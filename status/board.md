@@ -1,7 +1,7 @@
 # לוח סטטוס
 
 ## שלב 0 — Design Bible נורדי
-- [ ] master-designer משלים את docs/design-bible/nordic.md
+- [x] master-designer משלים את docs/design-bible/nordic.md
 - [ ] **אישור משתמש 1**
 
 ## שלב 1 — מוצרים לסלון
@@ -33,4 +33,4 @@
 ## יומן
 <!-- המנהל מוסיף כאן שורה אחרי כל הפעלת סוכן: תאריך, סוכן, מה נעשה, תוצאה -->
 - 2026-09-27 · המנהל · הקמת הפרויקט מ-BOOTSTRAP (22 קבצים) ותיעוד החלטות המשתמש ב-docs/brand-brief.md · הושלם
-- 2026-09-27 · master-designer · שלב 0: השלמת Design Bible נורדי והצעת שמות למותג · בעבודה
+- 2026-09-27 · master-designer · שלב 0: השלמת Design Bible נורדי והצעת שמות למותג (docs/brand-names.md) · הושלם, מחכה לאישור משתמש 1
