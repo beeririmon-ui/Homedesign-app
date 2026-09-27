@@ -1,0 +1,24 @@
+{
+  "room": "living-room",
+  "view": "main",
+  "notes": "z = סדר שכבות מלמטה למעלה. hotspot ו-zoom_frame הם קואורדינטות יחסיות (0-1) בתצוגה הראשית, ויוגדרו אחרי רינדור המעטפת. צל של כל מוצר יושב ב-z של המוצר פחות 1.",
+  "base_layers": [
+    { "id": "shell", "z": 0, "description": "מעטפת החדר: קירות, רצפה, חלונות" },
+    { "id": "fixed-furniture-shadow", "z": 34, "blend": "multiply", "description": "הצל של הרהיטים הקבועים" },
+    { "id": "fixed-furniture", "z": 40, "description": "ספה, שולחן קפה, כורסה", "includes": ["sofa", "coffee-table", "armchair"] }
+  ],
+  "slots": [
+    { "id": "curtains", "name_he": "וילונות", "placement": "window", "position": "חלון", "z": 10, "variants": 3, "hotspot": null, "zoom_frame": null },
+    { "id": "framed-art", "name_he": "תמונה ממוסגרת", "placement": "wall", "position": "קיר מעל הספה", "z": 12, "variants": 3, "hotspot": null, "zoom_frame": null },
+    { "id": "wall-decor", "name_he": "קישוט קיר (ראטן ודומיו)", "placement": "wall", "position": "קיר צדדי", "z": 12, "variants": 3, "hotspot": null, "zoom_frame": null },
+    { "id": "rug", "name_he": "שטיח", "placement": "floor", "position": "מרכז החדר, מתחת לשולחן הקפה", "z": 20, "variants": 3, "hotspot": null, "zoom_frame": null },
+    { "id": "floor-lamp", "name_he": "מנורת אהיל", "placement": "floor", "position": "ליד הספה, ייתכן שמאחורי משענת היד", "z": 30, "variants": 3, "has_light_layer": true, "hotspot": null, "zoom_frame": null },
+    { "id": "sofa-cover", "name_he": "כיסוי ספה", "placement": "sofa", "position": "על הספה", "z": 50, "variants": 3, "hotspot": null, "zoom_frame": null },
+    { "id": "cushions", "name_he": "כריות (סט)", "placement": "sofa", "position": "על הספה", "z": 55, "variants": 3, "hotspot": null, "zoom_frame": null },
+    { "id": "basket", "name_he": "סל לחפצים", "placement": "floor", "position": "בצד הספה", "z": 60, "variants": 3, "hotspot": null, "zoom_frame": null },
+    { "id": "magazine-holder", "name_he": "מחזיק עיתונים", "placement": "floor", "position": "ליד הכורסה", "z": 60, "variants": 3, "hotspot": null, "zoom_frame": null },
+    { "id": "vase", "name_he": "אגרטל", "placement": "surface", "position": "שולחן הקפה", "z": 65, "variants": 3, "hotspot": null, "zoom_frame": null },
+    { "id": "candle-holders", "name_he": "פמוטים", "placement": "surface", "position": "שולחן הקפה או מדף", "z": 65, "variants": 3, "hotspot": null, "zoom_frame": null }
+  ],
+  "light_layers": { "z": 90, "blend": "screen" }
+}

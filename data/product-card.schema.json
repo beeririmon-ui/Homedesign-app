@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Product card",
+  "description": "כרטיס מוצר אחד. sourcing-agent ממלא הכל חוץ מ-style_scores; master-designer ממלא את style_scores ואת status.",
+  "type": "object",
+  "required": ["id", "slot", "name", "supplier", "price", "images", "colors", "materials", "visual_weight", "status"],
+  "properties": {
+    "id": { "type": "string", "description": "<slot-id>-<supplier>-<short-name>" },
+    "slot": { "type": "string", "description": "מזהה עמדה מתוך data/slots/<room>.json" },
+    "name": { "type": "string" },
+    "category": { "type": "string" },
+    "rooms": { "type": "array", "items": { "type": "string" } },
+    "placement": { "enum": ["floor", "wall", "window", "surface", "sofa"] },
+    "supplier": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "product_url": { "type": "string" },
+        "sku": { "type": ["string", "null"] },
+        "rating": { "type": ["number", "null"] }
+      },
+      "required": ["name", "product_url"]
+    },
+    "price": {
+      "type": "object",
+      "properties": {
+        "cost": { "type": "number" },
+        "currency": { "type": "string" },
+        "suggested_retail": { "type": ["number", "null"] }
+      },
+      "required": ["cost", "currency"]
+    },
+    "shipping": {
+      "type": "object",
+      "properties": {
+        "days_min": { "type": ["integer", "null"] },
+        "days_max": { "type": ["integer", "null"] },
+        "ships_to": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "dimensions_cm": {
+      "type": "object",
+      "properties": {
+        "width": { "type": ["number", "null"] },
+        "depth": { "type": ["number", "null"] },
+        "height": { "type": ["number", "null"] }
+      }
+    },
+    "colors": {
+      "type": "object",
+      "properties": {
+        "dominant_hex": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" },
+        "secondary_hex": { "type": "array", "items": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" } },
+        "temperature": { "enum": ["warm", "cool", "neutral"] }
+      },
+      "required": ["dominant_hex", "temperature"]
+    },
+    "materials": { "type": "array", "items": { "type": "string" } },
+    "texture": { "type": ["string", "null"] },
+    "finish": { "enum": ["matte", "satin", "gloss", null] },
+    "visual_weight": { "enum": ["light", "medium", "heavy"] },
+    "lighting": {
+      "type": ["object", "null"],
+      "description": "לגופי תאורה בלבד",
+      "properties": {
+        "color_temp_k": { "type": ["integer", "null"] },
+        "light_type": { "enum": ["direct", "diffuse", "mixed", null] }
+      }
+    },
+    "images": {
+      "type": "object",
+      "properties": {
+        "urls": { "type": "array", "items": { "type": "string" } },
+        "quality": { "enum": ["high", "medium", "low"] },
+        "usage_rights": { "enum": ["confirmed", "unclear", "none"] }
+      },
+      "required": ["urls", "quality", "usage_rights"]
+    },
+    "style_scores": {
+      "type": "object",
+      "description": "מפתח לכל סגנון (nordic, boho, warm-modern)",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "score": { "type": "number", "minimum": 0, "maximum": 10 },
+          "reason": { "type": "string" }
+        },
+        "required": ["score", "reason"]
+      }
+    },
+    "status": { "enum": ["candidate", "selected", "rejected"] },
+    "notes": { "type": ["string", "null"] }
+  }
+}
