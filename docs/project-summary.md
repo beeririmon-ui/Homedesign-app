@@ -17,7 +17,7 @@
 | Design Bible נורדי, גרסה 1.0 | `docs/design-bible/nordic.md` | **אושר (אישור משתמש 1)** |
 | 5 הצעות לשם מותג | `docs/brand-names.md` | מחכה לבחירת המשתמש |
 | לוח סטטוס ויומן | `status/board.md` | מתעדכן |
-| חיבור ל-var2 (רינדור) | `.mcp.json` | מוגדר, אבל חסום ברשת |
+| חיבור ל-var2 (רינדור) | connector ב-claude.ai; `docs/var2-models.md` | מחובר, המיפוי מחכה לאישור |
 
 ## החלטות שהתקבלו
 **מותג** (`docs/brand-brief.md`):
@@ -44,7 +44,7 @@
 **עדכון 2026-09-28 (ערב):** הרשת נפתחה. AliExpress, alicdn, CJ, Spocket ו-var2 עונים (200). אבל דפי המוצר עצמם לא נטענים מסביבת הענן:
 - **AliExpress:** כל דף מוצר מופנה לדף "We need to check if you are a robot" (reCAPTCHA), גם בדפדפן Chromium מלא וגם בגרסת המובייל. זו חסימה של כתובות IP של שרתים, לא של הרשת שלנו. לא עוקפים קפצ'ה.
 - **CJ:** דף מוצר מופנה לדף "Human verification". לעומת זאת ה-API הרשמי של CJ (`developers.cjdropshipping.com/api2.0`) נגיש ומחכה למפתח (401 "access token cannot be empty").
-- **var2:** נגיש, מחכה להתחברות (401 "Missing authorization header"). נדרש רק בשלב 2.
+- **var2:** מחובר כ-connector ועובד (2026-09-28). המיפוי ב-`docs/var2-models.md`.
 
 **דרכים להמשיך:**
 1. **מפתח API של CJ** כסוד בהגדרות הסביבה (למשל `CJ_API_KEY`), ואז פתיחת סשן חדש. נותן פרטי מוצר, מידות, תמונות ועלות משלוח לישראל דרך ה-API הרשמי. חיסרון: רוב הלידים הקיימים (159 מתוך 167) הם מ-AliExpress, כך שהליקוט יעבור לקטלוג של CJ.
