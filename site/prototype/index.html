@@ -1,0 +1,418 @@
+<title>I design · סלון נורדי</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400&family=Assistant:wght@300;400;600&family=IBM+Plex+Mono:wght@400&display=swap">
+<style>
+/* Layout: one full-bleed cinematic stage; UI floats on it as frosted glass. Single committed look (dark chrome over bright renders). */
+:root{
+  --ink:#141312;          /* stage black, warm */
+  --paper:#F4F1EC;        /* nordic warm white */
+  --oat:#E6DCCB;
+  --oak:#C8A27A;          /* accent: light oak */
+  --mist:rgba(244,241,236,.62);
+  --glass:rgba(24,22,20,.46);
+  --glass-line:rgba(244,241,236,.16);
+  --f-display:"Frank Ruhl Libre", "David Libre", Georgia, serif;
+  --f-body:"Assistant", "Segoe UI", system-ui, sans-serif;
+  --f-data:"IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+  --ease:cubic-bezier(.77,0,.18,1);
+  --ease-out:cubic-bezier(.16,1,.3,1);
+  color-scheme:dark;
+}
+html,body{height:100%}
+body{margin:0;background:var(--ink);color:var(--paper);font-family:var(--f-body);overflow:hidden;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+button:focus-visible,.hs:focus-visible{outline:1.5px solid var(--oak);outline-offset:4px}
+
+#app{position:fixed;inset:0;overflow:hidden;direction:rtl}
+
+/* ---------- stage ---------- */
+.viewport{position:absolute;inset:0;overflow:hidden;touch-action:none}
+.scene{position:absolute;top:50%;left:50%;aspect-ratio:16/9;transform-origin:50% 50%;will-change:transform,filter;transition:filter 1.2s var(--ease)}
+.scene img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;user-select:none;-webkit-user-drag:none}
+.scene .variant{opacity:0}
+.scene .sweep{position:absolute;inset:0;pointer-events:none;opacity:0;background:linear-gradient(100deg,transparent 30%,rgba(255,250,240,.55) 48%,transparent 66%);mix-blend-mode:soft-light;transform:translateX(-60%)}
+.scene.zoomed{filter:saturate(.9) brightness(.62) blur(2px)}
+
+.vignette{position:absolute;inset:0;pointer-events:none;background:radial-gradient(120% 90% at 50% 45%,transparent 55%,rgba(10,9,8,.55) 100%);transition:opacity 1s}
+
+/* hotspots */
+.hs{position:absolute;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;display:grid;place-items:center;transition:opacity .6s,transform .6s var(--ease-out)}
+.hs::before{content:"";width:12px;height:12px;border-radius:50%;background:var(--paper);box-shadow:0 0 0 1px rgba(20,19,18,.12),0 2px 10px rgba(20,19,18,.25)}
+.hs::after{content:"";position:absolute;inset:6px;border-radius:50%;border:1px solid rgba(244,241,236,.9);animation:pulse 2.8s var(--ease-out) infinite}
+.hs[data-soon]::before{background:rgba(244,241,236,.7)}
+.hs[data-soon]::after{animation:none;opacity:.35}
+@keyframes pulse{0%{transform:scale(.6);opacity:.9}80%,100%{transform:scale(1.9);opacity:0}}
+.hs .tag{position:absolute;bottom:calc(100% + 6px);white-space:nowrap;padding:6px 12px;border-radius:999px;background:var(--glass);backdrop-filter:blur(14px) saturate(1.3);-webkit-backdrop-filter:blur(14px) saturate(1.3);border:1px solid var(--glass-line);font-size:13px;letter-spacing:.02em;opacity:0;transform:translateY(4px);transition:.35s var(--ease-out);pointer-events:none}
+.hs:hover .tag,.hs:focus-visible .tag,.hs.hint .tag{opacity:1;transform:none}
+.stage-zoomed .hs{opacity:0;pointer-events:none;transform:scale(.4)}
+
+/* ---------- chrome ---------- */
+.top{position:absolute;inset-inline:0;top:0;padding:calc(env(safe-area-inset-top,0px) + 18px) 22px 0;display:flex;justify-content:space-between;align-items:center;pointer-events:none;transition:opacity .8s}
+.mark{font-family:var(--f-display);font-weight:300;font-size:22px;letter-spacing:.02em;direction:ltr;color:var(--paper);text-shadow:0 1px 16px rgba(0,0,0,.25)}
+.mark i{font-style:normal;color:var(--oak)}
+.crumbs{display:flex;gap:8px;pointer-events:auto}
+.chip{padding:7px 14px;border-radius:999px;background:var(--glass);backdrop-filter:blur(16px) saturate(1.3);-webkit-backdrop-filter:blur(16px) saturate(1.3);border:1px solid var(--glass-line);font-size:13px;display:flex;gap:8px;align-items:center}
+.chip b{font-weight:600}
+.chip .dot{width:6px;height:6px;border-radius:50%;background:var(--oak)}
+
+.dock{position:absolute;inset-inline:0;bottom:0;padding:0 16px calc(env(safe-area-inset-bottom,0px) + 18px);display:flex;justify-content:center;pointer-events:none;transition:opacity .8s,transform .8s var(--ease)}
+.styles{pointer-events:auto;display:flex;gap:4px;padding:5px;border-radius:999px;background:var(--glass);backdrop-filter:blur(18px) saturate(1.3);-webkit-backdrop-filter:blur(18px) saturate(1.3);border:1px solid var(--glass-line)}
+.styles button{padding:9px 16px;border-radius:999px;font-size:13px;color:var(--mist);display:flex;flex-direction:column;align-items:center;line-height:1.1}
+.styles button small{font-family:var(--f-data);font-size:9.5px;letter-spacing:.08em;opacity:.7;margin-top:3px}
+.styles button[aria-pressed="true"]{background:var(--paper);color:var(--ink)}
+.stage-zoomed .dock,.stage-zoomed .top{opacity:0;transform:translateY(12px)}
+.stage-zoomed .top{transform:translateY(-12px)}
+
+.toast{position:absolute;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 86px);transform:translate(-50%,16px);opacity:0;transition:.6s var(--ease-out);pointer-events:none}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* ---------- wheel ---------- */
+.picker{position:absolute;inset:0;display:grid;grid-template-rows:auto 1fr auto;pointer-events:none;opacity:0;transition:opacity .7s var(--ease)}
+.picker.open{opacity:1;pointer-events:auto}
+.picker header{padding:calc(env(safe-area-inset-top,0px) + 22px) 22px 0;display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.eyebrow{font-family:var(--f-data);font-size:11px;letter-spacing:.18em;color:var(--oak);text-transform:uppercase;direction:ltr;text-align:right}
+.picker h2{margin:.25em 0 0;font-family:var(--f-display);font-weight:300;font-size:clamp(28px,5vw,46px);line-height:1.05;text-wrap:balance}
+.close{flex:none;width:44px;height:44px;border-radius:50%;background:var(--glass);border:1px solid var(--glass-line);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);display:grid;place-items:center;font-size:18px}
+
+.ring-wrap{position:relative;perspective:1400px;perspective-origin:50% 40%;touch-action:none;cursor:grab;min-height:0}
+.ring-wrap:active{cursor:grabbing}
+.ring{position:absolute;left:50%;top:50%;width:0;height:0;transform-style:preserve-3d}
+.card{position:absolute;left:0;top:0;width:var(--cw);height:var(--cw);margin:calc(var(--cw) / -2) 0 0 calc(var(--cw) / -2);transform-style:preserve-3d;transition:opacity .5s}
+.card .disc{position:absolute;inset:0;border-radius:50%;background:radial-gradient(closest-side,rgba(244,241,236,.16),rgba(244,241,236,.04) 70%,transparent 72%);border:1px solid rgba(244,241,236,.12)}
+.card img{position:absolute;inset:6%;width:88%;height:88%;object-fit:contain;filter:drop-shadow(0 26px 30px rgba(0,0,0,.45));pointer-events:none;user-select:none}
+.card .floor{position:absolute;left:18%;right:18%;bottom:-2%;height:14%;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.45),transparent);filter:blur(6px);transform:translateZ(-1px)}
+
+.info{padding:0 22px calc(env(safe-area-inset-bottom,0px) + 22px);display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center}
+.info .name{font-family:var(--f-display);font-weight:400;font-size:clamp(22px,3.4vw,30px);min-height:1.2em;transition:opacity .25s}
+.specs{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 18px;font-size:13px;color:var(--mist)}
+.specs span{display:flex;gap:6px;align-items:baseline}
+.specs .v{font-family:var(--f-data);font-size:12.5px;color:var(--paper);font-variant-numeric:tabular-nums}
+.pips{display:flex;gap:8px}
+.pips i{width:22px;height:2px;border-radius:2px;background:rgba(244,241,236,.25);transition:background .3s,width .3s}
+.pips i.on{background:var(--oak);width:34px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.btn{padding:14px 26px;border-radius:999px;font-weight:600;font-size:15px;letter-spacing:.01em;transition:transform .2s var(--ease-out),background .3s}
+.btn:active{transform:scale(.97)}
+.btn.primary{background:var(--paper);color:var(--ink)}
+.btn.ghost{border:1px solid var(--glass-line);background:var(--glass);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.price{font-family:var(--f-data);font-variant-numeric:tabular-nums}
+
+/* ---------- intro ---------- */
+.intro{position:absolute;inset:0;display:grid;place-items:center;background:var(--ink);z-index:5;transition:opacity 1.2s var(--ease)}
+.intro .bg{position:absolute;inset:0;background-size:cover;background-position:center;opacity:.34;filter:blur(2px) saturate(.8);transform:scale(1.06);animation:drift 18s ease-in-out infinite alternate}
+@keyframes drift{to{transform:scale(1.14) translate(-1.5%,1%)}}
+.intro .veil{position:absolute;inset:0;background:radial-gradient(80% 70% at 50% 50%,rgba(20,19,18,.2),rgba(20,19,18,.92))}
+.intro .content{position:relative;text-align:center;padding:24px;display:flex;flex-direction:column;align-items:center;gap:22px;max-width:36rem}
+.intro .wordmark{font-family:var(--f-display);font-weight:300;font-size:clamp(54px,11vw,112px);line-height:.9;letter-spacing:-.01em;direction:ltr}
+.intro .wordmark i{font-style:normal;color:var(--oak)}
+.intro p{margin:0;font-size:17px;line-height:1.6;color:var(--mist);text-wrap:balance}
+.intro .meta{font-family:var(--f-data);font-size:11px;letter-spacing:.16em;color:rgba(244,241,236,.45);direction:ltr}
+.enter{display:flex;align-items:center;gap:14px;padding:16px 30px;border-radius:999px;border:1px solid rgba(244,241,236,.35);font-size:16px;letter-spacing:.04em;transition:background .4s,color .4s}
+.enter:hover{background:var(--paper);color:var(--ink)}
+.enter span{display:inline-block;transition:transform .4s var(--ease-out)}
+.enter:hover span{transform:translateX(-6px)}
+.intro.gone{opacity:0;pointer-events:none}
+
+.walk{position:absolute;inset:0;z-index:4;overflow:hidden;background:var(--ink);pointer-events:none}
+.walk img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;will-change:transform,opacity,filter}
+.walk #walkHall{transform-origin:50% 47%}
+.walk #walkRoom{opacity:0}
+
+.note{position:absolute;right:22px;bottom:calc(env(safe-area-inset-bottom,0px) + 24px);font-size:11px;color:rgba(244,241,236,.55);max-width:15rem;line-height:1.4;pointer-events:none;text-shadow:0 1px 8px rgba(0,0,0,.4)}
+@media (max-width:700px){.note{display:none}.crumbs .chip:first-child{display:none}}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition-duration:.01ms!important}
+}
+</style>
+
+<div id="app">
+  <div class="viewport" id="viewport">
+    <div class="scene" id="scene">
+      <img id="base" alt="סלון נורדי: ספה בשיבולת שועל, שולחן קפה מאלון, כורסת בוקלה ועץ זית ליד החלון">
+      <img id="variant" class="variant" alt="">
+      <div class="sweep" id="sweep"></div>
+      <button class="hs" data-slot="sofa-cover" style="left:79.5%;top:71%" aria-label="כיסוי ספה"><span class="tag">כיסוי ספה · 3 גוונים</span></button>
+      <button class="hs" data-soon style="left:52.5%;top:62.5%" aria-label="כריות, בקרוב"><span class="tag">כריות · בקרוב</span></button>
+      <button class="hs" data-soon style="left:67.8%;top:64%" aria-label="אגרטל, בקרוב"><span class="tag">אגרטל · בקרוב</span></button>
+      <button class="hs" data-soon style="left:88%;top:45%" aria-label="מנורת רגל, בקרוב"><span class="tag">מנורת רגל · בקרוב</span></button>
+      <button class="hs" data-soon style="left:28%;top:74%" aria-label="כורסה, בקרוב"><span class="tag">כורסה · רהיט קבוע</span></button>
+    </div>
+    <div class="vignette"></div>
+  </div>
+
+  <div class="top">
+    <div class="mark">I<i>·</i>design</div>
+    <div class="crumbs">
+      <span class="chip"><span class="dot"></span>הבית · <b>סלון</b></span>
+      <span class="chip" id="cartChip">בסל <b class="price" id="cartCount">0</b></span>
+    </div>
+  </div>
+
+  <div class="dock">
+    <div class="styles" role="group" aria-label="סגנון">
+      <button aria-pressed="true">נורדי<small>NORDIC</small></button>
+      <button aria-pressed="false" disabled>בוהו<small>SOON</small></button>
+      <button aria-pressed="false" disabled>מודרני חם<small>SOON</small></button>
+    </div>
+  </div>
+  <div class="note">אב-טיפוס · החדר והמוצרים מרונדרים ב-var2 · מחירים לדוגמה</div>
+  <div class="chip toast" id="toast"></div>
+
+  <section class="picker" id="picker" aria-hidden="true">
+    <header>
+      <div>
+        <div class="eyebrow">Sofa throw · 03 variants</div>
+        <h2>כיסוי ספה</h2>
+      </div>
+      <button class="close" id="close" aria-label="חזרה לחדר">✕</button>
+    </header>
+    <div class="ring-wrap" id="ringWrap"><div class="ring" id="ring"></div></div>
+    <div class="info">
+      <div class="pips" id="pips"></div>
+      <div class="name" id="vName"></div>
+      <div class="specs" id="vSpecs"></div>
+      <div class="actions">
+        <button class="btn primary" id="choose">בחר והצג בחדר</button>
+        <button class="btn ghost" id="addCart">הוסף לסל · <span class="price" id="vPrice"></span></button>
+      </div>
+    </div>
+  </section>
+
+  <div class="walk" id="walk" hidden><img id="walkHall" src="assets/hall.jpg" alt=""><img id="walkRoom" alt=""></div>
+
+  <div class="intro" id="intro">
+    <div class="bg" style="background-image:url(assets/hall.jpg)"></div>
+    <div class="veil"></div>
+    <div class="content">
+      <div class="meta">NORDIC · LIVING ROOM · 01</div>
+      <div class="wordmark">I<i>·</i>design</div>
+      <p>בית אחד, עיצוב אחד שנבחר בקפידה. היכנסו, געו בכל פריט, ובחרו את הגרסה שמתאימה לכם.</p>
+      <button class="enter" id="enter">היכנסו הביתה <span aria-hidden="true">←</span></button>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  const VARIANTS = [
+    { id:'white', name:'שמיכה סרוגה, לבן חם', img:'assets/throw-white.webp', room:'assets/room-white.jpg',
+      specs:[['חומר','צמר סרוג עבה'],['מידות','130×170 ס"מ'],['גוון','#F4F1EC']], price:289 },
+    { id:'sage', name:'שמיכת ופל, מרווה עמומה', img:'assets/throw-sage.webp', room:'assets/room-sage.jpg',
+      specs:[['חומר','פשתן-כותנה ופל'],['מידות','130×180 ס"מ'],['גוון','#A7B09A']], price:249 },
+    { id:'charcoal', name:'שמיכת הרינגבון, פחם', img:'assets/throw-charcoal.webp', room:'assets/room-charcoal.jpg',
+      specs:[['חומר','צמר מוברש'],['מידות','140×180 ס"מ'],['גוון','#3A3A3A']], price:329 },
+  ];
+  const $ = s => document.querySelector(s);
+  const app=$('#app'), vp=$('#viewport'), scene=$('#scene'), base=$('#base'), variant=$('#variant'), sweep=$('#sweep');
+  const picker=$('#picker'), ring=$('#ring'), ringWrap=$('#ringWrap');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let current = 0, focus = 0, zoomed = false, busy = false, cart = 0;
+
+  VARIANTS.forEach(v => { const i=new Image(); i.src=v.room; const j=new Image(); j.src=v.img; });
+  base.src = VARIANTS[0].room;
+
+  /* ---- scene geometry: cover the viewport, keep a focus point, allow pan on narrow screens ---- */
+  const cam = { s:1, ox:0, oy:0, px:0, py:0, panX:0 };
+  let W, H, SW, SH;
+  function layout(){
+    W = vp.clientWidth; H = vp.clientHeight;
+    SW = Math.max(W, H*16/9); SH = SW*9/16;
+    scene.style.width = SW+'px'; scene.style.height = SH+'px';
+    clampPan(); apply(true);
+  }
+  function maxPan(){ return Math.max(0,(SW-W)/2); }
+  function clampPan(){ const m=maxPan(); cam.panX=Math.min(m,Math.max(-m,cam.panX)); }
+  // default: on narrow screens lean toward the sofa (right of centre)
+  function defaultPan(){ const m=maxPan(); cam.panX = -Math.min(m, SW*(W<H?0.2:0.12)); }
+  function apply(instant){
+    if(instant) scene.style.transition='filter 1.2s var(--ease)';
+    const tx = -SW/2 + cam.panX + cam.px, ty = -SH/2 + cam.py;
+    scene.style.transform = `translate(${tx}px,${ty}px) translate(${cam.ox}px,${cam.oy}px) scale(${cam.s})`;
+  }
+  addEventListener('resize', layout);
+
+  /* ambient parallax (pointer / tilt) */
+  let tx=0,ty=0;
+  function drift(nx,ny){ if(zoomed||reduce) return; tx=nx*-14; ty=ny*-9; }
+  addEventListener('pointermove', e => { if(e.pointerType==='mouse') drift(e.clientX/innerWidth-.5, e.clientY/innerHeight-.5); });
+  addEventListener('deviceorientation', e => { if(e.gamma==null) return; drift(Math.max(-1,Math.min(1,e.gamma/30))/2, Math.max(-1,Math.min(1,(e.beta-45)/30))/2); });
+  (function tick(){ cam.px += (tx-cam.px)*.05; cam.py += (ty-cam.py)*.05; if(!busy) apply(); requestAnimationFrame(tick); })();
+
+  /* drag to pan (narrow screens) */
+  let drag=null;
+  vp.addEventListener('pointerdown', e => { if(zoomed || e.target.closest('.hs')) return; drag={x:e.clientX,p:cam.panX}; });
+  addEventListener('pointermove', e => { if(!drag) return; cam.panX = drag.p + (e.clientX-drag.x); clampPan(); });
+  addEventListener('pointerup', () => drag=null);
+
+  /* ---- animate camera with WAAPI-like tween ---- */
+  function tween(to, ms, ease){
+    return new Promise(res => {
+      if(reduce) ms = 1;
+      const from = {s:cam.s, ox:cam.ox, oy:cam.oy}, t0 = performance.now();
+      const e = ease || (t => t<.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2);
+      busy = true;
+      (function step(now){
+        const k = Math.min(1,(now-t0)/ms), q = e(k);
+        for(const key in to) cam[key] = from[key] + (to[key]-from[key])*q;
+        apply(); if(k<1) requestAnimationFrame(step); else { busy=false; res(); }
+      })(t0);
+    });
+  }
+  // with transform-origin at centre, a scene point at offset d maps to centre + o + d*s
+  function target(fx, fy, s, sx, sy){
+    const dx=(fx-.5)*SW, dy=(fy-.5)*SH;
+    const cx = W/2 + cam.panX + cam.px, cy = H/2 + cam.py;
+    return { s, ox: sx - cx - dx*s, oy: sy - cy - dy*s };
+  }
+
+  /* ---- hotspots ---- */
+  document.querySelectorAll('.hs').forEach(h => h.addEventListener('click', e => {
+    e.stopPropagation();
+    if(h.dataset.soon!==undefined){ toast(h.querySelector('.tag').textContent.replace(' · ',' — ')); return; }
+    openPicker(h);
+  }));
+
+  async function openPicker(h){
+    if(busy||zoomed) return; zoomed = true;
+    app.classList.add('stage-zoomed');
+    const fx = parseFloat(h.style.left)/100, fy = parseFloat(h.style.top)/100;
+    const s = Math.max(2.4, 2.4*1100/Math.max(W,700));
+    const t = target(fx, fy-.04, s, W/2, H*.42);
+    scene.classList.add('zoomed');
+    await tween(t, 1300);
+    focus = current; rot = -focus*STEP; buildRing(); setInfo(); render();
+    picker.classList.add('open'); picker.setAttribute('aria-hidden','false');
+    ring.animate([{transform:ringTf(rot, .55)},{transform:ringTf(rot,1)}],{duration:reduce?1:900,easing:'cubic-bezier(.16,1,.3,1)'});
+    $('#choose').focus({preventScroll:true});
+  }
+  async function closePicker(chosen){
+    if(!zoomed||busy) return;
+    picker.classList.remove('open'); picker.setAttribute('aria-hidden','true');
+    if(chosen!=null && chosen!==current) await swapRoom(chosen, true);
+    scene.classList.remove('zoomed');
+    await tween({s:1,ox:0,oy:0}, 1200);
+    app.classList.remove('stage-zoomed'); zoomed=false;
+    if(chosen!=null && chosen!==current){ current = chosen; toast('הכיסוי הוחלף: '+VARIANTS[chosen].name); }
+  }
+  $('#close').onclick = () => closePicker(null);
+  addEventListener('keydown', e => {
+    if(!zoomed) return;
+    if(e.key==='Escape') closePicker(null);
+    if(e.key==='ArrowLeft') spinTo(focus+1);
+    if(e.key==='ArrowRight') spinTo(focus-1);
+    if(e.key==='Enter' && document.activeElement===document.body) closePicker(focus);
+  });
+  $('#choose').onclick = () => closePicker(focus);
+  $('#addCart').onclick = () => { cart++; $('#cartCount').textContent=cart; toast('נוסף לסל: '+VARIANTS[focus].name); };
+
+  async function swapRoom(i){
+    variant.src = VARIANTS[i].room;
+    await variant.decode().catch(()=>{});
+    variant.animate([{opacity:0,filter:'blur(8px)'},{opacity:1,filter:'blur(0)'}],{duration:reduce?1:1100,easing:'cubic-bezier(.77,0,.18,1)',fill:'forwards'});
+    sweep.animate([{opacity:0,transform:'translateX(-60%)'},{opacity:1,offset:.4},{opacity:0,transform:'translateX(60%)'}],{duration:reduce?1:1400,easing:'ease-out'});
+    await new Promise(r=>setTimeout(r, reduce?0:1100));
+    base.src = VARIANTS[i].room; await base.decode().catch(()=>{});
+    variant.getAnimations().forEach(a=>a.cancel()); variant.style.opacity=0;
+  }
+
+  /* ---- 3D wheel ---- */
+  const N = VARIANTS.length, STEP = 360/N;
+  let rot = 0, R = 260;
+  function cw(){ return Math.min(Math.max(ringWrap.clientHeight*.62, 150), innerWidth*.5, 380); }
+  function ringTf(r, sc=1){ return `translateZ(${-R}px) rotateY(${r}deg) scale(${sc})`; }
+  function buildRing(){
+    ring.innerHTML='';
+    const w = cw(); ring.style.setProperty('--cw', w+'px');
+    R = Math.max(w*0.95, Math.min(innerWidth*.34, w*1.35));
+    VARIANTS.forEach((v,i) => {
+      const c = document.createElement('div'); c.className='card';
+      c.innerHTML = `<div class="disc"></div><div class="floor"></div><img src="${v.img}" alt="${v.name}">`;
+      c.style.transform = `rotateY(${i*STEP}deg) translateZ(${R}px)`;
+      c.onclick = () => { if(Math.abs(moved)<6) spinTo(i===focus? focus : nearestIndexTo(i)); };
+      ring.appendChild(c);
+    });
+    $('#pips').innerHTML = VARIANTS.map(()=>'<i></i>').join('');
+  }
+  function nearestIndexTo(i){ // unwrap so the ring takes the short way round
+    let k = i; while(k-focus > N/2) k-=N; while(focus-k > N/2) k+=N; return k;
+  }
+  function render(){
+    ring.style.transform = ringTf(rot);
+    [...ring.children].forEach((c,i) => {
+      let a = ((i*STEP + rot) % 360 + 540) % 360 - 180; // -180..180, 0 = front
+      const f = 1 - Math.min(1, Math.abs(a)/150);
+      c.style.opacity = .25 + .75*f;
+      c.style.filter = `brightness(${.55+.45*f}) blur(${(1-f)*2.5}px)`;
+    });
+  }
+  function idx(){ return ((Math.round(-rot/STEP) % N)+N)%N; }
+  function setInfo(){
+    const v = VARIANTS[idx()]; focus = idx();
+    const n=$('#vName'); n.style.opacity=0;
+    setTimeout(()=>{ n.textContent=v.name; n.style.opacity=1; }, 120);
+    $('#vSpecs').innerHTML = v.specs.map(([k,val])=>`<span>${k} <span class="v">${val}</span></span>`).join('');
+    $('#vPrice').textContent = '₪'+v.price;
+    [...$('#pips').children].forEach((p,i)=>p.classList.toggle('on', i===focus));
+    $('#choose').textContent = focus===current ? 'מוצג בחדר · חזרה' : 'בחר והצג בחדר';
+  }
+  let anim=null;
+  function spinTo(k){
+    const target = -k*STEP; cancelAnimationFrame(anim);
+    const from = rot, t0=performance.now(), ms = reduce?1:650;
+    (function step(now){ const q=Math.min(1,(now-t0)/ms), e=1-Math.pow(1-q,4); rot=from+(target-from)*e; render(); if(q<1) anim=requestAnimationFrame(step); else setInfo(); })(t0);
+  }
+  // drag with inertia + snap
+  let dragging=false, lastX=0, vel=0, moved=0, lastT=0;
+  ringWrap.addEventListener('pointerdown', e => { dragging=true; moved=0; lastX=e.clientX; lastT=performance.now(); vel=0; cancelAnimationFrame(anim); ringWrap.setPointerCapture(e.pointerId); });
+  ringWrap.addEventListener('pointermove', e => {
+    if(!dragging) return; const dx=e.clientX-lastX, now=performance.now();
+    rot += dx*0.28; moved += dx; vel = dx*0.28/Math.max(1,now-lastT)*16; lastX=e.clientX; lastT=now; render();
+  });
+  ringWrap.addEventListener('pointerup', () => {
+    if(!dragging) return; dragging=false;
+    let r=rot, v=vel; while(Math.abs(v)>.05){ r+=v; v*=.92; }
+    spinTo(Math.round(-r/STEP));
+  });
+  ringWrap.addEventListener('wheel', e => { e.preventDefault(); spinTo(Math.round(-rot/STEP) + (e.deltaY+e.deltaX>0?1:-1)); }, {passive:false});
+
+  /* ---- toast ---- */
+  let tt; function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(tt); tt=setTimeout(()=>t.classList.remove('show'), 2600); }
+
+  /* ---- entrance: a slow walk down the hall, through the doorway, into the room ---- */
+  const walk=$('#walk'), hall=$('#walkHall'), wroom=$('#walkRoom');
+  function arrive(){
+    const h=document.querySelector('.hs[data-slot]'); h.classList.add('hint'); setTimeout(()=>h.classList.remove('hint'), 3400);
+    if(maxPan()>0) setTimeout(()=>toast('גררו הצידה כדי להסתכל בחדר'), 900);
+  }
+  $('#enter').onclick = async () => {
+    wroom.src = VARIANTS[current].room;
+    if(SW>W){ const p=(SW/2 - W/2 - cam.panX)/(SW-W); wroom.style.objectPosition=(p*100).toFixed(2)+'% 50%'; }
+    await Promise.all([hall.decode(), wroom.decode()].map(p=>p.catch(()=>{})));
+    walk.hidden = false;
+    $('#intro').classList.add('gone');
+    if(reduce){ walk.hidden=true; arrive(); return; }
+    const D = 5200, ez = 'cubic-bezier(.45,0,.2,1)';
+    const k = 'cubic-bezier(.45,0,.55,1)';
+    hall.animate([
+      {transform:'scale(1)', filter:'blur(0) brightness(1)', easing:k},
+      {transform:'scale(1.9) translateY(-1%)', filter:'blur(0) brightness(1.02)', offset:.45, easing:k},
+      {transform:'scale(3.3) translateY(-1.4%)', filter:'blur(1px) brightness(1.06)', offset:.7, easing:k},
+      {transform:'scale(4.8) translateY(-1.6%)', filter:'blur(9px) brightness(1.22)', offset:.86, easing:k},
+      {transform:'scale(5.4) translateY(-1.6%)', filter:'blur(14px) brightness(1.3)'}
+    ], {duration:D, fill:'forwards'});
+    wroom.animate([
+      {opacity:0, transform:'scale(1.3)', filter:'blur(12px) brightness(1.2)'},
+      {opacity:0, transform:'scale(1.3)', filter:'blur(12px) brightness(1.2)', offset:.64, easing:k},
+      {opacity:1, transform:'scale(1.12)', filter:'blur(3px) brightness(1.05)', offset:.82, easing:'cubic-bezier(.16,1,.3,1)'},
+      {opacity:1, transform:'scale(1)', filter:'blur(0)'}
+    ], {duration:D+900, fill:'forwards'});
+    // head-bob: a barely-there sway, like a person walking
+    walk.animate([{transform:'translateY(0)'},{transform:'translateY(-3px)'},{transform:'translateY(0)'},{transform:'translateY(-3px)'},{transform:'translateY(0)'}],{duration:D*.7, easing:'ease-in-out'});
+    setTimeout(()=>{ walk.animate([{opacity:1},{opacity:0}],{duration:700,fill:'forwards'}).onfinish=()=>{ walk.hidden=true; arrive(); }; }, D+900);
+  };
+
+  layout(); defaultPan(); apply(true);
+})();
+</script>
