@@ -1,9 +1,11 @@
 {
   "room": "living-room",
   "view": "main",
-  "notes": "z = סדר שכבות מלמטה למעלה. hotspot ו-zoom_frame הם קואורדינטות יחסיות (0-1) בתצוגה הראשית, ויוגדרו אחרי רינדור המעטפת. צל של כל מוצר יושב ב-z של המוצר פחות 1.",
+  "version": "1.1",
+  "approved": "2026-09-28",
+  "notes": "z = סדר שכבות מלמטה למעלה. hotspot ו-zoom_frame הם קואורדינטות יחסיות (0-1) בתצוגה הראשית, ויוגדרו אחרי רינדור המעטפת. צל של כל מוצר יושב ב-z של המוצר פחות 1, חוץ מעמדה עם has_shadow_layer: false (pendant). לכל עמדה עם has_light_layer: true יש 3 שכבות אור (אחת לכל וריאציה) ב-light_layers; השלולית זהה בשלוש הווריאציות. props = אביזרי עיצוב שלא נמכרים: זהים בכל הווריאציות של העמדה, בלי כרטיס מוצר ובלי עגלה.",
   "base_layers": [
-    { "id": "shell", "z": 0, "description": "מעטפת החדר: קירות, רצפה, חלונות" },
+    { "id": "shell", "z": 0, "description": "מעטפת החדר: קירות, רצפה, תקרה, פתח החלון (משותף לכל הסגנונות; הצורה העליונה לפי סגנון), נקודת התלייה בתקרה מעל מרכז שולחן הקפה" },
     { "id": "fixed-furniture-shadow", "z": 34, "blend": "multiply", "description": "הצל של הרהיטים הקבועים" },
     { "id": "fixed-furniture", "z": 40, "description": "ספה, שולחן קפה, כורסה", "includes": ["sofa", "coffee-table", "armchair"] }
   ],
@@ -11,14 +13,25 @@
     { "id": "curtains", "name_he": "וילונות", "placement": "window", "position": "חלון", "z": 10, "variants": 3, "hotspot": null, "zoom_frame": null },
     { "id": "framed-art", "name_he": "תמונה ממוסגרת", "placement": "wall", "position": "קיר מעל הספה", "z": 12, "variants": 3, "hotspot": null, "zoom_frame": null },
     { "id": "wall-decor", "name_he": "קישוט קיר (ראטן ודומיו)", "placement": "wall", "position": "קיר צדדי", "z": 12, "variants": 3, "hotspot": null, "zoom_frame": null },
+    { "id": "wall-sconce", "name_he": "מנורת קיר", "placement": "wall", "position": "קיר החלון (שמאל), קדימה מהחלון לכיוון המצלמה, מעל הכורסה", "z": 14, "variants": 3, "has_light_layer": true, "hotspot": null, "zoom_frame": null },
     { "id": "rug", "name_he": "שטיח", "placement": "floor", "position": "מרכז החדר, מתחת לשולחן הקפה", "z": 20, "variants": 3, "hotspot": null, "zoom_frame": null },
     { "id": "floor-lamp", "name_he": "מנורת אהיל", "placement": "floor", "position": "ליד הספה, ייתכן שמאחורי משענת היד", "z": 30, "variants": 3, "has_light_layer": true, "hotspot": null, "zoom_frame": null },
+    { "id": "planter", "name_he": "עציץ", "placement": "floor", "position": "פינה שמאלית-אחורית, בין הקצה השמאלי של הספה לקיר החלון", "z": 32, "variants": 3, "props": ["olive-tree"], "hotspot": null, "zoom_frame": null },
     { "id": "sofa-cover", "name_he": "כיסוי ספה", "placement": "sofa", "position": "על הספה", "z": 50, "variants": 3, "hotspot": null, "zoom_frame": null },
     { "id": "cushions", "name_he": "כריות (סט)", "placement": "sofa", "position": "על הספה", "z": 55, "variants": 3, "hotspot": null, "zoom_frame": null },
     { "id": "basket", "name_he": "סל לחפצים", "placement": "floor", "position": "בצד הספה", "z": 60, "variants": 3, "hotspot": null, "zoom_frame": null },
-    { "id": "magazine-holder", "name_he": "מחזיק עיתונים", "placement": "floor", "position": "ליד הכורסה", "z": 60, "variants": 3, "hotspot": null, "zoom_frame": null },
-    { "id": "vase", "name_he": "אגרטל", "placement": "surface", "position": "שולחן הקפה", "z": 65, "variants": 3, "hotspot": null, "zoom_frame": null },
-    { "id": "candle-holders", "name_he": "פמוטים", "placement": "surface", "position": "שולחן הקפה או מדף", "z": 65, "variants": 3, "hotspot": null, "zoom_frame": null }
+    { "id": "magazine-holder", "name_he": "מחזיק עיתונים", "placement": "floor", "position": "בצד האחורי של הכורסה, בין הכורסה לעציץ", "z": 60, "variants": 3, "props": ["magazines"], "hotspot": null, "zoom_frame": null },
+    { "id": "table-runner", "name_he": "ראנר", "placement": "surface", "position": "שולחן הקפה, חוצה לרוחבו בשליש השמאלי; שום דבר לא מונח עליו", "z": 62, "variants": 3, "hotspot": null, "zoom_frame": null },
+    { "id": "vase", "name_he": "אגרטל", "placement": "surface", "position": "שולחן הקפה, השליש הימני", "z": 65, "variants": 3, "props": ["branches"], "hotspot": null, "zoom_frame": null },
+    { "id": "candle-holders", "name_he": "פמוטים", "placement": "surface", "position": "שולחן הקפה, השליש הימני, יחד עם האגרטל", "z": 65, "variants": 3, "props": ["candles"], "hotspot": null, "zoom_frame": null },
+    { "id": "pouf", "name_he": "פוף", "placement": "floor", "position": "על השטיח, באלכסון קדמי-ימני משולחן הקפה", "z": 70, "variants": 3, "hotspot": null, "zoom_frame": null },
+    { "id": "pendant", "name_he": "מנורת תקרה תלויה", "placement": "ceiling", "position": "מעל מרכז שולחן הקפה, מנקודת התלייה בשלד", "z": 80, "variants": 3, "has_light_layer": true, "has_shadow_layer": false, "shadow_note": "אין שכבת צל: המנורה תלויה באוויר, לפחות 55 ס\"מ מכל משטח, והצל שלה לא נראה באור המפוזר", "hotspot": null, "zoom_frame": null }
   ],
-  "light_layers": { "z": 90, "blend": "screen" }
+  "props": [
+    { "id": "branches", "name_he": "ענפים באגרטל", "slot": "vase", "sold": false },
+    { "id": "olive-tree", "name_he": "עץ זית בעציץ", "slot": "planter", "sold": false },
+    { "id": "candles", "name_he": "נרות בפמוטים", "slot": "candle-holders", "sold": false },
+    { "id": "magazines", "name_he": "עיתונים במחזיק", "slot": "magazine-holder", "sold": false }
+  ],
+  "light_layers": { "z": 90, "blend": "screen", "count": 9, "active": 3, "slots": ["floor-lamp", "wall-sconce", "pendant"] }
 }
