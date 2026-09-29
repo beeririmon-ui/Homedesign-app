@@ -72,7 +72,7 @@ button:focus-visible,.hs:focus-visible{outline:1.5px solid var(--oak);outline-of
 .toast.show{opacity:1;transform:translate(-50%,0)}
 
 /* ---------- wheel ---------- */
-.picker{position:absolute;inset:0;display:grid;grid-template-rows:auto 1fr auto;pointer-events:none;opacity:0;transition:opacity .7s var(--ease)}
+.picker{position:absolute;inset:0;z-index:3;display:grid;grid-template-rows:auto 1fr auto;pointer-events:none;opacity:0;transition:opacity .7s var(--ease)}
 .picker.open{opacity:1;pointer-events:auto}
 .picker header{padding:calc(env(safe-area-inset-top,0px) + 22px) 22px 0;display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
 .eyebrow{font-family:var(--f-data);font-size:11px;letter-spacing:.18em;color:var(--oak);text-transform:uppercase;direction:ltr;text-align:right}
@@ -212,7 +212,7 @@ button:focus-visible,.hs:focus-visible{outline:1.5px solid var(--oak);outline-of
   const app=$('#app'), vp=$('#viewport'), scene=$('#scene'), base=$('#base'), variant=$('#variant'), sweep=$('#sweep');
   const picker=$('#picker'), ring=$('#ring'), ringWrap=$('#ringWrap');
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let current = 0, focus = 0, zoomed = false, busy = false, cart = 0;
+  let current = 0, focus = 0, zoomed = false, busy = false, cart = 0, shotCv = null;
 
   VARIANTS.forEach(v => { const i=new Image(); i.src=v.room; const j=new Image(); j.src=v.img; });
   base.src = VARIANTS[0].room;
@@ -281,6 +281,17 @@ button:focus-visible,.hs:focus-visible{outline:1.5px solid var(--oak);outline-of
   async function openPicker(h){
     if(busy||zoomed) return; zoomed = true;
     app.classList.add('stage-zoomed');
+    // product shot: the var2 dolly-in only exists for the white throw, so other variants keep the CSS zoom
+    if(h.dataset.slot==='sofa-cover' && VARIANTS[current].id==='white' && await loadSeq('product-throw', 61)){
+      busy=true; walk.getAnimations().forEach(a=>a.cancel()); walk.hidden=false; walk.style.opacity=1; walk.style.zIndex=1;
+      shotCv = await playSeq('product-throw', {D:2600});
+      busy=false;
+      focus = current; rot = -focus*STEP; buildRing(); setInfo(); render();
+      picker.classList.add('open'); picker.setAttribute('aria-hidden','false');
+      ring.animate([{transform:ringTf(rot, .55)},{transform:ringTf(rot,1)}],{duration:reduce?1:900,easing:'cubic-bezier(.16,1,.3,1)'});
+      $('#choose').focus({preventScroll:true});
+      return;
+    }
     const fx = parseFloat(h.style.left)/100, fy = parseFloat(h.style.top)/100;
     const s = Math.max(2.4, 2.4*1100/Math.max(W,700));
     const t = target(fx, fy-.04, s, W/2, H*.42);
@@ -294,6 +305,15 @@ button:focus-visible,.hs:focus-visible{outline:1.5px solid var(--oak);outline-of
   async function closePicker(chosen){
     if(!zoomed||busy) return;
     picker.classList.remove('open'); picker.setAttribute('aria-hidden','true');
+    if(shotCv){ // leave the product shot by playing the dolly backwards
+      busy=true;
+      if(chosen!=null && chosen!==current){ await swapRoom(chosen, true); walk.animate([{opacity:1},{opacity:0}],{duration:700,fill:'forwards'}).finished.then(()=>{}); await new Promise(r=>setTimeout(r,700)); }
+      else await playSeq('product-throw', {D:2200, reverse:true, cv:shotCv});
+      shotCv.remove(); shotCv=null; walk.hidden=true; walk.getAnimations().forEach(a=>a.cancel()); walk.style.zIndex=''; hall.style.opacity='';
+      busy=false; app.classList.remove('stage-zoomed'); zoomed=false;
+      if(chosen!=null && chosen!==current){ current = chosen; toast('הכיסוי הוחלף: '+VARIANTS[chosen].name); }
+      return;
+    }
     if(chosen!=null && chosen!==current) await swapRoom(chosen, true);
     scene.classList.remove('zoomed');
     await tween({s:1,ox:0,oy:0}, 1200);
@@ -390,39 +410,37 @@ button:focus-visible,.hs:focus-visible{outline:1.5px solid var(--oak);outline-of
     const h=document.querySelector('.hs[data-slot]'); h.classList.add('hint'); setTimeout(()=>h.classList.remove('hint'), 3400);
     if(maxPan()>0) setTimeout(()=>toast('גררו הצידה כדי להסתכל בחדר'), 900);
   }
-  /* frame sequence from the var2 walk-in video (docs/motion-plan.md: one video, many shots) */
-  const WALK_FRAMES = 61, walkImgs = [];
-  function loadWalkFrames(){
-    if(walkImgs.length) return Promise.all(walkImgs.map(im=>im.decode().catch(()=>{})));
-    for(let i=1;i<=WALK_FRAMES;i++){ const im=new Image(); im.src=`assets/frames/entrance/${String(i).padStart(3,'0')}.webp`; walkImgs.push(im); }
-    return Promise.all(walkImgs.map(im=>im.decode().catch(()=>{})));
+  /* frame sequences from var2 videos (docs/motion-plan.md: one video, many shots) */
+  const SEQ = {};
+  function loadSeq(name, n){
+    if(!SEQ[name]){ SEQ[name]=[]; for(let i=1;i<=n;i++){ const im=new Image(); im.src=`assets/frames/${name}/${String(i).padStart(3,'0')}.webp`; SEQ[name].push(im); } }
+    return Promise.all(SEQ[name].map(im=>im.decode().catch(()=>{}))).then(()=>SEQ[name].every(im=>im.naturalWidth>0));
   }
-  loadWalkFrames();
-  function playWalkFrames(){
+  loadSeq('entrance', 61); loadSeq('product-throw', 61);
+  // plays a sequence full-screen inside #walk; resolves with the canvas (last frame stays drawn)
+  function playSeq(name, {D=4600, reverse=false, cv=null}={}){
+    const imgs=SEQ[name], n=imgs.length;
     return new Promise(res=>{
-      const cv=document.createElement('canvas'); cv.style.cssText='position:absolute;inset:0;width:100%;height:100%';
+      if(!cv){ cv=document.createElement('canvas'); cv.style.cssText='position:absolute;inset:0;width:100%;height:100%'; walk.appendChild(cv); }
       const dpr=Math.min(devicePixelRatio||1,2); cv.width=innerWidth*dpr; cv.height=innerHeight*dpr;
-      const ctx=cv.getContext('2d'); walk.appendChild(cv); hall.style.opacity=0;
-      function draw(im){ // object-fit: cover
-        const s=Math.max(cv.width/im.naturalWidth, cv.height/im.naturalHeight), w=im.naturalWidth*s, h=im.naturalHeight*s;
-        ctx.drawImage(im,(cv.width-w)/2,(cv.height-h)/2,w,h);
-      }
-      const D=4600, ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2, t0=performance.now();
+      const ctx=cv.getContext('2d'); hall.style.opacity=0;
+      const draw=im=>{ const s=Math.max(cv.width/im.naturalWidth, cv.height/im.naturalHeight), w=im.naturalWidth*s, h=im.naturalHeight*s; ctx.drawImage(im,(cv.width-w)/2,(cv.height-h)/2,w,h); };
+      const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2, t0=performance.now();
       (function step(now){
-        const k=Math.min(1,(now-t0)/D), i=Math.round(ease(k)*(WALK_FRAMES-1)), im=walkImgs[i];
-        if(im.complete && im.naturalWidth) draw(im);
+        const k=reduce?1:Math.min(1,(now-t0)/D), f=ease(k), i=Math.round((reverse?1-f:f)*(n-1));
+        draw(imgs[i]);
         if(k<1) requestAnimationFrame(step); else res(cv);
       })(t0);
     });
   }
   $('#enter').onclick = async () => {
     wroom.src = VARIANTS[current].room;
-    const framesOk = await loadWalkFrames().then(()=>walkImgs.every(im=>im.naturalWidth>0));
+    const framesOk = await loadSeq('entrance', 61);
     if(framesOk && !reduce){
       walk.hidden=false; $('#intro').classList.add('gone');
-      const cv = await playWalkFrames();
+      const cv = await playSeq('entrance');
       // the video's last frame is the room itself, so just fade the overlay away
-      walk.animate([{opacity:1},{opacity:0}],{duration:600,fill:'forwards'}).onfinish=()=>{ walk.hidden=true; cv.remove(); hall.style.opacity=''; arrive(); };
+      walk.animate([{opacity:1},{opacity:0}],{duration:600,fill:'forwards'}).onfinish=()=>{ walk.hidden=true; cv.remove(); hall.style.opacity=''; walk.getAnimations().forEach(a=>a.cancel()); arrive(); };
       return;
     }
     if(SW>W){ const p=(SW/2 - W/2 - cam.panX)/(SW-W); wroom.style.objectPosition=(p*100).toFixed(2)+'% 50%'; }
