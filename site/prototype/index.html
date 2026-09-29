@@ -1,3 +1,7 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>I design · סלון נורדי</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -386,8 +390,41 @@ button:focus-visible,.hs:focus-visible{outline:1.5px solid var(--oak);outline-of
     const h=document.querySelector('.hs[data-slot]'); h.classList.add('hint'); setTimeout(()=>h.classList.remove('hint'), 3400);
     if(maxPan()>0) setTimeout(()=>toast('גררו הצידה כדי להסתכל בחדר'), 900);
   }
+  /* frame sequence from the var2 walk-in video (docs/motion-plan.md: one video, many shots) */
+  const WALK_FRAMES = 61, walkImgs = [];
+  function loadWalkFrames(){
+    if(walkImgs.length) return Promise.all(walkImgs.map(im=>im.decode().catch(()=>{})));
+    for(let i=1;i<=WALK_FRAMES;i++){ const im=new Image(); im.src=`assets/frames/entrance/${String(i).padStart(3,'0')}.webp`; walkImgs.push(im); }
+    return Promise.all(walkImgs.map(im=>im.decode().catch(()=>{})));
+  }
+  loadWalkFrames();
+  function playWalkFrames(){
+    return new Promise(res=>{
+      const cv=document.createElement('canvas'); cv.style.cssText='position:absolute;inset:0;width:100%;height:100%';
+      const dpr=Math.min(devicePixelRatio||1,2); cv.width=innerWidth*dpr; cv.height=innerHeight*dpr;
+      const ctx=cv.getContext('2d'); walk.appendChild(cv); hall.style.opacity=0;
+      function draw(im){ // object-fit: cover
+        const s=Math.max(cv.width/im.naturalWidth, cv.height/im.naturalHeight), w=im.naturalWidth*s, h=im.naturalHeight*s;
+        ctx.drawImage(im,(cv.width-w)/2,(cv.height-h)/2,w,h);
+      }
+      const D=4600, ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2, t0=performance.now();
+      (function step(now){
+        const k=Math.min(1,(now-t0)/D), i=Math.round(ease(k)*(WALK_FRAMES-1)), im=walkImgs[i];
+        if(im.complete && im.naturalWidth) draw(im);
+        if(k<1) requestAnimationFrame(step); else res(cv);
+      })(t0);
+    });
+  }
   $('#enter').onclick = async () => {
     wroom.src = VARIANTS[current].room;
+    const framesOk = await loadWalkFrames().then(()=>walkImgs.every(im=>im.naturalWidth>0));
+    if(framesOk && !reduce){
+      walk.hidden=false; $('#intro').classList.add('gone');
+      const cv = await playWalkFrames();
+      // the video's last frame is the room itself, so just fade the overlay away
+      walk.animate([{opacity:1},{opacity:0}],{duration:600,fill:'forwards'}).onfinish=()=>{ walk.hidden=true; cv.remove(); hall.style.opacity=''; arrive(); };
+      return;
+    }
     if(SW>W){ const p=(SW/2 - W/2 - cam.panX)/(SW-W); wroom.style.objectPosition=(p*100).toFixed(2)+'% 50%'; }
     await Promise.all([hall.decode(), wroom.decode()].map(p=>p.catch(()=>{})));
     walk.hidden = false;
