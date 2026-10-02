@@ -7,6 +7,8 @@ Never commit keys or tokens to the repo.
 
 Usage:
   python3 scripts/cj.py search "chunky knit throw blanket" [--size 20] [--page 1]
+  python3 scripts/cj.py list ["name words"] [--category <categoryId>] [--size 50] [--page 1]
+      # /product/list: browse a whole category page by page (see docs/suppliers/cj-categories.md)
   python3 scripts/cj.py product <pid>
   python3 scripts/cj.py freight <vid> [--to IL] [--qty 1]
 Output is JSON on stdout.
@@ -54,6 +56,18 @@ def search(q, page, size):
     return {"query": q, "total": (d.get("data") or {}).get("totalRecords"), "products": out}
 
 
+def listing(q, page, size, category=None):
+    params = {"pageNum": page, "pageSize": size}
+    if q: params["productNameEn"] = q
+    if category: params["categoryId"] = category
+    d = _req("GET", "/product/list", params, token=token())
+    data = d.get("data") or {}
+    out = [{"id": p.get("pid"), "nameEn": p.get("productNameEn"), "sku": p.get("productSku"),
+            "sellPrice": p.get("sellPrice"), "listedNum": p.get("listedNum"), "bigImage": p.get("productImage"),
+            "category": p.get("categoryName")} for p in data.get("list") or []]
+    return {"query": q, "total": data.get("total"), "products": out, "message": d.get("message")}
+
+
 def product(pid):
     p = _req("GET", "/product/query", {"pid": pid}, token=token()).get("data") or {}
     keep = ("pid", "productNameEn", "productSku", "productImageSet", "productWeight", "materialNameEn",
@@ -80,9 +94,13 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     sub = ap.add_subparsers(dest="cmd", required=True)
     s = sub.add_parser("search"); s.add_argument("q"); s.add_argument("--page", type=int, default=1); s.add_argument("--size", type=int, default=20)
+    l = sub.add_parser("list"); l.add_argument("q", nargs="?", default=""); l.add_argument("--category"); l.add_argument("--page", type=int, default=1); l.add_argument("--size", type=int, default=50)
     p = sub.add_parser("product"); p.add_argument("pid")
     f = sub.add_parser("freight"); f.add_argument("vid"); f.add_argument("--to", default="IL"); f.add_argument("--qty", type=int, default=1)
     a = ap.parse_args()
-    res = search(a.q, a.page, a.size) if a.cmd == "search" else product(a.pid) if a.cmd == "product" else freight(a.vid, a.to, a.qty)
+    if a.cmd == "search": res = search(a.q, a.page, a.size)
+    elif a.cmd == "list": res = listing(a.q, a.page, a.size, a.category)
+    elif a.cmd == "product": res = product(a.pid)
+    else: res = freight(a.vid, a.to, a.qty)
     json.dump(res, sys.stdout, ensure_ascii=False, indent=1)
     print()
