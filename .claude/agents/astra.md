@@ -22,3 +22,14 @@ model: inherit
 - התשובה של Astra היא הצעה, לא החלטה. master-designer והמשתמש מחליטים.
 - מסמך מחייב לא משתנה בגלל Astra.
 - אם הסקריפט נכשל (אין מפתח, אין הרשאה למודל, אין רשת), דווח למנהל בדיוק מה ההודעה. אל תנסה לעקוף.
+
+## בריפים מוכנים (2026-10-02)
+- `briefs/astra/motion-direction-review.brief.md`:
+  - קבצים: `briefs/motion-direction.nordic.md`, `docs/design-bible/nordic.md`
+  - תמונות: `assets/renders/test-2026-09-29/stills/entrance-t3.jpg` ו-`product-t5.jpg`
+  - פלט: `briefs/astra/motion-direction-review.md`
+- `briefs/astra/m0-keyframe-prompts.brief.md`:
+  - קבצים: `briefs/motion-direction.nordic.md`, `docs/design-bible/nordic.md`
+  - פלט: `briefs/astra/m0-keyframe-prompts.md`
+
+מודל מומלץ: gpt-5.1, הזמין במפתח שנבדק ב-2026-10-02.
