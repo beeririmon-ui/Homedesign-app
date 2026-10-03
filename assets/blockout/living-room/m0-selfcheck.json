@@ -1,0 +1,431 @@
+{
+  "tolerance": 0.02,
+  "items": [
+    {
+      "item": "back wall",
+      "axis": "x",
+      "expected": [
+        0.31,
+        0.7
+      ],
+      "measured": [
+        0.3125,
+        0.6979
+      ],
+      "max_dev": 0.0025,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "item": "back wall",
+      "axis": "y",
+      "expected": [
+        0.08,
+        0.58
+      ],
+      "measured": [
+        0.08,
+        0.58
+      ],
+      "max_dev": 0.0,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "item": "ceiling band above back wall",
+      "axis": "y",
+      "expected": [
+        0.0,
+        0.08
+      ],
+      "measured": [
+        0.0,
+        0.08
+      ],
+      "max_dev": 0.0,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "item": "horizon (camera height)",
+      "axis": "y",
+      "expected": 0.36,
+      "measured": 0.3578,
+      "max_dev": 0.0022,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "item": "sofa",
+      "axis": "x",
+      "expected": [
+        0.36,
+        0.64
+      ],
+      "measured": [
+        0.3662,
+        0.6338
+      ],
+      "max_dev": 0.0062,
+      "ok": true,
+      "note": "geometry projection"
+    },
+    {
+      "item": "sofa",
+      "axis": "y",
+      "expected": [
+        0.44,
+        0.62
+      ],
+      "measured": [
+        0.4383,
+        0.617
+      ],
+      "max_dev": 0.003,
+      "ok": true,
+      "note": "geometry projection"
+    },
+    {
+      "item": "sofa",
+      "axis": "mask",
+      "note": "visible pixels (object index pass)",
+      "measured": [
+        0.3661,
+        0.6339,
+        0.4384,
+        0.6171
+      ]
+    },
+    {
+      "item": "coffee-table",
+      "axis": "x",
+      "expected": [
+        0.39,
+        0.61
+      ],
+      "measured": [
+        0.3971,
+        0.6029
+      ],
+      "max_dev": 0.0071,
+      "ok": true,
+      "note": "geometry projection"
+    },
+    {
+      "item": "coffee-table",
+      "axis": "y",
+      "expected": [
+        0.55,
+        0.69
+      ],
+      "measured": [
+        0.5512,
+        0.6792
+      ],
+      "max_dev": 0.0108,
+      "ok": true,
+      "note": "geometry projection"
+    },
+    {
+      "item": "coffee-table",
+      "axis": "mask",
+      "note": "visible pixels (object index pass)",
+      "measured": [
+        0.3971,
+        0.6029,
+        0.5514,
+        0.6792
+      ]
+    },
+    {
+      "item": "armchair",
+      "axis": "x",
+      "expected": [
+        0.17,
+        0.37
+      ],
+      "measured": [
+        0.1559,
+        0.3646
+      ],
+      "max_dev": 0.0141,
+      "ok": true,
+      "note": "geometry projection"
+    },
+    {
+      "item": "armchair",
+      "axis": "y",
+      "expected": [
+        0.5,
+        0.84
+      ],
+      "measured": [
+        0.5093,
+        0.8293
+      ],
+      "max_dev": 0.0107,
+      "ok": true,
+      "note": "geometry projection"
+    },
+    {
+      "item": "armchair",
+      "axis": "mask",
+      "note": "visible pixels (object index pass)",
+      "measured": [
+        0.1565,
+        0.3646,
+        0.5093,
+        0.8292
+      ]
+    },
+    {
+      "item": "window opening",
+      "axis": "x",
+      "expected": [
+        0.2,
+        0.29
+      ],
+      "measured": [
+        0.2,
+        0.2931
+      ],
+      "max_dev": 0.0031,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "item": "window head",
+      "axis": "y",
+      "expected": [
+        0.02,
+        0.12
+      ],
+      "measured": [
+        0.017,
+        0.1228
+      ],
+      "max_dev": 0.003,
+      "ok": true,
+      "note": "front edge -> back edge"
+    },
+    {
+      "item": "window sill",
+      "axis": "y",
+      "expected": [
+        0.51,
+        0.58
+      ],
+      "measured": [
+        0.511,
+        0.58
+      ],
+      "max_dev": 0.001,
+      "ok": true,
+      "note": "back edge -> front edge"
+    },
+    {
+      "item": "left wall free (Y 2.40-4.00)",
+      "axis": "x",
+      "expected": [
+        0.0,
+        0.2
+      ],
+      "measured": [
+        0.0,
+        0.2
+      ],
+      "max_dev": 0.0,
+      "ok": true,
+      "note": "Y=4.00 projects to x=-0.000 (off-frame when <0); camera sees the left wall from Y=4.00"
+    },
+    {
+      "item": "right wall",
+      "axis": "x",
+      "expected": [
+        0.7,
+        1.0
+      ],
+      "measured": [
+        0.6979,
+        1.0
+      ],
+      "max_dev": 0.0021,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "item": "front floor empty, full width",
+      "axis": "y",
+      "expected": [
+        0.84,
+        1.0
+      ],
+      "measured": 0.8292,
+      "max_dev": 0.0,
+      "ok": true,
+      "note": "lowest furniture pixel (object index pass); ok = no furniture below expected top + tol"
+    },
+    {
+      "item": "front floor empty, right of x 0.37",
+      "axis": "y",
+      "expected": [
+        0.79,
+        1.0
+      ],
+      "measured": 0.6792,
+      "max_dev": 0.0,
+      "ok": true,
+      "note": "lowest furniture pixel (object index pass); ok = no furniture below expected top + tol"
+    },
+    {
+      "item": "framed-art (overlay)",
+      "axis": "x",
+      "expected": [
+        0.42,
+        0.58
+      ],
+      "measured": [
+        0.4189,
+        0.5811
+      ],
+      "max_dev": 0.0011,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "item": "framed-art (overlay)",
+      "axis": "y",
+      "expected": [
+        0.21,
+        0.4
+      ],
+      "measured": [
+        0.2136,
+        0.3996
+      ],
+      "max_dev": 0.0036,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "item": "pendant (overlay)",
+      "axis": "x",
+      "expected": [
+        0.47,
+        0.53
+      ],
+      "measured": [
+        0.4679,
+        0.5321
+      ],
+      "max_dev": 0.0021,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "item": "pendant (overlay)",
+      "axis": "y",
+      "expected": [
+        0.06,
+        0.15
+      ],
+      "measured": [
+        0.0598,
+        0.1524
+      ],
+      "max_dev": 0.0024,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "item": "wall-sconce plate (overlay)",
+      "axis": "x",
+      "expected": 0.16,
+      "measured": 0.1591,
+      "max_dev": 0.0009,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "item": "wall-sconce plate (overlay)",
+      "axis": "y",
+      "expected": 0.27,
+      "measured": 0.2669,
+      "max_dev": 0.0031,
+      "ok": true,
+      "note": ""
+    }
+  ],
+  "armchair_sofa_gap": {
+    "touching": false,
+    "min_gap_frame_w": 0.0016,
+    "min_gap_px": 6.0,
+    "image_width_px": 3840,
+    "closest_points_xy": [
+      [
+        0.3643,
+        0.5731
+      ],
+      [
+        0.3661,
+        0.5731
+      ]
+    ],
+    "min_horizontal_gap_same_row_frame_w": 0.0016,
+    "rows_overlap_y": [
+      0.5093,
+      0.6171
+    ],
+    "required_min": 0.01,
+    "ok": false
+  },
+  "pendant_to_art_gap": 0.0612,
+  "future_items": {
+    "framed-art": [
+      0.4189,
+      0.5811,
+      0.2136,
+      0.3996
+    ],
+    "pendant": [
+      0.4679,
+      0.5321,
+      0.0598,
+      0.1524
+    ],
+    "wall-sconce": [
+      0.1532,
+      0.1685,
+      0.2447,
+      0.2883
+    ],
+    "rug": [
+      0.2053,
+      0.7947,
+      0.6061,
+      0.7914
+    ],
+    "planter": [
+      0.3174,
+      0.3627,
+      0.5,
+      0.6009
+    ],
+    "floor-lamp": [
+      0.6242,
+      0.6712,
+      0.2974,
+      0.3578
+    ],
+    "pouf": [
+      0.6243,
+      0.6973,
+      0.58,
+      0.7381
+    ]
+  },
+  "all_ok": true,
+  "all_ok_including_armchair_sofa_gap": false,
+  "depth_check_back_wall_m": 6.4,
+  "depth_check_back_wall_corner_m": 6.4
+}
