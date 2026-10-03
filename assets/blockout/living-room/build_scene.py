@@ -661,6 +661,7 @@ def self_check(cam, roots, idx, res):
         (x0, x1), (y0, y1) = bbox2d(cam, fs[name]["hull"])
         rep["future_items"][name] = [round(x0, 4), round(x1, 4), round(y0, 4), round(y1, 4)]
     rep["future_items_expected_review"] = EXPECTED_FUTURE
+    rep["overlay_checks"] = overlay_checks(cam, idx)
     fl = FUTURE["floor-lamp"]
     base = [(fl["c"][0] + fl["base_r"] * math.cos(t), fl["c"][1] + fl["base_r"] * math.sin(t), 0.0)
             for t in np.linspace(0, 2 * math.pi, 96)]
@@ -677,6 +678,109 @@ def self_check(cam, roots, idx, res):
     rep["all_ok_including_gap_and_floor"] = (rep["all_ok_including_armchair_sofa_gap"]
                                              and rep["front_floor_exposed_below_rug"]["ok"])
     return rep
+
+
+def _hull2d(points):
+    pts = sorted(set((float(x), float(y)) for x, y in points))
+    if len(pts) < 3:
+        return pts
+
+    def cross(o, a, b):
+        return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])
+    lo, up = [], []
+    for p in pts:
+        while len(lo) >= 2 and cross(lo[-2], lo[-1], p) <= 0:
+            lo.pop()
+        lo.append(p)
+    for p in reversed(pts):
+        while len(up) >= 2 and cross(up[-2], up[-1], p) <= 0:
+            up.pop()
+        up.append(p)
+    return lo[:-1] + up[:-1]
+
+
+def _seg_dist(p, a, b):
+    ax, ay = b[0] - a[0], b[1] - a[1]
+    t = max(0.0, min(1.0, ((p[0] - a[0]) * ax + (p[1] - a[1]) * ay) / max(ax * ax + ay * ay, 1e-12)))
+    return math.hypot(p[0] - a[0] - t * ax, p[1] - a[1] - t * ay)
+
+
+def poly_gap(pa, pb):
+    """Min distance between two convex 2D polygons (0 if they intersect)."""
+    for poly in (pa, pb):
+        for i in range(len(poly)):
+            a, b = poly[i], poly[(i + 1) % len(poly)]
+            n = (a[1] - b[1], b[0] - a[0])
+            ra = [n[0] * x + n[1] * y for x, y in pa]
+            rb = [n[0] * x + n[1] * y for x, y in pb]
+            if max(ra) < min(rb) or max(rb) < min(ra):
+                break
+        else:
+            continue
+        break
+    else:
+        return 0.0
+    d = min(_seg_dist(p, pb[i], pb[(i + 1) % len(pb)]) for p in pa for i in range(len(pb)))
+    return min(d, min(_seg_dist(p, pa[i], pa[(i + 1) % len(pa)]) for p in pb for i in range(len(pa))))
+
+
+def overlay_checks(cam, idx):
+    """review-designer.md 3.1.5 'additional overlay checks'. Distances in frame-width units."""
+    from PIL import Image, ImageDraw
+    H, W = idx.shape
+    asp = H / W
+    fs = future_shapes()
+
+    def hull(name):
+        return _hull2d([(x, y * asp) for x, y, _ in (proj(cam, p) for p in fs[name]["hull"])])
+    out = {}
+    # (1) magazine holder: fully in frame, touches no other slot, >= 0.03 from pouf and rug right edge
+    mh = hull("magazine-holder")
+    (x0, x1), (y0, y1) = bbox2d(cam, fs["magazine-holder"]["hull"])
+    others = {n: poly_gap(mh, hull(n)) for n in FUTURE if n != "magazine-holder"}
+    rug = FUTURE["rug"]
+    rx = rug["c"][0] + rug["s"][0] / 2
+    ry0, ry1 = rug["c"][1] - rug["s"][1] / 2, rug["c"][1] + rug["s"][1] / 2
+    ra, rb = proj(cam, (rx, ry0, 0.01)), proj(cam, (rx, ry1, 0.01))
+    rug_edge = min(_seg_dist(p, (ra[0], ra[1] * asp), (rb[0], rb[1] * asp)) for p in mh)
+    # horizontal gap at the holder's base row (its front-bottom corner) to the rug's right edge line
+    f = FUTURE["magazine-holder"]
+    cx_, cy_, _ = proj(cam, (f["c"][0] - f["s"][0] / 2, f["c"][1] + f["s"][1] / 2, 0.0))   # front-bottom-inner corner
+    t = (cy_ - ra[1]) / (rb[1] - ra[1])
+    rug_x_at = ra[0] + t * (rb[0] - ra[0])
+    rug_edge_h = cx_ - rug_x_at
+    out["magazine_holder"] = dict(
+        frame_box=[round(x0, 4), round(x1, 4), round(y0, 4), round(y1, 4)],
+        in_frame=bool(x0 >= 0 and x1 <= 1 and y0 >= 0 and y1 <= 1),
+        gap_to_pouf=round(others["pouf"], 4), gap_to_rug_right_edge=round(rug_edge, 4),
+        gap_to_rug_right_edge_horizontal=round(rug_edge_h, 4),
+        overlaps=[n for n, g in others.items() if g == 0.0], required_min=0.03)
+    m = out["magazine_holder"]
+    m["ok"] = bool(m["in_frame"] and not m["overlaps"] and m["gap_to_pouf"] >= 0.03 and m["gap_to_rug_right_edge"] >= 0.03)
+    # (3) planter vessel: >= 65% visible (sofa / armchair in front), its edges >= 0.01 from their silhouettes
+    ph = [(x * W, y / asp * H) for x, y in hull("planter")]
+    im = Image.new("L", (W, H), 0)
+    ImageDraw.Draw(im).polygon(ph, fill=1)
+    pm = np.array(im, bool)
+    furn = (idx == PASS_INDEX["sofa"]) | (idx == PASS_INDEX["armchair"])
+    vis = 1.0 - (pm & furn).sum() / max(pm.sum(), 1)
+    (px0, px1), _ = bbox2d(cam, fs["planter"]["hull"])
+    rows = np.nonzero(pm.any(1))[0]
+    best = {}
+    for nm in ("sofa", "armchair"):
+        mk = idx[rows] == PASS_INDEX[nm]
+        cols = np.nonzero(mk.any(0))[0]
+        if not len(cols):
+            best[nm] = None
+            continue
+        ext = (cols.min() / W, (cols.max() + 1) / W)          # outer silhouette extents in the vessel's rows
+        best[nm] = round(float(min(abs(e - v) for e in ext for v in (px0, px1))), 4)
+    out["planter"] = dict(visible_fraction=round(float(vis), 4), required_visible=0.65,
+                          edge_gap_to_sofa=best["sofa"], edge_gap_to_armchair=best["armchair"], required_min=0.01,
+                          note="edge gap: vessel left/right edge vs the outer left/right extents of the sofa and "
+                               "armchair silhouettes in the vessel's rows (no coincident edges)")
+    out["planter"]["ok"] = bool(vis >= 0.65 and all(v is not None and v >= 0.01 for v in best.values()))
+    return out
 
 
 def _edge(mask):

@@ -1,0 +1,552 @@
+{
+  "tolerance": 0.02,
+  "items": [
+    {
+      "item": "back wall",
+      "axis": "x",
+      "expected": [
+        0.342,
+        0.749
+      ],
+      "measured": [
+        0.3417,
+        0.7494
+      ],
+      "max_dev": 0.0004,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "item": "back wall",
+      "axis": "y",
+      "expected": [
+        0.095,
+        0.624
+      ],
+      "measured": [
+        0.095,
+        0.624
+      ],
+      "max_dev": 0.0,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "item": "ceiling band above back wall",
+      "axis": "y",
+      "expected": [
+        0.0,
+        0.095
+      ],
+      "measured": [
+        0.0,
+        0.095
+      ],
+      "max_dev": 0.0,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "item": "horizon (camera height)",
+      "axis": "y",
+      "expected": 0.389,
+      "measured": 0.3889,
+      "max_dev": 0.0001,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "item": "sofa",
+      "axis": "x",
+      "expected": [
+        0.397,
+        0.683
+      ],
+      "measured": [
+        0.397,
+        0.6829
+      ],
+      "max_dev": 0.0001,
+      "ok": true,
+      "note": "geometry projection"
+    },
+    {
+      "item": "sofa",
+      "axis": "y",
+      "expected": [
+        0.472,
+        0.665
+      ],
+      "measured": [
+        0.4742,
+        0.6657
+      ],
+      "max_dev": 0.0022,
+      "ok": true,
+      "note": "geometry projection"
+    },
+    {
+      "item": "sofa",
+      "axis": "mask",
+      "note": "visible pixels (object index pass)",
+      "measured": [
+        0.3971,
+        0.6831,
+        0.4741,
+        0.6657
+      ]
+    },
+    {
+      "item": "coffee-table",
+      "axis": "x",
+      "expected": [
+        0.425,
+        0.655
+      ],
+      "measured": [
+        0.4284,
+        0.6516
+      ],
+      "max_dev": 0.0034,
+      "ok": true,
+      "note": "geometry projection"
+    },
+    {
+      "item": "coffee-table",
+      "axis": "y",
+      "expected": [
+        0.597,
+        0.736
+      ],
+      "measured": [
+        0.5968,
+        0.7379
+      ],
+      "max_dev": 0.0019,
+      "ok": true,
+      "note": "geometry projection"
+    },
+    {
+      "item": "coffee-table",
+      "axis": "mask",
+      "note": "visible pixels (object index pass)",
+      "measured": [
+        0.4284,
+        0.6516,
+        0.5968,
+        0.738
+      ]
+    },
+    {
+      "item": "armchair",
+      "axis": "x",
+      "expected": [
+        0.18,
+        0.375
+      ],
+      "measured": [
+        0.167,
+        0.3741
+      ],
+      "max_dev": 0.013,
+      "ok": true,
+      "note": "geometry projection"
+    },
+    {
+      "item": "armchair",
+      "axis": "y",
+      "expected": [
+        0.55,
+        0.9
+      ],
+      "measured": [
+        0.5483,
+        0.9028
+      ],
+      "max_dev": 0.0028,
+      "ok": true,
+      "note": "geometry projection"
+    },
+    {
+      "item": "armchair",
+      "axis": "mask",
+      "note": "visible pixels (object index pass)",
+      "measured": [
+        0.1669,
+        0.3742,
+        0.5481,
+        0.9028
+      ]
+    },
+    {
+      "item": "window opening",
+      "axis": "x",
+      "expected": [
+        0.211,
+        0.32
+      ],
+      "measured": [
+        0.2112,
+        0.3198
+      ],
+      "max_dev": 0.0002,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "item": "window head",
+      "axis": "y",
+      "expected": [
+        0.015,
+        0.139
+      ],
+      "measured": [
+        0.0155,
+        0.1388
+      ],
+      "max_dev": 0.0005,
+      "ok": true,
+      "note": "front edge -> back edge"
+    },
+    {
+      "item": "window sill",
+      "axis": "y",
+      "expected": [
+        0.552,
+        0.632
+      ],
+      "measured": [
+        0.552,
+        0.6324
+      ],
+      "max_dev": 0.0004,
+      "ok": true,
+      "note": "back edge -> front edge"
+    },
+    {
+      "item": "left wall free (window -> frame edge)",
+      "axis": "x",
+      "expected": [
+        0.0,
+        0.211
+      ],
+      "measured": [
+        0.0,
+        0.2112
+      ],
+      "max_dev": 0.0002,
+      "ok": true,
+      "note": "left frame edge cuts the left wall at Y=3.828"
+    },
+    {
+      "item": "left wall visible in front of the window",
+      "axis": "m",
+      "expected": ">= 1.4",
+      "measured": 1.4278,
+      "ok": true
+    },
+    {
+      "item": "window head margin from top edge",
+      "axis": "y",
+      "expected": ">= 0.01",
+      "measured": 0.0155,
+      "ok": true,
+      "note": "front edge of the head"
+    },
+    {
+      "item": "principal point u (house axis X=0)",
+      "axis": "x",
+      "expected": 0.54,
+      "measured": 0.54,
+      "max_dev": 0.0,
+      "ok": true,
+      "note": "tolerance 0.003; 0.460 would mean the shift_x sign is flipped"
+    },
+    {
+      "item": "right wall",
+      "axis": "x",
+      "expected": [
+        0.749,
+        1.0
+      ],
+      "measured": [
+        0.7494,
+        1.0
+      ],
+      "max_dev": 0.0004,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "item": "front floor empty, full width",
+      "axis": "y",
+      "expected": [
+        0.91,
+        1.0
+      ],
+      "measured": 0.9028,
+      "max_dev": 0.0,
+      "ok": true,
+      "note": "lowest furniture pixel (object index pass); ok = no furniture below expected top + tol"
+    },
+    {
+      "item": "front floor empty, right of x 0.375",
+      "axis": "y",
+      "expected": [
+        0.74,
+        1.0
+      ],
+      "measured": 0.738,
+      "max_dev": 0.0,
+      "ok": true,
+      "note": "lowest furniture pixel (object index pass); ok = no furniture below expected top + tol"
+    },
+    {
+      "item": "armchair margin to frame edges",
+      "axis": "min",
+      "expected": ">= 0.05",
+      "measured": 0.0972,
+      "ok": true
+    },
+    {
+      "item": "framed-art (overlay)",
+      "axis": "x",
+      "expected": [
+        0.454,
+        0.626
+      ],
+      "measured": [
+        0.4542,
+        0.6258
+      ],
+      "max_dev": 0.0002,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "item": "framed-art (overlay)",
+      "axis": "y",
+      "expected": [
+        0.237,
+        0.433
+      ],
+      "measured": [
+        0.2363,
+        0.4332
+      ],
+      "max_dev": 0.0007,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "item": "pendant (overlay)",
+      "axis": "x",
+      "expected": [
+        0.503,
+        0.577
+      ],
+      "measured": [
+        0.5054,
+        0.5746
+      ],
+      "max_dev": 0.0024,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "item": "pendant (overlay)",
+      "axis": "y",
+      "expected": [
+        0.066,
+        0.168
+      ],
+      "measured": [
+        0.0655,
+        0.1677
+      ],
+      "max_dev": 0.0005,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "item": "wall-sconce plate (overlay)",
+      "axis": "x",
+      "expected": 0.164,
+      "measured": 0.1615,
+      "max_dev": 0.0025,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "item": "wall-sconce plate (overlay)",
+      "axis": "y",
+      "expected": 0.288,
+      "measured": 0.2879,
+      "max_dev": 0.0001,
+      "ok": true,
+      "note": ""
+    }
+  ],
+  "armchair_sofa_gap": {
+    "touching": false,
+    "min_gap_frame_w": 0.0234,
+    "min_gap_px": 89.7,
+    "image_width_px": 3840,
+    "closest_points_xy": [
+      [
+        0.3737,
+        0.6306
+      ],
+      [
+        0.3971,
+        0.6255
+      ]
+    ],
+    "min_horizontal_gap_same_row_frame_w": 0.0247,
+    "rows_overlap_y": [
+      0.5481,
+      0.6657
+    ],
+    "required_min": 0.02,
+    "ok": true
+  },
+  "pendant_to_art_gap": 0.0686,
+  "framed_art_centre": [
+    0.54,
+    0.3347
+  ],
+  "front_floor_exposed_below_rug": {
+    "rug_front_edge_y": 0.8743,
+    "exposed_fraction": 0.1257,
+    "target": [
+      0.12,
+      0.13
+    ],
+    "ok": true
+  },
+  "future_items": {
+    "framed-art": [
+      0.4542,
+      0.6258,
+      0.2363,
+      0.4332
+    ],
+    "pendant": [
+      0.5054,
+      0.5746,
+      0.0655,
+      0.1677
+    ],
+    "wall-sconce": [
+      0.1541,
+      0.1726,
+      0.2631,
+      0.3118
+    ],
+    "rug": [
+      0.2101,
+      0.8699,
+      0.6535,
+      0.8743
+    ],
+    "planter": [
+      0.3396,
+      0.386,
+      0.5411,
+      0.6494
+    ],
+    "floor-lamp": [
+      0.6718,
+      0.7218,
+      0.3247,
+      0.3889
+    ],
+    "pouf": [
+      0.6646,
+      0.7676,
+      0.6621,
+      0.8477
+    ],
+    "magazine-holder": [
+      0.8092,
+      0.8854,
+      0.5963,
+      0.784
+    ]
+  },
+  "future_items_expected_review": {
+    "rug": [
+      0.21,
+      0.87,
+      0.656,
+      0.874
+    ],
+    "planter": [
+      0.341,
+      0.385,
+      0.54,
+      0.65
+    ],
+    "floor-lamp": [
+      0.672,
+      0.721,
+      0.327,
+      0.389
+    ],
+    "pouf": [
+      0.665,
+      0.765,
+      0.652,
+      0.848
+    ],
+    "magazine-holder": [
+      0.809,
+      0.885,
+      0.596,
+      0.784
+    ]
+  },
+  "overlay_checks": {
+    "magazine_holder": {
+      "frame_box": [
+        0.8092,
+        0.8854,
+        0.5963,
+        0.784
+      ],
+      "in_frame": true,
+      "gap_to_pouf": 0.0416,
+      "gap_to_rug_right_edge": 0.0162,
+      "gap_to_rug_right_edge_horizontal": 0.0283,
+      "overlaps": [],
+      "required_min": 0.03,
+      "ok": false
+    },
+    "planter": {
+      "visible_fraction": 0.7896,
+      "required_visible": 0.65,
+      "edge_gap_to_sofa": 0.0111,
+      "edge_gap_to_armchair": 0.012,
+      "required_min": 0.01,
+      "note": "edge gap: vessel left/right edge vs the outer left/right extents of the sofa and armchair silhouettes in the vessel's rows (no coincident edges)",
+      "ok": true
+    }
+  },
+  "floor_lamp_base_vs_pouf_top": {
+    "lamp_base_y": [
+      0.6299,
+      0.6429
+    ],
+    "pouf_top_y": 0.6621,
+    "gap": 0.0193,
+    "required_min": 0.02,
+    "ok": false,
+    "note": "Bible 1.2.2: the lamp base must sit >= 0.02 above (in frame) the pouf's top edge"
+  },
+  "future_items_note": "Bible 1.2.2: planter (-1.50, 0.40) d38 h45; pouf (0.88, 2.70) d50 h37; magazine holder X 1.615-1.865 Y 2.05-2.45 h50; floor-lamp base r15",
+  "all_ok": true,
+  "all_ok_including_armchair_sofa_gap": true,
+  "all_ok_including_gap_and_floor": true,
+  "depth_check_back_wall_m": 6.05,
+  "depth_check_back_wall_corner_m": 6.05
+}
