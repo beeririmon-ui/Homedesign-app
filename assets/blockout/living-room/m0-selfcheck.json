@@ -1,0 +1,2826 @@
+{
+  "tolerance": 0.02,
+  "items": [
+    {
+      "item": "back wall",
+      "axis": "x",
+      "expected": [
+        0.342,
+        0.749
+      ],
+      "measured": [
+        0.3417,
+        0.7494
+      ],
+      "max_dev": 0.0004,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "item": "back wall",
+      "axis": "y",
+      "expected": [
+        0.095,
+        0.624
+      ],
+      "measured": [
+        0.095,
+        0.624
+      ],
+      "max_dev": 0.0,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "item": "ceiling band above back wall",
+      "axis": "y",
+      "expected": [
+        0.0,
+        0.095
+      ],
+      "measured": [
+        0.0,
+        0.095
+      ],
+      "max_dev": 0.0,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "item": "horizon (camera height)",
+      "axis": "y",
+      "expected": 0.389,
+      "measured": 0.3889,
+      "max_dev": 0.0001,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "item": "sofa",
+      "axis": "x",
+      "expected": [
+        0.397,
+        0.683
+      ],
+      "measured": [
+        0.397,
+        0.6829
+      ],
+      "max_dev": 0.0001,
+      "ok": true,
+      "note": "geometry projection"
+    },
+    {
+      "item": "sofa",
+      "axis": "y",
+      "expected": [
+        0.472,
+        0.665
+      ],
+      "measured": [
+        0.4742,
+        0.6657
+      ],
+      "max_dev": 0.0022,
+      "ok": true,
+      "note": "geometry projection"
+    },
+    {
+      "item": "sofa",
+      "axis": "mask",
+      "note": "visible pixels (object index pass)",
+      "measured": [
+        0.3971,
+        0.6831,
+        0.4741,
+        0.6657
+      ]
+    },
+    {
+      "item": "coffee-table",
+      "axis": "x",
+      "expected": [
+        0.425,
+        0.655
+      ],
+      "measured": [
+        0.4284,
+        0.6516
+      ],
+      "max_dev": 0.0034,
+      "ok": true,
+      "note": "geometry projection"
+    },
+    {
+      "item": "coffee-table",
+      "axis": "y",
+      "expected": [
+        0.597,
+        0.736
+      ],
+      "measured": [
+        0.5968,
+        0.7379
+      ],
+      "max_dev": 0.0019,
+      "ok": true,
+      "note": "geometry projection"
+    },
+    {
+      "item": "coffee-table",
+      "axis": "mask",
+      "note": "visible pixels (object index pass)",
+      "measured": [
+        0.4284,
+        0.6516,
+        0.5968,
+        0.738
+      ]
+    },
+    {
+      "item": "armchair",
+      "axis": "x",
+      "expected": [
+        0.18,
+        0.375
+      ],
+      "measured": [
+        0.167,
+        0.3741
+      ],
+      "max_dev": 0.013,
+      "ok": true,
+      "note": "geometry projection"
+    },
+    {
+      "item": "armchair",
+      "axis": "y",
+      "expected": [
+        0.55,
+        0.9
+      ],
+      "measured": [
+        0.5483,
+        0.9028
+      ],
+      "max_dev": 0.0028,
+      "ok": true,
+      "note": "geometry projection"
+    },
+    {
+      "item": "armchair",
+      "axis": "mask",
+      "note": "visible pixels (object index pass)",
+      "measured": [
+        0.1669,
+        0.3742,
+        0.5481,
+        0.9028
+      ]
+    },
+    {
+      "item": "window opening",
+      "axis": "x",
+      "expected": [
+        0.211,
+        0.32
+      ],
+      "measured": [
+        0.2112,
+        0.3198
+      ],
+      "max_dev": 0.0002,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "item": "window head",
+      "axis": "y",
+      "expected": [
+        0.015,
+        0.139
+      ],
+      "measured": [
+        0.0155,
+        0.1388
+      ],
+      "max_dev": 0.0005,
+      "ok": true,
+      "note": "front edge -> back edge"
+    },
+    {
+      "item": "window sill",
+      "axis": "y",
+      "expected": [
+        0.552,
+        0.632
+      ],
+      "measured": [
+        0.552,
+        0.6324
+      ],
+      "max_dev": 0.0004,
+      "ok": true,
+      "note": "back edge -> front edge"
+    },
+    {
+      "item": "left wall free (window -> frame edge)",
+      "axis": "x",
+      "expected": [
+        0.0,
+        0.211
+      ],
+      "measured": [
+        0.0,
+        0.2112
+      ],
+      "max_dev": 0.0002,
+      "ok": true,
+      "note": "left frame edge cuts the left wall at Y=3.828"
+    },
+    {
+      "item": "left wall visible in front of the window",
+      "axis": "m",
+      "expected": ">= 1.4",
+      "measured": 1.4278,
+      "ok": true
+    },
+    {
+      "item": "window head margin from top edge",
+      "axis": "y",
+      "expected": ">= 0.01",
+      "measured": 0.0155,
+      "ok": true,
+      "note": "front edge of the head"
+    },
+    {
+      "item": "principal point u (house axis X=0)",
+      "axis": "x",
+      "expected": 0.54,
+      "measured": 0.54,
+      "max_dev": 0.0,
+      "ok": true,
+      "note": "tolerance 0.003; 0.460 would mean the shift_x sign is flipped"
+    },
+    {
+      "item": "right wall",
+      "axis": "x",
+      "expected": [
+        0.749,
+        1.0
+      ],
+      "measured": [
+        0.7494,
+        1.0
+      ],
+      "max_dev": 0.0004,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "item": "front floor empty, full width",
+      "axis": "y",
+      "expected": [
+        0.91,
+        1.0
+      ],
+      "measured": 0.9028,
+      "max_dev": 0.0,
+      "ok": true,
+      "note": "lowest furniture pixel (object index pass); ok = no furniture below expected top + tol"
+    },
+    {
+      "item": "front floor empty, right of x 0.375",
+      "axis": "y",
+      "expected": [
+        0.74,
+        1.0
+      ],
+      "measured": 0.738,
+      "max_dev": 0.0,
+      "ok": true,
+      "note": "lowest furniture pixel (object index pass); ok = no furniture below expected top + tol"
+    },
+    {
+      "item": "armchair margin to frame edges",
+      "axis": "min",
+      "expected": ">= 0.05",
+      "measured": 0.0972,
+      "ok": true
+    },
+    {
+      "item": "framed-art (overlay)",
+      "axis": "x",
+      "expected": [
+        0.454,
+        0.626
+      ],
+      "measured": [
+        0.4542,
+        0.6258
+      ],
+      "max_dev": 0.0002,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "item": "framed-art (overlay)",
+      "axis": "y",
+      "expected": [
+        0.237,
+        0.433
+      ],
+      "measured": [
+        0.2363,
+        0.4332
+      ],
+      "max_dev": 0.0007,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "item": "pendant (overlay)",
+      "axis": "x",
+      "expected": [
+        0.503,
+        0.577
+      ],
+      "measured": [
+        0.5054,
+        0.5746
+      ],
+      "max_dev": 0.0024,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "item": "pendant (overlay)",
+      "axis": "y",
+      "expected": [
+        0.066,
+        0.168
+      ],
+      "measured": [
+        0.0655,
+        0.1677
+      ],
+      "max_dev": 0.0005,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "item": "wall-sconce plate (overlay)",
+      "axis": "x",
+      "expected": 0.164,
+      "measured": 0.1615,
+      "max_dev": 0.0025,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "item": "wall-sconce plate (overlay)",
+      "axis": "y",
+      "expected": 0.288,
+      "measured": 0.2879,
+      "max_dev": 0.0001,
+      "ok": true,
+      "note": ""
+    }
+  ],
+  "armchair_sofa_gap": {
+    "touching": false,
+    "min_gap_frame_w": 0.0234,
+    "min_gap_px": 89.7,
+    "image_width_px": 3840,
+    "closest_points_xy": [
+      [
+        0.3737,
+        0.6306
+      ],
+      [
+        0.3971,
+        0.6255
+      ]
+    ],
+    "min_horizontal_gap_same_row_frame_w": 0.0247,
+    "rows_overlap_y": [
+      0.5481,
+      0.6657
+    ],
+    "required_min": 0.02,
+    "ok": true
+  },
+  "pendant_to_art_gap": 0.0686,
+  "framed_art_centre": [
+    0.54,
+    0.3347
+  ],
+  "front_floor_exposed_below_rug": {
+    "rug_front_edge_y": 0.8743,
+    "exposed_fraction": 0.1257,
+    "target": [
+      0.12,
+      0.13
+    ],
+    "ok": true
+  },
+  "future_items": {
+    "framed-art": [
+      0.4542,
+      0.6258,
+      0.2363,
+      0.4332
+    ],
+    "pendant": [
+      0.5054,
+      0.5746,
+      0.0655,
+      0.1677
+    ],
+    "wall-sconce": [
+      0.1541,
+      0.1726,
+      0.2631,
+      0.3118
+    ],
+    "rug": [
+      0.2101,
+      0.8699,
+      0.6535,
+      0.8743
+    ],
+    "planter": [
+      0.3396,
+      0.386,
+      0.5411,
+      0.6494
+    ],
+    "floor-lamp": [
+      0.6718,
+      0.7218,
+      0.3247,
+      0.3889
+    ],
+    "pouf": [
+      0.6646,
+      0.7676,
+      0.6621,
+      0.8477
+    ],
+    "magazine-holder": [
+      0.8067,
+      0.9239,
+      0.719,
+      0.9423
+    ]
+  },
+  "future_items_expected_review": {
+    "rug": [
+      0.21,
+      0.87,
+      0.656,
+      0.874
+    ],
+    "planter": [
+      0.341,
+      0.385,
+      0.54,
+      0.65
+    ],
+    "floor-lamp": [
+      0.672,
+      0.721,
+      0.327,
+      0.389
+    ],
+    "pouf": [
+      0.665,
+      0.765,
+      0.662,
+      0.848
+    ],
+    "magazine-holder": [
+      0.807,
+      0.924,
+      0.719,
+      0.942
+    ]
+  },
+  "overlay_checks": {
+    "magazine_holder_overlaps_other_slots": {
+      "overlaps": [],
+      "note": "rug excluded: its corner is hidden inside the holder silhouette on purpose (T junction)",
+      "ok": true
+    },
+    "planter": {
+      "visible_fraction": 0.7896,
+      "required_visible": 0.65,
+      "edge_gap_to_sofa": 0.0111,
+      "edge_gap_to_armchair": 0.012,
+      "required_min": 0.01,
+      "note": "edge gap: vessel left/right edge vs the outer left/right extents of the sofa and armchair silhouettes in the vessel's rows (no coincident edges)",
+      "ok": true
+    }
+  },
+  "floor_lamp_base_vs_pouf_top": {
+    "lamp_base_y": [
+      0.6299,
+      0.6429
+    ],
+    "pouf_top_y": 0.6621,
+    "gap": 0.0193,
+    "required_min": 0.02,
+    "ok": false,
+    "note": "Bible 1.2.2: the lamp base must sit >= 0.02 above (in frame) the pouf's top edge"
+  },
+  "floor_lamp_base_vs_pouf_top_by_height": {
+    "h37": {
+      "pouf_top_y": 0.6621,
+      "gap": 0.0193,
+      "ok": false
+    },
+    "h36": {
+      "pouf_top_y": 0.6654,
+      "gap": 0.0226,
+      "ok": true
+    }
+  },
+  "magazine_holder_v3": {
+    "envelope-h42": {
+      "box_m": {
+        "X": [
+          1.12,
+          1.48
+        ],
+        "Y": [
+          3.25,
+          3.48
+        ],
+        "Z": [
+          0.0,
+          0.42
+        ]
+      },
+      "frame_box": [
+        0.8067,
+        0.9239,
+        0.719,
+        0.9423
+      ],
+      "hull_order": [
+        "BTL",
+        "BTR",
+        "FTR",
+        "FBR",
+        "FBL",
+        "BBL"
+      ],
+      "margins": {
+        "left": 0.8067,
+        "right": 0.0761,
+        "top": 0.719,
+        "bottom": 0.0577
+      },
+      "margins_ok": true,
+      "height_fraction_of_frame": 0.2232,
+      "pouf": {
+        "height": 0.37,
+        "frame_box": [
+          0.6645,
+          0.7677,
+          0.6621,
+          0.8477
+        ],
+        "gap_horizontal": 0.039,
+        "gap_min_distance": 0.039,
+        "required_min": 0.03,
+        "gap_same_row": 0.039,
+        "gap_min_distance_aspect_w": 0.039,
+        "ok": true,
+        "ok_metric": "gap_same_row >= 0.03 (no overlap)"
+      },
+      "rug_corner": {
+        "point": [
+          0.8699,
+          0.8743
+        ],
+        "inside": true,
+        "to_left": 0.0633,
+        "to_right": 0.054,
+        "to_top": 0.1552,
+        "to_bottom": 0.068,
+        "to_nearest_edge": 0.054,
+        "required_min": 0.03,
+        "ok": true
+      },
+      "rug_front_edge_T": {
+        "entry": {
+          "t": 0.9041379266424852,
+          "edge": "BBL-BTL",
+          "point": [
+            0.8067,
+            0.8743
+          ],
+          "dist_to": {
+            "BBL": 0.0225,
+            "BTL": 0.1552
+          }
+        },
+        "dist_above_bottom_corner": 0.0225,
+        "required_min": 0.02,
+        "ok": true
+      },
+      "rug_right_edge": {
+        "entry": {
+          "t": 0.5742126078239493,
+          "edge": "BBL-BTL",
+          "point": [
+            0.8067,
+            0.7812
+          ],
+          "dist_to": {
+            "BBL": 0.1156,
+            "BTL": 0.0622
+          }
+        },
+        "required_min": 0.03,
+        "ok": true
+      },
+      "floor_right_wall_line": {
+        "crossings": [
+          {
+            "t": 0.021102504261706064,
+            "edge": "BTL-BTR",
+            "point": [
+              0.834,
+              0.719
+            ],
+            "dist_to": {
+              "BTL": 0.0274,
+              "BTR": 0.0583
+            }
+          },
+          {
+            "t": 0.04349788872434081,
+            "edge": "FTR-FBR",
+            "point": [
+              0.9239,
+              0.82
+            ],
+            "dist_to": {
+              "FTR": 0.0714,
+              "FBR": 0.1223
+            }
+          }
+        ],
+        "report_only": false,
+        "entry_edge": "BTL-BTR",
+        "through_top_edge": true,
+        "dist_top_left": 0.0273,
+        "dist_top_right": 0.0584,
+        "ok": true
+      },
+      "skirting_line": {
+        "crossings": [
+          {
+            "t": 0.026336541543719002,
+            "edge": "BTL-BTR",
+            "point": [
+              0.8531,
+              0.719
+            ],
+            "dist_to": {
+              "BTL": 0.0464,
+              "BTR": 0.0393
+            }
+          },
+          {
+            "t": 0.04410597630562588,
+            "edge": "FTR-FBR",
+            "point": [
+              0.9239,
+              0.7938
+            ],
+            "dist_to": {
+              "FTR": 0.0452,
+              "FBR": 0.1485
+            }
+          }
+        ],
+        "report_only": true,
+        "entry_edge": "BTL-BTR",
+        "through_top_edge": true,
+        "dist_top_left": 0.0464,
+        "dist_top_right": 0.0393,
+        "ok": true
+      },
+      "ok": true
+    },
+    "envelope-h40": {
+      "box_m": {
+        "X": [
+          1.12,
+          1.48
+        ],
+        "Y": [
+          3.25,
+          3.48
+        ],
+        "Z": [
+          0.0,
+          0.4
+        ]
+      },
+      "frame_box": [
+        0.8067,
+        0.9239,
+        0.7275,
+        0.9423
+      ],
+      "hull_order": [
+        "BTL",
+        "BTR",
+        "FTR",
+        "FBR",
+        "FBL",
+        "BBL"
+      ],
+      "margins": {
+        "left": 0.8067,
+        "right": 0.0761,
+        "top": 0.7275,
+        "bottom": 0.0577
+      },
+      "margins_ok": true,
+      "height_fraction_of_frame": 0.2148,
+      "pouf": {
+        "height": 0.37,
+        "frame_box": [
+          0.6645,
+          0.7677,
+          0.6621,
+          0.8477
+        ],
+        "gap_horizontal": 0.039,
+        "gap_min_distance": 0.039,
+        "required_min": 0.03,
+        "gap_same_row": 0.039,
+        "gap_min_distance_aspect_w": 0.039,
+        "ok": true,
+        "ok_metric": "gap_same_row >= 0.03 (no overlap)"
+      },
+      "rug_corner": {
+        "point": [
+          0.8699,
+          0.8743
+        ],
+        "inside": true,
+        "to_left": 0.0633,
+        "to_right": 0.054,
+        "to_top": 0.1468,
+        "to_bottom": 0.068,
+        "to_nearest_edge": 0.054,
+        "required_min": 0.03,
+        "ok": true
+      },
+      "rug_front_edge_T": {
+        "entry": {
+          "t": 0.9041379266424852,
+          "edge": "BBL-BTL",
+          "point": [
+            0.8067,
+            0.8743
+          ],
+          "dist_to": {
+            "BBL": 0.0225,
+            "BTL": 0.1468
+          }
+        },
+        "dist_above_bottom_corner": 0.0225,
+        "required_min": 0.02,
+        "ok": true
+      },
+      "rug_right_edge": {
+        "entry": {
+          "t": 0.5742126078239493,
+          "edge": "BBL-BTL",
+          "point": [
+            0.8067,
+            0.7812
+          ],
+          "dist_to": {
+            "BBL": 0.1156,
+            "BTL": 0.0537
+          }
+        },
+        "required_min": 0.03,
+        "ok": true
+      },
+      "floor_right_wall_line": {
+        "crossings": [
+          {
+            "t": 0.02298139075633537,
+            "edge": "BTL-BTR",
+            "point": [
+              0.8416,
+              0.7275
+            ],
+            "dist_to": {
+              "BTL": 0.0349,
+              "BTR": 0.0508
+            }
+          },
+          {
+            "t": 0.04349788872434081,
+            "edge": "FTR-FBR",
+            "point": [
+              0.9239,
+              0.82
+            ],
+            "dist_to": {
+              "FTR": 0.0621,
+              "FBR": 0.1223
+            }
+          }
+        ],
+        "report_only": false,
+        "entry_edge": "BTL-BTR",
+        "through_top_edge": true,
+        "dist_top_left": 0.0349,
+        "dist_top_right": 0.0508,
+        "ok": true
+      },
+      "skirting_line": {
+        "crossings": [
+          {
+            "t": 0.028349634261237974,
+            "edge": "BTL-BTR",
+            "point": [
+              0.8611,
+              0.7275
+            ],
+            "dist_to": {
+              "BTL": 0.0544,
+              "BTR": 0.0313
+            }
+          },
+          {
+            "t": 0.04410597630562588,
+            "edge": "FTR-FBR",
+            "point": [
+              0.9239,
+              0.7938
+            ],
+            "dist_to": {
+              "FTR": 0.036,
+              "FBR": 0.1485
+            }
+          }
+        ],
+        "report_only": true,
+        "entry_edge": "BTL-BTR",
+        "through_top_edge": true,
+        "dist_top_left": 0.0544,
+        "dist_top_right": 0.0313,
+        "ok": true
+      },
+      "ok": true
+    },
+    "envelope-h38": {
+      "box_m": {
+        "X": [
+          1.12,
+          1.48
+        ],
+        "Y": [
+          3.25,
+          3.48
+        ],
+        "Z": [
+          0.0,
+          0.38
+        ]
+      },
+      "frame_box": [
+        0.8067,
+        0.9239,
+        0.736,
+        0.9423
+      ],
+      "hull_order": [
+        "BTL",
+        "BTR",
+        "FTR",
+        "FBR",
+        "FBL",
+        "BBL"
+      ],
+      "margins": {
+        "left": 0.8067,
+        "right": 0.0761,
+        "top": 0.736,
+        "bottom": 0.0577
+      },
+      "margins_ok": true,
+      "height_fraction_of_frame": 0.2063,
+      "pouf": {
+        "height": 0.37,
+        "frame_box": [
+          0.6645,
+          0.7677,
+          0.6621,
+          0.8477
+        ],
+        "gap_horizontal": 0.039,
+        "gap_min_distance": 0.039,
+        "required_min": 0.03,
+        "gap_same_row": 0.039,
+        "gap_min_distance_aspect_w": 0.039,
+        "ok": true,
+        "ok_metric": "gap_same_row >= 0.03 (no overlap)"
+      },
+      "rug_corner": {
+        "point": [
+          0.8699,
+          0.8743
+        ],
+        "inside": true,
+        "to_left": 0.0633,
+        "to_right": 0.054,
+        "to_top": 0.1383,
+        "to_bottom": 0.068,
+        "to_nearest_edge": 0.054,
+        "required_min": 0.03,
+        "ok": true
+      },
+      "rug_front_edge_T": {
+        "entry": {
+          "t": 0.9041379266424852,
+          "edge": "BBL-BTL",
+          "point": [
+            0.8067,
+            0.8743
+          ],
+          "dist_to": {
+            "BBL": 0.0225,
+            "BTL": 0.1383
+          }
+        },
+        "dist_above_bottom_corner": 0.0225,
+        "required_min": 0.02,
+        "ok": true
+      },
+      "rug_right_edge": {
+        "entry": {
+          "t": 0.5742126078239493,
+          "edge": "BBL-BTL",
+          "point": [
+            0.8067,
+            0.7812
+          ],
+          "dist_to": {
+            "BBL": 0.1156,
+            "BTL": 0.0452
+          }
+        },
+        "required_min": 0.03,
+        "ok": true
+      },
+      "floor_right_wall_line": {
+        "crossings": [
+          {
+            "t": 0.024860277250964676,
+            "edge": "BTL-BTR",
+            "point": [
+              0.8491,
+              0.736
+            ],
+            "dist_to": {
+              "BTL": 0.0425,
+              "BTR": 0.0433
+            }
+          },
+          {
+            "t": 0.04349788872434081,
+            "edge": "FTR-FBR",
+            "point": [
+              0.9239,
+              0.82
+            ],
+            "dist_to": {
+              "FTR": 0.0529,
+              "FBR": 0.1223
+            }
+          }
+        ],
+        "report_only": false,
+        "entry_edge": "BTL-BTR",
+        "through_top_edge": true,
+        "dist_top_left": 0.0424,
+        "dist_top_right": 0.0433,
+        "ok": true
+      },
+      "skirting_line": {
+        "crossings": [
+          {
+            "t": 0.03036272697875695,
+            "edge": "BTL-BTR",
+            "point": [
+              0.8691,
+              0.736
+            ],
+            "dist_to": {
+              "BTL": 0.0624,
+              "BTR": 0.0233
+            }
+          },
+          {
+            "t": 0.04410597630562588,
+            "edge": "FTR-FBR",
+            "point": [
+              0.9239,
+              0.7938
+            ],
+            "dist_to": {
+              "FTR": 0.0267,
+              "FBR": 0.1485
+            }
+          }
+        ],
+        "report_only": true,
+        "entry_edge": "BTL-BTR",
+        "through_top_edge": true,
+        "dist_top_left": 0.0624,
+        "dist_top_right": 0.0233,
+        "ok": true
+      },
+      "ok": true
+    },
+    "smallest-30x20x38": {
+      "box_m": {
+        "X": [
+          1.12,
+          1.42
+        ],
+        "Y": [
+          3.25,
+          3.45
+        ],
+        "Z": [
+          0.0,
+          0.38
+        ]
+      },
+      "frame_box": [
+        0.8067,
+        0.9041,
+        0.736,
+        0.9359
+      ],
+      "hull_order": [
+        "BTL",
+        "BTR",
+        "FTR",
+        "FBR",
+        "FBL",
+        "BBL"
+      ],
+      "margins": {
+        "left": 0.8067,
+        "right": 0.0959,
+        "top": 0.736,
+        "bottom": 0.0641
+      },
+      "margins_ok": true,
+      "height_fraction_of_frame": 0.1999,
+      "pouf": {
+        "height": 0.37,
+        "frame_box": [
+          0.6645,
+          0.7677,
+          0.6621,
+          0.8477
+        ],
+        "gap_horizontal": 0.039,
+        "gap_min_distance": 0.039,
+        "required_min": 0.03,
+        "gap_same_row": 0.039,
+        "gap_min_distance_aspect_w": 0.039,
+        "ok": true,
+        "ok_metric": "gap_same_row >= 0.03 (no overlap)"
+      },
+      "rug_corner": {
+        "point": [
+          0.8699,
+          0.8743
+        ],
+        "inside": true,
+        "to_left": 0.0633,
+        "to_right": 0.0342,
+        "to_top": 0.1383,
+        "to_bottom": 0.0616,
+        "to_nearest_edge": 0.0342,
+        "required_min": 0.03,
+        "ok": true
+      },
+      "rug_front_edge_T": {
+        "entry": {
+          "t": 0.9041379266424852,
+          "edge": "BBL-BTL",
+          "point": [
+            0.8067,
+            0.8743
+          ],
+          "dist_to": {
+            "BBL": 0.0225,
+            "BTL": 0.1383
+          }
+        },
+        "dist_above_bottom_corner": 0.0225,
+        "required_min": 0.02,
+        "ok": true
+      },
+      "rug_right_edge": {
+        "entry": {
+          "t": 0.5742126078239493,
+          "edge": "BBL-BTL",
+          "point": [
+            0.8067,
+            0.7812
+          ],
+          "dist_to": {
+            "BBL": 0.1156,
+            "BTL": 0.0452
+          }
+        },
+        "required_min": 0.03,
+        "ok": true
+      },
+      "floor_right_wall_line": {
+        "crossings": [
+          {
+            "t": 0.024860277250964676,
+            "edge": "BTL-BTR",
+            "point": [
+              0.8491,
+              0.736
+            ],
+            "dist_to": {
+              "BTL": 0.0425,
+              "BTR": 0.029
+            }
+          },
+          {
+            "t": 0.03856014417820162,
+            "edge": "FTR-FBR",
+            "point": [
+              0.9041,
+              0.7977
+            ],
+            "dist_to": {
+              "FTR": 0.035,
+              "FBR": 0.1382
+            }
+          }
+        ],
+        "report_only": false,
+        "entry_edge": "BTL-BTR",
+        "through_top_edge": true,
+        "dist_top_left": 0.0424,
+        "dist_top_right": 0.029,
+        "ok": true
+      },
+      "skirting_line": {
+        "crossings": [
+          {
+            "t": 0.03036272697875695,
+            "edge": "BTL-BTR",
+            "point": [
+              0.8691,
+              0.736
+            ],
+            "dist_to": {
+              "BTL": 0.0624,
+              "BTR": 0.009
+            }
+          },
+          {
+            "t": 0.03913684779992172,
+            "edge": "FTR-FBR",
+            "point": [
+              0.9041,
+              0.7729
+            ],
+            "dist_to": {
+              "FTR": 0.0102,
+              "FBR": 0.163
+            }
+          }
+        ],
+        "report_only": true,
+        "entry_edge": "BTL-BTR",
+        "through_top_edge": true,
+        "dist_top_left": 0.0624,
+        "dist_top_right": 0.009,
+        "ok": false
+      },
+      "ok": true
+    }
+  },
+  "future_items_note": "Bible 1.2.2/1.2.3: planter (-1.50, 0.40) d38 h45; pouf (0.88, 2.70) d50 h37; magazine holder X 1.12-1.48 Y 3.25-3.48 h42 (also h38, smallest 30x20x38); floor-lamp base r15",
+  "all_ok": true,
+  "all_ok_including_armchair_sofa_gap": true,
+  "all_ok_including_gap_and_floor": true,
+  "depth_check_back_wall_m": 6.05,
+  "depth_check_back_wall_corner_m": 6.05,
+  "closeups": {
+    "note": "Close-ups with product proxies (clay #8F8D89; magazine holder darker). Coordinates of proxies marked 'approx' are placeholders from the Bible text (no binding coordinates yet). Tilt 10 deg down, no shift, 35 mm, same mirror as M0.",
+    "F9": {
+      "camera": {
+        "location_m": [
+          0.48,
+          4.3,
+          0.6
+        ],
+        "lens_mm": 35.0,
+        "tilt_down_deg": 10.0,
+        "look": "-Y",
+        "shift": [
+          0,
+          0
+        ],
+        "resolution": [
+          1920,
+          1080
+        ]
+      },
+      "checks": {
+        "pouf_box": [
+          0.5863,
+          0.9032,
+          0.412,
+          0.9297
+        ],
+        "pouf_height_fraction": 0.5177,
+        "pouf_centre_u": 0.7447,
+        "magazine_holder_outside_right": {
+          "envelope-h42": {
+            "min_u": 1.0467,
+            "outside_right_by": 0.0467,
+            "ok": true
+          },
+          "envelope-h40": {
+            "min_u": 1.0467,
+            "outside_right_by": 0.0467,
+            "ok": true
+          },
+          "envelope-h38": {
+            "min_u": 1.0467,
+            "outside_right_by": 0.0467,
+            "ok": true
+          },
+          "smallest-30x20x38": {
+            "min_u": 1.0467,
+            "outside_right_by": 0.0467,
+            "ok": true
+          }
+        },
+        "pouf_in_frame": true,
+        "pouf_base_bottom_margin": 0.0703,
+        "pouf_ok": true,
+        "table_front_legs_floor_uv": {
+          "front_left": [
+            0.0739,
+            0.6306
+          ],
+          "front_right": [
+            0.5402,
+            0.6306
+          ]
+        },
+        "ok": true,
+        "slots_in_frame": [
+          "basket",
+          "candle-holders",
+          "cushions",
+          "floor-lamp",
+          "framed-art",
+          "planter",
+          "pouf",
+          "rug",
+          "sofa-cover",
+          "table-runner",
+          "vase"
+        ],
+        "slots_out_of_frame": [
+          "curtains",
+          "magazine-holder",
+          "pendant",
+          "wall-decor",
+          "wall-sconce"
+        ]
+      },
+      "proxies": {
+        "rug": {
+          "coords": "exact",
+          "visible_px": 755570,
+          "visible_frame_fraction": 0.36438,
+          "projected_box_unclipped": [
+            -0.9843,
+            1.246,
+            0.4797,
+            1.0268
+          ],
+          "projected_area_in_frame": 0.5862,
+          "visible_box": [
+            0.0,
+            1.0,
+            0.4796,
+            1.0
+          ],
+          "in_frame": true
+        },
+        "pouf": {
+          "coords": "exact",
+          "visible_px": 301418,
+          "visible_frame_fraction": 0.14536,
+          "projected_box_unclipped": [
+            0.5863,
+            0.9032,
+            0.412,
+            0.9297
+          ],
+          "projected_area_in_frame": 1.0,
+          "visible_box": [
+            0.5865,
+            0.9031,
+            0.412,
+            0.9157
+          ],
+          "in_frame": true
+        },
+        "magazine-holder": {
+          "coords": "exact",
+          "visible_px": 0,
+          "visible_frame_fraction": 0.0,
+          "projected_box_unclipped": [
+            1.0467,
+            1.6591,
+            0.4918,
+            1.3502
+          ],
+          "projected_area_in_frame": 0.0,
+          "in_frame": false
+        },
+        "planter": {
+          "coords": "exact",
+          "visible_px": 18755,
+          "visible_frame_fraction": 0.00904,
+          "projected_box_unclipped": [
+            -0.0526,
+            0.0632,
+            0.2602,
+            0.4755
+          ],
+          "projected_area_in_frame": 0.5541,
+          "visible_box": [
+            0.0,
+            0.0552,
+            0.2602,
+            0.475
+          ],
+          "in_frame": true
+        },
+        "floor-lamp": {
+          "coords": "exact",
+          "visible_px": 4625,
+          "visible_frame_fraction": 0.00223,
+          "projected_box_unclipped": [
+            0.6666,
+            0.7797,
+            -0.2465,
+            0.4655
+          ],
+          "projected_area_in_frame": 0.6102,
+          "visible_box": [
+            0.7073,
+            0.7219,
+            0.0,
+            0.412
+          ],
+          "in_frame": true
+        },
+        "framed-art": {
+          "coords": "exact",
+          "visible_px": 27993,
+          "visible_frame_fraction": 0.0135,
+          "projected_box_unclipped": [
+            0.1924,
+            0.5723,
+            -0.4132,
+            0.0374
+          ],
+          "projected_area_in_frame": 0.0813,
+          "visible_box": [
+            0.2042,
+            0.5693,
+            0.0,
+            0.037
+          ],
+          "in_frame": true
+        },
+        "pendant": {
+          "coords": "exact",
+          "visible_px": 0,
+          "visible_frame_fraction": 0.0,
+          "projected_box_unclipped": [
+            0.1896,
+            0.3923,
+            -1.5015,
+            -0.8184
+          ],
+          "projected_area_in_frame": 0.0,
+          "in_frame": false
+        },
+        "wall-sconce": {
+          "coords": "exact",
+          "visible_px": 0,
+          "visible_frame_fraction": 0.0,
+          "projected_box_unclipped": [
+            -1.382,
+            -1.1685,
+            -1.1905,
+            -0.8843
+          ],
+          "projected_area_in_frame": 0.0,
+          "in_frame": false
+        },
+        "vase": {
+          "coords": "approx",
+          "visible_px": 25665,
+          "visible_frame_fraction": 0.01238,
+          "projected_box_unclipped": [
+            0.4472,
+            0.5059,
+            0.1371,
+            0.3518
+          ],
+          "projected_area_in_frame": 1.0,
+          "visible_box": [
+            0.4474,
+            0.5057,
+            0.137,
+            0.3519
+          ],
+          "in_frame": true
+        },
+        "candle-holders": {
+          "coords": "approx",
+          "visible_px": 16330,
+          "visible_frame_fraction": 0.00788,
+          "projected_box_unclipped": [
+            0.4012,
+            0.4462,
+            0.161,
+            0.3563
+          ],
+          "projected_area_in_frame": 1.0,
+          "visible_box": [
+            0.401,
+            0.4464,
+            0.1611,
+            0.3565
+          ],
+          "in_frame": true
+        },
+        "table-runner": {
+          "coords": "approx",
+          "visible_px": 11303,
+          "visible_frame_fraction": 0.00545,
+          "projected_box_unclipped": [
+            0.0952,
+            0.2972,
+            0.3249,
+            0.368
+          ],
+          "projected_area_in_frame": 1.0,
+          "visible_box": [
+            0.0953,
+            0.2974,
+            0.325,
+            0.3676
+          ],
+          "in_frame": true
+        },
+        "cushions": {
+          "coords": "approx",
+          "visible_px": 108417,
+          "visible_frame_fraction": 0.05228,
+          "projected_box_unclipped": [
+            0.1352,
+            0.6145,
+            0.0541,
+            0.2715
+          ],
+          "projected_area_in_frame": 1.0,
+          "visible_box": [
+            0.1354,
+            0.6146,
+            0.0537,
+            0.2713
+          ],
+          "in_frame": true
+        },
+        "sofa-cover": {
+          "coords": "approx",
+          "visible_px": 5243,
+          "visible_frame_fraction": 0.00253,
+          "projected_box_unclipped": [
+            0.5302,
+            0.6413,
+            0.2543,
+            0.2801
+          ],
+          "projected_area_in_frame": 1.0,
+          "visible_box": [
+            0.5318,
+            0.6411,
+            0.2546,
+            0.2806
+          ],
+          "in_frame": true
+        },
+        "basket": {
+          "coords": "approx",
+          "visible_px": 35404,
+          "visible_frame_fraction": 0.01707,
+          "projected_box_unclipped": [
+            0.7096,
+            0.8306,
+            0.267,
+            0.5092
+          ],
+          "projected_area_in_frame": 1.0,
+          "visible_box": [
+            0.7115,
+            0.8307,
+            0.2667,
+            0.4231
+          ],
+          "in_frame": true
+        },
+        "wall-decor": {
+          "coords": "approx",
+          "visible_px": 0,
+          "visible_frame_fraction": 0.0,
+          "projected_box_unclipped": [
+            1.014,
+            1.3697,
+            -1.2973,
+            -0.0708
+          ],
+          "projected_area_in_frame": 0.0,
+          "in_frame": false
+        },
+        "curtains": {
+          "coords": "approx",
+          "visible_px": 0,
+          "visible_frame_fraction": 0.0,
+          "projected_box_unclipped": [
+            -1.1597,
+            -0.0211,
+            -2.3673,
+            0.7781
+          ],
+          "projected_area_in_frame": 0.0,
+          "in_frame": false
+        }
+      }
+    },
+    "F13": {
+      "camera": {
+        "location_m": [
+          0.87,
+          4.85,
+          0.62
+        ],
+        "lens_mm": 35.0,
+        "tilt_down_deg": 10.0,
+        "look": "-Y",
+        "shift": [
+          0,
+          0
+        ],
+        "resolution": [
+          1920,
+          1080
+        ]
+      },
+      "checks": {
+        "pouf_box": [
+          0.3914,
+          0.6178,
+          0.3775,
+          0.7451
+        ],
+        "pouf_height_fraction": 0.3676,
+        "pouf_centre_u": 0.5046,
+        "magazine_holder": {
+          "envelope-h42": {
+            "box_m": {
+              "X": [
+                1.12,
+                1.48
+              ],
+              "Y": [
+                3.25,
+                3.48
+              ],
+              "Z": [
+                0.0,
+                0.42
+              ]
+            },
+            "frame_box": [
+              0.6444,
+              0.9285,
+              0.4132,
+              0.9421
+            ],
+            "hull_order": [
+              "BBL",
+              "BTL",
+              "BTR",
+              "FTR",
+              "FBR",
+              "FBL"
+            ],
+            "margins": {
+              "left": 0.6444,
+              "right": 0.0715,
+              "top": 0.4132,
+              "bottom": 0.0579
+            },
+            "margins_ok": true,
+            "height_fraction_of_frame": 0.5289,
+            "pouf": {
+              "height": 0.37,
+              "frame_box": [
+                0.3914,
+                0.6178,
+                0.3775,
+                0.7451
+              ],
+              "gap_horizontal": 0.0266,
+              "gap_min_distance": 0.0324,
+              "required_min": 0.03,
+              "gap_same_row": 0.0324,
+              "gap_min_distance_aspect_w": 0.0323,
+              "ok": true,
+              "ok_metric": "gap_same_row >= 0.03 (no overlap)"
+            },
+            "rug_corner": {
+              "point": [
+                0.8113,
+                0.796
+              ],
+              "inside": true,
+              "to_left": 0.1662,
+              "to_right": 0.1021,
+              "to_top": 0.3828,
+              "to_bottom": 0.1462,
+              "to_nearest_edge": 0.102,
+              "required_min": 0.03,
+              "ok": true
+            },
+            "rug_front_edge_T": {
+              "entry": {
+                "t": 0.8932111852654041,
+                "edge": "BBL-BTL",
+                "point": [
+                  0.6451,
+                  0.796
+                ],
+                "dist_to": {
+                  "BBL": 0.0457,
+                  "BTL": 0.3828
+                }
+              },
+              "dist_above_bottom_corner": 0.0457,
+              "required_min": 0.03,
+              "ok": true
+            },
+            "rug_right_edge": {
+              "entry": {
+                "t": 0.0838317563744228,
+                "edge": "BBL-BTL",
+                "point": [
+                  0.6498,
+                  0.4844
+                ],
+                "dist_to": {
+                  "BBL": 0.3573,
+                  "BTL": 0.0712
+                }
+              },
+              "required_min": 0.03,
+              "ok": true
+            },
+            "floor_right_wall_line": {
+              "crossings": [
+                {
+                  "t": 0.09419886071786229,
+                  "edge": "FTR-FBR",
+                  "point": [
+                    0.9197,
+                    0.6513
+                  ],
+                  "dist_to": {
+                    "FTR": 0.2026,
+                    "FBR": 0.2911
+                  }
+                }
+              ],
+              "report_only": false,
+              "entry_edge": "FTR-FBR",
+              "through_top_edge": false,
+              "dist_top_left": 0.3591,
+              "dist_top_right": 0.2436,
+              "ok": false
+            },
+            "skirting_line": {
+              "crossings": [
+                {
+                  "t": 0.010426717362145196,
+                  "edge": "BTL-BTR",
+                  "point": [
+                    0.7276,
+                    0.4132
+                  ],
+                  "dist_to": {
+                    "BTL": 0.0767,
+                    "BTR": 0.1406
+                  }
+                },
+                {
+                  "t": 0.09350348867259382,
+                  "edge": "FTR-FBR",
+                  "point": [
+                    0.922,
+                    0.5993
+                  ],
+                  "dist_to": {
+                    "FTR": 0.1506,
+                    "FBR": 0.3431
+                  }
+                }
+              ],
+              "report_only": true,
+              "entry_edge": "BTL-BTR",
+              "through_top_edge": true,
+              "dist_top_left": 0.0767,
+              "dist_top_right": 0.1407,
+              "ok": true
+            },
+            "ok": false
+          },
+          "envelope-h40": {
+            "box_m": {
+              "X": [
+                1.12,
+                1.48
+              ],
+              "Y": [
+                3.25,
+                3.48
+              ],
+              "Z": [
+                0.0,
+                0.4
+              ]
+            },
+            "frame_box": [
+              0.6444,
+              0.9275,
+              0.4345,
+              0.9421
+            ],
+            "hull_order": [
+              "BBL",
+              "BTL",
+              "BTR",
+              "FTR",
+              "FBR",
+              "FBL"
+            ],
+            "margins": {
+              "left": 0.6444,
+              "right": 0.0725,
+              "top": 0.4345,
+              "bottom": 0.0579
+            },
+            "margins_ok": true,
+            "height_fraction_of_frame": 0.5077,
+            "pouf": {
+              "height": 0.37,
+              "frame_box": [
+                0.3914,
+                0.6178,
+                0.3775,
+                0.7451
+              ],
+              "gap_horizontal": 0.0266,
+              "gap_min_distance": 0.0324,
+              "required_min": 0.03,
+              "gap_same_row": 0.0324,
+              "gap_min_distance_aspect_w": 0.0323,
+              "ok": true,
+              "ok_metric": "gap_same_row >= 0.03 (no overlap)"
+            },
+            "rug_corner": {
+              "point": [
+                0.8113,
+                0.796
+              ],
+              "inside": true,
+              "to_left": 0.1662,
+              "to_right": 0.1021,
+              "to_top": 0.3615,
+              "to_bottom": 0.1462,
+              "to_nearest_edge": 0.102,
+              "required_min": 0.03,
+              "ok": true
+            },
+            "rug_front_edge_T": {
+              "entry": {
+                "t": 0.8932111849470287,
+                "edge": "BBL-BTL",
+                "point": [
+                  0.6451,
+                  0.796
+                ],
+                "dist_to": {
+                  "BBL": 0.0457,
+                  "BTL": 0.3615
+                }
+              },
+              "dist_above_bottom_corner": 0.0457,
+              "required_min": 0.03,
+              "ok": true
+            },
+            "rug_right_edge": {
+              "entry": {
+                "t": 0.08383173501529222,
+                "edge": "BBL-BTL",
+                "point": [
+                  0.6498,
+                  0.4844
+                ],
+                "dist_to": {
+                  "BBL": 0.3573,
+                  "BTL": 0.0499
+                }
+              },
+              "required_min": 0.03,
+              "ok": true
+            },
+            "floor_right_wall_line": {
+              "crossings": [
+                {
+                  "t": 0.006640501608591509,
+                  "edge": "BTL-BTR",
+                  "point": [
+                    0.7202,
+                    0.4345
+                  ],
+                  "dist_to": {
+                    "BTL": 0.0696,
+                    "BTR": 0.1473
+                  }
+                },
+                {
+                  "t": 0.0941988654691803,
+                  "edge": "FTR-FBR",
+                  "point": [
+                    0.9197,
+                    0.6513
+                  ],
+                  "dist_to": {
+                    "FTR": 0.178,
+                    "FBR": 0.2911
+                  }
+                }
+              ],
+              "report_only": false,
+              "entry_edge": "BTL-BTR",
+              "through_top_edge": true,
+              "dist_top_left": 0.0696,
+              "dist_top_right": 0.1473,
+              "ok": true
+            },
+            "skirting_line": {
+              "crossings": [
+                {
+                  "t": 0.019925175802119492,
+                  "edge": "BTL-BTR",
+                  "point": [
+                    0.7498,
+                    0.4345
+                  ],
+                  "dist_to": {
+                    "BTL": 0.0992,
+                    "BTR": 0.1176
+                  }
+                },
+                {
+                  "t": 0.09350349415806006,
+                  "edge": "FTR-FBR",
+                  "point": [
+                    0.922,
+                    0.5993
+                  ],
+                  "dist_to": {
+                    "FTR": 0.1259,
+                    "FBR": 0.3431
+                  }
+                }
+              ],
+              "report_only": true,
+              "entry_edge": "BTL-BTR",
+              "through_top_edge": true,
+              "dist_top_left": 0.0992,
+              "dist_top_right": 0.1177,
+              "ok": true
+            },
+            "ok": true
+          },
+          "envelope-h38": {
+            "box_m": {
+              "X": [
+                1.12,
+                1.48
+              ],
+              "Y": [
+                3.25,
+                3.48
+              ],
+              "Z": [
+                0.0,
+                0.38
+              ]
+            },
+            "frame_box": [
+              0.6444,
+              0.9264,
+              0.4557,
+              0.9421
+            ],
+            "hull_order": [
+              "BBL",
+              "BTL",
+              "BTR",
+              "FTR",
+              "FBR",
+              "FBL"
+            ],
+            "margins": {
+              "left": 0.6444,
+              "right": 0.0736,
+              "top": 0.4557,
+              "bottom": 0.0579
+            },
+            "margins_ok": true,
+            "height_fraction_of_frame": 0.4865,
+            "pouf": {
+              "height": 0.37,
+              "frame_box": [
+                0.3914,
+                0.6178,
+                0.3775,
+                0.7451
+              ],
+              "gap_horizontal": 0.0266,
+              "gap_min_distance": 0.0324,
+              "required_min": 0.03,
+              "gap_same_row": 0.0324,
+              "gap_min_distance_aspect_w": 0.0323,
+              "ok": true,
+              "ok_metric": "gap_same_row >= 0.03 (no overlap)"
+            },
+            "rug_corner": {
+              "point": [
+                0.8113,
+                0.796
+              ],
+              "inside": true,
+              "to_left": 0.1662,
+              "to_right": 0.1021,
+              "to_top": 0.3403,
+              "to_bottom": 0.1462,
+              "to_nearest_edge": 0.102,
+              "required_min": 0.03,
+              "ok": true
+            },
+            "rug_front_edge_T": {
+              "entry": {
+                "t": 0.8932111873280222,
+                "edge": "BBL-BTL",
+                "point": [
+                  0.6451,
+                  0.796
+                ],
+                "dist_to": {
+                  "BBL": 0.0457,
+                  "BTL": 0.3403
+                }
+              },
+              "dist_above_bottom_corner": 0.0457,
+              "required_min": 0.03,
+              "ok": true
+            },
+            "rug_right_edge": {
+              "entry": {
+                "t": 0.08383189475107596,
+                "edge": "BBL-BTL",
+                "point": [
+                  0.6498,
+                  0.4844
+                ],
+                "dist_to": {
+                  "BBL": 0.3573,
+                  "BTL": 0.0287
+                }
+              },
+              "required_min": 0.03,
+              "ok": false
+            },
+            "floor_right_wall_line": {
+              "crossings": [
+                {
+                  "t": 0.015196174759162533,
+                  "edge": "BTL-BTR",
+                  "point": [
+                    0.7397,
+                    0.4557
+                  ],
+                  "dist_to": {
+                    "BTL": 0.0894,
+                    "BTR": 0.127
+                  }
+                },
+                {
+                  "t": 0.09419885608401042,
+                  "edge": "FTR-FBR",
+                  "point": [
+                    0.9197,
+                    0.6513
+                  ],
+                  "dist_to": {
+                    "FTR": 0.1534,
+                    "FBR": 0.2911
+                  }
+                }
+              ],
+              "report_only": false,
+              "entry_edge": "BTL-BTR",
+              "through_top_edge": true,
+              "dist_top_left": 0.0894,
+              "dist_top_right": 0.127,
+              "ok": true
+            },
+            "skirting_line": {
+              "crossings": [
+                {
+                  "t": 0.02938284948591919,
+                  "edge": "BTL-BTR",
+                  "point": [
+                    0.772,
+                    0.4557
+                  ],
+                  "dist_to": {
+                    "BTL": 0.1217,
+                    "BTR": 0.0947
+                  }
+                },
+                {
+                  "t": 0.093503483322744,
+                  "edge": "FTR-FBR",
+                  "point": [
+                    0.922,
+                    0.5993
+                  ],
+                  "dist_to": {
+                    "FTR": 0.1013,
+                    "FBR": 0.3431
+                  }
+                }
+              ],
+              "report_only": true,
+              "entry_edge": "BTL-BTR",
+              "through_top_edge": true,
+              "dist_top_left": 0.1217,
+              "dist_top_right": 0.0947,
+              "ok": true
+            },
+            "ok": true
+          },
+          "smallest-30x20x38": {
+            "box_m": {
+              "X": [
+                1.12,
+                1.42
+              ],
+              "Y": [
+                3.25,
+                3.45
+              ],
+              "Z": [
+                0.0,
+                0.38
+              ]
+            },
+            "frame_box": [
+              0.6444,
+              0.8765,
+              0.4557,
+              0.9273
+            ],
+            "hull_order": [
+              "BBL",
+              "BTL",
+              "BTR",
+              "FTR",
+              "FBR",
+              "FBL"
+            ],
+            "margins": {
+              "left": 0.6444,
+              "right": 0.1235,
+              "top": 0.4557,
+              "bottom": 0.0727
+            },
+            "margins_ok": true,
+            "height_fraction_of_frame": 0.4716,
+            "pouf": {
+              "height": 0.37,
+              "frame_box": [
+                0.3914,
+                0.6178,
+                0.3775,
+                0.7451
+              ],
+              "gap_horizontal": 0.0266,
+              "gap_min_distance": 0.0324,
+              "required_min": 0.03,
+              "gap_same_row": 0.0324,
+              "gap_min_distance_aspect_w": 0.0323,
+              "ok": true,
+              "ok_metric": "gap_same_row >= 0.03 (no overlap)"
+            },
+            "rug_corner": {
+              "point": [
+                0.8113,
+                0.796
+              ],
+              "inside": true,
+              "to_left": 0.1662,
+              "to_right": 0.0535,
+              "to_top": 0.3403,
+              "to_bottom": 0.1313,
+              "to_nearest_edge": 0.0534,
+              "required_min": 0.03,
+              "ok": true
+            },
+            "rug_front_edge_T": {
+              "entry": {
+                "t": 0.8932111873280222,
+                "edge": "BBL-BTL",
+                "point": [
+                  0.6451,
+                  0.796
+                ],
+                "dist_to": {
+                  "BBL": 0.0457,
+                  "BTL": 0.3403
+                }
+              },
+              "dist_above_bottom_corner": 0.0457,
+              "required_min": 0.03,
+              "ok": true
+            },
+            "rug_right_edge": {
+              "entry": {
+                "t": 0.08383189475107596,
+                "edge": "BBL-BTL",
+                "point": [
+                  0.6498,
+                  0.4844
+                ],
+                "dist_to": {
+                  "BBL": 0.3573,
+                  "BTL": 0.0287
+                }
+              },
+              "required_min": 0.03,
+              "ok": false
+            },
+            "floor_right_wall_line": {
+              "crossings": [
+                {
+                  "t": 0.015196174759162533,
+                  "edge": "BTL-BTR",
+                  "point": [
+                    0.7397,
+                    0.4557
+                  ],
+                  "dist_to": {
+                    "BTL": 0.0894,
+                    "BTR": 0.0909
+                  }
+                },
+                {
+                  "t": 0.07339412721252073,
+                  "edge": "FTR-FBR",
+                  "point": [
+                    0.8723,
+                    0.5998
+                  ],
+                  "dist_to": {
+                    "FTR": 0.1081,
+                    "FBR": 0.3277
+                  }
+                }
+              ],
+              "report_only": false,
+              "entry_edge": "BTL-BTR",
+              "through_top_edge": true,
+              "dist_top_left": 0.0894,
+              "dist_top_right": 0.0909,
+              "ok": true
+            },
+            "skirting_line": {
+              "crossings": [
+                {
+                  "t": 0.02938284948591919,
+                  "edge": "BTL-BTR",
+                  "point": [
+                    0.772,
+                    0.4557
+                  ],
+                  "dist_to": {
+                    "BTL": 0.1217,
+                    "BTR": 0.0586
+                  }
+                },
+                {
+                  "t": 0.07303022083878674,
+                  "edge": "FTR-FBR",
+                  "point": [
+                    0.8741,
+                    0.5535
+                  ],
+                  "dist_to": {
+                    "FTR": 0.0617,
+                    "FBR": 0.3741
+                  }
+                }
+              ],
+              "report_only": true,
+              "entry_edge": "BTL-BTR",
+              "through_top_edge": true,
+              "dist_top_left": 0.1217,
+              "dist_top_right": 0.0586,
+              "ok": true
+            },
+            "ok": true
+          }
+        },
+        "framed_art_height_fraction_in_frame": 0.1642,
+        "framed_art_ok": true,
+        "planter_projected_area_in_frame": 0.2967,
+        "planter_cut_fraction": 0.7033,
+        "planter_ok": true,
+        "cushions_vs_art": {
+          "art_bottom_v": 0.0623,
+          "sofa_back_cushion_top_v": 0.1309,
+          "gap_back_cushions": 0.0686,
+          "throw_cushion_top_v_approx": 0.0792,
+          "gap_throw_cushions_approx": 0.017,
+          "note": "report only; cushion proxies are approximate (h 0.90)"
+        },
+        "holder_height_fraction": {
+          "envelope-h42": 0.5289,
+          "envelope-h40": 0.5077,
+          "envelope-h38": 0.4865,
+          "smallest-30x20x38": 0.4716
+        },
+        "k2_ok_h40_h42": true,
+        "ok": true,
+        "slots_in_frame": [
+          "basket",
+          "candle-holders",
+          "cushions",
+          "floor-lamp",
+          "framed-art",
+          "magazine-holder",
+          "planter",
+          "pouf",
+          "rug",
+          "sofa-cover",
+          "table-runner",
+          "vase"
+        ],
+        "slots_out_of_frame": [
+          "curtains",
+          "pendant",
+          "wall-decor",
+          "wall-sconce"
+        ]
+      },
+      "proxies": {
+        "rug": {
+          "coords": "exact",
+          "visible_px": 330885,
+          "visible_frame_fraction": 0.15957,
+          "projected_box_unclipped": [
+            -0.7466,
+            0.8117,
+            0.451,
+            0.796
+          ],
+          "projected_area_in_frame": 0.6421,
+          "visible_box": [
+            0.0,
+            0.65,
+            0.4509,
+            0.7963
+          ],
+          "in_frame": true
+        },
+        "pouf": {
+          "coords": "exact",
+          "visible_px": 157611,
+          "visible_frame_fraction": 0.07601,
+          "projected_box_unclipped": [
+            0.3913,
+            0.6178,
+            0.3775,
+            0.7451
+          ],
+          "projected_area_in_frame": 1.0,
+          "visible_box": [
+            0.3911,
+            0.6177,
+            0.3778,
+            0.7352
+          ],
+          "in_frame": true
+        },
+        "magazine-holder": {
+          "coords": "exact",
+          "visible_px": 293546,
+          "visible_frame_fraction": 0.14156,
+          "projected_box_unclipped": [
+            0.6444,
+            0.9285,
+            0.4132,
+            0.9421
+          ],
+          "projected_area_in_frame": 1.0,
+          "visible_box": [
+            0.6443,
+            0.9286,
+            0.413,
+            0.9426
+          ],
+          "in_frame": true
+        },
+        "planter": {
+          "coords": "exact",
+          "visible_px": 2597,
+          "visible_frame_fraction": 0.00125,
+          "projected_box_unclipped": [
+            -0.0706,
+            0.0323,
+            0.2601,
+            0.4481
+          ],
+          "projected_area_in_frame": 0.2967,
+          "visible_box": [
+            0.0,
+            0.0109,
+            0.2602,
+            0.4454
+          ],
+          "in_frame": true
+        },
+        "floor-lamp": {
+          "coords": "exact",
+          "visible_px": 2917,
+          "visible_frame_fraction": 0.00141,
+          "projected_box_unclipped": [
+            0.5599,
+            0.6555,
+            -0.1795,
+            0.4403
+          ],
+          "projected_area_in_frame": 0.6728,
+          "visible_box": [
+            0.601,
+            0.6089,
+            0.0,
+            0.2667
+          ],
+          "in_frame": true
+        },
+        "framed-art": {
+          "coords": "exact",
+          "visible_px": 42117,
+          "visible_frame_fraction": 0.02031,
+          "projected_box_unclipped": [
+            0.1455,
+            0.4804,
+            -0.3319,
+            0.0631
+          ],
+          "projected_area_in_frame": 0.1572,
+          "visible_box": [
+            0.1568,
+            0.4802,
+            0.0,
+            0.063
+          ],
+          "in_frame": true
+        },
+        "pendant": {
+          "coords": "exact",
+          "visible_px": 0,
+          "visible_frame_fraction": 0.0,
+          "projected_box_unclipped": [
+            0.1122,
+            0.2806,
+            -1.1482,
+            -0.6261
+          ],
+          "projected_area_in_frame": 0.0,
+          "in_frame": false
+        },
+        "wall-sconce": {
+          "coords": "exact",
+          "visible_px": 0,
+          "visible_frame_fraction": 0.0,
+          "projected_box_unclipped": [
+            -1.0066,
+            -0.8837,
+            -0.7317,
+            -0.5494
+          ],
+          "projected_area_in_frame": 0.0,
+          "in_frame": false
+        },
+        "vase": {
+          "coords": "approx",
+          "visible_px": 17452,
+          "visible_frame_fraction": 0.00842,
+          "projected_box_unclipped": [
+            0.3314,
+            0.382,
+            0.1596,
+            0.3351
+          ],
+          "projected_area_in_frame": 1.0,
+          "visible_box": [
+            0.3312,
+            0.3818,
+            0.1593,
+            0.3352
+          ],
+          "in_frame": true
+        },
+        "candle-holders": {
+          "coords": "approx",
+          "visible_px": 9741,
+          "visible_frame_fraction": 0.0047,
+          "projected_box_unclipped": [
+            0.2971,
+            0.3293,
+            0.1783,
+            0.3384
+          ],
+          "projected_area_in_frame": 1.0,
+          "visible_box": [
+            0.2969,
+            0.3292,
+            0.1787,
+            0.338
+          ],
+          "in_frame": true
+        },
+        "table-runner": {
+          "coords": "approx",
+          "visible_px": 7178,
+          "visible_frame_fraction": 0.00346,
+          "projected_box_unclipped": [
+            0.0382,
+            0.2197,
+            0.3147,
+            0.3468
+          ],
+          "projected_area_in_frame": 1.0,
+          "visible_box": [
+            0.038,
+            0.2198,
+            0.3148,
+            0.3472
+          ],
+          "in_frame": true
+        },
+        "cushions": {
+          "coords": "approx",
+          "visible_px": 87113,
+          "visible_frame_fraction": 0.04201,
+          "projected_box_unclipped": [
+            0.0929,
+            0.5114,
+            0.0803,
+            0.27
+          ],
+          "projected_area_in_frame": 1.0,
+          "visible_box": [
+            0.0927,
+            0.5115,
+            0.0806,
+            0.2694
+          ],
+          "in_frame": true
+        },
+        "sofa-cover": {
+          "coords": "approx",
+          "visible_px": 3598,
+          "visible_frame_fraction": 0.00174,
+          "projected_box_unclipped": [
+            0.4318,
+            0.5227,
+            0.255,
+            0.2772
+          ],
+          "projected_area_in_frame": 1.0,
+          "visible_box": [
+            0.4318,
+            0.5229,
+            0.2546,
+            0.2769
+          ],
+          "in_frame": true
+        },
+        "basket": {
+          "coords": "approx",
+          "visible_px": 32066,
+          "visible_frame_fraction": 0.01546,
+          "projected_box_unclipped": [
+            0.59,
+            0.6896,
+            0.266,
+            0.4743
+          ],
+          "projected_area_in_frame": 1.0,
+          "visible_box": [
+            0.5906,
+            0.6896,
+            0.2657,
+            0.4741
+          ],
+          "in_frame": true
+        },
+        "wall-decor": {
+          "coords": "approx",
+          "visible_px": 0,
+          "visible_frame_fraction": 0.0,
+          "projected_box_unclipped": [
+            0.8069,
+            0.9696,
+            -0.8993,
+            -0.0142
+          ],
+          "projected_area_in_frame": 0.0,
+          "in_frame": false
+        },
+        "curtains": {
+          "coords": "approx",
+          "visible_px": 0,
+          "visible_frame_fraction": 0.0,
+          "projected_box_unclipped": [
+            -0.8803,
+            -0.0421,
+            -1.6058,
+            0.6564
+          ],
+          "projected_area_in_frame": 0.0,
+          "in_frame": false
+        }
+      }
+    },
+    "9a": {
+      "vector_m": [
+        0.39,
+        0.55,
+        0.02
+      ],
+      "length_m": 0.6745,
+      "lens_mm": 35.0,
+      "tilt_down_deg": 10.0,
+      "frames": [
+        {
+          "t": 0.0,
+          "location": [
+            0.48,
+            4.3,
+            0.6
+          ],
+          "holder_min_u": 1.0467,
+          "clearance_m": 1.056
+        },
+        {
+          "t": 0.2,
+          "location": [
+            0.558,
+            4.41,
+            0.604
+          ],
+          "holder_min_u": 0.9381,
+          "clearance_m": 1.102
+        },
+        {
+          "t": 0.4,
+          "location": [
+            0.636,
+            4.52,
+            0.608
+          ],
+          "holder_min_u": 0.8469,
+          "clearance_m": 1.162
+        },
+        {
+          "t": 0.6,
+          "location": [
+            0.714,
+            4.63,
+            0.612
+          ],
+          "holder_min_u": 0.7694,
+          "clearance_m": 1.235
+        },
+        {
+          "t": 0.8,
+          "location": [
+            0.792,
+            4.74,
+            0.616
+          ],
+          "holder_min_u": 0.7026,
+          "clearance_m": 1.317
+        },
+        {
+          "t": 1.0,
+          "location": [
+            0.87,
+            4.85,
+            0.62
+          ],
+          "holder_min_u": 0.6444,
+          "clearance_m": 1.407
+        }
+      ],
+      "holder_min_u_51_steps": [
+        1.0467,
+        1.0349,
+        1.0233,
+        1.012,
+        1.0008,
+        0.9899,
+        0.9791,
+        0.9686,
+        0.9582,
+        0.9481,
+        0.9381,
+        0.9282,
+        0.9186,
+        0.9091,
+        0.8998,
+        0.8906,
+        0.8816,
+        0.8727,
+        0.864,
+        0.8554,
+        0.8469,
+        0.8386,
+        0.8304,
+        0.8224,
+        0.8145,
+        0.8067,
+        0.799,
+        0.7914,
+        0.784,
+        0.7766,
+        0.7694,
+        0.7623,
+        0.7552,
+        0.7483,
+        0.7415,
+        0.7348,
+        0.7281,
+        0.7216,
+        0.7152,
+        0.7088,
+        0.7026,
+        0.6964,
+        0.6903,
+        0.6843,
+        0.6783,
+        0.6725,
+        0.6667,
+        0.661,
+        0.6554,
+        0.6499,
+        0.6444
+      ],
+      "holder_enters_monotonic": true,
+      "min_clearance_m": 1.056,
+      "note": "clearance = distance from the camera centre to the nearest furniture/proxy bounding box"
+    }
+  },
+  "v3_checklist": {
+    "1_overlay_holder_box_and_h38": {
+      "ok": true,
+      "note": "h42 box solid, h38 box dashed; mh-alt-* labels not drawn"
+    },
+    "2_expected": {
+      "ok": true,
+      "holder": [
+        0.8067,
+        0.9239,
+        0.719,
+        0.9423
+      ],
+      "pouf": [
+        0.6646,
+        0.7676,
+        0.6621,
+        0.8477
+      ],
+      "tolerance": 0.005
+    },
+    "3_m0_holder_checks": {
+      "ok": true,
+      "detail": {
+        "envelope-h42": {
+          "a_margins": true,
+          "b_pouf": true,
+          "c_rug_corner": true,
+          "d_rug_T": true,
+          "e_floor_wall_line": true,
+          "f_skirting_report": true
+        },
+        "envelope-h38": {
+          "a_margins": true,
+          "b_pouf": true,
+          "c_rug_corner": true,
+          "d_rug_T": true,
+          "e_floor_wall_line": true,
+          "f_skirting_report": true
+        }
+      }
+    },
+    "4_F9": {
+      "ok": true
+    },
+    "5_F13": {
+      "ok": true
+    },
+    "6_9a": {
+      "ok": true,
+      "frames": 6
+    },
+    "7_camera_adjustments": {
+      "ok": true,
+      "delta_m": {
+        "F9": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "F13": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "note": "holder, pouf and rug not moved"
+    },
+    "8_plan_readme": {
+      "ok": true,
+      "note": "plan.png redrawn with holder, pouf, rug, F9/F13 frustums; README v3"
+    },
+    "all_ok": true
+  }
+}

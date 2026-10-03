@@ -1,0 +1,91 @@
+{
+  "location_m": [
+    0.0,
+    6.05,
+    1.2
+  ],
+  "look": "-Y, level (tilt 0, roll 0)",
+  "blender_rotation_euler_deg": [
+    90,
+    0,
+    180
+  ],
+  "lens_mm": 24.0,
+  "sensor_mm": [
+    36.0,
+    20.25
+  ],
+  "sensor_fit": "HORIZONTAL",
+  "shift_x": -0.04,
+  "shift_x_mm": -1.44,
+  "shift_y": -0.0625,
+  "shift_y_mm": -2.25,
+  "hfov_deg": 73.74,
+  "vfov_deg": 45.747,
+  "resolution": [
+    3840,
+    2160
+  ],
+  "intrinsics_px": {
+    "fx": 2560.0,
+    "fy": 2560.0,
+    "cx": 2073.6,
+    "cy": 840.0
+  },
+  "note": "cx, cy: principal point from the left/top, measured by projecting the optical axis. shift_y<0 moves it up: cy = H/2 + shift_y*W. The camera is mirrored (scale.x=-1), so shift_x<0 moves it right: cx = W/2 - shift_x*W (house axis X=0 at u=0.540)",
+  "mirrored_scale_x": -1.0,
+  "depth": {
+    "file": "m0-depth.png",
+    "type": "uint16",
+    "unit": "mm",
+    "kind": "planar camera Z (distance to camera plane)",
+    "sky_value": 65535,
+    "exr": "m0-depth.exr (float32 metres)"
+  },
+  "principal_point_measured_uv": [
+    0.54,
+    0.38889
+  ],
+  "closeups": {
+    "F9": {
+      "location_m": [
+        0.48,
+        4.3,
+        0.6
+      ],
+      "lens_mm": 35.0,
+      "tilt_down_deg": 10.0,
+      "look": "-Y",
+      "shift": [
+        0,
+        0
+      ],
+      "mirrored_scale_x": -1.0,
+      "blender_rotation_euler_deg": [
+        80.0,
+        0,
+        180
+      ]
+    },
+    "F13": {
+      "location_m": [
+        0.87,
+        4.85,
+        0.62
+      ],
+      "lens_mm": 35.0,
+      "tilt_down_deg": 10.0,
+      "look": "-Y",
+      "shift": [
+        0,
+        0
+      ],
+      "mirrored_scale_x": -1.0,
+      "blender_rotation_euler_deg": [
+        80.0,
+        0,
+        180
+      ]
+    }
+  }
+}
