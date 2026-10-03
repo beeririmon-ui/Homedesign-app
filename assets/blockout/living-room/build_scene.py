@@ -64,13 +64,15 @@ EXPECTED = {
     "horizon_y": 0.36,
     "sofa": ((0.36, 0.64), (0.44, 0.62)),
     "coffee-table": ((0.39, 0.61), (0.55, 0.69)),
-    "armchair": ((0.17, 0.37), (0.50, 0.78)),
+    "armchair": ((0.17, 0.37), (0.50, 0.84)),          # m0-prompt 1.1 (was 0.78)
     "window_x": (0.20, 0.29), "window_head_y": (0.02, 0.12), "window_sill_y": (0.51, 0.58),
     "left_wall_free_x": (0.00, 0.20),
     "right_wall_x": (0.70, 1.00),
-    "front_floor_y": (0.79, 1.00),
+    "front_floor_y": (0.84, 1.00),                     # full width (m0-prompt 1.1)
+    "front_floor_right_y": (0.79, 1.00),               # right of x 0.37
+    "front_floor_right_from_x": 0.37,
     "framed-art": ((0.42, 0.58), (0.21, 0.40)),
-    "pendant": ((0.47, 0.53), (0.07, 0.14)),
+    "pendant": ((0.47, 0.53), (0.06, 0.15)),           # m0-prompt 1.1 (was 0.07-0.14)
     "wall-sconce": (0.16, 0.27),
 }
 TOL = 0.02
@@ -531,6 +533,8 @@ def self_check(cam, roots, idx, res):
     rep = {"tolerance": TOL, "items": []}
 
     def add(name, axis, got, exp, note=""):
+        if isinstance(got, (tuple, list)):
+            got = tuple(sorted(got))
         if isinstance(exp, (tuple, list)):
             dev = max(abs(got[0] - exp[0]), abs(got[1] - exp[1]))
         else:
@@ -573,8 +577,16 @@ def self_check(cam, roots, idx, res):
     g = proj(cam, (xr, 0, 1.2))
     add("right wall", "x", (g[0], 1.0), EXPECTED["right_wall_x"])
     # empty front floor - nearest furniture bottom
-    add("front floor empty", "y", (rep_floor_top(cam, roots), 1.0), EXPECTED["front_floor_y"],
-        "top = lowest projected furniture point")
+    furn = (idx == PASS_INDEX["sofa"]) | (idx == PASS_INDEX["coffee-table"]) | (idx == PASS_INDEX["armchair"])
+    low_all = (np.nonzero(furn.any(axis=1))[0].max() + 1) / H
+    xr0 = int(EXPECTED["front_floor_right_from_x"] * W)
+    low_right = (np.nonzero(furn[:, xr0:].any(axis=1))[0].max() + 1) / H
+    for nm, val, exp in (("front floor empty, full width", low_all, EXPECTED["front_floor_y"]),
+                         ("front floor empty, right of x 0.37", low_right, EXPECTED["front_floor_right_y"])):
+        rep["items"].append(dict(item=nm, axis="y", expected=exp, measured=round(val, 4),
+                                 max_dev=round(max(0.0, val - exp[0]), 4), ok=bool(val <= exp[0] + TOL),
+                                 note="lowest furniture pixel (object index pass); ok = no furniture below expected top + tol"))
+    rep["armchair_sofa_gap"] = silhouette_gap(idx, PASS_INDEX["armchair"], PASS_INDEX["sofa"])
     # future products
     fs = future_shapes()
     for name in ("framed-art", "pendant"):
@@ -594,7 +606,49 @@ def self_check(cam, roots, idx, res):
         (x0, x1), (y0, y1) = bbox2d(cam, fs[name]["hull"])
         rep["future_items"][name] = [round(x0, 4), round(x1, 4), round(y0, 4), round(y1, 4)]
     rep["all_ok"] = all(i.get("ok", True) for i in rep["items"])
+    rep["all_ok_including_armchair_sofa_gap"] = rep["all_ok"] and rep["armchair_sofa_gap"]["ok"]
     return rep
+
+
+def _edge(mask):
+    e = np.zeros_like(mask)
+    e[:, 1:] |= mask[:, 1:] != mask[:, :-1]
+    e[:, :-1] |= mask[:, 1:] != mask[:, :-1]
+    e[1:, :] |= mask[1:, :] != mask[:-1, :]
+    e[:-1, :] |= mask[1:, :] != mask[:-1, :]
+    return e & mask
+
+
+def silhouette_gap(idx, a, b):
+    """Minimum 2D distance between the visible silhouettes of objects a and b, in units of
+    frame width (object-index pass, unfiltered: 1 px = 1/W). 0 = touching/overlapping."""
+    H, W = idx.shape
+    ma, mb = idx == a, idx == b
+    ea, eb = np.argwhere(_edge(ma)), np.argwhere(_edge(mb))
+    # touching: a pixel of a 4-adjacent to b
+    touch = (ma[:, 1:] & mb[:, :-1]).any() or (ma[:, :-1] & mb[:, 1:]).any() or \
+            (ma[1:, :] & mb[:-1, :]).any() or (ma[:-1, :] & mb[1:, :]).any()
+    best, pa, pb = 1e9, None, None
+    for k in range(0, len(eb), 2000):
+        chunk = eb[k:k + 2000].astype(np.float64)
+        d = ((ea[:, None, :].astype(np.float64) - chunk[None, :, :]) ** 2).sum(-1)
+        i, j = np.unravel_index(np.argmin(d), d.shape)
+        if d[i, j] < best:
+            best, pa, pb = d[i, j], ea[i], eb[k + j]
+    dist_px = max(0.0, math.sqrt(best) - 1.0)          # pixel centres -> free pixels between
+    # horizontal gap per row where both exist
+    rows = np.nonzero(ma.any(1) & mb.any(1))[0]
+    hgap = None
+    for r in rows:
+        xa, xb = np.nonzero(ma[r])[0], np.nonzero(mb[r])[0]
+        g = (xb.min() - xa.max() - 1) if xb.min() > xa.max() else (xa.min() - xb.max() - 1)
+        hgap = g if hgap is None else min(hgap, g)
+    return dict(touching=bool(touch), min_gap_frame_w=round(dist_px / W, 4), min_gap_px=round(dist_px, 1),
+                image_width_px=W,
+                closest_points_xy=[[round(pa[1] / W, 4), round(pa[0] / H, 4)], [round(pb[1] / W, 4), round(pb[0] / H, 4)]],
+                min_horizontal_gap_same_row_frame_w=(round(hgap / W, 4) if hgap is not None else None),
+                rows_overlap_y=([round(rows.min() / H, 4), round((rows.max() + 1) / H, 4)] if len(rows) else None),
+                required_min=0.01, ok=bool((not touch) and dist_px / W >= 0.01))
 
 
 def camera_wall_entry(cam, xl):
@@ -758,9 +812,9 @@ def main():
     argv = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else sys.argv[1:]
     ap = argparse.ArgumentParser()
     ap.add_argument("--res", type=int, default=3840)
-    ap.add_argument("--samples", type=int, default=512)
+    ap.add_argument("--samples", type=int, default=256)
     ap.add_argument("--sky", type=float, default=6.0, help="world (sky) strength")
-    ap.add_argument("--exposure", type=float, default=0.0)
+    ap.add_argument("--exposure", type=float, default=1.0)
     ap.add_argument("--out", default=HERE)
     ap.add_argument("--no-plan", action="store_true")
     a = ap.parse_args(argv)
@@ -847,6 +901,8 @@ def main():
     if not a.no_plan:
         render_plan(os.path.join(a.out, "plan.png"), roots)
     bpy.ops.wm.save_as_mainfile(filepath=os.path.join(a.out, "m0-blockout.blend"))
+    if os.path.exists(os.path.join(a.out, "m0-blockout.blend1")):
+        os.remove(os.path.join(a.out, "m0-blockout.blend1"))
     print(json.dumps(rep, indent=1, ensure_ascii=False))
 
 
