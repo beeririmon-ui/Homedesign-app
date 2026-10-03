@@ -1,0 +1,179 @@
+{
+  "version": "2026-10-03",
+  "author": "master-designer",
+  "source": "assets/blockout/living-room/review-designer.md, section 7",
+  "status": "proposal, not approved. Do not change binding docs or v3 outputs. Clay comparison only.",
+  "recommended": "B",
+  "conventions": {
+    "axes": "Same as v3 / skeleton: metres, origin on the floor at the back wall on the sofa axis of v3, X right as the main camera sees, Y from back wall toward the camera, Z up. Left-handed; the v3 rig mirrors the camera (scale.x = -1).",
+    "yaw_deg_left": "Camera heading measured from -Y, positive = turned toward -X (left of frame). Forward f = (-sin(yaw), -cos(yaw), 0); right r = (cos(yaw), -sin(yaw), 0).",
+    "projection": "d = (P - C).f ; x = (P - C).r ; u = u0 + (lens/36) * x / d ; v = v0 + (lens/36)/0.5625 * (C.z - P.z) / d. For 24 mm: u = u0 + 0.6667 x/d, v = v0 + 1.1852 (1.20 - Z)/d.",
+    "shift": "u0, v0 = principal point (frame fractions, v from top). v0 = 0.5 + shift_y * 16/9 (v3: shift_y -0.0625 -> v0 0.3889). |shift_x| = |u0 - 0.5|; with the mirrored v3 rig, u0 > 0.5 needs shift_x < 0. Verify both by projecting the optical axis, as the v3 self-check does.",
+    "chair_yaw": "Same convention as build_scene.py CHAIR.yaw_deg: -25 = chair faces +X, turned 25 deg toward the back wall.",
+    "tolerance_expected": 0.02,
+    "positions_status": "fixed furniture, shell and camera are firm for the comparison. Slot proxies marked provisional are indicative and will be finalised in the scene brief after the user picks."
+  },
+  "deliverables": {
+    "dir": "assets/blockout/living-room/alts-2026-10-03/{A,B,C}/",
+    "per_alt": ["m0-clay.png 2048x1152 (64 samples ok)", "m0-clay-overlay.png with all 16 slot proxies, provisional ones dashed", "plan.png with camera, FOV and opening", "selfcheck.json with every item in checks and every expected value"],
+    "compare": "alts-2026-10-03/compare.jpg: row 1 = v3 | A | B | C (same size, titled); row 2 = the 9:16 mobile crop of each (mobile_crop). Optional 5th column: B-low.",
+    "rules": ["Never overwrite v3 files; build_scene.py without --alt must reproduce v3 exactly.", "Report deviations > 0.02 and any tangent < 0.02 between large items; do not move slots yourself."]
+  },
+  "lighting_all": "Sky only (as v3), light enters only through the window of the alternative. North-facing, diffuse, no sun.",
+  "alternatives": {
+    "A": {
+      "name": "Same view, bigger room (minimal change)",
+      "reference_qualities": ["frontal, calm one-axis catalogue view (Norm Architects / Menu style)", "clean wall, restraint"],
+      "room": {"x_left": -1.80, "x_right": 2.70, "y_back": 0.0, "y_front": 6.70, "h": 2.80},
+      "shell": {
+        "door": {"wall": "front", "x0": -0.45, "x1": 0.45, "h": 2.10},
+        "windows": [{"wall": "left", "y0": 0.60, "y1": 2.40, "z0": 0.35, "z1": 2.55, "mullion_y": 1.50, "mullion_w": 0.06, "frame_w": 0.06, "casements": 2, "reveal_depth": 0.30, "sill_proud": 0.04}],
+        "skirting_h": 0.12, "cornice": null, "floor_planks": {"w": 0.25, "len": [2.5, 3.5], "dir": "Y"},
+        "walls": "mineral matte paint, <=5 GU"
+      },
+      "camera": {"loc": [0.0, 5.90, 1.20], "yaw_deg_left": 0.0, "lens": 24.0, "sensor": [36.0, 20.25], "tilt": 0, "roll": 0, "u0": 0.54, "v0": 0.40, "shift_x": -0.040, "shift_y": -0.05625},
+      "h0": {"loc": [0.0, 9.75, 1.20], "same_optics_as_m0": true},
+      "fixed_furniture": {
+        "sofa": {"x0": -1.10, "x1": 1.10, "y0": 0.03, "y1": 0.95},
+        "table": {"cx": 0.0, "cy": 1.72},
+        "armchair": {"cx": -1.230, "cy": 2.821, "yaw_deg": -25.0, "arm_front_inset": 0.0375}
+      },
+      "slots": {
+        "framed-art": {"kind": "box", "c": [0.0, 0.015, 1.475], "s": [1.55, 0.03, 1.00], "status": "firm"},
+        "pendant": {"kind": "cyl", "c": [0.0, 1.72], "r": 0.225, "z0": 2.10, "z1": 2.37, "cord": true, "status": "firm"},
+        "wall-sconce": {"kind": "box", "c": [-1.79, 2.88, 1.47], "s": [0.02, 0.12, 0.12], "status": "firm"},
+        "rug": {"kind": "box", "c": [0.0, 1.92, 0.005], "s": [2.90, 2.40, 0.01], "status": "firm"},
+        "curtains": {"rod": {"wall": "left", "y0": 0.40, "y1": 2.60, "z": 2.68}, "stacks_y": [[0.40, 0.60], [2.40, 2.60]], "depth": 0.10, "status": "firm"},
+        "planter": {"kind": "cyl", "c": [-1.50, 0.40], "r": 0.19, "z0": 0.0, "z1": 0.45, "envelope": {"r": 0.40, "z0": 0.45, "z1": 1.65}, "status": "provisional", "note": "inherited v3 tangent: pot left edge on the back-left corner line; report"},
+        "floor-lamp": {"kind": "cyl", "c": [1.30, 0.30], "r": 0.21, "z0": 1.20, "z1": 1.50, "stem": true, "base_r": 0.15, "status": "provisional"},
+        "basket": {"kind": "cyl", "c": [1.40, 0.75], "r": 0.18, "z0": 0.0, "z1": 0.40, "status": "provisional"},
+        "pouf": {"kind": "cyl", "c": [0.88, 2.70], "r": 0.25, "z0": 0.0, "z1": 0.37, "status": "provisional"},
+        "magazine-holder": {"kind": "box", "c": [1.88, 1.415, 0.21], "s": [0.36, 0.23, 0.42], "status": "provisional", "note": "v3 front-right position falls below the frame"},
+        "wall-decor": {"kind": "box", "c": [2.05, 0.02, 1.47], "s": [0.45, 0.04, 0.45], "status": "provisional", "note": "moves to back wall; right wall nearly out of frame"},
+        "sofa-cover": {"status": "approx", "rule": "as v3 approx proxy, relative to the sofa"},
+        "cushions": {"status": "approx", "rule": "as v3 approx proxy, relative to the sofa"},
+        "table-runner": {"status": "approx", "rule": "as v3, relative to the table"},
+        "vase": {"status": "approx", "rule": "as v3, relative to the table (right third)"},
+        "candle-holders": {"status": "approx", "rule": "as v3, relative to the table (right third)"}
+      },
+      "expected": {
+        "back_wall_x": [0.337, 0.845], "back_wall_y": [0.079, 0.641], "ceiling_band_y": [0.0, 0.079],
+        "window_x": [0.197, 0.314], "window_head": "cut by the top edge for Y >= ~1.90 (decisive, ~28% of its length)",
+        "sofa_x": [0.392, 0.688], "framed-art": [[0.452, 0.628], [0.244, 0.445]],
+        "pendant": [[0.504, 0.576], [0.068, 0.145]], "wall-sconce_u": 0.143,
+        "rug_front_y": 0.912, "armchair_approx": [[0.15, 0.37], [0.53, 0.94]],
+        "left_wall_visible_to_y": 3.68, "right_wall_visible_to_y": 1.99
+      },
+      "checks": ["armchair-sofa gap >= 0.02", "armchair >= 0.05 from bottom edge", "window head cut >= 15% of its length or fully in frame", "pendant fully in top third, >= 0.05 above art", "hanging point (0,1.72,2.80) out of frame", "wall-decor vs floor-lamp shade gap >= 0.02", "pouf top vs floor-lamp base (report)", "planter edge vs back-left corner line (report)", "E0: door jambs leave the frame at 70-80% of the 3.85 m dolly"],
+      "mobile_crop": {"center_u": 0.54, "width": 0.316}
+    },
+    "B": {
+      "name": "Copenhagen apartment, corner view (recommended)",
+      "reference_qualities": ["two-wall interior with the window inside the frame as the light source (Ditte Isager / Elle Decoration kind of framing)", "side light raking textiles", "foreground-midground-background layering", "classic Nordic apartment bones: 3.0 m ceiling, simple cornice, deep reveals (AD-level architecture)", "Kinfolk / Cereal restraint and palette"],
+      "room": {"x_left": -2.30, "x_right": 2.50, "y_back": 0.0, "y_front": 6.20, "h": 3.00},
+      "shell": {
+        "door": {"wall": "front", "x0": 0.95, "x1": 2.15, "h": 2.40, "type": "double door, open, out of frame"},
+        "windows": [{"wall": "left", "y0": 0.90, "y1": 2.70, "z0": 0.45, "z1": 2.70, "mullion_y": 1.80, "mullion_w": 0.06, "frame_w": 0.06, "casements": 2, "reveal_depth": 0.35, "sill_proud": 0.04, "view": "layered winter garden, trees at 10-30 m, pale, soft"}],
+        "skirting_h": 0.15, "cornice": {"h": 0.10, "profile": "single simple step, wall colour"}, "floor_planks": {"w": 0.25, "len": [3.0, 4.0], "dir": "Y"},
+        "walls": "mineral matte paint with very subtle movement, <=5 GU"
+      },
+      "camera": {"loc": [1.25, 5.55, 1.20], "yaw_deg_left": 25.0, "optical_axis_hits": [-1.338, 0.0, 1.20], "lens": 24.0, "sensor": [36.0, 20.25], "tilt": 0, "roll": 0, "u0": 0.52, "v0": 0.46, "shift_x": -0.020, "shift_y": -0.0225, "yaw_sign_check": "back-left corner (-2.30, 0) must land at u ~0.431; ~0.61 means the yaw sign is flipped (mirrored rig)"},
+      "projection_24mm": "d = 5.558 - 0.4226 X - 0.9063 Y ; x = 1.212 + 0.9063 X - 0.4226 Y ; u = 0.52 + 0.6667 x/d ; v = 0.46 + 1.1852 (1.20 - Z)/d",
+      "h0": {"loc": [2.877, 9.039, 1.20], "yaw_deg_left": 25.0, "same_optics_as_m0": true, "note": "E0 = one straight 3.85 m dolly along the heading, through the 1.20 opening (path crosses Y 6.20 at X 1.553). Entrance hall must contain the path: about X 0.80-3.60, Y 6.35-9.80."},
+      "fixed_furniture": {
+        "sofa": {"x0": -0.90, "x1": 1.30, "y0": 0.03, "y1": 0.95},
+        "table": {"cx": 0.20, "cy": 1.72},
+        "armchair": {"cx": -1.03, "cy": 2.82, "yaw_deg": -25.0, "arm_front_inset": 0.0375}
+      },
+      "slots": {
+        "framed-art": {"kind": "box", "c": [0.20, 0.015, 1.475], "s": [1.55, 0.03, 1.00], "status": "firm"},
+        "pendant": {"kind": "cyl", "c": [0.20, 1.72], "r": 0.225, "z0": 2.20, "z1": 2.47, "cord": true, "status": "firm"},
+        "wall-sconce": {"kind": "box", "c": [-2.29, 3.17, 1.47], "s": [0.02, 0.12, 0.12], "status": "firm"},
+        "rug": {"kind": "box", "c": [0.20, 1.92, 0.005], "s": [2.90, 2.40, 0.01], "status": "firm"},
+        "curtains": {"rod": {"wall": "left", "y0": 0.70, "y1": 2.90, "z": 2.82}, "stacks_y": [[0.70, 0.90], [2.70, 2.90]], "depth": 0.10, "status": "firm"},
+        "planter": {"kind": "cyl", "c": [-2.00, 0.47], "r": 0.19, "z0": 0.0, "z1": 0.45, "envelope": {"r": 0.40, "z0": 0.45, "z1": 1.65}, "status": "firm", "note": "on the camera ray through the back-left corner: corner line through the middle of the pot"},
+        "wall-decor": {"kind": "box", "c": [-1.30, 0.02, 1.47], "s": [0.45, 0.04, 0.45], "status": "provisional", "note": "back wall, between tree and sofa (right wall out of frame)"},
+        "floor-lamp": {"kind": "cyl", "c": [1.45, 0.28], "r": 0.21, "z0": 1.20, "z1": 1.50, "stem": true, "base_r": 0.15, "status": "provisional"},
+        "basket": {"kind": "cyl", "c": [1.48, 1.08], "r": 0.18, "z0": 0.0, "z1": 0.40, "status": "provisional"},
+        "pouf": {"kind": "cyl", "c": [-0.27, 2.47], "r": 0.25, "z0": 0.0, "z1": 0.37, "status": "provisional", "note": "footstool in front of the armchair"},
+        "magazine-holder": {"kind": "box", "c": [-2.07, 3.315, 0.21], "s": [0.36, 0.23, 0.42], "status": "provisional", "note": "front-left frame corner, under the sconce, beside the armchair"},
+        "sofa-cover": {"status": "approx", "rule": "as v3 approx proxy, translated +0.20 X"},
+        "cushions": {"status": "approx", "rule": "as v3 approx proxy, translated +0.20 X"},
+        "table-runner": {"status": "approx", "rule": "as v3, translated +0.20 X"},
+        "vase": {"status": "approx", "rule": "as v3, translated +0.20 X"},
+        "candle-holders": {"status": "approx", "rule": "as v3, translated +0.20 X"}
+      },
+      "expected": {
+        "back_left_corner_u": 0.431, "back_wall_right": "back-right corner out of frame (back wall visible to X ~2.30)",
+        "left_wall_visible_to_y": 3.74, "ceiling_band_at_art_y": 0.07,
+        "window_x": [0.191, 0.374], "window_head_y": [0.025, 0.149], "window_sill_y": [0.616, 0.678],
+        "sofa_x": [0.519, 0.840], "sofa_y": [0.56, 0.80],
+        "framed-art": [[0.599, 0.792], [0.292, 0.509]],
+        "pendant": [[0.595, 0.672], [0.076, 0.157]],
+        "coffee-table_x": [0.500, 0.753],
+        "armchair_approx": [[0.26, 0.42], [0.61, 0.95]],
+        "planter": [0.410, 0.452], "wall-decor": [[0.502, 0.546], [0.36, 0.45]],
+        "wall-sconce": [0.117, 0.373], "pouf": [[0.457, 0.554], [0.747, 0.907]],
+        "magazine-holder": [[0.074, 0.163], [0.71, 0.90]],
+        "floor-lamp_shade_x": [0.832, 0.892]
+      },
+      "checks": ["yaw sign (corner at u 0.431)", "verticals plumb (tilt 0)", "armchair-planter: gap >= 0.02 or overlap >= 0.04 with >= 65% of pot visible", "armchair overlaps the window bottom by >= 0.04 (deliberate), no tangent with jambs/mullion", "armchair >= 0.05 from bottom edge", "pendant in top third, >= 0.05 above art; hanging point out of frame", "art bottom vs sofa back top >= 0.03", "magazine-holder vs curtain front stack and left edge >= 0.02 / 0.05", "pouf top vs table top line >= 0.02", "wall-decor vs tree crown and art >= 0.03", "floor-lamp shade vs right edge >= 0.08", "window head >= 0.010 below top edge", "E0 path clears jambs (>= 0.15 m) through the 1.20 opening"],
+      "mobile_crop": [{"name": "sofa and art", "center_u": 0.68, "width": 0.316, "note": "sofa 0.321 wider than crop; prefer width 0.34 or decisive arm cut"}, {"name": "window and reading corner", "center_u": 0.30, "width": 0.316}],
+      "optional_variant": {"id": "B-low", "camera_z": 1.05, "v0": 0.48, "note": "clay only, chest-height test; needs Bible exception to ~120 cm"}
+    },
+    "C": {
+      "name": "Light facade, frontal view",
+      "reference_qualities": ["gallery-like volume with architecture as backdrop (Cereal / Frama)", "frontal wall symmetry of showroom shoots (Menu)", "window as a framed picture of light with deep oak reveals"],
+      "room": {"x_left": -2.80, "x_right": 2.80, "y_back": 0.0, "y_front": 6.40, "h": 3.00},
+      "shell": {
+        "door": {"wall": "front", "x0": -0.45, "x1": 0.45, "h": 2.10},
+        "windows": [{"wall": "back", "x0": -2.05, "x1": -0.55, "z0": 0.30, "z1": 2.70, "mullion_x": -1.30, "mullion_w": 0.06, "frame_w": 0.06, "casements": 2, "reveal_depth": 0.40, "reveal_finish": "oak lining", "sill_proud": 0.04}],
+        "skirting": {"type": "shadow gap", "h": 0.08, "recess": 0.01}, "cornice": null, "floor_planks": {"w": 0.28, "len": [3.0, 4.0], "dir": "Y"},
+        "walls": "smooth mineral plaster, matte"
+      },
+      "camera": {"loc": [0.0, 5.60, 1.20], "yaw_deg_left": 0.0, "lens": 24.0, "sensor": [36.0, 20.25], "tilt": 0, "roll": 0, "u0": 0.56, "v0": 0.46, "shift_x": -0.060, "shift_y": -0.0225},
+      "h0": {"loc": [0.0, 9.45, 1.20], "same_optics_as_m0": true},
+      "fixed_furniture": {
+        "sofa": {"x0": 0.05, "x1": 2.25, "y0": 0.03, "y1": 0.95},
+        "table": {"cx": 1.15, "cy": 1.72},
+        "armchair": {"cx": -0.95, "cy": 2.05, "yaw_deg": -15.0, "arm_front_inset": 0.0375, "note": "off the rug (reading zone by the window): deviation from the universal rug rule"}
+      },
+      "slots": {
+        "framed-art": {"kind": "box", "c": [1.15, 0.015, 1.475], "s": [1.55, 0.03, 1.00], "status": "firm"},
+        "pendant": {"kind": "cyl", "c": [1.15, 1.72], "r": 0.225, "z0": 2.20, "z1": 2.47, "cord": true, "status": "firm"},
+        "rug": {"kind": "box", "c": [1.15, 1.92, 0.005], "s": [2.90, 2.40, 0.01], "status": "firm"},
+        "curtains": {"rod": {"wall": "back", "x0": -2.25, "x1": -0.35, "z": 2.82}, "stacks_x": [[-2.25, -2.05], [-0.55, -0.35]], "depth": 0.10, "status": "firm"},
+        "planter": {"kind": "cyl", "c": [-2.45, 0.70], "r": 0.19, "z0": 0.0, "z1": 0.45, "envelope": {"r": 0.40, "z0": 0.45, "z1": 1.65}, "status": "firm", "note": "on the camera ray through the back-left corner"},
+        "wall-sconce": {"kind": "box", "c": [-2.79, 1.40, 1.47], "s": [0.02, 0.12, 0.12], "status": "provisional", "note": "left wall; far from the armchair (ambient role)"},
+        "wall-decor": {"kind": "box", "c": [-0.15, 0.02, 1.47], "s": [0.35, 0.04, 0.45], "status": "provisional", "note": "back wall between window and sofa"},
+        "floor-lamp": {"kind": "cyl", "c": [2.50, 0.30], "r": 0.21, "z0": 1.20, "z1": 1.50, "stem": true, "base_r": 0.15, "status": "provisional"},
+        "basket": {"kind": "cyl", "c": [2.45, 1.10], "r": 0.18, "z0": 0.0, "z1": 0.40, "status": "provisional"},
+        "pouf": {"kind": "cyl", "c": [0.30, 2.45], "r": 0.25, "z0": 0.0, "z1": 0.37, "status": "provisional", "note": "13 cm from table edge; bottom margin ~0.05"},
+        "magazine-holder": {"kind": "box", "c": [-2.02, 2.415, 0.21], "s": [0.36, 0.23, 0.42], "status": "provisional"},
+        "sofa-cover": {"status": "approx", "rule": "as v3 approx proxy, translated +1.15 X"},
+        "cushions": {"status": "approx", "rule": "as v3 approx proxy, translated +1.15 X"},
+        "table-runner": {"status": "approx", "rule": "as v3, translated +1.15 X"},
+        "vase": {"status": "approx", "rule": "as v3, translated +1.15 X"},
+        "candle-holders": {"status": "approx", "rule": "as v3, translated +1.15 X"}
+      },
+      "expected": {
+        "back_wall_x": [0.227, 0.893], "back_wall_y": [0.079, 0.694],
+        "left_wall_visible_to_y": 2.27, "right_wall_visible_to_y": 1.36,
+        "window": [[0.316, 0.495], [0.143, 0.650]],
+        "sofa_x": [0.567, 0.883], "framed-art": [[0.605, 0.789], [0.296, 0.508]],
+        "pendant": [[0.719, 0.797], [0.072, 0.155]], "coffee-table_x": [0.645, 0.909],
+        "armchair_approx": [[0.29, 0.47], [0.61, 0.86]], "planter": [0.201, 0.253],
+        "wall-sconce": [0.116, 0.383], "wall-decor_x": [0.521, 0.563],
+        "rug_front": "just below the bottom edge (cut)"
+      },
+      "checks": ["light: window behind the subject; report wall L near window vs back-right and sofa front luminance in clay", "armchair overlaps window bottom >= 0.04, gaps to jambs >= 0.02", "armchair vs planter >= 0.02", "rug front edge not within 0.02 of the bottom edge", "pouf base >= 0.05 from bottom edge", "pendant in top third, >= 0.05 above art", "table right end >= 0.05 from right edge", "wall-decor vs window jamb, sofa back and art >= 0.03"],
+      "mobile_crop": {"center_u": 0.725, "width": 0.316, "note": "sofa width equals crop; prefer width 0.34"}
+    }
+  },
+  "baseline_v3_for_compare": {
+    "room": [3.70, 6.90, 2.70], "camera": [0.0, 6.05, 1.20], "u0": 0.54, "v0": 0.3889,
+    "back_wall_x": [0.342, 0.749], "back_wall_y": [0.095, 0.624], "window_x": [0.211, 0.320],
+    "sofa_x": [0.397, 0.683], "framed-art_x": [0.454, 0.626],
+    "mobile_crop": {"center_u": 0.54, "width": 0.316}
+  }
+}
