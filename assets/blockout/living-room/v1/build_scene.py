@@ -4,8 +4,6 @@ Blockout of the Nordic living room (M0) - clay render, metric depth, lines,
 overlay of future product slots, plan view and a self-check of section 2.1.
 
 Source of truth: briefs/m0-prompt.nordic.md, section 2 (geometry) and 2.1 (frame checks).
-Version 2 (2026-10-03): alternative A of review-designer.md (camera Y 6.05 + shift_x, armchair
-25 deg with short armrests, planter moved). Version 1 is kept in v1/.
 Axes (metres): origin on the floor where the room axis meets the back wall.
 X to the right, Y from the back wall toward the camera, Z up.
 
@@ -42,18 +40,9 @@ SOFA = dict(x0=-1.10, x1=1.10, y0=0.03, y1=0.95, back_h=0.78, seat_h=0.44, arm_h
             arm_w=0.14, leg_h=0.15, leg_in=0.05, leg_d_top=0.04, leg_d_bot=0.025)
 TABLE = dict(cx=0.0, cy=1.72, w=1.40, d=0.70, h=0.38, top_t=0.03, leg_d=0.05, leg_in=0.12,
              n=5.0)
-CHAIR = dict(cx=-1.230, cy=2.821, w=0.72, d=0.78, h=0.76, seat_h=0.40, yaw_deg=-25.0,
-             arm_front_inset=0.0375)
-# v2 (alternative A, review-designer.md 3.1, approved 2026-10-03):
-# yaw -25 deg: the chair faces +X, turned 25 deg toward the back wall / coffee table.
-# arm_front_inset: armrests end 3.75 cm behind the front of the frame (+0.3525 local), flush
-# with the front faces of the front legs.
-CAM = dict(loc=(0.0, 6.05, 1.20), lens=24.0, sensor_w=36.0, sensor_h=20.25, shift_y=-0.0625,
-           shift_x=-0.040)
-# shift_x: the house axis (X=0, centre of the framed art) lands at u = 0.540 in the frame.
-# The camera is mirrored (scale.x = -1); the sign is verified by the self-check
-# ("principal point u"), target 0.540, 0.460 would mean the sign is flipped.
-PP_U_TARGET = 0.540
+CHAIR = dict(cx=-1.22, cy=2.90, w=0.72, d=0.78, h=0.76, seat_h=0.40, yaw_deg=-35.0)
+# yaw -35 deg: the chair faces +X, turned 35 deg toward the back wall / coffee table.
+CAM = dict(loc=(0.0, 6.40, 1.20), lens=24.0, sensor_w=36.0, sensor_h=20.25, shift_y=-0.080)
 
 # Future products (overlay only, not in the clay render)
 FUTURE = {
@@ -61,7 +50,7 @@ FUTURE = {
     "pendant":     dict(kind="cyl", c=(0.0, 1.72), r=0.225, z0=2.05, z1=2.32, cord=True),
     "wall-sconce": dict(kind="box", c=(-1.80 + 0.01, 2.88, 1.47), s=(0.02, 0.12, 0.12)),
     "rug":         dict(kind="box", c=(0.0, 1.92, 0.005), s=(2.90, 2.40, 0.01)),
-    "planter":     dict(kind="cyl", c=(-1.50, 0.40), r=0.19, z0=0.0, z1=0.45,
+    "planter":     dict(kind="cyl", c=(-1.45, 0.35), r=0.20, z0=0.0, z1=0.45,
                         envelope=dict(r=0.40, z0=0.45, z1=1.65)),
     "floor-lamp":  dict(kind="cyl", c=(1.35, 0.30), r=0.21, z0=1.20, z1=1.50,
                         stem=True, base_r=0.14),
@@ -70,34 +59,22 @@ FUTURE = {
 
 # Expected frame positions (m0-prompt section 2.1) for the self-check
 EXPECTED = {
-    "ceiling_band_y": (0.00, 0.095),
-    "back_wall_x": (0.342, 0.749), "back_wall_y": (0.095, 0.624),
-    "horizon_y": 0.389,
-    "sofa": ((0.397, 0.683), (0.472, 0.665)),
-    "coffee-table": ((0.425, 0.655), (0.597, 0.736)),
-    "armchair": ((0.18, 0.375), (0.55, 0.90)),
-    "window_x": (0.211, 0.320), "window_head_y": (0.015, 0.139), "window_sill_y": (0.552, 0.632),
-    "left_wall_free_x": (0.00, 0.211),                 # frame edge cuts the left wall at Y~3.83
-    "right_wall_x": (0.749, 1.00),
-    "front_floor_y": (0.91, 1.00),                     # full width
-    "front_floor_right_y": (0.74, 1.00),               # right of front_floor_right_from_x
-    "front_floor_right_from_x": 0.375,
-    "framed-art": ((0.454, 0.626), (0.237, 0.433)),
-    "pendant": ((0.503, 0.577), (0.066, 0.168)),
-    "wall-sconce": (0.164, 0.288),
+    "ceiling_band_y": (0.00, 0.08),
+    "back_wall_x": (0.31, 0.70), "back_wall_y": (0.08, 0.58),
+    "horizon_y": 0.36,
+    "sofa": ((0.36, 0.64), (0.44, 0.62)),
+    "coffee-table": ((0.39, 0.61), (0.55, 0.69)),
+    "armchair": ((0.17, 0.37), (0.50, 0.84)),          # m0-prompt 1.1 (was 0.78)
+    "window_x": (0.20, 0.29), "window_head_y": (0.02, 0.12), "window_sill_y": (0.51, 0.58),
+    "left_wall_free_x": (0.00, 0.20),
+    "right_wall_x": (0.70, 1.00),
+    "front_floor_y": (0.84, 1.00),                     # full width (m0-prompt 1.1)
+    "front_floor_right_y": (0.79, 1.00),               # right of x 0.37
+    "front_floor_right_from_x": 0.37,
+    "framed-art": ((0.42, 0.58), (0.21, 0.40)),
+    "pendant": ((0.47, 0.53), (0.06, 0.15)),           # m0-prompt 1.1 (was 0.07-0.14)
+    "wall-sconce": (0.16, 0.27),
 }
-# review-designer.md 3.1 item 5: informative targets for future products [x0, x1, y0, y1]
-EXPECTED_FUTURE = {
-    "rug": [0.210, 0.870, 0.656, 0.874],
-    "planter": [0.346, 0.394, 0.540, 0.648],      # computed for the old planter (-1.45, 0.35) d40
-    "floor-lamp": [0.672, 0.721, 0.327, 0.389],
-    "pouf": [0.677, 0.755, 0.632, 0.808],
-}
-GAP_MIN = 0.02                 # armchair-sofa silhouette gap, alternative A (target 0.023)
-LEFT_WALL_FREE_MIN = 1.40      # m of left wall visible in front of the window
-WINDOW_HEAD_MARGIN = 0.010     # window head >= this below the top edge
-ARMCHAIR_EDGE_MARGIN = 0.05    # armchair >= this from every frame edge
-FLOOR_EXPOSED_TARGET = (0.12, 0.13)   # exposed floor below the rug, fraction of frame height
 TOL = 0.02
 
 CLAY = "#BDBBB7"
@@ -352,7 +329,7 @@ def build_chair(mclay, mwood):
             parts.append(box("chair_leg", lx - lw / 2, lx + lw / 2, ly - lw / 2, ly + lw / 2, 0, arm_z - 0.03, mwood, g, bevel=0.005, seg=1))
     # flat 6 cm armrests
     for ly in (hw - 0.03, -hw + 0.03):
-        parts.append(box("chair_arm", -hd + 0.02, hd - C["arm_front_inset"], ly - 0.03, ly + 0.03, arm_z - 0.03, arm_z, mwood, g, bevel=0.006, seg=2))
+        parts.append(box("chair_arm", -hd + 0.02, hd, ly - 0.03, ly + 0.03, arm_z - 0.03, arm_z, mwood, g, bevel=0.006, seg=2))
         parts.append(box("chair_side_rail", -hd + 0.06, hd - 0.06, ly - 0.02, ly + 0.02, 0.20, 0.25, mwood, g))
     # seat rails
     for lx in (hd - 0.06, -hd + 0.06):
@@ -392,7 +369,7 @@ def build_camera():
     cam_data.sensor_fit = "HORIZONTAL"
     cam_data.sensor_width = CAM["sensor_w"]
     cam_data.sensor_height = CAM["sensor_h"]
-    cam_data.shift_x = CAM["shift_x"]
+    cam_data.shift_x = 0.0
     cam_data.shift_y = CAM["shift_y"]
     cam_data.clip_start = 0.05
     cam_data.clip_end = 100.0
@@ -593,24 +570,10 @@ def self_check(cam, roots, idx, res):
     add("window opening", "x", (a[0], b[0]), EXPECTED["window_x"])
     add("window head", "y", (d[1], c[1]), EXPECTED["window_head_y"], "front edge -> back edge")
     add("window sill", "y", (a[1], b[1]), EXPECTED["window_sill_y"], "back edge -> front edge")
-    # free left wall in front of the window: from the window (Y 2.40) to where the frame edge cuts it
-    y_cut = camera_wall_entry(cam, xl)
-    f = proj(cam, (xl, Wn["y1"], 1.2))
-    add("left wall free (window -> frame edge)", "x", (0.0, f[0]), EXPECTED["left_wall_free_x"],
-        f"left frame edge cuts the left wall at Y={y_cut:.3f}")
-    free_m = y_cut - Wn["y1"]
-    rep["items"].append(dict(item="left wall visible in front of the window", axis="m",
-                             expected=f">= {LEFT_WALL_FREE_MIN}", measured=round(free_m, 4),
-                             ok=bool(free_m >= LEFT_WALL_FREE_MIN - 1e-9)))
-    rep["items"].append(dict(item="window head margin from top edge", axis="y",
-                             expected=f">= {WINDOW_HEAD_MARGIN}", measured=round(d[1], 4),
-                             ok=bool(d[1] >= WINDOW_HEAD_MARGIN - 1e-9), note="front edge of the head"))
-    # principal point / house axis (sign check of shift_x on the mirrored camera)
-    pp = proj(cam, (0.0, 0.0, CAM["loc"][2]))
-    rep["items"].append(dict(item="principal point u (house axis X=0)", axis="x", expected=PP_U_TARGET,
-                             measured=round(pp[0], 4), max_dev=round(abs(pp[0] - PP_U_TARGET), 4),
-                             ok=bool(abs(pp[0] - PP_U_TARGET) <= 0.003),
-                             note="tolerance 0.003; 0.460 would mean the shift_x sign is flipped"))
+    # free left wall in front of the window, Y 2.40 - 4.00
+    e = proj(cam, (xl, 4.00, 1.2)); f = proj(cam, (xl, Wn["y1"], 1.2))
+    add("left wall free (Y 2.40-4.00)", "x", (max(0.0, e[0]), f[0]), EXPECTED["left_wall_free_x"],
+        f"Y=4.00 projects to x={e[0]:.3f} (off-frame when <0); camera sees the left wall from Y={camera_wall_entry(cam, xl):.2f}")
     g = proj(cam, (xr, 0, 1.2))
     add("right wall", "x", (g[0], 1.0), EXPECTED["right_wall_x"])
     # empty front floor - nearest furniture bottom
@@ -618,18 +581,11 @@ def self_check(cam, roots, idx, res):
     low_all = (np.nonzero(furn.any(axis=1))[0].max() + 1) / H
     xr0 = int(EXPECTED["front_floor_right_from_x"] * W)
     low_right = (np.nonzero(furn[:, xr0:].any(axis=1))[0].max() + 1) / H
-    fx_lbl = EXPECTED["front_floor_right_from_x"]
     for nm, val, exp in (("front floor empty, full width", low_all, EXPECTED["front_floor_y"]),
-                         (f"front floor empty, right of x {fx_lbl}", low_right, EXPECTED["front_floor_right_y"])):
+                         ("front floor empty, right of x 0.37", low_right, EXPECTED["front_floor_right_y"])):
         rep["items"].append(dict(item=nm, axis="y", expected=exp, measured=round(val, 4),
                                  max_dev=round(max(0.0, val - exp[0]), 4), ok=bool(val <= exp[0] + TOL),
                                  note="lowest furniture pixel (object index pass); ok = no furniture below expected top + tol"))
-    # armchair clear of every frame edge (visible mask)
-    ma = idx == PASS_INDEX["armchair"]
-    ys_, xs_ = np.nonzero(ma)
-    edge_m = min(xs_.min() / W, 1 - (xs_.max() + 1) / W, ys_.min() / H, 1 - (ys_.max() + 1) / H)
-    rep["items"].append(dict(item="armchair margin to frame edges", axis="min", expected=f">= {ARMCHAIR_EDGE_MARGIN}",
-                             measured=round(edge_m, 4), ok=bool(edge_m >= ARMCHAIR_EDGE_MARGIN)))
     rep["armchair_sofa_gap"] = silhouette_gap(idx, PASS_INDEX["armchair"], PASS_INDEX["sofa"])
     # future products
     fs = future_shapes()
@@ -644,25 +600,13 @@ def self_check(cam, roots, idx, res):
     pend = bbox2d(cam, fs["pendant"]["hull"])
     art = bbox2d(cam, fs["framed-art"]["hull"])
     rep["pendant_to_art_gap"] = round(art[1][0] - pend[1][1], 4)
-    rep["framed_art_centre"] = [round((art[0][0] + art[0][1]) / 2, 4), round((art[1][0] + art[1][1]) / 2, 4)]
-    rug = bbox2d(cam, fs["rug"]["hull"])
-    exposed = 1.0 - rug[1][1]
-    rep["front_floor_exposed_below_rug"] = dict(
-        rug_front_edge_y=round(rug[1][1], 4), exposed_fraction=round(exposed, 4),
-        target=list(FLOOR_EXPOSED_TARGET),
-        ok=bool(FLOOR_EXPOSED_TARGET[0] - 0.005 <= exposed <= FLOOR_EXPOSED_TARGET[1] + 0.005))
     # other future items: informative
     rep["future_items"] = {}
     for name in FUTURE:
         (x0, x1), (y0, y1) = bbox2d(cam, fs[name]["hull"])
         rep["future_items"][name] = [round(x0, 4), round(x1, 4), round(y0, 4), round(y1, 4)]
-    rep["future_items_expected_review"] = EXPECTED_FUTURE
-    rep["future_items_note"] = ("planter moved to (-1.50, 0.40), vessel d38 (review 5.1); magazine holder "
-                                "not drawn: no new position decided yet (review 5.2, needs user decision)")
     rep["all_ok"] = all(i.get("ok", True) for i in rep["items"])
     rep["all_ok_including_armchair_sofa_gap"] = rep["all_ok"] and rep["armchair_sofa_gap"]["ok"]
-    rep["all_ok_including_gap_and_floor"] = (rep["all_ok_including_armchair_sofa_gap"]
-                                             and rep["front_floor_exposed_below_rug"]["ok"])
     return rep
 
 
@@ -704,19 +648,13 @@ def silhouette_gap(idx, a, b):
                 closest_points_xy=[[round(pa[1] / W, 4), round(pa[0] / H, 4)], [round(pb[1] / W, 4), round(pb[0] / H, 4)]],
                 min_horizontal_gap_same_row_frame_w=(round(hgap / W, 4) if hgap is not None else None),
                 rows_overlap_y=([round(rows.min() / H, 4), round((rows.max() + 1) / H, 4)] if len(rows) else None),
-                required_min=GAP_MIN, ok=bool((not touch) and dist_px / W >= GAP_MIN))
+                required_min=0.01, ok=bool((not touch) and dist_px / W >= 0.01))
 
 
 def camera_wall_entry(cam, xl):
-    # Y at which the left frame edge (u = 0) meets the left wall at camera height (includes shift_x)
-    lo, hi = 0.0, CAM["loc"][1] - 0.05
-    for _ in range(60):
-        mid = (lo + hi) / 2
-        if proj(cam, (xl, mid, CAM["loc"][2]))[0] > 0.0:
-            lo = mid
-        else:
-            hi = mid
-    return (lo + hi) / 2
+    # Y at which the left frame edge meets the left wall (at camera height)
+    half = (CAM["sensor_w"] / 2) / CAM["lens"]
+    return CAM["loc"][1] - abs(xl) / half
 
 
 def rep_floor_top(cam, roots):
@@ -855,13 +793,11 @@ def render_plan(out_path, roots):
         x, y, _ = proj(cp, p)
         return (x * img.size[0], y * img.size[1])
     c = CAM["loc"]
-    u0 = proj(bpy.data.objects["cam_main"], (c[0], 0.0, c[2]))[0]     # principal point (shift_x)
-    k = CAM["sensor_w"] / CAM["lens"]
-    D = 6.6
-    for u in (0.0, 1.0):                       # left and right frame edges
-        dr.line([P((c[0], c[1], 1.0)), P((c[0] + (u - u0) * k * D, c[1] - D, 1.0))],
+    half = math.atan((CAM["sensor_w"] / 2) / CAM["lens"])
+    L = 7.0
+    for s in (-1, 1):
+        dr.line([P((c[0], c[1], 1.0)), P((c[0] + s * L * math.sin(half), c[1] - L * math.cos(half), 1.0))],
                 fill=(220, 60, 40), width=3)
-    dr.line([P((c[0], c[1], 1.0)), P((c[0], c[1] - D, 1.0))], fill=(220, 60, 40), width=1)
     cx, cy = P((c[0], c[1], 1.0))
     dr.ellipse((cx - 10, cy - 10, cx + 10, cy + 10), fill=(220, 60, 40))
     img.save(out_path)
@@ -932,7 +868,7 @@ def main():
     make_overlay(clay_main, os.path.join(a.out, "m0-clay-overlay.png"), cam)
 
     rep = self_check(cam, roots, idx, a.res)
-    # depth sanity: centre of back wall must equal the camera Y (planar)
+    # depth sanity: centre of back wall must be 6.40 m (planar)
     H, W = depth.shape
     px, py, _ = proj(cam, (0.0, 0.0, 2.40))
     rep["depth_check_back_wall_m"] = round(float(depth[int(py * H), int(px * W)]), 4)
@@ -949,23 +885,16 @@ def main():
         location_m=list(CAM["loc"]), look="-Y, level (tilt 0, roll 0)",
         blender_rotation_euler_deg=[90, 0, 180], lens_mm=CAM["lens"],
         sensor_mm=[CAM["sensor_w"], CAM["sensor_h"]], sensor_fit="HORIZONTAL",
-        shift_x=CAM["shift_x"], shift_x_mm=round(CAM["shift_x"] * CAM["sensor_w"], 4),
-        shift_y=CAM["shift_y"], shift_y_mm=round(CAM["shift_y"] * CAM["sensor_w"], 4),
+        shift_x=0.0, shift_y=CAM["shift_y"], shift_y_mm=CAM["shift_y"] * CAM["sensor_w"],
         hfov_deg=round(math.degrees(2 * math.atan(CAM["sensor_w"] / 2 / CAM["lens"])), 3),
         vfov_deg=round(math.degrees(2 * math.atan(CAM["sensor_h"] / 2 / CAM["lens"])), 3),
         resolution=[a.res, Hh],
         intrinsics_px=dict(fx=fx, fy=fx, cx=a.res / 2, cy=Hh / 2 + (-CAM["shift_y"]) * a.res * -1.0 + 0.0),
-        note=("cx, cy: principal point from the left/top, measured by projecting the optical axis. "
-              "shift_y<0 moves it up: cy = H/2 + shift_y*W. The camera is mirrored (scale.x=-1), so "
-              "shift_x<0 moves it right: cx = W/2 - shift_x*W (house axis X=0 at u=0.540)"),
-        mirrored_scale_x=-1.0,
+        note="cy: principal point from the top; shift_y<0 moves the principal point up: cy = H/2 + shift_y*W",
         depth=dict(file="m0-depth.png", type="uint16", unit="mm", kind="planar camera Z (distance to camera plane)",
                    sky_value=65535, exr="m0-depth.exr (float32 metres)"),
     )
     camj["intrinsics_px"]["cy"] = Hh / 2 + CAM["shift_y"] * a.res
-    ppu, ppv, _ = proj(cam, (0.0, 0.0, CAM["loc"][2]))
-    camj["intrinsics_px"]["cx"] = round(ppu * a.res, 2)
-    camj["principal_point_measured_uv"] = [round(ppu, 5), round(ppv, 5)]
     with open(os.path.join(a.out, "m0-camera.json"), "w") as fh:
         json.dump(camj, fh, indent=2)
 
