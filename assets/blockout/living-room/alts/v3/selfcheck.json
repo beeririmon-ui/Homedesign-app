@@ -1,0 +1,663 @@
+{
+  "alternative": "v3",
+  "name": "v3 baseline (approved M0, re-rendered in the comparison clay)",
+  "tolerance_task": 0.01,
+  "tolerance_json": 0.02,
+  "camera": {
+    "loc": [
+      0.0,
+      6.05,
+      1.2
+    ],
+    "yaw": 0.0,
+    "lens": 24.0,
+    "shift_x": -0.04,
+    "shift_y": -0.0625,
+    "u0": 0.54,
+    "v0": 0.3889,
+    "mirrored_scale_x": -1.0,
+    "blender_rotation_euler_deg": [
+      90,
+      0,
+      180.0
+    ]
+  },
+  "room": {
+    "x_left": -1.8,
+    "x_right": 1.9,
+    "y_back": 0.0,
+    "y_front": 6.9,
+    "h": 2.7
+  },
+  "image_px": [
+    2048,
+    1152
+  ],
+  "frame_values": [
+    {
+      "key": "back_wall_x",
+      "measured": [
+        0.3417,
+        0.7494
+      ],
+      "how": "projection of the back-wall corners",
+      "expected": [
+        0.342,
+        0.749
+      ],
+      "max_dev": 0.0004,
+      "ok_task_0_01": true,
+      "ok_json_0_02": true
+    },
+    {
+      "key": "back_wall_y",
+      "measured": [
+        0.095,
+        0.624
+      ],
+      "how": "projection, back wall top/bottom",
+      "expected": [
+        0.095,
+        0.624
+      ],
+      "max_dev": 0.0,
+      "ok_task_0_01": true,
+      "ok_json_0_02": true
+    },
+    {
+      "key": "ceiling_band_y",
+      "measured": [
+        0.0,
+        0.095
+      ],
+      "how": "top edge to back-wall top"
+    },
+    {
+      "key": "left_wall_visible_to_y",
+      "measured": 3.8278,
+      "how": "left frame edge meets the left wall (camera height)"
+    },
+    {
+      "key": "right_wall_visible_to_y",
+      "measured": 3.2964,
+      "how": "right frame edge meets the right wall (camera height)"
+    },
+    {
+      "key": "window_x",
+      "measured": [
+        0.2112,
+        0.3198
+      ],
+      "how": "opening at the wall face",
+      "expected": [
+        0.211,
+        0.32
+      ],
+      "max_dev": 0.0002,
+      "ok_task_0_01": true,
+      "ok_json_0_02": true
+    },
+    {
+      "key": "window_head_y",
+      "measured": [
+        0.0155,
+        0.1388
+      ],
+      "how": "head, front edge -> back edge"
+    },
+    {
+      "key": "window_sill_y",
+      "measured": [
+        0.552,
+        0.6324
+      ],
+      "how": "sill, back edge -> front edge"
+    },
+    {
+      "key": "sofa_x",
+      "measured": [
+        0.397,
+        0.6829
+      ],
+      "how": "geometry projection (incl. bevel)",
+      "expected": [
+        0.397,
+        0.683
+      ],
+      "max_dev": 0.0001,
+      "ok_task_0_01": true,
+      "ok_json_0_02": true
+    },
+    {
+      "key": "armchair_approx",
+      "measured": [
+        [
+          0.167,
+          0.3741
+        ],
+        [
+          0.5483,
+          0.9028
+        ]
+      ],
+      "how": "geometry projection (approx expected)"
+    },
+    {
+      "key": "framed-art_x",
+      "measured": [
+        0.4542,
+        0.6258
+      ],
+      "how": "projection",
+      "expected": [
+        0.454,
+        0.626
+      ],
+      "max_dev": 0.0002,
+      "ok_task_0_01": true,
+      "ok_json_0_02": true
+    }
+  ],
+  "checks": [
+    {
+      "check": "principal point (u0, v0) from the optical axis",
+      "ok": true,
+      "measured": [
+        0.54,
+        0.3889
+      ],
+      "required": [
+        0.54,
+        0.3889
+      ],
+      "note": "verifies the shift signs on the mirrored rig (tol 0.003)"
+    },
+    {
+      "check": "verticals plumb (tilt 0, roll 0)",
+      "ok": true,
+      "measured": 0.0,
+      "required": "0",
+      "note": "max |du| between z 0 and z h of wall verticals"
+    }
+  ],
+  "notes": [],
+  "principal_point_measured": [
+    0.54,
+    0.3889
+  ],
+  "window_head_cut": {
+    "from_y": null,
+    "fraction_of_length": 0.0
+  },
+  "visible_masks": {
+    "sofa": [
+      0.397,
+      0.6831,
+      0.474,
+      0.6632
+    ],
+    "coffee-table": [
+      0.4282,
+      0.6519,
+      0.5972,
+      0.7344
+    ],
+    "armchair": [
+      0.167,
+      0.374,
+      0.5486,
+      0.9028
+    ],
+    "framed-art": [
+      0.4541,
+      0.626,
+      0.2361,
+      0.4332
+    ],
+    "pendant": [
+      0.5054,
+      0.5747,
+      0.0,
+      0.1675
+    ],
+    "wall-sconce": [
+      0.1543,
+      0.1729,
+      0.263,
+      0.3116
+    ],
+    "rug": [
+      0.2139,
+      0.8066,
+      0.6528,
+      0.8741
+    ],
+    "curtains": [
+      0.1938,
+      0.3452,
+      0.0,
+      0.796
+    ],
+    "planter": [
+      0.3403,
+      0.3862,
+      0.5148,
+      0.6493
+    ],
+    "floor-lamp": [
+      0.6719,
+      0.7217,
+      0.3247,
+      0.6424
+    ],
+    "basket": [
+      0.6982,
+      0.751,
+      0.5521,
+      0.6693
+    ],
+    "pouf": [
+      0.6646,
+      0.7676,
+      0.6623,
+      0.8429
+    ],
+    "magazine-holder": [
+      0.8066,
+      0.9238,
+      0.7188,
+      0.9427
+    ],
+    "wall-decor": [
+      0.8179,
+      0.8921,
+      0.1424,
+      0.4549
+    ],
+    "sofa-cover": [
+      0.6172,
+      0.666,
+      0.5417,
+      0.566
+    ],
+    "cushions": [
+      0.4302,
+      0.6499,
+      0.4514,
+      0.5503
+    ],
+    "table-runner": [
+      0.4648,
+      0.5215,
+      0.5955,
+      0.6328
+    ],
+    "vase": [
+      0.5938,
+      0.6172,
+      0.5304,
+      0.6198
+    ],
+    "candle-holders": [
+      0.5723,
+      0.5947,
+      0.5356,
+      0.6233
+    ],
+    "planter-crown": [
+      0.3276,
+      0.4106,
+      0.2943,
+      0.5148
+    ]
+  },
+  "slot_frame_boxes": {
+    "framed-art": {
+      "box": [
+        0.4542,
+        0.6258,
+        0.2363,
+        0.4332
+      ],
+      "status": "firm",
+      "in_frame": true
+    },
+    "pendant": {
+      "box": [
+        0.5053,
+        0.5747,
+        0.0655,
+        0.1677
+      ],
+      "status": "firm",
+      "in_frame": true
+    },
+    "wall-sconce": {
+      "box": [
+        0.1541,
+        0.1726,
+        0.2631,
+        0.3118
+      ],
+      "status": "firm",
+      "in_frame": true
+    },
+    "rug": {
+      "box": [
+        0.2101,
+        0.8699,
+        0.6531,
+        0.8743
+      ],
+      "status": "firm",
+      "in_frame": true
+    },
+    "curtains": {
+      "box": [
+        0.1937,
+        0.3452,
+        -0.0623,
+        0.7956
+      ],
+      "status": "firm",
+      "in_frame": true
+    },
+    "planter": {
+      "box": [
+        0.3396,
+        0.386,
+        0.5411,
+        0.6494
+      ],
+      "status": "firm",
+      "in_frame": true
+    },
+    "floor-lamp": {
+      "box": [
+        0.6717,
+        0.7217,
+        0.3247,
+        0.3889
+      ],
+      "status": "firm",
+      "in_frame": true
+    },
+    "basket": {
+      "box": [
+        0.698,
+        0.7508,
+        0.552,
+        0.6705
+      ],
+      "status": "approx",
+      "in_frame": true
+    },
+    "pouf": {
+      "box": [
+        0.6645,
+        0.7677,
+        0.6621,
+        0.8477
+      ],
+      "status": "firm",
+      "in_frame": true
+    },
+    "magazine-holder": {
+      "box": [
+        0.8067,
+        0.9239,
+        0.719,
+        0.9423
+      ],
+      "status": "firm",
+      "in_frame": true
+    },
+    "wall-decor": {
+      "box": [
+        0.8178,
+        0.8919,
+        0.142,
+        0.4547
+      ],
+      "status": "approx",
+      "in_frame": true
+    },
+    "sofa-cover": {
+      "box": [
+        0.6108,
+        0.666,
+        0.542,
+        0.5662
+      ],
+      "status": "approx",
+      "in_frame": true
+    },
+    "cushions": {
+      "box": [
+        0.4303,
+        0.6497,
+        0.4518,
+        0.5539
+      ],
+      "status": "approx",
+      "in_frame": true
+    },
+    "table-runner": {
+      "box": [
+        0.4646,
+        0.5215,
+        0.5955,
+        0.6331
+      ],
+      "status": "approx",
+      "in_frame": true
+    },
+    "vase": {
+      "box": [
+        0.5936,
+        0.617,
+        0.5301,
+        0.6195
+      ],
+      "status": "approx",
+      "in_frame": true
+    },
+    "candle-holders": {
+      "box": [
+        0.5725,
+        0.5949,
+        0.5352,
+        0.6234
+      ],
+      "status": "approx",
+      "in_frame": true
+    }
+  },
+  "luminance_L": {
+    "sofa front (seat cushion face)": {
+      "L": 74.0,
+      "uv": [
+        0.54,
+        0.5818
+      ],
+      "visible_px": 169
+    },
+    "back wall above the sofa (z 2.30)": {
+      "L": 80.3,
+      "uv": [
+        0.54,
+        0.1734
+      ],
+      "visible_px": 169
+    },
+    "back wall right (X xr-0.40, z 1.80)": {
+      "L": 74.0,
+      "uv": [
+        0.7053,
+        0.2713
+      ],
+      "visible_px": 169
+    },
+    "left wall beside the window (front side)": {
+      "L": 64.2,
+      "uv": [
+        0.165,
+        0.2407
+      ],
+      "visible_px": 169
+    },
+    "back wall near the window (X xl+0.40)": {
+      "L": 67.1,
+      "uv": [
+        0.3857,
+        0.3105
+      ],
+      "visible_px": 52
+    }
+  },
+  "tangents_lt_0_02": [
+    {
+      "pair": "sofa|planter",
+      "gap": 0.0107,
+      "at": [
+        [
+          0.397,
+          0.5451
+        ],
+        [
+          0.3857,
+          0.5451
+        ]
+      ]
+    },
+    {
+      "pair": "sofa|pouf",
+      "gap": 0.0015,
+      "at": [
+        [
+          0.6763,
+          0.6623
+        ],
+        [
+          0.6763,
+          0.6658
+        ]
+      ]
+    },
+    {
+      "pair": "sofa|basket",
+      "gap": 0.0151,
+      "at": [
+        [
+          0.6826,
+          0.5556
+        ],
+        [
+          0.6982,
+          0.5556
+        ]
+      ]
+    },
+    {
+      "pair": "planter|rug",
+      "gap": 0.002,
+      "at": [
+        [
+          0.3584,
+          0.6484
+        ],
+        [
+          0.3584,
+          0.6528
+        ]
+      ]
+    },
+    {
+      "pair": "floor-lamp|pouf",
+      "gap": 0.0112,
+      "at": [
+        [
+          0.6919,
+          0.6415
+        ],
+        [
+          0.6919,
+          0.6623
+        ]
+      ]
+    },
+    {
+      "pair": "floor-lamp|rug",
+      "gap": 0.0059,
+      "at": [
+        [
+          0.6914,
+          0.6415
+        ],
+        [
+          0.6914,
+          0.6528
+        ]
+      ]
+    }
+  ],
+  "tangent_note": "pairs whose visible silhouettes come within 0.02 frame widths without touching; touching/overlapping pairs (occlusion) are not listed",
+  "summary": {
+    "frame_values_outside_0_01": [],
+    "frame_values_outside_0_02": [],
+    "checks_failed": [],
+    "tangents": [
+      "sofa|planter",
+      "sofa|pouf",
+      "sofa|basket",
+      "planter|rug",
+      "floor-lamp|pouf",
+      "floor-lamp|rug"
+    ]
+  },
+  "render": {
+    "engine": "Cycles CPU",
+    "samples": 64,
+    "res": [
+      2048,
+      1152
+    ],
+    "sky_strength": 7.0,
+    "exposure": 1.0,
+    "view": "AgX",
+    "seed": 7,
+    "light": "sky only, through the window of the alternative (no sun, no lamps)",
+    "palette": {
+      "wall": "#DDD8D1",
+      "ceiling": "#E7E3DD",
+      "moulding": "#EEEAE4",
+      "floor_gap": "#8F887F",
+      "planks": [
+        "#C3BAAE",
+        "#BDB4A8",
+        "#C0B7AB",
+        "#B9B0A4"
+      ],
+      "sofa": "#D4CEC5",
+      "wood": "#B4A999",
+      "chair": "#CDC9C3",
+      "oak_lining": "#CBBBA5",
+      "textile": "#D9D2C7",
+      "rug": "#CBC3B6",
+      "curtain": "#E4DFD7",
+      "obj": "#C3BCB1",
+      "art": "#C8C2B9",
+      "holder": "#8E8A84",
+      "crown": "#A9A69C",
+      "shadow_gap": "#8A857E",
+      "vest": "#D0CBC4"
+    }
+  },
+  "overlay_not_visible": [],
+  "plan": {
+    "fov_edge_rays_project_to_u": [
+      -0.0,
+      1.0
+    ]
+  }
+}
