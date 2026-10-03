@@ -64,8 +64,11 @@ FUTURE = {
     "planter":     dict(kind="cyl", c=(-1.50, 0.40), r=0.19, z0=0.0, z1=0.45,
                         envelope=dict(r=0.40, z0=0.45, z1=1.65)),
     "floor-lamp":  dict(kind="cyl", c=(1.35, 0.30), r=0.21, z0=1.20, z1=1.50,
-                        stem=True, base_r=0.14),
-    "pouf":        dict(kind="cyl", c=(0.95, 2.45), r=0.21, z0=0.0, z1=0.42),
+                        stem=True, base_r=0.15),
+    # Bible 1.2.1/1.2.2: pouf centre (0.88, 2.70), d50, height 37 (Bible 35-37; m0-prompt still says 40)
+    "pouf":        dict(kind="cyl", c=(0.88, 2.70), r=0.25, z0=0.0, z1=0.37),
+    # Bible 1.2.1: on the floor against the right wall, X 1.615-1.865, Y 2.05-2.45, height 50
+    "magazine-holder": dict(kind="box", c=(1.74, 2.25, 0.25), s=(0.25, 0.40, 0.50)),
 }
 
 # Expected frame positions (m0-prompt section 2.1) for the self-check
@@ -87,11 +90,12 @@ EXPECTED = {
     "wall-sconce": (0.164, 0.288),
 }
 # review-designer.md 3.1 item 5: informative targets for future products [x0, x1, y0, y1]
-EXPECTED_FUTURE = {
+EXPECTED_FUTURE = {           # m0-prompt 2.1 (alternative A), informative [x0, x1, y0, y1]
     "rug": [0.210, 0.870, 0.656, 0.874],
-    "planter": [0.346, 0.394, 0.540, 0.648],      # computed for the old planter (-1.45, 0.35) d40
+    "planter": [0.341, 0.385, 0.54, 0.65],
     "floor-lamp": [0.672, 0.721, 0.327, 0.389],
-    "pouf": [0.677, 0.755, 0.632, 0.808],
+    "pouf": [0.665, 0.765, 0.652, 0.848],          # m0-prompt value is for height 40; here 37
+    "magazine-holder": [0.809, 0.885, 0.596, 0.784],
 }
 GAP_MIN = 0.02                 # armchair-sofa silhouette gap, alternative A (target 0.023)
 LEFT_WALL_FREE_MIN = 1.40      # m of left wall visible in front of the window
@@ -657,8 +661,17 @@ def self_check(cam, roots, idx, res):
         (x0, x1), (y0, y1) = bbox2d(cam, fs[name]["hull"])
         rep["future_items"][name] = [round(x0, 4), round(x1, 4), round(y0, 4), round(y1, 4)]
     rep["future_items_expected_review"] = EXPECTED_FUTURE
-    rep["future_items_note"] = ("planter moved to (-1.50, 0.40), vessel d38 (review 5.1); magazine holder "
-                                "not drawn: no new position decided yet (review 5.2, needs user decision)")
+    fl = FUTURE["floor-lamp"]
+    base = [(fl["c"][0] + fl["base_r"] * math.cos(t), fl["c"][1] + fl["base_r"] * math.sin(t), 0.0)
+            for t in np.linspace(0, 2 * math.pi, 96)]
+    base_y = bbox2d(cam, base)[1]
+    pouf_y = bbox2d(cam, fs["pouf"]["hull"])[1]
+    rep["floor_lamp_base_vs_pouf_top"] = dict(
+        lamp_base_y=[round(base_y[0], 4), round(base_y[1], 4)], pouf_top_y=round(pouf_y[0], 4),
+        gap=round(pouf_y[0] - base_y[1], 4), required_min=0.02, ok=bool(pouf_y[0] - base_y[1] >= 0.02),
+        note="Bible 1.2.2: the lamp base must sit >= 0.02 above (in frame) the pouf's top edge")
+    rep["future_items_note"] = ("Bible 1.2.2: planter (-1.50, 0.40) d38 h45; pouf (0.88, 2.70) d50 h37; "
+                                "magazine holder X 1.615-1.865 Y 2.05-2.45 h50; floor-lamp base r15")
     rep["all_ok"] = all(i.get("ok", True) for i in rep["items"])
     rep["all_ok_including_armchair_sofa_gap"] = rep["all_ok"] and rep["armchair_sofa_gap"]["ok"]
     rep["all_ok_including_gap_and_floor"] = (rep["all_ok_including_armchair_sofa_gap"]
@@ -743,7 +756,7 @@ def make_overlay(clay_path, out_path, cam):
     dr = ImageDraw.Draw(lay)
     colors = {"framed-art": (230, 80, 60), "pendant": (240, 170, 30), "wall-sconce": (40, 160, 230),
               "rug": (60, 180, 90), "planter": (40, 140, 60), "floor-lamp": (170, 90, 220),
-              "pouf": (220, 80, 160)}
+              "pouf": (220, 80, 160), "magazine-holder": (110, 110, 120)}
     try:
         font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", max(14, W // 110))
     except Exception:
@@ -773,7 +786,7 @@ def make_overlay(clay_path, out_path, cam):
             up.append(p)
         return lo[:-1] + up[:-1]
 
-    order = ["rug", "framed-art", "planter", "floor-lamp", "pouf", "wall-sconce", "pendant"]
+    order = ["rug", "framed-art", "planter", "floor-lamp", "magazine-holder", "pouf", "wall-sconce", "pendant"]
     for name in order:
         col = colors[name]
         sh = fs[name]
