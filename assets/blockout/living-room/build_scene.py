@@ -964,6 +964,7 @@ def holder_checks(cam, variant, pouf_h=0.37, rug_t_min=MH_RUG_T_MIN, cam_y=None)
 # Proxies of the 16 slots for the close-ups. "exact": binding coordinates (Bible / m0-prompt).
 # "approx": no binding coordinates exist yet (scene brief not written); placed from the Bible text.
 PROXY_IDX0 = 30
+PASS_DIR = [None]          # temp directory for EXR passes, set in main()
 
 
 def build_proxies(mprod, mholder):
@@ -1185,7 +1186,7 @@ def run_closeups(out_dir, res, samples, proxy_roots, proxy_info, seq_res=960, se
         sc.render.resolution_x, sc.render.resolution_y = res, int(round(res * 9 / 16))
         sc.cycles.samples = samples
         png = os.path.join(out_dir, f"{name.lower()}-clay.png")
-        idx = render_view(cam, png, os.path.join(out_dir, "_passes", name))
+        idx = render_view(cam, png, os.path.join(PASS_DIR[0], name))
         label_image(png, os.path.join(out_dir, f"{name.lower()}-clay-labels.png"), idx, proxy_info)
         prox = proxy_report(cam, proxy_roots, proxy_info, idx)
         rep[name] = dict(camera=dict(location_m=list(spec["loc"]), lens_mm=spec["lens"], tilt_down_deg=spec["tilt_deg"],
@@ -1224,7 +1225,7 @@ def run_closeups(out_dir, res, samples, proxy_roots, proxy_info, seq_res=960, se
         t = k / 5
         cam9.location = a.lerp(b, t)
         bpy.context.view_layer.update()
-        render_view(cam9, os.path.join(out_dir, "9a", f"9a-{int(t * 100):03d}.png"), os.path.join(out_dir, "_passes", "9a"))
+        render_view(cam9, os.path.join(out_dir, "9a", f"9a-{int(t * 100):03d}.png"), os.path.join(PASS_DIR[0], "9a"))
         seq.append(dict(t=t, location=[round(c, 4) for c in cam9.location], holder_min_u=round(min(proj(cam9, p)[0] for p in corners), 4),
                         clearance_m=round(clearance(cam9.location), 3)))
     d = b - a
@@ -1539,6 +1540,7 @@ def main():
     ap.add_argument("--out", default=HERE)
     ap.add_argument("--no-plan", action="store_true")
     ap.add_argument("--no-closeups", action="store_true")
+    ap.add_argument("--passes-dir", default="", help="temp dir for EXR passes (default: a system temp dir)")
     ap.add_argument("--closeup-res", type=int, default=0, help="close-up width (default min(res, 1920))")
     ap.add_argument("--closeup-samples", type=int, default=0)
     a = ap.parse_args(argv)
@@ -1554,7 +1556,10 @@ def main():
     cam = build_camera()
     build_world(a.sky)
     setup_render(a.res, a.samples, a.exposure)
-    tmp = os.path.join(a.out, "_passes")
+    # render passes go to a temporary directory outside the output folder (removed at the end)
+    import tempfile
+    tmp = a.passes_dir or tempfile.mkdtemp(prefix="m0-passes-")
+    PASS_DIR[0] = tmp
     os.makedirs(tmp, exist_ok=True)
     setup_compositor(tmp)
     bpy.context.view_layer.update()
@@ -1586,7 +1591,8 @@ def main():
     near_bright = np.clip(inv / inv[valid].max(), 0, 1)
     write_png16(os.path.join(a.out, "m0-depth-nearbright.png"), np.rint(near_bright * 65535))
     # copy float EXR
-    os.replace(os.path.join(tmp, "Depth_0001.exr"), os.path.join(a.out, "m0-depth.exr"))
+    import shutil as _sh
+    _sh.move(os.path.join(tmp, "Depth_0001.exr"), os.path.join(a.out, "m0-depth.exr"))
 
     make_lines(depth, idx, normal, os.path.join(a.out, "m0-lines.png"))
     make_overlay(clay_main, os.path.join(a.out, "m0-clay-overlay.png"), cam)
@@ -1647,6 +1653,9 @@ def main():
     bpy.ops.wm.save_as_mainfile(filepath=os.path.join(a.out, "m0-blockout.blend"))
     if os.path.exists(os.path.join(a.out, "m0-blockout.blend1")):
         os.remove(os.path.join(a.out, "m0-blockout.blend1"))
+    if not a.passes_dir:
+        import shutil
+        shutil.rmtree(tmp, ignore_errors=True)
     print(json.dumps(rep, indent=1, ensure_ascii=False))
 
 
