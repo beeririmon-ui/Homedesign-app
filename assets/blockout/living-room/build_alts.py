@@ -278,17 +278,18 @@ class Shell:
         mm = M["moulding"]
         self.wbox("win_frame_bottom", wall, a0, a1, n0, n1, z0, z0 + fw, mm, pw, g)
         self.wbox("win_frame_top", wall, a0, a1, n0, n1, z1 - fw, z1, mm, pw, g)
-        self.wbox("win_frame_a", wall, a0, a0 + fw, n0, n1, z0, z1, mm, pw, g)
-        self.wbox("win_frame_b", wall, a1 - fw, a1, n0, n1, z0, z1, mm, pw, g)
+        # jambs and mullion run between the rails (no overlapping volumes: shared faces render black)
+        self.wbox("win_frame_a", wall, a0, a0 + fw, n0, n1, z0 + fw, z1 - fw, mm, pw, g)
+        self.wbox("win_frame_b", wall, a1 - fw, a1, n0, n1, z0 + fw, z1 - fw, mm, pw, g)
         m, mw = W["mullion"], W["mullion_w"]
-        self.wbox("win_mullion", wall, m - mw / 2, m + mw / 2, n0, n1, z0, z1, mm, pw, g)
+        self.wbox("win_mullion", wall, m - mw / 2, m + mw / 2, n0, n1, z0 + fw, z1 - fw, mm, pw, g)
         s = 0.02
         for k, (p, q) in enumerate(((a0 + fw, m - mw / 2), (m + mw / 2, a1 - fw))):
             sn0, sn1 = rev + 0.015, rev + 0.055
             self.wbox(f"win_sash{k}_b", wall, p, q, sn0, sn1, z0 + fw, z0 + fw + s, mm, pw, g)
             self.wbox(f"win_sash{k}_t", wall, p, q, sn0, sn1, z1 - fw - s, z1 - fw, mm, pw, g)
-            self.wbox(f"win_sash{k}_l", wall, p, p + s, sn0, sn1, z0 + fw, z1 - fw, mm, pw, g)
-            self.wbox(f"win_sash{k}_r", wall, q - s, q, sn0, sn1, z0 + fw, z1 - fw, mm, pw, g)
+            self.wbox(f"win_sash{k}_l", wall, p, p + s, sn0, sn1, z0 + fw + s, z1 - fw - s, mm, pw, g)
+            self.wbox(f"win_sash{k}_r", wall, q - s, q, sn0, sn1, z0 + fw + s, z1 - fw - s, mm, pw, g)
         # reveal lining (oak in C: 2 cm boards inside a 2 cm larger wall cut; painted otherwise)
         if lin > 0:
             pl, lm = SHELL_IDX["lining"], M["oak_lining"]
@@ -896,7 +897,7 @@ def luminance_report(cfg, cam, rgb, idx):
         pts["left wall beside the window (front side)"] = ((xl, Wn["a1"] + 0.45, 1.60), bs.PASS_INDEX["left-wall"])
         pts["back wall near the window (X xl+0.40)"] = ((xl + 0.40, 0.0, 1.60), bs.PASS_INDEX["back-wall"])
     else:
-        pts["back wall beside the window (X a1+0.25)"] = ((Wn["a1"] + 0.25, 0.0, 1.60), bs.PASS_INDEX["back-wall"])
+        pts["back wall beside the window (X a1+0.35, z 2.20)"] = ((Wn["a1"] + 0.35, 0.0, 2.20), bs.PASS_INDEX["back-wall"])
     out = {}
     for k, (p, pi) in pts.items():
         u, v, _ = P(cam, p)
