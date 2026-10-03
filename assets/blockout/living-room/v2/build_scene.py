@@ -5,11 +5,7 @@ overlay of future product slots, plan view and a self-check of section 2.1.
 
 Source of truth: briefs/m0-prompt.nordic.md, section 2 (geometry) and 2.1 (frame checks).
 Version 2 (2026-10-03): alternative A of review-designer.md (camera Y 6.05 + shift_x, armchair
-25 deg with short armrests, planter moved). Version 1 is kept in v1/, version 2 in v2/.
-Version 3 (2026-10-03): magazine holder moved to the front of the frame (alternative C,
-review-designer.md 6.5, Bible 1.2.3): box X 1.12-1.48, Y 3.25-3.48, Z 0-0.42 (also checked at
-0.38). M0 geometry (shell, fixed furniture, camera) is unchanged from v2. Adds the 6.5 checklist,
-clay close-ups F9 / F13 with product proxies and the straight 9a branch (6 frames).
+25 deg with short armrests, planter moved). Version 1 is kept in v1/.
 Axes (metres): origin on the floor where the room axis meets the back wall.
 X to the right, Y from the back wall toward the camera, Z up.
 
@@ -71,18 +67,9 @@ FUTURE = {
                         stem=True, base_r=0.15),
     # Bible 1.2.1/1.2.2: pouf centre (0.88, 2.70), d50, height 37 (Bible 35-37; m0-prompt still says 40)
     "pouf":        dict(kind="cyl", c=(0.88, 2.70), r=0.25, z0=0.0, z1=0.37),
-    # Bible 1.2.3 (v3): free-standing on the parquet in front of the rug corner, max envelope
-    # X 1.12-1.48, Y 3.25-3.48, Z 0-0.42, anchored at the back-left corner (1.12, 3.25)
-    "magazine-holder": dict(kind="box", c=(1.30, 3.365, 0.21), s=(0.36, 0.23, 0.42)),
+    # Bible 1.2.1: on the floor against the right wall, X 1.615-1.865, Y 2.05-2.45, height 50
+    "magazine-holder": dict(kind="box", c=(1.74, 2.25, 0.25), s=(0.25, 0.40, 0.50)),
 }
-# v3 holder variants for the 6.5 checks: (x0, x1, y0, y1, z1), all anchored at (1.12, 3.25)
-MH_VARIANTS = {
-    "envelope-h42": (1.12, 1.48, 3.25, 3.48, 0.42),
-    "envelope-h40": (1.12, 1.48, 3.25, 3.48, 0.40),
-    "envelope-h38": (1.12, 1.48, 3.25, 3.48, 0.38),
-    "smallest-30x20x38": (1.12, 1.42, 3.25, 3.45, 0.38),
-}
-POUF_HEIGHTS = (0.37, 0.36)          # m0-prompt 1.3 / Bible 1.2.2: 37 drawn, 36 reported
 
 # Expected frame positions (m0-prompt section 2.1) for the self-check
 EXPECTED = {
@@ -107,19 +94,8 @@ EXPECTED_FUTURE = {           # m0-prompt 2.1 (alternative A), informative [x0, 
     "rug": [0.210, 0.870, 0.656, 0.874],
     "planter": [0.341, 0.385, 0.54, 0.65],
     "floor-lamp": [0.672, 0.721, 0.327, 0.389],
-    "pouf": [0.665, 0.765, 0.662, 0.848],          # review 6.5 item 2, height 37
-    "magazine-holder": [0.807, 0.924, 0.719, 0.942],   # review 6.5 item 2, envelope h42
-}
-# review-designer.md 6.5 thresholds (normalised frame coordinates u, v)
-MH_EDGE_MIN = 0.05          # right and bottom margins
-MH_POUF_MIN = 0.03
-MH_RUG_CORNER_MIN = 0.03    # rug corner inside the holder silhouette, from every edge
-MH_RUG_T_MIN = 0.02         # rug front edge T above the bottom-left corner
-MH_WALL_LINE_MIN = 0.02     # floor/right-wall line entry from both top corners
-# Close-up cameras (review-designer.md 6.5, motion-direction 1.4). Looking -Y, tilt down, 35 mm.
-CLOSEUPS = {
-    "F9":  dict(loc=(0.48, 4.30, 0.60), lens=35.0, tilt_deg=10.0),
-    "F13": dict(loc=(0.87, 4.85, 0.62), lens=35.0, tilt_deg=10.0),
+    "pouf": [0.665, 0.765, 0.652, 0.848],          # m0-prompt value is for height 40; here 37
+    "magazine-holder": [0.809, 0.885, 0.596, 0.784],
 }
 GAP_MIN = 0.02                 # armchair-sofa silhouette gap, alternative A (target 0.023)
 LEFT_WALL_FREE_MIN = 1.40      # m of left wall visible in front of the window
@@ -695,17 +671,8 @@ def self_check(cam, roots, idx, res):
         lamp_base_y=[round(base_y[0], 4), round(base_y[1], 4)], pouf_top_y=round(pouf_y[0], 4),
         gap=round(pouf_y[0] - base_y[1], 4), required_min=0.02, ok=bool(pouf_y[0] - base_y[1] >= 0.02),
         note="Bible 1.2.2: the lamp base must sit >= 0.02 above (in frame) the pouf's top edge")
-    # pouf at 36 (reported, review 6.5 / m0-prompt 1.3)
-    rep["floor_lamp_base_vs_pouf_top_by_height"] = {}
-    for ph in POUF_HEIGHTS:
-        top = min(proj(cam, (FUTURE["pouf"]["c"][0] + 0.25 * math.cos(t), FUTURE["pouf"]["c"][1] + 0.25 * math.sin(t), ph))[1]
-                  for t in np.linspace(0, 2 * math.pi, 192))
-        rep["floor_lamp_base_vs_pouf_top_by_height"][f"h{round(ph * 100)}"] = dict(
-            pouf_top_y=round(top, 4), gap=round(top - base_y[1], 4), ok=bool(top - base_y[1] >= 0.02))
-    rep["magazine_holder_v3"] = {k: holder_checks(cam, v) for k, v in MH_VARIANTS.items()}
-    rep["future_items_note"] = ("Bible 1.2.2/1.2.3: planter (-1.50, 0.40) d38 h45; pouf (0.88, 2.70) d50 h37; "
-                                "magazine holder X 1.12-1.48 Y 3.25-3.48 h42 (also h38, smallest 30x20x38); "
-                                "floor-lamp base r15")
+    rep["future_items_note"] = ("Bible 1.2.2: planter (-1.50, 0.40) d38 h45; pouf (0.88, 2.70) d50 h37; "
+                                "magazine holder X 1.615-1.865 Y 2.05-2.45 h50; floor-lamp base r15")
     rep["all_ok"] = all(i.get("ok", True) for i in rep["items"])
     rep["all_ok_including_armchair_sofa_gap"] = rep["all_ok"] and rep["armchair_sofa_gap"]["ok"]
     rep["all_ok_including_gap_and_floor"] = (rep["all_ok_including_armchair_sofa_gap"]
@@ -767,13 +734,29 @@ def overlay_checks(cam, idx):
     def hull(name):
         return _hull2d([(x, y * asp) for x, y, _ in (proj(cam, p) for p in fs[name]["hull"])])
     out = {}
-    # (1) magazine holder (v3, review-designer.md 6.5): see holder_checks(); summary here
+    # (1) magazine holder: fully in frame, touches no other slot, >= 0.03 from pouf and rug right edge
     mh = hull("magazine-holder")
-    others = {n: poly_gap(mh, hull(n)) for n in FUTURE if n not in ("magazine-holder", "rug")}
-    out["magazine_holder_overlaps_other_slots"] = dict(
-        overlaps=[n for n, g in others.items() if g == 0.0],
-        note="rug excluded: its corner is hidden inside the holder silhouette on purpose (T junction)",
-        ok=not any(g == 0.0 for g in others.values()))
+    (x0, x1), (y0, y1) = bbox2d(cam, fs["magazine-holder"]["hull"])
+    others = {n: poly_gap(mh, hull(n)) for n in FUTURE if n != "magazine-holder"}
+    rug = FUTURE["rug"]
+    rx = rug["c"][0] + rug["s"][0] / 2
+    ry0, ry1 = rug["c"][1] - rug["s"][1] / 2, rug["c"][1] + rug["s"][1] / 2
+    ra, rb = proj(cam, (rx, ry0, 0.01)), proj(cam, (rx, ry1, 0.01))
+    rug_edge = min(_seg_dist(p, (ra[0], ra[1] * asp), (rb[0], rb[1] * asp)) for p in mh)
+    # horizontal gap at the holder's base row (its front-bottom corner) to the rug's right edge line
+    f = FUTURE["magazine-holder"]
+    cx_, cy_, _ = proj(cam, (f["c"][0] - f["s"][0] / 2, f["c"][1] + f["s"][1] / 2, 0.0))   # front-bottom-inner corner
+    t = (cy_ - ra[1]) / (rb[1] - ra[1])
+    rug_x_at = ra[0] + t * (rb[0] - ra[0])
+    rug_edge_h = cx_ - rug_x_at
+    out["magazine_holder"] = dict(
+        frame_box=[round(x0, 4), round(x1, 4), round(y0, 4), round(y1, 4)],
+        in_frame=bool(x0 >= 0 and x1 <= 1 and y0 >= 0 and y1 <= 1),
+        gap_to_pouf=round(others["pouf"], 4), gap_to_rug_right_edge=round(rug_edge, 4),
+        gap_to_rug_right_edge_horizontal=round(rug_edge_h, 4),
+        overlaps=[n for n, g in others.items() if g == 0.0], required_min=0.03)
+    m = out["magazine_holder"]
+    m["ok"] = bool(m["in_frame"] and not m["overlaps"] and m["gap_to_pouf"] >= 0.03 and m["gap_to_rug_right_edge"] >= 0.03)
     # (3) planter vessel: >= 65% visible (sofa / armchair in front), its edges >= 0.01 from their silhouettes
     ph = [(x * W, y / asp * H) for x, y in hull("planter")]
     im = Image.new("L", (W, H), 0)
@@ -798,446 +781,6 @@ def overlay_checks(cam, idx):
                                "armchair silhouettes in the vessel's rows (no coincident edges)")
     out["planter"]["ok"] = bool(vis >= 0.65 and all(v is not None and v >= 0.01 for v in best.values()))
     return out
-
-
-# --------------------------------------------------------------------------------------
-# v3: magazine holder checks (review-designer.md 6.5). Units: normalised frame coordinates
-# (u from the left, v from the top), unscaled, the same units as the designer's tables.
-# --------------------------------------------------------------------------------------
-def box_corners(x0, x1, y0, y1, z0, z1):
-    """Labelled corners: Y back/front (B/F), Z top/bottom (T/B), X left/right (L/R)."""
-    return {("F" if y == y1 else "B") + ("T" if z == z1 else "B") + ("L" if x == x0 else "R"): (x, y, z)
-            for x in (x0, x1) for y in (y0, y1) for z in (z0, z1)}
-
-
-def _labelled_hull(cam, corners):
-    P = {k: tuple(float(c) for c in proj(cam, v)[:2]) for k, v in corners.items()}
-    hull = _hull2d(list(P.values()))
-    inv = {v: k for k, v in P.items()}
-    return [(inv[p], p) for p in hull], P
-
-
-def _span(hull, axis, value):
-    """Interval of the convex polygon cut by the line coord[axis] == value (or None)."""
-    o = 1 - axis
-    hits = []
-    n = len(hull)
-    for i in range(n):
-        a, b = hull[i], hull[(i + 1) % n]
-        if (a[axis] - value) * (b[axis] - value) <= 0 and a[axis] != b[axis]:
-            t = (value - a[axis]) / (b[axis] - a[axis])
-            hits.append(a[o] + t * (b[o] - a[o]))
-    return (min(hits), max(hits)) if hits else None
-
-
-def _inside(hull, p):
-    n = len(hull)
-    s = [(hull[(i + 1) % n][0] - hull[i][0]) * (p[1] - hull[i][1]) -
-         (hull[(i + 1) % n][1] - hull[i][1]) * (p[0] - hull[i][0]) for i in range(n)]
-    return all(x >= 0 for x in s) or all(x <= 0 for x in s)
-
-
-def line_crossings(lhull, A, B):
-    """Crossings of segment A->B with the labelled hull edges, sorted from A to B."""
-    out = []
-    n = len(lhull)
-    dx, dy = B[0] - A[0], B[1] - A[1]
-    for i in range(n):
-        (la, a), (lb, b) = lhull[i], lhull[(i + 1) % n]
-        ex, ey = b[0] - a[0], b[1] - a[1]
-        den = dx * ey - dy * ex
-        if abs(den) < 1e-12:
-            continue
-        t = ((a[0] - A[0]) * ey - (a[1] - A[1]) * ex) / den
-        s = ((a[0] - A[0]) * dy - (a[1] - A[1]) * dx) / den
-        if 0 <= t <= 1 and 0 <= s <= 1:
-            p = (A[0] + t * dx, A[1] + t * dy)
-            out.append(dict(t=t, edge=f"{la}-{lb}", point=[round(p[0], 4), round(p[1], 4)],
-                            dist_to={la: round(math.dist(p, a), 4), lb: round(math.dist(p, b), 4)}))
-    return sorted(out, key=lambda d: d["t"])
-
-
-def _ring(c, r, z, n=96):
-    return [(c[0] + r * math.cos(2 * math.pi * i / n), c[1] + r * math.sin(2 * math.pi * i / n), z) for i in range(n)]
-
-
-def holder_checks(cam, variant, pouf_h=0.37, rug_t_min=MH_RUG_T_MIN, cam_y=None):
-    x0, x1, y0, y1, z1 = variant
-    corners = box_corners(x0, x1, y0, y1, 0.0, z1)
-    lhull, P = _labelled_hull(cam, corners)
-    hull = [p for _, p in lhull]
-    us = [p[0] for p in hull]; vs = [p[1] for p in hull]
-    bx = [min(us), max(us), min(vs), max(vs)]
-    out = dict(box_m=dict(X=[x0, x1], Y=[y0, y1], Z=[0.0, z1]), frame_box=[round(b, 4) for b in bx],
-               hull_order=[k for k, _ in lhull])
-    out["margins"] = dict(left=round(bx[0], 4), right=round(1 - bx[1], 4), top=round(bx[2], 4),
-                          bottom=round(1 - bx[3], 4))
-    out["margins_ok"] = bool(out["margins"]["right"] >= MH_EDGE_MIN and out["margins"]["bottom"] >= MH_EDGE_MIN
-                             and bx[0] >= 0 and bx[2] >= 0)
-    out["height_fraction_of_frame"] = round(bx[3] - bx[2], 4)
-    # pouf
-    pc = FUTURE["pouf"]["c"]
-    ppts = [proj(cam, p)[:2] for p in _ring(pc, 0.25, 0.0) + _ring(pc, 0.25, pouf_h)]
-    phull = _hull2d(ppts)
-    pu1 = max(p[0] for p in phull)
-    out["pouf"] = dict(height=pouf_h, frame_box=[round(min(p[0] for p in phull), 4), round(pu1, 4),
-                                                 round(min(p[1] for p in phull), 4), round(max(p[1] for p in phull), 4)],
-                       gap_horizontal=round(bx[0] - pu1, 4), gap_min_distance=round(poly_gap(hull, phull), 4),
-                       required_min=MH_POUF_MIN)
-    # same-row horizontal gap (the M0 metric; with a tilted camera the verticals converge, so the
-    # bounding-box gap above compares different rows and is conservative)
-    pv0, pv1 = max(min(vs), min(p[1] for p in phull)), min(max(vs), max(p[1] for p in phull))
-    row_gaps = []
-    for v in np.linspace(pv0, pv1, 200) if pv1 > pv0 else []:
-        hs_, ps_ = _span(hull, 1, v), _span(phull, 1, v)
-        if hs_ and ps_:
-            row_gaps.append(hs_[0] - ps_[1])
-    out["pouf"]["gap_same_row"] = round(min(row_gaps), 4) if row_gaps else None
-    out["pouf"]["gap_min_distance_aspect_w"] = round(poly_gap([(x, y * 9 / 16) for x, y in hull],
-                                                              [(x, y * 9 / 16) for x, y in phull]), 4)
-    g_ = out["pouf"]["gap_same_row"] if row_gaps else out["pouf"]["gap_horizontal"]
-    out["pouf"]["ok"] = bool(g_ >= MH_POUF_MIN and out["pouf"]["gap_horizontal"] >= 0 and
-                             out["pouf"]["gap_min_distance"] > 0)
-    out["pouf"]["ok_metric"] = "gap_same_row >= 0.03 (no overlap)"
-    # rug corner (front-right) inside the silhouette
-    R = FUTURE["rug"]
-    rx1 = R["c"][0] + R["s"][0] / 2
-    ry0, ry1 = R["c"][1] - R["s"][1] / 2, R["c"][1] + R["s"][1] / 2
-    C = proj(cam, (rx1, ry1, 0.0))[:2]
-    inside = _inside(hull, C)
-    hs, vsp = _span(hull, 1, C[1]), _span(hull, 0, C[0])
-    edge_d = min(_seg_dist(C, hull[i], hull[(i + 1) % len(hull)]) for i in range(len(hull)))
-    out["rug_corner"] = dict(point=[round(C[0], 4), round(C[1], 4)], inside=bool(inside),
-                             to_left=round(C[0] - hs[0], 4) if hs else None,
-                             to_right=round(hs[1] - C[0], 4) if hs else None,
-                             to_top=round(C[1] - vsp[0], 4) if vsp else None,
-                             to_bottom=round(vsp[1] - C[1], 4) if vsp else None,
-                             to_nearest_edge=round(edge_d, 4), required_min=MH_RUG_CORNER_MIN)
-    rc = out["rug_corner"]
-    rc["ok"] = bool(inside and min(rc["to_left"], rc["to_right"], rc["to_bottom"]) >= MH_RUG_CORNER_MIN)
-    # rug front edge: T junction on the left side, above the bottom-left corner
-    A, B = proj(cam, (-rx1, ry1, 0.0))[:2], C
-    cr = line_crossings(lhull, A, B)
-    ent = cr[0] if cr else None
-    t_d = None
-    if ent:
-        a_lab, b_lab = ent["edge"].split("-")
-        bottom = max((a_lab, b_lab), key=lambda k: P[k][1])
-        t_d = ent["dist_to"][bottom]
-    out["rug_front_edge_T"] = dict(entry=ent, dist_above_bottom_corner=t_d, required_min=rug_t_min,
-                                   ok=bool(ent is not None and t_d >= rug_t_min))
-    # rug right edge: where it enters the silhouette (below the head)
-    A = proj(cam, (rx1, ry0, 0.0))[:2]
-    cr = line_crossings(lhull, A, C)
-    out["rug_right_edge"] = dict(entry=cr[-1] if cr else None, required_min=0.03)
-    if cr:
-        e = cr[-1]
-        out["rug_right_edge"]["ok"] = bool(min(e["dist_to"].values()) >= 0.03)
-    # floor / right-wall line and skirting line: entry into the silhouette
-    cy_ = (cam_y if cam_y is not None else cam.matrix_world.translation.y) - 0.30
-    for key, xw, zw, req in (("floor_right_wall_line", ROOM["x_right"], 0.0, True),
-                             ("skirting_line", ROOM["x_right"] - SKIRT_T, SKIRT_H, False)):
-        A, B = proj(cam, (xw, 0.0, zw))[:2], proj(cam, (xw, cy_, zw))[:2]
-        cr = line_crossings(lhull, A, B)
-        d = dict(crossings=cr, report_only=not req)
-        if cr:
-            e = cr[0]
-            top = {"BTL", "BTR"}
-            d["entry_edge"] = e["edge"]
-            d["through_top_edge"] = set(e["edge"].split("-")) == top
-            d["dist_top_left"] = round(math.dist(e["point"], P["BTL"]), 4)
-            d["dist_top_right"] = round(math.dist(e["point"], P["BTR"]), 4)
-            d["ok"] = bool(d["through_top_edge"] and min(d["dist_top_left"], d["dist_top_right"]) >= MH_WALL_LINE_MIN)
-        else:
-            d["entry_edge"] = None
-            d["ok"] = True
-            d["note"] = "the line does not cross the silhouette"
-        out[key] = d
-    out["ok"] = bool(out["margins_ok"] and out["pouf"]["ok"] and rc["ok"] and out["rug_front_edge_T"]["ok"]
-                     and out["floor_right_wall_line"]["ok"])
-    return out
-
-
-# --------------------------------------------------------------------------------------
-# v3: product proxies and close-up cameras (F9, F13, branch 9a)
-# --------------------------------------------------------------------------------------
-# Proxies of the 16 slots for the close-ups. "exact": binding coordinates (Bible / m0-prompt).
-# "approx": no binding coordinates exist yet (scene brief not written); placed from the Bible text.
-PROXY_IDX0 = 30
-
-
-def build_proxies(mprod, mholder):
-    g = "proxies"
-    P = {}
-    T = TABLE["h"]
-
-    def cyl(n, c, r, z0, z1, mat=mprod):
-        return cone(n, c[0], c[1], z0, z1, r, r, mat, g, verts=64)
-    P["rug"] = ("exact", [box("px_rug", -1.45, 1.45, 0.72, 3.12, 0.0, 0.012, mprod, g)])
-    P["pouf"] = ("exact", [cyl("px_pouf", (0.88, 2.70), 0.25, 0.0, 0.37)])
-    P["magazine-holder"] = ("exact", [box("px_mh", 1.12, 1.48, 3.25, 3.48, 0.0, 0.42, mholder, g)])
-    P["planter"] = ("exact", [cyl("px_planter", (-1.50, 0.40), 0.19, 0.0, 0.45)])
-    P["floor-lamp"] = ("exact", [cyl("px_lamp_base", (1.35, 0.30), 0.15, 0.0, 0.02),
-                                 cyl("px_lamp_stem", (1.35, 0.30), 0.012, 0.02, 1.20),
-                                 cyl("px_lamp_shade", (1.35, 0.30), 0.21, 1.20, 1.50)])
-    P["framed-art"] = ("exact", [box("px_art", -0.775, 0.775, 0.0, 0.03, 0.975, 1.975, mprod, g)])
-    P["pendant"] = ("exact", [cyl("px_pendant", (0.0, 1.72), 0.225, 2.05, 2.32),
-                              cyl("px_cord", (0.0, 1.72), 0.004, 2.32, ROOM["h"])])
-    P["wall-sconce"] = ("exact", [box("px_sconce", -1.80, -1.78, 2.82, 2.94, 1.41, 1.53, mprod, g)])
-    P["vase"] = ("approx", [cyl("px_vase", (0.42, 1.76), 0.075, T, T + 0.30)])
-    P["candle-holders"] = ("approx", [cyl("px_candle_a", (0.26, 1.64), 0.045, T, T + 0.27),
-                                      cyl("px_candle_b", (0.30, 1.86), 0.045, T, T + 0.20)])
-    P["table-runner"] = ("approx", [box("px_runner", -0.45, -0.13, 1.37, 2.07, T, T + 0.004, mprod, g)])
-    P["cushions"] = ("approx", [box("px_cush_a", -0.92, -0.42, 0.36, 0.50, 0.44, 0.90, mprod, g, bevel=0.04),
-                                box("px_cush_b", 0.42, 0.92, 0.36, 0.50, 0.44, 0.90, mprod, g, bevel=0.04),
-                                box("px_cush_c", 0.55, 0.85, 0.50, 0.62, 0.44, 0.74, mprod, g, bevel=0.03)])
-    P["sofa-cover"] = ("approx", [box("px_throw", 0.60, 0.96, 0.40, 0.97, 0.44, 0.47, mprod, g)])
-    P["basket"] = ("approx", [cyl("px_basket", (1.45, 0.80), 0.20, 0.0, 0.45)])
-    P["wall-decor"] = ("approx", [box("px_walldecor", 1.875, 1.90, 1.55, 2.45, 1.00, 1.95, mprod, g)])
-    P["curtains"] = ("approx", [box("px_curt_back", -1.80, -1.66, 0.35, 0.75, 0.01, 2.55, mprod, g),
-                                box("px_curt_front", -1.80, -1.66, 2.25, 2.60, 0.01, 2.55, mprod, g)])
-    roots, info = {}, {}
-    for i, (name, (kind, objs)) in enumerate(P.items()):
-        roots[name] = parent_group("proxy_" + name, objs, PROXY_IDX0 + i, group=g)
-        info[name] = dict(pass_index=PROXY_IDX0 + i, coords=kind)
-    return roots, info
-
-
-def make_closeup_camera(name, spec):
-    cd = bpy.data.cameras.new(name)
-    cd.lens = spec["lens"]
-    cd.sensor_fit = "HORIZONTAL"
-    cd.sensor_width = CAM["sensor_w"]
-    cd.sensor_height = CAM["sensor_h"]
-    cd.clip_start = 0.02
-    cd.clip_end = 100.0
-    cam = bpy.data.objects.new(name, cd)
-    cam.location = spec["loc"]
-    cam.rotation_euler = (math.radians(90 - spec["tilt_deg"]), 0, math.radians(180))
-    cam.scale = (-1.0, 1.0, 1.0)          # same mirror as the main camera
-    bpy.context.scene.collection.objects.link(cam)
-    return cam
-
-
-def _clip_area_fraction(poly):
-    """Fraction of a convex polygon's area inside the unit frame (Sutherland-Hodgman)."""
-    def area(p):
-        return abs(sum(p[i][0] * p[(i + 1) % len(p)][1] - p[(i + 1) % len(p)][0] * p[i][1] for i in range(len(p)))) / 2
-    full = area(poly)
-    out = list(poly)
-    for axis, val, keep_ge in ((0, 0.0, True), (0, 1.0, False), (1, 0.0, True), (1, 1.0, False)):
-        inp, out = out, []
-        if not inp:
-            break
-        for i in range(len(inp)):
-            a, b = inp[i - 1], inp[i]
-            ina = (a[axis] >= val) if keep_ge else (a[axis] <= val)
-            inb = (b[axis] >= val) if keep_ge else (b[axis] <= val)
-            if inb:
-                if not ina:
-                    t = (val - a[axis]) / (b[axis] - a[axis])
-                    out.append((a[0] + t * (b[0] - a[0]), a[1] + t * (b[1] - a[1])))
-                out.append(b)
-            elif ina:
-                t = (val - a[axis]) / (b[axis] - a[axis])
-                out.append((a[0] + t * (b[0] - a[0]), a[1] + t * (b[1] - a[1])))
-    return (area(out) / full) if (out and full > 0) else 0.0
-
-
-def proxy_report(cam, proxy_roots, proxy_info, idx):
-    H, W = idx.shape
-    rep = {}
-    for name, root in proxy_roots.items():
-        pts = [proj(cam, p) for p in eval_world_verts(root)]
-        pts2 = [(p[0], p[1]) for p in pts if p[2] > 0]
-        hull = _hull2d(pts2) if len(pts2) >= 3 else []
-        m = idx == proxy_info[name]["pass_index"]
-        npx = int(m.sum())
-        d = dict(coords=proxy_info[name]["coords"], visible_px=npx, visible_frame_fraction=round(npx / (W * H), 5))
-        if hull:
-            xs = [p[0] for p in hull]; ys = [p[1] for p in hull]
-            d["projected_box_unclipped"] = [round(min(xs), 4), round(max(xs), 4), round(min(ys), 4), round(max(ys), 4)]
-            d["projected_area_in_frame"] = round(_clip_area_fraction(hull), 4)
-        if npx:
-            ys_, xs_ = np.nonzero(m)
-            d["visible_box"] = [round(xs_.min() / W, 4), round((xs_.max() + 1) / W, 4),
-                                round(ys_.min() / H, 4), round((ys_.max() + 1) / H, 4)]
-        d["in_frame"] = bool(npx > 0)
-        rep[name] = d
-    return rep
-
-
-def closeup_checks(name, cam, idx, proxies):
-    """review-designer.md 6.5 items 4 (F9) and 5 (F13)."""
-    H, W = idx.shape
-    out = {}
-    pc = FUTURE["pouf"]["c"]
-    pp = [proj(cam, p) for p in _ring(pc, 0.25, 0.0) + _ring(pc, 0.25, 0.37)]
-    pbox = [min(p[0] for p in pp), max(p[0] for p in pp), min(p[1] for p in pp), max(p[1] for p in pp)]
-    out["pouf_box"] = [round(v, 4) for v in pbox]
-    out["pouf_height_fraction"] = round(pbox[3] - pbox[2], 4)
-    out["pouf_centre_u"] = round((pbox[0] + pbox[1]) / 2, 4)
-    if name == "F9":
-        mh = {}
-        for k, v in MH_VARIANTS.items():
-            x0, x1, y0, y1, z1 = v
-            u = [proj(cam, p)[0] for p in box_corners(x0, x1, y0, y1, 0.0, z1).values()]
-            mh[k] = dict(min_u=round(min(u), 4), outside_right_by=round(min(u) - 1.0, 4), ok=bool(min(u) - 1.0 >= 0.03))
-        out["magazine_holder_outside_right"] = mh
-        out["pouf_in_frame"] = bool(pbox[0] >= 0 and pbox[1] <= 1 and pbox[2] >= 0 and pbox[3] <= 1)
-        out["pouf_base_bottom_margin"] = round(1 - pbox[3], 4)
-        out["pouf_ok"] = bool(out["pouf_in_frame"] and out["pouf_base_bottom_margin"] >= 0.05)
-        legs = {}
-        a, b = TABLE["w"] / 2 - TABLE["leg_in"], TABLE["d"] / 2 - TABLE["leg_in"]
-        for lbl, sx in (("front_left", -1), ("front_right", 1)):
-            q = proj(cam, (sx * a, TABLE["cy"] + b, 0.0))
-            legs[lbl] = [round(q[0], 4), round(q[1], 4)]
-        out["table_front_legs_floor_uv"] = legs
-        out["ok"] = bool(out["pouf_ok"] and all(v["ok"] for v in mh.values()))
-    else:
-        out["magazine_holder"] = {k: holder_checks(cam, v, rug_t_min=0.03) for k, v in MH_VARIANTS.items()}
-        # framed art: fraction of its height in frame (sampled on the front face)
-        zs = np.linspace(0.975, 1.975, 201)
-        rows_in = [any(0 <= proj(cam, (x, 0.03, z))[1] <= 1 and 0 <= proj(cam, (x, 0.03, z))[0] <= 1
-                       for x in np.linspace(-0.775, 0.775, 9)) for z in zs]
-        frac_art = float(np.mean(rows_in))
-        out["framed_art_height_fraction_in_frame"] = round(frac_art, 4)
-        out["framed_art_ok"] = bool(frac_art == 0 or frac_art >= 0.15)
-        pl = proxies["planter"]
-        out["planter_projected_area_in_frame"] = pl.get("projected_area_in_frame")
-        cut = 1 - (pl.get("projected_area_in_frame") or 0)
-        out["planter_cut_fraction"] = round(cut, 4)
-        out["planter_ok"] = bool((not pl["in_frame"]) or cut >= 0.15)
-        # sofa back cushions top vs art bottom (report only)
-        art_b = proj(cam, (0.0, 0.03, 0.975))[1]
-        back_top = proj(cam, (0.0, SOFA["y0"] + 0.36, SOFA["back_h"]))[1]
-        cush_top = proj(cam, (0.67, 0.50, 0.90))[1]
-        out["cushions_vs_art"] = dict(art_bottom_v=round(art_b, 4), sofa_back_cushion_top_v=round(back_top, 4),
-                                      gap_back_cushions=round(back_top - art_b, 4),
-                                      throw_cushion_top_v_approx=round(cush_top, 4),
-                                      gap_throw_cushions_approx=round(cush_top - art_b, 4),
-                                      note="report only; cushion proxies are approximate (h 0.90)")
-        hf = {k: v["height_fraction_of_frame"] for k, v in out["magazine_holder"].items()}
-        out["holder_height_fraction"] = hf
-        out["k2_ok_h40_h42"] = bool(0.50 <= hf["envelope-h42"] <= 0.55 and 0.50 <= hf["envelope-h40"] <= 0.55)
-        mh = out["magazine_holder"]
-        out["ok"] = bool(out["k2_ok_h40_h42"] and out["framed_art_ok"] and out["planter_ok"]
-                         and all(mh[k]["margins_ok"] and mh[k]["pouf"]["ok"] and mh[k]["rug_front_edge_T"]["ok"]
-                                 for k in mh))
-    out["slots_in_frame"] = sorted(n for n, d in proxies.items() if d["in_frame"])
-    out["slots_out_of_frame"] = sorted(n for n, d in proxies.items() if not d["in_frame"])
-    return out
-
-
-def render_view(cam, png_path, passes_dir):
-    sc = bpy.context.scene
-    sc.camera = cam
-    for n in sc.node_tree.nodes:
-        if n.bl_idname == "CompositorNodeOutputFile":
-            n.base_path = passes_dir
-    os.makedirs(passes_dir, exist_ok=True)
-    sc.render.filepath = png_path
-    bpy.ops.render.render(write_still=True)
-    idx = np.rint(load_exr(os.path.join(passes_dir, "IndexOB_0001.exr"))).astype(np.int32)
-    return idx
-
-
-def label_image(png_path, out_path, idx, proxy_info):
-    from PIL import Image, ImageDraw, ImageFont
-    im = Image.open(png_path).convert("RGB")
-    W, H = im.size
-    dr = ImageDraw.Draw(im)
-    try:
-        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", max(12, W // 80))
-    except Exception:
-        font = ImageFont.load_default()
-    names = dict((v["pass_index"], k) for k, v in proxy_info.items())
-    names.update({v: k for k, v in PASS_INDEX.items() if k in ("sofa", "coffee-table", "armchair")})
-    for pi, nm in names.items():
-        m = idx == pi
-        if not m.any():
-            continue
-        ys, xs = np.nonzero(m)
-        e = _edge(m)
-        ey, ex = np.nonzero(e)
-        dr.point(list(zip(ex.tolist(), ey.tolist())), fill=(200, 40, 40) if pi >= PROXY_IDX0 else (40, 90, 200))
-        cx, cy = int(np.median(xs)), int(np.median(ys))
-        lbl = nm + (" ~" if proxy_info.get(nm, {}).get("coords") == "approx" else "")
-        bb = dr.textbbox((cx, cy), lbl, font=font)
-        dr.rectangle((bb[0] - 2, bb[1] - 1, bb[2] + 2, bb[3] + 1), fill=(255, 255, 255))
-        dr.text((cx, cy), lbl, fill=(20, 20, 20), font=font)
-    im.save(out_path)
-
-
-def run_closeups(out_dir, res, samples, proxy_roots, proxy_info, seq_res=960, seq_samples=32):
-    sc = bpy.context.scene
-    keep = (sc.camera, sc.render.resolution_x, sc.render.resolution_y, sc.cycles.samples)
-    for r in proxy_roots.values():
-        for ch in r.children:
-            ch.hide_render = False
-    rep = {"note": ("Close-ups with product proxies (clay #8F8D89; magazine holder darker). Coordinates of proxies "
-                    "marked 'approx' are placeholders from the Bible text (no binding coordinates yet). "
-                    "Tilt 10 deg down, no shift, 35 mm, same mirror as M0.")}
-    cams = {}
-    for name, spec in CLOSEUPS.items():
-        cam = make_closeup_camera("cam_" + name, spec)
-        cams[name] = cam
-        sc.render.resolution_x, sc.render.resolution_y = res, int(round(res * 9 / 16))
-        sc.cycles.samples = samples
-        png = os.path.join(out_dir, f"{name.lower()}-clay.png")
-        idx = render_view(cam, png, os.path.join(out_dir, "_passes", name))
-        label_image(png, os.path.join(out_dir, f"{name.lower()}-clay-labels.png"), idx, proxy_info)
-        prox = proxy_report(cam, proxy_roots, proxy_info, idx)
-        rep[name] = dict(camera=dict(location_m=list(spec["loc"]), lens_mm=spec["lens"], tilt_down_deg=spec["tilt_deg"],
-                                     look="-Y", shift=[0, 0], resolution=[res, sc.render.resolution_y]),
-                         checks=closeup_checks(name, cam, idx, prox), proxies=prox)
-    # branch 9a: straight F9 -> F13, fixed lens and tilt
-    a, b = Vector(CLOSEUPS["F9"]["loc"]), Vector(CLOSEUPS["F13"]["loc"])
-    seq = []
-    mh = MH_VARIANTS["envelope-h42"]
-    corners = list(box_corners(mh[0], mh[1], mh[2], mh[3], 0.0, mh[4]).values())
-    aabbs = []
-    for r in proxy_roots.values():
-        v = eval_world_verts(r)
-        aabbs.append([min(p[i] for p in v) for i in range(3)] + [max(p[i] for p in v) for i in range(3)])
-    for nm in ("sofa", "coffee-table", "armchair"):
-        v = eval_world_verts(bpy.data.objects[nm])
-        aabbs.append([min(p[i] for p in v) for i in range(3)] + [max(p[i] for p in v) for i in range(3)])
-
-    def clearance(p):
-        best = 1e9
-        for bb in aabbs:
-            d = math.sqrt(sum(max(bb[i] - p[i], 0, p[i] - bb[i + 3]) ** 2 for i in range(3)))
-            best = min(best, d)
-        return best
-    cam9 = make_closeup_camera("cam_9a", CLOSEUPS["F9"])
-    minu = []
-    for k in range(51):
-        t = k / 50
-        cam9.location = a.lerp(b, t)
-        bpy.context.view_layer.update()
-        minu.append(round(min(proj(cam9, p)[0] for p in corners), 4))
-    os.makedirs(os.path.join(out_dir, "9a"), exist_ok=True)
-    sc.render.resolution_x, sc.render.resolution_y = seq_res, int(round(seq_res * 9 / 16))
-    sc.cycles.samples = seq_samples
-    for k in range(6):
-        t = k / 5
-        cam9.location = a.lerp(b, t)
-        bpy.context.view_layer.update()
-        render_view(cam9, os.path.join(out_dir, "9a", f"9a-{int(t * 100):03d}.png"), os.path.join(out_dir, "_passes", "9a"))
-        seq.append(dict(t=t, location=[round(c, 4) for c in cam9.location], holder_min_u=round(min(proj(cam9, p)[0] for p in corners), 4),
-                        clearance_m=round(clearance(cam9.location), 3)))
-    d = b - a
-    rep["9a"] = dict(vector_m=[round(c, 4) for c in d], length_m=round(d.length, 4), lens_mm=35.0, tilt_down_deg=10.0,
-                     frames=seq, holder_min_u_51_steps=minu,
-                     holder_enters_monotonic=bool(all(minu[i + 1] <= minu[i] + 1e-9 for i in range(len(minu) - 1))),
-                     min_clearance_m=round(min(clearance(a.lerp(b, k / 50)) for k in range(51)), 3),
-                     note="clearance = distance from the camera centre to the nearest furniture/proxy bounding box")
-    for r in proxy_roots.values():
-        for ch in r.children:
-            ch.hide_render = True
-    sc.camera, sc.render.resolution_x, sc.render.resolution_y, sc.cycles.samples = keep
-    return rep, cams
 
 
 def _edge(mask):
@@ -1369,21 +912,6 @@ def make_overlay(clay_path, out_path, cam):
         bb = dr.textbbox((tx, ty), label, font=font)
         dr.rectangle((bb[0] - 3, bb[1] - 2, bb[2] + 3, bb[3] + 2), fill=(255, 255, 255, 200))
         dr.text((tx, ty), label, fill=col + (255,), font=font)
-    # v3: second, dashed magazine-holder box at height 0.38 (review 6.5 item 1)
-    v = MH_VARIANTS["envelope-h38"]
-    cc = box_corners(v[0], v[1], v[2], v[3], 0.0, v[4])
-    col = colors["magazine-holder"]
-    for e in (("BBL", "BBR"), ("FBL", "FBR"), ("BTL", "BTR"), ("FTL", "FTR"), ("BBL", "FBL"), ("BBR", "FBR"),
-              ("BTL", "FTL"), ("BTR", "FTR"), ("BBL", "BTL"), ("BBR", "BTR"), ("FBL", "FTL"), ("FBR", "FTR")):
-        a3, b3 = Vector(cc[e[0]]), Vector(cc[e[1]])
-        for k in range(0, 12, 2):
-            dr.line([P(a3.lerp(b3, k / 12)), P(a3.lerp(b3, (k + 1) / 12))], fill=(30, 30, 30, 230), width=lw)
-    tx, ty = P(cc["BBL"])
-    bb = dr.textbbox((0, 0), "h38 (dashed)", font=font)
-    tx -= (bb[2] - bb[0]) + 8
-    bb = dr.textbbox((tx, ty - font.size), "h38 (dashed)", font=font)
-    dr.rectangle((bb[0] - 3, bb[1] - 2, bb[2] + 3, bb[3] + 2), fill=(255, 255, 255, 200))
-    dr.text((tx, ty - font.size), "h38 (dashed)", fill=(30, 30, 30, 255), font=font)
     # horizon
     hy = proj(cam, (0, 0, CAM["loc"][2]))[1] * H
     for x in range(0, W, 24):
@@ -1410,7 +938,7 @@ def make_lines(depth, idx, normal, out_path):
     Image.fromarray(img).save(out_path)
 
 
-def render_plan(out_path, roots, closeup_cams=None):
+def render_plan(out_path, roots):
     """Top-down orthographic plan (Workbench), ceiling hidden, camera + frustum drawn."""
     from PIL import Image, ImageDraw
     sc = bpy.context.scene
@@ -1453,79 +981,11 @@ def render_plan(out_path, roots, closeup_cams=None):
     dr.line([P((c[0], c[1], 1.0)), P((c[0], c[1] - D, 1.0))], fill=(220, 60, 40), width=1)
     cx, cy = P((c[0], c[1], 1.0))
     dr.ellipse((cx - 10, cy - 10, cx + 10, cy + 10), fill=(220, 60, 40))
-    # v3: future-slot footprints (rug, pouf, magazine holder) and the F9 / F13 close-up cameras
-    try:
-        from PIL import ImageFont
-        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 22)
-    except Exception:
-        font = None
-    R = FUTURE["rug"]
-    rx, ry = R["s"][0] / 2, R["s"][1] / 2
-    dr.polygon([P((R["c"][0] + sx * rx, R["c"][1] + sy * ry, 1.0)) for sx, sy in ((-1, -1), (1, -1), (1, 1), (-1, 1))],
-               outline=(60, 160, 90), width=3)
-    pc = FUTURE["pouf"]["c"]
-    dr.polygon([P(p[:2] + (1.0,)) for p in _ring(pc, 0.25, 0.0)], outline=(220, 80, 160), width=3)
-    for k, v in MH_VARIANTS.items():
-        if k in ("envelope-h40", "envelope-h38"):
-            continue
-        dr.polygon([P((x, y, 1.0)) for x, y in ((v[0], v[2]), (v[1], v[2]), (v[1], v[3]), (v[0], v[3]))],
-                   outline=(40, 40, 40), width=3 if k.startswith("envelope") else 1)
-    lbls = [("rug", (1.0, 1.0)), ("pouf", (pc[0] - 0.12, pc[1])), ("magazine holder", (1.05, 3.62))]
-    for name_, (x, y) in lbls:
-        dr.text(P((x, y, 1.0)), name_, fill=(20, 20, 20), font=font)
-    for nm, cm in (closeup_cams or {}).items():
-        sp = CLOSEUPS[nm]
-        loc = sp["loc"]
-        k2 = CAM["sensor_w"] / 2 / sp["lens"]
-        Dc = 3.2
-        col = (40, 90, 200) if nm == "F9" else (200, 120, 20)
-        for sx in (-1, 1):
-            dr.line([P((loc[0], loc[1], 1.0)), P((loc[0] + sx * k2 * Dc, loc[1] - Dc, 1.0))], fill=col, width=3)
-        q = P((loc[0], loc[1], 1.0))
-        dr.ellipse((q[0] - 8, q[1] - 8, q[0] + 8, q[1] + 8), fill=col)
-        dr.text((q[0] + 10, q[1] + 4), nm, fill=col, font=font)
-    a9, b9 = P(CLOSEUPS["F9"]["loc"][:2] + (1.0,)), P(CLOSEUPS["F13"]["loc"][:2] + (1.0,))
-    dr.line([a9, b9], fill=(0, 0, 0), width=2)
     img.save(out_path)
     for ob in hidden:
         ob.hide_render = False
     sc.render.engine, sc.camera, sc.render.resolution_x, sc.render.resolution_y, sc.use_nodes = keep
     sc.cycles.samples = keep_samples
-
-
-def v3_checklist(rep):
-    """review-designer.md 6.5, 'checklist for motion-agent', items 1-8."""
-    fi, ex = rep["future_items"], EXPECTED_FUTURE
-    mh = rep["magazine_holder_v3"]
-
-    def close(a, b, tol=0.005):
-        return all(abs(x - y) <= tol for x, y in zip(a, b))
-    items = {}
-    items["1_overlay_holder_box_and_h38"] = dict(ok=bool(close(fi["magazine-holder"], ex["magazine-holder"], 0.01)),
-                                                 note="h42 box solid, h38 box dashed; mh-alt-* labels not drawn")
-    items["2_expected"] = dict(ok=bool(close(fi["magazine-holder"], ex["magazine-holder"]) and close(fi["pouf"], ex["pouf"])),
-                               holder=fi["magazine-holder"], pouf=fi["pouf"], tolerance=0.005)
-    sub = {}
-    for k in ("envelope-h42", "envelope-h38"):
-        m = mh[k]
-        sub[k] = dict(a_margins=m["margins_ok"], b_pouf=m["pouf"]["ok"], c_rug_corner=m["rug_corner"]["ok"],
-                      d_rug_T=m["rug_front_edge_T"]["ok"], e_floor_wall_line=m["floor_right_wall_line"]["ok"],
-                      f_skirting_report=m["skirting_line"].get("ok"))
-    items["3_m0_holder_checks"] = dict(ok=all(all(v for kk, v in s_.items() if kk != "f_skirting_report")
-                                              for s_ in sub.values()), detail=sub)
-    cl = rep.get("closeups")
-    if cl:
-        items["4_F9"] = dict(ok=cl["F9"]["checks"]["ok"])
-        items["5_F13"] = dict(ok=cl["F13"]["checks"]["ok"])
-        items["6_9a"] = dict(ok=bool(cl["9a"]["holder_enters_monotonic"] and cl["9a"]["min_clearance_m"] > 0.15),
-                             frames=6)
-        moved = {k: [round(a - b, 3) for a, b in zip(CLOSEUPS[k]["loc"], ref)]
-                 for k, ref in (("F9", (0.48, 4.30, 0.60)), ("F13", (0.87, 4.85, 0.62)))}
-        items["7_camera_adjustments"] = dict(ok=all(abs(c) <= 0.05 + 1e-9 for v in moved.values() for c in v),
-                                             delta_m=moved, note="holder, pouf and rug not moved")
-    items["8_plan_readme"] = dict(ok=True, note="plan.png redrawn with holder, pouf, rug, F9/F13 frustums; README v3")
-    items["all_ok"] = all(v["ok"] for v in items.values() if isinstance(v, dict))
-    return items
 
 
 # --------------------------------------------------------------------------------------
@@ -1538,9 +998,6 @@ def main():
     ap.add_argument("--exposure", type=float, default=1.0)
     ap.add_argument("--out", default=HERE)
     ap.add_argument("--no-plan", action="store_true")
-    ap.add_argument("--no-closeups", action="store_true")
-    ap.add_argument("--closeup-res", type=int, default=0, help="close-up width (default min(res, 1920))")
-    ap.add_argument("--closeup-samples", type=int, default=0)
     a = ap.parse_args(argv)
     os.makedirs(a.out, exist_ok=True)
 
@@ -1598,16 +1055,6 @@ def main():
     rep["depth_check_back_wall_m"] = round(float(depth[int(py * H), int(px * W)]), 4)
     px, py, _ = proj(cam, (1.89, 0.0, 2.50))
     rep["depth_check_back_wall_corner_m"] = round(float(depth[int(py * H), int(px * W)]), 4)
-    # v3: close-ups F9 / F13 and branch 9a, with product proxies (built after the M0 passes)
-    closeup_cams = {}
-    if not a.no_closeups:
-        mprod = make_mat("clay_proxy", "#8F8D89")
-        mholder = make_mat("clay_proxy_holder", "#5E5D5B")
-        proxy_roots, proxy_info = build_proxies(mprod, mholder)
-        cres = a.closeup_res or min(a.res, 1920)
-        rep["closeups"], closeup_cams = run_closeups(a.out, cres, a.closeup_samples or max(32, a.samples // 2),
-                                                     proxy_roots, proxy_info)
-    rep["v3_checklist"] = v3_checklist(rep)
     with open(os.path.join(a.out, "m0-selfcheck.json"), "w") as fh:
         json.dump(rep, fh, indent=2, ensure_ascii=False)
 
@@ -1636,14 +1083,11 @@ def main():
     ppu, ppv, _ = proj(cam, (0.0, 0.0, CAM["loc"][2]))
     camj["intrinsics_px"]["cx"] = round(ppu * a.res, 2)
     camj["principal_point_measured_uv"] = [round(ppu, 5), round(ppv, 5)]
-    camj["closeups"] = {k: dict(location_m=list(v["loc"]), lens_mm=v["lens"], tilt_down_deg=v["tilt_deg"], look="-Y",
-                                shift=[0, 0], mirrored_scale_x=-1.0,
-                                blender_rotation_euler_deg=[90 - v["tilt_deg"], 0, 180]) for k, v in CLOSEUPS.items()}
     with open(os.path.join(a.out, "m0-camera.json"), "w") as fh:
         json.dump(camj, fh, indent=2)
 
     if not a.no_plan:
-        render_plan(os.path.join(a.out, "plan.png"), roots, closeup_cams)
+        render_plan(os.path.join(a.out, "plan.png"), roots)
     bpy.ops.wm.save_as_mainfile(filepath=os.path.join(a.out, "m0-blockout.blend"))
     if os.path.exists(os.path.join(a.out, "m0-blockout.blend1")):
         os.remove(os.path.join(a.out, "m0-blockout.blend1"))
