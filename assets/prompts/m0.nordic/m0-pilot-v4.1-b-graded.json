@@ -1,0 +1,17 @@
+{
+  "asset_id": "m0-pilot-v4.1-b-graded",
+  "date": "2026-10-04",
+  "source": "assets/renders/living-room/nordic/m0/pilot-v4.1/m0-pilot-b.png",
+  "credits": 0,
+  "operation": "one global grade per brief 2.1 section 4 (allowed when exposure is still low after 2 attempts) and Bible grading rules; no local correction, geometry untouched",
+  "steps": [
+    "sRGB -> linear",
+    "exposure x2^0.45 (+0.45 stop, within +0.5 cap)",
+    "highlight shoulder on max channel above 0.70 (lin), asymptote 0.985, hue-preserving per-pixel scale",
+    "linear -> sRGB",
+    "black point lift: out = 0.12 + 0.88*in (HSL L floor 12)",
+    "no saturation change"
+  ],
+  "script": "assets/renders/living-room/nordic/m0/pilot-v4.1/grade.py (grade(\"b\",0.45,0.12))",
+  "output": "assets/renders/living-room/nordic/m0/pilot-v4.1/m0-pilot-b-graded.png"
+}
