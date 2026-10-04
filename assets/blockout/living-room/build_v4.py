@@ -1,28 +1,30 @@
 #!/usr/bin/env python3
 """
-Blockout v4 of the Nordic living room: alternative B as adopted (v4-spec.json), with the three
-left-zone variants L0 / L1 / L2 (review-designer.md 8.3), plus the M0 input set for one variant.
+Blockout v4.1 of the Nordic living room: alternative B as adopted, left zone L2 (the only variant left in
+v4-spec.json v4.1; L0/L1 are in its `history`), with the lower armchair back and the basket / floor-lamp fixes
+(review-designer.md 8.7), plus the M0 input set.
 
 Reuses build_alts.py (shell, slots, camera, readable warm-grey clay palette, plan) and
 build_scene.py (geometry helpers, passes, EXR loader). Neither file is modified by this script.
-Only the armchair is rebuilt here, because v4 makes the back-post length a parameter
-(L0 0.50 as v3, L1/L2 0.455).
+Only the armchair is rebuilt here. Every armchair dimension (footprint, seat, back cushion length / thickness /
+tilt / pivot / bevel, back-post length) and the window sill height are read from v4-spec.json; nothing here
+duplicates spec geometry. (The v4 script, which rendered v4/L0, L1, L2, is in git history: commit 8b1f17e.)
 
 Outputs
-  v4/<L0|L1|L2>/clay.png          2048x1152, 64 samples, shell + fixed furniture only (as M0)
-  v4/<L0|L1|L2>/clay-proxies.png  same view with solid clay proxies of all 16 slots
-  v4/<L0|L1|L2>/overlay.png       proxies render + outlines + labels + 3:5 mobile crop
-  v4/<L0|L1|L2>/plan.png          top view with camera, FOV, E0 path
-  v4/<L0|L1|L2>/selfcheck.json    expected (v4-spec) vs measured, checks C1-C20, mobile crop
-  v4/compare.jpg                  L0 | L1 | L2: left-zone crops (u 0-0.55) and full frames with the 3:5 crop
-  --m0 <variant>: the M0 input set at the top level (m0-clay-4k.png, m0-clay.png, m0-clay-overlay.png,
+  v4.1/clay.png          2048x1152, 64 samples, shell + fixed furniture only (as M0)
+  v4.1/clay-proxies.png  same view with solid clay proxies of all 16 slots
+  v4.1/overlay.png       proxies render + outlines + labels + 3:5 mobile crop
+  v4.1/plan.png          top view with camera, FOV, E0 path
+  v4.1/selfcheck.json    expected (v4-spec) vs measured, checks C1-C20, mobile crop
+  --m0: the M0 input set at the top level (m0-clay-4k.png, m0-clay.png, m0-clay-overlay.png,
   m0-lines.png, m0-depth.png/.exr, m0-depth-nearbright.png, m0-camera.json, m0-selfcheck.json,
   plan.png, m0-blockout.blend). The M0 clay is EMPTY of products: shell + sofa, coffee table, armchair.
 
 Run
-  python3 build_v4.py                               # L0, L1, L2 (2K) + compare
-  python3 build_v4.py --m0 L2                       # M0 set for L2 only (4K, 256 samples)
-  python3 build_v4.py --variants L1 --res 960 --samples 16 --out /tmp/x   # preview
+  python3 build_v4.py                               # v4.1 clay set (2K)
+  python3 build_v4.py --m0 --m0-only                # M0 set (4K, 256 samples) + .blend
+  python3 build_v4.py --m0 --m0-blend-only          # only rebuild m0-blockout.blend
+  python3 build_v4.py --res 960 --samples 16 --out /tmp/x   # preview
 Passes (EXR) go to a temp dir outside the repo and are deleted at the end.
 """
 import argparse
@@ -44,9 +46,9 @@ bs = ba.bs
 P = bs.proj
 ASP = 9 / 16
 SPEC_PATH = os.path.join(HERE, "v4-spec.json")
-OUT_DIR = os.path.join(HERE, "v4")
+OUT_DIR = os.path.join(HERE, "v4.1")
 TOL = 0.01
-VARIANTS = ("L0", "L1", "L2")
+VID = "v4.1"
 TANG = 0.02
 
 
@@ -57,16 +59,18 @@ def r4(x):
 # ---------------------------------------------------------------------------------------
 # configuration
 # ---------------------------------------------------------------------------------------
-def v4_config(spec, vid):
+def v4_config(spec):
+    """Config for v4.1 (the only active left-zone variant). Everything geometric comes from the spec."""
+    vid = VID
     sh = spec["shell"]
     w = sh["windows"][0]
-    z0 = w["variant_L2"]["z0"] if vid == "L2" else w["z0"]
-    win = dict(wall="left", a0=w["y0"], a1=w["y1"], mullion=w["mullion_y"], z0=z0, z1=w["z1"],
+    win = dict(wall="left", a0=w["y0"], a1=w["y1"], mullion=w["mullion_y"], z0=w["z0"], z1=w["z1"],
                mullion_w=w["mullion_w"], frame_w=w["frame_w"], reveal=w["reveal_depth"],
-               sill_proud=w["sill_proud"], lining="paint", frame_plane_x=w["frame_plane_x"])
+               sill_proud=w["sill_proud"], sill_t=w["sill_t"], glass_bottom_z=w["glass_bottom_z"],
+               lining="paint", frame_plane_x=w["frame_plane_x"])
     c = spec["camera"]
     ff = spec["fixed_furniture"]
-    ch = ff["armchair"]["variants"][vid]
+    ch = ff["armchair"]
     slots = {}
     for k, v in spec["slots"].items():
         s = dict(v)
@@ -82,7 +86,7 @@ def v4_config(spec, vid):
         slots[k] = s
     mc = spec["mobile_crop"]
     cfg = dict(
-        id=vid, name=f"v4 {vid}: {ch['note']}", room=dict(spec["room"]), door=dict(sh["door"]), window=win,
+        id=vid, name=f"{vid}: {ch['note']}", room=dict(spec["room"]), door=dict(sh["door"]), window=win,
         skirting=dict(type="board", h=sh["skirting_h"]), cornice=sh["cornice"],
         planks=dict(w=sh["floor_planks"]["w"], len=sh["floor_planks"]["len"]),
         camera=dict(loc=list(c["loc"]), yaw=c["yaw_deg_left"], lens=c["lens"], shift_x=c["shift_x"],
@@ -90,7 +94,8 @@ def v4_config(spec, vid):
         h0=dict(spec["h0"]),
         sofa=dict(x0=ff["sofa"]["x0"], x1=ff["sofa"]["x1"]), table=dict(cx=ff["table"]["cx"], cy=ff["table"]["cy"]),
         chair=dict(cx=ch["cx"], cy=ch["cy"], yaw=ch["yaw_deg"], arm_front_inset=ch["arm_front_inset"],
-                   post_len=0.50 if vid == "L0" else 0.455),
+                   w=ch["w"], d=ch["d"], seat_h=ch["seat_h"], h=ch["h_nominal"],
+                   back=dict(ch["back_cushion"]), posts=dict(ch["back_posts"])),
         dx=(ff["sofa"]["x0"] + ff["sofa"]["x1"]) / 2.0,
         slots=slots, expected=dict(spec["expected"]), checks=list(spec["checks"]),
         mobile_crop=[dict(name="3:5", center_u=(mc["u"][0] + mc["u"][1]) / 2, width=mc["u"][1] - mc["u"][0])],
@@ -117,8 +122,9 @@ class V4Shell(ba.Shell):
         bs.box("hall_back", hx0 - 0.1, hx1 + 0.1, hy1, hy1 + 0.1, 0, hh, M["vest"], "shell", pidx=pf)
 
 
-def build_chair_v4(mclay, mwood, post_len):
-    """build_scene.build_chair with the back-post length as a parameter (v3 = 0.50)."""
+def build_chair_v4(mclay, mwood, chair):
+    """build_scene.build_chair with the back cushion and back posts taken from the spec
+    (fixed_furniture.armchair.back_cushion / back_posts)."""
     C = bs.CHAIR
     box = bs.box
     g = "furniture"
@@ -137,16 +143,17 @@ def build_chair_v4(mclay, mwood, post_len):
     for lx in (hd - 0.06, -hd + 0.06):
         parts.append(box("chair_seat_rail", lx - 0.02, lx + 0.02, -hw + 0.03, hw - 0.03, 0.22, 0.28, mwood, g))
     parts.append(box("chair_seat", -hd + 0.18, hd - 0.02, -hw + 0.065, hw - 0.065, 0.27, C["seat_h"], mclay, g, bevel=0.03))
-    tilt = math.radians(15)
-    L, th = 0.41, 0.13
-    bx, bz = -hd + 0.17, 0.34
-    bc = box("chair_back", -th / 2, th / 2, -hw + 0.065, hw - 0.065, 0, L, mclay, g, bevel=0.035)
+    bk, po = chair["back"], chair["posts"]
+    tilt = math.radians(bk["tilt_deg"])
+    L, th = bk["len"], bk["th"]
+    bx, bz = bk["pivot_local"]
+    bc = box("chair_back", -th / 2, th / 2, -hw + 0.065, hw - 0.065, 0, L, mclay, g, bevel=bk["bevel"])
     bs._base_pivot(bc)
     bc.location = (bx, 0, bz)
     bc.rotation_euler = (0, -tilt, 0)
     parts.append(bc)
     for ly in (hw - 0.03, -hw + 0.03):
-        p = box("chair_back_post", -0.02, 0.02, ly - 0.02, ly + 0.02, 0, post_len, mwood, g)
+        p = box("chair_back_post", -0.02, 0.02, ly - 0.02, ly + 0.02, 0, po["len"], mwood, g)
         bs.apply_scale(p)
         bs._base_pivot(p)
         p.location = (-hd + 0.06, ly, 0.26)
@@ -158,11 +165,12 @@ def build_chair_v4(mclay, mwood, post_len):
 def build_furniture(cfg):
     bs.SOFA = dict(bs.SOFA, x0=cfg["sofa"]["x0"], x1=cfg["sofa"]["x1"])
     bs.TABLE = dict(bs.TABLE, cx=cfg["table"]["cx"], cy=cfg["table"]["cy"])
-    bs.CHAIR = dict(bs.CHAIR, cx=cfg["chair"]["cx"], cy=cfg["chair"]["cy"], yaw_deg=cfg["chair"]["yaw"],
-                    arm_front_inset=cfg["chair"]["arm_front_inset"])
+    ch = cfg["chair"]
+    bs.CHAIR = dict(bs.CHAIR, cx=ch["cx"], cy=ch["cy"], yaw_deg=ch["yaw"], arm_front_inset=ch["arm_front_inset"],
+                    w=ch["w"], d=ch["d"], h=ch["h"], seat_h=ch["seat_h"])
     M = ba.M
     return {"sofa": bs.build_sofa(M["sofa"], M["wood"]), "coffee-table": bs.build_table(M["wood"]),
-            "armchair": build_chair_v4(M["chair"], M["wood"], cfg["chair"]["post_len"])}
+            "armchair": build_chair_v4(M["chair"], M["wood"], cfg["chair"])}
 
 
 def build_base(cfg, a, res=None, samples=None):
@@ -362,6 +370,11 @@ def self_check(cfg, cam, roots, slots, idx, rgb, spec):
         return item
 
     checks = rep["checks"]
+    spec_checks = {c["id"]: c for c in cfg["checks"]}
+
+    def cexp(cid):
+        c = spec_checks[cid]
+        return {k: c[k] for k in ("expected", "measured_v4_L2", "measured_B") if k in c} or None
 
     def chk(cid, title, ok, measured, required, blocking, note="", expected=None):
         it = dict(id=cid, check=title, result=("pass" if ok else "fail") if ok is not None else "report",
@@ -415,16 +428,23 @@ def self_check(cfg, cam, roots, slots, idx, rgb, spec):
     head = sorted([P(cam, (xl, a1, z1))[1], P(cam, (xl, a0, z1))[1]])
     fv("window_head_y", head, "head at the wall face, front -> back")
     sill = sorted([P(cam, (xl, a1, z0))[1], P(cam, (xl, a0, z0))[1]])
-    fv("window_sill_y_info", sill, "sill line at the wall face (info; L2 sill 0.75)")
+    fv("window_sill_wall_face_y", sill, "sill top line at the wall face, front -> back (sill z0 %.3f)" % z0)
+    # the sill as built (build_alts.Shell): its real top / bottom z, cross-checked against the spec
+    sill_obs = [o for o in bpy.data.objects if o.name.startswith("win_sill")]
+    sz = [(o.matrix_world @ Vector(c)).z for o in sill_obs for c in o.bound_box]
+    sill_top_z, sill_bot_z = max(sz), min(sz)
+    rep["window_as_built"] = dict(sill_top_z=r4(sill_top_z), sill_bottom_z=r4(sill_bot_z),
+                                  sill_t=r4(sill_top_z - sill_bot_z), spec_sill_t=Wn["sill_t"],
+                                  glass_bottom_z=r4(z0 + Wn["frame_w"] + 0.02), spec_glass_bottom_z=Wn["glass_bottom_z"],
+                                  ok=bool(abs(sill_top_z - z0) < 1e-4 and abs(sill_top_z - sill_bot_z - Wn["sill_t"]) < 1e-4
+                                          and abs(z0 + Wn["frame_w"] + 0.02 - Wn["glass_bottom_z"]) < 1e-4))
     head_min = min(head)
 
     # ---------------- furniture
     fb = {n: bb(fur(n)) for n in roots}
     fv("sofa", fb["sofa"], "geometry projection incl. bevel [u0,u1,v0,v1]")
     fv("coffee-table_x", fb["coffee-table"][:2], "geometry projection")
-    ek = "armchair_L0" if vid == "L0" else "armchair_L1"
-    fv("armchair", fb["armchair"], "geometry projection [u0,u1,v0,v1]" +
-       ("" if vid != "L2" else " (L2 = L1 chair; expected armchair_L1)"), exp_key=ek)
+    fv("armchair", fb["armchair"], "geometry projection [u0,u1,v0,v1]")
     # chair corners (sharp box corners from bound boxes)
     ch = roots["armchair"]
     parts = {o.name: o for o in ch.children_recursive}
@@ -460,15 +480,19 @@ def self_check(cfg, cam, roots, slots, idx, rgb, spec):
     post_top_z = max(p.z for p in corners_world(posts[0]))
     rep["armchair_heights_m"] = dict(post_top_z=r4(post_top_z), back_cushion_top_z_sharp=r4(zmax),
                                      post_below_cushion_top_m=r4(zmax - post_top_z))
+    eh = E["armchair_heights_m"]
+    dev_h = max(abs(zmax - eh["back_cushion_top_z_sharp"]), abs(post_top_z - eh["post_top_z"]))
+    fvs.append(dict(key="armchair_heights_m", measured=dict(back_cushion_top_z_sharp=r4(zmax), post_top_z=r4(post_top_z)),
+                    how="metres, sharp corners (object bound boxes, before the bevel)", expected=eh,
+                    expected_key="armchair_heights_m", max_dev=round(dev_h, 4), ok=bool(dev_h <= TOL + 1e-9)))
     item = dict(key="armchair_corners_u", measured={k: r4(v) for k, v in corners_m.items()},
                 how="sharp corners (object bound boxes, i.e. before the 3.5 cm cushion bevel) projected; "
                     "posts = top face u range; near/far by camera depth")
-    if vid in ("L1", "L2"):
-        ex = E["armchair_L1_corners_u"]
-        devs = {k: round(float(np.max(np.abs(np.array(corners_m[k], float).ravel() - np.array(ex[k], float).ravel()))), 4)
-                for k in ex}
-        item.update(expected=ex, expected_key="armchair_L1_corners_u", max_dev=max(devs.values()), per_key_dev=devs,
-                    ok=bool(max(devs.values()) <= TOL + 1e-9))
+    ex = E["armchair_corners_u"]
+    devs = {k: round(float(np.max(np.abs(np.array(corners_m[k], float).ravel() - np.array(ex[k], float).ravel()))), 4)
+            for k in ex}
+    item.update(expected=ex, expected_key="armchair_corners_u", max_dev=max(devs.values()), per_key_dev=devs,
+                ok=bool(max(devs.values()) <= TOL + 1e-9))
     fvs.append(item)
 
     # ---------------- slots
@@ -513,7 +537,7 @@ def self_check(cfg, cam, roots, slots, idx, rgb, spec):
     chk("C4", "armchair-planter gap >= 0.02 (far front leg / arm tip vs pot)", ok4,
         dict(silhouette_gap_index_pass=g4 and g4["min_gap_frame_w"], touching=g4 and g4["touching"],
              signed_u_gap_pot_left_minus_chair_right=r4(sgn), hull_gap=r4(hg)),
-        ">= 0.02", True, expected=cfg["checks"][3].get(vid))
+        ">= 0.02", True, expected=cexp("C4"))
 
     # C5 window lines vs armchair contour
     corners, nvedges = contour_features(chull_parts)
@@ -569,7 +593,9 @@ def self_check(cfg, cam, roots, slots, idx, rgb, spec):
     hlines = {"glass bottom (top of the bottom sash rail, z %.3f)" % gb_z: (xs, gb_z),
               "sill top edge at the wall face (z %.3f)" % z0: (xl, z0),
               "sill front top edge, proud %.2f (z %.3f)" % (sp, z0): (xl + sp, z0),
-              "sill front bottom edge (z %.3f)" % (z0 - 0.025): (xl + sp, z0 - 0.025)}
+              "sill front bottom edge (z %.3f)" % sill_bot_z: (xl + sp, sill_bot_z)}
+    hkey = dict(zip(hlines, ("glass_bottom", "sill_wall_face_top", "sill_front_top", "sill_front_bottom")))
+    c5_exp = spec_checks["C5"]["expected"]
     hres = {}
     for nm, (hx, hz) in hlines.items():
         ov = []
@@ -579,26 +605,31 @@ def self_check(cfg, cam, roots, slots, idx, rgb, spec):
                 continue
             ov.append((gb_vq(u_, hx, hz) - t, u_))
         o = max(ov) if ov else (None, None)
-        hres[nm] = dict(max_rise_above_line=r4(o[0]), at_u=r4(o[1]),
+        ek_ = hkey[nm]
+        hres[nm] = dict(key=ek_, max_rise_above_line=r4(o[0]), at_u=r4(o[1]),
                         state=("none" if o[0] is None else "crossing (decisive)" if o[0] >= TANG else
-                               "clear below" if o[0] <= -TANG else "TANGENT"))
+                               "clear below" if o[0] <= -TANG else "TANGENT"),
+                        expected=c5_exp.get(ek_),
+                        dev=None if o[0] is None or ek_ not in c5_exp else round(abs(o[0] - c5_exp[ek_]), 4))
     ogb = (list(hres.values())[0]["max_rise_above_line"], None)
 
     def vert_ok(o):
         return o is None or o >= TANG or o <= -TANG
     h_tan = [k for k, v in hres.items() if v["state"] == "TANGENT"]
-    ok5 = bool((worst is None or worst[0] >= TANG) and not h_tan)
-    chk("C5", "armchair vs window lines (mullion at frame plane, glass edges, jambs, glass bottom): no contour corner "
-              "or near-vertical chair edge within 0.02", ok5,
+    h_bad = [k for k, v in hres.items() if v["max_rise_above_line"] is not None and v["max_rise_above_line"] > -TANG]
+    ok5 = bool((worst is None or worst[0] >= TANG) and not h_tan and not h_bad)
+    chk("C5", "armchair vs window lines (mullion at frame plane, glass edges, jambs, glass bottom and the three sill "
+              "edges): no contour corner or near-vertical chair edge within 0.02; chair top <= -0.02 below every "
+              "horizontal line", ok5,
         dict(closest_line=worst and worst[1], closest_dist=worst and r4(worst[0]), lines=c5,
-             chair_top_vs_horizontal_lines=hres, horizontal_tangents=h_tan,
+             chair_top_vs_horizontal_lines=hres, horizontal_tangents=h_tan, horizontal_not_clear_by_0_02=h_bad,
              contour_corners=len(corners), near_vertical_edges=len(nvedges)),
-        ">= 0.02 from every visible vertical line; glass bottom and sill edges: rise >= 0.02 (decisive) or <= -0.02 (clear)", True,
+        ">= 0.02 from every visible vertical line; glass bottom and sill edges: max rise <= -0.02 (clear below)", True,
         "contour = union of the projected convex hulls of the chair parts (evaluated meshes, bevel included); "
         "a corner/edge counts only inside the line's visible span (head to glass bottom / sill). "
-        "max_rise_above_line < 0 = the chair top stays below the line by that much. v4 adds the sill edges "
-        "(tangent_rule / M0-07 name the sill); the spec's C5 expectation covered the glass bottom only",
-        expected=cfg["checks"][4].get(vid))
+        "max_rise_above_line < 0 = the chair top stays below the line by that much (bevel included). "
+        "Sill bottom edge z taken from the sill as built",
+        expected=cexp("C5"))
 
     # C6 armchair vs front curtain stack edge
     def span_all(u_):
@@ -610,13 +641,13 @@ def self_check(cfg, cam, roots, slots, idx, rgb, spec):
         dict(stack_edge_u=r4(stack_edge_u), min_dist=r4(d6), nearest=n6,
              corners_within_0_02=[dict(part=c[2], u=r4(c[0]), v=r4(c[1] / ASP)) for c in straddle],
              chair_u=r4(chair_u)), ">= 0.02", False, "soft fabric edge, judged by eye (non-blocking)",
-        expected=cfg["checks"][5].get(vid))
+        expected=cexp("C6"))
 
     # C7 armchair bottom margin
     mb = ba.mask_bb(masks["armchair"])
     chk("C7", "armchair >= 0.05 from the bottom edge", bool(1 - fb["armchair"][3] >= 0.05),
         dict(geometry=r4(1 - fb["armchair"][3]), visible_mask=r4(1 - mb[3])), 0.05, True,
-        expected=cfg["checks"][6].get(vid))
+        expected=cexp("C7"))
 
     # C8 pendant
     pend, art = sb["pendant"], sb["framed-art"]
@@ -625,7 +656,7 @@ def self_check(cfg, cam, roots, slots, idx, rgb, spec):
     chk("C8", "pendant in the top third, >= 0.05 above the art; hanging point out of frame",
         bool(pend[3] <= 1 / 3 and art[2] - pend[3] >= 0.05 and hang_v < 0),
         dict(pendant_bottom_v=r4(pend[3]), art_top_v=r4(art[2]), gap=r4(art[2] - pend[3]), hang_v=r4(hang_v)),
-        "bottom <= 0.333, gap >= 0.05, hang_v < 0", True, expected=cfg["checks"][7]["measured_B"])
+        "bottom <= 0.333, gap >= 0.05, hang_v < 0", True, expected=cexp("C8"))
 
     # C9 art vs sofa back
     sm = masks["sofa"]
@@ -636,7 +667,7 @@ def self_check(cfg, cam, roots, slots, idx, rgb, spec):
     chk("C9", "art bottom vs sofa back top >= 0.03", bool(stop is not None and stop - art[3] >= 0.03),
         dict(art_bottom_v=r4(art[3]), sofa_top_v_visible=r4(stop), gap=r4(stop - art[3]),
              gap_geometry=r4(sofa_geo_top - art[3])), 0.03, True,
-        "visible sofa mask in the art's columns (cushion proxies excluded)", expected=cfg["checks"][8]["measured_B"])
+        "visible sofa mask in the art's columns (cushion proxies excluded)", expected=cexp("C9"))
 
     # C10 magazine holder
     mh = hull(sv("magazine-holder"))
@@ -645,7 +676,7 @@ def self_check(cfg, cam, roots, slots, idx, rgb, spec):
     chk("C10", "magazine-holder: gap to the front curtain stack >= 0.02; left margin >= 0.05; bottom margin >= 0.05",
         bool(gcs >= 0.02 and mhb[0] >= 0.05 and 1 - mhb[3] >= 0.05),
         dict(stack_gap=r4(gcs), left=r4(mhb[0]), bottom=r4(1 - mhb[3]), stack_left_edge_u=r4(stack_left_u)),
-        "0.02 / 0.05 / 0.05", True, expected=cfg["checks"][9]["expected"])
+        "0.02 / 0.05 / 0.05", True, expected=cexp("C10"))
 
     # C11 pouf top vs lower edge of the table-top slab (Z 0.35)
     T = bs.TABLE
@@ -674,7 +705,7 @@ def self_check(cfg, cam, roots, slots, idx, rgb, spec):
         bool(pt36 - tl >= 0.02),
         dict(table_line_v=r4(tl), pouf_top_v_h036=r4(pt36), gap_h036=r4(pt36 - tl), pouf_top_v_h037=r4(pt37),
              gap_h037=r4(pt37 - tl)), 0.02, True, "table line = slab lower edge Z 0.35 (review 8.4)",
-        expected=cfg["checks"][10]["expected"])
+        expected=cexp("C11"))
 
     # C12 pouf margins, armchair, rug
     g12 = sgap("pouf", "armchair")
@@ -688,7 +719,7 @@ def self_check(cfg, cam, roots, slots, idx, rgb, spec):
     chk("C12", "pouf: bottom margin >= 0.05; gap to armchair >= 0.02; on the rug >= 15 cm from its edges", ok12,
         dict(bottom=r4(bot12), armchair_gap_hull=r4(gh12), armchair_gap_index_pass=g12 and g12["min_gap_frame_w"],
              armchair_touching_index_pass=g12 and g12["touching"], min_dist_to_rug_edge_m=r4(on_rug)),
-        "0.05 / 0.02 / 0.15 m", True, expected=dict(bottom=cfg["checks"][11]["expected_bottom"], armchair="L0 0.040, L1 0.075"))
+        "0.05 / 0.02 / 0.15 m", True, expected=cexp("C12"))
 
     # C13 wall decor
     pe = cfg["slots"]["planter"]
@@ -698,7 +729,7 @@ def self_check(cfg, cam, roots, slots, idx, rgb, spec):
     g1, g2 = bs.poly_gap(wd, hull(crown_pts)), bs.poly_gap(wd, hull(sv("framed-art")))
     chk("C13", "wall-decor vs tree crown envelope (r 0.40, z 0.45-1.65) >= 0.03 and vs art >= 0.03",
         bool(g1 >= 0.03 and g2 >= 0.03), dict(crown=r4(g1), art=r4(g2)), 0.03, True,
-        expected=cfg["checks"][12]["expected"])
+        expected=cexp("C13"))
 
     # C14 basket / sofa / lamp
     bk = cfg["slots"]["basket"]
@@ -717,23 +748,23 @@ def self_check(cfg, cam, roots, slots, idx, rgb, spec):
         ok14, dict(sofa_gap=r4(g14s), sofa_gap_index_pass=g14i and g14i["min_gap_frame_w"],
                    stem_to_basket_left=r4(s_l), stem_to_basket_right=r4(s_r),
                    lamp_base_inside_basket_silhouette=bool(base_in), lamp_base_behind_basket=bool(base_behind)),
-        "0.02 / 0.02 / hidden", True, expected=cfg["checks"][13]["expected"])
+        "0.02 / 0.02 / hidden", True, expected=cexp("C14"))
 
     # C15, C16, C17
     chk("C15", "floor-lamp shade vs right edge >= 0.08", bool(1 - sb["floor-lamp"][1] >= 0.08), r4(1 - sb["floor-lamp"][1]),
-        0.08, True, expected=cfg["checks"][14]["expected"])
+        0.08, True, expected=cexp("C15"))
     chk("C16", "window head >= 0.010 below the top edge", bool(head_min >= 0.010), r4(head_min), 0.010, True,
-        expected=cfg["checks"][15]["measured_B"])
+        expected=cexp("C16"))
     e0 = ba.e0_path_B(cfg)
     chk("C17", "E0 path clears the jambs >= 0.15 m", bool(e0["min_clearance_m"] >= 0.15), e0, 0.15, True,
-        expected=cfg["checks"][16]["measured_B"])
+        expected=cexp("C17"))
 
     # C18 planter vs back curtain stack edge
     g18 = bs.poly_gap(pot_h, hull(ba.verts(stack_b)))
     g18i = sgap("planter", "curtains")
     chk("C18", "planter vs back curtain stack edge (report)", None,
         dict(hull_gap=r4(g18), index_pass_gap_to_curtains=g18i and g18i["min_gap_frame_w"]), ">= 0.02 (known 0.013)",
-        False, "soft edge, judged by eye", expected=cfg["checks"][17]["measured_B"])
+        False, "soft edge, judged by eye", expected=cexp("C18"))
 
     # C19 basket bottom vs rug back edge line
     rz = 0.012
@@ -766,8 +797,8 @@ def self_check(cfg, cam, roots, slots, idx, rgb, spec):
         dict(min_abs_dv=r4(m19[0]), at_u=r4(m19[1]), dv_range=r4([min(d[0] for d in d19), max(d[0] for d in d19)]) if d19 else None,
              note="dv = v(rug back edge) - v(basket bottom contour) in the basket's columns where the rug exists; "
                   "+ = rug edge below the basket bottom"),
-        "report (expected 0.0015)", False, "both are floor-contact lines; judge by eye",
-        expected=cfg["checks"][18]["expected"])
+        "report (lines cross, |dv| <= ~0.007)", False, "both are floor-contact lines; judge by eye",
+        expected=cexp("C19"))
 
     # C20 tangents (< 0.02) between visible silhouettes
     big = ["sofa", "coffee-table", "armchair", "framed-art", "planter", "planter-crown", "floor-lamp", "pouf",
@@ -896,7 +927,7 @@ def make_overlay(cfg, cam, clay_path, idx, slots, out_path, fill_alpha=40, note=
     x0, x1 = u0 * W, u1 * W
     dr.rectangle((x0, 1, x1, H - 2), outline=(255, 255, 255, 240), width=lw + 1)
     dr.rectangle((x0 - lw, 1 - lw, x1 + lw, H - 2 + lw), outline=(30, 30, 30, 200), width=1)
-    leg = [f"v4 {cfg['id']}  overlay: solid = firm / closed, dashed + ~ = approx (relative to furniture)" + (f"  {note}" if note else ""),
+    leg = [f"{cfg['id']}  overlay: solid = firm / closed, dashed + ~ = approx (relative to furniture)" + (f"  {note}" if note else ""),
            f"white frame = 3:5 mobile crop u {u0}-{u1} (full height); dotted line = horizon (camera z 1.20)"]
     if hidden:
         leg.append("not visible in this frame: " + ", ".join(hidden))
@@ -918,56 +949,13 @@ def make_plan(cfg, cam, slots, out_path):
     dr = ImageDraw.Draw(img)
     fnt = ba.font(20)
     R = cfg["room"]
-    lbl = (f"v4 {cfg['id']}  room {R['x_right'] - R['x_left']:.2f} x {R['y_front'] - R['y_back']:.2f} x {R['h']:.2f} m"
-           f"   armchair ({cfg['chair']['cx']}, {cfg['chair']['cy']})   sill {cfg['window']['z0']:.2f}")
+    lbl = (f"{cfg['id']}  room {R['x_right'] - R['x_left']:.2f} x {R['y_front'] - R['y_back']:.2f} x {R['h']:.2f} m"
+           f"   armchair ({cfg['chair']['cx']}, {cfg['chair']['cy']})   sill {cfg['window']['z0']:.2f}"
+           f"   armchair back top {cfg['chair']['back']['top_z_sharp']:.3f}")
     dr.rectangle((8, 8, 30 + dr.textlength(lbl, font=fnt), 40), fill=(255, 255, 255))
     dr.text((16, 12), lbl, fill=(20, 20, 20), font=fnt)
     img.save(out_path)
     return res
-
-
-def make_compare(out_dir, cfgs):
-    from PIL import Image, ImageDraw
-    cols = list(VARIANTS)
-    pad, title = 24, 58
-    cw = 1024                       # full frame tile width
-    ch = 576
-    crop_w = int(round(cw * 0.55 / 0.55))   # left zone crop shown at the same tile width
-    ft, fs = ba.font(32), ba.font(20, bold=False)
-    zone_h = int(round(crop_w / (0.55 * 2048) * 1152))
-    sheet_w = pad + len(cols) * (cw + pad)
-    sheet_h = pad + title + zone_h + pad + title + ch + pad + 70
-    sheet = Image.new("RGB", (sheet_w, sheet_h), (246, 244, 240))
-    dr = ImageDraw.Draw(sheet)
-    for i, c in enumerate(cols):
-        src = os.path.join(out_dir, c, "clay-proxies.png")
-        im = Image.open(src).convert("RGB")
-        W, H = im.size
-        x = pad + i * (cw + pad)
-        # row 1: left zone u 0-0.55, full height
-        z = im.crop((0, 0, int(round(0.55 * W)), H)).resize((crop_w, zone_h), Image.LANCZOS)
-        sheet.paste(z, (x, pad + title))
-        notes = {"L0": "L0  B as presented (reference)", "L1": "L1  armchair -24 cm X, posts 0.455",
-                 "L2": "L2  = L1 + window sill 0.75 (needs user approval)"}
-        dr.text((x, pad + 10), notes[c], fill=(25, 25, 25), font=ft)
-        # row 2: full frame with the 3:5 crop
-        y2 = pad + title + zone_h + pad
-        f_ = im.resize((cw, ch), Image.LANCZOS)
-        d2 = ImageDraw.Draw(f_)
-        u0, u1 = cfgs[c]["mobile"]["u"]
-        d2.rectangle((u0 * cw - 1, 0, u1 * cw + 1, ch - 1), outline=(40, 40, 40), width=1)
-        d2.rectangle((u0 * cw, 1, u1 * cw, ch - 2), outline=(255, 255, 255), width=3)
-        sheet.paste(f_, (x, y2 + title))
-        sc = json.load(open(os.path.join(out_dir, c, "selfcheck.json")))
-        s = sc["summary"]
-        txt = (f"{c}: blocking fails {', '.join(s['blocking_checks_failed']) or 'none'}"
-               f"   values >0.01: {', '.join(s['frame_values_outside_0_01']) or 'none'}")
-        dr.text((x, y2 + 12), txt, fill=(25, 25, 25), font=fs)
-    dr.text((pad, sheet_h - 50), "Row 1: left zone u 0.00-0.55, full height (clay with solid slot proxies). "
-            "Row 2: full frame; white frame = 3:5 mobile crop u 0.567-0.9045.", fill=(70, 70, 70), font=fs)
-    p = os.path.join(out_dir, "compare.jpg")
-    sheet.save(p, quality=90)
-    return p
 
 
 # ---------------------------------------------------------------------------------------
@@ -975,9 +963,9 @@ def make_compare(out_dir, cfgs):
 # ---------------------------------------------------------------------------------------
 def run_variant(cfg, a, spec, passes):
     from PIL import Image
-    out = os.path.join(a.out, cfg["id"])
+    out = a.out
     os.makedirs(out, exist_ok=True)
-    tmp = os.path.join(passes, cfg["id"])
+    tmp = os.path.join(passes, "clay")
     roots, cam = build_base(cfg, a)
     clay = os.path.join(out, "clay.png")
     _, idx_e, _ = render(clay, tmp)
@@ -1083,7 +1071,7 @@ def run_m0(cfg, a, spec, passes):
     Hh = int(round(res * 9 / 16))
     ppu, ppv, _ = P(cam, (C["loc"][0] + 5 * f[0], C["loc"][1] + 5 * f[1], C["loc"][2]))
     camj = dict(
-        version="v4 / " + cfg["id"], location_m=list(C["loc"]), yaw_deg_left=C["yaw"],
+        version=cfg["id"] + " (" + spec["version"] + ")", location_m=list(C["loc"]), yaw_deg_left=C["yaw"],
         forward=[round(f[0], 5), round(f[1], 5), 0.0], right=[round(math.cos(yaw), 5), round(-math.sin(yaw), 5), 0.0],
         look="level (tilt 0, roll 0), heading from -Y turned 25 deg toward -X",
         blender_rotation_euler_deg=[90, 0, round(180 - C["yaw"], 4)], mirrored_scale_x=-1.0,
@@ -1123,39 +1111,34 @@ def save_m0_blend(cfg, a):
 def main():
     argv = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else sys.argv[1:]
     ap = argparse.ArgumentParser()
-    ap.add_argument("--variants", default=",".join(VARIANTS))
     ap.add_argument("--res", type=int, default=2048)
     ap.add_argument("--samples", type=int, default=64)
     ap.add_argument("--sky", type=float, default=7.0)
     ap.add_argument("--exposure", type=float, default=1.0)
     ap.add_argument("--out", default=OUT_DIR)
-    ap.add_argument("--m0", default="", help="variant for the top-level M0 input set (e.g. L2)")
-    ap.add_argument("--m0-only", action="store_true")
+    ap.add_argument("--m0", action="store_true", help="also build the top-level M0 input set")
+    ap.add_argument("--m0-only", action="store_true", help="skip the 2K clay set")
     ap.add_argument("--m0-blend-only", action="store_true", help="only rebuild m0-blockout.blend (no render)")
+    ap.add_argument("--no-blend", action="store_true", help="M0 renders without saving the .blend (save it in a separate run)")
     ap.add_argument("--m0-out", default=HERE)
     ap.add_argument("--m0-res", type=int, default=3840)
     ap.add_argument("--m0-samples", type=int, default=256)
     ap.add_argument("--passes-dir", default="")
-    ap.add_argument("--compare-only", action="store_true")
     a = ap.parse_args(argv)
     spec = json.load(open(SPEC_PATH))
-    cfgs = {v: v4_config(spec, v) for v in VARIANTS}
-    passes = a.passes_dir or tempfile.mkdtemp(prefix="v4-passes-")
-    os.makedirs(a.out, exist_ok=True)
-    if not a.compare_only and not a.m0_only:
-        for v in a.variants.split(","):
-            rep = run_variant(cfgs[v], a, spec, passes)
-            print(v, json.dumps(rep["summary"], ensure_ascii=False), flush=True)
-    if all(os.path.exists(os.path.join(a.out, c, "selfcheck.json")) for c in VARIANTS) and not a.m0_only:
-        print("compare:", make_compare(a.out, cfgs))
+    cfg = v4_config(spec)
+    passes = a.passes_dir or tempfile.mkdtemp(prefix="v41-passes-")
+    if not a.m0_only and not a.m0_blend_only:
+        os.makedirs(a.out, exist_ok=True)
+        rep = run_variant(cfg, a, spec, passes)
+        print(VID, json.dumps(rep["summary"], ensure_ascii=False), flush=True)
     if a.m0 and not a.m0_blend_only:
-        rep = run_m0(cfgs[a.m0], a, spec, passes)
-        print("M0", a.m0, json.dumps(rep["summary"], ensure_ascii=False), flush=True)
-    if a.m0:
-        shutil.rmtree(passes, ignore_errors=True)
-        print("blend:", save_m0_blend(cfgs[a.m0], a), flush=True)
+        rep = run_m0(cfg, a, spec, passes)
+        print("M0", json.dumps(rep["summary"], ensure_ascii=False), flush=True)
     if not a.passes_dir:
         shutil.rmtree(passes, ignore_errors=True)
+    if a.m0 and not a.no_blend:
+        print("blend:", save_m0_blend(cfg, a), flush=True)
 
 
 if __name__ == "__main__":
