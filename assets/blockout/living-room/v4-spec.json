@@ -34,20 +34,22 @@
   "slots": {
     "framed-art": {"kind": "box", "c": [0.20, 0.015, 1.475], "s": [1.55, 0.03, 1.00], "status": "firm"},
     "pendant": {"kind": "cyl", "c": [0.20, 1.72], "r": 0.225, "z0": 2.20, "z1": 2.47, "cord": true, "hang_point": [0.20, 1.72, 3.00], "status": "firm"},
-    "wall-sconce": {"kind": "box", "c": [-2.29, 3.17, 1.47], "s": [0.02, 0.12, 0.12], "status": "firm", "note": "cable now disappears behind the magazine holder"},
+    "wall-sconce": {"kind": "box", "c": [-2.29, 3.17, 1.47], "s": [0.02, 0.12, 0.12], "status": "firm", "note": "Bible 1.4: no cable to the floor. Short straight cable (6-12 cm) from the plate bottom into a plug in the shell socket below.", "socket": {"kind": "box", "c": [-2.30, 3.17, 1.29], "s": [0.01, 0.08, 0.08], "layer": "shell", "finish": "warm white #F4F1EC matte, flush, no visible screws"}},
+    "accent-sconces": {"kind": "box_pair", "c": [[-0.85, 0.06, 1.75], [1.25, 0.06, 1.75]], "s": [0.14, 0.12, 0.18], "status": "firm", "note": "Bible 1.4. Plan-symmetric about the art axis X 0.20 (+-1.05). Hardwired, no cable; electrical points behind the plates (style shell)."},
+    "vase": {"kind": "cyl", "c": [-2.42, 1.35], "r": 0.11, "z0": 0.75, "z1": 1.10, "envelope": {"branches_z1": 1.35, "branches_w": 0.45}, "status": "firm", "note": "Bible 1.4: on the window sill, back casement. Supersedes the table 'approx' rule below."},
+    "bowl": {"kind": "cyl", "c": [0.68, 1.92], "r": 0.12, "z0": 0.38, "z1": 0.47, "status": "firm", "note": "Bible 1.4: replaces table-runner."},
     "rug": {"kind": "box", "c": [0.20, 1.92, 0.005], "s": [2.90, 2.40, 0.01], "status": "firm"},
     "curtains": {"rod": {"wall": "left", "y0": 0.70, "y1": 2.90, "z": 2.82}, "stacks_y": [[0.70, 0.90], [2.70, 2.90]], "depth": 0.10, "status": "firm"},
     "planter": {"kind": "cyl", "c": [-2.00, 0.47], "r": 0.19, "z0": 0.0, "z1": 0.45, "envelope": {"r": 0.40, "z0": 0.45, "z1": 1.65}, "status": "firm", "note": "on the camera ray through the back-left corner"},
-    "wall-decor": {"kind": "box", "c": [-1.18, 0.02, 1.47], "s": [0.55, 0.04, 0.55], "status": "closed", "change": "B: c X -1.30, s 0.45. Moved 12 cm right; envelope = max 55 x 55 (one piece 45-55, centre fixed)."},
+    "wall-decor": {"kind": "box", "c": [-1.18, 0.02, 1.47], "s": [0.55, 0.04, 0.55], "status": "retired (Bible 1.4, awaiting user confirmation)", "change": "B: c X -1.30, s 0.45. Moved 12 cm right; envelope = max 55 x 55 (one piece 45-55, centre fixed)."},
     "floor-lamp": {"kind": "cyl", "c": [1.60, 0.20], "r": 0.19, "z0": 1.20, "z1": 1.50, "stem": true, "base_r": 0.13, "status": "closed", "change": "v4.1: was (1.60, 0.18), shade r 0.21, base r 0.15. A shade of r 0.21 centred 0.18 from the back wall went 3 cm into the wall, and its right edge sat at 0.0800 from the frame edge (C15). Now shade diameter 35-38 (r <= 0.19, 1 cm clear of the wall), base diameter <= 26 (front edge Y 0.33, 1 cm behind the basket). Base fully hidden behind the basket; stem inside the basket silhouette."},
     "basket": {"kind": "cyl", "c": [1.62, 0.52], "r": 0.18, "z0": 0.0, "z1": 0.40, "status": "closed", "change": "v4.1: +2 cm X (was (1.60, 0.52); sofa gap 0.019 < 0.02, C14). Beside the sofa end, off the rug, 1 cm in front of the lamp base. Product diameter 35-38, anchored at the back-left: left edge X 1.44, back edge Y 0.34 (a larger basket grows right and forward; at 38 its front reaches the rug back edge Y 0.72, not onto it). Height 35-42. Check proxy r 0.18 at (1.62, 0.52)."},
     "pouf": {"kind": "cyl", "c": [-0.12, 2.72], "r": 0.225, "z0": 0.0, "z1": 0.36, "check_dashed_z1": 0.37, "status": "closed", "change": "B: (-0.27, 2.47), r 0.25, h 0.37. 26 cm toward the camera and 15 cm right; diameter max 45, height 35-36. Footstool in front-right of the armchair, 17.5 cm inside the rug front edge, 42.5 cm from the table."},
     "magazine-holder": {"kind": "box", "x": [-2.28, -1.98], "y": [3.28, 3.48], "z": [0.0, 0.42], "anchor": [-1.98, 3.28], "status": "closed", "change": "B: X -2.25..-1.89, Y 3.20-3.43 (36x23). Now 30x20x42 max, anchored at the back-right corner (stack side); a smaller product shrinks toward the wall and the camera only."},
     "sofa-cover": {"status": "approx", "rule": "as v3 approx proxy, translated +0.20 X"},
     "cushions": {"status": "approx", "rule": "as v3 approx proxy, translated +0.20 X"},
-    "table-runner": {"status": "approx", "rule": "as v3, translated +0.20 X"},
-    "vase": {"status": "approx", "rule": "as v3, translated +0.20 X"},
-    "candle-holders": {"status": "approx", "rule": "as v3, translated +0.20 X"}
+    "table-runner": {"status": "retired (Bible 1.4, awaiting user confirmation)", "rule": "as v3, translated +0.20 X"},
+    "candle-holders": {"status": "firm", "rule": "Bible 1.4: both holders within plan X 0.42-0.65, Y 1.55-1.75 (frame column u 0.66-0.73); total height with candle <= 27"}
   },
   "expected": {
     "note": "Pinhole values. Unchanged items carry the v4 L2 selfcheck measurement. Changed items (armchair back, basket, floor lamp) = v4 L2 measurement shifted by the pinhole derivative; cylinder edges = measured tangent edges scaled, not centre +- r. Boxes [u0, u1, v0, v1].",
