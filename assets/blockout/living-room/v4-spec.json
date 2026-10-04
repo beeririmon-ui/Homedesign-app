@@ -1,8 +1,9 @@
 {
-  "version": "v4 / 2026-10-04",
+  "version": "v4.1 / 2026-10-04",
   "author": "master-designer",
-  "source": "assets/blockout/living-room/review-designer.md section 8; alts-2026-10-03.json alternative B (user chose B, 2026-10-03)",
-  "status": "B adopted. Shell, camera, fixed furniture and firm slots as B. Small slots closed. Left zone (armchair / window / planter) is NOT closed: render three clay variants L0/L1/L2 (0 credits) and stop; master-designer picks; L2 needs user approval. No credits before that decision.",
+  "source": "assets/blockout/living-room/review-designer.md section 8 (8.7 = this version); alts-2026-10-03.json alternative B (user chose B, 2026-10-03); v4/L2/selfcheck.json",
+  "status": "B adopted. Left zone closed: L2 (user approval 2026-10-04, verbatim 'מאושר': window sill 0.75, armchair at (-1.27, 2.82), armchair back lowered instead of raising the sill). v4.1 = L2 + lower armchair back + floor-lamp/basket fixes for C14/C15. Render the single v4.1 clay (0 credits); master-designer checks it before any credit.",
+  "history": "v4 (same date) rendered three left-zone clay variants: L0 = B as presented (chair (-1.03, 2.82), posts 0.50, sill 0.45; failed C4 and C5), L1 = chair (-1.27, 2.82), posts 0.455, sill 0.45 (failed C5 at the mullion, 0.003), L2 = L1 + sill 0.75 (failed C5 on the sill: back-cushion top 0.011 below the sill's lower front edge). L0/L1 are no longer active; outputs stay in v4/L0, v4/L1, v4/L2.",
   "conventions": {
     "axes": "As alts-2026-10-03.json: metres, origin on the floor at the back wall on the v3 sofa axis, X right as seen by the main camera, Y from back wall toward camera, Z up. Rig mirrored (scale.x = -1).",
     "yaw_deg_left": "Camera heading from -Y, positive = turned toward -X. f = (-sin yaw, -cos yaw, 0), r = (cos yaw, -sin yaw, 0).",
@@ -15,7 +16,7 @@
   "room": {"x_left": -2.30, "x_right": 2.50, "y_back": 0.0, "y_front": 6.20, "h": 3.00},
   "shell": {
     "door": {"wall": "front", "x0": 0.95, "x1": 2.15, "h": 2.40, "type": "double door, open, out of frame"},
-    "windows": [{"wall": "left", "y0": 0.90, "y1": 2.70, "z0": 0.45, "z1": 2.70, "mullion_y": 1.80, "mullion_w": 0.06, "frame_w": 0.06, "frame_plane_x": -2.65, "casements": 2, "reveal_depth": 0.35, "sill_proud": 0.04, "view": "layered winter garden, trees at 10-30 m, pale, soft", "variant_L2": {"z0": 0.75, "note": "only in clay variant L2; needs user approval (skeleton sill 45)"}}],
+    "windows": [{"wall": "left", "y0": 0.90, "y1": 2.70, "z0": 0.75, "z1": 2.70, "mullion_y": 1.80, "mullion_w": 0.06, "frame_w": 0.06, "frame_plane_x": -2.65, "casements": 2, "reveal_depth": 0.35, "sill_proud": 0.04, "sill_t": 0.025, "glass_bottom_z": 0.83, "view": "layered winter garden, trees at 10-30 m, pale, soft", "note": "Sill 0.75 (L2, user approval 2026-10-04; was 0.45). Opening 1.80 x 1.95."}],
     "skirting_h": 0.15, "cornice": {"h": 0.10, "profile": "single simple step, wall colour"},
     "floor_planks": {"w": 0.25, "len": [3.0, 4.0], "dir": "Y"},
     "walls": "mineral matte paint with very subtle movement, <=5 GU"
@@ -25,11 +26,10 @@
   "fixed_furniture": {
     "sofa": {"x0": -0.90, "x1": 1.30, "y0": 0.03, "y1": 0.95},
     "table": {"cx": 0.20, "cy": 1.72},
-    "armchair": {"variants": {
-      "L0": {"cx": -1.03, "cy": 2.82, "yaw_deg": -25.0, "arm_front_inset": 0.0375, "back_posts": "as v3 (top z ~0.745, 0.5 m long)", "note": "B as presented. Reference only: fails planter and mullion checks."},
-      "L1": {"cx": -1.27, "cy": 2.82, "yaw_deg": -25.0, "arm_front_inset": 0.0375, "back_posts": "length 0.455 (top ~4 cm below the back cushion top)", "note": "24 cm toward the window wall. Fixes armchair-planter (gap 0.022). Front legs ~14 cm on the rug (front-left 14.1 from the front edge, front-right 13.9 from the left edge), as in B. Mullion and front stack contacts remain (see expected_L1)."},
-      "L2": {"cx": -1.27, "cy": 2.82, "yaw_deg": -25.0, "arm_front_inset": 0.0375, "back_posts": "length 0.455", "window_sill_z": 0.75, "note": "L1 + window sill 0.75 (window 1.95 tall, head 2.70). The chair back stays fully below the glass (>= 0.028), so no mullion/jamb contact. Changes an approved skeleton value: user approval required."}
-    }, "default_for_docs": "L0 position is written in the binding docs as 'pending v4 left-zone decision'"}
+    "armchair": {"cx": -1.27, "cy": 2.82, "yaw_deg": -25.0, "arm_front_inset": 0.0375, "w": 0.72, "d": 0.78, "seat_h": 0.40, "h_nominal": 0.70,
+      "back_cushion": {"len": 0.345, "th": 0.13, "tilt_deg": 15.0, "pivot_local": [-0.22, 0.34], "bevel": 0.035, "top_z_sharp": 0.690, "was": "len 0.41, top_z_sharp 0.753 (v4 L2)"},
+      "back_posts": {"len": 0.39, "top_z": 0.642, "was": "0.455 (top 0.705)", "rule": "post top ~4.8 cm below the back-cushion top"},
+      "note": "Fixed furniture we design (not a sold product). v4.1: back cushion 6.5 cm shorter (top 6.3 cm lower), posts shortened to match; position, footprint, seat, arms and legs as v4 L2. build_v4.py hard-codes the back cushion len 0.41: make it a parameter from this block. Front legs ~14 cm on the rug, as in B."}
   },
   "slots": {
     "framed-art": {"kind": "box", "c": [0.20, 0.015, 1.475], "s": [1.55, 0.03, 1.00], "status": "firm"},
@@ -39,8 +39,8 @@
     "curtains": {"rod": {"wall": "left", "y0": 0.70, "y1": 2.90, "z": 2.82}, "stacks_y": [[0.70, 0.90], [2.70, 2.90]], "depth": 0.10, "status": "firm"},
     "planter": {"kind": "cyl", "c": [-2.00, 0.47], "r": 0.19, "z0": 0.0, "z1": 0.45, "envelope": {"r": 0.40, "z0": 0.45, "z1": 1.65}, "status": "firm", "note": "on the camera ray through the back-left corner"},
     "wall-decor": {"kind": "box", "c": [-1.18, 0.02, 1.47], "s": [0.55, 0.04, 0.55], "status": "closed", "change": "B: c X -1.30, s 0.45. Moved 12 cm right; envelope = max 55 x 55 (one piece 45-55, centre fixed)."},
-    "floor-lamp": {"kind": "cyl", "c": [1.60, 0.18], "r": 0.21, "z0": 1.20, "z1": 1.50, "stem": true, "base_r": 0.15, "status": "closed", "change": "B: (1.45, 0.28). Base now fully hidden behind the basket; stem centred on the basket."},
-    "basket": {"kind": "cyl", "c": [1.60, 0.52], "r": 0.18, "z0": 0.0, "z1": 0.40, "status": "closed", "change": "B: (1.48, 1.08), whose left edge sat on the sofa edge (0.8398 vs 0.8397). Now beside the sofa end, off the rug, 1 cm in front of the lamp base. Product diameter 35-38, anchored at the back-left: left edge X 1.42, back edge Y 0.34 (a larger basket grows right and forward; at 38 its front reaches the rug back edge Y 0.72, not onto it). Height 35-42. Check proxy r 0.18 at (1.60, 0.52)."},
+    "floor-lamp": {"kind": "cyl", "c": [1.60, 0.20], "r": 0.19, "z0": 1.20, "z1": 1.50, "stem": true, "base_r": 0.13, "status": "closed", "change": "v4.1: was (1.60, 0.18), shade r 0.21, base r 0.15. A shade of r 0.21 centred 0.18 from the back wall went 3 cm into the wall, and its right edge sat at 0.0800 from the frame edge (C15). Now shade diameter 35-38 (r <= 0.19, 1 cm clear of the wall), base diameter <= 26 (front edge Y 0.33, 1 cm behind the basket). Base fully hidden behind the basket; stem inside the basket silhouette."},
+    "basket": {"kind": "cyl", "c": [1.62, 0.52], "r": 0.18, "z0": 0.0, "z1": 0.40, "status": "closed", "change": "v4.1: +2 cm X (was (1.60, 0.52); sofa gap 0.019 < 0.02, C14). Beside the sofa end, off the rug, 1 cm in front of the lamp base. Product diameter 35-38, anchored at the back-left: left edge X 1.44, back edge Y 0.34 (a larger basket grows right and forward; at 38 its front reaches the rug back edge Y 0.72, not onto it). Height 35-42. Check proxy r 0.18 at (1.62, 0.52)."},
     "pouf": {"kind": "cyl", "c": [-0.12, 2.72], "r": 0.225, "z0": 0.0, "z1": 0.36, "check_dashed_z1": 0.37, "status": "closed", "change": "B: (-0.27, 2.47), r 0.25, h 0.37. 26 cm toward the camera and 15 cm right; diameter max 45, height 35-36. Footstool in front-right of the armchair, 17.5 cm inside the rug front edge, 42.5 cm from the table."},
     "magazine-holder": {"kind": "box", "x": [-2.28, -1.98], "y": [3.28, 3.48], "z": [0.0, 0.42], "anchor": [-1.98, 3.28], "status": "closed", "change": "B: X -2.25..-1.89, Y 3.20-3.43 (36x23). Now 30x20x42 max, anchored at the back-right corner (stack side); a smaller product shrinks toward the wall and the camera only."},
     "sofa-cover": {"status": "approx", "rule": "as v3 approx proxy, translated +0.20 X"},
@@ -50,13 +50,14 @@
     "candle-holders": {"status": "approx", "rule": "as v3, translated +0.20 X"}
   },
   "expected": {
-    "note": "Pinhole values. Unchanged items carry the B selfcheck measurement (not the alts estimate). Boxes [u0, u1, v0, v1].",
+    "note": "Pinhole values. Unchanged items carry the v4 L2 selfcheck measurement. Changed items (armchair back, basket, floor lamp) = v4 L2 measurement shifted by the pinhole derivative; cylinder edges = measured tangent edges scaled, not centre +- r. Boxes [u0, u1, v0, v1].",
     "back_left_corner_u": 0.431,
     "left_wall_visible_to_y": 3.738,
     "ceiling_band_at_art_y": 0.070,
     "window_opening_wall_face_x": [0.191, 0.374],
     "window_mullion_frame_plane_x": [0.259, 0.266],
     "window_head_y": [0.025, 0.149],
+    "window_sill_wall_face_y": [0.553, 0.591],
     "sofa": [0.521, 0.840, 0.548, 0.799],
     "coffee-table_x": [0.512, 0.762],
     "framed-art": [0.598, 0.792, 0.281, 0.512],
@@ -66,41 +67,41 @@
     "wall-decor": [0.508, 0.563, 0.353, 0.461],
     "pouf": [0.463, 0.558, 0.756, 0.947],
     "magazine-holder": [0.060, 0.137, 0.720, 0.899],
-    "basket": [0.862, 0.917, 0.667, 0.795],
-    "floor-lamp_stem_u": 0.885,
-    "floor-lamp_shade": [0.855, 0.915, 0.382, 0.460],
-    "armchair_L0": [0.220, 0.422, 0.601, 0.920],
-    "armchair_L1": [0.184, 0.388, 0.598, 0.915],
-    "armchair_L1_corners_u": {"near_post_top": [0.184, 0.192], "back_cushion_near_back_top": 0.208, "far_post_top": [0.244, 0.251], "back_cushion_far_back_top": 0.256, "back_cushion_far_front_top": 0.278, "front_leg_and_arm_tip_far": 0.388}
+    "basket": [0.862, 0.924, 0.667, 0.797],
+    "floor-lamp_stem_u": 0.886,
+    "floor-lamp_base_u": [0.865, 0.907],
+    "floor-lamp_shade": [0.856, 0.917, 0.381, 0.460],
+    "armchair": [0.190, 0.387, 0.622, 0.906],
+    "armchair_corners_u": {"near_post_top": [0.190, 0.202], "back_cushion_near_back_top": 0.211, "far_post_top": [0.246, 0.256], "back_cushion_far_back_top": 0.259, "back_cushion_far_front_top": 0.281, "front_leg_and_arm_tip_far": 0.387},
+    "armchair_heights_m": {"back_cushion_top_z_sharp": 0.690, "post_top_z": 0.642}
   },
   "checks": [
     {"id": "C1", "check": "yaw sign: back-left corner at u 0.431 (0.61 = flipped)", "expected": 0.431, "blocking": true},
     {"id": "C2", "check": "principal point (u0, v0) = (0.52, 0.46) from the optical axis, tol 0.003", "blocking": true},
     {"id": "C3", "check": "verticals plumb (tilt 0, roll 0)", "blocking": true},
-    {"id": "C4", "check": "armchair-planter: gap >= 0.02 between the chair silhouette (far front leg / arm tip) and the pot", "L0": -0.013, "L1": 0.022, "L2": 0.022, "blocking": true},
-    {"id": "C5", "check": "armchair vs window lines (mullion at frame plane, visible jamb lines, glass bottom): no contour corner or near-vertical chair edge within 0.02 (tangent_rule)", "L0": "fail (mullion between near back-top 0.244 and far post 0.275: 0.015 / 0.009)", "L1": "fail (far back-top corner 0.256 vs mullion 0.259: 0.003)", "L2": "pass by construction (chair top >= 0.028 below the glass bottom)", "blocking": true},
-    {"id": "C6", "check": "armchair vs front curtain stack edge (u ~0.203) >= 0.02 or decisive crossing", "L0": 0.017, "L1": "near post 0.184-0.192 straddles the edge: fail", "L2": "as L1", "blocking": false, "note": "report; soft fabric edge, judged by eye"},
-    {"id": "C7", "check": "armchair >= 0.05 from the bottom edge", "L0": 0.080, "L1": 0.085, "blocking": true},
+    {"id": "C4", "check": "armchair-planter: gap >= 0.02 between the chair silhouette (far front leg / arm tip) and the pot", "expected": 0.022, "measured_v4_L2": 0.0229, "blocking": true},
+    {"id": "C5", "check": "armchair vs window lines (mullion at frame plane, glass edges, jambs, glass bottom, and the three sill edges: wall-face top z 0.75, proud front top z 0.75, proud front bottom z 0.725): no contour corner or near-vertical chair edge within 0.02 (tangent_rule); for the horizontal lines, max rise of the chair top above the line <= -0.02", "expected": {"sill_front_bottom": -0.022, "sill_front_top": -0.026, "sill_wall_face_top": -0.026, "glass_bottom": -0.043}, "measured_v4_L2": {"sill_front_bottom": -0.0113, "sill_front_top": -0.0149, "sill_wall_face_top": -0.0156, "glass_bottom": -0.032}, "how_computed": "Critical point = far back-cushion top near its front corner (u ~0.27, depth d 3.83). Lowering the top by dz moves it down by 1.1852 dz / d in v = 0.174 dz in frame widths (v x 9/16). dz 0.063 -> +0.011. Pinhole check of the sharp corners: far front-top (u 0.281, v 0.618) vs sill front bottom edge v 0.580 at that u: 0.021 before the bevel (bevel adds ~0.0014). Far post top (z 0.642, u 0.246-0.256) 0.025 below the sill. Vertical window lines end at the sill, so with the whole chair top below the sill no vertical line meets the chair.", "blocking": true},
+    {"id": "C6", "check": "armchair vs front curtain stack edge (u ~0.201) >= 0.02 or decisive crossing", "expected": "near post top 0.190-0.202 straddles the edge (inclined post = crossing; top corner ~0.0004 from the edge)", "blocking": false, "note": "report; soft fabric edge, judged by eye. The curtain product sets the real stack edge."},
+    {"id": "C7", "check": "armchair >= 0.05 from the bottom edge", "expected": 0.094, "blocking": true},
     {"id": "C8", "check": "pendant in the top third, >= 0.05 above the art; hanging point out of frame", "measured_B": {"gap": 0.107, "hang_v": -0.085}, "blocking": true},
     {"id": "C9", "check": "art bottom vs sofa back top >= 0.03", "measured_B": 0.039, "blocking": true},
     {"id": "C10", "check": "magazine-holder: right edge vs front curtain stack left edge (0.163) >= 0.02; left margin >= 0.05; bottom margin >= 0.05", "expected": {"stack_gap": 0.026, "left": 0.060, "bottom": 0.101}, "blocking": true},
     {"id": "C11", "check": "pouf top (far rim) >= 0.02 below the lower edge of the table-top slab in the pouf's columns (max 0.730)", "expected": 0.026, "blocking": true},
-    {"id": "C12", "check": "pouf: bottom margin >= 0.05; gap to armchair >= 0.02 (L0 0.040, L1 0.075); fully on the rug >= 15 cm from its edges", "expected_bottom": 0.053, "blocking": true},
+    {"id": "C12", "check": "pouf: bottom margin >= 0.05; gap to armchair >= 0.02; fully on the rug >= 15 cm from its edges", "expected": {"bottom": 0.053, "armchair": 0.075, "rug_edge_m": 0.175}, "blocking": true},
     {"id": "C13", "check": "wall-decor vs tree crown envelope (r 0.40, z 0.45-1.65) >= 0.03 and vs art >= 0.03", "expected": {"crown": 0.031, "art": 0.035}, "blocking": true},
-    {"id": "C14", "check": "basket vs sofa right edge >= 0.02; lamp stem >= 0.02 inside the basket silhouette; lamp base fully hidden behind the basket", "expected": {"sofa_gap": 0.022, "stem_to_basket_left": 0.023, "stem_to_basket_right": 0.031}, "blocking": true},
-    {"id": "C15", "check": "floor-lamp shade vs right edge >= 0.08", "expected": 0.085, "blocking": true},
+    {"id": "C14", "check": "basket vs sofa right edge >= 0.02; lamp stem >= 0.02 inside the basket silhouette; lamp base fully hidden behind the basket", "expected": {"sofa_gap": 0.022, "stem_to_basket_left": 0.024, "stem_to_basket_right": 0.039, "base_inside_basket_margin_left": 0.003}, "measured_v4_L2": {"sofa_gap": 0.019}, "how_computed": "Edge-of-silhouette: v4 L2 measured tangent edges (basket 0.8587-0.9210) moved by du/dX = 0.172 per m at the basket (+0.02 m -> +0.0034). Stem at (1.60, 0.20): u 0.8857.", "blocking": true},
+    {"id": "C15", "check": "floor-lamp shade vs right edge >= 0.08", "expected": 0.083, "measured_v4_L2": 0.0800, "how_computed": "v4 L2 measured shade half-widths (0.0331 left, 0.0346 right of the stem at r 0.21) scaled by r and depth: x 0.908 -> right edge 0.917.", "blocking": true},
     {"id": "C16", "check": "window head >= 0.010 below the top edge", "measured_B": 0.025, "blocking": true},
     {"id": "C17", "check": "E0 path clears the jambs >= 0.15 m", "measured_B": 0.478, "blocking": true},
     {"id": "C18", "check": "planter vs back curtain stack edge", "measured_B": 0.013, "blocking": false, "note": "report; known, soft edge"},
-    {"id": "C19", "check": "basket bottom vs rug back edge line", "expected": 0.0015, "blocking": false, "note": "report; both are floor-contact lines, basket stands 2 cm behind the rug edge. Judge by eye; if it reads as a kiss, basket Y -0.04 and lamp Y unchanged is not possible (lamp base), so report to master-designer"},
-    {"id": "C20", "check": "list every pair of silhouettes closer than 0.02 (as the B selfcheck), per left-zone variant", "blocking": false}
+    {"id": "C19", "check": "basket bottom vs rug back edge line", "expected": "lines cross, |dv| <= ~0.007 (v4 L2: min 0.0001, dv -0.0021..+0.0074)", "blocking": false, "note": "report; accepted by design (master-designer, review-designer 8.7). Both are floor-contact lines; the basket stands 2 cm behind the rug's back-right corner (X 1.65, Y 0.72), whose projection (u 0.901, v 0.795) falls on the basket foot. Here 1 m of depth is only ~0.077 in v, so a clear 0.02 gap needs ~0.5 m of movement (cm moves change dv by <= 0.003; basket +2 cm X changes it by < 0.001). The basket cannot move back (lamp base) and the rug is firm. Render rule instead: the rug's pile edge passes in front of the basket foot, with the basket's own soft contact shadow on the parquet between them; never let the rug edge look like it runs under or through the basket."},
+    {"id": "C20", "check": "list every pair of silhouettes closer than 0.02 (as the v4 selfcheck)", "expected": "planter|curtains 0.013 only (known, C18)", "blocking": false}
   ],
-  "mobile_crop": {"aspect": "3:5", "width": 0.3375, "u": [0.567, 0.9045], "center_u": 0.7358, "height": "full", "contains": "art, pendant, sofa (left end cut decisively ~14.5%), table right part, vase group, floor-lamp stem and most of the shade (shade cut ~17%), basket (cut ~21%)", "edges": {"art_left_margin": 0.031, "lamp_stem_to_right_edge": 0.019, "wall-decor_out_by": 0.004}, "note": "two values just under 0.02 (stem 0.019, wall-decor 0.004 outside the crop) - QA checks by eye on the M0 clay; alternatives were worse (see review-designer 8.5). The window/armchair zone and the holder are reached by horizontal swipe, as the skeleton requires."},
+  "mobile_crop": {"aspect": "3:5", "width": 0.3375, "u": [0.567, 0.9045], "center_u": 0.7358, "height": "full", "contains": "art, pendant, sofa (left end cut decisively ~14.5%), table right part, vase group, floor-lamp stem and most of the shade (shade cut ~20%), basket (cut ~31%)", "edges": {"art_left_margin": 0.031, "lamp_stem_to_right_edge": 0.0188, "wall-decor_out_by": 0.003}, "note": "two values just under 0.02 (stem 0.0188, wall-decor 0.003 outside the crop) - QA checks by eye on the M0 clay; alternatives were worse (see review-designer 8.5). The window/armchair zone and the holder are reached by horizontal swipe, as the skeleton requires."},
   "deliverables": {
-    "dir": "assets/blockout/living-room/v4/",
-    "per_variant": ["L0/, L1/, L2/: m0-clay.png 2048x1152 (64 samples), m0-clay-overlay.png (all 16 slots, closed ones solid), plan.png, selfcheck.json with every check above"],
-    "compare": "v4/left-zone-compare.jpg: L0 | L1 | L2 crops of u 0.00-0.55 at full height, plus the full frame of each below",
-    "rules": ["Never overwrite v3 or alts outputs.", "Do not move anything yourself; report.", "No 4K and no credits until master-designer picks the left-zone variant (and the user approves if it is L2)."]
+    "dir": "assets/blockout/living-room/v4.1/",
+    "files": ["clay.png and clay-proxies.png 2048x1152 (64 samples), overlay.png (all 16 slots, closed ones solid), plan.png, selfcheck.json with every check above", "M0 set (as README 'M0 set', 3840x2160, 256 samples) regenerated from v4.1 into the folder root; move the current root M0 set (v4 L2, C5 failing) to v4/L2/m0-set/ first"],
+    "rules": ["Never overwrite v3, alts or v4 outputs.", "Do not move anything yourself; report.", "No credits until master-designer has checked the v4.1 clay (all blocking checks pass)."]
   },
-  "lighting": "Sky only, through the window of the variant. North-facing, diffuse, no sun."
+  "lighting": "Sky only, through the window (sill 0.75). North-facing, diffuse, no sun."
 }
