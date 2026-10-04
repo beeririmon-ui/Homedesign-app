@@ -565,30 +565,39 @@ def self_check(cfg, cam, roots, slots, idx, rgb, spec):
             worst = (d, nm)
     # glass bottom / sill vs chair top (vertical relation)
     ucols = np.linspace(max(fb["armchair"][0], min(lines[k][0] for k in lines)), min(fb["armchair"][1], P(cam, (xl, a0, 1))[0]), 200)
-    ov_gb, ov_sill = [], []
-    for u_ in ucols:
-        t = union_top(chull_parts, u_)
-        if t is None:
-            continue
-        ov_gb.append((gb_vq(u_) - t, u_))
-        ov_sill.append((gb_vq(u_, xl, z0) - t, u_))
-    ogb = max(ov_gb) if ov_gb else (None, None)
-    osl = max(ov_sill) if ov_sill else (None, None)
+    sp = Wn["sill_proud"]
+    hlines = {"glass bottom (top of the bottom sash rail, z %.3f)" % gb_z: (xs, gb_z),
+              "sill top edge at the wall face (z %.3f)" % z0: (xl, z0),
+              "sill front top edge, proud %.2f (z %.3f)" % (sp, z0): (xl + sp, z0),
+              "sill front bottom edge (z %.3f)" % (z0 - 0.025): (xl + sp, z0 - 0.025)}
+    hres = {}
+    for nm, (hx, hz) in hlines.items():
+        ov = []
+        for u_ in ucols:
+            t = union_top(chull_parts, u_)
+            if t is None:
+                continue
+            ov.append((gb_vq(u_, hx, hz) - t, u_))
+        o = max(ov) if ov else (None, None)
+        hres[nm] = dict(max_rise_above_line=r4(o[0]), at_u=r4(o[1]),
+                        state=("none" if o[0] is None else "crossing (decisive)" if o[0] >= TANG else
+                               "clear below" if o[0] <= -TANG else "TANGENT"))
+    ogb = (list(hres.values())[0]["max_rise_above_line"], None)
 
     def vert_ok(o):
         return o is None or o >= TANG or o <= -TANG
-    ok5 = bool((worst is None or worst[0] >= TANG) and vert_ok(ogb[0]))
+    h_tan = [k for k, v in hres.items() if v["state"] == "TANGENT"]
+    ok5 = bool((worst is None or worst[0] >= TANG) and not h_tan)
     chk("C5", "armchair vs window lines (mullion at frame plane, glass edges, jambs, glass bottom): no contour corner "
               "or near-vertical chair edge within 0.02", ok5,
         dict(closest_line=worst and worst[1], closest_dist=worst and r4(worst[0]), lines=c5,
-             chair_top_vs_glass_bottom=dict(max_rise_above_line=r4(ogb[0]), at_u=r4(ogb[1]),
-                                            line="top of the bottom sash rail, z %.2f" % gb_z),
-             chair_top_vs_sill_wall_face=dict(max_rise_above_line=r4(osl[0]), at_u=r4(osl[1]), line="sill, z %.2f" % z0),
+             chair_top_vs_horizontal_lines=hres, horizontal_tangents=h_tan,
              contour_corners=len(corners), near_vertical_edges=len(nvedges)),
-        ">= 0.02 from every visible line; glass bottom: rise >= 0.02 (decisive) or <= -0.02 (clear)", True,
+        ">= 0.02 from every visible vertical line; glass bottom and sill edges: rise >= 0.02 (decisive) or <= -0.02 (clear)", True,
         "contour = union of the projected convex hulls of the chair parts (evaluated meshes, bevel included); "
         "a corner/edge counts only inside the line's visible span (head to glass bottom / sill). "
-        "max_rise_above_line < 0 = the chair top stays below the line by that much",
+        "max_rise_above_line < 0 = the chair top stays below the line by that much. v4 adds the sill edges "
+        "(tangent_rule / M0-07 name the sill); the spec's C5 expectation covered the glass bottom only",
         expected=cfg["checks"][4].get(vid))
 
     # C6 armchair vs front curtain stack edge
