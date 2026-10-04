@@ -1,6 +1,6 @@
 # בריף רינדור: תצוגת סטיילינג, סלון נורדי (B, ‏v4.1)
 
-> master-designer, 2026-10-04. גרסה 1.0. ל-render-agent.
+> master-designer, 2026-10-04. גרסה 1.0. ל-render-agent. **גרסה 2.0 (אותו יום): סעיף 10 "סבב 2" מחליף את סעיפים 1–8 לסבב הבא**; סעיפים 1–9 נשארים כתיעוד של סבב 1.
 > **מה זה:** תצוגה מקדימה של התצוגה הראשית עם מוצרים זמניים, כדי שהמשתמש ישפוט כמה החדר מעוצב ומושך (בעקבות ההערה "החדר מרגיש אנמי וריק... הספה נראית פשוטה ואנמית").
 > **מה זה לא:** לא אישור 2, לא בחירת וריאציות, לא שכבה סופית ולא נכס לאתר. התוצר לא עובר QA לשכבות ולא נכנס לאתר. אף כרטיס לא מסומן `selected`.
 > מקורות: `docs/design-bible/nordic.md` 1.3.1, `assets/blockout/living-room/v4-spec.json` v4.1 (+ `v4.1/overlay.png`), `data/slots/living-room.json`, `briefs/m0-prompt.nordic.md` 2.1, `data/selections/living-room.nordic.ranking.md`, הכרטיסים ב-`data/products/`.

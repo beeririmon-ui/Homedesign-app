@@ -1,5 +1,5 @@
 {
-  "version": "v4.1 / 2026-10-04",
+  "version": "v4.1 / 2026-10-04 (slot amendments for Design Bible 1.4: vase on the sill, bowl, accent-sconces, sconce socket; wall-decor and table-runner retired)",
   "author": "master-designer",
   "source": "assets/blockout/living-room/review-designer.md section 8 (8.7 = this version); alts-2026-10-03.json alternative B (user chose B, 2026-10-03); v4/L2/selfcheck.json",
   "status": "B adopted. Left zone closed: L2 (user approval 2026-10-04, verbatim 'מאושר': window sill 0.75, armchair at (-1.27, 2.82), armchair back lowered instead of raising the sill). v4.1 = L2 + lower armchair back + floor-lamp/basket fixes for C14/C15. Render the single v4.1 clay (0 credits); master-designer checks it before any credit.",
@@ -36,7 +36,7 @@
     "pendant": {"kind": "cyl", "c": [0.20, 1.72], "r": 0.225, "z0": 2.20, "z1": 2.47, "cord": true, "hang_point": [0.20, 1.72, 3.00], "status": "firm"},
     "wall-sconce": {"kind": "box", "c": [-2.29, 3.17, 1.47], "s": [0.02, 0.12, 0.12], "status": "firm", "note": "Bible 1.4: no cable to the floor. Short straight cable (6-12 cm) from the plate bottom into a plug in the shell socket below.", "socket": {"kind": "box", "c": [-2.30, 3.17, 1.29], "s": [0.01, 0.08, 0.08], "layer": "shell", "finish": "warm white #F4F1EC matte, flush, no visible screws"}},
     "accent-sconces": {"kind": "box_pair", "c": [[-0.85, 0.06, 1.75], [1.25, 0.06, 1.75]], "s": [0.14, 0.12, 0.18], "status": "firm", "note": "Bible 1.4. Plan-symmetric about the art axis X 0.20 (+-1.05). Hardwired, no cable; electrical points behind the plates (style shell)."},
-    "vase": {"kind": "cyl", "c": [-2.42, 1.35], "r": 0.11, "z0": 0.75, "z1": 1.10, "envelope": {"branches_z1": 1.35, "branches_w": 0.45}, "status": "firm", "note": "Bible 1.4: on the window sill, back casement. Supersedes the table 'approx' rule below."},
+    "vase": {"kind": "cyl", "c": [-2.42, 1.35], "r": 0.11, "z0": 0.75, "z1": 1.10, "envelope": {"branches_z1": 1.35, "branches_w": 0.45}, "status": "firm", "note": "Bible 1.4: on the window sill, back casement. Was on the coffee table (approx proxy, as v3)."},
     "bowl": {"kind": "cyl", "c": [0.68, 1.92], "r": 0.12, "z0": 0.38, "z1": 0.47, "status": "firm", "note": "Bible 1.4: replaces table-runner."},
     "rug": {"kind": "box", "c": [0.20, 1.92, 0.005], "s": [2.90, 2.40, 0.01], "status": "firm"},
     "curtains": {"rod": {"wall": "left", "y0": 0.70, "y1": 2.90, "z": 2.82}, "stacks_y": [[0.70, 0.90], [2.70, 2.90]], "depth": 0.10, "status": "firm"},
@@ -65,6 +65,11 @@
     "framed-art": [0.598, 0.792, 0.281, 0.512],
     "pendant": [0.595, 0.673, 0.052, 0.174],
     "wall-sconce_uv": [0.118, 0.372],
+    "wall-sconce_socket_uv": [0.117, 0.431],
+    "accent-sconces": {"left": [0.562, 0.578, 0.332, 0.368], "right": [0.822, 0.840, 0.309, 0.352], "note": "envelope 14 x 18; left 0.020 from the art box, right 0.030; right vs floor-lamp shade 0.016 in u and 0.029 in v (diagonal ~0.023)"},
+    "vase_sill": {"centre_u": 0.327, "body_32cm": [0.317, 0.337, 0.489, 0.560], "branches_u": [0.286, 0.352], "branches_top_v": 0.427},
+    "table_tall_items_u": [0.66, 0.73],
+    "cushion_columns_u": {"left_set_max": 0.645, "lumbar_min": 0.75},
     "planter_pot_x": [0.410, 0.452],
     "wall-decor": [0.508, 0.563, 0.353, 0.461],
     "pouf": [0.463, 0.558, 0.756, 0.947],
@@ -97,7 +102,9 @@
     {"id": "C17", "check": "E0 path clears the jambs >= 0.15 m", "measured_B": 0.478, "blocking": true},
     {"id": "C18", "check": "planter vs back curtain stack edge", "measured_B": 0.013, "blocking": false, "note": "report; known, soft edge"},
     {"id": "C19", "check": "basket bottom vs rug back edge line", "expected": "lines cross, |dv| <= ~0.007 (v4 L2: min 0.0001, dv -0.0021..+0.0074)", "blocking": false, "note": "report; accepted by design (master-designer, review-designer 8.7). Both are floor-contact lines; the basket stands 2 cm behind the rug's back-right corner (X 1.65, Y 0.72), whose projection (u 0.901, v 0.795) falls on the basket foot. Here 1 m of depth is only ~0.077 in v, so a clear 0.02 gap needs ~0.5 m of movement (cm moves change dv by <= 0.003; basket +2 cm X changes it by < 0.001). The basket cannot move back (lamp base) and the rug is firm. Render rule instead: the rug's pile edge passes in front of the basket foot, with the basket's own soft contact shadow on the parquet between them; never let the rug edge look like it runs under or through the basket."},
-    {"id": "C20", "check": "list every pair of silhouettes closer than 0.02 (as the v4 selfcheck)", "expected": "planter|curtains 0.013 only (known, C18)", "blocking": false}
+    {"id": "C20", "check": "list every pair of silhouettes closer than 0.02 (as the v4 selfcheck)", "expected": "planter|curtains 0.013 only (known, C18)", "blocking": false},
+    {"id": "C21", "check": "Bible 1.4: no coffee-table item overlaps any cushion or throw silhouette in M0; items taller than 18 cm above the top only in u 0.66-0.73", "blocking": true},
+    {"id": "C22", "check": "Bible 1.4: accent-sconces >= 0.02 from the art and from the floor-lamp shade (diagonal); vase body and branches >= 0.02 from the mullion (0.259-0.266) and from the tree crown / back curtain stack (from u 0.376); vase foot on the sill, nothing else on the sill", "blocking": true}
   ],
   "mobile_crop": {"aspect": "3:5", "width": 0.3375, "u": [0.567, 0.9045], "center_u": 0.7358, "height": "full", "contains": "art, pendant, sofa (left end cut decisively ~14.5%), table right part, vase group, floor-lamp stem and most of the shade (shade cut ~20%), basket (cut ~31%)", "edges": {"art_left_margin": 0.031, "lamp_stem_to_right_edge": 0.0188, "wall-decor_out_by": 0.003}, "note": "two values just under 0.02 (stem 0.0188, wall-decor 0.003 outside the crop) - QA checks by eye on the M0 clay; alternatives were worse (see review-designer 8.5). The window/armchair zone and the holder are reached by horizontal swipe, as the skeleton requires."},
   "deliverables": {
