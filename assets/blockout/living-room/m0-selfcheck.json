@@ -1,7 +1,7 @@
 {
-  "variant": "L2",
-  "name": "v4 L2: L1 + window sill 0.75 (window 1.95 tall, head 2.70). The chair back stays fully below the glass (>= 0.028), so no mullion/jamb contact. Changes an approved skeleton value: user approval required.",
-  "spec": "v4-spec.json (v4 / 2026-10-04)",
+  "variant": "v4.1",
+  "name": "v4.1: Fixed furniture we design (not a sold product). v4.1: back cushion 6.5 cm shorter (top 6.3 cm lower), posts shortened to match; position, footprint, seat, arms and legs as v4 L2. build_v4.py hard-codes the back cushion len 0.41: make it a parameter from this block. Front legs ~14 cm on the rug, as in B.",
+  "spec": "v4-spec.json (v4.1 / 2026-10-04)",
   "tolerance": 0.01,
   "method": "Geometry: pinhole projection of the evaluated Blender meshes through the render camera (bpy world_to_camera_view; bevels included). Pixels: object-index pass of the render (3840x2160, 1 px = 0.00026 frame widths). Distances between shapes are in frame widths, with v scaled by 9/16 (isotropic). Positive gap = apart.",
   "camera": {
@@ -34,6 +34,8 @@
     "frame_w": 0.06,
     "reveal": 0.35,
     "sill_proud": 0.04,
+    "sill_t": 0.025,
+    "glass_bottom_z": 0.83,
     "lining": "paint",
     "frame_plane_x": -2.65
   },
@@ -42,7 +44,28 @@
     "cy": 2.82,
     "yaw": -25.0,
     "arm_front_inset": 0.0375,
-    "post_len": 0.455
+    "w": 0.72,
+    "d": 0.78,
+    "seat_h": 0.4,
+    "h": 0.7,
+    "back": {
+      "len": 0.345,
+      "th": 0.13,
+      "tilt_deg": 15.0,
+      "pivot_local": [
+        -0.22,
+        0.34
+      ],
+      "bevel": 0.035,
+      "top_z_sharp": 0.69,
+      "was": "len 0.41, top_z_sharp 0.753 (v4 L2)"
+    },
+    "posts": {
+      "len": 0.39,
+      "top_z": 0.642,
+      "was": "0.455 (top 0.705)",
+      "rule": "post top ~4.8 cm below the back-cushion top"
+    }
   },
   "image_px": [
     3840,
@@ -122,12 +145,19 @@
       "ok": true
     },
     {
-      "key": "window_sill_y_info",
+      "key": "window_sill_wall_face_y",
       "measured": [
         0.5533,
         0.5906
       ],
-      "how": "sill line at the wall face (info; L2 sill 0.75)"
+      "how": "sill top line at the wall face, front -> back (sill z0 0.750)",
+      "expected": [
+        0.553,
+        0.591
+      ],
+      "expected_key": "window_sill_wall_face_y",
+      "max_dev": 0.0004,
+      "ok": true
     },
     {
       "key": "sofa",
@@ -166,62 +196,77 @@
     {
       "key": "armchair",
       "measured": [
-        0.1861,
+        0.1896,
         0.3868,
-        0.6023,
+        0.6219,
         0.9056
       ],
-      "how": "geometry projection [u0,u1,v0,v1] (L2 = L1 chair; expected armchair_L1)",
+      "how": "geometry projection [u0,u1,v0,v1]",
       "expected": [
-        0.184,
-        0.388,
-        0.598,
-        0.915
+        0.19,
+        0.387,
+        0.622,
+        0.906
       ],
-      "expected_key": "armchair_L1",
-      "max_dev": 0.0094,
+      "expected_key": "armchair",
+      "max_dev": 0.0004,
+      "ok": true
+    },
+    {
+      "key": "armchair_heights_m",
+      "measured": {
+        "back_cushion_top_z_sharp": 0.6901,
+        "post_top_z": 0.6419
+      },
+      "how": "metres, sharp corners (object bound boxes, before the bevel)",
+      "expected": {
+        "back_cushion_top_z_sharp": 0.69,
+        "post_top_z": 0.642
+      },
+      "expected_key": "armchair_heights_m",
+      "max_dev": 0.0001,
       "ok": true
     },
     {
       "key": "armchair_corners_u",
       "measured": {
         "near_post_top": [
-          0.1861,
-          0.1982
+          0.1896,
+          0.2017
         ],
-        "back_cushion_near_back_top": 0.2078,
+        "back_cushion_near_back_top": 0.2113,
         "far_post_top": [
-          0.2434,
-          0.2528
+          0.2463,
+          0.2557
         ],
-        "back_cushion_far_back_top": 0.2559,
-        "back_cushion_far_front_top": 0.2777,
+        "back_cushion_far_back_top": 0.2588,
+        "back_cushion_far_front_top": 0.2806,
         "front_leg_and_arm_tip_far": 0.3868
       },
       "how": "sharp corners (object bound boxes, i.e. before the 3.5 cm cushion bevel) projected; posts = top face u range; near/far by camera depth",
       "expected": {
         "near_post_top": [
-          0.184,
-          0.192
+          0.19,
+          0.202
         ],
-        "back_cushion_near_back_top": 0.208,
+        "back_cushion_near_back_top": 0.211,
         "far_post_top": [
-          0.244,
-          0.251
+          0.246,
+          0.256
         ],
-        "back_cushion_far_back_top": 0.256,
-        "back_cushion_far_front_top": 0.278,
-        "front_leg_and_arm_tip_far": 0.388
+        "back_cushion_far_back_top": 0.259,
+        "back_cushion_far_front_top": 0.281,
+        "front_leg_and_arm_tip_far": 0.387
       },
-      "expected_key": "armchair_L1_corners_u",
-      "max_dev": 0.0062,
+      "expected_key": "armchair_corners_u",
+      "max_dev": 0.0004,
       "per_key_dev": {
-        "near_post_top": 0.0062,
-        "back_cushion_near_back_top": 0.0002,
-        "far_post_top": 0.0018,
-        "back_cushion_far_back_top": 0.0001,
-        "back_cushion_far_front_top": 0.0003,
-        "front_leg_and_arm_tip_far": 0.0012
+        "near_post_top": 0.0004,
+        "back_cushion_near_back_top": 0.0003,
+        "far_post_top": 0.0003,
+        "back_cushion_far_back_top": 0.0002,
+        "back_cushion_far_front_top": 0.0004,
+        "front_leg_and_arm_tip_far": 0.0002
       },
       "ok": true
     },
@@ -353,27 +398,27 @@
     {
       "key": "basket",
       "measured": [
-        0.8587,
-        0.921,
-        0.6665,
-        0.7961
+        0.8621,
+        0.9246,
+        0.6669,
+        0.7968
       ],
       "how": "projection",
       "expected": [
         0.862,
-        0.917,
+        0.924,
         0.667,
-        0.795
+        0.797
       ],
       "expected_key": "basket",
-      "max_dev": 0.004,
+      "max_dev": 0.0006,
       "ok": true
     },
     {
       "key": "floor-lamp_stem_u",
-      "measured": 0.8854,
+      "measured": 0.8856,
       "how": "stem axis",
-      "expected": 0.885,
+      "expected": 0.886,
       "expected_key": "floor-lamp_stem_u",
       "max_dev": 0.0004,
       "ok": true
@@ -381,20 +426,20 @@
     {
       "key": "floor-lamp_shade",
       "measured": [
-        0.8523,
-        0.92,
-        0.3811,
+        0.8555,
+        0.917,
+        0.3812,
         0.46
       ],
       "how": "shade only",
       "expected": [
-        0.855,
-        0.915,
-        0.382,
+        0.856,
+        0.917,
+        0.381,
         0.46
       ],
       "expected_key": "floor-lamp_shade",
-      "max_dev": 0.005,
+      "max_dev": 0.0005,
       "ok": true
     }
   ],
@@ -442,12 +487,15 @@
       "required": ">= 0.02",
       "blocking": true,
       "note": "",
-      "expected_spec": 0.022
+      "expected_spec": {
+        "expected": 0.022,
+        "measured_v4_L2": 0.0229
+      }
     },
     {
       "id": "C5",
-      "check": "armchair vs window lines (mullion at frame plane, glass edges, jambs, glass bottom): no contour corner or near-vertical chair edge within 0.02",
-      "result": "fail",
+      "check": "armchair vs window lines (mullion at frame plane, glass edges, jambs, glass bottom and the three sill edges): no contour corner or near-vertical chair edge within 0.02; chair top <= -0.02 below every horizontal line",
+      "result": "pass",
       "measured": {
         "closest_line": null,
         "closest_dist": null,
@@ -515,38 +563,60 @@
         },
         "chair_top_vs_horizontal_lines": {
           "glass bottom (top of the bottom sash rail, z 0.830)": {
-            "max_rise_above_line": -0.032,
-            "at_u": 0.2701,
-            "state": "clear below"
+            "key": "glass_bottom",
+            "max_rise_above_line": -0.0433,
+            "at_u": 0.273,
+            "state": "clear below",
+            "expected": -0.043,
+            "dev": 0.0003
           },
           "sill top edge at the wall face (z 0.750)": {
-            "max_rise_above_line": -0.0156,
-            "at_u": 0.2692,
-            "state": "TANGENT"
+            "key": "sill_wall_face_top",
+            "max_rise_above_line": -0.027,
+            "at_u": 0.273,
+            "state": "clear below",
+            "expected": -0.026,
+            "dev": 0.001
           },
           "sill front top edge, proud 0.04 (z 0.750)": {
-            "max_rise_above_line": -0.0149,
-            "at_u": 0.2692,
-            "state": "TANGENT"
+            "key": "sill_front_top",
+            "max_rise_above_line": -0.0262,
+            "at_u": 0.273,
+            "state": "clear below",
+            "expected": -0.026,
+            "dev": 0.0002
           },
           "sill front bottom edge (z 0.725)": {
-            "max_rise_above_line": -0.0113,
-            "at_u": 0.2692,
-            "state": "TANGENT"
+            "key": "sill_front_bottom",
+            "max_rise_above_line": -0.0226,
+            "at_u": 0.273,
+            "state": "clear below",
+            "expected": -0.022,
+            "dev": 0.0006
           }
         },
-        "horizontal_tangents": [
-          "sill top edge at the wall face (z 0.750)",
-          "sill front top edge, proud 0.04 (z 0.750)",
-          "sill front bottom edge (z 0.725)"
-        ],
+        "horizontal_tangents": [],
+        "horizontal_not_clear_by_0_02": [],
         "contour_corners": 46,
         "near_vertical_edges": 4
       },
-      "required": ">= 0.02 from every visible vertical line; glass bottom and sill edges: rise >= 0.02 (decisive) or <= -0.02 (clear)",
+      "required": ">= 0.02 from every visible vertical line; glass bottom and sill edges: max rise <= -0.02 (clear below)",
       "blocking": true,
-      "note": "contour = union of the projected convex hulls of the chair parts (evaluated meshes, bevel included); a corner/edge counts only inside the line's visible span (head to glass bottom / sill). max_rise_above_line < 0 = the chair top stays below the line by that much. v4 adds the sill edges (tangent_rule / M0-07 name the sill); the spec's C5 expectation covered the glass bottom only",
-      "expected_spec": "pass by construction (chair top >= 0.028 below the glass bottom)"
+      "note": "contour = union of the projected convex hulls of the chair parts (evaluated meshes, bevel included); a corner/edge counts only inside the line's visible span (head to glass bottom / sill). max_rise_above_line < 0 = the chair top stays below the line by that much (bevel included). Sill bottom edge z taken from the sill as built",
+      "expected_spec": {
+        "expected": {
+          "sill_front_bottom": -0.022,
+          "sill_front_top": -0.026,
+          "sill_wall_face_top": -0.026,
+          "glass_bottom": -0.043
+        },
+        "measured_v4_L2": {
+          "sill_front_bottom": -0.0113,
+          "sill_front_top": -0.0149,
+          "sill_wall_face_top": -0.0156,
+          "glass_bottom": -0.032
+        }
+      }
     },
     {
       "id": "C6",
@@ -554,12 +624,12 @@
       "result": "fail",
       "measured": {
         "stack_edge_u": 0.2013,
-        "min_dist": 0.0031,
+        "min_dist": 0.0004,
         "nearest": {
           "kind": "corner",
           "part": "chair_back_post",
-          "u": 0.1982,
-          "v": 0.6418
+          "u": 0.2017,
+          "v": 0.6648
         },
         "corners_within_0_02": [
           {
@@ -574,18 +644,23 @@
           },
           {
             "part": "chair_back",
-            "u": 0.2124,
-            "v": 0.6402
+            "u": 0.2158,
+            "v": 0.663
+          },
+          {
+            "part": "chair_back",
+            "u": 0.2183,
+            "v": 0.6565
           },
           {
             "part": "chair_back_post",
-            "u": 0.1861,
-            "v": 0.6479
+            "u": 0.1896,
+            "v": 0.6713
           },
           {
             "part": "chair_back_post",
-            "u": 0.1982,
-            "v": 0.6418
+            "u": 0.2017,
+            "v": 0.6648
           },
           {
             "part": "chair_back_post",
@@ -619,14 +694,17 @@
           }
         ],
         "chair_u": [
-          0.1861,
+          0.1896,
           0.3868
         ]
       },
       "required": ">= 0.02",
       "blocking": false,
       "note": "soft fabric edge, judged by eye (non-blocking)",
-      "expected_spec": "as L1"
+      "expected_spec": {
+        "expected": "near post top 0.190-0.202 straddles the edge (inclined post = crossing; top corner ~0.0004 from the edge)"
+      },
+      "visual_note": "Visual check (motion-agent, by eye on clay-proxies.png at 2048 px, zoom u 0.17-0.25, v 0.60-0.76): the near back post rises at 15 deg from behind the front curtain stack; its top-right corner (u 0.2017, v 0.665) ends practically on the stack edge (u 0.2013, 0.0004), so the post top reads as a corner touching the line, not as a crossing. The rest of the post crosses decisively (inclined edge). In the clay the edge is low-contrast (pale fabric proxy on a pale wall, ~0.5 px), so it is barely visible; with a real curtain (folds, darker/lighter fabric) it will read more. The real stack edge depends on the curtain product: a stack edge >= 0.02 left or right of u 0.2017 removes it. Non-blocking (spec: judged by eye). Recommend that master-designer looks at it when the curtain product is fixed; nothing changed here."
     },
     {
       "id": "C7",
@@ -638,7 +716,10 @@
       },
       "required": 0.05,
       "blocking": true,
-      "note": ""
+      "note": "",
+      "expected_spec": {
+        "expected": 0.094
+      }
     },
     {
       "id": "C8",
@@ -654,8 +735,10 @@
       "blocking": true,
       "note": "",
       "expected_spec": {
-        "gap": 0.107,
-        "hang_v": -0.085
+        "measured_B": {
+          "gap": 0.107,
+          "hang_v": -0.085
+        }
       }
     },
     {
@@ -671,7 +754,9 @@
       "required": 0.03,
       "blocking": true,
       "note": "visible sofa mask in the art's columns (cushion proxies excluded)",
-      "expected_spec": 0.039
+      "expected_spec": {
+        "measured_B": 0.039
+      }
     },
     {
       "id": "C10",
@@ -687,9 +772,11 @@
       "blocking": true,
       "note": "",
       "expected_spec": {
-        "stack_gap": 0.026,
-        "left": 0.06,
-        "bottom": 0.101
+        "expected": {
+          "stack_gap": 0.026,
+          "left": 0.06,
+          "bottom": 0.101
+        }
       }
     },
     {
@@ -706,7 +793,9 @@
       "required": 0.02,
       "blocking": true,
       "note": "table line = slab lower edge Z 0.35 (review 8.4)",
-      "expected_spec": 0.026
+      "expected_spec": {
+        "expected": 0.026
+      }
     },
     {
       "id": "C12",
@@ -723,8 +812,11 @@
       "blocking": true,
       "note": "",
       "expected_spec": {
-        "bottom": 0.053,
-        "armchair": "L0 0.040, L1 0.075"
+        "expected": {
+          "bottom": 0.053,
+          "armchair": 0.075,
+          "rug_edge_m": 0.175
+        }
       }
     },
     {
@@ -739,19 +831,21 @@
       "blocking": true,
       "note": "",
       "expected_spec": {
-        "crown": 0.031,
-        "art": 0.035
+        "expected": {
+          "crown": 0.031,
+          "art": 0.035
+        }
       }
     },
     {
       "id": "C14",
       "check": "basket vs sofa right edge >= 0.02; lamp stem >= 0.02 inside the basket; lamp base hidden behind the basket",
-      "result": "fail",
+      "result": "pass",
       "measured": {
-        "sofa_gap": 0.0191,
-        "sofa_gap_index_pass": 0.0193,
-        "stem_to_basket_left": 0.0267,
-        "stem_to_basket_right": 0.0356,
+        "sofa_gap": 0.0224,
+        "sofa_gap_index_pass": 0.0224,
+        "stem_to_basket_left": 0.0236,
+        "stem_to_basket_right": 0.0389,
         "lamp_base_inside_basket_silhouette": true,
         "lamp_base_behind_basket": true
       },
@@ -759,20 +853,29 @@
       "blocking": true,
       "note": "",
       "expected_spec": {
-        "sofa_gap": 0.022,
-        "stem_to_basket_left": 0.023,
-        "stem_to_basket_right": 0.031
+        "expected": {
+          "sofa_gap": 0.022,
+          "stem_to_basket_left": 0.024,
+          "stem_to_basket_right": 0.039,
+          "base_inside_basket_margin_left": 0.003
+        },
+        "measured_v4_L2": {
+          "sofa_gap": 0.019
+        }
       }
     },
     {
       "id": "C15",
       "check": "floor-lamp shade vs right edge >= 0.08",
-      "result": "fail",
-      "measured": 0.08,
+      "result": "pass",
+      "measured": 0.083,
       "required": 0.08,
       "blocking": true,
       "note": "",
-      "expected_spec": 0.085
+      "expected_spec": {
+        "expected": 0.083,
+        "measured_v4_L2": 0.08
+      }
     },
     {
       "id": "C16",
@@ -782,7 +885,9 @@
       "required": 0.01,
       "blocking": true,
       "note": "",
-      "expected_spec": 0.025
+      "expected_spec": {
+        "measured_B": 0.025
+      }
     },
     {
       "id": "C17",
@@ -802,7 +907,9 @@
       "required": 0.15,
       "blocking": true,
       "note": "",
-      "expected_spec": 0.478
+      "expected_spec": {
+        "measured_B": 0.478
+      }
     },
     {
       "id": "C18",
@@ -815,45 +922,35 @@
       "required": ">= 0.02 (known 0.013)",
       "blocking": false,
       "note": "soft edge, judged by eye",
-      "expected_spec": 0.013
+      "expected_spec": {
+        "measured_B": 0.013
+      }
     },
     {
       "id": "C19",
       "check": "basket bottom vs rug back edge line (report)",
       "result": "report",
       "measured": {
-        "min_abs_dv": 0.0001,
-        "at_u": 0.8723,
+        "min_abs_dv": -0.0001,
+        "at_u": 0.8763,
         "dv_range": [
           -0.0021,
-          0.0074
+          0.0075
         ],
         "note": "dv = v(rug back edge) - v(basket bottom contour) in the basket's columns where the rug exists; + = rug edge below the basket bottom"
       },
-      "required": "report (expected 0.0015)",
+      "required": "report (lines cross, |dv| <= ~0.007)",
       "blocking": false,
       "note": "both are floor-contact lines; judge by eye",
-      "expected_spec": 0.0015
+      "expected_spec": {
+        "expected": "lines cross, |dv| <= ~0.007 (v4 L2: min 0.0001, dv -0.0021..+0.0074)"
+      }
     },
     {
       "id": "C20",
       "check": "every pair of visible silhouettes closer than 0.02 (not touching)",
       "result": "report",
       "measured": [
-        {
-          "pair": "sofa|basket",
-          "gap": 0.0193,
-          "at": [
-            [
-              0.8393,
-              0.6704
-            ],
-            [
-              0.8589,
-              0.6704
-            ]
-          ]
-        },
         {
           "pair": "planter|curtains",
           "gap": 0.013,
@@ -874,7 +971,9 @@
       "note": "object-index pass; touching/overlapping pairs are occlusions and not listed"
     }
   ],
-  "notes": [],
+  "notes": [
+    "C6 visual note added after the render (by eye), see checks[C6].visual_note"
+  ],
   "visible_masks": {
     "sofa": [
       0.5208,
@@ -889,9 +988,9 @@
       0.8699
     ],
     "armchair": [
-      0.1862,
+      0.1896,
       0.3867,
-      0.6023,
+      0.6218,
       0.9056
     ],
     "framed-art": [
@@ -931,16 +1030,16 @@
       0.7056
     ],
     "floor-lamp": [
-      0.8523,
-      0.9201,
+      0.8555,
+      0.9169,
       0.381,
       0.6671
     ],
     "basket": [
-      0.8589,
-      0.9211,
-      0.6667,
-      0.7963
+      0.862,
+      0.9245,
+      0.6671,
+      0.7968
     ],
     "pouf": [
       0.4625,
@@ -1005,9 +1104,18 @@
     ],
     "note": "window-index pixels around the mullion at z 1.6, includes the 2 cm sash stiles on each side (glass edges)"
   },
+  "window_as_built": {
+    "sill_top_z": 0.75,
+    "sill_bottom_z": 0.725,
+    "sill_t": 0.025,
+    "spec_sill_t": 0.025,
+    "glass_bottom_z": 0.83,
+    "spec_glass_bottom_z": 0.83,
+    "ok": true
+  },
   "armchair_heights_m": {
-    "post_top_z": 0.7047,
-    "back_cushion_top_z_sharp": 0.7529,
+    "post_top_z": 0.6419,
+    "back_cushion_top_z_sharp": 0.6901,
     "post_below_cushion_top_m": 0.0482
   },
   "slot_frame_boxes": {
@@ -1073,9 +1181,9 @@
     },
     "floor-lamp": {
       "box": [
-        0.8523,
-        0.92,
-        0.3811,
+        0.8555,
+        0.917,
+        0.3812,
         0.46
       ],
       "spec_status": "closed",
@@ -1083,10 +1191,10 @@
     },
     "basket": {
       "box": [
-        0.8587,
-        0.921,
-        0.6665,
-        0.7961
+        0.8621,
+        0.9246,
+        0.6669,
+        0.7968
       ],
       "spec_status": "closed",
       "in_frame": true
@@ -1180,12 +1288,12 @@
     "width": 0.3375,
     "art_left_margin": 0.0314,
     "art_right_margin": 0.1129,
-    "lamp_stem_to_right_edge": 0.0191,
+    "lamp_stem_to_right_edge": 0.0189,
     "wall-decor_out_by": 0.003,
     "sofa_left_cut_fraction": 0.1451,
     "sofa_right_end_to_right_edge": 0.0648,
-    "shade_cut_fraction": 0.2292,
-    "basket_cut_fraction": 0.2649,
+    "shade_cut_fraction": 0.2032,
+    "basket_cut_fraction": 0.3213,
     "pendant_margins": [
       0.028,
       0.2316
@@ -1199,19 +1307,19 @@
         "ok": true
       },
       "lamp_stem_to_right_edge": {
-        "expected": 0.019,
-        "measured": 0.0191,
+        "expected": 0.0188,
+        "measured": 0.0189,
         "dev": 0.0001,
         "ok": true
       },
       "wall-decor_out_by": {
-        "expected": 0.004,
+        "expected": 0.003,
         "measured": 0.003,
-        "dev": 0.001,
+        "dev": 0.0,
         "ok": true
       }
     },
-    "spec_contains": "art, pendant, sofa (left end cut decisively ~14.5%), table right part, vase group, floor-lamp stem and most of the shade (shade cut ~17%), basket (cut ~21%)",
+    "spec_contains": "art, pendant, sofa (left end cut decisively ~14.5%), table right part, vase group, floor-lamp stem and most of the shade (shade cut ~20%), basket (cut ~31%)",
     "under_0_02": [
       "lamp_stem_to_right_edge",
       "wall-decor just outside (0.0030)"
@@ -1261,11 +1369,7 @@
   },
   "summary": {
     "frame_values_outside_0_01": [],
-    "blocking_checks_failed": [
-      "C5",
-      "C14",
-      "C15"
-    ],
+    "blocking_checks_failed": [],
     "nonblocking_checks_failed": [
       "C6"
     ],
@@ -1274,7 +1378,7 @@
       "C2": "pass",
       "C3": "pass",
       "C4": "pass",
-      "C5": "fail",
+      "C5": "pass",
       "C6": "fail",
       "C7": "pass",
       "C8": "pass",
@@ -1283,8 +1387,8 @@
       "C11": "pass",
       "C12": "pass",
       "C13": "pass",
-      "C14": "fail",
-      "C15": "fail",
+      "C14": "pass",
+      "C15": "pass",
       "C16": "pass",
       "C17": "pass",
       "C18": "report",
@@ -1292,14 +1396,13 @@
       "C20": "report"
     },
     "tangents_lt_0_02": [
-      "sofa|basket",
       "planter|curtains"
     ],
-    "all_blocking_pass": false,
+    "all_blocking_pass": true,
     "all_values_within_0_01": true
   },
   "m0": {
-    "variant": "L2",
+    "variant": "v4.1",
     "clay": "m0-clay-4k.png (3840x2160) / m0-clay.png (2048x1152 Lanczos): shell + sofa, coffee table, armchair only. No slot products, no curtains, rug or lamps (m0-prompt 2.0 / M0-09)",
     "object_indices_in_clay": [
       0,
@@ -1353,13 +1456,12 @@
         ],
         "measured_m": 3.1159,
         "expected_planar_m": 3.1174,
-        "dev_m": 0.0014,
-        "note": "recomputed from m0-depth.exr; the first run sampled (0.20, 3.40, 0), which is below the frame"
+        "dev_m": 0.0014
       }
     },
     "depth_edge_sharpness": {
-      "transitions_checked": 4299,
-      "pixels_with_blended_depth": 3,
+      "transitions_checked": 4119,
+      "pixels_with_blended_depth": 2,
       "ok": true
     },
     "depth_note": "m0-depth.png uint16 mm, planar camera Z; 65535 = sky; Depth pass from Cycles (not filtered across object edges: one sample per pixel for data passes)",
