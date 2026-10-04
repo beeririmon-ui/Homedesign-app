@@ -538,22 +538,37 @@
             }
           }
         },
-        "chair_top_vs_glass_bottom": {
-          "max_rise_above_line": 0.0056,
-          "at_u": 0.2816,
-          "line": "top of the bottom sash rail, z 0.53"
+        "chair_top_vs_horizontal_lines": {
+          "glass bottom (top of the bottom sash rail, z 0.530)": {
+            "max_rise_above_line": 0.0056,
+            "at_u": 0.2816,
+            "state": "TANGENT"
+          },
+          "sill top edge at the wall face (z 0.450)": {
+            "max_rise_above_line": 0.0256,
+            "at_u": 0.2816,
+            "state": "crossing (decisive)"
+          },
+          "sill front top edge, proud 0.04 (z 0.450)": {
+            "max_rise_above_line": 0.0268,
+            "at_u": 0.2816,
+            "state": "crossing (decisive)"
+          },
+          "sill front bottom edge (z 0.425)": {
+            "max_rise_above_line": 0.0303,
+            "at_u": 0.2816,
+            "state": "crossing (decisive)"
+          }
         },
-        "chair_top_vs_sill_wall_face": {
-          "max_rise_above_line": 0.0256,
-          "at_u": 0.2816,
-          "line": "sill, z 0.45"
-        },
+        "horizontal_tangents": [
+          "glass bottom (top of the bottom sash rail, z 0.530)"
+        ],
         "contour_corners": 46,
         "near_vertical_edges": 4
       },
-      "required": ">= 0.02 from every visible line; glass bottom: rise >= 0.02 (decisive) or <= -0.02 (clear)",
+      "required": ">= 0.02 from every visible vertical line; glass bottom and sill edges: rise >= 0.02 (decisive) or <= -0.02 (clear)",
       "blocking": true,
-      "note": "contour = union of the projected convex hulls of the chair parts (evaluated meshes, bevel included); a corner/edge counts only inside the line's visible span (head to glass bottom / sill). max_rise_above_line < 0 = the chair top stays below the line by that much",
+      "note": "contour = union of the projected convex hulls of the chair parts (evaluated meshes, bevel included); a corner/edge counts only inside the line's visible span (head to glass bottom / sill). max_rise_above_line < 0 = the chair top stays below the line by that much. v4 adds the sill edges (tangent_rule / M0-07 name the sill); the spec's C5 expectation covered the glass bottom only",
       "expected_spec": "fail (mullion between near back-top 0.244 and far post 0.275: 0.015 / 0.009)"
     },
     {
