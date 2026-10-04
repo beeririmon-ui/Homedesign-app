@@ -1537,7 +1537,7 @@ def main():
     ap.add_argument("--samples", type=int, default=256)
     ap.add_argument("--sky", type=float, default=6.0, help="world (sky) strength")
     ap.add_argument("--exposure", type=float, default=1.0)
-    ap.add_argument("--out", default=os.path.join(HERE, "v3"))   # v4 owns the top-level m0-* files
+    ap.add_argument("--out", default=HERE)
     ap.add_argument("--no-plan", action="store_true")
     ap.add_argument("--no-closeups", action="store_true")
     ap.add_argument("--passes-dir", default="", help="temp dir for EXR passes (default: a system temp dir)")
