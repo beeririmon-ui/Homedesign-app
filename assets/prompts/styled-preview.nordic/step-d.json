@@ -1,0 +1,62 @@
+{
+ "asset_id": "styled-preview-nordic-step-d",
+ "room": "living-room",
+ "style": "nordic",
+ "frame": "M0",
+ "stage": "styled preview 2K (preview only - not Approval 2, not a site asset)",
+ "date": "2026-10-04",
+ "tool": "var2 MCP var2_create_image",
+ "model": "nano-banana-2",
+ "type": "image-to-image",
+ "resolution": "2K",
+ "aspect_ratio": "16:9",
+ "returned_size_px": [
+  2752,
+  1536
+ ],
+ "postprocess": "non-uniform resize 2752x1536 -> 2752x1548 (Lanczos, no crop); raw JPEG kept in raw/",
+ "seed": null,
+ "seed_note": "nano-banana-2 exposes no seed; regenerate = new sample",
+ "input_image": {
+  "local": "assets/renders/living-room/nordic/styled-preview/step-c.png",
+  "sha256": "f9a4a0030ad2caa8211527ab9b878a016300660d3594ef810ee58a859b97a966",
+  "var2_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/09adf6e7-779a-4677-89fd-6adbf22130d5.png",
+  "upload_verified": "sha256 of downloaded public_url matches local"
+ },
+ "image_refs": [
+  {
+   "image_index": 2,
+   "slot": "vase",
+   "url": "https://cf.cjdropshipping.com/quick/product/5cdbca5f-e2d4-42b3-9baa-ef3ea8b2691f.jpg"
+  },
+  {
+   "image_index": 3,
+   "slot": "candle-holders",
+   "url": "https://cf.cjdropshipping.com/quick/product/d4def2f1-fdf6-44bc-a65c-9a90ad47f840.jpg"
+  },
+  {
+   "image_index": 4,
+   "slot": "pouf",
+   "url": "https://cf.cjdropshipping.com/quick/product/0cf1414b-ec97-479f-9de6-835c3275be19.jpg"
+  }
+ ],
+ "prompt": "Edit image 1. Keep everything in it exactly as it is: camera, framing, architecture, daylight, the three lit lamps and their glow, exposure, white balance, and every item already in the room, unchanged in position, size, colour and shape. Only add the items below. Images 2-4 are product references: copy each faithfully and take nothing else from them; ignore their backgrounds, flowers, props and text.\n\nCoffee table: one group of exactly three objects in the right third of the table top, standing on the bare oak. The left two thirds of the table stay completely empty.\n1. VASE (image 2): the textured stoneware vase from image 2, 32 cm tall and 16 cm wide, a soft jar shape with a small mouth, warm white, matte, with a fine crinkled stone-like texture all over and a smooth rim. At the back of the group, toward the sofa, about 20 cm in from the table's right end. In it: four or five slender olive branches with narrow silvery sage-green leaves, loose and airy, the tallest about 60 cm above the table top, leaning slightly left; they may pass lightly in front of the lower edge of the framed art.\n2. CANDLE HOLDERS (image 3): two identical light travertine pedestal holders, a cone foot with a small cup on top, 7 cm wide and 11 cm tall, honed matte, natural pores and soft horizontal veins. In front of and slightly right of the vase, 8 cm apart, forming a triangle with it. Each holds an unlit warm white pillar candle 7 cm wide with smooth straight sides, a flat top with a crisp edge and a short upright white wick: a 15 cm candle in the holder nearer the vase, a 10 cm candle in the other. The heights step down: branches, vase, tall candle, short candle.\n\n3. POUF (image 4): round chunky-knit cotton pouf in natural off-white, a flat ball 45 cm wide and 36 cm high, plump and firmly filled, thick knit texture, rounded top. On the rug in front of the armchair and left of the coffee table, at about 46% to 56% of the frame width and 76% to 95% of its height. Its top stays below the lower edge of the table top behind it; clear rug between it and the armchair, the table and the bottom edge of the frame.\n\nLight: unchanged. The new items catch the window light from the left, with soft shadows falling right and slightly toward the camera and short soft contact shadows; the pendant adds only a faint warm glow on the table. No candle flames.\n\nDo not add anything else: no books, trays, bowls, cups, fruit, magazines, table runner or extra flowers. No text, logos or labels.",
+ "prompt_chars": 2488,
+ "prompt_limit": 4000,
+ "brief_cap": 3800,
+ "prompt_source": "briefs/styled-preview.nordic.md v1.0 section 6, verbatim",
+ "runs": [
+  {
+   "placeholder_id": "46172937-6cfb-47a4-b85c-17738bf704a9",
+   "task_id": "2bd04c912dfd98da4fe8440dc48835a7",
+   "result_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nano2-2bd04c912dfd98da4fe8440dc48835a7-0-1791114709772-fb8a527a.jpg",
+   "idempotency_key": "styled-preview-nordic-step-d-20261004",
+   "credits": 400,
+   "used": true,
+   "share_url": "https://www.var2.ai/image/46172937-6cfb-47a4-b85c-17738bf704a9"
+  }
+ ],
+ "credits": 400,
+ "output": "assets/renders/living-room/nordic/styled-preview/step-d.png",
+ "checks": "assets/renders/living-room/nordic/styled-preview/raw/step-d-check.json"
+}

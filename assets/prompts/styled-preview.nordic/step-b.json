@@ -1,0 +1,62 @@
+{
+ "asset_id": "styled-preview-nordic-step-b",
+ "room": "living-room",
+ "style": "nordic",
+ "frame": "M0",
+ "stage": "styled preview 2K (preview only - not Approval 2, not a site asset)",
+ "date": "2026-10-04",
+ "tool": "var2 MCP var2_create_image",
+ "model": "nano-banana-2",
+ "type": "image-to-image",
+ "resolution": "2K",
+ "aspect_ratio": "16:9",
+ "returned_size_px": [
+  2752,
+  1536
+ ],
+ "postprocess": "non-uniform resize 2752x1536 -> 2752x1548 (Lanczos, no crop); raw JPEG kept in raw/",
+ "seed": null,
+ "seed_note": "nano-banana-2 exposes no seed; regenerate = new sample",
+ "input_image": {
+  "local": "assets/renders/living-room/nordic/styled-preview/step-a.png",
+  "sha256": "5e4b64626ecb64ab5a8461a1db33e4686808c50370d8d290b558435edd3b75c4",
+  "var2_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/f6941829-405c-4a09-ba52-6e248e7f915d.png",
+  "upload_verified": "sha256 of downloaded public_url matches local"
+ },
+ "image_refs": [
+  {
+   "image_index": 2,
+   "slot": "framed-art",
+   "url": "https://cf.cjdropshipping.com/quick/product/304d6cc7-3840-4582-af46-f2182133a2c9.jpg"
+  },
+  {
+   "image_index": 3,
+   "slot": "curtains",
+   "url": "https://cf.cjdropshipping.com/quick/product/344cc9f0-af5d-4b68-8959-a34e7830868b.jpg"
+  },
+  {
+   "image_index": 4,
+   "slot": "planter",
+   "url": "https://cf.cjdropshipping.com/1614673413923.jpg"
+  }
+ ],
+ "prompt": "Edit image 1. Keep everything in it exactly as it is: camera, framing, architecture, floor, daylight, exposure and white balance, and every piece of furniture and textile already in the room (sofa, coffee table, armchair, rug, throw, three cushions) in the same position, size, colour and folds. Move, resize or restyle nothing. Only add the items listed below. Images 2-4 are product references: copy each product faithfully and take nothing else from them; ignore their rooms, furniture, lamps, plants, people and text.\n\n1. FRAMED ART (image 2): the three framed abstract prints from image 2, exactly as designed and in the same left-to-right order: sage arches above a dotted arch and a small sage dot; beige, sage and pale grey brush blocks; a sage organic shape with thin dark circular lines. Each print 50 x 70 cm portrait in a thin matte black frame, hung in a row with 6 cm gaps, 162 cm wide in total, on the back wall centred above the sofa, the centre of the row 147 cm above the floor. The row spans about 60% to 79% of the frame width and 28% to 51% of its height; its bottom is clearly above the sofa back. Flat, level, following the wall's perspective. Matte print, no glare, no reflections, no text, no signature. A thin soft daylight shadow under each frame.\n\n2. CURTAINS (image 3): two panels of semi-sheer hemp-linen in natural oatmeal, strong visible slub, matte, daylight glowing through. Pinch-pleat heading on a slim matte black rod, mounted 12 cm below the cornice and 20 cm wider than the window opening on each side. Both panels are drawn open into narrow soft stacks, one beside the window's back jamb near the corner and one beside its front jamb, covering the wall and the edge of the reveal but never the glass. They fall straight in soft vertical folds and just touch the floor. The glass, the mullion and the garden view stay fully visible.\n\n3. PLANTER WITH OLIVE TREE (image 4): the natural woven seagrass belly basket from image 4, 35 cm wide and 37 cm high, warm honey colour, herringbone weave, used as a floor pot in the back-left corner of the room. Its centre sits exactly on the vertical corner line at about 43% of the frame width, close to the walls, just right of the armchair with a clear narrow gap between them. In it: a young olive tree with one slender grey-brown trunk, about 165 cm tall including the pot, and an airy medium-density crown about 70 cm wide of narrow silvery sage-green leaves. The crown fills the corner between the back curtain stack and the wall left of the sofa, and stays clear of the framed art. Pale gravel top-dressing, no visible soil, no saucer.\n\nLight: the same 10:30 winter daylight from the left window as image 1. New items cast soft shadows falling right and slightly toward the camera. No sun patches, no leaf shadows, no new light sources.\n\nDo not add anything else: no lamps, mirrors, extra plants, shelves, wall decor, books or objects on surfaces. No text, logos or labels.",
+ "prompt_chars": 2957,
+ "prompt_limit": 4000,
+ "brief_cap": 3800,
+ "prompt_source": "briefs/styled-preview.nordic.md v1.0 section 6, verbatim",
+ "runs": [
+  {
+   "placeholder_id": "24282c05-2a99-40a2-9357-9a9e1f114a4f",
+   "task_id": "d5d9c0528b42b12f6fedbccca3ec2bd6",
+   "result_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nano2-d5d9c0528b42b12f6fedbccca3ec2bd6-0-1791114293505-f4accc51.jpg",
+   "idempotency_key": "styled-preview-nordic-step-b-20261004",
+   "credits": 400,
+   "used": true,
+   "share_url": "https://www.var2.ai/image/24282c05-2a99-40a2-9357-9a9e1f114a4f"
+  }
+ ],
+ "credits": 400,
+ "output": "assets/renders/living-room/nordic/styled-preview/step-b.png",
+ "checks": "assets/renders/living-room/nordic/styled-preview/raw/step-b-check.json"
+}

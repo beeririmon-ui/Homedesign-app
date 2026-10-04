@@ -1,0 +1,19 @@
+{
+ "asset_id": "styled-preview-nordic",
+ "date": "2026-10-04",
+ "source": "assets/renders/living-room/nordic/styled-preview/step-d.png",
+ "credits": 0,
+ "operation": "one global grade (director allowed one; brief section 2). No local correction, geometry untouched.",
+ "steps": [
+  "sRGB -> linear",
+  "global white-balance gains (linear RGB) [0.9284, 1.0265, 0.9881]: chromaticity of back-wall patch u0.62-0.80 v0.12-0.24 returned to the base master; luminance-neutral. NOTE: goes beyond the brief grading wording (exposure + black point only); added to cancel the pink drift that accumulated over 4 chained edits",
+  "exposure +0.207 stop (cap 0.5)",
+  "highlight shoulder on max channel above 0.70 (as pilot grade.py)",
+  "linear -> sRGB",
+  "black point lift 0.12 (L floor 12)",
+  "no saturation operator"
+ ],
+ "script": "assets/renders/living-room/nordic/styled-preview/grade.py",
+ "params": "assets/renders/living-room/nordic/styled-preview/raw/grade-params.json",
+ "output": "assets/renders/living-room/nordic/styled-preview/styled-preview.png"
+}
