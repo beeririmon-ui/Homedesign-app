@@ -1030,7 +1030,7 @@ def run_m0(cfg, a, spec, passes):
     for nm, p in (("back wall above the sofa (0.20, 0, 2.40)", (0.20, 0.0, 2.40)),
                   ("back wall near the corner (-2.00, 0, 2.20)", (-2.00, 0.0, 2.20)),
                   ("left wall front of the window (-2.30, 3.30, 2.00)", (-2.30, 3.30, 2.00)),
-                  ("floor (0.20, 3.40, 0)", (0.20, 3.40, 0.0))):
+                  ("floor (0.20, 2.60, 0)", (0.20, 2.60, 0.0))):
         u, v, _ = P(cam, p)
         px = depth[min(H - 1, int(v * H)), min(W - 1, int(u * W))]
         dchk[nm] = dict(uv=r4([u, v]), measured_m=round(float(px), 4), expected_planar_m=round(planar(p), 4),
@@ -1054,7 +1054,6 @@ def run_m0(cfg, a, spec, passes):
             n_mix += 1
     edge_sharp = dict(transitions_checked=n_tr, pixels_with_blended_depth=n_mix,
                       ok=bool(n_tr > 0 and n_mix <= 0.002 * n_tr))
-    blend = os.path.join(out, "m0-blockout.blend")
     # proxies for the overlay and the self-check (index pass only, 1 sample): not in the M0 clay
     slots = ba.build_slots(cfg)
     bpy.context.view_layer.update()
@@ -1102,14 +1101,23 @@ def run_m0(cfg, a, spec, passes):
         note="cx, cy measured by projecting the optical axis (mirrored rig: shift_x < 0 moves the principal point right).")
     with open(os.path.join(out, "m0-camera.json"), "w") as fh:
         json.dump(camj, fh, indent=2)
-    # blend: the M0 scene; proxies kept in their own collection, excluded from render
-    for o in bpy.data.collections["proxies"].all_objects:
+    return rep
+
+
+def save_m0_blend(cfg, a):
+    """M0 scene as .blend, built fresh (saving right after the 4K renders crashed Blender 4.2 as a module).
+    Proxies are kept in the 'proxies' collection, excluded from render."""
+    roots, cam = build_base(cfg, a, res=a.m0_res, samples=a.m0_samples)
+    ba.build_slots(cfg)
+    pc = bs.coll("proxies")
+    for o in list(pc.objects):
         o.hide_render = True
-    bpy.data.collections["proxies"].hide_render = True
+    pc.hide_render = True
+    blend = os.path.join(a.m0_out, "m0-blockout.blend")
     bpy.ops.wm.save_as_mainfile(filepath=blend)
     if os.path.exists(blend + "1"):
         os.remove(blend + "1")
-    return rep
+    return blend
 
 
 def main():
@@ -1123,6 +1131,7 @@ def main():
     ap.add_argument("--out", default=OUT_DIR)
     ap.add_argument("--m0", default="", help="variant for the top-level M0 input set (e.g. L2)")
     ap.add_argument("--m0-only", action="store_true")
+    ap.add_argument("--m0-blend-only", action="store_true", help="only rebuild m0-blockout.blend (no render)")
     ap.add_argument("--m0-out", default=HERE)
     ap.add_argument("--m0-res", type=int, default=3840)
     ap.add_argument("--m0-samples", type=int, default=256)
@@ -1139,9 +1148,12 @@ def main():
             print(v, json.dumps(rep["summary"], ensure_ascii=False), flush=True)
     if all(os.path.exists(os.path.join(a.out, c, "selfcheck.json")) for c in VARIANTS) and not a.m0_only:
         print("compare:", make_compare(a.out, cfgs))
-    if a.m0:
+    if a.m0 and not a.m0_blend_only:
         rep = run_m0(cfgs[a.m0], a, spec, passes)
         print("M0", a.m0, json.dumps(rep["summary"], ensure_ascii=False), flush=True)
+    if a.m0:
+        shutil.rmtree(passes, ignore_errors=True)
+        print("blend:", save_m0_blend(cfgs[a.m0], a), flush=True)
     if not a.passes_dir:
         shutil.rmtree(passes, ignore_errors=True)
 

@@ -3,7 +3,7 @@
   "name": "v4 L2: L1 + window sill 0.75 (window 1.95 tall, head 2.70). The chair back stays fully below the glass (>= 0.028), so no mullion/jamb contact. Changes an approved skeleton value: user approval required.",
   "spec": "v4-spec.json (v4 / 2026-10-04)",
   "tolerance": 0.01,
-  "method": "Geometry: pinhole projection of the evaluated Blender meshes through the render camera (bpy world_to_camera_view; bevels included). Pixels: object-index pass of the render (2048x1152, 1 px = 0.00049 frame widths). Distances between shapes are in frame widths, with v scaled by 9/16 (isotropic). Positive gap = apart.",
+  "method": "Geometry: pinhole projection of the evaluated Blender meshes through the render camera (bpy world_to_camera_view; bevels included). Pixels: object-index pass of the render (3840x2160, 1 px = 0.00026 frame widths). Distances between shapes are in frame widths, with v scaled by 9/16 (isotropic). Positive gap = apart.",
   "camera": {
     "loc": [
       1.25,
@@ -45,8 +45,8 @@
     "post_len": 0.455
   },
   "image_px": [
-    2048,
-    1152
+    3840,
+    2160
   ],
   "frame_values": [
     {
@@ -434,7 +434,7 @@
       "check": "armchair-planter gap >= 0.02 (far front leg / arm tip vs pot)",
       "result": "pass",
       "measured": {
-        "silhouette_gap_index_pass": 0.0229,
+        "silhouette_gap_index_pass": 0.0227,
         "touching": false,
         "signed_u_gap_pot_left_minus_chair_right": 0.0226,
         "hull_gap": 0.0226
@@ -634,7 +634,7 @@
       "result": "pass",
       "measured": {
         "geometry": 0.0944,
-        "visible_mask": 0.0946
+        "visible_mask": 0.0944
       },
       "required": 0.05,
       "blocking": true,
@@ -664,8 +664,8 @@
       "result": "pass",
       "measured": {
         "art_bottom_v": 0.5121,
-        "sofa_top_v_visible": 0.5512,
-        "gap": 0.0391,
+        "sofa_top_v_visible": 0.5509,
+        "gap": 0.0388,
         "gap_geometry": 0.0395
       },
       "required": 0.03,
@@ -715,7 +715,7 @@
       "measured": {
         "bottom": 0.0528,
         "armchair_gap_hull": 0.0758,
-        "armchair_gap_index_pass": 0.0757,
+        "armchair_gap_index_pass": 0.0758,
         "armchair_touching_index_pass": false,
         "min_dist_to_rug_edge_m": 0.175
       },
@@ -749,7 +749,7 @@
       "result": "fail",
       "measured": {
         "sofa_gap": 0.0191,
-        "sofa_gap_index_pass": 0.019,
+        "sofa_gap_index_pass": 0.0193,
         "stem_to_basket_left": 0.0267,
         "stem_to_basket_right": 0.0356,
         "lamp_base_inside_basket_silhouette": true,
@@ -810,7 +810,7 @@
       "result": "report",
       "measured": {
         "hull_gap": 0.013,
-        "index_pass_gap_to_curtains": 0.0132
+        "index_pass_gap_to_curtains": 0.013
       },
       "required": ">= 0.02 (known 0.013)",
       "blocking": false,
@@ -842,29 +842,29 @@
       "measured": [
         {
           "pair": "sofa|basket",
-          "gap": 0.019,
+          "gap": 0.0193,
           "at": [
             [
-              0.8394,
-              0.6701
+              0.8393,
+              0.6704
             ],
             [
               0.8589,
-              0.6701
+              0.6704
             ]
           ]
         },
         {
           "pair": "planter|curtains",
-          "gap": 0.0132,
+          "gap": 0.013,
           "at": [
             [
-              0.4097,
-              0.6085
+              0.4094,
+              0.6093
             ],
             [
-              0.396,
-              0.6085
+              0.3961,
+              0.6093
             ]
           ]
         }
@@ -877,130 +877,130 @@
   "notes": [],
   "visible_masks": {
     "sofa": [
-      0.5205,
-      0.8398,
-      0.5512,
-      0.7951
+      0.5208,
+      0.8396,
+      0.5509,
+      0.7949
     ],
     "coffee-table": [
-      0.5117,
-      0.7617,
-      0.6788,
-      0.8698
+      0.512,
+      0.762,
+      0.6787,
+      0.8699
     ],
     "armchair": [
-      0.186,
+      0.1862,
       0.3867,
-      0.6024,
-      0.9054
+      0.6023,
+      0.9056
     ],
     "framed-art": [
-      0.5981,
-      0.7915,
-      0.2804,
-      0.5122
+      0.5984,
+      0.7917,
+      0.2806,
+      0.512
     ],
     "pendant": [
-      0.5952,
+      0.5951,
       0.6729,
       0.0,
       0.1736
     ],
     "wall-sconce": [
       0.106,
-      0.1299,
-      0.3516,
-      0.3932
+      0.1297,
+      0.3514,
+      0.3931
     ],
     "rug": [
-      0.2666,
-      0.9438,
-      0.7188,
+      0.2667,
+      0.9437,
+      0.719,
       1.0
     ],
     "curtains": [
-      0.1631,
-      0.3965,
+      0.1633,
+      0.3964,
       0.0,
-      0.8229
+      0.8231
     ],
     "planter": [
-      0.4097,
+      0.4094,
       0.4521,
-      0.579,
-      0.7057
+      0.5787,
+      0.7056
     ],
     "floor-lamp": [
-      0.8521,
-      0.9199,
-      0.3811,
-      0.6675
+      0.8523,
+      0.9201,
+      0.381,
+      0.6671
     ],
     "basket": [
       0.8589,
-      0.9209,
+      0.9211,
       0.6667,
-      0.796
+      0.7963
     ],
     "pouf": [
-      0.4624,
+      0.4625,
       0.5581,
-      0.7552,
-      0.9427
+      0.7556,
+      0.9421
     ],
     "magazine-holder": [
-      0.0601,
+      0.0599,
       0.1367,
-      0.7205,
-      0.8984
+      0.7204,
+      0.8986
     ],
     "wall-decor": [
       0.5068,
-      0.564,
-      0.3507,
-      0.4609
+      0.5641,
+      0.3505,
+      0.4611
     ],
     "sofa-cover": [
-      0.7544,
+      0.7547,
       0.8154,
-      0.6432,
-      0.6753
+      0.6431,
+      0.675
     ],
     "cushions": [
-      0.5645,
-      0.8105,
-      0.5252,
+      0.5646,
+      0.8107,
+      0.525,
       0.6519
     ],
     "table-runner": [
       0.5396,
       0.6284,
-      0.6788,
-      0.7257
+      0.6787,
+      0.7259
     ],
     "vase": [
-      0.6919,
-      0.7197,
-      0.6233,
-      0.7283
+      0.6917,
+      0.7198,
+      0.6231,
+      0.7278
     ],
     "candle-holders": [
       0.6719,
-      0.689,
-      0.6259,
-      0.7292
+      0.6891,
+      0.6264,
+      0.7287
     ],
     "planter-crown": [
       0.3896,
-      0.4756,
-      0.3707,
-      0.579
+      0.4753,
+      0.3708,
+      0.5792
     ]
   },
   "mullion_pixel_run": {
-    "row_v": 0.3655,
+    "row_v": 0.3657,
     "u": [
-      0.252,
+      0.2518,
       0.2661
     ],
     "note": "window-index pixels around the mullion at z 1.6, includes the 2 cm sash stiles on each side (glass edges)"
@@ -1219,7 +1219,7 @@
   },
   "luminance_L": {
     "sofa front (seat cushion face)": {
-      "L": 67.3,
+      "L": 67.2,
       "uv": [
         0.6634,
         0.6733
@@ -1298,33 +1298,84 @@
     "all_blocking_pass": false,
     "all_values_within_0_01": true
   },
-  "empty_clay_object_indices": [
-    0,
-    1,
-    2,
-    3,
-    4,
-    5,
-    6,
-    8,
-    9,
-    11,
-    12,
-    13,
-    14
-  ],
+  "m0": {
+    "variant": "L2",
+    "clay": "m0-clay-4k.png (3840x2160) / m0-clay.png (2048x1152 Lanczos): shell + sofa, coffee table, armchair only. No slot products, no curtains, rug or lamps (m0-prompt 2.0 / M0-09)",
+    "object_indices_in_clay": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      8,
+      9,
+      11,
+      12,
+      13,
+      14
+    ],
+    "object_indices_expected": "0 sky, 1 sofa, 2 table, 3 armchair, 4 window, 5-12 shell, 13 cornice, 14 reveal",
+    "products_in_clay": false,
+    "depth_checks": {
+      "back wall above the sofa (0.20, 0, 2.40)": {
+        "uv": [
+          0.6898,
+          0.2002
+        ],
+        "measured_m": 5.4739,
+        "expected_planar_m": 5.4738,
+        "dev_m": 0.0002
+      },
+      "back wall near the corner (-2.00, 0, 2.20)": {
+        "uv": [
+          0.4575,
+          0.2749
+        ],
+        "measured_m": 6.4041,
+        "expected_planar_m": 6.4035,
+        "dev_m": 0.0005
+      },
+      "left wall front of the window (-2.30, 3.30, 2.00)": {
+        "uv": [
+          0.0931,
+          0.1921
+        ],
+        "measured_m": 3.5395,
+        "expected_planar_m": 3.5395,
+        "dev_m": 0.0
+      },
+      "floor (0.20, 2.60, 0)": {
+        "uv": [
+          0.5831,
+          0.9162
+        ],
+        "measured_m": 3.1159,
+        "expected_planar_m": 3.1174,
+        "dev_m": 0.0014,
+        "note": "recomputed from m0-depth.exr; the first run sampled (0.20, 3.40, 0), which is below the frame"
+      }
+    },
+    "depth_edge_sharpness": {
+      "transitions_checked": 4299,
+      "pixels_with_blended_depth": 3,
+      "ok": true
+    },
+    "depth_note": "m0-depth.png uint16 mm, planar camera Z; 65535 = sky; Depth pass from Cycles (not filtered across object edges: one sample per pixel for data passes)",
+    "overlay": "m0-clay-overlay.png: the empty M0 clay with the 16 slot proxies as outlines + translucent fills (index pass of a proxy scene, 1 sample)"
+  },
   "render": {
     "engine": "Cycles CPU 4.2",
-    "samples": 64,
+    "samples": 256,
     "res": [
-      2048,
-      1152
+      3840,
+      2160
     ],
     "sky_strength": 7.0,
     "exposure": 1.0,
     "view": "AgX, Medium High Contrast",
     "seed": 7,
-    "light": "sky only, through the window (no sun, no lamps)",
     "palette": {
       "wall": "#DDD8D1",
       "ceiling": "#E7E3DD",
@@ -1349,10 +1400,8 @@
       "crown": "#A9A69C",
       "shadow_gap": "#8A857E",
       "vest": "#D0CBC4"
-    },
-    "clay": "clay.png: shell + sofa, coffee table, armchair (as M0); clay-proxies.png: + 16 slot proxies"
+    }
   },
-  "overlay_not_visible": [],
   "plan": {
     "fov_edge_rays_project_to_u": [
       0.0,
