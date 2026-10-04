@@ -224,30 +224,32 @@ Do not add anything else: no books, trays, bowls, cups, fruit, magazines, table 
 | 1 | **האגרטל עובר לאדן החלון** (הכנף האחורית). על השולחן נשארים שני פמוטים ונכנסת קערה נמוכה | שלב D. שום דבר על השולחן לא חופף כרית או את השמיכה (C21) |
 | 2 | **כיסוי מלא לספה** (slipcover רפוי-מחויט, שיבולת שועל/פשתן). השמיכה נשארת, עכשיו בתוך סט הכריות | שלב A, מהבסיס הריק |
 | 3 | **מנורת הקיר: אותו מוצר, כבל קצר לשקע צמוד.** שקע עיצובי בלבן חם בגוון הקיר, 18 ס"מ מתחת למרכז הפלטה; הכבל יורד ישר 6–12 ס"מ לתקע. **אין כבל לרצפה** | שלב C |
-| 4 | **זוג מנורות קיר קטנות מטרוורטין** משני צדי התמונה, דולקות, הארת קיר למעלה ולמטה. **מחווטות: בלי חוט ובלי שקע** | שלב C |
+| 4 | **זוג מנורות קיר קטנות מטרוורטין** משני צדי התמונה, דולקות. **מחווטות: בלי חוט ובלי שקע.** המוצר הזמני הוא כיפה עם הילה על הקיר, ולא אור למעלה ולמטה; ברינדור מציגים את מה שהמוצר עושה | שלב C |
 | 5 | **אור חם יותר:** 15:00 בחורף, איזון לבן 4600K, המנורות **נראות דולקות** עם שלוליות | שלב C ונעילת צבע בכל שלב |
-| 6 | **מחזיק עיתונים** בפינה השמאלית-קדמית | שלב D |
-| 6א | **ראנר** בשליש השמאלי של השולחן (שטוח, לא מסתיר כריות), ו**קישוט קיר** קטן (עד 45) בין העץ לספה, בגובה 1.20, מתחת-משמאל למנורת הטרוורטין | ראנר בשלב B, קישוט בשלב C |
+| 6 | **מחזיק עיתונים** בפינה השמאלית-קדמית | **לא בסבב הזה** (אין מוצר מתאים; הפינה נשארת פרקט חשוף) |
+| 6א | **ראנר** בשליש השמאלי של השולחן (שטוח, לא מסתיר כריות), ו**קישוט קיר** קטן (עד 45) בין העץ לספה | ראנר בשלב B. **קישוט הקיר לא בסבב הזה** (אין מוצר מתאים; הקיר שם נשאר ריק) |
 | 7 | **תיקונים מסבב 1:** תלויה קטנה וגבוהה, תמונה/שטיח/סל/אהיל מנורת הקיר בגודל הנכון, קבוצת השולחן לא במרכז, נעילת צבע נגד הסחף הוורוד | בכל שלב, סעיפים 10.4–10.5 |
 
 ### 10.2 תנאי התחלה (חוסם)
+> **מתקיים (2026-10-04):** כרטיסי סבב 4 הגיעו (`data/leads/cj/round4-2026-10-04.md`), ונספח 10.8 מלא. render-agent יכול להתחיל.
+
 סבב 2 מתחיל **רק אחרי** ש-sourcing-agent מחזיר כרטיסים לפי `data/leads/cj/search-specs-2026-10-04.md`, ו-master-designer בוחר מוצר זמני לכל אחת מהעמדות החדשות ומוציא **נספח 10.8** עם ה-URL-ים והתיאורים שממלאים את הסוגריים המרובעים בפרומפטים. בלי מוצר אמיתי לכיסוי הספה ולמנורות הטרוורטין לא מרנדרים אותם (לא מוצר גנרי, כדי שהמשתמש לא יתאהב במוצר שלא קיים). מחזיק העיתונים, הקערה, הראנר וקישוט הקיר: אם אין מועמד כשר, מושמטים ונרשמים ב-README, והסבב ממשיך (בלי קערה נשארים 2 פמוטים: אז הקבוצה לא תקינה, וזה נרשם כפער).
 
 ### 10.3 מסלול ותקציב
 - **בסיס:** שוב `m0/pilot-v4.1/m0-pilot-b-graded.png` (לא step-d של סבב 1): הספה מתלבשת מחדש, והתלויה, התמונה, השטיח והסל צריכים להיבנות מחדש בגודל הנכון. עריכה של step-d לא תקטין אותם באמינות.
-- **ארבעה שלבים, עד 5 רפרנסים בכל אחד:**
+- **ארבעה שלבים, עד 4 רפרנסים בכל אחד (ועוד הבסיס):**
 
 | שלב | תוכן | רפרנסים | קרדיטים |
 | --- | --- | --- | --- |
-| A | כיסוי ספה, 3 כריות, שמיכה | 5 | 400 |
+| A | כיסוי ספה, 2 כריות ושמיכה (רפרנסים); כרית פחם (במילים) | 4 | 400 |
 | B | שטיח, תמונה, וילונות, ראנר (רפרנסים); עציץ ועץ, סל (במילים) | 4 | 400 |
-| C | תלויה, מנורת קיר (ושקע), זוג טרוורטין, קישוט קיר (רפרנסים); מנורת רגל (במילים); **אור אחר הצהריים והדלקת המנורות** | 4 (+1 מדריך מיקום בניסיון חוזר) | 400 |
-| D | אגרטל על האדן, 2 פמוטים, קערה, פוף, מחזיק עיתונים | 5 | 400 |
+| C | תלויה, מנורת קיר (ושקע), זוג טרוורטין (רפרנסים); מנורת רגל (במילים); **אור אחר הצהריים והדלקת המנורות** | 3 (+1 מדריך מיקום בניסיון חוזר) | 400 |
+| D | אגרטל על האדן, 2 פמוטים, קערה (רפרנסים); פוף (במילים) | 3 | 400 |
 | רזרבה | ניסיון חוזר אחד | — | 400 |
 | **סה"כ** | | | **2,000 (תקרה, כמו בסבב 1)** |
 
 - `var2_estimate_cost` לפני כל קריאה; עוצרים לפני שהמצטבר עובר 2,000.
-- **ניסיון חוזר ראשון בשלב C** (אם התלויה שוב גדולה או נמוכה): מוסיפים תמונה 6 = **מדריך מיקום**: תוצר B עם מלבנים שקופים-למחצה בצבעים שונים (בלי טקסט) על התיבות מסעיף 10.6, ובפרומפט: "Image 6 is a placement guide only: put each item inside its box; never draw the boxes or their colours."
+- **ניסיון חוזר ראשון בשלב C** (אם התלויה שוב גדולה או נמוכה): מוסיפים תמונה 5 = **מדריך מיקום**: תוצר B עם מלבנים שקופים-למחצה בצבעים שונים (בלי טקסט) על התיבות מסעיף 10.6, ובפרומפט: "Image 5 is a placement guide only: put each item inside its box; never draw the boxes or their colours."
 
 ### 10.4 נעילת צבע (נגד הסחף הוורוד) — חובה בכל שלב
 1. **בפרומפט** (בכל שלב, כבר כתוב בפרומפטים): "walls warm white, creamy, never pink, lilac or grey".
@@ -257,7 +259,7 @@ Do not add anything else: no books, trays, bowls, cups, fruit, magazines, table 
 
 ### 10.5 אור ומצב רוח
 - **15:00, אחר צהריים מאוחר באמצע החורף,** חלון צפוני: בלי שמש ישירה, בלי כתמי שמש. השמיים בהירים-רכים, אור היום חם מעט יותר מבסבב 1 ונמוך ב-⅓ סטופ בעומק החדר, כך שהמנורות קוראות. **החלון עדיין הבהיר ביותר.** הצללים מהחלון: ימינה ומעט לכיוון המצלמה, רכים.
-- **המנורות נראות דולקות:** האהילים זוהרים מבפנים (חמים, לא לבנים); שלולית חמה ברורה על הקצה הימני של הספה (מנורת הרגל, רדיוס כ-70), על הכתף והמושב של הכורסה (מנורת הקיר, כ-55), ועל מרכז השולחן (התלויה, כ-50). זוג הטרוורטין: פס אור רך וצר למעלה ולמטה על הקיר, לא נוגע במסגרות. **אין צל ממנורות, אין הילות, אין קרניים, אין נורה גלויה.**
+- **המנורות נראות דולקות:** האהילים זוהרים מבפנים (חמים, לא לבנים); שלולית חמה ברורה על הקצה הימני של הספה (מנורת הרגל, רדיוס כ-70), על הכתף והמושב של הכורסה (מנורת הקיר, כ-55), ועל מרכז השולחן (התלויה, כ-50). זוג הטרוורטין: הכיפה זוהרת בעדינות, וטבעת אור חמה וקטנה על הקיר סביבה (כמו בתמונות המוצר הזמני), לא נוגעת במסגרות. **אין צל ממנורות, אין הילות בצילום (bloom), אין קרניים, אין נורה גלויה.**
 - **גריידינג סופי (0 קרדיטים):** איזון לבן גלובלי (10.4), חשיפה עד ‎+0.2 סטופ (לא יותר; בסבב 1 החשיפה ונקודת השחור הגבוהה עשו את החדר "חלבי"), נקודת שחור L 12–13, עקומת S עדינה. בלי רוויה, בלי תיקון מקומי.
 
 ### 10.6 מיקום וקנה מידה (u, v; בסוגריים: ניסוח יחסי לפרומפט)
@@ -267,8 +269,8 @@ Do not add anything else: no books, trays, bowls, cups, fruit, magazines, table 
 | --- | --- | --- |
 | תלויה | [0.595, 0.673, 0.052, 0.174] | רוחבה כשליש מאורך שולחן הקפה, צרה מכרית מושב אחת; תחתיתה גבוהה מעל ראש המסגרות, והקיר הפנוי ביניהם גבוה בערך כמו התלויה עצמה; כולה בחמישית העליונה של התמונה |
 | תמונה | [0.598, 0.792, 0.281, 0.512] | כל מסגרת ברוחב כשלושה רבעים מכרית מושב; השורה כשלושה רבעים מרוחב הספה; תחתית המסגרות כחצי גובה מסגרת מעל גב הספה |
-| טרוורטין שמאל / ימין | [0.562, 0.578, 0.332, 0.368] / [0.822, 0.840, 0.309, 0.352] | כל מנורה ברוחב כרבע ממסגרת אחת; הקצה העליון בקו העליון של המסגרות; כל אחת מעל קצה של הספה |
-| קישוט קיר | [0.510, 0.556, 0.415, 0.505] | קטן, ברוחב כחצי מסגרת אחת; מרכזו בערך בגובה מרכז התמונה פחות חצי מסגרת; בין העץ לקצה השמאלי של הספה, מתחת ומשמאל למנורת הטרוורטין השמאלית, לא נוגע בה, בעלווה או בספה |
+| טרוורטין שמאל / ימין | [0.561, 0.579, 0.333, 0.367] / [0.821, 0.841, 0.312, 0.350] (המוצר הזמני: כיפה 15×15) | כל מנורה ברוחב כרבע ממסגרת אחת; הקצה העליון בקו העליון של המסגרות; כל אחת מעל קצה של הספה |
+| קישוט קיר | **ריק בסבב הזה** ([0.510, 0.556, 0.415, 0.505] נשאר קיר) | — |
 | ראנר | שליש שמאלי של השולחן, קו האמצע כ-30 ס"מ מהקצה השמאלי | פס פשתן ברוחב כרבע מאורך השולחן, חוצה אותו לרוחבו ונופל קדימה ואחורה; ריק |
 | מנורת קיר | פלטה (0.118, 0.372); שקע (0.117, 0.431) | אהיל קטן, ברוחב כשליש מרוחב הכורסה; השקע קטן, ריבוע בגוון הקיר, מתחת לפלטה |
 | מנורת רגל | אהיל [0.856, 0.917, 0.381, 0.460] | האהיל ברוחב הסל |
@@ -278,7 +280,7 @@ Do not add anything else: no books, trays, bowls, cups, fruit, magazines, table 
 | פמוטים | בעמודה u 0.66–0.73 | ברווח שבין הכריות השמאליות לכרית המותן, במבט מהמצלמה |
 | קערה | מרכז כ-(0.712, 0.72) | נמוכה, לפני הפמוטים ומימינם |
 | פוף | [0.463, 0.558, 0.756, 0.947] | ראשו מתחת לשפה התחתונה של משטח השולחן |
-| מחזיק עיתונים | [0.060, 0.137, 0.720, 0.899] | ראשו בערך בגובה מושב הכורסה; צמוד לקיר השמאלי, מתחת למנורת הקיר |
+| מחזיק עיתונים | **ריק בסבב הזה** (הפינה נשארת פרקט חשוף) | — |
 
 ### 10.7 הפרומפטים (מילה במילה; את [הסוגריים] ממלא נספח 10.8)
 
@@ -287,7 +289,7 @@ Do not add anything else: no books, trays, bowls, cups, fruit, magazines, table 
 ```text
 Edit image 1, a finished photograph of a Scandinavian living room. Keep everything exactly as it is: camera, framing, walls, corner, window, cornice, skirting, oak floor, light, exposure, and the coffee table and armchair in the same position, size, colour and fabric. The sofa keeps exactly its position, size, low straight shape, square track arms, three seat and three back cushions and its visible oak legs. Only change what is listed below. Images 2-5 are product references: copy each product faithfully and take nothing else from them; ignore their rooms, furniture, props, labels and text.
 
-1. SOFA SLIPCOVER (image 2): dress the whole sofa in the slipcover from image 2: [SLIPCOVER: colour, fabric, weave]. Relaxed tailored fit that follows the sofa's straight lines: square arms stay square, soft natural creases at the corners and along the front, separate covers on each seat and back cushion. The hem ends just below the sofa frame, so the oak legs stay fully visible. Matte, no shine, no stretch look, no skirt.
+1. SOFA SLIPCOVER (image 2): dress the whole sofa in the slipcover from image 2: a warm light greige-oatmeal linen-look fabric with an irregular slub weave, as in image 2, soft and dry to the eye. Relaxed tailored fit that follows the sofa's straight lines: square arms stay square, soft natural creases at the corners and along the front, a separate cover on each seat and back cushion, like image 2. The hem is tucked neatly just below the sofa frame, so the oak legs stay fully visible. Matte, no shine, no stretch look, no tight wrapping, no skirt, no elastic or hooks visible.
 
 2. THROW (image 5): the warm white multi-layer cotton muslin throw, 150 x 200 cm, small waffle grid, natural crinkle, short frayed fringe. Loosely folded over the top of the right armrest, flowing across the front half of the right seat cushion and spilling over the seat edge in two or three deep soft folds. About the right fifth of the sofa. No label.
 
@@ -297,7 +299,7 @@ Colour: walls warm white, creamy, never pink, lilac or grey. Natural colour, jus
 
 Do not add anything else. No text, logos or labels.
 ```
-(בשלב A אין רפרנס לכרית הפחם, כדי לא לעבור 5. הכרית ממשיכה את התיאור; אם היא יוצאת לא נאמנה, הניסיון החוזר מחליף את תמונה 3 בכרית הפחם, והבוקלה מתוארת במילים.)
+(בשלב A אין רפרנס לכרית הפחם, כדי לשמור על 4 רפרנסים לכל היותר. הכרית ממשיכה את התיאור; אם היא יוצאת לא נאמנה, הניסיון החוזר מחליף את תמונה 3 בכרית הפחם, והבוקלה מתוארת במילים.)
 
 #### שלב B: שטיח, תמונה, וילונות, ראנר, עציץ ועץ, סל
 תמונות: 1 תוצר A, ‏2 rug, ‏3 framed-art, ‏4 curtains, ‏5 table-runner. (העציץ והסל בתיאור מילולי בלבד, כי שניהם יצאו נאמנים בסבב 1; אם אחד מהם יוצא לא נאמן, הניסיון החוזר מחליף את תמונה 4 ברפרנס שלו.)
@@ -314,7 +316,7 @@ Edit image 1. Keep everything in it exactly as it is: camera, framing, architect
 
 5. BASKET: cylindrical coiled jute-rope basket, natural colour, two rope loop handles, empty. On the parquet just right of the sofa's right end with a narrow gap, at 86% to 92% of the frame width and 67% to 80% of its height. Its rim is a little below the sofa seat; it is about half as wide as a seat cushion is deep. The rug edge passes in front of its foot.
 
-6. TABLE RUNNER (image 5): [RUNNER: colour, fabric, edge], flat and thin, laid across the width of the coffee table in its left third, its centre line about 30 cm in from the table's left end, at a right angle to the table's long side. It drapes evenly over the front and back edges in soft straight folds, ending well above the rug. Nothing stands on it. The rest of the table top stays bare oak.
+6. TABLE RUNNER (image 5): the muted grey-sage linen-look runner from image 5 with a fine knotted fringe at both ends, 33 cm wide and 122 cm long, matte slub weave, flat and thin, laid across the width of the coffee table in its left third, its centre line about 30 cm in from the table's left end, at a right angle to the table's long side. It drapes evenly over the front and back edges in soft straight folds, ending well above the rug. Nothing stands on it. The rest of the table top stays bare oak.
 
 Colour: walls warm white, creamy, never pink, lilac or grey. Light unchanged; soft shadows to the right. No sun patches, no leaf shadows.
 
@@ -322,47 +324,100 @@ Do not add anything else: no lamps, mirrors, books or objects on surfaces. No te
 ```
 
 #### שלב C: מנורות, אור אחר הצהריים
-תמונות: 1 תוצר B, ‏2 pendant, ‏3 wall-sconce, ‏4 accent-sconces, ‏5 wall-decor. (מנורת הרגל במילים, כמו בסבב 1, כי הצללית שלה גנרית ממילא. מדריך המיקום בניסיון החוזר יהיה תמונה 6.)
+תמונות: 1 תוצר B, ‏2 pendant, ‏3 wall-sconce, ‏4 accent-sconces. (מנורת הרגל במילים, כמו בסבב 1, כי הצללית שלה גנרית ממילא. קישוט הקיר לא בסבב הזה: אין מוצר מתאים. מדריך המיקום בניסיון החוזר יהיה תמונה 5.)
 ```text
-Edit image 1. Keep everything in it exactly as it is: camera, framing, architecture, window, curtains, and every item already in the room, unchanged in position, size, colour and shape. Only add the items below and change the light as described. Images 2-5 are product references: copy each faithfully and take nothing else from them; ignore their rooms, beds, people and text. Image 2 may be a dimension drawing: ignore its lettering and lines.
+Edit image 1. Keep everything in it exactly as it is: camera, framing, architecture, window, curtains, and every item already in the room, unchanged in position, size, colour and shape. Only add the items below and change the light as described. Images 2-4 are product references: copy each faithfully and take nothing else from them; ignore their rooms, beds, people and text. Image 2 may be a dimension drawing: ignore its lettering and lines.
 
 1. PENDANT (image 2): closed pleated warm white fabric lantern, flat pumpkin form, dense fine pleats, matte. It is small: its width is about one third of the coffee table's length, narrower than one sofa seat cushion. It hangs above the centre of the coffee table, high: the whole lantern is in the top fifth of the image, at 60% to 67% of the frame width, and its bottom is well above the top edge of the frames, with a band of clear wall between them about as tall as the lantern itself. A thin black cord rises straight out of the top of the frame.
 
 2. WALL LAMP (image 3): the black swing-arm wall lamp with an oatmeal linen tapered shade. Plate on the left wall at 12% of the frame width and 37% of its height; the shade is small, about one third of the armchair's width, above and behind the armchair. Directly below the plate, a small flush square wall socket in the same warm white as the wall; a short straight black cord, a few centimetres, runs from the bottom of the plate into a plug in that socket. No cord below the socket, nothing running to the floor.
 
-3. TRAVERTINE WALL LIGHTS (image 4): a matching pair of [ACCENT: shape, size] in honed light travertine with visible pores, matte. On the back wall, one on each side of the framed prints, each above one end of the sofa, at 56-58% and 82-84% of the frame width; the top of each lamp level with the top of the frames. Each is small, about a quarter of one frame's width. They are wired into the wall: no cords, no sockets, no plugs.
+3. TRAVERTINE WALL LIGHTS (image 4): a matching pair of the small round domed wall lights from image 4, each dome 15 cm across and 12 cm deep, in honed warm light travertine with natural pores, matte. On the back wall, one on each side of the framed prints, each above one end of the sofa, at 56-58% and 82-84% of the frame width; the top of each lamp level with the top of the frames. Each is small, about a quarter of one frame's width. They are wired into the wall: no cords, no sockets, no plugs.
 
-4. WALL DECOR (image 5): [DECOR: description], small, about half the width of one frame, flat against the back wall between the olive tree and the left end of the sofa, at 51% to 56% of the frame width and 42% to 50% of its height: lower than the frames, below and to the left of the left travertine lamp, touching neither the lamp, the tree's leaves nor the sofa.
+4. FLOOR LAMP: slim matte black pole floor lamp with an oatmeal linen drum shade as wide as the basket, just right of the sofa's right end behind the basket; shade at 86% to 92% of the frame width and 38% to 46% of its height; base hidden by the basket.
 
-5. FLOOR LAMP: slim matte black pole floor lamp with an oatmeal linen drum shade as wide as the basket, just right of the sofa's right end behind the basket; shade at 86% to 92% of the frame width and 38% to 46% of its height; base hidden by the basket.
+Light: late winter afternoon, about 3 pm, north-facing window, no direct sun. Daylight from the window is soft and slightly warmer, the room a little dimmer away from the window; the window stays the brightest area. All lamps are switched on and clearly lit with warm 2700 K light: shades glow from within; a warm pool on the right end of the sofa, a warm pool on the armchair's shoulder and seat, a soft warm wash on the centre of the coffee table; each travertine dome glows softly and leaves a small warm ring of light on the wall around it, as in image 4, not reaching the frames. No lamp shadows, no visible bulbs, no glare, flare or beams. Walls warm white, creamy, never pink, lilac or grey.
 
-Light: late winter afternoon, about 3 pm, north-facing window, no direct sun. Daylight from the window is soft and slightly warmer, the room a little dimmer away from the window; the window stays the brightest area. All lamps are switched on and clearly lit with warm 2700 K light: shades glow from within; a warm pool on the right end of the sofa, a warm pool on the armchair's shoulder and seat, a soft warm wash on the centre of the coffee table; each travertine lamp throws a soft narrow wash up and down the wall, not touching the frames. No lamp shadows, no visible bulbs, no glare, halos or beams. Walls warm white, creamy, never pink, lilac or grey.
-
-Do not add anything else. No text, logos or labels.
+Do not add anything else: no wall decor, mirrors or extra lamps. No text, logos or labels.
 ```
 
-#### שלב D: אגרטל על האדן, פמוטים, קערה, פוף, מחזיק עיתונים
-תמונות: 1 תוצר C, ‏2 vase, ‏3 candle-holders, ‏4 bowl, ‏5 magazine-holder. (הפוף במילים, כמו בסבב 1.)
+#### שלב D: אגרטל על האדן, פמוטים, קערה, פוף
+תמונות: 1 תוצר C, ‏2 vase, ‏3 candle-holders, ‏4 bowl. (הפוף במילים, כמו בסבב 1. מחזיק העיתונים לא בסבב הזה: אין מוצר מתאים.)
 ```text
-Edit image 1. Keep everything in it exactly as it is: camera, framing, architecture, the late-afternoon light, every lit lamp and its glow, exposure, white balance, and every item already in the room, unchanged in position, size, colour and shape. Only add the items below. Images 2-5 are product references: copy each faithfully and take nothing else from them; ignore their backgrounds, flowers, props and text.
+Edit image 1. Keep everything in it exactly as it is: camera, framing, architecture, the late-afternoon light, every lit lamp and its glow, exposure, white balance, and every item already in the room, unchanged in position, size, colour and shape. Only add the items below. Images 2-4 are product references: copy each faithfully and take nothing else from them; ignore their backgrounds, flowers, props and text.
 
-1. VASE ON THE WINDOW SILL (image 2): [VASE: description], about one sixth of the window opening's height. It stands on the window sill in the middle of the back casement, at about 33% of the frame width, its foot on the sill, clear of the mullion and of the olive tree. In it: three or four slender eucalyptus stems with round silvery sage leaves, airy, leaning slightly left, reaching about twice the vase's height. Its face is softly lit by the room and reads as matte textured ceramic, not a dark silhouette; the window behind it stays brighter. Nothing else on the sill.
+1. VASE ON THE WINDOW SILL (image 2): the textured stoneware vase from image 2, 32 cm tall and 16 cm wide, a soft jar shape with a small mouth, warm white, matte, with a fine crinkled stone-like texture and a smooth rim, about one sixth of the window opening's height. It stands on the window sill in the middle of the back casement, at about 33% of the frame width, its foot on the sill, clear of the mullion and of the olive tree. In it: three or four slender eucalyptus stems with round silvery sage leaves, airy, leaning slightly left, reaching about twice the vase's height. Its face is softly lit by the room and reads as matte textured ceramic, not a dark silhouette; the window behind it stays brighter. Nothing else on the sill.
 
 2. CANDLE HOLDERS (image 3): two light travertine pedestal holders, 7 cm wide and 11 cm tall, each with an unlit warm white pillar candle 7 cm wide, one 15 cm and one 10 cm tall, flat tops and short white wicks. On the coffee table, standing in the gap between the left cushions and the charcoal lumbar cushion as seen from the camera, at 66% to 73% of the frame width; they must not overlap any cushion or the throw.
 
-3. BOWL (image 4): [BOWL: description], low, in front of and right of the candle holders, forming a triangle with them. Nothing is placed on the linen runner in the left third of the table, and the bare oak between the runner and the candle holders stays empty.
+3. BOWL (image 4): the wide shallow stoneware bowl from image 4, 21 cm across and 5 cm high, warm ivory with fine dark speckles, a thin raw clay rim and a small foot ring, soft low sheen only, empty, in front of and right of the candle holders, forming a triangle with them. Nothing is placed on the linen runner in the left third of the table, and the bare oak between the runner and the candle holders stays empty.
 
 4. POUF: round chunky-knit cotton pouf in natural off-white, a flat ball 45 cm wide and 36 cm high, plump, on the rug in front of the armchair at 46% to 56% of the frame width; its top below the lower edge of the table top.
 
-5. MAGAZINE HOLDER (image 5): [HOLDER: description], holding three upright A4 magazines in matte warm white, oatmeal and light grey covers with no text. On the parquet in the front-left corner, against the left wall under the wall lamp, facing the camera, at 6% to 14% of the frame width and 72% to 90% of its height; its top about at the height of the armchair seat.
-
 Light unchanged. New items: soft shadows falling right and slightly toward the camera, short soft contact shadows. No candle flames. Walls warm white, never pink.
 
-Do not add anything else: no books, trays, cups, fruit or extra flowers. No text, logos or labels.
+Do not add anything else: no magazine holder, magazines, books, trays, cups, fruit or extra flowers. The front-left corner under the wall lamp stays bare parquet. No text, logos or labels.
 ```
 
-### 10.8 נספח מוצרים (יוצא אחרי ה-sourcing)
-טבלה כמו בסעיף 3 לכל עמדה חדשה (sofa-cover, accent-sconces, vase אם מוחלף, bowl, magazine-holder, table-runner, wall-decor), עם הטקסט לכל [סוגריים]. העמדות שלא השתנו משתמשות באותם מוצרים ו-URL-ים כמו בסעיף 3.
+### 10.8 נספח מוצרים (2026-10-04, אחרי סבב 4 של CJ)
+כל המוצרים זמניים, ואף כרטיס לא מסומן `selected`. התיאורים כבר נמצאים בפרומפטים שב-10.7, ואין יותר סוגריים מרובעים. usage_rights בכל הכרטיסים `unclear`, ולא `none`.
+
+**כלל לבחירת תמונה (בעמדות שמסומנות "לבחור"):** render-agent פותח את כל ה-URL-ים שבכרטיס ובוחר תמונה **אחת**, לפי הקריטריון שבטבלה. את ה-URL שנבחר הוא רושם ב-README וברשומת השחזור. אם אף תמונה לא עומדת בקריטריון, משתמשים בראשונה ברשימה ורושמים את זה.
+
+| עמדה | שלב / תמונה | כרטיס | וריאנט | רפרנס |
+| --- | --- | --- | --- | --- |
+| sofa-cover **⚠ זמני-מותנה** | A / 2 | `data/products/sofa-cover/sofa-cover-cj-linen-feel-chenille-slipcover.json` | Beige, Three seat, vid 2605170628371633900 | **לבחור** מבין 7 ה-URL-ים בכרטיס: התמונה שמראה את הכיסוי הבז' **על ספה שלמה, עם כיסוי נפרד לכל כרית**, בתקריב הכי גדול של הבד. ברירת מחדל: https://oss-cf.cjdropshipping.com/product/2026/05/17/06/aa791f9d-0f82-4a82-bead-bb601867d8f0_trans.jpeg |
+| cushions: בוקלה | A / 3 | `cushions-cj-boucle-teddy.json` | כמו בסעיף 3 | כמו בסעיף 3 |
+| cushions: שניל מרווה | A / 4 | `cushions-cj-knitted-chenille-bean-green.json` | כמו בסעיף 3 | כמו בסעיף 3 |
+| cushions: שמיכה (מוסלין) | A / 5 | `sofa-cover-cj-cotton-muslin-fringe.json` (כרטיס בתיקיית sofa-cover; ב-Bible 1.4 השמיכה חלק מסט הכריות) | White 150×200 | כמו בסעיף 3 |
+| cushions: פחם | A, במילים | `cushions-cj-linen-look-charcoal.json` | כמו בסעיף 3 | — (ראו ההערה מתחת לפרומפט A) |
+| rug | B / 2 | כמו בסעיף 3 | Square 230×330 | כמו בסעיף 3 |
+| framed-art ⚠ | B / 3 | כמו בסעיף 3 | D 50×70 | כמו בסעיף 3 |
+| curtains ⚠ | B / 4 | כמו בסעיף 3 | Linen, 4 Hook | כמו בסעיף 3 |
+| table-runner | B / 5 | `data/products/table-runner/table-runner-cj-linen-look-sage-fringe.json` | Light Green, **33×122** (לא 183; ה-vid של 122 לא ברשום בכרטיס, ולכן sourcing-agent צריך להשלים אותו) | **לבחור:** התמונה שבה הראנר בגוון הירוק-אפור (Light Green) נראה הכי ברור, עם הפרנזים. ברירת מחדל: https://cf.cjdropshipping.com/quick/product/2736eed6-7f8e-49d7-8652-d9e719a72430.jpg |
+| planter, basket | B, במילים | כמו בסעיף 3 | | — |
+| pendant ⚠ | C / 2 | כמו בסעיף 3 | 40cm | כמו בסעיף 3 |
+| wall-sconce ⚠ | C / 3 | כמו בסעיף 3 (אותו מוצר, החלטת משתמש) | Type A EU | כמו בסעיף 3 |
+| accent-sconces **⚠ חסום CE** | C / 4 | `data/products/wall-sconce/wall-sconce-cj-travertine-dome-15-alt.json` | Warm Light-15cm, vid 2411180627251606300, ‏×2 | **לבחור:** תמונה של המנורה **על קיר**, שמראה את הכיפה ואת טבעת האור סביבה, בלי חוט. ברירת מחדל: https://cf.cjdropshipping.com/quick/product/6cca2b06-4618-4216-978f-af007bd94dfa.jpg |
+| floor-lamp ⚠ | C, במילים | כמו בסעיף 3 | | — |
+| vase | D / 2 | `vase-cj-textured-white-stoneware.json` (כמו בסבב 1) | Large 32 | כמו בסעיף 3 |
+| candle-holders | D / 3 | כמו בסעיף 3 | 2 × Small | כמו בסעיף 3 |
+| bowl | D / 4 | `data/products/bowl/bowl-cj-speckled-ivory-wide-bowl-21.json` | Large White, vid 2506280519431621200 | **לבחור:** הקערה הגדולה בלבן-שנהב המנומר, מזווית של שלושה רבעים, שבה רואים את השפה מחימר גלוי. ברירת מחדל: https://cf.cjdropshipping.com/quick/product/7b0ee726-ee08-48bc-bc82-1e04156ec05a.jpg |
+| pouf ⚠ | D, במילים | כמו בסעיף 3 | | — |
+| magazine-holder | — | **ריק** | אין מוצר שנכנס ל-26–30 × 18–20 × 38–42. הקרובים ביותר (קשת ברזל עם קש, ‏35×16.5×45; מסגרת עם רצועות, ‏35×19×27.5) נפסלו: ראטן אסור, ושני הגדלים מחוץ למעטפת | — |
+| wall-decor | — | **ריק** | אין מוצר נורדי בעד 45×45 | — |
+
+**למה כל בחירה, ומה הפער:**
+- **sofa-cover (⚠ זמני-מותנה):** ב-CJ אין כיסוי פשתן או כותנה שאינו נמתח. זה הקרוב ביותר שיש: מראה פשתן מט עם סלאב, כיסוי נפרד לכל כרית (כמו הספה שלנו), ובגוון בז'-גרייג'.
+  - **הפערים:** הבד הוא שניל פוליאסטר ולא פשתן. השפה התחתונה עם גומי ("one pull, one hook"). בתמונות הספק הספה בלי רגליים, ולכן לא ראינו איך הכיסוי נראה על משענת track ורגלי אלון.
+  - הגוון בתמונה נמדד ב-L כ-70, כהה מהיעד (L 78–88). מרנדרים את גוון המוצר כמו שהוא בבז', ולא מבהירים.
+  - **ברינדור:** מציגים את הכיסוי כמחויט ורפוי, בלי ברק ובלי מראה מתיחה. **זו חריגת נאמנות מודעת:** אם המוצר לא נראה כך בפועל, הוא לא ייבחר. QA רושם את L ואת הגזרה.
+  - ההכרעה על העמדה (כיסוי ב-CJ מול מקור אחר) נשארת פתוחה לפני אישור 2.
+- **accent-sconces (⚠ חסום CE):** כיפת טרוורטין מושחזת בקוטר 15. מבין 5 הכרטיסים היא הכי קרובה במידה ובמראה, ומחוברת לחשמל בקיר.
+  - **הפערים:** רוחב 15 (המעטפת עד 14). האור הוא הילה סביב הכיפה ולא אור למעלה ולמטה, ולכן ברינדור מציגים הילה.
+  - **החלופות שנפסלו:**
+    - half-bowl: גובה 7, מתחת לטווח 12–18.
+    - cone: יש לו זרוע, ופלטת עץ אגוז אדמדמה.
+    - dome-pull: אותו מוצר, אבל המשלוח פי 5.
+    - disc-25: גדולה מדי.
+  - **מה לשאול את הספק לפני כל בחירה:**
+    1. מתח הכניסה: האם 220–240V AC? בליסטינג כתוב "≤36V", כנראה מתח הדרייבר.
+    2. תעודת CE: מסמך, ולא רק מילה בליסטינג.
+    3. טמפרטורת צבע: האם יש 2700K? כתוב רק "warm".
+    4. האם הדרייבר מובנה, ואיך מתקינים על קופסת חשמל בקיר (מידות הפלטה, ברגים).
+    5. האם האבן טרוורטין אמיתי ולא שרף.
+    6. האם יש עמעום.
+    7. מידות סופיות (הבליטה 12).
+- **table-runner:** גוון מרווה-אפור עמום (#979584, אפור מעט יותר מהמרווה ב-Bible), פרנזים דקים, מראה פשתן מט. המרווה מופיעה פעם רביעית בחדר וקושרת את השולחן לכריות ולענפים.
+  - **הפערים:** פוליאסטר. הגוון מעט מחוץ לטווח המרווה (H כ-55 מול 70–110), ולכן QA רושם.
+  - **אורך:** מרנדרים 122, שנכנס ל-100–125 ונמכר באותו ליסטינג. 183 אסור: הוא היה נוגע ברצפה.
+- **bowl:** הכרטיס היחיד שעומד במידות (21×5.2), שנהב מנומר עם שפה מחימר גלוי, כלומר עבודת יד נראית. **הפערים:** זיגוג סאטן ולא מט לגמרי (בפרומפט: "soft low sheen only"), וטבעת רגל נמוכה.
+- **magazine-holder ו-wall-decor:** ריקים, לפי הכלל "בלי מוצר גנרי". הפינה השמאלית-קדמית נשארת פרקט, והקיר בין העץ לספה נשאר ריק. במסירה למשתמש כותבים במפורש: "שתי העמדות האלה ריקות בתצוגה כי עוד אין להן מוצר."
+
+**אורכי הפרומפטים (הערכה שלי לפני שליחה; לא ספרתי בכלי, ו-render-agent מודד ב-`len()` ורושם):** A כ-2,600, ‏B כ-3,350, ‏C כ-3,200, ‏D כ-2,500. כולם מתחת ל-3,800.
+- **אם B עובר 3,800:** מוחקים מסעיף 6 את המשפט "It drapes evenly over the front and back edges in soft straight folds, ending well above the rug." ואת הסעיף "Colour:" מקצרים ל-"Walls warm white, never pink." זה הקיצור היחיד המותר, ורושמים אותו.
+
+**תקציב (מאושר):** ארבעה שלבים × 400, ועוד ניסיון חוזר אחד של 400. סה"כ **2,000**, כמו בסבב 1. רפרנסים לכל שלב: A 4+בסיס, B 4+בסיס, C 3+בסיס, D 3+בסיס.
 
 ### 10.9 תנאי קבלה (S1–S8 מסבב 1 בתוקף, ובנוסף)
 | # | תנאי | איך |
