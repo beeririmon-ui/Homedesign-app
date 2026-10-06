@@ -86,14 +86,9 @@ def draw_base(ax, faded=False):
     # garden strip along north
     ax.text(-3.35, 11.0, he("גינה (צפון)"), rotation=90, ha="center", va="center", fontsize=16,
             color="#6d8f5e", alpha=a, zorder=1)
-    # wall mass = outer blocks (+ bath east wall strip, missing from the JSON blocks, see README)
+    # wall mass = outer blocks (v0.2: blocks tile the footprint without a gap)
     for b in fp["outer_blocks"]:
         rect(ax, b["x"], b["y"], facecolor=WALL, edgecolor="none", alpha=a, zorder=2)
-    rect(ax, [3.60, 6.60], [9.80, 9.95], facecolor=WALL, edgecolor="none", alpha=a, zorder=2)
-    # mamad walls: slightly different tone
-    m = ROOMS["work-mamad"]
-    rect(ax, [m["x"][0] - 0.0, m["x"][1] + 0.30], [m["y"][0] - 0.30, m["y"][1] + 0.30],
-         facecolor=MAMAD, edgecolor="none", alpha=a, zorder=2.1)
     # rooms
     for r in J["rooms"]:
         fc = FLOOR
@@ -151,11 +146,11 @@ def draw_opening(ax, o):
 DOOR_SWINGS = {
     "O-entry-living": [((0.95, 6.35), 0.60, 0, 90, 90), ((2.15, 6.35), 0.60, 90, 180, 90)],
     "O-living-dining": [((2.65, 2.97), 0.80, 0, 90, 0), ((2.65, 4.57), 0.80, 270, 360, 0)],
-    # opens out into the hall, hinge on the west jamb (Y 8.24), leaf parks along the hall wall toward +Y
-    "O-hall-mamad": [((0.80, 8.24), 0.80, 270, 450, 90)],
-    "O-corridor-boy": [((1.55, 13.63), 0.90, 180, 270, 180)],
-    "O-corridor-girl": [((1.55, 17.27), 0.90, 180, 270, 180)],
-    "O-corridor-bath": [((3.25, 13.49), 1.00, 270, 360, 0)],
+    # v0.2: regular door, opens into the work room, hinge on the west jamb (Y 9.00)
+    "O-hall-work": [((0.65, 9.00), 0.90, 180, 270, 180)],
+    "O-corridor-boy": [((1.55, 13.53), 0.90, 180, 270, 180)],
+    "O-corridor-girl": [((1.55, 17.16), 0.90, 180, 270, 180)],
+    "O-corridor-bath": [((3.25, 13.39), 1.00, 270, 360, 0)],
     "O-corridor-master": [((2.78, 17.66), 0.90, 90, 180, 90)],
     "O-master-ensuite": [((3.25, 20.60), 0.90, 270, 360, 0)],
 }
@@ -173,7 +168,7 @@ def draw_window(ax, w):
     elif "plane_y" in w:
         y = w["plane_y"]
         x0, x1 = w["x"]
-        t = 0.35 if y <= 0.01 else 0.15
+        t = w.get("wall_t", 0.35 if y <= 0.01 else 0.15)
         yo = y - t
         rect(ax, [x0, x1], [yo, y], facecolor=FLOOR, edgecolor="none", zorder=4)
         for yy in (yo, (yo + y) / 2, y):
@@ -188,7 +183,7 @@ LABELS = {
     "living": (0, 0, 1.0),
     "kitchen-dining": (0, 0, 1.0),
     "hall": (0, -0.35, 0.8),
-    "work-mamad": (0, 0, 0.8),
+    "work": (0, 0, 0.8),
     "corridor": (0, 0, 0.75),
     "boy": (0, 0, 1.0),
     "girl": (0, 0, 1.0),
@@ -229,8 +224,6 @@ def room_labels(ax, faded=False, positions=None):
             lines.append((he("מאושר, ללא שינוי"), 12, "bold"))
         if not r.get("build", True):
             lines.append((he("(לא נבנה)" if r["id"] == "laundry" else "(אדריכלות בלבד, לא נבנה)"), 9 if r["id"] == "laundry" else 10, "normal"))
-        if r["id"] == "work-mamad":
-            lines.append((he("קירות בטון 0.30"), 10, "normal"))
         step = 0.42
         y = cy - step * (len(lines) - 1) / 2
         for txt, fs, wt in lines:
@@ -281,7 +274,7 @@ def overall_dims(ax):
 
 def legend_plan(fig, H_in, extra):
     items = [
-        (WALL, "קיר"), (MAMAD, "קיר ממ\"ד (בטון 0.30)"), (GLASS, "חלון"),
+        (WALL, "קיר"), (GLASS, "חלון"),
         (LIVING, "סלון מאושר"), (NOBUILD, "חדר שלא נבנה (רק אדריכלות)"), (PORCH, "חוץ / חצר מקורה"),
     ]
     for i, (col, t) in enumerate(items):
@@ -334,7 +327,7 @@ TCOL = ["#1b9e77", "#d95f02", "#7570b3", "#e7298a", "#66a61e", "#e6ab02", "#a676
 WALK = [  # (number, transition id, Hebrew label)
     (1, "T-E0", "כניסה ← סלון (מאושר)"),
     (2, "T-LD", "סלון ← פינת אוכל (2 סיבובים במקום + דולי)"),
-    (3, "T-HW", "כניסה ← חדר עבודה/ממ\"ד (סיבוב + דולי)"),
+    (3, "T-HW", "כניסה ← חדר עבודה (סיבוב + דולי אלכסוני)"),
     (4, "T-HC", "כניסה ← מסדרון (סיבוב + נסיגה לאחור במסילה)"),
     (5, "T-CBoy", "מסדרון ← חדר ילד (מסילה עד S1, סיבוב 60°, דולי)"),
     (6, "T-CBath", "מסדרון ← מקלחת (מסילה עד S1, סיבוב 35°, דולי)"),
@@ -386,7 +379,7 @@ def make_walk():
     fig, ax, H = new_fig(extra, "סיור בבית: מצלמות ומסלולי מעבר")
     draw_base(ax, faded=True)
     room_labels(ax, faded=True, positions={
-        "living": (0.1, 2.6), "kitchen-dining": (5.6, 4.6), "hall": (1.45, 9.25), "work-mamad": (-1.0, 9.0),
+        "living": (0.1, 2.6), "kitchen-dining": (5.6, 4.6), "hall": (1.45, 9.25), "work": (-1.2, 9.5),
         "boy": (-0.8, 11.3), "girl": (-0.8, 14.9), "master": (-0.6, 20.3),
         "bath": (5.15, 12.95), "laundry": (4.1, 14.55), "ensuite-wic": (4.75, 18.6)})
     front_door_tag(ax)
@@ -488,7 +481,6 @@ def make_axo():
     wall = np.zeros((nx, ny), bool)
     for b in J["footprint"]["outer_blocks"]:
         wall |= inside(b["x"], b["y"])
-    wall |= inside([3.60, 6.60], [9.80, 9.95])
     for r in J["rooms"]:
         wall &= ~inside(r["x"], r["y"])
     H = np.where(wall, 3.0, 0.0)
