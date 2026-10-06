@@ -68,7 +68,7 @@ def new_fig(extra_bottom_in=0.0, title=""):
     ax.set_facecolor(BG)
     fig.text(0.97, 1 - 0.45 / H_in, he(title), ha="right", va="center", fontsize=26, weight="bold", color=INK)
     fig.text(0.97, 1 - 0.85 / H_in,
-             he("הצעה בלבד (גרסה 0.1, 2026-10-06), לא מסמך מחייב. מידות פנים במטרים, לפי house-plan.json"),
+             he("הצעה (גרסה " + J["version"].split()[0] + "), הפתח סלון-אוכל מאושר. מידות פנים במטרים, לפי house-plan.json"),
              ha="right", va="center", fontsize=12, color=MUTED)
     return fig, ax, H_in
 

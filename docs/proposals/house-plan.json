@@ -138,6 +138,24 @@
     "bath": ["towels", "bath-mat", "dispenser-set", "vanity-tray", "storage-basket", "towel-ladder", "wall-sconces", "robe-hooks", "planter", "shower-curtain-or-none"]
   },
 
+  "props_rule": {
+    "user_rule_verbatim": ["רק לוודא שכל הפרופס יהיו מוצרים בכל החדרים", "לא..בסדר שלא נמכור את מילוי המוצר, נרות, זית, עיתונים..כל עוד הם מדגישים על השימוש במוצר"],
+    "rule": "Every standalone object in any frame is a sellable product (a slot with a product card). Only 'fillers' may be unsold: contents that show a sold product in use (candles in the candle holders, plant in the planter, magazines in the holder, stems in a vase). A filler is identical in all 3 variations of its slot, never in the cart, and the product page says it is not included. Anything else that is not a product is removed. Fixed furniture and shell (sofa, tables, beds, cabinets, sanitary ware) are not props.",
+    "fillers_per_room": {
+      "living": ["branches (vase)", "olive-tree (planter)", "candles (candle-holders)", "magazines (magazine-holder)"],
+      "hall": ["stems (console-vessel)"],
+      "kitchen-dining": ["stems (centerpiece-vase)", "candles (candle-holders)", "dry branches (floor-vase)", "fruit or bread (bowl or serving-board), one only, same in all variations"],
+      "corridor": [],
+      "work": ["plant (planter)", "magazines (magazine-holder)"],
+      "boy": ["pillow inserts (cushions)"],
+      "girl": ["pillow inserts (cushions)"],
+      "master": ["stems (nightstand-vase)", "candles (candle-holders)", "plant (planter)"],
+      "bath": ["plant (planter)", "soap in the dispensers"]
+    },
+    "removed_non_products": ["books on shelves and nightstands", "coats/bags on the hall hooks (hooks stay empty)", "keys in the key tray (tray stays empty)", "laptop, papers and stationery on the desk", "loose toys other than the soft-toy slot", "fruit or food other than the one listed filler", "toiletries other than the dispenser set"],
+    "bible_proposal": "Rename the Bible chapter 'decor props not sold' to 'fillers (product contents that are not sold)', with the rule above as its first line. Existing 4 living-room props are fillers and need no change."
+  },
+
   "build_order": ["kitchen-dining", "hall", "corridor", "master", "boy", "girl", "bath", "work"],
   "build_order_note": "Recommended default (U12). Shells of hall, kitchen-dining and corridor are already required by living stage 3.",
 
@@ -179,7 +197,8 @@
       "README 5: thick walls documented ('documented_walls').",
       "README 6: kids' rooms exactly identical (+3.63 for room, window, door, camera).",
       "README 7: door jamb returns >= 0.20; boy, girl and bath doors moved 0.10 east; S1, C0, K-boy, K-girl, B0 recomputed.",
-      "README 8: kitchen-dining layout wording fixed."
+      "README 8: kitchen-dining layout wording fixed.",
+      "Props rule (user, 2026-10-06): every standalone prop is a product; product fillers may stay unsold. Kids' slot map +1 (wall-hooks) for the play touches."
     ]
   }
 }
