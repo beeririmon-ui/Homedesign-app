@@ -1,0 +1,80 @@
+{
+ "asset_id": "styled-preview-r2-nordic-step-a",
+ "room": "living-room",
+ "style": "nordic",
+ "frame": "M0",
+ "stage": "styled preview round 2, 2K (preview only - not Approval 2, not a site asset)",
+ "tool": "var2 MCP var2_create_image",
+ "model": "nano-banana-2",
+ "type": "image-to-image",
+ "resolution": "2K",
+ "aspect_ratio": "16:9",
+ "returned_size_px": [
+  2752,
+  1536
+ ],
+ "postprocess": "resize 2752x1536 -> 2752x1548 (Lanczos, no crop), then brief 10.4 colour lock (global WB gains only, see check json); raw JPEG in raw/",
+ "seed": null,
+ "seed_note": "nano-banana-2 exposes no seed; regenerate = new sample",
+ "prompt_limit": 4000,
+ "brief_cap": 3800,
+ "date": "2026-10-04",
+ "input_image": {
+  "local": "assets/renders/living-room/nordic/m0/pilot-v4.1/m0-pilot-b-graded.png",
+  "sha256": "474b71d780714428e323a51e5ca1e17627284cb266258b5d14aedf9b078e2ebc",
+  "var2_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/0ae57750-272a-4826-bc87-4c9e9e171482.png",
+  "upload_verified": "reused round-1 upload; sha256 of download re-verified 2026-10-04"
+ },
+ "image_refs": [
+  {
+   "image_index": 2,
+   "slot": "sofa-cover (linen-feel chenille slipcover, Beige; picked from 7 card URLs: beige on a full sofa, separate cover per cushion, largest fabric close-up - the brief default aa791f9d shows the grey colourway)",
+   "url": "https://oss-cf.cjdropshipping.com/product/2026/05/17/06/390a0e53-d586-4280-a74b-a2d68c216165_trans.jpeg"
+  },
+  {
+   "image_index": 3,
+   "slot": "cushions boucle",
+   "url": "https://cf.cjdropshipping.com/quick/product/635be4cd-9b07-4238-bb0f-e709154b4740.jpg"
+  },
+  {
+   "image_index": 4,
+   "slot": "cushions sage chenille",
+   "url": "https://oss-cf.cjdropshipping.com/product/2026/04/07/08/8281f262-bc9c-4a77-9def-5be4d642a1ac.jpg"
+  },
+  {
+   "image_index": 5,
+   "slot": "throw (cotton muslin)",
+   "url": "https://oss-cf.cjdropshipping.com/product/2025/12/04/05/857d7708-21e9-471c-a853-aabde32fe3ee.jpg"
+  }
+ ],
+ "prompt": "Edit image 1, a finished photograph of a Scandinavian living room. Keep everything exactly as it is: camera, framing, walls, corner, window, cornice, skirting, oak floor, light, exposure, and the coffee table and armchair in the same position, size, colour and fabric. The sofa keeps exactly its position, size, low straight shape, square track arms, three seat and three back cushions and its visible oak legs. Only change what is listed below. Images 2-5 are product references: copy each product faithfully and take nothing else from them; ignore their rooms, furniture, props, labels and text.\n\n1. SOFA SLIPCOVER (image 2): dress the whole sofa in the slipcover from image 2: a warm light greige-oatmeal linen-look fabric with an irregular slub weave, as in image 2, soft and dry to the eye. Relaxed tailored fit that follows the sofa's straight lines: square arms stay square, soft natural creases at the corners and along the front, a separate cover on each seat and back cushion, like image 2. The hem is tucked neatly just below the sofa frame, so the oak legs stay fully visible. Matte, no shine, no stretch look, no tight wrapping, no skirt, no elastic or hooks visible.\n\n2. THROW (image 5): the warm white multi-layer cotton muslin throw, 150 x 200 cm, small waffle grid, natural crinkle, short frayed fringe. Loosely folded over the top of the right armrest, flowing across the front half of the right seat cushion and spilling over the seat edge in two or three deep soft folds. About the right fifth of the sofa. No label.\n\n3. CUSHIONS, exactly three: Image 3: warm white looped boucle, 50 x 50 cm, upright at the left end in the corner of the arm and back cushion. Image 4: muted sage knitted chenille with a fine basket texture, 45 x 45 cm, in front of the boucle cushion, overlapping its lower right corner, tilted about 10 degrees. Charcoal linen-look slub lumbar, 30 x 50 cm, at the right end on the back half of the seat against the back cushion, just behind the throw and not covered by it. All plump, soft natural creases, matte.\n\nColour: walls warm white, creamy, never pink, lilac or grey. Natural colour, just below full saturation. Light unchanged; new items get soft shadows falling right and slightly toward the camera.\n\nDo not add anything else. No text, logos or labels.",
+ "prompt_chars": 2300,
+ "prompt_source": "briefs/styled-preview.nordic.md 10.7 step A, verbatim (both takes)",
+ "runs": [
+  {
+   "placeholder_id": "36132b83-74a4-42fc-9290-7fc3d76e6db9",
+   "task_id": "9306e5a0dc7e91a34de79339e44dafef",
+   "result_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nano2-9306e5a0dc7e91a34de79339e44dafef-0-1791117615483-50ba897e.jpg",
+   "share_url": "https://www.var2.ai/image/36132b83-74a4-42fc-9290-7fc3d76e6db9",
+   "idempotency_key": "styled-preview-r2-nordic-step-a-20261004",
+   "credits": 400,
+   "used": false,
+   "rejected_reason": "coffee table removed; sofa rebuilt ~1.3x larger and moved forward/left (S1/S2 fail). raw/step-a-take1-rejected.jpg"
+  },
+  {
+   "placeholder_id": "0b1d7e78-264a-4d8c-9d92-e3f01a0daf2e",
+   "task_id": "600433eba934bc20c614ed427ef02d74",
+   "result_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nano2-600433eba934bc20c614ed427ef02d74-0-1791117833025-83fbed81.jpg",
+   "share_url": "https://www.var2.ai/image/0b1d7e78-264a-4d8c-9d92-e3f01a0daf2e",
+   "idempotency_key": "styled-preview-r2-nordic-step-a-retry-20261004",
+   "credits": 400,
+   "used": true,
+   "note": "the round retry; sent with the SAME prompt (submitted before the coordinator asked for a prompt fix). Table kept; sofa still ~1.25x wider, slipcover skirt hides the oak legs"
+  }
+ ],
+ "credits": 800,
+ "output": "assets/renders/living-room/nordic/styled-preview-r2/step-a.png",
+ "output_sha256": "809c6c0b8f938518f90cf99c4ab7f1dbe8da4e9393db70629ce04b47a6e10657",
+ "checks": "assets/renders/living-room/nordic/styled-preview-r2/raw/step-a-check.json",
+ "output_var2_upload": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/7a9207e5-7f60-495f-9b15-5d5db6772b0f.png"
+}

@@ -1,0 +1,83 @@
+{
+ "asset_id": "styled-preview-r2-nordic-step-c",
+ "room": "living-room",
+ "style": "nordic",
+ "frame": "M0",
+ "stage": "styled preview round 2, 2K (preview only - not Approval 2, not a site asset)",
+ "tool": "var2 MCP var2_create_image",
+ "model": "nano-banana-2",
+ "type": "image-to-image",
+ "resolution": "2K",
+ "aspect_ratio": "16:9",
+ "returned_size_px": [
+  2752,
+  1536
+ ],
+ "postprocess": "resize 2752x1536 -> 2752x1548 (Lanczos, no crop), then brief 10.4 colour lock (global WB gains only, see check json); raw JPEG in raw/",
+ "seed": null,
+ "seed_note": "nano-banana-2 exposes no seed; regenerate = new sample",
+ "prompt_limit": 4000,
+ "brief_cap": 3800,
+ "date": "2026-10-06",
+ "input_image": {
+  "local": "assets/renders/living-room/nordic/styled-preview-r2/step-b.png",
+  "sha256": "7909a2ed8555ce308665b04cbda2abc928993ceac36c873d22cf31426bd0fdf3",
+  "var2_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/667223b2-73a2-490e-8d6f-411b60bcda21.png",
+  "upload_verified": "sha256 of download matches local"
+ },
+ "image_refs": [
+  {
+   "image_index": 2,
+   "slot": "pendant 40 (dimension drawing)",
+   "url": "https://oss-cf.cjdropshipping.com/product/2026/01/13/02/24c1901a-8dff-4184-a4bb-a4d5a066924b_trans.jpeg"
+  },
+  {
+   "image_index": 3,
+   "slot": "wall-sconce (linen shade)",
+   "url": "https://cf.cjdropshipping.com/quick/product/da5268c7-1a46-48a9-b61c-e54cff44a516.jpg"
+  },
+  {
+   "image_index": 4,
+   "slot": "accent-sconces travertine dome 15 (brief default kept: dome on wall with halo, no cord)",
+   "url": "https://cf.cjdropshipping.com/quick/product/6cca2b06-4618-4216-978f-af007bd94dfa.jpg"
+  }
+ ],
+ "prompt": "Edit image 1. Keep everything in it exactly as it is: camera, framing, architecture, window, curtains, and every item already in the room, unchanged in position, size, colour and shape. Only add the items below and change the light as described. Images 2-4 are product references: copy each faithfully and take nothing else from them; ignore their rooms, beds, people and text. Image 2 may be a dimension drawing: ignore its lettering and lines.\n\n1. PENDANT (image 2): closed pleated warm white fabric lantern, flat pumpkin form, dense fine pleats, matte. It is small: its width is about one third of the coffee table's length, narrower than one sofa seat cushion. It hangs above the centre of the coffee table, high: the whole lantern is in the top fifth of the image, at 56% to 63% of the frame width, and its bottom is well above the top edge of the frames, with a band of clear wall between them about as tall as the lantern itself. A thin black cord rises straight out of the top of the frame.\n\n2. WALL LAMP (image 3): the black swing-arm wall lamp with an oatmeal linen tapered shade. Plate on the left wall just left of the front curtain stack, at 4% of the frame width and 37% of its height; the shade is small, about one third of the armchair's width, above and behind the armchair. Directly below the plate, a small flush square wall socket in the same warm white as the wall; a short straight black cord, a few centimetres, runs from the bottom of the plate into a plug in that socket. No cord below the socket, nothing running to the floor.\n\n3. TRAVERTINE WALL LIGHTS (image 4): a matching pair of the small round domed wall lights from image 4, each dome 15 cm across and 12 cm deep, in honed warm light travertine with natural pores, matte. On the back wall, one on each side of the framed prints, each above one end of the sofa, at 46-48% and 82-84% of the frame width; the top of each lamp level with the top of the frames. Each is small, about a quarter of one frame's width. They are wired into the wall: no cords, no sockets, no plugs.\n\n4. FLOOR LAMP: slim matte black pole floor lamp with an oatmeal linen drum shade as wide as the basket, just right of the sofa's right end behind the basket; shade at 83% to 90% of the frame width and 38% to 46% of its height; base hidden by the basket.\n\nLight: late winter afternoon, about 3 pm, north-facing window, no direct sun. Daylight from the window is soft and slightly warmer, the room a little dimmer away from the window; the window stays the brightest area. All lamps are switched on and clearly lit with warm 2700 K light: shades glow from within; a warm pool on the right end of the sofa, a warm pool on the armchair's shoulder and seat, a soft warm wash on the centre of the coffee table; each travertine dome glows softly and leaves a small warm ring of light on the wall around it, as in image 4, not reaching the frames. No lamp shadows, no visible bulbs, no glare, flare or beams. Walls warm white, creamy, never pink, lilac or grey.\n\nDo not add anything else: no wall decor, mirrors or extra lamps. No text, logos or labels.",
+ "prompt_chars": 3101,
+ "prompt_source": "brief 10.7 step C with frame percentages re-mapped to the reframed step-b (coordinator-authorised prompt fix); all other words verbatim",
+ "prompt_changes": [
+  [
+   "at 60% to 67% of the frame width",
+   "at 56% to 63% of the frame width"
+  ],
+  [
+   "Plate on the left wall at 12% of the frame width and 37% of its height",
+   "Plate on the left wall just left of the front curtain stack, at 4% of the frame width and 37% of its height"
+  ],
+  [
+   "at 56-58% and 82-84% of the frame width",
+   "at 46-48% and 82-84% of the frame width"
+  ],
+  [
+   "shade at 86% to 92% of the frame width",
+   "shade at 83% to 90% of the frame width"
+  ]
+ ],
+ "prompt_chars_verbatim": 3064,
+ "runs": [
+  {
+   "placeholder_id": "38ad083d-2df9-4faf-ab47-fcde1dcafacb",
+   "task_id": "6d1bf2af5f99bf26014754daa4a05f5a",
+   "result_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nano2-6d1bf2af5f99bf26014754daa4a05f5a-0-1791307673626-83499cfc.jpg",
+   "share_url": "https://www.var2.ai/image/38ad083d-2df9-4faf-ab47-fcde1dcafacb",
+   "idempotency_key": "styled-preview-r2-nordic-step-c-20261006",
+   "credits": 400,
+   "used": true
+  }
+ ],
+ "credits": 400,
+ "output": "assets/renders/living-room/nordic/styled-preview-r2/step-c.png",
+ "output_sha256": "e26704bee5a7473a09c73897e6d088b41cfcd5f3d85945bac135badf437d3ee8",
+ "checks": "assets/renders/living-room/nordic/styled-preview-r2/raw/step-c-check.json",
+ "output_var2_upload": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/988dd9f9-d924-40d1-8da8-d17fcdff17a3.png"
+}
