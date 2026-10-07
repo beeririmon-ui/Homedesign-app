@@ -279,8 +279,8 @@ def build_option(opt, plan):
         reg("hall/key-tray", [bx("h_tray3", 2.66 + dx, 2.84 + dx, 6.44, 6.56, 0.80, 0.83, Hd)], "hall")
     if "G-H4" in D:
         objs = [bx("portal_jamb_a", 0.95, 0.97, 6.27, 6.35, 0.0, 2.40, oak), bx("portal_jamb_b", 2.13, 2.15, 6.27, 6.35, 0.0, 2.40, oak),
-                bx("portal_head", 0.95, 2.15, 6.27, 6.35, 2.38, 2.40, oak),
-                bx("portal_case_a", 0.85, 0.95, 6.35, 6.38, 0.0, 2.50, oak), bx("portal_case_b", 2.15, 2.25, 6.35, 6.38, 0.0, 2.50, oak),
+                bx("portal_head", 0.97, 2.13, 6.27, 6.35, 2.38, 2.40, oak),
+                bx("portal_case_a", 0.85, 0.95, 6.35, 6.38, 0.0, 2.40, oak), bx("portal_case_b", 2.15, 2.25, 6.35, 6.38, 0.0, 2.40, oak),
                 bx("portal_case_h", 0.85, 2.25, 6.35, 6.38, 2.40, 2.50, oak)]
         reg("G-H4 oak portal", objs, "hall", "architecture")
         notes.append("G-H4: reveal lining 2 cm on the hall half of the reveal (Y 6.27-6.35) + 10 cm casing on the hall face; assumed profile")
@@ -455,7 +455,7 @@ def build_option(opt, plan):
         reg("corridor/gallery-art", [bx(f"c_art2{i}", 1.70, 1.73, a, a + 0.40, 1.20, 1.70, A) for i, a in enumerate((14.0, 14.6, 15.2))], "corridor")
     if "G-C3" in D:
         objs = [bx("cportal_a", 1.70, 1.74, 9.70, 9.95, 0.0, 2.70, oak), bx("cportal_b", 3.06, 3.10, 9.70, 9.95, 0.0, 2.70, oak),
-                bx("cportal_h", 1.70, 3.10, 9.70, 9.95, 2.62, 2.70, oak),
+                bx("cportal_h", 1.74, 3.06, 9.70, 9.95, 2.62, 2.70, oak),
                 bx("cportal_ca", 1.60, 1.70, 9.76, 9.80, 0.0, 2.80, oak), bx("cportal_cb", 3.10, 3.20, 9.76, 9.80, 0.0, 2.80, oak),
                 bx("cportal_ch", 1.60, 3.20, 9.76, 9.80, 2.70, 2.80, oak)]
         reg("G-C3 oak portal", objs, "corridor", "architecture")
