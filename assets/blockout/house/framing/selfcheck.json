@@ -1466,6 +1466,234 @@
       },
       "overlay": "framing/overlays/W-A.png",
       "runtime_s": 350
+    },
+    "W-B": {
+      "option": "W-B",
+      "room": "work",
+      "camera": {
+        "id": "W0-B",
+        "room": "work",
+        "loc": [
+          0.4,
+          8.65,
+          1.1
+        ],
+        "yaw": 60,
+        "u0": 0.52,
+        "v0": 0.46
+      },
+      "deltas": [
+        "G-W2"
+      ],
+      "image": "framing/W-B.png",
+      "build_notes": [
+        "G-W2: window 1.80 (mullion); desk under it unchanged (centred Y 7.75); shelf X -1.90..-0.90, h 1.10, 0.40 from the corner"
+      ],
+      "lamps_on": [],
+      "mean_L_editorial": 190.8,
+      "est_vs_measured": [
+        {
+          "key": "window_u (Y 8.65 / 6.85)",
+          "est": [
+            0.135,
+            0.563
+          ],
+          "measured": [
+            0.1351,
+            0.563
+          ],
+          "dev": [
+            0.0001,
+            -0.0
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "NE_corner_u (-2.30, 6.35)",
+          "est": 0.643,
+          "measured": 0.6427,
+          "dev": -0.0003,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "camera_to_corner_m (depth)",
+          "est": 3.49,
+          "measured": 3.4883,
+          "dev": -0.0017,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": "euclid 3.547"
+        }
+      ],
+      "est_flags": [],
+      "acceptance": {
+        "F1": {
+          "result": "fail",
+          "heroes": [
+            {
+              "hero": "desk centre (under the window)",
+              "u": 0.4091,
+              "rule": "0.30-0.36 / 0.64-0.70",
+              "ok": false,
+              "almost_centre_0_45_0_58": false
+            },
+            {
+              "hero": "NE corner",
+              "u": 0.6427,
+              "rule": "0.30-0.36 / 0.64-0.70",
+              "ok": true,
+              "almost_centre_0_45_0_58": false
+            }
+          ],
+          "note": "result = first (named) hero; others listed"
+        },
+        "F2": {
+          "result": "fail",
+          "windows": {
+            "W-work": {
+              "in_frame": true,
+              "visible_width_pct": 100.0,
+              "cut_pct": 0.0,
+              "u": [
+                0.1351,
+                0.563
+              ],
+              "head_v_min": -0.351,
+              "head_cut_by_top": true,
+              "sill_v_max": 0.6374,
+              "margins_if_whole": {
+                "left": 0.1351,
+                "right": 0.437,
+                "top": -0.351,
+                "bottom": 0.3626
+              },
+              "width_share": 0.4279,
+              "rule": "whole, >= 0.03 to every edge",
+              "ok_cut_rule": false,
+              "ok_width_le_30pct": false,
+              "ok": false
+            }
+          }
+        },
+        "F3": {
+          "result": "fail",
+          "object_tangents": [
+            {
+              "item": "work/framed-art",
+              "side": "top",
+              "margin": 0.02
+            }
+          ],
+          "architectural_lines_within_0_02_of_edge": [],
+          "note": "objects: visible bbox margin 0 < m < 0.02 (touching = cut, allowed); pairwise object-object tangents not measured (visual)"
+        },
+        "F4": {
+          "result": "pass",
+          "hero_wall_depth_m": 3.4883,
+          "foreground_objects_frac": {
+            "fixed:work-desk": 0.0411,
+            "work/basket": 0.0062,
+            "work/planter": 0.0041
+          },
+          "background_frac": 0.179,
+          "note": "heuristic: foreground = non-shell pixels nearer than 0.55 x hero-wall depth; background = beyond the hero wall + 0.4 m (next room, window, sky)"
+        },
+        "F5": {
+          "result": "pass",
+          "camera_to_hero_wall_depth_m": 3.4883,
+          "min_m": 3.0,
+          "hero_wall_point": [
+            -2.3,
+            6.35
+          ]
+        },
+        "F6": {
+          "result": "pass",
+          "calm_wall_floor_ceiling_frac": 0.306,
+          "note": "pixels of wall, floor and ceiling (trim, rugs, windows excluded)"
+        },
+        "F7": {
+          "result": "n/a (hall and corridor only)"
+        },
+        "F8": {
+          "result": "n/a (no mirror)"
+        },
+        "F9": {
+          "result": "pass (jambs; end pose; play time = designer estimate, not measured)",
+          "transitions": [
+            {
+              "id": "T-HW''",
+              "note": "from the W-B text: pan to 60 + oblique dolly H0 -> (0.40, 8.65), 2.51 m",
+              "play_s_designer": null,
+              "segments": [
+                {
+                  "type": "pan",
+                  "yaw": [
+                    25,
+                    60
+                  ]
+                },
+                {
+                  "type": "dolly",
+                  "from_": [
+                    2.877,
+                    9.039,
+                    1.2
+                  ],
+                  "to": [
+                    0.4,
+                    8.65,
+                    1.1
+                  ],
+                  "len_m": 2.5074,
+                  "len_plan": null,
+                  "path_dir_deg_left": 81.07,
+                  "heading": 60,
+                  "jambs": [
+                    {
+                      "opening": "O-hall-work",
+                      "crossing": [
+                        0.725,
+                        8.701
+                      ],
+                      "min_jamb_clearance_m": 0.2837,
+                      "ok": true
+                    }
+                  ],
+                  "min_clearance_any_m": 0.2837,
+                  "nearest_any": "hwall_23",
+                  "ok_jambs": true
+                }
+              ],
+              "end": {
+                "end_pos": [
+                  0.4,
+                  8.65,
+                  1.1
+                ],
+                "cam": [
+                  0.4,
+                  8.65,
+                  1.1
+                ],
+                "pos_err_m": 0.0
+              },
+              "min_jamb_clearance_m": 0.2837,
+              "ok": true
+            }
+          ]
+        }
+      },
+      "camera_clearance_m": {
+        "min": 0.35,
+        "nearest": "leaf_hall_work"
+      },
+      "overlay": "framing/overlays/W-B.png",
+      "runtime_s": 289
     }
   }
 }
