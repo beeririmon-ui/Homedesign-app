@@ -23,6 +23,24 @@
       "image": "framing/current-hall.png",
       "mean_L_editorial": 101.2,
       "mean_L_sky_only": 76.3
+    },
+    "master": {
+      "room": "master",
+      "camera": {
+        "id": "MB0",
+        "room": "master",
+        "loc": [
+          1.75,
+          21.05,
+          1.2
+        ],
+        "yaw": 35,
+        "u0": 0.52,
+        "v0": 0.46,
+        "frame": "NE corner u ~0.34; north window on the left; bed wall with the sconce pair on the right two thirds"
+      },
+      "image": "framing/current-master.png",
+      "mean_L_editorial": 170.3
     }
   },
   "options": {
@@ -244,6 +262,353 @@
       },
       "overlay": "framing/overlays/H-A.png",
       "runtime_s": 650
+    },
+    "H-B": {
+      "option": "H-B",
+      "room": "hall",
+      "camera": {
+        "id": "H0-B",
+        "room": "hall",
+        "loc": [
+          2.877,
+          9.039,
+          1.2
+        ],
+        "yaw": 12,
+        "u0": 0.52,
+        "v0": 0.46,
+        "sweep": {
+          "yaw": [
+            10,
+            15
+          ]
+        }
+      },
+      "deltas": [
+        "G-H1",
+        "G-H2",
+        "G-H3",
+        "G-H4"
+      ],
+      "image": "framing/H-B.png",
+      "build_notes": [
+        "G-H4: reveal lining 2 cm on the hall half of the reveal (Y 6.27-6.35) + 10 cm casing on the hall face; assumed profile"
+      ],
+      "lamps_on": [
+        "hall-console"
+      ],
+      "mean_L_editorial": 126.7,
+      "est_vs_measured": [
+        {
+          "key": "NE_corner_u (0.80, 6.35)",
+          "est": 0.199,
+          "measured": 0.1994,
+          "dev": 0.0004,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "door_u (jambs X 0.95 / 2.15)",
+          "est": [
+            0.228,
+            0.484
+          ],
+          "measured": [
+            0.2284,
+            0.4836
+          ],
+          "dev": [
+            0.0004,
+            -0.0004
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "vista_centre_u (1.55, 6.35)",
+          "est": 0.356,
+          "measured": 0.3505,
+          "dev": -0.0055,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "console_u (pixels)",
+          "est": [
+            0.567,
+            0.81
+          ],
+          "measured": [
+            0.5674,
+            0.8086
+          ],
+          "dev": [
+            0.0004,
+            -0.0014
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "console_u (geometry, front corners Y 6.70)",
+          "est": [
+            0.567,
+            0.81
+          ],
+          "measured": [
+            0.5671,
+            0.8089
+          ],
+          "dev": [
+            0.0001,
+            -0.0011
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "art_centre_u (2.95, 6.35)",
+          "est": 0.69,
+          "measured": 0.6807,
+          "dev": -0.0093,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "SE_corner_u (3.60, 6.35)",
+          "est": 0.86,
+          "measured": 0.8604,
+          "dev": 0.0004,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "front_door_east_jamb_u (3.60, 7.80)",
+          "est": 1.13,
+          "measured": 1.1259,
+          "dev": -0.0041,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        }
+      ],
+      "est_flags": [],
+      "acceptance": {
+        "F1": {
+          "result": "pass",
+          "heroes": [
+            {
+              "hero": "vista centre (living door centre)",
+              "u": 0.3505,
+              "rule": "0.30-0.36 / 0.64-0.70",
+              "ok": true,
+              "almost_centre_0_45_0_58": false
+            },
+            {
+              "hero": "console vignette (art centre)",
+              "u": 0.6807,
+              "rule": "0.30-0.36 / 0.64-0.70",
+              "ok": true,
+              "almost_centre_0_45_0_58": false
+            }
+          ],
+          "note": "result = first (named) hero; others listed"
+        },
+        "F2": {
+          "result": "n/a (no window in frame)",
+          "windows": {}
+        },
+        "F3": {
+          "result": "fail",
+          "object_tangents": [
+            {
+              "item": "G-H4 oak portal",
+              "side": "bottom",
+              "margin": 0.0191
+            }
+          ],
+          "architectural_lines_within_0_02_of_edge": [],
+          "note": "objects: visible bbox margin 0 < m < 0.02 (touching = cut, allowed); pairwise object-object tangents not measured (visual)"
+        },
+        "F4": {
+          "result": "weak (no foreground object)",
+          "hero_wall_depth_m": 2.9061,
+          "foreground_objects_frac": {},
+          "background_frac": 0.2043,
+          "note": "heuristic: foreground = non-shell pixels nearer than 0.55 x hero-wall depth; background = beyond the hero wall + 0.4 m (next room, window, sky)"
+        },
+        "F5": {
+          "result": "fail",
+          "camera_to_hero_wall_depth_m": 2.9061,
+          "min_m": 3.0,
+          "hero_wall_point": [
+            1.55,
+            6.35
+          ]
+        },
+        "F6": {
+          "result": "pass",
+          "calm_wall_floor_ceiling_frac": 0.725,
+          "note": "pixels of wall, floor and ceiling (trim, rugs, windows excluded)"
+        },
+        "F7": {
+          "result": "pass",
+          "mean_L_sky_and_rooflight_only": 125.5,
+          "min": 95,
+          "image": "framing/extra/H-B-skyonly.png",
+          "note": "sky + opal roof light (radiance 0.55 x sky), no window boost, no lamps, no AO; 960 px"
+        },
+        "F8": {
+          "result": "n/a (no mirror)"
+        },
+        "F9": {
+          "result": "pass (jambs; end pose; play time = designer estimate, not measured)",
+          "transitions": [
+            {
+              "id": "E0'",
+              "note": "",
+              "play_s_designer": 2.9,
+              "segments": [
+                {
+                  "type": "pan",
+                  "yaw": [
+                    12,
+                    25
+                  ]
+                },
+                {
+                  "type": "dolly",
+                  "from_": [
+                    2.877,
+                    9.039,
+                    1.2
+                  ],
+                  "to": [
+                    1.25,
+                    5.55,
+                    1.2
+                  ],
+                  "len_m": 3.8497,
+                  "len_plan": null,
+                  "path_dir_deg_left": 25.0,
+                  "heading": null,
+                  "jambs": [
+                    {
+                      "opening": "O-entry-living",
+                      "crossing": [
+                        1.5881,
+                        6.275
+                      ],
+                      "min_jamb_clearance_m": 0.4776,
+                      "ok": true
+                    }
+                  ],
+                  "min_clearance_any_m": 0.4595,
+                  "nearest_any": "portal_jamb_b",
+                  "ok_jambs": true
+                }
+              ],
+              "end": {
+                "end_pos": [
+                  1.25,
+                  5.55,
+                  1.2
+                ],
+                "cam": [
+                  1.25,
+                  5.55,
+                  1.2
+                ],
+                "pos_err_m": 0.0
+              },
+              "min_jamb_clearance_m": 0.4776,
+              "ok": true
+            },
+            {
+              "id": "T-HC'",
+              "note": "",
+              "play_s_designer": 3.0,
+              "segments": [
+                {
+                  "type": "pan",
+                  "yaw": [
+                    "12 (H-B) or 25 (H-A)",
+                    0
+                  ]
+                },
+                {
+                  "type": "pull-back",
+                  "from_": [
+                    2.877,
+                    9.039,
+                    1.2
+                  ],
+                  "to": [
+                    2.397,
+                    17.11,
+                    1.2
+                  ],
+                  "len_m": 8.0853,
+                  "len_plan": 8.09,
+                  "path_dir_deg_left": 176.6,
+                  "heading": null,
+                  "jambs": [
+                    {
+                      "opening": "O-hall-corridor",
+                      "crossing": [
+                        2.8317,
+                        9.8
+                      ],
+                      "min_jamb_clearance_m": 0.2678,
+                      "ok": true
+                    }
+                  ],
+                  "min_clearance_any_m": 0.2678,
+                  "nearest_any": "hwall_48",
+                  "ok_jambs": true
+                }
+              ],
+              "end": {
+                "end_pos": [
+                  2.397,
+                  17.11,
+                  1.2
+                ],
+                "cam": [
+                  2.397,
+                  17.11,
+                  1.2
+                ],
+                "pos_err_m": 0.0
+              },
+              "min_jamb_clearance_m": 0.2678,
+              "ok": true
+            }
+          ]
+        }
+      },
+      "camera_clearance_m": {
+        "min": 0.723,
+        "nearest": "hwall_52"
+      },
+      "practicals_pass": {
+        "image": "framing/extra/H-B-practicals2700K.png",
+        "mean_L": 149.0,
+        "lamps": [
+          "h_ceil",
+          "h_lamp3"
+        ]
+      },
+      "sweep": "framing/extra/H-B-sweep.jpg",
+      "overlay": "framing/overlays/H-B.png",
+      "runtime_s": 763
     }
   }
 }
