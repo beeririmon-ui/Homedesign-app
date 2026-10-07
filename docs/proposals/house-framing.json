@@ -1,0 +1,294 @@
+{
+  "version": "0.1",
+  "date": "2026-10-07",
+  "author": "master-designer",
+  "status": "PROPOSAL. Not binding. Nothing here changes docs/house-plan.*, the Bible, skeleton-spec or slots files. Every geometry delta and every camera change needs user approval. All 'est' values are hand pinhole estimates (24 mm equations of house-plan.json, +-0.02); no tool run. Clay validates before any decision.",
+  "companion": "docs/proposals/house-framing.md",
+  "trigger_user_feedback_verbatim": "מרפרוף שלי בתמונות, זה לא נראה תמונות בצילום של מגזין, זה נראה יותר מעין של מביט, או כאילו מצילום אקראי, ואין התייחסות מלאה לסגנון ולעוצמה שאנחנו מחפשים בעצם להציג כל חדר לדעתי. הייתי שמח שזה יהיה בקומפוזיציה הרבה הרבה יותר מוקפדת לכל אחד מהחדרים ושכל תמונה תהיה וואו בעצם, שוב, כמו תמונה ממגזין ולא תמונה של צופה.",
+  "scope": "All master frames except the approved living room (M0 untouched; E0 end frame untouched).",
+
+  "conventions": {
+    "axes_and_yaw": "As docs/house-plan.json: f = (-sin yaw, -cos yaw), r = (cos yaw, -sin yaw), yaw measured left from -Y.",
+    "projection_24mm": "u = u0 + 0.6667 x/d ; v = v0 + 1.1852 (Hc - Z)/d. Hc is the camera height of that option (not always 1.20).",
+    "edge_rays": "u = 0 at x/d = -u0/0.6667, u = 1 at x/d = (1-u0)/0.6667 (u0 0.52: -0.78 / +0.72; u0 0.50: +-0.75).",
+    "lens": "24 mm everywhere (entry/arrival lens is fixed at 24 by the Bible; no creep on arrivals)."
+  },
+
+  "magazine_standard_v2": [
+    "S1 One named hero per frame, on a third (u 0.30-0.36 / 0.64-0.70) or dead centre in a truly symmetric frame (u0 0.50). Never 'almost centre' (0.45-0.58 for an asymmetric hero).",
+    "S2 Distance: >= 3.0 m from camera to the hero wall (bath >= 2.8). Get it by shooting from the threshold or from the far wall, not by a wider lens.",
+    "S3 Height: 1.20 public spaces (hall, corridor; living stays), 1.10 dining and work, 1.05 master, 1.00 kids ('child's eye'). Bath 1.15. Verticals plumb, framing by shift only.",
+    "S4 Window: in frame on the left, either whole with >= 0.03 to every edge or cut decisively (>= 15% of its width). Never a near-tangent. Window <= 30% of frame width.",
+    "S5 Three depth layers: foreground (low object, decisively cut), mid (hero), background (architecture, window, glimpse into the next room).",
+    "S6 One readable light direction with a visible gradient on the hero wall. Dark spaces get daylight from above (opal roof light), not exposure.",
+    "S7 Negative space: >= 25% of the frame is calm wall or floor.",
+    "S8 Edges: no object or architectural line within 0.02 of an edge unless cut by >= 15%; door jambs out by >= 0.02 or used on purpose.",
+    "S9 Every room gets one architectural 'bone' that carries the wow (portal, roof light, built-in, panelling, alcove, limestone + fluted light)."
+  ],
+
+  "global_rule_changes_needing_approval": [
+    {"id": "R1", "what": "Camera height per room (S3) instead of 1.20 everywhere; Bible 'camera ~120' becomes 'living/hall/corridor 120; other rooms 100-115'. Arrivals merge the pedestal into the last straight vector (allowed by the motion grammar)."},
+    {"id": "R2", "what": "u0 0.50 for symmetric one-point frames (MB0', W0', C0 already)."},
+    {"id": "R3", "what": "Slider through a doorway ('wall wipe') used as an arrival shot (T-CBoy, T-CBath, T-CGirl, T-HW, T-CM). Slider is already an allowed move; new is using it through a door with >= 0.15 jamb clearance."},
+    {"id": "R4", "what": "Opal roof lights (hall, corridor) as a daylight source. Diffusing glazing in a light well, no sun patch possible; they cast soft top light only. HC6 extended: 'windows lighting frames are north/east or opal roof lights'."},
+    {"id": "R5", "what": "H0 (site opening frame, U1) yaw 25 -> 12 and E0 prefixed by a 13 deg pan. Only if H-B is chosen."},
+    {"id": "R6", "what": "New rail station S1' at Y 13.00 (boy and bath); S1 (13.60) retired."}
+  ],
+
+  "rooms": {
+    "hall": {
+      "diagnosis": ["living door centred u 0.395-0.636 ('almost centre')", "left wall a dark slab ~40% with a black hook bar at eye level, bench cut by the bottom edge", "console vignette squeezed against the door, right part dark", "no light in the hall itself (mean L 76): the eye has nothing but the vista", "no foreground layer, no light direction"],
+      "hero": "The threshold of light: a calm, warm entry; the bright living room seen through the doorway; the console lamp as the welcome",
+      "pick": "H-B",
+      "options": {
+        "H-A": {
+          "name": "Enfilade portal (keep H0 and E0 exactly)",
+          "type": "centred enfilade, frame-within-frame",
+          "camera": {"loc": [2.877, 9.039, 1.20], "yaw": 25, "lens": 24, "u0": 0.52, "v0": 0.46},
+          "est": {"door_u": [0.395, 0.636], "console_u": [0.651, 0.912], "left_wall_u": [0.0, 0.395]},
+          "changes": ["G-H1 roof light", "G-H4 oak-lined portal", "G-H5 built-in bench niche replacing the hook bar"],
+          "transitions": "unchanged",
+          "verdict": "Safe; still centred and two-flanked. Magazine estimate 6.5/10."
+        },
+        "H-B": {
+          "name": "Vignette + vista on the thirds",
+          "type": "asymmetric two-subject balance: vista on the left third, console vignette on the right third",
+          "camera": {"loc": [2.877, 9.039, 1.20], "yaw": 12, "lens": 24, "u0": 0.52, "v0": 0.46},
+          "est": {"left_wall_strip_u": [0.0, 0.199], "NE_corner_u": 0.199, "door_u": [0.228, 0.484], "vista_centre_u": 0.356, "console_u": [0.567, 0.81], "art_centre_u": 0.69, "SE_corner_u": 0.86, "front_door_east_jamb_u": "1.13 (out) after G-H2"},
+          "changes": ["G-H1 roof light", "G-H2 front door moves to Y 7.80-8.80", "G-H3 console X 2.55-3.35", "G-H4 oak-lined portal"],
+          "transitions": {"E0'": "pan 12->25 (13 deg) + E0 dolly unchanged", "PH": "pan 12->0", "PW": "only for W-B: 12->60 as two pans of 24"},
+          "verdict": "The opening frame of the site: light from the left (the living window through the door), two lights in the frame, both on thirds. Estimate 8/10."
+        }
+      }
+    },
+
+    "kitchen-dining": {
+      "diagnosis": ["camera 0.35 m inside the room, pendant 1.85 m away: pendant hits the top edge (v 0.002)", "table and chairs as big cut blocks over the bottom third (blockout assumed 200x95, 6 chairs)", "window a blown slab over 40% of the frame", "kitchen only a sliver of tall units", "no floor, almost no ceiling: reads as pulling out a chair"],
+      "hero": "The table under the big lamp in winter light, the kitchen corner as the quiet background",
+      "pick": "D-A",
+      "options": {
+        "D-A": {
+          "name": "Pulled-back corner, lowered, bench as foreground",
+          "type": "two-point corner (living B grammar) with a decisively cut foreground",
+          "camera": {"loc": [2.75, 3.45, 1.10], "yaw": -35, "lens": 24, "u0": 0.52, "v0": 0.43},
+          "layout": "table 160x85 (draft 0.1) centre (4.30, 1.65), long axis X; 2 window-side chairs; no end chair; bench X 3.60-5.00, Y 2.30-2.65 on the camera side (foreground); pendant bottom 1.50, dia <= 55, height <= 30",
+          "est": {"window_u": [0.108, 0.463], "window_head": "out at the top (v about -0.05 at the south jamb)", "pendant_u": [0.509, 0.664], "pendant_v": [0.079, 0.23], "SE_corner_u": 0.73, "kitchen_u": [0.73, 1.0], "shelf_u": 0.80, "table_top_u": [0.30, 0.83], "table_top_v": [0.57, 0.70], "bench_u": [0.66, 0.87], "bench_v": "0.775 -> below the bottom edge (decisive cut)", "camera_to_pendant_m": 2.36, "cornice_wedge_at_corner_v": "<= 0.036"},
+          "transitions": {"T-LD'": "P0 25->0, P1 0->-35, dolly 2.58 m M0 -> (2.75, 3.45) with pedestal 1.20->1.10 merged; path heading -35.5 (0.5 deg oblique); crossing Y 3.70, 0.42/0.51 m perpendicular to the jambs"},
+          "verdict": "Same grammar that worked in the living room, now with distance and a foreground. Estimate 7.5/10."
+        },
+        "D-B_rejected": {
+          "name": "One-point down the table toward the kitchen",
+          "why_rejected": "Needs yaw -90 from a camera on the table axis: two more pans after T-LD (5 shots, > 3.4 s, breaks U10) and the window would be out of frame (Bible exception). Listed so the user sees it was considered."
+        }
+      }
+    },
+
+    "work": {
+      "diagnosis": ["camera 1.92 m from the east wall", "desk and lamp cut by the bottom and left edges (desk-top POV)", "window a blown slab over ~45%", "tall shelf block fills the right third and hides the corner", "no hero, no foreground/background, claustrophobic"],
+      "hero": "The desk wall: a built-in oak desk and shelf in raking north light",
+      "pick": "W-A",
+      "options": {
+        "W-A": {
+          "name": "Frontal desk wall (Norm-style study)",
+          "type": "one-point symmetric, window decisively cut on the left wall",
+          "camera": {"loc": [-0.825, 9.85, 1.10], "yaw": 0, "lens": 24, "u0": 0.50, "v0": 0.46},
+          "layout": "desk moves from under the window to the east wall Y 6.35: built-in oak desk 160x60 centred X -0.825, oak shelf above, art centred, chair back to camera, magazine holder and basket beside/under the desk, planter in the NE corner by the window; door leaf folds 180 deg flat on the south wall (hinge west jamb, leaf Y 9.00-9.90)",
+          "est": {"window_visible_Y": [7.15, 7.88], "window_u": [0.0, 0.136], "window_cut_pct": 39, "NE_corner_u": 0.219, "SE_corner_u": 0.781, "desk_centre_u": 0.50, "door_jamb_Y8.10_u": "1.06 (out)", "top_edge_on_east_wall_Z": 2.46, "camera_to_east_wall_m": 3.50},
+          "transitions": {"T-HW'": "pan at H0 to yaw 0 (12 deg from H-B, 25 from H-A); oblique slide heading 0 from H0 to (-0.825, 8.55), 3.73 m, crossing the door at Y 8.755 (0.24 / 0.65 to jambs, 7.5 deg oblique); pull-back 1.30 m to (-0.825, 9.85) with pedestal to 1.10. About 3.2-3.4 s."},
+          "verdict": "Estimate 8/10. Cost: the desk is no longer under the window (plan text)."
+        },
+        "W-B": {
+          "name": "Threshold corner, desk under a larger window",
+          "type": "two-point corner from the doorway",
+          "camera": {"loc": [0.40, 8.65, 1.10], "yaw": 60, "lens": 24, "u0": 0.52, "v0": 0.46},
+          "layout": "window 1.20 -> 1.80 (Y 6.85-8.65), desk under it; shelves on the east wall kept low (<= 1.20) and 0.40 from the corner",
+          "est": {"window_u": [0.135, 0.563], "NE_corner_u": 0.643, "camera_to_corner_m": 3.49},
+          "transitions": {"T-HW''": "pan to 60 + oblique dolly H0 -> (0.40, 8.65), 2.51 m, 21 deg oblique, crossing Y 8.70 (0.30/0.60)"},
+          "verdict": "Simpler motion, but the window takes ~43% of the width (blown-slab risk). Estimate 6.5/10."
+        }
+      }
+    },
+
+    "corridor": {
+      "diagnosis": ["walls are dark slabs over ~75% (mean L 64)", "three canvases on the left wall cut by the top/left edges in steep perspective", "door openings on both sides read as random dark/bright slots", "the living vista is only 2.3% of the frame: too small to be the hero", "no light rhythm: hotel corridor / security camera"],
+      "hero": "A gallery of light: a wall washed by daylight from above, leading to the glowing living room",
+      "pick": "C-B",
+      "options": {
+        "C-A": {
+          "name": "Three roof lights (rhythm)",
+          "type": "one-point symmetric enfilade",
+          "camera": {"loc": [2.397, 17.11, 1.20], "yaw": 0, "lens": 24, "u0": 0.50, "v0": 0.46},
+          "changes": ["G-C1a three opal roof lights 0.80x0.80 centred X 2.40 at Y 11.0, 13.9, 16.4 (light wells through the dropped ceiling)", "G-C2 gallery Y 14.0-15.6"],
+          "verdict": "Pools of light on the runner, symmetric rhythm. Estimate 7/10."
+        },
+        "C-B": {
+          "name": "Linear wall-wash slot on the left (gallery) wall",
+          "type": "one-point symmetric enfilade with a strong leading line",
+          "camera": {"loc": [2.397, 17.11, 1.20], "yaw": 0, "lens": 24, "u0": 0.50, "v0": 0.46},
+          "changes": ["G-C1b continuous opal roof-light slot 0.30 wide along the left wall, X 1.70-2.00, Y 10.00-17.20", "G-C2 gallery Y 14.0-15.6 (3 prints 40 wide, gaps 20, centre Z 1.45, top <= 1.70)", "G-C3 oak-cased portal on the hall/corridor opening"],
+          "est": {"gallery_u": [0.192, 0.35], "nearest_print_top_v": 0.067, "slot_visible_from_Y": "< 13.24 (ceiling enters the frame beyond d 3.87)", "girl_door_jamb_u": -0.047},
+          "verdict": "Light from the left like every other frame, a bright converging line at the top left, the gallery glows. Estimate 8/10."
+        }
+      }
+    },
+
+    "boy": {
+      "diagnosis": ["window a white slab over ~40% of the left", "desk under the window cut; bed foot cut on the right; mattress top dominant (1.20 looking down)", "corner hidden, wall box floating", "no story: nothing says child or forest"],
+      "hero": "Forest nook by the window: low bed under a gable 'house' frame, teepee in the window corner",
+      "pick": "K-A",
+      "options": {
+        "K-A": {
+          "name": "Child's-eye threshold corner",
+          "type": "two-point corner from the doorway, corner on the left third",
+          "camera": {"loc": [1.10, 13.00, 1.00], "yaw": 33, "lens": 24, "u0": 0.52, "v0": 0.44},
+          "layout": "wardrobes move from the south wall to the west wall (X -2.30..0.20, behind the camera); bed 90x190 along the east wall X -1.55..0.35, low (top <= 0.45), gable 'house' frame in oak (fixed furniture, <= 1.60 high, never above the window sill line where it overlaps the window); play nook (teepee, base <= 0.95) in the NE corner on the corner ray; right of the bed: hooks, shape shelf, toy basket",
+          "est": {"window_visible_Y": [10.75, 11.83], "window_u": [0.0, 0.23], "window_cut_pct": 23, "NE_corner_u": 0.303, "bed_front_u": [0.25, 0.65], "bed_centre_u": 0.41, "east_wall_right_edge_X": 1.23, "SE_corner_u": "1.12 (out)", "top_edge_on_east_wall_Z": 2.11, "camera_to_corner_m": 4.16},
+          "transitions": {"T-CBoy'": "rail dolly C0 -> S1' (2.641, 13.00) 4.12 m; slider -X 1.54 m through the door at Y 13.00 (0.37/0.53 to jambs) with pedestal 1.20->1.00; pan 0->33. About 3.3 s."},
+          "verdict": "Window in frame, kid story at kid height, bed off the window. Estimate 7.5/10."
+        },
+        "K-B": {
+          "name": "Frontal daybed wall",
+          "type": "one-point elevation",
+          "camera": {"loc": [-0.95, 13.00, 1.00], "yaw": 0, "lens": 24, "u0": 0.50, "v0": 0.36},
+          "est": {"window_u": [0.0, 0.10], "NE_corner_u": 0.173, "top_edge_on_east_wall_Z": 1.84},
+          "transitions": {"T-CBoy''": "rail to S1' + one slider 3.59 m, no pan"},
+          "verdict": "Only 2.75 m to the wall: wall visible only to ~1.84, canopy/shelf cramped, window nearly gone. Not recommended. 6/10."
+        }
+      }
+    },
+
+    "girl": {
+      "note": "Identical shell and camera to boy, +3.63 in Y. Hero: the cloud canopy falling from above the frame over the bed head, decisively cut by the top edge (fixes the 2 m cone hiding the corner).",
+      "pick": "K-A",
+      "camera_K-A": {"loc": [1.10, 16.63, 1.00], "yaw": 33, "lens": 24, "u0": 0.52, "v0": 0.44},
+      "transitions": {"T-CGirl'": "one oblique slide heading 0 from C0 to (1.10, 16.63), 1.38 m, crossing the girl door at Y 16.82 (0.32 perpendicular), pedestal to 1.00; pan 0->33. About 2.3 s."},
+      "canopy": "hook point above the bed's north (left) end; fabric enters from above the top edge and falls to <= 0.20 above the floor at the bed's left end; it must not cover the corner line or the window (>= 0.03 from both, or a decisive overlap >= 0.04)"
+    },
+
+    "master": {
+      "diagnosis": ["bed seen at 35 deg, mattress top fills the lower half (1.20 looking down)", "bed and corner 'almost centre' (corner 0.34, bed ~0.5)", "right nightstand cut, right of the bed wall empty", "no rug or floor, no depth beyond the room", "the room's best asset, the symmetric bed wall, is not shown frontally"],
+      "hero": "The bed wall as a sanctuary: symmetric sconces and art, linen in raking north light",
+      "pick": "MB-A",
+      "options": {
+        "MB-A": {
+          "name": "Frontal bed wall",
+          "type": "one-point symmetric (u0 0.50), window decisively cut on the left wall",
+          "camera": {"loc": [-0.70, 21.05, 1.05], "yaw": 0, "lens": 24, "u0": 0.50, "v0": 0.46},
+          "layout": "bed 180x200 centred X -0.70 (X -1.60..0.20); nightstands 45 wide, centres X -1.875 and 0.475; sconce pair above them; art centred over the bed; tall planter or lounge chair at X ~1.40 to weigh against the window; no wardrobes on the west wall (they go to the existing en-suite/WIC)",
+          "est": {"window_visible_Y": [18.10, 18.92], "window_u": [0.0, 0.138], "window_cut_pct": 45, "NE_corner_u": 0.185, "bed_centre_u": 0.50, "sconces_u": [0.269, 0.731], "door_jamb_X2.00_u": "1.031 (out)", "bed_foot_u": [0.07, 0.93], "bed_foot_top_v": 0.912, "bed_head_v": 0.645, "top_edge_on_bed_wall_Z": 2.37, "camera_to_bed_wall_m": 3.39},
+          "transitions": {"T-CM'": "pull-back heading 0 from C0 to (2.45, 21.05), 3.94 m, through the door at X 2.00-2.90 (0.45 clearance); slider -X 3.15 m to (-0.70, 21.05) with pedestal 1.20->1.05. No pan. About 2.8 s."},
+          "verdict": "The classic Nordic bedroom editorial frame; product-forward for bedding, throw, cushions, sconces. Estimate 8.5/10."
+        },
+        "MB-B": {
+          "name": "Refined current corner",
+          "type": "two-point corner",
+          "camera": {"loc": [1.75, 21.05, 1.05], "yaw": 35, "lens": 24, "u0": 0.52, "v0": 0.46},
+          "layout": "as plan; wardrobes stop before X 1.15; bed wall panelling; art + sconces centred on bed",
+          "est": {"NE_corner_u": 0.341},
+          "transitions": "T-CM unchanged (plus pedestal)",
+          "verdict": "Lower risk, still reads as 'standing at the door'. 6.5/10."
+        }
+      }
+    },
+
+    "bath": {
+      "diagnosis": ["dark (mean L 98), camera at the vanity", "vanity a long slab across the bottom, window a blown square above it", "a lamp cylinder and a dark box with no story", "shower cut on the right", "no place for the U6 mirror (window over the vanity), so the room has no 'bath' read", "no material story (limestone, fluted glass) visible"],
+      "hero": "Limestone and fluted light: a single oak-and-limestone vanity with the U6 mirror, between a fluted window and a calm limestone corner",
+      "pick": "B-A",
+      "options": {
+        "B-A": {
+          "name": "Vanity corner, window moved north",
+          "type": "two-point corner from the threshold",
+          "camera": {"loc": [3.45, 13.00, 1.15], "yaw": -32, "lens": 24, "u0": 0.52, "v0": 0.46},
+          "layout": "window X 3.95-4.95 sill 1.30 -> X 3.45-4.45 sill 0.90 head 2.40 (fluted, 1.00 wide); single vanity 110 (X 4.85-5.95) oak + honed limestone top; U6 mirror 100 wide (X 4.90-5.90), bottom 1.15; WC on the west wall X 4.5-5.0 (behind camera); shower placement decided by the mirror reflection check (see checks)",
+          "est": {"north_wall_sliver_u": [0.0, 0.04], "window_u": [0.103, 0.355], "mirror_u": [0.443, 0.60], "vanity_right_end_u": 0.606, "SE_corner_u": 0.644, "right_edge_on_south_wall_Y": 11.92, "mirror_reflects_south_wall_Y": [10.39, 12.79], "mirror_reflects_Z": [1.1, 2.45]},
+          "transitions": {"T-CBath'": "rail dolly C0 -> S1' 4.12 m; slider +X 0.81 m to (3.45, 13.00) through the door at Y 13.00 (0.39/0.61); pan 0->-32. About 3.2 s."},
+          "verdict": "Gives the mirror a real wall, keeps light from the left, a calm right third. Estimate 7.5/10. Risk: U6 reflection rule pushes the shower out of frame."
+        },
+        "B-B": {
+          "name": "Fluted clerestory over a double vanity",
+          "type": "two-point corner from the threshold",
+          "camera": {"loc": [3.45, 13.00, 1.15], "yaw": -32, "lens": 24, "u0": 0.52, "v0": 0.46},
+          "layout": "window becomes a high fluted clerestory X 3.95-6.05, sill 1.85, head 2.40; double vanity under it; U6 mirror 120 below it (Z 1.10-1.75); top light grazing the limestone",
+          "verdict": "Keeps the 'double vanity' of U6 and is the more dramatic light, but the mirror sits in the light path and reflects the west/south walls where the WC and shower live. 7/10, more reflection risk."
+        }
+      }
+    }
+  },
+
+  "geometry_deltas": [
+    {"id": "G-H1", "room": "hall", "options": ["H-A", "H-B"], "type": "add", "what": "opal roof light 0.90 x 1.60 (X 0.95-1.85, Y 6.70-8.30), light well 0.45 deep, diffusing glazing (no sun patch at 15:00 winter)"},
+    {"id": "G-H2", "room": "hall", "options": ["H-B"], "type": "move", "what": "front door O-front-door Y 7.10-8.10 -> Y 7.80-8.80 (still on the porch; 1.00 to the back corner)"},
+    {"id": "G-H3", "room": "hall", "options": ["H-B"], "type": "fixed furniture", "what": "console X 2.30-3.10 -> X 2.55-3.35 (0.083 gap to the door jamb in frame)"},
+    {"id": "G-H4", "room": "hall", "options": ["H-A", "H-B"], "type": "finish", "what": "oak-lined reveals (portal) on O-entry-living, hall side only; out of M0"},
+    {"id": "G-H5", "room": "hall", "options": ["H-A"], "type": "built-in", "what": "built-in oak bench with panelled back on the left wall Y 6.55-7.85, furred 0.25 into the hall; peg rail inside it replaces the hook bar"},
+    {"id": "G-C1a", "room": "corridor", "options": ["C-A"], "type": "add", "what": "three opal roof lights 0.80 x 0.80 at Y 11.0, 13.9, 16.4"},
+    {"id": "G-C1b", "room": "corridor", "options": ["C-B"], "type": "add", "what": "continuous opal roof-light slot 0.30 wide along the left wall, X 1.70-2.00, Y 10.00-17.20"},
+    {"id": "G-C2", "room": "corridor", "options": ["C-A", "C-B"], "type": "slot position", "what": "gallery-art Y 13.9-16.0 -> Y 14.0-15.6, centre Z 1.45, top <= 1.70"},
+    {"id": "G-C3", "room": "corridor", "options": ["C-B"], "type": "finish", "what": "oak-cased portal on O-hall-corridor"},
+    {"id": "G-W1", "room": "work", "options": ["W-A"], "type": "layout", "what": "desk from under the window to the east wall (built-in oak desk 160x60 + shelf); door leaf folds 180 deg onto the south wall, hinge west jamb"},
+    {"id": "G-W2", "room": "work", "options": ["W-B"], "type": "window", "what": "W-work 1.20 -> 1.80 wide, Y 6.85-8.65"},
+    {"id": "G-K1", "room": "boy+girl", "options": ["K-A", "K-B"], "type": "layout", "what": "wardrobes south wall -> west wall X -2.30..0.20; bed 90x190 along the east wall X -1.55..0.35 (off the window); oak gable 'house' bed frame as fixed furniture; teepee (boy) in the NE corner"},
+    {"id": "G-K2", "room": "corridor rail", "options": ["K-A", "B-A", "B-B"], "type": "motion", "what": "rail station S1' (2.641, 13.00) replaces S1 (2.606, 13.60)"},
+    {"id": "G-M1", "room": "master", "options": ["MB-A"], "type": "move", "what": "O-corridor-master X 1.88-2.78 -> X 2.00-2.90 (0.20 return to X 3.10 kept)"},
+    {"id": "G-M2", "room": "master", "options": ["MB-A"], "type": "layout", "what": "no wardrobes on the west wall (to the en-suite/WIC that already exists)"},
+    {"id": "G-M3", "room": "master", "options": ["MB-A"], "type": "layout", "what": "bed 180x200 centre X -0.25 -> -0.70; nightstands 45"},
+    {"id": "G-M4", "room": "master", "options": ["MB-A", "MB-B"], "type": "finish", "what": "bed wall: painted tongue-and-groove wainscot H 1.25, warm white, with a 3 cm oak cap (optional wow)"},
+    {"id": "G-B1", "room": "bath", "options": ["B-A"], "type": "window", "what": "W-bath X 3.95-4.95 sill 1.30 -> X 3.45-4.45 sill 0.90 head 2.40 (fluted)"},
+    {"id": "G-B1b", "room": "bath", "options": ["B-B"], "type": "window", "what": "W-bath -> clerestory X 3.95-6.05, sill 1.85, head 2.40 (fluted)"},
+    {"id": "G-B2", "room": "bath", "options": ["B-A"], "type": "layout", "what": "single vanity 110 instead of the double vanity of U6 (U6 text says double); WC to the west wall X 4.5-5.0"},
+    {"id": "G-D1", "room": "kitchen-dining", "options": ["D-A"], "type": "layout", "what": "already in draft 0.1: table 160x85 at (4.30, 1.65); remove the end chair; bench on the camera side as foreground"}
+  ],
+
+  "cameras_for_clay": [
+    {"id": "H0-A", "room": "hall", "loc": [2.877, 9.039, 1.20], "yaw": 25, "u0": 0.52, "v0": 0.46},
+    {"id": "H0-B", "room": "hall", "loc": [2.877, 9.039, 1.20], "yaw": 12, "u0": 0.52, "v0": 0.46, "sweep": {"yaw": [10, 15]}},
+    {"id": "D0-A", "room": "kitchen-dining", "loc": [2.75, 3.45, 1.10], "yaw": -35, "u0": 0.52, "v0": 0.43, "sweep": {"v0": [0.43, 0.46], "z": [1.10, 1.20]}},
+    {"id": "W0-A", "room": "work", "loc": [-0.825, 9.85, 1.10], "yaw": 0, "u0": 0.50, "v0": 0.46},
+    {"id": "W0-B", "room": "work", "loc": [0.40, 8.65, 1.10], "yaw": 60, "u0": 0.52, "v0": 0.46},
+    {"id": "C0-A", "room": "corridor", "loc": [2.397, 17.11, 1.20], "yaw": 0, "u0": 0.50, "v0": 0.46, "roof": "G-C1a"},
+    {"id": "C0-B", "room": "corridor", "loc": [2.397, 17.11, 1.20], "yaw": 0, "u0": 0.50, "v0": 0.46, "roof": "G-C1b"},
+    {"id": "K-boy-A", "room": "boy", "loc": [1.10, 13.00, 1.00], "yaw": 33, "u0": 0.52, "v0": 0.44, "sweep": {"yaw": [30, 35]}},
+    {"id": "K-boy-B", "room": "boy", "loc": [-0.95, 13.00, 1.00], "yaw": 0, "u0": 0.50, "v0": 0.36},
+    {"id": "K-girl-A", "room": "girl", "loc": [1.10, 16.63, 1.00], "yaw": 33, "u0": 0.52, "v0": 0.44},
+    {"id": "MB0-A", "room": "master", "loc": [-0.70, 21.05, 1.05], "yaw": 0, "u0": 0.50, "v0": 0.46, "sweep": {"y": [20.95, 21.20]}},
+    {"id": "MB0-B", "room": "master", "loc": [1.75, 21.05, 1.05], "yaw": 35, "u0": 0.52, "v0": 0.46},
+    {"id": "B0-A", "room": "bath", "loc": [3.45, 13.00, 1.15], "yaw": -32, "u0": 0.52, "v0": 0.46, "sweep": {"yaw": [-26, -34]}},
+    {"id": "B0-B", "room": "bath", "loc": [3.45, 13.00, 1.15], "yaw": -32, "u0": 0.52, "v0": 0.46}
+  ],
+
+  "transitions_new": [
+    {"id": "E0'", "options": ["H-B"], "segments": [{"type": "pan", "at": "H0", "yaw": [12, 25]}, {"type": "dolly", "id": "E0", "status": "approved, unchanged"}], "play_s_approx": 2.9},
+    {"id": "T-LD'", "options": ["D-A"], "segments": [{"type": "pan", "yaw": [25, 0], "id": "P0"}, {"type": "pan", "yaw": [0, -35], "id": "P1"}, {"type": "dolly", "from": [1.25, 5.55, 1.20], "to": [2.75, 3.45, 1.10], "heading": -35, "len_m": 2.58, "crossing": "X 2.575 at Y 3.70; >= 0.42 perpendicular to the jambs"}], "play_s_approx": 2.9},
+    {"id": "T-HW'", "options": ["W-A"], "segments": [{"type": "pan", "at": "H0", "yaw": ["12 (H-B) or 25 (H-A)", 0]}, {"type": "slide", "heading": 0, "from": [2.877, 9.039, 1.20], "to": [-0.825, 8.55, 1.10], "len_m": 3.73, "crossing": "X 0.725 at Y 8.755; 0.24 / 0.65 to jambs"}, {"type": "pull-back", "heading": 0, "from": [-0.825, 8.55, 1.10], "to": [-0.825, 9.85, 1.10], "len_m": 1.30}], "play_s_approx": 3.3},
+    {"id": "T-HC'", "segments": [{"type": "pan", "at": "H0", "yaw": ["12 (H-B) or 25 (H-A)", 0]}, {"type": "pull-back", "rail": "unchanged", "len_m": 8.09}], "play_s_approx": 3.0},
+    {"id": "T-CBoy'", "options": ["K-A"], "segments": [{"type": "dolly", "rail": "C0 -> S1' (2.641, 13.00)", "heading": 0, "len_m": 4.12}, {"type": "slide", "heading": 0, "from": [2.641, 13.00, 1.20], "to": [1.10, 13.00, 1.00], "len_m": 1.55, "crossing": "door Y 12.63-13.53 at Y 13.00 (0.37/0.53)"}, {"type": "pan", "yaw": [0, 33]}], "play_s_approx": 3.3},
+    {"id": "T-CGirl'", "options": ["K-A"], "segments": [{"type": "slide", "heading": 0, "from": [2.397, 17.11, 1.20], "to": [1.10, 16.63, 1.00], "len_m": 1.38, "crossing": "door Y 16.26-17.16 at Y 16.82 (0.32 perpendicular)"}, {"type": "pan", "yaw": [0, 33]}], "play_s_approx": 2.3},
+    {"id": "T-CBath'", "options": ["B-A", "B-B"], "segments": [{"type": "dolly", "rail": "C0 -> S1'", "heading": 0, "len_m": 4.12}, {"type": "slide", "heading": 0, "from": [2.641, 13.00, 1.20], "to": [3.45, 13.00, 1.15], "len_m": 0.81, "crossing": "door Y 12.39-13.39 at Y 13.00 (0.39/0.61)"}, {"type": "pan", "yaw": [0, -32]}], "play_s_approx": 3.2},
+    {"id": "T-CM'", "options": ["MB-A"], "segments": [{"type": "pull-back", "heading": 0, "from": [2.397, 17.11, 1.20], "to": [2.45, 21.05, 1.20], "len_m": 3.94, "crossing": "door X 2.00-2.90 at X ~2.41 (0.41 / 0.49)"}, {"type": "slide", "heading": 0, "from": [2.45, 21.05, 1.20], "to": [-0.70, 21.05, 1.05], "len_m": 3.15}], "play_s_approx": 2.8}
+  ],
+
+  "clay_instructions_motion_agent": {
+    "credits": 0,
+    "do_not_touch": ["assets/blockout/living-room/*", "docs/house-plan.*", "assets/blockout/house/* existing outputs"],
+    "output": "assets/blockout/house/framing/<room>/<option>/{clay.png, overlay.png, selfcheck.json} + assets/blockout/house/framing/compare.jpg (current vs A vs B per room, same size, thirds grid in a separate overlay row)",
+    "build": "Add '--framing <option-id>' to build_house.py that applies the geometry_deltas of that option on top of house-plan 1.0; no flag = identical to today's clays.",
+    "light": "Sky only, as today, PLUS the roof lights of the option (opal = large diffuse emitter in the well). For hall and corridor also render a second pass with the planned practicals at 2700K so the darkness is not misjudged.",
+    "proxies": "Use the layout of each option (bed, desk, console, bench, vanity, mirror plane). Mirror (B-A, B-B): render a reflection-only pass and list every object seen in it.",
+    "sweeps": "Render the 'sweep' ranges in cameras_for_clay as a contact strip (5 frames), so I pick the exact value from pixels.",
+    "report": "Every est value vs measured (|delta| > 0.02 flagged), every tangent < 0.02 between large items or with an edge, jamb clearance of every new transition (>= 0.15), mean frame L.",
+    "fix_policy": "Do not move anything to fix a failure. Report; I close it."
+  },
+
+  "acceptance_checks": [
+    "F1 hero on a third (0.30-0.36 / 0.64-0.70) or at 0.50 +-0.01 in u0 0.50 frames",
+    "F2 window per S4: whole with >= 0.03 to every edge, or cut >= 15% of its width",
+    "F3 no edge tangent < 0.02 (objects, door jambs, window heads, corner lines)",
+    "F4 three depth layers identifiable",
+    "F5 camera-to-hero-wall distance as listed (>= 3.0, bath >= 2.8)",
+    "F6 negative space >= 25%",
+    "F7 hall and corridor mean L >= 95 with roof light (sky only), wall gradient readable",
+    "F8 U6: mirror reflection shows only wall (no product, fixture, window, camera, lamp)",
+    "F9 every new transition: jamb clearance >= 0.15, last frame identical to the master camera, U10 play time"
+  ]
+}
