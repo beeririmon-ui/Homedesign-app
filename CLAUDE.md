@@ -7,9 +7,10 @@
 
 ## מסמכים מחייבים (מקור האמת)
 - `docs/skeleton-spec.md` — השלד: שכבות, מצלמות, עמדות מוצר, נכסים, אנימציות וביצועים.
+- `docs/house-plan.md` + `docs/house-plan.json` — תוכנית הבית: חדרים, פתחים, מצלמות ומסלולי מעבר (אושרה 2026-10-06).
 - `docs/design-bible/nordic.md` — ה-Design Bible של הסגנון הנורדי.
 - `data/product-card.schema.json` — מבנה כרטיס מוצר.
-- `data/slots/living-room.json` — עמדות המוצר ושכבות הסלון.
+- `data/slots/<room>.json` — עמדות המוצר והשכבות של כל חדר (התחלנו ב-`living-room.json`).
 - `.claude/skills/interior-design-rules/` — חוקי העיצוב של המעצב.
 
 תוצר שסותר את המסמכים האלה נדחה. שינוי במסמך מחייב אישור של המשתמש.
