@@ -1713,6 +1713,157 @@
       },
       "overlay": "framing/overlays/W-B.png",
       "runtime_s": 289
+    },
+    "C-A": {
+      "option": "C-A",
+      "room": "corridor",
+      "camera": {
+        "id": "C0-A",
+        "room": "corridor",
+        "loc": [
+          2.397,
+          17.11,
+          1.2
+        ],
+        "yaw": 0,
+        "u0": 0.5,
+        "v0": 0.46,
+        "roof": "G-C1a"
+      },
+      "deltas": [
+        "G-C1a",
+        "G-C2"
+      ],
+      "image": "framing/C-A.png",
+      "build_notes": [],
+      "lamps_on": [],
+      "mean_L_editorial": 111.6,
+      "est_vs_measured": [
+        {
+          "key": "gallery_u (prints Y 15.6 / 14.0)",
+          "est": [
+            0.192,
+            0.35
+          ],
+          "measured": [
+            0.1923,
+            0.3506
+          ],
+          "dev": [
+            0.0003,
+            0.0006
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "nearest_print_top_v (1.70, 15.6, 1.70)",
+          "est": 0.067,
+          "measured": 0.0676,
+          "dev": 0.0006,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "slot/ceiling visible from Y (top edge meets Z 2.70, centre column)",
+          "est": 13.24,
+          "measured": 13.2453,
+          "dev": 0.0053,
+          "flag_gt_tol": false,
+          "tol": 0.05,
+          "note": "slot visible for Y < this"
+        },
+        {
+          "key": "girl_door_jamb_u (1.70, 16.26)",
+          "est": -0.047,
+          "measured": -0.0467,
+          "dev": 0.0003,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        }
+      ],
+      "est_flags": [],
+      "acceptance": {
+        "F1": {
+          "result": "pass",
+          "heroes": [
+            {
+              "hero": "enfilade axis (vanishing point)",
+              "u": 0.5,
+              "rule": "0.50 +-0.01 (u0 0.50)",
+              "ok": true,
+              "almost_centre_0_45_0_58": true
+            }
+          ],
+          "note": "result = first (named) hero; others listed"
+        },
+        "F2": {
+          "result": "n/a (no window in frame)",
+          "windows": {}
+        },
+        "F3": {
+          "result": "pass",
+          "object_tangents": [],
+          "architectural_lines_within_0_02_of_edge": [],
+          "note": "objects: visible bbox margin 0 < m < 0.02 (touching = cut, allowed); pairwise object-object tangents not measured (visual)"
+        },
+        "F4": {
+          "result": "pass",
+          "hero_wall_depth_m": 7.31,
+          "foreground_objects_frac": {
+            "door leaves": 0.0672,
+            "corridor/runner-rug": 0.032,
+            "corridor/gallery-art": 0.044
+          },
+          "background_frac": 0.0543,
+          "note": "heuristic: foreground = non-shell pixels nearer than 0.55 x hero-wall depth; background = beyond the hero wall + 0.4 m (next room, window, sky)"
+        },
+        "F5": {
+          "result": "pass",
+          "camera_to_hero_wall_depth_m": 7.31,
+          "min_m": 3.0,
+          "hero_wall_point": [
+            2.397,
+            9.8
+          ]
+        },
+        "F6": {
+          "result": "pass",
+          "calm_wall_floor_ceiling_frac": 0.807,
+          "note": "pixels of wall, floor and ceiling (trim, rugs, windows excluded)"
+        },
+        "F7": {
+          "result": "pass",
+          "mean_L_sky_and_rooflight_only": 120.9,
+          "min": 95,
+          "image": "framing/extra/C-A-skyonly.png",
+          "note": "sky + opal roof light (radiance 0.55 x sky), no window boost, no lamps, no AO; 960 px"
+        },
+        "F8": {
+          "result": "n/a (no mirror)"
+        },
+        "F9": {
+          "result": "n/a (frame-only option; transitions unchanged)",
+          "transitions": []
+        }
+      },
+      "camera_clearance_m": {
+        "min": 0.5538,
+        "nearest": "hwall_35"
+      },
+      "practicals_pass": {
+        "image": "framing/extra/C-A-practicals2700K.png",
+        "mean_L": 136.2,
+        "lamps": [
+          "c_light_a",
+          "c_light_b"
+        ]
+      },
+      "overlay": "framing/overlays/C-A.png",
+      "runtime_s": 661
     }
   }
 }
