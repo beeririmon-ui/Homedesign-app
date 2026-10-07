@@ -20,6 +20,8 @@ Run
   python3 build_house.py                       # everything
   python3 build_house.py --only plan,clays     # parts: m0cmp, plan, clays, sheets
   python3 build_house.py --res 960 --samples 16 --sheet-res 320 --out /tmp/x   # preview
+  python3 build_house.py --framing <option-id|room|all|sheets>   # framing proposal options -> framing/ (framing.py);
+                                               # without the flag nothing changes: the approved plan geometry
 Passes (EXR) go to a temp dir outside the repo and are deleted at the end.
 Same conventions as the living room: metres, X right as M0 sees it, Y from the living back wall toward the
 entrance, Z up; camera mirrored (scale.x = -1); Cycles CPU, seed 7, no adaptive sampling, sky only.
@@ -1223,6 +1225,9 @@ def summarize(rep, plan):
 
 def main():
     argv = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else sys.argv[1:]
+    if "--framing" in argv:          # proposal options (docs/proposals/house-framing.json): see framing.py
+        import framing
+        return framing.main(argv)
     ap = argparse.ArgumentParser()
     ap.add_argument("--res", type=int, default=2048)
     ap.add_argument("--samples", type=int, default=64)
