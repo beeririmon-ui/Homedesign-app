@@ -114,6 +114,42 @@
       },
       "image": "framing/current-boy.png",
       "mean_L_editorial": 187.5
+    },
+    "girl": {
+      "room": "girl",
+      "camera": {
+        "id": "K-girl",
+        "room": "girl",
+        "loc": [
+          0.575,
+          16.057,
+          1.2
+        ],
+        "yaw": 60,
+        "u0": 0.52,
+        "v0": 0.46,
+        "frame": "identical to K-boy (+3.63 in Y)"
+      },
+      "image": "framing/current-girl.png",
+      "mean_L_editorial": 168.0
+    },
+    "bath": {
+      "room": "bath",
+      "camera": {
+        "id": "B0",
+        "room": "bath",
+        "loc": [
+          3.903,
+          11.748,
+          1.2
+        ],
+        "yaw": -35,
+        "u0": 0.52,
+        "v0": 0.46,
+        "frame": "SE corner u ~0.73; fluted window u ~0.08-0.52 (centre ~0.30, light from the left) with the vanity; shower on the right; the shell mirror reflects only wall (U6)"
+      },
+      "image": "framing/current-bath.png",
+      "mean_L_editorial": 101.9
     }
   },
   "options": {
@@ -140,12 +176,12 @@
       "image": "framing/H-A.png",
       "build_notes": [
         "G-H4: reveal lining 2 cm on the hall half of the reveal (Y 6.27-6.35) + 10 cm casing on the hall face; assumed profile",
-        "G-H5: niche 0.45 deep (0.05 panelled back + 0.40 seat) between cheeks Y 6.55-7.85, canopy 2.10; peg rail at 1.65 replaces the hook bar"
+        "G-H5: niche 0.40 deep (= the plan bench depth; 'furred 0.25' read as the panelled back + cheeks, interpretation) between cheeks Y 6.55-7.85, canopy 2.10; peg rail at 1.65 replaces the hook bar"
       ],
       "lamps_on": [
         "hall-console"
       ],
-      "mean_L_editorial": 106.5,
+      "mean_L_editorial": 110.8,
       "est_vs_measured": [
         {
           "key": "door_u",
@@ -228,7 +264,7 @@
           "result": "weak (no foreground object)",
           "hero_wall_depth_m": 2.9979,
           "foreground_objects_frac": {},
-          "background_frac": 0.1804,
+          "background_frac": 0.1881,
           "note": "heuristic: foreground = non-shell pixels nearer than 0.55 x hero-wall depth; background = beyond the hero wall + 0.4 m (next room, window, sky)"
         },
         "F5": {
@@ -242,12 +278,12 @@
         },
         "F6": {
           "result": "pass",
-          "calm_wall_floor_ceiling_frac": 0.452,
+          "calm_wall_floor_ceiling_frac": 0.458,
           "note": "pixels of wall, floor and ceiling (trim, rugs, windows excluded)"
         },
         "F7": {
           "result": "pass",
-          "mean_L_sky_and_rooflight_only": 103.6,
+          "mean_L_sky_and_rooflight_only": 109.1,
           "min": 95,
           "image": "framing/extra/H-A-skyonly.png",
           "note": "sky + opal roof light (radiance 0.55 x sky), no window boost, no lamps, no AO; 960 px"
@@ -327,14 +363,14 @@
       },
       "practicals_pass": {
         "image": "framing/extra/H-A-practicals2700K.png",
-        "mean_L": 129.6,
+        "mean_L": 133.5,
         "lamps": [
           "h_ceil",
           "h_lamp"
         ]
       },
       "overlay": "framing/overlays/H-A.png",
-      "runtime_s": 650
+      "runtime_s": 671
     },
     "H-B": {
       "option": "H-B",
@@ -370,7 +406,7 @@
       "lamps_on": [
         "hall-console"
       ],
-      "mean_L_editorial": 126.7,
+      "mean_L_editorial": 128.2,
       "est_vs_measured": [
         {
           "key": "NE_corner_u (0.80, 6.35)",
@@ -533,7 +569,7 @@
         },
         "F7": {
           "result": "pass",
-          "mean_L_sky_and_rooflight_only": 125.5,
+          "mean_L_sky_and_rooflight_only": 127.8,
           "min": 95,
           "image": "framing/extra/H-B-skyonly.png",
           "note": "sky + opal roof light (radiance 0.55 x sky), no window boost, no lamps, no AO; 960 px"
@@ -673,7 +709,7 @@
       },
       "practicals_pass": {
         "image": "framing/extra/H-B-practicals2700K.png",
-        "mean_L": 149.0,
+        "mean_L": 150.1,
         "lamps": [
           "h_ceil",
           "h_lamp3"
@@ -681,7 +717,7 @@
       },
       "sweep": "framing/extra/H-B-sweep.jpg",
       "overlay": "framing/overlays/H-B.png",
-      "runtime_s": 763
+      "runtime_s": 769
     },
     "MB-A": {
       "option": "MB-A",
@@ -1773,7 +1809,7 @@
       "image": "framing/C-A.png",
       "build_notes": [],
       "lamps_on": [],
-      "mean_L_editorial": 111.6,
+      "mean_L_editorial": 122.0,
       "est_vs_measured": [
         {
           "key": "gallery_u (prints Y 15.6 / 14.0)",
@@ -1868,12 +1904,12 @@
         },
         "F6": {
           "result": "pass",
-          "calm_wall_floor_ceiling_frac": 0.807,
+          "calm_wall_floor_ceiling_frac": 0.81,
           "note": "pixels of wall, floor and ceiling (trim, rugs, windows excluded)"
         },
         "F7": {
           "result": "pass",
-          "mean_L_sky_and_rooflight_only": 120.9,
+          "mean_L_sky_and_rooflight_only": 134.3,
           "min": 95,
           "image": "framing/extra/C-A-skyonly.png",
           "note": "sky + opal roof light (radiance 0.55 x sky), no window boost, no lamps, no AO; 960 px"
@@ -1892,14 +1928,14 @@
       },
       "practicals_pass": {
         "image": "framing/extra/C-A-practicals2700K.png",
-        "mean_L": 136.2,
+        "mean_L": 143.2,
         "lamps": [
           "c_light_a",
           "c_light_b"
         ]
       },
       "overlay": "framing/overlays/C-A.png",
-      "runtime_s": 661
+      "runtime_s": 658
     },
     "C-B": {
       "option": "C-B",
@@ -1927,7 +1963,7 @@
         "G-C3: 4 cm oak lining Y 9.70-9.95 (lintel drops to 2.62) + 10 cm casing on the hall face; assumed profile"
       ],
       "lamps_on": [],
-      "mean_L_editorial": 103.7,
+      "mean_L_editorial": 112.4,
       "est_vs_measured": [
         {
           "key": "gallery_u (prints Y 15.6 / 14.0)",
@@ -2027,7 +2063,7 @@
         },
         "F7": {
           "result": "pass",
-          "mean_L_sky_and_rooflight_only": 109.6,
+          "mean_L_sky_and_rooflight_only": 121.5,
           "min": 95,
           "image": "framing/extra/C-B-skyonly.png",
           "note": "sky + opal roof light (radiance 0.55 x sky), no window boost, no lamps, no AO; 960 px"
@@ -2046,14 +2082,14 @@
       },
       "practicals_pass": {
         "image": "framing/extra/C-B-practicals2700K.png",
-        "mean_L": 130.9,
+        "mean_L": 136.9,
         "lamps": [
           "c_light_a",
           "c_light_b"
         ]
       },
       "overlay": "framing/overlays/C-B.png",
-      "runtime_s": 712
+      "runtime_s": 676
     },
     "D-A": {
       "option": "D-A",
@@ -2449,6 +2485,1820 @@
       "sweep": "framing/extra/D-A-sweep.jpg",
       "overlay": "framing/overlays/D-A.png",
       "runtime_s": 479
+    },
+    "K-A-boy": {
+      "option": "K-A-boy",
+      "room": "boy",
+      "camera": {
+        "id": "K-boy-A",
+        "room": "boy",
+        "loc": [
+          1.1,
+          13.0,
+          1.0
+        ],
+        "yaw": 33,
+        "u0": 0.52,
+        "v0": 0.44,
+        "sweep": {
+          "yaw": [
+            30,
+            35
+          ]
+        }
+      },
+      "deltas": [
+        "G-K1"
+      ],
+      "image": "framing/K-A-boy.png",
+      "build_notes": [
+        "G-K1: desk + desk lamp of the plan dropped (not in the proposal layout); teepee base 0.75 (the corner beside the bed is 0.75 wide, base <= 0.95 allowed) centred (-1.92, 10.66) on the camera->corner ray; canopy cone hook over the bed's north end (-1.70), hem 0.20"
+      ],
+      "lamps_on": [],
+      "mean_L_editorial": 181.1,
+      "est_vs_measured": [
+        {
+          "key": "window_visible_Y",
+          "est": [
+            10.75,
+            11.83
+          ],
+          "measured": [
+            10.75,
+            11.8262
+          ],
+          "dev": [
+            0.0,
+            -0.0038
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "window_u",
+          "est": [
+            0.0,
+            0.23
+          ],
+          "measured": [
+            0.0,
+            0.2301
+          ],
+          "dev": [
+            0.0,
+            0.0001
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "window_cut_pct",
+          "est": 23,
+          "measured": 23.1,
+          "dev": 0.1,
+          "flag_gt_tol": false,
+          "tol": 2,
+          "note": ""
+        },
+        {
+          "key": "NE_corner_u",
+          "est": 0.303,
+          "measured": 0.303,
+          "dev": -0.0,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "bed_front_u (corners X -1.55 / 0.35 at Y front, Z 0.43)",
+          "est": [
+            0.25,
+            0.65
+          ],
+          "measured": [
+            0.2496,
+            0.6488
+          ],
+          "dev": [
+            -0.0004,
+            -0.0012
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "bed_u (pixels, whole bed)",
+          "est": [
+            0.25,
+            0.65
+          ],
+          "measured": [
+            0.2568,
+            0.7285
+          ],
+          "dev": [
+            0.0068,
+            0.0785
+          ],
+          "flag_gt_tol": true,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "bed_centre_u (-0.60, front)",
+          "est": 0.41,
+          "measured": 0.4075,
+          "dev": -0.0025,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "east_wall_right_edge_X",
+          "est": 1.23,
+          "measured": 1.2322,
+          "dev": 0.0022,
+          "flag_gt_tol": false,
+          "tol": 0.05,
+          "note": ""
+        },
+        {
+          "key": "SE_corner_u (1.55, Y east)",
+          "est": 1.12,
+          "measured": 1.1265,
+          "dev": 0.0065,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "top_edge_on_east_wall_Z (at the corner)",
+          "est": 2.11,
+          "measured": 2.5437,
+          "dev": 0.4337,
+          "flag_gt_tol": true,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "camera_to_corner_m (depth)",
+          "est": 4.16,
+          "measured": 4.1581,
+          "dev": -0.0019,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": "euclid 4.373"
+        }
+      ],
+      "est_flags": [
+        "bed_u (pixels, whole bed)",
+        "top_edge_on_east_wall_Z (at the corner)"
+      ],
+      "acceptance": {
+        "F1": {
+          "result": "pass",
+          "heroes": [
+            {
+              "hero": "NE corner nook",
+              "u": 0.303,
+              "rule": "0.30-0.36 / 0.64-0.70",
+              "ok": true,
+              "almost_centre_0_45_0_58": false
+            }
+          ],
+          "note": "result = first (named) hero; others listed"
+        },
+        "F2": {
+          "result": "pass",
+          "windows": {
+            "W-boy": {
+              "in_frame": true,
+              "visible_width_pct": 76.6,
+              "cut_pct": 23.4,
+              "u": [
+                0.0015,
+                0.2301
+              ],
+              "head_v_min": -0.3456,
+              "head_cut_by_top": true,
+              "sill_v_max": 0.5555,
+              "margins_if_whole": {
+                "left": -0.1009,
+                "right": 0.7699,
+                "top": -0.3456,
+                "bottom": 0.4445
+              },
+              "width_share": 0.2286,
+              "rule": "cut >= 15% of the width",
+              "ok_cut_rule": true,
+              "ok_width_le_30pct": true,
+              "ok": true
+            }
+          }
+        },
+        "F3": {
+          "result": "fail",
+          "object_tangents": [
+            {
+              "item": "boy/rug",
+              "side": "left",
+              "margin": 0.0054
+            }
+          ],
+          "architectural_lines_within_0_02_of_edge": [],
+          "note": "objects: visible bbox margin 0 < m < 0.02 (touching = cut, allowed); pairwise object-object tangents not measured (visual)"
+        },
+        "F4": {
+          "result": "pass",
+          "hero_wall_depth_m": 4.1581,
+          "foreground_objects_frac": {
+            "boy bed 90x190": 0.0305,
+            "boy gable 'house' frame": 0.0212,
+            "boy/bedding": 0.0083,
+            "boy/shape-shelf": 0.0075,
+            "boy/toy-basket": 0.0205,
+            "boy/rug": 0.0189
+          },
+          "background_frac": 0.0781,
+          "note": "heuristic: foreground = non-shell pixels nearer than 0.55 x hero-wall depth; background = beyond the hero wall + 0.4 m (next room, window, sky)"
+        },
+        "F5": {
+          "result": "pass",
+          "camera_to_hero_wall_depth_m": 4.1581,
+          "min_m": 3.0,
+          "hero_wall_point": [
+            -2.3,
+            10.25
+          ]
+        },
+        "F6": {
+          "result": "pass",
+          "calm_wall_floor_ceiling_frac": 0.547,
+          "note": "pixels of wall, floor and ceiling (trim, rugs, windows excluded)"
+        },
+        "F7": {
+          "result": "n/a (hall and corridor only)"
+        },
+        "F8": {
+          "result": "n/a (no mirror)"
+        },
+        "F9": {
+          "result": "pass (jambs; end pose; play time = designer estimate, not measured)",
+          "transitions": [
+            {
+              "id": "T-CBoy'",
+              "note": "",
+              "play_s_designer": 3.3,
+              "segments": [
+                {
+                  "type": "dolly",
+                  "from_": [
+                    2.397,
+                    17.11,
+                    1.2
+                  ],
+                  "to": [
+                    2.641,
+                    13.0,
+                    1.2
+                  ],
+                  "len_m": 4.1172,
+                  "len_plan": 4.12,
+                  "path_dir_deg_left": -3.4,
+                  "heading": 0,
+                  "jambs": [],
+                  "min_clearance_any_m": 0.4813,
+                  "nearest_any": "hwall_39",
+                  "ok_jambs": true
+                },
+                {
+                  "type": "slide",
+                  "from_": [
+                    2.641,
+                    13.0,
+                    1.2
+                  ],
+                  "to": [
+                    1.1,
+                    13.0,
+                    1.0
+                  ],
+                  "len_m": 1.541,
+                  "len_plan": 1.55,
+                  "path_dir_deg_left": 90.0,
+                  "heading": 0,
+                  "jambs": [
+                    {
+                      "opening": "O-corridor-boy",
+                      "crossing": [
+                        1.625,
+                        13.0
+                      ],
+                      "min_jamb_clearance_m": 0.37,
+                      "ok": true
+                    }
+                  ],
+                  "min_clearance_any_m": 0.37,
+                  "nearest_any": "hwall_26",
+                  "ok_jambs": true
+                },
+                {
+                  "type": "pan",
+                  "yaw": [
+                    0,
+                    33
+                  ]
+                }
+              ],
+              "end": {
+                "end_pos": [
+                  1.1,
+                  13.0,
+                  1.0
+                ],
+                "cam": [
+                  1.1,
+                  13.0,
+                  1.0
+                ],
+                "pos_err_m": 0.0
+              },
+              "min_jamb_clearance_m": 0.37,
+              "ok": true
+            }
+          ]
+        }
+      },
+      "camera_clearance_m": {
+        "min": 0.53,
+        "nearest": "leaf_corridor_boy"
+      },
+      "sweep": "framing/extra/K-A-boy-sweep.jpg",
+      "overlay": "framing/overlays/K-A-boy.png",
+      "runtime_s": 458
+    },
+    "K-B-boy": {
+      "option": "K-B-boy",
+      "room": "boy",
+      "camera": {
+        "id": "K-boy-B",
+        "room": "boy",
+        "loc": [
+          -0.95,
+          13.0,
+          1.0
+        ],
+        "yaw": 0,
+        "u0": 0.5,
+        "v0": 0.36
+      },
+      "deltas": [
+        "G-K1"
+      ],
+      "image": "framing/K-B-boy.png",
+      "build_notes": [
+        "G-K1: desk + desk lamp of the plan dropped (not in the proposal layout); teepee base 0.75 (the corner beside the bed is 0.75 wide, base <= 0.95 allowed) centred (-1.92, 10.66) on the camera->corner ray; canopy cone hook over the bed's north end (-1.70), hem 0.20"
+      ],
+      "lamps_on": [],
+      "mean_L_editorial": 178.7,
+      "est_vs_measured": [
+        {
+          "key": "window_u",
+          "est": [
+            0.0,
+            0.1
+          ],
+          "measured": [
+            0.0,
+            0.1
+          ],
+          "dev": [
+            0.0,
+            -0.0
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "NE_corner_u",
+          "est": 0.173,
+          "measured": 0.1727,
+          "dev": -0.0003,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "top_edge_on_east_wall_Z",
+          "est": 1.84,
+          "measured": 1.8353,
+          "dev": -0.0047,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        }
+      ],
+      "est_flags": [],
+      "acceptance": {
+        "F1": {
+          "result": "fail",
+          "heroes": [
+            {
+              "hero": "bed centre (-0.60, east wall)",
+              "u": 0.5848,
+              "rule": "0.50 +-0.01 (u0 0.50)",
+              "ok": false,
+              "almost_centre_0_45_0_58": false
+            }
+          ],
+          "note": "result = first (named) hero; others listed"
+        },
+        "F2": {
+          "result": "pass",
+          "windows": {
+            "W-boy": {
+              "in_frame": true,
+              "visible_width_pct": 32.3,
+              "cut_pct": 67.7,
+              "u": [
+                0.0006,
+                0.1
+              ],
+              "head_v_min": -2.0104,
+              "head_cut_by_top": true,
+              "sill_v_max": 0.7086,
+              "margins_if_whole": {
+                "left": -0.5588,
+                "right": 0.9,
+                "top": -2.0104,
+                "bottom": 0.2914
+              },
+              "width_share": 0.0994,
+              "rule": "cut >= 15% of the width",
+              "ok_cut_rule": true,
+              "ok_width_le_30pct": true,
+              "ok": true
+            }
+          }
+        },
+        "F3": {
+          "result": "fail",
+          "object_tangents": [
+            {
+              "item": "boy/wall-hooks",
+              "side": "right",
+              "margin": 0.0044
+            }
+          ],
+          "architectural_lines_within_0_02_of_edge": [],
+          "note": "objects: visible bbox margin 0 < m < 0.02 (touching = cut, allowed); pairwise object-object tangents not measured (visual)"
+        },
+        "F4": {
+          "result": "weak (no foreground object)",
+          "hero_wall_depth_m": 2.75,
+          "foreground_objects_frac": {},
+          "background_frac": 0.0,
+          "note": "heuristic: foreground = non-shell pixels nearer than 0.55 x hero-wall depth; background = beyond the hero wall + 0.4 m (next room, window, sky)"
+        },
+        "F5": {
+          "result": "fail",
+          "camera_to_hero_wall_depth_m": 2.75,
+          "min_m": 3.0,
+          "hero_wall_point": [
+            -0.95,
+            10.25
+          ]
+        },
+        "F6": {
+          "result": "pass",
+          "calm_wall_floor_ceiling_frac": 0.456,
+          "note": "pixels of wall, floor and ceiling (trim, rugs, windows excluded)"
+        },
+        "F7": {
+          "result": "n/a (hall and corridor only)"
+        },
+        "F8": {
+          "result": "n/a (no mirror)"
+        },
+        "F9": {
+          "result": "pass (jambs; end pose; play time = designer estimate, not measured)",
+          "transitions": [
+            {
+              "id": "T-CBoy''",
+              "note": "from the K-B text: rail to S1' + one slider 3.59 m, no pan",
+              "play_s_designer": null,
+              "segments": [
+                {
+                  "type": "dolly",
+                  "from_": [
+                    2.397,
+                    17.11,
+                    1.2
+                  ],
+                  "to": [
+                    2.641,
+                    13.0,
+                    1.2
+                  ],
+                  "len_m": 4.1172,
+                  "len_plan": null,
+                  "path_dir_deg_left": -3.4,
+                  "heading": 0,
+                  "jambs": [],
+                  "min_clearance_any_m": 0.4813,
+                  "nearest_any": "hwall_39",
+                  "ok_jambs": true
+                },
+                {
+                  "type": "slide",
+                  "from_": [
+                    2.641,
+                    13.0,
+                    1.2
+                  ],
+                  "to": [
+                    -0.95,
+                    13.0,
+                    1.0
+                  ],
+                  "len_m": 3.591,
+                  "len_plan": null,
+                  "path_dir_deg_left": 90.0,
+                  "heading": 0,
+                  "jambs": [
+                    {
+                      "opening": "O-corridor-boy",
+                      "crossing": [
+                        1.625,
+                        13.0
+                      ],
+                      "min_jamb_clearance_m": 0.37,
+                      "ok": true
+                    }
+                  ],
+                  "min_clearance_any_m": 0.13,
+                  "nearest_any": "boy_wr",
+                  "ok_jambs": true
+                }
+              ],
+              "end": {
+                "end_pos": [
+                  -0.95,
+                  13.0,
+                  1.0
+                ],
+                "cam": [
+                  -0.95,
+                  13.0,
+                  1.0
+                ],
+                "pos_err_m": 0.0
+              },
+              "min_jamb_clearance_m": 0.37,
+              "ok": true
+            }
+          ]
+        }
+      },
+      "camera_clearance_m": {
+        "min": 0.13,
+        "nearest": "boy_wr"
+      },
+      "overlay": "framing/overlays/K-B-boy.png",
+      "runtime_s": 387
+    },
+    "K-A-girl": {
+      "option": "K-A-girl",
+      "room": "girl",
+      "camera": {
+        "id": "K-girl-A",
+        "room": "girl",
+        "loc": [
+          1.1,
+          16.63,
+          1.0
+        ],
+        "yaw": 33,
+        "u0": 0.52,
+        "v0": 0.44
+      },
+      "deltas": [
+        "G-K1"
+      ],
+      "image": "framing/K-A-girl.png",
+      "build_notes": [
+        "G-K1: desk + desk lamp of the plan dropped (not in the proposal layout); teepee base 0.75 (the corner beside the bed is 0.75 wide, base <= 0.95 allowed) centred (-1.92, 10.66) on the camera->corner ray; canopy cone hook over the bed's north end (-1.70), hem 0.20"
+      ],
+      "lamps_on": [],
+      "mean_L_editorial": 175.0,
+      "est_vs_measured": [
+        {
+          "key": "window_visible_Y",
+          "est": [
+            14.379999999999999,
+            15.46
+          ],
+          "measured": [
+            14.38,
+            15.4562
+          ],
+          "dev": [
+            0.0,
+            -0.0038
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "window_u",
+          "est": [
+            0.0,
+            0.23
+          ],
+          "measured": [
+            0.0,
+            0.2301
+          ],
+          "dev": [
+            0.0,
+            0.0001
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "window_cut_pct",
+          "est": 23,
+          "measured": 23.1,
+          "dev": 0.1,
+          "flag_gt_tol": false,
+          "tol": 2,
+          "note": ""
+        },
+        {
+          "key": "NE_corner_u",
+          "est": 0.303,
+          "measured": 0.303,
+          "dev": -0.0,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "bed_front_u (corners X -1.55 / 0.35 at Y front, Z 0.43)",
+          "est": [
+            0.25,
+            0.65
+          ],
+          "measured": [
+            0.2496,
+            0.6488
+          ],
+          "dev": [
+            -0.0004,
+            -0.0012
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "bed_u (pixels, whole bed)",
+          "est": [
+            0.25,
+            0.65
+          ],
+          "measured": [
+            0.2568,
+            0.7285
+          ],
+          "dev": [
+            0.0068,
+            0.0785
+          ],
+          "flag_gt_tol": true,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "bed_centre_u (-0.60, front)",
+          "est": 0.41,
+          "measured": 0.4075,
+          "dev": -0.0025,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "east_wall_right_edge_X",
+          "est": 1.23,
+          "measured": 1.2322,
+          "dev": 0.0022,
+          "flag_gt_tol": false,
+          "tol": 0.05,
+          "note": ""
+        },
+        {
+          "key": "SE_corner_u (1.55, Y east)",
+          "est": 1.12,
+          "measured": 1.1265,
+          "dev": 0.0065,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "top_edge_on_east_wall_Z (at the corner)",
+          "est": 2.11,
+          "measured": 2.5437,
+          "dev": 0.4337,
+          "flag_gt_tol": true,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "camera_to_corner_m (depth)",
+          "est": 4.16,
+          "measured": 4.1581,
+          "dev": -0.0019,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": "euclid 4.373"
+        }
+      ],
+      "est_flags": [
+        "bed_u (pixels, whole bed)",
+        "top_edge_on_east_wall_Z (at the corner)"
+      ],
+      "acceptance": {
+        "F1": {
+          "result": "pass",
+          "heroes": [
+            {
+              "hero": "NE corner / canopy",
+              "u": 0.303,
+              "rule": "0.30-0.36 / 0.64-0.70",
+              "ok": true,
+              "almost_centre_0_45_0_58": false
+            }
+          ],
+          "note": "result = first (named) hero; others listed"
+        },
+        "F2": {
+          "result": "pass",
+          "windows": {
+            "W-girl": {
+              "in_frame": true,
+              "visible_width_pct": 76.6,
+              "cut_pct": 23.4,
+              "u": [
+                0.0015,
+                0.2301
+              ],
+              "head_v_min": -0.3456,
+              "head_cut_by_top": true,
+              "sill_v_max": 0.5555,
+              "margins_if_whole": {
+                "left": -0.1009,
+                "right": 0.7699,
+                "top": -0.3456,
+                "bottom": 0.4445
+              },
+              "width_share": 0.2286,
+              "rule": "cut >= 15% of the width",
+              "ok_cut_rule": true,
+              "ok_width_le_30pct": true,
+              "ok": true
+            }
+          }
+        },
+        "F3": {
+          "result": "fail",
+          "object_tangents": [
+            {
+              "item": "girl/rug",
+              "side": "left",
+              "margin": 0.0054
+            }
+          ],
+          "architectural_lines_within_0_02_of_edge": [],
+          "note": "objects: visible bbox margin 0 < m < 0.02 (touching = cut, allowed); pairwise object-object tangents not measured (visual)"
+        },
+        "F4": {
+          "result": "pass",
+          "hero_wall_depth_m": 4.1581,
+          "foreground_objects_frac": {
+            "girl bed 90x190": 0.0305,
+            "girl gable 'house' frame": 0.0212,
+            "girl/bedding": 0.0083,
+            "girl/shape-shelf": 0.0075,
+            "girl/toy-basket": 0.0205,
+            "girl/rug": 0.0189
+          },
+          "background_frac": 0.0781,
+          "note": "heuristic: foreground = non-shell pixels nearer than 0.55 x hero-wall depth; background = beyond the hero wall + 0.4 m (next room, window, sky)"
+        },
+        "F5": {
+          "result": "pass",
+          "camera_to_hero_wall_depth_m": 4.1581,
+          "min_m": 3.0,
+          "hero_wall_point": [
+            -2.3,
+            13.88
+          ]
+        },
+        "F6": {
+          "result": "pass",
+          "calm_wall_floor_ceiling_frac": 0.514,
+          "note": "pixels of wall, floor and ceiling (trim, rugs, windows excluded)"
+        },
+        "F7": {
+          "result": "n/a (hall and corridor only)"
+        },
+        "F8": {
+          "result": "n/a (no mirror)"
+        },
+        "F9": {
+          "result": "pass (jambs; end pose; play time = designer estimate, not measured)",
+          "transitions": [
+            {
+              "id": "T-CGirl'",
+              "note": "",
+              "play_s_designer": 2.3,
+              "segments": [
+                {
+                  "type": "slide",
+                  "from_": [
+                    2.397,
+                    17.11,
+                    1.2
+                  ],
+                  "to": [
+                    1.1,
+                    16.63,
+                    1.0
+                  ],
+                  "len_m": 1.383,
+                  "len_plan": 1.38,
+                  "path_dir_deg_left": 69.69,
+                  "heading": 0,
+                  "jambs": [
+                    {
+                      "opening": "O-corridor-girl",
+                      "crossing": [
+                        1.625,
+                        16.8243
+                      ],
+                      "min_jamb_clearance_m": 0.2888,
+                      "ok": true
+                    }
+                  ],
+                  "min_clearance_any_m": 0.2888,
+                  "nearest_any": "hwall_29",
+                  "ok_jambs": true
+                },
+                {
+                  "type": "pan",
+                  "yaw": [
+                    0,
+                    33
+                  ]
+                }
+              ],
+              "end": {
+                "end_pos": [
+                  1.1,
+                  16.63,
+                  1.0
+                ],
+                "cam": [
+                  1.1,
+                  16.63,
+                  1.0
+                ],
+                "pos_err_m": 0.0
+              },
+              "min_jamb_clearance_m": 0.2888,
+              "ok": true
+            }
+          ]
+        }
+      },
+      "camera_clearance_m": {
+        "min": 0.53,
+        "nearest": "leaf_corridor_girl"
+      },
+      "overlay": "framing/overlays/K-A-girl.png",
+      "runtime_s": 377
+    },
+    "K-B-girl": {
+      "option": "K-B-girl",
+      "room": "girl",
+      "camera": {
+        "id": "K-girl-B",
+        "room": "girl",
+        "loc": [
+          -0.95,
+          16.63,
+          1.0
+        ],
+        "yaw": 0,
+        "u0": 0.5,
+        "v0": 0.36,
+        "derived": "K-boy-B + 3.63 in Y (not listed in cameras_for_clay)"
+      },
+      "deltas": [
+        "G-K1"
+      ],
+      "image": "framing/K-B-girl.png",
+      "build_notes": [
+        "G-K1: desk + desk lamp of the plan dropped (not in the proposal layout); teepee base 0.75 (the corner beside the bed is 0.75 wide, base <= 0.95 allowed) centred (-1.92, 10.66) on the camera->corner ray; canopy cone hook over the bed's north end (-1.70), hem 0.20"
+      ],
+      "lamps_on": [],
+      "mean_L_editorial": 172.2,
+      "est_vs_measured": [
+        {
+          "key": "window_u",
+          "est": [
+            0.0,
+            0.1
+          ],
+          "measured": [
+            0.0,
+            0.1
+          ],
+          "dev": [
+            0.0,
+            -0.0
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "NE_corner_u",
+          "est": 0.173,
+          "measured": 0.1727,
+          "dev": -0.0003,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "top_edge_on_east_wall_Z",
+          "est": 1.84,
+          "measured": 1.8353,
+          "dev": -0.0047,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        }
+      ],
+      "est_flags": [],
+      "acceptance": {
+        "F1": {
+          "result": "fail",
+          "heroes": [
+            {
+              "hero": "bed centre (-0.60, east wall)",
+              "u": 0.5848,
+              "rule": "0.50 +-0.01 (u0 0.50)",
+              "ok": false,
+              "almost_centre_0_45_0_58": false
+            }
+          ],
+          "note": "result = first (named) hero; others listed"
+        },
+        "F2": {
+          "result": "pass",
+          "windows": {
+            "W-girl": {
+              "in_frame": true,
+              "visible_width_pct": 32.3,
+              "cut_pct": 67.7,
+              "u": [
+                0.0006,
+                0.1
+              ],
+              "head_v_min": -2.0104,
+              "head_cut_by_top": true,
+              "sill_v_max": 0.7086,
+              "margins_if_whole": {
+                "left": -0.5588,
+                "right": 0.9,
+                "top": -2.0104,
+                "bottom": 0.2914
+              },
+              "width_share": 0.0994,
+              "rule": "cut >= 15% of the width",
+              "ok_cut_rule": true,
+              "ok_width_le_30pct": true,
+              "ok": true
+            }
+          }
+        },
+        "F3": {
+          "result": "fail",
+          "object_tangents": [
+            {
+              "item": "girl/wall-hooks",
+              "side": "right",
+              "margin": 0.0044
+            }
+          ],
+          "architectural_lines_within_0_02_of_edge": [],
+          "note": "objects: visible bbox margin 0 < m < 0.02 (touching = cut, allowed); pairwise object-object tangents not measured (visual)"
+        },
+        "F4": {
+          "result": "weak (no foreground object)",
+          "hero_wall_depth_m": 2.75,
+          "foreground_objects_frac": {},
+          "background_frac": 0.0,
+          "note": "heuristic: foreground = non-shell pixels nearer than 0.55 x hero-wall depth; background = beyond the hero wall + 0.4 m (next room, window, sky)"
+        },
+        "F5": {
+          "result": "fail",
+          "camera_to_hero_wall_depth_m": 2.75,
+          "min_m": 3.0,
+          "hero_wall_point": [
+            -0.95,
+            13.88
+          ]
+        },
+        "F6": {
+          "result": "pass",
+          "calm_wall_floor_ceiling_frac": 0.415,
+          "note": "pixels of wall, floor and ceiling (trim, rugs, windows excluded)"
+        },
+        "F7": {
+          "result": "n/a (hall and corridor only)"
+        },
+        "F8": {
+          "result": "n/a (no mirror)"
+        },
+        "F9": {
+          "result": "fail",
+          "transitions": [
+            {
+              "id": "T-CGirl'' (derived)",
+              "note": "NOT in the proposal: K-B girl analog, one oblique slide C0 -> (-0.95, 16.63)",
+              "play_s_designer": null,
+              "segments": [
+                {
+                  "type": "slide",
+                  "from_": [
+                    2.397,
+                    17.11,
+                    1.2
+                  ],
+                  "to": [
+                    -0.95,
+                    16.63,
+                    1.0
+                  ],
+                  "len_m": 3.3812,
+                  "len_plan": null,
+                  "path_dir_deg_left": 81.84,
+                  "heading": 0,
+                  "jambs": [
+                    {
+                      "opening": "O-corridor-girl",
+                      "crossing": [
+                        1.625,
+                        16.9993
+                      ],
+                      "min_jamb_clearance_m": 0.1484,
+                      "ok": false
+                    }
+                  ],
+                  "min_clearance_any_m": 0.0,
+                  "nearest_any": "girl_wr",
+                  "ok_jambs": false
+                }
+              ],
+              "end": {
+                "end_pos": [
+                  -0.95,
+                  16.63,
+                  1.0
+                ],
+                "cam": [
+                  -0.95,
+                  16.63,
+                  1.0
+                ],
+                "pos_err_m": 0.0
+              },
+              "min_jamb_clearance_m": 0.1484,
+              "ok": false
+            }
+          ]
+        }
+      },
+      "camera_clearance_m": {
+        "min": 0.13,
+        "nearest": "girl_wr"
+      },
+      "overlay": "framing/overlays/K-B-girl.png",
+      "runtime_s": 394
+    },
+    "B-A": {
+      "option": "B-A",
+      "room": "bath",
+      "camera": {
+        "id": "B0-A",
+        "room": "bath",
+        "loc": [
+          3.45,
+          13.0,
+          1.15
+        ],
+        "yaw": -32,
+        "u0": 0.52,
+        "v0": 0.46,
+        "sweep": {
+          "yaw": [
+            -26,
+            -34
+          ]
+        }
+      },
+      "deltas": [
+        "G-B1",
+        "G-B2"
+      ],
+      "image": "framing/B-A.png",
+      "build_notes": [
+        "G-B1/G-B2: mirror 100 x 80 (Z 1.15-1.95; height not given, assumed); sconces flank the mirror; shower, towel ladder, towels and robe hooks of the plan kept (not moved: fix policy)"
+      ],
+      "lamps_on": [],
+      "mean_L_editorial": 78.3,
+      "est_vs_measured": [
+        {
+          "key": "north_wall_sliver_u (NE corner 3.25, 9.95)",
+          "est": [
+            0.0,
+            0.04
+          ],
+          "measured": [
+            0.0,
+            0.04
+          ],
+          "dev": [
+            0.0,
+            0.0
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "window_u (X 3.45 / 4.45)",
+          "est": [
+            0.103,
+            0.355
+          ],
+          "measured": [
+            0.1034,
+            0.3557
+          ],
+          "dev": [
+            0.0004,
+            0.0007
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "mirror_u (X 4.90 / 5.90)",
+          "est": [
+            0.443,
+            0.6
+          ],
+          "measured": [
+            0.4432,
+            0.5992
+          ],
+          "dev": [
+            0.0002,
+            -0.0008
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "vanity_right_end_u (5.95, back Y 9.95)",
+          "est": 0.606,
+          "measured": 0.6059,
+          "dev": -0.0001,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": "front Y 10.47: 0.673"
+        },
+        {
+          "key": "SE_corner_u (6.25, 9.95)",
+          "est": 0.644,
+          "measured": 0.6442,
+          "dev": 0.0002,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "right_edge_on_south_wall_Y",
+          "est": 11.92,
+          "measured": 11.8546,
+          "dev": -0.0654,
+          "flag_gt_tol": true,
+          "tol": 0.05,
+          "note": ""
+        }
+      ],
+      "est_flags": [
+        "right_edge_on_south_wall_Y"
+      ],
+      "acceptance": {
+        "F1": {
+          "result": "fail",
+          "heroes": [
+            {
+              "hero": "mirror centre (vanity hero)",
+              "u": 0.5269,
+              "rule": "0.30-0.36 / 0.64-0.70",
+              "ok": false,
+              "almost_centre_0_45_0_58": true
+            },
+            {
+              "hero": "SE corner",
+              "u": 0.6442,
+              "rule": "0.30-0.36 / 0.64-0.70",
+              "ok": true,
+              "almost_centre_0_45_0_58": false
+            }
+          ],
+          "note": "result = first (named) hero; others listed"
+        },
+        "F2": {
+          "result": "fail",
+          "windows": {
+            "W-bath": {
+              "in_frame": true,
+              "visible_width_pct": 100.0,
+              "cut_pct": 0.0,
+              "u": [
+                0.1034,
+                0.3557
+              ],
+              "head_v_min": -0.1128,
+              "head_cut_by_top": true,
+              "sill_v_max": 0.5746,
+              "margins_if_whole": {
+                "left": 0.1034,
+                "right": 0.6443,
+                "top": -0.1128,
+                "bottom": 0.4254
+              },
+              "width_share": 0.2522,
+              "rule": "whole, >= 0.03 to every edge",
+              "ok_cut_rule": false,
+              "ok_width_le_30pct": true,
+              "ok": false
+            }
+          }
+        },
+        "F3": {
+          "result": "pass",
+          "object_tangents": [],
+          "architectural_lines_within_0_02_of_edge": [],
+          "note": "objects: visible bbox margin 0 < m < 0.02 (touching = cut, allowed); pairwise object-object tangents not measured (visual)"
+        },
+        "F4": {
+          "result": "weak (no background)",
+          "hero_wall_depth_m": 3.6199,
+          "foreground_objects_frac": {
+            "fixed:bath-fixtures": 0.1812
+          },
+          "background_frac": 0.0085,
+          "note": "heuristic: foreground = non-shell pixels nearer than 0.55 x hero-wall depth; background = beyond the hero wall + 0.4 m (next room, window, sky)"
+        },
+        "F5": {
+          "result": "pass",
+          "camera_to_hero_wall_depth_m": 3.6199,
+          "min_m": 2.8,
+          "hero_wall_point": [
+            5.4,
+            9.95
+          ]
+        },
+        "F6": {
+          "result": "pass",
+          "calm_wall_floor_ceiling_frac": 0.435,
+          "note": "pixels of wall, floor and ceiling (trim, rugs, windows excluded)"
+        },
+        "F7": {
+          "result": "n/a (hall and corridor only)"
+        },
+        "F8": {
+          "result": "fail",
+          "samples_visible": 1591,
+          "hits": {
+            "hwall_61": {
+              "frac": 0.76,
+              "y": [
+                10.4207,
+                12.741
+              ],
+              "z": [
+                1.1645,
+                2.6625
+              ]
+            },
+            "b_ladder": {
+              "frac": 0.172,
+              "y": [
+                10.45,
+                10.9299
+              ],
+              "z": [
+                1.1616,
+                1.6481
+              ]
+            },
+            "b_pl2": {
+              "frac": 0.06,
+              "y": [
+                10.1701,
+                10.3594
+              ],
+              "z": [
+                1.1607,
+                1.3193
+              ]
+            },
+            "b_towel": {
+              "frac": 0.008,
+              "y": [
+                11.102,
+                11.155
+              ],
+              "z": [
+                1.3835,
+                1.5483
+              ]
+            }
+          },
+          "non_wall_objects": [
+            "b_ladder",
+            "b_pl2",
+            "b_towel"
+          ],
+          "ok": false,
+          "wall_Y_range": [
+            10.4207,
+            12.741
+          ],
+          "wall_Z_range": [
+            1.1645,
+            2.6625
+          ],
+          "note": "ray-cast reflection pass: 40x40 grid on the mirror, reflected camera rays; designer est: south wall Y 10.39-12.79, Z 1.1-2.45",
+          "crop": "framing/extra/B-A-mirror-crop.png"
+        },
+        "F9": {
+          "result": "pass (jambs; end pose; play time = designer estimate, not measured)",
+          "transitions": [
+            {
+              "id": "T-CBath'",
+              "note": "",
+              "play_s_designer": 3.2,
+              "segments": [
+                {
+                  "type": "dolly",
+                  "from_": [
+                    2.397,
+                    17.11,
+                    1.2
+                  ],
+                  "to": [
+                    2.641,
+                    13.0,
+                    1.2
+                  ],
+                  "len_m": 4.1172,
+                  "len_plan": 4.12,
+                  "path_dir_deg_left": -3.4,
+                  "heading": 0,
+                  "jambs": [],
+                  "min_clearance_any_m": 0.4813,
+                  "nearest_any": "hwall_39",
+                  "ok_jambs": true
+                },
+                {
+                  "type": "slide",
+                  "from_": [
+                    2.641,
+                    13.0,
+                    1.2
+                  ],
+                  "to": [
+                    3.45,
+                    13.0,
+                    1.15
+                  ],
+                  "len_m": 0.809,
+                  "len_plan": 0.81,
+                  "path_dir_deg_left": -90.0,
+                  "heading": 0,
+                  "jambs": [
+                    {
+                      "opening": "O-corridor-bath",
+                      "crossing": [
+                        3.175,
+                        13.0
+                      ],
+                      "min_jamb_clearance_m": 0.39,
+                      "ok": true
+                    }
+                  ],
+                  "min_clearance_any_m": 0.39,
+                  "nearest_any": "hwall_39",
+                  "ok_jambs": true
+                },
+                {
+                  "type": "pan",
+                  "yaw": [
+                    0,
+                    -32
+                  ]
+                }
+              ],
+              "end": {
+                "end_pos": [
+                  3.45,
+                  13.0,
+                  1.15
+                ],
+                "cam": [
+                  3.45,
+                  13.0,
+                  1.15
+                ],
+                "pos_err_m": 0.0
+              },
+              "min_jamb_clearance_m": 0.39,
+              "ok": true
+            }
+          ]
+        }
+      },
+      "camera_clearance_m": {
+        "min": 0.39,
+        "nearest": "leaf_corridor_bath"
+      },
+      "sweep": "framing/extra/B-A-sweep.jpg",
+      "overlay": "framing/overlays/B-A.png",
+      "runtime_s": 465
+    },
+    "B-B": {
+      "option": "B-B",
+      "room": "bath",
+      "camera": {
+        "id": "B0-B",
+        "room": "bath",
+        "loc": [
+          3.45,
+          13.0,
+          1.15
+        ],
+        "yaw": -32,
+        "u0": 0.52,
+        "v0": 0.46
+      },
+      "deltas": [
+        "G-B1b"
+      ],
+      "image": "framing/B-B.png",
+      "build_notes": [
+        "G-B1b: mirror 120 centred on the double vanity (X 3.90-5.10, Z 1.10-1.75); plan sconces (Z 1.75-1.93) collided with the new sill 1.85, moved to flank the mirror at 1.30-1.48"
+      ],
+      "lamps_on": [],
+      "mean_L_editorial": 74.5,
+      "est_vs_measured": [
+        {
+          "key": "north_wall_sliver_u (NE corner 3.25, 9.95)",
+          "est": null,
+          "measured": 0.04,
+          "dev": null,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": "no est in the proposal"
+        },
+        {
+          "key": "clerestory_u (X 3.95 / 6.05)",
+          "est": null,
+          "measured": [
+            0.2413,
+            0.619
+          ],
+          "dev": null,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": "no est"
+        },
+        {
+          "key": "mirror_u (X 3.90 / 5.10)",
+          "est": null,
+          "measured": [
+            0.2286,
+            0.4782
+          ],
+          "dev": null,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": "no est"
+        },
+        {
+          "key": "SE_corner_u (6.25, 9.95)",
+          "est": null,
+          "measured": 0.6442,
+          "dev": null,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": "no est"
+        }
+      ],
+      "est_flags": [],
+      "acceptance": {
+        "F1": {
+          "result": "fail",
+          "heroes": [
+            {
+              "hero": "mirror centre",
+              "u": 0.366,
+              "rule": "0.30-0.36 / 0.64-0.70",
+              "ok": false,
+              "almost_centre_0_45_0_58": false
+            },
+            {
+              "hero": "SE corner",
+              "u": 0.6442,
+              "rule": "0.30-0.36 / 0.64-0.70",
+              "ok": true,
+              "almost_centre_0_45_0_58": false
+            }
+          ],
+          "note": "result = first (named) hero; others listed"
+        },
+        "F2": {
+          "result": "fail",
+          "windows": {
+            "W-bath": {
+              "in_frame": true,
+              "visible_width_pct": 100.0,
+              "cut_pct": 0.0,
+              "u": [
+                0.2413,
+                0.619
+              ],
+              "head_v_min": -0.0595,
+              "head_cut_by_top": true,
+              "sill_v_max": 0.2507,
+              "margins_if_whole": {
+                "left": 0.2413,
+                "right": 0.381,
+                "top": -0.0595,
+                "bottom": 0.7493
+              },
+              "width_share": 0.3777,
+              "rule": "whole, >= 0.03 to every edge",
+              "ok_cut_rule": false,
+              "ok_width_le_30pct": false,
+              "ok": false
+            }
+          }
+        },
+        "F3": {
+          "result": "pass",
+          "object_tangents": [],
+          "architectural_lines_within_0_02_of_edge": [],
+          "note": "objects: visible bbox margin 0 < m < 0.02 (touching = cut, allowed); pairwise object-object tangents not measured (visual)"
+        },
+        "F4": {
+          "result": "pass",
+          "hero_wall_depth_m": 3.143,
+          "foreground_objects_frac": {
+            "fixed:bath-fixtures": 0.0825
+          },
+          "background_frac": 0.1583,
+          "note": "heuristic: foreground = non-shell pixels nearer than 0.55 x hero-wall depth; background = beyond the hero wall + 0.4 m (next room, window, sky)"
+        },
+        "F5": {
+          "result": "pass",
+          "camera_to_hero_wall_depth_m": 3.143,
+          "min_m": 2.8,
+          "hero_wall_point": [
+            4.5,
+            9.95
+          ]
+        },
+        "F6": {
+          "result": "pass",
+          "calm_wall_floor_ceiling_frac": 0.44,
+          "note": "pixels of wall, floor and ceiling (trim, rugs, windows excluded)"
+        },
+        "F7": {
+          "result": "n/a (hall and corridor only)"
+        },
+        "F8": {
+          "result": "fail",
+          "samples_visible": 1600,
+          "hits": {
+            "hwall_49": {
+              "frac": 0.544,
+              "y": [
+                13.59,
+                13.59
+              ],
+              "z": [
+                1.0581,
+                2.449
+              ]
+            },
+            "hwall_59": {
+              "frac": 0.2,
+              "y": [
+                12.129,
+                13.4411
+              ],
+              "z": [
+                1.0602,
+                2.4199
+              ]
+            },
+            "shower_screen": {
+              "frac": 0.146,
+              "y": [
+                11.8,
+                12.6794
+              ],
+              "z": [
+                1.0707,
+                1.998
+              ]
+            },
+            "b_plant": {
+              "frac": 0.1,
+              "y": [
+                10.1003,
+                10.2426
+              ],
+              "z": [
+                1.1044,
+                1.3993
+              ]
+            },
+            "wc_cistern": {
+              "frac": 0.009,
+              "y": [
+                13.45,
+                13.45
+              ],
+              "z": [
+                1.06,
+                1.0949
+              ]
+            },
+            "b_hooks": {
+              "frac": 0.001,
+              "y": [
+                13.53,
+                13.53
+              ],
+              "z": [
+                1.6597,
+                1.6951
+              ]
+            }
+          },
+          "non_wall_objects": [
+            "b_hooks",
+            "b_plant",
+            "shower_screen",
+            "wc_cistern"
+          ],
+          "ok": false,
+          "wall_Y_range": [
+            12.129,
+            13.59
+          ],
+          "wall_Z_range": [
+            1.0581,
+            2.449
+          ],
+          "note": "ray-cast reflection pass: 40x40 grid on the mirror, reflected camera rays; designer est: south wall Y 10.39-12.79, Z 1.1-2.45",
+          "crop": "framing/extra/B-B-mirror-crop.png"
+        },
+        "F9": {
+          "result": "pass (jambs; end pose; play time = designer estimate, not measured)",
+          "transitions": [
+            {
+              "id": "T-CBath'",
+              "note": "",
+              "play_s_designer": 3.2,
+              "segments": [
+                {
+                  "type": "dolly",
+                  "from_": [
+                    2.397,
+                    17.11,
+                    1.2
+                  ],
+                  "to": [
+                    2.641,
+                    13.0,
+                    1.2
+                  ],
+                  "len_m": 4.1172,
+                  "len_plan": 4.12,
+                  "path_dir_deg_left": -3.4,
+                  "heading": 0,
+                  "jambs": [],
+                  "min_clearance_any_m": 0.4813,
+                  "nearest_any": "hwall_39",
+                  "ok_jambs": true
+                },
+                {
+                  "type": "slide",
+                  "from_": [
+                    2.641,
+                    13.0,
+                    1.2
+                  ],
+                  "to": [
+                    3.45,
+                    13.0,
+                    1.15
+                  ],
+                  "len_m": 0.809,
+                  "len_plan": 0.81,
+                  "path_dir_deg_left": -90.0,
+                  "heading": 0,
+                  "jambs": [
+                    {
+                      "opening": "O-corridor-bath",
+                      "crossing": [
+                        3.175,
+                        13.0
+                      ],
+                      "min_jamb_clearance_m": 0.39,
+                      "ok": true
+                    }
+                  ],
+                  "min_clearance_any_m": 0.39,
+                  "nearest_any": "hwall_39",
+                  "ok_jambs": true
+                },
+                {
+                  "type": "pan",
+                  "yaw": [
+                    0,
+                    -32
+                  ]
+                }
+              ],
+              "end": {
+                "end_pos": [
+                  3.45,
+                  13.0,
+                  1.15
+                ],
+                "cam": [
+                  3.45,
+                  13.0,
+                  1.15
+                ],
+                "pos_err_m": 0.0
+              },
+              "min_jamb_clearance_m": 0.39,
+              "ok": true
+            }
+          ]
+        }
+      },
+      "camera_clearance_m": {
+        "min": 0.39,
+        "nearest": "leaf_corridor_bath"
+      },
+      "overlay": "framing/overlays/B-B.png",
+      "runtime_s": 372
     }
   }
 }
