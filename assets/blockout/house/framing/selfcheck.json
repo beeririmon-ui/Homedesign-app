@@ -2036,6 +2036,401 @@
       },
       "overlay": "framing/overlays/C-B.png",
       "runtime_s": 712
+    },
+    "D-A": {
+      "option": "D-A",
+      "room": "kitchen-dining",
+      "camera": {
+        "id": "D0-A",
+        "room": "kitchen-dining",
+        "loc": [
+          2.75,
+          3.45,
+          1.1
+        ],
+        "yaw": -35,
+        "u0": 0.52,
+        "v0": 0.43,
+        "sweep": {
+          "v0": [
+            0.43,
+            0.46
+          ],
+          "z": [
+            1.1,
+            1.2
+          ]
+        }
+      },
+      "deltas": [
+        "G-D1"
+      ],
+      "image": "framing/D-A.png",
+      "build_notes": [
+        "G-D1: table 160x85 (rectangular proxy, draft 0.1 says super-ellipse) at (4.30, 1.65); 2 window-side chairs; bench X 3.60-5.00 Y 2.30-2.65 h 0.45; pendant dia 55 x 30, bottom 1.50; wall units over Y 0.40-1.50 replaced by the draft's open oak shelf (Y 0-1.50, bottom 1.57)"
+      ],
+      "lamps_on": [],
+      "mean_L_editorial": 175.2,
+      "est_vs_measured": [
+        {
+          "key": "window_u (jambs X 2.95 / 4.75)",
+          "est": [
+            0.108,
+            0.463
+          ],
+          "measured": [
+            0.1085,
+            0.4629
+          ],
+          "dev": [
+            0.0005,
+            -0.0001
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "window head v at the south jamb (4.75, 0, 2.70)",
+          "est": -0.05,
+          "measured": -0.0473,
+          "dev": 0.0027,
+          "flag_gt_tol": false,
+          "tol": 0.03,
+          "note": "est 'about -0.05'"
+        },
+        {
+          "key": "pendant_u (pixels, shade+cord)",
+          "est": [
+            0.509,
+            0.664
+          ],
+          "measured": [
+            0.5093,
+            0.6665
+          ],
+          "dev": [
+            0.0003,
+            0.0025
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "pendant_u (geometry, shade rim)",
+          "est": [
+            0.509,
+            0.664
+          ],
+          "measured": [
+            0.5093,
+            0.6663
+          ],
+          "dev": [
+            0.0003,
+            0.0023
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "pendant_v (geometry, shade top..bottom)",
+          "est": [
+            0.079,
+            0.23
+          ],
+          "measured": [
+            0.0328,
+            0.2503
+          ],
+          "dev": [
+            -0.0462,
+            0.0203
+          ],
+          "flag_gt_tol": true,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "SE_corner_u (7.25, 0)",
+          "est": 0.73,
+          "measured": 0.7305,
+          "dev": 0.0005,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "shelf_u (open shelf centre 7.25, 0.75)",
+          "est": 0.8,
+          "measured": 0.8173,
+          "dev": 0.0173,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "table_top_u (pixels, incl. legs)",
+          "est": [
+            0.3,
+            0.83
+          ],
+          "measured": [
+            0.3247,
+            0.8257
+          ],
+          "dev": [
+            0.0247,
+            -0.0043
+          ],
+          "flag_gt_tol": true,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "table_top_v (geometry, top corners)",
+          "est": [
+            0.57,
+            0.7
+          ],
+          "measured": [
+            0.5608,
+            0.6965
+          ],
+          "dev": [
+            -0.0092,
+            -0.0035
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "bench_u (pixels)",
+          "est": [
+            0.66,
+            0.87
+          ],
+          "measured": [
+            0.5381,
+            0.9937
+          ],
+          "dev": [
+            -0.1219,
+            0.1237
+          ],
+          "flag_gt_tol": true,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "bench_v top (pixels; est 0.775 -> below the bottom edge)",
+          "est": 0.775,
+          "measured": 0.776,
+          "dev": 0.001,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": "bottom of bbox = 1.0"
+        },
+        {
+          "key": "camera_to_pendant_m",
+          "est": 2.36,
+          "measured": 2.4382,
+          "dev": 0.0782,
+          "flag_gt_tol": true,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "cornice_wedge_at_corner_v (cornice bottom at the SE corner)",
+          "est": 0.036,
+          "measured": 0.0409,
+          "dev": 0.0049,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": "est is '<= 0.036'"
+        }
+      ],
+      "est_flags": [
+        "pendant_v (geometry, shade top..bottom)",
+        "table_top_u (pixels, incl. legs)",
+        "bench_u (pixels)",
+        "camera_to_pendant_m"
+      ],
+      "acceptance": {
+        "F1": {
+          "result": "fail",
+          "heroes": [
+            {
+              "hero": "pendant (hero: table under the lamp)",
+              "u": 0.5869,
+              "rule": "0.30-0.36 / 0.64-0.70",
+              "ok": false,
+              "almost_centre_0_45_0_58": false
+            },
+            {
+              "hero": "table centre",
+              "u": 0.5869,
+              "rule": "0.30-0.36 / 0.64-0.70",
+              "ok": false,
+              "almost_centre_0_45_0_58": false
+            }
+          ],
+          "note": "result = first (named) hero; others listed"
+        },
+        "F2": {
+          "result": "fail",
+          "windows": {
+            "W-dining": {
+              "in_frame": true,
+              "visible_width_pct": 100.0,
+              "cut_pct": 0.0,
+              "u": [
+                0.1085,
+                0.4629
+              ],
+              "head_v_min": -0.2148,
+              "head_cut_by_top": true,
+              "sill_v_max": 0.5711,
+              "margins_if_whole": {
+                "left": 0.1085,
+                "right": 0.5371,
+                "top": -0.2148,
+                "bottom": 0.4289
+              },
+              "width_share": 0.3543,
+              "rule": "whole, >= 0.03 to every edge",
+              "ok_cut_rule": false,
+              "ok_width_le_30pct": false,
+              "ok": false
+            }
+          }
+        },
+        "F3": {
+          "result": "fail",
+          "object_tangents": [
+            {
+              "item": "dining bench",
+              "side": "right",
+              "margin": 0.0063
+            }
+          ],
+          "architectural_lines_within_0_02_of_edge": [],
+          "note": "objects: visible bbox margin 0 < m < 0.02 (touching = cut, allowed); pairwise object-object tangents not measured (visual)"
+        },
+        "F4": {
+          "result": "pass",
+          "hero_wall_depth_m": 3.7151,
+          "foreground_objects_frac": {
+            "door leaves": 0.0049,
+            "dining table": 0.0245,
+            "dining bench": 0.0589
+          },
+          "background_frac": 0.3678,
+          "note": "heuristic: foreground = non-shell pixels nearer than 0.55 x hero-wall depth; background = beyond the hero wall + 0.4 m (next room, window, sky)"
+        },
+        "F5": {
+          "result": "pass",
+          "camera_to_hero_wall_depth_m": 3.7151,
+          "min_m": 3.0,
+          "hero_wall_point": [
+            4.3,
+            0.0
+          ]
+        },
+        "F6": {
+          "result": "pass",
+          "calm_wall_floor_ceiling_frac": 0.392,
+          "note": "pixels of wall, floor and ceiling (trim, rugs, windows excluded)"
+        },
+        "F7": {
+          "result": "n/a (hall and corridor only)"
+        },
+        "F8": {
+          "result": "n/a (no mirror)"
+        },
+        "F9": {
+          "result": "pass (jambs; end pose; play time = designer estimate, not measured)",
+          "transitions": [
+            {
+              "id": "T-LD'",
+              "note": "",
+              "play_s_designer": 2.9,
+              "segments": [
+                {
+                  "type": "pan",
+                  "yaw": [
+                    25,
+                    0
+                  ]
+                },
+                {
+                  "type": "pan",
+                  "yaw": [
+                    0,
+                    -35
+                  ]
+                },
+                {
+                  "type": "dolly",
+                  "from_": [
+                    1.25,
+                    5.55,
+                    1.2
+                  ],
+                  "to": [
+                    2.75,
+                    3.45,
+                    1.1
+                  ],
+                  "len_m": 2.5807,
+                  "len_plan": 2.58,
+                  "path_dir_deg_left": -35.54,
+                  "heading": -35,
+                  "jambs": [
+                    {
+                      "opening": "O-living-dining",
+                      "crossing": [
+                        2.575,
+                        3.695
+                      ],
+                      "min_jamb_clearance_m": 0.4476,
+                      "ok": true
+                    }
+                  ],
+                  "min_clearance_any_m": 0.4476,
+                  "nearest_any": "wall_right_b",
+                  "ok_jambs": true
+                }
+              ],
+              "end": {
+                "end_pos": [
+                  2.75,
+                  3.45,
+                  1.1
+                ],
+                "cam": [
+                  2.75,
+                  3.45,
+                  1.1
+                ],
+                "pos_err_m": 0.0
+              },
+              "min_jamb_clearance_m": 0.4476,
+              "ok": true
+            }
+          ]
+        }
+      },
+      "camera_clearance_m": {
+        "min": 0.4837,
+        "nearest": "leaf_living_dining_a"
+      },
+      "sweep": "framing/extra/D-A-sweep.jpg",
+      "overlay": "framing/overlays/D-A.png",
+      "runtime_s": 479
     }
   }
 }
