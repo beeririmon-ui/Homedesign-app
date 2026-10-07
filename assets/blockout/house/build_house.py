@@ -1155,6 +1155,12 @@ def img_diff(pa, pb):
     # right third (side of the opening)
     W = A.shape[1]
     out["mean_luma_right_quarter_a_b"] = [round(float(LA[:, 3 * W // 4:].mean()), 3), round(float(LB[:, 3 * W // 4:].mean()), 3)]
+    # systematic part: 64x64 px block means of the luma difference (noise averages out)
+    k = 64
+    Hh, Ww = LA.shape
+    bl = (LB - LA)[:Hh // k * k, :Ww // k * k].reshape(Hh // k, k, Ww // k, k).mean((1, 3))
+    out["block64_luma_diff_8bit"] = dict(min=round(float(bl.min()), 2), max=round(float(bl.max()), 2),
+                                         mean=round(float(bl.mean()), 2), blocks_brighter_than_0_5=int((bl > 0.5).sum()))
     return out, d
 
 

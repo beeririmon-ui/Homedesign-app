@@ -1,0 +1,4749 @@
+{
+  "plan": "docs/house-plan.json",
+  "plan_version": "1.0 / approved 2026-10-06",
+  "living": "v4-spec.json v4.1 / 2026-10-04 (slot amendments for D... built by build_v4.py code",
+  "HC7_m0_pixels": {
+    "render": "2048x1152, 64 samples, seed 7, as v4.1/clay.png (shell + sofa, table, armchair, no proxies)",
+    "comparisons": {
+      "committed v4.1/clay.png vs v4.1 rebuilt now (reproducibility)": {
+        "identical": true,
+        "max_abs_diff_8bit": 0,
+        "mean_abs_diff_8bit": 0.0,
+        "px_gt_2": 0.0,
+        "px_gt_5": 0.0,
+        "px_gt_10": 0.0,
+        "mean_luma_a_b": [
+          170.225,
+          170.225
+        ],
+        "mean_luma_right_quarter_a_b": [
+          156.63,
+          156.63
+        ]
+      },
+      "v4.1 rebuilt vs house without O-living-dining (rest of the house)": {
+        "identical": false,
+        "max_abs_diff_8bit": 16,
+        "mean_abs_diff_8bit": 1.4902,
+        "px_gt_2": 0.212712,
+        "px_gt_5": 0.01474,
+        "px_gt_10": 3.9e-05,
+        "mean_luma_a_b": [
+          170.225,
+          168.729
+        ],
+        "mean_luma_right_quarter_a_b": [
+          156.63,
+          154.798
+        ]
+      },
+      "house without vs with O-living-dining (the opening alone)": {
+        "identical": false,
+        "max_abs_diff_8bit": 16,
+        "mean_abs_diff_8bit": 0.5753,
+        "px_gt_2": 0.019201,
+        "px_gt_5": 0.000788,
+        "px_gt_10": 3.5e-05,
+        "mean_luma_a_b": [
+          168.729,
+          168.191
+        ],
+        "mean_luma_right_quarter_a_b": [
+          154.798,
+          154.373
+        ]
+      },
+      "committed v4.1/clay.png vs house with the opening (total)": {
+        "identical": false,
+        "max_abs_diff_8bit": 20,
+        "mean_abs_diff_8bit": 2.0365,
+        "px_gt_2": 0.357346,
+        "px_gt_5": 0.046571,
+        "px_gt_10": 0.000994,
+        "mean_luma_a_b": [
+          170.225,
+          168.191
+        ],
+        "mean_luma_right_quarter_a_b": [
+          156.63,
+          154.373
+        ]
+      }
+    },
+    "diff_image": "m0-diff-x10.png (|v4.1 rebuilt - house with opening| x10)",
+    "empty_m0_in_house": "living-m0-empty-house.png",
+    "block64_luma": {
+      "rest_of_house (v4.1 -> house without opening)": {
+        "block64_luma_diff_8bit": {
+          "min": -4.68,
+          "max": 0.0,
+          "mean": -1.5
+        },
+        "block64_rel_min": -0.0437,
+        "right_quarter_block_mean": -1.83,
+        "blocks_brighter_than_0_5": 0,
+        "n_blocks": 576
+      },
+      "opening_alone (house without -> with opening)": {
+        "block64_luma_diff_8bit": {
+          "min": -1.84,
+          "max": 0.0,
+          "mean": -0.54
+        },
+        "block64_rel_min": -0.0164,
+        "right_quarter_block_mean": -0.42,
+        "blocks_brighter_than_0_5": 0,
+        "n_blocks": 576
+      },
+      "total (v4.1 -> house with opening)": {
+        "block64_luma_diff_8bit": {
+          "min": -6.12,
+          "max": 0.0,
+          "mean": -2.03
+        },
+        "block64_rel_min": -0.0574,
+        "right_quarter_block_mean": -2.26,
+        "blocks_brighter_than_0_5": 0,
+        "n_blocks": 576
+      }
+    },
+    "block_note": "64x64 px block means of luma (8-bit). Negative = darker. Opening-alone render re-done after the main run (same settings) for the block split."
+  },
+  "model": {
+    "wall_boxes": 63,
+    "windows": {
+      "W-dining": {
+        "side": "y0",
+        "a": [
+          2.95,
+          4.75
+        ],
+        "mullion": true,
+        "pidx": 150,
+        "facade": "east",
+        "room": "kitchen-dining"
+      },
+      "W-work": {
+        "side": "x0",
+        "a": [
+          7.15,
+          8.35
+        ],
+        "mullion": false,
+        "pidx": 151,
+        "facade": "north",
+        "room": "work"
+      },
+      "W-boy": {
+        "side": "x0",
+        "a": [
+          10.75,
+          12.15
+        ],
+        "mullion": true,
+        "pidx": 152,
+        "facade": "north",
+        "room": "boy"
+      },
+      "W-girl": {
+        "side": "x0",
+        "a": [
+          14.38,
+          15.78
+        ],
+        "mullion": true,
+        "pidx": 153,
+        "facade": "north",
+        "room": "girl"
+      },
+      "W-master": {
+        "side": "x0",
+        "a": [
+          18.1,
+          19.6
+        ],
+        "mullion": true,
+        "pidx": 154,
+        "facade": "north",
+        "room": "master"
+      },
+      "W-bath": {
+        "side": "y0",
+        "a": [
+          3.95,
+          4.95
+        ],
+        "mullion": false,
+        "pidx": 155,
+        "facade": "east (onto the shaded entrance court)",
+        "room": "bath"
+      }
+    },
+    "fixed_furniture": {
+      "dining-table+chairs": {
+        "room": "kitchen-dining",
+        "src": "plan: centre (4.30, 1.70), long axis X; size assumed 2.00 x 0.95, 6 chairs"
+      },
+      "kitchen-run": {
+        "room": "kitchen-dining",
+        "src": "plan: south wall X 7.25 (tall + counter), west wall Y 6.20 X 3.95-7.25 (tall); depths/heights assumed"
+      },
+      "hall-console": {
+        "room": "hall",
+        "src": "plan: X 2.30-3.10 on the front wall; depth 0.35 h 0.80 assumed"
+      },
+      "hall-bench": {
+        "room": "hall",
+        "src": "plan: bench on the solid left wall Y 6.35-7.98; size assumed"
+      },
+      "work-desk": {
+        "room": "work",
+        "src": "plan: desk under the window; size assumed"
+      },
+      "work-shelves": {
+        "room": "work",
+        "src": "plan: shelves on the east wall, visible X -2.30..-1.25; size assumed"
+      },
+      "boy-bed+desk+wardrobe": {
+        "room": "boy",
+        "src": "plan: bed 90x200 on the east wall head north, desk/play under the window, wardrobe on the south wall (out of frame); sizes assumed"
+      },
+      "girl-bed+desk+wardrobe": {
+        "room": "girl",
+        "src": "plan: bed 90x200 on the east wall head north, desk/play under the window, wardrobe on the south wall (out of frame); sizes assumed"
+      },
+      "master-bed+nightstands+wardrobes": {
+        "room": "master",
+        "src": "plan: bed head on Y 17.66, centre X -0.25; wardrobes on the west wall; 180x210, wardrobe X -2.30..1.15 (stops before MB0) assumed"
+      },
+      "bath-fixtures": {
+        "room": "bath",
+        "src": "plan: vanity on the east wall under the window, shower on the south wall, WC on the west wall; sizes and X/Y assumed (WC kept clear of the assumed door leaf)"
+      }
+    },
+    "door_leaves": [
+      {
+        "name": "leaf_living_dining_a",
+        "rect": [
+          2.65,
+          2.69,
+          2.17,
+          2.97
+        ],
+        "note": "O-living-dining leaf folded 180 deg on the dining side"
+      },
+      {
+        "name": "leaf_living_dining_b",
+        "rect": [
+          2.65,
+          2.69,
+          4.57,
+          5.37
+        ],
+        "note": "O-living-dining leaf folded 180 deg on the dining side"
+      },
+      {
+        "name": "leaf_hall_work",
+        "rect": [
+          -0.25,
+          0.65,
+          9.0,
+          9.04
+        ],
+        "note": "O-hall-work, open 90 deg into the work room, hinge west jamb (plan)"
+      },
+      {
+        "name": "leaf_corridor_boy",
+        "rect": [
+          0.65,
+          1.55,
+          13.53,
+          13.57
+        ],
+        "note": "assumed: open 90 deg into the room, hinge on the 0.20 return"
+      },
+      {
+        "name": "leaf_corridor_girl",
+        "rect": [
+          0.65,
+          1.55,
+          17.16,
+          17.2
+        ],
+        "note": "assumed: as boy (+3.63)"
+      },
+      {
+        "name": "leaf_corridor_bath",
+        "rect": [
+          3.25,
+          4.25,
+          13.39,
+          13.43
+        ],
+        "note": "assumed: open 90 deg into the bath, hinge on the 0.20 return"
+      },
+      {
+        "name": "leaf_corridor_master",
+        "rect": [
+          2.78,
+          2.82,
+          17.66,
+          18.56
+        ],
+        "note": "assumed: open 90 deg into the master, hinge on the east (X 2.78) jamb"
+      }
+    ],
+    "proxies": {
+      "hall/framed-art": "derived (console vignette, plan)",
+      "hall/table-lamp": "derived (console vignette, plan)",
+      "hall/console-vessel": "derived (console vignette, plan)",
+      "hall/key-tray": "derived (console vignette, plan)",
+      "hall/runner-rug": "derived",
+      "hall/ceiling-light": "derived",
+      "hall/bench-cushion": "derived (bench, plan)",
+      "hall/basket": "derived (under the bench)",
+      "hall/wall-hooks": "derived (left wall, plan)",
+      "kitchen-dining/dining-pendant": "plan (over the table centre, bottom 0.77 above the top)",
+      "kitchen-dining/table-runner": "derived",
+      "kitchen-dining/centerpiece-vase": "derived",
+      "kitchen-dining/candle-holders": "derived",
+      "kitchen-dining/bowl": "derived",
+      "kitchen-dining/curtains": "derived (window from the plan)",
+      "kitchen-dining/seat-pads": "derived (chairs)",
+      "work/desk-lamp": "derived",
+      "work/shelf-boxes": "derived (shelves)",
+      "work/desk-tray": "derived",
+      "work/magazine-holder": "derived",
+      "work/planter": "derived",
+      "work/framed-art": "derived",
+      "work/rug": "derived",
+      "work/curtains": "derived (window from the plan)",
+      "work/basket": "derived",
+      "corridor/runner-rug": "derived",
+      "corridor/ceiling-lights": "derived",
+      "corridor/gallery-art": "plan (left wall Y 13.9-16.0)",
+      "boy/bedding": "derived (bed)",
+      "boy/cushions": "derived (bed)",
+      "boy/rug": "derived",
+      "boy/curtains": "derived (window from the plan)",
+      "boy/wall-lamp": "derived",
+      "boy/pendant": "derived",
+      "boy/shape-shelf": "derived",
+      "boy/framed-prints": "derived",
+      "boy/toy-basket": "derived",
+      "boy/soft-toy": "derived",
+      "boy/desk-lamp": "derived",
+      "boy/wall-hooks": "derived",
+      "boy/play-structure": "derived",
+      "girl/bedding": "derived (bed)",
+      "girl/cushions": "derived (bed)",
+      "girl/rug": "derived",
+      "girl/curtains": "derived (window from the plan)",
+      "girl/wall-lamp": "derived",
+      "girl/pendant": "derived",
+      "girl/shape-shelf": "derived",
+      "girl/framed-prints": "derived",
+      "girl/toy-basket": "derived",
+      "girl/soft-toy": "derived",
+      "girl/desk-lamp": "derived",
+      "girl/wall-hooks": "derived",
+      "girl/play-structure": "plan (ceiling hook over the bed head)",
+      "master/bedding": "derived (bed)",
+      "master/pillowcases": "derived (bed)",
+      "master/throw": "derived (bed)",
+      "master/cushions": "derived (bed)",
+      "master/bedside-sconces": "plan (sconce pair on the bed wall)",
+      "master/framed-art": "plan (picture on the bed wall)",
+      "master/curtains": "derived (window from the plan)",
+      "master/rug": "derived",
+      "master/nightstand-vase": "derived",
+      "master/candle-holders": "derived",
+      "master/planter": "derived",
+      "master/basket": "derived",
+      "master/pendant": "derived",
+      "bath/towels": "derived",
+      "bath/bath-mat": "derived",
+      "bath/dispenser-set": "derived",
+      "bath/vanity-tray": "derived",
+      "bath/storage-basket": "derived",
+      "bath/towel-ladder": "derived",
+      "bath/wall-sconces": "derived",
+      "bath/robe-hooks": "derived",
+      "bath/planter": "derived"
+    }
+  },
+  "cameras": {
+    "M0": {
+      "room": "living",
+      "image": "living-clay.png",
+      "loc": [
+        1.25,
+        5.55,
+        1.2
+      ],
+      "yaw_deg_left": 25,
+      "u0": 0.52,
+      "v0": 0.46,
+      "frame_text": "",
+      "features": [
+        {
+          "feature": "back-left corner (-2.30, 0)",
+          "expected_u": 0.431,
+          "plan_eq_u": 0.431,
+          "blender_u": 0.431,
+          "pixel_u_by_z": {
+            "2.60": 0.431,
+            "2.45": 0.431,
+            "2.25": 0.431,
+            "1.95": 0.431,
+            "1.60": "occluded",
+            "1.30": "occluded",
+            "0.90": "occluded"
+          },
+          "pixel_u_measured": true,
+          "plumb_du_floor_to_2.70": 0.0,
+          "ok": true,
+          "tolerance": 0.02,
+          "dev": -0.0
+        },
+        {
+          "feature": "O-living-dining nearest jamb (2.50, 4.57) [out of frame: u > 1]",
+          "expected_u": null,
+          "plan_eq_u": 3.3858,
+          "blender_u": 3.3856,
+          "out_of_frame_by": 2.3856,
+          "ok": true
+        },
+        {
+          "feature": "back-right corner (2.50, 0) [right wall out of frame]",
+          "expected_u": null,
+          "plan_eq_u": 1.0351,
+          "blender_u": 1.0351,
+          "out_of_frame_by": 0.0351,
+          "ok": true
+        },
+        {
+          "feature": "left edge meets the left wall at Y (v4-spec)",
+          "expected": 3.738,
+          "plan_eq": 3.7375,
+          "blender_u_at_point": 0.0,
+          "dev_m": -0.0005,
+          "ok": true
+        }
+      ],
+      "windows_in_frame": [
+        {
+          "window": "W-living",
+          "facade": "north",
+          "px": 37055
+        }
+      ],
+      "slots_in_frame": [
+        {
+          "slot": "living/framed-art",
+          "own_room": true,
+          "src": "living v4-spec",
+          "px": 99627,
+          "bbox_uv": [
+            0.5981,
+            0.7915,
+            0.2804,
+            0.5122
+          ],
+          "min_edge_margin": 0.2085,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "living/pendant",
+          "own_room": true,
+          "src": "living v4-spec",
+          "px": 20837,
+          "bbox_uv": [
+            0.5952,
+            0.6729,
+            0.0,
+            0.1736
+          ],
+          "min_edge_margin": 0.0,
+          "within_0_05_of_edge": true
+        },
+        {
+          "slot": "living/wall-sconce",
+          "own_room": true,
+          "src": "living v4-spec",
+          "px": 2223,
+          "bbox_uv": [
+            0.106,
+            0.1299,
+            0.3516,
+            0.3932
+          ],
+          "min_edge_margin": 0.106,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "living/rug",
+          "own_room": true,
+          "src": "living v4-spec",
+          "px": 266935,
+          "bbox_uv": [
+            0.2666,
+            0.9438,
+            0.7188,
+            1.0
+          ],
+          "min_edge_margin": 0.0,
+          "within_0_05_of_edge": true
+        },
+        {
+          "slot": "living/curtains",
+          "own_room": true,
+          "src": "living v4-spec",
+          "px": 101388,
+          "bbox_uv": [
+            0.1631,
+            0.3965,
+            0.0,
+            0.8229
+          ],
+          "min_edge_margin": 0.0,
+          "within_0_05_of_edge": true
+        },
+        {
+          "slot": "living/planter",
+          "own_room": true,
+          "src": "living v4-spec",
+          "px": 43903,
+          "bbox_uv": [
+            0.3896,
+            0.4756,
+            0.3707,
+            0.7057
+          ],
+          "min_edge_margin": 0.2943,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "living/floor-lamp",
+          "own_room": true,
+          "src": "living v4-spec",
+          "px": 13231,
+          "bbox_uv": [
+            0.8555,
+            0.917,
+            0.3811,
+            0.6675
+          ],
+          "min_edge_margin": 0.083,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "living/basket",
+          "own_room": true,
+          "src": "living v4-spec",
+          "px": 18060,
+          "bbox_uv": [
+            0.8623,
+            0.9248,
+            0.6667,
+            0.7969
+          ],
+          "min_edge_margin": 0.0752,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "living/pouf",
+          "own_room": true,
+          "src": "living v4-spec",
+          "px": 39514,
+          "bbox_uv": [
+            0.4624,
+            0.5581,
+            0.7552,
+            0.9427
+          ],
+          "min_edge_margin": 0.0573,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "living/magazine-holder",
+          "own_room": true,
+          "src": "living v4-spec",
+          "px": 36445,
+          "bbox_uv": [
+            0.0557,
+            0.1392,
+            0.7005,
+            0.9028
+          ],
+          "min_edge_margin": 0.0557,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "living/wall-decor",
+          "own_room": true,
+          "src": "living v4-spec",
+          "px": 9789,
+          "bbox_uv": [
+            0.5098,
+            0.5566,
+            0.4149,
+            0.5052
+          ],
+          "min_edge_margin": 0.4149,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "living/sofa-cover",
+          "own_room": true,
+          "src": "living v4-spec",
+          "px": 3418,
+          "bbox_uv": [
+            0.7544,
+            0.8154,
+            0.6432,
+            0.6753
+          ],
+          "min_edge_margin": 0.1846,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "living/cushions",
+          "own_room": true,
+          "src": "living v4-spec",
+          "px": 34818,
+          "bbox_uv": [
+            0.5645,
+            0.8105,
+            0.5252,
+            0.6519
+          ],
+          "min_edge_margin": 0.1895,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "living/table-runner",
+          "own_room": true,
+          "src": "living v4-spec",
+          "px": 5509,
+          "bbox_uv": [
+            0.5396,
+            0.6284,
+            0.6788,
+            0.7257
+          ],
+          "min_edge_margin": 0.2743,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "living/vase",
+          "own_room": true,
+          "src": "living v4-spec",
+          "px": 6749,
+          "bbox_uv": [
+            0.6919,
+            0.7197,
+            0.6233,
+            0.7283
+          ],
+          "min_edge_margin": 0.2717,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "living/candle-holders",
+          "own_room": true,
+          "src": "living v4-spec",
+          "px": 3991,
+          "bbox_uv": [
+            0.6719,
+            0.689,
+            0.6259,
+            0.7292
+          ],
+          "min_edge_margin": 0.2708,
+          "within_0_05_of_edge": false
+        }
+      ],
+      "camera_clearance_m": {
+        "min": 0.7159,
+        "nearest": "wall_front_a"
+      },
+      "mean_luma_8bit": 158.7,
+      "sky_px_fraction": 0.04741,
+      "principal_point_uv": [
+        0.52,
+        0.46
+      ]
+    },
+    "H0": {
+      "room": "hall",
+      "image": "hall-clay.png",
+      "loc": [
+        2.877,
+        9.039,
+        1.2
+      ],
+      "yaw_deg_left": 25,
+      "u0": 0.52,
+      "v0": 0.46,
+      "frame_text": "living double door u 0.395-0.636; solid hall left wall Y 6.35-7.98 (bench + hooks) on the left; console vignette X 2.30-3.10 on the front wall, u ~0.66-0.91",
+      "features": [
+        {
+          "feature": "living double door jamb X 0.95 (hall face Y 6.35)",
+          "expected_u": 0.395,
+          "plan_eq_u": 0.3949,
+          "blender_u": 0.3949,
+          "ok": true,
+          "tolerance": 0.02,
+          "dev": -0.0001
+        },
+        {
+          "feature": "living double door jamb X 2.15 (hall face Y 6.35)",
+          "expected_u": 0.636,
+          "plan_eq_u": 0.636,
+          "blender_u": 0.636,
+          "ok": true,
+          "tolerance": 0.02,
+          "dev": 0.0
+        },
+        {
+          "feature": "work door east jamb (0.80, 8.10) [out of frame by >= 0.02]",
+          "expected_u": null,
+          "plan_eq_u": -0.0529,
+          "blender_u": -0.0529,
+          "out_of_frame_by": 0.0529,
+          "ok": true
+        },
+        {
+          "feature": "console left end (2.30, 6.70)",
+          "expected_u": 0.66,
+          "plan_eq_u": 0.6513,
+          "blender_u": 0.6513,
+          "ok": true,
+          "tolerance": 0.02,
+          "dev": -0.0087
+        },
+        {
+          "feature": "console right end (3.10, 6.70)",
+          "expected_u": 0.91,
+          "plan_eq_u": 0.9119,
+          "blender_u": 0.9119,
+          "ok": true,
+          "tolerance": 0.02,
+          "dev": 0.0019
+        },
+        {
+          "feature": "left edge meets the hall left wall (X 0.80) at Y",
+          "expected": 7.98,
+          "plan_eq": 7.9786,
+          "blender_u_at_point": 0.0,
+          "dev_m": -0.0014,
+          "ok": true
+        }
+      ],
+      "windows_in_frame": [],
+      "slots_in_frame": [
+        {
+          "slot": "living/framed-art",
+          "own_room": false,
+          "src": "living v4-spec",
+          "px": 20612,
+          "bbox_uv": [
+            0.5669,
+            0.6362,
+            0.3602,
+            0.4887
+          ],
+          "min_edge_margin": 0.3602,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "living/pendant",
+          "own_room": false,
+          "src": "living v4-spec",
+          "px": 4562,
+          "bbox_uv": [
+            0.5581,
+            0.5967,
+            0.1849,
+            0.3116
+          ],
+          "min_edge_margin": 0.1849,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "living/rug",
+          "own_room": false,
+          "src": "living v4-spec",
+          "px": 22125,
+          "bbox_uv": [
+            0.4126,
+            0.6362,
+            0.6155,
+            0.6953
+          ],
+          "min_edge_margin": 0.3047,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "living/curtains",
+          "own_room": false,
+          "src": "living v4-spec",
+          "px": 8584,
+          "bbox_uv": [
+            0.4126,
+            0.4453,
+            0.2457,
+            0.5842
+          ],
+          "min_edge_margin": 0.2457,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "living/planter",
+          "own_room": false,
+          "src": "living v4-spec",
+          "px": 15789,
+          "bbox_uv": [
+            0.4419,
+            0.4927,
+            0.4054,
+            0.6076
+          ],
+          "min_edge_margin": 0.3924,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "living/pouf",
+          "own_room": false,
+          "src": "living v4-spec",
+          "px": 6862,
+          "bbox_uv": [
+            0.4941,
+            0.5371,
+            0.5981,
+            0.6684
+          ],
+          "min_edge_margin": 0.3316,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "living/wall-decor",
+          "own_room": false,
+          "src": "living v4-spec",
+          "px": 3658,
+          "bbox_uv": [
+            0.5137,
+            0.5425,
+            0.4332,
+            0.487
+          ],
+          "min_edge_margin": 0.4332,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "living/cushions",
+          "own_room": false,
+          "src": "living v4-spec",
+          "px": 4972,
+          "bbox_uv": [
+            0.5459,
+            0.5815,
+            0.4983,
+            0.559
+          ],
+          "min_edge_margin": 0.4185,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "living/table-runner",
+          "own_room": false,
+          "src": "living v4-spec",
+          "px": 766,
+          "bbox_uv": [
+            0.5298,
+            0.5771,
+            0.5773,
+            0.5894
+          ],
+          "min_edge_margin": 0.4106,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "living/vase",
+          "own_room": false,
+          "src": "living v4-spec",
+          "px": 1520,
+          "bbox_uv": [
+            0.6045,
+            0.6177,
+            0.5408,
+            0.5903
+          ],
+          "min_edge_margin": 0.3823,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "living/candle-holders",
+          "own_room": false,
+          "src": "living v4-spec",
+          "px": 1013,
+          "bbox_uv": [
+            0.5942,
+            0.6045,
+            0.5443,
+            0.5903
+          ],
+          "min_edge_margin": 0.3955,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "hall/framed-art",
+          "own_room": true,
+          "src": "derived (console vignette, plan)",
+          "px": 99679,
+          "bbox_uv": [
+            0.7017,
+            0.8628,
+            0.1345,
+            0.4141
+          ],
+          "min_edge_margin": 0.1345,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "hall/table-lamp",
+          "own_room": true,
+          "src": "derived (console vignette, plan)",
+          "px": 29832,
+          "bbox_uv": [
+            0.6753,
+            0.7432,
+            0.4089,
+            0.658
+          ],
+          "min_edge_margin": 0.2568,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "hall/console-vessel",
+          "own_room": true,
+          "src": "derived (console vignette, plan)",
+          "px": 18961,
+          "bbox_uv": [
+            0.8384,
+            0.8848,
+            0.5009,
+            0.6762
+          ],
+          "min_edge_margin": 0.1152,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "hall/key-tray",
+          "own_room": true,
+          "src": "derived (console vignette, plan)",
+          "px": 3209,
+          "bbox_uv": [
+            0.7627,
+            0.8193,
+            0.6389,
+            0.6693
+          ],
+          "min_edge_margin": 0.1807,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "hall/bench-cushion",
+          "own_room": true,
+          "src": "derived (bench, plan)",
+          "px": 52766,
+          "bbox_uv": [
+            0.1001,
+            0.4058,
+            0.7292,
+            0.9201
+          ],
+          "min_edge_margin": 0.0799,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "hall/basket",
+          "own_room": true,
+          "src": "derived (under the bench)",
+          "px": 24375,
+          "bbox_uv": [
+            0.2334,
+            0.3242,
+            0.862,
+            1.0
+          ],
+          "min_edge_margin": 0.0,
+          "within_0_05_of_edge": true
+        },
+        {
+          "slot": "hall/wall-hooks",
+          "own_room": true,
+          "src": "derived (left wall, plan)",
+          "px": 16497,
+          "bbox_uv": [
+            0.145,
+            0.3237,
+            0.1806,
+            0.2795
+          ],
+          "min_edge_margin": 0.145,
+          "within_0_05_of_edge": false
+        }
+      ],
+      "camera_clearance_m": {
+        "min": 0.723,
+        "nearest": "hwall_52"
+      },
+      "mean_luma_8bit": 76.3,
+      "sky_px_fraction": 0.0,
+      "principal_point_uv": [
+        0.52,
+        0.46
+      ]
+    },
+    "D0": {
+      "room": "kitchen-dining",
+      "image": "kitchen-dining-clay.png",
+      "loc": [
+        3.0,
+        3.05,
+        1.2
+      ],
+      "yaw_deg_left": -35,
+      "u0": 0.52,
+      "v0": 0.46,
+      "frame_text": "SE corner u ~0.75; east window u ~0.04-0.46 (centre ~0.28, light from the left; head cut by the top edge); table under the big pendant u ~0.62; kitchen as the right band. Detail: data/slots/dining-room.json",
+      "features": [
+        {
+          "feature": "SE corner (7.25, 0)",
+          "expected_u": 0.75,
+          "plan_eq_u": 0.7539,
+          "blender_u": 0.7539,
+          "pixel_u_by_z": {
+            "2.60": 0.7539,
+            "2.45": 0.7539,
+            "2.25": 0.7539,
+            "1.95": 0.7539,
+            "1.60": 0.7539,
+            "1.30": 0.7539,
+            "0.90": "occluded"
+          },
+          "pixel_u_measured": true,
+          "plumb_du_floor_to_2.70": 0.0,
+          "ok": true,
+          "tolerance": 0.02,
+          "dev": 0.0039
+        },
+        {
+          "feature": "east window jamb X 2.95",
+          "expected_u": 0.04,
+          "plan_eq_u": 0.0367,
+          "blender_u": 0.0367,
+          "ok": true,
+          "tolerance": 0.02,
+          "dev": -0.0033
+        },
+        {
+          "feature": "east window centre (3.85, 0)",
+          "expected_u": 0.28,
+          "plan_eq_u": 0.2849,
+          "blender_u": 0.2849,
+          "ok": true,
+          "tolerance": 0.02,
+          "dev": 0.0049
+        },
+        {
+          "feature": "east window jamb X 4.75",
+          "expected_u": 0.46,
+          "plan_eq_u": 0.4599,
+          "blender_u": 0.4599,
+          "ok": true,
+          "tolerance": 0.02,
+          "dev": -0.0001
+        },
+        {
+          "feature": "table centre (4.30, 1.70)",
+          "expected_u": 0.62,
+          "plan_eq_u": 0.6246,
+          "blender_u": 0.6246,
+          "ok": true,
+          "tolerance": 0.02,
+          "dev": 0.0046
+        }
+      ],
+      "windows_in_frame": [
+        {
+          "window": "W-dining",
+          "facade": "east",
+          "px": 160429
+        }
+      ],
+      "slots_in_frame": [
+        {
+          "slot": "kitchen-dining/dining-pendant",
+          "own_room": true,
+          "src": "plan (over the table centre, bottom 0.77 above the top)",
+          "px": 135934,
+          "bbox_uv": [
+            0.5166,
+            0.7383,
+            0.0,
+            0.2839
+          ],
+          "min_edge_margin": 0.0,
+          "within_0_05_of_edge": true
+        },
+        {
+          "slot": "kitchen-dining/table-runner",
+          "own_room": true,
+          "src": "derived",
+          "px": 50868,
+          "bbox_uv": [
+            0.3433,
+            0.8262,
+            0.6875,
+            0.8707
+          ],
+          "min_edge_margin": 0.1293,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "kitchen-dining/centerpiece-vase",
+          "own_room": true,
+          "src": "derived",
+          "px": 27788,
+          "bbox_uv": [
+            0.5957,
+            0.6538,
+            0.5521,
+            0.7587
+          ],
+          "min_edge_margin": 0.2413,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "kitchen-dining/candle-holders",
+          "own_room": true,
+          "src": "derived",
+          "px": 23066,
+          "bbox_uv": [
+            0.4907,
+            0.5752,
+            0.6146,
+            0.7899
+          ],
+          "min_edge_margin": 0.2101,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "kitchen-dining/bowl",
+          "own_room": true,
+          "src": "derived",
+          "px": 14087,
+          "bbox_uv": [
+            0.686,
+            0.772,
+            0.6502,
+            0.7274
+          ],
+          "min_edge_margin": 0.228,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "kitchen-dining/curtains",
+          "own_room": true,
+          "src": "derived (window from the plan)",
+          "px": 154121,
+          "bbox_uv": [
+            0.0,
+            0.5059,
+            0.0,
+            1.0
+          ],
+          "min_edge_margin": 0.0,
+          "within_0_05_of_edge": true
+        },
+        {
+          "slot": "kitchen-dining/seat-pads",
+          "own_room": true,
+          "src": "derived (chairs)",
+          "px": 12404,
+          "bbox_uv": [
+            0.9038,
+            1.0,
+            0.9201,
+            1.0
+          ],
+          "min_edge_margin": 0.0,
+          "within_0_05_of_edge": true
+        }
+      ],
+      "camera_clearance_m": {
+        "min": 0.3202,
+        "nearest": "leaf_living_dining_a"
+      },
+      "mean_luma_8bit": 177.7,
+      "sky_px_fraction": 0.19832,
+      "principal_point_uv": [
+        0.52,
+        0.46
+      ]
+    },
+    "W0": {
+      "room": "work",
+      "image": "work-clay.png",
+      "loc": [
+        -0.385,
+        8.274,
+        1.2
+      ],
+      "yaw_deg_left": 60,
+      "u0": 0.52,
+      "v0": 0.46,
+      "frame_text": "NE corner at u ~0.70; north wall visible Y 6.35-8.54 with the window at u ~0.10-0.53 (centre ~0.35, light from the left) and the desk under it; east wall (shelves) visible X -2.30..-1.25 on the right. 1.92 m to the east wall.",
+      "features": [
+        {
+          "feature": "NE corner (-2.30, 6.35)",
+          "expected_u": 0.7,
+          "plan_eq_u": 0.7003,
+          "blender_u": 0.7003,
+          "pixel_u_by_z": {
+            "2.60": "out of frame",
+            "2.45": "out of frame",
+            "2.25": "out of frame",
+            "1.95": "occluded",
+            "1.60": "occluded",
+            "1.30": "occluded",
+            "0.90": "occluded"
+          },
+          "pixel_u_measured": false,
+          "plumb_du_floor_to_2.70": 0.0,
+          "ok": true,
+          "tolerance": 0.02,
+          "dev": 0.0003
+        },
+        {
+          "feature": "window jamb Y 8.35",
+          "expected_u": 0.1,
+          "plan_eq_u": 0.099,
+          "blender_u": 0.099,
+          "ok": true,
+          "tolerance": 0.02,
+          "dev": -0.001
+        },
+        {
+          "feature": "window centre Y 7.75",
+          "expected_u": 0.35,
+          "plan_eq_u": 0.3451,
+          "blender_u": 0.3451,
+          "ok": true,
+          "tolerance": 0.02,
+          "dev": -0.0049
+        },
+        {
+          "feature": "window jamb Y 7.15",
+          "expected_u": 0.53,
+          "plan_eq_u": 0.5248,
+          "blender_u": 0.5248,
+          "ok": true,
+          "tolerance": 0.02,
+          "dev": -0.0052
+        },
+        {
+          "feature": "left edge meets the north wall (X -2.30) at Y",
+          "expected": 8.54,
+          "plan_eq": 8.5415,
+          "blender_u_at_point": 0.0,
+          "dev_m": 0.0015,
+          "ok": true
+        },
+        {
+          "feature": "right edge meets the east wall (Y 6.35) at X",
+          "expected": -1.25,
+          "plan_eq": -1.2516,
+          "blender_u_at_point": 1.0,
+          "dev_m": -0.0016,
+          "ok": true
+        }
+      ],
+      "windows_in_frame": [
+        {
+          "window": "W-work",
+          "facade": "north",
+          "px": 179461
+        }
+      ],
+      "slots_in_frame": [
+        {
+          "slot": "work/desk-lamp",
+          "own_room": true,
+          "src": "derived",
+          "px": 74863,
+          "bbox_uv": [
+            0.1001,
+            0.1919,
+            0.4175,
+            0.8333
+          ],
+          "min_edge_margin": 0.1001,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "work/desk-tray",
+          "own_room": true,
+          "src": "derived",
+          "px": 17467,
+          "bbox_uv": [
+            0.4062,
+            0.5518,
+            0.7066,
+            0.7856
+          ],
+          "min_edge_margin": 0.2144,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "work/curtains",
+          "own_room": true,
+          "src": "derived (window from the plan)",
+          "px": 331383,
+          "bbox_uv": [
+            0.0,
+            0.5972,
+            0.0,
+            1.0
+          ],
+          "min_edge_margin": 0.0,
+          "within_0_05_of_edge": true
+        }
+      ],
+      "camera_clearance_m": {
+        "min": 0.7384,
+        "nearest": "leaf_hall_work"
+      },
+      "mean_luma_8bit": 180.5,
+      "sky_px_fraction": 0.20095,
+      "principal_point_uv": [
+        0.52,
+        0.46
+      ]
+    },
+    "C0": {
+      "room": "corridor",
+      "image": "corridor-clay.png",
+      "loc": [
+        2.397,
+        17.11,
+        1.2
+      ],
+      "yaw_deg_left": 0,
+      "u0": 0.5,
+      "v0": 0.46,
+      "frame_text": "symmetric enfilade east; at the end the hall console vignette and a slice of the living double door (lit floor lamp, basket, sofa end; living defaults per U9). Girl door east jamb (Y 16.26) ~0.05 outside the left edge.",
+      "features": [
+        {
+          "feature": "girl door east jamb (1.70, 16.26) [out of frame ~0.05]",
+          "expected_u": -0.05,
+          "plan_eq_u": -0.0467,
+          "blender_u": -0.0467,
+          "out_of_frame_by": 0.0467,
+          "ok": true,
+          "dev": 0.0033
+        },
+        {
+          "feature": "girl door east jamb, room face (1.55, 16.26)",
+          "expected_u": null,
+          "plan_eq_u": -0.1643,
+          "blender_u": -0.1643,
+          "out_of_frame_by": 0.1643,
+          "ok": true
+        }
+      ],
+      "windows_in_frame": [],
+      "slots_in_frame": [
+        {
+          "slot": "living/framed-art",
+          "own_room": false,
+          "src": "living v4-spec",
+          "px": 1360,
+          "bbox_uv": [
+            0.4365,
+            0.4448,
+            0.4062,
+            0.4757
+          ],
+          "min_edge_margin": 0.4062,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "living/rug",
+          "own_room": false,
+          "src": "living v4-spec",
+          "px": 1126,
+          "bbox_uv": [
+            0.4365,
+            0.4697,
+            0.546,
+            0.5616
+          ],
+          "min_edge_margin": 0.4365,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "living/floor-lamp",
+          "own_room": false,
+          "src": "living v4-spec",
+          "px": 896,
+          "bbox_uv": [
+            0.4609,
+            0.4761,
+            0.4384,
+            0.5165
+          ],
+          "min_edge_margin": 0.4384,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "living/basket",
+          "own_room": false,
+          "src": "living v4-spec",
+          "px": 1024,
+          "bbox_uv": [
+            0.4614,
+            0.4761,
+            0.5165,
+            0.5469
+          ],
+          "min_edge_margin": 0.4531,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "living/sofa-cover",
+          "own_room": false,
+          "src": "living v4-spec",
+          "px": 104,
+          "bbox_uv": [
+            0.4365,
+            0.4492,
+            0.5122,
+            0.5156
+          ],
+          "min_edge_margin": 0.4365,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "living/cushions",
+          "own_room": false,
+          "src": "living v4-spec",
+          "px": 930,
+          "bbox_uv": [
+            0.4365,
+            0.4492,
+            0.4809,
+            0.5122
+          ],
+          "min_edge_margin": 0.4365,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "hall/framed-art",
+          "own_room": false,
+          "src": "derived (console vignette, plan)",
+          "px": 4970,
+          "bbox_uv": [
+            0.5015,
+            0.5361,
+            0.388,
+            0.4488
+          ],
+          "min_edge_margin": 0.388,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "hall/table-lamp",
+          "own_room": false,
+          "src": "derived (console vignette, plan)",
+          "px": 1487,
+          "bbox_uv": [
+            0.4971,
+            0.5122,
+            0.4488,
+            0.5052
+          ],
+          "min_edge_margin": 0.4488,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "hall/console-vessel",
+          "own_room": false,
+          "src": "derived (console vignette, plan)",
+          "px": 755,
+          "bbox_uv": [
+            0.5317,
+            0.5405,
+            0.4688,
+            0.5052
+          ],
+          "min_edge_margin": 0.4595,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "hall/key-tray",
+          "own_room": false,
+          "src": "derived (console vignette, plan)",
+          "px": 115,
+          "bbox_uv": [
+            0.5166,
+            0.5278,
+            0.5009,
+            0.5052
+          ],
+          "min_edge_margin": 0.4722,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "hall/runner-rug",
+          "own_room": false,
+          "src": "derived",
+          "px": 7226,
+          "bbox_uv": [
+            0.4395,
+            0.5088,
+            0.5955,
+            0.6458
+          ],
+          "min_edge_margin": 0.3542,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "hall/ceiling-light",
+          "own_room": false,
+          "src": "derived",
+          "px": 2073,
+          "bbox_uv": [
+            0.4707,
+            0.5,
+            0.2231,
+            0.2552
+          ],
+          "min_edge_margin": 0.2231,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "corridor/runner-rug",
+          "own_room": true,
+          "src": "derived",
+          "px": 112318,
+          "bbox_uv": [
+            0.3984,
+            0.603,
+            0.6606,
+            1.0
+          ],
+          "min_edge_margin": 0.0,
+          "within_0_05_of_edge": true
+        },
+        {
+          "slot": "corridor/ceiling-lights",
+          "own_room": true,
+          "src": "derived",
+          "px": 4145,
+          "bbox_uv": [
+            0.4795,
+            0.5215,
+            0.1207,
+            0.1667
+          ],
+          "min_edge_margin": 0.1207,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "corridor/gallery-art",
+          "own_room": true,
+          "src": "plan (left wall Y 13.9-16.0)",
+          "px": 203354,
+          "bbox_uv": [
+            0.0815,
+            0.3594,
+            0.0,
+            0.4227
+          ],
+          "min_edge_margin": 0.0,
+          "within_0_05_of_edge": true
+        },
+        {
+          "slot": "bath/wall-sconces",
+          "own_room": false,
+          "src": "derived",
+          "px": 362,
+          "bbox_uv": [
+            0.6211,
+            0.626,
+            0.3368,
+            0.3689
+          ],
+          "min_edge_margin": 0.3368,
+          "within_0_05_of_edge": false
+        }
+      ],
+      "camera_clearance_m": {
+        "min": 0.5538,
+        "nearest": "hwall_35"
+      },
+      "mean_luma_8bit": 64.4,
+      "sky_px_fraction": 0.0,
+      "principal_point_uv": [
+        0.5,
+        0.46
+      ],
+      "living_slice": {
+        "px": 53687,
+        "frac": 0.02276,
+        "bbox_uv": [
+          0.4365,
+          0.5156,
+          0.2752,
+          0.5938
+        ],
+        "px_by_object": {
+          "floor-lamp": 896,
+          "basket": 1024,
+          "sofa": 1383
+        }
+      }
+    },
+    "K-boy": {
+      "room": "boy",
+      "image": "boy-clay.png",
+      "loc": [
+        0.575,
+        12.427,
+        1.2
+      ],
+      "yaw_deg_left": 60,
+      "u0": 0.52,
+      "v0": 0.46,
+      "frame_text": "NE corner u ~0.60; north wall visible Y 10.25-12.83, window u ~0.22 (west end) to the corner side; east wall on the right",
+      "features": [
+        {
+          "feature": "NE corner (-2.30, 10.25)",
+          "expected_u": 0.6,
+          "plan_eq_u": 0.6034,
+          "blender_u": 0.6034,
+          "pixel_u_by_z": {
+            "2.60": "out of frame",
+            "2.45": 0.6034,
+            "2.25": 0.6034,
+            "1.95": 0.6034,
+            "1.60": 0.6034,
+            "1.30": 0.6034,
+            "0.90": 0.6034
+          },
+          "pixel_u_measured": true,
+          "plumb_du_floor_to_2.70": 0.0,
+          "ok": true,
+          "tolerance": 0.02,
+          "dev": 0.0034
+        },
+        {
+          "feature": "window west jamb (-2.30, 12.15)",
+          "expected_u": 0.22,
+          "plan_eq_u": 0.2162,
+          "blender_u": 0.2162,
+          "ok": true,
+          "tolerance": 0.02,
+          "dev": -0.0038
+        },
+        {
+          "feature": "left edge meets the north wall (X -2.30) at Y",
+          "expected": 12.83,
+          "plan_eq": 12.8286,
+          "blender_u_at_point": 0.0,
+          "dev_m": -0.0014,
+          "ok": true
+        }
+      ],
+      "windows_in_frame": [
+        {
+          "window": "W-boy",
+          "facade": "north",
+          "px": 120921
+        }
+      ],
+      "slots_in_frame": [
+        {
+          "slot": "boy/bedding",
+          "own_room": true,
+          "src": "derived (bed)",
+          "px": 201994,
+          "bbox_uv": [
+            0.4595,
+            1.0,
+            0.7092,
+            1.0
+          ],
+          "min_edge_margin": 0.0,
+          "within_0_05_of_edge": true
+        },
+        {
+          "slot": "boy/cushions",
+          "own_room": true,
+          "src": "derived (bed)",
+          "px": 31979,
+          "bbox_uv": [
+            0.4766,
+            0.6035,
+            0.6163,
+            0.7465
+          ],
+          "min_edge_margin": 0.2535,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "boy/curtains",
+          "own_room": true,
+          "src": "derived (window from the plan)",
+          "px": 208186,
+          "bbox_uv": [
+            0.1528,
+            0.5713,
+            0.0,
+            1.0
+          ],
+          "min_edge_margin": 0.0,
+          "within_0_05_of_edge": true
+        },
+        {
+          "slot": "boy/wall-lamp",
+          "own_room": true,
+          "src": "derived",
+          "px": 6894,
+          "bbox_uv": [
+            0.6558,
+            0.6987,
+            0.4115,
+            0.48
+          ],
+          "min_edge_margin": 0.3013,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "boy/shape-shelf",
+          "own_room": true,
+          "src": "derived",
+          "px": 95487,
+          "bbox_uv": [
+            0.7471,
+            0.9307,
+            0.0807,
+            0.3472
+          ],
+          "min_edge_margin": 0.0693,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "boy/framed-prints",
+          "own_room": true,
+          "src": "derived",
+          "px": 746,
+          "bbox_uv": [
+            0.9985,
+            1.0,
+            0.3368,
+            0.553
+          ],
+          "min_edge_margin": 0.0,
+          "within_0_05_of_edge": true
+        },
+        {
+          "slot": "boy/toy-basket",
+          "own_room": true,
+          "src": "derived",
+          "px": 6930,
+          "bbox_uv": [
+            0.002,
+            0.0601,
+            0.941,
+            1.0
+          ],
+          "min_edge_margin": 0.0,
+          "within_0_05_of_edge": true
+        },
+        {
+          "slot": "boy/soft-toy",
+          "own_room": true,
+          "src": "derived",
+          "px": 33081,
+          "bbox_uv": [
+            0.811,
+            0.8848,
+            0.7405,
+            0.9418
+          ],
+          "min_edge_margin": 0.0582,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "boy/desk-lamp",
+          "own_room": true,
+          "src": "derived",
+          "px": 13743,
+          "bbox_uv": [
+            0.3589,
+            0.3979,
+            0.5226,
+            0.7005
+          ],
+          "min_edge_margin": 0.2995,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "boy/play-structure",
+          "own_room": true,
+          "src": "derived",
+          "px": 1152,
+          "bbox_uv": [
+            0.0,
+            0.0156,
+            0.9392,
+            1.0
+          ],
+          "min_edge_margin": 0.0,
+          "within_0_05_of_edge": true
+        }
+      ],
+      "camera_clearance_m": {
+        "min": 0.4147,
+        "nearest": "boy_wardrobe"
+      },
+      "mean_luma_8bit": 184.7,
+      "sky_px_fraction": 0.13353,
+      "principal_point_uv": [
+        0.52,
+        0.46
+      ]
+    },
+    "K-girl": {
+      "room": "girl",
+      "image": "girl-clay.png",
+      "loc": [
+        0.575,
+        16.057,
+        1.2
+      ],
+      "yaw_deg_left": 60,
+      "u0": 0.52,
+      "v0": 0.46,
+      "frame_text": "identical to K-boy (+3.63 in Y)",
+      "features": [
+        {
+          "feature": "NE corner (-2.30, 13.88)",
+          "expected_u": 0.6,
+          "plan_eq_u": 0.6034,
+          "blender_u": 0.6034,
+          "pixel_u_by_z": {
+            "2.60": "out of frame",
+            "2.45": "occluded",
+            "2.25": "occluded",
+            "1.95": "occluded",
+            "1.60": "occluded",
+            "1.30": "occluded",
+            "0.90": "occluded"
+          },
+          "pixel_u_measured": false,
+          "plumb_du_floor_to_2.70": 0.0,
+          "ok": true,
+          "tolerance": 0.02,
+          "dev": 0.0034
+        },
+        {
+          "feature": "window west jamb (-2.30, 15.78)",
+          "expected_u": 0.22,
+          "plan_eq_u": 0.2162,
+          "blender_u": 0.2162,
+          "ok": true,
+          "tolerance": 0.02,
+          "dev": -0.0038
+        },
+        {
+          "feature": "left edge meets the north wall (X -2.30) at Y (12.83 + 3.63)",
+          "expected": 16.46,
+          "plan_eq": 16.4586,
+          "blender_u_at_point": 0.0,
+          "dev_m": -0.0014,
+          "ok": true
+        }
+      ],
+      "windows_in_frame": [
+        {
+          "window": "W-girl",
+          "facade": "north",
+          "px": 76319
+        }
+      ],
+      "slots_in_frame": [
+        {
+          "slot": "girl/bedding",
+          "own_room": true,
+          "src": "derived (bed)",
+          "px": 201993,
+          "bbox_uv": [
+            0.4595,
+            1.0,
+            0.7092,
+            1.0
+          ],
+          "min_edge_margin": 0.0,
+          "within_0_05_of_edge": true
+        },
+        {
+          "slot": "girl/cushions",
+          "own_room": true,
+          "src": "derived (bed)",
+          "px": 31979,
+          "bbox_uv": [
+            0.4766,
+            0.6035,
+            0.6163,
+            0.7465
+          ],
+          "min_edge_margin": 0.2535,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "girl/curtains",
+          "own_room": true,
+          "src": "derived (window from the plan)",
+          "px": 144412,
+          "bbox_uv": [
+            0.1528,
+            0.5713,
+            0.0,
+            1.0
+          ],
+          "min_edge_margin": 0.0,
+          "within_0_05_of_edge": true
+        },
+        {
+          "slot": "girl/wall-lamp",
+          "own_room": true,
+          "src": "derived",
+          "px": 5328,
+          "bbox_uv": [
+            0.6606,
+            0.6987,
+            0.4115,
+            0.48
+          ],
+          "min_edge_margin": 0.3013,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "girl/shape-shelf",
+          "own_room": true,
+          "src": "derived",
+          "px": 95487,
+          "bbox_uv": [
+            0.7471,
+            0.9307,
+            0.0807,
+            0.3472
+          ],
+          "min_edge_margin": 0.0693,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "girl/framed-prints",
+          "own_room": true,
+          "src": "derived",
+          "px": 746,
+          "bbox_uv": [
+            0.9985,
+            1.0,
+            0.3368,
+            0.553
+          ],
+          "min_edge_margin": 0.0,
+          "within_0_05_of_edge": true
+        },
+        {
+          "slot": "girl/toy-basket",
+          "own_room": true,
+          "src": "derived",
+          "px": 8064,
+          "bbox_uv": [
+            0.0,
+            0.0601,
+            0.941,
+            1.0
+          ],
+          "min_edge_margin": 0.0,
+          "within_0_05_of_edge": true
+        },
+        {
+          "slot": "girl/soft-toy",
+          "own_room": true,
+          "src": "derived",
+          "px": 33081,
+          "bbox_uv": [
+            0.811,
+            0.8848,
+            0.7405,
+            0.9418
+          ],
+          "min_edge_margin": 0.0582,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "girl/desk-lamp",
+          "own_room": true,
+          "src": "derived",
+          "px": 13743,
+          "bbox_uv": [
+            0.3589,
+            0.3979,
+            0.5226,
+            0.7005
+          ],
+          "min_edge_margin": 0.2995,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "girl/play-structure",
+          "own_room": true,
+          "src": "plan (ceiling hook over the bed head)",
+          "px": 218117,
+          "bbox_uv": [
+            0.4404,
+            0.6826,
+            0.0,
+            0.5773
+          ],
+          "min_edge_margin": 0.0,
+          "within_0_05_of_edge": true
+        }
+      ],
+      "camera_clearance_m": {
+        "min": 0.4147,
+        "nearest": "girl_wardrobe"
+      },
+      "mean_luma_8bit": 165.5,
+      "sky_px_fraction": 0.12828,
+      "principal_point_uv": [
+        0.52,
+        0.46
+      ]
+    },
+    "MB0": {
+      "room": "master",
+      "image": "master-clay.png",
+      "loc": [
+        1.75,
+        21.05,
+        1.2
+      ],
+      "yaw_deg_left": 35,
+      "u0": 0.52,
+      "v0": 0.46,
+      "frame_text": "NE corner u ~0.34; north window on the left; bed wall with the sconce pair on the right two thirds",
+      "features": [
+        {
+          "feature": "NE corner (-2.30, 17.66)",
+          "expected_u": 0.34,
+          "plan_eq_u": 0.3405,
+          "blender_u": 0.3405,
+          "pixel_u_by_z": {
+            "2.60": 0.3405,
+            "2.45": 0.3405,
+            "2.25": 0.3405,
+            "1.95": 0.3405,
+            "1.60": 0.3405,
+            "1.30": 0.3405,
+            "0.90": 0.3405
+          },
+          "pixel_u_measured": true,
+          "plumb_du_floor_to_2.70": 0.0,
+          "ok": true,
+          "tolerance": 0.02,
+          "dev": 0.0005
+        },
+        {
+          "feature": "corridor door jamb X 1.88, master face (1.88, 17.66) [out by >= 0.02]",
+          "expected_u": null,
+          "plan_eq_u": 1.026,
+          "blender_u": 1.026,
+          "out_of_frame_by": 0.026,
+          "ok": true
+        },
+        {
+          "feature": "corridor door jamb X 1.88, corridor face (1.88, 17.51)",
+          "expected_u": null,
+          "plan_eq_u": 1.0243,
+          "blender_u": 1.0243,
+          "out_of_frame_by": 0.0243,
+          "ok": true
+        }
+      ],
+      "windows_in_frame": [
+        {
+          "window": "W-master",
+          "facade": "north",
+          "px": 99436
+        }
+      ],
+      "slots_in_frame": [
+        {
+          "slot": "master/bedding",
+          "own_room": true,
+          "src": "derived (bed)",
+          "px": 132441,
+          "bbox_uv": [
+            0.1191,
+            0.6685,
+            0.6502,
+            0.9436
+          ],
+          "min_edge_margin": 0.0564,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "master/pillowcases",
+          "own_room": true,
+          "src": "derived (bed)",
+          "px": 25875,
+          "bbox_uv": [
+            0.4116,
+            0.6963,
+            0.6102,
+            0.724
+          ],
+          "min_edge_margin": 0.276,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "master/throw",
+          "own_room": true,
+          "src": "derived (bed)",
+          "px": 84245,
+          "bbox_uv": [
+            0.1206,
+            0.5474,
+            0.6884,
+            0.895
+          ],
+          "min_edge_margin": 0.105,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "master/cushions",
+          "own_room": true,
+          "src": "derived (bed)",
+          "px": 31795,
+          "bbox_uv": [
+            0.4629,
+            0.5664,
+            0.5417,
+            0.6858
+          ],
+          "min_edge_margin": 0.3142,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "master/bedside-sconces",
+          "own_room": true,
+          "src": "plan (sconce pair on the bed wall)",
+          "px": 8990,
+          "bbox_uv": [
+            0.4023,
+            0.8008,
+            0.3724,
+            0.447
+          ],
+          "min_edge_margin": 0.1992,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "master/framed-art",
+          "own_room": true,
+          "src": "plan (picture on the bed wall)",
+          "px": 78439,
+          "bbox_uv": [
+            0.4883,
+            0.6685,
+            0.1936,
+            0.4045
+          ],
+          "min_edge_margin": 0.1936,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "master/curtains",
+          "own_room": true,
+          "src": "derived (window from the plan)",
+          "px": 167741,
+          "bbox_uv": [
+            0.0,
+            0.3262,
+            0.0,
+            0.8889
+          ],
+          "min_edge_margin": 0.0,
+          "within_0_05_of_edge": true
+        },
+        {
+          "slot": "master/rug",
+          "own_room": true,
+          "src": "derived",
+          "px": 26556,
+          "bbox_uv": [
+            0.0,
+            0.1772,
+            0.8889,
+            1.0
+          ],
+          "min_edge_margin": 0.0,
+          "within_0_05_of_edge": true
+        },
+        {
+          "slot": "master/nightstand-vase",
+          "own_room": true,
+          "src": "derived",
+          "px": 2950,
+          "bbox_uv": [
+            0.3774,
+            0.3955,
+            0.5642,
+            0.6345
+          ],
+          "min_edge_margin": 0.3655,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "master/candle-holders",
+          "own_room": true,
+          "src": "derived",
+          "px": 4683,
+          "bbox_uv": [
+            0.77,
+            0.8135,
+            0.6467,
+            0.7196
+          ],
+          "min_edge_margin": 0.1865,
+          "within_0_05_of_edge": false
+        }
+      ],
+      "camera_clearance_m": {
+        "min": 0.6001,
+        "nearest": "wardrobes"
+      },
+      "mean_luma_8bit": 163.6,
+      "sky_px_fraction": 0.08847,
+      "principal_point_uv": [
+        0.52,
+        0.46
+      ]
+    },
+    "B0": {
+      "room": "bath",
+      "image": "bath-clay.png",
+      "loc": [
+        3.903,
+        11.748,
+        1.2
+      ],
+      "yaw_deg_left": -35,
+      "u0": 0.52,
+      "v0": 0.46,
+      "frame_text": "SE corner u ~0.73; fluted window u ~0.08-0.52 (centre ~0.30, light from the left) with the vanity; shower on the right; the shell mirror reflects only wall (U6)",
+      "features": [
+        {
+          "feature": "SE corner (6.25, 9.95)",
+          "expected_u": 0.73,
+          "plan_eq_u": 0.7308,
+          "blender_u": 0.7308,
+          "pixel_u_by_z": {
+            "2.60": "out of frame",
+            "2.45": "out of frame",
+            "2.25": 0.7308,
+            "1.95": 0.7308,
+            "1.60": 0.7308,
+            "1.30": 0.7308,
+            "0.90": 0.7308
+          },
+          "pixel_u_measured": true,
+          "plumb_du_floor_to_2.70": 0.0,
+          "ok": true,
+          "tolerance": 0.02,
+          "dev": 0.0008
+        },
+        {
+          "feature": "fluted window jamb X 3.95",
+          "expected_u": 0.08,
+          "plan_eq_u": 0.0787,
+          "blender_u": 0.0787,
+          "ok": true,
+          "tolerance": 0.02,
+          "dev": -0.0013
+        },
+        {
+          "feature": "fluted window centre X 4.45",
+          "expected_u": 0.3,
+          "plan_eq_u": 0.3024,
+          "blender_u": 0.3024,
+          "ok": true,
+          "tolerance": 0.02,
+          "dev": 0.0024
+        },
+        {
+          "feature": "fluted window jamb X 4.95",
+          "expected_u": 0.52,
+          "plan_eq_u": 0.4642,
+          "blender_u": 0.4642,
+          "ok": false,
+          "tolerance": 0.02,
+          "dev": -0.0558
+        }
+      ],
+      "windows_in_frame": [
+        {
+          "window": "W-bath",
+          "facade": "east (onto the shaded entrance court)",
+          "px": 118526
+        }
+      ],
+      "slots_in_frame": [
+        {
+          "slot": "bath/towels",
+          "own_room": true,
+          "src": "derived",
+          "px": 766,
+          "bbox_uv": [
+            0.999,
+            1.0,
+            0.2483,
+            0.5807
+          ],
+          "min_edge_margin": 0.0,
+          "within_0_05_of_edge": true
+        },
+        {
+          "slot": "bath/dispenser-set",
+          "own_room": true,
+          "src": "derived",
+          "px": 20089,
+          "bbox_uv": [
+            0.0,
+            0.54,
+            0.5582,
+            0.7552
+          ],
+          "min_edge_margin": 0.0,
+          "within_0_05_of_edge": true
+        },
+        {
+          "slot": "bath/vanity-tray",
+          "own_room": true,
+          "src": "derived",
+          "px": 10061,
+          "bbox_uv": [
+            0.248,
+            0.3853,
+            0.6545,
+            0.7066
+          ],
+          "min_edge_margin": 0.248,
+          "within_0_05_of_edge": false
+        },
+        {
+          "slot": "bath/storage-basket",
+          "own_room": true,
+          "src": "derived",
+          "px": 17608,
+          "bbox_uv": [
+            0.6631,
+            0.7412,
+            0.8967,
+            1.0
+          ],
+          "min_edge_margin": 0.0,
+          "within_0_05_of_edge": true
+        },
+        {
+          "slot": "bath/towel-ladder",
+          "own_room": true,
+          "src": "derived",
+          "px": 331930,
+          "bbox_uv": [
+            0.8228,
+            1.0,
+            0.1814,
+            1.0
+          ],
+          "min_edge_margin": 0.0,
+          "within_0_05_of_edge": true
+        },
+        {
+          "slot": "bath/wall-sconces",
+          "own_room": true,
+          "src": "derived",
+          "px": 14138,
+          "bbox_uv": [
+            0.0,
+            0.5513,
+            0.0,
+            0.1658
+          ],
+          "min_edge_margin": 0.0,
+          "within_0_05_of_edge": true
+        },
+        {
+          "slot": "bath/planter",
+          "own_room": true,
+          "src": "derived",
+          "px": 70362,
+          "bbox_uv": [
+            0.5156,
+            0.6201,
+            0.3264,
+            0.6658
+          ],
+          "min_edge_margin": 0.3264,
+          "within_0_05_of_edge": false
+        }
+      ],
+      "camera_clearance_m": {
+        "min": 0.653,
+        "nearest": "hwall_38"
+      },
+      "mean_luma_8bit": 97.5,
+      "sky_px_fraction": 0.00301,
+      "principal_point_uv": [
+        0.52,
+        0.46
+      ]
+    }
+  },
+  "transitions": {
+    "T-E0": {
+      "from_": "hall H0",
+      "to": "living M0",
+      "segments": [
+        {
+          "seg": "dolly#1",
+          "type": "dolly",
+          "from_": [
+            2.877,
+            9.039
+          ],
+          "to": [
+            1.25,
+            5.55
+          ],
+          "len_m": 3.8497,
+          "len_plan": 3.85,
+          "path_dir_deg_left": 25.0,
+          "yaw": 25,
+          "oblique_deg": 0.0,
+          "through": "O-entry-living",
+          "jambs": [
+            {
+              "opening": "O-entry-living",
+              "crossing": [
+                1.5881,
+                6.275
+              ],
+              "min_jamb_clearance_m": 0.4776,
+              "ok": true
+            }
+          ],
+          "min_clearance_any_m": 0.4776,
+          "nearest_any": "wall_front_b",
+          "min_clearance_walls_m": 0.4776,
+          "nearest_wall": "wall_front_b"
+        }
+      ],
+      "end_pose_error": {
+        "pos_m": 0.0,
+        "yaw_deg": 0.0
+      },
+      "frames": [
+        {
+          "k": 0,
+          "x": 2.877,
+          "y": 9.039,
+          "yaw": 25.0,
+          "u0": 0.52,
+          "seg": "start H0",
+          "s_m": 0.0,
+          "clearance_m": 0.723,
+          "nearest": "hwall_52"
+        },
+        {
+          "k": 1,
+          "x": 2.6657,
+          "y": 8.5858,
+          "yaw": 25.0,
+          "u0": 0.52,
+          "seg": "dolly#1",
+          "s_m": 0.5,
+          "clearance_m": 0.9343,
+          "nearest": "hwall_52"
+        },
+        {
+          "k": 2,
+          "x": 2.4544,
+          "y": 8.1327,
+          "yaw": 25.0,
+          "u0": 0.52,
+          "seg": "dolly#1",
+          "s_m": 1.0,
+          "clearance_m": 1.1456,
+          "nearest": "hwall_52"
+        },
+        {
+          "k": 3,
+          "x": 2.2431,
+          "y": 7.6795,
+          "yaw": 25.0,
+          "u0": 0.52,
+          "seg": "dolly#1",
+          "s_m": 1.5,
+          "clearance_m": 1.045,
+          "nearest": "h_lamp"
+        },
+        {
+          "k": 4,
+          "x": 2.0317,
+          "y": 7.2264,
+          "yaw": 25.0,
+          "u0": 0.52,
+          "seg": "dolly#1",
+          "s_m": 2.0,
+          "clearance_m": 0.6672,
+          "nearest": "h_lamp"
+        },
+        {
+          "k": 5,
+          "x": 1.8204,
+          "y": 6.7732,
+          "yaw": 25.0,
+          "u0": 0.52,
+          "seg": "dolly#1",
+          "s_m": 2.5,
+          "clearance_m": 0.5364,
+          "nearest": "wall_front_b"
+        },
+        {
+          "k": 6,
+          "x": 1.6091,
+          "y": 6.3201,
+          "yaw": 25.0,
+          "u0": 0.52,
+          "seg": "dolly#1",
+          "s_m": 3.0,
+          "clearance_m": 0.5409,
+          "nearest": "wall_front_b"
+        },
+        {
+          "k": 7,
+          "x": 1.3978,
+          "y": 5.8669,
+          "yaw": 25.0,
+          "u0": 0.52,
+          "seg": "dolly#1",
+          "s_m": 3.5,
+          "clearance_m": 0.5581,
+          "nearest": "wall_front_a"
+        },
+        {
+          "k": 8,
+          "x": 1.25,
+          "y": 5.55,
+          "yaw": 25.0,
+          "u0": 0.52,
+          "seg": "dolly#1",
+          "s_m": 3.8497,
+          "clearance_m": 0.7159,
+          "nearest": "wall_front_a"
+        }
+      ],
+      "sheet": "transitions/T-E0-sheet.jpg"
+    },
+    "T-LD": {
+      "from_": "living M0",
+      "to": "kitchen-dining D0",
+      "segments": [
+        {
+          "seg": "P0#1",
+          "type": "pan",
+          "at": [
+            1.25,
+            5.55
+          ],
+          "yaw": [
+            25,
+            0
+          ]
+        },
+        {
+          "seg": "P1#2",
+          "type": "pan",
+          "at": [
+            1.25,
+            5.55
+          ],
+          "yaw": [
+            0,
+            -35
+          ]
+        },
+        {
+          "seg": "dolly#3",
+          "type": "dolly",
+          "from_": [
+            1.25,
+            5.55
+          ],
+          "to": [
+            3.0,
+            3.05
+          ],
+          "len_m": 3.0516,
+          "len_plan": 3.05,
+          "path_dir_deg_left": -34.99,
+          "yaw": -35,
+          "oblique_deg": 0.01,
+          "through": "O-living-dining",
+          "jambs": [
+            {
+              "opening": "O-living-dining",
+              "crossing": [
+                2.575,
+                3.6571
+              ],
+              "min_jamb_clearance_m": 0.3326,
+              "ok": true
+            }
+          ],
+          "min_clearance_any_m": 0.2998,
+          "nearest_any": "leaf_living_dining_a",
+          "min_clearance_walls_m": 0.3326,
+          "nearest_wall": "wall_right_a"
+        }
+      ],
+      "end_pose_error": {
+        "pos_m": 0.0,
+        "yaw_deg": 0.0
+      },
+      "frames": [
+        {
+          "k": 0,
+          "x": 1.25,
+          "y": 5.55,
+          "yaw": 25.0,
+          "u0": 0.52,
+          "seg": "start M0",
+          "s_m": 0.0,
+          "clearance_m": 0.7159,
+          "nearest": "wall_front_a"
+        },
+        {
+          "k": 1,
+          "x": 1.25,
+          "y": 5.55,
+          "yaw": 12.5,
+          "u0": 0.52,
+          "seg": "P0#1",
+          "s_m": 0.0,
+          "clearance_m": 0.7159,
+          "nearest": "wall_front_a"
+        },
+        {
+          "k": 2,
+          "x": 1.25,
+          "y": 5.55,
+          "yaw": 0.0,
+          "u0": 0.52,
+          "seg": "P0#1",
+          "s_m": 0.0,
+          "clearance_m": 0.7159,
+          "nearest": "wall_front_a"
+        },
+        {
+          "k": 3,
+          "x": 1.25,
+          "y": 5.55,
+          "yaw": -11.6667,
+          "u0": 0.52,
+          "seg": "P1#2",
+          "s_m": 0.0,
+          "clearance_m": 0.7159,
+          "nearest": "wall_front_a"
+        },
+        {
+          "k": 4,
+          "x": 1.25,
+          "y": 5.55,
+          "yaw": -23.3333,
+          "u0": 0.52,
+          "seg": "P1#2",
+          "s_m": 0.0,
+          "clearance_m": 0.7159,
+          "nearest": "wall_front_a"
+        },
+        {
+          "k": 5,
+          "x": 1.25,
+          "y": 5.55,
+          "yaw": -35.0,
+          "u0": 0.52,
+          "seg": "P1#2",
+          "s_m": 0.0,
+          "clearance_m": 0.7159,
+          "nearest": "wall_front_a"
+        },
+        {
+          "k": 6,
+          "x": 1.5367,
+          "y": 5.1404,
+          "yaw": -35.0,
+          "u0": 0.52,
+          "seg": "dolly#3",
+          "s_m": 0.5,
+          "clearance_m": 0.9633,
+          "nearest": "wall_right_b"
+        },
+        {
+          "k": 7,
+          "x": 1.8235,
+          "y": 4.7308,
+          "yaw": -35.0,
+          "u0": 0.52,
+          "seg": "dolly#3",
+          "s_m": 1.0,
+          "clearance_m": 0.6765,
+          "nearest": "wall_right_b"
+        },
+        {
+          "k": 8,
+          "x": 2.1102,
+          "y": 4.3212,
+          "yaw": -35.0,
+          "u0": 0.52,
+          "seg": "dolly#3",
+          "s_m": 1.5,
+          "clearance_m": 0.4625,
+          "nearest": "wall_right_b"
+        },
+        {
+          "k": 9,
+          "x": 2.3969,
+          "y": 3.9115,
+          "yaw": -35.0,
+          "u0": 0.52,
+          "seg": "dolly#3",
+          "s_m": 2.0,
+          "clearance_m": 0.6665,
+          "nearest": "wall_right_b"
+        },
+        {
+          "k": 10,
+          "x": 2.6837,
+          "y": 3.5019,
+          "yaw": -35.0,
+          "u0": 0.52,
+          "seg": "dolly#3",
+          "s_m": 2.5,
+          "clearance_m": 0.5319,
+          "nearest": "leaf_living_dining_a"
+        },
+        {
+          "k": 11,
+          "x": 2.9704,
+          "y": 3.0923,
+          "yaw": -35.0,
+          "u0": 0.52,
+          "seg": "dolly#3",
+          "s_m": 3.0,
+          "clearance_m": 0.3059,
+          "nearest": "leaf_living_dining_a"
+        },
+        {
+          "k": 12,
+          "x": 3.0,
+          "y": 3.05,
+          "yaw": -35.0,
+          "u0": 0.52,
+          "seg": "dolly#3",
+          "s_m": 3.0516,
+          "clearance_m": 0.3202,
+          "nearest": "leaf_living_dining_a"
+        }
+      ],
+      "sheet": "transitions/T-LD-sheet.jpg"
+    },
+    "T-HW": {
+      "from_": "hall H0",
+      "to": "work W0",
+      "segments": [
+        {
+          "seg": "PW#1",
+          "type": "pan",
+          "at": [
+            2.877,
+            9.039
+          ],
+          "yaw": [
+            25,
+            60
+          ]
+        },
+        {
+          "seg": "dolly#2",
+          "type": "dolly",
+          "from_": [
+            2.877,
+            9.039
+          ],
+          "to": [
+            -0.385,
+            8.274
+          ],
+          "len_m": 3.3505,
+          "len_plan": 3.35,
+          "path_dir_deg_left": 76.8,
+          "yaw": 60,
+          "oblique_deg": 16.8,
+          "through": "O-hall-work",
+          "jambs": [
+            {
+              "opening": "O-hall-work",
+              "crossing": [
+                0.725,
+                8.5343
+              ],
+              "min_jamb_clearance_m": 0.4057,
+              "ok": true
+            }
+          ],
+          "min_clearance_any_m": 0.4057,
+          "nearest_any": "hwall_22",
+          "min_clearance_walls_m": 0.4057,
+          "nearest_wall": "hwall_22"
+        }
+      ],
+      "end_pose_error": {
+        "pos_m": 0.0,
+        "yaw_deg": 0.0
+      },
+      "frames": [
+        {
+          "k": 0,
+          "x": 2.877,
+          "y": 9.039,
+          "yaw": 25.0,
+          "u0": 0.52,
+          "seg": "start H0",
+          "s_m": 0.0,
+          "clearance_m": 0.723,
+          "nearest": "hwall_52"
+        },
+        {
+          "k": 1,
+          "x": 2.877,
+          "y": 9.039,
+          "yaw": 36.6667,
+          "u0": 0.52,
+          "seg": "PW#1",
+          "s_m": 0.0,
+          "clearance_m": 0.723,
+          "nearest": "hwall_52"
+        },
+        {
+          "k": 2,
+          "x": 2.877,
+          "y": 9.039,
+          "yaw": 48.3333,
+          "u0": 0.52,
+          "seg": "PW#1",
+          "s_m": 0.0,
+          "clearance_m": 0.723,
+          "nearest": "hwall_52"
+        },
+        {
+          "k": 3,
+          "x": 2.877,
+          "y": 9.039,
+          "yaw": 60.0,
+          "u0": 0.52,
+          "seg": "PW#1",
+          "s_m": 0.0,
+          "clearance_m": 0.723,
+          "nearest": "hwall_52"
+        },
+        {
+          "k": 4,
+          "x": 2.3902,
+          "y": 8.9248,
+          "yaw": 60.0,
+          "u0": 0.52,
+          "seg": "dolly#2",
+          "s_m": 0.5,
+          "clearance_m": 1.1146,
+          "nearest": "hwall_25"
+        },
+        {
+          "k": 5,
+          "x": 1.9034,
+          "y": 8.8107,
+          "yaw": 60.0,
+          "u0": 0.52,
+          "seg": "dolly#2",
+          "s_m": 1.0,
+          "clearance_m": 1.01,
+          "nearest": "hwall_25"
+        },
+        {
+          "k": 6,
+          "x": 1.4166,
+          "y": 8.6965,
+          "yaw": 60.0,
+          "u0": 0.52,
+          "seg": "dolly#2",
+          "s_m": 1.5,
+          "clearance_m": 0.6873,
+          "nearest": "hwall_23"
+        },
+        {
+          "k": 7,
+          "x": 0.9298,
+          "y": 8.5824,
+          "yaw": 60.0,
+          "u0": 0.52,
+          "seg": "dolly#2",
+          "s_m": 2.0,
+          "clearance_m": 0.4374,
+          "nearest": "hwall_23"
+        },
+        {
+          "k": 8,
+          "x": 0.443,
+          "y": 8.4682,
+          "yaw": 60.0,
+          "u0": 0.52,
+          "seg": "dolly#2",
+          "s_m": 2.5,
+          "clearance_m": 0.4224,
+          "nearest": "hwall_22"
+        },
+        {
+          "k": 9,
+          "x": -0.0438,
+          "y": 8.354,
+          "yaw": 60.0,
+          "u0": 0.52,
+          "seg": "dolly#2",
+          "s_m": 3.0,
+          "clearance_m": 0.646,
+          "nearest": "leaf_hall_work"
+        },
+        {
+          "k": 10,
+          "x": -0.385,
+          "y": 8.274,
+          "yaw": 60.0,
+          "u0": 0.52,
+          "seg": "dolly#2",
+          "s_m": 3.3505,
+          "clearance_m": 0.7384,
+          "nearest": "leaf_hall_work"
+        }
+      ],
+      "sheet": "transitions/T-HW-sheet.jpg"
+    },
+    "T-HC": {
+      "from_": "hall H0",
+      "to": "corridor C0",
+      "segments": [
+        {
+          "seg": "PH#1",
+          "type": "pan",
+          "at": [
+            2.877,
+            9.039
+          ],
+          "yaw": [
+            25,
+            0
+          ]
+        },
+        {
+          "seg": "pull-back#2",
+          "type": "pull-back",
+          "from_": [
+            2.877,
+            9.039
+          ],
+          "to": [
+            2.397,
+            17.11
+          ],
+          "len_m": 8.0853,
+          "len_plan": 8.09,
+          "path_dir_deg_left": 176.6,
+          "yaw": 0,
+          "oblique_deg": 176.6,
+          "through": "O-hall-corridor",
+          "jambs": [
+            {
+              "opening": "O-hall-corridor",
+              "crossing": [
+                2.8317,
+                9.8
+              ],
+              "min_jamb_clearance_m": 0.2678,
+              "ok": true
+            }
+          ],
+          "min_clearance_any_m": 0.2678,
+          "nearest_any": "hwall_48",
+          "min_clearance_walls_m": 0.2678,
+          "nearest_wall": "hwall_48"
+        }
+      ],
+      "end_pose_error": {
+        "pos_m": 0.0,
+        "yaw_deg": 0.0
+      },
+      "frames": [
+        {
+          "k": 0,
+          "x": 2.877,
+          "y": 9.039,
+          "yaw": 25.0,
+          "u0": 0.52,
+          "seg": "start H0",
+          "s_m": 0.0,
+          "clearance_m": 0.723,
+          "nearest": "hwall_52"
+        },
+        {
+          "k": 1,
+          "x": 2.877,
+          "y": 9.039,
+          "yaw": 12.5,
+          "u0": 0.5189,
+          "seg": "PH#1",
+          "s_m": 0.0,
+          "clearance_m": 0.723,
+          "nearest": "hwall_52"
+        },
+        {
+          "k": 2,
+          "x": 2.877,
+          "y": 9.039,
+          "yaw": 0.0,
+          "u0": 0.5179,
+          "seg": "PH#1",
+          "s_m": 0.0,
+          "clearance_m": 0.723,
+          "nearest": "hwall_52"
+        },
+        {
+          "k": 3,
+          "x": 2.8473,
+          "y": 9.5381,
+          "yaw": 0.0,
+          "u0": 0.5168,
+          "seg": "pull-back#2",
+          "s_m": 0.5,
+          "clearance_m": 0.3639,
+          "nearest": "hwall_48"
+        },
+        {
+          "k": 4,
+          "x": 2.8176,
+          "y": 10.0372,
+          "yaw": 0.0,
+          "u0": 0.5158,
+          "seg": "pull-back#2",
+          "s_m": 1.0,
+          "clearance_m": 0.2824,
+          "nearest": "hwall_38"
+        },
+        {
+          "k": 5,
+          "x": 2.7879,
+          "y": 10.5364,
+          "yaw": 0.0,
+          "u0": 0.5147,
+          "seg": "pull-back#2",
+          "s_m": 1.5,
+          "clearance_m": 0.3121,
+          "nearest": "hwall_38"
+        },
+        {
+          "k": 6,
+          "x": 2.7583,
+          "y": 11.0355,
+          "yaw": 0.0,
+          "u0": 0.5137,
+          "seg": "pull-back#2",
+          "s_m": 2.0,
+          "clearance_m": 0.3417,
+          "nearest": "hwall_38"
+        },
+        {
+          "k": 7,
+          "x": 2.7286,
+          "y": 11.5346,
+          "yaw": 0.0,
+          "u0": 0.5126,
+          "seg": "pull-back#2",
+          "s_m": 2.5,
+          "clearance_m": 0.3714,
+          "nearest": "hwall_38"
+        },
+        {
+          "k": 8,
+          "x": 2.6989,
+          "y": 12.0337,
+          "yaw": 0.0,
+          "u0": 0.5116,
+          "seg": "pull-back#2",
+          "s_m": 3.0,
+          "clearance_m": 0.4011,
+          "nearest": "hwall_38"
+        },
+        {
+          "k": 9,
+          "x": 2.6692,
+          "y": 12.5328,
+          "yaw": 0.0,
+          "u0": 0.5105,
+          "seg": "pull-back#2",
+          "s_m": 3.5,
+          "clearance_m": 0.4538,
+          "nearest": "hwall_38"
+        },
+        {
+          "k": 10,
+          "x": 2.6395,
+          "y": 13.0319,
+          "yaw": 0.0,
+          "u0": 0.5095,
+          "seg": "pull-back#2",
+          "s_m": 4.0,
+          "clearance_m": 0.5833,
+          "nearest": "hwall_39"
+        },
+        {
+          "k": 11,
+          "x": 2.6098,
+          "y": 13.5311,
+          "yaw": 0.0,
+          "u0": 0.5084,
+          "seg": "pull-back#2",
+          "s_m": 4.5,
+          "clearance_m": 0.4902,
+          "nearest": "hwall_39"
+        },
+        {
+          "k": 12,
+          "x": 2.5802,
+          "y": 14.0302,
+          "yaw": 0.0,
+          "u0": 0.5074,
+          "seg": "pull-back#2",
+          "s_m": 5.0,
+          "clearance_m": 0.5198,
+          "nearest": "hwall_40"
+        },
+        {
+          "k": 13,
+          "x": 2.5505,
+          "y": 14.5293,
+          "yaw": 0.0,
+          "u0": 0.5063,
+          "seg": "pull-back#2",
+          "s_m": 5.5,
+          "clearance_m": 0.5455,
+          "nearest": "laundry_door_flush"
+        },
+        {
+          "k": 14,
+          "x": 2.5208,
+          "y": 15.0284,
+          "yaw": 0.0,
+          "u0": 0.5053,
+          "seg": "pull-back#2",
+          "s_m": 6.0,
+          "clearance_m": 0.5752,
+          "nearest": "laundry_door_flush"
+        },
+        {
+          "k": 15,
+          "x": 2.4911,
+          "y": 15.5275,
+          "yaw": 0.0,
+          "u0": 0.5042,
+          "seg": "pull-back#2",
+          "s_m": 6.5,
+          "clearance_m": 0.6089,
+          "nearest": "hwall_50"
+        },
+        {
+          "k": 16,
+          "x": 2.4614,
+          "y": 16.0267,
+          "yaw": 0.0,
+          "u0": 0.5032,
+          "seg": "pull-back#2",
+          "s_m": 7.0,
+          "clearance_m": 0.6386,
+          "nearest": "hwall_42"
+        },
+        {
+          "k": 17,
+          "x": 2.4317,
+          "y": 16.5258,
+          "yaw": 0.0,
+          "u0": 0.5021,
+          "seg": "pull-back#2",
+          "s_m": 7.5,
+          "clearance_m": 0.6683,
+          "nearest": "hwall_42"
+        },
+        {
+          "k": 18,
+          "x": 2.4021,
+          "y": 17.0249,
+          "yaw": 0.0,
+          "u0": 0.5011,
+          "seg": "pull-back#2",
+          "s_m": 8.0,
+          "clearance_m": 0.615,
+          "nearest": "hwall_35"
+        },
+        {
+          "k": 19,
+          "x": 2.397,
+          "y": 17.11,
+          "yaw": 0.0,
+          "u0": 0.5,
+          "seg": "pull-back#2",
+          "s_m": 8.0853,
+          "clearance_m": 0.5538,
+          "nearest": "hwall_35"
+        }
+      ],
+      "sheet": "transitions/T-HC-sheet.jpg"
+    },
+    "T-CBoy": {
+      "from_": "corridor C0",
+      "to": "boy K-boy",
+      "segments": [
+        {
+          "seg": "dolly#1",
+          "type": "dolly",
+          "from_": [
+            2.397,
+            17.11
+          ],
+          "to": [
+            2.606,
+            13.6
+          ],
+          "len_m": 3.5162,
+          "len_plan": 3.52,
+          "path_dir_deg_left": -3.41,
+          "yaw": 0,
+          "oblique_deg": -3.41,
+          "through": null,
+          "jambs": [],
+          "min_clearance_any_m": 0.494,
+          "nearest_any": "hwall_49",
+          "min_clearance_walls_m": 0.494,
+          "nearest_wall": "hwall_49"
+        },
+        {
+          "seg": "pan#2",
+          "type": "pan",
+          "at": [
+            2.606,
+            13.6
+          ],
+          "yaw": [
+            0,
+            30
+          ]
+        },
+        {
+          "seg": "pan#3",
+          "type": "pan",
+          "at": [
+            2.606,
+            13.6
+          ],
+          "yaw": [
+            30,
+            60
+          ]
+        },
+        {
+          "seg": "dolly#4",
+          "type": "dolly",
+          "from_": [
+            2.606,
+            13.6
+          ],
+          "to": [
+            0.575,
+            12.427
+          ],
+          "len_m": 2.3454,
+          "len_plan": 2.35,
+          "path_dir_deg_left": 59.99,
+          "yaw": 60,
+          "oblique_deg": -0.01,
+          "through": "O-corridor-boy",
+          "jambs": [
+            {
+              "opening": "O-corridor-boy",
+              "crossing": [
+                1.625,
+                13.0334
+              ],
+              "min_jamb_clearance_m": 0.3118,
+              "ok": true
+            }
+          ],
+          "min_clearance_any_m": 0.3119,
+          "nearest_any": "hwall_26",
+          "min_clearance_walls_m": 0.3119,
+          "nearest_wall": "hwall_26"
+        }
+      ],
+      "end_pose_error": {
+        "pos_m": 0.0,
+        "yaw_deg": 0.0
+      },
+      "frames": [
+        {
+          "k": 0,
+          "x": 2.397,
+          "y": 17.11,
+          "yaw": 0.0,
+          "u0": 0.5,
+          "seg": "start C0",
+          "s_m": 0.0,
+          "clearance_m": 0.5538,
+          "nearest": "hwall_35"
+        },
+        {
+          "k": 1,
+          "x": 2.4267,
+          "y": 16.6109,
+          "yaw": 0.0,
+          "u0": 0.5012,
+          "seg": "dolly#1",
+          "s_m": 0.5,
+          "clearance_m": 0.6733,
+          "nearest": "hwall_42"
+        },
+        {
+          "k": 2,
+          "x": 2.4564,
+          "y": 16.1118,
+          "yaw": 0.0,
+          "u0": 0.5025,
+          "seg": "dolly#1",
+          "s_m": 1.0,
+          "clearance_m": 0.6436,
+          "nearest": "hwall_42"
+        },
+        {
+          "k": 3,
+          "x": 2.4862,
+          "y": 15.6127,
+          "yaw": 0.0,
+          "u0": 0.5038,
+          "seg": "dolly#1",
+          "s_m": 1.5,
+          "clearance_m": 0.6138,
+          "nearest": "hwall_42"
+        },
+        {
+          "k": 4,
+          "x": 2.5159,
+          "y": 15.1135,
+          "yaw": 0.0,
+          "u0": 0.505,
+          "seg": "dolly#1",
+          "s_m": 2.0,
+          "clearance_m": 0.5803,
+          "nearest": "laundry_door_flush"
+        },
+        {
+          "k": 5,
+          "x": 2.5456,
+          "y": 14.6144,
+          "yaw": 0.0,
+          "u0": 0.5062,
+          "seg": "dolly#1",
+          "s_m": 2.5,
+          "clearance_m": 0.5504,
+          "nearest": "laundry_door_flush"
+        },
+        {
+          "k": 6,
+          "x": 2.5753,
+          "y": 14.1153,
+          "yaw": 0.0,
+          "u0": 0.5075,
+          "seg": "dolly#1",
+          "s_m": 3.0,
+          "clearance_m": 0.5247,
+          "nearest": "hwall_40"
+        },
+        {
+          "k": 7,
+          "x": 2.605,
+          "y": 13.6162,
+          "yaw": 0.0,
+          "u0": 0.5088,
+          "seg": "dolly#1",
+          "s_m": 3.5,
+          "clearance_m": 0.495,
+          "nearest": "hwall_49"
+        },
+        {
+          "k": 8,
+          "x": 2.606,
+          "y": 13.6,
+          "yaw": 15.0,
+          "u0": 0.51,
+          "seg": "pan#2",
+          "s_m": 0.0,
+          "clearance_m": 0.494,
+          "nearest": "hwall_49"
+        },
+        {
+          "k": 9,
+          "x": 2.606,
+          "y": 13.6,
+          "yaw": 30.0,
+          "u0": 0.5112,
+          "seg": "pan#2",
+          "s_m": 0.0,
+          "clearance_m": 0.494,
+          "nearest": "hwall_49"
+        },
+        {
+          "k": 10,
+          "x": 2.606,
+          "y": 13.6,
+          "yaw": 45.0,
+          "u0": 0.5125,
+          "seg": "pan#3",
+          "s_m": 0.0,
+          "clearance_m": 0.494,
+          "nearest": "hwall_49"
+        },
+        {
+          "k": 11,
+          "x": 2.606,
+          "y": 13.6,
+          "yaw": 60.0,
+          "u0": 0.5138,
+          "seg": "pan#3",
+          "s_m": 0.0,
+          "clearance_m": 0.494,
+          "nearest": "hwall_49"
+        },
+        {
+          "k": 12,
+          "x": 2.173,
+          "y": 13.3499,
+          "yaw": 60.0,
+          "u0": 0.515,
+          "seg": "dolly#4",
+          "s_m": 0.5,
+          "clearance_m": 0.5061,
+          "nearest": "hwall_27"
+        },
+        {
+          "k": 13,
+          "x": 1.74,
+          "y": 13.0999,
+          "yaw": 60.0,
+          "u0": 0.5162,
+          "seg": "dolly#4",
+          "s_m": 1.0,
+          "clearance_m": 0.432,
+          "nearest": "hwall_27"
+        },
+        {
+          "k": 14,
+          "x": 1.3071,
+          "y": 12.8498,
+          "yaw": 60.0,
+          "u0": 0.5175,
+          "seg": "dolly#4",
+          "s_m": 1.5,
+          "clearance_m": 0.3276,
+          "nearest": "hwall_26"
+        },
+        {
+          "k": 15,
+          "x": 0.8741,
+          "y": 12.5997,
+          "yaw": 60.0,
+          "u0": 0.5188,
+          "seg": "dolly#4",
+          "s_m": 2.0,
+          "clearance_m": 0.3579,
+          "nearest": "boy_wardrobe"
+        },
+        {
+          "k": 16,
+          "x": 0.575,
+          "y": 12.427,
+          "yaw": 60.0,
+          "u0": 0.52,
+          "seg": "dolly#4",
+          "s_m": 2.3454,
+          "clearance_m": 0.4147,
+          "nearest": "boy_wardrobe"
+        }
+      ],
+      "sheet": "transitions/T-CBoy-sheet.jpg"
+    },
+    "T-CGirl": {
+      "from_": "corridor C0",
+      "to": "girl K-girl",
+      "segments": [
+        {
+          "seg": "pan#1",
+          "type": "pan",
+          "at": [
+            2.397,
+            17.11
+          ],
+          "yaw": [
+            0,
+            30
+          ]
+        },
+        {
+          "seg": "pan#2",
+          "type": "pan",
+          "at": [
+            2.397,
+            17.11
+          ],
+          "yaw": [
+            30,
+            60
+          ]
+        },
+        {
+          "seg": "dolly#3",
+          "type": "dolly",
+          "from_": [
+            2.397,
+            17.11
+          ],
+          "to": [
+            0.575,
+            16.057
+          ],
+          "len_m": 2.1044,
+          "len_plan": 2.1,
+          "path_dir_deg_left": 59.97,
+          "yaw": 60,
+          "oblique_deg": -0.03,
+          "through": "O-corridor-girl",
+          "jambs": [
+            {
+              "opening": "O-corridor-girl",
+              "crossing": [
+                1.625,
+                16.6638
+              ],
+              "min_jamb_clearance_m": 0.3121,
+              "ok": true
+            }
+          ],
+          "min_clearance_any_m": 0.3121,
+          "nearest_any": "hwall_28",
+          "min_clearance_walls_m": 0.3121,
+          "nearest_wall": "hwall_28"
+        }
+      ],
+      "end_pose_error": {
+        "pos_m": 0.0,
+        "yaw_deg": 0.0
+      },
+      "frames": [
+        {
+          "k": 0,
+          "x": 2.397,
+          "y": 17.11,
+          "yaw": 0.0,
+          "u0": 0.5,
+          "seg": "start C0",
+          "s_m": 0.0,
+          "clearance_m": 0.5538,
+          "nearest": "hwall_35"
+        },
+        {
+          "k": 1,
+          "x": 2.397,
+          "y": 17.11,
+          "yaw": 15.0,
+          "u0": 0.5022,
+          "seg": "pan#1",
+          "s_m": 0.0,
+          "clearance_m": 0.5538,
+          "nearest": "hwall_35"
+        },
+        {
+          "k": 2,
+          "x": 2.397,
+          "y": 17.11,
+          "yaw": 30.0,
+          "u0": 0.5044,
+          "seg": "pan#1",
+          "s_m": 0.0,
+          "clearance_m": 0.5538,
+          "nearest": "hwall_35"
+        },
+        {
+          "k": 3,
+          "x": 2.397,
+          "y": 17.11,
+          "yaw": 45.0,
+          "u0": 0.5067,
+          "seg": "pan#2",
+          "s_m": 0.0,
+          "clearance_m": 0.5538,
+          "nearest": "hwall_35"
+        },
+        {
+          "k": 4,
+          "x": 2.397,
+          "y": 17.11,
+          "yaw": 60.0,
+          "u0": 0.5089,
+          "seg": "pan#2",
+          "s_m": 0.0,
+          "clearance_m": 0.5538,
+          "nearest": "hwall_35"
+        },
+        {
+          "k": 5,
+          "x": 1.9641,
+          "y": 16.8598,
+          "yaw": 60.0,
+          "u0": 0.5111,
+          "seg": "dolly#3",
+          "s_m": 0.5,
+          "clearance_m": 0.3998,
+          "nearest": "hwall_29"
+        },
+        {
+          "k": 6,
+          "x": 1.5312,
+          "y": 16.6096,
+          "yaw": 60.0,
+          "u0": 0.5133,
+          "seg": "dolly#3",
+          "s_m": 1.0,
+          "clearance_m": 0.3501,
+          "nearest": "hwall_28"
+        },
+        {
+          "k": 7,
+          "x": 1.0983,
+          "y": 16.3594,
+          "yaw": 60.0,
+          "u0": 0.5156,
+          "seg": "dolly#3",
+          "s_m": 1.5,
+          "clearance_m": 0.4625,
+          "nearest": "hwall_28"
+        },
+        {
+          "k": 8,
+          "x": 0.6654,
+          "y": 16.1092,
+          "yaw": 60.0,
+          "u0": 0.5178,
+          "seg": "dolly#3",
+          "s_m": 2.0,
+          "clearance_m": 0.3655,
+          "nearest": "girl_wardrobe"
+        },
+        {
+          "k": 9,
+          "x": 0.575,
+          "y": 16.057,
+          "yaw": 60.0,
+          "u0": 0.52,
+          "seg": "dolly#3",
+          "s_m": 2.1044,
+          "clearance_m": 0.4147,
+          "nearest": "girl_wardrobe"
+        }
+      ],
+      "sheet": "transitions/T-CGirl-sheet.jpg"
+    },
+    "T-CBath": {
+      "from_": "corridor C0",
+      "to": "bath B0",
+      "segments": [
+        {
+          "seg": "dolly#1",
+          "type": "dolly",
+          "from_": [
+            2.397,
+            17.11
+          ],
+          "to": [
+            2.606,
+            13.6
+          ],
+          "len_m": 3.5162,
+          "len_plan": 3.52,
+          "path_dir_deg_left": -3.41,
+          "yaw": 0,
+          "oblique_deg": -3.41,
+          "through": null,
+          "jambs": [],
+          "min_clearance_any_m": 0.494,
+          "nearest_any": "hwall_49",
+          "min_clearance_walls_m": 0.494,
+          "nearest_wall": "hwall_49"
+        },
+        {
+          "seg": "pan#2",
+          "type": "pan",
+          "at": [
+            2.606,
+            13.6
+          ],
+          "yaw": [
+            0,
+            -35
+          ]
+        },
+        {
+          "seg": "dolly#3",
+          "type": "dolly",
+          "from_": [
+            2.606,
+            13.6
+          ],
+          "to": [
+            3.903,
+            11.748
+          ],
+          "len_m": 2.261,
+          "len_plan": 2.26,
+          "path_dir_deg_left": -35.0,
+          "yaw": -35,
+          "oblique_deg": -0.0,
+          "through": "O-corridor-bath",
+          "jambs": [
+            {
+              "opening": "O-corridor-bath",
+              "crossing": [
+                3.175,
+                12.7875
+              ],
+              "min_jamb_clearance_m": 0.1666,
+              "ok": true
+            }
+          ],
+          "min_clearance_any_m": 0.1666,
+          "nearest_any": "hwall_38",
+          "min_clearance_walls_m": 0.1666,
+          "nearest_wall": "hwall_38"
+        }
+      ],
+      "end_pose_error": {
+        "pos_m": 0.0,
+        "yaw_deg": 0.0
+      },
+      "frames": [
+        {
+          "k": 0,
+          "x": 2.397,
+          "y": 17.11,
+          "yaw": 0.0,
+          "u0": 0.5,
+          "seg": "start C0",
+          "s_m": 0.0,
+          "clearance_m": 0.5538,
+          "nearest": "hwall_35"
+        },
+        {
+          "k": 1,
+          "x": 2.4267,
+          "y": 16.6109,
+          "yaw": 0.0,
+          "u0": 0.5013,
+          "seg": "dolly#1",
+          "s_m": 0.5,
+          "clearance_m": 0.6733,
+          "nearest": "hwall_42"
+        },
+        {
+          "k": 2,
+          "x": 2.4564,
+          "y": 16.1118,
+          "yaw": 0.0,
+          "u0": 0.5027,
+          "seg": "dolly#1",
+          "s_m": 1.0,
+          "clearance_m": 0.6436,
+          "nearest": "hwall_42"
+        },
+        {
+          "k": 3,
+          "x": 2.4862,
+          "y": 15.6127,
+          "yaw": 0.0,
+          "u0": 0.504,
+          "seg": "dolly#1",
+          "s_m": 1.5,
+          "clearance_m": 0.6138,
+          "nearest": "hwall_42"
+        },
+        {
+          "k": 4,
+          "x": 2.5159,
+          "y": 15.1135,
+          "yaw": 0.0,
+          "u0": 0.5053,
+          "seg": "dolly#1",
+          "s_m": 2.0,
+          "clearance_m": 0.5803,
+          "nearest": "laundry_door_flush"
+        },
+        {
+          "k": 5,
+          "x": 2.5456,
+          "y": 14.6144,
+          "yaw": 0.0,
+          "u0": 0.5067,
+          "seg": "dolly#1",
+          "s_m": 2.5,
+          "clearance_m": 0.5504,
+          "nearest": "laundry_door_flush"
+        },
+        {
+          "k": 6,
+          "x": 2.5753,
+          "y": 14.1153,
+          "yaw": 0.0,
+          "u0": 0.508,
+          "seg": "dolly#1",
+          "s_m": 3.0,
+          "clearance_m": 0.5247,
+          "nearest": "hwall_40"
+        },
+        {
+          "k": 7,
+          "x": 2.605,
+          "y": 13.6162,
+          "yaw": 0.0,
+          "u0": 0.5093,
+          "seg": "dolly#1",
+          "s_m": 3.5,
+          "clearance_m": 0.495,
+          "nearest": "hwall_49"
+        },
+        {
+          "k": 8,
+          "x": 2.606,
+          "y": 13.6,
+          "yaw": -11.6667,
+          "u0": 0.5107,
+          "seg": "pan#2",
+          "s_m": 0.0,
+          "clearance_m": 0.494,
+          "nearest": "hwall_49"
+        },
+        {
+          "k": 9,
+          "x": 2.606,
+          "y": 13.6,
+          "yaw": -23.3333,
+          "u0": 0.512,
+          "seg": "pan#2",
+          "s_m": 0.0,
+          "clearance_m": 0.494,
+          "nearest": "hwall_49"
+        },
+        {
+          "k": 10,
+          "x": 2.606,
+          "y": 13.6,
+          "yaw": -35.0,
+          "u0": 0.5133,
+          "seg": "pan#2",
+          "s_m": 0.0,
+          "clearance_m": 0.494,
+          "nearest": "hwall_49"
+        },
+        {
+          "k": 11,
+          "x": 2.8928,
+          "y": 13.1904,
+          "yaw": -35.0,
+          "u0": 0.5147,
+          "seg": "dolly#3",
+          "s_m": 0.5,
+          "clearance_m": 0.2877,
+          "nearest": "hwall_39"
+        },
+        {
+          "k": 12,
+          "x": 3.1796,
+          "y": 12.7809,
+          "yaw": -35.0,
+          "u0": 0.516,
+          "seg": "dolly#3",
+          "s_m": 1.0,
+          "clearance_m": 0.3909,
+          "nearest": "hwall_38"
+        },
+        {
+          "k": 13,
+          "x": 3.4665,
+          "y": 12.3713,
+          "yaw": -35.0,
+          "u0": 0.5173,
+          "seg": "dolly#3",
+          "s_m": 1.5,
+          "clearance_m": 0.2165,
+          "nearest": "hwall_38"
+        },
+        {
+          "k": 14,
+          "x": 3.7533,
+          "y": 11.9618,
+          "yaw": -35.0,
+          "u0": 0.5187,
+          "seg": "dolly#3",
+          "s_m": 2.0,
+          "clearance_m": 0.5033,
+          "nearest": "hwall_38"
+        },
+        {
+          "k": 15,
+          "x": 3.903,
+          "y": 11.748,
+          "yaw": -35.0,
+          "u0": 0.52,
+          "seg": "dolly#3",
+          "s_m": 2.261,
+          "clearance_m": 0.653,
+          "nearest": "hwall_38"
+        }
+      ],
+      "sheet": "transitions/T-CBath-sheet.jpg"
+    },
+    "T-CM": {
+      "from_": "corridor C0",
+      "to": "master MB0",
+      "segments": [
+        {
+          "seg": "pull-back#1",
+          "type": "pull-back",
+          "from_": [
+            2.397,
+            17.11
+          ],
+          "to": [
+            1.75,
+            21.05
+          ],
+          "len_m": 3.9928,
+          "len_plan": 3.99,
+          "path_dir_deg_left": 170.67,
+          "yaw": 0,
+          "oblique_deg": 170.67,
+          "through": "O-corridor-master",
+          "jambs": [
+            {
+              "opening": "O-corridor-master",
+              "crossing": [
+                2.319,
+                17.585
+              ],
+              "min_jamb_clearance_m": 0.421,
+              "ok": true
+            }
+          ],
+          "min_clearance_any_m": 0.4211,
+          "nearest_any": "hwall_19",
+          "min_clearance_walls_m": 0.4211,
+          "nearest_wall": "hwall_19"
+        },
+        {
+          "seg": "pan#2",
+          "type": "pan",
+          "at": [
+            1.75,
+            21.05
+          ],
+          "yaw": [
+            0,
+            35
+          ]
+        }
+      ],
+      "end_pose_error": {
+        "pos_m": 0.0,
+        "yaw_deg": 0.0
+      },
+      "frames": [
+        {
+          "k": 0,
+          "x": 2.397,
+          "y": 17.11,
+          "yaw": 0.0,
+          "u0": 0.5,
+          "seg": "start C0",
+          "s_m": 0.0,
+          "clearance_m": 0.5538,
+          "nearest": "hwall_35"
+        },
+        {
+          "k": 1,
+          "x": 2.316,
+          "y": 17.6034,
+          "yaw": 0.0,
+          "u0": 0.5018,
+          "seg": "pull-back#1",
+          "s_m": 0.5,
+          "clearance_m": 0.436,
+          "nearest": "hwall_19"
+        },
+        {
+          "k": 2,
+          "x": 2.235,
+          "y": 18.0968,
+          "yaw": 0.0,
+          "u0": 0.5036,
+          "seg": "pull-back#1",
+          "s_m": 1.0,
+          "clearance_m": 0.545,
+          "nearest": "leaf_corridor_master"
+        },
+        {
+          "k": 3,
+          "x": 2.1539,
+          "y": 18.5902,
+          "yaw": 0.0,
+          "u0": 0.5055,
+          "seg": "pull-back#1",
+          "s_m": 1.5,
+          "clearance_m": 0.6268,
+          "nearest": "leaf_corridor_master"
+        },
+        {
+          "k": 4,
+          "x": 2.0729,
+          "y": 19.0836,
+          "yaw": 0.0,
+          "u0": 0.5073,
+          "seg": "pull-back#1",
+          "s_m": 2.0,
+          "clearance_m": 0.8798,
+          "nearest": "leaf_corridor_master"
+        },
+        {
+          "k": 5,
+          "x": 1.9919,
+          "y": 19.577,
+          "yaw": 0.0,
+          "u0": 0.5091,
+          "seg": "pull-back#1",
+          "s_m": 2.5,
+          "clearance_m": 1.1081,
+          "nearest": "hwall_43"
+        },
+        {
+          "k": 6,
+          "x": 1.9109,
+          "y": 20.0704,
+          "yaw": 0.0,
+          "u0": 0.5109,
+          "seg": "pull-back#1",
+          "s_m": 3.0,
+          "clearance_m": 1.2455,
+          "nearest": "hwall_43"
+        },
+        {
+          "k": 7,
+          "x": 1.8298,
+          "y": 20.5637,
+          "yaw": 0.0,
+          "u0": 0.5127,
+          "seg": "pull-back#1",
+          "s_m": 3.5,
+          "clearance_m": 0.8417,
+          "nearest": "wardrobes"
+        },
+        {
+          "k": 8,
+          "x": 1.75,
+          "y": 21.05,
+          "yaw": 0.0,
+          "u0": 0.5145,
+          "seg": "pull-back#1",
+          "s_m": 3.9928,
+          "clearance_m": 0.6001,
+          "nearest": "wardrobes"
+        },
+        {
+          "k": 9,
+          "x": 1.75,
+          "y": 21.05,
+          "yaw": 11.6667,
+          "u0": 0.5164,
+          "seg": "pan#2",
+          "s_m": 0.0,
+          "clearance_m": 0.6001,
+          "nearest": "wardrobes"
+        },
+        {
+          "k": 10,
+          "x": 1.75,
+          "y": 21.05,
+          "yaw": 23.3333,
+          "u0": 0.5182,
+          "seg": "pan#2",
+          "s_m": 0.0,
+          "clearance_m": 0.6001,
+          "nearest": "wardrobes"
+        },
+        {
+          "k": 11,
+          "x": 1.75,
+          "y": 21.05,
+          "yaw": 35.0,
+          "u0": 0.52,
+          "seg": "pan#2",
+          "s_m": 0.0,
+          "clearance_m": 0.6001,
+          "nearest": "wardrobes"
+        }
+      ],
+      "sheet": "transitions/T-CM-sheet.jpg"
+    }
+  },
+  "plan_png": {
+    "px": [
+      1204,
+      2536
+    ],
+    "ppm": 110,
+    "extent_x": [
+      -3.0,
+      7.95
+    ],
+    "extent_y": [
+      -0.7,
+      22.35
+    ]
+  },
+  "checks": [
+    {
+      "id": "HC1",
+      "check": "HC1 every transition path clears every jamb by >= 0.15 m",
+      "result": "pass",
+      "worst": {
+        "transition": "T-CBath",
+        "seg": "dolly#3",
+        "opening": "O-corridor-bath",
+        "crossing": [
+          3.175,
+          12.7875
+        ],
+        "min_jamb_clearance_m": 0.1666,
+        "ok": true
+      },
+      "crossings": [
+        {
+          "transition": "T-E0",
+          "seg": "dolly#1",
+          "opening": "O-entry-living",
+          "crossing": [
+            1.5881,
+            6.275
+          ],
+          "min_jamb_clearance_m": 0.4776,
+          "ok": true
+        },
+        {
+          "transition": "T-LD",
+          "seg": "dolly#3",
+          "opening": "O-living-dining",
+          "crossing": [
+            2.575,
+            3.6571
+          ],
+          "min_jamb_clearance_m": 0.3326,
+          "ok": true
+        },
+        {
+          "transition": "T-HW",
+          "seg": "dolly#2",
+          "opening": "O-hall-work",
+          "crossing": [
+            0.725,
+            8.5343
+          ],
+          "min_jamb_clearance_m": 0.4057,
+          "ok": true
+        },
+        {
+          "transition": "T-HC",
+          "seg": "pull-back#2",
+          "opening": "O-hall-corridor",
+          "crossing": [
+            2.8317,
+            9.8
+          ],
+          "min_jamb_clearance_m": 0.2678,
+          "ok": true
+        },
+        {
+          "transition": "T-CBoy",
+          "seg": "dolly#4",
+          "opening": "O-corridor-boy",
+          "crossing": [
+            1.625,
+            13.0334
+          ],
+          "min_jamb_clearance_m": 0.3118,
+          "ok": true
+        },
+        {
+          "transition": "T-CGirl",
+          "seg": "dolly#3",
+          "opening": "O-corridor-girl",
+          "crossing": [
+            1.625,
+            16.6638
+          ],
+          "min_jamb_clearance_m": 0.3121,
+          "ok": true
+        },
+        {
+          "transition": "T-CBath",
+          "seg": "dolly#3",
+          "opening": "O-corridor-bath",
+          "crossing": [
+            3.175,
+            12.7875
+          ],
+          "min_jamb_clearance_m": 0.1666,
+          "ok": true
+        },
+        {
+          "transition": "T-CM",
+          "seg": "pull-back#1",
+          "opening": "O-corridor-master",
+          "crossing": [
+            2.319,
+            17.585
+          ],
+          "min_jamb_clearance_m": 0.421,
+          "ok": true
+        }
+      ],
+      "path_issues": [],
+      "end_pose_errors": {
+        "T-E0": {
+          "pos_m": 0.0,
+          "yaw_deg": 0.0
+        },
+        "T-LD": {
+          "pos_m": 0.0,
+          "yaw_deg": 0.0
+        },
+        "T-HW": {
+          "pos_m": 0.0,
+          "yaw_deg": 0.0
+        },
+        "T-HC": {
+          "pos_m": 0.0,
+          "yaw_deg": 0.0
+        },
+        "T-CBoy": {
+          "pos_m": 0.0,
+          "yaw_deg": 0.0
+        },
+        "T-CGirl": {
+          "pos_m": 0.0,
+          "yaw_deg": 0.0
+        },
+        "T-CBath": {
+          "pos_m": 0.0,
+          "yaw_deg": 0.0
+        },
+        "T-CM": {
+          "pos_m": 0.0,
+          "yaw_deg": 0.0
+        }
+      }
+    },
+    {
+      "id": "HC2",
+      "check": "HC2 every master frame: corner u within +-0.02 of 'frame'; verticals plumb; no product slot within 0.05 of an edge",
+      "result": "pass (corners, plumb); slot edge margins: see per_camera (derived proxies are report-only)",
+      "per_camera": {
+        "M0": {
+          "corner_ok": true,
+          "corner": [
+            {
+              "feature": "back-left corner (-2.30, 0)",
+              "expected": 0.431,
+              "blender": 0.431,
+              "pixels": {
+                "2.60": 0.431,
+                "2.45": 0.431,
+                "2.25": 0.431,
+                "1.95": 0.431,
+                "1.60": "occluded",
+                "1.30": "occluded",
+                "0.90": "occluded"
+              }
+            }
+          ],
+          "plumb_max_du": 0.0,
+          "own_slots_within_0_05": [
+            "living/pendant",
+            "living/rug",
+            "living/curtains"
+          ],
+          "of_which_plan_or_living_positions": [
+            "living/pendant",
+            "living/rug",
+            "living/curtains"
+          ]
+        },
+        "H0": {
+          "corner_ok": null,
+          "corner": [],
+          "plumb_max_du": null,
+          "own_slots_within_0_05": [
+            "hall/basket"
+          ],
+          "of_which_plan_or_living_positions": []
+        },
+        "D0": {
+          "corner_ok": true,
+          "corner": [
+            {
+              "feature": "SE corner (7.25, 0)",
+              "expected": 0.75,
+              "blender": 0.7539,
+              "pixels": {
+                "2.60": 0.7539,
+                "2.45": 0.7539,
+                "2.25": 0.7539,
+                "1.95": 0.7539,
+                "1.60": 0.7539,
+                "1.30": 0.7539,
+                "0.90": "occluded"
+              }
+            }
+          ],
+          "plumb_max_du": 0.0,
+          "own_slots_within_0_05": [
+            "kitchen-dining/dining-pendant",
+            "kitchen-dining/curtains",
+            "kitchen-dining/seat-pads"
+          ],
+          "of_which_plan_or_living_positions": [
+            "kitchen-dining/dining-pendant"
+          ]
+        },
+        "W0": {
+          "corner_ok": true,
+          "corner": [
+            {
+              "feature": "NE corner (-2.30, 6.35)",
+              "expected": 0.7,
+              "blender": 0.7003,
+              "pixels": {
+                "2.60": "out of frame",
+                "2.45": "out of frame",
+                "2.25": "out of frame",
+                "1.95": "occluded",
+                "1.60": "occluded",
+                "1.30": "occluded",
+                "0.90": "occluded"
+              }
+            }
+          ],
+          "plumb_max_du": 0.0,
+          "own_slots_within_0_05": [
+            "work/curtains"
+          ],
+          "of_which_plan_or_living_positions": []
+        },
+        "C0": {
+          "corner_ok": null,
+          "corner": [],
+          "plumb_max_du": null,
+          "own_slots_within_0_05": [
+            "corridor/runner-rug",
+            "corridor/gallery-art"
+          ],
+          "of_which_plan_or_living_positions": [
+            "corridor/gallery-art"
+          ]
+        },
+        "K-boy": {
+          "corner_ok": true,
+          "corner": [
+            {
+              "feature": "NE corner (-2.30, 10.25)",
+              "expected": 0.6,
+              "blender": 0.6034,
+              "pixels": {
+                "2.60": "out of frame",
+                "2.45": 0.6034,
+                "2.25": 0.6034,
+                "1.95": 0.6034,
+                "1.60": 0.6034,
+                "1.30": 0.6034,
+                "0.90": 0.6034
+              }
+            }
+          ],
+          "plumb_max_du": 0.0,
+          "own_slots_within_0_05": [
+            "boy/bedding",
+            "boy/curtains",
+            "boy/framed-prints",
+            "boy/toy-basket",
+            "boy/play-structure"
+          ],
+          "of_which_plan_or_living_positions": []
+        },
+        "K-girl": {
+          "corner_ok": true,
+          "corner": [
+            {
+              "feature": "NE corner (-2.30, 13.88)",
+              "expected": 0.6,
+              "blender": 0.6034,
+              "pixels": {
+                "2.60": "out of frame",
+                "2.45": "occluded",
+                "2.25": "occluded",
+                "1.95": "occluded",
+                "1.60": "occluded",
+                "1.30": "occluded",
+                "0.90": "occluded"
+              }
+            }
+          ],
+          "plumb_max_du": 0.0,
+          "own_slots_within_0_05": [
+            "girl/bedding",
+            "girl/curtains",
+            "girl/framed-prints",
+            "girl/toy-basket",
+            "girl/play-structure"
+          ],
+          "of_which_plan_or_living_positions": [
+            "girl/play-structure"
+          ]
+        },
+        "MB0": {
+          "corner_ok": true,
+          "corner": [
+            {
+              "feature": "NE corner (-2.30, 17.66)",
+              "expected": 0.34,
+              "blender": 0.3405,
+              "pixels": {
+                "2.60": 0.3405,
+                "2.45": 0.3405,
+                "2.25": 0.3405,
+                "1.95": 0.3405,
+                "1.60": 0.3405,
+                "1.30": 0.3405,
+                "0.90": 0.3405
+              }
+            }
+          ],
+          "plumb_max_du": 0.0,
+          "own_slots_within_0_05": [
+            "master/curtains",
+            "master/rug"
+          ],
+          "of_which_plan_or_living_positions": []
+        },
+        "B0": {
+          "corner_ok": true,
+          "corner": [
+            {
+              "feature": "SE corner (6.25, 9.95)",
+              "expected": 0.73,
+              "blender": 0.7308,
+              "pixels": {
+                "2.60": "out of frame",
+                "2.45": "out of frame",
+                "2.25": 0.7308,
+                "1.95": 0.7308,
+                "1.60": 0.7308,
+                "1.30": 0.7308,
+                "0.90": 0.7308
+              }
+            }
+          ],
+          "plumb_max_du": 0.0,
+          "own_slots_within_0_05": [
+            "bath/towels",
+            "bath/dispenser-set",
+            "bath/storage-basket",
+            "bath/towel-ladder",
+            "bath/wall-sconces"
+          ],
+          "of_which_plan_or_living_positions": []
+        }
+      }
+    },
+    {
+      "id": "HC3",
+      "check": "HC3 H0: hall left wall seen Y 6.35-7.98 is solid (work door east jamb 8.10 out of frame by >= 0.02); console right end >= 0.05 from the right edge",
+      "result": "pass",
+      "items": [
+        {
+          "feature": "work door east jamb (0.80, 8.10) [out of frame by >= 0.02]",
+          "expected_u": null,
+          "plan_eq_u": -0.0529,
+          "blender_u": -0.0529,
+          "out_of_frame_by": 0.0529,
+          "ok": true
+        },
+        {
+          "feature": "console left end (2.30, 6.70)",
+          "expected_u": 0.66,
+          "plan_eq_u": 0.6513,
+          "blender_u": 0.6513,
+          "ok": true,
+          "tolerance": 0.02,
+          "dev": -0.0087
+        },
+        {
+          "feature": "console right end (3.10, 6.70)",
+          "expected_u": 0.91,
+          "plan_eq_u": 0.9119,
+          "blender_u": 0.9119,
+          "ok": true,
+          "tolerance": 0.02,
+          "dev": 0.0019
+        },
+        {
+          "feature": "left edge meets the hall left wall (X 0.80) at Y",
+          "expected": 7.98,
+          "plan_eq": 7.9786,
+          "blender_u_at_point": 0.0,
+          "dev_m": -0.0014,
+          "ok": true
+        }
+      ],
+      "console_right_margin": 0.0881
+    },
+    {
+      "id": "HC4",
+      "check": "HC4 C0: girl door jamb out of frame (expected ~0.05); the living slice through the double door reads",
+      "result": "pass",
+      "girl_jamb": [
+        {
+          "feature": "girl door east jamb (1.70, 16.26) [out of frame ~0.05]",
+          "expected_u": -0.05,
+          "plan_eq_u": -0.0467,
+          "blender_u": -0.0467,
+          "out_of_frame_by": 0.0467,
+          "ok": true,
+          "dev": 0.0033
+        },
+        {
+          "feature": "girl door east jamb, room face (1.55, 16.26)",
+          "expected_u": null,
+          "plan_eq_u": -0.1643,
+          "blender_u": -0.1643,
+          "out_of_frame_by": 0.1643,
+          "ok": true
+        }
+      ],
+      "living_slice": {
+        "px": 53687,
+        "frac": 0.02276,
+        "bbox_uv": [
+          0.4365,
+          0.5156,
+          0.2752,
+          0.5938
+        ],
+        "px_by_object": {
+          "floor-lamp": 896,
+          "basket": 1024,
+          "sofa": 1383
+        }
+      }
+    },
+    {
+      "id": "HC5",
+      "check": "HC5 MB0: corridor door jamb (X 1.88) out of frame by >= 0.02",
+      "result": "pass",
+      "items": [
+        {
+          "feature": "corridor door jamb X 1.88, master face (1.88, 17.66) [out by >= 0.02]",
+          "expected_u": null,
+          "plan_eq_u": 1.026,
+          "blender_u": 1.026,
+          "out_of_frame_by": 0.026,
+          "ok": true
+        },
+        {
+          "feature": "corridor door jamb X 1.88, corridor face (1.88, 17.51)",
+          "expected_u": null,
+          "plan_eq_u": 1.0243,
+          "blender_u": 1.0243,
+          "out_of_frame_by": 0.0243,
+          "ok": true
+        }
+      ]
+    },
+    {
+      "id": "HC6",
+      "check": "HC6 windows lighting frames are north or east only",
+      "result": "pass",
+      "windows_in_frames": {
+        "M0": [
+          {
+            "window": "W-living",
+            "facade": "north",
+            "px": 37055
+          }
+        ],
+        "H0": [],
+        "D0": [
+          {
+            "window": "W-dining",
+            "facade": "east",
+            "px": 160429
+          }
+        ],
+        "W0": [
+          {
+            "window": "W-work",
+            "facade": "north",
+            "px": 179461
+          }
+        ],
+        "C0": [],
+        "K-boy": [
+          {
+            "window": "W-boy",
+            "facade": "north",
+            "px": 120921
+          }
+        ],
+        "K-girl": [
+          {
+            "window": "W-girl",
+            "facade": "north",
+            "px": 76319
+          }
+        ],
+        "MB0": [
+          {
+            "window": "W-master",
+            "facade": "north",
+            "px": 99436
+          }
+        ],
+        "B0": [
+          {
+            "window": "W-bath",
+            "facade": "east (onto the shaded entrance court)",
+            "px": 118526
+          }
+        ]
+      },
+      "plan_window_facades": {
+        "W-living": "north",
+        "W-dining": "east",
+        "W-work": "north",
+        "W-boy": "north",
+        "W-girl": "north",
+        "W-master": "north",
+        "W-bath": "east (onto the shaded entrance court)",
+        "W-ensuite": "south"
+      }
+    },
+    {
+      "id": "HC7",
+      "check": "HC7 living M0 unchanged: O-living-dining outside the frame and adds no visible light or shadow",
+      "result": "geometry pass; pixels not identical: the opening only removes light (block mean -0.54, worst -1.84/255 = -1.6%, no block brighter, no new shadow shape); the rest of the house (real hall instead of the v4 stand-in vestibule) darkens by -1.50 mean, worst -4.68/255",
+      "opening_alone": {
+        "identical": false,
+        "max_abs_diff_8bit": 16,
+        "mean_abs_diff_8bit": 0.5753,
+        "px_gt_2": 0.019201,
+        "px_gt_5": 0.000788,
+        "px_gt_10": 3.5e-05,
+        "mean_luma_a_b": [
+          168.729,
+          168.191
+        ],
+        "mean_luma_right_quarter_a_b": [
+          154.798,
+          154.373
+        ]
+      },
+      "geometry": {
+        "feature": "O-living-dining nearest jamb (2.50, 4.57) [out of frame: u > 1]",
+        "expected_u": null,
+        "plan_eq_u": 3.3858,
+        "blender_u": 3.3856,
+        "out_of_frame_by": 2.3856,
+        "ok": true
+      },
+      "opening_alone_blocks": {
+        "block64_luma_diff_8bit": {
+          "min": -1.84,
+          "max": 0.0,
+          "mean": -0.54
+        },
+        "block64_rel_min": -0.0164,
+        "right_quarter_block_mean": -0.42,
+        "blocks_brighter_than_0_5": 0,
+        "n_blocks": 576
+      }
+    }
+  ],
+  "runtime_s": 2753
+}
