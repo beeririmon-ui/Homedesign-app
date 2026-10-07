@@ -235,11 +235,13 @@ def ceiling_with_holes(room_id, R, h, holes, well_top, opal_strength):
     objs = []
     t = 0.04
     for q, (x0, x1, y0, y1) in enumerate(holes):
-        for nm, a in (("a", (x0 - t, x0, y0 - t, y1 + t)), ("b", (x1, x1 + t, y0 - t, y1 + t)),
-                      ("c", (x0, x1, y0 - t, y0)), ("d", (x0, x1, y1, y1 + t))):
-            if not (abs(a[1] - rx0) < 1e-6 or abs(a[0] - rx1) < 1e-6):      # wall side already there
-                objs.append(bs.box(f"well{q}{nm}", a[0], a[1], a[2], a[3], h, well_top, M["wall"], "shell",
-                                   pidx=bh.IDX["wall"]))
+        # the slab itself is the well up to TOP; extra well walls only above TOP (no overlapping / coplanar faces)
+        if well_top > bh.TOP + 1e-6:
+            for nm, a in (("a", (x0 - t, x0, y0 - t, y1 + t)), ("b", (x1, x1 + t, y0 - t, y1 + t)),
+                          ("c", (x0, x1, y0 - t, y0)), ("d", (x0, x1, y1, y1 + t))):
+                if not (abs(a[1] - rx0) < 1e-6 or abs(a[0] - rx1) < 1e-6):      # wall side already there
+                    objs.append(bs.box(f"well{q}{nm}", a[0], a[1], a[2], a[3], bh.TOP, well_top, M["wall"], "shell",
+                                       pidx=bh.IDX["wall"]))
         e = bs.box(f"opal{q}", x0 - 0.001, x1 + 0.001, y0 - 0.001, y1 + 0.001, well_top - 0.01, well_top, opal,
                    "framing")
         objs.append(e)
@@ -284,15 +286,15 @@ def build_option(opt, plan):
         notes.append("G-H4: reveal lining 2 cm on the hall half of the reveal (Y 6.27-6.35) + 10 cm casing on the hall face; assumed profile")
     if "G-H5" in D:
         kill("bench_seat", "bench_end_a", "bench_end_b", "h_hooks", "h_cush")
-        objs = [bx("bi_back", 0.80, 0.85, 6.55, 7.85, 0.0, 2.10, oak), bx("bi_cheek_a", 0.80, 1.25, 6.55, 6.60, 0.0, 2.10, oak),
-                bx("bi_cheek_b", 0.80, 1.25, 7.80, 7.85, 0.0, 2.10, oak), bx("bi_canopy", 0.80, 1.25, 6.55, 7.85, 2.06, 2.10, oak),
-                bx("bi_seat", 0.85, 1.25, 6.60, 7.80, 0.40, 0.45, oak)]
+        objs = [bx("bi_back", 0.80, 0.85, 6.60, 7.80, 0.0, 2.06, oak), bx("bi_cheek_a", 0.80, 1.20, 6.55, 6.60, 0.0, 2.10, oak),
+                bx("bi_cheek_b", 0.80, 1.20, 7.80, 7.85, 0.0, 2.10, oak), bx("bi_canopy", 0.85, 1.20, 6.60, 7.80, 2.06, 2.10, oak),
+                bx("bi_seat", 0.85, 1.20, 6.60, 7.80, 0.40, 0.45, oak)]
         objs += [bx(f"bi_panel{i}", 0.85, 0.855, 6.60 + 0.20 * i + 0.005, 6.60 + 0.20 * i + 0.195, 0.45, 2.06, oak) for i in range(6)]
         reg("G-H5 built-in bench", objs, "hall", "architecture")
         reg("hall/wall-hooks", [bx("bi_pegrail", 0.855, 0.88, 6.65, 7.75, 1.62, 1.68, Hd)] +
             [cyl(f"bi_peg{i}", (0.90, 6.75 + 0.18 * i), 0.012, 1.63, 1.67, Hd, verts=12) for i in range(6)], "hall")
-        reg("hall/bench-cushion", [bx("bi_cush", 0.87, 1.23, 6.62, 7.78, 0.45, 0.50, T, 0.015)], "hall")
-        notes.append("G-H5: niche 0.45 deep (0.05 panelled back + 0.40 seat) between cheeks Y 6.55-7.85, canopy 2.10; peg rail at 1.65 replaces the hook bar")
+        reg("hall/bench-cushion", [bx("bi_cush", 0.87, 1.18, 6.62, 7.78, 0.45, 0.50, T, 0.015)], "hall")
+        notes.append("G-H5: niche 0.40 deep (= the plan bench depth; 'furred 0.25' read as the panelled back + cheeks, interpretation) between cheeks Y 6.55-7.85, canopy 2.10; peg rail at 1.65 replaces the hook bar")
     # ----------------------------------------------------------------------------------- kitchen-dining
     if "G-D1" in D:
         kill("dining_table_top", "dining_table_leg", "dchair*", "d_pend", "d_cord", "d_runner", "d_vase", "d_cand_a",
