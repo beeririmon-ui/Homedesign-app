@@ -1,0 +1,249 @@
+{
+  "proposal": "docs/proposals/house-framing.json 0.1",
+  "plan": "docs/house-plan.json",
+  "plan_version": "1.0 / approved 2026-10-06",
+  "render": "2048x1152, 48 samples, Cycles CPU seed 7, AgX Medium High Contrast, exposure 1.0",
+  "light": "sky (strength 7.0) as the plan clays + soft area light outside every window (camera-invisible) + opal roof lights (radiance 0.55 x sky) + 2700 K lamp glows where the proposal calls them on + AO multiply 0.30 (0.35 m)",
+  "current": {
+    "hall": {
+      "room": "hall",
+      "camera": {
+        "id": "H0",
+        "room": "hall",
+        "loc": [
+          2.877,
+          9.039,
+          1.2
+        ],
+        "yaw": 25,
+        "u0": 0.52,
+        "v0": 0.46,
+        "frame": "living double door u 0.395-0.636; solid hall left wall Y 6.35-7.98 (bench + hooks) on the left; console vignette X 2.30-3.10 on the front wall, u ~0.66-0.91"
+      },
+      "image": "framing/current-hall.png",
+      "mean_L_editorial": 101.2,
+      "mean_L_sky_only": 76.3
+    }
+  },
+  "options": {
+    "H-A": {
+      "option": "H-A",
+      "room": "hall",
+      "camera": {
+        "id": "H0-A",
+        "room": "hall",
+        "loc": [
+          2.877,
+          9.039,
+          1.2
+        ],
+        "yaw": 25,
+        "u0": 0.52,
+        "v0": 0.46
+      },
+      "deltas": [
+        "G-H1",
+        "G-H4",
+        "G-H5"
+      ],
+      "image": "framing/H-A.png",
+      "build_notes": [
+        "G-H4: reveal lining 2 cm on the hall half of the reveal (Y 6.27-6.35) + 10 cm casing on the hall face; assumed profile",
+        "G-H5: niche 0.45 deep (0.05 panelled back + 0.40 seat) between cheeks Y 6.55-7.85, canopy 2.10; peg rail at 1.65 replaces the hook bar"
+      ],
+      "lamps_on": [
+        "hall-console"
+      ],
+      "mean_L_editorial": 106.5,
+      "est_vs_measured": [
+        {
+          "key": "door_u",
+          "est": [
+            0.395,
+            0.636
+          ],
+          "measured": [
+            0.3949,
+            0.636
+          ],
+          "dev": [
+            -0.0001,
+            0.0
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "console_u (pixels)",
+          "est": [
+            0.651,
+            0.912
+          ],
+          "measured": [
+            0.6514,
+            0.9116
+          ],
+          "dev": [
+            0.0004,
+            -0.0004
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "left_wall_u end (= door jamb X 0.95)",
+          "est": 0.395,
+          "measured": 0.3949,
+          "dev": -0.0001,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        }
+      ],
+      "est_flags": [],
+      "acceptance": {
+        "F1": {
+          "result": "fail",
+          "heroes": [
+            {
+              "hero": "vista centre (living door centre)",
+              "u": 0.5053,
+              "rule": "0.30-0.36 / 0.64-0.70",
+              "ok": false,
+              "almost_centre_0_45_0_58": true
+            }
+          ],
+          "note": "result = first (named) hero; others listed"
+        },
+        "F2": {
+          "result": "n/a (no window in frame)",
+          "windows": {}
+        },
+        "F3": {
+          "result": "fail",
+          "object_tangents": [
+            {
+              "item": "G-H4 oak portal",
+              "side": "bottom",
+              "margin": 0.0087
+            }
+          ],
+          "architectural_lines_within_0_02_of_edge": [],
+          "note": "objects: visible bbox margin 0 < m < 0.02 (touching = cut, allowed); pairwise object-object tangents not measured (visual)"
+        },
+        "F4": {
+          "result": "weak (no foreground object)",
+          "hero_wall_depth_m": 2.9979,
+          "foreground_objects_frac": {},
+          "background_frac": 0.1804,
+          "note": "heuristic: foreground = non-shell pixels nearer than 0.55 x hero-wall depth; background = beyond the hero wall + 0.4 m (next room, window, sky)"
+        },
+        "F5": {
+          "result": "fail",
+          "camera_to_hero_wall_depth_m": 2.9979,
+          "min_m": 3.0,
+          "hero_wall_point": [
+            1.55,
+            6.35
+          ]
+        },
+        "F6": {
+          "result": "pass",
+          "calm_wall_floor_ceiling_frac": 0.452,
+          "note": "pixels of wall, floor and ceiling (trim, rugs, windows excluded)"
+        },
+        "F7": {
+          "result": "pass",
+          "mean_L_sky_and_rooflight_only": 103.6,
+          "min": 95,
+          "image": "framing/extra/H-A-skyonly.png",
+          "note": "sky + opal roof light (radiance 0.55 x sky), no window boost, no lamps, no AO; 960 px"
+        },
+        "F8": {
+          "result": "n/a (no mirror)"
+        },
+        "F9": {
+          "result": "pass (jambs; end pose; play time = designer estimate, not measured)",
+          "transitions": [
+            {
+              "id": "T-HC'",
+              "note": "",
+              "play_s_designer": 3.0,
+              "segments": [
+                {
+                  "type": "pan",
+                  "yaw": [
+                    "12 (H-B) or 25 (H-A)",
+                    0
+                  ]
+                },
+                {
+                  "type": "pull-back",
+                  "from_": [
+                    2.877,
+                    9.039,
+                    1.2
+                  ],
+                  "to": [
+                    2.397,
+                    17.11,
+                    1.2
+                  ],
+                  "len_m": 8.0853,
+                  "len_plan": 8.09,
+                  "path_dir_deg_left": 176.6,
+                  "heading": null,
+                  "jambs": [
+                    {
+                      "opening": "O-hall-corridor",
+                      "crossing": [
+                        2.8317,
+                        9.8
+                      ],
+                      "min_jamb_clearance_m": 0.2678,
+                      "ok": true
+                    }
+                  ],
+                  "min_clearance_any_m": 0.2678,
+                  "nearest_any": "hwall_48",
+                  "ok_jambs": true
+                }
+              ],
+              "end": {
+                "end_pos": [
+                  2.397,
+                  17.11,
+                  1.2
+                ],
+                "cam": [
+                  2.397,
+                  17.11,
+                  1.2
+                ],
+                "pos_err_m": 0.0
+              },
+              "min_jamb_clearance_m": 0.2678,
+              "ok": true
+            }
+          ]
+        }
+      },
+      "camera_clearance_m": {
+        "min": 0.723,
+        "nearest": "hwall_52"
+      },
+      "practicals_pass": {
+        "image": "framing/extra/H-A-practicals2700K.png",
+        "mean_L": 129.6,
+        "lamps": [
+          "h_ceil",
+          "h_lamp"
+        ]
+      },
+      "overlay": "framing/overlays/H-A.png",
+      "runtime_s": 650
+    }
+  }
+}
