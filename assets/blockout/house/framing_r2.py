@@ -1829,6 +1829,49 @@ def summary_line(acc):
     return s
 
 
+def slots_label(acc):
+    f = acc.get("F10", {})
+    if "counted" not in f:
+        return ""
+    return (f"  | slots: {f['counted']} by the rule, {f.get('info_counted_any_area_ge_50pct_visible')} if size is ignored "
+            f"(min {f['minimum']})")
+
+
+def summarize(rep):
+    """Compact per-frame table + the density reading, for the README and the art director."""
+    keys = ["F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12"]
+    out = dict(frames={}, density={}, mirror_B2=None, transitions={})
+    for grp, sub in (("frames", ""), ("picks_lit", "-lit")):
+        for fid, R in rep.get(grp, {}).items():
+            acc = R["acceptance"]
+            out["frames"][fid + sub] = {k: str(acc.get(k, {}).get("result", "n/a"))[:40] for k in keys}
+            out["frames"][fid + sub]["mean_L"] = R.get("mean_L_lit")
+            out["frames"][fid + sub]["est_flags"] = len(R.get("est_flags", []))
+            d = acc.get("F10", {})
+            out["density"][fid + sub] = dict(
+                minimum=d.get("minimum"), counted_by_rule=d.get("counted"),
+                counted_if_area_ge_0_2pct=d.get("info_counted_if_area_ge_0_2pct"),
+                counted_if_size_ignored=d.get("info_counted_any_area_ge_50pct_visible"),
+                proxies_of_the_room_seen=len(d.get("slots", [])),
+                excluded_small=[x["slot"] for x in d.get("slots", []) if x["why_not"] == "area < 0.5%"],
+                excluded_cut_or_hidden=[x["slot"] for x in d.get("slots", []) if x["why_not"] == "visible < 50%"],
+                missing_categories=d.get("missing_categories"))
+    b2 = rep.get("frames", {}).get("B2", {}).get("acceptance", {}).get("F8")
+    if b2:
+        out["mirror_B2"] = dict(result=b2["result"], objects_seen=list(b2["hits"]), non_wall=b2["non_wall_objects"],
+                                wall_Y=b2["wall_Y_range"], wall_Z=b2["wall_Z_range"], samples_in_frame=b2.get("inside_frame", {}).get("samples"))
+    for tid, T in rep.get("transitions", {}).items():
+        out["transitions"][tid] = dict(F9=T["F9"], shots=T["shots"], min_jamb_clearance_m=T["min_jamb_clearance_m"],
+                                       end_pose_error=T["end_pose_error"], play_s_designer=T["play_s_designer"], sheet=T.get("sheet"))
+    out["density_reading"] = (
+        "Every slot of the round-2 lists has a proxy (kids 15, bath 21 + ceiling light, kitchen 23; picks: plan slots + S11 additions; "
+        "only the corridor's optional picture-ledge was never modelled). The low 'counted' numbers are the counting rule: >= 0.5% of the "
+        "frame removes small products (lamps, toy cars, condiment set, dispensers: 0.1-0.4% at 2.5-4.5 m), and >= 50% visible removes "
+        "textiles that the composition cuts on purpose (rugs, curtains, blind) or covers (bedding under the bedspread).")
+    rep["summary"] = out
+    return out
+
+
 def all_sheet(rep):
     from PIL import Image, ImageDraw
     w = 900
@@ -1841,19 +1884,16 @@ def all_sheet(rep):
         f1 = [k for k in ("F1", "F2", "F3", "F4", "F5", "F6", "F8", "F9") if str(a1.get(k, {}).get("result", "")).startswith("fail")]
         R = rep.get("frames", {}).get(fid, {})
         acc = R.get("acceptance", {})
-        n = acc.get("F10", {}).get("counted")
         pairs.append(((os.path.join(R1, f"{o1}.png"), f"ROUND 1  {o1}", ("fails: " + ", ".join(f1)) if f1 else "round 1: all pass"),
-                      (os.path.join(OUT, f"{fid}.png"), f"ROUND 2  {fid}", (summary_line(acc) + (f"  | {n} slots counted" if n is not None else ""))
-                       if acc else "not rendered")))
+                      (os.path.join(OUT, f"{fid}.png"), f"ROUND 2  {fid}", (summary_line(acc) + slots_label(acc)) if acc else "not rendered")))
     for opt in PICKS:
         a1 = r1.get(opt, {}).get("acceptance", {})
         f1 = [k for k in ("F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9") if str(a1.get(k, {}).get("result", "")).startswith("fail")]
         R = rep.get("picks_lit", {}).get(opt, {})
         acc = R.get("acceptance", {})
-        n = acc.get("F10", {}).get("counted")
         pairs.append(((os.path.join(R1, f"{opt}.png"), f"ROUND 1  {opt}", ("fails: " + ", ".join(f1)) if f1 else "round 1: all pass"),
                       (os.path.join(OUT, f"{opt}-lit.png"), f"ROUND 2  {opt}-lit (S11 + S12 lamps)",
-                       (summary_line(acc) + (f"  | {n} slots counted" if n is not None else "")) if acc else "not rendered")))
+                       (summary_line(acc) + slots_label(acc)) if acc else "not rendered")))
     cols = 2
     rows = math.ceil(len(pairs) / cols)
     pad, head = 12, 70
@@ -1943,5 +1983,6 @@ def main(argv):
         import shutil
         shutil.rmtree(tmp, ignore_errors=True)
     if do_sheet:
+        summarize(rep)
         all_sheet(rep)
     save()
