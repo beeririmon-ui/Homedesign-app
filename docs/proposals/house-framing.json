@@ -1,6 +1,7 @@
 {
-  "version": "0.1",
-  "date": "2026-10-07",
+  "version": "0.2",
+  "date": "2026-10-08",
+  "round_note": "Round 2 is the key 'round_2' at the end of this file (kids, bath, kitchen-dining, whole-house density + lighting rule). Everything above it is round 1 (0.1, 2026-10-07), kept as history; items superseded by round 2 are listed in round_2.supersedes.",
   "author": "master-designer",
   "status": "PROPOSAL. Not binding. Nothing here changes docs/house-plan.*, the Bible, skeleton-spec or slots files. Every geometry delta and every camera change needs user approval. All 'est' values are hand pinhole estimates (24 mm equations of house-plan.json, +-0.02); no tool run. Clay validates before any decision.",
   "companion": "docs/proposals/house-framing.md",
@@ -290,5 +291,278 @@
     "F7 hall and corridor mean L >= 95 with roof light (sky only), wall gradient readable",
     "F8 U6: mirror reflection shows only wall (no product, fixture, window, camera, lamp)",
     "F9 every new transition: jamb clearance >= 0.15, last frame identical to the master camera, U10 play time"
-  ]
+  ],
+
+  "round_2": {
+    "version": "0.2",
+    "date": "2026-10-08",
+    "status": "PROPOSAL. Not binding. Binding docs untouched (house-plan 1.0, Bible 1.5, nordic-dining 0.1, slots files). Hand pinhole estimates (+-0.02); clay validates.",
+    "user_feedback_verbatim": [
+      "1.בחדרי ילד ילדה שהמיטה תהיה בלי אפיריון אלא מיטת יחיד רגילה, עיצוב של בנות קצת בבת, בובות קצת, מדף ספרי ילדים, אולי צבע קיר שמתאים, ולבנים סגנון שמתאים לילד, מכוניות צעצוע, ספרים, אולי סקייטבורד וכדורגל.. וגם גוף התאורה שיהיה תאורת קיר ותקרה, שולחן עבודה לשניהם, 2. בשירותים לא רואים אסלה ומקלחון, ששם יש מוצרים להוסיף כמו סבוניה, מתלה נייר טואלט, פחון, וילון מקלחת, עציצים, סביב המראה כל מיני מתלים וכו וכל אביזר שמתאים לחדר שירותים לעשות מהמקלחת רמת מגזין.. במטבח לא כל כך רואים את המטבח אז שיראו עוד מהמטבח? או שיהיה קלוסאפ נוסף על המטבח ואביזרי עיצוב למטבח, תאורות, מלח פלפל צנצנות מסוגננות מעמד נייר מטבח וכל מיני אביזרי מטבח מעוצבים.. שיהיו מספיק מוצרים לכל חדר ולתת דגש על תאורות מעוצבות תקרה וקירות ואולי תאורת ארונות וכל מה שאפשר להוסיף",
+      "אפשר 2 פריימים מחדר שירותים כדי שיהיו בקומפוזיציה טובה..ו2 פריימים מטבח ופינת אוכל, ותחשוב על עוד מוצרים שמתאימים לכל חדר..צריך שיהיו מספיק מוצרים לחווית קנייה בכל פריים"
+    ],
+    "supersedes": [
+      {"round_1": "G-K1 oak gable 'house' bed frame, teepee (boy), canopy (girl)", "round_2": "regular single bed, no frame/teepee/canopy; west-wall wardrobes kept", "why": "user decision; clay showed the frame dominating the centre and hiding teepee/canopy"},
+      {"round_1": "kids slots play-structure, shape-shelf, desk-lamp, wall-hooks", "round_2": "bookshelf, corner pendant, desk wall-sconce, toys as products", "why": "user: kids' bookshelf; wall + ceiling lighting"},
+      {"round_1": "plan 6.6/U8 'no pink'; plan 8.2 'no books or toys in kids frames'", "round_2": "girl: dusty blush within a soft palette; books as fillers; toys as products", "why": "user decision; needs a kids-room appendix exception"},
+      {"round_1": "U6 fluted-glass shower screen (shell)", "round_2": "shower curtain (product) on a ceiling L-track (shell); mirror stays shell", "why": "user asked for a shower curtain; glass + curtain would duplicate"},
+      {"round_1": "B-A / B-B single frame, double vanity", "round_2": "two frames B1/B2 from one point, single vanity on the south wall", "why": "user: 2 bath frames; both round-1 options failed F1/F2/F8"},
+      {"round_1": "D-A single frame; nordic-dining 0.1 'no under-shelf light'", "round_2": "two frames D1/D2 from one point; under-shelf LED", "why": "user: 2 kitchen frames, cabinet lighting; D-A failed F1/F2/F3"}
+    ],
+    "standard_additions": [
+      "S4' Window head cut by the top edge is allowed only if the head is >= 0.05 above the edge; otherwise it must be >= 0.03 inside (closes the MB-B / B-A F2 fails).",
+      "S10 Two-frame rooms: the arrival frame shows the window on the left. The second frame may have the window out of frame if light still comes from the left (same hour). The two frames share one camera point and are linked by ONE pan <= 35 deg; the mirror check (F8) is therefore one pass per point. Needs user approval (exception to 'window on the left in every frame').",
+      "S11 Product density per frame (see density_rule).",
+      "S12 Lighting plan per room (see lighting_plan)."
+    ],
+    "conventions_reminder": "As round 1: f = (-sin yaw, -cos yaw), r = (cos yaw, -sin yaw); u = u0 + 0.6667 x/d; v = v0 + 1.1852 (Hc - Z)/d. Floor visible from depth d >= 1.1852 Hc / (1 - v0).",
+
+    "cameras_for_clay": [
+      {"id": "K2-boy", "room": "boy", "loc": [1.10, 13.00, 1.00], "yaw": 33, "u0": 0.52, "v0": 0.44, "note": "= K-A (passed F1/F2, T-CBoy' 0.37)", "sweep": {"yaw": [31, 35]}},
+      {"id": "K2-girl", "room": "girl", "loc": [1.10, 16.63, 1.00], "yaw": 33, "u0": 0.52, "v0": 0.44, "note": "= K-A girl (T-CGirl' 0.289)"},
+      {"id": "B1", "room": "bath", "loc": [3.80, 13.20, 1.15], "yaw": -22, "u0": 0.52, "v0": 0.46, "role": "arrival", "sweep": {"yaw": [-20, -24]}},
+      {"id": "B2", "room": "bath", "loc": [3.80, 13.20, 1.15], "yaw": -57, "u0": 0.52, "v0": 0.46, "role": "second frame, pan -35 from B1", "sweep": {"yaw": [-55, -59], "constraint": "|yaw_B2 - yaw_B1| <= 35"}},
+      {"id": "D1", "room": "kitchen-dining", "loc": [2.80, 3.80, 1.10], "yaw": -56, "u0": 0.52, "v0": 0.43, "role": "arrival", "sweep": {"yaw": [-54, -58], "v0": [0.42, 0.45]}},
+      {"id": "D2", "room": "kitchen-dining", "loc": [2.80, 3.80, 1.10], "yaw": -91, "u0": 0.52, "v0": 0.43, "role": "second frame, pan -35 from D1", "sweep": {"yaw": [-89, -93], "constraint": "|yaw_D2 - yaw_D1| <= 35"}}
+    ],
+
+    "rooms": {
+      "kids": {
+        "applies_to": "boy and girl, identical geometry, girl = +3.63 in Y",
+        "hero": "The bed nook in the window corner at child's-eye height: single oak bed along the east wall with its head in the window corner, a low pendant on the corner ray, a colour block wrapping the corner to 1.25, window light raking across the bedding; desk corner (desk, chair, swing-arm sconce, 2 prints) on the right; 2 book ledges over the bed foot in the middle.",
+        "camera": "K2-boy / K2-girl (unchanged K-A)",
+        "composition": {"left_third": "NE corner + pendant u 0.303", "right_third": "desk sconce u ~0.70", "foreground": "rug and toy basket, cut by the bottom edge", "mid": "bed, desk, chair", "background": "window + colour-blocked walls"},
+        "layout_boy": {
+          "wardrobes": "west wall X -2.30..0.20 (behind camera; from G-K1)",
+          "bed_fixed": {"outer_cm": [96, 196], "x": [-2.26, -0.30], "y": [10.25, 11.21], "head": "north wall (window corner)", "boards_top_max": 0.60, "rule": "boards >= 0.15 below the 0.75 sill in frame"},
+          "desk_fixed": {"cm": [90, 50, 70], "x": [0.10, 1.00], "y": [10.25, 10.75]},
+          "colour_block": {"walls": ["east", "north"], "z": [0.0, 1.25], "boy": "#A7B09A", "girl": "#E8D5CC", "line": "crisp, no rail; skirting painted in the block colour"},
+          "electrical_points": {"ceiling": [-1.94, 10.54, 3.00], "wall": [0.20, 10.25, 1.25], "note": "kids: hardwired, no visible cable"}
+        },
+        "girl_palette_exception": {"blush_clay": {"hex": "#E8D5CC", "hsl": [19, 38, 85], "tolerance": {"H": [12, 25], "S": [20, 40], "L": [80, 88]}, "where": "girl wall block; bedding edge"}, "dusty_rose": {"hex": "#C9A497", "hsl": [16, 32, 69], "tolerance": {"H": [10, 22], "S": [20, 38], "L": [62, 74]}, "where": "max 2 product slots in the girl room"}, "note": "girl room only; Bible 'no pink in white/beige surfaces' stays everywhere else"},
+        "slots": [
+          {"id": "roman-blind", "placement": "window", "plan": "inside the reveal Y 10.75-12.15, raised to bottom Z 1.85", "est": {"u": [0.0, 0.23], "v_bottom": 0.13}, "why": "a floor-length stack at the jamb would fall on the bed head"},
+          {"id": "bedding", "placement": "bed", "plan": "duvet cover + pillowcase on the fixed bed", "est": {"bed_front_u": [0.15, 0.46], "mattress_v": [0.64, 0.73]}},
+          {"id": "bedspread", "placement": "bed", "plan": "quilted throw folded across the foot third"},
+          {"id": "cushions", "placement": "bed", "plan": "2 + 1 against the east wall at the head", "fillers": ["pillow inserts"]},
+          {"id": "soft-toy", "placement": "bed", "plan": "at the head (boy bear, girl bunny)"},
+          {"id": "pendant", "placement": "ceiling", "plan": {"hook": [-1.94, 10.54, 3.00], "shade_bottom": 1.45, "shade_top_max": 1.70, "d_max_cm": 28}, "est": {"u": [0.28, 0.33], "v": [0.22, 0.30]}, "rule": "the corner line (0.303) runs through the shade; >= 0.02 from the window and the blind folds"},
+          {"id": "wall-sconce", "placement": "wall", "plan": {"plate": [0.20, 10.25, 1.25], "arm_cm": [30, 45]}, "est": {"u": 0.70, "v": 0.33}, "role": "desk task light; replaces the desk lamp"},
+          {"id": "bookshelf", "placement": "wall", "plan": {"x": [-1.25, -0.45], "ledges_z": [1.25, 1.58]}, "est": {"u": [0.43, 0.56], "v": [0.15, 0.35]}, "fillers": ["children's books, face-out, palette covers, no readable text"]},
+          {"id": "framed-prints", "placement": "wall", "plan": {"format": "2 x 30x40", "x": [0.45, 0.95], "centre_z": 1.62}, "est": {"u": [0.75, 0.90], "top_v": 0.055}},
+          {"id": "desk-chair", "placement": "floor", "plan": {"seat_centre": [0.55, 11.00], "facing": "-Y (back to camera)"}, "est": {"u": 0.73, "back_top_v": 0.62}},
+          {"id": "desk-organizer", "placement": "surface (fixed desk)", "plan": "right end of the desk (0.85, 10.40): pencil cup + small tray", "fillers": ["pencils, natural wood / charcoal"]},
+          {"id": "rug", "placement": "floor", "plan": {"cm": [140, 200], "x": [-1.50, 0.50], "y": [10.95, 12.35]}, "est": "cut by the bottom edge"},
+          {"id": "toy-basket", "placement": "floor (on the rug, like the living pouf)", "plan": {"centre": [-0.70, 11.45], "d_cm": 35, "h_cm": 35}, "est": {"u": [0.27, 0.38], "v": [0.78, 0.96]}, "fillers": {"boy": "football, matte warm-white/charcoal panels", "girl": "knitted balls in blush, oat, warm white"}},
+          {"id": "toy-cars", "room": "boy", "placement": "surface (fixed desk)", "plan": "set of 3 wooden cars, left part of the desk (0.30, 10.45)"},
+          {"id": "skateboard", "room": "boy", "placement": "floor, leaning", "plan": "natural wood deck, no graphics, charcoal/oat wheels; leans on the desk's left end, nose up", "est": {"u": [0.60, 0.63]}, "rule": "overlaps the desk leg decisively"},
+          {"id": "doll", "room": "girl", "placement": "surface (fixed desk)", "plan": "fabric doll seated against the wall, left part of the desk"},
+          {"id": "doll-pram", "room": "girl", "placement": "floor", "plan": "wooden doll pram at the desk's left end (skateboard envelope)", "fillers": ["muslin blanket + mini pillow"]}
+        ],
+        "slot_count_per_room": 15,
+        "lighting": {"lit": ["pendant (ceiling)", "wall-sconce (wall, task)"], "rule": "hardwired, no visible cable; bridge: pendant shares shade material with the corridor ceiling lights"},
+        "transitions": "unchanged: T-CBoy' (~3.3 s, 0.37), T-CGirl' (~2.3 s, 0.289)",
+        "checks": ["F1 corner/pendant 0.303", "F3 pendant vs window and blind >= 0.02; skateboard/pram vs desk leg: decisive overlap; basket vs bottom edge >= 0.03", "F6", "F10 >= 11 counted", "F11 two lamps lit and visible"],
+        "magazine_estimate_kids": "8/10; risk: right side busy -> the print pair becomes one print, no slot removed"
+      },
+
+      "bath": {
+        "idea": "One camera point by the door, two magazine walls. B1 (arrival): fluted window with a wall-hung WC on a limestone ledge below it, and a limestone shower corner with a linen curtain gathered at the L-track corner (hero, right third). B2 (pan -35): oak vanity + U6 mirror between two flat sconces on the south wall (hero, right third), shower corner on the left.",
+        "camera_point": {"id": "CB", "loc": [3.80, 13.20, 1.15], "u0": 0.52, "v0": 0.46, "note": "0.55 inside the north wall; door jamb Y 12.39 outside both frames"},
+        "layout": {
+          "window": {"wall": "east Y 9.95", "x": [3.45, 4.25], "sill": 1.00, "head": 2.15, "glass": "fluted"},
+          "wc_fixed": {"type": "wall-hung, concealed cistern", "centre_x": 3.85, "ledge": {"x": [3.30, 4.40], "top": 0.95, "depth": 0.20, "finish": "honed limestone"}},
+          "shower": {"x": [5.20, 6.25], "y": [9.95, 11.15], "floor": "level, limestone", "niche": {"wall": "south", "y": [10.30, 10.90], "z": [1.05, 1.40]}, "fittings": "rain head + mixer, matte black", "light": "recessed downlight (shell)", "curtain_track": "ceiling-mounted L, matte black, along X 5.20 (Y 9.95-11.15) and Y 11.15 (X 5.20-6.25); curtain gathered at the L corner (5.20, 11.15)", "replaces": "U6 fluted-glass screen"},
+          "vanity_fixed": {"type": "single, open-shelf oak, limestone top, wall tap matte black", "cm": [110, 48], "wall": "south X 6.25", "y": [11.75, 12.85]},
+          "mirror_shell": {"cm": [100, 80], "y": [11.80, 12.80], "z": [1.15, 1.95], "frame": "thin oak"},
+          "reflection_zone": "north wall Y 9.95-12.39, Z 1.15-2.70 and the ceiling above it stay blank: no hook, art, lamp or ceiling fixture",
+          "electrical_points": {"B1_sconce": [4.70, 9.95, 1.70], "vanity_sconces": [[6.25, 11.62, 1.65], [6.25, 12.98, 1.65]]}
+        },
+        "reflection_est_F8": {"mirror_reflects": "north wall Y 10.03-12.12, Z 1.15-2.70 + a ceiling strip", "door_margin_m": 0.27, "window_margin_m": 0.08, "note": "same point for B1 and B2 -> one reflection pass; sconces flat (<= 12 cm) so the east one stays out of the reflected ray at the mirror's east edge"},
+        "frames": {
+          "B1": {"yaw": -22, "hero": "shower curtain gathered at the L corner, u ~0.67", "est": {"NE_corner_u": 0.110, "window_u": [0.163, 0.353], "window_head_v": [0.05, 0.09], "window_sill_v": 0.52, "wc_ledge_u": [0.21, 0.33], "sconce": [0.44, 0.27], "shower_east_wall_u": [0.56, 0.70], "SE_corner_u": 0.699, "shower_south_wall_u": [0.70, 0.88], "curtain_stack_u": [0.64, 0.69], "right_edge_on_south_wall_Y": 11.65, "vanity": "out (starts Y 11.75)", "floor_visible_from_depth_m": 2.52}},
+          "B2": {"yaw": -57, "hero": "mirror + vanity between the sconces, mirror centre u ~0.672", "est": {"east_wall_visible_from_X": 4.92, "SE_corner_u": 0.278, "shower_south_wall_u": [0.28, 0.44], "curtain_stack_u": [0.22, 0.27], "towel_ladder_u": [0.43, 0.52], "sconces_u": [0.51, 0.87], "vanity_u": [0.55, 0.83], "mirror_centre_u": 0.672, "mirror_v": [0.09, 0.46], "towel_ring_u": 0.87, "window": "out of frame (S10), light from the left"}, "rule": "curtain stack overlaps the SE corner line decisively (>= 0.03) or clears it by >= 0.02 (sweep)"}
+        },
+        "slots": [
+          {"id": "shower-curtain", "frames": ["B1", "B2"], "placement": "ceiling track", "spec": "linen-look cotton/waffle, warm white or oat, floor-skimming, gathered at the L corner"},
+          {"id": "shower-dispensers", "frames": ["B1", "B2"], "placement": "shower niche", "spec": "set of 3, matte ceramic", "fillers": ["liquids"]},
+          {"id": "shower-stool", "frames": ["B1", "B2"], "placement": "shower floor by the south wall", "spec": "oak or teak, oiled matte"},
+          {"id": "bath-mat", "frames": ["B1"], "placement": "floor before the shower's north side, X 4.75-5.15, Y 10.40-10.95"},
+          {"id": "toilet-paper-stand", "frames": ["B1"], "placement": "floor group right of the ledge X 4.42-4.75", "fillers": ["roll + spare roll"]},
+          {"id": "toilet-brush", "frames": ["B1"], "placement": "same floor group"},
+          {"id": "bin", "frames": ["B1"], "placement": "same floor group", "spec": "pedal bin, matte"},
+          {"id": "ledge-planter", "frames": ["B1"], "placement": "WC ledge group of 3", "fillers": ["plant"]},
+          {"id": "reed-diffuser", "frames": ["B1"], "placement": "WC ledge group of 3", "fillers": ["reeds, oil"]},
+          {"id": "candle", "frames": ["B1"], "placement": "WC ledge group of 3", "spec": "candle in a matte vessel (vessel = product, wax = filler)"},
+          {"id": "floor-planter", "frames": ["B1"], "placement": "floor (4.95, 10.20)", "fillers": ["plant"]},
+          {"id": "wall-sconce", "frames": ["B1"], "placement": "east wall (4.70, 9.95, 1.70)", "spec": "IP44, hardwired"},
+          {"id": "towel-ladder", "frames": ["B1 (right edge)", "B2"], "placement": "leans on the south wall Y 11.20-11.50, height <= 1.35, lean <= 0.25", "rule": "top >= 0.20 below the east vanity sconce; outside the mirror's reflected rays"},
+          {"id": "bath-towels", "frames": ["B1", "B2"], "placement": "on the towel ladder (textile-on-rack precedent: cushions on the sofa cover)"},
+          {"id": "vanity-sconces", "frames": ["B2"], "placement": "pair flanking the mirror, Y 11.62 / 12.98, Z 1.65, flat <= 12 cm", "spec": "IP44, hardwired"},
+          {"id": "soap-dispenser", "frames": ["B2"], "placement": "vanity top group of 3", "fillers": ["soap"]},
+          {"id": "toothbrush-cup", "frames": ["B2"], "placement": "vanity top group of 3", "fillers": ["toothbrushes, bamboo handle, warm-white bristles"]},
+          {"id": "vanity-vase", "frames": ["B2"], "placement": "vanity top group of 3", "fillers": ["one sprig"]},
+          {"id": "towel-ring", "frames": ["B2"], "placement": "south wall Y 12.98, Z 0.95 (below the reflection band)"},
+          {"id": "hand-towel", "frames": ["B2"], "placement": "on the towel ring"},
+          {"id": "storage-basket", "frames": ["B2"], "placement": "vanity open shelf", "fillers": ["rolled towels"]}
+        ],
+        "slot_count": {"B1": 14, "B2": 12, "unique": 21},
+        "not_in": ["vanity rug: the floor in front of the vanity is nearer than 2.52 m in B2 (below the frame)"],
+        "lighting": {"B1": ["wall-sconce"], "B2": ["vanity-sconces (pair)"], "ceiling": "shower downlight (shell) + flush ceiling light (product, seen only in transit); ceiling at 2.70 is above both frames from 1.15", "option_for_user": "low pendant on the WEST side of the vanity (outside the reflected rays)", "material_exception_proposed": "bath only: no fabric or paper shades; matte glazed ceramic, matte plaster or etched opal glass (never clear), IP44"},
+        "transitions": {
+          "T-CBath''": [{"type": "dolly", "rail": "C0 -> S1' (2.641, 13.00)", "heading": 0, "len_m": 4.12}, {"type": "slide", "heading": 0, "from": [2.641, 13.00, 1.20], "to": [3.80, 13.20, 1.15], "len_m": 1.18, "crossing": "bath door at Y ~13.09 (~0.29 to the 13.39 jamb)"}, {"type": "pan", "yaw": [0, -22]}],
+          "T-CBath''_play_s": 3.2,
+          "P-B (B1<->B2)": {"type": "pan", "at": "CB", "yaw": [-22, -57], "play_s": [1.2, 1.6]}
+        },
+        "light_passes": "sky + window area light AND a pass with all frame lamps lit at 2700K (mandatory: round-1 bath L 75-78)",
+        "magazine_estimate": {"B1": "7.5/10", "B2": "8/10"}
+      },
+
+      "kitchen-dining": {
+        "idea": "One camera point in the living-room opening. D1 (arrival): the table under the big lamp on the left third, window decisively cut on the left, the whole kitchen run as the right-half background ('see more of the kitchen'). D2 (pan -35): the kitchen elevation: plastered hood over the hob on the left third, lit oak shelves, coffee niche on the right third, table and bench ends as the cut foreground.",
+        "camera_point": {"id": "PD", "loc": [2.80, 3.80, 1.10], "u0": 0.52, "v0": 0.43, "note": "0.15 inside the room, within the opening Y 2.97-4.57"},
+        "fixes_D-A": {"F1": "yaw -35 -> -56 and table +0.30 in X: table/pendant u 0.328", "F2": "window cut by the left edge: visible X 4.04-4.75 (61% cut), u 0-0.153", "F3": "bench moves with the table and crosses the bottom edge diagonally, u 0.28-0.63"},
+        "layout": {
+          "table_fixed": {"cm": [160, 85], "centre": [4.60, 1.65], "x": [3.80, 5.40], "hook": [4.60, 1.65, 3.00], "pendant_bottom": 1.50},
+          "chairs_fixed": [[4.10, 0.90], [4.90, 0.90]],
+          "bench_fixed": {"x": [3.90, 5.30], "y": [2.30, 2.65], "h": 0.45},
+          "kitchen_south_wall": {"lower_units_y": [0.75, 4.20], "sink_y": [1.00, 1.60], "tap": "matte black", "hob": {"y": [2.30, 2.90], "type": "flush induction, matte <= 30 GU"}, "hood": {"y": [2.15, 3.05], "z": [1.55, 3.00], "depth": 0.50, "finish": "mineral plaster, warm white"}, "shelves": [{"y": [0.75, 2.05], "bottom_z": 1.55}, {"y": [3.15, 4.20], "bottom_z": 1.55}], "shelf_spec": "oak 3 cm, depth 0.25, built-in LED profile under each (2700K, CRI 90+, matte diffuser, hidden)", "tall_units_y": [4.20, 6.20], "coffee_niche": {"y": [4.55, 5.20], "z": [0.90, 1.60], "lining": "oak", "light": "LED at the top"}, "oven": {"y": [5.30, 5.90], "handle": "matte black bar"}, "floor_vase_niche_y": [0.0, 0.75]},
+          "electrical_points": {"kitchen_sconce": [7.25, 1.80, 2.05], "pendant": [4.60, 1.65, 3.00]},
+          "replaces": "G-D1 and nordic-dining 0.1 sections 3 and 5 (single shelf Y 0-1.50, 'no under-shelf light')"
+        },
+        "frames": {
+          "D1": {"yaw": -56, "hero": "table under the pendant, u 0.328", "est": {"window_u": [0.0, 0.153], "curtain_stack_u": [0.15, 0.17], "pendant_u": [0.27, 0.39], "pendant_v": [0.10, 0.24], "table_top_u": [0.06, 0.55], "table_near_edge_v": 0.66, "SE_corner_u": 0.444, "pendant_to_corner_gap": 0.054, "floor_vase": "on the corner line", "sink_u": 0.57, "hood_u": 0.75, "kitchen_sconce": [0.635, 0.196], "south_wall_visible_to_Y": 3.94, "bench_u": [0.28, 0.63], "bench": "crosses the bottom edge", "floor_visible_from_depth_m": 2.29}},
+          "D2": {"yaw": -91, "hero": "plastered hood + hob, u 0.328", "est": {"SE_corner": "out (u -0.07)", "south_wall_visible_Y": [0.45, 6.20], "sink_group_u": [0.10, 0.18], "hood_centre_u": 0.328, "hood_top": "cut by the top edge (Z 2.71 at depth 4.45)", "lower_units_u": [0.05, 0.57], "tall_units_u": [0.57, 0.865], "west_wall_u": [0.865, 1.0], "coffee_niche_u": [0.62, 0.72], "shelves_v": 0.31, "counter_v": 0.48, "table_and_bench_end_u": [0.0, 0.20], "window": "out of frame (S10), light from the left"}}
+        },
+        "slots_D1_own": [
+          {"id": "dining-pendant", "plan": "hook (4.60, 1.65, 3.00), bottom 1.50, d 45-55"},
+          {"id": "table-runner", "plan": "along the table axis, centred (4.60, 1.65)"},
+          {"id": "centerpiece-vase", "plan": "on the runner under the pendant", "fillers": ["olive sprigs"]},
+          {"id": "candle-holders", "plan": "pair on the runner, left of the vase", "fillers": ["candles"]},
+          {"id": "curtains", "plan": "single panel stacked at the south jamb X 4.75-4.95"},
+          {"id": "floor-vase", "plan": "(6.92, 0.24) on the D1 corner ray", "fillers": ["dried eucalyptus"]},
+          {"id": "bench-pad", "plan": "long seat pad on the bench (foreground)", "replaces": "seat-pads (chair seats hidden behind the table top)"},
+          {"id": "dining-rug", "plan": "under the table, flat-weave, oat/fog range"}
+        ],
+        "slots_D2": [
+          {"id": "framed-art", "plan": "leans on the left shelf (group of 3 with the ceramics)"},
+          {"id": "open-shelf-ceramics", "plan": "jug + small jar, left shelf"},
+          {"id": "tableware-set", "plan": "stack on the right shelf (moved from the counter)"},
+          {"id": "mug-set", "plan": "right shelf"},
+          {"id": "herb-pots", "plan": "2 pots on the right shelf", "fillers": ["herbs in the sage range"]},
+          {"id": "sink-set", "plan": "soap dispenser + dish brush + small tray, right of the sink", "fillers": ["soap"]},
+          {"id": "utensil-crock", "plan": "counter left of the hob (Y ~1.95)", "fillers": ["wooden utensils"]},
+          {"id": "cutting-boards", "plan": "2 oak boards leaning on the backsplash behind the crock (replaces serving-board)"},
+          {"id": "condiment-set", "plan": "salt + pepper grinders + oil cruet, one line, counter right of the hob"},
+          {"id": "bowl", "plan": "counter right of the hob", "fillers": ["pears"]},
+          {"id": "paper-towel-holder", "plan": "standing, counter end Y ~4.05", "fillers": ["paper roll"]},
+          {"id": "canisters", "plan": "3 stoneware jars with oak lids in the coffee niche"},
+          {"id": "tea-towel", "plan": "over the oven bar handle"},
+          {"id": "kitchen-runner", "plan": "floor in front of the counter X 6.00-6.55, Y 1.0-3.8"},
+          {"id": "kitchen-sconce", "plan": "wall (7.25, 1.80, 2.05), left of the hood above the shelf"}
+        ],
+        "slot_count": {"D1_visible": "~16 (8 own + ~8 D2 products in the background)", "D2": 15, "unique": 23},
+        "dropped": ["seat-pads", "serving-board (-> cutting-boards)"],
+        "kept_out": ["appliances on the counter", "other food", "cookbooks"],
+        "lighting": {"D1": ["dining-pendant (ceiling)", "kitchen-sconce (wall, background)", "under-shelf LED (cabinet)"], "D2": ["kitchen-sconce", "under-shelf + niche LED"], "note": "reverses nordic-dining 0.1 'no under-shelf light' (user asked for cabinet lighting)"},
+        "transitions": {
+          "T-LD''": [{"type": "pan", "id": "P0", "yaw": [25, 0], "status": "approved"}, {"type": "pan", "id": "P1", "yaw": [0, -35]}, {"type": "dolly", "heading": -35, "from": [1.25, 5.55, 1.20], "to": [2.80, 3.80, 1.10], "len_m": 2.34, "oblique_deg": 6.5, "crossing": "opening at Y ~4.05, >= 0.39 perpendicular to the jambs"}, {"type": "pan", "id": "P2", "at": "PD", "yaw": [-35, -56]}],
+          "T-LD''_play_s": 3.4,
+          "T-LD''_note": "4 shots, at the U10 upper limit. Alternative for the motion-agent to compare: P0 + 2 x 28 deg pans at M0 + dolly heading -56 (14.5 deg oblique)",
+          "P-D (D1<->D2)": {"type": "pan", "at": "PD", "yaw": [-56, -91], "play_s": [1.2, 1.6]}
+        },
+        "magazine_estimate": {"D1": "8/10", "D2": "8/10"}
+      }
+    },
+
+    "density_rule_S11": {
+      "per_frame_min": {"full_route_master (M0, D1, D2, MB0)": 14, "lean_route_master (H0, W0, K-boy, K-girl, B1, B2)": 11, "transit (C0)": 5},
+      "per_frame_target": {"full": [15, 18], "lean": [12, 15], "transit": [5, 7]},
+      "counting": "a slot counts if its product is >= 50% visible and >= 0.5% of the frame area; a set counts once; not counted: products of a neighbouring room seen through an opening, fillers, shell, fixed furniture",
+      "categories_min": "each frame shows >= 4 of: textile, lighting, ceramics/tableware, storage/function",
+      "clutter_guard": "S7 >= 25% negative space; one group of 3 or 5 per surface; surface coverage <= 40%; product >= 0.05 from an edge unless cut >= 15%; <= 3 lit lamp typologies; every extra slot needs a named place in the slots file; if the mock-up is busy, the smallest slot on the busiest surface goes first, never below the minimum",
+      "per_room": {
+        "living": {"now": 18, "proposed": 18, "frames": {"M0": 18}, "note": "approved; meets the rule; no change"},
+        "kitchen-dining": {"now": 12, "proposed": 23, "frames": {"D1": 16, "D2": 15}},
+        "master": {"now": 13, "proposed": 15, "add": ["floor-lamp (reading corner X ~1.40)", "nightstand-tray (nightstand group becomes 3)"], "frames": {"MB0": 15}},
+        "boy": {"now": 13, "proposed": 15},
+        "girl": {"now": 13, "proposed": 15},
+        "bath": {"now": 10, "proposed": 21, "frames": {"B1": 14, "B2": 12}},
+        "hall": {"now": 9, "proposed": 12, "add": ["wall-sconce (above the bench)", "umbrella-stand (umbrella = filler)", "planter (by the portal)"], "frames": {"H0": 12}},
+        "work": {"now": 9, "proposed": 13, "add": ["pendant (over the desk, visible in W-A)", "wall-sconce", "bookends (books = filler)", "waste-basket"], "frames": {"W0": 13}},
+        "corridor": {"now": 4, "proposed": 5, "add": ["picture-lights (3 over the gallery)"], "frames": {"C0": 5}}
+      }
+    },
+
+    "lighting_plan_S12": {
+      "constants": "2700K; Bible electrical + replica gates; kids and bath: hardwired, no visible cable; bridge rule on every transition",
+      "camera_limit": "at camera height 1.00-1.15 the ceiling does not enter the frame in the kids' rooms and the bath; there 'ceiling light' means a pendant hung into the frame",
+      "rooms": {
+        "living": {"ceiling": "pendant over the coffee table", "wall": "reading sconce + travertine pair", "task": "floor lamp", "lit_in_frame": 4, "note": "approved exception; no addition"},
+        "hall": {"ceiling": "pendant at the hall centre (seen from C0 and in E0')", "wall": "NEW sconce above the bench (H-B left strip)", "task": "console table lamp", "lit_in_frame": "H0: table lamp + sconce"},
+        "corridor": {"ceiling": "2 semi-flush (existing) + C-B roof-light slot", "wall": "NEW 3 picture lights over the prints", "lit_in_frame": "ceiling + picture lights"},
+        "work": {"ceiling": "NEW pendant over the desk", "wall": "NEW sconce by the window", "task": "desk lamp (existing)", "lit_in_frame": 3},
+        "master": {"ceiling": "pendant at the centre (transit only)", "wall": "bedside sconce pair (existing)", "task": "NEW floor lamp in the reading corner", "lit_in_frame": "MB0: pair + floor lamp"},
+        "kids": {"ceiling": "NEW pendant in the window corner", "wall": "NEW swing-arm sconce over the desk (also the task light)", "lit_in_frame": 2},
+        "bath": {"ceiling": "shower downlight (shell) + flush light (not in frame); option: low pendant west of the vanity", "wall": "B1 sconce; B2 pair at the mirror (IP44)", "lit_in_frame": {"B1": 1, "B2": 2}},
+        "kitchen-dining": {"ceiling": "dining pendant", "wall": "NEW kitchen sconce", "cabinet": "NEW under-shelf + niche LED (shell)", "lit_in_frame": {"D1": 3, "D2": 2}}
+      }
+    },
+
+    "fillers_vs_products": [
+      {"item": "kids' books", "decision": "filler of bookshelf", "why": "shows the shelf in use (like magazines); identical in all variations; overrides plan 8.2 'no books' for kids only"},
+      {"item": "football", "decision": "filler of toy-basket", "why": "ball in the basket = basket in use"},
+      {"item": "toy cars", "decision": "product (toy-cars, set of 3, wooden)", "why": "standalone, sellable kids' decor; on the fixed desk (not on the swappable shelf)"},
+      {"item": "skateboard", "decision": "product", "why": "standalone; plain natural deck"},
+      {"item": "doll, doll pram", "decision": "products (pram filler: muslin blanket + mini pillow)", "why": "standalone"},
+      {"item": "knitted balls, pencils, wooden utensils, herbs, paper rolls, soaps/liquids, toothbrushes, diffuser reeds, candle wax", "decision": "fillers", "why": "contents that show a sold product in use"},
+      {"item": "soft toy / doll on the bed; towels on ladder and ring", "decision": "products", "why": "textile on textile/rack, precedent: cushions on the sofa cover"}
+    ],
+
+    "geometry_deltas": [
+      {"id": "G-K1r2", "room": "boy+girl", "replaces": "G-K1", "what": "wardrobes west wall (kept); bed 96x196 X -2.26..-0.30, head on the north wall, boards <= 0.60; NO house frame, teepee or canopy"},
+      {"id": "G-K3", "room": "boy+girl", "what": "fixed desk 90x50x70, X 0.10-1.00 on the east wall"},
+      {"id": "G-K4", "room": "boy+girl", "what": "paint colour block Z 0-1.25 on east + north walls; boy #A7B09A, girl #E8D5CC"},
+      {"id": "G-K5", "room": "boy+girl", "what": "electrical points: ceiling (-1.94, 10.54, 3.00), wall (0.20, 10.25, 1.25); girl +3.63"},
+      {"id": "G-B1r2", "room": "bath", "replaces": "G-B1, G-B1b", "what": "window X 3.45-4.25, sill 1.00, head 2.15, fluted"},
+      {"id": "G-B2r2", "room": "bath", "replaces": "G-B2", "what": "WC under the window with limestone ledge; shower corner X 5.20-6.25 x Y 9.95-11.15 with niche and ceiling L-track; curtain replaces the fluted screen (U6); single vanity 110 on the south wall Y 11.75-12.85; mirror Y 11.80-12.80, Z 1.15-1.95; blank north wall"},
+      {"id": "G-B3", "room": "bath", "what": "camera point CB (3.80, 13.20, 1.15): B1 yaw -22, B2 yaw -57"},
+      {"id": "G-D2", "room": "kitchen-dining", "replaces": "G-D1", "what": "table + hook to (4.60, 1.65); chairs (4.10/4.90, 0.90); bench X 3.90-5.30; dining rug"},
+      {"id": "G-D3", "room": "kitchen-dining", "what": "plastered hood, flush hob, two LED-lit oak shelves, coffee niche, oven, kitchen sconce point"},
+      {"id": "G-D4", "room": "kitchen-dining", "what": "camera point PD (2.80, 3.80, 1.10): D1 yaw -56, D2 yaw -91"}
+    ],
+
+    "clay_instructions_motion_agent": {
+      "credits": 0,
+      "add_options": ["K2-boy", "K2-girl", "B1", "B2", "D1", "D2"],
+      "build": "--framing <id> applies round_2.geometry_deltas; round-1 options and the no-flag build stay identical",
+      "proxies": "every slot as a proxy at its envelope and plan position (rooms.*.slots), so density and tangents can be measured",
+      "light": "as round 1 PLUS a pass with every lamp of the frame lit at 2700K (incl. kitchen LED); mandatory for the bath",
+      "mirror": "one reflection pass at CB; list every object seen",
+      "sweeps": "see cameras_for_clay",
+      "report": "F1-F9 as round 1, plus F10-F12; object-object tangents measured from the index pass this time",
+      "fix_policy": "do not fix; report; the designer closes"
+    },
+
+    "acceptance_checks_added": [
+      "F10 density: counted slots per frame >= the density_rule minimum (counting rule applies)",
+      "F11 lighting: the lamps listed for the frame are lit and visible; <= 3 typologies; no visible cable in kids and bath",
+      "F12 two-frame rooms: both frames from the identical point; the pan between them <= 35 deg"
+    ],
+
+    "credits_rough": {"basis": "house-plan 10: lean ~1,300 / slot, full ~4,500 / slot, ~5,800 base per frame", "kitchen": 55000, "bath": 20000, "kids": 5000, "hall_work_master_corridor": 20000, "total_added": 100000, "share_of_306k": "~+33%", "saving_option": "D2 products on the lean route: about -35,000"},
+
+    "open_for_user": [
+      "Kids: bed in the window corner (head under the window, boards below the sill) [recommended] vs off the window",
+      "Kids wall colour: block to 1.25 on 2 walls [recommended] / whole east wall / none; boy sage, girl blush clay #E8D5CC (new tone, girl-room exception)",
+      "Kids furniture: bed and desk fixed [recommended] or products; desk chair is a product",
+      "Fillers vs products as in fillers_vs_products",
+      "Bath: curtain instead of fluted glass (U6 change); single vanity on the south wall (U6 says double, east wall); window moves and shrinks to 0.80 with head 2.15; WC under the window",
+      "S10: second frames (B2, D2) without the window in frame",
+      "Bath lighting: wall-only in frame, or add a low pendant west of the vanity; bath shade-material exception",
+      "Kitchen: plastered hood as D2's bone; LED-lit shelves (reverses draft 0.1); table +0.30 in X; seat-pads -> bench-pad + dining rug; T-LD'' 4 shots ~3.4 s (U10 limit)",
+      "Whole-house density minimums (14 / 11 / 5) and the lighting plan, for the Bible",
+      "Cost: ~+100,000 credits (~+33%); option: D2 products on the lean route"
+    ]
+  }
 }
