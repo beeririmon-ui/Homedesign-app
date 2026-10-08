@@ -337,7 +337,7 @@
       ]
     }
   },
-  "build_s": 18,
+  "build_s": 17,
   "frames": {
     "K2-boy": {
       "frame": "K2-boy",
@@ -7140,6 +7140,145 @@
       },
       "note": "same camera and geometry as round 1 + S11/S12 additions; F7 (sky only) unchanged by lamps: see round-1 selfcheck",
       "runtime_s": 429
+    }
+  },
+  "transitions": {
+    "P-B": {
+      "note": "B1 -> B2, one pan at CB",
+      "shots": 1,
+      "segments": [
+        {
+          "type": "pan",
+          "id": null,
+          "yaw": [
+            -22,
+            -57
+          ],
+          "deg": 35
+        }
+      ],
+      "path_issues": [],
+      "end_pose_error": {
+        "pos_m": 0.0,
+        "yaw_deg": 0.0,
+        "u0": 0.0,
+        "v0": 0.0
+      },
+      "min_jamb_clearance_m": null,
+      "jambs_ok": null,
+      "play_s_designer": [
+        1.2,
+        1.6
+      ],
+      "frames": [
+        {
+          "k": 0,
+          "x": 3.8,
+          "y": 13.2,
+          "z": 1.15,
+          "yaw": -22.0,
+          "u0": 0.52,
+          "v0": 0.46,
+          "seg": "start",
+          "s_m": 0.0,
+          "clearance_m": 0.19,
+          "nearest": "leaf_corridor_bath"
+        },
+        {
+          "k": 1,
+          "x": 3.8,
+          "y": 13.2,
+          "z": 1.15,
+          "yaw": -27.0,
+          "u0": 0.52,
+          "v0": 0.46,
+          "seg": "pan#1",
+          "s_m": 0.0,
+          "clearance_m": 0.19,
+          "nearest": "leaf_corridor_bath"
+        },
+        {
+          "k": 2,
+          "x": 3.8,
+          "y": 13.2,
+          "z": 1.15,
+          "yaw": -32.0,
+          "u0": 0.52,
+          "v0": 0.46,
+          "seg": "pan#1",
+          "s_m": 0.0,
+          "clearance_m": 0.19,
+          "nearest": "leaf_corridor_bath"
+        },
+        {
+          "k": 3,
+          "x": 3.8,
+          "y": 13.2,
+          "z": 1.15,
+          "yaw": -37.0,
+          "u0": 0.52,
+          "v0": 0.46,
+          "seg": "pan#1",
+          "s_m": 0.0,
+          "clearance_m": 0.19,
+          "nearest": "leaf_corridor_bath"
+        },
+        {
+          "k": 4,
+          "x": 3.8,
+          "y": 13.2,
+          "z": 1.15,
+          "yaw": -42.0,
+          "u0": 0.52,
+          "v0": 0.46,
+          "seg": "pan#1",
+          "s_m": 0.0,
+          "clearance_m": 0.19,
+          "nearest": "leaf_corridor_bath"
+        },
+        {
+          "k": 5,
+          "x": 3.8,
+          "y": 13.2,
+          "z": 1.15,
+          "yaw": -47.0,
+          "u0": 0.52,
+          "v0": 0.46,
+          "seg": "pan#1",
+          "s_m": 0.0,
+          "clearance_m": 0.19,
+          "nearest": "leaf_corridor_bath"
+        },
+        {
+          "k": 6,
+          "x": 3.8,
+          "y": 13.2,
+          "z": 1.15,
+          "yaw": -52.0,
+          "u0": 0.52,
+          "v0": 0.46,
+          "seg": "pan#1",
+          "s_m": 0.0,
+          "clearance_m": 0.19,
+          "nearest": "leaf_corridor_bath"
+        },
+        {
+          "k": 7,
+          "x": 3.8,
+          "y": 13.2,
+          "z": 1.15,
+          "yaw": -57.0,
+          "u0": 0.52,
+          "v0": 0.46,
+          "seg": "pan#1",
+          "s_m": 0.0,
+          "clearance_m": 0.19,
+          "nearest": "leaf_corridor_bath"
+        }
+      ],
+      "F9": "pass",
+      "F9_note": "jambs >= 0.15 (crossed openings), last pose = the frame camera; play time = designer estimate, not measured",
+      "sheet": "framing/round2/transitions/P-B-sheet.jpg"
     }
   }
 }
