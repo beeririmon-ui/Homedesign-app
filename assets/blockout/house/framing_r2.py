@@ -49,7 +49,8 @@ M = ba.M
 P = bs.proj
 HERE = bh.HERE
 REPO = bh.REPO
-OUT = os.path.join(fr.OUT, "round2")
+R1 = os.path.join(HERE, "framing")                 # round-1 outputs (read only)
+OUT = os.environ.get("FRAMING_R2_OUT") or os.path.join(R1, "round2")
 FX, FY = 24.0 / 36.0, 24.0 / 20.25          # focal / sensor (the plan's 0.6667 and 1.1852)
 
 FRAMES = ["K2-boy", "K2-girl", "B1", "B2", "D1", "D2"]
@@ -227,8 +228,8 @@ FRAME_LAMPS = {       # lamps the proposal lists as lit AND visible in each fram
 }
 LAMP_POWER_NOTE = ("2700 K (linear RGB %s). Shades: emission %.0f; LED strips / opal discs: emission %.0f. Light sources "
                    "(W, Blender radiometric): pendants 30-60 (disc under the shade), sconces 12-20 (point in front of the "
-                   "shade), LED profiles 12 W/m (rectangle under the shelf), niche 5, downlight 25, floor lamp 30+12, "
-                   "picture lights 8 each. Set by eye for a readable warm pool without clipping; not photometric." % (str(WARM), GLOW, GLOW_LED))
+                   "shade), LED profiles 12 W/m (rectangle under the shelf), niche 5, floor lamp 30+12, "
+                   "picture lights 8 each; bath ceiling light 18, shower downlight 12. Set by eye for a readable warm pool without clipping; not photometric." % (str(WARM), GLOW, GLOW_LED))
 
 
 # ---------------------------------------------------------------------------------------------------------------
@@ -405,8 +406,8 @@ def build_kids(kid, dy):
                              bx("boy_car2", 0.34, 0.46, y0 + 0.09, y0 + 0.15, 0.70, 0.76, tc, 0.01)], kid)
         sk = sm("skateboard")
         # natural deck leaning on the desk's front-left edge, nose up, in front of the front-left leg (decisive overlap)
-        deck = obox("boy_deck", (0.13, y0 + 0.74, 0.03), (0.13, y0 + 0.46, 0.81), (1, 0, 0), 0.20, 0.013, sk)
-        wheels = [obox("boy_truck", (0.13, y0 + 0.76, 0.03), (0.13, y0 + 0.745, 0.075), (1, 0, 0), 0.17, 0.05, M["holder"])]
+        deck = obox("boy_deck", (0.22, y0 + 0.74, 0.03), (0.22, y0 + 0.46, 0.81), (1, 0, 0), 0.20, 0.013, sk)
+        wheels = [obox("boy_truck", (0.22, y0 + 0.76, 0.03), (0.22, y0 + 0.745, 0.075), (1, 0, 0), 0.17, 0.05, M["holder"])]
         reg("boy/skateboard", [deck] + wheels, kid)
     else:
         dl = sm("doll")
@@ -419,6 +420,10 @@ def build_kids(kid, dy):
                                bx("girl_pramw1", 0.24, 0.26, y0 + 0.60, y0 + 0.90, 0.0, 0.16, pr),
                                obox("girl_pramh", (-0.12, y0 + 0.75, 0.40), (-0.24, y0 + 0.75, 0.64), (0, 1, 0), 0.24, 0.02, pr),
                                bx("girl_pramfill", -0.08, 0.24, y0 + 0.65, y0 + 0.85, 0.42, 0.46, pr, 0.015)], kid)
+    if kid == "boy":
+        notes.append("skateboard: deck centred on X 0.22 so that, seen from K2, it sits over the desk's front-left leg (X 0.13-0.17): the "
+                     "rule 'covers the leg decisively' wins over the est u 0.60-0.63 (a deck at X 0.02-0.22 projects beside the leg, "
+                     "covering ~50%: tested)")
     notes.append(f"{kid}: bed boards to 0.60, mattress top 0.42 (+ duvet to 0.50); kid chair seat 0.43 / back 0.72 (the est "
                  "back_top_v 0.62 implies ~0.72); slot proxies each in their own warm grey, the paint is the only colour")
     return notes
@@ -490,11 +495,11 @@ def build_bath(plan):
     dl = cyl("sh_downlight", (5.72, 10.55), 0.045, 2.693, 2.699, named_mat("downlight_off", "#E9E5DF"))
     reg("shower downlight (shell)", [dl], "bath", "architecture")
     lamp("bath/shower-downlight", "bath", "ceiling", [(dl, GLOW_LED)],
-         [mk_light("sh_down_L", "AREA", (5.72, 10.55, 2.69), 25.0, size=0.09)], "recessed downlight in the shower (shell)", shell=True)
+         [mk_light("sh_down_L", "AREA", (5.72, 10.55, 2.69), 12.0, size=0.09)], "recessed downlight in the shower (shell)", shell=True)
     cfl = cyl("bath_ceil", (4.75, 11.80), 0.15, 2.64, 2.699, sm("ceiling-light"))
     reg("bath/ceiling-light", [cfl], "bath", "proxy-transit")
     lamp("bath/ceiling-light", "bath", "ceiling", [(cfl, GLOW)],
-         [mk_light("bath_ceil_L", "AREA", (4.75, 11.80, 2.635), 40.0, size=0.26)], "flush ceiling light (S12: not in frame)")
+         [mk_light("bath_ceil_L", "AREA", (4.75, 11.80, 2.635), 18.0, size=0.26)], "flush ceiling light (S12: not in frame)")
     notes.append("bath ceiling light (S12 'flush light, product, seen only in transit') placed at the room centre (4.75, 11.80); "
                  "not a B1/B2 slot, not counted")
     # vanity: single 110 x 48 oak, open shelf, limestone top, vessel basin, matte black wall tap; south wall Y 11.75-12.85
@@ -987,7 +992,7 @@ def analyse(C, S, idx, room, extra_min_area=0.002):
         nin = int(sil.sum())
         items[pidx] = dict(name=nm, kind=kind, room=nm.split("/")[0] if "/" in nm else None, area=px / (H * W),
                            sil=sil, vis=vis, n_sil=ntot, n_sil_in=nin,
-                           visible_pct=round(100.0 * int((vis & sil).sum() + (vis & ~sil).sum()) / max(1, ntot), 1),
+                           visible_pct=round(min(100.0, 100.0 * int(vis.sum()) / max(1, ntot)), 1),
                            cut_pct=round(100.0 * (1 - nin / max(1, ntot)), 1), aabb=aabb(objs))
     # tangents
     flags = []
@@ -1016,7 +1021,7 @@ def analyse(C, S, idx, room, extra_min_area=0.002):
             if not touching:
                 continue
             th = thickness(inter) / GW
-            back = A if (inter & B["vis"]).sum() < (inter & A["vis"]).sum() else B
+            back = B if (inter & A["vis"]).sum() >= (inter & B["vis"]).sum() else A      # the one hidden in the overlap
             cover = float(inter.sum()) / max(1, back["sil"].sum())
             if th < 0.03 and cover < 0.6:
                 flags.append(dict(a=A["name"], b=B["name"], kind="overlap", overlap_thickness=round(th, 4), cover_of_back=round(cover, 3),
@@ -1067,7 +1072,10 @@ def density(items, room, fid):
     mn = DENSITY_MIN[fid]
     tgt = DENSITY_TARGET[FRAME_KIND[fid]]
     have4 = [c for c in CATS4 if c in cats]
+    n02 = sum(1 for r in rows if r["visible_pct"] >= 50.0 and r["frame_area_pct"] >= 0.2)
+    n_any = sum(1 for r in rows if r["visible_pct"] >= 50.0)
     return dict(result="pass" if n >= mn and len(have4) == 4 else "fail", counted=n, minimum=mn, target=list(tgt),
+                info_counted_if_area_ge_0_2pct=n02, info_counted_any_area_ge_50pct_visible=n_any,
                 frame_kind=FRAME_KIND[fid], in_target=bool(tgt[0] <= n <= tgt[1]), categories=cats,
                 four_categories_ok=len(have4) == 4, missing_categories=[c for c in CATS4 if c not in cats], slots=rows,
                 rule="counted = own-room product proxy >= 50% visible (ray-cast silhouette incl. outside the frame) and >= 0.5% "
@@ -1087,7 +1095,7 @@ def lamp_check(fid, idx, lit):
         for o, _ in L["glow"]:
             px += int((idx == o.pass_index).sum()) if o.pass_index else 0
         on = k in lit
-        vis = px >= 60
+        vis = px >= 2.5e-5 * H * W
         if on and vis:
             typ.add(L["typ"])
         rows.append(dict(lamp=k, label=L["label"], typology=L["typ"], lit=on, visible_px_group=px, visible=vis, ok=bool(on and vis)))
@@ -1096,7 +1104,7 @@ def lamp_check(fid, idx, lit):
     return dict(result="pass" if ok else "fail", lamps=rows, typologies_lit_visible=sorted(typ), n_typologies=len(typ),
                 also_on_in_the_room_not_listed_for_this_frame=others,
                 cables="kids + bath: none modelled; pendant suspension cords only (hardwired). Clay cannot show plug cables",
-                note="visible = pass index of the lamp group >= 60 px at 2K (whole group incl. arm/plate)")
+                note="visible = the lamp's glowing part >= 60 px at 2K (2.5e-5 of the frame)")
 
 
 # ---------------------------------------------------------------------------------------------------------------
@@ -1237,10 +1245,12 @@ def est_rows(fid, S, cam, C, idx):
         add("sink group u (pixels)", [0.10, 0.18], u)
         add("hood centre u (wall line 7.25, 2.60)", 0.328, U(cam, 7.25, 2.60, 2.0))
         add("hood centre u (front face X 6.75)", None, U(cam, 6.75, 2.60, 2.0), "no est")
-        add("hood top cut: top edge Z at the hood front", 2.71, fr.top_edge_Z(cam, 6.75, 2.60), "est 'Z 2.71 at depth 4.45'", tol=0.05)
+        add("hood top cut: top edge Z on the wall line (7.25, 2.60)", 2.71, fr.top_edge_Z(cam, 7.25, 2.60), "est 'Z 2.71 at depth 4.45'", tol=0.05)
+        add("hood top cut: top edge Z at the hood front X 6.75", None, fr.top_edge_Z(cam, 6.75, 2.60), "no est; the hood box is cut where the frame top meets its front")
         add("lower units u (Y 0.75 / 4.20 at the wall)", [0.05, 0.57], [U(cam, 7.25, 0.75, 0.5), U(cam, 7.25, 4.20, 0.5)])
         add("tall units u (Y 4.20 / 6.20 at the wall)", [0.57, 0.865], [U(cam, 7.25, 4.20, 1.2), U(cam, 7.25, 6.20, 1.2)])
         add("coffee niche u (front Y 4.55 / 5.20)", [0.62, 0.72], [U(cam, 6.63, 4.55, 1.25), U(cam, 6.63, 5.20, 1.25)])
+        add("coffee niche u (wall line X 7.25)", [0.62, 0.72], [U(cam, 7.25, 4.55, 1.25), U(cam, 7.25, 5.20, 1.25)], "the designer's u are wall-line values")
         add("shelves v (bottom 1.55 at the wall, Y 1.40)", 0.31, V(cam, 7.25, 1.40, 1.55))
         add("counter v (0.90 at the front edge, Y 2.60)", 0.48, V(cam, 6.60, 2.60, 0.90))
         u, _ = bbu("dining table 160x85 (fixed)")
@@ -1307,7 +1317,7 @@ def acceptance2(fid, S, cam, C, idx, depth, plan, est, items, flags):
     arch = []
     for fe in est:
         k = fe["key"]
-        if any(s in k for s in ("corner", "jamb", "window_u", "window head")):
+        if any(s in k for s in ("corner", "jamb", "window_u", "window head")) and not any(s in k for s in ("gap", "on the corner line", "visible")):
             vals = fe["measured"] if isinstance(fe["measured"], list) else [fe["measured"]]
             for val in vals:
                 if isinstance(val, (int, float)) and val not in (0.0,) and (abs(val) < 0.02 or abs(val - 1) < 0.02):
@@ -1341,6 +1351,17 @@ def acceptance2(fid, S, cam, C, idx, depth, plan, est, items, flags):
     return out
 
 
+def item_gap(items, na, nb):
+    A = next((v for v in items.values() if v["name"] == na), None)
+    B = next((v for v in items.values() if v["name"] == nb), None)
+    if A is None or B is None:
+        return None
+    if (A["vis"] & dilate(B["vis"])).any():
+        return 0.0
+    g = min_dist(boundary_pts(A["vis"]), boundary_pts(B["vis"]))
+    return None if g is None else round(g / GW, 4)
+
+
 def designer_rules(fid, S, cam, C, idx, items):
     """The named tangent rules of round 2 (section 8.2 / 8.3 / 8.4), measured in pixels."""
     R = []
@@ -1363,10 +1384,12 @@ def designer_rules(fid, S, cam, C, idx, items):
         if pb:
             R.append(dict(rule="pendant >= 0.02 from the window (west jamb line at the shade height)", gap=bh.r4(wj - pb[1]) if wj > pb[1] else bh.r4(pb[0] - wj),
                           pendant_u=[bh.r4(pb[0]), bh.r4(pb[1])], jamb_u=bh.r4(wj), ok=bool(wj >= pb[1] + 0.02 or wj <= pb[0] - 0.02)))
-        if pb and bl:
-            gap_v = pb[2] - bl[3]
-            R.append(dict(rule="pendant >= 0.02 from the blind folds (vertical gap: blind bottom -> shade top)", blind_bottom_v=bh.r4(bl[3]),
-                          shade_top_v=bh.r4(pb[2]), gap=bh.r4(gap_v), ok=bool(gap_v >= 0.02 or (bl[1] < pb[0] - 0.02))))
+        g = item_gap(items, f"{kid}/pendant", f"{kid}/roman-blind")
+        if g is not None:
+            R.append(dict(rule="pendant >= 0.02 from the blind folds (2D silhouette gap, frame widths)", gap=g, ok=bool(g >= 0.02)))
+        g = item_gap(items, f"{kid}/pendant", "window W-" + kid)
+        if g is not None:
+            R.append(dict(rule="pendant >= 0.02 from the window frame (2D silhouette gap)", gap=g, ok=bool(g >= 0.02)))
         tb = bb(f"{kid}/toy-basket")
         if tb:
             R.append(dict(rule="toy basket vs the bottom edge: cut, or >= 0.03 clear", bottom_v=bh.r4(tb[3]), margin=bh.r4(1 - tb[3]),
@@ -1698,7 +1721,7 @@ def run_frame(fid, S, plan, cams, prop, tmp, a, rep):
     # F8 mirror
     if room == "bath":
         mr = mirror_pass(C, cam)
-        acc["F8"] = dict(result=mr["result"], note="one pass for CB (B1 and B2 share the point); inside_frame = samples whose mirror point is in this frame", **mr)
+        acc["F8"] = dict(mr, note="one pass for CB (B1 and B2 share the point); inside_frame = samples whose mirror point is in this frame")
         if fid == "B2":
             acc["F8"]["crop"] = crop_mirror(p, idx)
     else:
@@ -1780,7 +1803,7 @@ def run_pick(opt, S, plan, prop, tmp, a, rep):
     acc["F10"] = density(items, room, opt)
     acc["F11"] = lamp_check(opt, idx, lit)
     acc["F12"] = dict(result="n/a (one-frame room)")
-    r1 = json.load(open(os.path.join(fr.OUT, "selfcheck.json")))["options"].get(opt, {})
+    r1 = json.load(open(os.path.join(R1, "selfcheck.json")))["options"].get(opt, {})
     R = dict(option=opt, room=room, camera=C, image=f"framing/round2/{opt}-lit.png", lamps_on=lit, mean_L_lit=fr.mean_L(p),
              mean_L_round1=r1.get("mean_L_editorial"), est_flags=[r["key"] for r in est if r["flag_gt_tol"]], acceptance=acc,
              round1_results={k: v.get("result") for k, v in r1.get("acceptance", {}).items()},
@@ -1810,7 +1833,7 @@ def all_sheet(rep):
     from PIL import Image, ImageDraw
     w = 900
     th = int(w * 9 / 16)
-    r1 = json.load(open(os.path.join(fr.OUT, "selfcheck.json"))).get("options", {})
+    r1 = json.load(open(os.path.join(R1, "selfcheck.json"))).get("options", {})
     pairs = []
     for fid in FRAMES:
         o1 = ROUND1_IMG[fid]
@@ -1819,7 +1842,7 @@ def all_sheet(rep):
         R = rep.get("frames", {}).get(fid, {})
         acc = R.get("acceptance", {})
         n = acc.get("F10", {}).get("counted")
-        pairs.append(((os.path.join(fr.OUT, f"{o1}.png"), f"ROUND 1  {o1}", ("fails: " + ", ".join(f1)) if f1 else "round 1: all pass"),
+        pairs.append(((os.path.join(R1, f"{o1}.png"), f"ROUND 1  {o1}", ("fails: " + ", ".join(f1)) if f1 else "round 1: all pass"),
                       (os.path.join(OUT, f"{fid}.png"), f"ROUND 2  {fid}", (summary_line(acc) + (f"  | {n} slots counted" if n is not None else ""))
                        if acc else "not rendered")))
     for opt in PICKS:
@@ -1828,7 +1851,7 @@ def all_sheet(rep):
         R = rep.get("picks_lit", {}).get(opt, {})
         acc = R.get("acceptance", {})
         n = acc.get("F10", {}).get("counted")
-        pairs.append(((os.path.join(fr.OUT, f"{opt}.png"), f"ROUND 1  {opt}", ("fails: " + ", ".join(f1)) if f1 else "round 1: all pass"),
+        pairs.append(((os.path.join(R1, f"{opt}.png"), f"ROUND 1  {opt}", ("fails: " + ", ".join(f1)) if f1 else "round 1: all pass"),
                       (os.path.join(OUT, f"{opt}-lit.png"), f"ROUND 2  {opt}-lit (S11 + S12 lamps)",
                        (summary_line(acc) + (f"  | {n} slots counted" if n is not None else "")) if acc else "not rendered")))
     cols = 2
@@ -1917,6 +1940,8 @@ def main(argv):
                 run_transition(tid, T[tid], S, plan, obs, tmp, a, rep, render=True)
                 save()
                 print("transition", tid, flush=True)
+        import shutil
+        shutil.rmtree(tmp, ignore_errors=True)
     if do_sheet:
         all_sheet(rep)
     save()

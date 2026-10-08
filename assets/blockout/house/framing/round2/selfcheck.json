@@ -1,0 +1,341 @@
+{
+  "proposal": "docs/proposals/house-framing.json 0.2 (round_2)",
+  "plan": "docs/house-plan.json",
+  "plan_version": "1.0 / approved 2026-10-06",
+  "render": "2048x1152, 48 samples, Cycles CPU seed 7, AgX Medium High Contrast, exposure +0.35 (editorial) as round 1",
+  "light": "round-1 editorial daylight (sky 7.0 + soft area light outside every window + roof lights + AO 0.30) PLUS the room's S12 lamps at 2700 K (emissive shade + light source). Daylight-only (lamps off) per frame in extra/.",
+  "lamp_power": "2700 K (linear RGB (1.0, 0.56, 0.25)). Shades: emission 6; LED strips / opal discs: emission 14. Light sources (W, Blender radiometric): pendants 30-60 (disc under the shade), sconces 12-20 (point in front of the shade), LED profiles 12 W/m (rectangle under the shelf), niche 5, floor lamp 30+12, picture lights 8 each; bath ceiling light 18, shower downlight 12. Set by eye for a readable warm pool without clipping; not photometric.",
+  "scene": "one combined scene: plan 1.0 + round-1 picks H-B, C-B, W-A, MB-A + round-2 kids, bath, kitchen-dining + S11/S12 additions",
+  "build_notes": {
+    "H-B": [
+      "G-H4: reveal lining 2 cm on the hall half of the reveal (Y 6.27-6.35) + 10 cm casing on the hall face; assumed profile"
+    ],
+    "C-B": [
+      "G-C3: 4 cm oak lining Y 9.70-9.95 (lintel drops to 2.62) + 10 cm casing on the hall face; assumed profile"
+    ],
+    "W-A": [
+      "G-W1: built-in desk X -1.625..-0.025 x 0.60 deep, top 0.76; shelf at 1.62; art 60x50 between; chair at Y 7.30; door leaf folded on the south wall X 0.61-0.65 Y 9.00-9.90"
+    ],
+    "MB-A": [
+      "G-M3: tall planter (option 'tall planter or lounge chair') at (1.45, 18.15), crown to 1.75; basket and pendant of the plan kept"
+    ],
+    "boy": [
+      "G-K4: paint #A7B09A as a 1 mm layer 1 mm in front of the east (Y 10.25) and north (X -2.30) walls, Z 0.149-1.25 (under the window only to 0.724, below the sill board); skirting of those two walls in the paint colour",
+      "framed-prints: two 30x40 portrait frames (the slot format) do not fit the plan range X 0.45-0.95 (0.50 m); kept the format and centred the pair on X 0.70 with a 4 cm gap: X 0.38-0.68 / 0.72-1.02, Z 1.42-1.82 (top matches the est v 0.055)",
+      "skateboard: deck centred on X 0.22 so that, seen from K2, it sits over the desk's front-left leg (X 0.13-0.17): the rule 'covers the leg decisively' wins over the est u 0.60-0.63 (a deck at X 0.02-0.22 projects beside the leg, covering ~50%: tested)",
+      "boy: bed boards to 0.60, mattress top 0.42 (+ duvet to 0.50); kid chair seat 0.43 / back 0.72 (the est back_top_v 0.62 implies ~0.72); slot proxies each in their own warm grey, the paint is the only colour"
+    ],
+    "girl": [
+      "G-K4: paint #E8D5CC as a 1 mm layer 1 mm in front of the east (Y 13.88) and north (X -2.30) walls, Z 0.149-1.25 (under the window only to 0.724, below the sill board); skirting of those two walls in the paint colour",
+      "framed-prints: two 30x40 portrait frames (the slot format) do not fit the plan range X 0.45-0.95 (0.50 m); kept the format and centred the pair on X 0.70 with a 4 cm gap: X 0.38-0.68 / 0.72-1.02, Z 1.42-1.82 (top matches the est v 0.055)",
+      "girl: bed boards to 0.60, mattress top 0.42 (+ duvet to 0.50); kid chair seat 0.43 / back 0.72 (the est back_top_v 0.62 implies ~0.72); slot proxies each in their own warm grey, the paint is the only colour"
+    ],
+    "bath": [
+      "shower niche: boolean cut 0.12 deep into the south wall (X 6.25-6.37, Y 10.30-10.90, Z 1.05-1.40) on 1 wall solid(s); niche faces take the limestone material",
+      "bath ceiling light (S12 'flush light, product, seen only in transit') placed at the room centre (4.75, 11.80); not a B1/B2 slot, not counted",
+      "bath proxies: vase sprig kept below the mirror bottom (top 1.12 < 1.165) and the tooth-brushes at 1.07, so the vanity group cannot reflect; towel ladder rails 0.035 x 0.022, rungs at 0.38 / 0.74 / 1.10"
+    ],
+    "kitchen-dining": [
+      "kitchen: worktop top 0.90 (est counter v 0.48); hood X 6.75-7.25 x Y 2.15-3.05, Z 1.55-3.00; shelves X 7.00-7.25 Z 1.55-1.58; tall units Y 4.20-6.20 to Z 2.40 (plan height) with the niche lining 1.5 cm oak; upper wall units of the plan removed (shelves + hood replace them); plan west-wall tall run kept (X 3.95-6.63, Y 5.58-6.20): round 2 does not mention it, so the approved plan stands",
+      "kitchen proxies from the round-2 slot text; heights assumed (jug 24, plates 10+7, crock 18 + utensils, boards 46/38 leaning); D1 dining rug 2.60 x 2.40 (X 3.30-5.90, Y 0.45-2.85): size not given"
+    ],
+    "additions": [
+      "hall: sconce on the left wall at Y 6.95 (centre of the bench strip that H-B shows: the bench centre Y 7.15 is u 0.04, too close to the edge), Z 1.85-2.03 because the plan's hook bar sits at 1.65-1.72; umbrella stand (3.42, 6.88) by the right wall; planter (2.37, 6.58) between the portal casing and the console",
+      "work: pendant hook (-0.825, 6.82): over the desk front, 3 cm clear of the 1.62 shelf in plan, shade 1.50-1.72; sconce on the north wall at Y 6.75 (the only part of the wall 'by the window' that W-A shows: Y 6.35-7.15); bookends + books on the shelf X -1.03..-0.69; waste basket under the desk (-0.35, 6.70)",
+      "master: floor lamp at (0.95, 18.25), shade d 38 at 1.30-1.58, next to (in front of) the tall planter: at X 1.40 it would sit on the right frame edge (u ~1.0) like the planter; tray under the left nightstand vase"
+    ]
+  },
+  "lamps": {
+    "boy/pendant": {
+      "room": "boy",
+      "typology": "ceiling",
+      "label": "pendant (ceiling point, window corner)",
+      "shell": false,
+      "glow": [
+        "boy_pshade"
+      ],
+      "lights": [
+        "boy_pend_L"
+      ]
+    },
+    "boy/wall-sconce": {
+      "room": "boy",
+      "typology": "wall",
+      "label": "swing-arm sconce over the desk",
+      "shell": false,
+      "glow": [
+        "boy_sshade"
+      ],
+      "lights": [
+        "boy_sconce_L"
+      ]
+    },
+    "girl/pendant": {
+      "room": "girl",
+      "typology": "ceiling",
+      "label": "pendant (ceiling point, window corner)",
+      "shell": false,
+      "glow": [
+        "girl_pshade"
+      ],
+      "lights": [
+        "girl_pend_L"
+      ]
+    },
+    "girl/wall-sconce": {
+      "room": "girl",
+      "typology": "wall",
+      "label": "swing-arm sconce over the desk",
+      "shell": false,
+      "glow": [
+        "girl_sshade"
+      ],
+      "lights": [
+        "girl_sconce_L"
+      ]
+    },
+    "bath/shower-downlight": {
+      "room": "bath",
+      "typology": "ceiling",
+      "label": "recessed downlight in the shower (shell)",
+      "shell": true,
+      "glow": [
+        "sh_downlight"
+      ],
+      "lights": [
+        "sh_down_L"
+      ]
+    },
+    "bath/ceiling-light": {
+      "room": "bath",
+      "typology": "ceiling",
+      "label": "flush ceiling light (S12: not in frame)",
+      "shell": false,
+      "glow": [
+        "bath_ceil"
+      ],
+      "lights": [
+        "bath_ceil_L"
+      ]
+    },
+    "bath/wall-sconce": {
+      "room": "bath",
+      "typology": "wall",
+      "label": "B1 opal wall light between window and shower",
+      "shell": false,
+      "glow": [
+        "b1_sconce"
+      ],
+      "lights": [
+        "b1_sconce_L"
+      ]
+    },
+    "bath/vanity-sconces": {
+      "room": "bath",
+      "typology": "wall",
+      "label": "flat opal pair flanking the mirror (<= 12 cm)",
+      "shell": false,
+      "glow": [
+        "vsconce0",
+        "vsconce1"
+      ],
+      "lights": [
+        "vsconce_L0",
+        "vsconce_L1"
+      ]
+    },
+    "kitchen-dining/led-shelves": {
+      "room": "kitchen-dining",
+      "typology": "cabinet",
+      "label": "LED profiles under both shelves (shell)",
+      "shell": true,
+      "glow": [
+        "kled0",
+        "kled1"
+      ],
+      "lights": [
+        "kled_L0",
+        "kled_L1"
+      ]
+    },
+    "kitchen-dining/led-niche": {
+      "room": "kitchen-dining",
+      "typology": "cabinet",
+      "label": "coffee-niche LED (shell)",
+      "shell": true,
+      "glow": [
+        "kniche_led"
+      ],
+      "lights": [
+        "kniche_L"
+      ]
+    },
+    "kitchen-dining/dining-pendant": {
+      "room": "kitchen-dining",
+      "typology": "ceiling",
+      "label": "dining pendant d 50",
+      "shell": false,
+      "glow": [
+        "dpend_r2"
+      ],
+      "lights": [
+        "dpend_L"
+      ]
+    },
+    "kitchen-dining/kitchen-sconce": {
+      "room": "kitchen-dining",
+      "typology": "wall",
+      "label": "kitchen wall sconce left of the hood",
+      "shell": false,
+      "glow": [
+        "ksconce_r2"
+      ],
+      "lights": [
+        "ksconce_L"
+      ]
+    },
+    "hall/wall-sconce": {
+      "room": "hall",
+      "typology": "wall",
+      "label": "NEW sconce above the bench (H-B left strip)",
+      "shell": false,
+      "glow": [
+        "h_sconce_r2"
+      ],
+      "lights": [
+        "h_sconce_L"
+      ]
+    },
+    "hall/table-lamp": {
+      "room": "hall",
+      "typology": "task",
+      "label": "console table lamp (existing)",
+      "shell": false,
+      "glow": [
+        "h_lamp3"
+      ],
+      "lights": [
+        "h_tlamp_L",
+        "h_tlamp_L2"
+      ]
+    },
+    "hall/ceiling-light": {
+      "room": "hall",
+      "typology": "ceiling",
+      "label": "hall ceiling pendant (plan proxy; transit only)",
+      "shell": false,
+      "glow": [
+        "h_ceil"
+      ],
+      "lights": [
+        "h_ceil_L"
+      ]
+    },
+    "corridor/picture-lights": {
+      "room": "corridor",
+      "typology": "wall",
+      "label": "NEW 3 picture lights",
+      "shell": false,
+      "glow": [
+        "c_pict0",
+        "c_pict1",
+        "c_pict2"
+      ],
+      "lights": [
+        "c_pict_L0",
+        "c_pict_L1",
+        "c_pict_L2"
+      ]
+    },
+    "corridor/ceiling-lights": {
+      "room": "corridor",
+      "typology": "ceiling",
+      "label": "2 semi-flush ceiling lights (existing)",
+      "shell": false,
+      "glow": [
+        "c_light_a",
+        "c_light_b"
+      ],
+      "lights": [
+        "c_ceil_L0",
+        "c_ceil_L1"
+      ]
+    },
+    "work/pendant": {
+      "room": "work",
+      "typology": "ceiling",
+      "label": "NEW pendant over the desk",
+      "shell": false,
+      "glow": [
+        "w_pend_r2"
+      ],
+      "lights": [
+        "w_pend_L"
+      ]
+    },
+    "work/wall-sconce": {
+      "room": "work",
+      "typology": "wall",
+      "label": "NEW sconce by the window",
+      "shell": false,
+      "glow": [
+        "w_sconce_r2"
+      ],
+      "lights": [
+        "w_sconce_L"
+      ]
+    },
+    "work/desk-lamp": {
+      "room": "work",
+      "typology": "task",
+      "label": "desk lamp (existing)",
+      "shell": false,
+      "glow": [
+        "w_lamp2"
+      ],
+      "lights": [
+        "w_dlamp_L"
+      ]
+    },
+    "master/floor-lamp": {
+      "room": "master",
+      "typology": "floor",
+      "label": "NEW floor lamp, reading corner",
+      "shell": false,
+      "glow": [
+        "m_flamp_r2"
+      ],
+      "lights": [
+        "m_flamp_L",
+        "m_flamp_L2"
+      ]
+    },
+    "master/bedside-sconces": {
+      "room": "master",
+      "typology": "wall",
+      "label": "bedside sconce pair (existing)",
+      "shell": false,
+      "glow": [
+        "m_sc2a",
+        "m_sc2b"
+      ],
+      "lights": [
+        "m_sc_L0",
+        "m_sc_L1"
+      ]
+    },
+    "master/pendant": {
+      "room": "master",
+      "typology": "ceiling",
+      "label": "centre pendant (plan proxy; transit only)",
+      "shell": false,
+      "glow": [
+        "m_pend"
+      ],
+      "lights": [
+        "m_pend_L"
+      ]
+    }
+  },
+  "build_s": 33
+}

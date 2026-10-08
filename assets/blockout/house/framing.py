@@ -9,6 +9,7 @@ the default, and an option applies only its own geometry deltas (G-*) and layout
   python3 build_house.py --framing hall                # every option of a room (+ the current frame)
   python3 build_house.py --framing all                 # everything, room by room, then the sheets
   python3 build_house.py --framing sheets              # compare sheets + all-picks + README tables only
+  python3 build_house.py --framing round2              # ROUND 2 (proposal 0.2): see framing_r2.py
   python3 build_house.py                               # no flag: the approved plan clays, exactly as before
 
 Lighting ("editorial clay"): the sky through the windows exactly as the plan clays, PLUS (a) a soft area light
@@ -1328,6 +1329,10 @@ def picks_sheet(rep):
 # ---------------------------------------------------------------------------------------------------------------
 def main(argv):
     import argparse
+    sel0 = argv[argv.index("--framing") + 1] if "--framing" in argv and argv.index("--framing") + 1 < len(argv) else ""
+    import framing_r2                       # round 2 (proposal 0.2): K2-*, B1, B2, D1, D2, round2*, <pick>-lit
+    if framing_r2.is_round2(sel0):
+        return framing_r2.main(argv)
     ap = argparse.ArgumentParser()
     ap.add_argument("--framing", required=True)
     ap.add_argument("--res", type=int, default=2048)
