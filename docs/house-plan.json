@@ -1,37 +1,52 @@
 {
-  "version": "1.0 / approved 2026-10-06",
+  "version": "1.1 / approved 2026-10-08",
   "author": "master-designer",
-  "status": "BINDING. Approved by the user 2026-10-06 (verbatim: \"1.טוב 2.טוב\"): (1) the house plan v0.2 with its recommended defaults U1, U4, U5, U6, U9, U10, U12, now decisions; (2) the filler rule in the Design Bible (1.5). New cameras, stations and clearances are pinhole estimates validated by the house blockout (0 credits) before any credit; deviations found there are fixed in 1.0.x and reported to the user. Changing a room, opening or window needs user approval.",
-  "supersedes": "docs/proposals/house-plan.json 0.2 (kept as history)",
+  "status": "BINDING. 1.0 approved 2026-10-06 (\"1.טוב 2.טוב\"). 1.1 approved 2026-10-08 (verbatim: \"סבב 2 נראה מעולה\") on the framing clay assets/blockout/house/framing/round2/all-round2.jpg: the frames exactly as shown there (round-2 K-boy, K-girl, B1, B2, D1, D2 and the round-1 picks H-B, C-B, W-A, MB-A with the S11/S12 additions), the whole-house density rule S11 and the lighting plan S12. Camera and layout values are the clay-measured ones (assets/blockout/house/framing/round2/selfcheck.json, framing/selfcheck.json). Clay fails that remain in the approved frames (F3 tangents, F4 weak, F5 at H0 and B2) are listed in frame_fixes_1_1_x: nudges up to 0.10 m are closed by master-designer in 1.1.x and reported; anything larger goes back to the user. Choices not visible in the clay are defaults until the user answers (open_1_1). Changing a room, opening, window or camera still needs user approval.",
+  "supersedes": "1.0 (2026-10-06); superseded values are kept in history_1_0. Proposal sources: docs/proposals/house-framing.md/.json 0.2 (rounds 1 and 2).",
   "companion": "docs/house-plan.md",
-  "drawings": "docs/proposals/house-plan/ (plan.png, plan-walk.png, clay-axo.png from draw_plan.py; geometry identical to 1.0)",
+  "drawings": "docs/proposals/house-plan/ (1.0 geometry; not redrawn for 1.1). The 1.1 geometry is built by assets/blockout/house/build_house.py --framing (framing.py, framing_r2.py).",
   "user_decisions": {
     "2026_10_06_plan_inputs_verbatim": "מאשר פתח בסלון, ילד ילדה עם גימיקים לילדים בכוון הנורדי, מאשר מידות מחזיק עיתונים, ללא ממד, רמת מילוי חדרים מעורב, בית 170 מר",
     "2026_10_06_approval_verbatim": "1.טוב 2.טוב",
-    "U1": "H0 is the hall master frame and the site opening frame",
+    "2026_10_07_framing_feedback_verbatim": "מרפרוף שלי בתמונות, זה לא נראה תמונות בצילום של מגזין, זה נראה יותר מעין של מביט, או כאילו מצילום אקראי, ואין התייחסות מלאה לסגנון ולעוצמה שאנחנו מחפשים בעצם להציג כל חדר לדעתי. הייתי שמח שזה יהיה בקומפוזיציה הרבה הרבה יותר מוקפדת לכל אחד מהחדרים ושכל תמונה תהיה וואו בעצם, שוב, כמו תמונה ממגזין ולא תמונה של צופה.",
+    "2026_10_08_round2_feedback_verbatim": [
+      "1.בחדרי ילד ילדה שהמיטה תהיה בלי אפיריון אלא מיטת יחיד רגילה, עיצוב של בנות קצת בבת, בובות קצת, מדף ספרי ילדים, אולי צבע קיר שמתאים, ולבנים סגנון שמתאים לילד, מכוניות צעצוע, ספרים, אולי סקייטבורד וכדורגל.. וגם גוף התאורה שיהיה תאורת קיר ותקרה, שולחן עבודה לשניהם, 2. בשירותים לא רואים אסלה ומקלחון, ששם יש מוצרים להוסיף כמו סבוניה, מתלה נייר טואלט, פחון, וילון מקלחת, עציצים, סביב המראה כל מיני מתלים וכו וכל אביזר שמתאים לחדר שירותים לעשות מהמקלחת רמת מגזין.. במטבח לא כל כך רואים את המטבח אז שיראו עוד מהמטבח? או שיהיה קלוסאפ נוסף על המטבח ואביזרי עיצוב למטבח, תאורות, מלח פלפל צנצנות מסוגננות מעמד נייר מטבח וכל מיני אביזרי מטבח מעוצבים.. שיהיו מספיק מוצרים לכל חדר ולתת דגש על תאורות מעוצבות תקרה וקירות ואולי תאורת ארונות וכל מה שאפשר להוסיף",
+      "אפשר 2 פריימים מחדר שירותים כדי שיהיו בקומפוזיציה טובה..ו2 פריימים מטבח ופינת אוכל, ותחשוב על עוד מוצרים שמתאימים לכל חדר..צריך שיהיו מספיק מוצרים לחווית קנייה בכל פריים"
+    ],
+    "2026_10_08_approval_verbatim": "סבב 2 נראה מעולה",
+    "2026_10_08_density_verbatim": "כתוב מינימום מוצרים..לדעתי כמה שיותר שהמעצב יחליט שזה לא גורע. ו3 וואריציות מתאימות לנורדי לכל מוצר",
+    "U1": "H0 is the hall master frame and the site opening frame. 1.1: yaw 12 (H-B), E0 is prefixed by a 13 deg pan (T-E0)",
     "U2": "no mamad: the work room is a regular room (0.15 walls, regular window)",
     "U3": "living-room opening to the dining approved (in docs/skeleton-spec.md)",
     "U4": "pull-back (dolly backwards, camera retreating) is an allowed transition shot: hall->corridor rail and corridor->master",
-    "U5": "a 60 deg turn is two 30 deg pan shots (kids' rooms); any pan shot stays <= 35 deg",
-    "U6": "bath: the mirror above the vanity is part of the shell, not a product, placed so it reflects only wall from B0; shower screen in fluted (reeded) glass. Written as a room exception in Design Bible 1.5",
+    "U5": "any pan shot stays <= 35 deg (1.1: no 60 deg turn is used any more; kids' arrivals are slider + one 33 deg pan)",
+    "U6": "bath: the mirror above the vanity is shell, not a product, and from the camera point reflects only wall. 1.1: single vanity on the south wall; the fluted-glass shower screen is replaced by a shower curtain (product) on a ceiling L-track (shell). Design Bible 1.6",
     "U7": "house ~170 m2 net",
-    "U8": "kids' rooms: Nordic palette, playful kid touches, boy and girl distinct",
+    "U8": "kids' rooms: Nordic, playful kid touches, boy and girl distinct. 1.1: see U19",
     "U9": "living products seen from C0/H0 are rendered with the living defaults; frontend may composite the living layers there",
-    "U10": "room-to-room transitions play 2.3-3.4 s depending on shot count (E0 stays 2.2-2.6 s)",
+    "U10": "room-to-room transitions play 2.3-3.4 s depending on shot count (E0 stays 2.2-2.6 s; T-E0 with its 13 deg pan: open_1_1)",
     "U11": "mixed: full route for kitchen-dining and master, lean for the rest",
     "U12": "build order as 'build_order'",
-    "fillers": "every standalone object in a frame is a product; only fillers that show a product in use may be unsold (Design Bible 1.5)"
+    "fillers": "every standalone object in a frame is a product; only fillers that show a product in use may be unsold (Design Bible 1.5)",
+    "U13": "1.1: the 'Magazine 2' framing standard S1-S12 (docs/proposals/house-framing.md 2 and 8.1) is binding for every master frame; acceptance checks F1-F12 (frame_checks)",
+    "U14": "1.1 (R1): camera height per room: 1.20 living, hall, corridor; 1.10 kitchen-dining and work; 1.05 master; 1.00 kids; 1.15 bath. Lens 24 mm everywhere, tilt 0, framing by shift only",
+    "U15": "1.1 (S10): two frames for the bath (B1, B2) and for kitchen-dining (D1, D2), each pair from ONE camera point, linked by ONE pan of <= 35 deg. The second frame may have no window in frame if light still comes from the left (same hour)",
+    "U16": "1.1 (S11): products per frame: minimum 14 (full-route frame), 11 (lean), 5 (transit). The minimum is a floor: the goal is as many products as master-designer judges do not detract from the composition (user, 2026-10-08)",
+    "U17": "1.1 (S12): lighting plan per room (lighting_plan); kids and bath: hardwired, no visible cable",
+    "U18": "1.1: every product slot carries exactly 3 Nordic variants (default + 2), sourced and selected per the Design Bible (user, 2026-10-08)",
+    "U19": "1.1: kids: regular single bed in the window corner (no canopy, no house frame, no teepee), a desk for each child, colour block to 1.25 (boy sage, girl blush clay), kids' bookshelf, ceiling + wall light, toys as products (Design Bible 1.6, kids' rooms)",
+    "U20": "1.1: R3 slider through a doorway ('wall wipe') as an arrival shot; R4 opal roof lights as daylight in the hall and corridor; R6 rail station S1' replaces S1"
   },
-  "sources": ["docs/proposals/house-plan.json 0.2", "docs/skeleton-spec.md (B, update e)", "assets/blockout/living-room/v4-spec.json v4.1", "assets/blockout/living-room/review-designer.md 7-8", "briefs/motion-direction.nordic.md 2.0.2", "docs/design-bible/nordic.md 1.5", "docs/brand-brief.md", "docs/proposals/house-plan/README.md (v0.1 check)"],
+  "sources": ["docs/house-plan.json 1.0", "docs/proposals/house-framing.json 0.2 (round 1 + round_2)", "assets/blockout/house/framing/selfcheck.json (round 1)", "assets/blockout/house/framing/round2/selfcheck.json (round 2)", "docs/skeleton-spec.md", "docs/design-bible/nordic.md 1.6", "docs/design-bible/nordic-dining.md 0.2", "docs/brand-brief.md"],
 
   "conventions": {
     "axes": "Same world as v4-spec.json: metres, origin on the living-room floor at its back wall, X right as the living master camera sees it, Y from the living back wall toward the entrance, Z up. All room rectangles are INTERIOR wall faces.",
     "compass": "north = -X, south = +X, east = -Y, west = +Y. Plan drawing: -Y (east) up, -X (north) left.",
     "yaw_deg_left": "As v4-spec: heading from -Y, positive toward -X. f = (-sin yaw, -cos yaw), r = (cos yaw, -sin yaw).",
-    "projection": "d = f.(P-C), x = r.(P-C); u = u0 + 0.6667 x/d; v = v0 + 1.1852 (1.20 - Z)/d (24 mm).",
+    "projection": "d = f.(P-C), x = r.(P-C); u = u0 + 0.6667 x/d; v = v0 + 1.1852 (Hc - Z)/d (24 mm, 16:9). Hc = camera height of that frame (1.1; was 1.20 everywhere). Floor visible from depth d >= 1.1852 Hc / (1 - v0).",
     "walls": "Interior partitions 0.15. Exterior walls 0.35 everywhere, including around the entrance court. Documented exceptions: see 'documented_walls'.",
-    "sun": "Render time 15:00 mid-winter for the whole house (Bible 1.4). Every window seen in, or lighting, a master frame is on a north or east facade (in shade at that hour). South/west walls in frames are solid.",
-    "transition_grammar": "motion-direction 2.3 + U4 + U5: each shot is one straight move with constant heading (dolly forward, pull-back, slider, pedestal, merged into one vector; may be oblique to the heading, as T4) or a pan-only shot of <= 35 deg from a fixed point. 60 deg = 2 x 30 deg pans. Playback per U10."
+    "sun": "Render time 15:00 mid-winter for the whole house (Bible 1.4). Every window seen in, or lighting, a master frame is on a north or east facade (in shade at that hour); 1.1: or an opal roof light (hall, corridor; diffuse, no sun patch). South/west walls in frames are solid.",
+    "transition_grammar": "motion-direction 2.3 + U4 + U5 + U20: each shot is one straight move with constant heading (dolly forward, pull-back, slider, pedestal, merged into one vector; may be oblique to the heading) or a pan-only shot of <= 35 deg from a fixed point. 1.1: a slider may cross a doorway (>= 0.15 to the jambs); the camera height change of an arrival is merged into its last straight vector; two frames of one room are linked by one in-room pan (P-B, P-D). Playback per U10."
   },
 
   "footprint": {
@@ -49,15 +64,15 @@
   },
 
   "rooms": [
-    {"id": "living", "name_he": "סלון", "status": "approved (B v4.1); right-wall opening approved 2026-10-06", "x": [-2.30, 2.50], "y": [0.00, 6.20], "h": 3.00, "area_m2": 29.8, "build": true, "slots_file": "data/slots/living-room.json"},
-    {"id": "kitchen-dining", "name_he": "מטבח + פינת אוכל", "x": [2.65, 7.25], "y": [0.00, 6.20], "h": 3.00, "area_m2": 28.5, "build": true, "route": "full", "layout": "dining table by the east window, centre (4.30, 1.70), long axis along X; kitchen run (tall units + counter, no window) on the south wall X 7.25; more tall units on the west wall Y 6.20 in its southern part (X 3.95-7.25, behind the entrance court)", "slots_file": "data/slots/dining-room.json (pending user approval)", "bible_appendix": "docs/design-bible/nordic-dining.md (pending user approval)"},
-    {"id": "hall", "name_he": "חלל כניסה", "x": [0.80, 3.60], "y": [6.35, 9.80], "h": 3.00, "area_m2": 9.7, "build": true, "route": "lean", "note": "As v4-spec h0.hall. No window. Back wall Y 9.80 open X 1.70-3.10 into the corridor. Left wall Y 6.35-7.98 (the part seen in H0) is solid: bench + hooks."},
-    {"id": "work", "name_he": "חדר עבודה", "x": [-2.30, 0.65], "y": [6.35, 10.10], "h": 3.00, "area_m2": 11.1, "build": true, "route": "lean", "note": "Regular room (no mamad, U2). 0.15 walls; 3.75 m deep."},
-    {"id": "corridor", "name_he": "מסדרון", "x": [1.70, 3.10], "y": [9.80, 17.51], "h": 2.70, "area_m2": 10.8, "build": true, "route": "lean", "note": "Dropped ceiling 2.70 (AC ducts), shadow gap, no cornice."},
-    {"id": "boy", "name_he": "חדר ילד", "x": [-2.30, 1.55], "y": [10.25, 13.73], "h": 3.00, "area_m2": 13.4, "build": true, "route": "lean", "identical_to": "girl, shifted exactly +3.63 in Y (room, window, door, camera)"},
-    {"id": "girl", "name_he": "חדר ילדה", "x": [-2.30, 1.55], "y": [13.88, 17.36], "h": 3.00, "area_m2": 13.4, "build": true, "route": "lean"},
-    {"id": "master", "name_he": "חדר שינה הורים", "x": [-2.30, 3.10], "y": [17.66, 21.66], "h": 3.00, "area_m2": 21.6, "build": true, "route": "full", "layout": "bed head against the east wall Y 17.66, bed centre X -0.25; wardrobes on the west wall; opening to the en-suite in the south wall"},
-    {"id": "bath", "name_he": "מקלחת ושירותים", "x": [3.25, 6.25], "y": [9.95, 13.59], "h": 2.70, "area_m2": 10.9, "build": true, "route": "lean", "layout": "double vanity on the east wall under/next to the window, walk-in shower on the south wall X 6.25, WC on the west wall", "shell_exception_U6": "mirror above the vanity is shell (reflects only wall from B0); fluted-glass shower screen; Design Bible 1.5"},
+    {"id": "living", "name_he": "סלון", "status": "approved (B v4.1); right-wall opening approved 2026-10-06; unchanged in 1.1", "x": [-2.30, 2.50], "y": [0.00, 6.20], "h": 3.00, "area_m2": 29.8, "build": true, "frames": ["M0"], "slots_file": "data/slots/living-room.json"},
+    {"id": "kitchen-dining", "name_he": "מטבח + פינת אוכל", "x": [2.65, 7.25], "y": [0.00, 6.20], "h": 3.00, "area_m2": 28.5, "build": true, "route": "full", "frames": ["D1", "D2"], "layout": "1.1 (G-D2, G-D3): dining table 160x85 by the east window, centre (4.60, 1.65), long axis X; 2 chairs on the window side, bench on the camera side, no end chair; dining rug under the table. Kitchen run on the south wall X 7.25: lower units Y 0.75-4.20 with sink, flush hob, plastered hood (the room's bone), two LED-lit oak shelves, tall units Y 4.20-6.20 with an oak-lined coffee niche and the oven; tall units on the west wall Y 5.58-6.20 (X 3.95-6.63) as in 1.0. Detail: fixed_1_1.kitchen-dining", "slots_file": "data/slots/dining-room.json 0.2", "bible_appendix": "docs/design-bible/nordic-dining.md 0.2"},
+    {"id": "hall", "name_he": "חלל כניסה", "x": [0.80, 3.60], "y": [6.35, 9.80], "h": 3.00, "area_m2": 9.7, "build": true, "route": "lean", "frames": ["H0"], "note": "No window; 1.1: opal roof light RL-hall over the bench (G-H1), oak-lined portal on the hall side of the living door (G-H4), front door moved to Y 7.80-8.80 (G-H2), console X 2.55-3.35 (G-H3). Back wall Y 9.80 open X 1.70-3.10 into the corridor (oak portal G-C3). Left wall Y 6.35-7.98 is solid: bench, cushion, peg rail, wall sconce.", "slots_file": "data/slots/hall.json"},
+    {"id": "work", "name_he": "חדר עבודה", "x": [-2.30, 0.65], "y": [6.35, 10.10], "h": 3.00, "area_m2": 11.1, "build": true, "route": "lean", "frames": ["W0"], "note": "Regular room (no mamad, U2). 0.15 walls; 3.75 m deep. 1.1 (G-W1): built-in oak desk + shelf on the east wall (the hero wall), no longer under the window; the door leaf folds 180 deg flat on the room's south wall.", "slots_file": "data/slots/work.json"},
+    {"id": "corridor", "name_he": "מסדרון", "x": [1.70, 3.10], "y": [9.80, 17.51], "h": 2.70, "area_m2": 10.8, "build": true, "route": "lean", "frames": ["C0"], "note": "Dropped ceiling 2.70 (AC ducts), shadow gap, no cornice. 1.1: continuous opal roof-light slot along the left (gallery) wall (G-C1b), gallery Y 14.0-15.6 (G-C2), oak portal on the hall opening (G-C3).", "slots_file": "data/slots/corridor.json"},
+    {"id": "boy", "name_he": "חדר ילד", "x": [-2.30, 1.55], "y": [10.25, 13.73], "h": 3.00, "area_m2": 13.4, "build": true, "route": "lean", "frames": ["K-boy"], "identical_to": "girl, shifted exactly +3.63 in Y (room, window, door, camera, furniture, electrical points)", "layout": "1.1 (G-K1r2, G-K3, G-K4, G-K5): single bed 96x196 with its head in the window corner along the east wall, desk 90x50 on the east wall by the door side, wardrobes on the west wall (behind the camera), colour block Z 0-1.25 on the east and north walls (#A7B09A). Detail: fixed_1_1.kids", "slots_file": "data/slots/kids.json (shared with girl)"},
+    {"id": "girl", "name_he": "חדר ילדה", "x": [-2.30, 1.55], "y": [13.88, 17.36], "h": 3.00, "area_m2": 13.4, "build": true, "route": "lean", "frames": ["K-girl"], "layout": "as boy +3.63 in Y; colour block #E8D5CC (blush clay, Bible 1.6 kids' exception)", "slots_file": "data/slots/kids.json (shared with boy)"},
+    {"id": "master", "name_he": "חדר שינה הורים", "x": [-2.30, 3.10], "y": [17.66, 21.66], "h": 3.00, "area_m2": 21.6, "build": true, "route": "full", "frames": ["MB0"], "layout": "1.1 (G-M1..G-M4): bed 180x200 centred X -0.70 with its head on the east wall Y 17.66; nightstands 45; bed wall with painted tongue-and-groove wainscot to 1.25 and an oak cap; reading corner (floor lamp + tall planter) right of the bed; no wardrobes on the west wall (they belong to the existing en-suite/WIC); opening to the en-suite in the south wall", "slots_file": "data/slots/master.json"},
+    {"id": "bath", "name_he": "מקלחת ושירותים", "x": [3.25, 6.25], "y": [9.95, 13.59], "h": 2.70, "area_m2": 10.9, "build": true, "route": "lean", "frames": ["B1", "B2"], "layout": "1.1 (G-B1r2, G-B2r2): fluted window X 3.45-4.25 with a wall-hung WC under it on a honed limestone ledge; limestone shower corner X 5.20-6.25 x Y 9.95-11.15 with a niche and a ceiling L-track carrying the shower curtain (product); single oak vanity 110 on the south wall Y 11.75-12.85 under the U6 mirror; the north wall Y 9.95-12.39 stays blank (mirror reflection zone)", "shell_exception_U6": "mirror is shell and reflects only the blank north wall from CB; ceiling L-track is shell; the curtain is a product (Design Bible 1.6)", "slots_file": "data/slots/bath.json"},
     {"id": "laundry", "name_he": "שירות/כביסה", "x": [3.25, 6.25], "y": [13.74, 15.40], "h": 2.70, "area_m2": 5.0, "build": false, "note": "Door closed, flush."},
     {"id": "ensuite-wic", "name_he": "חדר רחצה הורים + ארונות", "x": [3.25, 6.25], "y": [15.55, 21.66], "h": 2.70, "area_m2": 18.3, "build": false}
   ],
@@ -69,85 +84,137 @@
   ],
 
   "shell_common": {
-    "floor": "whitened oak, 25 cm planks 3-4 m, along Y in every dry room, continuous across thresholds. Bath: light limestone-look porcelain 60x120.",
-    "cornice_skirting": "cornice 10 and skirting 15, wall colour, in every 3.00 room; corridor and bath 2.70 with a shadow gap",
-    "interior_doors": "flush, wall colour, black matte lever, 0.90 x 2.40; bath 1.00 x 2.40. Every door has >= 0.20 of wall (jamb return) to the nearest corner.",
-    "windows": "same family as the living window: reveals 0.35, frame in the outer plane, flat head, sill 0.75 head 2.70 unless stated"
+    "floor": "whitened oak, 25 cm planks 3-4 m, along Y in every dry room, continuous across thresholds. Bath: light limestone-look porcelain 60x120; 1.1: shower floor level, honed limestone.",
+    "cornice_skirting": "cornice 10 and skirting 15, wall colour, in every 3.00 room; corridor and bath 2.70 with a shadow gap. 1.1: in the kids' rooms the skirting of the two colour-blocked walls takes the block colour.",
+    "interior_doors": "flush, wall colour, black matte lever, 0.90 x 2.40; bath 1.00 x 2.40. Every door has >= 0.20 of wall (jamb return) to the nearest corner. 1.1: the work door leaf folds 180 deg flat on the work room's south wall.",
+    "windows": "same family as the living window: reveals 0.35, frame in the outer plane, flat head, sill 0.75 head 2.70 unless stated",
+    "roof_lights_1_1": "opal (diffusing) glazing at the top of a light well, no sun patch possible; read as soft top light. RL-hall and RL-corridor (see roof_lights)",
+    "portals_1_1": "oak-lined reveals with a 10 cm oak casing on one face only: O-entry-living (hall side, 2 cm lining), O-hall-corridor (hall side, 4 cm lining, lintel 2.62). Profiles as built in the clay"
   },
 
   "openings": [
-    {"id": "O-entry-living", "type": "double door, open", "wall": "living front", "plane_y": [6.20, 6.35], "x": [0.95, 2.15], "z": [0, 2.40], "status": "approved"},
-    {"id": "O-living-dining", "type": "double door, open (leaves folded 180 deg against the dining side of the wall)", "wall": "living right", "plane_x": [2.50, 2.65], "y": [2.97, 4.57], "z": [0, 2.40], "status": "approved 2026-10-06, in skeleton-spec", "clearance_est": "+-0.40 (crossing at 35 deg to the wall)"},
-    {"id": "O-front-door", "type": "front door, solid oak, closed", "wall": "hall south (exterior, 0.35)", "plane_x": [3.60, 3.95], "y": [7.10, 8.10], "z": [0, 2.40]},
-    {"id": "O-hall-work", "type": "door 0.90 x 2.40, open into the work room, hinge on the west jamb", "wall": "hall left", "plane_x": [0.65, 0.80], "y": [8.10, 9.00], "z": [0, 2.40], "clearance_est": "+-0.42", "note": "east jamb at Y 8.10 is outside the H0 frame (left edge meets this wall at Y 7.98)"},
-    {"id": "O-hall-corridor", "type": "open, no door", "plane_y": [9.80, 9.80], "x": [1.70, 3.10], "z": [0, 2.70]},
-    {"id": "O-corridor-boy", "type": "door 0.90 x 2.40, open", "wall": "corridor left", "plane_x": [1.55, 1.70], "y": [12.63, 13.53], "clearance_est": "+-0.35", "jamb_returns": [2.38, 0.20]},
-    {"id": "O-corridor-girl", "type": "door 0.90 x 2.40, open", "wall": "corridor left", "plane_x": [1.55, 1.70], "y": [16.26, 17.16], "clearance_est": "+-0.35", "jamb_returns": [2.38, 0.20]},
-    {"id": "O-corridor-bath", "type": "door 1.00 x 2.40, open", "wall": "corridor right", "plane_x": [3.10, 3.25], "y": [12.39, 13.39], "clearance_est": "+-0.23", "jamb_returns": [2.44, 0.20]},
+    {"id": "O-entry-living", "type": "double door, open", "wall": "living front", "plane_y": [6.20, 6.35], "x": [0.95, 2.15], "z": [0, 2.40], "status": "approved", "finish_1_1": "G-H4: oak-lined portal on the hall half of the reveal (Y 6.27-6.35) + 10 cm casing on the hall face; out of M0"},
+    {"id": "O-living-dining", "type": "double door, open (leaves folded 180 deg against the dining side of the wall)", "wall": "living right", "plane_x": [2.50, 2.65], "y": [2.97, 4.57], "z": [0, 2.40], "status": "approved 2026-10-06, in skeleton-spec", "clearance_1_1": "T-LD 0.286 (measured)"},
+    {"id": "O-front-door", "type": "front door, solid oak, closed", "wall": "hall south (exterior, 0.35)", "plane_x": [3.60, 3.95], "y": [7.80, 8.80], "z": [0, 2.40], "changed_1_1": "G-H2 (was Y 7.10-8.10); still onto the covered court; outside H0 (u ~1.13)"},
+    {"id": "O-hall-work", "type": "door 0.90 x 2.40, open into the work room, hinge on the west jamb; 1.1: leaf folded 180 deg flat on the work room's south wall (Y 9.00-9.90)", "wall": "hall left", "plane_x": [0.65, 0.80], "y": [8.10, 9.00], "z": [0, 2.40], "clearance_1_1": "T-HW 0.233 (measured)", "note": "outside H0 (the left edge meets the hall left wall at Y ~7.29)"},
+    {"id": "O-hall-corridor", "type": "open, no door", "plane_y": [9.80, 9.80], "x": [1.70, 3.10], "z": [0, 2.70], "finish_1_1": "G-C3: oak-lined portal (4 cm lining, lintel drops to 2.62) + 10 cm casing on the hall face"},
+    {"id": "O-corridor-boy", "type": "door 0.90 x 2.40, open", "wall": "corridor left", "plane_x": [1.55, 1.70], "y": [12.63, 13.53], "jamb_returns": [2.38, 0.20], "clearance_1_1": "T-CBoy 0.370 (measured)"},
+    {"id": "O-corridor-girl", "type": "door 0.90 x 2.40, open", "wall": "corridor left", "plane_x": [1.55, 1.70], "y": [16.26, 17.16], "jamb_returns": [2.38, 0.20], "clearance_1_1": "T-CGirl 0.289 (measured)"},
+    {"id": "O-corridor-bath", "type": "door 1.00 x 2.40, open", "wall": "corridor right", "plane_x": [3.10, 3.25], "y": [12.39, 13.39], "jamb_returns": [2.44, 0.20], "clearance_1_1": "T-CBath 0.281 to the jambs, 0.19 to the open leaf (measured)"},
     {"id": "O-corridor-laundry", "type": "door 0.80 x 2.40, closed, flush", "wall": "corridor right", "plane_x": [3.10, 3.25], "y": [14.30, 15.10]},
-    {"id": "O-corridor-master", "type": "door 0.90 x 2.40, open", "wall": "corridor end", "plane_y": [17.51, 17.66], "x": [1.88, 2.78], "clearance_est": "+-0.43"},
+    {"id": "O-corridor-master", "type": "door 0.90 x 2.40, open", "wall": "corridor end", "plane_y": [17.51, 17.66], "x": [2.00, 2.90], "changed_1_1": "G-M1 (was X 1.88-2.78); 0.20 return to X 3.10 kept; jamb X 2.00 outside MB0 (u 1.031)", "clearance_1_1": "T-CM 0.402 (measured)"},
     {"id": "O-master-ensuite", "type": "opening 0.90 x 2.40", "wall": "master south", "plane_x": [3.10, 3.25], "y": [19.70, 20.60]}
   ],
 
   "windows": [
     {"id": "W-living", "room": "living", "facade": "north", "plane_x": -2.30, "y": [0.90, 2.70], "sill": 0.75, "head": 2.70, "status": "approved"},
-    {"id": "W-dining", "room": "kitchen-dining", "facade": "east", "plane_y": 0.00, "wall_t": 0.35, "x": [2.95, 4.75], "sill": 0.75, "head": 2.70},
-    {"id": "W-work", "room": "work", "facade": "north", "plane_x": -2.30, "y": [7.15, 8.35], "sill": 0.75, "head": 2.70},
-    {"id": "W-boy", "room": "boy", "facade": "north", "plane_x": -2.30, "y": [10.75, 12.15], "sill": 0.75, "head": 2.70},
+    {"id": "W-dining", "room": "kitchen-dining", "facade": "east", "plane_y": 0.00, "wall_t": 0.35, "x": [2.95, 4.75], "sill": 0.75, "head": 2.70, "frame_1_1": "D1: cut by the left edge, visible X 4.04-4.75 (u 0-0.153, 60.5% cut); D2: out of frame (S10)"},
+    {"id": "W-work", "room": "work", "facade": "north", "plane_x": -2.30, "y": [7.15, 8.35], "sill": 0.75, "head": 2.70, "frame_1_1": "W0: on the left wall, visible Y 7.15-7.88 (u 0-0.136, 39% cut)"},
+    {"id": "W-boy", "room": "boy", "facade": "north", "plane_x": -2.30, "y": [10.75, 12.15], "sill": 0.75, "head": 2.70, "frame_1_1": "K-boy: u 0-0.230 (23% cut), head out at the top; roman blind inside the reveal"},
     {"id": "W-girl", "room": "girl", "facade": "north", "plane_x": -2.30, "y": [14.38, 15.78], "sill": 0.75, "head": 2.70},
-    {"id": "W-master", "room": "master", "facade": "north", "plane_x": -2.30, "y": [18.10, 19.60], "sill": 0.75, "head": 2.70},
-    {"id": "W-bath", "room": "bath", "facade": "east (onto the shaded entrance court)", "plane_y": 9.95, "wall_t": 0.35, "x": [3.95, 4.95], "sill": 1.30, "head": 2.40, "glass": "fluted (privacy, diffuse)"},
+    {"id": "W-master", "room": "master", "facade": "north", "plane_x": -2.30, "y": [18.10, 19.60], "sill": 0.75, "head": 2.70, "frame_1_1": "MB0: u 0-0.138 (46% cut)"},
+    {"id": "W-bath", "room": "bath", "facade": "east (onto the shaded entrance court)", "plane_y": 9.95, "wall_t": 0.35, "x": [3.45, 4.25], "sill": 1.00, "head": 2.15, "glass": "fluted (privacy, diffuse)", "changed_1_1": "G-B1r2 (was X 3.95-4.95, sill 1.30, head 2.40); B1: whole, u 0.163-0.352, head v 0.049-0.088; B2: out of frame (S10)"},
     {"id": "W-ensuite", "room": "ensuite-wic", "facade": "south", "note": "frosted, never in a frame"}
   ],
 
+  "roof_lights": [
+    {"id": "RL-hall", "delta": "G-H1", "room": "hall", "x": [0.95, 1.85], "y": [6.70, 8.30], "size_m": [0.90, 1.60], "well_depth": 0.45, "glazing": "opal, diffusing; no sun patch at 15:00 winter", "in_frame": "not in H0 (above the frame); lights the bench wall from above"},
+    {"id": "RL-corridor", "delta": "G-C1b", "room": "corridor", "x": [1.70, 2.00], "y": [10.00, 17.20], "width": 0.30, "type": "continuous slot along the left (gallery) wall", "glazing": "opal, diffusing", "in_frame": "C0: bright converging line at the top left (ceiling visible from Y < 13.24)"}
+  ],
+
+  "fixed_1_1": {
+    "note": "Fixed furniture and built-ins (not products, identical in every variation). Sizes as built in the approved clay.",
+    "hall": {"console": {"delta": "G-H3", "x": [2.55, 3.35], "y": [6.35, 6.70], "h": 0.80, "type": "oak table, slim legs (was X 2.30-3.10)"}, "bench": {"x": [0.80, 1.20], "y": [6.55, 7.75], "seat_h": 0.45, "type": "oak, open under the seat, end panels"}},
+    "work": {"desk": {"delta": "G-W1", "x": [-1.625, -0.025], "y": [6.35, 6.95], "top": 0.76, "type": "built-in oak desk with a drawer, on the east wall"}, "shelf": {"z": 1.62, "x": [-1.625, -0.025], "depth": 0.25, "type": "built-in oak shelf"}, "chair": {"centre": [-0.825, 7.30], "type": "oak desk chair, back to the camera"}},
+    "kids": {"bed": {"delta": "G-K1r2", "outer_cm": [96, 196], "x": [-2.26, -0.30], "y": [10.25, 11.21], "head": "north wall (window corner)", "boards_top_max": 0.60, "mattress_top": 0.42, "rule": "boards >= 0.15 below the 0.75 sill in frame"}, "desk": {"delta": "G-K3", "cm": [90, 50, 70], "x": [0.10, 1.00], "y": [10.25, 10.75]}, "wardrobes": {"x": [-2.30, 0.20], "wall": "west (Y 13.73)", "in_frame": "no (behind the camera)"}, "colour_block": {"delta": "G-K4", "walls": ["east", "north"], "z": [0.0, 1.25], "under_window": "to the sill board only", "boy": "#A7B09A", "girl": "#E8D5CC", "line": "crisp, no rail; skirting of those walls in the block colour"}, "girl_offset_y": 3.63},
+    "master": {"bed": {"delta": "G-M3", "cm": [180, 200], "x": [-1.60, 0.20], "y": [17.66, 19.66], "head_h": 1.15}, "nightstands": {"w": 0.45, "x": [[-2.10, -1.65], [0.25, 0.70]], "y": [17.66, 18.06], "h": 0.55}, "wainscot": {"delta": "G-M4", "wall": "east (bed wall)", "z": [0.0, 1.25], "type": "painted tongue-and-groove, warm white, 3 cm oak cap"}, "west_wall": "no wardrobes (G-M2)"},
+    "bath": {"wc": {"delta": "G-B2r2", "type": "wall-hung, concealed cistern", "centre_x": 3.85, "ledge": {"x": [3.30, 4.40], "y": [9.95, 10.15], "top": 0.95, "finish": "honed limestone"}}, "shower": {"x": [5.20, 6.25], "y": [9.95, 11.15], "floor": "level, honed limestone", "cladding": "honed limestone to 2.20", "niche": {"wall": "south", "y": [10.30, 10.90], "z": [1.05, 1.40], "depth": 0.12}, "fittings": "rain head + mixer, matte black", "downlight": "recessed (shell)", "curtain_track": "ceiling-mounted L, matte black, along X 5.20 (Y 9.95-11.15) and Y 11.15 (X 5.20-6.25); curtain gathered at (5.20, 11.15)"}, "vanity": {"type": "single, open-shelf oak, honed limestone top, basin, wall tap matte black", "cm": [110, 48], "wall": "south X 6.25", "y": [11.75, 12.85]}, "mirror_U6": {"cm": [100, 80], "y": [11.80, 12.80], "z": [1.15, 1.95], "frame": "thin oak", "reflects_from_CB_measured": "north wall Y 10.14-12.25, Z 1.20-2.67 + a ceiling strip; nothing else (F8 pass)"}, "reflection_zone": "north wall Y 9.95-12.39, Z 1.15-2.70 and the ceiling above it stay blank: no hook, art, lamp or ceiling fixture"},
+    "kitchen-dining": {"table": {"delta": "G-D2", "cm": [160, 85], "centre": [4.60, 1.65], "x": [3.80, 5.40], "h": 0.75}, "chairs": {"centres": [[4.10, 0.90], [4.90, 0.90]], "facing": "+Y"}, "bench": {"x": [3.90, 5.30], "y": [2.30, 2.65], "h": 0.45}, "kitchen_run": {"delta": "G-D3", "lower_units": {"y": [0.75, 4.20], "front_x": 6.63, "top": 0.90}, "sink": {"y": [1.00, 1.60], "tap": "matte black"}, "hob": {"y": [2.30, 2.90], "type": "flush induction, matte <= 30 GU"}, "hood": {"y": [2.15, 3.05], "z": [1.55, 3.00], "depth": 0.50, "finish": "mineral plaster, warm white"}, "shelves": [{"y": [0.75, 2.05], "bottom_z": 1.55}, {"y": [3.15, 4.20], "bottom_z": 1.55}], "shelf_spec": "oak 3 cm, depth 0.25, built-in LED profile under each (2700 K, CRI 90+, matte diffuser, hidden)", "tall_units": {"y": [4.20, 6.20], "top": 2.40}, "coffee_niche": {"y": [4.55, 5.20], "z": [0.90, 1.60], "lining": "oak", "light": "LED at the top"}, "oven": {"y": [5.30, 5.90], "handle": "matte black bar"}, "floor_vase_niche_y": [0.0, 0.75], "upper_wall_units": "none (shelves + hood replace them)", "west_wall_tall_run": {"x": [3.95, 6.63], "y": [5.58, 6.20], "status": "as 1.0"}}}
+  },
+
+  "electrical_points_1_1": {
+    "note": "Every hardwired lamp needs its point in the shell before the shell render (Bible, house lighting language).",
+    "hall": {"wall_sconce": [0.80, 6.95, 1.94], "ceiling_light": [2.20, 8.05, 3.00]},
+    "work": {"pendant": [-0.825, 6.82, 3.00], "wall_sconce": [-2.30, 6.75, 1.70]},
+    "corridor": {"ceiling_lights": [[2.40, 11.70, 2.70], [2.40, 15.10, 2.70]], "picture_lights": "3 wall points above the gallery prints (Y 14.2, 14.8, 15.4)"},
+    "kids": {"pendant": [-1.94, 10.54, 3.00], "wall_sconce": [0.20, 10.25, 1.25], "girl": "+3.63 in Y"},
+    "master": {"bedside_sconces": [[-1.875, 17.66, 1.34], [0.475, 17.66, 1.34]], "pendant": [0.40, 19.66, 3.00]},
+    "bath": {"B1_sconce": [4.70, 9.95, 1.70], "vanity_sconces": [[6.25, 11.62, 1.65], [6.25, 12.98, 1.65]], "ceiling_light": [4.75, 11.80, 2.70], "shower_downlight": [5.72, 10.55, 2.70]},
+    "kitchen-dining": {"pendant": [4.60, 1.65, 3.00], "kitchen_sconce": [7.25, 1.80, 2.05], "led_profiles": "under both shelves + top of the coffee niche (shell)"}
+  },
+
   "cameras": [
-    {"id": "M0", "room": "living", "loc": [1.25, 5.55, 1.20], "yaw_deg_left": 25, "lens": 24, "u0": 0.52, "v0": 0.46, "status": "approved"},
+    {"id": "M0", "room": "living", "loc": [1.25, 5.55, 1.20], "yaw_deg_left": 25, "lens": 24, "u0": 0.52, "v0": 0.46, "status": "approved, unchanged"},
     {"id": "M0p", "room": "living", "loc": [1.25, 5.55, 1.20], "yaw_deg_left": 0, "role": "end of P0 (approved)"},
     {"id": "M0x", "room": "living", "loc": [1.25, 5.55, 1.20], "yaw_deg_left": -35, "role": "exit frame toward the dining opening (end of P1)"},
-    {"id": "H0", "room": "hall", "loc": [2.877, 9.039, 1.20], "yaw_deg_left": 25, "lens": 24, "u0": 0.52, "v0": 0.46, "status": "approved as E0 start; hall master and site opening frame (U1)", "frame": "living double door u 0.395-0.636; solid hall left wall Y 6.35-7.98 (bench + hooks) on the left; console vignette X 2.30-3.10 on the front wall, u ~0.66-0.91"},
-    {"id": "H0e", "room": "hall", "loc": [2.877, 9.039, 1.20], "yaw_deg_left": 0, "role": "rail start (end of PH)"},
-    {"id": "H0w", "room": "hall", "loc": [2.877, 9.039, 1.20], "yaw_deg_left": 60, "role": "end of PW (turn toward the work room)"},
-    {"id": "D0", "room": "kitchen-dining", "loc": [3.00, 3.05, 1.20], "yaw_deg_left": -35, "lens": 24, "u0": 0.52, "v0": 0.46, "frame": "SE corner u ~0.75; east window u ~0.04-0.46 (centre ~0.28, light from the left; head cut by the top edge); table under the big pendant u ~0.62; kitchen as the right band. Detail: data/slots/dining-room.json"},
-    {"id": "W0", "room": "work", "loc": [-0.385, 8.274, 1.20], "yaw_deg_left": 60, "lens": 24, "u0": 0.52, "v0": 0.46, "frame": "NE corner at u ~0.70; north wall visible Y 6.35-8.54 with the window at u ~0.10-0.53 (centre ~0.35, light from the left) and the desk under it; east wall (shelves) visible X -2.30..-1.25 on the right. 1.92 m to the east wall."},
-    {"id": "C0", "room": "corridor", "loc": [2.397, 17.110, 1.20], "yaw_deg_left": 0, "lens": 24, "u0": 0.50, "v0": 0.46, "frame": "symmetric enfilade east; at the end the hall console vignette and a slice of the living double door (lit floor lamp, basket, sofa end; living defaults per U9). Girl door east jamb (Y 16.26) ~0.05 outside the left edge."},
-    {"id": "S1", "room": "corridor", "loc": [2.606, 13.600, 1.20], "yaw_deg_left": 0, "role": "rail station for boy (left) and bath (right)"},
-    {"id": "K-boy", "room": "boy", "loc": [0.575, 12.427, 1.20], "yaw_deg_left": 60, "lens": 24, "u0": 0.52, "v0": 0.46, "frame": "NE corner u ~0.60; north wall visible Y 10.25-12.83, window u ~0.22 (west end) to the corner side; east wall on the right"},
-    {"id": "K-girl", "room": "girl", "loc": [0.575, 16.057, 1.20], "yaw_deg_left": 60, "lens": 24, "u0": 0.52, "v0": 0.46, "frame": "identical to K-boy (+3.63 in Y)"},
-    {"id": "MB0", "room": "master", "loc": [1.75, 21.05, 1.20], "yaw_deg_left": 35, "lens": 24, "u0": 0.52, "v0": 0.46, "frame": "NE corner u ~0.34; north window on the left; bed wall with the sconce pair on the right two thirds"},
-    {"id": "B0", "room": "bath", "loc": [3.903, 11.748, 1.20], "yaw_deg_left": -35, "lens": 24, "u0": 0.52, "v0": 0.46, "frame": "SE corner u ~0.73; fluted window u ~0.08-0.52 (centre ~0.30, light from the left) with the vanity; shower on the right; the shell mirror reflects only wall (U6)"}
+    {"id": "H0", "room": "hall", "loc": [2.877, 9.039, 1.20], "yaw_deg_left": 12, "lens": 24, "u0": 0.52, "v0": 0.46, "status": "1.1 (H-B); hall master and site opening frame (U1)", "hero": "the threshold of light: the living vista on the left third, the console vignette on the right third", "frame_measured": "left wall strip u 0-0.199 (bench, cushion, peg rail, sconce); living door centre u 0.351; console u 0.567-0.81, art centre 0.681; umbrella stand at the right, cut by the bottom edge; front door out (u ~1.13)", "accepted_as_shown": "F5 2.91 m to the hero wall (< 3.0); F4 weak (no foreground layer)"},
+    {"id": "H0x", "room": "hall", "loc": [2.877, 9.039, 1.20], "yaw_deg_left": 25, "role": "start of the approved E0 dolly (end of the 13 deg pan of T-E0); the 1.0 H0 pose"},
+    {"id": "H0e", "room": "hall", "loc": [2.877, 9.039, 1.20], "yaw_deg_left": 0, "role": "rail start (end of PH); start of the T-HW slide"},
+    {"id": "D1", "room": "kitchen-dining", "point": "PD", "loc": [2.80, 3.80, 1.10], "yaw_deg_left": -56, "lens": 24, "u0": 0.52, "v0": 0.43, "role": "arrival", "hero": "the table under the big pendant on the left third (u 0.328); the whole kitchen run as the right-half background", "frame_measured": "window cut by the left edge u 0-0.153 (visible X 4.04-4.75); pendant u 0.262-0.391, v 0.131-0.254; SE corner u 0.444 with the floor vase on the corner line; sink 0.575, hood 0.748, south wall visible to Y 3.94; bench u 0.281-0.629 crossing the bottom edge; 3.62 m to the hero wall"},
+    {"id": "D2", "room": "kitchen-dining", "point": "PD", "loc": [2.80, 3.80, 1.10], "yaw_deg_left": -91, "lens": 24, "u0": 0.52, "v0": 0.43, "role": "second frame (pan -35 from D1)", "hero": "the plastered hood over the hob on the left third (u 0.328 at the wall line); the lit coffee niche on the right third (u 0.695)", "frame_measured": "table and bench ends cut on the left u 0-0.20; lower units 0.05-0.57, tall units 0.57-0.865, west wall 0.865-1.0; hood top cut by the top edge; no window in frame (S10), light from the left; 4.43 m to the hero wall"},
+    {"id": "W0", "room": "work", "loc": [-0.825, 9.85, 1.10], "yaw_deg_left": 0, "lens": 24, "u0": 0.50, "v0": 0.46, "status": "1.1 (W-A)", "hero": "the built-in desk wall, dead centre (one-point symmetric)", "frame_measured": "window on the left wall u 0-0.136 (visible Y 7.15-7.88, 39% cut); NE corner 0.219, SE corner 0.781; desk centre 0.50; door outside (u 1.06); 3.50 m to the east wall"},
+    {"id": "C0", "room": "corridor", "loc": [2.397, 17.110, 1.20], "yaw_deg_left": 0, "lens": 24, "u0": 0.50, "v0": 0.46, "status": "unchanged camera; 1.1 shell C-B", "hero": "a gallery of light: the left wall washed from the roof slot, leading to the glowing hall and living vista", "frame_measured": "gallery u 0.192-0.35; vanishing point 0.50; girl door jamb outside the left edge; living slice through the double doors at the end (U9)"},
+    {"id": "S1'", "room": "corridor", "loc": [2.641, 13.000, 1.20], "yaw_deg_left": 0, "role": "rail station for boy (left) and bath (right); replaces S1 (R6)"},
+    {"id": "K-boy", "room": "boy", "loc": [1.10, 13.00, 1.00], "yaw_deg_left": 33, "lens": 24, "u0": 0.52, "v0": 0.44, "status": "1.1 (K2-boy, = K-A)", "hero": "the bed nook in the window corner at child's-eye height: NE corner and pendant on the left third (u 0.303), the desk sconce near the right third (u 0.697)", "frame_measured": "window u 0-0.230 (23% cut, head out at the top); bed front 0.151-0.461; desk 0.626-0.912; east wall visible to Z 2.54 at the corner; 4.16 m to the hero corner"},
+    {"id": "K-girl", "room": "girl", "loc": [1.10, 16.63, 1.00], "yaw_deg_left": 33, "lens": 24, "u0": 0.52, "v0": 0.44, "status": "1.1 (K2-girl)", "frame": "identical to K-boy (+3.63 in Y)"},
+    {"id": "MB0", "room": "master", "loc": [-0.70, 21.05, 1.05], "yaw_deg_left": 0, "lens": 24, "u0": 0.50, "v0": 0.46, "status": "1.1 (MB-A)", "hero": "the bed wall as a sanctuary, dead centre: sconce pair (u 0.269 / 0.731), art, wainscot", "frame_measured": "window on the left wall u 0-0.138 (46% cut); NE corner 0.185; bed centre 0.50; bed foot as the cut foreground; corridor door jamb outside (u 1.031); 3.39 m to the bed wall"},
+    {"id": "B1", "room": "bath", "point": "CB", "loc": [3.80, 13.20, 1.15], "yaw_deg_left": -22, "lens": 24, "u0": 0.52, "v0": 0.46, "role": "arrival", "hero": "the shower curtain gathered at the L corner, right third (u 0.666), limestone and niche behind it", "frame_measured": "NE corner 0.110; fluted window whole u 0.163-0.352 (head v 0.049-0.088, sill v 0.519) with the WC and ledge under it; B1 sconce (0.444, 0.265); SE corner 0.699; right edge meets the south wall at Y 11.65; 3.73 m to the hero wall"},
+    {"id": "B2", "room": "bath", "point": "CB", "loc": [3.80, 13.20, 1.15], "yaw_deg_left": -57, "lens": 24, "u0": 0.52, "v0": 0.46, "role": "second frame (pan -35 from B1)", "hero": "mirror and vanity between the sconce pair, right third (mirror centre u 0.672)", "frame_measured": "SE corner 0.278; shower south wall 0.278-0.439; vanity 0.548-0.829; sconces 0.522 / 0.873; towel ring 0.873; mirror v 0.087-0.46; no window in frame (S10), light from the left", "accepted_as_shown": "F5 2.54 m to the hero wall (< 2.8 bath minimum); F4 weak (no foreground object)"}
   ],
+
+  "camera_points": {
+    "PD": {"room": "kitchen-dining", "loc": [2.80, 3.80, 1.10], "frames": ["D1", "D2"], "note": "0.15 inside the room, within the opening Y 2.97-4.57; one z-order of layers serves both frames (same centre of projection)"},
+    "CB": {"room": "bath", "loc": [3.80, 13.20, 1.15], "frames": ["B1", "B2"], "note": "0.55 inside the north wall; door jamb Y 12.39 outside both frames; one mirror reflection pass and one z-order serve both frames"}
+  },
 
   "rail": {
     "id": "corridor-rail", "heading_yaw": 0,
     "line": "X(Y) = 2.877 - 0.0595 (Y - 9.039); H0e (2.877, 9.039) to C0 (2.397, 17.110). 3.4 deg crab; clears the corridor-mouth corner (3.10, 9.80) by 0.27.",
-    "stations": [{"id": "H0e", "y": 9.039}, {"id": "S1", "y": 13.60, "serves": ["boy", "bath"]}, {"id": "C0", "y": 17.11, "serves": ["girl", "master"]}],
-    "render": "R1 H0e->S1 4.57 m, R2 S1->C0 3.52 m"
+    "stations": [{"id": "H0e", "y": 9.039}, {"id": "S1'", "y": 13.00, "serves": ["boy", "bath"]}, {"id": "C0", "y": 17.11, "serves": ["girl", "master"]}],
+    "render": "R1 H0e->S1' 3.97 m, R2 S1'->C0 4.12 m (1.1; was S1 at Y 13.60: 4.57 / 3.52)"
   },
 
   "transitions": [
-    {"id": "T-E0", "from": "hall H0", "to": "living M0", "segments": [{"type": "dolly", "from": [2.877, 9.039], "to": [1.25, 5.55], "yaw": 25, "len_m": 3.85, "through": "O-entry-living"}], "status": "approved", "reverse": true, "play_s": [2.2, 2.6]},
-    {"id": "T-LD", "from": "living M0", "to": "kitchen-dining D0", "segments": [{"type": "pan", "yaw": [25, 0], "id": "P0", "status": "approved"}, {"type": "pan", "yaw": [0, -35], "id": "P1"}, {"type": "dolly", "from": [1.25, 5.55], "to": [3.00, 3.05], "yaw": -35, "len_m": 3.05, "through": "O-living-dining"}], "reverse": true, "play_s_approx": 3.0},
-    {"id": "T-HW", "from": "hall H0", "to": "work W0", "segments": [{"type": "pan", "yaw": [25, 60], "id": "PW"}, {"type": "dolly", "from": [2.877, 9.039], "to": [-0.385, 8.274], "yaw": 60, "path_dir_deg_left": 76.8, "len_m": 3.35, "through": "O-hall-work", "note": "straight vector 16.8 deg oblique to the heading (dolly + slider merged, as T4)"}], "reverse": true, "play_s_approx": 2.5},
-    {"id": "T-HC", "from": "hall H0", "to": "corridor C0", "segments": [{"type": "pan", "yaw": [25, 0], "id": "PH"}, {"type": "pull-back", "rail": "R1+R2", "from": [2.877, 9.039], "to": [2.397, 17.110], "yaw": 0, "len_m": 8.09, "through": "O-hall-corridor"}], "reverse": true, "play_s_approx": 3.2},
-    {"id": "T-CBoy", "from": "corridor C0", "to": "boy K-boy", "segments": [{"type": "dolly", "rail": "R2 reversed", "to": "S1", "yaw": 0, "len_m": 3.52}, {"type": "pan", "yaw": [0, 30]}, {"type": "pan", "yaw": [30, 60]}, {"type": "dolly", "from": [2.606, 13.60], "to": [0.575, 12.427], "yaw": 60, "len_m": 2.35, "through": "O-corridor-boy"}], "reverse": true, "play_s_approx": 3.4},
-    {"id": "T-CGirl", "from": "corridor C0", "to": "girl K-girl", "segments": [{"type": "pan", "yaw": [0, 30]}, {"type": "pan", "yaw": [30, 60]}, {"type": "dolly", "from": [2.397, 17.11], "to": [0.575, 16.057], "yaw": 60, "len_m": 2.10, "through": "O-corridor-girl"}], "reverse": true, "play_s_approx": 2.3},
-    {"id": "T-CBath", "from": "corridor C0", "to": "bath B0", "segments": [{"type": "dolly", "rail": "R2 reversed", "to": "S1", "yaw": 0, "len_m": 3.52}, {"type": "pan", "yaw": [0, -35]}, {"type": "dolly", "from": [2.606, 13.60], "to": [3.903, 11.748], "yaw": -35, "len_m": 2.26, "through": "O-corridor-bath"}], "reverse": true, "play_s_approx": 3.0},
-    {"id": "T-CM", "from": "corridor C0", "to": "master MB0", "segments": [{"type": "pull-back", "from": [2.397, 17.11], "to": [1.75, 21.05], "yaw": 0, "len_m": 3.99, "through": "O-corridor-master", "crossing_x": 2.32}, {"type": "pan", "yaw": [0, 35]}], "reverse": true, "play_s_approx": 2.4}
+    {"id": "T-E0", "from": "hall H0", "to": "living M0", "segments": [{"type": "pan", "at": "H0", "yaw": [12, 25], "deg": 13}, {"type": "dolly", "from": [2.877, 9.039], "to": [1.25, 5.55], "yaw": 25, "len_m": 3.85, "through": "O-entry-living", "status": "approved E0, unchanged"}], "reverse": true, "play_s_approx": [2.6, 2.9], "note": "1.1 = E0' of house-framing; the pan adds ~0.4 s to the approved 2.2-2.6 (open_1_1)", "min_jamb_clearance_m": 0.478},
+    {"id": "T-LD", "from": "living M0", "to": "kitchen-dining D1", "segments": [{"type": "pan", "id": "P0", "yaw": [25, 0], "status": "approved"}, {"type": "pan", "id": "P1", "yaw": [0, -35]}, {"type": "dolly", "heading": -35, "from": [1.25, 5.55, 1.20], "to": [2.80, 3.80, 1.10], "len_m": 2.34, "oblique_deg": 6.5, "through": "O-living-dining", "crossing": [2.575, 4.054], "min_jamb_clearance_m": 0.286}, {"type": "pan", "id": "P2", "at": "PD", "yaw": [-35, -56], "deg": 21}], "reverse": true, "play_s_approx": 3.4, "note": "1.1 = T-LD'' of house-framing; 4 shots at the U10 upper limit. motion-agent may compare P0 + 2 x 28 deg pans at M0 + one dolly heading -56 (open_1_1)"},
+    {"id": "P-D", "from": "D1", "to": "D2", "segments": [{"type": "pan", "at": "PD", "yaw": [-56, -91], "deg": 35}], "reverse": true, "play_s_approx": [1.2, 1.6], "note": "in-room pan between the two kitchen-dining frames (U15)"},
+    {"id": "T-HW", "from": "hall H0", "to": "work W0", "segments": [{"type": "pan", "at": "H0", "yaw": [12, 0], "deg": 12}, {"type": "slide", "heading": 0, "from": [2.877, 9.039, 1.20], "to": [-0.825, 8.55, 1.10], "len_m": 3.73, "through": "O-hall-work", "crossing": [0.725, 8.755], "min_jamb_clearance_m": 0.233}, {"type": "pull-back", "heading": 0, "from": [-0.825, 8.55, 1.10], "to": [-0.825, 9.85, 1.10], "len_m": 1.30}], "reverse": true, "play_s_approx": 3.3, "note": "1.1 = T-HW' (wall wipe through the work door, then the reveal of the desk wall)"},
+    {"id": "T-HC", "from": "hall H0", "to": "corridor C0", "segments": [{"type": "pan", "id": "PH", "at": "H0", "yaw": [12, 0], "deg": 12}, {"type": "pull-back", "rail": "R1+R2", "from": [2.877, 9.039], "to": [2.397, 17.110], "yaw": 0, "len_m": 8.09, "through": "O-hall-corridor", "min_jamb_clearance_m": 0.268}], "reverse": true, "play_s_approx": 3.0},
+    {"id": "T-CBoy", "from": "corridor C0", "to": "boy K-boy", "segments": [{"type": "dolly", "rail": "R2 reversed", "from": [2.397, 17.110, 1.20], "to": [2.641, 13.00, 1.20], "yaw": 0, "len_m": 4.12}, {"type": "slide", "heading": 0, "from": [2.641, 13.00, 1.20], "to": [1.10, 13.00, 1.00], "len_m": 1.54, "through": "O-corridor-boy", "crossing": [1.625, 13.00], "min_jamb_clearance_m": 0.370}, {"type": "pan", "yaw": [0, 33], "deg": 33}], "reverse": true, "play_s_approx": 3.3},
+    {"id": "T-CGirl", "from": "corridor C0", "to": "girl K-girl", "segments": [{"type": "slide", "heading": 0, "from": [2.397, 17.110, 1.20], "to": [1.10, 16.63, 1.00], "len_m": 1.38, "through": "O-corridor-girl", "crossing_y": 16.82, "min_jamb_clearance_m": 0.289}, {"type": "pan", "yaw": [0, 33], "deg": 33}], "reverse": true, "play_s_approx": 2.3},
+    {"id": "T-CBath", "from": "corridor C0", "to": "bath B1", "segments": [{"type": "dolly", "rail": "R2 reversed", "from": [2.397, 17.110, 1.20], "to": [2.641, 13.00, 1.20], "yaw": 0, "len_m": 4.12}, {"type": "slide", "heading": 0, "from": [2.641, 13.00, 1.20], "to": [3.80, 13.20, 1.15], "len_m": 1.18, "through": "O-corridor-bath", "crossing": [3.175, 13.092], "min_jamb_clearance_m": 0.281, "min_clearance_any_m": 0.19, "nearest": "open bath door leaf"}, {"type": "pan", "yaw": [0, -22], "deg": 22}], "reverse": true, "play_s_approx": 3.2, "note": "1.1 = T-CBath''"},
+    {"id": "P-B", "from": "B1", "to": "B2", "segments": [{"type": "pan", "at": "CB", "yaw": [-22, -57], "deg": 35}], "reverse": true, "play_s_approx": [1.2, 1.6], "note": "in-room pan between the two bath frames (U15)"},
+    {"id": "T-CM", "from": "corridor C0", "to": "master MB0", "segments": [{"type": "pull-back", "heading": 0, "from": [2.397, 17.110, 1.20], "to": [2.45, 21.05, 1.20], "len_m": 3.94, "through": "O-corridor-master", "min_jamb_clearance_m": 0.402}, {"type": "slide", "heading": 0, "from": [2.45, 21.05, 1.20], "to": [-0.70, 21.05, 1.05], "len_m": 3.15}], "reverse": true, "play_s_approx": 2.8, "note": "1.1 = T-CM' (no pan: the bed wall is revealed by the lateral move)"}
   ],
-  "transition_playback_U10": "Room-to-room transitions play 2.3-3.4 s (approx values per transition above); E0 stays 2.2-2.6 s. Render speeds, easing and creep per Design Bible 'grading and motion'; pull-back renders at entry-dolly speed (~0.7 m/s).",
+  "transition_playback_U10": "Room-to-room transitions play 2.3-3.4 s (approx values per transition above). E0 alone stays 2.2-2.6 s; T-E0 with its 13 deg pan is ~2.6-2.9 (open_1_1). In-room pans P-B and P-D play 1.2-1.6 s. Render speeds, easing and creep per Design Bible 'grading and motion'; pull-back renders at entry-dolly speed (~0.7 m/s). Jamb clearances are clay-measured (round-1/round-2 selfcheck); play times are estimates.",
 
-  "slots_first_list": {
-    "note": "Base lists. The binding slot list of each room is data/slots/<room>.json once approved; kitchen-dining keeps these 12 ids (data/slots/dining-room.json).",
-    "hall": ["framed-art", "table-lamp", "console-vessel", "key-tray", "runner-rug", "ceiling-light", "bench-cushion", "basket", "wall-hooks"],
-    "corridor": ["runner-rug", "ceiling-lights", "gallery-art", "picture-ledge (optional)"],
-    "kitchen-dining": ["dining-pendant", "table-runner", "centerpiece-vase", "candle-holders", "bowl", "curtains", "seat-pads", "tableware-set", "open-shelf-ceramics", "serving-board", "floor-vase", "framed-art"],
-    "work": ["desk-lamp", "shelf-boxes", "desk-tray", "magazine-holder", "planter", "framed-art", "rug", "curtains", "basket"],
-    "kids_shared_map": ["bedding", "cushions", "rug", "curtains", "wall-lamp", "pendant", "play-structure", "shape-shelf", "framed-prints", "toy-basket", "soft-toy", "desk-lamp", "wall-hooks"],
-    "boy": {"theme": "Nordic forest/mountain", "accents": "sage + charcoal on oat and warm white", "play-structure": "play tent (teepee) in natural cotton canvas, oak/pine poles", "shape-shelf": "mountain or house-shaped oak shelf", "framed-prints": "set of 3, line-art animals (bear, fox, deer) in charcoal on warm white", "soft-toy": "knitted or plush bear in oat", "bedding": "sage or oat cotton/linen, small triangle or stripe pattern allowed", "rug": "round or rectangular flat-weave, oat with charcoal line motif"},
-    "girl": {"theme": "Nordic meadow/cloud", "accents": "sage + oat on warm white (no pink: outside the Bible palette)", "play-structure": "bed canopy in warm-white linen from a ceiling hook over the bed head (ceiling point in the shell)", "shape-shelf": "cloud or house-shaped shelf in warm white", "framed-prints": "set of 3, line-art animals (rabbit, swan, bird) and soft shapes", "soft-toy": "knitted bunny in oat", "bedding": "warm white or oat with scalloped or ruffle-free soft edge", "rug": "round, scalloped-edge or plain oat"},
-    "kids_rules": "Within Bible palette and materials. Kid touches come from shape, scale and motif, not colour. Low/small-scale pieces. Pattern on at most 2 textile slots at once. Natural fibres for basket/canopy; rattan/seagrass quota as Bible.",
-    "master": ["bedding", "pillowcases", "throw", "cushions", "bedside-sconces", "curtains", "rug", "framed-art", "nightstand-vase", "candle-holders", "planter", "basket", "pendant"],
-    "bath": ["towels", "bath-mat", "dispenser-set", "vanity-tray", "storage-basket", "towel-ladder", "wall-sconces", "robe-hooks", "planter", "shower-curtain-or-none"]
+  "frames_1_1": {
+    "note": "One row per master frame. Slots and per-frame membership: data/slots/<file>. Counts follow the Bible 1.6 counting rule (S11); 'counted' is the clay estimate until the shell render. Minimum is a floor (U16).",
+    "M0": {"room": "living", "kind": "full", "min": 14, "slots_file": "data/slots/living-room.json 1.3.3", "in_frame": 18, "counted": 18, "lit": ["floor-lamp", "wall-sconce", "pendant", "accent-sconces"], "status": "approved, unchanged"},
+    "D1": {"room": "kitchen-dining", "kind": "full", "min": 14, "slots_file": "data/slots/dining-room.json 0.2", "in_frame": 19, "counted": 18, "lit": ["dining-pendant (ceiling)", "kitchen-sconce (wall)", "under-shelf + niche LED (cabinet, shell)"]},
+    "D2": {"room": "kitchen-dining", "kind": "full", "min": 14, "slots_file": "data/slots/dining-room.json 0.2", "in_frame": 18, "counted": 17, "lit": ["kitchen-sconce (wall)", "under-shelf + niche LED (cabinet, shell)"]},
+    "H0": {"room": "hall", "kind": "lean", "min": 11, "slots_file": "data/slots/hall.json", "in_frame": 12, "counted": 11, "lit": ["table-lamp (task)", "wall-sconce (wall)"]},
+    "W0": {"room": "work", "kind": "lean", "min": 11, "slots_file": "data/slots/work.json", "in_frame": 14, "counted": 13, "lit": ["pendant (ceiling)", "wall-sconce (wall)", "desk-lamp (task)"]},
+    "C0": {"room": "corridor", "kind": "transit", "min": 5, "slots_file": "data/slots/corridor.json", "in_frame": 5, "counted": 5, "lit": ["ceiling-lights (ceiling)", "picture-lights (wall)"]},
+    "K-boy": {"room": "boy", "kind": "lean", "min": 11, "slots_file": "data/slots/kids.json", "in_frame": 15, "counted": 15, "lit": ["pendant (ceiling)", "wall-sconce (wall)"]},
+    "K-girl": {"room": "girl", "kind": "lean", "min": 11, "slots_file": "data/slots/kids.json", "in_frame": 15, "counted": 15, "lit": ["pendant (ceiling)", "wall-sconce (wall)"]},
+    "MB0": {"room": "master", "kind": "full", "min": 14, "slots_file": "data/slots/master.json", "in_frame": 15, "counted": 14, "lit": ["bedside-sconces (wall)", "floor-lamp (floor)"]},
+    "B1": {"room": "bath", "kind": "lean", "min": 11, "slots_file": "data/slots/bath.json", "in_frame": 14, "counted": 12, "lit": ["wall-sconce (wall)"]},
+    "B2": {"room": "bath", "kind": "lean", "min": 11, "slots_file": "data/slots/bath.json", "in_frame": 13, "counted": 13, "lit": ["vanity-sconces (wall, pair)"]}
+  },
+
+  "slots_1_1": {
+    "note": "The binding slot list of each room is its data/slots file. Unique slots per room (in brackets: slots visible only in transit or through an opening, not counted).",
+    "living": {"file": "data/slots/living-room.json", "unique": 18},
+    "kitchen-dining": {"file": "data/slots/dining-room.json", "unique": 24},
+    "hall": {"file": "data/slots/hall.json", "unique": 14, "transit_only": ["runner-rug", "ceiling-light"]},
+    "corridor": {"file": "data/slots/corridor.json", "unique": 5},
+    "work": {"file": "data/slots/work.json", "unique": 14},
+    "boy": {"file": "data/slots/kids.json", "unique": 15},
+    "girl": {"file": "data/slots/kids.json", "unique": 15},
+    "master": {"file": "data/slots/master.json", "unique": 18, "transit_only": ["rug", "basket", "pendant"]},
+    "bath": {"file": "data/slots/bath.json", "unique": 22, "transit_only": ["ceiling-light"]},
+    "variants": "3 Nordic variants per slot (U18)"
   },
 
   "fillers_rule": {
@@ -156,51 +223,97 @@
     "rule": "Every standalone object in any frame is a sellable product (a slot with a product card). Only 'fillers' may be unsold: contents that show a sold product in use (candles in the candle holders, plant in the planter, magazines in the holder, stems in a vase). A filler is identical in all 3 variations of its slot, never in the cart, and the product page says it is not included. Anything else that is not a product stays out of frame. Fixed furniture and shell (sofa, tables, chairs, beds, cabinets, sanitary ware, the bath mirror per U6) are neither fillers nor products.",
     "fillers_per_room": {
       "living": ["branches (vase)", "olive-tree (planter)", "candles (candle-holders)", "magazines (magazine-holder)"],
-      "hall": ["stems (console-vessel)"],
-      "kitchen-dining": ["olive sprigs (centerpiece-vase)", "candles (candle-holders)", "dried eucalyptus (floor-vase)", "pears (bowl), the one food filler"],
+      "hall": ["stems (console-vessel)", "plant (planter)", "umbrella (umbrella-stand)"],
+      "kitchen-dining": ["olive sprigs (centerpiece-vase)", "candles (candle-holders)", "dried eucalyptus (floor-vase)", "pears (bowl), the one food filler", "wooden utensils (utensil-crock)", "herbs (herb-pots)", "paper roll (paper-towel-holder)", "dish soap (sink-set)"],
       "corridor": [],
-      "work": ["plant (planter)", "magazines (magazine-holder)"],
-      "boy": ["pillow inserts (cushions)"],
-      "girl": ["pillow inserts (cushions)"],
-      "master": ["stems (nightstand-vase)", "candles (candle-holders)", "plant (planter)"],
-      "bath": ["plant (planter)", "soap in the dispensers"]
+      "work": ["plant (planter)", "magazines (magazine-holder)", "books (bookends)", "pencils (desk-organizer)"],
+      "boy": ["pillow inserts (cushions)", "children's books (bookshelf)", "football (toy-basket)", "pencils (desk-organizer)"],
+      "girl": ["pillow inserts (cushions)", "children's books (bookshelf)", "knitted balls (toy-basket)", "pencils (desk-organizer)", "muslin blanket + mini pillow (doll-pram)"],
+      "master": ["stems (nightstand-vase)", "candles (candle-holders)", "plant (planter)", "one stem (sill-vase)"],
+      "bath": ["plants (ledge-planter, floor-planter)", "soap and liquids (shower-dispensers, soap-dispenser)", "toothbrushes (toothbrush-cup)", "reeds + oil (reed-diffuser)", "wax (candle)", "one sprig (vanity-vase)", "rolled towels (storage-basket)", "paper rolls (toilet-paper-stand)"]
     },
-    "kept_out_of_frame": ["books on shelves and nightstands", "coats/bags on the hall hooks (hooks stay empty)", "keys in the key tray (tray stays empty)", "laptop, papers and stationery on the desk", "loose toys other than the soft-toy slot", "fruit or food other than the one listed filler", "appliances on the kitchen counter", "toiletries other than the dispenser set"]
+    "kept_out_of_frame": ["books on nightstands and anywhere except the kids' bookshelf and the work bookends (1.1)", "coats/bags on the hall hooks (hooks stay empty)", "keys in the key tray (tray stays empty)", "laptop, papers and stationery on the desks (pencils in the organizer are a filler)", "toys that are not a product slot (kids: soft-toy, toy-cars, skateboard, doll, doll-pram are products)", "fruit or food other than the listed fillers", "appliances on the kitchen counter", "cookbooks", "toiletries outside the bath product slots and their fillers"]
   },
 
   "build_order": ["kitchen-dining", "hall", "corridor", "master", "boy", "girl", "bath", "work"],
-  "build_order_note": "U12. Shells of hall, kitchen-dining and corridor are already required by living stage 3.",
+  "build_order_note": "U12, unchanged in 1.1. Shells of hall, kitchen-dining and corridor are already required by living stage 3.",
 
   "credits_estimate": {
-    "basis": "Base per room ~5,800. Full ~4,500 per slot (close-ups as the living room). Lean ~1,300 per slot (master layers + parallax zoom only). Video 324/s x 2 attempts.",
+    "basis": "As 1.0: base per frame ~5,800 (1.1: two-frame rooms pay two bases). Full ~4,500 per slot, lean ~1,300 per slot (3 variants included). Video 324/s x 2 attempts.",
     "route": "mixed (U11): full for kitchen-dining and master, lean for the rest",
     "rooms": {
-      "kitchen-dining": {"slots": 12, "route": "full", "credits": 59800},
-      "master": {"slots": 13, "route": "full", "credits": 64300},
-      "hall": {"slots": 9, "route": "lean", "credits": 16100},
-      "corridor": {"slots": 4, "route": "lean", "credits": 11000},
-      "boy": {"slots": 13, "route": "lean", "credits": 22700},
-      "girl": {"slots": 13, "route": "lean", "credits": 21500, "note": "reuses the boy blockout/shell"},
-      "bath": {"slots": 10, "route": "lean", "credits": 18800},
-      "work": {"slots": 9, "route": "lean", "credits": 17500}
+      "kitchen-dining": {"frames": 2, "slots": 24, "route": "full", "credits": 119600},
+      "master": {"frames": 1, "slots": 18, "route": "full", "credits": 86800},
+      "hall": {"frames": 1, "slots": 14, "route": "lean", "credits": 24000},
+      "corridor": {"frames": 1, "slots": 5, "route": "lean", "credits": 12300},
+      "boy": {"frames": 1, "slots": 15, "route": "lean", "credits": 25300},
+      "girl": {"frames": 1, "slots": 15, "route": "lean", "credits": 24100, "note": "reuses the boy blockout/shell"},
+      "bath": {"frames": 2, "slots": 22, "route": "lean", "credits": 40200},
+      "work": {"frames": 1, "slots": 14, "route": "lean", "credits": 24000}
     },
-    "transitions": {"T-LD": 6480, "T-HW": 6480, "T-HC": 9720, "T-CBoy": 7776, "T-CGirl": 7128, "T-CBath": 5832, "T-CM": 7128, "total": 50544},
-    "house_total_excl_living": {"mixed": 282200, "contingency": 24000, "mixed_with_contingency": 306200},
-    "range_note": "+-15%"
+    "transitions": {"note": "1.0 set (50,544) + the 13 deg pan of T-E0, P2 of T-LD and the in-room pans P-B and P-D", "total": 59000},
+    "house_total_excl_living": {"mixed": 415300, "contingency": 24000, "mixed_with_contingency": 439300, "vs_1_0": "+133,100 (~+43%) against 306,200"},
+    "range_note": "+-15%; rough, for the user's decision (open_1_1). Saving lever: D2 products on the lean route (about -35,000)"
+  },
+
+  "frame_checks": {
+    "note": "1.1: every master frame passes F1-F12 (docs/proposals/house-framing.json acceptance_checks + round_2.acceptance_checks_added) on the clay before credits, and again on the shell render. F10 uses the Bible 1.6 counting rule.",
+    "F1": "hero on a third (u 0.30-0.36 / 0.64-0.70) or at 0.50 +-0.01 in u0 0.50 frames",
+    "F2": "window per S4/S4': whole with >= 0.03 to every edge, or cut >= 15% of its width; head cut by the top edge only if >= 0.05 above it; window <= 30% of the frame width; second frames may have none (S10)",
+    "F3": "no tangent < 0.02: object-edge (unless cut >= 15%), object-object (kissing contours or sliver overlaps), architectural lines",
+    "F4": "three depth layers identifiable",
+    "F5": "camera-to-hero-wall distance >= 3.0 (bath >= 2.8); accepted exceptions: H0 2.91, B2 2.54 (approved as shown)",
+    "F6": "negative space >= 25%",
+    "F7": "hall and corridor mean L >= 95 with roof light (sky only), wall gradient readable",
+    "F8": "U6: the mirror reflects only blank wall (one pass per camera point)",
+    "F9": "every transition: jamb clearance >= 0.15, last frame identical to the master camera, U10 play time",
+    "F10": "density per frame >= the minimum (Bible 1.6 S11, counting rule)",
+    "F11": "the lamps listed for the frame are lit and visible; <= 3 lit typologies; no visible cable in kids and bath",
+    "F12": "two-frame rooms: both frames from the identical point; the pan between them <= 35 deg"
   },
 
   "blockout_checks": [
-    "HC1 every transition path clears every jamb by >= 0.15 m",
-    "HC2 every master frame: corner u within +-0.02 of 'frame'; verticals plumb; no product slot within 0.05 of an edge",
-    "HC3 H0: hall left wall seen Y 6.35-7.98 is solid (work door east jamb 8.10 out of frame by >= 0.02); console right end >= 0.05 from the right edge",
-    "HC4 C0: girl door jamb out of frame (expected ~0.05); the living slice through the double door reads",
-    "HC5 MB0: corridor door jamb (X 1.88) out of frame by >= 0.02",
-    "HC6 windows lighting frames are north or east only",
+    "HC1 every transition path clears every jamb by >= 0.15 m (1.1: all measured 0.233-0.478)",
+    "HC2 every master frame: hero u per F1 +-0.02 of frame_measured; verticals plumb; no product within 0.05 of an edge unless cut >= 15%",
+    "HC3 H0: hall left wall seen Y 6.35-7.29 is solid (bench, peg rail, sconce); work door outside; console right end and the umbrella stand per F3",
+    "HC4 C0: girl door jamb out of frame; the hall/living vista reads through the portal",
+    "HC5 MB0: corridor door jamb (X 2.00) out of frame by >= 0.02 (measured u 1.031)",
+    "HC6 windows lighting frames are north or east, or opal roof lights (hall, corridor); B2 and D2 show no window (S10) and keep light from the left",
     "HC7 living M0 unchanged: O-living-dining outside the frame and adds no visible light or shadow",
-    "Room checks: see 'blockout_checks' in each data/slots/<room>.json (kitchen-dining: D-HC1..D-HC8)"
+    "Room checks: see 'blockout_checks' in each data/slots/<room>.json"
+  ],
+
+  "frame_fixes_1_1_x": {
+    "policy": "Approved frames keep their camera. These clay fails are closed by master-designer with nudges <= 0.10 m or small size changes inside the slot envelope, re-checked on the clay, and reported. Detail per room in the slots files.",
+    "H0": ["umbrella stand vs console end: kissing contour (0.012) -> decisive overlap >= 0.03 or clear >= 0.02", "basket vs bench cushion (0.019)", "basket moved to the bench's corner end so it is >= 50% visible (designer, 1.1)"],
+    "C0": ["nearest picture light 0.018 from the top edge -> >= 0.02 inside or decisively cut", "gallery-art vs picture-lights kissing (0.011)", "runner narrowed to 60 so the new gallery stool clears it by >= 0.02 in frame"],
+    "W0": ["framed-art vs pendant shade 0.012", "basket / waste-basket vs rug and chair kissing contours"],
+    "K-boy/K-girl": ["toy basket 0.004 from the bottom edge -> cut decisively or >= 0.03 clear", "skateboard 0.012 from the bottom edge (boy)", "doll-pram covers the desk leg only 47% (girl) -> decisive", "framed prints top v 0.023 -> lower the pair 0.05 (Z 1.37-1.77)", "chair vs desk sliver overlap", "cushions vs bedspread 0.015"],
+    "MB0": ["curtain vs left nightstand 0.002", "bedding vs pillowcases sliver", "planter vs throw 0.008"],
+    "B1/B2": ["curtain stack vs SE corner line in B2: overlap 0.013 -> >= 0.03 or clear >= 0.02 (rotate the gather 2-3 cm)", "bath towels vs vanity 0.006", "curtain vs shower stool 0.010", "toilet brush only 25% visible in B1 (reorder the floor group)", "hand towel vs vanity 0.014", "mirror vs vanity-vase sprig 0.016"],
+    "D1/D2": ["window-side chair 0.017 from the left edge and 0.002 from the window jamb", "mug set 0.012 from the right edge in D1", "bench-pad / bench vs chairs and table sliver overlaps", "candle holders vs chair back (0.023 sliver)", "dining rug vs kitchen runner 0.004 -> rug X 3.45-5.75, runner X 6.08-6.58 and re-measure", "tea towel only 47% visible in D2", "bench 0.019 from the bottom edge in D2"]
+  },
+
+  "open_1_1": [
+    "Counting rule for S11 (Bible 1.6): the proposal's 0.5% area threshold counted only 1-8 products in the frames the user approved (small tabletop items at 3-4 m). 1.1 counts a product that is >= 0.1% of the frame and >= 50% visible, or a decisively cut large textile whose visible part is >= 1% of the frame; a set counts once if one piece qualifies. With it every frame meets its minimum. Confirm.",
+    "Designer additions made under the 2026-10-08 density decision, not visible in the approved clay: hall storage-boxes and bench-throw (and the basket moved to the bench's corner end); corridor gallery-stool (runner narrowed to 60, optional picture-ledge dropped); work desk-organizer; master bedside-carafe, sill-vase, trinket-dish; kitchen step-stool. Each is the first to go if the mock-up reads busy.",
+    "Transit-only products (not in any master frame, so not tappable there): hall runner-rug and ceiling-light, master rug, basket and pendant, bath ceiling-light. Keep them as products (seen in the transitions and the corridor vista) or drop them.",
+    "T-E0 plays ~2.6-2.9 s with the 13 deg pan (U10 said E0 2.2-2.6).",
+    "T-LD: 4 shots at ~3.4 s (U10 limit) vs the alternative (2 x 28 deg pans at M0 + one dolly).",
+    "Bath lighting: wall only in frame (default) or an extra low pendant west of the vanity.",
+    "Kids' toy safety standard (EN 71 / Israeli SI 562, skateboard EN 13613) as a hard gate in docs/brand-brief.md (Bible 1.6 has it as a default).",
+    "Cost: ~+133,000 credits (~+43%) vs 1.0; option: D2 products on the lean route (~-35,000)."
   ],
 
   "changelog": {
+    "1.1": [
+      "Approved 2026-10-08 (\"סבב 2 נראה מעולה\") on assets/blockout/house/framing/round2/all-round2.jpg; density decision 2026-10-08 (\"כתוב מינימום מוצרים..לדעתי כמה שיותר שהמעצב יחליט שזה לא גורע. ו3 וואריציות מתאימות לנורדי לכל מוצר\").",
+      "Cameras: H0 yaw 25 -> 12 (H-B); D0 -> D1/D2 at PD; W0, K-boy, K-girl, MB0 moved (W-A, K-A, MB-A); B0 -> B1/B2 at CB; heights per room (U14); S1 -> S1'.",
+      "Geometry: G-H1 roof light, G-H2 front door Y 7.80-8.80, G-H3 console, G-H4 portal; G-C1b roof slot, G-C2 gallery, G-C3 portal; G-W1 desk on the east wall; G-K1r2/G-K3/G-K4/G-K5 kids; G-M1 master door X 2.00-2.90, G-M2, G-M3 bed X -0.70, G-M4 wainscot; G-B1r2 bath window X 3.45-4.25 sill 1.00 head 2.15, G-B2r2 bath layout, G-B3 point CB; G-D2 table (4.60, 1.65), G-D3 kitchen run, G-D4 point PD.",
+      "Transitions rebuilt (T-E0, T-LD, T-HW, T-HC, T-CBoy, T-CGirl, T-CBath, T-CM) + in-room pans P-D and P-B; clearances clay-measured.",
+      "New sections: roof_lights, fixed_1_1, electrical_points_1_1, camera_points, frames_1_1, slots_1_1, frame_checks, frame_fixes_1_1_x, open_1_1. slots_first_list moved to history_1_0. Credits re-estimated.",
+      "Density (S11) and lighting plan (S12), kids, bath and kitchen rules: Design Bible 1.6; nordic-dining 0.2."
+    ],
     "1.0": [
       "Approved 2026-10-06 (\"1.טוב 2.טוב\"). U1, U4, U5, U6, U9, U10, U12 are decisions (user_decisions).",
       "props_rule renamed fillers_rule and marked approved (Design Bible 1.5). kitchen-dining fillers made specific (olive sprigs, candles, dried eucalyptus, pears in the bowl).",
@@ -208,5 +321,56 @@
       "Geometry, cameras, rail, transitions and credits identical to 0.2."
     ],
     "0.2": "see docs/proposals/house-plan.json"
+  },
+
+  "history_1_0": {
+    "note": "Values of 1.0 (2026-10-06) replaced in 1.1. Kept for traceability; not binding.",
+    "cameras": [
+      {"id": "H0", "loc": [2.877, 9.039, 1.20], "yaw_deg_left": 25, "u0": 0.52, "v0": 0.46, "frame": "living double door u 0.395-0.636; solid hall left wall Y 6.35-7.98 (bench + hooks) on the left; console vignette X 2.30-3.10 on the front wall, u ~0.66-0.91"},
+      {"id": "H0w", "loc": [2.877, 9.039, 1.20], "yaw_deg_left": 60, "role": "end of PW (turn toward the work room)"},
+      {"id": "D0", "loc": [3.00, 3.05, 1.20], "yaw_deg_left": -35, "u0": 0.52, "v0": 0.46, "frame": "SE corner u ~0.75; east window u ~0.04-0.46; table under the big pendant u ~0.62; kitchen as the right band"},
+      {"id": "W0", "loc": [-0.385, 8.274, 1.20], "yaw_deg_left": 60, "u0": 0.52, "v0": 0.46, "frame": "NE corner u ~0.70; window u ~0.10-0.53 with the desk under it; shelves on the east wall"},
+      {"id": "S1", "loc": [2.606, 13.600, 1.20], "yaw_deg_left": 0, "role": "rail station for boy and bath"},
+      {"id": "K-boy", "loc": [0.575, 12.427, 1.20], "yaw_deg_left": 60, "u0": 0.52, "v0": 0.46},
+      {"id": "K-girl", "loc": [0.575, 16.057, 1.20], "yaw_deg_left": 60, "u0": 0.52, "v0": 0.46},
+      {"id": "MB0", "loc": [1.75, 21.05, 1.20], "yaw_deg_left": 35, "u0": 0.52, "v0": 0.46, "frame": "NE corner u ~0.34; bed wall on the right two thirds"},
+      {"id": "B0", "loc": [3.903, 11.748, 1.20], "yaw_deg_left": -35, "u0": 0.52, "v0": 0.46, "frame": "SE corner u ~0.73; fluted window u ~0.08-0.52 with the double vanity; shower on the right"}
+    ],
+    "openings": [
+      {"id": "O-front-door", "y": [7.10, 8.10]},
+      {"id": "O-corridor-master", "x": [1.88, 2.78]}
+    ],
+    "windows": [
+      {"id": "W-bath", "x": [3.95, 4.95], "sill": 1.30, "head": 2.40}
+    ],
+    "rooms_layout": {
+      "kitchen-dining": "dining table by the east window, centre (4.30, 1.70), long axis along X; kitchen run (tall units + counter, no window) on the south wall X 7.25; more tall units on the west wall Y 6.20 in its southern part (X 3.95-7.25, behind the entrance court)",
+      "work": "desk under the north window, shelves on the east wall",
+      "kids": "bed 90x200 along the east wall, head north; window fully in frame with a desk or play corner under it; wardrobe on the south wall",
+      "master": "bed head against the east wall Y 17.66, bed centre X -0.25; wardrobes on the west wall",
+      "bath": "double vanity on the east wall under/next to the window, walk-in shower on the south wall X 6.25, WC on the west wall; fluted-glass shower screen"
+    },
+    "rail": {"stations": [{"id": "H0e", "y": 9.039}, {"id": "S1", "y": 13.60}, {"id": "C0", "y": 17.11}], "render": "R1 H0e->S1 4.57 m, R2 S1->C0 3.52 m"},
+    "transitions": [
+      {"id": "T-E0", "segments": "dolly H0 -> M0, yaw 25, 3.85 m", "play_s": [2.2, 2.6]},
+      {"id": "T-LD", "segments": "P0 25->0, P1 0->-35, dolly M0 -> D0 3.05 m", "play_s_approx": 3.0},
+      {"id": "T-HW", "segments": "PW 25->60, oblique dolly H0 -> W0 3.35 m (path 76.8 deg)", "play_s_approx": 2.5},
+      {"id": "T-HC", "segments": "PH 25->0, pull-back rail R1+R2 8.09 m", "play_s_approx": 3.2},
+      {"id": "T-CBoy", "segments": "rail to S1 3.52 m, pans 0->30->60, dolly S1 -> K-boy 2.35 m", "play_s_approx": 3.4},
+      {"id": "T-CGirl", "segments": "pans 0->30->60, dolly C0 -> K-girl 2.10 m", "play_s_approx": 2.3},
+      {"id": "T-CBath", "segments": "rail to S1 3.52 m, pan 0->-35, dolly S1 -> B0 2.26 m", "play_s_approx": 3.0},
+      {"id": "T-CM", "segments": "pull-back C0 -> MB0 3.99 m, pan 0->35", "play_s_approx": 2.4}
+    ],
+    "slots_first_list": {
+      "hall": ["framed-art", "table-lamp", "console-vessel", "key-tray", "runner-rug", "ceiling-light", "bench-cushion", "basket", "wall-hooks"],
+      "corridor": ["runner-rug", "ceiling-lights", "gallery-art", "picture-ledge (optional)"],
+      "kitchen-dining": ["dining-pendant", "table-runner", "centerpiece-vase", "candle-holders", "bowl", "curtains", "seat-pads", "tableware-set", "open-shelf-ceramics", "serving-board", "floor-vase", "framed-art"],
+      "work": ["desk-lamp", "shelf-boxes", "desk-tray", "magazine-holder", "planter", "framed-art", "rug", "curtains", "basket"],
+      "kids_shared_map": ["bedding", "cushions", "rug", "curtains", "wall-lamp", "pendant", "play-structure", "shape-shelf", "framed-prints", "toy-basket", "soft-toy", "desk-lamp", "wall-hooks"],
+      "kids_rules": "Within Bible palette and materials. Kid touches come from shape, scale and motif, not colour. No pink. Pattern on at most 2 textile slots at once.",
+      "master": ["bedding", "pillowcases", "throw", "cushions", "bedside-sconces", "curtains", "rug", "framed-art", "nightstand-vase", "candle-holders", "planter", "basket", "pendant"],
+      "bath": ["towels", "bath-mat", "dispenser-set", "vanity-tray", "storage-basket", "towel-ladder", "wall-sconces", "robe-hooks", "planter", "shower-curtain-or-none"]
+    },
+    "credits_estimate_total": {"mixed": 282200, "contingency": 24000, "mixed_with_contingency": 306200}
   }
 }

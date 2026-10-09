@@ -1,7 +1,7 @@
 {
   "proposal": "docs/proposals/house-framing.json 0.2 (round_2)",
   "plan": "docs/house-plan.json",
-  "plan_version": "1.0 / approved 2026-10-06",
+  "plan_version": "1.1 / approved 2026-10-08",
   "render": "2048x1152, 48 samples, Cycles CPU seed 7, AgX Medium High Contrast, exposure +0.35 (editorial) as round 1",
   "light": "round-1 editorial daylight (sky 7.0 + soft area light outside every window + roof lights + AO 0.30) PLUS the room's S12 lamps at 2700 K (emissive shade + light source). Daylight-only (lamps off) per frame in extra/.",
   "lamp_power": "2700 K (linear RGB (1.0, 0.56, 0.25)). Shades: emission 6; LED strips / opal discs: emission 14. Light sources (W, Blender radiometric): pendants 30-60 (disc under the shade), sconces 12-20 (point in front of the shade), LED profiles 12 W/m (rectangle under the shelf), niche 5, floor lamp 30+12, picture lights 8 each; bath ceiling light 18, shower downlight 12. Set by eye for a readable warm pool without clipping; not photometric.",
@@ -337,7 +337,7 @@
       ]
     }
   },
-  "build_s": 17,
+  "build_s": 19,
   "frames": {
     "K2-boy": {
       "frame": "K2-boy",
@@ -7279,6 +7279,1952 @@
       "F9": "pass",
       "F9_note": "jambs >= 0.15 (crossed openings), last pose = the frame camera; play time = designer estimate, not measured",
       "sheet": "framing/round2/transitions/P-B-sheet.jpg"
+    },
+    "P-D": {
+      "note": "D1 -> D2, one pan at PD",
+      "shots": 1,
+      "segments": [
+        {
+          "type": "pan",
+          "id": null,
+          "yaw": [
+            -56,
+            -91
+          ],
+          "deg": 35
+        }
+      ],
+      "path_issues": [],
+      "end_pose_error": {
+        "pos_m": 0.0,
+        "yaw_deg": 0.0,
+        "u0": 0.0,
+        "v0": 0.0
+      },
+      "min_jamb_clearance_m": null,
+      "jambs_ok": null,
+      "play_s_designer": [
+        1.2,
+        1.6
+      ],
+      "frames": [
+        {
+          "k": 0,
+          "x": 2.8,
+          "y": 3.8,
+          "z": 1.1,
+          "yaw": -56.0,
+          "u0": 0.52,
+          "v0": 0.43,
+          "seg": "start",
+          "s_m": 0.0,
+          "clearance_m": 0.7778,
+          "nearest": "leaf_living_dining_b"
+        },
+        {
+          "k": 1,
+          "x": 2.8,
+          "y": 3.8,
+          "z": 1.1,
+          "yaw": -61.0,
+          "u0": 0.52,
+          "v0": 0.43,
+          "seg": "pan#1",
+          "s_m": 0.0,
+          "clearance_m": 0.7778,
+          "nearest": "leaf_living_dining_b"
+        },
+        {
+          "k": 2,
+          "x": 2.8,
+          "y": 3.8,
+          "z": 1.1,
+          "yaw": -66.0,
+          "u0": 0.52,
+          "v0": 0.43,
+          "seg": "pan#1",
+          "s_m": 0.0,
+          "clearance_m": 0.7778,
+          "nearest": "leaf_living_dining_b"
+        },
+        {
+          "k": 3,
+          "x": 2.8,
+          "y": 3.8,
+          "z": 1.1,
+          "yaw": -71.0,
+          "u0": 0.52,
+          "v0": 0.43,
+          "seg": "pan#1",
+          "s_m": 0.0,
+          "clearance_m": 0.7778,
+          "nearest": "leaf_living_dining_b"
+        },
+        {
+          "k": 4,
+          "x": 2.8,
+          "y": 3.8,
+          "z": 1.1,
+          "yaw": -76.0,
+          "u0": 0.52,
+          "v0": 0.43,
+          "seg": "pan#1",
+          "s_m": 0.0,
+          "clearance_m": 0.7778,
+          "nearest": "leaf_living_dining_b"
+        },
+        {
+          "k": 5,
+          "x": 2.8,
+          "y": 3.8,
+          "z": 1.1,
+          "yaw": -81.0,
+          "u0": 0.52,
+          "v0": 0.43,
+          "seg": "pan#1",
+          "s_m": 0.0,
+          "clearance_m": 0.7778,
+          "nearest": "leaf_living_dining_b"
+        },
+        {
+          "k": 6,
+          "x": 2.8,
+          "y": 3.8,
+          "z": 1.1,
+          "yaw": -86.0,
+          "u0": 0.52,
+          "v0": 0.43,
+          "seg": "pan#1",
+          "s_m": 0.0,
+          "clearance_m": 0.7778,
+          "nearest": "leaf_living_dining_b"
+        },
+        {
+          "k": 7,
+          "x": 2.8,
+          "y": 3.8,
+          "z": 1.1,
+          "yaw": -91.0,
+          "u0": 0.52,
+          "v0": 0.43,
+          "seg": "pan#1",
+          "s_m": 0.0,
+          "clearance_m": 0.7778,
+          "nearest": "leaf_living_dining_b"
+        }
+      ],
+      "F9": "pass",
+      "F9_note": "jambs >= 0.15 (crossed openings), last pose = the frame camera; play time = designer estimate, not measured",
+      "sheet": "framing/round2/transitions/P-D-sheet.jpg"
+    },
+    "T-CBath''": {
+      "note": "rail C0 -> S1', slide to CB, pan 0 -> -22",
+      "shots": 3,
+      "segments": [
+        {
+          "type": "dolly",
+          "from_": [
+            2.397,
+            17.11,
+            1.2
+          ],
+          "to": [
+            2.641,
+            13.0,
+            1.2
+          ],
+          "len_m": 4.1172,
+          "path_dir_deg_left": -3.4,
+          "heading": 0,
+          "oblique_deg": -3.4,
+          "jambs": [],
+          "min_clearance_any_m": 0.4813,
+          "nearest_any": "hwall_39",
+          "ok_jambs": true
+        },
+        {
+          "type": "slide",
+          "from_": [
+            2.641,
+            13.0,
+            1.2
+          ],
+          "to": [
+            3.8,
+            13.2,
+            1.15
+          ],
+          "len_m": 1.1761,
+          "path_dir_deg_left": -99.79,
+          "heading": 0,
+          "oblique_deg": -99.79,
+          "jambs": [
+            {
+              "opening": "O-corridor-bath",
+              "crossing": [
+                3.175,
+                13.0921
+              ],
+              "min_jamb_clearance_m": 0.2808,
+              "ok": true
+            }
+          ],
+          "min_clearance_any_m": 0.19,
+          "nearest_any": "leaf_corridor_bath",
+          "ok_jambs": true
+        },
+        {
+          "type": "pan",
+          "id": null,
+          "yaw": [
+            0,
+            -22
+          ],
+          "deg": 22
+        }
+      ],
+      "path_issues": [],
+      "end_pose_error": {
+        "pos_m": 0.0,
+        "yaw_deg": 0.0,
+        "u0": 0.0,
+        "v0": 0.0
+      },
+      "min_jamb_clearance_m": 0.2808,
+      "jambs_ok": true,
+      "play_s_designer": 3.2,
+      "frames": [
+        {
+          "k": 0,
+          "x": 2.397,
+          "y": 17.11,
+          "z": 1.2,
+          "yaw": 0.0,
+          "u0": 0.5,
+          "v0": 0.46,
+          "seg": "start",
+          "s_m": 0.0,
+          "clearance_m": 0.5636,
+          "nearest": "hwall_19"
+        },
+        {
+          "k": 1,
+          "x": 2.4114,
+          "y": 16.8682,
+          "z": 1.2,
+          "yaw": 0.0,
+          "u0": 0.5012,
+          "v0": 0.46,
+          "seg": "dolly#1",
+          "s_m": 0.242,
+          "clearance_m": 0.6886,
+          "nearest": "hwall_42"
+        },
+        {
+          "k": 2,
+          "x": 2.4257,
+          "y": 16.6265,
+          "z": 1.2,
+          "yaw": 0.0,
+          "u0": 0.5024,
+          "v0": 0.46,
+          "seg": "dolly#1",
+          "s_m": 0.484,
+          "clearance_m": 0.6743,
+          "nearest": "hwall_42"
+        },
+        {
+          "k": 3,
+          "x": 2.4401,
+          "y": 16.3847,
+          "z": 1.2,
+          "yaw": 0.0,
+          "u0": 0.5035,
+          "v0": 0.46,
+          "seg": "dolly#1",
+          "s_m": 0.727,
+          "clearance_m": 0.6599,
+          "nearest": "hwall_42"
+        },
+        {
+          "k": 4,
+          "x": 2.4544,
+          "y": 16.1429,
+          "z": 1.2,
+          "yaw": 0.0,
+          "u0": 0.5047,
+          "v0": 0.46,
+          "seg": "dolly#1",
+          "s_m": 0.969,
+          "clearance_m": 0.6456,
+          "nearest": "hwall_42"
+        },
+        {
+          "k": 5,
+          "x": 2.4688,
+          "y": 15.9012,
+          "z": 1.2,
+          "yaw": 0.0,
+          "u0": 0.5059,
+          "v0": 0.46,
+          "seg": "dolly#1",
+          "s_m": 1.211,
+          "clearance_m": 0.6312,
+          "nearest": "hwall_42"
+        },
+        {
+          "k": 6,
+          "x": 2.4831,
+          "y": 15.6594,
+          "z": 1.2,
+          "yaw": 0.0,
+          "u0": 0.5071,
+          "v0": 0.46,
+          "seg": "dolly#1",
+          "s_m": 1.453,
+          "clearance_m": 0.6169,
+          "nearest": "hwall_42"
+        },
+        {
+          "k": 7,
+          "x": 2.4975,
+          "y": 15.4176,
+          "z": 1.2,
+          "yaw": 0.0,
+          "u0": 0.5082,
+          "v0": 0.46,
+          "seg": "dolly#1",
+          "s_m": 1.695,
+          "clearance_m": 0.6025,
+          "nearest": "hwall_50"
+        },
+        {
+          "k": 8,
+          "x": 2.5118,
+          "y": 15.1759,
+          "z": 1.2,
+          "yaw": 0.0,
+          "u0": 0.5094,
+          "v0": 0.46,
+          "seg": "dolly#1",
+          "s_m": 1.938,
+          "clearance_m": 0.5882,
+          "nearest": "hwall_41"
+        },
+        {
+          "k": 9,
+          "x": 2.5262,
+          "y": 14.9341,
+          "z": 1.2,
+          "yaw": 0.0,
+          "u0": 0.5106,
+          "v0": 0.46,
+          "seg": "dolly#1",
+          "s_m": 2.18,
+          "clearance_m": 0.5698,
+          "nearest": "laundry_door_flush"
+        },
+        {
+          "k": 10,
+          "x": 2.5405,
+          "y": 14.6924,
+          "z": 1.2,
+          "yaw": 0.0,
+          "u0": 0.5118,
+          "v0": 0.46,
+          "seg": "dolly#1",
+          "s_m": 2.422,
+          "clearance_m": 0.5555,
+          "nearest": "laundry_door_flush"
+        },
+        {
+          "k": 11,
+          "x": 2.5549,
+          "y": 14.4506,
+          "z": 1.2,
+          "yaw": 0.0,
+          "u0": 0.5129,
+          "v0": 0.46,
+          "seg": "dolly#1",
+          "s_m": 2.664,
+          "clearance_m": 0.5411,
+          "nearest": "laundry_door_flush"
+        },
+        {
+          "k": 12,
+          "x": 2.5692,
+          "y": 14.2088,
+          "z": 1.2,
+          "yaw": 0.0,
+          "u0": 0.5141,
+          "v0": 0.46,
+          "seg": "dolly#1",
+          "s_m": 2.906,
+          "clearance_m": 0.5308,
+          "nearest": "hwall_40"
+        },
+        {
+          "k": 13,
+          "x": 2.5836,
+          "y": 13.9671,
+          "z": 1.2,
+          "yaw": 0.0,
+          "u0": 0.5153,
+          "v0": 0.46,
+          "seg": "dolly#1",
+          "s_m": 3.148,
+          "clearance_m": 0.5164,
+          "nearest": "hwall_40"
+        },
+        {
+          "k": 14,
+          "x": 2.5979,
+          "y": 13.7253,
+          "z": 1.2,
+          "yaw": 0.0,
+          "u0": 0.5165,
+          "v0": 0.46,
+          "seg": "dolly#1",
+          "s_m": 3.391,
+          "clearance_m": 0.5021,
+          "nearest": "hwall_49"
+        },
+        {
+          "k": 15,
+          "x": 2.6123,
+          "y": 13.4835,
+          "z": 1.2,
+          "yaw": 0.0,
+          "u0": 0.5176,
+          "v0": 0.46,
+          "seg": "dolly#1",
+          "s_m": 3.633,
+          "clearance_m": 0.4877,
+          "nearest": "hwall_39"
+        },
+        {
+          "k": 16,
+          "x": 2.6266,
+          "y": 13.2418,
+          "z": 1.2,
+          "yaw": 0.0,
+          "u0": 0.5188,
+          "v0": 0.46,
+          "seg": "dolly#1",
+          "s_m": 3.875,
+          "clearance_m": 0.496,
+          "nearest": "hwall_39"
+        },
+        {
+          "k": 17,
+          "x": 2.641,
+          "y": 13.0,
+          "z": 1.2,
+          "yaw": 0.0,
+          "u0": 0.52,
+          "v0": 0.46,
+          "seg": "dolly#1",
+          "s_m": 4.117,
+          "clearance_m": 0.6023,
+          "nearest": "hwall_39"
+        },
+        {
+          "k": 18,
+          "x": 2.8728,
+          "y": 13.04,
+          "z": 1.19,
+          "yaw": 0.0,
+          "u0": 0.52,
+          "v0": 0.46,
+          "seg": "slide#2",
+          "s_m": 0.235,
+          "clearance_m": 0.4173,
+          "nearest": "hwall_39"
+        },
+        {
+          "k": 19,
+          "x": 3.1046,
+          "y": 13.08,
+          "z": 1.18,
+          "yaw": 0.0,
+          "u0": 0.52,
+          "v0": 0.46,
+          "seg": "slide#2",
+          "s_m": 0.47,
+          "clearance_m": 0.31,
+          "nearest": "hwall_39"
+        },
+        {
+          "k": 20,
+          "x": 3.3364,
+          "y": 13.12,
+          "z": 1.17,
+          "yaw": 0.0,
+          "u0": 0.52,
+          "v0": 0.46,
+          "seg": "slide#2",
+          "s_m": 0.706,
+          "clearance_m": 0.27,
+          "nearest": "leaf_corridor_bath"
+        },
+        {
+          "k": 21,
+          "x": 3.5682,
+          "y": 13.16,
+          "z": 1.16,
+          "yaw": 0.0,
+          "u0": 0.52,
+          "v0": 0.46,
+          "seg": "slide#2",
+          "s_m": 0.941,
+          "clearance_m": 0.23,
+          "nearest": "leaf_corridor_bath"
+        },
+        {
+          "k": 22,
+          "x": 3.8,
+          "y": 13.2,
+          "z": 1.15,
+          "yaw": 0.0,
+          "u0": 0.52,
+          "v0": 0.46,
+          "seg": "slide#2",
+          "s_m": 1.176,
+          "clearance_m": 0.19,
+          "nearest": "leaf_corridor_bath"
+        },
+        {
+          "k": 23,
+          "x": 3.8,
+          "y": 13.2,
+          "z": 1.15,
+          "yaw": -4.4,
+          "u0": 0.52,
+          "v0": 0.46,
+          "seg": "pan#3",
+          "s_m": 0.0,
+          "clearance_m": 0.19,
+          "nearest": "leaf_corridor_bath"
+        },
+        {
+          "k": 24,
+          "x": 3.8,
+          "y": 13.2,
+          "z": 1.15,
+          "yaw": -8.8,
+          "u0": 0.52,
+          "v0": 0.46,
+          "seg": "pan#3",
+          "s_m": 0.0,
+          "clearance_m": 0.19,
+          "nearest": "leaf_corridor_bath"
+        },
+        {
+          "k": 25,
+          "x": 3.8,
+          "y": 13.2,
+          "z": 1.15,
+          "yaw": -13.2,
+          "u0": 0.52,
+          "v0": 0.46,
+          "seg": "pan#3",
+          "s_m": 0.0,
+          "clearance_m": 0.19,
+          "nearest": "leaf_corridor_bath"
+        },
+        {
+          "k": 26,
+          "x": 3.8,
+          "y": 13.2,
+          "z": 1.15,
+          "yaw": -17.6,
+          "u0": 0.52,
+          "v0": 0.46,
+          "seg": "pan#3",
+          "s_m": 0.0,
+          "clearance_m": 0.19,
+          "nearest": "leaf_corridor_bath"
+        },
+        {
+          "k": 27,
+          "x": 3.8,
+          "y": 13.2,
+          "z": 1.15,
+          "yaw": -22.0,
+          "u0": 0.52,
+          "v0": 0.46,
+          "seg": "pan#3",
+          "s_m": 0.0,
+          "clearance_m": 0.19,
+          "nearest": "leaf_corridor_bath"
+        }
+      ],
+      "F9": "pass",
+      "F9_note": "jambs >= 0.15 (crossed openings), last pose = the frame camera; play time = designer estimate, not measured",
+      "sheet": "framing/round2/transitions/T-CBath2-sheet.jpg"
+    },
+    "T-LD''": {
+      "note": "4 shots (U10 upper limit)",
+      "shots": 4,
+      "segments": [
+        {
+          "type": "pan",
+          "id": "P0",
+          "yaw": [
+            25,
+            0
+          ],
+          "deg": 25
+        },
+        {
+          "type": "pan",
+          "id": "P1",
+          "yaw": [
+            0,
+            -35
+          ],
+          "deg": 35
+        },
+        {
+          "type": "dolly",
+          "from_": [
+            1.25,
+            5.55,
+            1.2
+          ],
+          "to": [
+            2.8,
+            3.8,
+            1.1
+          ],
+          "len_m": 2.3377,
+          "path_dir_deg_left": -41.53,
+          "heading": -35,
+          "oblique_deg": -6.53,
+          "jambs": [
+            {
+              "opening": "O-living-dining",
+              "crossing": [
+                2.575,
+                4.054
+              ],
+              "min_jamb_clearance_m": 0.286,
+              "ok": true
+            }
+          ],
+          "min_clearance_any_m": 0.286,
+          "nearest_any": "wall_right_b",
+          "ok_jambs": true
+        },
+        {
+          "type": "pan",
+          "id": "P2",
+          "yaw": [
+            -35,
+            -56
+          ],
+          "deg": 21
+        }
+      ],
+      "path_issues": [],
+      "end_pose_error": {
+        "pos_m": 0.0,
+        "yaw_deg": 0.0,
+        "u0": 0.0,
+        "v0": 0.0
+      },
+      "min_jamb_clearance_m": 0.286,
+      "jambs_ok": true,
+      "play_s_designer": 3.4,
+      "frames": [
+        {
+          "k": 0,
+          "x": 1.25,
+          "y": 5.55,
+          "z": 1.2,
+          "yaw": 25.0,
+          "u0": 0.52,
+          "v0": 0.46,
+          "seg": "start",
+          "s_m": 0.0,
+          "clearance_m": 0.7159,
+          "nearest": "wall_front_a"
+        },
+        {
+          "k": 1,
+          "x": 1.25,
+          "y": 5.55,
+          "z": 1.2,
+          "yaw": 20.0,
+          "u0": 0.52,
+          "v0": 0.46,
+          "seg": "P0#1",
+          "s_m": 0.0,
+          "clearance_m": 0.7159,
+          "nearest": "wall_front_a"
+        },
+        {
+          "k": 2,
+          "x": 1.25,
+          "y": 5.55,
+          "z": 1.2,
+          "yaw": 15.0,
+          "u0": 0.52,
+          "v0": 0.46,
+          "seg": "P0#1",
+          "s_m": 0.0,
+          "clearance_m": 0.7159,
+          "nearest": "wall_front_a"
+        },
+        {
+          "k": 3,
+          "x": 1.25,
+          "y": 5.55,
+          "z": 1.2,
+          "yaw": 10.0,
+          "u0": 0.52,
+          "v0": 0.46,
+          "seg": "P0#1",
+          "s_m": 0.0,
+          "clearance_m": 0.7159,
+          "nearest": "wall_front_a"
+        },
+        {
+          "k": 4,
+          "x": 1.25,
+          "y": 5.55,
+          "z": 1.2,
+          "yaw": 5.0,
+          "u0": 0.52,
+          "v0": 0.46,
+          "seg": "P0#1",
+          "s_m": 0.0,
+          "clearance_m": 0.7159,
+          "nearest": "wall_front_a"
+        },
+        {
+          "k": 5,
+          "x": 1.25,
+          "y": 5.55,
+          "z": 1.2,
+          "yaw": 0.0,
+          "u0": 0.52,
+          "v0": 0.46,
+          "seg": "P0#1",
+          "s_m": 0.0,
+          "clearance_m": 0.7159,
+          "nearest": "wall_front_a"
+        },
+        {
+          "k": 6,
+          "x": 1.25,
+          "y": 5.55,
+          "z": 1.2,
+          "yaw": -5.0,
+          "u0": 0.52,
+          "v0": 0.46,
+          "seg": "P1#2",
+          "s_m": 0.0,
+          "clearance_m": 0.7159,
+          "nearest": "wall_front_a"
+        },
+        {
+          "k": 7,
+          "x": 1.25,
+          "y": 5.55,
+          "z": 1.2,
+          "yaw": -10.0,
+          "u0": 0.52,
+          "v0": 0.46,
+          "seg": "P1#2",
+          "s_m": 0.0,
+          "clearance_m": 0.7159,
+          "nearest": "wall_front_a"
+        },
+        {
+          "k": 8,
+          "x": 1.25,
+          "y": 5.55,
+          "z": 1.2,
+          "yaw": -15.0,
+          "u0": 0.52,
+          "v0": 0.46,
+          "seg": "P1#2",
+          "s_m": 0.0,
+          "clearance_m": 0.7159,
+          "nearest": "wall_front_a"
+        },
+        {
+          "k": 9,
+          "x": 1.25,
+          "y": 5.55,
+          "z": 1.2,
+          "yaw": -20.0,
+          "u0": 0.52,
+          "v0": 0.46,
+          "seg": "P1#2",
+          "s_m": 0.0,
+          "clearance_m": 0.7159,
+          "nearest": "wall_front_a"
+        },
+        {
+          "k": 10,
+          "x": 1.25,
+          "y": 5.55,
+          "z": 1.2,
+          "yaw": -25.0,
+          "u0": 0.52,
+          "v0": 0.46,
+          "seg": "P1#2",
+          "s_m": 0.0,
+          "clearance_m": 0.7159,
+          "nearest": "wall_front_a"
+        },
+        {
+          "k": 11,
+          "x": 1.25,
+          "y": 5.55,
+          "z": 1.2,
+          "yaw": -30.0,
+          "u0": 0.52,
+          "v0": 0.46,
+          "seg": "P1#2",
+          "s_m": 0.0,
+          "clearance_m": 0.7159,
+          "nearest": "wall_front_a"
+        },
+        {
+          "k": 12,
+          "x": 1.25,
+          "y": 5.55,
+          "z": 1.2,
+          "yaw": -35.0,
+          "u0": 0.52,
+          "v0": 0.46,
+          "seg": "P1#2",
+          "s_m": 0.0,
+          "clearance_m": 0.7159,
+          "nearest": "wall_front_a"
+        },
+        {
+          "k": 13,
+          "x": 1.405,
+          "y": 5.375,
+          "z": 1.19,
+          "yaw": -35.0,
+          "u0": 0.52,
+          "v0": 0.457,
+          "seg": "dolly#3",
+          "s_m": 0.234,
+          "clearance_m": 0.9422,
+          "nearest": "wall_front_a"
+        },
+        {
+          "k": 14,
+          "x": 1.56,
+          "y": 5.2,
+          "z": 1.18,
+          "yaw": -35.0,
+          "u0": 0.52,
+          "v0": 0.454,
+          "seg": "dolly#3",
+          "s_m": 0.468,
+          "clearance_m": 0.94,
+          "nearest": "wall_right_b"
+        },
+        {
+          "k": 15,
+          "x": 1.715,
+          "y": 5.025,
+          "z": 1.17,
+          "yaw": -35.0,
+          "u0": 0.52,
+          "v0": 0.451,
+          "seg": "dolly#3",
+          "s_m": 0.701,
+          "clearance_m": 0.785,
+          "nearest": "wall_right_b"
+        },
+        {
+          "k": 16,
+          "x": 1.87,
+          "y": 4.85,
+          "z": 1.16,
+          "yaw": -35.0,
+          "u0": 0.52,
+          "v0": 0.448,
+          "seg": "dolly#3",
+          "s_m": 0.935,
+          "clearance_m": 0.63,
+          "nearest": "wall_right_b"
+        },
+        {
+          "k": 17,
+          "x": 2.025,
+          "y": 4.675,
+          "z": 1.15,
+          "yaw": -35.0,
+          "u0": 0.52,
+          "v0": 0.445,
+          "seg": "dolly#3",
+          "s_m": 1.169,
+          "clearance_m": 0.475,
+          "nearest": "wall_right_b"
+        },
+        {
+          "k": 18,
+          "x": 2.18,
+          "y": 4.5,
+          "z": 1.14,
+          "yaw": -35.0,
+          "u0": 0.52,
+          "v0": 0.442,
+          "seg": "dolly#3",
+          "s_m": 1.403,
+          "clearance_m": 0.3276,
+          "nearest": "wall_right_b"
+        },
+        {
+          "k": 19,
+          "x": 2.335,
+          "y": 4.325,
+          "z": 1.13,
+          "yaw": -35.0,
+          "u0": 0.52,
+          "v0": 0.439,
+          "seg": "dolly#3",
+          "s_m": 1.636,
+          "clearance_m": 0.2954,
+          "nearest": "wall_right_b"
+        },
+        {
+          "k": 20,
+          "x": 2.49,
+          "y": 4.15,
+          "z": 1.12,
+          "yaw": -35.0,
+          "u0": 0.52,
+          "v0": 0.436,
+          "seg": "dolly#3",
+          "s_m": 1.87,
+          "clearance_m": 0.4201,
+          "nearest": "wall_right_b"
+        },
+        {
+          "k": 21,
+          "x": 2.645,
+          "y": 3.975,
+          "z": 1.11,
+          "yaw": -35.0,
+          "u0": 0.52,
+          "v0": 0.433,
+          "seg": "dolly#3",
+          "s_m": 2.104,
+          "clearance_m": 0.595,
+          "nearest": "wall_right_b"
+        },
+        {
+          "k": 22,
+          "x": 2.8,
+          "y": 3.8,
+          "z": 1.1,
+          "yaw": -35.0,
+          "u0": 0.52,
+          "v0": 0.43,
+          "seg": "dolly#3",
+          "s_m": 2.338,
+          "clearance_m": 0.7778,
+          "nearest": "leaf_living_dining_b"
+        },
+        {
+          "k": 23,
+          "x": 2.8,
+          "y": 3.8,
+          "z": 1.1,
+          "yaw": -39.2,
+          "u0": 0.52,
+          "v0": 0.43,
+          "seg": "P2#4",
+          "s_m": 0.0,
+          "clearance_m": 0.7778,
+          "nearest": "leaf_living_dining_b"
+        },
+        {
+          "k": 24,
+          "x": 2.8,
+          "y": 3.8,
+          "z": 1.1,
+          "yaw": -43.4,
+          "u0": 0.52,
+          "v0": 0.43,
+          "seg": "P2#4",
+          "s_m": 0.0,
+          "clearance_m": 0.7778,
+          "nearest": "leaf_living_dining_b"
+        },
+        {
+          "k": 25,
+          "x": 2.8,
+          "y": 3.8,
+          "z": 1.1,
+          "yaw": -47.6,
+          "u0": 0.52,
+          "v0": 0.43,
+          "seg": "P2#4",
+          "s_m": 0.0,
+          "clearance_m": 0.7778,
+          "nearest": "leaf_living_dining_b"
+        },
+        {
+          "k": 26,
+          "x": 2.8,
+          "y": 3.8,
+          "z": 1.1,
+          "yaw": -51.8,
+          "u0": 0.52,
+          "v0": 0.43,
+          "seg": "P2#4",
+          "s_m": 0.0,
+          "clearance_m": 0.7778,
+          "nearest": "leaf_living_dining_b"
+        },
+        {
+          "k": 27,
+          "x": 2.8,
+          "y": 3.8,
+          "z": 1.1,
+          "yaw": -56.0,
+          "u0": 0.52,
+          "v0": 0.43,
+          "seg": "P2#4",
+          "s_m": 0.0,
+          "clearance_m": 0.7778,
+          "nearest": "leaf_living_dining_b"
+        }
+      ],
+      "F9": "pass",
+      "F9_note": "jambs >= 0.15 (crossed openings), last pose = the frame camera; play time = designer estimate, not measured",
+      "sheet": "framing/round2/transitions/T-LD2-sheet.jpg"
+    },
+    "T-LD'' alt": {
+      "note": "designer's alternative to compare: P0 + 2 x 28 deg pans at M0 + dolly heading -56 (14.5 deg oblique)",
+      "shots": 4,
+      "segments": [
+        {
+          "type": "pan",
+          "id": "P0",
+          "yaw": [
+            25,
+            0
+          ],
+          "deg": 25
+        },
+        {
+          "type": "pan",
+          "id": "P1a",
+          "yaw": [
+            0,
+            -28
+          ],
+          "deg": 28
+        },
+        {
+          "type": "pan",
+          "id": "P1b",
+          "yaw": [
+            -28,
+            -56
+          ],
+          "deg": 28
+        },
+        {
+          "type": "dolly",
+          "from_": [
+            1.25,
+            5.55,
+            1.2
+          ],
+          "to": [
+            2.8,
+            3.8,
+            1.1
+          ],
+          "len_m": 2.3377,
+          "path_dir_deg_left": -41.53,
+          "heading": -56,
+          "oblique_deg": 14.47,
+          "jambs": [
+            {
+              "opening": "O-living-dining",
+              "crossing": [
+                2.575,
+                4.054
+              ],
+              "min_jamb_clearance_m": 0.286,
+              "ok": true
+            }
+          ],
+          "min_clearance_any_m": 0.286,
+          "nearest_any": "wall_right_b",
+          "ok_jambs": true
+        }
+      ],
+      "path_issues": [],
+      "end_pose_error": {
+        "pos_m": 0.0,
+        "yaw_deg": 0.0,
+        "u0": 0.0,
+        "v0": 0.0
+      },
+      "min_jamb_clearance_m": 0.286,
+      "jambs_ok": true,
+      "play_s_designer": null,
+      "frames": [
+        {
+          "k": 0,
+          "x": 1.25,
+          "y": 5.55,
+          "z": 1.2,
+          "yaw": 25.0,
+          "u0": 0.52,
+          "v0": 0.46,
+          "seg": "start",
+          "s_m": 0.0,
+          "clearance_m": 0.7159,
+          "nearest": "wall_front_a"
+        },
+        {
+          "k": 1,
+          "x": 1.25,
+          "y": 5.55,
+          "z": 1.2,
+          "yaw": 20.0,
+          "u0": 0.52,
+          "v0": 0.46,
+          "seg": "P0#1",
+          "s_m": 0.0,
+          "clearance_m": 0.7159,
+          "nearest": "wall_front_a"
+        },
+        {
+          "k": 2,
+          "x": 1.25,
+          "y": 5.55,
+          "z": 1.2,
+          "yaw": 15.0,
+          "u0": 0.52,
+          "v0": 0.46,
+          "seg": "P0#1",
+          "s_m": 0.0,
+          "clearance_m": 0.7159,
+          "nearest": "wall_front_a"
+        },
+        {
+          "k": 3,
+          "x": 1.25,
+          "y": 5.55,
+          "z": 1.2,
+          "yaw": 10.0,
+          "u0": 0.52,
+          "v0": 0.46,
+          "seg": "P0#1",
+          "s_m": 0.0,
+          "clearance_m": 0.7159,
+          "nearest": "wall_front_a"
+        },
+        {
+          "k": 4,
+          "x": 1.25,
+          "y": 5.55,
+          "z": 1.2,
+          "yaw": 5.0,
+          "u0": 0.52,
+          "v0": 0.46,
+          "seg": "P0#1",
+          "s_m": 0.0,
+          "clearance_m": 0.7159,
+          "nearest": "wall_front_a"
+        },
+        {
+          "k": 5,
+          "x": 1.25,
+          "y": 5.55,
+          "z": 1.2,
+          "yaw": 0.0,
+          "u0": 0.52,
+          "v0": 0.46,
+          "seg": "P0#1",
+          "s_m": 0.0,
+          "clearance_m": 0.7159,
+          "nearest": "wall_front_a"
+        },
+        {
+          "k": 6,
+          "x": 1.25,
+          "y": 5.55,
+          "z": 1.2,
+          "yaw": -4.6667,
+          "u0": 0.52,
+          "v0": 0.46,
+          "seg": "P1a#2",
+          "s_m": 0.0,
+          "clearance_m": 0.7159,
+          "nearest": "wall_front_a"
+        },
+        {
+          "k": 7,
+          "x": 1.25,
+          "y": 5.55,
+          "z": 1.2,
+          "yaw": -9.3333,
+          "u0": 0.52,
+          "v0": 0.46,
+          "seg": "P1a#2",
+          "s_m": 0.0,
+          "clearance_m": 0.7159,
+          "nearest": "wall_front_a"
+        },
+        {
+          "k": 8,
+          "x": 1.25,
+          "y": 5.55,
+          "z": 1.2,
+          "yaw": -14.0,
+          "u0": 0.52,
+          "v0": 0.46,
+          "seg": "P1a#2",
+          "s_m": 0.0,
+          "clearance_m": 0.7159,
+          "nearest": "wall_front_a"
+        },
+        {
+          "k": 9,
+          "x": 1.25,
+          "y": 5.55,
+          "z": 1.2,
+          "yaw": -18.6667,
+          "u0": 0.52,
+          "v0": 0.46,
+          "seg": "P1a#2",
+          "s_m": 0.0,
+          "clearance_m": 0.7159,
+          "nearest": "wall_front_a"
+        },
+        {
+          "k": 10,
+          "x": 1.25,
+          "y": 5.55,
+          "z": 1.2,
+          "yaw": -23.3333,
+          "u0": 0.52,
+          "v0": 0.46,
+          "seg": "P1a#2",
+          "s_m": 0.0,
+          "clearance_m": 0.7159,
+          "nearest": "wall_front_a"
+        },
+        {
+          "k": 11,
+          "x": 1.25,
+          "y": 5.55,
+          "z": 1.2,
+          "yaw": -28.0,
+          "u0": 0.52,
+          "v0": 0.46,
+          "seg": "P1a#2",
+          "s_m": 0.0,
+          "clearance_m": 0.7159,
+          "nearest": "wall_front_a"
+        },
+        {
+          "k": 12,
+          "x": 1.25,
+          "y": 5.55,
+          "z": 1.2,
+          "yaw": -32.6667,
+          "u0": 0.52,
+          "v0": 0.46,
+          "seg": "P1b#3",
+          "s_m": 0.0,
+          "clearance_m": 0.7159,
+          "nearest": "wall_front_a"
+        },
+        {
+          "k": 13,
+          "x": 1.25,
+          "y": 5.55,
+          "z": 1.2,
+          "yaw": -37.3333,
+          "u0": 0.52,
+          "v0": 0.46,
+          "seg": "P1b#3",
+          "s_m": 0.0,
+          "clearance_m": 0.7159,
+          "nearest": "wall_front_a"
+        },
+        {
+          "k": 14,
+          "x": 1.25,
+          "y": 5.55,
+          "z": 1.2,
+          "yaw": -42.0,
+          "u0": 0.52,
+          "v0": 0.46,
+          "seg": "P1b#3",
+          "s_m": 0.0,
+          "clearance_m": 0.7159,
+          "nearest": "wall_front_a"
+        },
+        {
+          "k": 15,
+          "x": 1.25,
+          "y": 5.55,
+          "z": 1.2,
+          "yaw": -46.6667,
+          "u0": 0.52,
+          "v0": 0.46,
+          "seg": "P1b#3",
+          "s_m": 0.0,
+          "clearance_m": 0.7159,
+          "nearest": "wall_front_a"
+        },
+        {
+          "k": 16,
+          "x": 1.25,
+          "y": 5.55,
+          "z": 1.2,
+          "yaw": -51.3333,
+          "u0": 0.52,
+          "v0": 0.46,
+          "seg": "P1b#3",
+          "s_m": 0.0,
+          "clearance_m": 0.7159,
+          "nearest": "wall_front_a"
+        },
+        {
+          "k": 17,
+          "x": 1.25,
+          "y": 5.55,
+          "z": 1.2,
+          "yaw": -56.0,
+          "u0": 0.52,
+          "v0": 0.46,
+          "seg": "P1b#3",
+          "s_m": 0.0,
+          "clearance_m": 0.7159,
+          "nearest": "wall_front_a"
+        },
+        {
+          "k": 18,
+          "x": 1.405,
+          "y": 5.375,
+          "z": 1.19,
+          "yaw": -56.0,
+          "u0": 0.52,
+          "v0": 0.457,
+          "seg": "dolly#4",
+          "s_m": 0.234,
+          "clearance_m": 0.9422,
+          "nearest": "wall_front_a"
+        },
+        {
+          "k": 19,
+          "x": 1.56,
+          "y": 5.2,
+          "z": 1.18,
+          "yaw": -56.0,
+          "u0": 0.52,
+          "v0": 0.454,
+          "seg": "dolly#4",
+          "s_m": 0.468,
+          "clearance_m": 0.94,
+          "nearest": "wall_right_b"
+        },
+        {
+          "k": 20,
+          "x": 1.715,
+          "y": 5.025,
+          "z": 1.17,
+          "yaw": -56.0,
+          "u0": 0.52,
+          "v0": 0.451,
+          "seg": "dolly#4",
+          "s_m": 0.701,
+          "clearance_m": 0.785,
+          "nearest": "wall_right_b"
+        },
+        {
+          "k": 21,
+          "x": 1.87,
+          "y": 4.85,
+          "z": 1.16,
+          "yaw": -56.0,
+          "u0": 0.52,
+          "v0": 0.448,
+          "seg": "dolly#4",
+          "s_m": 0.935,
+          "clearance_m": 0.63,
+          "nearest": "wall_right_b"
+        },
+        {
+          "k": 22,
+          "x": 2.025,
+          "y": 4.675,
+          "z": 1.15,
+          "yaw": -56.0,
+          "u0": 0.52,
+          "v0": 0.445,
+          "seg": "dolly#4",
+          "s_m": 1.169,
+          "clearance_m": 0.475,
+          "nearest": "wall_right_b"
+        },
+        {
+          "k": 23,
+          "x": 2.18,
+          "y": 4.5,
+          "z": 1.14,
+          "yaw": -56.0,
+          "u0": 0.52,
+          "v0": 0.442,
+          "seg": "dolly#4",
+          "s_m": 1.403,
+          "clearance_m": 0.3276,
+          "nearest": "wall_right_b"
+        },
+        {
+          "k": 24,
+          "x": 2.335,
+          "y": 4.325,
+          "z": 1.13,
+          "yaw": -56.0,
+          "u0": 0.52,
+          "v0": 0.439,
+          "seg": "dolly#4",
+          "s_m": 1.636,
+          "clearance_m": 0.2954,
+          "nearest": "wall_right_b"
+        },
+        {
+          "k": 25,
+          "x": 2.49,
+          "y": 4.15,
+          "z": 1.12,
+          "yaw": -56.0,
+          "u0": 0.52,
+          "v0": 0.436,
+          "seg": "dolly#4",
+          "s_m": 1.87,
+          "clearance_m": 0.4201,
+          "nearest": "wall_right_b"
+        },
+        {
+          "k": 26,
+          "x": 2.645,
+          "y": 3.975,
+          "z": 1.11,
+          "yaw": -56.0,
+          "u0": 0.52,
+          "v0": 0.433,
+          "seg": "dolly#4",
+          "s_m": 2.104,
+          "clearance_m": 0.595,
+          "nearest": "wall_right_b"
+        },
+        {
+          "k": 27,
+          "x": 2.8,
+          "y": 3.8,
+          "z": 1.1,
+          "yaw": -56.0,
+          "u0": 0.52,
+          "v0": 0.43,
+          "seg": "dolly#4",
+          "s_m": 2.338,
+          "clearance_m": 0.7778,
+          "nearest": "leaf_living_dining_b"
+        }
+      ],
+      "F9": "pass",
+      "F9_note": "jambs >= 0.15 (crossed openings), last pose = the frame camera; play time = designer estimate, not measured",
+      "sheet": "framing/round2/transitions/T-LD2-alt-sheet.jpg"
     }
+  },
+  "summary": {
+    "frames": {
+      "K2-boy": {
+        "F1": "pass",
+        "F2": "pass",
+        "F3": "fail",
+        "F4": "pass",
+        "F5": "pass",
+        "F6": "pass",
+        "F7": "n/a (hall and corridor only)",
+        "F8": "n/a (no mirror)",
+        "F9": "pass",
+        "F10": "fail",
+        "F11": "pass",
+        "F12": "n/a (one-frame room)",
+        "mean_L": 166.0,
+        "est_flags": 7
+      },
+      "K2-girl": {
+        "F1": "pass",
+        "F2": "pass",
+        "F3": "fail",
+        "F4": "pass",
+        "F5": "pass",
+        "F6": "pass",
+        "F7": "n/a (hall and corridor only)",
+        "F8": "n/a (no mirror)",
+        "F9": "pass",
+        "F10": "fail",
+        "F11": "pass",
+        "F12": "n/a (one-frame room)",
+        "mean_L": 172.3,
+        "est_flags": 6
+      },
+      "B1": {
+        "F1": "pass",
+        "F2": "pass",
+        "F3": "fail",
+        "F4": "weak (no background)",
+        "F5": "pass",
+        "F6": "pass",
+        "F7": "n/a (hall and corridor only)",
+        "F8": "pass",
+        "F9": "pass",
+        "F10": "fail",
+        "F11": "pass",
+        "F12": "pass",
+        "mean_L": 139.2,
+        "est_flags": 3
+      },
+      "B2": {
+        "F1": "pass",
+        "F2": "n/a (no window in frame; S10 second fram",
+        "F3": "fail",
+        "F4": "weak (no foreground object)",
+        "F5": "fail",
+        "F6": "pass",
+        "F7": "n/a (hall and corridor only)",
+        "F8": "pass",
+        "F9": "n/a (second frame: reached by the pan, s",
+        "F10": "fail",
+        "F11": "pass",
+        "F12": "pass",
+        "mean_L": 136.7,
+        "est_flags": 2
+      },
+      "D1": {
+        "F1": "pass",
+        "F2": "pass",
+        "F3": "fail",
+        "F4": "pass",
+        "F5": "pass",
+        "F6": "pass",
+        "F7": "n/a (hall and corridor only)",
+        "F8": "n/a (no mirror)",
+        "F9": "pass",
+        "F10": "fail",
+        "F11": "pass",
+        "F12": "pass",
+        "mean_L": 192.0,
+        "est_flags": 3
+      },
+      "D2": {
+        "F1": "pass",
+        "F2": "n/a (no window in frame; S10 second fram",
+        "F3": "fail",
+        "F4": "weak (no background)",
+        "F5": "pass",
+        "F6": "pass",
+        "F7": "n/a (hall and corridor only)",
+        "F8": "n/a (no mirror)",
+        "F9": "n/a (second frame: reached by the pan, s",
+        "F10": "fail",
+        "F11": "pass",
+        "F12": "pass",
+        "mean_L": 184.5,
+        "est_flags": 2
+      },
+      "H-B-lit": {
+        "F1": "pass",
+        "F2": "n/a (no window in frame)",
+        "F3": "fail",
+        "F4": "weak (no foreground object)",
+        "F5": "fail",
+        "F6": "pass",
+        "F7": "n/a",
+        "F8": "n/a",
+        "F9": "n/a",
+        "F10": "fail",
+        "F11": "pass",
+        "F12": "n/a (one-frame room)",
+        "mean_L": 162.4,
+        "est_flags": 0
+      },
+      "C-B-lit": {
+        "F1": "pass",
+        "F2": "n/a (no window in frame)",
+        "F3": "fail",
+        "F4": "pass",
+        "F5": "pass",
+        "F6": "pass",
+        "F7": "n/a",
+        "F8": "n/a",
+        "F9": "n/a",
+        "F10": "fail",
+        "F11": "pass",
+        "F12": "n/a (one-frame room)",
+        "mean_L": 186.8,
+        "est_flags": 0
+      },
+      "W-A-lit": {
+        "F1": "pass",
+        "F2": "pass",
+        "F3": "fail",
+        "F4": "weak (no foreground object)",
+        "F5": "pass",
+        "F6": "pass",
+        "F7": "n/a",
+        "F8": "n/a",
+        "F9": "n/a",
+        "F10": "fail",
+        "F11": "pass",
+        "F12": "n/a (one-frame room)",
+        "mean_L": 199.7,
+        "est_flags": 0
+      },
+      "MB-A-lit": {
+        "F1": "pass",
+        "F2": "pass",
+        "F3": "fail",
+        "F4": "pass",
+        "F5": "pass",
+        "F6": "pass",
+        "F7": "n/a",
+        "F8": "n/a",
+        "F9": "n/a",
+        "F10": "fail",
+        "F11": "pass",
+        "F12": "n/a (one-frame room)",
+        "mean_L": 204.1,
+        "est_flags": 1
+      }
+    },
+    "density": {
+      "K2-boy": {
+        "minimum": 11,
+        "counted_by_rule": 7,
+        "counted_if_area_ge_0_2pct": 12,
+        "counted_if_size_ignored": 12,
+        "proxies_of_the_room_seen": 15,
+        "excluded_small": [
+          "soft-toy",
+          "pendant",
+          "wall-sconce",
+          "desk-organizer",
+          "toy-cars"
+        ],
+        "excluded_cut_or_hidden": [
+          "rug",
+          "roman-blind",
+          "bedding"
+        ],
+        "missing_categories": [
+          "lighting",
+          "ceramics/tableware"
+        ]
+      },
+      "K2-girl": {
+        "minimum": 11,
+        "counted_by_rule": 7,
+        "counted_if_area_ge_0_2pct": 12,
+        "counted_if_size_ignored": 12,
+        "proxies_of_the_room_seen": 15,
+        "excluded_small": [
+          "soft-toy",
+          "pendant",
+          "wall-sconce",
+          "doll",
+          "desk-organizer"
+        ],
+        "excluded_cut_or_hidden": [
+          "rug",
+          "roman-blind",
+          "bedding"
+        ],
+        "missing_categories": [
+          "lighting",
+          "ceramics/tableware"
+        ]
+      },
+      "B1": {
+        "minimum": 11,
+        "counted_by_rule": 8,
+        "counted_if_area_ge_0_2pct": 11,
+        "counted_if_size_ignored": 13,
+        "proxies_of_the_room_seen": 15,
+        "excluded_small": [
+          "toilet-paper-stand",
+          "shower-dispensers",
+          "wall-sconce",
+          "reed-diffuser",
+          "candle"
+        ],
+        "excluded_cut_or_hidden": [
+          "vanity-sconces",
+          "toilet-brush"
+        ],
+        "missing_categories": [
+          "lighting"
+        ]
+      },
+      "B2": {
+        "minimum": 11,
+        "counted_by_rule": 8,
+        "counted_if_area_ge_0_2pct": 11,
+        "counted_if_size_ignored": 13,
+        "proxies_of_the_room_seen": 14,
+        "excluded_small": [
+          "vanity-vase",
+          "shower-dispensers",
+          "soap-dispenser",
+          "toothbrush-cup",
+          "towel-ring"
+        ],
+        "excluded_cut_or_hidden": [
+          "bath-mat"
+        ],
+        "missing_categories": []
+      },
+      "D1": {
+        "minimum": 14,
+        "counted_by_rule": 7,
+        "counted_if_area_ge_0_2pct": 13,
+        "counted_if_size_ignored": 18,
+        "proxies_of_the_room_seen": 19,
+        "excluded_small": [
+          "candle-holders",
+          "framed-art",
+          "cutting-boards",
+          "bowl",
+          "tableware-set",
+          "utensil-crock",
+          "condiment-set",
+          "mug-set",
+          "open-shelf-ceramics",
+          "kitchen-sconce",
+          "sink-set"
+        ],
+        "excluded_cut_or_hidden": [
+          "dining-rug"
+        ],
+        "missing_categories": [
+          "storage/function"
+        ]
+      },
+      "D2": {
+        "minimum": 14,
+        "counted_by_rule": 1,
+        "counted_if_area_ge_0_2pct": 6,
+        "counted_if_size_ignored": 14,
+        "proxies_of_the_room_seen": 17,
+        "excluded_small": [
+          "framed-art",
+          "canisters",
+          "cutting-boards",
+          "utensil-crock",
+          "herb-pots",
+          "open-shelf-ceramics",
+          "bowl",
+          "tableware-set",
+          "condiment-set",
+          "paper-towel-holder",
+          "kitchen-sconce",
+          "mug-set",
+          "sink-set"
+        ],
+        "excluded_cut_or_hidden": [
+          "dining-rug",
+          "bench-pad",
+          "tea-towel"
+        ],
+        "missing_categories": [
+          "lighting",
+          "ceramics/tableware",
+          "storage/function"
+        ]
+      },
+      "H-B-lit": {
+        "minimum": 11,
+        "counted_by_rule": 6,
+        "counted_if_area_ge_0_2pct": 7,
+        "counted_if_size_ignored": 8,
+        "proxies_of_the_room_seen": 10,
+        "excluded_small": [
+          "wall-sconce",
+          "key-tray"
+        ],
+        "excluded_cut_or_hidden": [
+          "umbrella-stand",
+          "basket"
+        ],
+        "missing_categories": []
+      },
+      "C-B-lit": {
+        "minimum": 5,
+        "counted_by_rule": 1,
+        "counted_if_area_ge_0_2pct": 2,
+        "counted_if_size_ignored": 2,
+        "proxies_of_the_room_seen": 4,
+        "excluded_small": [
+          "picture-lights"
+        ],
+        "excluded_cut_or_hidden": [
+          "runner-rug",
+          "ceiling-lights"
+        ],
+        "missing_categories": [
+          "textile",
+          "lighting",
+          "ceramics/tableware",
+          "storage/function"
+        ]
+      },
+      "W-A-lit": {
+        "minimum": 11,
+        "counted_by_rule": 8,
+        "counted_if_area_ge_0_2pct": 9,
+        "counted_if_size_ignored": 11,
+        "proxies_of_the_room_seen": 13,
+        "excluded_small": [
+          "bookends",
+          "wall-sconce",
+          "desk-tray"
+        ],
+        "excluded_cut_or_hidden": [
+          "curtains",
+          "rug"
+        ],
+        "missing_categories": [
+          "textile"
+        ]
+      },
+      "MB-A-lit": {
+        "minimum": 14,
+        "counted_by_rule": 6,
+        "counted_if_area_ge_0_2pct": 8,
+        "counted_if_size_ignored": 10,
+        "proxies_of_the_room_seen": 13,
+        "excluded_small": [
+          "bedside-sconces",
+          "nightstand-vase",
+          "candle-holders",
+          "nightstand-tray"
+        ],
+        "excluded_cut_or_hidden": [
+          "planter",
+          "curtains",
+          "rug"
+        ],
+        "missing_categories": [
+          "ceramics/tableware",
+          "storage/function"
+        ]
+      }
+    },
+    "mirror_B2": {
+      "result": "pass",
+      "objects_seen": [
+        "hwall_38",
+        "bath_ceiling"
+      ],
+      "non_wall": [],
+      "wall_Y": [
+        10.1398,
+        12.2538
+      ],
+      "wall_Z": [
+        1.2012,
+        2.6652
+      ],
+      "samples_in_frame": 2304
+    },
+    "transitions": {
+      "P-B": {
+        "F9": "pass",
+        "shots": 1,
+        "min_jamb_clearance_m": null,
+        "end_pose_error": {
+          "pos_m": 0.0,
+          "yaw_deg": 0.0,
+          "u0": 0.0,
+          "v0": 0.0
+        },
+        "play_s_designer": [
+          1.2,
+          1.6
+        ],
+        "sheet": "framing/round2/transitions/P-B-sheet.jpg"
+      },
+      "P-D": {
+        "F9": "pass",
+        "shots": 1,
+        "min_jamb_clearance_m": null,
+        "end_pose_error": {
+          "pos_m": 0.0,
+          "yaw_deg": 0.0,
+          "u0": 0.0,
+          "v0": 0.0
+        },
+        "play_s_designer": [
+          1.2,
+          1.6
+        ],
+        "sheet": "framing/round2/transitions/P-D-sheet.jpg"
+      },
+      "T-CBath''": {
+        "F9": "pass",
+        "shots": 3,
+        "min_jamb_clearance_m": 0.2808,
+        "end_pose_error": {
+          "pos_m": 0.0,
+          "yaw_deg": 0.0,
+          "u0": 0.0,
+          "v0": 0.0
+        },
+        "play_s_designer": 3.2,
+        "sheet": "framing/round2/transitions/T-CBath2-sheet.jpg"
+      },
+      "T-LD''": {
+        "F9": "pass",
+        "shots": 4,
+        "min_jamb_clearance_m": 0.286,
+        "end_pose_error": {
+          "pos_m": 0.0,
+          "yaw_deg": 0.0,
+          "u0": 0.0,
+          "v0": 0.0
+        },
+        "play_s_designer": 3.4,
+        "sheet": "framing/round2/transitions/T-LD2-sheet.jpg"
+      },
+      "T-LD'' alt": {
+        "F9": "pass",
+        "shots": 4,
+        "min_jamb_clearance_m": 0.286,
+        "end_pose_error": {
+          "pos_m": 0.0,
+          "yaw_deg": 0.0,
+          "u0": 0.0,
+          "v0": 0.0
+        },
+        "play_s_designer": null,
+        "sheet": "framing/round2/transitions/T-LD2-alt-sheet.jpg"
+      }
+    },
+    "density_reading": "Every slot of the round-2 lists has a proxy (kids 15, bath 21 + ceiling light, kitchen 23; picks: plan slots + S11 additions; only the corridor's optional picture-ledge was never modelled). The low 'counted' numbers are the counting rule: >= 0.5% of the frame removes small products (lamps, toy cars, condiment set, dispensers: 0.1-0.4% at 2.5-4.5 m), and >= 50% visible removes textiles that the composition cuts on purpose (rugs, curtains, blind) or covers (bedding under the bedspread)."
   }
 }

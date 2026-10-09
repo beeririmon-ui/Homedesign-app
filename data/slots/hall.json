@@ -1,0 +1,64 @@
+{
+  "room": "hall",
+  "house_room_id": "hall",
+  "views": ["H0"],
+  "version": "1.0",
+  "approved": "Frame H0 (H-B, yaw 12) with its slots and the S11/S12 additions approved 2026-10-08 (verbatim: \"סבב 2 נראה מעולה\", on assets/blockout/house/framing/round2/all-round2.jpg, tile H-B-lit), with the density decision (verbatim: \"כתוב מינימום מוצרים..לדעתי כמה שיותר שהמעצב יחליט שזה לא גורע. ו3 וואריציות מתאימות לנורדי לכל מוצר\"). Designer additions under that decision, not in the clay: storage-boxes, bench-throw, and the basket moved to the bench's corner end. Rules: docs/design-bible/nordic.md 1.6 (rooms: hall); geometry: docs/house-plan.md/json 1.1 (6.3).",
+  "notes": "Structure as living-room.json. placement uses the product-card enum; placement_detail names the surface. z = layer order bottom to top; shadow at z-1 unless has_shadow_layer is false. plan_m in house coordinates (docs/house-plan.json), Z from the floor. envelope_cm = max envelope per variant; 3 variants within +-15%. frames = master frames where the product is visible by design; seen_in = transit / vista only (not counted, not tappable in a master frame). hotspot and zoom_frame after the shell render. fillers = unsold contents (Bible 1.5).",
+  "variants_required": 3,
+  "cameras": {
+    "H0": {"loc": [2.877, 9.039, 1.20], "yaw_deg_left": 12, "lens_mm": 24, "aspect": "16:9", "u0": 0.52, "v0": 0.46, "tilt": 0, "role": "hall master frame and site opening frame (U1)", "hero": "living vista on the left third (door centre u 0.351) + console vignette on the right third (art centre u 0.681)", "source": "docs/house-plan.json cameras.H0"}
+  },
+  "density": {
+    "rule": "Bible 1.6 S11: lean frame, minimum 11 is a floor; as many as the designer judges do not detract. Counted = >= 0.1% of the frame and >= 50% visible, or a cut large textile with >= 1% visible.",
+    "H0": {"kind": "lean", "min": 11, "in_frame": 12, "counted_est": 11, "not_counted": [{"slot": "umbrella-stand", "why": "decisively cut by the bottom edge (46% visible), kept as composed in the approved frame"}]},
+    "unique_slots": 14,
+    "transit_only": ["runner-rug", "ceiling-light"],
+    "source": "assets/blockout/house/framing/round2/selfcheck.json (H-B F10) + estimates for the additions"
+  },
+  "base_layers": [
+    { "id": "shell", "z": 0, "description": "מעטפת: קירות #F4F1EC, תקרה 3.00, כרכוב ושיפולים, פרקט אלון מולבן. חלון גג חלבי RL-hall מעל הספסל (מחוץ לפריים). פורטל אלון בצד הכניסה של הדלת לסלון (G-H4) ופורטל בפתח למסדרון (G-C3). דלת הכניסה Y 7.80–8.80 מחוץ לפריים. נקודות חשמל: מנורת הקיר (0.80, 6.95, 1.94), התלויה (2.20, 8.05, 3.00), שקע מאחורי הקונסולה. המבט לסלון דרך הדלת הכפולה מרונדר עם ברירות המחדל של הסלון (U9)" },
+    { "id": "fixed-furniture-shadow", "z": 34, "blend": "multiply", "description": "הצל של הקונסולה והספסל (אור היום מחלון הגג ומהסלון בלבד)" },
+    { "id": "fixed-furniture", "z": 40, "description": "קונסולת אלון X 2.55–3.35, Y 6.35–6.70, גובה 0.80 (G-H3). ספסל אלון X 0.80–1.20, Y 6.55–7.75, מושב ב-0.45, פתוח מתחת, עם דפנות קצה", "includes": ["console", "bench"] }
+  ],
+  "slots": [
+    { "id": "framed-art", "name_he": "תמונה ממוסגרת מעל הקונסולה", "placement": "wall", "position": "קיר מזרחי מעל הקונסולה, ממורכזת על X 2.95; מרכז התמונה על השליש הימני (u 0.681)", "plan_m": { "x": [2.67, 3.23], "y": [6.35, 6.38], "z": [1.30, 1.85] }, "envelope_cm": { "w": [50, 60], "h": [50, 60], "frame_depth": [2, 3.5] }, "frames": ["H0"], "z": 12, "variants": 3, "shared": "data/products/framed-art/ (house series)", "hotspot": null, "zoom_frame": null },
+    { "id": "table-lamp", "name_he": "מנורת שולחן על הקונסולה", "placement": "surface", "placement_detail": "console", "position": "צד שמאל של הקונסולה, (2.72, 6.52); כבל קצר לשקע מאחורי הקונסולה, לא נראה מ-H0", "plan_m": { "center": [2.72, 6.52], "z": [0.80, 1.35] }, "envelope_cm": { "h": [45, 55], "shade_d": [20, 26], "base_d_max": 14 }, "frames": ["H0"], "seen_in": ["C0 vista"], "electrical": "plug-in: Israeli or EU plug, 220-240V, SI or CE; cable hidden behind the console", "z": 46, "variants": 3, "has_light_layer": true, "hotspot": null, "zoom_frame": null },
+    { "id": "key-tray", "name_he": "מגש מפתחות", "placement": "surface", "placement_detail": "console", "position": "באמצע הקונסולה, X 2.91–3.09; ריק תמיד", "plan_m": { "x": [2.91, 3.09], "y": [6.44, 6.56], "z": [0.80, 0.83] }, "envelope_cm": { "w": [16, 22], "d": [10, 14], "h": [2, 4] }, "frames": ["H0"], "z": 44, "variants": 3, "hotspot": null, "zoom_frame": null },
+    { "id": "console-vessel", "name_he": "כלי עם גבעולים", "placement": "surface", "placement_detail": "console", "position": "צד ימין של הקונסולה, (3.22, 6.50); הקבוצה מנורה-מגש-כלי יורדת ועולה במשולש", "plan_m": { "center": [3.22, 6.50], "z": [0.80, 1.40] }, "envelope_cm": { "h": [25, 35], "d": [10, 16] }, "frames": ["H0"], "z": 46, "variants": 3, "fillers": ["stems"], "hotspot": null, "zoom_frame": null },
+    { "id": "storage-boxes", "name_he": "קופסאות אחסון מתחת לקונסולה (זוג)", "placement": "floor", "position": "מתחת לקונסולה, צמודות לקיר, X 2.65–3.25, Y 6.38–6.60; נחתכות קצת בשוליים התחתונים (חיתוך החלטי)", "plan_m": { "x": [2.65, 3.25], "y": [6.38, 6.60], "z": [0.0, 0.35] }, "envelope_cm": { "w_each": [26, 30], "d": [20, 22], "h": [28, 35] }, "frames": ["H0"], "z": 30, "variants": 3, "set_of": 2, "status_1_0": "designer addition (density decision 2026-10-08), not in the clay; first to go if busy", "hotspot": null, "zoom_frame": null },
+    { "id": "bench-cushion", "name_he": "כרית ספסל", "placement": "surface", "placement_detail": "bench seat", "position": "על הספסל, X 0.82–1.18, Y 6.58–7.72; נחתכת בשוליים השמאליים", "plan_m": { "x": [0.82, 1.18], "y": [6.58, 7.72], "z": [0.45, 0.50] }, "envelope_cm": { "l": [110, 116], "w": [34, 38], "t": [3, 5] }, "frames": ["H0"], "z": 50, "variants": 3, "hotspot": null, "zoom_frame": null },
+    { "id": "bench-throw", "name_he": "שמיכה מקופלת על הספסל", "placement": "surface", "placement_detail": "bench cushion", "position": "מקופלת על הכרית בקצה הספסל שליד הפינה, X 0.84–1.16, Y 6.62–6.95", "plan_m": { "x": [0.84, 1.16], "y": [6.62, 6.95], "z": [0.50, 0.58] }, "envelope_cm": { "folded_w": [30, 34], "folded_l": [30, 36], "folded_h": [5, 8] }, "frames": ["H0"], "z": 52, "variants": 3, "status_1_0": "designer addition (density decision 2026-10-08), not in the clay", "hotspot": null, "zoom_frame": null },
+    { "id": "basket", "name_he": "סל מתחת לספסל", "placement": "floor", "position": "מתחת למושב, בקצה שליד הפינה: מרכז (1.00, 6.85); הראש לפחות 0.02 מתחת לשפת המושב בפריים", "plan_m": { "center": [1.00, 6.85], "z": [0.0, 0.30] }, "envelope_cm": { "d": [28, 34], "h": [26, 30] }, "frames": ["H0"], "z": 42, "variants": 3, "status_1_0": "moved from (1.00, 7.15) so that it is >= 50% visible (clay 29%)", "hotspot": null, "zoom_frame": null },
+    { "id": "wall-hooks", "name_he": "מתלה יתדות", "placement": "wall", "position": "קיר שמאל (X 0.80), Y 6.75–7.55, Z 1.65–1.72; נחתך בשוליים השמאליים; הקולבים ריקים", "plan_m": { "x": [0.80, 0.86], "y": [6.75, 7.55], "z": [1.65, 1.72] }, "envelope_cm": { "l": [60, 80], "pegs": [3, 5], "projection_max": 8 }, "frames": ["H0"], "z": 12, "variants": 3, "hotspot": null, "zoom_frame": null },
+    { "id": "wall-sconce", "name_he": "מנורת קיר מעל הספסל", "placement": "wall", "position": "קיר שמאל, פלטה ב-(0.80, 6.95, 1.94), מעל מתלה היתדות", "plan_m": { "plate": [0.80, 6.95, 1.94], "z": [1.85, 2.03] }, "envelope_cm": { "w": [10, 16], "h": [15, 22], "projection_max": 15 }, "frames": ["H0"], "electrical": "CE, 220-240V, hardwired to the wall point, no visible cable, electrician install; 2700K", "z": 14, "variants": 3, "has_light_layer": true, "hotspot": null, "zoom_frame": null },
+    { "id": "planter", "name_he": "עציץ ליד הפורטל", "placement": "floor", "position": "(2.37, 6.58), בין משקוף הפורטל לקונסולה", "plan_m": { "center": [2.37, 6.58], "z": [0.0, 1.45] }, "envelope_cm": { "pot_d": [22, 26], "pot_h": [34, 40], "plant_top_max": 145 }, "frames": ["H0"], "z": 36, "variants": 3, "fillers": ["plant"], "hotspot": null, "zoom_frame": null },
+    { "id": "umbrella-stand", "name_he": "מעמד מטריות", "placement": "floor", "position": "(3.42, 6.88), ליד הקיר הימני, מימין לקונסולה; נחתך בנחישות בשוליים התחתונים; חופף את רגל הקונסולה בבירור (0.03 לפחות) או רחוק ממנה 0.02", "plan_m": { "center": [3.42, 6.88], "z": [0.0, 0.92] }, "envelope_cm": { "d": [20, 24], "h": [45, 50] }, "frames": ["H0"], "z": 60, "variants": 3, "fillers": ["umbrella"], "hotspot": null, "zoom_frame": null },
+    { "id": "runner-rug", "name_he": "שטיח ראנר בכניסה", "placement": "floor", "position": "X 1.70–2.50, Y 6.75–9.45; לא בפריים H0 (הרצפה נראית שם רק ליד הקיר הרחוק); נראה מ-C0 ובמעברים", "plan_m": { "x": [1.70, 2.50], "y": [6.75, 9.45], "z": [0.0, 0.012] }, "envelope_cm": { "w": [70, 80], "l": [250, 270] }, "frames": [], "seen_in": ["C0 vista", "T-HC", "T-E0"], "z": 20, "variants": 3, "hotspot": null, "zoom_frame": null },
+    { "id": "ceiling-light", "name_he": "מנורת תקרה בכניסה", "placement": "ceiling", "position": "(2.20, 8.05), צמודה למחצה; לא בפריים H0; נראית מ-C0 ובמעברים", "plan_m": { "center": [2.20, 8.05], "z": [2.75, 3.00] }, "envelope_cm": { "d": [35, 45], "h": [18, 25] }, "frames": [], "seen_in": ["C0 vista", "T-HC", "T-E0"], "electrical": "CE, 220-240V, hardwired to the ceiling point, no plug", "z": 80, "variants": 3, "has_light_layer": true, "has_shadow_layer": false, "shadow_note": "צמודה לתקרה, לא בפריים הראשי", "shared": "bridge: same shade material as the corridor ceiling lights", "hotspot": null, "zoom_frame": null }
+  ],
+  "fillers": [
+    { "id": "stems", "name_he": "גבעולים בכלי", "slot": "console-vessel", "sold": false, "spec": "3-5 dried or fresh stems, sage or oat range, top <= Z 1.40, same in every variant" },
+    { "id": "plant", "name_he": "צמח בעציץ", "slot": "planter", "sold": false, "spec": "upright soft-leaved plant (e.g. olive or ficus), crown in the sage range, top <= Z 1.45, same in every variant" },
+    { "id": "umbrella", "name_he": "מטרייה במעמד", "slot": "umbrella-stand", "sold": false, "spec": "one closed long umbrella, charcoal or oat, wooden handle, no logo, top <= Z 0.92" }
+  ],
+  "kept_out_of_frame": ["coats and bags on the hooks (hooks stay empty)", "keys in the tray", "shoes", "mirror (Bible: no mirror in the hall)", "mail and papers"],
+  "light_layers": { "z": 90, "blend": "screen", "count": 9, "active": { "H0": 2 }, "slots": ["table-lamp", "wall-sconce", "ceiling-light"], "lit_typologies": { "H0": ["task", "wall"] } },
+  "accent_carriers": {
+    "charcoal": ["framed-art (line or frame, 3/3)", "wall-hooks or table-lamp base (at least one charcoal variant in each)"],
+    "sage": ["stems (filler)", "plant (filler)"]
+  },
+  "transitions_out": ["T-E0 (to living)", "T-HW (to work)", "T-HC (to corridor)"],
+  "blockout_checks": [
+    "H-HC1 vista (living door centre) u 0.351 +-0.02; console art centre u 0.681 +-0.02",
+    "H-HC2 umbrella stand vs console end: decisive overlap >= 0.03 or >= 0.02 clear (clay 0.012)",
+    "H-HC3 basket at the bench's corner end >= 50% visible; its top >= 0.02 below the seat edge; >= 0.02 from the bench cushion (clay 0.019)",
+    "H-HC4 storage boxes: >= 0.02 from the console legs and the planter, or decisively overlapped by the legs; cut by the bottom edge >= 15% or clear >= 0.05",
+    "H-HC5 density: >= 11 counted (Bible 1.6); lamps: table lamp + sconce lit and visible",
+    "H-HC6 F7: mean L with the roof light (sky only) >= 95 (round 1: 127.8)"
+  ],
+  "open_for_user": [
+    "Designer additions not in the clay: storage-boxes, bench-throw; basket moved to the bench's corner end",
+    "runner-rug and ceiling-light are seen only from C0 and in transitions: keep as products or drop"
+  ]
+}
