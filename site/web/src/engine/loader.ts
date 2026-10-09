@@ -31,7 +31,7 @@ export class Loader {
   adopt(url: string, img: HTMLImageElement): Promise<Decoded> {
     const p = img
       .decode()
-      .then(() => (typeof createImageBitmap === 'function' ? createImageBitmap(img, { premultiplyAlpha: 'premultiply' }) : img));
+      .then((): Promise<Decoded> | Decoded => (typeof createImageBitmap === 'function' ? createImageBitmap(img, { premultiplyAlpha: 'premultiply' }) : img));
     this.cache.set(url, p);
     return p;
   }

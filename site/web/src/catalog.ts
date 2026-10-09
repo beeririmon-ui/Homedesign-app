@@ -5,7 +5,20 @@ import sceneJson from '@generated/scene.living-room.nordic.json';
 import type { Scene } from './engine/types';
 
 export const catalog = catalogJson as unknown as PublicCatalog;
-export const scene = sceneJson as unknown as Scene;
+const fullScene = sceneJson as unknown as Scene;
+/**
+ * The artifact preview ships a reduced media set (≤ 200 files, ≤ 12 MB): WebP only, layers at one width (lo),
+ * shell and hall at ≤ lo. tools/finalize-artifact.ts copies exactly these files.
+ */
+export const scene: Scene = __ARTIFACT__
+  ? {
+      ...fullScene,
+      formats: ['webp'],
+      widths: { lo: fullScene.widths.lo, hi: fullScene.widths.lo },
+      base: fullScene.base.map((b) => ({ ...b, widths: b.widths.filter((w) => w <= fullScene.widths.lo) })),
+      hall: { ...fullScene.hall, widths: fullScene.hall.widths.filter((w) => w <= fullScene.widths.lo) },
+    }
+  : fullScene;
 
 const byId = new Map(catalog.products.map((p) => [p.id, p]));
 export const product = (id: string | null | undefined): PublicProduct | undefined => (id ? byId.get(id) : undefined);

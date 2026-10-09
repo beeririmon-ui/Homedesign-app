@@ -417,6 +417,59 @@ def attach_candidates(slots: dict, products: list[dict]) -> None:
         p.setdefault("_shared_in", [])
 
 
+# --------------------------------------------------------------------------- sell quantity
+
+# The slot may need a set (data/slots: set_of). Card cost is sometimes per piece, sometimes per set.
+QTY_PER_PIECE = [
+    re.compile(r"price\s+(?:is\s+)?per\s+(?:lamp|light|unit|piece|pc|item|cup|mug|plate|bowl|cover|cushion|frame|print)", re.I),
+    re.compile(r"(?:pair|set)\s*=\s*\d+\s*x\s*\$", re.I),
+    re.compile(r"set of \d+\s*=\s*\d+\s*units", re.I),
+    re.compile(r"=\s*order\s+qty\s*\d", re.I),
+    re.compile(r"sell\s+\d+\s+units", re.I),
+    re.compile(r"sell as a set of [\d\sor]+=\s*qty", re.I),
+    re.compile(r"sold\s+(?:as\s+1\s*pc|singly|individually|per\s+piece)", re.I),
+    re.compile(r"(?:מחיר|cost)[^.;\n]{0,25}ליחידה"),
+    re.compile(r"ליחידה[^.;\n]{0,15}(?:מחיר|cost)"),
+]
+QTY_WHOLE_SET_NOTES = [
+    re.compile(r"price\s+(?:is\s+)?for\s+(?:\d+|two|three|four|the\s+(?:set|pair))\b", re.I),
+    re.compile(r"המחיר\s+(?:הוא\s+)?ל(?:סט|זוג)"),
+]
+QTY_WHOLE_SET_NAME = [
+    re.compile(r"\bset of \d\b", re.I),
+    re.compile(r"\bpair\b", re.I),
+    re.compile(r"\b(?:two|three|four|five|six)-piece\b|\b\d+\s*-?\s*(?:pcs|pieces)\s*/\s*set", re.I),
+]
+QTY_COUNT = re.compile(r"set of (\d+)\s*=\s*\d+\s*units|כסט של (\d+) יחידות", re.I)
+
+
+def sell_qty_default(p: dict, slot_by_key: dict) -> dict:
+    """Default units per sale. Uses the slot's set_of only when the card says its cost is per piece;
+    when that is unclear the default is 1 and sure=False (the page shows a 'not sure' chip)."""
+    def set_of(k):
+        v = (slot_by_key.get(k) or {}).get("set_of")
+        return int(v) if isnum(v) and v > 1 else None
+    home = set_of(p.get("_slot_key")) if p.get("_slot_key") else None
+    shared = [(set_of(k), k) for k in p.get("_shared_in") or [] if set_of(k)]
+    name, notes = p.get("name") or "", p.get("notes") or ""
+    pp = any(r.search(name) or r.search(notes) for r in QTY_PER_PIECE)
+    ws_strong = any(r.search(notes) for r in QTY_WHOLE_SET_NOTES)
+    ws = ws_strong or any(r.search(name) for r in QTY_WHOLE_SET_NAME)
+    if home:
+        if pp and not ws_strong:
+            return {"qty": home, "sure": True, "set_of": home, "reason": f"העמדה דורשת סט של {home}, וההערות אומרות שהעלות ליחידה"}
+        if ws and not pp:
+            return {"qty": 1, "sure": True, "set_of": home, "reason": f"העמדה דורשת סט של {home}, והעלות בכרטיס כבר לסט או לזוג"}
+        return {"qty": 1, "sure": False, "set_of": home,
+                "reason": f"העמדה דורשת סט של {home}, ולא ברור מהכרטיס אם העלות ליחידה או לסט"}
+    if pp:
+        m = QTY_COUNT.search(name) or QTY_COUNT.search(notes)
+        n = int(next(g for g in m.groups() if g)) if m else (max(shared)[0] if shared else None)
+        if n and n > 1:
+            return {"qty": n, "sure": True, "set_of": n, "reason": f"ההערות אומרות שהעלות ליחידה ושהמוצר נמכר כסט של {n}"}
+    return {"qty": 1, "sure": True, "set_of": None, "reason": None}
+
+
 # --------------------------------------------------------------------------- images
 
 _ssl_ctx = None
@@ -778,8 +831,9 @@ def _max_days(key: str, o: dict):
 
 
 def pick_freight(entry: dict):
-    """Default shipping from CJ freight data: the cheapest option that arrives within 20 days,
-    otherwise the cheapest option overall. Returns (usd, option_key, option) or None."""
+    """The cheapest CJ option that arrives within 20 days. Returns (usd, option_key, option), or None when
+    no option is known to arrive within 20 days (no silent fallback to the slow line: the page then shows
+    'no fast shipping' for the under-20-days method)."""
     if not isinstance(entry, dict):
         return None
     cu = entry.get("cheapest_under_20d")
@@ -796,8 +850,9 @@ def pick_freight(entry: dict):
     if not opts:
         return None
     under = [(k, o) for k, o in opts if (_max_days(k, o) is not None and _max_days(k, o) <= 20)]
-    pool = under or [(k, o) for k, o in opts if k == "cheapest"] or opts
-    k, o = min(pool, key=lambda x: x[1]["usd"])
+    if not under:
+        return None
+    k, o = min(under, key=lambda x: x[1]["usd"])
     return o["usd"], k, o
 
 
@@ -864,7 +919,7 @@ def load_economics(eco_dir: Path, products: list[dict]) -> dict:
             out["files"].append(bp2.name)
         except Exception as e:
             log(f"  ! cannot read {bp2.name}: {e}")
-    n_cj = n_manual = 0
+    n_cj = n_manual = n_no_fast = n_qty = 0
 
     def opt(o):
         if not isinstance(o, dict) or not isnum(o.get("usd")):
@@ -884,8 +939,10 @@ def load_economics(eco_dir: Path, products: list[dict]) -> dict:
             under = pick_freight(fe)
             cj = {"cheapest": opt(fe.get("cheapest")), "under20": opt(under[2]) if under else None,
                   "date": first_date(str(fe.get("checked_at") or fe.get("date") or "")) or fdate, "status": fe.get("status")}
-            if cj["cheapest"] is None and under:  # no explicit cheapest: the cheapest of all options
-                allo = [opt(o) for o in (fe.get("options") or [])] + [cj["under20"]]
+            if under is None:
+                n_no_fast += 1
+            if cj["cheapest"] is None:  # no explicit cheapest: the cheapest of all options
+                allo = [opt(o) for o in (fe.get("options") or [])] + [cj["under20"], opt(fe.get("fastest_under_20d"))]
                 allo = [o for o in allo if o]
                 cj["cheapest"] = min(allo, key=lambda o: o["usd"]) if allo else None
             if cj["cheapest"] or cj["under20"]:
@@ -894,9 +951,13 @@ def load_economics(eco_dir: Path, products: list[dict]) -> dict:
         for k in ("retail_ils", "compare_at_ils"):
             if isnum(m.get(k)):
                 e[k] = m[k]
+        q = m.get("sell_qty")
+        if isnum(q) and float(q).is_integer() and q >= 1:
+            e["sell_qty"] = int(q)
+            n_qty += 1
         if e:
             out["products"][pid] = e
-    out["counts"] = {"shipping_cj": n_cj, "shipping_manual": n_manual,
+    out["counts"] = {"shipping_cj": n_cj, "shipping_manual": n_manual, "no_fast_shipping": n_no_fast, "sell_qty": n_qty,
                      "retail": sum(1 for v in out["products"].values() if "retail_ils" in v)}
     return out
 
@@ -916,7 +977,13 @@ def main() -> int:
     products = load_products(set(order))
     n_dup = mark_duplicates(products)
     attach_candidates(slots, products)
+    slot_by_key = {s["key"]: s for rows in slots.values() for s in rows}
+    for p in products:
+        p["_sell_qty"] = sell_qty_default(p, slot_by_key)
+    n_qty = sum(1 for p in products if p["_sell_qty"]["qty"] > 1)
+    n_unsure = sum(1 for p in products if not p["_sell_qty"]["sure"])
     log(f"  rooms {len(order)} · slots {sum(len(v) for v in slots.values())} · products {len(products)} · duplicate cards {n_dup}")
+    log(f"  sell quantity: {n_qty} cards sold as a set by default · {n_unsure} not sure (default 1)")
 
     # fresh dist (studio/dist is generated output)
     if DIST.exists():
@@ -934,7 +1001,7 @@ def main() -> int:
     economics = load_economics(eco_dir, products)
     if economics["files"]:
         c = economics.get("counts", {})
-        log(f"  economics: {', '.join(economics['files'])} · shipping from CJ {c.get('shipping_cj', 0)}, manual {c.get('shipping_manual', 0)} · retail prices {c.get('retail', 0)}")
+        log(f"  economics: {', '.join(economics['files'])} · shipping from CJ {c.get('shipping_cj', 0)}, manual {c.get('shipping_manual', 0)} · no option within 20 days {c.get('no_fast_shipping', 0)} · retail prices {c.get('retail', 0)} · sell quantities {c.get('sell_qty', 0)}")
     else:
         log(f"  economics: no files in {economics['dir']} (the page shows its defaults)")
 
@@ -982,6 +1049,7 @@ def main() -> int:
             "path": p["_path"], "room": p["_room"], "slot_key": p["_slot_key"], "pool": p["_pool"],
             "pid": p["_pid"], "dups": p["_dups"], "shared_in": p["_shared_in"], "in_rooms": p["_in_rooms"],
             "standards": p["_standards"], "img": p["_img"], "links": p["_links"], "lead": p["_lead"],
+            "sell_qty_default": p["_sell_qty"],
         })
         out_products.append(q)
 

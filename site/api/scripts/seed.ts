@@ -51,7 +51,7 @@ export function buildSeedSql(cat: FullCatalog): string {
     out.push(`INSERT INTO catalog_meta (key, value) VALUES ${row([k, v])} ON CONFLICT(key) DO UPDATE SET value = excluded.value;`);
 
   out.push(
-    `INSERT INTO economics_settings (id, fx_usd_ils, vat_rate, payment_fee_rate, payment_fee_fixed_agorot, returns_reserve_rate, cac_agorot, target_margin_rate, default_shipping_usd_cents, defaults_used, imported_at, source) VALUES ${row([
+    `INSERT INTO economics_settings (id, fx_usd_ils, vat_rate, payment_fee_rate, payment_fee_fixed_agorot, returns_reserve_rate, cac_agorot, target_margin_rate, default_shipping_usd_cents, packaging_agorot, items_per_order, bundle_factor, freight_method, shipping_fee_economy_agorot, shipping_fee_express_agorot, free_shipping_threshold_agorot, defaults_used, imported_at, source) VALUES ${row([
       'current',
       s.fx_usd_ils,
       s.vat_rate,
@@ -61,10 +61,17 @@ export function buildSeedSql(cat: FullCatalog): string {
       Math.round(s.cac_ils * 100),
       s.target_margin_rate,
       Math.round(s.default_shipping_usd * 100),
+      Math.round(s.packaging_ils * 100),
+      s.items_per_order,
+      s.bundle_factor,
+      s.freight_method,
+      Math.round(s.shipping_fee_economy_ils * 100),
+      Math.round(s.shipping_fee_express_ils * 100),
+      s.free_shipping_threshold_ils === null ? null : Math.round(s.free_shipping_threshold_ils * 100),
       JSON.stringify(cat.economics.defaults_used),
       now,
       cat.economics.sources.settings,
-    ])} ON CONFLICT(id) DO UPDATE SET fx_usd_ils = excluded.fx_usd_ils, vat_rate = excluded.vat_rate, payment_fee_rate = excluded.payment_fee_rate, payment_fee_fixed_agorot = excluded.payment_fee_fixed_agorot, returns_reserve_rate = excluded.returns_reserve_rate, cac_agorot = excluded.cac_agorot, target_margin_rate = excluded.target_margin_rate, default_shipping_usd_cents = excluded.default_shipping_usd_cents, defaults_used = excluded.defaults_used, imported_at = excluded.imported_at, source = excluded.source;`,
+    ])} ON CONFLICT(id) DO UPDATE SET fx_usd_ils = excluded.fx_usd_ils, vat_rate = excluded.vat_rate, payment_fee_rate = excluded.payment_fee_rate, payment_fee_fixed_agorot = excluded.payment_fee_fixed_agorot, returns_reserve_rate = excluded.returns_reserve_rate, cac_agorot = excluded.cac_agorot, target_margin_rate = excluded.target_margin_rate, default_shipping_usd_cents = excluded.default_shipping_usd_cents, packaging_agorot = excluded.packaging_agorot, items_per_order = excluded.items_per_order, bundle_factor = excluded.bundle_factor, freight_method = excluded.freight_method, shipping_fee_economy_agorot = excluded.shipping_fee_economy_agorot, shipping_fee_express_agorot = excluded.shipping_fee_express_agorot, free_shipping_threshold_agorot = excluded.free_shipping_threshold_agorot, defaults_used = excluded.defaults_used, imported_at = excluded.imported_at, source = excluded.source;`,
   );
 
   for (const r of cat.rooms) {
@@ -84,15 +91,15 @@ export function buildSeedSql(cat: FullCatalog): string {
       nordic_score: p.nordic_score,
     };
     out.push(
-      `INSERT INTO products (id, room_id, slot_id, name_he, name_provisional, name_supplier, category, description_he, status, source_path, supplier_name, supplier_url, supplier_sku, cost_usd_cents, shipping_usd_cents, shipping_from_default, fx_usd_ils_at_import, retail_agorot, compare_at_agorot, price_provisional, visible, data_json, catalog_version, updated_at) VALUES ${row([
+      `INSERT INTO products (id, room_id, slot_id, name_he, name_provisional, name_supplier, category, description_he, status, source_path, supplier_name, supplier_url, supplier_sku, cost_usd_cents, shipping_usd_cents, shipping_from_default, shipping_source, sell_qty, fx_usd_ils_at_import, retail_agorot, compare_at_agorot, price_provisional, visible, data_json, catalog_version, updated_at) VALUES ${row([
         p.id, p.room, p.slot, p.name_he, p.name_provisional, p.name_supplier, p.category, p.description_he, p.status, p.source_path,
-        p.supplier.name, p.supplier.url, p.supplier.sku, p.cost_usd_cents, p.shipping_usd_cents, p.shipping_from_default,
+        p.supplier.name, p.supplier.url, p.supplier.sku, p.cost_usd_cents, p.shipping_usd_cents, p.shipping_from_default, p.shipping_source, p.sell_qty,
         p.fx_usd_ils, p.price_agorot, p.compare_at_agorot, p.price_provisional, true, JSON.stringify(data), cat.version, now,
-      ])} ON CONFLICT(id) DO UPDATE SET room_id = excluded.room_id, slot_id = excluded.slot_id, name_he = excluded.name_he, name_provisional = excluded.name_provisional, name_supplier = excluded.name_supplier, category = excluded.category, description_he = excluded.description_he, status = excluded.status, source_path = excluded.source_path, supplier_name = excluded.supplier_name, supplier_url = excluded.supplier_url, supplier_sku = excluded.supplier_sku, cost_usd_cents = excluded.cost_usd_cents, shipping_usd_cents = excluded.shipping_usd_cents, shipping_from_default = excluded.shipping_from_default, fx_usd_ils_at_import = excluded.fx_usd_ils_at_import, retail_agorot = excluded.retail_agorot, compare_at_agorot = excluded.compare_at_agorot, price_provisional = excluded.price_provisional, visible = 1, data_json = excluded.data_json, catalog_version = excluded.catalog_version, updated_at = excluded.updated_at;`,
+      ])} ON CONFLICT(id) DO UPDATE SET room_id = excluded.room_id, slot_id = excluded.slot_id, name_he = excluded.name_he, name_provisional = excluded.name_provisional, name_supplier = excluded.name_supplier, category = excluded.category, description_he = excluded.description_he, status = excluded.status, source_path = excluded.source_path, supplier_name = excluded.supplier_name, supplier_url = excluded.supplier_url, supplier_sku = excluded.supplier_sku, cost_usd_cents = excluded.cost_usd_cents, shipping_usd_cents = excluded.shipping_usd_cents, shipping_from_default = excluded.shipping_from_default, shipping_source = excluded.shipping_source, sell_qty = excluded.sell_qty, fx_usd_ils_at_import = excluded.fx_usd_ils_at_import, retail_agorot = excluded.retail_agorot, compare_at_agorot = excluded.compare_at_agorot, price_provisional = excluded.price_provisional, visible = 1, data_json = excluded.data_json, catalog_version = excluded.catalog_version, updated_at = excluded.updated_at;`,
     );
     for (const v of p.variants) {
       out.push(
-        `INSERT INTO product_variants (id, product_id, label_he, supplier_sku, active) VALUES ${row([v.id, p.id, v.label_he, p.supplier.sku, true])} ON CONFLICT(id) DO UPDATE SET label_he = excluded.label_he, supplier_sku = excluded.supplier_sku, active = 1;`,
+        `INSERT INTO product_variants (id, product_id, label_he, supplier_sku, fulfillment_source, active) VALUES ${row([v.id, p.id, v.label_he, p.supplier.sku, p.fulfillment_source, true])} ON CONFLICT(id) DO UPDATE SET label_he = excluded.label_he, supplier_sku = excluded.supplier_sku, fulfillment_source = excluded.fulfillment_source, active = 1;`,
       );
     }
   }

@@ -5,6 +5,7 @@ import {
   CartItemInputSchema,
   CheckoutRequestSchema,
   ORDER_STATUS_HE,
+  customerShippingAgorot,
   randomToken,
   sha256Hex,
   timingSafeEqualHex,
@@ -109,7 +110,13 @@ publicApi.post('/checkout', async (c) => {
   if (!ship) throw new HttpError(422, 'shipping_unavailable');
   const econ = await economics(c.env.DB);
   const subtotal = cart.subtotal_agorot;
-  const total = subtotal + ship.price_agorot;
+  // price from D1 settings, never from the client: economy is free at or above the threshold
+  const shippingAgorot = customerShippingAgorot(req.shipping_method, subtotal, {
+    shipping_fee_economy_ils: econ.shipping_fee_economy_agorot / 100,
+    shipping_fee_express_ils: econ.shipping_fee_express_agorot / 100,
+    free_shipping_threshold_ils: econ.free_shipping_threshold_agorot === null ? null : econ.free_shipping_threshold_agorot / 100,
+  });
+  const total = subtotal + shippingAgorot;
   const vat = total - Math.round(total / (1 + econ.vat_rate));
   const now = nowIso();
   const id = orderId();
@@ -118,12 +125,12 @@ publicApi.post('/checkout', async (c) => {
 
   // cost snapshots for real per-order margin
   const { results: costs } = await c.env.DB.prepare(
-    `SELECT v.id AS variant_id, p.cost_usd_cents, p.shipping_usd_cents, v.supplier_sku
+    `SELECT v.id AS variant_id, p.cost_usd_cents, p.shipping_usd_cents, p.sell_qty, v.fulfillment_source, v.supplier_sku
      FROM product_variants v JOIN products p ON p.id = v.product_id
      WHERE v.id IN (${cart.lines.map(() => '?').join(',')})`,
   )
     .bind(...cart.lines.map((l) => l.variant_id))
-    .all<{ variant_id: string; cost_usd_cents: number; shipping_usd_cents: number; supplier_sku: string | null }>();
+    .all<{ variant_id: string; cost_usd_cents: number; shipping_usd_cents: number; sell_qty: number; fulfillment_source: string; supplier_sku: string | null }>();
   const costOf = new Map(costs.map((r) => [r.variant_id, r]));
 
   const provider = paymentProvider(c.env, new URL(c.req.url).origin);
@@ -146,15 +153,18 @@ publicApi.post('/checkout', async (c) => {
       `INSERT INTO orders (id, token_hash, cart_id, customer_id, status, subtotal_agorot, shipping_method, shipping_agorot, total_agorot, vat_agorot, vat_rate, fx_usd_ils_at_order, address_json, terms_accepted_at, payment_provider, payment_session_id, created_at, updated_at)
        VALUES (?, ?, ?, ?, 'pending_payment', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     ).bind(
-      id, await sha256Hex(token), req.cart_id, customerId, subtotal, req.shipping_method, ship.price_agorot, total, vat,
+      id, await sha256Hex(token), req.cart_id, customerId, subtotal, req.shipping_method, shippingAgorot, total, vat,
       econ.vat_rate, econ.fx_usd_ils, JSON.stringify(req.address), now, provider.id, session.session_id, now, now,
     ),
     ...cart.lines.map((l, i) => {
       const cost = costOf.get(l.variant_id);
       return c.env.DB.prepare(
-        `INSERT INTO order_items (order_id, line, product_id, variant_id, name_he, qty, unit_price_agorot, unit_cost_usd_cents, unit_shipping_usd_cents, supplier_sku)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      ).bind(id, i + 1, l.product_id, l.variant_id, l.name_he, l.qty, l.unit_price_agorot, cost?.cost_usd_cents ?? 0, cost?.shipping_usd_cents ?? 0, cost?.supplier_sku ?? null);
+        `INSERT INTO order_items (order_id, line, product_id, variant_id, name_he, qty, unit_price_agorot, unit_cost_usd_cents, unit_shipping_usd_cents, unit_sell_qty, fulfillment_source, supplier_sku)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      ).bind(
+        id, i + 1, l.product_id, l.variant_id, l.name_he, l.qty, l.unit_price_agorot, cost?.cost_usd_cents ?? 0, cost?.shipping_usd_cents ?? 0,
+        cost?.sell_qty ?? 1, cost?.fulfillment_source ?? 'dropship_cj', cost?.supplier_sku ?? null,
+      );
     }),
     c.env.DB.prepare("UPDATE carts SET status = 'converted', updated_at = ? WHERE id = ?").bind(now, req.cart_id),
     c.env.DB.prepare('INSERT INTO audit_log (at, actor, action, subject, detail) VALUES (?, ?, ?, ?, ?)').bind(now, 'system', 'order.created', id, JSON.stringify({ total, provider: provider.id })),

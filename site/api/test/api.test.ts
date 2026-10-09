@@ -43,7 +43,10 @@ function product(id: string, slot: string, price: number, cost: number): FullPro
     supplier: { name: 'CJ Dropshipping', url: 'https://example.invalid/p', sku: 'SKU1' },
     cost_usd_cents: cost,
     shipping_usd_cents: 1000,
-    shipping_from_default: true,
+    shipping_from_default: false,
+    shipping_source: 'cj',
+    sell_qty: 1,
+    fulfillment_source: 'dropship_cj',
     fx_usd_ils: DEFAULT_SETTINGS.fx_usd_ils,
     nordic_score: 8,
     economics: unitEconomics({ retail_agorot: price, cost_usd_cents: cost, shipping_usd_cents: 1000, fx_usd_ils: DEFAULT_SETTINGS.fx_usd_ils }, DEFAULT_SETTINGS),
@@ -92,13 +95,13 @@ const catalog: FullCatalog = {
   ],
   products: [product('vase-a', 'vase', 15900, 1624), product('vase-b', 'vase', 25900, 2405)],
   shipping: [
-    { id: 'economy', label_he: 'חסכוני', price_agorot: 0, days_he: '', provisional: true, is_default: true },
-    { id: 'express', label_he: 'מהיר', price_agorot: 4900, days_he: '', provisional: true, is_default: false },
+    { id: 'economy', label_he: 'חסכוני', price_agorot: 2900, free_over_agorot: 29900, days_he: '', provisional: true, is_default: true },
+    { id: 'express', label_he: 'מהיר', price_agorot: 5900, free_over_agorot: null, days_he: '', provisional: true, is_default: false },
   ],
   vat_rate: 0.18,
   hidden: [],
   invalid_cards: [],
-  economics: { settings: DEFAULT_SETTINGS, defaults_used: ['fx_usd_ils'], sources: { settings: null, products: null } },
+  economics: { settings: DEFAULT_SETTINGS, defaults_used: ['fx_usd_ils'], sources: { settings: null, products: null, freight: null } },
 };
 
 let env: Env;
@@ -172,8 +175,8 @@ describe('public api', () => {
     const body = (await res.json()) as { order_id: string; order_token: string; redirect_url: string };
     expect(body.redirect_url).toMatch(/\/mock-pay\/ms_/);
     const order = await env.DB.prepare('SELECT * FROM orders WHERE id = ?').bind(body.order_id).first<Record<string, number | string>>();
-    expect(order).toMatchObject({ status: 'pending_payment', subtotal_agorot: 25900, shipping_agorot: 4900, total_agorot: 30800 });
-    expect(order!.vat_agorot).toBe(30800 - Math.round(30800 / 1.18));
+    expect(order).toMatchObject({ status: 'pending_payment', subtotal_agorot: 25900, shipping_agorot: 5900, total_agorot: 31800 });
+    expect(order!.vat_agorot).toBe(31800 - Math.round(31800 / 1.18));
     const item = await env.DB.prepare('SELECT unit_cost_usd_cents FROM order_items WHERE order_id = ?').bind(body.order_id).first<{ unit_cost_usd_cents: number }>();
     expect(item!.unit_cost_usd_cents).toBe(2405);
     // cart is closed after checkout
@@ -182,6 +185,21 @@ describe('public api', () => {
     expect((await req(`/api/orders/${body.order_id}`, { headers: { 'x-order-token': 'x'.repeat(32) } })).status).toBe(404);
     const view = (await (await req(`/api/orders/${body.order_id}`, { headers: { 'x-order-token': body.order_token } })).json()) as { status_he: string };
     expect(view.status_he).toBe('ממתינה לתשלום');
+  });
+});
+
+describe('customer shipping fees (settings, decision E1)', () => {
+  it('economy is charged below the free-shipping threshold and free at or above it; express is always charged', async () => {
+    const below = await cartWith('vase-b:default', 1); // 259
+    const r1 = (await (await req('/api/checkout', json({ ...checkoutBody(below), shipping_method: 'economy' }))).json()) as { order_id: string };
+    const o1 = await env.DB.prepare('SELECT shipping_agorot, total_agorot FROM orders WHERE id = ?').bind(r1.order_id).first();
+    expect(o1).toMatchObject({ shipping_agorot: 2900, total_agorot: 28800 });
+    const above = await cartWith('vase-a:default', 2); // 318
+    const r2 = (await (await req('/api/checkout', json({ ...checkoutBody(above), shipping_method: 'economy' }))).json()) as { order_id: string };
+    const o2 = await env.DB.prepare('SELECT shipping_agorot, total_agorot FROM orders WHERE id = ?').bind(r2.order_id).first();
+    expect(o2).toMatchObject({ shipping_agorot: 0, total_agorot: 31800 });
+    const item = await env.DB.prepare('SELECT fulfillment_source, unit_sell_qty FROM order_items WHERE order_id = ?').bind(r2.order_id).first();
+    expect(item).toMatchObject({ fulfillment_source: 'dropship_cj', unit_sell_qty: 1 });
   });
 });
 
@@ -243,7 +261,7 @@ describe('payment webhook', () => {
     await post({ id: 'evt_00000004', type: 'payment.succeeded', session_id: session, amount_agorot: total });
     expect(await processSupplierJob(env, { kind: 'submit-order', order_id: orderId }, 1)).toBe('submitted');
     expect(await processSupplierJob(env, { kind: 'submit-order', order_id: orderId }, 2)).toBe('skipped');
-    const so = await env.DB.prepare('SELECT status, supplier_order_id FROM supplier_orders WHERE order_id = ?').bind(orderId).first();
+    const so = await env.DB.prepare('SELECT status, supplier_order_id FROM supplier_shipments WHERE order_id = ?').bind(orderId).first();
     expect(so).toMatchObject({ status: 'submitted', supplier_order_id: `MOCK-${orderId}` });
   });
 });

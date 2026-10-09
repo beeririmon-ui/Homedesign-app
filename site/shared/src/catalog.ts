@@ -14,6 +14,8 @@ export const ShippingOptionSchema = z.object({
   id: z.enum(['economy', 'express']),
   label_he: z.string(),
   price_agorot: z.number().int().min(0),
+  /** economy only: free at or above this subtotal (incl. VAT) */
+  free_over_agorot: z.number().int().positive().nullable(),
   days_he: z.string(),
   provisional: z.boolean(),
   is_default: z.boolean(),
@@ -113,6 +115,9 @@ export type FullProduct = PublicProduct & {
   cost_usd_cents: number;
   shipping_usd_cents: number;
   shipping_from_default: boolean;
+  shipping_source: 'manual' | 'cj' | 'default';
+  sell_qty: number;
+  fulfillment_source: import('./schema/economics').FulfillmentSource;
   fx_usd_ils: number;
   nordic_score: number | null;
   economics: import('./pricing').UnitEconomics;
@@ -127,6 +132,6 @@ export type FullCatalog = Omit<PublicCatalog, 'products'> & {
   economics: {
     settings: import('./schema/economics').EconomicsSettings;
     defaults_used: string[];
-    sources: { settings: string | null; products: string | null };
+    sources: { settings: string | null; products: string | null; freight: string | null };
   };
 };

@@ -69,7 +69,7 @@ admin.get('/orders/:id', async (c) => {
       unit_shipping_usd_cents: number;
     }>(),
     c.env.DB.prepare('SELECT provider, provider_event_id, type, amount_agorot, received_at, outcome FROM payment_events WHERE order_id = ? ORDER BY received_at').bind(id).all(),
-    c.env.DB.prepare('SELECT * FROM supplier_orders WHERE order_id = ?').bind(id).all(),
+    c.env.DB.prepare('SELECT * FROM supplier_shipments WHERE order_id = ?').bind(id).all(),
   ]);
   const fx = order.fx_usd_ils_at_order as number;
   const cogs = items.results.reduce((s, i) => s + Math.round((i.unit_cost_usd_cents + i.unit_shipping_usd_cents) * fx) * i.qty, 0);
@@ -78,7 +78,7 @@ admin.get('/orders/:id', async (c) => {
     order: { ...order, address: JSON.parse(order.address_json as string), address_json: undefined },
     items: items.results,
     payments: payments.results,
-    supplier_orders: supplier.results,
+    supplier_shipments: supplier.results,
     margin: { net_agorot: net, cogs_agorot: cogs, gross_profit_agorot: net - cogs, note: 'before payment fees, returns reserve and CAC' },
   });
 });
@@ -86,18 +86,16 @@ admin.get('/orders/:id', async (c) => {
 admin.get('/products', async (c) => {
   const { results } = await c.env.DB.prepare(
     `SELECT e.*, p.supplier_name, p.supplier_url, p.supplier_sku, p.source_path,
-            CASE WHEN e.net_agorot > 0 THEN ROUND(CAST(e.contribution_agorot AS REAL) / e.net_agorot, 4) END AS margin_rate,
-            e.contribution_agorot - e.cac_agorot AS contribution_after_cac_agorot,
-            CASE WHEN e.net_agorot > 0 AND CAST(e.contribution_agorot AS REAL) / e.net_agorot >= e.target_margin_rate THEN 1 ELSE 0 END AS meets_target
+            (SELECT group_concat(DISTINCT v.fulfillment_source) FROM product_variants v WHERE v.product_id = p.id AND v.active = 1) AS fulfillment_sources
      FROM v_product_economics e JOIN products p ON p.id = e.id
      ORDER BY e.slot_id, e.id`,
   ).all();
   return c.json({ products: results });
 });
 
-admin.get('/supplier-orders', async (c) => {
-  const { results } = await c.env.DB.prepare('SELECT * FROM supplier_orders ORDER BY updated_at DESC LIMIT 200').all();
-  return c.json({ supplier_orders: results });
+admin.get('/supplier-shipments', async (c) => {
+  const { results } = await c.env.DB.prepare('SELECT * FROM supplier_shipments ORDER BY updated_at DESC LIMIT 200').all();
+  return c.json({ supplier_shipments: results });
 });
 
 admin.get('/economics', async (c) => {

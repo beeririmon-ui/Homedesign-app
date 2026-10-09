@@ -12,6 +12,10 @@ export class HttpError extends Error {
   }
 }
 
+/** The page CSP (same as web/public/_headers) for HTML the Worker serves itself. */
+export const SITE_CSP =
+  "default-src 'self'; script-src 'self'; style-src-elem 'self'; style-src-attr 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'";
+
 export const nowIso = (): string => new Date().toISOString();
 
 /** Security headers for every API/Worker response (static assets get theirs from web/public/_headers). */

@@ -67,10 +67,13 @@ describe('pricing', () => {
   });
 
   it('settings fall back to provisional defaults and say so', () => {
-    const r = resolveSettings({ vat_rate: 0.18, fx_usd_ils: 3.65 });
+    // the studio's settings.json format: percent values are whole numbers
+    const r = resolveSettings({ economics: { vat_pct: 18, usd_ils: 3.65, card_pct: 2.5 } });
     expect(r.settings.fx_usd_ils).toBe(3.65);
+    expect(r.settings.payment_fee_rate).toBe(0.025);
     expect(r.defaults_used).not.toContain('vat_rate');
-    expect(r.defaults_used).toContain('payment_fee_rate');
+    expect(r.defaults_used).toContain('returns_reserve_rate');
+    expect(r.defaults_used).toContain('free_shipping_threshold_ils');
   });
 
   it('economics products file accepts a flat map or a { products } wrapper', () => {

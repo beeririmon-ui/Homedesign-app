@@ -394,6 +394,12 @@ details.snips li span{direction:ltr;unicode-bidi:isolate}
 .chip.flag-green{background:var(--sage-wash)}
 .chip-pending{background:var(--amber-wash);color:var(--amber-ink)}
 .chip-new{background:var(--ink);color:var(--on-ink)}
+.chip-unsure{background:var(--amber-wash);color:var(--amber-ink);border:1px dashed currentColor;padding:4px 8px}
+.chip-warn{background:var(--amber-wash);color:var(--amber-ink)}
+.qty-tag{display:inline-block;font-size:11px;font-weight:600;color:var(--ink-2);white-space:nowrap}
+.qty-line{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.cell-in.qty-in{width:4.2em}
+.bad-link{display:flex;flex-wrap:wrap;gap:6px;align-items:center;word-break:break-all}
 .pecon{font-size:var(--fs-xs)}
 .tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,150px),1fr));gap:12px}
 .tile{background:var(--sheet);border:1px solid var(--rule);border-radius:var(--r);padding:14px 16px;display:grid;gap:4px;align-content:start;min-width:0}
@@ -669,7 +675,7 @@ details.room-lad summary{cursor:pointer;font-weight:600}
   <div class="sr-only" role="status" aria-live="polite" id="live"></div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js" integrity="sha512-xeUh+KxNyTufZOje++oQHstlMQ8/rpyzPuM+gjMFYK3z5ILJGE7l2NvYL+XfliKURMpBIKKp1XoPN/qswlSMFA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
 (function(){
 'use strict';
@@ -712,7 +718,7 @@ const STYLE_HE = {nordic:'נורדי', boho:'בוהו', 'warm-modern':'מודר�
 const STD_HE = {unknown:'לא ידוע', unverified:'לא מאומת', stated:'מוצהר בהערות'};
 const WHO = {user:'המשתמש', manager:'המנהל', 'master-designer':'master-designer', 'sourcing-agent':'sourcing', 'motion-agent':'motion-agent', 'render-agent':'render-agent', 'qa-agent':'qa-agent', 'frontend-dev':'frontend-dev', astra:'astra', other:'אחר'};
 const FLAG_HE = {green:'עומד ביעד', red:'מתחת ליעד', orange:'חסרים נתונים'};
-const MISS_HE = {cost:'עלות', shipping:'משלוח', retail:'מחיר'};
+const MISS_HE = {cost:'עלות', shipping:'משלוח', retail:'מחיר', fast_shipping:'משלוח מהיר (עד 20 יום)', currency:'עלות בדולר'};
 
 /* ---------- economics: settings, defaults, calculation ---------- */
 const ECON_META = [
@@ -725,7 +731,7 @@ const ECON_META = [
   {k:'cac_ils', label:'עלות שיווק להזמנה (CAC)', unit:'₪ להזמנה', def:40, step:1, help:'כמה עולה להביא הזמנה אחת. מוצג בנפרד כ"תרומה אחרי שיווק", ומתחלק בין הפריטים שבהזמנה.'},
   {k:'packaging_ils', label:'אריזה', unit:'₪ לפריט', def:0, step:0.5, help:'אריזה ממותגת או חומרי מילוי מעבר לאריזת הספק.'},
   {k:'target_margin_pct', label:'יעד מרווח', unit:'% מההכנסה נטו', def:35, step:1, help:'מרווח = תרומה חלקי הכנסה נטו. מוצר מתחת ליעד מקבל דגל אדום.'},
-  {k:'items_per_order', label:'פריטים בהזמנה ממוצעת', unit:'פריטים', def:1.4, step:0.1, help:'קובע את שווי ההזמנה הממוצעת ואת חלוקת ה-CAC בין הפריטים.'},
+  {k:'items_per_order', label:'פריטים בהזמנה ממוצעת', unit:'פריטים', def:1.4, step:0.1, min:1, help:'קובע את שווי ההזמנה הממוצעת ואת חלוקת ה-CAC בין הפריטים. מינימום 1: כל הזמנה כוללת לפחות פריט אחד.'},
   {k:'bundle_factor', label:'מקדם משלוח בהזמנה משולבת', unit:'× משלוח לפריט', def:1.0, step:0.05, help:'מכפיל את המשלוח לפריט בהזמנה הממוצעת, במסך נקודת האיזון. 1.0 = בלי הנחה על משלוח משולב.'}
 ];
 const BUDGET_DEFAULT = [
@@ -739,19 +745,29 @@ const BUDGET_DEFAULT = [
 
 /* econ:start */
 // All money in ILS except cost_usd / shipping_usd. Percent settings are whole numbers (18 = 18%).
+// One sale = qty units (sell_qty). cost_usd is per unit; shipping_usd is for the whole sale (all qty units).
+// Retail price, landed cost, contribution and the recommended price are all per sale.
+const PARCEL_FIXED_USD = 3.72;  // CJ bundle test: about $3.72 of each parcel is fixed, the rest goes by weight
+function shipForQty(unitUsd, qty){
+  // estimate: shipping(qty) = cheapest + (qty - 1) * (cheapest - 3.72), never less per extra unit than 0
+  if(!(typeof unitUsd === 'number' && isFinite(unitUsd))) return null;
+  const q = qty >= 1 ? Math.round(qty) : 1;
+  return unitUsd + (q - 1) * Math.max(0, unitUsd - PARCEL_FIXED_USD);
+}
 function econCalc(inp, s){
   const ok = x => typeof x === 'number' && isFinite(x);
   const rate = s.usd_ils, v = s.vat_pct / 100, p = s.card_pct / 100, f = s.card_fixed_ils;
   const r = s.returns_pct / 100, k = s.packaging_ils, T = s.target_margin_pct / 100;
-  const ipo = s.items_per_order > 0 ? s.items_per_order : 1;
-  const out = {missing: []};
+  const ipo = s.items_per_order >= 1 ? s.items_per_order : 1;   // 0 or less than one item per order counts as 1
+  const qty = ok(inp.qty) && inp.qty >= 1 ? Math.round(inp.qty) : 1;
+  const out = {missing: [], qty};
   if(!ok(inp.cost_usd)) out.missing.push('cost');
   if(!ok(inp.shipping_usd)) out.missing.push('shipping');
   const R = inp.retail_ils;
   if(!(ok(R) && R > 0)) out.missing.push('retail');
   if(ok(inp.cost_usd) && ok(inp.shipping_usd)){
-    out.landed = (inp.cost_usd + inp.shipping_usd) * rate;
-    const usd = inp.cost_usd + inp.shipping_usd;
+    const usd = inp.cost_usd * qty + inp.shipping_usd;
+    out.landed = usd * rate;
     out.ship_share = usd > 0 ? inp.shipping_usd / usd : null;
     const den = (1 - r - T) / (1 + v) - p;           // solve contribution / net = T for the retail price
     out.recommended = den > 0 ? (out.landed + f + k) / den : null;
@@ -837,7 +853,7 @@ function econSettings(){
     if(!L) continue;
     for(const m of ECON_META){
       const x = L[m.k];
-      if(m.type === 'select' ? m.options.some(o => o[0] === x) : isNum(x)) v[m.k] = x;
+      if(m.type === 'select' ? m.options.some(o => o[0] === x) : (isNum(x) && x >= (m.min || 0))) v[m.k] = x;
       if(L.verified && typeof L.verified[m.k] === 'boolean') verified[m.k] = L.verified[m.k];
     }
   }
@@ -850,16 +866,20 @@ function budgetRows(){
   if(repo && Array.isArray(repo.rows)) return {rows: repo.rows, source:'repo'};
   return {rows: BUDGET_DEFAULT, source:'defaults'};
 }
-const EDIT_KEYS = ['name','slot_key','rooms','status','product_url','sku','cost','shipping_cost_usd','retail_ils','compare_at_ils','notes','links'];
-const EDIT_LABEL = {name:'שם', slot_key:'עמדה', rooms:'חדרים מתאימים', status:'סטטוס', product_url:'קישור לספק', sku:'SKU', cost:'עלות (USD)', shipping_cost_usd:'משלוח (USD)', retail_ils:'מחיר לצרכן (₪)', compare_at_ils:'מחיר לפני הנחה (₪)', notes:'הערות', links:'קישורים נוספים'};
-const NUM_KEYS = new Set(['cost','shipping_cost_usd','retail_ils','compare_at_ils']);
+const EDIT_KEYS = ['name','slot_key','rooms','status','product_url','sku','cost','shipping_cost_usd','sell_qty','retail_ils','compare_at_ils','notes','links'];
+const EDIT_LABEL = {name:'שם', slot_key:'עמדה', rooms:'חדרים מתאימים', status:'סטטוס', product_url:'קישור לספק', sku:'SKU', cost:'עלות (USD)', shipping_cost_usd:'משלוח ליחידה (USD)', sell_qty:'כמות למכירה', retail_ils:'מחיר לצרכן (₪)', compare_at_ils:'מחיר לפני הנחה (₪)', notes:'הערות', links:'קישורים נוספים'};
+const NUM_KEYS = new Set(['cost','shipping_cost_usd','sell_qty','retail_ils','compare_at_ils']);
+const ECON_FIELDS = ['shipping_cost_usd','sell_qty','retail_ils','compare_at_ils'];
+const qtyOk = v => isNum(v) && Number.isInteger(v) && v >= 1;
 function baseEcon(id){ return (S.data.economics.products || {})[id] || {}; }
 function cjShip(id){
   const be = baseEcon(id), cj = be.cj;
   if(!cj) return null;
-  const want = S.ES.v.shipping_method === 'under20' ? (cj.under20 || cj.cheapest) : (cj.cheapest || cj.under20);
+  // under 20 days: no fallback to the slow line. Without a fast option the product shows 'missing fast shipping'.
+  const want = S.ES.v.shipping_method === 'under20' ? cj.under20 : (cj.cheapest || cj.under20);
   return want ? Object.assign({date: cj.date}, want) : null;
 }
+const noFastShip = id => { const cj = baseEcon(id).cj; return !!cj && S.ES.v.shipping_method === 'under20' && !cj.under20; };
 function baseFlat(p){
   const be = baseEcon(p.id);
   const manual = be.manual && isNum(be.manual.shipping_cost_usd) ? be.manual.shipping_cost_usd : null;
@@ -869,6 +889,7 @@ function baseFlat(p){
     product_url: (p.supplier && p.supplier.product_url) ?? null, sku: (p.supplier && p.supplier.sku) ?? null,
     cost: (p.price && isNum(p.price.cost)) ? p.price.cost : null,
     shipping_cost_usd: manual != null ? manual : (cj ? cj.usd : null),
+    sell_qty: qtyOk(be.sell_qty) ? be.sell_qty : null,   // null = the default from the slot (sell_qty_default)
     retail_ils: isNum(be.retail_ils) ? be.retail_ils : null, compare_at_ils: isNum(be.compare_at_ils) ? be.compare_at_ils : null,
     notes: p.notes ?? null, links: p.links || []
   };
@@ -879,7 +900,7 @@ function fieldsToFlat(fields, p){
   if('slot' in f || 'slot_room' in f){ const room = 'slot_room' in f ? f.slot_room : (p && p.room), slot = 'slot' in f ? f.slot : (p && p.slot); o.slot_key = room && slot ? room + '/' + slot : null; }
   if(f.supplier){ if('product_url' in f.supplier) o.product_url = f.supplier.product_url; if('sku' in f.supplier) o.sku = f.supplier.sku; }
   if(f.price && 'cost' in f.price) o.cost = f.price.cost;
-  if(f.economics) for(const k of ['shipping_cost_usd','retail_ils','compare_at_ils']) if(k in f.economics) o[k] = f.economics[k];
+  if(f.economics) for(const k of ECON_FIELDS) if(k in f.economics) o[k] = f.economics[k];
   return o;
 }
 function flatToFields(o){
@@ -888,7 +909,7 @@ function flatToFields(o){
   if('slot_key' in o){ const [room, slot] = String(o.slot_key || '').split('/'); f.slot = slot || null; f.slot_room = room || null; }
   if('product_url' in o || 'sku' in o){ f.supplier = {}; if('product_url' in o) f.supplier.product_url = o.product_url; if('sku' in o) f.supplier.sku = o.sku; }
   if('cost' in o) f.price = {cost: o.cost};
-  const ek = ['shipping_cost_usd','retail_ils','compare_at_ils'].filter(k => k in o);
+  const ek = ECON_FIELDS.filter(k => k in o);
   if(ek.length){ f.economics = {}; for(const k of ek) f.economics[k] = o[k]; }
   return f;
 }
@@ -920,13 +941,35 @@ function effProduct(p){
   if('shipping_cost_usd' in pf) ship = {usd: pf.shipping_cost_usd, src: 'manual', label: 'ידני (סטודיו)'};
   else if(be.manual && isNum(be.manual.shipping_cost_usd)) ship = {usd: be.manual.shipping_cost_usd, src: 'manual', label: 'ידני' + (be.manual.date ? ', ' + fmtDay(be.manual.date) : '')};
   else if(cj) ship = {usd: cj.usd, src: 'cj', label: `CJ, ${fmtDay(cj.date)}`, detail: [cj.name, cj.days ? cj.days + ' יום' : ''].filter(Boolean).join(' · ')};
+  else if(noFastShip(p.id)) ship = {usd: null, src: null, label: 'אין אפשרות CJ של עד 20 יום', nofast: true};
   else ship = {usd: null, src: null, label: 'חסר משלוח'};
+  // sell quantity: explicit value (studio or data/economics/products.json), else the default from the slot
+  const qd = p.sell_qty_default || {qty: 1, sure: true};
+  e.qtyDef = qd;
+  e.qty = qtyOk(f.sell_qty) ? f.sell_qty : (qtyOk(qd.qty) ? qd.qty : 1);
+  e.qtySet = qtyOk(f.sell_qty);
+  e.qtySure = e.qtySet || qd.sure !== false;
+  // shipping for the sale: per-unit shipping x qty, estimated from the CJ bundle test (fixed part per parcel)
+  ship.total = e.qty > 1 ? shipForQty(ship.usd, e.qty) : ship.usd;
+  ship.est = e.qty > 1 && isNum(ship.usd);
   e.ship = ship; e.retail = f.retail_ils; e.compare_at = f.compare_at_ils;
   e.flat = f; e.bflat = bf; e.pflat = pf;
   e.pending = !!(doc && !doc.synced && Object.keys(pf).length);
   e.history = (doc && doc.history) || [];
-  e.econ = econCalc({cost_usd: f.cost, shipping_usd: ship.usd, retail_ils: f.retail_ils}, S.ES.v);
+  const cur = p.price && p.price.currency;
+  e.badCurrency = !!cur && String(cur).toUpperCase() !== 'USD';
+  e.econ = econCalc({cost_usd: e.badCurrency ? null : f.cost, qty: e.qty, shipping_usd: ship.total, retail_ils: f.retail_ils}, S.ES.v);
+  if(e.badCurrency) e.econ.missing = e.econ.missing.map(m => m === 'cost' ? 'currency' : m);
+  if(ship.nofast) e.econ.missing = e.econ.missing.map(m => m === 'shipping' ? 'fast_shipping' : m);
   return e;
+}
+// "sold as N units" label, shown next to every price; amber chip when the quantity is a guess
+function qtyHtml(e, opts){
+  if(!e || e._new) return '';
+  const o = opts || {};
+  const unsure = e.qtySure ? '' : `<span class="chip chip-unsure" title="${esc((e.qtyDef && e.qtyDef.reason) || '')}">כמות לא ודאית</span>`;
+  const tag = `<span class="qty-tag">נמכר כ-<span dir="ltr">${esc(e.qty)}</span> יח'</span>`;
+  return o.block ? `<span class="cell-src qty-line">${tag}${unsure}</span>` : `${tag}${unsure ? ' ' + unsure : ''}`;
 }
 function leadProduct(docId, d){
   const room = d.room || null, slot = d.slot || null;
@@ -936,7 +979,7 @@ function leadProduct(docId, d){
     status: 'candidate', supplier: {name: hostOf(d.url) || '—', product_url: d.url || null, sku: null},
     price: {cost: isNum(d.cost_usd) ? d.cost_usd : null, currency: 'USD'}, notes: d.note || null, links: d.links || [],
     img: {ok: false, src: null}, dups: [], shared_in: [], standards: null, colors: {}, shipping: {}, materials: [],
-    ship: {usd: null, src: null, label: 'חסר משלוח'}, retail: null, pending: !d.synced, history: [],
+    ship: {usd: null, total: null, src: null, label: 'חסר משלוח'}, retail: null, pending: !d.synced, history: [], qty: 1, qtySure: true,
     created_at: d.created_at, by: d.by, path: null
   };
   e.econ = econCalc({cost_usd: e.price.cost, shipping_usd: null, retail_ils: null}, S.ES.v);
@@ -965,7 +1008,7 @@ const canEditData = () => !!S.db && S.dbReady && S.canWrite !== false;
 const flagHtml = (e, long) => {
   const x = e.econ;
   if(x.flag === 'orange') return `<span class="flag flag-orange"><i class="fdot"></i>חסר ${esc(x.missing.map(m => MISS_HE[m]).join(' ו'))}</span>`;
-  return `<span class="flag flag-${x.flag}"><i class="fdot"></i>${long ? esc(FLAG_HE[x.flag]) + ' · ' : ''}מרווח ${ltr(fmtPct(x.margin))}</span>`;
+  return `<span class="flag flag-${x.flag}"><i class="fdot"></i>${long ? esc(FLAG_HE[x.flag]) + ' · ' : ''}מרווח ${ltr(fmtPct(x.margin, 1))}</span>`;
 };
 function profitBasis(){
   return S.view.filter(p => !p._new && p.status !== 'rejected');
@@ -1208,7 +1251,7 @@ function renderOverview(){
           </div>
           <div class="section-head"><h2>רווחיות</h2><a class="small" href="#profit">למסך הרווחיות</a></div>
           <div class="side-card">
-            <p><span class="stat bignum">${margins.length ? ltr(fmtPct(mean(margins))) : '—'}</span> <span class="muted">מרווח ממוצע${margins.length ? ` (${margins.length} מוצרים עם כל הנתונים)` : ''}</span></p>
+            <p><span class="stat bignum">${margins.length ? ltr(fmtPct(mean(margins), 1)) : '—'}</span> <span class="muted">מרווח ממוצע${margins.length ? ` (${margins.length} מוצרים עם כל הנתונים)` : ''}</span></p>
             <dl class="kv">
               <dt><span class="dot" data-bg="var(--sage-ink)"></span><span>עומדים ביעד ${ltr(esc(S.ES.v.target_margin_pct + '%'))}</span></dt><dd>${fl.green}</dd>
               <dt><span class="dot" data-bg="var(--brick-ink)"></span><span>מתחת ליעד</span></dt><dd>${fl.red}</dd>
@@ -1593,7 +1636,7 @@ function renderProducts(){
         <span class="pslot">${esc(slotLabel(p))}${viaShared ? ' · דרך מאגר משותף' : ''}</span>
         <span class="pslot faint">${esc((p.rooms || []).map(tagName).join(', '))}</span>
         <span class="prow"><span class="cost num" dir="ltr">${esc(fmtUSD(p.price && p.price.cost))}</span>${days ? `<span><span class="num" dir="ltr">${esc(days)}</span> ימים</span>` : ''}${hex ? `<span class="swrow"><span class="swatch" data-sw="${esc(hex)}"></span><span class="hex" dir="ltr">${esc(hex)}</span></span>` : ''}<span class="faint">${esc(p.supplier && p.supplier.name || '')}</span></span>
-        <span class="pecon">${flagHtml(p)}</span>
+        <span class="pecon">${flagHtml(p)}${p._new ? '' : ' ' + qtyHtml(p)}</span>
       </span>
     </button>`;
   }).join('');
@@ -1614,24 +1657,29 @@ function openProduct(id, from){
   $('#drawer [data-close]').focus();
 }
 function linkItem(label, url){
+  // only https links become <a>; anything else (http:, javascript:, data:, a bare string) is shown as plain text
+  if(!httpsOk(url)) return `<li><div class="row bad-link"><span>${esc(label || 'קישור')}</span><span class="chip chip-warn">קישור לא מאובטח: לא נפתח</span></div><span class="url-text" dir="ltr">${esc(url)}</span></li>`;
   return `<li><div class="row"><a href="${esc(url)}" target="_blank" rel="noopener noreferrer">${esc(label || hostOf(url) || url)}</a><button type="button" class="copy" data-copy="${esc(url)}" aria-label="העתקת הקישור ${esc(label || '')}">העתקה</button></div><span class="url-text">${esc(url)}</span></li>`;
 }
 function econBlock(e){
   const x = e.econ, s = S.ES.v;
-  const head = `<div class="econ-head">${x.flag === 'orange' ? flagHtml(e, true) : `<span class="big">${ltr(fmtPct(x.margin))}</span>${flagHtml(e, true)}`}</div>`;
+  const head = `<div class="econ-head">${x.flag === 'orange' ? flagHtml(e, true) : `<span class="big">${ltr(fmtPct(x.margin, 1))}</span>${flagHtml(e, true)}`}</div>`;
+  const q = e.qty, many = q > 1;
+  const qd = e.qtyDef || {};
   return `<section class="section" aria-labelledby="h-econ"><h3 id="h-econ" class="h-small">רווחיות</h3>${head}
+    <p class="qty-line small">${qtyHtml(e)}<span class="xs faint">${e.qtySet ? 'כמות שנקבעה בסטודיו' : esc(qd.reason || 'ברירת מחדל: יחידה אחת')}</span></p>
     <dl class="econ-dl">
-      <dt>עלות המוצר</dt><dd>${ltr(fmtUSD(e.price.cost))}</dd>
-      <dt>משלוח לישראל <span class="xs faint">· ${esc(e.ship.label)}${e.ship.detail ? ' · ' + esc(e.ship.detail) : ''}</span></dt><dd>${ltr(fmtUSD(e.ship.usd))}</dd>
+      <dt>עלות המוצר${many ? ` <span class="xs faint">(${ltr(fmtUSD(e.price.cost))} × ${ltr(esc(q))} יח')</span>` : ''}</dt><dd>${ltr(fmtUSD(isNum(e.price.cost) ? e.price.cost * q : null))}</dd>
+      <dt>משלוח לישראל <span class="xs faint">· ${esc(e.ship.label)}${e.ship.detail ? ' · ' + esc(e.ship.detail) : ''}${e.ship.est ? ` · ${ltr(fmtUSD(e.ship.usd))} ליחידה, ל-${ltr(esc(q))} יח' לפי $3.72 קבוע לחבילה` : ''}</span>${e.ship.est ? ' <span class="est">הערכה</span>' : ''}</dt><dd>${ltr(fmtUSD(e.ship.total))}</dd>
       <dt>עלות נחיתה <span class="xs faint">(× ${ltr(esc(s.usd_ils))} ₪ לדולר)${isNum(x.ship_share) ? ` · משלוח ${ltr(fmtPct(x.ship_share))} ממנה` : ''}</span></dt><dd class="tot">${ltr(fmtILS(x.landed, 2))}</dd>
-      <dt>מחיר לצרכן, כולל מע"מ</dt><dd>${ltr(fmtILS(e.retail, 2))}${isNum(e.compare_at) ? ` <span class="xs faint">(לפני הנחה ${ltr(fmtILS(e.compare_at))})</span>` : ''}</dd>
+      <dt>מחיר לצרכן, כולל מע"מ <span class="xs faint">(נמכר כ-${ltr(esc(q))} יח')</span></dt><dd>${ltr(fmtILS(e.retail, 2))}${isNum(e.compare_at) ? ` <span class="xs faint">(לפני הנחה ${ltr(fmtILS(e.compare_at))})</span>` : ''}</dd>
       <dt>הכנסה נטו <span class="xs faint">(בלי מע"מ ${ltr(esc(s.vat_pct + '%'))})</span></dt><dd>${ltr(fmtILS(x.net, 2))}</dd>
       <dt>עמלות סליקה <span class="xs faint">(${ltr(esc(s.card_pct + '%'))} + ${ltr(fmtILS(s.card_fixed_ils, 2))})</span></dt><dd>${ltr(fmtILS(x.fees, 2))}</dd>
       <dt>שמורת החזרות <span class="xs faint">(${ltr(esc(s.returns_pct + '%'))} מהנטו)</span></dt><dd>${ltr(fmtILS(x.reserve, 2))}</dd>
       <dt>אריזה</dt><dd>${ltr(fmtILS(s.packaging_ils, 2))}</dd>
       <dt class="tot">תרומה</dt><dd class="tot">${ltr(fmtILS(x.contribution, 2))}</dd>
       <dt>אחרי שיווק <span class="xs faint">(CAC ${ltr(fmtILS(s.cac_ils))} ÷ ${ltr(esc(s.items_per_order))} פריטים)</span></dt><dd>${ltr(fmtILS(x.after_marketing, 2))}</dd>
-      <dt class="tot">מחיר מומלץ ליעד ${ltr(esc(s.target_margin_pct + '%'))}</dt><dd class="tot">${x.recommended != null ? ltr(fmtILS(Math.ceil(x.recommended))) : (x.landed != null ? 'היעד לא אפשרי בהנחות האלה' : '—')}</dd>
+      <dt class="tot">מחיר מומלץ ליעד ${ltr(esc(s.target_margin_pct + '%'))} <span class="xs faint">(נמכר כ-${ltr(esc(q))} יח')</span></dt><dd class="tot">${x.recommended != null ? ltr(fmtILS(Math.ceil(x.recommended))) : (x.landed != null ? 'היעד לא אפשרי בהנחות האלה' : '—')}</dd>
     </dl></section>`;
 }
 function renderDrawer(id, keepScroll){
@@ -1661,7 +1709,8 @@ function renderDrawer(id, keepScroll){
       <div class="pic"><img src="${esc(p.img.src)}" alt="${esc(e.name)}" width="${p.img.w}" height="${p.img.h}"></div>
       <div class="side">
         <div class="chiprow"><span class="chip st-${esc(e.status)}">${esc(P_STATUS[e.status] || e.status)}</span>${(p.dups || []).length ? '<span class="chip chip-dup">כרטיס כפול</span>' : ''}${e.pending ? '<span class="chip chip-pending">ממתין לסנכרון</span>' : ''}</div>
-        <p><span class="num price-big" dir="ltr">${esc(fmtUSD(pr.cost))}</span> <span class="muted small">עלות אצל הספק</span></p>
+        <p><span class="num price-big" dir="ltr">${esc(fmtUSD(pr.cost))}</span> <span class="muted small">עלות אצל הספק ליחידה</span></p>
+        <p class="qty-line">${qtyHtml(e)}</p>
         <p>${flagHtml(e, true)}</p>
         ${p.img.note ? `<p class="xs warn-text">${esc(p.img.note)}</p>` : ''}
         <p class="xs faint">${(im.urls || []).length > 1 ? `ועוד ${(im.urls.length - 1)} תמונות אצל הספק` : ''}</p>
@@ -1731,6 +1780,8 @@ function editFormHtml(e){
   const cj = cjShip(e.id);
   const shipHelp = (cj ? `ברירת מחדל: CJ ${esc(fmtDay(cj.date))} · ${esc(cj.name || '')} ${cj.days ? esc(cj.days) + ' יום' : ''} · ${ltr(fmtUSD(cj.usd))}. ערך ידני גובר.` : 'אין נתון משלוח מ-CJ למוצר הזה.') + ' שדה ריק חוזר לברירת המחדל.';
   const num = (k, step, unit) => `<input type="number" id="e-${k}" min="0" step="${step}" inputmode="decimal" value="${isNum(f[k]) ? esc(f[k]) : ''}" aria-describedby="e-${k}-err">`;
+  const qd = e.qtyDef || {qty: 1, sure: true};
+  const qtyHelp = `ריק = ברירת המחדל: ${esc(qd.qty)} יח'${qd.sure === false ? ' (לא ודאי)' : ''}${qd.reason ? ' · ' + esc(qd.reason) : ''}. העלות כאן תמיד ליחידה; עלות הנחיתה, המחיר לצרכן והמחיר המומלץ הם למכירה כולה.`;
   return `<form id="ef-form" class="ef-grid" novalidate>
     ${efWrap('name', 'שם', `<input type="text" id="e-name" dir="auto" value="${esc(f.name || '')}">`)}
     <div class="ef-row2">
@@ -1744,8 +1795,11 @@ function editFormHtml(e){
       ${efWrap('cost', 'עלות אצל הספק (USD)', num('cost', '0.01'))}
     </div>
     <div class="ef-row2">
-      ${efWrap('shipping_cost_usd', 'משלוח לישראל (USD)', num('shipping_cost_usd', '0.01'), shipHelp)}
-      ${efWrap('retail_ils', 'מחיר לצרכן (₪, כולל מע"מ)', num('retail_ils', '1'), isNum(e.econ.recommended) ? `מחיר מומלץ ליעד: ${ltr(fmtILS(Math.ceil(e.econ.recommended)))}` : '')}
+      ${efWrap('shipping_cost_usd', 'משלוח לישראל ליחידה (USD)', num('shipping_cost_usd', '0.01'), shipHelp + (e.qty > 1 ? ` ל-${esc(e.qty)} יח': ${ltr(fmtUSD(e.ship.total))} <span class="est">הערכה</span>` : ''))}
+      ${efWrap('sell_qty', 'כמות למכירה (יח\' בכל מכירה)', `<input type="number" id="e-sell_qty" min="1" step="1" inputmode="numeric" placeholder="${esc(qd.qty)}" value="${qtyOk(f.sell_qty) ? esc(f.sell_qty) : ''}" aria-describedby="e-sell_qty-err">`, qtyHelp)}
+    </div>
+    <div class="ef-row2">
+      ${efWrap('retail_ils', `מחיר לצרכן (₪, כולל מע"מ, ל-${esc(e.qty)} יח')`, num('retail_ils', '1'), isNum(e.econ.recommended) ? `מחיר מומלץ ליעד: ${ltr(fmtILS(Math.ceil(e.econ.recommended)))} · נמכר כ-${esc(e.qty)} יח'` : '')}
       ${efWrap('compare_at_ils', 'מחיר לפני הנחה (₪, לא חובה)', num('compare_at_ils', '1'))}
     </div>
     ${efWrap('notes', 'הערות', `<textarea id="e-notes" rows="6" dir="auto">${esc(f.notes || '')}</textarea>`)}
@@ -1774,7 +1828,7 @@ function readEditForm(e){
   out.name = v('name'); out.status = v('status'); out.slot_key = v('slot_key') || null;
   out.rooms = $$('input[name="e-rooms"]:checked').map(x => x.value);
   out.product_url = v('product_url'); out.sku = v('sku'); out.notes = v('notes');
-  for(const k of ['cost','shipping_cost_usd','retail_ils','compare_at_ils']){ nums[k] = numv(k); out[k] = nums[k].v; }
+  for(const k of ['cost','shipping_cost_usd','sell_qty','retail_ils','compare_at_ils']){ nums[k] = numv(k); out[k] = nums[k].v; }
   out.links = $$('#e-links [data-link]').map(r => ({label: $('.lr-label', r).value.trim(), url: $('.lr-url', r).value.trim()})).filter(l => l.label || l.url);
   if(!String(out.name || '').trim()) errs.name = 'שם הוא שדה חובה.';
   if(!httpsOk(out.product_url)) errs.product_url = 'הקישור חייב להתחיל ב-https:// ולהיות כתובת מלאה.';
@@ -1782,6 +1836,7 @@ function readEditForm(e){
     if(nums[k].bad) errs[k] = 'זה לא מספר תקין.';
     else if(out[k] != null && !(out[k] >= 0)) errs[k] = 'צריך מספר 0 ומעלה.';
   }
+  if(nums.sell_qty.bad || (out.sell_qty != null && !qtyOk(out.sell_qty))) errs.sell_qty = 'צריך מספר שלם, 1 ומעלה.';
   if(out.cost == null && !errs.cost) errs.cost = 'עלות היא שדה חובה בכרטיס.';
   if(out.shipping_cost_usd == null && !errs.shipping_cost_usd) out.shipping_cost_usd = e.bflat.shipping_cost_usd;  // empty = back to the default
   if(!out.slot_key && e.bflat.slot_key) errs.slot_key = 'כרטיס שיש לו עמדה צריך להישאר עם עמדה.';
@@ -1941,6 +1996,8 @@ function renderProfit(){
   const missRetail = basis.filter(p => p.econ.missing.includes('retail')).length;
   const withShare = basis.filter(p => isNum(p.econ.ship_share));
   const hi = withShare.filter(p => p.econ.ship_share > 0.5).length;
+  const nUnsure = basis.filter(p => !p.qtySure).length, nSets = basis.filter(p => p.qty > 1).length;
+  const nNoFast = basis.filter(p => p.ship.nofast).length;
   const est = k => ES.verified[k] ? '' : `<span class="est">${ECON_META.find(m => m.k === k).update ? 'לעדכן' : 'הערכה'}</span>`;
   const methodLabel = (ECON_META.find(m => m.k === 'shipping_method').options.find(o => o[0] === v.shipping_method) || [])[1];
   const restore = keepFocus(box);
@@ -1948,7 +2005,7 @@ function renderProfit(){
   let rows = S.view.filter(p => !p._new && (P.rejected || p.status !== 'rejected') && (!P.room || (p.in_rooms || []).includes(P.room)));
   const key = {
     name: p => p.name.toLowerCase(), slot: p => slotLabel(p), landed: p => p.econ.landed, share: p => p.econ.ship_share,
-    retail: p => p.retail, margin: p => p.econ.margin, recommended: p => p.econ.recommended, flag: p => ({red:0, orange:1, green:2})[p.econ.flag]
+    retail: p => p.retail, qty: p => p.qty * 10 + (p.qtySure ? 0 : 5), margin: p => p.econ.margin, recommended: p => p.econ.recommended, flag: p => ({red:0, orange:1, green:2})[p.econ.flag]
   }[P.sort] || (p => p.econ.margin);
   const dir = P.dir === 'desc' ? -1 : 1;
   rows.sort((a, b) => { const x = key(a), y = key(b); if(x == null && y == null) return 0; if(x == null) return 1; if(y == null) return -1; return (x < y ? -1 : x > y ? 1 : 0) * dir; });
@@ -1956,10 +2013,11 @@ function renderProfit(){
   const th = (k, label, cls) => `<th scope="col" class="${cls || ''}" aria-sort="${P.sort === k ? (P.dir === 'desc' ? 'descending' : 'ascending') : 'none'}"><button type="button" class="sort" data-sort="${k}">${label}<span class="arr" aria-hidden="true">${P.sort === k ? (P.dir === 'desc' ? '▼' : '▲') : ''}</span></button></th>`;
   const cell = (p, k) => {
     const id = `pi-${k}-${p.id}`;
-    const val = id in S.inline ? S.inline[id] : (k === 'retail' ? (isNum(p.retail) ? p.retail : '') : (isNum(p.ship.usd) ? p.ship.usd : ''));
-    const label = k === 'retail' ? `מחיר לצרכן בשקלים: ${p.name}` : `משלוח בדולרים: ${p.name}`;
+    const val = id in S.inline ? S.inline[id] : (k === 'retail' ? (isNum(p.retail) ? p.retail : '') : k === 'qty' ? (p.qtySet ? p.qty : '') : (isNum(p.ship.usd) ? p.ship.usd : ''));
+    const label = k === 'retail' ? `מחיר לצרכן בשקלים, ל-${p.qty} יח': ${p.name}` : k === 'qty' ? `כמות למכירה (ריק = ${p.qtyDef ? p.qtyDef.qty : 1}): ${p.name}` : `משלוח ליחידה בדולרים: ${p.name}`;
     const rs = S.rowState[id];
-    return `<input type="number" class="cell-in" id="${esc(id)}" data-inline="${k}" data-pid="${esc(p.id)}" min="0" step="${k === 'retail' ? '1' : '0.01'}" inputmode="decimal" value="${esc(val)}" aria-label="${esc(label)}" ${editable ? '' : 'disabled'} ${rs && rs.err ? 'aria-invalid="true"' : ''}>${rs ? `<span class="cell-src row-state ${rs.err ? 'err' : ''}">${esc(rs.msg)}</span>` : ''}`;
+    const extra = k === 'qty' ? `min="1" step="1" inputmode="numeric" placeholder="${esc(p.qtyDef ? p.qtyDef.qty : 1)}"` : `min="0" step="${k === 'retail' ? '1' : '0.01'}" inputmode="decimal"`;
+    return `<input type="number" class="cell-in ${k === 'qty' ? 'qty-in' : ''}" id="${esc(id)}" data-inline="${k}" data-pid="${esc(p.id)}" ${extra} value="${esc(val)}" aria-label="${esc(label)}" ${editable ? '' : 'disabled'} ${rs && rs.err ? 'aria-invalid="true"' : ''}>${rs ? `<span class="cell-src row-state ${rs.err ? 'err' : ''}">${esc(rs.msg)}</span>` : ''}`;
   };
   const trs = rows.map(p => {
     const x = p.econ;
@@ -1967,13 +2025,14 @@ function renderProfit(){
     return `<tr>
       <td class="pname-cell"><button type="button" class="linkish" data-product="${esc(p.id)}" dir="auto">${esc(p.name)}</button>${p.pending ? ' <span class="chip chip-pending">ממתין לסנכרון</span>' : ''}${p.status !== 'candidate' ? ` <span class="chip st-${esc(p.status)}">${esc(P_STATUS[p.status])}</span>` : ''}</td>
       <td>${esc(slotLabel(p))}</td>
-      <td class="money">${ltr(fmtUSD(p.price.cost))}</td>
-      <td class="money">${cell(p, 'ship')}<span class="cell-src">${esc(p.ship.label)}</span></td>
+      <td class="money">${ltr(fmtUSD(p.price.cost))}${p.qty > 1 && isNum(p.price.cost) ? `<span class="cell-src">× ${ltr(esc(p.qty))} = ${ltr(fmtUSD(p.price.cost * p.qty))}</span>` : ''}</td>
+      <td class="money">${cell(p, 'qty')}${qtyHtml(p, {block: true})}</td>
+      <td class="money">${cell(p, 'ship')}<span class="cell-src">${esc(p.ship.label)}</span>${p.ship.est ? `<span class="cell-src">ל-${ltr(esc(p.qty))} יח' ${ltr(fmtUSD(p.ship.total))} <span class="est">הערכה</span></span>` : ''}</td>
       <td class="money">${ltr(fmtILS(x.landed))}</td>
       <td>${share}</td>
-      <td class="money">${cell(p, 'retail')}</td>
-      <td class="money">${isNum(x.margin) ? ltr(fmtPct(x.margin)) : '—'}${isNum(x.contribution) ? `<span class="cell-src">תרומה ${ltr(fmtILS(x.contribution))}</span>` : ''}</td>
-      <td class="money">${x.recommended != null ? ltr(fmtILS(Math.ceil(x.recommended))) : '—'}</td>
+      <td class="money">${cell(p, 'retail')}<span class="cell-src">נמכר כ-${ltr(esc(p.qty))} יח'</span></td>
+      <td class="money">${isNum(x.margin) ? ltr(fmtPct(x.margin, 1)) : '—'}${isNum(x.contribution) ? `<span class="cell-src">תרומה ${ltr(fmtILS(x.contribution))}</span>` : ''}</td>
+      <td class="money">${x.recommended != null ? ltr(fmtILS(Math.ceil(x.recommended))) : '—'}${x.recommended != null ? `<span class="cell-src">ל-${ltr(esc(p.qty))} יח'</span>` : ''}</td>
       <td>${flagHtml(p)}</td>
     </tr>`;
   }).join('');
@@ -1983,7 +2042,7 @@ function renderProfit(){
     const ver = (S.setDraftVer && m.k in S.setDraftVer) ? S.setDraftVer[m.k] : ES.verified[m.k];
     const ctl = m.type === 'select'
       ? `<select id="s-${m.k}" class="fld" ${editable ? '' : 'disabled'}>${m.options.map(o => `<option value="${o[0]}" ${val === o[0] ? 'selected' : ''}>${esc(o[1])}</option>`).join('')}</select>`
-      : `<input type="number" id="s-${m.k}" class="fld" min="0" step="${m.step}" inputmode="decimal" value="${esc(val)}" ${editable ? '' : 'disabled'}><span class="small muted">${esc(m.unit)}</span>`;
+      : `<input type="number" id="s-${m.k}" class="fld" min="${m.min || 0}" step="${m.step}" inputmode="decimal" value="${esc(val)}" ${editable ? '' : 'disabled'}><span class="small muted">${esc(m.unit)}</span>`;
     return `<div class="set"><label class="lbl" for="s-${m.k}">${esc(m.label)} ${ver ? '<span class="ok-badge">אומת</span>' : `<span class="est">${m.update ? 'לעדכן' : 'הערכה'}</span>`}</label>
       <div class="in">${ctl}</div><p class="ef-err" id="s-${m.k}-err"></p>
       <p class="ef-help">${esc(m.help)}</p>
@@ -1996,7 +2055,7 @@ function renderProfit(){
       const need = s.variants_required || 3;
       const sel = st.selected.slice().sort((a, b) => (a.retail ?? 1e9) - (b.retail ?? 1e9));
       const cands = st.direct.concat(st.shared).filter(p => p.status !== 'rejected' && isNum(p.retail)).map(p => p.retail);
-      const lad = sel.length ? sel.map(p => `<span class="rung"><i class="fdot ${'flag-' + p.econ.flag}"></i>${isNum(p.retail) ? ltr(fmtILS(p.retail)) : 'חסר מחיר'} <button type="button" class="linkish xs" data-product="${esc(p.id)}" dir="auto">${esc(p.name.slice(0, 26))}${p.name.length > 26 ? '…' : ''}</button></span>`).join('')
+      const lad = sel.length ? sel.map(p => `<span class="rung"><i class="fdot ${'flag-' + p.econ.flag}"></i>${isNum(p.retail) ? ltr(fmtILS(p.retail)) : 'חסר מחיר'} ${qtyHtml(p)} <button type="button" class="linkish xs" data-product="${esc(p.id)}" dir="auto">${esc(p.name.slice(0, 26))}${p.name.length > 26 ? '…' : ''}</button></span>`).join('')
         : `<span class="small faint">אין נבחרים${cands.length ? ` · מחירי מועמדים ${ltr(fmtILS(Math.min(...cands)))}–${ltr(fmtILS(Math.max(...cands)))}` : ''}</span>`;
       return `<tr><td>${esc(s.name_he || s.id)}</td><td class="num">${sel.length}/${esc(need)}</td><td><div class="ladder">${lad}</div></td></tr>`;
     }).join('');
@@ -2008,9 +2067,10 @@ function renderProfit(){
   box.innerHTML = `<div class="screen roomy">
     ${editable ? '' : noDbLine('המספרים מחושבים מהריפו ומברירות המחדל.')}
     <div class="tiles">
-      <div class="tile"><span class="l">מרווח ממוצע</span><span class="v">${withM.length ? ltr(fmtPct(mean(withM.map(p => p.econ.margin)))) : '—'}</span><span class="s">${withM.length} מוצרים עם כל הנתונים · יעד ${ltr(esc(v.target_margin_pct + '%'))}</span></div>
+      <div class="tile"><span class="l">מרווח ממוצע</span><span class="v">${withM.length ? ltr(fmtPct(mean(withM.map(p => p.econ.margin)), 1)) : '—'}</span><span class="s">${withM.length} מוצרים עם כל הנתונים · יעד ${ltr(esc(v.target_margin_pct + '%'))}</span></div>
       <div class="tile"><span class="l"><span class="flag flag-green"><i class="fdot"></i>עומדים ביעד</span></span><span class="v">${fl.green}</span><span class="s"><span class="flag flag-red"><i class="fdot"></i>${fl.red} מתחת ליעד</span></span></div>
-      <div class="tile"><span class="l"><span class="flag flag-orange"><i class="fdot"></i>חסרים נתונים</span></span><span class="v">${fl.orange}</span><span class="s">${missRetail} בלי מחיר · ${missShip} בלי משלוח</span></div>
+      <div class="tile"><span class="l"><span class="flag flag-orange"><i class="fdot"></i>חסרים נתונים</span></span><span class="v">${fl.orange}</span><span class="s">${missRetail} בלי מחיר · ${missShip + nNoFast} בלי משלוח${nNoFast ? ` (${nNoFast} בלי אפשרות של עד 20 יום)` : ''}</span></div>
+      <div class="tile"><span class="l">כמות למכירה</span><span class="v">${nSets}<span class="small muted"> נמכרים כסט</span></span><span class="s">${nUnsure ? `<span class="chip chip-unsure">${nUnsure} כמות לא ודאית</span>` : 'כל הכמויות ודאיות'}</span></div>
       <div class="tile"><span class="l">משלוח מעל חצי מעלות הנחיתה</span><span class="v">${hi}<span class="small muted"> / ${withShare.length}</span></span><span class="s">לפי ${esc(methodLabel || '')}</span></div>
     </div>
     <div class="assume">
@@ -2033,9 +2093,9 @@ function renderProfit(){
       </div>
       <div class="tbl-wrap"><table class="ptable">
         <caption class="sr-only">רווחיות לכל מוצר. לחיצה על כותרת ממיינת.</caption>
-        <thead><tr>${th('name','מוצר')}${th('slot','עמדה')}<th scope="col" class="money">עלות</th><th scope="col" class="money">משלוח $</th>${th('landed','עלות נחיתה','money')}${th('share','חלק המשלוח')}${th('retail','מחיר ₪','money')}${th('margin','מרווח','money')}${th('recommended','מחיר מומלץ','money')}${th('flag','דגל')}</tr></thead>
-        <tbody>${trs || '<tr><td colspan="10">אין מוצרים בסינון.</td></tr>'}</tbody></table></div>
-      <p class="xs faint">עלות נחיתה = (עלות + משלוח) × שער. מרווח = תרומה ÷ הכנסה נטו. מחיר מומלץ = המחיר הנמוך ביותר שמביא את המרווח ליעד, מעוגל למעלה לשקל.</p>
+        <thead><tr>${th('name','מוצר')}${th('slot','עמדה')}<th scope="col" class="money">עלות ליח'</th>${th('qty','כמות','money')}<th scope="col" class="money">משלוח $ ליח'</th>${th('landed','עלות נחיתה','money')}${th('share','חלק המשלוח')}${th('retail','מחיר ₪','money')}${th('margin','מרווח','money')}${th('recommended','מחיר מומלץ','money')}${th('flag','דגל')}</tr></thead>
+        <tbody>${trs || '<tr><td colspan="11">אין מוצרים בסינון.</td></tr>'}</tbody></table></div>
+      <p class="xs faint">כמות = כמה יחידות נמכרות בכל מכירה (ריק = ברירת המחדל מהעמדה; "כמות לא ודאית" = לא ברור מהכרטיס אם העלות ליחידה או לסט). עלות נחיתה = (עלות × כמות + משלוח לכמות) × שער. משלוח לכמות של יותר מיחידה אחת הוא <span class="est">הערכה</span>: משלוח ליחידה + (כמות − 1) × (משלוח ליחידה − $3.72), כי בבדיקת הסלים של CJ כ-$3.72 מכל חבילה קבועים והשאר לפי משקל. המחיר לצרכן והמחיר המומלץ הם למכירה כולה. מרווח = תרומה ÷ הכנסה נטו. מחיר מומלץ = המחיר הנמוך ביותר שמביא את המרווח ליעד, מעוגל למעלה לשקל.</p>
     </section>
     <section class="section" aria-labelledby="h-lad">
       <div class="section-head"><h2 id="h-lad">סולם המחירים של הנבחרים</h2><span class="small faint">3 וריאציות לכל עמדה</span></div>
@@ -2068,10 +2128,10 @@ async function commitInline(inp){
   const id = inp.id, k = inp.dataset.inline, pid = inp.dataset.pid;
   const e = S.byId.get(pid); if(!e) return;
   const raw = inp.value.trim();
-  const bad = (inp.validity && inp.validity.badInput) || (raw !== '' && !(Number(raw) >= 0));
-  if(bad){ S.rowState[id] = {err:true, msg:'צריך מספר 0 ומעלה'}; inp.setAttribute('aria-invalid','true'); renderProfit(); return; }
+  const bad = (inp.validity && inp.validity.badInput) || (raw !== '' && (k === 'qty' ? !qtyOk(Number(raw)) : !(Number(raw) >= 0)));
+  if(bad){ S.rowState[id] = {err:true, msg: k === 'qty' ? 'מספר שלם, 1 ומעלה' : 'צריך מספר 0 ומעלה'}; inp.setAttribute('aria-invalid','true'); renderProfit(); return; }
   const v = raw === '' ? null : Number(raw);
-  const field = k === 'retail' ? 'retail_ils' : 'shipping_cost_usd';
+  const field = k === 'retail' ? 'retail_ils' : k === 'qty' ? 'sell_qty' : 'shipping_cost_usd';
   delete S.inline[id];
   if(same(field, v, e.flat[field])){ delete S.rowState[id]; renderProfit(); return; }
   S.rowState[id] = {msg:'שומר…'}; renderProfit();
@@ -2090,7 +2150,7 @@ function readSettingsDraft(){
   for(const m of ECON_META){
     const el = $('#s-' + m.k), ver = $('#sv-' + m.k);
     if(m.type === 'select') S.setDraft[m.k] = el.value;
-    else { const bad = (el.validity && el.validity.badInput) || el.value.trim() === '' || !(Number(el.value) >= 0); $('#s-' + m.k + '-err').textContent = bad ? 'צריך מספר 0 ומעלה.' : ''; el.setAttribute('aria-invalid', bad ? 'true' : 'false'); if(bad) errs++; S.setDraft[m.k] = bad ? el.value : Number(el.value); }
+    else { const min = m.min || 0; const bad = (el.validity && el.validity.badInput) || el.value.trim() === '' || !(Number(el.value) >= min); $('#s-' + m.k + '-err').textContent = bad ? `צריך מספר ${min} ומעלה.` : ''; el.setAttribute('aria-invalid', bad ? 'true' : 'false'); if(bad) errs++; S.setDraft[m.k] = bad ? el.value : Number(el.value); }
     S.setDraftVer[m.k] = ver.checked;
   }
   const cur = S.ES;
@@ -2121,9 +2181,9 @@ function breakEven(rowsIn){
   const sel = complete.filter(p => p.status === 'selected');
   const basis = sel.length ? sel : complete;
   const bf = v.bundle_factor;
-  const contribB = basis.map(p => econCalc({cost_usd: p.price.cost, shipping_usd: p.ship.usd * bf, retail_ils: p.retail}, v).contribution);
+  const contribB = basis.map(p => econCalc({cost_usd: p.price.cost, qty: p.qty, shipping_usd: p.ship.total * bf, retail_ils: p.retail}, v).contribution);
   const avgC = mean(contribB), avgR = mean(basis.map(p => p.retail));
-  const ipo = v.items_per_order;
+  const ipo = v.items_per_order >= 1 ? v.items_per_order : 1;   // same guard as econCalc
   const perOrder = avgC == null ? null : ipo * avgC - v.cac_ils;
   return {oneTime, monthly, basis: sel.length ? 'selected' : 'candidates', n: basis.length, avgC, avgR, aov: avgR == null ? null : ipo * avgR, perOrder,
     setupOrders: perOrder > 0 ? Math.ceil(oneTime / perOrder) : null, monthlyOrders: perOrder > 0 ? Math.ceil(monthly / perOrder) : null,

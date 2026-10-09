@@ -1,6 +1,6 @@
 import { Hono } from 'hono';
 import type { AppEnv } from './env';
-import { HttpError, securityHeaders } from './lib/http';
+import { HttpError, SITE_CSP, securityHeaders } from './lib/http';
 import { publicApi } from './routes/public';
 import { webhooks, mockPay } from './routes/payments';
 import { admin } from './routes/admin';
@@ -12,6 +12,21 @@ app.route('/api', publicApi);
 app.route('/api/webhooks', webhooks);
 app.route('/api/admin', admin);
 app.route('/mock-pay', mockPay);
+// Buyer order pages share one prerendered shell; the client reads the id from the URL.
+app.get('/order/*', async (c) => {
+  if (!c.env.ASSETS) throw new HttpError(404, 'not_found');
+  const ok = /^\/order\/HD-[A-Z0-9]{8}\/?$/.test(new URL(c.req.url).pathname);
+  const res = await c.env.ASSETS.fetch(new Request(new URL(ok ? '/order/' : '/404.html', c.req.url)));
+  return new Response(res.body, {
+    status: ok ? res.status : 404,
+    headers: {
+      'content-type': 'text/html; charset=utf-8',
+      'cache-control': 'no-store',
+      'x-robots-tag': 'noindex',
+      'content-security-policy': SITE_CSP,
+    },
+  });
+});
 app.all('/api/*', () => {
   throw new HttpError(404, 'not_found');
 });

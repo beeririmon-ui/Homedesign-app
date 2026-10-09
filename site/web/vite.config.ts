@@ -25,7 +25,7 @@ export default defineConfig(({ mode }) => {
       host: '127.0.0.1',
       port: 5180,
       strictPort: true,
-      proxy: { '/api': 'http://127.0.0.1:8790', '/mock-pay': 'http://127.0.0.1:8790' },
+      proxy: { '/api': 'http://127.0.0.1:8787', '/mock-pay': 'http://127.0.0.1:8787' },
     },
     preview: { host: '127.0.0.1', port: 5181, strictPort: true },
     build: artifact

@@ -16,8 +16,11 @@ import { relative, join } from 'node:path';
 import {
   ProductCardSchema,
   SlotsFileSchema,
-  EconomicsSettingsInputSchema,
+  SettingsFileSchema,
   ProductEconomicsFileSchema,
+  FreightFileSchema,
+  resolveShippingUsd,
+  type FreightFile,
   PublicCatalogSchema,
   resolveSettings,
   recommendedRetailIls,
@@ -75,7 +78,9 @@ const tempCoords = readJson(sitePath('tools/temp/living-room.nordic.json')) as {
 
 const settingsPath = repoPath('data/economics/settings.json');
 const productsEconPath = repoPath('data/economics/products.json');
-const settingsInput = existsSync(settingsPath) ? EconomicsSettingsInputSchema.parse(readJson(settingsPath)) : null;
+const freightPath = repoPath('data/economics/freight-cj.json');
+const settingsInput = existsSync(settingsPath) ? SettingsFileSchema.parse(readJson(settingsPath)) : null;
+const freight: FreightFile | null = existsSync(freightPath) ? FreightFileSchema.parse(readJson(freightPath)) : null;
 const productEcon: Record<string, ProductEconomics> = existsSync(productsEconPath)
   ? ProductEconomicsFileSchema.parse(readJson(productsEconPath))
   : {};
@@ -151,13 +156,16 @@ function buildProduct(
   const econ = productEcon[card.id] ?? {};
   const cost = usdToCents(card.price.currency === 'USD' ? card.price.cost : NaN);
   if (!Number.isFinite(cost)) return { id: card.id, slot: slot.id, reason: `price.currency ${card.price.currency} is not USD` };
-  const shippingFromDefault = typeof econ.shipping_cost_usd !== 'number';
-  const ship = usdToCents(shippingFromDefault ? settings.default_shipping_usd : (econ.shipping_cost_usd as number));
+  const shipping = resolveShippingUsd(card.id, econ.shipping_cost_usd, freight, settings);
+  const shippingFromDefault = shipping.source === 'default';
+  const ship = usdToCents(shipping.usd);
+  const sellQty = econ.sell_qty ?? 1;
+  const fulfillment = econ.fulfillment_source ?? 'dropship_cj';
   let retailIls = typeof econ.retail_ils === 'number' ? econ.retail_ils : null;
   let provisional = false;
   if (retailIls === null) {
     if (STRICT) return { id: card.id, slot: slot.id, reason: 'no retail_ils in data/economics/products.json' };
-    retailIls = recommendedRetailIls({ cost_usd_cents: cost, shipping_usd_cents: ship, fx_usd_ils: settings.fx_usd_ils }, settings);
+    retailIls = recommendedRetailIls({ cost_usd_cents: cost, shipping_usd_cents: ship, fx_usd_ils: settings.fx_usd_ils, sell_qty: sellQty }, settings);
     provisional = true;
     if (retailIls === null) return { id: card.id, slot: slot.id, reason: 'target margin unreachable with current settings' };
   }
@@ -200,10 +208,13 @@ function buildProduct(
     cost_usd_cents: cost,
     shipping_usd_cents: ship,
     shipping_from_default: shippingFromDefault,
+    shipping_source: shipping.source,
+    sell_qty: sellQty,
+    fulfillment_source: fulfillment,
     fx_usd_ils: settings.fx_usd_ils,
     nordic_score: card.style_scores?.[STYLE]?.score ?? null,
     economics: unitEconomics(
-      { retail_agorot: retail, cost_usd_cents: cost, shipping_usd_cents: ship, fx_usd_ils: settings.fx_usd_ils },
+      { retail_agorot: retail, cost_usd_cents: cost, shipping_usd_cents: ship, fx_usd_ils: settings.fx_usd_ils, sell_qty: sellQty },
       settings,
     ),
   };
@@ -306,9 +317,29 @@ for (const hr of house.rooms) {
   });
 }
 
+// Customer shipping fees come from settings (storefront); provisional until decision E1 is made.
+const shippingProvisional = (['shipping_fee_economy_ils', 'shipping_fee_express_ils', 'free_shipping_threshold_ils'] as const).some((k) =>
+  defaults_used.includes(k),
+);
 const shipping: ShippingOption[] = [
-  { id: 'economy', label_he: 'משלוח חסכוני', price_agorot: 0, days_he: 'לפי המוצר, בדרך כלל 12–30 ימים', provisional: true, is_default: true },
-  { id: 'express', label_he: 'משלוח מהיר', price_agorot: 4900, days_he: 'בדרך כלל 7–14 ימים', provisional: true, is_default: false },
+  {
+    id: 'economy',
+    label_he: 'משלוח חסכוני',
+    price_agorot: ilsToAgorot(settings.shipping_fee_economy_ils),
+    free_over_agorot: settings.free_shipping_threshold_ils === null ? null : ilsToAgorot(settings.free_shipping_threshold_ils),
+    days_he: 'לפי המוצר, בדרך כלל 12–30 ימים',
+    provisional: shippingProvisional,
+    is_default: true,
+  },
+  {
+    id: 'express',
+    label_he: 'משלוח מהיר',
+    price_agorot: ilsToAgorot(settings.shipping_fee_express_ils),
+    free_over_agorot: null,
+    days_he: 'בדרך כלל 7–14 ימים',
+    provisional: shippingProvisional,
+    is_default: false,
+  },
 ];
 
 const styles = [
@@ -363,6 +394,7 @@ const fullCatalog: FullCatalog = {
     sources: {
       settings: settingsInput ? 'data/economics/settings.json' : null,
       products: Object.keys(productEcon).length ? 'data/economics/products.json' : null,
+      freight: freight ? 'data/economics/freight-cj.json' : null,
     },
   },
 };
@@ -379,6 +411,7 @@ console.log(
     `  products shown: ${publicProducts.length} (provisional prices: ${fullProducts.filter((p) => p.price_provisional).length})`,
     `  hidden: ${hidden.length}${hidden.length ? ' · ' + hidden.map((h) => `${h.id}: ${h.reason}`).join('; ') : ''}`,
     `  living-room slots: ${living?.slots.length ?? 0}, placeholder options: ${placeholders}`,
+    `  shipping cost source: ${['manual', 'cj', 'default'].map((k) => `${k} ${fullProducts.filter((p) => p.shipping_source === k).length}`).join(', ')}`,
     `  economics defaults used: ${defaults_used.length ? defaults_used.join(', ') : 'none'}`,
     `  invalid product cards skipped: ${invalidCards.length}${invalidCards.length ? ' · ' + invalidCards.map((c) => `${c.path} (${c.issues})`).join('; ') : ''}`,
   ].join('\n'),

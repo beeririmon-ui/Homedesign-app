@@ -1,4 +1,8 @@
-/** Queue consumer: paid order → supplier order (CJ in production, mock elsewhere). Idempotent per (order, supplier). */
+/**
+ * Queue consumer: paid order → supplier order (CJ in production, mock elsewhere). Idempotent per (order, supplier).
+ * Only dropship lines go to CJ (qty × sell_qty supplier units). Lines with fulfillment_source = il_3pl get their own
+ * supplier_shipments row at payment time and are handled by the 3PL adapter once one is chosen (decision E1).
+ */
 import type { Env, SupplierJob } from '../env';
 import { nowIso } from './http';
 import { supplierClient } from './suppliers';
@@ -9,12 +13,12 @@ export async function processSupplierJob(env: Env, job: SupplierJob, attempt: nu
     .bind(job.order_id)
     .first<{ id: string; status: string; shipping_method: 'economy' | 'express'; address_json: string; customer_id: string }>();
   if (!order || order.status !== 'paid') return 'skipped';
-  const existing = await env.DB.prepare('SELECT status FROM supplier_orders WHERE order_id = ? AND supplier = ?')
+  const existing = await env.DB.prepare('SELECT status FROM supplier_shipments WHERE order_id = ? AND supplier = ?')
     .bind(order.id, client.id)
     .first<{ status: string }>();
   if (existing && existing.status !== 'queued' && existing.status !== 'failed') return 'skipped';
   const customer = await env.DB.prepare('SELECT full_name, phone, email FROM customers WHERE id = ?').bind(order.customer_id).first<{ full_name: string; phone: string; email: string }>();
-  const { results: items } = await env.DB.prepare('SELECT product_id, qty, supplier_sku FROM order_items WHERE order_id = ? ORDER BY line')
+  const { results: items } = await env.DB.prepare("SELECT product_id, qty * unit_sell_qty AS qty, supplier_sku FROM order_items WHERE order_id = ? AND fulfillment_source = 'dropship_cj' ORDER BY line")
     .bind(order.id)
     .all<{ product_id: string; qty: number; supplier_sku: string | null }>();
   const now = nowIso();
@@ -28,7 +32,7 @@ export async function processSupplierJob(env: Env, job: SupplierJob, attempt: nu
     const res = await client.submitOrder(input);
     await env.DB.batch([
       env.DB.prepare(
-        `INSERT INTO supplier_orders (id, order_id, supplier, status, supplier_order_id, attempts, request_json, response_json, created_at, updated_at)
+        `INSERT INTO supplier_shipments (id, order_id, supplier, status, supplier_order_id, attempts, request_json, response_json, created_at, updated_at)
          VALUES (?, ?, ?, 'submitted', ?, ?, ?, ?, ?, ?)
          ON CONFLICT(order_id, supplier) DO UPDATE SET status = 'submitted', supplier_order_id = excluded.supplier_order_id, attempts = excluded.attempts, response_json = excluded.response_json, last_error = NULL, updated_at = excluded.updated_at`,
       ).bind(crypto.randomUUID(), order.id, client.id, res.supplier_order_id, attempt, JSON.stringify({ lines: input.lines.length, shipping_method: input.shipping_method }), JSON.stringify(res.raw), now, now),
@@ -39,7 +43,7 @@ export async function processSupplierJob(env: Env, job: SupplierJob, attempt: nu
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
     await env.DB.prepare(
-      `INSERT INTO supplier_orders (id, order_id, supplier, status, attempts, last_error, created_at, updated_at) VALUES (?, ?, ?, 'failed', ?, ?, ?, ?)
+      `INSERT INTO supplier_shipments (id, order_id, supplier, status, attempts, last_error, created_at, updated_at) VALUES (?, ?, ?, 'failed', ?, ?, ?, ?)
        ON CONFLICT(order_id, supplier) DO UPDATE SET status = 'failed', attempts = excluded.attempts, last_error = excluded.last_error, updated_at = excluded.updated_at`,
     )
       .bind(crypto.randomUUID(), order.id, client.id, attempt, msg.slice(0, 500), now, now)

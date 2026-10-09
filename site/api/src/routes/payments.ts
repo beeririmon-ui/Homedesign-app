@@ -39,9 +39,13 @@ export async function handlePaymentEvent(env: Env, providerId: string, event: Pa
   else {
     await env.DB.batch([
       env.DB.prepare("UPDATE orders SET status = 'paid', paid_at = ?, updated_at = ? WHERE id = ?").bind(now, now, order.id),
+      // one shipment per fulfillment source in the order (dropship → SUPPLIER_PROVIDER, il_3pl → '3pl')
       env.DB.prepare(
-        "INSERT INTO supplier_orders (id, order_id, supplier, status, created_at, updated_at) VALUES (?, ?, ?, 'queued', ?, ?) ON CONFLICT(order_id, supplier) DO NOTHING",
-      ).bind(crypto.randomUUID(), order.id, env.SUPPLIER_PROVIDER, now, now),
+        `INSERT INTO supplier_shipments (id, order_id, supplier, fulfillment_source, status, created_at, updated_at)
+         SELECT lower(hex(randomblob(16))), ?, CASE fulfillment_source WHEN 'il_3pl' THEN '3pl' ELSE ? END, fulfillment_source, 'queued', ?, ?
+         FROM (SELECT DISTINCT fulfillment_source FROM order_items WHERE order_id = ?) WHERE true
+         ON CONFLICT(order_id, supplier) DO NOTHING`,
+      ).bind(order.id, env.SUPPLIER_PROVIDER, now, now, order.id),
       env.DB.prepare('INSERT INTO audit_log (at, actor, action, subject, detail) VALUES (?, ?, ?, ?, ?)').bind(now, `webhook:${providerId}`, 'order.paid', order.id, JSON.stringify({ event: event.id })),
     ]);
     await env.SUPPLIER_QUEUE.send({ kind: 'submit-order', order_id: order.id });

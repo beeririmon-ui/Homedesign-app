@@ -21,11 +21,18 @@ What it does:
     touched: name, slot, rooms, status, supplier.product_url, supplier.sku, price.cost,
     notes. Extra links go into a [studio-links] block at the end of notes (the schema
     has no links field). A slot move to another room also moves the file (--no-move to skip).
-  * writes economics fields (shipping_cost_usd, retail_ils, compare_at_ils) to
-    data/economics/products.json and the settings to data/economics/settings.json.
+  * writes economics fields (shipping_cost_usd per unit, sell_qty = units per sale, retail_ils,
+    compare_at_ils) to data/economics/products.json and the settings to data/economics/settings.json.
+    updated_at changes only when a value really changes; an unchanged file is not rewritten.
   * creates a lead card per new product in data/products/leads/<id>.json (status
-    candidate); missing required fields are listed in its notes.
-  * validates every card it writes against data/product-card.schema.json (never edits it).
+    candidate); missing required fields are listed in its notes. A lead is rejected (not written,
+    not synced, listed under Problems) when its url or any extra link is not https://, its room/slot
+    is not in data/slots/, its cost is negative or not a number, or a field has the wrong type.
+  * validates every card it writes against data/product-card.schema.json (never edits it). A card
+    that already broke the schema before the patch (e.g. pool cards with slot: null) is still
+    patched: only NEW schema errors block the write. An economics-only patch never touches the card.
+  * one bad item never stops the run: it is reported, and the rest (and the economics and
+    settings files) are still written.
   * prints a diff summary and the ids that were synced, so the manager can set
     synced:true on those db documents.
 
@@ -47,7 +54,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import build as B  # noqa: E402  (shared helpers: links block, room folders)
 
 STATUS = ("candidate", "selected", "rejected")
-ECON_KEYS = ("shipping_cost_usd", "retail_ils", "compare_at_ils")
+ECON_KEYS = ("shipping_cost_usd", "sell_qty", "retail_ils", "compare_at_ils")
 ROOM_FOLDER = {"living-room": None, "dining-room": "dining", "hall": "entrance", "bath": "bath",
                "corridor": "corridor", "kids": "kids", "master": "master", "work": "work"}
 
@@ -77,7 +84,7 @@ def as_items(x) -> list[tuple[str, dict]]:
         return []
     if isinstance(x, dict):
         return [(k, v) for k, v in x.items()]
-    return [(i.get("id"), i.get("data") if "data" in i else i) for i in x]
+    return [(i.get("id"), i.get("data") if "data" in i else i) for i in x if isinstance(i, dict)]
 
 
 def flat(o, prefix=""):
@@ -262,7 +269,7 @@ class Run:
                 if isinstance(l, dict) and https_ok(l.get("url")):
                     good.append({"label": str(l.get("label") or "").replace("|", "/").strip(), "url": l["url"].strip()})
                 else:
-                    errs.append(f"links: skipped {short(l)} (url must start with https://)")
+                    errs.append(f"links: rejected {short(l)} (url must start with https://)")
             card["notes"] = B.join_links(notes if isinstance(notes, str) else None, good)
 
         move_to = None
@@ -270,7 +277,9 @@ class Run:
             cur_room, cur_slot = self.current_room_slot(path, card)
             new_room = f.get("slot_room", cur_room)
             new_slot = f.get("slot", cur_slot)
-            if not new_slot or (new_room and new_slot not in self.room_slots.get(new_room, set())):
+            if not new_slot and not cur_slot:
+                pass  # "no slot" stays "no slot" (pool cards): never write slot: null into a card
+            elif not new_slot or (new_room and new_slot not in self.room_slots.get(new_room, set())):
                 errs.append(f"slot: '{new_room}/{new_slot}' is not a slot in data/slots/{new_room}.json")
             else:
                 card["slot"] = new_slot
@@ -284,16 +293,27 @@ class Run:
         for k in ECON_KEYS:
             if k in econ:
                 v = econ[k]
-                if v is None or (isnum(v) and v >= 0):
+                if k == "sell_qty":
+                    if v is None or (isnum(v) and float(v).is_integer() and v >= 1):
+                        eu[k] = None if v is None else int(v)
+                    else:
+                        errs.append(f"economics.sell_qty: must be a whole number >= 1 or empty ({short(v)})")
+                elif v is None or (isnum(v) and v >= 0):
                     eu[k] = v
                 else:
                     errs.append(f"economics.{k}: must be a number >= 0 or empty ({short(v)})")
         if eu:
             self.econ_updates[pid] = eu
 
-        verrs = validate(card, self.schema)
-        diff = [(k, flat(before).get(k), v) for k, v in flat(card).items() if flat(before).get(k) != v]
-        diff += [(k, v, None) for k, v in flat(before).items() if k not in flat(card)]
+        # Only errors the patch itself creates block it. A card that already broke the schema (pool cards
+        # carry slot: null) can still get its price, shipping or other fields fixed.
+        old_errs = set(validate(before, self.schema))
+        all_errs = validate(card, self.schema)
+        verrs = [e for e in all_errs if e not in old_errs]
+        kept = [e for e in all_errs if e in old_errs]
+        fb, fc = flat(before), flat(card)
+        diff = [(k, fb.get(k), v) for k, v in fc.items() if fb.get(k) != v]
+        diff += [(k, v, None) for k, v in fb.items() if k not in fc]
         self.say(f"• {pid}  ({path.relative_to(self.root)})")
         for k, a, b in diff:
             self.say(f"    {k}: {short(a)} → {short(b)}")
@@ -308,6 +328,8 @@ class Run:
         for e in errs:
             self.say(f"    ! {e}")
             self.problems.append(f"{pid}: {e}")
+        if kept:
+            self.say(f"    (already in the repo, not blocking: {'; '.join(kept)})")
         if verrs:
             for e in verrs:
                 self.say(f"    ! schema: {e}")
@@ -344,13 +366,53 @@ class Run:
                 self.say(f"• lead {doc_id}: already in {p.relative_to(self.root)} (skipped)")
                 self.synced_new.append(doc_id)
                 return
-        url = (d.get("url") or "").strip()
+        bad: list[str] = []
+
+        def text(k):  # a text field: missing/empty -> "", anything that is not text -> rejected
+            v = d.get(k)
+            if v is None:
+                return ""
+            if not isinstance(v, str):
+                bad.append(f"{k}: must be text ({short(v)})")
+                return ""
+            return v.strip()
+
+        url, name, note = text("url"), text("name"), text("note")
+        slot, room = text("slot") or None, text("room") or None
+        if not https_ok(url):
+            bad.append(f"url must start with https:// ({short(url)})")
+        if room and room not in self.room_slots:
+            bad.append(f"room '{room}' is not a room in data/slots/")
+        elif slot:
+            if room:
+                if slot not in self.room_slots.get(room, set()):
+                    bad.append(f"slot '{room}/{slot}' is not a slot in data/slots/{room}.json")
+            else:
+                hits = [r for r, ids in self.room_slots.items() if slot in ids]
+                if len(hits) == 1:
+                    room = hits[0]
+                else:
+                    bad.append(f"slot '{slot}' without a room is {'ambiguous' if hits else 'not a slot in data/slots/'}")
+        cost = d.get("cost_usd")
+        if cost is not None and not (isnum(cost) and cost >= 0):
+            bad.append(f"cost_usd must be a number >= 0 or empty ({short(cost)})")
+        links = d.get("links") or []
+        if not isinstance(links, list):
+            bad.append("links: must be a list")
+            links = []
+        for l in links:
+            if not (isinstance(l, dict) and https_ok(l.get("url"))):
+                bad.append(f"links: {short(l)} (url must start with https://)")
+        if bad:
+            self.say(f"• lead {doc_id}: NOT written (fix it in the Studio and sync again)")
+            for e in bad:
+                self.say(f"    ! {e}")
+                self.problems.append(f"lead {doc_id}: {e}")
+            return
+
         host = urllib.parse.urlparse(url).hostname or ""
         sup_short = "cj" if "cjdropshipping" in host else (host.replace("www.", "").split(".")[0] or "web")
         sup_name = "CJ Dropshipping" if sup_short == "cj" else (host.replace("www.", "") or "לא ידוע")
-        slot = (d.get("slot") or "").strip() or None
-        room = (d.get("room") or "").strip() or None
-        name = (d.get("name") or "").strip()
         base = slugify(name) or slugify(urllib.parse.urlparse(url).path) or doc_id.lower()
         pid = f"{slot or 'lead'}-{sup_short}-{base}"[:80].strip("-")
         while pid in self.index:
@@ -364,11 +426,9 @@ class Run:
         if room:
             card["rooms"] = [room]
         card["supplier"] = {"name": sup_name, "product_url": url, "sku": None, "rating": None}
-        if not https_ok(url):
-            self.problems.append(f"lead {doc_id}: url must start with https:// ({short(url)})")
         price = {"currency": "USD", "suggested_retail": None}
-        if isnum(d.get("cost_usd")) and d["cost_usd"] >= 0:
-            price = {"cost": d["cost_usd"], **price}
+        if isnum(cost):
+            price = {"cost": cost, **price}
         else:
             missing.append("price.cost")
         card["price"] = price
@@ -377,8 +437,7 @@ class Run:
         card["status"] = "candidate"
         intro = (f"ליד מהסטודיו ({marker}), נוסף {str(d.get('created_at') or self.today)[:10]}. "
                  f"חסרים שדות חובה: {', '.join(missing)}. אין תמונות עד שה-sourcing-agent ימלא את הכרטיס.")
-        note = (d.get("note") or "").strip()
-        good = [l for l in d.get("links") or [] if isinstance(l, dict) and https_ok(l.get("url"))]
+        good = [{"label": str(l.get("label") or "").replace("|", "/").strip(), "url": l["url"].strip()} for l in links]
         card["notes"] = B.join_links(intro + (("\n" + note) if note else ""), good)
         path = self.products_dir / B.LEADS_DIR / f"{pid}.json"
         verrs = validate(card, self.schema)
@@ -387,10 +446,14 @@ class Run:
         self.say(f"• lead {doc_id} → {path.relative_to(self.root)}")
         self.say(f"    name {short(card['name'])} · slot {room}/{slot} · url {short(url, 60)}")
         if expected:
-            self.say(f"    (expected for a lead) {len(expected)} schema gaps: {', '.join(missing)}")
-        for e in other:
-            self.say(f"    ! schema: {e}")
-            self.problems.append(f"lead {doc_id}: schema: {e}")
+            self.say(f"    (expected for a lead) {len(missing)} schema gaps: {', '.join(missing)}")
+        if other:
+            for e in other:
+                self.say(f"    ! schema: {e}")
+                self.problems.append(f"lead {doc_id}: schema: {e}")
+            if not self.args.force:
+                self.say("    lead NOT written (fails the schema; --force to override)")
+                return
         if not self.args.dry_run:
             write_json(path, card)
             self.index[pid] = path
@@ -401,34 +464,48 @@ class Run:
         if self.econ_updates:
             pp = self.eco_dir / "products.json"
             cur = json.loads(pp.read_text(encoding="utf-8")) if pp.exists() else {}
-            prods = cur.get("products", {}) if isinstance(cur, dict) else {}
+            prods = dict(cur.get("products", {})) if isinstance(cur, dict) else {}
+            changed = 0
             for pid, eu in self.econ_updates.items():
-                e = dict(prods.get(pid) or {})
+                old = dict(prods.get(pid) or {})
+                e = dict(old)
                 for k, v in eu.items():
                     if v is None:
                         e.pop(k, None)
                     else:
                         e[k] = v
+                if all(e.get(k) == old.get(k) for k in ECON_KEYS):
+                    continue  # same values: keep the old updated_at, so an old number does not look fresh
+                changed += 1
                 e["updated_at"] = self.today
                 e["source"] = "studio"
                 if any(k in e for k in ECON_KEYS):
                     prods[pid] = e
                 else:
                     prods.pop(pid, None)
-            out = {"version": 1, "note": "שדות כלכלה לכל מוצר (נכתב על ידי studio/apply_edits.py). משלוח ידני גובר על freight-cj.json.",
-                   "updated": self.today, "products": dict(sorted(prods.items()))}
-            self.say(f"• data/economics/products.json: {len(self.econ_updates)} products updated ({len(prods)} total)")
-            if not self.args.dry_run:
-                write_json(pp, out)
+            if changed:
+                out = {"version": 1, "note": "שדות כלכלה לכל מוצר (נכתב על ידי studio/apply_edits.py). משלוח ידני (ליחידה) גובר על freight-cj.json. sell_qty = יחידות בכל מכירה.",
+                       "updated": self.today, "products": dict(sorted(prods.items()))}
+                self.say(f"• data/economics/products.json: {changed} products changed ({len(prods)} total)")
+                if not self.args.dry_run:
+                    write_json(pp, out)
+            else:
+                self.say("• data/economics/products.json: no change")
         if settings and (settings.get("economics") or settings.get("budget")):
             sp = self.eco_dir / "settings.json"
             cur = json.loads(sp.read_text(encoding="utf-8")) if sp.exists() else {}
             out = {"version": 1, "updated": self.today,
                    "economics": settings.get("economics") or cur.get("economics"),
                    "budget": settings.get("budget") or cur.get("budget")}
+            meta = lambda x: x.endswith(("updated_at", ".by")) or x == "by"
+            same = all({a: b for a, b in flat(out.get(k) or {}).items() if not meta(a)} ==
+                       {a: b for a, b in flat(cur.get(k) or {}).items() if not meta(a)} for k in ("economics", "budget"))
+            if same:
+                self.say("• data/economics/settings.json: no change")
+                return
             for k in ("economics", "budget"):
                 if settings.get(k):
-                    for a, b in [(x, y) for x, y in flat(settings[k]).items() if flat(cur.get(k) or {}).get(x) != y and not x.endswith(("updated_at", ".by", "by"))][:12]:
+                    for a, b in [(x, y) for x, y in flat(settings[k]).items() if flat(cur.get(k) or {}).get(x) != y and not meta(x)][:12]:
                         self.say(f"    settings.{k}.{a} → {short(b)}")
             n = len(((out.get("budget") or {}).get("rows")) or [])
             self.say(f"• data/economics/settings.json: economics {'set' if out['economics'] else '—'}, budget rows {n}")
@@ -455,14 +532,27 @@ def main() -> int:
     edits = as_items(export.get("product_edits"))
     news = as_items(export.get("product_new"))
     run.say(f"Product edits: {len(edits)}")
+    # one malformed item never stops the run: it is reported, and the economics/settings files are still written
     for pid, doc in edits:
-        run.apply_edit(pid, doc or {})
+        try:
+            run.apply_edit(pid, doc if isinstance(doc, dict) else {})
+        except Exception as e:  # noqa: BLE001
+            run.econ_updates.pop(pid, None)
+            run.say(f"• {pid}: NOT applied ({type(e).__name__}: {e})")
+            run.problems.append(f"{pid}: could not apply ({type(e).__name__}: {e})")
     run.say("")
     run.say(f"New leads: {len(news)}")
     for doc_id, d in news:
-        run.apply_new(doc_id, d or {})
+        try:
+            run.apply_new(doc_id, d if isinstance(d, dict) else {})
+        except Exception as e:  # noqa: BLE001
+            run.say(f"• lead {doc_id}: NOT written ({type(e).__name__}: {e})")
+            run.problems.append(f"lead {doc_id}: could not apply ({type(e).__name__}: {e})")
     run.say("")
-    run.write_economics(export.get("settings"))
+    try:
+        run.write_economics(export.get("settings") if isinstance(export.get("settings"), dict) else None)
+    except Exception as e:  # noqa: BLE001
+        run.problems.append(f"economics files: {type(e).__name__}: {e}")
     result = {"product_edits": run.synced_edits, "product_new": run.synced_new, "dry_run": args.dry_run}
     run.say("")
     if run.problems:

@@ -101,6 +101,11 @@ export async function economics(db: D1Database) {
     cac_agorot: number;
     target_margin_rate: number;
     default_shipping_usd_cents: number;
+    packaging_agorot: number;
+    items_per_order: number;
+    shipping_fee_economy_agorot: number;
+    shipping_fee_express_agorot: number;
+    free_shipping_threshold_agorot: number | null;
     defaults_used: string;
     imported_at: string;
   }>();

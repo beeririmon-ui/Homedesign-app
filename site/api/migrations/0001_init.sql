@@ -1,4 +1,5 @@
--- D1 schema v1. Money is INTEGER minor units: *_agorot (ILS), *_usd_cents (USD).
+-- D1 schema v1 (not deployed anywhere yet, so v1 is still edited in place; from the first deploy on, changes go in new
+-- numbered migrations). Money is INTEGER minor units: *_agorot (ILS), *_usd_cents (USD).
 -- Catalog tables are written only by the seed (repo = source of truth). Order tables are written only by the API.
 PRAGMA foreign_keys = ON;
 
@@ -18,6 +19,14 @@ CREATE TABLE economics_settings (
   cac_agorot             INTEGER NOT NULL DEFAULT 0,
   target_margin_rate     REAL    NOT NULL CHECK (target_margin_rate >= 0 AND target_margin_rate < 1),
   default_shipping_usd_cents INTEGER NOT NULL DEFAULT 0,
+  packaging_agorot       INTEGER NOT NULL DEFAULT 0,
+  items_per_order        REAL    NOT NULL DEFAULT 1 CHECK (items_per_order > 0),
+  bundle_factor          REAL    NOT NULL DEFAULT 1,
+  freight_method         TEXT    NOT NULL DEFAULT 'cheapest' CHECK (freight_method IN ('cheapest', 'under20')),
+  -- storefront: what the customer pays for shipping
+  shipping_fee_economy_agorot INTEGER NOT NULL DEFAULT 0,
+  shipping_fee_express_agorot INTEGER NOT NULL DEFAULT 0,
+  free_shipping_threshold_agorot INTEGER,                 -- NULL = economy shipping is never free
   defaults_used          TEXT    NOT NULL DEFAULT '[]',   -- JSON list of settings that fell back to provisional defaults
   imported_at            TEXT    NOT NULL,
   source                 TEXT
@@ -64,7 +73,9 @@ CREATE TABLE products (
   supplier_sku           TEXT,
   cost_usd_cents         INTEGER NOT NULL CHECK (cost_usd_cents >= 0),
   shipping_usd_cents     INTEGER NOT NULL CHECK (shipping_usd_cents >= 0),
-  shipping_from_default  INTEGER NOT NULL DEFAULT 0, -- 1 = no shipping_cost_usd yet, settings default used
+  shipping_from_default  INTEGER NOT NULL DEFAULT 0, -- 1 = no manual cost and no CJ quote, settings default used
+  shipping_source        TEXT    NOT NULL DEFAULT 'default' CHECK (shipping_source IN ('manual', 'cj', 'default')),
+  sell_qty               INTEGER NOT NULL DEFAULT 1 CHECK (sell_qty >= 1), -- supplier units per unit sold
   fx_usd_ils_at_import   REAL    NOT NULL,
   retail_agorot          INTEGER CHECK (retail_agorot IS NULL OR retail_agorot > 0),  -- consumer price incl. VAT
   compare_at_agorot      INTEGER,
@@ -81,6 +92,9 @@ CREATE TABLE product_variants (
   product_id  TEXT NOT NULL REFERENCES products(id),
   label_he    TEXT NOT NULL,
   supplier_sku TEXT,
+  -- hybrid fulfillment (decision E1): dropship from CJ now; best sellers can move to an Israeli 3PL per variant
+  fulfillment_source TEXT NOT NULL DEFAULT 'dropship_cj' CHECK (fulfillment_source IN ('dropship_cj', 'il_3pl')),
+  stock_qty   INTEGER,                                -- il_3pl only (NULL for dropship)
   active      INTEGER NOT NULL DEFAULT 1
 );
 CREATE INDEX product_variants_product ON product_variants (product_id);
@@ -98,23 +112,32 @@ CREATE TABLE slot_options (
 
 -- Unit economics per visible product, with the current settings. Mirrors shared/src/pricing.ts (tests compare both).
 CREATE VIEW v_product_economics AS
-SELECT
-  p.id, p.slot_id, p.name_he, p.status, p.visible, p.price_provisional, p.shipping_from_default,
-  p.retail_agorot,
-  p.cost_usd_cents, p.shipping_usd_cents, p.fx_usd_ils_at_import,
-  CAST(ROUND(p.retail_agorot / (1 + s.vat_rate)) AS INTEGER) AS net_agorot,
-  CAST(ROUND((p.cost_usd_cents + p.shipping_usd_cents) * p.fx_usd_ils_at_import) AS INTEGER) AS cogs_agorot,
-  CAST(ROUND(p.retail_agorot * s.payment_fee_rate + s.payment_fee_fixed_agorot) AS INTEGER) AS payment_fee_agorot,
-  CAST(ROUND(ROUND(p.retail_agorot / (1 + s.vat_rate)) * s.returns_reserve_rate) AS INTEGER) AS returns_reserve_agorot,
-  CAST(ROUND(p.retail_agorot / (1 + s.vat_rate)) AS INTEGER)
-    - CAST(ROUND((p.cost_usd_cents + p.shipping_usd_cents) * p.fx_usd_ils_at_import) AS INTEGER)
-    - CAST(ROUND(p.retail_agorot * s.payment_fee_rate + s.payment_fee_fixed_agorot) AS INTEGER)
-    - CAST(ROUND(ROUND(p.retail_agorot / (1 + s.vat_rate)) * s.returns_reserve_rate) AS INTEGER) AS contribution_agorot,
-  s.cac_agorot,
-  s.target_margin_rate
-FROM products p
-JOIN economics_settings s ON s.id = 'current'
-WHERE p.retail_agorot IS NOT NULL;
+WITH b AS (
+  SELECT
+    p.id, p.slot_id, p.name_he, p.status, p.visible, p.price_provisional, p.shipping_from_default, p.shipping_source,
+    p.retail_agorot, p.cost_usd_cents, p.shipping_usd_cents, p.sell_qty, p.fx_usd_ils_at_import,
+    CAST(ROUND(p.retail_agorot / (1 + s.vat_rate)) AS INTEGER) AS net_agorot,
+    CAST(ROUND((p.cost_usd_cents + p.shipping_usd_cents) * p.sell_qty * p.fx_usd_ils_at_import) AS INTEGER) AS cogs_agorot,
+    CAST(ROUND(p.retail_agorot * s.payment_fee_rate + s.payment_fee_fixed_agorot) AS INTEGER) AS payment_fee_agorot,
+    s.packaging_agorot,
+    CAST(ROUND(s.cac_agorot / s.items_per_order) AS INTEGER) AS cac_per_item_agorot,
+    s.returns_reserve_rate, s.target_margin_rate
+  FROM products p
+  JOIN economics_settings s ON s.id = 'current'
+  WHERE p.retail_agorot IS NOT NULL
+), c AS (
+  SELECT b.*,
+    CAST(ROUND(b.net_agorot * b.returns_reserve_rate) AS INTEGER) AS returns_reserve_agorot
+  FROM b
+), d AS (
+  SELECT c.*, c.net_agorot - c.cogs_agorot - c.payment_fee_agorot - c.returns_reserve_agorot - c.packaging_agorot AS contribution_agorot
+  FROM c
+)
+SELECT d.*,
+  CASE WHEN d.net_agorot > 0 THEN ROUND(CAST(d.contribution_agorot AS REAL) / d.net_agorot, 4) END AS margin_rate,
+  d.contribution_agorot - d.cac_per_item_agorot AS contribution_after_cac_agorot,
+  CASE WHEN d.net_agorot > 0 AND CAST(d.contribution_agorot AS REAL) / d.net_agorot >= d.target_margin_rate THEN 1 ELSE 0 END AS meets_target
+FROM d;
 
 -- ---------- commerce (written by the API) ----------
 CREATE TABLE customers (
@@ -182,6 +205,8 @@ CREATE TABLE order_items (
   unit_price_agorot     INTEGER NOT NULL,              -- snapshot, incl. VAT
   unit_cost_usd_cents   INTEGER NOT NULL,              -- snapshot for real margin per order
   unit_shipping_usd_cents INTEGER NOT NULL,
+  unit_sell_qty         INTEGER NOT NULL DEFAULT 1,
+  fulfillment_source    TEXT    NOT NULL DEFAULT 'dropship_cj',  -- snapshot: who ships this line
   supplier_sku          TEXT,
   PRIMARY KEY (order_id, line)
 );
@@ -201,10 +226,12 @@ CREATE TABLE payment_events (
   UNIQUE (provider, provider_event_id)
 );
 
-CREATE TABLE supplier_orders (
+-- One row per (order, supplier): a hybrid order can split into a CJ dropship shipment and a 3PL shipment.
+CREATE TABLE supplier_shipments (
   id                 TEXT PRIMARY KEY,
   order_id           TEXT NOT NULL REFERENCES orders(id),
-  supplier           TEXT NOT NULL,
+  supplier           TEXT NOT NULL,                    -- 'cj' | '3pl' | 'mock'
+  fulfillment_source TEXT NOT NULL DEFAULT 'dropship_cj',
   status             TEXT NOT NULL CHECK (status IN ('queued','submitted','accepted','failed','shipped','canceled')),
   supplier_order_id  TEXT,
   tracking_number    TEXT,
