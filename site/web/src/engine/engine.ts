@@ -12,6 +12,7 @@ import { Loader } from './loader';
 import { buildLayers, slotSources } from './layers';
 import { camForBox, clampCam, coverSize, defaultCam, easeInOutCubic, easeOutCubic, lerpCam } from './camera';
 import { mediaUrl, supportsAvif } from '../media';
+import { timeScale } from '../motion';
 
 type Anim = { start: number; dur: number; step: (t: number) => void; done?: () => void };
 
@@ -240,6 +241,7 @@ export class RoomEngine {
 
   // ---------- loop ----------
   private animate(durationMs: number, step: (t: number) => void, done?: () => void): Promise<void> {
+    durationMs *= timeScale();
     return new Promise((resolve) => {
       if (durationMs <= 0) {
         step(1);

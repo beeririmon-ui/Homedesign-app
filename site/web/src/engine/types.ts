@@ -18,7 +18,16 @@ export type Scene = {
   base: { id: string; z: number; blend: Blend; src: string; widths: number[]; temporary: boolean }[];
   slots: Record<
     string,
-    { z: number; depth: number; temporary: boolean; product: SceneLayerSet | null; shadow: SceneLayerSet | null; light: SceneLayerSet | null }
+    {
+      z: number;
+      depth: number;
+      temporary: boolean;
+      /** the product's own box in the frame (its ring on the stage); null when the product is not in the picture */
+      ring?: Box | null;
+      product: SceneLayerSet | null;
+      shadow: SceneLayerSet | null;
+      light: SceneLayerSet | null;
+    }
   >;
   depth: { src: string; width: number };
   hall: { src: string; widths: number[]; temporary: boolean };

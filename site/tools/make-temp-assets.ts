@@ -48,6 +48,7 @@ type TempSlot = {
   glow?: [number, number, number][];
   exclude?: string[];
   variant_palette?: string[];
+  zoom?: Box;
 };
 type TempFile = {
   room: string;
@@ -367,6 +368,13 @@ async function main() {
     const pal = t.variant_palette ?? PALETTE;
     const colors = slot.options.map((o, i) => (i === 0 ? null : ((o.product_id ? productColor.get(o.product_id) : null) ?? pal[(i - 1) % pal.length]!)));
     const entry: Record<string, unknown> = { z: slot.z, depth: t.depth, temporary: true };
+    // the product's own box, for its ring on the stage (split products: the part the zoom shows)
+    const shapes = shapeBoxes(t);
+    entry.ring = t.zoom
+      ? t.zoom
+      : shapes.length
+        ? [Math.min(...shapes.map((b) => b[0])), Math.max(...shapes.map((b) => b[1])), Math.min(...shapes.map((b) => b[2])), Math.max(...shapes.map((b) => b[3]))]
+        : null;
     for (const key of ['lo', 'hi'] as const) {
       const layers = await makeSlotLayers(bases[key]!, key, slot.id, t, colors);
       if (key === 'lo') {

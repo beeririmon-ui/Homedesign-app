@@ -11,6 +11,7 @@
 import { type Loader, type Decoded } from './loader';
 import { mediaUrl } from '../media';
 import type { Scene } from './types';
+import { timeScale } from '../motion';
 
 type Transition = Scene['transitions'][string];
 
@@ -80,6 +81,7 @@ export class SequencePlayer {
 
 /** rAF loop for `durationMs`, calling step(t) with t from 0 to 1. */
 export function tween(durationMs: number, step: (t: number, dtMs: number) => void): Promise<void> {
+  durationMs *= timeScale();
   return new Promise((resolve) => {
     if (durationMs <= 0) {
       step(1, 0);

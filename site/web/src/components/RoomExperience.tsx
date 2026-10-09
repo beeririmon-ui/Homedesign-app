@@ -368,21 +368,21 @@ export function RoomExperience({ room }: { room: CatalogRoom }) {
 }
 
 /**
- * The ring around a product, in frame coordinates: the slot's zoom_frame (the product itself; for split products
- * such as the curtains or the sconce pair, the one the zoom shows), else a small circle at the hotspot.
+ * The ring around a product, in frame coordinates: the product's own box from the scene (for split products such as
+ * the curtains or the sconce pair, the part the zoom shows), else a small circle at the hotspot.
  */
 function ringOf(s: CatalogSlot): { cu: number; cv: number; ru: number; rv: number } {
-  const z = s.zoom_frame;
-  if (z) return { cu: (z[0] + z[1]) / 2, cv: (z[2] + z[3]) / 2, ru: (z[1] - z[0]) / 2, rv: (z[3] - z[2]) / 2 };
+  const b = scene.slots[s.id]?.ring;
+  if (b) return { cu: (b[0] + b[1]) / 2, cv: (b[2] + b[3]) / 2, ru: (b[1] - b[0]) / 2, rv: (b[3] - b[2]) / 2 };
   return { cu: s.hotspot!.u, cv: s.hotspot!.v, ru: 0.02, rv: 0.035 };
 }
 
-/** Screen radii of a ring: a little larger than the product, at least a 44 px target, capped, never too elongated. */
+/** Screen radii of a ring: just outside the product (an ellipse around a box needs ×√2), a 44 px target at least, capped. */
 function ringRadii(halfW: number, halfH: number): { rx: number; ry: number } {
-  let rx = Math.min(120, Math.max(22, halfW * 1.1 + 6));
-  let ry = Math.min(120, Math.max(22, halfH * 1.1 + 6));
-  if (rx > ry * 1.6) ry = rx / 1.6;
-  if (ry > rx * 1.6) rx = ry / 1.6;
+  let rx = Math.min(150, Math.max(22, halfW * 1.3 + 4));
+  let ry = Math.min(150, Math.max(22, halfH * 1.3 + 4));
+  if (rx > ry * 1.8) ry = rx / 1.8;
+  if (ry > rx * 1.8) rx = ry / 1.8;
   return { rx, ry };
 }
 

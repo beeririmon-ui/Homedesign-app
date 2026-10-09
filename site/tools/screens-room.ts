@@ -218,29 +218,47 @@ async function hotspots(): Promise<void> {
 // ---------------- 3. transition ----------------
 async function transition(): Promise<void> {
   const page = await newPage();
+  // slow motion (×10) so the screenshots, which take longer than a frame under SwiftShader, sample the move evenly
+  const SLOW = 10;
+  await page.addInitScript(`window.__hdSlowMo = ${SLOW}`);
+  // rings and controls fade in on CSS time after the landing; hidden here so the landing check sees only the room
+  await page.addInitScript(`addEventListener('DOMContentLoaded', () => { const s = document.createElement('style'); s.textContent = '.hotspots,.stage-ui{visibility:hidden!important}'; document.head.append(s); })`);
   await page.goto(`${ORIGIN}/`, { waitUntil: 'load' });
   await page.getByRole('heading', { level: 1 }).first().waitFor();
-  await page.waitForTimeout(3000); // T-E0 preloaded
-  // a timeline of screenshots: start, three during the walk, the hand-off, the landing
-  const t0 = Date.now();
+  await page.waitForTimeout(4000); // T-E0 preloaded and decoded
   await page.getByRole('link', { name: 'היכנסו לסלון' }).click();
-  const shots: { t: number; png: Buffer }[] = [];
-  while (Date.now() - t0 < 6500) {
-    shots.push({ t: Date.now() - t0, png: await page.screenshot() });
-    const done = await page.evaluate(() => !document.querySelector('.seq-overlay') && window.__hdEngine?.ready === true);
-    if (done && shots.length > 2) break;
+  const t0 = Date.now();
+  const shots: { t: number; png: Buffer; overlay: number }[] = [];
+  for (;;) {
+    const t = (Date.now() - t0) / SLOW;
+    const overlay = Number(await page.evaluate('(() => { const o = document.querySelector(".seq-overlay"); return o ? getComputedStyle(o).opacity : 0; })()'));
+    shots.push({ t: Math.round(t), png: await page.screenshot(), overlay });
+    const done = await page.evaluate('!document.querySelector(".seq-overlay") && !document.querySelector(".stage.arriving") && window.__hdEngine?.ready === true');
+    if (done || t > 9000) break;
   }
-  await page.waitForTimeout(600);
-  shots.push({ t: Date.now() - t0, png: await page.screenshot() });
-  const pick = [0, 0.2, 0.4, 0.6, 0.8, 1].map((k) => shots[Math.round(k * (shots.length - 1))]!);
-  for (const [i, s] of pick.entries()) writeFileSync(`${OUT}/${PREFIX}transition-${i + 1}.png`, s.png);
-  report.push(`transition: ${shots.length} screenshots over ${shots[shots.length - 1]!.t} ms (SwiftShader; frame pacing is not representative)`);
-  // landing check: the last screenshot of the sequence vs the room at rest a moment later
+  const total = shots[shots.length - 1]!.t;
+  await page.waitForTimeout(1500);
   const rest = await page.screenshot();
+  // six frames: the hall, two along the walk, the hand-off (overlay ~70 %), the landing (overlay ~25 %), landed
+  const nearest = (ms: number) => shots.reduce((best, s) => (Math.abs(s.t - ms) < Math.abs(best.t - ms) ? s : best));
+  const opaque = shots.findIndex((s) => s.overlay >= 0.999);
+  const handIdx = shots.findIndex((s, i) => opaque >= 0 && i > opaque && s.overlay < 0.999);
+  const hand = handIdx > 0 ? shots[handIdx]!.t : total * 0.7;
+  const byOverlay = (o: number) => shots.slice(Math.max(0, handIdx)).reduce((best, s) => (Math.abs(s.overlay - o) < Math.abs(best.overlay - o) ? s : best));
+  const pick = [nearest(0), nearest(hand * 0.4), nearest(hand * 0.8), byOverlay(0.7), byOverlay(0.25), shots[shots.length - 1]!];
+  for (const [i, s] of pick.entries()) writeFileSync(`${OUT}/${PREFIX}transition-${i + 1}.png`, s.png);
+  report.push(`transition: ${shots.length} screenshots over ${total} ms of transition time (slow motion ×${SLOW}); picked at ${pick.map((s) => s.t).join(', ')} ms`);
+  // landing check: the last frame of the move vs the room at rest 1.5 s later — must be the same picture
   const a = await sharp(pick[5]!.png).removeAlpha().raw().toBuffer();
   const b = await sharp(rest).removeAlpha().raw().toBuffer();
   let diff = 0;
-  for (let i = 0; i < a.length; i += 3) if (Math.abs(a[i]! - b[i]!) > 12) diff++;
+  const dimg = Buffer.alloc(a.length);
+  for (let i = 0; i < a.length; i += 3) {
+    const d = Math.abs(a[i]! - b[i]!);
+    if (d > 12) diff++;
+    dimg[i] = dimg[i + 1] = dimg[i + 2] = Math.min(255, d * 8);
+  }
+  writeFileSync(`${OUT}/${PREFIX}transition-landing-diff.png`, await sharp(dimg, { raw: { width: W, height: H, channels: 3 } }).png().toBuffer());
   report.push(`transition landing: ${diff} pixels differ between the landed frame and the room at rest`);
   const tw = 427;
   const th = 267;
