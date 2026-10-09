@@ -12,9 +12,9 @@
     "D2": {"loc": [2.80, 3.80, 1.10], "yaw_deg_left": -91, "lens_mm": 24, "aspect": "16:9", "u0": 0.52, "v0": 0.43, "tilt": 0, "role": "second frame, pan -35 from D1 (P-D)", "hero": "plastered hood u 0.328; coffee niche u 0.695", "source": "docs/house-plan.json cameras.D2"}
   },
   "density": {
-    "rule": "Bible 1.6 S11: minimum 14 per full-route frame is a floor; as many products as the designer judges do not detract. Counted = >= 0.1% of the frame and >= 50% visible, or a decisively cut large textile with >= 1% visible.",
-    "D1": {"kind": "full", "min": 14, "in_frame": 19, "counted_est": 18, "not_counted": [{"slot": "sink-set", "why": "0.08% of the frame"}]},
-    "D2": {"kind": "full", "min": 14, "in_frame": 18, "counted_est": 17, "not_counted": [{"slot": "tea-towel", "why": "47% visible in the clay; fix the fold (1.1.x)"}]},
+    "rule": "Bible 1.6 S11: minimum 14 per full-route frame is a floor; as many products as the designer judges do not detract. Counted = every identifiable product: visible part >= 0.05% of the frame and (>= 50% visible or visible part >= 1% of the frame); a set counts once.",
+    "D1": {"kind": "full", "min": 14, "in_frame": 19, "counted_est": 19, "not_counted": []},
+    "D2": {"kind": "full", "min": 14, "in_frame": 18, "counted_est": 17, "not_counted": [{"slot": "tea-towel", "why": "47% visible in the clay; fix the fold (1.1.x)"}], "readability": "D2 reads sparse from 4.4 m (motion-agent 6/10). Inside the approved frame: every D2 product at the top of its envelope, the step-stool, a kitchen runner with a readable texture or border. Product reading happens in the full-route close-ups. Tightening the frame is open for the user (house-plan 13)."},
     "unique_slots": 24,
     "source": "assets/blockout/house/framing/round2/selfcheck.json (D1, D2 F10 slot lists) + step-stool estimate"
   },
@@ -87,6 +87,7 @@
     "dining-pendant diameter 45-55 (old Bible table: 50-65)",
     "step-stool in D2: designer addition under the density decision, not in the clay",
     "T-LD 4 shots ~3.4 s (U10 limit) vs the motion-agent alternative",
-    "Cost: full route for both frames (~119,600); option: D2 products on the lean route (~-35,000)"
+    "Cost: full route for both frames (~119,600); option: D2 products on the lean route (~-35,000)",
+    "D2 reads sparse (motion-agent 6/10): keep (recommended for now), shift-only reframe (v0 0.43 -> 0.47), or a separate closer D2 point reached by a short dolly instead of P-D"
   ]
 }

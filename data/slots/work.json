@@ -10,8 +10,8 @@
     "W0": {"loc": [-0.825, 9.85, 1.10], "yaw_deg_left": 0, "lens_mm": 24, "aspect": "16:9", "u0": 0.50, "v0": 0.46, "tilt": 0, "role": "work master frame (one-point symmetric)", "hero": "built-in desk wall, desk centre u 0.50; window on the left wall u 0-0.136 (39% cut); corners 0.219 / 0.781", "source": "docs/house-plan.json cameras.W0"}
   },
   "density": {
-    "rule": "Bible 1.6 S11: lean frame, minimum 11 is a floor; as many as the designer judges do not detract. Counted = >= 0.1% of the frame and >= 50% visible, or a cut large textile with >= 1% visible.",
-    "W0": {"kind": "lean", "min": 11, "in_frame": 14, "counted_est": 13, "not_counted": [{"slot": "desk-organizer", "why": "pencil cup < 0.1% of the frame; kept to complete the desk group of 3"}]},
+    "rule": "Bible 1.6 S11: lean frame, minimum 11 is a floor; as many as the designer judges do not detract. Counted = every identifiable product: visible part >= 0.05% of the frame and (>= 50% visible or visible part >= 1% of the frame); a set counts once.",
+    "W0": {"kind": "lean", "min": 11, "in_frame": 14, "counted_est": 14, "not_counted": [], "as_shown_in_clay": 13, "note": "curtains and rug count as deliberately cut textiles (4.7% and 4.1% of the frame); desk-organizer est. ~0.07%"},
     "unique_slots": 14,
     "source": "assets/blockout/house/framing/round2/selfcheck.json (W-A F10) + estimate for the organizer"
   },
@@ -35,7 +35,7 @@
     { "id": "desk-tray", "name_he": "מגש שולחן", "placement": "surface", "placement_detail": "built-in desk", "position": "צד שמאל של השולחן, X ‎−1.45…‎−1.20; נושא את כלי העפרונות", "plan_m": { "x": [-1.45, -1.20], "y": [6.45, 6.70], "z": [0.76, 0.79] }, "envelope_cm": { "w": [22, 28], "d": [18, 26], "h": [2, 4] }, "frames": ["W0"], "z": 44, "variants": 3, "hotspot": null, "zoom_frame": null },
     { "id": "desk-organizer", "name_he": "כלי עפרונות", "placement": "surface", "placement_detail": "desk tray", "position": "על המגש, (‎−1.32, 6.55); הקבוצה על השולחן: מגש, כלי ומנורה", "plan_m": { "center": [-1.32, 6.55], "z": [0.79, 0.92] }, "envelope_cm": { "d": [7, 10], "h": [10, 14] }, "frames": ["W0"], "z": 46, "variants": 3, "fillers": ["pencils"], "status_1_0": "designer addition (density decision 2026-10-08), not in the clay", "hotspot": null, "zoom_frame": null },
     { "id": "desk-lamp", "name_he": "מנורת שולחן", "placement": "surface", "placement_detail": "built-in desk", "position": "צד ימין של השולחן, (‎−0.30, 6.58); הכבל יורד מאחורי השולחן לשקע", "plan_m": { "center": [-0.30, 6.58], "z": [0.76, 1.25] }, "envelope_cm": { "h": [40, 50], "shade_d": [16, 22], "base_d_max": 14 }, "frames": ["W0"], "electrical": "plug-in: Israeli or EU plug, 220-240V, SI or CE; cable hidden behind the desk", "z": 46, "variants": 3, "has_light_layer": true, "hotspot": null, "zoom_frame": null },
-    { "id": "pendant", "name_he": "מנורה תלויה מעל השולחן", "placement": "ceiling", "position": "נקודה (‎−0.825, 6.82, 3.00), מעל קדמת השולחן; תחתית האהיל 1.50, ראש עד 1.72; נחתך בשוליים העליונים רק בכבל", "plan_m": { "center": [-0.825, 6.82], "z": [1.50, 1.72] }, "envelope_cm": { "d_max": 34, "h": [18, 22] }, "frames": ["W0"], "electrical": "CE, 220-240V, hardwired to the ceiling point, no plug, electrician install; 2700K; bulb hidden", "z": 80, "variants": 3, "has_light_layer": true, "has_shadow_layer": false, "shadow_note": "תלויה באוויר, 0.74 מעל המשטח", "hotspot": null, "zoom_frame": null }
+    { "id": "pendant", "name_he": "מנורה תלויה מעל השולחן", "placement": "ceiling", "position": "נקודה (‎−0.825, 6.82, 3.00), מעל קדמת השולחן; **1.1: קטנה וגבוהה יותר** (ב-clay קוטר 34 ותחתית 1.50 נגעו כמעט בראש התמונה, 0.012, והעמיסו על הקיר): תחתית האהיל ב-1.58, ראש עד 1.76; תלויה לפני קו המדף, לפחות 0.03 מעל ראש התמונה בפריים (הערכה כ-0.05); אהיל לבן חם בגוון הקיר עם מפזר תחתון, כי המצלמה ב-1.10 רואה את האהיל מלמטה; נחתך בשוליים העליונים רק בכבל", "plan_m": { "center": [-0.825, 6.82], "z": [1.58, 1.76] }, "envelope_cm": { "d_max": 28, "h_max": 18 }, "frames": ["W0"], "electrical": "CE, 220-240V, hardwired to the ceiling point, no plug, electrician install; 2700K; bulb hidden (bottom diffuser)", "alternative_open_for_user": "semi-flush out of frame: back to round 1's clean desk wall (W0 13 products, 2 lit lamps)", "z": 80, "variants": 3, "has_light_layer": true, "has_shadow_layer": false, "shadow_note": "תלויה באוויר, 0.74 מעל המשטח", "hotspot": null, "zoom_frame": null }
   ],
   "fillers": [
     { "id": "plant", "name_he": "צמח בעציץ", "slot": "planter", "sold": false, "spec": "upright soft-leaved plant, crown in the sage range, top <= Z 1.30" },
@@ -52,12 +52,13 @@
   "transition_in": { "id": "T-HW", "from": "hall H0", "segments": "pan 12->0 at H0, slide 3.73 m through the work door (0.233 to the jambs), pull-back 1.30 m", "play_s_approx": 3.3 },
   "blockout_checks": [
     "W-HC1 desk centre u 0.50 +-0.01; corners 0.219 / 0.781; window cut >= 15%",
-    "W-HC2 framed-art vs pendant shade >= 0.02 or decisive overlap (clay 0.012)",
+    "W-HC2 pendant (1.1 size and height) >= 0.03 above the art top in frame (clay 0.012 with d 34 at 1.50); bulb not visible from W0",
     "W-HC3 basket / waste-basket vs rug and chair legs: no kissing contours (clay 0.008-0.014)",
     "W-HC4 wall sconce >= 0.20 from the curtain stack",
     "W-HC5 density >= 11 counted; three lamp typologies lit and visible"
   ],
   "open_for_user": [
-    "desk-organizer: designer addition not in the clay"
+    "desk-organizer: designer addition not in the clay",
+    "pendant: kept smaller and higher (default) or replaced by a semi-flush out of frame (round 1's clean wall)"
   ]
 }

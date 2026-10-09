@@ -10,8 +10,8 @@
     "H0": {"loc": [2.877, 9.039, 1.20], "yaw_deg_left": 12, "lens_mm": 24, "aspect": "16:9", "u0": 0.52, "v0": 0.46, "tilt": 0, "role": "hall master frame and site opening frame (U1)", "hero": "living vista on the left third (door centre u 0.351) + console vignette on the right third (art centre u 0.681)", "source": "docs/house-plan.json cameras.H0"}
   },
   "density": {
-    "rule": "Bible 1.6 S11: lean frame, minimum 11 is a floor; as many as the designer judges do not detract. Counted = >= 0.1% of the frame and >= 50% visible, or a cut large textile with >= 1% visible.",
-    "H0": {"kind": "lean", "min": 11, "in_frame": 12, "counted_est": 11, "not_counted": [{"slot": "umbrella-stand", "why": "decisively cut by the bottom edge (46% visible), kept as composed in the approved frame"}]},
+    "rule": "Bible 1.6 S11: lean frame, minimum 11 is a floor; as many as the designer judges do not detract. Counted = every identifiable product: visible part >= 0.05% of the frame and (>= 50% visible or visible part >= 1% of the frame); a set counts once.",
+    "H0": {"kind": "lean", "min": 11, "in_frame": 12, "counted_est": 12, "not_counted": [], "as_shown_in_clay": 9, "note": "umbrella-stand counts as a large cut item (1.4% of the frame, 46% visible). As shown in the approved clay H0 had 9 (basket 29% visible); the additions and the moved basket bring it to 12"},
     "unique_slots": 14,
     "transit_only": ["runner-rug", "ceiling-light"],
     "source": "assets/blockout/house/framing/round2/selfcheck.json (H-B F10) + estimates for the additions"

@@ -1,0 +1,82 @@
+{
+  "room": "kids",
+  "house_room_id": ["boy", "girl"],
+  "views": ["K-boy", "K-girl"],
+  "version": "1.0",
+  "approved": "Frames K-boy and K-girl (K2: single bed in the window corner, desk + chair, bookshelf, ceiling + wall light, sage / clay-pink colour block) with their slots approved 2026-10-08 (verbatim: \"סבב 2 נראה מעולה\", on assets/blockout/house/framing/round2/all-round2.jpg, tiles K2-boy and K2-girl), with the density decision (verbatim: \"כתוב מינימום מוצרים..לדעתי כמה שיותר שהמעצב יחליט שזה לא גורע. ו3 וואריציות מתאימות לנורדי לכל מוצר\"). 1.0 includes the clay fixes of the toy basket, doll pram, desk chair and prints (designer nudges, house-plan frame_fixes_1_1_x). Rules: docs/design-bible/nordic.md 1.6 (rooms: kids, incl. the girl palette exception and the toy safety gate); geometry: docs/house-plan.md/json 1.1 (6.6).",
+  "notes": "One file for both rooms: identical shell, furniture, camera and slot positions; the girl room is the boy room shifted exactly +3.63 in Y. plan_m is given for the boy room (girl: add 3.63 to every Y). Slots with 'rooms' exist in one room only. placement uses the product-card enum; placement_detail names the surface. z = layer order bottom to top; shadow at z-1 unless has_shadow_layer is false. envelope_cm = max envelope per variant; 3 variants within +-15%. frames = master frames where the product is visible by design. Every toy and kid product passes the safety gate (Bible 1.6) before rating. hotspot and zoom_frame after the shell render.",
+  "variants_required": 3,
+  "girl_offset_y": 3.63,
+  "cameras": {
+    "K-boy": {"loc": [1.10, 13.00, 1.00], "yaw_deg_left": 33, "lens_mm": 24, "aspect": "16:9", "u0": 0.52, "v0": 0.44, "tilt": 0, "role": "boy master frame (child's-eye height)", "hero": "bed nook in the window corner: NE corner + pendant u 0.303; desk sconce u 0.697", "source": "docs/house-plan.json cameras.K-boy"},
+    "K-girl": {"loc": [1.10, 16.63, 1.00], "yaw_deg_left": 33, "lens_mm": 24, "aspect": "16:9", "u0": 0.52, "v0": 0.44, "tilt": 0, "role": "girl master frame (identical, +3.63 in Y)", "source": "docs/house-plan.json cameras.K-girl"}
+  },
+  "rooms": {
+    "boy": {"theme_he": "יער ומגרש", "colour_block": "#A7B09A (sage, in palette)", "accent": "charcoal (skateboard wheels, print lines, football panels) and oak; sage in products in at most 1 slot per combination", "bedding": "oat or warm white with a thin charcoal stripe or small triangles", "prints_motif": "charcoal line: fox, mountain, bicycle", "own_slots": ["toy-cars", "skateboard"], "basket_filler": "football"},
+    "girl": {"theme_he": "אחו וורוד אבקה", "colour_block": "#E8D5CC (blush clay; tolerance H 12-25, S 20-40, L 80-88; Bible 1.6 exception)", "accent": "dusty rose #C9A497 (H 10-22, S 20-38, L 62-74) on at most 2 product slots per combination, sage in one detail", "bedding": "warm white with a blush-clay scalloped edge, or oat", "prints_motif": "soft shapes: rabbit, flower, bird", "own_slots": ["doll", "doll-pram"], "basket_filler": "knitted balls"}
+  },
+  "density": {
+    "rule": "Bible 1.6 S11: lean frame, minimum 11 is a floor; as many as the designer judges do not detract (the right side is already the busy side: no additions). Counted = every identifiable product: visible part >= 0.05% of the frame and (>= 50% visible or visible part >= 1% of the frame).",
+    "K-boy": {"kind": "lean", "min": 11, "in_frame": 15, "counted_est": 15, "as_shown_in_clay": 15, "note": "rug, roman-blind and bedding count as deliberately cut or partly covered textiles (4.8%, 2.9%, 2.4% of the frame)"},
+    "K-girl": {"kind": "lean", "min": 11, "in_frame": 15, "counted_est": 15, "as_shown_in_clay": 15},
+    "categories": "textile, lighting, storage/function, art/decor/toys (4 of 5; no ceramics slot in the kids' rooms)",
+    "unique_slots_per_room": 15
+  },
+  "base_layers": [
+    { "id": "shell", "z": 0, "description": "מעטפת: קירות #F4F1EC, תקרה 3.00, כרכוב ושיפולים, פרקט אלון מולבן. **פס צבע** בקירות המזרח והצפון, Z 0–1.25 (מתחת לחלון עד האדן), קו חד, שיפולים בגוון הפס: ילד #A7B09A, ילדה #E8D5CC (G-K4). החלון הצפוני Y 10.75–12.15 בקיר השמאלי. ארונות בקיר המערבי, מאחורי המצלמה. נקודות חשמל: תלויה (‎−1.94, 10.54, 3.00), מנורת קיר (0.20, 10.25, 1.25); בילדה +3.63" },
+    { "id": "fixed-furniture-shadow", "z": 34, "blend": "multiply", "description": "הצל של המיטה והשולחן (אור החלון בלבד)" },
+    { "id": "fixed-furniture", "z": 40, "description": "מיטת יחיד מאלון 96×196, X ‎−2.26…‎−0.30, Y 10.25–11.21, ראש בקיר הצפוני (פינת החלון), דפנות עד 0.60, מזרן ב-0.42 (G-K1r2). שולחן 90×50×70, X 0.10–1.00, Y 10.25–10.75 (G-K3)", "includes": ["bed", "desk"] }
+  ],
+  "slots": [
+    { "id": "roman-blind", "name_he": "וילון רומאי", "placement": "window", "position": "בתוך הספי, Y 10.77–12.13, מקופל עד תחתית ב-Z 1.85; בפריים נחתך בשוליים השמאליים והעליונים", "plan_m": { "x": [-2.43, -2.355], "y": [10.77, 12.13], "z": [1.85, 2.69] }, "envelope_cm": { "w": [134, 138], "fold_stack_h": [30, 40] }, "frames": ["K-boy", "K-girl"], "safety": "cordless, or a cord safety device per EN 13120", "z": 10, "variants": 3, "hotspot": null, "zoom_frame": null },
+    { "id": "framed-prints", "name_he": "זוג תמונות ממוסגרות", "placement": "wall", "position": "קיר מזרחי מעל השולחן, X 0.38–0.68 ו-0.72–1.02, **Z 1.37–1.77** (1.1: ירדו 5 ס\"מ; ב-clay הראש היה 0.023 מהשוליים העליונים)", "plan_m": { "x": [0.38, 1.02], "y": [10.25, 10.275], "z": [1.37, 1.77] }, "envelope_cm": { "w_each": 30, "h_each": 40, "gap": 4, "frame_depth": [2, 3] }, "frames": ["K-boy", "K-girl"], "z": 12, "variants": 3, "set_of": 2, "hotspot": null, "zoom_frame": null },
+    { "id": "bookshelf", "name_he": "מדף ספרי ילדים (שני מדפי כריכה-לפנים)", "placement": "wall", "position": "קיר מזרחי מעל רגלי המיטה, X ‎−1.25…‎−0.45, מדפים ב-Z 1.25 (על קו הפס) וב-1.58", "plan_m": { "x": [-1.25, -0.45], "y": [10.25, 10.35], "z": [1.23, 1.85] }, "envelope_cm": { "l": 80, "d": [8, 12], "lip_h": [3, 5] }, "frames": ["K-boy", "K-girl"], "z": 12, "variants": 3, "set_of": 2, "fillers": ["childrens-books"], "hotspot": null, "zoom_frame": null },
+    { "id": "wall-sconce", "name_he": "מנורת קיר עם זרוע מעל השולחן", "placement": "wall", "position": "פלטה ב-(0.20, 10.25, 1.25), זרוע 30–45 מעל השולחן (אהיל ב-(0.20, 10.64) בערך); גם מנורת השולחן", "plan_m": { "plate": [0.20, 10.25, 1.25], "z": [1.15, 1.32] }, "envelope_cm": { "arm": [30, 45], "shade_d": [12, 16] }, "frames": ["K-boy", "K-girl"], "electrical": "CE, 220-240V, hardwired to the wall point, no visible cable, electrician install; 2700K LED; no glass shade", "z": 14, "variants": 3, "has_light_layer": true, "hotspot": null, "zoom_frame": null },
+    { "id": "rug", "name_he": "שטיח", "placement": "floor", "position": "X ‎−1.50…0.50, Y 10.95–12.35 (0.26 מתחת למיטה); נחתך בשוליים התחתונים (שכבת החזית)", "plan_m": { "x": [-1.50, 0.50], "y": [10.95, 12.35], "z": [0.0, 0.012] }, "envelope_cm": { "w": [140, 140], "l": [200, 200] }, "frames": ["K-boy", "K-girl"], "z": 20, "variants": 3, "hotspot": null, "zoom_frame": null },
+    { "id": "desk-organizer", "name_he": "כלי עפרונות ומגש", "placement": "surface", "placement_detail": "desk", "position": "הקצה הימני של השולחן: כוס (0.89, 10.36) ומגש X 0.70–0.84", "plan_m": { "x": [0.70, 0.93], "y": [10.30, 10.42], "z": [0.70, 0.88] }, "envelope_cm": { "cup_d": [7, 9], "cup_h": [9, 11], "tray": [14, 12] }, "frames": ["K-boy", "K-girl"], "z": 46, "variants": 3, "set_of": 2, "fillers": ["pencils"], "hotspot": null, "zoom_frame": null },
+    { "id": "toy-cars", "name_he": "מכוניות עץ (סט של 3)", "rooms": ["boy"], "placement": "surface", "placement_detail": "desk", "position": "הצד השמאלי של השולחן, X 0.18–0.46, Y 10.34–10.51", "plan_m": { "x": [0.18, 0.46], "y": [10.34, 10.51], "z": [0.70, 0.76] }, "envelope_cm": { "l_each": [10, 13], "h_each": [5, 7] }, "frames": ["K-boy"], "safety": "EN 71-1/2/3 + CE (Israel: SI 562), age 3+, non-toxic finish", "z": 46, "variants": 3, "set_of": 3, "hotspot": null, "zoom_frame": null },
+    { "id": "doll", "name_he": "בובת בד", "rooms": ["girl"], "placement": "surface", "placement_detail": "desk", "position": "יושבת ונשענת לקיר בצד השמאלי של השולחן, (0.30, 10.32)", "plan_m": { "center": [0.30, 10.32], "z": [0.70, 0.96] }, "envelope_cm": { "h_seated": [22, 28] }, "frames": ["K-girl"], "safety": "EN 71-1/2/3 + CE (Israel: SI 562), embroidered eyes, no buttons", "z": 46, "variants": 3, "hotspot": null, "zoom_frame": null },
+    { "id": "bedding", "name_he": "מצעי יחיד (ציפה וציפית)", "placement": "surface", "placement_detail": "bed", "position": "על המיטה הקבועה; כרית בראש המיטה", "plan_m": { "x": [-2.19, -0.355], "y": [10.30, 11.24], "z": [0.30, 0.55] }, "envelope_cm": { "duvet": [140, 200], "pillow": [50, 70] }, "frames": ["K-boy", "K-girl"], "safety": "OEKO-TEX Standard 100 preferred", "z": 50, "variants": 3, "set_of": 2, "hotspot": null, "zoom_frame": null },
+    { "id": "bedspread", "name_he": "שמיכת קווילט מקופלת", "placement": "surface", "placement_detail": "bed foot", "position": "מקופלת על שליש הרגליים, X ‎−0.93…‎−0.36", "plan_m": { "x": [-0.93, -0.36], "y": [10.28, 11.25], "z": [0.33, 0.55] }, "envelope_cm": { "folded_l": [55, 60], "folded_w": [95, 100] }, "frames": ["K-boy", "K-girl"], "z": 52, "variants": 3, "hotspot": null, "zoom_frame": null },
+    { "id": "cushions", "name_he": "כריות (2+1)", "placement": "surface", "placement_detail": "bed", "position": "צמודות לקיר המזרחי בראש המיטה, X ‎−2.17…‎−1.42; לפחות 0.02 מהשמיכה המקופלת בפריים (ב-clay 0.015)", "plan_m": { "x": [-2.17, -1.42], "y": [10.28, 10.52], "z": [0.50, 0.88] }, "envelope_cm": { "square": [35, 40], "small": [30, 30] }, "frames": ["K-boy", "K-girl"], "z": 55, "variants": 3, "set_of": 3, "fillers": ["pillow-inserts"], "hotspot": null, "zoom_frame": null },
+    { "id": "soft-toy", "name_he": "בובה רכה (דובי לילד, ארנבת לילדה)", "placement": "surface", "placement_detail": "bed head", "position": "בראש המיטה, (‎−2.02, 11.01); לא חוצה את קו האדן ברצועה (חפיפה ברורה או 0.02)", "plan_m": { "center": [-2.02, 11.01], "z": [0.53, 0.86] }, "envelope_cm": { "h": [25, 35] }, "frames": ["K-boy", "K-girl"], "safety": "EN 71-1/2/3 + CE (Israel: SI 562), embroidered eyes, no small parts", "z": 57, "variants": 3, "hotspot": null, "zoom_frame": null },
+    { "id": "toy-basket", "name_he": "סל צעצועים", "placement": "floor", "position": "**1.1:** על השטיח, מרכז (‎−0.62, 11.58), נחתך בנחישות בשוליים התחתונים (כ-20% מגובהו בפריים, הערכה), כשכבת החזית. ב-clay ב-(‎−0.70, 11.45) הוא נגע בשוליים (v ‏0.996)", "plan_m": { "center": [-0.62, 11.58], "z": [0.013, 0.36] }, "envelope_cm": { "d": [32, 36], "h": [32, 36] }, "frames": ["K-boy", "K-girl"], "z": 60, "variants": 3, "fillers": { "boy": ["football"], "girl": ["knitted-balls"] }, "hotspot": null, "zoom_frame": null },
+    { "id": "skateboard", "name_he": "סקייטבורד", "rooms": ["boy"], "placement": "floor", "position": "נשען על הקצה השמאלי של השולחן, האף למעלה, דק ב-X 0.12–0.32, מ-(Y 10.99, Z 0.03) עד (Y 10.71, Z 0.81); מכסה את הרגל השמאלית-קדמית של השולחן (73% ב-clay); הרגל התחתונה לפחות 0.02 מעל השוליים התחתונים (ב-clay 0.012) בהטיה תלולה יותר, או חיתוך החלטי", "plan_m": { "x": [0.12, 0.32], "y": [10.71, 10.99], "z": [0.0, 0.81] }, "envelope_cm": { "l": [70, 80], "w": [19, 21] }, "frames": ["K-boy"], "safety": "EN 13613 (children's skateboard) or EN 71 if sold as a toy; plain natural deck, no graphics", "z": 62, "variants": 3, "hotspot": null, "zoom_frame": null },
+    { "id": "doll-pram", "name_he": "עגלת בובות מעץ", "rooms": ["girl"], "placement": "floor", "position": "**1.1:** מסובבת, הציר הארוך לאורך Y: X 0.10–0.42, Y 10.80–11.30 (בילדה 14.43–14.93), הידית לכיוון המצלמה. כך היא יושבת על קו הראייה לרגל השמאלית-קדמית של השולחן ומכסה אותה בבירור (ב-clay 47%)", "plan_m": { "x": [0.10, 0.42], "y": [10.80, 11.30], "z": [0.0, 0.64] }, "envelope_cm": { "w": [30, 34], "l": [45, 50], "h": [45, 52] }, "frames": ["K-girl"], "safety": "EN 71-1/2/3 + CE (Israel: SI 562)", "z": 62, "variants": 3, "fillers": ["muslin-blanket-and-pillow"], "hotspot": null, "zoom_frame": null },
+    { "id": "desk-chair", "name_he": "כיסא שולחן לילד", "placement": "floor", "position": "**1.1:** מרכז (0.66, 11.00) בשני החדרים (היה 0.55), גב למצלמה; לפחות 0.05 מהעגלה; ראש הגב לא על קו משטח השולחן (חפיפה ברורה או 0.02)", "plan_m": { "center": [0.66, 11.00], "z": [0.0, 0.72] }, "envelope_cm": { "seat_h": [40, 43], "back_h": [70, 74], "w": [36, 40] }, "frames": ["K-boy", "K-girl"], "safety": "stable, no pinch points", "z": 64, "variants": 3, "hotspot": null, "zoom_frame": null },
+    { "id": "pendant", "name_he": "מנורה תלויה בפינת החלון", "placement": "ceiling", "position": "נקודה (‎−1.94, 10.54, 3.00), על קרן הפינה; תחתית 1.45 (0.90 מעל המזרן), ראש עד 1.70; קו הפינה (u 0.303) עובר דרך האהיל; לפחות 0.02 מהחלון ומקפלי הווילון", "plan_m": { "center": [-1.94, 10.54], "z": [1.45, 1.70] }, "envelope_cm": { "d_max": 28, "h": [18, 25] }, "frames": ["K-boy", "K-girl"], "electrical": "CE, 220-240V, hardwired to the ceiling point, no plug, no visible cable other than the suspension cord; 2700K LED; no glass", "z": 80, "variants": 3, "has_light_layer": true, "has_shadow_layer": false, "shadow_note": "תלויה באוויר, באור מפוזר", "shared": "bridge: shade material shared with the corridor ceiling lights", "hotspot": null, "zoom_frame": null }
+  ],
+  "fillers": [
+    { "id": "childrens-books", "name_he": "ספרי ילדים במדף", "slot": "bookshelf", "sold": false, "spec": "7 picture books face-out, covers in the palette (boy: sage, oat, charcoal; girl: blush, oat, warm white), no readable text, identical in every variant" },
+    { "id": "football", "name_he": "כדורגל בסל (ילד)", "slot": "toy-basket", "sold": false, "spec": "matte warm-white and charcoal panels, no logo" },
+    { "id": "knitted-balls", "name_he": "כדורים סרוגים בסל (ילדה)", "slot": "toy-basket", "sold": false, "spec": "3 knitted balls in blush, oat and warm white" },
+    { "id": "pencils", "name_he": "עפרונות בכלי", "slot": "desk-organizer", "sold": false, "spec": "4-6 natural wood or charcoal pencils" },
+    { "id": "muslin-blanket-and-pillow", "name_he": "שמיכונת וכרית בעגלה (ילדה)", "slot": "doll-pram", "sold": false, "spec": "warm-white muslin blanket and a mini pillow" },
+    { "id": "pillow-inserts", "name_he": "מילוי הכריות", "slot": "cushions", "sold": false, "spec": "same inserts in every variant" }
+  ],
+  "kept_out_of_frame": ["toys that are not a product slot", "clothes", "books outside the bookshelf", "screens", "plastic toys"],
+  "light_layers": { "z": 90, "blend": "screen", "count": 6, "active": { "K-boy": 2, "K-girl": 2 }, "slots": ["pendant", "wall-sconce"], "lit_typologies": { "K-boy": ["ceiling", "wall"], "K-girl": ["ceiling", "wall"] } },
+  "accent_carriers": {
+    "boy_charcoal": ["framed-prints (3/3)", "skateboard wheels (3/3)", "football (filler)"],
+    "boy_sage": ["colour block (shell)", "at most 1 product slot"],
+    "girl_dusty_rose": ["at most 2 product slots per combination"],
+    "girl_sage": ["one detail"]
+  },
+  "transitions_in": {
+    "T-CBoy": "rail C0 -> S1' 4.12 m, slide 1.54 m through the boy door (0.37), pan 0->33; ~3.3 s",
+    "T-CGirl": "slide 1.38 m from C0 through the girl door (0.289), pan 0->33; ~2.3 s"
+  },
+  "blockout_checks": [
+    "K-HC1 NE corner + pendant u 0.303 +-0.02; sconce plate u ~0.70; window cut >= 15%",
+    "K-HC2 toy basket decisively cut by the bottom edge (>= 15% of its height) at (-0.62, 11.58)",
+    "K-HC3 skateboard (boy) and doll-pram (girl) cover the desk's front-left leg >= 60%; pram >= 0.05 from the chair",
+    "K-HC4 prints top >= 0.03 below the top edge (Z 1.37-1.77); chair back vs desk top: decisive overlap or >= 0.02",
+    "K-HC5 soft toy vs sill line and cushions vs bedspread: no slivers",
+    "K-HC6 density >= 11; pendant + sconce lit and visible; no visible cable",
+    "K-HC7 girl: wall above the block stays warm white (H 32-40); dusty rose on <= 2 product slots"
+  ],
+  "open_for_user": [
+    "Bed and desk stay fixed furniture (recommended) or become products",
+    "Toy safety gate (EN 71 / SI 562, EN 13613, EN 13120) also as a hard rule in docs/brand-brief.md"
+  ]
+}
