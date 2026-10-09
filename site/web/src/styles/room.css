@@ -86,12 +86,12 @@
   box-shadow:
     0 0 0 1px rgba(28, 24, 20, 0.22),
     inset 0 0 0 1px rgba(28, 24, 20, 0.16);
+  /* static: no pulsing or breathing (studio-rules ו.4) */
   opacity: 0.8;
   transition:
     opacity 0.35s var(--ease-out),
     border-color 0.35s var(--ease-out),
     transform 0.45s var(--ease-out);
-  animation: ring-breathe 4.8s ease-in-out infinite;
 }
 .hotspot::after {
   /* the glow: the product brightens a little under a warm halo; a soft dark falloff outside keeps the halo
@@ -115,7 +115,6 @@
   .hotspot:hover .ring {
     opacity: 1;
     border-color: #fffcf6;
-    animation: none;
     transform: scale(1.02);
   }
   .hotspot:hover::after {
@@ -128,7 +127,6 @@
 .hotspot[data-active='true'] .ring {
   opacity: 1;
   border-color: #fffcf6;
-  animation: none;
   transform: scale(1.02);
 }
 .hotspot:active::after,
@@ -171,19 +169,7 @@
   opacity: 1;
   transform: translate(-50%, 0);
 }
-@keyframes ring-breathe {
-  0%,
-  100% {
-    opacity: 0.66;
-  }
-  50% {
-    opacity: 0.92;
-  }
-}
 @media (prefers-reduced-motion: reduce) {
-  .hotspot .ring {
-    animation: none;
-  }
   .hotspot .ring,
   .hotspot::after,
   .hotspot .tag {

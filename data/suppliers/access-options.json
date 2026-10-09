@@ -1,0 +1,689 @@
+{
+ "version": 1,
+ "updated": "2026-10-09",
+ "note": "Access options for more sourcing data. 'verified' says what was checked and where. Keys go only in env vars set by the user (studio-rules ח).",
+ "options": [
+  {
+   "id": "cj-api-sourcing",
+   "name": "CJ API: Sourcing Requests + Image Search (existing key)",
+   "type": "aggregator-api",
+   "priority": 1,
+   "unlocks": "CJ agents find a product from an image+URL on 1688/AliExpress/Amazon and list it in CJ (answer within ~24h per CJ). Same CJ IL freight lines as today. Image search inside CJ catalog.",
+   "user_steps": [
+    "No signup. Approve that agents may send sourcing requests to CJ (a request to CJ staff, so it needs the user's OK).",
+    "Optional later: CJ Plus ($15.99/mo) only if the free daily sourcing cap is hit."
+   ],
+   "requirements": {
+    "business": false,
+    "website": false,
+    "store": false,
+    "min_sales": "Image search requires account level 3+ (per docs); sourcing daily cap rises with sales level"
+   },
+   "cost": {
+    "monthly": "0 (Plus 15.99 / Prime 19.99 / Advanced 59.99 optional, third-party figures)",
+    "per_order": "product+freight only"
+   },
+   "api": {
+    "available": true,
+    "rate_limit": "Our account (live /setting/get 2026-10-09): 1000 calls/day per endpoint, qpsLimit 100. Points system since 2026-07-01: 50,000 base points/day; listV2 50, product/query 10, freightCalculate 10, queryProductsByImage 1000 points. Free web tier: 5 sourcing requests/day (cap via API not verified).",
+    "endpoints": {
+     "search": "GET /product/listV2",
+     "detail": "GET /product/query",
+     "variants": "GET /product/variant/query",
+     "freight_IL": "POST /logistic/freightCalculate",
+     "image_search": "POST /product/queryProductsByImage",
+     "sourcing_create": "POST /product/sourcing/create {productName, productImage, productUrl?, price?, remark?}",
+     "sourcing_status": "GET /product/sourcing/queryList?sourceIds=..",
+     "order": "POST /shopping/order/createOrderV3",
+     "webhook": "/webhook/product/subscribe"
+    }
+   },
+   "images": "CJ images are used for dropshipping CJ products; commercial rights for our site still 'unclear' (as on cards).",
+   "env_vars": [
+    "CJ_API_KEY (exists)"
+   ],
+   "approval_days": 0,
+   "depends_on": [],
+   "verified": "yes: endpoints and points from developers.cjdropshipping.com (2026-10-09); quotas from our own /setting/get. Daily sourcing cap via API: not verified.",
+   "sources": [
+    "https://developers.cjdropshipping.com/en/api/api2/api/product.html",
+    "https://developers.cjdropshipping.com/en/api/api2/standard/points.html",
+    "https://developers.cjdropshipping.com/en/api/start/limit.html",
+    "https://www.channelwill.com/Apps/cjdropshipping"
+   ],
+   "checked": "2026-10-09"
+  },
+  {
+   "id": "aliexpress-ds-api",
+   "name": "AliExpress Open Platform: Dropshipping Developer app",
+   "type": "marketplace-api",
+   "priority": 2,
+   "unlocks": "Full AliExpress catalog (hundreds of millions of listings, not verified number) for search, detail, IL freight and order placement; image search (aliexpress.ds.image.searchV2) = the 'find cheaper' engine.",
+   "user_steps": [
+    "Create an AEOP account at https://openservice.aliexpress.com (Create Account, email verification, accept the Developer Agreement).",
+    "Profile: choose developer type Individual (or Corporation after W-decision on osek), upload the documents it asks for.",
+    "App Console > Create > 'Dropshipping Developer (Individual/Corporation)' > Apply, paste the Reason text from the doc (internal sourcing tool for our own store).",
+    "After approval: Create App (name, callback URL, logo). Callback URL: the store domain (W3) or a Cloudflare Workers URL (W4).",
+    "API Permission Group: apply for any inactive DS group.",
+    "Set AE_DS_APP_KEY and AE_DS_APP_SECRET in the Claude environment settings (Edit environment > env vars / network secrets). Never paste them in chat.",
+    "One-time OAuth with the AliExpress buyer account that will place orders: open the authorize URL the script prints; token handling per doc section 1.2.1."
+   ],
+   "requirements": {
+    "business": "No: Individual category exists",
+    "website": "callback URL required (any https URL you control)",
+    "store": "Not stated",
+    "min_sales": "Not stated"
+   },
+   "cost": {
+    "monthly": "0",
+    "per_order": "AliExpress price + AliExpress shipping"
+   },
+   "api": {
+    "available": true,
+    "rate_limit": "Not published in public docs (unverified); traffic control is per app category.",
+    "gateway": "https://api-sg.aliexpress.com/sync (reachable from our container, HTTP 200 on 2026-10-09)",
+    "endpoints": {
+     "search": "aliexpress.ds.text.search",
+     "image_search": "aliexpress.ds.image.searchV2",
+     "detail": "aliexpress.ds.product.get",
+     "certs": "aliexpress.ds.product.specialinfo.get",
+     "freight_IL": "aliexpress.ds.freight.query / aliexpress.logistics.buyer.freight.calculate",
+     "category": "aliexpress.ds.category.get",
+     "feeds": "aliexpress.ds.feed.itemids.get",
+     "order": "aliexpress.ds.order.create",
+     "tracking": "aliexpress.ds.order.tracking.get",
+     "auth": "/auth/token/create, /auth/token/refresh"
+    }
+   },
+   "images": "Not stated; treat as 'unclear' (seller-owned photos).",
+   "env_vars": [
+    "AE_DS_APP_KEY",
+    "AE_DS_APP_SECRET",
+    "AE_DS_REFRESH_TOKEN (only if the token is generated manually)"
+   ],
+   "approval_days": "1-5 (unverified; docs only say admins review)",
+   "depends_on": [
+    "W3 or W4 for the callback URL (optional)",
+    "osek only if applying as Corporation"
+   ],
+   "verified": "yes: categories, steps and method list from openservice.aliexpress.com doc API (docIds 1358-1365, getApiCategoryMixed) 2026-10-09. Approval criteria, rate limits and Israel eligibility: not verified.",
+   "sources": [
+    "https://openservice.aliexpress.com/doc/doc.htm?nodeId=27493&docId=118729#/?docId=1361",
+    "https://openservice.aliexpress.com/doc/doc.htm?nodeId=27493&docId=118729#/?docId=1362",
+    "https://openservice.aliexpress.com/doc/api.htm",
+    "https://terms.alicdn.com/legal-agreement/terms/suit_bu1_aliexpress/suit_bu1_aliexpress202201220006_10755.html"
+   ],
+   "checked": "2026-10-09"
+  },
+  {
+   "id": "aliexpress-affiliate-api",
+   "name": "AliExpress Open Platform: Affiliates Developer app",
+   "type": "marketplace-api",
+   "priority": 3,
+   "unlocks": "Read-only AliExpress catalog: keyword search, detail, SKU detail, shipping info per country, 'smart match'. No buyer OAuth needed (unverified). Good second key for read volume.",
+   "user_steps": [
+    "Join AliExpress Portals (affiliate) at https://portals.aliexpress.com and get a tracking ID.",
+    "In the same AEOP account: App Console > Create > 'Affiliates Developer (Individual)' > Apply.",
+    "Set AE_AFF_APP_KEY, AE_AFF_APP_SECRET, AE_AFF_TRACKING_ID in the environment settings."
+   ],
+   "requirements": {
+    "business": false,
+    "website": "Portals may ask for a site or channel (unverified)",
+    "store": false,
+    "min_sales": "Not stated"
+   },
+   "cost": {
+    "monthly": "0",
+    "per_order": "n/a (we buy via DS, not via affiliate links)"
+   },
+   "api": {
+    "available": true,
+    "rate_limit": "Not published (third-party claims 500/day for new apps, unverified)",
+    "endpoints": {
+     "search": "aliexpress.affiliate.product.query",
+     "detail": "aliexpress.affiliate.productdetail.get",
+     "sku": "aliexpress.affiliate.product.sku.detail.get",
+     "freight_IL": "aliexpress.affiliate.product.shipping.get",
+     "match": "aliexpress.affiliate.product.smartmatch",
+     "category": "aliexpress.affiliate.category.get"
+    }
+   },
+   "images": "Promotion use under affiliate terms (not verified for product pages).",
+   "env_vars": [
+    "AE_AFF_APP_KEY",
+    "AE_AFF_APP_SECRET",
+    "AE_AFF_TRACKING_ID"
+   ],
+   "approval_days": "1-3 (third-party, unverified)",
+   "depends_on": [],
+   "verified": "partial: method list official (2026-10-09); portal requirements unverified.",
+   "sources": [
+    "https://openservice.aliexpress.com/doc/api.htm",
+    "https://strackr.com/blog/aliexpress-affiliate-program"
+   ],
+   "checked": "2026-10-09"
+  },
+  {
+   "id": "google-vision-web",
+   "name": "Google Cloud Vision: Web Detection (reverse image)",
+   "type": "image-search-api",
+   "priority": 4,
+   "unlocks": "For any product photo: pages and visually similar images on the web (Google Image index). Finds the same item on AliExpress/1688/Etsy/brand sites so we can then price it via official APIs.",
+   "user_steps": [
+    "Google Cloud console: create project, enable Cloud Vision API, attach billing (card).",
+    "Create an API key restricted to Vision API only.",
+    "Set GOOGLE_VISION_API_KEY in the environment settings."
+   ],
+   "requirements": {
+    "business": false,
+    "website": false,
+    "store": false,
+    "min_sales": null
+   },
+   "cost": {
+    "monthly": "first 1,000 units/month free, then $3.50 per 1,000",
+    "per_order": null
+   },
+   "api": {
+    "available": true,
+    "rate_limit": "Google project quotas (default, not checked)",
+    "endpoints": {
+     "reverse_image": "POST https://vision.googleapis.com/v1/images:annotate feature WEB_DETECTION"
+    }
+   },
+   "images": "Results are links only; no rights to the found images.",
+   "env_vars": [
+    "GOOGLE_VISION_API_KEY"
+   ],
+   "approval_days": 0,
+   "depends_on": [],
+   "verified": "yes: price from cloud.google.com/vision/pricing 2026-10-09. Google Lens itself has no official API.",
+   "sources": [
+    "https://cloud.google.com/vision/pricing"
+   ],
+   "checked": "2026-10-09"
+  },
+  {
+   "id": "dsers-mcp",
+   "name": "DSers (AliExpress official partner) + DSers MCP / Open API",
+   "type": "aggregator",
+   "priority": 5,
+   "unlocks": "AliExpress (+Alibaba, 1688 per Shopify listing) supplier discovery, product search/detail, freight quotes, cross-platform image search, 'Supplier Optimizer' (same product, cheaper supplier). MCP lets Claude call it directly.",
+   "user_steps": [
+    "Sign up at https://www.dsers.com (free Basic).",
+    "MCP needs Advanced ($19.90/mo, 14-day trial) per pricing page.",
+    "Add the DSers MCP URL as a custom connector at https://claude.ai/customize/connectors (OAuth sign-in, no keys), then start a new session.",
+    "Check whether search/freight work without a connected store; if not, wait for the store decision."
+   ],
+   "requirements": {
+    "business": false,
+    "website": false,
+    "store": "Likely Shopify/Wix/Woo for import and orders; search without a store not verified",
+    "min_sales": null
+   },
+   "cost": {
+    "monthly": "0 / 19.90 / 49.90 / 499.90",
+    "per_order": "AliExpress price"
+   },
+   "api": {
+    "available": true,
+    "rate_limit": "Not published",
+    "endpoints": {
+     "mcp": "https://ai.dsers.com/mcp (Glama listing; another listing says https://mcp.dsers.com/dropshipping/mcp) - 60 tools incl. product search, detail, freight quotes",
+     "open_api": "dsers.dev (domain did not resolve 2026-10-09)"
+    }
+   },
+   "images": "AliExpress listing images; same 'unclear' status.",
+   "env_vars": [
+    "none (OAuth connector)"
+   ],
+   "approval_days": 0,
+   "depends_on": [
+    "probably a Shopify/Wix store for full use"
+   ],
+   "verified": "partial: plans/prices and MCP plan gating from dsers.com/pricing 2026-10-09; MCP endpoint from Glama (two different URLs); store requirement unverified.",
+   "sources": [
+    "https://www.dsers.com/pricing",
+    "https://glama.ai/mcp/servers/ch8774ox9z",
+    "https://apps.shopify.com/dsers"
+   ],
+   "checked": "2026-10-09"
+  },
+  {
+   "id": "aliexpress-ds-center",
+   "name": "AliExpress Dropshipping Center (web, manual)",
+   "type": "manual-tool",
+   "priority": 6,
+   "unlocks": "User-side manual image search and trend data on AliExpress; we cannot access it (blocked).",
+   "user_steps": [
+    "Optional: user uses ds.aliexpress.com by hand for a specific 'find cheaper' and pastes product IDs (not keys) to us."
+   ],
+   "requirements": {
+    "business": false,
+    "website": false,
+    "store": "unverified",
+    "min_sales": "unverified"
+   },
+   "cost": {
+    "monthly": "0",
+    "per_order": null
+   },
+   "api": {
+    "available": false,
+    "rate_limit": null,
+    "endpoints": {}
+   },
+   "images": "unclear",
+   "env_vars": [],
+   "approval_days": 0,
+   "depends_on": [],
+   "verified": "no (third-party guides only)",
+   "sources": [
+    "https://trackmage.com/aliexpress-dropshipping-center/"
+   ],
+   "checked": "2026-10-09"
+  },
+  {
+   "id": "tineye-api",
+   "name": "TinEye API",
+   "type": "image-search-api",
+   "priority": 9,
+   "unlocks": "Exact/near-duplicate image matches across TinEye's web index. Weaker than Vision for product shots.",
+   "user_steps": [
+    "Buy the smallest bundle (5,000 searches, $200) only if Vision proves insufficient.",
+    "Set TINEYE_API_KEY."
+   ],
+   "requirements": {
+    "business": false,
+    "website": false,
+    "store": false,
+    "min_sales": null
+   },
+   "cost": {
+    "monthly": "prepaid: $200/5k ... $10,000/1M (2015 post, current price not verified)",
+    "per_order": null
+   },
+   "api": {
+    "available": true,
+    "rate_limit": "unverified",
+    "endpoints": {
+     "search": "https://api.tineye.com/rest/search/"
+    }
+   },
+   "images": "links only",
+   "env_vars": [
+    "TINEYE_API_KEY"
+   ],
+   "approval_days": 0,
+   "depends_on": [],
+   "verified": "partial (pricing post dated 2015-08-03)",
+   "sources": [
+    "https://blog.tineye.com/new-image-search-pricing/",
+    "https://help.tineye.com/article/275-signing-up"
+   ],
+   "checked": "2026-10-09"
+  },
+  {
+   "id": "bing-visual-search",
+   "name": "Bing Visual Search API",
+   "type": "image-search-api",
+   "priority": 99,
+   "unlocks": "Nothing: Bing Search APIs retired 2025-08-11, no new signups.",
+   "user_steps": [],
+   "requirements": {},
+   "cost": {},
+   "api": {
+    "available": false,
+    "rate_limit": null,
+    "endpoints": {}
+   },
+   "images": null,
+   "env_vars": [],
+   "approval_days": null,
+   "depends_on": [],
+   "verified": "yes (Bing Search APIs retirement notice; Visual Search assumed included in 'Bing Search APIs')",
+   "sources": [
+    "https://learn.microsoft.com/en-us/lifecycle/announcements/bing-search-api-retirement"
+   ],
+   "checked": "2026-10-09"
+  },
+  {
+   "id": "google-lens",
+   "name": "Google Lens",
+   "type": "image-search-api",
+   "priority": 99,
+   "unlocks": "No official API. Third-party 'Lens APIs' scrape Google, which breaks our no-bypass rule. Use Vision Web Detection instead.",
+   "user_steps": [],
+   "requirements": {},
+   "cost": {},
+   "api": {
+    "available": false,
+    "rate_limit": null,
+    "endpoints": {}
+   },
+   "images": null,
+   "env_vars": [],
+   "approval_days": null,
+   "depends_on": [],
+   "verified": "no official API found",
+   "sources": [],
+   "checked": "2026-10-09"
+  },
+  {
+   "id": "autods",
+   "name": "AutoDS (Israeli company)",
+   "type": "aggregator",
+   "priority": 8,
+   "unlocks": "Import/automation from many suppliers (AliExpress, CJ, Amazon, etc.); Product Finding Hub add-on ($14.97) with winning products and 'stores selling the same product'.",
+   "user_steps": [
+    "Only after a Shopify/Wix/Woo/eBay store exists: 3-day $0.99 trial, then plan + Product Finding Hub."
+   ],
+   "requirements": {
+    "business": false,
+    "website": false,
+    "store": "Yes (works through a connected store; our store is custom)",
+    "min_sales": null
+   },
+   "cost": {
+    "monthly": "Import 19.9 / Starter 39.9 / Advanced 49.9 (+ add-ons) - third-party tracker",
+    "per_order": "supplier price"
+   },
+   "api": {
+    "available": false,
+    "rate_limit": null,
+    "endpoints": {}
+   },
+   "images": "supplier images",
+   "env_vars": [],
+   "approval_days": 0,
+   "depends_on": [
+    "store platform decision"
+   ],
+   "verified": "partial: add-ons from autods.com/pricing; plan prices from pricingsaas.com",
+   "sources": [
+    "https://www.autods.com/pricing/",
+    "https://pricingsaas.com/companies/autods"
+   ],
+   "checked": "2026-10-09"
+  },
+  {
+   "id": "zendrop",
+   "name": "Zendrop",
+   "type": "aggregator",
+   "priority": 10,
+   "unlocks": "1M+ products, 5-20 sourcing requests/month; Israel not in published shipping table ('Other Countries' rate).",
+   "user_steps": [
+    "Skip for now: needs Shopify/Wix billing for Flex; no public API."
+   ],
+   "requirements": {
+    "business": false,
+    "website": false,
+    "store": "Yes (Shopify/Wix)",
+    "min_sales": null
+   },
+   "cost": {
+    "monthly": "Pro 49 / Plus 79 / Flex 0-79",
+    "per_order": "supplier price"
+   },
+   "api": {
+    "available": false,
+    "rate_limit": null,
+    "endpoints": {}
+   },
+   "images": "unclear",
+   "env_vars": [],
+   "approval_days": 0,
+   "depends_on": [
+    "store platform decision"
+   ],
+   "verified": "yes (Zendrop help center, undated)",
+   "sources": [
+    "https://support.zendrop.com/en/articles/9981459-understanding-zendrop-pricing-plans-a-complete-guide",
+    "https://support.zendrop.com/en/articles/8487356-zendrop-shipping-times-by-country"
+   ],
+   "checked": "2026-10-09"
+  },
+  {
+   "id": "spocket",
+   "name": "Spocket",
+   "type": "aggregator",
+   "priority": 11,
+   "unlocks": "US/EU suppliers; worldwide shipping per supplier; Israel not verified.",
+   "user_steps": [
+    "Skip: store-based, no public API found."
+   ],
+   "requirements": {
+    "business": false,
+    "website": false,
+    "store": "Yes",
+    "min_sales": null
+   },
+   "cost": {
+    "monthly": "39.99 / 59.99 / 99.99 / 299.99 (third-party)",
+    "per_order": "supplier price"
+   },
+   "api": {
+    "available": false,
+    "rate_limit": null,
+    "endpoints": {}
+   },
+   "images": "unclear",
+   "env_vars": [],
+   "approval_days": 0,
+   "depends_on": [
+    "store platform decision"
+   ],
+   "verified": "partial (third-party pricing)",
+   "sources": [
+    "https://toolradar.com/tools/spocket/pricing"
+   ],
+   "checked": "2026-10-09"
+  },
+  {
+   "id": "syncee",
+   "name": "Syncee",
+   "type": "aggregator",
+   "priority": 12,
+   "unlocks": "EU/US/AU suppliers marketplace with country filter (per directory.md); no retailer API found.",
+   "user_steps": [
+    "Skip until a store platform exists."
+   ],
+   "requirements": {
+    "business": false,
+    "website": false,
+    "store": "Yes",
+    "min_sales": null
+   },
+   "cost": {
+    "monthly": "39.99 / 59.99 / 99.99",
+    "per_order": "supplier price"
+   },
+   "api": {
+    "available": false,
+    "rate_limit": null,
+    "endpoints": {}
+   },
+   "images": "per supplier",
+   "env_vars": [],
+   "approval_days": 0,
+   "depends_on": [
+    "store platform decision"
+   ],
+   "verified": "partial (Shopify listing)",
+   "sources": [
+    "https://apps.shopify.com/syncee-1"
+   ],
+   "checked": "2026-10-09"
+  },
+  {
+   "id": "china-agents",
+   "name": "China sourcing agents (Sup, HyperSKU, BuckyDrop, Eprolo, Sourcinbox, NicheDropshipping, Wiio, Dropshipman)",
+   "type": "sourcing-agent",
+   "priority": 7,
+   "unlocks": "Human 'find this product' quotes from 1688/factories. None publishes an Israel line or a public product API (see deep-research-2026-10.md). BuckySync ($9.90) does 1688 image search; Eprolo lists an API (undocumented).",
+   "user_steps": [
+    "Covered by deep-research-2026-10.md section 7-8: approve quote requests to 3 agents. No API keys to set."
+   ],
+   "requirements": {
+    "business": false,
+    "website": false,
+    "store": "Most onboard via a Shopify/Woo store; quotes by email possible",
+    "min_sales": null
+   },
+   "cost": {
+    "monthly": "0-19.90 (Sup Pro), BuckySync 9.90",
+    "per_order": "product + agent fee + freight"
+   },
+   "api": {
+    "available": false,
+    "rate_limit": null,
+    "endpoints": {}
+   },
+   "images": "agent photos on request",
+   "env_vars": [],
+   "approval_days": "1-3 per quote",
+   "depends_on": [
+    "user approval to contact"
+   ],
+   "verified": "partial (app-store listings)",
+   "sources": [
+    "https://apps.shopify.com/buckysync",
+    "https://apps.shopify.com/sourcinbox",
+    "https://apps.shopify.com/hypersku",
+    "https://apps.shopify.com/eprolo",
+    "https://pickyourapp.com/de/products/sup-dropshipping-2"
+   ],
+   "checked": "2026-10-09"
+  },
+  {
+   "id": "alibaba-openapi",
+   "name": "Alibaba.com Open Platform",
+   "type": "b2b-api",
+   "priority": 13,
+   "unlocks": "Supplier product data for B2B buyers (alibaba.procurement.supplier.items.get per a guide); approval is for business partners.",
+   "user_steps": [
+    "Later, after osek: register as developer at openapi.alibaba.com, apply for an app with a business scenario."
+   ],
+   "requirements": {
+    "business": "Yes (business partners)",
+    "website": "probably",
+    "store": null,
+    "min_sales": null
+   },
+   "cost": {
+    "monthly": "unverified",
+    "per_order": "MOQ-based"
+   },
+   "api": {
+    "available": true,
+    "rate_limit": "unverified",
+    "endpoints": {
+     "gateway": "https://openapi-api.alibaba.com/rest (reachable)"
+    }
+   },
+   "images": "unclear",
+   "env_vars": [
+    "ALIBABA_APP_KEY",
+    "ALIBABA_APP_SECRET"
+   ],
+   "approval_days": "unverified",
+   "depends_on": [
+    "osek (business registration)"
+   ],
+   "verified": "no (official docs are JS-only; third-party summary)",
+   "sources": [
+    "https://openapi.alibaba.com/"
+   ],
+   "checked": "2026-10-09"
+  },
+  {
+   "id": "1688-agents",
+   "name": "1688 via agents",
+   "type": "b2b-agent",
+   "priority": 7,
+   "unlocks": "Factory prices; 1688 has no open buyer API for foreigners that we could verify.",
+   "user_steps": [
+    "Same as china-agents (quotes)."
+   ],
+   "requirements": {
+    "business": false,
+    "website": false,
+    "store": false,
+    "min_sales": "MOQ per factory"
+   },
+   "cost": {
+    "monthly": "0",
+    "per_order": "agent 5-9% + freight (see deep-research)"
+   },
+   "api": {
+    "available": false,
+    "rate_limit": null,
+    "endpoints": {}
+   },
+   "images": "unclear",
+   "env_vars": [],
+   "approval_days": null,
+   "depends_on": [],
+   "verified": "partial",
+   "sources": [
+    "https://www.worldfirst.com/uk/blog/international-transactions/how-to-buy-from-1688/"
+   ],
+   "checked": "2026-10-09"
+  },
+  {
+   "id": "made-in-china",
+   "name": "Made-in-China.com",
+   "type": "b2b-marketplace",
+   "priority": 14,
+   "unlocks": "B2B listings with MOQ; no official buyer API or feed found (only scrapers, which we do not use).",
+   "user_steps": [
+    "None for now."
+   ],
+   "requirements": {
+    "business": "for RFQ",
+    "website": null,
+    "store": null,
+    "min_sales": "MOQ"
+   },
+   "cost": {},
+   "api": {
+    "available": false,
+    "rate_limit": null,
+    "endpoints": {}
+   },
+   "images": "unclear",
+   "env_vars": [],
+   "approval_days": null,
+   "depends_on": [],
+   "verified": "no official API found",
+   "sources": [],
+   "checked": "2026-10-09"
+  },
+  {
+   "id": "israel-local",
+   "name": "Israeli platforms (DropShipISR, Importify, local wholesalers)",
+   "type": "local",
+   "priority": 15,
+   "unlocks": "No Israeli home-decor dropship feed with an API found. Importify (Givatayim) and AutoDS are import tools, not suppliers. Local options are in directory.md and deep-research (OneStop).",
+   "user_steps": [
+    "None now."
+   ],
+   "requirements": {},
+   "cost": {},
+   "api": {
+    "available": false,
+    "rate_limit": null,
+    "endpoints": {}
+   },
+   "images": null,
+   "env_vars": [],
+   "approval_days": null,
+   "depends_on": [],
+   "verified": "search found none (2026-10-09)",
+   "sources": [
+    "https://yourstory.com/companies/importify"
+   ],
+   "checked": "2026-10-09"
+  }
+ ]
+}

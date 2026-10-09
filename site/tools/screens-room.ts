@@ -226,7 +226,10 @@ async function transition(): Promise<void> {
   await page.addInitScript(`window.__hdSlowMo = ${SLOW}`);
   // rings and controls fade in on CSS time after the landing; hidden here so the landing check sees only the room
   await page.addInitScript(`addEventListener('DOMContentLoaded', () => { const s = document.createElement('style'); s.textContent = '.hotspots,.stage-ui{visibility:hidden!important}'; document.head.append(s); })`);
+  // camera log: the engine camera on every animation frame, to prove the dolly lands on the rest camera without a step
+  await page.addInitScript(`window.__camLog = []; const tick = () => { const e = window.__hdEngine; if (e && e.cam) window.__camLog.push([performance.now(), e.cam.cu, e.cam.cv, e.cam.z]); requestAnimationFrame(tick); }; requestAnimationFrame(tick);`);
   await page.goto(`${ORIGIN}/`, { waitUntil: 'load' });
+  await page.addStyleTag({ content: '.hotspots,.stage-ui{visibility:hidden!important}' });
   await page.getByRole('heading', { level: 1 }).first().waitFor();
   await page.waitForTimeout(4000); // T-E0 preloaded and decoded
   await page.getByRole('link', { name: 'היכנסו לסלון' }).click();
@@ -262,7 +265,24 @@ async function transition(): Promise<void> {
     dimg[i] = dimg[i + 1] = dimg[i + 2] = Math.min(255, d * 8);
   }
   writeFileSync(`${OUT}/${PREFIX}transition-landing-diff.png`, await sharp(dimg, { raw: { width: W, height: H, channels: 3 } }).png().toBuffer());
-  report.push(`transition landing: ${diff} pixels differ between the landed frame and the room at rest`);
+  const pct = (100 * diff) / (W * H);
+  report.push(`transition landing: ${diff} pixels (${pct.toFixed(3)} %) differ by more than 12 levels between the landed frame and the composed M0 at rest`);
+  if (pct > 0.05) problems.push(`transition landing differs from the composed M0 in ${pct.toFixed(3)} % of the pixels`);
+  // camera continuity: the last logged camera equals the rest camera, and the steps shrink into the landing (no jump)
+  const log = (await page.evaluate('window.__camLog')) as [number, number, number, number][];
+  const restCam = (await page.evaluate('(() => { const c = window.__hdEngine.cam; return [c.cu, c.cv, c.z]; })()')) as [number, number, number];
+  const steps = log.slice(1).map((c, i) => Math.abs(c[1] - log[i]![1]) + Math.abs(c[2] - log[i]![2]) + Math.abs(c[3] - log[i]![3]));
+  const moving = steps.map((d, i) => [d, i] as const).filter(([d]) => d > 0);
+  const lastMove = moving.length ? moving[moving.length - 1]! : null;
+  const maxStep = Math.max(0, ...steps);
+  const end = log[log.length - 1];
+  const endErr = end ? Math.abs(end[1] - restCam[0]) + Math.abs(end[2] - restCam[1]) + Math.abs(end[3] - restCam[2]) : 1;
+  const tailMax = moving.length ? Math.max(...moving.slice(-Math.max(1, Math.round(moving.length * 0.1))).map(([d]) => d)) : 0;
+  report.push(
+    `transition camera: ${moving.length} moving frames, largest step ${maxStep.toExponential(2)}, largest step in the last 10 % ${tailMax.toExponential(2)}, last step ${lastMove ? lastMove[0].toExponential(2) : 0}, end vs rest camera ${endErr.toExponential(2)}`,
+  );
+  if (endErr > 1e-9) problems.push('transition: the camera does not end on the rest camera');
+  if (moving.length && tailMax > maxStep * 0.25) problems.push('transition: the camera still moves fast at the end of the landing (jump)');
   const tw = 427;
   const th = 267;
   await sharp({ create: { width: tw * 3, height: th * 2, channels: 3, background: '#000' } })
