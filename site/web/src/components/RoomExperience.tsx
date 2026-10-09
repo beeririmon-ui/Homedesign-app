@@ -82,11 +82,16 @@ export function RoomExperience({ room }: { room: CatalogRoom }) {
     // smaller rings sit above larger ones, so every product stays reachable where rings overlap
     const order = [...pts].sort((a, b) => b.rx * b.ry - a.rx * a.ry);
     order.forEach((p, i) => (p.el.style.zIndex = String(i + 1)));
-    // keep targets clear of the controls at the bottom of the stage (style switch, pan, back to the hall)
-    const ui = stage.current?.querySelector<HTMLElement>('.stage-ui');
-    const bottom = ui && stage.current ? ui.getBoundingClientRect().top - stage.current.getBoundingClientRect().top - 26 : vp.h - 8;
+    // keep targets clear of the controls on the stage (style switch, pan, back to the hall, the room label)
+    const sr = stage.current?.getBoundingClientRect();
+    const blocked = sr
+      ? [...stage.current!.querySelectorAll<HTMLElement>('.stage-ui .glass, .stage-temp-note')].map((c) => {
+          const r = c.getBoundingClientRect();
+          return { l: r.left - sr.left - 26, r: r.right - sr.left + 26, t: r.top - sr.top - 26, b: r.bottom - sr.top + 26 };
+        })
+      : [];
     for (const { el, x, y, rx, ry } of pts) {
-      const inside = x > 8 && x < vp.w - 8 && y > 8 && y < Math.min(vp.h - 8, bottom);
+      const inside = x > 8 && x < vp.w - 8 && y > 8 && y < vp.h - 8 && !blocked.some((b) => x > b.l && x < b.r && y > b.t && y < b.b);
       el.style.width = `${(2 * rx).toFixed(1)}px`;
       el.style.height = `${(2 * ry).toFixed(1)}px`;
       el.style.transform = `translate(${(x - rx).toFixed(1)}px, ${(y - ry).toFixed(1)}px)`;
