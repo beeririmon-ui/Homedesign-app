@@ -1,0 +1,1228 @@
+<meta charset="utf-8">
+<title>סטודיו הבית</title>
+<style>
+/* Layout: a working ledger. Sticky masthead with a tab rail over one 1180px column on limewash paper.
+   Only real objects (a decision, a room, a product) get a sheet; everything else sits on the paper.
+   The one bold surface is the charcoal "waiting for you" panel. */
+:root{
+  --paper:#F1F0EC; --sheet:#FBFAF8; --sunk:#E7E5E0;
+  --ink:#2A2A29; --ink-2:#55534E; --ink-3:#67645D; --on-ink:#F4F1EC;
+  --rule:#D9D6D0; --rule-2:#BDB8AF;
+  --sage:#A7B09A; --sage-ink:#46533C; --sage-wash:#E1E6D9;
+  --oak:#C8A27A; --oak-ink:#72502B; --oak-wash:#EFE3D1;
+  --brick-ink:#8A3A2A; --brick-wash:#F2E0DA;
+  --shade:rgba(42,42,41,.22); --scrim:rgba(30,30,29,.46);
+  --f-display:"Frank Ruhl Libre","David Libre","Times New Roman",serif;
+  --f-body:"Assistant","Heebo","Arial Hebrew",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+  --fs-xs:12.5px; --fs-s:14px; --fs-m:16px; --fs-l:19px; --fs-xl:24px; --fs-xxl:34px;
+  --r:6px; --gut:16px; --maxw:1180px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#1B1B1A; --sheet:#242422; --sunk:#2E2D2B;
+  --ink:#ECEAE4; --ink-2:#BDB9B1; --ink-3:#A39F97; --on-ink:#1B1B1A;
+  --rule:#3A3936; --rule-2:#57554F;
+  --sage:#8D967F; --sage-ink:#BAC5AA; --sage-wash:#2B3227;
+  --oak:#B48F67; --oak-ink:#DDBE95; --oak-wash:#3A3124;
+  --brick-ink:#F0B3A5; --brick-wash:#3D2621;
+  --shade:rgba(0,0,0,.5); --scrim:rgba(0,0,0,.62);
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --paper:#1B1B1A; --sheet:#242422; --sunk:#2E2D2B;
+  --ink:#ECEAE4; --ink-2:#BDB9B1; --ink-3:#A39F97; --on-ink:#1B1B1A;
+  --rule:#3A3936; --rule-2:#57554F;
+  --sage:#8D967F; --sage-ink:#BAC5AA; --sage-wash:#2B3227;
+  --oak:#B48F67; --oak-ink:#DDBE95; --oak-wash:#3A3124;
+  --brick-ink:#F0B3A5; --brick-wash:#3D2621;
+  --shade:rgba(0,0,0,.5); --scrim:rgba(0,0,0,.62);
+  color-scheme:dark;
+}
+@media (min-width:720px){:root{--gut:28px}}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:var(--fs-m);line-height:1.55}
+.app{min-height:100%}
+h1,h2,h3{font-family:var(--f-display);font-weight:500;line-height:1.2;text-wrap:balance;margin:0;color:var(--ink)}
+h1{font-size:var(--fs-xxl)}
+h2{font-size:var(--fs-xl)}
+h3{font-size:var(--fs-l)}
+p{margin:0}
+a{color:var(--ink);text-decoration-color:var(--rule-2);text-underline-offset:3px}
+a:hover{text-decoration-color:var(--ink)}
+code,.mono{font-family:var(--f-mono);font-size:.86em;letter-spacing:0}
+.num,table,.stat,.tab-badge{font-variant-numeric:tabular-nums}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px;border-radius:3px}
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.skip{position:absolute;inset-inline-start:var(--gut);top:-60px;z-index:50;background:var(--ink);color:var(--on-ink);padding:10px 14px;border-radius:var(--r);font-weight:600;text-decoration:none}
+.skip:focus{top:calc(env(safe-area-inset-top,0px) + 8px)}
+.muted{color:var(--ink-2)}
+.faint{color:var(--ink-3)}
+.small{font-size:var(--fs-s)}
+.xs{font-size:var(--fs-xs)}
+.eyebrow{font-size:var(--fs-xs);font-weight:600;letter-spacing:.04em;color:var(--ink-3)}
+
+/* masthead */
+.mast{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--paper);border-bottom:1px solid var(--rule)}
+.mast-in{max-width:var(--maxw);margin:0 auto;padding-inline:var(--gut);display:flex;flex-wrap:wrap;align-items:flex-end;gap:4px 28px;padding-block:10px 0}
+.brand{display:flex;flex-direction:column;padding-bottom:10px;min-width:0}
+.brand-name{font-family:var(--f-display);font-size:23px;font-weight:700;line-height:1.1}
+.brand-sub{font-size:var(--fs-xs);color:var(--ink-3)}
+.tabs{flex:1 1 420px;min-width:0;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tabs ul{list-style:none;margin:0;padding:0;display:flex;gap:2px}
+.tabs a{display:flex;align-items:center;gap:6px;padding:10px 12px 11px;text-decoration:none;color:var(--ink-2);font-weight:600;white-space:nowrap;border-bottom:2px solid transparent}
+.tabs a:hover{color:var(--ink)}
+.tabs a[aria-current="page"]{color:var(--ink);border-bottom-color:var(--ink)}
+.tab-badge{min-width:22px;padding:1px 7px;border-radius:999px;background:var(--ink);color:var(--on-ink);font-size:var(--fs-xs);text-align:center;line-height:18px}
+.tab-badge:empty{display:none}
+
+@media (max-width:480px){.tabs a{padding:10px 7px 11px;font-size:15px;gap:4px}.tab-badge{min-width:20px;padding:1px 5px}}
+main{max-width:var(--maxw);margin:0 auto;padding-inline:var(--gut);padding-block:24px 64px;outline:none}
+.screen{display:grid;gap:28px}
+.screen-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px 20px}
+.screen-head h1{outline:none}
+.lede{max-width:66ch;color:var(--ink-2)}
+.section{display:grid;gap:14px;min-width:0}
+.section-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 16px;border-bottom:1px solid var(--rule);padding-bottom:8px}
+.loading{color:var(--ink-3)}
+
+/* chips and buttons */
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:var(--fs-xs);font-weight:600;line-height:1;padding:5px 9px;border-radius:999px;background:var(--sunk);color:var(--ink-2);white-space:nowrap}
+.st-open{background:var(--oak-wash);color:var(--oak-ink)}
+.st-answered,.st-selected,.std-stated{background:var(--sage-wash);color:var(--sage-ink)}
+.st-applied,.st-candidate,.std-unknown{background:var(--sunk);color:var(--ink-2)}
+.st-rejected{background:var(--brick-wash);color:var(--brick-ink)}
+.std-unverified{background:var(--oak-wash);color:var(--oak-ink)}
+.chip-block{background:var(--ink);color:var(--on-ink)}
+.chip-dup{background:transparent;color:var(--brick-ink);border:1px solid currentColor;padding:4px 8px}
+.code-tag{font-family:var(--f-mono);font-size:12px;padding:2px 6px;border-radius:4px;background:var(--sunk);color:var(--ink-2);white-space:nowrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;padding:8px 16px;border-radius:var(--r);border:1px solid var(--ink);background:var(--ink);color:var(--on-ink);font-weight:600;font-size:15px;cursor:pointer;text-decoration:none}
+.btn:hover{filter:brightness(1.12)}
+.btn[disabled]{opacity:.55;cursor:not-allowed;filter:none}
+.btn-ghost{background:transparent;color:var(--ink);border-color:var(--rule-2)}
+.btn-ghost:hover{border-color:var(--ink);filter:none}
+.btn-small{min-height:32px;padding:4px 11px;font-size:var(--fs-s)}
+.linkish{background:none;border:0;padding:0;font:inherit;color:var(--ink);text-decoration:underline;text-decoration-color:var(--rule-2);text-underline-offset:3px;cursor:pointer}
+.linkish:hover{text-decoration-color:var(--ink)}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button{min-height:34px;padding:5px 12px;border-radius:999px;border:1px solid var(--rule-2);background:transparent;cursor:pointer;font-weight:600;font-size:var(--fs-s);color:var(--ink-2)}
+.seg button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--on-ink)}
+.seg button .n{font-weight:400;opacity:.8;margin-inline-start:4px}
+
+/* overview: waiting panel */
+.waiting{background:var(--ink);color:var(--on-ink);border-radius:10px;padding:22px clamp(18px,3vw,30px);display:grid;grid-template-columns:auto 1fr;gap:16px 28px;align-items:start}
+.waiting .big{font-family:var(--f-display);font-size:64px;line-height:.9;font-weight:500}
+.waiting h2{color:var(--on-ink);font-size:var(--fs-xl)}
+.waiting p{opacity:.86}
+.waiting ul{list-style:none;margin:10px 0 14px;padding:0;display:grid;gap:6px}
+.waiting li{display:flex;gap:10px;align-items:baseline;min-width:0}
+.waiting li .code-tag{background:transparent;border:1px solid currentColor;color:inherit;opacity:.9}
+.waiting .btn{background:var(--on-ink);color:var(--ink);border-color:var(--on-ink)}
+.waiting .btn-ghost{background:transparent;color:var(--on-ink);border-color:currentColor}
+@media (max-width:560px){.waiting{grid-template-columns:1fr}.waiting .big{font-size:52px}}
+
+.ov-grid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:28px 36px;align-items:start}
+@media (max-width:900px){.ov-grid{grid-template-columns:1fr}}
+
+/* stages */
+.stages{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.stage{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:4px 12px;align-items:start;padding:10px 0;border-bottom:1px solid var(--rule)}
+.stage:last-child{border-bottom:0}
+.stage-n{font-family:var(--f-display);font-size:26px;line-height:1;color:var(--ink-3)}
+.stage-title{font-weight:600}
+.stage-next{font-size:var(--fs-s);color:var(--ink-2)}
+.stage-count{font-size:var(--fs-s);color:var(--ink-2);white-space:nowrap}
+.ticks{display:flex;flex-wrap:wrap;gap:4px;margin:6px 0 4px}
+.tick{width:22px;height:10px;border-radius:2px;border:1.5px solid var(--rule-2)}
+.tick.done{background:var(--ink);border-color:var(--ink)}
+.tick.partial{border-color:var(--ink);background:repeating-linear-gradient(135deg,var(--ink) 0 2px,transparent 2px 5px)}
+.tick.gate{width:11px;height:11px;transform:rotate(45deg);margin-inline:5px;border-radius:1px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:var(--fs-xs);color:var(--ink-3);align-items:center}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend .tick{margin:0}
+.legend .tick.gate{margin-inline:3px}
+details.stage-items{grid-column:2 / -1}
+details.stage-items summary{cursor:pointer;font-size:var(--fs-s);color:var(--ink-2);width:max-content;max-width:100%}
+details.stage-items ul{margin:6px 0 2px;padding-inline-start:18px;display:grid;gap:3px;font-size:var(--fs-s)}
+.it-done{color:var(--ink-3);text-decoration:line-through;text-decoration-color:var(--rule-2)}
+.it-partial::after{content:" · בתהליך";color:var(--oak-ink)}
+
+/* status bar */
+.stack{display:flex;height:12px;border-radius:3px;overflow:hidden;background:var(--sunk)}
+.stack span{display:block;height:100%}
+.stack .s-candidate{background:var(--ink-3)}
+.stack .s-selected{background:var(--sage-ink)}
+.stack .s-rejected{background:var(--brick-ink)}
+.kv{display:grid;grid-template-columns:auto 1fr auto;gap:6px 10px;align-items:center;margin:0}
+.kv dt{display:contents}
+.kv .dot{width:10px;height:10px;border-radius:2px}
+.kv dd{margin:0;font-weight:600;text-align:end;font-variant-numeric:tabular-nums}
+.side-card{background:var(--sheet);border:1px solid var(--rule);border-radius:var(--r);padding:16px;display:grid;gap:12px}
+
+/* rooms (overview cards) */
+.room-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr));gap:14px}
+.room-card{display:grid;grid-template-rows:auto 1fr;background:var(--sheet);border:1px solid var(--rule);border-radius:var(--r);overflow:hidden;text-decoration:none;color:inherit}
+.room-card:hover{border-color:var(--rule-2);box-shadow:0 10px 24px -18px var(--shade)}
+.room-card .thumb{aspect-ratio:16/9;background:var(--sunk);max-width:100%}
+.room-card .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.room-card .body{padding:12px 14px 14px;display:grid;gap:8px;align-content:start}
+.room-card h3{font-size:var(--fs-l)}
+.frames-line{display:flex;flex-wrap:wrap;gap:4px}
+.mini-stats{display:grid;grid-template-columns:1fr auto;gap:3px 10px;font-size:var(--fs-s);margin:0}
+.mini-stats dt{color:var(--ink-2)}
+.mini-stats dd{margin:0;font-weight:600;text-align:end;font-variant-numeric:tabular-nums}
+.meter{height:6px;border-radius:3px;background:var(--sunk);overflow:hidden}
+.meter span{display:block;height:100%;background:var(--sage-ink)}
+.open-count{color:var(--oak-ink)}
+
+/* log */
+.log-list{list-style:none;margin:0;padding:0;display:grid}
+.log-item{display:grid;grid-template-columns:96px minmax(0,1fr);gap:4px 14px;padding:10px 0;border-bottom:1px solid var(--rule)}
+.log-item:last-child{border-bottom:0}
+.log-when{font-size:var(--fs-s);color:var(--ink-3);font-variant-numeric:tabular-nums}
+.log-who{margin-bottom:3px}
+.log-main{overflow-wrap:anywhere}
+.log-rest{font-size:var(--fs-s);color:var(--ink-2);overflow-wrap:anywhere;margin-top:3px}
+.log-item.clamp .log-main{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+@media (max-width:560px){.log-item{grid-template-columns:1fr}}
+.who-user{background:var(--ink);color:var(--on-ink)}
+.date-head{font-family:var(--f-display);font-size:var(--fs-l);padding-top:14px;border-bottom:1px solid var(--rule-2);padding-bottom:4px}
+.foot{font-size:var(--fs-s);color:var(--ink-3);border-top:1px solid var(--rule);padding-top:14px}
+
+/* decisions */
+.dec-bar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between}
+.db-line{display:flex;gap:10px;align-items:flex-start;padding:10px 14px;border:1px dashed var(--rule-2);border-radius:var(--r);font-size:var(--fs-s);color:var(--ink-2)}
+.db-line strong{color:var(--ink)}
+.db-dot{flex:none;width:9px;height:9px;border-radius:50%;margin-top:6px;background:var(--ink-3)}
+.db-dot.live{background:var(--sage-ink)}
+.db-dot.warn{background:var(--oak-ink)}
+.confirm{border:1.5px solid var(--ink);border-radius:var(--r);background:var(--sheet);padding:16px;display:grid;gap:10px}
+.confirm ol{margin:0;padding-inline-start:22px;display:grid;gap:3px;font-size:var(--fs-s)}
+.confirm .row{display:flex;flex-wrap:wrap;gap:8px}
+.dec-list{display:grid;gap:14px;max-width:900px}
+.dcard{background:var(--sheet);border:1px solid var(--rule);border-radius:var(--r);padding:16px clamp(14px,2.4vw,22px);display:grid;gap:10px;min-width:0}
+.dcard.is-blocking{border-color:var(--ink);box-shadow:inset 0 3px 0 var(--ink)}
+.dcard.is-answered,.dcard.is-applied{background:transparent}
+.dhead{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center}
+.did{font-family:var(--f-mono);font-weight:500;font-size:13px;padding:2px 7px;border:1px solid var(--rule-2);border-radius:4px}
+.dgroup{font-size:var(--fs-xs);color:var(--ink-3);font-weight:600}
+.dhead .spacer{flex:1}
+.dq{font-size:17px;font-weight:600;max-width:70ch}
+.dctx{color:var(--ink-2);max-width:70ch;font-size:15px}
+.dblocks{font-size:var(--fs-s);display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.opts{border:0;margin:0;padding:0;display:grid;gap:6px;min-width:0}
+.opts legend{font-size:var(--fs-xs);font-weight:600;color:var(--ink-3);margin-bottom:4px;padding:0}
+.opt{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;align-items:start;padding:9px 12px;border:1px solid var(--rule);border-radius:var(--r);cursor:pointer;background:var(--paper)}
+.opt:hover{border-color:var(--rule-2)}
+.opt input{margin:4px 0 0;width:17px;height:17px;accent-color:var(--ink)}
+.opt:has(input:checked){border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.opt:has(input:focus-visible){outline:2px solid var(--ink);outline-offset:2px}
+.opt.ro{cursor:default;grid-template-columns:1fr}
+.opt.chosen{border-color:var(--sage-ink);box-shadow:inset 0 0 0 1px var(--sage-ink)}
+.ol{font-weight:600;display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center}
+.od{grid-column:2;font-size:var(--fs-s);color:var(--ink-2)}
+.opt.ro .od{grid-column:1}
+.rec{font-size:11.5px;font-weight:700;color:var(--sage-ink);border:1px solid currentColor;border-radius:999px;padding:1px 7px}
+.note-field{display:grid;gap:4px}
+.note-field label{font-size:var(--fs-xs);font-weight:600;color:var(--ink-3)}
+textarea{width:100%;min-height:64px;resize:vertical;padding:9px 11px;border:1px solid var(--rule-2);border-radius:var(--r);background:var(--paper);line-height:1.5}
+.dact{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.save-state{font-size:var(--fs-s);color:var(--ink-2)}
+.save-state.err{color:var(--brick-ink)}
+.answer-box{border-inline-start:3px solid var(--sage-ink);padding:4px 12px;display:grid;gap:2px;font-size:15px}
+.dmeta{font-size:var(--fs-xs);color:var(--ink-3);display:flex;flex-wrap:wrap;gap:4px 14px}
+
+/* rooms screen */
+.room-pick{display:flex;flex-wrap:wrap;gap:6px}
+.room-pick button{min-height:38px;padding:6px 14px;border-radius:var(--r);border:1px solid var(--rule-2);background:transparent;cursor:pointer;font-weight:600;color:var(--ink-2)}
+.room-pick button[aria-pressed="true"]{background:var(--ink);color:var(--on-ink);border-color:var(--ink)}
+.room-head{display:grid;gap:8px}
+.facts{display:flex;flex-wrap:wrap;gap:6px 22px;font-size:var(--fs-s);color:var(--ink-2)}
+.facts b{color:var(--ink);font-variant-numeric:tabular-nums}
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:14px}
+.shot{margin:0;display:grid;gap:6px;min-width:0}
+.shot.wide{grid-column:1 / -1}
+.shot button{display:block;padding:0;border:1px solid var(--rule);border-radius:var(--r);overflow:hidden;background:var(--sunk);cursor:zoom-in;width:100%}
+.shot button:hover{border-color:var(--rule-2)}
+.shot img{display:block;width:100%;height:auto;max-width:100%}
+.shot:not(.wide) img{aspect-ratio:16/9;object-fit:cover}
+.shot figcaption{font-size:var(--fs-s);color:var(--ink-2);display:grid;gap:2px}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--rule);border-radius:var(--r);background:var(--sheet);max-width:100%}
+table{border-collapse:collapse;width:100%;font-size:var(--fs-s)}
+th,td{padding:8px 10px;text-align:start;vertical-align:top;border-bottom:1px solid var(--rule)}
+th{font-size:var(--fs-xs);font-weight:700;color:var(--ink-3);background:var(--paper);white-space:nowrap;position:sticky;top:0}
+tr:last-child td{border-bottom:0}
+tbody tr:hover td{background:var(--paper)}
+.slots-table td.c-id{white-space:nowrap}
+.slots-table .slot-open{font-family:var(--f-mono);font-size:13px}
+.pips{display:inline-flex;gap:3px;vertical-align:middle;margin-inline-start:6px}
+.pips i{width:8px;height:8px;border-radius:2px;border:1.5px solid var(--rule-2)}
+.pips i.on{background:var(--sage-ink);border-color:var(--sage-ink)}
+.cell-n{white-space:nowrap}
+.sub{display:block;font-size:var(--fs-xs);color:var(--ink-3)}
+
+/* products */
+.filters{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,170px),1fr));gap:10px 12px;align-items:end}
+.filters .search{grid-column:1 / -1}
+.field{display:grid;gap:4px;min-width:0}
+.field label{font-size:var(--fs-xs);font-weight:600;color:var(--ink-3)}
+input[type="search"],select{width:100%;min-height:40px;padding:7px 10px;border:1px solid var(--rule-2);border-radius:var(--r);background:var(--sheet)}
+.check{display:flex;gap:8px;align-items:center;min-height:40px;font-size:var(--fs-s);font-weight:600}
+.check input{width:17px;height:17px;accent-color:var(--ink)}
+.result-line{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;font-size:var(--fs-s);color:var(--ink-2)}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,168px),1fr));gap:12px}
+@media (max-width:420px){.pgrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}}
+.pcard{display:grid;grid-template-rows:auto auto;text-align:start;padding:0;border:1px solid var(--rule);border-radius:var(--r);background:var(--sheet);overflow:hidden;cursor:pointer;min-width:0}
+.pcard:hover{border-color:var(--rule-2);box-shadow:0 10px 24px -18px var(--shade)}
+.pcard .pimg{position:relative;aspect-ratio:1/1;background:#fff;display:block;max-width:100%}
+.pcard .pimg img{width:100%;height:100%;object-fit:contain;display:block}
+.pcard .pimg .chips{position:absolute;inset-block-start:7px;inset-inline-start:7px;display:flex;flex-wrap:wrap;gap:4px}
+.pcard .pimg .noimg{position:absolute;inset-block-end:7px;inset-inline-start:7px}
+.pcard .pbody{display:grid;gap:4px;padding:9px 10px 11px;align-content:start;min-width:0}
+.pname{font-weight:600;font-size:14.5px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+.pslot{font-size:var(--fs-xs);color:var(--ink-2);overflow-wrap:anywhere}
+.prow{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center;font-size:var(--fs-xs);color:var(--ink-2)}
+.prow .cost{font-weight:700;color:var(--ink);font-size:var(--fs-s)}
+.swatch{display:inline-block;width:14px;height:14px;border-radius:3px;border:1px solid var(--rule-2);vertical-align:middle;flex:none}
+.swatch.lg{width:28px;height:28px;border-radius:4px}
+.hex{font-family:var(--f-mono);font-size:11.5px}
+.empty{padding:28px;border:1px dashed var(--rule-2);border-radius:var(--r);color:var(--ink-2);text-align:center}
+
+/* quality */
+.reader{display:grid;grid-template-columns:minmax(220px,300px) minmax(0,1fr);gap:24px;align-items:start}
+@media (max-width:860px){.reader{grid-template-columns:1fr}}
+.rep-list{display:grid;gap:18px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 110px);max-height:calc(100vh - 140px);overflow:auto;padding-inline-end:4px}
+@media (max-width:860px){.rep-list{position:static;max-height:none}}
+.rep-list h2{font-size:var(--fs-l)}
+.rep-list ul{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:4px}
+.rep-btn{display:grid;gap:2px;width:100%;text-align:start;padding:9px 11px;border:1px solid transparent;border-radius:var(--r);background:transparent;cursor:pointer}
+.rep-btn:hover{background:var(--sheet);border-color:var(--rule)}
+.rep-btn[aria-current="true"]{background:var(--sheet);border-color:var(--ink)}
+.rep-btn .t{font-weight:600;font-size:var(--fs-s);line-height:1.35}
+.rep-btn .m{font-size:var(--fs-xs);color:var(--ink-3);overflow-wrap:anywhere}
+.md{background:var(--sheet);border:1px solid var(--rule);border-radius:var(--r);padding:clamp(16px,3vw,32px);min-width:0;overflow-wrap:anywhere}
+.md > *+*{margin-top:.8em}
+.md h2{font-size:26px}
+.md h3{font-size:20px;margin-top:1.4em}
+.md h4,.md h5,.md h6{font-family:var(--f-body);font-size:var(--fs-m);font-weight:700;margin-top:1.2em}
+.md p,.md li{max-width:75ch}
+.md ul,.md ol{padding-inline-start:22px}
+.md code{background:var(--sunk);padding:1px 5px;border-radius:3px;overflow-wrap:anywhere}
+.md pre{background:var(--sunk);padding:12px;border-radius:var(--r);overflow-x:auto;direction:ltr;text-align:left}
+.md pre code{background:none;padding:0}
+.md blockquote{margin:0;border-inline-start:3px solid var(--rule-2);padding-inline-start:12px;color:var(--ink-2)}
+.md hr{border:0;border-top:1px solid var(--rule)}
+.md .tbl-wrap{background:var(--paper)}
+.md table{font-size:13.5px}
+.md td{min-width:90px}
+.md .md-img{display:inline-block;font-size:var(--fs-xs);color:var(--ink-3);border:1px dashed var(--rule-2);padding:2px 6px;border-radius:4px}
+.md-fallback{white-space:pre-wrap;font-family:var(--f-body);background:none!important;direction:rtl!important;text-align:start!important}
+
+/* dialogs */
+dialog{color:var(--ink);background:var(--sheet);border:0;padding:0}
+dialog::backdrop{background:var(--scrim)}
+.drawer{position:fixed;inset-block:0;inset-inline-end:0;inset-inline-start:auto;margin:0;width:min(600px,100vw);max-width:100vw;height:100%;max-height:100%;box-shadow:0 0 40px var(--shade)}
+.drawer[open]{animation:slide-in .22s ease-out}
+@keyframes slide-in{from{transform:translateX(-24px);opacity:.4}to{transform:none;opacity:1}}
+.drawer-in{display:grid;grid-template-rows:auto 1fr;height:100%}
+.drawer-top{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;padding:calc(env(safe-area-inset-top,0px) + 14px) 18px 12px;border-bottom:1px solid var(--rule);background:var(--sheet)}
+.drawer-top h2{font-size:21px;overflow-wrap:anywhere}
+.drawer-body{overflow:auto;padding:16px 18px calc(env(safe-area-inset-bottom,0px) + 28px);display:grid;gap:18px;align-content:start}
+.close{flex:none;width:40px;height:40px;border-radius:50%;border:1px solid var(--rule-2);background:transparent;cursor:pointer;font-size:22px;line-height:1;display:grid;place-items:center}
+.close:hover{border-color:var(--ink)}
+.d-hero{display:grid;grid-template-columns:150px minmax(0,1fr);gap:14px;align-items:start}
+@media (max-width:440px){.d-hero{grid-template-columns:110px minmax(0,1fr)}}
+.d-hero .pic{background:#fff;border:1px solid var(--rule);border-radius:var(--r);aspect-ratio:1/1;overflow:hidden;max-width:100%}
+.d-hero .pic img{width:100%;height:100%;object-fit:contain;display:block}
+.d-hero .side{display:grid;gap:8px;align-content:start;min-width:0}
+.fields{display:grid;grid-template-columns:minmax(96px,34%) minmax(0,1fr);gap:0;margin:0;border-top:1px solid var(--rule)}
+.fields dt,.fields dd{padding:7px 0;border-bottom:1px solid var(--rule);margin:0}
+.fields dt{font-size:var(--fs-s);color:var(--ink-3);font-weight:600;padding-inline-end:10px}
+.fields dd{font-size:15px;min-width:0;overflow-wrap:anywhere}
+.stds{display:grid;gap:8px}
+.std-row{display:flex;flex-wrap:wrap;gap:8px}
+.std{display:inline-flex;gap:6px;align-items:center}
+.std b{font-family:var(--f-mono);font-size:12.5px;font-weight:500}
+details.snips summary{cursor:pointer;font-size:var(--fs-s);color:var(--ink-2)}
+details.snips ul{margin:6px 0 0;padding-inline-start:18px;display:grid;gap:5px;font-size:var(--fs-xs);color:var(--ink-2)}
+details.snips li span{direction:ltr;unicode-bidi:isolate}
+.notes{white-space:pre-wrap;overflow-wrap:anywhere;font-size:14.5px;background:var(--paper);border:1px solid var(--rule);border-radius:var(--r);padding:12px;direction:auto;unicode-bidi:plaintext;text-align:start}
+.score{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;font-size:var(--fs-s)}
+.score b{font-variant-numeric:tabular-nums}
+.lightbox{width:min(1240px,96vw);max-width:96vw;max-height:94vh;border-radius:8px;overflow:hidden;background:var(--sheet)}
+.lb-in{display:grid;grid-template-rows:minmax(0,1fr) auto;max-height:94vh}
+.lb-img{background:#141413;display:grid;place-items:center;min-height:0;overflow:auto}
+.lb-img img{max-width:100%;max-height:78vh;width:auto;height:auto;display:block}
+.lb-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;padding:10px 14px}
+.lb-bar p{font-size:var(--fs-s);color:var(--ink-2);min-width:0;flex:1 1 260px;overflow-wrap:anywhere}
+.lb-nav{display:flex;gap:6px}
+.toast-err{border:1px solid var(--brick-ink);color:var(--brick-ink);background:var(--brick-wash);border-radius:var(--r);padding:12px 14px}
+
+.roomy{gap:30px}
+.dim{opacity:.8}
+.bignum{font-family:var(--f-display);font-size:40px;line-height:1}
+.h-mid{font-size:20px}
+.h-small{font-size:17px;margin-bottom:6px}
+.minw0{min-width:0}
+.swrow{display:inline-flex;gap:6px;align-items:center}
+.swrow.spaced{margin-inline-end:10px}
+.chiprow{display:flex;flex-wrap:wrap;gap:6px}
+.price-big{font-family:var(--f-display);font-size:28px}
+.warn-text{color:var(--oak-ink)}
+.plain-ul{margin:0;padding-inline-start:18px}
+.path-line{text-align:end}
+.span-all{grid-column:1 / -1}
+.narrow{max-width:420px}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700&family=Frank+Ruhl+Libre:wght@500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<div class="app" dir="rtl" lang="he">
+  <a class="skip" href="#main" id="skip">דילוג לתוכן</a>
+  <header class="mast">
+    <div class="mast-in">
+      <div class="brand">
+        <span class="brand-name">סטודיו הבית</span>
+        <span class="brand-sub">ניהול פנימי · <span id="stamp">טוען…</span></span>
+      </div>
+      <nav class="tabs" aria-label="מסכים">
+        <ul>
+          <li><a href="#overview" data-screen="overview">סקירה</a></li>
+          <li><a href="#decisions" data-screen="decisions">החלטות <span class="tab-badge" id="badge-dec" aria-hidden="true"></span><span class="sr-only" id="badge-dec-sr"></span></a></li>
+          <li><a href="#rooms" data-screen="rooms">חדרים</a></li>
+          <li><a href="#products" data-screen="products">מוצרים</a></li>
+          <li><a href="#quality" data-screen="quality">איכות</a></li>
+          <li><a href="#log" data-screen="log">יומן</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <section class="screen" id="screen-overview" aria-labelledby="h-overview">
+      <div class="screen-head"><h1 id="h-overview" tabindex="-1">סקירה</h1></div>
+      <div id="ov-body"><p class="loading">טוען את נתוני הסטודיו…</p></div>
+    </section>
+
+    <section class="screen" id="screen-decisions" aria-labelledby="h-decisions" hidden>
+      <div class="screen-head"><h1 id="h-decisions" tabindex="-1">החלטות</h1></div>
+      <p class="lede">כל שאלה פתוחה למשתמש, עם ההקשר והאפשרויות. בוחרים אפשרות, מוסיפים הערה אם צריך, ושומרים. התשובה נשמרת לכל מי שפותח את הדף, והמנהל ממשיך ממנה.</p>
+      <div id="dec-status"></div>
+      <div class="dec-bar" id="dec-bar"></div>
+      <div id="dec-confirm"></div>
+      <div class="dec-list" id="dec-list"><p class="loading">טוען…</p></div>
+    </section>
+
+    <section class="screen" id="screen-rooms" aria-labelledby="h-rooms" hidden>
+      <div class="screen-head"><h1 id="h-rooms" tabindex="-1">חדרים</h1></div>
+      <div class="room-pick" id="room-pick" role="group" aria-label="בחירת חדר"></div>
+      <div id="room-body"><p class="loading">טוען…</p></div>
+    </section>
+
+    <section class="screen" id="screen-products" aria-labelledby="h-products" hidden>
+      <div class="screen-head"><h1 id="h-products" tabindex="-1">מוצרים</h1></div>
+      <form class="filters" id="filters" role="search" aria-label="סינון מוצרים">
+        <div class="field search"><label for="f-q">חיפוש</label><input type="search" id="f-q" placeholder="שם, מזהה, חומר, SKU או טקסט מההערות" autocomplete="off"></div>
+        <div class="field"><label for="f-room">חדר</label><select id="f-room"></select></div>
+        <div class="field"><label for="f-slot">עמדה</label><select id="f-slot"></select></div>
+        <div class="field"><label for="f-status">סטטוס</label><select id="f-status"></select></div>
+        <div class="field"><label for="f-supplier">ספק</label><select id="f-supplier"></select></div>
+        <div class="field"><label for="f-sort">מיון</label><select id="f-sort">
+          <option value="default">לפי חדר ועמדה</option>
+          <option value="cost-asc">עלות: מהזולה ליקרה</option>
+          <option value="cost-desc">עלות: מהיקרה לזולה</option>
+        </select></div>
+        <div class="field"><span class="check"><input type="checkbox" id="f-dups"><label for="f-dups">רק כרטיסים כפולים</label></span></div>
+      </form>
+      <div class="result-line" id="p-result" aria-live="polite"></div>
+      <div class="pgrid" id="pgrid"><p class="loading">טוען…</p></div>
+    </section>
+
+    <section class="screen" id="screen-quality" aria-labelledby="h-quality" hidden>
+      <div class="screen-head"><h1 id="h-quality" tabindex="-1">איכות</h1></div>
+      <div class="reader">
+        <nav class="rep-list" id="rep-list" aria-label="דוחות"></nav>
+        <article class="md" id="rep-view" aria-live="polite"><p class="loading">טוען…</p></article>
+      </div>
+    </section>
+
+    <section class="screen" id="screen-log" aria-labelledby="h-log" hidden>
+      <div class="screen-head"><h1 id="h-log" tabindex="-1">יומן</h1><p class="small faint" id="log-count"></p></div>
+      <div class="section">
+        <div class="seg" id="log-who" role="group" aria-label="סינון לפי מי כתב"></div>
+        <div class="field narrow"><label for="log-q">חיפוש ביומן</label><input type="search" id="log-q" autocomplete="off" placeholder="מילה, עמדה, פריים…"></div>
+      </div>
+      <div id="log-body"><p class="loading">טוען…</p></div>
+    </section>
+  </main>
+
+  <dialog class="drawer" id="drawer" aria-labelledby="drawer-title">
+    <div class="drawer-in">
+      <div class="drawer-top">
+        <div><p class="eyebrow" id="drawer-eyebrow"></p><h2 id="drawer-title">מוצר</h2></div>
+        <button class="close" type="button" data-close aria-label="סגירה">×</button>
+      </div>
+      <div class="drawer-body" id="drawer-body"></div>
+    </div>
+  </dialog>
+
+  <dialog class="lightbox" id="lightbox" aria-labelledby="lb-cap">
+    <div class="lb-in">
+      <div class="lb-img"><img id="lb-img" alt=""></div>
+      <div class="lb-bar">
+        <p id="lb-cap"></p>
+        <div class="lb-nav">
+          <button class="btn btn-ghost btn-small" type="button" id="lb-prev">הקודמת</button>
+          <button class="btn btn-ghost btn-small" type="button" id="lb-next">הבאה</button>
+          <button class="btn btn-small" type="button" data-close>סגירה</button>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <div class="sr-only" role="status" aria-live="polite" id="live"></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<script>
+(function(){
+'use strict';
+document.documentElement.setAttribute('dir','rtl');
+document.documentElement.setAttribute('lang','he');
+
+/* ---------- helpers ---------- */
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const store = {
+  get(k, d){ try{ const v = localStorage.getItem('studio.'+k); return v == null ? d : JSON.parse(v); }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem('studio.'+k, JSON.stringify(v)); }catch(e){} }
+};
+const say = msg => { const el = $('#live'); el.textContent = ''; setTimeout(()=>{ el.textContent = msg; }, 30); };
+const fmtUSD = n => (typeof n === 'number') ? '$' + n.toLocaleString('en-US',{minimumFractionDigits:2, maximumFractionDigits:2}) : '—';
+const fmtDate = iso => { if(!iso) return ''; if(/^\d{4}-\d{2}-\d{2}$/.test(iso)) return fmtDay(iso); try{ return new Intl.DateTimeFormat('he-IL',{day:'numeric',month:'numeric',year:'numeric',hour:'2-digit',minute:'2-digit',timeZone:'Asia/Jerusalem'}).format(new Date(iso)); }catch(e){ return iso; } };
+const fmtDay = d => { if(!d) return ''; const [y,m,dd] = d.split('-'); return `${+dd}.${+m}.${y}`; };
+const bidi = (txt, cls='') => `<span dir="ltr" class="${cls}">${esc(txt)}</span>`;
+
+const PLACEMENT = {floor:'רצפה', wall:'קיר', window:'חלון', surface:'משטח', sofa:'ספה', ceiling:'תקרה', sill:'אדן'};
+const P_STATUS = {candidate:'מועמד', selected:'נבחר', rejected:'נדחה'};
+const D_STATUS = {open:'פתוחה', answered:'נענתה', applied:'יושמה'};
+const WEIGHT = {light:'קל', medium:'בינוני', heavy:'כבד'};
+const TEMP = {warm:'חם', cool:'קר', neutral:'ניטרלי'};
+const FINISH = {matte:'מט', satin:'סאטן', gloss:'מבריק'};
+const QUALITY = {high:'גבוהה', medium:'בינונית', low:'נמוכה'};
+const RIGHTS = {confirmed:'מאושרות', unclear:'לא ברורות', none:'אין'};
+const LIGHT = {direct:'ישיר', diffuse:'מפוזר', mixed:'משולב'};
+const TAG_HE = {'living-room':'סלון','bedroom':'חדר שינה','hallway':'כניסה','dining':'פינת אוכל','kitchen-dining':'מטבח ופינת אוכל','bath':'מקלחת','work':'עבודה','master':'הורים','corridor':'מסדרון','kids':'ילדים','kids-boy':'ילד','kids-girl':'ילדה'};
+const STYLE_HE = {nordic:'נורדי', boho:'בוהו', 'warm-modern':'מודרני חם'};
+const STD_HE = {unknown:'לא ידוע', unverified:'לא מאומת', stated:'מוצהר בהערות'};
+const WHO = {user:'המשתמש', manager:'המנהל', 'master-designer':'master-designer', 'sourcing-agent':'sourcing', 'motion-agent':'motion-agent', 'render-agent':'render-agent', 'qa-agent':'qa-agent', 'frontend-dev':'frontend-dev', astra:'astra', other:'אחר'};
+
+/* ---------- state ---------- */
+const S = {
+  data:null, rooms:new Map(), slots:new Map(), products:new Map(),
+  screen:'overview', room:store.get('room', null),
+  filters:Object.assign({q:'', room:'', slot:'', status:'', supplier:'', sort:'default', dups:false}, store.get('filters', {})),
+  report:store.get('report', null), logWho:store.get('logWho', 'all'), logQ:'',
+  decFilter:store.get('decFilter','all'),
+  db:null, user:null, uid:null, canWrite:null, dbState:'connecting', dbError:null,
+  dbDocs:new Map(), drafts:{}, saving:new Set(), saved:{}, errors:{},
+  bulk:{open:false, running:false, done:0, total:0, failed:[]},
+  lb:{list:[], i:0}, drawerReturn:null, lbReturn:null
+};
+S.filters.q = ''; // never restore a search term
+
+/* ---------- boot ---------- */
+async function boot(){
+  bindStatic();
+  try{
+    const r = await fetch('./data.json', {cache:'no-cache'});
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    S.data = await r.json();
+  }catch(e){
+    $('#ov-body').innerHTML = `<div class="toast-err"><strong>לא הצלחתי לטעון את data.json.</strong> בונים אותו עם <code>python3 studio/build.py</code> ומגישים את התיקייה studio/dist. (${esc(e.message)})</div>`;
+    $('#stamp').textContent = 'אין נתונים';
+    return;
+  }
+  for(const r of S.data.rooms){ S.rooms.set(r.id, r); for(const s of r.slots) S.slots.set(s.key, s); }
+  for(const p of S.data.products) S.products.set(p.id, p);
+  if(!S.room || !S.rooms.has(S.room)) S.room = S.data.rooms[0]?.id;
+  const b = S.data.build || {};
+  $('#stamp').textContent = b.commit ? `commit ${b.commit}` : 'בנייה מקומית';
+  renderAll();
+  route(false);
+  connectDb();
+}
+
+function renderAll(){
+  renderOverview(); renderDecisions(); renderRoomPick(); renderRoom();
+  initFilters(); renderProducts(); renderReports(); renderLog();
+}
+
+/* ---------- routing ---------- */
+const SCREENS = ['overview','decisions','rooms','products','quality','log'];
+function route(focus){
+  const t = (location.hash || '').replace(/^#/, '');
+  let s = SCREENS.includes(t) ? t : null;
+  if(!s){ if(t) return; s = store.get('screen', 'overview'); if(!SCREENS.includes(s)) s = 'overview'; }
+  S.screen = s; store.set('screen', s);
+  for(const id of SCREENS){ $('#screen-'+id).hidden = id !== s; }
+  for(const a of $$('.tabs a')){ if(a.dataset.screen === s) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); }
+  const cur = $(`.tabs a[data-screen="${s}"]`); if(cur && cur.scrollIntoView) cur.scrollIntoView({block:'nearest', inline:'nearest'});
+  if(focus){ window.scrollTo(0,0); const h = $('#h-'+s); if(h) h.focus({preventScroll:true}); }
+}
+function go(screen){ if(location.hash === '#'+screen){ route(true); } else { location.hash = screen; } }
+
+function bindStatic(){
+  window.addEventListener('hashchange', () => route(true));
+  $('#skip').addEventListener('click', e => { e.preventDefault(); const m = $('#main'); m.focus(); m.scrollIntoView(); });
+  for(const dlg of [$('#drawer'), $('#lightbox')]){
+    dlg.addEventListener('click', e => { if(e.target === dlg || e.target.closest('[data-close]')) closeDialog(dlg); });
+    dlg.addEventListener('close', () => {
+      const back = dlg.id === 'drawer' ? S.drawerReturn : S.lbReturn;
+      if(back && document.contains(back)) back.focus({preventScroll:true});
+    });
+  }
+  $('#lb-prev').addEventListener('click', () => stepLightbox(-1));
+  $('#lb-next').addEventListener('click', () => stepLightbox(1));
+  $('#lightbox').addEventListener('keydown', e => {
+    if(e.key === 'ArrowLeft') stepLightbox(1); else if(e.key === 'ArrowRight') stepLightbox(-1);
+  });
+  document.addEventListener('click', onDocClick);
+}
+function onDocClick(e){
+  const pr = e.target.closest('[data-product]');
+  if(pr){ e.preventDefault(); openProduct(pr.dataset.product, pr); return; }
+  const ro = e.target.closest('[data-goto-room]');
+  if(ro){ e.preventDefault(); S.room = ro.dataset.gotoRoom; store.set('room', S.room); renderRoomPick(); renderRoom(); go('rooms'); return; }
+  const sl = e.target.closest('[data-goto-slot]');
+  if(sl){ e.preventDefault(); const key = sl.dataset.gotoSlot; const s = S.slots.get(key);
+    Object.assign(S.filters, {room: s ? s.room : '', slot: key, status:'', supplier:'', dups:false, q:''});
+    syncFilterInputs(); renderProducts(); go('products'); return; }
+  const gd = e.target.closest('[data-goto]');
+  if(gd){ e.preventDefault(); go(gd.dataset.goto); }
+}
+
+/* ---------- dialogs ---------- */
+function openDialog(dlg){ if(typeof dlg.showModal === 'function'){ if(!dlg.open) dlg.showModal(); } else { dlg.setAttribute('open',''); } }
+function closeDialog(dlg){ if(typeof dlg.close === 'function') dlg.close(); else { dlg.removeAttribute('open'); dlg.dispatchEvent(new Event('close')); } }
+
+/* ---------- decisions model ---------- */
+function decisionsAll(){
+  const stat = (S.data?.decisions?.items) || [];
+  const meta = new Map(stat.map(d => [d.id, d]));
+  let list;
+  if(S.dbState === 'live'){
+    list = [];
+    for(const [id, doc] of S.dbDocs){
+      const m = meta.get(id);
+      list.push(Object.assign({}, doc, {id, _src:'db', _rooms: m ? m._rooms : (doc.rooms || []), _order: m ? m._order : 1000 + list.length}));
+    }
+    for(const d of stat){ if(!S.dbDocs.has(d.id)) list.push(Object.assign({}, d, {_src:'static'})); }
+  } else {
+    list = stat.map(d => Object.assign({}, d, {_src:'static'}));
+  }
+  const rank = s => s === 'open' ? 0 : s === 'answered' ? 1 : s === 'applied' ? 2 : 3;
+  const st = d => d.status || 'open';
+  list.sort((a,b) => rank(st(a)) - rank(st(b)) || (isBlocking(b) - isBlocking(a)) || (a._order - b._order));
+  return list;
+}
+const isBlocking = d => (d.status || 'open') === 'open' && !!String(d.blocks || '').trim();
+const canAnswer = d => S.dbState === 'live' && d._src === 'db' && S.canWrite !== false && (d.status || 'open') !== 'applied' && !S.bulk.running;
+const recommended = d => (d.options || []).filter(o => o.recommended);
+
+/* ---------- overview ---------- */
+function renderOverview(){
+  const D = S.data; if(!D) return;
+  const decs = decisionsAll();
+  const open = decs.filter(d => (d.status || 'open') === 'open');
+  const blocking = open.filter(isBlocking);
+  const b = D.build || {};
+  $('#badge-dec').textContent = open.length ? String(open.length) : ''; $('#badge-dec-sr').textContent = open.length ? `, ${open.length} פתוחות` : '';
+
+  const top = (blocking.length ? blocking : open).slice(0, 4);
+  const waiting = open.length ? `
+    <section class="waiting" aria-labelledby="h-wait">
+      <div class="big num" aria-hidden="true">${open.length}</div>
+      <div>
+        <h2 id="h-wait"><span class="sr-only">${open.length} </span>${open.length === 1 ? 'החלטה מחכה לך' : 'החלטות מחכות לך'}</h2>
+        <p>${blocking.length ? `${blocking.length} מהן חוסמות עבודה. הן מופיעות ראשונות בתור.` : 'אף אחת מהן לא חוסמת כרגע.'}</p>
+        <ul>${top.map(d => `<li><span class="code-tag">${esc(d.id)}</span><span>${esc(d.title || d.question)}${isBlocking(d) ? ` <span class="small dim">· חוסמת: ${esc(d.blocks)}</span>` : ''}</span></li>`).join('')}</ul>
+        <div class="seg"><a class="btn" href="#decisions">לתור ההחלטות</a></div>
+      </div>
+    </section>` : `
+    <section class="waiting" aria-labelledby="h-wait"><div class="big num" aria-hidden="true">0</div><div><h2 id="h-wait">אין החלטות פתוחות</h2><p>כל השאלות נענו. ההחלטות שנענו ושיושמו מופיעות במסך ההחלטות.</p></div></section>`;
+
+  const stages = (D.stages || []).filter(s => s.n >= 0 && s.n <= 4).map(s => {
+    const next = s.items.find(i => i.state !== 'done');
+    const pct = s.total ? Math.round(((s.done + s.partial * 0.5) / s.total) * 100) : 0;
+    return `<li class="stage">
+      <span class="stage-n num" aria-hidden="true">${s.n}</span>
+      <div>
+        <div class="stage-title">שלב ${s.n} · ${esc(s.title)}</div>
+        <div class="ticks" aria-hidden="true">${s.items.map(i => `<span class="tick ${i.state === 'done' ? 'done' : i.state === 'partial' ? 'partial' : ''} ${i.gate ? 'gate' : ''}" title="${esc(i.text)}"></span>`).join('')}</div>
+        <p class="stage-next">${next ? `הבא: ${esc(next.text)}` : 'הושלם'}</p>
+      </div>
+      <span class="stage-count num">${s.done}/${s.total}${s.partial ? ` <span class="faint">(+${s.partial} בתהליך)</span>` : ''}<span class="sr-only">, ${pct}%</span></span>
+      <details class="stage-items"><summary>כל המשימות בשלב</summary><ul>${s.items.map(i => `<li class="${i.state === 'done' ? 'it-done' : i.state === 'partial' ? 'it-partial' : ''}">${i.gate ? '<strong>' : ''}${esc(i.text)}${i.gate ? '</strong>' : ''}${i.state === 'done' ? '<span class="sr-only"> (הושלם)</span>' : ''}</li>`).join('')}</ul></details>
+    </li>`;
+  }).join('');
+
+  const bs = D.counts.by_status || {};
+  const order = ['candidate','selected','rejected'];
+  const keys = order.concat(Object.keys(bs).filter(k => !order.includes(k)));
+  const total = D.counts.products || 1;
+  const stack = keys.filter(k => bs[k]).map(k => `<span class="s-${esc(k)}" data-w="${(bs[k]/total*100).toFixed(2)}"></span>`).join('');
+  const dotCls = {candidate:'var(--ink-3)', selected:'var(--sage-ink)', rejected:'var(--brick-ink)'};
+  const statusRows = keys.map(k => `<dt><span class="dot" data-bg="${dotCls[k] || 'var(--rule-2)'}"></span><span>${esc(P_STATUS[k] || k)}</span></dt><dd>${bs[k] || 0}</dd>`).join('');
+
+  const rooms = D.rooms.map(r => {
+    const img = r.images.find(i => i.kind === 'round2' || i.kind === 'render') || r.images[0];
+    const nOpen = open.filter(d => (d._rooms || []).includes(r.id)).length;
+    const pct = r.n_slots ? Math.round(r.n_covered3 / r.n_slots * 100) : 0;
+    return `<a class="room-card" href="#rooms" data-goto-room="${esc(r.id)}">
+      <div class="thumb">${img ? `<img src="${esc(img.src)}" alt="" loading="lazy" width="${img.w}" height="${img.h}">` : ''}</div>
+      <div class="body">
+        <h3>${esc(r.name_he)}</h3>
+        <div class="frames-line">${r.frames.map(f => `<span class="code-tag">${esc(f.id)}</span>`).join('')}</div>
+        <dl class="mini-stats">
+          <dt>פריימים</dt><dd>${r.frames.length}</dd>
+          <dt>עמדות</dt><dd>${r.n_slots}</dd>
+          <dt>עם 3 מועמדים ומעלה</dt><dd>${r.n_covered3} מתוך ${r.n_slots}</dd>
+          <dt>החלטות פתוחות</dt><dd class="${nOpen ? 'open-count' : ''}">${nOpen}</dd>
+        </dl>
+        <div class="meter" role="img" aria-label="${pct}% מהעמדות עם 3 מועמדים ומעלה"><span data-w="${pct}"></span></div>
+      </div>
+    </a>`;
+  }).join('');
+
+  const last = (D.log || []).slice(-6).reverse();
+  const logHtml = last.map(logItem).join('');
+  const failed = D.counts.images_failed || 0;
+  const dirty = (b.dirty || []).length;
+
+  $('#ov-body').innerHTML = `
+    <div class="screen roomy">
+      ${waiting}
+      <div class="ov-grid">
+        <section class="section" aria-labelledby="h-stages">
+          <div class="section-head"><h2 id="h-stages">התקדמות לפי שלבים</h2><span class="small faint">מתוך status/board.md</span></div>
+          <ol class="stages">${stages}</ol>
+          <div class="legend"><span><i class="tick done"></i>הושלם</span><span><i class="tick partial"></i>בתהליך</span><span><i class="tick"></i>פתוח</span><span><i class="tick gate"></i>נקודת אישור של המשתמש</span></div>
+        </section>
+        <aside class="section" aria-labelledby="h-pstat">
+          <div class="section-head"><h2 id="h-pstat">מוצרים</h2><a class="small" href="#products">לכל המוצרים</a></div>
+          <div class="side-card">
+            <p><span class="stat bignum">${D.counts.products}</span> <span class="muted">כרטיסי מוצר</span></p>
+            <div class="stack" role="img" aria-label="${keys.map(k => `${P_STATUS[k] || k} ${bs[k] || 0}`).join(', ')}">${stack}</div>
+            <dl class="kv">${statusRows}</dl>
+            <p class="small muted">${D.counts.duplicates} כרטיסים כפולים (אותו מוצר אצל הספק) · ${failed ? `${failed} בלי תמונה` : 'לכל המוצרים יש תמונה'}</p>
+          </div>
+        </aside>
+      </div>
+      <section class="section" aria-labelledby="h-rooms-ov">
+        <div class="section-head"><h2 id="h-rooms-ov">חדרים</h2><span class="small faint">${D.counts.rooms} חדרים · ${D.counts.frames} פריימים · ${D.counts.slots} עמדות</span></div>
+        <div class="room-cards">${rooms}</div>
+      </section>
+      <section class="section" aria-labelledby="h-log-ov">
+        <div class="section-head"><h2 id="h-log-ov">ביומן לאחרונה</h2><a class="small" href="#log">ליומן המלא</a></div>
+        <ul class="log-list">${logHtml}</ul>
+      </section>
+      <p class="foot">נבנה מ-commit <code>${esc(b.commit || '?')}</code>${b.branch ? ` (ענף <code>${esc(b.branch)}</code>)` : ''} · ${esc(fmtDate(b.built_at))}${dirty ? ` · כולל ${dirty} ${dirty === 1 ? 'קובץ' : 'קבצים'} שעוד לא נשמרו ב-commit: ${b.dirty.map(x => `<code>${esc(x)}</code>`).join(', ')}` : ''}</p>
+    </div>`;
+  paintVars($('#ov-body'));
+  for(const li of $$('#ov-body .log-item')) li.classList.add('clamp');
+}
+function paintVars(root){
+  for(const el of $$('[data-bg]', root)) el.style.background = el.dataset.bg;
+  for(const el of $$('[data-w]', root)) el.style.width = el.dataset.w + '%';
+  for(const el of $$('[data-sw]', root)) el.style.background = el.dataset.sw;
+}
+function logItem(e){
+  const rest = (e.parts || []).slice(1);
+  return `<li class="log-item">
+    <span class="log-when">${esc(fmtDay(e.date))}</span>
+    <div class="minw0">
+      <div class="log-who"><span class="chip ${e.who_key === 'user' ? 'who-user' : ''}">${esc(e.who)}</span></div>
+      <p class="log-main">${esc((e.parts || [e.text])[0])}</p>
+      ${rest.map(r => `<p class="log-rest">${esc(r)}</p>`).join('')}
+    </div>
+  </li>`;
+}
+
+/* ---------- decisions screen ---------- */
+function dbStatusHtml(){
+  const st = S.dbState;
+  if(st === 'connecting') return `<div class="db-line"><span class="db-dot"></span><span>מתחבר לתור התשובות…</span></div>`;
+  if(st === 'none') return `<div class="db-line"><span class="db-dot warn"></span><span><strong>תצוגה לקריאה בלבד.</strong> כאן מוצגת הגרסה מ-status/decisions.json כפי שהייתה בבנייה. כדי לענות, פתח/י את הדף ב-claude.ai.</span></div>`;
+  if(st === 'empty') return `<div class="db-line"><span class="db-dot warn"></span><span><strong>תור התשובות עוד ריק.</strong> מוצגת הגרסה מ-status/decisions.json לקריאה בלבד, עד שהמנהל יטען את ההחלטות. כדי לענות, פתח/י את הדף ב-claude.ai.</span></div>`;
+  if(st === 'error') return `<div class="db-line"><span class="db-dot warn"></span><span><strong>החיבור לתור התשובות נפסק</strong>${S.dbError ? ` (${esc(S.dbError)})` : ''}. מוצגת הגרסה מהבנייה לקריאה בלבד. רענון הדף יחבר מחדש. כדי לענות, פתח/י את הדף ב-claude.ai.</span></div>`;
+  if(S.canWrite === false) return `<div class="db-line"><span class="db-dot warn"></span><span><strong>יש לך הרשאת צפייה בלבד.</strong> התשובות מוצגות חי, אבל אין אפשרות לענות מהחשבון הזה.</span></div>`;
+  return `<div class="db-line"><span class="db-dot live"></span><span><strong>מחובר.</strong> תשובה שנשמרת כאן מופיעה מיד לכל מי שפותח את הדף, והמנהל ממשיך ממנה.</span></div>`;
+}
+function renderDecisions(){
+  if(!S.data) return;
+  const all = decisionsAll();
+  const counts = {all:all.length, open:0, answered:0, applied:0};
+  for(const d of all){ const s = d.status || 'open'; if(counts[s] != null) counts[s]++; }
+  $('#dec-status').innerHTML = dbStatusHtml();
+  const bulkable = all.filter(d => (d.status || 'open') === 'open' && canAnswer(d) && recommended(d).length === 1);
+  const f = S.decFilter;
+  $('#dec-bar').innerHTML = `
+    <div class="seg" role="group" aria-label="סינון לפי סטטוס">
+      ${[['all','הכול'],['open','פתוחות'],['answered','נענו'],['applied','יושמו']].map(([k,l]) => `<button type="button" data-decf="${k}" aria-pressed="${f === k}">${l}<span class="n num">${counts[k]}</span></button>`).join('')}
+    </div>
+    ${bulkable.length ? `<button type="button" class="btn btn-ghost" id="bulk-open" ${S.bulk.running ? 'disabled' : ''}>לאשר את כל ההמלצות הפתוחות (${bulkable.length})</button>` : ''}`;
+  renderBulk(bulkable);
+  const list = all.filter(d => f === 'all' || (d.status || 'open') === f);
+  const active = document.activeElement;
+  const activeId = active && active.id && $('#dec-list').contains(active) ? active.id : null;
+  let sel = null; if(activeId && active.tagName === 'TEXTAREA'){ sel = [active.selectionStart, active.selectionEnd]; }
+  $('#dec-list').innerHTML = list.length ? list.map(decCard).join('') : `<p class="empty">אין החלטות בסינון הזה.</p>`;
+  if(activeId){ const el = document.getElementById(activeId); if(el){ el.focus({preventScroll:true}); if(sel) try{ el.setSelectionRange(sel[0], sel[1]); }catch(e){} } }
+  for(const b of $$('[data-decf]')) b.onclick = () => { S.decFilter = b.dataset.decf; store.set('decFilter', S.decFilter); renderDecisions(); };
+  const bo = $('#bulk-open'); if(bo) bo.onclick = () => { S.bulk.open = true; S.bulk.failed = []; renderDecisions(); const c = $('#bulk-yes'); if(c) c.focus(); };
+  for(const card of $$('#dec-list .dcard')) bindCard(card);
+}
+function renderBulk(bulkable){
+  const box = $('#dec-confirm');
+  const B = S.bulk;
+  if(B.running){ box.innerHTML = `<div class="confirm" role="status"><strong>שומר ${B.done} מתוך ${B.total}…</strong></div>`; return; }
+  if(B.failed.length && !B.open){ box.innerHTML = `<div class="toast-err" role="alert">${B.failed.length} החלטות לא נשמרו: ${B.failed.map(f => `${esc(f.id)} (${esc(f.msg)})`).join(' · ')}</div>`; return; }
+  if(!B.open || !bulkable.length){ box.innerHTML = ''; return; }
+  box.innerHTML = `<div class="confirm" role="region" aria-labelledby="bulk-h">
+    <h2 id="bulk-h" class="h-mid">לאשר ${bulkable.length} החלטות לפי ההמלצה?</h2>
+    <p class="small muted">כל אחת תישמר כנענתה עם האפשרות המומלצת. הערה שכבר כתבת בכרטיס תישמר איתה. אפשר לשנות כל תשובה אחר כך.</p>
+    <ol>${bulkable.map(d => { const o = recommended(d)[0]; return `<li><code>${esc(d.id)}</code> ${esc(d.title || d.question)}: <strong>${esc(o.label)}</strong></li>`; }).join('')}</ol>
+    <div class="row"><button type="button" class="btn" id="bulk-yes">כן, לאשר את כולן</button><button type="button" class="btn btn-ghost" id="bulk-no">ביטול</button></div>
+  </div>`;
+  $('#bulk-no').onclick = () => { S.bulk.open = false; renderDecisions(); const b = $('#bulk-open'); if(b) b.focus(); };
+  $('#bulk-yes').onclick = () => runBulk(bulkable);
+}
+async function runBulk(list){
+  const B = S.bulk; B.open = false; B.running = true; B.done = 0; B.total = list.length; B.failed = [];
+  renderDecisions();
+  for(const d of list){
+    const o = recommended(d)[0];
+    const note = (S.drafts[d.id] && S.drafts[d.id].note) || '';
+    try{ await writeAnswer(d.id, o.id, note); delete S.drafts[d.id]; }
+    catch(e){ B.failed.push({id:d.id, msg:errText(e)}); }
+    B.done++; renderBulk([]);
+  }
+  B.running = false;
+  say(B.failed.length ? `${B.total - B.failed.length} נשמרו, ${B.failed.length} נכשלו` : `${B.total} החלטות אושרו לפי ההמלצה`);
+  renderDecisions(); renderOverview();
+}
+function optLabel(d, id){ const o = (d.options || []).find(o => o.id === id); return o ? o.label : id; }
+function whoLabel(by){ if(!by) return ''; if(S.uid && by === S.uid) return 'על ידך'; return 'על ידי משתמש אחר'; }
+function decCard(d){
+  const st = d.status || 'open';
+  const editable = canAnswer(d);
+  const ans = d.answer || null;
+  const draft = S.drafts[d.id] || {};
+  const chosen = draft.option ?? (ans && ans.option) ?? null;
+  const note = draft.note ?? (ans && ans.note) ?? '';
+  const blocking = isBlocking(d);
+  const roomNames = (d._rooms || []).map(r => S.rooms.get(r)?.name_he).filter(Boolean);
+  const opts = (d.options || []).map(o => {
+    const rec = o.recommended ? `<span class="rec">מומלץ</span>` : '';
+    if(editable){
+      return `<label class="opt" for="o-${esc(d.id)}-${esc(o.id)}"><input type="radio" id="o-${esc(d.id)}-${esc(o.id)}" name="opt-${esc(d.id)}" value="${esc(o.id)}" ${chosen === o.id ? 'checked' : ''}>
+        <span class="ol">${esc(o.label)} ${rec}</span>${o.desc ? `<span class="od">${esc(o.desc)}</span>` : ''}</label>`;
+    }
+    const isChosen = ans && ans.option === o.id;
+    return `<div class="opt ro ${isChosen ? 'chosen' : ''}"><span class="ol">${esc(o.label)} ${rec}${isChosen ? ' <span class="chip st-answered">נבחרה</span>' : ''}</span>${o.desc ? `<span class="od">${esc(o.desc)}</span>` : ''}</div>`;
+  }).join('');
+  const saving = S.saving.has(d.id);
+  const err = S.errors[d.id];
+  const savedAt = S.saved[d.id] && (Date.now() - S.saved[d.id] < 6000);
+  const answerBox = ans ? `<div class="answer-box"><span><strong>התשובה:</strong> ${esc(optLabel(d, ans.option))}</span>${ans.note ? `<span class="muted">הערה: ${esc(ans.note)}</span>` : ''}<span class="xs faint">${esc(fmtDate(ans.at))} ${esc(whoLabel(ans.by))}</span></div>` : '';
+  return `<article class="dcard is-${esc(st)} ${blocking ? 'is-blocking' : ''}" data-id="${esc(d.id)}" aria-labelledby="dt-${esc(d.id)}">
+    <div class="dhead"><span class="did">${esc(d.id)}</span><span class="dgroup">${esc(d.group || '')}</span><span class="spacer"></span>
+      ${blocking ? '<span class="chip chip-block">חוסמת</span>' : ''}<span class="chip st-${esc(st)}">${esc(D_STATUS[st] || st)}</span></div>
+    <h3 id="dt-${esc(d.id)}">${esc(d.title || d.id)}</h3>
+    <p class="dq">${esc(d.question || '')}</p>
+    ${d.context ? `<p class="dctx">${esc(d.context)}</p>` : ''}
+    ${String(d.blocks || '').trim() ? `<p class="dblocks"><span class="eyebrow">מה זה חוסם</span><span>${esc(d.blocks)}</span></p>` : ''}
+    ${ans && !editable ? answerBox : ''}
+    <fieldset class="opts" ${editable ? '' : 'disabled'}><legend>אפשרויות</legend>${opts}</fieldset>
+    ${editable ? `
+      ${ans ? answerBox : ''}
+      <div class="note-field"><label for="note-${esc(d.id)}">הערה חופשית (לא חובה)</label><textarea id="note-${esc(d.id)}" rows="2">${esc(note)}</textarea></div>
+      <div class="dact"><button type="button" class="btn" data-save="${esc(d.id)}" ${saving || !chosen ? 'disabled' : ''}>${saving ? 'שומר…' : ans ? 'עדכון התשובה' : 'שמירת התשובה'}</button>
+        <span class="save-state ${err ? 'err' : ''}" role="${err ? 'alert' : 'status'}">${err ? esc(err) : savedAt ? 'נשמר.' : !chosen ? 'בחר/י אפשרות כדי לשמור.' : ''}</span></div>` : ''}
+    <p class="dmeta">${d.source ? `<span>מקור: <code>${esc(d.source)}</code></span>` : ''}${d.asked ? `<span>נשאלה ${esc(fmtDay(d.asked))}</span>` : ''}${roomNames.length ? `<span>חדרים: ${esc(roomNames.join(', '))}</span>` : ''}${d._src === 'static' && S.dbState === 'live' ? '<span>עוד לא בתור התשובות, לקריאה בלבד</span>' : ''}</p>
+  </article>`;
+}
+function bindCard(card){
+  const id = card.dataset.id;
+  for(const r of $$('input[type=radio]', card)) r.addEventListener('change', () => {
+    S.drafts[id] = Object.assign({}, S.drafts[id], {option:r.value}); delete S.errors[id];
+    const b = $(`[data-save="${CSS.escape(id)}"]`, card); if(b) b.disabled = false;
+    const s = $('.save-state', card); if(s){ s.textContent = ''; s.classList.remove('err'); }
+  });
+  const ta = $('textarea', card);
+  if(ta) ta.addEventListener('input', () => { S.drafts[id] = Object.assign({}, S.drafts[id], {note:ta.value}); });
+  const sb = $('[data-save]', card);
+  if(sb) sb.addEventListener('click', () => saveOne(id));
+}
+async function saveOne(id){
+  const d = decisionsAll().find(x => x.id === id); if(!d) return;
+  const draft = S.drafts[id] || {};
+  const option = draft.option ?? (d.answer && d.answer.option);
+  if(!option) return;
+  const note = draft.note ?? (d.answer && d.answer.note) ?? '';
+  S.saving.add(id); delete S.errors[id]; renderDecisions();
+  try{
+    await writeAnswer(id, option, note);
+    delete S.drafts[id]; S.saved[id] = Date.now();
+    say(`התשובה ל-${id} נשמרה`);
+    setTimeout(() => { if(S.screen === 'decisions') renderDecisions(); }, 6200);
+  }catch(e){
+    S.errors[id] = errText(e);
+    if(e && e.code === 'invalid_argument' && S.canWrite == null){ /* refused write decides */ }
+    say(`השמירה של ${id} נכשלה`);
+  }finally{
+    S.saving.delete(id); renderDecisions(); renderOverview();
+  }
+}
+async function writeAnswer(id, option, note){
+  if(!S.db) throw {code:'not_granted'};
+  const by = S.user ? await S.user.id() : null;
+  const body = {status:'answered', answer:{option, note:String(note || '').trim(), at:new Date().toISOString(), by}};
+  const ref = S.db.collection('decisions').doc(id);
+  try{ await ref.update(body); }
+  catch(e){
+    if(e && e.code === 'unavailable'){ await new Promise(r => setTimeout(r, 400 + Math.random() * 600)); await ref.update(body); }
+    else throw e;
+  }
+}
+function errText(e){
+  const c = e && e.code;
+  return ({
+    invalid_argument:'השמירה נדחתה. ייתכן שאין לך הרשאת כתיבה בדף, או שההחלטה עוד לא בתור התשובות.',
+    quota_exceeded:'מקום האחסון של הדף מלא, ולכן התשובה לא נשמרה.',
+    resource_exhausted:'יותר מדי שמירות ברצף. נסה/י שוב בעוד רגע.',
+    revoked:'הגישה לדף השתנתה. רענן/י את הדף ונסה/י שוב.',
+    unavailable:'החיבור לא זמין כרגע. נסה/י שוב בעוד רגע.',
+    not_granted:'אין חיבור לתור התשובות בתצוגה הזו. פתח/י את הדף ב-claude.ai.'
+  })[c] || `השמירה נכשלה${c ? ` (${c})` : ''}. נסה/י שוב.`;
+}
+
+/* ---------- db connection ---------- */
+async function connectDb(){
+  const c = window.claude;
+  if(!c || typeof c.use !== 'function'){ S.dbState = 'none'; renderDecisions(); renderOverview(); return; }
+  let db = null, user = null;
+  try{ [db, user] = await Promise.all([c.use('db'), c.use('user')]); }catch(e){ db = null; }
+  S.user = user || null;
+  if(!db){ S.dbState = 'none'; renderDecisions(); renderOverview(); return; }
+  S.db = db;
+  if(user){
+    try{ S.uid = await user.id(); }catch(e){ S.uid = null; }
+    try{ S.canWrite = await user.can('data.write'); }catch(e){ S.canWrite = null; }
+  }
+  try{
+    db.collection('decisions').onSnapshot(snap => {
+      const m = new Map();
+      for(const doc of snap.docs){ if(doc.exists){ const v = doc.data(); if(v) m.set(doc.id, v); } }
+      S.dbDocs = m; S.dbState = m.size ? 'live' : 'empty';
+      renderDecisions(); renderOverview(); renderRoom();
+    }, err => {
+      S.dbState = 'error'; S.dbError = err && err.code; renderDecisions(); renderOverview();
+    });
+  }catch(e){ S.dbState = 'error'; S.dbError = e && e.code; renderDecisions(); renderOverview(); }
+}
+
+/* ---------- rooms ---------- */
+function renderRoomPick(){
+  if(!S.data) return;
+  $('#room-pick').innerHTML = S.data.rooms.map(r => `<button type="button" data-room="${esc(r.id)}" aria-pressed="${r.id === S.room}">${esc(r.name_he)}</button>`).join('');
+  for(const b of $$('#room-pick button')) b.onclick = () => { S.room = b.dataset.room; store.set('room', S.room); renderRoomPick(); renderRoom(); $(`#room-pick [data-room="${CSS.escape(S.room)}"]`).focus(); };
+}
+function renderRoom(){
+  if(!S.data) return;
+  const r = S.rooms.get(S.room); if(!r) return;
+  const openDec = decisionsAll().filter(d => (d.status || 'open') === 'open' && (d._rooms || []).includes(r.id));
+  const ordered = r.images.filter(im => im.kind !== 'compare').concat(r.images.filter(im => im.kind === 'compare'));
+  const imgs = ordered.map((im, i) => `<figure class="shot ${im.kind === 'compare' ? 'wide' : ''}">
+      <button type="button" data-shot="${i}" aria-label="הגדלה: ${esc(im.caption)}"><img src="${esc(im.src)}" alt="${esc(im.caption)}" width="${im.w}" height="${im.h}"></button>
+      <figcaption><span><span class="chip ${im.kind === 'round2' ? 'st-answered' : ''}">${esc(im.label)}</span>${im.frame ? ` <span class="code-tag">${esc(im.frame)}</span>` : ''}</span><span>${esc(im.caption)}</span>${im.status ? `<span class="xs faint">${esc(im.status)}</span>` : ''}</figcaption>
+    </figure>`).join('');
+  const rows = r.slots.map(s => {
+    const n = s.n_candidates;
+    const pips = [0,1,2].map(i => `<i class="${i < Math.min(n,3) ? 'on' : ''}"></i>`).join('');
+    const frames = s.frames.map(f => `<span class="code-tag">${esc(f)}</span>`).join(' ');
+    return `<tr>
+      <td class="c-id"><button type="button" class="linkish slot-open" data-goto-slot="${esc(s.key)}" aria-label="המוצרים של ${esc(s.name_he || s.id)}">${esc(s.id)}</button></td>
+      <td>${esc(s.name_he || '')}${s.for_rooms ? `<span class="sub">רק ב${esc(s.for_rooms.map(x => x === 'boy' ? 'חדר הילד' : x === 'girl' ? 'חדר הילדה' : x).join(', '))}</span>` : ''}${s.set_of ? `<span class="sub">סט של ${esc(s.set_of)}</span>` : ''}</td>
+      <td>${s.category ? `<code>${esc(s.category)}</code>` : '<span class="faint">—</span>'}</td>
+      <td>${esc(PLACEMENT[s.placement] || s.placement || '—')}${s.placement_detail ? `<span class="sub">${esc(s.placement_detail)}</span>` : ''}</td>
+      <td>${frames}${s.transit_only ? ' <span class="chip st-open">רק במעבר</span>' : ''}${s.seen_in && s.seen_in.length ? `<span class="sub">נראית גם: ${esc(s.seen_in.join(', '))}</span>` : ''}</td>
+      <td class="num">${esc(s.variants_required ?? '—')}</td>
+      <td class="cell-n num">${s.n_direct}${s.n_shared ? `<span class="faint"> +${s.n_shared}</span>` : ''}<span class="pips" aria-hidden="true">${pips}</span>${s.n_shared ? `<span class="sub">+${s.n_shared} ממאגר משותף</span>` : ''}${s.n_rejected ? `<span class="sub">${s.n_rejected} נדחו</span>` : ''}</td>
+      <td class="num">${s.n_selected}/${esc(s.variants_required ?? 3)}</td>
+    </tr>`;
+  }).join('');
+  $('#room-body').innerHTML = `<div class="screen roomy">
+    <div class="room-head">
+      <h2>${esc(r.name_he)}</h2>
+      <div class="facts">
+        <span>פריימים: <b>${r.frames.length}</b> (${r.frames.map(f => esc(f.id)).join(', ')})</span>
+        <span>עמדות: <b>${r.n_slots}</b></span>
+        <span>עם 3 מועמדים ומעלה: <b>${r.n_covered3} מתוך ${r.n_slots}</b></span>
+        <span>החלטות פתוחות: <b>${openDec.length}</b>${openDec.length ? ` (${openDec.map(d => `<a href="#decisions">${esc(d.id)}</a>`).join(', ')})` : ''}</span>
+        ${r.slots_file ? `<span>קובץ: <code>${esc(r.slots_file)}</code>${r.slots_version ? ` · גרסה ${esc(r.slots_version)}` : ''}</span>` : ''}
+      </div>
+      ${r.frames.map(f => f.hero ? `<p class="small muted"><span class="code-tag">${esc(f.id)}</span> ${bidi(f.hero)}</p>` : '').join('')}
+    </div>
+    <section class="section" aria-labelledby="h-frames"><div class="section-head"><h3 id="h-frames">פריימים ורינדורים</h3><span class="small faint">${r.images.length} תמונות · לחיצה מגדילה</span></div>
+      ${r.images.length ? `<div class="gallery">${imgs}</div>` : '<p class="empty">אין עדיין תמונות לחדר הזה.</p>'}</section>
+    <section class="section" aria-labelledby="h-slots"><div class="section-head"><h3 id="h-slots">עמדות</h3><span class="small faint">לחיצה על מזהה פותחת את המוצרים שלה</span></div>
+      <div class="tbl-wrap"><table class="slots-table">
+        <caption class="sr-only">עמדות המוצר ב${esc(r.name_he)}</caption>
+        <thead><tr><th scope="col">מזהה</th><th scope="col">שם</th><th scope="col">קטגוריה</th><th scope="col">מיקום</th><th scope="col">פריימים</th><th scope="col">וריאציות נדרשות</th><th scope="col">מועמדים</th><th scope="col">נבחרים</th></tr></thead>
+        <tbody>${rows}</tbody></table></div>
+      <p class="xs faint">מועמדים = כרטיסים שלא נדחו. המספר האפור הוא כרטיסים ממאגר משותף שהעמדה מפנה אליו בשדה shared. שלושת הריבועים מסמנים את הסף של 3 מועמדים.</p>
+    </section></div>`;
+  for(const b of $$('#room-body [data-shot]')) b.onclick = () => openLightbox(ordered, +b.dataset.shot, b);
+}
+function openLightbox(list, i, from){ S.lb = {list, i}; S.lbReturn = from || null; showLb(); openDialog($('#lightbox')); $('#lightbox [data-close]').focus(); }
+function showLb(){ const {list, i} = S.lb; const im = list[i]; if(!im) return;
+  const img = $('#lb-img'); img.src = im.src; img.alt = im.caption; img.width = im.w; img.height = im.h;
+  $('#lb-cap').textContent = `${i + 1}/${list.length} · ${im.label}${im.frame ? ' · ' + im.frame : ''} · ${im.caption}`;
+  $('#lb-prev').disabled = i === 0; $('#lb-next').disabled = i === list.length - 1; }
+function stepLightbox(d){ const n = S.lb.i + d; if(n >= 0 && n < S.lb.list.length){ S.lb.i = n; showLb(); } }
+
+/* ---------- products ---------- */
+function initFilters(){
+  const D = S.data;
+  $('#f-room').innerHTML = `<option value="">כל החדרים</option>` + D.rooms.map(r => `<option value="${esc(r.id)}">${esc(r.name_he)}</option>`).join('');
+  const statuses = [...new Set(D.products.map(p => p.status))];
+  $('#f-status').innerHTML = `<option value="">כל הסטטוסים</option>` + statuses.map(s => `<option value="${esc(s)}">${esc(P_STATUS[s] || s)} (${D.products.filter(p => p.status === s).length})</option>`).join('');
+  const sups = [...new Set(D.products.map(p => p.supplier && p.supplier.name).filter(Boolean))];
+  $('#f-supplier').innerHTML = `<option value="">כל הספקים</option>` + sups.map(s => `<option value="${esc(s)}">${esc(s)}</option>`).join('');
+  if(S.filters.room && !S.rooms.has(S.filters.room)) S.filters.room = '';
+  if(S.filters.slot && !S.slots.has(S.filters.slot)) S.filters.slot = '';
+  if(S.filters.status && !statuses.includes(S.filters.status)) S.filters.status = '';
+  if(S.filters.supplier && !sups.includes(S.filters.supplier)) S.filters.supplier = '';
+  fillSlotSelect();
+  syncFilterInputs();
+  const upd = () => { readFilters(); renderProducts(); };
+  $('#f-q').addEventListener('input', upd);
+  $('#f-room').addEventListener('change', () => { S.filters.room = $('#f-room').value; const s = S.slots.get(S.filters.slot); if(s && S.filters.room && s.room !== S.filters.room) S.filters.slot = ''; fillSlotSelect(); syncFilterInputs(); upd(); });
+  for(const id of ['#f-slot','#f-status','#f-supplier','#f-sort','#f-dups']) $(id).addEventListener('change', upd);
+  $('#filters').addEventListener('submit', e => e.preventDefault());
+}
+function fillSlotSelect(){
+  const D = S.data; const room = S.filters.room;
+  const groups = D.rooms.filter(r => !room || r.id === room);
+  $('#f-slot').innerHTML = `<option value="">כל העמדות</option>` + groups.map(r => {
+    const opts = r.slots.map(s => `<option value="${esc(s.key)}">${esc(s.name_he || s.id)} · ${esc(s.id)}</option>`).join('');
+    return room ? opts : `<optgroup label="${esc(r.name_he)}">${opts}</optgroup>`;
+  }).join('');
+}
+function syncFilterInputs(){
+  const f = S.filters;
+  if(S.data){ fillSlotSelect(); }
+  $('#f-q').value = f.q; $('#f-room').value = f.room; $('#f-slot').value = f.slot; $('#f-status').value = f.status;
+  $('#f-supplier').value = f.supplier; $('#f-sort').value = f.sort; $('#f-dups').checked = !!f.dups;
+}
+function readFilters(){
+  const f = S.filters;
+  f.q = $('#f-q').value; f.room = $('#f-room').value; f.slot = $('#f-slot').value; f.status = $('#f-status').value;
+  f.supplier = $('#f-supplier').value; f.sort = $('#f-sort').value; f.dups = $('#f-dups').checked;
+  store.set('filters', Object.assign({}, f, {q:''}));
+}
+function slotLabel(p){
+  if(!p.slot_key) return p.pool ? 'מאגר משותף, בלי עמדה' : (p.slot || '—');
+  const s = S.slots.get(p.slot_key); const r = S.rooms.get(p.room);
+  return `${r ? r.name_he : p.room} · ${s ? (s.name_he || s.id) : p.slot}${s ? '' : ' (עמדה לא קיימת בקובץ)'}`;
+}
+function haystack(p){
+  return [p.id, p.name, p.slot, p.category, (p.materials || []).join(' '), p.texture, p.notes, p.supplier && p.supplier.sku, p.pid, (p.colors || {}).dominant_hex, slotLabel(p), (p.rooms || []).map(t => TAG_HE[t] || t).join(' ')].join(' ').toLowerCase();
+}
+function filtered(){
+  const f = S.filters;
+  const toks = f.q.trim().toLowerCase().split(/\s+/).filter(Boolean);
+  let list = S.data.products.filter(p => {
+    if(f.room && !(p.in_rooms || []).includes(f.room)) return false;
+    if(f.slot && !(p.slot_key === f.slot || (p.shared_in || []).includes(f.slot))) return false;
+    if(f.status && p.status !== f.status) return false;
+    if(f.supplier && !(p.supplier && p.supplier.name === f.supplier)) return false;
+    if(f.dups && !(p.dups || []).length) return false;
+    if(toks.length){ const h = p._h || (p._h = haystack(p)); if(!toks.every(t => h.includes(t))) return false; }
+    return true;
+  });
+  const roomIdx = new Map(S.data.rooms.map((r,i) => [r.id, i]));
+  const slotIdx = new Map(); S.data.rooms.forEach(r => r.slots.forEach((s,i) => slotIdx.set(s.key, i)));
+  const cost = p => (p.price && typeof p.price.cost === 'number') ? p.price.cost : Infinity;
+  if(f.sort === 'cost-asc') list.sort((a,b) => cost(a) - cost(b));
+  else if(f.sort === 'cost-desc') list.sort((a,b) => (cost(b) === Infinity ? -1 : cost(b)) - (cost(a) === Infinity ? -1 : cost(a)));
+  else list.sort((a,b) => ((roomIdx.get(a.room) ?? 99) - (roomIdx.get(b.room) ?? 99)) || ((slotIdx.get(a.slot_key) ?? 99) - (slotIdx.get(b.slot_key) ?? 99)) || a.id.localeCompare(b.id));
+  return list;
+}
+function renderProducts(){
+  if(!S.data) return;
+  const list = filtered();
+  const f = S.filters;
+  const active = [f.room && S.rooms.get(f.room)?.name_he, f.slot && (S.slots.get(f.slot)?.name_he || f.slot), f.status && (P_STATUS[f.status] || f.status), f.supplier, f.dups && 'כפולים', f.q.trim() && `"${f.q.trim()}"`].filter(Boolean);
+  $('#p-result').innerHTML = `<span><strong class="num">${list.length}</strong> מתוך ${S.data.products.length} מוצרים${active.length ? ` · ${esc(active.join(' · '))}` : ''}</span>${active.length ? '<button type="button" class="linkish" id="f-reset">ניקוי הסינון</button>' : ''}`;
+  const rb = $('#f-reset'); if(rb) rb.onclick = () => { Object.assign(S.filters, {q:'', room:'', slot:'', status:'', supplier:'', dups:false}); syncFilterInputs(); readFilters(); renderProducts(); $('#f-q').focus(); };
+  if(!list.length){ $('#pgrid').innerHTML = `<p class="empty span-all">אין מוצרים שמתאימים לסינון.${f.slot ? ' לעמדה הזו עוד אין כרטיסי מוצר.' : ''}</p>`; return; }
+  $('#pgrid').innerHTML = list.map(p => {
+    const hex = (p.colors || {}).dominant_hex || '';
+    const viaShared = f.slot && p.slot_key !== f.slot;
+    const sh = p.shipping || {};
+    const days = sh.days_min != null ? (sh.days_max != null && sh.days_max !== sh.days_min ? `${sh.days_min}–${sh.days_max}` : `${sh.days_min}`) : null;
+    return `<button type="button" class="pcard" data-product="${esc(p.id)}" aria-haspopup="dialog">
+      <span class="pimg"><img src="${esc(p.img.src)}" alt="" loading="lazy" width="${p.img.w}" height="${p.img.h}">
+        <span class="chips"><span class="chip st-${esc(p.status)}">${esc(P_STATUS[p.status] || p.status)}</span>${(p.dups || []).length ? '<span class="chip chip-dup">כפול</span>' : ''}</span>
+        ${p.img.ok ? '' : '<span class="noimg chip">אין תמונה</span>'}</span>
+      <span class="pbody">
+        <span class="pname">${esc(p.name)}</span>
+        <span class="pslot">${esc(slotLabel(p))}${viaShared ? ' · דרך מאגר משותף' : ''}</span>
+        <span class="pslot faint">${esc((p.rooms || []).map(t => TAG_HE[t] || t).join(', '))}</span>
+        <span class="prow"><span class="cost num" dir="ltr">${esc(fmtUSD(p.price && p.price.cost))}</span>${days ? `<span><span class="num" dir="ltr">${esc(days)}</span> ימים</span>` : ''}<span class="swrow"><span class="swatch" data-sw="${esc(hex)}"></span><span class="hex" dir="ltr">${esc(hex)}</span></span><span class="faint">${esc(p.supplier && p.supplier.name || '')}</span></span>
+      </span>
+    </button>`;
+  }).join('');
+  paintVars($('#pgrid'));
+}
+
+/* ---------- product drawer ---------- */
+function row(label, html){ return html == null || html === '' ? '' : `<dt>${esc(label)}</dt><dd>${html}</dd>`; }
+function openProduct(id, from){
+  const p = S.products.get(id); if(!p) return;
+  if(!$('#drawer').open) S.drawerReturn = from || document.activeElement;
+  const sup = p.supplier || {}, pr = p.price || {}, sh = p.shipping || {}, dim = p.dimensions_cm || {}, col = p.colors || {}, im = p.images || {}, li = p.lighting;
+  const dims = ['width','depth','height'].map(k => dim[k]).some(v => v != null) ? `${['width','depth','height'].map(k => dim[k] ?? '?').join(' × ')} ס״מ <span class="faint xs">(רוחב × עומק × גובה)</span>` : '';
+  const stds = p.standards || {};
+  const stdChips = ['CE','IP44','EN71'].map(k => { const s = stds[k] || {state:'unknown', snippets:[]}; const m = (s.snippets || []).find(x => x.kind === 'stated'); const extra = m && m.match && m.match.replace(/\s/g,'') !== k ? ` (${m.match})` : '';
+    return `<span class="std"><b>${k}</b><span class="chip std-${esc(s.state)}">${esc(STD_HE[s.state] || s.state)}${esc(extra)}</span></span>`; }).join('');
+  const snips = ['CE','IP44','EN71'].flatMap(k => ((stds[k] || {}).snippets || []).map(s => `<li><strong>${k}</strong> · ${esc(s.kind === 'stated' ? 'מוצהר' : s.kind === 'unverified' ? 'לא מאומת' : 'אזכור')}: <span dir="ltr">…${esc(s.text)}…</span></li>`));
+  const scores = Object.entries(p.style_scores || {}).map(([k, v]) => `<span>${esc(STYLE_HE[k] || k)}</span><span><b>${esc(v.score)}</b>/10 <span class="muted">${esc(v.reason || '')}</span></span>`).join('');
+  const dups = (p.dups || []).map(x => { const q = S.products.get(x); return `<li><button type="button" class="linkish" data-product="${esc(x)}">${esc(x)}</button>${q ? ` <span class="faint xs">· ${esc(slotLabel(q))}</span>` : ''}</li>`; }).join('');
+  const shared = (p.shared_in || []).map(k => { const s = S.slots.get(k); const r = s && S.rooms.get(s.room); return `<button type="button" class="linkish" data-goto-slot="${esc(k)}">${esc(r ? r.name_he : '')} · ${esc(s ? (s.name_he || s.id) : k)}</button>`; }).join(', ');
+  const ships = (sh.ships_to || []).join(', ');
+  const known = new Set(['id','slot','name','category','rooms','placement','supplier','price','shipping','dimensions_cm','colors','materials','texture','finish','visual_weight','lighting','images','style_scores','status','notes','path','room','slot_key','pool','pid','dups','shared_in','in_rooms','standards','img','_h']);
+  const extraFields = Object.keys(p).filter(k => !known.has(k)).map(k => row(k, `<code>${esc(JSON.stringify(p[k]))}</code>`)).join('');
+  $('#drawer-eyebrow').textContent = slotLabel(p);
+  $('#drawer-title').textContent = p.name;
+  $('#drawer-body').innerHTML = `
+    <div class="d-hero">
+      <div class="pic"><img src="${esc(p.img.src)}" alt="${esc(p.name)}" width="${p.img.w}" height="${p.img.h}"></div>
+      <div class="side">
+        <div class="chiprow"><span class="chip st-${esc(p.status)}">${esc(P_STATUS[p.status] || p.status)}</span>${(p.dups || []).length ? '<span class="chip chip-dup">כרטיס כפול</span>' : ''}</div>
+        <p><span class="num price-big" dir="ltr">${esc(fmtUSD(pr.cost))}</span> <span class="muted small">${esc(pr.currency || '')} · עלות אצל הספק</span></p>
+        ${sup.product_url ? `<p><a href="${esc(sup.product_url)}" target="_blank" rel="noopener noreferrer">לעמוד המוצר אצל ${esc(sup.name || 'הספק')}</a></p>` : ''}
+        ${p.img.note ? `<p class="xs warn-text">${esc(p.img.note)}</p>` : ''}
+        <p class="xs faint">${(im.urls || []).length > 1 ? `ועוד ${(im.urls.length - 1)} תמונות אצל הספק` : ''}</p>
+      </div>
+    </div>
+    <section class="stds" aria-labelledby="h-std"><h3 id="h-std" class="h-small">תקנים</h3>
+      <div class="std-row">${stdChips}</div>
+      <p class="xs faint">לפי זיהוי טקסט בהערות הכרטיס בלבד. "מוצהר" אומר שההערות מצטטות את הספק, לא שיש תעודה.</p>
+      ${snips.length ? `<details class="snips"><summary>מה כתוב בהערות (${snips.length})</summary><ul>${snips.join('')}</ul></details>` : ''}
+    </section>
+    <dl class="fields">
+      ${row('מזהה', `<code>${esc(p.id)}</code>`)}
+      ${row('עמדה', esc(slotLabel(p)) + (p.slot_key ? ` <button type="button" class="linkish xs" data-goto-slot="${esc(p.slot_key)}">לכל המועמדים בעמדה</button>` : ''))}
+      ${row('מועמד גם ב', shared)}
+      ${row('חדרים מתאימים', esc((p.rooms || []).map(t => TAG_HE[t] || t).join(', ')))}
+      ${row('קטגוריה', p.category ? `<code>${esc(p.category)}</code>` : '')}
+      ${row('מיקום', esc(PLACEMENT[p.placement] || p.placement || ''))}
+      ${row('ספק', `${esc(sup.name || '')}${sup.rating != null ? ` · דירוג ${esc(sup.rating)}` : ''}`)}
+      ${row('SKU', sup.sku ? `<code>${esc(sup.sku)}</code>` : '<span class="faint">—</span>')}
+      ${row('מזהה מוצר (pid)', p.pid ? `<code>${esc(p.pid)}</code>` : '')}
+      ${row('מחיר מכירה מוצע', pr.suggested_retail != null ? `<span dir="ltr">${esc(fmtUSD(pr.suggested_retail))}</span>` : '<span class="faint">—</span>')}
+      ${row('משלוח', sh.days_min != null ? `<span class="num" dir="ltr">${esc(sh.days_min)}${sh.days_max != null && sh.days_max !== sh.days_min ? '–' + esc(sh.days_max) : ''}</span> ימים${ships ? ` · אל ${esc(ships)}` : ''}` : (ships ? `אל ${esc(ships)}` : ''))}
+      ${row('מידות', dims)}
+      ${row('צבע דומיננטי', col.dominant_hex ? `<span class="swrow"><span class="swatch lg" data-sw="${esc(col.dominant_hex)}"></span><span class="hex" dir="ltr">${esc(col.dominant_hex)}</span>${col.temperature ? ` · ${esc(TEMP[col.temperature] || col.temperature)}` : ''}</span>` : '')}
+      ${row('צבעים משניים', (col.secondary_hex || []).map(h => `<span class="swrow spaced"><span class="swatch" data-sw="${esc(h)}"></span><span class="hex" dir="ltr">${esc(h)}</span></span>`).join(''))}
+      ${row('חומרים', esc((p.materials || []).join(', ')))}
+      ${row('טקסטורה', esc(p.texture || ''))}
+      ${row('גימור', esc(FINISH[p.finish] || p.finish || ''))}
+      ${row('משקל ויזואלי', esc(WEIGHT[p.visual_weight] || p.visual_weight || ''))}
+      ${li ? row('תאורה', [li.color_temp_k ? `<span class="num">${esc(li.color_temp_k)}K</span>` : '', li.light_type ? esc(LIGHT[li.light_type] || li.light_type) : ''].filter(Boolean).join(' · ') || '<span class="faint">לא צוין</span>') : ''}
+      ${row('תמונות', `איכות ${esc(QUALITY[im.quality] || im.quality || '?')} · זכויות שימוש ${esc(RIGHTS[im.usage_rights] || im.usage_rights || '?')}`)}
+      ${row('ציוני סגנון', scores ? `<div class="score">${scores}</div>` : '<span class="faint">עוד לא דורג</span>')}
+      ${row('כרטיסים כפולים', dups ? `<ul class="plain-ul">${dups}</ul>` : '')}
+      ${row('קובץ', `<code>${esc(p.path)}</code>`)}
+      ${extraFields}
+    </dl>
+    <section aria-labelledby="h-notes"><h3 id="h-notes" class="h-small">הערות</h3>${p.notes ? `<div class="notes">${esc(p.notes)}</div>` : '<p class="faint">אין הערות.</p>'}</section>`;
+  paintVars($('#drawer-body'));
+  const dlg = $('#drawer');
+  openDialog(dlg);
+  $('#drawer-body').scrollTop = 0;
+  $('#drawer [data-close]').focus();
+}
+document.addEventListener('click', e => {
+  // links inside the drawer that move to another screen close it first
+  if(e.target.closest('#drawer [data-goto-slot]')) closeDialog($('#drawer'));
+}, true);
+
+/* ---------- reports ---------- */
+function renderReports(){
+  const D = S.data; const all = (D.reports || []).concat(D.leads || []);
+  if(!all.length){ $('#rep-list').innerHTML = ''; $('#rep-view').innerHTML = '<p class="empty">אין דוחות.</p>'; return; }
+  if(!S.report || !all.find(r => r.id === S.report)) S.report = (D.reports[0] || all[0]).id;
+  const item = r => `<li><button type="button" class="rep-btn" data-rep="${esc(r.id)}" aria-current="${r.id === S.report}"><span class="t">${esc(r.title)}</span><span class="m">${r.date ? esc(fmtDay(r.date)) + ' · ' : ''}<span dir="ltr">${esc(r.path)}</span></span></button></li>`;
+  $('#rep-list').innerHTML = `
+    <div><h2>דוחות QA</h2><ul>${(D.reports || []).map(item).join('') || '<li class="faint small">אין</li>'}</ul></div>
+    <div><h2>סיכומי ליד</h2><p class="xs faint">חיפושי הספקים של sourcing-agent</p><ul>${(D.leads || []).map(item).join('') || '<li class="faint small">אין</li>'}</ul></div>`;
+  for(const b of $$('#rep-list [data-rep]')) b.onclick = () => { S.report = b.dataset.rep; store.set('report', S.report); renderReports(); const v = $('#rep-view'); v.focus({preventScroll:true}); if(window.innerWidth < 860) v.scrollIntoView({block:'start'}); };
+  const r = all.find(x => x.id === S.report);
+  $('#rep-view').setAttribute('tabindex','-1');
+  $('#rep-view').setAttribute('aria-label', r.title);
+  $('#rep-view').innerHTML = `<p class="eyebrow path-line" dir="ltr">${esc(r.path)}</p>` + mdToHtml(r.md);
+}
+function mdToHtml(md){
+  if(!(window.marked && typeof window.marked.parse === 'function')) return `<pre class="md-fallback">${esc(md)}</pre>`;
+  let html; try{ html = window.marked.parse(md, {gfm:true, async:false}); }catch(e){ return `<pre class="md-fallback">${esc(md)}</pre>`; }
+  const t = document.createElement('template'); t.innerHTML = html;
+  const c = t.content;
+  for(const n of c.querySelectorAll('script,style,iframe,object,embed,link,meta,form,input,button')) n.remove();
+  for(const el of c.querySelectorAll('*')) for(const a of Array.from(el.attributes)) if(/^on/i.test(a.name) || a.name === 'style') el.removeAttribute(a.name);
+  for(const img of c.querySelectorAll('img')){ const s = document.createElement('span'); s.className = 'md-img'; s.textContent = 'תמונה בריפו: ' + (img.getAttribute('alt') || img.getAttribute('src') || ''); img.replaceWith(s); }
+  for(const a of c.querySelectorAll('a')){ const h = a.getAttribute('href') || ''; if(/^https?:\/\//i.test(h)){ a.target = '_blank'; a.rel = 'noopener noreferrer'; } else { const k = document.createElement('code'); k.textContent = a.textContent; a.replaceWith(k); } }
+  for(const tb of c.querySelectorAll('table')){ const w = document.createElement('div'); w.className = 'tbl-wrap'; tb.replaceWith(w); w.appendChild(tb); }
+  for(const h of Array.from(c.querySelectorAll('h1,h2,h3,h4,h5,h6'))){ const lv = Math.min(6, +h.tagName[1] + 1); const n = document.createElement('h' + lv); n.innerHTML = h.innerHTML; h.replaceWith(n); }
+  const box = document.createElement('div'); box.appendChild(c); return box.innerHTML;
+}
+
+/* ---------- log ---------- */
+function renderLog(){
+  const D = S.data; const log = D.log || [];
+  const counts = {}; for(const e of log) counts[e.who_key] = (counts[e.who_key] || 0) + 1;
+  const keys = ['user','manager','master-designer','sourcing-agent','motion-agent','render-agent','qa-agent','frontend-dev','astra','other'].filter(k => counts[k]);
+  if(S.logWho !== 'all' && !counts[S.logWho]) S.logWho = 'all';
+  $('#log-who').innerHTML = `<button type="button" data-who="all" aria-pressed="${S.logWho === 'all'}">הכול<span class="n num">${log.length}</span></button>` + keys.map(k => `<button type="button" data-who="${esc(k)}" aria-pressed="${S.logWho === k}">${esc(WHO[k] || k)}<span class="n num">${counts[k]}</span></button>`).join('');
+  for(const b of $$('#log-who button')) b.onclick = () => { S.logWho = b.dataset.who; store.set('logWho', S.logWho); renderLog(); $(`#log-who [data-who="${CSS.escape(S.logWho)}"]`).focus(); };
+  const q = S.logQ.trim().toLowerCase();
+  const list = log.filter(e => (S.logWho === 'all' || e.who_key === S.logWho) && (!q || (e.who + ' ' + e.text).toLowerCase().includes(q))).slice().reverse();
+  $('#log-count').textContent = `${list.length} רשומות`;
+  if(!list.length){ $('#log-body').innerHTML = '<p class="empty">אין רשומות בסינון הזה.</p>'; return; }
+  let html = '', cur = null;
+  for(const e of list){
+    if(e.date !== cur){ if(cur !== null) html += '</ul>'; cur = e.date; html += `<h2 class="date-head num">${esc(fmtDay(e.date))}</h2><ul class="log-list">`; }
+    html += logItem(e);
+  }
+  html += '</ul>';
+  $('#log-body').innerHTML = html;
+}
+$('#log-q').addEventListener('input', () => { S.logQ = $('#log-q').value; renderLog(); });
+
+boot();
+})();
+</script>
