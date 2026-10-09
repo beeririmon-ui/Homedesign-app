@@ -1,0 +1,5396 @@
+{
+ "version": 1,
+ "updated": "2026-10-09",
+ "currency": "ILS",
+ "assumptions": {
+  "fx_usd_ils": 3.7,
+  "fx_note": "שער 3.7 לפי ברירת המחדל של הסטודיו. לעדכן: הדולר נסחר סביב ₪3.0 ב-2026 (ראו fulfillment-research.md). margin_at_band_fx3 מראה את המרווח בשער 3.0.",
+  "vat": 0.18,
+  "card_fee_pct": 0.02,
+  "card_fee_fixed_ils": 1.2,
+  "returns_reserve": 0.05,
+  "cac_ils": 40,
+  "target_margin": 0.35,
+  "shipping": "freight-cj.json cheapest.usd (בדרך כלל CJPacket Eub, 12–50 יום); מוצר בלי נתון מקבל חציון הקטגוריה ודגל shipping-estimated",
+  "qty": "כל החישובים ליחידה אחת לפי עלות הכרטיס (בלי sell_qty של הסטודיו)",
+  "market_price": "מחיר מלא (לפני מבצע) כולל מע\"מ. median = חציון השוק הבינוני/נורדי (IKEA, Fox Home, Home Style, Terminal X, Naaman, Zara Home) כשיש בו 8 פריטים לפחות, אחרת כל השוק. low = אחוזון 10 של כל השוק. high = אחוזון 90 של כל השוק.",
+  "band": "[max(0.75×median מעוגל מטה לנקודת מחיר), median מעוגל מטה לנקודת מחיר]. נקודות מחיר: מספרים שלמים שמסתיימים ב-9.",
+  "margin_at_band": "מרווח תרומה (לפני CAC) במחיר העליון של suggested_band; margin_at_band_min במחיר התחתון",
+  "verdict": "viable = ≥35% במחיר העליון של הרצועה; bundle-only = מתחת ל-35% לבד, אבל ≥25% בסל של 3 פריטים (חיסכון $2.48 משלוח לפריט) ורווח חיובי אחרי CAC/3; not-viable = אחרת"
+ },
+ "categories": {
+  "cushion-cover": {
+   "label_he": "ציפה לכרית נוי",
+   "low": 21,
+   "median": 100,
+   "high": 180,
+   "p75": 140,
+   "band": [
+    69,
+    99
+   ],
+   "n": 144,
+   "confidence": "high",
+   "per_retailer_median": {
+    "Fox Home": 129.9,
+    "Home Center": 24.9,
+    "Home Style": 190.0,
+    "IKEA": 34.0,
+    "Terminal X": 69.9,
+    "Zara Home": 199.0
+   },
+   "verdict": "viable",
+   "verdict_counts": {
+    "viable": 10,
+    "bundle-only": 2
+   },
+   "our_landed_median_ils": 30,
+   "price_for_35pct_median": 63,
+   "sources": [
+    {
+     "retailer": "IKEA",
+     "title": "SANELA כיסוי לכרית",
+     "size": "‎50x50 ס\"מ‏",
+     "price": 29.0,
+     "sale_price": null,
+     "url": "https://www.ikea.com/il/he/p/sanela-cushion-cover-light-blue-80635998/",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Fox Home",
+     "title": "כרית נוי מרובעת עם דוגמה פרחונית Flow",
+     "size": null,
+     "price": 129.9,
+     "sale_price": 90.93,
+     "url": "https://www.foxhome.co.il/products/0335215800",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Center",
+     "title": "ציפית לכרית נוי 46*46 הדפס זברה כותנה",
+     "size": null,
+     "price": 24.9,
+     "sale_price": null,
+     "url": "https://www.homecenter.co.il/products/5151418794",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Style",
+     "title": "כרית נוי, דגם בוהו - כרית נוי",
+     "size": "30/50 סמ כרית נוי",
+     "price": 190.0,
+     "sale_price": 95.0,
+     "url": "https://www.homestyle.co.il/products/568751772974256-999",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Zara Home",
+     "title": "ציפית מבד פשתן כבד 50x50",
+     "size": null,
+     "price": 199.0,
+     "sale_price": null,
+     "url": "https://www.zarahome.com/il/ציפית-מבד-פשתן-כבד-l46350008",
+     "date": "2026-10-09",
+     "verified": "search-snippet"
+    },
+    {
+     "retailer": "Terminal X",
+     "title": "ציפית טטרה לכרית נוי / 45x45 (TERMINAL X HOME )",
+     "size": "OS OS OS OS",
+     "price": 69.9,
+     "sale_price": null,
+     "url": "https://www.terminalx.com/catalogsearch/result?q=%D7%9B%D7%A8%D7%99%D7%AA+%D7%A0%D7%95%D7%99",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Center",
+     "title": "ציפה לכרית 46/46 דגם מוזס",
+     "size": null,
+     "price": 10.0,
+     "sale_price": null,
+     "url": "https://www.homecenter.co.il/products/5151417935",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Zara Home",
+     "title": "ציפית מפשתן שטוף 40x60",
+     "size": null,
+     "price": 329.0,
+     "sale_price": null,
+     "url": "https://www.zarahome.com/il/ציפית-מפשתן-שטוף-l46392008",
+     "date": "2026-10-09",
+     "verified": "search-snippet"
+    }
+   ]
+  },
+  "throw": {
+   "label_he": "שמיכת סלון / פלייד",
+   "low": 49,
+   "median": 120,
+   "high": 200,
+   "p75": 195,
+   "band": [
+    89,
+    119
+   ],
+   "n": 36,
+   "confidence": "high",
+   "per_retailer_median": {
+    "Fox Home": 119.9,
+    "IKEA": 79.0,
+    "Zara Home": 399.0
+   },
+   "verdict": "not-viable",
+   "verdict_counts": {
+    "not-viable": 6
+   },
+   "our_landed_median_ils": 103,
+   "price_for_35pct_median": 214,
+   "sources": [
+    {
+     "retailer": "IKEA",
+     "title": "LAPPKATTFOT שמיכת טלוויזיה",
+     "size": "‎130x170 ס\"מ‏",
+     "price": 79.0,
+     "sale_price": null,
+     "url": "https://www.ikea.com/il/he/p/lappkattfot-throw-brown-black-70598661/",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Fox Home",
+     "title": "שמיכת פליז עם עיטורי מיקי מאוס Star Mickey",
+     "size": null,
+     "price": 119.9,
+     "sale_price": null,
+     "url": "https://www.foxhome.co.il/products/0333749900",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Zara Home",
+     "title": "שמיכה ג׳קארד פרחונית 140x190",
+     "size": null,
+     "price": 399.0,
+     "sale_price": null,
+     "url": "https://www.zarahome.com/il/שמיכה-גקארד-פרחונית-l41386004",
+     "date": "2026-10-09",
+     "verified": "search-snippet"
+    },
+    {
+     "retailer": "IKEA",
+     "title": "VITMOSSA שמיכת טלוויזיה",
+     "size": "‎120x160 ס\"מ‏",
+     "price": 12.0,
+     "sale_price": null,
+     "url": "https://www.ikea.com/il/he/p/vitmossa-throw-grey-90304889/",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Zara Home",
+     "title": "שמיכה בעיצוב גאומטרי פשתן-כותנה 140x190",
+     "size": null,
+     "price": 479.0,
+     "sale_price": null,
+     "url": "https://www.zarahome.com/il/שמיכה-בעיצוב-גאומטרי-l49132004",
+     "date": "2026-10-09",
+     "verified": "search-snippet"
+    }
+   ]
+  },
+  "sofa-cover": {
+   "label_he": "כיסוי לספה",
+   "low": 83,
+   "median": 372,
+   "high": 804,
+   "p75": 601,
+   "band": [
+    279,
+    349
+   ],
+   "n": 12,
+   "confidence": "low",
+   "per_retailer_median": {
+    "Home Center": 109.9,
+    "Home Style": 499.0,
+    "IKEA": 710.0
+   },
+   "verdict": "viable",
+   "verdict_counts": {
+    "bundle-only": 1,
+    "viable": 4
+   },
+   "our_landed_median_ils": 133,
+   "price_for_35pct_median": 274,
+   "sources": [
+    {
+     "retailer": "Home Center",
+     "title": "כיסוי לספה דו מושבית בצבע אפור 113*190 ס\"מ",
+     "size": null,
+     "price": 109.9,
+     "sale_price": 69.9,
+     "url": "https://www.homecenter.co.il/products/5151616429",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "IKEA",
+     "title": "SÖDERHAMN ריפוד לספה תלת-מושבית נפתחת",
+     "size": null,
+     "price": 595.0,
+     "sale_price": null,
+     "url": "https://www.ikea.com/il/he/p/soederhamn-cover-for-3-seat-sofa-bed-section-kelinge-dark-blue-70630369/",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Style",
+     "title": "סט כיסוי סלון 3 חלקים דו צדדי - אפור",
+     "size": "O.S כיסוי סלון",
+     "price": 499.0,
+     "sale_price": 249.5,
+     "url": "https://www.homestyle.co.il/products/1535-104",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Center",
+     "title": "כיסוי לספת יחיד בצבע אפור 57*190 ס\"מ",
+     "size": null,
+     "price": 79.9,
+     "sale_price": 49.9,
+     "url": "https://www.homecenter.co.il/products/5151616428",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "IKEA",
+     "title": "EKTORP ריפוד לספה תלת-מושבית עם שזלונג",
+     "size": null,
+     "price": 995.0,
+     "sale_price": null,
+     "url": "https://www.ikea.com/il/he/p/ektorp-cover-f-3-seat-sofa-w-chaise-longue-mangbyn-brown-multicolour-90635554/",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    }
+   ]
+  },
+  "curtains": {
+   "label_he": "וילונות בד, זוג",
+   "low": 84,
+   "median": 185,
+   "high": 395,
+   "p75": 345,
+   "band": [
+    129,
+    179
+   ],
+   "n": 38,
+   "confidence": "medium",
+   "per_retailer_median": {
+    "IKEA": 185.0
+   },
+   "verdict": "not-viable",
+   "verdict_counts": {
+    "not-viable": 1,
+    "bundle-only": 1
+   },
+   "our_landed_median_ils": 127,
+   "price_for_35pct_median": 263,
+   "sources": [
+    {
+     "retailer": "IKEA",
+     "title": "MAISTANGG וילון/2 כנפיים",
+     "size": "‎145x300 ס\"מ‏",
+     "price": 175.0,
+     "sale_price": null,
+     "url": "https://www.ikea.com/il/he/p/maistangg-curtains-1-pair-off-white-dark-grey-striped-with-heading-tape-30641096/",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "IKEA",
+     "title": "MATILDA וילון שקוף/2 כנפיים",
+     "size": "‎60x120 ס\"מ‏",
+     "price": 35.0,
+     "sale_price": null,
+     "url": "https://www.ikea.com/il/he/p/matilda-sheer-curtains-1-pair-pale-pink-with-rod-pocket-90626597/",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "IKEA",
+     "title": "DYTÅG וילון/2 כנפיים",
+     "size": "‎145x300 ס\"מ‏",
+     "price": 395.0,
+     "sale_price": null,
+     "url": "https://www.ikea.com/il/he/p/dytag-curtains-1-pair-beige-with-heading-tape-80607820/",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    }
+   ]
+  },
+  "rug-small": {
+   "label_he": "שטיח קטן (עד 1.5 מ\"ר, למשל 60x90–80x150)",
+   "low": 49,
+   "median": 129,
+   "high": 302,
+   "p75": 178,
+   "band": [
+    89,
+    129
+   ],
+   "n": 116,
+   "confidence": "high",
+   "per_retailer_median": {
+    "Fox Home": 349.9,
+    "Home Center": 64.9,
+    "Home Style": 129.0,
+    "IKEA": 125.0,
+    "Terminal X": 420.0,
+    "Zara Home": 329.0
+   },
+   "verdict": "no-products",
+   "verdict_counts": null,
+   "our_landed_median_ils": null,
+   "price_for_35pct_median": null,
+   "sources": [
+    {
+     "retailer": "Home Style",
+     "title": "שטיחון, דגם שייני - בז'",
+     "size": "70/130 סמ שטיח רצפה",
+     "price": 129.0,
+     "sale_price": 64.5,
+     "url": "https://www.homestyle.co.il/products/3254-128",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "IKEA",
+     "title": "LOKALTÅG שטיח, סיבים קצרים",
+     "size": "‎80x150 ס\"מ‏",
+     "price": 125.0,
+     "sale_price": null,
+     "url": "https://www.ikea.com/il/he/p/lokaltag-rug-low-pile-beige-grey-60623232/",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Center",
+     "title": "שטיח שניל 60/120 Stripe",
+     "size": null,
+     "price": 69.9,
+     "sale_price": null,
+     "url": "https://www.homecenter.co.il/products/1765974626157",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Terminal X",
+     "title": "שטיח סיירה קרם-חום SIERRA (RED CARPET)",
+     "size": "150X80 160X230 170X120 140x90 200X290 34",
+     "price": 390.0,
+     "sale_price": null,
+     "url": "https://www.terminalx.com/catalogsearch/result?q=%D7%A9%D7%98%D7%99%D7%97",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Fox Home",
+     "title": "שטיח עבודת יד לסלון עם דוגמה מובלטת בגוון טבעי Connie",
+     "size": "‏ס\"מ‎ 150X90",
+     "price": 349.9,
+     "sale_price": 244.93,
+     "url": "https://www.foxhome.co.il/products/0335700300",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Zara Home",
+     "title": "שטיח פסים כותנה 60x120",
+     "size": null,
+     "price": 329.0,
+     "sale_price": 159.9,
+     "url": "https://www.zarahome.com/il/שטיח-פסים-l47277029",
+     "date": "2026-10-09",
+     "verified": "search-snippet"
+    },
+    {
+     "retailer": "IKEA",
+     "title": "TIPHEDE שטיח באריגה שטוחה",
+     "size": "‎50x80 ס\"מ‏",
+     "price": 15.0,
+     "sale_price": null,
+     "url": "https://www.ikea.com/il/he/p/tiphede-rug-flatwoven-natural-black-40592825/",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Center",
+     "title": "שטיח לוטוס  9999/11 במידה 2.90*1.90",
+     "size": null,
+     "price": 669.9,
+     "sale_price": null,
+     "url": "https://www.homecenter.co.il/products/1761046317190",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    }
+   ]
+  },
+  "rug-medium": {
+   "label_he": "שטיח בינוני (1.5–3.2 מ\"ר, למשל 120x170–160x200)",
+   "low": 195,
+   "median": 345,
+   "high": 562,
+   "p75": 469,
+   "band": [
+    249,
+    329
+   ],
+   "n": 60,
+   "confidence": "high",
+   "per_retailer_median": {
+    "ACE": 334.4,
+    "Home Center": 249.9,
+    "Home Style": 469.0,
+    "IKEA": 225.0,
+    "Terminal X": 450.0
+   },
+   "verdict": "no-products",
+   "verdict_counts": null,
+   "our_landed_median_ils": null,
+   "price_for_35pct_median": null,
+   "sources": [
+    {
+     "retailer": "Home Center",
+     "title": "שטיח רצפה 200*150  סמ אוסקה קשתות בז'",
+     "size": null,
+     "price": 249.9,
+     "sale_price": null,
+     "url": "https://www.homecenter.co.il/products/1787574230772",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "IKEA",
+     "title": "LEN שטיח, סיבים קצרים",
+     "size": "‎133x160 ס\"מ‏",
+     "price": 225.0,
+     "sale_price": null,
+     "url": "https://www.ikea.com/il/he/p/len-rug-low-pile-beige-dot-pattern-40625109/",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "ACE",
+     "title": "שטיח בייבי מנדלה 5248-00 מידה 120/170 ס\"מ",
+     "size": null,
+     "price": 249.5,
+     "sale_price": null,
+     "url": "https://www.ace.co.il/4490055",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Terminal X",
+     "title": "שטיח טרנדס 02 צבעוני (RED CARPET)",
+     "size": "170X120 190X140 160X230 120X80",
+     "price": 450.0,
+     "sale_price": 225.0,
+     "url": "https://www.terminalx.com/catalogsearch/result?q=%D7%A9%D7%98%D7%99%D7%97",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Style",
+     "title": "שטיח רצפה כביס, סקיי",
+     "size": "150/200 סמ שטיח רצפה",
+     "price": 469.0,
+     "sale_price": 234.5,
+     "url": "https://www.homestyle.co.il/products/2170-999",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "IKEA",
+     "title": "TIPHEDE שטיח באריגה שטוחה",
+     "size": "‎120x180 ס\"מ‏",
+     "price": 79.0,
+     "sale_price": null,
+     "url": "https://www.ikea.com/il/he/p/tiphede-rug-flatwoven-natural-black-40456757/",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Terminal X",
+     "title": "שטיח קילים סקנדינבי 30 שחור/לבן (RED CARPET)",
+     "size": "170X120 190X140 160X230 200X290 340X240 ",
+     "price": 750.0,
+     "sale_price": 225.0,
+     "url": "https://www.terminalx.com/catalogsearch/result?q=%D7%95%D7%99%D7%9C%D7%95%D7%9F",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    }
+   ]
+  },
+  "rug-large": {
+   "label_he": "שטיח גדול (מעל 3.2 מ\"ר, למשל 160x230 ומעלה)",
+   "low": 459,
+   "median": 895,
+   "high": 1612,
+   "p75": 1250,
+   "band": [
+    649,
+    799
+   ],
+   "n": 66,
+   "confidence": "high",
+   "per_retailer_median": {
+    "ACE": 884.2,
+    "Fox Home": 899.9,
+    "Home Center": 679.9,
+    "Home Style": 569.0,
+    "IKEA": 945.0,
+    "Terminal X": 2190.0
+   },
+   "verdict": "not-viable",
+   "verdict_counts": {
+    "not-viable": 1
+   },
+   "our_landed_median_ils": 2807,
+   "price_for_35pct_median": 5749,
+   "sources": [
+    {
+     "retailer": "IKEA",
+     "title": "LOHALS שטיח באריגה שטוחה",
+     "size": "‎240x350 ס\"מ‏",
+     "price": 995.0,
+     "sale_price": null,
+     "url": "https://www.ikea.com/il/he/p/lohals-rug-flatwoven-natural-40614262/",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Center",
+     "title": "שטיח היילנד  1819/89 290*195",
+     "size": null,
+     "price": 679.9,
+     "sale_price": null,
+     "url": "https://www.homecenter.co.il/products/1705315018985",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "ACE",
+     "title": "שטיח דיאנה שאגי קטיפה ורוד 160/230",
+     "size": null,
+     "price": 1049.3,
+     "sale_price": null,
+     "url": "https://www.ace.co.il/4488481",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Style",
+     "title": "שטיח רצפה כביס, סקיי",
+     "size": "160/230 סמ שטיח רצפה",
+     "price": 569.0,
+     "sale_price": 284.5,
+     "url": "https://www.homestyle.co.il/products/2170-999",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Fox Home",
+     "title": "שטיח עבודת יד לסלון עם דוגמה מובלטת בגוון טבעי Connie",
+     "size": "‏ס\"מ‎ 240X160",
+     "price": 899.9,
+     "sale_price": 629.93,
+     "url": "https://www.foxhome.co.il/products/0335700300",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Terminal X",
+     "title": "שטיח ניקי NIKI (RED CARPET)",
+     "size": "300X200",
+     "price": 2190.0,
+     "sale_price": 1971.0,
+     "url": "https://www.terminalx.com/catalogsearch/result?q=%D7%A9%D7%98%D7%99%D7%97",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Center",
+     "title": "שטיח היילנד  0821/90 170*115",
+     "size": null,
+     "price": 239.9,
+     "sale_price": null,
+     "url": "https://www.homecenter.co.il/products/1705302148593",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Center",
+     "title": "שטיח ניו הרמס 7777/66 3.30*2.40",
+     "size": null,
+     "price": 3669.9,
+     "sale_price": 1649.9,
+     "url": "https://www.homecenter.co.il/products/1661250941977",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    }
+   ]
+  },
+  "vase-small": {
+   "label_he": "אגרטל קטן (עד 25 ס\"מ)",
+   "low": 19,
+   "median": 42,
+   "high": 95,
+   "p75": 69,
+   "band": [
+    29,
+    39
+   ],
+   "n": 65,
+   "confidence": "high",
+   "per_retailer_median": {
+    "ACE": 69.9,
+    "Home Center": 29.9,
+    "IKEA": 39.0,
+    "Zara Home": 269.0
+   },
+   "verdict": "not-viable",
+   "verdict_counts": {
+    "not-viable": 4
+   },
+   "our_landed_median_ils": 78,
+   "price_for_35pct_median": 162,
+   "sources": [
+    {
+     "retailer": "IKEA",
+     "title": "PÅSKÖTRÄD אגרטל",
+     "size": "20 ס\"מ",
+     "price": 39.0,
+     "sale_price": null,
+     "url": "https://www.ikea.com/il/he/p/paskoetraed-vase-glass-light-brown-10610538/",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "ACE",
+     "title": "אגרטל טארה בז 20 סמ",
+     "size": null,
+     "price": 69.9,
+     "sale_price": 27.96,
+     "url": "https://www.ace.co.il/9908806",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Center",
+     "title": "אגרטל הנרי 15 ס\"מ לבן",
+     "size": null,
+     "price": 29.9,
+     "sale_price": 20.0,
+     "url": "https://www.homecenter.co.il/products/1691063440587",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Zara Home",
+     "title": "אגרטל מקרמיקה עם טקסטורה 16 ס\"מ",
+     "size": null,
+     "price": 269.0,
+     "sale_price": 149.9,
+     "url": "https://www.zarahome.com/il/אגרטל-מקרמיקה-עם-טקסטורה-l47100046",
+     "date": "2026-10-09",
+     "verified": "search-snippet"
+    },
+    {
+     "retailer": "IKEA",
+     "title": "VILJESTARK אגרטל",
+     "size": "17 ס\"מ",
+     "price": 7.0,
+     "sale_price": null,
+     "url": "https://www.ikea.com/il/he/p/viljestark-vase-clear-glass-00338577/",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    }
+   ]
+  },
+  "vase-large": {
+   "label_he": "אגרטל גדול (מעל 25 ס\"מ)",
+   "low": 78,
+   "median": 327,
+   "high": 655,
+   "p75": 476,
+   "band": [
+    229,
+    299
+   ],
+   "n": 30,
+   "confidence": "high",
+   "per_retailer_median": {
+    "ACE": 79.9,
+    "IKEA": 79.0,
+    "Terminal X": 366.0,
+    "Zara Home": 419.0
+   },
+   "verdict": "not-viable",
+   "verdict_counts": {
+    "not-viable": 5,
+    "bundle-only": 3,
+    "viable": 1
+   },
+   "our_landed_median_ils": 184,
+   "price_for_35pct_median": 379,
+   "sources": [
+    {
+     "retailer": "ACE",
+     "title": "אגרטל ציפורים לבן 30 סמ",
+     "size": null,
+     "price": 79.9,
+     "sale_price": 31.96,
+     "url": "https://www.ace.co.il/9908821",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Terminal X",
+     "title": "אגרטל MASA (DECORADO)",
+     "size": "52CM 52CM",
+     "price": 366.0,
+     "sale_price": null,
+     "url": "https://www.terminalx.com/catalogsearch/result?q=%D7%90%D7%92%D7%A8%D7%98%D7%9C",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "IKEA",
+     "title": "KONSTFULL אגרטל",
+     "size": "26 ס\"מ",
+     "price": 79.0,
+     "sale_price": null,
+     "url": "https://www.ikea.com/il/he/p/konstfull-vase-clear-glass-patterned-20511953/",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Zara Home",
+     "title": "אגרטל קרמיקה אסימטרי 38.5 ס\"מ",
+     "size": null,
+     "price": 479.0,
+     "sale_price": null,
+     "url": "https://www.zarahome.com/il/אגרטל-קרמיקה-l47122046",
+     "date": "2026-10-09",
+     "verified": "search-snippet"
+    },
+    {
+     "retailer": "IKEA",
+     "title": "BERGKÖRSBÄR אגרטל",
+     "size": "28 ס\"מ",
+     "price": 49.0,
+     "sale_price": null,
+     "url": "https://www.ikea.com/il/he/p/bergkoersbaer-vase-glass-green-30611042/",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Terminal X",
+     "title": "אגרטל קורל XL (MYKEL)",
+     "size": "60CM",
+     "price": 1055.0,
+     "sale_price": null,
+     "url": "https://www.terminalx.com/catalogsearch/result?q=%D7%90%D7%92%D7%A8%D7%98%D7%9C",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    }
+   ]
+  },
+  "ceramic-bowl": {
+   "label_he": "קערה קרמית / קערת הגשה",
+   "low": 8,
+   "median": 49,
+   "high": 130,
+   "p75": 90,
+   "band": [
+    29,
+    49
+   ],
+   "n": 161,
+   "confidence": "high",
+   "per_retailer_median": {
+    "ACE": 32.4,
+    "Fox Home": 59.9,
+    "Home Center": 14.9,
+    "IKEA": 15.0,
+    "Naaman": 49.9,
+    "Terminal X": 99.9
+   },
+   "verdict": "not-viable",
+   "verdict_counts": {
+    "not-viable": 5
+   },
+   "our_landed_median_ils": 66,
+   "price_for_35pct_median": 137,
+   "sources": [
+    {
+     "retailer": "Home Center",
+     "title": "קערה 15 סמ פורצלן FABIO",
+     "size": null,
+     "price": 14.9,
+     "sale_price": null,
+     "url": "https://www.homecenter.co.il/products/1765114176878",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Fox Home",
+     "title": "קערת הגשה ממלמין בגוון ירוק מרווה Crystal",
+     "size": null,
+     "price": 59.9,
+     "sale_price": 41.93,
+     "url": "https://www.foxhome.co.il/products/0332462105",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "IKEA",
+     "title": "IKEA 365+ קערה",
+     "size": "16 ס\"מ",
+     "price": 15.0,
+     "sale_price": null,
+     "url": "https://www.ikea.com/il/he/p/ikea-365-bowl-rounded-sides-white-20278351/",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Naaman",
+     "title": "קערה SUNNY",
+     "size": null,
+     "price": 49.9,
+     "sale_price": 19.96,
+     "url": "https://www.naamanp.co.il/2612_998",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Terminal X",
+     "title": "קערה 26 MINTY (FOX HOME)",
+     "size": "OS",
+     "price": 99.9,
+     "sale_price": 39.96,
+     "url": "https://www.terminalx.com/catalogsearch/result?q=%D7%A7%D7%A2%D7%A8%D7%94",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "ACE",
+     "title": "קערה + מכסה 9 ליטר",
+     "size": null,
+     "price": 25.9,
+     "sale_price": 21.95,
+     "url": "https://www.ace.co.il/9908565",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Center",
+     "title": "קערת קונוס גאומטרי WIN - בינוני",
+     "size": null,
+     "price": 2.9,
+     "sale_price": null,
+     "url": "https://www.homecenter.co.il/products/1756730854648",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Terminal X",
+     "title": "קערת קורל (MYKEL)",
+     "size": "36CM",
+     "price": 835.0,
+     "sale_price": null,
+     "url": "https://www.terminalx.com/catalogsearch/result?q=%D7%A7%D7%A2%D7%A8%D7%94",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    }
+   ]
+  },
+  "candle-holder": {
+   "label_he": "פמוט / מעמד לנר",
+   "low": 22,
+   "median": 89,
+   "high": 219,
+   "p75": 129,
+   "band": [
+    59,
+    89
+   ],
+   "n": 85,
+   "confidence": "high",
+   "per_retailer_median": {
+    "ACE": 79.9,
+    "Fox Home": 94.9,
+    "Home Center": 24.9,
+    "IKEA": 35.0,
+    "Naaman": 89.9,
+    "Terminal X": 186.5
+   },
+   "verdict": "not-viable",
+   "verdict_counts": {
+    "not-viable": 2
+   },
+   "our_landed_median_ils": 93,
+   "price_for_35pct_median": 193,
+   "sources": [
+    {
+     "retailer": "IKEA",
+     "title": "KUNGSTÄRNA פמוט",
+     "size": "19 ס\"מ",
+     "price": 35.0,
+     "sale_price": null,
+     "url": "https://www.ikea.com/il/he/p/kungstaerna-candlestick-clear-glass-gold-colour-70623745/",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Terminal X",
+     "title": "פמוט OCRA (DECORADO)",
+     "size": "OS",
+     "price": 185.0,
+     "sale_price": null,
+     "url": "https://www.terminalx.com/catalogsearch/result?q=%D7%A4%D7%9E%D7%95%D7%98",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Fox Home",
+     "title": "פמוט מתכת 22 ס\"מ בגוון זהב Terra",
+     "size": null,
+     "price": 99.9,
+     "sale_price": 69.93,
+     "url": "https://www.foxhome.co.il/products/0332329901",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Center",
+     "title": "פמוט סטון דגם נטורל 11*16",
+     "size": null,
+     "price": 24.9,
+     "sale_price": null,
+     "url": "https://www.homecenter.co.il/products/1755168206137",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "ACE",
+     "title": "פמוט אורך 48 סמ מתכת זהב Crush",
+     "size": null,
+     "price": 79.9,
+     "sale_price": 67.72,
+     "url": "https://www.ace.co.il/9909984",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Naaman",
+     "title": "פמוט כסף Silver light",
+     "size": null,
+     "price": 89.9,
+     "sale_price": 17.98,
+     "url": "https://www.naamanp.co.il/11310164",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "IKEA",
+     "title": "FINSMAK פמוט",
+     "size": "4 ס\"מ",
+     "price": 5.0,
+     "sale_price": null,
+     "url": "https://www.ikea.com/il/he/p/finsmak-candlestick-clear-glass-80630774/",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Terminal X",
+     "title": "זוג פמוטים ROXANA קריסטל בוהמיה 31 ס״מ (Bohemia)",
+     "size": "OS",
+     "price": 674.0,
+     "sale_price": null,
+     "url": "https://www.terminalx.com/catalogsearch/result?q=%D7%A4%D7%9E%D7%95%D7%98",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    }
+   ]
+  },
+  "table-lamp": {
+   "label_he": "מנורת שולחן",
+   "low": 50,
+   "median": 192,
+   "high": 282,
+   "p75": 230,
+   "band": [
+    139,
+    179
+   ],
+   "n": 76,
+   "confidence": "high",
+   "per_retailer_median": {
+    "ACE": 99.9,
+    "Fox Home": 224.9,
+    "Home Center": 49.9,
+    "IKEA": 125.0,
+    "Terminal X": 209.9
+   },
+   "verdict": "not-viable",
+   "verdict_counts": {
+    "not-viable": 3
+   },
+   "our_landed_median_ils": 194,
+   "price_for_35pct_median": 400,
+   "sources": [
+    {
+     "retailer": "IKEA",
+     "title": "ÅRSTID מנורת שולחן",
+     "size": null,
+     "price": 125.0,
+     "sale_price": null,
+     "url": "https://www.ikea.com/il/he/p/arstid-table-lamp-brass-white-30321373/",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Center",
+     "title": "מנורת שולחן עם בסיס E-27 ורוד(לרכישה באתר בלבד)",
+     "size": null,
+     "price": 49.9,
+     "sale_price": null,
+     "url": "https://www.homecenter.co.il/products/7272000195",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Fox Home",
+     "title": "מנורת שולחן עם בסיס קרמי ואהיל בד בהיר Lian",
+     "size": null,
+     "price": 199.9,
+     "sale_price": 139.9,
+     "url": "https://www.foxhome.co.il/products/0336582400",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Terminal X",
+     "title": "מנורה BISTRO WAVES לבן (STYLISTIC)",
+     "size": "OS",
+     "price": 229.9,
+     "sale_price": null,
+     "url": "https://www.terminalx.com/catalogsearch/result?q=%D7%9E%D7%A0%D7%95%D7%A8%D7%AA+%D7%A9%D7%95%D7%9C%D7%97%D7%9F",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "ACE",
+     "title": "מנורת שולחן 8237 צבע אדום",
+     "size": null,
+     "price": 99.9,
+     "sale_price": null,
+     "url": "https://www.ace.co.il/7614826",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "IKEA",
+     "title": "BARLAST מנורת שולחן",
+     "size": "31 ס\"מ",
+     "price": 19.0,
+     "sale_price": null,
+     "url": "https://www.ikea.com/il/he/p/barlast-table-lamp-black-white-00504557/",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "IKEA",
+     "title": "STOCKHOLM 2025 מנורת שולחן",
+     "size": "65 ס\"מ",
+     "price": 345.0,
+     "sale_price": null,
+     "url": "https://www.ikea.com/il/he/p/stockholm-2025-table-lamp-white-textile-brass-plated-90585926/",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    }
+   ]
+  },
+  "floor-lamp": {
+   "label_he": "מנורה עומדת",
+   "low": 98,
+   "median": 225,
+   "high": 450,
+   "p75": 295,
+   "band": [
+    149,
+    219
+   ],
+   "n": 32,
+   "confidence": "medium",
+   "per_retailer_median": {
+    "ACE": 199.9,
+    "IKEA": 225.0
+   },
+   "verdict": "not-viable",
+   "verdict_counts": {
+    "not-viable": 3
+   },
+   "our_landed_median_ils": 174,
+   "price_for_35pct_median": 359,
+   "sources": [
+    {
+     "retailer": "IKEA",
+     "title": "IKEA PS 2026 מנורה עומדת, תאורה עילית",
+     "size": "182 ס\"מ",
+     "price": 225.0,
+     "sale_price": null,
+     "url": "https://www.ikea.com/il/he/p/ikea-ps-2026-floor-uplighter-yellow-80608532/",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "ACE",
+     "title": "מנורת עמידה 1393 ורוד",
+     "size": null,
+     "price": 199.9,
+     "sale_price": null,
+     "url": "https://www.ace.co.il/7403018",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "IKEA",
+     "title": "BARLAST מנורה עומדת",
+     "size": "150 ס\"מ",
+     "price": 49.0,
+     "sale_price": null,
+     "url": "https://www.ikea.com/il/he/p/barlast-floor-lamp-black-white-10430368/",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "IKEA",
+     "title": "STOCKHOLM 2025 מנורה עומדת",
+     "size": "159 ס\"מ",
+     "price": 495.0,
+     "sale_price": null,
+     "url": "https://www.ikea.com/il/he/p/stockholm-2025-floor-lamp-white-textile-brass-plated-50585914/",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    }
+   ]
+  },
+  "wall-sconce": {
+   "label_he": "מנורת קיר",
+   "low": 60,
+   "median": 125,
+   "high": 299,
+   "p75": 150,
+   "band": [
+    89,
+    119
+   ],
+   "n": 52,
+   "confidence": "high",
+   "per_retailer_median": {
+    "ACE": 149.9,
+    "Home Center": 194.9,
+    "IKEA": 110.0,
+    "Terminal X": 149.9
+   },
+   "verdict": "not-viable",
+   "verdict_counts": {
+    "not-viable": 15,
+    "viable": 2,
+    "bundle-only": 1
+   },
+   "our_landed_median_ils": 162,
+   "price_for_35pct_median": 334,
+   "sources": [
+    {
+     "retailer": "Home Center",
+     "title": "מנורת קיר CARDO 180 UP AND DOWN 2X4W גוון צהוב שחור",
+     "size": null,
+     "price": 219.9,
+     "sale_price": 175.92,
+     "url": "https://www.homecenter.co.il/products/1755092006749",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "IKEA",
+     "title": "ÅRSTID מנורת קיר",
+     "size": null,
+     "price": 95.0,
+     "sale_price": null,
+     "url": "https://www.ikea.com/il/he/p/arstid-wall-lamp-brass-white-50321386/",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "ACE",
+     "title": "מנורת קיר דגם וינטג' מייפל",
+     "size": null,
+     "price": 149.9,
+     "sale_price": null,
+     "url": "https://www.ace.co.il/7639881",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Terminal X",
+     "title": "מנורה WAVES S לבן (STYLISTIC)",
+     "size": "OS",
+     "price": 149.9,
+     "sale_price": null,
+     "url": "https://www.terminalx.com/catalogsearch/result?q=%D7%9E%D7%A0%D7%95%D7%A8%D7%AA+%D7%A9%D7%95%D7%9C%D7%97%D7%9F",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Center",
+     "title": "זרוע צמוד קיר למסך בגודל 13 עד 43 אינץ",
+     "size": null,
+     "price": 39.9,
+     "sale_price": 29.9,
+     "url": "https://www.homecenter.co.il/products/1745228643743",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Center",
+     "title": "קולט אדים צמוד קיר זכוכית שחור MIDEA 60V71-B",
+     "size": null,
+     "price": 1090.0,
+     "sale_price": null,
+     "url": "https://www.homecenter.co.il/products/1704897792280",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    }
+   ]
+  },
+  "pendant": {
+   "label_he": "מנורת תלייה",
+   "low": 20,
+   "median": 195,
+   "high": 295,
+   "p75": 245,
+   "band": [
+    139,
+    179
+   ],
+   "n": 158,
+   "confidence": "high",
+   "per_retailer_median": {
+    "Fox Home": 229.9,
+    "Home Center": 79.9,
+    "IKEA": 195.0,
+    "Terminal X": 159.0
+   },
+   "verdict": "not-viable",
+   "verdict_counts": {
+    "not-viable": 9
+   },
+   "our_landed_median_ils": 221,
+   "price_for_35pct_median": 455,
+   "sources": [
+    {
+     "retailer": "Home Center",
+     "title": "קולב נירוסטה 4 כפול ניקל",
+     "size": null,
+     "price": 79.9,
+     "sale_price": null,
+     "url": "https://www.homecenter.co.il/products/8080709208",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "IKEA",
+     "title": "BÄCKNATE אהיל מנורת תלייה",
+     "size": "50 ס\"מ",
+     "price": 195.0,
+     "sale_price": null,
+     "url": "https://www.ikea.com/il/he/p/baecknate-pendant-lamp-shade-white-60578791/",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Fox Home",
+     "title": "לוח תלייה לקיר מחורץ ממתכת בגוון שחור Libby",
+     "size": null,
+     "price": 229.9,
+     "sale_price": 59.9,
+     "url": "https://www.foxhome.co.il/products/298920200",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Terminal X",
+     "title": "צעצועים לתלייה לאוניברסיטה  ארנב ורוד, גזר, כוכב JABADABADO (MEKUPELET)",
+     "size": "OS",
+     "price": 159.0,
+     "sale_price": null,
+     "url": "https://www.terminalx.com/catalogsearch/result?q=%D7%A6%D7%A2%D7%A6%D7%95%D7%A2",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Center",
+     "title": "קולב בודד 840 מושחר עתיק",
+     "size": null,
+     "price": 10.9,
+     "sale_price": null,
+     "url": "https://www.homecenter.co.il/products/8081214280",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "IKEA",
+     "title": "STOCKHOLM 2025 מנורת תלייה",
+     "size": "54 ס\"מ",
+     "price": 745.0,
+     "sale_price": null,
+     "url": "https://www.ikea.com/il/he/p/stockholm-2025-pendant-lamp-glass-brass-plated-90585950/",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    }
+   ]
+  },
+  "framed-print": {
+   "label_he": "תמונה ממוסגרת / הדפס",
+   "low": 30,
+   "median": 225,
+   "high": 610,
+   "p75": 450,
+   "band": [
+    149,
+    219
+   ],
+   "n": 139,
+   "confidence": "high",
+   "per_retailer_median": {
+    "ACE": 49.9,
+    "Fox Home": 199.9,
+    "Home Center": 54.9,
+    "IKEA": 145.0,
+    "Terminal X": 437.5
+   },
+   "verdict": "not-viable",
+   "verdict_counts": {
+    "viable": 2,
+    "not-viable": 5
+   },
+   "our_landed_median_ils": 149,
+   "price_for_35pct_median": 307,
+   "sources": [
+    {
+     "retailer": "Home Center",
+     "title": "מפצל HDMI ל 3",
+     "size": null,
+     "price": 54.9,
+     "sale_price": 29.9,
+     "url": "https://www.homecenter.co.il/products/7071300993",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Terminal X",
+     "title": "תמונת קנבס - CAN-RYK052 (EFRAT ILAN)",
+     "size": "15040 80X35",
+     "price": 450.0,
+     "sale_price": null,
+     "url": "https://www.terminalx.com/catalogsearch/result?q=%D7%AA%D7%9E%D7%95%D7%A0%D7%94",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "IKEA",
+     "title": "BLODFLÄDER תמונה ממוסגרת",
+     "size": "‎40x50 ס\"מ‏",
+     "price": 145.0,
+     "sale_price": null,
+     "url": "https://www.ikea.com/il/he/p/blodflaeder-picture-two-birds-00601921/",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Fox Home",
+     "title": "תמונת קיר דקורטיבית בעיצוב בוטני Leaf",
+     "size": null,
+     "price": 199.9,
+     "sale_price": 149.93,
+     "url": "https://www.foxhome.co.il/products/0332680300",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "ACE",
+     "title": "תמונה קנבס מודפסת Marny",
+     "size": null,
+     "price": 49.9,
+     "sale_price": 42.29,
+     "url": "https://www.ace.co.il/9909969",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Center",
+     "title": "מארז תבריג RF לכבלים נקבה נקבה",
+     "size": null,
+     "price": 12.9,
+     "sale_price": null,
+     "url": "https://www.homecenter.co.il/products/7069905105",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Terminal X",
+     "title": "תמונת קנבס - CAN-PRH059 (EFRAT ILAN)",
+     "size": "150X100",
+     "price": 1000.0,
+     "sale_price": null,
+     "url": "https://www.terminalx.com/catalogsearch/result?q=%D7%AA%D7%9E%D7%95%D7%A0%D7%94",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    }
+   ]
+  },
+  "wall-decor": {
+   "label_he": "קישוט קיר / מקרמה / מראה דקורטיבית",
+   "low": 29,
+   "median": 175,
+   "high": 515,
+   "p75": 345,
+   "band": [
+    129,
+    169
+   ],
+   "n": 67,
+   "confidence": "high",
+   "per_retailer_median": {
+    "Home Center": 473.5,
+    "IKEA": 175.0,
+    "Terminal X": 99.0
+   },
+   "verdict": "viable",
+   "verdict_counts": {
+    "bundle-only": 2,
+    "viable": 2
+   },
+   "our_landed_median_ils": 79,
+   "price_for_35pct_median": 165,
+   "sources": [
+    {
+     "retailer": "IKEA",
+     "title": "LINDBYN מראה",
+     "size": "50 ס\"מ",
+     "price": 175.0,
+     "sale_price": null,
+     "url": "https://www.ikea.com/il/he/p/lindbyn-mirror-black-70590448/",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Center",
+     "title": "מראה עגולה PlatinumBlack בצבע שחור במידות 50X50",
+     "size": null,
+     "price": 360.0,
+     "sale_price": 252.0,
+     "url": "https://www.homecenter.co.il/products/1782655223898",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Terminal X",
+     "title": "קישוט קיר חמסה לאהוב (MYKEL)",
+     "size": "OS",
+     "price": 99.0,
+     "sale_price": null,
+     "url": "https://www.terminalx.com/catalogsearch/result?q=%D7%A7%D7%99%D7%A9%D7%95%D7%98+%D7%A7%D7%99%D7%A8",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "IKEA",
+     "title": "LÖNSÅS מראה",
+     "size": "‎21x30 ס\"מ‏",
+     "price": 10.0,
+     "sale_price": null,
+     "url": "https://www.ikea.com/il/he/p/loensas-mirror-50471026/",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Center",
+     "title": "מראה עץ מלא 110X186X7.5 WOOP WHITE NVENGER",
+     "size": null,
+     "price": 1800.0,
+     "sale_price": 1080.0,
+     "url": "https://www.homecenter.co.il/products/1777298407252",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    }
+   ]
+  },
+  "basket": {
+   "label_he": "סלסלה קלועה",
+   "low": 25,
+   "median": 69,
+   "high": 300,
+   "p75": 95,
+   "band": [
+    49,
+    69
+   ],
+   "n": 209,
+   "confidence": "high",
+   "per_retailer_median": {
+    "ACE": 261.8,
+    "Fox Home": 66.4,
+    "Home Center": 59.9,
+    "IKEA": 59.0,
+    "Terminal X": 230.0
+   },
+   "verdict": "not-viable",
+   "verdict_counts": {
+    "not-viable": 6,
+    "bundle-only": 3
+   },
+   "our_landed_median_ils": 77,
+   "price_for_35pct_median": 160,
+   "sources": [
+    {
+     "retailer": "Home Center",
+     "title": "סל קש עגול דגם חבלים S",
+     "size": null,
+     "price": 59.9,
+     "sale_price": null,
+     "url": "https://www.homecenter.co.il/products/2020485409",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "IKEA",
+     "title": "FLÅDIS סלסילה",
+     "size": "25 ס\"מ",
+     "price": 59.0,
+     "sale_price": null,
+     "url": "https://www.ikea.com/il/he/p/fladis-basket-seagrass-60322173/",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Fox Home",
+     "title": "סלסלת קש מלבנית בגוון טבעי Maui",
+     "size": null,
+     "price": 69.9,
+     "sale_price": 48.93,
+     "url": "https://www.foxhome.co.il/products/0334540300",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Terminal X",
+     "title": "סנסיווריה ירוקה L בסלסלת לאגוס (PLANT IT)",
+     "size": "L",
+     "price": 230.0,
+     "sale_price": null,
+     "url": "https://www.terminalx.com/catalogsearch/result?q=%D7%A1%D7%9C%D7%A1%D7%9C%D7%94",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "ACE",
+     "title": "ספסל אחסון קורדרוי דגם TOMAS אבן",
+     "size": null,
+     "price": 261.75,
+     "sale_price": null,
+     "url": "https://www.ace.co.il/4495103",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Center",
+     "title": "סלסלת אטבים עם ידית קשיחה",
+     "size": null,
+     "price": 9.9,
+     "sale_price": null,
+     "url": "https://www.homecenter.co.il/products/6766612011",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "IKEA",
+     "title": "METOD / MAXIMERA ארון תחתון לכיריים/מגירה/2 סלסילות",
+     "size": "‎60x60 ס\"מ‏",
+     "price": 1285.0,
+     "sale_price": null,
+     "url": "https://www.ikea.com/il/he/p/metod-maximera-base-cab-f-hob-drawer-2-wire-bskts-white-voxtorp-dark-grey-s99463770/",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    }
+   ]
+  },
+  "pouf": {
+   "label_he": "פוף / הדום",
+   "low": 262,
+   "median": 495,
+   "high": 850,
+   "p75": 822,
+   "band": [
+    349,
+    449
+   ],
+   "n": 81,
+   "confidence": "high",
+   "per_retailer_median": {
+    "ACE": 353.6,
+    "Home Center": 449.0,
+    "IKEA": 495.0,
+    "Terminal X": 690.0
+   },
+   "verdict": "viable",
+   "verdict_counts": {
+    "viable": 1
+   },
+   "our_landed_median_ils": 143,
+   "price_for_35pct_median": 295,
+   "sources": [
+    {
+     "retailer": "Home Center",
+     "title": "סט פוף Shelly והדום Dotcom Quilt צבע אפור",
+     "size": null,
+     "price": 449.0,
+     "sale_price": null,
+     "url": "https://www.homecenter.co.il/products/1745870435849",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "IKEA",
+     "title": "LILLESÄTER הדום",
+     "size": null,
+     "price": 495.0,
+     "sale_price": null,
+     "url": "https://www.ikea.com/il/he/p/lillesaeter-pouffe-axvall-off-white-40619066/",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "ACE",
+     "title": "הדום ישיבה באורך 85 ס\"מ עשוי במבוק דגם J42",
+     "size": null,
+     "price": 321.2,
+     "sale_price": null,
+     "url": "https://www.ace.co.il/4501526",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Terminal X",
+     "title": "הדום לאונרדו 01 לבן 60*60*45 LEONARDO 01 (RED CARPET)",
+     "size": "60X60",
+     "price": 690.0,
+     "sale_price": 207.0,
+     "url": "https://www.terminalx.com/catalogsearch/result?q=%D7%94%D7%93%D7%95%D7%9D",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Center",
+     "title": "ציר כפוף (זוג במארז)",
+     "size": null,
+     "price": 19.9,
+     "sale_price": null,
+     "url": "https://www.homecenter.co.il/products/8081213907",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Terminal X",
+     "title": "הדום BUKALA FABRIC CREAM (LIFE STYLE)",
+     "size": "OS",
+     "price": 1360.0,
+     "sale_price": null,
+     "url": "https://www.terminalx.com/catalogsearch/result?q=%D7%94%D7%93%D7%95%D7%9D",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    }
+   ]
+  },
+  "table-runner": {
+   "label_he": "ראנר לשולחן",
+   "low": 16,
+   "median": 130,
+   "high": 140,
+   "p75": 155,
+   "band": [
+    89,
+    129
+   ],
+   "n": 53,
+   "confidence": "high",
+   "per_retailer_median": {
+    "Fox Home": 129.9,
+    "Home Center": 29.9,
+    "IKEA": 39.0,
+    "Terminal X": 255.0
+   },
+   "verdict": "viable",
+   "verdict_counts": {
+    "viable": 3
+   },
+   "our_landed_median_ils": 37,
+   "price_for_35pct_median": 79,
+   "sources": [
+    {
+     "retailer": "Home Center",
+     "title": "סט 4 פלייסמטים 30*45 סמ כסוף SHINY",
+     "size": null,
+     "price": 29.9,
+     "sale_price": null,
+     "url": "https://www.homecenter.co.il/products/1724577659280",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Fox Home",
+     "title": "ראנר שולחן בעיצוב גאומטרי בגווני ירוק ושמנת Terra",
+     "size": null,
+     "price": 129.9,
+     "sale_price": 90.93,
+     "url": "https://www.foxhome.co.il/products/0333929996",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "IKEA",
+     "title": "VÅRARV מפת ראנר",
+     "size": "‎35x150 ס\"מ‏",
+     "price": 39.0,
+     "sale_price": null,
+     "url": "https://www.ikea.com/il/he/p/vararv-table-runner-dark-grey-natural-20545854/",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Terminal X",
+     "title": "ראנר לימונים כותנה (RANGOLI HOME DESIGN)",
+     "size": "180X40 280X40",
+     "price": 215.0,
+     "sale_price": null,
+     "url": "https://www.terminalx.com/catalogsearch/result?q=%D7%A8%D7%90%D7%A0%D7%A8",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Center",
+     "title": "פלייסמט 33*48 נקודות גארדן",
+     "size": null,
+     "price": 9.9,
+     "sale_price": null,
+     "url": "https://www.homecenter.co.il/products/5150614563",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Terminal X",
+     "title": "ראנר הורטנזיה כחולה כותנה (RANGOLI HOME DESIGN)",
+     "size": "280X40",
+     "price": 295.0,
+     "sale_price": null,
+     "url": "https://www.terminalx.com/catalogsearch/result?q=%D7%A8%D7%90%D7%A0%D7%A8",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    }
+   ]
+  },
+  "bedding-set": {
+   "label_he": "סט מצעים (ציפה + ציפיות, זוגי)",
+   "low": 125,
+   "median": 489,
+   "high": 869,
+   "p75": 699,
+   "band": [
+    349,
+    449
+   ],
+   "n": 399,
+   "confidence": "high",
+   "per_retailer_median": {
+    "ACE": 141.6,
+    "Fox Home": 519.9,
+    "Home Center": 119.9,
+    "Home Style": 499.0,
+    "IKEA": 145.0,
+    "Terminal X": 564.0
+   },
+   "verdict": "not-viable",
+   "verdict_counts": {
+    "viable": 2,
+    "not-viable": 3,
+    "bundle-only": 1
+   },
+   "our_landed_median_ils": 290,
+   "price_for_35pct_median": 596,
+   "sources": [
+    {
+     "retailer": "Home Style",
+     "title": "סט מצעי פרקל כותנה EXCLUSIVE - ענבל",
+     "size": "120/200 סמ מיטה וחצי",
+     "price": 499.0,
+     "sale_price": 249.5,
+     "url": "https://www.homestyle.co.il/products/3073-999",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "IKEA",
+     "title": "ÄNGSLILJA ציפה ו-2 ציפיות",
+     "size": "‎200x220/50x70 ס\"מ‏",
+     "price": 145.0,
+     "sale_price": null,
+     "url": "https://www.ikea.com/il/he/p/aengslilja-duvet-cover-and-2-pillowcases-dark-blue-60636611/",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Center",
+     "title": "סט מיטה וחצי 120/200 סמ נטלי",
+     "size": null,
+     "price": 119.9,
+     "sale_price": null,
+     "url": "https://www.homecenter.co.il/products/1787648348425",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Fox Home",
+     "title": "סט מצעי סאטן בדוגמת פרחים בשילוב עלים בגוונים טבעיים Yulia",
+     "size": "‏ס\"מ‎ 90X200",
+     "price": 439.9,
+     "sale_price": 307.93,
+     "url": "https://www.foxhome.co.il/products/0331729900",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "ACE",
+     "title": "סט מצעים למיטה וחצי דגם בוב חיוך גדול",
+     "size": null,
+     "price": 143.2,
+     "sale_price": null,
+     "url": "https://www.ace.co.il/4475434",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Terminal X",
+     "title": "סט מצעים 100% כותנה סאטן (REPLAY)",
+     "size": "90X200 120X200 160X200 180X200 90X200 12",
+     "price": 539.0,
+     "sale_price": 269.5,
+     "url": "https://www.terminalx.com/catalogsearch/result?q=%D7%9E%D7%A6%D7%A2%D7%99%D7%9D",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Style",
+     "title": "סט מצעי סאטן כותנה, קריסטין - כחול",
+     "size": "2X50/70 סמ זוג ציפיות",
+     "price": 29.0,
+     "sale_price": null,
+     "url": "https://www.homestyle.co.il/products/3005-107",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Style",
+     "title": "סט מצעי סאטן, כותנה מצרית, ונוס - אבן",
+     "size": "220/200 סמ מיטה זוגי מיוחד",
+     "price": 1799.0,
+     "sale_price": 899.5,
+     "url": "https://www.homestyle.co.il/products/3259-219",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    }
+   ]
+  },
+  "duvet-cover": {
+   "label_he": "ציפה לשמיכה",
+   "low": 120,
+   "median": 370,
+   "high": 480,
+   "p75": 440,
+   "band": [
+    269,
+    349
+   ],
+   "n": 121,
+   "confidence": "high",
+   "per_retailer_median": {
+    "Fox Home": 379.9,
+    "Home Center": 119.9,
+    "Home Style": 259.0,
+    "Terminal X": 369.9,
+    "Zara Home": 529.0
+   },
+   "verdict": "viable",
+   "verdict_counts": {
+    "viable": 1
+   },
+   "our_landed_median_ils": 117,
+   "price_for_35pct_median": 241,
+   "sources": [
+    {
+     "retailer": "Fox Home",
+     "title": "ציפת פרקל לבנה עם עיטורי תחרה עדינים Orchid",
+     "size": "‏ס\"מ‎ 150X200",
+     "price": 379.9,
+     "sale_price": 265.93,
+     "url": "https://www.foxhome.co.il/products/0331910100",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Style",
+     "title": "ציפה כותנה חלקה - ורוד Mix&Match",
+     "size": "220/200 סמ ציפה",
+     "price": 259.0,
+     "sale_price": 119.0,
+     "url": "https://www.homestyle.co.il/products/1530-116",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Center",
+     "title": "ציפה זוגית 220/200 ס\"מ גרסי 100% כותנה פיסטוק MOON",
+     "size": null,
+     "price": 119.9,
+     "sale_price": null,
+     "url": "https://www.homecenter.co.il/products/1707832882588",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Terminal X",
+     "title": "ציפה 002X051 CARLY (FOX HOME)",
+     "size": "150X200",
+     "price": 369.9,
+     "sale_price": 147.96,
+     "url": "https://www.terminalx.com/catalogsearch/result?q=%D7%A6%D7%99%D7%A4%D7%94+%D7%9C%D7%9B%D7%A8%D7%99%D7%AA",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Zara Home",
+     "title": "ציפה מפשתן מנוגד 150x220 (יחיד)",
+     "size": null,
+     "price": 399.0,
+     "sale_price": null,
+     "url": "https://www.zarahome.com/il/ציפה-מפשתן-מנוגד-l44126088",
+     "date": "2026-10-09",
+     "verified": "search-snippet"
+    },
+    {
+     "retailer": "Home Center",
+     "title": "ציפה לשמיכה 200*150 גרסי סגול",
+     "size": null,
+     "price": 49.9,
+     "sale_price": null,
+     "url": "https://www.homecenter.co.il/products/5150216537",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Zara Home",
+     "title": "ציפה מפשתן מנוגד 150/160 (זוגי)",
+     "size": null,
+     "price": 659.0,
+     "sale_price": null,
+     "url": "https://www.zarahome.com/il/ציפה-מפשתן-מנוגד-l44126088",
+     "date": "2026-10-09",
+     "verified": "search-snippet"
+    }
+   ]
+  },
+  "towels": {
+   "label_he": "מגבת רחצה (גוף)",
+   "low": 40,
+   "median": 129,
+   "high": 180,
+   "p75": 157,
+   "band": [
+    89,
+    129
+   ],
+   "n": 163,
+   "confidence": "high",
+   "per_retailer_median": {
+    "Fox Home": 139.9,
+    "Home Center": 30.0,
+    "Home Style": 129.0,
+    "IKEA": 55.0,
+    "Terminal X": 149.9,
+    "Zara Home": 179.9
+   },
+   "verdict": "viable",
+   "verdict_counts": {
+    "viable": 2
+   },
+   "our_landed_median_ils": 56,
+   "price_for_35pct_median": 116,
+   "sources": [
+    {
+     "retailer": "Home Style",
+     "title": "מגבת ג'אקרד, דגם לוסיל - אפור כהה",
+     "size": "70/130 סמ מגבת גוף",
+     "price": 129.0,
+     "sale_price": 64.5,
+     "url": "https://www.homestyle.co.il/products/3241-105",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Fox Home",
+     "title": "מגבת רחצה Diva",
+     "size": null,
+     "price": 139.9,
+     "sale_price": 97.93,
+     "url": "https://www.foxhome.co.il/products/0243452105",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Center",
+     "title": "מגבת גוף ענקית 70X150 ס\"מ 100% כותנה אפור כהה",
+     "size": null,
+     "price": 30.0,
+     "sale_price": null,
+     "url": "https://www.homecenter.co.il/products/1667395395260",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "IKEA",
+     "title": "BROKGINST מגבת רחצה",
+     "size": "‎70x140 ס\"מ‏",
+     "price": 55.0,
+     "sale_price": null,
+     "url": "https://www.ikea.com/il/he/p/brokginst-bath-towel-white-00614443/",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Terminal X",
+     "title": "מגבת גוף מגבת כותנה 550  REPLAY (REPLAY)",
+     "size": "140x90 130x70 140x90 130x70 140x90 130x7",
+     "price": 149.9,
+     "sale_price": 59.96,
+     "url": "https://www.terminalx.com/catalogsearch/result?q=%D7%9E%D7%92%D7%91%D7%AA",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Zara Home",
+     "title": "מגבת רחצה מכותנה עם פסים",
+     "size": null,
+     "price": 179.9,
+     "sale_price": null,
+     "url": "https://www.zarahome.com/il/מגבת-רחצה-מכותנה-עם-פסים-l41515013",
+     "date": "2026-10-09",
+     "verified": "search-snippet"
+    },
+    {
+     "retailer": "IKEA",
+     "title": "LUDDVIAL מגבת רחצה",
+     "size": "‎55x120 ס\"מ‏",
+     "price": 10.0,
+     "sale_price": null,
+     "url": "https://www.ikea.com/il/he/p/luddvial-bath-towel-white-10579868/",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Style",
+     "title": "מגבת רחצה פרימיום, דגם הדסון  - קרם",
+     "size": "90/140 סמ מגבת ענק",
+     "price": 225.0,
+     "sale_price": 112.5,
+     "url": "https://www.homestyle.co.il/products/3036-219",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    }
+   ]
+  },
+  "bath-accessories": {
+   "label_he": "אביזרי אמבטיה (דיספנסר / כוס)",
+   "low": 19,
+   "median": 60,
+   "high": 153,
+   "p75": 117,
+   "band": [
+    39,
+    59
+   ],
+   "n": 109,
+   "confidence": "high",
+   "per_retailer_median": {
+    "ACE": 33.0,
+    "Fox Home": 59.9,
+    "Home Center": 22.4,
+    "IKEA": 29.0,
+    "Terminal X": 153.5
+   },
+   "verdict": "not-viable",
+   "verdict_counts": {
+    "not-viable": 5
+   },
+   "our_landed_median_ils": 59,
+   "price_for_35pct_median": 123,
+   "sources": [
+    {
+     "retailer": "Fox Home",
+     "title": "דיספנסר לסבון בגוון אפור Icon",
+     "size": null,
+     "price": 59.9,
+     "sale_price": 41.93,
+     "url": "https://www.foxhome.co.il/products/0336875800",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Center",
+     "title": "מעמד לסבון מוצק דגם מיורקה",
+     "size": null,
+     "price": 20.0,
+     "sale_price": null,
+     "url": "https://www.homecenter.co.il/products/6763211194",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "ACE",
+     "title": "דיספנסר ויקי- שחור",
+     "size": null,
+     "price": 33.05,
+     "sale_price": null,
+     "url": "https://www.ace.co.il/3100165",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Terminal X",
+     "title": "סט דיספנסר לסבון נוזלי וצנצנת Lyon - שחור (ESSENTIALS.)",
+     "size": "OS",
+     "price": 148.0,
+     "sale_price": null,
+     "url": "https://www.terminalx.com/catalogsearch/result?q=%D7%93%D7%99%D7%A1%D7%A4%D7%A0%D7%A1%D7%A8",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "IKEA",
+     "title": "SILVTJÄRN מעמד למברשות שיניים",
+     "size": null,
+     "price": 29.0,
+     "sale_price": null,
+     "url": "https://www.ikea.com/il/he/p/silvtjaern-toothbrush-holder-30501915/",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Center",
+     "title": "סבונייה אליס - שמנת",
+     "size": null,
+     "price": 4.9,
+     "sale_price": null,
+     "url": "https://www.homecenter.co.il/products/6763110801",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Terminal X",
+     "title": "מארז דיספנסר, כוס ומגש שיש L - לבן (STUDIO MARMO)",
+     "size": "OS",
+     "price": 373.0,
+     "sale_price": null,
+     "url": "https://www.terminalx.com/catalogsearch/result?q=%D7%93%D7%99%D7%A1%D7%A4%D7%A0%D7%A1%D7%A8",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    }
+   ]
+  },
+  "kitchen-canisters": {
+   "label_he": "צנצנות / אחסוניות מטבח",
+   "low": 15,
+   "median": 50,
+   "high": 100,
+   "p75": 80,
+   "band": [
+    29,
+    49
+   ],
+   "n": 147,
+   "confidence": "high",
+   "per_retailer_median": {
+    "ACE": 25.9,
+    "Fox Home": 49.9,
+    "Home Center": 19.9,
+    "IKEA": 23.5,
+    "Naaman": 50.0,
+    "Terminal X": 159.0
+   },
+   "verdict": "no-products",
+   "verdict_counts": null,
+   "our_landed_median_ils": null,
+   "price_for_35pct_median": null,
+   "sources": [
+    {
+     "retailer": "Home Center",
+     "title": "צנצנת זכוכית 1000 מל ACACIA",
+     "size": null,
+     "price": 19.9,
+     "sale_price": null,
+     "url": "https://www.homecenter.co.il/products/1752065285438",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Fox Home",
+     "title": "אחסונית לתה ממתכת עם ידית מעץ Simple",
+     "size": null,
+     "price": 49.9,
+     "sale_price": 34.93,
+     "url": "https://www.foxhome.co.il/products/0325339401",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "IKEA",
+     "title": "BRUGDHAJ צנצנת עם מכסה",
+     "size": "0.3 ל'",
+     "price": 25.0,
+     "sale_price": null,
+     "url": "https://www.ikea.com/il/he/p/brugdhaj-jar-with-lid-beige-10596170/",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Naaman",
+     "title": "צנצנת זכוכית מכסה עץ - 1.9 ליטר",
+     "size": null,
+     "price": 50.0,
+     "sale_price": 20.0,
+     "url": "https://www.naamanp.co.il/41324819",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "ACE",
+     "title": "צנצנת זכוכית 1 ליטר מכסה עץ השיטה Arche",
+     "size": null,
+     "price": 25.9,
+     "sale_price": 21.95,
+     "url": "https://www.ace.co.il/9909790",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Terminal X",
+     "title": "צנצנת שיש Sofia ג' 10 סמ - לבן (STUDIO MARMO)",
+     "size": "OS",
+     "price": 159.0,
+     "sale_price": null,
+     "url": "https://www.terminalx.com/catalogsearch/result?q=%D7%A6%D7%A0%D7%A6%D7%A0%D7%AA",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Center",
+     "title": "צנצנת מלח/פלפל זכוכית+ידית ומכסה מתכת צבעוני",
+     "size": null,
+     "price": 5.9,
+     "sale_price": null,
+     "url": "https://www.homecenter.co.il/products/2020244026",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Terminal X",
+     "title": "זוג צנצנות שיש Sofia S/L - לבן (STUDIO MARMO)",
+     "size": "OS",
+     "price": 318.0,
+     "sale_price": null,
+     "url": "https://www.terminalx.com/catalogsearch/result?q=%D7%A6%D7%A0%D7%A6%D7%A0%D7%AA",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    }
+   ]
+  },
+  "salt-pepper": {
+   "label_he": "מלחייה / פלפלייה / מטחנות",
+   "low": 13,
+   "median": 60,
+   "high": 130,
+   "p75": 110,
+   "band": [
+    39,
+    59
+   ],
+   "n": 50,
+   "confidence": "high",
+   "per_retailer_median": {
+    "ACE": 19.5,
+    "Fox Home": 89.9,
+    "Home Center": 19.9,
+    "IKEA": 34.0,
+    "Naaman": 69.9,
+    "Terminal X": 89.0
+   },
+   "verdict": "not-viable",
+   "verdict_counts": {
+    "not-viable": 1
+   },
+   "our_landed_median_ils": 79,
+   "price_for_35pct_median": 165,
+   "sources": [
+    {
+     "retailer": "Home Center",
+     "title": "זוג מגבות מטבח 40/70 סמ מלח ופלפל",
+     "size": null,
+     "price": 19.9,
+     "sale_price": null,
+     "url": "https://www.homecenter.co.il/products/1713703224926",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Terminal X",
+     "title": "שמפו משקם ללא מלחים 400 מ\"ל Silica (SILICA)",
+     "size": "400ML",
+     "price": 89.0,
+     "sale_price": 75.65,
+     "url": "https://www.terminalx.com/catalogsearch/result?q=%D7%9E%D7%9C%D7%97",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "IKEA",
+     "title": "AFTONHAJ סט מלחיה/פלפליה, 2 חלקים",
+     "size": "8.5 ס\"מ",
+     "price": 39.0,
+     "sale_price": null,
+     "url": "https://www.ikea.com/il/he/p/aftonhaj-salt-pepper-shaker-set-of-2-stainless-steel-beech-walnut-40623742/",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Fox Home",
+     "title": "סט מלח פלפל מזכוכית Homey Cooking",
+     "size": null,
+     "price": 89.9,
+     "sale_price": 26.97,
+     "url": "https://www.foxhome.co.il/products/0293579998",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Naaman",
+     "title": "מלחייה נירוסטה",
+     "size": null,
+     "price": 69.9,
+     "sale_price": 41.94,
+     "url": "https://www.naamanp.co.il/11308208",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "ACE",
+     "title": "מלחייה זכוכית 125 מל",
+     "size": null,
+     "price": 19.49,
+     "sale_price": null,
+     "url": "https://www.ace.co.il/9907440",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Center",
+     "title": "צנצנת מלח/פלפל זכוכית+ידית ומכסה מתכת צבעוני",
+     "size": null,
+     "price": 5.9,
+     "sale_price": null,
+     "url": "https://www.homecenter.co.il/products/2020244026",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Terminal X",
+     "title": "זוג מלחיות פתוחות שיש וכפיות זהב על מגש עץ כהה 20/10 גובה 8 ס״מ (NOVELL COLLECTION)",
+     "size": "OS",
+     "price": 500.0,
+     "sale_price": null,
+     "url": "https://www.terminalx.com/catalogsearch/result?q=%D7%9E%D7%9C%D7%97",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    }
+   ]
+  },
+  "kids-decor": {
+   "label_he": "קישוט לחדר ילדים",
+   "low": 19,
+   "median": 90,
+   "high": 118,
+   "p75": 90,
+   "band": [
+    59,
+    89
+   ],
+   "n": 10,
+   "confidence": "low",
+   "per_retailer_median": {
+    "Home Center": 89.9,
+    "Home Style": 369.0,
+    "IKEA": 19.0
+   },
+   "verdict": "not-viable",
+   "verdict_counts": {
+    "not-viable": 1
+   },
+   "our_landed_median_ils": 72,
+   "price_for_35pct_median": 150,
+   "sources": [
+    {
+     "retailer": "Home Center",
+     "title": "מדבקת  קיר צורות  לחדרי ילדים",
+     "size": null,
+     "price": 89.9,
+     "sale_price": null,
+     "url": "https://www.homecenter.co.il/products/5840901223",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "IKEA",
+     "title": "ALPTALL סט מדבקות קישוט, 3 יח'",
+     "size": null,
+     "price": 19.0,
+     "sale_price": null,
+     "url": "https://www.ikea.com/il/he/p/alptall-decoration-stickers-set-of-3-multicolour-himalayan-animals-and-plants-20625186/",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Style",
+     "title": "שטיח רצפה כביס לילדים - סטיץ תמונות",
+     "size": "110/160 סמ שטיח רצפה",
+     "price": 369.0,
+     "sale_price": 184.5,
+     "url": "https://www.homestyle.co.il/products/3131-999",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    }
+   ]
+  },
+  "toys": {
+   "label_he": "צעצוע (עץ / רך)",
+   "low": 17,
+   "median": 49,
+   "high": 151,
+   "p75": 95,
+   "band": [
+    29,
+    49
+   ],
+   "n": 97,
+   "confidence": "high",
+   "per_retailer_median": {
+    "ACE": 64.8,
+    "Home Center": 109.0,
+    "IKEA": 49.0,
+    "Terminal X": 159.0
+   },
+   "verdict": "bundle-only",
+   "verdict_counts": {
+    "bundle-only": 1
+   },
+   "our_landed_median_ils": 33,
+   "price_for_35pct_median": 70,
+   "sources": [
+    {
+     "retailer": "IKEA",
+     "title": "ALPTALL צעצוע רך",
+     "size": "31 ס\"מ",
+     "price": 49.0,
+     "sale_price": null,
+     "url": "https://www.ikea.com/il/he/p/alptall-soft-toy-pallass-cat-grey-40620625/",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Center",
+     "title": "משטח פעילות לילדים דגם איילים",
+     "size": null,
+     "price": 119.0,
+     "sale_price": null,
+     "url": "https://www.homecenter.co.il/products/1774278019709",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "ACE",
+     "title": "סט מגדל טבעות 6 חלקים + צעצוע משיכה מעודד הליכה מתגלגל מעץ מלא - שועל ורוד",
+     "size": null,
+     "price": 63.56,
+     "sale_price": null,
+     "url": "https://www.ace.co.il/4449918",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Terminal X",
+     "title": "צעצועים לתלייה לאוניברסיטה  ארנב ורוד, גזר, כוכב JABADABADO (MEKUPELET)",
+     "size": "OS",
+     "price": 159.0,
+     "sale_price": null,
+     "url": "https://www.terminalx.com/catalogsearch/result?q=%D7%A6%D7%A2%D7%A6%D7%95%D7%A2",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "IKEA",
+     "title": "FABLER BJÖRN צעצוע רך",
+     "size": "21 ס\"מ",
+     "price": 9.0,
+     "sale_price": null,
+     "url": "https://www.ikea.com/il/he/p/fabler-bjoern-soft-toy-beige-00141401/",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "ACE",
+     "title": "ארגונית צעצועים 4KIDS קרם",
+     "size": null,
+     "price": 617.83,
+     "sale_price": null,
+     "url": "https://www.ace.co.il/4477774",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    }
+   ]
+  },
+  "bath-mat": {
+   "label_he": "שטיח אמבטיה",
+   "low": 25,
+   "median": 100,
+   "high": 116,
+   "p75": 100,
+   "band": [
+    69,
+    99
+   ],
+   "n": 63,
+   "confidence": "high",
+   "per_retailer_median": {
+    "Fox Home": 99.9,
+    "Home Center": 54.9,
+    "Home Style": 89.0,
+    "Terminal X": 139.0
+   },
+   "verdict": "not-viable",
+   "verdict_counts": {
+    "not-viable": 1,
+    "bundle-only": 1
+   },
+   "our_landed_median_ils": 204,
+   "price_for_35pct_median": 422,
+   "sources": [
+    {
+     "retailer": "Fox Home",
+     "title": "שטיח אמבטיה מכותנה בצורת פרח Alina",
+     "size": null,
+     "price": 99.9,
+     "sale_price": 69.93,
+     "url": "https://www.foxhome.co.il/products/0335999401",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Center",
+     "title": "שטיח אמבטיה נגד החלקה פי.וי.סי אובלי לבן ריבועים",
+     "size": null,
+     "price": 59.9,
+     "sale_price": 29.9,
+     "url": "https://www.homecenter.co.il/products/1712061181042",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Style",
+     "title": "Benetton Essential Bath Mat - פטרול",
+     "size": "50/80 סמ מגבת רצפה",
+     "price": 89.0,
+     "sale_price": 53.4,
+     "url": "https://www.homestyle.co.il/products/2029-227",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Terminal X",
+     "title": "Laura Ashley -שטיח אמבטיה 100% כותנה - אפור (LAURA ASHLEY)",
+     "size": "70X30",
+     "price": 139.0,
+     "sale_price": 55.6,
+     "url": "https://www.terminalx.com/catalogsearch/result?q=%D7%A9%D7%98%D7%99%D7%97",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Center",
+     "title": "AB5826 שטיח אמבטיה אובלי BASIC 33.5*61 (24)",
+     "size": null,
+     "price": 10.0,
+     "sale_price": null,
+     "url": "https://www.homecenter.co.il/products/1769421529085",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Fox Home",
+     "title": "שטיח אמבט בגוון בז׳ Lucia",
+     "size": null,
+     "price": 199.9,
+     "sale_price": 59.97,
+     "url": "https://www.foxhome.co.il/products/0164836000",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    }
+   ]
+  },
+  "shower-curtain": {
+   "label_he": "וילון מקלחת/אמבטיה",
+   "low": 35,
+   "median": 90,
+   "high": 129,
+   "p75": 129,
+   "band": [
+    59,
+    89
+   ],
+   "n": 49,
+   "confidence": "high",
+   "per_retailer_median": {
+    "Fox Home": 89.9,
+    "Home Center": 59.9,
+    "Home Style": 129.0,
+    "IKEA": 44.0
+   },
+   "verdict": "not-viable",
+   "verdict_counts": {
+    "not-viable": 1
+   },
+   "our_landed_median_ils": 64,
+   "price_for_35pct_median": 132,
+   "sources": [
+    {
+     "retailer": "Home Center",
+     "title": "וילון אמבט 180*200 צבעי ים",
+     "size": null,
+     "price": 59.9,
+     "sale_price": 29.9,
+     "url": "https://www.homecenter.co.il/products/1726399952981",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Style",
+     "title": "וילון אמבטיה ג'אקרד - כחול",
+     "size": "180/180 סמ וילון אמבט",
+     "price": 129.0,
+     "sale_price": 64.5,
+     "url": "https://www.homestyle.co.il/products/2063-107",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "IKEA",
+     "title": "LUDDHAGTORN וילון למקלחת",
+     "size": "‎180x200 ס\"מ‏",
+     "price": 29.0,
+     "sale_price": null,
+     "url": "https://www.ikea.com/il/he/p/luddhagtorn-shower-curtain-light-beige-00649664/",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Fox Home",
+     "title": "וילון אמבטיה בדוגמת  לבבות בצבעי שחור, אפור ואדום Hearts",
+     "size": null,
+     "price": 89.9,
+     "sale_price": 62.93,
+     "url": "https://www.foxhome.co.il/products/0168359900",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "IKEA",
+     "title": "HASSJÖN טבעת לוילון מקלחת",
+     "size": null,
+     "price": 7.0,
+     "sale_price": null,
+     "url": "https://www.ikea.com/il/he/p/hassjoen-shower-curtain-ring-white-00466008/",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    }
+   ]
+  },
+  "mug": {
+   "label_he": "ספל / מאג",
+   "low": 7,
+   "median": 20,
+   "high": 30,
+   "p75": 25,
+   "band": [
+    19,
+    19
+   ],
+   "n": 117,
+   "confidence": "high",
+   "per_retailer_median": {
+    "Fox Home": 18.4,
+    "Home Center": 14.9,
+    "IKEA": 49.0
+   },
+   "verdict": "not-viable",
+   "verdict_counts": {
+    "not-viable": 2
+   },
+   "our_landed_median_ils": 56,
+   "price_for_35pct_median": 116,
+   "sources": [
+    {
+     "retailer": "Home Center",
+     "title": "שישיית כוסות שופ 200 מל חלקות",
+     "size": null,
+     "price": 14.9,
+     "sale_price": null,
+     "url": "https://www.homecenter.co.il/products/1766496748265",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Fox Home",
+     "title": "מאג מקרמיקה לשתייה חמה 350 מ\"ל Mika",
+     "size": null,
+     "price": 19.9,
+     "sale_price": 13.93,
+     "url": "https://www.foxhome.co.il/products/0334376361",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "IKEA",
+     "title": "DUKTIG סט צעצועים, ספל וצלוחית/8 חל'",
+     "size": null,
+     "price": 49.0,
+     "sale_price": null,
+     "url": "https://www.ikea.com/il/he/p/duktig-8-piece-cup-saucer-playset-mixed-colours-10490244/",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Center",
+     "title": "מאג אספרסו גיגון 65 מל",
+     "size": null,
+     "price": 3.9,
+     "sale_price": null,
+     "url": "https://www.homecenter.co.il/products/1716208559790",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Center",
+     "title": "כיסוי אקספלור לגריל ביסטרו",
+     "size": null,
+     "price": 99.9,
+     "sale_price": null,
+     "url": "https://www.homecenter.co.il/products/1112080095",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    }
+   ]
+  },
+  "tray": {
+   "label_he": "מגש דקורטיבי",
+   "low": 7,
+   "median": 130,
+   "high": 399,
+   "p75": 150,
+   "band": [
+    89,
+    129
+   ],
+   "n": 88,
+   "confidence": "high",
+   "per_retailer_median": {
+    "Fox Home": 129.9,
+    "Home Center": 37.4,
+    "Terminal X": 347.0
+   },
+   "verdict": "not-viable",
+   "verdict_counts": {
+    "not-viable": 2
+   },
+   "our_landed_median_ils": 120,
+   "price_for_35pct_median": 248,
+   "sources": [
+    {
+     "retailer": "Home Center",
+     "title": "מגש אקרילי 31/13/4 סמ ANNA",
+     "size": null,
+     "price": 39.9,
+     "sale_price": null,
+     "url": "https://www.homecenter.co.il/products/1741874579385",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Fox Home",
+     "title": "מגש הגשה ממתכת בגוון ורוד Romy",
+     "size": null,
+     "price": 129.9,
+     "sale_price": 90.93,
+     "url": "https://www.foxhome.co.il/products/0336223939",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Terminal X",
+     "title": "מארז דיספנסר, כוס ומגש שיש S - לבן (STUDIO MARMO)",
+     "size": "OS",
+     "price": 347.0,
+     "sale_price": null,
+     "url": "https://www.terminalx.com/catalogsearch/result?q=%D7%93%D7%99%D7%A1%D7%A4%D7%A0%D7%A1%D7%A8",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Center",
+     "title": "מגש אובלי עמוק קטן WIN",
+     "size": null,
+     "price": 2.9,
+     "sale_price": null,
+     "url": "https://www.homecenter.co.il/products/1756730854650",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Center",
+     "title": "פוף הדום מרובע 68*68 מבד חוץ עם מגש לבחירה צבע שמנת בחירת מגש שיש אוניקס",
+     "size": null,
+     "price": 399.0,
+     "sale_price": null,
+     "url": "https://www.homecenter.co.il/products/1745870435955",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    }
+   ]
+  },
+  "planter": {
+   "label_he": "עציץ / כיסוי לעציץ",
+   "low": 15,
+   "median": 35,
+   "high": 160,
+   "p75": 59,
+   "band": [
+    19,
+    29
+   ],
+   "n": 114,
+   "confidence": "low",
+   "per_retailer_median": {
+    "Fox Home": 54.9,
+    "Home Center": 34.9,
+    "Terminal X": 312.0
+   },
+   "verdict": "not-viable",
+   "verdict_counts": {
+    "not-viable": 2
+   },
+   "our_landed_median_ils": 127,
+   "price_for_35pct_median": 262,
+   "sources": [
+    {
+     "retailer": "Home Center",
+     "title": "עציץ נשפכים דגם הולנד",
+     "size": null,
+     "price": 34.9,
+     "sale_price": null,
+     "url": "https://www.homecenter.co.il/products/1755161967867",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Fox Home",
+     "title": "עציץ נוי דקורטיבי צבעוני Troy",
+     "size": null,
+     "price": 59.9,
+     "sale_price": 41.93,
+     "url": "https://www.foxhome.co.il/products/0336419900",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Terminal X",
+     "title": "קלתאה אינסיגניס M בעציץ קופנהגן לבן וזמיה קוקוס M סלסלת לאגוס (PLANT IT)",
+     "size": "M",
+     "price": 312.0,
+     "sale_price": null,
+     "url": "https://www.terminalx.com/catalogsearch/result?q=%D7%A1%D7%9C%D7%A1%D7%9C%D7%94",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Center",
+     "title": "תחתית לאדנית מרובעת",
+     "size": null,
+     "price": 7.9,
+     "sale_price": null,
+     "url": "https://www.homecenter.co.il/products/1011408434",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Center",
+     "title": "זוג בתי עציץ צבע אבן MoonRiver 59X59X50 39X39X33",
+     "size": null,
+     "price": 1600.0,
+     "sale_price": 1360.0,
+     "url": "https://www.homecenter.co.il/products/1780322422360",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    }
+   ]
+  },
+  "ceiling-light": {
+   "label_he": "גוף תאורה צמוד תקרה",
+   "low": 80,
+   "median": 180,
+   "high": 450,
+   "p75": 300,
+   "band": [
+    129,
+    179
+   ],
+   "n": 91,
+   "confidence": "low",
+   "per_retailer_median": {
+    "ACE": 234.9,
+    "Home Center": 179.9
+   },
+   "verdict": "not-viable",
+   "verdict_counts": {
+    "not-viable": 3
+   },
+   "our_landed_median_ils": 246,
+   "price_for_35pct_median": 505,
+   "sources": [
+    {
+     "retailer": "Home Center",
+     "title": "צמוד תקרה צבע עץ קוטר 50 ס\"מ ORA CCT 50W",
+     "size": null,
+     "price": 179.9,
+     "sale_price": 125.93,
+     "url": "https://www.homecenter.co.il/products/1752753358946",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "ACE",
+     "title": "צמוד תקרה דגם יאכטה אור חם",
+     "size": null,
+     "price": 299.9,
+     "sale_price": null,
+     "url": "https://www.ace.co.il/7667563",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Center",
+     "title": "גוף תאורה צמוד תקרה IP40 20 W ATLAS קוטר 25 ס\"מ CCT לבן",
+     "size": null,
+     "price": 59.9,
+     "sale_price": 47.92,
+     "url": "https://www.homecenter.co.il/products/1780226712569",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Center",
+     "title": "גוף תאורה צמוד תקרה לבן JULIA 120W 100CM 3CCT",
+     "size": null,
+     "price": 849.9,
+     "sale_price": 679.92,
+     "url": "https://www.homecenter.co.il/products/1741178273653",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    }
+   ]
+  },
+  "pillowcases": {
+   "label_he": "ציפיות לכרית שינה (זוג)",
+   "low": 59,
+   "median": 95,
+   "high": 145,
+   "p75": 125,
+   "band": [
+    69,
+    89
+   ],
+   "n": 129,
+   "confidence": "high",
+   "per_retailer_median": {
+    "Fox Home": 79.9,
+    "Home Center": 29.9,
+    "Home Style": 99.0,
+    "IKEA": 95.0,
+    "Terminal X": 89.9
+   },
+   "verdict": "not-viable",
+   "verdict_counts": {
+    "not-viable": 2
+   },
+   "our_landed_median_ils": 85,
+   "price_for_35pct_median": 177,
+   "sources": [
+    {
+     "retailer": "IKEA",
+     "title": "STRANDLUMMER ציפה וציפית",
+     "size": "‎150x200/50x70 ס\"מ‏",
+     "price": 95.0,
+     "sale_price": null,
+     "url": "https://www.ikea.com/il/he/p/strandlummer-duvet-cover-and-pillowcase-multicolour-floral-pattern-10599017/",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Fox Home",
+     "title": "ציפית סאטן בהדפס פרחוני עשיר Tamarin",
+     "size": null,
+     "price": 79.9,
+     "sale_price": 55.93,
+     "url": "https://www.foxhome.co.il/products/0331529900",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Style",
+     "title": "קולקציית MIX & MATCH של Benetton - זוג ציפיות - לבן",
+     "size": "2X50/70 סמ זוג ציפיות",
+     "price": 99.0,
+     "sale_price": 59.4,
+     "url": "https://www.homestyle.co.il/products/3185-101",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Terminal X",
+     "title": "AURA 50*70 ציפית (FOX HOME)",
+     "size": "OS",
+     "price": 89.9,
+     "sale_price": 62.93,
+     "url": "https://www.terminalx.com/catalogsearch/result?q=%D7%A6%D7%99%D7%A4%D7%94+%D7%9C%D7%9B%D7%A8%D7%99%D7%AA",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Center",
+     "title": "זוג ציפיות 50/70 ס\"מ גרסי 100% כותנה אפור כהה MOON",
+     "size": null,
+     "price": 29.9,
+     "sale_price": null,
+     "url": "https://www.homecenter.co.il/products/1707832882590",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Center",
+     "title": "ציפית לכרית רביצה 80*80 100% כותנה",
+     "size": null,
+     "price": 20.0,
+     "sale_price": null,
+     "url": "https://www.homecenter.co.il/products/5150216689",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Terminal X",
+     "title": "ציפית 220X200 Royal (FOX HOME)",
+     "size": "OS",
+     "price": 559.9,
+     "sale_price": 391.93,
+     "url": "https://www.terminalx.com/catalogsearch/result?q=%D7%A6%D7%99%D7%A4%D7%94+%D7%9C%D7%9B%D7%A8%D7%99%D7%AA",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    }
+   ]
+  },
+  "seat-cushion": {
+   "label_he": "כרית ישיבה / לספסל",
+   "low": 30,
+   "median": 70,
+   "high": 108,
+   "p75": 70,
+   "band": [
+    49,
+    69
+   ],
+   "n": 37,
+   "confidence": "high",
+   "per_retailer_median": {
+    "Fox Home": 69.9,
+    "Home Center": 39.9,
+    "Home Style": 69.0,
+    "Terminal X": 69.9
+   },
+   "verdict": "not-viable",
+   "verdict_counts": {
+    "not-viable": 1
+   },
+   "our_landed_median_ils": 114,
+   "price_for_35pct_median": 236,
+   "sources": [
+    {
+     "retailer": "Home Center",
+     "title": "כרית מושב 40/40 סמ חלקה גל קפה",
+     "size": null,
+     "price": 39.9,
+     "sale_price": null,
+     "url": "https://www.homecenter.co.il/products/1771400261427",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Fox Home",
+     "title": "כרית מושב מרובעת River",
+     "size": null,
+     "price": 69.9,
+     "sale_price": 48.93,
+     "url": "https://www.foxhome.co.il/products/0335322400",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Style",
+     "title": "כרית מושב, דגם קשת - קפה",
+     "size": "40/40 סמ כרית מושב",
+     "price": 69.0,
+     "sale_price": 34.5,
+     "url": "https://www.homestyle.co.il/products/2209-217",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Terminal X",
+     "title": "כרית מושב 40R MARRY (FOX HOME)",
+     "size": "OS OS",
+     "price": 69.9,
+     "sale_price": 27.96,
+     "url": "https://www.terminalx.com/catalogsearch/result?q=%D7%9B%D7%A8%D7%99%D7%AA+%D7%A0%D7%95%D7%99",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Home Style",
+     "title": "כרית מושב מודפסת, דגם טום - חרדל",
+     "size": "40/40 סמ כרית מושב",
+     "price": 19.0,
+     "sale_price": null,
+     "url": "https://www.homestyle.co.il/products/1666-214",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    },
+    {
+     "retailer": "Fox Home",
+     "title": "כרית מושב ארוכה ומרופדת בגוון בז' River",
+     "size": null,
+     "price": 129.9,
+     "sale_price": 90.93,
+     "url": "https://www.foxhome.co.il/products/0335336000",
+     "date": "2026-10-09",
+     "verified": "catalog/api"
+    }
+   ]
+  }
+ },
+ "products": {
+  "accent-sconces-cj-ribbed-travertine-half-cylinder-wood-bracket": {
+   "category": "wall-sconce",
+   "suggested_band": [
+    119,
+    119
+   ],
+   "margin_at_band": -0.759,
+   "margin_at_band_min": -0.759,
+   "verdict": "not-viable",
+   "landed_ils": 168.7,
+   "price_for_35pct": 348,
+   "margin_in_bundle": -0.668,
+   "margin_at_band_fx3": -0.442,
+   "flags": [
+    "shipping-estimated"
+   ]
+  },
+  "basket-cj-cotton-rope-white": {
+   "category": "basket",
+   "suggested_band": [
+    69,
+    69
+   ],
+   "margin_at_band": -0.822,
+   "margin_at_band_min": -0.822,
+   "verdict": "not-viable",
+   "landed_ils": 101.0,
+   "price_for_35pct": 209,
+   "margin_in_bundle": -0.665,
+   "margin_at_band_fx3": -0.495,
+   "flags": []
+  },
+  "basket-cj-jute-rope-cylinder": {
+   "category": "basket",
+   "suggested_band": [
+    69,
+    69
+   ],
+   "margin_at_band": -0.63,
+   "margin_at_band_min": -0.63,
+   "verdict": "not-viable",
+   "landed_ils": 89.8,
+   "price_for_35pct": 186,
+   "margin_in_bundle": -0.474,
+   "margin_at_band_fx3": -0.34,
+   "flags": []
+  },
+  "basket-cj-seagrass-belly": {
+   "category": "basket",
+   "suggested_band": [
+    69,
+    69
+   ],
+   "margin_at_band": -0.407,
+   "margin_at_band_min": -0.407,
+   "verdict": "not-viable",
+   "landed_ils": 76.8,
+   "price_for_35pct": 160,
+   "margin_in_bundle": -0.25,
+   "margin_at_band_fx3": -0.159,
+   "flags": []
+  },
+  "basket-cj-seagrass-belly-xl": {
+   "category": "basket",
+   "suggested_band": [
+    69,
+    69
+   ],
+   "margin_at_band": -0.056,
+   "margin_at_band_min": -0.056,
+   "verdict": "not-viable",
+   "landed_ils": 56.2,
+   "price_for_35pct": 118,
+   "margin_in_bundle": 0.101,
+   "margin_at_band_fx3": 0.126,
+   "flags": []
+  },
+  "bath-mat-cj-solid-wood-slatted-61x45": {
+   "category": "bath-mat",
+   "suggested_band": [
+    99,
+    99
+   ],
+   "margin_at_band": -3.258,
+   "margin_at_band_min": -3.258,
+   "verdict": "not-viable",
+   "landed_ils": 349.8,
+   "price_for_35pct": 719,
+   "margin_in_bundle": -3.148,
+   "margin_at_band_fx3": -2.469,
+   "flags": []
+  },
+  "bath-mat-cj-tufted-cotton-frame-beige-40x60": {
+   "category": "bath-mat",
+   "suggested_band": [
+    99,
+    99
+   ],
+   "margin_at_band": 0.207,
+   "margin_at_band_min": 0.207,
+   "verdict": "bundle-only",
+   "landed_ils": 59.2,
+   "price_for_35pct": 124,
+   "margin_in_bundle": 0.316,
+   "margin_at_band_fx3": 0.34,
+   "flags": []
+  },
+  "bath-towels-cj-cotton-waffle-white": {
+   "category": "towels",
+   "suggested_band": [
+    109,
+    129
+   ],
+   "margin_at_band": 0.442,
+   "margin_at_band_min": 0.353,
+   "verdict": "viable",
+   "landed_ils": 51.7,
+   "price_for_35pct": 108,
+   "margin_in_bundle": 0.526,
+   "margin_at_band_fx3": 0.532,
+   "flags": []
+  },
+  "bedding-cj-cotton-linen-duvet-beige": {
+   "category": "bedding-set",
+   "suggested_band": [
+    449,
+    449
+   ],
+   "margin_at_band": -1.375,
+   "margin_at_band_min": -1.375,
+   "verdict": "not-viable",
+   "landed_ils": 874.5,
+   "price_for_35pct": 1793,
+   "margin_in_bundle": -1.351,
+   "margin_at_band_fx3": -0.94,
+   "flags": [
+    "benchmark-mostly-double-size"
+   ]
+  },
+  "bedding-cj-cream-ruffle-rosebud-set": {
+   "category": "bedding-set",
+   "suggested_band": [
+    379,
+    449
+   ],
+   "margin_at_band": 0.455,
+   "margin_at_band_min": 0.367,
+   "verdict": "viable",
+   "landed_ils": 178.3,
+   "price_for_35pct": 368,
+   "margin_in_bundle": 0.479,
+   "margin_at_band_fx3": 0.543,
+   "flags": [
+    "benchmark-mostly-double-size"
+   ]
+  },
+  "bedding-cj-muslin-cotton-duvet-dune": {
+   "category": "duvet-cover",
+   "suggested_band": [
+    269,
+    349
+   ],
+   "margin_at_band": 0.528,
+   "margin_at_band_min": 0.41,
+   "verdict": "viable",
+   "landed_ils": 116.6,
+   "price_for_35pct": 241,
+   "margin_in_bundle": 0.559,
+   "margin_at_band_fx3": 0.603,
+   "flags": []
+  },
+  "bedding-cj-plain-linen-flat-sheet-raw-jute-260x280": {
+   "category": "bedding-set",
+   "suggested_band": [
+    449,
+    449
+   ],
+   "margin_at_band": 0.067,
+   "margin_at_band_min": 0.067,
+   "verdict": "not-viable",
+   "landed_ils": 325.8,
+   "price_for_35pct": 669,
+   "margin_in_bundle": 0.091,
+   "margin_at_band_fx3": 0.229,
+   "flags": [
+    "shipping-estimated",
+    "viable-as-premium-up-to-P75",
+    "benchmark-mostly-double-size"
+   ]
+  },
+  "bedding-cj-washed-cotton-khaki-set-220x240": {
+   "category": "bedding-set",
+   "suggested_band": [
+    449,
+    449
+   ],
+   "margin_at_band": 0.256,
+   "margin_at_band_min": 0.256,
+   "verdict": "bundle-only",
+   "landed_ils": 253.8,
+   "price_for_35pct": 522,
+   "margin_in_bundle": 0.28,
+   "margin_at_band_fx3": 0.382,
+   "flags": [
+    "shipping-estimated",
+    "viable-as-premium-up-to-P75",
+    "benchmark-mostly-double-size"
+   ]
+  },
+  "bedding-cj-washed-linen-natural-set": {
+   "category": "bedding-set",
+   "suggested_band": [
+    449,
+    449
+   ],
+   "margin_at_band": 0.022,
+   "margin_at_band_min": 0.022,
+   "verdict": "not-viable",
+   "landed_ils": 342.8,
+   "price_for_35pct": 704,
+   "margin_in_bundle": 0.047,
+   "margin_at_band_fx3": 0.193,
+   "flags": [
+    "benchmark-mostly-double-size"
+   ]
+  },
+  "bedding-cj-washed-polyester-set-milk-tea": {
+   "category": "bedding-set",
+   "suggested_band": [
+    349,
+    449
+   ],
+   "margin_at_band": 0.593,
+   "margin_at_band_min": 0.498,
+   "verdict": "viable",
+   "landed_ils": 125.5,
+   "price_for_35pct": 259,
+   "margin_in_bundle": 0.617,
+   "margin_at_band_fx3": 0.656,
+   "flags": [
+    "benchmark-mostly-double-size"
+   ]
+  },
+  "bedside-sconces-cj-linen-half-drum-black-trim": {
+   "category": "wall-sconce",
+   "suggested_band": [
+    119,
+    119
+   ],
+   "margin_at_band": -0.773,
+   "margin_at_band_min": -0.773,
+   "verdict": "not-viable",
+   "landed_ils": 170.2,
+   "price_for_35pct": 351,
+   "margin_in_bundle": -0.682,
+   "margin_at_band_fx3": -0.454,
+   "flags": []
+  },
+  "bedside-sconces-cj-linen-wave-flush": {
+   "category": "wall-sconce",
+   "suggested_band": [
+    119,
+    119
+   ],
+   "margin_at_band": -0.601,
+   "margin_at_band_min": -0.601,
+   "verdict": "not-viable",
+   "landed_ils": 152.9,
+   "price_for_35pct": 315,
+   "margin_in_bundle": -0.511,
+   "margin_at_band_fx3": -0.315,
+   "flags": []
+  },
+  "bedspread-cj-muslin-blanket-beige-150x200": {
+   "category": "throw",
+   "suggested_band": [
+    119,
+    119
+   ],
+   "margin_at_band": 0.023,
+   "margin_at_band_min": 0.023,
+   "verdict": "not-viable",
+   "landed_ils": 89.9,
+   "price_for_35pct": 186,
+   "margin_in_bundle": 0.114,
+   "margin_at_band_fx3": 0.192,
+   "flags": []
+  },
+  "bedspread-cj-six-layer-gauze-quilt": {
+   "category": "throw",
+   "suggested_band": [
+    119,
+    119
+   ],
+   "margin_at_band": 0.134,
+   "margin_at_band_min": 0.134,
+   "verdict": "not-viable",
+   "landed_ils": 78.7,
+   "price_for_35pct": 163,
+   "margin_in_bundle": 0.225,
+   "margin_at_band_fx3": 0.282,
+   "flags": [
+    "viable-as-premium-up-to-P75"
+   ]
+  },
+  "bench-pad-cj-tufted-long-cushion-khaki-120": {
+   "category": "seat-cushion",
+   "suggested_band": [
+    69,
+    69
+   ],
+   "margin_at_band": -1.045,
+   "margin_at_band_min": -1.045,
+   "verdict": "not-viable",
+   "landed_ils": 114.1,
+   "price_for_35pct": 236,
+   "margin_in_bundle": -0.888,
+   "margin_at_band_fx3": -0.676,
+   "flags": []
+  },
+  "bowl-cj-glutinous-white-belly-bowl-21": {
+   "category": "ceramic-bowl",
+   "suggested_band": [
+    49,
+    49
+   ],
+   "margin_at_band": -0.535,
+   "margin_at_band_min": -0.535,
+   "verdict": "not-viable",
+   "landed_ils": 59.5,
+   "price_for_35pct": 124,
+   "margin_in_bundle": -0.314,
+   "margin_at_band_fx3": -0.264,
+   "flags": []
+  },
+  "bowl-cj-reactive-white-rimmed-plate-21": {
+   "category": "ceramic-bowl",
+   "suggested_band": [
+    49,
+    49
+   ],
+   "margin_at_band": -0.875,
+   "margin_at_band_min": -0.875,
+   "verdict": "not-viable",
+   "landed_ils": 73.6,
+   "price_for_35pct": 153,
+   "margin_in_bundle": -0.654,
+   "margin_at_band_fx3": -0.539,
+   "flags": []
+  },
+  "bowl-cj-speckled-ivory-wide-bowl-21": {
+   "category": "ceramic-bowl",
+   "suggested_band": [
+    49,
+    49
+   ],
+   "margin_at_band": -0.476,
+   "margin_at_band_min": -0.476,
+   "verdict": "not-viable",
+   "landed_ils": 57.1,
+   "price_for_35pct": 119,
+   "margin_in_bundle": -0.255,
+   "margin_at_band_fx3": -0.217,
+   "flags": []
+  },
+  "candle-holders-cj-travertine-pedestal": {
+   "category": "candle-holder",
+   "suggested_band": [
+    89,
+    89
+   ],
+   "margin_at_band": -0.207,
+   "margin_at_band_min": -0.207,
+   "verdict": "not-viable",
+   "landed_ils": 84.3,
+   "price_for_35pct": 175,
+   "margin_in_bundle": -0.085,
+   "margin_at_band_fx3": 0.004,
+   "flags": []
+  },
+  "ceiling-light-cj-opal-glass-drum-flush-32": {
+   "category": "ceiling-light",
+   "suggested_band": [
+    179,
+    179
+   ],
+   "margin_at_band": -0.479,
+   "margin_at_band_min": -0.479,
+   "verdict": "not-viable",
+   "landed_ils": 212.0,
+   "price_for_35pct": 436,
+   "margin_in_bundle": -0.418,
+   "margin_at_band_fx3": -0.215,
+   "flags": [
+    "shipping-estimated"
+   ]
+  },
+  "ceiling-light-cj-waxwood-dome-ash-40": {
+   "category": "pendant",
+   "suggested_band": [
+    179,
+    179
+   ],
+   "margin_at_band": -0.539,
+   "margin_at_band_min": -0.539,
+   "verdict": "not-viable",
+   "landed_ils": 221.1,
+   "price_for_35pct": 455,
+   "margin_in_bundle": -0.479,
+   "margin_at_band_fx3": -0.264,
+   "flags": []
+  },
+  "ceiling-lights-cj-pleated-fabric-saucer-flush-50": {
+   "category": "ceiling-light",
+   "suggested_band": [
+    179,
+    179
+   ],
+   "margin_at_band": -0.7,
+   "margin_at_band_min": -0.7,
+   "verdict": "not-viable",
+   "landed_ils": 245.5,
+   "price_for_35pct": 505,
+   "margin_in_bundle": -0.639,
+   "margin_at_band_fx3": -0.394,
+   "flags": []
+  },
+  "ceiling-lights-cj-silk-cocoon-flush-40": {
+   "category": "ceiling-light",
+   "suggested_band": [
+    179,
+    179
+   ],
+   "margin_at_band": -0.807,
+   "margin_at_band_min": -0.807,
+   "verdict": "not-viable",
+   "landed_ils": 261.8,
+   "price_for_35pct": 538,
+   "margin_in_bundle": -0.747,
+   "margin_at_band_fx3": -0.481,
+   "flags": []
+  },
+  "centerpiece-vase-cj-sandy-white-bead-band-25": {
+   "category": "vase-small",
+   "suggested_band": [
+    39,
+    39
+   ],
+   "margin_at_band": -1.708,
+   "margin_at_band_min": -1.708,
+   "verdict": "not-viable",
+   "landed_ils": 85.9,
+   "price_for_35pct": 178,
+   "margin_in_bundle": -1.431,
+   "margin_at_band_fx3": -1.217,
+   "flags": [
+    "shipping-estimated"
+   ]
+  },
+  "condiment-set-cj-rubberwood-mill-pair-6in": {
+   "category": "salt-pepper",
+   "suggested_band": [
+    59,
+    59
+   ],
+   "margin_at_band": -0.681,
+   "margin_at_band_min": -0.681,
+   "verdict": "not-viable",
+   "landed_ils": 79.2,
+   "price_for_35pct": 165,
+   "margin_in_bundle": -0.498,
+   "margin_at_band_fx3": -0.382,
+   "flags": [
+    "shipping-estimated"
+   ]
+  },
+  "curtains-cj-japanese-linen-half-shade": {
+   "category": "curtains",
+   "suggested_band": [
+    179,
+    179
+   ],
+   "margin_at_band": -0.136,
+   "margin_at_band_min": -0.136,
+   "verdict": "not-viable",
+   "landed_ils": 160.0,
+   "price_for_35pct": 330,
+   "margin_in_bundle": -0.076,
+   "margin_at_band_fx3": 0.063,
+   "flags": []
+  },
+  "cushions-cj-boucle-teddy": {
+   "category": "cushion-cover",
+   "suggested_band": [
+    99,
+    99
+   ],
+   "margin_at_band": 0.383,
+   "margin_at_band_min": 0.383,
+   "verdict": "viable",
+   "landed_ils": 44.4,
+   "price_for_35pct": 93,
+   "margin_in_bundle": 0.492,
+   "margin_at_band_fx3": 0.483,
+   "flags": [
+    "benchmark-mostly-filled-cushions"
+   ]
+  },
+  "cushions-cj-bubble-chenille-bean-green": {
+   "category": "cushion-cover",
+   "suggested_band": [
+    69,
+    99
+   ],
+   "margin_at_band": 0.525,
+   "margin_at_band_min": 0.35,
+   "verdict": "viable",
+   "landed_ils": 32.5,
+   "price_for_35pct": 69,
+   "margin_in_bundle": 0.634,
+   "margin_at_band_fx3": 0.598,
+   "flags": [
+    "benchmark-mostly-filled-cushions"
+   ]
+  },
+  "cushions-cj-chenille-wide-wale-green": {
+   "category": "cushion-cover",
+   "suggested_band": [
+    69,
+    99
+   ],
+   "margin_at_band": 0.601,
+   "margin_at_band_min": 0.459,
+   "verdict": "viable",
+   "landed_ils": 26.1,
+   "price_for_35pct": 56,
+   "margin_in_bundle": 0.71,
+   "margin_at_band_fx3": 0.66,
+   "flags": [
+    "benchmark-mostly-filled-cushions"
+   ]
+  },
+  "cushions-cj-corduroy-patchwork": {
+   "category": "cushion-cover",
+   "suggested_band": [
+    69,
+    99
+   ],
+   "margin_at_band": 0.57,
+   "margin_at_band_min": 0.415,
+   "verdict": "viable",
+   "landed_ils": 28.7,
+   "price_for_35pct": 61,
+   "margin_in_bundle": 0.679,
+   "margin_at_band_fx3": 0.635,
+   "flags": [
+    "benchmark-mostly-filled-cushions"
+   ]
+  },
+  "cushions-cj-dusty-pink-corduroy-patchwork-45": {
+   "category": "cushion-cover",
+   "suggested_band": [
+    99,
+    99
+   ],
+   "margin_at_band": 0.212,
+   "margin_at_band_min": 0.212,
+   "verdict": "bundle-only",
+   "landed_ils": 58.7,
+   "price_for_35pct": 123,
+   "margin_in_bundle": 0.322,
+   "margin_at_band_fx3": 0.345,
+   "flags": [
+    "viable-as-premium-up-to-P75",
+    "benchmark-mostly-filled-cushions"
+   ]
+  },
+  "cushions-cj-knitted-chenille-bean-green": {
+   "category": "cushion-cover",
+   "suggested_band": [
+    69,
+    99
+   ],
+   "margin_at_band": 0.578,
+   "margin_at_band_min": 0.426,
+   "verdict": "viable",
+   "landed_ils": 28.0,
+   "price_for_35pct": 60,
+   "margin_in_bundle": 0.687,
+   "margin_at_band_fx3": 0.641,
+   "flags": [
+    "benchmark-mostly-filled-cushions"
+   ]
+  },
+  "cushions-cj-linen-look-charcoal": {
+   "category": "cushion-cover",
+   "suggested_band": [
+    69,
+    99
+   ],
+   "margin_at_band": 0.546,
+   "margin_at_band_min": 0.381,
+   "verdict": "viable",
+   "landed_ils": 30.7,
+   "price_for_35pct": 65,
+   "margin_in_bundle": 0.656,
+   "margin_at_band_fx3": 0.616,
+   "flags": [
+    "benchmark-mostly-filled-cushions"
+   ]
+  },
+  "cushions-cj-linen-look-ivory": {
+   "category": "cushion-cover",
+   "suggested_band": [
+    99,
+    99
+   ],
+   "margin_at_band": 0.332,
+   "margin_at_band_min": 0.332,
+   "verdict": "bundle-only",
+   "landed_ils": 48.7,
+   "price_for_35pct": 102,
+   "margin_in_bundle": 0.442,
+   "margin_at_band_fx3": 0.442,
+   "flags": [
+    "viable-as-premium-up-to-P75",
+    "benchmark-mostly-filled-cushions"
+   ]
+  },
+  "cushions-cj-sandstone-chenille-flange": {
+   "category": "cushion-cover",
+   "suggested_band": [
+    79,
+    99
+   ],
+   "margin_at_band": 0.495,
+   "margin_at_band_min": 0.386,
+   "verdict": "viable",
+   "landed_ils": 35.0,
+   "price_for_35pct": 74,
+   "margin_in_bundle": 0.604,
+   "margin_at_band_fx3": 0.574,
+   "flags": [
+    "benchmark-mostly-filled-cushions"
+   ]
+  },
+  "cushions-cj-washed-cotton-frayed": {
+   "category": "cushion-cover",
+   "suggested_band": [
+    69,
+    99
+   ],
+   "margin_at_band": 0.585,
+   "margin_at_band_min": 0.436,
+   "verdict": "viable",
+   "landed_ils": 27.5,
+   "price_for_35pct": 59,
+   "margin_in_bundle": 0.694,
+   "margin_at_band_fx3": 0.647,
+   "flags": [
+    "benchmark-mostly-filled-cushions"
+   ]
+  },
+  "cushions-cj-wide-stripe-corduroy-light-green": {
+   "category": "cushion-cover",
+   "suggested_band": [
+    69,
+    99
+   ],
+   "margin_at_band": 0.573,
+   "margin_at_band_min": 0.42,
+   "verdict": "viable",
+   "landed_ils": 28.4,
+   "price_for_35pct": 61,
+   "margin_in_bundle": 0.683,
+   "margin_at_band_fx3": 0.637,
+   "flags": [
+    "benchmark-mostly-filled-cushions"
+   ]
+  },
+  "cushions-cj-wide-wale-corduroy": {
+   "category": "cushion-cover",
+   "suggested_band": [
+    69,
+    99
+   ],
+   "margin_at_band": 0.573,
+   "margin_at_band_min": 0.419,
+   "verdict": "viable",
+   "landed_ils": 28.5,
+   "price_for_35pct": 61,
+   "margin_in_bundle": 0.682,
+   "margin_at_band_fx3": 0.637,
+   "flags": [
+    "benchmark-mostly-filled-cushions"
+   ]
+  },
+  "dining-pendant-cj-black-ring-cloth-lantern-50": {
+   "category": "pendant",
+   "suggested_band": [
+    179,
+    179
+   ],
+   "margin_at_band": -1.066,
+   "margin_at_band_min": -1.066,
+   "verdict": "not-viable",
+   "landed_ils": 301.0,
+   "price_for_35pct": 619,
+   "margin_in_bundle": -1.005,
+   "margin_at_band_fx3": -0.691,
+   "flags": []
+  },
+  "floor-lamp-cj-black-drum-linen": {
+   "category": "floor-lamp",
+   "suggested_band": [
+    219,
+    219
+   ],
+   "margin_at_band": 0.05,
+   "margin_at_band_min": 0.05,
+   "verdict": "not-viable",
+   "landed_ils": 161.5,
+   "price_for_35pct": 333,
+   "margin_in_bundle": 0.099,
+   "margin_at_band_fx3": 0.215,
+   "flags": []
+  },
+  "floor-lamp-cj-cream-arc-pleated-152": {
+   "category": "floor-lamp",
+   "suggested_band": [
+    219,
+    219
+   ],
+   "margin_at_band": -0.018,
+   "margin_at_band_min": -0.018,
+   "verdict": "not-viable",
+   "landed_ils": 174.1,
+   "price_for_35pct": 359,
+   "margin_in_bundle": 0.031,
+   "margin_at_band_fx3": 0.159,
+   "flags": [
+    "shipping-estimated"
+   ]
+  },
+  "floor-lamp-cj-pleated-walnut-stem-158": {
+   "category": "floor-lamp",
+   "suggested_band": [
+    219,
+    219
+   ],
+   "margin_at_band": -0.392,
+   "margin_at_band_min": -0.392,
+   "verdict": "not-viable",
+   "landed_ils": 243.5,
+   "price_for_35pct": 501,
+   "margin_in_bundle": -0.342,
+   "margin_at_band_fx3": -0.144,
+   "flags": [
+    "shipping-estimated"
+   ]
+  },
+  "framed-art-cj-line-scribble-white-mat-50": {
+   "category": "framed-print",
+   "suggested_band": [
+    219,
+    219
+   ],
+   "margin_at_band": 0.153,
+   "margin_at_band_min": 0.153,
+   "verdict": "not-viable",
+   "landed_ils": 142.4,
+   "price_for_35pct": 294,
+   "margin_in_bundle": 0.202,
+   "margin_at_band_fx3": 0.298,
+   "flags": [
+    "shipping-estimated",
+    "viable-as-premium-up-to-P75"
+   ]
+  },
+  "framed-art-cj-morandi-triptych-sage": {
+   "category": "framed-print",
+   "suggested_band": [
+    219,
+    219
+   ],
+   "margin_at_band": -2.002,
+   "margin_at_band_min": -2.002,
+   "verdict": "not-viable",
+   "landed_ils": 542.3,
+   "price_for_35pct": 1113,
+   "margin_in_bundle": -1.953,
+   "margin_at_band_fx3": -1.449,
+   "flags": []
+  },
+  "framed-art-cj-swinging-line-black-frame-mat-35x45": {
+   "category": "framed-print",
+   "suggested_band": [
+    219,
+    219
+   ],
+   "margin_at_band": 0.02,
+   "margin_at_band_min": 0.02,
+   "verdict": "not-viable",
+   "landed_ils": 167.0,
+   "price_for_35pct": 344,
+   "margin_in_bundle": 0.07,
+   "margin_at_band_fx3": 0.19,
+   "flags": [
+    "viable-as-premium-up-to-P75"
+   ]
+  },
+  "framed-art-cj-taupe-block-black-line-30x40": {
+   "category": "framed-print",
+   "suggested_band": [
+    219,
+    219
+   ],
+   "margin_at_band": 0.12,
+   "margin_at_band_min": 0.12,
+   "verdict": "not-viable",
+   "landed_ils": 148.6,
+   "price_for_35pct": 307,
+   "margin_in_bundle": 0.169,
+   "margin_at_band_fx3": 0.271,
+   "flags": [
+    "viable-as-premium-up-to-P75"
+   ]
+  },
+  "framed-prints-cj-charcoal-line-black-frame-35x45": {
+   "category": "framed-print",
+   "suggested_band": [
+    219,
+    219
+   ],
+   "margin_at_band": 0.02,
+   "margin_at_band_min": 0.02,
+   "verdict": "not-viable",
+   "landed_ils": 167.0,
+   "price_for_35pct": 344,
+   "margin_in_bundle": 0.07,
+   "margin_at_band_fx3": 0.19,
+   "flags": [
+    "viable-as-premium-up-to-P75"
+   ]
+  },
+  "framed-prints-cj-flower-cutout-set-30x40": {
+   "category": "framed-print",
+   "suggested_band": [
+    169,
+    219
+   ],
+   "margin_at_band": 0.504,
+   "margin_at_band_min": 0.379,
+   "verdict": "viable",
+   "landed_ils": 77.3,
+   "price_for_35pct": 161,
+   "margin_in_bundle": 0.553,
+   "margin_at_band_fx3": 0.582,
+   "flags": []
+  },
+  "gallery-art-cj-black-botanical-cutout-set3": {
+   "category": "framed-print",
+   "suggested_band": [
+    199,
+    219
+   ],
+   "margin_at_band": 0.418,
+   "margin_at_band_min": 0.367,
+   "verdict": "viable",
+   "landed_ils": 93.2,
+   "price_for_35pct": 193,
+   "margin_in_bundle": 0.467,
+   "margin_at_band_fx3": 0.513,
+   "flags": []
+  },
+  "magazine-holder-cj-arch-iron-cane": {
+   "category": "basket",
+   "suggested_band": [
+    69,
+    69
+   ],
+   "margin_at_band": -1.612,
+   "margin_at_band_min": -1.612,
+   "verdict": "not-viable",
+   "landed_ils": 147.3,
+   "price_for_35pct": 304,
+   "margin_in_bundle": -1.456,
+   "margin_at_band_fx3": -1.136,
+   "flags": []
+  },
+  "magazine-holder-cj-felt-log-basket": {
+   "category": "basket",
+   "suggested_band": [
+    69,
+    69
+   ],
+   "margin_at_band": 0.147,
+   "margin_at_band_min": 0.147,
+   "verdict": "bundle-only",
+   "landed_ils": 44.4,
+   "price_for_35pct": 93,
+   "margin_in_bundle": 0.304,
+   "margin_at_band_fx3": 0.291,
+   "flags": []
+  },
+  "magazine-holder-cj-felt-snap-bucket": {
+   "category": "basket",
+   "suggested_band": [
+    69,
+    69
+   ],
+   "margin_at_band": 0.206,
+   "margin_at_band_min": 0.206,
+   "verdict": "bundle-only",
+   "landed_ils": 40.9,
+   "price_for_35pct": 86,
+   "margin_in_bundle": 0.363,
+   "margin_at_band_fx3": 0.338,
+   "flags": [
+    "viable-as-premium-up-to-P75"
+   ]
+  },
+  "magazine-holder-cj-gunmetal-leather-strap": {
+   "category": "basket",
+   "suggested_band": [
+    69,
+    69
+   ],
+   "margin_at_band": -2.932,
+   "margin_at_band_min": -2.932,
+   "verdict": "not-viable",
+   "landed_ils": 224.4,
+   "price_for_35pct": 462,
+   "margin_in_bundle": -2.775,
+   "margin_at_band_fx3": -2.206,
+   "flags": []
+  },
+  "mug-set-cj-cream-matte-breakfast-cup": {
+   "category": "mug",
+   "suggested_band": [
+    19,
+    19
+   ],
+   "margin_at_band": -1.86,
+   "margin_at_band_min": -1.86,
+   "verdict": "not-viable",
+   "landed_ils": 43.7,
+   "price_for_35pct": 92,
+   "margin_in_bundle": -1.29,
+   "margin_at_band_fx3": -1.347,
+   "flags": []
+  },
+  "mug-set-cj-oat-speckled-round-mug-wood-saucer": {
+   "category": "mug",
+   "suggested_band": [
+    19,
+    19
+   ],
+   "margin_at_band": -3.353,
+   "margin_at_band_min": -3.353,
+   "verdict": "not-viable",
+   "landed_ils": 67.7,
+   "price_for_35pct": 141,
+   "margin_in_bundle": -2.783,
+   "margin_at_band_fx3": -2.558,
+   "flags": []
+  },
+  "nightstand-tray-cj-travertine-look-rect-milktea": {
+   "category": "tray",
+   "suggested_band": [
+    129,
+    129
+   ],
+   "margin_at_band": -0.038,
+   "margin_at_band_min": -0.038,
+   "verdict": "not-viable",
+   "landed_ils": 104.2,
+   "price_for_35pct": 216,
+   "margin_in_bundle": 0.046,
+   "margin_at_band_fx3": 0.142,
+   "flags": [
+    "shipping-estimated"
+   ]
+  },
+  "open-shelf-ceramics-cj-morandi-matte-bottle-set": {
+   "category": "vase-small",
+   "suggested_band": [
+    39,
+    39
+   ],
+   "margin_at_band": -0.979,
+   "margin_at_band_min": -0.979,
+   "verdict": "not-viable",
+   "landed_ils": 61.8,
+   "price_for_35pct": 129,
+   "margin_in_bundle": -0.702,
+   "margin_at_band_fx3": -0.626,
+   "flags": []
+  },
+  "paper-towel-holder-cj-beech-upright-31": {
+   "category": "towels",
+   "suggested_band": [
+    129,
+    129
+   ],
+   "margin_at_band": 0.368,
+   "margin_at_band_min": 0.368,
+   "verdict": "viable",
+   "landed_ils": 59.8,
+   "price_for_35pct": 125,
+   "margin_in_bundle": 0.452,
+   "margin_at_band_fx3": 0.472,
+   "flags": [
+    "shipping-estimated"
+   ]
+  },
+  "pendant-cj-fabric-dome-ash-cap-25": {
+   "category": "pendant",
+   "suggested_band": [
+    179,
+    179
+   ],
+   "margin_at_band": -0.147,
+   "margin_at_band_min": -0.147,
+   "verdict": "not-viable",
+   "landed_ils": 161.6,
+   "price_for_35pct": 333,
+   "margin_in_bundle": -0.086,
+   "margin_at_band_fx3": 0.055,
+   "flags": []
+  },
+  "pendant-cj-fluted-ceramic-wood-cap-short-lantern": {
+   "category": "pendant",
+   "suggested_band": [
+    179,
+    179
+   ],
+   "margin_at_band": -0.296,
+   "margin_at_band_min": -0.296,
+   "verdict": "not-viable",
+   "landed_ils": 184.3,
+   "price_for_35pct": 380,
+   "margin_in_bundle": -0.236,
+   "margin_at_band_fx3": -0.067,
+   "flags": [
+    "shipping-estimated"
+   ]
+  },
+  "pendant-cj-light-wood-slat-drum-43": {
+   "category": "pendant",
+   "suggested_band": [
+    179,
+    179
+   ],
+   "margin_at_band": -0.497,
+   "margin_at_band_min": -0.497,
+   "verdict": "not-viable",
+   "landed_ils": 214.7,
+   "price_for_35pct": 442,
+   "margin_in_bundle": -0.437,
+   "margin_at_band_fx3": -0.229,
+   "flags": [
+    "shipping-estimated"
+   ]
+  },
+  "pendant-cj-pleated-pumpkin-lantern-40": {
+   "category": "pendant",
+   "suggested_band": [
+    179,
+    179
+   ],
+   "margin_at_band": -1.543,
+   "margin_at_band_min": -1.543,
+   "verdict": "not-viable",
+   "landed_ils": 373.3,
+   "price_for_35pct": 767,
+   "margin_in_bundle": -1.482,
+   "margin_at_band_fx3": -1.077,
+   "flags": []
+  },
+  "pendant-cj-silk-pumpkin-lantern": {
+   "category": "pendant",
+   "suggested_band": [
+    179,
+    179
+   ],
+   "margin_at_band": -0.522,
+   "margin_at_band_min": -0.522,
+   "verdict": "not-viable",
+   "landed_ils": 218.5,
+   "price_for_35pct": 450,
+   "margin_in_bundle": -0.461,
+   "margin_at_band_fx3": -0.249,
+   "flags": []
+  },
+  "pendant-cj-tiered-fabric-drum": {
+   "category": "pendant",
+   "suggested_band": [
+    179,
+    179
+   ],
+   "margin_at_band": -1.474,
+   "margin_at_band_min": -1.474,
+   "verdict": "not-viable",
+   "landed_ils": 362.9,
+   "price_for_35pct": 745,
+   "margin_in_bundle": -1.413,
+   "margin_at_band_fx3": -1.021,
+   "flags": []
+  },
+  "pendant-cj-wabi-pleated-fabric-lantern-50": {
+   "category": "pendant",
+   "suggested_band": [
+    179,
+    179
+   ],
+   "margin_at_band": -1.372,
+   "margin_at_band_min": -1.372,
+   "verdict": "not-viable",
+   "landed_ils": 347.5,
+   "price_for_35pct": 714,
+   "margin_in_bundle": -1.312,
+   "margin_at_band_fx3": -0.939,
+   "flags": [
+    "shipping-estimated"
+   ]
+  },
+  "picture-lights-cj-black-tube-rechargeable": {
+   "category": "wall-sconce",
+   "suggested_band": [
+    119,
+    119
+   ],
+   "margin_at_band": 0.247,
+   "margin_at_band_min": 0.247,
+   "verdict": "bundle-only",
+   "landed_ils": 67.3,
+   "price_for_35pct": 140,
+   "margin_in_bundle": 0.338,
+   "margin_at_band_fx3": 0.373,
+   "flags": [
+    "viable-as-premium-up-to-P75"
+   ]
+  },
+  "pillowcases-cj-linen-pair-coconut-button": {
+   "category": "pillowcases",
+   "suggested_band": [
+    89,
+    89
+   ],
+   "margin_at_band": -0.187,
+   "margin_at_band_min": -0.187,
+   "verdict": "not-viable",
+   "landed_ils": 82.8,
+   "price_for_35pct": 172,
+   "margin_in_bundle": -0.066,
+   "margin_at_band_fx3": 0.02,
+   "flags": []
+  },
+  "pillowcases-cj-pure-linen-envelope-pair-48x74": {
+   "category": "pillowcases",
+   "suggested_band": [
+    89,
+    89
+   ],
+   "margin_at_band": -0.254,
+   "margin_at_band_min": -0.254,
+   "verdict": "not-viable",
+   "landed_ils": 87.8,
+   "price_for_35pct": 182,
+   "margin_in_bundle": -0.132,
+   "margin_at_band_fx3": -0.034,
+   "flags": [
+    "shipping-estimated"
+   ]
+  },
+  "planter-cj-cement-ribbed-belly": {
+   "category": "planter",
+   "suggested_band": [
+    29,
+    29
+   ],
+   "margin_at_band": -6.311,
+   "margin_at_band_min": -6.311,
+   "verdict": "not-viable",
+   "landed_ils": 176.7,
+   "price_for_35pct": 364,
+   "margin_in_bundle": -5.938,
+   "margin_at_band_fx3": -4.951,
+   "flags": []
+  },
+  "planter-cj-seagrass-belly": {
+   "category": "planter",
+   "suggested_band": [
+    29,
+    29
+   ],
+   "margin_at_band": -2.246,
+   "margin_at_band_min": -2.246,
+   "verdict": "not-viable",
+   "landed_ils": 76.8,
+   "price_for_35pct": 160,
+   "margin_in_bundle": -1.873,
+   "margin_at_band_fx3": -1.655,
+   "flags": []
+  },
+  "pool-cj-carbonized-wood-pedestal-candlestick": {
+   "category": "candle-holder",
+   "suggested_band": [
+    89,
+    89
+   ],
+   "margin_at_band": -0.441,
+   "margin_at_band_min": -0.441,
+   "verdict": "not-viable",
+   "landed_ils": 102.0,
+   "price_for_35pct": 211,
+   "margin_in_bundle": -0.32,
+   "margin_at_band_fx3": -0.186,
+   "flags": []
+  },
+  "pool-cj-cotton-linen-box-camel-40x30": {
+   "category": "basket",
+   "suggested_band": [
+    69,
+    69
+   ],
+   "margin_at_band": 0.332,
+   "margin_at_band_min": 0.332,
+   "verdict": "bundle-only",
+   "landed_ils": 33.6,
+   "price_for_35pct": 71,
+   "margin_in_bundle": 0.489,
+   "margin_at_band_fx3": 0.441,
+   "flags": [
+    "viable-as-premium-up-to-P75"
+   ]
+  },
+  "pool-cj-linen-look-tassel-curtain": {
+   "category": "curtains",
+   "suggested_band": [
+    179,
+    179
+   ],
+   "margin_at_band": 0.295,
+   "margin_at_band_min": 0.295,
+   "verdict": "bundle-only",
+   "landed_ils": 94.6,
+   "price_for_35pct": 196,
+   "margin_in_bundle": 0.355,
+   "margin_at_band_fx3": 0.413,
+   "flags": [
+    "viable-as-premium-up-to-P75"
+   ]
+  },
+  "pool-cj-terracotta-amphora-floor-51": {
+   "category": "vase-large",
+   "suggested_band": [
+    299,
+    299
+   ],
+   "margin_at_band": -2.291,
+   "margin_at_band_min": -2.291,
+   "verdict": "not-viable",
+   "landed_ils": 814.0,
+   "price_for_35pct": 1669,
+   "margin_in_bundle": -2.254,
+   "margin_at_band_fx3": -1.683,
+   "flags": []
+  },
+  "pool-cj-travertine-organic-tray-24": {
+   "category": "tray",
+   "suggested_band": [
+    129,
+    129
+   ],
+   "margin_at_band": -0.324,
+   "margin_at_band_min": -0.324,
+   "verdict": "not-viable",
+   "landed_ils": 135.5,
+   "price_for_35pct": 280,
+   "margin_in_bundle": -0.24,
+   "margin_at_band_fx3": -0.089,
+   "flags": []
+  },
+  "pool-cj-wabi-sabi-floor-vase-white": {
+   "category": "vase-large",
+   "suggested_band": [
+    299,
+    299
+   ],
+   "margin_at_band": -0.333,
+   "margin_at_band_min": -0.333,
+   "verdict": "not-viable",
+   "landed_ils": 317.9,
+   "price_for_35pct": 653,
+   "margin_in_bundle": -0.297,
+   "margin_at_band_fx3": -0.096,
+   "flags": []
+  },
+  "pool-cj-wood-sunburst-mirror-43": {
+   "category": "wall-decor",
+   "suggested_band": [
+    169,
+    169
+   ],
+   "margin_at_band": 0.276,
+   "margin_at_band_min": 0.276,
+   "verdict": "bundle-only",
+   "landed_ils": 91.9,
+   "price_for_35pct": 191,
+   "margin_in_bundle": 0.34,
+   "margin_at_band_fx3": 0.397,
+   "flags": [
+    "viable-as-premium-up-to-P75"
+   ]
+  },
+  "pool-cj-woven-cotton-runner-fringe": {
+   "category": "table-runner",
+   "suggested_band": [
+    89,
+    129
+   ],
+   "margin_at_band": 0.58,
+   "margin_at_band_min": 0.424,
+   "verdict": "viable",
+   "landed_ils": 36.7,
+   "price_for_35pct": 78,
+   "margin_in_bundle": 0.664,
+   "margin_at_band_fx3": 0.643,
+   "flags": []
+  },
+  "pouf-cj-cotton-knit-ball-cover": {
+   "category": "pouf",
+   "suggested_band": [
+    349,
+    449
+   ],
+   "margin_at_band": 0.548,
+   "margin_at_band_min": 0.439,
+   "verdict": "viable",
+   "landed_ils": 142.8,
+   "price_for_35pct": 295,
+   "margin_in_bundle": 0.572,
+   "margin_at_band_fx3": 0.619,
+   "flags": [
+    "benchmark-is-upholstered-ottoman"
+   ]
+  },
+  "reed-diffuser-cj-travertine-look-bamboo-lid-milktea": {
+   "category": "bath-accessories",
+   "suggested_band": [
+    59,
+    59
+   ],
+   "margin_at_band": -0.273,
+   "margin_at_band_min": -0.273,
+   "verdict": "not-viable",
+   "landed_ils": 58.8,
+   "price_for_35pct": 123,
+   "margin_in_bundle": -0.09,
+   "margin_at_band_fx3": -0.051,
+   "flags": [
+    "shipping-estimated"
+   ]
+  },
+  "rug-cj-braided-wool-natural": {
+   "category": "rug-large",
+   "suggested_band": [
+    799,
+    799
+   ],
+   "margin_at_band": -3.221,
+   "margin_at_band_min": -3.221,
+   "verdict": "not-viable",
+   "landed_ils": 2806.9,
+   "price_for_35pct": 5749,
+   "margin_in_bundle": -3.207,
+   "margin_at_band_fx3": -2.436,
+   "flags": []
+  },
+  "shower-curtain-cj-linen-look-khaki-grommet": {
+   "category": "shower-curtain",
+   "suggested_band": [
+    89,
+    89
+   ],
+   "margin_at_band": 0.069,
+   "margin_at_band_min": 0.069,
+   "verdict": "not-viable",
+   "landed_ils": 63.5,
+   "price_for_35pct": 132,
+   "margin_in_bundle": 0.191,
+   "margin_at_band_fx3": 0.228,
+   "flags": []
+  },
+  "sill-vase-cj-cream-fluted-column-25": {
+   "category": "vase-small",
+   "suggested_band": [
+    39,
+    39
+   ],
+   "margin_at_band": -1.237,
+   "margin_at_band_min": -1.237,
+   "verdict": "not-viable",
+   "landed_ils": 70.3,
+   "price_for_35pct": 146,
+   "margin_in_bundle": -0.959,
+   "margin_at_band_fx3": -0.835,
+   "flags": [
+    "shipping-estimated"
+   ]
+  },
+  "skateboard-cj-blank-maple-43": {
+   "category": "kids-decor",
+   "suggested_band": [
+    89,
+    89
+   ],
+   "margin_at_band": -0.048,
+   "margin_at_band_min": -0.048,
+   "verdict": "not-viable",
+   "landed_ils": 72.3,
+   "price_for_35pct": 150,
+   "margin_in_bundle": 0.074,
+   "margin_at_band_fx3": 0.134,
+   "flags": []
+  },
+  "soap-dispenser-cj-matte-ceramic-cream-black-pump": {
+   "category": "bath-accessories",
+   "suggested_band": [
+    59,
+    59
+   ],
+   "margin_at_band": -0.162,
+   "margin_at_band_min": -0.162,
+   "verdict": "not-viable",
+   "landed_ils": 53.2,
+   "price_for_35pct": 111,
+   "margin_in_bundle": 0.022,
+   "margin_at_band_fx3": 0.04,
+   "flags": []
+  },
+  "soap-dispenser-cj-travertine-look-lotion-milktea": {
+   "category": "bath-accessories",
+   "suggested_band": [
+    59,
+    59
+   ],
+   "margin_at_band": -0.299,
+   "margin_at_band_min": -0.299,
+   "verdict": "not-viable",
+   "landed_ils": 60.1,
+   "price_for_35pct": 125,
+   "margin_in_bundle": -0.116,
+   "margin_at_band_fx3": -0.072,
+   "flags": [
+    "shipping-estimated"
+   ]
+  },
+  "sofa-cover-cj-bubble-stretch-slipcover": {
+   "category": "sofa-cover",
+   "suggested_band": [
+    349,
+    349
+   ],
+   "margin_at_band": 0.24,
+   "margin_at_band_min": 0.24,
+   "verdict": "bundle-only",
+   "landed_ils": 201.7,
+   "price_for_35pct": 415,
+   "margin_in_bundle": 0.271,
+   "margin_at_band_fx3": 0.369,
+   "flags": [
+    "viable-as-premium-up-to-P75"
+   ]
+  },
+  "sofa-cover-cj-cotton-muslin-fringe": {
+   "category": "throw",
+   "suggested_band": [
+    119,
+    119
+   ],
+   "margin_at_band": -0.028,
+   "margin_at_band_min": -0.028,
+   "verdict": "not-viable",
+   "landed_ils": 95.1,
+   "price_for_35pct": 197,
+   "margin_in_bundle": 0.063,
+   "margin_at_band_fx3": 0.15,
+   "flags": []
+  },
+  "sofa-cover-cj-knit-thick-slipcover": {
+   "category": "sofa-cover",
+   "suggested_band": [
+    279,
+    349
+   ],
+   "margin_at_band": 0.576,
+   "margin_at_band_min": 0.488,
+   "verdict": "viable",
+   "landed_ils": 102.6,
+   "price_for_35pct": 212,
+   "margin_in_bundle": 0.607,
+   "margin_at_band_fx3": 0.641,
+   "flags": []
+  },
+  "sofa-cover-cj-linen-feel-chenille-slipcover": {
+   "category": "sofa-cover",
+   "suggested_band": [
+    279,
+    349
+   ],
+   "margin_at_band": 0.534,
+   "margin_at_band_min": 0.435,
+   "verdict": "viable",
+   "landed_ils": 115.0,
+   "price_for_35pct": 238,
+   "margin_in_bundle": 0.565,
+   "margin_at_band_fx3": 0.607,
+   "flags": []
+  },
+  "sofa-cover-cj-polar-fleece-jacquard-slipcover": {
+   "category": "sofa-cover",
+   "suggested_band": [
+    299,
+    349
+   ],
+   "margin_at_band": 0.459,
+   "margin_at_band_min": 0.38,
+   "verdict": "viable",
+   "landed_ils": 137.2,
+   "price_for_35pct": 283,
+   "margin_in_bundle": 0.49,
+   "margin_at_band_fx3": 0.546,
+   "flags": []
+  },
+  "sofa-cover-cj-waffle-jacquard-stretch-slipcover": {
+   "category": "sofa-cover",
+   "suggested_band": [
+    279,
+    349
+   ],
+   "margin_at_band": 0.474,
+   "margin_at_band_min": 0.361,
+   "verdict": "viable",
+   "landed_ils": 132.6,
+   "price_for_35pct": 274,
+   "margin_in_bundle": 0.505,
+   "margin_at_band_fx3": 0.559,
+   "flags": []
+  },
+  "sofa-cover-cj-washed-hemp-throw": {
+   "category": "throw",
+   "suggested_band": [
+    119,
+    119
+   ],
+   "margin_at_band": -0.912,
+   "margin_at_band_min": -0.912,
+   "verdict": "not-viable",
+   "landed_ils": 184.1,
+   "price_for_35pct": 379,
+   "margin_in_bundle": -0.821,
+   "margin_at_band_fx3": -0.566,
+   "flags": []
+  },
+  "table-lamp-cj-pleated-shade-wood-column": {
+   "category": "table-lamp",
+   "suggested_band": [
+    179,
+    179
+   ],
+   "margin_at_band": -0.544,
+   "margin_at_band_min": -0.544,
+   "verdict": "not-viable",
+   "landed_ils": 221.9,
+   "price_for_35pct": 457,
+   "margin_in_bundle": -0.484,
+   "margin_at_band_fx3": -0.268,
+   "flags": []
+  },
+  "table-lamp-cj-white-teardrop-fabric-cone-25x45": {
+   "category": "table-lamp",
+   "suggested_band": [
+    179,
+    179
+   ],
+   "margin_at_band": -0.22,
+   "margin_at_band_min": -0.22,
+   "verdict": "not-viable",
+   "landed_ils": 172.6,
+   "price_for_35pct": 356,
+   "margin_in_bundle": -0.159,
+   "margin_at_band_fx3": -0.004,
+   "flags": [
+    "shipping-estimated"
+   ]
+  },
+  "table-lamp-cj-white-textured-ceramic-linen-drum": {
+   "category": "table-lamp",
+   "suggested_band": [
+    179,
+    179
+   ],
+   "margin_at_band": -0.36,
+   "margin_at_band_min": -0.36,
+   "verdict": "not-viable",
+   "landed_ils": 194.0,
+   "price_for_35pct": 400,
+   "margin_in_bundle": -0.3,
+   "margin_at_band_fx3": -0.118,
+   "flags": []
+  },
+  "table-runner-cj-linen-look-sage-fringe": {
+   "category": "table-runner",
+   "suggested_band": [
+    89,
+    129
+   ],
+   "margin_at_band": 0.541,
+   "margin_at_band_min": 0.368,
+   "verdict": "viable",
+   "landed_ils": 40.9,
+   "price_for_35pct": 86,
+   "margin_in_bundle": 0.625,
+   "margin_at_band_fx3": 0.612,
+   "flags": []
+  },
+  "table-runner-cj-linen-look-triangle-end": {
+   "category": "table-runner",
+   "suggested_band": [
+    89,
+    129
+   ],
+   "margin_at_band": 0.576,
+   "margin_at_band_min": 0.418,
+   "verdict": "viable",
+   "landed_ils": 37.1,
+   "price_for_35pct": 79,
+   "margin_in_bundle": 0.66,
+   "margin_at_band_fx3": 0.64,
+   "flags": []
+  },
+  "tableware-set-cj-grey-sand-matte-plate": {
+   "category": "ceramic-bowl",
+   "suggested_band": [
+    49,
+    49
+   ],
+   "margin_at_band": -1.197,
+   "margin_at_band_min": -1.197,
+   "verdict": "not-viable",
+   "landed_ils": 87.0,
+   "price_for_35pct": 181,
+   "margin_in_bundle": -0.976,
+   "margin_at_band_fx3": -0.801,
+   "flags": []
+  },
+  "tableware-set-cj-speckled-oat-stoneware-bowl-13": {
+   "category": "ceramic-bowl",
+   "suggested_band": [
+    49,
+    49
+   ],
+   "margin_at_band": -0.686,
+   "margin_at_band_min": -0.686,
+   "verdict": "not-viable",
+   "landed_ils": 65.7,
+   "price_for_35pct": 137,
+   "margin_in_bundle": -0.465,
+   "margin_at_band_fx3": -0.386,
+   "flags": []
+  },
+  "throw-cj-cotton-linen-light-gray-200x230": {
+   "category": "throw",
+   "suggested_band": [
+    119,
+    119
+   ],
+   "margin_at_band": -0.194,
+   "margin_at_band_min": -0.194,
+   "verdict": "not-viable",
+   "landed_ils": 111.8,
+   "price_for_35pct": 231,
+   "margin_in_bundle": -0.103,
+   "margin_at_band_fx3": 0.016,
+   "flags": [
+    "shipping-estimated"
+   ]
+  },
+  "throw-cj-cotton-waffle-ruffle-khaki-150x200": {
+   "category": "throw",
+   "suggested_band": [
+    119,
+    119
+   ],
+   "margin_at_band": -0.237,
+   "margin_at_band_min": -0.237,
+   "verdict": "not-viable",
+   "landed_ils": 116.1,
+   "price_for_35pct": 240,
+   "margin_in_bundle": -0.146,
+   "margin_at_band_fx3": -0.019,
+   "flags": []
+  },
+  "toothbrush-cup-cj-silver-travertine-cup": {
+   "category": "bath-accessories",
+   "suggested_band": [
+    59,
+    59
+   ],
+   "margin_at_band": -1.44,
+   "margin_at_band_min": -1.44,
+   "verdict": "not-viable",
+   "landed_ils": 117.1,
+   "price_for_35pct": 242,
+   "margin_in_bundle": -1.256,
+   "margin_at_band_fx3": -0.997,
+   "flags": []
+  },
+  "toothbrush-cup-cj-travertine-look-cup-milktea": {
+   "category": "bath-accessories",
+   "suggested_band": [
+    59,
+    59
+   ],
+   "margin_at_band": -0.195,
+   "margin_at_band_min": -0.195,
+   "verdict": "not-viable",
+   "landed_ils": 54.9,
+   "price_for_35pct": 115,
+   "margin_in_bundle": -0.012,
+   "margin_at_band_fx3": 0.013,
+   "flags": [
+    "shipping-estimated"
+   ]
+  },
+  "toy-cars-cj-beech-peg-bus": {
+   "category": "toys",
+   "suggested_band": [
+    49,
+    49
+   ],
+   "margin_at_band": 0.101,
+   "margin_at_band_min": 0.101,
+   "verdict": "bundle-only",
+   "landed_ils": 33.1,
+   "price_for_35pct": 70,
+   "margin_in_bundle": 0.322,
+   "margin_at_band_fx3": 0.252,
+   "flags": [
+    "viable-as-premium-up-to-P75"
+   ]
+  },
+  "vanity-sconces-cj-flat-halo-disc-white": {
+   "category": "wall-sconce",
+   "suggested_band": [
+    119,
+    119
+   ],
+   "margin_at_band": 0.352,
+   "margin_at_band_min": 0.352,
+   "verdict": "viable",
+   "landed_ils": 56.7,
+   "price_for_35pct": 118,
+   "margin_in_bundle": 0.443,
+   "margin_at_band_fx3": 0.459,
+   "flags": []
+  },
+  "vanity-sconces-cj-fluted-resin-updown-white": {
+   "category": "wall-sconce",
+   "suggested_band": [
+    119,
+    119
+   ],
+   "margin_at_band": -0.218,
+   "margin_at_band_min": -0.218,
+   "verdict": "not-viable",
+   "landed_ils": 114.2,
+   "price_for_35pct": 236,
+   "margin_in_bundle": -0.127,
+   "margin_at_band_fx3": -0.004,
+   "flags": []
+  },
+  "vanity-sconces-cj-ip65-mini-updown-white": {
+   "category": "wall-sconce",
+   "suggested_band": [
+    119,
+    119
+   ],
+   "margin_at_band": 0.365,
+   "margin_at_band_min": 0.365,
+   "verdict": "viable",
+   "landed_ils": 55.4,
+   "price_for_35pct": 116,
+   "margin_in_bundle": 0.456,
+   "margin_at_band_fx3": 0.469,
+   "flags": []
+  },
+  "vase-cj-charcoal-carved": {
+   "category": "vase-large",
+   "suggested_band": [
+    299,
+    299
+   ],
+   "margin_at_band": 0.222,
+   "margin_at_band_min": 0.222,
+   "verdict": "bundle-only",
+   "landed_ils": 177.3,
+   "price_for_35pct": 365,
+   "margin_in_bundle": 0.258,
+   "margin_at_band_fx3": 0.354,
+   "flags": [
+    "viable-as-premium-up-to-P75"
+   ]
+  },
+  "vase-cj-coarse-sand-white-tall": {
+   "category": "vase-large",
+   "suggested_band": [
+    299,
+    299
+   ],
+   "margin_at_band": 0.234,
+   "margin_at_band_min": 0.234,
+   "verdict": "bundle-only",
+   "landed_ils": 174.2,
+   "price_for_35pct": 359,
+   "margin_in_bundle": 0.27,
+   "margin_at_band_fx3": 0.364,
+   "flags": [
+    "viable-as-premium-up-to-P75"
+   ]
+  },
+  "vase-cj-faceted-cream": {
+   "category": "vase-large",
+   "suggested_band": [
+    299,
+    299
+   ],
+   "margin_at_band": 0.196,
+   "margin_at_band_min": 0.196,
+   "verdict": "not-viable",
+   "landed_ils": 183.9,
+   "price_for_35pct": 379,
+   "margin_in_bundle": 0.232,
+   "margin_at_band_fx3": 0.333,
+   "flags": [
+    "viable-as-premium-up-to-P75"
+   ]
+  },
+  "vase-cj-french-matte-white-35": {
+   "category": "vase-large",
+   "suggested_band": [
+    299,
+    299
+   ],
+   "margin_at_band": -0.135,
+   "margin_at_band_min": -0.135,
+   "verdict": "not-viable",
+   "landed_ils": 267.7,
+   "price_for_35pct": 551,
+   "margin_in_bundle": -0.099,
+   "margin_at_band_fx3": 0.065,
+   "flags": []
+  },
+  "vase-cj-matte-moon-jar-white": {
+   "category": "vase-small",
+   "suggested_band": [
+    39,
+    39
+   ],
+   "margin_at_band": -3.145,
+   "margin_at_band_min": -3.145,
+   "verdict": "not-viable",
+   "landed_ils": 133.3,
+   "price_for_35pct": 275,
+   "margin_in_bundle": -2.867,
+   "margin_at_band_fx3": -2.381,
+   "flags": []
+  },
+  "vase-cj-textured-white-stoneware": {
+   "category": "vase-large",
+   "suggested_band": [
+    299,
+    299
+   ],
+   "margin_at_band": 0.373,
+   "margin_at_band_min": 0.373,
+   "verdict": "viable",
+   "landed_ils": 138.9,
+   "price_for_35pct": 287,
+   "margin_in_bundle": 0.41,
+   "margin_at_band_fx3": 0.477,
+   "flags": []
+  },
+  "vase-cj-white-plum-hand-thrown": {
+   "category": "vase-large",
+   "suggested_band": [
+    299,
+    299
+   ],
+   "margin_at_band": 0.139,
+   "margin_at_band_min": 0.139,
+   "verdict": "not-viable",
+   "landed_ils": 198.4,
+   "price_for_35pct": 409,
+   "margin_in_bundle": 0.175,
+   "margin_at_band_fx3": 0.287,
+   "flags": [
+    "viable-as-premium-up-to-P75"
+   ]
+  },
+  "vase-cj-white-textured-jar": {
+   "category": "vase-large",
+   "suggested_band": [
+    299,
+    299
+   ],
+   "margin_at_band": 0.34,
+   "margin_at_band_min": 0.34,
+   "verdict": "bundle-only",
+   "landed_ils": 147.4,
+   "price_for_35pct": 304,
+   "margin_in_bundle": 0.376,
+   "margin_at_band_fx3": 0.45,
+   "flags": [
+    "viable-as-premium-up-to-P75"
+   ]
+  },
+  "wall-decor-cj-macrame-dowel-50x70": {
+   "category": "wall-decor",
+   "suggested_band": [
+    149,
+    169
+   ],
+   "margin_at_band": 0.435,
+   "margin_at_band_min": 0.37,
+   "verdict": "viable",
+   "landed_ils": 69.1,
+   "price_for_35pct": 144,
+   "margin_in_bundle": 0.5,
+   "margin_at_band_fx3": 0.527,
+   "flags": []
+  },
+  "wall-hooks-cj-light-wood-rail-5-brass-pegs-58": {
+   "category": "wall-decor",
+   "suggested_band": [
+    169,
+    169
+   ],
+   "margin_at_band": 0.293,
+   "margin_at_band_min": 0.293,
+   "verdict": "bundle-only",
+   "landed_ils": 89.6,
+   "price_for_35pct": 186,
+   "margin_in_bundle": 0.357,
+   "margin_at_band_fx3": 0.411,
+   "flags": [
+    "shipping-estimated",
+    "viable-as-premium-up-to-P75"
+   ]
+  },
+  "wall-hooks-cj-raw-wood-cylinder-peg-set-of-4": {
+   "category": "wall-decor",
+   "suggested_band": [
+    149,
+    169
+   ],
+   "margin_at_band": 0.444,
+   "margin_at_band_min": 0.379,
+   "verdict": "viable",
+   "landed_ils": 67.9,
+   "price_for_35pct": 141,
+   "margin_in_bundle": 0.508,
+   "margin_at_band_fx3": 0.534,
+   "flags": [
+    "shipping-estimated"
+   ]
+  },
+  "wall-sconce-cj-black-folding-arm-woodgrain-cone-18": {
+   "category": "wall-sconce",
+   "suggested_band": [
+    119,
+    119
+   ],
+   "margin_at_band": -0.253,
+   "margin_at_band_min": -0.253,
+   "verdict": "not-viable",
+   "landed_ils": 117.8,
+   "price_for_35pct": 244,
+   "margin_in_bundle": -0.162,
+   "margin_at_band_fx3": -0.032,
+   "flags": [
+    "shipping-estimated"
+   ]
+  },
+  "wall-sconce-cj-black-swan-arm-white-fabric-cone": {
+   "category": "wall-sconce",
+   "suggested_band": [
+    119,
+    119
+   ],
+   "margin_at_band": -0.132,
+   "margin_at_band_min": -0.132,
+   "verdict": "not-viable",
+   "landed_ils": 105.5,
+   "price_for_35pct": 218,
+   "margin_in_bundle": -0.041,
+   "margin_at_band_fx3": 0.066,
+   "flags": [
+    "shipping-estimated"
+   ]
+  },
+  "wall-sconce-cj-black-swing-arm-fabric": {
+   "category": "wall-sconce",
+   "suggested_band": [
+    119,
+    119
+   ],
+   "margin_at_band": -3.443,
+   "margin_at_band_min": -3.443,
+   "verdict": "not-viable",
+   "landed_ils": 439.5,
+   "price_for_35pct": 902,
+   "margin_in_bundle": -3.352,
+   "margin_at_band_fx3": -2.619,
+   "flags": []
+  },
+  "wall-sconce-cj-black-swing-arm-wood-shade": {
+   "category": "wall-sconce",
+   "suggested_band": [
+    119,
+    119
+   ],
+   "margin_at_band": -2.665,
+   "margin_at_band_min": -2.665,
+   "verdict": "not-viable",
+   "landed_ils": 361.0,
+   "price_for_35pct": 741,
+   "margin_in_bundle": -2.574,
+   "margin_at_band_fx3": -1.988,
+   "flags": []
+  },
+  "wall-sconce-cj-travertine-cone-walnut": {
+   "category": "wall-sconce",
+   "suggested_band": [
+    119,
+    119
+   ],
+   "margin_at_band": -0.797,
+   "margin_at_band_min": -0.797,
+   "verdict": "not-viable",
+   "landed_ils": 172.6,
+   "price_for_35pct": 356,
+   "margin_in_bundle": -0.706,
+   "margin_at_band_fx3": -0.473,
+   "flags": []
+  },
+  "wall-sconce-cj-travertine-disc-25": {
+   "category": "wall-sconce",
+   "suggested_band": [
+    119,
+    119
+   ],
+   "margin_at_band": -1.797,
+   "margin_at_band_min": -1.797,
+   "verdict": "not-viable",
+   "landed_ils": 273.4,
+   "price_for_35pct": 562,
+   "margin_in_bundle": -1.706,
+   "margin_at_band_fx3": -1.284,
+   "flags": []
+  },
+  "wall-sconce-cj-travertine-dome-15-alt": {
+   "category": "wall-sconce",
+   "suggested_band": [
+    119,
+    119
+   ],
+   "margin_at_band": -0.859,
+   "margin_at_band_min": -0.859,
+   "verdict": "not-viable",
+   "landed_ils": 178.9,
+   "price_for_35pct": 369,
+   "margin_in_bundle": -0.768,
+   "margin_at_band_fx3": -0.524,
+   "flags": []
+  },
+  "wall-sconce-cj-travertine-dome-15-pull": {
+   "category": "wall-sconce",
+   "suggested_band": [
+    119,
+    119
+   ],
+   "margin_at_band": -2.786,
+   "margin_at_band_min": -2.786,
+   "verdict": "not-viable",
+   "landed_ils": 373.1,
+   "price_for_35pct": 766,
+   "margin_in_bundle": -2.695,
+   "margin_at_band_fx3": -2.086,
+   "flags": []
+  },
+  "wall-sconce-cj-travertine-half-bowl-15": {
+   "category": "wall-sconce",
+   "suggested_band": [
+    119,
+    119
+   ],
+   "margin_at_band": -0.246,
+   "margin_at_band_min": -0.246,
+   "verdict": "not-viable",
+   "landed_ils": 117.0,
+   "price_for_35pct": 242,
+   "margin_in_bundle": -0.155,
+   "margin_at_band_fx3": -0.026,
+   "flags": []
+  },
+  "wall-sconce-cj-wavy-linen-flush-25": {
+   "category": "wall-sconce",
+   "suggested_band": [
+    119,
+    119
+   ],
+   "margin_at_band": -0.773,
+   "margin_at_band_min": -0.773,
+   "verdict": "not-viable",
+   "landed_ils": 170.2,
+   "price_for_35pct": 351,
+   "margin_in_bundle": -0.682,
+   "margin_at_band_fx3": -0.454,
+   "flags": []
+  },
+  "wall-sconce-cj-white-fabric-cube-15": {
+   "category": "wall-sconce",
+   "suggested_band": [
+    119,
+    119
+   ],
+   "margin_at_band": -0.622,
+   "margin_at_band_min": -0.622,
+   "verdict": "not-viable",
+   "landed_ils": 155.0,
+   "price_for_35pct": 320,
+   "margin_in_bundle": -0.531,
+   "margin_at_band_fx3": -0.332,
+   "flags": [
+    "shipping-estimated"
+   ]
+  }
+ }
+}

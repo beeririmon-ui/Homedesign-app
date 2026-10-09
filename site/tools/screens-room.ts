@@ -110,7 +110,12 @@ async function variants(): Promise<void> {
       const [x1, y1] = toPx(b[1], b[3]);
       return [x0 - 3, x1 + 3, y0 - 3, y1 + 3];
     });
-    const union = [Math.min(...pxBoxes.map((b) => b[0]!)), Math.max(...pxBoxes.map((b) => b[1]!)), Math.min(...pxBoxes.map((b) => b[2]!)), Math.max(...pxBoxes.map((b) => b[3]!))];
+    const union = [
+      Math.min(...pxBoxes.map((b) => b[0]!)),
+      Math.max(...pxBoxes.map((b) => b[1]!)),
+      Math.min(...pxBoxes.map((b) => b[2]!)),
+      Math.max(...pxBoxes.map((b) => b[3]!)),
+    ];
     const inBox = (x: number, y: number) => pxBoxes.some((b) => x >= b[0]! && x <= b[1]! && y >= b[2]! && y <= b[3]!);
     for (const n of [2, 3]) {
       await page.evaluate(([s, k]) => window.__hdEngine!.setSelection(s as string, k as number, 0), [slot, n]);
@@ -188,7 +193,11 @@ async function variants(): Promise<void> {
   let changed = 0;
   let maxD = 0;
   for (let i = 0; i < comp.raw.length; i += 3) {
-    const d = Math.max(Math.abs(comp.raw[i]! - poster.raw[i]!), Math.abs(comp.raw[i + 1]! - poster.raw[i + 1]!), Math.abs(comp.raw[i + 2]! - poster.raw[i + 2]!));
+    const d = Math.max(
+      Math.abs(comp.raw[i]! - poster.raw[i]!),
+      Math.abs(comp.raw[i + 1]! - poster.raw[i + 1]!),
+      Math.abs(comp.raw[i + 2]! - poster.raw[i + 2]!),
+    );
     if (d > 12) changed++;
     maxD = Math.max(maxD, d);
   }
@@ -225,11 +234,15 @@ async function transition(): Promise<void> {
   const SLOW = 10;
   await page.addInitScript(`window.__hdSlowMo = ${SLOW}`);
   // rings and controls fade in on CSS time after the landing; hidden here so the landing check sees only the room
-  await page.addInitScript(`addEventListener('DOMContentLoaded', () => { const s = document.createElement('style'); s.textContent = '.hotspots,.stage-ui{visibility:hidden!important}'; document.head.append(s); })`);
+  await page.addInitScript(
+    `addEventListener('DOMContentLoaded', () => { const s = document.createElement('style'); s.textContent = '.hotspots,.hotspot,.stage-ui{visibility:hidden!important}'; document.head.append(s); })`,
+  );
   // camera log: the engine camera on every animation frame, to prove the dolly lands on the rest camera without a step
-  await page.addInitScript(`window.__camLog = []; const tick = () => { const e = window.__hdEngine; if (e && e.cam) window.__camLog.push([performance.now(), e.cam.cu, e.cam.cv, e.cam.z]); requestAnimationFrame(tick); }; requestAnimationFrame(tick);`);
+  await page.addInitScript(
+    `window.__camLog = []; const tick = () => { const e = window.__hdEngine; if (e && e.cam) window.__camLog.push([performance.now(), e.cam.cu, e.cam.cv, e.cam.z]); requestAnimationFrame(tick); }; requestAnimationFrame(tick);`,
+  );
   await page.goto(`${ORIGIN}/`, { waitUntil: 'load' });
-  await page.addStyleTag({ content: '.hotspots,.stage-ui{visibility:hidden!important}' });
+  await page.addStyleTag({ content: '.hotspots,.hotspot,.stage-ui{visibility:hidden!important}' });
   await page.getByRole('heading', { level: 1 }).first().waitFor();
   await page.waitForTimeout(4000); // T-E0 preloaded and decoded
   await page.getByRole('link', { name: 'היכנסו לסלון' }).click();
@@ -239,11 +252,16 @@ async function transition(): Promise<void> {
     const t = (Date.now() - t0) / SLOW;
     const overlay = Number(await page.evaluate('(() => { const o = document.querySelector(".seq-overlay"); return o ? getComputedStyle(o).opacity : 0; })()'));
     shots.push({ t: Math.round(t), png: await page.screenshot(), overlay });
-    const done = await page.evaluate('!document.querySelector(".seq-overlay") && !document.querySelector(".stage.arriving") && window.__hdEngine?.ready === true');
+    const done = await page.evaluate(
+      '!document.querySelector(".seq-overlay") && !document.querySelector(".stage.arriving") && window.__hdEngine?.ready === true',
+    );
     if (done || t > 9000) break;
   }
   const total = shots[shots.length - 1]!.t;
   await page.waitForTimeout(1500);
+  // the router re-renders the head on navigation: hide the rings and controls again for the reference frame
+  await page.addStyleTag({ content: '.hotspots,.hotspot,.stage-ui{visibility:hidden!important}' });
+  await frames(page);
   const rest = await page.screenshot();
   // six frames: the hall, two along the walk, the hand-off (overlay ~70 %), the landing (overlay ~25 %), landed
   const nearest = (ms: number) => shots.reduce((best, s) => (Math.abs(s.t - ms) < Math.abs(best.t - ms) ? s : best));
@@ -253,7 +271,9 @@ async function transition(): Promise<void> {
   const byOverlay = (o: number) => shots.slice(Math.max(0, handIdx)).reduce((best, s) => (Math.abs(s.overlay - o) < Math.abs(best.overlay - o) ? s : best));
   const pick = [nearest(0), nearest(hand * 0.4), nearest(hand * 0.8), byOverlay(0.7), byOverlay(0.25), shots[shots.length - 1]!];
   for (const [i, s] of pick.entries()) writeFileSync(`${OUT}/${PREFIX}transition-${i + 1}.png`, s.png);
-  report.push(`transition: ${shots.length} screenshots over ${total} ms of transition time (slow motion ×${SLOW}); picked at ${pick.map((s) => s.t).join(', ')} ms`);
+  report.push(
+    `transition: ${shots.length} screenshots over ${total} ms of transition time (slow motion ×${SLOW}); picked at ${pick.map((s) => s.t).join(', ')} ms`,
+  );
   // landing check: the last frame of the move vs the room at rest 1.5 s later — must be the same picture
   const a = await sharp(pick[5]!.png).removeAlpha().raw().toBuffer();
   const b = await sharp(rest).removeAlpha().raw().toBuffer();
@@ -264,7 +284,12 @@ async function transition(): Promise<void> {
     if (d > 12) diff++;
     dimg[i] = dimg[i + 1] = dimg[i + 2] = Math.min(255, d * 8);
   }
-  writeFileSync(`${OUT}/${PREFIX}transition-landing-diff.png`, await sharp(dimg, { raw: { width: W, height: H, channels: 3 } }).png().toBuffer());
+  writeFileSync(
+    `${OUT}/${PREFIX}transition-landing-diff.png`,
+    await sharp(dimg, { raw: { width: W, height: H, channels: 3 } })
+      .png()
+      .toBuffer(),
+  );
   const pct = (100 * diff) / (W * H);
   report.push(`transition landing: ${diff} pixels (${pct.toFixed(3)} %) differ by more than 12 levels between the landed frame and the composed M0 at rest`);
   if (pct > 0.05) problems.push(`transition landing differs from the composed M0 in ${pct.toFixed(3)} % of the pixels`);
@@ -286,7 +311,11 @@ async function transition(): Promise<void> {
   const tw = 427;
   const th = 267;
   await sharp({ create: { width: tw * 3, height: th * 2, channels: 3, background: '#000' } })
-    .composite(await Promise.all(pick.map(async (s, i) => ({ input: await sharp(s.png).resize(tw, th).png().toBuffer(), left: (i % 3) * tw, top: Math.floor(i / 3) * th }))))
+    .composite(
+      await Promise.all(
+        pick.map(async (s, i) => ({ input: await sharp(s.png).resize(tw, th).png().toBuffer(), left: (i % 3) * tw, top: Math.floor(i / 3) * th })),
+      ),
+    )
     .png()
     .toFile(`${OUT}/${PREFIX}transition-sheet.png`);
   await page.context().close();

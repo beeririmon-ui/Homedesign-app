@@ -373,7 +373,12 @@ async function main() {
     entry.ring = t.zoom
       ? t.zoom
       : shapes.length
-        ? [Math.min(...shapes.map((b) => b[0])), Math.max(...shapes.map((b) => b[1])), Math.min(...shapes.map((b) => b[2])), Math.max(...shapes.map((b) => b[3]))]
+        ? [
+            Math.min(...shapes.map((b) => b[0])),
+            Math.max(...shapes.map((b) => b[1])),
+            Math.min(...shapes.map((b) => b[2])),
+            Math.max(...shapes.map((b) => b[3])),
+          ]
         : null;
     for (const key of ['lo', 'hi'] as const) {
       const layers = await makeSlotLayers(bases[key]!, key, slot.id, t, colors);
