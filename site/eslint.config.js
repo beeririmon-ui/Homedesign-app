@@ -8,6 +8,8 @@ export default tseslint.config(
   {
     ignores: [
       '**/node_modules/**',
+      '**/.wrangler/**',
+      '.lighthouse/**',
       '**/dist/**',
       'dist-artifact/**',
       'web/.ssr/**',

@@ -8,7 +8,7 @@ import { scene } from './catalog';
 export type Head = { title: string; description: string; canonical: string; jsonLd: object[]; noindex?: boolean; preload?: string };
 
 const SITE = 'הבית';
-const ORIGIN = 'https://example.co.il'; // replaced when the domain is chosen (docs/architecture.md, open decisions)
+export const ORIGIN = 'https://example.co.il'; // replaced when the domain is chosen (docs/architecture.md, open decisions)
 
 export function canonicalPath(route: Route): string {
   switch (route.name) {

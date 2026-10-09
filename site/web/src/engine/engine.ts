@@ -91,6 +91,8 @@ export class RoomEngine {
       const need = this.vp.w * Math.min(2, devicePixelRatio || 1) * (coverSize(this.vp, this.aspect).fw / this.vp.w);
       this.compWidth = shell.widths.find((w) => w >= need) ?? shell.widths[shell.widths.length - 1]!;
     }
+    // phones: compose at the lo width (half the pixels to blend; the shell texture stays the poster's)
+    if (this.vp.w <= 900) this.compWidth = Math.min(this.compWidth, this.o.scene.widths.lo);
     this.res = this.compWidth > this.o.scene.widths.lo ? 'hi' : 'lo';
 
     const layers = buildLayers(this.o.room, this.o.scene, this.selection);

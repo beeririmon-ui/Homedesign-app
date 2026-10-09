@@ -35,8 +35,8 @@ export function Room({ room, slot, option }: { room: CatalogRoom; slot?: string;
                   <span class="small">{p ? <a href={`/p/${p.id}/`}>{p.name_he}</a> : <span class="muted">וריאציה {pos} · ממתינה למוצר</span>}</span>
                   <span class="row">
                     {p ? <Price agorot={p.price_agorot} provisional={p.price_provisional} /> : null}
-                    <a class="link-btn" href={`/rooms/${room.id}/?slot=${s.id}`} aria-label={`החלפת ${s.name_he} (${s.options.length} וריאציות)`}>
-                      החלפה
+                    <a class="link-btn" href={`/rooms/${room.id}/?slot=${s.id}`}>
+                      החלפה<span class="sr-only"> של {s.name_he} ({s.options.length} וריאציות)</span>
                     </a>
                   </span>
                 </div>

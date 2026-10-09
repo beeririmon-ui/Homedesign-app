@@ -9,7 +9,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 const here = dirname(fileURLToPath(import.meta.url));
 const dist = resolve(here, '../dist');
 const ssrDir = resolve(here, '../.ssr');
-const { render } = (await import(pathToFileURL(resolve(ssrDir, 'entry-server.js')).href)) as typeof import('../src/entry-server');
+const { render, ORIGIN } = (await import(pathToFileURL(resolve(ssrDir, 'entry-server.js')).href)) as typeof import('../src/entry-server');
 const catalog = JSON.parse(readFileSync(resolve(here, '../../.generated/catalog.public.json'), 'utf8')) as {
   rooms: { id: string; built: boolean }[];
   products: { id: string }[];
@@ -42,5 +42,15 @@ for (const url of routes) {
 mkdirSync(resolve(dist, 'order'), { recursive: true });
 writeFileSync(resolve(dist, 'order/index.html'), page('/order/HD-00000000/').replace(/HD-00000000/g, ''));
 writeFileSync(resolve(dist, '404.html'), page('/404'));
+// robots.txt and sitemap.xml (absolute URLs; ORIGIN changes when the domain is chosen)
+const indexable = routes.filter((u) => !['/cart/', '/checkout/'].includes(u));
+writeFileSync(
+  resolve(dist, 'sitemap.xml'),
+  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${indexable.map((u) => `  <url><loc>${ORIGIN}${u}</loc></url>`).join('\n')}\n</urlset>\n`,
+);
+writeFileSync(
+  resolve(dist, 'robots.txt'),
+  ['User-agent: *', 'Disallow: /api/', 'Disallow: /cart/', 'Disallow: /checkout/', 'Disallow: /order/', 'Disallow: /mock-pay/', '', `Sitemap: ${ORIGIN}/sitemap.xml`, ''].join('\n'),
+);
 rmSync(ssrDir, { recursive: true, force: true });
 console.log(`prerendered ${routes.length} pages + order shell + 404`);

@@ -2,6 +2,8 @@
 import renderToString from 'preact-render-to-string';
 import { App } from './App';
 import { headFor } from './head';
+
+export { ORIGIN } from './head';
 import { match } from './router';
 
 const esc = (s: string) => s.replace(/[&<>"]/g, (c) => `&#${c.charCodeAt(0)};`);

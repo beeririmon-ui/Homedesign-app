@@ -61,7 +61,7 @@ async function run(width: number, height: number, mobile: boolean) {
 
   const vase = page.locator('button.hotspot[data-slot="vase"]');
   if (await vase.isVisible()) await vase.click();
-  else await page.getByRole('link', { name: /^החלפת אגרטל/ }).click(); // narrow screens: the hotspot can be panned out of view
+  else await page.getByRole('link', { name: /^החלפה של אגרטל/ }).click(); // narrow screens: the hotspot can be panned out of view
   await page.getByRole('dialog').waitFor();
   await page.keyboard.press('ArrowLeft');
   await page.waitForTimeout(1200);
