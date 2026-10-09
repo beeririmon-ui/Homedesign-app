@@ -42,6 +42,10 @@
       "exclude": [
         "wall-sconce",
         "armchair"
+      ],
+      "variant_palette": [
+        "#E6DCCB",
+        "#D9D6D0"
       ]
     },
     "framed-art": {
@@ -117,10 +121,16 @@
     "wall-sconce": {
       "boxes": [
         [
-          0.018,
+          0.035,
           0.125,
-          0.255,
-          0.455
+          0.262,
+          0.365
+        ],
+        [
+          0.02,
+          0.112,
+          0.36,
+          0.452
         ]
       ],
       "hotspot": [
@@ -139,10 +149,10 @@
     "vase": {
       "boxes": [
         [
-          0.215,
-          0.3,
-          0.33,
-          0.585
+          0.224,
+          0.282,
+          0.472,
+          0.586
         ]
       ],
       "hotspot": [
@@ -152,15 +162,28 @@
       "depth": 0.35,
       "exclude": [
         "curtains"
-      ]
+      ],
+      "note": "vase body only; the branches are fillers"
     },
     "rug": {
       "boxes": [
         [
-          0.15,
+          0.157,
           0.92,
-          0.74,
+          0.89,
           1.0
+        ],
+        [
+          0.39,
+          0.48,
+          0.75,
+          0.89
+        ],
+        [
+          0.52,
+          0.92,
+          0.82,
+          0.89
         ]
       ],
       "hotspot": [
@@ -175,20 +198,29 @@
         1.0
       ],
       "exclude": [
-        "armchair",
-        "coffee-table",
-        "sofa",
         "pouf",
-        "basket",
-        "table-runner"
+        "armchair",
+        "table-runner",
+        "basket"
+      ],
+      "objectness": false,
+      "variant_palette": [
+        "#D9D6D0",
+        "#CDBFAA"
       ]
     },
     "floor-lamp": {
       "boxes": [
         [
-          0.818,
-          0.9,
-          0.345,
+          0.826,
+          0.894,
+          0.355,
+          0.44
+        ],
+        [
+          0.855,
+          0.866,
+          0.44,
           0.665
         ]
       ],
@@ -211,9 +243,9 @@
     "planter": {
       "boxes": [
         [
-          0.35,
-          0.47,
-          0.3,
+          0.369,
+          0.446,
+          0.612,
           0.745
         ]
       ],
@@ -223,17 +255,29 @@
       ],
       "depth": 0.2,
       "exclude": [
-        "armchair",
-        "sofa"
-      ]
+        "armchair"
+      ],
+      "note": "pot only; the olive tree is a filler"
     },
     "sofa-cover": {
       "boxes": [
         [
-          0.44,
-          0.81,
-          0.53,
-          0.8
+          0.443,
+          0.8,
+          0.55,
+          0.685
+        ],
+        [
+          0.443,
+          0.48,
+          0.55,
+          0.75
+        ],
+        [
+          0.71,
+          0.8,
+          0.685,
+          0.812
         ]
       ],
       "hotspot": [
@@ -248,9 +292,9 @@
         0.8
       ],
       "exclude": [
-        "coffee-table",
         "cushions",
         "candle-holders",
+        "coffee-table",
         "bowl",
         "table-runner",
         "basket"
@@ -259,16 +303,34 @@
     "cushions": {
       "boxes": [
         [
-          0.47,
-          0.775,
-          0.52,
-          0.665
+          0.474,
+          0.54,
+          0.532,
+          0.632
         ],
         [
-          0.69,
-          0.82,
+          0.516,
+          0.579,
+          0.539,
+          0.637
+        ],
+        [
+          0.679,
+          0.766,
+          0.565,
+          0.651
+        ],
+        [
+          0.687,
+          0.803,
           0.6,
-          0.83
+          0.82
+        ],
+        [
+          0.803,
+          0.822,
+          0.625,
+          0.79
         ]
       ],
       "hotspot": [
@@ -284,9 +346,9 @@
       ],
       "exclude": [
         "candle-holders",
-        "coffee-table",
-        "basket"
-      ]
+        "coffee-table"
+      ],
+      "objectness": false
     },
     "basket": {
       "boxes": [
@@ -316,10 +378,10 @@
     "table-runner": {
       "boxes": [
         [
-          0.51,
-          0.59,
-          0.66,
-          0.85
+          0.511,
+          0.587,
+          0.711,
+          0.842
         ]
       ],
       "hotspot": [
@@ -331,10 +393,10 @@
     "bowl": {
       "boxes": [
         [
-          0.605,
-          0.68,
-          0.67,
-          0.735
+          0.611,
+          0.679,
+          0.679,
+          0.728
         ]
       ],
       "hotspot": [
@@ -349,32 +411,35 @@
     "candle-holders": {
       "boxes": [
         [
-          0.548,
-          0.612,
-          0.565,
-          0.71
+          0.556,
+          0.606,
+          0.636,
+          0.707
         ]
       ],
       "hotspot": [
         0.597,
         0.63
       ],
-      "depth": 0.45
+      "depth": 0.45,
+      "note": "holders only; the candles are fillers and stay identical in every option"
     },
     "pouf": {
-      "boxes": [
-        [
-          0.37,
-          0.52,
-          0.8,
-          0.985
-        ]
-      ],
+      "boxes": [],
       "hotspot": [
         0.445,
         0.885
       ],
-      "depth": 0.72
+      "depth": 0.72,
+      "ellipses": [
+        [
+          0.447,
+          0.898,
+          0.072,
+          0.098
+        ]
+      ],
+      "objectness": false
     },
     "pendant": {
       "boxes": [
@@ -402,23 +467,25 @@
   "notes_zoom": "zoom: optional box that the zoom frames instead of the union of boxes (large or split products).",
   "fixed_occluders": {
     "armchair": [
-      0.185,
-      0.395,
-      0.6,
-      0.935
+      0.191,
+      0.39,
+      0.613,
+      0.922
     ],
     "coffee-table": [
-      0.475,
-      0.715,
-      0.675,
-      0.885
+      0.48,
+      0.71,
+      0.683,
+      0.75
     ],
     "sofa": [
-      0.44,
-      0.81,
-      0.53,
-      0.8
+      0.443,
+      0.803,
+      0.535,
+      0.75
     ]
   },
-  "notes_exclude": "exclude: names from fixed_occluders or other slot ids. The temporary layer is cut out where those sit in front of it (real layers are rendered with holdouts)."
+  "notes_exclude": "exclude: names from fixed_occluders or other slot ids. The temporary layer is cut out where those sit in front of it (real layers are rendered with holdouts).",
+  "notes_shapes": "boxes [u0,u1,v0,v1] and ellipses [cu,cv,ru,rv]; objectness:false = the shapes alone are the mask (no background-difference test).",
+  "notes_palette": "variant_palette: colours for placeholder options of large slots, kept close to the original so the temporary cut-out edges stay quiet."
 }

@@ -25,7 +25,8 @@ export const SlotSchema = z.looseObject({
   set_of: z.number().int().positive().optional(),
   has_light_layer: z.boolean().optional(),
   has_shadow_layer: z.boolean().optional(),
-  fillers: z.array(z.string()).optional(),
+  /** Filler ids; kids.json keys them per room ({ boy: [...], girl: [...] }). */
+  fillers: z.union([z.array(z.string()), z.record(z.string(), z.array(z.string()))]).optional(),
   frames: z.array(z.string()).optional(),
   hotspot: z.union([HotspotSchema, z.tuple([Unit, Unit])]).nullable().optional(),
   zoom_frame: z.union([FrameBoxSchema, z.looseObject({})]).nullable().optional(),

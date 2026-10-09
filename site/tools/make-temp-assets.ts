@@ -28,13 +28,17 @@ import type { PublicCatalog } from '@hd/shared';
 import { GENERATED, MEDIA_OUT, repoPath, sitePath } from './lib/paths';
 
 type Box = [number, number, number, number]; // u0 u1 v0 v1
+type Ellipse = [number, number, number, number]; // cu cv ru rv
 type TempSlot = {
   boxes: Box[];
+  ellipses?: Ellipse[];
+  objectness?: boolean;
   hotspot: [number, number];
   visible?: boolean;
   depth: number;
   glow?: [number, number, number][];
   exclude?: string[];
+  variant_palette?: string[];
 };
 type TempFile = {
   room: string;
@@ -114,6 +118,16 @@ const smooth = (a: number, b: number, x: number) => {
   return t * t * (3 - 2 * t);
 };
 
+function ellipseWeight(u: number, v: number, e: Ellipse, feather: number): number {
+  const d = Math.hypot((u - e[0]) / e[2], (v - e[1]) / e[3]);
+  return 1 - smooth(1, 1 + feather / Math.min(e[2], e[3]), d);
+}
+
+/** Bounding boxes of every shape of a slot (ellipses included). */
+function shapeBoxes(t: TempSlot): Box[] {
+  return [...t.boxes, ...(t.ellipses ?? []).map((e): Box => [e[0] - e[2], e[0] + e[2], e[1] - e[3], e[1] + e[3]])];
+}
+
 /** Feathered rounded-rect weight of a point in frame coordinates. */
 function boxWeight(u: number, v: number, b: Box, feather: number): number {
   const du = Math.max(b[0] - u, 0, u - b[1]);
@@ -133,14 +147,15 @@ const sceneSlots: Record<string, unknown> = {};
 
 /** Product layer cut-outs. Alpha = feathered slot boxes × "differs from the local background" − occluders in front. */
 async function makeSlotLayers(base: Raw, key: 'lo' | 'hi', slotId: string, t: TempSlot, optionColors: (string | null)[]) {
-  if (t.boxes.length === 0) return null;
+  const all = shapeBoxes(t);
+  if (all.length === 0) return null;
   const W = base.width;
   const H = base.height;
   const pad = 0.012;
-  const u0 = Math.max(0, Math.min(...t.boxes.map((b) => b[0])) - pad);
-  const u1 = Math.min(1, Math.max(...t.boxes.map((b) => b[1])) + pad);
-  const v0 = Math.max(0, Math.min(...t.boxes.map((b) => b[2])) - pad * (16 / 9));
-  const v1 = Math.min(1, Math.max(...t.boxes.map((b) => b[3])) + pad * (16 / 9));
+  const u0 = Math.max(0, Math.min(...all.map((b) => b[0])) - pad);
+  const u1 = Math.min(1, Math.max(...all.map((b) => b[1])) + pad);
+  const v0 = Math.max(0, Math.min(...all.map((b) => b[2])) - pad * (16 / 9));
+  const v1 = Math.min(1, Math.max(...all.map((b) => b[3])) + pad * (16 / 9));
   const x0 = Math.floor(u0 * W);
   const y0 = Math.floor(v0 * H);
   const w = Math.ceil(u1 * W) - x0;
@@ -154,7 +169,15 @@ async function makeSlotLayers(base: Raw, key: 'lo' | 'hi', slotId: string, t: Te
   const mid = border.slice(Math.floor(border.length * 0.25), Math.ceil(border.length * 0.75));
   const bg = [0, 1, 2].map((i) => mid.reduce((sum, c) => sum + c[i]!, 0) / mid.length) as [number, number, number];
 
-  const occluders: Box[] = (t.exclude ?? []).flatMap((name) => temp.fixed_occluders?.[name] ? [temp.fixed_occluders[name]!] : (temp.slots[name]?.boxes ?? []));
+  const occBoxes: Box[] = [];
+  const occEllipses: Ellipse[] = [];
+  for (const name of t.exclude ?? []) {
+    const fixed = temp.fixed_occluders?.[name];
+    if (fixed) occBoxes.push(fixed);
+    occBoxes.push(...(temp.slots[name]?.boxes ?? []));
+    occEllipses.push(...(temp.slots[name]?.ellipses ?? []));
+  }
+  const useObjectness = t.objectness !== false;
   const alpha = new Float32Array(w * h);
   let lumSum = 0;
   let wSum = 0;
@@ -163,16 +186,18 @@ async function makeSlotLayers(base: Raw, key: 'lo' | 'hi', slotId: string, t: Te
     for (let x = 0; x < w; x++) {
       const u = (x0 + x + 0.5) / W;
       let box = 0;
-      for (const b of t.boxes) box = Math.max(box, boxWeight(u, v, b, 0.008));
+      for (const b of t.boxes) box = Math.max(box, boxWeight(u, v, b, 0.006));
+      for (const e of t.ellipses ?? []) box = Math.max(box, ellipseWeight(u, v, e, 0.006));
       if (box <= 0) continue;
       let occ = 0;
-      for (const b of occluders) occ = Math.max(occ, boxWeight(u, v, b, 0.004));
+      for (const b of occBoxes) occ = Math.max(occ, boxWeight(u, v, b, 0.004));
+      for (const e of occEllipses) occ = Math.max(occ, ellipseWeight(u, v, e, 0.004));
       const i = ((y0 + y) * W + (x0 + x)) * 3;
       const r = base.data[i]! / 255;
       const g = base.data[i + 1]! / 255;
       const b = base.data[i + 2]! / 255;
       const dist = Math.hypot(r - bg[0], g - bg[1], b - bg[2]);
-      const a = box * smooth(0.04, 0.13, dist) * (1 - occ);
+      const a = box * (useObjectness ? smooth(0.04, 0.13, dist) : 1) * (1 - occ);
       alpha[y * w + x] = a;
       lumSum += lum(r, g, b) * a;
       wSum += a;
@@ -222,11 +247,11 @@ function px(img: Raw, x: number, y: number): [number, number, number] {
 
 /** Soft contact/cast shadow, multiply. Light comes from the window on the left, so it falls right. */
 async function makeShadow(key: 'lo' | 'hi', slotId: string, t: TempSlot, placement: string) {
-  if (t.boxes.length === 0) return null;
+  if (shapeBoxes(t).length === 0) return null;
   const W = WIDTHS[key];
   const H = Math.round((W * 9) / 16);
   const wall = placement === 'wall' || placement === 'window' || placement === 'ceiling';
-  const boxes = t.boxes.map((b): Box =>
+  const boxes = shapeBoxes(t).map((b): Box =>
     wall
       ? [b[0] + 0.004, b[1] + 0.008, b[2] + 0.01, b[3] + 0.012]
       : [b[0] + 0.01, b[1] + 0.025, b[3] - (b[3] - b[2]) * 0.08, Math.min(1, b[3] + 0.018)],
@@ -310,7 +335,7 @@ async function makeDepth() {
       if (v > floorLine) d = Math.max(d, 0.12 + 0.88 * ((v - floorLine) / (1 - floorLine)));
       const ceilLine = u > corner ? 0.1 - 0.05 * ((u - corner) / (1 - corner)) : 0.1 + 0.06 * ((corner - u) / corner);
       if (v < ceilLine) d = Math.max(d, 0.1 + 0.4 * ((ceilLine - v) / ceilLine));
-      for (const t of slotList) for (const b of t.boxes) d = Math.max(d, t.depth * boxWeight(u, v, b, 0.015));
+      for (const t of slotList) for (const b of shapeBoxes(t)) d = Math.max(d, t.depth * boxWeight(u, v, b, 0.015));
       out[y * W + x] = Math.round(Math.min(1, d) * 255);
     }
   const rel = `${roomDir}/depth.${W}`;
@@ -345,7 +370,10 @@ async function main() {
   for (const slot of room!.slots) {
     const t = temp.slots[slot.id];
     if (!t) continue;
-    const colors = slot.options.map((o, i) => (i === 0 ? null : (o.product_id ? productColor.get(o.product_id) : null) ?? PALETTE[i % PALETTE.length]!));
+    const pal = t.variant_palette ?? PALETTE;
+    const colors = slot.options.map((o, i) =>
+      i === 0 ? null : ((o.product_id ? productColor.get(o.product_id) : null) ?? pal[(i - 1) % pal.length]!),
+    );
     const entry: Record<string, unknown> = { z: slot.z, depth: t.depth, temporary: true };
     for (const key of ['lo', 'hi'] as const) {
       const layers = await makeSlotLayers(bases[key]!, key, slot.id, t, colors);

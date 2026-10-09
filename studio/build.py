@@ -842,8 +842,25 @@ def load_economics(eco_dir: Path, products: list[dict]) -> dict:
     if bp2.exists():
         try:
             d = read_json(bp2)
+            rows = []
+            for bid, bd in (d.get("bundles") or {}).items():
+                if not isinstance(bd, dict):
+                    continue
+                comb = bd.get("combined") or {}
+                rows.append({"id": bid, "label": bd.get("label"), "items": len(bd.get("items") or []),
+                             "sum_single_cheapest": bd.get("sum_single_cheapest"), "sum_single_under20": bd.get("sum_single_cheapest_under_20d"),
+                             "combined_cheapest": (comb.get("cheapest") or {}).get("usd"), "combined_under20": (comb.get("cheapest_under_20d") or {}).get("usd"),
+                             "saving_pct_cheapest": bd.get("saving_pct_cheapest"), "saving_pct_under20": bd.get("saving_pct_under_20d"),
+                             "ship_share_single_pct": bd.get("ship_share_landed_single_pct"), "ship_share_combined_pct": bd.get("ship_share_landed_combined_pct"),
+                             "status": bd.get("status")})
+
+            def avg_factor(key):
+                vals = [r[key] for r in rows if isnum(r.get(key))]
+                return round(1 - sum(vals) / len(vals) / 100, 2) if vals else None
+
             out["bundles"] = {"file": bp2.name, "date": next((first_date(str(d[k])) for k in ("updated", "date", "generated_at") if d.get(k)), None),
-                              "summary": {k: v for k, v in d.items() if not isinstance(v, (dict, list))}}
+                              "rows": rows, "findings": [f for f in (d.get("findings") or []) if isinstance(f, str)],
+                              "suggested_factor": {"cheapest": avg_factor("saving_pct_cheapest"), "under20": avg_factor("saving_pct_under20")}}
             out["files"].append(bp2.name)
         except Exception as e:
             log(f"  ! cannot read {bp2.name}: {e}")

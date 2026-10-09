@@ -1,0 +1,13 @@
+# Copy to .dev.vars for local development (.dev.vars is gitignored). Names only; values are never committed.
+# Preview / Production: `npx wrangler secret put <NAME> --env preview|production`.
+
+# HMAC secret for payment webhooks (mock provider locally; the real provider's secret later)
+PAYMENT_WEBHOOK_SECRET=
+# Payment provider API key (Grow / Cardcom / PayPlus, after the user decides)
+PAYMENT_API_KEY=
+# CJ Dropshipping API key (supplier orders)
+CJ_API_KEY=
+# Invoicing service API key (Morning / iCount, after the user decides)
+INVOICE_API_KEY=
+# Local only: 1 lets /api/admin/* through without Cloudflare Access. Ignored outside ENVIRONMENT=development.
+ADMIN_DEV_BYPASS=

@@ -180,6 +180,11 @@ class Run:
         self.synced_new: list[str] = []
         self.econ_updates: dict[str, dict] = {}
         self.today = dt.date.today().isoformat()
+        pp = self.eco_dir / "products.json"
+        try:
+            self.econ_current = (json.loads(pp.read_text(encoding="utf-8")).get("products") or {}) if pp.exists() else {}
+        except Exception:
+            self.econ_current = {}
 
     def say(self, s=""):
         self.lines.append(s)
@@ -292,11 +297,13 @@ class Run:
         self.say(f"• {pid}  ({path.relative_to(self.root)})")
         for k, a, b in diff:
             self.say(f"    {k}: {short(a)} → {short(b)}")
+        cur_e = self.econ_current.get(pid) or {}
         for k, v in eu.items():
-            self.say(f"    economics.{k} → {short(v)}  (data/economics/products.json)")
+            if cur_e.get(k) != v:
+                self.say(f"    economics.{k}: {short(cur_e.get(k))} → {short(v)}  (data/economics/products.json)")
         if move_to:
             self.say(f"    MOVE → {move_to.relative_to(self.root)}" + ("  (skipped: --no-move)" if self.args.no_move else ""))
-        if not diff and not eu and not move_to:
+        if not diff and not move_to and all((self.econ_current.get(pid) or {}).get(k) == v for k, v in eu.items()):
             self.say("    no change (already matches the repo)")
         for e in errs:
             self.say(f"    ! {e}")
@@ -307,7 +314,13 @@ class Run:
             self.problems += [f"{pid}: schema: {e}" for e in verrs]
             if not self.args.force:
                 self.say("    card NOT written (fails the schema; --force to override)")
+                self.econ_updates.pop(pid, None)
                 return
+        if errs and not self.args.force:
+            # all or nothing per product: a patch with an invalid field is not applied at all
+            self.say("    nothing written for this product (fix the field above in the Studio and sync again)")
+            self.econ_updates.pop(pid, None)
+            return
         if not self.args.dry_run:
             if diff:
                 write_json(path, card)
@@ -362,8 +375,7 @@ class Run:
         card["images"] = {"urls": [], "quality": "low", "usage_rights": "unclear"}
         missing += ["colors", "materials", "visual_weight", "images.urls"]
         card["status"] = "candidate"
-        by = d.get("by") or "?"
-        intro = (f"ליד מהסטודיו ({marker}), נוסף {str(d.get('created_at') or self.today)[:10]} על ידי {by}. "
+        intro = (f"ליד מהסטודיו ({marker}), נוסף {str(d.get('created_at') or self.today)[:10]}. "
                  f"חסרים שדות חובה: {', '.join(missing)}. אין תמונות עד שה-sourcing-agent ימלא את הכרטיס.")
         note = (d.get("note") or "").strip()
         good = [l for l in d.get("links") or [] if isinstance(l, dict) and https_ok(l.get("url"))]

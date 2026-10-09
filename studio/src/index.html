@@ -395,7 +395,7 @@ details.snips li span{direction:ltr;unicode-bidi:isolate}
 .chip-pending{background:var(--amber-wash);color:var(--amber-ink)}
 .chip-new{background:var(--ink);color:var(--on-ink)}
 .pecon{font-size:var(--fs-xs)}
-.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,190px),1fr));gap:12px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,150px),1fr));gap:12px}
 .tile{background:var(--sheet);border:1px solid var(--rule);border-radius:var(--r);padding:14px 16px;display:grid;gap:4px;align-content:start;min-width:0}
 .tile .v{font-family:var(--f-display);font-size:30px;line-height:1.05;font-variant-numeric:tabular-nums}
 .tile .l{font-size:var(--fs-s);color:var(--ink-2);font-weight:600}
@@ -410,7 +410,7 @@ details.snips li span{direction:ltr;unicode-bidi:isolate}
 /* edit form */
 .panel{background:var(--sheet);border:1px solid var(--rule);border-radius:var(--r);padding:16px;display:grid;gap:14px;min-width:0}
 .ef-grid{display:grid;gap:14px}
-.ef{display:grid;gap:5px;min-width:0;border:0;margin:0;padding:0}
+.ef{display:grid;gap:5px;min-width:0;border:0;margin:0;padding:0;align-content:start}
 .ef-top{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline}
 .ef-top label,.ef legend,.ef-top .lbl{font-size:var(--fs-s);font-weight:600;color:var(--ink-2);padding:0}
 .ef-flag,.ef-revert{display:none}
@@ -490,7 +490,7 @@ details.room-lad summary{cursor:pointer;font-weight:600}
 .btable td{vertical-align:middle}
 .btable .num-in{width:110px;text-align:end}
 .btable tfoot td{font-weight:700;background:var(--paper)}
-.be-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,220px),1fr));gap:12px}
+.be-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,150px),1fr));gap:12px}
 .formula{font-size:var(--fs-s);color:var(--ink-2);max-width:75ch}
 
 .lead-ph{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:12px;font-size:var(--fs-xs);color:var(--ink-3);background:repeating-linear-gradient(135deg,var(--sunk) 0 8px,var(--paper) 8px 16px)}
@@ -562,7 +562,7 @@ details.room-lad summary{cursor:pointer;font-weight:600}
 
     <section class="screen" id="screen-products" aria-labelledby="h-products" hidden>
       <div class="screen-head"><h1 id="h-products" tabindex="-1">מוצרים</h1>
-        <div class="seg"><button type="button" class="btn" id="add-open" hidden>הוספת מוצר</button></div></div>
+        <div class="row"><button type="button" class="btn" id="add-open" hidden>הוספת מוצר</button></div></div>
       <div id="sync-line"></div>
       <form class="filters" id="filters" role="search" aria-label="סינון מוצרים">
         <div class="field search"><label for="f-q">חיפוש</label><input type="search" id="f-q" placeholder="שם, מזהה, חומר, SKU או טקסט מההערות" autocomplete="off"></div>
@@ -1215,7 +1215,7 @@ function renderOverview(){
               <dt><span class="dot" data-bg="var(--amber-ink)"></span><span>חסרים נתונים</span></dt><dd>${fl.orange}</dd>
             </dl>
             <p class="small muted">המשלוח הוא יותר ממחצית עלות הנחיתה ב-${hiShip} מתוך ${pb.filter(p => isNum(p.econ.ship_share)).length} מוצרים.</p>
-            <p class="small muted">הקמה ${ltr(fmtILS(be.oneTime))} · קבועות ${ltr(fmtILS(be.monthly))} לחודש · ${be.setupOrders != null ? `נקודת איזון: ${be.setupOrders.toLocaleString('en-US')} הזמנות` : 'נקודת האיזון מחכה למחירים'} · <a href="#budget">לתקציב</a></p>
+            <p class="small muted">הקמה ${ltr(fmtILS(be.oneTime))} · קבועות ${ltr(fmtILS(be.monthly))} לחודש · ${be.setupOrders != null ? `נקודת איזון: ${be.setupOrders.toLocaleString('en-US')} הזמנות` : !be.n ? 'נקודת האיזון מחכה למחירים' : '<span class="flag flag-red">לא מתאזן: התרומה להזמנה שלילית</span>'} · <a href="#budget">לתקציב</a></p>
           </div>
         </aside>
       </div>
@@ -2023,7 +2023,7 @@ function renderProfit(){
     <section class="panel" id="set-panel" aria-labelledby="h-set" ${P.showSettings ? '' : 'hidden'}>
       <div class="section-head"><h2 id="h-set" class="h-mid">הנחות החישוב</h2><span class="small faint">${ES.source === 'db' ? 'נשמרו בדף' : ES.source === 'repo' ? 'מ-data/economics/settings.json' : 'ברירות מחדל, עוד לא נשמרו'}</span></div>
       <div class="set-grid">${settingsForm}</div>
-      ${editable ? `<div class="row seg"><button type="button" class="btn" id="set-save" ${S.setDirty ? '' : 'disabled'}>שמירת ההנחות</button><button type="button" class="btn btn-ghost" id="set-cancel" ${S.setDirty ? '' : 'disabled'}>ביטול</button><button type="button" class="btn btn-ghost" id="set-defaults">ברירות מחדל</button><span class="save-state" id="set-state" role="status"></span></div>` : ''}
+      ${editable ? `<div class="row"><button type="button" class="btn" id="set-save" ${S.setDirty ? '' : 'disabled'}>שמירת ההנחות</button><button type="button" class="btn btn-ghost" id="set-cancel" ${S.setDirty ? '' : 'disabled'}>ביטול</button><button type="button" class="btn btn-ghost" id="set-defaults">ברירות מחדל</button><span class="save-state" id="set-state" role="status"></span></div>` : ''}
     </section>
     <section class="section" aria-labelledby="h-ptable">
       <div class="section-head"><h2 id="h-ptable">כל המוצרים</h2><span class="small faint">${rows.length} מוצרים · עריכה בטבלה נשמרת כשיוצאים מהשדה</span></div>
@@ -2154,10 +2154,11 @@ function renderBudget(){
     <div class="be-grid">
       ${beTile('הזמנות לכיסוי ההקמה', be.setupOrders != null ? be.setupOrders.toLocaleString('en-US') : '—', `הקמה ${ltr(fmtILS(be.oneTime))}${be.unknown ? ` · ${be.unknown} שורות בלי סכום` : ''}`)}
       ${beTile('הזמנות בחודש לכיסוי הקבועות', be.monthlyOrders != null ? be.monthlyOrders.toLocaleString('en-US') : '—', `קבועות ${ltr(fmtILS(be.monthly))} לחודש`)}
-      ${beTile('תרומה להזמנה אחרי שיווק', ltr(fmtILS(be.perOrder)), be.perOrder != null && be.perOrder <= 0 ? '<span class="flag flag-red">שלילית: כל הזמנה מפסידה</span>' : `${ltr(esc(v.items_per_order))} פריטים × ${ltr(fmtILS(be.avgC))} − CAC ${ltr(fmtILS(v.cac_ils))}`)}
-      ${beTile('הזמנה ממוצעת', ltr(fmtILS(be.aov)), `${ltr(esc(v.items_per_order))} פריטים · מחיר ממוצע ${ltr(fmtILS(be.avgR))}`)}
+      ${beTile('תרומה להזמנה אחרי שיווק', ltr(fmtILS(be.perOrder)), !be.n ? 'מחכה למוצרים עם מחיר ומשלוח' : be.perOrder <= 0 ? '<span class="flag flag-red">שלילית: כל הזמנה מפסידה</span>' : `${ltr(esc(v.items_per_order))} פריטים × ${ltr(fmtILS(be.avgC))} − CAC ${ltr(fmtILS(v.cac_ils))}`)}
+      ${beTile('הזמנה ממוצעת', ltr(fmtILS(be.aov)), be.n ? `${ltr(esc(v.items_per_order))} פריטים · מחיר ממוצע ${ltr(fmtILS(be.avgR))}` : `${ltr(esc(v.items_per_order))} פריטים להזמנה`)}
     </div>
-    <p class="formula">הבסיס: ${esc(basisTxt)}. מקדם משלוח בהזמנה משולבת ${ltr(esc(v.bundle_factor))}${v.bundle_factor === 1 ? ' (בלי הנחה)' : ''}. הזמנות לכיסוי ההקמה = סך ההקמה ÷ תרומה להזמנה אחרי שיווק. הזמנות בחודש = סך הקבועות ÷ אותה תרומה. ${S.data.economics.bundles ? `נמצא ${esc(S.data.economics.bundles.file)}: עדכנו את המקדם לפיו.` : ''}</p>
+    <p class="formula">הבסיס: ${esc(basisTxt)}. מקדם משלוח בהזמנה משולבת ${ltr(esc(v.bundle_factor))}${v.bundle_factor === 1 ? ' (בלי הנחה)' : ''}. הזמנות לכיסוי ההקמה = סך ההקמה ÷ תרומה להזמנה אחרי שיווק. הזמנות בחודש = סך הקבועות ÷ אותה תרומה.</p>
+    ${bundlesHtml()}
     <section class="section" aria-labelledby="h-btable">
       <div class="section-head"><h2 id="h-btable">תקציב הקמה</h2><span class="small faint">${src.source === 'db' ? 'נשמר בדף' : src.source === 'repo' ? 'מ-data/economics/settings.json' : 'שורות התחלתיות, הערכה בלבד'}</span></div>
       <div class="tbl-wrap"><table class="btable">
@@ -2166,7 +2167,7 @@ function renderBudget(){
         <tbody>${trs}</tbody>
         <tfoot><tr><td>סך הכול</td><td class="money">${ltr(fmtILS(be.oneTime))}</td><td class="money">${ltr(fmtILS(be.monthly))}</td><td colspan="3"></td></tr></tfoot>
       </table></div>
-      ${editable ? `<div class="row seg"><button type="button" class="btn btn-ghost" id="b-add">הוספת שורה</button><button type="button" class="btn" id="b-save" ${S.budgetWork ? '' : 'disabled'}>שמירת התקציב</button><button type="button" class="btn btn-ghost" id="b-cancel" ${S.budgetWork ? '' : 'disabled'}>ביטול</button><span class="save-state" id="b-state" role="status">${S.budgetWork ? 'יש שינויים שלא נשמרו.' : ''}</span></div>` : ''}
+      ${editable ? `<div class="row"><button type="button" class="btn btn-ghost" id="b-add">הוספת שורה</button><button type="button" class="btn" id="b-save" ${S.budgetWork ? '' : 'disabled'}>שמירת התקציב</button><button type="button" class="btn btn-ghost" id="b-cancel" ${S.budgetWork ? '' : 'disabled'}>ביטול</button><span class="save-state" id="b-state" role="status">${S.budgetWork ? 'יש שינויים שלא נשמרו.' : ''}</span></div>` : ''}
     </section>
   </div>`;
   restore();
@@ -2191,6 +2192,21 @@ function renderBudget(){
     if(S.budgetArmed !== id){ S.budgetArmed = id; renderBudget(); const nb = $(`[data-bdel="${CSS.escape(id)}"]`); if(nb) nb.focus(); setTimeout(() => { if(S.budgetArmed === id){ S.budgetArmed = null; renderBudget(); } }, 5000); return; }
     S.budgetArmed = null; S.budgetWork = work().filter(r => r.id !== id); renderBudget(); const ab = $('#b-add'); if(ab) ab.focus();
   };
+}
+function bundlesHtml(){
+  const B = S.data.economics.bundles; if(!B || !(B.rows || []).length) return '';
+  const v = S.ES.v, sf = B.suggested_factor || {};
+  const want = v.shipping_method === 'under20' ? sf.under20 : sf.cheapest;
+  const pctv = x => isNum(x) ? ltr(esc(x.toFixed(1) + '%')) : '—';
+  const rows = B.rows.map(r => `<tr><td>${esc(r.label || r.id)}</td><td class="num">${esc(r.items)}</td><td class="money">${ltr(fmtUSD(r.sum_single_cheapest))} → ${ltr(fmtUSD(r.combined_cheapest))}</td><td class="money">${pctv(r.saving_pct_cheapest)}</td><td class="money">${ltr(fmtUSD(r.sum_single_under20))} → ${ltr(fmtUSD(r.combined_under20))}</td><td class="money">${pctv(r.saving_pct_under20)}</td><td class="money">${pctv(r.ship_share_combined_pct)}</td></tr>`).join('');
+  return `<section class="panel" aria-labelledby="h-bund">
+    <div class="section-head"><h2 id="h-bund" class="h-mid">משלוח בהזמנה משולבת</h2><span class="small faint">${esc(B.file)}${B.date ? ' · ' + esc(fmtDay(B.date)) : ''}</span></div>
+    <p class="small">לפי ${B.rows.length} סלים שנבדקו מול CJ, מקדם ממוצע של ${ltr(esc(isNum(sf.cheapest) ? sf.cheapest : '—'))} בקו הזול ו-${ltr(esc(isNum(sf.under20) ? sf.under20 : '—'))} בקו של עד 20 יום. ${isNum(want) && want !== v.bundle_factor ? `המקדם בהגדרות הוא ${ltr(esc(v.bundle_factor))}; אפשר לעדכן אותו במסך הרווחיות, תחת "עריכת ההנחות".` : ''}</p>
+    <div class="tbl-wrap"><table><caption class="sr-only">חיסכון במשלוח משולב לפי סל</caption>
+      <thead><tr><th scope="col">סל</th><th scope="col">פריטים</th><th scope="col" class="money">זול: בנפרד → יחד</th><th scope="col" class="money">חיסכון</th><th scope="col" class="money">עד 20 יום: בנפרד → יחד</th><th scope="col" class="money">חיסכון</th><th scope="col" class="money">משלוח מעלות הנחיתה</th></tr></thead>
+      <tbody>${rows}</tbody></table></div>
+    ${(B.findings || []).length ? `<details class="snips"><summary>ממצאי הבדיקה (${B.findings.length})</summary><ul>${B.findings.map(f => `<li>${esc(f)}</li>`).join('')}</ul></details>` : ''}
+  </section>`;
 }
 async function saveBudget(){
   const rows = (S.budgetWork || []).map(r => ({id: r.id, label: String(r.label || '').trim() || 'שורה ללא שם', one_time_ils: isNum(r.one_time_ils) ? r.one_time_ils : null, monthly_ils: isNum(r.monthly_ils) ? r.monthly_ils : null, note: String(r.note || '').trim(), verified: !!r.verified}));
