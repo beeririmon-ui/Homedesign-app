@@ -208,8 +208,11 @@ async function hotspots(): Promise<void> {
   await page.waitForTimeout(500);
   await page.screenshot({ path: `${OUT}/${PREFIX}hotspots-glow-hover.png` });
   await page.mouse.move(5, 5);
-  await page.keyboard.press('Tab');
-  await page.locator('button.hotspot[data-slot="framed-art"]').focus();
+  // real keyboard focus (Tab), as a keyboard user gets it
+  for (let i = 0; i < 40; i++) {
+    await page.keyboard.press('Tab');
+    if (await page.evaluate('document.activeElement?.dataset?.slot === "framed-art"')) break;
+  }
   await page.waitForTimeout(500);
   await page.screenshot({ path: `${OUT}/${PREFIX}hotspots-glow-focus.png` });
   await page.context().close();
