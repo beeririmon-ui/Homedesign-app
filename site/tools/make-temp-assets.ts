@@ -13,11 +13,20 @@
  *
  * How the temporary layers are made (all flagged temporary in the scene manifest):
  *   shell        the full styled preview (products baked in; fixed furniture is not separated yet)
- *   product n=1  a feathered cut-out of the preview at the slot box (identical to the shell)
- *   product n>1  the same cut-out recoloured toward the option's product colour (luminance kept)
- *   shadow       one soft multiply shadow per slot, shared by its options
- *   light        one screen glow per lamp slot, shared by its options (the pool is the same per spec)
+ *   product n=1  a cut-out of the preview inside the slot boxes (identical to the shell)
+ *   product n>1  the same cut-out recoloured toward the option's product colour (shading kept)
+ *   shadow       none: the shell already carries the real shadow of option 1, and a second, synthetic
+ *                multiply shadow (shared by all options) darkened the room around each product
+ *   light        none: the lamp glow is baked into the shell; a synthetic screen glow on top doubled it
  *   depth        synthesised from the room planes and the slot boxes (no depth render for this image)
+ *
+ * Mask rules (QA: switching options may change nothing outside the product's bounding box):
+ *   - alpha is exactly 0 outside the slot shapes: the feather runs inward from the box edge, the layer rect is
+ *     the shapes' bounding box with no padding;
+ *   - inside, alpha = "differs from the local background" (objectness), cleaned (blur + re-threshold) so
+ *     background noise does not become specks of colour;
+ *   - the recolour weight also falls off with colour distance from the product's own mean colour, so wall,
+ *     floor or sofa pixels that slipped into the box keep their colour.
  */
 import sharp from 'sharp';
 import { readFileSync, writeFileSync, mkdirSync, rmSync, existsSync, readdirSync, statSync } from 'node:fs';
@@ -152,26 +161,57 @@ async function loadRaw(path: string, width: number): Promise<Raw> {
 
 const sceneSlots: Record<string, unknown> = {};
 
-/** Product layer cut-outs. Alpha = feathered slot boxes × "differs from the local background" − occluders in front. */
+/** Weight 1 inside the box, 0 on and outside its edge, smooth over `feather` inward. */
+function insideBoxWeight(u: number, v: number, b: Box, feather: number): number {
+  const d = Math.min(u - b[0], b[1] - u, (v - b[2]) * (9 / 16), (b[3] - v) * (9 / 16));
+  return d <= 0 ? 0 : smooth(0, feather, d);
+}
+function insideEllipseWeight(u: number, v: number, e: Ellipse, feather: number): number {
+  const d = Math.hypot((u - e[0]) / e[2], (v - e[1]) / e[3]);
+  return d >= 1 ? 0 : 1 - smooth(1 - feather / Math.min(e[2], e[3]), 1, d);
+}
+
+/** Separable box blur of a float mask (radius in px), used to clean the objectness mask. */
+function blurMask(m: Float32Array, w: number, h: number, r: number): Float32Array {
+  const tmp = new Float32Array(w * h);
+  const out = new Float32Array(w * h);
+  const n = 2 * r + 1;
+  for (let y = 0; y < h; y++)
+    for (let x = 0; x < w; x++) {
+      let s = 0;
+      for (let k = -r; k <= r; k++) s += m[y * w + Math.min(w - 1, Math.max(0, x + k))]!;
+      tmp[y * w + x] = s / n;
+    }
+  for (let y = 0; y < h; y++)
+    for (let x = 0; x < w; x++) {
+      let s = 0;
+      for (let k = -r; k <= r; k++) s += tmp[Math.min(h - 1, Math.max(0, y + k)) * w + x]!;
+      out[y * w + x] = s / n;
+    }
+  return out;
+}
+
+/** Product layer cut-outs. Alpha = slot shapes (feathered inward) × cleaned objectness − occluders in front. */
 async function makeSlotLayers(base: Raw, key: 'lo' | 'hi', slotId: string, t: TempSlot, optionColors: (string | null)[]) {
   const all = shapeBoxes(t);
   if (all.length === 0) return null;
   const W = base.width;
   const H = base.height;
-  const pad = 0.012;
-  const u0 = Math.max(0, Math.min(...all.map((b) => b[0])) - pad);
-  const u1 = Math.min(1, Math.max(...all.map((b) => b[1])) + pad);
-  const v0 = Math.max(0, Math.min(...all.map((b) => b[2])) - pad * (16 / 9));
-  const v1 = Math.min(1, Math.max(...all.map((b) => b[3])) + pad * (16 / 9));
+  const u0 = Math.max(0, Math.min(...all.map((b) => b[0])));
+  const u1 = Math.min(1, Math.max(...all.map((b) => b[1])));
+  const v0 = Math.max(0, Math.min(...all.map((b) => b[2])));
+  const v1 = Math.min(1, Math.max(...all.map((b) => b[3])));
   const x0 = Math.floor(u0 * W);
   const y0 = Math.floor(v0 * H);
   const w = Math.ceil(u1 * W) - x0;
   const h = Math.ceil(v1 * H) - y0;
+  const feather = 0.0035; // ≈ 7 px at 1920, inside the box
 
-  // local background: the middle half (by luminance) of the crop border
+  // local background: the middle half (by luminance) of a ring just outside the shapes' bounding box
+  const ring = Math.round(W * 0.006);
   const border: [number, number, number][] = [];
-  for (let x = 0; x < w; x += 2) for (const y of [0, h - 1]) border.push(px(base, x0 + x, y0 + y));
-  for (let y = 0; y < h; y += 2) for (const x of [0, w - 1]) border.push(px(base, x0 + x, y0 + y));
+  for (let x = -ring; x < w + ring; x += 2) for (const y of [-ring, h - 1 + ring]) border.push(px(base, x0 + x, y0 + y));
+  for (let y = -ring; y < h + ring; y += 2) for (const x of [-ring, w - 1 + ring]) border.push(px(base, x0 + x, y0 + y));
   border.sort((a, b) => lum(...a) - lum(...b));
   const mid = border.slice(Math.floor(border.length * 0.25), Math.ceil(border.length * 0.75));
   const bg = [0, 1, 2].map((i) => mid.reduce((sum, c) => sum + c[i]!, 0) / mid.length) as [number, number, number];
@@ -185,32 +225,47 @@ async function makeSlotLayers(base: Raw, key: 'lo' | 'hi', slotId: string, t: Te
     occEllipses.push(...(temp.slots[name]?.ellipses ?? []));
   }
   const useObjectness = t.objectness !== false;
-  const alpha = new Float32Array(w * h);
-  let lumSum = 0;
-  let wSum = 0;
+  const shape = new Float32Array(w * h);
+  const obj = new Float32Array(w * h);
   for (let y = 0; y < h; y++) {
     const v = (y0 + y + 0.5) / H;
     for (let x = 0; x < w; x++) {
       const u = (x0 + x + 0.5) / W;
       let box = 0;
-      for (const b of t.boxes) box = Math.max(box, boxWeight(u, v, b, 0.006));
-      for (const e of t.ellipses ?? []) box = Math.max(box, ellipseWeight(u, v, e, 0.006));
+      for (const b of t.boxes) box = Math.max(box, insideBoxWeight(u, v, b, feather));
+      for (const e of t.ellipses ?? []) box = Math.max(box, insideEllipseWeight(u, v, e, feather));
       if (box <= 0) continue;
       let occ = 0;
       for (const b of occBoxes) occ = Math.max(occ, boxWeight(u, v, b, 0.004));
       for (const e of occEllipses) occ = Math.max(occ, ellipseWeight(u, v, e, 0.004));
-      const i = ((y0 + y) * W + (x0 + x)) * 3;
-      const r = base.data[i]! / 255;
-      const g = base.data[i + 1]! / 255;
-      const b = base.data[i + 2]! / 255;
-      const dist = Math.hypot(r - bg[0], g - bg[1], b - bg[2]);
-      const a = box * (useObjectness ? smooth(0.04, 0.13, dist) : 1) * (1 - occ);
-      alpha[y * w + x] = a;
-      lumSum += lum(r, g, b) * a;
-      wSum += a;
+      shape[y * w + x] = box * (1 - occ);
+      const [r, g, b] = px(base, x0 + x, y0 + y);
+      obj[y * w + x] = useObjectness ? smooth(0.05, 0.14, Math.hypot(r - bg[0], g - bg[1], b - bg[2])) : 1;
     }
   }
+  // clean the objectness: close small holes and drop isolated specks, then soften the edge by ~2 px
+  const r1 = Math.max(1, Math.round(W / 960));
+  const cleaned = blurMask(obj, w, h, 2 * r1);
+  for (let i = 0; i < cleaned.length; i++) cleaned[i] = smooth(0.35, 0.65, cleaned[i]!);
+  const soft = blurMask(cleaned, w, h, r1);
+  const alpha = new Float32Array(w * h);
+  for (let i = 0; i < alpha.length; i++) alpha[i] = shape[i]! * soft[i]!;
+
+  // the product's own colour (well inside the mask), and its mean luminance
+  let lumSum = 0;
+  let wSum = 0;
+  const mean = [0, 0, 0];
+  for (let y = 0; y < h; y++)
+    for (let x = 0; x < w; x++) {
+      const a = alpha[y * w + x]!;
+      if (a < 0.8) continue;
+      const c = px(base, x0 + x, y0 + y);
+      lumSum += lum(...c);
+      for (let k = 0; k < 3; k++) mean[k] = mean[k]! + c[k]!;
+      wSum++;
+    }
   const meanLum = wSum > 0 ? lumSum / wSum : 0.5;
+  const meanChroma = wSum > 0 ? mean.map((m) => m / wSum - meanLum) : [0, 0, 0];
 
   const product: string[] = [];
   for (let n = 0; n < optionColors.length; n++) {
@@ -220,24 +275,26 @@ async function makeSlotLayers(base: Raw, key: 'lo' | 'hi', slotId: string, t: Te
     const tl = target ? Math.max(0.04, lum(tr, tg, tb)) : 0;
     for (let y = 0; y < h; y++)
       for (let x = 0; x < w; x++) {
-        const i = ((y0 + y) * W + (x0 + x)) * 3;
-        let r = base.data[i]! / 255;
-        let g = base.data[i + 1]! / 255;
-        let b = base.data[i + 2]! / 255;
+        const a = alpha[y * w + x]!;
+        const o = (y * w + x) * 4;
+        if (a <= 0) continue; // fully transparent, colour 0 (premultiplied-safe)
+        let [r, g, b] = px(base, x0 + x, y0 + y);
         if (n > 0 && target) {
           const l = lum(r, g, b);
+          // pixels whose colour is far from the product's own colour (wall, floor, a neighbour) are not recoloured
+          const cd = Math.hypot(r - l - meanChroma[0]!, g - l - meanChroma[1]!, b - l - meanChroma[2]!);
+          const sim = 1 - smooth(0.04, 0.12, cd);
           const nl = Math.min(1, Math.max(0, tl + (l - meanLum) * 0.9));
           const k = nl / tl;
-          const sat = 0.82;
+          const sat = 0.82 * sim;
           r = r * (1 - sat) + Math.min(1, tr * k) * sat;
           g = g * (1 - sat) + Math.min(1, tg * k) * sat;
           b = b * (1 - sat) + Math.min(1, tb * k) * sat;
         }
-        const o = (y * w + x) * 4;
         out[o] = Math.round(r * 255);
         out[o + 1] = Math.round(g * 255);
         out[o + 2] = Math.round(b * 255);
-        out[o + 3] = Math.round(alpha[y * w + x]! * 255);
+        out[o + 3] = Math.round(a * 255);
       }
     const rel = `${roomDir}/slots/${slotId}/${n + 1}.product.${WIDTHS[key]}`;
     await encode(sharp(out, { raw: { width: w, height: h, channels: 4 } }), rel);
@@ -250,79 +307,6 @@ async function makeSlotLayers(base: Raw, key: 'lo' | 'hi', slotId: string, t: Te
 function px(img: Raw, x: number, y: number): [number, number, number] {
   const i = (Math.min(img.height - 1, Math.max(0, y)) * img.width + Math.min(img.width - 1, Math.max(0, x))) * 3;
   return [img.data[i]! / 255, img.data[i + 1]! / 255, img.data[i + 2]! / 255];
-}
-
-/** Soft contact/cast shadow, multiply. Light comes from the window on the left, so it falls right. */
-async function makeShadow(key: 'lo' | 'hi', slotId: string, t: TempSlot, placement: string) {
-  if (shapeBoxes(t).length === 0) return null;
-  const W = WIDTHS[key];
-  const H = Math.round((W * 9) / 16);
-  const wall = placement === 'wall' || placement === 'window' || placement === 'ceiling';
-  const boxes = shapeBoxes(t).map(
-    (b): Box =>
-      wall ? [b[0] + 0.004, b[1] + 0.008, b[2] + 0.01, b[3] + 0.012] : [b[0] + 0.01, b[1] + 0.025, b[3] - (b[3] - b[2]) * 0.08, Math.min(1, b[3] + 0.018)],
-  );
-  const u0 = Math.max(0, Math.min(...boxes.map((b) => b[0])) - 0.02);
-  const u1 = Math.min(1, Math.max(...boxes.map((b) => b[1])) + 0.02);
-  const v0 = Math.max(0, Math.min(...boxes.map((b) => b[2])) - 0.03);
-  const v1 = Math.min(1, Math.max(...boxes.map((b) => b[3])) + 0.03);
-  const x0 = Math.floor(u0 * W);
-  const y0 = Math.floor(v0 * H);
-  const w = Math.max(1, Math.ceil(u1 * W) - x0);
-  const h = Math.max(1, Math.ceil(v1 * H) - y0);
-  const out = Buffer.alloc(w * h * 4);
-  const peak = wall ? 0.1 : 0.16;
-  for (let y = 0; y < h; y++)
-    for (let x = 0; x < w; x++) {
-      const u = (x0 + x + 0.5) / W;
-      const v = (y0 + y + 0.5) / H;
-      let a = 0;
-      for (const b of boxes) a = Math.max(a, boxWeight(u, v, b, 0.018));
-      a *= peak;
-      const i = (y * w + x) * 4;
-      // premultiplied-friendly: colour of the shadow tint, alpha = strength
-      out[i] = 92;
-      out[i + 1] = 78;
-      out[i + 2] = 64;
-      out[i + 3] = Math.round(a * 255);
-    }
-  const rel = `${roomDir}/slots/${slotId}/1.shadow.${W}`;
-  await encode(sharp(out, { raw: { width: w, height: h, channels: 4 } }).blur(Math.max(1, W / 640)), rel);
-  return { rect: [x0 / W, (x0 + w) / W, y0 / H, (y0 + h) / H] as Box, src: rel };
-}
-
-/** Warm glow (screen) around each lamp shade; identical pool per option, as the spec requires. */
-async function makeLight(key: 'lo' | 'hi', slotId: string, t: TempSlot) {
-  if (!t.glow?.length) return null;
-  const W = WIDTHS[key];
-  const H = Math.round((W * 9) / 16);
-  const u0 = Math.max(0, Math.min(...t.glow.map((g) => g[0] - g[2])));
-  const u1 = Math.min(1, Math.max(...t.glow.map((g) => g[0] + g[2])));
-  const v0 = Math.max(0, Math.min(...t.glow.map((g) => g[1] - g[2] * (16 / 9))));
-  const v1 = Math.min(1, Math.max(...t.glow.map((g) => g[1] + g[2] * (16 / 9))));
-  const x0 = Math.floor(u0 * W);
-  const y0 = Math.floor(v0 * H);
-  const w = Math.ceil(u1 * W) - x0;
-  const h = Math.ceil(v1 * H) - y0;
-  const out = Buffer.alloc(w * h * 4);
-  for (let y = 0; y < h; y++)
-    for (let x = 0; x < w; x++) {
-      const u = (x0 + x + 0.5) / W;
-      const v = (y0 + y + 0.5) / H;
-      let a = 0;
-      for (const [gu, gv, gr] of t.glow) {
-        const d = Math.hypot(u - gu, (v - gv) * (9 / 16)) / gr;
-        a = Math.max(a, Math.exp(-d * d * 2.2) * 0.42);
-      }
-      const i = (y * w + x) * 4;
-      out[i] = 255;
-      out[i + 1] = 206;
-      out[i + 2] = 148;
-      out[i + 3] = Math.round(a * 255);
-    }
-  const rel = `${roomDir}/slots/${slotId}/1.light.${W}`;
-  await encode(sharp(out, { raw: { width: w, height: h, channels: 4 } }), rel);
-  return { rect: [x0 / W, (x0 + w) / W, y0 / H, (y0 + h) / H] as Box, src: rel };
 }
 
 /** Synthetic depth (1 = near): back wall far, left wall nearer to the left edge, floor nearer to the bottom. */
@@ -385,12 +369,11 @@ async function main() {
     const entry: Record<string, unknown> = { z: slot.z, depth: t.depth, temporary: true };
     for (const key of ['lo', 'hi'] as const) {
       const layers = await makeSlotLayers(bases[key]!, key, slot.id, t, colors);
-      const shadow = slot.has_shadow ? await makeShadow(key, slot.id, t, slot.placement) : null;
-      const light = slot.has_light ? await makeLight(key, slot.id, t) : null;
       if (key === 'lo') {
         entry.product = layers ? { rect: layers.rect, src: slot.options.map((_, n) => `${roomDir}/slots/${slot.id}/${n + 1}.product`) } : null;
-        entry.shadow = shadow ? { rect: shadow.rect, src: slot.options.map(() => `${roomDir}/slots/${slot.id}/1.shadow`) } : null;
-        entry.light = light ? { rect: light.rect, src: slot.options.map(() => `${roomDir}/slots/${slot.id}/1.light`) } : null;
+        // temporary layers are cut from the shell, which already holds this slot's real shadow and lamp light
+        entry.shadow = null;
+        entry.light = null;
       }
     }
     sceneSlots[slot.id] = entry;

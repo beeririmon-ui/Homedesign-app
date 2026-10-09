@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from 'preact/hooks';
 import type { CatalogRoom, CatalogSlot } from '@hd/shared';
 import { catalog, defaultSelection, product, scene } from '../catalog';
 import { RoomEngine } from '../engine/engine';
-import { defaultCam, frameToScreen } from '../engine/camera';
+import { coverSize, defaultCam, frameToScreen } from '../engine/camera';
 import { slotSources } from '../engine/layers';
 import { mediaUrl, supportsAvif } from '../media';
 import { Picture } from './Media';
@@ -46,13 +46,22 @@ export function RoomExperience({ room }: { room: CatalogRoom }) {
     if (!c) return;
     const vp = e?.vp ?? { w: Math.max(1, c.clientWidth), h: Math.max(1, c.clientHeight) };
     const cam = e?.cam ?? defaultCam(vp, scene.aspect, scene.mobile_center_u);
-    const pts: { el: HTMLButtonElement; x: number; y: number }[] = [];
+    // the poster under the canvas follows the same camera, so the engine fades in without a shift
+    const img = poster.current;
+    if (img && cam.z < 1.001) {
+      const { fw, fh } = coverSize(vp, scene.aspect);
+      img.style.objectPosition = `${(vp.w / 2 - cam.cu * fw).toFixed(1)}px ${(vp.h / 2 - cam.cv * fh).toFixed(1)}px`;
+    }
+    const pts: { el: HTMLButtonElement; x: number; y: number; rx: number; ry: number }[] = [];
     for (const s of room.slots) {
       const el = spots.current.get(s.id);
       if (!el || !s.hotspot || !s.hotspot.visible) continue;
-      pts.push({ el, ...frameToScreen(s.hotspot.u, s.hotspot.v, cam, vp, scene.aspect) });
+      const ring = ringOf(s);
+      const c = frameToScreen(ring.cu, ring.cv, cam, vp, scene.aspect);
+      const { fw, fh } = coverSize(vp, scene.aspect);
+      pts.push({ el, ...c, ...ringRadii(ring.ru * fw * cam.z, ring.rv * fh * cam.z) });
     }
-    // keep 44 px targets from overlapping (WCAG 2.5.8): nudge close pairs apart, a few relaxation passes
+    // keep the centres of neighbouring rings apart (each target is at least 44 px, WCAG 2.5.8): a few relaxation passes
     const MIN = 48;
     for (let pass = 0; pass < 4; pass++)
       for (let i = 0; i < pts.length; i++)
@@ -70,12 +79,17 @@ export function RoomExperience({ room }: { room: CatalogRoom }) {
           b.x += ux;
           b.y += uy;
         }
+    // smaller rings sit above larger ones, so every product stays reachable where rings overlap
+    const order = [...pts].sort((a, b) => b.rx * b.ry - a.rx * a.ry);
+    order.forEach((p, i) => (p.el.style.zIndex = String(i + 1)));
     // keep targets clear of the controls at the bottom of the stage (style switch, pan, back to the hall)
     const ui = stage.current?.querySelector<HTMLElement>('.stage-ui');
     const bottom = ui && stage.current ? ui.getBoundingClientRect().top - stage.current.getBoundingClientRect().top - 26 : vp.h - 8;
-    for (const { el, x, y } of pts) {
+    for (const { el, x, y, rx, ry } of pts) {
       const inside = x > 8 && x < vp.w - 8 && y > 8 && y < Math.min(vp.h - 8, bottom);
-      el.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px)`;
+      el.style.width = `${(2 * rx).toFixed(1)}px`;
+      el.style.height = `${(2 * ry).toFixed(1)}px`;
+      el.style.transform = `translate(${(x - rx).toFixed(1)}px, ${(y - ry).toFixed(1)}px)`;
       el.style.visibility = inside ? 'visible' : 'hidden';
     }
     setCanPan(vp.w < vp.h * scene.aspect - 1);
@@ -161,6 +175,8 @@ export function RoomExperience({ room }: { room: CatalogRoom }) {
     if (!e) return setBusy(false);
     const before = selection.value[slot.id] ?? 1;
     const zoom = slot.zoom_frame ?? [0.3, 0.7, 0.3, 0.7];
+    // the touched product keeps its glow while the rings fade out and the camera moves in
+    spots.current.get(slot.id)?.setAttribute('data-active', 'true');
     stage.current?.classList.add('zoomed');
     await e.zoomToBox(zoom, scene.slots[slot.id]?.depth ?? 0.4, { durationMs: 1000, reserve: e.vp.h > 520 ? 0.44 : 0.36 });
     if (previewOption && previewOption !== before) await preview(slot, previewOption);
@@ -181,6 +197,7 @@ export function RoomExperience({ room }: { room: CatalogRoom }) {
     setBusy(true);
     if (!chosen && selection.value[o.slot.id] !== o.before) await preview(o.slot, o.before);
     await e.zoomOut(1000);
+    spots.current.get(o.slot.id)?.removeAttribute('data-active');
     stage.current?.classList.remove('zoomed');
     setBusy(false);
     if (chosen) {
@@ -228,6 +245,7 @@ export function RoomExperience({ room }: { room: CatalogRoom }) {
     <section
       class="stage"
       ref={stage}
+      style={{ '--cu': String(scene.mobile_center_u) }}
       aria-labelledby="room-title"
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
@@ -279,6 +297,7 @@ export function RoomExperience({ room }: { room: CatalogRoom }) {
               disabled={busy}
               aria-busy={busy && !ready ? 'true' : undefined}
             >
+              <span class="ring" aria-hidden="true" />
               <span class="tag" aria-hidden="true">
                 {s.name_he}
               </span>
@@ -336,6 +355,25 @@ export function RoomExperience({ room }: { room: CatalogRoom }) {
       ) : null}
     </section>
   );
+}
+
+/**
+ * The ring around a product, in frame coordinates: the slot's zoom_frame (the product itself; for split products
+ * such as the curtains or the sconce pair, the one the zoom shows), else a small circle at the hotspot.
+ */
+function ringOf(s: CatalogSlot): { cu: number; cv: number; ru: number; rv: number } {
+  const z = s.zoom_frame;
+  if (z) return { cu: (z[0] + z[1]) / 2, cv: (z[2] + z[3]) / 2, ru: (z[1] - z[0]) / 2, rv: (z[3] - z[2]) / 2 };
+  return { cu: s.hotspot!.u, cv: s.hotspot!.v, ru: 0.02, rv: 0.035 };
+}
+
+/** Screen radii of a ring: a little larger than the product, at least a 44 px target, capped, never too elongated. */
+function ringRadii(halfW: number, halfH: number): { rx: number; ry: number } {
+  let rx = Math.min(120, Math.max(22, halfW * 1.1 + 6));
+  let ry = Math.min(120, Math.max(22, halfH * 1.1 + 6));
+  if (rx > ry * 1.6) ry = rx / 1.6;
+  if (ry > rx * 1.6) rx = ry / 1.6;
+  return { rx, ry };
 }
 
 function requestIdleCallbackSafe(fn: () => void): number {
