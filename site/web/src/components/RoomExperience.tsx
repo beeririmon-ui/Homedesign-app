@@ -12,7 +12,7 @@ import { mediaUrl, supportsAvif } from '../media';
 import { Picture } from './Media';
 import { VariantWheel } from './VariantWheel';
 import { IconDoor, IconLeft, IconRight } from './Icons';
-import { pendingOpen, roomReady, selection } from '../state/room';
+import { arrival, pendingOpen, roomReady, selection, stageEngine } from '../state/room';
 import { announce } from '../state/ui';
 import { prefersReducedMotion } from '../motion';
 import { go, preload } from './Transition';
@@ -116,6 +116,7 @@ export function RoomExperience({ room }: { room: CatalogRoom }) {
       onFrame: (dt) => window.__hdFrames?.push(dt),
       onReady: () => {
         setReady(true);
+        stageEngine.value = e;
         placeHotspots();
       },
     });
@@ -135,7 +136,8 @@ export function RoomExperience({ room }: { room: CatalogRoom }) {
     ro.observe(c);
     // a selection that differs from the poster (changed earlier in this visit) needs the engine right away
     const def = defaultSelection(room);
-    if (Object.entries(selection.value).some(([k, v]) => def[k] !== v)) void ensureEngine();
+    // and so does an arriving transition: it lands on the composed room, not on the poster
+    if (arrival.value || Object.entries(selection.value).some(([k, v]) => def[k] !== v)) void ensureEngine();
     // after the room is shown: the only reachable transition (back to the hall), then the variant layers (HTTP cache)
     let idle = 0;
     const later = () => {
@@ -153,10 +155,18 @@ export function RoomExperience({ room }: { room: CatalogRoom }) {
       cancelIdle(idle);
       engine.current?.destroy();
       engine.current = null;
+      stageEngine.value = null;
       starting.current = null;
       roomReady.value = false;
     };
   }, [room.id]);
+
+  // rings and controls wait until the arrival has landed
+  const arriving = arrival.value !== null;
+  useEffect(() => {
+    stage.current?.classList.toggle('arriving', arriving);
+    if (!arriving) placeHotspots();
+  }, [arriving]);
 
   // "הצגה בחדר" from a product page, or "החלפה" in the list under the stage
   const pending = pendingOpen.value;
@@ -269,7 +279,7 @@ export function RoomExperience({ room }: { room: CatalogRoom }) {
         // eslint-disable-next-line jsx-a11y/no-interactive-element-to-noninteractive-role
         role="img"
         aria-label={`${room.name_he} בסגנון נורדי: ספה בכיסוי בהיר, שולחן קפה מאלון, כורסה ליד החלון ועץ זית בפינה. ${room.slots.length} פריטים לבחירה, ברשימה שמתחת לחדר ובנקודות על התמונה.`}
-        style={{ opacity: ready ? 1 : 0, transition: 'opacity .5s' }}
+        style={{ opacity: ready ? 1 : 0, transition: arriving ? 'none' : 'opacity .5s' }}
       />
       <div class="stage-vignette" aria-hidden="true" />
       <h1 id="room-title" class="glass stage-temp-note" tabIndex={-1}>
