@@ -803,7 +803,7 @@ def pick_freight(entry: dict):
 
 def load_economics(eco_dir: Path, products: list[dict]) -> dict:
     out = {"dir": rel(eco_dir) if eco_dir.is_relative_to(ROOT) else str(eco_dir), "settings": None, "budget": None,
-           "products": {}, "freight": None, "files": []}
+           "products": {}, "freight": None, "bundles": None, "files": []}
     if not eco_dir.exists():
         return out
     sp = eco_dir / "settings.json"
@@ -838,28 +838,42 @@ def load_economics(eco_dir: Path, products: list[dict]) -> dict:
             out["files"].append(fp.name)
         except Exception as e:
             log(f"  ! cannot read {fp.name}: {e}")
+    bp2 = eco_dir / "freight-bundles.json"
+    if bp2.exists():
+        try:
+            d = read_json(bp2)
+            out["bundles"] = {"file": bp2.name, "date": next((first_date(str(d[k])) for k in ("updated", "date", "generated_at") if d.get(k)), None),
+                              "summary": {k: v for k, v in d.items() if not isinstance(v, (dict, list))}}
+            out["files"].append(bp2.name)
+        except Exception as e:
+            log(f"  ! cannot read {bp2.name}: {e}")
     n_cj = n_manual = 0
+
+    def opt(o):
+        if not isinstance(o, dict) or not isnum(o.get("usd")):
+            return None
+        days = o.get("days") or (f"{o.get('days_min')}-{o.get('days_max')}" if o.get("days_min") is not None else None)
+        return {"usd": o["usd"], "name": o.get("name") or o.get("logistic") or o.get("method"), "days": days}
+
     for p in products:
         pid = p["id"]
         m = manual.get(pid) or {}
         e = {}
         if isnum(m.get("shipping_cost_usd")):
-            e.update(shipping_cost_usd=m["shipping_cost_usd"], shipping_source="manual",
-                     shipping_date=first_date(str(m.get("updated_at") or "")))
+            e["manual"] = {"shipping_cost_usd": m["shipping_cost_usd"], "date": first_date(str(m.get("updated_at") or ""))}
             n_manual += 1
-        else:
-            fe = freight.get(pid)
-            got = pick_freight(fe) if fe else None
-            if got:
-                usd, key, o = got
-                days = o.get("days") or (f"{o.get('days_min')}-{o.get('days_max')}" if o.get("days_min") is not None else None)
-                e.update(shipping_cost_usd=usd, shipping_source="cj",
-                         shipping_date=first_date(str(fe.get("checked_at") or fe.get("date") or "")) or fdate,
-                         shipping_option=key, shipping_name=o.get("name") or o.get("logistic") or o.get("method"),
-                         shipping_days=days)
+        fe = freight.get(pid)
+        if isinstance(fe, dict):
+            under = pick_freight(fe)
+            cj = {"cheapest": opt(fe.get("cheapest")), "under20": opt(under[2]) if under else None,
+                  "date": first_date(str(fe.get("checked_at") or fe.get("date") or "")) or fdate, "status": fe.get("status")}
+            if cj["cheapest"] is None and under:  # no explicit cheapest: the cheapest of all options
+                allo = [opt(o) for o in (fe.get("options") or [])] + [cj["under20"]]
+                allo = [o for o in allo if o]
+                cj["cheapest"] = min(allo, key=lambda o: o["usd"]) if allo else None
+            if cj["cheapest"] or cj["under20"]:
                 n_cj += 1
-            if fe and fe.get("status") is not None:
-                e["freight_status"] = fe.get("status")
+            e["cj"] = cj
         for k in ("retail_ils", "compare_at_ils"):
             if isnum(m.get(k)):
                 e[k] = m[k]
