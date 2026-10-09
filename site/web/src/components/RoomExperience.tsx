@@ -151,7 +151,15 @@ export function RoomExperience({ room }: { room: CatalogRoom }) {
 
   const styles = catalog.styles;
   return (
-    <section class="stage" ref={stage} aria-labelledby="room-title" onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={onPointerUp} onPointerCancel={onPointerUp}>
+    <section
+      class="stage"
+      ref={stage}
+      aria-labelledby="room-title"
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={onPointerUp}
+      onPointerCancel={onPointerUp}
+    >
       <Picture
         src={scene.base[0]!.src}
         widths={scene.base[0]!.widths}
@@ -162,9 +170,11 @@ export function RoomExperience({ room }: { room: CatalogRoom }) {
         fetchpriority="high"
         imgRef={poster}
       />
+      {/* the composed room is a picture, not a control: the hotspot buttons and the list below are the interactive parts */}
       <canvas
         ref={canvas}
         class="room-canvas"
+        // eslint-disable-next-line jsx-a11y/no-interactive-element-to-noninteractive-role
         role="img"
         aria-label={`${room.name_he} בסגנון נורדי: ספה בכיסוי בהיר, שולחן קפה מאלון, כורסה ליד החלון ועץ זית בפינה. ${room.slots.length} פריטים לבחירה, ברשימה שמתחת לחדר ובנקודות על התמונה.`}
         style={{ opacity: ready ? 1 : 0, transition: 'opacity .5s' }}

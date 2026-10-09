@@ -20,8 +20,7 @@ export const httpApi: StoreApi = {
   kind: 'http',
   createCart: () => call<Cart>('/cart', { method: 'POST' }),
   getCart: (id) => call<Cart>(`/cart/${encodeURIComponent(id)}`),
-  setItem: (cartId, variant_id, qty) =>
-    call<Cart>(`/cart/${encodeURIComponent(cartId)}/items`, { method: 'PUT', body: JSON.stringify({ variant_id, qty }) }),
+  setItem: (cartId, variant_id, qty) => call<Cart>(`/cart/${encodeURIComponent(cartId)}/items`, { method: 'PUT', body: JSON.stringify({ variant_id, qty }) }),
   checkout: (req: CheckoutRequest) => call<CheckoutResponse>('/checkout', { method: 'POST', body: JSON.stringify(req) }),
   getOrder: (id, token) => call<OrderView>(`/orders/${encodeURIComponent(id)}`, { headers: { 'x-order-token': token } }),
 };

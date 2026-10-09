@@ -10,7 +10,16 @@ import { validateCheckout } from '../validate';
 import { ApiError, type StoreApi } from './types';
 
 type MockCart = { id: string; open: boolean; items: { variant_id: string; qty: number }[] };
-type MockOrder = { id: string; token: string; session: string; status: OrderStatus; created_at: string; total_agorot: number; shipping_method: 'economy' | 'express'; lines: { name_he: string; qty: number; line_total_agorot: number }[] };
+type MockOrder = {
+  id: string;
+  token: string;
+  session: string;
+  status: OrderStatus;
+  created_at: string;
+  total_agorot: number;
+  shipping_method: 'economy' | 'express';
+  lines: { name_he: string; qty: number; line_total_agorot: number }[];
+};
 
 const mem = new Map<string, string>();
 const store = {
@@ -46,7 +55,17 @@ function view(c: MockCart): Cart {
   const lines = c.items.flatMap((i) => {
     const p = variantIndex.get(i.variant_id);
     return p
-      ? [{ variant_id: i.variant_id, product_id: p.id, name_he: p.name_he, qty: i.qty, unit_price_agorot: p.price_agorot, line_total_agorot: p.price_agorot * i.qty, price_provisional: p.price_provisional }]
+      ? [
+          {
+            variant_id: i.variant_id,
+            product_id: p.id,
+            name_he: p.name_he,
+            qty: i.qty,
+            unit_price_agorot: p.price_agorot,
+            line_total_agorot: p.price_agorot * i.qty,
+            price_provisional: p.price_provisional,
+          },
+        ]
       : [];
   });
   return { id: c.id, lines, subtotal_agorot: lines.reduce((s, l) => s + l.line_total_agorot, 0), count: lines.reduce((s, l) => s + l.qty, 0) };
@@ -115,7 +134,15 @@ export const mockApi: StoreApi = {
     await delay(80);
     const o = orders()[id];
     if (!o || o.token !== token) throw new ApiError(404, 'order_not_found');
-    const view: OrderView = { id: o.id, status: o.status, status_he: ORDER_STATUS_HE[o.status], created_at: o.created_at, total_agorot: o.total_agorot, shipping_method: o.shipping_method, lines: o.lines };
+    const view: OrderView = {
+      id: o.id,
+      status: o.status,
+      status_he: ORDER_STATUS_HE[o.status],
+      created_at: o.created_at,
+      total_agorot: o.total_agorot,
+      shipping_method: o.shipping_method,
+      lines: o.lines,
+    };
     return view;
   },
   mockPay: {

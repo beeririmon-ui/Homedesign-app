@@ -16,7 +16,11 @@ class Stmt {
     private args: SQLInputValue[] = [],
   ) {}
   bind(...args: unknown[]): Stmt {
-    return new Stmt(this.db, this.sql, args.map((a) => (typeof a === 'boolean' ? (a ? 1 : 0) : (a as SQLInputValue))));
+    return new Stmt(
+      this.db,
+      this.sql,
+      args.map((a) => (typeof a === 'boolean' ? (a ? 1 : 0) : (a as SQLInputValue))),
+    );
   }
   async first<T = Row>(col?: string): Promise<T | null> {
     const row = this.db.prepare(this.sql).get(...this.args) as Row | undefined;

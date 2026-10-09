@@ -81,9 +81,7 @@ const productsEconPath = repoPath('data/economics/products.json');
 const freightPath = repoPath('data/economics/freight-cj.json');
 const settingsInput = existsSync(settingsPath) ? SettingsFileSchema.parse(readJson(settingsPath)) : null;
 const freight: FreightFile | null = existsSync(freightPath) ? FreightFileSchema.parse(readJson(freightPath)) : null;
-const productEcon: Record<string, ProductEconomics> = existsSync(productsEconPath)
-  ? ProductEconomicsFileSchema.parse(readJson(productsEconPath))
-  : {};
+const productEcon: Record<string, ProductEconomics> = existsSync(productsEconPath) ? ProductEconomicsFileSchema.parse(readJson(productsEconPath)) : {};
 const { settings, defaults_used } = resolveSettings(settingsInput);
 
 /** Cards that fail data/product-card.schema.json are reported and skipped (data/ is not ours to fix). */
@@ -140,19 +138,12 @@ function productNotes(slot: Slot, fillerNames: string[]): string[] {
   const notes: string[] = [];
   if (fillerNames.length) notes.push(`בתמונה: ${fillerNames.join(', ')}. לא כלול במוצר.`);
   if (slot.id === 'accent-sconces' || slot.id === 'pendant') notes.push('דורשת התקנה על ידי חשמלאי.');
-  if (slot.id === 'wall-sconce')
-    notes.push('בתמונה: הכבל מקוצר ומחובר לשקע צמוד מתחת למנורה (קיצור כבל והתקנת שקע על ידי חשמלאי).');
+  if (slot.id === 'wall-sconce') notes.push('בתמונה: הכבל מקוצר ומחובר לשקע צמוד מתחת למנורה (קיצור כבל והתקנת שקע על ידי חשמלאי).');
   if (slot.set_of) notes.push(`סט של ${slot.set_of} פריטים.`);
   return notes;
 }
 
-function buildProduct(
-  card: ProductCard,
-  path: string,
-  roomId: string,
-  slot: Slot,
-  fillerNames: string[],
-): FullProduct | HiddenProduct {
+function buildProduct(card: ProductCard, path: string, roomId: string, slot: Slot, fillerNames: string[]): FullProduct | HiddenProduct {
   const econ = productEcon[card.id] ?? {};
   const cost = usdToCents(card.price.currency === 'USD' ? card.price.cost : NaN);
   if (!Number.isFinite(cost)) return { id: card.id, slot: slot.id, reason: `price.currency ${card.price.currency} is not USD` };
@@ -259,7 +250,7 @@ for (const hr of house.rooms) {
     const candidates = cards
       .filter(({ card, path }) => card.slot === slot.id && path.split('/').length === 4 && card.status !== 'rejected')
       .filter(({ card }) => typeof card.style_scores?.[STYLE]?.score === 'number')
-      .sort((a, b) => (b.card.style_scores![STYLE]!.score - a.card.style_scores![STYLE]!.score) || a.card.id.localeCompare(b.card.id));
+      .sort((a, b) => b.card.style_scores![STYLE]!.score - a.card.style_scores![STYLE]!.score || a.card.id.localeCompare(b.card.id));
     const chosen: FullProduct[] = [];
     for (const { card, path } of candidates) {
       if (chosen.length === (sf.variants_required ?? slot.variants ?? 3)) break;
@@ -298,7 +289,17 @@ for (const hr of house.rooms) {
       has_shadow: slot.has_shadow_layer !== false,
       fillers_he: fillerNames,
       hotspot,
-      zoom_frame: zoomFromFile ?? (temp ? frameBoxFromBoxes(temp.zoom ? [temp.zoom] : temp.boxes.length ? temp.boxes : [[temp.hotspot[0] - 0.04, temp.hotspot[0] + 0.04, temp.hotspot[1] - 0.06, temp.hotspot[1] + 0.06]]) : null),
+      zoom_frame:
+        zoomFromFile ??
+        (temp
+          ? frameBoxFromBoxes(
+              temp.zoom
+                ? [temp.zoom]
+                : temp.boxes.length
+                  ? temp.boxes
+                  : [[temp.hotspot[0] - 0.04, temp.hotspot[0] + 0.04, temp.hotspot[1] - 0.06, temp.hotspot[1] + 0.06]],
+            )
+          : null),
       options,
     });
   }
@@ -376,10 +377,7 @@ const base = {
   shipping,
   vat_rate: settings.vat_rate,
 };
-const version = createHash('sha256')
-  .update(JSON.stringify({ rooms, publicProducts, shipping }))
-  .digest('hex')
-  .slice(0, 12);
+const version = createHash('sha256').update(JSON.stringify({ rooms, publicProducts, shipping })).digest('hex').slice(0, 12);
 
 const publicCatalog: PublicCatalog = PublicCatalogSchema.parse({ version, ...base, products: publicProducts });
 const fullCatalog: FullCatalog = {

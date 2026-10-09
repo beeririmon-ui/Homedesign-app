@@ -1,5 +1,14 @@
 /** Inline icons (decorative: aria-hidden). Stroke follows currentColor. */
-const base = { viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', 'stroke-width': 1.7, 'stroke-linecap': 'round', 'stroke-linejoin': 'round', 'aria-hidden': 'true', focusable: 'false' } as const;
+const base = {
+  viewBox: '0 0 24 24',
+  fill: 'none',
+  stroke: 'currentColor',
+  'stroke-width': 1.7,
+  'stroke-linecap': 'round',
+  'stroke-linejoin': 'round',
+  'aria-hidden': 'true',
+  focusable: 'false',
+} as const;
 
 export const IconHouse = () => (
   <svg {...base} viewBox="0 0 32 32" stroke-width={2}>

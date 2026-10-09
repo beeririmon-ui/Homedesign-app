@@ -66,7 +66,12 @@ export const FreightFileSchema = z.looseObject({
   updated: z.string().optional(),
   products: z.record(
     z.string(),
-    z.looseObject({ cheapest: Quote.nullable().optional(), cheapest_under_20d: Quote.nullable().optional(), checked_at: z.string().optional(), status: z.string().optional() }),
+    z.looseObject({
+      cheapest: Quote.nullable().optional(),
+      cheapest_under_20d: Quote.nullable().optional(),
+      checked_at: z.string().optional(),
+      status: z.string().optional(),
+    }),
   ),
 });
 export type FreightFile = z.infer<typeof FreightFileSchema>;

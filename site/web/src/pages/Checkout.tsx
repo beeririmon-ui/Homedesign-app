@@ -88,7 +88,7 @@ export function Checkout({ failed }: { failed: boolean }) {
 
   const field = (k: keyof typeof f & keyof FieldErrors, label: string, props: Record<string, unknown> = {}, hint?: string) => (
     <div class="field">
-      <label for={`f-${k}`}>{label}</label>
+      <label htmlFor={`f-${k}`}>{label}</label>
       {hint ? (
         <span class="hint" id={`h-${k}`}>
           {hint}
@@ -160,7 +160,12 @@ export function Checkout({ failed }: { failed: boolean }) {
               <legend>פרטי קשר</legend>
               {field('full_name', 'שם מלא', { autocomplete: 'name', required: true })}
               <div class="fields-2">
-                {field('email', 'אימייל', { type: 'email', autocomplete: 'email', inputMode: 'email', dir: 'ltr', required: true }, 'לשם נשלחים אישור ההזמנה והחשבונית.')}
+                {field(
+                  'email',
+                  'אימייל',
+                  { type: 'email', autocomplete: 'email', inputMode: 'email', dir: 'ltr', required: true },
+                  'לשם נשלחים אישור ההזמנה והחשבונית.',
+                )}
                 {field('phone', 'טלפון', { type: 'tel', autocomplete: 'tel', inputMode: 'tel', dir: 'ltr', required: true }, 'לשליח, למשל 050-1234567.')}
               </div>
             </fieldset>
@@ -173,13 +178,13 @@ export function Checkout({ failed }: { failed: boolean }) {
               <div class="fields-2">
                 {field('house', 'מספר בית', { inputMode: 'numeric', required: true })}
                 <div class="field">
-                  <label for="f-apartment">דירה (רשות)</label>
+                  <label htmlFor="f-apartment">דירה (רשות)</label>
                   <input id="f-apartment" name="apartment" value={f.apartment} onInput={set('apartment')} autocomplete="address-line2" />
                 </div>
               </div>
               {field('zip', 'מיקוד (רשות)', { inputMode: 'numeric', autocomplete: 'postal-code', dir: 'ltr' }, '7 ספרות.')}
               <div class="field">
-                <label for="f-notes">הערות לשליח (רשות)</label>
+                <label htmlFor="f-notes">הערות לשליח (רשות)</label>
                 <textarea id="f-notes" name="notes" rows={2} maxLength={200} value={f.notes} onInput={set('notes')} />
               </div>
             </fieldset>
@@ -207,7 +212,14 @@ export function Checkout({ failed }: { failed: boolean }) {
             </fieldset>
             <div class="field">
               <label class="check">
-                <input type="checkbox" checked={terms} onChange={(e) => setTerms(e.currentTarget.checked)} aria-invalid={errors.terms ? 'true' : undefined} aria-describedby={errors.terms ? 'e-terms' : undefined} id="f-terms" />
+                <input
+                  type="checkbox"
+                  checked={terms}
+                  onChange={(e) => setTerms(e.currentTarget.checked)}
+                  aria-invalid={errors.terms ? 'true' : undefined}
+                  aria-describedby={errors.terms ? 'e-terms' : undefined}
+                  id="f-terms"
+                />
                 <span>
                   קראתי ואני מסכים/ה ל<a href="/terms/">תקנון</a> ול<a href="/returns/">מדיניות הביטולים וההחזרות</a>.
                 </span>

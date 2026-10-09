@@ -22,7 +22,9 @@ type Scene = {
   slots: Record<string, { product: { src: string[] } | null; shadow: { src: string[] } | null; light: { src: string[] } | null }>;
   depth: { src: string };
 };
-type Catalog = { rooms: { id: string; slots: { id: string; has_shadow: boolean; has_light: boolean; options: { position: number; is_default: boolean }[] }[] }[] };
+type Catalog = {
+  rooms: { id: string; slots: { id: string; has_shadow: boolean; has_light: boolean; options: { position: number; is_default: boolean }[] }[] }[];
+};
 
 if (!existsSync(DIST)) {
   console.error('web/dist is missing: run `npm run build` first.');

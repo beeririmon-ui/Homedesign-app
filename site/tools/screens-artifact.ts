@@ -5,7 +5,7 @@
  */
 import { spawn } from 'node:child_process';
 import { mkdirSync, readFileSync } from 'node:fs';
-import { chromium, type Page } from '@playwright/test';
+import { chromium } from '@playwright/test';
 import { sitePath } from './lib/paths';
 
 const PORT = 5199;
@@ -40,7 +40,8 @@ async function run(width: number, height: number, mobile: boolean) {
   });
   page.on('request', (r) => {
     const u = new URL(r.url());
-    if (u.origin !== ORIGIN && !/^fonts\.(googleapis|gstatic)\.com$/.test(u.hostname) && u.protocol.startsWith('http')) problems.push(`[${width}] external request: ${r.url()}`);
+    if (u.origin !== ORIGIN && !/^fonts\.(googleapis|gstatic)\.com$/.test(u.hostname) && u.protocol.startsWith('http'))
+      problems.push(`[${width}] external request: ${r.url()}`);
   });
   await page.route(`${ORIGIN}/`, (route) => route.fulfill({ status: 200, contentType: 'text/html; charset=utf-8', body: wrapped }));
   const shot = (name: string) => page.screenshot({ path: `${OUT}/artifact-${width}-${name}.png` });
@@ -51,12 +52,16 @@ async function run(width: number, height: number, mobile: boolean) {
   await shot('1-home');
 
   await page.getByRole('link', { name: 'היכנסו לסלון' }).click();
-  await page.locator('button.hotspot:not([hidden])').first().waitFor({ timeout: 20_000 });
+  await page.locator('button.hotspot:visible').first().waitFor({ timeout: 20_000 });
   await page.waitForTimeout(900);
-  stats.push(`[${width}] room ready, same-origin bytes so far: ${(bytes / 1048576).toFixed(2)} MB, compositor: ${await page.evaluate(() => window.__hdEngine?.kind)}`);
+  stats.push(
+    `[${width}] room ready, same-origin bytes so far: ${(bytes / 1048576).toFixed(2)} MB, compositor: ${await page.evaluate(() => window.__hdEngine?.kind)}`,
+  );
   await shot('2-room');
 
-  await page.locator('button.hotspot[data-slot="vase"]').click();
+  const vase = page.locator('button.hotspot[data-slot="vase"]');
+  if (await vase.isVisible()) await vase.click();
+  else await page.getByRole('link', { name: /^החלפת אגרטל/ }).click(); // narrow screens: the hotspot can be panned out of view
   await page.getByRole('dialog').waitFor();
   await page.keyboard.press('ArrowLeft');
   await page.waitForTimeout(1200);

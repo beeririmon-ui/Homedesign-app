@@ -10,7 +10,8 @@
   "workspaces": [
     "shared",
     "api",
-    "web"
+    "web",
+    "tools"
   ],
   "scripts": {
     "catalog": "tsx tools/build-catalog.ts",
@@ -23,7 +24,7 @@
     "budget": "tsx tools/check-budget.ts",
     "preview": "npm run db:reset -w @hd/api && npm run preview -w @hd/api",
     "preview:artifact": "npm run prepare:data && npm run build:artifact -w @hd/web && tsx tools/finalize-artifact.ts && tsx tools/check-artifact.ts",
-    "typecheck": "tsx shared/scripts/gen-product-card-schema.ts --check && npm run typecheck --workspaces --if-present && tsc -p tsconfig.tools.json --noEmit",
+    "typecheck": "tsx shared/scripts/gen-product-card-schema.ts --check && npm run typecheck --workspaces --if-present",
     "lint": "eslint . --max-warnings=0",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
@@ -31,7 +32,8 @@
     "e2e": "playwright test --project=e2e",
     "a11y": "playwright test --project=a11y",
     "screens:artifact": "tsx tools/screens-artifact.ts",
-    "lighthouse": "tsx tools/lighthouse.ts"
+    "lighthouse": "tsx tools/lighthouse.ts",
+    "test:all": "npm run typecheck && npm run lint && npm run format:check && npm test && npm run build && npm run e2e && npm run a11y"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.11.0",

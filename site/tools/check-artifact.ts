@@ -23,7 +23,10 @@ const css = /<style>([\s\S]*?)<\/style>/.exec(html)?.[1] ?? '';
 const iRoot = css.indexOf(':root{');
 const iDark = css.search(/@media\s*\(prefers-color-scheme:\s*dark\)\s*\{\s*:root:not\(\[data-theme=['"]?light['"]?\]\)\s*\{/);
 const iForced = css.search(/:root\[data-theme=['"]?dark['"]?\]\s*\{/);
-check(iRoot === 0 && iDark > iRoot && iForced > iDark, 'token order: :root, then the dark media query guarded by :root:not([data-theme=light]), then :root[data-theme=dark]');
+check(
+  iRoot === 0 && iDark > iRoot && iForced > iDark,
+  'token order: :root, then the dark media query guarded by :root:not([data-theme=light]), then :root[data-theme=dark]',
+);
 check(/body\{[^}]*background:/.test(css), 'body needs an explicit background');
 
 // external resources: only Google Fonts
@@ -42,7 +45,9 @@ for (const f of files) {
   check(/^media\/[A-Za-z0-9/._-]+\.webp$/.test(rel), `unexpected file: ${rel}`);
 }
 
-console.log(`dist-artifact: ${files.length} files, ${(bytes / 1048576).toFixed(2)} MB (index.html ${(statSync(join(OUT, 'index.html')).size / 1024).toFixed(0)} KB)`);
+console.log(
+  `dist-artifact: ${files.length} files, ${(bytes / 1048576).toFixed(2)} MB (index.html ${(statSync(join(OUT, 'index.html')).size / 1024).toFixed(0)} KB)`,
+);
 if (problems.length) {
   for (const p of problems) console.error(`FAIL  ${p}`);
   process.exit(1);

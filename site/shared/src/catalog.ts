@@ -65,9 +65,7 @@ export const CatalogSlotSchema = z.object({
   has_light: z.boolean(),
   has_shadow: z.boolean(),
   fillers_he: z.array(z.string()),
-  hotspot: z
-    .object({ u: Unit, v: Unit, provisional: z.boolean(), visible: z.boolean() })
-    .nullable(),
+  hotspot: z.object({ u: Unit, v: Unit, provisional: z.boolean(), visible: z.boolean() }).nullable(),
   /** [u0, u1, v0, v1] */
   zoom_frame: z.tuple([Unit, Unit, Unit, Unit]).nullable(),
   options: z.array(SlotOptionSchema),

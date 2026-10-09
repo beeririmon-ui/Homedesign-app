@@ -28,7 +28,6 @@ export const CartSchema = z.object({
 });
 export type Cart = z.infer<typeof CartSchema>;
 
-
 export const CustomerSchema = z.object({
   full_name: z.string().trim().min(2).max(80),
   email: z.email().max(120),

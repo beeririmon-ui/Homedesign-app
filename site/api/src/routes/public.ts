@@ -130,7 +130,14 @@ publicApi.post('/checkout', async (c) => {
      WHERE v.id IN (${cart.lines.map(() => '?').join(',')})`,
   )
     .bind(...cart.lines.map((l) => l.variant_id))
-    .all<{ variant_id: string; cost_usd_cents: number; shipping_usd_cents: number; sell_qty: number; fulfillment_source: string; supplier_sku: string | null }>();
+    .all<{
+      variant_id: string;
+      cost_usd_cents: number;
+      shipping_usd_cents: number;
+      sell_qty: number;
+      fulfillment_source: string;
+      supplier_sku: string | null;
+    }>();
   const costOf = new Map(costs.map((r) => [r.variant_id, r]));
 
   const provider = paymentProvider(c.env, new URL(c.req.url).origin);
@@ -148,13 +155,36 @@ publicApi.post('/checkout', async (c) => {
   const stmts = [
     c.env.DB.prepare(
       'INSERT INTO customers (id, email, phone, full_name, marketing_consent, marketing_consent_at, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)',
-    ).bind(customerId, req.customer.email, req.customer.phone, req.customer.full_name, req.consents.marketing ? 1 : 0, req.consents.marketing ? now : null, now),
+    ).bind(
+      customerId,
+      req.customer.email,
+      req.customer.phone,
+      req.customer.full_name,
+      req.consents.marketing ? 1 : 0,
+      req.consents.marketing ? now : null,
+      now,
+    ),
     c.env.DB.prepare(
       `INSERT INTO orders (id, token_hash, cart_id, customer_id, status, subtotal_agorot, shipping_method, shipping_agorot, total_agorot, vat_agorot, vat_rate, fx_usd_ils_at_order, address_json, terms_accepted_at, payment_provider, payment_session_id, created_at, updated_at)
        VALUES (?, ?, ?, ?, 'pending_payment', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     ).bind(
-      id, await sha256Hex(token), req.cart_id, customerId, subtotal, req.shipping_method, shippingAgorot, total, vat,
-      econ.vat_rate, econ.fx_usd_ils, JSON.stringify(req.address), now, provider.id, session.session_id, now, now,
+      id,
+      await sha256Hex(token),
+      req.cart_id,
+      customerId,
+      subtotal,
+      req.shipping_method,
+      shippingAgorot,
+      total,
+      vat,
+      econ.vat_rate,
+      econ.fx_usd_ils,
+      JSON.stringify(req.address),
+      now,
+      provider.id,
+      session.session_id,
+      now,
+      now,
     ),
     ...cart.lines.map((l, i) => {
       const cost = costOf.get(l.variant_id);
@@ -162,12 +192,28 @@ publicApi.post('/checkout', async (c) => {
         `INSERT INTO order_items (order_id, line, product_id, variant_id, name_he, qty, unit_price_agorot, unit_cost_usd_cents, unit_shipping_usd_cents, unit_sell_qty, fulfillment_source, supplier_sku)
          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       ).bind(
-        id, i + 1, l.product_id, l.variant_id, l.name_he, l.qty, l.unit_price_agorot, cost?.cost_usd_cents ?? 0, cost?.shipping_usd_cents ?? 0,
-        cost?.sell_qty ?? 1, cost?.fulfillment_source ?? 'dropship_cj', cost?.supplier_sku ?? null,
+        id,
+        i + 1,
+        l.product_id,
+        l.variant_id,
+        l.name_he,
+        l.qty,
+        l.unit_price_agorot,
+        cost?.cost_usd_cents ?? 0,
+        cost?.shipping_usd_cents ?? 0,
+        cost?.sell_qty ?? 1,
+        cost?.fulfillment_source ?? 'dropship_cj',
+        cost?.supplier_sku ?? null,
       );
     }),
     c.env.DB.prepare("UPDATE carts SET status = 'converted', updated_at = ? WHERE id = ?").bind(now, req.cart_id),
-    c.env.DB.prepare('INSERT INTO audit_log (at, actor, action, subject, detail) VALUES (?, ?, ?, ?, ?)').bind(now, 'system', 'order.created', id, JSON.stringify({ total, provider: provider.id })),
+    c.env.DB.prepare('INSERT INTO audit_log (at, actor, action, subject, detail) VALUES (?, ?, ?, ?, ?)').bind(
+      now,
+      'system',
+      'order.created',
+      id,
+      JSON.stringify({ total, provider: provider.id }),
+    ),
   ];
   await c.env.DB.batch(stmts);
 

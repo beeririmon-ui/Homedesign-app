@@ -17,8 +17,7 @@ if (styles.length !== 1 || scripts.length !== 1) throw new Error(`expected one i
 const css = styles[0]!;
 if (!css.startsWith(':root{')) throw new Error('the stylesheet must start with the :root light tokens');
 
-const FONTS =
-  'https://fonts.googleapis.com/css2?family=Assistant:wght@400;600&family=Frank+Ruhl+Libre:wght@300;500&display=swap';
+const FONTS = 'https://fonts.googleapis.com/css2?family=Assistant:wght@400;600&family=Frank+Ruhl+Libre:wght@300;500&display=swap';
 const page = [
   '<title>הבית · תצוגה מקדימה</title>',
   `<style>${css}</style>`,
@@ -47,10 +46,8 @@ const files = new Set<string>();
 for (const b of scene.base) for (const w of b.widths.filter((x) => x <= lo)) files.add(`${b.src}.${w}.webp`);
 for (const w of scene.hall.widths.filter((x) => x <= lo)) files.add(`${scene.hall.src}.${w}.webp`);
 files.add(`${scene.depth.src}.webp`);
-for (const s of Object.values(scene.slots))
-  for (const set of [s.product, s.shadow, s.light]) for (const src of set?.src ?? []) files.add(`${src}.${lo}.webp`);
-for (const t of Object.values(scene.transitions))
-  for (let i = 1; i <= t.frames; i++) files.add(`${t.src}/${String(i).padStart(3, '0')}.webp`);
+for (const s of Object.values(scene.slots)) for (const set of [s.product, s.shadow, s.light]) for (const src of set?.src ?? []) files.add(`${src}.${lo}.webp`);
+for (const t of Object.values(scene.transitions)) for (let i = 1; i <= t.frames; i++) files.add(`${t.src}/${String(i).padStart(3, '0')}.webp`);
 
 rmSync(join(OUT, 'media'), { recursive: true, force: true });
 let missing = 0;

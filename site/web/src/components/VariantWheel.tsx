@@ -255,7 +255,11 @@ export function VariantWheel({ slot, initial, onPreview, onChoose, onCancel }: P
             ))}
           </p>
         ) : null}
-        {p ? <Price class="price" agorot={p.price_agorot} provisional={p.price_provisional} /> : <p class="specs">אין עדיין מוצר בעמדה הזו. התצוגה בחדר זמנית.</p>}
+        {p ? (
+          <Price class="price" agorot={p.price_agorot} provisional={p.price_provisional} />
+        ) : (
+          <p class="specs">אין עדיין מוצר בעמדה הזו. התצוגה בחדר זמנית.</p>
+        )}
         <div class="picker-actions">
           <div class="arc-nav">
             <button type="button" class="glass" onClick={() => goTo(index - 1)} disabled={index === 0} aria-label="הווריאציה הקודמת">

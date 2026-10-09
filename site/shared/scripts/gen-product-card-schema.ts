@@ -39,10 +39,7 @@ function emit(s: JsonSchema, indent: string): string {
     const nonNull = s.enum.filter((v): v is string | number => v !== null);
     const hasNull = s.enum.includes(null);
     const allStrings = nonNull.every((v) => typeof v === 'string');
-    out =
-      allStrings && nonNull.length > 0
-        ? `z.enum(${JSON.stringify(nonNull)})`
-        : `z.union([${nonNull.map(lit).join(', ')}])`;
+    out = allStrings && nonNull.length > 0 ? `z.enum(${JSON.stringify(nonNull)})` : `z.union([${nonNull.map(lit).join(', ')}])`;
     if (hasNull) out += '.nullable()';
     return withDescription(out, s);
   }

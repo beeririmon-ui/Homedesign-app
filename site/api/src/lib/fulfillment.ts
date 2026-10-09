@@ -17,8 +17,12 @@ export async function processSupplierJob(env: Env, job: SupplierJob, attempt: nu
     .bind(order.id, client.id)
     .first<{ status: string }>();
   if (existing && existing.status !== 'queued' && existing.status !== 'failed') return 'skipped';
-  const customer = await env.DB.prepare('SELECT full_name, phone, email FROM customers WHERE id = ?').bind(order.customer_id).first<{ full_name: string; phone: string; email: string }>();
-  const { results: items } = await env.DB.prepare("SELECT product_id, qty * unit_sell_qty AS qty, supplier_sku FROM order_items WHERE order_id = ? AND fulfillment_source = 'dropship_cj' ORDER BY line")
+  const customer = await env.DB.prepare('SELECT full_name, phone, email FROM customers WHERE id = ?')
+    .bind(order.customer_id)
+    .first<{ full_name: string; phone: string; email: string }>();
+  const { results: items } = await env.DB.prepare(
+    "SELECT product_id, qty * unit_sell_qty AS qty, supplier_sku FROM order_items WHERE order_id = ? AND fulfillment_source = 'dropship_cj' ORDER BY line",
+  )
     .bind(order.id)
     .all<{ product_id: string; qty: number; supplier_sku: string | null }>();
   const now = nowIso();
@@ -35,9 +39,25 @@ export async function processSupplierJob(env: Env, job: SupplierJob, attempt: nu
         `INSERT INTO supplier_shipments (id, order_id, supplier, status, supplier_order_id, attempts, request_json, response_json, created_at, updated_at)
          VALUES (?, ?, ?, 'submitted', ?, ?, ?, ?, ?, ?)
          ON CONFLICT(order_id, supplier) DO UPDATE SET status = 'submitted', supplier_order_id = excluded.supplier_order_id, attempts = excluded.attempts, response_json = excluded.response_json, last_error = NULL, updated_at = excluded.updated_at`,
-      ).bind(crypto.randomUUID(), order.id, client.id, res.supplier_order_id, attempt, JSON.stringify({ lines: input.lines.length, shipping_method: input.shipping_method }), JSON.stringify(res.raw), now, now),
+      ).bind(
+        crypto.randomUUID(),
+        order.id,
+        client.id,
+        res.supplier_order_id,
+        attempt,
+        JSON.stringify({ lines: input.lines.length, shipping_method: input.shipping_method }),
+        JSON.stringify(res.raw),
+        now,
+        now,
+      ),
       env.DB.prepare("UPDATE orders SET status = 'sent_to_supplier', updated_at = ? WHERE id = ? AND status = 'paid'").bind(now, order.id),
-      env.DB.prepare('INSERT INTO audit_log (at, actor, action, subject, detail) VALUES (?, ?, ?, ?, ?)').bind(now, 'queue', 'supplier.submitted', order.id, res.supplier_order_id),
+      env.DB.prepare('INSERT INTO audit_log (at, actor, action, subject, detail) VALUES (?, ?, ?, ?, ?)').bind(
+        now,
+        'queue',
+        'supplier.submitted',
+        order.id,
+        res.supplier_order_id,
+      ),
     ]);
     return 'submitted';
   } catch (err) {

@@ -1,6 +1,7 @@
 import { useEffect } from 'preact/hooks';
 import { catalog } from '../catalog';
 import { Price } from '../components/Media';
+import { shippingFor } from './Checkout';
 import { cart, cartBusy, cartError, loadCart, setQty } from '../state/cart';
 
 export function CartPage() {
@@ -10,6 +11,7 @@ export function CartPage() {
   const c = cart.value;
   const lines = c?.lines ?? [];
   const provisional = lines.some((l) => l.price_provisional);
+  const eco = catalog.shipping.find((s) => s.id === 'economy');
   return (
     <div class="wrap page">
       <div class="page-head">
@@ -43,11 +45,21 @@ export function CartPage() {
                 <Price agorot={l.line_total_agorot} class="num" />
                 <div class="controls">
                   <div class="qty" role="group" aria-label={`כמות של ${l.name_he}`}>
-                    <button type="button" disabled={cartBusy.value || l.qty >= 20} onClick={() => void setQty(l.variant_id, l.qty + 1, `כמות עודכנה: ${l.qty + 1}`)} aria-label="הגדלת הכמות">
+                    <button
+                      type="button"
+                      disabled={cartBusy.value || l.qty >= 20}
+                      onClick={() => void setQty(l.variant_id, l.qty + 1, `כמות עודכנה: ${l.qty + 1}`)}
+                      aria-label="הגדלת הכמות"
+                    >
                       +
                     </button>
                     <output aria-label={`כמות: ${l.qty}`}>{l.qty}</output>
-                    <button type="button" disabled={cartBusy.value || l.qty <= 1} onClick={() => void setQty(l.variant_id, l.qty - 1, `כמות עודכנה: ${l.qty - 1}`)} aria-label="הקטנת הכמות">
+                    <button
+                      type="button"
+                      disabled={cartBusy.value || l.qty <= 1}
+                      onClick={() => void setQty(l.variant_id, l.qty - 1, `כמות עודכנה: ${l.qty - 1}`)}
+                      aria-label="הקטנת הכמות"
+                    >
                       −
                     </button>
                   </div>
@@ -66,9 +78,16 @@ export function CartPage() {
                 <Price agorot={c!.subtotal_agorot} />
               </dd>
               <dt>משלוח</dt>
-              <dd class="small">נבחר בשלב הבא ({catalog.shipping.find((s) => s.is_default)?.label_he} כברירת מחדל)</dd>
+              <dd class="small">
+                {eco ? shippingFor('economy', c!.subtotal_agorot) === 0 ? 'חינם (משלוח חסכוני)' : <Price agorot={eco.price_agorot} /> : 'נבחר בשלב הבא'}
+              </dd>
             </dl>
-            <p class="small muted">המחירים כוללים מע"מ.{provisional ? ' המחירים זמניים ועוד לא אושרו.' : ''}</p>
+            {eco?.free_over_agorot && c!.subtotal_agorot < eco.free_over_agorot ? (
+              <p class="small">
+                עוד <Price agorot={eco.free_over_agorot - c!.subtotal_agorot} /> והמשלוח החסכוני חינם.
+              </p>
+            ) : null}
+            <p class="small muted">המחירים כוללים מע"מ. אפשר לבחור משלוח מהיר בשלב הבא.{provisional ? ' המחירים ודמי המשלוח זמניים ועוד לא אושרו.' : ''}</p>
             <a class="btn btn-primary" href="/checkout/">
               להמשך לתשלום
             </a>

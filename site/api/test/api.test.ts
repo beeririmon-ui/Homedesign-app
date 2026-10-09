@@ -5,13 +5,7 @@ import { buildSeedSql } from '../scripts/seed';
 import { createD1, migrate } from './d1-shim';
 import { processSupplierJob } from '../src/lib/fulfillment';
 import { resetAccessCache, verifyAccessJwt } from '../src/lib/access';
-import {
-  DEFAULT_SETTINGS,
-  signWebhook,
-  unitEconomics,
-  type FullCatalog,
-  type FullProduct,
-} from '@hd/shared';
+import { DEFAULT_SETTINGS, signWebhook, unitEconomics, type FullCatalog, type FullProduct } from '@hd/shared';
 
 const SECRET = 'test-webhook-secret-0123456789';
 
@@ -49,7 +43,10 @@ function product(id: string, slot: string, price: number, cost: number): FullPro
     fulfillment_source: 'dropship_cj',
     fx_usd_ils: DEFAULT_SETTINGS.fx_usd_ils,
     nordic_score: 8,
-    economics: unitEconomics({ retail_agorot: price, cost_usd_cents: cost, shipping_usd_cents: 1000, fx_usd_ils: DEFAULT_SETTINGS.fx_usd_ils }, DEFAULT_SETTINGS),
+    economics: unitEconomics(
+      { retail_agorot: price, cost_usd_cents: cost, shipping_usd_cents: 1000, fx_usd_ils: DEFAULT_SETTINGS.fx_usd_ils },
+      DEFAULT_SETTINGS,
+    ),
   };
 }
 
@@ -177,7 +174,9 @@ describe('public api', () => {
     const order = await env.DB.prepare('SELECT * FROM orders WHERE id = ?').bind(body.order_id).first<Record<string, number | string>>();
     expect(order).toMatchObject({ status: 'pending_payment', subtotal_agorot: 25900, shipping_agorot: 5900, total_agorot: 31800 });
     expect(order!.vat_agorot).toBe(31800 - Math.round(31800 / 1.18));
-    const item = await env.DB.prepare('SELECT unit_cost_usd_cents FROM order_items WHERE order_id = ?').bind(body.order_id).first<{ unit_cost_usd_cents: number }>();
+    const item = await env.DB.prepare('SELECT unit_cost_usd_cents FROM order_items WHERE order_id = ?')
+      .bind(body.order_id)
+      .first<{ unit_cost_usd_cents: number }>();
     expect(item!.unit_cost_usd_cents).toBe(2405);
     // cart is closed after checkout
     expect((await req(`/api/cart/${id}`)).status).toBe(409);
@@ -207,12 +206,18 @@ describe('payment webhook', () => {
   async function pendingOrder() {
     const id = await cartWith('vase-a:default', 1);
     const res = (await (await req('/api/checkout', json(checkoutBody(id)))).json()) as { order_id: string };
-    const o = await env.DB.prepare('SELECT payment_session_id, total_agorot FROM orders WHERE id = ?').bind(res.order_id).first<{ payment_session_id: string; total_agorot: number }>();
+    const o = await env.DB.prepare('SELECT payment_session_id, total_agorot FROM orders WHERE id = ?')
+      .bind(res.order_id)
+      .first<{ payment_session_id: string; total_agorot: number }>();
     return { orderId: res.order_id, session: o!.payment_session_id, total: o!.total_agorot };
   }
   async function post(event: object, secret = SECRET, ts = Math.floor(Date.now() / 1000)) {
     const body = JSON.stringify(event);
-    return req('/api/webhooks/payment/mock', { method: 'POST', headers: { 'content-type': 'application/json', 'x-mock-signature': await signWebhook(secret, body, ts) }, body });
+    return req('/api/webhooks/payment/mock', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', 'x-mock-signature': await signWebhook(secret, body, ts) },
+      body,
+    });
   }
 
   it('rejects bad and stale signatures', async () => {
@@ -234,7 +239,9 @@ describe('payment webhook', () => {
 
   it('does not mark paid when the amount differs', async () => {
     const { orderId, session, total } = await pendingOrder();
-    expect(await (await post({ id: 'evt_00000003', type: 'payment.succeeded', session_id: session, amount_agorot: total - 100 })).json()).toMatchObject({ outcome: 'amount_mismatch' });
+    expect(await (await post({ id: 'evt_00000003', type: 'payment.succeeded', session_id: session, amount_agorot: total - 100 })).json()).toMatchObject({
+      outcome: 'amount_mismatch',
+    });
     const o = await env.DB.prepare('SELECT status FROM orders WHERE id = ?').bind(orderId).first<{ status: string }>();
     expect(o!.status).toBe('pending_payment');
   });
@@ -244,7 +251,11 @@ describe('payment webhook', () => {
     const page = await req(`/mock-pay/${session}`);
     expect(page.status).toBe(200);
     expect(await page.text()).toContain('תשלום מדומה');
-    const done = await req(`/mock-pay/${session}/complete`, { method: 'POST', headers: { 'content-type': 'application/x-www-form-urlencoded' }, body: 'outcome=success' });
+    const done = await req(`/mock-pay/${session}/complete`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/x-www-form-urlencoded' },
+      body: 'outcome=success',
+    });
     expect(done.status).toBe(303);
     expect(done.headers.get('location')).toBe(`/order/${orderId}/`);
     const o = await env.DB.prepare('SELECT status FROM orders WHERE id = ?').bind(orderId).first<{ status: string }>();

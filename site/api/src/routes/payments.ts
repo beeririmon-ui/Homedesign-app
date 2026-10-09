@@ -46,7 +46,13 @@ export async function handlePaymentEvent(env: Env, providerId: string, event: Pa
          FROM (SELECT DISTINCT fulfillment_source FROM order_items WHERE order_id = ?) WHERE true
          ON CONFLICT(order_id, supplier) DO NOTHING`,
       ).bind(order.id, env.SUPPLIER_PROVIDER, now, now, order.id),
-      env.DB.prepare('INSERT INTO audit_log (at, actor, action, subject, detail) VALUES (?, ?, ?, ?, ?)').bind(now, `webhook:${providerId}`, 'order.paid', order.id, JSON.stringify({ event: event.id })),
+      env.DB.prepare('INSERT INTO audit_log (at, actor, action, subject, detail) VALUES (?, ?, ?, ?, ?)').bind(
+        now,
+        `webhook:${providerId}`,
+        'order.paid',
+        order.id,
+        JSON.stringify({ event: event.id }),
+      ),
     ]);
     await env.SUPPLIER_QUEUE.send({ kind: 'submit-order', order_id: order.id });
     // Next (not in this phase): enqueue the tax invoice job with the chosen invoicing service.
@@ -121,7 +127,11 @@ mockPay.post('/:session/complete', async (c) => {
     ctx = undefined; // unit tests run without an execution context
   }
   const res = await app.fetch(
-    new Request(`${origin}/api/webhooks/payment/mock`, { method: 'POST', headers: { 'content-type': 'application/json', [MOCK_SIGNATURE_HEADER]: signature }, body }),
+    new Request(`${origin}/api/webhooks/payment/mock`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', [MOCK_SIGNATURE_HEADER]: signature },
+      body,
+    }),
     c.env,
     ctx,
   );

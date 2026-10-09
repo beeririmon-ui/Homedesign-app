@@ -28,8 +28,7 @@ export const securityHeaders: MiddlewareHandler<AppEnv> = async (c, next) => {
   h.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
   if (!h.has('Content-Security-Policy')) h.set('Content-Security-Policy', "default-src 'none'; frame-ancestors 'none'");
   if (!h.has('Cache-Control')) h.set('Cache-Control', 'no-store');
-  if (c.env.ENVIRONMENT === 'production' || c.env.ENVIRONMENT === 'preview')
-    h.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+  if (c.env.ENVIRONMENT === 'production' || c.env.ENVIRONMENT === 'preview') h.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
 };
 
 export async function readJson<T extends z.ZodType>(c: Context<AppEnv>, schema: T, maxBytes = 16_384): Promise<z.output<T>> {

@@ -6,9 +6,7 @@
 const enc = new TextEncoder();
 
 async function hmacKey(secret: string): Promise<CryptoKey> {
-  return crypto.subtle.importKey('raw', enc.encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, [
-    'sign',
-  ]);
+  return crypto.subtle.importKey('raw', enc.encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
 }
 
 export function toHex(buf: ArrayBuffer): string {

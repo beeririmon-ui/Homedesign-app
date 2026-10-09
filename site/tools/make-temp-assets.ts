@@ -92,7 +92,13 @@ function inputsStamp(): string {
   return h.digest('hex');
 }
 const stamp = inputsStamp();
-if (!process.argv.includes('--force') && existsSync(STAMP_FILE) && existsSync(SCENE_FILE) && existsSync(MEDIA_OUT) && readFileSync(STAMP_FILE, 'utf8') === stamp) {
+if (
+  !process.argv.includes('--force') &&
+  existsSync(STAMP_FILE) &&
+  existsSync(SCENE_FILE) &&
+  existsSync(MEDIA_OUT) &&
+  readFileSync(STAMP_FILE, 'utf8') === stamp
+) {
   console.log('temp media up to date (use --force to rebuild)');
   process.exit(0);
 }
@@ -252,10 +258,9 @@ async function makeShadow(key: 'lo' | 'hi', slotId: string, t: TempSlot, placeme
   const W = WIDTHS[key];
   const H = Math.round((W * 9) / 16);
   const wall = placement === 'wall' || placement === 'window' || placement === 'ceiling';
-  const boxes = shapeBoxes(t).map((b): Box =>
-    wall
-      ? [b[0] + 0.004, b[1] + 0.008, b[2] + 0.01, b[3] + 0.012]
-      : [b[0] + 0.01, b[1] + 0.025, b[3] - (b[3] - b[2]) * 0.08, Math.min(1, b[3] + 0.018)],
+  const boxes = shapeBoxes(t).map(
+    (b): Box =>
+      wall ? [b[0] + 0.004, b[1] + 0.008, b[2] + 0.01, b[3] + 0.012] : [b[0] + 0.01, b[1] + 0.025, b[3] - (b[3] - b[2]) * 0.08, Math.min(1, b[3] + 0.018)],
   );
   const u0 = Math.max(0, Math.min(...boxes.map((b) => b[0])) - 0.02);
   const u1 = Math.min(1, Math.max(...boxes.map((b) => b[1])) + 0.02);
@@ -342,7 +347,10 @@ async function makeDepth() {
   const rel = `${roomDir}/depth.${W}`;
   const file = join(MEDIA_OUT, `${rel}.webp`);
   mkdirSync(dirname(file), { recursive: true });
-  await sharp(out, { raw: { width: W, height: H, channels: 1 } }).blur(3).webp({ quality: 90 }).toFile(file);
+  await sharp(out, { raw: { width: W, height: H, channels: 1 } })
+    .blur(3)
+    .webp({ quality: 90 })
+    .toFile(file);
   return `${rel}`;
 }
 
@@ -373,9 +381,7 @@ async function main() {
     const t = temp.slots[slot.id];
     if (!t) continue;
     const pal = t.variant_palette ?? PALETTE;
-    const colors = slot.options.map((o, i) =>
-      i === 0 ? null : ((o.product_id ? productColor.get(o.product_id) : null) ?? pal[(i - 1) % pal.length]!),
-    );
+    const colors = slot.options.map((o, i) => (i === 0 ? null : ((o.product_id ? productColor.get(o.product_id) : null) ?? pal[(i - 1) % pal.length]!)));
     const entry: Record<string, unknown> = { z: slot.z, depth: t.depth, temporary: true };
     for (const key of ['lo', 'hi'] as const) {
       const layers = await makeSlotLayers(bases[key]!, key, slot.id, t, colors);
@@ -399,7 +405,9 @@ async function main() {
 
   // Transition T-E0 (hall → living), temporary frames from the prototype walk-in.
   const tdir = repoPath(temp.transition_source.dir);
-  const frames = readdirSync(tdir).filter((f) => f.endsWith('.webp')).sort();
+  const frames = readdirSync(tdir)
+    .filter((f) => f.endsWith('.webp'))
+    .sort();
   const tw = 1280;
   for (const [i, f] of frames.entries()) {
     const out = join(MEDIA_OUT, `transitions/${temp.transition_source.id}/${temp.style}/${tw}/${String(i + 1).padStart(3, '0')}.webp`);

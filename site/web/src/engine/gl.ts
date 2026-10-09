@@ -75,7 +75,13 @@ export class GLCompositor implements Compositor {
   private loc: Record<string, WebGLUniformLocation | null> = {};
 
   static create(canvas: HTMLCanvasElement): GLCompositor | null {
-    const gl = canvas.getContext('webgl2', { alpha: false, antialias: false, premultipliedAlpha: true, preserveDrawingBuffer: false, powerPreference: 'high-performance' });
+    const gl = canvas.getContext('webgl2', {
+      alpha: false,
+      antialias: false,
+      premultipliedAlpha: true,
+      preserveDrawingBuffer: false,
+      powerPreference: 'high-performance',
+    });
     if (!gl) return null;
     try {
       return new GLCompositor(gl);

@@ -2,7 +2,7 @@
  * Room-to-room transitions: a frame sequence drawn on a canvas. Frames are decoded ahead (createImageBitmap
  * in the loader) so playback is a cheap drawImage per frame. Cover-fitted like the room frame.
  */
-import { Loader, type Decoded } from './loader';
+import { type Loader, type Decoded } from './loader';
 import { mediaUrl } from '../media';
 import type { Scene } from './types';
 

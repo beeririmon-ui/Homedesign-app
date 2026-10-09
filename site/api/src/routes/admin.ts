@@ -29,14 +29,27 @@ admin.get('/overview', async (c) => {
     c.env.DB.prepare('SELECT status, COUNT(*) AS n, SUM(total_agorot) AS total_agorot FROM orders GROUP BY status').all(),
     c.env.DB.prepare('SELECT key, value FROM catalog_meta').all<{ key: string; value: string }>(),
     economics(c.env.DB),
-    c.env.DB.prepare('SELECT COUNT(*) AS products, SUM(visible) AS visible, SUM(price_provisional) AS provisional, SUM(shipping_from_default) AS shipping_defaulted FROM products').first(),
+    c.env.DB.prepare(
+      'SELECT COUNT(*) AS products, SUM(visible) AS visible, SUM(price_provisional) AS provisional, SUM(shipping_from_default) AS shipping_defaulted FROM products',
+    ).first(),
   ]);
-  const m = Object.fromEntries(meta.results.map((r) => [r.key, r.key.endsWith('_options') || r.key.endsWith('_products') || r.key.endsWith('_cards') ? JSON.parse(r.value) : r.value]));
-  return c.json({ actor: c.get('actor'), orders_by_status: byStatus.results, catalog: m, economics: { ...settings, defaults_used: JSON.parse(settings.defaults_used) }, products: counts });
+  const m = Object.fromEntries(
+    meta.results.map((r) => [r.key, r.key.endsWith('_options') || r.key.endsWith('_products') || r.key.endsWith('_cards') ? JSON.parse(r.value) : r.value]),
+  );
+  return c.json({
+    actor: c.get('actor'),
+    orders_by_status: byStatus.results,
+    catalog: m,
+    economics: { ...settings, defaults_used: JSON.parse(settings.defaults_used) },
+    products: counts,
+  });
 });
 
 const ListQuery = z.object({
-  status: z.string().regex(/^[a-z_]{1,32}$/).optional(),
+  status: z
+    .string()
+    .regex(/^[a-z_]{1,32}$/)
+    .optional(),
   limit: z.coerce.number().int().min(1).max(200).default(50),
 });
 
@@ -68,7 +81,11 @@ admin.get('/orders/:id', async (c) => {
       unit_cost_usd_cents: number;
       unit_shipping_usd_cents: number;
     }>(),
-    c.env.DB.prepare('SELECT provider, provider_event_id, type, amount_agorot, received_at, outcome FROM payment_events WHERE order_id = ? ORDER BY received_at').bind(id).all(),
+    c.env.DB.prepare(
+      'SELECT provider, provider_event_id, type, amount_agorot, received_at, outcome FROM payment_events WHERE order_id = ? ORDER BY received_at',
+    )
+      .bind(id)
+      .all(),
     c.env.DB.prepare('SELECT * FROM supplier_shipments WHERE order_id = ?').bind(id).all(),
   ]);
   const fx = order.fx_usd_ils_at_order as number;

@@ -127,7 +127,9 @@ export function Product({ p }: { p: PublicProduct }) {
               הצגה בחדר
             </button>
           </div>
-          <p class="small muted">ביטול עסקה והחזרות לפי חוק הגנת הצרכן. <a href="/returns/">פרטים</a></p>
+          <p class="small muted">
+            ביטול עסקה והחזרות לפי חוק הגנת הצרכן. <a href="/returns/">פרטים</a>
+          </p>
         </div>
       </article>
     </div>

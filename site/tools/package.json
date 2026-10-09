@@ -1,0 +1,18 @@
+{
+  "name": "@hd/tools",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Build-time tools: repo → catalog, temporary media, budgets, artifact preview, screenshots",
+  "scripts": {
+    "catalog": "tsx build-catalog.ts",
+    "assets:temp": "tsx make-temp-assets.ts",
+    "budget": "tsx check-budget.ts",
+    "artifact:finalize": "tsx finalize-artifact.ts",
+    "artifact:check": "tsx check-artifact.ts",
+    "typecheck": "tsc -p ../tsconfig.tools.json --noEmit"
+  },
+  "dependencies": {
+    "@hd/shared": "0.1.0"
+  }
+}

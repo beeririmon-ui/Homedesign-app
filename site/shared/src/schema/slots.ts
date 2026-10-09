@@ -28,8 +28,14 @@ export const SlotSchema = z.looseObject({
   /** Filler ids; kids.json keys them per room ({ boy: [...], girl: [...] }). */
   fillers: z.union([z.array(z.string()), z.record(z.string(), z.array(z.string()))]).optional(),
   frames: z.array(z.string()).optional(),
-  hotspot: z.union([HotspotSchema, z.tuple([Unit, Unit])]).nullable().optional(),
-  zoom_frame: z.union([FrameBoxSchema, z.looseObject({})]).nullable().optional(),
+  hotspot: z
+    .union([HotspotSchema, z.tuple([Unit, Unit])])
+    .nullable()
+    .optional(),
+  zoom_frame: z
+    .union([FrameBoxSchema, z.looseObject({})])
+    .nullable()
+    .optional(),
 });
 export type Slot = z.infer<typeof SlotSchema>;
 

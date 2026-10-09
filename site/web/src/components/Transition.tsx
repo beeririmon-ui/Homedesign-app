@@ -42,7 +42,11 @@ export function TransitionOverlay() {
       const frames = await preloadTransition(sharedLoader, def, 0);
       if (cancelled) return;
       el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 260, fill: 'forwards', easing: 'ease-out' });
-      const playing = playSequence(canvas.current!, frames, { durationMs: (def.frames / def.fps) * 1000 * 1.25, reverse: t.reverse, centerU: scene.mobile_center_u });
+      const playing = playSequence(canvas.current!, frames, {
+        durationMs: (def.frames / def.fps) * 1000 * 1.25,
+        reverse: t.reverse,
+        centerU: scene.mobile_center_u,
+      });
       await wait(260);
       roomReady.value = false;
       await playing;
