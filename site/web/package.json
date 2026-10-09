@@ -1,0 +1,24 @@
+{
+  "name": "@hd/web",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && vite build --ssr src/entry-server.tsx --outDir .ssr && tsx scripts/prerender.ts",
+    "build:artifact": "vite build --mode artifact",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@fontsource/assistant": "5.2.8",
+    "@fontsource/frank-ruhl-libre": "5.2.8",
+    "@hd/shared": "0.1.0",
+    "@preact/signals": "2.5.1",
+    "preact": "10.29.8",
+    "preact-render-to-string": "6.6.3"
+  },
+  "devDependencies": {
+    "vite": "7.3.7",
+    "vite-plugin-singlefile": "2.3.0"
+  }
+}

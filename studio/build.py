@@ -62,6 +62,42 @@ ROOM_DIRS = {
     "living-room": "living-room",
 }
 POOL_DIR = "pool"
+LEADS_DIR = "leads"  # data/products/leads/<slug>.json: new leads written by studio/apply_edits.py
+
+# Extra links (alternative suppliers, reviews...) live in a delimited block at the end of
+# a card's notes, because the card schema has no links field. apply_edits.py writes it;
+# build.py reads it back out so the page shows notes and links separately.
+LINKS_OPEN, LINKS_CLOSE = "[studio-links]", "[/studio-links]"
+LINKS_RE = re.compile(r"\s*\[studio-links\]\n(.*?)\n?\[/studio-links\]\s*", re.S)
+
+
+def split_links(notes):
+    """Return (notes without the links block, [{label, url}])."""
+    if not notes:
+        return notes, []
+    m = LINKS_RE.search(notes)
+    if not m:
+        return notes, []
+    links = []
+    for line in m.group(1).splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        m2 = re.match(r"^(.*?)\s*\|\s*(\S+)$", line)
+        label, url = (m2.group(1), m2.group(2)) if m2 else ("", line)
+        links.append({"label": label.strip(), "url": url.strip()})
+    clean = (notes[:m.start()] + ("\n\n" if notes[:m.start()].strip() and notes[m.end():].strip() else "") + notes[m.end():]).strip()
+    return (clean or None), links
+
+
+def join_links(notes, links):
+    """Inverse of split_links: notes text plus a links block (omitted when there are no links)."""
+    text = (notes or "").strip()
+    rows = [l for l in (links or []) if (l.get("url") or "").strip()]
+    if not rows:
+        return text or None
+    block = "\n".join([LINKS_OPEN] + [f"{(l.get('label') or '').strip()} | {l['url'].strip()}".strip() for l in rows] + [LINKS_CLOSE])
+    return (text + "\n\n" + block) if text else block
 
 # Product "rooms" tags -> slot-file room ids (only used for pool cards that no slot points to).
 ROOM_TAGS = {
@@ -258,7 +294,7 @@ def pid_of(url: str) -> str | None:
     return m.group(1) if m else None
 
 
-def load_products() -> list[dict]:
+def load_products(room_ids=None) -> list[dict]:
     base = ROOT / "data" / "products"
     products = []
     for p in sorted(base.rglob("*.json")):
@@ -271,7 +307,13 @@ def load_products() -> list[dict]:
         room = None
         slot = card.get("slot")
         pool = False
-        if len(parts) == 2:
+        lead = parts[0] == LEADS_DIR
+        if lead:
+            for t in card.get("rooms") or []:
+                room = t if t in (room_ids or ()) else ROOM_TAGS.get(t)
+                if room:
+                    break
+        elif len(parts) == 2:
             room = "living-room"
             slot = slot or parts[0]
         elif parts[0] == POOL_DIR:
@@ -287,6 +329,8 @@ def load_products() -> list[dict]:
         card["_pool"] = pool
         card["_pid"] = pid_of(sup.get("product_url", ""))
         card["_standards"] = detect_standards(card.get("notes") or "")
+        card["notes"], card["_links"] = split_links(card.get("notes"))
+        card["_lead"] = lead
         products.append(card)
     return products
 
@@ -711,16 +755,134 @@ def load_reports(globs: list[str], kind: str) -> list[dict]:
     return out
 
 
+# --------------------------------------------------------------------------- economics
+
+def isnum(v) -> bool:
+    return isinstance(v, (int, float)) and not isinstance(v, bool)
+
+
+def _max_days(key: str, o: dict):
+    for k in ("days_max", "max_days"):
+        if isnum(o.get(k)):
+            return o[k]
+    d = o.get("days")
+    if isnum(d):
+        return d
+    if isinstance(d, str):
+        nums = [int(x) for x in re.findall(r"\d+", d)]
+        if nums:
+            return max(nums)
+    if key == "fastest_under_20d":
+        return 20
+    return None
+
+
+def pick_freight(entry: dict):
+    """Default shipping from CJ freight data: the cheapest option that arrives within 20 days,
+    otherwise the cheapest option overall. Returns (usd, option_key, option) or None."""
+    if not isinstance(entry, dict):
+        return None
+    cu = entry.get("cheapest_under_20d")
+    if isinstance(cu, dict) and isnum(cu.get("usd")):
+        return cu["usd"], "cheapest_under_20d", cu
+    opts = []
+    for key in ("cheapest", "fastest_under_20d"):
+        o = entry.get(key)
+        if isinstance(o, dict) and isnum(o.get("usd")):
+            opts.append((key, o))
+    for o in entry.get("options") or []:
+        if isinstance(o, dict) and isnum(o.get("usd")):
+            opts.append(("option", o))
+    if not opts:
+        return None
+    under = [(k, o) for k, o in opts if (_max_days(k, o) is not None and _max_days(k, o) <= 20)]
+    pool = under or [(k, o) for k, o in opts if k == "cheapest"] or opts
+    k, o = min(pool, key=lambda x: x[1]["usd"])
+    return o["usd"], k, o
+
+
+def load_economics(eco_dir: Path, products: list[dict]) -> dict:
+    out = {"dir": rel(eco_dir) if eco_dir.is_relative_to(ROOT) else str(eco_dir), "settings": None, "budget": None,
+           "products": {}, "freight": None, "files": []}
+    if not eco_dir.exists():
+        return out
+    sp = eco_dir / "settings.json"
+    if sp.exists():
+        d = read_json(sp)
+        out["settings"] = d.get("economics")
+        out["budget"] = d.get("budget")
+        out["files"].append(sp.name)
+    bp = eco_dir / "budget.json"
+    if out["budget"] is None and bp.exists():
+        out["budget"] = read_json(bp)
+        out["files"].append(bp.name)
+    manual = {}
+    pp = eco_dir / "products.json"
+    if pp.exists():
+        d = read_json(pp)
+        manual = d.get("products", d) if isinstance(d, dict) else {}
+        out["files"].append(pp.name)
+    freight, fdate = {}, None
+    fp = eco_dir / "freight-cj.json"
+    if fp.exists():
+        try:
+            d = read_json(fp)
+            freight = d.get("products") or {}
+            for k in ("updated", "generated_at", "generated", "date", "checked_at", "as_of", "created"):
+                if d.get(k):
+                    fdate = first_date(str(d[k]))
+                    if fdate:
+                        break
+            fdate = fdate or git_date(fp) or dt.date.fromtimestamp(fp.stat().st_mtime).isoformat()
+            out["freight"] = {"file": fp.name, "date": fdate, "products": len(freight)}
+            out["files"].append(fp.name)
+        except Exception as e:
+            log(f"  ! cannot read {fp.name}: {e}")
+    n_cj = n_manual = 0
+    for p in products:
+        pid = p["id"]
+        m = manual.get(pid) or {}
+        e = {}
+        if isnum(m.get("shipping_cost_usd")):
+            e.update(shipping_cost_usd=m["shipping_cost_usd"], shipping_source="manual",
+                     shipping_date=first_date(str(m.get("updated_at") or "")))
+            n_manual += 1
+        else:
+            fe = freight.get(pid)
+            got = pick_freight(fe) if fe else None
+            if got:
+                usd, key, o = got
+                days = o.get("days") or (f"{o.get('days_min')}-{o.get('days_max')}" if o.get("days_min") is not None else None)
+                e.update(shipping_cost_usd=usd, shipping_source="cj",
+                         shipping_date=first_date(str(fe.get("checked_at") or fe.get("date") or "")) or fdate,
+                         shipping_option=key, shipping_name=o.get("name") or o.get("logistic") or o.get("method"),
+                         shipping_days=days)
+                n_cj += 1
+            if fe and fe.get("status") is not None:
+                e["freight_status"] = fe.get("status")
+        for k in ("retail_ils", "compare_at_ils"):
+            if isnum(m.get(k)):
+                e[k] = m[k]
+        if e:
+            out["products"][pid] = e
+    out["counts"] = {"shipping_cj": n_cj, "shipping_manual": n_manual,
+                     "retail": sum(1 for v in out["products"].values() if "retail_ils" in v)}
+    return out
+
+
 # --------------------------------------------------------------------------- main
 
 def main() -> int:
     offline = "--offline" in sys.argv
+    eco_dir = ROOT / "data" / "economics"
+    if "--economics-dir" in sys.argv:  # for testing with sample files outside the repo data
+        eco_dir = Path(sys.argv[sys.argv.index("--economics-dir") + 1]).resolve()
     t0 = time.time()
     log(f"Studio build · repo {ROOT}")
     plan = read_json(ROOT / "docs" / "house-plan.json")
     order, rooms = load_rooms(plan)
     slots = load_slots(order, rooms)
-    products = load_products()
+    products = load_products(set(order))
     n_dup = mark_duplicates(products)
     attach_candidates(slots, products)
     log(f"  rooms {len(order)} · slots {sum(len(v) for v in slots.values())} · products {len(products)} · duplicate cards {n_dup}")
@@ -737,6 +899,13 @@ def main() -> int:
     frames = collect_frames(plan, order, rooms)
     hits = build_frame_images(frames)
     log(f"  frame images: {len(frames)} ({hits} from cache)")
+
+    economics = load_economics(eco_dir, products)
+    if economics["files"]:
+        c = economics.get("counts", {})
+        log(f"  economics: {', '.join(economics['files'])} · shipping from CJ {c.get('shipping_cj', 0)}, manual {c.get('shipping_manual', 0)} · retail prices {c.get('retail', 0)}")
+    else:
+        log(f"  economics: no files in {economics['dir']} (the page shows its defaults)")
 
     board = parse_board(ROOT / "status" / "board.md")
     decisions = load_decisions(order)
@@ -781,7 +950,7 @@ def main() -> int:
         q.update({
             "path": p["_path"], "room": p["_room"], "slot_key": p["_slot_key"], "pool": p["_pool"],
             "pid": p["_pid"], "dups": p["_dups"], "shared_in": p["_shared_in"], "in_rooms": p["_in_rooms"],
-            "standards": p["_standards"], "img": p["_img"],
+            "standards": p["_standards"], "img": p["_img"], "links": p["_links"], "lead": p["_lead"],
         })
         out_products.append(q)
 
@@ -810,6 +979,7 @@ def main() -> int:
         "roadmap": board["roadmap"],
         "log": board["log"],
         "decisions": decisions,
+        "economics": economics,
         "reports": qa,
         "leads": leads,
     }

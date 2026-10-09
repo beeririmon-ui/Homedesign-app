@@ -1,0 +1,118 @@
+// Worker אחד: מגיש את האתר הסטטי (Workers Static Assets) ואת ה-API באותו origin.
+// בלי סודות כאן. סודות: `wrangler secret put <NAME>` (Preview/Production) או `.dev.vars` (מקומי, לא בריפו).
+// database_id ו-namespace_id הם ערכי מקום לפיתוח מקומי. לפני deploy מחליפים אותם בערכים מהחשבון (ראו docs/architecture.md, "סביבות").
+{
+  "$schema": "../node_modules/wrangler/config-schema.json",
+  "name": "homedesign-site",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-09-15",
+  "workers_dev": true,
+  "assets": {
+    "directory": "../web/dist",
+    "binding": "ASSETS",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page",
+    "run_worker_first": ["/api/*", "/mock-pay/*"]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "homedesign-dev",
+      "database_id": "00000000-0000-4000-8000-000000000000",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "queues": {
+    "producers": [{ "binding": "SUPPLIER_QUEUE", "queue": "supplier-orders-dev" }],
+    "consumers": [
+      {
+        "queue": "supplier-orders-dev",
+        "max_batch_size": 5,
+        "max_batch_timeout": 2,
+        "max_retries": 5,
+        "dead_letter_queue": "supplier-orders-dev-dlq"
+      }
+    ]
+  },
+  "ratelimits": [
+    { "name": "RL_WRITE", "namespace_id": "1001", "simple": { "limit": 60, "period": 60 } },
+    { "name": "RL_CHECKOUT", "namespace_id": "1002", "simple": { "limit": 10, "period": 60 } }
+  ],
+  "vars": {
+    "ENVIRONMENT": "development",
+    "PAYMENT_PROVIDER": "mock",
+    "SUPPLIER_PROVIDER": "mock",
+    "ACCESS_TEAM_DOMAIN": "",
+    "ACCESS_AUD": ""
+  },
+  "observability": { "enabled": true },
+  "env": {
+    "preview": {
+      "name": "homedesign-site-preview",
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "homedesign-preview",
+          "database_id": "REPLACE_WITH_PREVIEW_D1_ID",
+          "migrations_dir": "migrations"
+        }
+      ],
+      "queues": {
+        "producers": [{ "binding": "SUPPLIER_QUEUE", "queue": "supplier-orders-preview" }],
+        "consumers": [
+          {
+            "queue": "supplier-orders-preview",
+            "max_batch_size": 5,
+            "max_retries": 5,
+            "dead_letter_queue": "supplier-orders-preview-dlq"
+          }
+        ]
+      },
+      "ratelimits": [
+        { "name": "RL_WRITE", "namespace_id": "2001", "simple": { "limit": 60, "period": 60 } },
+        { "name": "RL_CHECKOUT", "namespace_id": "2002", "simple": { "limit": 10, "period": 60 } }
+      ],
+      "vars": {
+        "ENVIRONMENT": "preview",
+        "PAYMENT_PROVIDER": "mock",
+        "SUPPLIER_PROVIDER": "mock",
+        "ACCESS_TEAM_DOMAIN": "REPLACE_WITH_TEAM.cloudflareaccess.com",
+        "ACCESS_AUD": "REPLACE_WITH_ACCESS_APP_AUD"
+      }
+    },
+    "production": {
+      "name": "homedesign-site",
+      "workers_dev": false,
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "homedesign",
+          "database_id": "REPLACE_WITH_PRODUCTION_D1_ID",
+          "migrations_dir": "migrations"
+        }
+      ],
+      "queues": {
+        "producers": [{ "binding": "SUPPLIER_QUEUE", "queue": "supplier-orders" }],
+        "consumers": [
+          {
+            "queue": "supplier-orders",
+            "max_batch_size": 5,
+            "max_retries": 8,
+            "dead_letter_queue": "supplier-orders-dlq"
+          }
+        ]
+      },
+      "ratelimits": [
+        { "name": "RL_WRITE", "namespace_id": "3001", "simple": { "limit": 60, "period": 60 } },
+        { "name": "RL_CHECKOUT", "namespace_id": "3002", "simple": { "limit": 10, "period": 60 } }
+      ],
+      "vars": {
+        "ENVIRONMENT": "production",
+        "PAYMENT_PROVIDER": "UNDECIDED",
+        "SUPPLIER_PROVIDER": "cj",
+        "ACCESS_TEAM_DOMAIN": "REPLACE_WITH_TEAM.cloudflareaccess.com",
+        "ACCESS_AUD": "REPLACE_WITH_ACCESS_APP_AUD"
+      }
+    }
+  }
+}

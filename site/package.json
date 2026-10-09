@@ -1,0 +1,52 @@
+{
+  "name": "homedesign-site",
+  "private": true,
+  "version": "0.1.0",
+  "description": "חנות מותאמת (אפשרות ג'): אתר, מנוע חדר, Worker API ו-D1",
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "workspaces": [
+    "shared",
+    "api",
+    "web"
+  ],
+  "scripts": {
+    "catalog": "tsx tools/build-catalog.ts",
+    "catalog:strict": "tsx tools/build-catalog.ts --strict-prices",
+    "assets:temp": "tsx tools/make-temp-assets.ts",
+    "prepare:data": "npm run catalog && npm run assets:temp",
+    "gen:schema": "tsx shared/scripts/gen-product-card-schema.ts",
+    "dev": "npm run prepare:data && npm run db:reset -w @hd/api && concurrently -k -n api,web -c yellow,cyan \"npm run dev -w @hd/api\" \"npm run dev -w @hd/web\"",
+    "build": "npm run prepare:data && npm run build -w @hd/web && npm run build -w @hd/api && npm run budget",
+    "budget": "tsx tools/check-budget.ts",
+    "preview": "npm run db:reset -w @hd/api && npm run preview -w @hd/api",
+    "preview:artifact": "npm run prepare:data && npm run build:artifact -w @hd/web && tsx tools/finalize-artifact.ts && tsx tools/check-artifact.ts",
+    "typecheck": "tsx shared/scripts/gen-product-card-schema.ts --check && npm run typecheck --workspaces --if-present && tsc -p tsconfig.tools.json --noEmit",
+    "lint": "eslint . --max-warnings=0",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "e2e": "playwright test --project=e2e",
+    "a11y": "playwright test --project=a11y",
+    "screens:artifact": "tsx tools/screens-artifact.ts",
+    "lighthouse": "tsx tools/lighthouse.ts"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.11.0",
+    "@eslint/js": "9.39.5",
+    "@playwright/test": "1.56.1",
+    "@types/node": "22.19.1",
+    "concurrently": "9.2.1",
+    "eslint": "9.39.5",
+    "eslint-plugin-jsx-a11y": "6.10.2",
+    "globals": "16.5.0",
+    "prettier": "3.6.2",
+    "sharp": "0.34.5",
+    "tsx": "4.20.6",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.46.4",
+    "vitest": "4.0.8"
+  }
+}

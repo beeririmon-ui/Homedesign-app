@@ -1,0 +1,25 @@
+{
+  "name": "@hd/api",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev --port 8787 --local --persist-to ../.wrangler-state",
+    "build": "wrangler deploy --dry-run --outdir dist",
+    "preview": "wrangler dev --port 8788 --local --persist-to ../.wrangler-state --var ENVIRONMENT:preview-local",
+    "seed:sql": "tsx scripts/seed.ts",
+    "db:migrate": "wrangler d1 migrations apply DB --local --persist-to ../.wrangler-state",
+    "db:seed": "npm run seed:sql && wrangler d1 execute DB --local --persist-to ../.wrangler-state --file ../.generated/seed.sql",
+    "db:reset": "tsx scripts/reset-local-db.ts && npm run db:migrate && npm run db:seed",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@hd/shared": "0.1.0",
+    "hono": "4.10.4",
+    "zod": "4.1.12"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "4.20251014.0",
+    "wrangler": "4.149.0"
+  }
+}
