@@ -1,0 +1,63 @@
+{
+  "room": "work",
+  "house_room_id": "work",
+  "views": ["W0"],
+  "version": "1.0",
+  "approved": "Frame W0 (W-A: frontal desk wall, built-in oak desk + shelf on the east wall) with the S11/S12 additions approved 2026-10-08 (verbatim: \"סבב 2 נראה מעולה\", on assets/blockout/house/framing/round2/all-round2.jpg, tile W-A-lit), with the density decision (verbatim: \"כתוב מינימום מוצרים..לדעתי כמה שיותר שהמעצב יחליט שזה לא גורע. ו3 וואריציות מתאימות לנורדי לכל מוצר\"). Designer addition under that decision, not in the clay: desk-organizer (completes the desk group of 3). Rules: docs/design-bible/nordic.md 1.6 (rooms: work); geometry: docs/house-plan.md/json 1.1 (6.5).",
+  "notes": "Structure as living-room.json. placement uses the product-card enum; placement_detail names the surface. z = layer order bottom to top; shadow at z-1 unless has_shadow_layer is false. plan_m in house coordinates, Z from the floor. envelope_cm = max envelope per variant; 3 variants within +-15%. frames = master frames where the product is visible by design. hotspot and zoom_frame after the shell render. fillers = unsold contents (Bible 1.5).",
+  "variants_required": 3,
+  "cameras": {
+    "W0": {"loc": [-0.825, 9.85, 1.10], "yaw_deg_left": 0, "lens_mm": 24, "aspect": "16:9", "u0": 0.50, "v0": 0.46, "tilt": 0, "role": "work master frame (one-point symmetric)", "hero": "built-in desk wall, desk centre u 0.50; window on the left wall u 0-0.136 (39% cut); corners 0.219 / 0.781", "source": "docs/house-plan.json cameras.W0"}
+  },
+  "density": {
+    "rule": "Bible 1.6 S11: lean frame, minimum 11 is a floor; as many as the designer judges do not detract. Counted = >= 0.1% of the frame and >= 50% visible, or a cut large textile with >= 1% visible.",
+    "W0": {"kind": "lean", "min": 11, "in_frame": 14, "counted_est": 13, "not_counted": [{"slot": "desk-organizer", "why": "pencil cup < 0.1% of the frame; kept to complete the desk group of 3"}]},
+    "unique_slots": 14,
+    "source": "assets/blockout/house/framing/round2/selfcheck.json (W-A F10) + estimate for the organizer"
+  },
+  "base_layers": [
+    { "id": "shell", "z": 0, "description": "מעטפת: קירות #F4F1EC, תקרה 3.00, כרכוב ושיפולים, פרקט אלון מולבן. החלון הצפוני Y 7.15–8.35 בקיר השמאלי. כנף הדלת מקופלת על הקיר הדרומי (מחוץ לפריים). נקודות חשמל: תלויה (‎−0.825, 6.82, 3.00), מנורת קיר (‎−2.30, 6.70, 1.70), שקע מאחורי השולחן" },
+    { "id": "fixed-furniture-shadow", "z": 34, "blend": "multiply", "description": "הצל של השולחן המובנה והכיסא (אור החלון בלבד)" },
+    { "id": "fixed-furniture", "z": 40, "description": "שולחן אלון מובנה X ‎−1.625…‎−0.025, Y 6.35–6.95, משטח 0.76, עם מגירה; מדף אלון מובנה ב-Z 1.62 (G-W1)", "includes": ["built-in desk", "built-in shelf"] },
+    { "id": "fixed-chair", "z": 60, "description": "כיסא שולחן מאלון, מרכז (‎−0.825, 7.30), גב למצלמה. בשכבה נפרדת, כי הוא מסתיר את מרכז השולחן ואת הסלים שמתחתיו", "includes": ["desk chair"] }
+  ],
+  "slots": [
+    { "id": "curtains", "name_he": "וילונות", "placement": "window", "position": "שני פאנלים, מוט ב-2.82, Y 6.90–8.60; בפריים נראית הערימה המזרחית (נחתכת בשוליים השמאליים) ולפחות 0.20 ממנורת הקיר", "plan_m": { "stacks_y": [[6.93, 7.15], [8.35, 8.57]], "x": [-2.30, -2.18], "z": [0.0, 2.82] }, "envelope_cm": { "panel_w": [130, 150], "drop": [278, 282] }, "frames": ["W0"], "z": 10, "variants": 3, "set_of": 2, "shared": "house curtain family: the same 3 products as data/slots/living-room.json curtains", "hotspot": null, "zoom_frame": null },
+    { "id": "framed-art", "name_he": "תמונה ממוסגרת מעל השולחן", "placement": "wall", "position": "קיר מזרחי, בין המשטח למדף, X ‎−1.125…‎−0.525, Z 0.98–1.48; לפחות 0.02 מהתלויה בפריים (ב-clay 0.012)", "plan_m": { "x": [-1.125, -0.525], "y": [6.35, 6.38], "z": [0.98, 1.48] }, "envelope_cm": { "w": [55, 60], "h": [45, 50], "frame_depth": [2, 3.5] }, "frames": ["W0"], "z": 12, "variants": 3, "shared": "data/products/framed-art/ (house series)", "hotspot": null, "zoom_frame": null },
+    { "id": "wall-sconce", "name_he": "מנורת קיר ליד החלון", "placement": "wall", "position": "קיר צפוני, פלטה ב-(‎−2.30, 6.70, 1.70), בין הפינה לערימת הווילון", "plan_m": { "plate": [-2.30, 6.70, 1.70], "z": [1.60, 1.80] }, "envelope_cm": { "w": [10, 16], "h": [15, 22], "projection_max": 20 }, "frames": ["W0"], "electrical": "CE, 220-240V, hardwired to the wall point, no visible cable, electrician install; 2700K", "z": 14, "variants": 3, "has_light_layer": true, "hotspot": null, "zoom_frame": null },
+    { "id": "rug", "name_he": "שטיח", "placement": "floor", "position": "לפני השולחן ומתחת לכיסא, X ‎−1.725…0.075, Y 6.95–9.05; נחתך בשוליים התחתונים", "plan_m": { "x": [-1.725, 0.075], "y": [6.95, 9.05], "z": [0.0, 0.012] }, "envelope_cm": { "w": [160, 180], "l": [200, 220] }, "frames": ["W0"], "z": 20, "variants": 3, "hotspot": null, "zoom_frame": null },
+    { "id": "basket", "name_he": "סל מתחת לשולחן", "placement": "floor", "position": "מתחת לשולחן משמאל, (‎−1.25, 6.62)", "plan_m": { "center": [-1.25, 6.62], "z": [0.0, 0.32] }, "envelope_cm": { "d": [28, 32], "h": [28, 32] }, "frames": ["W0"], "z": 30, "variants": 3, "hotspot": null, "zoom_frame": null },
+    { "id": "waste-basket", "name_he": "פח נייר", "placement": "floor", "position": "מתחת לשולחן מימין, (‎−0.35, 6.70)", "plan_m": { "center": [-0.35, 6.70], "z": [0.0, 0.30] }, "envelope_cm": { "d": [22, 26], "h": [28, 32] }, "frames": ["W0"], "z": 30, "variants": 3, "hotspot": null, "zoom_frame": null },
+    { "id": "planter", "name_he": "עציץ בפינה ליד החלון", "placement": "floor", "position": "הפינה הצפון-מזרחית, (‎−1.95, 6.70); משקל נגד לחלון", "plan_m": { "center": [-1.95, 6.70], "z": [0.0, 1.30] }, "envelope_cm": { "pot_d": [34, 38], "pot_h": [36, 42], "plant_top_max": 130 }, "frames": ["W0"], "z": 32, "variants": 3, "fillers": ["plant"], "hotspot": null, "zoom_frame": null },
+    { "id": "magazine-holder", "name_he": "מחזיק עיתונים", "placement": "floor", "position": "מימין לשולחן, X 0.10–0.35, Y 6.40–6.65", "plan_m": { "x": [0.10, 0.35], "y": [6.40, 6.65], "z": [0.0, 0.42] }, "envelope_cm": { "w": [24, 30], "d": [20, 25], "h": [36, 42] }, "frames": ["W0"], "z": 34, "variants": 3, "fillers": ["magazines"], "shared": "data/products/magazine-holder/ (living pool; not the living default)", "hotspot": null, "zoom_frame": null },
+    { "id": "shelf-boxes", "name_he": "קופסאות על המדף (זוג)", "placement": "surface", "placement_detail": "built-in shelf", "position": "על המדף ב-1.62: X ‎−1.50…‎−1.20 ו-‎−0.45…‎−0.15, משני צדי תומכי הספרים", "plan_m": { "x": [[-1.50, -1.20], [-0.45, -0.15]], "y": [6.38, 6.60], "z": [1.62, 1.88] }, "envelope_cm": { "w": [28, 32], "d": [20, 24], "h": [[20, 26], [12, 18]] }, "frames": ["W0"], "z": 44, "variants": 3, "set_of": 2, "hotspot": null, "zoom_frame": null },
+    { "id": "bookends", "name_he": "תומכי ספרים", "placement": "surface", "placement_detail": "built-in shelf", "position": "במרכז המדף, X ‎−1.03…‎−0.69, עם ספרים כמילוי", "plan_m": { "x": [-1.03, -0.69], "y": [6.40, 6.58], "z": [1.62, 1.90] }, "envelope_cm": { "h": [14, 18], "d": [12, 16] }, "frames": ["W0"], "z": 44, "variants": 3, "set_of": 2, "fillers": ["books"], "hotspot": null, "zoom_frame": null },
+    { "id": "desk-tray", "name_he": "מגש שולחן", "placement": "surface", "placement_detail": "built-in desk", "position": "צד שמאל של השולחן, X ‎−1.45…‎−1.20; נושא את כלי העפרונות", "plan_m": { "x": [-1.45, -1.20], "y": [6.45, 6.70], "z": [0.76, 0.79] }, "envelope_cm": { "w": [22, 28], "d": [18, 26], "h": [2, 4] }, "frames": ["W0"], "z": 44, "variants": 3, "hotspot": null, "zoom_frame": null },
+    { "id": "desk-organizer", "name_he": "כלי עפרונות", "placement": "surface", "placement_detail": "desk tray", "position": "על המגש, (‎−1.32, 6.55); הקבוצה על השולחן: מגש, כלי ומנורה", "plan_m": { "center": [-1.32, 6.55], "z": [0.79, 0.92] }, "envelope_cm": { "d": [7, 10], "h": [10, 14] }, "frames": ["W0"], "z": 46, "variants": 3, "fillers": ["pencils"], "status_1_0": "designer addition (density decision 2026-10-08), not in the clay", "hotspot": null, "zoom_frame": null },
+    { "id": "desk-lamp", "name_he": "מנורת שולחן", "placement": "surface", "placement_detail": "built-in desk", "position": "צד ימין של השולחן, (‎−0.30, 6.58); הכבל יורד מאחורי השולחן לשקע", "plan_m": { "center": [-0.30, 6.58], "z": [0.76, 1.25] }, "envelope_cm": { "h": [40, 50], "shade_d": [16, 22], "base_d_max": 14 }, "frames": ["W0"], "electrical": "plug-in: Israeli or EU plug, 220-240V, SI or CE; cable hidden behind the desk", "z": 46, "variants": 3, "has_light_layer": true, "hotspot": null, "zoom_frame": null },
+    { "id": "pendant", "name_he": "מנורה תלויה מעל השולחן", "placement": "ceiling", "position": "נקודה (‎−0.825, 6.82, 3.00), מעל קדמת השולחן; תחתית האהיל 1.50, ראש עד 1.72; נחתך בשוליים העליונים רק בכבל", "plan_m": { "center": [-0.825, 6.82], "z": [1.50, 1.72] }, "envelope_cm": { "d_max": 34, "h": [18, 22] }, "frames": ["W0"], "electrical": "CE, 220-240V, hardwired to the ceiling point, no plug, electrician install; 2700K; bulb hidden", "z": 80, "variants": 3, "has_light_layer": true, "has_shadow_layer": false, "shadow_note": "תלויה באוויר, 0.74 מעל המשטח", "hotspot": null, "zoom_frame": null }
+  ],
+  "fillers": [
+    { "id": "plant", "name_he": "צמח בעציץ", "slot": "planter", "sold": false, "spec": "upright soft-leaved plant, crown in the sage range, top <= Z 1.30" },
+    { "id": "magazines", "name_he": "עיתונים במחזיק", "slot": "magazine-holder", "sold": false, "spec": "3 magazines as in the living room, no readable text" },
+    { "id": "books", "name_he": "ספרים בין תומכי הספרים", "slot": "bookends", "sold": false, "spec": "6-8 hardcovers in the palette (warm white, oat, fog, one charcoal), spines without readable text, same in every variant" },
+    { "id": "pencils", "name_he": "עפרונות בכלי", "slot": "desk-organizer", "sold": false, "spec": "4-6 natural wood or charcoal pencils" }
+  ],
+  "kept_out_of_frame": ["laptop, papers and other stationery", "books outside the bookends", "cables"],
+  "light_layers": { "z": 90, "blend": "screen", "count": 9, "active": { "W0": 3 }, "slots": ["desk-lamp", "pendant", "wall-sconce"], "lit_typologies": { "W0": ["task", "ceiling", "wall"] } },
+  "accent_carriers": {
+    "charcoal": ["framed-art (3/3)", "magazine-holder (3/3)"],
+    "sage": ["plant (filler)", "at most one textile variant"]
+  },
+  "transition_in": { "id": "T-HW", "from": "hall H0", "segments": "pan 12->0 at H0, slide 3.73 m through the work door (0.233 to the jambs), pull-back 1.30 m", "play_s_approx": 3.3 },
+  "blockout_checks": [
+    "W-HC1 desk centre u 0.50 +-0.01; corners 0.219 / 0.781; window cut >= 15%",
+    "W-HC2 framed-art vs pendant shade >= 0.02 or decisive overlap (clay 0.012)",
+    "W-HC3 basket / waste-basket vs rug and chair legs: no kissing contours (clay 0.008-0.014)",
+    "W-HC4 wall sconce >= 0.20 from the curtain stack",
+    "W-HC5 density >= 11 counted; three lamp typologies lit and visible"
+  ],
+  "open_for_user": [
+    "desk-organizer: designer addition not in the clay"
+  ]
+}

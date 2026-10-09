@@ -1,0 +1,49 @@
+{
+  "room": "corridor",
+  "house_room_id": "corridor",
+  "views": ["C0"],
+  "version": "1.0",
+  "approved": "Frame C0 (C-B: roof-light slot, gallery Y 14.0-15.6, oak portal) with the S11/S12 additions approved 2026-10-08 (verbatim: \"סבב 2 נראה מעולה\", on assets/blockout/house/framing/round2/all-round2.jpg, tile C-B-lit), with the density decision (verbatim: \"כתוב מינימום מוצרים..לדעתי כמה שיותר שהמעצב יחליט שזה לא גורע. ו3 וואריציות מתאימות לנורדי לכל מוצר\"). Designer addition under that decision, not in the clay: gallery-stool (runner narrowed to 60 so that it clears the stool). The optional picture-ledge of plan 1.0 is dropped. Rules: docs/design-bible/nordic.md 1.6 (rooms: corridor); geometry: docs/house-plan.md/json 1.1 (6.4).",
+  "notes": "Structure as living-room.json. placement uses the product-card enum. z = layer order bottom to top; shadow at z-1 unless has_shadow_layer is false. plan_m in house coordinates, Z from the floor. envelope_cm = max envelope per variant; 3 variants within +-15%. frames = master frames where the product is visible by design. The hall and living products seen at the end of the enfilade are neighbouring-room products (rendered with their defaults, U9), not counted here. hotspot and zoom_frame after the shell render.",
+  "variants_required": 3,
+  "cameras": {
+    "C0": {"loc": [2.397, 17.110, 1.20], "yaw_deg_left": 0, "lens_mm": 24, "aspect": "16:9", "u0": 0.50, "v0": 0.46, "tilt": 0, "role": "transit frame; rail end station (girl, master)", "hero": "gallery of light: the left wall washed by the roof slot, leading to the glowing hall and living vista; vanishing point u 0.50", "source": "docs/house-plan.json cameras.C0"}
+  },
+  "density": {
+    "rule": "Bible 1.6 S11: transit frame, minimum 5 is a floor. Counted = >= 0.1% of the frame and >= 50% visible, or a cut large textile with >= 1% visible; a set counts once if one piece qualifies.",
+    "C0": {"kind": "transit", "min": 5, "in_frame": 5, "counted_est": 5, "not_counted": [], "note": "ceiling-lights counts through its far piece at Y 11.70 (fully visible); the near piece at Y 15.10 is above the frame. runner-rug counts as a cut textile (4.8% of the frame)"},
+    "unique_slots": 5,
+    "removed": ["picture-ledge (optional in plan 1.0): the only calm right-wall run lies between two doors and in steep perspective"],
+    "source": "assets/blockout/house/framing/round2/selfcheck.json (C-B F10) + estimate for the stool"
+  },
+  "base_layers": [
+    { "id": "shell", "z": 0, "description": "מעטפת: קירות #F4F1EC, תקרה מונמכת 2.70 עם חריץ צל, פרקט אלון מולבן. חריץ אור חלבי RL-corridor לאורך הקיר השמאלי (X 1.70–2.00, Y 10.00–17.20). פורטל אלון בפתח לכניסה (G-C3). דלתות פתוחות לילד, לילדה ולמקלחת; דלת הכביסה סגורה ושטוחה. נקודות חשמל: 2 בתקרה (Y 11.70, 15.10) ו-3 מעל ההדפסים. בקצה: הכניסה והסלון בברירות המחדל (U9)" }
+  ],
+  "slots": [
+    { "id": "runner-rug", "name_he": "שטיח ראנר במסדרון", "placement": "floor", "position": "במרכז המסדרון, X 2.10–2.70 (רוחב 60), Y 10.10–17.20; לפחות 0.02 בפריים מהשרפרף", "plan_m": { "x": [2.10, 2.70], "y": [10.10, 17.20], "z": [0.0, 0.012] }, "envelope_cm": { "w": [58, 65], "l": [680, 710] }, "sourcing_note": "sold by length, or two identical pieces butted with a gap of <= 3 cm", "frames": ["C0"], "z": 20, "variants": 3, "status_1_0": "narrowed from 80 (clay) to 60 for the gallery stool", "hotspot": null, "zoom_frame": null },
+    { "id": "ceiling-lights", "name_he": "מנורות תקרה חצי-צמודות (זוג)", "placement": "ceiling", "position": "(2.40, 11.70) ו-(2.40, 15.10); הקרובה מעל הפריים, הרחוקה נראית במלואה (u ≈0.50, v ≈0.13)", "plan_m": { "centers": [[2.40, 11.70], [2.40, 15.10]], "z": [2.50, 2.70] }, "envelope_cm": { "d": [30, 40], "projection": [12, 20] }, "frames": ["C0"], "electrical": "CE, 220-240V, hardwired to the ceiling points, no plug; 2700K", "z": 80, "variants": 3, "set_of": 2, "has_light_layer": true, "has_shadow_layer": false, "shadow_note": "צמודות לתקרה, באור מפוזר", "shared": "bridge: same shade material as the kids' pendants and the hall ceiling light (fabric drum or flat paper lantern)", "hotspot": null, "zoom_frame": null },
+    { "id": "gallery-art", "name_he": "גלריה: 3 הדפסים ממוסגרים", "placement": "wall", "position": "קיר שמאל (X 1.70): Y 14.0–14.4, 14.6–15.0, 15.2–15.6; מרכז ב-Z 1.45, ראש עד 1.70; בפריים u 0.192–0.35, לא נחתך", "plan_m": { "x": [1.70, 1.73], "y": [14.0, 15.6], "z": [1.20, 1.70] }, "envelope_cm": { "w_each": 40, "h_each": [45, 50], "gap": 20, "frame_depth": [2, 3] }, "frames": ["C0"], "z": 12, "variants": 3, "set_of": 3, "shared": "data/products/framed-art/ (house series); charcoal line in every variant", "hotspot": null, "zoom_frame": null },
+    { "id": "picture-lights", "name_he": "מנורות תמונה (3)", "placement": "wall", "position": "אחת מעל כל הדפס, Z 1.74–1.82, זרוע 10–15; המנורה הקרובה לפחות 0.02 בתוך הפריים או חתוכה בנחישות (ב-clay 0.018)", "plan_m": { "x": [1.70, 1.85], "y": [14.05, 15.55], "z": [1.74, 1.82] }, "envelope_cm": { "w": [25, 32], "projection": [10, 15], "h": [4, 8] }, "frames": ["C0"], "electrical": "CE, 220-240V, hardwired to wall points, no visible cable; LED 2700K, CRI 90+, even wash without a hot spot", "z": 14, "variants": 3, "set_of": 3, "has_light_layer": true, "hotspot": null, "zoom_frame": null },
+    { "id": "gallery-stool", "name_he": "שרפרף מתחת לגלריה", "placement": "floor", "position": "צמוד לקיר השמאלי מתחת להדפס הרחוק, X 1.72–2.00, Y 14.05–14.33; הערכה בפריים u ≈0.35–0.42, v ≈0.76–0.94; לפחות 0.02 מהראנר", "plan_m": { "x": [1.72, 2.00], "y": [14.05, 14.33], "z": [0.0, 0.46] }, "envelope_cm": { "w": [26, 30], "d": [26, 30], "h": [42, 46] }, "frames": ["C0"], "z": 30, "variants": 3, "status_1_0": "designer addition (density decision 2026-10-08), not in the clay; first to go if busy", "hotspot": null, "zoom_frame": null }
+  ],
+  "fillers": [],
+  "kept_out_of_frame": ["anything on the right wall (doors)", "shoes", "plants on the floor in front of the vista"],
+  "light_layers": { "z": 90, "blend": "screen", "count": 6, "active": { "C0": 2 }, "slots": ["ceiling-lights", "picture-lights"], "lit_typologies": { "C0": ["ceiling", "wall"] }, "daylight": "roof slot RL-corridor (shell)" },
+  "accent_carriers": {
+    "charcoal": ["gallery-art (3/3)", "picture-lights (at least one charcoal variant)"],
+    "oak": ["gallery-stool", "portal (shell)"]
+  },
+  "rail": { "line": "X(Y) = 2.877 - 0.0595 (Y - 9.039)", "stations": ["H0e", "S1' (2.641, 13.00)", "C0"], "stool_clearance_m": 0.55 },
+  "transitions": ["T-HC (in, from the hall)", "T-CBoy", "T-CGirl", "T-CBath", "T-CM (out)"],
+  "blockout_checks": [
+    "C-HC1 vanishing point u 0.50; gallery u 0.192-0.35 +-0.02; girl door jamb out of frame",
+    "C-HC2 nearest picture light >= 0.02 inside the top edge or cut >= 15%; gallery-art vs picture lights >= 0.02 apart or decisively overlapping (clay 0.011)",
+    "C-HC3 gallery stool >= 0.02 from the runner and the near print in frame; >= 0.15 from every transition path",
+    "C-HC4 density >= 5 counted; ceiling + picture lights lit and visible",
+    "C-HC5 F7: mean L with the roof slot (sky only) >= 95 (round 1: 121.5)"
+  ],
+  "open_for_user": [
+    "gallery-stool: designer addition not in the clay; runner narrowed to 60",
+    "picture-ledge (optional in plan 1.0) dropped"
+  ]
+}
