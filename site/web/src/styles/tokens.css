@@ -1,0 +1,94 @@
+/* Design tokens. Light = Design Bible "טיפוגרפיה וממשק"; dark = the same palette at night.
+   Order required by the artifact contract: :root, then the dark media query guarded by
+   :root:not([data-theme=light]), then :root[data-theme=dark]. All text pairs ≥ 4.5:1 (checked). */
+:root {
+  --bg: #f4f1ec; /* warm white */
+  --surface: #fbfaf7;
+  --surface-2: #e9e4db;
+  --ink: #3a3a3a; /* charcoal, 10.1:1 on --bg */
+  --ink-2: #5c5852; /* 6.3:1 */
+  --line: #d9d6d0; /* mist */
+  --line-strong: #b9b3a9;
+  --accent: #c8a27a; /* oak: decoration only, never text */
+  --accent-ink: #6f5a3f; /* 5.8:1 */
+  --sage: #a7b09a;
+  --sage-ink: #4a5a3c;
+  --primary-bg: #3a3a3a;
+  --primary-ink: #f4f1ec;
+  --secondary-bg: #a7b09a;
+  --secondary-ink: #3a3a3a;
+  --danger: #9a3b2e;
+  --focus: #3a3a3a;
+  --stage: #141312;
+  --on-stage: #f4f1ec;
+  --glass: rgba(28, 27, 25, 0.56);
+  --glass-line: rgba(244, 241, 236, 0.2);
+  --shadow: 0 10px 40px rgba(20, 19, 18, 0.18);
+
+  --f-display: 'Frank Ruhl Libre', 'David Libre', Georgia, serif;
+  --f-body: 'Assistant', 'Heebo', 'Arial Hebrew', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --fs-h1: clamp(30px, 4.2vw, 44px);
+  --fs-h2: clamp(24px, 3vw, 30px);
+  --fs-body: 17px;
+  --lh-body: 1.65;
+  --radius: 14px;
+  --radius-pill: 999px;
+  --gutter: 24px;
+  --maxw: 1180px;
+  --header-h: 60px;
+  --ease: cubic-bezier(0.77, 0, 0.18, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #1c1b19;
+    --surface: #262522;
+    --surface-2: #302e2a;
+    --ink: #ece8e1;
+    --ink-2: #b3ada3;
+    --line: #3a3835;
+    --line-strong: #57534d;
+    --accent: #b48f67;
+    --accent-ink: #d4b48c;
+    --sage: #8d967f;
+    --sage-ink: #c3cdb3;
+    --primary-bg: #ece8e1;
+    --primary-ink: #1c1b19;
+    --secondary-bg: #a7b09a;
+    --secondary-ink: #1c1b19;
+    --danger: #e9a493;
+    --focus: #ece8e1;
+    --shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme='dark'] {
+  --bg: #1c1b19;
+  --surface: #262522;
+  --surface-2: #302e2a;
+  --ink: #ece8e1;
+  --ink-2: #b3ada3;
+  --line: #3a3835;
+  --line-strong: #57534d;
+  --accent: #b48f67;
+  --accent-ink: #d4b48c;
+  --sage: #8d967f;
+  --sage-ink: #c3cdb3;
+  --primary-bg: #ece8e1;
+  --primary-ink: #1c1b19;
+  --secondary-bg: #a7b09a;
+  --secondary-ink: #1c1b19;
+  --danger: #e9a493;
+  --focus: #ece8e1;
+  --shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  color-scheme: dark;
+}
+
+@media (min-width: 720px) {
+  :root {
+    --gutter: 32px;
+  }
+}

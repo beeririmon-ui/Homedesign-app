@@ -1,5 +1,8 @@
 /** Request/response contracts shared by the Worker API, the web client and the in-browser mock. */
 import { z } from 'zod';
+import { IL_PHONE, ORDER_STATUSES } from './constants';
+
+export { IL_PHONE, ORDER_STATUSES, ORDER_STATUS_HE, type OrderStatus } from './constants';
 
 export const CartItemInputSchema = z.object({
   variant_id: z.string().min(1).max(160),
@@ -25,8 +28,6 @@ export const CartSchema = z.object({
 });
 export type Cart = z.infer<typeof CartSchema>;
 
-/** Israeli mobile or landline, digits with optional dashes/spaces, or +972. */
-export const IL_PHONE = /^(?:\+972[-\s]?|0)(?:[23489]|5\d|7\d)[-\s]?\d{3}[-\s]?\d{4}$/;
 
 export const CustomerSchema = z.object({
   full_name: z.string().trim().min(2).max(80),
@@ -66,31 +67,6 @@ export const CheckoutResponseSchema = z.object({
   redirect_url: z.string(),
 });
 export type CheckoutResponse = z.infer<typeof CheckoutResponseSchema>;
-
-export const ORDER_STATUSES = [
-  'pending_payment',
-  'paid',
-  'payment_failed',
-  'canceled',
-  'sent_to_supplier',
-  'supplier_error',
-  'shipped',
-  'delivered',
-  'refunded',
-] as const;
-export type OrderStatus = (typeof ORDER_STATUSES)[number];
-
-export const ORDER_STATUS_HE: Record<OrderStatus, string> = {
-  pending_payment: 'ממתינה לתשלום',
-  paid: 'שולמה',
-  payment_failed: 'התשלום נכשל',
-  canceled: 'בוטלה',
-  sent_to_supplier: 'הועברה לספק',
-  supplier_error: 'בטיפול',
-  shipped: 'נשלחה',
-  delivered: 'נמסרה',
-  refunded: 'זוכתה',
-};
 
 export const OrderViewSchema = z.object({
   id: z.string(),
