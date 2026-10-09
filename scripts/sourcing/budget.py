@@ -15,6 +15,7 @@ or --max-points / --max-calls in the source CLIs). A run is named by --run-id or
 CLI:
   python3 scripts/sourcing/budget.py status
   python3 scripts/sourcing/budget.py can cj product
+  python3 scripts/sourcing/budget.py record cj 2870 "rounds 6-8 before the pipeline"   # usage made outside it
 """
 import contextlib, datetime as dt, fcntl, json, os, sys
 
@@ -117,6 +118,15 @@ def charge(source, endpoint, rid=None, max_points=None, max_calls=None, n=1):
         return total, s["used"]
 
 
+def record(source, amount, note=""):
+    """Add usage that happened outside this pipeline (another tool, the CJ site), so the caps stay honest."""
+    with _locked_state() as st:
+        s = st["sources"].setdefault(source, {"used": 0, "calls": {}, "runs": {}})
+        s["used"] += int(amount)
+        s.setdefault("external", []).append({"amount": int(amount), "note": note})
+        return s["used"]
+
+
 def status(date=None):
     p = path(date)
     st = json.load(open(p)) if os.path.exists(p) else {"date": date or today(), "sources": {}}
@@ -138,5 +148,7 @@ if __name__ == "__main__":
         ok, cost, problems, used = can(a[1], a[2])
         print(json.dumps({"ok": ok, "cost": cost, "used_today": used, "problems": problems}, indent=1))
         sys.exit(0 if ok else 1)
+    elif a[0] == "record" and len(a) >= 3:
+        print(json.dumps({"used_today": record(a[1], a[2], " ".join(a[3:]))}))
     else:
         sys.exit(__doc__)
