@@ -5,26 +5,420 @@
   "frame": "M0",
   "source_manifest_id": "styled-preview-r2-nordic-final",
   "hall_source": "site/prototype/assets/hall.jpg",
-  "transition_source": { "id": "T-E0", "dir": "site/prototype/assets/frames/entrance", "frames": 61, "note": "prototype var2 walk-in (2026-09-29), older room geometry; temporary stand-in for T-E0" },
+  "transition_source": {
+    "id": "T-E0",
+    "dir": "site/prototype/assets/frames/entrance",
+    "frames": 61,
+    "note": "prototype var2 walk-in (2026-09-29), older room geometry; temporary stand-in for T-E0"
+  },
   "measured_by": "frontend-dev, 2026-10-09, by eye on a 5% grid over the styled preview (r2). Boxes are [u0, u1, v0, v1]. depth: 0 = far (back wall), 1 = near (camera).",
   "slots": {
-    "curtains": { "boxes": [[0.055, 0.16, 0.0, 0.9], [0.3, 0.36, 0.08, 0.72]], "hotspot": [0.11, 0.56], "depth": 0.45 },
-    "framed-art": { "boxes": [[0.502, 0.8, 0.215, 0.465]], "hotspot": [0.65, 0.34], "depth": 0.08 },
-    "wall-decor": { "boxes": [], "hotspot": [0.475, 0.45], "visible": false, "depth": 0.1, "note": "not present in the temporary image" },
-    "accent-sconces": { "boxes": [[0.44, 0.472, 0.262, 0.327], [0.85, 0.895, 0.212, 0.29]], "hotspot": [0.456, 0.295], "depth": 0.08, "glow": [[0.456, 0.295, 0.05], [0.872, 0.25, 0.055]] },
-    "wall-sconce": { "boxes": [[0.018, 0.125, 0.255, 0.455]], "hotspot": [0.075, 0.33], "depth": 0.7, "glow": [[0.085, 0.33, 0.09]] },
-    "vase": { "boxes": [[0.215, 0.3, 0.33, 0.585]], "hotspot": [0.252, 0.52], "depth": 0.35 },
-    "rug": { "boxes": [[0.15, 0.92, 0.74, 1.0]], "hotspot": [0.63, 0.94], "depth": 0.7 },
-    "floor-lamp": { "boxes": [[0.818, 0.9, 0.345, 0.665]], "hotspot": [0.859, 0.4], "depth": 0.18, "glow": [[0.859, 0.4, 0.085]] },
-    "planter": { "boxes": [[0.35, 0.47, 0.3, 0.745]], "hotspot": [0.41, 0.69], "depth": 0.2 },
-    "sofa-cover": { "boxes": [[0.44, 0.81, 0.53, 0.8]], "hotspot": [0.49, 0.66], "depth": 0.3 },
-    "cushions": { "boxes": [[0.47, 0.775, 0.52, 0.665], [0.69, 0.82, 0.6, 0.83]], "hotspot": [0.72, 0.6], "depth": 0.32 },
-    "basket": { "boxes": [[0.82, 0.92, 0.635, 0.84]], "hotspot": [0.872, 0.75], "depth": 0.24 },
-    "magazine-holder": { "boxes": [], "hotspot": [0.1, 0.8], "visible": false, "depth": 0.75, "note": "not present in the temporary image" },
-    "table-runner": { "boxes": [[0.51, 0.59, 0.66, 0.85]], "hotspot": [0.552, 0.79], "depth": 0.48 },
-    "bowl": { "boxes": [[0.605, 0.68, 0.67, 0.735]], "hotspot": [0.643, 0.7], "depth": 0.46 },
-    "candle-holders": { "boxes": [[0.548, 0.612, 0.565, 0.71]], "hotspot": [0.597, 0.63], "depth": 0.45 },
-    "pouf": { "boxes": [[0.37, 0.52, 0.8, 0.985]], "hotspot": [0.445, 0.885], "depth": 0.72 },
-    "pendant": { "boxes": [[0.515, 0.61, 0.09, 0.232]], "hotspot": [0.5625, 0.165], "depth": 0.4, "glow": [[0.5625, 0.17, 0.08]] }
-  }
+    "curtains": {
+      "boxes": [
+        [
+          0.055,
+          0.16,
+          0.0,
+          0.9
+        ],
+        [
+          0.3,
+          0.36,
+          0.08,
+          0.72
+        ]
+      ],
+      "hotspot": [
+        0.11,
+        0.56
+      ],
+      "depth": 0.45,
+      "zoom": [
+        0.055,
+        0.16,
+        0.05,
+        0.85
+      ],
+      "exclude": [
+        "wall-sconce",
+        "armchair"
+      ]
+    },
+    "framed-art": {
+      "boxes": [
+        [
+          0.502,
+          0.8,
+          0.215,
+          0.465
+        ]
+      ],
+      "hotspot": [
+        0.65,
+        0.34
+      ],
+      "depth": 0.08,
+      "exclude": [
+        "pendant"
+      ]
+    },
+    "wall-decor": {
+      "boxes": [],
+      "hotspot": [
+        0.475,
+        0.45
+      ],
+      "visible": false,
+      "depth": 0.1,
+      "note": "not present in the temporary image"
+    },
+    "accent-sconces": {
+      "boxes": [
+        [
+          0.44,
+          0.472,
+          0.262,
+          0.327
+        ],
+        [
+          0.85,
+          0.895,
+          0.212,
+          0.29
+        ]
+      ],
+      "hotspot": [
+        0.456,
+        0.295
+      ],
+      "depth": 0.08,
+      "glow": [
+        [
+          0.456,
+          0.295,
+          0.05
+        ],
+        [
+          0.872,
+          0.25,
+          0.055
+        ]
+      ],
+      "zoom": [
+        0.43,
+        0.48,
+        0.255,
+        0.335
+      ],
+      "exclude": [
+        "framed-art"
+      ]
+    },
+    "wall-sconce": {
+      "boxes": [
+        [
+          0.018,
+          0.125,
+          0.255,
+          0.455
+        ]
+      ],
+      "hotspot": [
+        0.075,
+        0.33
+      ],
+      "depth": 0.7,
+      "glow": [
+        [
+          0.085,
+          0.33,
+          0.09
+        ]
+      ]
+    },
+    "vase": {
+      "boxes": [
+        [
+          0.215,
+          0.3,
+          0.33,
+          0.585
+        ]
+      ],
+      "hotspot": [
+        0.252,
+        0.52
+      ],
+      "depth": 0.35,
+      "exclude": [
+        "curtains"
+      ]
+    },
+    "rug": {
+      "boxes": [
+        [
+          0.15,
+          0.92,
+          0.74,
+          1.0
+        ]
+      ],
+      "hotspot": [
+        0.63,
+        0.94
+      ],
+      "depth": 0.7,
+      "zoom": [
+        0.5,
+        0.86,
+        0.8,
+        1.0
+      ],
+      "exclude": [
+        "armchair",
+        "coffee-table",
+        "sofa",
+        "pouf",
+        "basket",
+        "table-runner"
+      ]
+    },
+    "floor-lamp": {
+      "boxes": [
+        [
+          0.818,
+          0.9,
+          0.345,
+          0.665
+        ]
+      ],
+      "hotspot": [
+        0.859,
+        0.4
+      ],
+      "depth": 0.18,
+      "glow": [
+        [
+          0.859,
+          0.4,
+          0.085
+        ]
+      ],
+      "exclude": [
+        "basket"
+      ]
+    },
+    "planter": {
+      "boxes": [
+        [
+          0.35,
+          0.47,
+          0.3,
+          0.745
+        ]
+      ],
+      "hotspot": [
+        0.41,
+        0.69
+      ],
+      "depth": 0.2,
+      "exclude": [
+        "armchair",
+        "sofa"
+      ]
+    },
+    "sofa-cover": {
+      "boxes": [
+        [
+          0.44,
+          0.81,
+          0.53,
+          0.8
+        ]
+      ],
+      "hotspot": [
+        0.49,
+        0.66
+      ],
+      "depth": 0.3,
+      "zoom": [
+        0.44,
+        0.62,
+        0.53,
+        0.8
+      ],
+      "exclude": [
+        "coffee-table",
+        "cushions",
+        "candle-holders",
+        "bowl",
+        "table-runner",
+        "basket"
+      ]
+    },
+    "cushions": {
+      "boxes": [
+        [
+          0.47,
+          0.775,
+          0.52,
+          0.665
+        ],
+        [
+          0.69,
+          0.82,
+          0.6,
+          0.83
+        ]
+      ],
+      "hotspot": [
+        0.72,
+        0.6
+      ],
+      "depth": 0.32,
+      "zoom": [
+        0.6,
+        0.78,
+        0.52,
+        0.68
+      ],
+      "exclude": [
+        "candle-holders",
+        "coffee-table",
+        "basket"
+      ]
+    },
+    "basket": {
+      "boxes": [
+        [
+          0.82,
+          0.92,
+          0.635,
+          0.84
+        ]
+      ],
+      "hotspot": [
+        0.872,
+        0.75
+      ],
+      "depth": 0.24
+    },
+    "magazine-holder": {
+      "boxes": [],
+      "hotspot": [
+        0.1,
+        0.8
+      ],
+      "visible": false,
+      "depth": 0.75,
+      "note": "not present in the temporary image"
+    },
+    "table-runner": {
+      "boxes": [
+        [
+          0.51,
+          0.59,
+          0.66,
+          0.85
+        ]
+      ],
+      "hotspot": [
+        0.552,
+        0.79
+      ],
+      "depth": 0.48
+    },
+    "bowl": {
+      "boxes": [
+        [
+          0.605,
+          0.68,
+          0.67,
+          0.735
+        ]
+      ],
+      "hotspot": [
+        0.643,
+        0.7
+      ],
+      "depth": 0.46,
+      "exclude": [
+        "candle-holders"
+      ]
+    },
+    "candle-holders": {
+      "boxes": [
+        [
+          0.548,
+          0.612,
+          0.565,
+          0.71
+        ]
+      ],
+      "hotspot": [
+        0.597,
+        0.63
+      ],
+      "depth": 0.45
+    },
+    "pouf": {
+      "boxes": [
+        [
+          0.37,
+          0.52,
+          0.8,
+          0.985
+        ]
+      ],
+      "hotspot": [
+        0.445,
+        0.885
+      ],
+      "depth": 0.72
+    },
+    "pendant": {
+      "boxes": [
+        [
+          0.515,
+          0.61,
+          0.09,
+          0.232
+        ]
+      ],
+      "hotspot": [
+        0.5625,
+        0.165
+      ],
+      "depth": 0.4,
+      "glow": [
+        [
+          0.5625,
+          0.17,
+          0.08
+        ]
+      ]
+    }
+  },
+  "notes_zoom": "zoom: optional box that the zoom frames instead of the union of boxes (large or split products).",
+  "fixed_occluders": {
+    "armchair": [
+      0.185,
+      0.395,
+      0.6,
+      0.935
+    ],
+    "coffee-table": [
+      0.475,
+      0.715,
+      0.675,
+      0.885
+    ],
+    "sofa": [
+      0.44,
+      0.81,
+      0.53,
+      0.8
+    ]
+  },
+  "notes_exclude": "exclude: names from fixed_occluders or other slot ids. The temporary layer is cut out where those sit in front of it (real layers are rendered with holdouts)."
 }

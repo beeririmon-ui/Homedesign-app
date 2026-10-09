@@ -123,6 +123,7 @@ export type HiddenProduct = { id: string; slot: string; reason: string };
 export type FullCatalog = Omit<PublicCatalog, 'products'> & {
   products: FullProduct[];
   hidden: HiddenProduct[];
+  invalid_cards: { path: string; issues: string }[];
   economics: {
     settings: import('./schema/economics').EconomicsSettings;
     defaults_used: string[];

@@ -11,6 +11,7 @@
   --sage:#A7B09A; --sage-ink:#46533C; --sage-wash:#E1E6D9;
   --oak:#C8A27A; --oak-ink:#72502B; --oak-wash:#EFE3D1;
   --brick-ink:#8A3A2A; --brick-wash:#F2E0DA;
+  --amber-ink:#87500F; --amber-wash:#F5E2C4;
   --shade:rgba(42,42,41,.22); --scrim:rgba(30,30,29,.46);
   --f-display:"Frank Ruhl Libre","David Libre","Times New Roman",serif;
   --f-body:"Assistant","Heebo","Arial Hebrew",system-ui,-apple-system,"Segoe UI",sans-serif;
@@ -25,6 +26,7 @@
   --sage:#8D967F; --sage-ink:#BAC5AA; --sage-wash:#2B3227;
   --oak:#B48F67; --oak-ink:#DDBE95; --oak-wash:#3A3124;
   --brick-ink:#F0B3A5; --brick-wash:#3D2621;
+  --amber-ink:#F2C47E; --amber-wash:#3E2F18;
   --shade:rgba(0,0,0,.5); --scrim:rgba(0,0,0,.62);
   color-scheme:dark;
 }}
@@ -35,6 +37,7 @@
   --sage:#8D967F; --sage-ink:#BAC5AA; --sage-wash:#2B3227;
   --oak:#B48F67; --oak-ink:#DDBE95; --oak-wash:#3A3124;
   --brick-ink:#F0B3A5; --brick-wash:#3D2621;
+  --amber-ink:#F2C47E; --amber-wash:#3E2F18;
   --shade:rgba(0,0,0,.5); --scrim:rgba(0,0,0,.62);
   color-scheme:dark;
 }
@@ -380,6 +383,131 @@ details.snips li span{direction:ltr;unicode-bidi:isolate}
 .span-all{grid-column:1 / -1}
 .narrow{max-width:420px}
 
+/* ---- profitability, editing, budget ---- */
+.flag{display:inline-flex;align-items:center;gap:6px;font-weight:600;white-space:nowrap}
+.fdot{display:inline-block;width:9px;height:9px;border-radius:50%;flex:none;background:currentColor}
+.flag-red{color:var(--brick-ink)}
+.flag-orange{color:var(--amber-ink)}
+.flag-green{color:var(--sage-ink)}
+.chip.flag-red{background:var(--brick-wash)}
+.chip.flag-orange{background:var(--amber-wash)}
+.chip.flag-green{background:var(--sage-wash)}
+.chip-pending{background:var(--amber-wash);color:var(--amber-ink)}
+.chip-new{background:var(--ink);color:var(--on-ink)}
+.pecon{font-size:var(--fs-xs)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,190px),1fr));gap:12px}
+.tile{background:var(--sheet);border:1px solid var(--rule);border-radius:var(--r);padding:14px 16px;display:grid;gap:4px;align-content:start;min-width:0}
+.tile .v{font-family:var(--f-display);font-size:30px;line-height:1.05;font-variant-numeric:tabular-nums}
+.tile .l{font-size:var(--fs-s);color:var(--ink-2);font-weight:600}
+.tile .s{font-size:var(--fs-xs);color:var(--ink-3)}
+.assume{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;font-size:var(--fs-s);color:var(--ink-2)}
+.assume b{color:var(--ink);font-variant-numeric:tabular-nums}
+.est{font-size:11px;font-weight:700;color:var(--amber-ink);border:1px solid currentColor;border-radius:999px;padding:0 7px;line-height:17px;white-space:nowrap}
+.ok-badge{font-size:11px;font-weight:700;color:var(--sage-ink);border:1px solid currentColor;border-radius:999px;padding:0 7px;line-height:17px}
+.toolbar{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:flex-end}
+.toolbar .field{min-width:160px}
+
+/* edit form */
+.panel{background:var(--sheet);border:1px solid var(--rule);border-radius:var(--r);padding:16px;display:grid;gap:14px;min-width:0}
+.ef-grid{display:grid;gap:14px}
+.ef{display:grid;gap:5px;min-width:0;border:0;margin:0;padding:0}
+.ef-top{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline}
+.ef-top label,.ef legend,.ef-top .lbl{font-size:var(--fs-s);font-weight:600;color:var(--ink-2);padding:0}
+.ef-flag,.ef-revert{display:none}
+.ef.is-changed .ef-flag{display:inline;font-size:var(--fs-xs);font-weight:700;color:var(--amber-ink)}
+.ef.is-changed .ef-revert{display:inline}
+.ef input[type="text"],.ef input[type="url"],.ef input[type="number"],.ef select,.ef textarea,.fld{width:100%;min-height:40px;padding:7px 10px;border:1px solid var(--rule-2);border-radius:var(--r);background:var(--paper)}
+.ef textarea{min-height:120px}
+[aria-invalid="true"]{border-color:var(--brick-ink)!important;box-shadow:inset 0 0 0 1px var(--brick-ink)}
+.ef-err{font-size:var(--fs-xs);color:var(--brick-ink);margin:0}
+.ef-err:empty{display:none}
+.ef-help{font-size:var(--fs-xs);color:var(--ink-3)}
+.ef-row2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:12px}
+.tagbox{display:flex;flex-wrap:wrap;gap:6px 16px}
+.tagbox label{display:inline-flex;gap:6px;align-items:center;font-size:var(--fs-s)}
+.tagbox input,.chk{width:16px;height:16px;accent-color:var(--ink)}
+.link-rows{display:grid;gap:8px}
+.link-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr) auto;gap:6px;align-items:start}
+@media (max-width:480px){.link-row{grid-template-columns:minmax(0,1fr) auto}.link-row .lr-label{grid-column:1 / -1}}
+.save-bar{position:sticky;bottom:0;z-index:2;background:var(--sheet);border-top:1px solid var(--rule);padding:12px 0 4px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.btn-danger{background:transparent;color:var(--brick-ink);border-color:var(--brick-ink)}
+.btn-danger.armed{background:var(--brick-ink);color:var(--sheet)}
+
+/* links */
+.links{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.links li{display:grid;gap:2px;min-width:0}
+.links .row{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
+.url-text{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);overflow-wrap:anywhere;min-width:0;direction:ltr;text-align:right}
+.copy{min-height:30px;padding:3px 11px;border-radius:999px;border:1px solid var(--rule-2);background:transparent;cursor:pointer;font-size:var(--fs-xs);font-weight:600;color:var(--ink-2)}
+.copy:hover{border-color:var(--ink);color:var(--ink)}
+.copy-manual{width:100%;font-family:var(--f-mono);font-size:12px;padding:6px 8px;border:1px solid var(--ink);border-radius:5px;background:var(--paper);direction:ltr}
+
+/* economics breakdown */
+.econ-dl{display:grid;grid-template-columns:minmax(0,1fr) auto;margin:0}
+.econ-dl dt,.econ-dl dd{padding:6px 0;border-bottom:1px dashed var(--rule);margin:0;font-size:var(--fs-s)}
+.econ-dl dt{color:var(--ink-2)}
+.econ-dl dd{text-align:end;font-variant-numeric:tabular-nums;white-space:nowrap;padding-inline-start:12px}
+.econ-dl .tot{font-weight:700;color:var(--ink)}
+.econ-head{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline}
+.econ-head .big{font-family:var(--f-display);font-size:30px;line-height:1}
+
+/* profit table */
+.ptable td.money,.ptable th.money{text-align:end;white-space:nowrap}
+.ptable td{vertical-align:middle}
+.ptable .pname-cell{min-width:200px;max-width:320px}
+.ptable .pname-cell .linkish{text-align:start;overflow-wrap:anywhere}
+.cell-in{width:92px;min-height:34px;padding:4px 8px;border:1px solid var(--rule-2);border-radius:5px;background:var(--paper);text-align:end;font-variant-numeric:tabular-nums}
+.cell-in[disabled]{background:transparent;border-color:transparent;color:var(--ink)}
+.cell-src{display:block;font-size:11px;color:var(--ink-3);white-space:nowrap}
+th .sort{background:none;border:0;padding:0;font:inherit;color:inherit;cursor:pointer;display:inline-flex;gap:4px;align-items:center;text-transform:none}
+th .sort:hover{color:var(--ink)}
+th .sort .arr{font-size:10px;opacity:.75}
+.share{display:grid;gap:3px;min-width:84px}
+.share .bar{height:5px;background:var(--sunk);border-radius:3px;overflow:hidden}
+.share .bar span{display:block;height:100%;background:var(--ink-3)}
+.share.hi{color:var(--amber-ink);font-weight:700}
+.share.hi .bar span{background:var(--amber-ink)}
+.row-state{font-size:11px;color:var(--ink-3)}
+.row-state.err{color:var(--brick-ink)}
+
+/* settings */
+.set-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,270px),1fr));gap:12px}
+.set{background:var(--paper);border:1px solid var(--rule);border-radius:var(--r);padding:12px;display:grid;gap:6px;align-content:start;min-width:0}
+.set .lbl{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center;font-weight:600;font-size:var(--fs-s)}
+.set .in{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.set input[type="number"]{width:120px}
+.set select{width:100%}
+.set .ver{display:inline-flex;gap:6px;align-items:center;font-size:var(--fs-xs);color:var(--ink-2)}
+
+/* ladders */
+.ladder{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.rung{display:inline-flex;gap:6px;align-items:center;padding:3px 9px;border-radius:999px;border:1px solid var(--rule-2);font-size:var(--fs-xs);font-variant-numeric:tabular-nums}
+details.room-lad{border-top:1px solid var(--rule);padding:8px 0}
+details.room-lad summary{cursor:pointer;font-weight:600}
+
+/* budget */
+.btable input.fld{min-height:34px;padding:4px 8px}
+.btable td{vertical-align:middle}
+.btable .num-in{width:110px;text-align:end}
+.btable tfoot td{font-weight:700;background:var(--paper)}
+.be-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,220px),1fr));gap:12px}
+.formula{font-size:var(--fs-s);color:var(--ink-2);max-width:75ch}
+
+.lead-ph{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:12px;font-size:var(--fs-xs);color:var(--ink-3);background:repeating-linear-gradient(135deg,var(--sunk) 0 8px,var(--paper) 8px 16px)}
+.pcard .pimg.ph{background:var(--paper)}
+.sync-line{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;font-size:var(--fs-s);color:var(--ink-2)}
+.export-ta{width:100%;min-height:260px;font-family:var(--f-mono);font-size:12px;direction:ltr;text-align:left;padding:10px;border:1px solid var(--rule-2);border-radius:var(--r);background:var(--paper)}
+.formdlg{width:min(560px,94vw);max-height:92vh;border-radius:8px}
+.formdlg form,.formdlg .in{display:grid;gap:14px;padding:18px;overflow:auto;max-height:92vh}
+.formdlg .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.hist{list-style:none;margin:0;padding:0;display:grid;gap:8px;font-size:var(--fs-s)}
+.hist li{border-inline-start:2px solid var(--rule-2);padding-inline-start:10px}
+@media (max-width:560px){.tabs ul{flex-wrap:wrap}.tabs{overflow:visible}}
+
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.row.between{justify-content:space-between}
+.row .spacer{flex:1}
+
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 }
@@ -402,6 +530,8 @@ details.snips li span{direction:ltr;unicode-bidi:isolate}
           <li><a href="#decisions" data-screen="decisions">החלטות <span class="tab-badge" id="badge-dec" aria-hidden="true"></span><span class="sr-only" id="badge-dec-sr"></span></a></li>
           <li><a href="#rooms" data-screen="rooms">חדרים</a></li>
           <li><a href="#products" data-screen="products">מוצרים</a></li>
+          <li><a href="#profit" data-screen="profit">רווחיות</a></li>
+          <li><a href="#budget" data-screen="budget">תקציב</a></li>
           <li><a href="#quality" data-screen="quality">איכות</a></li>
           <li><a href="#log" data-screen="log">יומן</a></li>
         </ul>
@@ -431,22 +561,40 @@ details.snips li span{direction:ltr;unicode-bidi:isolate}
     </section>
 
     <section class="screen" id="screen-products" aria-labelledby="h-products" hidden>
-      <div class="screen-head"><h1 id="h-products" tabindex="-1">מוצרים</h1></div>
+      <div class="screen-head"><h1 id="h-products" tabindex="-1">מוצרים</h1>
+        <div class="seg"><button type="button" class="btn" id="add-open" hidden>הוספת מוצר</button></div></div>
+      <div id="sync-line"></div>
       <form class="filters" id="filters" role="search" aria-label="סינון מוצרים">
         <div class="field search"><label for="f-q">חיפוש</label><input type="search" id="f-q" placeholder="שם, מזהה, חומר, SKU או טקסט מההערות" autocomplete="off"></div>
         <div class="field"><label for="f-room">חדר</label><select id="f-room"></select></div>
         <div class="field"><label for="f-slot">עמדה</label><select id="f-slot"></select></div>
         <div class="field"><label for="f-status">סטטוס</label><select id="f-status"></select></div>
+        <div class="field"><label for="f-flag">רווחיות</label><select id="f-flag">
+          <option value="">הכול</option><option value="green">עומד ביעד</option><option value="red">מתחת ליעד</option><option value="orange">חסרים נתונים</option>
+        </select></div>
         <div class="field"><label for="f-supplier">ספק</label><select id="f-supplier"></select></div>
         <div class="field"><label for="f-sort">מיון</label><select id="f-sort">
           <option value="default">לפי חדר ועמדה</option>
           <option value="cost-asc">עלות: מהזולה ליקרה</option>
           <option value="cost-desc">עלות: מהיקרה לזולה</option>
+          <option value="margin-asc">מרווח: מהנמוך לגבוה</option>
+          <option value="margin-desc">מרווח: מהגבוה לנמוך</option>
         </select></div>
         <div class="field"><span class="check"><input type="checkbox" id="f-dups"><label for="f-dups">רק כרטיסים כפולים</label></span></div>
+        <div class="field"><span class="check"><input type="checkbox" id="f-pending"><label for="f-pending">רק ממתינים לסנכרון</label></span></div>
       </form>
       <div class="result-line" id="p-result" aria-live="polite"></div>
       <div class="pgrid" id="pgrid"><p class="loading">טוען…</p></div>
+    </section>
+
+    <section class="screen" id="screen-profit" aria-labelledby="h-profit" hidden>
+      <div class="screen-head"><h1 id="h-profit" tabindex="-1">רווחיות</h1></div>
+      <div id="profit-body"><p class="loading">טוען…</p></div>
+    </section>
+
+    <section class="screen" id="screen-budget" aria-labelledby="h-budget" hidden>
+      <div class="screen-head"><h1 id="h-budget" tabindex="-1">תקציב הקמה ונקודת איזון</h1></div>
+      <div id="budget-body"><p class="loading">טוען…</p></div>
     </section>
 
     <section class="screen" id="screen-quality" aria-labelledby="h-quality" hidden>
@@ -491,6 +639,33 @@ details.snips li span{direction:ltr;unicode-bidi:isolate}
     </div>
   </dialog>
 
+  <dialog class="formdlg" id="addp" aria-labelledby="addp-title">
+    <form id="addp-form" novalidate>
+      <div class="row between"><h2 id="addp-title" class="h-mid">הוספת מוצר</h2><button class="close" type="button" data-close aria-label="סגירה">×</button></div>
+      <p class="small muted" id="addp-lede">המוצר נשמר כליד חדש ומחכה לסנכרון לריפו. אין תמונה עד שה-sourcing-agent ימלא את הכרטיס.</p>
+      <div class="ef"><div class="ef-top"><label for="a-url">קישור למוצר (חובה)</label></div><input type="url" id="a-url" dir="ltr" placeholder="https://…" required autocomplete="off"><p class="ef-err" id="a-url-err"></p></div>
+      <div class="ef-row2">
+        <div class="ef"><div class="ef-top"><label for="a-room">חדר</label></div><select id="a-room"></select></div>
+        <div class="ef"><div class="ef-top"><label for="a-slot">עמדה</label></div><select id="a-slot"></select></div>
+      </div>
+      <div class="ef"><div class="ef-top"><label for="a-name">שם</label></div><input type="text" id="a-name" autocomplete="off"></div>
+      <div class="ef"><div class="ef-top"><label for="a-cost">עלות אצל הספק (USD)</label></div><input type="number" id="a-cost" min="0" step="0.01" inputmode="decimal"><p class="ef-err" id="a-cost-err"></p></div>
+      <div class="ef"><div class="ef-top"><label for="a-note">הערה</label></div><textarea id="a-note" rows="3"></textarea></div>
+      <p class="ef-err" id="a-err" role="alert"></p>
+      <div class="row"><button type="submit" class="btn" id="a-save">שמירה</button><button type="button" class="btn btn-ghost" data-close>ביטול</button><span class="spacer"></span><button type="button" class="btn btn-danger" id="a-del" hidden>מחיקת הליד</button></div>
+    </form>
+  </dialog>
+
+  <dialog class="formdlg" id="exportdlg" aria-labelledby="exp-title">
+    <div class="in">
+      <div class="row between"><h2 id="exp-title" class="h-mid">קובץ סנכרון לריפו</h2><button class="close" type="button" data-close aria-label="סגירה">×</button></div>
+      <p class="small muted">המנהל שומר את הטקסט כקובץ ומריץ <code>python3 studio/apply_edits.py export.json</code>. אחרי הסנכרון הוא מסמן את המסמכים כמסונכרנים, והצ'יפ "ממתין לסנכרון" נעלם.</p>
+      <label for="exp-ta" class="eyebrow">JSON</label>
+      <textarea id="exp-ta" class="export-ta" readonly></textarea>
+      <div class="row"><button type="button" class="btn" id="exp-copy">העתקה</button><span class="small muted" id="exp-state" role="status"></span></div>
+    </div>
+  </dialog>
+
   <div class="sr-only" role="status" aria-live="polite" id="live"></div>
 </div>
 
@@ -509,11 +684,19 @@ const store = {
   get(k, d){ try{ const v = localStorage.getItem('studio.'+k); return v == null ? d : JSON.parse(v); }catch(e){ return d; } },
   set(k, v){ try{ localStorage.setItem('studio.'+k, JSON.stringify(v)); }catch(e){} }
 };
+const sleep = ms => new Promise(r => setTimeout(r, ms));
 const say = msg => { const el = $('#live'); el.textContent = ''; setTimeout(()=>{ el.textContent = msg; }, 30); };
-const fmtUSD = n => (typeof n === 'number') ? '$' + n.toLocaleString('en-US',{minimumFractionDigits:2, maximumFractionDigits:2}) : '—';
+const isNum = v => typeof v === 'number' && isFinite(v);
+const fmtDay = d => { if(!d) return ''; const [y,m,dd] = String(d).slice(0,10).split('-'); return `${+dd}.${+m}.${y}`; };
 const fmtDate = iso => { if(!iso) return ''; if(/^\d{4}-\d{2}-\d{2}$/.test(iso)) return fmtDay(iso); try{ return new Intl.DateTimeFormat('he-IL',{day:'numeric',month:'numeric',year:'numeric',hour:'2-digit',minute:'2-digit',timeZone:'Asia/Jerusalem'}).format(new Date(iso)); }catch(e){ return iso; } };
-const fmtDay = d => { if(!d) return ''; const [y,m,dd] = d.split('-'); return `${+dd}.${+m}.${y}`; };
-const bidi = (txt, cls='') => `<span dir="ltr" class="${cls}">${esc(txt)}</span>`;
+const fmtUSD = n => isNum(n) ? '$' + n.toLocaleString('en-US',{minimumFractionDigits:2, maximumFractionDigits:2}) : '—';
+const fmtILS = (n, dec=0) => isNum(n) ? (n < 0 ? '−' : '') + '₪ ' + Math.abs(n).toLocaleString('en-US',{minimumFractionDigits:dec, maximumFractionDigits:dec}) : '—';
+const fmtPct = (x, dec=0) => isNum(x) ? (x*100).toFixed(dec).replace('-', '−') + '%' : '—';
+const ltr = html => `<span dir="ltr">${html}</span>`;
+const bidi = txt => `<span dir="ltr">${esc(txt)}</span>`;
+const mean = a => a.length ? a.reduce((s,x) => s + x, 0) / a.length : null;
+const hostOf = u => { try{ return new URL(u).hostname.replace(/^www\./,''); }catch(e){ return ''; } };
+const httpsOk = u => typeof u === 'string' && /^https:\/\/[^\s/]+\.[^\s]+$/.test(u.trim());
 
 const PLACEMENT = {floor:'רצפה', wall:'קיר', window:'חלון', surface:'משטח', sofa:'ספה', ceiling:'תקרה', sill:'אדן'};
 const P_STATUS = {candidate:'מועמד', selected:'נבחר', rejected:'נדחה'};
@@ -528,20 +711,84 @@ const TAG_HE = {'living-room':'סלון','bedroom':'חדר שינה','hallway':'
 const STYLE_HE = {nordic:'נורדי', boho:'בוהו', 'warm-modern':'מודרני חם'};
 const STD_HE = {unknown:'לא ידוע', unverified:'לא מאומת', stated:'מוצהר בהערות'};
 const WHO = {user:'המשתמש', manager:'המנהל', 'master-designer':'master-designer', 'sourcing-agent':'sourcing', 'motion-agent':'motion-agent', 'render-agent':'render-agent', 'qa-agent':'qa-agent', 'frontend-dev':'frontend-dev', astra:'astra', other:'אחר'};
+const FLAG_HE = {green:'עומד ביעד', red:'מתחת ליעד', orange:'חסרים נתונים'};
+const MISS_HE = {cost:'עלות', shipping:'משלוח', retail:'מחיר'};
+
+/* ---------- economics: settings, defaults, calculation ---------- */
+const ECON_META = [
+  {k:'usd_ils', label:'שער דולר-שקל', unit:'₪ לדולר', def:3.7, step:0.01, update:true, help:'ממיר את עלות המוצר והמשלוח מדולר לשקל. לעדכן לשער שחברת האשראי גובה בפועל.'},
+  {k:'shipping_method', label:'שיטת משלוח לחישוב', type:'select', def:'cheapest', options:[['cheapest','זול (12–50 יום)'],['under20','עד 20 יום']], help:'איזו אפשרות משלוח של CJ נכנסת לעלות הנחיתה. משלוח ידני תמיד גובר.'},
+  {k:'vat_pct', label:'מע"מ', unit:'%', def:18, step:0.1, help:'המחיר לצרכן כולל מע"מ. הכנסה נטו = מחיר חלקי (1 + מע"מ).'},
+  {k:'card_pct', label:'עמלת סליקה', unit:'% מהמחיר', def:2, step:0.1, help:'אחוז מהמחיר לצרכן שהסולק גובה.'},
+  {k:'card_fixed_ils', label:'עמלה קבועה לעסקה', unit:'₪', def:1.2, step:0.1, help:'סכום קבוע לכל עסקה. בחישוב לפי מוצר הוא נספר על כל פריט, ולכן החישוב מעט שמרני.'},
+  {k:'returns_pct', label:'שמורת החזרות', unit:'% מההכנסה נטו', def:5, step:0.5, help:'חלק מההכנסה שנשמר להחזרות, להחלפות ולנזקי משלוח.'},
+  {k:'cac_ils', label:'עלות שיווק להזמנה (CAC)', unit:'₪ להזמנה', def:40, step:1, help:'כמה עולה להביא הזמנה אחת. מוצג בנפרד כ"תרומה אחרי שיווק", ומתחלק בין הפריטים שבהזמנה.'},
+  {k:'packaging_ils', label:'אריזה', unit:'₪ לפריט', def:0, step:0.5, help:'אריזה ממותגת או חומרי מילוי מעבר לאריזת הספק.'},
+  {k:'target_margin_pct', label:'יעד מרווח', unit:'% מההכנסה נטו', def:35, step:1, help:'מרווח = תרומה חלקי הכנסה נטו. מוצר מתחת ליעד מקבל דגל אדום.'},
+  {k:'items_per_order', label:'פריטים בהזמנה ממוצעת', unit:'פריטים', def:1.4, step:0.1, help:'קובע את שווי ההזמנה הממוצעת ואת חלוקת ה-CAC בין הפריטים.'},
+  {k:'bundle_factor', label:'מקדם משלוח בהזמנה משולבת', unit:'× משלוח לפריט', def:1.0, step:0.05, help:'מכפיל את המשלוח לפריט בהזמנה הממוצעת, במסך נקודת האיזון. 1.0 = בלי הנחה על משלוח משולב.'}
+];
+const BUDGET_DEFAULT = [
+  {id:'var2', label:'var2: רינדורים וסרטונים', one_time_ils:null, monthly_ils:null, note:'כ-500 אלף קרדיטים לכל הבית. העלות בש"ח עוד לא ידועה.', verified:false},
+  {id:'cloudflare', label:'Cloudflare: אחסון והגשה', one_time_ils:null, monthly_ils:20, note:'הערכה. ייתכן שהתוכנית החינמית מספיקה; Workers בתשלום עולה כ-$5 לחודש.', verified:false},
+  {id:'domain', label:'דומיין', one_time_ils:60, monthly_ils:null, note:'הערכה: רישום או חידוש שנתי.', verified:false},
+  {id:'terminal', label:'סולק: דמי מסוף', one_time_ils:null, monthly_ils:80, note:'הערכה. תלוי בסולק ובחבילה.', verified:false},
+  {id:'invoices', label:'שירות חשבוניות', one_time_ils:null, monthly_ils:60, note:'הערכה: מנוי בסיסי לשירות חשבוניות מקוון.', verified:false},
+  {id:'legal', label:'ייעוץ משפטי: תקנון, פרטיות ונגישות', one_time_ils:5000, monthly_ils:null, note:'הערכה. כולל הצהרת נגישות.', verified:false}
+];
+
+/* econ:start */
+// All money in ILS except cost_usd / shipping_usd. Percent settings are whole numbers (18 = 18%).
+function econCalc(inp, s){
+  const ok = x => typeof x === 'number' && isFinite(x);
+  const rate = s.usd_ils, v = s.vat_pct / 100, p = s.card_pct / 100, f = s.card_fixed_ils;
+  const r = s.returns_pct / 100, k = s.packaging_ils, T = s.target_margin_pct / 100;
+  const ipo = s.items_per_order > 0 ? s.items_per_order : 1;
+  const out = {missing: []};
+  if(!ok(inp.cost_usd)) out.missing.push('cost');
+  if(!ok(inp.shipping_usd)) out.missing.push('shipping');
+  const R = inp.retail_ils;
+  if(!(ok(R) && R > 0)) out.missing.push('retail');
+  if(ok(inp.cost_usd) && ok(inp.shipping_usd)){
+    out.landed = (inp.cost_usd + inp.shipping_usd) * rate;
+    const usd = inp.cost_usd + inp.shipping_usd;
+    out.ship_share = usd > 0 ? inp.shipping_usd / usd : null;
+    const den = (1 - r - T) / (1 + v) - p;           // solve contribution / net = T for the retail price
+    out.recommended = den > 0 ? (out.landed + f + k) / den : null;
+  }
+  if(ok(R) && R > 0){
+    out.net = R / (1 + v);
+    out.fees = R * p + f;
+    out.reserve = out.net * r;
+  }
+  if(out.landed != null && out.net != null){
+    out.contribution = out.net - out.landed - out.fees - out.reserve - k;
+    out.margin = out.contribution / out.net;
+    out.cac_per_item = s.cac_ils / ipo;
+    out.after_marketing = out.contribution - out.cac_per_item;
+  }
+  out.flag = out.missing.length ? 'orange' : (out.margin < T ? 'red' : 'green');
+  return out;
+}
+/* econ:end */
 
 /* ---------- state ---------- */
 const S = {
-  data:null, rooms:new Map(), slots:new Map(), products:new Map(),
+  data:null, rooms:new Map(), slots:new Map(), base:new Map(),
+  view:[], byId:new Map(), slotStats:new Map(), ES:null,
   screen:'overview', room:store.get('room', null),
-  filters:Object.assign({q:'', room:'', slot:'', status:'', supplier:'', sort:'default', dups:false}, store.get('filters', {})),
+  filters:Object.assign({q:'', room:'', slot:'', status:'', supplier:'', flag:'', sort:'default', dups:false, pending:false}, store.get('filters', {})),
   report:store.get('report', null), logWho:store.get('logWho', 'all'), logQ:'',
   decFilter:store.get('decFilter','all'),
-  db:null, user:null, uid:null, canWrite:null, dbState:'connecting', dbError:null,
+  profit:Object.assign({sort:'margin', dir:'asc', room:'', rejected:false, showSettings:false}, store.get('profit', {})),
+  db:null, user:null, uid:null, canWrite:null, dbState:'connecting', dbError:null, dbReady:false,
   dbDocs:new Map(), drafts:{}, saving:new Set(), saved:{}, errors:{},
+  edits:new Map(), news:new Map(), settingsDocs:new Map(),
   bulk:{open:false, running:false, done:0, total:0, failed:[]},
-  lb:{list:[], i:0}, drawerReturn:null, lbReturn:null
+  lb:{list:[], i:0}, drawerReturn:null, lbReturn:null, drawerId:null, drawerDirty:false,
+  inline:{}, rowState:{}, setDirty:false, setDraft:null, setDraftVer:null, drawerMsg:null, budgetWork:null, budgetArmed:null, q:new Map(), addEdit:null
 };
-S.filters.q = ''; // never restore a search term
+S.filters.q = '';
 
 /* ---------- boot ---------- */
 async function boot(){
@@ -555,23 +802,177 @@ async function boot(){
     $('#stamp').textContent = 'אין נתונים';
     return;
   }
+  S.data.economics = S.data.economics || {products:{}};
   for(const r of S.data.rooms){ S.rooms.set(r.id, r); for(const s of r.slots) S.slots.set(s.key, s); }
-  for(const p of S.data.products) S.products.set(p.id, p);
+  for(const p of S.data.products) S.base.set(p.id, p);
   if(!S.room || !S.rooms.has(S.room)) S.room = S.data.rooms[0]?.id;
   const b = S.data.build || {};
   $('#stamp').textContent = b.commit ? `commit ${b.commit}` : 'בנייה מקומית';
+  refreshView();
   renderAll();
   route(false);
   connectDb();
 }
-
 function renderAll(){
   renderOverview(); renderDecisions(); renderRoomPick(); renderRoom();
-  initFilters(); renderProducts(); renderReports(); renderLog();
+  initFilters(); renderProducts(); renderProfit(); renderBudget(); renderReports(); renderLog();
+}
+let pendingRender = false;
+function onDataChange(){
+  if(pendingRender) return; pendingRender = true;
+  setTimeout(() => {
+    pendingRender = false;
+    refreshView();
+    renderOverview(); renderRoom(); renderProducts(); renderProfit(); renderBudget(); refreshDrawer();
+  }, 0);
+}
+
+/* ---------- effective model: repo base + db patches ---------- */
+function econSettings(){
+  const v = {}, verified = {};
+  for(const m of ECON_META){ v[m.k] = m.def; verified[m.k] = false; }
+  const repo = S.data && S.data.economics && S.data.economics.settings;
+  const dbs = S.settingsDocs.get('economics') || null;
+  for(const L of [repo, dbs]){
+    if(!L) continue;
+    for(const m of ECON_META){
+      const x = L[m.k];
+      if(m.type === 'select' ? m.options.some(o => o[0] === x) : isNum(x)) v[m.k] = x;
+      if(L.verified && typeof L.verified[m.k] === 'boolean') verified[m.k] = L.verified[m.k];
+    }
+  }
+  return {v, verified, source: dbs ? 'db' : repo ? 'repo' : 'defaults', doc: dbs};
+}
+function budgetRows(){
+  const dbs = S.settingsDocs.get('budget');
+  if(dbs && Array.isArray(dbs.rows)) return {rows: dbs.rows, source:'db'};
+  const repo = S.data.economics && S.data.economics.budget;
+  if(repo && Array.isArray(repo.rows)) return {rows: repo.rows, source:'repo'};
+  return {rows: BUDGET_DEFAULT, source:'defaults'};
+}
+const EDIT_KEYS = ['name','slot_key','rooms','status','product_url','sku','cost','shipping_cost_usd','retail_ils','compare_at_ils','notes','links'];
+const EDIT_LABEL = {name:'שם', slot_key:'עמדה', rooms:'חדרים מתאימים', status:'סטטוס', product_url:'קישור לספק', sku:'SKU', cost:'עלות (USD)', shipping_cost_usd:'משלוח (USD)', retail_ils:'מחיר לצרכן (₪)', compare_at_ils:'מחיר לפני הנחה (₪)', notes:'הערות', links:'קישורים נוספים'};
+const NUM_KEYS = new Set(['cost','shipping_cost_usd','retail_ils','compare_at_ils']);
+function baseEcon(id){ return (S.data.economics.products || {})[id] || {}; }
+function cjShip(id){
+  const be = baseEcon(id), cj = be.cj;
+  if(!cj) return null;
+  const want = S.ES.v.shipping_method === 'under20' ? (cj.under20 || cj.cheapest) : (cj.cheapest || cj.under20);
+  return want ? Object.assign({date: cj.date}, want) : null;
+}
+function baseFlat(p){
+  const be = baseEcon(p.id);
+  const manual = be.manual && isNum(be.manual.shipping_cost_usd) ? be.manual.shipping_cost_usd : null;
+  const cj = cjShip(p.id);
+  return {
+    name: p.name ?? null, slot_key: p.slot_key ?? null, rooms: p.rooms || [], status: p.status ?? null,
+    product_url: (p.supplier && p.supplier.product_url) ?? null, sku: (p.supplier && p.supplier.sku) ?? null,
+    cost: (p.price && isNum(p.price.cost)) ? p.price.cost : null,
+    shipping_cost_usd: manual != null ? manual : (cj ? cj.usd : null),
+    retail_ils: isNum(be.retail_ils) ? be.retail_ils : null, compare_at_ils: isNum(be.compare_at_ils) ? be.compare_at_ils : null,
+    notes: p.notes ?? null, links: p.links || []
+  };
+}
+function fieldsToFlat(fields, p){
+  const f = fields || {}, o = {};
+  for(const k of ['name','rooms','status','notes','links']) if(k in f) o[k] = f[k];
+  if('slot' in f || 'slot_room' in f){ const room = 'slot_room' in f ? f.slot_room : (p && p.room), slot = 'slot' in f ? f.slot : (p && p.slot); o.slot_key = room && slot ? room + '/' + slot : null; }
+  if(f.supplier){ if('product_url' in f.supplier) o.product_url = f.supplier.product_url; if('sku' in f.supplier) o.sku = f.supplier.sku; }
+  if(f.price && 'cost' in f.price) o.cost = f.price.cost;
+  if(f.economics) for(const k of ['shipping_cost_usd','retail_ils','compare_at_ils']) if(k in f.economics) o[k] = f.economics[k];
+  return o;
+}
+function flatToFields(o){
+  const f = {};
+  for(const k of ['name','rooms','status','notes','links']) if(k in o) f[k] = o[k];
+  if('slot_key' in o){ const [room, slot] = String(o.slot_key || '').split('/'); f.slot = slot || null; f.slot_room = room || null; }
+  if('product_url' in o || 'sku' in o){ f.supplier = {}; if('product_url' in o) f.supplier.product_url = o.product_url; if('sku' in o) f.supplier.sku = o.sku; }
+  if('cost' in o) f.price = {cost: o.cost};
+  const ek = ['shipping_cost_usd','retail_ils','compare_at_ils'].filter(k => k in o);
+  if(ek.length){ f.economics = {}; for(const k of ek) f.economics[k] = o[k]; }
+  return f;
+}
+function norm(k, v){
+  if(k === 'rooms') return (Array.isArray(v) ? v.filter(Boolean) : []).slice().sort();
+  if(k === 'links') return (Array.isArray(v) ? v : []).map(l => ({label: String(l.label || '').trim(), url: String(l.url || '').trim()})).filter(l => l.url);
+  if(NUM_KEYS.has(k)) return isNum(v) ? Math.round(v * 10000) / 10000 : null;
+  if(typeof v === 'string'){ const t = v.trim(); return t === '' ? null : t; }
+  return v ?? null;
+}
+const same = (k, a, b) => JSON.stringify(norm(k, a)) === JSON.stringify(norm(k, b));
+
+function effProduct(p){
+  const doc = S.edits.get(p.id);
+  const bf = baseFlat(p);
+  const pf = doc ? fieldsToFlat(doc.fields, p) : {};
+  const f = Object.assign({}, bf, pf);
+  const e = Object.assign({}, p);
+  e.name = f.name; e.status = f.status; e.rooms = f.rooms || []; e.notes = f.notes; e.links = f.links || [];
+  e.supplier = Object.assign({}, p.supplier, {product_url: f.product_url, sku: f.sku});
+  e.price = Object.assign({}, p.price, {cost: f.cost});
+  if(f.slot_key !== p.slot_key){
+    const [room, slot] = String(f.slot_key || '').split('/');
+    e.room = room || null; e.slot = slot || null; e.slot_key = f.slot_key || null;
+    e.in_rooms = [e.room].concat((p.in_rooms || []).filter(r => r !== p.room)).filter(Boolean);
+  }
+  const be = baseEcon(p.id), cj = cjShip(p.id);
+  let ship;
+  if('shipping_cost_usd' in pf) ship = {usd: pf.shipping_cost_usd, src: 'manual', label: 'ידני (סטודיו)'};
+  else if(be.manual && isNum(be.manual.shipping_cost_usd)) ship = {usd: be.manual.shipping_cost_usd, src: 'manual', label: 'ידני' + (be.manual.date ? ', ' + fmtDay(be.manual.date) : '')};
+  else if(cj) ship = {usd: cj.usd, src: 'cj', label: `CJ, ${fmtDay(cj.date)}`, detail: [cj.name, cj.days ? cj.days + ' יום' : ''].filter(Boolean).join(' · ')};
+  else ship = {usd: null, src: null, label: 'חסר משלוח'};
+  e.ship = ship; e.retail = f.retail_ils; e.compare_at = f.compare_at_ils;
+  e.flat = f; e.bflat = bf; e.pflat = pf;
+  e.pending = !!(doc && !doc.synced && Object.keys(pf).length);
+  e.history = (doc && doc.history) || [];
+  e.econ = econCalc({cost_usd: f.cost, shipping_usd: ship.usd, retail_ils: f.retail_ils}, S.ES.v);
+  return e;
+}
+function leadProduct(docId, d){
+  const room = d.room || null, slot = d.slot || null;
+  const e = {
+    id: 'new-' + docId, _new: true, _doc: docId, name: d.name || ('ליד מ-' + (hostOf(d.url) || 'קישור')),
+    slot, room, slot_key: room && slot ? room + '/' + slot : null, in_rooms: room ? [room] : [], rooms: room ? [room] : [],
+    status: 'candidate', supplier: {name: hostOf(d.url) || '—', product_url: d.url || null, sku: null},
+    price: {cost: isNum(d.cost_usd) ? d.cost_usd : null, currency: 'USD'}, notes: d.note || null, links: d.links || [],
+    img: {ok: false, src: null}, dups: [], shared_in: [], standards: null, colors: {}, shipping: {}, materials: [],
+    ship: {usd: null, src: null, label: 'חסר משלוח'}, retail: null, pending: !d.synced, history: [],
+    created_at: d.created_at, by: d.by, path: null
+  };
+  e.econ = econCalc({cost_usd: e.price.cost, shipping_usd: null, retail_ils: null}, S.ES.v);
+  return e;
+}
+function refreshView(){
+  S.ES = econSettings();
+  S.view = S.data.products.map(effProduct).concat(Array.from(S.news, ([id, d]) => leadProduct(id, d)));
+  S.byId = new Map(S.view.map(p => [p.id, p]));
+  S.slotStats = new Map();
+  for(const r of S.data.rooms) for(const s of r.slots){
+    const direct = S.view.filter(p => p.slot_key === s.key);
+    const dset = new Set(direct.map(p => p.id));
+    const shared = (s.shared_ids || []).map(id => S.byId.get(id)).filter(p => p && !dset.has(p.id));
+    const live = a => a.filter(p => p.status !== 'rejected');
+    S.slotStats.set(s.key, {
+      direct, shared, n_direct: live(direct).length, n_shared: live(shared).length,
+      n_candidates: live(direct).length + live(shared).length,
+      n_rejected: direct.concat(shared).filter(p => p.status === 'rejected').length,
+      selected: direct.concat(shared).filter(p => p.status === 'selected')
+    });
+  }
+}
+const roomCover = r => r.slots.filter(s => (S.slotStats.get(s.key) || {}).n_candidates >= 3).length;
+const canEditData = () => !!S.db && S.dbReady && S.canWrite !== false;
+const flagHtml = (e, long) => {
+  const x = e.econ;
+  if(x.flag === 'orange') return `<span class="flag flag-orange"><i class="fdot"></i>חסר ${esc(x.missing.map(m => MISS_HE[m]).join(' ו'))}</span>`;
+  return `<span class="flag flag-${x.flag}"><i class="fdot"></i>${long ? esc(FLAG_HE[x.flag]) + ' · ' : ''}מרווח ${ltr(fmtPct(x.margin))}</span>`;
+};
+function profitBasis(){
+  return S.view.filter(p => !p._new && p.status !== 'rejected');
 }
 
 /* ---------- routing ---------- */
-const SCREENS = ['overview','decisions','rooms','products','quality','log'];
+const SCREENS = ['overview','decisions','rooms','products','profit','budget','quality','log'];
 function route(focus){
   const t = (location.hash || '').replace(/^#/, '');
   let s = SCREENS.includes(t) ? t : null;
@@ -579,7 +980,6 @@ function route(focus){
   S.screen = s; store.set('screen', s);
   for(const id of SCREENS){ $('#screen-'+id).hidden = id !== s; }
   for(const a of $$('.tabs a')){ if(a.dataset.screen === s) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); }
-  const cur = $(`.tabs a[data-screen="${s}"]`); if(cur && cur.scrollIntoView) cur.scrollIntoView({block:'nearest', inline:'nearest'});
   if(focus){ window.scrollTo(0,0); const h = $('#h-'+s); if(h) h.focus({preventScroll:true}); }
 }
 function go(screen){ if(location.hash === '#'+screen){ route(true); } else { location.hash = screen; } }
@@ -587,36 +987,105 @@ function go(screen){ if(location.hash === '#'+screen){ route(true); } else { loc
 function bindStatic(){
   window.addEventListener('hashchange', () => route(true));
   $('#skip').addEventListener('click', e => { e.preventDefault(); const m = $('#main'); m.focus(); m.scrollIntoView(); });
-  for(const dlg of [$('#drawer'), $('#lightbox')]){
-    dlg.addEventListener('click', e => { if(e.target === dlg || e.target.closest('[data-close]')) closeDialog(dlg); });
+  for(const dlg of $$('dialog')){
+    dlg.addEventListener('click', e => { if(e.target === dlg || e.target.closest('[data-close]')){ if(dlg.id === 'drawer' && S.drawerDirty){ confirmLeave(); return; } closeDialog(dlg); } });
     dlg.addEventListener('close', () => {
-      const back = dlg.id === 'drawer' ? S.drawerReturn : S.lbReturn;
+      const back = dlg.id === 'drawer' ? S.drawerReturn : dlg.id === 'lightbox' ? S.lbReturn : dlg._return;
+      if(dlg.id === 'drawer'){ S.drawerId = null; S.drawerDirty = false; S.drawerMsg = null; }
       if(back && document.contains(back)) back.focus({preventScroll:true});
     });
   }
+  $('#drawer').addEventListener('cancel', e => { if(S.drawerDirty && !confirmLeave()) e.preventDefault(); });
   $('#lb-prev').addEventListener('click', () => stepLightbox(-1));
   $('#lb-next').addEventListener('click', () => stepLightbox(1));
-  $('#lightbox').addEventListener('keydown', e => {
-    if(e.key === 'ArrowLeft') stepLightbox(1); else if(e.key === 'ArrowRight') stepLightbox(-1);
-  });
+  $('#lightbox').addEventListener('keydown', e => { if(e.key === 'ArrowLeft') stepLightbox(1); else if(e.key === 'ArrowRight') stepLightbox(-1); });
   document.addEventListener('click', onDocClick);
+  $('#log-q').addEventListener('input', () => { S.logQ = $('#log-q').value; renderLog(); });
+  $('#add-open').addEventListener('click', e => openAdd(null, e.currentTarget));
+  $('#addp-form').addEventListener('submit', e => { e.preventDefault(); saveAdd(); });
+  $('#a-room').addEventListener('change', () => fillAddSlots());
+  $('#a-del').addEventListener('click', delLead);
+  $('#exp-copy').addEventListener('click', e => copyText($('#exp-ta').value, e.currentTarget, $('#exp-state')));
+}
+// A dirty drawer form asks before it is closed with Escape; the in-page bar does the same for the close button.
+function confirmLeave(){
+  const bar = $('#ef-leave'); if(!bar) return true;
+  bar.hidden = false; bar.querySelector('button').focus(); return false;
 }
 function onDocClick(e){
+  const cp = e.target.closest('[data-copy]');
+  if(cp){ e.preventDefault(); copyText(cp.dataset.copy, cp); return; }
   const pr = e.target.closest('[data-product]');
   if(pr){ e.preventDefault(); openProduct(pr.dataset.product, pr); return; }
   const ro = e.target.closest('[data-goto-room]');
   if(ro){ e.preventDefault(); S.room = ro.dataset.gotoRoom; store.set('room', S.room); renderRoomPick(); renderRoom(); go('rooms'); return; }
   const sl = e.target.closest('[data-goto-slot]');
   if(sl){ e.preventDefault(); const key = sl.dataset.gotoSlot; const s = S.slots.get(key);
-    Object.assign(S.filters, {room: s ? s.room : '', slot: key, status:'', supplier:'', dups:false, q:''});
+    if($('#drawer').open) closeDialog($('#drawer'));
+    Object.assign(S.filters, {room: s ? s.room : '', slot: key, status:'', supplier:'', flag:'', dups:false, pending:false, q:''});
     syncFilterInputs(); renderProducts(); go('products'); return; }
   const gd = e.target.closest('[data-goto]');
-  if(gd){ e.preventDefault(); go(gd.dataset.goto); }
+  if(gd){ e.preventDefault(); if($('#drawer').open) closeDialog($('#drawer')); go(gd.dataset.goto); }
 }
 
-/* ---------- dialogs ---------- */
-function openDialog(dlg){ if(typeof dlg.showModal === 'function'){ if(!dlg.open) dlg.showModal(); } else { dlg.setAttribute('open',''); } }
+/* ---------- dialogs and copy ---------- */
+function openDialog(dlg, from){ if(from) dlg._return = from; if(typeof dlg.showModal === 'function'){ if(!dlg.open) dlg.showModal(); } else { dlg.setAttribute('open',''); } }
 function closeDialog(dlg){ if(typeof dlg.close === 'function') dlg.close(); else { dlg.removeAttribute('open'); dlg.dispatchEvent(new Event('close')); } }
+function copyText(text, btn, stateEl){
+  const done = ok => {
+    const target = stateEl || btn;
+    const old = target === btn ? btn.textContent : null;
+    if(ok){ if(target === btn){ btn.textContent = 'הועתק'; setTimeout(() => { btn.textContent = old; }, 1600); } else target.textContent = 'הועתק.'; say('הועתק'); return; }
+    // last resort: show the text selected so it can be copied by hand
+    const inp = document.createElement('input'); inp.className = 'copy-manual'; inp.readOnly = true; inp.value = text; inp.setAttribute('aria-label', 'סמן/י והעתק/י');
+    (btn.closest('li,.row,.ef') || btn.parentElement).appendChild(inp); inp.focus(); inp.select();
+    if(stateEl) stateEl.textContent = 'ההעתקה האוטומטית חסומה כאן. הטקסט מסומן: העתק/י ידנית.';
+  };
+  try{
+    navigator.clipboard.writeText(text).then(() => done(true), () => done(fallbackCopy(text)));
+  }catch(e){ done(fallbackCopy(text)); }
+}
+function fallbackCopy(text){
+  const ta = document.createElement('textarea'); ta.value = text; ta.setAttribute('readonly',''); ta.className = 'sr-only';
+  (document.querySelector('dialog[open]') || document.body).appendChild(ta); ta.select();
+  let ok = false; try{ ok = document.execCommand('copy'); }catch(e){} ta.remove(); return ok;
+}
+
+/* ---------- db writes ---------- */
+function dbWrite(path, fn){
+  const prev = S.q.get(path) || Promise.resolve();
+  const run = prev.catch(() => {}).then(async () => {
+    try{ return await fn(); }
+    catch(e){ if(e && e.code === 'unavailable'){ await sleep(400 + Math.random() * 600); return await fn(); } throw e; }
+  });
+  S.q.set(path, run); return run;
+}
+async function whoId(){ try{ return S.user ? await S.user.id() : null; }catch(e){ return null; } }
+async function saveProductFlat(id, nextFlat, changes){
+  const p = S.base.get(id); if(!p) throw {code:'invalid_argument'};
+  const bf = baseFlat(p);
+  const patch = {};
+  for(const k of EDIT_KEYS) if(k in nextFlat && !same(k, nextFlat[k], bf[k])) patch[k] = norm(k, nextFlat[k]);
+  const by = await whoId();
+  const at = new Date().toISOString();
+  const prev = S.edits.get(id) || {};
+  const doc = {fields: flatToFields(patch), history: (prev.history || []).concat([{at, by, changes}]).slice(-50), synced: false, updated_at: at};
+  await dbWrite('product_edits/' + id, () => S.db.collection('product_edits').doc(id).set(doc));
+  S.edits.set(id, doc);
+  onDataChange();
+}
+function errText(e){
+  const c = e && e.code;
+  return ({
+    invalid_argument:'השמירה נדחתה. ייתכן שאין לך הרשאת כתיבה בדף, או שהמסמך עוד לא קיים.',
+    quota_exceeded:'מקום האחסון של הדף מלא, ולכן השינוי לא נשמר.',
+    resource_exhausted:'יותר מדי שמירות ברצף. נסה/י שוב בעוד רגע.',
+    revoked:'הגישה לדף השתנתה. רענן/י את הדף ונסה/י שוב.',
+    unavailable:'החיבור לא זמין כרגע. נסה/י שוב בעוד רגע.',
+    not_granted:'אין חיבור למסד הנתונים בתצוגה הזו. פתח/י את הדף ב-claude.ai.'
+  })[c] || `השמירה נכשלה${c ? ` (${c})` : ''}. נסה/י שוב.`;
+}
+function noDbLine(what){ return `<div class="db-line"><span class="db-dot warn"></span><span><strong>תצוגה לקריאה בלבד.</strong> ${esc(what)} כדי לערוך, פתח/י את הדף ב-claude.ai.</span></div>`; }
 
 /* ---------- decisions model ---------- */
 function decisionsAll(){
@@ -679,18 +1148,28 @@ function renderOverview(){
     </li>`;
   }).join('');
 
-  const bs = D.counts.by_status || {};
+  const prods = S.view.filter(p => !p._new);
+  const bs = {}; for(const p of prods) bs[p.status || 'unknown'] = (bs[p.status || 'unknown'] || 0) + 1;
   const order = ['candidate','selected','rejected'];
   const keys = order.concat(Object.keys(bs).filter(k => !order.includes(k)));
-  const total = D.counts.products || 1;
+  const total = prods.length || 1;
   const stack = keys.filter(k => bs[k]).map(k => `<span class="s-${esc(k)}" data-w="${(bs[k]/total*100).toFixed(2)}"></span>`).join('');
   const dotCls = {candidate:'var(--ink-3)', selected:'var(--sage-ink)', rejected:'var(--brick-ink)'};
   const statusRows = keys.map(k => `<dt><span class="dot" data-bg="${dotCls[k] || 'var(--rule-2)'}"></span><span>${esc(P_STATUS[k] || k)}</span></dt><dd>${bs[k] || 0}</dd>`).join('');
+  const pending = S.view.filter(p => p.pending).length;
+  const nNew = S.view.filter(p => p._new).length;
+
+  const pb = profitBasis();
+  const margins = pb.filter(p => isNum(p.econ.margin)).map(p => p.econ.margin);
+  const fl = {green:0, red:0, orange:0}; for(const p of pb) fl[p.econ.flag]++;
+  const hiShip = pb.filter(p => isNum(p.econ.ship_share) && p.econ.ship_share > 0.5).length;
+  const be = breakEven();
 
   const rooms = D.rooms.map(r => {
     const img = r.images.find(i => i.kind === 'round2' || i.kind === 'render') || r.images[0];
     const nOpen = open.filter(d => (d._rooms || []).includes(r.id)).length;
-    const pct = r.n_slots ? Math.round(r.n_covered3 / r.n_slots * 100) : 0;
+    const cov = roomCover(r);
+    const pct = r.slots.length ? Math.round(cov / r.slots.length * 100) : 0;
     return `<a class="room-card" href="#rooms" data-goto-room="${esc(r.id)}">
       <div class="thumb">${img ? `<img src="${esc(img.src)}" alt="" loading="lazy" width="${img.w}" height="${img.h}">` : ''}</div>
       <div class="body">
@@ -698,8 +1177,8 @@ function renderOverview(){
         <div class="frames-line">${r.frames.map(f => `<span class="code-tag">${esc(f.id)}</span>`).join('')}</div>
         <dl class="mini-stats">
           <dt>פריימים</dt><dd>${r.frames.length}</dd>
-          <dt>עמדות</dt><dd>${r.n_slots}</dd>
-          <dt>עם 3 מועמדים ומעלה</dt><dd>${r.n_covered3} מתוך ${r.n_slots}</dd>
+          <dt>עמדות</dt><dd>${r.slots.length}</dd>
+          <dt>עם 3 מועמדים ומעלה</dt><dd>${cov} מתוך ${r.slots.length}</dd>
           <dt>החלטות פתוחות</dt><dd class="${nOpen ? 'open-count' : ''}">${nOpen}</dd>
         </dl>
         <div class="meter" role="img" aria-label="${pct}% מהעמדות עם 3 מועמדים ומעלה"><span data-w="${pct}"></span></div>
@@ -708,8 +1187,6 @@ function renderOverview(){
   }).join('');
 
   const last = (D.log || []).slice(-6).reverse();
-  const logHtml = last.map(logItem).join('');
-  const failed = D.counts.images_failed || 0;
   const dirty = (b.dirty || []).length;
 
   $('#ov-body').innerHTML = `
@@ -721,13 +1198,24 @@ function renderOverview(){
           <ol class="stages">${stages}</ol>
           <div class="legend"><span><i class="tick done"></i>הושלם</span><span><i class="tick partial"></i>בתהליך</span><span><i class="tick"></i>פתוח</span><span><i class="tick gate"></i>נקודת אישור של המשתמש</span></div>
         </section>
-        <aside class="section" aria-labelledby="h-pstat">
+        <aside class="section" aria-label="מוצרים ורווחיות">
           <div class="section-head"><h2 id="h-pstat">מוצרים</h2><a class="small" href="#products">לכל המוצרים</a></div>
           <div class="side-card">
-            <p><span class="stat bignum">${D.counts.products}</span> <span class="muted">כרטיסי מוצר</span></p>
+            <p><span class="stat bignum">${prods.length}</span> <span class="muted">כרטיסי מוצר</span>${nNew ? ` <span class="chip chip-new">+${nNew} לידים חדשים</span>` : ''}</p>
             <div class="stack" role="img" aria-label="${keys.map(k => `${P_STATUS[k] || k} ${bs[k] || 0}`).join(', ')}">${stack}</div>
             <dl class="kv">${statusRows}</dl>
-            <p class="small muted">${D.counts.duplicates} כרטיסים כפולים (אותו מוצר אצל הספק) · ${failed ? `${failed} בלי תמונה` : 'לכל המוצרים יש תמונה'}</p>
+            <p class="small muted">${D.counts.duplicates} כרטיסים כפולים · ${D.counts.images_failed ? `${D.counts.images_failed} בלי תמונה` : 'לכל המוצרים יש תמונה'}${pending ? ` · <span class="flag flag-orange">${pending} ממתינים לסנכרון</span>` : ''}</p>
+          </div>
+          <div class="section-head"><h2>רווחיות</h2><a class="small" href="#profit">למסך הרווחיות</a></div>
+          <div class="side-card">
+            <p><span class="stat bignum">${margins.length ? ltr(fmtPct(mean(margins))) : '—'}</span> <span class="muted">מרווח ממוצע${margins.length ? ` (${margins.length} מוצרים עם כל הנתונים)` : ''}</span></p>
+            <dl class="kv">
+              <dt><span class="dot" data-bg="var(--sage-ink)"></span><span>עומדים ביעד ${ltr(esc(S.ES.v.target_margin_pct + '%'))}</span></dt><dd>${fl.green}</dd>
+              <dt><span class="dot" data-bg="var(--brick-ink)"></span><span>מתחת ליעד</span></dt><dd>${fl.red}</dd>
+              <dt><span class="dot" data-bg="var(--amber-ink)"></span><span>חסרים נתונים</span></dt><dd>${fl.orange}</dd>
+            </dl>
+            <p class="small muted">המשלוח הוא יותר ממחצית עלות הנחיתה ב-${hiShip} מתוך ${pb.filter(p => isNum(p.econ.ship_share)).length} מוצרים.</p>
+            <p class="small muted">הקמה ${ltr(fmtILS(be.oneTime))} · קבועות ${ltr(fmtILS(be.monthly))} לחודש · ${be.setupOrders != null ? `נקודת איזון: ${be.setupOrders.toLocaleString('en-US')} הזמנות` : 'נקודת האיזון מחכה למחירים'} · <a href="#budget">לתקציב</a></p>
           </div>
         </aside>
       </div>
@@ -737,7 +1225,7 @@ function renderOverview(){
       </section>
       <section class="section" aria-labelledby="h-log-ov">
         <div class="section-head"><h2 id="h-log-ov">ביומן לאחרונה</h2><a class="small" href="#log">ליומן המלא</a></div>
-        <ul class="log-list">${logHtml}</ul>
+        <ul class="log-list">${last.map(e => logItem(e)).join('')}</ul>
       </section>
       <p class="foot">נבנה מ-commit <code>${esc(b.commit || '?')}</code>${b.branch ? ` (ענף <code>${esc(b.branch)}</code>)` : ''} · ${esc(fmtDate(b.built_at))}${dirty ? ` · כולל ${dirty} ${dirty === 1 ? 'קובץ' : 'קבצים'} שעוד לא נשמרו ב-commit: ${b.dirty.map(x => `<code>${esc(x)}</code>`).join(', ')}` : ''}</p>
     </div>`;
@@ -787,14 +1275,18 @@ function renderDecisions(){
     ${bulkable.length ? `<button type="button" class="btn btn-ghost" id="bulk-open" ${S.bulk.running ? 'disabled' : ''}>לאשר את כל ההמלצות הפתוחות (${bulkable.length})</button>` : ''}`;
   renderBulk(bulkable);
   const list = all.filter(d => f === 'all' || (d.status || 'open') === f);
-  const active = document.activeElement;
-  const activeId = active && active.id && $('#dec-list').contains(active) ? active.id : null;
-  let sel = null; if(activeId && active.tagName === 'TEXTAREA'){ sel = [active.selectionStart, active.selectionEnd]; }
+  const restore = keepFocus($('#dec-list'));
   $('#dec-list').innerHTML = list.length ? list.map(decCard).join('') : `<p class="empty">אין החלטות בסינון הזה.</p>`;
-  if(activeId){ const el = document.getElementById(activeId); if(el){ el.focus({preventScroll:true}); if(sel) try{ el.setSelectionRange(sel[0], sel[1]); }catch(e){} } }
+  restore();
   for(const b of $$('[data-decf]')) b.onclick = () => { S.decFilter = b.dataset.decf; store.set('decFilter', S.decFilter); renderDecisions(); };
   const bo = $('#bulk-open'); if(bo) bo.onclick = () => { S.bulk.open = true; S.bulk.failed = []; renderDecisions(); const c = $('#bulk-yes'); if(c) c.focus(); };
   for(const card of $$('#dec-list .dcard')) bindCard(card);
+}
+function keepFocus(container){
+  const a = document.activeElement;
+  const id = a && a.id && container.contains(a) ? a.id : null;
+  const sel = id && (a.tagName === 'TEXTAREA' || (a.tagName === 'INPUT' && /text|search|url|number/.test(a.type))) ? (() => { try{ return [a.selectionStart, a.selectionEnd]; }catch(e){ return null; } })() : null;
+  return () => { if(!id) return; const el = document.getElementById(id); if(el){ el.focus({preventScroll:true}); if(sel) try{ el.setSelectionRange(sel[0], sel[1]); }catch(e){} } };
 }
 function renderBulk(bulkable){
   const box = $('#dec-confirm');
@@ -892,7 +1384,6 @@ async function saveOne(id){
     setTimeout(() => { if(S.screen === 'decisions') renderDecisions(); }, 6200);
   }catch(e){
     S.errors[id] = errText(e);
-    if(e && e.code === 'invalid_argument' && S.canWrite == null){ /* refused write decides */ }
     say(`השמירה של ${id} נכשלה`);
   }finally{
     S.saving.delete(id); renderDecisions(); renderOverview();
@@ -900,51 +1391,39 @@ async function saveOne(id){
 }
 async function writeAnswer(id, option, note){
   if(!S.db) throw {code:'not_granted'};
-  const by = S.user ? await S.user.id() : null;
+  const by = await whoId();
   const body = {status:'answered', answer:{option, note:String(note || '').trim(), at:new Date().toISOString(), by}};
-  const ref = S.db.collection('decisions').doc(id);
-  try{ await ref.update(body); }
-  catch(e){
-    if(e && e.code === 'unavailable'){ await new Promise(r => setTimeout(r, 400 + Math.random() * 600)); await ref.update(body); }
-    else throw e;
-  }
-}
-function errText(e){
-  const c = e && e.code;
-  return ({
-    invalid_argument:'השמירה נדחתה. ייתכן שאין לך הרשאת כתיבה בדף, או שההחלטה עוד לא בתור התשובות.',
-    quota_exceeded:'מקום האחסון של הדף מלא, ולכן התשובה לא נשמרה.',
-    resource_exhausted:'יותר מדי שמירות ברצף. נסה/י שוב בעוד רגע.',
-    revoked:'הגישה לדף השתנתה. רענן/י את הדף ונסה/י שוב.',
-    unavailable:'החיבור לא זמין כרגע. נסה/י שוב בעוד רגע.',
-    not_granted:'אין חיבור לתור התשובות בתצוגה הזו. פתח/י את הדף ב-claude.ai.'
-  })[c] || `השמירה נכשלה${c ? ` (${c})` : ''}. נסה/י שוב.`;
+  await dbWrite('decisions/' + id, () => S.db.collection('decisions').doc(id).update(body));
 }
 
 /* ---------- db connection ---------- */
 async function connectDb(){
   const c = window.claude;
-  if(!c || typeof c.use !== 'function'){ S.dbState = 'none'; renderDecisions(); renderOverview(); return; }
+  if(!c || typeof c.use !== 'function'){ S.dbState = 'none'; afterDbState(); return; }
   let db = null, user = null;
   try{ [db, user] = await Promise.all([c.use('db'), c.use('user')]); }catch(e){ db = null; }
   S.user = user || null;
-  if(!db){ S.dbState = 'none'; renderDecisions(); renderOverview(); return; }
+  if(!db){ S.dbState = 'none'; afterDbState(); return; }
   S.db = db;
   if(user){
     try{ S.uid = await user.id(); }catch(e){ S.uid = null; }
     try{ S.canWrite = await user.can('data.write'); }catch(e){ S.canWrite = null; }
   }
+  S.dbReady = true;
+  const fail = err => { S.dbError = err && err.code; if(S.dbState !== 'live') S.dbState = 'error'; renderDecisions(); onDataChange(); };
+  const docsOf = snap => { const m = new Map(); for(const d of snap.docs){ if(d.exists){ const v = d.data(); if(v) m.set(d.id, v); } } return m; };
   try{
     db.collection('decisions').onSnapshot(snap => {
-      const m = new Map();
-      for(const doc of snap.docs){ if(doc.exists){ const v = doc.data(); if(v) m.set(doc.id, v); } }
-      S.dbDocs = m; S.dbState = m.size ? 'live' : 'empty';
-      renderDecisions(); renderOverview(); renderRoom();
-    }, err => {
-      S.dbState = 'error'; S.dbError = err && err.code; renderDecisions(); renderOverview();
-    });
-  }catch(e){ S.dbState = 'error'; S.dbError = e && e.code; renderDecisions(); renderOverview(); }
+      S.dbDocs = docsOf(snap); S.dbState = S.dbDocs.size ? 'live' : 'empty';
+      renderDecisions(); onDataChange();
+    }, err => { S.dbState = 'error'; fail(err); });
+    db.collection('product_edits').onSnapshot(snap => { S.edits = docsOf(snap); onDataChange(); }, fail);
+    db.collection('product_new').onSnapshot(snap => { S.news = docsOf(snap); onDataChange(); }, fail);
+    db.collection('settings').onSnapshot(snap => { S.settingsDocs = docsOf(snap); onDataChange(); }, fail);
+  }catch(e){ S.dbState = 'error'; fail(e); }
+  afterDbState();
 }
+function afterDbState(){ renderDecisions(); onDataChange(); $('#add-open').hidden = !canEditData(); }
 
 /* ---------- rooms ---------- */
 function renderRoomPick(){
@@ -962,7 +1441,8 @@ function renderRoom(){
       <figcaption><span><span class="chip ${im.kind === 'round2' ? 'st-answered' : ''}">${esc(im.label)}</span>${im.frame ? ` <span class="code-tag">${esc(im.frame)}</span>` : ''}</span><span>${esc(im.caption)}</span>${im.status ? `<span class="xs faint">${esc(im.status)}</span>` : ''}</figcaption>
     </figure>`).join('');
   const rows = r.slots.map(s => {
-    const n = s.n_candidates;
+    const st = S.slotStats.get(s.key) || {n_direct:0, n_shared:0, n_candidates:0, n_rejected:0, selected:[]};
+    const n = st.n_candidates;
     const pips = [0,1,2].map(i => `<i class="${i < Math.min(n,3) ? 'on' : ''}"></i>`).join('');
     const frames = s.frames.map(f => `<span class="code-tag">${esc(f)}</span>`).join(' ');
     return `<tr>
@@ -972,17 +1452,18 @@ function renderRoom(){
       <td>${esc(PLACEMENT[s.placement] || s.placement || '—')}${s.placement_detail ? `<span class="sub">${esc(s.placement_detail)}</span>` : ''}</td>
       <td>${frames}${s.transit_only ? ' <span class="chip st-open">רק במעבר</span>' : ''}${s.seen_in && s.seen_in.length ? `<span class="sub">נראית גם: ${esc(s.seen_in.join(', '))}</span>` : ''}</td>
       <td class="num">${esc(s.variants_required ?? '—')}</td>
-      <td class="cell-n num">${s.n_direct}${s.n_shared ? `<span class="faint"> +${s.n_shared}</span>` : ''}<span class="pips" aria-hidden="true">${pips}</span>${s.n_shared ? `<span class="sub">+${s.n_shared} ממאגר משותף</span>` : ''}${s.n_rejected ? `<span class="sub">${s.n_rejected} נדחו</span>` : ''}</td>
-      <td class="num">${s.n_selected}/${esc(s.variants_required ?? 3)}</td>
+      <td class="cell-n num">${st.n_direct}${st.n_shared ? `<span class="faint"> +${st.n_shared}</span>` : ''}<span class="pips" aria-hidden="true">${pips}</span>${st.n_shared ? `<span class="sub">+${st.n_shared} ממאגר משותף</span>` : ''}${st.n_rejected ? `<span class="sub">${st.n_rejected} נדחו</span>` : ''}</td>
+      <td class="num">${st.selected.length}/${esc(s.variants_required ?? 3)}</td>
     </tr>`;
   }).join('');
+  const cov = roomCover(r);
   $('#room-body').innerHTML = `<div class="screen roomy">
     <div class="room-head">
       <h2>${esc(r.name_he)}</h2>
       <div class="facts">
         <span>פריימים: <b>${r.frames.length}</b> (${r.frames.map(f => esc(f.id)).join(', ')})</span>
-        <span>עמדות: <b>${r.n_slots}</b></span>
-        <span>עם 3 מועמדים ומעלה: <b>${r.n_covered3} מתוך ${r.n_slots}</b></span>
+        <span>עמדות: <b>${r.slots.length}</b></span>
+        <span>עם 3 מועמדים ומעלה: <b>${cov} מתוך ${r.slots.length}</b></span>
         <span>החלטות פתוחות: <b>${openDec.length}</b>${openDec.length ? ` (${openDec.map(d => `<a href="#decisions">${esc(d.id)}</a>`).join(', ')})` : ''}</span>
         ${r.slots_file ? `<span>קובץ: <code>${esc(r.slots_file)}</code>${r.slots_version ? ` · גרסה ${esc(r.slots_version)}` : ''}</span>` : ''}
       </div>
@@ -995,7 +1476,7 @@ function renderRoom(){
         <caption class="sr-only">עמדות המוצר ב${esc(r.name_he)}</caption>
         <thead><tr><th scope="col">מזהה</th><th scope="col">שם</th><th scope="col">קטגוריה</th><th scope="col">מיקום</th><th scope="col">פריימים</th><th scope="col">וריאציות נדרשות</th><th scope="col">מועמדים</th><th scope="col">נבחרים</th></tr></thead>
         <tbody>${rows}</tbody></table></div>
-      <p class="xs faint">מועמדים = כרטיסים שלא נדחו. המספר האפור הוא כרטיסים ממאגר משותף שהעמדה מפנה אליו בשדה shared. שלושת הריבועים מסמנים את הסף של 3 מועמדים.</p>
+      <p class="xs faint">מועמדים = כרטיסים שלא נדחו, כולל שינויים מהסטודיו שעוד לא סונכרנו. המספר האפור הוא כרטיסים ממאגר משותף שהעמדה מפנה אליו בשדה shared. שלושת הריבועים מסמנים את הסף של 3 מועמדים.</p>
     </section></div>`;
   for(const b of $$('#room-body [data-shot]')) b.onclick = () => openLightbox(ordered, +b.dataset.shot, b);
 }
@@ -1010,92 +1491,109 @@ function stepLightbox(d){ const n = S.lb.i + d; if(n >= 0 && n < S.lb.list.lengt
 function initFilters(){
   const D = S.data;
   $('#f-room').innerHTML = `<option value="">כל החדרים</option>` + D.rooms.map(r => `<option value="${esc(r.id)}">${esc(r.name_he)}</option>`).join('');
-  const statuses = [...new Set(D.products.map(p => p.status))];
-  $('#f-status').innerHTML = `<option value="">כל הסטטוסים</option>` + statuses.map(s => `<option value="${esc(s)}">${esc(P_STATUS[s] || s)} (${D.products.filter(p => p.status === s).length})</option>`).join('');
+  const statuses = ['candidate','selected','rejected'];
+  $('#f-status').innerHTML = `<option value="">כל הסטטוסים</option>` + statuses.map(s => `<option value="${esc(s)}">${esc(P_STATUS[s])}</option>`).join('');
   const sups = [...new Set(D.products.map(p => p.supplier && p.supplier.name).filter(Boolean))];
   $('#f-supplier').innerHTML = `<option value="">כל הספקים</option>` + sups.map(s => `<option value="${esc(s)}">${esc(s)}</option>`).join('');
-  if(S.filters.room && !S.rooms.has(S.filters.room)) S.filters.room = '';
-  if(S.filters.slot && !S.slots.has(S.filters.slot)) S.filters.slot = '';
-  if(S.filters.status && !statuses.includes(S.filters.status)) S.filters.status = '';
-  if(S.filters.supplier && !sups.includes(S.filters.supplier)) S.filters.supplier = '';
+  const F = S.filters;
+  if(F.room && !S.rooms.has(F.room)) F.room = '';
+  if(F.slot && !S.slots.has(F.slot)) F.slot = '';
+  if(F.status && !statuses.includes(F.status)) F.status = '';
+  if(F.supplier && !sups.includes(F.supplier)) F.supplier = '';
   fillSlotSelect();
   syncFilterInputs();
   const upd = () => { readFilters(); renderProducts(); };
   $('#f-q').addEventListener('input', upd);
   $('#f-room').addEventListener('change', () => { S.filters.room = $('#f-room').value; const s = S.slots.get(S.filters.slot); if(s && S.filters.room && s.room !== S.filters.room) S.filters.slot = ''; fillSlotSelect(); syncFilterInputs(); upd(); });
-  for(const id of ['#f-slot','#f-status','#f-supplier','#f-sort','#f-dups']) $(id).addEventListener('change', upd);
+  for(const id of ['#f-slot','#f-status','#f-supplier','#f-flag','#f-sort','#f-dups','#f-pending']) $(id).addEventListener('change', upd);
   $('#filters').addEventListener('submit', e => e.preventDefault());
 }
-function fillSlotSelect(){
-  const D = S.data; const room = S.filters.room;
-  const groups = D.rooms.filter(r => !room || r.id === room);
-  $('#f-slot').innerHTML = `<option value="">כל העמדות</option>` + groups.map(r => {
+function slotOptions(room, withEmpty){
+  const groups = S.data.rooms.filter(r => !room || r.id === room);
+  return (withEmpty ? `<option value="">${esc(withEmpty)}</option>` : '') + groups.map(r => {
     const opts = r.slots.map(s => `<option value="${esc(s.key)}">${esc(s.name_he || s.id)} · ${esc(s.id)}</option>`).join('');
     return room ? opts : `<optgroup label="${esc(r.name_he)}">${opts}</optgroup>`;
   }).join('');
 }
+function fillSlotSelect(){ $('#f-slot').innerHTML = slotOptions(S.filters.room, 'כל העמדות'); }
 function syncFilterInputs(){
   const f = S.filters;
-  if(S.data){ fillSlotSelect(); }
+  if(S.data) fillSlotSelect();
   $('#f-q').value = f.q; $('#f-room').value = f.room; $('#f-slot').value = f.slot; $('#f-status').value = f.status;
-  $('#f-supplier').value = f.supplier; $('#f-sort').value = f.sort; $('#f-dups').checked = !!f.dups;
+  $('#f-supplier').value = f.supplier; $('#f-flag').value = f.flag || ''; $('#f-sort').value = f.sort; $('#f-dups').checked = !!f.dups; $('#f-pending').checked = !!f.pending;
 }
 function readFilters(){
   const f = S.filters;
   f.q = $('#f-q').value; f.room = $('#f-room').value; f.slot = $('#f-slot').value; f.status = $('#f-status').value;
-  f.supplier = $('#f-supplier').value; f.sort = $('#f-sort').value; f.dups = $('#f-dups').checked;
+  f.supplier = $('#f-supplier').value; f.flag = $('#f-flag').value; f.sort = $('#f-sort').value; f.dups = $('#f-dups').checked; f.pending = $('#f-pending').checked;
   store.set('filters', Object.assign({}, f, {q:''}));
 }
+const tagName = t => TAG_HE[t] || (S.rooms.get(t) && S.rooms.get(t).name_he) || t;
 function slotLabel(p){
-  if(!p.slot_key) return p.pool ? 'מאגר משותף, בלי עמדה' : (p.slot || '—');
+  if(!p.slot_key) return p._new ? 'ליד בלי עמדה' : p.pool ? 'מאגר משותף, בלי עמדה' : (p.slot || '—');
   const s = S.slots.get(p.slot_key); const r = S.rooms.get(p.room);
   return `${r ? r.name_he : p.room} · ${s ? (s.name_he || s.id) : p.slot}${s ? '' : ' (עמדה לא קיימת בקובץ)'}`;
 }
 function haystack(p){
-  return [p.id, p.name, p.slot, p.category, (p.materials || []).join(' '), p.texture, p.notes, p.supplier && p.supplier.sku, p.pid, (p.colors || {}).dominant_hex, slotLabel(p), (p.rooms || []).map(t => TAG_HE[t] || t).join(' ')].join(' ').toLowerCase();
+  return [p.id, p.name, p.slot, p.category, (p.materials || []).join(' '), p.texture, p.notes, p.supplier && p.supplier.sku, p.pid, (p.colors || {}).dominant_hex, slotLabel(p), (p.rooms || []).map(tagName).join(' '), (p.links || []).map(l => l.label + ' ' + l.url).join(' ')].join(' ').toLowerCase();
 }
 function filtered(){
   const f = S.filters;
   const toks = f.q.trim().toLowerCase().split(/\s+/).filter(Boolean);
-  let list = S.data.products.filter(p => {
+  let list = S.view.filter(p => {
     if(f.room && !(p.in_rooms || []).includes(f.room)) return false;
     if(f.slot && !(p.slot_key === f.slot || (p.shared_in || []).includes(f.slot))) return false;
     if(f.status && p.status !== f.status) return false;
     if(f.supplier && !(p.supplier && p.supplier.name === f.supplier)) return false;
+    if(f.flag && p.econ.flag !== f.flag) return false;
     if(f.dups && !(p.dups || []).length) return false;
-    if(toks.length){ const h = p._h || (p._h = haystack(p)); if(!toks.every(t => h.includes(t))) return false; }
+    if(f.pending && !p.pending) return false;
+    if(toks.length){ const h = haystack(p); if(!toks.every(t => h.includes(t))) return false; }
     return true;
   });
   const roomIdx = new Map(S.data.rooms.map((r,i) => [r.id, i]));
   const slotIdx = new Map(); S.data.rooms.forEach(r => r.slots.forEach((s,i) => slotIdx.set(s.key, i)));
-  const cost = p => (p.price && typeof p.price.cost === 'number') ? p.price.cost : Infinity;
+  const cost = p => isNum(p.price && p.price.cost) ? p.price.cost : Infinity;
+  const mg = p => isNum(p.econ.margin) ? p.econ.margin : null;
   if(f.sort === 'cost-asc') list.sort((a,b) => cost(a) - cost(b));
   else if(f.sort === 'cost-desc') list.sort((a,b) => (cost(b) === Infinity ? -1 : cost(b)) - (cost(a) === Infinity ? -1 : cost(a)));
-  else list.sort((a,b) => ((roomIdx.get(a.room) ?? 99) - (roomIdx.get(b.room) ?? 99)) || ((slotIdx.get(a.slot_key) ?? 99) - (slotIdx.get(b.slot_key) ?? 99)) || a.id.localeCompare(b.id));
+  else if(f.sort === 'margin-asc' || f.sort === 'margin-desc'){ const d = f.sort === 'margin-asc' ? 1 : -1; list.sort((a,b) => (mg(a) == null) - (mg(b) == null) || d * ((mg(a) ?? 0) - (mg(b) ?? 0))); }
+  else list.sort((a,b) => (!!b._new - !!a._new) || ((roomIdx.get(a.room) ?? 99) - (roomIdx.get(b.room) ?? 99)) || ((slotIdx.get(a.slot_key) ?? 99) - (slotIdx.get(b.slot_key) ?? 99)) || a.id.localeCompare(b.id));
   return list;
+}
+function renderSyncLine(){
+  const pend = S.view.filter(p => p.pending && !p._new).length, nNew = S.view.filter(p => p._new && p.pending).length;
+  const box = $('#sync-line');
+  if(!S.db){ box.innerHTML = noDbLine('אפשר לעיין בכל המוצרים, אבל שינויים נשמרים רק בדף שפורסם.'); return; }
+  box.innerHTML = `<div class="sync-line"><span>${pend || nNew ? `<span class="flag flag-orange"><i class="fdot"></i>${pend} מוצרים ששונו ו-${nNew} לידים חדשים ממתינים לסנכרון לריפו</span>` : 'כל השינויים מסונכרנים עם הריפו.'}</span>
+    <button type="button" class="btn btn-ghost btn-small" id="exp-open">קובץ סנכרון</button></div>`;
+  $('#exp-open').onclick = e => openExport(e.currentTarget);
 }
 function renderProducts(){
   if(!S.data) return;
+  renderSyncLine();
   const list = filtered();
   const f = S.filters;
-  const active = [f.room && S.rooms.get(f.room)?.name_he, f.slot && (S.slots.get(f.slot)?.name_he || f.slot), f.status && (P_STATUS[f.status] || f.status), f.supplier, f.dups && 'כפולים', f.q.trim() && `"${f.q.trim()}"`].filter(Boolean);
-  $('#p-result').innerHTML = `<span><strong class="num">${list.length}</strong> מתוך ${S.data.products.length} מוצרים${active.length ? ` · ${esc(active.join(' · '))}` : ''}</span>${active.length ? '<button type="button" class="linkish" id="f-reset">ניקוי הסינון</button>' : ''}`;
-  const rb = $('#f-reset'); if(rb) rb.onclick = () => { Object.assign(S.filters, {q:'', room:'', slot:'', status:'', supplier:'', dups:false}); syncFilterInputs(); readFilters(); renderProducts(); $('#f-q').focus(); };
+  const active = [f.room && S.rooms.get(f.room)?.name_he, f.slot && (S.slots.get(f.slot)?.name_he || f.slot), f.status && (P_STATUS[f.status] || f.status), f.flag && FLAG_HE[f.flag], f.supplier, f.dups && 'כפולים', f.pending && 'ממתינים לסנכרון', f.q.trim() && `"${f.q.trim()}"`].filter(Boolean);
+  $('#p-result').innerHTML = `<span><strong class="num">${list.length}</strong> מתוך ${S.view.length} מוצרים${active.length ? ` · ${esc(active.join(' · '))}` : ''}</span>${active.length ? '<button type="button" class="linkish" id="f-reset">ניקוי הסינון</button>' : ''}`;
+  const rb = $('#f-reset'); if(rb) rb.onclick = () => { Object.assign(S.filters, {q:'', room:'', slot:'', status:'', supplier:'', flag:'', dups:false, pending:false}); syncFilterInputs(); readFilters(); renderProducts(); $('#f-q').focus(); };
   if(!list.length){ $('#pgrid').innerHTML = `<p class="empty span-all">אין מוצרים שמתאימים לסינון.${f.slot ? ' לעמדה הזו עוד אין כרטיסי מוצר.' : ''}</p>`; return; }
   $('#pgrid').innerHTML = list.map(p => {
     const hex = (p.colors || {}).dominant_hex || '';
     const viaShared = f.slot && p.slot_key !== f.slot;
     const sh = p.shipping || {};
     const days = sh.days_min != null ? (sh.days_max != null && sh.days_max !== sh.days_min ? `${sh.days_min}–${sh.days_max}` : `${sh.days_min}`) : null;
+    const img = p._new ? `<span class="lead-ph">אין תמונה עד הסנכרון</span>` : `<img src="${esc(p.img.src)}" alt="" loading="lazy" width="${p.img.w}" height="${p.img.h}">`;
     return `<button type="button" class="pcard" data-product="${esc(p.id)}" aria-haspopup="dialog">
-      <span class="pimg"><img src="${esc(p.img.src)}" alt="" loading="lazy" width="${p.img.w}" height="${p.img.h}">
-        <span class="chips"><span class="chip st-${esc(p.status)}">${esc(P_STATUS[p.status] || p.status)}</span>${(p.dups || []).length ? '<span class="chip chip-dup">כפול</span>' : ''}</span>
-        ${p.img.ok ? '' : '<span class="noimg chip">אין תמונה</span>'}</span>
+      <span class="pimg ${p._new ? 'ph' : ''}">${img}
+        <span class="chips">${p._new ? '<span class="chip chip-new">ליד חדש</span>' : `<span class="chip st-${esc(p.status)}">${esc(P_STATUS[p.status] || p.status)}</span>`}${(p.dups || []).length ? '<span class="chip chip-dup">כפול</span>' : ''}${p.pending ? '<span class="chip chip-pending">ממתין לסנכרון</span>' : ''}</span>
+        ${p._new || p.img.ok ? '' : '<span class="noimg chip">אין תמונה</span>'}</span>
       <span class="pbody">
         <span class="pname" dir="auto">${esc(p.name)}</span>
         <span class="pslot">${esc(slotLabel(p))}${viaShared ? ' · דרך מאגר משותף' : ''}</span>
-        <span class="pslot faint">${esc((p.rooms || []).map(t => TAG_HE[t] || t).join(', '))}</span>
-        <span class="prow"><span class="cost num" dir="ltr">${esc(fmtUSD(p.price && p.price.cost))}</span>${days ? `<span><span class="num" dir="ltr">${esc(days)}</span> ימים</span>` : ''}<span class="swrow"><span class="swatch" data-sw="${esc(hex)}"></span><span class="hex" dir="ltr">${esc(hex)}</span></span><span class="faint">${esc(p.supplier && p.supplier.name || '')}</span></span>
+        <span class="pslot faint">${esc((p.rooms || []).map(tagName).join(', '))}</span>
+        <span class="prow"><span class="cost num" dir="ltr">${esc(fmtUSD(p.price && p.price.cost))}</span>${days ? `<span><span class="num" dir="ltr">${esc(days)}</span> ימים</span>` : ''}${hex ? `<span class="swrow"><span class="swatch" data-sw="${esc(hex)}"></span><span class="hex" dir="ltr">${esc(hex)}</span></span>` : ''}<span class="faint">${esc(p.supplier && p.supplier.name || '')}</span></span>
+        <span class="pecon">${flagHtml(p)}</span>
       </span>
     </button>`;
   }).join('');
@@ -1104,34 +1602,76 @@ function renderProducts(){
 
 /* ---------- product drawer ---------- */
 function row(label, html){ return html == null || html === '' ? '' : `<dt>${esc(label)}</dt><dd>${html}</dd>`; }
+function refreshDrawer(){ if(S.drawerId && $('#drawer').open && !S.drawerDirty) renderDrawer(S.drawerId, true); }
 function openProduct(id, from){
-  const p = S.products.get(id); if(!p) return;
+  const p = S.byId.get(id); if(!p) return;
+  if($('#drawer').open && S.drawerDirty && S.drawerId !== id){ confirmLeave(); return; }
   if(!$('#drawer').open) S.drawerReturn = from || document.activeElement;
-  const sup = p.supplier || {}, pr = p.price || {}, sh = p.shipping || {}, dim = p.dimensions_cm || {}, col = p.colors || {}, im = p.images || {}, li = p.lighting;
+  S.drawerId = id; S.drawerDirty = false;
+  renderDrawer(id, false);
+  openDialog($('#drawer'));
+  $('#drawer-body').scrollTop = 0;
+  $('#drawer [data-close]').focus();
+}
+function linkItem(label, url){
+  return `<li><div class="row"><a href="${esc(url)}" target="_blank" rel="noopener noreferrer">${esc(label || hostOf(url) || url)}</a><button type="button" class="copy" data-copy="${esc(url)}" aria-label="העתקת הקישור ${esc(label || '')}">העתקה</button></div><span class="url-text">${esc(url)}</span></li>`;
+}
+function econBlock(e){
+  const x = e.econ, s = S.ES.v;
+  const head = `<div class="econ-head">${x.flag === 'orange' ? flagHtml(e, true) : `<span class="big">${ltr(fmtPct(x.margin))}</span>${flagHtml(e, true)}`}</div>`;
+  return `<section class="section" aria-labelledby="h-econ"><h3 id="h-econ" class="h-small">רווחיות</h3>${head}
+    <dl class="econ-dl">
+      <dt>עלות המוצר</dt><dd>${ltr(fmtUSD(e.price.cost))}</dd>
+      <dt>משלוח לישראל <span class="xs faint">· ${esc(e.ship.label)}${e.ship.detail ? ' · ' + esc(e.ship.detail) : ''}</span></dt><dd>${ltr(fmtUSD(e.ship.usd))}</dd>
+      <dt>עלות נחיתה <span class="xs faint">(× ${ltr(esc(s.usd_ils))} ₪ לדולר)${isNum(x.ship_share) ? ` · משלוח ${ltr(fmtPct(x.ship_share))} ממנה` : ''}</span></dt><dd class="tot">${ltr(fmtILS(x.landed, 2))}</dd>
+      <dt>מחיר לצרכן, כולל מע"מ</dt><dd>${ltr(fmtILS(e.retail, 2))}${isNum(e.compare_at) ? ` <span class="xs faint">(לפני הנחה ${ltr(fmtILS(e.compare_at))})</span>` : ''}</dd>
+      <dt>הכנסה נטו <span class="xs faint">(בלי מע"מ ${ltr(esc(s.vat_pct + '%'))})</span></dt><dd>${ltr(fmtILS(x.net, 2))}</dd>
+      <dt>עמלות סליקה <span class="xs faint">(${ltr(esc(s.card_pct + '%'))} + ${ltr(fmtILS(s.card_fixed_ils, 2))})</span></dt><dd>${ltr(fmtILS(x.fees, 2))}</dd>
+      <dt>שמורת החזרות <span class="xs faint">(${ltr(esc(s.returns_pct + '%'))} מהנטו)</span></dt><dd>${ltr(fmtILS(x.reserve, 2))}</dd>
+      <dt>אריזה</dt><dd>${ltr(fmtILS(s.packaging_ils, 2))}</dd>
+      <dt class="tot">תרומה</dt><dd class="tot">${ltr(fmtILS(x.contribution, 2))}</dd>
+      <dt>אחרי שיווק <span class="xs faint">(CAC ${ltr(fmtILS(s.cac_ils))} ÷ ${ltr(esc(s.items_per_order))} פריטים)</span></dt><dd>${ltr(fmtILS(x.after_marketing, 2))}</dd>
+      <dt class="tot">מחיר מומלץ ליעד ${ltr(esc(s.target_margin_pct + '%'))}</dt><dd class="tot">${x.recommended != null ? ltr(fmtILS(Math.ceil(x.recommended))) : (x.landed != null ? 'היעד לא אפשרי בהנחות האלה' : '—')}</dd>
+    </dl></section>`;
+}
+function renderDrawer(id, keepScroll){
+  const e = S.byId.get(id);
+  if(!e){ closeDialog($('#drawer')); return; }
+  const body = $('#drawer-body'); const st = body.scrollTop;
+  $('#drawer-eyebrow').textContent = slotLabel(e);
+  $('#drawer-title').textContent = e.name;
+  if(e._new){ body.innerHTML = leadDrawerHtml(e); bindLeadDrawer(e); if(keepScroll) body.scrollTop = st; return; }
+  const p = S.base.get(id);
+  const sup = e.supplier || {}, pr = e.price || {}, sh = p.shipping || {}, dim = p.dimensions_cm || {}, col = p.colors || {}, im = p.images || {}, li = p.lighting;
   const dims = ['width','depth','height'].map(k => dim[k]).some(v => v != null) ? `${['width','depth','height'].map(k => dim[k] ?? '?').join(' × ')} ס״מ <span class="faint xs">(רוחב × עומק × גובה)</span>` : '';
   const stds = p.standards || {};
   const stdChips = ['CE','IP44','EN71'].map(k => { const s = stds[k] || {state:'unknown', snippets:[]}; const m = (s.snippets || []).find(x => x.kind === 'stated'); const extra = m && m.match && m.match.replace(/\s/g,'') !== k ? ` (${m.match})` : '';
     return `<span class="std"><b>${k}</b><span class="chip std-${esc(s.state)}">${esc(STD_HE[s.state] || s.state)}${esc(extra)}</span></span>`; }).join('');
   const snips = ['CE','IP44','EN71'].flatMap(k => ((stds[k] || {}).snippets || []).map(s => `<li><strong>${k}</strong> · ${esc(s.kind === 'stated' ? 'מוצהר' : s.kind === 'unverified' ? 'לא מאומת' : 'אזכור')}: <span dir="ltr">…${esc(s.text)}…</span></li>`));
   const scores = Object.entries(p.style_scores || {}).map(([k, v]) => `<span>${esc(STYLE_HE[k] || k)}</span><span><b>${esc(v.score)}</b>/10 <span class="muted">${esc(v.reason || '')}</span></span>`).join('');
-  const dups = (p.dups || []).map(x => { const q = S.products.get(x); return `<li><button type="button" class="linkish" data-product="${esc(x)}">${esc(x)}</button>${q ? ` <span class="faint xs">· ${esc(slotLabel(q))}</span>` : ''}</li>`; }).join('');
+  const dups = (p.dups || []).map(x => { const q = S.byId.get(x); return `<li><button type="button" class="linkish" data-product="${esc(x)}">${esc(x)}</button>${q ? ` <span class="faint xs">· ${esc(slotLabel(q))}</span>` : ''}</li>`; }).join('');
   const shared = (p.shared_in || []).map(k => { const s = S.slots.get(k); const r = s && S.rooms.get(s.room); return `<button type="button" class="linkish" data-goto-slot="${esc(k)}">${esc(r ? r.name_he : '')} · ${esc(s ? (s.name_he || s.id) : k)}</button>`; }).join(', ');
   const ships = (sh.ships_to || []).join(', ');
-  const known = new Set(['id','slot','name','category','rooms','placement','supplier','price','shipping','dimensions_cm','colors','materials','texture','finish','visual_weight','lighting','images','style_scores','status','notes','path','room','slot_key','pool','pid','dups','shared_in','in_rooms','standards','img','_h']);
+  const known = new Set(['id','slot','name','category','rooms','placement','supplier','price','shipping','dimensions_cm','colors','materials','texture','finish','visual_weight','lighting','images','style_scores','status','notes','path','room','slot_key','pool','pid','dups','shared_in','in_rooms','standards','img','links','lead']);
   const extraFields = Object.keys(p).filter(k => !known.has(k)).map(k => row(k, `<code>${esc(JSON.stringify(p[k]))}</code>`)).join('');
-  $('#drawer-eyebrow').textContent = slotLabel(p);
-  $('#drawer-title').textContent = p.name;
-  $('#drawer-body').innerHTML = `
+  const links = [sup.product_url ? linkItem(`עמוד המוצר אצל ${sup.name || 'הספק'}`, sup.product_url) : ''].concat((e.links || []).map(l => linkItem(l.label, l.url))).join('');
+  const hist = (e.history || []).slice().reverse().slice(0, 12).map(h => `<li><span class="xs faint">${esc(fmtDate(h.at))} ${esc(whoLabel(h.by))}</span><br>${(h.changes || []).map(c => `${esc(EDIT_LABEL[c.field] || c.field)}: ${esc(showVal(c.field, c.from))} ← ${esc(showVal(c.field, c.to))}`).join('<br>')}</li>`).join('');
+  body.innerHTML = `
     <div class="d-hero">
-      <div class="pic"><img src="${esc(p.img.src)}" alt="${esc(p.name)}" width="${p.img.w}" height="${p.img.h}"></div>
+      <div class="pic"><img src="${esc(p.img.src)}" alt="${esc(e.name)}" width="${p.img.w}" height="${p.img.h}"></div>
       <div class="side">
-        <div class="chiprow"><span class="chip st-${esc(p.status)}">${esc(P_STATUS[p.status] || p.status)}</span>${(p.dups || []).length ? '<span class="chip chip-dup">כרטיס כפול</span>' : ''}</div>
-        <p><span class="num price-big" dir="ltr">${esc(fmtUSD(pr.cost))}</span> <span class="muted small">${esc(pr.currency || '')} · עלות אצל הספק</span></p>
-        ${sup.product_url ? `<p><a href="${esc(sup.product_url)}" target="_blank" rel="noopener noreferrer">לעמוד המוצר אצל ${esc(sup.name || 'הספק')}</a></p>` : ''}
+        <div class="chiprow"><span class="chip st-${esc(e.status)}">${esc(P_STATUS[e.status] || e.status)}</span>${(p.dups || []).length ? '<span class="chip chip-dup">כרטיס כפול</span>' : ''}${e.pending ? '<span class="chip chip-pending">ממתין לסנכרון</span>' : ''}</div>
+        <p><span class="num price-big" dir="ltr">${esc(fmtUSD(pr.cost))}</span> <span class="muted small">עלות אצל הספק</span></p>
+        <p>${flagHtml(e, true)}</p>
         ${p.img.note ? `<p class="xs warn-text">${esc(p.img.note)}</p>` : ''}
         <p class="xs faint">${(im.urls || []).length > 1 ? `ועוד ${(im.urls.length - 1)} תמונות אצל הספק` : ''}</p>
       </div>
     </div>
+    <section class="section" aria-labelledby="h-links"><h3 id="h-links" class="h-small">קישורים</h3>${links ? `<ul class="links">${links}</ul>` : '<p class="faint small">אין קישורים.</p>'}</section>
+    ${econBlock(e)}
+    <section class="section" aria-labelledby="h-edit"><h3 id="h-edit" class="h-small">עריכה</h3>
+      ${canEditData() ? editFormHtml(e) : noDbLine('השדות מוצגים כפי שהם בריפו ובשינויים שכבר נשמרו.')}
+    </section>
     <section class="stds" aria-labelledby="h-std"><h3 id="h-std" class="h-small">תקנים</h3>
       <div class="std-row">${stdChips}</div>
       <p class="xs faint">לפי זיהוי טקסט בהערות הכרטיס בלבד. "מוצהר" אומר שההערות מצטטות את הספק, לא שיש תעודה.</p>
@@ -1139,16 +1679,16 @@ function openProduct(id, from){
     </section>
     <dl class="fields">
       ${row('מזהה', `<code>${esc(p.id)}</code>`)}
-      ${row('עמדה', esc(slotLabel(p)) + (p.slot_key ? ` <button type="button" class="linkish xs" data-goto-slot="${esc(p.slot_key)}">לכל המועמדים בעמדה</button>` : ''))}
+      ${row('עמדה', esc(slotLabel(e)) + (e.slot_key ? ` <button type="button" class="linkish xs" data-goto-slot="${esc(e.slot_key)}">לכל המועמדים בעמדה</button>` : ''))}
       ${row('מועמד גם ב', shared)}
-      ${row('חדרים מתאימים', esc((p.rooms || []).map(t => TAG_HE[t] || t).join(', ')))}
+      ${row('חדרים מתאימים', esc((e.rooms || []).map(tagName).join(', ')))}
       ${row('קטגוריה', p.category ? `<code>${esc(p.category)}</code>` : '')}
       ${row('מיקום', esc(PLACEMENT[p.placement] || p.placement || ''))}
       ${row('ספק', `${esc(sup.name || '')}${sup.rating != null ? ` · דירוג ${esc(sup.rating)}` : ''}`)}
       ${row('SKU', sup.sku ? `<code>${esc(sup.sku)}</code>` : '<span class="faint">—</span>')}
       ${row('מזהה מוצר (pid)', p.pid ? `<code>${esc(p.pid)}</code>` : '')}
-      ${row('מחיר מכירה מוצע', pr.suggested_retail != null ? `<span dir="ltr">${esc(fmtUSD(pr.suggested_retail))}</span>` : '<span class="faint">—</span>')}
-      ${row('משלוח', sh.days_min != null ? `<span class="num" dir="ltr">${esc(sh.days_min)}${sh.days_max != null && sh.days_max !== sh.days_min ? '–' + esc(sh.days_max) : ''}</span> ימים${ships ? ` · אל ${esc(ships)}` : ''}` : (ships ? `אל ${esc(ships)}` : ''))}
+      ${row('מחיר מכירה מוצע (כרטיס)', isNum(pr.suggested_retail) ? `<span dir="ltr">${esc(fmtUSD(pr.suggested_retail))}</span>` : '<span class="faint">—</span>')}
+      ${row('זמן משלוח בכרטיס', sh.days_min != null ? `<span class="num" dir="ltr">${esc(sh.days_min)}${sh.days_max != null && sh.days_max !== sh.days_min ? '–' + esc(sh.days_max) : ''}</span> ימים${ships ? ` · אל ${esc(ships)}` : ''}` : (ships ? `אל ${esc(ships)}` : ''))}
       ${row('מידות', dims)}
       ${row('צבע דומיננטי', col.dominant_hex ? `<span class="swrow"><span class="swatch lg" data-sw="${esc(col.dominant_hex)}"></span><span class="hex" dir="ltr">${esc(col.dominant_hex)}</span>${col.temperature ? ` · ${esc(TEMP[col.temperature] || col.temperature)}` : ''}</span>` : '')}
       ${row('צבעים משניים', (col.secondary_hex || []).map(h => `<span class="swrow spaced"><span class="swatch" data-sw="${esc(h)}"></span><span class="hex" dir="ltr">${esc(h)}</span></span>`).join(''))}
@@ -1163,17 +1703,504 @@ function openProduct(id, from){
       ${row('קובץ', `<code>${esc(p.path)}</code>`)}
       ${extraFields}
     </dl>
-    <section aria-labelledby="h-notes"><h3 id="h-notes" class="h-small">הערות</h3>${p.notes ? `<div class="notes">${esc(p.notes)}</div>` : '<p class="faint">אין הערות.</p>'}</section>`;
-  paintVars($('#drawer-body'));
-  const dlg = $('#drawer');
-  openDialog(dlg);
-  $('#drawer-body').scrollTop = 0;
-  $('#drawer [data-close]').focus();
+    <section aria-labelledby="h-notes"><h3 id="h-notes" class="h-small">הערות</h3>${e.notes ? `<div class="notes">${esc(e.notes)}</div>` : '<p class="faint">אין הערות.</p>'}</section>
+    ${hist ? `<section aria-labelledby="h-hist"><h3 id="h-hist" class="h-small">היסטוריית שינויים מהסטודיו</h3><ul class="hist">${hist}</ul></section>` : ''}`;
+  paintVars(body);
+  if(canEditData()) bindEditForm(e);
+  if(keepScroll) body.scrollTop = st;
 }
-document.addEventListener('click', e => {
-  // links inside the drawer that move to another screen close it first
-  if(e.target.closest('#drawer [data-goto-slot]')) closeDialog($('#drawer'));
-}, true);
+function showVal(k, v){
+  if(v == null || v === '') return '—';
+  if(k === 'rooms') return (v || []).map(tagName).join(', ') || '—';
+  if(k === 'links') return (v || []).map(l => l.label || hostOf(l.url)).join(', ') || '—';
+  if(k === 'status') return P_STATUS[v] || v;
+  if(k === 'slot_key'){ const s = S.slots.get(v), r = s && S.rooms.get(s.room); return s ? `${r ? r.name_he : ''} · ${s.name_he || s.id}` : v; }
+  if(k === 'notes') return String(v).length > 60 ? String(v).slice(0, 60) + '…' : v;
+  return String(v);
+}
+
+/* ---------- edit form ---------- */
+function efWrap(k, label, control, help, asFieldset){
+  const top = `<div class="ef-top">${asFieldset ? `<legend>${esc(label)}</legend>` : `<label for="e-${k}">${esc(label)}</label>`}<span class="ef-flag">שונה מהריפו</span><button type="button" class="linkish xs ef-revert" data-revert="${k}">בטל שינוי</button></div>`;
+  return asFieldset ? `<fieldset class="ef" data-k="${k}">${top}${control}<p class="ef-err" id="e-${k}-err"></p>${help ? `<p class="ef-help">${help}</p>` : ''}</fieldset>`
+                    : `<div class="ef" data-k="${k}">${top}${control}<p class="ef-err" id="e-${k}-err"></p>${help ? `<p class="ef-help">${help}</p>` : ''}</div>`;
+}
+function editFormHtml(e){
+  const f = e.flat;
+  const tags = [...new Set(Object.keys(TAG_HE).concat(e.bflat.rooms || [], f.rooms || []))];
+  const cj = cjShip(e.id);
+  const shipHelp = (cj ? `ברירת מחדל: CJ ${esc(fmtDay(cj.date))} · ${esc(cj.name || '')} ${cj.days ? esc(cj.days) + ' יום' : ''} · ${ltr(fmtUSD(cj.usd))}. ערך ידני גובר.` : 'אין נתון משלוח מ-CJ למוצר הזה.') + ' שדה ריק חוזר לברירת המחדל.';
+  const num = (k, step, unit) => `<input type="number" id="e-${k}" min="0" step="${step}" inputmode="decimal" value="${isNum(f[k]) ? esc(f[k]) : ''}" aria-describedby="e-${k}-err">`;
+  return `<form id="ef-form" class="ef-grid" novalidate>
+    ${efWrap('name', 'שם', `<input type="text" id="e-name" dir="auto" value="${esc(f.name || '')}">`)}
+    <div class="ef-row2">
+      ${efWrap('status', 'סטטוס', `<select id="e-status">${['candidate','selected','rejected'].map(s => `<option value="${s}" ${f.status === s ? 'selected' : ''}>${P_STATUS[s]}</option>`).join('')}</select>`)}
+      ${efWrap('slot_key', 'עמדה', `<select id="e-slot_key">${slotOptions('', 'בלי עמדה')}</select>`, 'העברה לחדר אחר מזיזה את הקובץ בסנכרון.')}
+    </div>
+    ${efWrap('rooms', 'חדרים מתאימים', `<div class="tagbox">${tags.map(t => `<label><input type="checkbox" class="chk" name="e-rooms" value="${esc(t)}" ${(f.rooms || []).includes(t) ? 'checked' : ''}>${esc(tagName(t))}</label>`).join('')}</div>`, '', true)}
+    ${efWrap('product_url', 'קישור לעמוד המוצר', `<input type="url" id="e-product_url" dir="ltr" value="${esc(f.product_url || '')}" aria-describedby="e-product_url-err">`)}
+    <div class="ef-row2">
+      ${efWrap('sku', 'SKU', `<input type="text" id="e-sku" dir="ltr" value="${esc(f.sku || '')}">`)}
+      ${efWrap('cost', 'עלות אצל הספק (USD)', num('cost', '0.01'))}
+    </div>
+    <div class="ef-row2">
+      ${efWrap('shipping_cost_usd', 'משלוח לישראל (USD)', num('shipping_cost_usd', '0.01'), shipHelp)}
+      ${efWrap('retail_ils', 'מחיר לצרכן (₪, כולל מע"מ)', num('retail_ils', '1'), isNum(e.econ.recommended) ? `מחיר מומלץ ליעד: ${ltr(fmtILS(Math.ceil(e.econ.recommended)))}` : '')}
+      ${efWrap('compare_at_ils', 'מחיר לפני הנחה (₪, לא חובה)', num('compare_at_ils', '1'))}
+    </div>
+    ${efWrap('notes', 'הערות', `<textarea id="e-notes" rows="6" dir="auto">${esc(f.notes || '')}</textarea>`)}
+    ${efWrap('links', 'קישורים נוספים: ספקים חלופיים, AliExpress, ביקורות', `<div class="link-rows" id="e-links">${(f.links || []).map((l, i) => linkRow(l, i)).join('')}</div><div><button type="button" class="btn btn-ghost btn-small" id="e-links-add">הוספת קישור</button></div>`, 'כל קישור חייב להתחיל ב-https://', true)}
+    <div class="save-bar">
+      <button type="submit" class="btn" id="ef-save" disabled>שמירת השינויים</button>
+      <button type="button" class="btn btn-ghost" id="ef-reset" disabled>ביטול העריכה</button>
+      <span class="save-state" id="ef-state" role="status" ${S.drawerMsg && S.drawerMsg.id === e.id ? 'data-sticky="1"' : ''}>${S.drawerMsg && S.drawerMsg.id === e.id ? esc(S.drawerMsg.text) : ''}</span>
+    </div>
+    <div class="confirm" id="ef-leave" hidden><p class="small">יש שינויים שלא נשמרו.</p><div class="row"><button type="button" class="btn btn-ghost btn-small" id="ef-stay">להמשיך לערוך</button><button type="button" class="btn btn-danger btn-small" id="ef-discard">לצאת בלי לשמור</button></div></div>
+  </form>`;
+}
+let linkSeq = 0;
+function linkRow(l, i){
+  const n = 'l' + (linkSeq++);
+  return `<div class="link-row" data-link>
+    <input type="text" class="fld lr-label" id="e-lk-${n}-label" aria-label="תווית הקישור" placeholder="תווית (למשל AliExpress)" value="${esc(l.label || '')}">
+    <input type="url" class="fld lr-url" id="e-lk-${n}-url" aria-label="כתובת הקישור" dir="ltr" placeholder="https://…" value="${esc(l.url || '')}">
+    <button type="button" class="btn btn-ghost btn-small" data-link-del aria-label="הסרת הקישור">הסרה</button>
+  </div>`;
+}
+function readEditForm(e){
+  const v = id => { const el = $('#e-' + id); return el ? el.value : ''; };
+  const numv = id => { const el = $('#e-' + id); if(!el) return {v:null}; if(el.validity && el.validity.badInput) return {v:null, bad:true}; return {v: el.value.trim() === '' ? null : Number(el.value)}; };
+  const out = {}, errs = {}, nums = {};
+  out.name = v('name'); out.status = v('status'); out.slot_key = v('slot_key') || null;
+  out.rooms = $$('input[name="e-rooms"]:checked').map(x => x.value);
+  out.product_url = v('product_url'); out.sku = v('sku'); out.notes = v('notes');
+  for(const k of ['cost','shipping_cost_usd','retail_ils','compare_at_ils']){ nums[k] = numv(k); out[k] = nums[k].v; }
+  out.links = $$('#e-links [data-link]').map(r => ({label: $('.lr-label', r).value.trim(), url: $('.lr-url', r).value.trim()})).filter(l => l.label || l.url);
+  if(!String(out.name || '').trim()) errs.name = 'שם הוא שדה חובה.';
+  if(!httpsOk(out.product_url)) errs.product_url = 'הקישור חייב להתחיל ב-https:// ולהיות כתובת מלאה.';
+  for(const k of ['cost','shipping_cost_usd','retail_ils','compare_at_ils']){
+    if(nums[k].bad) errs[k] = 'זה לא מספר תקין.';
+    else if(out[k] != null && !(out[k] >= 0)) errs[k] = 'צריך מספר 0 ומעלה.';
+  }
+  if(out.cost == null && !errs.cost) errs.cost = 'עלות היא שדה חובה בכרטיס.';
+  if(out.shipping_cost_usd == null && !errs.shipping_cost_usd) out.shipping_cost_usd = e.bflat.shipping_cost_usd;  // empty = back to the default
+  if(!out.slot_key && e.bflat.slot_key) errs.slot_key = 'כרטיס שיש לו עמדה צריך להישאר עם עמדה.';
+  const badLinks = out.links.filter(l => !httpsOk(l.url));
+  if(badLinks.length) errs.links = `${badLinks.length === 1 ? 'קישור אחד לא מתחיל' : badLinks.length + ' קישורים לא מתחילים'} ב-https://.`;
+  return {val: out, errs};
+}
+function bindEditForm(e){
+  const form = $('#ef-form'); if(!form) return;
+  const sel = $('#e-slot_key'); sel.value = e.flat.slot_key || '';
+  const update = () => {
+    const {val, errs} = readEditForm(e);
+    let dirty = false;
+    for(const k of EDIT_KEYS){
+      const wrap = $(`.ef[data-k="${k}"]`, form); if(!wrap) continue;
+      wrap.classList.toggle('is-changed', !same(k, val[k], e.bflat[k]));
+      if(!same(k, val[k], e.flat[k])) dirty = true;
+      const err = $(`#e-${k}-err`, form); if(err) err.textContent = errs[k] || '';
+      const ctl = $('#e-' + k); if(ctl && ctl.setAttribute) ctl.setAttribute('aria-invalid', errs[k] ? 'true' : 'false');
+    }
+    for(const r of $$('#e-links [data-link]')){ const u = $('.lr-url', r); u.setAttribute('aria-invalid', u.value.trim() && !httpsOk(u.value.trim()) || (!u.value.trim() && $('.lr-label', r).value.trim()) ? 'true' : 'false'); }
+    S.drawerDirty = dirty;
+    $('#ef-save').disabled = !dirty || Object.keys(errs).length > 0;
+    $('#ef-reset').disabled = !dirty;
+    const st = $('#ef-state');
+    if(!st.dataset.sticky) st.textContent = dirty ? (Object.keys(errs).length ? 'יש שדות לתקן לפני שמירה.' : 'יש שינויים שלא נשמרו.') : '';
+    st.classList.toggle('err', dirty && Object.keys(errs).length > 0);
+  };
+  form.addEventListener('input', () => { delete $('#ef-state').dataset.sticky; S.drawerMsg = null; update(); });
+  form.addEventListener('change', update);
+  form.addEventListener('click', ev => {
+    const rv = ev.target.closest('[data-revert]');
+    if(rv){ ev.preventDefault(); revertField(rv.dataset.revert, e); update(); return; }
+    const del = ev.target.closest('[data-link-del]');
+    if(del){ ev.preventDefault(); del.closest('[data-link]').remove(); update(); return; }
+  });
+  $('#e-links-add').addEventListener('click', () => { $('#e-links').insertAdjacentHTML('beforeend', linkRow({label:'', url:''})); const rows = $$('#e-links [data-link]'); $('.lr-label', rows[rows.length - 1]).focus(); update(); });
+  $('#ef-reset').addEventListener('click', () => { S.drawerDirty = false; renderDrawer(e.id, true); $('#h-edit').scrollIntoView({block:'start'}); });
+  $('#ef-stay').addEventListener('click', () => { $('#ef-leave').hidden = true; $('#ef-save').focus(); });
+  $('#ef-discard').addEventListener('click', () => { S.drawerDirty = false; closeDialog($('#drawer')); });
+  form.addEventListener('submit', async ev => {
+    ev.preventDefault();
+    const {val, errs} = readEditForm(e);
+    if(Object.keys(errs).length){ update(); const first = $('.ef [aria-invalid="true"]', form); if(first) first.focus(); return; }
+    const changes = EDIT_KEYS.filter(k => !same(k, val[k], e.flat[k])).map(k => ({field: k, from: norm(k, e.flat[k]), to: norm(k, val[k])}));
+    if(!changes.length) return;
+    const next = Object.assign({}, e.flat, val);
+    const btn = $('#ef-save'); btn.disabled = true; btn.textContent = 'שומר…';
+    try{
+      await saveProductPatch(e.id, next, changes);
+      S.drawerDirty = false;
+      S.drawerMsg = {id: e.id, text: `נשמר. ${changes.length} ${changes.length === 1 ? 'שינוי ממתין' : 'שינויים ממתינים'} לסנכרון לריפו.`};
+      say('השינויים נשמרו');
+      renderDrawer(e.id, true);
+    }catch(err){
+      btn.disabled = false; btn.textContent = 'שמירת השינויים';
+      const st = $('#ef-state'); st.textContent = errText(err); st.classList.add('err'); st.dataset.sticky = '1';
+    }
+  });
+  update();
+}
+async function saveProductPatch(id, nextFlat, changes){ return saveProductFlat(id, nextFlat, changes); }
+function revertField(k, e){
+  const b = e.bflat[k];
+  if(k === 'rooms'){ for(const c of $$('input[name="e-rooms"]')) c.checked = (b || []).includes(c.value); return; }
+  if(k === 'links'){ $('#e-links').innerHTML = (b || []).map((l, i) => linkRow(l, i)).join(''); return; }
+  const el = $('#e-' + k); if(!el) return;
+  el.value = b == null ? '' : String(b);
+  el.focus();
+}
+
+/* ---------- new leads ---------- */
+function leadDrawerHtml(e){
+  const links = [e.supplier.product_url ? linkItem('עמוד המוצר', e.supplier.product_url) : ''].concat((e.links || []).map(l => linkItem(l.label, l.url))).join('');
+  return `<div class="chiprow"><span class="chip chip-new">ליד חדש</span>${e.pending ? '<span class="chip chip-pending">ממתין לסנכרון</span>' : ''}</div>
+    <p class="small muted">נוסף ${esc(fmtDate(e.created_at))} ${esc(whoLabel(e.by))}. הכרטיס ייווצר ב-data/products/leads/ בסנכרון, ואז sourcing-agent ימלא תמונות, צבעים וחומרים.</p>
+    <section class="section"><h3 class="h-small">קישורים</h3>${links ? `<ul class="links">${links}</ul>` : '<p class="faint small">אין קישור.</p>'}</section>
+    <dl class="fields">
+      ${row('עמדה', esc(slotLabel(e)))}
+      ${row('עלות', isNum(e.price.cost) ? ltr(esc(fmtUSD(e.price.cost))) : '<span class="faint">—</span>')}
+      ${row('הערה', e.notes ? esc(e.notes) : '<span class="faint">—</span>')}
+    </dl>
+    ${canEditData() ? `<div class="row"><button type="button" class="btn" id="lead-edit">עריכת הליד</button></div>` : noDbLine('')}`;
+}
+function bindLeadDrawer(e){
+  const b = $('#lead-edit'); if(b) b.addEventListener('click', () => openAdd(e._doc, S.drawerReturn));
+}
+function fillAddSlots(){ $('#a-slot').innerHTML = slotOptions($('#a-room').value, 'בלי עמדה'); }
+function openAdd(docId, from){
+  const d = docId ? S.news.get(docId) : null;
+  S.addEdit = docId || null;
+  $('#addp-title').textContent = d ? 'עריכת ליד' : 'הוספת מוצר';
+  $('#a-room').innerHTML = `<option value="">בלי חדר</option>` + S.data.rooms.map(r => `<option value="${esc(r.id)}">${esc(r.name_he)}</option>`).join('');
+  $('#a-room').value = d ? (d.room || '') : (S.filters.room || '');
+  fillAddSlots();
+  $('#a-slot').value = d && d.room && d.slot ? d.room + '/' + d.slot : (S.filters.slot && S.slots.get(S.filters.slot) && S.slots.get(S.filters.slot).room === $('#a-room').value ? S.filters.slot : '');
+  $('#a-url').value = d ? (d.url || '') : ''; $('#a-name').value = d ? (d.name || '') : ''; $('#a-cost').value = d && isNum(d.cost_usd) ? d.cost_usd : ''; $('#a-note').value = d ? (d.note || '') : '';
+  for(const id of ['a-url-err','a-cost-err','a-err']) $('#' + id).textContent = '';
+  for(const id of ['a-url','a-cost']) $('#' + id).setAttribute('aria-invalid','false');
+  const del = $('#a-del'); del.hidden = !d; del.classList.remove('armed'); del.textContent = 'מחיקת הליד';
+  if($('#drawer').open) closeDialog($('#drawer'));
+  openDialog($('#addp'), from);
+  $('#a-url').focus();
+}
+async function saveAdd(){
+  const url = $('#a-url').value.trim();
+  const costEl = $('#a-cost');
+  const cost = costEl.value.trim() === '' ? null : Number(costEl.value);
+  let bad = false;
+  $('#a-url-err').textContent = httpsOk(url) ? '' : 'צריך קישור מלא שמתחיל ב-https://.';
+  $('#a-url').setAttribute('aria-invalid', httpsOk(url) ? 'false' : 'true');
+  if(!httpsOk(url)) bad = true;
+  const costBad = (costEl.validity && costEl.validity.badInput) || (cost != null && !(cost >= 0));
+  $('#a-cost-err').textContent = costBad ? 'צריך מספר 0 ומעלה.' : '';
+  costEl.setAttribute('aria-invalid', costBad ? 'true' : 'false');
+  if(costBad) bad = true;
+  if(bad){ $('[aria-invalid="true"]', $('#addp')).focus(); return; }
+  const slotKey = $('#a-slot').value; const [room2, slot] = slotKey ? slotKey.split('/') : [null, null];
+  const room = room2 || $('#a-room').value || null;
+  const by = await whoId(); const at = new Date().toISOString();
+  const prev = S.addEdit ? S.news.get(S.addEdit) || {} : {};
+  const body = {url, room, slot: slot || null, name: $('#a-name').value.trim() || null, cost_usd: cost, note: $('#a-note').value.trim() || null,
+    links: prev.links || [], created_at: prev.created_at || at, by: prev.by || by, updated_at: at, synced: false};
+  const btn = $('#a-save'); btn.disabled = true; btn.textContent = 'שומר…';
+  try{
+    if(S.addEdit){ await dbWrite('product_new/' + S.addEdit, () => S.db.collection('product_new').doc(S.addEdit).set(body)); S.news.set(S.addEdit, body); }
+    else { const ref = await S.db.collection('product_new').add(body); if(ref && ref.id) S.news.set(ref.id, body); }
+    closeDialog($('#addp'));
+    say(S.addEdit ? 'הליד עודכן' : 'הליד נוסף וממתין לסנכרון');
+    onDataChange();
+  }catch(e){ $('#a-err').textContent = errText(e); }
+  finally{ btn.disabled = false; btn.textContent = 'שמירה'; }
+}
+async function delLead(){
+  const del = $('#a-del');
+  if(!del.classList.contains('armed')){ del.classList.add('armed'); del.textContent = 'לאשר מחיקה'; setTimeout(() => { del.classList.remove('armed'); del.textContent = 'מחיקת הליד'; }, 5000); return; }
+  try{ await dbWrite('product_new/' + S.addEdit, () => S.db.collection('product_new').doc(S.addEdit).delete()); S.news.delete(S.addEdit); closeDialog($('#addp')); say('הליד נמחק'); onDataChange(); }
+  catch(e){ $('#a-err').textContent = errText(e); }
+}
+function exportJson(){
+  const edits = Array.from(S.edits, ([id, data]) => ({id, data})).filter(x => !x.data.synced);
+  const news = Array.from(S.news, ([id, data]) => ({id, data})).filter(x => !x.data.synced);
+  return JSON.stringify({exported_at: new Date().toISOString(), product_edits: edits, product_new: news,
+    settings: {economics: S.settingsDocs.get('economics') || null, budget: S.settingsDocs.get('budget') || null}}, null, 2);
+}
+function openExport(from){ $('#exp-ta').value = exportJson(); $('#exp-state').textContent = ''; openDialog($('#exportdlg'), from); $('#exp-copy').focus(); }
+
+/* ---------- profit screen ---------- */
+function renderProfit(){
+  if(!S.data) return;
+  const box = $('#profit-body');
+  const ES = S.ES, v = ES.v, P = S.profit;
+  const basis = profitBasis();
+  const withM = basis.filter(p => isNum(p.econ.margin));
+  const fl = {green:0, red:0, orange:0}; for(const p of basis) fl[p.econ.flag]++;
+  const missShip = basis.filter(p => p.econ.missing.includes('shipping')).length;
+  const missRetail = basis.filter(p => p.econ.missing.includes('retail')).length;
+  const withShare = basis.filter(p => isNum(p.econ.ship_share));
+  const hi = withShare.filter(p => p.econ.ship_share > 0.5).length;
+  const est = k => ES.verified[k] ? '' : `<span class="est">${ECON_META.find(m => m.k === k).update ? 'לעדכן' : 'הערכה'}</span>`;
+  const methodLabel = (ECON_META.find(m => m.k === 'shipping_method').options.find(o => o[0] === v.shipping_method) || [])[1];
+  const restore = keepFocus(box);
+
+  let rows = S.view.filter(p => !p._new && (P.rejected || p.status !== 'rejected') && (!P.room || (p.in_rooms || []).includes(P.room)));
+  const key = {
+    name: p => p.name.toLowerCase(), slot: p => slotLabel(p), landed: p => p.econ.landed, share: p => p.econ.ship_share,
+    retail: p => p.retail, margin: p => p.econ.margin, recommended: p => p.econ.recommended, flag: p => ({red:0, orange:1, green:2})[p.econ.flag]
+  }[P.sort] || (p => p.econ.margin);
+  const dir = P.dir === 'desc' ? -1 : 1;
+  rows.sort((a, b) => { const x = key(a), y = key(b); if(x == null && y == null) return 0; if(x == null) return 1; if(y == null) return -1; return (x < y ? -1 : x > y ? 1 : 0) * dir; });
+  const editable = canEditData();
+  const th = (k, label, cls) => `<th scope="col" class="${cls || ''}" aria-sort="${P.sort === k ? (P.dir === 'desc' ? 'descending' : 'ascending') : 'none'}"><button type="button" class="sort" data-sort="${k}">${label}<span class="arr" aria-hidden="true">${P.sort === k ? (P.dir === 'desc' ? '▼' : '▲') : ''}</span></button></th>`;
+  const cell = (p, k) => {
+    const id = `pi-${k}-${p.id}`;
+    const val = id in S.inline ? S.inline[id] : (k === 'retail' ? (isNum(p.retail) ? p.retail : '') : (isNum(p.ship.usd) ? p.ship.usd : ''));
+    const label = k === 'retail' ? `מחיר לצרכן בשקלים: ${p.name}` : `משלוח בדולרים: ${p.name}`;
+    const rs = S.rowState[id];
+    return `<input type="number" class="cell-in" id="${esc(id)}" data-inline="${k}" data-pid="${esc(p.id)}" min="0" step="${k === 'retail' ? '1' : '0.01'}" inputmode="decimal" value="${esc(val)}" aria-label="${esc(label)}" ${editable ? '' : 'disabled'} ${rs && rs.err ? 'aria-invalid="true"' : ''}>${rs ? `<span class="cell-src row-state ${rs.err ? 'err' : ''}">${esc(rs.msg)}</span>` : ''}`;
+  };
+  const trs = rows.map(p => {
+    const x = p.econ;
+    const share = isNum(x.ship_share) ? `<span class="share ${x.ship_share > 0.5 ? 'hi' : ''}"><span>${ltr(fmtPct(x.ship_share))}${x.ship_share > 0.5 ? ' · מעל חצי' : ''}</span><span class="bar"><span data-w="${Math.round(x.ship_share * 100)}"></span></span></span>` : '<span class="faint">—</span>';
+    return `<tr>
+      <td class="pname-cell"><button type="button" class="linkish" data-product="${esc(p.id)}" dir="auto">${esc(p.name)}</button>${p.pending ? ' <span class="chip chip-pending">ממתין לסנכרון</span>' : ''}${p.status !== 'candidate' ? ` <span class="chip st-${esc(p.status)}">${esc(P_STATUS[p.status])}</span>` : ''}</td>
+      <td>${esc(slotLabel(p))}</td>
+      <td class="money">${ltr(fmtUSD(p.price.cost))}</td>
+      <td class="money">${cell(p, 'ship')}<span class="cell-src">${esc(p.ship.label)}</span></td>
+      <td class="money">${ltr(fmtILS(x.landed))}</td>
+      <td>${share}</td>
+      <td class="money">${cell(p, 'retail')}</td>
+      <td class="money">${isNum(x.margin) ? ltr(fmtPct(x.margin)) : '—'}${isNum(x.contribution) ? `<span class="cell-src">תרומה ${ltr(fmtILS(x.contribution))}</span>` : ''}</td>
+      <td class="money">${x.recommended != null ? ltr(fmtILS(Math.ceil(x.recommended))) : '—'}</td>
+      <td>${flagHtml(p)}</td>
+    </tr>`;
+  }).join('');
+
+  const settingsForm = ECON_META.map(m => {
+    const val = m.k in (S.setDraft || {}) ? S.setDraft[m.k] : v[m.k];
+    const ver = (S.setDraftVer && m.k in S.setDraftVer) ? S.setDraftVer[m.k] : ES.verified[m.k];
+    const ctl = m.type === 'select'
+      ? `<select id="s-${m.k}" class="fld" ${editable ? '' : 'disabled'}>${m.options.map(o => `<option value="${o[0]}" ${val === o[0] ? 'selected' : ''}>${esc(o[1])}</option>`).join('')}</select>`
+      : `<input type="number" id="s-${m.k}" class="fld" min="0" step="${m.step}" inputmode="decimal" value="${esc(val)}" ${editable ? '' : 'disabled'}><span class="small muted">${esc(m.unit)}</span>`;
+    return `<div class="set"><label class="lbl" for="s-${m.k}">${esc(m.label)} ${ver ? '<span class="ok-badge">אומת</span>' : `<span class="est">${m.update ? 'לעדכן' : 'הערכה'}</span>`}</label>
+      <div class="in">${ctl}</div><p class="ef-err" id="s-${m.k}-err"></p>
+      <p class="ef-help">${esc(m.help)}</p>
+      <label class="ver"><input type="checkbox" class="chk" id="sv-${m.k}" ${ver ? 'checked' : ''} ${editable ? '' : 'disabled'}>הערך אומת</label></div>`;
+  }).join('');
+
+  const ladders = S.data.rooms.map(r => {
+    const lines = r.slots.map(s => {
+      const st = S.slotStats.get(s.key) || {selected:[], direct:[], shared:[]};
+      const need = s.variants_required || 3;
+      const sel = st.selected.slice().sort((a, b) => (a.retail ?? 1e9) - (b.retail ?? 1e9));
+      const cands = st.direct.concat(st.shared).filter(p => p.status !== 'rejected' && isNum(p.retail)).map(p => p.retail);
+      const lad = sel.length ? sel.map(p => `<span class="rung"><i class="fdot ${'flag-' + p.econ.flag}"></i>${isNum(p.retail) ? ltr(fmtILS(p.retail)) : 'חסר מחיר'} <button type="button" class="linkish xs" data-product="${esc(p.id)}" dir="auto">${esc(p.name.slice(0, 26))}${p.name.length > 26 ? '…' : ''}</button></span>`).join('')
+        : `<span class="small faint">אין נבחרים${cands.length ? ` · מחירי מועמדים ${ltr(fmtILS(Math.min(...cands)))}–${ltr(fmtILS(Math.max(...cands)))}` : ''}</span>`;
+      return `<tr><td>${esc(s.name_he || s.id)}</td><td class="num">${sel.length}/${esc(need)}</td><td><div class="ladder">${lad}</div></td></tr>`;
+    }).join('');
+    const nsel = r.slots.reduce((n, s) => n + ((S.slotStats.get(s.key) || {selected:[]}).selected.length), 0);
+    return `<details class="room-lad"><summary>${esc(r.name_he)} <span class="small faint">· ${nsel} נבחרים ב-${r.slots.length} עמדות</span></summary>
+      <div class="tbl-wrap"><table><thead><tr><th scope="col">עמדה</th><th scope="col">נבחרים</th><th scope="col">סולם מחירים (זול ← יקר)</th></tr></thead><tbody>${lines}</tbody></table></div></details>`;
+  }).join('');
+
+  box.innerHTML = `<div class="screen roomy">
+    ${editable ? '' : noDbLine('המספרים מחושבים מהריפו ומברירות המחדל.')}
+    <div class="tiles">
+      <div class="tile"><span class="l">מרווח ממוצע</span><span class="v">${withM.length ? ltr(fmtPct(mean(withM.map(p => p.econ.margin)))) : '—'}</span><span class="s">${withM.length} מוצרים עם כל הנתונים · יעד ${ltr(esc(v.target_margin_pct + '%'))}</span></div>
+      <div class="tile"><span class="l"><span class="flag flag-green"><i class="fdot"></i>עומדים ביעד</span></span><span class="v">${fl.green}</span><span class="s"><span class="flag flag-red"><i class="fdot"></i>${fl.red} מתחת ליעד</span></span></div>
+      <div class="tile"><span class="l"><span class="flag flag-orange"><i class="fdot"></i>חסרים נתונים</span></span><span class="v">${fl.orange}</span><span class="s">${missRetail} בלי מחיר · ${missShip} בלי משלוח</span></div>
+      <div class="tile"><span class="l">משלוח מעל חצי מעלות הנחיתה</span><span class="v">${hi}<span class="small muted"> / ${withShare.length}</span></span><span class="s">לפי ${esc(methodLabel || '')}</span></div>
+    </div>
+    <div class="assume">
+      <span>שער <b>${ltr(esc(v.usd_ils))}</b> ${est('usd_ils')}</span><span>משלוח: <b>${esc(methodLabel || '')}</b></span>
+      <span>מע"מ <b>${ltr(esc(v.vat_pct + '%'))}</b> ${est('vat_pct')}</span><span>סליקה <b>${ltr(esc(v.card_pct + '%'))} + ${ltr(fmtILS(v.card_fixed_ils, 2))}</b> ${est('card_pct')}</span>
+      <span>החזרות <b>${ltr(esc(v.returns_pct + '%'))}</b> ${est('returns_pct')}</span><span>CAC <b>${ltr(fmtILS(v.cac_ils))}</b> ${est('cac_ils')}</span>
+      <span>יעד <b>${ltr(esc(v.target_margin_pct + '%'))}</b></span>
+      <button type="button" class="btn btn-ghost btn-small" id="set-toggle" aria-expanded="${!!P.showSettings}" aria-controls="set-panel">${P.showSettings ? 'סגירת ההנחות' : 'עריכת ההנחות'}</button>
+    </div>
+    <section class="panel" id="set-panel" aria-labelledby="h-set" ${P.showSettings ? '' : 'hidden'}>
+      <div class="section-head"><h2 id="h-set" class="h-mid">הנחות החישוב</h2><span class="small faint">${ES.source === 'db' ? 'נשמרו בדף' : ES.source === 'repo' ? 'מ-data/economics/settings.json' : 'ברירות מחדל, עוד לא נשמרו'}</span></div>
+      <div class="set-grid">${settingsForm}</div>
+      ${editable ? `<div class="row seg"><button type="button" class="btn" id="set-save" ${S.setDirty ? '' : 'disabled'}>שמירת ההנחות</button><button type="button" class="btn btn-ghost" id="set-cancel" ${S.setDirty ? '' : 'disabled'}>ביטול</button><button type="button" class="btn btn-ghost" id="set-defaults">ברירות מחדל</button><span class="save-state" id="set-state" role="status"></span></div>` : ''}
+    </section>
+    <section class="section" aria-labelledby="h-ptable">
+      <div class="section-head"><h2 id="h-ptable">כל המוצרים</h2><span class="small faint">${rows.length} מוצרים · עריכה בטבלה נשמרת כשיוצאים מהשדה</span></div>
+      <div class="toolbar">
+        <div class="field"><label for="pf-room">חדר</label><select id="pf-room"><option value="">כל החדרים</option>${S.data.rooms.map(r => `<option value="${esc(r.id)}" ${P.room === r.id ? 'selected' : ''}>${esc(r.name_he)}</option>`).join('')}</select></div>
+        <span class="check"><input type="checkbox" id="pf-rej" ${P.rejected ? 'checked' : ''}><label for="pf-rej">כולל נדחים</label></span>
+      </div>
+      <div class="tbl-wrap"><table class="ptable">
+        <caption class="sr-only">רווחיות לכל מוצר. לחיצה על כותרת ממיינת.</caption>
+        <thead><tr>${th('name','מוצר')}${th('slot','עמדה')}<th scope="col" class="money">עלות</th><th scope="col" class="money">משלוח $</th>${th('landed','עלות נחיתה','money')}${th('share','חלק המשלוח')}${th('retail','מחיר ₪','money')}${th('margin','מרווח','money')}${th('recommended','מחיר מומלץ','money')}${th('flag','דגל')}</tr></thead>
+        <tbody>${trs || '<tr><td colspan="10">אין מוצרים בסינון.</td></tr>'}</tbody></table></div>
+      <p class="xs faint">עלות נחיתה = (עלות + משלוח) × שער. מרווח = תרומה ÷ הכנסה נטו. מחיר מומלץ = המחיר הנמוך ביותר שמביא את המרווח ליעד, מעוגל למעלה לשקל.</p>
+    </section>
+    <section class="section" aria-labelledby="h-lad">
+      <div class="section-head"><h2 id="h-lad">סולם המחירים של הנבחרים</h2><span class="small faint">3 וריאציות לכל עמדה</span></div>
+      ${ladders}
+    </section>
+  </div>`;
+  paintVars(box);
+  restore();
+  bindProfit();
+}
+function bindProfit(){
+  const box = $('#profit-body');
+  for(const b of $$('[data-sort]', box)) b.onclick = () => { const k = b.dataset.sort; if(S.profit.sort === k) S.profit.dir = S.profit.dir === 'asc' ? 'desc' : 'asc'; else { S.profit.sort = k; S.profit.dir = k === 'name' || k === 'slot' ? 'asc' : (k === 'margin' || k === 'flag' ? 'asc' : 'desc'); } store.set('profit', S.profit); renderProfit(); const nb = $(`[data-sort="${k}"]`, box); if(nb) nb.focus(); };
+  $('#pf-room').onchange = e => { S.profit.room = e.target.value; store.set('profit', S.profit); renderProfit(); $('#pf-room').focus(); };
+  $('#pf-rej').onchange = e => { S.profit.rejected = e.target.checked; store.set('profit', S.profit); renderProfit(); $('#pf-rej').focus(); };
+  $('#set-toggle').onclick = () => { S.profit.showSettings = !S.profit.showSettings; store.set('profit', S.profit); renderProfit(); $('#set-toggle').focus(); };
+  for(const inp of $$('[data-inline]', box)){
+    inp.addEventListener('input', () => { S.inline[inp.id] = inp.value; });
+    inp.addEventListener('change', () => commitInline(inp));
+    inp.addEventListener('keydown', ev => { if(ev.key === 'Enter'){ ev.preventDefault(); inp.blur(); } });
+  }
+  const setIn = $$('#set-panel input, #set-panel select');
+  for(const el of setIn) el.addEventListener('input', () => readSettingsDraft());
+  for(const el of setIn) el.addEventListener('change', () => readSettingsDraft());
+  const ss = $('#set-save'); if(ss) ss.onclick = saveSettings;
+  const sc = $('#set-cancel'); if(sc) sc.onclick = () => { S.setDraft = null; S.setDraftVer = null; S.setDirty = false; renderProfit(); };
+  const sd = $('#set-defaults'); if(sd) sd.onclick = () => { S.setDraft = {}; S.setDraftVer = {}; for(const m of ECON_META){ S.setDraft[m.k] = m.def; S.setDraftVer[m.k] = false; } S.setDirty = true; renderProfit(); $('#set-save').focus(); };
+}
+async function commitInline(inp){
+  const id = inp.id, k = inp.dataset.inline, pid = inp.dataset.pid;
+  const e = S.byId.get(pid); if(!e) return;
+  const raw = inp.value.trim();
+  const bad = (inp.validity && inp.validity.badInput) || (raw !== '' && !(Number(raw) >= 0));
+  if(bad){ S.rowState[id] = {err:true, msg:'צריך מספר 0 ומעלה'}; inp.setAttribute('aria-invalid','true'); renderProfit(); return; }
+  const v = raw === '' ? null : Number(raw);
+  const field = k === 'retail' ? 'retail_ils' : 'shipping_cost_usd';
+  delete S.inline[id];
+  if(same(field, v, e.flat[field])){ delete S.rowState[id]; renderProfit(); return; }
+  S.rowState[id] = {msg:'שומר…'}; renderProfit();
+  try{
+    const next = Object.assign({}, e.flat, {[field]: v});
+    // clearing a manual shipping value falls back to CJ: drop the override instead of storing an empty value
+    if(field === 'shipping_cost_usd' && v == null) next[field] = e.bflat[field];
+    await saveProductFlat(pid, next, [{field, from: norm(field, e.flat[field]), to: norm(field, next[field])}]);
+    S.rowState[id] = {msg:'נשמר'}; setTimeout(() => { if(S.rowState[id] && S.rowState[id].msg === 'נשמר'){ delete S.rowState[id]; if(S.screen === 'profit') renderProfit(); } }, 2500);
+  }catch(err){ S.rowState[id] = {err:true, msg: errText(err)}; }
+  renderProfit();
+}
+function readSettingsDraft(){
+  S.setDraft = {}; S.setDraftVer = {};
+  let errs = 0;
+  for(const m of ECON_META){
+    const el = $('#s-' + m.k), ver = $('#sv-' + m.k);
+    if(m.type === 'select') S.setDraft[m.k] = el.value;
+    else { const bad = (el.validity && el.validity.badInput) || el.value.trim() === '' || !(Number(el.value) >= 0); $('#s-' + m.k + '-err').textContent = bad ? 'צריך מספר 0 ומעלה.' : ''; el.setAttribute('aria-invalid', bad ? 'true' : 'false'); if(bad) errs++; S.setDraft[m.k] = bad ? el.value : Number(el.value); }
+    S.setDraftVer[m.k] = ver.checked;
+  }
+  const cur = S.ES;
+  S.setDirty = ECON_META.some(m => S.setDraft[m.k] !== cur.v[m.k] || S.setDraftVer[m.k] !== cur.verified[m.k]);
+  $('#set-save').disabled = !S.setDirty || errs > 0; $('#set-cancel').disabled = !S.setDirty;
+  $('#set-state').textContent = errs ? 'יש ערכים לתקן.' : S.setDirty ? 'יש שינויים שלא נשמרו.' : '';
+}
+async function saveSettings(){
+  readSettingsDraft();
+  if($('#set-save').disabled) return;
+  const doc = {}; for(const m of ECON_META) doc[m.k] = S.setDraft[m.k];
+  doc.verified = Object.assign({}, S.setDraftVer); doc.updated_at = new Date().toISOString(); doc.by = await whoId();
+  $('#set-state').textContent = 'שומר…';
+  try{
+    await dbWrite('settings/economics', () => S.db.collection('settings').doc('economics').set(doc));
+    S.settingsDocs.set('economics', doc); S.setDraft = null; S.setDraftVer = null; S.setDirty = false;
+    say('ההנחות נשמרו'); onDataChange();
+  }catch(e){ $('#set-state').textContent = errText(e); }
+}
+
+/* ---------- budget and break-even ---------- */
+function breakEven(rowsIn){
+  const v = S.ES.v;
+  const rows = rowsIn || budgetRows().rows;
+  const oneTime = rows.reduce((s, r) => s + (isNum(r.one_time_ils) ? r.one_time_ils : 0), 0);
+  const monthly = rows.reduce((s, r) => s + (isNum(r.monthly_ils) ? r.monthly_ils : 0), 0);
+  const complete = profitBasis().filter(p => isNum(p.econ.contribution));
+  const sel = complete.filter(p => p.status === 'selected');
+  const basis = sel.length ? sel : complete;
+  const bf = v.bundle_factor;
+  const contribB = basis.map(p => econCalc({cost_usd: p.price.cost, shipping_usd: p.ship.usd * bf, retail_ils: p.retail}, v).contribution);
+  const avgC = mean(contribB), avgR = mean(basis.map(p => p.retail));
+  const ipo = v.items_per_order;
+  const perOrder = avgC == null ? null : ipo * avgC - v.cac_ils;
+  return {oneTime, monthly, basis: sel.length ? 'selected' : 'candidates', n: basis.length, avgC, avgR, aov: avgR == null ? null : ipo * avgR, perOrder,
+    setupOrders: perOrder > 0 ? Math.ceil(oneTime / perOrder) : null, monthlyOrders: perOrder > 0 ? Math.ceil(monthly / perOrder) : null,
+    unknown: rows.filter(r => !isNum(r.one_time_ils) && !isNum(r.monthly_ils)).length};
+}
+function renderBudget(){
+  if(!S.data) return;
+  const box = $('#budget-body');
+  const src = budgetRows();
+  const working = S.budgetWork || src.rows.map(r => Object.assign({}, r));
+  const be = breakEven(working);
+  const v = S.ES.v;
+  const editable = canEditData();
+  const restore = keepFocus(box);
+  const numIn = (r, k, i) => `<input type="number" class="fld num-in" id="b-${k}-${esc(r.id)}" data-bk="${k}" data-bi="${i}" min="0" step="1" inputmode="decimal" value="${isNum(r[k]) ? esc(r[k]) : ''}" aria-label="${k === 'one_time_ils' ? 'חד-פעמי' : 'חודשי'}: ${esc(r.label)}" ${editable ? '' : 'disabled'}>`;
+  const trs = working.map((r, i) => `<tr>
+    <td><input type="text" class="fld" id="b-label-${esc(r.id)}" data-bk="label" data-bi="${i}" value="${esc(r.label || '')}" aria-label="שורה" ${editable ? '' : 'disabled'}></td>
+    <td class="money">${numIn(r, 'one_time_ils', i)}</td>
+    <td class="money">${numIn(r, 'monthly_ils', i)}</td>
+    <td><input type="text" class="fld" id="b-note-${esc(r.id)}" data-bk="note" data-bi="${i}" value="${esc(r.note || '')}" aria-label="הערה: ${esc(r.label)}" ${editable ? '' : 'disabled'}></td>
+    <td><label class="ver small"><input type="checkbox" class="chk" id="b-ver-${esc(r.id)}" data-bk="verified" data-bi="${i}" ${r.verified ? 'checked' : ''} ${editable ? '' : 'disabled'}> אומת</label>${r.verified ? '' : ' <span class="est">לעדכן</span>'}</td>
+    <td>${editable ? `<button type="button" class="btn btn-danger btn-small ${S.budgetArmed === r.id ? 'armed' : ''}" data-bdel="${esc(r.id)}">${S.budgetArmed === r.id ? 'לאשר מחיקה' : 'מחיקה'}</button>` : ''}</td>
+  </tr>`).join('');
+  const basisTxt = be.n ? `${be.n} ${be.basis === 'selected' ? 'מוצרים נבחרים' : 'מועמדים (עוד אין נבחרים עם כל הנתונים)'}` : 'אין עדיין מוצרים עם מחיר ומשלוח';
+  const beTile = (label, val, sub) => `<div class="tile"><span class="l">${label}</span><span class="v">${val}</span><span class="s">${sub}</span></div>`;
+  box.innerHTML = `<div class="screen roomy">
+    ${editable ? '' : noDbLine('השורות מוצגות מהריפו או כברירות מחדל.')}
+    <div class="be-grid">
+      ${beTile('הזמנות לכיסוי ההקמה', be.setupOrders != null ? be.setupOrders.toLocaleString('en-US') : '—', `הקמה ${ltr(fmtILS(be.oneTime))}${be.unknown ? ` · ${be.unknown} שורות בלי סכום` : ''}`)}
+      ${beTile('הזמנות בחודש לכיסוי הקבועות', be.monthlyOrders != null ? be.monthlyOrders.toLocaleString('en-US') : '—', `קבועות ${ltr(fmtILS(be.monthly))} לחודש`)}
+      ${beTile('תרומה להזמנה אחרי שיווק', ltr(fmtILS(be.perOrder)), be.perOrder != null && be.perOrder <= 0 ? '<span class="flag flag-red">שלילית: כל הזמנה מפסידה</span>' : `${ltr(esc(v.items_per_order))} פריטים × ${ltr(fmtILS(be.avgC))} − CAC ${ltr(fmtILS(v.cac_ils))}`)}
+      ${beTile('הזמנה ממוצעת', ltr(fmtILS(be.aov)), `${ltr(esc(v.items_per_order))} פריטים · מחיר ממוצע ${ltr(fmtILS(be.avgR))}`)}
+    </div>
+    <p class="formula">הבסיס: ${esc(basisTxt)}. מקדם משלוח בהזמנה משולבת ${ltr(esc(v.bundle_factor))}${v.bundle_factor === 1 ? ' (בלי הנחה)' : ''}. הזמנות לכיסוי ההקמה = סך ההקמה ÷ תרומה להזמנה אחרי שיווק. הזמנות בחודש = סך הקבועות ÷ אותה תרומה. ${S.data.economics.bundles ? `נמצא ${esc(S.data.economics.bundles.file)}: עדכנו את המקדם לפיו.` : ''}</p>
+    <section class="section" aria-labelledby="h-btable">
+      <div class="section-head"><h2 id="h-btable">תקציב הקמה</h2><span class="small faint">${src.source === 'db' ? 'נשמר בדף' : src.source === 'repo' ? 'מ-data/economics/settings.json' : 'שורות התחלתיות, הערכה בלבד'}</span></div>
+      <div class="tbl-wrap"><table class="btable">
+        <caption class="sr-only">שורות תקציב ההקמה: חד-פעמי וחודשי בשקלים</caption>
+        <thead><tr><th scope="col">שורה</th><th scope="col" class="money">חד-פעמי ₪</th><th scope="col" class="money">חודשי ₪</th><th scope="col">הערה</th><th scope="col">סטטוס</th><th scope="col"><span class="sr-only">פעולות</span></th></tr></thead>
+        <tbody>${trs}</tbody>
+        <tfoot><tr><td>סך הכול</td><td class="money">${ltr(fmtILS(be.oneTime))}</td><td class="money">${ltr(fmtILS(be.monthly))}</td><td colspan="3"></td></tr></tfoot>
+      </table></div>
+      ${editable ? `<div class="row seg"><button type="button" class="btn btn-ghost" id="b-add">הוספת שורה</button><button type="button" class="btn" id="b-save" ${S.budgetWork ? '' : 'disabled'}>שמירת התקציב</button><button type="button" class="btn btn-ghost" id="b-cancel" ${S.budgetWork ? '' : 'disabled'}>ביטול</button><span class="save-state" id="b-state" role="status">${S.budgetWork ? 'יש שינויים שלא נשמרו.' : ''}</span></div>` : ''}
+    </section>
+  </div>`;
+  restore();
+  if(!editable) return;
+  const work = () => { if(!S.budgetWork) S.budgetWork = working; return S.budgetWork; };
+  for(const el of $$('[data-bk]', box)){
+    const handler = () => {
+      const w = work(); const r = w[+el.dataset.bi]; const k = el.dataset.bk;
+      if(k === 'verified') r.verified = el.checked;
+      else if(k === 'label' || k === 'note') r[k] = el.value;
+      else { const bad = (el.validity && el.validity.badInput) || (el.value.trim() !== '' && !(Number(el.value) >= 0)); el.setAttribute('aria-invalid', bad ? 'true' : 'false'); r[k] = el.value.trim() === '' || bad ? null : Number(el.value); }
+      $('#b-save').disabled = false; $('#b-cancel').disabled = false; $('#b-state').textContent = 'יש שינויים שלא נשמרו.';
+    };
+    el.addEventListener('input', handler);
+    el.addEventListener('change', () => { handler(); if(el.dataset.bk !== 'label' && el.dataset.bk !== 'note') renderBudget(); });
+  }
+  $('#b-add').onclick = () => { const w = work(); const id = 'r' + Date.now().toString(36); w.push({id, label:'', one_time_ils:null, monthly_ils:null, note:'', verified:false}); renderBudget(); const el = $('#b-label-' + id); if(el) el.focus(); };
+  $('#b-cancel').onclick = () => { S.budgetWork = null; S.budgetArmed = null; renderBudget(); };
+  $('#b-save').onclick = saveBudget;
+  for(const b of $$('[data-bdel]', box)) b.onclick = () => {
+    const id = b.dataset.bdel;
+    if(S.budgetArmed !== id){ S.budgetArmed = id; renderBudget(); const nb = $(`[data-bdel="${CSS.escape(id)}"]`); if(nb) nb.focus(); setTimeout(() => { if(S.budgetArmed === id){ S.budgetArmed = null; renderBudget(); } }, 5000); return; }
+    S.budgetArmed = null; S.budgetWork = work().filter(r => r.id !== id); renderBudget(); const ab = $('#b-add'); if(ab) ab.focus();
+  };
+}
+async function saveBudget(){
+  const rows = (S.budgetWork || []).map(r => ({id: r.id, label: String(r.label || '').trim() || 'שורה ללא שם', one_time_ils: isNum(r.one_time_ils) ? r.one_time_ils : null, monthly_ils: isNum(r.monthly_ils) ? r.monthly_ils : null, note: String(r.note || '').trim(), verified: !!r.verified}));
+  $('#b-state').textContent = 'שומר…';
+  try{
+    const doc = {rows, updated_at: new Date().toISOString(), by: await whoId()};
+    await dbWrite('settings/budget', () => S.db.collection('settings').doc('budget').set(doc));
+    S.settingsDocs.set('budget', doc); S.budgetWork = null; say('התקציב נשמר'); onDataChange();
+  }catch(e){ $('#b-state').textContent = errText(e); }
+}
 
 /* ---------- reports ---------- */
 function renderReports(){
@@ -1224,7 +2251,6 @@ function renderLog(){
   html += '</ul>';
   $('#log-body').innerHTML = html;
 }
-$('#log-q').addEventListener('input', () => { S.logQ = $('#log-q').value; renderLog(); });
 
 boot();
 })();
