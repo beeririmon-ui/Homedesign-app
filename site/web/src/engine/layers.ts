@@ -2,6 +2,10 @@
  * Layer order for a room and a selection, straight from data/slots/<room>.json (via the catalog):
  * base layers at their z, each product at its slot z, its shadow at z-1 (multiply) unless the slot has
  * has_shadow_layer: false, and light layers at the room's light z (screen). Ties keep slot order.
+ *
+ * Shadows and lights are per option: option n uses shadow n / light n. An option without its own file gets no
+ * shadow or light at all (never option 1's): a multiply shadow shaped for option 1 left under option 2 or 3
+ * darkens the room around the product and reads as a stain.
  */
 import type { CatalogRoom } from '@hd/shared';
 import type { LayerSpec, Scene } from './types';
@@ -20,16 +24,16 @@ export function buildLayers(room: CatalogRoom, scene: Scene, selection: Record<s
     if (!s) continue;
     const n = Math.max(1, Math.min(slot.options.length, selection[slot.id] ?? 1)) - 1;
     if (s.shadow && slot.has_shadow) {
-      const src = s.shadow.src[n] ?? s.shadow.src[0]!;
-      out.push({ key: src, src, kind: 'shadow', slot: slot.id, rect: s.shadow.rect, blend: 'multiply', z: slot.z - 1, order: order++ });
+      const src = s.shadow.src[n];
+      if (src) out.push({ key: src, src, kind: 'shadow', slot: slot.id, rect: s.shadow.rect, blend: 'multiply', z: slot.z - 1, order: order++ });
     }
     if (s.product) {
       const src = s.product.src[n] ?? s.product.src[0]!;
       out.push({ key: src, src, kind: 'product', slot: slot.id, rect: s.product.rect, blend: 'normal', z: slot.z, order: order++ });
     }
     if (s.light && slot.has_light) {
-      const src = s.light.src[n] ?? s.light.src[0]!;
-      out.push({ key: src, src, kind: 'light', slot: slot.id, rect: s.light.rect, blend: 'screen', z: LIGHT_Z, order: order++ });
+      const src = s.light.src[n];
+      if (src) out.push({ key: src, src, kind: 'light', slot: slot.id, rect: s.light.rect, blend: 'screen', z: LIGHT_Z, order: order++ });
     }
   }
   return out.sort((a, b) => a.z - b.z || a.order - b.order).map(({ order: _o, ...l }) => l);
