@@ -97,7 +97,9 @@ export class RoomEngine {
     this.res = this.compWidth > this.o.scene.widths.lo ? 'hi' : 'lo';
 
     const layers = buildLayers(this.o.room, this.o.scene, this.selection);
-    await Promise.all(layers.map((l) => this.ensure(l.key, this.layerUrl(l), 0)));
+    // the depth map (a few KB) comes with the first composition: the arrival dolly needs it from its first frame
+    const depth = this.loader.load(mediaUrl(this.o.scene.depth.src, undefined, 'webp'), 0).then((d) => !this.destroyed && this.comp.setDepth(d));
+    await Promise.all([...layers.map((l) => this.ensure(l.key, this.layerUrl(l), 0)), depth.catch(() => undefined)]);
     if (this.destroyed) return;
     this.comp.compose(this.draw(layers), this.compWidth);
     this.mix = 1;
@@ -105,8 +107,7 @@ export class RoomEngine {
     this.requestRender();
     this.o.onReady?.();
 
-    // after the room is shown: depth map, then every other variant in the background
-    void this.loader.load(mediaUrl(this.o.scene.depth.src, undefined, 'webp'), 1).then((d) => !this.destroyed && this.comp.setDepth(d));
+    // after the room is shown: every other variant in the background
     for (const slot of this.o.room.slots)
       for (const src of slotSources(this.o.scene, slot.id)) void this.ensure(src, this.srcUrl(src), 1).catch(() => undefined);
   }
@@ -327,6 +328,7 @@ export class RoomEngine {
     void (async () => {
       const layers = buildLayers(this.o.room, this.o.scene, this.selection);
       await Promise.all(layers.map((l) => this.ensure(l.key, this.layerUrl(l), 0)));
+      void this.loader.load(mediaUrl(this.o.scene.depth.src, undefined, 'webp'), 0).then((d) => this.comp.setDepth(d));
       this.comp.compose(this.draw(layers), this.compWidth);
       this.ready = true;
       this.requestRender();
