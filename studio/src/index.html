@@ -283,7 +283,7 @@ input[type="search"],select{width:100%;min-height:40px;padding:7px 10px;border:1
 .pcard .pimg .chips{position:absolute;inset-block-start:7px;inset-inline-start:7px;display:flex;flex-wrap:wrap;gap:4px}
 .pcard .pimg .noimg{position:absolute;inset-block-end:7px;inset-inline-start:7px}
 .pcard .pbody{display:grid;gap:4px;padding:9px 10px 11px;align-content:start;min-width:0}
-.pname{font-weight:600;font-size:14.5px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+.pname{text-align:right;font-weight:600;font-size:14.5px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
 .pslot{font-size:var(--fs-xs);color:var(--ink-2);overflow-wrap:anywhere}
 .prow{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center;font-size:var(--fs-xs);color:var(--ink-2)}
 .prow .cost{font-weight:700;color:var(--ink);font-size:var(--fs-s)}
@@ -304,6 +304,8 @@ input[type="search"],select{width:100%;min-height:40px;padding:7px 10px;border:1
 .rep-btn[aria-current="true"]{background:var(--sheet);border-color:var(--ink)}
 .rep-btn .t{font-weight:600;font-size:var(--fs-s);line-height:1.35}
 .rep-btn .m{font-size:var(--fs-xs);color:var(--ink-3);overflow-wrap:anywhere}
+.rep-btn .m.path{text-align:end}
+.log-item.no-date{grid-template-columns:minmax(0,1fr)}
 .md{background:var(--sheet);border:1px solid var(--rule);border-radius:var(--r);padding:clamp(16px,3vw,32px);min-width:0;overflow-wrap:anywhere}
 .md > *+*{margin-top:.8em}
 .md h2{font-size:26px}
@@ -330,7 +332,7 @@ dialog::backdrop{background:var(--scrim)}
 @keyframes slide-in{from{transform:translateX(-24px);opacity:.4}to{transform:none;opacity:1}}
 .drawer-in{display:grid;grid-template-rows:auto 1fr;height:100%}
 .drawer-top{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;padding:calc(env(safe-area-inset-top,0px) + 14px) 18px 12px;border-bottom:1px solid var(--rule);background:var(--sheet)}
-.drawer-top h2{font-size:21px;overflow-wrap:anywhere}
+.drawer-top h2{text-align:right;font-size:21px;overflow-wrap:anywhere}
 .drawer-body{overflow:auto;padding:16px 18px calc(env(safe-area-inset-bottom,0px) + 28px);display:grid;gap:18px;align-content:start}
 .close{flex:none;width:40px;height:40px;border-radius:50%;border:1px solid var(--rule-2);background:transparent;cursor:pointer;font-size:22px;line-height:1;display:grid;place-items:center}
 .close:hover{border-color:var(--ink)}
@@ -468,7 +470,7 @@ details.snips li span{direction:ltr;unicode-bidi:isolate}
   <dialog class="drawer" id="drawer" aria-labelledby="drawer-title">
     <div class="drawer-in">
       <div class="drawer-top">
-        <div><p class="eyebrow" id="drawer-eyebrow"></p><h2 id="drawer-title">מוצר</h2></div>
+        <div class="minw0"><p class="eyebrow" id="drawer-eyebrow"></p><h2 id="drawer-title" dir="auto">מוצר</h2></div>
         <button class="close" type="button" data-close aria-label="סגירה">×</button>
       </div>
       <div class="drawer-body" id="drawer-body"></div>
@@ -747,14 +749,15 @@ function paintVars(root){
   for(const el of $$('[data-w]', root)) el.style.width = el.dataset.w + '%';
   for(const el of $$('[data-sw]', root)) el.style.background = el.dataset.sw;
 }
-function logItem(e){
+const rich = t => esc(t).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+function logItem(e, noDate){
   const rest = (e.parts || []).slice(1);
-  return `<li class="log-item">
-    <span class="log-when">${esc(fmtDay(e.date))}</span>
+  return `<li class="log-item ${noDate ? 'no-date' : ''}">
+    ${noDate ? '' : `<span class="log-when">${esc(fmtDay(e.date))}</span>`}
     <div class="minw0">
       <div class="log-who"><span class="chip ${e.who_key === 'user' ? 'who-user' : ''}">${esc(e.who)}</span></div>
-      <p class="log-main">${esc((e.parts || [e.text])[0])}</p>
-      ${rest.map(r => `<p class="log-rest">${esc(r)}</p>`).join('')}
+      <p class="log-main">${rich((e.parts || [e.text])[0])}</p>
+      ${rest.map(r => `<p class="log-rest">${rich(r)}</p>`).join('')}
     </div>
   </li>`;
 }
@@ -1089,7 +1092,7 @@ function renderProducts(){
         <span class="chips"><span class="chip st-${esc(p.status)}">${esc(P_STATUS[p.status] || p.status)}</span>${(p.dups || []).length ? '<span class="chip chip-dup">כפול</span>' : ''}</span>
         ${p.img.ok ? '' : '<span class="noimg chip">אין תמונה</span>'}</span>
       <span class="pbody">
-        <span class="pname">${esc(p.name)}</span>
+        <span class="pname" dir="auto">${esc(p.name)}</span>
         <span class="pslot">${esc(slotLabel(p))}${viaShared ? ' · דרך מאגר משותף' : ''}</span>
         <span class="pslot faint">${esc((p.rooms || []).map(t => TAG_HE[t] || t).join(', '))}</span>
         <span class="prow"><span class="cost num" dir="ltr">${esc(fmtUSD(p.price && p.price.cost))}</span>${days ? `<span><span class="num" dir="ltr">${esc(days)}</span> ימים</span>` : ''}<span class="swrow"><span class="swatch" data-sw="${esc(hex)}"></span><span class="hex" dir="ltr">${esc(hex)}</span></span><span class="faint">${esc(p.supplier && p.supplier.name || '')}</span></span>
@@ -1177,7 +1180,7 @@ function renderReports(){
   const D = S.data; const all = (D.reports || []).concat(D.leads || []);
   if(!all.length){ $('#rep-list').innerHTML = ''; $('#rep-view').innerHTML = '<p class="empty">אין דוחות.</p>'; return; }
   if(!S.report || !all.find(r => r.id === S.report)) S.report = (D.reports[0] || all[0]).id;
-  const item = r => `<li><button type="button" class="rep-btn" data-rep="${esc(r.id)}" aria-current="${r.id === S.report}"><span class="t">${esc(r.title)}</span><span class="m">${r.date ? esc(fmtDay(r.date)) + ' · ' : ''}<span dir="ltr">${esc(r.path)}</span></span></button></li>`;
+  const item = r => `<li><button type="button" class="rep-btn" data-rep="${esc(r.id)}" aria-current="${r.id === S.report}"><span class="t">${esc(r.title)}</span>${r.date ? `<span class="m num">${esc(fmtDay(r.date))}</span>` : ''}<span class="m path" dir="ltr">${esc(r.path)}</span></button></li>`;
   $('#rep-list').innerHTML = `
     <div><h2>דוחות QA</h2><ul>${(D.reports || []).map(item).join('') || '<li class="faint small">אין</li>'}</ul></div>
     <div><h2>סיכומי ליד</h2><p class="xs faint">חיפושי הספקים של sourcing-agent</p><ul>${(D.leads || []).map(item).join('') || '<li class="faint small">אין</li>'}</ul></div>`;
@@ -1207,7 +1210,7 @@ function renderLog(){
   const counts = {}; for(const e of log) counts[e.who_key] = (counts[e.who_key] || 0) + 1;
   const keys = ['user','manager','master-designer','sourcing-agent','motion-agent','render-agent','qa-agent','frontend-dev','astra','other'].filter(k => counts[k]);
   if(S.logWho !== 'all' && !counts[S.logWho]) S.logWho = 'all';
-  $('#log-who').innerHTML = `<button type="button" data-who="all" aria-pressed="${S.logWho === 'all'}">הכול<span class="n num">${log.length}</span></button>` + keys.map(k => `<button type="button" data-who="${esc(k)}" aria-pressed="${S.logWho === k}">${esc(WHO[k] || k)}<span class="n num">${counts[k]}</span></button>`).join('');
+  $('#log-who').innerHTML = `<button type="button" data-who="all" aria-pressed="${S.logWho === 'all'}">הכול<span class="n num">${log.length}</span></button>` + keys.map(k => `<button type="button" data-who="${esc(k)}" aria-pressed="${S.logWho === k}"><bdi>${esc(WHO[k] || k)}</bdi><span class="n num">${counts[k]}</span></button>`).join('');
   for(const b of $$('#log-who button')) b.onclick = () => { S.logWho = b.dataset.who; store.set('logWho', S.logWho); renderLog(); $(`#log-who [data-who="${CSS.escape(S.logWho)}"]`).focus(); };
   const q = S.logQ.trim().toLowerCase();
   const list = log.filter(e => (S.logWho === 'all' || e.who_key === S.logWho) && (!q || (e.who + ' ' + e.text).toLowerCase().includes(q))).slice().reverse();
@@ -1216,7 +1219,7 @@ function renderLog(){
   let html = '', cur = null;
   for(const e of list){
     if(e.date !== cur){ if(cur !== null) html += '</ul>'; cur = e.date; html += `<h2 class="date-head num">${esc(fmtDay(e.date))}</h2><ul class="log-list">`; }
-    html += logItem(e);
+    html += logItem(e, true);
   }
   html += '</ul>';
   $('#log-body').innerHTML = html;
