@@ -8,14 +8,18 @@ import AxeBuilder from '@axe-core/playwright';
 const TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'];
 
 async function audit(page: Page, label: string) {
-  const r = await new AxeBuilder({ page }).withTags(TAGS).analyze();
+  // @axe-core/playwright pins its own playwright-core types; the runtime Page is the same object
+  const r = await new AxeBuilder({ page } as unknown as ConstructorParameters<typeof AxeBuilder>[0]).withTags(TAGS).analyze();
   const summary = r.violations.map((v) => `${v.id} (${v.impact}): ${v.nodes.length} × ${v.nodes[0]?.target.join(' ')} — ${v.help}`);
   expect(summary, `${label}\n${summary.join('\n')}`).toEqual([]);
 }
 
 async function addVase(page: Page) {
   await page.goto('/rooms/living-room/');
-  await page.getByRole('link', { name: /^אגרטל/ }).first().click();
+  await page
+    .getByRole('link', { name: /^אגרטל/ })
+    .first()
+    .click();
   await page.getByRole('button', { name: 'הוספה לסל' }).click();
   await expect(page.locator('.cart-count')).toHaveText(/[1-9]/);
 }

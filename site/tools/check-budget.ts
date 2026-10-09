@@ -46,10 +46,11 @@ const html = gz(join(DIST, 'rooms/living-room/index.html'));
 const vw = 412;
 const vh = 915 - 60;
 const dpr = 2;
-const need = Math.max(vw, vh * scene.aspect) * dpr;
+// mirrors the poster's sizes (portrait: min((100svh - 60px) × 1.78, 1080px)) and the engine (phones compose at lo)
+const need = Math.min(Math.max(vw, vh * scene.aspect), 1080) * dpr;
 const shell = scene.base[0]!;
 const posterW = shell.widths.find((w) => w >= need) ?? shell.widths[shell.widths.length - 1]!;
-const res = posterW > scene.widths.lo ? scene.widths.hi : scene.widths.lo;
+const res = vw <= 900 ? scene.widths.lo : posterW > scene.widths.lo ? scene.widths.hi : scene.widths.lo;
 const file = (src: string, w?: number) => {
   for (const ext of ['avif', 'webp']) {
     const p = sitePath('web/public/media', `${src}${w ? `.${w}` : ''}.${ext}`);

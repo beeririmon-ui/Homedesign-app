@@ -1,0 +1,68 @@
+# Site CI: quality gates only. No deploy (deploys need the Cloudflare account; see docs/architecture.md, "סביבות").
+name: site-ci
+
+on:
+  pull_request:
+    paths: ['site/**', 'data/**', 'docs/house-plan.json', 'assets/manifest.json', '.github/workflows/site-ci.yml']
+  push:
+    branches: [main]
+    paths: ['site/**', 'data/**', 'docs/house-plan.json', 'assets/manifest.json', '.github/workflows/site-ci.yml']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: site-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    working-directory: site
+
+jobs:
+  checks:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.12.0
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+      - run: npm ci
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Lint (ESLint + jsx-a11y)
+        run: npm run lint
+      - name: Format
+        run: npm run format:check
+      - name: Unit and API tests (vitest)
+        run: npm test
+      - name: Build (strict prices are not enforced until the user approves prices) + bundle budget
+        run: npm run build
+      - name: Artifact preview build and contract check
+        run: npm run preview:artifact
+
+      - name: Install Chromium for Playwright
+        run: npx playwright install --with-deps chromium
+      - name: Point the tests at the installed Chromium
+        run: echo "PW_CHROMIUM=$(node -e "console.log(require('@playwright/test').chromium.executablePath())")" >> "$GITHUB_ENV"
+      - name: e2e (flow, first-load budget, preload rules)
+        run: npm run e2e
+      - name: Accessibility (axe, zero violations, light and dark)
+        run: npm run a11y
+      - name: Lighthouse mobile (a11y 100, performance >= 90)
+        run: |
+          npm run preview > preview.log 2>&1 &
+          for i in $(seq 1 120); do curl -sf http://127.0.0.1:8788/api/health > /dev/null && break; sleep 1; done
+          npm run lighthouse
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: site-reports
+          path: |
+            site/playwright-report
+            site/test-results
+            site/.lighthouse
+          retention-days: 14

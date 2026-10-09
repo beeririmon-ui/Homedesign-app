@@ -16,11 +16,19 @@ const pages = ['/', '/rooms/living-room/', `/p/${catalog.products[0]!.id}/`, '/c
 const OUT = sitePath('.lighthouse');
 mkdirSync(OUT, { recursive: true });
 
-const chrome = await chromeLauncher.launch({ chromePath, chromeFlags: ['--headless=new', '--no-sandbox', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
+const chrome = await chromeLauncher.launch({
+  chromePath,
+  chromeFlags: ['--headless=new', '--no-sandbox', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'],
+});
 let failed = false;
 try {
   for (const p of pages) {
-    const res = await lighthouse(`${BASE}${p}`, { port: chrome.port, output: 'html', onlyCategories: ['performance', 'accessibility', 'best-practices', 'seo'], logLevel: 'error' });
+    const res = await lighthouse(`${BASE}${p}`, {
+      port: chrome.port,
+      output: 'html',
+      onlyCategories: ['performance', 'accessibility', 'best-practices', 'seo'],
+      logLevel: 'error',
+    });
     if (!res) throw new Error(`no result for ${p}`);
     const c = res.lhr.categories;
     const score = (k: string) => Math.round((c[k]?.score ?? 0) * 100);

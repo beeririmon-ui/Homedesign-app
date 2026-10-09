@@ -121,7 +121,7 @@ export const mockApi: StoreApi = {
       session: `ms_${rid(18)}`,
       status: 'pending_payment',
       created_at: new Date().toISOString(),
-      total_agorot: v.subtotal_agorot + ship.price_agorot,
+      total_agorot: v.subtotal_agorot + (ship.free_over_agorot !== null && v.subtotal_agorot >= ship.free_over_agorot ? 0 : ship.price_agorot),
       shipping_method: req.shipping_method,
       lines: v.lines.map((l) => ({ name_he: l.name_he, qty: l.qty, line_total_agorot: l.line_total_agorot })),
     };

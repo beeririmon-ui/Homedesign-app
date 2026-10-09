@@ -62,7 +62,10 @@ test.describe('room experience', () => {
 test.describe('store', () => {
   test('product → cart → checkout validation → mock hosted page → paid order', async ({ page }) => {
     await page.goto('/rooms/living-room/');
-    await page.getByRole('link', { name: /^אגרטל/ }).first().click();
+    await page
+      .getByRole('link', { name: /^אגרטל/ })
+      .first()
+      .click();
     await expect(page.locator('#product-title')).toBeVisible();
     await page.getByRole('button', { name: 'הוספה לסל' }).click();
     await expect(page.locator('.cart-count')).toHaveText('1');
@@ -93,7 +96,10 @@ test.describe('store', () => {
 
   test('a declined payment returns to checkout with a clear message', async ({ page }) => {
     await page.goto('/rooms/living-room/');
-    await page.getByRole('link', { name: /^אגרטל/ }).first().click();
+    await page
+      .getByRole('link', { name: /^אגרטל/ })
+      .first()
+      .click();
     await page.getByRole('button', { name: 'הוספה לסל' }).click();
     await expect(page.locator('.cart-count')).toHaveText('1');
     await page.goto('/checkout/');

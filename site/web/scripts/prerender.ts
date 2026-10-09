@@ -50,7 +50,17 @@ writeFileSync(
 );
 writeFileSync(
   resolve(dist, 'robots.txt'),
-  ['User-agent: *', 'Disallow: /api/', 'Disallow: /cart/', 'Disallow: /checkout/', 'Disallow: /order/', 'Disallow: /mock-pay/', '', `Sitemap: ${ORIGIN}/sitemap.xml`, ''].join('\n'),
+  [
+    'User-agent: *',
+    'Disallow: /api/',
+    'Disallow: /cart/',
+    'Disallow: /checkout/',
+    'Disallow: /order/',
+    'Disallow: /mock-pay/',
+    '',
+    `Sitemap: ${ORIGIN}/sitemap.xml`,
+    '',
+  ].join('\n'),
 );
 rmSync(ssrDir, { recursive: true, force: true });
 console.log(`prerendered ${routes.length} pages + order shell + 404`);

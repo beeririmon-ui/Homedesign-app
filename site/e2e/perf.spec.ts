@@ -23,7 +23,13 @@ test.describe('mobile', () => {
     page.on('request', (r) => urls.push(r.url()));
     await page.goto('/rooms/living-room/');
     await expect(page.locator('button.hotspot:visible').first()).toBeVisible({ timeout: 30_000 });
+    const atPoster = bytes;
+    // the engine starts on the first touch: count everything until the WebGL composition is on screen
+    await page.locator('.stage').dispatchEvent('pointerdown', { pointerId: 1, pointerType: 'touch', isPrimary: true });
+    await page.waitForFunction(() => window.__hdEngine?.ready === true, undefined, { timeout: 30_000 });
+    await page.waitForTimeout(300);
     const atReady = bytes;
+    console.log(`poster and hotspots: ${(atPoster / MB).toFixed(2)} MB`);
     test.info().annotations.push({ type: 'first-load', description: `${(atReady / MB).toFixed(2)} MB until the room is composed` });
     console.log(`first load (mobile, until composed): ${(atReady / MB).toFixed(2)} MB`);
     expect(atReady).toBeLessThanOrEqual(3 * MB);
