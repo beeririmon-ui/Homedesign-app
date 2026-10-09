@@ -10,7 +10,7 @@ import { GLCompositor } from './gl';
 import { Canvas2DCompositor } from './canvas2d';
 import { Loader } from './loader';
 import { buildLayers, slotSources } from './layers';
-import { camForBox, clampCam, coverSize, defaultCam, easeInOutCubic, lerpCam } from './camera';
+import { camForBox, clampCam, coverSize, defaultCam, easeInOutCubic, easeOutCubic, lerpCam } from './camera';
 import { mediaUrl, supportsAvif } from '../media';
 
 type Anim = { start: number; dur: number; step: (t: number) => void; done?: () => void };
@@ -41,6 +41,7 @@ export class RoomEngine {
   private parallax = 0;
   private focus = 0.3;
   private drift: [number, number] = [0, 0];
+  private blur = 0;
   private ext: 'avif' | 'webp' = 'webp';
   private res: 'lo' | 'hi' = 'lo';
   private compWidth = 1920;
@@ -181,6 +182,38 @@ export class RoomEngine {
     );
   }
 
+  /**
+   * Arrival from a room-to-room transition: a dolly, not a zoom. The camera is still travelling forward when the
+   * transition hands over, so near things (floor, armchair, pouf) start smaller and grow into place faster than the
+   * back wall, the view slides slightly sideways, and a radial motion blur follows the speed. Everything decelerates
+   * (ease-out) and lands exactly on the rest camera: the last frame IS the composed room, nothing jumps.
+   * `reverse` plays the same move backwards (leaving the room): accelerating away, for the overlay to take over.
+   */
+  arrive(durationMs = 1100, opts: { reverse?: boolean } = {}): Promise<void> {
+    const rest = this.restCam ?? defaultCam(this.vp, this.aspect, this.o.scene.mobile_center_u);
+    const dur = this.o.reduceMotion || this.comp.kind !== 'webgl2' ? 0 : durationMs;
+    const reverse = opts.reverse === true;
+    const focus = 0.1; // the back wall barely moves; nearer planes travel more
+    const apply = (t: number) => {
+      const k = reverse ? 1 - t : t; // position along the arrival (1 = landed)
+      const left = 1 - easeOutCubic(k); // distance still to travel
+      const speed = (1 - k) * (1 - k); // derivative of the ease-out, normalised
+      this.focus = focus;
+      this.parallax = -0.11 * left;
+      this.drift = [-0.012 * left, 0.004 * left];
+      this.blur = 0.045 * speed;
+      this.cam = { ...rest, z: rest.z * (1 - 0.035 * left) };
+    };
+    return this.animate(dur, apply, () => {
+      if (reverse) return; // the transition overlay covers the room from here on
+      this.parallax = 0;
+      this.drift = [0, 0];
+      this.blur = 0;
+      this.cam = rest;
+      this.o.onCamera?.(this.cam, this.vp);
+    });
+  }
+
   panBy(dxCss: number): void {
     const { fw } = coverSize(this.vp, this.aspect);
     this.cam = clampCam({ ...this.cam, cu: this.cam.cu - dxCss / (fw * this.cam.z) }, this.vp, this.aspect);
@@ -245,7 +278,16 @@ export class RoomEngine {
       }
     }
     if (this.ready)
-      this.comp.display({ cam: this.cam, vp: this.vp, aspect: this.aspect, mix: this.mix, parallax: this.parallax, focus: this.focus, drift: this.drift });
+      this.comp.display({
+        cam: this.cam,
+        vp: this.vp,
+        aspect: this.aspect,
+        mix: this.mix,
+        parallax: this.parallax,
+        focus: this.focus,
+        drift: this.drift,
+        blur: this.blur,
+      });
     if (this.anims.size) this.requestRender();
   };
 

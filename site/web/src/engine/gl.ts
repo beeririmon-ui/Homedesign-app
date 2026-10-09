@@ -3,7 +3,8 @@
  *  1. compose: every layer is a textured quad at its rect, drawn bottom-to-top into a framebuffer at frame
  *     resolution with premultiplied blending (normal, multiply, screen). Runs only when something changes.
  *  2. display: one full-screen pass that maps screen → frame through the camera, mixes the previous and next
- *     compositions (variant/style cross-fades) and shifts UVs by the depth map (parallax during zoom).
+ *     compositions (variant/style cross-fades) and shifts UVs by the depth map (parallax during zoom and while
+ *     arriving from a transition), with an optional radial motion blur while the camera travels.
  * At rest nothing is drawn; the GPU is idle.
  */
 import type { Compositor, DisplayState, DrawLayer } from './compositor';
@@ -44,7 +45,15 @@ uniform vec2 uViewport;
 uniform vec2 uFrame;
 uniform vec3 uCam;
 uniform vec4 uPar; // dolly, focus, driftX, driftY
+uniform float uBlur; // radial motion blur length (fraction of the distance to the centre of travel)
 out vec4 o;
+// mirrored edges: while the camera is still travelling the frame can be a little smaller than the screen
+vec2 edge(vec2 uv) { return clamp(1.0 - abs(1.0 - abs(uv)), vec2(0.0005), vec2(0.9995)); }
+vec3 sampleAt(vec2 uv) {
+  vec2 t = edge(uv);
+  t.y = 1.0 - t.y;
+  return mix(texture(uPrev, t).rgb, texture(uNext, t).rgb, uMix);
+}
 void main() {
   vec2 px = vScreen * uViewport;
   vec2 uv = uCam.xy + (px - 0.5 * uViewport) / (uFrame * uCam.z);
@@ -52,11 +61,15 @@ void main() {
   float k = uPar.x * (d - uPar.y);
   uv = uCam.xy + (uv - uCam.xy) / (1.0 + k);
   uv += (d - 0.5) * uPar.zw;
-  uv = clamp(uv, vec2(0.0005), vec2(0.9995));
-  vec2 t = vec2(uv.x, 1.0 - uv.y);
-  vec4 a = texture(uPrev, t);
-  vec4 b = texture(uNext, t);
-  o = vec4(mix(a.rgb, b.rgb, uMix), 1.0);
+  if (uBlur <= 0.0) {
+    o = vec4(sampleAt(uv), 1.0);
+    return;
+  }
+  // nearer pixels streak more (they move faster on screen); 8 taps toward the centre of travel
+  vec2 dir = (uv - uCam.xy) * uBlur * (0.4 + d);
+  vec3 c = vec3(0.0);
+  for (int i = 0; i < 8; i++) c += sampleAt(uv - dir * (float(i) / 7.0 - 0.5));
+  o = vec4(c / 8.0, 1.0);
 }`;
 
 type Target = { fb: WebGLFramebuffer; tex: WebGLTexture; w: number; h: number };
@@ -97,7 +110,7 @@ export class GLCompositor implements Compositor {
     this.layerProg = this.program(LAYER_VS, LAYER_FS);
     this.displayProg = this.program(DISPLAY_VS, DISPLAY_FS);
     for (const n of ['uRect', 'uTex', 'uOpacity']) this.loc[`l.${n}`] = gl.getUniformLocation(this.layerProg, n);
-    for (const n of ['uPrev', 'uNext', 'uDepth', 'uMix', 'uViewport', 'uFrame', 'uCam', 'uPar'])
+    for (const n of ['uPrev', 'uNext', 'uDepth', 'uMix', 'uViewport', 'uFrame', 'uCam', 'uPar', 'uBlur'])
       this.loc[`d.${n}`] = gl.getUniformLocation(this.displayProg, n);
     const vao = gl.createVertexArray()!;
     gl.bindVertexArray(vao);
@@ -248,6 +261,7 @@ export class GLCompositor implements Compositor {
     gl.uniform2f(this.loc['d.uFrame']!, fw, fh);
     gl.uniform3f(this.loc['d.uCam']!, s.cam.cu, s.cam.cv, s.cam.z);
     gl.uniform4f(this.loc['d.uPar']!, s.parallax, s.focus, s.drift[0], s.drift[1]);
+    gl.uniform1f(this.loc['d.uBlur']!, s.blur);
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     gl.activeTexture(gl.TEXTURE0);
   }

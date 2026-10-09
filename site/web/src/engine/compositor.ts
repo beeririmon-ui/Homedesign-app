@@ -13,6 +13,8 @@ export type DisplayState = {
   parallax: number;
   focus: number;
   drift: [number, number];
+  /** radial motion blur along the direction of travel (0 = none), used while arriving in or leaving the room */
+  blur: number;
 };
 
 export interface Compositor {
