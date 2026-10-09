@@ -555,6 +555,118 @@
       "source": "docs/suppliers/directory.md, docs/brand-brief.md",
       "asked": "2026-10-09",
       "status": "open"
+    },
+    {
+      "id": "W1",
+      "group": "השקה",
+      "title": "סולק (חברת סליקה)",
+      "question": "עם איזו חברת סליקה לעבוד?",
+      "context": "תשלום בדף מאובטח של הסולק, כך שפרטי האשראי לא עוברים באתר. תנאים ומחירים לא אומתו; ההמלצה היא לבקש הצעות מחיר. ראו docs/architecture.md.",
+      "options": [
+        {
+          "id": "grow",
+          "label": "Grow",
+          "desc": "מומלץ לבדיקה ראשונה",
+          "recommended": true
+        },
+        {
+          "id": "payplus",
+          "label": "PayPlus",
+          "desc": "חלופה",
+          "recommended": false
+        },
+        {
+          "id": "cardcom",
+          "label": "Cardcom",
+          "desc": "חלופה",
+          "recommended": false
+        }
+      ],
+      "blocks": "תשלום אמיתי באתר",
+      "source": "docs/architecture.md",
+      "asked": "2026-10-09",
+      "status": "open"
+    },
+    {
+      "id": "W2",
+      "group": "השקה",
+      "title": "שירות חשבוניות",
+      "question": "איך מפיקים חשבוניות מס?",
+      "context": "לא אומת. אם לסולק יש מודול חשבוניות, הוא הפשוט ביותר.",
+      "options": [
+        {
+          "id": "psp",
+          "label": "המודול של הסולק, ואם אין: Morning",
+          "desc": "",
+          "recommended": true
+        },
+        {
+          "id": "morning",
+          "label": "Morning (חשבונית ירוקה)",
+          "desc": "",
+          "recommended": false
+        },
+        {
+          "id": "icount",
+          "label": "iCount",
+          "desc": "",
+          "recommended": false
+        }
+      ],
+      "blocks": "",
+      "source": "docs/architecture.md",
+      "asked": "2026-10-09",
+      "status": "open"
+    },
+    {
+      "id": "W3",
+      "group": "השקה",
+      "title": "דומיין",
+      "question": "איזה דומיין?",
+      "context": "דומיין ‎.co.il בשם המותג, אחרי שהשם ייבחר. ה-DNS ינוהל ב-Cloudflare.",
+      "options": [
+        {
+          "id": "after-name",
+          "label": ".co.il בשם המותג, אחרי בחירת השם",
+          "desc": "",
+          "recommended": true
+        },
+        {
+          "id": "now",
+          "label": "לרשום עכשיו שם זמני",
+          "desc": "",
+          "recommended": false
+        }
+      ],
+      "blocks": "פרסום האתר בכתובת אמיתית",
+      "source": "docs/architecture.md",
+      "asked": "2026-10-09",
+      "status": "open"
+    },
+    {
+      "id": "W4",
+      "group": "השקה",
+      "title": "חשבון Cloudflare",
+      "question": "לפתוח חשבון Cloudflare לאירוח האתר?",
+      "context": "נדרש לתצוגה מקדימה אמיתית ולאתר החי. החשבון על שם העסק, עם אימות דו-שלבי ותוכנית Workers Paid (כ-$5 לחודש). את/ה פותח/ת את החשבון ומתחבר/ת במחשב שלך; אין צורך לשלוח מפתחות בצ'אט. הצעדים המלאים נמצאים בסעיף 12 של docs/architecture.md.",
+      "options": [
+        {
+          "id": "yes",
+          "label": "כן, אפתח",
+          "desc": "",
+          "recommended": true
+        },
+        {
+          "id": "later",
+          "label": "מאוחר יותר",
+          "desc": "",
+          "recommended": false
+        }
+      ],
+      "blocks": "אתר חי ותצוגה מקדימה לכל שינוי",
+      "source": "docs/architecture.md",
+      "asked": "2026-10-09",
+      "status": "open"
     }
   ]
 }
