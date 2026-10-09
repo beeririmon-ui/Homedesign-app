@@ -47,6 +47,7 @@ type TempFile = {
   source_manifest_id: string;
   hall_source: string;
   transition_source: { id: string; dir: string; frames: number };
+  mobile_center_u: number;
   slots: Record<string, TempSlot>;
   fixed_occluders?: Record<string, Box>;
 };
@@ -355,6 +356,7 @@ async function main() {
     temporary: true,
     source: temp.source_manifest_id,
     aspect: 16 / 9,
+    mobile_center_u: temp.mobile_center_u,
     widths: WIDTHS,
     formats: FORMATS,
   };
