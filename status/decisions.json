@@ -1,0 +1,436 @@
+{
+  "version": 1,
+  "updated": "2026-10-09",
+  "note": "תור ההחלטות הפתוחות למשתמש. המנהל מתחזק את הקובץ; הסטודיו מציג אותו ושומר את תשובות המשתמש. status: open | answered | applied.",
+  "decisions": [
+    {
+      "id": "T1",
+      "group": "אתר",
+      "title": "טכנולוגיה לאתר ולחנות",
+      "question": "על איזו פלטפורמה בונים את האתר והחנות?",
+      "context": "הצעת frontend-dev מ-2026-09-28. מנוע החדר (שכבות, זום, גלגל, מעברים) זהה בכל האפשרויות, ההבדל הוא בקופה, בתשלום ובתחזוקה.",
+      "options": [
+        {
+          "id": "A",
+          "label": "Shopify headless + Astro",
+          "desc": "הקופה, התשלום, ההזמנות והאבטחה אצל Shopify, ואנחנו בונים את החוויה. Shopify Payments לא פועל בישראל, ולכן יש עמלה של 2% מעל עמלת הסליקה. כ-$40–90 לחודש.",
+          "recommended": true
+        },
+        {
+          "id": "B",
+          "label": "WooCommerce",
+          "desc": "בלי עמלת פלטפורמה, וסולקים ישראליים עם תוספים מוכנים. דורש תחזוקה שוטפת של WordPress, וקשה יותר לעמוד בדרישות הביצועים.",
+          "recommended": false
+        },
+        {
+          "id": "C",
+          "label": "חנות מותאמת",
+          "desc": "שליטה מלאה ותשתית זולה, אבל חודשים של פיתוח: הזמנות, החזרים, חשבוניות וחיבור לספקים.",
+          "recommended": false
+        }
+      ],
+      "blocks": "בניית האתר (שלב 4)",
+      "source": "docs/tech-proposal.md",
+      "asked": "2026-09-28",
+      "status": "applied",
+      "answer": {
+        "option": "C",
+        "note": "נבחר בשיחה (AskUserQuestion)",
+        "at": "2026-10-09"
+      }
+    },
+    {
+      "id": "D1",
+      "group": "צפיפות מוצרים",
+      "title": "כלל הספירה",
+      "question": "לספור כל מוצר שאפשר לזהות בתמונה, כולל פריטים קטנים (מנורה, צעצוע) וטקסטיל שנחתך בשולי הפריים?",
+      "context": "בנוסח הקודם (לפחות 0.5% מהפריים ו-50% מהמוצר גלוי) נספרו רק 1–8 מוצרים בכל פריים מאושר.",
+      "options": [
+        {
+          "id": "yes",
+          "label": "כן",
+          "desc": "הנוסח החדש ב-Bible 1.6",
+          "recommended": true
+        },
+        {
+          "id": "no",
+          "label": "לא",
+          "desc": "לחזור לנוסח הקודם",
+          "recommended": false
+        }
+      ],
+      "blocks": "שלושה פריימים מתחת לרצפה (כניסה, הורים, מסדרון)",
+      "source": "docs/design-bible/nordic.md",
+      "asked": "2026-10-09",
+      "status": "open"
+    },
+    {
+      "id": "D2",
+      "group": "צפיפות מוצרים",
+      "title": "המוצרים שהמעצב הוסיף",
+      "question": "לאשר את המוצרים שהמעצב הוסיף כדי למלא פריימים?",
+      "context": "כניסה: קופסאות מתחת לקונסולה ושמיכה על הספסל. הורים: קנקן ליד המיטה, אגרטל על האדן וצלוחית. מסדרון: שרפרף, והשטיח הארוך מוצר ל-60 ס\"מ. חדר עבודה: כלי עפרונות. מטבח D2: שרפרף מדרגה.",
+      "options": [
+        {
+          "id": "yes",
+          "label": "כן",
+          "desc": "",
+          "recommended": true
+        },
+        {
+          "id": "no",
+          "label": "לא",
+          "desc": "",
+          "recommended": false
+        }
+      ],
+      "blocks": "שלושה פריימים מתחת לרצפה",
+      "source": "data/slots/hall.json, master.json, corridor.json",
+      "asked": "2026-10-09",
+      "status": "open"
+    },
+    {
+      "id": "D3",
+      "group": "צפיפות מוצרים",
+      "title": "מוצרים שנראים רק במעבר",
+      "question": "מה עושים עם מוצרים שרואים רק בסרטוני המעבר (שטיח ומנורה בכניסה, שטיח וסל בהורים, מנורת תקרה במקלחת)?",
+      "context": "בתמונה עצמה אי אפשר ללחוץ עליהם.",
+      "options": [
+        {
+          "id": "keep-not-sold",
+          "label": "להשאיר בבית ולא למכור",
+          "desc": "",
+          "recommended": true
+        },
+        {
+          "id": "sell",
+          "label": "למכור כמו כל מוצר",
+          "desc": "",
+          "recommended": false
+        },
+        {
+          "id": "remove",
+          "label": "להוריד מהבית",
+          "desc": "",
+          "recommended": false
+        }
+      ],
+      "blocks": "",
+      "source": "docs/house-plan.md",
+      "asked": "2026-10-09",
+      "status": "open"
+    },
+    {
+      "id": "D4",
+      "group": "פריימים",
+      "title": "D2 נראה דליל",
+      "question": "מה עושים עם D2, המבט הרחב על המטבח?",
+      "context": "motion-agent נתן 6/10: ממרחק 4.4 מ' האביזרים נראים כנקודות, וחצי מהפריים רצפה.",
+      "options": [
+        {
+          "id": "keep",
+          "label": "להשאיר ולשפוט ברינדור",
+          "desc": "",
+          "recommended": true
+        },
+        {
+          "id": "shift",
+          "label": "חיתוך קרוב יותר",
+          "desc": "בלי להזיז את המצלמה",
+          "recommended": false
+        },
+        {
+          "id": "new-point",
+          "label": "מצלמה נפרדת וקרובה",
+          "desc": "",
+          "recommended": false
+        }
+      ],
+      "blocks": "",
+      "source": "docs/house-plan.md",
+      "asked": "2026-10-09",
+      "status": "open"
+    },
+    {
+      "id": "D5",
+      "group": "תאורה",
+      "title": "התלויה בחדר העבודה",
+      "question": "איזו תאורת תקרה בחדר העבודה?",
+      "context": "ב-clay התלויה כמעט נגעה בתמונה. המעצב הקטין אותה (קוטר עד 28 ס\"מ) והעלה אותה.",
+      "options": [
+        {
+          "id": "small-pendant",
+          "label": "תלויה קטנה",
+          "desc": "שומר על הדגש על תאורה מעוצבת",
+          "recommended": true
+        },
+        {
+          "id": "ceiling",
+          "label": "מנורת תקרה מחוץ לפריים",
+          "desc": "הקיר נשאר נקי כמו בסבב 1",
+          "recommended": false
+        }
+      ],
+      "blocks": "",
+      "source": "data/slots/work.json",
+      "asked": "2026-10-09",
+      "status": "open"
+    },
+    {
+      "id": "D6",
+      "group": "תאורה",
+      "title": "מקלחת: תלויה ליד הכיור",
+      "question": "להוסיף תלויה ליד הכיור במקלחת?",
+      "context": "יש כבר שתי מנורות קיר ליד המראה. איזון לבן של 4000K בשני הפריימים של המקלחת.",
+      "options": [
+        {
+          "id": "no",
+          "label": "לא",
+          "desc": "שתי מנורות הקיר מספיקות",
+          "recommended": true
+        },
+        {
+          "id": "yes",
+          "label": "כן",
+          "desc": "",
+          "recommended": false
+        }
+      ],
+      "blocks": "",
+      "source": "data/slots/bath.json",
+      "asked": "2026-10-09",
+      "status": "open"
+    },
+    {
+      "id": "D7",
+      "group": "מוצרים",
+      "title": "ילדים: מיטה ושולחן",
+      "question": "המיטה והשולחן בחדרי הילדים הם רהיטים קבועים, ולא למכירה?",
+      "context": "כרגע אין להם ספק טוב.",
+      "options": [
+        {
+          "id": "fixed",
+          "label": "כן, רהיטים קבועים",
+          "desc": "",
+          "recommended": true
+        },
+        {
+          "id": "sell",
+          "label": "לא, למכירה",
+          "desc": "",
+          "recommended": false
+        }
+      ],
+      "blocks": "",
+      "source": "data/slots/kids.json",
+      "asked": "2026-10-09",
+      "status": "open"
+    },
+    {
+      "id": "D8",
+      "group": "תנועה",
+      "title": "משך המעברים",
+      "question": "לקבל מעברים קצת ארוכים מהמתוכנן?",
+      "context": "מהכניסה כ-2.6–2.9 שניות (אושר 2.2–2.6), ומהסלון למטבח כ-3.4 שניות.",
+      "options": [
+        {
+          "id": "accept",
+          "label": "לקבל",
+          "desc": "",
+          "recommended": true
+        },
+        {
+          "id": "shorten",
+          "label": "לקצר",
+          "desc": "",
+          "recommended": false
+        }
+      ],
+      "blocks": "",
+      "source": "docs/house-plan.md",
+      "asked": "2026-10-09",
+      "status": "open"
+    },
+    {
+      "id": "D9",
+      "group": "בטיחות",
+      "title": "תקן צעצועים במסמך המותג",
+      "question": "להוסיף את תקן EN 71 / ת\"י 562 כחובה ב-docs/brand-brief.md?",
+      "context": "זה שינוי במסמך מחייב, ולכן צריך אישור.",
+      "options": [
+        {
+          "id": "yes",
+          "label": "כן",
+          "desc": "",
+          "recommended": true
+        },
+        {
+          "id": "no",
+          "label": "לא",
+          "desc": "",
+          "recommended": false
+        }
+      ],
+      "blocks": "",
+      "source": "docs/brand-brief.md",
+      "asked": "2026-10-09",
+      "status": "open"
+    },
+    {
+      "id": "D10",
+      "group": "תקציב",
+      "title": "חיסכון בקרדיטים ב-D2",
+      "question": "לרנדר את מוצרי D2 במסלול החסכוני?",
+      "context": "סבב 2 מוסיף כ-133 אלף קרדיטים. המסלול החסכוני חוסך כ-35 אלף.",
+      "options": [
+        {
+          "id": "lean",
+          "label": "כן, לחסוך",
+          "desc": "",
+          "recommended": true
+        },
+        {
+          "id": "full",
+          "label": "לא, מסלול מלא",
+          "desc": "",
+          "recommended": false
+        }
+      ],
+      "blocks": "",
+      "source": "docs/house-plan.md",
+      "asked": "2026-10-09",
+      "status": "open"
+    },
+    {
+      "id": "S1",
+      "group": "ספקים",
+      "title": "ניסיון עם Yakkyofy",
+      "question": "לנסות את Yakkyofy כספק משלים לפריטים קלים, עם הזמנת דוגמאות?",
+      "context": "אביזרי מטבח, עץ קטן והדפסים. לא לשטיחים, לתאורה ולצעצועים. ראו docs/suppliers/yakkyofy.md.",
+      "options": [
+        {
+          "id": "yes",
+          "label": "כן",
+          "desc": "",
+          "recommended": true
+        },
+        {
+          "id": "no",
+          "label": "לא",
+          "desc": "",
+          "recommended": false
+        }
+      ],
+      "blocks": "",
+      "source": "docs/suppliers/yakkyofy.md",
+      "asked": "2026-10-09",
+      "status": "open"
+    },
+    {
+      "id": "S2",
+      "group": "ספקים",
+      "title": "תעודות בטיחות מהספק",
+      "question": "לדרוש מהספק תעודת CE לתאורה ותקן EN71 לצעצועים לפני שמוצר עולה לאתר?",
+      "context": "באף כרטיס של CJ אין כרגע CE לתאורה או EN71 לצעצועים.",
+      "options": [
+        {
+          "id": "yes",
+          "label": "כן",
+          "desc": "",
+          "recommended": true
+        },
+        {
+          "id": "no",
+          "label": "לא",
+          "desc": "",
+          "recommended": false
+        }
+      ],
+      "blocks": "",
+      "source": "data/leads/cj/",
+      "asked": "2026-10-09",
+      "status": "open"
+    },
+    {
+      "id": "S3",
+      "group": "ספקים",
+      "title": "ספק לפערים",
+      "question": "מאיפה מביאים מוצרים שאין ב-CJ: שטיחים, אביזרי מטבח, פריטי אלון, מוצרי ילדים?",
+      "context": "",
+      "options": [
+        {
+          "id": "both",
+          "label": "שניהם",
+          "desc": "בקשת Sourcing ב-CJ וגם ספק אירופאי או ישראלי",
+          "recommended": true
+        },
+        {
+          "id": "cj",
+          "label": "רק בקשת Sourcing ב-CJ",
+          "desc": "",
+          "recommended": false
+        },
+        {
+          "id": "local",
+          "label": "רק ספק אירופאי או ישראלי",
+          "desc": "",
+          "recommended": false
+        }
+      ],
+      "blocks": "",
+      "source": "data/leads/cj/",
+      "asked": "2026-10-09",
+      "status": "open"
+    },
+    {
+      "id": "Q2",
+      "group": "מסמכים",
+      "title": "שדות בכרטיס המוצר",
+      "question": "להוסיף לכרטיס המוצר שדה חדר ושדות בטיחות (CE, IP44, EN71, מחווט או עם תקע)?",
+      "context": "כרגע המידע הזה נמצא רק בהערות, ואי אפשר לסנן לפיו.",
+      "options": [
+        {
+          "id": "yes",
+          "label": "כן",
+          "desc": "",
+          "recommended": true
+        },
+        {
+          "id": "no",
+          "label": "לא",
+          "desc": "",
+          "recommended": false
+        }
+      ],
+      "blocks": "דירוג מוצרים לילדים ולמקלחת",
+      "source": "data/product-card.schema.json",
+      "asked": "2026-10-09",
+      "status": "open"
+    },
+    {
+      "id": "Q5",
+      "group": "מסמכים",
+      "title": "רשימת המסמכים המחייבים",
+      "question": "לעדכן את רשימת המסמכים המחייבים ב-CLAUDE.md לתוכנית 1.1, ולהוסיף את nordic-dining.md?",
+      "context": "",
+      "options": [
+        {
+          "id": "yes",
+          "label": "כן",
+          "desc": "",
+          "recommended": true
+        },
+        {
+          "id": "no",
+          "label": "לא",
+          "desc": "",
+          "recommended": false
+        }
+      ],
+      "blocks": "",
+      "source": "CLAUDE.md",
+      "asked": "2026-10-09",
+      "status": "open"
+    }
+  ]
+}
