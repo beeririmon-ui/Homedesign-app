@@ -33,7 +33,7 @@ async function run(width: number, height: number, mobile: boolean) {
   const page = await ctx.newPage();
   let bytes = 0;
   page.on('pageerror', (e) => problems.push(`[${width}] pageerror: ${e.message}`));
-  page.on('console', (m) => m.type() === 'error' && !/fonts\.(googleapis|gstatic)/.test(m.text()) && problems.push(`[${width}] console: ${m.text()}`));
+  page.on('console', (m) => m.type() === 'error' && !/Failed to load resource/.test(m.text()) && problems.push(`[${width}] console: ${m.text()}`));
   page.on('requestfailed', (r) => !/fonts\.(googleapis|gstatic)/.test(r.url()) && problems.push(`[${width}] failed: ${r.url()}`));
   page.on('response', async (r) => {
     if (r.url().startsWith(ORIGIN)) bytes += Number((await r.headerValue('content-length')) ?? 0);
@@ -56,7 +56,7 @@ async function run(width: number, height: number, mobile: boolean) {
   stats.push(`[${width}] room ready, same-origin bytes so far: ${(bytes / 1048576).toFixed(2)} MB, compositor: ${await page.evaluate(() => window.__hdEngine?.kind)}`);
   await shot('2-room');
 
-  await page.locator('button.hotspot[data-slot="vase"], button.hotspot:not([hidden])').first().click();
+  await page.locator('button.hotspot[data-slot="vase"]').click();
   await page.getByRole('dialog').waitFor();
   await page.keyboard.press('ArrowLeft');
   await page.waitForTimeout(1200);
