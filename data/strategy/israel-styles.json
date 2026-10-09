@@ -1,0 +1,977 @@
+{
+  "version": "0.1",
+  "date": "2026-10-09",
+  "status": "proposal — not binding; awaiting user decisions",
+  "doc": "docs/strategy/israel-style-market-2026.md",
+  "method": {
+    "demand_score": "weighted estimate 0-100, not a consumer survey",
+    "components": [
+      {
+        "id": "media",
+        "label_he": "תקשורת ומעצבים ישראלים 2024–2026",
+        "max": 30
+      },
+      {
+        "id": "retail",
+        "label_he": "נוכחות בקמעונאות הישראלית",
+        "max": 25
+      },
+      {
+        "id": "global_search",
+        "label_he": "אות חיפוש עולמי",
+        "max": 20
+      },
+      {
+        "id": "climate_fit",
+        "label_he": "התאמה לאקלים ולאורח החיים",
+        "max": 15
+      },
+      {
+        "id": "dropship_fit",
+        "label_he": "התאמה לדרופשיפינג ולפרימיום נגיש",
+        "max": 10
+      }
+    ],
+    "score_breakdown_order": [
+      "media",
+      "retail",
+      "global_search",
+      "climate_fit",
+      "dropship_fit"
+    ],
+    "gaps": [
+      "Google Trends IL blocked (429)",
+      "retailer sites mostly 403",
+      "no public Israeli bestseller lists",
+      "price ranges are estimates"
+    ]
+  },
+  "recommended_launch_order": [
+    "nordic",
+    "warm-modern",
+    "mediterranean",
+    "japandi",
+    "modern-country"
+  ],
+  "current_plan_order": [
+    "nordic",
+    "boho",
+    "warm-modern"
+  ],
+  "clusters": [
+    {
+      "id": "calm-natural",
+      "styles": [
+        "nordic",
+        "warm-modern",
+        "japandi"
+      ],
+      "overlap": "50-60%"
+    },
+    {
+      "id": "fiber-earth",
+      "styles": [
+        "mediterranean",
+        "boho",
+        "modern-country"
+      ],
+      "overlap": "40-65%"
+    }
+  ],
+  "styles": [
+    {
+      "id": "warm-modern",
+      "name_he": "מודרני חם",
+      "name_en": "Warm Modern / Warm Minimal",
+      "rank": 1,
+      "launch_order": 2,
+      "demand_score": 86,
+      "score_breakdown": [
+        27,
+        22,
+        16,
+        13,
+        8
+      ],
+      "trend": "rising",
+      "tier": "must-have",
+      "evidence": [
+        {
+          "claim_he": "גווני אדמה וחול מחליפים אפור; עץ, צורות מעוגלות",
+          "source": "https://www.nadlancenter.co.il/article/11274",
+          "date": "2025-01-03",
+          "verification": "verified"
+        },
+        {
+          "claim_he": "עץ אגוז מחליף אלון; חומים עמוקים ובורדו",
+          "source": "https://www.mako.co.il/living-rooms/Article-6d4a234783bbb91027.htm",
+          "date": "2026-01-15",
+          "verification": "verified"
+        },
+        {
+          "claim_he": "רהיטים מעוגלים, עץ חם, ריפוד רך (תוכן ממומן)",
+          "source": "https://www.maariv.co.il/economy/consumerism/article-1374637",
+          "date": "2026-10-07",
+          "verification": "verified"
+        },
+        {
+          "claim_he": "מודרניזם שולט באסתטיקה הישראלית",
+          "source": "https://www.mako.co.il/living-architecture/local/Article-e71a635d7865451006.htm",
+          "date": "2016-04-27",
+          "verification": "verified-old"
+        },
+        {
+          "claim_he": "מעבר ממינימליזם קר לחם; מינימליזם חם ואורגני-מודרני",
+          "source": "https://genroom.io/he/blog/interior-design-styles-2026-trends",
+          "date": "2026",
+          "verification": "search-summary"
+        }
+      ],
+      "shares_with": {
+        "nordic": 0.55,
+        "japandi": 0.6,
+        "mediterranean": 0.35,
+        "modern-country": 0.3,
+        "boho": 0.25
+      },
+      "top_products": [
+        {
+          "type_he": "כיסוי ספה בוקלה/פשתן כבד בגוון חול או מוקה",
+          "slots": [
+            "living-room/sofa-cover"
+          ]
+        },
+        {
+          "type_he": "פוף עגול בוקלה או עור מט",
+          "slots": [
+            "living-room/pouf"
+          ]
+        },
+        {
+          "type_he": "שטיח טון-על-טון, צורה רכה או אורגנית",
+          "slots": [
+            "living-room/rug",
+            "master/rug",
+            "dining-room/dining-rug"
+          ]
+        },
+        {
+          "type_he": "מנורת רגל, אהיל פשתן ובסיס אגוז",
+          "slots": [
+            "living-room/floor-lamp",
+            "master/floor-lamp"
+          ]
+        },
+        {
+          "type_he": "גוף תאורה מעוגל (גלובוס אופל או פטריה)",
+          "slots": [
+            "living-room/pendant",
+            "dining-room/dining-pendant",
+            "hall/table-lamp"
+          ]
+        },
+        {
+          "type_he": "אגרטל קרמיקה מט גדול או אגרטל רצפה",
+          "slots": [
+            "living-room/vase",
+            "dining-room/floor-vase",
+            "hall/console-vessel"
+          ]
+        },
+        {
+          "type_he": "וילונות פשתן גלי בשמנת",
+          "slots": [
+            "living-room/curtains",
+            "master/curtains"
+          ]
+        },
+        {
+          "type_he": "כריות ושמיכה בגווני אדמה",
+          "slots": [
+            "living-room/cushions",
+            "master/cushions",
+            "master/throw"
+          ]
+        },
+        {
+          "type_he": "פריטי טרוורטין או אגוז (קערה, מגש, פמוט)",
+          "slots": [
+            "living-room/bowl",
+            "living-room/candle-holders",
+            "master/nightstand-tray",
+            "hall/key-tray"
+          ]
+        },
+        {
+          "type_he": "אמנות קיר מופשטת בגווני אדמה, מסגרת עץ",
+          "slots": [
+            "living-room/framed-art",
+            "master/framed-art",
+            "corridor/gallery-art"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nordic",
+      "name_he": "נורדי / סקנדינבי",
+      "name_en": "Nordic / Scandinavian",
+      "rank": 2,
+      "launch_order": 1,
+      "demand_score": 80,
+      "score_breakdown": [
+        20,
+        25,
+        12,
+        13,
+        10
+      ],
+      "trend": "stable",
+      "tier": "must-have",
+      "evidence": [
+        {
+          "claim_he": "'העיצוב שהישראלים מאוהבים בו'",
+          "source": "https://www.israelhayom.co.il/lifestyle/design/article/3741424",
+          "date": "unknown",
+          "verification": "search-summary"
+        },
+        {
+          "claim_he": "קווים נורדיים נקיים בין מגמות 2025",
+          "source": "https://www.nadlancenter.co.il/article/11274",
+          "date": "2025-01-03",
+          "verification": "verified"
+        },
+        {
+          "claim_he": "ביקוש ל-IKEA בישראל יציב ואף עולה",
+          "source": "https://finance.walla.co.il/item/3808853",
+          "date": "2026-01",
+          "verification": "search-summary"
+        },
+        {
+          "claim_he": "נורדי עולה אך לרוב משולב ולא טהור",
+          "source": "https://www.mako.co.il/living-architecture/local/Article-e71a635d7865451006.htm",
+          "date": "2016-04-27",
+          "verification": "verified-old"
+        }
+      ],
+      "shares_with": {
+        "warm-modern": 0.55,
+        "japandi": 0.5,
+        "mediterranean": 0.3,
+        "modern-country": 0.35,
+        "boho": 0.2
+      },
+      "note_he": "הסגנון הפעיל; הסלון כבר מעוצב. להדגיש את הצד החם",
+      "top_products": [
+        {
+          "type_he": "וילונות פשתן בלבן חם",
+          "slots": [
+            "living-room/curtains"
+          ]
+        },
+        {
+          "type_he": "שטיח צמר/כותנה קליעה שטוחה בהירה",
+          "slots": [
+            "living-room/rug"
+          ]
+        },
+        {
+          "type_he": "כריות ושמיכה סרוגה/ופל",
+          "slots": [
+            "living-room/cushions"
+          ]
+        },
+        {
+          "type_he": "מנורת תלייה נייר אורז או עץ",
+          "slots": [
+            "living-room/pendant"
+          ]
+        },
+        {
+          "type_he": "מנורת רגל אלון",
+          "slots": [
+            "living-room/floor-lamp"
+          ]
+        },
+        {
+          "type_he": "אגרטל אבנית מט עם אקליפטוס",
+          "slots": [
+            "living-room/vase"
+          ]
+        },
+        {
+          "type_he": "פמוטים ונרות",
+          "slots": [
+            "living-room/candle-holders"
+          ]
+        },
+        {
+          "type_he": "סל כותנה או יוטה",
+          "slots": [
+            "living-room/basket"
+          ]
+        },
+        {
+          "type_he": "הדפס קווי/בוטני במסגרת אלון",
+          "slots": [
+            "living-room/framed-art"
+          ]
+        },
+        {
+          "type_he": "מצעי פשתן מכובס",
+          "slots": [
+            "master/bedding",
+            "master/pillowcases"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "japandi",
+      "name_he": "ג'אפנדי",
+      "name_en": "Japandi",
+      "rank": 3,
+      "launch_order": 4,
+      "demand_score": 72,
+      "score_breakdown": [
+        20,
+        12,
+        20,
+        12,
+        8
+      ],
+      "trend": "rising",
+      "tier": "must-have (as warm-modern variant)",
+      "evidence": [
+        {
+          "claim_he": "בית ג'אפנדי של האדריכלית אבישג גורדין בתל אביב",
+          "source": "https://www.ynet.co.il/architecture/article/hyv6mknpq",
+          "date": "unknown",
+          "verification": "search-summary"
+        },
+        {
+          "claim_he": "טרנד שתפס תאוצה באינסטגרם",
+          "source": "https://www.maariv.co.il/lifestyle/fashion/article-1150048",
+          "date": "2024?",
+          "verification": "search-summary"
+        },
+        {
+          "claim_he": "מוביל חיפושי Google שנה שנייה, +108% (ארה\"ב)",
+          "source": "https://www.rentcafe.com/blog/daily-living/trendiest-interior-design-styles-2023/",
+          "date": "2023",
+          "verification": "search-summary"
+        },
+        {
+          "claim_he": "וואבי-סאבי והשפעה יפנית-נורדית צוברות תאוצה",
+          "source": "https://www.nadlancenter.co.il/article/11274",
+          "date": "2025-01-03",
+          "verification": "verified"
+        }
+      ],
+      "shares_with": {
+        "warm-modern": 0.6,
+        "nordic": 0.5,
+        "mediterranean": 0.25,
+        "modern-country": 0.2,
+        "boho": 0.2
+      },
+      "top_products": [
+        {
+          "type_he": "מנורת נייר אורז (לא העתק)",
+          "slots": [
+            "living-room/pendant",
+            "master/pendant",
+            "work/desk-lamp"
+          ]
+        },
+        {
+          "type_he": "קרמיקה בזיגוג ריאקטיבי או גס",
+          "slots": [
+            "living-room/vase",
+            "dining-room/tableware-set",
+            "dining-room/mug-set"
+          ]
+        },
+        {
+          "type_he": "שטיח קליעה נמוכה בגווני אבן",
+          "slots": [
+            "living-room/rug"
+          ]
+        },
+        {
+          "type_he": "מגש או קערה מעץ כהה",
+          "slots": [
+            "living-room/bowl",
+            "master/nightstand-tray"
+          ]
+        },
+        {
+          "type_he": "וילון פשתן או תריס במבוק",
+          "slots": [
+            "living-room/curtains",
+            "kids/roman-blind"
+          ]
+        },
+        {
+          "type_he": "פוף נמוך או כרית ישיבה",
+          "slots": [
+            "living-room/pouf"
+          ]
+        },
+        {
+          "type_he": "צמח פיסולי בעציץ אבן",
+          "slots": [
+            "living-room/planter",
+            "master/planter"
+          ]
+        },
+        {
+          "type_he": "סלי קש ים",
+          "slots": [
+            "living-room/basket",
+            "bath/storage-basket"
+          ]
+        },
+        {
+          "type_he": "הדפס מינימלי או קליגרפיה מופשטת",
+          "slots": [
+            "living-room/framed-art"
+          ]
+        },
+        {
+          "type_he": "ראנר פשתן ופמוט ברזל או קרמיקה",
+          "slots": [
+            "dining-room/table-runner",
+            "living-room/candle-holders"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mediterranean",
+      "name_he": "ים תיכוני",
+      "name_en": "Mediterranean / Coastal",
+      "rank": 4,
+      "launch_order": 3,
+      "demand_score": 66,
+      "score_breakdown": [
+        22,
+        10,
+        10,
+        15,
+        9
+      ],
+      "trend": "rising",
+      "tier": "next-wave",
+      "evidence": [
+        {
+          "claim_he": "'מתאים לישראל'; כחול-לבן ובז' של מדבר; טראצו בז' חוזר",
+          "source": "https://www.mako.co.il/living-rooms/Article-6d4a234783bbb91027.htm",
+          "date": "2026-01-15",
+          "verification": "verified"
+        },
+        {
+          "claim_he": "סגנון נפוץ בישראל: אבן, עץ גולמי, פשתן, גוונים בהירים",
+          "source": "https://www.midrag.co.il/pages/NCR/Midragonim/Answer/26397",
+          "date": "unknown",
+          "verification": "search-summary"
+        },
+        {
+          "claim_he": "התאמה לאקלים; טיוטת הבוהו שלנו כבר מוגדרת 'בית ים-תיכוני חם'",
+          "source": "docs/proposals/style-pools.md",
+          "date": "2026-10-09",
+          "verification": "internal"
+        }
+      ],
+      "shares_with": {
+        "boho": 0.65,
+        "modern-country": 0.4,
+        "warm-modern": 0.35,
+        "nordic": 0.3,
+        "japandi": 0.25
+      },
+      "note_he": "מומלץ כתחליף לבוהו, על בסיס מאגר הבוהו",
+      "top_products": [
+        {
+          "type_he": "שטיח יוטה או קילים בהיר",
+          "slots": [
+            "living-room/rug",
+            "dining-room/dining-rug"
+          ]
+        },
+        {
+          "type_he": "כד טרקוטה או קרמיקה לבנה עם ידיות",
+          "slots": [
+            "living-room/vase",
+            "dining-room/floor-vase"
+          ]
+        },
+        {
+          "type_he": "עץ זית בעציץ טרקוטה",
+          "slots": [
+            "living-room/planter"
+          ]
+        },
+        {
+          "type_he": "מנורת תלייה ראטן או קש",
+          "slots": [
+            "living-room/pendant",
+            "dining-room/dining-pendant"
+          ]
+        },
+        {
+          "type_he": "וילונות פשתן לבנים או מפוספסים",
+          "slots": [
+            "living-room/curtains"
+          ]
+        },
+        {
+          "type_he": "כריות פשתן בכחול, לבן ואוכרה",
+          "slots": [
+            "living-room/cushions"
+          ]
+        },
+        {
+          "type_he": "כלי הגשה וקרמיקה מצוירת (סדרתית)",
+          "slots": [
+            "dining-room/tableware-set",
+            "dining-room/bowl",
+            "dining-room/centerpiece-vase"
+          ]
+        },
+        {
+          "type_he": "קישוט קיר מראטן",
+          "slots": [
+            "living-room/wall-decor"
+          ]
+        },
+        {
+          "type_he": "מגבות פשטמל או חמאם",
+          "slots": [
+            "bath/bath-towels",
+            "bath/hand-towel",
+            "dining-room/tea-towel"
+          ]
+        },
+        {
+          "type_he": "סלי קש ים או במבוק",
+          "slots": [
+            "living-room/basket",
+            "hall/basket"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "modern-country",
+      "name_he": "כפרי מודרני",
+      "name_en": "Modern Country / Grandmillennial",
+      "rank": 5,
+      "launch_order": 5,
+      "demand_score": 62,
+      "score_breakdown": [
+        17,
+        18,
+        9,
+        10,
+        8
+      ],
+      "trend": "stable",
+      "tier": "next-wave",
+      "evidence": [
+        {
+          "claim_he": "'כפרי לייט' מועדף על ישראלים",
+          "source": "https://www.mako.co.il/living-architecture/local/Article-e71a635d7865451006.htm",
+          "date": "2016-04-27",
+          "verification": "verified-old"
+        },
+        {
+          "claim_he": "גרנדמילניאל מתחיל להיכנס לישראל",
+          "source": "https://www.mako.co.il/living-rooms/Article-6d4a234783bbb91027.htm",
+          "date": "2026-01-15",
+          "verification": "verified"
+        },
+        {
+          "claim_he": "Throwback Kid: משבצות, סריגה, פרחוני",
+          "source": "https://www.apartmenttherapy.com/pinterest-predicts-2026-37522611",
+          "date": "2025-12",
+          "verification": "search-summary"
+        },
+        {
+          "claim_he": "טוסקני כבד יוצא",
+          "source": "https://www.nadlancenter.co.il/article/11274",
+          "date": "2025-01-03",
+          "verification": "verified"
+        }
+      ],
+      "shares_with": {
+        "mediterranean": 0.4,
+        "nordic": 0.35,
+        "warm-modern": 0.3,
+        "boho": 0.3,
+        "japandi": 0.2
+      },
+      "top_products": [
+        {
+          "type_he": "מצעי פשתן מכובס או פרחוני עדין",
+          "slots": [
+            "master/bedding"
+          ]
+        },
+        {
+          "type_he": "ראנר או מפה משובצת",
+          "slots": [
+            "dining-room/table-runner"
+          ]
+        },
+        {
+          "type_he": "קנקן וכלי חרס לבן",
+          "slots": [
+            "dining-room/open-shelf-ceramics",
+            "dining-room/utensil-crock"
+          ]
+        },
+        {
+          "type_he": "צנצנות אחסון",
+          "slots": [
+            "dining-room/canisters"
+          ]
+        },
+        {
+          "type_he": "סל נצרים",
+          "slots": [
+            "living-room/basket",
+            "hall/basket"
+          ]
+        },
+        {
+          "type_he": "מנורת שולחן קרמית עם אהיל קפלים",
+          "slots": [
+            "hall/table-lamp"
+          ]
+        },
+        {
+          "type_he": "פמוטי פליז",
+          "slots": [
+            "living-room/candle-holders",
+            "dining-room/candle-holders"
+          ]
+        },
+        {
+          "type_he": "קרשי חיתוך מעץ",
+          "slots": [
+            "dining-room/cutting-boards"
+          ]
+        },
+        {
+          "type_he": "שמיכת קווילט",
+          "slots": [
+            "kids/bedspread",
+            "master/throw"
+          ]
+        },
+        {
+          "type_he": "הדפסים בוטניים במסגרת עץ",
+          "slots": [
+            "corridor/gallery-art",
+            "living-room/framed-art"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "boho",
+      "name_he": "בוהו",
+      "name_en": "Boho",
+      "rank": 6,
+      "launch_order": null,
+      "demand_score": 55,
+      "score_breakdown": [
+        8,
+        15,
+        12,
+        12,
+        8
+      ],
+      "trend": "declining",
+      "tier": "niche (accessory layer inside mediterranean)",
+      "evidence": [
+        {
+          "claim_he": "לא הוזכר במקורות ישראליים 2025–2026 שנבדקו",
+          "source": "https://www.nadlancenter.co.il/article/11274 ; https://www.mako.co.il/living-rooms/Article-6d4a234783bbb91027.htm",
+          "date": "2025-2026",
+          "verification": "verified (absence)"
+        },
+        {
+          "claim_he": "Pinterest 2026: מוטציה Afrohemian (סלים, ראטן, סיבים)",
+          "source": "https://www.apartmenttherapy.com/pinterest-predicts-2026-37522611",
+          "date": "2025-12",
+          "verification": "search-summary"
+        }
+      ],
+      "shares_with": {
+        "mediterranean": 0.65,
+        "modern-country": 0.3,
+        "warm-modern": 0.25,
+        "nordic": 0.2,
+        "japandi": 0.2
+      },
+      "top_products": [
+        {
+          "type_he": "קישוט קיר מקרמה או סלסלות",
+          "slots": [
+            "living-room/wall-decor"
+          ]
+        },
+        {
+          "type_he": "שטיח ברברי טאפטד או קילים",
+          "slots": [
+            "living-room/rug"
+          ]
+        },
+        {
+          "type_he": "פוף עור או קילים",
+          "slots": [
+            "living-room/pouf"
+          ]
+        },
+        {
+          "type_he": "מנורת תלייה ראטן או קש",
+          "slots": [
+            "living-room/pendant"
+          ]
+        },
+        {
+          "type_he": "כריות עם פרנזים ודוגמה",
+          "slots": [
+            "living-room/cushions"
+          ]
+        },
+        {
+          "type_he": "סלי יקינטון מים",
+          "slots": [
+            "living-room/basket"
+          ]
+        },
+        {
+          "type_he": "כדי טרקוטה",
+          "slots": [
+            "living-room/vase"
+          ]
+        },
+        {
+          "type_he": "צמחים וירוק",
+          "slots": [
+            "living-room/planter"
+          ]
+        },
+        {
+          "type_he": "שמיכה עם פרנזים",
+          "slots": [
+            "master/throw",
+            "hall/bench-throw"
+          ]
+        },
+        {
+          "type_he": "מנורת רגל ראטן",
+          "slots": [
+            "living-room/floor-lamp"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eclectic",
+      "name_he": "אקלקטי מעוצב",
+      "name_en": "Curated Eclectic",
+      "rank": 7,
+      "launch_order": null,
+      "demand_score": 48,
+      "score_breakdown": [
+        18,
+        8,
+        12,
+        6,
+        4
+      ],
+      "trend": "rising",
+      "tier": "niche",
+      "evidence": [
+        {
+          "claim_he": "'אקלקטיות היא חביבת הקהל הישראלי'",
+          "source": "https://www.mako.co.il/living-rooms/Article-6d4a234783bbb91027.htm",
+          "date": "2026-01-15",
+          "verification": "verified"
+        },
+        {
+          "claim_he": "33% מהמעצבים: אקלקטי נשאר",
+          "source": "https://www.businesswire.com/news/home/20241112477735/en/1stDibs-Reveals-2025-Trends-from-Its-Annual-Designer-Survey-Highlighting-Upcoming-Color-Furniture-and-Design-Style-Trends",
+          "date": "2024-11",
+          "verification": "search-summary"
+        }
+      ],
+      "shares_with": {},
+      "top_products": []
+    },
+    {
+      "id": "wabi-sabi",
+      "name_he": "וואבי סאבי / אורגני",
+      "name_en": "Wabi-Sabi / Organic",
+      "rank": 8,
+      "launch_order": null,
+      "demand_score": 46,
+      "score_breakdown": [
+        14,
+        6,
+        14,
+        8,
+        4
+      ],
+      "trend": "rising",
+      "tier": "niche",
+      "evidence": [
+        {
+          "claim_he": "וואבי-סאבי צובר תאוצה",
+          "source": "https://www.nadlancenter.co.il/article/11274",
+          "date": "2025-01-03",
+          "verification": "verified"
+        },
+        {
+          "claim_he": "עולה ב-2026",
+          "source": "https://genroom.io/he/blog/interior-design-styles-2026-trends",
+          "date": "2026",
+          "verification": "search-summary"
+        }
+      ],
+      "note_he": "מתנגש עם מדיניות הדרופשיפינג (ייחודיות, עבודת יד)",
+      "shares_with": {},
+      "top_products": []
+    },
+    {
+      "id": "modern-classic",
+      "name_he": "קלאסי מודרני / ניאו-דקו",
+      "name_en": "Transitional / Neo Deco",
+      "rank": 9,
+      "launch_order": null,
+      "demand_score": 44,
+      "score_breakdown": [
+        13,
+        10,
+        12,
+        5,
+        4
+      ],
+      "trend": "rising",
+      "tier": "niche",
+      "evidence": [
+        {
+          "claim_he": "קלאסי מודרני עשוי להתאים לישראלים",
+          "source": "https://www.mako.co.il/living-rooms/Article-6d4a234783bbb91027.htm",
+          "date": "2026-01-15",
+          "verification": "verified"
+        },
+        {
+          "claim_he": "Neo Deco",
+          "source": "https://www.apartmenttherapy.com/pinterest-predicts-2026-37522611",
+          "date": "2025-12",
+          "verification": "search-summary"
+        }
+      ],
+      "shares_with": {},
+      "top_products": []
+    },
+    {
+      "id": "mid-century",
+      "name_he": "מיד-סנצ'ורי / רטרו",
+      "name_en": "Mid-Century / Retro",
+      "rank": 10,
+      "launch_order": null,
+      "demand_score": 40,
+      "score_breakdown": [
+        10,
+        10,
+        9,
+        6,
+        5
+      ],
+      "trend": "stable",
+      "tier": "niche",
+      "evidence": [
+        {
+          "claim_he": "רטרו-פוטוריזם, בעיקר בחללים מסחריים",
+          "source": "https://www.mako.co.il/living-rooms/Article-6d4a234783bbb91027.htm",
+          "date": "2026-01-15",
+          "verification": "verified"
+        }
+      ],
+      "shares_with": {},
+      "top_products": []
+    },
+    {
+      "id": "industrial",
+      "name_he": "תעשייתי",
+      "name_en": "Industrial",
+      "rank": 11,
+      "launch_order": null,
+      "demand_score": 32,
+      "score_breakdown": [
+        6,
+        10,
+        5,
+        5,
+        6
+      ],
+      "trend": "declining",
+      "tier": "niche",
+      "evidence": [
+        {
+          "claim_he": "בטון חשוף וברזל מאבדים פופולריות",
+          "source": "https://www.nadlancenter.co.il/article/11274",
+          "date": "2025-01-03",
+          "verification": "verified"
+        },
+        {
+          "claim_he": "ירידה חדה בחיפושים (ארה\"ב)",
+          "source": "https://www.rentcafe.com/blog/daily-living/trendiest-interior-design-styles-2023/",
+          "date": "2023",
+          "verification": "search-summary"
+        }
+      ],
+      "shares_with": {},
+      "top_products": []
+    },
+    {
+      "id": "cold-minimal",
+      "name_he": "מינימליזם קר",
+      "name_en": "Cold Minimal (white/grey)",
+      "rank": 12,
+      "launch_order": null,
+      "demand_score": 28,
+      "score_breakdown": [
+        4,
+        10,
+        4,
+        5,
+        5
+      ],
+      "trend": "declining",
+      "tier": "not-recommended",
+      "evidence": [
+        {
+          "claim_he": "אפור ולבן 'קר' יוצאים",
+          "source": "https://www.nadlancenter.co.il/article/11274",
+          "date": "2025-01-03",
+          "verification": "verified"
+        },
+        {
+          "claim_he": "ריצוף אפור יוצא, חוזרים לבז'",
+          "source": "https://www.mako.co.il/living-rooms/Article-6d4a234783bbb91027.htm",
+          "date": "2026-01-15",
+          "verification": "verified"
+        }
+      ],
+      "shares_with": {},
+      "top_products": []
+    }
+  ]
+}
