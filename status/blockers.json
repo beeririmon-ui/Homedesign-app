@@ -6,7 +6,7 @@
     {
       "id": "B1",
       "kind": "user_action",
-      "priority": 1,
+      "priority": 3,
       "title": "טלגרם: התקנת התוסף הרשמי על מחשב שנשאר דלוק",
       "stuck": "העבודה נעצרת בכל פעם שצריך אישור או החלטה והמשתמש לא במערכת.",
       "needs": "לפתוח בוט ב-BotFather, להתקין את התוסף, להפעיל סשן בתיקיית הפרויקט (בתוך tmux), להצמיד את החשבון ולהגדיר allowlist. הטוקן נשאר במחשב.",
@@ -17,7 +17,8 @@
         "status/handoff.md"
       ],
       "decisions": [],
-      "status": "open"
+      "status": "open",
+      "progress": "2026-10-10: אין מחשב דלוק כרגע, ולכן טלגרם נדחה. חלופה מהענן: אפשרות ב' ב-docs/ops/remote-approvals.md (מייל + סטודיו + שגרה), אם המשתמש מבקש"
     },
     {
       "id": "B2",
@@ -58,7 +59,7 @@
     {
       "id": "B4",
       "kind": "user_action",
-      "priority": 2,
+      "priority": 3,
       "title": "סשן על המחשב לדפדוף ב-AliExpress",
       "stuck": "דפי מוצר של AliExpress לא נפתחים מהענן, ודפדפן מהענן נחסם בסביבה. הליקוט מעבר ל-CJ ול-Zendrop מחכה.",
       "needs": "לפתוח Claude Desktop או `claude remote-control` בתיקיית הפרויקט, ולכתוב: המשך לפי status/handoff.md.",
@@ -68,7 +69,8 @@
         "status/handoff.md"
       ],
       "decisions": [],
-      "status": "open"
+      "status": "open",
+      "progress": "2026-10-10: המשתמש לא מצליח לפתוח Claude במחשב; עובדים מהטלפון. חלופה: ברגע שה-API של AliExpress פעיל (B5), 90 הפריטים ברשימה נמשכים דרך ds.py product/freight בלי דפדפן. הדפדוף הידני נדחה"
     },
     {
       "id": "B5",
@@ -76,7 +78,7 @@
       "priority": 2,
       "title": "AliExpress: להכניס את מפתחות האפליקציה להגדרות הסביבה (אחרי Reset לסוד)",
       "stuck": "הפרופיל אושר (מייל \"Profile Approval Granted\", 10.10). עדיין אין אפליקציה, ולכן אין App Key ו-App Secret ואין גישה ל-API.",
-      "needs": "1) ב-App Console: App Secret › Reset › View › להעתיק. 2) https://claude.ai/code/new › אייקון הענן עם שם הסביבה › גלגל שיניים › Environment variables: AE_DS_APP_KEY=<AppKey> ו-AE_DS_APP_SECRET=<הסוד החדש> (לא Network secret, כי הסקריפט חותם איתו). 3) לכתוב \"הכנסתי\": המנהל פותח סשן שרואה את המשתנים, מדפיס קישור הרשאה לפתיחה בטלפון, והקוד החד-פעמי מועתק משורת הכתובת אחרי ההפניה ל-127.0.0.1. אסור להדביק את הסוד בצ'אט.",
+      "needs": "1) ב-App Console: App Secret › Reset › View › להעתיק. 2) מהטלפון, בדפדפן Chrome (לא באפליקציה): https://claude.ai/code/new › אייקון הענן עם שם הסביבה › גלגל שיניים › Environment variables: AE_DS_APP_KEY=<AppKey> ו-AE_DS_APP_SECRET=<הסוד החדש> (לא Network secret, כי הסקריפט חותם איתו). 3) לכתוב \"הכנסתי\": המנהל פותח סשן שרואה את המשתנים, מדפיס קישור הרשאה לפתיחה בטלפון, והקוד החד-פעמי מועתק משורת הכתובת אחרי ההפניה ל-127.0.0.1. אסור להדביק את הסוד בצ'אט.",
       "who": "המשתמש",
       "since": "2026-10-09",
       "links": [
