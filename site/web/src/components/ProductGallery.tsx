@@ -75,7 +75,7 @@ export function ProductGallery({ images, id }: { images: GalleryImage[]; id: str
         onKeyDown={n > 1 ? onKey : undefined}
       >
         {images.map((im, i) => (
-          <figure
+          <div
             key={im.src}
             class="gallery-slide"
             data-kind={im.kind}
@@ -86,16 +86,15 @@ export function ProductGallery({ images, id }: { images: GalleryImage[]; id: str
               slides.current[i] = el;
             }}
           >
-            <div class="gallery-img">
-              <img src={im.src} alt={im.alt} width={im.width} height={im.height} loading={i === 0 ? 'eager' : 'lazy'} decoding="async" />
-            </div>
-            <figcaption class="gallery-caption">
-              {im.kind === 'render' ? <span class="badge badge-temp">הדמיה</span> : null}
-              <span>{im.caption}</span>
-            </figcaption>
-          </figure>
+            <img src={im.src} alt={im.alt} width={im.width} height={im.height} loading={i === 0 ? 'eager' : 'lazy'} decoding="async" />
+          </div>
         ))}
       </div>
+      {/* the note under the picture in view: the render says it is a render (FR-I); the alt text says it too */}
+      <p class="gallery-caption" data-kind={images[index]?.kind}>
+        {images[index]?.kind === 'render' ? <span class="badge badge-temp">הדמיה</span> : null}
+        <span>{images[index]?.caption}</span>
+      </p>
       {n > 1 ? (
         <div class="gallery-nav">
           <button type="button" class="gallery-btn" aria-label="התמונה הקודמת" aria-disabled={index === 0 ? 'true' : undefined} onClick={() => goTo(index - 1)}>

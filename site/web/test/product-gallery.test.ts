@@ -30,8 +30,8 @@ describe('product gallery', () => {
     const iSupplier = html.indexOf('data-kind="supplier"');
     expect(iRender).toBeGreaterThan(-1);
     expect(iSupplier).toBeGreaterThan(iRender);
-    expect(html).toContain('>הדמיה</span>');
-    expect(html).toContain('המוצר מרונדר');
+    // the visible note under the picture in view (the render, at first)
+    expect(html).toMatch(/class="gallery-caption" data-kind="render"><span class="badge badge-temp">הדמיה<\/span><span>[^<]*המוצר מרונדר/);
     expect(html).toContain('alt="תמונת הספק: אגרטל קרמיקה, לבן"');
     expect(html).toContain('src="/media/products/vase-a/supplier.800.webp"');
     expect(html).toContain('width="800" height="800"');

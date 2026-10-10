@@ -167,7 +167,10 @@ test.describe('product gallery (FR-I)', () => {
     const slides = gallery.locator('.gallery-slide');
     await expect(slides).toHaveCount(2);
     await expect(slides.nth(0)).toHaveAttribute('data-kind', 'render');
-    await expect(slides.nth(0)).toContainText('המוצר מרונדר');
+    await expect(slides.nth(0).getByRole('img')).toHaveAttribute('alt', /^הדמיה: /);
+    const caption = gallery.locator('.gallery-caption');
+    await expect(caption).toContainText('הדמיה');
+    await expect(caption).toContainText('המוצר מרונדר');
     await expect(slides.nth(1)).toHaveAttribute('data-kind', 'supplier');
     await expect(slides.nth(1).getByRole('img')).toHaveAttribute('alt', /^תמונת הספק: /);
     const next = gallery.getByRole('button', { name: 'התמונה הבאה' });
@@ -176,6 +179,7 @@ test.describe('product gallery (FR-I)', () => {
     await next.click();
     await expect(slides.nth(1)).toBeInViewport({ ratio: 0.9 });
     await expect(gallery.locator('[aria-live="polite"]')).toHaveText('תמונה 2 מתוך 2: תמונת הספק');
+    await expect(caption).toHaveText('התמונה המקורית מהספק.');
     await expect(gallery.getByRole('button', { name: 'תמונה 2: תמונת הספק' })).toHaveAttribute('aria-current', 'true');
     await expect(next).toHaveAttribute('aria-disabled', 'true');
     // focus stays on the button at the end (aria-disabled, never disabled)

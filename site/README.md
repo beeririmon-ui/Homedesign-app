@@ -21,22 +21,23 @@ npm run dev        # בונה קטלוג ומדיה זמנית, מאפס D1 מק
 
 ## סקריפטים
 
-| פקודה                             | מה עושה                                                                                         |
-| --------------------------------- | ----------------------------------------------------------------------------------------------- |
-| `npm run dev`                     | פיתוח: ‏Vite ו-wrangler dev עם D1 מקומי                                                         |
-| `npm run build`                   | קטלוג ← מדיה זמנית ← build של האתר ו-prerender ← dry-run של ה-Worker ← בדיקת תקציב (`budget`)   |
-| `npm run preview`                 | הבנייה המקומית "כמו בפרודקשן": Worker אחד מגיש את `web/dist` ואת ה-API ‏(http://127.0.0.1:8788) |
-| `npm run typecheck`               | ‏tsc בכל ה-workspaces ובדיקה שהסכמה שנוצרה מעודכנת                                              |
-| `npm run lint`                    | ESLint עם typescript-eslint ו-jsx-a11y (strict)                                                 |
-| `npm run format` / `format:check` | Prettier                                                                                        |
-| `npm test`                        | Vitest: תמחור, סכמות, routes של ה-API מול SQLite, webhook חתום, תור ו-Access JWT                |
-| `npm run e2e`                     | Playwright: זרימת קנייה מלאה, מקלדת וגרירה בגלגל, SEO, תקציב 3MB, preload                       |
-| `npm run a11y`                    | axe בכל סוגי העמודים, בבהיר ובכהה, עם אפס הפרות                                                 |
-| `npm run lighthouse`              | Lighthouse במובייל (צריך `npm run preview` רץ). הדוחות נשמרים ב-`.lighthouse/`                  |
-| `npm run budget`                  | תקציב JS, ‏CSS וטעינה ראשונה של החדר                                                            |
-| `npm run catalog:strict`          | קטלוג בכלל של פרודקשן: מוצר בלי `retail_ils` לא מוצג                                            |
-| `npm run preview:artifact`        | בונה את `dist-artifact/` (ה-API מדומה בדפדפן) ובודק את חוזה ה-Artifact                          |
-| `npm run screens:artifact`        | פותח את `dist-artifact` ב-Chromium ברוחב 1280 וברוחב 400, ושומר צילומים ב-`screens/`            |
+| פקודה                             | מה עושה                                                                                                    |
+| --------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `npm run dev`                     | פיתוח: ‏Vite ו-wrangler dev עם D1 מקומי                                                                    |
+| `npm run build`                   | קטלוג ← מדיה זמנית ← תמונות ספק ← build של האתר ו-prerender ← dry-run של ה-Worker ← בדיקת תקציב (`budget`) |
+| `npm run assets:supplier`         | תמונת הספק הראשונה של כל מוצר מוצג (FR-I): הורדה למטמון, WebP ברוחב 800 ב-`web/public/media/products/`     |
+| `npm run preview`                 | הבנייה המקומית "כמו בפרודקשן": Worker אחד מגיש את `web/dist` ואת ה-API ‏(http://127.0.0.1:8788)            |
+| `npm run typecheck`               | ‏tsc בכל ה-workspaces ובדיקה שהסכמה שנוצרה מעודכנת                                                         |
+| `npm run lint`                    | ESLint עם typescript-eslint ו-jsx-a11y (strict)                                                            |
+| `npm run format` / `format:check` | Prettier                                                                                                   |
+| `npm test`                        | Vitest: תמחור, סכמות, routes של ה-API מול SQLite, webhook חתום, תור ו-Access JWT                           |
+| `npm run e2e`                     | Playwright: זרימת קנייה מלאה, מקלדת וגרירה בגלגל, SEO, תקציב 3MB, preload                                  |
+| `npm run a11y`                    | axe בכל סוגי העמודים, בבהיר ובכהה, עם אפס הפרות                                                            |
+| `npm run lighthouse`              | Lighthouse במובייל (צריך `npm run preview` רץ). הדוחות נשמרים ב-`.lighthouse/`                             |
+| `npm run budget`                  | תקציב JS, ‏CSS וטעינה ראשונה של החדר                                                                       |
+| `npm run catalog:strict`          | קטלוג בכלל של פרודקשן: מוצר בלי `retail_ils` לא מוצג                                                       |
+| `npm run preview:artifact`        | בונה את `dist-artifact/` (ה-API מדומה בדפדפן) ובודק את חוזה ה-Artifact                                     |
+| `npm run screens:artifact`        | פותח את `dist-artifact` ב-Chromium ברוחב 1280 וברוחב 400, ושומר צילומים ב-`screens/`                       |
 
 **Playwright:**
 
@@ -59,6 +60,7 @@ npm run dev        # בונה קטלוג ומדיה זמנית, מאפס D1 מק
 - `tools/`:
   - `build-catalog.ts`: מהריפו אל הקטלוג.
   - `make-temp-assets.ts`: תמונות זמניות בשמות הסופיים.
+  - `supplier-images.ts`: תמונת הספק של כל מוצר מוצג (FR-I), מהכרטיס אל `media/products/<id>/supplier.800.webp` ואל `.generated/supplier-images.json` (עם `usage_rights` מהכרטיס).
   - בדיקות תקציב ו-Artifact.
 - `e2e/`: בדיקות Playwright.
 
@@ -66,6 +68,14 @@ npm run dev        # בונה קטלוג ומדיה זמנית, מאפס D1 מק
 
 - `npm run assets:temp` מייצר מדיה ב-`web/public/media/` (gitignored) מתוך מקורות שמוגדרים ב-`tools/temp/living-room.nordic.json` וב-`assets/manifest.json`.
 - הנתיבים כבר סופיים. כשיהיו נכסים סופיים שעברו QA, מחליפים קבצים ולא קוד.
+
+## דף המוצר: הדמיה ותמונת הספק (FR-I, 2026-10-10)
+
+- התמונה הראשית היא ההדמיה מהחדר (שכבת המוצר), עם הערה גלויה: תג "הדמיה" ו"כך המוצר נראה בחדר (המוצר מרונדר)". ה-alt אומר את זה גם.
+- אחריה תמונת הספק המקורית (`alt="תמונת הספק: <שם המוצר>"`), מהכרטיס (`images.urls[0]`), תמונה אחת לכל מוצר. `npm run assets:supplier` מוריד אותה פעם אחת למטמון (`.cache/supplier-images/`, gitignored), מקודד WebP ברוחב 800 ל-`web/public/media/products/<id>/supplier.800.webp`, ורושם ב-`.generated/supplier-images.json` את המידות ואת `usage_rights` מהכרטיס (היום כולם `unclear`: לברר מול הספקים לפני ההשקה). באתר התמונה נטענת מהמדיה שלנו, וב-Artifact היא מועתקת ליד הדף. אף פעם לא hot-link לספק, והקטלוג הציבורי לא מכיל את כתובת הספק.
+- הגלריה (`components/ProductGallery.tsx`): רצועת scroll-snap (החלקה במגע), כפתורי הקודמת/הבאה (נשארים פעילים בקצוות, `aria-disabled`, כדי לא לאבד פוקוס), תמונות ממוזערות, חיצים במקלדת (RTL: שמאלה = הבאה) ואזור חי שמכריז "תמונה 2 מתוך 2: תמונת הספק". הרצועה היא אזור גלילה ולכן ניתנת לפוקוס ומסומנת.
+- schema.org `Product.image`: ההדמיה ואחריה תמונת הספק.
+- הבדיקות: `web/test/product-gallery.test.ts`, ‏`e2e/flow.spec.ts` (SEO והגלריה, גם ב-Pixel 7) ו-`e2e/a11y.spec.ts` (axe על הגלריה בתמונה השנייה).
 
 ## Artifact (תצוגה מקדימה לפרסום)
 
@@ -97,11 +107,13 @@ npm run screens:artifact     # צילומים ב-screens/artifact-{1280,400}-*.p
 
 ### נקודות מוצר (2026-10-10)
 
-- במנוחה: סימן קטן אחד לכל מוצר, בנקודה העמוקה ביותר בתוך הצללית (`anchor` בסצנה). כך הסימן יושב על המוצר עצמו, ולא באמצע בין שני חלקים שלו.
+- **במנוחה החדר נקי לגמרי, בלי סימנים** (החלטת המשתמש "כן לנקודות", חוקי הסטודיו ו.4). הסימנים מופיעים כשהעכבר זז מעל החדר או כשנוגעים במסך (`pointermove` / `pointerdown` על ה-stage, ‏`.stage[data-marks="on"]`), ונעלמים בדעיכה כ-3 שניות אחרי התנועה האחרונה. במקלדת: פוקוס על כפתור נקודה מציג אותם, והם נשארים כל עוד הפוקוס בתוך ה-stage. בכניסה הראשונה לחדר (פעם אחת לכל טעינת דף) רמז קצר: הסימנים מופיעים ונעלמים אחרי כ-2 שניות. עם `prefers-reduced-motion` אין דעיכה, רק הופעה והיעלמות.
+- נגישות: הכפתורים תמיד ב-DOM (לא `display: none`), רק האטימות של הסימן משתנה; קורא מסך, מקלדת ורשימת "מה יש בחדר" לא מושפעים.
+- כשהסימנים מוצגים: סימן קטן אחד לכל מוצר, בנקודה העמוקה ביותר בתוך הצללית (`anchor` בסצנה). כך הסימן יושב על המוצר עצמו, ולא באמצע בין שני חלקים שלו.
 - הסימנים לא חופפים: מרחק של 48px לפחות בין מרכזים. ה-`<button>` הוא יעד של 46px.
 - בריחוף, במגע ובפוקוס: קו המתאר של המוצר עצמו (`outline` בסצנה, מתוך האלפא) בקו בהיר עדין, עם הילה חמה. גם ריחוף ולחיצה על המוצר עצמו פותחים אותו. הכפתור נשאר הפקד הנגיש.
 - אין פעימה. עם `prefers-reduced-motion` אין מעברים.
-- צילומים: `e2e/hotspots.spec.ts` → `assets/qa/hotspots/`.
+- צילומים: `e2e/hotspots.spec.ts` → `assets/qa/hotspots/` (‏`room-<w>-rest.png` נקי, ‏`room-<w>-after-move.png` אחרי תזוזת עכבר, ‏`room-<w>-focus-sofa.png` בפוקוס מקלדת, ‏`room-<w>-hover-vase.png` בריחוף). הבדיקות של המצבים האלה: `e2e/flow.spec.ts`, "product marks rest hidden".
 
 ### סט או יחידה (P1) ותקנים (D9)
 

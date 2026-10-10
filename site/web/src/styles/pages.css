@@ -16,7 +16,7 @@
 /* ---------- product gallery (FR-I): the render first, the supplier photo after it ---------- */
 .gallery {
   display: grid;
-  gap: 12px;
+  gap: 10px;
 }
 .gallery-track {
   display: flex;
@@ -38,25 +38,20 @@
 .gallery-slide {
   flex: 0 0 100%;
   min-width: 0;
-  margin: 0;
+  aspect-ratio: 1;
   scroll-snap-align: start;
   scroll-snap-stop: always;
-  display: grid;
-  grid-template-rows: 1fr auto;
-}
-.gallery-img {
-  aspect-ratio: 1;
   display: grid;
   place-items: center;
   overflow: hidden;
   background: radial-gradient(closest-side, var(--surface), var(--surface-2));
 }
-.gallery-img img {
+.gallery-slide img {
   width: 100%;
   height: 100%;
   object-fit: contain;
 }
-.gallery-slide[data-kind='render'] .gallery-img img {
+.gallery-slide[data-kind='render'] img {
   width: 78%;
   height: 78%;
 }
@@ -65,8 +60,8 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 8px 10px;
-  padding: 10px 16px 12px;
-  border-top: 1px solid var(--line);
+  margin: 0;
+  min-height: 28px;
   font-size: 14px;
   color: var(--ink-2);
 }
