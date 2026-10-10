@@ -74,9 +74,9 @@
       "id": "B5",
       "kind": "user_action",
       "priority": 2,
-      "title": "AliExpress Open Platform: ליצור אפליקציה ולהכניס את המפתחות",
+      "title": "AliExpress: להכניס את מפתחות האפליקציה להגדרות הסביבה (אחרי Reset לסוד)",
       "stuck": "הפרופיל אושר (מייל \"Profile Approval Granted\", 10.10). עדיין אין אפליקציה, ולכן אין App Key ו-App Secret ואין גישה ל-API.",
-      "needs": "להיכנס ל-openservice.aliexpress.com עם אותו חשבון > APP Console > Create App (סוג Dropshipping; שם, תיאור קצר, Callback URL חייב להיות https: בינתיים https://localhost/callback (או https://127.0.0.1/callback), ומחליפים לכתובת האתר כשתהיה) > אם האפליקציה דורשת אישור, להגיש. אחרי שיש App Key ו-App Secret: להכניס אותם בהגדרות הסביבה של Claude כ-AE_DS_APP_KEY ו-AE_DS_APP_SECRET (לא בצ'אט). אז המנהל מחבר את ה-API (OAuth פעם אחת מהדפדפן של המשתמש) ומפעיל חיפוש בקטלוג.",
+      "needs": "1) ב-App Console: App Secret › Reset › View › להעתיק. 2) https://claude.ai/code/new › אייקון הענן עם שם הסביבה › גלגל שיניים › Environment variables: AE_DS_APP_KEY=<AppKey> ו-AE_DS_APP_SECRET=<הסוד החדש> (לא Network secret, כי הסקריפט חותם איתו). 3) לכתוב \"הכנסתי\": המנהל פותח סשן שרואה את המשתנים, מדפיס קישור הרשאה לפתיחה בטלפון, והקוד החד-פעמי מועתק משורת הכתובת אחרי ההפניה ל-127.0.0.1. אסור להדביק את הסוד בצ'אט.",
       "who": "המשתמש",
       "since": "2026-10-09",
       "links": [
@@ -87,7 +87,7 @@
         "AC3"
       ],
       "status": "open",
-      "progress": "2026-10-10: הפרופיל אושר"
+      "progress": "2026-10-10: הפרופיל אושר; האפליקציה נוצרה (Test, Drop Shipping); לקוח ה-API מוכן ב-scripts/ae (12 בדיקות חתימה). חסר: AE_DS_APP_KEY ו-AE_DS_APP_SECRET בהגדרות הסביבה (אחרי Reset לסוד), ואז הרשאה חד-פעמית מהדפדפן"
     },
     {
       "id": "B6",

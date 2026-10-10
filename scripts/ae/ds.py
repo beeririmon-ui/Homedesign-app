@@ -506,7 +506,14 @@ def main(argv=None):
     ap.add_argument("--by", default="sourcing-agent"); ap.add_argument("--run-id")
     ap.add_argument("--max-calls", type=int); ap.add_argument("--no-cache", action="store_true")
     ap.add_argument("--hide-seen", action="store_true"); ap.add_argument("--raw", action="store_true")
+    # The same global flags are also accepted after the subcommand (SUPPRESS keeps the main parser's values).
+    g = argparse.ArgumentParser(add_help=False); S = argparse.SUPPRESS
+    for flag in ("--dry-run", "--force", "--no-cache", "--hide-seen", "--raw"):
+        g.add_argument(flag, action="store_true", default=S)
+    g.add_argument("--by", default=S); g.add_argument("--run-id", default=S); g.add_argument("--max-calls", type=int, default=S)
     sub = ap.add_subparsers(dest="cmd", required=True)
+    _add = sub.add_parser
+    sub.add_parser = lambda name, **kw: _add(name, parents=[g], **kw)
     s = sub.add_parser("search"); s.add_argument("q"); s.add_argument("--ship-to", default="IL"); s.add_argument("--currency", default="USD")
     s.add_argument("--page", type=int, default=1); s.add_argument("--size", type=int, default=20); s.add_argument("--sort", choices=SORTS)
     s.add_argument("--category"); s.add_argument("--lang", default="en_US")

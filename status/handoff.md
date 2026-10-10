@@ -36,3 +36,13 @@ sourcing-support סרק דפי חיפוש של AliExpress (רק `aliexpress.com/
 - **סדר מומלץ** (לפי הציון וחשיבות העמדה): accent-sconces (3256807415537790 ועוד 7), kitchen-sconce (3256812137993644), centerpiece-vase (9), curtains (8, משותף לסלון ולפינת האוכל), candle-holders בפינת האוכל (8), floor-vase (6), candle-holders בסלון (6), cushions (6). עמדות שבהן AliExpress חלש וכדאי מקור אחר: bowl, pouf, rug, table-runner, utensil-crock, cutting-boards, herb-pots, floor-lamp.
 - **מזהים:** דף החיפוש מחזיר קישורי `aliexpress.us/item/<id>` (מזהים 3256…/2255…/2251…). לפתוח כמו שהם; אם האתר מפנה ל-`aliexpress.com` עם מזהה 1005…, לרשום את שני המזהים בכרטיס.
 - **חסימות:** שלושה דפי חיפוש חזרו ריקים (utensil holder white, white oak cutting board, ceramic planter with saucer) ולא נוסו שוב. אפשר לנסות אותם בדפדפן של המשתמש.
+
+## AliExpress API: הרשאה ראשונה (2026-10-10)
+הלקוח ב-`scripts/ae/` (תיעוד מלא: `scripts/ae/README.md`). האפליקציה בסטטוס Test, עם ההרשאות System Tool ו-AliExpress-dropship, ו-Callback ‏`https://127.0.0.1/callback`. המפתחות קיימים רק כמשתני סביבה `AE_DS_APP_KEY` ו-`AE_DS_APP_SECRET`; **לא בצ'אט, לא בקבצים.** ההרשאה נעשית פעם אחת, בסשן על המחשב של המשתמש (שם הדפדפן ומשתני הסביבה), כך שה-code לא עובר בצ'אט:
+1. `python3 scripts/ae/auth.py url` מדפיס את כתובת ההרשאה. אם מודפס "לא מוגדר", משתני הסביבה חסרים בסשן הזה: מגדירים אותם בהגדרות הסביבה ופותחים סשן חדש.
+2. פותחים את הכתובת בדפדפן של המשתמש, מתחברים עם **חשבון הקונה** של AliExpress ולוחצים Access Now / Authorize.
+3. הדפדפן מופנה אל `https://127.0.0.1/callback?code=...` והדף לא נטען. זה צפוי. מעתיקים את הערך של `code` משורת הכתובת (או את כל הכתובת).
+4. מיד, באותו טרמינל: `python3 scripts/ae/auth.py code <code>`. הפלט הצפוי: `stored, expires <תאריך>, account <מוסווה>`. הטוקן נשמר ב-`~/.cache/ae/token.json` (‏chmod 600) ולא מודפס.
+5. בדיקה: `python3 scripts/ae/auth.py status`, ואז קריאה חיה קטנה: `python3 scripts/ae/ds.py search "ceramic vase" --size 5`. אם חוזר `IllegalAccessToken` או `IncompleteSignature`, מנסים שוב עם `AE_DS_TOKEN_PARAM=session` (ה-SDK הרשמי קורא לטוקן `session`), ורושמים את התוצאה ביומן.
+6. בסטטוס Test הטוקן תקף יום אחד (refresh יומיים): `ds.py` מרענן לבד; אם ה-refresh פג, חוזרים על שלבים 1–4. אחרי שהכל עובד: Apply Online בקונסול (30 / 60 יום).
+כללים: לא מדביקים code, טוקן או מפתח בצ'אט; שגיאת API מודפסת במלואה (בלי סודות) ונרשמת ביומן; העבודה ממשיכה דרך `scripts/ae/ds.py` בלבד (מרשם, תקציב ומטמון), בלי גירוד של האתר.

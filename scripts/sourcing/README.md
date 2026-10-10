@@ -14,7 +14,8 @@
 | `cache.py` | המטמון |
 | `gaps.py` | תור העדיפויות: אילו עמדות חסרות מועמדים |
 | `cj_source.py` | הייבואן של CJ: עוטף את `scripts/cj.py` עם המרשם, התקציב והמטמון |
-| `aliexpress_source.py`, `google_vision_source.py` | שלדים. רק בודקים אם משתני הסביבה קיימים ומדפיסים "not configured" |
+| `aliexpress_source.py` | כיסוי דק ל-`scripts/ae/ds.py` (הלקוח האמיתי, 2026-10-10): search / image / product / freight / card / check / mark. בלי AE_DS_APP_KEY ו-AE_DS_APP_SECRET מדפיס "not configured" |
+| `google_vision_source.py` | שלד. רק בודק אם משתנה הסביבה קיים ומדפיס "not configured" |
 | `build_seen.py` | בונה מחדש את המרשם מהכרטיסים ומקובצי `data/leads/**`. בטוח להרצה חוזרת: ממזג ולא מוחק |
 
 ## החוק
