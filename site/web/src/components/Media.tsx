@@ -82,7 +82,7 @@ export function galleryImages(p: PublicProduct): GalleryImage[] {
   if (sup)
     out.push({
       kind: 'supplier',
-      src: mediaUrl(sup.src, sup.width, 'webp'),
+      src: mediaUrl(sup.src, undefined, 'webp'),
       alt: `תמונת הספק: ${p.name_he}`,
       width: sup.width,
       height: sup.height,

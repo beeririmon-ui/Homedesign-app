@@ -13,7 +13,7 @@
  * Input:  .generated/catalog.full.json (supplier_image.url per shown product; the public catalog never has the url)
  * Cache:  .cache/supplier-images/<sha256(url)>.bin, gitignored (a second build does not hit the network)
  * Output: web/public/media/products/<id>/supplier.800.webp and .generated/supplier-images.json
- *         ({ products: { <id>: { src, width, height, usage_rights } }, missing: [...] })
+ *         ({ products: { <id>: { src: 'products/<id>/supplier.800', width, height, usage_rights } }, missing: [...] })
  *
  * A download that fails is a warning, not a build failure: the product page then shows the render only.
  */
@@ -89,8 +89,9 @@ async function main() {
       manifest.missing.push({ id: p.id, reason: 'the card has no https image url' });
       continue;
     }
-    const src = `products/${p.id}/supplier`;
-    const out = join(MEDIA_OUT, `${src}.${WIDTH}.webp`);
+    // the file is named by the encoding width even when a small original stays smaller (withoutEnlargement)
+    const src = `products/${p.id}/supplier.${WIDTH}`;
+    const out = join(MEDIA_OUT, `${src}.webp`);
     const cached = existsSync(join(CACHE, `${hashOf(url)}.bin`));
     const prev = previous?.products[p.id];
     // up to date: same url (its original is cached), output present, dimensions known from the last run

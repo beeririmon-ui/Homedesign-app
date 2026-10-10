@@ -151,15 +151,16 @@ export type HiddenProduct = { id: string; slot: string; reason: string };
  * `usage_rights` is copied from the card (all "unclear" today: to clear with the suppliers before launch).
  */
 export type SupplierImage = {
-  /** media path without width and extension, e.g. products/<id>/supplier (file: <src>.<width>.webp) */
+  /** media path without the extension, e.g. products/<id>/supplier.800 (file: <src>.webp, named by the encoding width) */
   src: string;
+  /** the picture's own size (a small original is not enlarged) */
   width: number;
   height: number;
   usage_rights: 'confirmed' | 'unclear' | 'none';
 };
 export type SupplierImageManifest = {
   generated_at: string;
-  /** the width the files are encoded at */
+  /** the width the files are encoded at (and named by) */
   width: number;
   products: Record<string, SupplierImage>;
   missing: { id: string; reason: string }[];
