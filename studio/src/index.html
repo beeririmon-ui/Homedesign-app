@@ -573,6 +573,36 @@ details.room-lad summary{cursor:pointer;font-weight:600}
 .checklist label{overflow-wrap:anywhere;cursor:pointer}
 .checklist li.is-done label{color:var(--ink-3);text-decoration:line-through;text-decoration-color:var(--rule-2)}
 .log-who .chip{white-space:normal;line-height:1.3;max-width:100%;overflow-wrap:anywhere}
+/* waiting for you (status/blockers.json) */
+.todo-line{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;justify-content:space-between;padding:10px 14px;border:1px solid var(--rule);border-radius:var(--r);background:var(--sheet);font-size:var(--fs-s);color:var(--ink-2)}
+.todo-line b{color:var(--ink);font-variant-numeric:tabular-nums}
+.todo-line .btn{min-height:34px}
+.todo-bar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between}
+.tile.is-hot{border-color:var(--ink);box-shadow:inset 0 3px 0 var(--ink)}
+.tile .s a{color:inherit}
+.blist{display:grid;gap:12px;max-width:900px}
+.bcard{background:var(--sheet);border:1px solid var(--rule);border-radius:var(--r);padding:14px clamp(14px,2.4vw,20px);display:grid;gap:9px;min-width:0}
+.bcard.is-p1{border-color:var(--ink);box-shadow:inset 0 3px 0 var(--ink)}
+.bcard.is-done{background:transparent}
+.bcard.is-done h3{color:var(--ink-3);text-decoration:line-through;text-decoration-color:var(--rule-2)}
+.bcard h3{font-size:18px}
+.kind-user_action{background:var(--ink);color:var(--on-ink)}
+.kind-decision{background:var(--oak-wash);color:var(--oak-ink)}
+.kind-waiting{background:var(--sunk);color:var(--ink-2)}
+.kind-blocked{background:var(--brick-wash);color:var(--brick-ink)}
+.kind-resolved,.chip-done{background:var(--sage-wash);color:var(--sage-ink)}
+.pri-1{background:var(--brick-wash);color:var(--brick-ink)}
+.pri-2{background:var(--amber-wash);color:var(--amber-ink)}
+.pri-3{background:var(--sunk);color:var(--ink-2)}
+.bfields{display:grid;grid-template-columns:minmax(72px,auto) minmax(0,1fr);gap:4px 12px;margin:0;font-size:15px}
+.bfields dt{font-size:var(--fs-xs);font-weight:600;color:var(--ink-3);padding-top:3px;white-space:nowrap}
+.bfields dd{margin:0;min-width:0;overflow-wrap:anywhere}
+@media (max-width:480px){.bfields{grid-template-columns:1fr;gap:2px}.bfields dd{margin-bottom:4px}}
+.bcard .chiprow .code-tag{direction:ltr;unicode-bidi:isolate;white-space:normal;overflow-wrap:anywhere}
+.done-chk{display:inline-flex;gap:7px;align-items:center;font-size:var(--fs-s);font-weight:600;cursor:pointer;min-height:32px;padding:0 4px;border-radius:var(--r)}
+.done-chk input{width:18px;height:18px;accent-color:var(--ink);margin:0}
+.done-chk:has(input:disabled){cursor:default;color:var(--ink-3)}
+.bcard .ef-err{grid-column:1 / -1}
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 }
@@ -592,6 +622,7 @@ details.room-lad summary{cursor:pointer;font-weight:600}
       <nav class="tabs" aria-label="מסכים">
         <ul>
           <li><a href="#overview" data-screen="overview">סקירה</a></li>
+          <li><a href="#todo" data-screen="todo">ממתין לך <span class="tab-badge" id="badge-todo" aria-hidden="true"></span><span class="sr-only" id="badge-todo-sr"></span></a></li>
           <li><a href="#decisions" data-screen="decisions">החלטות <span class="tab-badge" id="badge-dec" aria-hidden="true"></span><span class="sr-only" id="badge-dec-sr"></span></a></li>
           <li><a href="#rooms" data-screen="rooms">חדרים</a></li>
           <li><a href="#products" data-screen="products">מוצרים</a></li>
@@ -609,6 +640,12 @@ details.room-lad summary{cursor:pointer;font-weight:600}
     <section class="screen" id="screen-overview" aria-labelledby="h-overview">
       <div class="screen-head"><h1 id="h-overview" tabindex="-1">סקירה</h1></div>
       <div id="ov-body"><p class="loading">טוען את נתוני הסטודיו…</p></div>
+    </section>
+
+    <section class="screen" id="screen-todo" aria-labelledby="h-todo" hidden>
+      <div class="screen-head"><h1 id="h-todo" tabindex="-1">ממתין לך</h1><p class="small faint" id="todo-count"></p></div>
+      <p class="lede">כל מה שנתקע או מחכה לך: פעולות שרק את/ה יכול/ה לעשות, החלטות שמחכות בתור, ומה שמחכה לגורם חיצוני. הרשימה מגיעה מ-<code>status/blockers.json</code>; הסימון "טופל" נשמר בדף.</p>
+      <div id="todo-body"><p class="loading">טוען…</p></div>
     </section>
 
     <section class="screen" id="screen-decisions" aria-labelledby="h-decisions" hidden>
@@ -861,6 +898,7 @@ const S = {
   filters:Object.assign({q:'', room:'', slot:'', status:'', supplier:'', flag:'', sort:'default', dups:false, pending:false}, store.get('filters', {})),
   report:store.get('report', null), logWho:store.get('logWho', 'all'), logQ:'',
   decFilter:store.get('decFilter','all'),
+  todo:Object.assign({kind:'all', showDone:false}, store.get('todo', {})), todoSaving:new Set(), todoErr:null,
   profit:Object.assign({sort:'margin', dir:'asc', room:'', rejected:false, showSettings:false, verdict:''}, store.get('profit', {})),
   sup:Object.assign({q:'', section:'', status:'', model:'', sort:'fit'}, store.get('sup', {})), focusDec:null, accessSaving:new Set(), accessErr:null,
   db:null, user:null, uid:null, canWrite:null, dbState:'connecting', dbError:null, dbReady:false,
@@ -896,7 +934,7 @@ async function boot(){
   connectDb();
 }
 function renderAll(){
-  renderOverview(); renderDecisions(); renderRoomPick(); renderRoom();
+  renderOverview(); renderTodo(); renderDecisions(); renderRoomPick(); renderRoom();
   initFilters(); renderProducts(); renderProfit(); renderSuppliers(); renderBudget(); renderReports(); renderLog();
 }
 let pendingRender = false;
@@ -905,7 +943,7 @@ function onDataChange(){
   setTimeout(() => {
     pendingRender = false;
     refreshView();
-    renderOverview(); renderRoom(); renderProducts(); renderProfit(); renderSuppliers(); renderBudget(); refreshDrawer();
+    renderOverview(); renderTodo(); renderRoom(); renderProducts(); renderProfit(); renderSuppliers(); renderBudget(); refreshDrawer();
   }, 0);
 }
 
@@ -1104,7 +1142,7 @@ function profitBasis(){
 }
 
 /* ---------- routing ---------- */
-const SCREENS = ['overview','decisions','rooms','products','profit','suppliers','budget','quality','log'];
+const SCREENS = ['overview','todo','decisions','rooms','products','profit','suppliers','budget','quality','log'];
 function route(focus){
   const t = (location.hash || '').replace(/^#/, '');
   let s = SCREENS.includes(t) ? t : null;
@@ -1279,6 +1317,11 @@ function renderOverview(){
   const b = D.build || {};
   $('#badge-dec').textContent = open.length ? String(open.length) : ''; $('#badge-dec-sr').textContent = open.length ? `, ${open.length} פתוחות` : '';
 
+  const BS = blockerStats(open.length);
+  const todoLine = `<div class="todo-line" role="region" aria-label="ממתין לך">
+      <span>ממתינות לך: <b class="num">${BS.userOpen}</b> ${BS.userOpen === 1 ? 'פעולה' : 'פעולות'} ו-<b class="num">${open.length}</b> ${open.length === 1 ? 'החלטה' : 'החלטות'}${BS.externalOpen ? ` <span class="faint">· ${BS.externalOpen} ממתינים לגורם חיצוני</span>` : ''}</span>
+      <a class="btn btn-ghost btn-small" href="#todo">למסך "ממתין לך"</a>
+    </div>`;
   const top = (blocking.length ? blocking : open).slice(0, 4);
   const waiting = open.length ? `
     <section class="waiting" aria-labelledby="h-wait">
@@ -1350,6 +1393,7 @@ function renderOverview(){
 
   $('#ov-body').innerHTML = `
     <div class="screen roomy">
+      ${todoLine}
       ${waiting}
       <div class="ov-grid">
         <section class="section" aria-labelledby="h-stages">
@@ -1431,6 +1475,109 @@ function logItem(e, noDate){
       ${rest.map(r => `<p class="log-rest">${rich(r)}</p>`).join('')}
     </div>
   </li>`;
+}
+
+/* ---------- waiting for you (status/blockers.json + settings/blockers in the db) ---------- */
+const B_KIND = {user_action:'פעולה שלך', decision:'החלטה', waiting:'ממתין לגורם חיצוני', blocked:'חסום', resolved:'טופל'};
+const B_PRI = {1:'דחוף', 2:'השבוע', 3:'בהמשך'};
+const blockersAll = () => ((S.data && S.data.blockers && S.data.blockers.items) || []);
+// done in the file (status: done) or marked done in the page: settings/blockers {done: {"<id>": {at, by}}}
+function blockerMark(id){ const d = S.settingsDocs.get('blockers'); const v = d && d.done && d.done[id]; return v && v.done !== false ? v : null; }
+const blockerDone = b => b.status === 'done' || !!blockerMark(b.id);
+function blockerStats(nDecOpen){
+  const items = blockersAll();
+  const open = items.filter(b => !blockerDone(b));
+  return {
+    items, open,
+    userOpen: open.filter(b => b.kind === 'user_action').length,
+    decOpen: isNum(nDecOpen) ? nDecOpen : decisionsAll().filter(d => (d.status || 'open') === 'open').length,
+    externalOpen: open.filter(b => b.kind === 'waiting' || b.kind === 'blocked').length,
+    badge: open.filter(b => b.kind === 'user_action' || b.kind === 'decision').length
+  };
+}
+function sinceText(d){
+  if(!d) return '';
+  const t = Date.parse(String(d).slice(0, 10) + 'T00:00:00+03:00');
+  if(!isFinite(t)) return esc(d);
+  const days = Math.floor((Date.now() - t) / 864e5);
+  const rel = days <= 0 ? 'היום' : days === 1 ? 'אתמול' : `לפני ${days} ימים`;
+  return `${esc(fmtDay(d))} <span class="faint">(${rel})</span>`;
+}
+async function toggleBlocker(id, done){
+  const prev = S.settingsDocs.get('blockers') || {};
+  const map = Object.assign({}, prev.done || {});
+  if(done) map[id] = {at: new Date().toISOString(), by: await whoId()}; else delete map[id];
+  const doc = {done: map, updated_at: new Date().toISOString()};
+  S.todoSaving.add(id); S.todoErr = null;
+  try{ await dbWrite('settings/blockers', () => S.db.collection('settings').doc('blockers').set(doc)); S.settingsDocs.set('blockers', doc); say(done ? 'סומן כטופל' : 'הסימון בוטל'); }
+  catch(e){ S.todoErr = {id, msg: errText(e)}; }
+  S.todoSaving.delete(id);
+  renderTodo(); renderOverview();
+}
+function renderTodo(){
+  if(!S.data) return;
+  const box = $('#todo-body');
+  const BS = blockerStats();
+  $('#badge-todo').textContent = BS.badge ? String(BS.badge) : ''; $('#badge-todo-sr').textContent = BS.badge ? `, ${BS.badge} פתוחים` : '';
+  const src = S.data.blockers || {};
+  if(!BS.items.length){ $('#todo-count').textContent = ''; box.innerHTML = '<p class="empty">אין פריטים. הרשימה נקראת מ-status/blockers.json.</p>'; return; }
+  const restore = keepFocus(box);
+  const editable = canEditData();
+  const F = S.todo;
+  const nDone = BS.items.length - BS.open.length;
+  $('#todo-count').textContent = `${BS.open.length} פתוחים · ${nDone} טופלו${src.updated ? ` · עודכן ${fmtDay(src.updated)}` : ''}`;
+  const KINDS = [['all','הכול'],['user_action','פעולות שלך'],['decision','החלטות'],['waiting','ממתינים לגורם חיצוני'],['blocked','חסום']];
+  const cnt = {all: BS.open.length};
+  for(const b of BS.open) cnt[b.kind] = (cnt[b.kind] || 0) + 1;
+  const rank = b => blockerDone(b) ? 1 : 0;
+  const pri = b => isNum(b.priority) ? b.priority : 9;
+  const list = BS.items.filter(b => (F.showDone || !blockerDone(b)) && (F.kind === 'all' || b.kind === F.kind))
+    .sort((a, b) => rank(a) - rank(b) || pri(a) - pri(b) || String(a.since || '').localeCompare(String(b.since || '')) || (a._order - b._order));
+  const tile = (label, val, sub, hot, cls) => `<div class="tile ${hot ? 'is-hot' : ''} ${cls || ''}" role="listitem"><span class="l">${label}</span><span class="v num">${val}</span><span class="s">${sub}</span></div>`;
+  const card = b => {
+    const done = blockerDone(b), mark = blockerMark(b.id), fileDone = b.status === 'done';
+    const busy = S.todoSaving.has(b.id);
+    const err = S.todoErr && S.todoErr.id === b.id ? `<p class="ef-err" role="alert">${esc(S.todoErr.msg)}</p>` : '';
+    const decs = (b.decisions || []);
+    const decOpen = decs.filter(id => decStatus(id) === 'open').length;
+    const links = (b.links || []).map(l => `<code class="code-tag">${esc(l)}</code>`).join('');
+    const chips = decs.map(id => decChip(id)).join('');
+    const doneCtl = fileDone
+      ? `<span class="chip chip-done">טופל</span>`
+      : `<label class="done-chk" for="bk-${esc(b.id)}"><input type="checkbox" class="chk" id="bk-${esc(b.id)}" data-blk="${esc(b.id)}" ${done ? 'checked' : ''} ${editable && !busy ? '' : 'disabled'} aria-describedby="bt-${esc(b.id)}">${busy ? 'שומר…' : 'טופל'}</label>`;
+    return `<article class="bcard is-p${esc(pri(b))} ${done ? 'is-done' : ''}" data-blk-card="${esc(b.id)}" aria-labelledby="bt-${esc(b.id)}">
+      <div class="dhead"><span class="did">${esc(b.id)}</span><span class="chip kind-${esc(b.kind)}">${esc(B_KIND[b.kind] || b.kind || '')}</span>${isNum(b.priority) ? `<span class="chip pri-${esc(b.priority)}">עדיפות ${esc(b.priority)} · ${esc(B_PRI[b.priority] || '')}</span>` : ''}<span class="spacer"></span>${doneCtl}</div>
+      <h3 id="bt-${esc(b.id)}">${esc(b.title || b.id)}</h3>
+      <dl class="bfields">
+        ${b.stuck ? `<dt>מה נתקע</dt><dd>${esc(b.stuck)}</dd>` : ''}
+        ${b.needs ? `<dt>מה צריך</dt><dd>${esc(b.needs)}</dd>` : ''}
+      </dl>
+      <p class="dmeta">${b.who ? `<span>מי: ${esc(b.who)}</span>` : ''}${b.since ? `<span>מאז ${sinceText(b.since)}</span>` : ''}${decs.length ? `<span>החלטות: ${decOpen} מתוך ${decs.length} עדיין פתוחות</span>` : ''}${mark ? `<span>סומן כטופל ${esc(fmtDate(mark.at))} ${esc(whoLabel(mark.by))}</span>` : ''}</p>
+      ${links || chips ? `<div class="chiprow">${links}${chips}</div>` : ''}
+      ${err}
+    </article>`;
+  };
+  box.innerHTML = `<div class="screen roomy">
+    <div class="tiles" role="list" aria-label="סיכום">
+      ${tile('פעולות שלך', BS.userOpen, 'דברים שרק את/ה יכול/ה לעשות', BS.userOpen > 0)}
+      ${tile('החלטות פתוחות', BS.decOpen, `בתור ההחלטות · <a href="#decisions">לענות</a>`, BS.decOpen > 0)}
+      ${tile('ממתינים לגורם חיצוני', BS.externalOpen, 'ספקים, סוכנים, חסימות טכניות', false)}
+    </div>
+    ${editable ? '' : noDbLine('הסימון "טופל" מוצג בלי שמירה.')}
+    <div class="todo-bar">
+      <div class="seg" role="group" aria-label="סינון לפי סוג">
+        ${KINDS.filter(([k]) => k === 'all' || cnt[k] || F.kind === k).map(([k, l]) => `<button type="button" data-todok="${k}" aria-pressed="${F.kind === k}">${l}<span class="n num">${cnt[k] || 0}</span></button>`).join('')}
+      </div>
+      <span class="check"><input type="checkbox" id="todo-done" ${F.showDone ? 'checked' : ''}><label for="todo-done">הצג גם מה שטופל (${nDone})</label></span>
+    </div>
+    <p class="result-line small" aria-live="polite"><span><strong class="num">${list.length}</strong> ${list.length === 1 ? 'פריט' : 'פריטים'}</span><span class="faint">ממוין לפי עדיפות, ואז לפי הוותק</span></p>
+    <div class="blist">${list.length ? list.map(card).join('') : '<p class="empty">אין פריטים בסינון הזה.</p>'}</div>
+    <p class="foot">הרשימה עצמה מתעדכנת בריפו: <code>${esc(src.source || 'status/blockers.json')}</code>${src.updated ? ` · עודכנה ${esc(fmtDay(src.updated))}` : ''}. עדיפות 1 = דחוף, 2 = השבוע, 3 = בהמשך. פריט שסומן כטופל כאן נשמר בדף (settings/blockers) ולא חוזר לריפו.</p>
+  </div>`;
+  restore();
+  for(const b of $$('[data-todok]', box)) b.onclick = () => { S.todo.kind = b.dataset.todok; store.set('todo', S.todo); renderTodo(); const nb = $(`[data-todok="${CSS.escape(S.todo.kind)}"]`); if(nb) nb.focus(); };
+  const sd = $('#todo-done'); if(sd) sd.onchange = () => { S.todo.showDone = sd.checked; store.set('todo', S.todo); renderTodo(); };
+  for(const c of $$('[data-blk]', box)) c.onchange = () => toggleBlocker(c.dataset.blk, c.checked);
 }
 
 /* ---------- decisions screen ---------- */
