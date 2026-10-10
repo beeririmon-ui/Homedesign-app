@@ -74,9 +74,9 @@
       "id": "B5",
       "kind": "user_action",
       "priority": 2,
-      "title": "AliExpress Open Platform: חשבון מפתח ואפליקציות",
-      "stuck": "בלי זה אין גישה לקטלוג של AliExpress, לחיפוש לפי תמונה ולהזמנות אוטומטיות.",
-      "needs": "openservice.aliexpress.com: Create Account > Profile (Individual) > APP Console > Create > Dropshipping Developer > Apply (הנימוק מוכן). אחרי האישור: Create App, ואת המפתחות להגדרות הסביבה (AE_DS_APP_KEY, AE_DS_APP_SECRET). במקביל Affiliates Developer. האישור לוקח ימים, ולכן כדאי להתחיל עכשיו.",
+      "title": "AliExpress Open Platform: ליצור אפליקציה ולהכניס את המפתחות",
+      "stuck": "הפרופיל אושר (מייל \"Profile Approval Granted\", 10.10). עדיין אין אפליקציה, ולכן אין App Key ו-App Secret ואין גישה ל-API.",
+      "needs": "להיכנס ל-openservice.aliexpress.com עם אותו חשבון > APP Console > Create App (סוג Dropshipping; שם, תיאור קצר, Callback URL: כתובת האתר או localhost בינתיים) > אם האפליקציה דורשת אישור, להגיש. אחרי שיש App Key ו-App Secret: להכניס אותם בהגדרות הסביבה של Claude כ-AE_DS_APP_KEY ו-AE_DS_APP_SECRET (לא בצ'אט). אז המנהל מחבר את ה-API (OAuth פעם אחת מהדפדפן של המשתמש) ומפעיל חיפוש בקטלוג.",
       "who": "המשתמש",
       "since": "2026-10-09",
       "links": [
@@ -86,7 +86,8 @@
         "AC2",
         "AC3"
       ],
-      "status": "open"
+      "status": "open",
+      "progress": "2026-10-10: הפרופיל אושר"
     },
     {
       "id": "B6",

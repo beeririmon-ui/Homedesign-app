@@ -31,7 +31,7 @@ const OFFLINE = process.argv.includes('--offline');
 const FORCE = process.argv.includes('--force');
 const CACHE = sitePath('.cache/supplier-images');
 const MANIFEST = join(GENERATED, 'supplier-images.json');
-const UA = 'Mozilla/5.0 (X11; Linux x86_64) homedesign-site-build/1.0';
+const UA = 'homedesign-site-build/1.0';
 const MAX_BYTES = 25 * 1024 * 1024;
 
 const catalog = JSON.parse(readFileSync(join(GENERATED, 'catalog.full.json'), 'utf8')) as FullCatalog;
