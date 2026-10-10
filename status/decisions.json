@@ -136,7 +136,7 @@
       "blocks": "שלושה פריימים מתחת לרצפה (כניסה, הורים, מסדרון)",
       "source": "docs/design-bible/nordic.md",
       "asked": "2026-10-09",
-      "status": "answered",
+      "status": "applied",
       "answer": {
         "option": "no",
         "note": "",
@@ -204,7 +204,7 @@
       "blocks": "",
       "source": "docs/house-plan.md",
       "asked": "2026-10-09",
-      "status": "answered",
+      "status": "applied",
       "answer": {
         "option": "sell",
         "note": "",
@@ -334,7 +334,7 @@
       "blocks": "",
       "source": "data/slots/kids.json",
       "asked": "2026-10-09",
-      "status": "answered",
+      "status": "applied",
       "answer": {
         "option": "sell",
         "note": "נחפש ספק, אם לא נמצא נעשה כרהיט קבוע",
@@ -959,7 +959,7 @@
       "blocks": "",
       "source": "docs/strategy/foundation-review.md",
       "asked": "2026-10-09",
-      "status": "answered",
+      "status": "applied",
       "answer": {
         "option": "stable",
         "note": "",
@@ -996,7 +996,7 @@
       "blocks": "נאמנות למוצר",
       "source": "docs/strategy/foundation-review.md",
       "asked": "2026-10-09",
-      "status": "answered",
+      "status": "applied",
       "answer": {
         "option": "none",
         "note": "",
@@ -1027,7 +1027,7 @@
       "blocks": "קצב העבודה",
       "source": "docs/strategy/foundation-review.md",
       "asked": "2026-10-09",
-      "status": "answered",
+      "status": "applied",
       "answer": {
         "option": "delegate",
         "note": "",
@@ -1472,7 +1472,7 @@
       "blocks": "",
       "source": "docs/proposals/filler-replacements.md",
       "asked": "2026-10-10",
-      "status": "answered",
+      "status": "applied",
       "answer": {
         "option": "no-hotspot",
         "note": "עדיף שנמצא מוצרים אם ממש אין אז בלי נקודה או שנעשה חסר במלאי",
@@ -1509,7 +1509,7 @@
       "blocks": "",
       "source": "data/slots/filler-replacements.json",
       "asked": "2026-10-10",
-      "status": "answered",
+      "status": "applied",
       "answer": {
         "option": "yes",
         "note": "",
@@ -1620,13 +1620,50 @@
       "blocks": "פניות לספקי ריהוט (איזה דגמים מבקשים)",
       "source": "docs/studio-rules.md ג.00",
       "asked": "2026-10-10",
-      "status": "answered",
+      "status": "applied",
       "answer": {
         "option": "as-shown",
         "note": "",
         "at": "2026-10-10T11:57Z",
         "via": "studio"
       }
+    },
+    {
+      "id": "D1B",
+      "group": "צפיפות מוצרים",
+      "title": "כלל הספירה: עם הנוסח הישן כל הפריימים מתחת למינימום",
+      "question": "ב-D1 בחרת לחזור לנוסח הישן של כלל הספירה. בנוסח הזה כל הפריימים המאושרים יורדים מתחת למינימום הצפיפות (למשל D2: ‏1 מתוך 14, ‏MB0: ‏6 מתוך 14, ‏C0: ‏1 מתוך 5). מה עושים?",
+      "context": "המדידה המלאה ב-docs/proposals/density-after-d1.md. הנוסח הישן סופר מוצר רק אם 0.5% מהפריים ו-50% ממנו גלויים. בינתיים (F3) הרהיטים הקבועים הפכו למוצרים (13 עמדות fixed-product: ספה, שולחן קפה, כורסה, שולחן אוכל, כיסאות, ספסל, מיטות, שידות, שולחנות עבודה), והם גדולים וגלויים, ולכן אם סופרים אותם רוב הפריימים מתקרבים למינימום בלי רינדור נוסף. ההמלצה: הנוסח הישן נשאר, ורהיטי fixed-product נספרים בצפיפות; פריים שעדיין חסר מקבל מוצרים נמכרים לפי רשימת density-after-d1.",
+      "options": [
+        {
+          "id": "count-furniture",
+          "label": "הנוסח הישן נשאר, ורהיטי fixed-product נספרים בצפיפות",
+          "desc": "רוב הפריימים מתקרבים למינימום בלי רינדור נוסף; מה שחסר מושלם במוצרים נמכרים",
+          "recommended": true
+        },
+        {
+          "id": "new-wording",
+          "label": "לחזור לנוסח החדש (Bible 1.6: כל מוצר שאפשר לזהות)",
+          "desc": "הפריימים עומדים במינימום כמו שהם",
+          "recommended": false
+        },
+        {
+          "id": "lower-min",
+          "label": "הנוסח הישן, והורדת המינימום לחדר (למשל 10 בסלון ובאוכל, 8 בחדרי שינה)",
+          "desc": "פחות מוצרים בפריים, פחות רינדורים",
+          "recommended": false
+        },
+        {
+          "id": "add-products",
+          "label": "הנוסח הישן, ולהוסיף מוצרים נמכרים עד המינימום בכל פריים",
+          "desc": "הכי יקר ברינדור ובליקוט",
+          "recommended": false
+        }
+      ],
+      "blocks": "אישור הצפיפות של כל הפריימים, ותכנון הרינדור",
+      "source": "docs/proposals/density-after-d1.md",
+      "asked": "2026-10-10",
+      "status": "open"
     }
   ]
 }

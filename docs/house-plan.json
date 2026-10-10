@@ -189,7 +189,7 @@
   "transition_playback_U10": "Room-to-room transitions play 2.3-3.4 s (approx values per transition above). E0 alone stays 2.2-2.6 s; T-E0 with its 13 deg pan is ~2.6-2.9 (open_1_1). In-room pans P-B and P-D play 1.2-1.6 s. Render speeds, easing and creep per Design Bible 'grading and motion'; pull-back renders at entry-dolly speed (~0.7 m/s). Jamb clearances are clay-measured (round-1/round-2 selfcheck); play times are estimates.",
 
   "frames_1_1": {
-    "note": "One row per master frame. Slots and per-frame membership: data/slots/<file>. Counts follow the Bible 1.6 counting rule (S11: every identifiable product, >= 0.05% of the frame and >= 50% visible or >= 1% visible; deliberately cropped textiles count). 'counted' is the clay estimate until the shell render; 'as_shown' = the approved clay without the designer additions. Minimum is a floor (U16).",
+    "note": "One row per master frame. Slots and per-frame membership: data/slots/<file>. Binding counting rule (Bible 1.7 S11, user decision D1 2026-10-10): a slot counts only if its product is >= 50% visible and covers >= 0.5% of the frame; a set counts once; not counted: neighbouring-room products seen through an opening, fillers, shell, fixed furniture. The 'counted' / 'as_shown' numbers below are the clay estimates under the rejected Bible 1.6 wording; the counts under the binding rule: docs/proposals/density-after-d1.md. Minimum is a floor (U16).",
     "M0": {"room": "living", "kind": "full", "min": 14, "slots_file": "data/slots/living-room.json 1.3.3", "in_frame": 18, "counted": 18, "lit": ["floor-lamp", "wall-sconce", "pendant", "accent-sconces"], "status": "approved, unchanged (not re-measured with F10)"},
     "D1": {"room": "kitchen-dining", "kind": "full", "min": 14, "slots_file": "data/slots/dining-room.json 0.2", "in_frame": 19, "counted": 19, "as_shown": 19, "lit": ["dining-pendant (ceiling)", "kitchen-sconce (wall)", "under-shelf + niche LED (cabinet, shell)"]},
     "D2": {"room": "kitchen-dining", "kind": "full", "min": 14, "slots_file": "data/slots/dining-room.json 0.2", "in_frame": 18, "counted": 17, "as_shown": 16, "lit": ["kitchen-sconce (wall)", "under-shelf + niche LED (cabinet, shell)"]},
@@ -259,7 +259,7 @@
   },
 
   "frame_checks": {
-    "note": "1.1: every master frame passes F1-F12 (docs/proposals/house-framing.json acceptance_checks + round_2.acceptance_checks_added) on the clay before credits, and again on the shell render. F10 uses the Bible 1.6 counting rule.",
+    "note": "1.1: every master frame passes F1-F12 (docs/proposals/house-framing.json acceptance_checks + round_2.acceptance_checks_added) on the clay before credits, and again on the shell render. F10 uses the Bible 1.7 counting rule (D1: >= 50% visible and >= 0.5% of the frame).",
     "F1": "hero on a third (u 0.30-0.36 / 0.64-0.70) or at 0.50 +-0.01 in u0 0.50 frames",
     "F2": "window per S4/S4': whole with >= 0.03 to every edge, or cut >= 15% of its width; head cut by the top edge only if >= 0.05 above it; window <= 30% of the frame width; second frames may have none (S10)",
     "F3": "no tangent < 0.02: object-edge (unless cut >= 15%), object-object (kissing contours or sliver overlaps), architectural lines",
@@ -269,7 +269,7 @@
     "F7": "hall and corridor mean L >= 95 with roof light (sky only), wall gradient readable",
     "F8": "U6: the mirror reflects only blank wall (one pass per camera point)",
     "F9": "every transition: jamb clearance >= 0.15, last frame identical to the master camera, U10 play time",
-    "F10": "density per frame >= the minimum (Bible 1.6 S11, counting rule)",
+    "F10": "density per frame >= the minimum (Bible 1.7 S11, counting rule D1: a slot counts if its product is >= 50% visible and >= 0.5% of the frame)",
     "F11": "the lamps listed for the frame are lit and visible; <= 3 lit typologies; no visible cable in kids and bath",
     "F12": "two-frame rooms: both frames from the identical point; the pan between them <= 35 deg"
   },
@@ -297,7 +297,7 @@
   },
 
   "open_1_1": [
-    "Counting rule for S11 (Bible 1.6): the proposal's wording (>= 0.5% of the frame and >= 50% visible) counted only 1-8 products in the frames the user approved, because tabletop products are 0.1-0.4% at 2.5-4.5 m and textiles are cropped on purpose. 1.1 counts every identifiable product: visible part >= 0.05% of the frame and (>= 50% visible or visible part >= 1% of the frame); a set counts once. With it the six new frames pass as shown; H0 (9/11), MB0 (12/14) and C0 (4/5) reach the floor only with the designer additions below. Confirm.",
+    "Counting rule for S11: decided (D1, 2026-10-10): the proposal's wording stays: a slot counts only if its product is >= 50% visible and covers >= 0.5% of the frame; a set counts once. The 1.1 wording ('every identifiable product', >= 0.05% of the frame) is rejected. Consequence: in the round-2 clay this rule counts 1-8 products per frame, and every frame is below the minimum (docs/proposals/density-after-d1.md); the follow-up is with the user.",
     "D2 reads sparse from 4.4 m (motion-agent 6/10: props read as dots, half the frame is floor). Inside the approved frame: D2 props at the top of their envelopes, step-stool, a readable kitchen runner; product reading happens in the full-route close-ups. Tightening the frame itself would change the approved composition: options (a) keep (recommended for now), (b) shift-only reframe of D2 (v0 0.43 -> 0.47, slightly less floor), (c) a separate D2 point closer to the kitchen, reached by a short dolly instead of the pan P-D.",
     "W0 pendant: kept (ceiling light, user request) but smaller and higher; alternative: a semi-flush light out of frame, which gives back round 1's clean desk wall (W0 13 products, 2 lit lamps).",
     "B2 F5: 2.54 m to the mirror wall (< 2.8) accepted as approved.",

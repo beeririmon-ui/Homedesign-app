@@ -1,4 +1,4 @@
-import { test, expect, type Page } from '@playwright/test';
+import { test, expect, devices, type Page } from '@playwright/test';
 
 async function roomReady(page: Page) {
   await page.goto('/rooms/living-room/');
@@ -17,6 +17,14 @@ test.describe('SEO: prerendered Hebrew pages', () => {
     const product = await (await request.get(href!)).text();
     expect(product).toContain('"@type":"Product"');
     expect(product).toMatch(/<h1[^>]*id="product-title"/);
+    // FR-I: the render leads, the supplier's photo follows, in the markup and in the Product schema
+    const image = /"image":\["([^"]+)","([^"]+)"\]/.exec(product);
+    expect(image, 'Product.image: render, then supplier photo').toBeTruthy();
+    expect(image![1]).toMatch(/^https:\/\/[^/]+\/media\/rooms\/living-room\/.*\.product\.\d+\.webp$/);
+    expect(image![2]).toMatch(/^https:\/\/[^/]+\/media\/products\/[a-z0-9-]+\/supplier\.800\.webp$/);
+    expect(product).toContain('המוצר מרונדר');
+    expect(product.indexOf('data-kind="render"')).toBeLessThan(product.indexOf('data-kind="supplier"'));
+    expect(product).toMatch(/alt="תמונת הספק: [^"]+"/);
     expect((await request.get('/no-such-page/')).status()).toBe(404);
   });
 });
@@ -95,6 +103,45 @@ test.describe('room experience', () => {
     await expect(page.getByRole('dialog', { name: 'פוף' })).toBeVisible();
   });
 
+  test('product marks rest hidden: a first-visit hint, then they show on pointer movement, fade ~3 s later, and stay with keyboard focus', async ({ page }) => {
+    await roomReady(page);
+    const stage = page.locator('.stage');
+    const mark = page.locator('button.hotspot[data-slot="vase"] .mark');
+    // the hint: the marks appear once on the first visit, then the room is clean
+    await expect(stage).toHaveAttribute('data-marks', 'on');
+    await expect(stage).not.toHaveAttribute('data-marks', 'on', { timeout: 8000 });
+    await expect(mark).toHaveCSS('opacity', '0');
+    // the buttons stay in the DOM and keep their names (only the mark's opacity changes)
+    await expect(page.locator('button.hotspot[data-slot="vase"]')).toHaveAccessibleName(/^אגרטל/);
+    // pointer movement over the room shows them...
+    const box = (await page.locator('canvas.room-canvas').boundingBox())!;
+    await page.mouse.move(box.x + box.width * 0.5, box.y + box.height * 0.12);
+    await page.mouse.move(box.x + box.width * 0.52, box.y + box.height * 0.13);
+    await expect(stage).toHaveAttribute('data-marks', 'on');
+    await expect(mark).toHaveCSS('opacity', '1');
+    // ...and they fade about 3 s after the last movement
+    await expect(stage).not.toHaveAttribute('data-marks', 'on', { timeout: 8000 });
+    await expect(mark).toHaveCSS('opacity', '0');
+    // keyboard: focus on a mark shows them, and they stay while focus is inside the stage
+    await page.locator('button.hotspot[data-slot="vase"]').focus();
+    await expect(mark).toHaveCSS('opacity', '1');
+    await page.waitForTimeout(3600);
+    await expect(stage).toHaveAttribute('data-marks', 'on');
+    await expect(mark).toHaveCSS('opacity', '1');
+    await page.locator('button.hotspot[data-slot="vase"]').blur();
+    await expect(stage).not.toHaveAttribute('data-marks', 'on');
+    await expect(mark).toHaveCSS('opacity', '0');
+  });
+
+  test('product marks: a touch shows them too, and the list under the room is unchanged', async ({ page }) => {
+    await roomReady(page);
+    const stage = page.locator('.stage');
+    await expect(stage).not.toHaveAttribute('data-marks', 'on', { timeout: 8000 });
+    await stage.dispatchEvent('pointerdown', { pointerId: 2, pointerType: 'touch', isPrimary: true, clientX: 300, clientY: 300 });
+    await expect(stage).toHaveAttribute('data-marks', 'on');
+    await expect(page.locator('.slot-list li')).toHaveCount(await page.locator('button.hotspot').count());
+  });
+
   test('drag with inertia moves the wheel (mouse)', async ({ page }) => {
     await roomReady(page);
     await page.locator('button.hotspot[data-slot="vase"]').click();
@@ -107,6 +154,59 @@ test.describe('room experience', () => {
     for (let i = 1; i <= 8; i++) await page.mouse.move(box.x + box.width * (0.3 + i * 0.05), y);
     await page.mouse.up();
     await expect(page.getByRole('radio', { checked: true })).not.toHaveAccessibleName(/^1 מתוך/, { timeout: 5000 });
+  });
+});
+
+test.describe('product gallery (FR-I)', () => {
+  const PRODUCT = '/p/vase-cj-textured-white-stoneware/';
+
+  test('the render leads with a visible note, the supplier photo follows; buttons, keys and the live region move between them', async ({ page }) => {
+    await page.goto(PRODUCT);
+    const gallery = page.getByRole('region', { name: 'תמונות המוצר' });
+    await expect(gallery).toBeVisible();
+    const slides = gallery.locator('.gallery-slide');
+    await expect(slides).toHaveCount(2);
+    await expect(slides.nth(0)).toHaveAttribute('data-kind', 'render');
+    await expect(slides.nth(0)).toContainText('המוצר מרונדר');
+    await expect(slides.nth(1)).toHaveAttribute('data-kind', 'supplier');
+    await expect(slides.nth(1).getByRole('img')).toHaveAttribute('alt', /^תמונת הספק: /);
+    const next = gallery.getByRole('button', { name: 'התמונה הבאה' });
+    const prev = gallery.getByRole('button', { name: 'התמונה הקודמת' });
+    await expect(prev).toHaveAttribute('aria-disabled', 'true');
+    await next.click();
+    await expect(slides.nth(1)).toBeInViewport({ ratio: 0.9 });
+    await expect(gallery.locator('[aria-live="polite"]')).toHaveText('תמונה 2 מתוך 2: תמונת הספק');
+    await expect(gallery.getByRole('button', { name: 'תמונה 2: תמונת הספק' })).toHaveAttribute('aria-current', 'true');
+    await expect(next).toHaveAttribute('aria-disabled', 'true');
+    // focus stays on the button at the end (aria-disabled, never disabled)
+    await expect(next).toBeFocused();
+    // keyboard on the strip: ArrowRight goes back in RTL
+    await gallery.locator('.gallery-track').focus();
+    await page.keyboard.press('ArrowRight');
+    await expect(slides.nth(0)).toBeInViewport({ ratio: 0.9 });
+    await expect(gallery.locator('[aria-live="polite"]')).toHaveText('תמונה 1 מתוך 2: הדמיה בחדר');
+    await expect(prev).toHaveAttribute('aria-disabled', 'true');
+    // the supplier photo is served from our media, never from the supplier
+    const src = await slides.nth(1).getByRole('img').getAttribute('src');
+    expect(src).toMatch(/^\/media\/products\/vase-cj-textured-white-stoneware\/supplier\.800\.webp$/);
+    expect((await page.request.get(src!)).headers()['content-type']).toContain('image/webp');
+  });
+
+  test.describe('mobile', () => {
+    const { defaultBrowserType: _b, ...pixel } = devices['Pixel 7'];
+    test.use(pixel);
+    test('the strip scrolls sideways within the screen, and the buttons work', async ({ page }) => {
+      await page.goto(PRODUCT);
+      const gallery = page.getByRole('region', { name: 'תמונות המוצר' });
+      await expect(gallery).toBeVisible();
+      // no horizontal page scroll: the strip scrolls, the page does not
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1)).toBe(true);
+      const track = gallery.locator('.gallery-track');
+      expect(await track.evaluate((el) => el.scrollWidth > el.clientWidth)).toBe(true);
+      await gallery.getByRole('button', { name: 'התמונה הבאה' }).tap();
+      await expect(gallery.locator('.gallery-slide').nth(1)).toBeInViewport({ ratio: 0.9 });
+      await expect(gallery.locator('[aria-live="polite"]')).toHaveText('תמונה 2 מתוך 2: תמונת הספק');
+    });
   });
 });
 

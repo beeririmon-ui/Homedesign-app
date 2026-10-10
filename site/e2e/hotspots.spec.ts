@@ -1,7 +1,8 @@
 /**
- * Product marks QA (docs/studio-rules.md ו.4): screenshots of the room at 1280 and 400 px, at rest and with one
- * product lit (hover / focus), written to assets/qa/hotspots/ for review by eye. Also checks that every mark sits on
- * its own product (inside the silhouette) unless it had to move aside for a neighbour, by at most one target.
+ * Product marks QA (docs/studio-rules.md ו.4, "כן לנקודות" 2026-10-10): screenshots of the room at 1280 and 400 px,
+ * written to assets/qa/hotspots/ for review by eye: at rest (clean, no marks), after the pointer moved over the room
+ * (marks shown), with one product focused by the keyboard and one under the pointer. Also checks that every mark
+ * sits on its own product (inside the silhouette) unless it had to move aside for a neighbour, by at most one target.
  */
 import { test, expect } from '@playwright/test';
 import { mkdirSync, readFileSync } from 'node:fs';
@@ -24,10 +25,22 @@ for (const [w, h] of [
     await expect(page.locator('button.hotspot:visible').first()).toBeVisible({ timeout: 20_000 });
     await page.locator('.stage').dispatchEvent('pointerdown');
     await page.waitForFunction(() => window.__hdEngine?.ready === true, undefined, { timeout: 20_000 });
-    await page.mouse.move(1, 1);
-    await page.waitForTimeout(600);
     const stage = page.locator('.stage');
+    // at rest: the first-visit hint and the touch above have faded, the room is clean
+    await page.mouse.move(1, 1);
+    await expect(stage).not.toHaveAttribute('data-marks', 'on', { timeout: 10_000 });
+    await page.waitForTimeout(800);
+    await expect(page.locator('button.hotspot[data-slot="vase"] .mark')).toHaveCSS('opacity', '0');
     await stage.screenshot({ path: resolve(OUT, `room-${w}-rest.png`) });
+
+    // the pointer moves over the room (a point on the back wall, on no product): the marks show
+    const box = (await stage.boundingBox())!;
+    await page.mouse.move(box.x + box.width * 0.5, box.y + box.height * 0.12);
+    await page.mouse.move(box.x + box.width * 0.52, box.y + box.height * 0.13);
+    await expect(stage).toHaveAttribute('data-marks', 'on');
+    await expect(page.locator('button.hotspot[data-slot="vase"] .mark')).toHaveCSS('opacity', '1');
+    await page.waitForTimeout(400);
+    await stage.screenshot({ path: resolve(OUT, `room-${w}-after-move.png`) });
 
     // every visible mark is on its product: its centre inside the silhouette, or within 46 px of it
     const marks = await page.evaluate(() => {
@@ -63,14 +76,18 @@ for (const [w, h] of [
       expect(inside || best <= 46, `${m.slot} mark is off its product`).toBe(true);
     }
 
-    // one product lit by the keyboard: the outline glows and the label shows
+    // one product lit by the keyboard: the marks show, the outline glows and the label shows
+    await page.mouse.move(1, 1);
+    await expect(stage).not.toHaveAttribute('data-marks', 'on', { timeout: 10_000 });
     const target = page.locator('button.hotspot[data-slot="sofa-cover"]');
     if (await target.isVisible()) {
       await target.focus();
+      await expect(stage).toHaveAttribute('data-marks', 'on');
       await expect(page.locator('.outlines path[data-slot="sofa-cover"]')).toHaveAttribute('data-on', 'true');
       await page.waitForTimeout(400);
       await stage.screenshot({ path: resolve(OUT, `room-${w}-focus-sofa.png`) });
       await target.blur();
+      await expect(stage).not.toHaveAttribute('data-marks', 'on');
     }
     const vase = page.locator('button.hotspot[data-slot="vase"]');
     if (await vase.isVisible()) {

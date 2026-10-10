@@ -62,6 +62,10 @@ for (const scheme of ['light', 'dark'] as const) {
     test('product, filled cart, checkout with errors', async ({ page }) => {
       await addVase(page);
       await audit(page, `${scheme} product`);
+      // the gallery (FR-I) on its second picture, the supplier photo
+      await page.getByRole('region', { name: 'תמונות המוצר' }).getByRole('button', { name: 'התמונה הבאה' }).click();
+      await expect(page.locator('.gallery-slide').nth(1)).toBeInViewport({ ratio: 0.9 });
+      await audit(page, `${scheme} product gallery, supplier photo`);
       await page.goto('/cart/');
       await expect(page.locator('.cart-line').first()).toBeVisible();
       await audit(page, `${scheme} cart`);

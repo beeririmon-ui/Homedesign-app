@@ -2,7 +2,7 @@
  * Room engine evidence on dist-artifact (Chromium + SwiftShader, 1280×800):
  *   variants   for every slot: the composed room at option 1 and option 2/3, and a pixel diff that must be zero
  *              outside the product's bounding box (tools/temp boxes + a 3 px resampling margin).
- *   hotspots   the product rings at rest and the glow state (hover/focus).
+ *   hotspots   the room at rest (clean, no marks), after the pointer moved (marks shown) and the glow state (hover/focus).
  *   transition 6 frames along T-E0 (hall → living room), the last one after the landing, plus a check that the
  *              landed frame equals the room at rest (no jump at the hand-off).
  *
@@ -211,7 +211,14 @@ async function hotspots(): Promise<void> {
   const page = await newPage();
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await openRoom(page);
+  // the first-visit hint fades, then the room rests clean (studio-rules ו.4, 2026-10-10)
+  await page.waitForFunction(() => !document.querySelector('.stage[data-marks="on"]'), undefined, { timeout: 10_000 });
+  await page.waitForTimeout(300);
   await page.screenshot({ path: `${OUT}/${PREFIX}hotspots-rest.png` });
+  await page.mouse.move(640, 90);
+  await page.mouse.move(650, 95);
+  await page.waitForTimeout(400);
+  await page.screenshot({ path: `${OUT}/${PREFIX}hotspots-after-move.png` });
   const vase = page.locator('button.hotspot[data-slot="vase"]');
   await vase.hover();
   await page.waitForTimeout(500);

@@ -54,7 +54,7 @@ describe('product gallery', () => {
     // the strip is a scrollable region: focusable and named
     expect(html).toMatch(/class="gallery-track"[^>]*tabindex="0"/);
     // thumbnails are decorative, alt="" (the button is labelled); the renderer writes an empty attribute as `alt`
-    expect((html.match(/<img alt(?:=""|\s)/g) ?? []).length).toBe(2);
+    expect((html.match(/<img src="[^"]+" alt(?:=""|\s)/g) ?? []).length).toBe(2);
   });
 
   it('with the render alone there is nothing to navigate', () => {
