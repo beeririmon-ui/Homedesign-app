@@ -12,7 +12,10 @@
       "needs": "לפתוח בוט ב-BotFather, להתקין את התוסף, להפעיל סשן בתיקיית הפרויקט (בתוך tmux), להצמיד את החשבון ולהגדיר allowlist. הטוקן נשאר במחשב.",
       "who": "המשתמש",
       "since": "2026-10-10",
-      "links": ["docs/ops/remote-approvals.md", "status/handoff.md"],
+      "links": [
+        "docs/ops/remote-approvals.md",
+        "status/handoff.md"
+      ],
       "decisions": [],
       "status": "open"
     },
@@ -25,22 +28,32 @@
       "needs": "ב-claude.ai > Customize > Connectors: ללחוץ Connect מחדש ל-var2 ולאשר. אחר כך סשן חדש.",
       "who": "המשתמש",
       "since": "2026-10-09",
-      "links": ["status/board.md"],
+      "links": [
+        "status/board.md"
+      ],
       "decisions": [],
       "status": "open"
     },
     {
       "id": "B3",
-      "kind": "decision",
+      "kind": "resolved",
       "priority": 1,
       "title": "7 החלטות דחופות בסטודיו",
-      "stuck": "סדר העבודה (FR-A), שער המטבע לתמחור (FR-C), הסגנון השני (ST2), ריהוט בבית (F3), תקן בתאורה ובצעצועים (S2B), הצעות מחיר מסוכנים (S6), ובקשות Sourcing ל-CJ (AC1).",
-      "needs": "תשובה במסך ההחלטות. בכל אחת יש המלצה מסומנת.",
+      "stuck": "נענו בסטודיו ב-10.10: FR-A מלא, FR-C שמרני, ST2 לבדוק לעומק, F3 כמו בחדר, S2B חובה בחשמל ובצעצועים, S6 כן, AC1 כן.",
+      "needs": "אין. היישום בעבודה.",
       "who": "המשתמש",
       "since": "2026-10-09",
       "links": [],
-      "decisions": ["FR-A", "FR-C", "ST2", "F3", "S2B", "S6", "AC1"],
-      "status": "open"
+      "decisions": [
+        "FR-A",
+        "FR-C",
+        "ST2",
+        "F3",
+        "S2B",
+        "S6",
+        "AC1"
+      ],
+      "status": "done"
     },
     {
       "id": "B4",
@@ -51,7 +64,9 @@
       "needs": "לפתוח Claude Desktop או `claude remote-control` בתיקיית הפרויקט, ולכתוב: המשך לפי status/handoff.md.",
       "who": "המשתמש",
       "since": "2026-10-10",
-      "links": ["status/handoff.md"],
+      "links": [
+        "status/handoff.md"
+      ],
       "decisions": [],
       "status": "open"
     },
@@ -64,8 +79,13 @@
       "needs": "openservice.aliexpress.com: Create Account > Profile (Individual) > APP Console > Create > Dropshipping Developer > Apply (הנימוק מוכן). אחרי האישור: Create App, ואת המפתחות להגדרות הסביבה (AE_DS_APP_KEY, AE_DS_APP_SECRET). במקביל Affiliates Developer. האישור לוקח ימים, ולכן כדאי להתחיל עכשיו.",
       "who": "המשתמש",
       "since": "2026-10-09",
-      "links": ["docs/suppliers/access-and-pipeline-2026-10.md"],
-      "decisions": ["AC2", "AC3"],
+      "links": [
+        "docs/suppliers/access-and-pipeline-2026-10.md"
+      ],
+      "decisions": [
+        "AC2",
+        "AC3"
+      ],
       "status": "open"
     },
     {
@@ -77,7 +97,9 @@
       "needs": "מעקב ב-15.10. אם אין תשובה: טלפון או טופס, רק על ידי המשתמש.",
       "who": "ספקים",
       "since": "2026-10-10",
-      "links": ["docs/suppliers/outreach/README.md"],
+      "links": [
+        "docs/suppliers/outreach/README.md"
+      ],
       "decisions": [],
       "status": "open"
     },
@@ -90,21 +112,27 @@
       "needs": "אישור המשתמש לכל טיוטה לפני שליחה.",
       "who": "סוכן, ואז המשתמש",
       "since": "2026-10-10",
-      "links": ["docs/suppliers/outreach/README.md"],
-      "decisions": ["F3"],
+      "links": [
+        "docs/suppliers/outreach/README.md"
+      ],
+      "decisions": [
+        "F3"
+      ],
       "status": "open"
     },
     {
       "id": "B8",
       "kind": "decision",
       "priority": 2,
-      "title": "השקה: סולק, חשבוניות, דומיין, Cloudflare",
-      "stuck": "בלי אלה אין תשלום אמיתי, אין כתובת אמיתית לאתר ואין Callback URL לאפליקציית AliExpress.",
-      "needs": "ארבע החלטות W1–W4 בסטודיו. הדומיין תלוי בשם המותג.",
+      "title": "השקה: לפתוח Cloudflare (חינמי) ולבקש הצעת מחיר מ-Grow",
+      "stuck": "W1–W4 נענו: סולק Grow, חשבוניות דרך הסולק (ואם אין, Morning), דומיין אחרי בחירת השם, Cloudflare כן (חינמי בהתחלה).",
+      "needs": "המשתמש: לפתוח חשבון Cloudflare חינמי על שם העסק עם אימות דו-שלבי (docs/architecture.md סעיף 12), ולבקש הצעת מחיר מ-Grow (טיוטה תוכן ב-Gmail לאישור).",
       "who": "המשתמש",
       "since": "2026-10-09",
-      "links": ["docs/architecture.md"],
-      "decisions": ["W1", "W2", "W3", "W4"],
+      "links": [
+        "docs/architecture.md"
+      ],
+      "decisions": [],
       "status": "open"
     },
     {
@@ -116,7 +144,9 @@
       "needs": "לבחור שם מתוך docs/brand-names.md או לבקש סבב הצעות נוסף.",
       "who": "המשתמש",
       "since": "2026-10-09",
-      "links": ["docs/brand-names.md"],
+      "links": [
+        "docs/brand-names.md"
+      ],
       "decisions": [],
       "status": "open"
     },
@@ -129,7 +159,9 @@
       "needs": "תזכורת אוטומטית ב-13.10 ממשיכה את העבודה.",
       "who": "סוכן",
       "since": "2026-10-09",
-      "links": ["assets/qa/round2-binding-docs-qa.md"],
+      "links": [
+        "assets/qa/round2-binding-docs-qa.md"
+      ],
       "decisions": [],
       "status": "open"
     },
@@ -142,7 +174,9 @@
       "needs": "כן או לא מהמשתמש.",
       "who": "המשתמש",
       "since": "2026-10-10",
-      "links": ["docs/studio-rules.md"],
+      "links": [
+        "docs/studio-rules.md"
+      ],
       "decisions": [],
       "status": "open"
     },
@@ -155,7 +189,9 @@
       "needs": "אישור כתוב מהספקים (נשאל בכל פנייה) או רינדורים שלנו (תלוי ב-B2).",
       "who": "ספקים / render-agent",
       "since": "2026-10-09",
-      "links": ["docs/studio-rules.md"],
+      "links": [
+        "docs/studio-rules.md"
+      ],
       "decisions": [],
       "status": "open"
     },
@@ -168,22 +204,42 @@
       "needs": "הרצת הבדיקה על המחשב של המשתמש בסשן המקומי (B4).",
       "who": "המשתמש + frontend-dev",
       "since": "2026-10-10",
-      "links": ["site/README.md"],
+      "links": [
+        "site/README.md"
+      ],
       "decisions": [],
       "status": "open"
     },
     {
       "id": "B14",
-      "kind": "decision",
+      "kind": "resolved",
       "priority": 3,
       "title": "23 החלטות נוספות פתוחות",
-      "stuck": "כללי צפיפות (D1, D3, D7), יסודות המותג (FR-B עד FR-J), מאגר רב-סגנוני (ST1), פשתן מליטא (S7), DSers (AC4), מוצרי מילוי (F1, F2), תקנים נוספים (Q2B).",
-      "needs": "אפשר לענות בהדרגה; אף אחת לא חוסמת את הסלון.",
+      "stuck": "כל 23 ההחלטות נענו בסטודיו ב-10.10.",
+      "needs": "אין.",
       "who": "המשתמש",
       "since": "2026-10-09",
       "links": [],
-      "decisions": ["D1", "D3", "D7", "FR-B", "FR-D", "FR-E", "FR-F", "FR-G", "FR-H", "FR-I", "FR-J", "ST1", "S7", "AC4", "F1", "F2", "Q2B"],
-      "status": "open"
+      "decisions": [
+        "D1",
+        "D3",
+        "D7",
+        "FR-B",
+        "FR-D",
+        "FR-E",
+        "FR-F",
+        "FR-G",
+        "FR-H",
+        "FR-I",
+        "FR-J",
+        "ST1",
+        "S7",
+        "AC4",
+        "F1",
+        "F2",
+        "Q2B"
+      ],
+      "status": "done"
     },
     {
       "id": "B15",
@@ -194,9 +250,45 @@
       "needs": "אין. Alibaba.com Open Platform ורישום AliExpress כ-Corporation נפתחים כאפשרות.",
       "who": "–",
       "since": "2026-10-10",
-      "links": ["docs/strategy/foundation-review.md"],
+      "links": [
+        "docs/strategy/foundation-review.md"
+      ],
       "decisions": [],
       "status": "done"
+    },
+    {
+      "id": "B16",
+      "kind": "user_action",
+      "priority": 2,
+      "title": "Google Cloud Vision: לפתוח פרויקט ומפתח (AC3)",
+      "stuck": "המשתמש ביקש עזרה ותזכורת. חיפוש 'מצא זול יותר' לפי תמונה מחכה למפתח.",
+      "needs": "console.cloud.google.com: פרויקט חדש > Enable 'Cloud Vision API' > חיבור כרטיס (1,000 בדיקות בחודש חינם) > Credentials > API key מוגבל ל-Vision בלבד > להכניס כ-GOOGLE_VISION_API_KEY בהגדרות הסביבה של Claude. תזכורת נקבעה ל-11.10.",
+      "who": "המשתמש",
+      "since": "2026-10-10",
+      "links": [
+        "docs/suppliers/access-and-pipeline-2026-10.md"
+      ],
+      "decisions": [
+        "AC3"
+      ],
+      "status": "open"
+    },
+    {
+      "id": "B17",
+      "kind": "user_action",
+      "priority": 2,
+      "title": "ST2: בדיקה ידנית של Google Trends ואינסטגרם לפני ההחלטה על הסגנון השני",
+      "stuck": "המשתמש בחר 'לבדוק לעומק ואז נחליט'. Google Trends ואתרי הרשתות חוסמים את הענן.",
+      "needs": "research מכין רשימת בדיקות מדויקת (מונחים, טווחי זמן, האשטגים) והמשתמש מריץ אותן בדפדפן שלו או בסשן המקומי. התוצאות חוזרות לסטודיו.",
+      "who": "המשתמש + research",
+      "since": "2026-10-10",
+      "links": [
+        "docs/strategy/israel-style-market-2026.md"
+      ],
+      "decisions": [
+        "ST2"
+      ],
+      "status": "open"
     }
   ]
 }
