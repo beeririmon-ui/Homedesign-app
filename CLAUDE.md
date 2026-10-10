@@ -8,8 +8,9 @@
 ## מסמכים מחייבים (מקור האמת)
 - `docs/studio-rules.md` — חוקי הסטודיו: כל הערות והחלטות המשתמש ומסקנות שהתקבלו. כל הנחיה חדשה של המשתמש נכנסת אליו מיד, עם תאריך.
 - `docs/skeleton-spec.md` — השלד: שכבות, מצלמות, עמדות מוצר, נכסים, אנימציות וביצועים.
-- `docs/house-plan.md` + `docs/house-plan.json` — תוכנית הבית: חדרים, פתחים, מצלמות ומסלולי מעבר (אושרה 2026-10-06).
+- `docs/house-plan.md` + `docs/house-plan.json` — תוכנית הבית: חדרים, פתחים, מצלמות ומסלולי מעבר (גרסה 1.1, אושרה 2026-10-08).
 - `docs/design-bible/nordic.md` — ה-Design Bible של הסגנון הנורדי.
+- `docs/design-bible/nordic-dining.md` — תוספת ה-Design Bible הנורדי למטבח ולפינת האוכל.
 - `data/product-card.schema.json` — מבנה כרטיס מוצר.
 - `data/slots/<room>.json` — עמדות המוצר והשכבות של כל חדר (התחלנו ב-`living-room.json`).
 - `.claude/skills/interior-design-rules/` — חוקי העיצוב של המעצב.

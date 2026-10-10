@@ -2224,10 +2224,10 @@ function renderProfit(){
       <td class="money">${ltr(fmtILS(x.landed))}</td>
       <td>${share}</td>
       <td class="money">${cell(p, 'retail')}<span class="cell-src">נמכר כ-${ltr(esc(p.qty))} יח'</span></td>
+      ${hasMarket ? `<td class="mkt-cell">${mktCell(p, editable)}</td>` : ''}
       <td class="money">${isNum(x.margin) ? ltr(fmtPct(x.margin, 1)) : '—'}${isNum(x.contribution) ? `<span class="cell-src">תרומה ${ltr(fmtILS(x.contribution))}</span>` : ''}</td>
       <td class="money">${x.recommended != null ? ltr(fmtILS(Math.ceil(x.recommended))) : '—'}${x.recommended != null ? `<span class="cell-src">ל-${ltr(esc(p.qty))} יח'</span>` : ''}</td>
       <td>${flagHtml(p)}</td>
-      ${hasMarket ? `<td class="mkt-cell">${mktCell(p, editable)}</td>` : ''}
     </tr>`;
   }).join('');
 
@@ -2289,7 +2289,7 @@ function renderProfit(){
       </div>
       <div class="tbl-wrap"><table class="ptable">
         <caption class="sr-only">רווחיות לכל מוצר. לחיצה על כותרת ממיינת.</caption>
-        <thead><tr>${th('name','מוצר')}${th('slot','עמדה')}<th scope="col" class="money">עלות ליח'</th>${th('qty','כמות','money')}<th scope="col" class="money">משלוח $ ליח'</th>${th('landed','עלות נחיתה','money')}${th('share','חלק המשלוח')}${th('retail','מחיר ₪','money')}${th('margin','מרווח','money')}${th('recommended','מחיר מומלץ','money')}${th('flag','דגל')}${hasMarket ? th('verdict','שוק בישראל') : ''}</tr></thead>
+        <thead><tr>${th('name','מוצר')}${th('slot','עמדה')}<th scope="col" class="money">עלות ליח'</th>${th('qty','כמות','money')}<th scope="col" class="money">משלוח $ ליח'</th>${th('landed','עלות נחיתה','money')}${th('share','חלק המשלוח')}${th('retail','מחיר ₪','money')}${hasMarket ? th('verdict','שוק בישראל') : ''}${th('margin','מרווח','money')}${th('recommended','מחיר מומלץ','money')}${th('flag','דגל')}</tr></thead>
         <tbody>${trs || `<tr><td colspan="${hasMarket ? 12 : 11}">אין מוצרים בסינון.</td></tr>`}</tbody></table></div>
       <p class="xs faint">כמות = כמה יחידות נמכרות בכל מכירה (ריק = ברירת המחדל מהעמדה; "כמות לא ודאית" = לא ברור מהכרטיס אם העלות ליחידה או לסט). עלות נחיתה = (עלות × כמות + משלוח לכמות) × שער. משלוח לכמות של יותר מיחידה אחת הוא <span class="est">הערכה</span>: משלוח ליחידה + (כמות − 1) × (משלוח ליחידה − $3.72), כי בבדיקת הסלים של CJ כ-$3.72 מכל חבילה קבועים והשאר לפי משקל. המחיר לצרכן והמחיר המומלץ הם למכירה כולה. מרווח = תרומה ÷ הכנסה נטו. מחיר מומלץ = המחיר הנמוך ביותר שמביא את המרווח ליעד, מעוגל למעלה לשקל.${hasMarket ? ` שוק בישראל: פסק הדין והטווח מ-${esc(S.data.market.file)} (${esc(fmtDay(S.data.market.updated))}), לפי עלות CJ, שער ${ltr(esc((S.data.market.assumptions || {}).fx_usd_ils ?? 3.7))} ויחידה אחת: כדאי = 35% ומעלה במחיר העליון של הטווח; רק בסל = מתחת ל-35% לבד, אבל 25% ומעלה בסל של 3. הכפתור ממלא את המחיר לצרכן במחיר העליון של הטווח (שנגמר ב-9), כפול הכמות ומעוגל מטה ל-9 כשנמכרים כמה יחידות; אפשר לערוך אותו אחר כך כרגיל.` : ''}</p>
     </section>
@@ -2462,7 +2462,9 @@ function renderSuppliers(){
     const done = steps.filter((_, i) => accessDone(o.id, i)).length;
     stepsAll += steps.length; stepsDone += done;
     const req = o.requirements || {};
-    const reqs = [req.business && 'דורש עסק רשום', req.website && 'דורש אתר', req.store && 'דורש חנות (Shopify / Wix / Woo)'].filter(Boolean).map(t => `<span class="chip st-open">${esc(t)}</span>`).join('');
+    // requirements as stated in the file: true = "כן", a string is quoted as is, false / empty is left out
+    const reqs = [['business','עסק רשום'], ['website','אתר'], ['store','חנות'], ['min_sales','מכירות']].filter(([k]) => req[k] === true || (typeof req[k] === 'string' && req[k].trim()))
+      .map(([k, l]) => `<span class="chip ${req[k] === true || /^yes/i.test(req[k]) ? 'st-open' : ''}"><b>${esc(l)}:</b>&nbsp;<span dir="auto">${esc(req[k] === true ? 'כן' : req[k])}</span></span>`).join('');
     const cost = o.cost || {};
     const srcs = (o.sources || []).filter(httpsOk).map(u => `<li><a href="${esc(u)}" target="_blank" rel="noopener noreferrer">${esc(hostOf(u))}</a></li>`).join('');
     const list = steps.map((t, i) => {

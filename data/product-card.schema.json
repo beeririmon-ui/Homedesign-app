@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Product card",
-  "description": "כרטיס מוצר אחד. sourcing-agent ממלא הכל חוץ מ-style_scores; master-designer ממלא את style_scores ואת status.",
+  "description": "כרטיס מוצר אחד. sourcing-agent ממלא הכל חוץ מ-style_scores; master-designer ממלא את style_scores ואת status. 2026-10-10: נוסף שדה safety אופציונלי (החלטת משתמש Q2).",
   "type": "object",
   "required": ["id", "slot", "name", "supplier", "price", "images", "colors", "materials", "visual_weight", "status"],
   "properties": {
@@ -86,6 +86,37 @@
           "reason": { "type": "string" }
         },
         "required": ["score", "reason"]
+      }
+    },
+    "safety": {
+      "type": "object",
+      "description": "בטיחות ותקינה כפי שהספק מצהיר (Q2, 2026-10-10). אופציונלי. null = לא ידוע. toy_standard: מוצג בדף המוצר (D9)",
+      "additionalProperties": false,
+      "properties": {
+        "ce": { "type": ["boolean", "null"], "description": "האם הספק מצהיר על CE" },
+        "ip_rating": { "type": ["string", "null"], "description": "למשל IP44" },
+        "toy_standard": {
+          "type": "array",
+          "description": "תקני צעצועים ומוצרי ילדים; ריק = אין",
+          "items": { "enum": ["EN71", "SI-562", "EN13613"] }
+        },
+        "power": { "enum": ["plug", "wired", "battery", "usb", "none", null] },
+        "plug_type": { "type": ["string", "null"], "description": "למשל EU, IL, UK" },
+        "voltage": { "type": ["string", "null"], "description": "למשל 220-240V" },
+        "certificates": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "name": { "type": "string" },
+              "url": { "type": "string", "pattern": "^https://" },
+              "verified": { "type": "boolean" }
+            },
+            "required": ["name", "url", "verified"]
+          }
+        },
+        "source": { "type": "string", "description": "מאיפה המידע, למשל supplier listing או CJ API" }
       }
     },
     "status": { "enum": ["candidate", "selected", "rejected"] },
