@@ -3,6 +3,7 @@
 
 Reads the repo's source-of-truth files (read-only) and writes:
   dist/data.json        everything the page shows, computed from the repo
+                        (data/, docs/, assets/ and status/: board.md, decisions.json, blockers.json)
   dist/img/p/<id>.webp  first image of each product, 360px long side, q72
   dist/img/f/<n>.webp   frames and renders, 1280px long side, q78
   dist/index.html       the page (copied from studio/src/index.html)
@@ -791,6 +792,29 @@ def load_decisions(room_ids: list[str]) -> dict:
             "source": rel(p)}
 
 
+def load_blockers() -> dict:
+    """status/blockers.json: actions that are stuck or need the user (the 'waiting for you' screen).
+
+    Each item: id, kind (user_action | decision | waiting | blocked | resolved), priority 1-3, title,
+    stuck, needs, who, since, links, decisions, status (open | done). The file order is kept in _order;
+    the page sorts by priority and since. 'done' marks made in the page live in the page db (settings/blockers)."""
+    p = ROOT / "status" / "blockers.json"
+    if not p.exists():
+        return {"items": [], "note": None, "updated": None, "version": None, "source": None}
+    d = read_json(p)
+    items = []
+    for i, it in enumerate(d.get("items") or []):
+        if not isinstance(it, dict) or not it.get("id"):
+            continue
+        it = dict(it)
+        it["_order"] = i
+        it["links"] = [l for l in (it.get("links") or []) if isinstance(l, str)]
+        it["decisions"] = [x for x in (it.get("decisions") or []) if isinstance(x, str)]
+        items.append(it)
+    return {"items": items, "note": d.get("note"), "updated": d.get("updated"), "version": d.get("version"),
+            "source": rel(p)}
+
+
 def load_reports(globs: list[str], kind: str) -> list[dict]:
     out = []
     seen = set()
@@ -1107,10 +1131,14 @@ def main() -> int:
 
     board = parse_board(ROOT / "status" / "board.md")
     decisions = load_decisions(order)
+    blockers = load_blockers()
     market = load_market(eco_dir)
     styles = load_styles()
     dec_ids = {d.get("id") for d in decisions.get("items") or [] if isinstance(d, dict)}
     suppliers = load_suppliers(dec_ids)
+    if blockers["items"]:
+        n_open = sum(1 for b in blockers["items"] if b.get("status") != "done")
+        log(f"  blockers: {len(blockers['items'])} items in {blockers['source']} · {n_open} open")
     if market:
         log(f"  market: {len(market['categories'])} categories · {len(market['products'])} products with a verdict")
     if suppliers:
@@ -1186,6 +1214,7 @@ def main() -> int:
         "roadmap": board["roadmap"],
         "log": board["log"],
         "decisions": decisions,
+        "blockers": blockers,
         "economics": economics,
         "market": market,
         "styles": styles,
