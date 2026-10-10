@@ -514,6 +514,65 @@ details.room-lad summary{cursor:pointer;font-weight:600}
 .row.between{justify-content:space-between}
 .row .spacer{flex:1}
 
+
+/* decision links (AC1, FR-C...) */
+.dec-link{display:inline-flex;align-items:center;gap:6px;font:inherit;font-size:var(--fs-xs);font-weight:700;line-height:1;padding:4px 8px;border-radius:999px;border:1px solid currentColor;cursor:pointer;white-space:nowrap;vertical-align:baseline}
+.dec-link .dl-st{font-weight:500;opacity:.85}
+.dec-link:hover{text-decoration:underline}
+.dcard.is-target{outline:2px solid var(--oak-ink);outline-offset:2px}
+.fx-tip{font-size:var(--fs-xs);color:var(--ink-2)}
+/* market prices */
+.chip.verdict .fdot{width:7px;height:7px;border-radius:50%;background:currentColor;display:inline-block}
+.chip.verdict:not(.flag-green):not(.flag-orange):not(.flag-red) .fdot{opacity:.5}
+.mkt-top{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
+.mkt-scale{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:1px solid var(--rule);border-radius:var(--r);overflow:hidden}
+.mkt-scale>div{padding:8px 10px;display:grid;gap:2px;background:var(--sheet)}
+.mkt-scale>div+div{border-inline-start:1px solid var(--rule)}
+.mkt-scale .l{font-size:var(--fs-xs);color:var(--ink-3)}
+.mkt-scale b{font-variant-numeric:tabular-nums}
+.mkt-src summary{cursor:pointer;font-size:var(--fs-s);color:var(--ink-2)}
+.mkt-src ul{margin:8px 0 0;padding-inline-start:18px;display:grid;gap:4px;overflow-wrap:anywhere}
+.mkt-cell{min-width:150px}
+.mkt-cell .band-btn{margin-top:4px;min-height:30px}
+/* overview: styles */
+.sty-list{list-style:none;margin:0;padding:0;display:grid;gap:9px}
+.sty{display:grid;grid-template-columns:22px minmax(0,1fr) auto auto;gap:3px 8px;align-items:center}
+.sty-rank{color:var(--ink-3);font-size:var(--fs-s);text-align:center}
+.sty-name{font-weight:600;min-width:0}
+.sty-score{font-weight:700}
+.sty-trend{padding:3px 7px}
+.sty-trend.flag-green{background:var(--sage-wash)}
+.sty-trend.flag-red{background:var(--brick-wash)}
+.sty-bar{grid-column:2 / -1;height:4px}
+.sty-more summary{cursor:pointer;font-size:var(--fs-s);color:var(--ink-2);margin-bottom:8px}
+/* suppliers */
+.stable{min-width:1040px}
+.stable th[scope="row"]{font-size:var(--fs-s);color:var(--ink);background:none;position:static;white-space:normal;font-weight:600}
+.stable td{vertical-align:top}
+.sup-name{min-width:170px;max-width:230px}
+.sup-name .chip{margin-top:5px;margin-inline-end:4px}
+.chip-first{background:var(--ink);color:var(--on-ink)}
+.fit-cell{min-width:74px}
+.fit-cell .meter{margin-top:4px;height:4px}
+.sup-cats{min-width:130px;max-width:190px}
+.sup-text{min-width:190px;max-width:260px;font-size:var(--fs-xs);color:var(--ink-2)}
+.sup-moq{min-width:110px;max-width:170px;font-size:var(--fs-xs)}
+.sup-links{min-width:96px;line-height:1.7;overflow-wrap:anywhere}
+.acc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:12px}
+.acc{background:var(--sheet);border:1px solid var(--rule);border-radius:var(--r);padding:14px 16px;display:grid;gap:8px;align-content:start;min-width:0}
+.acc.is-complete{border-color:var(--sage)}
+.acc-head{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:start}
+.acc-head .h-small{margin:0;overflow-wrap:anywhere}
+.acc-pri{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--sunk);font-weight:700;font-size:var(--fs-s)}
+.acc .chiprow{display:flex;flex-wrap:wrap;gap:6px}
+.acc .chiprow .chip{white-space:normal;line-height:1.3}
+.checklist{list-style:none;margin:4px 0 0;padding:0;display:grid;gap:8px}
+.checklist li{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 10px;align-items:start;font-size:var(--fs-s)}
+.checklist li>.xs,.checklist li>.ef-err{grid-column:2}
+.checklist input{margin-top:3px;width:18px;height:18px}
+.checklist label{overflow-wrap:anywhere;cursor:pointer}
+.checklist li.is-done label{color:var(--ink-3);text-decoration:line-through;text-decoration-color:var(--rule-2)}
+.log-who .chip{white-space:normal;line-height:1.3;max-width:100%;overflow-wrap:anywhere}
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 }
@@ -537,6 +596,7 @@ details.room-lad summary{cursor:pointer;font-weight:600}
           <li><a href="#rooms" data-screen="rooms">חדרים</a></li>
           <li><a href="#products" data-screen="products">מוצרים</a></li>
           <li><a href="#profit" data-screen="profit">רווחיות</a></li>
+          <li><a href="#suppliers" data-screen="suppliers">ספקים</a></li>
           <li><a href="#budget" data-screen="budget">תקציב</a></li>
           <li><a href="#quality" data-screen="quality">איכות</a></li>
           <li><a href="#log" data-screen="log">יומן</a></li>
@@ -596,6 +656,11 @@ details.room-lad summary{cursor:pointer;font-weight:600}
     <section class="screen" id="screen-profit" aria-labelledby="h-profit" hidden>
       <div class="screen-head"><h1 id="h-profit" tabindex="-1">רווחיות</h1></div>
       <div id="profit-body"><p class="loading">טוען…</p></div>
+    </section>
+
+    <section class="screen" id="screen-suppliers" aria-labelledby="h-suppliers" hidden>
+      <div class="screen-head"><h1 id="h-suppliers" tabindex="-1">ספקים</h1><p class="small faint" id="sup-count"></p></div>
+      <div id="sup-body"><p class="loading">טוען…</p></div>
     </section>
 
     <section class="screen" id="screen-budget" aria-labelledby="h-budget" hidden>
@@ -796,7 +861,8 @@ const S = {
   filters:Object.assign({q:'', room:'', slot:'', status:'', supplier:'', flag:'', sort:'default', dups:false, pending:false}, store.get('filters', {})),
   report:store.get('report', null), logWho:store.get('logWho', 'all'), logQ:'',
   decFilter:store.get('decFilter','all'),
-  profit:Object.assign({sort:'margin', dir:'asc', room:'', rejected:false, showSettings:false}, store.get('profit', {})),
+  profit:Object.assign({sort:'margin', dir:'asc', room:'', rejected:false, showSettings:false, verdict:''}, store.get('profit', {})),
+  sup:Object.assign({q:'', section:'', status:'', model:'', sort:'fit'}, store.get('sup', {})), focusDec:null, accessSaving:new Set(), accessErr:null,
   db:null, user:null, uid:null, canWrite:null, dbState:'connecting', dbError:null, dbReady:false,
   dbDocs:new Map(), drafts:{}, saving:new Set(), saved:{}, errors:{},
   edits:new Map(), news:new Map(), settingsDocs:new Map(),
@@ -831,7 +897,7 @@ async function boot(){
 }
 function renderAll(){
   renderOverview(); renderDecisions(); renderRoomPick(); renderRoom();
-  initFilters(); renderProducts(); renderProfit(); renderBudget(); renderReports(); renderLog();
+  initFilters(); renderProducts(); renderProfit(); renderSuppliers(); renderBudget(); renderReports(); renderLog();
 }
 let pendingRender = false;
 function onDataChange(){
@@ -839,7 +905,7 @@ function onDataChange(){
   setTimeout(() => {
     pendingRender = false;
     refreshView();
-    renderOverview(); renderRoom(); renderProducts(); renderProfit(); renderBudget(); refreshDrawer();
+    renderOverview(); renderRoom(); renderProducts(); renderProfit(); renderSuppliers(); renderBudget(); refreshDrawer();
   }, 0);
 }
 
@@ -959,6 +1025,7 @@ function effProduct(p){
   const cur = p.price && p.price.currency;
   e.badCurrency = !!cur && String(cur).toUpperCase() !== 'USD';
   e.econ = econCalc({cost_usd: e.badCurrency ? null : f.cost, qty: e.qty, shipping_usd: ship.total, retail_ils: f.retail_ils}, S.ES.v);
+  e.mkt = mktOf(p.id);
   if(e.badCurrency) e.econ.missing = e.econ.missing.map(m => m === 'cost' ? 'currency' : m);
   if(ship.nofast) e.econ.missing = e.econ.missing.map(m => m === 'shipping' ? 'fast_shipping' : m);
   return e;
@@ -1010,12 +1077,34 @@ const flagHtml = (e, long) => {
   if(x.flag === 'orange') return `<span class="flag flag-orange"><i class="fdot"></i>חסר ${esc(x.missing.map(m => MISS_HE[m]).join(' ו'))}</span>`;
   return `<span class="flag flag-${x.flag}"><i class="fdot"></i>${long ? esc(FLAG_HE[x.flag]) + ' · ' : ''}מרווח ${ltr(fmtPct(x.margin, 1))}</span>`;
 };
+/* ---------- market prices (data/economics/market-prices.json) ---------- */
+// verdict of the market research per product: viable / bundle-only / not-viable (CJ cost, rate 3.7, one unit); none = not in the research
+const VERDICT = {
+  viable:{he:'כדאי', cls:'flag-green'},
+  'bundle-only':{he:'רק בסל', cls:'flag-orange'},
+  'not-viable':{he:'לא כדאי מ-CJ', cls:'flag-red'},
+  none:{he:'לא נבדק', cls:''}
+};
+const mktOf = id => ((S.data && S.data.market && S.data.market.products) || {})[id] || null;
+const mktCat = k => ((S.data && S.data.market && S.data.market.categories) || {})[k] || null;
+const verdictOf = e => (e && e.mkt && VERDICT[e.mkt.verdict]) ? e.mkt.verdict : 'none';
+const verdictChip = (e, title) => { const k = verdictOf(e), v = VERDICT[k]; return `<span class="chip verdict ${v.cls}"${title ? ` title="${esc(title)}"` : ''}><i class="fdot"></i>${esc(v.he)}</span>`; };
+// round down to a price point that ends in 9 (99, 129, 349...)
+const p9 = x => isNum(x) ? Math.max(9, Math.floor((x + 1) / 10) * 10 - 1) : null;
+// the price the "set price to band" action writes: the top of the suggested band (the point the verdict is judged at).
+// The band is per unit; a product sold as N units gets N x the band, rounded down to a ...9 point.
+function bandPoint(e){
+  const b = e && e.mkt && e.mkt.suggested_band;
+  if(!Array.isArray(b) || !isNum(b[1])) return null;
+  return e.qty > 1 ? p9(b[1] * e.qty) : b[1];
+}
+const bandText = b => Array.isArray(b) && isNum(b[0]) ? (b[0] === b[1] ? fmtILS(b[0]) : `${fmtILS(b[0])}–${fmtILS(b[1]).replace('₪ ', '')}`) : '—';
 function profitBasis(){
   return S.view.filter(p => !p._new && p.status !== 'rejected');
 }
 
 /* ---------- routing ---------- */
-const SCREENS = ['overview','decisions','rooms','products','profit','budget','quality','log'];
+const SCREENS = ['overview','decisions','rooms','products','profit','suppliers','budget','quality','log'];
 function route(focus){
   const t = (location.hash || '').replace(/^#/, '');
   let s = SCREENS.includes(t) ? t : null;
@@ -1024,6 +1113,31 @@ function route(focus){
   for(const id of SCREENS){ $('#screen-'+id).hidden = id !== s; }
   for(const a of $$('.tabs a')){ if(a.dataset.screen === s) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); }
   if(focus){ window.scrollTo(0,0); const h = $('#h-'+s); if(h) h.focus({preventScroll:true}); }
+  if(s === 'decisions' && S.focusDec) focusDecision();
+}
+// jump to one decision card (from a "AC1" / "FR-C" chip elsewhere): show all, scroll to it, focus its title
+function gotoDecision(id){
+  if($('#drawer').open) closeDialog($('#drawer'));
+  S.focusDec = id;
+  if(S.decFilter !== 'all'){ S.decFilter = 'all'; store.set('decFilter', 'all'); }
+  renderDecisions();
+  go('decisions');
+}
+function focusDecision(){
+  const id = S.focusDec; S.focusDec = null;
+  const card = $$('#dec-list .dcard').find(c => c.dataset.id === id);
+  if(!card){ say(`ההחלטה ${id} לא נמצאה בתור`); return; }
+  const h = $('h3', card); if(h){ h.setAttribute('tabindex', '-1'); h.focus({preventScroll:true}); }
+  card.scrollIntoView({block:'start'});
+  card.classList.add('is-target'); setTimeout(() => card.classList.remove('is-target'), 2400);
+}
+function decStatus(id){ const d = decisionsAll().find(x => x.id === id); return d ? (d.status || 'open') : null; }
+// a chip that names a decision and opens it in the decisions screen; plain text when the decision is not in the queue
+function decChip(id, withStatus){
+  if(!id) return '';
+  const st = decStatus(id);
+  if(!st) return `<span class="code-tag">${esc(id)}</span>`;
+  return `<button type="button" class="dec-link st-${esc(st)}" data-goto-dec="${esc(id)}" aria-label="להחלטה ${esc(id)}, ${esc(D_STATUS[st] || st)}"><span dir="ltr">${esc(id)}</span>${withStatus === false ? '' : `<span class="dl-st">${esc(D_STATUS[st] || st)}</span>`}</button>`;
 }
 function go(screen){ if(location.hash === '#'+screen){ route(true); } else { location.hash = screen; } }
 
@@ -1067,6 +1181,8 @@ function onDocClick(e){
     if($('#drawer').open) closeDialog($('#drawer'));
     Object.assign(S.filters, {room: s ? s.room : '', slot: key, status:'', supplier:'', flag:'', dups:false, pending:false, q:''});
     syncFilterInputs(); renderProducts(); go('products'); return; }
+  const gdec = e.target.closest('[data-goto-dec]');
+  if(gdec){ e.preventDefault(); gotoDecision(gdec.dataset.gotoDec); return; }
   const gd = e.target.closest('[data-goto]');
   if(gd){ e.preventDefault(); if($('#drawer').open) closeDialog($('#drawer')); go(gd.dataset.goto); }
 }
@@ -1260,6 +1376,7 @@ function renderOverview(){
             <p class="small muted">המשלוח הוא יותר ממחצית עלות הנחיתה ב-${hiShip} מתוך ${pb.filter(p => isNum(p.econ.ship_share)).length} מוצרים.</p>
             <p class="small muted">הקמה ${ltr(fmtILS(be.oneTime))} · קבועות ${ltr(fmtILS(be.monthly))} לחודש · ${be.setupOrders != null ? `נקודת איזון: ${be.setupOrders.toLocaleString('en-US')} הזמנות` : !be.n ? 'נקודת האיזון מחכה למחירים' : '<span class="flag flag-red">לא מתאזן: התרומה להזמנה שלילית</span>'} · <a href="#budget">לתקציב</a></p>
           </div>
+          ${stylesCard()}
         </aside>
       </div>
       <section class="section" aria-labelledby="h-rooms-ov">
@@ -1274,6 +1391,29 @@ function renderOverview(){
     </div>`;
   paintVars($('#ov-body'));
   for(const li of $$('#ov-body .log-item')) li.classList.add('clamp');
+}
+// overview: style demand ranking in Israel (data/strategy/israel-styles.json). A proposal until decision ST2.
+const TREND = {rising:{he:'עולה', ar:'↑', cls:'flag-green'}, stable:{he:'יציב', ar:'→', cls:''}, declining:{he:'יורד', ar:'↓', cls:'flag-red'}};
+const TIER_HE = {'must-have':'חובה', 'next-wave':'הגל הבא', niche:'נישה', 'not-recommended':'לא מומלץ'};
+function stylesCard(){
+  const st = S.data.styles;
+  if(!st || !(st.styles || []).length) return '';
+  const max = Math.max(...st.styles.map(x => x.demand_score || 0), 1);
+  const item = x => { const t = TREND[x.trend] || {he: x.trend || '', ar:'', cls:''}; const tier = String(x.tier || '').split(' ')[0];
+    return `<li class="sty">
+      <span class="sty-rank num">${esc(x.rank)}</span>
+      <span class="sty-name">${esc(x.name_he)}${x.id === 'nordic' ? ' <span class="xs faint">· בעבודה</span>' : ''}${x.launch_order ? ` <span class="xs faint">· השקה ${esc(x.launch_order)}</span>` : ''}</span>
+      <span class="sty-score num" title="${esc(TIER_HE[tier] || x.tier || '')}">${esc(x.demand_score)}</span>
+      <span class="chip sty-trend ${t.cls}"><span aria-hidden="true">${t.ar}</span>${esc(t.he)}</span>
+      <span class="meter sty-bar" aria-hidden="true"><span data-w="${Math.round((x.demand_score || 0) / max * 100)}"></span></span>
+    </li>`; };
+  const top = st.styles.slice(0, 6), rest = st.styles.slice(6);
+  return `<div class="section-head"><h2 id="h-styles">סגנונות לפי הביקוש בישראל</h2><span class="small faint">ציון ביקוש 0–100</span></div>
+    <div class="side-card">
+      <ol class="sty-list" aria-labelledby="h-styles">${top.map(item).join('')}</ol>
+      ${rest.length ? `<details class="sty-more"><summary>ועוד ${rest.length} סגנונות</summary><ol class="sty-list">${rest.map(item).join('')}</ol></details>` : ''}
+      <p class="small muted">לא סופי עד החלטה ${decChip('ST2')}. ציון משוקלל מתקשורת, קמעונאות, חיפוש, אקלים והתאמה לדרופשיפינג; לא סקר צרכנים. מקור: <code>${esc(st.file)}</code></p>
+    </div>`;
 }
 function paintVars(root){
   for(const el of $$('[data-bg]', root)) el.style.background = el.dataset.bg;
@@ -1682,6 +1822,53 @@ function econBlock(e){
       <dt class="tot">מחיר מומלץ ליעד ${ltr(esc(s.target_margin_pct + '%'))} <span class="xs faint">(נמכר כ-${ltr(esc(q))} יח')</span></dt><dd class="tot">${x.recommended != null ? ltr(fmtILS(Math.ceil(x.recommended))) : (x.landed != null ? 'היעד לא אפשרי בהנחות האלה' : '—')}</dd>
     </dl></section>`;
 }
+function marketBlock(e){
+  const M = S.data.market;
+  if(!M) return '';
+  const m = e.mkt;
+  const head = `<section class="section mkt" aria-labelledby="h-mkt"><h3 id="h-mkt" class="h-small">מחיר שוק בישראל</h3>`;
+  if(!m) return `${head}<p class="small">${verdictChip(e)} <span class="muted">המוצר לא נכלל במחקר מחירי השוק (${esc(M.updated ? fmtDay(M.updated) : '')}). אין לו טווח מומלץ.</span></p></section>`;
+  const c = mktCat(m.category) || {};
+  const pt = bandPoint(e);
+  const atPt = isNum(pt) ? econCalc({cost_usd: e.badCurrency ? null : e.price.cost, qty: e.qty, shipping_usd: e.ship.total, retail_ils: pt}, S.ES.v) : null;
+  const cur = e.retail;
+  // where the current price sits in the market, per unit
+  const u = isNum(cur) ? cur / (e.qty || 1) : null;
+  const pos = !isNum(u) || !Array.isArray(c.band) ? '' : u < c.band[0] ? 'מתחת לטווח' : u <= c.band[1] ? 'בתוך הטווח' : u <= c.median ? 'בין הטווח לחציון' : u <= c.high ? 'מעל החציון' : 'מעל היקר בשוק';
+  const srcs = (c.sources || []).map(x => `<li>${httpsOk(x.url) ? `<a href="${esc(x.url)}" target="_blank" rel="noopener noreferrer">${esc(x.retailer || hostOf(x.url))}</a>` : esc(x.retailer || '')} · <span dir="auto">${esc(x.title || '')}</span>${x.size ? ` <span class="faint">(${esc(x.size)})</span>` : ''} · ${ltr(fmtILS(x.price, x.price % 1 ? 2 : 0))}${isNum(x.sale_price) ? ` <span class="faint">(במבצע ${ltr(fmtILS(x.sale_price, x.sale_price % 1 ? 2 : 0))})</span>` : ''}</li>`).join('');
+  const editable = canEditData();
+  const atBand = isNum(cur) && isNum(pt) && Math.abs(cur - pt) < 0.005;
+  return `${head}
+    <div class="mkt-top">${verdictChip(e)}<span class="small muted">${esc(c.label_he || m.category)} · ${esc(c.n || 0)} מחירים · ביטחון ${esc(({high:'גבוה', medium:'בינוני', low:'נמוך'})[c.confidence] || c.confidence || '—')}</span></div>
+    <div class="mkt-scale" role="img" aria-label="שוק: זול ${esc(c.low)}, חציון ${esc(c.median)}, יקר ${esc(c.high)} שקלים">
+      <div><span class="l">זול</span><b>${ltr(fmtILS(c.low))}</b></div><div><span class="l">חציון</span><b>${ltr(fmtILS(c.median))}</b></div><div><span class="l">יקר</span><b>${ltr(fmtILS(c.high))}</b></div>
+    </div>
+    <dl class="econ-dl">
+      <dt>טווח מומלץ לקטגוריה</dt><dd>${ltr(bandText(c.band))}</dd>
+      <dt>טווח מומלץ למוצר <span class="xs faint">(ליחידה)</span></dt><dd class="tot">${ltr(bandText(m.suggested_band))}</dd>
+      <dt>מרווח במחיר העליון <span class="xs faint">(במחקר: שער ${ltr(esc((M.assumptions || {}).fx_usd_ils ?? 3.7))}, יחידה אחת)</span></dt><dd>${ltr(fmtPct(m.margin_at_band, 1))}</dd>
+      <dt>אותו מרווח בשער 3.0</dt><dd>${ltr(fmtPct(m.margin_at_band_fx3, 1))}</dd>
+      <dt>בסל של 3 פריטים</dt><dd>${ltr(fmtPct(m.margin_in_bundle, 1))}</dd>
+      <dt>מחיר ל-35% <span class="xs faint">(במחקר)</span></dt><dd>${ltr(fmtILS(m.price_for_35pct))}</dd>
+      ${atPt ? `<dt>במחיר ${ltr(fmtILS(pt))} לפי ההנחות כאן${e.qty > 1 ? ` <span class="xs faint">(${ltr(esc(e.qty))} יח')</span>` : ''}</dt><dd>${isNum(atPt.margin) ? ltr(fmtPct(atPt.margin, 1)) : '—'}</dd>` : ''}
+      ${isNum(cur) ? `<dt>המחיר שלך</dt><dd>${ltr(fmtILS(cur))} <span class="xs faint">${esc(pos)}</span></dd>` : ''}
+    </dl>
+    ${(m.flags || []).length ? `<p class="xs muted">${m.flags.map(f => `<span class="est">${esc(f.he)}</span>`).join(' ')}</p>` : ''}
+    ${isNum(pt) ? `<div class="row"><button type="button" class="btn btn-ghost btn-small" id="mkt-set" ${editable && !atBand ? '' : 'disabled'}>${atBand ? `המחיר כבר ${ltr(fmtILS(pt))}` : `קביעת מחיר לפי הטווח: ${ltr(fmtILS(pt))}`}</button><span class="xs faint">${editable ? (e.qty > 1 ? `${ltr(fmtILS(m.suggested_band[1]))} × ${ltr(esc(e.qty))} יח', מעוגל ל-9. ` : '') + 'ממלא את שדה המחיר בטופס; שומרים כרגיל.' : 'כדי לקבוע מחיר, פתח/י את הדף ב-claude.ai.'}</span></div>` : ''}
+    ${srcs ? `<details class="mkt-src"><summary>${(c.sources || []).length} מקורות מחיר</summary><ul class="small">${srcs}</ul></details>` : ''}
+  </section>`;
+}
+function bindMarket(e){
+  const b = $('#mkt-set'); if(!b) return;
+  b.onclick = () => {
+    const pt = bandPoint(e), inp = $('#e-retail_ils');
+    if(!isNum(pt) || !inp) return;
+    inp.value = String(pt);
+    inp.dispatchEvent(new Event('input', {bubbles:true}));
+    inp.scrollIntoView({block:'center'}); inp.focus();
+    say(`המחיר בטופס עודכן ל-${pt} שקלים. לשמירה לוחצים "שמירת השינויים".`);
+  };
+}
 function renderDrawer(id, keepScroll){
   const e = S.byId.get(id);
   if(!e){ closeDialog($('#drawer')); return; }
@@ -1718,6 +1905,7 @@ function renderDrawer(id, keepScroll){
     </div>
     <section class="section" aria-labelledby="h-links"><h3 id="h-links" class="h-small">קישורים</h3>${links ? `<ul class="links">${links}</ul>` : '<p class="faint small">אין קישורים.</p>'}</section>
     ${econBlock(e)}
+    ${marketBlock(e)}
     <section class="section" aria-labelledby="h-edit"><h3 id="h-edit" class="h-small">עריכה</h3>
       ${canEditData() ? editFormHtml(e) : noDbLine('השדות מוצגים כפי שהם בריפו ובשינויים שכבר נשמרו.')}
     </section>
@@ -1756,6 +1944,7 @@ function renderDrawer(id, keepScroll){
     ${hist ? `<section aria-labelledby="h-hist"><h3 id="h-hist" class="h-small">היסטוריית שינויים מהסטודיו</h3><ul class="hist">${hist}</ul></section>` : ''}`;
   paintVars(body);
   if(canEditData()) bindEditForm(e);
+  bindMarket(e);
   if(keepScroll) body.scrollTop = st;
 }
 function showVal(k, v){
@@ -2003,9 +2192,13 @@ function renderProfit(){
   const restore = keepFocus(box);
 
   let rows = S.view.filter(p => !p._new && (P.rejected || p.status !== 'rejected') && (!P.room || (p.in_rooms || []).includes(P.room)));
+  const vc = {viable:0, 'bundle-only':0, 'not-viable':0, none:0}; for(const p of rows) vc[verdictOf(p)]++;
+  if(P.verdict) rows = rows.filter(p => verdictOf(p) === P.verdict);
+  const hasMarket = !!S.data.market;
   const key = {
     name: p => p.name.toLowerCase(), slot: p => slotLabel(p), landed: p => p.econ.landed, share: p => p.econ.ship_share,
-    retail: p => p.retail, qty: p => p.qty * 10 + (p.qtySure ? 0 : 5), margin: p => p.econ.margin, recommended: p => p.econ.recommended, flag: p => ({red:0, orange:1, green:2})[p.econ.flag]
+    retail: p => p.retail, qty: p => p.qty * 10 + (p.qtySure ? 0 : 5), margin: p => p.econ.margin, recommended: p => p.econ.recommended, flag: p => ({red:0, orange:1, green:2})[p.econ.flag],
+    verdict: p => ({'not-viable':0, 'bundle-only':1, viable:2, none:3})[verdictOf(p)] * 10 + (p.mkt && isNum(p.mkt.margin_at_band) ? p.mkt.margin_at_band : 0)
   }[P.sort] || (p => p.econ.margin);
   const dir = P.dir === 'desc' ? -1 : 1;
   rows.sort((a, b) => { const x = key(a), y = key(b); if(x == null && y == null) return 0; if(x == null) return 1; if(y == null) return -1; return (x < y ? -1 : x > y ? 1 : 0) * dir; });
@@ -2034,6 +2227,7 @@ function renderProfit(){
       <td class="money">${isNum(x.margin) ? ltr(fmtPct(x.margin, 1)) : '—'}${isNum(x.contribution) ? `<span class="cell-src">תרומה ${ltr(fmtILS(x.contribution))}</span>` : ''}</td>
       <td class="money">${x.recommended != null ? ltr(fmtILS(Math.ceil(x.recommended))) : '—'}${x.recommended != null ? `<span class="cell-src">ל-${ltr(esc(p.qty))} יח'</span>` : ''}</td>
       <td>${flagHtml(p)}</td>
+      ${hasMarket ? `<td class="mkt-cell">${mktCell(p, editable)}</td>` : ''}
     </tr>`;
   }).join('');
 
@@ -2045,7 +2239,7 @@ function renderProfit(){
       : `<input type="number" id="s-${m.k}" class="fld" min="${m.min || 0}" step="${m.step}" inputmode="decimal" value="${esc(val)}" ${editable ? '' : 'disabled'}><span class="small muted">${esc(m.unit)}</span>`;
     return `<div class="set"><label class="lbl" for="s-${m.k}">${esc(m.label)} ${ver ? '<span class="ok-badge">אומת</span>' : `<span class="est">${m.update ? 'לעדכן' : 'הערכה'}</span>`}</label>
       <div class="in">${ctl}</div><p class="ef-err" id="s-${m.k}-err"></p>
-      <p class="ef-help">${esc(m.help)}</p>
+      <p class="ef-help">${esc(m.help)}</p>${m.k === 'usd_ils' ? `<p class="ef-help fx-note">${fxNote(true)}</p>` : ''}
       <label class="ver"><input type="checkbox" class="chk" id="sv-${m.k}" ${ver ? 'checked' : ''} ${editable ? '' : 'disabled'}>הערך אומת</label></div>`;
   }).join('');
 
@@ -2067,6 +2261,7 @@ function renderProfit(){
   box.innerHTML = `<div class="screen roomy">
     ${editable ? '' : noDbLine('המספרים מחושבים מהריפו ומברירות המחדל.')}
     <div class="tiles">
+      ${hasMarket ? `<div class="tile"><span class="l">מול מחירי השוק</span><span class="v">${vc.viable}<span class="small muted"> כדאי</span></span><span class="s"><span class="flag flag-orange">${vc['bundle-only']} רק בסל</span> · <span class="flag flag-red">${vc['not-viable']} לא כדאי מ-CJ</span>${vc.none ? ` · ${vc.none} לא נבדקו` : ''}</span></div>` : ''}
       <div class="tile"><span class="l">מרווח ממוצע</span><span class="v">${withM.length ? ltr(fmtPct(mean(withM.map(p => p.econ.margin)), 1)) : '—'}</span><span class="s">${withM.length} מוצרים עם כל הנתונים · יעד ${ltr(esc(v.target_margin_pct + '%'))}</span></div>
       <div class="tile"><span class="l"><span class="flag flag-green"><i class="fdot"></i>עומדים ביעד</span></span><span class="v">${fl.green}</span><span class="s"><span class="flag flag-red"><i class="fdot"></i>${fl.red} מתחת ליעד</span></span></div>
       <div class="tile"><span class="l"><span class="flag flag-orange"><i class="fdot"></i>חסרים נתונים</span></span><span class="v">${fl.orange}</span><span class="s">${missRetail} בלי מחיר · ${missShip + nNoFast} בלי משלוח${nNoFast ? ` (${nNoFast} בלי אפשרות של עד 20 יום)` : ''}</span></div>
@@ -2074,7 +2269,7 @@ function renderProfit(){
       <div class="tile"><span class="l">משלוח מעל חצי מעלות הנחיתה</span><span class="v">${hi}<span class="small muted"> / ${withShare.length}</span></span><span class="s">לפי ${esc(methodLabel || '')}</span></div>
     </div>
     <div class="assume">
-      <span>שער <b>${ltr(esc(v.usd_ils))}</b> ${est('usd_ils')}</span><span>משלוח: <b>${esc(methodLabel || '')}</b></span>
+      <span>שער <b>${ltr(esc(v.usd_ils))}</b> ${est('usd_ils')} ${fxNote()}</span><span>משלוח: <b>${esc(methodLabel || '')}</b></span>
       <span>מע"מ <b>${ltr(esc(v.vat_pct + '%'))}</b> ${est('vat_pct')}</span><span>סליקה <b>${ltr(esc(v.card_pct + '%'))} + ${ltr(fmtILS(v.card_fixed_ils, 2))}</b> ${est('card_pct')}</span>
       <span>החזרות <b>${ltr(esc(v.returns_pct + '%'))}</b> ${est('returns_pct')}</span><span>CAC <b>${ltr(fmtILS(v.cac_ils))}</b> ${est('cac_ils')}</span>
       <span>יעד <b>${ltr(esc(v.target_margin_pct + '%'))}</b></span>
@@ -2089,13 +2284,14 @@ function renderProfit(){
       <div class="section-head"><h2 id="h-ptable">כל המוצרים</h2><span class="small faint">${rows.length} מוצרים · עריכה בטבלה נשמרת כשיוצאים מהשדה</span></div>
       <div class="toolbar">
         <div class="field"><label for="pf-room">חדר</label><select id="pf-room"><option value="">כל החדרים</option>${S.data.rooms.map(r => `<option value="${esc(r.id)}" ${P.room === r.id ? 'selected' : ''}>${esc(r.name_he)}</option>`).join('')}</select></div>
+        ${hasMarket ? `<div class="field"><label for="pf-verdict">כדאיות מול השוק</label><select id="pf-verdict"><option value="">הכול</option>${Object.keys(VERDICT).map(k => `<option value="${k}" ${P.verdict === k ? 'selected' : ''}>${esc(VERDICT[k].he)} (${vc[k]})</option>`).join('')}</select></div>` : ''}
         <span class="check"><input type="checkbox" id="pf-rej" ${P.rejected ? 'checked' : ''}><label for="pf-rej">כולל נדחים</label></span>
       </div>
       <div class="tbl-wrap"><table class="ptable">
         <caption class="sr-only">רווחיות לכל מוצר. לחיצה על כותרת ממיינת.</caption>
-        <thead><tr>${th('name','מוצר')}${th('slot','עמדה')}<th scope="col" class="money">עלות ליח'</th>${th('qty','כמות','money')}<th scope="col" class="money">משלוח $ ליח'</th>${th('landed','עלות נחיתה','money')}${th('share','חלק המשלוח')}${th('retail','מחיר ₪','money')}${th('margin','מרווח','money')}${th('recommended','מחיר מומלץ','money')}${th('flag','דגל')}</tr></thead>
-        <tbody>${trs || '<tr><td colspan="11">אין מוצרים בסינון.</td></tr>'}</tbody></table></div>
-      <p class="xs faint">כמות = כמה יחידות נמכרות בכל מכירה (ריק = ברירת המחדל מהעמדה; "כמות לא ודאית" = לא ברור מהכרטיס אם העלות ליחידה או לסט). עלות נחיתה = (עלות × כמות + משלוח לכמות) × שער. משלוח לכמות של יותר מיחידה אחת הוא <span class="est">הערכה</span>: משלוח ליחידה + (כמות − 1) × (משלוח ליחידה − $3.72), כי בבדיקת הסלים של CJ כ-$3.72 מכל חבילה קבועים והשאר לפי משקל. המחיר לצרכן והמחיר המומלץ הם למכירה כולה. מרווח = תרומה ÷ הכנסה נטו. מחיר מומלץ = המחיר הנמוך ביותר שמביא את המרווח ליעד, מעוגל למעלה לשקל.</p>
+        <thead><tr>${th('name','מוצר')}${th('slot','עמדה')}<th scope="col" class="money">עלות ליח'</th>${th('qty','כמות','money')}<th scope="col" class="money">משלוח $ ליח'</th>${th('landed','עלות נחיתה','money')}${th('share','חלק המשלוח')}${th('retail','מחיר ₪','money')}${th('margin','מרווח','money')}${th('recommended','מחיר מומלץ','money')}${th('flag','דגל')}${hasMarket ? th('verdict','שוק בישראל') : ''}</tr></thead>
+        <tbody>${trs || `<tr><td colspan="${hasMarket ? 12 : 11}">אין מוצרים בסינון.</td></tr>`}</tbody></table></div>
+      <p class="xs faint">כמות = כמה יחידות נמכרות בכל מכירה (ריק = ברירת המחדל מהעמדה; "כמות לא ודאית" = לא ברור מהכרטיס אם העלות ליחידה או לסט). עלות נחיתה = (עלות × כמות + משלוח לכמות) × שער. משלוח לכמות של יותר מיחידה אחת הוא <span class="est">הערכה</span>: משלוח ליחידה + (כמות − 1) × (משלוח ליחידה − $3.72), כי בבדיקת הסלים של CJ כ-$3.72 מכל חבילה קבועים והשאר לפי משקל. המחיר לצרכן והמחיר המומלץ הם למכירה כולה. מרווח = תרומה ÷ הכנסה נטו. מחיר מומלץ = המחיר הנמוך ביותר שמביא את המרווח ליעד, מעוגל למעלה לשקל.${hasMarket ? ` שוק בישראל: פסק הדין והטווח מ-${esc(S.data.market.file)} (${esc(fmtDay(S.data.market.updated))}), לפי עלות CJ, שער ${ltr(esc((S.data.market.assumptions || {}).fx_usd_ils ?? 3.7))} ויחידה אחת: כדאי = 35% ומעלה במחיר העליון של הטווח; רק בסל = מתחת ל-35% לבד, אבל 25% ומעלה בסל של 3. הכפתור ממלא את המחיר לצרכן במחיר העליון של הטווח (שנגמר ב-9), כפול הכמות ומעוגל מטה ל-9 כשנמכרים כמה יחידות; אפשר לערוך אותו אחר כך כרגיל.` : ''}</p>
     </section>
     <section class="section" aria-labelledby="h-lad">
       <div class="section-head"><h2 id="h-lad">סולם המחירים של הנבחרים</h2><span class="small faint">3 וריאציות לכל עמדה</span></div>
@@ -2106,10 +2302,29 @@ function renderProfit(){
   restore();
   bindProfit();
 }
+// "market rate is about 3.0" note shown next to the FX setting; stored values stay as they are (FR-C decides)
+function fxNote(long){
+  return `<span class="fx-tip">שער שוק נוכחי כ-3.0; 3.7 שמרני מדי, ראו ${decChip('FR-C', !!long)}</span>`;
+}
+function mktCell(p, editable){
+  const m = p.mkt;
+  if(!m) return `${verdictChip(p)}<span class="cell-src">לא במחקר השוק</span>`;
+  const pt = bandPoint(p);
+  const atBand = isNum(p.retail) && isNum(pt) && Math.abs(p.retail - pt) < 0.005;
+  const tip = `מרווח במחיר העליון ${fmtPct(m.margin_at_band, 1)} · בשער 3.0 ${fmtPct(m.margin_at_band_fx3, 1)} · בסל ${fmtPct(m.margin_in_bundle, 1)}`;
+  return `${verdictChip(p, tip)}<span class="cell-src">טווח ${ltr(bandText(m.suggested_band))} · בשער 3.0 ${ltr(fmtPct(m.margin_at_band_fx3))}</span>${isNum(pt) ? (atBand ? `<span class="cell-src">במחיר הטווח</span>` : `<button type="button" class="btn btn-ghost btn-small band-btn" data-band-set="${esc(p.id)}" ${editable ? '' : 'disabled'} aria-label="קביעת מחיר ${pt} שקלים לפי טווח השוק: ${esc(p.name)}">מחיר ${ltr(fmtILS(pt))}</button>`) : ''}`;
+}
 function bindProfit(){
   const box = $('#profit-body');
   for(const b of $$('[data-sort]', box)) b.onclick = () => { const k = b.dataset.sort; if(S.profit.sort === k) S.profit.dir = S.profit.dir === 'asc' ? 'desc' : 'asc'; else { S.profit.sort = k; S.profit.dir = k === 'name' || k === 'slot' ? 'asc' : (k === 'margin' || k === 'flag' ? 'asc' : 'desc'); } store.set('profit', S.profit); renderProfit(); const nb = $(`[data-sort="${k}"]`, box); if(nb) nb.focus(); };
   $('#pf-room').onchange = e => { S.profit.room = e.target.value; store.set('profit', S.profit); renderProfit(); $('#pf-room').focus(); };
+  const pv = $('#pf-verdict'); if(pv) pv.onchange = e => { S.profit.verdict = e.target.value; store.set('profit', S.profit); renderProfit(); $('#pf-verdict').focus(); };
+  for(const b of $$('[data-band-set]', box)) b.onclick = () => {
+    const pid = b.dataset.bandSet, e = S.byId.get(pid), inp = $('#pi-retail-' + CSS.escape(pid));
+    const pt = bandPoint(e); if(!inp || !isNum(pt)) return;
+    inp.value = String(pt); S.inline[inp.id] = inp.value;
+    commitInline(inp).then(() => { const n = $('#pi-retail-' + CSS.escape(pid)); if(n) n.focus(); });
+  };
   $('#pf-rej').onchange = e => { S.profit.rejected = e.target.checked; store.set('profit', S.profit); renderProfit(); $('#pf-rej').focus(); };
   $('#set-toggle').onclick = () => { S.profit.showSettings = !S.profit.showSettings; store.set('profit', S.profit); renderProfit(); $('#set-toggle').focus(); };
   for(const inp of $$('[data-inline]', box)){
@@ -2169,6 +2384,138 @@ async function saveSettings(){
     S.settingsDocs.set('economics', doc); S.setDraft = null; S.setDraftVer = null; S.setDirty = false;
     say('ההנחות נשמרו'); onDataChange();
   }catch(e){ $('#set-state').textContent = errText(e); }
+}
+
+/* ---------- suppliers screen ---------- */
+const SEC_HE = {international:'בינלאומי', rugs_il:'שטיחים בישראל', furniture_il:'רהיטים בישראל', general_il:'כללי בישראל'};
+const MODEL_HE = {dropshipping:'דרופשיפינג', wholesale:'סיטונאות', stock:'מלאי', mixed:'משולב', unknown:'לא ידוע'};
+const SUP_ST = {
+  lead_strong:{he:'ליד חזק', cls:'st-answered'}, lead:{he:'ליד', cls:'st-open'}, screening_only:{he:'לבדיקה בלבד', cls:'st-candidate'},
+  not_verified_exists:{he:'קיום לא אומת', cls:'st-candidate'}, not_for_israel:{he:'לא לישראל', cls:'st-rejected'}
+};
+const SUP_TYPE_HE = {brand_wholesale:'מותג (סיטונאות)', platform:'פלטפורמה', pod:'הדפסה לפי הזמנה', importer:'יבואן', manufacturer:'יצרן', retailer:'קמעונאי', agent:'סוכן'};
+const ACC_TYPE_HE = {'aggregator-api':'API של אגרגטור', 'marketplace-api':'API של מרקטפלייס', 'image-search-api':'חיפוש לפי תמונה', aggregator:'אגרגטור', 'manual-tool':'כלי ידני', 'sourcing-agent':'סוכן סורסינג', 'b2b-api':'API ‏B2B', 'b2b-agent':'סוכן B2B', 'b2b-marketplace':'מרקטפלייס B2B', local:'מקומי'};
+function supLinks(x){
+  const seen = new Set(), out = [];
+  const add = (label, url) => { if(!httpsOk(url)) return; const k = url.replace(/\/+$/, ''); if(seen.has(k)) return; seen.add(k); out.push(`<a href="${esc(url)}" target="_blank" rel="noopener noreferrer">${esc(label)}</a>`); };
+  add('אתר', x.website);
+  const c = x.contact || {};
+  add('טופס קשר', c.form); add('פורטל B2B', c.b2b); add('הרשמה', c.registration_requires);
+  (x.sample_links || []).forEach((u, i) => add(`דוגמה ${i + 1}`, u));
+  const plain = ['email', 'phone', 'phone_il', 'whatsapp'].filter(k => c[k] && !httpsOk(c[k])).map(k => `<span dir="ltr" class="xs">${esc(c[k])}</span>`);
+  return out.concat(plain).join('<br>');
+}
+// access checklist: settings/access in the page db, {steps: {"<option id>#<step index>": {done, at, by}}}
+function accessDone(oid, i){ const d = S.settingsDocs.get('access'); const v = d && d.steps && d.steps[oid + '#' + i]; return !!(v && v.done); }
+async function toggleStep(oid, i, done){
+  const key = oid + '#' + i;
+  const prev = S.settingsDocs.get('access') || {};
+  const doc = {steps: Object.assign({}, prev.steps || {}, {[key]: {done, at: new Date().toISOString(), by: await whoId()}}), updated_at: new Date().toISOString()};
+  S.accessSaving.add(key); S.accessErr = null;
+  try{ await dbWrite('settings/access', () => S.db.collection('settings').doc('access').set(doc)); S.settingsDocs.set('access', doc); say(done ? 'סומן כבוצע' : 'הסימון בוטל'); }
+  catch(e){ S.accessErr = {key, msg: errText(e)}; }
+  S.accessSaving.delete(key);
+  renderSuppliers();
+}
+function renderSuppliers(){
+  if(!S.data) return;
+  const box = $('#sup-body');
+  const SU = S.data.suppliers;
+  if(!SU || (!SU.directory && !SU.access)){ box.innerHTML = '<p class="empty">אין נתוני ספקים. הם נקראים מ-data/suppliers/directory.json ומ-data/suppliers/access-options.json.</p>'; return; }
+  const restore = keepFocus(box);
+  const F = S.sup, editable = canEditData();
+  const all = (SU.directory && SU.directory.suppliers) || [];
+  const q = (F.q || '').trim().toLowerCase();
+  let rows = all.filter(x => (!F.section || x.section === F.section) && (!F.status || x.status === F.status) && (!F.model || x.model === F.model)
+    && (!q || [x.name, x.id, x.country, (x.categories || []).join(' '), x.shipping_to_israel, x.moq, x.fit_why].join(' ').toLowerCase().includes(q)));
+  const stRank = {lead_strong:0, lead:1, screening_only:2, not_verified_exists:3, not_for_israel:4};
+  const sorters = {
+    fit: (a, b) => (b.fit ?? -1) - (a.fit ?? -1) || (stRank[a.status] ?? 9) - (stRank[b.status] ?? 9) || a.name.localeCompare(b.name),
+    status: (a, b) => (stRank[a.status] ?? 9) - (stRank[b.status] ?? 9) || (b.fit ?? -1) - (a.fit ?? -1),
+    first: (a, b) => (a.first_rank ?? 99) - (b.first_rank ?? 99) || (b.fit ?? -1) - (a.fit ?? -1),
+    name: (a, b) => a.name.localeCompare(b.name, 'he')
+  };
+  rows.sort(sorters[F.sort] || sorters.fit);
+  const cnt = k => { const m = {}; for(const x of all) m[x[k]] = (m[x[k]] || 0) + 1; return m; };
+  const cs = cnt('section'), cst = cnt('status'), cm = cnt('model');
+  const opt = (map, counts, cur) => Object.keys(map).filter(k => counts[k]).map(k => `<option value="${k}" ${cur === k ? 'selected' : ''}>${esc(map[k].he || map[k])} (${counts[k]})</option>`).join('');
+  const trs = rows.map(x => {
+    const st = SUP_ST[x.status] || {he: x.status, cls:''};
+    return `<tr>
+      <th scope="row" class="sup-name"><span dir="auto">${esc(x.name)}</span><span class="cell-src">${esc(SUP_TYPE_HE[x.type] || x.type || '')}${x.country ? ` · <span dir="ltr">${esc(x.country)}</span>` : ''} · ${esc(SEC_HE[x.section] || x.section || '')}</span>${x.first_rank ? `<span class="chip chip-first" title="${esc(x.first_why || '')}">פנייה ראשונה #${esc(x.first_rank)}</span>` : ''}${x.next_wave ? '<span class="chip">הגל הבא</span>' : ''}</th>
+      <td class="fit-cell"><span class="fit num" title="${esc(x.fit_why || '')}"><b>${isNum(x.fit) ? esc(x.fit) : '—'}</b><span class="faint">/10</span></span><span class="meter"><span data-w="${isNum(x.fit) ? x.fit * 10 : 0}"></span></span></td>
+      <td class="sup-cats">${(x.categories || []).map(c => esc(c)).join(', ')}</td>
+      <td class="sup-text">${esc(x.shipping_to_israel || '—')}</td>
+      <td>${esc(MODEL_HE[x.model] || x.model || '—')}</td>
+      <td class="sup-moq">${esc(x.moq || '—')}</td>
+      <td><span class="chip ${st.cls}">${esc(st.he)}</span></td>
+      <td>${x.decision ? decChip(x.decision) : '<span class="faint">—</span>'}</td>
+      <td class="sup-links">${supLinks(x) || '<span class="faint">—</span>'}</td>
+    </tr>`;
+  }).join('');
+
+  const A = SU.access;
+  const opts = (A && A.options) || [];
+  let stepsAll = 0, stepsDone = 0;
+  const cards = opts.map(o => {
+    const steps = o.user_steps || [];
+    const done = steps.filter((_, i) => accessDone(o.id, i)).length;
+    stepsAll += steps.length; stepsDone += done;
+    const req = o.requirements || {};
+    const reqs = [req.business && 'דורש עסק רשום', req.website && 'דורש אתר', req.store && 'דורש חנות (Shopify / Wix / Woo)'].filter(Boolean).map(t => `<span class="chip st-open">${esc(t)}</span>`).join('');
+    const cost = o.cost || {};
+    const srcs = (o.sources || []).filter(httpsOk).map(u => `<li><a href="${esc(u)}" target="_blank" rel="noopener noreferrer">${esc(hostOf(u))}</a></li>`).join('');
+    const list = steps.map((t, i) => {
+      const key = o.id + '#' + i, id = `acs-${o.id}-${i}`, d = accessDone(o.id, i), busy = S.accessSaving.has(key);
+      const err = S.accessErr && S.accessErr.key === key ? `<span class="ef-err">${esc(S.accessErr.msg)}</span>` : '';
+      return `<li class="${d ? 'is-done' : ''}"><input type="checkbox" class="chk" id="${esc(id)}" data-step="${esc(key)}" ${d ? 'checked' : ''} ${editable && !busy ? '' : 'disabled'}><label for="${esc(id)}" dir="auto">${esc(t)}</label>${busy ? '<span class="xs faint">שומר…</span>' : ''}${err}</li>`;
+    }).join('');
+    return `<article class="acc ${steps.length && done === steps.length ? 'is-complete' : ''}" aria-labelledby="ac-${esc(o.id)}">
+      <div class="acc-head">
+        <span class="acc-pri num" title="עדיפות">${isNum(o.priority) && o.priority < 99 ? esc(o.priority) : '—'}</span>
+        <div class="minw0"><h3 id="ac-${esc(o.id)}" class="h-small" dir="auto">${esc(o.name)}</h3><p class="xs faint">${esc(ACC_TYPE_HE[o.type] || o.type || '')}${isNum(o.approval_days) ? ` · אישור תוך ${esc(o.approval_days)} ימים` : ''}${o.checked ? ` · נבדק ${esc(fmtDay(o.checked))}` : ''}</p></div>
+        ${o.decision ? decChip(o.decision) : ''}
+      </div>
+      ${o.unlocks ? `<p class="small" dir="auto">${esc(o.unlocks)}</p>` : ''}
+      <p class="xs muted">${cost.monthly != null ? `עלות חודשית: <span dir="auto">${esc(cost.monthly)}</span>` : ''}${cost.per_order ? ` · להזמנה: <span dir="auto">${esc(cost.per_order)}</span>` : ''}${(o.env_vars || []).length ? ` · משתני סביבה: ${o.env_vars.map(v => `<code>${esc(v)}</code>`).join(', ')}` : ''}</p>
+      ${reqs || (o.depends_on || []).length ? `<div class="chiprow">${reqs}${(o.depends_on || []).map(t => `<span class="chip" dir="auto">תלוי: ${esc(t)}</span>`).join('')}</div>` : ''}
+      ${steps.length ? `<div class="acc-steps"><p class="xs faint">הצעדים שלך · ${done}/${steps.length}</p><ul class="checklist">${list}</ul></div>` : '<p class="xs faint">אין צעדים בשבילך כרגע.</p>'}
+      ${srcs ? `<details class="mkt-src"><summary>${(o.sources || []).length} מקורות</summary><ul class="small">${srcs}</ul></details>` : ''}
+    </article>`;
+  }).join('');
+
+  $('#sup-count').textContent = `${all.length} ספקים · ${opts.length} אפשרויות גישה`;
+  box.innerHTML = `<div class="screen roomy">
+    ${SU.directory ? `<section class="section" aria-labelledby="h-sdir">
+      <div class="section-head"><h2 id="h-sdir">מאגר הספקים</h2><span class="small faint">${esc(SU.directory.file)}${SU.directory.updated ? ` · ${esc(fmtDay(SU.directory.updated))}` : ''}</span></div>
+      <p class="small muted lede">${esc(SU.directory.scope || '')}. ציון התאמה = התאמה לסגנון הנורדי, 1–10. "פנייה ראשונה" = ההמלצה מהסריקה (החלטה S4). רוב השדות לא אומתו מול הספק.</p>
+      <form class="toolbar" id="sup-filters" role="search" aria-label="סינון ספקים">
+        <div class="field"><label for="sf-q">חיפוש</label><input type="search" id="sf-q" value="${esc(F.q || '')}" placeholder="שם, קטגוריה, מדינה" autocomplete="off"></div>
+        <div class="field"><label for="sf-section">אזור</label><select id="sf-section"><option value="">הכול</option>${opt(SEC_HE, cs, F.section)}</select></div>
+        <div class="field"><label for="sf-status">סטטוס</label><select id="sf-status"><option value="">הכול</option>${opt(SUP_ST, cst, F.status)}</select></div>
+        <div class="field"><label for="sf-model">מודל</label><select id="sf-model"><option value="">הכול</option>${opt(MODEL_HE, cm, F.model)}</select></div>
+        <div class="field"><label for="sf-sort">מיון</label><select id="sf-sort">${[['fit','ציון התאמה'],['first','פנייה ראשונה'],['status','סטטוס'],['name','שם']].map(([k, l]) => `<option value="${k}" ${F.sort === k ? 'selected' : ''}>${l}</option>`).join('')}</select></div>
+      </form>
+      <p class="result-line small" aria-live="polite"><span><strong class="num">${rows.length}</strong> מתוך ${all.length} ספקים</span></p>
+      <div class="tbl-wrap"><table class="stable">
+        <caption class="sr-only">מאגר הספקים</caption>
+        <thead><tr><th scope="col">ספק</th><th scope="col">התאמה</th><th scope="col">קטגוריות</th><th scope="col">משלוח לישראל</th><th scope="col">מודל</th><th scope="col">מינימום הזמנה</th><th scope="col">סטטוס</th><th scope="col">החלטה</th><th scope="col">קישורים</th></tr></thead>
+        <tbody>${trs || '<tr><td colspan="9">אין ספקים בסינון.</td></tr>'}</tbody></table></div>
+    </section>` : ''}
+    ${A ? `<section class="section" aria-labelledby="h-acc">
+      <div class="section-head"><h2 id="h-acc">גישה למקורות: המשימות שלך</h2><span class="small faint">${stepsDone}/${stepsAll} צעדים · ${esc(A.file)}${A.updated ? ` · ${esc(fmtDay(A.updated))}` : ''}</span></div>
+      ${editable ? '' : noDbLine('הסימונים מוצגים בלי שמירה.')}
+      <p class="small muted lede">לפי סדר העדיפות. כל אפשרות מקושרת להחלטה שלה (AC1–AC4, S6) כשיש כזו. מפתחות נכנסים רק למשתני הסביבה של Claude, אף פעם לא לצ'אט. הסימון נשמר בדף.</p>
+      <div class="acc-grid">${cards}</div>
+    </section>` : ''}
+  </div>`;
+  paintVars(box);
+  restore();
+  const setF = (k, v) => { S.sup[k] = v; store.set('sup', Object.assign({}, S.sup, {q:''})); renderSuppliers(); };
+  const sf = $('#sup-filters'); if(sf) sf.onsubmit = ev => ev.preventDefault();
+  const qi = $('#sf-q'); if(qi) qi.addEventListener('input', () => { S.sup.q = qi.value; renderSuppliers(); });
+  for(const k of ['section','status','model','sort']){ const el = $('#sf-' + k); if(el) el.onchange = () => { setF(k, el.value); $('#sf-' + k).focus(); }; }
+  for(const c of $$('[data-step]', box)) c.onchange = () => { const [oid, i] = c.dataset.step.split('#'); toggleStep(oid, +i, c.checked); };
 }
 
 /* ---------- budget and break-even ---------- */

@@ -44,6 +44,31 @@ test.describe('room experience', () => {
     expect(await page.evaluate(() => window.__hdEngine?.getSelection().vase)).toBe(1);
   });
 
+  test('product rings: 44 px targets, no pulsing, visible keyboard focus with a glow, reduced motion respected', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await roomReady(page);
+    const spots = page.locator('button.hotspot:visible');
+    const n = await spots.count();
+    expect(n).toBeGreaterThan(5);
+    for (let i = 0; i < n; i++) {
+      const b = (await spots.nth(i).boundingBox())!;
+      expect(Math.min(b.width, b.height)).toBeGreaterThanOrEqual(44);
+    }
+    const vase = page.locator('button.hotspot[data-slot="vase"]');
+    expect(await vase.evaluate((el) => getComputedStyle(el.querySelector('.ring')!).animationName)).toBe('none');
+    // keyboard focus: a solid outline and the halo, with no transition time under reduced motion
+    await page.keyboard.press('Tab');
+    for (let i = 0; i < 40 && !(await vase.evaluate((el) => el === document.activeElement)); i++) await page.keyboard.press('Tab');
+    await expect(vase).toBeFocused();
+    const focusStyle = () =>
+      vase.evaluate((el) => {
+        const s = getComputedStyle(el);
+        const halo = getComputedStyle(el, '::after');
+        return `${s.outlineStyle} ${parseFloat(s.outlineWidth) >= 2} halo:${halo.opacity} ${parseFloat(halo.transitionDuration) <= 0.01}`;
+      });
+    await expect.poll(focusStyle, { timeout: 5000 }).toBe('solid true halo:1 true');
+  });
+
   test('drag with inertia moves the wheel (mouse)', async ({ page }) => {
     await roomReady(page);
     await page.locator('button.hotspot[data-slot="vase"]').click();

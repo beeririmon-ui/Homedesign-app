@@ -962,6 +962,106 @@ def load_economics(eco_dir: Path, products: list[dict]) -> dict:
     return out
 
 
+
+# --------------------------------------------------------------------------- market, styles, suppliers
+
+FLAG_HE = {
+    "shipping-estimated": "משלוח מוערך (חציון הקטגוריה)",
+    "viable-as-premium-up-to-P75": "כדאי גם כפרימיום, עד האחוזון ה-75",
+    "benchmark-mostly-filled-cushions": "ההשוואה בעיקר לכריות ממולאות",
+    "benchmark-mostly-double-size": "ההשוואה בעיקר למידה זוגית",
+    "benchmark-is-upholstered-ottoman": "ההשוואה לפוף מרופד",
+}
+# Decisions in status/decisions.json that an access option or a supplier belongs to.
+# S4 is taken from directory.json recommended_first_contacts; the rest are named in the decision texts.
+ACCESS_DECISIONS = {
+    "cj-api-sourcing": "AC1", "aliexpress-ds-api": "AC2", "aliexpress-affiliate-api": "AC2",
+    "google-vision-web": "AC3", "dsers-mcp": "AC4", "china-agents": "S6", "1688-agents": "S6",
+}
+SUPPLIER_DECISIONS = {
+    "china-purchasing-agent": "S6", "supplyia": "S6", "leeline-sourcing": "S6", "onestop-wh": "S6",
+    "amourlinen": "S7", "magiclinen": "S7",
+}
+
+
+def load_market(eco_dir: Path) -> dict | None:
+    """data/economics/market-prices.json -> {categories, products, assumptions} (only what the page shows)."""
+    mp = eco_dir / "market-prices.json"
+    if not mp.exists():
+        mp = ROOT / "data" / "economics" / "market-prices.json"
+    if not mp.exists():
+        return None
+    d = read_json(mp)
+    cats = {}
+    for k, c in (d.get("categories") or {}).items():
+        cats[k] = {f: c.get(f) for f in ("label_he", "low", "median", "high", "p75", "band", "n", "confidence", "verdict", "price_for_35pct_median")}
+        cats[k]["sources"] = [{f: s.get(f) for f in ("retailer", "title", "size", "price", "sale_price", "url", "date")}
+                              for s in (c.get("sources") or []) if isinstance(s, dict)]
+    prods = {}
+    for pid, e in (d.get("products") or {}).items():
+        q = {f: e.get(f) for f in ("category", "suggested_band", "verdict", "margin_at_band", "margin_at_band_min",
+                                   "margin_at_band_fx3", "margin_in_bundle", "landed_ils", "price_for_35pct")}
+        q["flags"] = [{"id": f, "he": FLAG_HE.get(f, f)} for f in (e.get("flags") or [])]
+        prods[pid] = q
+    a = d.get("assumptions") or {}
+    return {"file": rel(mp), "updated": d.get("updated"), "categories": cats, "products": prods,
+            "assumptions": {k: a.get(k) for k in ("fx_usd_ils", "target_margin", "cac_ils", "returns_reserve", "verdict", "band", "qty")}}
+
+
+def load_styles() -> dict | None:
+    sp = ROOT / "data" / "strategy" / "israel-styles.json"
+    if not sp.exists():
+        return None
+    d = read_json(sp)
+    styles = [{f: s.get(f) for f in ("id", "name_he", "name_en", "rank", "launch_order", "demand_score", "trend", "tier")}
+              for s in d.get("styles") or []]
+    styles.sort(key=lambda s: (s.get("rank") or 99))
+    return {"file": rel(sp), "doc": d.get("doc"), "date": d.get("date"), "status": d.get("status"),
+            "recommended_launch_order": d.get("recommended_launch_order") or [],
+            "current_plan_order": d.get("current_plan_order") or [], "styles": styles}
+
+
+def load_suppliers(decision_ids: set) -> dict | None:
+    dp = ROOT / "data" / "suppliers" / "directory.json"
+    ap = ROOT / "data" / "suppliers" / "access-options.json"
+    if not dp.exists() and not ap.exists():
+        return None
+    out = {"directory": None, "access": None}
+    if dp.exists():
+        d = read_json(dp)
+        first = {r["id"]: r for r in d.get("recommended_first_contacts") or [] if isinstance(r, dict) and r.get("id")}
+        rows = []
+        for s in d.get("suppliers") or []:
+            q = {f: s.get(f) for f in ("id", "name", "website", "section", "type", "country", "categories", "model", "moq",
+                                       "price_level", "shipping_to_israel", "lead_time", "standards", "integration",
+                                       "status", "unverified", "sample_links", "price_note")}
+            fit = s.get("nordic_fit") or {}
+            q["fit"] = fit.get("score") if isinstance(fit, dict) else fit
+            q["fit_why"] = fit.get("rationale") if isinstance(fit, dict) else None
+            c = s.get("contact") or {}
+            q["contact"] = {k: v for k, v in c.items() if isinstance(v, str)} if isinstance(c, dict) else {}
+            dec = SUPPLIER_DECISIONS.get(s.get("id")) or ("S4" if s.get("id") in first else None)
+            q["decision"] = dec if dec in decision_ids else None
+            if s.get("id") in first:
+                q["first_rank"] = first[s["id"]].get("rank")
+                q["first_why"] = first[s["id"]].get("why")
+            q["next_wave"] = s.get("id") in (d.get("next_wave") or [])
+            rows.append(q)
+        out["directory"] = {"file": rel(dp), "updated": d.get("updated"), "scope": d.get("scope"),
+                            "fields": d.get("fields"), "suppliers": rows}
+    if ap.exists():
+        a = read_json(ap)
+        opts = []
+        for o in a.get("options") or []:
+            q = {f: o.get(f) for f in ("id", "name", "type", "priority", "unlocks", "user_steps", "requirements", "cost",
+                                       "approval_days", "depends_on", "sources", "verified", "env_vars", "checked")}
+            dec = ACCESS_DECISIONS.get(o.get("id"))
+            q["decision"] = dec if dec in decision_ids else None
+            opts.append(q)
+        opts.sort(key=lambda o: (o.get("priority") if isinstance(o.get("priority"), (int, float)) else 999, o.get("id") or ""))
+        out["access"] = {"file": rel(ap), "updated": a.get("updated"), "note": a.get("note"), "options": opts}
+    return out
+
 # --------------------------------------------------------------------------- main
 
 def main() -> int:
@@ -1007,6 +1107,14 @@ def main() -> int:
 
     board = parse_board(ROOT / "status" / "board.md")
     decisions = load_decisions(order)
+    market = load_market(eco_dir)
+    styles = load_styles()
+    dec_ids = {d.get("id") for d in decisions.get("items") or [] if isinstance(d, dict)}
+    suppliers = load_suppliers(dec_ids)
+    if market:
+        log(f"  market: {len(market['categories'])} categories · {len(market['products'])} products with a verdict")
+    if suppliers:
+        log(f"  suppliers: {len((suppliers.get('directory') or {}).get('suppliers') or [])} in the directory · {len((suppliers.get('access') or {}).get('options') or [])} access options")
     qa = load_reports(["assets/qa/*.md", "qa/reports/*.md"], "qa")
     leads = load_reports(["data/leads/**/*.md"], "lead")
 
@@ -1079,6 +1187,9 @@ def main() -> int:
         "log": board["log"],
         "decisions": decisions,
         "economics": economics,
+        "market": market,
+        "styles": styles,
+        "suppliers": suppliers,
         "reports": qa,
         "leads": leads,
     }
