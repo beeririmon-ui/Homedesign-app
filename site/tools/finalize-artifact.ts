@@ -48,6 +48,10 @@ for (const w of scene.hall.widths.filter((x) => x <= lo)) files.add(`${scene.hal
 files.add(`${scene.depth.src}.webp`);
 for (const s of Object.values(scene.slots)) for (const set of [s.product, s.shadow, s.light]) for (const src of set?.src ?? []) files.add(`${src}.${lo}.webp`);
 for (const t of Object.values(scene.transitions)) for (let i = 1; i <= t.frames; i++) files.add(`${t.src}/${String(i).padStart(3, '0')}.webp`);
+// FR-I: the supplier's photo of every shown product (one per product, encoded by tools/supplier-images.ts)
+type SupplierManifest = { width: number; products: Record<string, { src: string; width: number }> };
+const supplier = JSON.parse(readFileSync(sitePath('.generated/supplier-images.json'), 'utf8')) as SupplierManifest;
+for (const s of Object.values(supplier.products)) files.add(`${s.src}.${s.width}.webp`);
 
 rmSync(join(OUT, 'media'), { recursive: true, force: true });
 let missing = 0;

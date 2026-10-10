@@ -2,7 +2,8 @@ import { useState } from 'preact/hooks';
 import type { Pack, PublicProduct } from '@hd/shared';
 import { packLabelHe } from '@hd/shared/packs';
 import { product, slotOf } from '../catalog';
-import { Price, productImage } from '../components/Media';
+import { Price, galleryImages } from '../components/Media';
+import { ProductGallery } from '../components/ProductGallery';
 import { addToCart, cartBusy } from '../state/cart';
 import { navigate } from '../router';
 import { pendingOpen } from '../state/room';
@@ -16,7 +17,7 @@ export function Product({ p }: { p: PublicProduct }) {
   const price = packPrice(p, pack);
   const estimated = pack === 'unit' && !!p.pack?.unit_price_estimated;
   const where = slotOf(p)!;
-  const img = productImage(p.id);
+  const images = galleryImages(p);
   const dims = [p.dimensions_cm.width, p.dimensions_cm.depth, p.dimensions_cm.height].filter((x): x is number => typeof x === 'number');
   const showInRoom = () => {
     pendingOpen.value = { slot: where.slot.id, option: where.option.position };
@@ -36,7 +37,7 @@ export function Product({ p }: { p: PublicProduct }) {
         </ol>
       </nav>
       <article class="product" aria-labelledby="product-title">
-        <div class="product-media">{img ? <img src={img} alt={`${p.name_he} (תמונה זמנית מתוך החדר)`} width={600} height={600} /> : null}</div>
+        <div class="product-media">{images.length ? <ProductGallery images={images} id={`p-${p.id}`} /> : null}</div>
         <div class="product-info">
           <div class="page-head" style={{ marginBottom: 0 }}>
             <p class="eyebrow">{where.slot.name_he}</p>

@@ -53,9 +53,12 @@
 .stage.zoomed .hotspots {
   opacity: 0;
 }
-/* Product markers (studio-rules ו.4, 2026-10-10): at rest one small, quiet mark per product, sitting on the product
-   itself (the deepest point of its silhouette, set in JS); never a ring around a box. Hover, touch or focus draws the
-   product's own outline with a soft glow (.outlines below). The button is a 46 px target around the mark. */
+/* Product markers (studio-rules ו.4, 2026-10-10): at rest the room is clean. One small, quiet mark per product sits on
+   the product itself (the deepest point of its silhouette, set in JS); never a ring around a box. The marks show
+   (.stage[data-marks='on'], set in JS) while the pointer moves or a finger touches the stage and fade ~3 s after the
+   last movement, stay while keyboard focus is inside the stage, and blink once on the first visit. Hover, touch or
+   focus draws the product's own outline with a soft glow (.outlines below). The button is a 46 px target around the
+   mark and is always in the DOM: only the mark's opacity changes. */
 .hotspot {
   position: absolute;
   left: 0;
@@ -89,12 +92,25 @@
     0 0 0 5px rgba(255, 252, 246, 0.22),
     0 1px 6px rgba(28, 24, 20, 0.25);
   pointer-events: none;
+  opacity: 0;
   transition:
+    opacity 0.6s var(--ease-out),
     transform 0.35s var(--ease-out),
     box-shadow 0.35s var(--ease-out);
 }
+.stage[data-marks='on'] .hotspot .mark {
+  opacity: 1;
+  transition-duration: 0.25s, 0.35s, 0.35s;
+}
+/* the touched, hovered or focused product keeps its mark whatever the rest do */
+.hotspot:focus-visible .mark,
+.hotspot[data-active='true'] .mark,
+.hotspot[data-hover='true'] .mark {
+  opacity: 1;
+}
 @media (hover: hover) {
   .hotspot:hover .mark {
+    opacity: 1;
     transform: scale(1.25);
   }
 }

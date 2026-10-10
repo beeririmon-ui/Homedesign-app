@@ -4,6 +4,7 @@ import type { Route } from './router';
 import { catalog, livingRoom, product, slotOf } from './catalog';
 import { mediaUrl } from './media';
 import { scene } from './catalog';
+import { galleryImages } from './components/Media';
 
 export type Head = { title: string; description: string; canonical: string; jsonLd: object[]; noindex?: boolean; preload?: string };
 
@@ -78,6 +79,8 @@ export function headFor(route: Route): Head {
         name: p.name_he,
         description: p.description_he,
         sku: p.id,
+        // FR-I: the render from the room first, the supplier's original photo after it
+        image: galleryImages(p).map((im) => new URL(im.src, `${ORIGIN}/`).href),
         color: p.color_hex,
         material: p.materials_he.join(', ') || undefined,
       };

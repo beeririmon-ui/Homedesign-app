@@ -38,6 +38,7 @@ function product(id: string, slot: string, price: number, cost: number, set?: { 
     status: 'candidate',
     source_path: `data/products/${slot}/${id}.json`,
     supplier: { name: 'CJ Dropshipping', url: 'https://example.invalid/p', sku: 'SKU1' },
+    supplier_image: { url: 'https://example.invalid/p.jpg', usage_rights: 'unclear', quality: 'medium' },
     cost_usd_cents: cost,
     shipping_usd_cents: 1000,
     shipping_from_default: false,

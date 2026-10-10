@@ -1,10 +1,14 @@
 /** The public catalog and the room scene, bundled at build time from site/.generated (built from the repo). */
-import type { CatalogRoom, CatalogSlot, PublicCatalog, PublicProduct, SlotOption } from '@hd/shared';
+import type { CatalogRoom, CatalogSlot, PublicCatalog, PublicProduct, SlotOption, SupplierImage, SupplierImageManifest } from '@hd/shared';
 import catalogJson from '@generated/catalog.public.json';
 import sceneJson from '@generated/scene.living-room.nordic.json';
+import supplierJson from '@generated/supplier-images.json';
 import type { Scene } from './engine/types';
 
 export const catalog = catalogJson as unknown as PublicCatalog;
+/** The supplier's original photo of a product, served from our media (FR-I; tools/supplier-images.ts). */
+const supplierImages = (supplierJson as unknown as SupplierImageManifest).products;
+export const supplierImage = (id: string): SupplierImage | null => supplierImages[id] ?? null;
 const fullScene = sceneJson as unknown as Scene;
 /**
  * The artifact preview ships a reduced media set (≤ 200 files, ≤ 12 MB): WebP only, layers at one width (lo),

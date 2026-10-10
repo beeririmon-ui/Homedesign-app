@@ -106,11 +106,7 @@ async function main() {
       continue;
     }
     mkdirSync(dirname(out), { recursive: true });
-    const info = await sharp(buf, { failOn: 'none' })
-      .rotate()
-      .resize({ width: WIDTH, withoutEnlargement: true })
-      .webp({ quality: 80, effort: 5 })
-      .toFile(out);
+    const info = await sharp(buf, { failOn: 'none' }).rotate().resize({ width: WIDTH, withoutEnlargement: true }).webp({ quality: 80, effort: 5 }).toFile(out);
     manifest.products[p.id] = { src, width: info.width, height: info.height, usage_rights: p.supplier_image.usage_rights };
     encoded++;
   }

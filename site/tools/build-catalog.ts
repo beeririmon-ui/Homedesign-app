@@ -16,6 +16,7 @@ import { relative, join } from 'node:path';
 import {
   ProductCardSchema,
   SlotsFileSchema,
+  HotspotPointsSchema,
   SettingsFileSchema,
   ProductEconomicsFileSchema,
   FreightFileSchema,
@@ -115,11 +116,12 @@ const fixedWaiting: string[] = [];
 function hotspotFromFile(slot: Slot, frame: string): CatalogSlot['hotspot'] {
   const h = slot.hotspot;
   if (!h || Array.isArray(h)) return null;
-  if ('points' in h) {
-    const pt = h.points.find((p) => p.frame === frame) ?? h.points[0];
-    return pt ? { u: pt.u, v: pt.v, provisional: h.provisional === true, visible: h.visible !== false } : null;
+  const pts = HotspotPointsSchema.safeParse(h);
+  if (pts.success) {
+    const pt = pts.data.points.find((p) => p.frame === frame) ?? pts.data.points[0];
+    return pt ? { u: pt.u, v: pt.v, provisional: pts.data.provisional === true, visible: pts.data.visible !== false } : null;
   }
-  return { u: h.u, v: h.v, provisional: false, visible: true };
+  return typeof h.u === 'number' && typeof h.v === 'number' ? { u: h.u, v: h.v, provisional: false, visible: true } : null;
 }
 
 function frameBoxFromBoxes(boxes: number[][]): [number, number, number, number] | null {
@@ -326,11 +328,7 @@ for (const hr of house.rooms) {
     });
     const temp = tempCoords.slots[slot.id];
     const fromFile = hotspotFromFile(slot, frame);
-    const hotspot = fromFile
-      ? fromFile
-      : temp
-        ? { u: temp.hotspot[0], v: temp.hotspot[1], provisional: true, visible: temp.visible !== false }
-        : null;
+    const hotspot = fromFile ? fromFile : temp ? { u: temp.hotspot[0], v: temp.hotspot[1], provisional: true, visible: temp.visible !== false } : null;
     const zoomFromFile = Array.isArray(slot.zoom_frame) && slot.zoom_frame.length === 4 ? (slot.zoom_frame as [number, number, number, number]) : null;
     slots.push({
       id: slot.id,

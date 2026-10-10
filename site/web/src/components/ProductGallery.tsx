@@ -116,7 +116,13 @@ export function ProductGallery({ images, id }: { images: GalleryImage[]; id: str
               </button>
             ))}
           </div>
-          <button type="button" class="gallery-btn" aria-label="התמונה הבאה" aria-disabled={index === n - 1 ? 'true' : undefined} onClick={() => goTo(index + 1)}>
+          <button
+            type="button"
+            class="gallery-btn"
+            aria-label="התמונה הבאה"
+            aria-disabled={index === n - 1 ? 'true' : undefined}
+            onClick={() => goTo(index + 1)}
+          >
             <IconLeft />
           </button>
           <p class="sr-only" aria-live="polite" id={`${id}-gallery-live`}>

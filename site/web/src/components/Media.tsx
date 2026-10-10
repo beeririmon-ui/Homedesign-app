@@ -1,7 +1,9 @@
 import type { Ref } from 'preact';
 import { formatIls } from '@hd/shared/money';
+import type { PublicProduct } from '@hd/shared';
 import { mediaUrl } from '../media';
-import { scene, slotOf, product as productById } from '../catalog';
+import { scene, slotOf, supplierImage, product as productById } from '../catalog';
+import type { GalleryImage } from './ProductGallery';
 
 const FORMATS: ('avif' | 'webp')[] = __ARTIFACT__ ? ['webp'] : scene.formats;
 
@@ -57,6 +59,37 @@ export function productImage(id: string): string | null {
   const p = productById(id);
   const where = p ? slotOf(p) : undefined;
   return where ? optionImage(where.slot.id, where.option.position) : null;
+}
+
+/**
+ * The product page pictures (FR-I): the render from the room first, with a visible note that it is a render, then the
+ * supplier's original photo (when tools/supplier-images.ts fetched one).
+ */
+export function galleryImages(p: PublicProduct): GalleryImage[] {
+  const out: GalleryImage[] = [];
+  const render = productImage(p.id);
+  const sup = supplierImage(p.id);
+  if (render)
+    out.push({
+      kind: 'render',
+      src: render,
+      alt: `הדמיה: ${p.name_he} בחדר`,
+      width: 600,
+      height: 600,
+      label: 'הדמיה בחדר',
+      caption: `כך המוצר נראה בחדר (המוצר מרונדר).${sup ? ' התמונה המקורית מהספק בתמונה הבאה.' : ''}`,
+    });
+  if (sup)
+    out.push({
+      kind: 'supplier',
+      src: mediaUrl(sup.src, sup.width, 'webp'),
+      alt: `תמונת הספק: ${p.name_he}`,
+      width: sup.width,
+      height: sup.height,
+      label: 'תמונת הספק',
+      caption: 'התמונה המקורית מהספק.',
+    });
+  return out;
 }
 
 export function Price({ agorot, provisional, class: cls }: { agorot: number; provisional?: boolean; class?: string }) {

@@ -24,6 +24,18 @@ declare global {
   }
 }
 
+/**
+ * Product marks (studio-rules ו.4, "כן לנקודות", 2026-10-10): the room rests clean. The marks show while the pointer
+ * moves over the stage or a finger touches it, and fade out MARKS_MS after the last movement; keyboard focus on a mark
+ * shows them for as long as focus stays inside the stage; on the first visit they blink once (HINT_MS) so people know
+ * there is something to touch. Only the visual mark hides (opacity): the buttons stay in the DOM for screen readers
+ * and the keyboard, and the list under the room stays.
+ */
+const MARKS_MS = 3000;
+const HINT_MS = 2000;
+/** the first-visit hint shows once per page session */
+let hinted = false;
+
 export function RoomExperience({ room }: { room: CatalogRoom }) {
   const stage = useRef<HTMLDivElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
@@ -41,6 +53,31 @@ export function RoomExperience({ room }: { room: CatalogRoom }) {
 
   const [placed, setPlaced] = useState(false);
   const starting = useRef<Promise<RoomEngine | null> | null>(null);
+
+  // marks: shown until `marksUntil` (performance.now ms), or while keyboard focus holds them
+  const marksUntil = useRef(0);
+  const marksTimer = useRef(0);
+  const marksHeld = useRef(false);
+  function showMarks(ms = MARKS_MS) {
+    const st = stage.current;
+    if (!st) return;
+    if (st.getAttribute('data-marks') !== 'on') st.setAttribute('data-marks', 'on');
+    marksUntil.current = Math.max(marksUntil.current, performance.now() + ms);
+    if (!marksTimer.current) armMarks();
+  }
+  function armMarks() {
+    const wait = Math.max(0, marksUntil.current - performance.now()) + 16;
+    marksTimer.current = window.setTimeout(() => {
+      marksTimer.current = 0;
+      if (marksHeld.current) return; // keyboard focus keeps them; the blur handler hides them
+      if (performance.now() < marksUntil.current) return armMarks(); // moved again meanwhile
+      stage.current?.removeAttribute('data-marks');
+    }, wait);
+  }
+  function hideMarks() {
+    marksUntil.current = 0;
+    stage.current?.removeAttribute('data-marks');
+  }
 
   /** Hotspot positions: from the engine's camera once it runs, before that from the same camera math on the poster. */
   function placeHotspots() {
@@ -163,6 +200,8 @@ export function RoomExperience({ room }: { room: CatalogRoom }) {
       ro.disconnect();
       removeEventListener('load', later);
       cancelIdle(idle);
+      clearTimeout(marksTimer.current);
+      marksTimer.current = 0;
       engine.current?.destroy();
       engine.current = null;
       stageEngine.value = null;
@@ -177,6 +216,15 @@ export function RoomExperience({ room }: { room: CatalogRoom }) {
     stage.current?.classList.toggle('arriving', arriving);
     if (!arriving) placeHotspots();
   }, [arriving]);
+
+  // first visit: the marks appear and fade so people know the products can be touched (no animation under
+  // prefers-reduced-motion: base.css removes the transition, so they just appear and disappear)
+  useEffect(() => {
+    if (!placed || arriving || hinted) return;
+    hinted = true;
+    const t = setTimeout(() => showMarks(HINT_MS), 400);
+    return () => clearTimeout(t);
+  }, [placed, arriving]);
 
   // "הצגה בחדר" from a product page, or "החלפה" in the list under the stage
   const pending = pendingOpen.value;
@@ -272,12 +320,14 @@ export function RoomExperience({ room }: { room: CatalogRoom }) {
   const panState = useRef<{ x: number; id: number; moved: number; onControl: boolean } | null>(null);
   function onPointerDown(ev: PointerEvent) {
     void ensureEngine();
+    showMarks();
     if (open || busy) return;
     const onControl = !!(ev.target as Element).closest('button, a');
     panState.current = { x: ev.clientX, id: ev.pointerId, moved: 0, onControl };
     if (!onControl) light(slotAt(ev.clientX, ev.clientY)?.id ?? null);
   }
   function onPointerMove(ev: PointerEvent) {
+    showMarks();
     const e = engine.current;
     const p = panState.current;
     if (e && p && p.id === ev.pointerId && !p.onControl) {
@@ -316,6 +366,18 @@ export function RoomExperience({ room }: { room: CatalogRoom }) {
     stage.current?.removeAttribute('data-pointing');
   }
   const panBy = (dx: number) => void ensureEngine().then((e) => e?.panBy(dx));
+  function onFocusIn(ev: FocusEvent) {
+    if (!(ev.target as Element).closest('.hotspot')) return;
+    marksHeld.current = true;
+    showMarks();
+  }
+  function onFocusOut(ev: FocusEvent) {
+    const to = ev.relatedTarget as Node | null;
+    if (to && stage.current?.contains(to)) return;
+    if (!marksHeld.current) return;
+    marksHeld.current = false;
+    hideMarks();
+  }
 
   const styles = catalog.styles;
   return (
@@ -329,6 +391,8 @@ export function RoomExperience({ room }: { room: CatalogRoom }) {
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerUp}
       onPointerLeave={onPointerLeave}
+      onFocusIn={onFocusIn}
+      onFocusOut={onFocusOut}
     >
       <Picture
         src={scene.base[0]!.src}
