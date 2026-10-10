@@ -161,7 +161,7 @@
       "blocks": "שלושה פריימים מתחת לרצפה",
       "source": "data/slots/hall.json, master.json, corridor.json",
       "asked": "2026-10-09",
-      "status": "answered",
+      "status": "applied",
       "answer": {
         "option": "yes",
         "note": "כן ולעשות רשימה שלאט לאט נחליף את זה במוצרים תלוי הצלחה של האתר",
@@ -229,7 +229,7 @@
       "blocks": "",
       "source": "docs/house-plan.md",
       "asked": "2026-10-09",
-      "status": "answered",
+      "status": "applied",
       "answer": {
         "option": "keep",
         "note": "",
@@ -260,7 +260,7 @@
       "blocks": "",
       "source": "data/slots/work.json",
       "asked": "2026-10-09",
-      "status": "answered",
+      "status": "applied",
       "answer": {
         "option": "small-pendant",
         "note": "",
@@ -291,7 +291,7 @@
       "blocks": "",
       "source": "data/slots/bath.json",
       "asked": "2026-10-09",
-      "status": "answered",
+      "status": "applied",
       "answer": {
         "option": "no",
         "note": "",
@@ -347,7 +347,7 @@
       "blocks": "",
       "source": "docs/house-plan.md",
       "asked": "2026-10-09",
-      "status": "answered",
+      "status": "applied",
       "answer": {
         "option": "accept",
         "note": "",
@@ -378,7 +378,7 @@
       "blocks": "",
       "source": "docs/brand-brief.md",
       "asked": "2026-10-09",
-      "status": "answered",
+      "status": "applied",
       "answer": {
         "option": "yes",
         "note": "אם כן אז לציין בדף מוצר את התקן",
@@ -409,7 +409,7 @@
       "blocks": "",
       "source": "docs/house-plan.md",
       "asked": "2026-10-09",
-      "status": "answered",
+      "status": "applied",
       "answer": {
         "option": "full",
         "note": "",
@@ -539,7 +539,7 @@
       "blocks": "דירוג מוצרים לילדים ולמקלחת",
       "source": "data/product-card.schema.json",
       "asked": "2026-10-09",
-      "status": "answered",
+      "status": "applied",
       "answer": {
         "option": "yes",
         "note": "",
@@ -570,7 +570,7 @@
       "blocks": "",
       "source": "CLAUDE.md",
       "asked": "2026-10-09",
-      "status": "answered",
+      "status": "applied",
       "answer": {
         "option": "yes",
         "note": "",
@@ -644,7 +644,7 @@
       "blocks": "",
       "source": "docs/suppliers/directory.md, docs/brand-brief.md",
       "asked": "2026-10-09",
-      "status": "answered",
+      "status": "applied",
       "answer": {
         "option": "1-2",
         "note": "",
@@ -1260,6 +1260,118 @@
       "blocks": "",
       "source": "docs/suppliers/access-and-pipeline-2026-10.md",
       "asked": "2026-10-09",
+      "status": "open"
+    },
+    {
+      "id": "S2B",
+      "group": "ספקים",
+      "title": "תקן בתאורה ובצעצועים",
+      "question": "ב-S2 ענית לא לדרוש מהספק תעודות. להשאיר בכל זאת את חובת התקן בתאורה ובצעצועים?",
+      "context": "מסמך המותג מחייב CE ו-220–240V בכל מוצר חשמל, ו-D9 קבע EN71 / ת\"י 562 לצעצועים. לפי המחקר, מנורות דורשות אישור תקן ישראלי ביבוא מסחרי (לא אומת מול מכון התקנים). זה סיכון משפטי וסיכון למוצר שנחסם במכס.",
+      "options": [
+        {
+          "id": "keep-risky",
+          "label": "כן: חובה רק בחשמל ובצעצועים",
+          "desc": "בשאר המוצרים לא דורשים תעודה",
+          "recommended": true
+        },
+        {
+          "id": "none",
+          "label": "לא: לא דורשים בכלל",
+          "desc": "מוחק את הדרישה גם ממסמך המותג",
+          "recommended": false
+        },
+        {
+          "id": "all",
+          "label": "לדרוש בכל המוצרים",
+          "desc": "",
+          "recommended": false
+        }
+      ],
+      "blocks": "תאורה ומוצרי ילדים באתר",
+      "source": "docs/brand-brief.md, docs/studio-rules.md ד.3",
+      "asked": "2026-10-10",
+      "status": "open"
+    },
+    {
+      "id": "F1",
+      "group": "מוצרים",
+      "title": "מוצרי מילוי בלי כרטיס",
+      "question": "8 מוצרי מילוי עוד בלי כרטיס מוצר. עד שיהיה להם כרטיס, שיופיעו בחדר בלי נקודת מוצר?",
+      "context": "חוק ג.1: כל אביזר עצמאי בפריים הוא מוצר שנמכר. רשימת ההחלפה: docs/proposals/filler-replacements.md (קופסאות וספסל בכניסה, שטיח ושרפרף במסדרון, שרפרף מדרגה במטבח, קנקן, אגרטל וצלוחית בהורים, כלי עפרונות בחדר העבודה).",
+      "options": [
+        {
+          "id": "no-hotspot",
+          "label": "כן, בלי נקודה עד שיש כרטיס",
+          "desc": "",
+          "recommended": true
+        },
+        {
+          "id": "source-now",
+          "label": "לא, למצוא להם מוצרים לפני ההשקה",
+          "desc": "",
+          "recommended": false
+        }
+      ],
+      "blocks": "",
+      "source": "docs/proposals/filler-replacements.md",
+      "asked": "2026-10-10",
+      "status": "open"
+    },
+    {
+      "id": "F2",
+      "group": "מוצרים",
+      "title": "מתי מחליפים מוצרי מילוי",
+      "question": "לאשר את ספי ההחלפה: 3 פריטים עכשיו, עוד 4 ב-20 הזמנות בחודש לחדר, והשאר ב-50?",
+      "context": "סדר ההחלפה לפי חשיפה בפריים ופוטנציאל מכירה. מוצר מחליף צריך 3 מועמדים, ציון נורדי 8+, תמונות טובות וזכויות מאושרות.",
+      "options": [
+        {
+          "id": "yes",
+          "label": "כן",
+          "desc": "",
+          "recommended": true
+        },
+        {
+          "id": "all-now",
+          "label": "להחליף את כולם כבר עכשיו",
+          "desc": "",
+          "recommended": false
+        },
+        {
+          "id": "other",
+          "label": "ספים אחרים (פרט/י בהערה)",
+          "desc": "",
+          "recommended": false
+        }
+      ],
+      "blocks": "",
+      "source": "data/slots/filler-replacements.json",
+      "asked": "2026-10-10",
+      "status": "open"
+    },
+    {
+      "id": "Q2B",
+      "group": "מסמכים",
+      "title": "תקנים נוספים בכרטיס",
+      "question": "איך לרשום תקנים שלא ברשימה (EN 13120 לווילון רומאי בחדר ילדים, OEKO-TEX למצעים)?",
+      "context": "שדה safety.toy_standard מכיל רק EN71, ת\"י 562 ו-EN13613.",
+      "options": [
+        {
+          "id": "certificates",
+          "label": "ברשימת התעודות של המוצר",
+          "desc": "גמיש, בלי לשנות את הסכמה",
+          "recommended": true
+        },
+        {
+          "id": "enum",
+          "label": "להרחיב את רשימת התקנים בסכמה",
+          "desc": "",
+          "recommended": false
+        }
+      ],
+      "blocks": "",
+      "source": "data/product-card.schema.json, data/slots/kids.json",
+      "asked": "2026-10-10",
       "status": "open"
     }
   ]
