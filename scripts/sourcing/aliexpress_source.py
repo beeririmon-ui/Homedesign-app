@@ -1,16 +1,17 @@
 #!/usr/bin/env python3
-"""AliExpress importer: STUB. Same CLI as cj_source.py (search / image / product / freight / check / mark).
+"""AliExpress importer: thin shim over scripts/ae/ds.py (the real client, wired 2026-10-10).
 
-Needs the AliExpress Open Platform Dropshipping app (doc task 2): AE_DS_APP_KEY, AE_DS_APP_SECRET.
-The Affiliates app (task 3: AE_AFF_APP_KEY, AE_AFF_APP_SECRET, AE_AFF_TRACKING_ID) is optional, read-only.
-Registry keys: "aliexpress:<item id>" with the aliexpress.com id (1005...); .us ids (3256...) map to it.
+Same CLI shape as cj_source.py: search / image / product / freight / check / mark (plus card, specialinfo,
+category from ds.py). `image <path-or-url>` maps to `ds.py image-search`. Keys only from the environment
+(AE_DS_APP_KEY, AE_DS_APP_SECRET); without them ds.py prints "not configured" and calls nothing.
+Registry keys: "aliexpress:<item id>" with the aliexpress.com id (1005...); .us ids (3256...) are stored as aliases
+when the API returns the converter result. Docs: scripts/ae/README.md.
 """
-import os, sys
+import os
+import sys
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from stub_source import run_stub  # noqa: E402
+DS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "ae", "ds.py")
 
 if __name__ == "__main__":
-    run_stub("aliexpress", ["AE_DS_APP_KEY", "AE_DS_APP_SECRET"],
-             supported=("search", "image", "product", "freight", "check", "mark"),
-             doc_task="docs/suppliers/access-and-pipeline-2026-10.md, tasks 2-3")
+    argv = ["image-search" if x == "image" else x for x in sys.argv[1:]]
+    os.execv(sys.executable, [sys.executable, "-I", os.path.abspath(DS)] + argv)

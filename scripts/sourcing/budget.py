@@ -30,9 +30,11 @@ SOURCES = {
         # "Exceeded the daily source limit"), the same 5/day as the website's free tier.
         "endpoint_caps": {"sourcing_create": 5},
     },
-    # Placeholders for the stubs; real numbers go in when the source is configured.
+    # AliExpress DS API (scripts/ae/ds.py): the per-app quota is not published for Test apps (it is shown in the
+    # App Console, doc 1361 "API traffic control policy"); 5,000 calls/day is our own conservative cap until
+    # the console value is copied here. Unit = calls, every endpoint costs 1.
     "aliexpress": {"unit": "calls", "daily_cap": 5000, "soft_ratio": 0.8, "endpoint_daily_calls": None,
-                   "cost": {"search": 1, "image": 1, "product": 1, "freight": 1}},
+                   "cost": {"search": 1, "image": 1, "product": 1, "freight": 1, "specialinfo": 1, "category": 1}},
     "google_vision": {"unit": "units", "daily_cap": 33, "soft_ratio": 0.8, "endpoint_daily_calls": None,
                       "cost": {"image": 1}},  # 1,000 free units/month ~ 33/day
 }
