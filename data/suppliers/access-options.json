@@ -1,7 +1,7 @@
 {
-  "version": 1,
-  "updated": "2026-10-09",
-  "note": "Access options for more sourcing data. 'verified' says what was checked and where. Keys go only in env vars set by the user (studio-rules ח).",
+  "version": 2,
+  "updated": "2026-10-10",
+  "note": "Access options for more sourcing data. 'verified' says what was checked and where. Keys go only in env vars set by the user (studio-rules ח). 2026-10-10: aggregator research added (docs/suppliers/aggregators-2026-10.md); existing entries kept, autods/dsers-mcp/syncee facts refreshed.",
   "options": [
     {
       "id": "cj-api-sourcing",
@@ -208,28 +208,28 @@
       "name": "DSers (AliExpress official partner) + DSers MCP / Open API",
       "type": "aggregator",
       "priority": 5,
-      "unlocks": "AliExpress (+Alibaba, 1688 per Shopify listing) supplier discovery, product search/detail, freight quotes, cross-platform image search, 'Supplier Optimizer' (same product, cheaper supplier). MCP lets Claude call it directly.",
+      "unlocks": "AliExpress, 1688 (dropshipping + wholesale), Alibaba dropshipping and the 'DSers supplier agent network' (pricing page 2026-10-10). Temu appears only in a help-article URL slug, not in visible text. Official MCP (labelled Beta) on Advanced/Pro/Enterprise: 'Connect DSers with external AI tools through the official MCP integration'. Basic: MCP 'Unavailable'.",
       "user_steps": [
         "Sign up at https://www.dsers.com (free Basic).",
-        "MCP needs Advanced ($19.90/mo, 14-day trial) per pricing page.",
+        "MCP needs Advanced ($19.90/mo, 20K products, 10 stores; 14-day trial) or higher. Basic (free, 3K products) has no MCP.",
         "Add the DSers MCP URL as a custom connector at https://claude.ai/customize/connectors (OAuth sign-in, no keys), then start a new session.",
         "Check whether search/freight work without a connected store; if not, wait for the store decision."
       ],
       "requirements": {
         "business": false,
         "website": false,
-        "store": "Likely Shopify/Wix/Woo for import and orders; search without a store not verified",
+        "store": "Shopify app listing: 'To install this app you need to create a Shopify account... and then select a store'. Sales channels: Shopify, Wix, WooCommerce, eBay, TikTok, Amazon, Walmart. Whether MCP search works with no store: not verified.",
         "min_sales": null
       },
       "cost": {
-        "monthly": "0 / 19.90 / 49.90 / 499.90",
+        "monthly": "0 (Basic) / 19.90 (Advanced, MCP) / 49.90 (Pro) / 499.90 (Enterprise); yearly -20%",
         "per_order": "AliExpress price"
       },
       "api": {
         "available": true,
         "rate_limit": "Not published",
         "endpoints": {
-          "mcp": "https://ai.dsers.com/mcp (Glama listing; another listing says https://mcp.dsers.com/dropshipping/mcp) - 60 tools incl. product search, detail, freight quotes",
+          "mcp": "Official hosted MCP (OAuth) per pricing page; URL not printed on the page. Third-party listings: https://ai.dsers.com/mcp (401 without OAuth) or https://mcp.dsers.com/dropshipping/mcp. Community npm 'DSers MCP' servers exist and are NOT official.",
           "open_api": "dsers.dev (domain did not resolve 2026-10-09)"
         }
       },
@@ -241,13 +241,14 @@
       "depends_on": [
         "probably a Shopify/Wix store for full use"
       ],
-      "verified": "partial: plans/prices and MCP plan gating from dsers.com/pricing 2026-10-09; MCP endpoint from Glama (two different URLs); store requirement unverified.",
+      "verified": "partial: plans, prices, sources and MCP plan gating from dsers.com/pricing (re-read 2026-10-10); store requirement from the Shopify listing; MCP URL from third-party listings; no-store use not verified.",
       "sources": [
         "https://www.dsers.com/pricing",
+        "https://apps.shopify.com/dsers?locale=en",
         "https://glama.ai/mcp/servers/ch8774ox9z",
-        "https://apps.shopify.com/dsers"
+        "docs/suppliers/aggregators-2026-10.md"
       ],
-      "checked": "2026-10-09"
+      "checked": "2026-10-10"
     },
     {
       "id": "aliexpress-ds-center",
@@ -371,21 +372,22 @@
     },
     {
       "id": "autods",
-      "name": "AutoDS (Israeli company)",
+      "name": "AutoDS (Israeli company: AutoDS Ltd., Tel Aviv, per its Terms of Service)",
       "type": "aggregator",
       "priority": 8,
-      "unlocks": "Import/automation from many suppliers (AliExpress, CJ, Amazon, etc.); Product Finding Hub add-on ($14.97) with winning products and 'stores selling the same product'.",
+      "unlocks": "Import/automation from 29 logo-listed sources (official suppliers page 2026-10-10): AliExpress, Amazon, Alibaba, CJdropshipping, Banggood, DHgate, Shein, Walmart, Costco, Wayfair, Overstock, Lowe's, Target, Costway, Sam's Club, VidaXL, Wish, Redbubble, MiniInTheBox, Light in the Box, Kmart, Macy's, Kohl's, Cdiscount, Etsy, eBay, Shopify, Pure Formulas + 'AutoDS private suppliers'. Most US retailers do not ship to Israel. Product Finding Hub add-on ($14.97).",
       "user_steps": [
-        "Only after a Shopify/Wix/Woo/eBay store exists: 3-day $0.99 trial, then plan + Product Finding Hub."
+        "Only via a connected store: Shopify, Wix, WooCommerce, eBay, Amazon, Etsy, TikTok Shop, Facebook. For us that means the WooCommerce hub bridge (see woocommerce-hub-bridge).",
+        "Trial: 3 days for $0.99, cancel any time (pricing page). Add-ons: Auto ordering 9.90, VA access 14.97, Product Finding Hub 14.97, Mentor 39.97."
       ],
       "requirements": {
         "business": false,
         "website": false,
-        "store": "Yes (works through a connected store; our store is custom)",
+        "store": "Yes (connected store; our store is custom). Pricing page 2026-10-10 shows plan prices as '$__' (not public without login).",
         "min_sales": null
       },
       "cost": {
-        "monthly": "Import 19.9 / Starter 39.9 / Advanced 49.9 (+ add-ons) - third-party tracker",
+        "monthly": "Plan prices not shown on the official page ('$__'); third-party tracker: Import 19.9 / Starter 39.9 / Advanced 49.9. Add-ons 9.90 / 14.97 / 14.97 / 39.97 (official).",
         "per_order": "supplier price"
       },
       "api": {
@@ -397,14 +399,18 @@
       "env_vars": [],
       "approval_days": 0,
       "depends_on": [
-        "store platform decision"
+        "store platform decision or a WooCommerce hub (bridge)"
       ],
-      "verified": "partial: add-ons from autods.com/pricing; plan prices from pricingsaas.com",
+      "verified": "partial: Israeli entity and address from autods.com/terms-of-service; 29 sources from autods.com/blog/suppliers; add-ons and $0.99 trial from autods.com/pricing (all 2026-10-10). No API, export or CSV mentioned anywhere official. Plan prices: third-party only.",
       "sources": [
         "https://www.autods.com/pricing/",
-        "https://pricingsaas.com/companies/autods"
+        "https://www.autods.com/blog/suppliers/",
+        "https://www.autods.com/terms-of-service/",
+        "https://chromewebstore.google.com/detail/inblpolgchbcgmocpnalobjmmaldkjap",
+        "https://pricingsaas.com/companies/autods",
+        "docs/suppliers/aggregators-2026-10.md"
       ],
-      "checked": "2026-10-09"
+      "checked": "2026-10-10"
     },
     {
       "id": "zendrop",
@@ -484,18 +490,18 @@
       "name": "Syncee",
       "type": "aggregator",
       "priority": 12,
-      "unlocks": "EU/US/AU suppliers marketplace with country filter (per directory.md); no retailer API found.",
+      "unlocks": "Marketplace: 'millions of products' from suppliers mainly in the US, Canada, UK, Europe, Australia. DataFeed Manager imports any supplier's CSV/XML/XLSX/JSON feed but is available only to Shopify, Shoprenter and Jumpseller stores. No retailer API; 'Syncee AI Agent' / 'Syncee GPT' are not APIs.",
       "user_steps": [
-        "Skip until a store platform exists."
+        "Skip: Marketplace works only on Shopify, WooCommerce, Wix, Squarespace, BigCommerce, Ecwid, EKM, KMO Shops, Jumpseller, Shoprenter. Usable through the WooCommerce hub bridge only."
       ],
       "requirements": {
         "business": false,
         "website": false,
-        "store": "Yes",
+        "store": "Yes (10 platforms listed; no custom store)",
         "min_sales": null
       },
       "cost": {
-        "monthly": "39.99 / 59.99 / 99.99",
+        "monthly": "Free 0 / Basic 39.99 (100 products, 1 supplier) / Pro 59.99 (250) / Business 99.99 (10,000); 3-day trial; 0% transaction fee",
         "per_order": "supplier price"
       },
       "api": {
@@ -509,11 +515,14 @@
       "depends_on": [
         "store platform decision"
       ],
-      "verified": "partial (Shopify listing)",
+      "verified": "yes: prices and platform list from syncee.com/pricing; DataFeed Manager platform limit from help.syncee.com (2026-10-10)",
       "sources": [
-        "https://apps.shopify.com/syncee-1"
+        "https://syncee.com/pricing/",
+        "https://help.syncee.com/en/articles/8953216-what-is-the-difference-between-the-marketplace-and-the-datafeed-manager",
+        "https://apps.shopify.com/syncee-1",
+        "docs/suppliers/aggregators-2026-10.md"
       ],
-      "checked": "2026-10-09"
+      "checked": "2026-10-10"
     },
     {
       "id": "china-agents",
@@ -684,6 +693,610 @@
         "https://yourstory.com/companies/importify"
       ],
       "checked": "2026-10-09"
+    },
+    {
+      "id": "zendrop-mcp",
+      "name": "Zendrop MCP server (official)",
+      "type": "aggregator-mcp",
+      "priority": 5,
+      "unlocks": "Zendrop's own catalog ('1M+ products', US + China warehouses) through an official MCP server: catalog search by keyword/category/price, product details with price, images and variants, trending products, shipping methods/costs/delivery windows 'for any country', orders and fulfillment (with confirmation step), analytics. Israel is in Zendrop's shipping table: average 23.4 days; liquids/ointments cannot ship to IL.",
+      "user_steps": [
+        "Sign up free at zendrop.com (name, email, password). Account starts on the Free plan; a store connection is a separate later step.",
+        "In claude.ai: Customize > Connectors > + > Add custom connector > name 'Zendrop MCP', URL exactly https://app.zendrop.com/mcp/v1 > Add > Connect > authorize (sign in to Zendrop in the same browser first).",
+        "Start a new session. We test: catalog search, product detail, shipping estimate to IL. If it works without a connected store, Zendrop becomes a second catalog next to CJ.",
+        "Only if we want imports/auto-fulfillment: Pro $49/mo or Plus $79/mo. Zendrop supports Shopify, Wix, TikTok Shop, ClickFunnels (not WooCommerce)."
+      ],
+      "requirements": {
+        "business": false,
+        "website": false,
+        "store": "Not stated for the MCP. Troubleshooting FAQ mentions 'ensure store connection' when results are missing. Catalog search with no store: not verified.",
+        "min_sales": null
+      },
+      "cost": {
+        "monthly": "Free 0 ('limited access', $100 order credits) / Pro 49 (399 per year) / Plus 79 (549 per year). MCP: 'You can get started free'; 'Some features may require a paid plan'.",
+        "per_order": "Zendrop product price + shipping"
+      },
+      "api": {
+        "available": true,
+        "rate_limit": "Per minute: 120 read, 30 write, 10 fulfillment actions (help center)",
+        "endpoints": {
+          "mcp": "POST https://app.zendrop.com/mcp/v1",
+          "auth": "Access tokens created in Zendrop, or OAuth 2.0 Authorization Code with PKCE",
+          "scopes": "catalog:read, orders:read, orders:write, stores:read, stores:write, my_products:write, billing:read",
+          "examples": "actions get_catalog_product, get_catalog_trending_products (help center examples; full tool list not published)"
+        }
+      },
+      "images": "Zendrop catalog images delivered via MCP; licence not stated ('unclear').",
+      "env_vars": [
+        "none (OAuth connector)"
+      ],
+      "approval_days": 0,
+      "depends_on": [],
+      "verified": "yes: MCP page, help articles 14461568 and 15349416, pricing page and shipping table (last updated 2026-05-21) read 2026-10-10. Not verified: whether catalog search works with no connected store; which features need a paid plan.",
+      "sources": [
+        "https://www.zendrop.com/mcp-server/",
+        "https://support.zendrop.com/en/articles/14461568-zendrop-mcp-server",
+        "https://support.zendrop.com/en/articles/15349416-connect-zendrop-mcp-to-your-ai-assistant",
+        "https://zendrop.com/pricing",
+        "https://support.zendrop.com/en/articles/8487356-zendrop-shipping-times-by-country",
+        "docs/suppliers/aggregators-2026-10.md"
+      ],
+      "checked": "2026-10-10"
+    },
+    {
+      "id": "hypersku-openapi",
+      "name": "HyperSKU Open API (China sourcing agent with catalog)",
+      "type": "sourcing-agent-api",
+      "priority": 6,
+      "unlocks": "'Millions of products from 2,000+ vetted dropshipping suppliers', 10+ global warehouses, sourcing requests, POD and branding. 'Open API' is listed among supported platforms (Shopify, WooCommerce, BigCommerce, TikTok Shop, Shoplazza, Shopline, Yampi, Open API). Documentation is not public.",
+      "user_steps": [
+        "Create a free HyperSKU account (hypersku.com). Ask support/your account manager for Open API documentation and credentials for a custom store.",
+        "Send us only the documentation (not keys). We check: product search, product detail, images, freight quote to IL, order creation.",
+        "Set HYPERSKU_API_KEY (name per their docs) in the environment settings. Never in chat."
+      ],
+      "requirements": {
+        "business": false,
+        "website": "unknown",
+        "store": "No for Open API (by definition); not verified",
+        "min_sales": null
+      },
+      "cost": {
+        "monthly": "0 ('You only pay for the products and fulfillment services you use')",
+        "per_order": "product + fulfillment + freight"
+      },
+      "api": {
+        "available": true,
+        "rate_limit": "not published",
+        "endpoints": {
+          "docs": "not public; BigCommerce guide shows Client ID / Client Secret / token auth model for store integrations"
+        }
+      },
+      "images": "not stated ('unclear')",
+      "env_vars": [
+        "HYPERSKU_API_KEY (name TBD)"
+      ],
+      "approval_days": "unknown",
+      "depends_on": [
+        "user opens the account and requests API docs"
+      ],
+      "verified": "partial: 'Open API' in the official FAQ and catalog/warehouse claims from hypersku.com (2026-10-10). Shipping to Israel ('5-12 days global') not verified; no country list.",
+      "sources": [
+        "https://www.hypersku.com/",
+        "https://www.hypersku.com/hypersku-fashion-supply-chain/",
+        "https://hypersku.com/bigcommerce-integration/",
+        "docs/suppliers/aggregators-2026-10.md"
+      ],
+      "checked": "2026-10-10"
+    },
+    {
+      "id": "eprolo-api",
+      "name": "EPROLO API (free, by request)",
+      "type": "sourcing-agent-api",
+      "priority": 6,
+      "unlocks": "EPROLO catalog and fulfillment through an API document sent on request ('automated dropshipping services'). Free platform. Integrations: Shopify, TikTok, Etsy, AliExpress, WooCommerce, Amazon, Shoplazza, Shopline, eBay, Wix, 'EPROLO API'.",
+      "user_steps": [
+        "Sign up at eprolo.com with an email address (free).",
+        "In 'My Dashboard' message your Account Support Rep via the message box and ask for API access; they send the API document in the message box (avatar, lower-right).",
+        "Send us the document only. We check coverage: products, images, freight to IL, orders, tracking.",
+        "Set EPROLO_API_KEY (name per their docs) in the environment settings."
+      ],
+      "requirements": {
+        "business": false,
+        "website": false,
+        "store": "Not stated; account only",
+        "min_sales": null
+      },
+      "cost": {
+        "monthly": "0 ('Get EPROLO API For Free')",
+        "per_order": "product + freight"
+      },
+      "api": {
+        "available": true,
+        "rate_limit": "not published",
+        "endpoints": {
+          "docs": "sent privately by the account rep; scope (products/orders/tracking) not stated on the page"
+        }
+      },
+      "images": "not stated ('unclear')",
+      "env_vars": [
+        "EPROLO_API_KEY (name TBD)"
+      ],
+      "approval_days": "unknown (support reply)",
+      "depends_on": [
+        "user opens the account and requests the API document"
+      ],
+      "verified": "yes for the access process (eprolo.com/eprolo-api, 2026-10-10). Shipping to Israel not verified: shipping page (dated 2020) lists express only for US/CA/AU/UK and groups 'Middle East' under a 60-day refund rule.",
+      "sources": [
+        "https://eprolo.com/eprolo-api",
+        "https://eprolo.com/shipping-methods",
+        "docs/suppliers/aggregators-2026-10.md"
+      ],
+      "checked": "2026-10-10"
+    },
+    {
+      "id": "modalyst-csv",
+      "name": "Modalyst (Wix-owned) with generic CSV export",
+      "type": "aggregator-feed",
+      "priority": 8,
+      "unlocks": "'Thousands of fast shipping suppliers in the USA and Europe' + AliExpress + Alibaba in one marketplace. Products chosen into the Import List can be exported as a 'Generic' or Shopify CSV (emailed). 'Most Suppliers ship internationally'; each supplier toggles regions; AliExpress suppliers 'ship worldwide'. CSV products are not synced afterwards (prices/stock must be re-checked by us).",
+      "user_steps": [
+        "Sign up free (Hobby, 25 products) at modalyst.co; no store needed for browsing and the Import List (not verified).",
+        "Pick products into the Import List > Export to CSV > Generic. Forward the CSV file to the repo (data/sources/modalyst/).",
+        "Start Up $35/mo (250 products) or Pro $90/mo (unlimited) only if the catalog proves useful."
+      ],
+      "requirements": {
+        "business": false,
+        "website": false,
+        "store": "Shopify, Wix or BigCommerce for sync; CSV for 'other ecommerce platforms' (pricing page)",
+        "min_sales": null
+      },
+      "cost": {
+        "monthly": "Hobby 0 (25 products) / Start Up 35 (30 yearly; 250 products) / Pro 90 (67 yearly; unlimited)",
+        "per_order": "supplier price (orders need a connected store; manual otherwise, not verified)"
+      },
+      "api": {
+        "available": false,
+        "rate_limit": null,
+        "endpoints": {
+          "csv_export": "Import List > Export to CSV (Generic / Shopify), delivered by email"
+        }
+      },
+      "images": "supplier images via CSV URLs; licence not stated",
+      "env_vars": [],
+      "approval_days": 0,
+      "depends_on": [],
+      "verified": "yes: pricing, CSV export article and international-shipping article (2026-10-10). Israel not named; per-supplier destinations visible on each item page.",
+      "sources": [
+        "https://www.modalyst.co/pricing",
+        "https://www.modalyst.co/",
+        "https://support.modalyst.co/en/articles/1063192-add-products-to-store-via-csv-file",
+        "https://support.modalyst.co/en/articles/1013678-do-your-suppliers-ship-internationally",
+        "docs/suppliers/aggregators-2026-10.md"
+      ],
+      "checked": "2026-10-10"
+    },
+    {
+      "id": "importify",
+      "name": "Importify (25+ marketplaces importer; Importify Limited, Hong Kong)",
+      "type": "aggregator",
+      "priority": 16,
+      "unlocks": "Chrome-extension import from '25+ global marketplaces': AliExpress, Amazon (Premium+), Alibaba, Etsy, SHEIN, Temu, Taobao, 1688, DHgate, Banggood ('full list inside the app'). Pushes to Shopify, Wix, WooCommerce, BigCommerce, Jumpseller. No API, no export. Temu/Shein imports are unofficial (no dropship program on their side).",
+      "user_steps": [
+        "Only through a hub store (WooCommerce bridge). Basic $14.95 (no Amazon) / Premium $27.95 / Gold $37.95 (AliExpress 1-click ordering); yearly -20%."
+      ],
+      "requirements": {
+        "business": false,
+        "website": false,
+        "store": "Yes (Shopify, Wix, WooCommerce, BigCommerce, Jumpseller)",
+        "min_sales": null
+      },
+      "cost": {
+        "monthly": "14.95 / 27.95 / 37.95 (official pricing page 2026-10-10)",
+        "per_order": "supplier price"
+      },
+      "api": {
+        "available": false,
+        "rate_limit": null,
+        "endpoints": {}
+      },
+      "images": "source-site images; not stated",
+      "env_vars": [],
+      "approval_days": 0,
+      "depends_on": [
+        "woocommerce-hub-bridge"
+      ],
+      "verified": "yes: prices, sources and platforms from importify.com (2026-10-10). Legal entity 'Importify Limited', Sheung Wan, Hong Kong (privacy policy). The 'Israeli (Givatayim)' claim is third-party (yourstory) and NOT verified. Note: importify.app is a different Shopify-only product by OX OCEAN LLC (EUR pricing).",
+      "sources": [
+        "http://www.importify.com/pricing/",
+        "https://www.importify.com/",
+        "https://www.importify.com/privacy-policy/",
+        "https://yourstory.com/companies/importify",
+        "docs/suppliers/aggregators-2026-10.md"
+      ],
+      "checked": "2026-10-10"
+    },
+    {
+      "id": "woocommerce-hub-bridge",
+      "name": "Bridge: private WooCommerce hub that importer apps push into",
+      "type": "bridge",
+      "priority": 9,
+      "unlocks": "A password-protected WordPress+WooCommerce site used only as a product database. AutoDS, Importify, DSers, Syncee, Spocket, Doba, Wholesale2B, Inventory Source, AppScenic, HyperSKU and EPROLO all support WooCommerce; our Worker reads products via the WooCommerce REST API v3 (/wp-json/wc/v3/products, consumer key) and can create orders (POST /orders) so the importer app fulfils them. Does not touch decision T1 (the custom store stays the store). Zendrop and Modalyst do not support WooCommerce.",
+      "user_steps": [
+        "Open a small WordPress hosting plan (price not verified, order of $5-15/mo), install WooCommerce, set the site to private/noindex.",
+        "Install the importer app(s): AutoDS ($0.99 3-day trial) and/or Importify ($14.95) and/or DSers (free).",
+        "WooCommerce > Settings > Advanced > REST API > Add key (Read, or Read/Write if we mirror orders). Set WOO_HUB_URL, WOO_HUB_KEY, WOO_HUB_SECRET in the environment settings.",
+        "We build scripts/woo_hub.py (search/product/freight CLI as in access-and-pipeline-2026-10.md section 2.3) and tag each product with the source the app recorded."
+      ],
+      "requirements": {
+        "business": false,
+        "website": "a WordPress host",
+        "store": "the hub itself (not customer-facing)",
+        "min_sales": null
+      },
+      "cost": {
+        "monthly": "hosting (not verified, ~5-15) + importer app (AutoDS ~19.9-49.9 third-party / Importify 14.95-37.95 / DSers 0-19.90) = roughly 20-65",
+        "per_order": "supplier price via the app"
+      },
+      "api": {
+        "available": true,
+        "rate_limit": "host-dependent",
+        "endpoints": {
+          "products": "GET /wp-json/wc/v3/products (list), /products/{id}",
+          "orders": "POST /wp-json/wc/v3/orders (mirror our orders so the importer app can auto-fulfil; app pickup of API-created orders NOT verified)",
+          "auth": "HTTP Basic with consumer key/secret over HTTPS (official docs)"
+        }
+      },
+      "images": "image URLs point to the source sites; rights 'unclear' as today",
+      "env_vars": [
+        "WOO_HUB_URL",
+        "WOO_HUB_KEY",
+        "WOO_HUB_SECRET"
+      ],
+      "approval_days": 0,
+      "depends_on": [
+        "user decision AC5",
+        "importer app choice"
+      ],
+      "verified": "partial: WooCommerce REST API v3 docs and importer-app WooCommerce support from each vendor's official page (2026-10-10). Hosting price and whether apps pick up API-created orders: not verified.",
+      "sources": [
+        "https://woocommerce.github.io/woocommerce-rest-api-docs/",
+        "https://www.autods.com/",
+        "http://www.importify.com/pricing/",
+        "https://www.dsers.com/pricing",
+        "docs/suppliers/aggregators-2026-10.md"
+      ],
+      "checked": "2026-10-10"
+    },
+    {
+      "id": "shopify-basic-bridge",
+      "name": "Bridge: Shopify Basic as a data hub (NOT recommended)",
+      "type": "bridge",
+      "priority": 17,
+      "unlocks": "Lets AutoDS/Importify/DSers/Zendrop/Modalyst/Spocket/Syncee push products into a Shopify store that our site reads via Storefront/Admin API. Facts (2026-10-10): Starter plan 'isn't available to new stores'; Basic $39/mo monthly or $29/mo yearly; trial 3 days free then $1/mo for 3 months; third-party transaction fee 2% on Basic (Shopify Payments not in Israel); comparison table 'Build headless storefronts: 1' on Basic; Headless channel issues Storefront tokens with no plan requirement stated; dev stores 'can't process real transactions' and 'can't be converted'. Shopify API Terms (updated 2026-10-07) s.2.3.18: may not 'use an alternative to Shopify Checkout' without written authorization; s.6.2.8: may not 'transfer any data you receive from Shopify'. Using Shopify only as a hub with our own checkout risks breaching these; the clean path is Shopify Checkout = T1 option A.",
+      "user_steps": [
+        "Only if AC5 chooses it: open a Shopify trial, pick Basic, install the Headless channel (Storefront tokens) and the importer app; accept that checkout must stay on Shopify (T1 option A) and the 2% fee."
+      ],
+      "requirements": {
+        "business": false,
+        "website": false,
+        "store": "Shopify Basic (Starter not available to new stores; dev stores not allowed in production)",
+        "min_sales": null
+      },
+      "cost": {
+        "monthly": "Basic 29 (yearly) / 39 (monthly) + importer app = ~45-90; first 3 months $1/mo; plus 2% third-party transaction fee",
+        "per_order": "+2% of order value"
+      },
+      "api": {
+        "available": true,
+        "rate_limit": "Storefront API: no fixed per-minute limit for real buyer traffic; tokenless queries complexity 1,000",
+        "endpoints": {
+          "storefront": "GraphQL Storefront API via Headless channel tokens",
+          "admin": "GraphQL Admin API via custom app; CSV export from admin (manual)"
+        }
+      },
+      "images": "images stored on Shopify CDN; source rights unchanged ('unclear')",
+      "env_vars": [
+        "SHOPIFY_STORE_DOMAIN",
+        "SHOPIFY_STOREFRONT_TOKEN"
+      ],
+      "approval_days": 0,
+      "depends_on": [
+        "would effectively reopen T1 (option A)"
+      ],
+      "verified": "yes: shopify.com/pricing (prices as of 2026-10-08 footnote), help center Starter page, shopify.dev dev-stores and headless getting-started, Storefront API overview, API terms (2026-10-07). Not verified: Agentic plan ($0) API access; how the terms apply when merchant = developer.",
+      "sources": [
+        "https://www.shopify.com/pricing",
+        "https://help.shopify.com/en/manual/intro-to-shopify/pricing-plans/plans-features/shopify-starter-plan?locale=en",
+        "https://shopify.dev/docs/api/development-stores",
+        "https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/getting-started",
+        "https://shopify.dev/docs/api/storefront",
+        "https://www.shopify.com/legal/api-terms",
+        "docs/suppliers/aggregators-2026-10.md"
+      ],
+      "checked": "2026-10-10"
+    },
+    {
+      "id": "appscenic",
+      "name": "AppScenic (US/UK/EU/CA suppliers; 'API (soon)')",
+      "type": "aggregator",
+      "priority": 18,
+      "unlocks": "'1,000,000+ products' across '100+ categories' from suppliers in the USA, UK, EU and Canada; 2-5 day shipping in ~20 flagged countries 'and more' (Israel not shown). Footer: 'AppScenic API (soon)'.",
+      "user_steps": [
+        "Watch only: re-check when the API ships. Free plan exists (1 store, no orders)."
+      ],
+      "requirements": {
+        "business": false,
+        "website": false,
+        "store": "Shopify, WooCommerce, Wix, Ecwid, Walmart, eBay",
+        "min_sales": null
+      },
+      "cost": {
+        "monthly": "Free 0 / Standard 39 / Pro 79 / Elite 99",
+        "per_order": "supplier price"
+      },
+      "api": {
+        "available": false,
+        "rate_limit": null,
+        "endpoints": {
+          "status": "'AppScenic API (soon)' on the pricing page"
+        }
+      },
+      "images": "not stated",
+      "env_vars": [],
+      "approval_days": null,
+      "depends_on": [
+        "API release"
+      ],
+      "verified": "yes: appscenic.com/pricing (2026-10-10). Israel shipping not verified.",
+      "sources": [
+        "https://appscenic.com/pricing/",
+        "docs/suppliers/aggregators-2026-10.md"
+      ],
+      "checked": "2026-10-10"
+    },
+    {
+      "id": "wholesale2b-api",
+      "name": "Wholesale2B 'Download Product Data' (CSV/XML/API) - US/Canada only",
+      "type": "aggregator-api",
+      "priority": 90,
+      "unlocks": "Real feed without a store: daily CSV, XML and an API with webhooks and 'HD images', '1-1.5M products from 100+ suppliers' (US and China based). BUT the Shopify listing says shipping is 'to customers in the US and Canada', so it does not serve Israel.",
+      "user_steps": [
+        "None: not usable for Israeli customers."
+      ],
+      "requirements": {
+        "business": false,
+        "website": false,
+        "store": "No for the data plan",
+        "min_sales": null
+      },
+      "cost": {
+        "monthly": "Download Product Data 99.99 (10,000 items; yearly 899.91). Store integrations 49.99; Amazon 99.99; Dropship Website 49.99",
+        "per_order": "supplier price (wallet)"
+      },
+      "api": {
+        "available": true,
+        "rate_limit": "not published",
+        "endpoints": {
+          "feed": "daily CSV URL / XML files",
+          "api": "catalog, inventory, orders, tracking webhooks (formats not stated)"
+        }
+      },
+      "images": "'HD images' provided; licence not stated",
+      "env_vars": [],
+      "approval_days": 0,
+      "depends_on": [],
+      "verified": "yes: prices and plan pages on wholesale2b.com; US/Canada shipping from the Shopify listing (2026-10-10)",
+      "sources": [
+        "https://www.wholesale2b.com/wholesale2b-prices.html",
+        "https://www.wholesale2b.com/dropship-api-plan.html",
+        "https://www.wholesale2b.com/dropship-datafeed-plan.html",
+        "https://apps.shopify.com/dropship-auotmated-inventory",
+        "docs/suppliers/aggregators-2026-10.md"
+      ],
+      "checked": "2026-10-10"
+    },
+    {
+      "id": "doba-api",
+      "name": "Doba Retailer API (US-stocked catalog)",
+      "type": "aggregator-api",
+      "priority": 91,
+      "unlocks": "'450K+' US-warehouse products ('90% stocked in U.S. warehouses'); Retailer API (3 req/s) and FTP from the Standard plan. Ship-to countries not stated; built for US sellers.",
+      "user_steps": [
+        "None now: expensive and US-oriented. Re-check only if a US-ship-to-Israel line is confirmed by Doba support."
+      ],
+      "requirements": {
+        "business": false,
+        "website": false,
+        "store": "No for the API",
+        "min_sales": null
+      },
+      "cost": {
+        "monthly": "Limited 28.67 / Basic 57 / Standard 142.67 (API, FTP) / Enterprise n/a (quarterly-billing figures); $0.99 trials",
+        "per_order": "supplier price"
+      },
+      "api": {
+        "available": true,
+        "rate_limit": "Standard 3 req/s, Enterprise 5 req/s",
+        "endpoints": {
+          "docs": "https://open.doba.com/apidoc/retailer (JS-only, not readable from the container)"
+        }
+      },
+      "images": "not stated",
+      "env_vars": [],
+      "approval_days": 0,
+      "depends_on": [],
+      "verified": "partial: pricing and API gating from doba.com/pricing (2026-10-10); docs and international shipping not verified",
+      "sources": [
+        "https://www.doba.com/pricing",
+        "https://www.doba.com/",
+        "docs/suppliers/aggregators-2026-10.md"
+      ],
+      "checked": "2026-10-10"
+    },
+    {
+      "id": "inventory-source-api",
+      "name": "Inventory Source (US supplier integrations; API by request)",
+      "type": "aggregator-api",
+      "priority": 92,
+      "unlocks": "Pre-built integrations to US dropship suppliers; 'Request API Access' and 'Custom Integrations' offered without a price; 'US Direct' 100,000+ products.",
+      "user_steps": [
+        "None: US suppliers and $199+/mo."
+      ],
+      "requirements": {
+        "business": false,
+        "website": false,
+        "store": "25+ platforms or custom integration",
+        "min_sales": null
+      },
+      "cost": {
+        "monthly": "Directory 0 / Inventory Automation 199 (2 integrations) or 499 (10) / Full Automation 299 or 599; +50 per extra integration",
+        "per_order": "supplier price (+0.20-0.30 per extra order)"
+      },
+      "api": {
+        "available": true,
+        "rate_limit": "not published",
+        "endpoints": {
+          "access": "'Request API Access' form (page returned 404 on 2026-10-10)"
+        }
+      },
+      "images": "not stated",
+      "env_vars": [],
+      "approval_days": "unknown",
+      "depends_on": [],
+      "verified": "yes for pricing (inventorysource.com/pricing-plans 2026-10-10); API terms not verified",
+      "sources": [
+        "https://www.inventorysource.com/pricing-plans/",
+        "https://www.inventorysource.com/dropship-ecommerce-integrations/",
+        "docs/suppliers/aggregators-2026-10.md"
+      ],
+      "checked": "2026-10-10"
+    },
+    {
+      "id": "salehoo-directory",
+      "name": "SaleHoo supplier directory (research only)",
+      "type": "directory",
+      "priority": 19,
+      "unlocks": "'8,000+ vetted global suppliers' directory with 'Ships Worldwide' filter and CSV export of supplier details (not product feeds). Could surface home-decor wholesalers that ship to Israel.",
+      "user_steps": [
+        "Optional: Starter $9/mo billed annually (or $299 lifetime). Export the filtered supplier list as CSV and share it."
+      ],
+      "requirements": {
+        "business": false,
+        "website": false,
+        "store": false,
+        "min_sales": null
+      },
+      "cost": {
+        "monthly": "Starter 9 (annual) / Pro 49 (annual); lifetime 299 / 1,699",
+        "per_order": null
+      },
+      "api": {
+        "available": false,
+        "rate_limit": null,
+        "endpoints": {
+          "csv": "supplier details export"
+        }
+      },
+      "images": null,
+      "env_vars": [],
+      "approval_days": 0,
+      "depends_on": [],
+      "verified": "yes: salehoo.com/pricing (2026-10-10); 'Developer Program' page returned 404",
+      "sources": [
+        "https://www.salehoo.com/pricing",
+        "docs/suppliers/aggregators-2026-10.md"
+      ],
+      "checked": "2026-10-10"
+    },
+    {
+      "id": "temu-shein",
+      "name": "Temu / Shein dropshipping",
+      "type": "marketplace",
+      "priority": 99,
+      "unlocks": "Nothing official: no dropshipping program, reseller portal or API found; terms are for personal purchases; no permission to reuse photos (third-party sources). Importer apps that pull from them are unofficial.",
+      "user_steps": [],
+      "requirements": {},
+      "cost": {},
+      "api": {
+        "available": false,
+        "rate_limit": null,
+        "endpoints": {}
+      },
+      "images": "no rights",
+      "env_vars": [],
+      "approval_days": null,
+      "depends_on": [],
+      "verified": "no official page found (third-party guides by Spocket, CJ, nichedropshipping, 2026)",
+      "sources": [
+        "https://www.spocket.co/blogs/temu-dropshipping",
+        "https://cjdropshipping.com/blogs/dropshipping-knowledge/Shein-Dropshipping-Guide",
+        "docs/suppliers/aggregators-2026-10.md"
+      ],
+      "checked": "2026-10-10"
+    },
+    {
+      "id": "banggood-open-platform",
+      "name": "Banggood Open Platform (dropship API) - unverified",
+      "type": "marketplace-api",
+      "priority": 20,
+      "unlocks": "Third-party WooCommerce/Magento plugins reference an AppId/AppSecret issued by the 'Banggood Open platform' (domain-bound, support openplatform@banggood.com). open.banggood.com did not resolve from our container. Banggood is one of AutoDS's and Importify's sources.",
+      "user_steps": [
+        "Optional: the user checks open.banggood.com from his own browser and tells us whether a dropship API application still exists and whether IL is a shipping destination."
+      ],
+      "requirements": {
+        "business": "unknown",
+        "website": "AppId bound to a domain (plugin page)",
+        "store": "unknown",
+        "min_sales": null
+      },
+      "cost": {
+        "monthly": "unknown",
+        "per_order": "Banggood price"
+      },
+      "api": {
+        "available": "unverified",
+        "rate_limit": null,
+        "endpoints": {}
+      },
+      "images": "unclear",
+      "env_vars": [
+        "BANGGOOD_APP_ID",
+        "BANGGOOD_APP_SECRET (if it exists)"
+      ],
+      "approval_days": "unknown",
+      "depends_on": [
+        "user check"
+      ],
+      "verified": "no (plugin pages only; official site unreachable 2026-10-10)",
+      "sources": [
+        "https://wphive.com/plugins/banggood-dropshipping",
+        "docs/suppliers/aggregators-2026-10.md"
+      ],
+      "checked": "2026-10-10"
+    },
+    {
+      "id": "scraper-apis-forbidden",
+      "name": "RapidAPI / Apify 'AliExpress / Temu / Amazon product APIs'",
+      "type": "forbidden",
+      "priority": 99,
+      "unlocks": "Nothing for us: these are scrapers that bypass site access controls, forbidden by studio rules section 4.6. Only official APIs are used (AliExpress Open Platform, CJ, Zendrop MCP, DSers MCP, HyperSKU/EPROLO by request).",
+      "user_steps": [],
+      "requirements": {},
+      "cost": {},
+      "api": {
+        "available": false,
+        "rate_limit": null,
+        "endpoints": {}
+      },
+      "images": null,
+      "env_vars": [],
+      "approval_days": null,
+      "depends_on": [],
+      "verified": "policy, not a product check",
+      "sources": [
+        "docs/suppliers/aggregators-2026-10.md"
+      ],
+      "checked": "2026-10-10"
     }
   ]
 }

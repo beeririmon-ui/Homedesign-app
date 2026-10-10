@@ -1373,6 +1373,43 @@
       "source": "data/product-card.schema.json, data/slots/kids.json",
       "asked": "2026-10-10",
       "status": "open"
+    },
+    {
+      "id": "AC5",
+      "group": "ספקים",
+      "title": "אגרגטור של ספקים לחנות מותאמת",
+      "question": "איך מרכזים AliExpress ועוד ספקים ב-hub אחד, כשהחנות שלנו מותאמת ולא Shopify?",
+      "context": "נבדקו 20 שירותים (docs/suppliers/aggregators-2026-10.md). אין אגרגטור שמרכז את AliExpress ועוד הרבה אתרים וגם פותח API או פיד: AutoDS (29 מקורות, ישראלית) ו-Importify (25+) עובדים רק דרך חנות Shopify/Wix/Woo, ורוב המקורות הנוספים שלהם הם קמעונאים אמריקאים שלא שולחים לישראל. Temu ו-Shein בלי תוכנית רשמית. מה שכן פתוח לנו בלי Shopify: Zendrop MCP (חינם להתחלה, מיליון+ מוצרים, ישראל בטבלת המשלוחים), DSers MCP (19.90, כבר AC4), ו-API בבקשה מ-HyperSKU ומ-EPROLO (חינם). גשר דרך Shopify Basic (29–39 + 2%) מסוכן: תנאי ה-API אוסרים קופה חלופית, ו-Starter לא זמין לחנויות חדשות. גשר דרך WooCommerce פרטי (אחסון + כלי ייבוא, כ-20–65 לחודש) חוקי ולא נוגע ב-T1, אבל מוסיף תחזוקה.",
+      "options": [
+        {
+          "id": "mcp-first",
+          "label": "בלי אגרגטור בתשלום: Zendrop MCP חינם + API מ-HyperSKU ו-EPROLO, לצד AliExpress ו-CJ",
+          "desc": "המשתמש פותח חשבונות חינם, מחבר את Zendrop MCP ומבקש תיעוד API מ-HyperSKU ו-EPROLO. בודקים אם זה עובד בלי חנות. עלות 0.",
+          "recommended": true
+        },
+        {
+          "id": "woo-bridge",
+          "label": "גשר WooCommerce פרטי + AutoDS או Importify",
+          "desc": "מחסן נתונים ב-WordPress שהכלים דוחפים אליו ואנחנו קוראים ב-REST API. נותן את 29 המקורות של AutoDS. כ-$20–65 לחודש ותחזוקה.",
+          "recommended": false
+        },
+        {
+          "id": "shopify-bridge",
+          "label": "גשר Shopify Basic + AutoDS או Importify",
+          "desc": "כ-$45–90 לחודש ועוד 2% מהמכירות. דורש קופה של Shopify כדי לא להפר את תנאי ה-API, כלומר חזרה לאפשרות A של T1.",
+          "recommended": false
+        },
+        {
+          "id": "none",
+          "label": "להישאר עם CJ ו-AliExpress בלבד",
+          "desc": "בלי אגרגטור. ממשיכים AC1 ו-AC2.",
+          "recommended": false
+        }
+      ],
+      "blocks": "",
+      "source": "docs/suppliers/aggregators-2026-10.md",
+      "asked": "2026-10-10",
+      "status": "open"
     }
   ]
 }
