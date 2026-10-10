@@ -28,3 +28,11 @@
 - **הודעות סטטוס:** רק כשמשהו הסתיים או נתקע. לא הודעות התקדמות.
 - **הרשאות:** `/telegram:access policy allowlist`. הודעה בטלגרם היא הנחיה של המשתמש רק אם היא מהחשבון המוצמד.
 - הסשן עובד על הענף `claude/agent-system-brand-launch-ax87dv`, לפי `CLAUDE.md` ו-`docs/studio-rules.md`, ומבצע commit ו-push אחרי כל תוצר.
+
+## רשימת AliExpress לפתיחה בסשן המקומי (2026-10-10)
+sourcing-support סרק דפי חיפוש של AliExpress (רק `aliexpress.com/w/wholesale-<keywords>.html`, עד 2 דפים לעמדה, בלי דפי מוצר, לפי ד.6) לעמדות ש-Zendrop ו-CJ לא כיסו. התוצאה: **90 פריטים ב-17 עמדות** (16 עם תוצאות, floor-lamp בלי), עם ציון התאמה מנוחש מהכותרת בלבד.
+- **הקבצים:** `data/leads/aliexpress/shortlist-2026-10-10.md` (טבלה לכל עמדה, בעברית) ו-`data/leads/aliexpress/shortlist-2026-10-10.json` (אותם נתונים, מובנים). כולם רשומים ב-`data/sources/seen.json` כ-`aliexpress:<item_id>` בסטטוס `seen`, ‏`opened: false`.
+- **מה לעשות:** לפתוח כל URL בדפדפן של המשתמש (קצב אנושי, בלי סקריפטים), ולוודא: **משלוח לישראל** (עלות וימים, חסכוני ומהיר), **מחיר** לווריאציה הרלוונטית, **מידות** מלאות, **חומרים** וגוון (HEX מהתמונות), תמונות מכמה זוויות; במנורות גם CE, ‏220–240V וסוג החיבור. ואז לכתוב כרטיסים (`data/product-card.schema.json`, לפי `.claude/agents/sourcing-agent.md`) ולעדכן את המרשם (`registry.py add aliexpress:<id> --status card --card-id <id>` או `--status rejected --reason "..."`).
+- **סדר מומלץ** (לפי הציון וחשיבות העמדה): accent-sconces (3256807415537790 ועוד 7), kitchen-sconce (3256812137993644), centerpiece-vase (9), curtains (8, משותף לסלון ולפינת האוכל), candle-holders בפינת האוכל (8), floor-vase (6), candle-holders בסלון (6), cushions (6). עמדות שבהן AliExpress חלש וכדאי מקור אחר: bowl, pouf, rug, table-runner, utensil-crock, cutting-boards, herb-pots, floor-lamp.
+- **מזהים:** דף החיפוש מחזיר קישורי `aliexpress.us/item/<id>` (מזהים 3256…/2255…/2251…). לפתוח כמו שהם; אם האתר מפנה ל-`aliexpress.com` עם מזהה 1005…, לרשום את שני המזהים בכרטיס.
+- **חסימות:** שלושה דפי חיפוש חזרו ריקים (utensil holder white, white oak cutting board, ceramic planter with saucer) ולא נוסו שוב. אפשר לנסות אותם בדפדפן של המשתמש.
