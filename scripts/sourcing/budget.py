@@ -7,7 +7,7 @@ Every agent and every process charges the same file (flock), so parallel agents 
 CJ points model (developers.cjdropshipping.com/en/api/api2/standard/points.html, checked 2026-10-09):
   50,000 points/day; listV2 (search) 50, product/query 10, freightCalculate 10, image search 1,000.
   Also 1,000 calls/day per endpoint. /product/list and /product/sourcing/* costs are not published:
-  we charge them 50 (conservative) until CJ says otherwise.
+  we charge them 50 (conservative) until CJ says otherwise. Sourcing requests: 5 per day (endpoint_caps).
 Soft stop at 80% of the daily cap (doc 2.3), hard stop at 100%. Per-run caps on top (default
 5,000 points and 150 calls per run; env SOURCING_RUN_MAX_POINTS / SOURCING_RUN_MAX_CALLS,
 or --max-points / --max-calls in the source CLIs). A run is named by --run-id or SOURCING_RUN_ID.
@@ -26,6 +26,9 @@ SOURCES = {
         "unit": "points", "daily_cap": 50000, "soft_ratio": 0.8, "endpoint_daily_calls": 1000,
         "cost": {"search": 50, "list": 50, "product": 10, "freight": 10, "image": 1000,
                  "variant": 10, "sourcing_create": 50, "sourcing_query": 50},
+        # Verified 2026-10-10: the 6th POST /product/sourcing/create of the day is refused (code 1600000,
+        # "Exceeded the daily source limit"), the same 5/day as the website's free tier.
+        "endpoint_caps": {"sourcing_create": 5},
     },
     # Placeholders for the stubs; real numbers go in when the source is configured.
     "aliexpress": {"unit": "calls", "daily_cap": 5000, "soft_ratio": 0.8, "endpoint_daily_calls": None,
@@ -85,9 +88,9 @@ def _evaluate(st, source, endpoint, rid, max_points, max_calls):
     problems = []
     if s["used"] + cost > soft:
         problems.append("daily soft stop: %d + %d > %d (80%% of %d %s)" % (s["used"], cost, soft, cap, cfg["unit"]))
-    epc = cfg.get("endpoint_daily_calls")
+    epc = cfg.get("endpoint_caps", {}).get(endpoint) or cfg.get("endpoint_daily_calls")
     if epc and s["calls"].get(endpoint, 0) + 1 > epc:
-        problems.append("endpoint cap: %s already %d calls today" % (endpoint, s["calls"][endpoint]))
+        problems.append("endpoint cap: %s already %d calls today (max %d)" % (endpoint, s["calls"][endpoint], epc))
     if r["used"] + cost > rp:
         problems.append("run cap: run '%s' %d + %d > %d %s" % (rid, r["used"], cost, rp, cfg["unit"]))
     if r["calls"] + 1 > rc:

@@ -12,6 +12,10 @@ Same CLI shape for every source (see aliexpress_source.py, google_vision_source.
           # CJ Sourcing request (charged 50). Sent only with --approved <decision id> (studio rules d.9, e.g. "AC1 2026-10-10").
           # The id comes back as cjSourcingId; it is registered as cj-sourcing:<id> and cached under data/sources/cj-sourcing/
   source-status <cjSourcingId> [...]                  # GET /product/sourcing/queryList (charged 50; up to 100 ids): 3 = succeeded, 5 = failed
+  source-batch <file.json> --approved "<decision>" [--count 5]
+          # sends the entries with status "pending" from a record file such as data/leads/cj/sourcing-requests-<date>.json
+          # (fields slot, productName, productImage, remark, productUrl?, price?) and writes cjSourcingId/status back into it.
+          # CJ allows 5 sourcing requests per day: the batch stops at the limit (code 1600000) and the rest stay "pending".
   check   <pid|vid|sku> [...]                          # registry only, no call
   mark    <pid> --status rejected|seen|card --reason "..." [--slot room/slot] [--card-id ID]
 
@@ -163,16 +167,69 @@ def do_source(a):
     if a.dry_run:
         return out({"dry_run": True, "would_call": "sourcing_create", "slot": a.slot, "request": body,
                     "budget": spend(a, "sourcing_create")})
+    out(_send_one(a, dict(body, slot=a.slot)))
+
+
+LIMIT_WORDS = ("daily source limit", "exceeded", "limit", "quota")
+
+
+def _send_one(a, req):
+    """Shared by `source` and `source-batch`: charge, call, cache, register. Returns the response dict."""
     spend(a, "sourcing_create")
-    r = cj().sourcing_create(a.name, a.image, a.url, a.price, a.remark)
-    res = dict(r, slot=a.slot, approved=a.approved, request=body)
+    r = cj().sourcing_create(req["productName"], req["productImage"], req.get("productUrl"), req.get("price"), req.get("remark"))
+    res = dict(r, slot=req.get("slot"), approved=a.approved, request=req)
     sid = r.get("cjSourcingId")
     if r.get("ok") and sid:
-        cache.put(SRC_SOURCING, sid, "create", res, endpoint="/product/sourcing/create", params={"slot": a.slot})
+        cache.put(SRC_SOURCING, sid, "create", res, endpoint="/product/sourcing/create", params={"slot": req.get("slot")})
         registry.add("%s:%s" % (SRC_SOURCING, sid), "seen",
-                     "CJ sourcing request (%s) for %s: %s" % (a.approved, a.slot or "?", a.name[:110]),
-                     by=a.by, slot=a.slot, opened=True, source=SRC_SOURCING, url=a.url)
-    out(res)
+                     "CJ sourcing request (%s) for %s: %s" % (a.approved, req.get("slot") or "?", req["productName"][:110]),
+                     by=a.by, slot=req.get("slot"), opened=True, source=SRC_SOURCING, url=req.get("productUrl"))
+    return res
+
+
+def do_source_batch(a):
+    import datetime as dt, time
+    if not a.approved:
+        sys.exit("CJ Sourcing requests need the user's approval first (studio rules d.9). Pass --approved. Not sent.")
+    with open(a.file) as f:
+        log = json.load(f)
+    pending = [r for r in log.get("requests") or [] if r.get("status") == "pending"]
+    if a.dry_run:
+        return out({"dry_run": True, "pending": len(pending), "would_send": [r["slot"] for r in pending[:a.count]],
+                    "budget": spend(a, "sourcing_create")})
+    sent, stopped = 0, None
+    for req in pending[:a.count]:
+        for k in ("productName", "productImage", "remark", "productUrl"):
+            if req.get(k) and len(req[k]) > MAXLEN:
+                sys.exit("%s: %s is %d chars (max %d). Not sent." % (req["slot"], k, len(req[k]), MAXLEN))
+        try:
+            res = _send_one(a, req)
+        except budget.BudgetExceeded as e:
+            stopped = "budget: %s" % e; break
+        now = dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat()
+        req.update({"cjSourcingId": res.get("cjSourcingId"), "api_code": res.get("code"), "api_message": res.get("message"),
+                    "requestId": res.get("requestId")})
+        if res.get("ok") and res.get("cjSourcingId"):
+            req["status"], req["created_at"] = "created", now; sent += 1
+        else:
+            msg = (res.get("message") or "").lower()
+            if any(w in msg for w in LIMIT_WORDS):
+                req["status"] = "pending"  # stays queued for tomorrow
+                log.setdefault("limit_events", []).append({"at": now, "slot": req["slot"], "code": res.get("code"), "message": res.get("message")})
+                stopped = "limit: %s" % res.get("message"); break
+            req["status"], req["failed_at"] = "failed", now
+            log.setdefault("failures", []).append({"at": now, "slot": req["slot"], "code": res.get("code"), "message": res.get("message")})
+            stopped = "failed: %s" % res.get("message"); break
+        print("[batch] created %s -> %s" % (req["slot"], req["cjSourcingId"]), file=sys.stderr)
+        time.sleep(1.5)
+    reqs = log.get("requests") or []
+    log["summary"] = {"planned": len(reqs), "created": sum(r.get("status") == "created" for r in reqs),
+                      "pending": sum(r.get("status") == "pending" for r in reqs), "failed": sum(r.get("status") == "failed" for r in reqs),
+                      "cjSourcingIds": [r["cjSourcingId"] for r in reqs if r.get("status") == "created"],
+                      "last_run": {"at": dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat(), "sent": sent, "stopped": stopped}}
+    with open(a.file, "w") as f:
+        json.dump(log, f, ensure_ascii=False, indent=1); f.write("\n")
+    out({"sent": sent, "stopped": stopped, "summary": log["summary"]})
 
 
 def do_source_status(a):
@@ -205,6 +262,7 @@ def main(argv=None):
     so = sub.add_parser("source"); so.add_argument("image"); so.add_argument("--name", required=True); so.add_argument("--url")
     so.add_argument("--price"); so.add_argument("--remark"); so.add_argument("--slot"); so.add_argument("--approved")
     ss = sub.add_parser("source-status"); ss.add_argument("ids", nargs="+")
+    sb = sub.add_parser("source-batch"); sb.add_argument("file"); sb.add_argument("--approved"); sb.add_argument("--count", type=int, default=5)
     c = sub.add_parser("check"); c.add_argument("ids", nargs="+")
     m = sub.add_parser("mark"); m.add_argument("pid"); m.add_argument("--status", required=True, choices=registry.STATUSES)
     m.add_argument("--reason", required=True); m.add_argument("--slot"); m.add_argument("--card-id")
@@ -230,6 +288,8 @@ def main(argv=None):
             do_source(a)
         elif a.cmd == "source-status":
             do_source_status(a)
+        elif a.cmd == "source-batch":
+            do_source_batch(a)
     except budget.BudgetExceeded as e:
         print("BUDGET STOP: %s" % e, file=sys.stderr)
         sys.exit(3)

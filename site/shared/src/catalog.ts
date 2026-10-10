@@ -124,6 +124,8 @@ export type FullProduct = PublicProduct & {
   status: 'candidate' | 'selected' | 'rejected';
   source_path: string;
   supplier: { name: string; url: string; sku: string | null };
+  /** the card's first image url and its stated rights (FR-I); the public catalog never carries the supplier url */
+  supplier_image: { url: string | null; usage_rights: 'confirmed' | 'unclear' | 'none'; quality: 'high' | 'medium' | 'low' };
   cost_usd_cents: number;
   shipping_usd_cents: number;
   shipping_from_default: boolean;
@@ -142,6 +144,26 @@ export type FullProduct = PublicProduct & {
 };
 
 export type HiddenProduct = { id: string; slot: string; reason: string };
+
+/**
+ * The supplier's first photo of a shown product (FR-I, 2026-10-10), served from our media, never hot-linked:
+ * tools/supplier-images.ts downloads it once and writes `.generated/supplier-images.json` (this shape).
+ * `usage_rights` is copied from the card (all "unclear" today: to clear with the suppliers before launch).
+ */
+export type SupplierImage = {
+  /** media path without width and extension, e.g. products/<id>/supplier (file: <src>.<width>.webp) */
+  src: string;
+  width: number;
+  height: number;
+  usage_rights: 'confirmed' | 'unclear' | 'none';
+};
+export type SupplierImageManifest = {
+  generated_at: string;
+  /** the width the files are encoded at */
+  width: number;
+  products: Record<string, SupplierImage>;
+  missing: { id: string; reason: string }[];
+};
 
 export type FullCatalog = Omit<PublicCatalog, 'products'> & {
   products: FullProduct[];

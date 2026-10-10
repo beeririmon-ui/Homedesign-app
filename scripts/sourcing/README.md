@@ -61,7 +61,7 @@ python3 scripts/sourcing/cj_source.py check 2608020808091620300 CJYD2915383
 ```
 - שימוש ב-API שנעשה מחוץ לצנרת (למשל wrapper ישן) נרשם כדי שהתקרות יישארו נכונות: `python3 scripts/sourcing/budget.py record cj 2870 "rounds 6-8"`.
 - עלויות CJ (נקודות): `search` (listV2) ‏50, ‏`product` ‏10, ‏`freight` ‏10, ‏`image` ‏1,000. העלות של `list` ושל Sourcing לא פורסמה, ולכן נספרת כ-50.
-- `image` עדיין לא מחובר. `source` (בקשת Sourcing ל-CJ) מחובר מ-2026-10-10 ונשלח רק עם `--approved "<מזהה ההחלטה>"` (למשל AC1). כל בקשה נרשמת במרשם כ-`cj-sourcing:<cjSourcingId>` ובמטמון `data/sources/cj-sourcing/`; הסטטוס נבדק ב-`source-status <id> ...` (עד 100 בקריאה, 50 נקודות).
+- `image` עדיין לא מחובר. `source` (בקשת Sourcing ל-CJ) מחובר מ-2026-10-10 ונשלח רק עם `--approved "<מזהה ההחלטה>"` (למשל AC1). כל בקשה נרשמת במרשם כ-`cj-sourcing:<cjSourcingId>` ובמטמון `data/sources/cj-sourcing/`; הסטטוס נבדק ב-`source-status <id> ...` (עד 100 בקריאה, 50 נקודות). **מגבלה (אומתה 2026-10-10): 5 בקשות Sourcing ביום גם ב-API** (הבקשה השישית נדחית, קוד 1600000). תור של בקשות: `source-batch data/leads/cj/sourcing-requests-<date>.json --approved "<החלטה>" --count 5` שולח את הרשומות במצב `pending` ומעדכן את הקובץ.
 - מטמון טרי לא עולה כלום: מוצר 30 יום, משלוח 14 יום, חיפוש 7 ימים.
 - בסיכום הסבב כותבים: כמה קריאות ונקודות (מ-`budget.py status`), וכמה פריטים דולגו בזכות המרשם.
 

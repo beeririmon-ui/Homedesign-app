@@ -9,6 +9,15 @@ import { z } from 'zod';
 const Unit = z.number().min(0).max(1);
 
 export const HotspotSchema = z.looseObject({ u: Unit, v: Unit });
+/**
+ * The designer's newer shape (F3 fixed-product slots, 2026-10-10): one point per frame. The catalog takes the point of
+ * the room's frame.
+ */
+export const HotspotPointsSchema = z.looseObject({
+  visible: z.boolean().optional(),
+  provisional: z.boolean().optional(),
+  points: z.array(z.looseObject({ frame: z.string(), u: Unit, v: Unit })),
+});
 /** [u0, u1, v0, v1], the same order the Design Bible uses for frame boxes. */
 export const FrameBoxSchema = z.tuple([Unit, Unit, Unit, Unit]);
 
@@ -20,7 +29,8 @@ export const SlotSchema = z.looseObject({
   category: z.string().optional(),
   placement: z.string(),
   position: z.string().optional(),
-  z: z.number(),
+  /** stacking order; a fixed-product slot (F3) sits in a base layer and has none */
+  z: z.number().optional(),
   variants: z.number().int().positive().optional(),
   set_of: z.number().int().positive().optional(),
   has_light_layer: z.boolean().optional(),
@@ -28,8 +38,10 @@ export const SlotSchema = z.looseObject({
   /** Filler ids; kids.json keys them per room ({ boy: [...], girl: [...] }). */
   fillers: z.union([z.array(z.string()), z.record(z.string(), z.array(z.string()))]).optional(),
   frames: z.array(z.string()).optional(),
+  /** F3 (2026-10-10): 'fixed-product' marks a fixed piece of furniture sold as one product, without variants. */
+  kind: z.enum(['fixed-product']).optional(),
   hotspot: z
-    .union([HotspotSchema, z.tuple([Unit, Unit])])
+    .union([HotspotSchema, HotspotPointsSchema, z.tuple([Unit, Unit])])
     .nullable()
     .optional(),
   zoom_frame: z

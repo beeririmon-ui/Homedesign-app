@@ -108,6 +108,19 @@ const roomIdOf = (houseId: string): string => SLOT_FILE_FOR[houseId] ?? houseId;
 const fullProducts: FullProduct[] = [];
 const hidden: HiddenProduct[] = [];
 const rooms: CatalogRoom[] = [];
+/** fixed-product slots (F3) without a product card yet */
+const fixedWaiting: string[] = [];
+
+/** The slot file's own hotspot: { u, v } (any frame), or the point of this frame in the newer { points } shape. */
+function hotspotFromFile(slot: Slot, frame: string): CatalogSlot['hotspot'] {
+  const h = slot.hotspot;
+  if (!h || Array.isArray(h)) return null;
+  if ('points' in h) {
+    const pt = h.points.find((p) => p.frame === frame) ?? h.points[0];
+    return pt ? { u: pt.u, v: pt.v, provisional: h.provisional === true, visible: h.visible !== false } : null;
+  }
+  return { u: h.u, v: h.v, provisional: false, visible: true };
+}
 
 function frameBoxFromBoxes(boxes: number[][]): [number, number, number, number] | null {
   if (boxes.length === 0) return null;
@@ -215,6 +228,12 @@ function buildProduct(card: ProductCard, path: string, roomId: string, slot: Slo
     status: card.status,
     source_path: path,
     supplier: { name: card.supplier.name, url: card.supplier.product_url, sku: card.supplier.sku ?? null },
+    // FR-I: the first supplier photo (one per product, size budget); tools/supplier-images.ts serves it from our media
+    supplier_image: {
+      url: card.images.urls.find((u) => /^https:\/\//.test(u)) ?? null,
+      usage_rights: card.images.usage_rights,
+      quality: card.images.quality,
+    },
     cost_usd_cents: cost,
     shipping_usd_cents: ship,
     shipping_from_default: shippingFromDefault,
@@ -272,7 +291,14 @@ for (const hr of house.rooms) {
 
   const sf = SlotsFileSchema.parse(readJson(slotsPath));
   const slots: CatalogSlot[] = [];
+  const frame = hr.frames?.[0] ?? sf.view ?? 'main';
   for (const slot of sf.slots) {
+    // F3 (2026-10-10): a fixed piece of furniture sold as one product. Until its card exists there is nothing to open,
+    // so the slot stays out of the room (no empty wheel, no mark on the sofa); the list below the room skips it too.
+    if (slot.kind === 'fixed-product') {
+      fixedWaiting.push(slot.id);
+      continue;
+    }
     const fillerNames = (sf.fillers ?? []).filter((f) => f.slot === slot.id).map((f) => f.name_he);
     // Only designer-scored, non-rejected cards of this slot qualify; best Nordic score first.
     const candidates = cards
@@ -299,9 +325,9 @@ for (const hr of house.rooms) {
       };
     });
     const temp = tempCoords.slots[slot.id];
-    const fromFile = slot.hotspot && !Array.isArray(slot.hotspot) ? slot.hotspot : null;
+    const fromFile = hotspotFromFile(slot, frame);
     const hotspot = fromFile
-      ? { u: fromFile.u, v: fromFile.v, provisional: false, visible: true }
+      ? fromFile
       : temp
         ? { u: temp.hotspot[0], v: temp.hotspot[1], provisional: true, visible: temp.visible !== false }
         : null;
@@ -311,7 +337,7 @@ for (const hr of house.rooms) {
       name_he: slot.name_he,
       category: slot.category ?? null,
       placement: slot.placement,
-      z: slot.z,
+      z: slot.z ?? 0,
       set_of: slot.set_of ?? null,
       has_light: slot.has_light_layer === true,
       has_shadow: slot.has_shadow_layer !== false,
@@ -336,7 +362,7 @@ for (const hr of house.rooms) {
     house_room_id: hr.id,
     name_he: hr.name_he,
     style: STYLE,
-    frame: hr.frames?.[0] ?? sf.view ?? 'main',
+    frame,
     slots_version: sf.version,
     base_layers: sf.base_layers.map((b) => ({ id: b.id, z: b.z, blend: b.blend ?? 'normal' })),
     light_slots: sf.light_layers?.slots ?? [],
@@ -441,6 +467,10 @@ console.log(
     `  living-room slots: ${living?.slots.length ?? 0}, placeholder options: ${placeholders}`,
     `  shipping cost source: ${['manual', 'cj', 'default'].map((k) => `${k} ${fullProducts.filter((p) => p.shipping_source === k).length}`).join(', ')}`,
     `  economics defaults used: ${defaults_used.length ? defaults_used.join(', ') : 'none'}`,
+    `  supplier images (FR-I): ${fullProducts.filter((p) => p.supplier_image.url).length} with a url · usage rights ${['confirmed', 'unclear', 'none']
+      .map((r) => `${r} ${fullProducts.filter((p) => p.supplier_image.usage_rights === r).length}`)
+      .join(', ')}`,
+    `  fixed-product slots waiting for a card (F3): ${fixedWaiting.length ? fixedWaiting.join(', ') : 'none'}`,
     `  invalid product cards skipped: ${invalidCards.length}${invalidCards.length ? ' · ' + invalidCards.map((c) => `${c.path} (${c.issues})`).join('; ') : ''}`,
   ].join('\n'),
 );
