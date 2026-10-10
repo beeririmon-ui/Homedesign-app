@@ -1,0 +1,20 @@
+# מסירה לסשן על המחשב של המשתמש (2026-10-10)
+
+למי שפותח סשן חדש בתיקייה הזו (Claude Desktop או `claude remote-control`): קרא קודם `CLAUDE.md`, ‏`docs/studio-rules.md` (מחייב) ואת הקובץ הזה. היומן המלא ב-`status/board.md`.
+
+## למה הסשן הזה
+הסשן בענן לא יכול לדפדף באתרי ספקים (CAPTCHA, ודפדפן אוטומטי מהענן נחסם). כאן יש את הדפדפן של המשתמש, מחובר לחשבונות שלו, והוא רואה כל מה שנעשה.
+
+## משימות, לפי הסדר
+1. **Zendrop MCP (החלטה AC5):** אם מחבר Zendrop מופיע בסשן, בדוק: חיפוש בקטלוג (למשל "ceramic vase", "linen cushion cover"), פרטי מוצר עם תמונות, והערכת משלוח לישראל. האם זה עובד בלי חנות מחוברת? כתוב ממצאים ב-`docs/suppliers/zendrop-test-2026-10.md` ועדכן `verified` ב-`data/suppliers/access-options.json` (רשומה `zendrop-mcp`). אם המחבר לא מופיע: המשתמש מוסיף אותו ב-claude.ai > Customize > Connectors > Add custom connector, כתובת `https://app.zendrop.com/mcp/v1`, ופותח סשן חדש.
+2. **דפדוף במוצרים בדפדפן של המשתמש:** ‏AliExpress (עם משלוח לישראל מוגדר בחשבון) ו-Zendrop. לפי תור הפערים `data/leads/slot-gaps-2026-10-09.txt` (או `python3 scripts/sourcing/gaps.py`): קודם עמדות עם 0 מועמדים בסלון (accent-sconces), אחר כך פינת האוכל (table-runner, ‏centerpiece-vase, ‏candle-holders, ‏curtains, ‏floor-vase, ‏dining-rug, ‏kitchen-sconce, ‏sink-set, ‏utensil-crock, ‏cutting-boards).
+   - לכל מועמד: כרטיס מוצר לפי `data/product-card.schema.json`, כמו הכרטיסים הקיימים ב-`data/products/`, לפי ההנחיות ב-`.claude/agents/sourcing-agent.md` (קריטריונים, Design Bible, רישום ב-`data/sources/seen.json`).
+   - לרשום: מחיר, משלוח לישראל (עלות וימים), מידות, חומרים, קישור, זכויות תמונה (`unclear` אלא אם כתוב אחרת), ותקנים אם מוצגים (safety).
+3. בסוף: שורה ביומן `status/board.md`, סריקת סודות, commit ו-push לענף `claude/agent-system-brand-launch-ax87dv`.
+
+## כללי הדפדוף (מחייבים)
+- קצב אנושי: דף אחד בכל פעם, רק מה שצריך. בלי איסוף המוני ובלי סקריפטים שסורקים אתרים.
+- חסימה או CAPTCHA: עוצרים ומדווחים. לא עוקפים.
+- לא נרשמים לשום שירות ולא פונים לספקים. זה רק המשתמש.
+- בלי מפתחות, סיסמאות או טוקנים בצ'אט או בריפו.
+- נאמנות למוצר קודמת ליופי. מוצר שלא ברור ממנו מה נמכר (יחידה או סט, מידות) מסומן בהערה.
