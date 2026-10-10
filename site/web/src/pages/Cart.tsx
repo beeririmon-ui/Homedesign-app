@@ -3,6 +3,7 @@ import { catalog } from '../catalog';
 import { Price } from '../components/Media';
 import { shippingFor } from './Checkout';
 import { cart, cartBusy, cartError, loadCart, setQty } from '../state/cart';
+import { lineLabelHe } from './lineLabel';
 
 export function CartPage() {
   useEffect(() => {
@@ -33,22 +34,23 @@ export function CartPage() {
         <div class="cart-grid">
           <ul class="cart-lines" aria-label="פריטים בסל">
             {lines.map((l) => (
-              <li key={l.variant_id} class="card cart-line">
+              <li key={`${l.variant_id}:${l.pack}`} class="card cart-line">
                 <div>
                   <a class="title" href={`/p/${l.product_id}/`}>
                     {l.name_he}
                   </a>
+                  {lineLabelHe(l) ? <p class="small pack-line">{lineLabelHe(l)}</p> : null}
                   <p class="small muted">
-                    <Price agorot={l.unit_price_agorot} provisional={l.price_provisional} /> ליחידה
+                    <Price agorot={l.unit_price_agorot} provisional={l.price_provisional} /> {l.pack === 'set' && l.pack_qty > 1 ? 'לסט' : 'ליחידה'}
                   </p>
                 </div>
                 <Price agorot={l.line_total_agorot} class="num" />
                 <div class="controls">
-                  <div class="qty" role="group" aria-label={`כמות של ${l.name_he}`}>
+                  <div class="qty" role="group" aria-label={`כמות של ${l.name_he}${lineLabelHe(l) ? `, ${lineLabelHe(l)}` : ''}`}>
                     <button
                       type="button"
                       disabled={cartBusy.value || l.qty >= 20}
-                      onClick={() => void setQty(l.variant_id, l.qty + 1, `כמות עודכנה: ${l.qty + 1}`)}
+                      onClick={() => void setQty(l.variant_id, l.pack, l.qty + 1, `כמות עודכנה: ${l.qty + 1}`)}
                       aria-label="הגדלת הכמות"
                     >
                       +
@@ -57,14 +59,19 @@ export function CartPage() {
                     <button
                       type="button"
                       disabled={cartBusy.value || l.qty <= 1}
-                      onClick={() => void setQty(l.variant_id, l.qty - 1, `כמות עודכנה: ${l.qty - 1}`)}
+                      onClick={() => void setQty(l.variant_id, l.pack, l.qty - 1, `כמות עודכנה: ${l.qty - 1}`)}
                       aria-label="הקטנת הכמות"
                     >
                       −
                     </button>
                   </div>
-                  <button type="button" class="link-btn" disabled={cartBusy.value} onClick={() => void setQty(l.variant_id, 0, 'הוסר מהסל')}>
-                    הסרה<span class="sr-only"> של {l.name_he}</span>
+                  <button type="button" class="link-btn" disabled={cartBusy.value} onClick={() => void setQty(l.variant_id, l.pack, 0, 'הוסר מהסל')}>
+                    הסרה
+                    <span class="sr-only">
+                      {' '}
+                      של {l.name_he}
+                      {lineLabelHe(l) ? `, ${lineLabelHe(l)}` : ''}
+                    </span>
                   </button>
                 </div>
               </li>

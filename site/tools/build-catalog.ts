@@ -37,6 +37,9 @@ import {
   type FullCatalog,
   type ShippingOption,
   type ProductEconomics,
+  sellQtyDefault,
+  unitPriceEstimateIls,
+  publicSafety,
 } from '@hd/shared';
 import { REPO, GENERATED, repoPath, sitePath } from './lib/paths';
 import { materialsHe, colorNameHe, hasHebrew } from './lib/hebrew';
@@ -134,12 +137,14 @@ function shippingDays(c: ProductCard): [number, number] | null {
   return typeof a === 'number' && typeof b === 'number' ? [a, b] : null;
 }
 
-function productNotes(slot: Slot, fillerNames: string[]): string[] {
+function productNotes(slot: Slot, fillerNames: string[], o: { wiredInSafety: boolean; packChoice: boolean }): string[] {
   const notes: string[] = [];
   if (fillerNames.length) notes.push(`בתמונה: ${fillerNames.join(', ')}. לא כלול במוצר.`);
-  if (slot.id === 'accent-sconces' || slot.id === 'pendant') notes.push('דורשת התקנה על ידי חשמלאי.');
+  // the safety row says it when the card states power: wired
+  if ((slot.id === 'accent-sconces' || slot.id === 'pendant') && !o.wiredInSafety) notes.push('דורשת התקנה על ידי חשמלאי.');
   if (slot.id === 'wall-sconce') notes.push('בתמונה: הכבל מקוצר ומחובר לשקע צמוד מתחת למנורה (קיצור כבל והתקנת שקע על ידי חשמלאי).');
-  if (slot.set_of) notes.push(`סט של ${slot.set_of} פריטים.`);
+  // with a set / single choice the picker says what a set holds
+  if (slot.set_of && !o.packChoice) notes.push(`בתמונה: סט של ${slot.set_of} פריטים.`);
   return notes;
 }
 
@@ -150,7 +155,9 @@ function buildProduct(card: ProductCard, path: string, roomId: string, slot: Slo
   const shipping = resolveShippingUsd(card.id, econ.shipping_cost_usd, freight, settings);
   const shippingFromDefault = shipping.source === 'default';
   const ship = usdToCents(shipping.usd);
-  const sellQty = econ.sell_qty ?? 1;
+  // units per sale: the studio's sell_qty, else the studio's own default rule (studio/build.py sell_qty_default)
+  const qtyDefault = sellQtyDefault(card, slot.set_of);
+  const sellQty = econ.sell_qty ?? qtyDefault.qty;
   const fulfillment = econ.fulfillment_source ?? 'dropship_cj';
   let retailIls = typeof econ.retail_ils === 'number' ? econ.retail_ils : null;
   let provisional = false;
@@ -174,6 +181,16 @@ function buildProduct(card: ProductCard, path: string, roomId: string, slot: Slo
     .filter(Boolean)
     .join(' ');
   const compare = typeof econ.compare_at_ils === 'number' && econ.compare_at_ils > retailIls ? ilsToAgorot(econ.compare_at_ils) : null;
+  // P1: a set (sell_qty > 1) is also sold as one piece. Unit price from the studio, else an estimate (marked as such).
+  const unitIls =
+    sellQty > 1
+      ? typeof econ.unit_retail_ils === 'number' && econ.unit_retail_ils > 0
+        ? econ.unit_retail_ils
+        : unitPriceEstimateIls(retailIls, sellQty)
+      : null;
+  const pack =
+    unitIls === null ? null : { set_qty: sellQty, unit_price_agorot: ilsToAgorot(unitIls), unit_price_estimated: typeof econ.unit_retail_ils !== 'number' };
+  const safety = publicSafety(card.safety);
   return {
     id: card.id,
     room: roomId,
@@ -188,9 +205,11 @@ function buildProduct(card: ProductCard, path: string, roomId: string, slot: Slo
     dimensions_cm: { width: d.width ?? null, depth: d.depth ?? null, height: d.height ?? null },
     color_hex: card.colors.dominant_hex,
     shipping_days: shippingDays(card),
-    notes_he: productNotes(slot, fillerNames),
+    notes_he: productNotes(slot, fillerNames, { wiredInSafety: safety?.power === 'wired', packChoice: pack !== null }),
     set_of: slot.set_of ?? null,
     variants: [{ id: `${card.id}:default`, label_he: 'ברירת מחדל' }],
+    pack,
+    safety,
     name_supplier: card.name,
     category: card.category ?? null,
     status: card.status,
@@ -201,6 +220,15 @@ function buildProduct(card: ProductCard, path: string, roomId: string, slot: Slo
     shipping_from_default: shippingFromDefault,
     shipping_source: shipping.source,
     sell_qty: sellQty,
+    sell_qty_source: typeof econ.sell_qty === 'number' ? 'studio' : 'default',
+    sell_qty_sure: typeof econ.sell_qty === 'number' || qtyDefault.sure,
+    sell_qty_reason: typeof econ.sell_qty === 'number' ? null : qtyDefault.reason,
+    unit_economics: pack
+      ? unitEconomics(
+          { retail_agorot: pack.unit_price_agorot, cost_usd_cents: cost, shipping_usd_cents: ship, fx_usd_ils: settings.fx_usd_ils, sell_qty: 1 },
+          settings,
+        )
+      : null,
     fulfillment_source: fulfillment,
     fx_usd_ils: settings.fx_usd_ils,
     nordic_score: card.style_scores?.[STYLE]?.score ?? null,
@@ -366,6 +394,8 @@ const publicProducts = fullProducts.map((p) => ({
   notes_he: p.notes_he,
   set_of: p.set_of,
   variants: p.variants,
+  pack: p.pack,
+  safety: p.safety,
 }));
 
 const base = {

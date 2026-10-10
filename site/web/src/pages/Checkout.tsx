@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from 'preact/hooks';
 import type { CheckoutRequest } from '@hd/shared';
 import { catalog } from '../catalog';
 import { Price } from '../components/Media';
+import { lineLabelHe } from './lineLabel';
 import { api, ApiError } from '../api';
 import { cart, forgetCart, loadCart, saveOrderToken } from '../state/cart';
 import { navigate } from '../router';
@@ -242,8 +243,9 @@ export function Checkout({ failed }: { failed: boolean }) {
             <h2 id="sum-title">ההזמנה</h2>
             <ul class="small" style={{ margin: 0, paddingInlineStart: 18 }}>
               {lines.map((l) => (
-                <li key={l.variant_id}>
-                  {l.name_he} × {l.qty}
+                <li key={`${l.variant_id}:${l.pack}`}>
+                  {l.name_he}
+                  {lineLabelHe(l) ? ` (${lineLabelHe(l)})` : ''} × {l.qty}
                 </li>
               ))}
             </ul>

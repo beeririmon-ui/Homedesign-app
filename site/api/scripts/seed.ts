@@ -90,10 +90,11 @@ export function buildSeedSql(cat: FullCatalog): string {
       shipping_days: p.shipping_days,
       notes_he: p.notes_he,
       set_of: p.set_of,
+      safety: p.safety,
       nordic_score: p.nordic_score,
     };
     out.push(
-      `INSERT INTO products (id, room_id, slot_id, name_he, name_provisional, name_supplier, category, description_he, status, source_path, supplier_name, supplier_url, supplier_sku, cost_usd_cents, shipping_usd_cents, shipping_from_default, shipping_source, sell_qty, fx_usd_ils_at_import, retail_agorot, compare_at_agorot, price_provisional, visible, data_json, catalog_version, updated_at) VALUES ${row(
+      `INSERT INTO products (id, room_id, slot_id, name_he, name_provisional, name_supplier, category, description_he, status, source_path, supplier_name, supplier_url, supplier_sku, cost_usd_cents, shipping_usd_cents, shipping_from_default, shipping_source, sell_qty, fx_usd_ils_at_import, retail_agorot, compare_at_agorot, price_provisional, unit_retail_agorot, unit_price_estimated, visible, data_json, catalog_version, updated_at) VALUES ${row(
         [
           p.id,
           p.room,
@@ -117,12 +118,14 @@ export function buildSeedSql(cat: FullCatalog): string {
           p.price_agorot,
           p.compare_at_agorot,
           p.price_provisional,
+          p.pack?.unit_price_agorot ?? null,
+          p.pack?.unit_price_estimated ?? false,
           true,
           JSON.stringify(data),
           cat.version,
           now,
         ],
-      )} ON CONFLICT(id) DO UPDATE SET room_id = excluded.room_id, slot_id = excluded.slot_id, name_he = excluded.name_he, name_provisional = excluded.name_provisional, name_supplier = excluded.name_supplier, category = excluded.category, description_he = excluded.description_he, status = excluded.status, source_path = excluded.source_path, supplier_name = excluded.supplier_name, supplier_url = excluded.supplier_url, supplier_sku = excluded.supplier_sku, cost_usd_cents = excluded.cost_usd_cents, shipping_usd_cents = excluded.shipping_usd_cents, shipping_from_default = excluded.shipping_from_default, shipping_source = excluded.shipping_source, sell_qty = excluded.sell_qty, fx_usd_ils_at_import = excluded.fx_usd_ils_at_import, retail_agorot = excluded.retail_agorot, compare_at_agorot = excluded.compare_at_agorot, price_provisional = excluded.price_provisional, visible = 1, data_json = excluded.data_json, catalog_version = excluded.catalog_version, updated_at = excluded.updated_at;`,
+      )} ON CONFLICT(id) DO UPDATE SET room_id = excluded.room_id, slot_id = excluded.slot_id, name_he = excluded.name_he, name_provisional = excluded.name_provisional, name_supplier = excluded.name_supplier, category = excluded.category, description_he = excluded.description_he, status = excluded.status, source_path = excluded.source_path, supplier_name = excluded.supplier_name, supplier_url = excluded.supplier_url, supplier_sku = excluded.supplier_sku, cost_usd_cents = excluded.cost_usd_cents, shipping_usd_cents = excluded.shipping_usd_cents, shipping_from_default = excluded.shipping_from_default, shipping_source = excluded.shipping_source, sell_qty = excluded.sell_qty, fx_usd_ils_at_import = excluded.fx_usd_ils_at_import, retail_agorot = excluded.retail_agorot, compare_at_agorot = excluded.compare_at_agorot, price_provisional = excluded.price_provisional, unit_retail_agorot = excluded.unit_retail_agorot, unit_price_estimated = excluded.unit_price_estimated, visible = 1, data_json = excluded.data_json, catalog_version = excluded.catalog_version, updated_at = excluded.updated_at;`,
     );
     for (const v of p.variants) {
       out.push(

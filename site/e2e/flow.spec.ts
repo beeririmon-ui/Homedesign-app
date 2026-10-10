@@ -44,29 +44,55 @@ test.describe('room experience', () => {
     expect(await page.evaluate(() => window.__hdEngine?.getSelection().vase)).toBe(1);
   });
 
-  test('product rings: 44 px targets, no pulsing, visible keyboard focus with a glow, reduced motion respected', async ({ page }) => {
+  test('product marks: 44 px targets that never overlap, no pulsing, focus lights the product outline, reduced motion respected', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await roomReady(page);
     const spots = page.locator('button.hotspot:visible');
     const n = await spots.count();
     expect(n).toBeGreaterThan(5);
+    const boxes = [];
     for (let i = 0; i < n; i++) {
-      const b = (await spots.nth(i).boundingBox())!;
+      const b = { ...(await spots.nth(i).boundingBox())!, slot: await spots.nth(i).getAttribute('data-slot') };
       expect(Math.min(b.width, b.height)).toBeGreaterThanOrEqual(44);
+      boxes.push(b);
     }
+    for (let i = 0; i < n; i++)
+      for (let j = i + 1; j < n; j++) {
+        const a = boxes[i]!;
+        const b = boxes[j]!;
+        expect(Math.hypot(a.x - b.x, a.y - b.y), `mark targets overlap: ${a.slot} ${a.x},${a.y} / ${b.slot} ${b.x},${b.y}`).toBeGreaterThanOrEqual(44);
+      }
     const vase = page.locator('button.hotspot[data-slot="vase"]');
-    expect(await vase.evaluate((el) => getComputedStyle(el.querySelector('.ring')!).animationName)).toBe('none');
-    // keyboard focus: a solid outline and the halo, with no transition time under reduced motion
+    expect(await vase.evaluate((el) => getComputedStyle(el.querySelector('.mark')!).animationName)).toBe('none');
+    // keyboard focus: a solid outline on the target, and the product's own outline glows
     await page.keyboard.press('Tab');
     for (let i = 0; i < 40 && !(await vase.evaluate((el) => el === document.activeElement)); i++) await page.keyboard.press('Tab');
     await expect(vase).toBeFocused();
     const focusStyle = () =>
       vase.evaluate((el) => {
         const s = getComputedStyle(el);
-        const halo = getComputedStyle(el, '::after');
-        return `${s.outlineStyle} ${parseFloat(s.outlineWidth) >= 2} halo:${halo.opacity} ${parseFloat(halo.transitionDuration) <= 0.01}`;
+        const path = document.querySelector<SVGPathElement>('.outlines path[data-slot="vase"]')!;
+        const p = getComputedStyle(path);
+        return `${s.outlineStyle} ${parseFloat(s.outlineWidth) >= 2} outline:${p.opacity} ${parseFloat(p.transitionDuration) <= 0.01}`;
       });
-    await expect.poll(focusStyle, { timeout: 5000 }).toBe('solid true halo:1 true');
+    await expect.poll(focusStyle, { timeout: 5000 }).toBe('solid true outline:1 true');
+    // only the focused product is lit
+    await expect(page.locator('.outlines path[data-on="true"]')).toHaveCount(1);
+  });
+
+  test('hovering the product itself lights its outline, and a click on it opens its variants', async ({ page }) => {
+    await roomReady(page);
+    const box = (await page.locator('canvas.room-canvas').boundingBox())!;
+    const at = await page.evaluate(() => {
+      const r = document.querySelector('canvas.room-canvas')!.getBoundingClientRect();
+      const b = document.querySelector('button.hotspot[data-slot="pouf"]')!.getBoundingClientRect();
+      return { x: b.x + b.width / 2 - r.x, y: b.y + b.height / 2 - r.y };
+    });
+    // a point on the pouf, away from its mark
+    await page.mouse.move(box.x + at.x + 30, box.y + at.y + 10);
+    await expect(page.locator('.outlines path[data-slot="pouf"]')).toHaveAttribute('data-on', 'true');
+    await page.mouse.click(box.x + at.x + 30, box.y + at.y + 10);
+    await expect(page.getByRole('dialog', { name: 'פוף' })).toBeVisible();
   });
 
   test('drag with inertia moves the wheel (mouse)', async ({ page }) => {
@@ -139,5 +165,69 @@ test.describe('store', () => {
     await page.getByRole('button', { name: 'דחיית תשלום (מדומה)' }).click();
     await expect(page).toHaveURL(/\/checkout\/\?failed=1/);
     await expect(page.getByRole('alert').first()).toContainText('התשלום לא הושלם');
+  });
+
+  test('set or single piece (P1): the set is the default, one piece has its own price, the cart keeps both apart', async ({ page }) => {
+    const SET = '/p/candle-holders-cj-travertine-pedestal/';
+    await page.goto(SET);
+    const group = page.getByRole('radiogroup', { name: 'איך לקנות' });
+    await expect(group).toBeVisible();
+    const set = group.getByRole('radio', { name: /^סט של 2/ });
+    const unit = group.getByRole('radio', { name: /^יחידה אחת/ });
+    await expect(set).toBeChecked();
+    const priceRow = page.locator('.price-row');
+    const setPrice = (await priceRow.locator('.price-big').innerText()).replace(/\D/g, '');
+    // keyboard: arrow keys move between the two radios
+    await set.focus();
+    await page.keyboard.press('ArrowLeft');
+    await expect(unit).toBeChecked();
+    await expect(priceRow).toContainText('מחיר משוער');
+    const unitPrice = (await priceRow.locator('.price-big').innerText()).replace(/\D/g, '');
+    expect(Number(unitPrice)).toBeLessThan(Number(setPrice));
+    await page.getByRole('button', { name: 'הוספה לסל' }).click();
+    await expect(page.locator('.cart-count')).toHaveText('1');
+    await set.check();
+    await page.getByRole('button', { name: 'הוספה לסל' }).click();
+    await expect(page.locator('.cart-count')).toHaveText('2');
+
+    await page.goto('/cart/');
+    const lines = page.locator('.cart-line');
+    await expect(lines).toHaveCount(2);
+    await expect(lines.filter({ hasText: 'יחידה אחת' })).toHaveCount(1);
+    await expect(lines.filter({ hasText: 'סט של 2' })).toHaveCount(1);
+    await expect(page.getByRole('group', { name: /כמות של .*, יחידה אחת/ })).toBeVisible();
+    // removing the single piece keeps the set
+    await page.getByRole('button', { name: /הסרה של .*, יחידה אחת/ }).click();
+    await expect(lines).toHaveCount(1);
+    await expect(lines.first()).toContainText('סט של 2');
+    await page.goto('/checkout/');
+    await expect(page.locator('.summary')).toContainText('(סט של 2) × 1');
+
+    // a product sold as one unit shows no choice, and no standards row without data in its card
+    await page.goto('/rooms/living-room/');
+    await page
+      .getByRole('link', { name: /^אגרטל/ })
+      .first()
+      .click();
+    await expect(page.locator('#product-title')).toBeVisible();
+    await expect(page.getByRole('radiogroup', { name: 'איך לקנות' })).toHaveCount(0);
+    await expect(page.getByText('תקנים ובטיחות')).toHaveCount(0);
+  });
+
+  test('the variant wheel offers set or single piece; its arrow keys stay with the radios', async ({ page }) => {
+    await roomReady(page);
+    await page.locator('button.hotspot[data-slot="candle-holders"]').click();
+    const dialog = page.getByRole('dialog', { name: 'פמוטים' });
+    await expect(dialog).toBeVisible();
+    const group = dialog.getByRole('radiogroup', { name: 'איך לקנות' });
+    await expect(group).toBeVisible();
+    const before = await dialog.getByRole('radio', { checked: true }).first().getAttribute('aria-label');
+    await group.getByRole('radio', { name: /^סט של 2/ }).focus();
+    await page.keyboard.press('ArrowLeft');
+    await expect(group.getByRole('radio', { name: /^יחידה אחת/ })).toBeChecked();
+    // the wheel did not move
+    expect(await dialog.locator('.arc-card[aria-checked="true"]').getAttribute('aria-label')).toBe(before);
+    await dialog.getByRole('button', { name: 'הוספה לסל' }).click();
+    await expect(page.locator('.cart-count')).toHaveText('1');
   });
 });

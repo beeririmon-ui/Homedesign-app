@@ -6,9 +6,9 @@ import { useEffect, useRef, useState } from 'preact/hooks';
 import type { CatalogRoom, CatalogSlot } from '@hd/shared';
 import { catalog, defaultSelection, product, scene } from '../catalog';
 import { RoomEngine } from '../engine/engine';
-import { coverSize, defaultCam, frameToScreen } from '../engine/camera';
+import { coverSize, defaultCam, frameToScreen, screenToFrame } from '../engine/camera';
 import { slotSources } from '../engine/layers';
-import { mediaUrl, supportsAvif } from '../media';
+import { mediaUrl } from '../media';
 import { Picture } from './Media';
 import { VariantWheel } from './VariantWheel';
 import { IconDoor, IconLeft, IconRight } from './Icons';
@@ -30,6 +30,9 @@ export function RoomExperience({ room }: { room: CatalogRoom }) {
   const poster = useRef<HTMLImageElement>(null);
   const engine = useRef<RoomEngine | null>(null);
   const spots = useRef(new Map<string, HTMLButtonElement>());
+  const outlineSvg = useRef<SVGSVGElement>(null);
+  const outlinePaths = useRef(new Map<string, SVGPathElement>());
+  const lit = useRef<string | null>(null);
   const opener = useRef<HTMLElement | null>(null);
   const [ready, setReady] = useState(false);
   const [open, setOpen] = useState<{ slot: CatalogSlot; before: number } | null>(null);
@@ -52,18 +55,25 @@ export function RoomExperience({ room }: { room: CatalogRoom }) {
       const { fw, fh } = coverSize(vp, scene.aspect);
       img.style.objectPosition = `${(vp.w / 2 - cam.cu * fw).toFixed(1)}px ${(vp.h / 2 - cam.cv * fh).toFixed(1)}px`;
     }
-    const pts: { el: HTMLButtonElement; x: number; y: number; rx: number; ry: number }[] = [];
+    const { fw, fh } = coverSize(vp, scene.aspect);
+    // the outlines follow the same camera: the SVG is the whole frame, scaled and shifted like the picture
+    const svg = outlineSvg.current;
+    if (svg) {
+      const o = frameToScreen(0, 0, cam, vp, scene.aspect);
+      svg.style.width = `${(fw * cam.z).toFixed(1)}px`;
+      svg.style.height = `${(fh * cam.z).toFixed(1)}px`;
+      svg.style.transform = `translate(${o.x.toFixed(1)}px, ${o.y.toFixed(1)}px)`;
+    }
+    const pts: { el: HTMLButtonElement; x: number; y: number }[] = [];
     for (const s of room.slots) {
       const el = spots.current.get(s.id);
       if (!el || !s.hotspot || !s.hotspot.visible) continue;
-      const ring = ringOf(s);
-      const c = frameToScreen(ring.cu, ring.cv, cam, vp, scene.aspect);
-      const { fw, fh } = coverSize(vp, scene.aspect);
-      pts.push({ el, ...c, ...ringRadii(ring.ru * fw * cam.z, ring.rv * fh * cam.z) });
+      const [u, v] = anchorOf(s);
+      pts.push({ el, ...frameToScreen(u, v, cam, vp, scene.aspect) });
     }
-    // keep the centres of neighbouring rings apart (each target is at least 44 px, WCAG 2.5.8): a few relaxation passes
+    // one mark per product, never overlapping: neighbouring 44 px targets (WCAG 2.5.8) are pushed apart a little
     const MIN = 48;
-    for (let pass = 0; pass < 4; pass++)
+    for (let pass = 0; pass < 12; pass++)
       for (let i = 0; i < pts.length; i++)
         for (let j = i + 1; j < pts.length; j++) {
           const a = pts[i]!;
@@ -79,22 +89,17 @@ export function RoomExperience({ room }: { room: CatalogRoom }) {
           b.x += ux;
           b.y += uy;
         }
-    // smaller rings sit above larger ones, so every product stays reachable where rings overlap
-    const order = [...pts].sort((a, b) => b.rx * b.ry - a.rx * a.ry);
-    order.forEach((p, i) => (p.el.style.zIndex = String(i + 1)));
     // keep targets clear of the controls on the stage (style switch, pan, back to the hall, the room label)
     const sr = stage.current?.getBoundingClientRect();
     const blocked = sr
       ? [...stage.current!.querySelectorAll<HTMLElement>('.stage-ui .glass, .stage-temp-note')].map((c) => {
           const r = c.getBoundingClientRect();
-          return { l: r.left - sr.left - 26, r: r.right - sr.left + 26, t: r.top - sr.top - 26, b: r.bottom - sr.top + 26 };
+          return { l: r.left - sr.left - 22, r: r.right - sr.left + 22, t: r.top - sr.top - 22, b: r.bottom - sr.top + 22 };
         })
       : [];
-    for (const { el, x, y, rx, ry } of pts) {
+    for (const { el, x, y } of pts) {
       const inside = x > 8 && x < vp.w - 8 && y > 8 && y < vp.h - 8 && !blocked.some((b) => x > b.l && x < b.r && y > b.t && y < b.b);
-      el.style.width = `${(2 * rx).toFixed(1)}px`;
-      el.style.height = `${(2 * ry).toFixed(1)}px`;
-      el.style.transform = `translate(${(x - rx).toFixed(1)}px, ${(y - ry).toFixed(1)}px)`;
+      el.style.transform = `translate(${(x - 23).toFixed(1)}px, ${(y - 23).toFixed(1)}px)`;
       el.style.visibility = inside ? 'visible' : 'hidden';
     }
     setCanPan(vp.w < vp.h * scene.aspect - 1);
@@ -231,27 +236,84 @@ export function RoomExperience({ room }: { room: CatalogRoom }) {
   }, [busy, open]);
 
   // horizontal pan (touch and mouse) on narrow screens; pointer drift on desktop
-  const panState = useRef<{ x: number; id: number; moved: number } | null>(null);
+  /** Lights one product: its outline glows and its mark grows (hover, touch, keyboard focus). */
+  function light(id: string | null) {
+    if (lit.current === id) return;
+    if (lit.current) {
+      outlinePaths.current.get(lit.current)?.removeAttribute('data-on');
+      spots.current.get(lit.current)?.removeAttribute('data-hover');
+    }
+    lit.current = id;
+    if (id) {
+      outlinePaths.current.get(id)?.setAttribute('data-on', 'true');
+      spots.current.get(id)?.setAttribute('data-hover', 'true');
+    }
+  }
+
+  /** The product under a point of the stage (its silhouette, frontmost first), for pointer hover and taps. */
+  function slotAt(clientX: number, clientY: number): CatalogSlot | null {
+    const c = canvas.current;
+    if (!c) return null;
+    const r = c.getBoundingClientRect();
+    // until the engine has measured the stage, the poster's camera (the same math) is the truth
+    const e = engine.current?.ready ? engine.current : null;
+    const vp = e?.vp ?? { w: Math.max(1, c.clientWidth), h: Math.max(1, c.clientHeight) };
+    const cam = e?.cam ?? defaultCam(vp, scene.aspect, scene.mobile_center_u);
+    const { u, v } = screenToFrame(clientX - r.left, clientY - r.top, cam, vp, scene.aspect);
+    for (let i = room.slots.length - 1; i >= 0; i--) {
+      const s = room.slots[i]!;
+      if (!s.hotspot?.visible) continue;
+      if ((scene.slots[s.id]?.outline ?? []).some((poly) => inPolygon(u, v, poly))) return s;
+    }
+    return null;
+  }
+
+  // horizontal pan (touch and mouse) on narrow screens; pointer drift on desktop; hover and tap on a product itself
+  const panState = useRef<{ x: number; id: number; moved: number; onControl: boolean } | null>(null);
   function onPointerDown(ev: PointerEvent) {
     void ensureEngine();
-    if (open || busy || (ev.target as Element).closest('button, a')) return;
-    panState.current = { x: ev.clientX, id: ev.pointerId, moved: 0 };
+    if (open || busy) return;
+    const onControl = !!(ev.target as Element).closest('button, a');
+    panState.current = { x: ev.clientX, id: ev.pointerId, moved: 0, onControl };
+    if (!onControl) light(slotAt(ev.clientX, ev.clientY)?.id ?? null);
   }
   function onPointerMove(ev: PointerEvent) {
     const e = engine.current;
     const p = panState.current;
-    if (e && p && p.id === ev.pointerId) {
+    if (e && p && p.id === ev.pointerId && !p.onControl) {
       const dx = ev.clientX - p.x;
       p.x = ev.clientX;
       p.moved += Math.abs(dx);
-      if (p.moved > 4) e.panBy(dx);
-    } else if (e && ev.pointerType === 'mouse' && !open) {
-      const r = stage.current!.getBoundingClientRect();
-      e.setDrift((ev.clientX - r.left) / r.width - 0.5, (ev.clientY - r.top) / r.height - 0.5);
+      if (p.moved > 4) {
+        light(null);
+        e.panBy(dx);
+      }
+    } else if (ev.pointerType === 'mouse' && !open && !busy) {
+      if (e) {
+        const r = stage.current!.getBoundingClientRect();
+        e.setDrift((ev.clientX - r.left) / r.width - 0.5, (ev.clientY - r.top) / r.height - 0.5);
+      }
+      if (!(ev.target as Element).closest('button, a')) {
+        const hit = slotAt(ev.clientX, ev.clientY);
+        light(hit?.id ?? null);
+        if (hit) stage.current?.setAttribute('data-pointing', 'true');
+        else stage.current?.removeAttribute('data-pointing');
+      }
     }
   }
-  function onPointerUp() {
+  function onPointerUp(ev: PointerEvent) {
+    const p = panState.current;
     panState.current = null;
+    // a tap or click on the product itself opens it, like its mark does (the mark stays the accessible control)
+    if (p && !p.onControl && p.moved <= 4 && !open && !busy) {
+      const hit = slotAt(ev.clientX, ev.clientY);
+      if (hit) void openSlot(hit);
+    }
+    if (ev.pointerType !== 'mouse') light(null);
+  }
+  function onPointerLeave() {
+    light(null);
+    stage.current?.removeAttribute('data-pointing');
   }
   const panBy = (dx: number) => void ensureEngine().then((e) => e?.panBy(dx));
 
@@ -266,6 +328,7 @@ export function RoomExperience({ room }: { room: CatalogRoom }) {
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerUp}
+      onPointerLeave={onPointerLeave}
     >
       <Picture
         src={scene.base[0]!.src}
@@ -290,6 +353,21 @@ export function RoomExperience({ room }: { room: CatalogRoom }) {
       <h1 id="room-title" class="glass stage-temp-note" tabIndex={-1}>
         {room.name_he} · נורדי{scene.temporary ? ' · תמונות זמניות' : ''}
       </h1>
+      <svg class="outlines" ref={outlineSvg} viewBox="0 0 1600 900" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+        {room.slots.map((s) => {
+          const o = scene.slots[s.id]?.outline;
+          return o?.length ? (
+            <path
+              key={s.id}
+              data-slot={s.id}
+              d={outlinePath(o)}
+              ref={(el) => {
+                if (el) outlinePaths.current.set(s.id, el);
+              }}
+            />
+          ) : null;
+        })}
+      </svg>
       <div class="hotspots" role="group" aria-label="פריטים בחדר">
         {room.slots.map((s) => {
           if (!s.hotspot) return null;
@@ -309,10 +387,14 @@ export function RoomExperience({ room }: { room: CatalogRoom }) {
               style={{ left: 0, top: 0 }}
               aria-label={`${s.name_he}: ${p ? p.name_he : 'וריאציה זמנית'}. פתיחת ${s.options.length} וריאציות`}
               onClick={() => void openSlot(s)}
+              onPointerEnter={() => light(s.id)}
+              onPointerLeave={() => light(null)}
+              onFocus={() => light(s.id)}
+              onBlur={() => light(null)}
               disabled={busy}
               aria-busy={busy && !ready ? 'true' : undefined}
             >
-              <span class="ring" aria-hidden="true" />
+              <span class="mark" aria-hidden="true" />
               <span class="tag" aria-hidden="true">
                 {s.name_he}
               </span>
@@ -372,23 +454,25 @@ export function RoomExperience({ room }: { room: CatalogRoom }) {
   );
 }
 
-/**
- * The ring around a product, in frame coordinates: the product's own box from the scene (for split products such as
- * the curtains or the sconce pair, the part the zoom shows), else a small circle at the hotspot.
- */
-function ringOf(s: CatalogSlot): { cu: number; cv: number; ru: number; rv: number } {
-  const b = scene.slots[s.id]?.ring;
-  if (b) return { cu: (b[0] + b[1]) / 2, cv: (b[2] + b[3]) / 2, ru: (b[1] - b[0]) / 2, rv: (b[3] - b[2]) / 2 };
-  return { cu: s.hotspot!.u, cv: s.hotspot!.v, ru: 0.02, rv: 0.035 };
+/** Where a product's mark rests: the deepest point inside its silhouette (scene anchor), else the slot's hotspot. */
+function anchorOf(s: CatalogSlot): [number, number] {
+  return scene.slots[s.id]?.anchor ?? [s.hotspot!.u, s.hotspot!.v];
 }
 
-/** Screen radii of a ring: just outside the product (an ellipse around a box needs ×√2), a 44 px target at least, capped. */
-function ringRadii(halfW: number, halfH: number): { rx: number; ry: number } {
-  let rx = Math.min(150, Math.max(22, halfW * 1.3 + 4));
-  let ry = Math.min(150, Math.max(22, halfH * 1.3 + 4));
-  if (rx > ry * 1.8) ry = rx / 1.8;
-  if (ry > rx * 1.8) rx = ry / 1.8;
-  return { rx, ry };
+/** SVG path of a silhouette outline in the 1600 × 900 frame box. */
+function outlinePath(polys: [number, number][][]): string {
+  return polys.map((p) => `M${p.map(([u, v]) => `${(u * 1600).toFixed(1)} ${(v * 900).toFixed(1)}`).join('L')}Z`).join('');
+}
+
+/** Even-odd point-in-polygon test in frame coordinates. */
+function inPolygon(u: number, v: number, poly: [number, number][]): boolean {
+  let inside = false;
+  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+    const [ui, vi] = poly[i]!;
+    const [uj, vj] = poly[j]!;
+    if (vi > v !== vj > v && u < ((uj - ui) * (v - vi)) / (vj - vi) + ui) inside = !inside;
+  }
+  return inside;
 }
 
 function requestIdleCallbackSafe(fn: () => void): number {
@@ -403,10 +487,7 @@ function cancelIdle(id: number): void {
 /** Warms the HTTP cache with every variant layer (fetch only: decoding and GPU upload happen when the engine needs them). */
 function prefetchVariants(room: CatalogRoom): void {
   const w = innerWidth <= 900 ? scene.widths.lo : scene.widths.hi;
-  const ext = scene.formats.includes('avif') && !__ARTIFACT__ ? null : 'webp';
-  void supportsAvif().then((avif) => {
-    for (const s of room.slots)
-      for (const src of slotSources(scene, s.id))
-        void fetch(mediaUrl(src, w, ext ?? (avif ? 'avif' : 'webp')), { priority: 'low' } as RequestInit).catch(() => undefined);
-  });
+  // layers are WebP only (lossless alpha)
+  for (const s of room.slots)
+    for (const src of slotSources(scene, s.id)) void fetch(mediaUrl(src, w, 'webp'), { priority: 'low' } as RequestInit).catch(() => undefined);
 }

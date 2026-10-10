@@ -1,5 +1,5 @@
 /** D1 queries shared by the routes. Prepared statements only; never string-built SQL with input. */
-import type { Cart, CartLine } from '@hd/shared';
+import type { Cart, CartLine, Pack } from '@hd/shared';
 import { HttpError, nowIso } from './http';
 
 const CART_TTL_DAYS = 30;
@@ -9,8 +9,12 @@ type LineRow = {
   variant_id: string;
   product_id: string;
   name_he: string;
+  pack: Pack;
   qty: number;
   retail_agorot: number;
+  unit_retail_agorot: number | null;
+  unit_price_estimated: number;
+  sell_qty: number;
   price_provisional: number;
 };
 
@@ -34,7 +38,8 @@ export async function openCartOr404(db: D1Database, id: string): Promise<void> {
 export async function readCart(db: D1Database, id: string): Promise<Cart> {
   const { results } = await db
     .prepare(
-      `SELECT ci.variant_id, p.id AS product_id, p.name_he, ci.qty, p.retail_agorot, p.price_provisional
+      `SELECT ci.variant_id, p.id AS product_id, p.name_he, ci.pack, ci.qty, p.retail_agorot, p.unit_retail_agorot,
+              p.unit_price_estimated, p.sell_qty, p.price_provisional
        FROM cart_items ci
        JOIN product_variants v ON v.id = ci.variant_id AND v.active = 1
        JOIN products p ON p.id = v.product_id AND p.visible = 1 AND p.retail_agorot IS NOT NULL
@@ -43,15 +48,25 @@ export async function readCart(db: D1Database, id: string): Promise<Cart> {
     )
     .bind(id)
     .all<LineRow>();
-  const lines: CartLine[] = results.map((r) => ({
-    variant_id: r.variant_id,
-    product_id: r.product_id,
-    name_he: r.name_he,
-    qty: r.qty,
-    unit_price_agorot: r.retail_agorot,
-    line_total_agorot: r.retail_agorot * r.qty,
-    price_provisional: r.price_provisional === 1,
-  }));
+  // a single-piece line whose product no longer has a unit option is dropped, like an unavailable product
+  const lines: CartLine[] = results.flatMap((r) => {
+    const unit = r.pack === 'unit';
+    const price = unit ? r.unit_retail_agorot : r.retail_agorot;
+    if (price === null) return [];
+    return [
+      {
+        variant_id: r.variant_id,
+        product_id: r.product_id,
+        name_he: r.name_he,
+        pack: r.pack,
+        pack_qty: unit ? 1 : r.sell_qty,
+        qty: r.qty,
+        unit_price_agorot: price,
+        line_total_agorot: price * r.qty,
+        price_provisional: r.price_provisional === 1 || (unit && r.unit_price_estimated === 1),
+      },
+    ];
+  });
   return {
     id,
     lines,
@@ -60,25 +75,27 @@ export async function readCart(db: D1Database, id: string): Promise<Cart> {
   };
 }
 
-export async function setCartItem(db: D1Database, cartId: string, variantId: string, qty: number): Promise<void> {
+export async function setCartItem(db: D1Database, cartId: string, variantId: string, pack: Pack, qty: number): Promise<void> {
   const now = nowIso();
   if (qty === 0) {
-    await db.prepare('DELETE FROM cart_items WHERE cart_id = ? AND variant_id = ?').bind(cartId, variantId).run();
+    await db.prepare('DELETE FROM cart_items WHERE cart_id = ? AND variant_id = ? AND pack = ?').bind(cartId, variantId, pack).run();
   } else {
-    const ok = await db
+    const row = await db
       .prepare(
-        `SELECT 1 AS ok FROM product_variants v JOIN products p ON p.id = v.product_id
+        `SELECT p.unit_retail_agorot FROM product_variants v JOIN products p ON p.id = v.product_id
          WHERE v.id = ? AND v.active = 1 AND p.visible = 1 AND p.retail_agorot IS NOT NULL`,
       )
       .bind(variantId)
-      .first<{ ok: number }>();
-    if (!ok) throw new HttpError(404, 'variant_not_found', 'המוצר לא זמין.');
+      .first<{ unit_retail_agorot: number | null }>();
+    if (!row) throw new HttpError(404, 'variant_not_found', 'המוצר לא זמין.');
+    // only a set (sell_qty > 1) has a single-piece option
+    if (pack === 'unit' && row.unit_retail_agorot === null) throw new HttpError(422, 'pack_unavailable', 'המוצר הזה נמכר רק כסט.');
     await db
       .prepare(
-        `INSERT INTO cart_items (cart_id, variant_id, qty, added_at) VALUES (?, ?, ?, ?)
-         ON CONFLICT(cart_id, variant_id) DO UPDATE SET qty = excluded.qty`,
+        `INSERT INTO cart_items (cart_id, variant_id, pack, qty, added_at) VALUES (?, ?, ?, ?, ?)
+         ON CONFLICT(cart_id, variant_id, pack) DO UPDATE SET qty = excluded.qty`,
       )
-      .bind(cartId, variantId, qty, now)
+      .bind(cartId, variantId, pack, qty, now)
       .run();
   }
   await db.prepare('UPDATE carts SET updated_at = ? WHERE id = ?').bind(now, cartId).run();

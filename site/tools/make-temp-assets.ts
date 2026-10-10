@@ -13,20 +13,24 @@
  *
  * How the temporary layers are made (all flagged temporary in the scene manifest):
  *   shell        the full styled preview (products baked in; fixed furniture is not separated yet)
- *   product n=1  a cut-out of the preview inside the slot boxes (identical to the shell)
+ *   product n=1  a cut-out of the preview inside the product's silhouette (identical to the shell)
  *   product n>1  the same cut-out recoloured toward the option's product colour (shading kept)
  *   shadow       none: the shell already carries the real shadow of option 1, and a second, synthetic
  *                multiply shadow (shared by all options) darkened the room around each product
  *   light        none: the lamp glow is baked into the shell; a synthetic screen glow on top doubled it
  *   depth        synthesised from the room planes and the slot boxes (no depth render for this image)
  *
- * Mask rules (QA: switching options may change nothing outside the product's bounding box):
- *   - alpha is exactly 0 outside the slot shapes: the feather runs inward from the box edge, the layer rect is
- *     the shapes' bounding box with no padding;
- *   - inside, alpha = "differs from the local background" (objectness), cleaned (blur + re-threshold) so
- *     background noise does not become specks of colour;
- *   - the recolour weight also falls off with colour distance from the product's own mean colour, so wall,
- *     floor or sofa pixels that slipped into the box keep their colour.
+ * Silhouettes (QA, docs/studio-rules.md ו.5: a swap may change nothing outside the product's own shape):
+ *   - alpha is the product's traced silhouette, tools/temp/masks/<room>/<slot>.png (tools/temp/make-masks.py:
+ *     hand-traced outlines refined by GrabCut, products in front cut out), never a box or a colour guess;
+ *   - the edge is anti-aliased by ~1 px at each output width; everything else is alpha 0 with colour 0;
+ *   - the layer's colour is decontaminated: every pixel with alpha > 0 carries the (recoloured) product colour, so a
+ *     half-covered edge pixel blends product over the shell, never the preview's background over itself;
+ *   - the layer rect is the silhouette's bounding box (1 px margin for the anti-aliased edge);
+ *   - product layers are WebP with lossless alpha. They are not encoded as AVIF: lossy AVIF alpha rings into the
+ *     transparent area, and that ringing is exactly a faint stain around the product.
+ * The masks' outlines and anchors (tools/temp/masks/<room>/outlines.json) go into the scene for the hotspot marker
+ * and its hover/focus glow.
  */
 import sharp from 'sharp';
 import { readFileSync, writeFileSync, mkdirSync, rmSync, existsSync, readdirSync, statSync } from 'node:fs';
@@ -50,6 +54,7 @@ type TempSlot = {
   variant_palette?: string[];
   zoom?: Box;
 };
+type Outline = { anchor: [number, number]; bbox: Box; paths: [number, number][][] };
 type TempFile = {
   room: string;
   style: string;
@@ -68,6 +73,8 @@ const FORMATS = FAST ? (['webp'] as const) : (['avif', 'webp'] as const);
 
 const temp = JSON.parse(readFileSync(sitePath('tools/temp/living-room.nordic.json'), 'utf8')) as TempFile;
 const catalog = JSON.parse(readFileSync(join(GENERATED, 'catalog.public.json'), 'utf8')) as PublicCatalog;
+const MASKS = sitePath(`tools/temp/masks/${temp.room}`);
+const outlines = JSON.parse(readFileSync(join(MASKS, 'outlines.json'), 'utf8')) as Record<string, Outline>;
 const manifest = JSON.parse(readFileSync(repoPath('assets/manifest.json'), 'utf8')) as {
   assets: { id: string; path: string; status?: string }[];
 };
@@ -92,6 +99,7 @@ function inputsStamp(): string {
   const h = createHash('sha256');
   h.update(readFileSync(fileURLToPath(import.meta.url)));
   h.update(readFileSync(sitePath('tools/temp/living-room.nordic.json')));
+  for (const f of readdirSync(MASKS).sort()) h.update(readFileSync(join(MASKS, f)));
   h.update(JSON.stringify(room!.slots.map((s) => s.options.map((o) => (o.product_id ? productColor.get(o.product_id) : null)))));
   h.update(JSON.stringify(FORMATS));
   for (const p of [manifestPath(temp.source_manifest_id), repoPath(temp.hall_source)]) {
@@ -115,6 +123,13 @@ if (
 rmSync(MEDIA_OUT, { recursive: true, force: true });
 mkdirSync(MEDIA_OUT, { recursive: true });
 
+async function encodeLayer(img: sharp.Sharp, rel: string): Promise<void> {
+  const out = join(MEDIA_OUT, `${rel}.webp`);
+  mkdirSync(dirname(out), { recursive: true });
+  // lossless alpha (alphaQuality 100); colour under alpha 0 is irrelevant once premultiplied
+  await img.webp({ quality: 86, alphaQuality: 100, smartSubsample: true, effort: 5 }).toFile(out);
+}
+
 async function encode(img: sharp.Sharp, rel: string): Promise<void> {
   for (const fmt of FORMATS) {
     const out = join(MEDIA_OUT, `${rel}.${fmt}`);
@@ -134,11 +149,6 @@ const smooth = (a: number, b: number, x: number) => {
   const t = Math.min(1, Math.max(0, (x - a) / (b - a)));
   return t * t * (3 - 2 * t);
 };
-
-function ellipseWeight(u: number, v: number, e: Ellipse, feather: number): number {
-  const d = Math.hypot((u - e[0]) / e[2], (v - e[1]) / e[3]);
-  return 1 - smooth(1, 1 + feather / Math.min(e[2], e[3]), d);
-}
 
 /** Bounding boxes of every shape of a slot (ellipses included). */
 function shapeBoxes(t: TempSlot): Box[] {
@@ -162,111 +172,53 @@ async function loadRaw(path: string, width: number): Promise<Raw> {
 
 const sceneSlots: Record<string, unknown> = {};
 
-/** Weight 1 inside the box, 0 on and outside its edge, smooth over `feather` inward. */
-function insideBoxWeight(u: number, v: number, b: Box, feather: number): number {
-  const d = Math.min(u - b[0], b[1] - u, (v - b[2]) * (9 / 16), (b[3] - v) * (9 / 16));
-  return d <= 0 ? 0 : smooth(0, feather, d);
-}
-function insideEllipseWeight(u: number, v: number, e: Ellipse, feather: number): number {
-  const d = Math.hypot((u - e[0]) / e[2], (v - e[1]) / e[3]);
-  return d >= 1 ? 0 : 1 - smooth(1 - feather / Math.min(e[2], e[3]), 1, d);
-}
-
-/** Separable box blur of a float mask (radius in px), used to clean the objectness mask. */
-function blurMask(m: Float32Array, w: number, h: number, r: number): Float32Array {
-  const tmp = new Float32Array(w * h);
-  const out = new Float32Array(w * h);
-  const n = 2 * r + 1;
-  for (let y = 0; y < h; y++)
-    for (let x = 0; x < w; x++) {
-      let s = 0;
-      for (let k = -r; k <= r; k++) s += m[y * w + Math.min(w - 1, Math.max(0, x + k))]!;
-      tmp[y * w + x] = s / n;
-    }
-  for (let y = 0; y < h; y++)
-    for (let x = 0; x < w; x++) {
-      let s = 0;
-      for (let k = -r; k <= r; k++) s += tmp[Math.min(h - 1, Math.max(0, y + k)) * w + x]!;
-      out[y * w + x] = s / n;
-    }
-  return out;
+/** The slot's silhouette at the output size: anti-aliased by ~1 px, exactly 0 outside. */
+async function silhouette(slotId: string, width: number, height: number): Promise<Float32Array | null> {
+  const file = join(MASKS, `${slotId}.png`);
+  if (!existsSync(file)) return null;
+  const { data } = await sharp(file).resize(width, height, { kernel: 'linear' }).blur(0.5).toColourspace('b-w').raw().toBuffer({ resolveWithObject: true });
+  const a = new Float32Array(width * height);
+  // below 2/255 is blur spill, not coverage: keep the outside exactly 0
+  for (let i = 0; i < a.length; i++) a[i] = data[i]! < 3 ? 0 : data[i]! / 255;
+  return a;
 }
 
-/** Product layer cut-outs. Alpha = slot shapes (feathered inward) × cleaned objectness − occluders in front. */
-async function makeSlotLayers(base: Raw, key: 'lo' | 'hi', slotId: string, t: TempSlot, optionColors: (string | null)[]) {
-  const all = shapeBoxes(t);
-  if (all.length === 0) return null;
+/** Product layer cut-outs: the silhouette, recoloured per option. */
+async function makeSlotLayers(base: Raw, key: 'lo' | 'hi', slotId: string, optionColors: (string | null)[]) {
   const W = base.width;
   const H = base.height;
-  const u0 = Math.max(0, Math.min(...all.map((b) => b[0])));
-  const u1 = Math.min(1, Math.max(...all.map((b) => b[1])));
-  const v0 = Math.max(0, Math.min(...all.map((b) => b[2])));
-  const v1 = Math.min(1, Math.max(...all.map((b) => b[3])));
-  const x0 = Math.floor(u0 * W);
-  const y0 = Math.floor(v0 * H);
-  const w = Math.ceil(u1 * W) - x0;
-  const h = Math.ceil(v1 * H) - y0;
-  const feather = 0.0035; // ≈ 7 px at 1920, inside the box
-
-  // local background: the middle half (by luminance) of a ring just outside the shapes' bounding box
-  const ring = Math.round(W * 0.006);
-  const border: [number, number, number][] = [];
-  for (let x = -ring; x < w + ring; x += 2) for (const y of [-ring, h - 1 + ring]) border.push(px(base, x0 + x, y0 + y));
-  for (let y = -ring; y < h + ring; y += 2) for (const x of [-ring, w - 1 + ring]) border.push(px(base, x0 + x, y0 + y));
-  border.sort((a, b) => lum(...a) - lum(...b));
-  const mid = border.slice(Math.floor(border.length * 0.25), Math.ceil(border.length * 0.75));
-  const bg = [0, 1, 2].map((i) => mid.reduce((sum, c) => sum + c[i]!, 0) / mid.length) as [number, number, number];
-
-  const occBoxes: Box[] = [];
-  const occEllipses: Ellipse[] = [];
-  for (const name of t.exclude ?? []) {
-    const fixed = temp.fixed_occluders?.[name];
-    if (fixed) occBoxes.push(fixed);
-    occBoxes.push(...(temp.slots[name]?.boxes ?? []));
-    occEllipses.push(...(temp.slots[name]?.ellipses ?? []));
-  }
-  const useObjectness = t.objectness !== false;
-  const shape = new Float32Array(w * h);
-  const obj = new Float32Array(w * h);
-  for (let y = 0; y < h; y++) {
-    const v = (y0 + y + 0.5) / H;
-    for (let x = 0; x < w; x++) {
-      const u = (x0 + x + 0.5) / W;
-      let box = 0;
-      for (const b of t.boxes) box = Math.max(box, insideBoxWeight(u, v, b, feather));
-      for (const e of t.ellipses ?? []) box = Math.max(box, insideEllipseWeight(u, v, e, feather));
-      if (box <= 0) continue;
-      let occ = 0;
-      for (const b of occBoxes) occ = Math.max(occ, boxWeight(u, v, b, 0.004));
-      for (const e of occEllipses) occ = Math.max(occ, ellipseWeight(u, v, e, 0.004));
-      shape[y * w + x] = box * (1 - occ);
-      const [r, g, b] = px(base, x0 + x, y0 + y);
-      obj[y * w + x] = useObjectness ? smooth(0.05, 0.14, Math.hypot(r - bg[0], g - bg[1], b - bg[2])) : 1;
-    }
-  }
-  // clean the objectness: close small holes and drop isolated specks, then soften the edge by ~2 px
-  const r1 = Math.max(1, Math.round(W / 960));
-  const cleaned = blurMask(obj, w, h, 2 * r1);
-  for (let i = 0; i < cleaned.length; i++) cleaned[i] = smooth(0.35, 0.65, cleaned[i]!);
-  const soft = blurMask(cleaned, w, h, r1);
+  const full = await silhouette(slotId, W, H);
+  if (!full) return null;
+  let x0 = W;
+  let x1 = -1;
+  let y0 = H;
+  let y1 = -1;
+  for (let y = 0; y < H; y++)
+    for (let x = 0; x < W; x++)
+      if (full[y * W + x]! > 0) {
+        if (x < x0) x0 = x;
+        if (x > x1) x1 = x;
+        if (y < y0) y0 = y;
+        if (y > y1) y1 = y;
+      }
+  if (x1 < 0) return null;
+  x0 = Math.max(0, x0 - 1);
+  y0 = Math.max(0, y0 - 1);
+  const w = Math.min(W, x1 + 2) - x0;
+  const h = Math.min(H, y1 + 2) - y0;
   const alpha = new Float32Array(w * h);
-  for (let i = 0; i < alpha.length; i++) alpha[i] = shape[i]! * soft[i]!;
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) alpha[y * w + x] = full[(y0 + y) * W + x0 + x]!;
 
-  // the product's own colour (well inside the mask), and its mean luminance
+  // the product's own mean luminance (well inside the silhouette)
   let lumSum = 0;
-  let wSum = 0;
-  const mean = [0, 0, 0];
+  let n0 = 0;
   for (let y = 0; y < h; y++)
     for (let x = 0; x < w; x++) {
-      const a = alpha[y * w + x]!;
-      if (a < 0.8) continue;
-      const c = px(base, x0 + x, y0 + y);
-      lumSum += lum(...c);
-      for (let k = 0; k < 3; k++) mean[k] = mean[k]! + c[k]!;
-      wSum++;
+      if (alpha[y * w + x]! < 0.99) continue;
+      lumSum += lum(...px(base, x0 + x, y0 + y));
+      n0++;
     }
-  const meanLum = wSum > 0 ? lumSum / wSum : 0.5;
-  const meanChroma = wSum > 0 ? mean.map((m) => m / wSum - meanLum) : [0, 0, 0];
+  const meanLum = n0 > 0 ? lumSum / n0 : 0.5;
 
   const product: string[] = [];
   for (let n = 0; n < optionColors.length; n++) {
@@ -281,13 +233,12 @@ async function makeSlotLayers(base: Raw, key: 'lo' | 'hi', slotId: string, t: Te
         if (a <= 0) continue; // fully transparent, colour 0 (premultiplied-safe)
         let [r, g, b] = px(base, x0 + x, y0 + y);
         if (n > 0 && target) {
+          // the whole silhouette takes the option's colour; the preview's shading (luminance relative to the
+          // product's mean) is kept, so folds, weave and light stay where they were
           const l = lum(r, g, b);
-          // pixels whose colour is far from the product's own colour (wall, floor, a neighbour) are not recoloured
-          const cd = Math.hypot(r - l - meanChroma[0]!, g - l - meanChroma[1]!, b - l - meanChroma[2]!);
-          const sim = 1 - smooth(0.04, 0.12, cd);
           const nl = Math.min(1, Math.max(0, tl + (l - meanLum) * 0.9));
           const k = nl / tl;
-          const sat = 0.82 * sim;
+          const sat = 0.82;
           r = r * (1 - sat) + Math.min(1, tr * k) * sat;
           g = g * (1 - sat) + Math.min(1, tg * k) * sat;
           b = b * (1 - sat) + Math.min(1, tb * k) * sat;
@@ -298,7 +249,7 @@ async function makeSlotLayers(base: Raw, key: 'lo' | 'hi', slotId: string, t: Te
         out[o + 3] = Math.round(a * 255);
       }
     const rel = `${roomDir}/slots/${slotId}/${n + 1}.product.${WIDTHS[key]}`;
-    await encode(sharp(out, { raw: { width: w, height: h, channels: 4 } }), rel);
+    await encodeLayer(sharp(out, { raw: { width: w, height: h, channels: 4 } }), rel);
     product.push(rel);
   }
 
@@ -368,20 +319,14 @@ async function main() {
     const pal = t.variant_palette ?? PALETTE;
     const colors = slot.options.map((o, i) => (i === 0 ? null : ((o.product_id ? productColor.get(o.product_id) : null) ?? pal[(i - 1) % pal.length]!)));
     const entry: Record<string, unknown> = { z: slot.z, depth: t.depth, temporary: true };
-    // the product's own box, for its ring on the stage (split products: the part the zoom shows)
-    const shapes = shapeBoxes(t);
-    entry.ring = t.zoom
-      ? t.zoom
-      : shapes.length
-        ? [
-            Math.min(...shapes.map((b) => b[0])),
-            Math.max(...shapes.map((b) => b[1])),
-            Math.min(...shapes.map((b) => b[2])),
-            Math.max(...shapes.map((b) => b[3])),
-          ]
-        : null;
+    // the product's own shape on the stage: the resting marker sits at the anchor (deepest point inside the
+    // silhouette), the hover/focus glow follows the outline
+    const o = outlines[slot.id];
+    entry.ring = o ? o.bbox : null;
+    entry.anchor = o ? o.anchor : null;
+    entry.outline = o ? o.paths : null;
     for (const key of ['lo', 'hi'] as const) {
-      const layers = await makeSlotLayers(bases[key]!, key, slot.id, t, colors);
+      const layers = await makeSlotLayers(bases[key]!, key, slot.id, colors);
       if (key === 'lo') {
         entry.product = layers ? { rect: layers.rect, src: slot.options.map((_, n) => `${roomDir}/slots/${slot.id}/${n + 1}.product`) } : null;
         // temporary layers are cut from the shell, which already holds this slot's real shadow and lamp light

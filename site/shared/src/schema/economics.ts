@@ -1,7 +1,7 @@
 /**
  * Economics inputs. The studio back-office (studio/) edits them, and studio/apply_edits.py syncs them to:
  *   data/economics/settings.json  · { economics: {usd_ils, vat_pct, card_pct, ...}, budget, storefront? }
- *   data/economics/products.json  · { products: { <id>: {shipping_cost_usd, retail_ils, compare_at_ils, sell_qty?, fulfillment_source?} } }
+ *   data/economics/products.json  · { products: { <id>: {shipping_cost_usd, retail_ils, compare_at_ils, sell_qty?, unit_retail_ils?, fulfillment_source?} } }
  *   data/economics/freight-cj.json · CJ freight quotes per product (fallback when there is no manual shipping cost)
  * All files are optional for the build. Missing values fall back to DEFAULT_SETTINGS (the studio's defaults), and every
  * fallback is reported in `defaults_used` so nothing provisional reaches production silently.
@@ -48,6 +48,8 @@ export const ProductEconomicsSchema = z.looseObject({
   compare_at_ils: NonNeg.nullable().optional(),
   /** Supplier units shipped per unit sold (e.g. a "set of 2" bought as two singles). Default 1. */
   sell_qty: z.number().int().min(1).max(50).nullable().optional(),
+  /** Price of one piece when a set (sell_qty > 1) is also sold singly (P1). Without it the site shows an estimate. */
+  unit_retail_ils: NonNeg.nullable().optional(),
   fulfillment_source: z.enum(FULFILLMENT_SOURCES).nullable().optional(),
 });
 export type ProductEconomics = z.infer<typeof ProductEconomicsSchema>;

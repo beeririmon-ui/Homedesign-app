@@ -22,8 +22,12 @@ export type Scene = {
       z: number;
       depth: number;
       temporary: boolean;
-      /** the product's own box in the frame (its ring on the stage); null when the product is not in the picture */
+      /** the product silhouette's bounding box in the frame; null when the product is not in the picture */
       ring?: Box | null;
+      /** the resting marker: the point deepest inside the silhouette (never between two parts of a split product) */
+      anchor?: [number, number] | null;
+      /** the silhouette's outline (simplified contours, frame coordinates) for the hover/focus glow */
+      outline?: [number, number][][] | null;
       product: SceneLayerSet | null;
       shadow: SceneLayerSet | null;
       light: SceneLayerSet | null;

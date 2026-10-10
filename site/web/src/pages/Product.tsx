@@ -1,13 +1,20 @@
 import { useState } from 'preact/hooks';
-import type { PublicProduct } from '@hd/shared';
+import type { Pack, PublicProduct } from '@hd/shared';
+import { packLabelHe } from '@hd/shared/packs';
 import { product, slotOf } from '../catalog';
 import { Price, productImage } from '../components/Media';
 import { addToCart, cartBusy } from '../state/cart';
 import { navigate } from '../router';
 import { pendingOpen } from '../state/room';
+import { PackPicker, packPrice } from '../components/PackPicker';
+import { SafetyRow } from '../components/SafetyRow';
 
 export function Product({ p }: { p: PublicProduct }) {
   const [qty, setQty] = useState(1);
+  // P1: the set is the default; a single piece is the other choice (only for products sold as a set)
+  const [pack, setPack] = useState<Pack>('set');
+  const price = packPrice(p, pack);
+  const estimated = pack === 'unit' && !!p.pack?.unit_price_estimated;
   const where = slotOf(p)!;
   const img = productImage(p.id);
   const dims = [p.dimensions_cm.width, p.dimensions_cm.depth, p.dimensions_cm.height].filter((x): x is number => typeof x === 'number');
@@ -42,9 +49,11 @@ export function Product({ p }: { p: PublicProduct }) {
               </p>
             ) : null}
           </div>
-          <div class="price-row">
-            <Price class="price-big" agorot={p.price_agorot} provisional={p.price_provisional} />
-            {p.compare_at_agorot ? (
+          <div class="price-row" aria-live="polite">
+            <Price class="price-big" agorot={price} provisional={p.price_provisional && !estimated} />
+            {estimated ? <span class="badge badge-temp">מחיר משוער</span> : null}
+            {p.pack ? <span class="small">{packLabelHe(pack, p.pack.set_qty)}</span> : null}
+            {p.compare_at_agorot && pack === 'set' ? (
               <span class="price-old">
                 <span class="sr-only">מחיר קודם: </span>
                 <Price agorot={p.compare_at_agorot} />
@@ -53,6 +62,7 @@ export function Product({ p }: { p: PublicProduct }) {
             <span class="small muted">כולל מע"מ</span>
           </div>
           <p>{p.description_he}</p>
+          <PackPicker p={p} value={pack} onChange={setPack} id={`pack-${p.id}`} />
           <div>
             <h2 class="small" style={{ fontFamily: 'var(--f-body)', fontWeight: 600, marginBottom: 8 }}>
               וריאציות בעמדה
@@ -94,12 +104,7 @@ export function Product({ p }: { p: PublicProduct }) {
                 </dd>
               </>
             ) : null}
-            {p.set_of ? (
-              <>
-                <dt>סט</dt>
-                <dd>{p.set_of} פריטים</dd>
-              </>
-            ) : null}
+            <SafetyRow safety={p.safety} />
           </dl>
           {p.notes_he.length ? (
             <ul class="notes-list">
@@ -120,7 +125,12 @@ export function Product({ p }: { p: PublicProduct }) {
                 −
               </button>
             </div>
-            <button type="button" class="btn btn-primary" disabled={cartBusy.value} onClick={() => void addToCart(p.variants[0]!.id, p.name_he, qty)}>
+            <button
+              type="button"
+              class="btn btn-primary"
+              disabled={cartBusy.value}
+              onClick={() => void addToCart(p.variants[0]!.id, p.name_he, qty, pack, p.pack ? packLabelHe(pack, p.pack.set_qty) : undefined)}
+            >
               הוספה לסל
             </button>
             <button type="button" class="btn btn-ghost" onClick={showInRoom}>

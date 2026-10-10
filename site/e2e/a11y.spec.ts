@@ -46,6 +46,19 @@ for (const scheme of ['light', 'dark'] as const) {
       await audit(page, `${scheme} wheel`);
     });
 
+    test('a set product (set or single piece), and its wheel', async ({ page }) => {
+      await page.goto('/p/candle-holders-cj-travertine-pedestal/');
+      await expect(page.getByRole('radiogroup', { name: 'איך לקנות' })).toBeVisible();
+      await page.getByRole('radio', { name: /^יחידה אחת/ }).check();
+      await audit(page, `${scheme} set product`);
+      await page.goto('/rooms/living-room/');
+      await expect(page.locator('button.hotspot:visible').first()).toBeVisible({ timeout: 20_000 });
+      await page.locator('button.hotspot[data-slot="candle-holders"]').click();
+      await expect(page.getByRole('dialog').getByRole('radiogroup', { name: 'איך לקנות' })).toBeVisible();
+      await page.waitForTimeout(400);
+      await audit(page, `${scheme} wheel with set or single piece`);
+    });
+
     test('product, filled cart, checkout with errors', async ({ page }) => {
       await addVase(page);
       await audit(page, `${scheme} product`);

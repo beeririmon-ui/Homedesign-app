@@ -80,6 +80,9 @@ CREATE TABLE products (
   retail_agorot          INTEGER CHECK (retail_agorot IS NULL OR retail_agorot > 0),  -- consumer price incl. VAT
   compare_at_agorot      INTEGER,
   price_provisional      INTEGER NOT NULL DEFAULT 0,
+  -- P1: one piece of a set (sell_qty > 1) sold alone; NULL = no single-piece option. Estimated until the studio sets it.
+  unit_retail_agorot     INTEGER CHECK (unit_retail_agorot IS NULL OR unit_retail_agorot > 0),
+  unit_price_estimated   INTEGER NOT NULL DEFAULT 0,
   visible                INTEGER NOT NULL DEFAULT 0, -- shown on the site: has a retail price and sits in a slot option
   data_json              TEXT NOT NULL DEFAULT '{}', -- materials, dimensions, colours, notes (public fields)
   catalog_version        TEXT NOT NULL,
@@ -162,9 +165,10 @@ CREATE TABLE carts (
 CREATE TABLE cart_items (
   cart_id     TEXT NOT NULL REFERENCES carts(id) ON DELETE CASCADE,
   variant_id  TEXT NOT NULL REFERENCES product_variants(id),
+  pack        TEXT NOT NULL DEFAULT 'set' CHECK (pack IN ('set', 'unit')),  -- P1: the set (sell_qty pieces) or one piece
   qty         INTEGER NOT NULL CHECK (qty > 0 AND qty <= 20),
   added_at    TEXT NOT NULL,
-  PRIMARY KEY (cart_id, variant_id)
+  PRIMARY KEY (cart_id, variant_id, pack)
 );
 
 CREATE TABLE orders (
@@ -205,7 +209,8 @@ CREATE TABLE order_items (
   unit_price_agorot     INTEGER NOT NULL,              -- snapshot, incl. VAT
   unit_cost_usd_cents   INTEGER NOT NULL,              -- snapshot for real margin per order
   unit_shipping_usd_cents INTEGER NOT NULL,
-  unit_sell_qty         INTEGER NOT NULL DEFAULT 1,
+  pack                  TEXT    NOT NULL DEFAULT 'set' CHECK (pack IN ('set', 'unit')),
+  unit_sell_qty         INTEGER NOT NULL DEFAULT 1,     -- supplier units per unit sold: sell_qty for 'set', 1 for 'unit'
   fulfillment_source    TEXT    NOT NULL DEFAULT 'dropship_cj',  -- snapshot: who ships this line
   supplier_sku          TEXT,
   PRIMARY KEY (order_id, line)

@@ -1,11 +1,14 @@
 /** Request/response contracts shared by the Worker API, the web client and the in-browser mock. */
 import { z } from 'zod';
 import { IL_PHONE, ORDER_STATUSES } from './constants';
+import { PACKS } from './packs';
 
 export { IL_PHONE, ORDER_STATUSES, ORDER_STATUS_HE, type OrderStatus } from './constants';
 
 export const CartItemInputSchema = z.object({
   variant_id: z.string().min(1).max(160),
+  /** set or single piece (P1); a product without a unit option accepts only 'set' */
+  pack: z.enum(PACKS).default('set'),
   qty: z.number().int().min(0).max(20),
 });
 
@@ -13,6 +16,9 @@ export const CartLineSchema = z.object({
   variant_id: z.string(),
   product_id: z.string(),
   name_he: z.string(),
+  pack: z.enum(PACKS),
+  /** pieces in one of this line's sale units: the set size for 'set' (1 when not sold as a set), 1 for 'unit' */
+  pack_qty: z.number().int().min(1),
   qty: z.number().int(),
   unit_price_agorot: z.number().int(),
   line_total_agorot: z.number().int(),
@@ -74,7 +80,9 @@ export const OrderViewSchema = z.object({
   created_at: z.string(),
   total_agorot: z.number().int(),
   shipping_method: z.enum(['economy', 'express']),
-  lines: z.array(z.object({ name_he: z.string(), qty: z.number().int(), line_total_agorot: z.number().int() })),
+  lines: z.array(
+    z.object({ name_he: z.string(), pack: z.enum(PACKS), pack_qty: z.number().int().min(1), qty: z.number().int(), line_total_agorot: z.number().int() }),
+  ),
 });
 export type OrderView = z.infer<typeof OrderViewSchema>;
 

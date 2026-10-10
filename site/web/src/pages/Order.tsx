@@ -7,6 +7,7 @@ import type { OrderView } from '@hd/shared';
 import { api, ApiError } from '../api';
 import { orderToken } from '../state/cart';
 import { Price } from '../components/Media';
+import { lineLabelHe } from './lineLabel';
 
 export function OrderPage({ id }: { id: string }) {
   const [order, setOrder] = useState<OrderView | null>(null);
@@ -56,7 +57,8 @@ export function OrderPage({ id }: { id: string }) {
           <ul style={{ margin: 0, paddingInlineStart: 18 }}>
             {order.lines.map((l, i) => (
               <li key={i}>
-                {l.name_he} × {l.qty} · <Price agorot={l.line_total_agorot} />
+                {l.name_he}
+                {lineLabelHe(l) ? ` (${lineLabelHe(l)})` : ''} × {l.qty} · <Price agorot={l.line_total_agorot} />
               </li>
             ))}
           </ul>

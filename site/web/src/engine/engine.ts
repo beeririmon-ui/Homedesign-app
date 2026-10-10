@@ -71,12 +71,13 @@ export class RoomEngine {
 
   private layerUrl(l: LayerSpec): string {
     if (l.kind === 'base') return this.shellUrl || mediaUrl(l.src, this.compWidth, this.ext);
-    return mediaUrl(l.src, this.o.scene.widths[this.res], this.ext);
+    // product, shadow and light layers are WebP only: lossless alpha (lossy AVIF alpha rings into a stain)
+    return mediaUrl(l.src, this.o.scene.widths[this.res], 'webp');
   }
 
   private srcUrl(src: string): string {
     const base = this.o.scene.base.find((b) => b.src === src);
-    return base ? this.shellUrl || mediaUrl(src, this.compWidth, this.ext) : mediaUrl(src, this.o.scene.widths[this.res], this.ext);
+    return base ? this.shellUrl || mediaUrl(src, this.compWidth, this.ext) : mediaUrl(src, this.o.scene.widths[this.res], 'webp');
   }
 
   async start(): Promise<void> {

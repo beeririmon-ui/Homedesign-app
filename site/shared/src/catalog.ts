@@ -7,6 +7,7 @@
  *   FullCatalog    · build-time only: D1 seed and admin. Never imported by web code.
  */
 import { z } from 'zod';
+import { PublicSafetySchema } from './safety';
 
 const Unit = z.number().min(0).max(1);
 
@@ -43,6 +44,19 @@ export const PublicProductSchema = z.object({
   notes_he: z.array(z.string()),
   set_of: z.number().int().nullable(),
   variants: z.array(z.object({ id: z.string(), label_he: z.string() })).min(1),
+  /**
+   * Set or single (P1). null: sold as one sale unit only (no choice shown). Otherwise `price_agorot` is the set of
+   * `set_qty` and one piece costs `unit_price_agorot`; `unit_price_estimated` until the studio sets a unit price.
+   */
+  pack: z
+    .object({
+      set_qty: z.number().int().min(2),
+      unit_price_agorot: z.number().int().positive(),
+      unit_price_estimated: z.boolean(),
+    })
+    .nullable(),
+  /** Standards and safety claims from the card (D9); null when the card has none. */
+  safety: PublicSafetySchema.nullable(),
 });
 export type PublicProduct = z.infer<typeof PublicProductSchema>;
 
@@ -115,6 +129,12 @@ export type FullProduct = PublicProduct & {
   shipping_from_default: boolean;
   shipping_source: 'manual' | 'cj' | 'default';
   sell_qty: number;
+  /** where sell_qty came from: the studio (products.json) or the studio's default rule, and how sure that is */
+  sell_qty_source: 'studio' | 'default';
+  sell_qty_sure: boolean;
+  sell_qty_reason: string | null;
+  /** economics of one piece sold alone (pack 'unit'), null when there is no unit option */
+  unit_economics: import('./pricing').UnitEconomics | null;
   fulfillment_source: import('./schema/economics').FulfillmentSource;
   fx_usd_ils: number;
   nordic_score: number | null;

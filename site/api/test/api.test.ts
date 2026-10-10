@@ -9,7 +9,8 @@ import { DEFAULT_SETTINGS, signWebhook, unitEconomics, type FullCatalog, type Fu
 
 const SECRET = 'test-webhook-secret-0123456789';
 
-function product(id: string, slot: string, price: number, cost: number): FullProduct {
+function product(id: string, slot: string, price: number, cost: number, set?: { n: number; unit: number }): FullProduct {
+  const sellQty = set?.n ?? 1;
   const base = {
     id,
     room: 'living-room',
@@ -25,8 +26,10 @@ function product(id: string, slot: string, price: number, cost: number): FullPro
     color_hex: '#F4F1EC',
     shipping_days: [12, 30] as [number, number],
     notes_he: [],
-    set_of: null,
+    set_of: set ? set.n : null,
     variants: [{ id: `${id}:default`, label_he: 'ברירת מחדל' }],
+    pack: set ? { set_qty: set.n, unit_price_agorot: set.unit, unit_price_estimated: true } : null,
+    safety: null,
   };
   return {
     ...base,
@@ -39,12 +42,21 @@ function product(id: string, slot: string, price: number, cost: number): FullPro
     shipping_usd_cents: 1000,
     shipping_from_default: false,
     shipping_source: 'cj',
-    sell_qty: 1,
+    sell_qty: sellQty,
+    sell_qty_source: 'default',
+    sell_qty_sure: true,
+    sell_qty_reason: null,
+    unit_economics: set
+      ? unitEconomics(
+          { retail_agorot: set.unit, cost_usd_cents: cost, shipping_usd_cents: 1000, fx_usd_ils: DEFAULT_SETTINGS.fx_usd_ils, sell_qty: 1 },
+          DEFAULT_SETTINGS,
+        )
+      : null,
     fulfillment_source: 'dropship_cj',
     fx_usd_ils: DEFAULT_SETTINGS.fx_usd_ils,
     nordic_score: 8,
     economics: unitEconomics(
-      { retail_agorot: price, cost_usd_cents: cost, shipping_usd_cents: 1000, fx_usd_ils: DEFAULT_SETTINGS.fx_usd_ils },
+      { retail_agorot: price, cost_usd_cents: cost, shipping_usd_cents: 1000, fx_usd_ils: DEFAULT_SETTINGS.fx_usd_ils, sell_qty: sellQty },
       DEFAULT_SETTINGS,
     ),
   };
@@ -90,7 +102,12 @@ const catalog: FullCatalog = {
       ],
     },
   ],
-  products: [product('vase-a', 'vase', 15900, 1624), product('vase-b', 'vase', 25900, 2405)],
+  products: [
+    product('vase-a', 'vase', 15900, 1624),
+    product('vase-b', 'vase', 25900, 2405),
+    // P1: a pair sold as a set of 2 (₪349) or as one piece (₪199, estimated)
+    product('candles-a', 'candle-holders', 34900, 907, { n: 2, unit: 19900 }),
+  ],
   shipping: [
     { id: 'economy', label_he: 'חסכוני', price_agorot: 2900, free_over_agorot: 29900, days_he: '', provisional: true, is_default: true },
     { id: 'express', label_he: 'מהיר', price_agorot: 5900, free_over_agorot: null, days_he: '', provisional: true, is_default: false },
@@ -123,9 +140,9 @@ beforeEach(() => {
 const req = (path: string, init?: RequestInit) => app.request(`http://localhost${path}`, init, env);
 const json = (body: unknown, method = 'POST'): RequestInit => ({ method, headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
 
-async function cartWith(variant: string, qty: number) {
+async function cartWith(variant: string, qty: number, pack?: 'set' | 'unit') {
   const created = (await (await req('/api/cart', { method: 'POST' })).json()) as { id: string };
-  await req(`/api/cart/${created.id}/items`, json({ variant_id: variant, qty }, 'PUT'));
+  await req(`/api/cart/${created.id}/items`, json({ variant_id: variant, qty, ...(pack ? { pack } : {}) }, 'PUT'));
   return created.id;
 }
 
@@ -184,6 +201,68 @@ describe('public api', () => {
     expect((await req(`/api/orders/${body.order_id}`, { headers: { 'x-order-token': 'x'.repeat(32) } })).status).toBe(404);
     const view = (await (await req(`/api/orders/${body.order_id}`, { headers: { 'x-order-token': body.order_token } })).json()) as { status_he: string };
     expect(view.status_he).toBe('ממתינה לתשלום');
+  });
+});
+
+describe('set or single piece (P1)', () => {
+  type CartBody = {
+    subtotal_agorot: number;
+    count: number;
+    lines: { pack: string; pack_qty: number; qty: number; unit_price_agorot: number; price_provisional: boolean }[];
+  };
+  const put = async (id: string, body: object) => req(`/api/cart/${id}/items`, json(body, 'PUT'));
+
+  it('the set is the default; a single piece has its own price and its own line', async () => {
+    const id = await cartWith('candles-a:default', 1); // no pack given: the set
+    let cart = (await (await req(`/api/cart/${id}`)).json()) as CartBody;
+    expect(cart.lines).toEqual([expect.objectContaining({ pack: 'set', pack_qty: 2, qty: 1, unit_price_agorot: 34900 })]);
+    cart = (await (await put(id, { variant_id: 'candles-a:default', pack: 'unit', qty: 3 })).json()) as CartBody;
+    expect(cart.lines).toHaveLength(2);
+    expect(cart.lines[1]).toMatchObject({ pack: 'unit', pack_qty: 1, qty: 3, unit_price_agorot: 19900, price_provisional: true });
+    expect(cart.subtotal_agorot).toBe(34900 + 3 * 19900);
+    // removing the single pieces leaves the set
+    cart = (await (await put(id, { variant_id: 'candles-a:default', pack: 'unit', qty: 0 })).json()) as CartBody;
+    expect(cart.lines.map((l) => l.pack)).toEqual(['set']);
+  });
+
+  it('a product sold only as one unit refuses a single-piece line; an unknown pack is invalid', async () => {
+    const id = await cartWith('vase-a:default', 1);
+    const res = await put(id, { variant_id: 'vase-a:default', pack: 'unit', qty: 1 });
+    expect(res.status).toBe(422);
+    expect(await res.json()).toMatchObject({ error: 'pack_unavailable' });
+    expect((await put(id, { variant_id: 'candles-a:default', pack: 'pair', qty: 1 })).status).toBe(422);
+  });
+
+  it('checkout snapshots the pack and the supplier units; the supplier gets qty × units; the buyer sees the pack', async () => {
+    const id = await cartWith('candles-a:default', 1, 'set');
+    await put(id, { variant_id: 'candles-a:default', pack: 'unit', qty: 1 });
+    const r = (await (await req('/api/checkout', json(checkoutBody(id)))).json()) as { order_id: string; order_token: string };
+    const { results } = await env.DB.prepare('SELECT pack, unit_sell_qty, unit_price_agorot FROM order_items WHERE order_id = ? ORDER BY line')
+      .bind(r.order_id)
+      .all();
+    expect(results).toEqual([
+      { pack: 'set', unit_sell_qty: 2, unit_price_agorot: 34900 },
+      { pack: 'unit', unit_sell_qty: 1, unit_price_agorot: 19900 },
+    ]);
+    const view = (await (await req(`/api/orders/${r.order_id}`, { headers: { 'x-order-token': r.order_token } })).json()) as { lines: object[] };
+    expect(view.lines).toEqual([expect.objectContaining({ pack: 'set', pack_qty: 2, qty: 1 }), expect.objectContaining({ pack: 'unit', pack_qty: 1, qty: 1 })]);
+    const supplierUnits = await env.DB.prepare(
+      "SELECT SUM(qty * unit_sell_qty) AS n FROM order_items WHERE order_id = ? AND fulfillment_source = 'dropship_cj'",
+    )
+      .bind(r.order_id)
+      .first<{ n: number }>();
+    expect(supplierUnits!.n).toBe(3);
+  });
+
+  it('live prices include the set size and the single-piece price', async () => {
+    const res = (await (await req('/api/catalog/prices?ids=candles-a,vase-a')).json()) as { prices: Record<string, unknown>[] };
+    expect(res.prices.find((p) => p.id === 'candles-a')).toMatchObject({
+      price_agorot: 34900,
+      set_qty: 2,
+      unit_price_agorot: 19900,
+      unit_price_estimated: true,
+    });
+    expect(res.prices.find((p) => p.id === 'vase-a')).toMatchObject({ set_qty: null, unit_price_agorot: null });
   });
 });
 

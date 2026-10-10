@@ -35,10 +35,20 @@ publicApi.get('/catalog/prices', async (c) => {
   if (!list.length) return c.json({ prices: [] });
   const placeholders = list.map(() => '?').join(',');
   const { results } = await c.env.DB.prepare(
-    `SELECT id, retail_agorot AS price_agorot, compare_at_agorot, price_provisional, visible FROM products WHERE id IN (${placeholders})`,
+    `SELECT id, retail_agorot AS price_agorot, compare_at_agorot, price_provisional, unit_retail_agorot, unit_price_estimated, sell_qty, visible
+     FROM products WHERE id IN (${placeholders})`,
   )
     .bind(...list)
-    .all<{ id: string; price_agorot: number | null; compare_at_agorot: number | null; price_provisional: number; visible: number }>();
+    .all<{
+      id: string;
+      price_agorot: number | null;
+      compare_at_agorot: number | null;
+      price_provisional: number;
+      unit_retail_agorot: number | null;
+      unit_price_estimated: number;
+      sell_qty: number;
+      visible: number;
+    }>();
   c.header('Cache-Control', 'public, max-age=60');
   return c.json({
     prices: results.map((r) => ({
@@ -46,6 +56,10 @@ publicApi.get('/catalog/prices', async (c) => {
       price_agorot: r.visible ? r.price_agorot : null,
       compare_at_agorot: r.visible ? r.compare_at_agorot : null,
       price_provisional: r.price_provisional === 1,
+      // P1: the set's size and the price of one piece (null: sold only as one sale unit)
+      set_qty: r.unit_retail_agorot !== null ? r.sell_qty : null,
+      unit_price_agorot: r.visible ? r.unit_retail_agorot : null,
+      unit_price_estimated: r.unit_price_estimated === 1,
       available: r.visible === 1 && r.price_agorot !== null,
     })),
   });
@@ -94,7 +108,7 @@ publicApi.put('/cart/:id/items', async (c) => {
   const id = c.req.param('id');
   await openCartOr404(c.env.DB, id);
   const body = await readJson(c, CartItemInputSchema);
-  await setCartItem(c.env.DB, id, body.variant_id, body.qty);
+  await setCartItem(c.env.DB, id, body.variant_id, body.pack, body.qty);
   return c.json(await readCart(c.env.DB, id));
 });
 
@@ -189,8 +203,8 @@ publicApi.post('/checkout', async (c) => {
     ...cart.lines.map((l, i) => {
       const cost = costOf.get(l.variant_id);
       return c.env.DB.prepare(
-        `INSERT INTO order_items (order_id, line, product_id, variant_id, name_he, qty, unit_price_agorot, unit_cost_usd_cents, unit_shipping_usd_cents, unit_sell_qty, fulfillment_source, supplier_sku)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        `INSERT INTO order_items (order_id, line, product_id, variant_id, name_he, qty, unit_price_agorot, unit_cost_usd_cents, unit_shipping_usd_cents, pack, unit_sell_qty, fulfillment_source, supplier_sku)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       ).bind(
         id,
         i + 1,
@@ -201,7 +215,8 @@ publicApi.post('/checkout', async (c) => {
         l.unit_price_agorot,
         cost?.cost_usd_cents ?? 0,
         cost?.shipping_usd_cents ?? 0,
-        cost?.sell_qty ?? 1,
+        l.pack,
+        l.pack === 'unit' ? 1 : (cost?.sell_qty ?? 1),
         cost?.fulfillment_source ?? 'dropship_cj',
         cost?.supplier_sku ?? null,
       );
@@ -230,9 +245,9 @@ publicApi.get('/orders/:id', async (c) => {
     .bind(id)
     .first<{ id: string; token_hash: string; status: OrderStatus; created_at: string; total_agorot: number; shipping_method: 'economy' | 'express' }>();
   if (!o || !timingSafeEqualHex(o.token_hash, await sha256Hex(token))) throw new HttpError(404, 'order_not_found');
-  const { results } = await c.env.DB.prepare('SELECT name_he, qty, unit_price_agorot FROM order_items WHERE order_id = ? ORDER BY line')
+  const { results } = await c.env.DB.prepare('SELECT name_he, pack, unit_sell_qty, qty, unit_price_agorot FROM order_items WHERE order_id = ? ORDER BY line')
     .bind(id)
-    .all<{ name_he: string; qty: number; unit_price_agorot: number }>();
+    .all<{ name_he: string; pack: 'set' | 'unit'; unit_sell_qty: number; qty: number; unit_price_agorot: number }>();
   const view: OrderView = {
     id: o.id,
     status: o.status,
@@ -240,7 +255,13 @@ publicApi.get('/orders/:id', async (c) => {
     created_at: o.created_at,
     total_agorot: o.total_agorot,
     shipping_method: o.shipping_method,
-    lines: results.map((r) => ({ name_he: r.name_he, qty: r.qty, line_total_agorot: r.qty * r.unit_price_agorot })),
+    lines: results.map((r) => ({
+      name_he: r.name_he,
+      pack: r.pack,
+      pack_qty: r.pack === 'unit' ? 1 : r.unit_sell_qty,
+      qty: r.qty,
+      line_total_agorot: r.qty * r.unit_price_agorot,
+    })),
   };
   return c.json(view);
 });

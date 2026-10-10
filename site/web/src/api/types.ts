@@ -1,4 +1,4 @@
-import type { Cart, CheckoutRequest, CheckoutResponse, OrderView } from '@hd/shared';
+import type { Cart, CheckoutRequest, CheckoutResponse, OrderView, Pack } from '@hd/shared';
 
 export class ApiError extends Error {
   constructor(
@@ -14,7 +14,7 @@ export interface StoreApi {
   readonly kind: 'http' | 'mock';
   createCart(): Promise<Cart>;
   getCart(id: string): Promise<Cart>;
-  setItem(cartId: string, variant_id: string, qty: number): Promise<Cart>;
+  setItem(cartId: string, variant_id: string, pack: Pack, qty: number): Promise<Cart>;
   checkout(req: CheckoutRequest): Promise<CheckoutResponse>;
   getOrder(id: string, token: string): Promise<OrderView>;
   /** In-browser hosted-page simulator (artifact only). */

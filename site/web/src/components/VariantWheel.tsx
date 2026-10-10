@@ -4,7 +4,8 @@
  * options previews them live in the room behind, Enter or "בחירה" confirms, Escape cancels.
  */
 import { useEffect, useLayoutEffect, useRef, useState } from 'preact/hooks';
-import type { CatalogSlot } from '@hd/shared';
+import type { CatalogSlot, Pack } from '@hd/shared';
+import { packLabelHe } from '@hd/shared/packs';
 import { formatIls } from '@hd/shared/money';
 import { product } from '../catalog';
 import { ArcPhysics } from '../engine/wheel-physics';
@@ -12,6 +13,7 @@ import { optionImage, Price } from './Media';
 import { IconClose, IconLeft, IconRight } from './Icons';
 import { addToCart, cartBusy } from '../state/cart';
 import { prefersReducedMotion } from '../motion';
+import { PackPicker, packPrice } from './PackPicker';
 
 const STEP_DEG = 34;
 
@@ -37,6 +39,9 @@ export function VariantWheel({ slot, initial, onPreview, onChoose, onCancel }: P
 
   const opt = slot.options[index]!;
   const p = product(opt.product_id);
+  // P1: set (default) or one piece; every option starts at its set
+  const [pack, setPack] = useState<Pack>('set');
+  useEffect(() => setPack('set'), [index]);
 
   // layout: card width from the arc height
   useLayoutEffect(() => {
@@ -141,6 +146,9 @@ export function VariantWheel({ slot, initial, onPreview, onChoose, onCancel }: P
   }
 
   function onKeyDown(e: KeyboardEvent) {
+    // the set / single radios use the arrow keys themselves
+    const inRadio = (e.target as HTMLElement).matches?.('input[type="radio"]');
+    if (inRadio && e.key !== 'Escape' && e.key !== 'Tab') return;
     if (e.key === 'Escape') {
       e.preventDefault();
       onCancel();
@@ -157,7 +165,7 @@ export function VariantWheel({ slot, initial, onPreview, onChoose, onCancel }: P
       e.preventDefault();
       goTo(n - 1);
     } else if (e.key === 'Tab') {
-      const f = [...(dialog.current?.querySelectorAll<HTMLElement>('button:not([disabled]), a[href], [tabindex="0"]') ?? [])];
+      const f = [...(dialog.current?.querySelectorAll<HTMLElement>('button:not([disabled]), a[href], [tabindex="0"], input:checked') ?? [])];
       if (!f.length) return;
       const first = f[0]!;
       const last = f[f.length - 1]!;
@@ -204,7 +212,9 @@ export function VariantWheel({ slot, initial, onPreview, onChoose, onCancel }: P
           {slot.options.map((o, i) => {
             const prod = product(o.product_id);
             const img = optionImage(slot.id, o.position);
-            const label = `${i + 1} מתוך ${n}: ${prod ? `${prod.name_he}, ${formatIls(prod.price_agorot)}` : o.label_he}`;
+            const label = `${i + 1} מתוך ${n}: ${
+              prod ? `${prod.name_he}, ${prod.pack ? `${packLabelHe('set', prod.pack.set_qty)} ` : ''}${formatIls(prod.price_agorot)}` : o.label_he
+            }`;
             return (
               <button
                 key={o.position}
@@ -256,7 +266,10 @@ export function VariantWheel({ slot, initial, onPreview, onChoose, onCancel }: P
           </p>
         ) : null}
         {p ? (
-          <Price class="price" agorot={p.price_agorot} provisional={p.price_provisional} />
+          <>
+            <Price class="price" agorot={packPrice(p, pack)} provisional={p.price_provisional} />
+            <PackPicker p={p} value={pack} onChange={setPack} id={`wheel-pack-${slot.id}`} onStage />
+          </>
         ) : (
           <p class="specs">אין עדיין מוצר בעמדה הזו. התצוגה בחדר זמנית.</p>
         )}
@@ -274,7 +287,12 @@ export function VariantWheel({ slot, initial, onPreview, onChoose, onCancel }: P
           </button>
           {p ? (
             <>
-              <button type="button" class="btn btn-ghost" disabled={cartBusy.value} onClick={() => void addToCart(p.variants[0]!.id, p.name_he)}>
+              <button
+                type="button"
+                class="btn btn-ghost"
+                disabled={cartBusy.value}
+                onClick={() => void addToCart(p.variants[0]!.id, p.name_he, 1, pack, p.pack ? packLabelHe(pack, p.pack.set_qty) : undefined)}
+              >
                 הוספה לסל
               </button>
               <a class="btn btn-ghost" href={`/p/${p.id}/`}>

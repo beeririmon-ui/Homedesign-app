@@ -50,7 +50,7 @@ export function Picture(p: PictureProps) {
 export function optionImage(slotId: string, position: number): string | null {
   const s = scene.slots[slotId]?.product;
   const src = s?.src[position - 1] ?? null;
-  return src ? mediaUrl(src, scene.widths.lo, FORMATS[0]) : null;
+  return src ? mediaUrl(src, scene.widths.lo, 'webp') : null; // layers are WebP only (lossless alpha)
 }
 
 export function productImage(id: string): string | null {
