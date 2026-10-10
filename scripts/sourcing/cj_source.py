@@ -8,7 +8,10 @@ Same CLI shape for every source (see aliexpress_source.py, google_vision_source.
   image   <image_url>                                  # not wired yet: 1,000 points and account level 3+
   product <pid> [<pid> ...] [--slot room/slot]         # 10 points each; SKIPS anything already seen
   freight <vid> [--to IL] [--qty 1]                    # 10 points; cached 14 days
-  source  <image_url> --name "<n>" [--url U]           # CJ Sourcing request: needs the user's OK (doc task 1)
+  source  <image_url> --name "<n>" --approved "<decision>" [--slot room/slot] [--url U] [--price P] [--remark R]
+          # CJ Sourcing request (charged 50). Sent only with --approved <decision id> (studio rules d.9, e.g. "AC1 2026-10-10").
+          # The id comes back as cjSourcingId; it is registered as cj-sourcing:<id> and cached under data/sources/cj-sourcing/
+  source-status <cjSourcingId> [...]                  # GET /product/sourcing/queryList (charged 50; up to 100 ids): 3 = succeeded, 5 = failed
   check   <pid|vid|sku> [...]                          # registry only, no call
   mark    <pid> --status rejected|seen|card --reason "..." [--slot room/slot] [--card-id ID]
 
@@ -144,6 +147,49 @@ def do_freight(a):
     out(r)
 
 
+SRC_SOURCING = "cj-sourcing"
+MAXLEN = 200  # CJ: productName, productImage, productUrl, remark are each <= 200 chars
+
+
+def do_source(a):
+    if not a.approved:
+        sys.exit("CJ Sourcing requests need the user's approval first (studio rules d.9). "
+                 "Pass --approved \"<decision id>\" (e.g. \"AC1 2026-10-10\"). Not sent.")
+    for field in ("name", "image", "url", "remark"):
+        v = getattr(a, field)
+        if v and len(v) > MAXLEN:
+            sys.exit("%s is %d chars; CJ allows %d. Not sent." % (field, len(v), MAXLEN))
+    body = {"productName": a.name, "productImage": a.image, "productUrl": a.url, "price": a.price, "remark": a.remark}
+    if a.dry_run:
+        return out({"dry_run": True, "would_call": "sourcing_create", "slot": a.slot, "request": body,
+                    "budget": spend(a, "sourcing_create")})
+    spend(a, "sourcing_create")
+    r = cj().sourcing_create(a.name, a.image, a.url, a.price, a.remark)
+    res = dict(r, slot=a.slot, approved=a.approved, request=body)
+    sid = r.get("cjSourcingId")
+    if r.get("ok") and sid:
+        cache.put(SRC_SOURCING, sid, "create", res, endpoint="/product/sourcing/create", params={"slot": a.slot})
+        registry.add("%s:%s" % (SRC_SOURCING, sid), "seen",
+                     "CJ sourcing request (%s) for %s: %s" % (a.approved, a.slot or "?", a.name[:110]),
+                     by=a.by, slot=a.slot, opened=True, source=SRC_SOURCING, url=a.url)
+    out(res)
+
+
+def do_source_status(a):
+    if a.dry_run:
+        return out({"dry_run": True, "would_call": "sourcing_query", "ids": a.ids, "budget": spend(a, "sourcing_query")})
+    spend(a, "sourcing_query")
+    r = cj().sourcing_query(a.ids)
+    for it in r.get("items") or []:
+        sid = it.get("sourceId")
+        if sid:
+            cache.put(SRC_SOURCING, sid, "status", it, endpoint="/product/sourcing/queryList")
+            note = "status %s (%s)%s" % (it.get("sourceStatus"), it.get("sourceStatusStr"),
+                                         " cj:%s" % it["cjProductId"] if it.get("cjProductId") else "")
+            registry.add("%s:%s" % (SRC_SOURCING, sid), "seen", note, by=a.by, opened=True, source=SRC_SOURCING)
+    out(r)
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description="CJ importer (registry + budget + cache)")
     ap.add_argument("--dry-run", action="store_true"); ap.add_argument("--force", action="store_true")
@@ -157,6 +203,8 @@ def main(argv=None):
     p = sub.add_parser("product"); p.add_argument("pids", nargs="+"); p.add_argument("--slot")
     f = sub.add_parser("freight"); f.add_argument("vid"); f.add_argument("--to", default="IL"); f.add_argument("--qty", type=int, default=1)
     so = sub.add_parser("source"); so.add_argument("image"); so.add_argument("--name", required=True); so.add_argument("--url")
+    so.add_argument("--price"); so.add_argument("--remark"); so.add_argument("--slot"); so.add_argument("--approved")
+    ss = sub.add_parser("source-status"); ss.add_argument("ids", nargs="+")
     c = sub.add_parser("check"); c.add_argument("ids", nargs="+")
     m = sub.add_parser("mark"); m.add_argument("pid"); m.add_argument("--status", required=True, choices=registry.STATUSES)
     m.add_argument("--reason", required=True); m.add_argument("--slot"); m.add_argument("--card-id")
@@ -179,7 +227,9 @@ def main(argv=None):
             sys.exit("image search is not wired: it costs 1,000 points and needs CJ account level 3+ "
                      "(doc 1.1). Ask the coordinator before adding it.")
         elif a.cmd == "source":
-            sys.exit("CJ Sourcing requests need the user's approval first (doc task 1). Not sent.")
+            do_source(a)
+        elif a.cmd == "source-status":
+            do_source_status(a)
     except budget.BudgetExceeded as e:
         print("BUDGET STOP: %s" % e, file=sys.stderr)
         sys.exit(3)

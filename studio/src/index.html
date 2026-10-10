@@ -824,13 +824,13 @@ const MISS_HE = {cost:'עלות', shipping:'משלוח', retail:'מחיר', fast
 
 /* ---------- economics: settings, defaults, calculation ---------- */
 const ECON_META = [
-  {k:'usd_ils', label:'שער דולר-שקל', unit:'₪ לדולר', def:3.7, step:0.01, update:true, help:'ממיר את עלות המוצר והמשלוח מדולר לשקל. לעדכן לשער שחברת האשראי גובה בפועל.'},
+  {k:'usd_ils', label:'שער דולר-שקל', unit:'₪ לדולר', def:3.3, step:0.01, update:true, help:'ממיר את עלות המוצר והמשלוח מדולר לשקל. ברירת המחדל 3.3, שמרנית מול שער השוק (החלטה FR-C, 2026-10-10). לעדכן לשער שחברת האשראי גובה בפועל.'},
   {k:'shipping_method', label:'שיטת משלוח לחישוב', type:'select', def:'cheapest', options:[['cheapest','זול (12–50 יום)'],['under20','עד 20 יום']], help:'איזו אפשרות משלוח של CJ נכנסת לעלות הנחיתה. משלוח ידני תמיד גובר.'},
   {k:'vat_pct', label:'מע"מ', unit:'%', def:18, step:0.1, help:'המחיר לצרכן כולל מע"מ. הכנסה נטו = מחיר חלקי (1 + מע"מ).'},
   {k:'card_pct', label:'עמלת סליקה', unit:'% מהמחיר', def:2, step:0.1, help:'אחוז מהמחיר לצרכן שהסולק גובה.'},
   {k:'card_fixed_ils', label:'עמלה קבועה לעסקה', unit:'₪', def:1.2, step:0.1, help:'סכום קבוע לכל עסקה. בחישוב לפי מוצר הוא נספר על כל פריט, ולכן החישוב מעט שמרני.'},
-  {k:'returns_pct', label:'שמורת החזרות', unit:'% מההכנסה נטו', def:5, step:0.5, help:'חלק מההכנסה שנשמר להחזרות, להחלפות ולנזקי משלוח.'},
-  {k:'cac_ils', label:'עלות שיווק להזמנה (CAC)', unit:'₪ להזמנה', def:40, step:1, help:'כמה עולה להביא הזמנה אחת. מוצג בנפרד כ"תרומה אחרי שיווק", ומתחלק בין הפריטים שבהזמנה.'},
+  {k:'returns_pct', label:'שמורת החזרות', unit:'% מההכנסה נטו', def:8, step:0.5, help:'חלק מההכנסה שנשמר להחזרות, להחלפות ולנזקי משלוח. ברירת המחדל 8%, הנחה שמרנית (החלטה FR-C, 2026-10-10).'},
+  {k:'cac_ils', label:'עלות שיווק להזמנה (CAC)', unit:'₪ להזמנה', def:100, step:1, help:'כמה עולה להביא הזמנה אחת. ברירת המחדל ₪100, הנחה שמרנית (החלטה FR-C, 2026-10-10). מוצג בנפרד כ"תרומה אחרי שיווק", ומתחלק בין הפריטים שבהזמנה.'},
   {k:'packaging_ils', label:'אריזה', unit:'₪ לפריט', def:0, step:0.5, help:'אריזה ממותגת או חומרי מילוי מעבר לאריזת הספק.'},
   {k:'target_margin_pct', label:'יעד מרווח', unit:'% מההכנסה נטו', def:35, step:1, help:'מרווח = תרומה חלקי הכנסה נטו. מוצר מתחת ליעד מקבל דגל אדום.'},
   {k:'items_per_order', label:'פריטים בהזמנה ממוצעת', unit:'פריטים', def:1.4, step:0.1, min:1, help:'קובע את שווי ההזמנה הממוצעת ואת חלוקת ה-CAC בין הפריטים. מינימום 1: כל הזמנה כוללת לפחות פריט אחד.'},
@@ -2449,9 +2449,10 @@ function renderProfit(){
   restore();
   bindProfit();
 }
-// "market rate is about 3.0" note shown next to the FX setting; stored values stay as they are (FR-C decides)
+// "market rate is about 3.0" note shown next to the FX setting; the default 3.3 is the conservative value the user
+// chose (FR-C, 2026-10-10); values saved in settings/economics in the db still win over the default
 function fxNote(long){
-  return `<span class="fx-tip">שער שוק נוכחי כ-3.0; 3.7 שמרני מדי, ראו ${decChip('FR-C', !!long)}</span>`;
+  return `<span class="fx-tip">שער שוק כ-3.0; 3.3 שמרני לפי ${decChip('FR-C', !!long)}</span>`;
 }
 function mktCell(p, editable){
   const m = p.mkt;

@@ -101,18 +101,19 @@ export type EconomicsSettings = {
 };
 
 /**
- * Provisional defaults. The economics values are the studio's defaults (studio/README.md, "רווחיות"); VAT 18% was
+ * Provisional defaults. The economics values are the studio's defaults (studio/README.md, "רווחיות"): the conservative
+ * assumptions the user chose in decision FR-C (2026-10-10: rate 3.3, returns reserve 8%, CAC ₪100); VAT 18% was
  * stated by the user. The storefront values follow the fulfillment research (₪10–30 shipping, free over ₪199–349)
  * and are not approved: decision E1 is open.
  */
 export const DEFAULT_SETTINGS: EconomicsSettings = {
-  fx_usd_ils: 3.7,
+  fx_usd_ils: 3.3,
   freight_method: 'cheapest',
   vat_rate: 0.18,
   payment_fee_rate: 0.02,
   payment_fee_fixed_ils: 1.2,
-  returns_reserve_rate: 0.05,
-  cac_ils: 40,
+  returns_reserve_rate: 0.08,
+  cac_ils: 100,
   packaging_ils: 0,
   target_margin_rate: 0.35,
   items_per_order: 1.4,

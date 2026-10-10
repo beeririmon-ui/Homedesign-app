@@ -11,6 +11,10 @@ Usage:
       # /product/list: browse a whole category page by page (see docs/suppliers/cj-categories.md)
   python3 scripts/cj.py product <pid>
   python3 scripts/cj.py freight <vid> [--to IL] [--qty 1]
+  python3 scripts/cj.py source <image_url> --name "<n>" [--url U] [--price P] [--remark R]
+      # POST /product/sourcing/create (productName + productImage required, each <= 200 chars)
+  python3 scripts/cj.py source-status <cjSourcingId> [...]
+      # GET /product/sourcing/queryList?sourceIds=... (up to 100)
 Output is JSON on stdout.
 """
 import json, os, sys, argparse, urllib.request, urllib.parse
@@ -90,6 +94,28 @@ def freight(vid, to, qty):
             "message": d.get("message")}
 
 
+def _ok(d):
+    return bool(d.get("result", d.get("success")))
+
+
+def sourcing_create(name, image, url=None, price=None, remark=None):
+    """CJ Sourcing request (doc 5.1). Returns cjSourcingId on success. Needs the user's approval (studio rules)."""
+    body = {"productName": name, "productImage": image}
+    if url: body["productUrl"] = url
+    if price is not None: body["price"] = price
+    if remark: body["remark"] = remark
+    d = _req("POST", "/product/sourcing/create", body=body, token=token())
+    data = d.get("data") or {}
+    return {"ok": _ok(d), "code": d.get("code"), "message": d.get("message"), "requestId": d.get("requestId"),
+            "cjSourcingId": data.get("cjSourcingId"), "result": data.get("result")}
+
+
+def sourcing_query(ids):
+    """Status of sourcing requests (doc 5.3): sourceStatus 3 = succeeded (cjProductId, cjVariantSku), 5 = failed."""
+    d = _req("GET", "/product/sourcing/queryList", [("sourceIds", i) for i in ids], token=token())
+    return {"ok": _ok(d), "code": d.get("code"), "message": d.get("message"), "items": d.get("data") or []}
+
+
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -97,10 +123,14 @@ if __name__ == "__main__":
     l = sub.add_parser("list"); l.add_argument("q", nargs="?", default=""); l.add_argument("--category"); l.add_argument("--page", type=int, default=1); l.add_argument("--size", type=int, default=50)
     p = sub.add_parser("product"); p.add_argument("pid")
     f = sub.add_parser("freight"); f.add_argument("vid"); f.add_argument("--to", default="IL"); f.add_argument("--qty", type=int, default=1)
+    so = sub.add_parser("source"); so.add_argument("image"); so.add_argument("--name", required=True); so.add_argument("--url"); so.add_argument("--price"); so.add_argument("--remark")
+    ss = sub.add_parser("source-status"); ss.add_argument("ids", nargs="+")
     a = ap.parse_args()
     if a.cmd == "search": res = search(a.q, a.page, a.size)
     elif a.cmd == "list": res = listing(a.q, a.page, a.size, a.category)
     elif a.cmd == "product": res = product(a.pid)
+    elif a.cmd == "source": res = sourcing_create(a.name, a.image, a.url, a.price, a.remark)
+    elif a.cmd == "source-status": res = sourcing_query(a.ids)
     else: res = freight(a.vid, a.to, a.qty)
     json.dump(res, sys.stdout, ensure_ascii=False, indent=1)
     print()
