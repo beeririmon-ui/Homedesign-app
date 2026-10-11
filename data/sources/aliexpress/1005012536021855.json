@@ -1,0 +1,208 @@
+{
+ "source": "aliexpress",
+ "id": "1005012536021855",
+ "sections": {
+  "product": {
+   "fetched_at": "2026-10-11T17:09:03+00:00",
+   "endpoint": "aliexpress.ds.product.get",
+   "params": {
+    "ship_to_country": "IL",
+    "product_id": "1005012536021855",
+    "target_currency": "USD",
+    "target_language": "en"
+   },
+   "payload": {
+    "result": {
+     "ae_item_sku_info_dtos": [
+      {
+       "sku_attr": "14:10#1pc",
+       "offer_sale_price": "0.35",
+       "sku_id": "12000058662672366",
+       "price_include_tax": false,
+       "currency_code": "USD",
+       "sku_price": "8.71",
+       "offer_bulk_sale_price": "0.35",
+       "sku_available_stock": 972,
+       "id": "14:10#1pc",
+       "ae_sku_property_dtos": [
+        {
+         "sku_property_value": "Red",
+         "sku_image": "https://ae01.alicdn.com/kf/S98d93b173ddb49fcab55f480e810bc3f3.jpg",
+         "sku_property_name": "Color",
+         "property_value_definition_name": "1pc",
+         "property_value_id": 10,
+         "sku_property_id": 14
+        }
+       ]
+      }
+     ],
+     "ae_multimedia_info_dto": {
+      "image_urls": "https://ae01.alicdn.com/kf/Se91bc7ebe30249cf998d3bbe70716dfc1.jpg;https://ae01.alicdn.com/kf/Sb737ca3160ed4ac99bc0b77d97d96a55J.jpg;https://ae01.alicdn.com/kf/S1461af7b9ac2420781de7f47b7807248e.jpg;https://ae01.alicdn.com/kf/S39cb69dbe38144a2879da2890ac1fa58A.jpg;https://ae01.alicdn.com/kf/S1aaea0e92aee429eb25b2f5995eaece5h.jpg;https://ae01.alicdn.com/kf/Sbee910ac8fed49b3bf7da0983c9911d70.jpg"
+     },
+     "package_info_dto": {
+      "package_width": 8,
+      "package_height": 2,
+      "package_length": 10,
+      "gross_weight": "0.043",
+      "package_type": false,
+      "product_unit": 100000015
+     },
+     "logistics_info_dto": {
+      "delivery_time": 7,
+      "ship_to_country": "IL"
+     },
+     "product_id_converter_result": {
+      "main_product_id": 1005012536021855,
+      "sub_product_id": "{\"US\":3256812349707103}"
+     },
+     "ae_item_base_info_dto": {
+      "mobile_detail": "<removed; use --full>",
+      "subject": "Vivid Decorative Vase Small Vases for Flowers Small Glass Bud Vases for Flowers Mini Flower Vases for Wedding Centerpieces Home",
+      "evaluation_count": "0",
+      "sales_count": "6",
+      "product_status_type": "onSelling",
+      "avg_evaluation_rating": "0.0",
+      "separated_listing": false,
+      "currency_code": "CNY",
+      "sl_product": false,
+      "category_id": 200001438,
+      "product_id": 1005012536021855,
+      "detail": "<removed; use --full>"
+     },
+     "has_whole_sale": false,
+     "ae_item_properties": [
+      {
+       "attr_name_id": 2,
+       "attr_value_id": 201602149,
+       "attr_name": "Brand Name",
+       "attr_value": "BLUELANS"
+      },
+      {
+       "attr_name_id": 10,
+       "attr_value_id": 124,
+       "attr_name": "Material",
+       "attr_value": "Plastic"
+      },
+      {
+       "attr_name_id": 400000603,
+       "attr_value_id": 23399591357,
+       "attr_name": "High-concerned chemical",
+       "attr_value": "none"
+      },
+      {
+       "attr_name_id": 219,
+       "attr_value_id": 9441741844,
+       "attr_name": "Origin",
+       "attr_value": "Mainland China"
+      }
+     ],
+     "ae_store_info": {
+      "store_id": 911933309,
+      "shipping_speed_rating": "4.6",
+      "communication_rating": "4.6",
+      "store_name": "HIGHOME Store",
+      "store_country_code": "CN",
+      "item_as_described_rating": "4.4"
+     }
+    },
+    "rsp_code": 200,
+    "rsp_msg": "Call succeeds",
+    "request_id": "212a799017917385436564559",
+    "_trace_id_": "2151fce817917385436553058e0def"
+   }
+  },
+  "freight:12000058662672366:IL:1": {
+   "fetched_at": "2026-10-11T17:09:05+00:00",
+   "endpoint": "aliexpress.ds.freight.query",
+   "params": {
+    "quantity": 1,
+    "shipToCountry": "IL",
+    "productId": "1005012536021855",
+    "selectedSkuId": "12000058662672366",
+    "language": "en_US",
+    "locale": "en_US",
+    "currency": "USD"
+   },
+   "payload": {
+    "options": [
+     {
+      "code": "CAINIAO_ECONOMY",
+      "company": "AliExpress Saver Shipping",
+      "fee": 3.0,
+      "currency": "USD",
+      "days_min": 18,
+      "days_max": 28,
+      "estimated": "Oct. 29 - Nov. 08",
+      "tracking": true,
+      "free_shipping": false,
+      "ship_from": "CN",
+      "stock": null,
+      "guaranteed_days": "60"
+     },
+     {
+      "code": "CAINIAO_STANDARD",
+      "company": "AliExpress standard shipping",
+      "fee": 5.48,
+      "currency": "USD",
+      "days_min": 8,
+      "days_max": 18,
+      "estimated": "Oct 19 - 29",
+      "tracking": true,
+      "free_shipping": false,
+      "ship_from": "CN",
+      "stock": null,
+      "guaranteed_days": "60"
+     }
+    ],
+    "success": true,
+    "code": 200,
+    "msg": "Call succeeds",
+    "item_id": "1005012536021855",
+    "sku_id": "12000058662672366",
+    "country": "IL",
+    "qty": 1,
+    "raw": {
+     "result": {
+      "msg": "Call succeeds",
+      "code": 200,
+      "success": true,
+      "delivery_options": [
+       {
+        "code": "CAINIAO_ECONOMY",
+        "shipping_fee_currency": "USD",
+        "free_shipping": false,
+        "mayHavePFS": false,
+        "guaranteed_delivery_days": "60",
+        "max_delivery_days": 28,
+        "tracking": true,
+        "shipping_fee_format": "US $3.00",
+        "delivery_date_desc": "Oct. 29 - Nov. 08",
+        "company": "AliExpress Saver Shipping",
+        "ship_from_country": "CN",
+        "min_delivery_days": 18,
+        "shipping_fee_cent": "3.00"
+       },
+       {
+        "code": "CAINIAO_STANDARD",
+        "shipping_fee_currency": "USD",
+        "free_shipping": false,
+        "mayHavePFS": false,
+        "guaranteed_delivery_days": "60",
+        "max_delivery_days": 18,
+        "tracking": true,
+        "shipping_fee_format": "US $5.48",
+        "delivery_date_desc": "Oct 19 - 29",
+        "company": "AliExpress standard shipping",
+        "ship_from_country": "CN",
+        "min_delivery_days": 8,
+        "shipping_fee_cent": "5.48"
+       }
+      ]
+     },
+     "request_id": "210155f117917385451348388",
+     "_trace_id_": "210152bd17917385451325846e0d70"
+    }
+   }
+  }
+ }
+}

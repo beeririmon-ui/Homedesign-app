@@ -1,0 +1,193 @@
+{
+ "source": "aliexpress",
+ "id": "1005012751655156",
+ "sections": {
+  "product": {
+   "fetched_at": "2026-10-11T17:09:09+00:00",
+   "endpoint": "aliexpress.ds.product.get",
+   "params": {
+    "ship_to_country": "IL",
+    "product_id": "1005012751655156",
+    "target_currency": "USD",
+    "target_language": "en"
+   },
+   "payload": {
+    "result": {
+     "ae_item_sku_info_dtos": [
+      {
+       "sku_attr": "",
+       "offer_sale_price": "1.99",
+       "sku_id": "12000059276832017",
+       "price_include_tax": false,
+       "currency_code": "USD",
+       "sku_price": "3.06",
+       "offer_bulk_sale_price": "1.99",
+       "sku_available_stock": 999,
+       "id": "",
+       "sku_bulk_order": 3
+      }
+     ],
+     "ae_multimedia_info_dto": {
+      "image_urls": "https://ae01.alicdn.com/kf/S36f3e3a080ce44b9a0f43f2c0b8f2157g.jpg;https://ae01.alicdn.com/kf/S91469b6b1f854a59929f684e086f316dM.jpg;https://ae01.alicdn.com/kf/S1b5c99f61e094eec8e39b320231a67a8B.jpg;https://ae01.alicdn.com/kf/S8e31f51e865640eca9a2eec1a26ca778h.jpg;https://ae01.alicdn.com/kf/Sf099ce93b68443d1b94abf38dcd06479B.jpg;https://ae01.alicdn.com/kf/S2304eb73627240dfbbcdaef2333697d8J.jpg"
+     },
+     "package_info_dto": {
+      "package_width": 22,
+      "package_height": 8,
+      "package_length": 22,
+      "gross_weight": "0.370",
+      "package_type": false,
+      "product_unit": 100000015
+     },
+     "logistics_info_dto": {
+      "delivery_time": 7,
+      "ship_to_country": "IL"
+     },
+     "product_id_converter_result": {
+      "main_product_id": 1005012751655156,
+      "sub_product_id": "{\"US\":3256812565340404}"
+     },
+     "ae_item_base_info_dto": {
+      "mobile_detail": "<removed; use --full>",
+      "subject": "Transparent PET 3 Tier Desk Folder Holder Paper Tray Organizer for Large Capacity Document Storage",
+      "evaluation_count": "0",
+      "sales_count": "0",
+      "product_status_type": "onSelling",
+      "avg_evaluation_rating": "0.0",
+      "separated_listing": false,
+      "currency_code": "CNY",
+      "sl_product": false,
+      "category_id": 21110604,
+      "product_id": 1005012751655156,
+      "detail": "<removed; use --full>"
+     },
+     "has_whole_sale": true,
+     "ae_item_properties": [
+      {
+       "attr_name_id": 2,
+       "attr_value_id": 203079816,
+       "attr_name": "Brand Name",
+       "attr_value": "SDJZT"
+      },
+      {
+       "attr_name_id": 219,
+       "attr_value_id": 9441741844,
+       "attr_name": "Origin",
+       "attr_value": "Mainland China"
+      },
+      {
+       "attr_name_id": 400000603,
+       "attr_value_id": 23399591357,
+       "attr_name": "High-concerned chemical",
+       "attr_value": "none"
+      }
+     ],
+     "ae_store_info": {
+      "store_id": 1103441130,
+      "shipping_speed_rating": "4.7",
+      "communication_rating": "4.7",
+      "store_name": "YY-Digital Store",
+      "store_country_code": "CN",
+      "item_as_described_rating": "4.6"
+     }
+    },
+    "rsp_code": 200,
+    "rsp_msg": "Call succeeds",
+    "request_id": "2101119a17917385486657667",
+    "_trace_id_": "2140da8b17917385486636182e0e55"
+   }
+  },
+  "freight:12000059276832017:IL:1": {
+   "fetched_at": "2026-10-11T17:09:10+00:00",
+   "endpoint": "aliexpress.ds.freight.query",
+   "params": {
+    "quantity": 1,
+    "shipToCountry": "IL",
+    "productId": "1005012751655156",
+    "selectedSkuId": "12000059276832017",
+    "language": "en_US",
+    "locale": "en_US",
+    "currency": "USD"
+   },
+   "payload": {
+    "options": [
+     {
+      "code": "CAINIAO_STANDARD",
+      "company": "AliExpress standard shipping",
+      "fee": 10.06,
+      "currency": "USD",
+      "days_min": 8,
+      "days_max": 18,
+      "estimated": "Oct 19 - 29",
+      "tracking": true,
+      "free_shipping": false,
+      "ship_from": "CN",
+      "stock": null,
+      "guaranteed_days": "60"
+     },
+     {
+      "code": "CAINIAO_PREMIUM",
+      "company": "AliExpress Premium shipping",
+      "fee": 45.76,
+      "currency": "USD",
+      "days_min": 11,
+      "days_max": 13,
+      "estimated": "Oct 22 - 24",
+      "tracking": true,
+      "free_shipping": false,
+      "ship_from": "CN",
+      "stock": null,
+      "guaranteed_days": "60"
+     }
+    ],
+    "success": true,
+    "code": 200,
+    "msg": "Call succeeds",
+    "item_id": "1005012751655156",
+    "sku_id": "12000059276832017",
+    "country": "IL",
+    "qty": 1,
+    "raw": {
+     "result": {
+      "msg": "Call succeeds",
+      "code": 200,
+      "success": true,
+      "delivery_options": [
+       {
+        "code": "CAINIAO_STANDARD",
+        "shipping_fee_currency": "USD",
+        "free_shipping": false,
+        "mayHavePFS": false,
+        "guaranteed_delivery_days": "60",
+        "max_delivery_days": 18,
+        "tracking": true,
+        "shipping_fee_format": "US $10.06",
+        "delivery_date_desc": "Oct 19 - 29",
+        "company": "AliExpress standard shipping",
+        "ship_from_country": "CN",
+        "min_delivery_days": 8,
+        "shipping_fee_cent": "10.06"
+       },
+       {
+        "code": "CAINIAO_PREMIUM",
+        "shipping_fee_currency": "USD",
+        "free_shipping": false,
+        "mayHavePFS": false,
+        "guaranteed_delivery_days": "60",
+        "max_delivery_days": 13,
+        "tracking": true,
+        "shipping_fee_format": "US $45.76",
+        "delivery_date_desc": "Oct 22 - 24",
+        "company": "AliExpress Premium shipping",
+        "ship_from_country": "CN",
+        "min_delivery_days": 11,
+        "shipping_fee_cent": "45.76"
+       }
+      ]
+     },
+     "request_id": "21411fe917917385503661082",
+     "_trace_id_": "2141315917917385503646467e110e"
+    }
+   }
+  }
+ }
+}
