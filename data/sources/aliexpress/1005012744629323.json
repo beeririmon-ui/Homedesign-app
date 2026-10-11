@@ -1,0 +1,190 @@
+{
+ "source": "aliexpress",
+ "id": "1005012744629323",
+ "sections": {
+  "product": {
+   "fetched_at": "2026-10-11T11:58:21+00:00",
+   "endpoint": "aliexpress.ds.product.get",
+   "params": {
+    "ship_to_country": "IL",
+    "product_id": "1005012744629323",
+    "target_currency": "USD",
+    "target_language": "en"
+   },
+   "payload": {
+    "result": {
+     "ae_item_sku_info_dtos": [
+      {
+       "sku_attr": "14:200006151#one size",
+       "offer_sale_price": "3.75",
+       "sku_id": "12000059253306356",
+       "price_include_tax": false,
+       "currency_code": "USD",
+       "sku_price": "7.49",
+       "offer_bulk_sale_price": "3.75",
+       "sku_available_stock": 17,
+       "id": "14:200006151#one size",
+       "ae_sku_property_dtos": [
+        {
+         "sku_property_value": "Light Grey",
+         "sku_image": "https://ae01.alicdn.com/kf/S48ab3c84fdc445b9b5b4364e32b20d0fS.jpg",
+         "sku_property_name": "Color",
+         "property_value_definition_name": "one size",
+         "property_value_id": 200006151,
+         "sku_property_id": 14
+        }
+       ]
+      }
+     ],
+     "ae_multimedia_info_dto": {
+      "ae_video_dtos": [
+       {
+        "media_status": "approved",
+        "media_type": "video",
+        "poster_url": "https://ae-pic-a1.aliexpress-media.com/kf/Se2db2cdb44b54a8da9ee76a00c7472e8r.jpg",
+        "ali_member_id": 6005493839,
+        "media_id": 5000564804089,
+        "media_url": "https://video.aliexpress-media.com/play/5000564804089.mp4"
+       }
+      ],
+      "image_urls": "https://ae01.alicdn.com/kf/S48ab3c84fdc445b9b5b4364e32b20d0fS.jpg;https://ae01.alicdn.com/kf/S4b7a5c913d5449ba9d29864113ee3c7bV.jpg;https://ae01.alicdn.com/kf/S7b7d7fba7538424a93d64942ccc4fee1c.jpg;https://ae01.alicdn.com/kf/S67287d674879432890b4a14229d3f04bR.jpg;https://ae01.alicdn.com/kf/S1d43938d25384b7bb0c76d7118114dc3Q.jpg;https://ae01.alicdn.com/kf/S3b4ec4106f4944db84cb602000d1de84b.jpg"
+     },
+     "package_info_dto": {
+      "package_width": 14,
+      "package_height": 3,
+      "package_length": 19,
+      "gross_weight": "0.070",
+      "package_type": false,
+      "product_unit": 100000015
+     },
+     "logistics_info_dto": {
+      "delivery_time": 7,
+      "ship_to_country": "IL"
+     },
+     "product_id_converter_result": {
+      "main_product_id": 1005012744629323,
+      "sub_product_id": "{\"US\":3256812558314571}"
+     },
+     "ae_item_base_info_dto": {
+      "mobile_detail": "<removed; use --full>",
+      "subject": "●50PCS Wooden Candle Wick Holders Candles Bars Holders for Candle Making",
+      "evaluation_count": "0",
+      "sales_count": "6",
+      "product_status_type": "onSelling",
+      "avg_evaluation_rating": "0.0",
+      "separated_listing": false,
+      "currency_code": "CNY",
+      "sl_product": false,
+      "category_id": 200108142,
+      "product_id": 1005012744629323,
+      "detail": "<removed; use --full>"
+     },
+     "has_whole_sale": false,
+     "ae_item_properties": [
+      {
+       "attr_name_id": 2,
+       "attr_value_id": 201512802,
+       "attr_name": "Brand Name",
+       "attr_value": "NONE"
+      },
+      {
+       "attr_name_id": 219,
+       "attr_value_id": 9441741844,
+       "attr_name": "Origin",
+       "attr_value": "Mainland China"
+      },
+      {
+       "attr_name_id": 400000603,
+       "attr_value_id": 23399591357,
+       "attr_name": "High-concerned chemical",
+       "attr_value": "none"
+      },
+      {
+       "attr_name_id": -1,
+       "attr_name": "Choice",
+       "attr_value": "yes"
+      }
+     ],
+     "ae_store_info": {
+      "store_id": 1105662244,
+      "shipping_speed_rating": "4.7",
+      "communication_rating": "4.6",
+      "store_name": "Ali-GPU06-QTG Store",
+      "store_country_code": "CN",
+      "item_as_described_rating": "4.5"
+     }
+    },
+    "rsp_code": 200,
+    "rsp_msg": "Call succeeds",
+    "request_id": "210171a817917199017022471",
+    "_trace_id_": "2140da8b17917199017013713e1109"
+   }
+  },
+  "freight:12000059253306356:IL:1": {
+   "fetched_at": "2026-10-11T11:58:23+00:00",
+   "endpoint": "aliexpress.ds.freight.query",
+   "params": {
+    "quantity": 1,
+    "shipToCountry": "IL",
+    "productId": "1005012744629323",
+    "selectedSkuId": "12000059253306356",
+    "language": "en_US",
+    "locale": "en_US",
+    "currency": "USD"
+   },
+   "payload": {
+    "options": [
+     {
+      "code": "CAINIAO_FULFILLMENT_STD",
+      "company": "AliExpress Selection Standard",
+      "fee": 1.99,
+      "currency": "USD",
+      "days_min": 6,
+      "days_max": 15,
+      "estimated": "Oct 17 - 26",
+      "tracking": true,
+      "free_shipping": false,
+      "ship_from": "CN",
+      "stock": "17",
+      "guaranteed_days": "60"
+     }
+    ],
+    "success": true,
+    "code": 200,
+    "msg": "Call succeeds",
+    "item_id": "1005012744629323",
+    "sku_id": "12000059253306356",
+    "country": "IL",
+    "qty": 1,
+    "raw": {
+     "result": {
+      "msg": "Call succeeds",
+      "code": 200,
+      "success": true,
+      "delivery_options": [
+       {
+        "code": "CAINIAO_FULFILLMENT_STD",
+        "shipping_fee_currency": "USD",
+        "free_shipping": false,
+        "mayHavePFS": true,
+        "guaranteed_delivery_days": "60",
+        "max_delivery_days": 15,
+        "tracking": true,
+        "shipping_fee_format": "US $1.99",
+        "free_shipping_threshold": "US $0.00",
+        "delivery_date_desc": "Oct 17 - 26",
+        "company": "AliExpress Selection Standard",
+        "ship_from_country": "CN",
+        "min_delivery_days": 6,
+        "available_stock": "17",
+        "shipping_fee_cent": "1.99"
+       }
+      ]
+     },
+     "request_id": "0bb4a80e17917199030902019",
+     "_trace_id_": "2102f1cd17917199030881151e0e99"
+    }
+   }
+  }
+ }
+}
