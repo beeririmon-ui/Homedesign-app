@@ -50,6 +50,7 @@ python3 scripts/ae/auth.py forget    # מחיקת הטוקן השמור
 | `specialinfo <id> [--country IL]` | `aliexpress.ds.product.specialinfo.get` | תעודות (CE ועוד) כפי שהמוכר מצהיר. **לא מורשה לאפליקציה שלנו (2026-10-11): `APPKEY_NOT_ALLOWED`**, ולכן גם `card --certs` נכשל |
 | `category [--id ID]` | `aliexpress.ds.category.get` | שם קטגוריה לפי `cateId` מהחיפוש |
 | `card <id> --slot <room>/<slot> [--out נתיב] [--sku ID] [--certs] [--no-freight]` | מוצר + משלוח (+ תעודות) | כותב כרטיס לפי `data/product-card.schema.json` ורושם במרשם כ-`card`. ראו 3.1 |
+| `card <id> --slot <room>/<slot> --offline [--sku ID] [--ship-usd X --ship-days A-B --ship-company NAME --ship-basis "..."]` | מטמון בלבד | אותו כרטיס (כולל `options`) מתשובת `product.get` השמורה, בלי מפתח, בלי טוקן, בלי תקציב ובלי רשת (כל ניסיון קריאה נחסם). המשלוח: הציטוט השמור ל-SKU, אחרת הערכים שבשורת הפקודה (למשל מרשומת ה-detail של ריצת הסקייל), אחרת בלי משלוח. `--certs` נדחה. נוסף ב-2026-10-11 לשלב 3 של ריצת הסקייל |
 | `backfill-options [card.json ...]` | מטמון בלבד | בונה `options` (כל ה-SKU) לכרטיסי AliExpress קיימים מתשובות `product` השמורות ב-`data/sources/aliexpress/<id>.json`. בלי קריאה ובלי תקציב. כרטיס שכבר יש בו options נשאר כמו שהוא (`--force` בונה מחדש רק `source: "api"`) |
 | `check <id> [...]` / `mark <id> --status ... --reason "..."` | מרשם בלבד | בלי קריאה |
 
