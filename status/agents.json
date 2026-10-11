@@ -1,0 +1,69 @@
+{
+  "version": 1,
+  "updated": "2026-10-11T18:30:00+00:00",
+  "note": "מרשם הסוכנים למסך 'המשרד' בסטודיו. ההוראות המלאות וההגבלות נקראות מ-.claude/agents/<id>.md (ומ-CLAUDE.md למנהל). state כאן הוא ערך ברירת מחדל בזמן הבנייה; המצב החי נכתב בזמן אמת לאוסף agents במסד הנתונים של הסטודיו. state: working | idle | blocked | planned.",
+  "states": {
+    "working": "עובד עכשיו",
+    "idle": "ממתין למשימה",
+    "blocked": "חסום, מחכה למשהו",
+    "planned": "משרד פנוי"
+  },
+  "wings": [
+    {"id": "core", "name_he": "הקומה הראשית", "desc": "הצוות הקבוע שהוקם לפי CLAUDE.md"},
+    {"id": "helpers", "name_he": "חלל עבודה משותף", "desc": "עוזרים זמניים שהמנהל מפעיל למשימה אחת (בלי קובץ סוכן קבוע)"},
+    {"id": "cloud", "name_he": "חדר השרתים", "desc": "סשנים בענן ושגרות מתוזמנות שרצים לבד"},
+    {"id": "future", "name_he": "האגף החדש", "desc": "משרדים פנויים לתפקידים שעוד לא הקמנו"}
+  ],
+  "agents": [
+    {"id": "user", "kind": "person", "wing": "core", "name_he": "בעל המותג", "role_he": "מאשר את נקודות האישור, מחליט החלטות, שולח מיילים מהג'ימייל שלו", "instructions_src": null, "state": "idle",
+     "limits_he": ["רק הוא מאשר מעבר נקודת אישור", "רק הוא מכניס מפתחות API בהגדרות הסביבה", "רק הוא מאשר שליחת מייל לספק"]},
+    {"id": "art-director", "kind": "agent", "wing": "core", "name_he": "המנהל האומנותי", "role_he": "מתאם: מפעיל את הסוכנים, בודק תוצרים מול המסמכים המחייבים, מעדכן את הלוח ומדבר עם בעל המותג", "instructions_src": "CLAUDE.md", "state": "working",
+     "limits_he": ["לא מבצע בעצמו את העבודה המקצועית", "לא עובר נקודת אישור בלי תשובה מפורשת", "נכס שלא עבר QA לא נכנס לאתר"]},
+    {"id": "sourcing-agent", "kind": "agent", "wing": "core", "name_he": "הלקטת", "role_he": "מוצאת מוצרים אצל ספקי דרופשיפינג וממלאת כרטיסי מוצר", "stage": 1, "instructions_src": ".claude/agents/sourcing-agent.md", "state": "idle"},
+    {"id": "master-designer", "kind": "agent", "wing": "core", "name_he": "המעצב הראשי", "role_he": "Design Bible, דירוג ובחירת וריאציות, בריף סצנה, ביקורת עיצובית", "stage": 0, "instructions_src": ".claude/agents/master-designer.md", "state": "idle"},
+    {"id": "astra", "kind": "agent", "wing": "core", "name_he": "אסטרה", "role_he": "דעה שנייה מ-GPT: ביקורת, רעיונות ופרומפטים, לצד המעצב", "instructions_src": ".claude/agents/astra.md", "state": "idle"},
+    {"id": "render-agent", "kind": "agent", "wing": "core", "name_he": "סטודיו הרינדור", "role_he": "רינדורים ושכבות ריאליסטיות ב-var2", "stage": 2, "instructions_src": ".claude/agents/render-agent.md", "state": "blocked", "blocked_he": "מחכה לעמדה נעולה ולחיבור מחדש של var2"},
+    {"id": "motion-agent", "kind": "agent", "wing": "core", "name_he": "חדר התנועה", "role_he": "מפות עומק, סרטוני מעבר בין חדרים ורצפי פריימים", "stage": 3, "instructions_src": ".claude/agents/motion-agent.md", "state": "idle"},
+    {"id": "frontend-dev", "kind": "agent", "wing": "core", "name_he": "המפתח", "role_he": "האתר, מנוע השכבות, הגלגל, החנות והסטודיו", "stage": 4, "instructions_src": ".claude/agents/frontend-dev.md", "state": "working", "task_he": "הסטודיו: מחיר לצרכן לעריכה, משלוח בכרטיס, עמדות משותפות"},
+    {"id": "qa-agent", "kind": "agent", "wing": "core", "name_he": "בקרת איכות", "role_he": "נאמנות למוצר, עקביות בין שכבות ומצלמות, ביצועים", "instructions_src": ".claude/agents/qa-agent.md", "state": "idle"},
+
+    {"id": "pricing-living", "kind": "helper", "wing": "helpers", "name_he": "אנליסט מחירים · סלון", "role_he": "מחיר התחלתי לפי שווי בישראל ל-73 מוצרי הסלון", "instructions_src": null, "state": "working", "task_he": "data/economics/pricing/living-room-2026-10-11.json"},
+    {"id": "pricing-rest", "kind": "helper", "wing": "helpers", "name_he": "אנליסט מחירים · שאר הבית", "role_he": "מחיר התחלתי לפי שווי בישראל ל-93 מוצרים", "instructions_src": null, "state": "working", "task_he": "data/economics/pricing/other-rooms-2026-10-11.json"},
+    {"id": "explorer", "kind": "helper", "wing": "helpers", "name_he": "חוקר הקוד", "role_he": "חיפוש רחב בריפו לפי בקשה", "instructions_src": null, "state": "idle"},
+
+    {"id": "aliexpress-scale", "kind": "cloud", "wing": "cloud", "name_he": "ליקוט AliExpress בענן", "role_he": "סשן ענן עם גישה ל-API הרשמי של AliExpress: ליקוט מעמיק לכל חדרי הבית", "instructions_src": null, "state": "working", "ref": "session_013RCorJtVoLL5N2eFoKhkXP"},
+    {"id": "cj-daily", "kind": "cloud", "wing": "cloud", "name_he": "שגרת CJ היומית", "role_he": "שולחת עד 5 בקשות Sourcing ל-CJ ביום ובודקת תשובות", "instructions_src": null, "state": "idle", "ref": "trig_012TYAN6iyV3LniodbCqxgpy", "schedule_he": "כל יום ב-06:49"},
+    {"id": "supplier-replies", "kind": "cloud", "wing": "cloud", "name_he": "בדיקת תשובות ספקים", "role_he": "בודקת תשובות לבקשות שיתוף הפעולה מספקי הריהוט", "instructions_src": null, "state": "idle", "schedule_he": "2026-10-15 ב-10:00"},
+
+    {"id": "marketing", "kind": "planned", "wing": "future", "name_he": "שיווק ופרסום", "role_he": "קמפיינים, קהלים, מודעות, מדידת CAC", "state": "planned"},
+    {"id": "content-seo", "kind": "planned", "wing": "future", "name_he": "תוכן ו-SEO", "role_he": "טקסטים לדפי מוצר, מדריכי עיצוב, קידום אורגני", "state": "planned"},
+    {"id": "social", "kind": "planned", "wing": "future", "name_he": "רשתות חברתיות", "role_he": "אינסטגרם, פינטרסט וטיקטוק מתוך הרינדורים", "state": "planned"},
+    {"id": "customer-care", "kind": "planned", "wing": "future", "name_he": "שירות לקוחות", "role_he": "מעקב הזמנות, החזרות ושאלות", "state": "planned"},
+    {"id": "supplier-relations", "kind": "planned", "wing": "future", "name_he": "קשרי ספקים ורכש", "role_he": "מעקב פניות, תנאים, דוגמאות", "state": "planned"},
+    {"id": "finance", "kind": "planned", "wing": "future", "name_he": "כספים", "role_he": "תזרים, מע\"מ, התאמות סליקה", "state": "planned"},
+    {"id": "unknown-1", "kind": "planned", "wing": "future", "name_he": "פנוי", "role_he": "לתפקיד שעוד לא הבנו שצריך", "state": "planned"},
+    {"id": "unknown-2", "kind": "planned", "wing": "future", "name_he": "פנוי", "role_he": "לתפקיד שעוד לא הבנו שצריך", "state": "planned"}
+  ],
+  "flows": [
+    {"from": "user", "to": "art-director", "label_he": "החלטות ואישורים"},
+    {"from": "art-director", "to": "user", "label_he": "שאלות ודיווח"},
+    {"from": "art-director", "to": "sourcing-agent", "label_he": "בקשת מועמדים לעמדה"},
+    {"from": "sourcing-agent", "to": "master-designer", "label_he": "כרטיסי מוצר לדירוג"},
+    {"from": "master-designer", "to": "astra", "label_he": "בקשת דעה שנייה"},
+    {"from": "astra", "to": "master-designer", "label_he": "ביקורת ורעיונות"},
+    {"from": "master-designer", "to": "render-agent", "label_he": "בריף סצנה מאושר"},
+    {"from": "render-agent", "to": "qa-agent", "label_he": "רינדורים לבדיקה"},
+    {"from": "qa-agent", "to": "master-designer", "label_he": "ממצאי נאמנות"},
+    {"from": "render-agent", "to": "motion-agent", "label_he": "תצוגות מאושרות"},
+    {"from": "motion-agent", "to": "qa-agent", "label_he": "מעברים לבדיקה"},
+    {"from": "motion-agent", "to": "frontend-dev", "label_he": "רצפי פריימים"},
+    {"from": "sourcing-agent", "to": "frontend-dev", "label_he": "כרטיסים לחנות ולסטודיו"},
+    {"from": "frontend-dev", "to": "qa-agent", "label_he": "בדיקת ביצועים"},
+    {"from": "qa-agent", "to": "art-director", "label_he": "עבר / נכשל"},
+    {"from": "pricing-living", "to": "frontend-dev", "label_he": "מחירים התחלתיים"},
+    {"from": "pricing-rest", "to": "frontend-dev", "label_he": "מחירים התחלתיים"},
+    {"from": "aliexpress-scale", "to": "master-designer", "label_he": "מועמדים מ-AliExpress"},
+    {"from": "cj-daily", "to": "sourcing-agent", "label_he": "תשובות Sourcing מ-CJ"},
+    {"from": "supplier-replies", "to": "art-director", "label_he": "תשובות ספקים"}
+  ]
+}
