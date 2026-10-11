@@ -1119,7 +1119,7 @@ DEEP_VERDICTS = {"best", "alternative", "reject"}
 SUP_HE = {"aliexpress": "AliExpress", "cj": "CJ", "zendrop": "Zendrop", "il": "ספק ישראלי", "other": "אחר"}
 # "Shipping to IL: cheapest 23.39 USD AliExpress standard shipping, 22-32 days" (AliExpress cards),
 # "Shipping to IL: regular $14.24, 14 days" (Zendrop cards). The card schema has no shipping-cost field.
-SHIP_NOTE = re.compile(r"Shipping to IL:\s*(?:cheapest|regular)?\s*\$?\s*(\d+(?:\.\d+)?)\s*(?:USD)?[^,;\n]*?(?:,\s*(\d+)(?:\s*[-–]\s*(\d+))?\s*days)?", re.I)
+SHIP_NOTE = re.compile(r"Shipping to IL:\s*(?:cheapest|regular)?\s*\$?\s*(\d+(?:\.\d+)?)\s*(?:USD)?[^,;\n]*(?:,\s*(\d+)(?:\s*[-–]\s*(\d+))?\s*days)?", re.I)
 AE_ITEM = re.compile(r"aliexpress\.[a-z.]+/item/(\d+)\.html", re.I)
 
 
