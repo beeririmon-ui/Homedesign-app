@@ -11,6 +11,9 @@ Methods (official catalog, category "AE-Dropshipper", https://openservice.aliexp
   card         product + freight (+ specialinfo with --certs) -> product card in data/product-card.schema.json,
                registered in data/sources/seen.json as aliexpress:<id> (status card). Writes `options`: every SKU of the
                product (studio rules ג, 2026-10-11), default_sku = the --sku chosen (the option shown in the room)
+  card --offline  the same card from the cache only (product.get in data/sources/aliexpress/<id>.json, any age), no key,
+               no token, no budget, no network: freight is the cached quote for the SKU, else --ship-usd/--ship-days/
+               --ship-company (e.g. the scale run's detail record), else none. --certs is refused (it needs the API)
   backfill-options  rebuilds `options` of existing AliExpress cards from the cached product.get responses in
                data/sources/aliexpress/<id>.json. No API call, no budget; keeps any existing options (curated); --force rebuilds source "api", never "manual"
   check / mark registry only, no call
@@ -23,6 +26,7 @@ Usage:
   python3 scripts/ae/ds.py specialinfo <item_id> [--country IL]
   python3 scripts/ae/ds.py category [--id <category_id>]
   python3 scripts/ae/ds.py card <item_id> --slot <room>/<slot> [--out data/products/<slot>/<id>.json] [--sku <sku_id>] [--certs]
+  python3 scripts/ae/ds.py card <item_id> --slot <room>/<slot> --offline [--sku ID] [--ship-usd 1.99 --ship-days 6-15 --ship-company NAME --ship-basis "..."]
   python3 scripts/ae/ds.py backfill-options [card.json ...] [--dry-run]
   python3 scripts/ae/ds.py check <item_id> [...]
   python3 scripts/ae/ds.py mark <item_id> --status rejected|seen|card --reason "..." [--slot room/slot] [--card-id ID]
@@ -496,21 +500,58 @@ def build_card(item_id, product, sku, freight, certs, room, slot, card_id, by):
     return card, cheapest, fastest
 
 
+def _no_network(*args, **kwargs):
+    raise client.AeError("offline", "card --offline: a network call was attempted and refused")
+
+
+def offline_freight(a, item_id, sku_id):
+    """--offline freight: the cached quote for this SKU (any age), else the values given on the command line
+    (--ship-usd, --ship-days, --ship-company), else None. Never a call. -> (freight, basis)."""
+    hit = cache.get(SRC, item_id, "freight:%s:%s:%d" % (sku_id, a.ship_to, a.qty), kind="freight", allow_stale=True)
+    if hit:
+        return _fill_currency(dict(hit["payload"]), a.currency), "cached freight.query of %s" % hit["fetched_at"][:10]
+    if a.ship_usd is None:
+        return None, "none (no cached quote for SKU %s and no --ship-usd)" % sku_id
+    days = [int(x) for x in re.findall(r"\d+", a.ship_days or "")]
+    opt = {"code": "offline", "company": a.ship_company or "AliExpress", "fee": round(float(a.ship_usd), 2), "currency": "USD",
+           "days_min": min(days) if days else None, "days_max": max(days) if days else None}
+    return {"options": [opt], "country": a.ship_to}, a.ship_basis or "given on the command line (--ship-usd)"
+
+
 def do_card(a):
     if "/" not in a.slot:
         sys.exit("card: --slot must be <room>/<slot>, e.g. living-room/vase")
     room, slot = a.slot.split("/", 1)
     item_id = str(a.item_id).strip()
+    offline = getattr(a, "offline", False)
+    if offline and a.certs:
+        sys.exit("card --offline: --certs needs aliexpress.ds.product.specialinfo.get (the API); run it without --offline.")
     if a.dry_run:
+        if offline:
+            hit = cache.get(SRC, item_id, "product", allow_stale=True)
+            sku_id = a.sku or (str((pick_sku(as_list((hit["payload"].get("result") or {}).get("ae_item_sku_info_dtos"))) or {}).get("sku_id")) if hit else None)
+            fr, basis = offline_freight(a, item_id, sku_id) if hit and sku_id else (None, "none")
+            return out({"dry_run": True, "offline": True, "would_call": [], "item_id": item_id, "cached_product": hit["fetched_at"] if hit else None,
+                        "sku": sku_id, "freight": basis, "ok": bool(hit)})
         return out({"dry_run": True, "would_call": [M_PRODUCT, M_FREIGHT] + ([M_SPECIAL] if a.certs else []), "item_id": item_id,
                     "cached_product": bool(cache.get(SRC, item_id, "product")), "budget": spend(a, "product")})
-    product, how_p = fetch_product(a, item_id)
+    fbasis = None
+    if offline:
+        hit = cache.get(SRC, item_id, "product", allow_stale=True)
+        if not hit:
+            sys.exit("card --offline: no cached product.get for %s in data/sources/aliexpress/; run `ds.py product %s` in a session with the API." % (item_id, item_id))
+        product, how_p = hit["payload"], "CACHE"
+    else:
+        product, how_p = fetch_product(a, item_id)
     r = product.get("result") or {}
     skus = as_list(r.get("ae_item_sku_info_dtos"))
     sku = pick_sku(skus, a.sku)
     freight = None
     if not a.no_freight and sku and sku.get("sku_id"):
-        freight, _ = fetch_freight(a, item_id, str(sku["sku_id"]), a.ship_to, a.qty)
+        if offline:
+            freight, fbasis = offline_freight(a, item_id, str(sku["sku_id"]))
+        else:
+            freight, _ = fetch_freight(a, item_id, str(sku["sku_id"]), a.ship_to, a.qty)
     certs = None
     if a.certs:
         certs, _ = fetch_specialinfo(a, item_id, a.ship_to)
@@ -528,6 +569,8 @@ def do_card(a):
             card_id = "%s-%s" % (card_id, item_id[-6:])
             path = os.path.join(os.path.dirname(path), card_id + ".json")
     card, cheapest, fastest = build_card(item_id, product, sku, freight, certs, room, slot, card_id, a.by)
+    if offline:
+        card["notes"] += " Offline card (ds.py card --offline): product from the cached product.get of %s; shipping: %s." % (hit["fetched_at"][:10], fbasis)
     os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
     with open(path, "w") as f:
         json.dump(card, f, ensure_ascii=False, indent=2)
@@ -658,6 +701,8 @@ def main(argv=None):
     c = sub.add_parser("card"); c.add_argument("item_id"); c.add_argument("--slot", required=True); c.add_argument("--out"); c.add_argument("--id")
     c.add_argument("--sku"); c.add_argument("--ship-to", default="IL"); c.add_argument("--qty", type=int, default=1); c.add_argument("--currency", default="USD")
     c.add_argument("--lang", default="en"); c.add_argument("--certs", action="store_true"); c.add_argument("--no-freight", action="store_true")
+    c.add_argument("--offline", action="store_true", help="cache only: no key, no token, no budget, no network")
+    c.add_argument("--ship-usd", type=float); c.add_argument("--ship-days"); c.add_argument("--ship-company"); c.add_argument("--ship-basis")
     bo = sub.add_parser("backfill-options"); bo.add_argument("paths", nargs="*")
     ck = sub.add_parser("check"); ck.add_argument("ids", nargs="+")
     m = sub.add_parser("mark"); m.add_argument("item_id"); m.add_argument("--status", required=True, choices=registry.STATUSES)
@@ -673,6 +718,9 @@ def main(argv=None):
             if a.dry_run:
                 return out({"dry_run": True, "would_mark": key_of(a.item_id), "status": a.status})
             return out(registry.add(key_of(a.item_id), a.status, a.reason, by=a.by, slot=a.slot, card_id=a.card_id, opened=True))
+        if a.cmd == "card" and a.offline:  # cache only: refuse any network call, no key needed
+            client._post = _no_network
+            return do_card(a) or 0
         if not a.dry_run and not client.configured():
             print("aliexpress: not configured. חסרים משתני הסביבה AE_DS_APP_KEY / AE_DS_APP_SECRET (מגדירים בהגדרות הסביבה של Claude, לא בצ'אט). "
                   "ראו scripts/ae/README.md. Nothing was called.", file=sys.stderr)
