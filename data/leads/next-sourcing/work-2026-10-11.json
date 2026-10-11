@@ -1,0 +1,293 @@
+{
+  "room": "work",
+  "style": "nordic",
+  "date": "2026-10-11",
+  "author": "master-designer",
+  "source": "docs/rooms/work-nordic-2026-10-11.md, data/compositions/work-nordic-2026-10-11.json",
+  "formula": "net = price/1.18; contribution = net - landed - (0.02*price + 1.2) - 0.08*net. Break-even landed = 0.75966*price - 1.2; landed for 40% = 0.42068*price - 1.2. Landed = (item + cheapest shipping to IL) * 3.3.",
+  "priority_rule": "high = in W0 (main frame) or a hero item; medium = supplier confirmation or plan B; 'rank' orders the work inside a priority.",
+  "global_rules_he": "לכל פריט: בתוך טווחי הפלטה (לבן חם, שיבולת שועל, אפור ערפל, אלון בהיר; פחם ומרווה כהדגשה), גימור מט (עד 10 GU), בלי פלסטיק, כרום, זכוכית שקופה, צורות פיגורטיביות או טקסט. ב-SKU שבחדר: מידה מאומתת, משלוח לישראל (עדיף AliExpress Choice), ותמונות אמיתיות. גופי תאורה: CE ו-220–240V; מנורת שולחן עם תקע EU או ישראלי (USB או מתאם לא נחשבים); תלויה ומנורת קיר מחווטות, בלי כבל גלוי; 2700K; הנורה לא נראית מגובה 1.10; לא העתק. חתימת התאורה בחדר העבודה: קונוס רך או פעמון בפשתן או בנייר בקפלים, גוף שחור מט או אלון, עד 2 חומרי אהיל.",
+  "slots": [
+    {
+      "slot": "framed-art",
+      "priority": "high",
+      "rank": 1,
+      "need_variations": 3,
+      "spec_he": "תמונה ממוסגרת לרוחב בין משטח השולחן למדף (X ‎−1.125…‎−0.525, ‏Z ‏0.98–1.48), במרכז קיר הגיבור של פריים סימטרי. מידה חיצונית: רוחב 55–60 × גובה 45–50 (לדוגמה הדפס 40×30 או 50×40 עם פספרטו). פרופיל 1.5–2.5 בשחור מט או באלון בהיר, עומק 2–3.5, פספרטו לבן חם 5–8, זכוכית או אקריליק נגד-השתקפות. רקע לבן חם או שיבולת שועל. **חובה אלמנט פחם בכל וריאציה.** תוכן: רישום קו, מופשט רך או נוף ערפילי, ושלוש הווריאציות נבדלות בתוכן. התמונה לפחות 0.02 מתחת לתלויה בפריים. אסור: הדפס לאורך, קנבס בלי מסגרת, טקסט, אנשים, גושי שחור גדולים.",
+      "envelope_cm": { "w": [55, 60], "h": [45, 50], "frame_depth": [2, 3.5], "orientation": "landscape" },
+      "price_ceiling": { "breakeven_landed_ils": 134.78, "landed_for_40_ils": 74.10, "slot_price_ils": 179, "pack_median_ils": 379, "note": "pack median 379 is the living triptych's set price, not a single 60x50 print; ILS 179 is a suggested value price" },
+      "source_type": "ספק ישראלי לתמונות ממוסגרות (מלאי מקומי, LK1); AliExpress להדפס בלי מסגרת רק אם PR1 = כן",
+      "queries": [
+        "horizontal minimalist line art print 50x40 black and white",
+        "landscape abstract charcoal drawing poster 60x45",
+        "foggy landscape print horizontal minimalist neutral",
+        "scandinavian line drawing landscape print 40x30 frame mat",
+        "black frame white mat horizontal art print 60x50"
+      ],
+      "why_he": "הגיבור במרכז W0 ונשא הפחם (3/3). חסום ב-PR1. כל 7 הכרטיסים מתחת ל-7, ורוב ההדפסים לאורך."
+    },
+    {
+      "slot": "desk-lamp",
+      "priority": "high",
+      "rank": 2,
+      "need_variations": 3,
+      "spec_he": "מנורת שולחן בצד ימין של השולחן (17 ס\"מ מהקצה ב-JOURNALIST): גובה 40–50, אהיל קונוס רך או תוף קטן בקוטר 16–22, מפשתן או כותנה-פשתן בלבן חם או בשיבולת שועל. רגל ובסיס בקוטר עד 14: אלון, או מתכת שחורה מט בווריאציה אחת (פחם), או קרמיקה מט. תקע EU או ישראלי, 220–240V, ‏CE; הכבל יורד מאחורי השולחן. הנורה נסתרת. אסור: USB, ספירלות LED, מנורת קליפס או אדריכל, העתק (Anglepoise, Tolomeo).",
+      "envelope_cm": { "h": [40, 50], "shade_d": [16, 22], "base_d_max": 14 },
+      "price_ceiling": { "breakeven_landed_ils": 127.18, "landed_for_40_ils": 69.89, "slot_price_ils": 169, "note": "suggested price (table-lamp median ILS 192, band 139-179)" },
+      "source_type": "AliExpress (לבקש SKU עם תקע EU ל-1005008734758186: ‏₪67 נחיתה, ‏45% ב-₪179); ספק ישראלי",
+      "queries": [
+        "linen cone table lamp wooden stem EU plug 45cm",
+        "small table lamp fabric shade oak base 220V EU plug",
+        "black metal table lamp linen shade EU plug 45cm",
+        "ceramic table lamp small linen cone shade EU",
+        "nordic desk lamp wood base fabric lampshade E27 EU plug"
+      ],
+      "why_he": "אחת משלוש המנורות שצריכות לדלוק ב-W0, והנקודה הגבוהה בצד הימני הריק. המועמד היחיד עם USB."
+    },
+    {
+      "slot": "pendant",
+      "priority": "high",
+      "rank": 3,
+      "need_variations": 3,
+      "spec_he": "תלויה קטנה מעל קדמת השולחן, נקודה (‎−0.825, 6.82, 3.00), תחתית האהיל ב-1.58: קוטר עד 28, גובה אהיל עד 18. פעמון רך, קונוס רך או תוף נמוך, מפשתן או מנייר בקפלים בלבן חם (בגוון הקיר). **מפזר תחתון סגור**, כי המצלמה ב-1.10 רואה את האהיל מלמטה. כיפה בשחור מט או באלון, כבל בד, כבל מתכוונן עד כ-1.40. מחווטת, ‏CE ו-220–240V. אסור: אהיל מתכת אטום, ראטן או קש, זכוכית, נורה גלויה, העתקים (Le Klint, PH, Akari).",
+      "envelope_cm": { "d_max": 28, "h_max": 18, "bottom_z_m": 1.58 },
+      "price_ceiling": { "breakeven_landed_ils": 111.99, "landed_for_40_ils": 61.48, "slot_price_ils": 149 },
+      "source_type": "AliExpress (תלויות בד קטנות שולחות זול מאהילים גדולים); בקשת Sourcing ל-CJ (AC1)",
+      "queries": [
+        "small linen pendant light 25cm bell shape",
+        "pleated paper pendant lamp small 25cm",
+        "mini fabric cone pendant light warm white 22cm diffuser",
+        "small linen drum pendant 25x15 closed bottom",
+        "fabric bell pendant lamp 24cm black canopy"
+      ],
+      "why_he": "תאורת התקרה שהמשתמש ביקש (D5). הקרמיקה מפסידה ופתוחה מלמטה. אין מועמד."
+    },
+    {
+      "slot": "wall-sconce",
+      "priority": "high",
+      "rank": 4,
+      "need_variations": 3,
+      "spec_he": "מנורת קיר בקיר הצפוני, פלטה ב-(‎−2.30, 6.70, 1.70), לפחות 0.20 מערימת הווילון: רוחב 10–16, גובה 15–22, בליטה עד 20. קונוס רך או חצי-פעמון מפשתן עם סלאב, בלבן חם או בשיבולת שועל (הצורה של wall-sconce-cj-linen-cone-black, במחיר אחר). פלטה בשחור מט או באלון. מחווטת, בלי כבל גלוי, ‏CE ו-220–240V, ‏2700K.",
+      "envelope_cm": { "w": [10, 16], "h": [15, 22], "projection_max": 20 },
+      "price_ceiling": { "breakeven_landed_ils": 111.99, "landed_for_40_ils": 61.48, "slot_price_ils": 149, "pack_median_ils": 89, "note": "pack median 89 comes from two cheap CJ cards; at ILS 89: break-even 66.41, 40% 36.24. ILS 149 = same class as the hall sconce (suggested)" },
+      "source_type": "AliExpress (לבדוק משלוח ל-1005007909006505: איזון ב-₪149 עד $18.47); ספק ישראלי למנורות מחווטות",
+      "queries": [
+        "linen cone wall sconce black backplate hardwired",
+        "small fabric cone wall light 15cm wood base",
+        "linen shade wall lamp minimalist flush 20cm",
+        "pleated linen wall sconce small oak",
+        "fabric bell wall light black matte 220V"
+      ],
+      "why_he": "המנורה השלישית שדולקת ב-W0. כל 3 הכרטיסים מתחת ל-7 או מפסידים."
+    },
+    {
+      "slot": "magazine-holder",
+      "priority": "high",
+      "rank": 5,
+      "need_variations": 3,
+      "spec_he": "מחזיק עיתונים מימין לשולחן (X ‏0.10–0.35): רוחב 24–30, עומק 20–25, גובה 36–42. חזית פתוחה או נמוכה, ששלושה עיתוני A4 זקופים נראים דרכה. **חובה אלמנט פחם בכל וריאציה:** חוט או פח פלדה בשחור מט, לבד צמר בפחם, או אלון עם רצועות עור שחור מט. ‏3 וריאציות שנבדלות בחומר (חוט, לבד, עץ). אסור: כרום, זהב, פלסטיק, ראטן, רשת מתכת משרדית.",
+      "envelope_cm": { "w": [24, 30], "d": [20, 25], "h": [36, 42] },
+      "price_ceiling": { "breakeven_landed_ils": 77.80, "landed_for_40_ils": 42.55, "slot_price_ils": 104 },
+      "source_type": "AliExpress Choice (חוט מתכת קל) או CJ (לבד)",
+      "queries": [
+        "black metal wire magazine rack floor 30x40",
+        "felt magazine holder charcoal floor 28cm",
+        "oak magazine rack leather strap black",
+        "matte black metal magazine basket standing 40cm",
+        "wool felt magazine basket dark grey open front"
+      ],
+      "why_he": "נשא הפחם השני (3/3) ומשקל הנגד של הצד הימני. סל הלבד (7.0) רחב מדי, ורשומות ה-AE מקטגוריה שגויה."
+    },
+    {
+      "slot": "rug",
+      "priority": "high",
+      "rank": 6,
+      "need_variations": 3,
+      "spec_he": "שטיח מלבני לפני השולחן ומתחת לכיסא, נחתך בשוליים התחתונים. עדיף 160×210 (ראו הצעת הפריסה: ‏X ‎−1.625…‎−0.025, ‏Y ‏6.45–8.55). לבן חם, שיבולת שועל או אפור ערפל, טון-על-טון או קו פחם דק עד 10%, ‏L≥60. צמר, צמר-כותנה, יוטה-צמר או כותנה בקליעה שטוחה, סיב עד 15 מ\"מ, מט. אסור: פוליאסטר מודפס, צורה עגולה, שאגי, פרנזים מעל 8 ס\"מ.",
+      "envelope_cm": { "w": [160, 180], "l": [200, 220], "preferred": "160x210" },
+      "price_ceiling": { "breakeven_landed_ils": 339.89, "landed_for_40_ils": 187.68, "slot_price_ils": 449, "note": "suggested price (rug-medium P90 562; 160x200-220)" },
+      "source_type": "ספק ישראלי לשטיחים (ד.1; CJ חלש בשטיחים); AliExpress רק לכותנה בקליעה שטוחה עם משלוח ידוע",
+      "queries": [
+        "flatweave wool rug 160x210 oatmeal",
+        "handwoven cotton rug 160x220 natural stripe",
+        "wool jute rug 160x200 beige",
+        "low pile wool rug 160x230 ivory tone on tone",
+        "kilim flatweave rug cream thin charcoal border 160x230"
+      ],
+      "why_he": "בלי שטיח האלון שולט בפריים והיחס 60/30 נשבר. השטיח גם פותר את מצב הכיסא חצי על השטיח. אין מועמד."
+    },
+    {
+      "slot": "curtains",
+      "priority": "high",
+      "rank": 7,
+      "need_variations": 1,
+      "spec_he": "הווריאציה השלישית של משפחת הווילונות של הבית (גם בסלון): וילון שקוף במראה פשתן, **בלבן חם (L 90–95) או באפור ערפל**, קפלי S או wave (או קפלי צביטה, או לולאות אחוריות). פאנל ברוחב 130–150, נפילה 275–285 (בחדר העבודה 278–282), מעבר אור 30–60%, סלאב נראה. זוג. אסור: עיניות מתכת, מנהרה למוט, לולאות קדמיות, גדילים, סאטן.",
+      "envelope_cm": { "panel_w": [130, 150], "drop": [278, 282], "set_of": 2 },
+      "price_ceiling": { "breakeven_landed_ils": 199.35, "landed_for_40_ils": 109.86, "slot_price_ils": 264, "note": "pair, at the work slot median; the family default is priced ILS 179 for the pair (break-even 134.78, 40% 74.10). One price for the whole house" },
+      "source_type": "AliExpress (אותם מוכרים כמו 902882 ו-180502; עדיף ליסטינג עם מידה מותאמת)",
+      "queries": [
+        "linen look sheer curtain S fold 280cm warm white",
+        "sheer linen voile curtain wave heading grey 140x280",
+        "ivory linen texture sheer curtain pinch pleat 280",
+        "semi sheer linen curtain hook top 145x280 light grey"
+      ],
+      "why_he": "יש שתיים ב-8.0, שתיהן בשיבולת שועל, ואין בחירה אמיתית. המשפחה ננעלת יחד עם הסלון."
+    },
+    {
+      "slot": "planter",
+      "priority": "high",
+      "rank": 8,
+      "need_variations": 2,
+      "spec_he": "כלי עציץ בפינה הצפון-מזרחית (‎−1.95, 6.70): קוטר 34–38, גובה 36–42. **ברירת מחדל בגוון בסיס:** אבנית או קרמיקה מט בלבן חם, עם מרקם יד, גליל או בטן רחבה. וריאציה 2: בטון או טרוורטין בשיבולת שועל, או פייבר-קליי שנקרא כבטון. קש הים הנוכחי (7.0) נשאר כווריאציה 3. הצמח (מילוי) עד Z 1.30. אסור: זיגוג מבריק, טרקוטה כתומה, פלסטיק.",
+      "envelope_cm": { "pot_d": [34, 38], "pot_h": [36, 42], "plant_top_max": 130 },
+      "price_ceiling": { "breakeven_landed_ils": 111.99, "landed_for_40_ils": 61.48, "slot_price_ils": 149, "note": "suggested price for a 36-38 cm ceramic planter; the seagrass default sells at ILS 89" },
+      "source_type": "מלאי מקומי (LK1, קרמיקה כבדה) או CJ לפייבר-קליי קל",
+      "queries": [
+        "matte stoneware planter 36cm diameter white",
+        "fiber clay round planter 38x40 light",
+        "concrete belly planter 36cm beige",
+        "ceramic floor planter wide 38cm matte oatmeal"
+      ],
+      "why_he": "ברירת המחדל היום היא קש ים, בניגוד לכלל של ברירת מחדל בגוון בסיס, ויוצרת שני גושים קלועים בשמאל. חסרה גם קרמיקה בחדר."
+    },
+    {
+      "slot": "desk-tray",
+      "priority": "high",
+      "rank": 9,
+      "need_variations": 3,
+      "spec_he": "מגש בצד שמאל של השולחן (7.5 ס\"מ מהקצה ב-JOURNALIST): ‏22–28 × 18–26 × 2–4. מלבן מעוגל, סגלגל או אורגני רך. טרוורטין מושחז (אבן אמיתית, גשר לסלון), אבנית מט, או אלון בשמן. ריק (או עם כלי העפרונות לידו, לפי ההחלטה על בעיית המבנה). אסור: עור או PU כגוף, עץ כהה, מתכת מבריקה.",
+      "envelope_cm": { "w": [22, 28], "d": [18, 26], "h": [2, 4] },
+      "price_ceiling": { "breakeven_landed_ils": 89.20, "landed_for_40_ils": 48.86, "slot_price_ils": 119 },
+      "source_type": "AliExpress (לבדוק משלוח ל-1005013257979199, מגש טרוורטין $21.79; איזון עד $5.24); CJ",
+      "queries": [
+        "travertine tray rectangular 25x20",
+        "natural travertine desk tray organic shape",
+        "oak wood desk tray 25x20 rounded corners",
+        "matte stoneware rectangular tray 24x18"
+      ],
+      "why_he": "מגש הטרוורטין (7.5) הוא החומר הנכון, אבל מפסיד. הוא יכניס אבן לחדר שאין בו קרמיקה."
+    },
+    {
+      "slot": "shelf-boxes",
+      "priority": "high",
+      "rank": 10,
+      "need_variations": 3,
+      "spec_he": "זוג קופסאות על המדף, משני צדי תומכי הספרים: רוחב 28–32, עומק 18–20 (FLOAT, ‏LQ5), **אחת גבוהה 20–26 משמאל ואחת נמוכה 12–18 מימין** (שתי מידות מאותו ליסטינג, או סט מקונן). אלון עם מכסה, בד פשתן או כותנה על מסגרת (שיבולת שועל, לבן חם, אפור ערפל), או לבד (אפור ערפל, פחם). אסור: פלסטיק, PU, בריחי פליז, עץ כהה או שרוף, הדפס.",
+      "envelope_cm": { "w": [28, 32], "d": [18, 20], "h_tall": [20, 26], "h_low": [12, 18], "set_of": 2 },
+      "price_ceiling": { "breakeven_landed_ils": 96.80, "landed_for_40_ils": 53.07, "slot_price_ils": 129, "note": "for the pair; suggested price" },
+      "source_type": "AliExpress Choice (קופסאות בד קלות) או CJ",
+      "queries": [
+        "linen covered storage box with lid 30x20 set of 2",
+        "fabric storage box low 30x20x15 beige",
+        "oak wooden box with lid 30x20",
+        "felt storage box lidded grey 30cm set",
+        "nesting linen storage boxes 2 sizes"
+      ],
+      "why_he": "בקבוצת המדף קיימים רק התומכים. רשומות ה-AE כפריות או מ-PU."
+    },
+    {
+      "slot": "waste-basket",
+      "priority": "high",
+      "rank": 11,
+      "need_variations": 3,
+      "spec_he": "פח נייר מתחת לשולחן מימין (‎−0.35, 6.70): קוטר 22–26, גובה 28–32 (בקצה הנמוך, כדי לא לגעת ברגל הכיסא). גליל. נייר קראפט רחיץ (שיבולת שועל, אפור ערפל), חבל נייר או חבל כותנה, לבד, אלון, או מתכת שחורה מט. אסור: פלסטיק, מכסה עם פדל, מתכת מבריקה.",
+      "envelope_cm": { "d": [22, 26], "h": [28, 32] },
+      "price_ceiling": { "breakeven_landed_ils": 58.81, "landed_for_40_ils": 32.03, "slot_price_ils": 79, "note": "suggested price (band 49-69)" },
+      "source_type": "AliExpress Choice",
+      "queries": [
+        "washable kraft paper bin 25x30",
+        "paper rope waste basket round 25cm",
+        "felt waste paper basket grey 25x30",
+        "oak wood waste bin round small",
+        "cotton rope wastebasket 24x28 natural"
+      ],
+      "why_he": "רשומות ה-AE הן פחי פלסטיק או סלים קטנים. הפח נספר ב-W0."
+    },
+    {
+      "slot": "bookends",
+      "priority": "high",
+      "rank": 12,
+      "need_variations": 2,
+      "spec_he": "זוג תומכי ספרים במרכז המדף, עם 6–8 ספרים כמילוי: גובה 14–18, עומק 12–16. לוח עם קצה מעוגל או קשת, או L פשוט. אלון או בוק בהיר, מתכת שחורה מט (נשא פחם; עדיף כווריאציה), או טרוורטין. ברירת המחדל מבוק (7.5) נשארת. חסרות וריאציה בפחם ווריאציה באבן או בגובה הנכון. אסור: צורות דמויות או חיות, זהב, אקריליק.",
+      "envelope_cm": { "h": [14, 18], "d": [12, 16], "set_of": 2 },
+      "price_ceiling": { "breakeven_landed_ils": 58.81, "landed_for_40_ils": 32.03, "slot_price_ils": 79, "note": "for the pair; suggested price" },
+      "source_type": "AliExpress Choice (לבדוק את 1005013324559563, קשת שחורה)",
+      "queries": [
+        "black metal arch bookends pair minimalist",
+        "oak wood bookends pair 15cm",
+        "travertine bookends pair natural stone",
+        "beech wood bookends round top 16cm pair"
+      ],
+      "why_he": "יש 7.5 ו-7.0, כמעט באותה צורה. חסרים נשא פחם על המדף ו-3 בציון 8."
+    },
+    {
+      "slot": "desk-organizer",
+      "priority": "high",
+      "rank": 13,
+      "need_variations": 3,
+      "spec_he": "כלי עפרונות: קוטר 7–10, גובה 10–14, גליל או כוס. אבנית מט (לבן חם, אפור ערפל), אלון מחורט, טרוורטין, או מתכת שחורה מט בווריאציה אחת. עפרונות עץ או פחם כמילוי. **לפי ההחלטה על המבנה:** עומד על השולחן ליד המגש, לא עליו.",
+      "envelope_cm": { "d": [7, 10], "h": [10, 14] },
+      "price_ceiling": { "breakeven_landed_ils": 36.02, "landed_for_40_ils": 19.41, "slot_price_ils": 49, "note": "suggested price (band 39-59); add-on only" },
+      "source_type": "AliExpress Choice",
+      "queries": [
+        "matte ceramic pencil cup 8cm white",
+        "oak wood pen holder round 8x12",
+        "travertine pen holder cup",
+        "stoneware pen pot speckled beige"
+      ],
+      "why_he": "רשומות ה-AE פיגורטיביות או מאקריליק. פריט קטן, שמשלים את המשולש על השולחן."
+    },
+    {
+      "slot": "basket",
+      "priority": "high",
+      "rank": 14,
+      "need_variations": 3,
+      "spec_he": "סל מתחת לשולחן משמאל (‎−1.25, 6.62): קוטר 28–32, גובה 28–32 (בקצה הנמוך, כדי לא לגעת ברגל הכיסא). גליל. חבל יוטה, חבל כותנה או חבל נייר; טבעי או לבן חם. לא קש ים (העציץ כבר בקש ים). הדו-גוני (7.5) נשאר כגיבוי.",
+      "envelope_cm": { "d": [28, 32], "h": [28, 32] },
+      "price_ceiling": { "breakeven_landed_ils": 66.41, "landed_for_40_ils": 36.24, "slot_price_ils": 89 },
+      "source_type": "CJ (משלוח ומידה ל-basket-cj-jute-rope-cylinder medium); AliExpress Choice",
+      "queries": [
+        "jute rope basket 30x30 cylinder",
+        "cotton rope storage basket 30cm white",
+        "paper rope basket round 30cm natural"
+      ],
+      "why_he": "יש ברירת מחדל ב-7.5 שמשותפת עם הכניסה. צריך 3 בציון 8, ולהפריד בין הכניסה לחדר העבודה."
+    },
+    {
+      "slot": "desk",
+      "priority": "medium",
+      "rank": 15,
+      "need_variations": 1,
+      "spec_he": "לא חיפוש: ממתינים לאישור בכתב ולצילום אמיתי מרהיטי טבע על JOURNALIST ‏140 (‏140×65×76, לכה מט, מלאי; גבולי G3). גיבוי: ROBI, אם הוא 155–165 × 55–65.",
+      "envelope_cm": { "w": [140, 165], "d": [55, 65], "h": [76, 76] },
+      "price_ceiling": { "breakeven_landed_ils": null, "landed_for_40_ils": null, "slot_price_ils": 3355 },
+      "source_type": "ספק ישראלי (LS1); בתוכנית ב' רהיט קבוע שלא נמכר",
+      "queries": ["solid oak desk 140x65 drawers", "oak writing desk 160x60 matte", "minimalist oak desk splayed legs 140cm"],
+      "why_he": "מחכה לספק. קובע את המיקומים של המגש, המנורה, הסל והפח."
+    },
+    {
+      "slot": "shelf",
+      "priority": "medium",
+      "rank": 16,
+      "need_variations": 1,
+      "spec_he": "לא חיפוש: מחיר ומלאי ל-FLOAT ‏140 (‏140×20×3, פרזול נסתר). גיבוי: מדף אלון צף 140–145 × 20–25.",
+      "envelope_cm": { "w": [140, 145], "d": [20, 25], "t": [3, 3] },
+      "price_ceiling": { "breakeven_landed_ils": null, "landed_for_40_ils": null, "slot_price_ils": null },
+      "source_type": "ספק ישראלי (LS1)",
+      "queries": ["solid oak floating shelf 140x20", "oak wall shelf hidden bracket 140cm", "floating shelf oak 145x25"],
+      "why_he": "קובע את עומק קופסאות המדף (עד 20)."
+    },
+    {
+      "slot": "chair",
+      "priority": "medium",
+      "rank": 17,
+      "need_variations": 1,
+      "spec_he": "תוכנית ב': רהיט קבוע שלא נמכר (VERDA, גיבוי MICA), נדחף עד שהגב ב-Y 7.02, כדי שראש הגב יהיה 0.02–0.03 מעל קו שפת השולחן ב-W0. כיסא אלון מלא, גב שטוח או מעוגל, גובה גב 81–84, מושב 45–46.",
+      "envelope_cm": { "h_back": [79, 86], "seat_h": [45, 46] },
+      "price_ceiling": { "breakeven_landed_ils": null, "landed_for_40_ils": null, "slot_price_ils": null },
+      "source_type": "ספק ישראלי (LS1); לא נמכר כרגע",
+      "queries": ["solid oak desk chair flat back", "oak dining chair 81cm back minimalist", "wooden desk chair no upholstery oak"],
+      "why_he": "הערת ה-QA (ראש הגב מול קו השולחן) נפתרת בדחיפה. ההשלכה על השטיח נמצאת בהצעת הפריסה."
+    }
+  ]
+}

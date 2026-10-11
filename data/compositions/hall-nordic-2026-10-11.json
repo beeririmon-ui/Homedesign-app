@@ -1,0 +1,165 @@
+{
+  "room": "hall",
+  "style": "nordic",
+  "date": "2026-10-11",
+  "frame": "H0",
+  "author": "master-designer",
+  "doc": "docs/rooms/hall-nordic-2026-10-11.md",
+  "economics_note": "Studio formula: net = price/1.18; contribution = net - landed - (0.02*price + 1.2) - 0.08*net. Cards: price and margin from data/economics/products.json (or the card's profit-fix note when products.json has none). AliExpress records: margin at the slot price, landed = (SKU + cheapest shipping <= 45 d) * 3.3. Scores: card style_scores.nordic; AE records scored by eye from review/sheets (no AE record reaches 8 from a contact sheet).",
+  "status_counts": { "ready-to-lock": 1, "partial": 4, "empty": 8, "on-hold": 3 },
+  "slots": {
+    "framed-art": {
+      "status": "on-hold",
+      "blocked_by": ["PR1"],
+      "default": null,
+      "variations": [],
+      "needs_card": [],
+      "notes_he": "חסום ב-PR1 (הדפס מ-AliExpress בלי מסגרת, וממסגרים בישראל). 5 הכרטיסים: wabi-sabi-tree-176323 ‏5.5 (₪39, ‏10.7%, רק כתוספת לסל), ‏japandi-set-969661 ‏5.5, ‏mediterranean-802890 ‏4.5, ‏line-scribble-white-mat-50 ‏6.5 (מפסיד ‎−63.1%), ‏morandi-triptych-sage ‏6.5 (מפסיד ‎−61.3%, ובמידה של הסלון). כל הדפסי ה-AE הנורדיים הם קנבס בלי מסגרת (אסור ב-Bible) ולאורך 50×70, מול מעטפה ריבועית 50–60. גם הטוב שבהם, פרחי הבר 1005011956338629, הוא בלי אלמנט פחם (חובה). עם קונסולה H: רוחב 60, ‏Z ‏1.35–1.90."
+    },
+    "table-lamp": {
+      "status": "empty",
+      "default": null,
+      "variations": [],
+      "needs_card": [],
+      "notes_he": "כל 3 הכרטיסים מפסידים: teardrop-cone ‏‎−37.3%, ‏ceramic-linen-drum ‏‎−13.7% (וכל התמונות AI), ‏pleated-wood-column ‏‎−68% (וקרוב ל-Moragas, העתק). רשומות ה-AE עם USB, תקע US או AU, או עם משלוח חסר, וכולן נכשלות בשער החשמל (תקע EU או ישראלי, 220–240V, ‏CE; מתאם לא נחשב). ליד: חצובת עץ עם אהיל פשתן של CJ (profit-fix, ‏28.8% ב-₪149), כנראה בגובה 30–35 מול 45–55."
+    },
+    "key-tray": {
+      "status": "partial",
+      "default": { "ae_item_id": "1005011962693779", "score": 7.5, "price_ils": 119, "margin_pct": 58.5, "landed_ils": 30.2, "desc_he": "מגש סגלגל ממתכת שחורה, 22.2×9.5×1.5, Choice ‏$1.99" },
+      "variations": [
+        { "ae_item_id": "1005012509590290", "score": 7.5, "price_ils": 119, "margin_pct": 56.0, "landed_ils": 32.7, "ship_days": "6-13", "desc_he": "מגש אקציה סגלגל 19×10.5" }
+      ],
+      "needs_card": ["1005011962693779", "1005012509590290"],
+      "notes_he": "השחור כברירת מחדל, בשוויון ציון: חוזר על קו הפחם של התמונה, ולא יוצר עץ-על-עץ בגוון אחר על קונסולת האלון. תנאי: גימור מט (עד 10 GU) ו-L ‏15–32; עומק 9.5 מול 10–14. מחיר העמדה ₪119 גבוה מהשווי של מגש קטן. ב-₪69: שחור 35.9%, אקציה 31.7%, ואז רק כתוספת לסל. נדחו: מגש הטרוורטין של המאגר (24×17 גדול מהמעטפת, ומפסיד ‎−31.4%), מגשי עור PU (עור מותר רק ברצועות), מגשי דקסהונד (פיגורטיבי). חסרה וריאציה שלישית, ושלוש בציון 8."
+    },
+    "console-vessel": {
+      "status": "ready-to-lock",
+      "lock_conditions_he": "כמו ב-VL1: כד הפחם ב-L ‏15–32 ולא שחור; תמונות textured-white אינן AI והלבן לא קר. בנוסף: qa-agent מוודא שהאגרטל שעל אדן הסלון לא נראה דרך הדלת ב-H0.",
+      "default": { "card_id": "vase-aliexpress-vintage-distressed-clay-vase-589009", "score": 8.5, "price_ils": 229, "margin_pct": 35.0, "dims_cm": "31x15 (SKU L)" },
+      "variations": [
+        { "card_id": "vase-cj-textured-white-stoneware", "score": 8.5, "price_ils": 229, "margin_pct": 25.2, "dims_cm": "32x16" },
+        { "card_id": "vase-cj-black-matte-stoneware-jar-30", "score": 8.0, "price_ils": 229, "margin_pct": 37.5, "dims_cm": "30x15" }
+      ],
+      "needs_card": [],
+      "fillers": ["stems: 3-5 sage or oat stems, same in every variant, top <= Z 1.45 with console H"],
+      "notes_he": "משפחת האגרטלים של הסלון, ששויכה גם לכניסה: שלושתם בתוך קוטר 10–16 וגובה 25–35, ובתוך ±15% (30–32). ברירת המחדל לפי FR-D: ‏589009, מלאי 996. אם האגרטל שעל אדן הסלון נראה ב-H0 (הקרן דרך המשקוף פוגעת בקיר החלון ב-Y≈1.27 והאגרטל ב-1.35), ברירת המחדל עוברת ל-textured-white, כדי שאותו חפץ לא יופיע פעמיים בפריים הפתיחה. גיבוי: vase-cj-matte-frosted-tapered-28 ‏(7.0, ‏41.2% ב-₪199). כל 9 רשומות ה-AE הנורדיות לעמדה הזו הן מיניאטורות של 8–14 ס\"מ או צורות פיגורטיביות, ולכן אף אחת לא נבחרה. אף אחד מהשלושה לא מגיע ל-40%, ואין בעמדה חלופה ב-8 שמגיעה (ה.11–ה.12)."
+    },
+    "storage-boxes": {
+      "status": "empty",
+      "default": null,
+      "variations": [],
+      "needs_card": [],
+      "notes_he": "רשומות ה-AE: קופסת אורן עם בריח פליז (כפרית וקטנה), מגשי PU, קופסאות שקופות, ארגז 100 ליטר בהדפס. אין מועמד. עם H: עומק עד 22, מתחת למוט התחתון."
+    },
+    "bench-cushion": {
+      "status": "empty",
+      "default": null,
+      "variations": [],
+      "needs_card": [],
+      "notes_he": "אין מועמד נורדי. ליד: כרית ספסל שניל במידה מותאמת 1005013241834466 (אפור, 5 ס\"מ): נחיתה כ-₪80, ‏36% ב-₪179 ו-42% ב-₪199. השניל לא ברשימת החומרים, ולכן צריך מבט בתקריב. עם LAKE ‏115: רוחב עד 35 (LQ5)."
+    },
+    "bench-throw": {
+      "status": "empty",
+      "default": null,
+      "variations": [],
+      "needs_card": [],
+      "notes_he": "1005012918362515: פלד סרוג בשמנת, 6.5. ציציות גדולות בפינות (כמו פונפונים, אסור), אקריליק, ‏16% ב-₪119. שאר הרשומות מודפסות או צבעוניות. בעיית מבנה: לפי hall.json השמיכה מונחת על הכרית, וזה מפר את 'אין מוצר על מוצר מתחלף'. הצעה: עמדה אחת לטקסטיל הספסל (כרית ושמיכה כזוג מתואם, שכבה אחת), כמו הכריות והשמיכה בסלון (1.4).",
+      "structure_issue": "bench-throw sits on bench-cushion (both swappable): Bible 'no product on a swappable product'. Proposal: merge into one 'bench textiles' set slot, or lay the throw on the bare oak end with a shorter cushion."
+    },
+    "basket": {
+      "status": "partial",
+      "default": { "card_id": "basket-cj-two-tone-rope-jute-white-30", "score": 7.5, "price_ils": 89, "margin_pct": 35.1, "dims_cm": "30x30" },
+      "variations": [],
+      "needs_card": [],
+      "leads": [{ "card_id": "basket-cj-jute-rope-cylinder", "sku": "CJYD186026902BY (medium, $3.99)", "note_he": "8.5 בגודל הגדול בסלון. חסרים מידת ה-medium וציטוט משלוח (ה-large ‏$19.11)." }],
+      "notes_he": "הסל הדו-גוני של הסלון, ששויך לכניסה: 30×30 נכנס בדיוק למעטפת 28–34 × 26–30, ולכן כאן הוא 7.5 ולא 7.0. סלי חבל הכותנה של AE ‏(23×13×7) קטנים מדי. בכניסה הסל הוא הפריט הקלוע של החדר."
+    },
+    "wall-hooks": {
+      "status": "partial",
+      "default": { "card_id": "wall-hooks-aliexpress-pine-oval-pegs-4pcs", "score": 7.0, "price_ils": 64, "margin_pct": 50.1, "landed_ils": 20.2 },
+      "variations": [
+        { "card_id": "wall-hooks-cj-raw-wood-cylinder-peg-set-of-4", "score": 7.0, "price_ils": 64, "margin_pct": 18.9, "price_note_he": "מחיר העמדה. במחיר של הכרטיס (₪39) מפסיד ‎−26.5%, ולכן נכנס רק אם המשתמש מאשר ₪64." }
+      ],
+      "needs_card": [],
+      "notes_he": "אין כאן מסילה, רק יתדות בודדות (4 בשורה, 60–80). אורן: לבדוק שהגוון לא כתום (S עד 55). נפסלה: מסילת CJ עם יתדות פליז (מפסידה, ופליז לא מותר במתלים). חסרה וריאציה עם יתדות בשחור מט (נשא פחם, accent_carriers)."
+    },
+    "wall-sconce": {
+      "status": "partial",
+      "default": { "card_id": "wall-sconce-cj-white-fabric-cube-15-hall", "score": 7.0, "price_ils": 149, "margin_pct": 2.3, "condition_he": "שער חשמל: \"‎≤36V\" מול E27. נדרש אישור בכתב ל-220–240V ול-CE. התמונה הראשית לא מראה את הבד." },
+      "variations": [],
+      "needs_card": [],
+      "notes_he": "הקובייה עוברת לכאן לפי profit-fix (בחדר העבודה היא מפסידה). wavy-linen-25 ‏(6.5) מפסיד ‎−31.5%, ורוחבו 25 מול 10–16. רשומות AE: טרוורטין מפסיד (‎−41% עד ‎−160%), אהיל מתכת, תעשייתי, ראטן. קובייה היא לא צורת יסוד (תוף, קונוס או כדור), ולכן 7.0 ולא יותר."
+    },
+    "planter": {
+      "status": "empty",
+      "default": null,
+      "variations": [],
+      "needs_card": [],
+      "notes_he": "אין מועמד בשום סגנון. ליד: סל-עציץ קש ים 1005011872839727 (נמצא תחת basket); מידות לא ידועות. עם H העציץ זז ל-(2.33, 6.80). הכלי צריך להיות גליל צר: קוטר 22–26, גובה 34–40."
+    },
+    "umbrella-stand": {
+      "status": "empty",
+      "default": null,
+      "variations": [],
+      "needs_card": [],
+      "rejected_records": ["1005010037214767", "1005009050485927"],
+      "notes_he": "שתי רשומות ה-AE הן מחזיקי מטרייה לכיסא גלגלים או לאופניים, ונדחו לעמדה. בגיליון כל השאר מעמדים לשמשיית חוץ. מטרייה סגורה בפחם או בשיבולת שועל היא מילוי."
+    },
+    "runner-rug": {
+      "status": "empty",
+      "default": null,
+      "variations": [],
+      "needs_card": [],
+      "notes_he": "נראה רק במעברים ומ-C0. רשומות ה-AE הן הדפסים (גוף אדם, חיות, פרחים) ב-40×120. אין מועמד."
+    },
+    "ceiling-light": {
+      "status": "empty",
+      "default": null,
+      "variations": [],
+      "needs_card": [],
+      "notes_he": "waxwood-dome-40 ‏(5.5) מפסיד ‎−28%. AE ‏1005011997278771: תוף לבן עם בסיס עץ, קוטר 18 מול 35–45. ליד: תלוית משי D40×H20 ‏1005008585971887, ממתינה לבדיקת משלוח (לאיזון עד $15.6). כלל הגשר: אהיל בד או נייר כמו בחצי-צמודות של המסדרון."
+    },
+    "console": {
+      "status": "on-hold",
+      "blocked_by": ["LS1: written supplier approval (Rahitei Teva)"],
+      "default": { "model": "H (Rahitei Teva) 100x26x85", "price_ils": 1850, "margin_pct": null },
+      "variations": [],
+      "needs_card": [],
+      "notes_he": "גבולי G4: נכנס רק עם הזזת העציץ ל-(2.33, 6.80). התמונה, המנורה והכלי עולים ב-5 ס\"מ. בתוכנית ב' הוא רהיט קבוע שלא נמכר."
+    },
+    "bench": {
+      "status": "on-hold",
+      "blocked_by": ["LS1: written supplier approval (Rahitei Teva)"],
+      "default": { "model": "LAKE 115 (Rahitei Teva) 115x35x45", "price_ils": 1650, "margin_pct": null },
+      "variations": [],
+      "needs_card": [],
+      "notes_he": "בתוך הטולרנס. כרית הספסל ברוחב עד 35 (LQ5, אחרי אישור הספק)."
+    }
+  },
+  "whole_look": {
+    "defaults": [
+      { "slot": "console-vessel", "id": "vase-aliexpress-vintage-distressed-clay-vase-589009", "price_ils": 229, "margin_pct": 35.0, "contribution_ils": 67.9, "addon_only": false },
+      { "slot": "key-tray", "id": "ae:1005011962693779", "price_ils": 119, "margin_pct": 58.5, "contribution_ils": 59.0, "addon_only": false },
+      { "slot": "basket", "id": "basket-cj-two-tone-rope-jute-white-30", "price_ils": 89, "margin_pct": 35.1, "contribution_ils": 26.5, "addon_only": true },
+      { "slot": "wall-hooks", "id": "wall-hooks-aliexpress-pine-oval-pegs-4pcs", "price_ils": 64, "margin_pct": 50.1, "contribution_ils": 27.2, "addon_only": true },
+      { "slot": "wall-sconce", "id": "wall-sconce-cj-white-fabric-cube-15-hall", "price_ils": 149, "margin_pct": 2.3, "contribution_ils": 2.9, "addon_only": false, "conditional": true }
+    ],
+    "total_price_ils": 650,
+    "total_contribution_ils": 183.5,
+    "blended_margin_pct": 33.3,
+    "without_conditional_sconce": { "total_price_ils": 501, "blended_margin_pct": 42.5 },
+    "addon_only": ["basket-cj-two-tone-rope-jute-white-30", "wall-hooks-aliexpress-pine-oval-pegs-4pcs", "key-tray (only if repriced to ILS 69)"],
+    "furniture_pending_ls1": [
+      { "slot": "console", "model": "H", "price_ils": 1850 },
+      { "slot": "bench", "model": "LAKE 115", "price_ils_from": 1650 }
+    ],
+    "note_he": "5 עמדות מתוך 14 עמדות המוצר מאוכלסות, ושתיים מהן מותנות. הסכום לא מייצג את המראה של H0, כי חסרות התמונה, מנורת השולחן והטקסטיל."
+  },
+  "room_check_he": "הבסיס חם ונכון: קירות בלבן חם, אלון בקונסולה, בספסל וברצפה. כל ברירות המחדל בגוון תחתון חם. ההדגשה כמעט אפסית: הפחם מגיע רק מהמגש ומהמטרייה (מילוי), כי התמונה (3/3 פחם) חסומה ב-PR1, המנורה ריקה והמתלה בעץ בלבד; המרווה מגיעה רק מהגבעולים, כי העציץ ריק. בפריים חסר טקסטיל רך: הכרית והשמיכה על הספסל הן משקל הנגד של הצד השמאלי, הקל, מול הוויניטה הכבדה מימין, ובלעדיהן הפריים נוטה ימינה. אין שכבות אור: ב-H0 צריכות לדלוק מנורת השולחן ומנורת הקיר, והיום יש 0 שאפשר למכור. החתימה נשארת: אהיל פשתן או נייר, וגוף קרמיקה או אלון. סיכוני צבע לבדיקה: אורן שנוטה לכתום, קוביית בד בלבן טהור, ומגש שחור מבריק במקום פחם. השילוב הכבד ביותר (כד פחם, מגש שחור וקו פחם בתמונה) עדיין בתקציב ההדגשה, ו-qa-agent מודד אותו. הקונסולה H משנה את הפריסה: העציץ ל-(2.33, 6.80), והתמונה, המנורה והכלי עולים ב-5 ס\"מ.",
+  "decisions_needed": [
+    { "id": "PR1", "why_he": "חוסם את התמונה בכניסה (ובחדר העבודה): כל ההדפסים הרווחיים הם בלי מסגרת, וכל התמונות הממוסגרות מסין מפסידות (1.6–2.5 ק\"ג)." },
+    { "id": "VL1", "why_he": "הכלי בכניסה משתמש באותם שלושה אגרטלים. תשובה על VL1 עונה גם על הנעילה כאן." },
+    { "id": "price", "why_he": "יתדות CJ ב-₪64 במקום ₪39 (אז הן לא מפסידות); המגש ב-₪119 מול שווי של כ-₪69 (ה.10, המשתמש מחליט)." },
+    { "id": "bench-textiles", "why_he": "השמיכה מונחת על הכרית, מוצר על מוצר מתחלף. להחליט: איחוד לעמדה אחת (מומלץ, כמו בסלון 1.4) או שמיכה על קצה האלון. זה שינוי בקובץ עמדות מחייב (תוספת מעצב שעוד פתוחה)." }
+  ]
+}
