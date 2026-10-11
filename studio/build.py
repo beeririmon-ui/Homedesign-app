@@ -11,8 +11,11 @@ Reads the repo's source-of-truth files (read-only) and writes:
 Product images are downloaded once and cached in studio/.cache/, so a second
 build does not hit the network. Frame conversions are cached there too.
 
-Usage: python3 studio/build.py [--offline]
-  --offline  never download; products without a cached image get a placeholder.
+Usage: python3 studio/build.py [--offline] [--economics-dir DIR] [--deep-dir DIR] [--dist DIR]
+  --offline        never download; products without a cached image get a placeholder.
+  --economics-dir  read the economics files from another folder (testing).
+  --deep-dir       read the deep AliExpress pass from another folder (testing; default data/leads/aliexpress/deep-2026-10).
+  --dist           write the build to another folder (testing; default studio/dist).
 
 Only the Python standard library and Pillow are used.
 """
@@ -1086,13 +1089,376 @@ def load_suppliers(decision_ids: set) -> dict | None:
         out["access"] = {"file": rel(ap), "updated": a.get("updated"), "note": a.get("note"), "options": opts}
     return out
 
+
+# --------------------------------------------------------------------------- supplier comparison
+
+# The deep AliExpress pass (studio-rules ז.00, 2026-10-11) writes one file per room here. Records:
+# {room, slot, style, item_id, title, sku, price_usd, ship_usd, ship_days, landed_ils, retail_band_ils,
+#  margin_ils, margin_pct, fit, reason, compared_to: {card_id, landed_ils}, verdict: best|alternative|reject}
+DEEP_DIR = ROOT / "data" / "leads" / "aliexpress" / "deep-2026-10"
+AE_FIRST_CALL = ROOT / "data" / "leads" / "aliexpress" / "api-first-call-2026-10-11.md"
+AE_SHORTLIST = ROOT / "data" / "leads" / "aliexpress" / "shortlist-2026-10-10.json"
+SEEN = ROOT / "data" / "sources" / "seen.json"
+
+# The six styles, in the order of studio-rules ד.8. Hebrew names come from data/strategy/israel-styles.json.
+STYLE_ORDER = ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"]
+STYLE_FALLBACK_HE = {"nordic": "נורדי", "warm-modern": "מודרני חם", "japandi": "ג'פנדי", "mediterranean": "ים תיכוני",
+                     "modern-country": "כפרי מודרני", "boho": "בוהו"}
+STYLE_ALIASES = {
+    "nordic": "nordic", "scandinavian": "nordic", "scandi": "nordic", "נורדי": "nordic", "סקנדינבי": "nordic",
+    "warm-modern": "warm-modern", "modern-warm": "warm-modern", "warmmodern": "warm-modern", "מודרני-חם": "warm-modern",
+    "japandi": "japandi", "ג'פנדי": "japandi", "ג'אפנדי": "japandi",
+    "mediterranean": "mediterranean", "med": "mediterranean", "ים-תיכוני": "mediterranean",
+    "modern-country": "modern-country", "country": "modern-country", "modern-farmhouse": "modern-country",
+    "rustic-modern": "modern-country", "כפרי-מודרני": "modern-country", "כפרי": "modern-country",
+    "boho": "boho", "bohemian": "boho", "בוהו": "boho",
+}
+ROOM_ALIASES = dict(ROOM_DIRS, **ROOM_TAGS, **{"living": "living-room", "kitchen": "dining-room", "bathroom": "bath",
+                                               "office": "work", "entry": "hall", "bedroom-master": "master"})
+DEEP_VERDICTS = {"best", "alternative", "reject"}
+SUP_HE = {"aliexpress": "AliExpress", "cj": "CJ", "zendrop": "Zendrop", "il": "ספק ישראלי", "other": "אחר"}
+# "Shipping to IL: cheapest 23.39 USD AliExpress standard shipping, 22-32 days" (AliExpress cards),
+# "Shipping to IL: regular $14.24, 14 days" (Zendrop cards). The card schema has no shipping-cost field.
+SHIP_NOTE = re.compile(r"Shipping to IL:\s*(?:cheapest|regular)?\s*\$?\s*(\d+(?:\.\d+)?)\s*(?:USD)?[^,;\n]*?(?:,\s*(\d+)(?:\s*[-–]\s*(\d+))?\s*days)?", re.I)
+AE_ITEM = re.compile(r"aliexpress\.[a-z.]+/item/(\d+)\.html", re.I)
+
+
+def to_num(v):
+    if isnum(v):
+        return float(v)
+    if isinstance(v, str):
+        m = re.search(r"-?\d+(?:\.\d+)?", v.replace(",", ""))
+        return float(m.group(0)) if m else None
+    return None
+
+
+def days_pair(v):
+    """'6-15', 14, [6, 15], {min, max} -> [6, 15]; None when there is no number."""
+    if isinstance(v, dict):
+        v = [v.get(k) for k in ("min", "days_min", "max", "days_max")]
+    if isnum(v):
+        return [int(v), int(v)]
+    if isinstance(v, (list, tuple)):
+        ns = [int(x) for x in v if isnum(x)]
+    elif isinstance(v, str):
+        ns = [int(x) for x in re.findall(r"\d+", v)]
+    else:
+        return None
+    return [min(ns), max(ns)] if ns else None
+
+
+def band_pair(v):
+    """retail band in ILS: [lo, hi], {low, high}, a number or '129-149' -> [lo, hi]."""
+    if isinstance(v, dict):
+        v = [v.get(k) for k in ("low", "min", "lo", "high", "max", "hi")]
+    if isnum(v):
+        return [float(v), float(v)]
+    if isinstance(v, (list, tuple)):
+        ns = [float(x) for x in v if isnum(x)]
+    elif isinstance(v, str):
+        ns = [float(x) for x in re.findall(r"\d+(?:\.\d+)?", v.replace(",", ""))]
+    else:
+        return None
+    return [min(ns), max(ns)] if ns else None
+
+
+def style_key(v):
+    if not isinstance(v, str) or not v.strip():
+        return None
+    k = re.sub(r"[\s_]+", "-", v.strip().lower())
+    return STYLE_ALIASES.get(k) or (k if k in STYLE_ORDER else None)
+
+
+def room_key(v, room_ids):
+    if not isinstance(v, str):
+        return None
+    k = v.strip().lower()
+    return k if k in room_ids else ROOM_ALIASES.get(k)
+
+
+def supplier_key(name, url, currency) -> str:
+    n = (name or "").lower()
+    host = ""
+    m = re.match(r"https?://([^/]+)", url or "")
+    if m:
+        host = m.group(1).lower()
+    if re.search(r"\bcj\b|cjdropshipping", n) or "cjdropshipping" in host:
+        return "cj"
+    if "zendrop" in n or "zendrop" in host:
+        return "zendrop"
+    if "aliexpress" in n or "aliexpress" in host:
+        return "aliexpress"
+    if str(currency or "").upper() == "ILS" or host.endswith(".co.il") or re.search(r"[֐-׿]", name or ""):
+        return "il"
+    return "other"
+
+
+def ae_canon(item_id, aliases) -> str | None:
+    """Canonical AliExpress item id (.us 3256... ids; .com 1005... ids and SKUs map through seen.json aliases)."""
+    if item_id is None:
+        return None
+    s = re.sub(r"\D", "", str(item_id))
+    if not s:
+        return None
+    seen = set()
+    key = "aliexpress:" + s
+    while key in aliases and key not in seen:
+        seen.add(key)
+        key = aliases[key]
+    return key.split(":", 1)[1] if key.startswith("aliexpress:") else s
+
+
+def strip_md(t: str) -> str:
+    return re.sub(r"\*\*|`", "", t or "").strip()
+
+
+def frac(v):
+    """margin percent as a fraction: 0.31 or 31 or '31%' -> 0.31."""
+    x = to_num(v)
+    if x is None:
+        return None
+    return x / 100 if abs(x) > 1.5 else x
+
+
+def load_deep(deep_dir: Path, room_ids: set, slot_keys: set, aliases: dict) -> dict:
+    """All records of the deep AliExpress pass, normalized. Bad records are reported, not dropped silently."""
+    out = {"dir": rel(deep_dir) if deep_dir.is_relative_to(ROOT) else str(deep_dir), "present": False,
+           "files": [], "records": [], "unmatched": [], "warnings": []}
+    if not deep_dir.exists():
+        return out
+    for f in sorted(deep_dir.glob("*.json")):
+        try:
+            d = read_json(f)
+        except Exception as e:
+            out["warnings"].append(f"{f.name}: {type(e).__name__}: {e}"[:200])
+            continue
+        if isinstance(d, list):
+            recs, meta = d, {}
+        elif isinstance(d, dict):
+            recs = next((d[k] for k in ("records", "items", "candidates", "results", "rows") if isinstance(d.get(k), list)), [])
+            meta = d
+        else:
+            recs, meta = [], {}
+        n_ok = 0
+        for i, r in enumerate(recs):
+            if not isinstance(r, dict):
+                continue
+            room = room_key(r.get("room") or meta.get("room") or f.stem, room_ids)
+            slot = str(r.get("slot") or "").strip()
+            style = style_key(r.get("style"))
+            item = ae_canon(r.get("item_id") or (AE_ITEM.search(str(r.get("url") or "")) or [None, None])[1], aliases)
+            where = f"{f.name} #{i + 1}"
+            problem = None
+            if not item:
+                problem = "אין item_id"
+            elif not room:
+                problem = f"חדר לא מוכר: {r.get('room') or meta.get('room') or f.stem}"
+            elif f"{room}/{slot}" not in slot_keys:
+                problem = f"עמדה לא קיימת: {room}/{slot}"
+            elif not style:
+                problem = f"סגנון לא מוכר: {r.get('style')}"
+            if problem:
+                out["unmatched"].append({"where": where, "why": problem, "title": str(r.get("title") or "")[:120],
+                                         "item_id": str(r.get("item_id") or "")})
+                continue
+            verdict = str(r.get("verdict") or "").strip().lower()
+            ct = r.get("compared_to") if isinstance(r.get("compared_to"), dict) else {}
+            url = r.get("url") if isinstance(r.get("url"), str) and r["url"].startswith("https://") else f"https://www.aliexpress.com/item/{item}.html"
+            out["records"].append({
+                "room": room, "slot": slot, "key": f"{room}/{slot}", "style": style, "item": item, "url": url,
+                "title": str(r.get("title") or "").strip() or f"AliExpress {item}", "sku": r.get("sku"),
+                "price_usd": to_num(r.get("price_usd")), "ship_usd": to_num(r.get("ship_usd")),
+                "ship_days": days_pair(r.get("ship_days")), "band": band_pair(r.get("retail_band_ils")),
+                "landed_ils": to_num(r.get("landed_ils")), "margin_ils": to_num(r.get("margin_ils")),
+                "margin_pct": frac(r.get("margin_pct")), "fit": to_num(r.get("fit")),
+                "reason": str(r.get("reason") or "").strip() or None,
+                "verdict": verdict if verdict in DEEP_VERDICTS else None,
+                "compared_to": {"card_id": ct.get("card_id"), "landed_ils": to_num(ct.get("landed_ils"))} if ct.get("card_id") else None,
+                "file": f.name,
+            })
+            n_ok += 1
+        st = f.stat()
+        out["files"].append({"file": f.name, "records": len(recs), "ok": n_ok,
+                             "date": first_date(str(meta.get("updated") or meta.get("date") or ""))
+                             or (git_date(f) if f.is_relative_to(ROOT) else None)
+                             or dt.date.fromtimestamp(st.st_mtime).isoformat()})
+    out["present"] = bool(out["files"])
+    return out
+
+
+def load_ae_first_call(path: Path, aliases: dict) -> list[dict]:
+    """The table of data/leads/aliexpress/api-first-call-2026-10-11.md:
+    | item_id | room/slot | SKU | price USD | shipping (USD, days) | card | why |"""
+    if not path.exists():
+        return []
+    rows = []
+    for line in path.read_text(encoding="utf-8").splitlines():
+        m = re.match(r"^\|\s*(\d{10,})\s*\|(.*)\|\s*$", line)
+        if not m:
+            continue
+        cells = [c.strip() for c in m.group(2).split("|")]
+        if len(cells) < 6:
+            continue
+        where, sku, price, ship, card, why = cells[:6]
+        room, _, slot = where.partition("/")
+        price_t, ship_t = strip_md(price), strip_md(ship)
+        no_ship = "אין משלוח" in ship_t
+        ship_usd, days = None, None
+        if not no_ship and "לא נבדק" not in ship_t:
+            a, _, b = ship_t.partition(",")
+            ship_usd, days = to_num(a), days_pair(b)
+        rows.append({"item": ae_canon(m.group(1), aliases), "room": room.strip(), "slot": slot.strip(),
+                     "sku": None if sku in ("—", "-", "") else strip_md(sku),
+                     "price_usd": None if "placeholder" in price_t.lower() else to_num(price_t),
+                     "price_from": price_t.split("(")[0].strip().endswith("+"),
+                     "ship_usd": ship_usd, "ship_days": days, "no_ship": no_ship,
+                     "carded": card.strip().startswith("כן"), "why": strip_md(why)})
+    return rows
+
+
+def build_comparison(slots: dict, products: list[dict], slot_by_key: dict, room_ids: list[str], deep_dir: Path) -> dict:
+    """data.json 'comparison': room -> slot -> candidates, from the product cards (all suppliers), the deep AliExpress
+    pass and the first AliExpress API call. Only facts here; the page computes landed cost and margin with the same
+    econCalc as the profit screen, so the numbers agree and follow the studio's settings."""
+    aliases = {}
+    if SEEN.exists():
+        try:
+            aliases = read_json(SEEN).get("aliases") or {}
+        except Exception as e:
+            log(f"  ! cannot read {rel(SEEN)}: {e}")
+    titles = {}
+    if AE_SHORTLIST.exists():
+        try:
+            for it in read_json(AE_SHORTLIST):
+                if isinstance(it, dict) and it.get("item_id"):
+                    titles[ae_canon(it["item_id"], aliases)] = it.get("title")
+        except Exception as e:
+            log(f"  ! cannot read {rel(AE_SHORTLIST)}: {e}")
+    slot_keys = set(slot_by_key)
+    by_id = {p["id"]: p for p in products}
+
+    # styles: the six, names from israel-styles.json
+    names = {}
+    sp = ROOT / "data" / "strategy" / "israel-styles.json"
+    if sp.exists():
+        try:
+            for s in read_json(sp).get("styles") or []:
+                if s.get("id") in STYLE_ORDER and s.get("name_he"):
+                    names[s["id"]] = s["name_he"].split(" / ")[0].strip()
+        except Exception:
+            pass
+    styles = [{"id": k, "name_he": names.get(k) or STYLE_FALLBACK_HE[k]} for k in STYLE_ORDER]
+
+    deep = load_deep(deep_dir, set(room_ids), slot_keys, aliases)
+    api = load_ae_first_call(AE_FIRST_CALL, aliases)
+    api_by_item = {r["item"]: r for r in api}
+
+    def card_cand(p, shared):
+        sup = p.get("supplier") or {}
+        price = p.get("price") or {}
+        c = {"k": "card", "id": p["id"], "sup": supplier_key(sup.get("name"), sup.get("product_url"), price.get("currency"))}
+        if shared:
+            c["shared"] = True
+        m = SHIP_NOTE.search(p.get("notes") or "")
+        if m:
+            d = [int(x) for x in m.groups()[1:] if x]
+            c["ship"] = {"usd": float(m.group(1)), "days": [min(d), max(d)] if d else None, "src": "notes"}
+        mi = AE_ITEM.search(sup.get("product_url") or "")
+        if mi:
+            c["ae"] = ae_canon(mi.group(1), aliases)
+            a = api_by_item.get(c["ae"])
+            if a and a.get("why"):
+                c["note"] = a["why"]
+        return c
+
+    rooms_out: dict[str, dict] = {}
+    n_cards = n_deep = n_api = 0
+    used_api = set()
+    by_sup: dict[str, int] = {}
+    for rid in room_ids:
+        rslots = {}
+        for s in slots.get(rid) or []:
+            cands = []
+            ae_index = {}
+            for pid in s.get("direct") or []:
+                cands.append(card_cand(by_id[pid], False))
+            for pid in s.get("shared_ids") or []:
+                cands.append(card_cand(by_id[pid], True))
+            for c in cands:
+                if c.get("ae"):
+                    ae_index[c["ae"]] = c
+            # deep AliExpress records: one candidate per item, one entry per style
+            for r in (x for x in deep["records"] if x["key"] == s["key"]):
+                c = ae_index.get(r["item"])
+                if c is None:
+                    q = sell_qty_default({"name": r["title"], "notes": r["reason"] or "", "_slot_key": s["key"], "_shared_in": []}, slot_by_key)
+                    c = {"k": "deep", "id": "ae:" + r["item"], "sup": "aliexpress", "item": r["item"], "title": r["title"],
+                         "url": r["url"], "sku": r["sku"], "price_usd": r["price_usd"], "ship_usd": r["ship_usd"],
+                         "ship_days": r["ship_days"], "band": r["band"], "qty": q, "styles": {}}
+                    a = api_by_item.get(r["item"])
+                    if a and a.get("why"):
+                        c["note"] = a["why"]
+                    cands.append(c)
+                    ae_index[r["item"]] = c
+                    n_deep += 1
+                entry = {k: r[k] for k in ("fit", "verdict", "reason", "landed_ils", "margin_ils", "margin_pct",
+                                           "compared_to", "sku", "price_usd", "ship_usd", "ship_days", "band", "file")}
+                (c.setdefault("deep", {}) if c["k"] == "card" else c["styles"])[r["style"]] = entry
+                if c["k"] == "deep" and r["verdict"] == "best":  # the record the pass itself picked sets the shown price
+                    for k in ("sku", "price_usd", "ship_usd", "ship_days", "band"):
+                        if r[k] is not None:
+                            c[k] = r[k]
+            # first API call: items that did not become a card (no shipping to Israel, 76 days, no price...)
+            for a in api:
+                if a["carded"] or a["item"] in ae_index or f"{room_key(a['room'], set(room_ids))}/{a['slot']}" != s["key"]:
+                    continue
+                cands.append({"k": "api", "id": "ae:" + a["item"], "sup": "aliexpress", "item": a["item"],
+                              "title": titles.get(a["item"]) or f"AliExpress {a['item']}",
+                              "url": f"https://www.aliexpress.com/item/{a['item']}.html", "sku": a["sku"],
+                              "price_usd": a["price_usd"], "price_from": a["price_from"], "ship_usd": a["ship_usd"],
+                              "ship_days": a["ship_days"], "no_ship": a["no_ship"], "rejected": True, "note": a["why"]})
+                used_api.add(a["item"])
+                n_api += 1
+            for c in cands:
+                by_sup[c["sup"]] = by_sup.get(c["sup"], 0) + 1
+                n_cards += c["k"] == "card"
+            rslots[s["id"]] = cands
+        rooms_out[rid] = rslots
+    n_slots = sum(1 for r in rooms_out.values() for v in r.values() if v)
+    log(f"  comparison: {n_slots} slots with candidates · cards {n_cards} · deep AliExpress {len(deep['records'])} records"
+        f" in {len(deep['files'])} files -> {n_deep} new candidates · first API call {n_api} · unmatched {len(deep['unmatched'])}"
+        + ("" if deep["present"] else f" (no {deep['dir']} yet)"))
+    for w in deep["warnings"]:
+        log(f"  ! deep file {w}")
+    return {
+        "styles": styles,
+        "suppliers": SUP_HE,
+        "fit_min": 7,
+        "rooms": rooms_out,
+        "sources": {
+            "deep": {k: deep[k] for k in ("dir", "present", "files", "warnings")} | {"records": len(deep["records"]),
+                                                                                   "unmatched": deep["unmatched"][:60],
+                                                                                   "n_unmatched": len(deep["unmatched"])},
+            "api": {"file": rel(AE_FIRST_CALL) if AE_FIRST_CALL.exists() else None, "rows": len(api),
+                    "carded": sum(1 for a in api if a["carded"]), "shown": len(used_api)},
+            "by_supplier": by_sup,
+        },
+    }
+
+
 # --------------------------------------------------------------------------- main
 
 def main() -> int:
+    global DIST
     offline = "--offline" in sys.argv
     eco_dir = ROOT / "data" / "economics"
     if "--economics-dir" in sys.argv:  # for testing with sample files outside the repo data
         eco_dir = Path(sys.argv[sys.argv.index("--economics-dir") + 1]).resolve()
+    deep_dir = DEEP_DIR
+    if "--deep-dir" in sys.argv:  # for testing the comparison screen with a fixture (studio/tests/fixtures/)
+        deep_dir = Path(sys.argv[sys.argv.index("--deep-dir") + 1]).resolve()
+    if "--dist" in sys.argv:  # build somewhere else (the smoke test builds the fixture into its own folder)
+        DIST = Path(sys.argv[sys.argv.index("--dist") + 1]).resolve()
     t0 = time.time()
     log(f"Studio build · repo {ROOT}")
     plan = read_json(ROOT / "docs" / "house-plan.json")
@@ -1143,6 +1509,7 @@ def main() -> int:
         log(f"  market: {len(market['categories'])} categories · {len(market['products'])} products with a verdict")
     if suppliers:
         log(f"  suppliers: {len((suppliers.get('directory') or {}).get('suppliers') or [])} in the directory · {len((suppliers.get('access') or {}).get('options') or [])} access options")
+    comparison = build_comparison(slots, products, slot_by_key, order, deep_dir)
     qa = load_reports(["assets/qa/*.md", "qa/reports/*.md"], "qa")
     leads = load_reports(["data/leads/**/*.md"], "lead")
 
@@ -1219,6 +1586,7 @@ def main() -> int:
         "market": market,
         "styles": styles,
         "suppliers": suppliers,
+        "comparison": comparison,
         "reports": qa,
         "leads": leads,
     }
