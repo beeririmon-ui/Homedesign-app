@@ -669,16 +669,96 @@ def write_md(room, meta):
         f.write("\n".join(L) + "\n")
 
 
+# ----------------------------------------------------------------------------- README (all rooms)
+
+def do_readme():
+    rooms = [r for r in ROOMS if os.path.exists(os.path.join(OUT, r + ".json"))]
+    recs, tot = [], {"screened_rows": 0, "detailed": 0, "records": 0, "carded": 0, "reviewed_items": 0}
+    for room in rooms:
+        d = json.load(open(os.path.join(OUT, room + ".json")))
+        recs += d["records"]
+        for k in ("screened_rows", "detailed", "records"):
+            tot[k] += d["totals"][k]
+        rv = os.path.join(OUT, "review", room + ".json")
+        tot["reviewed_items"] += len(json.load(open(rv))) if os.path.exists(rv) else 0
+    cards = sorted({(r["room"], r["slot"], r["card_id"]) for r in recs if r.get("card_id")})
+    tot["carded"] = len({c for _, _, c in cards})
+    st = budget.status()["sources"]["aliexpress"]
+    stops = "".join(open(f).read() for f in sorted(glob.glob(os.path.join(OUT, "stop-*.txt"))))
+    L = ["# AliExpress בקנה מידה: סיכום (2026-10-11)", "",
+         "ליקוט בהיקף גדול דרך ה-API הרשמי של AliExpress (סשן עזר, בקשת המשתמש 2026-10-11: \"מאות, לא עשרה\"). השיטה: `scripts/ae/scale.py` (סינון רחב → בדיקה מלאה של מחיר SKU ומשלוח לישראל → מבט בתמונה → כרטיס). "
+         "כל העמדות בכל 8 החדרים (132, בלי 16 הרהיטים הקבועים), לכל ששת הסגנונות, שני סבבים (בסבב 2 שאילתות מתוקנות לעמדות שקיבלו תוצאות שגויות).", "",
+         "## במספרים", "",
+         "| | |", "| --- | --- |",
+         "| שורות סינון (תוצאות חיפוש) | %s |" % format(tot["screened_rows"], ","),
+         "| מוצרים שנבדקו לעומק (מחיר SKU + משלוח לישראל) | %s |" % format(tot["detailed"], ","),
+         "| מוצרים שנבדקו בעין (גיליונות תמונות) | %s |" % format(tot["reviewed_items"], ","),
+         "| רשומות מוצר×סגנון | %s |" % format(tot["records"], ","),
+         "| כרטיסי טיוטה חדשים | %d |" % tot["carded"],
+         "| קריאות API היום (כל הסשן) | %s |" % format(st["used"], ","), "",
+         "**מכסה שנצפתה:** אין מכסה יומית מוחזרת. מגבלת קצב: עם 3 תהליכים במקביל (כ-1.8 קריאות בשנייה) AliExpress החזיר `ApiCallLimit` (\"this ban will last 1 seconds\"); עם 2 במקביל זה קרה לעיתים רחוקות. כל עצירה נרשמה, וההרצה המשיכה מהנקודה שבה עצרה. התקרה העצמית הועלתה ל-12,000 ביום לריצה הזו (`scripts/sourcing/budget.py`).", ""]
+    if stops:
+        L += ["עצירות שנרשמו:", "```", stops.strip(), "```", ""]
+    L += ["**כלכלה:** נחיתה = (מחיר ה-SKU שמתאים לחדר + המשלוח הזול עד 45 יום) × 3.3. מחיר לצרכן = הקצה העליון של רצועת השוק בישראל (`data/economics/market-prices.json`; ה.10). רווח לפי `pricing.ts` (מע\"מ 18%, סליקה 2% + 1.2, החזרות 8%), לפני CAC. כרטיס נכתב רק עם fit 8+ אחרי מבט בתמונה, SKU שמידתו אומתה מול העמדה, עלות לא גבוהה מהכרטיס הקיים, ורווח 40%+ (VR1; פחות מזה רק כשאין חלופה בעמדה ובסגנון, ומסומן).", "",
+          "## כרטיסי הטיוטה", "", "| חדר | עמדה | כרטיס | סגנון, fit | נחיתה ₪ | רווח |", "| --- | --- | --- | --- | --- | --- |"]
+    for room, slot, cid in cards:
+        rs = [r for r in recs if r.get("card_id") == cid and r["room"] == room]
+        r = max(rs, key=lambda r: r["fit"])
+        L.append("| %s | %s | `%s` | %s | %.0f | %d%%%s |" % (room, slot, cid, ", ".join("%s %s" % (STYLE_HE[x["style"]], x["fit"]) for x in rs),
+                                                            r["landed_ils"], round(r["margin_pct"] * 100), " (חריג VR1)" if r.get("vr1_exception") else ""))
+    L += ["", "כל הכרטיסים הם DRAFT: צבעים (HEX), מידות מוצר ומשקל ויזואלי ריקים, ו-sourcing-agent משלים אותם. הדפסים שנמכרים בלי מסגרת מסומנים בסיבה. ה-fit הוא ציון סינון בעין, לא ציון המעצב.", ""]
+    # where AliExpress wins vs the existing card (reviewed, fit >= 7, cheaper landed)
+    wins = {}
+    for r in recs:
+        if r["verdict"] in ("best", "alternative") and r.get("reviewed") and r["fit"] >= 7 and r.get("compared_to") and r.get("beats_existing") and not r.get("size_unverified"):
+            k = (r["room"], r["slot"])
+            if k not in wins or r["landed_ils"] < wins[k]["landed_ils"]:
+                wins[k] = r
+    L += ["## איפה AliExpress זול מהכרטיס הקיים (CJ / Zendrop / ישראלי)", "", "fit 7+ במבט, מידה מאומתת, נחיתה זולה מהכרטיס הקיים באותה עמדה.", "",
+          "| חדר/עמדה | AliExpress | נחיתה ₪ | הכרטיס הקיים | נחיתה ₪ |", "| --- | --- | --- | --- | --- |"]
+    for (room, slot), r in sorted(wins.items()):
+        c = r["compared_to"]
+        L.append("| %s/%s | [%s](%s) (%s %s) | %.0f | %s (%s) | %.0f |" % (room, slot, (r["title"] or "")[:50].replace("|", "/"), r["url"], STYLE_HE[r["style"]], r["fit"], r["landed_ils"], c["card_id"], c["supplier"], c["landed_ils"]))
+    # slots with nothing usable
+    L += ["", "## עמדות בלי שום מוצר שמיש מ-AliExpress", "", "אין אף פריט עם fit 7+ במבט בשום סגנון (הסיבה העיקרית בטבלת החדר).", ""]
+    empty = []
+    for room in rooms:
+        for key in slots_of(room):
+            slot = key.split("/")[1]
+            if not any(r["slot"] == slot and r["room"] == room and r.get("reviewed") and (r["fit"] or 0) >= 7 for r in recs):
+                empty.append("%s/%s" % (room, slot))
+    L.append(", ".join(empty) if empty else "אין.")
+    # top 30 by margin among the good ones
+    good = {}
+    for r in recs:
+        if r.get("reviewed") and r["fit"] >= 7.5 and r["margin_ils"] is not None and r["verdict"] != "reject" and not r.get("size_unverified"):
+            k = r["item_id"]
+            if k not in good or r["margin_ils"] > good[k]["margin_ils"]:
+                good[k] = r
+    top = sorted(good.values(), key=lambda r: -r["margin_ils"])[:30]
+    L += ["", "## 30 הרווחיים ביותר (fit 7.5+ במבט, מידה מאומתת)", "", "| # | חדר/עמדה | מוצר | סגנון, fit | נחיתה ₪ | מחיר ₪ | רווח ₪ | % |", "| --- | --- | --- | --- | --- | --- | --- | --- |"]
+    for i, r in enumerate(top, 1):
+        L.append("| %d | %s/%s | [%s](%s) | %s %s | %.0f | %d | %.0f | %d%% |" % (i, r["room"], r["slot"], (r["title"] or "")[:45].replace("|", "/"), r["url"], STYLE_HE[r["style"]], r["fit"],
+                                                                         r["landed_ils"], r["retail_band_ils"][1], r["margin_ils"], round(r["margin_pct"] * 100)))
+    L += ["", "## קבצים", "", "- `<room>.json` / `<room>.md`: כל הרשומות לחדר (גם ב-`../deep-2026-10/<room>.json` למסך \"השוואת ספקים\" בסטודיו).",
+          "- `screen/<room>.jsonl`: כל שורות החיפוש. `detail/<room>.json`: הבדיקה המלאה. `review/<room>.json`: ציוני המבט. `review/sheets/`: גיליונות התמונות.", ""]
+    with open(os.path.join(OUT, "README.md"), "w") as f:
+        f.write("\n".join(L) + "\n")
+    print("README: %d cards, %d wins, %d empty slots, top %d" % (tot["carded"], len(wins), len(empty), len(top)))
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("stage", choices=["screen", "detail", "sheet", "finalize", "all"])
-    ap.add_argument("room", choices=ROOMS)
+    ap.add_argument("stage", choices=["screen", "detail", "sheet", "finalize", "all", "readme"])
+    ap.add_argument("room", choices=ROOMS + ["all"])
     ap.add_argument("--max-calls", type=int, default=3000)
     ap.add_argument("--top", type=int, default=8)
     ap.add_argument("--per-style", type=int, default=3)
     ap.add_argument("--no-cards", action="store_true")
     ap.add_argument("--repick", action="store_true", help="detail: re-pick the room SKU from the cache (after a size-rule fix)")
     a0 = ap.parse_args()
+    if a0.stage == "readme":
+        return do_readme() or 0
     a = ns(a0.room, a0.max_calls)
     global REPICK
     REPICK = a0.repick
