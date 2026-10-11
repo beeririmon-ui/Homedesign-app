@@ -1,0 +1,335 @@
+{
+  "room": "master",
+  "style": "nordic",
+  "date": "2026-10-11",
+  "author": "master-designer",
+  "source_doc": "docs/rooms/master-nordic-2026-10-11.md",
+  "formula": "net = price/1.18; contribution = net - landed - (0.02*price + 1.2) - 0.08*net. breakeven_landed = 0.759661*price - 1.2; landed_for_40 = 0.420678*price - 1.2. Landed = product + shipping to Israel (x3.3 from USD), for the whole set when set_of > 1.",
+  "rules_for_every_candidate_he": "Bible נורדי 1.7: טווחי הפלטה, חומרים מותרים, מט (עד 10 GU), צלליות מותרות. בלי עבודת יד ובלי Etsy (ג.4), בלי העתקים, בלי זכוכית שקופה. כל מנורה: CE ו-220–240V באישור בכתב מהספק; מחווטת = בלי תקע ובלי כבל גלוי. תמונות שמספיקות לרינדור נאמן (לא AI ולא הדמיה), ו-usage_rights לא none. לרשום משלוח לישראל, כולל הקו הזול עד 45 יום. need_variations = כמה מוצרים חדשים בציון 8 ומעלה חסרים עד נעילה.",
+  "slots": [
+    {
+      "slot": "framed-art",
+      "priority": "high",
+      "need_variations": 3,
+      "spec_he": "תמונה ממוסגרת לרוחב מעל המיטה, ממורכזת ב-X ‎-0.70. פורמטים: יחידה אחת 120×60 (או 110×55), או דיפטיך של שני ריבועים 50×50–55×55 ברווח 8–10 (סה\"כ 110–120 × 50–60). מסגרת אלון בהיר בשמן או שחור מט, פרופיל 1.5–2.5, עומק 2–3.5; פספרטו לבן חם 5–8; זכוכית או אקריליק נגד השתקפות. רקע לבן חם או שיבולת שועל. תוכן: רישום קו בפחם, מופשט רך, נוף ערפילי (ים, דיונות, יער) או בוטני בקו. **חובה אלמנט פחם בכל וריאציה** (קו, צורה או מסגרת שחורה). אסור: טקסט, אנשים, צבעים רוויים, זהב, בד בלי מסגרת, יצירות מוכרות.",
+      "envelope_cm": { "w": [110, 120], "h": [55, 65], "frame_depth": [2, 3.5] },
+      "price_ceiling": { "breakeven_landed_ils": 286.7, "landed_for_40_ils": 158.2, "slot_price_ils": 379 },
+      "source_type": "Israeli supplier or framer (PR1: AliExpress print + framing in Israel, open). CJ framed only if the shipped weight is under ~2 kg.",
+      "queries": [
+        "framed abstract line art print 120x60 black frame passe-partout",
+        "set of 2 square framed prints 50x50 charcoal line neutral",
+        "minimalist foggy landscape framed print 60x120 light oak frame",
+        "charcoal botanical line drawing diptych framed 55x55",
+        "large horizontal framed wall art beige black line 110x55"
+      ],
+      "why_he": "הגיבור של MB0 ונשא הפחם החובה. היום אין אף מועמד, ובלעדיו אין הדגשה בחדר והקיר העליון ריק."
+    },
+    {
+      "slot": "bedside-sconces",
+      "priority": "high",
+      "need_variations": 3,
+      "spec_he": "זוג זהה. תוף, חצי-תוף או פעמון רך מפשתן או כותנה-פשתן בשיבולת שועל (L 78–90), אהיל מפזר. גוף קרמיקה מט או אלון; פליז עד 10% (חוזר בזוג). רוחב 12–18, גובה 15–22, בליטה עד 22. מחווט לנקודה בקיר, בלי תקע ובלי כבל גלוי; CE ו-220–240V; ‏2700K; הנורה לא נראית מגובה 1.05. בלי העתקים (Lampe Gras, Serge Mouille וכו'). וריאציה אחת לפחות נושאת פחם (גוף או צנרת שחורה מט).",
+      "envelope_cm": { "w": [12, 18], "h": [15, 22], "projection_max": 22 },
+      "price_ceiling": { "breakeven_landed_ils": 263.9, "landed_for_40_ils": 145.6, "slot_price_ils": 349 },
+      "source_type": "Israeli lighting importer (IL1), or a CJ Sourcing request that states CE and 220-240V; AliExpress only if the pair ships for $10 or less.",
+      "queries": [
+        "linen drum wall sconce hardwired 15cm",
+        "fabric half cylinder wall light bedside pair",
+        "small ceramic wall sconce linen shade",
+        "oak wall lamp linen shade bedroom set of 2",
+        "mini fabric wall light E14 220V CE hardwired"
+      ],
+      "why_he": "הסימטריה של קיר המיטה. המועמד היחיד (wave-flush) רחב ב-6 ס\"מ מהמעטפת ולא אומת חשמלית; חצי-התוף עם הצנרת (נושא פחם) מפסיד."
+    },
+    {
+      "slot": "floor-lamp",
+      "priority": "high",
+      "need_variations": 3,
+      "spec_he": "מוט ישר או טריפוד, גובה 150–160; אהיל תוף או קונוס רך מפשתן, לבן חם או שיבולת שועל, קוטר 35–40; בסיס עגול עד 30. מוט שחור מט (עדיף, נשא פחם) או אלון; פליז עד 10%. תקע ישראלי או אירופאי, 220–240V, CE או ת\"י; ‏2700K. הכבל יוצא מאחור, אל מאחורי העציץ. אסור: קשת, זרועות מרובות, נורה חשופה, אהיל PVC.",
+      "envelope_cm": { "shade_d": [35, 40], "h": [150, 160], "base_d_max": 30 },
+      "price_ceiling": { "breakeven_landed_ils": 263.9, "landed_for_40_ils": 145.6, "slot_price_ils": 349 },
+      "source_type": "Israeli lighting importer (IL1); CJ only with CE and a flat-pack line (the 56 cm carton is what kills the margin).",
+      "queries": [
+        "floor lamp linen drum shade black metal pole 155cm",
+        "oak tripod floor lamp beige linen shade",
+        "nordic floor lamp fabric drum shade E27 220V CE",
+        "slim floor lamp cream linen shade wooden pole",
+        "floor lamp 38cm drum shade matte black round base"
+      ],
+      "why_he": "S12: ב-MB0 דולקים זוג מנורות ומנורת רגל. היום יש רק מועמד אחד, בציון 6.5."
+    },
+    {
+      "slot": "nightstand-tray",
+      "priority": "medium",
+      "need_variations": 3,
+      "spec_he": "מגש מלבני מעוגל או אליפסה רכה, 28–34 × 20–28, גובה 1.5–3, שפה נמוכה. אלון, אפר או בוק בהיר בשמן מט (טווח האלון, לא אגוז ולא שיטה כהה); או אבנית מט בלבן חם או שיבולת שועל; או טרוורטין אמיתי מושחז. בלי מתכת מבריקה, בלי ראטן, בלי הדפס.",
+      "envelope_cm": { "w": [28, 34], "d": [20, 28], "h": [1.5, 3] },
+      "price_ceiling": { "breakeven_landed_ils": 66.4, "landed_for_40_ils": 36.2, "slot_price_ils": 89 },
+      "source_type": "AliExpress Choice (wood is light); travertine only from local stock (LK1), because 1.3 kg loses from China.",
+      "queries": [
+        "oak wood serving tray rectangle 30x20 with rim",
+        "ash wood tray rounded rectangle 32x22",
+        "beech wood valet tray natural 30cm",
+        "matte ceramic tray rectangle 30cm cream",
+        "honed travertine tray 30x20"
+      ],
+      "why_he": "נושא את האגרטל ואת הצלוחית. בלעדיו אין קבוצה של 3 בשידה השמאלית."
+    },
+    {
+      "slot": "bedside-carafe",
+      "priority": "medium",
+      "need_variations": 3,
+      "spec_he": "קנקן וכוס (סט של 2), הכוס הפוכה על הקנקן או לידו. גובה 20–26, קוטר 9–12. אבנית או קרמיקה בזיגוג מט, בלבן חם, שיבולת שועל, אפור ערפל או פחם. **בלי זכוכית** (אסורה בבית). בלי כיתוב.",
+      "envelope_cm": { "h": [20, 26], "d": [9, 12] },
+      "price_ceiling": { "breakeven_landed_ils": 74.0, "landed_for_40_ils": 40.4, "slot_price_ils": 99 },
+      "source_type": "CJ or AliExpress (ceramic, about 0.6 kg); Israeli homeware or local stock (LK1) if the shipping kills it.",
+      "queries": [
+        "ceramic bedside water carafe with cup set matte",
+        "stoneware water jug with tumbler 500ml",
+        "matte ceramic night carafe and cup",
+        "japanese ceramic water pitcher with cup bedside"
+      ],
+      "why_he": "השידה הימנית (קנקן ושני פמוטים). כל תוצאות AliExpress מזכוכית."
+    },
+    {
+      "slot": "trinket-dish",
+      "priority": "low",
+      "need_variations": 3,
+      "spec_he": "צלוחית ריקה, קוטר 8–12, גובה 2–4. אבנית או קרמיקה מט עם שפה ביד, בלבן חם, שיבולת שועל או פחם; או טרוורטין מושחז. בלי זהב, בלי הדפס, בלי ברק.",
+      "envelope_cm": { "d": [8, 12], "h": [2, 4] },
+      "price_ceiling": { "breakeven_landed_ils": 28.4, "landed_for_40_ils": 15.2, "slot_price_ils": 39 },
+      "source_type": "AliExpress Choice only (product up to about $3 plus $1.99 shipping).",
+      "queries": [
+        "small ceramic ring dish matte 10cm",
+        "stoneware trinket dish speckled beige",
+        "handmade look ceramic jewelry dish irregular rim white",
+        "black matte ceramic trinket dish round",
+        "travertine ring dish small"
+      ],
+      "why_he": "משלימה את קבוצת השלוש בשידה השמאלית. היא קטנה ולא נספרת בצפיפות, ולכן עדיפות נמוכה."
+    },
+    {
+      "slot": "nightstand-vase",
+      "priority": "medium",
+      "need_variations": 2,
+      "spec_he": "אגרטל לשניים או שלושה גבעולים, גובה 22–28, קוטר 9–14, פה 2–8. אבנית מט עם מרקם יד; לבן חם, שיבולת שועל, אפור ערפל או פחם (L 15–32, לא שחור). צללית בקבוק, כד או גליל. שונה מאגרטל האדן (כד 30).",
+      "envelope_cm": { "h": [22, 28], "d": [9, 14] },
+      "price_ceiling": { "breakeven_landed_ils": 134.8, "landed_for_40_ils": 74.1, "slot_price_ils": 179 },
+      "source_type": "AliExpress (Choice when possible) or CJ.",
+      "queries": [
+        "matte stoneware bud vase 25cm handmade look",
+        "wabi sabi ceramic bottle vase 24cm beige",
+        "sand glaze ceramic vase 25cm grey",
+        "textured white ceramic vase 25cm narrow neck",
+        "charcoal matte ceramic bottle vase 25cm"
+      ],
+      "why_he": "יש רק בקבוק AE אחד בציון 8.0 זמני (צריך כרטיס, 1005008552665862) וגליל CJ אחד בשני צבעים בציון 7.0."
+    },
+    {
+      "slot": "sill-vase",
+      "priority": "low",
+      "need_variations": 0,
+      "spec_he": "אם המשתמש מאשר להרחיב את המעטפת ל-30–34 × 12–16, שלישיית האדן של הסלון (589009, ‏textured-white, הכד בפחם) ממלאת את העמדה ולא צריך ליקוט. אם לא, צריך 3 בקבוקונים: גבעול אחד, גובה 22–30, קוטר 8–14, אבנית או טרוורטין מט, בלבן חם, שיבולת שועל או אפור ערפל.",
+      "envelope_cm": { "h": [22, 30], "d": [8, 14] },
+      "price_ceiling": { "breakeven_landed_ils": 74.0, "landed_for_40_ils": 40.4, "slot_price_ils": 99 },
+      "source_type": "AliExpress Choice (fallback only).",
+      "queries": [
+        "slim ceramic bud vase 28cm matte",
+        "single stem bottle vase stoneware 26cm",
+        "tall narrow ceramic vase 27cm cream textured",
+        "travertine bud vase small"
+      ],
+      "why_he": "מחיר העמדה בחבילה הוא ₪49, כמו הכרטיס היחיד בה (מפסיד). המחיר ₪99 הוא הצעה לפי שווי בישראל לבקבוקון 25 ס\"מ."
+    },
+    {
+      "slot": "candle-holders",
+      "priority": "medium",
+      "need_variations": 2,
+      "spec_he": "זוג פמוטים לנרות עמוד 7×10 ו-7×15. גובה המחזיק 1–12; צלחת בקוטר 9–14 או שקע רדוד 7.2–8.5. טרוורטין מושחז, אבנית מט, בלוק אלון, צלחת ברזל שחור מט, או פליז מוברש (רק כזוג). אסור: זכוכית, הוריקן, טייפר בלבד, קוץ מתכת חשוף.",
+      "envelope_cm": { "holder_h": [1, 12], "total_low_max": 22, "total_high": [16, 27] },
+      "price_ceiling": { "breakeven_landed_ils": 150.0, "landed_for_40_ils": 82.5, "slot_price_ils": 199 },
+      "source_type": "AliExpress Choice or CJ.",
+      "queries": [
+        "pillar candle plate ceramic matte 12cm set of 2",
+        "oak wood pillar candle holder block 10cm",
+        "brushed brass pillar candle plate set of 2",
+        "stoneware candle plate pillar handmade look",
+        "low travertine pillar candle holder"
+      ],
+      "why_he": "יש טרוורטין 8.5 וצלחות ברזל 7.0, שמפסידות במחיר של היום. חסרים שניים בציון 8 ומעלה, אחד מהם נושא פחם או פליז."
+    },
+    {
+      "slot": "throw",
+      "priority": "medium",
+      "need_variations": 3,
+      "spec_he": "שמיכה 200×230 או 180×220 שמתקפלת לרוחב המיטה, 180–185 × 35–45. כותנה ופל, פשתן רחוץ, סריגת כותנה או צמר-כותנה. שיבולת שועל ולבן חם (אפור ערפל כבר יש); מרווה בווריאציה אחת לכל היותר. פרנזים עד 5 ס\"מ. בלי פליז ובלי הדפסים.",
+      "envelope_cm": { "folded_w": [180, 185], "folded_d": [35, 45] },
+      "price_ceiling": { "breakeven_landed_ils": 142.4, "landed_for_40_ils": 78.3, "slot_price_ils": 189 },
+      "source_type": "CJ or AliExpress.",
+      "queries": [
+        "cotton waffle blanket 200x230 oatmeal",
+        "washed linen throw blanket 180x220 natural",
+        "knitted cotton bed throw cream 200x220",
+        "muslin cotton blanket 200x230 beige"
+      ],
+      "why_he": "שכבת החזית החתוכה של MB0. יש מועמד אחד בציון 7.5."
+    },
+    {
+      "slot": "cushions",
+      "priority": "medium",
+      "need_variations": 2,
+      "spec_he": "כרית מותן אחת, 50–60 × 26–30 (עם HARGROVE: גובה ≤ 0.88 פחות ראש המזרן). בוקלה, פשתן, כותנה סרוגה או קורדרוי מט. לבן חם, פחם, או מרווה (רק וריאציה אחת). בלי גדילים, בלי פאייטים, בלי הדפס.",
+      "envelope_cm": { "w": [50, 60], "h": [26, 30], "slot_envelope_today": { "w": [55, 65], "h": [33, 40] } },
+      "price_ceiling": { "breakeven_landed_ils": 58.8, "landed_for_40_ils": 32.0, "slot_price_ils": 79 },
+      "source_type": "CJ or AliExpress Choice.",
+      "queries": [
+        "lumbar pillow cover 30x60 linen",
+        "boucle lumbar cushion cover 30x50 cream",
+        "charcoal linen lumbar pillow cover 30x60",
+        "sage green corduroy lumbar cushion 30x50",
+        "knitted cotton lumbar pillow cover oatmeal"
+      ],
+      "why_he": "יש מותנית אחת בציון 8 (בוקלה ממאגר הסלון). הגובה נקבע לפי HARGROVE."
+    },
+    {
+      "slot": "pillowcases",
+      "priority": "low",
+      "need_variations": 2,
+      "spec_he": "זוג ציפיות 65–70 × 45–50 (50×70 מתקבל), פשתן 100% או פשתן-כותנה רחוץ, סגירת מעטפה. לבן חם (L 93–97) ושיבולת שועל בהירה. או: למדוד את חצי-הלבן ואת החאקי הבהיר בליסטינג הקיים, ואז לא צריך מוצר חדש.",
+      "envelope_cm": { "w": [65, 70], "h": [45, 50] },
+      "price_ceiling": { "breakeven_landed_ils": 96.8, "landed_for_40_ils": 53.1, "slot_price_ils": 129 },
+      "source_type": "CJ (same listing, colour check) or AliExpress.",
+      "queries": [
+        "100% linen pillowcase pair 50x70 envelope closure",
+        "stonewashed linen pillowcase natural 50x70 set of 2",
+        "warm white washed linen pillowcase 50x70"
+      ],
+      "why_he": "יש מוצר אחד בציון 8 בשלושה צבעים. שני הצבעים האחרים לא נמדדו, והתמונות נראות כמו קטלוג של מותג."
+    },
+    {
+      "slot": "bedding",
+      "priority": "low",
+      "need_variations": 1,
+      "spec_he": "ציפה 200–220 (220×240 מתקבל) וסדין. פשתן רחוץ או כותנה-פשתן, מט, סלאב נראה. גוון בהיר יותר מהטבעי: לבן חם (L 90–95) או אפור ערפל בהיר (L 80–88). בלי הדפס, בלי כפתורים בולטים.",
+      "envelope_cm": { "duvet": [200, 220] },
+      "price_ceiling": { "breakeven_landed_ils": 355.1, "landed_for_40_ils": 196.1, "slot_price_ils": 469 },
+      "source_type": "CJ (or the white of the existing set, after measurement).",
+      "queries": [
+        "stonewashed linen duvet cover 220x240 white",
+        "washed french linen bedding set warm white",
+        "linen cotton duvet cover light grey 220x240"
+      ],
+      "why_he": "שתי וריאציות בציון 8 בשיבולת שועל. חסרה וריאציה בהירה שנותנת בחירה אמיתית בגוון."
+    },
+    {
+      "slot": "planter",
+      "priority": "medium",
+      "need_variations": 3,
+      "spec_he": "כלי בקוטר 36–42 ובגובה 38–45, גליל או בטן רחבה. אבנית או קרמיקה מט, בטון בהיר מוחלק, או פייבר-קליי שנקרא כבטון בתקריב. לבן חם, שיבולת שועל או אפור ערפל. בטנה פנימית אטומה. אסור: טרקוטה כתומה, פלסטיק, זיגוג מבריק. לעץ (מילוי) עד 1.75.",
+      "envelope_cm": { "pot_d": [36, 42], "pot_h": [38, 45], "plant_top_max": 175 },
+      "price_ceiling": { "breakeven_landed_ils": 172.8, "landed_for_40_ils": 95.1, "slot_price_ils": 229 },
+      "source_type": "Israeli supplier or local stock (weight); CJ only for fibre-clay under ~4 kg.",
+      "queries": [
+        "fiber clay planter 40cm round matte white",
+        "large concrete look planter 40x42 light grey",
+        "ceramic floor planter 40cm matte cream",
+        "stoneware plant pot large 38cm textured"
+      ],
+      "why_he": "יש רק סל קש ים בציון 7.0, ובגובה 34. מחיר העמדה ₪229 הוא הצעה, כמו העציץ מבטון בסלון."
+    },
+    {
+      "slot": "curtains",
+      "priority": "medium",
+      "need_variations": 1,
+      "spec_he": "משפחת הבית: 2 פאנלים 130–150 × 278–282 (המוט ב-2.82; בסלון 275–285). קפלי S או גל. פשתן או שקוף במראה פשתן עם סלאב נראה, מעבר אור 30–60%. **לבן חם** ו**אפור ערפל** (שיבולת שועל כבר יש). אסור: עיניות מתכת, מנהרה, גדילים.",
+      "envelope_cm": { "panel_w": [130, 150], "drop": [278, 282] },
+      "price_ceiling": { "breakeven_landed_ils": 199.4, "landed_for_40_ils": 109.9, "slot_price_ils": 264 },
+      "source_type": "AliExpress with custom length (is_customized listings).",
+      "queries": [
+        "linen look sheer curtain s fold 280cm warm white",
+        "custom length linen sheer curtain 140x280 wave fold",
+        "grey linen sheer curtain 150x280 ripple fold",
+        "linen voile curtain 280 drop custom"
+      ],
+      "why_he": "ננעלת עם הסלון. שתי ה-8.0 בגוון אחד ובאורך 270/275."
+    },
+    {
+      "slot": "pendant",
+      "priority": "low",
+      "need_variations": 3,
+      "spec_he": "קוטר 40–50, גובה 25–35. תוף, פעמון רך או פנס שטוח מפשתן, כותנה-פשתן, נייר אורז או נייר בקפלים; לבן חם או שיבולת שועל; תחתית סגורה במפזר. כיפה שחורה, לבנה או אלון. מחווט, CE ו-220–240V. בלי העתקים (Le Klint, Akari, Secto, PH). כלל הגשר: חומר אהיל משותף עם פנסי המשי במסדרון, או גוף משותף.",
+      "envelope_cm": { "d": [40, 50], "h": [25, 35] },
+      "price_ceiling": { "breakeven_landed_ils": 225.9, "landed_for_40_ils": 124.6, "slot_price_ils": 299 },
+      "source_type": "Israeli lighting importer (IL1) or CJ Sourcing with CE and a flat pack.",
+      "queries": [
+        "linen drum pendant light 45cm diffuser",
+        "rice paper pendant lamp 45cm flat",
+        "fabric bell pendant light oat 40cm",
+        "pleated fabric pendant 45cm cream hardwired"
+      ],
+      "why_he": "רק במעבר. שני המועמדים הם פנסי משי כמעט זהים, ושניהם לא אומתו חשמלית."
+    },
+    {
+      "slot": "rug",
+      "priority": "medium",
+      "need_variations": 3,
+      "spec_he": "מלבן 280–300 × 200–220 מתחת למיטה. צמר, צמר-כותנה, יוטה-צמר או כותנה בקליעה שטוחה. לבן חם, שיבולת שועל או אפור ערפל; טון-על-טון או קווים דקים בפחם עד 10%. L ממוצע 60 ומעלה; גובה סיב עד 15 מ\"מ (וריאציה אחת ברבר עד 30). בלי פוליאסטר מודפס, בלי ויסקוזה.",
+      "envelope_cm": { "w": [280, 300], "d": [200, 220] },
+      "price_ceiling": { "breakeven_landed_ils": 985.6, "landed_for_40_ils": 545.3, "slot_price_ils": 1299 },
+      "source_type": "Israeli rug supplier (IL1: Carpetshop / The Red Carpet, Carmel Floor Design).",
+      "queries": [
+        "wool flatweave rug 200x300 natural ivory",
+        "handwoven wool cotton rug 200x290 cream",
+        "jute wool rug 200x300 natural",
+        "berber wool rug 200x300 ivory low pile"
+      ],
+      "why_he": "נמכר לפי D3 (רק במעבר T-CM). AliExpress מציע רק פלנל פוליאסטר מודפס, ושטיח הצמר של הסלון מפסיד."
+    },
+    {
+      "slot": "basket",
+      "priority": "low",
+      "need_variations": 2,
+      "spec_he": "סל עגול בקוטר 32–38 ובגובה 32–38, ידיות מאותו חומר. חבל יוטה או כותנה, יקינטון מים, חבל נייר מט. טבעי או לבן חם; פס פחם עד 15%. לא קש ים (העציץ כבר מקש ים).",
+      "envelope_cm": { "d": [32, 38], "h": [32, 38] },
+      "price_ceiling": { "breakeven_landed_ils": 89.2, "landed_for_40_ils": 48.9, "slot_price_ils": 119 },
+      "source_type": "CJ or AliExpress (light rope).",
+      "queries": [
+        "jute rope storage basket 35cm round handles",
+        "cotton rope basket 35x35 natural white",
+        "water hyacinth basket round 35cm",
+        "paper rope basket round 35cm natural"
+      ],
+      "why_he": "סל היוטה (8.5) מפסיד ב-₪79 ומרוויח 9% רק ב-₪119 המוצע."
+    },
+    {
+      "slot": "bed",
+      "priority": "medium",
+      "need_variations": 1,
+      "spec_he": "רהיט קבוע (תוכנית ב') עד אישור בכתב מהספק. המועמד HARGROVE ‏180 (רהיטי טבע): אלון מלא בשמן-ווקס, 189×205, ראש 1.00 עם פאנל בד. חסרים: קוד הבד ודוגמית (אפור ערפל או שיבולת שועל), גובה ראש המזרן, מחיר סוחר, הובלה והרכבה. אין ליקוט חדש: המעקב של 16.10.",
+      "envelope_cm": { "w": [175, 190], "l": [200, 210], "headboard_h": [100, 115] },
+      "price_ceiling": { "breakeven_landed_ils": 4746.7, "landed_for_40_ils": 2628.0, "slot_price_ils": 6250 },
+      "source_type": "Israeli supplier (רהיטי טבע, outreach sent; follow-up 16.10, owner approval).",
+      "queries": [
+        "solid oak bed 180x200 fabric headboard",
+        "oak bed frame low headboard upholstered panel 180",
+        "nordic solid wood double bed oiled oak"
+      ],
+      "why_he": "בהמתנה (LS1). ה'נחיתה' כאן היא מחיר הסוחר ועוד הובלה והרכבה, מול מחיר לצרכן של ₪6,250."
+    },
+    {
+      "slot": "nightstands",
+      "priority": "low",
+      "need_variations": 1,
+      "spec_he": "זוג שידות 40–45 × 35–40 × 55, אלון בשמן או לבן חם מט, חזית שקטה בלי ידיות בולטות. המועמד KODOMA ×2 (רהיטי טבע). אין ליקוט חדש.",
+      "envelope_cm": { "w": [40, 45], "d": [35, 40], "h": [52, 58] },
+      "price_ceiling": { "breakeven_landed_ils": 3569.2, "landed_for_40_ils": 1976.0, "slot_price_ils": 4700 },
+      "source_type": "Israeli supplier (רהיטי טבע, follow-up 16.10).",
+      "queries": [
+        "solid oak nightstand 40x35 two drawers push open",
+        "oak bedside table no handles 55cm",
+        "nordic oak nightstand pair"
+      ],
+      "why_he": "בהמתנה (LS1). המחיר הוא לזוג (2 × ₪2,350)."
+    }
+  ]
+}
