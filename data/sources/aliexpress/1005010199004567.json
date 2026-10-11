@@ -546,6 +546,70 @@
      "_trace_id_": "210152bd17917195268345519e0fc0"
     }
    }
+  },
+  "freight:12000051499000764:IL:1": {
+   "fetched_at": "2026-10-11T17:03:43+00:00",
+   "endpoint": "aliexpress.ds.freight.query",
+   "params": {
+    "quantity": 1,
+    "shipToCountry": "IL",
+    "productId": "1005010199004567",
+    "selectedSkuId": "12000051499000764",
+    "language": "en_US",
+    "locale": "en_US",
+    "currency": "USD"
+   },
+   "payload": {
+    "options": [
+     {
+      "code": "DHL",
+      "company": "DHL",
+      "fee": 27.17,
+      "currency": "USD",
+      "days_min": 4,
+      "days_max": 15,
+      "estimated": "Oct 15 - 26",
+      "tracking": true,
+      "free_shipping": false,
+      "ship_from": "CN",
+      "stock": null,
+      "guaranteed_days": "35"
+     }
+    ],
+    "success": true,
+    "code": 200,
+    "msg": "Call succeeds",
+    "item_id": "1005010199004567",
+    "sku_id": "12000051499000764",
+    "country": "IL",
+    "qty": 1,
+    "raw": {
+     "result": {
+      "msg": "Call succeeds",
+      "code": 200,
+      "success": true,
+      "delivery_options": [
+       {
+        "code": "DHL",
+        "shipping_fee_currency": "USD",
+        "free_shipping": false,
+        "mayHavePFS": false,
+        "guaranteed_delivery_days": "35",
+        "max_delivery_days": 15,
+        "tracking": true,
+        "shipping_fee_format": "US $27.17",
+        "delivery_date_desc": "Oct 15 - 26",
+        "company": "DHL",
+        "ship_from_country": "CN",
+        "min_delivery_days": 4,
+        "shipping_fee_cent": "27.17"
+       }
+      ]
+     },
+     "request_id": "210155bd17917382234443291",
+     "_trace_id_": "2140f88817917382234425909e0f1b"
+    }
+   }
   }
  }
 }

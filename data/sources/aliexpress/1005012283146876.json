@@ -1,0 +1,192 @@
+{
+ "source": "aliexpress",
+ "id": "1005012283146876",
+ "sections": {
+  "product": {
+   "fetched_at": "2026-10-11T17:04:14+00:00",
+   "endpoint": "aliexpress.ds.product.get",
+   "params": {
+    "ship_to_country": "IL",
+    "product_id": "1005012283146876",
+    "target_currency": "USD",
+    "target_language": "en"
+   },
+   "payload": {
+    "result": {
+     "ae_item_sku_info_dtos": [
+      {
+       "sku_attr": "14:29#Beige",
+       "offer_sale_price": "4.89",
+       "sku_id": "12000057972658438",
+       "price_include_tax": false,
+       "currency_code": "USD",
+       "sku_price": "9.79",
+       "offer_bulk_sale_price": "4.89",
+       "sku_available_stock": 115,
+       "id": "14:29#Beige",
+       "ae_sku_property_dtos": [
+        {
+         "sku_property_value": "WHITE",
+         "sku_image": "https://ae01.alicdn.com/kf/S7bd1d94dabf2477c87ef143b56006b0dD.jpg",
+         "sku_property_name": "Color",
+         "property_value_definition_name": "Beige",
+         "property_value_id": 29,
+         "sku_property_id": 14
+        }
+       ]
+      }
+     ],
+     "ae_multimedia_info_dto": {
+      "image_urls": "https://ae01.alicdn.com/kf/Sd906124360674f6998aa65f0a9feb427J.jpg;https://ae01.alicdn.com/kf/S02d48ff93e5348e1b881eb923042776bj.jpg;https://ae01.alicdn.com/kf/Se3618f2db833496d916320134b0b6734w.jpg;https://ae01.alicdn.com/kf/S6ecb62e339fe4dcd8d95b000791fd75b5.jpg;https://ae01.alicdn.com/kf/S3c3223d1f988468bbc6c217909ea77adK.jpg;https://ae01.alicdn.com/kf/S7bd1d94dabf2477c87ef143b56006b0dD.jpg"
+     },
+     "package_info_dto": {
+      "package_width": 12,
+      "package_height": 4,
+      "package_length": 25,
+      "gross_weight": "0.101",
+      "package_type": false,
+      "product_unit": 100000015
+     },
+     "logistics_info_dto": {
+      "delivery_time": 7,
+      "ship_to_country": "IL"
+     },
+     "product_id_converter_result": {
+      "main_product_id": 1005012283146876,
+      "sub_product_id": "{\"US\":3256812096832124}"
+     },
+     "ae_item_base_info_dto": {
+      "mobile_detail": "<removed; use --full>",
+      "subject": "Toilet Paper Holder Vintage Bohemian Woven Rope Rack Decorative Wall Towel Organizer Home Bathroom Storage",
+      "evaluation_count": "0",
+      "sales_count": "5",
+      "product_status_type": "onSelling",
+      "avg_evaluation_rating": "0.0",
+      "separated_listing": false,
+      "currency_code": "CNY",
+      "sl_product": false,
+      "category_id": 100007128,
+      "product_id": 1005012283146876,
+      "detail": "<removed; use --full>"
+     },
+     "has_whole_sale": false,
+     "ae_item_properties": [
+      {
+       "attr_name_id": 2,
+       "attr_value_id": 201512802,
+       "attr_name": "Brand Name",
+       "attr_value": "NONE"
+      },
+      {
+       "attr_name_id": 10,
+       "attr_value_id": -1,
+       "attr_name": "Material",
+       "attr_value": "wood"
+      },
+      {
+       "attr_name_id": 400000603,
+       "attr_value_id": 23399591357,
+       "attr_name": "High-concerned chemical",
+       "attr_value": "none"
+      },
+      {
+       "attr_name_id": 219,
+       "attr_value_id": 9441741844,
+       "attr_name": "Origin",
+       "attr_value": "Mainland China"
+      },
+      {
+       "attr_name_id": 100004171,
+       "attr_value_id": 100013275,
+       "attr_name": "Type",
+       "attr_value": "Paper Holders"
+      },
+      {
+       "attr_name_id": -1,
+       "attr_name": "Choice",
+       "attr_value": "yes"
+      }
+     ],
+     "ae_store_info": {
+      "store_id": 1105508363,
+      "shipping_speed_rating": "4.9",
+      "communication_rating": "4.9",
+      "store_name": "Shop1105508363 Store",
+      "store_country_code": "CN",
+      "item_as_described_rating": "4.8"
+     }
+    },
+    "rsp_code": 200,
+    "rsp_msg": "Call succeeds",
+    "request_id": "210126a717917382546662723",
+    "_trace_id_": "2140d36117917382546641000e0cef"
+   }
+  },
+  "freight:12000057972658438:IL:1": {
+   "fetched_at": "2026-10-11T17:04:18+00:00",
+   "endpoint": "aliexpress.ds.freight.query",
+   "params": {
+    "quantity": 1,
+    "shipToCountry": "IL",
+    "productId": "1005012283146876",
+    "selectedSkuId": "12000057972658438",
+    "language": "en_US",
+    "locale": "en_US",
+    "currency": "USD"
+   },
+   "payload": {
+    "options": [
+     {
+      "code": "CAINIAO_FULFILLMENT_STD",
+      "company": "AliExpress Selection Standard",
+      "fee": 1.99,
+      "currency": "USD",
+      "days_min": 6,
+      "days_max": 15,
+      "estimated": "Oct 17 - 26",
+      "tracking": true,
+      "free_shipping": false,
+      "ship_from": "CN",
+      "stock": "115",
+      "guaranteed_days": "60"
+     }
+    ],
+    "success": true,
+    "code": 200,
+    "msg": "Call succeeds",
+    "item_id": "1005012283146876",
+    "sku_id": "12000057972658438",
+    "country": "IL",
+    "qty": 1,
+    "raw": {
+     "result": {
+      "msg": "Call succeeds",
+      "code": 200,
+      "success": true,
+      "delivery_options": [
+       {
+        "code": "CAINIAO_FULFILLMENT_STD",
+        "shipping_fee_currency": "USD",
+        "free_shipping": false,
+        "mayHavePFS": true,
+        "guaranteed_delivery_days": "60",
+        "max_delivery_days": 15,
+        "tracking": true,
+        "shipping_fee_format": "US $1.99",
+        "free_shipping_threshold": "US $0.00",
+        "delivery_date_desc": "Oct 17 - 26",
+        "company": "AliExpress Selection Standard",
+        "ship_from_country": "CN",
+        "min_delivery_days": 6,
+        "available_stock": "115",
+        "shipping_fee_cent": "1.99"
+       }
+      ]
+     },
+     "request_id": "0bb4a9a517917382561497275",
+     "_trace_id_": "2151fd2c17917382561487800e0ea6"
+    }
+   }
+  }
+ }
+}

@@ -441,6 +441,99 @@
     "request_id": "0bb4a36417917382075031464",
     "_trace_id_": "2151fce817917382075021401e1083"
    }
+  },
+  "freight:12000037296743439:IL:1": {
+   "fetched_at": "2026-10-11T17:03:29+00:00",
+   "endpoint": "aliexpress.ds.freight.query",
+   "params": {
+    "quantity": 1,
+    "shipToCountry": "IL",
+    "productId": "1005001670768519",
+    "selectedSkuId": "12000037296743439",
+    "language": "en_US",
+    "locale": "en_US",
+    "currency": "USD"
+   },
+   "payload": {
+    "options": [
+     {
+      "code": "CAINIAO_STANDARD_SG",
+      "company": "AliExpress Standard for Special Goods",
+      "fee": 22.22,
+      "currency": "USD",
+      "days_min": 23,
+      "days_max": 33,
+      "estimated": "Nov 03 - 13",
+      "tracking": true,
+      "free_shipping": false,
+      "ship_from": "CN",
+      "stock": null,
+      "guaranteed_days": "60"
+     },
+     {
+      "code": "CAINIAO_STANDARD",
+      "company": "AliExpress standard shipping",
+      "fee": 26.56,
+      "currency": "USD",
+      "days_min": 22,
+      "days_max": 32,
+      "estimated": "Nov 02 - 12",
+      "tracking": true,
+      "free_shipping": false,
+      "ship_from": "CN",
+      "stock": null,
+      "guaranteed_days": "60"
+     }
+    ],
+    "success": true,
+    "code": 200,
+    "msg": "Call succeeds",
+    "item_id": "1005001670768519",
+    "sku_id": "12000037296743439",
+    "country": "IL",
+    "qty": 1,
+    "raw": {
+     "result": {
+      "msg": "Call succeeds",
+      "code": 200,
+      "success": true,
+      "delivery_options": [
+       {
+        "code": "CAINIAO_STANDARD_SG",
+        "shipping_fee_currency": "USD",
+        "free_shipping": false,
+        "mayHavePFS": false,
+        "guaranteed_delivery_days": "60",
+        "max_delivery_days": 33,
+        "tracking": true,
+        "shipping_fee_format": "US $22.22",
+        "delivery_date_desc": "Nov 03 - 13",
+        "company": "AliExpress Standard for Special Goods",
+        "ship_from_country": "CN",
+        "min_delivery_days": 23,
+        "shipping_fee_cent": "22.22"
+       },
+       {
+        "code": "CAINIAO_STANDARD",
+        "shipping_fee_currency": "USD",
+        "free_shipping": false,
+        "mayHavePFS": false,
+        "guaranteed_delivery_days": "60",
+        "max_delivery_days": 32,
+        "tracking": true,
+        "shipping_fee_format": "US $26.56",
+        "delivery_date_desc": "Nov 02 - 12",
+        "company": "AliExpress standard shipping",
+        "ship_from_country": "CN",
+        "min_delivery_days": 22,
+        "shipping_fee_cent": "26.56"
+       }
+      ]
+     },
+     "request_id": "0bb4a9a517917382091923655",
+     "_trace_id_": "2141149b17917382091891926e1008"
+    }
+   }
   }
  }
 }

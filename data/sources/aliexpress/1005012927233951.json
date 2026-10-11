@@ -5241,6 +5241,96 @@
      "_trace_id_": "2141315917917200853794654e0e16"
     }
    }
+  },
+  "freight:12000059801580597:IL:1": {
+   "fetched_at": "2026-10-11T17:04:23+00:00",
+   "endpoint": "aliexpress.ds.freight.query",
+   "params": {
+    "quantity": 1,
+    "shipToCountry": "IL",
+    "productId": "1005012927233951",
+    "selectedSkuId": "12000059801580597",
+    "language": "en_US",
+    "locale": "en_US",
+    "currency": "USD"
+   },
+   "payload": {
+    "options": [
+     {
+      "code": "ARAMEX",
+      "company": "Aramex",
+      "fee": 0.0,
+      "currency": null,
+      "days_min": 9,
+      "days_max": 23,
+      "estimated": "Oct. 20 - Nov. 03",
+      "tracking": true,
+      "free_shipping": true,
+      "ship_from": "CN",
+      "stock": null,
+      "guaranteed_days": "60"
+     },
+     {
+      "code": "UPSE",
+      "company": "UPS Expedited",
+      "fee": 68.09,
+      "currency": "USD",
+      "days_min": 4,
+      "days_max": 21,
+      "estimated": "Oct. 15 - Nov. 01",
+      "tracking": true,
+      "free_shipping": false,
+      "ship_from": "CN",
+      "stock": null,
+      "guaranteed_days": "35"
+     }
+    ],
+    "success": true,
+    "code": 200,
+    "msg": "Call succeeds",
+    "item_id": "1005012927233951",
+    "sku_id": "12000059801580597",
+    "country": "IL",
+    "qty": 1,
+    "raw": {
+     "result": {
+      "msg": "Call succeeds",
+      "code": 200,
+      "success": true,
+      "delivery_options": [
+       {
+        "code": "ARAMEX",
+        "free_shipping": true,
+        "mayHavePFS": false,
+        "guaranteed_delivery_days": "60",
+        "max_delivery_days": 23,
+        "tracking": true,
+        "delivery_date_desc": "Oct. 20 - Nov. 03",
+        "company": "Aramex",
+        "ship_from_country": "CN",
+        "min_delivery_days": 9
+       },
+       {
+        "code": "UPSE",
+        "shipping_fee_currency": "USD",
+        "free_shipping": false,
+        "mayHavePFS": false,
+        "guaranteed_delivery_days": "35",
+        "max_delivery_days": 21,
+        "tracking": true,
+        "shipping_fee_format": "US $68.09",
+        "delivery_date_desc": "Oct. 15 - Nov. 01",
+        "company": "UPS Expedited",
+        "ship_from_country": "CN",
+        "min_delivery_days": 4,
+        "shipping_fee_cent": "68.09"
+       }
+      ]
+     },
+     "request_id": "210137bd17917382634022208",
+     "_trace_id_": "2140d36217917382634003299e0f8b"
+    }
+   }
   }
  }
 }
