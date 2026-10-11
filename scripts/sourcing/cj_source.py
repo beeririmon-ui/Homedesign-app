@@ -17,6 +17,14 @@ Same CLI shape for every source (see aliexpress_source.py, google_vision_source.
           # (fields slot, productName, productImage, remark, productUrl?, price?) and writes cjSourcingId/status back into it.
           # CJ allows 5 sourcing requests per day: the batch stops at the limit (code 1600000) and the rest stay "pending".
   check   <pid|vid|sku> [...]                          # registry only, no call
+  options <pid> [--sku <variantSku>]                    # no call: the `options` object (every variant, studio rules ג,
+          # 2026-10-11) built from the cached /product/query response, for a card being written by hand
+  backfill-options [card.json ...]                      # no call: rebuilds `options` of existing CJ cards from the cache
+          # (data/sources/cj/<pid>.json); default variant = supplier.sku, else the vid in data/economics/freight-cj.json,
+          # else the first "vid ... ('<variantKey>')" in the notes, else the only variant at the card's price.
+          # Never replaces options with source "manual"
+  import-cache <dir>                                    # no call: copies /product/query payloads saved elsewhere (JSON dumps
+          # of earlier `cj.py product` runs) into data/sources/cj/<pid>.json, for CJ cards that have no cached product yet
   mark    <pid> --status rejected|seen|card --reason "..." [--slot room/slot] [--card-id ID]
 
 Global flags (before the command):
@@ -31,12 +39,13 @@ Exit code 3 = budget stop.
 
 The token is handled only inside scripts/cj.py (~/.cache/cj/token.json); this script never reads it.
 """
-import argparse, json, os, sys
+import argparse, json, os, re, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 sys.path.insert(0, os.path.dirname(HERE))  # scripts/ -> cj.py
 import budget, cache, registry  # noqa: E402
+import options as sku_options  # noqa: E402
 
 SRC = "cj"
 _cj = None
@@ -250,6 +259,268 @@ def do_source_status(a):
     out(r)
 
 
+# ----------------------------------------------------------------------------- options (no call)
+
+PID = re.compile(r"cjdropshipping\.com/product/[^\s\"]*-p-([0-9A-Fa-f-]+)\.html")
+PRODUCT_KEYS = ("pid", "productNameEn", "productSku", "productImageSet", "productWeight", "materialNameEn", "packingNameEn",
+                "sellPrice", "suggestSellPrice", "listedNum", "categoryName", "description", "productVideo", "supplierName",
+                "productKeyEn")
+VARIANT_KEYS = ("vid", "variantNameEn", "variantSku", "variantImage", "variantKey", "variantSellPrice", "variantWeight",
+                "variantLength", "variantWidth", "variantHeight", "inventoryNum")
+
+
+def cj_cards(paths=None):
+    """(path, card, pid) for every CJ card (or the given paths)."""
+    root = os.path.join(cache.REPO, "data", "products")
+    if not paths:
+        paths = [os.path.join(d, n) for d, _, fs in os.walk(root) for n in sorted(fs) if n.endswith(".json")]
+    for p in sorted(paths):
+        try:
+            with open(p, encoding="utf-8") as f:
+                card = json.load(f)
+        except (OSError, ValueError):
+            continue
+        m = PID.search(str((card.get("supplier") or {}).get("product_url") or ""))
+        if m:
+            yield p, card, m.group(1)
+
+
+def cached_product(pid):
+    """The cached /product/query payload, any age (the backfill is about what the product offers, not today's price)."""
+    for key in (pid, pid.upper(), pid.lower()):
+        hit = cache.get(SRC, key, "product", allow_stale=True)
+        if hit:
+            return hit
+    return None
+
+
+def split_keys(payload):
+    """variantKey 'White-L' -> ['White', 'L'], on the axes named by productKeyEn ('Color-Size') when the payload has it.
+    A value may hold a hyphen itself ('Off-White-L'): the split is from the right, as many parts as the shortest key."""
+    vs = payload.get("variants") or []
+    keys = [str(v.get("variantKey") or v.get("variantNameEn") or "").strip() for v in vs]
+    names = [x.strip() for x in str(payload.get("productKeyEn") or "").split("-") if x.strip()]
+    counts = [len(k.split("-")) for k in keys] or [1]
+    k = len(names) if names and min(counts) >= len(names) else min(counts)
+    if names and len(names) != k:
+        names = []
+    return [(k_.rsplit("-", k - 1) if k > 1 else [k_]) for k_ in keys], names
+
+
+def cj_rows(payload, freights=None):
+    parts, names = split_keys(payload)
+    rows = []
+    for v, vals in zip(payload.get("variants") or [], parts):
+        price = v.get("variantSellPrice")
+        try:
+            price = float(price)
+        except (TypeError, ValueError):
+            price = None
+        rows.append({"id": str(v.get("variantSku") or v.get("vid") or ""), "vid": str(v.get("vid") or ""),
+                     "key": str(v.get("variantKey") or ""), "props": [(names[i] if names else "#%d" % (i + 1), x, None) for i, x in enumerate(vals)],
+                     "price": price, "currency": "USD", "stock": v.get("inventoryNum"), "image": v.get("variantImage"),
+                     "shipping_il": (freights or {}).get(str(v.get("vid") or ""))})
+    return rows
+
+
+def _norm(s):
+    return re.sub(r"[\s_-]+", " ", str(s or "")).strip().lower()
+
+
+def default_variant(card, payload):
+    """The variant shown in the room -> (variantSku, how) or (None, reason)."""
+    vs = payload.get("variants") or []
+    if not vs:
+        return None, "no variants in the cached product"
+    sku = str((card.get("supplier") or {}).get("sku") or "").upper()
+    hit = [v for v in vs if str(v.get("variantSku") or "").upper() == sku]
+    if len(hit) == 1:
+        return hit[0]["variantSku"], "supplier.sku"
+    if len(vs) == 1:
+        return vs[0].get("variantSku"), "only variant"
+    fr = (_freight_file().get(card.get("id")) or {}).get("vid")
+    hit = [v for v in vs if fr and str(v.get("vid")) == str(fr)]
+    if len(hit) == 1:
+        return hit[0]["variantSku"], "freight-cj.json vid"
+    notes = str(card.get("notes") or "")
+    m = re.search(r"vid\s*([0-9]{12,})\s*\(['\"]([^'\"]+)['\"]\)", notes)
+    if m:  # the first "vid <n> ('<key>')" in the notes is the recommended variant
+        hit = [v for v in vs if _norm(v.get("variantKey")) == _norm(m.group(2)) or _norm(v.get("variantNameEn")) == _norm(m.group(2))]
+        if len(hit) != 1:  # vids in notes were sometimes rounded by a JSON reader: the nearest one, if it is close
+            near = sorted(vs, key=lambda v: abs(int(str(v.get("vid") or 0) or 0) - int(m.group(1))))
+            hit = near[:1] if near and abs(int(near[0].get("vid") or 0) - int(m.group(1))) < 10_000 else []
+        if len(hit) == 1:
+            return hit[0]["variantSku"], "notes vid"
+    up = notes.upper()
+    hit = [v for v in vs if v.get("variantSku") and str(v["variantSku"]).upper() in up]
+    if len(hit) == 1:
+        return hit[0]["variantSku"], "notes variant SKU"
+    cost = (card.get("price") or {}).get("cost")
+    hit = [v for v in vs if isinstance(cost, (int, float)) and _num(v.get("variantSellPrice")) is not None and abs(_num(v.get("variantSellPrice")) - cost) < 0.005]
+    if len(hit) == 1:
+        return hit[0]["variantSku"], "only variant at the card's price"
+    return None, "default variant unknown (supplier.sku %s is not a variant SKU; no vid in freight-cj.json or the notes)" % (sku or "-")
+
+
+def _num(v):
+    try:
+        return float(v)
+    except (TypeError, ValueError):
+        return None
+
+
+_FREIGHT = None
+
+
+def _freight_file():
+    global _FREIGHT
+    if _FREIGHT is None:
+        try:
+            with open(os.path.join(cache.REPO, "data", "economics", "freight-cj.json"), encoding="utf-8") as f:
+                _FREIGHT = json.load(f).get("products") or {}
+        except (OSError, ValueError):
+            _FREIGHT = {}
+    return _FREIGHT
+
+
+def cached_freights(card_id, pid):
+    """{vid: shipping_il}: freight sections cached for this product, and the vid quoted in data/economics/freight-cj.json."""
+    out = {}
+    d = cache._read(cache.item_path(SRC, pid)) or {}
+    for name, sec in (d.get("sections") or {}).items():
+        m = re.match(r"^freight:([^:]+):IL:1$", name)
+        if m:
+            q = sku_options.shipping_from_quotes((sec.get("payload") or {}).get("options"))
+            if q:
+                out[m.group(1)] = q
+    f = _freight_file().get(card_id) or {}
+    if f.get("vid") and str(f["vid"]) not in out:
+        q = sku_options.shipping_from_quotes(f.get("options"))
+        if q:
+            out[str(f["vid"])] = q
+    return out
+
+
+def cj_options(card, payload, card_id=None, pid=None):
+    """-> (options, note) or (None, reason)."""
+    default, how = default_variant(card, payload)
+    if not default:
+        return None, how
+    opts, why = sku_options.from_variants(cj_rows(payload, cached_freights(card_id or card.get("id"), pid or payload.get("pid"))), default)
+    if not opts:
+        return None, why
+    return opts, "; ".join(x for x in ("default by " + how, why) if x)
+
+
+def backfill(paths=None, dry_run=False, log=print):
+    n = {"cards": 0, "written": 0, "unchanged": 0, "kept-manual": 0, "skipped": 0, "no-cache": 0}
+    for p, card, pid in cj_cards(paths):
+        n["cards"] += 1
+        rel = os.path.relpath(p, cache.REPO)
+        cur = card.get("options")
+        if isinstance(cur, dict) and cur.get("source") == "manual":
+            n["kept-manual"] += 1
+            log("keep    %s (options source manual)" % rel)
+            continue
+        hit = cached_product(pid)
+        if not hit:
+            n["no-cache"] += 1
+            log("skip    %s: no cached /product/query for %s (import-cache, or `cj_source.py product %s` once)" % (rel, pid, pid))
+            continue
+        opts, why = cj_options(card, hit["payload"], card.get("id"), pid)
+        if not opts:
+            n["skipped"] += 1
+            log("skip    %s: %s" % (rel, why))
+            continue
+        errs, warns = sku_options.validate(opts, card)
+        if errs:
+            n["skipped"] += 1
+            log("skip    %s: invalid options: %s" % (rel, "; ".join(errs[:3])))
+            continue
+        res = sku_options.write_options(p, opts, dry_run=dry_run)
+        n[res] += 1
+        log("%-7s %s: %d SKUs on %s · %s%s" % ("would" if dry_run and res == "written" else res[:7], rel, len(opts["skus"]),
+            ", ".join("%s %d" % (x["id"], len(x["values"])) for x in opts["axes"]), why, "".join(" · warn: " + w for w in warns)))
+    return n
+
+
+def do_backfill(a):
+    n = backfill(a.paths, a.dry_run)
+    print("cj backfill-options: %d cards · %d written · %d unchanged · %d manual kept · %d skipped · %d without a cached product%s" % (
+        n["cards"], n["written"], n["unchanged"], n["kept-manual"], n["skipped"], n["no-cache"], " (dry run: nothing written)" if a.dry_run else ""))
+
+
+def do_options(a):
+    hit = cached_product(a.pid)
+    if not hit:
+        sys.exit("no cached /product/query for %s: run `cj_source.py product %s` first (10 points)" % (a.pid, a.pid))
+    card = {"supplier": {"sku": a.sku}, "price": {}, "notes": ""}
+    opts, why = cj_options(card, hit["payload"], None, a.pid)
+    out({"options": opts, "note": why, "cached_at": hit["fetched_at"]})
+
+
+def find_products(obj, want, depth=0):
+    """CJ /product/query payloads (cj.py shape or the raw API data) anywhere inside a JSON dump."""
+    if depth > 8:
+        return
+    if isinstance(obj, dict):
+        pid = str(obj.get("pid") or "")
+        if pid and isinstance(obj.get("variants"), list) and pid.upper() in want:
+            yield obj
+            return
+        for v in obj.values():
+            yield from find_products(v, want, depth + 1)
+    elif isinstance(obj, list):
+        for v in obj:
+            yield from find_products(v, want, depth + 1)
+
+
+def do_import(a):
+    import datetime as dt
+    want = {}
+    for _, card, pid in cj_cards():
+        if not cached_product(pid):
+            want[pid.upper()] = pid
+    best = {}
+    for d, _, files in os.walk(a.dir):
+        for name in files:
+            f = os.path.join(d, name)
+            if not name.endswith(".json") or os.path.getsize(f) > 3 * 1024 * 1024:
+                continue
+            try:
+                with open(f, encoding="utf-8") as fh:
+                    obj = json.load(fh)
+            except (OSError, ValueError, UnicodeDecodeError):
+                continue
+            mtime = os.path.getmtime(f)
+            for o in find_products(obj, want):
+                key = str(o["pid"]).upper()
+                # the newest dump wins; the raw API shape (with productKeyEn, the axis names) wins a tie
+                rank = (mtime, "productKeyEn" in o)
+                if key not in best or rank > best[key][0]:
+                    best[key] = (rank, o, f)
+    wrote = 0
+    for key, (rank, o, f) in sorted(best.items()):
+        pid = want[key]
+        payload = {k: o.get(k) for k in PRODUCT_KEYS if k in o}
+        payload["url"] = o.get("url") or "https://cjdropshipping.com/product/-p-%s.html" % pid
+        payload["variants"] = [{k: v.get(k) for k in VARIANT_KEYS} for v in o.get("variants") or []]
+        fetched = dt.datetime.fromtimestamp(rank[0], dt.timezone.utc).replace(microsecond=0).isoformat()
+        if a.dry_run:
+            print("would import %s (%d variants, saved %s)" % (pid, len(payload["variants"]), fetched[:10]))
+            continue
+        path = cache.item_path(SRC, pid)
+        doc = cache._read(path) or {"source": SRC, "id": str(pid), "sections": {}}
+        doc["sections"]["product"] = {"fetched_at": fetched, "endpoint": "/product/query", "params": {"pid": pid},
+                                      "imported": "saved by an earlier cj.py product run (local dump); imported without a call", "payload": payload}
+        cache._write(path, doc)
+        wrote += 1
+    missing = sorted(set(want.values()) - {want[k] for k in best})
+    print("import-cache: %d CJ cards had no cached product · %d found in %s · %d %s%s" % (
+        len(want), len(best), a.dir, wrote if not a.dry_run else len(best), "imported" if not a.dry_run else "would import",
+        (" · still missing: " + ", ".join(missing[:10])) if missing else ""))
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description="CJ importer (registry + budget + cache)")
     ap.add_argument("--dry-run", action="store_true"); ap.add_argument("--force", action="store_true")
@@ -267,6 +538,9 @@ def main(argv=None):
     ss = sub.add_parser("source-status"); ss.add_argument("ids", nargs="+")
     sb = sub.add_parser("source-batch"); sb.add_argument("file"); sb.add_argument("--approved"); sb.add_argument("--count", type=int, default=5)
     c = sub.add_parser("check"); c.add_argument("ids", nargs="+")
+    op = sub.add_parser("options"); op.add_argument("pid"); op.add_argument("--sku")
+    bo = sub.add_parser("backfill-options"); bo.add_argument("paths", nargs="*")
+    ic = sub.add_parser("import-cache"); ic.add_argument("dir")
     m = sub.add_parser("mark"); m.add_argument("pid"); m.add_argument("--status", required=True, choices=registry.STATUSES)
     m.add_argument("--reason", required=True); m.add_argument("--slot"); m.add_argument("--card-id")
     a = ap.parse_args(argv)
@@ -284,6 +558,12 @@ def main(argv=None):
             if a.dry_run:
                 return out({"dry_run": True, "would_mark": a.pid, "status": a.status})
             out(registry.add(a.pid, a.status, a.reason, by=a.by, slot=a.slot, card_id=a.card_id, opened=True))
+        elif a.cmd == "options":
+            do_options(a)
+        elif a.cmd == "backfill-options":
+            do_backfill(a)
+        elif a.cmd == "import-cache":
+            do_import(a)
         elif a.cmd == "image":
             sys.exit("image search is not wired: it costs 1,000 points and needs CJ account level 3+ "
                      "(doc 1.1). Ask the coordinator before adding it.")

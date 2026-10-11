@@ -10,11 +10,11 @@
   "supplier": {
     "name": "AliExpress",
     "product_url": "https://www.aliexpress.com/item/3256804234725093.html",
-    "sku": "12000029126697716",
-    "rating": 0.0
+    "sku": "12000029126697717",
+    "rating": null
   },
   "price": {
-    "cost": 17.41,
+    "cost": 26.79,
     "currency": "USD",
     "suggested_retail": null
   },
@@ -26,21 +26,24 @@
     ]
   },
   "dimensions_cm": {
-    "width": null,
-    "depth": null,
-    "height": null
+    "width": 22.5,
+    "depth": 6.7,
+    "height": 23
   },
   "colors": {
-    "dominant_hex": null,
-    "secondary_hex": [],
-    "temperature": null
+    "dominant_hex": "#E7DCC8",
+    "secondary_hex": [
+      "#CDBFA6",
+      "#F1E9DA"
+    ],
+    "temperature": "warm"
   },
   "materials": [
-    "Ceramic & Porcelain"
+    "ceramic / stoneware (per listing: Ceramic & Porcelain)"
   ],
-  "texture": null,
-  "finish": null,
-  "visual_weight": null,
+  "texture": "fine speckled sand-matte surface that looks unglazed, sculptural hollow ring (donut) body with a narrow neck",
+  "finish": "matte",
+  "visual_weight": "medium",
   "lighting": null,
   "images": {
     "urls": [
@@ -53,10 +56,31 @@
       "https://ae01.alicdn.com/kf/S925d9306f617492f8818f3c949f268a34.jpg",
       "https://ae01.alicdn.com/kf/S7d56ec1c65da4282a906179049101a81g.jpg"
     ],
-    "quality": "medium",
+    "quality": "high",
     "usage_rights": "unclear"
   },
   "style_scores": {},
   "status": "candidate",
-  "notes": "DRAFT from AliExpress DS API (2026-10-11, aliexpress-session): colors (HEX), visual_weight, product dimensions and texture are NOT filled; fill them from the photos before QA (sourcing-agent). SKU 12000029126697716 (Color: S), stock 68, list price 25.99 USD. Package (not product): 23 x 22 x 2 cm, gross 0.700 kg. Shipping to IL: cheapest 8.42 USD AliExpress standard shipping, 8-18 days (CAINIAO_STANDARD); fastest 33.92 USD AliExpress Premium shipping, 11-13 days. Store: CAPIRON Official Store (id 912098027, CN); ratings described 4.9 / communication 4.9 / shipping 4.8; product 0.0 stars, 0 reviews, 5 sold; AE category 200001438. Listed attributes: Size = M."
+  "fit_score_provisional": 5.5,
+  "recommendation": "keep-weak",
+  "fit_notes": "הכרטיס נבחר במקור על S (16 ס״מ, מתחת ל-20); רק L (23 ס״מ) נכנס בגובה 20-28, ולכן ברירת המחדל שונתה ל-L. הצבע והחומר מצוינים לנורדי: אבנית מנוקדת מט בגוון שיבולת שועל-חול (H39 S39 L84), מרקם 'יד'. הבעיה בצורה ובטביעת הרגל: טבעת חלולה (donut) ברוחב 22.5 ובעומק 6.7 מול קוטר 9-16 במעטפת (רחב ב-41%, צר בעומק), והצורה אינה ברשימת הצלליות המותרות (כד/בקבוק/גליל/כדור/קונוס), יותר ג'פנדי-בוהו מנורדי. פיזית היא נכנסת על ראנר ברוחב 33-38. דורש החלטת מעצב לגבי המעטפת; חזק יותר כמועמד לבוהו ולמודרני חם (מאגר). 'עיצוב נפוץ מאוד' (vase טבעת חלולה): לבדוק שאינו העתק של דגם מוכר.",
+  "options": {
+    "axes": [
+      {
+        "id": "size",
+        "name_he": "גודל",
+        "values": [
+          { "id": "s", "label_he": "S: גובה 16, רוחב 15.7, עומק 5.2 ס״מ", "label_src": "S (16 x 15.7 x 5.2 cm, neck 3.5 cm, per the size photo)" },
+          { "id": "l", "label_he": "L: גובה 23, רוחב 22.5, עומק 6.7 ס״מ", "label_src": "L (23 x 22.5 x 6.7 cm, neck 4.5 cm)" }
+        ]
+      }
+    ],
+    "skus": [
+      { "id": "12000029126697716", "values": { "size": "s" }, "price": { "amount": 17.41, "currency": "USD" }, "stock": 68, "image": "https://ae01.alicdn.com/kf/S925d9306f617492f8818f3c949f268a34.jpg", "in_room": false },
+      { "id": "12000029126697717", "values": { "size": "l" }, "price": { "amount": 26.79, "currency": "USD" }, "stock": 69, "image": "https://ae01.alicdn.com/kf/S7d56ec1c65da4282a906179049101a81g.jpg", "in_room": true }
+    ],
+    "default_sku": "12000029126697717",
+    "source": "api"
+  },
+  "notes": "COMPLETED 2026-10-11 (sourcing-agent) from data/sources/aliexpress/3256804234725093.json and the card images. DEFAULT SKU CHANGED from the API session's pick S (12000029126697716, 17.41 USD, 16 cm tall: below the 20-28 envelope) to L (12000029126697717, 26.79 USD, 23 cm tall, stock 69, list price 39.98). Package (not product): 23 x 22 x 2 cm, gross 0.700 kg (a 2 cm thick package cannot hold a 6.7 cm deep vase, so the API package data is not reliable). SHIPPING to IL (quoted for the S SKU only; the L fee is not quoted and may be higher): cheapest 8.42 USD AliExpress standard shipping (CAINIAO_STANDARD), 8-18 days; fastest reasonable 33.92 USD AliExpress Premium shipping (CAINIAO_PREMIUM), 11-13 days. Store: CAPIRON Official Store (id 912098027, CN; same store as the floor-vase card); ratings described 4.9 / communication 4.9 / shipping 4.8; product: 0 reviews, 5 sold (rating set to null instead of 0.0); AE category 200001438; brand CAPIRON; listing attributes 'Size = M', 'Style Europe'. DIMENSIONS from the supplier's size photos: S 16 high x 15.7 wide x 5.2 deep, neck 3.5 cm; L 23 high x 22.5 wide x 6.7 deep, neck 4.5 cm. COLOUR: warm sand-cream with fine darker specks (#E7DCC8; speckles #CDBFA6; highlight #F1E9DA). The supplier's canonical colour ids (WHITE, YELLOW) are meaningless. Photos (8): lifestyle pairs with pampas grass and dried flowers on a ribbed cloth with a dark green curtain behind, plus the two size charts; sharp. Image rights unclear. The photos show both vases always with a heavy dried bouquet; the Bible filler for this slot is 3-5 olive sprigs (width up to 35, top Z 1.20): the 4.5 cm neck holds sprigs."
 }

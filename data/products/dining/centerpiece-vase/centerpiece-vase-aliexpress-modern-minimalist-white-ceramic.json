@@ -10,11 +10,11 @@
   "supplier": {
     "name": "AliExpress",
     "product_url": "https://www.aliexpress.com/item/2255800578472233.html",
-    "sku": "10000007605734235",
+    "sku": "10000007605734236",
     "rating": 5.0
   },
   "price": {
-    "cost": 10.62,
+    "cost": 15.01,
     "currency": "USD",
     "suggested_retail": null
   },
@@ -26,21 +26,24 @@
     ]
   },
   "dimensions_cm": {
-    "width": null,
-    "depth": null,
-    "height": null
+    "width": 8.5,
+    "depth": 8.5,
+    "height": 26
   },
   "colors": {
-    "dominant_hex": null,
-    "secondary_hex": [],
-    "temperature": null
+    "dominant_hex": "#F0EDE8",
+    "secondary_hex": [
+      "#E3DFD7",
+      "#D9D5CD"
+    ],
+    "temperature": "neutral"
   },
   "materials": [
-    "Ceramic & Porcelain"
+    "ceramic / porcelain (per listing: Ceramic & Porcelain)"
   ],
-  "texture": null,
-  "finish": null,
-  "visual_weight": null,
+  "texture": "smooth fine-grain chalky matte glaze, no speckle; asymmetric teardrop body with a leaning neck",
+  "finish": "matte",
+  "visual_weight": "light",
   "lighting": null,
   "images": {
     "urls": [
@@ -59,5 +62,28 @@
   },
   "style_scores": {},
   "status": "candidate",
-  "notes": "DRAFT from AliExpress DS API (2026-10-11, aliexpress-session): colors (HEX), visual_weight, product dimensions and texture are NOT filled; fill them from the photos before QA (sourcing-agent). SKU 10000007605734235 (Color: Small), stock 39, list price 16.85 USD. Package (not product): 15 x 15 x 30 cm, gross 1.000 kg. Shipping to IL: cheapest 0.0 USD AliExpress standard shipping, 8-18 days (CAINIAO_STANDARD). Store: Homelike Decor Store (id 2666014, CN); ratings described 4.8 / communication 4.8 / shipping 4.8; product 5.0 stars, 3 reviews, 4 sold; AE category 200001438. Listed attributes: Size = M."
+  "fit_score_provisional": 6.5,
+  "recommendation": "needs-different-sku",
+  "fit_notes": "הכרטיס נבחר במקור על Small (19.5 ס״מ, מתחת ל-20), אבל Medium (26 ס״מ x 8.5) נכנס במעטפת של פינת האוכל (גוף 20-28, קוטר 9-16; הקוטר 8.5 נמוך ב-6%, בתוך ±15%), ולכן ברירת המחדל שונתה ל-Medium. הגרסה Large (32) חורגת מ-28. חומר וצבע מתאימים: קרמיקה מט לבנה בלי פחם, והמרווה והזית נכנסים בפה הצר. הצורה היא טיפה אסימטרית עם צוואר נוטה, צלליות 'רכה' שמותרת כאסימטריה קלה אבל יותר פיסולית ופחות 'בקבוק נורדי' ממה שה-Bible מתאר, וזה עיצוב נפוץ מאוד באליאקספרס: ההחלטה אם זה 'וואו' למעצב. משלוח חינם (8-18 ימים) נבדק רק ל-Small ויש לאמת ל-Medium.",
+  "options": {
+    "axes": [
+      {
+        "id": "size",
+        "name_he": "גודל",
+        "values": [
+          { "id": "small", "label_he": "קטן: גובה 19.5 ס״מ, רוחב 6.5", "label_src": "Small (19.5 x 6.5 cm per the size photo)" },
+          { "id": "medium", "label_he": "בינוני: גובה 26 ס״מ, רוחב 8.5", "label_src": "Medium (26 x 8.5 cm)" },
+          { "id": "large", "label_he": "גדול: גובה 32 ס״מ, רוחב 11.5", "label_src": "Large (32 x 11.5 cm)" }
+        ]
+      }
+    ],
+    "skus": [
+      { "id": "10000007605734235", "values": { "size": "small" }, "price": { "amount": 10.62, "currency": "USD" }, "stock": 39, "image": "https://ae01.alicdn.com/kf/H46282e72859a476aa2a74760a8f07aadV.jpg", "in_room": false },
+      { "id": "10000007605734236", "values": { "size": "medium" }, "price": { "amount": 15.01, "currency": "USD" }, "stock": 43, "image": "https://ae01.alicdn.com/kf/Hef1df59d1f4641508d7fe8543b0fd64cf.jpg", "in_room": true },
+      { "id": "10000007605734237", "values": { "size": "large" }, "price": { "amount": 24.61, "currency": "USD" }, "stock": 46, "image": "https://ae01.alicdn.com/kf/Hed18bee0082945698ae085f5d272ae9fx.jpg", "in_room": false }
+    ],
+    "default_sku": "10000007605734236",
+    "source": "api"
+  },
+  "notes": "COMPLETED 2026-10-11 (sourcing-agent) from data/sources/aliexpress/2255800578472233.json and the card images. DEFAULT SKU CHANGED from the API session's pick Small (10000007605734235, 10.62 USD, 19.5 cm: below the 20-28 envelope) to Medium (10000007605734236, 15.01 USD, 26 cm, stock 43, list price 23.82). Package (not product): 15 x 15 x 30 cm, gross 1.000 kg (same for all three SKUs in the API). SHIPPING to IL (quoted for the Small SKU only): only one option returned: AliExpress standard shipping 0.00 USD (free), 8-18 days (CAINIAO_STANDARD), so cheapest = fastest; re-check the fee for Medium (a 15x15x30 cm, 1 kg parcel is unlikely to stay free). Store: Homelike Decor Store (id 2666014, CN); ratings described 4.8 / communication 4.8 / shipping 4.8; product 5.0 stars, 3 reviews, 4 sold; AE category 200001438; model HDHP377; listing attribute 'Size = M'. DIMENSIONS (supplier's own size photos): Small 19.5 x 6.5, Medium 26 x 8.5, Large 32 x 11.5 cm (height x width); depth is not given and is assumed equal to the width (estimated from photo). COLOUR: matte white, slightly warm in sunlit photos (#F0EDE8 dominant, shaded side #D9D5CD); the supplier's canonical colour ids (WHITE, YELLOW, Red) are meaningless, all three SKUs are white. Photos (9): lifestyle with dried flowers on a pale wall, size chart, three per-size photos; sharp and consistent. Image rights unclear. Slot checks (dining centerpiece-vase): height 20-28 OK for Medium, diameter 9-16 vs 8.5 (-6%, inside the +-15% rule), narrow mouth OK, no charcoal OK; the 'not the same product as the living-room default' rule needs the designer to compare with data/products/vase/."
 }

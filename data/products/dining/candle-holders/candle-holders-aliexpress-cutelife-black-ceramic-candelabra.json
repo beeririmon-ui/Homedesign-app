@@ -11,7 +11,7 @@
     "name": "AliExpress",
     "product_url": "https://www.aliexpress.com/item/3256811647185429.html",
     "sku": "12000056728690425",
-    "rating": 0.0
+    "rating": null
   },
   "price": {
     "cost": 24.63,
@@ -26,19 +26,24 @@
     ]
   },
   "dimensions_cm": {
-    "width": null,
-    "depth": null,
-    "height": null
+    "width": 8,
+    "depth": 8,
+    "height": 9
   },
   "colors": {
-    "dominant_hex": null,
-    "secondary_hex": [],
-    "temperature": null
+    "dominant_hex": "#1E1E20",
+    "secondary_hex": [
+      "#3A3B3D",
+      "#F2F0EA"
+    ],
+    "temperature": "neutral"
   },
-  "materials": [],
-  "texture": null,
-  "finish": null,
-  "visual_weight": null,
+  "materials": [
+    "glazed ceramic (per title and photos)"
+  ],
+  "texture": "smooth high-gloss glaze with mirror highlights, two raised rings around the cup, small turned pedestal foot",
+  "finish": "gloss",
+  "visual_weight": "medium",
   "lighting": null,
   "images": {
     "urls": [
@@ -57,5 +62,37 @@
   },
   "style_scores": {},
   "status": "candidate",
-  "notes": "DRAFT from AliExpress DS API (2026-10-11, aliexpress-session): colors (HEX), visual_weight, product dimensions and texture are NOT filled; fill them from the photos before QA (sourcing-agent). SKU 12000056728690425 (Color: Black no candle, Number of Pcs: 1Pc), stock 30, list price 49.27 USD. Package (not product): 12 x 12 x 12 cm, gross 0.33 kg. Shipping to IL: cheapest 1.99 USD AliExpress Selection Standard, 6-15 days (CAINIAO_FULFILLMENT_STD). Store: Shop1105210817 Store (id 1105210817, CN); ratings described 4.8 / communication 4.7 / shipping 4.8; product 0.0 stars, 0 reviews, 0 sold; AE category 1706."
+  "fit_score_provisional": 2,
+  "recommendation": "reject",
+  "fit_notes": "נפסל לעמדה: (1) זה גביע לנר/טי-לייט עם נר שפוך בתוכו (Type: Tea Light Holder, Matching Candle: Big Tealight, כל התמונות עם נר שעווה ופתיל עץ), וה-Bible פוסל 'נר בכוס או בכלי' ומחזיק לטי-לייט; העמדה דורשת מחזיק לנרות עמוד 7x10 ו-7x15; (2) הזיגוג מבריק (השתקפויות ברורות), בעוד ה-Bible אוסר זיגוג מבריק ומעל 30 GU; (3) יחידה אחת ב-24.63 דולר (העמדה דורשת זוג, כלומר כ-49 דולר פלוס משלוח), יקר פי 5 מהסט של ברזל שחור מט; (4) בתמונה הראשית יש מיתוג של נר ('GUINON Aroma Series'), כלומר תמונות של מוצר אחר. ראוי לבדוק רק אם יידרש פמוט חלופי בסגנון אחר (מתאים אולי לבוהו, לא לנורדי).",
+  "options": {
+    "axes": [
+      {
+        "id": "color",
+        "name_he": "צבע",
+        "values": [
+          { "id": "yellow", "label_he": "צהוב (בלי נר)", "label_src": "Yellow no candle" },
+          { "id": "black", "label_he": "שחור (בלי נר)", "label_src": "Black no candle" },
+          { "id": "green", "label_he": "ירוק (בלי נר)", "label_src": "Green no candle" },
+          { "id": "white", "label_he": "לבן (בלי נר)", "label_src": "White no candle" }
+        ]
+      },
+      {
+        "id": "set",
+        "name_he": "כמות",
+        "values": [
+          { "id": "1pc", "label_he": "יחידה אחת", "label_src": "1Pc" }
+        ]
+      }
+    ],
+    "skus": [
+      { "id": "12000056728690426", "values": { "color": "yellow", "set": "1pc" }, "price": { "amount": 24.63, "currency": "USD" }, "stock": 30, "image": "https://ae01.alicdn.com/kf/Sc69d4ce45f6141bd91e0fc45ba59ac93R.jpg", "in_room": false },
+      { "id": "12000056728690425", "values": { "color": "black", "set": "1pc" }, "price": { "amount": 24.63, "currency": "USD" }, "stock": 30, "image": "https://ae01.alicdn.com/kf/S7255cddb03084e708705a820c1d412cem.jpg", "in_room": true },
+      { "id": "12000056728690424", "values": { "color": "green", "set": "1pc" }, "price": { "amount": 23.25, "currency": "USD" }, "stock": 29, "image": "https://ae01.alicdn.com/kf/S3e17170b0ceb42d5856315c13a516587E.jpg", "in_room": false },
+      { "id": "12000056728690423", "values": { "color": "white", "set": "1pc" }, "price": { "amount": 22.75, "currency": "USD" }, "stock": 30, "image": "https://ae01.alicdn.com/kf/Scdb1f1384bc84bb4970ac4c502ed330co.jpg", "in_room": false }
+    ],
+    "default_sku": "12000056728690425",
+    "source": "api"
+  },
+  "notes": "COMPLETED 2026-10-11 (sourcing-agent) from data/sources/aliexpress/3256811647185429.json and the card images. RECOMMEND REJECT for dining-room/candle-holders (see fit_notes). Default SKU 12000056728690425 (Black no candle, 1Pc), stock 30, list price 49.27 USD. Package (not product): 12 x 12 x 12 cm, gross 0.33 kg. SHIPPING to IL: only one option returned: AliExpress Selection Standard 1.99 USD, 6-15 days (CAINIAO_FULFILLMENT_STD), so cheapest = fastest. Store: Shop1105210817 Store (id 1105210817, CN); ratings described 4.8 / communication 4.7 / shipping 4.8; product: 0 reviews, 0 sold (new listing; rating set to null instead of 0.0); AE category 1706; model C25Q009. DIMENSIONS: from the supplier's own photos of the black and white SKUs: 8 cm wide x 9 cm high (round cup, so depth 8 is assumed equal to the width, estimated from photo). COLOURS from the photos: Black is a deep glossy black (#1E1E20, highlights #3A3B3D, candle surface #F2F0EA); the other SKUs are Yellow, Green (deep emerald) and White (glossy). The supplier's canonical colour names in the raw data (Golden, SILVER) are wrong, ignore them. Attributes: Type Tea Light Holder, Function 'Matching Block Candle', Matching Candle 'Big Tealight', Candle Included no, Style Modern, Handmade no. Photos show a wooden-wick soy candle poured in the cup (not included in the 'no candle' SKUs) and a 'GUINON Aroma Series' mark on the first photo. Image rights unclear. Pool note: glossy coloured goblets could suit a boho or warm-modern table, not the Nordic one."
 }

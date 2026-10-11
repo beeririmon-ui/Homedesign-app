@@ -38,6 +38,9 @@ DAYS = re.compile(r"^[0-9]+(-[0-9]+)?$")
 BOGUS = re.compile(r"contact\s*us|custom(?:ized|ised)?\s*(?:size|made|order)?$|^custom|please\s+(?:contact|leave|message)|message\s+us|"
                    r"leave\s+(?:a\s+)?(?:message|note)|remark|link\s+for|price\s+difference|extra\s+fee|shipping\s+fee", re.I)
 SHIPS_FROM = re.compile(r"ships?\s*from|shipping\s*from|send\s*from|origin|发货地", re.I)
+# Fixed to the room's SKU, never a customer choice: the origin, and the plug type (the room's is the one checked for IL).
+PLUG_NAME = re.compile(r"plug|electrical\s*outlet|socket\s*type|规格插头", re.I)
+PLUG_VALUE = re.compile(r"^(?:us|eu|uk|au|il|jp|cn|kr|br|in|ch|it|za)(?:\s*plug)?$|\bplug\b", re.I)
 
 # ----------------------------------------------------------------------------- labels
 
@@ -57,16 +60,31 @@ COLORS = {
     "blue": ("כחול", "#4A6A94"), "navy": ("כחול נייבי", "#24324F"), "navy blue": ("כחול נייבי", "#24324F"),
     "sky blue": ("תכלת", "#9CC3DE"), "haze blue": ("כחול אפרפר", "#8DA0B3"),
     "pink": ("ורוד", "#E3B7BC"), "rose": ("ורוד עתיק", "#C9989C"), "red": ("אדום", "#B23A32"), "brick red": ("אדום לבנים", "#9C4A35"),
+    "rust red": ("אדום חלודה", "#9E4A2F"), "orange rust red": ("כתום חלודה", "#B5532F"),
     "wine": ("יין", "#6E2A35"), "wine red": ("אדום יין", "#6E2A35"), "burgundy": ("בורדו", "#6D2232"), "orange": ("כתום", "#D9822B"),
     "rust": ("חלודה", "#A4532D"), "terracotta": ("טרקוטה", "#B5653F"), "yellow": ("צהוב", "#E3C34F"), "mustard": ("חרדל", "#C49A2C"),
     "purple": ("סגול", "#6E4F86"), "lavender": ("לבנדר", "#B7A6CC"), "coral": ("אלמוג", "#E07C66"),
     "transparent": ("שקוף", "#E8ECEE"), "clear": ("שקוף", "#E8ECEE"), "multicolor": ("צבעוני", None), "multi": ("צבעוני", None),
 }
 SHADES = {"light": ("בהיר", 0.35), "dark": ("כהה", -0.35), "deep": ("עמוק", -0.25), "pale": ("חיוור", 0.45)}
-WORDS = {  # extra words around a colour name, and fixed values that are not colours
+WORDS = {  # words around a colour or a size; a phrase is translated only when every word is known, else kept as is
     "tulle": "טול", "linen": "פשתן", "cotton": "כותנה", "velvet": "קטיפה", "boucle": "בוקלה", "yarn": "חוט", "sheer": "שקוף",
     "no candle": "בלי נר", "with candle": "עם נר", "linen like curtain": "וילון במראה פשתן", "set": "סט", "matte": "מט",
-    "glossy": "מבריק", "glaze": "מזוגג", "ceramic": "קרמיקה", "metal": "מתכת",
+    "glossy": "מבריק", "glaze": "מזוגג", "ceramic": "קרמיקה", "metal": "מתכת", "pillowcase": "ציפית", "pillow case": "ציפית",
+    "pillow": "כרית", "cushion": "כרית", "pillow core": "מילוי", "with core": "עם מילוי", "without core": "בלי מילוי",
+    "pillow core and pillowcase": "כרית עם מילוי", "cover only": "ציפית בלבד", "single": "יחיד", "double": "זוגי",
+    "curtain": "וילון", "single curtain": "וילון אחד", "panel": "יריעה", "pair": "זוג", "a pair": "זוג", "1 pair": "זוג",
+    "bed sheet": "סדין", "flat sheet": "סדין שטוח", "fitted sheet": "סדין עם גומי", "quilt cover": "ציפה לשמיכה",
+    "duvet cover": "ציפה לשמיכה", "frameless": "בלי מסגרת", "frameless painting": "בלי מסגרת", "with frame": "עם מסגרת",
+    "black frame": "מסגרת שחורה", "white frame": "מסגרת לבנה", "wood frame": "מסגרת עץ", "tall": "גבוה", "short": "נמוך",
+    "low": "נמוך", "high": "גבוה", "round": "עגול", "square": "מרובע", "tassel": "פרנזים", "with tassel": "עם פרנזים",
+    "warm light": "אור חם", "white light": "אור לבן", "neutral light": "אור ניטרלי", "tricolor light": "אור בשלושה גוונים",
+    "three colors": "אור בשלושה גוונים", "tri color": "אור בשלושה גוונים", "no light source": "בלי נורה",
+    "light source not included": "בלי נורה", "with pull switch": "עם מתג משיכה", "without pull switch": "בלי מתג משיכה",
+    "remote control": "שלט רחוק", "bottle": "בקבוק", "medium bottle": "בקבוק בינוני", "tall bottle": "בקבוק גבוה",
+    "low bottle": "בקבוק נמוך", "tall style": "דגם גבוה", "short style": "דגם נמוך", "default": "רגיל", "original": "מקורי",
+    "seat": "מושב", "1 seat": "מושב אחד", "single seat": "מושב אחד", "double seat": "שני מושבים", "three seat": "שלושה מושבים",
+    "four seat": "ארבעה מושבים", "five seat": "חמישה מושבים",
 }
 HEADINGS = [  # curtain heading ("Processing")
     (r"hidden\s*back\s*tab", "לולאות נסתרות"), (r"grommet.*ring|ring", "טבעות"), (r"white\s*grommet", "טבעות לבנות"),
@@ -82,9 +100,9 @@ CM = r"\s*(?:cm|厘米)?"
 DIMS = re.compile(NUM + CM + r"\s*[x×*]\s*[a-z]?\s*" + NUM + CM + r"(?:\s*[x×*]\s*[a-z]?\s*" + NUM + CM + r")?", re.I)
 WH = re.compile(r"\bw\s*" + NUM + r"\s*cm\s*[x×*]?\s*(?:[hl])\s*" + NUM + r"\s*cm", re.I)
 PCS = re.compile(r"^\s*(\d+)\s*(?:pc|pcs|piece|pieces|panel|panels)\b", re.I)
-ONE_LEN = re.compile(r"^\s*(?:diameter\s*|dia\.?\s*|d\s*|h\s*|height\s*|length\s*)?" + NUM + r"\s*(cm|mm|m|inch|in|\")\s*$", re.I)
+ONE_LEN = re.compile(r"^\s*(diameter\s*|dia\.?\s*|d\s*|h\s*|height\s*|length\s*)?" + NUM + r"\s*(cm|mm|m|inches|inch|in|\")\s*$", re.I)
 LETTER = re.compile(r"^(?:[a-z]|(?:style|type|model|no\.?|design)\s*[a-z0-9]+|[a-z]\d{0,2})$", re.I)
-SET = re.compile(r"^\s*(?:(\d+)\s*(?:pc|pcs|piece|pieces|set|sets)\b|set\s*of\s*(\d+)|(\d+)\s*-?\s*piece\s*set)", re.I)
+SET = re.compile(r"^\s*(?:(\d+)\s*(?:pc|pcs|piece|pieces|set|sets)|set\s*of\s*(\d+)|(\d+)\s*-?\s*piece\s*set)\s*$", re.I)
 
 
 def clean(s):
@@ -129,39 +147,63 @@ def color_of(label):
                 he, hx = "%s %s" % (he, shade[0]), shade_hex(hx, shade[1])
             rest = " ".join(t for j, t in enumerate(toks) if not (i <= j < i + n) and not (shade and j == i - 1))
             if rest:
-                rest_he = WORDS.get(rest) or " ".join(WORDS.get(t, t) for t in rest.split())
-                he = "%s (%s)" % (he, rest_he)
+                he = "%s (%s)" % (he, words_he(rest))
             return he, hx
     return None, None
 
 
+def words_he(s):
+    """Hebrew for a short phrase when every word is known (WORDS, COLORS), else the phrase as the supplier wrote it."""
+    s = clean(s)
+    low = s.lower()
+    if not low:
+        return ""
+    if low in WORDS:
+        return WORDS[low]
+    if low in COLORS:
+        return COLORS[low][0]
+    toks = [x for x in re.split(r"[\s/,+&]+", low) if x]
+    if toks and all(x in WORDS or x in COLORS for x in toks):
+        return " ".join(WORDS.get(x) or COLORS[x][0] for x in toks)
+    return s
+
+
 def size_of(label):
-    """-> (id, label_he, sort_key) for a size-like label, else None."""
+    """-> (id, label_he, sort_key) for a size-like label, else None. Other words stay: 'Single Curtain 100x180' ->
+    '100×180 ס"מ (וילון אחד)'."""
     lab = clean(label)
     low = lab.lower()
     pcs = PCS.match(lab)
     n = int(pcs.group(1)) if pcs else 1
     m = WH.search(lab)
-    dims = (m.group(1), m.group(2)) if m else None
+    dims, span = ((m.group(1), m.group(2)), m.span()) if m else (None, None)
     if not dims:
         d = DIMS.search(lab)
         if d and not KELVIN.search(lab):
-            dims = tuple(x for x in d.groups() if x)
+            dims, span = tuple(x for x in d.groups() if x), d.span()
     if dims:
+        rest = lab[:span[0]] + " " + lab[span[1]:]
+        if pcs:
+            rest = rest.replace(pcs.group(0).strip(), " ", 1)
+        rest = clean(re.sub(r"(?i)\b(?:size|cm|mm|w|h|l|d)\b|[-–(),:]", " ", rest))
         txt = "×".join(fmt_num(x) for x in dims)
         vid = "x".join(fmt_num(x) for x in dims)
         he = '%s ס"מ' % txt
         if n > 1:
             vid, he = "%dpc-%s" % (n, vid), "%d יח', %s" % (n, he)
-        return vid, he, (n, [float(x) for x in dims])
+        if rest:
+            vid, he = "%s-%s" % (vid, slug(rest)), "%s (%s)" % (he, words_he(rest))
+        return vid, he, (n, [float(x) for x in dims], rest.lower())
     m = ONE_LEN.match(lab)
     if m:
-        unit = m.group(2).lower()
+        unit = m.group(3).lower()
+        unit = "inch" if unit.startswith("inch") else unit
         unit_he = {"cm": 'ס"מ', "mm": 'מ"מ', "m": "מ'", "inch": "אינץ'", "in": "אינץ'", '"': "אינץ'"}[unit]
-        return "%s%s" % (fmt_num(m.group(1)), "" if unit == "cm" else unit.replace('"', "in")), "%s %s" % (fmt_num(m.group(1)), unit_he), (1, [float(m.group(1))])
+        what = {"diameter": "קוטר ", "dia": "קוטר ", "dia.": "קוטר ", "d": "קוטר ", "height": "גובה ", "h": "גובה ", "length": "אורך "}.get(clean(m.group(1)).lower(), "")
+        return "%s%s" % (fmt_num(m.group(2)), "" if unit == "cm" else unit.replace('"', "in")), "%s%s %s" % (what, fmt_num(m.group(2)), unit_he), (1, [float(m.group(2))], "")
     if low in SIZE_WORDS:
         order = ["xs", "s", "mini", "small", "m", "medium", "middle", "l", "large", "big", "xl", "x-large", "extra large", "xxl"]
-        return slug(low), SIZE_WORDS[low], (1, [float(order.index(low)) if low in order else 50.0])
+        return slug(low), SIZE_WORDS[low], (1, [float(order.index(low)) if low in order else 50.0], "")
     return None
 
 
@@ -245,7 +287,7 @@ def value_of(axis, label):
         m = SET.match(lab)
         k = int(next((g for g in m.groups() if g), 1)) if m else None
         if k:
-            v["id"], v["label_he"], key = ("%dpc" % k), ("יחידה אחת" if k == 1 else "%d יחידות" % k), (k, [])
+            v["id"], v["label_he"], key = ("%dpc" % k), ("יחידה אחת" if k == 1 else "%d יחידות" % k), (k, [], "")
     elif axis == "style":
         for pat, he in HEADINGS:
             if re.search(pat, lab, re.I):
@@ -254,7 +296,10 @@ def value_of(axis, label):
         else:
             if re.match(r"^[a-z]$|^[a-z]\d{0,2}$", lab, re.I):
                 v["label_he"] = "דגם %s" % lab.upper()
-    elif axis == "other" and KELVIN.search(lab):
+                key = (0, [float(ord(lab[0].upper()))] + [float(x) for x in re.findall(r"\d+", lab)], "")
+    if axis in ("style", "other", "finish", "pattern", "set") and v["label_he"] == lab:
+        v["label_he"] = words_he(lab)
+    if axis == "other" and KELVIN.search(lab) and v["label_he"] == lab:
         k = re.search(r"(\d{4})\s*k", lab, re.I)
         low = lab.lower()
         tone = "חם" if "warm" in low else "קר" if ("cold" in low or "cool" in low) else "ניטרלי" if ("neutral" in low or "natural" in low) else None
@@ -291,7 +336,12 @@ def from_variants(rows, default_sku, source="api"):
     rows = keep
     # ship-from is not the customer's choice: keep the origin of the SKU in the room
     dflt = next(r for r in rows if str(r["id"]) == default_sku)
-    origin = {clean(n): clean(l) for n, l, _ in dflt["props"] if SHIPS_FROM.search(clean(n))}
+    every = {}
+    for r in rows:
+        for n, l, _ in r["props"]:
+            every.setdefault(clean(n), set()).add(clean(l))
+    fixed = lambda n: SHIPS_FROM.search(n) or PLUG_NAME.search(n) or (every.get(n) and all(PLUG_VALUE.search(v) for v in every[n]))
+    origin = {clean(n): clean(l) for n, l, _ in dflt["props"] if fixed(clean(n))}
     if origin:
         rows = [r for r in rows if all(clean(l) == origin[clean(n)] for n, l, _ in r["props"] if clean(n) in origin)]
     names = []
@@ -316,7 +366,7 @@ def from_variants(rows, default_sku, source="api"):
             aid = next((a for a in ("style", "pattern", "finish", "other") if a not in used), None)
             if aid is None:
                 return None, "more properties than axis ids"
-            name_he = clean(n) or AXIS_HE[aid]
+            name_he = AXIS_HE[aid] if (not clean(n) or clean(n).startswith("#")) else clean(n)
         used.add(aid)
         vals, ids, keyed = [], {}, []
         for lab in labels[n]:

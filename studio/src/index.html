@@ -77,7 +77,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 .tabs{flex:1 1 420px;min-width:0;overflow-x:auto;scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
 .tabs ul{list-style:none;margin:0;padding:0;display:flex;gap:2px}
-.tabs a{display:flex;align-items:center;gap:6px;padding:10px 12px 11px;text-decoration:none;color:var(--ink-2);font-weight:600;white-space:nowrap;border-bottom:2px solid transparent}
+.tabs a{display:flex;align-items:center;gap:6px;padding:10px 10px 11px;text-decoration:none;color:var(--ink-2);font-weight:600;white-space:nowrap;border-bottom:2px solid transparent}
 .tabs a:hover{color:var(--ink)}
 .tabs a[aria-current="page"]{color:var(--ink);border-bottom-color:var(--ink)}
 .tab-badge{min-width:22px;padding:1px 7px;border-radius:999px;background:var(--ink);color:var(--on-ink);font-size:var(--fs-xs);text-align:center;line-height:18px}
@@ -632,6 +632,7 @@ details.room-lad summary{cursor:pointer;font-weight:600}
 .cmp-nowin{background:transparent;color:var(--ink-2);box-shadow:inset 0 0 0 1px var(--rule-2)}
 .cmp-win b,.cmp-nowin b{font-weight:700}
 .cmp-narrow,.cmp-pct-n{display:none}
+.cmp-table td.money{width:1%}
 .cmp-wins{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px 16px;font-size:var(--fs-xs);color:var(--ink-2)}
 .cmp-wins li{display:inline-flex;flex-wrap:wrap;gap:5px;align-items:center}
 .cmp-wins .st{font-weight:700;color:var(--ink)}
@@ -649,7 +650,8 @@ details.room-lad summary{cursor:pointer;font-weight:600}
 .cmp-src details summary{cursor:pointer}
 @media (max-width:760px){
   .cmp-table .w{display:none}
-  .cmp-narrow{display:block;font-size:var(--fs-xs);color:var(--ink-2);margin-top:5px;overflow-wrap:anywhere}
+  .cmp-narrow{display:flex;flex-wrap:wrap;gap:2px 12px;font-size:var(--fs-xs);color:var(--ink-2);margin-top:6px}
+  .cmp-narrow > span{white-space:nowrap}
   .cmp-pct-n{display:block}
   .cmp-table .c-cand{min-width:0}
   .cmp-table th,.cmp-table td{padding:8px 7px}
@@ -749,7 +751,7 @@ details.room-lad summary{cursor:pointer;font-weight:600}
 
     <section class="screen" id="screen-compare" aria-labelledby="h-compare" hidden>
       <div class="screen-head"><h1 id="h-compare" tabindex="-1">השוואת ספקים</h1><p class="small faint" id="cmp-count"></p></div>
-      <p class="lede">לכל עמדה, כל המועמדים מכל הספקים (CJ, ‏Zendrop, ‏AliExpress וספקים ישראליים): מחיר, משלוח לישראל, עלות נחיתה, מחיר לצרכן ורווח. החישוב זהה למסך הרווחיות ובאותן הנחות. המנצח בכל עמדה הוא המועמד שמשאיר הכי הרבה רווח ליחידה, מבין אלה שלא נדחו, שהתאמתם לסגנון 7 ומעלה ושיש להם כל הנתונים.</p>
+      <p class="lede">לכל עמדה, כל המועמדים מכל הספקים (CJ, ‏Zendrop, ‏AliExpress וספקים ישראליים): מחיר, משלוח לישראל, עלות נחיתה, מחיר לצרכן ורווח. החישוב זהה למסך הרווחיות ובאותן הנחות. המנצח בכל עמדה הוא המועמד שמשאיר הכי הרבה רווח ליחידה, מבין אלה שלא נדחו, שהתאמתם לסגנון 7 ומעלה, שיש להם כל הנתונים ושמרוויחים עליהם.</p>
       <div id="cmp-body"><p class="loading">טוען…</p></div>
     </section>
 
@@ -2675,11 +2677,17 @@ function cmpFit(r, st){
 const cmpRejected = (r, st) => r.rejected || (st ? r.verdicts[st] === 'reject' : (Object.keys(r.verdicts).length > 0 && Object.values(r.verdicts).every(x => x === 'reject')));
 // an item of the deep pass belongs to the styles the pass proposed it for
 const cmpProposed = (r, st) => !st || r.k !== 'deep' || st in r.verdicts || st in r.fits;
-function cmpEligible(r, st){
+// fits the style and has every number (a candidate for the win, before the profit test)
+function cmpQualifies(r, st){
   if(cmpRejected(r, st) || !cmpProposed(r, st) || !isNum(r.econ.contribution)) return false;
   const f = cmpFit(r, st);
   return f.kind === 'assumed' || (f.kind === 'score' && f.n >= cmpFitMin());
 }
+// a winner also has to leave a profit before marketing (contribution above zero)
+const cmpEligible = (r, st) => cmpQualifies(r, st) && r.econ.contribution > 0;
+// why a slot has no winner: no candidate at all / none fits with every number / none leaves a profit
+const cmpNoWin = (rows, st) => !rows.length ? 'empty' : rows.some(r => cmpQualifies(r, st)) ? 'noprofit' : 'nofit';
+const NOWIN_HE = {empty: 'אין אף מועמד', nofit: 'אין מועמד עם התאמה ' + 7 + '+ וכל הנתונים', noprofit: 'אף מועמד מתאים לא משאיר רווח'};
 const perUnit = r => r.econ.contribution / (r.qty || 1);
 function cmpBetter(a, b){
   const x = perUnit(a), y = perUnit(b);
@@ -2717,10 +2725,10 @@ function renderCompare(){
   }
   const slotName = (s, withRoom) => `${withRoom ? (S.rooms.get(s.room) || {}).name_he + ' · ' : ''}${s.name_he || s.id}`;
   function summary(x){
-    const o = {ae: [], cjz: [], il: [], other: [], none: [], empty: 0, ok: {ae: 0, cjz: 0, il: 0, other: 0}, cj: 0, zd: 0};
+    const o = {ae: [], cjz: [], il: [], other: [], none: [], why: {empty: 0, nofit: 0, noprofit: 0}, ok: {ae: 0, cjz: 0, il: 0, other: 0}, cj: 0, zd: 0};
     for(const r of scope) for(const s of r.slots){
       const w = winners.get(s.key)[x];
-      if(!w){ o.none.push(s); if(!(slotRows.get(s.key) || []).length) o.empty++; continue; }
+      if(!w){ o.none.push(s); o.why[cmpNoWin(slotRows.get(s.key) || [], x)]++; continue; }
       const g = CMP_GROUP[w.sup] || 'other'; o[g].push(s);
       if(w.sup === 'cj') o.cj++; else if(w.sup === 'zendrop') o.zd++;
       if(w.econ.margin >= T) o.ok[g]++;
@@ -2737,7 +2745,7 @@ function renderCompare(){
       <div class="tile"><span class="l">CJ או Zendrop מנצחים</span><span class="v">${o.cjz.length}<span class="small muted"> / ${nSlots}</span></span><span class="s">CJ ${o.cj} · Zendrop ${o.zd} · ${o.ok.cjz} עומדים ביעד</span>${listBtn(o.cjz)}</div>
       ${o.il.length ? `<div class="tile"><span class="l">ספק ישראלי מנצח</span><span class="v">${o.il.length}</span><span class="s">${o.ok.il} עומדים ביעד</span>${listBtn(o.il)}</div>` : ''}
       ${o.other.length ? `<div class="tile"><span class="l">ספק אחר מנצח</span><span class="v">${o.other.length}</span>${listBtn(o.other)}</div>` : ''}
-      <div class="tile"><span class="l">בלי מנצח</span><span class="v">${o.none.length}<span class="small muted"> / ${nSlots}</span></span><span class="s">${o.empty} בלי אף מועמד · ${o.none.length - o.empty} בלי מועמד מתאים עם כל הנתונים</span>${listBtn(o.none)}</div>
+      <div class="tile"><span class="l">בלי מנצח</span><span class="v">${o.none.length}<span class="small muted"> / ${nSlots}</span></span><span class="s">${o.why.empty} בלי אף מועמד · ${o.why.nofit} בלי מועמד מתאים עם כל הנתונים · ${o.why.noprofit} בלי מועמד רווחי</span>${listBtn(o.none)}</div>
     </div>`;
   } else {
     const all = STY.map(x => [x, summary(x)]);
@@ -2775,7 +2783,7 @@ function renderCompare(){
       const wst = st ? w[st] : null;
       const head = st
         ? (wst ? `<span class="chip cmp-win ${wst.econ.margin >= T ? 'is-ok' : 'is-low'}">מנצח: <b>${esc((CMP_SUP[wst.sup] || CMP_SUP.other).he)}</b> · רווח ${ltr(fmtILS(wst.econ.contribution))} · ${ltr(fmtPct(wst.econ.margin))}${wst.econ.margin >= T ? '' : ' · מתחת ליעד'}</span>`
-               : `<span class="chip cmp-nowin">אין מנצח: אין מועמד עם התאמה ${cmpFitMin()}+ וכל הנתונים</span>`)
+               : `<span class="chip cmp-nowin">אין מנצח: ${esc(cmpNoWin(all, st) === 'nofit' ? `אין מועמד עם התאמה ${cmpFitMin()}+ וכל הנתונים` : NOWIN_HE[cmpNoWin(all, st)])}</span>`)
         : '';
       const winsLine = st ? '' : `<ul class="cmp-wins" aria-label="מנצח לפי סגנון">${STY.map(x => { const wr = w[x]; return `<li><span class="st">${esc(cmpStyleHe(x))}:</span> ${wr ? `${supBadge(wr)} ${ltr(fmtILS(wr.econ.contribution))}` : '<span>אין</span>'}</li>`; }).join('')}</ul>`;
       const trs = rows.map(x => cmpRowHtml(x, st, winOf.get(x.key), T)).join('');
@@ -2827,7 +2835,7 @@ function renderCompare(){
     </section>
     <p class="result-line" aria-live="polite"><span><strong class="num">${nShownRows}</strong> מועמדים ב-<strong class="num">${nShownSlots}</strong> עמדות${nHiddenSlots ? ` · ${nHiddenSlots} עמדות מוסתרות בסינון` : ''}</span></p>
     ${roomHtml}
-    <p class="xs faint formula">רווח ₪ = תרומה למכירה (הכנסה נטו פחות עלות נחיתה, עמלות, שמורת החזרות ואריזה), כמו בעמודה "מרווח" במסך הרווחיות; "אחרי שיווק" מוריד גם CAC לפריט. עלות נחיתה = (מחיר × כמות + משלוח לכמות) × שער. מחיר לצרכן: המחיר שנקבע בסטודיו, אחרת המחיר העליון של טווח השוק של המוצר (הנקודה של כפתור "מחיר ₪…9"), אחרת טווח השוק של העמדה, ובליקוט המעמיק הטווח שבקובץ; כמה יחידות = הטווח × הכמות, מעוגל מטה ל-9. "ל-35%" = המחיר הנמוך ביותר שמביא ליעד. משלוח: CJ לפי שיטת המשלוח שבהגדרות, ‏AliExpress ו-Zendrop לפי מה שכתוב בכרטיס או בקובץ הליקוט. מנצח = הכי הרבה רווח ליחידה (תרומה ÷ כמות), מבין המועמדים שלא נדחו, עם התאמה ${cmpFitMin()}+ לסגנון ועם כל הנתונים. כרטיס בלי ציוני סגנון בעמדה של הבית הנורדי נחשב לנורדי ומסומן "לא דורג".</p>
+    <p class="xs faint formula">רווח ₪ = תרומה למכירה (הכנסה נטו פחות עלות נחיתה, עמלות, שמורת החזרות ואריזה), כמו בעמודה "מרווח" במסך הרווחיות; "אחרי שיווק" מוריד גם CAC לפריט. עלות נחיתה = (מחיר × כמות + משלוח לכמות) × שער. מחיר לצרכן: המחיר שנקבע בסטודיו, אחרת המחיר העליון של טווח השוק של המוצר (הנקודה של כפתור "מחיר ₪…9"), אחרת טווח השוק של העמדה, ובליקוט המעמיק הטווח שבקובץ; כמה יחידות = הטווח × הכמות, מעוגל מטה ל-9. "ל-35%" = המחיר הנמוך ביותר שמביא ליעד. משלוח: CJ לפי שיטת המשלוח שבהגדרות, ‏AliExpress ו-Zendrop לפי מה שכתוב בכרטיס או בקובץ הליקוט. מנצח = הכי הרבה רווח ליחידה (תרומה ÷ כמות), מבין המועמדים שלא נדחו, עם התאמה ${cmpFitMin()}+ לסגנון, עם כל הנתונים ועם רווח מעל אפס לפני שיווק. כרטיס בלי ציוני סגנון בעמדה של הבית הנורדי נחשב לנורדי ומסומן "לא דורג".</p>
   </div>`;
   restore();
   const setF = (k, val, focusId) => { S.cmp[k] = val; store.set('cmp', S.cmp); renderCompare(); const el = $('#' + focusId); if(el) el.focus(); };
@@ -2877,12 +2885,12 @@ function cmpRowHtml(x, st, winStyles, T){
   const fileTip = file && (isNum(file.landed_ils) || isNum(file.margin_ils)) ? ` title="${esc(`בקובץ הליקוט: נחיתה ${fmtILS(file.landed_ils)}, רווח ${fmtILS(file.margin_ils)}${isNum(file.margin_pct) ? ' (' + fmtPct(file.margin_pct) + ')' : ''}. כאן מחושב מחדש לפי ההנחות של מסך הרווחיות.`)}"` : '';
   const cmpTo = file && file.compared_to && file.compared_to.card_id ? (() => { const o = S.byId.get(file.compared_to.card_id); return `<p class="cand-reason">מול: <span dir="auto">${esc(o ? o.name.slice(0, 60) : file.compared_to.card_id)}</span>${isNum(file.compared_to.landed_ils) ? ` (נחיתה ${ltr(fmtILS(file.compared_to.landed_ils))} בקובץ)` : ''}</p>`; })() : '';
   const marginCell = isNum(e.contribution)
-    ? `<span class="flag ${cls}"><i class="fdot"></i>${ltr(fmtILS(e.contribution))}</span><span class="cmp-sub cmp-pct-n">${ltr(fmtPct(e.margin, 1))}</span><span class="cmp-sub">אחרי שיווק ${ltr(fmtILS(e.after_marketing))}</span>`
+    ? `<span class="flag ${cls}"><i class="fdot"></i>${ltr(fmtILS(e.contribution))}</span><span class="cmp-sub cmp-pct-n">${ltr(fmtPct(e.margin, 1))}</span><span class="cmp-sub w">אחרי שיווק ${ltr(fmtILS(e.after_marketing))}</span>`
     : `<span class="flag flag-orange"><i class="fdot"></i>${esc(missText(e))}</span>`;
   return `<tr class="${isWin ? 'is-win' : ''} ${rej ? 'is-rej' : ''}" data-sup="${esc(x.sup)}" data-key="${esc(x.key)}"${isNum(e.margin) ? ` data-margin="${e.margin.toFixed(4)}"` : ''}>
     <th scope="row" class="c-cand">${titleHtml}
       <div class="cand-meta">${chips}</div>
-      <div class="cmp-narrow">${esc(priceTxt)}${x.qty > 1 ? ` × ${x.qty}` : ''} + משלוח ${esc(shipTxt)}${days ? ` (${days} יום)` : ''} · מחיר ${esc(retailTxt)}${x.retail ? ` (${esc(RETAIL_SRC[x.retail.src])})` : ''} · התאמה ${esc(fitTxt)}</div>
+      <div class="cmp-narrow"><span>מחיר ${ltr(esc(priceTxt))}${x.qty > 1 ? ` × ${ltr(esc(x.qty))}` : ''}</span><span>משלוח ${ltr(esc(shipTxt))}${days ? `, ${ltr(esc(days))} יום` : ''}</span><span>לצרכן ${ltr(esc(retailTxt))}${x.retail ? ` <span class="faint">(${esc(RETAIL_SRC[x.retail.src])})</span>` : ''}</span><span>התאמה ${st ? ltr(esc(fitTxt)) : esc(fitTxt)}</span></div>
       ${reason ? `<p class="cand-reason" dir="auto">${esc(reason.length > 220 ? reason.slice(0, 220) + '…' : reason)}</p>` : ''}${cmpTo}
     </th>
     <td class="money w">${ltr(esc(priceTxt))}${priceSub ? `<span class="cmp-sub" dir="auto">${esc(priceSub)}</span>` : ''}</td>

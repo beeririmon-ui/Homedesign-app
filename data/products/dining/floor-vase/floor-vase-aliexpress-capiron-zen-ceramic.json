@@ -26,21 +26,23 @@
     ]
   },
   "dimensions_cm": {
-    "width": null,
-    "depth": null,
-    "height": null
+    "width": 8,
+    "depth": 8,
+    "height": 25
   },
   "colors": {
-    "dominant_hex": null,
-    "secondary_hex": [],
-    "temperature": null
+    "dominant_hex": "#E9E8E4",
+    "secondary_hex": [
+      "#C9C8C4"
+    ],
+    "temperature": "neutral"
   },
   "materials": [
-    "Ceramic & Porcelain"
+    "ceramic / porcelain (per listing: Ceramic & Porcelain)"
   ],
-  "texture": null,
-  "finish": null,
-  "visual_weight": null,
+  "texture": "matte white with fine horizontal turned grooves (thread-like ribbing), slim teardrop body with a very narrow neck",
+  "finish": "matte",
+  "visual_weight": "light",
   "lighting": null,
   "images": {
     "urls": [
@@ -60,5 +62,32 @@
   },
   "style_scores": {},
   "status": "candidate",
-  "notes": "DRAFT from AliExpress DS API (2026-10-11, aliexpress-session): colors (HEX), visual_weight, product dimensions and texture are NOT filled; fill them from the photos before QA (sourcing-agent). SKU 12000047471652183 (Color: B), stock 10, list price 32.86 USD. Package (not product): 30 x 20 x 20 cm, gross 0.400 kg. Shipping to IL: cheapest 5.61 USD AliExpress standard shipping, 8-18 days (CAINIAO_STANDARD); fastest 57.1 USD AliExpress Premium shipping, 11-13 days. Store: CAPIRON Official Store (id 912098027, CN); ratings described 4.9 / communication 4.9 / shipping 4.8; product 4.9 stars, 14 reviews, 30 sold; AE category 200001438. Listed attributes: Size = L."
+  "fit_score_provisional": 3,
+  "recommendation": "reject",
+  "fit_notes": "נפסל לעמדת floor-vase (גוף 50-65 ס״מ, קוטר 25-32): למרות הכותרת 'Floor Flowerpot' אף אחת מ-5 האפשרויות לא מתקרבת: 17x14, 25x8, 38x8, 32x12 ו-46x9 (גובה x רוחב, מתוך תמונות המידות של הספק). הגבוהה ביותר (E, 46 ס״מ, אפור כהה, 37.92 דולר) נמוכה ב-8% מהמינימום וצרה פי 3 מהקוטר הנדרש, ופיה צר מדי לשלושה עד חמישה ענפי אקליפטוס. הסגנון (פס חריטה דק, צוואר דקיק) יפה אבל מתאים לשולחן, לא לרצפה. כן שווה להעביר למאגר: B (25x8, לבן, 22.02 דולר) נכנס בגובה של centerpiece-vase (20-28, קוטר 8 בתוך ±15%), ו-C (38x8) מתאים למדף או לאדן. לא נפתח כרטיס חדש (לפי ההנחיה).",
+  "options": {
+    "axes": [
+      {
+        "id": "style",
+        "name_he": "דגם",
+        "values": [
+          { "id": "a", "label_he": "A: כדור לבן, גובה 17, רוחב 14 ס״מ", "label_src": "A (17 x 14 cm per the size photo)" },
+          { "id": "b", "label_he": "B: טיפה לבנה, גובה 25, רוחב 8 ס״מ", "label_src": "B (25 x 8 cm)" },
+          { "id": "c", "label_he": "C: בקבוק לבן דק, גובה 38, רוחב 8 ס״מ", "label_src": "C (38 x 8 cm)" },
+          { "id": "d", "label_he": "D: טיפה אפורה, גובה 32, רוחב 12 ס״מ", "label_src": "D (32 x 12 cm)" },
+          { "id": "e", "label_he": "E: בקבוק אפור כהה, גובה 46, רוחב 9 ס״מ", "label_src": "E (46 x 9 cm)" }
+        ]
+      }
+    ],
+    "skus": [
+      { "id": "12000047471652182", "values": { "style": "a" }, "price": { "amount": 24.53, "currency": "USD" }, "stock": 8, "image": "https://ae01.alicdn.com/kf/S176b1f9073474cfa91daf491e70f775aL.jpg", "in_room": false },
+      { "id": "12000047471652183", "values": { "style": "b" }, "price": { "amount": 22.02, "currency": "USD" }, "stock": 10, "image": "https://ae01.alicdn.com/kf/S555da00d5ed1485a909c1d8ca493cd61J.jpg", "in_room": false },
+      { "id": "12000047471652184", "values": { "style": "c" }, "price": { "amount": 26.00, "currency": "USD" }, "stock": 7, "image": "https://ae01.alicdn.com/kf/S82de259298814e1794cdb8da8869006au.jpg", "in_room": false },
+      { "id": "12000047471652185", "values": { "style": "d" }, "price": { "amount": 25.39, "currency": "USD" }, "stock": 11, "image": "https://ae01.alicdn.com/kf/S03c2fc5e7760418da62077b9cd6061574.jpg", "in_room": false },
+      { "id": "12000047471652186", "values": { "style": "e" }, "price": { "amount": 37.92, "currency": "USD" }, "stock": 5, "image": "https://ae01.alicdn.com/kf/S8c7adc0637d2459ca9355bf3d26b29acg.jpg", "in_room": false }
+    ],
+    "default_sku": "12000047471652183",
+    "source": "api"
+  },
+  "notes": "COMPLETED 2026-10-11 (sourcing-agent) from data/sources/aliexpress/3256808800994217.json and the card images. RECOMMEND REJECT for dining-room/floor-vase (no SKU fits the 50-65 cm x 25-32 cm envelope; see fit_notes). Default SKU kept as the API session's pick B (12000047471652183, 22.02 USD, 25 cm tall, stock 10, list price 32.86), with in_room false on every option because none fits the room. Package (not product): 30 x 20 x 20 cm, gross 0.400 kg. SHIPPING to IL: cheapest 5.61 USD AliExpress standard shipping (CAINIAO_STANDARD), 8-18 days; fastest reasonable 57.10 USD AliExpress Premium shipping (CAINIAO_PREMIUM), 11-13 days (quoted for B). Store: CAPIRON Official Store (id 912098027, CN; same store as the centerpiece-vase card); ratings described 4.9 / communication 4.9 / shipping 4.8; product 4.9 stars, 14 reviews, 30 sold; AE category 200001438; brand CAPIRON, model 981; listing attribute 'Size = L' does not match the real sizes. STOCK is thin (5-11 units per SKU). DIMENSIONS from the supplier's own size photos (height x width): A 17 x 14, B 25 x 8, C 38 x 8, D 32 x 12, E 46 x 9 cm; depth assumed equal to the width (estimated from photo). COLOUR: A, B and C are matte white, slightly cool-neutral (#E9E8E4, shade #C9C8C4); D and E look mid-grey in their size charts (about #6F7173, L about 44) but the lifestyle photos show black vases of the same moulds, so they are probably dark grey to black (darker than the Bible's mist grey 76-88, closer to charcoal); the supplier's canonical colour ids (YELLOW, WHITE, Burgundy, Red, PURPLE) are meaningless. The turned horizontal grooves are visible in the lifestyle photos and read as a fine ribbing. Photos (10): lifestyle groups in white and black on a floor and shelves, a poster wall, a round table, five per-SKU size charts (all 10 photos were opened; the size charts are photo 6 = B, 7 = A, 8 = D, 9 = C, 10 = E). Image rights unclear."
 }

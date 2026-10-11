@@ -9,7 +9,10 @@ Methods (official catalog, category "AE-Dropshipper", https://openservice.aliexp
   specialinfo  aliexpress.ds.product.specialinfo.get  itemId, countryCodes[], appKey   (certificates)
   category     aliexpress.ds.category.get         categoryId, language
   card         product + freight (+ specialinfo with --certs) -> product card in data/product-card.schema.json,
-               registered in data/sources/seen.json as aliexpress:<id> (status card)
+               registered in data/sources/seen.json as aliexpress:<id> (status card). Writes `options`: every SKU of the
+               product (studio rules ג, 2026-10-11), default_sku = the --sku chosen (the option shown in the room)
+  backfill-options  rebuilds `options` of existing AliExpress cards from the cached product.get responses in
+               data/sources/aliexpress/<id>.json. No API call, no budget; never replaces options with source "manual"
   check / mark registry only, no call
 
 Usage:
@@ -20,6 +23,7 @@ Usage:
   python3 scripts/ae/ds.py specialinfo <item_id> [--country IL]
   python3 scripts/ae/ds.py category [--id <category_id>]
   python3 scripts/ae/ds.py card <item_id> --slot <room>/<slot> [--out data/products/<slot>/<id>.json] [--sku <sku_id>] [--certs]
+  python3 scripts/ae/ds.py backfill-options [card.json ...] [--dry-run]
   python3 scripts/ae/ds.py check <item_id> [...]
   python3 scripts/ae/ds.py mark <item_id> --status rejected|seen|card --reason "..." [--slot room/slot] [--card-id ID]
 Global flags (before the command): --dry-run --force --by NAME --run-id ID --max-calls N --no-cache --hide-seen --raw
@@ -43,6 +47,7 @@ sys.path.insert(0, HERE)
 sys.path.insert(0, os.path.join(REPO, "scripts", "sourcing"))
 import client  # noqa: E402
 import budget, cache, registry  # noqa: E402
+import options as sku_options  # noqa: E402  (scripts/sourcing/options.py)
 
 SRC = "aliexpress"
 SUPPLIER_NAME = "AliExpress"
@@ -379,6 +384,34 @@ def slot_spec(room, slot):
     return {}
 
 
+def cached_freights(item_id, country="IL"):
+    """{sku_id: shipping_il} from the freight sections already cached for this item (no call)."""
+    d = cache._read(cache.item_path(SRC, item_id)) or {}
+    out = {}
+    for name, sec in (d.get("sections") or {}).items():
+        m = re.match(r"^freight:([^:]+):%s:1$" % re.escape(country), name)
+        if m and isinstance(sec.get("payload"), dict):
+            q = sku_options.shipping_from_quotes((sec["payload"] or {}).get("options"))
+            if q:
+                out[m.group(1)] = q
+    return out
+
+
+def ae_options(product, default_sku, freights=None):
+    """product.get response -> (options, note) or (None, reason). One row per ae_item_sku_info_dto; the axis names are
+    the seller's sku_property_name, the labels its property_value_definition_name (else sku_property_value)."""
+    r = (product or {}).get("result") or {}
+    rows = []
+    for s in as_list(r.get("ae_item_sku_info_dtos")):
+        props = [(p.get("sku_property_name"), p.get("property_value_definition_name") or p.get("sku_property_value"), p.get("sku_image"))
+                 for p in as_list(s.get("ae_sku_property_dtos"))]
+        sid = str(s.get("sku_id") or "")
+        rows.append({"id": sid, "props": props, "price": num(s.get("offer_sale_price")) or num(s.get("sku_price")),
+                     "currency": s.get("currency_code") or "USD", "stock": s.get("sku_available_stock"),
+                     "image": next((im for _, _, im in props if im), None), "shipping_il": (freights or {}).get(sid)})
+    return sku_options.from_variants(rows, default_sku)
+
+
 def build_card(item_id, product, sku, freight, certs, room, slot, card_id, by):
     r = product.get("result") or {}
     base = r.get("ae_item_base_info_dto") or {}
@@ -499,6 +532,10 @@ def do_card(a):
     with open(path, "w") as f:
         json.dump(card, f, ensure_ascii=False, indent=2)
         f.write("\n")
+    # every option of the supplier (studio rules ג, 2026-10-11); the room shows the chosen SKU
+    opts, why = ae_options(product, (sku or {}).get("sku_id"), cached_freights(item_id, a.ship_to))
+    if opts:
+        sku_options.write_options(path, opts)
     registry.add(key_of(item_id), "card", "card %s via scripts/ae/ds.py" % card_id, by=a.by, slot=a.slot, card_id=card_id, opened=True,
                  skus=[str(s.get("sku_id")) for s in skus if s.get("sku_id")], url=ITEM_URL % item_id)
     rel = os.path.relpath(path, REPO) if os.path.abspath(path).startswith(REPO) else path
@@ -521,7 +558,73 @@ def do_card(a):
     if card.get("safety", {}).get("certificates"):
         print("תעודות: %s" % ", ".join(c["name"] for c in card["safety"]["certificates"]))
     print("להשלים ידנית לפני QA: צבעים (HEX), משקל ויזואלי, מידות המוצר, טקסטורה%s" % ("" if card["materials"] else ", חומרים"))
+    if opts:
+        print("אפשרויות: %d SKU על %s%s" % (len(opts["skus"]), ", ".join("%s (%d)" % (x["name_he"], len(x["values"])) for x in opts["axes"]), " · " + why if why else ""))
+    else:
+        print("אפשרויות: לא נכתבו (%s)" % why)
     print("נרשם ב-seen.json: %s status=card card_id=%s" % (key_of(item_id), card_id))
+
+
+# ----------------------------------------------------------------------------- backfill-options
+
+ITEM_ID = re.compile(r"aliexpress\.[a-z.]+/item/(\d+)\.html")
+
+
+def ae_cards(paths=None):
+    """(path, card, item_id) for every AliExpress card (or the given paths)."""
+    root = os.path.join(REPO, "data", "products")
+    if not paths:
+        paths = [os.path.join(d, n) for d, _, fs in os.walk(root) for n in sorted(fs) if n.endswith(".json")]
+    for p in sorted(paths):
+        try:
+            with open(p, encoding="utf-8") as f:
+                card = json.load(f)
+        except (OSError, ValueError):
+            continue
+        m = ITEM_ID.search(str((card.get("supplier") or {}).get("product_url") or ""))
+        if m:
+            yield p, card, m.group(1)
+
+
+def backfill(paths=None, dry_run=False, log=print):
+    """Options for existing AliExpress cards from the cached product.get responses. No API call. -> counts."""
+    n = {"cards": 0, "written": 0, "unchanged": 0, "kept-manual": 0, "skipped": 0}
+    for p, card, item_id in ae_cards(paths):
+        n["cards"] += 1
+        rel = os.path.relpath(p, REPO)
+        cur = card.get("options")
+        if isinstance(cur, dict) and cur.get("source") == "manual":
+            n["kept-manual"] += 1
+            log("keep    %s (options source manual)" % rel)
+            continue
+        hit = cache.get(SRC, item_id, "product", allow_stale=True)
+        if not hit:
+            n["skipped"] += 1
+            log("skip    %s: no cached product.get for %s (run `ds.py product %s` once)" % (rel, item_id, item_id))
+            continue
+        default = (card.get("supplier") or {}).get("sku")
+        opts, why = ae_options(hit["payload"], default, cached_freights(item_id))
+        if not opts:
+            n["skipped"] += 1
+            log("skip    %s: %s" % (rel, why))
+            continue
+        errs, warns = sku_options.validate(opts, card)
+        if errs:
+            n["skipped"] += 1
+            log("skip    %s: invalid options: %s" % (rel, "; ".join(errs[:3])))
+            continue
+        res = sku_options.write_options(p, opts, dry_run=dry_run)
+        n[res] += 1
+        log("%-7s %s: %d SKUs on %s (cached %s)%s%s" % ("would" if dry_run and res == "written" else res[:7], rel, len(opts["skus"]),
+            ", ".join("%s %d" % (x["id"], len(x["values"])) for x in opts["axes"]), hit["fetched_at"][:10],
+            " · " + why if why else "", "".join(" · warn: " + w for w in warns)))
+    return n
+
+
+def do_backfill(a):
+    n = backfill(a.paths, a.dry_run)
+    print("aliexpress backfill-options: %d cards · %d written · %d unchanged · %d manual kept · %d skipped%s" % (
+        n["cards"], n["written"], n["unchanged"], n["kept-manual"], n["skipped"], " (dry run: nothing written)" if a.dry_run else ""))
 
 
 # ----------------------------------------------------------------------------- main
@@ -555,6 +658,7 @@ def main(argv=None):
     c = sub.add_parser("card"); c.add_argument("item_id"); c.add_argument("--slot", required=True); c.add_argument("--out"); c.add_argument("--id")
     c.add_argument("--sku"); c.add_argument("--ship-to", default="IL"); c.add_argument("--qty", type=int, default=1); c.add_argument("--currency", default="USD")
     c.add_argument("--lang", default="en"); c.add_argument("--certs", action="store_true"); c.add_argument("--no-freight", action="store_true")
+    bo = sub.add_parser("backfill-options"); bo.add_argument("paths", nargs="*")
     ck = sub.add_parser("check"); ck.add_argument("ids", nargs="+")
     m = sub.add_parser("mark"); m.add_argument("item_id"); m.add_argument("--status", required=True, choices=registry.STATUSES)
     m.add_argument("--reason", required=True); m.add_argument("--slot"); m.add_argument("--card-id")
@@ -563,6 +667,8 @@ def main(argv=None):
         if a.cmd == "check":
             reg = registry.load()
             return out([{k: v for k, v in registry.check(key_of(x), reg, a.force).items() if k != "entry"} for x in a.ids])
+        if a.cmd == "backfill-options":  # cache only: no key, no token, no budget
+            return do_backfill(a) or 0
         if a.cmd == "mark":
             if a.dry_run:
                 return out({"dry_run": True, "would_mark": key_of(a.item_id), "status": a.status})
