@@ -47,7 +47,7 @@ python3 scripts/ae/auth.py forget    # מחיקת הטוקן השמור
 | `product <id> [<id> ...] [--ship-to IL] [--slot room/slot] [--full]` | `aliexpress.ds.product.get` | מדלג על מה שהמרשם אומר לדלג (כמו CJ). כותרת, תמונות, SKU עם מחירים ומלאי, מאפיינים, אריזה ומשקל, חנות, קטגוריה. ה-HTML של התיאור מוסר אלא אם `--full`. מטמון 30 יום. נרשם כ-`seen`, ‏`opened: true` |
 | `freight <id> --sku <sku_id> [--country IL] [--qty 1]` | `aliexpress.ds.freight.query` | אפשרויות משלוח: קוד, חברה, עלות, ימים, מעקב, מאיפה נשלח. מטמון 14 יום. ‏`sku_id` מגיע מ-`product` |
 | `image-search <קובץ או https-URL> [--type similar\|same] [--ship-to IL]` | `aliexpress.ds.image.searchV2` | התמונה נשלחת ב-base64 (עד 5MB). קיים ל-DS, מחובר |
-| `specialinfo <id> [--country IL]` | `aliexpress.ds.product.specialinfo.get` | תעודות (CE ועוד) כפי שהמוכר מצהיר |
+| `specialinfo <id> [--country IL]` | `aliexpress.ds.product.specialinfo.get` | תעודות (CE ועוד) כפי שהמוכר מצהיר. **לא מורשה לאפליקציה שלנו (2026-10-11): `APPKEY_NOT_ALLOWED`**, ולכן גם `card --certs` נכשל |
 | `category [--id ID]` | `aliexpress.ds.category.get` | שם קטגוריה לפי `cateId` מהחיפוש |
 | `card <id> --slot <room>/<slot> [--out נתיב] [--sku ID] [--certs] [--no-freight]` | מוצר + משלוח (+ תעודות) | כותב כרטיס לפי `data/product-card.schema.json` ורושם במרשם כ-`card`. ראו 3.1 |
 | `check <id> [...]` / `mark <id> --status ... --reason "..."` | מרשם בלבד | בלי קריאה |
@@ -69,7 +69,7 @@ python3 scripts/ae/ds.py card 1005001234567890 --slot living-room/accent-sconces
 ## 4. הפרוטוקול, בקצרה (אומת 2026-10-10)
 - **כתובות** (תיעוד 1369): עסקיות `https://api-sg.aliexpress.com/sync?method=<api>` ‏(‏`aliexpress.ds.*`), מערכת `https://api-sg.aliexpress.com/rest/auth/token/create` ו-`/rest/auth/token/refresh`. תמיד POST ‏(`application/x-www-form-urlencoded`).
 - **חתימה** (תיעוד 1386, דוגמה מלאה ב-1385, ו-SDK הרשמי `IopUtils.signApiRequest`): ממיינים את כל הפרמטרים (מערכת ועסקיים, כולל `method`) לפי שם, משרשרים שם+ערך בלי מפרידים (ערכים ריקים מדולגים), בקריאת מערכת מקדימים את הנתיב (`/auth/token/create`), ‏HMAC-SHA256 עם ה-App Secret, הקס באותיות גדולות. ‏`sign_method=sha256`, ‏`timestamp` במילישניות (עד 7200 שניות מ-UTC).
-- **פרמטרי מערכת** שאנחנו שולחים ב-`/sync`: ‏`app_key`, ‏`timestamp`, ‏`sign_method`, ‏`method`, ‏`access_token`, ‏`format=json`, ‏`v=2.0`, ‏`simplify=true`, ‏`partner_id`. ה-SDK הרשמי קורא לטוקן `session` במקום `access_token`; אם הקריאה הראשונה תחזיר `IllegalAccessToken` או `IncompleteSignature`, מנסים `AE_DS_TOKEN_PARAM=session`.
+- **פרמטרי מערכת** שאנחנו שולחים ב-`/sync`: ‏`app_key`, ‏`timestamp`, ‏`sign_method`, ‏`method`, ‏`access_token`, ‏`format=json`, ‏`v=2.0`, ‏`simplify=true`, ‏`partner_id`. **אומת 2026-10-11: `access_token` עובד** (ה-SDK הרשמי קורא לו `session`; `AE_DS_TOKEN_PARAM=session` נשאר כגיבוי).
 - **הרשאה** (תיעוד 1364 ו-1590): ‏`https://api-sg.aliexpress.com/oauth/authorize?response_type=code&force_auth=true&redirect_uri=<callback>&client_id=<app_key>`, ואז `code` → ‏`/auth/token/create`. רענון מומלץ 30 דקות לפני הפקיעה; ‏`refresh_expires_in = 0` אומר שאי אפשר לרענן.
 - **שגיאות:** שגיאת gateway היא `{type, code, message|msg, sub_code, sub_msg, request_id}` (לפעמים תחת `error_response`); שגיאה עסקית ב-`rsp_code`/`rsp_msg`, ‏`resp_code`, ‏`code`/`msg` או `result.success`. המעטפת `<api>_response` ו-`resp_result` מוסרת אוטומטית. ההודעה מודפסת במלואה (שמות השגיאות נחוצים לדיבוג), בלי שום סוד.
 - **קצב:** לפחות 0.5 שניות בין קריאות; ניסיון חוזר עם המתנה רק על HTTP 5xx ושגיאות רשת; על "Api access frequency exceeds the limit" (תיעוד 1790) ניסיון חוזר אחד אחרי 2 שניות. ‏`AE_DS_DEBUG=1` מדפיס רק שמות פרמטרים, לא ערכים.
@@ -85,4 +85,14 @@ python3 scripts/ae/ds.py card 1005001234567890 --slot living-room/accent-sconces
 - הזמנות (`aliexpress.ds.order.create`, ‏`aliexpress.ds.order.tracking.get`, ‏`aliexpress.ds.order.afterpay`), פידים (`aliexpress.ds.feed.itemids.get`), סיטונאות (`aliexpress.ds.product.wholesale.get`), ‏`aliexpress.logistics.buyer.freight.calculate` (יש לנו `ds.freight.query`), ‏Webhooks, ו-`/auth/token/security/*`.
 - אפליקציית ה-Affiliates (מפתחות `AE_AFF_*`): לא נדרשת ולא מחוברת.
 - המרת מזהי `.us` (3256…) למזהי `.com` (1005…) לפני הקריאה: ה-API מקבל את שניהם, והמזהים שחוזרים ב-`product_id_converter_result` נרשמים במרשם כ-aliases.
-- **לא אומת מול ה-API החי** (אין מפתחות בסשן הזה): שם פרמטר הטוקן (`access_token` לעומת `session`), צורת המעטפות בפועל, ושמות השדות ב-`ds.text.search` (לפי התיעוד: ‏`itemId`, ‏`title`, ‏`salePrice`, ‏`itemMainPic`, ‏`itemUrl`, ‏`orders`, ‏`evaluateRate`, ‏`cateId`). הקריאה החיה הראשונה: `python3 scripts/ae/ds.py search "ceramic vase" --size 5`.
+- (ראו סעיף 7: מה שלא היה מאומת אומת ב-2026-10-11.)
+
+## 7. אומת מול ה-API החי (2026-10-11)
+פירוט מלא: `data/leads/aliexpress/api-first-call-2026-10-11.md`.
+- **הרשאה:** עבדה עם חשבון הקונה. ‏`auth.py code` מקבל את כתובת ה-redirect המלאה. בסטטוס Test: ‏access_token ‏24 שעות, refresh ‏48 שעות.
+- **טוקן:** `access_token`. מכסה יומית לא מוחזרת בתגובות.
+- **מעטפות עם `simplify=true`:** אין `<method>_response`. ‏`ds.product.get` שטוח (`result`, ‏`rsp_code: 200`, ‏`rsp_msg`, ‏`request_id`); ‏`ds.category.get` בתוך `resp_result` (`resp_code`). ‏`unwrap()` ו-`business_status()` מטפלים בשניהם.
+- **`ds.text.search`:** שמות השדות לפי התיעוד. ‏`salePrice` ביואן (`salePriceCurrency: CNY`); המחיר בדולר ב-`targetSalePrice`. ‏`orders`/`evaluateRate` לפעמים ריקים.
+- **מזהים:** מזהי `.us` (3256…) מתקבלים ישירות ב-`ds.product.get`; ‏`product_id_converter_result.main_product_id` הוא מזהה ה-.com, ו-`sub_product_id` מחרוזת JSON (`"{\"US\":3256...}"`), שמפורקת ל-aliases.
+- **משלוח:** אין אפשרות → שגיאה `DELIVERY_SERVICE_EXCEPTION` (נשמר ככרטיס "אין משלוח"). באפשרות חינמית אין מטבע: הלקוח ממלא את המטבע המבוקש.
+- **`card`:** ברירת המחדל היא ה-SKU הזול במלאי, שבטקסטיל הוא בדרך כלל המידה הקטנה ביותר: לבחור `--sku`. ‏`--out` לא קובע את ה-id: להעביר גם `--id`. slug זהה של מוצר אחר לא נדרס (מתווספות 6 ספרות מהמזהה).

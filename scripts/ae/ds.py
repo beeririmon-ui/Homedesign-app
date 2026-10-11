@@ -151,7 +151,15 @@ def fetch_product(a, item_id, use_cache=True):
     if isinstance(skus, dict):
         skus = next(iter(skus.values()), [])
     conv = r.get("product_id_converter_result") or {}
-    aliases = [str(x) for x in (conv.get("main_product_id"), conv.get("sub_product_id")) if x and str(x) != str(item_id)]
+    # Live shape (2026-10-11): {"main_product_id": 1005..., "sub_product_id": "{\"US\":3256...}"} (a JSON string).
+    subs = conv.get("sub_product_id")
+    if isinstance(subs, str) and subs.startswith("{"):
+        try:
+            subs = list(json.loads(subs).values())
+        except ValueError:
+            subs = []
+    aliases = [str(x) for x in [conv.get("main_product_id")] + (subs if isinstance(subs, list) else [subs])
+               if x and str(x) != str(item_id)]
     registry.add(key_of(item_id), "seen", "opened via scripts/ae/ds.py: %s" % (base.get("subject") or "")[:120], by=a.by,
                  slot=getattr(a, "slot", None), opened=True, vids=aliases,
                  skus=[str(s.get("sku_id")) for s in skus if s.get("sku_id")], url=ITEM_URL % item_id)
@@ -212,7 +220,7 @@ def fetch_freight(a, item_id, sku_id, country, qty):
     section = "freight:%s:%s:%d" % (sku_id, country, qty)
     hit = None if a.no_cache else cache.get(SRC, item_id, section, kind="freight")
     if hit:
-        return dict(hit["payload"], cached_at=hit["fetched_at"]), "CACHE"
+        return _fill_currency(dict(hit["payload"], cached_at=hit["fetched_at"]), a.currency), "CACHE"
     spend(a, "freight")
     req = {"quantity": qty, "shipToCountry": country, "productId": str(item_id), "selectedSkuId": str(sku_id),
            "language": lang_full(a.lang), "locale": lang_full(a.lang), "currency": a.currency}
@@ -224,7 +232,15 @@ def fetch_freight(a, item_id, sku_id, country, qty):
             raise
         res = {"options": [], "success": False, "code": e.code, "msg": e.message, "item_id": str(item_id), "sku_id": str(sku_id), "country": country, "qty": qty}
     cache.put(SRC, item_id, section, res, endpoint=M_FREIGHT, params=req)
-    return res, "CALLED"
+    return _fill_currency(res, a.currency), "CALLED"
+
+
+def _fill_currency(res, currency):
+    """Free options come back without shipping_fee_currency (live, 2026-10-11); fees are in the requested currency."""
+    for o in res.get("options") or []:
+        if o.get("currency") is None and o.get("fee") is not None:
+            o["currency"] = currency
+    return res
 
 
 def do_freight(a):
@@ -468,6 +484,16 @@ def do_card(a):
     base = r.get("ae_item_base_info_dto") or {}
     card_id = a.id or "%s-aliexpress-%s" % (slot, slugify(base.get("subject")))
     path = a.out or os.path.join(REPO, "data", "products", slot, card_id + ".json")
+    if not a.id and not a.out and os.path.exists(path):
+        # Sellers reuse titles: never overwrite another product's card with the same slug.
+        try:
+            with open(path) as f:
+                other = (json.load(f).get("supplier") or {}).get("product_url")
+        except (OSError, ValueError):
+            other = None
+        if other != ITEM_URL % item_id:
+            card_id = "%s-%s" % (card_id, item_id[-6:])
+            path = os.path.join(os.path.dirname(path), card_id + ".json")
     card, cheapest, fastest = build_card(item_id, product, sku, freight, certs, room, slot, card_id, a.by)
     os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
     with open(path, "w") as f:
