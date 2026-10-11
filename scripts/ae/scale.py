@@ -319,11 +319,11 @@ def ranked_for_review(room):
     det = json.load(open(os.path.join(OUT, "detail", room + ".json")))
     out = {}
     for k, rec in det.items():
-        if not rec.get("ship_ok"):
+        L = landed(rec)
+        if not rec.get("ship_ok") or L is None:
             continue
         key = "%s/%s" % (room, rec["slot"])
         band, _ = band_of(SLOTS[key])
-        L = landed(rec)
         m_ils, m_pct = economics(band[1], L)
         for style in rec["styles"]:
             out.setdefault((rec["slot"], style), []).append((prelim_fit(rec, style) + max(-2, min(2, m_pct * 4)), rec, m_pct))
@@ -360,14 +360,14 @@ def do_sheet(room, per_style):
             x, y = (i % cols) * W, (i // cols) * H
             fp = os.path.join(imgdir, rec["item_id"] + ".jpg")
             if not os.path.exists(fp) and rec.get("image"):
-                try:
-                    url = rec["image"] + ("_220x220.jpg" if "aliexpress-media" in rec["image"] else "")
-                    with urllib.request.urlopen(url, timeout=20) as r, open(fp, "wb") as f:
-                        f.write(r.read())
-                except Exception:
+                for url in (rec["image"] + "_220x220.jpg", rec["image"]):
                     try:
-                        with urllib.request.urlopen(rec["image"], timeout=20) as r, open(fp, "wb") as f:
-                            f.write(r.read())
+                        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+                        with urllib.request.urlopen(req, timeout=20) as r:
+                            data = r.read()
+                        with open(fp, "wb") as f:
+                            f.write(data)
+                        break
                     except Exception:
                         pass
             try:
@@ -484,8 +484,8 @@ def do_finalize(room, a, write_cards=True):
                 r.update(margin_ils=m_ils, margin_pct=m_pct, margin_after_cac_ils=round(m_ils - CAC / ITEMS, 1))
                 if rv.get("verdict") == "reject" or fit < 6:
                     r.update(verdict="reject", reject_why=rv.get("reason") or "fit %.1f" % fit)
-                elif m_pct < 0.15:
-                    r.update(verdict="reject", reject_why="margin %d%% at the top of the band" % round(m_pct * 100))
+                elif m_pct < 0:
+                    r.update(verdict="reject", reject_why="loses money at the top of the market band (margin %d%%)" % round(m_pct * 100))
                 else:
                     r["verdict"] = "candidate"
             recs.append(r)
@@ -499,9 +499,11 @@ def do_finalize(room, a, write_cards=True):
         for i, r in enumerate(live):
             r["verdict"] = "best" if i == 0 and r["fit"] >= 8 else "alternative"
             c = r["compared_to"]
-            beats = c is None or r["landed_ils"] <= c["landed_ils"] or (r["margin_ils"] or 0) >= economics(r["retail_band_ils"][1], c["landed_ils"])[0]
+            # same retail band for both, so "margin at least as good" == landed cost not higher
+            beats = c is None or r["landed_ils"] <= c["landed_ils"]
             r["beats_existing"] = beats
-            if i < 3 and r["fit"] >= 8 and r["margin_pct"] >= 0.25 and beats:
+            r["low_margin"] = r["margin_pct"] < 0.35
+            if i < 3 and r["fit"] >= 8 and beats:
                 to_card.setdefault((slot, r["item_id"]), []).append(r)
     # cards
     carded = []

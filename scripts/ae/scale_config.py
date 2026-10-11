@@ -48,7 +48,7 @@ SLOTS = {
     "living-room/wall-decor": dict(q="wall decor hanging", must=r"wall|hanging|mirror|plate|basket|tapestry|macrame", band="wall-decor", size=[r"\b(5\d|6\d|7\d|8\d)\s*cm"], ship=6),
     "living-room/accent-sconces": dict(q="stone wall sconce lamp", must=r"sconce|wall (lamp|light)", band="wall-sconce", size=[r"\b1[4-8]\s*cm", r"warm|3000"], ship=10, qty=2),
     "living-room/wall-sconce": dict(q="wall sconce lamp linen shade", must=r"sconce|wall (lamp|light)", band="wall-sconce", size=[r"warm|3000"], ship=10),
-    "living-room/vase": dict(q="ceramic vase", must=r"vase", band="vase-small", size=[r"\b(2[0-9]|3[0-2])\s*cm", r"\bM\b|medium"], ship=5, bad=r"\b(artificial|fake|flowers? included)\b"),
+    "living-room/vase": dict(q="ceramic vase", must=r"vase", band="vase-large", size=[r"\b(2[5-9]|3[0-5])\s*cm", r"\bL\b|large"], ship=5, bad=r"\b(artificial|fake|flowers? included)\b"),
     "living-room/rug": dict(q="living room rug", must=r"rug|carpet", band="rug-large", size=[_s(r"(?:200|190)", r"(?:290|300)"), _s(r"(?:160)", r"(?:230)"), _s(r"200", r"250")], ship=25),
     "living-room/floor-lamp": dict(q="floor lamp linen shade", must=r"floor (lamp|light)|standing lamp", band="floor-lamp", size=[r"warm|3000", r"eu"], ship=25),
     "living-room/planter": dict(q="ceramic planter pot", must=r"planter|pot|flowerpot|plant pot", band="planter", size=[r"\b(2[0-9]|3[0-5])\s*cm", r"\bL\b|large"], ship=6, bad=r"\b(artificial|fake)\b"),
