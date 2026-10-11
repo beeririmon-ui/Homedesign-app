@@ -1380,6 +1380,7 @@ def build_comparison(slots: dict, products: list[dict], slot_by_key: dict, room_
         for s in slots.get(rid) or []:
             cands = []
             ae_index = {}
+            best_set = set()  # deep candidates whose shown price already comes from a 'best' record
             for pid in s.get("direct") or []:
                 cands.append(card_cand(by_id[pid], False))
             for pid in s.get("shared_ids") or []:
@@ -1404,7 +1405,9 @@ def build_comparison(slots: dict, products: list[dict], slot_by_key: dict, room_
                 entry = {k: r[k] for k in ("fit", "verdict", "reason", "landed_ils", "margin_ils", "margin_pct",
                                            "compared_to", "sku", "price_usd", "ship_usd", "ship_days", "band", "file")}
                 (c.setdefault("deep", {}) if c["k"] == "card" else c["styles"])[r["style"]] = entry
-                if c["k"] == "deep" and r["verdict"] == "best":  # the record the pass itself picked sets the shown price
+                # the first record the pass itself picked as best (styles in file order) sets the price shown for "all styles"
+                if c["k"] == "deep" and r["verdict"] == "best" and c["id"] not in best_set:
+                    best_set.add(c["id"])
                     for k in ("sku", "price_usd", "ship_usd", "ship_days", "band"):
                         if r[k] is not None:
                             c[k] = r[k]

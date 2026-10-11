@@ -26,23 +26,30 @@
     ]
   },
   "dimensions_cm": {
-    "width": null,
-    "depth": null,
-    "height": null
+    "width": 6.5,
+    "depth": 9,
+    "height": 16
   },
   "colors": {
-    "dominant_hex": null,
-    "secondary_hex": [],
-    "temperature": null
+    "dominant_hex": "#D9C7A3",
+    "secondary_hex": [
+      "#5B3A29",
+      "#EADFC9"
+    ],
+    "temperature": "warm"
   },
   "materials": [
-    "Stone",
-    "Stone"
+    "travertine (natural stone, per listing 'Stone'; authenticity to verify)",
+    "dark walnut-toned wood backplate (estimated from photo; not stated in the listing)",
+    "LED bulb included"
   ],
-  "texture": null,
-  "finish": null,
-  "visual_weight": null,
-  "lighting": null,
+  "texture": "honed cylinder of pale travertine with open pores and soft horizontal banding; small dark wooden wall plate behind it",
+  "finish": "matte",
+  "visual_weight": "light",
+  "lighting": {
+    "color_temp_k": 3000,
+    "light_type": "direct"
+  },
   "images": {
     "urls": [
       "https://ae01.alicdn.com/kf/Sdb2f283a1f244faab61f3d7262870680w.jpg",
@@ -61,15 +68,57 @@
   },
   "style_scores": {},
   "status": "candidate",
-  "notes": "DRAFT from AliExpress DS API (2026-10-11, aliexpress-session): colors (HEX), visual_weight, product dimensions and texture are NOT filled; fill them from the photos before QA (sourcing-agent). SKU 12000043242375290 (Lampshade Color: 16cm, Size: Warm White 3000K), stock 161, list price 103.89 USD. Package (not product): 25 x 25 x 25 cm, gross 2.000 kg. Shipping to IL: cheapest 23.39 USD AliExpress standard shipping, 22-32 days (CAINIAO_STANDARD); fastest 142.86 USD DHL, 18-29 days. Store: Takeme Lighting Store (id 1103805123, CN); ratings described 4.9 / communication 4.9 / shipping 4.9; product 4.8 stars, 27 reviews, 85 sold; AE category 39050510. Listed attributes: Length = 23cm,28cm,32cm.",
+  "fit_score_provisional": 8,
+  "recommendation": "keep",
+  "fit_notes": "צילינדר טרוורטין חלק עם נקבוביות נראות, אור מעלה ומטה על הקיר (Shade Direction: Up & Down), בדיוק ההארה שה-Bible מבקש ל-accent-sconces (אלומה רכה למעלה ולמטה, בלי שלולית על רהיט). הגרסה 16 ס״מ: גובה 16 (בתוך 12–18), בליטה כ-9 (בתוך 7–12), קוטר 6.5 (צר מהמעטפת 10–14, לא חורג ממנה). הגרסאות 23/28/32 גבוהות מדי. נקודות לבדיקה לפני נעילה: (1) אמיתות הטרוורטין (ה-Bible: טרוורטין אמיתי בלבד, לא שרף); (2) 3000K מול 2700K (אפשר לתקן בגריידינג); (3) CE הוא הצהרת ספק בלבד, התעודות לא זמינות ב-API; (4) לוחית גב באגוז כהה קטנה מחוץ לטווח האלון (פרט קטן, מתחת ל-5%); (5) 22–32 ימי משלוח.",
   "safety": {
-    "ce": null,
+    "ce": true,
     "ip_rating": null,
     "toy_standard": [],
-    "power": null,
+    "power": "wired",
     "plug_type": null,
     "voltage": "90-260V",
     "certificates": [],
-    "source": "aliexpress.ds.product.get attributes"
-  }
+    "source": "supplier listing attributes via aliexpress.ds.product.get (Certification: CCC, ce, ROHS; declared, unverified; certificate lookup not authorised for the app)"
+  },
+  "options": {
+    "axes": [
+      {
+        "id": "length",
+        "name_he": "גובה הגוף",
+        "values": [
+          { "id": "16", "label_he": "16 ס״מ", "label_src": "16cm (supplier property 'Lampshade Color')" },
+          { "id": "23", "label_he": "23 ס״מ", "label_src": "23cm" },
+          { "id": "28", "label_he": "28 ס״מ", "label_src": "28cm" },
+          { "id": "32", "label_he": "32 ס״מ", "label_src": "32cm" }
+        ]
+      },
+      {
+        "id": "other",
+        "name_he": "גוון אור",
+        "values": [
+          { "id": "3000k", "label_he": "לבן חם 3000K", "label_src": "Warm White 3000K (supplier property 'Size' = S)" },
+          { "id": "4000k", "label_he": "לבן ניטרלי 4000K", "label_src": "Neutral White 4000K (supplier property 'Size' = M)" },
+          { "id": "6000k", "label_he": "לבן קר 6000K", "label_src": "Cold White 6000K (supplier property 'Size' = L)" }
+        ]
+      }
+    ],
+    "skus": [
+      { "id": "12000043242375290", "values": { "length": "16", "other": "3000k" }, "price": { "amount": 51.94, "currency": "USD" }, "stock": 161, "image": "https://ae01.alicdn.com/kf/S212325531a954ea58ee233109694868cN.jpg", "in_room": true },
+      { "id": "12000043242375291", "values": { "length": "16", "other": "4000k" }, "price": { "amount": 51.94, "currency": "USD" }, "stock": 191, "image": "https://ae01.alicdn.com/kf/S212325531a954ea58ee233109694868cN.jpg", "in_room": false },
+      { "id": "12000043242375292", "values": { "length": "16", "other": "6000k" }, "price": { "amount": 51.94, "currency": "USD" }, "stock": 199, "image": "https://ae01.alicdn.com/kf/S212325531a954ea58ee233109694868cN.jpg", "in_room": false },
+      { "id": "12000041466171952", "values": { "length": "23", "other": "3000k" }, "price": { "amount": 54.65, "currency": "USD" }, "stock": 111, "image": "https://ae01.alicdn.com/kf/Sccf3b5be86834485baebfec2bf3fdc2fY.jpg", "in_room": false },
+      { "id": "12000041466171953", "values": { "length": "23", "other": "4000k" }, "price": { "amount": 54.65, "currency": "USD" }, "stock": 173, "image": "https://ae01.alicdn.com/kf/Sccf3b5be86834485baebfec2bf3fdc2fY.jpg", "in_room": false },
+      { "id": "12000041466171954", "values": { "length": "23", "other": "6000k" }, "price": { "amount": 54.65, "currency": "USD" }, "stock": 200, "image": "https://ae01.alicdn.com/kf/Sccf3b5be86834485baebfec2bf3fdc2fY.jpg", "in_room": false },
+      { "id": "12000041466171955", "values": { "length": "28", "other": "3000k" }, "price": { "amount": 72.51, "currency": "USD" }, "stock": 20, "image": "https://ae01.alicdn.com/kf/S2daf5c56542847aeb7a50b7ab5a15d80R.jpg", "in_room": false },
+      { "id": "12000041466171956", "values": { "length": "28", "other": "4000k" }, "price": { "amount": 72.51, "currency": "USD" }, "stock": 136, "image": "https://ae01.alicdn.com/kf/S2daf5c56542847aeb7a50b7ab5a15d80R.jpg", "in_room": false },
+      { "id": "12000041466171957", "values": { "length": "28", "other": "6000k" }, "price": { "amount": 72.51, "currency": "USD" }, "stock": 190, "image": "https://ae01.alicdn.com/kf/S2daf5c56542847aeb7a50b7ab5a15d80R.jpg", "in_room": false },
+      { "id": "12000041466171958", "values": { "length": "32", "other": "3000k" }, "price": { "amount": 77.92, "currency": "USD" }, "stock": 13, "image": "https://ae01.alicdn.com/kf/S54377919f0374e8f8a1952046d57be561.jpg", "in_room": false },
+      { "id": "12000041466171959", "values": { "length": "32", "other": "4000k" }, "price": { "amount": 77.92, "currency": "USD" }, "stock": 135, "image": "https://ae01.alicdn.com/kf/S54377919f0374e8f8a1952046d57be561.jpg", "in_room": false },
+      { "id": "12000041466171960", "values": { "length": "32", "other": "6000k" }, "price": { "amount": 77.92, "currency": "USD" }, "stock": 196, "image": "https://ae01.alicdn.com/kf/S54377919f0374e8f8a1952046d57be561.jpg", "in_room": false }
+    ],
+    "default_sku": "12000043242375290",
+    "source": "api"
+  },
+  "notes": "COMPLETED 2026-10-11 (sourcing-agent) from the API response data/sources/aliexpress/3256807415537790.json and the card images. Default SKU 12000043242375290 (16cm, Warm White 3000K), stock 161, list price 103.89 USD. Package (not product): 25 x 25 x 25 cm, gross 2.000 kg. SHIPPING to IL: cheapest 23.39 USD AliExpress standard shipping (CAINIAO_STANDARD), 22-32 days; fastest reasonable 142.86 USD DHL, 18-29 days (shipping is 45% of the unit price on the cheap option; a pair = 2 x 51.94 = 103.88 USD plus freight for 2 units, not quoted). Store: Takeme Lighting Store (id 1103805123, CN); ratings described 4.9 / communication 4.9 / shipping 4.9; product 4.8 stars, 27 reviews, 85 sold; AE category 39050510; brand JIANKEXING, model JK-X1-01. DIMENSIONS: from the supplier size chart photos: D6.5 cm (diameter, read from the 16 cm and 32 cm charts), height 16 / 23 / 28 / 32 cm per SKU; depth (projection from the wall) about 9 cm is ESTIMATED FROM PHOTO (6.5 cm cylinder plus about 2.5 cm wood plate). Slot envelope (living-room accent-sconces): 10-14 wide x 12-18 high, projection 7-12: only the 16 cm option fits the height (23 / 28 / 32 are 28-78% too tall); width 6.5 is slimmer than the envelope. SKU LABEL TRAP: the supplier mislabels its properties: 'Lampshade Color' holds the length (16/23/28/32cm) and 'Size' holds the light colour (S = Warm 3000K, M = Neutral 4000K, L = Cold 6000K). The listing attribute 'Length = 23cm,28cm,32cm' omits 16 cm, which exists only as a SKU. ELECTRICAL (supplier listing): Voltage 90-260V, AC, hardwired (title), knob switch, warranty 5 years, Certification CCC / ce / ROHS (declared by the supplier, NOT verified; aliexpress.ds.product.specialinfo.get is not authorised for the app), Is Dimmable No, Shade Direction Up & Down, Number of light sources 2 (up and down). Listing says Base Type E27 and bulb included, but the photos show a built-in COB/GU10-style spot module in a 6.5 cm tube (an E27 bulb will not fit): ask the supplier what the light source really is. Photo 5 shows a bench test with a switch box and a mains lead: the real product is wired; the Bible needs an electrician install, no visible cable. PHOTOS: 10 images, sharp, several angles and wall-mounted lifestyle shots, plus two size charts; colour varies between photos (warm beige in most, grey-silver in photo 4 under cold light): use the warm-lit main photos for the render colour (#D9C7A3 is read from them). Image rights unclear (supplier lifestyle photos). Rating 4.8 from 27 reviews."
 }

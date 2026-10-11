@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Product card",
-  "description": "כרטיס מוצר אחד. sourcing-agent ממלא הכל חוץ מ-style_scores; master-designer ממלא את style_scores ואת status. 2026-10-10: נוסף שדה safety אופציונלי (החלטת משתמש Q2).",
+  "description": "כרטיס מוצר אחד. sourcing-agent ממלא הכל חוץ מ-style_scores; master-designer ממלא את style_scores ואת status. 2026-10-10: נוסף שדה safety אופציונלי (החלטת משתמש Q2). 2026-10-11: נוסף שדה options אופציונלי, כל האפשרויות של הספק (חוקי הסטודיו ג, 'כל האפשרויות של הספק בדף המוצר').",
   "type": "object",
   "required": ["id", "slot", "name", "supplier", "price", "images", "colors", "materials", "visual_weight", "status"],
   "properties": {
@@ -117,6 +117,88 @@
           }
         },
         "source": { "type": "string", "description": "מאיפה המידע, למשל supplier listing או CJ API" }
+      }
+    },
+    "options": {
+      "type": "object",
+      "description": "כל האפשרויות של הספק (2026-10-11, חוקי הסטודיו ג, 'כל האפשרויות של הספק בדף המוצר'). אופציונלי ותוספתי: דף המוצר מציג את כל ה-SKU והלקוח בוחר, כל אחד עם מחיר ומשלוח משלו. החדר מציג רק את default_sku (in_room), אפשרות שקיימת אצל הספק. price ו-supplier.sku של הכרטיס נשארים של default_sku. source: api = נבנה מתגובת ה-API השמורה (backfill-options של ds.py ו-cj_source.py, נבנה מחדש בכל הרצה); manual = נכתב ביד, ואף סקריפט לא דורס אותו",
+      "additionalProperties": false,
+      "required": ["axes", "skus", "default_sku", "source"],
+      "properties": {
+        "axes": {
+          "type": "array",
+          "minItems": 1,
+          "description": "צירי הבחירה, לפי הסדר שבדף המוצר. כל מזהה ציר מופיע פעם אחת",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "name_he", "values"],
+            "properties": {
+              "id": { "enum": ["size", "length", "width", "color", "pattern", "finish", "style", "set", "other"] },
+              "name_he": { "type": "string", "minLength": 1, "description": "שם הציר בדף המוצר, למשל מידה, צבע" },
+              "values": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["id", "label_he"],
+                  "properties": {
+                    "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$", "description": "מזהה יציב בתוך הציר, למשל 200x260, beige" },
+                    "label_he": { "type": "string", "minLength": 1, "description": "מה שהלקוח רואה, למשל 200×260, בז'" },
+                    "label_src": { "type": "string", "description": "השם אצל הספק, כמו שהוא" },
+                    "hex": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$", "description": "בציר צבע: דוגמית הצבע" }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "skus": {
+          "type": "array",
+          "minItems": 1,
+          "description": "כל צירוף שקיים אצל הספק. צירוף שלא מופיע כאן לא קיים, ודף המוצר לא מאפשר לבחור אותו",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "values", "price"],
+            "properties": {
+              "id": { "type": "string", "minLength": 1, "description": "מזהה ה-SKU אצל הספק: AliExpress sku_id, ‏CJ variantSku, ‏Zendrop sku" },
+              "values": {
+                "type": "object",
+                "description": "ציר → מזהה ערך: ערך אחד לכל ציר שב-axes",
+                "propertyNames": { "enum": ["size", "length", "width", "color", "pattern", "finish", "style", "set", "other"] },
+                "additionalProperties": { "type": "string" }
+              },
+              "price": {
+                "type": "object",
+                "description": "עלות ה-SKU אצל הספק, בלי משלוח",
+                "additionalProperties": false,
+                "required": ["amount", "currency"],
+                "properties": {
+                  "amount": { "type": "number", "minimum": 0 },
+                  "currency": { "type": "string", "pattern": "^[A-Z]{3}$" }
+                }
+              },
+              "shipping_il": {
+                "type": "object",
+                "description": "משלוח לישראל של ה-SKU, כשיש מחיר משלו. בלי השדה: המשלוח של הכרטיס ועלות המשלוח שבסטודיו",
+                "additionalProperties": false,
+                "required": ["amount", "currency"],
+                "properties": {
+                  "amount": { "type": "number", "minimum": 0 },
+                  "currency": { "type": "string", "pattern": "^[A-Z]{3}$" },
+                  "days": { "type": ["string", "null"], "pattern": "^[0-9]+(-[0-9]+)?$", "description": "ימי אספקה, למשל 6-15" }
+                }
+              },
+              "stock": { "type": ["integer", "null"], "minimum": 0, "description": "מלאי אצל הספק כשנקרא; null = לא ידוע" },
+              "image": { "type": ["string", "null"], "pattern": "^https://", "description": "תמונת הספק של ה-SKU" },
+              "in_room": { "type": "boolean", "description": "true רק ב-default_sku: האפשרות שמוצגת בחדר" }
+            }
+          }
+        },
+        "default_sku": { "type": "string", "minLength": 1, "description": "ה-SKU שבחדר (נאמנות) וברירת המחדל בדף המוצר; שווה ל-supplier.sku" },
+        "source": { "enum": ["api", "manual"] }
       }
     },
     "status": { "enum": ["candidate", "selected", "rejected"] },

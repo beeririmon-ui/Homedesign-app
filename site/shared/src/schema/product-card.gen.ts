@@ -66,8 +66,38 @@ export const ProductCardSchema = z.looseObject({
     })).optional(),
     "source": z.string().describe("מאיפה המידע, למשל supplier listing או CJ API").optional(),
   }).describe("בטיחות ותקינה כפי שהספק מצהיר (Q2, 2026-10-10). אופציונלי. null = לא ידוע. toy_standard: מוצג בדף המוצר (D9)").optional(),
+  "options": z.strictObject({
+    "axes": z.array(z.strictObject({
+      "id": z.enum(["size","length","width","color","pattern","finish","style","set","other"]),
+      "name_he": z.string().min(1).describe("שם הציר בדף המוצר, למשל מידה, צבע"),
+      "values": z.array(z.strictObject({
+        "id": z.string().regex(new RegExp("^[a-z0-9][a-z0-9._-]*$")).describe("מזהה יציב בתוך הציר, למשל 200x260, beige"),
+        "label_he": z.string().min(1).describe("מה שהלקוח רואה, למשל 200×260, בז'"),
+        "label_src": z.string().describe("השם אצל הספק, כמו שהוא").optional(),
+        "hex": z.string().regex(new RegExp("^#[0-9A-Fa-f]{6}$")).describe("בציר צבע: דוגמית הצבע").optional(),
+      })).min(1),
+    })).min(1).describe("צירי הבחירה, לפי הסדר שבדף המוצר. כל מזהה ציר מופיע פעם אחת"),
+    "skus": z.array(z.strictObject({
+      "id": z.string().min(1).describe("מזהה ה-SKU אצל הספק: AliExpress sku_id, ‏CJ variantSku, ‏Zendrop sku"),
+      "values": z.partialRecord(z.enum(["size","length","width","color","pattern","finish","style","set","other"]), z.string()).describe("ציר → מזהה ערך: ערך אחד לכל ציר שב-axes"),
+      "price": z.strictObject({
+        "amount": z.number().min(0),
+        "currency": z.string().regex(new RegExp("^[A-Z]{3}$")),
+      }).describe("עלות ה-SKU אצל הספק, בלי משלוח"),
+      "shipping_il": z.strictObject({
+        "amount": z.number().min(0),
+        "currency": z.string().regex(new RegExp("^[A-Z]{3}$")),
+        "days": z.string().regex(new RegExp("^[0-9]+(-[0-9]+)?$")).nullable().describe("ימי אספקה, למשל 6-15").optional(),
+      }).describe("משלוח לישראל של ה-SKU, כשיש מחיר משלו. בלי השדה: המשלוח של הכרטיס ועלות המשלוח שבסטודיו").optional(),
+      "stock": z.number().int().min(0).nullable().describe("מלאי אצל הספק כשנקרא; null = לא ידוע").optional(),
+      "image": z.string().regex(new RegExp("^https://")).nullable().describe("תמונת הספק של ה-SKU").optional(),
+      "in_room": z.boolean().describe("true רק ב-default_sku: האפשרות שמוצגת בחדר").optional(),
+    })).min(1).describe("כל צירוף שקיים אצל הספק. צירוף שלא מופיע כאן לא קיים, ודף המוצר לא מאפשר לבחור אותו"),
+    "default_sku": z.string().min(1).describe("ה-SKU שבחדר (נאמנות) וברירת המחדל בדף המוצר; שווה ל-supplier.sku"),
+    "source": z.enum(["api","manual"]),
+  }).describe("כל האפשרויות של הספק (2026-10-11, חוקי הסטודיו ג, 'כל האפשרויות של הספק בדף המוצר'). אופציונלי ותוספתי: דף המוצר מציג את כל ה-SKU והלקוח בוחר, כל אחד עם מחיר ומשלוח משלו. החדר מציג רק את default_sku (in_room), אפשרות שקיימת אצל הספק. price ו-supplier.sku של הכרטיס נשארים של default_sku. source: api = נבנה מתגובת ה-API השמורה (backfill-options של ds.py ו-cj_source.py, נבנה מחדש בכל הרצה); manual = נכתב ביד, ואף סקריפט לא דורס אותו").optional(),
   "status": z.enum(["candidate","selected","rejected"]),
   "notes": z.string().nullable().optional(),
-}).describe("כרטיס מוצר אחד. sourcing-agent ממלא הכל חוץ מ-style_scores; master-designer ממלא את style_scores ואת status. 2026-10-10: נוסף שדה safety אופציונלי (החלטת משתמש Q2).");
+}).describe("כרטיס מוצר אחד. sourcing-agent ממלא הכל חוץ מ-style_scores; master-designer ממלא את style_scores ואת status. 2026-10-10: נוסף שדה safety אופציונלי (החלטת משתמש Q2). 2026-10-11: נוסף שדה options אופציונלי, כל האפשרויות של הספק (חוקי הסטודיו ג, 'כל האפשרויות של הספק בדף המוצר').");
 
 export type ProductCard = z.infer<typeof ProductCardSchema>;

@@ -603,6 +603,57 @@ details.room-lad summary{cursor:pointer;font-weight:600}
 .done-chk input{width:18px;height:18px;accent-color:var(--ink);margin:0}
 .done-chk:has(input:disabled){cursor:default;color:var(--ink-3)}
 .bcard .ef-err{grid-column:1 / -1}
+/* supplier comparison (#compare) */
+.cmp-room{display:grid;gap:22px;min-width:0}
+.cmp-slot{display:grid;gap:8px;min-width:0;scroll-margin-top:calc(env(safe-area-inset-top,0px) + 130px)}
+.cmp-slot-head{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
+.cmp-slot-head h3{font-size:var(--fs-l);outline:none}
+.cmp-table th[scope="row"]{font-weight:400;background:none;position:static;white-space:normal;color:var(--ink);font-size:var(--fs-s)}
+.cmp-table td{vertical-align:top}
+.cmp-table td.money,.cmp-table th.money{text-align:end;white-space:nowrap}
+.cmp-table .c-cand{min-width:230px}
+.cmp-table tr.is-win > *{background:var(--sage-wash)}
+.cmp-table tr.is-win > th[scope="row"]{box-shadow:inset -4px 0 0 var(--sage-ink)}
+.cmp-table tbody tr.is-win:hover > *{background:var(--sage-wash)}
+.cmp-table tr.is-rej .cand-title{text-decoration:line-through;text-decoration-color:var(--rule-2)}
+.cand-title{font-weight:600;text-align:start;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+.cand-meta{display:flex;flex-wrap:wrap;gap:4px;align-items:center;margin-top:5px}
+.cand-reason{font-size:var(--fs-xs);color:var(--ink-2);margin-top:4px;overflow-wrap:anywhere}
+.cand-link{font-size:var(--fs-xs);font-weight:600;white-space:nowrap;display:inline-flex;align-items:center;min-height:24px}
+.cmp-sub{display:block;font-size:var(--fs-xs);color:var(--ink-2);white-space:nowrap;font-weight:400}
+.sup-ae{background:var(--oak-wash);color:var(--oak-ink)}
+.sup-cj{background:var(--sunk);color:var(--ink)}
+.sup-zd{background:transparent;color:var(--ink-2);box-shadow:inset 0 0 0 1px var(--rule-2)}
+.sup-il{background:var(--ink);color:var(--on-ink)}
+.sup-ot{background:var(--sunk);color:var(--ink-2)}
+.cmp-win-tag{background:var(--sage-ink);color:var(--sheet)}
+.cmp-win.is-ok{background:var(--sage-wash);color:var(--sage-ink)}
+.cmp-win.is-low{background:var(--amber-wash);color:var(--amber-ink)}
+.cmp-nowin{background:transparent;color:var(--ink-2);box-shadow:inset 0 0 0 1px var(--rule-2)}
+.cmp-win b,.cmp-nowin b{font-weight:700}
+.cmp-narrow,.cmp-pct-n{display:none}
+.cmp-wins{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px 16px;font-size:var(--fs-xs);color:var(--ink-2)}
+.cmp-wins li{display:inline-flex;flex-wrap:wrap;gap:5px;align-items:center}
+.cmp-wins .st{font-weight:700;color:var(--ink)}
+.cmp-hidden{font-size:var(--fs-xs);color:var(--ink-2)}
+.cmp-empty{font-size:var(--fs-s);color:var(--ink-2)}
+.cmp-empty ul{list-style:none;padding:0;margin:4px 0 0;display:flex;flex-wrap:wrap;gap:4px 14px}
+.cmp-empty li{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 130px)}
+.cmp-list summary{cursor:pointer;font-size:var(--fs-xs);color:var(--ink-2);margin-top:4px;min-height:24px}
+.cmp-list ul{margin:6px 0 0;padding-inline-start:16px;display:grid;gap:4px;font-size:var(--fs-s)}
+.cmp-matrix td{text-align:center;font-weight:700}
+.cmp-matrix td.zero{font-weight:400;color:var(--ink-2)}
+.cmp-matrix th[scope="row"]{background:none;position:static;font-size:var(--fs-s);color:var(--ink)}
+.cmp-matrix th[scope="row"] .linkish{font-weight:700}
+.cmp-src{display:grid;gap:6px}
+.cmp-src details summary{cursor:pointer}
+@media (max-width:760px){
+  .cmp-table .w{display:none}
+  .cmp-narrow{display:block;font-size:var(--fs-xs);color:var(--ink-2);margin-top:5px;overflow-wrap:anywhere}
+  .cmp-pct-n{display:block}
+  .cmp-table .c-cand{min-width:0}
+  .cmp-table th,.cmp-table td{padding:8px 7px}
+}
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 }
@@ -627,6 +678,7 @@ details.room-lad summary{cursor:pointer;font-weight:600}
           <li><a href="#rooms" data-screen="rooms">חדרים</a></li>
           <li><a href="#products" data-screen="products">מוצרים</a></li>
           <li><a href="#profit" data-screen="profit">רווחיות</a></li>
+          <li><a href="#compare" data-screen="compare">השוואת ספקים</a></li>
           <li><a href="#suppliers" data-screen="suppliers">ספקים</a></li>
           <li><a href="#budget" data-screen="budget">תקציב</a></li>
           <li><a href="#quality" data-screen="quality">איכות</a></li>
@@ -693,6 +745,12 @@ details.room-lad summary{cursor:pointer;font-weight:600}
     <section class="screen" id="screen-profit" aria-labelledby="h-profit" hidden>
       <div class="screen-head"><h1 id="h-profit" tabindex="-1">רווחיות</h1></div>
       <div id="profit-body"><p class="loading">טוען…</p></div>
+    </section>
+
+    <section class="screen" id="screen-compare" aria-labelledby="h-compare" hidden>
+      <div class="screen-head"><h1 id="h-compare" tabindex="-1">השוואת ספקים</h1><p class="small faint" id="cmp-count"></p></div>
+      <p class="lede">לכל עמדה, כל המועמדים מכל הספקים (CJ, ‏Zendrop, ‏AliExpress וספקים ישראליים): מחיר, משלוח לישראל, עלות נחיתה, מחיר לצרכן ורווח. החישוב זהה למסך הרווחיות ובאותן הנחות. המנצח בכל עמדה הוא המועמד שמשאיר הכי הרבה רווח ליחידה, מבין אלה שלא נדחו, שהתאמתם לסגנון 7 ומעלה ושיש להם כל הנתונים.</p>
+      <div id="cmp-body"><p class="loading">טוען…</p></div>
     </section>
 
     <section class="screen" id="screen-suppliers" aria-labelledby="h-suppliers" hidden>
@@ -820,7 +878,7 @@ const STYLE_HE = {nordic:'נורדי', boho:'בוהו', 'warm-modern':'מודר�
 const STD_HE = {unknown:'לא ידוע', unverified:'לא מאומת', stated:'מוצהר בהערות'};
 const WHO = {user:'המשתמש', manager:'המנהל', 'master-designer':'master-designer', 'sourcing-agent':'sourcing', 'motion-agent':'motion-agent', 'render-agent':'render-agent', 'qa-agent':'qa-agent', 'frontend-dev':'frontend-dev', astra:'astra', other:'אחר'};
 const FLAG_HE = {green:'עומד ביעד', red:'מתחת ליעד', orange:'חסרים נתונים'};
-const MISS_HE = {cost:'עלות', shipping:'משלוח', retail:'מחיר', fast_shipping:'משלוח מהיר (עד 20 יום)', currency:'עלות בדולר'};
+const MISS_HE = {cost:'עלות', shipping:'משלוח', retail:'מחיר', fast_shipping:'משלוח מהיר (עד 20 יום)', currency:'עלות בדולר', dealer:'מחיר סוחר'};
 
 /* ---------- economics: settings, defaults, calculation ---------- */
 const ECON_META = [
@@ -901,6 +959,7 @@ const S = {
   todo:Object.assign({kind:'all', showDone:false}, store.get('todo', {})), todoSaving:new Set(), todoErr:null,
   profit:Object.assign({sort:'margin', dir:'asc', room:'', rejected:false, showSettings:false, verdict:''}, store.get('profit', {})),
   sup:Object.assign({q:'', section:'', status:'', model:'', sort:'fit'}, store.get('sup', {})), focusDec:null, accessSaving:new Set(), accessErr:null,
+  cmp:Object.assign({room:null, style:'nordic', sup:'', profitable:false, rejected:false, unrated:false}, store.get('cmp', {})),
   db:null, user:null, uid:null, canWrite:null, dbState:'connecting', dbError:null, dbReady:false,
   dbDocs:new Map(), drafts:{}, saving:new Set(), saved:{}, errors:{},
   edits:new Map(), news:new Map(), settingsDocs:new Map(),
@@ -935,7 +994,7 @@ async function boot(){
 }
 function renderAll(){
   renderOverview(); renderTodo(); renderDecisions(); renderRoomPick(); renderRoom();
-  initFilters(); renderProducts(); renderProfit(); renderSuppliers(); renderBudget(); renderReports(); renderLog();
+  initFilters(); renderProducts(); renderProfit(); renderCompare(); renderSuppliers(); renderBudget(); renderReports(); renderLog();
 }
 let pendingRender = false;
 function onDataChange(){
@@ -943,7 +1002,7 @@ function onDataChange(){
   setTimeout(() => {
     pendingRender = false;
     refreshView();
-    renderOverview(); renderTodo(); renderRoom(); renderProducts(); renderProfit(); renderSuppliers(); renderBudget(); refreshDrawer();
+    renderOverview(); renderTodo(); renderRoom(); renderProducts(); renderProfit(); renderCompare(); renderSuppliers(); renderBudget(); refreshDrawer();
   }, 0);
 }
 
@@ -1142,7 +1201,7 @@ function profitBasis(){
 }
 
 /* ---------- routing ---------- */
-const SCREENS = ['overview','todo','decisions','rooms','products','profit','suppliers','budget','quality','log'];
+const SCREENS = ['overview','todo','decisions','rooms','products','profit','compare','suppliers','budget','quality','log'];
 function route(focus){
   const t = (location.hash || '').replace(/^#/, '');
   let s = SCREENS.includes(t) ? t : null;
@@ -2532,6 +2591,321 @@ async function saveSettings(){
     S.settingsDocs.set('economics', doc); S.setDraft = null; S.setDraftVer = null; S.setDirty = false;
     say('ההנחות נשמרו'); onDataChange();
   }catch(e){ $('#set-state').textContent = errText(e); }
+}
+
+/* ---------- supplier comparison (data.comparison from build.py; landed cost and margin by the profit screen's econCalc) ---------- */
+const CMP_SUP = {
+  aliexpress:{he:'AliExpress', cls:'sup-ae'}, cj:{he:'CJ', cls:'sup-cj'}, zendrop:{he:'Zendrop', cls:'sup-zd'},
+  il:{he:'ספק ישראלי', cls:'sup-il'}, other:{he:'אחר', cls:'sup-ot'}
+};
+const CMP_GROUP = {aliexpress:'ae', cj:'cjz', zendrop:'cjz', il:'il', other:'other'};
+const CMP_VERDICT = {best:{he:'הליקוט: הכי טוב', cls:'flag-green'}, alternative:{he:'הליקוט: חלופה', cls:''}, reject:{he:'הליקוט: נדחה', cls:'flag-red'}};
+const RETAIL_SRC = {set:'מחיר שנקבע', band:'טווח השוק', slot:'טווח השוק של העמדה', file:'טווח מהליקוט'};
+const cmpData = () => (S.data && S.data.comparison) || null;
+const cmpFitMin = () => { const c = cmpData(); return c && isNum(c.fit_min) ? c.fit_min : 7; };
+const cmpStyleHe = id => { const c = cmpData(); const x = c && (c.styles || []).find(s => s.id === id); return x ? x.name_he : (STYLE_HE[id] || id); };
+const daysOf = d => Array.isArray(d) ? d : (typeof d === 'string' ? (n => n.length ? [Math.min(...n), Math.max(...n)] : null)((d.match(/\d+/g) || []).map(Number)) : null);
+const daysTxt = d => d ? (d[0] === d[1] ? `${d[0]}` : `${d[0]}–${d[1]}`) : '';
+// the retail point of a band, the same rule as bandPoint(): the top of the band; N units = N x the top, rounded down to ...9
+const bandAt = (band, qty) => qty > 1 ? p9(band[1] * qty) : band[1];
+const cmpKeyId = key => 'cmp-' + String(key).replace(/[^\w-]+/g, '--');
+// the market band of a slot: the category most of its cards have in data/economics/market-prices.json
+function cmpSlotBand(s){
+  const cnt = new Map();
+  for(const id of (s.direct || []).concat(s.shared_ids || [])){ const m = mktOf(id); if(m && m.category) cnt.set(m.category, (cnt.get(m.category) || 0) + 1); }
+  let best = null; for(const [k, n] of cnt) if(!best || n > best[1]) best = [k, n];
+  const c = best && mktCat(best[0]);
+  return c && Array.isArray(c.band) && isNum(c.band[1]) ? {band: c.band, label: c.label_he} : null;
+}
+// One candidate as the screen shows it. Cards go through effProduct (the profit screen's model: studio edits, CJ freight,
+// sell quantity); AliExpress / Zendrop cards without CJ freight use the shipping written in the card. Retail price for the
+// margin: the price set in the studio, else the top of the market band (the profit screen's "price ₪…9" point), else the
+// slot's market band, else the band the deep pass wrote. All numbers come from econCalc with the current settings.
+function cmpRow(c, s, style){
+  const v = S.ES.v, sb = cmpSlotBand(s);
+  const fits = {}, reasons = {}, verdicts = {}, files = {};
+  if(c.k === 'card'){
+    const e = S.byId.get(c.id); if(!e) return null;
+    const scores = (S.base.get(c.id) || {}).style_scores || {};
+    for(const [k, x] of Object.entries(scores)) if(x && isNum(x.score)) fits[k] = x.score;
+    for(const [k, x] of Object.entries(c.deep || {})){ if(!(k in fits) && isNum(x.fit)) fits[k] = x.fit; if(x.reason) reasons[k] = x.reason; if(x.verdict) verdicts[k] = x.verdict; files[k] = x; }
+    const qty = e.qty;
+    let ship;
+    if(isNum(e.ship.usd)){ const cj = e.ship.src === 'cj' ? cjShip(c.id) : null; ship = {usd: e.ship.usd, total: e.ship.total, label: e.ship.label, days: cj ? daysOf(cj.days) : null, est: e.ship.est}; }
+    else if(c.ship && isNum(c.ship.usd) && !e.ship.nofast) ship = {usd: c.ship.usd, total: qty > 1 ? shipForQty(c.ship.usd, qty) : c.ship.usd, label: `מהכרטיס (${(CMP_SUP[c.sup] || CMP_SUP.other).he})`, days: c.ship.days, est: qty > 1};
+    else ship = {usd: null, total: null, label: e.ship.label, nofast: !!e.ship.nofast};
+    if(!ship.days){ const sh = e.shipping || {}; if(isNum(sh.days_min)) ship.days = [sh.days_min, isNum(sh.days_max) ? sh.days_max : sh.days_min]; }
+    let retail = null;
+    if(isNum(e.retail) && e.retail > 0) retail = {ils: e.retail, src: 'set'};
+    else { const bp = bandPoint(e); if(isNum(bp)) retail = {ils: bp, src: 'band', band: e.mkt.suggested_band}; else if(sb) retail = {ils: bandAt(sb.band, qty), src: 'slot', band: sb.band}; }
+    const econ = econCalc({cost_usd: e.badCurrency ? null : e.price.cost, qty, shipping_usd: ship.total, retail_ils: retail ? retail.ils : null}, v);
+    if(e.badCurrency) econ.missing = econ.missing.map(m => m === 'cost' ? 'dealer' : m);
+    if(ship.nofast) econ.missing = econ.missing.map(m => m === 'shipping' ? 'fast_shipping' : m);
+    return {key: 'card:' + c.id, k: 'card', id: c.id, sup: c.sup, supName: (e.supplier && e.supplier.name) || '', title: e.name, url: e.supplier.product_url,
+      status: e.status, rejected: e.status === 'rejected', shared: !!c.shared, qty, qtySure: e.qtySure, qtyReason: (e.qtyDef || {}).reason,
+      priceUsd: e.badCurrency ? null : e.price.cost, priceIls: e.badCurrency ? e.price.cost : null, ship, retail, econ,
+      fits, verdicts, reasons, files, unrated: !Object.keys(scores).length, note: c.note || null};
+  }
+  // 'deep' (the deep AliExpress pass) or 'api' (the first AliExpress API call): one style's own price when a style is chosen
+  for(const [k, x] of Object.entries(c.styles || {})){ if(isNum(x.fit)) fits[k] = x.fit; if(x.reason) reasons[k] = x.reason; if(x.verdict) verdicts[k] = x.verdict; files[k] = x; }
+  const pick = (style && c.styles && c.styles[style]) || {};
+  const val = k => pick[k] != null ? pick[k] : c[k];
+  const q = c.qty || {qty: 1, sure: true};
+  const qty = qtyOk(q.qty) ? q.qty : 1;
+  const price = val('price_usd'), shipUsd = val('ship_usd'), band = val('band');
+  const ship = isNum(shipUsd)
+    ? {usd: shipUsd, total: qty > 1 ? shipForQty(shipUsd, qty) : shipUsd, label: c.k === 'deep' ? 'AliExpress, ליקוט מעמיק' : 'AliExpress, קריאה ראשונה ל-API', days: daysOf(val('ship_days')), est: qty > 1}
+    : {usd: null, total: null, label: c.no_ship ? 'אין משלוח לישראל' : 'חסר משלוח', days: null, noShip: !!c.no_ship};
+  let retail = null;
+  if(sb) retail = {ils: bandAt(sb.band, qty), src: 'slot', band: sb.band};
+  if(Array.isArray(band) && isNum(band[1])) retail = {ils: bandAt(band, qty), src: 'file', band};
+  const econ = econCalc({cost_usd: isNum(price) ? price : null, qty, shipping_usd: ship.total, retail_ils: retail ? retail.ils : null}, v);
+  return {key: c.k + ':' + c.id, k: c.k, id: c.id, sup: c.sup, supName: 'AliExpress', title: c.title, url: c.url, sku: val('sku'),
+    status: c.rejected ? 'rejected' : 'candidate', rejected: !!c.rejected, shared: false, qty, qtySure: q.sure !== false, qtyReason: q.reason,
+    priceUsd: isNum(price) ? price : null, priceFrom: !!c.price_from, priceIls: null, ship, retail, econ,
+    fits, verdicts, reasons, files, unrated: false, note: c.note || null};
+}
+// fit for one style: a score (card style_scores first, then the deep pass); 'assumed' = an unscored card in the Nordic house
+// (its slot was sourced for the Nordic house, so it counts for Nordic and is marked "not scored"); otherwise none
+function cmpFit(r, st){
+  if(isNum(r.fits[st])) return {n: r.fits[st], kind: 'score'};
+  if(st === 'nordic' && r.k === 'card' && r.unrated) return {n: null, kind: 'assumed'};
+  return {n: null, kind: 'none'};
+}
+const cmpRejected = (r, st) => r.rejected || (st ? r.verdicts[st] === 'reject' : (Object.keys(r.verdicts).length > 0 && Object.values(r.verdicts).every(x => x === 'reject')));
+// an item of the deep pass belongs to the styles the pass proposed it for
+const cmpProposed = (r, st) => !st || r.k !== 'deep' || st in r.verdicts || st in r.fits;
+function cmpEligible(r, st){
+  if(cmpRejected(r, st) || !cmpProposed(r, st) || !isNum(r.econ.contribution)) return false;
+  const f = cmpFit(r, st);
+  return f.kind === 'assumed' || (f.kind === 'score' && f.n >= cmpFitMin());
+}
+const perUnit = r => r.econ.contribution / (r.qty || 1);
+function cmpBetter(a, b){
+  const x = perUnit(a), y = perUnit(b);
+  if(Math.abs(x - y) > 1e-6) return x > y;
+  if(Math.abs(a.econ.margin - b.econ.margin) > 1e-9) return a.econ.margin > b.econ.margin;
+  return a.econ.landed < b.econ.landed;
+}
+function cmpWinner(rows, st){ let w = null; for(const r of rows) if(cmpEligible(r, st) && (!w || cmpBetter(r, w))) w = r; return w; }
+const supBadge = r => { const x = CMP_SUP[r.sup] || CMP_SUP.other; const t = r.sup === 'il' && r.supName ? r.supName : r.sup === 'other' ? (r.supName || x.he) : x.he;
+  return `<span class="chip ${x.cls}"${r.sup === 'il' ? ' title="ספק ישראלי"' : ''}>${r.sup === 'il' ? '<span class="sr-only">ספק ישראלי: </span>' : ''}<span dir="auto">${esc(t)}</span></span>`; };
+const missText = e => 'חסר ' + e.missing.map(m => MISS_HE[m] || m).join(' ו');
+
+function renderCompare(){
+  if(!S.data) return;
+  const box = $('#cmp-body');
+  const C = cmpData();
+  if(!C || !C.rooms){ box.innerHTML = '<p class="empty">אין נתוני השוואה. הם נבנים עם <code>python3 studio/build.py</code>.</p>'; $('#cmp-count').textContent = ''; return; }
+  const restore = keepFocus(box);
+  const F = S.cmp, v = S.ES.v, T = v.target_margin_pct / 100;
+  const rooms = S.data.rooms.filter(r => r.slots.length);
+  if(F.room == null || (F.room && !rooms.some(r => r.id === F.room))) F.room = rooms[0] ? rooms[0].id : '';
+  const STY = (C.styles || []).map(x => x.id);
+  if(F.style !== 'all' && !STY.includes(F.style)) F.style = STY[0] || 'all';
+  const st = F.style === 'all' ? null : F.style;
+  const scope = F.room ? rooms.filter(r => r.id === F.room) : rooms;
+  const showStyles = st ? [st] : STY;
+
+  // every candidate of every slot in scope, and the winner per style
+  const slotRows = new Map(), winners = new Map();
+  for(const r of scope) for(const s of r.slots){
+    const rows = (((C.rooms[r.id] || {})[s.id]) || []).map(c => cmpRow(c, s, st)).filter(Boolean);
+    slotRows.set(s.key, rows);
+    const w = {}; for(const x of showStyles) w[x] = cmpWinner(rows, x);
+    winners.set(s.key, w);
+  }
+  const slotName = (s, withRoom) => `${withRoom ? (S.rooms.get(s.room) || {}).name_he + ' · ' : ''}${s.name_he || s.id}`;
+  function summary(x){
+    const o = {ae: [], cjz: [], il: [], other: [], none: [], empty: 0, ok: {ae: 0, cjz: 0, il: 0, other: 0}, cj: 0, zd: 0};
+    for(const r of scope) for(const s of r.slots){
+      const w = winners.get(s.key)[x];
+      if(!w){ o.none.push(s); if(!(slotRows.get(s.key) || []).length) o.empty++; continue; }
+      const g = CMP_GROUP[w.sup] || 'other'; o[g].push(s);
+      if(w.sup === 'cj') o.cj++; else if(w.sup === 'zendrop') o.zd++;
+      if(w.econ.margin >= T) o.ok[g]++;
+    }
+    return o;
+  }
+  const nSlots = scope.reduce((n, r) => n + r.slots.length, 0);
+  const listBtn = (arr) => arr.length ? `<details class="cmp-list"><summary>העמדות (${arr.length})</summary><ul>${arr.map(s => `<li><button type="button" class="linkish" data-cmp-jump="${esc(s.key)}">${esc(slotName(s, !F.room))}</button></li>`).join('')}</ul></details>` : '';
+  let sumHtml;
+  if(st){
+    const o = summary(st);
+    sumHtml = `<div class="tiles">
+      <div class="tile"><span class="l">AliExpress מנצח</span><span class="v">${o.ae.length}<span class="small muted"> / ${nSlots}</span></span><span class="s">${o.ok.ae} עומדים ביעד</span>${listBtn(o.ae)}</div>
+      <div class="tile"><span class="l">CJ או Zendrop מנצחים</span><span class="v">${o.cjz.length}<span class="small muted"> / ${nSlots}</span></span><span class="s">CJ ${o.cj} · Zendrop ${o.zd} · ${o.ok.cjz} עומדים ביעד</span>${listBtn(o.cjz)}</div>
+      ${o.il.length ? `<div class="tile"><span class="l">ספק ישראלי מנצח</span><span class="v">${o.il.length}</span><span class="s">${o.ok.il} עומדים ביעד</span>${listBtn(o.il)}</div>` : ''}
+      ${o.other.length ? `<div class="tile"><span class="l">ספק אחר מנצח</span><span class="v">${o.other.length}</span>${listBtn(o.other)}</div>` : ''}
+      <div class="tile"><span class="l">בלי מנצח</span><span class="v">${o.none.length}<span class="small muted"> / ${nSlots}</span></span><span class="s">${o.empty} בלי אף מועמד · ${o.none.length - o.empty} בלי מועמד מתאים עם כל הנתונים</span>${listBtn(o.none)}</div>
+    </div>`;
+  } else {
+    const all = STY.map(x => [x, summary(x)]);
+    const hasIl = all.some(([, o]) => o.il.length), hasOther = all.some(([, o]) => o.other.length);
+    const td = n => `<td class="num ${n ? '' : 'zero'}">${n}</td>`;
+    sumHtml = `<div class="tbl-wrap"><table class="cmp-matrix">
+      <caption class="sr-only">מספר העמדות שבהן כל ספק מנצח, לכל סגנון, מתוך ${nSlots} עמדות</caption>
+      <thead><tr><th scope="col">סגנון</th><th scope="col">AliExpress</th><th scope="col">CJ / Zendrop</th>${hasIl ? '<th scope="col">ישראלי</th>' : ''}${hasOther ? '<th scope="col">אחר</th>' : ''}<th scope="col">בלי מנצח</th></tr></thead>
+      <tbody>${all.map(([x, o]) => `<tr><th scope="row"><button type="button" class="linkish" data-cmp-style="${esc(x)}" aria-label="הצגת ${esc(cmpStyleHe(x))} בלבד">${esc(cmpStyleHe(x))}</button></th>${td(o.ae.length)}${td(o.cjz.length)}${hasIl ? td(o.il.length) : ''}${hasOther ? td(o.other.length) : ''}${td(o.none.length)}</tr>`).join('')}</tbody>
+    </table></div>`;
+  }
+
+  // the slot tables
+  let nShownSlots = 0, nShownRows = 0, nHiddenSlots = 0, nRowsAll = 0;
+  const roomHtml = scope.map(r => {
+    const empty = [];
+    const parts = r.slots.map(s => {
+      const all = slotRows.get(s.key) || [], w = winners.get(s.key);
+      nRowsAll += all.length;
+      if(!all.length){ empty.push(s); return ''; }
+      const winOf = new Map();
+      for(const x of showStyles){ const wr = w[x]; if(wr){ if(!winOf.has(wr.key)) winOf.set(wr.key, []); winOf.get(wr.key).push(x); } }
+      let rows = all.filter(x => cmpProposed(x, st));
+      let hidRej = 0, hidUnr = 0;
+      if(!F.rejected){ const n = rows.length; rows = rows.filter(x => !cmpRejected(x, st)); hidRej = n - rows.length; }
+      if(st && !F.unrated){ const n = rows.length; rows = rows.filter(x => cmpFit(x, st).kind !== 'none' || winOf.has(x.key)); hidUnr = n - rows.length; }
+      if(F.sup) rows = rows.filter(x => x.sup === F.sup);
+      if(F.profitable) rows = rows.filter(x => isNum(x.econ.margin) && x.econ.margin >= T);
+      if(!rows.length){ nHiddenSlots++; return ''; }
+      const elig = x => st ? cmpEligible(x, st) : STY.some(y => cmpEligible(x, y));
+      const rank = x => winOf.has(x.key) ? 0 : elig(x) ? 1 : (!cmpRejected(x, st) && isNum(x.econ.contribution)) ? 2 : !cmpRejected(x, st) ? 3 : 4;
+      const pu = x => isNum(x.econ.contribution) ? perUnit(x) : -1e9;
+      rows.sort((a, b) => rank(a) - rank(b) || pu(b) - pu(a) || a.title.localeCompare(b.title));
+      nShownSlots++; nShownRows += rows.length;
+      const wst = st ? w[st] : null;
+      const head = st
+        ? (wst ? `<span class="chip cmp-win ${wst.econ.margin >= T ? 'is-ok' : 'is-low'}">מנצח: <b>${esc((CMP_SUP[wst.sup] || CMP_SUP.other).he)}</b> · רווח ${ltr(fmtILS(wst.econ.contribution))} · ${ltr(fmtPct(wst.econ.margin))}${wst.econ.margin >= T ? '' : ' · מתחת ליעד'}</span>`
+               : `<span class="chip cmp-nowin">אין מנצח: אין מועמד עם התאמה ${cmpFitMin()}+ וכל הנתונים</span>`)
+        : '';
+      const winsLine = st ? '' : `<ul class="cmp-wins" aria-label="מנצח לפי סגנון">${STY.map(x => { const wr = w[x]; return `<li><span class="st">${esc(cmpStyleHe(x))}:</span> ${wr ? `${supBadge(wr)} ${ltr(fmtILS(wr.econ.contribution))}` : '<span>אין</span>'}</li>`; }).join('')}</ul>`;
+      const trs = rows.map(x => cmpRowHtml(x, st, winOf.get(x.key), T)).join('');
+      const hid = [hidRej ? `${hidRej} נדחו` : '', hidUnr ? `${hidUnr} לא דורגו ל${esc(cmpStyleHe(st))}` : ''].filter(Boolean);
+      const id = cmpKeyId(s.key);
+      return `<section class="cmp-slot" id="${id}" aria-labelledby="${id}-h">
+        <div class="cmp-slot-head"><h3 id="${id}-h" tabindex="-1">${esc(s.name_he || s.id)}</h3><span class="code-tag" dir="ltr">${esc(s.id)}</span>${s.set_of > 1 ? `<span class="chip">סט של ${esc(s.set_of)}</span>` : ''}${head}</div>
+        ${winsLine}
+        <div class="tbl-wrap"><table class="cmp-table">
+          <caption class="sr-only">מועמדים לעמדה ${esc(s.name_he || s.id)}, ${esc((S.rooms.get(r.id) || {}).name_he || r.id)}${st ? ', ' + esc(cmpStyleHe(st)) : ''}. המנצח מסומן "מנצח" ומופיע ראשון.</caption>
+          <thead><tr><th scope="col" class="c-cand">מועמד</th><th scope="col" class="money w">מחיר</th><th scope="col" class="money w">משלוח לישראל</th><th scope="col" class="money">נחיתה</th><th scope="col" class="money w">מחיר לצרכן</th><th scope="col" class="money">רווח ₪</th><th scope="col" class="money w">רווח %</th><th scope="col" class="w">התאמה</th></tr></thead>
+          <tbody>${trs}</tbody></table></div>
+        ${hid.length ? `<p class="cmp-hidden">מוסתרים: ${hid.join(' · ')}. ${hidRej ? 'אפשר להציג עם "כולל נדחים"' : ''}${hidRej && hidUnr ? '; ' : ''}${hidUnr ? 'אפשר להציג עם "כולל לא מדורגים"' : ''}.</p>` : ''}
+      </section>`;
+    }).join('');
+    const emptyHtml = empty.length ? `<div class="cmp-empty"><p>עמדות בלי אף מועמד (${empty.length}):</p><ul>${empty.map(s => `<li id="${cmpKeyId(s.key)}" tabindex="-1">${esc(s.name_he || s.id)} <span class="code-tag" dir="ltr">${esc(s.id)}</span></li>`).join('')}</ul></div>` : '';
+    return `<section class="cmp-room" aria-labelledby="cmp-r-${esc(r.id)}">
+      <div class="section-head"><h2 id="cmp-r-${esc(r.id)}">${esc(r.name_he)}</h2><span class="small faint">${r.slots.length} עמדות · ${r.slots.length - empty.length} עם מועמדים</span></div>
+      ${parts || (empty.length === r.slots.length ? '' : '<p class="empty">אין מועמדים שמתאימים לסינון בחדר הזה.</p>')}
+      ${emptyHtml}
+    </section>`;
+  }).join('');
+
+  // sources and assumptions
+  const src = C.sources || {}, dp = src.deep || {}, api = src.api || {}, bs = src.by_supplier || {};
+  const deepLine = dp.present
+    ? `<div class="db-line"><span class="db-dot live"></span><span><strong>ליקוט מעמיק ב-AliExpress:</strong> ${esc(dp.records)} רשומות ב-${esc((dp.files || []).length)} קבצים (<code>${esc(dp.dir)}</code>), עדכון אחרון ${esc(fmtDay((dp.files || []).map(f => f.date).filter(Boolean).sort().slice(-1)[0]))}.${dp.n_unmatched ? ` <details><summary>${esc(dp.n_unmatched)} רשומות לא שויכו לעמדה</summary><ul class="plain-ul small">${(dp.unmatched || []).map(u => `<li><span dir="auto">${esc(u.title || u.item_id)}</span> · ${esc(u.why)} · <span dir="ltr">${esc(u.where)}</span></li>`).join('')}</ul></details>` : ''}${(dp.warnings || []).length ? ` <span class="warn-text">${esc(dp.warnings.length)} קבצים לא נקראו: ${esc(dp.warnings.join('; '))}</span>` : ''}</span></div>`
+    : `<div class="db-line"><span class="db-dot warn"></span><span><strong>הליקוט המעמיק ב-AliExpress עוד לא הגיע</strong> (<code>${esc(dp.dir || 'data/leads/aliexpress/deep-2026-10/')}</code>). כרגע מוצגים כרטיסי המוצר מכל הספקים${api.shown ? ` ו-${esc(api.shown)} פריטים מהקריאה הראשונה ל-API שלא הפכו לכרטיס` : ''}. הקבצים נכנסים בבנייה הבאה של הסטודיו.</span></div>`;
+  const supCounts = Object.keys(CMP_SUP).filter(k => bs[k]).map(k => `${CMP_SUP[k].he} ${bs[k]}`).join(' · ');
+  const supOpts = Object.keys(CMP_SUP).filter(k => bs[k]).map(k => `<option value="${k}" ${F.sup === k ? 'selected' : ''}>${esc(CMP_SUP[k].he)} (${bs[k]})</option>`).join('');
+  $('#cmp-count').textContent = `${Object.values(bs).reduce((a, b) => a + b, 0)} מועמדים בכל הבית · ${supCounts}`;
+  const scopeName = F.room ? (S.rooms.get(F.room) || {}).name_he : 'כל הבית';
+  box.innerHTML = `<div class="screen roomy">
+    <form class="toolbar" id="cmp-filters" role="search" aria-label="סינון השוואת הספקים">
+      <div class="field"><label for="cf-room">חדר</label><select id="cf-room"><option value="">כל הבית</option>${rooms.map(r => `<option value="${esc(r.id)}" ${F.room === r.id ? 'selected' : ''}>${esc(r.name_he)}</option>`).join('')}</select></div>
+      <div class="field"><label for="cf-style">סגנון</label><select id="cf-style">${STY.map(x => `<option value="${esc(x)}" ${F.style === x ? 'selected' : ''}>${esc(cmpStyleHe(x))}</option>`).join('')}<option value="all" ${F.style === 'all' ? 'selected' : ''}>כל הסגנונות</option></select></div>
+      <div class="field"><label for="cf-sup">ספק</label><select id="cf-sup"><option value="">כל הספקים</option>${supOpts}</select></div>
+      <span class="check"><input type="checkbox" id="cf-profit" ${F.profitable ? 'checked' : ''}><label for="cf-profit">רק רווחיים (${ltr(esc(v.target_margin_pct + '%'))} ומעלה)</label></span>
+      <span class="check"><input type="checkbox" id="cf-rej" ${F.rejected ? 'checked' : ''}><label for="cf-rej">כולל נדחים</label></span>
+      ${st ? `<span class="check"><input type="checkbox" id="cf-unr" ${F.unrated ? 'checked' : ''}><label for="cf-unr">כולל לא מדורגים</label></span>` : ''}
+    </form>
+    <div class="cmp-src">
+      <div class="assume"><span>שער <b>${ltr(esc(v.usd_ils))}</b></span><span>CAC <b>${ltr(fmtILS(v.cac_ils))}</b></span><span>החזרות <b>${ltr(esc(v.returns_pct + '%'))}</b></span><span>מע"מ <b>${ltr(esc(v.vat_pct + '%'))}</b></span><span>יעד <b>${ltr(esc(v.target_margin_pct + '%'))}</b></span><span>התאמה מינימלית <b>${cmpFitMin()}</b></span><button type="button" class="linkish" data-goto="profit">ההנחות במסך הרווחיות</button></div>
+      ${deepLine}
+    </div>
+    <section class="section" aria-labelledby="h-cmp-sum">
+      <div class="section-head"><h2 id="h-cmp-sum">מי מנצח · ${esc(st ? cmpStyleHe(st) : 'כל הסגנונות')} · ${esc(scopeName)}</h2><span class="small faint">${nSlots} עמדות · המנצח לא תלוי בסינון הספק והרווחיות</span></div>
+      ${sumHtml}
+    </section>
+    <p class="result-line" aria-live="polite"><span><strong class="num">${nShownRows}</strong> מועמדים ב-<strong class="num">${nShownSlots}</strong> עמדות${nHiddenSlots ? ` · ${nHiddenSlots} עמדות מוסתרות בסינון` : ''}</span></p>
+    ${roomHtml}
+    <p class="xs faint formula">רווח ₪ = תרומה למכירה (הכנסה נטו פחות עלות נחיתה, עמלות, שמורת החזרות ואריזה), כמו בעמודה "מרווח" במסך הרווחיות; "אחרי שיווק" מוריד גם CAC לפריט. עלות נחיתה = (מחיר × כמות + משלוח לכמות) × שער. מחיר לצרכן: המחיר שנקבע בסטודיו, אחרת המחיר העליון של טווח השוק של המוצר (הנקודה של כפתור "מחיר ₪…9"), אחרת טווח השוק של העמדה, ובליקוט המעמיק הטווח שבקובץ; כמה יחידות = הטווח × הכמות, מעוגל מטה ל-9. "ל-35%" = המחיר הנמוך ביותר שמביא ליעד. משלוח: CJ לפי שיטת המשלוח שבהגדרות, ‏AliExpress ו-Zendrop לפי מה שכתוב בכרטיס או בקובץ הליקוט. מנצח = הכי הרבה רווח ליחידה (תרומה ÷ כמות), מבין המועמדים שלא נדחו, עם התאמה ${cmpFitMin()}+ לסגנון ועם כל הנתונים. כרטיס בלי ציוני סגנון בעמדה של הבית הנורדי נחשב לנורדי ומסומן "לא דורג".</p>
+  </div>`;
+  restore();
+  const setF = (k, val, focusId) => { S.cmp[k] = val; store.set('cmp', S.cmp); renderCompare(); const el = $('#' + focusId); if(el) el.focus(); };
+  $('#cmp-filters').onsubmit = ev => ev.preventDefault();
+  $('#cf-room').onchange = e => setF('room', e.target.value, 'cf-room');
+  $('#cf-style').onchange = e => setF('style', e.target.value, 'cf-style');
+  $('#cf-sup').onchange = e => setF('sup', e.target.value, 'cf-sup');
+  $('#cf-profit').onchange = e => setF('profitable', e.target.checked, 'cf-profit');
+  $('#cf-rej').onchange = e => setF('rejected', e.target.checked, 'cf-rej');
+  const un = $('#cf-unr'); if(un) un.onchange = e => setF('unrated', e.target.checked, 'cf-unr');
+  for(const b of $$('[data-cmp-style]', box)) b.onclick = () => setF('style', b.dataset.cmpStyle, 'cf-style');
+  for(const b of $$('[data-cmp-jump]', box)) b.onclick = () => cmpJump(b.dataset.cmpJump);
+}
+function cmpRowHtml(x, st, winStyles, T){
+  const e = x.econ, v = S.ES.v;
+  const rej = cmpRejected(x, st);
+  const verdict = st ? x.verdicts[st] : null;
+  const fit = st ? cmpFit(x, st) : null;
+  const reason = (st && x.reasons[st]) || x.note || (!st ? Object.values(x.reasons)[0] : '') || '';
+  const file = st ? x.files[st] : null;
+  const isWin = !!(winStyles && winStyles.length);
+  const titleHtml = x.k === 'card'
+    ? `<button type="button" class="linkish" data-product="${esc(x.id)}" aria-haspopup="dialog"><span class="cand-title" dir="auto">${esc(x.title)}</span></button>`
+    : `<span class="cand-title" dir="auto">${esc(x.title)}</span>`;
+  const sup = CMP_SUP[x.sup] || CMP_SUP.other;
+  const link = httpsOk(x.url) ? `<a class="cand-link" href="${esc(x.url)}" target="_blank" rel="noopener noreferrer">לספק<span class="sr-only">: ${esc(sup.he)}, נפתח בחלון חדש</span><span aria-hidden="true">&nbsp;↗</span></a>` : '';
+  const chips = [
+    supBadge(x),
+    isWin ? `<span class="chip cmp-win-tag">מנצח${st ? '' : ': ' + esc(winStyles.map(cmpStyleHe).join(', '))}</span>` : '',
+    x.status === 'selected' ? '<span class="chip st-selected">נבחר</span>' : '',
+    rej ? '<span class="chip st-rejected">נדחה</span>' : '',
+    verdict && CMP_VERDICT[verdict] ? `<span class="chip verdict ${CMP_VERDICT[verdict].cls}"><i class="fdot"></i>${esc(CMP_VERDICT[verdict].he)}</span>` : '',
+    x.shared ? '<span class="chip">ממאגר משותף</span>' : '',
+    x.k === 'api' ? '<span class="chip">קריאה ראשונה ל-API</span>' : '',
+    x.qtySure ? '' : `<span class="chip chip-unsure" title="${esc(x.qtyReason || '')}">כמות לא ודאית</span>`,
+    link
+  ].join('');
+  const priceTxt = x.priceIls != null ? fmtILS(x.priceIls) : isNum(x.priceUsd) ? (x.priceFrom ? 'מ-' : '') + fmtUSD(x.priceUsd) : '—';
+  const priceSub = x.priceIls != null ? 'מחיר צרכן באתר הספק' : (x.qty > 1 && isNum(x.priceUsd) ? `× ${x.qty} = ${fmtUSD(x.priceUsd * x.qty)}` : (x.sku ? `SKU ${x.sku}` : ''));
+  const shipIls = isNum(x.ship.total) ? x.ship.total * v.usd_ils : null;
+  const shipTxt = isNum(shipIls) ? fmtILS(shipIls, shipIls < 10 ? 1 : 0) : (x.ship.noShip ? 'אין משלוח' : '—');
+  const days = daysTxt(x.ship.days);
+  const retailTxt = x.retail ? fmtILS(x.retail.ils) : '—';
+  const fitTxt = !st ? Object.keys(x.fits).length ? Object.entries(x.fits).filter(([k]) => cmpData().styles.some(s => s.id === k)).map(([k, n]) => `${cmpStyleHe(k)} ${n}`).join(' · ') || '—' : '—'
+    : fit.kind === 'score' ? `${fit.n}/10` : fit.kind === 'assumed' ? 'לא דורג' : '—';
+  const cls = e.flag === 'orange' ? 'flag-orange' : e.flag === 'red' ? 'flag-red' : 'flag-green';
+  const fileTip = file && (isNum(file.landed_ils) || isNum(file.margin_ils)) ? ` title="${esc(`בקובץ הליקוט: נחיתה ${fmtILS(file.landed_ils)}, רווח ${fmtILS(file.margin_ils)}${isNum(file.margin_pct) ? ' (' + fmtPct(file.margin_pct) + ')' : ''}. כאן מחושב מחדש לפי ההנחות של מסך הרווחיות.`)}"` : '';
+  const cmpTo = file && file.compared_to && file.compared_to.card_id ? (() => { const o = S.byId.get(file.compared_to.card_id); return `<p class="cand-reason">מול: <span dir="auto">${esc(o ? o.name.slice(0, 60) : file.compared_to.card_id)}</span>${isNum(file.compared_to.landed_ils) ? ` (נחיתה ${ltr(fmtILS(file.compared_to.landed_ils))} בקובץ)` : ''}</p>`; })() : '';
+  const marginCell = isNum(e.contribution)
+    ? `<span class="flag ${cls}"><i class="fdot"></i>${ltr(fmtILS(e.contribution))}</span><span class="cmp-sub cmp-pct-n">${ltr(fmtPct(e.margin, 1))}</span><span class="cmp-sub">אחרי שיווק ${ltr(fmtILS(e.after_marketing))}</span>`
+    : `<span class="flag flag-orange"><i class="fdot"></i>${esc(missText(e))}</span>`;
+  return `<tr class="${isWin ? 'is-win' : ''} ${rej ? 'is-rej' : ''}">
+    <th scope="row" class="c-cand">${titleHtml}
+      <div class="cand-meta">${chips}</div>
+      <div class="cmp-narrow">${esc(priceTxt)}${x.qty > 1 ? ` × ${x.qty}` : ''} + משלוח ${esc(shipTxt)}${days ? ` (${days} יום)` : ''} · מחיר ${esc(retailTxt)}${x.retail ? ` (${esc(RETAIL_SRC[x.retail.src])})` : ''} · התאמה ${esc(fitTxt)}</div>
+      ${reason ? `<p class="cand-reason" dir="auto">${esc(reason.length > 220 ? reason.slice(0, 220) + '…' : reason)}</p>` : ''}${cmpTo}
+    </th>
+    <td class="money w">${ltr(esc(priceTxt))}${priceSub ? `<span class="cmp-sub" dir="auto">${esc(priceSub)}</span>` : ''}</td>
+    <td class="money w">${ltr(esc(shipTxt))}${isNum(x.ship.total) ? `<span class="cmp-sub">${ltr(fmtUSD(x.ship.total))}${days ? ` · ${days} יום` : ''}</span>` : ''}<span class="cmp-sub">${esc(x.ship.label || '')}</span>${x.ship.est ? '<span class="cmp-sub"><span class="est">הערכה לכמות</span></span>' : ''}</td>
+    <td class="money">${ltr(fmtILS(e.landed))}${isNum(e.ship_share) && e.ship_share > 0.5 ? `<span class="cmp-sub warn-text">משלוח ${ltr(fmtPct(e.ship_share))}</span>` : ''}${x.qty > 1 ? `<span class="cmp-sub">ל-${x.qty} יח'</span>` : ''}</td>
+    <td class="money w">${ltr(esc(retailTxt))}${x.retail ? `<span class="cmp-sub">${esc(RETAIL_SRC[x.retail.src])}</span>` : ''}${e.recommended != null ? `<span class="cmp-sub">ל-${ltr(esc(v.target_margin_pct + '%'))}: ${ltr(fmtILS(Math.ceil(e.recommended)))}</span>` : ''}</td>
+    <td class="money"${fileTip}>${marginCell}</td>
+    <td class="money w">${isNum(e.margin) ? `<span class="flag ${cls}">${ltr(fmtPct(e.margin, 1))}</span>` : '—'}</td>
+    <td class="w">${esc(fitTxt)}${fit && fit.kind === 'assumed' ? '<span class="cmp-sub">נחשב נורדי</span>' : ''}</td>
+  </tr>`;
+}
+function cmpJump(key){
+  const id = cmpKeyId(key);
+  let el = document.getElementById(id);
+  if(!el){
+    Object.assign(S.cmp, {sup: '', profitable: false, rejected: true, unrated: true}); store.set('cmp', S.cmp);
+    renderCompare(); el = document.getElementById(id);
+    if(el) say('הסינון נוקה כדי להציג את העמדה');
+  }
+  if(!el){ say('העמדה לא מוצגת'); return; }
+  el.scrollIntoView({block: 'start'});
+  const h = el.matches('li') ? el : $('h3', el);
+  if(h) h.focus({preventScroll: true});
 }
 
 /* ---------- suppliers screen ---------- */

@@ -20,7 +20,10 @@ type JsonSchema = {
   pattern?: string;
   minimum?: number;
   maximum?: number;
+  minLength?: number;
+  minItems?: number;
   properties?: Record<string, JsonSchema>;
+  propertyNames?: JsonSchema;
   required?: string[];
   additionalProperties?: boolean | JsonSchema;
   items?: JsonSchema;
@@ -53,6 +56,7 @@ function emit(s: JsonSchema, indent: string): string {
     switch (t) {
       case 'string':
         out = 'z.string()';
+        if (s.minLength !== undefined) out += `.min(${s.minLength})`;
         if (s.pattern) out += `.regex(new RegExp(${JSON.stringify(s.pattern)}))`;
         break;
       case 'number':
@@ -66,13 +70,18 @@ function emit(s: JsonSchema, indent: string): string {
         break;
       case 'array':
         out = `z.array(${s.items ? emit(s.items, indent) : 'z.unknown()'})`;
+        if (s.minItems !== undefined) out += `.min(${s.minItems})`;
         break;
       case 'object': {
         const props = s.properties ?? {};
         const req = new Set(s.required ?? []);
         const keys = Object.keys(props);
         if (keys.length === 0 && s.additionalProperties && typeof s.additionalProperties === 'object') {
-          out = `z.record(z.string(), ${emit(s.additionalProperties, indent)})`;
+          // propertyNames with an enum: only those keys, each optional (zod's record over an enum is exhaustive)
+          const names = s.propertyNames?.enum?.filter((v): v is string => typeof v === 'string');
+          out = names?.length
+            ? `z.partialRecord(z.enum(${JSON.stringify(names)}), ${emit(s.additionalProperties, indent)})`
+            : `z.record(z.string(), ${emit(s.additionalProperties, indent)})`;
           break;
         }
         const fields = keys
