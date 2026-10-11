@@ -6,12 +6,12 @@
 
 | | |
 | --- | --- |
-| שורות סינון (תוצאות חיפוש) | 35,756 |
-| מוצרים שנבדקו לעומק (מחיר SKU + משלוח לישראל) | 3,844 |
-| מוצרים שנבדקו בעין (גיליונות תמונות) | 1,525 |
-| רשומות מוצר×סגנון | 5,594 |
-| כרטיסי טיוטה חדשים | 16 |
-| קריאות API היום (כל הסשן) | 8,395 |
+| שורות סינון (תוצאות חיפוש) | 35,652 |
+| מוצרים שנבדקו לעומק (מחיר SKU + משלוח לישראל) | 3,959 |
+| מוצרים שנבדקו בעין (גיליונות תמונות) | 1,548 |
+| רשומות מוצר×סגנון | 5,820 |
+| כרטיסי טיוטה חדשים | 19 |
+| קריאות API היום (כל הסשן) | 8,411 |
 
 **מכסה שנצפתה:** אין מכסה יומית מוחזרת. מגבלת קצב: עם 3 תהליכים במקביל (כ-1.8 קריאות בשנייה) AliExpress החזיר `ApiCallLimit` ("this ban will last 1 seconds"); עם 2 במקביל זה קרה לעיתים רחוקות. כל עצירה נרשמה, וההרצה המשיכה מהנקודה שבה עצרה. התקרה העצמית הועלתה ל-12,000 ביום לריצה הזו (`scripts/sourcing/budget.py`).
 
@@ -40,12 +40,12 @@ work STOP detail at 2026-10-11 12:29:17 UTC: flow control: ApiCallLimit | Api ac
 | living-room | wall-decor | `wall-decor-aliexpress-japandi-wall-art-set-969661` | ג'פנדי 8 | 29 | 69% |
 | master | curtains | `curtains-aliexpress-linen-blend-beige-curtains-122000` | מודרני חם 8 | 78 | 37% (חריג VR1) |
 | work | curtains | `curtains-aliexpress-1pc-japanese-folk-wabi-212463` | ג'פנדי 8 | 111 | 16% (חריג VR1) |
-| work | curtains | `curtains-aliexpress-beige-linen-sheer-curtains-554205` | מודרני חם 8 | 87 | 31% (חריג VR1) |
-| work | curtains | `curtains-aliexpress-cotton-linen-curtain-look-902882` | נורדי 8 | 64 | 47% |
+| work | curtains | `curtains-aliexpress-beige-linen-sheer-curtains-554205-work` | מודרני חם 8 | 87 | 31% (חריג VR1) |
+| work | curtains | `curtains-aliexpress-cotton-linen-curtain-look-902882-work` | נורדי 8 | 64 | 47% |
 | work | curtains | `curtains-aliexpress-natural-linen-curtains-84-784378` | כפרי מודרני 8 | 84 | 33% (חריג VR1) |
 | work | framed-art | `framed-art-aliexpress-frameless-minimalist-wall-art-631735` | מודרני חם 8.5 | 26 | 75% |
-| work | framed-art | `framed-art-aliexpress-japanese-wabi-sabi-tree-176323` | ג'פנדי 8.5 | 25 | 76% |
-| work | framed-art | `framed-art-aliexpress-mediterranean-wabi-sabi-poster-802890` | ים תיכוני 8 | 22 | 77% |
+| work | framed-art | `framed-art-aliexpress-japanese-wabi-sabi-tree-176323-work` | ג'פנדי 8.5 | 25 | 76% |
+| work | framed-art | `framed-art-aliexpress-mediterranean-wabi-sabi-poster-802890-work` | ים תיכוני 8 | 22 | 77% |
 | work | framed-art | `framed-art-aliexpress-modern-minimalist-neutral-gallery-802995` | מודרני חם 8 | 39 | 68% |
 | work | wall-sconce | `wall-sconce-aliexpress-rattan-bamboo-wall-lamp-671943` | בוהו 8 | 66 | 23% (חריג VR1) |
 
@@ -57,22 +57,22 @@ fit 7+ במבט, מידה מאומתת, נחיתה זולה מהכרטיס הק�
 
 | חדר/עמדה | AliExpress | נחיתה ₪ | הכרטיס הקיים | נחיתה ₪ |
 | --- | --- | --- | --- | --- |
-| corridor/ceiling-lights | [Bamboo Ceiling Lamp Indoor Ceiling Light E27 Home ](https://www.aliexpress.com/item/1005010079227644.html) (בוהו 7) | 94 | ceiling-lights-cj-pleated-fabric-saucer-flush-50 (CJ Dropshipping) | 219 |
+| bath/bath-mat | [Waffle Bath Mat Rug Super Absorbent Non Slip Boho ](https://www.aliexpress.com/item/1005011772248198.html) (כפרי מודרני 7) | 37 | bath-mat-cj-tufted-cotton-frame-beige-40x60 (CJ Dropshipping) | 53 |
+| corridor/ceiling-lights | [Bamboo Ceiling Lamp Indoor Ceiling Light E27 Home ](https://www.aliexpress.com/item/1005010079227644.html) (בוהו 7) | 94 | ceiling-lights-cj-silk-pumpkin-lantern-30 (CJ Dropshipping) | 153 |
 | corridor/gallery-art | [Japanese Wabi Sabi Tree Abstract Canvas Print Post](https://www.aliexpress.com/item/1005012443176323.html) (ג'פנדי 8) | 25 | gallery-art-cj-black-botanical-cutout-set3 (CJ Dropshipping) | 83 |
 | dining-room/candle-holders | [Vintage Metal Taper Candle Holder with Handle Tray](https://www.aliexpress.com/item/1005012396864609.html) (כפרי מודרני 7) | 21 | candle-holders-aliexpress-matte-black-iron-pillar-set2 (AliExpress) | 41 |
 | dining-room/framed-art | [Rustic Kitchen Still Life Poster Vintage Bread Art](https://www.aliexpress.com/item/1005011780297081.html) (כפרי מודרני 7) | 19 | framed-art-aliexpress-retro-farmhouse-chicken-botanical-333603 (AliExpress) | 97 |
-| dining-room/paper-towel-holder | [Wooden Paper Towel Holder Rustic Farmhouse Counter](https://www.aliexpress.com/item/1005010107906181.html) (נורדי 7) | 23 | paper-towel-holder-aliexpress-1pc-bamboo-paper-towel-316063 (AliExpress) | 23 |
+| dining-room/paper-towel-holder | [1PC Bamboo Paper Towel Holder Kitchen Dining Room ](https://www.aliexpress.com/item/1005009904316063.html) (ג'פנדי 7) | 23 | paper-towel-holder-aliexpress-1pc-bamboo-paper-towel-316063 (AliExpress) | 23 |
 | hall/ceiling-light | [Boho Rattan Woven Ceiling Light Semi Flush Mount C](https://www.aliexpress.com/item/1005012561051994.html) (בוהו 7) | 74 | ceiling-light-cj-waxwood-dome-ash-40 (CJ Dropshipping) | 197 |
 | hall/framed-art | [Frameless Minimalist Wall Art Set in Brown and Bei](https://www.aliexpress.com/item/1005010493631735.html) (מודרני חם 7) | 26 | framed-art-cj-line-scribble-white-mat-50 (CJ Dropshipping) | 166 |
-| hall/wall-sconce | [Rattan Bamboo Wall Lamp Sconce Fixture Vintage Boh](https://www.aliexpress.com/item/1005010168671943.html) (בוהו 7) | 66 | wall-sconce-cj-wavy-linen-flush-25 (CJ Dropshipping) | 152 |
-| kids/cushions | [Boho Style Line Cushion Cover Durable Hypoallergen](https://www.aliexpress.com/item/1005012719227422.html) (בוהו 7) | 29 | cushions-cj-dusty-pink-corduroy-patchwork-45 (CJ Dropshipping) | 52 |
+| hall/wall-sconce | [Rattan Bamboo Wall Lamp Sconce Fixture Vintage Boh](https://www.aliexpress.com/item/1005010168671943.html) (בוהו 7) | 66 | wall-sconce-cj-white-fabric-cube-15-hall (CJ Dropshipping) | 109 |
 | kids/framed-prints | [Japandi Wall Art Set of 2 Sage Green Landscape Pos](https://www.aliexpress.com/item/1005012553969661.html) (ג'פנדי 7) | 21 | framed-prints-cj-flower-cutout-set-30x40 (CJ Dropshipping) | 69 |
 | kids/pendant | [Rustic Woven Pendant Light Kitchen Island Boho Han](https://www.aliexpress.com/item/1005009394200914.html) (כפרי מודרני 7) | 84 | pendant-cj-fabric-dome-ash-cap-25 (CJ Dropshipping) | 144 |
 | living-room/curtains | [Beige Linen Sheer Curtains for Living Room Modern ](https://www.aliexpress.com/item/1005004556554205.html) (מודרני חם 8) | 87 | curtains-cj-japanese-linen-half-shade (CJ Dropshipping) | 143 |
 | living-room/framed-art | [Vintage Countryside Wall Art Print Retro Rustic Sp](https://www.aliexpress.com/item/1005006849743763.html) (כפרי מודרני 7.5) | 27 | framed-art-cj-morandi-triptych-sage (CJ Dropshipping) | 484 |
 | living-room/vase | [Vintage Distressed Clay Vase, Wabi-Sabi Rustic Cer](https://www.aliexpress.com/item/1005012472589009.html) (ג'פנדי 8.5) | 105 | vase-aliexpress-vintage-distressed-clay-vase-589009 (AliExpress) | 105 |
 | living-room/wall-decor | [Japandi Wall Art Set of 2 Sage Green Landscape Pos](https://www.aliexpress.com/item/1005012553969661.html) (ג'פנדי 8) | 29 | wall-decor-aliexpress-natural-raffia-woven-bohemian-763597 (AliExpress) | 46 |
-| master/bedside-sconces | [Boho Farmhouse Wall Sconces Natural Twine Hand Kni](https://www.aliexpress.com/item/1005009708965037.html) (כפרי מודרני 7) | 88 | bedside-sconces-cj-linen-wave-flush (CJ Dropshipping) | 136 |
+| master/bedside-sconces | [Boho Farmhouse Wall Sconces Natural Twine Hand Kni](https://www.aliexpress.com/item/1005009708965037.html) (כפרי מודרני 7) | 88 | bedside-sconces-cj-white-fabric-cube-15 (CJ Dropshipping) | 109 |
 | work/pendant | [Rustic Woven Pendant Light Kitchen Island Boho Han](https://www.aliexpress.com/item/1005009394200914.html) (כפרי מודרני 7.5) | 84 | pendant-cj-fluted-ceramic-wood-cap-short-lantern (CJ Dropshipping) | 115 |
 | work/wall-sconce | [Rattan Bamboo Wall Lamp Sconce Fixture Vintage Boh](https://www.aliexpress.com/item/1005010168671943.html) (בוהו 8) | 66 | wall-sconce-cj-black-swan-arm-white-fabric-cone (CJ Dropshipping) | 85 |
 

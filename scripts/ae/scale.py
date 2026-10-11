@@ -552,6 +552,15 @@ def do_finalize(room, a, write_cards=True):
             r0 = max(rs, key=lambda r: r["fit"])
             cid = "%s-aliexpress-%s-%s" % (slot, ds.slugify(r0["title"] or iid, words=4, maxlen=36), iid[-6:])
             path = card_path(room, slot, cid)
+            # a card for this product already in the slot folder (maybe renamed by another session): reuse it, never duplicate
+            for other in glob.glob(os.path.join(os.path.dirname(path), "*.json")):
+                try:
+                    oc = json.load(open(other))
+                except ValueError:
+                    continue
+                if (oc.get("supplier") or {}).get("product_url") == ds.ITEM_URL % iid:
+                    cid, path = oc.get("id") or cid, other
+                    break
             if not os.path.exists(path):
                 argv = ["--by", "aliexpress-scale", "--run-id", a.run_id, "--max-calls", str(a.max_calls), "card", iid,
                         "--slot", "%s/%s" % (room, slot), "--sku", r0["sku"], "--id", cid, "--out", path]
@@ -573,7 +582,10 @@ def do_finalize(room, a, write_cards=True):
                 c = json.load(open(path))
             except ValueError:
                 continue
-            if OWN_MARK in (c.get("notes") or "") and c.get("id") not in carded and room in (c.get("rooms") or []):
+            # only a card this run wrote under its own generated id (another session may have renamed or edited it: leave those)
+            gen = re.match(r"^%s-aliexpress-[a-z0-9-]+-\d{6}$" % re.escape(str(c.get("slot"))), str(c.get("id")))
+            if OWN_MARK in (c.get("notes") or "") and gen and c.get("id") not in carded and room in (c.get("rooms") or []) \
+                    and not c.get("style_scores"):
                 os.remove(path)
                 iid = ds.ITEM_ID.search((c.get("supplier") or {}).get("product_url") or "")
                 if iid:
