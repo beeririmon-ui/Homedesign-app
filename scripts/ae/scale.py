@@ -435,6 +435,8 @@ def existing_cards(room):
         except ValueError:
             continue
         slot = os.path.basename(os.path.dirname(p))
+        if "Scale run 2026-10-11" in (c.get("notes") or ""):
+            continue  # this run's own cards are not the baseline to beat
         cost = (c.get("price") or {}).get("cost")
         if not isinstance(cost, (int, float)):
             continue

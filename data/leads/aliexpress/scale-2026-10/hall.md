@@ -60,10 +60,10 @@
 
 | סגנון | הבחירה | SKU | $ מוצר+משלוח | נחיתה ₪ | רצועה ₪ | רווח | fit | מול הכרטיס הקיים |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| נורדי | [Nordic Ins Leather Desktop Storage Box Key Door Cosmetics Je](https://www.aliexpress.com/item/1005006166093404.html) · **alternative** | Color green Size Small | 4.42+1.99, 6-15 ימים | 21 | 49–69 | ₪30 · 51% | 6.3 (סינון) | אין כרטיס ✓ זול/רווחי יותר |
+| נורדי | [Nordic Ins Leather Desktop Storage Box Key Door Cosmetics Je](https://www.aliexpress.com/item/1005006166093404.html) · **alternative** · ⚠ מידה לא אומתה (SKU הזול) | Color green Size Small | 4.42+1.99, 6-15 ימים | 21 | 49–69 | ₪30 · 51% | 6.3 (סינון) | אין כרטיס ✓ זול/רווחי יותר |
 | מודרני חם | — אין מועמד שעבר | | | | | | | |
 | ג'פנדי | — אין מועמד שעבר | | | | | | | |
-| ים תיכוני | [Transparent Cable Storage Box, Compartment Organizer With Li](https://www.aliexpress.com/item/1005010106524395.html) · **alternative** | Color M | 4.17+1.99, 6-13 ימים | 20 | 49–69 | ₪31 · 53% | 6.0 (סינון) | אין כרטיס ✓ זול/רווחי יותר |
+| ים תיכוני | [Transparent Cable Storage Box, Compartment Organizer With Li](https://www.aliexpress.com/item/1005010106524395.html) · **alternative** · ⚠ מידה לא אומתה (SKU הזול) | Color M | 4.17+1.99, 6-13 ימים | 20 | 49–69 | ₪31 · 53% | 6.0 (סינון) | אין כרטיס ✓ זול/רווחי יותר |
 | כפרי מודרני | [Food Storage Containers with Lids Stackable Treat Box Contai](https://www.aliexpress.com/item/1005008091357345.html) · **alternative** | Color 2L-Storage-Jar-1pc | 1.46+5.60, 18-28 ימים | 23 | 49–69 | ₪28 · 48% | 7 (סינון) | אין כרטיס ✓ זול/רווחי יותר |
 | בוהו | [Wooden Storage Box Plain Wood With Lid Multifunction Square ](https://www.aliexpress.com/item/1005008364057350.html) · **alternative** | Ships From China Mainland | 0.54+4.01, 18-28 ימים | 15 | 49–69 | ₪36 · 62% | 7 (סינון) | אין כרטיס ✓ זול/רווחי יותר |
 
