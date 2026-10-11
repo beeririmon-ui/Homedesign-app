@@ -35,6 +35,8 @@ STYLE_HE = {"nordic": "נורדי", "warm-modern": "מודרני חם", "japandi
             "modern-country": "כפרי מודרני", "boho": "בוהו"}
 TODAY = "2026-10-11"
 REPICK = False
+# written by ds.build_card for the cards this run makes (--by aliexpress-scale); other sessions' cards never carry it
+OWN_MARK = "DRAFT from AliExpress DS API (2026-10-11, aliexpress-scale)"
 
 
 class Stop(Exception):
@@ -435,7 +437,7 @@ def existing_cards(room):
         except ValueError:
             continue
         slot = os.path.basename(os.path.dirname(p))
-        if "Scale run 2026-10-11" in (c.get("notes") or ""):
+        if OWN_MARK in (c.get("notes") or ""):
             continue  # this run's own cards are not the baseline to beat
         cost = (c.get("price") or {}).get("cost")
         if not isinstance(cost, (int, float)):
@@ -533,11 +535,16 @@ def do_finalize(room, a, write_cards=True):
             # same retail band for both, so "margin at least as good" == landed cost not higher
             beats = c is None or r["landed_ils"] <= c["landed_ils"]
             r["beats_existing"] = beats
-            r["low_margin"] = r["margin_pct"] < 0.35
+            r["low_margin"] = r["margin_pct"] < 0.40  # VR1 (studio rules ה.11): 40% minimum
             # the room needs a size: a multi-SKU product whose SKU was not matched by size may be priced on a too-small SKU
             r["size_unverified"] = bool(SLOTS["%s/%s" % (room, slot)].get("size")) and r.get("sku_pick") == "sku-default" and (r.get("n_skus") or 1) > 1
-            if i < 3 and r["fit"] >= 8 and beats and not r["size_unverified"]:
-                to_card.setdefault((slot, r["item_id"]), []).append(r)
+        # VR1: card only at >= 40% margin; below 40% only when the slot x style has no >= 40% option (flagged)
+        ok = [r for r in live if r["fit"] >= 8 and r.get("beats_existing") and not r["size_unverified"]]
+        good = [r for r in ok if r["margin_pct"] >= 0.40]
+        for r in (good or ok[:1])[:3]:
+            if not good:
+                r["vr1_exception"] = "below 40%% (%d%%), no >=40%% option for this slot x style" % round(r["margin_pct"] * 100)
+            to_card.setdefault((slot, r["item_id"]), []).append(r)
     # cards
     carded = []
     if write_cards:
@@ -556,6 +563,23 @@ def do_finalize(room, a, write_cards=True):
             carded.append(cid)
             for r in rs:
                 r["card_id"] = cid
+    # withdraw this run's earlier cards in this room that are no longer chosen (ranking or VR1 changed)
+    if write_cards:
+        base = os.path.join(REPO, "data", "products") if ROOM_DIRS[room] is None else os.path.join(REPO, "data", "products", ROOM_DIRS[room])
+        for path in glob.glob(os.path.join(base, "*", "*-aliexpress-*.json")):
+            if ROOM_DIRS[room] is None and os.path.basename(os.path.dirname(path)) not in {k.split("/")[1] for k in slots_of(room)}:
+                continue
+            try:
+                c = json.load(open(path))
+            except ValueError:
+                continue
+            if OWN_MARK in (c.get("notes") or "") and c.get("id") not in carded and room in (c.get("rooms") or []):
+                os.remove(path)
+                iid = ds.ITEM_ID.search((c.get("supplier") or {}).get("product_url") or "")
+                if iid:
+                    registry.add(ds.key_of(iid.group(1)), "seen", "scale run 2026-10-11: draft card %s withdrawn (ranking / VR1 40%% rule)" % c.get("id"),
+                                 by="aliexpress-scale", slot="%s/%s" % (room, c.get("slot")), opened=True)
+                print("withdrawn: %s" % os.path.relpath(path, REPO), file=sys.stderr)
     # registry: rejected with reason (only items not carded and not already rejected)
     reg = registry.load()
     for r in recs:
@@ -573,7 +597,7 @@ def add_scale_note(path, rs):
     c = json.load(open(path))
     txt = open(path).read()
     note = " Scale run 2026-10-11 (screening fit, not the designer's score): " + "; ".join(
-        "%s %s/10 (%s), landed %.0f ILS, margin %d%% at %s ILS" % (r["style"], r["fit"], r["reason"], r["landed_ils"], round(r["margin_pct"] * 100), r["retail_band_ils"][1]) for r in rs)
+        "%s %s/10 (%s), landed %.0f ILS, margin %d%% at %s ILS%s" % (r["style"], r["fit"], r["reason"], r["landed_ils"], round(r["margin_pct"] * 100), r["retail_band_ils"][1], " [VR1 exception: " + r["vr1_exception"] + "]" if r.get("vr1_exception") else "") for r in rs)
     c["notes"] = (c.get("notes") or "") + note
     with open(path, "w") as f:
         json.dump(c, f, ensure_ascii=False, indent=2)
