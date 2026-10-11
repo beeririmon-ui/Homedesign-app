@@ -2879,7 +2879,7 @@ function cmpRowHtml(x, st, winStyles, T){
   const marginCell = isNum(e.contribution)
     ? `<span class="flag ${cls}"><i class="fdot"></i>${ltr(fmtILS(e.contribution))}</span><span class="cmp-sub cmp-pct-n">${ltr(fmtPct(e.margin, 1))}</span><span class="cmp-sub">אחרי שיווק ${ltr(fmtILS(e.after_marketing))}</span>`
     : `<span class="flag flag-orange"><i class="fdot"></i>${esc(missText(e))}</span>`;
-  return `<tr class="${isWin ? 'is-win' : ''} ${rej ? 'is-rej' : ''}">
+  return `<tr class="${isWin ? 'is-win' : ''} ${rej ? 'is-rej' : ''}" data-sup="${esc(x.sup)}" data-key="${esc(x.key)}"${isNum(e.margin) ? ` data-margin="${e.margin.toFixed(4)}"` : ''}>
     <th scope="row" class="c-cand">${titleHtml}
       <div class="cand-meta">${chips}</div>
       <div class="cmp-narrow">${esc(priceTxt)}${x.qty > 1 ? ` × ${x.qty}` : ''} + משלוח ${esc(shipTxt)}${days ? ` (${days} יום)` : ''} · מחיר ${esc(retailTxt)}${x.retail ? ` (${esc(RETAIL_SRC[x.retail.src])})` : ''} · התאמה ${esc(fitTxt)}</div>

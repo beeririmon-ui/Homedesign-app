@@ -1117,9 +1117,13 @@ ROOM_ALIASES = dict(ROOM_DIRS, **ROOM_TAGS, **{"living": "living-room", "kitchen
                                                "office": "work", "entry": "hall", "bedroom-master": "master"})
 DEEP_VERDICTS = {"best", "alternative", "reject"}
 SUP_HE = {"aliexpress": "AliExpress", "cj": "CJ", "zendrop": "Zendrop", "il": "ספק ישראלי", "other": "אחר"}
-# "Shipping to IL: cheapest 23.39 USD AliExpress standard shipping, 22-32 days" (AliExpress cards),
-# "Shipping to IL: regular $14.24, 14 days" (Zendrop cards). The card schema has no shipping-cost field.
-SHIP_NOTE = re.compile(r"Shipping to IL:\s*(?:cheapest|regular)?\s*\$?\s*(\d+(?:\.\d+)?)\s*(?:USD)?[^,;\n]*(?:,\s*(\d+)(?:\s*[-–]\s*(\d+))?\s*days)?", re.I)
+# Shipping to Israel written in a card (the card schema has no shipping-cost field): first the default SKU's
+# options.skus[].shipping_il, then the notes: "Shipping to IL: cheapest 23.39 USD AliExpress standard shipping, 22-32 days",
+# "SHIPPING to IL: only one option returned: AliExpress Selection Standard 1.99 USD, 6-15 days", "Shipping to IL: regular
+# $14.24, 14 days" (Zendrop). The first amount after the label is the cheapest option in every format seen.
+SHIP_HEAD = re.compile(r"shipping to IL\s*:", re.I)
+SHIP_AMOUNT = re.compile(r"\$\s*(\d+(?:\.\d+)?)|(\d+(?:\.\d+)?)\s*USD")
+SHIP_DAYS = re.compile(r"(\d+)(?:\s*[-–]\s*(\d+))?\s*days", re.I)
 AE_ITEM = re.compile(r"aliexpress\.[a-z.]+/item/(\d+)\.html", re.I)
 
 
@@ -1218,6 +1222,26 @@ def frac(v):
     if x is None:
         return None
     return x / 100 if abs(x) > 1.5 else x
+
+
+def card_ship(p: dict) -> dict | None:
+    """Shipping to Israel in USD written in the card, for cards without CJ freight (AliExpress, Zendrop)."""
+    o = p.get("options") if isinstance(p.get("options"), dict) else {}
+    sku = next((x for x in o.get("skus") or [] if isinstance(x, dict) and x.get("id") == o.get("default_sku")), None)
+    si = (sku or {}).get("shipping_il") or {}
+    if isnum(si.get("amount")) and str(si.get("currency") or "").upper() == "USD":
+        return {"usd": float(si["amount"]), "days": days_pair(si.get("days")), "src": "options"}
+    notes = p.get("notes") or ""
+    m = SHIP_HEAD.search(notes)
+    if not m:
+        return None
+    seg = notes[m.end():m.end() + 160]
+    a = SHIP_AMOUNT.search(seg)
+    if not a:
+        return None
+    d = SHIP_DAYS.search(seg[a.end():a.end() + 90])
+    days = [int(x) for x in d.groups() if x] if d else []
+    return {"usd": float(a.group(1) or a.group(2)), "days": [min(days), max(days)] if days else None, "src": "notes"}
 
 
 def load_deep(deep_dir: Path, room_ids: set, slot_keys: set, aliases: dict) -> dict:
@@ -1359,10 +1383,9 @@ def build_comparison(slots: dict, products: list[dict], slot_by_key: dict, room_
         c = {"k": "card", "id": p["id"], "sup": supplier_key(sup.get("name"), sup.get("product_url"), price.get("currency"))}
         if shared:
             c["shared"] = True
-        m = SHIP_NOTE.search(p.get("notes") or "")
-        if m:
-            d = [int(x) for x in m.groups()[1:] if x]
-            c["ship"] = {"usd": float(m.group(1)), "days": [min(d), max(d)] if d else None, "src": "notes"}
+        ship = card_ship(p)
+        if ship:
+            c["ship"] = ship
         mi = AE_ITEM.search(sup.get("product_url") or "")
         if mi:
             c["ae"] = ae_canon(mi.group(1), aliases)
