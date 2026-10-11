@@ -214,6 +214,8 @@ def best_freight(opts):
 
 def shortlist(room, top):
     rows = [json.loads(l) for l in open(os.path.join(OUT, "screen", room + ".jsonl"))]
+    for r in rows:  # rescore with the current config (fixes to scale_config apply without new searches)
+        r["score"], r["why"] = score_row(r, "%s/%s" % (room, r["slot"]), r["style"])
     reg = registry.load()
     picks = {}  # (slot, style) -> [rows]
     for key in slots_of(room):
