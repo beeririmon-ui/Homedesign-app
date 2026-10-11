@@ -164,7 +164,11 @@ def do_screen(room, a):
                 pages = [1]
                 got = []
                 for page in pages:
-                    res = guard(search, a, q, page)
+                    try:
+                        res = guard(search, a, q, page)
+                    except client.AeError as e:  # a one-off search error (e.g. NGSELECTION_SEARCH_ERROR): skip the query
+                        print("[screen] skip %r p%d: %s %s" % (q, page, e.code, e.message), file=sys.stderr)
+                        continue
                     for p in res.get("products") or []:
                         r = {"item_id": str(p.get("itemId")), "title": p.get("title"), "price_usd": fnum(p.get("targetSalePrice")),
                              "orders": int(fnum(p.get("orders")) or 0), "rating": fnum(p.get("evaluateRate")),
@@ -281,7 +285,10 @@ def do_detail(room, a, top):
                            price_usd=(ds.num(sku.get("offer_sale_price")) or ds.num(sku.get("sku_price"))) if sku else None,
                            stock=ds.num(sku.get("sku_available_stock")) if sku else None)
             if rec.get("product_ok") and rec.get("sku") and "ship_usd" not in rec:
-                fr, _ = guard(ds.fetch_freight, a, iid, rec["sku"], "IL", 1)
+                try:
+                    fr, _ = guard(ds.fetch_freight, a, iid, rec["sku"], "IL", 1)
+                except client.AeError as e:
+                    fr = {"options": [], "msg": "%s %s" % (e.code, e.message)}
                 b = best_freight(fr.get("options"))
                 rec.update(ship_usd=b["fee"] if b else None, ship_days="%s-%s" % (b.get("days_min"), b.get("days_max")) if b else None,
                            ship_company=(b.get("company") or b.get("code")) if b else None, ship_ok=bool(b),
@@ -582,8 +589,17 @@ def write_md(room, meta):
         L += ["## %s" % slot, "", "| סגנון | הבחירה | SKU | $ מוצר+משלוח | נחיתה ₪ | רצועה ₪ | רווח | fit | מול הכרטיס הקיים |", "| --- | --- | --- | --- | --- | --- | --- | --- | --- |"]
         for st in STYLE_ORDER:
             live = [r for r in rs if r["style"] == st and r["verdict"] in ("best", "alternative")]
-            if not live:
-                L.append("| %s | — אין מועמד שעבר | | | | | | | |" % STYLE_HE[st])
+            if not live:  # nothing passed: show the best-looking item that failed only on money, if any
+                lose = sorted([r for r in rs if r["style"] == st and r.get("reviewed") and (r["fit"] or 0) >= 7 and r["margin_pct"] is not None],
+                              key=lambda r: -r["fit"])
+                if not lose:
+                    L.append("| %s | — אין מועמד שעבר | | | | | | | |" % STYLE_HE[st])
+                    continue
+                r = lose[0]
+                L.append("| %s | [%s](%s) · **מפסיד ברצועת השוק** | %s | %.2f+%.2f, %s ימים | %.0f | %d–%d | ₪%.0f · %d%% | %s | %s |" % (
+                    STYLE_HE[st], (r["title"] or "")[:60].replace("|", "/"), r["url"], (r.get("sku_label") or "—")[:40].replace("|", "/"),
+                    r["price_usd"], r["ship_usd"], r["ship_days"], r["landed_ils"], r["retail_band_ils"][0], r["retail_band_ils"][1],
+                    r["margin_ils"], round(r["margin_pct"] * 100), r["fit"], "%s ₪%.0f" % (r["compared_to"]["card_id"], r["compared_to"]["landed_ils"]) if r["compared_to"] else "אין כרטיס"))
                 continue
             r = live[0]
             c = r["compared_to"]
