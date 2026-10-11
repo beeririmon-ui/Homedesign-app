@@ -1,0 +1,5171 @@
+{
+ "version": 1,
+ "batch": "other-rooms",
+ "date": "2026-10-11",
+ "method": "לכל מוצר נאסף ערך ישראלי: 2–5 מוצרים דומים (מידה, חומר, מראה) ברשתות ישראליות, בעיקר IKEA (API החיפוש), Fox Home ו-Home Style (קטלוג Shopify), Terminal X (דף החיפוש), Cotton Club, LEDmarket ומקורות market-prices.json, ו-Zara Home/H&M/חנויות עיצוב לפי תקציר חיפוש. typical הוא המחיר שהלקוח משלם היום ברמת הביניים (Fox Home / Home Style / Zara Home / Terminal X), לא הבסיס של IKEA: Home Style מציגה מחיר מחוק קבוע (~50%) ו-Fox Home מבצע של ~30% על 91% מהקטלוג, ולכן הטיפוסי נקבע לפי המחיר בפועל (מחיר מחוק נשמר ב-list_price; חיסול של 50% ומעלה לא נספר). המחיר נבחר כך שהסה\"כ ללקוח (מחיר + ₪29, חינם מ-₪299) יהיה כ-10–15% מתחת ל-typical, קרוב יותר ל-typical בסטים ובפריטים עיצוביים שאין להם מקביל מקומי, ולעולם לא מעליו (חריג אחד מסומן addon_only). הרווחיות חושבה רק לדיווח, ולא שינתה את המחיר.",
+ "assumptions": {
+  "fx_usd_ils": 3.3,
+  "vat": 0.18,
+  "card_fee_pct": 0.02,
+  "card_fee_fixed_ils": 1.2,
+  "returns_reserve_pct_of_net": 0.08,
+  "packaging_ils": 0,
+  "cac_ils_per_order": 100,
+  "items_per_order": 1.4,
+  "cac_ils_per_item": 71.43,
+  "delivery_fee_ils": 29,
+  "free_delivery_from_ils": 299,
+  "shipping_for_qty": "unit + (q-1) x (unit - 3.72) USD (CJ fixed parcel fee 3.72 USD saved per extra unit)",
+  "landed_ils": "(cost x q + shipping_for_qty) x fx; ILS supplier: cost x q + supplier delivery (incl. VAT) x q",
+  "net_ils": "price / 1.18",
+  "contribution_ils": "net - landed - (0.02 x price + 1.2) - 0.08 x net",
+  "margin_pct": "contribution / net",
+  "after_cac_ils": "contribution - 71.43",
+  "contribution_with_fee_ils": "only when price < 299: the same contribution formula on price + 29 (the fee enters net; card fee and returns reserve apply to the whole amount)",
+  "customer_total_ils": "price + 29 when price < 299, else price",
+  "vs_typical_pct": "(customer_total - il_value.typical) / il_value.typical",
+  "flags": "VR1 2026-10-11: ok = margin >= 40%; below-floor = 0 <= margin < 40%; loss = contribution < 0 (or no CJ route to Israel)",
+  "slot_alternative_ok": "for below-floor/loss only: true when another product of this batch in the same slot_key or shared_in reaches >= 40% at its own price AND its card style_scores.nordic is not lower than this product's (directive 2026-10-11: design first). When this product has no Nordic score, the design test is skipped (margin only). null = pool item with no slot.",
+  "nordic_score": "card style_scores.nordic (score), null when the card has none",
+  "price_points": "whole shekels ending in 9; 299 preferred over 279-289 because the customer total drops to 299 (free delivery)",
+  "comps": "price = price paid today incl. VAT; list_price = struck price when shown (Home Style ~50% permanent, Fox Home ~30% sale on 91% of the catalog, some Terminal X items); typical is judged on price paid today, ignoring 50%+ clearance; IKEA / Fox Home / Home Style / Terminal X / Cotton Club / LEDmarket read 2026-10-11 from public catalogs and search pages; entries with a note are from search snippets and were not opened directly",
+  "ship_estimated": "true when the input had no ship_usd_per_unit; the value used and its basis are in ship_usd_per_unit_used and ship_basis",
+  "addon_only": "true for low-ticket items that cannot be priced attractively alone because of the 29 ILS fee; meant for baskets or bundles"
+ },
+ "summary": {
+  "count": 93,
+  "flags": {
+   "loss": 70,
+   "below-floor": 18,
+   "ok": 5
+  },
+  "median_vs_typical_pct_customer_total": -11,
+  "median_price_to_typical_ratio": 0.69,
+  "median_price_ils": 99,
+  "median_typical_ils": 149
+ },
+ "products": {
+  "bath-mat-cj-solid-wood-slatted-61x45": {
+   "retail_ils": 129,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "שטיח עץ מלא אחד 61x45",
+   "il_value": {
+    "low": 69,
+    "typical": 179,
+    "high": 399,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "BLANGSLEV שטיח",
+      "size": "50x100 ס\"מ",
+      "price": 69.0,
+      "url": "https://www.ikea.com/il/he/p/blangslev-rug-bamboo-60488941/"
+     },
+     {
+      "retailer": "Terminal X",
+      "title": "שטיח אמבטיה 80x50 Classic סמ - לבן (Tirador)",
+      "size": null,
+      "price": 165.0,
+      "url": "https://www.terminalx.com/default-category/r607740001"
+     },
+     {
+      "retailer": "Fox Home",
+      "title": "שטיח אמבט בגוון בז׳ Lucia",
+      "size": null,
+      "price": 59.97,
+      "list_price": 199.9,
+      "url": "https://www.foxhome.co.il/products/0164836000"
+     },
+     {
+      "retailer": "Native Ran (ארונות אמבטיה)",
+      "title": "משטח עץ אורן למקלחת 61 ס\"מ",
+      "size": "61 ס\"מ",
+      "price": 399,
+      "url": "https://www.nativeran.co.il/161077-%D7%9E%D7%A9%D7%98%D7%97%D7%99-%D7%A2%D7%A5-%D7%9C%D7%9E%D7%A7%D7%9C%D7%97%D7%AA-",
+      "note": "מתוך תוצאת חיפוש, לא נפתח ישירות"
+     }
+    ]
+   },
+   "customer_total_ils": 158,
+   "vs_typical_pct": -12,
+   "landed_ils": 312.01,
+   "margin_pct": -196.9,
+   "contribution_ils": -215.22,
+   "after_cac_ils": -286.65,
+   "contribution_with_fee_ils": -193.19,
+   "flag": "loss",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 74.85,
+   "price_note": "שטיח עץ מלא כמעט לא נמכר ברשתות (שם בד או במבוק); Tirador ₪165 בבד, משטח אורן ₪399; עיצובי, 12% מתחת. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "action_he": "משלוח Sensitive בלבד ($75) הורג את המוצר: לחפש ספק עם קו Eub או גרסה קלה וקטנה יותר.",
+   "slot_alternative_ok": false
+  },
+  "bath-mat-cj-tufted-cotton-frame-beige-40x60": {
+   "retail_ils": 39,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "שטיח אמבטיה אחד 40x60",
+   "il_value": {
+    "low": 53,
+    "typical": 79,
+    "high": 165,
+    "comps": [
+     {
+      "retailer": "Fox Home",
+      "title": "שטיח אמבטיה בגוון בז' Bliss",
+      "size": null,
+      "price": 69.93,
+      "list_price": 99.9,
+      "url": "https://www.foxhome.co.il/products/0331406000"
+     },
+     {
+      "retailer": "Home Style",
+      "title": "Benetton Essential Bath Mat - לבן",
+      "size": "50/80 סמ מגבת רצפה",
+      "price": 53.4,
+      "list_price": 89.0,
+      "url": "https://www.homestyle.co.il/products/2029-101"
+     },
+     {
+      "retailer": "Terminal X",
+      "title": "שטיחון אמבט לוקאס בז' 80*50 LUKAS (TheRedCarpet)",
+      "size": null,
+      "price": 89.1,
+      "list_price": 99.0,
+      "url": "https://www.terminalx.com/default-category/r218720018"
+     },
+     {
+      "retailer": "Terminal X",
+      "title": "שטיח אמבטיה 80x50 Classic סמ - לבן (Tirador)",
+      "size": null,
+      "price": 165.0,
+      "url": "https://www.terminalx.com/default-category/r607740001"
+     }
+    ]
+   },
+   "customer_total_ils": 68,
+   "vs_typical_pct": -14,
+   "landed_ils": 52.77,
+   "margin_pct": -73.6,
+   "contribution_ils": -24.34,
+   "after_cac_ils": -95.77,
+   "contribution_with_fee_ils": -2.31,
+   "flag": "loss",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 10.02,
+   "price_note": "שטיחי כותנה נמכרים היום ב-₪53–89 (Home Style, Fox Home במבצע, Terminal X); שלנו קטן יותר, לכן ₪39. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "action_he": "להציע גם את 50x80 ($8.96) או למכור בסט אמבטיה (שטיח + מגבות).",
+   "slot_alternative_ok": false
+  },
+  "bath-towels-cj-cotton-waffle-white": {
+   "retail_ils": 49,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "מגבת גוף אחת 70x140",
+   "il_value": {
+    "low": 55,
+    "typical": 89,
+    "high": 199,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "GULVIAL מגבת רחצה",
+      "size": "70x140 ס\"מ",
+      "price": 55.0,
+      "url": "https://www.ikea.com/il/he/p/gulvial-bath-towel-white-90624471/"
+     },
+     {
+      "retailer": "Fox Home",
+      "title": "מגבת רחצה Diva",
+      "size": null,
+      "price": 76.93,
+      "list_price": 109.9,
+      "url": "https://www.foxhome.co.il/products/243440100"
+     },
+     {
+      "retailer": "Home Style",
+      "title": "מגבת ג'אקרד, דגם לוסיל - לבן",
+      "size": "70/130 מגבת גוף",
+      "price": 64.5,
+      "list_price": 129.0,
+      "url": "https://www.homestyle.co.il/products/3241-101"
+     },
+     {
+      "retailer": "Cotton Club",
+      "title": "מגבת קלאסית פארטו Caramel",
+      "size": "70x140",
+      "price": 199.0,
+      "url": "https://cottonclub.co.il/products/מגבת-קלאסית-פארטו-caramel"
+     },
+     {
+      "retailer": "Zara Home",
+      "title": "מגבת רחצה מכותנה עם טקסטורת וופל עדינה",
+      "size": "90x150",
+      "price": 129.9,
+      "list_price": 179.9,
+      "url": "https://www.zarahome.com/il/%D7%9E%D7%92%D7%91%D7%AA-%D7%A8%D7%97%D7%A6%D7%94-%D7%9E%D7%9B%D7%95%D7%AA%D7%A0%D7%94-%D7%A2%D7%9D-%D7%98%D7%A7%D7%A1%D7%98%D7%95%D7%A8%D7%94-l44587013",
+      "note": "תקציר חיפוש, לא נפתח ישירות (Zara Home חוסמת גישה אוטומטית)"
+     }
+    ]
+   },
+   "customer_total_ils": 78,
+   "vs_typical_pct": -12,
+   "landed_ils": 46.13,
+   "margin_pct": -24.3,
+   "contribution_ils": -10.11,
+   "after_cac_ils": -81.54,
+   "contribution_with_fee_ils": 11.92,
+   "flag": "loss",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 8.51,
+   "price_note": "מגבת גוף נמכרת היום ב-₪65–77 (Home Style, Fox Home) ו-Zara Home וופל ₪130; וופל הוא מראה ספא, ולכן טיפוסי ₪89. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "action_he": "למכור כסט (Set A של CJ: 2 מגבות + מגבת פנים, $11.74) ב-₪129, כך המשלוח מתחלק.",
+   "slot_alternative_ok": false
+  },
+  "ceiling-light-cj-opal-glass-drum-flush-32": {
+   "retail_ils": 149,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "גוף תאורה צמוד תקרה אחד D32",
+   "il_value": {
+    "low": 79,
+    "typical": 199,
+    "high": 300,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "KÄRRNOCKA מנורת תקרה",
+      "size": "37 ס\"מ",
+      "price": 79.0,
+      "url": "https://www.ikea.com/il/he/p/kaerrnocka-ceiling-lamp-white-50599402/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "SOLKLINT מנורת תקרה",
+      "size": "27 ס\"מ",
+      "price": 145.0,
+      "url": "https://www.ikea.com/il/he/p/solklint-ceiling-lamp-brass-grey-clear-glass-40472031/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "VIRRMO מנורת תקרה LED",
+      "size": "36 ס\"מ 800 לומן",
+      "price": 175.0,
+      "url": "https://www.ikea.com/il/he/p/virrmo-led-ceiling-lamp-nickel-plated-70430780/"
+     },
+     {
+      "retailer": "Home Center",
+      "title": "צמוד תקרה צבע עץ קוטר 50 ס\"מ ORA CCT 50W",
+      "size": null,
+      "price": 179.9,
+      "url": "https://www.homecenter.co.il/products/1752753358946"
+     },
+     {
+      "retailer": "ACE",
+      "title": "צמוד תקרה דגם יאכטה אור חם",
+      "size": null,
+      "price": 299.9,
+      "url": "https://www.ace.co.il/7667563"
+     }
+    ]
+   },
+   "customer_total_ils": 178,
+   "vs_typical_pct": -11,
+   "landed_ils": 186.38,
+   "margin_pct": -58.9,
+   "contribution_ils": -74.39,
+   "after_cac_ils": -145.82,
+   "contribution_with_fee_ils": -52.36,
+   "flag": "loss",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 35.25,
+   "price_note": "זכוכית אופל מחורצת עם LED מובנה: בין IKEA ‏₪145–175 לחנויות תאורה ‏₪180–300. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "action_he": "משלוח $35 על גוף של $21: לחפש ספק עם משלוח זול או מלאי בישראל; IP44 עדיין לא אושר.",
+   "slot_alternative_ok": false
+  },
+  "reed-diffuser-cj-travertine-look-bamboo-lid-milktea": {
+   "retail_ils": 39,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "כלי מפיץ ריח אחד (בלי נוזל ריח)",
+   "il_value": {
+    "low": 49,
+    "typical": 79,
+    "high": 144,
+    "comps": [
+     {
+      "retailer": "Fox Home",
+      "title": "מפיץ ריח בניחוח ברגמוט ופריחה עדינה 200 מ\"ל Wellness",
+      "size": null,
+      "price": 83.93,
+      "list_price": 119.9,
+      "url": "https://www.foxhome.co.il/products/0333785800"
+     },
+     {
+      "retailer": "Terminal X",
+      "title": "מפיץ ריח עם מקלות ריד 100 מ״ל בניחוח Cardamomum (Tirador)",
+      "size": null,
+      "price": 139.0,
+      "url": "https://www.terminalx.com/default-category/r630220001"
+     },
+     {
+      "retailer": "Terminal X",
+      "title": "מפיץ ריח 01",
+      "size": null,
+      "price": 99.0,
+      "url": "https://www.terminalx.com/default-category/w564870968"
+     },
+     {
+      "retailer": "Fine Lab Home",
+      "title": "מפיץ ריח קרמיקה Fleur d’Oranger",
+      "size": null,
+      "price": 689.0,
+      "url": "https://finelab.shop/products/strie-blanc-fleur-doranger-diffuser-cote-bougie"
+     }
+    ]
+   },
+   "customer_total_ils": 68,
+   "vs_typical_pct": -14,
+   "landed_ils": 49.73,
+   "margin_pct": -64.5,
+   "contribution_ils": -21.3,
+   "after_cac_ils": -92.73,
+   "contribution_with_fee_ils": 0.73,
+   "flag": "loss",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 10.15,
+   "price_note": "מפיצים עם נוזל נמכרים ב-₪84–139; שלנו כלי במראה אבן בלי נוזל, ולכן טיפוסי ₪79. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "action_he": "למכור כסט אמבטיה במראה טרוורטין (מפיץ + דיספנסר + כוס + מגש; וריאנט סט מלא $35) או להוסיף נוזל ריח מקומי.",
+   "slot_alternative_ok": false
+  },
+  "shower-curtain-cj-linen-look-khaki-grommet": {
+   "retail_ils": 39,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "וילון מקלחת אחד 200x240",
+   "il_value": {
+    "low": 29,
+    "typical": 69,
+    "high": 129,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "LUDDHAGTORN וילון למקלחת",
+      "size": "180x200 ס\"מ",
+      "price": 29.0,
+      "url": "https://www.ikea.com/il/he/p/luddhagtorn-shower-curtain-light-beige-00649664/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "STAVBJÖRNBÄR וילון למקלחת",
+      "size": "180x200 ס\"מ",
+      "price": 89.0,
+      "url": "https://www.ikea.com/il/he/p/stavbjoernbaer-shower-curtain-black-white-60623166/"
+     },
+     {
+      "retailer": "Fox Home",
+      "title": "וילון אמבטיה בדוגמת לבבות בצבעי שחור, אפור ואדום Hearts",
+      "size": null,
+      "price": 62.93,
+      "list_price": 89.9,
+      "url": "https://www.foxhome.co.il/products/0168359900"
+     },
+     {
+      "retailer": "Home Style",
+      "title": "וילון אמבטיה ג'אקרד - בז'",
+      "size": "180/180 סמ וילון אמבט",
+      "price": 49.0,
+      "list_price": 129.0,
+      "url": "https://www.homestyle.co.il/products/2063-128"
+     }
+    ]
+   },
+   "customer_total_ils": 68,
+   "vs_typical_pct": -1,
+   "landed_ils": 56.59,
+   "margin_pct": -85.2,
+   "contribution_ils": -28.17,
+   "after_cac_ils": -99.6,
+   "contribution_with_fee_ils": -6.14,
+   "flag": "loss",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 10.27,
+   "price_note": "וילון מקלחת נמכר היום ב-₪49–89 (Home Style, Fox Home, IKEA); שלנו גבוה (240) במראה פשתן; ₪39 + משלוח שווה בערך לטיפוסי. לבד הסה\"כ ללקוח קרוב לטיפוסי בגלל דמי המשלוח: פריט תוספת לסל (חינם מ-₪299) או לסט. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "action_he": "זול בלבד בסל; לבדוק משלוח לשני וילונות יחד.",
+   "addon_only": true,
+   "slot_alternative_ok": false
+  },
+  "soap-dispenser-cj-matte-ceramic-cream-black-pump": {
+   "retail_ils": 39,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "דיספנסר קרמי אחד",
+   "il_value": {
+    "low": 35,
+    "typical": 69,
+    "high": 120,
+    "comps": [
+     {
+      "retailer": "Fox Home",
+      "title": "דיספנסר לסבון בגוון בז' Icon",
+      "size": null,
+      "price": 41.93,
+      "list_price": 59.9,
+      "url": "https://www.foxhome.co.il/products/0336876000"
+     },
+     {
+      "retailer": "Fox Home",
+      "title": "דיספנסר לסבון בטקסטורה מנוקדת בגוון בז' Queen",
+      "size": null,
+      "price": 59.9,
+      "url": "https://www.foxhome.co.il/products/0336846000"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "EKOLN דיספנסר לסבון נוזלי",
+      "size": null,
+      "price": 35.0,
+      "url": "https://www.ikea.com/il/he/p/ekoln-soap-dispenser-beige-60493004/"
+     },
+     {
+      "retailer": "Terminal X",
+      "title": "דיספנסר לסבון נוזלי Solo - לבן 330204 (371001) (Tirador)",
+      "size": null,
+      "price": 119.0,
+      "url": "https://www.terminalx.com/default-category/r051200005"
+     },
+     {
+      "retailer": "Zara Home",
+      "title": "דיספנסר סבון מקרמיקה (עמוד הקטגוריה)",
+      "size": null,
+      "price": 119.9,
+      "url": "https://www.zarahome.com/il/%D7%90%D7%9E%D7%91%D7%98%D7%99%D7%94-%D7%93%D7%99%D7%A1%D7%A4%D7%A0%D7%A1%D7%A8%D7%99%D7%9D-n3882",
+      "note": "תקציר חיפוש, לא נפתח ישירות (Zara Home חוסמת גישה אוטומטית)"
+     }
+    ]
+   },
+   "customer_total_ils": 68,
+   "vs_typical_pct": -1,
+   "landed_ils": 47.45,
+   "margin_pct": -57.6,
+   "contribution_ils": -19.03,
+   "after_cac_ils": -90.46,
+   "contribution_with_fee_ils": 3.0,
+   "flag": "loss",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 10.02,
+   "price_note": "דיספנסר קרמי: Fox Home ₪42–60, Zara Home ו-Tirador ₪119; ₪39 + משלוח מתחת לטיפוסי. לבד הסה\"כ ללקוח קרוב לטיפוסי בגלל דמי המשלוח: פריט תוספת לסל (חינם מ-₪299) או לסט. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "action_he": "פריט תוספת: למכור בסט אמבטיה (2–3 בקבוקים לנישה) כדי לחלק את המשלוח.",
+   "addon_only": true,
+   "slot_alternative_ok": false
+  },
+  "soap-dispenser-cj-travertine-look-lotion-milktea": {
+   "retail_ils": 49,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "דיספנסר אחד במראה טרוורטין",
+   "il_value": {
+    "low": 42,
+    "typical": 79,
+    "high": 180,
+    "comps": [
+     {
+      "retailer": "Fox Home",
+      "title": "דיספנסר לסבון בדוגמת שיש עדינה Roy",
+      "size": null,
+      "price": 41.93,
+      "list_price": 59.9,
+      "url": "https://www.foxhome.co.il/products/0334015800"
+     },
+     {
+      "retailer": "Terminal X",
+      "title": "דיספנסר לסבון DROPLET (SOHO)",
+      "size": null,
+      "price": 99.9,
+      "url": "https://www.terminalx.com/default-category/r829260001"
+     },
+     {
+      "retailer": "Terminal X",
+      "title": "סט דיספנסר לסבון נוזלי וכוס למברשת שיניים Dax - חום טקסטורה (Tirador)",
+      "size": null,
+      "price": 178.0,
+      "url": "https://www.terminalx.com/default-category/r967690001"
+     },
+     {
+      "retailer": "Zara Home",
+      "title": "דיספנסר אלבסטר ושיש",
+      "size": "17.5x8.5",
+      "price": 179.9,
+      "url": "https://www.zarahome.com/il/%D7%93%D7%99%D7%A1%D7%A4%D7%A0%D7%A1%D7%A8-%D7%90%D7%9C%D7%91%D7%A1%D7%98%D7%A8-%D7%9E%D7%A8%D7%96%D7%99%D7%9F-l42536466",
+      "note": "תקציר חיפוש, לא נפתח ישירות (Zara Home חוסמת גישה אוטומטית)"
+     }
+    ]
+   },
+   "customer_total_ils": 78,
+   "vs_typical_pct": -1,
+   "landed_ils": 55.47,
+   "margin_pct": -46.8,
+   "contribution_ils": -19.45,
+   "after_cac_ils": -90.88,
+   "contribution_with_fee_ils": 2.58,
+   "flag": "loss",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 11.54,
+   "price_note": "דיספנסר במראה אבן: Fox Home ₪42, SOHO ₪100, Zara Home מאבן אמיתית ₪180. לבד הסה\"כ ללקוח קרוב לטיפוסי בגלל דמי המשלוח: פריט תוספת לסל (חינם מ-₪299) או לסט. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "action_he": "למכור בסט הטרוורטין (מגש + דיספנסר + כוס + מפיץ).",
+   "addon_only": true,
+   "slot_alternative_ok": false
+  },
+  "toothbrush-cup-cj-silver-travertine-cup": {
+   "retail_ils": 79,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "כוס טרוורטין טבעי אחת 8x11",
+   "il_value": {
+    "low": 49.9,
+    "typical": 119,
+    "high": 347,
+    "comps": [
+     {
+      "retailer": "Terminal X",
+      "title": "כוס למברשת שיניים Nova One - חום טאופ' (Tirador)",
+      "size": null,
+      "price": 114.0,
+      "url": "https://www.terminalx.com/default-category/r607060001"
+     },
+     {
+      "retailer": "Fox Home",
+      "title": "כוס למברשות שיניים בטקסטורה מנוקדת בגוון בז' Queen",
+      "size": null,
+      "price": 49.9,
+      "url": "https://www.foxhome.co.il/products/0336856000"
+     },
+     {
+      "retailer": "Terminal X",
+      "title": "מארז דיספנסר, כוס ומגש שיש S - לבן (Tirador)",
+      "size": null,
+      "price": 347.0,
+      "url": "https://www.terminalx.com/default-category/k065690001"
+     },
+     {
+      "retailer": "Terminal X",
+      "title": "פמוט יחיד TRAVENTINE (Golyan)",
+      "size": null,
+      "price": 130.0,
+      "url": "https://www.terminalx.com/default-category/r958400001"
+     }
+    ]
+   },
+   "customer_total_ils": 108,
+   "vs_typical_pct": -9,
+   "landed_ils": 104.44,
+   "margin_pct": -68.2,
+   "contribution_ils": -45.63,
+   "after_cac_ils": -117.06,
+   "contribution_with_fee_ils": -23.6,
+   "flag": "loss",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 11.92,
+   "price_note": "טרוורטין אמיתי: כוסות Tirador (פולירזין) ב-₪114, סט שיש של Tirador ב-₪347; עיצובי ולא נפוץ, לכן 9% מתחת. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "action_he": "העלות ($19.7) גבוהה לכוס: למכור בסט עם הדיספנסר והמגש מאותו ספק.",
+   "slot_alternative_ok": false
+  },
+  "toothbrush-cup-cj-travertine-look-cup-milktea": {
+   "retail_ils": 19,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "כוס אחת במראה טרוורטין",
+   "il_value": {
+    "low": 20,
+    "typical": 49,
+    "high": 114,
+    "comps": [
+     {
+      "retailer": "Fox Home",
+      "title": "כוס למברשות שיניים בדוגמת שיש Roy",
+      "size": null,
+      "price": 27.93,
+      "list_price": 39.9,
+      "url": "https://www.foxhome.co.il/products/0334025800"
+     },
+     {
+      "retailer": "Fox Home",
+      "title": "כוס למברשות שיניים בגוון בז' Icon",
+      "size": null,
+      "price": 34.93,
+      "list_price": 49.9,
+      "url": "https://www.foxhome.co.il/products/0336886000"
+     },
+     {
+      "retailer": "Terminal X",
+      "title": "כוס למברשות 5.01X8 BERGEN",
+      "size": null,
+      "price": 19.96,
+      "list_price": 49.9,
+      "url": "https://www.terminalx.com/default-category/w789080005"
+     },
+     {
+      "retailer": "Terminal X",
+      "title": "כוס למברשת שיניים Nova One - חום טאופ' (Tirador)",
+      "size": null,
+      "price": 114.0,
+      "url": "https://www.terminalx.com/default-category/r607060001"
+     }
+    ]
+   },
+   "customer_total_ils": 48,
+   "vs_typical_pct": -2,
+   "landed_ils": 34.15,
+   "margin_pct": -129.9,
+   "contribution_ils": -20.92,
+   "after_cac_ils": -92.35,
+   "contribution_with_fee_ils": 1.11,
+   "flag": "loss",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 6.49,
+   "price_note": "כוסות מברשות נמכרות היום ב-₪20–35 (Fox Home, Terminal X במבצע) ו-Tirador ₪114; לבד, עם משלוח, רק ₪19 נשאר מתחת לטיפוסי. לבד הסה\"כ ללקוח קרוב לטיפוסי בגלל דמי המשלוח: פריט תוספת לסל (חינם מ-₪299) או לסט. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "action_he": "פריט תוספת בלבד, בסט הטרוורטין.",
+   "addon_only": true,
+   "slot_alternative_ok": false
+  },
+  "vanity-sconces-cj-flat-halo-disc-white": {
+   "retail_ils": 79,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "מנורת קיר אחת D15 (העמדה צריכה זוג)",
+   "il_value": {
+    "low": 79,
+    "typical": 129,
+    "high": 220,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "NYMÅNE מנורת קיר, תאורה מעלה/מטה",
+      "size": null,
+      "price": 79.0,
+      "url": "https://www.ikea.com/il/he/p/nymane-wall-up-downlighter-wired-in-white-60397861/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "KORVSNÖRE מנורת קיר LED",
+      "size": null,
+      "price": 95.0,
+      "url": "https://www.ikea.com/il/he/p/korvsnoere-led-wall-lamp-dimmable-white-00608545/"
+     },
+     {
+      "retailer": "Terminal X",
+      "title": "מנורה WAVES S לבן (SOHO)",
+      "size": null,
+      "price": 149.9,
+      "url": "https://www.terminalx.com/default-category/r833340001"
+     },
+     {
+      "retailer": "Home Center",
+      "title": "מנורת קיר CARDO 180 UP AND DOWN 2X4W גוון צהוב שחור",
+      "size": null,
+      "price": 219.9,
+      "url": "https://www.homecenter.co.il/products/1755092006749"
+     }
+    ]
+   },
+   "customer_total_ils": 108,
+   "vs_typical_pct": -16,
+   "landed_ils": 50.56,
+   "margin_pct": 12.3,
+   "contribution_ils": 8.26,
+   "after_cac_ils": -63.17,
+   "contribution_with_fee_ils": 30.29,
+   "flag": "below-floor",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 9.4,
+   "price_note": "מנורת קיר LED שטוחה: IKEA ‏₪79–95, SOHO ‏₪150, Home Center ‏₪220. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "action_he": "לזוג (2 יח') ₪199 (כ-36%); עדיין צריך אישור IP44 לפני חדר רחצה.",
+   "slot_alternative_ok": false
+  },
+  "vanity-sconces-cj-fluted-resin-updown-white": {
+   "retail_ils": 229,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 2,
+   "sale_contains": "זוג מנורות קיר (2 יח')",
+   "il_value": {
+    "low": 158,
+    "typical": 279,
+    "high": 440,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "NYMÅNE מנורת קיר, תאורה מעלה/מטה (ליחידה)",
+      "size": null,
+      "price": 79.0,
+      "url": "https://www.ikea.com/il/he/p/nymane-wall-up-downlighter-wired-in-white-60397861/"
+     },
+     {
+      "retailer": "ACE",
+      "title": "מנורת קיר דגם וינטג' מייפל (ליחידה)",
+      "size": null,
+      "price": 149.9,
+      "url": "https://www.ace.co.il/7639881"
+     },
+     {
+      "retailer": "Terminal X",
+      "title": "מנורה WAVES S לבן (SOHO) (ליחידה)",
+      "size": null,
+      "price": 149.9,
+      "url": "https://www.terminalx.com/default-category/r833340001"
+     },
+     {
+      "retailer": "Home Center",
+      "title": "מנורת קיר CARDO 180 UP AND DOWN 2X4W גוון צהוב שחור (ליחידה)",
+      "size": null,
+      "price": 219.9,
+      "url": "https://www.homecenter.co.il/products/1755092006749"
+     }
+    ]
+   },
+   "customer_total_ils": 258,
+   "vs_typical_pct": -8,
+   "landed_ils": 191.47,
+   "margin_pct": -9.6,
+   "contribution_ils": -18.7,
+   "after_cac_ils": -90.13,
+   "contribution_with_fee_ils": 3.33,
+   "flag": "loss",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 23.57,
+   "price_note": "זוג מנורות למעלה/למטה במראה טיח מחורץ; ברשתות נמכרות ליחידה ₪79–220, כזוג ~₪280. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "action_he": "משלוח Sensitive ‏$23.6 ליחידה: לחפש קו Eub או ספק אחר לאותו דגם.",
+   "slot_alternative_ok": false
+  },
+  "vanity-sconces-cj-ip65-mini-updown-white": {
+   "retail_ils": 49,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "מנורת קיר IP65 קטנה אחת",
+   "il_value": {
+    "low": 39,
+    "typical": 89,
+    "high": 220,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "BARLAST מנורת לד לתקרה/קיר",
+      "size": "25 ס\"מ",
+      "price": 39.0,
+      "url": "https://www.ikea.com/il/he/p/barlast-led-ceiling-wall-lamp-white-00525908/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "NYMÅNE מנורת קיר, תאורה מעלה/מטה",
+      "size": null,
+      "price": 79.0,
+      "url": "https://www.ikea.com/il/he/p/nymane-wall-up-downlighter-wired-in-white-60397861/"
+     },
+     {
+      "retailer": "Home Center",
+      "title": "מנורת קיר CARDO 180 UP AND DOWN 2X4W גוון צהוב שחור",
+      "size": null,
+      "price": 219.9,
+      "url": "https://www.homecenter.co.il/products/1755092006749"
+     }
+    ]
+   },
+   "customer_total_ils": 78,
+   "vs_typical_pct": -12,
+   "landed_ils": 49.4,
+   "margin_pct": -32.2,
+   "contribution_ils": -13.38,
+   "after_cac_ils": -84.81,
+   "contribution_with_fee_ils": 8.65,
+   "flag": "loss",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 11.67,
+   "price_note": "מנורה טכנית קטנה (9.5 ס\"מ) מוגנת מים: בין IKEA ‏₪39–79 לגופי למעלה/למטה ב-Home Center. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "action_he": "לזוג ₪129; מנורה טכנית, מתאימה בעיקר לחדר הרחצה.",
+   "slot_alternative_ok": false
+  },
+  "ceiling-lights-cj-pleated-fabric-saucer-flush-50": {
+   "retail_ils": 499,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 2,
+   "sale_contains": "זוג צמודי תקרה מבד D50 (2 יח')",
+   "il_value": {
+    "low": 290,
+    "typical": 538,
+    "high": 900,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "TRUBBRUFSE מנורת תקרה (ליחידה)",
+      "size": "45 ס\"מ",
+      "price": 145.0,
+      "url": "https://www.ikea.com/il/he/p/trubbrufse-ceiling-lamp-sedge-90601337/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "KRANBALK מנורת תקרה (ליחידה)",
+      "size": null,
+      "price": 245.0,
+      "url": "https://www.ikea.com/il/he/p/kranbalk-ceiling-lamp-beige-90549405/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "NÖSUND מנורת תקרה (ליחידה)",
+      "size": "44 ס\"מ",
+      "price": 395.0,
+      "url": "https://www.ikea.com/il/he/p/noesund-ceiling-lamp-birch-20404887/"
+     },
+     {
+      "retailer": "Terminal X",
+      "title": "מנורת תקרה PAPPER MATCH שמנת (Golyan) (ליחידה)",
+      "size": null,
+      "price": 293.93,
+      "list_price": 419.9,
+      "url": "https://www.terminalx.com/default-category/w434060007"
+     }
+    ]
+   },
+   "customer_total_ils": 499,
+   "vs_typical_pct": -7,
+   "landed_ils": 425.63,
+   "margin_pct": -11.3,
+   "contribution_ils": -47.76,
+   "after_cac_ils": -119.19,
+   "contribution_with_fee_ils": null,
+   "flag": "loss",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 30.2,
+   "price_note": "צמוד תקרה מבד בקפלים: Golyan ₪294 במבצע, IKEA ₪145–395 ליחידה; זוג ~₪540; עיצובי, 7% מתחת. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "action_he": "עלות $36 + משלוח $30 ליחידה: לבדוק הנחת כמות או ספק שני; אולי מלאי בישראל.",
+   "slot_alternative_ok": false
+  },
+  "ceiling-lights-cj-silk-cocoon-flush-40": {
+   "retail_ils": 219,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "צמוד תקרה אחד D40 (העמדה צריכה זוג)",
+   "il_value": {
+    "low": 145,
+    "typical": 269,
+    "high": 420,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "TRUBBRUFSE מנורת תקרה",
+      "size": "45 ס\"מ",
+      "price": 145.0,
+      "url": "https://www.ikea.com/il/he/p/trubbrufse-ceiling-lamp-sedge-90601337/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "KRANBALK מנורת תקרה",
+      "size": null,
+      "price": 245.0,
+      "url": "https://www.ikea.com/il/he/p/kranbalk-ceiling-lamp-beige-90549405/"
+     },
+     {
+      "retailer": "Terminal X",
+      "title": "מנורת תקרה PAPPER MATCH שמנת (Golyan)",
+      "size": null,
+      "price": 293.93,
+      "list_price": 419.9,
+      "url": "https://www.terminalx.com/default-category/w434060007"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "NÖSUND מנורת תקרה",
+      "size": "44 ס\"מ",
+      "price": 395.0,
+      "url": "https://www.ikea.com/il/he/p/noesund-ceiling-lamp-birch-20404887/"
+     }
+    ]
+   },
+   "customer_total_ils": 248,
+   "vs_typical_pct": -8,
+   "landed_ils": 233.51,
+   "margin_pct": -36.8,
+   "contribution_ils": -68.34,
+   "after_cac_ils": -139.77,
+   "contribution_with_fee_ils": -46.31,
+   "flag": "loss",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 41.93,
+   "price_note": "צמוד תקרה \"משי\" עיצובי D40: Golyan ₪294 במבצע, IKEA ₪145–395. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "action_he": "לזוג ₪449; המשלוח (~$42) נאמד לפי הכרטיס ולא צוטט, לצטט לפני בחירה.",
+   "slot_alternative_ok": false
+  },
+  "gallery-art-cj-black-botanical-cutout-set3": {
+   "retail_ils": 349,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "סט 3 תמונות ממוסגרות 40x60",
+   "il_value": {
+    "low": 195,
+    "typical": 399,
+    "high": 600,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "BLODFLÄDER תמונה ממוסגרת (ליחידה)",
+      "size": "40x50 ס\"מ",
+      "price": 145.0,
+      "url": "https://www.ikea.com/il/he/p/blodflaeder-picture-two-birds-00601921/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "BLODFLÄDER תמונה ממוסגרת (ליחידה)",
+      "size": "40x50 ס\"מ",
+      "price": 225.0,
+      "url": "https://www.ikea.com/il/he/p/blodflaeder-picture-black-leaves-00623857/"
+     },
+     {
+      "retailer": "Fox Home",
+      "title": "תמונת קיר דקורטיבית בעיצוב בוטני Leaf (ליחידה)",
+      "size": null,
+      "price": 149.93,
+      "list_price": 199.9,
+      "url": "https://www.foxhome.co.il/products/0332680300"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "KNOPPÄNG סט מסגרות עם פוסטר/8 חל'",
+      "size": null,
+      "price": 195.0,
+      "url": "https://www.ikea.com/il/he/p/knoppaeng-frame-with-poster-set-of-8-folk-tales-80601998/"
+     }
+    ]
+   },
+   "customer_total_ils": 349,
+   "vs_typical_pct": -13,
+   "landed_ils": 83.09,
+   "margin_pct": 61.1,
+   "contribution_ils": 180.83,
+   "after_cac_ils": 109.4,
+   "contribution_with_fee_ils": null,
+   "flag": "ok",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 10.65,
+   "price_note": "שלוש תמונות 40x60 ממוסגרות; ברשתות תמונה אחת עולה ₪145–225, ולכן סט של 3 שווה כ-₪400."
+  },
+  "picture-lights-cj-black-tube-rechargeable": {
+   "retail_ils": 59,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "מנורת תמונה נטענת אחת (העמדה צריכה 3)",
+   "il_value": {
+    "low": 59.9,
+    "typical": 99,
+    "high": 125,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "KORVSNÖRE מנורת קיר LED",
+      "size": null,
+      "price": 95.0,
+      "url": "https://www.ikea.com/il/he/p/korvsnoere-led-wall-lamp-dimmable-white-00608545/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "FLASKPOST תאורת לד לארון/קיר",
+      "size": "56 ס\"מ",
+      "price": 125.0,
+      "url": "https://www.ikea.com/il/he/p/flaskpost-led-cabinet-wall-lighting-chrome-plated-30591039/"
+     },
+     {
+      "retailer": "Home Center",
+      "title": "מנורת לילה נטענת USB",
+      "size": null,
+      "price": 59.9,
+      "url": "https://www.homecenter.co.il/products/1686057438948",
+      "note": "מתוך תוצאת חיפוש, לא נפתח ישירות"
+     },
+     {
+      "retailer": "Shein ישראל",
+      "title": "מנורת תמונה נטענת עם שלט, 3 גווני אור",
+      "size": null,
+      "price": 68.31,
+      "url": "https://m.shein.com/il/Picture-Display-Lighting-c-9341.html",
+      "note": "מתוך תוצאת חיפוש, לא נפתח ישירות; מחיר משוער באתר"
+     }
+    ]
+   },
+   "customer_total_ils": 88,
+   "vs_typical_pct": -11,
+   "landed_ils": 60.03,
+   "margin_pct": -32.8,
+   "contribution_ils": -16.41,
+   "after_cac_ils": -87.84,
+   "contribution_with_fee_ils": 5.62,
+   "flag": "loss",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 12.47,
+   "price_note": "כמעט אין מנורות תמונה ברשתות; לעומת מנורות LED נטענות/קיר ב-₪60–125. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "action_he": "לסט של 3 ₪199; גוף פלסטיק, לבדוק איכות בתקריב.",
+   "slot_alternative_ok": false
+  },
+  "bench-pad-cj-tufted-long-cushion-khaki-120": {
+   "retail_ils": 59,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "כרית ספסל אחת 120x50x8",
+   "il_value": {
+    "low": 89,
+    "typical": 99,
+    "high": 135,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "KUDDARNA כרית ספסל",
+      "size": "120x40 ס\"מ",
+      "price": 135.0,
+      "url": "https://www.ikea.com/il/he/p/kuddarna-bench-cushion-outdoor-light-grey-beige-70584174/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "BÄNKKAMRAT כרית מושב לספסל",
+      "size": "90x50x3 ס\"מ",
+      "price": 89.0,
+      "url": "https://www.ikea.com/il/he/p/baenkkamrat-bench-pad-dot-pattern-80461889/"
+     },
+     {
+      "retailer": "Fox Home",
+      "title": "כרית מושב ארוכה ומרופדת בגוון בז' River",
+      "size": null,
+      "price": 90.93,
+      "list_price": 129.9,
+      "url": "https://www.foxhome.co.il/products/0335336000"
+     }
+    ]
+   },
+   "customer_total_ils": 88,
+   "vs_typical_pct": -11,
+   "landed_ils": 101.74,
+   "margin_pct": -116.2,
+   "contribution_ils": -58.12,
+   "after_cac_ils": -129.55,
+   "contribution_with_fee_ils": -36.09,
+   "flag": "loss",
+   "nordic_score": 4.5,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 24.53,
+   "price_note": "כרית ספסל ארוכה: Fox Home ₪91 במבצע, IKEA ₪89–135. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "action_he": "משלוח $24.5 על פריט של $6: רק בסל, או ספק עם כרית שטוחה וקלה יותר.",
+   "slot_alternative_ok": false
+  },
+  "bowl-cj-glutinous-white-belly-bowl-21": {
+   "retail_ils": 39,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "קערה אחת D21",
+   "il_value": {
+    "low": 19,
+    "typical": 69,
+    "high": 120,
+    "comps": [
+     {
+      "retailer": "Fox Home",
+      "title": "קערת הגשה מקרמיקה בגוון שמנת עם טקסטורה Mika",
+      "size": null,
+      "price": 83.93,
+      "list_price": 119.9,
+      "url": "https://www.foxhome.co.il/products/0334389401"
+     },
+     {
+      "retailer": "Naaman",
+      "title": "קערה SUNNY",
+      "size": null,
+      "price": 49.9,
+      "url": "https://www.naamanp.co.il/2612_998"
+     },
+     {
+      "retailer": "Terminal X",
+      "title": "קערה 22 MINTY",
+      "size": null,
+      "price": 35.96,
+      "list_price": 89.9,
+      "url": "https://www.terminalx.com/default-category/k033090005"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "IKEA 365+ קערה",
+      "size": "19 ס\"מ",
+      "price": 19.0,
+      "url": "https://www.ikea.com/il/he/p/ikea-365-bowl-white-00621368/"
+     }
+    ]
+   },
+   "customer_total_ils": 68,
+   "vs_typical_pct": -1,
+   "landed_ils": 53.06,
+   "margin_pct": -74.5,
+   "contribution_ils": -24.64,
+   "after_cac_ils": -96.07,
+   "contribution_with_fee_ils": -2.61,
+   "flag": "loss",
+   "nordic_score": 8.0,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 9.4,
+   "price_note": "קערת הגשה 21 ס\"מ: נעמן ₪50, Fox Home ₪84 במבצע, Terminal X ₪36 במבצע; IKEA ₪19. לבד הסה\"כ ללקוח קרוב לטיפוסי בגלל דמי המשלוח: פריט תוספת לסל (חינם מ-₪299) או לסט. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "addon_only": true,
+   "slot_alternative_ok": false
+  },
+  "candle-holders-aliexpress-cutelife-black-ceramic-candelabra": {
+   "retail_ils": 39,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "מחזיק נר טי-לייט קרמי אחד",
+   "il_value": {
+    "low": 12,
+    "typical": 69,
+    "high": 125,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "TURTURDUVA פמוט",
+      "size": "4 ס\"מ",
+      "price": 12.0,
+      "url": "https://www.ikea.com/il/he/p/turturduva-candlestick-off-white-40609086/"
+     },
+     {
+      "retailer": "Fox Home",
+      "title": "פמוט Noga",
+      "size": null,
+      "price": 20.97,
+      "list_price": 69.9,
+      "url": "https://www.foxhome.co.il/products/311480200"
+     },
+     {
+      "retailer": "Terminal X",
+      "title": "פמוט Raphael (Tirador)",
+      "size": null,
+      "price": 79.0,
+      "url": "https://www.terminalx.com/default-category/r505350002"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "STOCKHOLM 2025 פמוט לנר/נר חימום",
+      "size": "6 ס\"מ",
+      "price": 125.0,
+      "url": "https://www.ikea.com/il/he/p/stockholm-2025-candlestick-tealight-holder-black-90590503/"
+     }
+    ]
+   },
+   "customer_total_ils": 68,
+   "vs_typical_pct": -1,
+   "landed_ils": 87.85,
+   "margin_pct": -179.8,
+   "contribution_ils": -59.42,
+   "after_cac_ils": -130.85,
+   "contribution_with_fee_ils": -37.39,
+   "flag": "loss",
+   "nordic_score": 2.0,
+   "ship_estimated": true,
+   "ship_usd_per_unit_used": 1.99,
+   "price_note": "מחזיק טי-לייט קרמי: IKEA ‏₪12–125, Fox Home ‏₪70, Tirador ‏₪79. לבד הסה\"כ ללקוח קרוב לטיפוסי בגלל דמי המשלוח: פריט תוספת לסל (חינם מ-₪299) או לסט. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "ship_basis": "לפי הערת הכרטיס: AliExpress Selection Standard ‏$1.99 (לא בשדה המשלוח)",
+   "action_he": "העלות ($24.6) גבוהה מאוד לפריט הזה; ספק אחר לאותו מראה.",
+   "addon_only": true,
+   "slot_alternative_ok": false
+  },
+  "candle-holders-aliexpress-matte-black-iron-pillar-set2": {
+   "retail_ils": 39,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "זוג מחזיקי נר עמוד מברזל",
+   "il_value": {
+    "low": 39,
+    "typical": 69,
+    "high": 89,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "FULLTALIG פמוט/סט 3 יחידות",
+      "size": null,
+      "price": 59.0,
+      "url": "https://www.ikea.com/il/he/p/fulltalig-candlestick-set-of-3-black-40342134/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "SILVERPÄRON פמוט לנר בלוק",
+      "size": "24 ס\"מ",
+      "price": 39.0,
+      "url": "https://www.ikea.com/il/he/p/silverpaeron-pillar-candle-holder-black-40575010/"
+     },
+     {
+      "retailer": "Terminal X",
+      "title": "סט פמוטים Raphael (Tirador)",
+      "size": null,
+      "price": 89.0,
+      "url": "https://www.terminalx.com/default-category/r505370001"
+     },
+     {
+      "retailer": "Fox Home",
+      "title": "פמוט Noga",
+      "size": null,
+      "price": 20.97,
+      "list_price": 69.9,
+      "url": "https://www.foxhome.co.il/products/311480200"
+     }
+    ]
+   },
+   "customer_total_ils": 68,
+   "vs_typical_pct": -1,
+   "landed_ils": 41.09,
+   "margin_pct": -38.3,
+   "contribution_ils": -12.66,
+   "after_cac_ils": -84.09,
+   "contribution_with_fee_ils": 9.37,
+   "flag": "loss",
+   "nordic_score": 7.0,
+   "ship_estimated": true,
+   "ship_usd_per_unit_used": 1.99,
+   "price_note": "זוג צלחות ברזל לנר עמוד: IKEA ₪39–59, Tirador ₪89 לסט. לבד הסה\"כ ללקוח קרוב לטיפוסי בגלל דמי המשלוח: פריט תוספת לסל (חינם מ-₪299) או לסט. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "ship_basis": "לפי הערת הכרטיס: AliExpress Selection Standard ‏$1.99 (לא בשדה המשלוח)",
+   "addon_only": true,
+   "slot_alternative_ok": false
+  },
+  "canisters-zendrop-matte-ceramic-bamboo-lid-sml": {
+   "retail_ils": 89,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "סט 3 צנצנות קרמיקה S/M/L",
+   "il_value": {
+    "low": 75,
+    "typical": 129,
+    "high": 180,
+    "comps": [
+     {
+      "retailer": "Fox Home",
+      "title": "אחסונית לקפה מקרמיקה בגוון לבן Mono (ליחידה; 3 יח' = ₪179.7)",
+      "size": null,
+      "price": 41.93,
+      "list_price": 59.9,
+      "url": "https://www.foxhome.co.il/products/0336770100"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "BRUGDHAJ צנצנת עם מכסה",
+      "size": "1 ל'",
+      "price": 49.0,
+      "url": "https://www.ikea.com/il/he/p/brugdhaj-jar-with-lid-beige-30596169/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "BRUGDHAJ צנצנת עם מכסה",
+      "size": "0.3 ל'",
+      "price": 25.0,
+      "url": "https://www.ikea.com/il/he/p/brugdhaj-jar-with-lid-beige-10596170/"
+     },
+     {
+      "retailer": "Naaman",
+      "title": "צנצנת זכוכית מכסה עץ - 1.9 ליטר",
+      "size": null,
+      "price": 50.0,
+      "url": "https://www.naamanp.co.il/41324819"
+     }
+    ]
+   },
+   "customer_total_ils": 118,
+   "vs_typical_pct": -9,
+   "landed_ils": 78.01,
+   "margin_pct": -15.4,
+   "contribution_ils": -11.6,
+   "after_cac_ils": -83.03,
+   "contribution_with_fee_ils": 10.43,
+   "flag": "loss",
+   "nordic_score": 7.5,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 13.67,
+   "price_note": "שלוש צנצנות קרמיקה עם מכסה עץ: Fox Home ₪42 ליחידה במבצע (₪126 לשלוש), IKEA ₪25–49; סט, 8% מתחת. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "action_he": "המשלוח צוטט כנראה על הצנצנת הקטנה; לבדוק משלוח לסט (2.2 ק\"ג).",
+   "slot_alternative_ok": false
+  },
+  "centerpiece-vase-aliexpress-modern-minimalist-white-ceramic": {
+   "retail_ils": 59,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "אגרטל קרמי אחד 26 ס\"מ",
+   "il_value": {
+    "low": 59,
+    "typical": 99,
+    "high": 295,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "BLODBJÖRK אגרטל",
+      "size": "25 ס\"מ",
+      "price": 95.0,
+      "url": "https://www.ikea.com/il/he/p/blodbjoerk-vase-beige-90637727/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "KÄLLARHALS אגרטל",
+      "size": "26 ס\"מ",
+      "price": 59.0,
+      "url": "https://www.ikea.com/il/he/p/kaellarhals-vase-orange-50583712/"
+     },
+     {
+      "retailer": "Terminal X",
+      "title": "אגרטל פיר (MmShacham)",
+      "size": null,
+      "price": 295.0,
+      "url": "https://www.terminalx.com/default-category/r892010001"
+     },
+     {
+      "retailer": "Zara Home",
+      "title": "אגרטל מקרמיקה עם טקסטורה 16 ס\"מ",
+      "size": null,
+      "price": 269.0,
+      "url": "https://www.zarahome.com/il/אגרטל-מקרמיקה-עם-טקסטורה-l47100046",
+      "note": "search snippet, not verified directly"
+     }
+    ]
+   },
+   "customer_total_ils": 88,
+   "vs_typical_pct": -11,
+   "landed_ils": 77.32,
+   "margin_pct": -67.4,
+   "contribution_ils": -33.7,
+   "after_cac_ils": -105.13,
+   "contribution_with_fee_ils": -11.67,
+   "flag": "loss",
+   "nordic_score": 6.5,
+   "ship_estimated": true,
+   "ship_usd_per_unit_used": 8.42,
+   "price_note": "אגרטל קרמי מט 26 ס\"מ: IKEA ‏₪59–95, Zara Home ו-MmShacham ‏₪270–295. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "ship_basis": "הערכה: המשלוח צוטט רק למידה S (חינם); לפי אגרטל AliExpress דומה באצווה (centerpiece CAPIRON S, $8.42)",
+   "slot_alternative_ok": false
+  },
+  "centerpiece-vase-aliexpress-nordic-matte-ceramic-vase": {
+   "retail_ils": 89,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "אגרטל טבעת קרמי אחד 23x22.5",
+   "il_value": {
+    "low": 59,
+    "typical": 129,
+    "high": 295,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "PÄRLHÄGG אגרטל",
+      "size": "22 ס\"מ",
+      "price": 59.0,
+      "url": "https://www.ikea.com/il/he/p/paerlhaegg-vase-beige-80623405/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "BLODBJÖRK אגרטל",
+      "size": "25 ס\"מ",
+      "price": 95.0,
+      "url": "https://www.ikea.com/il/he/p/blodbjoerk-vase-beige-90637727/"
+     },
+     {
+      "retailer": "Terminal X",
+      "title": "אגרטל פיר (MmShacham)",
+      "size": null,
+      "price": 295.0,
+      "url": "https://www.terminalx.com/default-category/r892010001"
+     },
+     {
+      "retailer": "Zara Home",
+      "title": "אגרטל מקרמיקה עם טקסטורה 16 ס\"מ",
+      "size": null,
+      "price": 269.0,
+      "url": "https://www.zarahome.com/il/אגרטל-מקרמיקה-עם-טקסטורה-l47100046",
+      "note": "search snippet, not verified directly"
+     }
+    ]
+   },
+   "customer_total_ils": 118,
+   "vs_typical_pct": -9,
+   "landed_ils": 116.19,
+   "margin_pct": -66.0,
+   "contribution_ils": -49.78,
+   "after_cac_ils": -121.21,
+   "contribution_with_fee_ils": -27.75,
+   "flag": "loss",
+   "nordic_score": 5.5,
+   "ship_estimated": true,
+   "ship_usd_per_unit_used": 8.42,
+   "price_note": "אגרטל פיסולי מאבנית מנוקדת; עיצובי, לכן 9% מתחת לטיפוסי. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "ship_basis": "הערכה: המשלוח צוטט למידה S ‏($8.42); ל-L לא צוטט",
+   "action_he": "עלות $26.8 גבוהה: לחפש את אותה צורה אצל ספק אחר.",
+   "slot_alternative_ok": false
+  },
+  "centerpiece-vase-aliexpress-nordic-morandi-matte-ceramic": {
+   "retail_ils": 199,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "סט 4 אגרטלים (9.5–26 ס\"מ)",
+   "il_value": {
+    "low": 158,
+    "typical": 249,
+    "high": 400,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "PÄRLHÄGG אגרטל (ליחידה)",
+      "size": "14 ס\"מ",
+      "price": 29.0,
+      "url": "https://www.ikea.com/il/he/p/paerlhaegg-vase-light-pink-30637725/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "PÄRLHÄGG אגרטל (ליחידה)",
+      "size": "22 ס\"מ",
+      "price": 59.0,
+      "url": "https://www.ikea.com/il/he/p/paerlhaegg-vase-beige-80623405/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "BLODBJÖRK אגרטל (ליחידה)",
+      "size": "16 ס\"מ",
+      "price": 59.0,
+      "url": "https://www.ikea.com/il/he/p/blodbjoerk-vase-beige-90607297/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "PELARBJÖRK אגרטל (ליחידה)",
+      "size": "14 ס\"מ",
+      "price": 45.0,
+      "url": "https://www.ikea.com/il/he/p/pelarbjoerk-vase-white-80607311/"
+     },
+     {
+      "retailer": "Terminal X",
+      "title": "אגרטל פיר (MmShacham)",
+      "size": null,
+      "price": 295.0,
+      "url": "https://www.terminalx.com/default-category/r892010001"
+     }
+    ]
+   },
+   "customer_total_ils": 228,
+   "vs_typical_pct": -8,
+   "landed_ils": 152.46,
+   "margin_pct": -1.5,
+   "contribution_ils": -2.49,
+   "after_cac_ils": -73.92,
+   "contribution_with_fee_ils": 19.54,
+   "flag": "loss",
+   "nordic_score": 6.5,
+   "ship_estimated": true,
+   "ship_usd_per_unit_used": 30.64,
+   "price_note": "ארבעה אגרטלים בסט; ברשתות כל אחד ₪29–95, כך שסט דומה עולה ₪250 ומעלה. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "ship_basis": "לפי הערת הכרטיס: צוטט לסט F באותה אריזה ($30.64)",
+   "slot_alternative_ok": false
+  },
+  "centerpiece-vase-cj-sandy-white-bead-band-25": {
+   "retail_ils": 59,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "אגרטל אבנית אחד 25 ס\"מ",
+   "il_value": {
+    "low": 59,
+    "typical": 99,
+    "high": 295,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "BLODBJÖRK אגרטל",
+      "size": "25 ס\"מ",
+      "price": 95.0,
+      "url": "https://www.ikea.com/il/he/p/blodbjoerk-vase-beige-90637727/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "KÄLLARHALS אגרטל",
+      "size": "26 ס\"מ",
+      "price": 59.0,
+      "url": "https://www.ikea.com/il/he/p/kaellarhals-vase-orange-50583712/"
+     },
+     {
+      "retailer": "Terminal X",
+      "title": "אגרטל פיר (MmShacham)",
+      "size": null,
+      "price": 295.0,
+      "url": "https://www.terminalx.com/default-category/r892010001"
+     },
+     {
+      "retailer": "Zara Home",
+      "title": "אגרטל מקרמיקה עם טקסטורה 16 ס\"מ",
+      "size": null,
+      "price": 269.0,
+      "url": "https://www.zarahome.com/il/אגרטל-מקרמיקה-עם-טקסטורה-l47100046",
+      "note": "search snippet, not verified directly"
+     }
+    ]
+   },
+   "customer_total_ils": 88,
+   "vs_typical_pct": -11,
+   "landed_ils": 212.19,
+   "margin_pct": -337.1,
+   "contribution_ils": -168.57,
+   "after_cac_ils": -240.0,
+   "contribution_with_fee_ils": -146.54,
+   "flag": "loss",
+   "nordic_score": 6.5,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 56.07,
+   "price_note": "אגרטל אבנית 25 ס\"מ: IKEA ‏₪59–95, מעצבים ₪270–295. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "action_he": "משלוח $56 (משקל 4.15 ק\"ג שגוי כנראה): לבקש מ-CJ לתקן משקל או ספק אחר.",
+   "slot_alternative_ok": false
+  },
+  "condiment-set-cj-rubberwood-mill-pair-6in": {
+   "retail_ils": 49,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "זוג מטחנות עץ 15 ס\"מ",
+   "il_value": {
+    "low": 49,
+    "typical": 89,
+    "high": 130,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "SPJUTLILJA סט מטחנת תבלינים/2 יחידות",
+      "size": "16 ס\"מ",
+      "price": 49.0,
+      "url": "https://www.ikea.com/il/he/p/spjutlilja-spice-mill-set-of-2-black-light-beige-50624227/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "INTRESSANT מטחנת תבלינים",
+      "size": "27 ס\"מ",
+      "price": 69.0,
+      "url": "https://www.ikea.com/il/he/p/intressant-spice-mill-acacia-50301897/"
+     },
+     {
+      "retailer": "Naaman",
+      "title": "מלחייה נירוסטה",
+      "size": null,
+      "price": 69.9,
+      "url": "https://www.naamanp.co.il/11308208"
+     },
+     {
+      "retailer": "Fox Home",
+      "title": "סט מלח פלפל מזכוכית Homey Cooking",
+      "size": null,
+      "price": 26.97,
+      "list_price": 89.9,
+      "url": "https://www.foxhome.co.il/products/0293579998"
+     }
+    ]
+   },
+   "customer_total_ils": 78,
+   "vs_typical_pct": -12,
+   "landed_ils": 47.72,
+   "margin_pct": -28.2,
+   "contribution_ils": -11.69,
+   "after_cac_ils": -83.12,
+   "contribution_with_fee_ils": 10.34,
+   "flag": "loss",
+   "nordic_score": 7.0,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 9.65,
+   "price_note": "זוג מטחנות עץ: IKEA ₪49 לזוג, נעמן ₪70 לפריט. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "slot_alternative_ok": false
+  },
+  "condiment-set-zendrop-wood-mills-black-white-21": {
+   "retail_ils": 59,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "זוג מטחנות עץ 21.5 ס\"מ (שחור ולבן)",
+   "il_value": {
+    "low": 49,
+    "typical": 99,
+    "high": 140,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "SPJUTLILJA סט מטחנת תבלינים/2 יחידות",
+      "size": "16 ס\"מ",
+      "price": 49.0,
+      "url": "https://www.ikea.com/il/he/p/spjutlilja-spice-mill-set-of-2-black-light-beige-50624227/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "INTRESSANT מטחנת תבלינים",
+      "size": "27 ס\"מ",
+      "price": 69.0,
+      "url": "https://www.ikea.com/il/he/p/intressant-spice-mill-acacia-50301897/"
+     },
+     {
+      "retailer": "Naaman",
+      "title": "מלחייה נירוסטה",
+      "size": null,
+      "price": 69.9,
+      "url": "https://www.naamanp.co.il/11308208"
+     },
+     {
+      "retailer": "Fox Home",
+      "title": "סט מלח פלפל מזכוכית Homey Cooking",
+      "size": null,
+      "price": 26.97,
+      "list_price": 89.9,
+      "url": "https://www.foxhome.co.il/products/0293579998"
+     }
+    ]
+   },
+   "customer_total_ils": 88,
+   "vs_typical_pct": -11,
+   "landed_ils": 65.47,
+   "margin_pct": -43.7,
+   "contribution_ils": -21.85,
+   "after_cac_ils": -93.28,
+   "contribution_with_fee_ils": 0.18,
+   "flag": "loss",
+   "nordic_score": 7.0,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 13.38,
+   "price_note": "זוג מטחנות עץ גבוהות בשני גוונים: מעל IKEA ₪49, נעמן ₪70 לפריט. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "slot_alternative_ok": false
+  },
+  "dining-chairs-furniture-express-maya": {
+   "retail_ils": 399,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "כיסא אחד (העמדה צריכה זוג ומעלה)",
+   "il_value": {
+    "low": 295,
+    "typical": 449,
+    "high": 600,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "KRYLBO כיסא",
+      "size": null,
+      "price": 345.0,
+      "url": "https://www.ikea.com/il/he/p/krylbo-chair-tibbleby-dark-red-30620579/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "SKÅLSTA כיסא",
+      "size": null,
+      "price": 295.0,
+      "url": "https://www.ikea.com/il/he/p/skalsta-chair-knaebaeck-beige-tubular-metal-light-grey-beige-s89608740/"
+     },
+     {
+      "retailer": "Home Center",
+      "title": "כיסא לפינת אוכל מרופד דגם ג'ק, רגלי מתכת שחורות",
+      "size": null,
+      "price": 299,
+      "list_price": 349,
+      "url": "https://www.homecenter.co.il/products/1699271752196",
+      "note": "מתוך תוצאת חיפוש, לא נפתח ישירות; ₪299 באתר, ₪349 בסניפים"
+     },
+     {
+      "retailer": "ריהוט אקספרס (הספק)",
+      "title": "כסא דגם מאיה",
+      "size": null,
+      "price": 399,
+      "url": "https://www.rihut-express.co.il/product/%D7%9B%D7%A1%D7%90-%D7%93%D7%92%D7%9D-%D7%9E%D7%90%D7%99%D7%94/",
+      "note": "מחיר צרכן של הספק (מחיר מקורי ₪499), לפי הכרטיס"
+     }
+    ]
+   },
+   "customer_total_ils": 399,
+   "vs_typical_pct": -11,
+   "landed_ils": 468,
+   "margin_pct": -49.1,
+   "contribution_ils": -166.1,
+   "after_cac_ils": -237.52,
+   "contribution_with_fee_ils": null,
+   "flag": "loss",
+   "nordic_score": 7.0,
+   "ship_estimated": true,
+   "ship_usd_per_unit_used": null,
+   "price_note": "המחיר לצרכן הוא המחיר הציבורי של הספק (₪399); תלוי בתנאי השותפות. מול כיסאות מרופדים ברשתות ₪300–450. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "cost_currency": "ILS",
+   "ship_ils_per_unit_used": 69,
+   "ship_basis": "משלוח רגיל של הספק ₪69 כולל מע\"מ לכיסא (לפי הכרטיס)",
+   "action_he": "תלוי בתנאי השותפות: ב-₪399 הכיסא מגיע ל-40% רק אם העלות כולל משלוח היא עד ~₪165.",
+   "slot_alternative_ok": false
+  },
+  "dining-pendant-cj-black-ring-cloth-lantern-50": {
+   "retail_ils": 229,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "מנורת תלייה אחת D50",
+   "il_value": {
+    "low": 195,
+    "typical": 279,
+    "high": 420,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "VINDKAST מנורת תלייה",
+      "size": "50 ס\"מ",
+      "price": 195.0,
+      "url": "https://www.ikea.com/il/he/p/vindkast-pendant-lamp-white-20450520/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "RÖDFLIK מנורת תלייה",
+      "size": null,
+      "price": 195.0,
+      "url": "https://www.ikea.com/il/he/p/roedflik-pendant-lamp-light-beige-50582784/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "SINNERLIG מנורת תלייה",
+      "size": "50 ס\"מ",
+      "price": 395.0,
+      "url": "https://www.ikea.com/il/he/p/sinnerlig-pendant-lamp-bamboo-handmade-70311697/"
+     },
+     {
+      "retailer": "Terminal X",
+      "title": "מנורת תקרה PAPPER MATCH שמנת (Golyan)",
+      "size": null,
+      "price": 293.93,
+      "list_price": 419.9,
+      "url": "https://www.terminalx.com/default-category/w434060007"
+     }
+    ]
+   },
+   "customer_total_ils": 258,
+   "vs_typical_pct": -8,
+   "landed_ils": 268.49,
+   "margin_pct": -49.3,
+   "contribution_ils": -95.73,
+   "after_cac_ils": -167.15,
+   "contribution_with_fee_ils": -73.7,
+   "flag": "loss",
+   "nordic_score": 7.0,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 29.57,
+   "price_note": "פנס בד 50 ס\"מ: IKEA ₪195–395, Golyan ₪294 במבצע; עיצובי, 8% מתחת. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "action_he": "עלות $51.8: לבדוק את ה-40 ס\"מ ($38.3) או ספק אחר.",
+   "slot_alternative_ok": false
+  },
+  "floor-vase-aliexpress-capiron-zen-ceramic": {
+   "retail_ils": 49,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "אגרטל קרמי אחד 25x8",
+   "il_value": {
+    "low": 59,
+    "typical": 89,
+    "high": 295,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "KÄLLARHALS אגרטל",
+      "size": "26 ס\"מ",
+      "price": 59.0,
+      "url": "https://www.ikea.com/il/he/p/kaellarhals-vase-orange-50583712/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "BLODBJÖRK אגרטל",
+      "size": "25 ס\"מ",
+      "price": 95.0,
+      "url": "https://www.ikea.com/il/he/p/blodbjoerk-vase-beige-90637727/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "PÄRLHÄGG אגרטל",
+      "size": "22 ס\"מ",
+      "price": 59.0,
+      "url": "https://www.ikea.com/il/he/p/paerlhaegg-vase-beige-80623405/"
+     }
+    ]
+   },
+   "customer_total_ils": 78,
+   "vs_typical_pct": -12,
+   "landed_ils": 91.18,
+   "margin_pct": -132.8,
+   "contribution_ils": -55.16,
+   "after_cac_ils": -126.58,
+   "contribution_with_fee_ils": -33.13,
+   "flag": "loss",
+   "nordic_score": 3.0,
+   "ship_estimated": true,
+   "ship_usd_per_unit_used": 5.61,
+   "price_note": "אגרטל בקבוק קרמי 25 ס\"מ: IKEA ‏₪59–95. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "ship_basis": "לפי הערת הכרטיס: AliExpress standard ‏$5.61 צוטט לוריאנט B",
+   "action_he": "עלות $22 לאגרטל קטן: ספק אחר.",
+   "slot_alternative_ok": false
+  },
+  "framed-art-aliexpress-retro-farmhouse-chicken-botanical-333603": {
+   "retail_ils": 89,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "תמונה ממוסגרת אחת 30x40",
+   "il_value": {
+    "low": 75,
+    "typical": 139,
+    "high": 200,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "PJÄTTERYD תמונה",
+      "size": "30x40 ס\"מ",
+      "price": 75.0,
+      "url": "https://www.ikea.com/il/he/p/pjaetteryd-picture-dawn-haze-90623867/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "BLODFLÄDER תמונה ממוסגרת",
+      "size": "30x40 ס\"מ",
+      "price": 175.0,
+      "url": "https://www.ikea.com/il/he/p/blodflaeder-picture-floral-simplicity-00623471/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "KNOPPÄNG מסגרת עם פוסטר",
+      "size": "40x50 ס\"מ",
+      "price": 95.0,
+      "url": "https://www.ikea.com/il/he/p/knoppaeng-frame-with-poster-vintage-botanical-fruit-charts-50578895/"
+     },
+     {
+      "retailer": "Fox Home",
+      "title": "תמונת קיר דקורטיבית בעיצוב בוטני Leaf",
+      "size": null,
+      "price": 149.93,
+      "list_price": 199.9,
+      "url": "https://www.foxhome.co.il/products/0332680300"
+     }
+    ]
+   },
+   "customer_total_ils": 118,
+   "vs_typical_pct": -15,
+   "landed_ils": 96.76,
+   "margin_pct": -40.2,
+   "contribution_ils": -30.35,
+   "after_cac_ils": -101.77,
+   "contribution_with_fee_ils": -8.32,
+   "flag": "loss",
+   "nordic_score": 4.0,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 1.99,
+   "price_note": "הדפס בוטני ממוסגר 30x40: IKEA ₪75–175, Fox Home ₪150 במבצע. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "action_he": "עלות $27.3 גבוהה; לבדוק את המידה בלי מסגרת וספק אחר.",
+   "slot_alternative_ok": false
+  },
+  "framed-art-cj-swinging-line-black-frame-mat-35x45": {
+   "retail_ils": 129,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "תמונה ממוסגרת אחת 35x45",
+   "il_value": {
+    "low": 95,
+    "typical": 179,
+    "high": 225,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "BLODFLÄDER תמונה ממוסגרת",
+      "size": "40x50 ס\"מ",
+      "price": 145.0,
+      "url": "https://www.ikea.com/il/he/p/blodflaeder-picture-two-birds-00601921/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "BLODFLÄDER תמונה ממוסגרת",
+      "size": "40x50 ס\"מ",
+      "price": 225.0,
+      "url": "https://www.ikea.com/il/he/p/blodflaeder-picture-black-leaves-00623857/"
+     },
+     {
+      "retailer": "Fox Home",
+      "title": "תמונת קיר דקורטיבית בעיצוב בוטני Leaf",
+      "size": null,
+      "price": 149.93,
+      "list_price": 199.9,
+      "url": "https://www.foxhome.co.il/products/0332680300"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "KNOPPÄNG מסגרת עם פוסטר",
+      "size": "40x50 ס\"מ",
+      "price": 95.0,
+      "url": "https://www.ikea.com/il/he/p/knoppaeng-frame-with-poster-vintage-botanical-fruit-charts-50578895/"
+     }
+    ]
+   },
+   "customer_total_ils": 158,
+   "vs_typical_pct": -12,
+   "landed_ils": 148.93,
+   "margin_pct": -47.7,
+   "contribution_ils": -52.13,
+   "after_cac_ils": -123.56,
+   "contribution_with_fee_ils": -30.1,
+   "flag": "loss",
+   "nordic_score": 8.0,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 23.9,
+   "price_note": "הדפס קו עם פספרטו ומסגרת עץ שחורה: IKEA ₪145–225, Fox Home ₪150 במבצע. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "action_he": "משלוח $24 על מסגרת 1.6 ק\"ג: לבדוק משלוח בלי זכוכית/פרספקס או מלאי בישראל.",
+   "slot_alternative_ok": false
+  },
+  "framed-art-cj-taupe-block-black-line-30x40": {
+   "retail_ils": 109,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "תמונת קנבס ממוסגרת אחת 30x40",
+   "il_value": {
+    "low": 75,
+    "typical": 159,
+    "high": 200,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "PJÄTTERYD תמונה",
+      "size": "30x40 ס\"מ",
+      "price": 75.0,
+      "url": "https://www.ikea.com/il/he/p/pjaetteryd-picture-dawn-haze-90623867/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "BLODFLÄDER תמונה ממוסגרת",
+      "size": "30x40 ס\"מ",
+      "price": 175.0,
+      "url": "https://www.ikea.com/il/he/p/blodflaeder-picture-floral-simplicity-00623471/"
+     },
+     {
+      "retailer": "Fox Home",
+      "title": "תמונת קיר דקורטיבית בעיצוב בוטני Leaf",
+      "size": null,
+      "price": 149.93,
+      "list_price": 199.9,
+      "url": "https://www.foxhome.co.il/products/0332680300"
+     }
+    ]
+   },
+   "customer_total_ils": 138,
+   "vs_typical_pct": -13,
+   "landed_ils": 132.49,
+   "margin_pct": -55.1,
+   "contribution_ils": -50.89,
+   "after_cac_ils": -122.32,
+   "contribution_with_fee_ils": -28.86,
+   "flag": "loss",
+   "nordic_score": 7.5,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 29.2,
+   "price_note": "קנבס מצויר ביד 30x40: IKEA ₪75–175, Fox Home ₪150 במבצע. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "action_he": "משלוח $29 (2 ק\"ג): לבדוק משקל אמיתי.",
+   "slot_alternative_ok": false
+  },
+  "mug-set-cj-cream-matte-breakfast-cup": {
+   "retail_ils": 39,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 3,
+   "sale_contains": "סט 3 כוסות 375 מ\"ל",
+   "il_value": {
+    "low": 36,
+    "typical": 69,
+    "high": 90,
+    "comps": [
+     {
+      "retailer": "Fox Home",
+      "title": "מאג פורצלן בגוון בז' בגימור מט Dylan (ליחידה)",
+      "size": null,
+      "price": 11.83,
+      "list_price": 16.9,
+      "url": "https://www.foxhome.co.il/products/0333726000"
+     },
+     {
+      "retailer": "Fox Home",
+      "title": "מאג מקרמיקה לשתייה חמה 350 מ\"ל Mika (ליחידה)",
+      "size": null,
+      "price": 13.93,
+      "list_price": 19.9,
+      "url": "https://www.foxhome.co.il/products/0334379401"
+     },
+     {
+      "retailer": "Fox Home",
+      "title": "מאג קרמיקה בגוון אוופוויט עם טקסטורה Granite2 (ליחידה)",
+      "size": null,
+      "price": 20.93,
+      "list_price": 29.9,
+      "url": "https://www.foxhome.co.il/products/0334559400"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "STRIMMIG ספל (ליחידה)",
+      "size": "36 סנטל'",
+      "price": 19.0,
+      "url": "https://www.ikea.com/il/he/p/strimmig-mug-stoneware-pale-grey-green-20569897/"
+     }
+    ]
+   },
+   "customer_total_ils": 68,
+   "vs_typical_pct": -1,
+   "landed_ils": 92.27,
+   "margin_pct": -193.2,
+   "contribution_ils": -63.84,
+   "after_cac_ils": -135.27,
+   "contribution_with_fee_ils": -41.81,
+   "flag": "loss",
+   "nordic_score": 6.0,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 8.39,
+   "price_note": "שלוש כוסות קרמיקה מט; כוס כזו נמכרת היום ב-₪12–21 (Fox Home) ו-₪19 (IKEA), כ-₪70 לשלוש. לבד הסה\"כ ללקוח קרוב לטיפוסי בגלל דמי המשלוח: פריט תוספת לסל (חינם מ-₪299) או לסט. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "action_he": "משלוח $8.4 לכל כוס: לחפש ספק עם כוסות קלות יותר או למכור רק בסל.",
+   "addon_only": true,
+   "slot_alternative_ok": false
+  },
+  "mug-set-cj-oat-speckled-round-mug-wood-saucer": {
+   "retail_ils": 19,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "ספל אחד עם תחתית עץ",
+   "il_value": {
+    "low": 19,
+    "typical": 49,
+    "high": 60,
+    "comps": [
+     {
+      "retailer": "Fox Home",
+      "title": "מאג קרמיקה בגוון אוופוויט עם טקסטורה Granite2",
+      "size": null,
+      "price": 20.93,
+      "list_price": 29.9,
+      "url": "https://www.foxhome.co.il/products/0334559400"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "STRIMMIG ספל",
+      "size": "36 סנטל'",
+      "price": 19.0,
+      "url": "https://www.ikea.com/il/he/p/strimmig-mug-stoneware-pale-grey-green-20569897/"
+     },
+     {
+      "retailer": "Terminal X",
+      "title": "סט 6 כוסות 180ml זכוכית לשתייה חמה + תחתיות עץ מבית DreamChef (Golyan) (6 כוסות + תחתיות, ~₪33 לכוס)",
+      "size": null,
+      "price": 138.6,
+      "list_price": 198.0,
+      "url": "https://www.terminalx.com/default-category/r990030001"
+     }
+    ]
+   },
+   "customer_total_ils": 48,
+   "vs_typical_pct": -2,
+   "landed_ils": 60.39,
+   "margin_pct": -292.9,
+   "contribution_ils": -47.16,
+   "after_cac_ils": -118.59,
+   "contribution_with_fee_ils": -25.13,
+   "flag": "loss",
+   "nordic_score": 6.5,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 10.02,
+   "price_note": "ספל אבנית: Fox Home ₪21, IKEA ₪19, כוס עם תחתית עץ ~₪23 (DreamChef); לבד, עם משלוח, רק ₪19 נשאר מתחת לטיפוסי. לבד הסה\"כ ללקוח קרוב לטיפוסי בגלל דמי המשלוח: פריט תוספת לסל (חינם מ-₪299) או לסט. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "action_he": "פריט תוספת; גם כסט של 3 (₪99) המשלוח גבוה מדי: לבקש ציטוט לשלושה יחד או ספל קל יותר.",
+   "addon_only": true,
+   "slot_alternative_ok": false
+  },
+  "open-shelf-ceramics-cj-morandi-matte-bottle-set": {
+   "retail_ils": 79,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 2,
+   "sale_contains": "זוג אגרטלי בקבוק (15.5 ו-19 ס\"מ)",
+   "il_value": {
+    "low": 74,
+    "typical": 119,
+    "high": 270,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "PÄRLHÄGG אגרטל (ליחידה)",
+      "size": "14 ס\"מ",
+      "price": 29.0,
+      "url": "https://www.ikea.com/il/he/p/paerlhaegg-vase-light-pink-30637725/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "BLODBJÖRK אגרטל (ליחידה)",
+      "size": "16 ס\"מ",
+      "price": 59.0,
+      "url": "https://www.ikea.com/il/he/p/blodbjoerk-vase-beige-90607297/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "PELARBJÖRK אגרטל (ליחידה)",
+      "size": "14 ס\"מ",
+      "price": 45.0,
+      "url": "https://www.ikea.com/il/he/p/pelarbjoerk-vase-white-80607311/"
+     },
+     {
+      "retailer": "Zara Home",
+      "title": "אגרטל מקרמיקה עם טקסטורה 16 ס\"מ",
+      "size": null,
+      "price": 269.0,
+      "url": "https://www.zarahome.com/il/אגרטל-מקרמיקה-עם-טקסטורה-l47100046",
+      "note": "search snippet, not verified directly"
+     }
+    ]
+   },
+   "customer_total_ils": 108,
+   "vs_typical_pct": -9,
+   "landed_ils": 97.94,
+   "margin_pct": -58.4,
+   "contribution_ils": -39.13,
+   "after_cac_ils": -110.56,
+   "contribution_with_fee_ils": -17.1,
+   "flag": "loss",
+   "nordic_score": 6.5,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 9.85,
+   "price_note": "שני אגרטלים קטנים; ב-IKEA כל אחד ₪29–59, ב-Zara Home ‏₪269; זוג, ולכן 9% מתחת. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "slot_alternative_ok": false
+  },
+  "paper-towel-holder-aliexpress-1pc-bamboo-paper-towel-316063": {
+   "retail_ils": 39,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "מתקן נייר סופג אחד מבמבוק",
+   "il_value": {
+    "low": 29.9,
+    "typical": 69,
+    "high": 69,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "MÅLA מעמד לגליל נייר עם אחסון",
+      "size": null,
+      "price": 59.0,
+      "url": "https://www.ikea.com/il/he/p/mala-paper-roll-holder-with-storage-70488969/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "STEGESUND מעמד לנייר טואלט",
+      "size": null,
+      "price": 59.0,
+      "url": "https://www.ikea.com/il/he/p/stegesund-toilet-roll-stand-light-bamboo-00632022/"
+     },
+     {
+      "retailer": "Home Center",
+      "title": "מתקן לנייר סופג במבוק (עמוד הקטגוריה)",
+      "size": null,
+      "price": 29.9,
+      "url": "https://www.homecenter.co.il/collections/absorbent-paper-dispenser",
+      "note": "מתוך תוצאת חיפוש, לא נפתח ישירות"
+     }
+    ]
+   },
+   "customer_total_ils": 68,
+   "vs_typical_pct": -1,
+   "landed_ils": 23.3,
+   "margin_pct": 15.5,
+   "contribution_ils": 5.13,
+   "after_cac_ils": -66.3,
+   "contribution_with_fee_ils": 27.16,
+   "flag": "below-floor",
+   "nordic_score": 7.0,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 1.99,
+   "price_note": "מעמד במבוק לנייר: Home Center ‏₪30, IKEA ‏₪59; ברשתות הבינוניות (נעמן, Fox) ₪60–80. לבד הסה\"כ ללקוח קרוב לטיפוסי בגלל דמי המשלוח: פריט תוספת לסל (חינם מ-₪299) או לסט. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "action_he": "פריט תוספת לסל.",
+   "addon_only": true,
+   "slot_alternative_ok": false
+  },
+  "paper-towel-holder-cj-beech-upright-31": {
+   "retail_ils": 39,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "מתקן נייר סופג אחד מעץ בוק",
+   "il_value": {
+    "low": 29.9,
+    "typical": 69,
+    "high": 89,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "MÅLA מעמד לגליל נייר עם אחסון",
+      "size": null,
+      "price": 59.0,
+      "url": "https://www.ikea.com/il/he/p/mala-paper-roll-holder-with-storage-70488969/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "STEGESUND מעמד לנייר טואלט",
+      "size": null,
+      "price": 59.0,
+      "url": "https://www.ikea.com/il/he/p/stegesund-toilet-roll-stand-light-bamboo-00632022/"
+     },
+     {
+      "retailer": "Home Center",
+      "title": "מתקן לנייר סופג במבוק (עמוד הקטגוריה)",
+      "size": null,
+      "price": 29.9,
+      "url": "https://www.homecenter.co.il/collections/absorbent-paper-dispenser",
+      "note": "מתוך תוצאת חיפוש, לא נפתח ישירות"
+     }
+    ]
+   },
+   "customer_total_ils": 68,
+   "vs_typical_pct": -1,
+   "landed_ils": 58.34,
+   "margin_pct": -90.5,
+   "contribution_ils": -29.92,
+   "after_cac_ils": -101.35,
+   "contribution_with_fee_ils": -7.89,
+   "flag": "loss",
+   "nordic_score": 7.0,
+   "ship_estimated": true,
+   "ship_usd_per_unit_used": 10.02,
+   "price_note": "מעמד עץ בוק לנייר: ₪30–60 ברשתות; תומחר כמו מקבילו מבמבוק. לבד הסה\"כ ללקוח קרוב לטיפוסי בגלל דמי המשלוח: פריט תוספת לסל (חינם מ-₪299) או לסט. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "ship_basis": "הערכה בלבד: CJ לא שולח לישראל; לפי פריט CJ דומה (0.35–0.5 ק\"ג) ב-Eub ‏$10.02",
+   "action_he": "אין ל-CJ מסלול לישראל (מחסן בחו\"ל): לבקש מ-CJ מסלול או ספק אחר לאותו מוצר.",
+   "addon_only": true,
+   "slot_alternative_ok": false
+  },
+  "table-runner-aliexpress-boho-macrame-table-runners-263532": {
+   "retail_ils": 69,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "ראנר אחד 30x140",
+   "il_value": {
+    "low": 39,
+    "typical": 109,
+    "high": 150,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "VÅRARV מפת ראנר",
+      "size": "35x150 ס\"מ",
+      "price": 39.0,
+      "url": "https://www.ikea.com/il/he/p/vararv-table-runner-dark-grey-natural-20545854/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "MÄVINN מפת ראנר",
+      "size": "35x130 ס\"מ",
+      "price": 79.0,
+      "url": "https://www.ikea.com/il/he/p/maevinn-table-runner-banana-fibre-stripe-pattern-10615116/"
+     },
+     {
+      "retailer": "Fox Home",
+      "title": "ראנר שולחן בעיצוב פסים ארוגים וטקסטורה עדינה Japan",
+      "size": null,
+      "price": 90.93,
+      "list_price": 129.9,
+      "url": "https://www.foxhome.co.il/products/0334949900"
+     },
+     {
+      "retailer": "Cotton Club",
+      "title": "ראנר שולחן כותנה רקומה",
+      "size": "50x160",
+      "price": 150.0,
+      "url": "https://cottonclub.co.il/products/ראנר-שולחן-כותנה-רקומה"
+     }
+    ]
+   },
+   "customer_total_ils": 98,
+   "vs_typical_pct": -10,
+   "landed_ils": 33.43,
+   "margin_pct": 30.4,
+   "contribution_ils": 17.79,
+   "after_cac_ils": -53.64,
+   "contribution_with_fee_ils": 39.82,
+   "flag": "below-floor",
+   "nordic_score": 3.0,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 0.0,
+   "price_note": "ראנר בוהו בעבודת מקרמה: IKEA ₪39–79, Fox Home ₪91 במבצע, Cotton Club ₪150. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "slot_alternative_ok": false
+  },
+  "tableware-set-cj-grey-sand-matte-plate": {
+   "retail_ils": 19,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "צלחת אוכל אחת 28 ס\"מ",
+   "il_value": {
+    "low": 15,
+    "typical": 39,
+    "high": 50,
+    "comps": [
+     {
+      "retailer": "Fox Home",
+      "title": "צלחת עיקרית מקרמיקה Mika",
+      "size": null,
+      "price": 34.93,
+      "list_price": 49.9,
+      "url": "https://www.foxhome.co.il/products/0334349401"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "GLADELIG צלחת",
+      "size": "25 ס\"מ",
+      "price": 15.0,
+      "url": "https://www.ikea.com/il/he/p/gladelig-plate-grey-10600756/"
+     },
+     {
+      "retailer": "Fox Home",
+      "title": "סט 6 צלחות עיקריות מקרמיקה בגוון בז' Cory (6 צלחות, ~₪27 לצלחת)",
+      "size": null,
+      "price": 119.92,
+      "list_price": 159.9,
+      "url": "https://www.foxhome.co.il/products/0328706000"
+     }
+    ]
+   },
+   "customer_total_ils": 48,
+   "vs_typical_pct": 23,
+   "landed_ils": 77.58,
+   "margin_pct": -399.6,
+   "contribution_ils": -64.35,
+   "after_cac_ils": -135.78,
+   "contribution_with_fee_ils": -42.32,
+   "flag": "loss",
+   "nordic_score": 7.0,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 15.58,
+   "price_note": "צלחת עיקרית: Fox Home ₪35 במבצע (₪20 בסט של 6), IKEA ₪15; לבד, עם משלוח, אי אפשר להיות מתחת לטיפוסי. לבד, עם ₪29 משלוח, הסה\"כ ללקוח גבוה מהטיפוסי: פריט תוספת לסל (משלוח חינם מ-₪299) או לסט בלבד. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "action_he": "צלחת בודדת לא נמכרת לבד: סט 4–6 בלבד (משלוח $15.6 לצלחת).",
+   "addon_only": true,
+   "slot_alternative_ok": false
+  },
+  "tableware-set-cj-speckled-oat-stoneware-bowl-13": {
+   "retail_ils": 29,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "זוג קערות 13.6 ס\"מ (וריאנט 2 יח')",
+   "il_value": {
+    "low": 24,
+    "typical": 59,
+    "high": 80,
+    "comps": [
+     {
+      "retailer": "Fox Home",
+      "title": "קערת מרק מקרמיקה Mika (ליחידה)",
+      "size": null,
+      "price": 27.93,
+      "list_price": 39.9,
+      "url": "https://www.foxhome.co.il/products/0334369401"
+     },
+     {
+      "retailer": "Fox Home",
+      "title": "קערית קרמיקה בגוון אופוויט עם טקסטורת התזה Granite2 (ליחידה)",
+      "size": null,
+      "price": 20.93,
+      "list_price": 29.9,
+      "url": "https://www.foxhome.co.il/products/0334569400"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "GLADELIG קערה (ליחידה)",
+      "size": "14 ס\"מ",
+      "price": 12.0,
+      "url": "https://www.ikea.com/il/he/p/gladelig-bowl-grey-40600750/"
+     },
+     {
+      "retailer": "Fox Home",
+      "title": "סט 6 קערות מרק מקרמיקה בגוון בז' Cory (6 קערות)",
+      "size": null,
+      "price": 89.92,
+      "list_price": 119.9,
+      "url": "https://www.foxhome.co.il/products/0328726000"
+     }
+    ]
+   },
+   "customer_total_ils": 58,
+   "vs_typical_pct": -2,
+   "landed_ils": 58.64,
+   "margin_pct": -153.9,
+   "contribution_ils": -37.81,
+   "after_cac_ils": -109.24,
+   "contribution_with_fee_ils": -15.78,
+   "flag": "loss",
+   "nordic_score": 7.0,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 10.4,
+   "price_note": "העלות בכרטיס היא לזוג קערות; קערה כזו נמכרת היום ב-₪21–28 (Fox Home), כ-₪55–60 לזוג. לבד הסה\"כ ללקוח קרוב לטיפוסי בגלל דמי המשלוח: פריט תוספת לסל (חינם מ-₪299) או לסט. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "addon_only": true,
+   "slot_alternative_ok": false
+  },
+  "tea-towel-zendrop-cotton-linen-washed-60x45": {
+   "retail_ils": 19,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "מגבת מטבח אחת 60x45",
+   "il_value": {
+    "low": 19,
+    "typical": 29,
+    "high": 49,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "RINNIG מגבת מטבח",
+      "size": "45x60 ס\"מ",
+      "price": 19.0,
+      "url": "https://www.ikea.com/il/he/p/rinnig-tea-towel-white-dark-grey-patterned-20476346/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "RÖDSPÄTTA מגבת מטבח",
+      "size": "45x60 ס\"מ",
+      "price": 49.0,
+      "url": "https://www.ikea.com/il/he/p/roedspaetta-tea-towel-white-90618564/"
+     },
+     {
+      "retailer": "Fox Home",
+      "title": "מגבת מטבח מכותנה בגוון ניוד Alpha",
+      "size": null,
+      "price": 18.83,
+      "list_price": 26.9,
+      "url": "https://www.foxhome.co.il/products/0314756003"
+     },
+     {
+      "retailer": "Cotton Club",
+      "title": "מגבת מטבח באריגת פיקה Coconut Milk",
+      "size": "Coconut.Milk",
+      "price": 30.0,
+      "url": "https://cottonclub.co.il/products/מגבת-מטבח-באריגת-פיקה-copy"
+     }
+    ]
+   },
+   "customer_total_ils": 48,
+   "vs_typical_pct": 66,
+   "landed_ils": 28.05,
+   "margin_pct": -92.0,
+   "contribution_ils": -14.82,
+   "after_cac_ils": -86.25,
+   "contribution_with_fee_ils": 7.21,
+   "flag": "loss",
+   "nordic_score": 8.0,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 6.73,
+   "price_note": "מגבת מטבח: Fox Home ₪19 במבצע, IKEA ₪19–49, Cotton Club ₪30. לבד, עם ₪29 משלוח, הסה\"כ ללקוח גבוה מהטיפוסי: פריט תוספת לסל (משלוח חינם מ-₪299) או לסט בלבד. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "action_he": "פריט תוספת לסל בלבד; גם כסט של 3 (₪59) המשלוח ליחידה ($3–7) גבוה מדי, לבדוק ספק עם משלוח מאוחד.",
+   "addon_only": true,
+   "slot_alternative_ok": false
+  },
+  "ceiling-light-cj-waxwood-dome-ash-40": {
+   "retail_ils": 199,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "מנורת תלייה אחת 40 ס\"מ",
+   "il_value": {
+    "low": 145,
+    "typical": 249,
+    "high": 420,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "SJÖMAKT מנורת תלייה",
+      "size": "38 ס\"מ",
+      "price": 145.0,
+      "url": "https://www.ikea.com/il/he/p/sjoemakt-pendant-lamp-beige-ash-80595681/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "BLÅSVERK מנורת תלייה",
+      "size": "37 ס\"מ",
+      "price": 195.0,
+      "url": "https://www.ikea.com/il/he/p/blasverk-pendant-lamp-beige-60520903/"
+     },
+     {
+      "retailer": "Terminal X",
+      "title": "מנורת תקרה יוטה גליל גובה 30 ס״מ (MmShacham)",
+      "size": null,
+      "price": 315.0,
+      "url": "https://www.terminalx.com/default-category/r345602006"
+     },
+     {
+      "retailer": "Terminal X",
+      "title": "מנורת תקרה PAPPER MATCH שמנת (Golyan)",
+      "size": null,
+      "price": 293.93,
+      "list_price": 419.9,
+      "url": "https://www.terminalx.com/default-category/w434060007"
+     }
+    ]
+   },
+   "customer_total_ils": 228,
+   "vs_typical_pct": -8,
+   "landed_ils": 197.24,
+   "margin_pct": -28.0,
+   "contribution_ils": -47.27,
+   "after_cac_ils": -118.7,
+   "contribution_with_fee_ils": -25.24,
+   "flag": "loss",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 42.19,
+   "price_note": "כיפת בד/נייר שעווה עם כיפת עץ: IKEA ‏₪145–195, MmShacham ‏₪315, Golyan ‏₪420. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "action_he": "משלוח $42: לבדוק ספק עם משלוח זול או את ה-25 ס\"מ.",
+   "slot_alternative_ok": false
+  },
+  "framed-art-cj-line-scribble-white-mat-50": {
+   "retail_ils": 129,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "תמונה ממוסגרת אחת 50x50",
+   "il_value": {
+    "low": 95,
+    "typical": 179,
+    "high": 225,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "PJÄTTERYD תמונה",
+      "size": "56x56 ס\"מ",
+      "price": 175.0,
+      "url": "https://www.ikea.com/il/he/p/pjaetteryd-picture-swedish-sand-dunes-40602018/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "GRÖNMES תמונה",
+      "size": "56x56 ס\"מ",
+      "price": 95.0,
+      "url": "https://www.ikea.com/il/he/p/groenmes-picture-checkered-flower-70624009/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "BLODFLÄDER תמונה ממוסגרת",
+      "size": "40x50 ס\"מ",
+      "price": 225.0,
+      "url": "https://www.ikea.com/il/he/p/blodflaeder-picture-black-leaves-00623857/"
+     },
+     {
+      "retailer": "Fox Home",
+      "title": "תמונת קיר דקורטיבית בעיצוב בוטני Leaf",
+      "size": null,
+      "price": 149.93,
+      "list_price": 199.9,
+      "url": "https://www.foxhome.co.il/products/0332680300"
+     }
+    ]
+   },
+   "customer_total_ils": 158,
+   "vs_typical_pct": -12,
+   "landed_ils": 165.73,
+   "margin_pct": -63.1,
+   "contribution_ils": -68.93,
+   "after_cac_ils": -140.36,
+   "contribution_with_fee_ils": -46.9,
+   "flag": "loss",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 35.63,
+   "price_note": "הדפס קו ממוסגר 50x50: IKEA ₪95–225, Fox Home ₪150 במבצע. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "action_he": "משלוח $35.6: לבדוק את ה-40x40 או מסגרת קלה.",
+   "slot_alternative_ok": false
+  },
+  "table-lamp-cj-pleated-shade-wood-column": {
+   "retail_ils": 149,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "מנורת שולחן אחת",
+   "il_value": {
+    "low": 125,
+    "typical": 199,
+    "high": 295,
+    "comps": [
+     {
+      "retailer": "Fox Home",
+      "title": "מנורת שולחן עם בסיס קרמי ואהיל בד בהיר Lian",
+      "size": null,
+      "price": 139.9,
+      "list_price": 199.9,
+      "url": "https://www.foxhome.co.il/products/0336582400"
+     },
+     {
+      "retailer": "Fox Home",
+      "title": "מנורת שולחן בגוון בהיר ובטקסטורה עדינה Troy",
+      "size": null,
+      "price": 174.93,
+      "list_price": 249.9,
+      "url": "https://www.foxhome.co.il/products/0336569401"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "BLIDVÄDER מנורת שולחן",
+      "size": "50 ס\"מ",
+      "price": 295.0,
+      "url": "https://www.ikea.com/il/he/p/blidvaeder-table-lamp-off-white-ceramic-beige-80501258/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "TÄRNABY מנורת שולחן",
+      "size": "25 ס\"מ",
+      "price": 125.0,
+      "url": "https://www.ikea.com/il/he/p/taernaby-table-lamp-dimmable-beige-60508072/"
+     }
+    ]
+   },
+   "customer_total_ils": 178,
+   "vs_typical_pct": -11,
+   "landed_ils": 197.9,
+   "margin_pct": -68.0,
+   "contribution_ils": -85.91,
+   "after_cac_ils": -157.34,
+   "contribution_with_fee_ils": -63.88,
+   "flag": "loss",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 40.24,
+   "price_note": "מנורת פליסה על עמוד עץ: Fox Home ₪140–175 במבצע, IKEA ₪125–295. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "action_he": "משלוח Sensitive ‏$40: לבדוק קו זול או מלאי בישראל.",
+   "slot_alternative_ok": false
+  },
+  "table-lamp-cj-white-teardrop-fabric-cone-25x45": {
+   "retail_ils": 99,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "מנורת שולחן אחת 25x45",
+   "il_value": {
+    "low": 125,
+    "typical": 149,
+    "high": 190,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "FADO מנורת שולחן",
+      "size": "25 ס\"מ",
+      "price": 125.0,
+      "url": "https://www.ikea.com/il/he/p/fado-table-lamp-white-80096372/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "TÄRNABY מנורת שולחן",
+      "size": "25 ס\"מ",
+      "price": 125.0,
+      "url": "https://www.ikea.com/il/he/p/taernaby-table-lamp-dimmable-beige-60508072/"
+     },
+     {
+      "retailer": "Fox Home",
+      "title": "מנורת שולחן עם בסיס קרמי ואהיל בד בהיר Lian",
+      "size": null,
+      "price": 139.9,
+      "list_price": 199.9,
+      "url": "https://www.foxhome.co.il/products/0336582400"
+     },
+     {
+      "retailer": "Terminal X",
+      "title": "מנורה WAVES M לבן (SOHO)",
+      "size": null,
+      "price": 189.9,
+      "url": "https://www.terminalx.com/default-category/r833380001"
+     }
+    ]
+   },
+   "customer_total_ils": 128,
+   "vs_typical_pct": -14,
+   "landed_ils": 105.34,
+   "margin_pct": -37.3,
+   "contribution_ils": -31.33,
+   "after_cac_ils": -102.76,
+   "contribution_with_fee_ils": -9.3,
+   "flag": "loss",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 23.96,
+   "price_note": "מנורת שולחן עם אהיל בד: IKEA ₪125, Fox Home ₪140 במבצע, SOHO ₪190. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "slot_alternative_ok": false
+  },
+  "table-lamp-cj-white-textured-ceramic-linen-drum": {
+   "retail_ils": 199,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "מנורת שולחן קרמית אחת H55",
+   "il_value": {
+    "low": 199,
+    "typical": 249,
+    "high": 295,
+    "comps": [
+     {
+      "retailer": "Fox Home",
+      "title": "מנורת שולחן עם בסיס קרמיקה מחורץ בגוון אבן Lenni",
+      "size": null,
+      "price": 209.9,
+      "list_price": 299.9,
+      "url": "https://www.foxhome.co.il/products/0336802400"
+     },
+     {
+      "retailer": "Fox Home",
+      "title": "מנורת שולחן עם בסיס עגול מקרמיקה בגוון בז' Darcy",
+      "size": null,
+      "price": 209.93,
+      "list_price": 299.9,
+      "url": "https://www.foxhome.co.il/products/0336556000"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "BLIDVÄDER מנורת שולחן",
+      "size": "50 ס\"מ",
+      "price": 295.0,
+      "url": "https://www.ikea.com/il/he/p/blidvaeder-table-lamp-off-white-ceramic-beige-80501258/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "HALGATT מנורת שולחן",
+      "size": "49 ס\"מ",
+      "price": 295.0,
+      "url": "https://www.ikea.com/il/he/p/halgatt-table-lamp-dimmable-beige-brown-ceramic-50597224/"
+     }
+    ]
+   },
+   "customer_total_ils": 228,
+   "vs_typical_pct": -8,
+   "landed_ils": 173.02,
+   "margin_pct": -13.7,
+   "contribution_ils": -23.05,
+   "after_cac_ils": -94.48,
+   "contribution_with_fee_ils": -1.02,
+   "flag": "loss",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 37.15,
+   "price_note": "בסיס קרמי עם אהיל פשתן: Fox Home ₪210 במבצע, IKEA ₪295; עיצובי, 8% מתחת. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "slot_alternative_ok": false
+  },
+  "wall-hooks-cj-light-wood-rail-5-brass-pegs-58": {
+   "retail_ils": 89,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "מתלה עץ אחד עם 5 ווי פליז",
+   "il_value": {
+    "low": 59,
+    "typical": 129,
+    "high": 175,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "IKEA PS 2026 מתלה 5 ווים",
+      "size": null,
+      "price": 125.0,
+      "url": "https://www.ikea.com/il/he/p/ikea-ps-2026-rack-with-5-hooks-solid-birch-40618707/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "STOREDAMM מתלה ווים",
+      "size": null,
+      "price": 69.0,
+      "url": "https://www.ikea.com/il/he/p/storedamm-hook-rack-acacia-rattan-50576170/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "TJUSIG מתלה לדלת/קיר",
+      "size": "60 ס\"מ",
+      "price": 59.0,
+      "url": "https://www.ikea.com/il/he/p/tjusig-hanger-for-door-wall-black-40242653/"
+     },
+     {
+      "retailer": "Home Center",
+      "title": "מתלה עץ עם 5 ווים (עמוד הקטגוריה)",
+      "size": null,
+      "price": 129.9,
+      "url": "https://www.homecenter.co.il/collections/wall-hangers",
+      "note": "מתוך תוצאת חיפוש, לא נפתח ישירות"
+     }
+    ]
+   },
+   "customer_total_ils": 118,
+   "vs_typical_pct": -9,
+   "landed_ils": 72.07,
+   "margin_pct": -7.5,
+   "contribution_ils": -5.66,
+   "after_cac_ils": -77.09,
+   "contribution_with_fee_ils": 16.37,
+   "flag": "loss",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 13.97,
+   "price_note": "מתלה עץ עם 5 ווים: IKEA ‏₪69–125, Home Center ‏₪130; ווי פליז, לכן 8.5% מתחת. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "slot_alternative_ok": false
+  },
+  "wall-hooks-cj-raw-wood-cylinder-peg-set-of-4": {
+   "retail_ils": 39,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "סט 4 ווי עץ גליליים",
+   "il_value": {
+    "low": 29,
+    "typical": 79,
+    "high": 125,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "ALTARLIDEN מתלה ווים",
+      "size": null,
+      "price": 29.0,
+      "url": "https://www.ikea.com/il/he/p/altarliden-hook-rack-with-storage-white-30618736/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "TJUSIG מתלה לדלת/קיר",
+      "size": "60 ס\"מ",
+      "price": 59.0,
+      "url": "https://www.ikea.com/il/he/p/tjusig-hanger-for-door-wall-black-40242653/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "STOREDAMM מתלה ווים",
+      "size": null,
+      "price": 69.0,
+      "url": "https://www.ikea.com/il/he/p/storedamm-hook-rack-acacia-rattan-50576170/"
+     }
+    ]
+   },
+   "customer_total_ils": 68,
+   "vs_typical_pct": -14,
+   "landed_ils": 37.19,
+   "margin_pct": -26.5,
+   "contribution_ils": -8.76,
+   "after_cac_ils": -80.19,
+   "contribution_with_fee_ils": 13.27,
+   "flag": "loss",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 9.27,
+   "price_note": "ארבעה ווי עץ מלא; מתלים פשוטים ב-IKEA ‏₪29–69, ווי עץ מעוצבים בחנויות עיצוב יקרים יותר. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "slot_alternative_ok": false
+  },
+  "wall-sconce-cj-wavy-linen-flush-25": {
+   "retail_ils": 149,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "מנורת קיר אחת D25",
+   "il_value": {
+    "low": 125,
+    "typical": 199,
+    "high": 299,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "MÅNALG מנורת קיר",
+      "size": null,
+      "price": 125.0,
+      "url": "https://www.ikea.com/il/he/p/manalg-wall-lamp-wired-in-installation-sedge-handmade-60484698/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "VARPTROSS מנורת קיר",
+      "size": "30 ס\"מ",
+      "price": 145.0,
+      "url": "https://www.ikea.com/il/he/p/varptross-wall-lamp-wired-in-installation-bamboo-20595132/"
+     },
+     {
+      "retailer": "Terminal X",
+      "title": "מנורה WAVES M לבן (SOHO)",
+      "size": null,
+      "price": 189.9,
+      "url": "https://www.terminalx.com/default-category/r833380001"
+     },
+     {
+      "retailer": "Haimans Decor",
+      "title": "מנורת קיר עם אהיל פליסה שמנת",
+      "size": null,
+      "price": 299,
+      "url": "https://haimansdecor.co.il/product/%D7%9E%D7%A0%D7%95%D7%A8%D7%94-%D7%A2%D7%9D-%D7%90%D7%94%D7%99%D7%9C-%D7%A4%D7%9C%D7%99%D7%A1%D7%94/",
+      "note": "מתוך תוצאת חיפוש, לא נפתח ישירות"
+     }
+    ]
+   },
+   "customer_total_ils": 178,
+   "vs_typical_pct": -11,
+   "landed_ils": 151.8,
+   "margin_pct": -31.5,
+   "contribution_ils": -39.81,
+   "after_cac_ils": -111.24,
+   "contribution_with_fee_ils": -17.78,
+   "flag": "loss",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 15.32,
+   "price_note": "מנורת קיר עם אהיל פשתן: IKEA ‏₪125–145, SOHO ‏₪190, Haimans ‏₪299. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "slot_alternative_ok": false
+  },
+  "bedding-cj-cream-ruffle-rosebud-set": {
+   "retail_ils": 299,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "סט מצעים 4 חלקים למיטה 1.5 מ'",
+   "il_value": {
+    "low": 195,
+    "typical": 349,
+    "high": 420,
+    "comps": [
+     {
+      "retailer": "Home Style",
+      "title": "סט מצעים אל-קמט, ליטל",
+      "size": "160/200 זוגית",
+      "price": 139.5,
+      "list_price": 279.0,
+      "url": "https://www.homestyle.co.il/products/3311-999"
+     },
+     {
+      "retailer": "Fox Home",
+      "title": "סט מצעי סאטן בעיצוב פרחוני בגווני בז' ולבן Yasmin",
+      "size": "90x200 יחיד",
+      "price": 307.93,
+      "list_price": 439.9,
+      "url": "https://www.foxhome.co.il/products/0331702400"
+     },
+     {
+      "retailer": "Home Style",
+      "title": "סט מצעי פרקל כותנה EXCLUSIVE - ענבל",
+      "size": "160/200 זוגית",
+      "price": 349.5,
+      "list_price": 699.0,
+      "url": "https://www.homestyle.co.il/products/3073-999"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "NATTJASMIN ציפה וציפית",
+      "size": "150x200/50x70 ס\"מ",
+      "price": 195.0,
+      "url": "https://www.ikea.com/il/he/p/nattjasmin-duvet-cover-and-pillowcase-white-80598811/"
+     }
+    ]
+   },
+   "customer_total_ils": 299,
+   "vs_typical_pct": -14,
+   "landed_ils": 159.06,
+   "margin_pct": 26.4,
+   "contribution_ils": 66.88,
+   "after_cac_ils": -4.55,
+   "contribution_with_fee_ils": null,
+   "flag": "below-floor",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 31.85,
+   "price_note": "סט כותנה רקום עם מלמלה, 4 חלקים: Home Style ₪140–350, Fox Home ₪308–420 במבצע; ₪299 = משלוח חינם. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "action_he": "לבקש מהספק את סט ה-1.2 מ' המתאים למיטת יחיד.",
+   "slot_alternative_ok": false
+  },
+  "bedding-cj-muslin-cotton-duvet-dune": {
+   "retail_ils": 179,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "ציפה אחת ליחיד 173x229",
+   "il_value": {
+    "low": 120,
+    "typical": 229,
+    "high": 266,
+    "comps": [
+     {
+      "retailer": "Home Style",
+      "title": "ציפה ג'רסי - בז'",
+      "size": "150/200",
+      "price": 129.5,
+      "list_price": 259.0,
+      "url": "https://www.homestyle.co.il/products/1000-128"
+     },
+     {
+      "retailer": "Home Style",
+      "title": "ציפה סאטן, אינפיניטי - אבן",
+      "size": "150/200",
+      "price": 164.5,
+      "list_price": 329.0,
+      "url": "https://www.homestyle.co.il/products/3383-219"
+     },
+     {
+      "retailer": "Cotton Club",
+      "title": "ציפה לשמיכה פרקל Peach Brandy",
+      "size": "150x200",
+      "price": 245.0,
+      "url": "https://cottonclub.co.il/products/ציפה-לשמיכה-פרקל-peach-brandy"
+     },
+     {
+      "retailer": "Fox Home",
+      "title": "ציפת פרקל לבנה עם עיטורי תחרה עדינים Orchid",
+      "size": "ס\"מ 150X200",
+      "price": 265.93,
+      "list_price": 379.9,
+      "url": "https://www.foxhome.co.il/products/0331910100"
+     }
+    ]
+   },
+   "customer_total_ils": 208,
+   "vs_typical_pct": -9,
+   "landed_ils": 104.02,
+   "margin_pct": 20.3,
+   "contribution_ils": 30.76,
+   "after_cac_ils": -40.67,
+   "contribution_with_fee_ils": 52.79,
+   "flag": "below-floor",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 16.59,
+   "price_note": "ציפת מוסלין ליחיד: Home Style ₪130–165, Cotton Club ₪245, Fox Home ₪266 במבצע. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "slot_alternative_ok": false
+  },
+  "bedding-cj-washed-polyester-set-milk-tea": {
+   "retail_ils": 99,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "סט מצעים 4 חלקים ליחיד 150x200",
+   "il_value": {
+    "low": 59,
+    "typical": 149,
+    "high": 210,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "SORGMANTEL ציפה וציפית",
+      "size": "150x200/50x70 ס\"מ",
+      "price": 59.0,
+      "url": "https://www.ikea.com/il/he/p/sorgmantel-duvet-cover-and-pillowcase-white-green-10598881/"
+     },
+     {
+      "retailer": "Home Style",
+      "title": "סט מצעי אל-קמט, VERONA - שברון, לבן",
+      "size": "90/200 יחיד",
+      "price": 119.5,
+      "list_price": 239.0,
+      "url": "https://www.homestyle.co.il/products/3280-101"
+     },
+     {
+      "retailer": "Home Style",
+      "title": "סט מצעים אל-קמט, ליטל",
+      "size": "90/200 יחיד",
+      "price": 109.5,
+      "list_price": 219.0,
+      "url": "https://www.homestyle.co.il/products/3311-999"
+     },
+     {
+      "retailer": "Fox Home",
+      "title": "סט מצעים יחיד סוניק לילדים Sonic",
+      "size": null,
+      "price": 209.93,
+      "list_price": 299.9,
+      "url": "https://www.foxhome.co.il/products/0333989900"
+     }
+    ]
+   },
+   "customer_total_ils": 128,
+   "vs_typical_pct": -14,
+   "landed_ils": 111.97,
+   "margin_pct": -45.2,
+   "contribution_ils": -37.96,
+   "after_cac_ils": -109.39,
+   "contribution_with_fee_ils": -15.93,
+   "flag": "loss",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 24.15,
+   "price_note": "סט פוליאסטר שטוף ליחיד: IKEA ₪59, Home Style ₪110–120, Fox Home ₪210 (מודפס, במבצע). אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "slot_alternative_ok": false
+  },
+  "bedspread-cj-muslin-blanket-beige-150x200": {
+   "retail_ils": 199,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "שמיכת מוסלין אחת 150x200",
+   "il_value": {
+    "low": 95,
+    "typical": 259,
+    "high": 320,
+    "comps": [
+     {
+      "retailer": "Cotton Club",
+      "title": "שמיכת מוסלין Natural",
+      "size": "150x200",
+      "price": 320.0,
+      "url": "https://cottonclub.co.il/products/שמיכת-מוסלין-natural"
+     },
+     {
+      "retailer": "Cotton Club",
+      "title": "שמיכת מוסלין Mocha",
+      "size": "150x200",
+      "price": 270.0,
+      "url": "https://cottonclub.co.il/products/שמיכת-מוסלין-mocha"
+     },
+     {
+      "retailer": "HUIZE",
+      "title": "שמיכת קיץ מכותנה (מוסלין) 150x200",
+      "size": "150x200",
+      "price": 239,
+      "url": "https://huize.co.il/product/%D7%A9%D7%9E%D7%99%D7%9B%D7%AA-%D7%A7%D7%99%D7%A5-%D7%A9%D7%97%D7%95%D7%A8%D7%94/",
+      "note": "מתוך תוצאת חיפוש, לא נפתח ישירות"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "VALLKRASSING שמיכת טלוויזיה",
+      "size": "150x200 ס\"מ",
+      "price": 95.0,
+      "url": "https://www.ikea.com/il/he/p/vallkrassing-throw-off-white-20570928/"
+     }
+    ]
+   },
+   "customer_total_ils": 228,
+   "vs_typical_pct": -12,
+   "landed_ils": 80.16,
+   "margin_pct": 41.4,
+   "contribution_ils": 69.82,
+   "after_cac_ils": -1.61,
+   "contribution_with_fee_ils": 91.85,
+   "flag": "ok",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 12.68,
+   "price_note": "שמיכת מוסלין 150x200: Cotton Club ‏₪270–320, HUIZE ‏₪239; IKEA (לא מוסלין) ₪95."
+  },
+  "bedspread-cj-six-layer-gauze-quilt": {
+   "retail_ils": 199,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "שמיכת גזה 6 שכבות אחת 150x200",
+   "il_value": {
+    "low": 95,
+    "typical": 259,
+    "high": 320,
+    "comps": [
+     {
+      "retailer": "Cotton Club",
+      "title": "שמיכת מוסלין Natural",
+      "size": "150x200",
+      "price": 320.0,
+      "url": "https://cottonclub.co.il/products/שמיכת-מוסלין-natural"
+     },
+     {
+      "retailer": "Cotton Club",
+      "title": "שמיכת מוסלין Mocha",
+      "size": "150x200",
+      "price": 270.0,
+      "url": "https://cottonclub.co.il/products/שמיכת-מוסלין-mocha"
+     },
+     {
+      "retailer": "HUIZE",
+      "title": "שמיכת קיץ מכותנה (מוסלין) 150x200",
+      "size": "150x200",
+      "price": 239,
+      "url": "https://huize.co.il/product/%D7%A9%D7%9E%D7%99%D7%9B%D7%AA-%D7%A7%D7%99%D7%A5-%D7%A9%D7%97%D7%95%D7%A8%D7%94/",
+      "note": "מתוך תוצאת חיפוש, לא נפתח ישירות"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "VALLKRASSING שמיכת טלוויזיה",
+      "size": "150x200 ס\"מ",
+      "price": 95.0,
+      "url": "https://www.ikea.com/il/he/p/vallkrassing-throw-off-white-20570928/"
+     }
+    ]
+   },
+   "customer_total_ils": 228,
+   "vs_typical_pct": -12,
+   "landed_ils": 70.16,
+   "margin_pct": 47.3,
+   "contribution_ils": 79.81,
+   "after_cac_ils": 8.39,
+   "contribution_with_fee_ils": 101.84,
+   "flag": "ok",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 12.8,
+   "price_note": "אותו ערך כמו שמיכת המוסלין המקבילה: Cotton Club ‏₪270–320, HUIZE ‏₪239."
+  },
+  "cushions-cj-dusty-pink-corduroy-patchwork-45": {
+   "retail_ils": 59,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "ציפה לכרית נוי אחת 45x45 (בלי מילוי)",
+   "il_value": {
+    "low": 29,
+    "typical": 99,
+    "high": 199,
+    "comps": [
+     {
+      "retailer": "Fox Home",
+      "title": "כרית נוי מרובעת עם דוגמה פרחונית Flow",
+      "size": null,
+      "price": 90.93,
+      "list_price": 129.9,
+      "url": "https://www.foxhome.co.il/products/0335215800"
+     },
+     {
+      "retailer": "Home Style",
+      "title": "כרית נוי, דגם בוהו - כרית נוי",
+      "size": "30/50 סמ כרית נוי",
+      "price": 95.0,
+      "list_price": 190.0,
+      "url": "https://www.homestyle.co.il/products/568751772974256-999"
+     },
+     {
+      "retailer": "Zara Home",
+      "title": "ציפית מבד פשתן כבד 50x50",
+      "size": null,
+      "price": 199.0,
+      "url": "https://www.zarahome.com/il/ציפית-מבד-פשתן-כבד-l46350008",
+      "note": "search snippet, not verified directly"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "SANELA כיסוי לכרית",
+      "size": "50x50 ס\"מ",
+      "price": 29.0,
+      "url": "https://www.ikea.com/il/he/p/sanela-cushion-cover-light-blue-80635998/"
+     }
+    ]
+   },
+   "customer_total_ils": 88,
+   "vs_typical_pct": -11,
+   "landed_ils": 52.37,
+   "margin_pct": -17.5,
+   "contribution_ils": -8.75,
+   "after_cac_ils": -80.18,
+   "contribution_with_fee_ils": 13.28,
+   "flag": "loss",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 4.79,
+   "price_note": "ציפת קורדרוי טלאים: Fox Home ₪91 ו-Home Style ₪95 (כולל מילוי), Zara Home ₪199; IKEA ₪29. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "slot_alternative_ok": false
+  },
+  "framed-prints-cj-charcoal-line-black-frame-35x45": {
+   "retail_ils": 129,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "תמונה ממוסגרת אחת 35x45",
+   "il_value": {
+    "low": 95,
+    "typical": 179,
+    "high": 225,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "BLODFLÄDER תמונה ממוסגרת",
+      "size": "40x50 ס\"מ",
+      "price": 145.0,
+      "url": "https://www.ikea.com/il/he/p/blodflaeder-picture-two-birds-00601921/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "BLODFLÄDER תמונה ממוסגרת",
+      "size": "40x50 ס\"מ",
+      "price": 225.0,
+      "url": "https://www.ikea.com/il/he/p/blodflaeder-picture-black-leaves-00623857/"
+     },
+     {
+      "retailer": "Fox Home",
+      "title": "תמונת קיר דקורטיבית בעיצוב בוטני Leaf",
+      "size": null,
+      "price": 149.93,
+      "list_price": 199.9,
+      "url": "https://www.foxhome.co.il/products/0332680300"
+     }
+    ]
+   },
+   "customer_total_ils": 158,
+   "vs_typical_pct": -12,
+   "landed_ils": 148.93,
+   "margin_pct": -47.7,
+   "contribution_ils": -52.13,
+   "after_cac_ils": -123.56,
+   "contribution_with_fee_ils": -30.1,
+   "flag": "loss",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 23.9,
+   "price_note": "אותו מוצר כמו התמונה בפינת האוכל (35x45, מסגרת עץ שחורה, פספרטו): ₪145–225 ברשתות. יש בעמדה חלופה מעל 40% בציון עיצוב שווה או גבוה, ולכן החריג לא חל.",
+   "slot_alternative_ok": true,
+   "slot_alternative_ids": [
+    "framed-prints-cj-flower-cutout-set-30x40"
+   ]
+  },
+  "framed-prints-cj-flower-cutout-set-30x40": {
+   "retail_ils": 229,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "סט 3 תמונות ממוסגרות 30x40",
+   "il_value": {
+    "low": 195,
+    "typical": 299,
+    "high": 525,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "PJÄTTERYD תמונה (ליחידה)",
+      "size": "30x40 ס\"מ",
+      "price": 75.0,
+      "url": "https://www.ikea.com/il/he/p/pjaetteryd-picture-dawn-haze-90623867/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "BLODFLÄDER תמונה ממוסגרת (ליחידה)",
+      "size": "30x40 ס\"מ",
+      "price": 175.0,
+      "url": "https://www.ikea.com/il/he/p/blodflaeder-picture-floral-simplicity-00623471/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "KNOPPÄNG סט מסגרות עם פוסטר/8 חל'",
+      "size": null,
+      "price": 195.0,
+      "url": "https://www.ikea.com/il/he/p/knoppaeng-frame-with-poster-set-of-8-folk-tales-80601998/"
+     }
+    ]
+   },
+   "customer_total_ils": 258,
+   "vs_typical_pct": -14,
+   "landed_ils": 68.9,
+   "margin_pct": 53.5,
+   "contribution_ils": 103.86,
+   "after_cac_ils": 32.43,
+   "contribution_with_fee_ils": 125.89,
+   "flag": "ok",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 8.14,
+   "price_note": "שלוש תמונות 30x40; ברשתות תמונה אחת ₪75–175, כך שסט דומה ~₪300."
+  },
+  "pendant-cj-fabric-dome-ash-cap-25": {
+   "retail_ils": 119,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "מנורת תלייה קטנה אחת D25",
+   "il_value": {
+    "low": 59,
+    "typical": 169,
+    "high": 195,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "SJÖMAKT מנורת תלייה",
+      "size": "38 ס\"מ",
+      "price": 145.0,
+      "url": "https://www.ikea.com/il/he/p/sjoemakt-pendant-lamp-beige-ash-80595681/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "SOLKLINT מנורת תלייה",
+      "size": "22 ס\"מ",
+      "price": 145.0,
+      "url": "https://www.ikea.com/il/he/p/solklint-pendant-lamp-brass-grey-clear-glass-10430778/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "BUNKEFLO מנורת תלייה",
+      "size": "36 ס\"מ",
+      "price": 195.0,
+      "url": "https://www.ikea.com/il/he/p/bunkeflo-pendant-lamp-white-birch-60488390/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "BRUNSTA אהיל מנורת תלייה",
+      "size": "20 ס\"מ",
+      "price": 59.0,
+      "url": "https://www.ikea.com/il/he/p/brunsta-pendant-lamp-shade-black-90579770/"
+     }
+    ]
+   },
+   "customer_total_ils": 148,
+   "vs_typical_pct": -12,
+   "landed_ils": 144.11,
+   "margin_pct": -54.4,
+   "contribution_ils": -54.91,
+   "after_cac_ils": -126.34,
+   "contribution_with_fee_ils": -32.88,
+   "flag": "loss",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 29.57,
+   "price_note": "מנורת תלייה קטנה מבד עם כיפת עץ: IKEA ‏₪145–195 (אהיל בלבד ₪59). אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "action_he": "משלוח $29.6 על מנורה של $14: רק עם מלאי בישראל או ספק עם משלוח זול.",
+   "slot_alternative_ok": false
+  },
+  "skateboard-cj-blank-maple-43": {
+   "retail_ils": 79,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "סקייטבורד מיני 43 ס\"מ (קישוט)",
+   "il_value": {
+    "low": 40,
+    "typical": 119,
+    "high": 149,
+    "comps": [
+     {
+      "retailer": "Kmart (אוסטרליה, להשוואה בלבד)",
+      "title": "Mini Skateboard 43cm, 7-ply maple",
+      "size": "43 ס\"מ",
+      "price": 21,
+      "url": "https://www.kmart.com.au/product/mini-skateboard-checkered-43654994",
+      "note": "$9 AUD ≈ ₪21; אין מקביל ישראלי שנמצא"
+     },
+     {
+      "retailer": "Toybox (קפריסין, להשוואה בלבד)",
+      "title": "Mini skateboard 43cm",
+      "size": "43 ס\"מ",
+      "price": 114,
+      "url": "https://toybox.com.cy/products/dragons-mini-skateboard-43cm",
+      "note": "€29.99 ≈ ₪114; אין מקביל ישראלי שנמצא"
+     }
+    ]
+   },
+   "customer_total_ils": 108,
+   "vs_typical_pct": -9,
+   "landed_ils": 64.45,
+   "margin_pct": -8.4,
+   "contribution_ils": -5.64,
+   "after_cac_ils": -77.06,
+   "contribution_with_fee_ils": 16.39,
+   "flag": "loss",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 17.6,
+   "price_note": "לא נמצא סקייטבורד מיני מעץ בחנויות ישראליות שנבדקו (Terminal X, IKEA, חיפוש רשת); הערכה לפי קישוט ילדים בשוק (חציון ₪90) וחו\"ל. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "action_he": "משלוח $17.6 על לוח של $1.9; גלגלים אדומים צריכים אישור לפני מכירה.",
+   "slot_alternative_ok": false
+  },
+  "toy-cars-cj-beech-peg-bus": {
+   "retail_ils": 129,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 3,
+   "sale_contains": "3 אוטובוסי עץ עם 12 דמויות",
+   "il_value": {
+    "low": 117,
+    "typical": 177,
+    "high": 507,
+    "comps": [
+     {
+      "retailer": "באג",
+      "title": "אוטובוס מעץ - Speedy Monkey",
+      "size": "43x20x7.5",
+      "price": 168.9,
+      "url": "https://www.bug.co.il/%D7%90%D7%95%D7%98%D7%95%D7%91%D7%95%D7%A1-%D7%9E%D7%A2%D7%A5-speedy-monkey-850047013248",
+      "note": "מתוך תוצאת חיפוש, לא נפתח ישירות"
+     },
+     {
+      "retailer": "באג",
+      "title": "מכונית השחלה - אוטובוס בית ספר - J'adore",
+      "size": null,
+      "price": 38.9,
+      "url": "https://www.bug.co.il/%D7%9E%D7%9B%D7%95%D7%A0%D7%99%D7%AA-%D7%94%D7%A9%D7%97%D7%9C%D7%94-%D7%90%D7%95%D7%98%D7%95%D7%91%D7%95%D7%A1-%D7%91%D7%99%D7%AA-%D7%A1%D7%A4%D7%A8-jadore-6943478028661",
+      "note": "מתוך תוצאת חיפוש, לא נפתח ישירות"
+     },
+     {
+      "retailer": "ACE",
+      "title": "סט מגדל טבעות 6 חלקים + צעצוע משיכה מעודד הליכה מתגלגל מעץ מלא - שועל ורוד",
+      "size": null,
+      "price": 63.56,
+      "url": "https://www.ace.co.il/4449918"
+     }
+    ]
+   },
+   "customer_total_ils": 158,
+   "vs_typical_pct": -11,
+   "landed_ils": 63.95,
+   "margin_pct": 30.0,
+   "contribution_ils": 32.84,
+   "after_cac_ils": -38.59,
+   "contribution_with_fee_ils": 54.87,
+   "flag": "below-floor",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 5.87,
+   "price_note": "אוטובוס עץ מלא עם דמויות: באג ₪39–169, ACE ‏₪64; ~₪59 לאוטובוס קטן, ₪177 לשלושה. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "action_he": "שלושה אוטובוסים זהים הם סט מוזר: לשקול סט של כלי רכב שונים מאותו ספק, או אוטובוס בודד כפריט תוספת; צריך תקן EN71.",
+   "slot_alternative_ok": false
+  },
+  "wall-sconce-cj-black-folding-arm-woodgrain-cone-18": {
+   "retail_ils": 99,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "מנורת קיר אחת עם זרוע מתקפלת",
+   "il_value": {
+    "low": 95,
+    "typical": 149,
+    "high": 195,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "NYMÅNE מנורת קיר/קריאה, התקנה קבועה",
+      "size": null,
+      "price": 95.0,
+      "url": "https://www.ikea.com/il/he/p/nymane-wall-reading-lamp-wired-in-inst-white-90356963/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "ÅRSTID מנורת קיר",
+      "size": null,
+      "price": 95.0,
+      "url": "https://www.ikea.com/il/he/p/arstid-wall-lamp-brass-white-50321386/"
+     },
+     {
+      "retailer": "ACE",
+      "title": "מנורת קיר דגם וינטג' מייפל",
+      "size": null,
+      "price": 149.9,
+      "url": "https://www.ace.co.il/7639881"
+     },
+     {
+      "retailer": "LEDmarket",
+      "title": "מנורת קיר NOME לצד המיטה , עם מטען USB מובנה, אהיל ולד גמיש.",
+      "size": "ימין",
+      "price": 195.0,
+      "url": "https://ledmarket.co.il/products/מנורת-קיר-nome-לצד-המיטה-עם-מטען-usb-מובנה-אהיל-ולד-גמיש"
+     }
+    ]
+   },
+   "customer_total_ils": 128,
+   "vs_typical_pct": -14,
+   "landed_ils": 88.84,
+   "margin_pct": -17.7,
+   "contribution_ils": -14.83,
+   "after_cac_ils": -86.26,
+   "contribution_with_fee_ils": 7.2,
+   "flag": "loss",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 16.97,
+   "price_note": "מנורת קיר עם זרוע: IKEA ‏₪95, ACE ‏₪150, LEDmarket ‏₪195. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "slot_alternative_ok": false
+  },
+  "wall-sconce-cj-black-swing-arm-wood-shade": {
+   "retail_ils": 119,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "מנורת קיר אחת עם זרוע ואהיל עץ",
+   "il_value": {
+    "low": 95,
+    "typical": 169,
+    "high": 195,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "NYMÅNE מנורת קיר/קריאה, התקנה קבועה",
+      "size": null,
+      "price": 95.0,
+      "url": "https://www.ikea.com/il/he/p/nymane-wall-reading-lamp-wired-in-inst-white-90356963/"
+     },
+     {
+      "retailer": "ACE",
+      "title": "מנורת קיר דגם וינטג' מייפל",
+      "size": null,
+      "price": 149.9,
+      "url": "https://www.ace.co.il/7639881"
+     },
+     {
+      "retailer": "LEDmarket",
+      "title": "מנורת קיר NOME לצד המיטה , עם מטען USB מובנה, אהיל ולד גמיש.",
+      "size": "ימין",
+      "price": 195.0,
+      "url": "https://ledmarket.co.il/products/מנורת-קיר-nome-לצד-המיטה-עם-מטען-usb-מובנה-אהיל-ולד-גמיש"
+     },
+     {
+      "retailer": "Terminal X",
+      "title": "מנורה WAVES S לבן (SOHO)",
+      "size": null,
+      "price": 149.9,
+      "url": "https://www.terminalx.com/default-category/r833340001"
+     }
+    ]
+   },
+   "customer_total_ils": 148,
+   "vs_typical_pct": -12,
+   "landed_ils": 321.95,
+   "margin_pct": -230.8,
+   "contribution_ils": -232.75,
+   "after_cac_ils": -304.18,
+   "contribution_with_fee_ils": -210.72,
+   "flag": "loss",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 86.78,
+   "price_note": "זרוע מתקפלת עם אהיל עץ: IKEA ‏₪95, ACE ו-SOHO ‏₪150, LEDmarket ‏₪195. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "action_he": "משלוח Sensitive ‏$86.8: לא משתלם מהספק הזה: לבקש קו Eub או לחפש את אותו דגם אצל ספק אחר.",
+   "slot_alternative_ok": false
+  },
+  "bedding-aliexpress-boho-3d-tufted-cut-500672": {
+   "retail_ils": 349,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "סט ציפה ו-2 ציפיות Queen (3 חלקים)",
+   "il_value": {
+    "low": 150,
+    "typical": 399,
+    "high": 425,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "BANDKNIPPE ציפה ו-2 ציפיות",
+      "size": "200x220/50x70 ס\"מ",
+      "price": 195.0,
+      "url": "https://www.ikea.com/il/he/p/bandknippe-duvet-cover-and-2-pillowcases-white-beige-30621989/"
+     },
+     {
+      "retailer": "Home Style",
+      "title": "סט מצעי אל-קמט, VERONA - שברון, לבן",
+      "size": "160/200 זוגית",
+      "price": 149.5,
+      "list_price": 299.0,
+      "url": "https://www.homestyle.co.il/products/3280-101"
+     },
+     {
+      "retailer": "Fox Home",
+      "title": "סט מצעי סאטן בעיצוב פרחוני בגווני בז' ולבן Yasmin",
+      "size": "160x200",
+      "price": 419.93,
+      "list_price": 599.9,
+      "url": "https://www.foxhome.co.il/products/0331702400"
+     },
+     {
+      "retailer": "Home Style",
+      "title": "סט מצעי פרקל כותנה CHIC, מגנוליה - לבן",
+      "size": "160/200 זוגית",
+      "price": 424.5,
+      "list_price": 849.0,
+      "url": "https://www.homestyle.co.il/products/1568-101"
+     }
+    ]
+   },
+   "customer_total_ils": 349,
+   "vs_typical_pct": -13,
+   "landed_ils": 214.5,
+   "margin_pct": 16.7,
+   "contribution_ils": 49.42,
+   "after_cac_ils": -22.01,
+   "contribution_with_fee_ils": null,
+   "flag": "below-floor",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 0.0,
+   "price_note": "סט בוהו עם טאפטינג תלת-ממדי (פוליאסטר): סטים זוגיים נמכרים היום ב-₪150–425 (Home Style, Fox Home במבצע). יש בעמדה חלופה מעל 40% בציון עיצוב שווה או גבוה, ולכן החריג לא חל.",
+   "slot_alternative_ok": true,
+   "slot_alternative_ids": [
+    "bedding-cj-washed-linen-natural-set"
+   ]
+  },
+  "bedding-cj-cotton-linen-duvet-beige": {
+   "retail_ils": 479,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "ציפה 240x220 וזוג ציפיות (3 חלקים)",
+   "il_value": {
+    "low": 499,
+    "typical": 549,
+    "high": 1080,
+    "comps": [
+     {
+      "retailer": "H&M Home",
+      "title": "סט פשתן ציפה וציפיות זוגי/קינג",
+      "size": "זוגי/קינג",
+      "price": 649,
+      "url": "https://www2.hm.com/hw_il/productpage.0188589050.html",
+      "note": "מתוך תוצאת חיפוש, לא נפתח ישירות"
+     },
+     {
+      "retailer": "Zara Home",
+      "title": "ציפה מפשתן מנוגד 150/160 (זוגי)",
+      "size": "150/160 (זוגי)",
+      "price": 659,
+      "url": "https://www.zarahome.com/il/ציפה-מפשתן-מנוגד-l44126088",
+      "note": "search snippet, not verified directly"
+     },
+     {
+      "retailer": "Cotton Club",
+      "title": "ציפה לשמיכה פשתן",
+      "size": "220x240 (פשתן 100%)",
+      "price": 1080.0,
+      "url": "https://cottonclub.co.il/products/ציפה-לשמיכה-פשתן"
+     },
+     {
+      "retailer": "Home Style",
+      "title": "סט מצעי פרקל כותנה EXCLUSIVE - ענבל",
+      "size": "160/200 זוגית",
+      "price": 349.5,
+      "list_price": 699.0,
+      "url": "https://www.homestyle.co.il/products/3073-999"
+     }
+    ]
+   },
+   "customer_total_ils": 479,
+   "vs_typical_pct": -13,
+   "landed_ils": 779.96,
+   "margin_pct": -102.8,
+   "contribution_ils": -417.28,
+   "after_cac_ils": -488.71,
+   "contribution_with_fee_ils": null,
+   "flag": "loss",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 107.99,
+   "price_note": "ציפה כותנה-פשתן עם ציפיות: H&M ‏₪649, Zara Home ‏₪659, Home Style ‏₪499 (כותנה). יש בעמדה חלופה מעל 40% בציון עיצוב שווה או גבוה, ולכן החריג לא חל.",
+   "action_he": "עלות $128 ומשלוח $108 (5 ק\"ג): לא משתלם מהספק הזה: לחפש את אותו סט אצל ספק עם משלוח רגיל.",
+   "slot_alternative_ok": true,
+   "slot_alternative_ids": [
+    "bedding-cj-washed-linen-natural-set"
+   ]
+  },
+  "bedding-cj-plain-linen-flat-sheet-raw-jute-260x280": {
+   "retail_ils": 469,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "סדין שטוח אחד מפשתן 260x280",
+   "il_value": {
+    "low": 299,
+    "typical": 549,
+    "high": 940,
+    "comps": [
+     {
+      "retailer": "Home Style",
+      "title": "קולקציית MIX & MATCH של Benetton - אבן",
+      "size": null,
+      "price": 239.4,
+      "list_price": 399.0,
+      "url": "https://www.homestyle.co.il/products/2025-219"
+     },
+     {
+      "retailer": "Cotton Club",
+      "title": "סדין פשתן",
+      "size": "160x200 (פשתן)",
+      "price": 660.0,
+      "url": "https://cottonclub.co.il/products/סדין-פשתן"
+     },
+     {
+      "retailer": "Zara Home",
+      "title": "כיסוי מיטה מפשתן שטוף",
+      "size": null,
+      "price": 599,
+      "url": "https://www.zarahome.com/il/%D7%9B%D7%99%D7%A1%D7%95%D7%99-%D7%9E%D7%99%D7%98%D7%94-%D7%9E%D7%A4%D7%A9%D7%AA%D7%9F-%D7%A9%D7%98%D7%95%D7%A3-%28400-gxm%C2%B2%29-l41160006",
+      "note": "תקציר חיפוש, לא נפתח ישירות (Zara Home חוסמת גישה אוטומטית); ₪599–1,299"
+     }
+    ]
+   },
+   "customer_total_ils": 469,
+   "vs_typical_pct": -15,
+   "landed_ils": 228.16,
+   "margin_pct": 31.9,
+   "contribution_ils": 126.92,
+   "after_cac_ils": 55.49,
+   "contribution_with_fee_ils": null,
+   "flag": "below-floor",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 19.0,
+   "price_note": "סדין פשתן 100% במידת קינג: Cotton Club ‏₪660 ומעלה, Zara Home ‏₪599 ומעלה; Home Style (כותנה) עד ₪399. יש בעמדה חלופה מעל 40% בציון עיצוב שווה או גבוה, ולכן החריג לא חל.",
+   "slot_alternative_ok": true,
+   "slot_alternative_ids": [
+    "bedding-cj-washed-linen-natural-set"
+   ]
+  },
+  "bedding-cj-washed-cotton-khaki-set-220x240": {
+   "retail_ils": 349,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "סט 4 חלקים: ציפה 220x240, סדין גומי 1.8 וזוג ציפיות",
+   "il_value": {
+    "low": 145,
+    "typical": 399,
+    "high": 435,
+    "comps": [
+     {
+      "retailer": "Home Style",
+      "title": "סט מצעי פרקל כותנה EXCLUSIVE - ענבל",
+      "size": "160/200 זוגית",
+      "price": 349.5,
+      "list_price": 699.0,
+      "url": "https://www.homestyle.co.il/products/3073-999"
+     },
+     {
+      "retailer": "Fox Home",
+      "title": "סט מצעי סאטן בעיצוב פרחוני בגווני בז' ולבן Yasmin",
+      "size": "160x200",
+      "price": 419.93,
+      "list_price": 599.9,
+      "url": "https://www.foxhome.co.il/products/0331702400"
+     },
+     {
+      "retailer": "Home Style",
+      "title": "סט מצעי פרקל כותנה CHIC, מגנוליה - לבן",
+      "size": "180/200",
+      "price": 434.5,
+      "list_price": 869.0,
+      "url": "https://www.homestyle.co.il/products/1568-101"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "ÄNGSLILJA ציפה ו-2 ציפיות",
+      "size": "200x220/50x70 ס\"מ",
+      "price": 145.0,
+      "url": "https://www.ikea.com/il/he/p/aengslilja-duvet-cover-and-2-pillowcases-dark-blue-60636611/"
+     }
+    ]
+   },
+   "customer_total_ils": 349,
+   "vs_typical_pct": -13,
+   "landed_ils": 203.02,
+   "margin_pct": 20.6,
+   "contribution_ils": 60.91,
+   "after_cac_ils": -10.52,
+   "contribution_with_fee_ils": null,
+   "flag": "below-floor",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 30.84,
+   "price_note": "סט כותנה שטופה זוגי: Home Style ₪350–435, Fox Home ₪420 במבצע, IKEA ₪145 (בלי סדין). יש בעמדה חלופה מעל 40% בציון עיצוב שווה או גבוה, ולכן החריג לא חל.",
+   "slot_alternative_ok": true,
+   "slot_alternative_ids": [
+    "bedding-cj-washed-linen-natural-set"
+   ]
+  },
+  "bedding-cj-washed-linen-natural-set": {
+   "retail_ils": 799,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "סט פשתן: ציפה, סדין שטוח וציפיות למיטה 1.8",
+   "il_value": {
+    "low": 649,
+    "typical": 899,
+    "high": 1960,
+    "comps": [
+     {
+      "retailer": "H&M Home",
+      "title": "סט פשתן ציפה וציפיות זוגי/קינג",
+      "size": "זוגי/קינג",
+      "price": 649,
+      "url": "https://www2.hm.com/hw_il/productpage.0188589050.html",
+      "note": "מתוך תוצאת חיפוש, לא נפתח ישירות; בלי סדין"
+     },
+     {
+      "retailer": "Zara Home",
+      "title": "ציפה מפשתן מנוגד 150/160 (זוגי)",
+      "size": "150/160 (זוגי), ציפה בלבד",
+      "price": 659,
+      "url": "https://www.zarahome.com/il/ציפה-מפשתן-מנוגד-l44126088",
+      "note": "search snippet, not verified directly"
+     },
+     {
+      "retailer": "Cotton Club",
+      "title": "סט מצעי פשתן Oat Latte",
+      "size": "סדין 160x200, ציפה 220x240",
+      "price": 1960.0,
+      "url": "https://cottonclub.co.il/products/סט-מצעי-פשתן-oat-latte"
+     },
+     {
+      "retailer": "Fine Lab Home",
+      "title": "סט מצעים פשתן לבן",
+      "size": null,
+      "price": 1128,
+      "url": "https://finelab.shop/products/white-linen-bedding-set",
+      "note": "מתוך תוצאת חיפוש, לא נפתח ישירות"
+     }
+    ]
+   },
+   "customer_total_ils": 799,
+   "vs_typical_pct": -11,
+   "landed_ils": 305.71,
+   "margin_pct": 44.3,
+   "contribution_ils": 300.06,
+   "after_cac_ils": 228.63,
+   "contribution_with_fee_ils": null,
+   "flag": "ok",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 43.96,
+   "price_note": "סט פשתן שטוף כולל סדין: H&M ‏₪649 בלי סדין, Fine Lab ‏₪1,128, Cotton Club ‏₪1,960."
+  },
+  "bedside-sconces-cj-linen-half-drum-black-trim": {
+   "retail_ils": 349,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 2,
+   "sale_contains": "זוג מנורות קיר D25 (2 יח')",
+   "il_value": {
+    "low": 250,
+    "typical": 399,
+    "high": 598,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "MÅNALG מנורת קיר (ליחידה)",
+      "size": null,
+      "price": 125.0,
+      "url": "https://www.ikea.com/il/he/p/manalg-wall-lamp-wired-in-installation-sedge-handmade-60484698/"
+     },
+     {
+      "retailer": "Terminal X",
+      "title": "מנורה WAVES M לבן (SOHO) (ליחידה)",
+      "size": null,
+      "price": 189.9,
+      "url": "https://www.terminalx.com/default-category/r833380001"
+     },
+     {
+      "retailer": "Home Center",
+      "title": "מנורת קיר CARDO 180 UP AND DOWN 2X4W גוון צהוב שחור (ליחידה)",
+      "size": null,
+      "price": 219.9,
+      "url": "https://www.homecenter.co.il/products/1755092006749"
+     },
+     {
+      "retailer": "Haimans Decor",
+      "title": "מנורת קיר עם אהיל פליסה שמנת (ליחידה)",
+      "size": null,
+      "price": 299,
+      "url": "https://haimansdecor.co.il/product/%D7%9E%D7%A0%D7%95%D7%A8%D7%94-%D7%A2%D7%9D-%D7%90%D7%94%D7%99%D7%9C-%D7%A4%D7%9C%D7%99%D7%A1%D7%94/",
+      "note": "מתוך תוצאת חיפוש, לא נפתח ישירות"
+     }
+    ]
+   },
+   "customer_total_ils": 349,
+   "vs_typical_pct": -13,
+   "landed_ils": 291.32,
+   "margin_pct": -9.3,
+   "contribution_ils": -27.4,
+   "after_cac_ils": -98.83,
+   "contribution_with_fee_ils": null,
+   "flag": "loss",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 15.32,
+   "price_note": "זוג מנורות קיר עם אהיל פשתן; ברשתות ₪125–299 ליחידה, כ-₪400 לזוג. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "slot_alternative_ok": false
+  },
+  "bedside-sconces-cj-linen-wave-flush": {
+   "retail_ils": 349,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 2,
+   "sale_contains": "זוג מנורות קיר D24 (2 יח')",
+   "il_value": {
+    "low": 250,
+    "typical": 399,
+    "high": 598,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "MÅNALG מנורת קיר (ליחידה)",
+      "size": null,
+      "price": 125.0,
+      "url": "https://www.ikea.com/il/he/p/manalg-wall-lamp-wired-in-installation-sedge-handmade-60484698/"
+     },
+     {
+      "retailer": "Terminal X",
+      "title": "מנורה WAVES M לבן (SOHO) (ליחידה)",
+      "size": null,
+      "price": 189.9,
+      "url": "https://www.terminalx.com/default-category/r833380001"
+     },
+     {
+      "retailer": "Home Center",
+      "title": "מנורת קיר CARDO 180 UP AND DOWN 2X4W גוון צהוב שחור (ליחידה)",
+      "size": null,
+      "price": 219.9,
+      "url": "https://www.homecenter.co.il/products/1755092006749"
+     },
+     {
+      "retailer": "Haimans Decor",
+      "title": "מנורת קיר עם אהיל פליסה שמנת (ליחידה)",
+      "size": null,
+      "price": 299,
+      "url": "https://haimansdecor.co.il/product/%D7%9E%D7%A0%D7%95%D7%A8%D7%94-%D7%A2%D7%9D-%D7%90%D7%94%D7%99%D7%9C-%D7%A4%D7%9C%D7%99%D7%A1%D7%94/",
+      "note": "מתוך תוצאת חיפוש, לא נפתח ישירות"
+     }
+    ]
+   },
+   "customer_total_ils": 349,
+   "vs_typical_pct": -13,
+   "landed_ils": 260.44,
+   "margin_pct": 1.2,
+   "contribution_ils": 3.49,
+   "after_cac_ils": -67.94,
+   "contribution_with_fee_ils": null,
+   "flag": "below-floor",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 11.54,
+   "price_note": "כמו זוג מנורות הפשתן המקביל: ₪125–299 ליחידה ברשתות. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "slot_alternative_ok": false
+  },
+  "floor-lamp-cj-cream-arc-pleated-152": {
+   "retail_ils": 349,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "מנורה עומדת אחת H152",
+   "il_value": {
+    "low": 245,
+    "typical": 399,
+    "high": 651,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "SKOTTORP / SKAFTET מנורה עומדת,מקומר",
+      "size": null,
+      "price": 445.0,
+      "url": "https://www.ikea.com/il/he/p/skottorp-skaftet-floor-lamp-arched-light-grey-s49385987/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "FLYGHÖJD מנורה עומדת",
+      "size": null,
+      "price": 245.0,
+      "url": "https://www.ikea.com/il/he/p/flyghoejd-floor-lamp-brass-beige-50574473/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "STOCKHOLM 2025 מנורה עומדת",
+      "size": "159 ס\"מ",
+      "price": 495.0,
+      "url": "https://www.ikea.com/il/he/p/stockholm-2025-floor-lamp-white-textile-brass-plated-50585914/"
+     },
+     {
+      "retailer": "LEDmarket",
+      "title": "מנורת רצפה לאורה דקורטיבית מעץ",
+      "size": null,
+      "price": 651.0,
+      "url": "https://ledmarket.co.il/products/מנורת-רצפה-לאורה-דקורטיבית-מעץ"
+     }
+    ]
+   },
+   "customer_total_ils": 349,
+   "vs_typical_pct": -13,
+   "landed_ils": 2567.73,
+   "margin_pct": -778.9,
+   "contribution_ils": -2303.81,
+   "after_cac_ils": -2375.24,
+   "contribution_with_fee_ils": null,
+   "flag": "loss",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 765.66,
+   "price_note": "מנורה עומדת קשתית עם אהיל פליסה: IKEA ‏₪245–495, LEDmarket ‏₪651. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "action_he": "המשלוח היחיד הוא DHL ‏$766: לא משתלם מהספק הזה: לחפש את אותו דגם אצל ספק עם משלוח רגיל, או מלאי בישראל.",
+   "slot_alternative_ok": false
+  },
+  "floor-lamp-cj-pleated-walnut-stem-158": {
+   "retail_ils": 349,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "מנורה עומדת אחת H158",
+   "il_value": {
+    "low": 245,
+    "typical": 399,
+    "high": 651,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "SKOTTORP / SKAFTET מנורה עומדת,מקומר",
+      "size": null,
+      "price": 445.0,
+      "url": "https://www.ikea.com/il/he/p/skottorp-skaftet-floor-lamp-arched-light-grey-s49385987/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "FLYGHÖJD מנורה עומדת",
+      "size": null,
+      "price": 245.0,
+      "url": "https://www.ikea.com/il/he/p/flyghoejd-floor-lamp-brass-beige-50574473/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "STOCKHOLM 2025 מנורה עומדת",
+      "size": "159 ס\"מ",
+      "price": 495.0,
+      "url": "https://www.ikea.com/il/he/p/stockholm-2025-floor-lamp-white-textile-brass-plated-50585914/"
+     },
+     {
+      "retailer": "LEDmarket",
+      "title": "מנורת רצפה לאורה דקורטיבית מעץ",
+      "size": null,
+      "price": 651.0,
+      "url": "https://ledmarket.co.il/products/מנורת-רצפה-לאורה-דקורטיבית-מעץ"
+     }
+    ]
+   },
+   "customer_total_ils": 349,
+   "vs_typical_pct": -13,
+   "landed_ils": 580.44,
+   "margin_pct": -107.0,
+   "contribution_ils": -316.52,
+   "after_cac_ils": -387.94,
+   "contribution_with_fee_ils": null,
+   "flag": "loss",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 144.71,
+   "price_note": "מנורה עומדת פליסה על עמוד: IKEA ‏₪245–495, LEDmarket ‏₪651. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "action_he": "משלוח Sensitive ‏$145: רק עם מלאי בישראל (מנורה נמכרת היטב, 58 מכירות).",
+   "slot_alternative_ok": false
+  },
+  "nightstand-tray-cj-travertine-look-rect-milktea": {
+   "retail_ils": 59,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "מגש אחד במראה טרוורטין ~30x20",
+   "il_value": {
+    "low": 35,
+    "typical": 99,
+    "high": 347,
+    "comps": [
+     {
+      "retailer": "Fox Home",
+      "title": "מגש נוי קטן מקרמיקה Connie",
+      "size": null,
+      "price": 90.93,
+      "list_price": 129.9,
+      "url": "https://www.foxhome.co.il/products/0333252400"
+     },
+     {
+      "retailer": "Fox Home",
+      "title": "מגש מלבני מעץ Woody",
+      "size": null,
+      "price": 69.93,
+      "list_price": 99.9,
+      "url": "https://www.foxhome.co.il/products/0316550300"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "OSTBIT מגש",
+      "size": "25x33 ס\"מ",
+      "price": 35.0,
+      "url": "https://www.ikea.com/il/he/p/ostbit-tray-bamboo-30452991/"
+     },
+     {
+      "retailer": "Terminal X",
+      "title": "מארז דיספנסר, כוס ומגש שיש S - לבן (Tirador)",
+      "size": null,
+      "price": 347.0,
+      "url": "https://www.terminalx.com/default-category/k065690001"
+     }
+    ]
+   },
+   "customer_total_ils": 88,
+   "vs_typical_pct": -11,
+   "landed_ils": 94.61,
+   "margin_pct": -102.0,
+   "contribution_ils": -50.99,
+   "after_cac_ils": -122.42,
+   "contribution_with_fee_ils": -28.96,
+   "flag": "loss",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 19.99,
+   "price_note": "מגש במראה אבן: Fox Home ₪70–91 במבצע, IKEA ₪35; סט שיש של Tirador ₪347. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "action_he": "משלוח $20 על 1.3 ק\"ג: למכור בסט הטרוורטין.",
+   "slot_alternative_ok": false
+  },
+  "pendant-cj-light-wood-slat-drum-43": {
+   "retail_ils": 299,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "מנורת תלייה אחת D43 (בלי נורה)",
+   "il_value": {
+    "low": 195,
+    "typical": 349,
+    "high": 895,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "ÖDLEBLAD / SUNNEBY מנורת תלייה",
+      "size": "48 ס\"מ",
+      "price": 285.0,
+      "url": "https://www.ikea.com/il/he/p/oedleblad-sunneby-pendant-lamp-birch-veneer-white-s49604013/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "DYKARKLOCKA / HAVSDJUP מנורת תלייה",
+      "size": "40 ס\"מ",
+      "price": 315.0,
+      "url": "https://www.ikea.com/il/he/p/dykarklocka-havsdjup-pendant-lamp-white-stained-oak-veneer-white-s69604045/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "MISTERHULT מנורת תלייה",
+      "size": "45 ס\"מ",
+      "price": 395.0,
+      "url": "https://www.ikea.com/il/he/p/misterhult-pendant-lamp-bamboo-handmade-90441018/"
+     },
+     {
+      "retailer": "LEDmarket",
+      "title": "מנורת תלייה TREE - עץ טבעי",
+      "size": "60+40 ס\"מ",
+      "price": 895.0,
+      "url": "https://ledmarket.co.il/products/מנורת-תלייה-tree"
+     }
+    ]
+   },
+   "customer_total_ils": 299,
+   "vs_typical_pct": -14,
+   "landed_ils": 187.37,
+   "margin_pct": 15.2,
+   "contribution_ils": 38.56,
+   "after_cac_ils": -32.86,
+   "contribution_with_fee_ils": null,
+   "flag": "below-floor",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 34.62,
+   "price_note": "תוף עץ בהיר: IKEA ‏₪285–395, LEDmarket ‏₪895; ₪299 = משלוח חינם ללקוח. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "slot_alternative_ok": false
+  },
+  "pendant-cj-wabi-pleated-fabric-lantern-50": {
+   "retail_ils": 299,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "מנורת תלייה אחת D50",
+   "il_value": {
+    "low": 195,
+    "typical": 329,
+    "high": 420,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "SINNERLIG מנורת תלייה",
+      "size": "50 ס\"מ",
+      "price": 395.0,
+      "url": "https://www.ikea.com/il/he/p/sinnerlig-pendant-lamp-bamboo-handmade-70311697/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "VINDKAST מנורת תלייה",
+      "size": "50 ס\"מ",
+      "price": 195.0,
+      "url": "https://www.ikea.com/il/he/p/vindkast-pendant-lamp-white-20450520/"
+     },
+     {
+      "retailer": "Terminal X",
+      "title": "מנורת תקרה PAPPER MATCH שמנת (Golyan)",
+      "size": null,
+      "price": 293.93,
+      "list_price": 419.9,
+      "url": "https://www.terminalx.com/default-category/w434060007"
+     }
+    ]
+   },
+   "customer_total_ils": 299,
+   "vs_typical_pct": -9,
+   "landed_ils": 1314.49,
+   "margin_pct": -429.6,
+   "contribution_ils": -1088.55,
+   "after_cac_ils": -1159.98,
+   "contribution_with_fee_ils": null,
+   "flag": "loss",
+   "nordic_score": 7.0,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 340.29,
+   "price_note": "פנס בד בקפלים 50 ס\"מ: IKEA ₪195–395, Golyan ₪294 במבצע; ₪299 = משלוח חינם. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "action_he": "משלוח To Door ‏$340 (6 ק\"ג): לא משתלם מהספק הזה: לחפש את אותו פנס אצל ספק עם משלוח רגיל, או מלאי בישראל.",
+   "slot_alternative_ok": false
+  },
+  "pillowcases-cj-linen-pair-coconut-button": {
+   "retail_ils": 129,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "זוג ציפיות פשתן 48x74",
+   "il_value": {
+    "low": 44,
+    "typical": 179,
+    "high": 299,
+    "comps": [
+     {
+      "retailer": "Cotton Club",
+      "title": "זוג ציפיות פשתן",
+      "size": "50x70 זוג",
+      "price": 220.0,
+      "url": "https://cottonclub.co.il/products/זוג-ציפיות-פשתן"
+     },
+     {
+      "retailer": "Linenzzz",
+      "title": "זוג ציפיות לבן - פשתן",
+      "size": "50x70 זוג",
+      "price": 299,
+      "url": "https://www.linenzzz.com/cloudwhite-pillowcases-linen.html",
+      "note": "מתוך תוצאת חיפוש, לא נפתח ישירות; בדף מופיע גם ₪169"
+     },
+     {
+      "retailer": "Home Style",
+      "title": "קולקציית MIX & MATCH של Benetton - זוג ציפיות - לבן",
+      "size": "2X50/70 סמ זוג ציפיות",
+      "price": 59.4,
+      "list_price": 99.0,
+      "url": "https://www.homestyle.co.il/products/3185-101"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "DVALA ציפית",
+      "size": "50x70 ס\"מ",
+      "price": 22.0,
+      "url": "https://www.ikea.com/il/he/p/dvala-pillowcase-beige-60627800/"
+     }
+    ]
+   },
+   "customer_total_ils": 158,
+   "vs_typical_pct": -12,
+   "landed_ils": 73.85,
+   "margin_pct": 21.0,
+   "contribution_ils": 22.94,
+   "after_cac_ils": -48.49,
+   "contribution_with_fee_ils": 44.97,
+   "flag": "below-floor",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 9.15,
+   "price_note": "זוג ציפיות פשתן 100%: Cotton Club ‏₪220, Linenzzz ‏₪169–299; כותנה ב-Home Style ‏₪59 במבצע. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "slot_alternative_ok": false
+  },
+  "pillowcases-cj-pure-linen-envelope-pair-48x74": {
+   "retail_ils": 129,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "זוג ציפיות פשתן 48x74",
+   "il_value": {
+    "low": 44,
+    "typical": 179,
+    "high": 299,
+    "comps": [
+     {
+      "retailer": "Cotton Club",
+      "title": "זוג ציפיות פשתן",
+      "size": "50x70 זוג",
+      "price": 220.0,
+      "url": "https://cottonclub.co.il/products/זוג-ציפיות-פשתן"
+     },
+     {
+      "retailer": "Linenzzz",
+      "title": "זוג ציפיות לבן - פשתן",
+      "size": "50x70 זוג",
+      "price": 299,
+      "url": "https://www.linenzzz.com/cloudwhite-pillowcases-linen.html",
+      "note": "מתוך תוצאת חיפוש, לא נפתח ישירות; בדף מופיע גם ₪169"
+     },
+     {
+      "retailer": "Home Style",
+      "title": "קולקציית MIX & MATCH של Benetton - זוג ציפיות - לבן",
+      "size": "2X50/70 סמ זוג ציפיות",
+      "price": 59.4,
+      "list_price": 99.0,
+      "url": "https://www.homestyle.co.il/products/3185-101"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "DVALA ציפית",
+      "size": "50x70 ס\"מ",
+      "price": 22.0,
+      "url": "https://www.ikea.com/il/he/p/dvala-pillowcase-beige-60627800/"
+     }
+    ]
+   },
+   "customer_total_ils": 158,
+   "vs_typical_pct": -12,
+   "landed_ils": 73.75,
+   "margin_pct": 21.1,
+   "contribution_ils": 23.04,
+   "after_cac_ils": -48.39,
+   "contribution_with_fee_ils": 45.07,
+   "flag": "below-floor",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 7.76,
+   "price_note": "כמו זוג הפשתן המקביל: Cotton Club ‏₪220 לזוג. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "slot_alternative_ok": false
+  },
+  "sill-vase-cj-cream-fluted-column-25": {
+   "retail_ils": 49,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "אגרטל קרמי אחד 24.7 ס\"מ",
+   "il_value": {
+    "low": 25,
+    "typical": 89,
+    "high": 295,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "BLODBJÖRK אגרטל",
+      "size": "25 ס\"מ",
+      "price": 95.0,
+      "url": "https://www.ikea.com/il/he/p/blodbjoerk-vase-beige-90637727/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "PÄRLHÄGG אגרטל",
+      "size": "22 ס\"מ",
+      "price": 59.0,
+      "url": "https://www.ikea.com/il/he/p/paerlhaegg-vase-beige-80623405/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "STILREN אגרטל",
+      "size": "12 ס\"מ",
+      "price": 25.0,
+      "url": "https://www.ikea.com/il/he/p/stilren-vase-white-10592365/"
+     },
+     {
+      "retailer": "Terminal X",
+      "title": "אגרטל פיר (MmShacham)",
+      "size": null,
+      "price": 295.0,
+      "url": "https://www.terminalx.com/default-category/r892010001"
+     }
+    ]
+   },
+   "customer_total_ils": 78,
+   "vs_typical_pct": -12,
+   "landed_ils": 38.87,
+   "margin_pct": -6.9,
+   "contribution_ils": -2.85,
+   "after_cac_ils": -74.28,
+   "contribution_with_fee_ils": 19.18,
+   "flag": "loss",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 7.76,
+   "price_note": "אגרטל קרמי מחורץ 25 ס\"מ: IKEA ‏₪59–95, מעצבים ₪295. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "slot_alternative_ok": false
+  },
+  "throw-cj-cotton-linen-light-gray-200x230": {
+   "retail_ils": 229,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "שמיכת כותנה-פשתן אחת 200x230",
+   "il_value": {
+    "low": 95,
+    "typical": 299,
+    "high": 479,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "VALLKRASSING שמיכת טלוויזיה",
+      "size": "150x200 ס\"מ",
+      "price": 95.0,
+      "url": "https://www.ikea.com/il/he/p/vallkrassing-throw-off-white-20570928/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "SLÅNGRÅMAL שמיכת טלוויזיה",
+      "size": "150x200 ס\"מ",
+      "price": 125.0,
+      "url": "https://www.ikea.com/il/he/p/slangramal-throw-off-white-40633538/"
+     },
+     {
+      "retailer": "Cotton Club",
+      "title": "שמיכת מוסלין Natural",
+      "size": "220x240",
+      "price": 380.0,
+      "url": "https://cottonclub.co.il/products/שמיכת-מוסלין-natural"
+     },
+     {
+      "retailer": "Zara Home",
+      "title": "שמיכה בעיצוב גאומטרי פשתן-כותנה 140x190",
+      "size": null,
+      "price": 479.0,
+      "url": "https://www.zarahome.com/il/שמיכה-בעיצוב-גאומטרי-l49132004",
+      "note": "search snippet, not verified directly"
+     }
+    ]
+   },
+   "customer_total_ils": 258,
+   "vs_typical_pct": -14,
+   "landed_ils": 146.72,
+   "margin_pct": 13.4,
+   "contribution_ils": 26.04,
+   "after_cac_ils": -45.38,
+   "contribution_with_fee_ils": 48.07,
+   "flag": "below-floor",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 27.05,
+   "price_note": "שמיכה/כיסוי כותנה-פשתן גדול: IKEA ‏₪95–125 (150x200), Cotton Club ‏₪380, Zara Home ‏₪479 (140x190). אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "slot_alternative_ok": false
+  },
+  "throw-cj-cotton-waffle-ruffle-khaki-150x200": {
+   "retail_ils": 149,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "שמיכת וופל אחת 150x200",
+   "il_value": {
+    "low": 95,
+    "typical": 199,
+    "high": 399,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "VALLKRASSING שמיכת טלוויזיה",
+      "size": "150x200 ס\"מ",
+      "price": 95.0,
+      "url": "https://www.ikea.com/il/he/p/vallkrassing-throw-off-white-20570928/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "SLÅNGRÅMAL שמיכת טלוויזיה",
+      "size": "150x200 ס\"מ",
+      "price": 125.0,
+      "url": "https://www.ikea.com/il/he/p/slangramal-throw-off-white-40633538/"
+     },
+     {
+      "retailer": "Fox Home",
+      "title": "שמיכת פליז עם עיטורי מיקי מאוס Star Mickey",
+      "size": null,
+      "price": 119.9,
+      "url": "https://www.foxhome.co.il/products/0333749900"
+     },
+     {
+      "retailer": "Zara Home",
+      "title": "שמיכה ג׳קארד פרחונית 140x190",
+      "size": null,
+      "price": 399.0,
+      "url": "https://www.zarahome.com/il/שמיכה-גקארד-פרחונית-l41386004",
+      "note": "search snippet, not verified directly"
+     }
+    ]
+   },
+   "customer_total_ils": 178,
+   "vs_typical_pct": -11,
+   "landed_ils": 103.59,
+   "margin_pct": 6.7,
+   "contribution_ils": 8.4,
+   "after_cac_ils": -63.03,
+   "contribution_with_fee_ils": 30.43,
+   "flag": "below-floor",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 17.84,
+   "price_note": "שמיכת וופל כותנה עם מלמלה: IKEA ‏₪95–125, Fox Home ‏₪120, Zara Home ‏₪399. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "slot_alternative_ok": false
+  },
+  "pool-cj-cotton-linen-box-camel-40x30": {
+   "retail_ils": 29,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "קופסת אחסון מבד אחת 40x30x25",
+   "il_value": {
+    "low": 35,
+    "typical": 59,
+    "high": 70,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "SKUBB תיבת אחסון",
+      "size": "43x53x19 ס\"מ",
+      "price": 45.0,
+      "url": "https://www.ikea.com/il/he/p/skubb-storage-case-dark-grey-60591052/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "DRÖNA קופסה עם מכסה",
+      "size": "34x39x33 ס\"מ",
+      "price": 35.0,
+      "url": "https://www.ikea.com/il/he/p/droena-box-with-lid-dark-grey-s29634266/"
+     },
+     {
+      "retailer": "Fox Home",
+      "title": "סלסלת קש מלבנית בגוון טבעי Maui",
+      "size": null,
+      "price": 48.93,
+      "list_price": 69.9,
+      "url": "https://www.foxhome.co.il/products/0334540300"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "FLÅDIS סלסילה",
+      "size": "25 ס\"מ",
+      "price": 59.0,
+      "url": "https://www.ikea.com/il/he/p/fladis-basket-seagrass-60322173/"
+     }
+    ]
+   },
+   "customer_total_ils": 58,
+   "vs_typical_pct": -2,
+   "landed_ils": 29.93,
+   "margin_pct": -37.0,
+   "contribution_ils": -9.1,
+   "after_cac_ils": -80.53,
+   "contribution_with_fee_ils": 12.93,
+   "flag": "loss",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 7.5,
+   "price_note": "קופסת בד עם ידיות: IKEA ₪35–59, Fox Home ₪49 במבצע. לבד הסה\"כ ללקוח קרוב לטיפוסי בגלל דמי המשלוח: פריט תוספת לסל (חינם מ-₪299) או לסט. פריט מאגר בלי עמדה: החריג יוחלט כשיוקצה לעמדה.",
+   "addon_only": true,
+   "slot_alternative_ok": null
+  },
+  "pool-cj-carbonized-wood-pedestal-candlestick": {
+   "retail_ils": 69,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "פמוט עץ שרוף אחד 22 ס\"מ",
+   "il_value": {
+    "low": 39,
+    "typical": 109,
+    "high": 185,
+    "comps": [
+     {
+      "retailer": "Fox Home",
+      "title": "פמוט מתכת 22 ס\"מ בגוון זהב Terra",
+      "size": null,
+      "price": 69.93,
+      "list_price": 99.9,
+      "url": "https://www.foxhome.co.il/products/0332329901"
+     },
+     {
+      "retailer": "Terminal X",
+      "title": "פמוט יחיד TRAVENTINE (Golyan)",
+      "size": null,
+      "price": 130.0,
+      "url": "https://www.terminalx.com/default-category/r958400001"
+     },
+     {
+      "retailer": "Terminal X",
+      "title": "פמוט OCRA (Decorado)",
+      "size": null,
+      "price": 185.0,
+      "url": "https://www.terminalx.com/default-category/r688870001"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "SILVERPÄRON פמוט לנר בלוק",
+      "size": "24 ס\"מ",
+      "price": 39.0,
+      "url": "https://www.ikea.com/il/he/p/silverpaeron-pillar-candle-holder-black-40575010/"
+     }
+    ]
+   },
+   "customer_total_ils": 98,
+   "vs_typical_pct": -10,
+   "landed_ils": 90.95,
+   "margin_pct": -67.9,
+   "contribution_ils": -39.73,
+   "after_cac_ils": -111.16,
+   "contribution_with_fee_ils": -17.7,
+   "flag": "loss",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 19.11,
+   "price_note": "פמוט עמוד 22 ס\"מ: Fox Home ₪70 במבצע, Golyan ₪130, Decorado ₪185; IKEA ₪39. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "slot_alternative_ok": false
+  },
+  "pool-cj-linen-look-tassel-curtain": {
+   "retail_ils": 59,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "וילון אחד 150x260 (כנף אחת)",
+   "il_value": {
+    "low": 25,
+    "typical": 99,
+    "high": 198,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "MÄSTERROT וילון/2 כנפיים (זוג כנפיים)",
+      "size": "145x300 ס\"מ",
+      "price": 125.0,
+      "url": "https://www.ikea.com/il/he/p/maesterrot-curtains-1-pair-white-white-grid-with-heading-tape-20602496/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "LENDA וילון עם סרטי קשירה/2 כנפיים (זוג כנפיים)",
+      "size": "140x300 ס\"מ",
+      "price": 175.0,
+      "url": "https://www.ikea.com/il/he/p/lenda-curtains-with-tie-backs-1-pair-off-white-with-heading-tape-40633246/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "DYTÅG וילון/2 כנפיים (זוג כנפיים)",
+      "size": "145x300 ס\"מ",
+      "price": 395.0,
+      "url": "https://www.ikea.com/il/he/p/dytag-curtains-1-pair-beige-with-heading-tape-80607820/"
+     }
+    ]
+   },
+   "customer_total_ils": 88,
+   "vs_typical_pct": -11,
+   "landed_ils": 84.41,
+   "margin_pct": -81.6,
+   "contribution_ils": -40.79,
+   "after_cac_ils": -112.22,
+   "contribution_with_fee_ils": -18.76,
+   "flag": "loss",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 15.96,
+   "price_note": "וילון מראה פשתן עם גדילים; ב-IKEA זוג כנפיים ₪125–395, כלומר ~₪100 לכנף. פריט מאגר בלי עמדה: החריג יוחלט כשיוקצה לעמדה.",
+   "action_he": "לזוג ₪119; משלוח $16 לכנף.",
+   "slot_alternative_ok": null
+  },
+  "pool-cj-woven-cotton-runner-fringe": {
+   "retail_ils": 69,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "ראנר אחד 33x183",
+   "il_value": {
+    "low": 39,
+    "typical": 109,
+    "high": 150,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "VÅRARV מפת ראנר",
+      "size": "35x150 ס\"מ",
+      "price": 39.0,
+      "url": "https://www.ikea.com/il/he/p/vararv-table-runner-dark-grey-natural-20545854/"
+     },
+     {
+      "retailer": "Fox Home",
+      "title": "ראנר שולחן בעיצוב פסים ארוגים וטקסטורה עדינה Japan",
+      "size": null,
+      "price": 90.93,
+      "list_price": 129.9,
+      "url": "https://www.foxhome.co.il/products/0334949900"
+     },
+     {
+      "retailer": "Cotton Club",
+      "title": "ראנר שולחן כותנה רקומה",
+      "size": "50x160",
+      "price": 150.0,
+      "url": "https://cottonclub.co.il/products/ראנר-שולחן-כותנה-רקומה"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "MÄVINN מפת ראנר",
+      "size": "35x130 ס\"מ",
+      "price": 79.0,
+      "url": "https://www.ikea.com/il/he/p/maevinn-table-runner-banana-fibre-stripe-pattern-10615116/"
+     }
+    ]
+   },
+   "customer_total_ils": 98,
+   "vs_typical_pct": -10,
+   "landed_ils": 32.7,
+   "margin_pct": 31.7,
+   "contribution_ils": 18.51,
+   "after_cac_ils": -52.91,
+   "contribution_with_fee_ils": 40.54,
+   "flag": "below-floor",
+   "nordic_score": 6.0,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 6.74,
+   "price_note": "ראנר כותנה ארוג עם פרנזים: IKEA ₪39–79, Fox Home ₪91 במבצע, Cotton Club ₪150. פריט מאגר בלי עמדה: החריג יוחלט כשיוקצה לעמדה.",
+   "slot_alternative_ok": null
+  },
+  "pool-cj-travertine-organic-tray-24": {
+   "retail_ils": 119,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "מגש טרוורטין טבעי אחד 24x17",
+   "il_value": {
+    "low": 70,
+    "typical": 159,
+    "high": 347,
+    "comps": [
+     {
+      "retailer": "Fox Home",
+      "title": "מגש נוי קטן מקרמיקה Connie",
+      "size": null,
+      "price": 90.93,
+      "list_price": 129.9,
+      "url": "https://www.foxhome.co.il/products/0333252400"
+     },
+     {
+      "retailer": "Terminal X",
+      "title": "פמוט יחיד TRAVENTINE (Golyan)",
+      "size": null,
+      "price": 130.0,
+      "url": "https://www.terminalx.com/default-category/r958400001"
+     },
+     {
+      "retailer": "Terminal X",
+      "title": "מארז דיספנסר, כוס ומגש שיש S - לבן (Tirador)",
+      "size": null,
+      "price": 347.0,
+      "url": "https://www.terminalx.com/default-category/k065690001"
+     },
+     {
+      "retailer": "Terminal X",
+      "title": "מגש בז' ידיות חלוקי נחל חומות אלומיניום 35/14.5 גובה 4 ס״מ (PLADINOX)",
+      "size": null,
+      "price": 165.0,
+      "url": "https://www.terminalx.com/default-category/k253680001"
+     }
+    ]
+   },
+   "customer_total_ils": 148,
+   "vs_typical_pct": -7,
+   "landed_ils": 120.85,
+   "margin_pct": -31.4,
+   "contribution_ils": -31.65,
+   "after_cac_ils": -103.07,
+   "contribution_with_fee_ils": -9.62,
+   "flag": "loss",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 19.49,
+   "price_note": "טרוורטין אמיתי: Fox Home מגש קרמיקה ₪91 במבצע, Golyan פמוט טרוורטין ₪130, מגשי מעצבים ₪165–347; עיצובי. פריט מאגר בלי עמדה: החריג יוחלט כשיוקצה לעמדה.",
+   "slot_alternative_ok": null
+  },
+  "pool-cj-terracotta-amphora-floor-51": {
+   "retail_ils": 479,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "אגרטל רצפה אחד 35x51",
+   "il_value": {
+    "low": 283,
+    "typical": 549,
+    "high": 1055,
+    "comps": [
+     {
+      "retailer": "Terminal X",
+      "title": "אגרטל MASA (Decorado)",
+      "size": null,
+      "price": 366.0,
+      "url": "https://www.terminalx.com/default-category/w623120001"
+     },
+     {
+      "retailer": "Terminal X",
+      "title": "אגרטל צדף (MmShacham)",
+      "size": null,
+      "price": 465.0,
+      "url": "https://www.terminalx.com/default-category/k230790001"
+     },
+     {
+      "retailer": "Zara Home",
+      "title": "אגרטל קרמיקה אסימטרי 38.5 ס\"מ",
+      "size": null,
+      "price": 479.0,
+      "url": "https://www.zarahome.com/il/אגרטל-קרמיקה-l47122046",
+      "note": "search snippet, not verified directly"
+     },
+     {
+      "retailer": "Terminal X",
+      "title": "אגרטל בז' על בסיס חלוקי נחל חום אלומיניום קוטר 20 גובה 48 ס״מ (PLADINOX)",
+      "size": null,
+      "price": 283.0,
+      "url": "https://www.terminalx.com/default-category/k253570001"
+     }
+    ]
+   },
+   "customer_total_ils": 479,
+   "vs_typical_pct": -13,
+   "landed_ils": 725.97,
+   "margin_pct": -89.5,
+   "contribution_ils": -363.29,
+   "after_cac_ils": -434.72,
+   "contribution_with_fee_ils": null,
+   "flag": "loss",
+   "nordic_score": 3.5,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 37.15,
+   "price_note": "אגרטל רצפה קרמי 51 ס\"מ: Decorado ‏₪366, MmShacham ‏₪465, Zara Home ‏₪479 (38.5 ס\"מ). אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "action_he": "עלות $183: לחפש את אותה אמפורה אצל ספק זול יותר (יעד עלות ~$60).",
+   "slot_alternative_ok": false
+  },
+  "pool-cj-wabi-sabi-floor-vase-white": {
+   "retail_ils": 349,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "אגרטל קרמי אחד 28x45",
+   "il_value": {
+    "low": 224,
+    "typical": 399,
+    "high": 835,
+    "comps": [
+     {
+      "retailer": "Terminal X",
+      "title": "אגרטל MASA (Decorado)",
+      "size": null,
+      "price": 366.0,
+      "url": "https://www.terminalx.com/default-category/w623120001"
+     },
+     {
+      "retailer": "Terminal X",
+      "title": "אגרטל צדף (MmShacham)",
+      "size": null,
+      "price": 465.0,
+      "url": "https://www.terminalx.com/default-category/k230790001"
+     },
+     {
+      "retailer": "Zara Home",
+      "title": "אגרטל קרמיקה אסימטרי 38.5 ס\"מ",
+      "size": null,
+      "price": 479.0,
+      "url": "https://www.zarahome.com/il/אגרטל-קרמיקה-l47122046",
+      "note": "search snippet, not verified directly"
+     },
+     {
+      "retailer": "Terminal X",
+      "title": "אגרטל בז' על בסיס חלוקי נחל חום אלומיניום קוטר 20 גובה 48 ס״מ (PLADINOX)",
+      "size": null,
+      "price": 283.0,
+      "url": "https://www.terminalx.com/default-category/k253570001"
+     }
+    ]
+   },
+   "customer_total_ils": 349,
+   "vs_typical_pct": -13,
+   "landed_ils": 283.54,
+   "margin_pct": -6.6,
+   "contribution_ils": -19.61,
+   "after_cac_ils": -91.04,
+   "contribution_with_fee_ils": null,
+   "flag": "loss",
+   "nordic_score": 6.5,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 59.72,
+   "price_note": "אגרטל גדול 45 ס\"מ: Decorado ‏₪366, MmShacham ‏₪465, Zara Home ‏₪479, אלומיניום ₪283. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "action_he": "משלוח $60: לבדוק משלוח זול או מלאי בישראל.",
+   "slot_alternative_ok": false
+  },
+  "pool-cj-wood-sunburst-mirror-43": {
+   "retail_ils": 119,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "מראה שמש מעץ אחת D43",
+   "il_value": {
+    "low": 119,
+    "typical": 169,
+    "high": 220,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "LINDBYN מראה",
+      "size": "50 ס\"מ",
+      "price": 175.0,
+      "url": "https://www.ikea.com/il/he/p/lindbyn-mirror-black-70590448/"
+     },
+     {
+      "retailer": "Home Center",
+      "title": "מראה עגולה 50 ס\"מ עם חבל לתלייה (בוהו)",
+      "size": "50 ס\"מ",
+      "price": 119,
+      "list_price": 219.9,
+      "url": "https://www.homecenter.co.il/products/6767511862",
+      "note": "מתוך תוצאת חיפוש, לא נפתח ישירות; ₪119 באתר, ₪219.9 בסניפים"
+     },
+     {
+      "retailer": "Home Center",
+      "title": "מראה עגולה 60 ס\"מ עם מדף מתכת",
+      "size": "60 ס\"מ",
+      "price": 169.9,
+      "url": "https://www.homecenter.co.il/products/6767511860",
+      "note": "מתוך תוצאת חיפוש, לא נפתח ישירות"
+     }
+    ]
+   },
+   "customer_total_ils": 148,
+   "vs_typical_pct": -12,
+   "landed_ils": 82.0,
+   "margin_pct": 7.1,
+   "contribution_ils": 7.19,
+   "after_cac_ils": -64.23,
+   "contribution_with_fee_ils": 29.22,
+   "flag": "below-floor",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 19.99,
+   "price_note": "מראה דקורטיבית עגולה: Home Center ₪119–170 באתר, IKEA ₪175 (50 ס\"מ). פריט מאגר בלי עמדה: החריג יוחלט כשיוקצה לעמדה.",
+   "slot_alternative_ok": null
+  },
+  "framed-art-aliexpress-japanese-wabi-sabi-tree-176323": {
+   "retail_ils": 39,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "הדפס קנבס אחד 40x50, בלי מסגרת",
+   "il_value": {
+    "low": 25,
+    "typical": 69,
+    "high": 95,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "BILD פוסטר",
+      "size": "30x40 ס\"מ",
+      "price": 25.0,
+      "url": "https://www.ikea.com/il/he/p/bild-poster-sleeping-by-lights-of-the-night-30601972/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "FISKBO מסגרת עם פוסטר",
+      "size": "40x50 ס\"מ",
+      "price": 79.0,
+      "url": "https://www.ikea.com/il/he/p/fiskbo-frame-with-poster-apple-game-40602141/"
+     },
+     {
+      "retailer": "ACE",
+      "title": "תמונה קנבס מודפסת Marny",
+      "size": null,
+      "price": 49.9,
+      "url": "https://www.ace.co.il/9909969"
+     }
+    ]
+   },
+   "customer_total_ils": 68,
+   "vs_typical_pct": -1,
+   "landed_ils": 24.88,
+   "margin_pct": 10.7,
+   "contribution_ils": 3.54,
+   "after_cac_ils": -67.88,
+   "contribution_with_fee_ils": 25.57,
+   "flag": "below-floor",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 1.99,
+   "price_note": "הדפס קנבס בלי מסגרת: IKEA פוסטר ₪25, ACE קנבס ₪50, IKEA עם מסגרת ₪79–95. לבד הסה\"כ ללקוח קרוב לטיפוסי בגלל דמי המשלוח: פריט תוספת לסל (חינם מ-₪299) או לסט. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "addon_only": true,
+   "slot_alternative_ok": false
+  },
+  "pendant-cj-fluted-ceramic-wood-cap-short-lantern": {
+   "retail_ils": 149,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "מנורת תלייה קרמית אחת",
+   "il_value": {
+    "low": 145,
+    "typical": 199,
+    "high": 315,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "JÄRPLIDEN מנורת תלייה",
+      "size": "30 ס\"מ",
+      "price": 195.0,
+      "url": "https://www.ikea.com/il/he/p/jaerpliden-pendant-lamp-white-glass-nickel-plated-20499606/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "SOLKLINT מנורת תלייה",
+      "size": "22 ס\"מ",
+      "price": 145.0,
+      "url": "https://www.ikea.com/il/he/p/solklint-pendant-lamp-brass-grey-clear-glass-10430778/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "BUNKEFLO מנורת תלייה",
+      "size": "36 ס\"מ",
+      "price": 195.0,
+      "url": "https://www.ikea.com/il/he/p/bunkeflo-pendant-lamp-white-birch-60488390/"
+     },
+     {
+      "retailer": "Terminal X",
+      "title": "מנורת תקרה יוטה גליל גובה 30 ס״מ (MmShacham)",
+      "size": null,
+      "price": 315.0,
+      "url": "https://www.terminalx.com/default-category/r345602006"
+     }
+    ]
+   },
+   "customer_total_ils": 178,
+   "vs_typical_pct": -11,
+   "landed_ils": 114.87,
+   "margin_pct": -2.3,
+   "contribution_ils": -2.88,
+   "after_cac_ils": -74.31,
+   "contribution_with_fee_ils": 19.15,
+   "flag": "loss",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 20.88,
+   "price_note": "מנורת תלייה קרמית מחורצת עם כיפת עץ: IKEA ‏₪145–195, MmShacham ‏₪315. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "slot_alternative_ok": false
+  },
+  "wall-sconce-cj-black-swan-arm-white-fabric-cone": {
+   "retail_ils": 79,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "מנורת קיר אחת עם אהיל בד",
+   "il_value": {
+    "low": 95,
+    "typical": 129,
+    "high": 150,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "NYMÅNE מנורת קיר/קריאה, התקנה קבועה",
+      "size": null,
+      "price": 95.0,
+      "url": "https://www.ikea.com/il/he/p/nymane-wall-reading-lamp-wired-in-inst-white-90356963/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "ÅRSTID מנורת קיר",
+      "size": null,
+      "price": 95.0,
+      "url": "https://www.ikea.com/il/he/p/arstid-wall-lamp-brass-white-50321386/"
+     },
+     {
+      "retailer": "ACE",
+      "title": "מנורת קיר דגם וינטג' מייפל",
+      "size": null,
+      "price": 149.9,
+      "url": "https://www.ace.co.il/7639881"
+     },
+     {
+      "retailer": "Terminal X",
+      "title": "מנורה WAVES S לבן (SOHO)",
+      "size": null,
+      "price": 149.9,
+      "url": "https://www.terminalx.com/default-category/r833340001"
+     }
+    ]
+   },
+   "customer_total_ils": 108,
+   "vs_typical_pct": -16,
+   "landed_ils": 84.94,
+   "margin_pct": -39.0,
+   "contribution_ils": -26.13,
+   "after_cac_ils": -97.56,
+   "contribution_with_fee_ils": -4.1,
+   "flag": "loss",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 19.11,
+   "price_note": "מנורת קיר עם זרוע ואהיל בד: IKEA ‏₪95, ACE ו-SOHO ‏₪150. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "slot_alternative_ok": false
+  },
+  "wall-sconce-cj-white-fabric-cube-15": {
+   "retail_ils": 99,
+   "retail_src": "initial-2026-10-11",
+   "price_for_qty": 1,
+   "sale_contains": "מנורת קיר בד אחת 15x15",
+   "il_value": {
+    "low": 79,
+    "typical": 149,
+    "high": 299,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "MÅNALG מנורת קיר",
+      "size": null,
+      "price": 125.0,
+      "url": "https://www.ikea.com/il/he/p/manalg-wall-lamp-wired-in-installation-sedge-handmade-60484698/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "AKTERSPRING מנורת קיר",
+      "size": "15 ס\"מ",
+      "price": 79.0,
+      "url": "https://www.ikea.com/il/he/p/akterspring-wall-lamp-wired-in-installation-opal-white-glass-brass-plated-00614315/"
+     },
+     {
+      "retailer": "Terminal X",
+      "title": "מנורה WAVES S לבן (SOHO)",
+      "size": null,
+      "price": 149.9,
+      "url": "https://www.terminalx.com/default-category/r833340001"
+     },
+     {
+      "retailer": "Terminal X",
+      "title": "מנורה WAVES M לבן (SOHO)",
+      "size": null,
+      "price": 189.9,
+      "url": "https://www.terminalx.com/default-category/r833380001"
+     }
+    ]
+   },
+   "customer_total_ils": 128,
+   "vs_typical_pct": -14,
+   "landed_ils": 109.13,
+   "margin_pct": -41.9,
+   "contribution_ils": -35.12,
+   "after_cac_ils": -106.55,
+   "contribution_with_fee_ils": -13.09,
+   "flag": "loss",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "ship_usd_per_unit_used": 13.06,
+   "price_note": "מנורת קיר קוביית בד: IKEA ‏₪79–125, SOHO ‏₪150–190. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול.",
+   "action_he": "\"≤36V\" בשדה הספק: לאמת 220V/E27 לפני מכירה.",
+   "slot_alternative_ok": false
+  }
+ }
+}
