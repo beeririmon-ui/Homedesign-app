@@ -34,11 +34,11 @@ STYLES = {
              "bad": r"\b(crystal|glossy|chrome|neon|futuristic)\b"},
 }
 
-S = r"(?:\s*[x*×]\s*)"  # size separator
+S = r"(?:\s*[xX*×]\s*)"  # size separator (SKU text is normalized by scale.sku_text: "W132 x H264cm" -> "132 x 264 cm")
 
 
 def _s(a, b):
-    return r"\b%s%s%s\b" % (a, S, b)
+    return r"(?<!\d)(?:%s)%s(?:%s)(?!\d)" % (a, S, b)
 
 
 SLOTS = {

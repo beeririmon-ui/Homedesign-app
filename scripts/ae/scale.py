@@ -34,6 +34,7 @@ STYLE_ORDER = ["nordic", "warm-modern", "japandi", "mediterranean", "modern-coun
 STYLE_HE = {"nordic": "נורדי", "warm-modern": "מודרני חם", "japandi": "ג'פנדי", "mediterranean": "ים תיכוני",
             "modern-country": "כפרי מודרני", "boho": "בוהו"}
 TODAY = "2026-10-11"
+REPICK = False
 
 
 class Stop(Exception):
@@ -190,8 +191,15 @@ def do_screen(room, a):
 # ----------------------------------------------------------------------------- detail
 
 def sku_text(s):
-    return " ".join("%s %s" % (p.get("sku_property_name"), p.get("property_value_definition_name") or p.get("sku_property_value"))
-                    for p in ds.as_list(s.get("ae_sku_property_dtos")))
+    t = " ".join("%s %s" % (p.get("sku_property_name"), p.get("property_value_definition_name") or p.get("sku_property_value"))
+                 for p in ds.as_list(s.get("ae_sku_property_dtos")))
+    # normalize sizes so the slot regexes match: "W132 x H264cm" / "100cmxH275cm" -> "132 x 264 cm" / "100 x 275 cm"
+    t = re.sub(r"(?<=\d)(?=[A-Za-z])|(?<=[A-Za-z])(?=\d)", " ", t)
+    t = re.sub(r"(?i)cm\s*([x*×])\s*[whld]?\s*(?=\d)", r" x ", t)
+    t = re.sub(r"(?i)(?<=\d)\s*([x*×])\s*[whld]\s*(?=\d)", r" x ", t)
+    t = re.sub(r"\b[WHLDwhld]\s+(?=\d)", "", t)
+    t = re.sub(r"(\d)\s*cm\s*(?=[xX*×])", r"\1 ", t)
+    return re.sub(r"\s+", " ", t)
 
 
 def pick_room_sku(skus, key):
@@ -256,7 +264,21 @@ def do_detail(room, a, top):
     try:
         for (slot, iid), styles in items.items():
             k = "%s|%s" % (slot, iid)
-            if k in done and done[k].get("styles") and set(s for s, _ in styles) <= set(done[k]["styles"]):
+            if REPICK and k in done and done[k].get("product_ok"):
+                hit = cache.get(ds.SRC, iid, "product", allow_stale=True)
+                if hit:
+                    skus = ds.as_list((hit["payload"].get("result") or {}).get("ae_item_sku_info_dtos"))
+                    sku, how = pick_room_sku(skus, "%s/%s" % (room, slot))
+                    rec = done[k]
+                    if sku and str(sku.get("sku_id")) != rec.get("sku"):
+                        rec.update(sku=str(sku.get("sku_id")), sku_label=sku_text(sku), sku_pick=how,
+                                   price_usd=ds.num(sku.get("offer_sale_price")) or ds.num(sku.get("sku_price")),
+                                   stock=ds.num(sku.get("sku_available_stock")))
+                        for x in ("ship_usd", "ship_days", "ship_company", "ship_ok", "ship_msg"):
+                            rec.pop(x, None)
+                    else:
+                        rec["sku_pick"] = how
+            if k in done and done[k].get("styles") and set(s for s, _ in styles) <= set(done[k]["styles"]) and "ship_usd" in done[k]:
                 continue
             key = "%s/%s" % (room, slot)
             rec = done.get(k) or {"slot": slot, "item_id": iid}
@@ -478,7 +500,7 @@ def do_finalize(room, a, write_cards=True):
             cmp_ = compare_card(cards.get(rec["slot"]), style)
             r = {"room": room, "slot": rec["slot"], "style": style, "item_id": rec["item_id"], "title": rec.get("title"),
                  "url": ds.ITEM_URL % rec["item_id"], "image": rec.get("image"), "sku": rec.get("sku"), "sku_label": rec.get("sku_label"),
-                 "sku_pick": rec.get("sku_pick"), "price_usd": rec.get("price_usd"), "ship_usd": rec.get("ship_usd"),
+                 "sku_pick": rec.get("sku_pick"), "n_skus": rec.get("n_skus"), "price_usd": rec.get("price_usd"), "ship_usd": rec.get("ship_usd"),
                  "ship_days": rec.get("ship_days"), "ship_company": rec.get("ship_company"), "landed_ils": L,
                  "retail_band_ils": band, "band_source": band_src, "orders": rec.get("orders"), "reviews": rec.get("reviews"),
                  "rating": rec.get("ae_rating"), "materials": rec.get("materials"), "fit": fit, "reviewed": bool(rv),
@@ -510,7 +532,9 @@ def do_finalize(room, a, write_cards=True):
             beats = c is None or r["landed_ils"] <= c["landed_ils"]
             r["beats_existing"] = beats
             r["low_margin"] = r["margin_pct"] < 0.35
-            if i < 3 and r["fit"] >= 8 and beats:
+            # the room needs a size: a multi-SKU product whose SKU was not matched by size may be priced on a too-small SKU
+            r["size_unverified"] = bool(SLOTS["%s/%s" % (room, slot)].get("size")) and r.get("sku_pick") == "sku-default" and (r.get("n_skus") or 1) > 1
+            if i < 3 and r["fit"] >= 8 and beats and not r["size_unverified"]:
                 to_card.setdefault((slot, r["item_id"]), []).append(r)
     # cards
     carded = []
@@ -605,7 +629,7 @@ def write_md(room, meta):
             c = r["compared_to"]
             cmp_ = "%s ₪%.0f (%s)" % (c["card_id"], c["landed_ils"], c["supplier"]) if c else "אין כרטיס"
             L.append("| %s | [%s](%s)%s%s | %s | %.2f+%.2f, %s ימים | %.0f | %d–%d | ₪%.0f · %d%% | %s%s | %s %s |" % (
-                STYLE_HE[st], (r["title"] or "")[:60].replace("|", "/"), r["url"], " · **%s**" % r["verdict"],
+                STYLE_HE[st], (r["title"] or "")[:60].replace("|", "/"), r["url"], " · **%s**" % r["verdict"] + (" · ⚠ מידה לא אומתה (SKU הזול)" if r.get("size_unverified") else ""),
                 " · כרטיס" if r.get("card_id") else "", (r.get("sku_label") or "—")[:40].replace("|", "/"),
                 r["price_usd"], r["ship_usd"], r["ship_days"], r["landed_ils"], r["retail_band_ils"][0], r["retail_band_ils"][1],
                 r["margin_ils"], round(r["margin_pct"] * 100), r["fit"], "" if r["reviewed"] else " (סינון)", cmp_,
@@ -627,8 +651,11 @@ def main():
     ap.add_argument("--top", type=int, default=8)
     ap.add_argument("--per-style", type=int, default=3)
     ap.add_argument("--no-cards", action="store_true")
+    ap.add_argument("--repick", action="store_true", help="detail: re-pick the room SKU from the cache (after a size-rule fix)")
     a0 = ap.parse_args()
     a = ns(a0.room, a0.max_calls)
+    global REPICK
+    REPICK = a0.repick
     t0 = time.time()
     try:
         if a0.stage in ("screen", "all"):
