@@ -1,0 +1,155 @@
+{
+ "source": "aliexpress",
+ "id": "1005010158831023",
+ "sections": {
+  "product": {
+   "fetched_at": "2026-10-11T12:04:02+00:00",
+   "endpoint": "aliexpress.ds.product.get",
+   "params": {
+    "ship_to_country": "IL",
+    "product_id": "1005010158831023",
+    "target_currency": "USD",
+    "target_language": "en"
+   },
+   "payload": {
+    "result": {
+     "ae_item_sku_info_dtos": [
+      {
+       "sku_attr": "14:760#10pcs",
+       "offer_sale_price": "1.79",
+       "sku_id": "12000051355972449",
+       "price_include_tax": false,
+       "currency_code": "USD",
+       "sku_price": "3.73",
+       "offer_bulk_sale_price": "1.79",
+       "sku_available_stock": 8,
+       "id": "14:760#10pcs",
+       "ae_sku_property_dtos": [
+        {
+         "sku_property_value": "Pine",
+         "sku_image": "https://ae01.alicdn.com/kf/S4d72d0851a20417599a42f0916b04963B.jpg",
+         "sku_property_name": "Color",
+         "property_value_definition_name": "10pcs",
+         "property_value_id": 760,
+         "sku_property_id": 14
+        }
+       ]
+      }
+     ],
+     "ae_multimedia_info_dto": {
+      "image_urls": "https://ae01.alicdn.com/kf/Sceea986ae80344c1b006326b541430dbI.jpg;https://ae01.alicdn.com/kf/S3ee47a3a6f214f46a76fa6e2144132c4v.jpg;https://ae01.alicdn.com/kf/Sf9e7ff29e9784249bf516ce0bebaa51cQ.jpg;https://ae01.alicdn.com/kf/Sd940331c9cf9404380b1516e369d6ad0S.jpg;https://ae01.alicdn.com/kf/S5263b1d612c64e7391a91eb7d35067ffZ.jpg;https://ae01.alicdn.com/kf/Se10c418fce1d46898388314cc73fada3v.jpg"
+     },
+     "package_info_dto": {
+      "package_width": 11,
+      "package_height": 1,
+      "package_length": 13,
+      "gross_weight": "0.013",
+      "package_type": true,
+      "product_unit": 100000015
+     },
+     "logistics_info_dto": {
+      "delivery_time": 7,
+      "ship_to_country": "IL"
+     },
+     "product_id_converter_result": {
+      "main_product_id": 1005010158831023,
+      "sub_product_id": "{\"US\":3256809972516271}"
+     },
+     "ae_item_base_info_dto": {
+      "mobile_detail": "<removed; use --full>",
+      "subject": "10pcs/lot Mini Wooden Cutting Board, Dollhouse Cutting Board Handle Wood Paddle for Scene Setting of Dollhouse Kitchen",
+      "evaluation_count": "130",
+      "sales_count": "459",
+      "product_status_type": "onSelling",
+      "avg_evaluation_rating": "4.8",
+      "separated_listing": false,
+      "currency_code": "CNY",
+      "sl_product": false,
+      "category_id": 200297146,
+      "product_id": 1005010158831023,
+      "detail": "<removed; use --full>"
+     },
+     "has_whole_sale": false,
+     "ae_item_properties": [
+      {
+       "attr_name_id": 2,
+       "attr_value_id": 201512802,
+       "attr_name": "Brand Name",
+       "attr_value": "NONE"
+      },
+      {
+       "attr_name_id": 400000603,
+       "attr_value_id": 23399591357,
+       "attr_name": "High-concerned chemical",
+       "attr_value": "none"
+      },
+      {
+       "attr_name_id": 400076804,
+       "attr_value_id": 23399554847,
+       "attr_name": "Is It Charged",
+       "attr_value": "No"
+      },
+      {
+       "attr_name_id": 1238,
+       "attr_value_id": 202966874,
+       "attr_name": "Product Type",
+       "attr_value": "Wood DIY Package"
+      },
+      {
+       "attr_name_id": 219,
+       "attr_value_id": 9441741844,
+       "attr_name": "Origin",
+       "attr_value": "Mainland China"
+      },
+      {
+       "attr_name_id": 400061202,
+       "attr_value_id": 23710544761,
+       "attr_name": "Laser printer",
+       "attr_value": "N"
+      },
+      {
+       "attr_name_id": -1,
+       "attr_name": "Choice",
+       "attr_value": "yes"
+      }
+     ],
+     "ae_store_info": {
+      "store_id": 1105163918,
+      "shipping_speed_rating": "4.8",
+      "communication_rating": "4.7",
+      "store_name": "Woooooood Store",
+      "store_country_code": "CN",
+      "item_as_described_rating": "4.7"
+     }
+    },
+    "rsp_code": 200,
+    "rsp_msg": "Call succeeds",
+    "request_id": "2151e8f117917202424114498",
+    "_trace_id_": "2151fd2c17917202424102775e0ec7"
+   }
+  },
+  "freight:12000051355972449:IL:1": {
+   "fetched_at": "2026-10-11T12:04:04+00:00",
+   "endpoint": "aliexpress.ds.freight.query",
+   "params": {
+    "quantity": 1,
+    "shipToCountry": "IL",
+    "productId": "1005010158831023",
+    "selectedSkuId": "12000051355972449",
+    "language": "en_US",
+    "locale": "en_US",
+    "currency": "USD"
+   },
+   "payload": {
+    "options": [],
+    "success": false,
+    "code": 506,
+    "msg": "DELIVERY_SERVICE_EXCEPTION",
+    "item_id": "1005010158831023",
+    "sku_id": "12000051355972449",
+    "country": "IL",
+    "qty": 1
+   }
+  }
+ }
+}
