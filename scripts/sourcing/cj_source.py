@@ -194,14 +194,17 @@ def do_source_batch(a):
     with open(a.file) as f:
         log = json.load(f)
     pending = [r for r in log.get("requests") or [] if r.get("status") == "pending"]
-    if a.dry_run:
-        return out({"dry_run": True, "pending": len(pending), "would_send": [r["slot"] for r in pending[:a.count]],
-                    "budget": spend(a, "sourcing_create")})
-    sent, stopped = 0, None
+    FIELDS = ("productName", "productImage", "productUrl", "price", "remark")
     for req in pending[:a.count]:
         for k in ("productName", "productImage", "remark", "productUrl"):
             if req.get(k) and len(req[k]) > MAXLEN:
                 sys.exit("%s: %s is %d chars (max %d). Not sent." % (req["slot"], k, len(req[k]), MAXLEN))
+    if a.dry_run:  # the exact bodies that would go out, so a rework can be checked for free
+        return out({"dry_run": True, "pending": len(pending),
+                    "would_send": [dict(slot=r["slot"], **{k: r.get(k) for k in FIELDS}) for r in pending[:a.count]],
+                    "budget": spend(a, "sourcing_create")})
+    sent, stopped = 0, None
+    for req in pending[:a.count]:
         try:
             res = _send_one(a, req)
         except budget.BudgetExceeded as e:
