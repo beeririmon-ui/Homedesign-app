@@ -284,6 +284,35 @@ input[type="search"],select{width:100%;min-height:40px;padding:7px 10px;border:1
 @media (max-width:420px){.pgrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}}
 .pcard{display:grid;grid-template-rows:auto auto;text-align:start;padding:0;border:1px solid var(--rule);border-radius:var(--r);background:var(--sheet);overflow:hidden;cursor:pointer;min-width:0}
 .pcard:hover{border-color:var(--rule-2);box-shadow:0 10px 24px -18px var(--shade)}
+/* a card plus its quick price edit: the wrapper carries the frame, so the edit control is not inside the card button */
+.pcard-w{display:grid;grid-template-rows:1fr auto;border:1px solid var(--rule);border-radius:var(--r);background:var(--sheet);overflow:hidden;min-width:0}
+.pcard-w:hover{border-color:var(--rule-2);box-shadow:0 10px 24px -18px var(--shade)}
+.pcard-w>.pcard{border:0;border-radius:0;background:transparent;align-content:start}
+/* the card's content never sets its width: long flags ("CJ לא שולח לישראל (נבדק 11.10) · חסר מחיר") wrap inside the column */
+.pcard{grid-template-columns:minmax(0,1fr)}
+.pcard .pbody{grid-template-columns:minmax(0,1fr)}
+.pcard .pecon .flag{white-space:normal;align-items:baseline}
+.pcard .pecon .flag .fdot{flex:none;align-self:center}
+.pcard-w>.pcard:hover{box-shadow:none}
+.pcard-w>.pcard:focus-visible{outline-offset:-3px}
+.pcard-w.is-quick{border-color:var(--ink)}
+.pquick{padding:0 10px 10px;display:grid;gap:5px;min-width:0}
+.pquick>.linkish{justify-self:start;color:var(--ink-2)}
+.pquick label{font-weight:600;color:var(--ink-2)}
+.pquick .qrow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;min-width:0}
+.pquick .qrow .fld{flex:1 1 72px;min-width:0;width:auto;min-height:34px;padding:4px 8px;text-align:end;font-variant-numeric:tabular-nums}
+.pquick p{margin:0}
+.pprice{display:inline-flex;flex-wrap:wrap;align-items:center;gap:4px;font-weight:700;color:var(--ink);font-size:var(--fs-s)}
+.pship{white-space:nowrap}
+.pmeta{color:var(--ink-3)}
+.chip-initial{background:var(--oak-wash);color:var(--oak-ink);padding:3px 7px;font-size:11px}
+.chip-free{background:var(--sage-wash);color:var(--sage-ink)}
+.chip-design{background:var(--sheet);color:var(--ink);border:1px solid var(--rule-2);padding:4px 8px}
+.chip-floor{background:var(--brick-wash);color:var(--brick-ink)}
+.chip-loss{background:var(--brick-ink);color:var(--sheet)}
+.loss-action{border-inline-start:3px solid var(--brick-ink);padding-inline-start:8px;margin:0}
+.chip-addon{background:var(--sunk);color:var(--ink-2)}
+.chip-exception{background:var(--amber-wash);color:var(--amber-ink)}
 .pcard .pimg{position:relative;aspect-ratio:1/1;background:#fff;display:block;max-width:100%}
 .pcard .pimg img{width:100%;height:100%;object-fit:contain;display:block}
 .pcard .pimg .chips{position:absolute;inset-block-start:7px;inset-inline-start:7px;display:flex;flex-wrap:wrap;gap:4px}
@@ -452,10 +481,13 @@ details.snips li span{direction:ltr;unicode-bidi:isolate}
 .copy-manual{width:100%;font-family:var(--f-mono);font-size:12px;padding:6px 8px;border:1px solid var(--ink);border-radius:5px;background:var(--paper);direction:ltr}
 
 /* economics breakdown */
-.econ-dl{display:grid;grid-template-columns:minmax(0,1fr) auto;margin:0}
+.econ-dl{display:grid;grid-template-columns:minmax(0,1fr) fit-content(58%);margin:0}
 .econ-dl dt,.econ-dl dd{padding:6px 0;border-bottom:1px dashed var(--rule);margin:0;font-size:var(--fs-s)}
 .econ-dl dt{color:var(--ink-2)}
 .econ-dl dd{text-align:end;font-variant-numeric:tabular-nums;white-space:nowrap;padding-inline-start:12px}
+/* a value with chips ("מחיר התחלתי", quantity warning) wraps the chips under the number instead of crushing the label */
+.econ-dl dd:has(.chip){white-space:normal}
+.econ-dl dd .chip,.econ-dl dd>[dir="ltr"]{white-space:nowrap}
 .econ-dl .tot{font-weight:700;color:var(--ink)}
 .econ-head{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline}
 .econ-head .big{font-family:var(--f-display);font-size:30px;line-height:1}
@@ -505,6 +537,9 @@ details.room-lad summary{cursor:pointer;font-weight:600}
 .lead-ph{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:12px;font-size:var(--fs-xs);color:var(--ink-3);background:repeating-linear-gradient(135deg,var(--sunk) 0 8px,var(--paper) 8px 16px)}
 .pcard .pimg.ph{background:var(--paper)}
 .sync-line{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;font-size:var(--fs-s);color:var(--ink-2)}
+.sync-line .flag{white-space:normal;align-items:baseline}
+.sync-line .flag .fdot{flex:none;align-self:center}
+.screen-head>*{min-width:0}
 .export-ta{width:100%;min-height:260px;font-family:var(--f-mono);font-size:12px;direction:ltr;text-align:left;padding:10px;border:1px solid var(--rule-2);border-radius:var(--r);background:var(--paper)}
 .formdlg{width:min(560px,94vw);max-height:92vh;border-radius:8px}
 .formdlg form,.formdlg .in{display:grid;gap:14px;padding:18px;overflow:auto;max-height:92vh}
@@ -794,11 +829,12 @@ details.room-lad summary{cursor:pointer;font-weight:600}
         <div class="field"><label for="f-slot">עמדה</label><select id="f-slot"></select></div>
         <div class="field"><label for="f-status">סטטוס</label><select id="f-status"></select></div>
         <div class="field"><label for="f-flag">רווחיות</label><select id="f-flag">
-          <option value="">הכול</option><option value="green">עומד ביעד</option><option value="red">מתחת ליעד</option><option value="orange">חסרים נתונים</option>
+          <option value="">הכול</option><option value="green">עומד ביעד</option><option value="red">מתחת ליעד</option><option value="loss">מפסיד (תרומה שלילית)</option><option value="orange">חסרים נתונים</option>
         </select></div>
         <div class="field"><label for="f-supplier">ספק</label><select id="f-supplier"></select></div>
         <div class="field"><label for="f-sort">מיון</label><select id="f-sort">
-          <option value="default">לפי חדר ועמדה</option>
+          <option value="default">לפי חדר ועמדה, ובכל עמדה לפי העיצוב</option>
+          <option value="design">ציון עיצוב נורדי: מהגבוה לנמוך</option>
           <option value="cost-asc">עלות: מהזולה ליקרה</option>
           <option value="cost-desc">עלות: מהיקרה לזולה</option>
           <option value="margin-asc">מרווח: מהנמוך לגבוה</option>
@@ -929,6 +965,7 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
 const say = msg => { const el = $('#live'); el.textContent = ''; setTimeout(()=>{ el.textContent = msg; }, 30); };
 const isNum = v => typeof v === 'number' && isFinite(v);
 const fmtDay = d => { if(!d) return ''; const [y,m,dd] = String(d).slice(0,10).split('-'); return `${+dd}.${+m}.${y}`; };
+const fmtDM = d => { if(!d) return ''; const [, m, dd] = String(d).slice(0,10).split('-'); return `${+dd}.${+m}`; };
 const fmtDate = iso => { if(!iso) return ''; if(/^\d{4}-\d{2}-\d{2}$/.test(iso)) return fmtDay(iso); try{ return new Intl.DateTimeFormat('he-IL',{day:'numeric',month:'numeric',year:'numeric',hour:'2-digit',minute:'2-digit',timeZone:'Asia/Jerusalem'}).format(new Date(iso)); }catch(e){ return iso; } };
 const fmtUSD = n => isNum(n) ? '$' + n.toLocaleString('en-US',{minimumFractionDigits:2, maximumFractionDigits:2}) : '—';
 const fmtILS = (n, dec=0) => isNum(n) ? (n < 0 ? '−' : '') + '₪ ' + Math.abs(n).toLocaleString('en-US',{minimumFractionDigits:dec, maximumFractionDigits:dec}) : '—';
@@ -953,7 +990,10 @@ const STYLE_HE = {nordic:'נורדי', boho:'בוהו', 'warm-modern':'מודר�
 const STD_HE = {unknown:'לא ידוע', unverified:'לא מאומת', stated:'מוצהר בהערות'};
 const WHO = {user:'המשתמש', manager:'המנהל', 'master-designer':'master-designer', 'sourcing-agent':'sourcing', 'motion-agent':'motion-agent', 'render-agent':'render-agent', 'qa-agent':'qa-agent', 'frontend-dev':'frontend-dev', astra:'astra', other:'אחר'};
 const FLAG_HE = {green:'עומד ביעד', red:'מתחת ליעד', orange:'חסרים נתונים'};
-const MISS_HE = {cost:'עלות', shipping:'משלוח', retail:'מחיר', fast_shipping:'משלוח מהיר (עד 20 יום)', currency:'עלות בדולר', dealer:'מחיר סוחר'};
+const MISS_HE = {cost:'עלות', shipping:'משלוח', retail:'מחיר', fast_shipping:'משלוח מהיר (עד 20 יום)', currency:'עלות בדולר', dealer:'מחיר סוחר', no_route:'משלוח לישראל'};
+// where a freight quote comes from (data/economics/freight-<supplier>.json, or the room SKU's shipping_il in the card)
+const FR_HE = {cj:'CJ', zendrop:'Zendrop', aliexpress:'AliExpress', card:'המק"ט בכרטיס'};
+const SUP_KEY_HE = {cj:'CJ', zendrop:'Zendrop', aliexpress:'AliExpress', il:'ספק ישראלי', other:'הספק'};
 
 /* ---------- economics: settings, defaults, calculation ---------- */
 const ECON_META = [
@@ -965,7 +1005,7 @@ const ECON_META = [
   {k:'returns_pct', label:'שמורת החזרות', unit:'% מההכנסה נטו', def:8, step:0.5, help:'חלק מההכנסה שנשמר להחזרות, להחלפות ולנזקי משלוח. ברירת המחדל 8%, הנחה שמרנית (החלטה FR-C, 2026-10-10).'},
   {k:'cac_ils', label:'עלות שיווק להזמנה (CAC)', unit:'₪ להזמנה', def:100, step:1, help:'כמה עולה להביא הזמנה אחת. ברירת המחדל ₪100, הנחה שמרנית (החלטה FR-C, 2026-10-10). מוצג בנפרד כ"תרומה אחרי שיווק", ומתחלק בין הפריטים שבהזמנה.'},
   {k:'packaging_ils', label:'אריזה', unit:'₪ לפריט', def:0, step:0.5, help:'אריזה ממותגת או חומרי מילוי מעבר לאריזת הספק.'},
-  {k:'target_margin_pct', label:'יעד מרווח', unit:'% מההכנסה נטו', def:35, step:1, help:'מרווח = תרומה חלקי הכנסה נטו. מוצר מתחת ליעד מקבל דגל אדום.'},
+  {k:'target_margin_pct', label:'יעד מרווח', unit:'% מההכנסה נטו', def:40, step:1, help:'מרווח = תרומה חלקי הכנסה נטו. מוצר מתחת ליעד מקבל דגל אדום. ברירת המחדל 40%, הרף המינימלי שהמשתמש קבע (VR1, 2026-10-11; היה 35%).'},
   {k:'items_per_order', label:'פריטים בהזמנה ממוצעת', unit:'פריטים', def:1.4, step:0.1, min:1, help:'קובע את שווי ההזמנה הממוצעת ואת חלוקת ה-CAC בין הפריטים. מינימום 1: כל הזמנה כוללת לפחות פריט אחד.'},
   {k:'bundle_factor', label:'מקדם משלוח בהזמנה משולבת', unit:'× משלוח לפריט', def:1.0, step:0.05, help:'מכפיל את המשלוח לפריט בהזמנה הממוצעת, במסך נקודת האיזון. 1.0 = בלי הנחה על משלוח משולב.'}
 ];
@@ -1041,7 +1081,7 @@ const S = {
   edits:new Map(), news:new Map(), settingsDocs:new Map(),
   bulk:{open:false, running:false, done:0, total:0, failed:[]},
   lb:{list:[], i:0}, drawerReturn:null, lbReturn:null, drawerId:null, drawerDirty:false,
-  inline:{}, rowState:{}, setDirty:false, setDraft:null, setDraftVer:null, drawerMsg:null, budgetWork:null, budgetArmed:null, q:new Map(), addEdit:null
+  inline:{}, rowState:{}, quick:null, quickFocus:null, setDirty:false, setDraft:null, setDraftVer:null, drawerMsg:null, budgetWork:null, budgetArmed:null, q:new Map(), addEdit:null
 };
 S.filters.q = '';
 
@@ -1111,23 +1151,37 @@ const NUM_KEYS = new Set(['cost','shipping_cost_usd','sell_qty','retail_ils','co
 const ECON_FIELDS = ['shipping_cost_usd','sell_qty','retail_ils','compare_at_ils'];
 const qtyOk = v => isNum(v) && Number.isInteger(v) && v >= 1;
 function baseEcon(id){ return (S.data.economics.products || {})[id] || {}; }
-function cjShip(id){
-  const be = baseEcon(id), cj = be.cj;
-  if(!cj) return null;
+// the supplier's freight quote for the chosen method (CJ, Zendrop or AliExpress file, or the card's room SKU)
+const frOf = id => baseEcon(id).freight || null;
+function frShip(id){
+  const fr = frOf(id);
+  if(!fr || fr.status === 'no_route') return null;
   // under 20 days: no fallback to the slow line. Without a fast option the product shows 'missing fast shipping'.
-  const want = S.ES.v.shipping_method === 'under20' ? cj.under20 : (cj.cheapest || cj.under20);
-  return want ? Object.assign({date: cj.date}, want) : null;
+  const want = S.ES.v.shipping_method === 'under20' ? fr.under20 : (fr.cheapest || fr.under20);
+  return want ? Object.assign({date: fr.date, src: fr.src, quoted_qty: fr.quoted_qty || null, note: fr.note || null}, want) : null;
 }
-const noFastShip = id => { const cj = baseEcon(id).cj; return !!cj && S.ES.v.shipping_method === 'under20' && !cj.under20; };
+const noRoute = id => { const fr = frOf(id); return !!fr && fr.status === 'no_route'; };
+const noFastShip = id => { const fr = frOf(id); return !!fr && fr.status !== 'no_route' && S.ES.v.shipping_method === 'under20' && !fr.under20; };
+// "CJ, 11.10" / "Zendrop, 11.10" / "AliExpress, 11.10"; the card's own SKU: "AliExpress, מהמק"ט בכרטיס"
+const frLabel = (fr, supKey) => fr.src === 'card' ? `${SUP_KEY_HE[supKey] || 'הספק'}, מהמק"ט בכרטיס` : `${FR_HE[fr.src] || fr.src}${fr.date ? ', ' + fmtDM(fr.date) : ''}`;
+// why a product has no shipping number: the real reason, not a bare "missing"
+function noShipLabel(id){
+  const be = baseEcon(id), fr = frOf(id), sup = be.sup;
+  if(fr && fr.status === 'no_route') return `${FR_HE[fr.src] || SUP_KEY_HE[sup] || 'הספק'} לא שולח לישראל${fr.date ? ` (נבדק ${fmtDM(fr.date)})` : ''}`;
+  if(sup === 'aliexpress') return 'חסר משלוח: AliExpress עוד לא נבדק';
+  if(sup === 'cj' || sup === 'zendrop') return `חסר משלוח: ${SUP_KEY_HE[sup]} עוד לא נבדק`;
+  if(sup === 'il') return 'חסר משלוח: ספק ישראלי, לפי הצעת הספק';
+  return 'חסר משלוח';
+}
 function baseFlat(p){
   const be = baseEcon(p.id);
   const manual = be.manual && isNum(be.manual.shipping_cost_usd) ? be.manual.shipping_cost_usd : null;
-  const cj = cjShip(p.id);
+  const fr = frShip(p.id);
   return {
     name: p.name ?? null, slot_key: p.slot_key ?? null, rooms: p.rooms || [], status: p.status ?? null,
     product_url: (p.supplier && p.supplier.product_url) ?? null, sku: (p.supplier && p.supplier.sku) ?? null,
     cost: (p.price && isNum(p.price.cost)) ? p.price.cost : null,
-    shipping_cost_usd: manual != null ? manual : (cj ? cj.usd : null),
+    shipping_cost_usd: manual != null ? manual : (fr ? fr.usd : null),
     sell_qty: qtyOk(be.sell_qty) ? be.sell_qty : null,   // null = the default from the slot (sell_qty_default)
     retail_ils: isNum(be.retail_ils) ? be.retail_ils : null, compare_at_ils: isNum(be.compare_at_ils) ? be.compare_at_ils : null,
     notes: p.notes ?? null, links: p.links || []
@@ -1175,13 +1229,15 @@ function effProduct(p){
     e.room = room || null; e.slot = slot || null; e.slot_key = f.slot_key || null;
     e.in_rooms = [e.room].concat((p.in_rooms || []).filter(r => r !== p.room)).filter(Boolean);
   }
-  const be = baseEcon(p.id), cj = cjShip(p.id);
+  const be = baseEcon(p.id), fr = frShip(p.id);
   let ship;
   if('shipping_cost_usd' in pf) ship = {usd: pf.shipping_cost_usd, src: 'manual', label: 'ידני (סטודיו)'};
   else if(be.manual && isNum(be.manual.shipping_cost_usd)) ship = {usd: be.manual.shipping_cost_usd, src: 'manual', label: 'ידני' + (be.manual.date ? ', ' + fmtDay(be.manual.date) : '')};
-  else if(cj) ship = {usd: cj.usd, src: 'cj', label: `CJ, ${fmtDay(cj.date)}`, detail: [cj.name, cj.days ? cj.days + ' יום' : ''].filter(Boolean).join(' · ')};
-  else if(noFastShip(p.id)) ship = {usd: null, src: null, label: 'אין אפשרות CJ של עד 20 יום', nofast: true};
-  else ship = {usd: null, src: null, label: 'חסר משלוח'};
+  else if(fr) ship = {usd: fr.usd, src: fr.src, label: frLabel(fr, be.sup), days: fr.days || null,
+    detail: [fr.name, fr.days ? fr.days + ' יום' : '', fr.quoted_qty ? `המחיר ל-${fr.quoted_qty} יח', כל הסט` : ''].filter(Boolean).join(' · '), note: fr.note};
+  else if(noRoute(p.id)) ship = {usd: null, src: null, label: noShipLabel(p.id), noroute: true};
+  else if(noFastShip(p.id)) ship = {usd: null, src: null, label: `אין אפשרות ${FR_HE[frOf(p.id).src] || 'משלוח'} של עד 20 יום`, nofast: true};
+  else ship = {usd: null, src: null, label: noShipLabel(p.id)};
   // sell quantity: explicit value (studio or data/economics/products.json), else the default from the slot
   const qd = p.sell_qty_default || {qty: 1, sure: true};
   e.qtyDef = qd;
@@ -1192,6 +1248,16 @@ function effProduct(p){
   ship.total = e.qty > 1 ? shipForQty(ship.usd, e.qty) : ship.usd;
   ship.est = e.qty > 1 && isNum(ship.usd);
   e.ship = ship; e.retail = f.retail_ils; e.compare_at = f.compare_at_ils;
+  // the starting price from data/economics/products.json (pricing team, retail_src "initial-..."): a real price for every
+  // number on the page, marked "מחיר התחלתי" until someone edits it in the studio (the edit wins and the mark goes away)
+  e.retailInitial = !('retail_ils' in pf) && isNum(be.retail_ils) && /^initial/.test(String(be.retail_src || ''));
+  e.retailEdited = 'retail_ils' in pf;
+  e.addonOnly = be.addon_only === true;
+  e.priceFlag = be.price_flag || null; e.slotAltOk = typeof be.slot_alternative_ok === 'boolean' ? be.slot_alternative_ok : null;
+  e.priceBasis = {src: be.retail_src || null, il_value: be.il_value || null, note: be.price_note || null, customer_total: isNum(be.customer_total_ils) ? be.customer_total_ils : null,
+    for_qty: qtyOk(be.price_for_qty) ? be.price_for_qty : null, contains: be.sale_contains || null, action: be.action_he || null};
+  // the file's price is for price_for_qty units; when the studio sells another quantity the price does not fit the sale
+  e.priceQtyMismatch = !e.retailEdited && isNum(be.retail_ils) && qtyOk(be.price_for_qty) && be.price_for_qty !== e.qty;
   e.flat = f; e.bflat = bf; e.pflat = pf;
   e.pending = !!(doc && !doc.synced && Object.keys(pf).length);
   e.history = (doc && doc.history) || [];
@@ -1201,8 +1267,41 @@ function effProduct(p){
   e.mkt = mktOf(p.id);
   if(e.badCurrency) e.econ.missing = e.econ.missing.map(m => m === 'cost' ? 'currency' : m);
   if(ship.nofast) e.econ.missing = e.econ.missing.map(m => m === 'shipping' ? 'fast_shipping' : m);
+  if(ship.noroute) e.econ.missing = e.econ.missing.map(m => m === 'shipping' ? 'no_route' : m);
   return e;
 }
+// what the customer pays: the price plus economy shipping under the free-shipping threshold (site/shared economics.ts)
+function customerTotal(e){
+  if(!e || !isNum(e.retail) || !(e.retail > 0)) return null;
+  const sf = (S.data.economics && S.data.economics.storefront) || {};
+  const fee = isNum(sf.shipping_fee_economy_ils) ? sf.shipping_fee_economy_ils : 29;
+  const thr = sf.free_shipping_threshold_ils === null ? null : (isNum(sf.free_shipping_threshold_ils) ? sf.free_shipping_threshold_ils : 299);
+  const free = thr != null && e.retail >= thr;
+  return {total: free ? e.retail : e.retail + fee, free, fee, thr, src: sf.src || ''};
+}
+// VR1 (2026-10-11): under the floor (the target margin, 40%). The pricing files say whether the slot has another product
+// that clears it: no alternative = an allowed exception (amber), an alternative exists = under the floor (red).
+// ה.13 (2026-10-11): no product may lose money. Negative contribution at its price (live, with the current assumptions;
+// the pricing file's "loss" when the numbers are missing) = "מפסיד, לא למכירה". It stays in its slot's list, last.
+function isLoser(e){
+  if(!e || e._new) return false;
+  if(isNum(e.econ.contribution)) return e.econ.contribution < 0;
+  return e.priceFlag === 'loss' && !e.retailEdited;
+}
+const loserChip = e => isLoser(e) ? `<span class="chip chip-loss" title="${esc(isNum(e.econ.contribution) ? `תרומה ${fmtILS(e.econ.contribution)} למכירה במחיר הזה` : 'לפי קובץ התמחור')}">מפסיד, לא למכירה</span>` : '';
+const addonChip = e => e && e.addonOnly ? '<span class="chip chip-addon" title="מוצר שנמכר רק כתוספת להזמנה (addon_only בקובץ התמחור)">רק כתוספת לסל</span>' : '';
+// all the price-state chips of a product, in order of weight: losing money, under the floor, add-on only, quantity mismatch
+const priceChips = e => [loserChip(e), isLoser(e) ? '' : floorChip(e), addonChip(e)].filter(Boolean).join(' ');
+function floorChip(e){
+  if(!e || e._new || typeof e.slotAltOk !== 'boolean') return '';
+  const T = S.ES.v.target_margin_pct;
+  const below = isNum(e.econ.margin) ? e.econ.margin < T / 100 - 1e-9 : (e.priceFlag === 'below-floor' || e.priceFlag === 'loss');
+  if(!below) return '';
+  return e.slotAltOk ? `<span class="chip chip-floor" title="${esc(`המרווח מתחת לרף ${T}%, ויש בעמדה חלופה שעוברת אותו`)}">מתחת לרף ${esc(T)}%</span>`
+                     : `<span class="chip chip-exception" title="${esc(`המרווח מתחת לרף ${T}%, ואין בעמדה מוצר אחר שעובר אותו`)}">חריג: אין חלופה בעמדה</span>`;
+}
+const qtyMismatchChip = e => e && e.priceQtyMismatch ? `<span class="chip chip-warn" title="${esc(`המחיר בקובץ התמחור הוא ל-${e.priceBasis.for_qty} יח', והסטודיו מוכר ${e.qty} יח' בכל מכירה`)}">המחיר בקובץ ל-${esc(e.priceBasis.for_qty)} יח', נמכר כ-${esc(e.qty)}</span>` : '';
+const initialChip = e => e && e.retailInitial ? `<span class="chip chip-initial" title="${esc('מחיר התחלתי מ-data/economics/products.json' + (e.priceBasis && e.priceBasis.src ? ` (${e.priceBasis.src})` : '') + '. עריכה בסטודיו גוברת עליו.')}">מחיר התחלתי</span>` : '';
 // "sold as N units" label, shown next to every price; amber chip when the quantity is a guess
 function qtyHtml(e, opts){
   if(!e || e._new) return '';
@@ -1247,7 +1346,12 @@ const roomCover = r => r.slots.filter(s => (S.slotStats.get(s.key) || {}).n_cand
 const canEditData = () => !!S.db && S.dbReady && S.canWrite !== false;
 const flagHtml = (e, long) => {
   const x = e.econ;
-  if(x.flag === 'orange') return `<span class="flag flag-orange"><i class="fdot"></i>חסר ${esc(x.missing.map(m => MISS_HE[m]).join(' ו'))}</span>`;
+  if(x.flag === 'orange'){
+    // a known reason ("CJ לא שולח לישראל (נבדק 11.10)") is shown as it is; the rest as "חסר ..."
+    const miss = x.missing.filter(m => m !== 'no_route');
+    const parts = [x.missing.includes('no_route') && e.ship ? e.ship.label : null, miss.length ? 'חסר ' + miss.map(m => MISS_HE[m]).join(' ו') : null].filter(Boolean);
+    return `<span class="flag flag-orange"><i class="fdot"></i>${esc(parts.join(' · '))}</span>`;
+  }
   return `<span class="flag flag-${x.flag}"><i class="fdot"></i>${long ? esc(FLAG_HE[x.flag]) + ' · ' : ''}מרווח ${ltr(fmtPct(x.margin, 1))}</span>`;
 };
 /* ---------- market prices (data/economics/market-prices.json) ---------- */
@@ -1260,16 +1364,31 @@ const VERDICT = {
 };
 const mktOf = id => ((S.data && S.data.market && S.data.market.products) || {})[id] || null;
 const mktCat = k => ((S.data && S.data.market && S.data.market.categories) || {})[k] || null;
-const verdictOf = e => (e && e.mkt && VERDICT[e.mkt.verdict]) ? e.mkt.verdict : 'none';
+// The research judged its verdict at a 35% target. It is re-judged here at the current target (VR1, 2026-10-11: 40%) with the
+// research's own margins: viable = margin at the top of the band >= target; under it, "bundle-only" when the bundle of 3
+// still reaches 25% (and the research did not call it not-viable), else not-viable.
+function verdictOf(e){
+  const m = e && e.mkt;
+  if(!m || !VERDICT[m.verdict] || m.verdict === 'none') return 'none';
+  if(!isNum(m.margin_at_band)) return m.verdict;
+  const T = S.ES.v.target_margin_pct / 100;
+  if(m.margin_at_band >= T - 1e-9) return 'viable';
+  return m.verdict !== 'not-viable' && isNum(m.margin_in_bundle) && m.margin_in_bundle >= 0.25 ? 'bundle-only' : 'not-viable';
+}
 const verdictChip = (e, title) => { const k = verdictOf(e), v = VERDICT[k]; return `<span class="chip verdict ${v.cls}"${title ? ` title="${esc(title)}"` : ''}><i class="fdot"></i>${esc(v.he)}</span>`; };
 // round down to a price point that ends in 9 (99, 129, 349...)
 const p9 = x => isNum(x) ? Math.max(9, Math.floor((x + 1) / 10) * 10 - 1) : null;
+// Market units in one sale. A market category may be priced per pair ("וילונות בד, זוג", "ציפיות (זוג)": pieces 2 in
+// data.json, from build.py): 2 single panels sold together are ONE market price, not two. Never less than one unit.
+const mktPieces = k => { const c = mktCat(k); return c && isNum(c.pieces) && c.pieces > 1 ? c.pieces : 1; };
+const mktUnits = (qty, catKey) => Math.max(1, (qty >= 1 ? qty : 1) / mktPieces(catKey));
 // the price the "set price to band" action writes: the top of the suggested band (the point the verdict is judged at).
-// The band is per unit; a product sold as N units gets N x the band, rounded down to a ...9 point.
+// The band is per market unit; a sale of N market units gets N x the band, rounded down to a ...9 point.
 function bandPoint(e){
   const b = e && e.mkt && e.mkt.suggested_band;
   if(!Array.isArray(b) || !isNum(b[1])) return null;
-  return e.qty > 1 ? p9(b[1] * e.qty) : b[1];
+  const u = mktUnits(e.qty, e.mkt.category);
+  return u > 1 ? p9(b[1] * u) : b[1];
 }
 const bandText = b => Array.isArray(b) && isNum(b[0]) ? (b[0] === b[1] ? fmtILS(b[0]) : `${fmtILS(b[0])}–${fmtILS(b[1]).replace('₪ ', '')}`) : '—';
 function profitBasis(){
@@ -1962,7 +2081,7 @@ function initFilters(){
   $('#f-supplier').innerHTML = `<option value="">כל הספקים</option>` + sups.map(s => `<option value="${esc(s)}">${esc(s)}</option>`).join('');
   const F = S.filters;
   if(F.room && !S.rooms.has(F.room)) F.room = '';
-  if(F.slot && !S.slots.has(F.slot)) F.slot = '';
+  if(F.slot && F.slot !== NO_SLOT && !S.slots.has(F.slot)) F.slot = '';
   if(F.status && !statuses.includes(F.status)) F.status = '';
   if(F.supplier && !sups.includes(F.supplier)) F.supplier = '';
   fillSlotSelect();
@@ -1980,7 +2099,9 @@ function slotOptions(room, withEmpty){
     return room ? opts : `<optgroup label="${esc(r.name_he)}">${opts}</optgroup>`;
   }).join('');
 }
-function fillSlotSelect(){ $('#f-slot').innerHTML = slotOptions(S.filters.room, 'כל העמדות'); }
+// '__none' = cards with no slot of their own and no shared slot (not placed anywhere in the house)
+const NO_SLOT = '__none';
+function fillSlotSelect(){ $('#f-slot').innerHTML = `<option value="">כל העמדות</option><option value="${NO_SLOT}">בלי עמדה</option>` + slotOptions(S.filters.room, ''); }
 function syncFilterInputs(){
   const f = S.filters;
   if(S.data) fillSlotSelect();
@@ -1994,8 +2115,16 @@ function readFilters(){
   store.set('filters', Object.assign({}, f, {q:''}));
 }
 const tagName = t => TAG_HE[t] || (S.rooms.get(t) && S.rooms.get(t).name_he) || t;
+// "פינת אוכל · פמוטים, סלון · אגרטל": the slots a card is shared into (data/slots shared_ids)
+const sharedSlotsText = p => (p.shared_in || []).map(k => { const s = S.slots.get(k); const r = s && S.rooms.get(s.room); return `${r ? r.name_he : (s ? s.room : k.split('/')[0])} · ${s ? (s.name_he || s.id) : k}`; }).join(', ');
+// the designer's Nordic score of a card (style_scores.nordic.score, 0-10), or null when it is not scored yet
+const designScore = p => { const x = p && p.style_scores && p.style_scores.nordic; return x && isNum(x.score) ? x.score : null; };
 function slotLabel(p){
-  if(!p.slot_key) return p._new ? 'ליד בלי עמדה' : p.pool ? 'מאגר משותף, בלי עמדה' : (p.slot || '—');
+  if(!p.slot_key){
+    if(p._new) return 'ליד בלי עמדה';
+    if((p.shared_in || []).length) return 'משותף: ' + sharedSlotsText(p);
+    return p.pool ? 'מאגר משותף, בלי עמדה' : (p.slot || 'בלי עמדה');
+  }
   const s = S.slots.get(p.slot_key); const r = S.rooms.get(p.room);
   return `${r ? r.name_he : p.room} · ${s ? (s.name_he || s.id) : p.slot}${s ? '' : ' (עמדה לא קיימת בקובץ)'}`;
 }
@@ -2007,10 +2136,12 @@ function filtered(){
   const toks = f.q.trim().toLowerCase().split(/\s+/).filter(Boolean);
   let list = S.view.filter(p => {
     if(f.room && !(p.in_rooms || []).includes(f.room)) return false;
-    if(f.slot && !(p.slot_key === f.slot || (p.shared_in || []).includes(f.slot))) return false;
+    if(f.slot === NO_SLOT){ if(p.slot_key || (p.shared_in || []).length) return false; }
+    else if(f.slot && !(p.slot_key === f.slot || (p.shared_in || []).includes(f.slot))) return false;
     if(f.status && p.status !== f.status) return false;
     if(f.supplier && !(p.supplier && p.supplier.name === f.supplier)) return false;
-    if(f.flag && p.econ.flag !== f.flag) return false;
+    if(f.flag === 'loss'){ if(!isLoser(p)) return false; }
+    else if(f.flag && p.econ.flag !== f.flag) return false;
     if(f.dups && !(p.dups || []).length) return false;
     if(f.pending && !p.pending) return false;
     if(toks.length){ const h = haystack(p); if(!toks.every(t => h.includes(t))) return false; }
@@ -2020,10 +2151,15 @@ function filtered(){
   const slotIdx = new Map(); S.data.rooms.forEach(r => r.slots.forEach((s,i) => slotIdx.set(s.key, i)));
   const cost = p => isNum(p.price && p.price.cost) ? p.price.cost : Infinity;
   const mg = p => isNum(p.econ.margin) ? p.econ.margin : null;
+  // design first (user, 2026-10-11): products that do not lose money first (ה.13: losing ones last, never hidden), then
+  // the Nordic design score high to low, then the margin high to low; unscored after scored
+  const byDesign = (a, b) => (isLoser(a) - isLoser(b)) || ((designScore(a) == null) - (designScore(b) == null)) || ((designScore(b) ?? 0) - (designScore(a) ?? 0))
+    || ((mg(a) == null) - (mg(b) == null)) || ((mg(b) ?? 0) - (mg(a) ?? 0)) || a.id.localeCompare(b.id);
   if(f.sort === 'cost-asc') list.sort((a,b) => cost(a) - cost(b));
   else if(f.sort === 'cost-desc') list.sort((a,b) => (cost(b) === Infinity ? -1 : cost(b)) - (cost(a) === Infinity ? -1 : cost(a)));
   else if(f.sort === 'margin-asc' || f.sort === 'margin-desc'){ const d = f.sort === 'margin-asc' ? 1 : -1; list.sort((a,b) => (mg(a) == null) - (mg(b) == null) || d * ((mg(a) ?? 0) - (mg(b) ?? 0))); }
-  else list.sort((a,b) => (!!b._new - !!a._new) || ((roomIdx.get(a.room) ?? 99) - (roomIdx.get(b.room) ?? 99)) || ((slotIdx.get(a.slot_key) ?? 99) - (slotIdx.get(b.slot_key) ?? 99)) || a.id.localeCompare(b.id));
+  else if(f.sort === 'design' || (f.slot && f.slot !== NO_SLOT)) list.sort((a,b) => (!!b._new - !!a._new) || byDesign(a, b));
+  else list.sort((a,b) => (!!b._new - !!a._new) || ((roomIdx.get(a.room) ?? 99) - (roomIdx.get(b.room) ?? 99)) || ((slotIdx.get(a.slot_key) ?? 99) - (slotIdx.get(b.slot_key) ?? 99)) || byDesign(a, b));
   return list;
 }
 function renderSyncLine(){
@@ -2039,30 +2175,84 @@ function renderProducts(){
   renderSyncLine();
   const list = filtered();
   const f = S.filters;
-  const active = [f.room && S.rooms.get(f.room)?.name_he, f.slot && (S.slots.get(f.slot)?.name_he || f.slot), f.status && (P_STATUS[f.status] || f.status), f.flag && FLAG_HE[f.flag], f.supplier, f.dups && 'כפולים', f.pending && 'ממתינים לסנכרון', f.q.trim() && `"${f.q.trim()}"`].filter(Boolean);
+  const active = [f.room && S.rooms.get(f.room)?.name_he, f.slot && (f.slot === NO_SLOT ? 'בלי עמדה' : (S.slots.get(f.slot)?.name_he || f.slot)), f.status && (P_STATUS[f.status] || f.status), f.flag && (f.flag === 'loss' ? 'מפסיד' : FLAG_HE[f.flag]), f.supplier, f.dups && 'כפולים', f.pending && 'ממתינים לסנכרון', f.q.trim() && `"${f.q.trim()}"`].filter(Boolean);
   $('#p-result').innerHTML = `<span><strong class="num">${list.length}</strong> מתוך ${S.view.length} מוצרים${active.length ? ` · ${esc(active.join(' · '))}` : ''}</span>${active.length ? '<button type="button" class="linkish" id="f-reset">ניקוי הסינון</button>' : ''}`;
   const rb = $('#f-reset'); if(rb) rb.onclick = () => { Object.assign(S.filters, {q:'', room:'', slot:'', status:'', supplier:'', flag:'', dups:false, pending:false}); syncFilterInputs(); readFilters(); renderProducts(); $('#f-q').focus(); };
-  if(!list.length){ $('#pgrid').innerHTML = `<p class="empty span-all">אין מוצרים שמתאימים לסינון.${f.slot ? ' לעמדה הזו עוד אין כרטיסי מוצר.' : ''}</p>`; return; }
+  if(!list.length){ $('#pgrid').innerHTML = `<p class="empty span-all">אין מוצרים שמתאימים לסינון.${f.slot === NO_SLOT ? ' כל המוצרים משובצים בעמדה או במאגר משותף.' : f.slot ? ' לעמדה הזו עוד אין כרטיסי מוצר.' : ''}</p>`; return; }
+  const restore = keepFocus($('#pgrid'));
+  // a card or its price button has no id: after a re-render (a db snapshot, a save) focus goes back to the same one
+  const act = document.activeElement, grid = $('#pgrid');
+  const back = act && grid.contains(act) ? (act.dataset.qprice ? `[data-qprice="${CSS.escape(act.dataset.qprice)}"]` : act.dataset.product ? `.pcard[data-product="${CSS.escape(act.dataset.product)}"]` : null) : null;
+  const quickOk = canEditData();
   $('#pgrid').innerHTML = list.map(p => {
     const hex = (p.colors || {}).dominant_hex || '';
-    const viaShared = f.slot && p.slot_key !== f.slot;
+    const viaShared = f.slot && f.slot !== NO_SLOT && p.slot_key !== f.slot;
     const sh = p.shipping || {};
     const days = sh.days_min != null ? (sh.days_max != null && sh.days_max !== sh.days_min ? `${sh.days_min}–${sh.days_max}` : `${sh.days_min}`) : null;
     const img = p._new ? `<span class="lead-ph">אין תמונה עד הסנכרון</span>` : `<img src="${esc(p.img.src)}" alt="" loading="lazy" width="${p.img.w}" height="${p.img.h}">`;
-    return `<button type="button" class="pcard" data-product="${esc(p.id)}" aria-haspopup="dialog">
+    const shipTip = isNum(p.ship.usd) ? `משלוח לישראל ליחידה · ${p.ship.label}${p.qty > 1 ? ` · ל-${p.qty} יח' ${fmtUSD(p.ship.total)}` : ''}` : '';
+    const price = isNum(p.retail) && p.retail > 0 ? `<span class="pprice"><span class="num" dir="ltr">${esc(fmtILS(p.retail))}</span>${p.retailInitial ? initialChip(p) : ''}</span>` : '';
+    // data-* for the smoke test and for scripts: flag, what is missing, where shipping and the price come from, units per sale
+    const dat = `data-pid="${esc(p.id)}" data-flag="${esc(p.econ.flag)}" data-miss="${esc(p.econ.missing.join(','))}" data-ship-src="${esc(p.ship.src || (p.ship.noroute ? 'no_route' : p.ship.nofast ? 'nofast' : ''))}" data-qty="${esc(p.qty)}" data-retail-src="${esc(!isNum(p.retail) ? '' : p.retailInitial ? 'initial' : p.retailEdited ? 'studio' : 'file')}" data-sup="${esc(baseEcon(p.id).sup || '')}"`;
+    return `<div class="pcard-w${S.quick && S.quick.id === p.id ? ' is-quick' : ''}" ${dat}><button type="button" class="pcard" data-product="${esc(p.id)}" aria-haspopup="dialog">
       <span class="pimg ${p._new ? 'ph' : ''}">${img}
-        <span class="chips">${p._new ? '<span class="chip chip-new">ליד חדש</span>' : `<span class="chip st-${esc(p.status)}">${esc(P_STATUS[p.status] || p.status)}</span>`}${(p.dups || []).length ? '<span class="chip chip-dup">כפול</span>' : ''}${p.pending ? '<span class="chip chip-pending">ממתין לסנכרון</span>' : ''}</span>
+        <span class="chips">${p._new ? '<span class="chip chip-new">ליד חדש</span>' : `<span class="chip st-${esc(p.status)}">${esc(P_STATUS[p.status] || p.status)}</span>`}${designScore(p) != null ? `<span class="chip chip-design" title="ציון העיצוב הנורדי של המעצב (style_scores.nordic)">נורדי <b dir="ltr">${esc(designScore(p))}</b></span>` : ''}${(p.dups || []).length ? '<span class="chip chip-dup">כפול</span>' : ''}${p.pending ? '<span class="chip chip-pending">ממתין לסנכרון</span>' : ''}</span>
         ${p._new || p.img.ok ? '' : '<span class="noimg chip">אין תמונה</span>'}</span>
       <span class="pbody">
         <span class="pname" dir="auto">${esc(p.name)}</span>
         <span class="pslot">${esc(slotLabel(p))}${viaShared ? ' · דרך מאגר משותף' : ''}</span>
         <span class="pslot faint">${esc((p.rooms || []).map(tagName).join(', '))}</span>
-        <span class="prow"><span class="cost num" dir="ltr">${esc(fmtUSD(p.price && p.price.cost))}</span>${days ? `<span><span class="num" dir="ltr">${esc(days)}</span> ימים</span>` : ''}${hex ? `<span class="swrow"><span class="swatch" data-sw="${esc(hex)}"></span><span class="hex" dir="ltr">${esc(hex)}</span></span>` : ''}${p.options_n ? `<span class="popts" title="${esc((p.options_axes || []).join(', '))}"><span class="num">${p.options_n}</span> אפשרויות</span>` : ''}<span class="faint">${esc(p.supplier && p.supplier.name || '')}</span></span>
-        <span class="pecon">${flagHtml(p)}${p._new ? '' : ' ' + qtyHtml(p)}</span>
+        <span class="prow"><span class="cost num" dir="ltr" title="עלות אצל הספק ליחידה">${esc(fmtUSD(p.price && p.price.cost))}</span>${isNum(p.ship.usd) ? `<span class="pship" title="${esc(shipTip)}"><span class="num" dir="ltr">+${esc(fmtUSD(p.ship.usd))}</span> משלוח</span>` : ''}${price}</span>
+        <span class="prow pmeta">${days ? `<span><span class="num" dir="ltr">${esc(days)}</span> ימים</span>` : ''}${hex ? `<span class="swrow"><span class="swatch" data-sw="${esc(hex)}"></span><span class="hex" dir="ltr">${esc(hex)}</span></span>` : ''}${p.options_n ? `<span class="popts" title="${esc((p.options_axes || []).join(', '))}"><span class="num">${p.options_n}</span> אפשרויות</span>` : ''}<span class="faint">${esc(p.supplier && p.supplier.name || '')}</span></span>
+        <span class="pecon">${flagHtml(p)}${p._new ? '' : ' ' + qtyHtml(p)}${priceChips(p) ? ' ' + priceChips(p) : ''}</span>
       </span>
-    </button>`;
+    </button>${quickOk && !p._new ? quickPriceHtml(p) : ''}</div>`;
   }).join('');
   paintVars($('#pgrid'));
+  bindQuickPrice();
+  restore();
+  if(back){ const el = $(back, grid); if(el) el.focus({preventScroll:true}); }
+  if(S.quickFocus){ const b = $(`[data-qprice="${CSS.escape(S.quickFocus)}"]`); S.quickFocus = null; if(b) b.focus({preventScroll:true}); }
+}
+/* quick price edit on a product card: a small button opens one field; saving goes through the studio's edit + sync
+   path (product_edits/<id>, fields.economics.retail_ils), the same as the drawer form and the profit table */
+function quickPriceHtml(p){
+  const q = S.quick && S.quick.id === p.id ? S.quick : null;
+  if(!q) return `<div class="pquick"><button type="button" class="linkish xs" data-qprice="${esc(p.id)}" aria-label="${esc(`עריכת המחיר לצרכן: ${p.name}`)}">${isNum(p.retail) ? 'עריכת מחיר' : 'קביעת מחיר'}</button></div>`;
+  const id = 'qp-' + p.id;
+  const val = 'val' in q ? q.val : (isNum(p.retail) ? String(p.retail) : '');
+  return `<form class="pquick open" data-qform="${esc(p.id)}" novalidate>
+    <label for="${esc(id)}" class="xs">מחיר לצרכן, ₪ כולל מע"מ${p.qty > 1 ? `, ל-${esc(p.qty)} יח'` : ''}</label>
+    <div class="qrow"><input type="number" id="${esc(id)}" class="fld" min="0" step="1" inputmode="decimal" value="${esc(val)}" ${q.saving ? 'disabled' : ''} ${q.err ? 'aria-invalid="true"' : ''} aria-describedby="${esc(id)}-msg">
+      <button type="submit" class="btn btn-small" ${q.saving ? 'disabled' : ''}>${q.saving ? 'שומר…' : 'שמירה'}</button>
+      <button type="button" class="btn btn-ghost btn-small" data-qcancel ${q.saving ? 'disabled' : ''}>ביטול</button></div>
+    <p class="xs ${q.err ? 'ef-err' : 'faint'}" id="${esc(id)}-msg">${q.err ? esc(q.err) : (isNum(p.econ.recommended) ? `מחיר ליעד המרווח: ${ltr(fmtILS(Math.ceil(p.econ.recommended)))}` : '')}</p>
+  </form>`;
+}
+function bindQuickPrice(){
+  const grid = $('#pgrid');
+  for(const b of $$('[data-qprice]', grid)) b.onclick = () => { S.quick = {id: b.dataset.qprice}; renderProducts(); const i = $('#qp-' + CSS.escape(b.dataset.qprice)); if(i){ i.focus(); i.select(); } };
+  const form = $('[data-qform]', grid); if(!form) return;
+  const id = form.dataset.qform, inp = $('input', form);
+  const cancel = () => { S.quick = null; S.quickFocus = id; renderProducts(); };
+  inp.addEventListener('input', () => { if(S.quick) S.quick.val = inp.value; });
+  form.addEventListener('keydown', ev => { if(ev.key === 'Escape'){ ev.preventDefault(); ev.stopPropagation(); cancel(); } });
+  $('[data-qcancel]', form).onclick = cancel;
+  form.onsubmit = ev => { ev.preventDefault(); saveQuickPrice(id, inp); };
+}
+async function saveQuickPrice(id, inp){
+  const e = S.byId.get(id); if(!e || !S.quick) return;
+  const raw = inp.value.trim();
+  if((inp.validity && inp.validity.badInput) || (raw !== '' && !(Number(raw) >= 0))){ S.quick.err = 'צריך מספר 0 ומעלה, או שדה ריק.'; S.quick.val = inp.value; renderProducts(); const i = $('#qp-' + CSS.escape(id)); if(i) i.focus(); return; }
+  const v = raw === '' ? null : Number(raw);
+  if(same('retail_ils', v, e.flat.retail_ils)){ S.quick = null; S.quickFocus = id; renderProducts(); return; }
+  S.quick = {id, val: inp.value, saving: true}; renderProducts();
+  try{
+    await saveProductFlat(id, Object.assign({}, e.flat, {retail_ils: v}), [{field: 'retail_ils', from: norm('retail_ils', e.flat.retail_ils), to: norm('retail_ils', v)}]);
+    S.quick = null; S.quickFocus = id;
+    say(v == null ? 'המחיר נמחק. השינוי ממתין לסנכרון.' : `המחיר נשמר: ${v} שקלים. השינוי ממתין לסנכרון.`);
+  }catch(err){ S.quick = {id, val: inp.value, err: errText(err)}; }
+  renderProducts();
 }
 
 /* ---------- product drawer ---------- */
@@ -2084,7 +2274,7 @@ function linkItem(label, url){
   return `<li><div class="row"><a href="${esc(url)}" target="_blank" rel="noopener noreferrer">${esc(label || hostOf(url) || url)}</a><button type="button" class="copy" data-copy="${esc(url)}" aria-label="העתקת הקישור ${esc(label || '')}">העתקה</button></div><span class="url-text">${esc(url)}</span></li>`;
 }
 function econBlock(e){
-  const x = e.econ, s = S.ES.v;
+  const x = e.econ, s = S.ES.v, ct = customerTotal(e);
   const head = `<div class="econ-head">${x.flag === 'orange' ? flagHtml(e, true) : `<span class="big">${ltr(fmtPct(x.margin, 1))}</span>${flagHtml(e, true)}`}</div>`;
   const q = e.qty, many = q > 1;
   const qd = e.qtyDef || {};
@@ -2094,7 +2284,8 @@ function econBlock(e){
       <dt>עלות המוצר${many ? ` <span class="xs faint">(${ltr(fmtUSD(e.price.cost))} × ${ltr(esc(q))} יח')</span>` : ''}</dt><dd>${ltr(fmtUSD(isNum(e.price.cost) ? e.price.cost * q : null))}</dd>
       <dt>משלוח לישראל <span class="xs faint">· ${esc(e.ship.label)}${e.ship.detail ? ' · ' + esc(e.ship.detail) : ''}${e.ship.est ? ` · ${ltr(fmtUSD(e.ship.usd))} ליחידה, ל-${ltr(esc(q))} יח' לפי $3.72 קבוע לחבילה` : ''}</span>${e.ship.est ? ' <span class="est">הערכה</span>' : ''}</dt><dd>${ltr(fmtUSD(e.ship.total))}</dd>
       <dt>עלות נחיתה <span class="xs faint">(× ${ltr(esc(s.usd_ils))} ₪ לדולר)${isNum(x.ship_share) ? ` · משלוח ${ltr(fmtPct(x.ship_share))} ממנה` : ''}</span></dt><dd class="tot">${ltr(fmtILS(x.landed, 2))}</dd>
-      <dt>מחיר לצרכן, כולל מע"מ <span class="xs faint">(נמכר כ-${ltr(esc(q))} יח')</span></dt><dd>${ltr(fmtILS(e.retail, 2))}${isNum(e.compare_at) ? ` <span class="xs faint">(לפני הנחה ${ltr(fmtILS(e.compare_at))})</span>` : ''}</dd>
+      <dt>מחיר לצרכן, כולל מע"מ <span class="xs faint">(נמכר כ-${ltr(esc(q))} יח')</span></dt><dd>${ltr(fmtILS(e.retail, 2))}${e.retailInitial ? ' ' + initialChip(e) : ''}${e.priceQtyMismatch ? ' ' + qtyMismatchChip(e) : ''}${isNum(e.compare_at) ? ` <span class="xs faint">(לפני הנחה ${ltr(fmtILS(e.compare_at))})</span>` : ''}</dd>
+      ${ct ? `<dt>ללקוח עם משלוח <span class="xs faint">(${ct.free ? `משלוח חינם מ-${ltr(fmtILS(ct.thr))}` : `+ משלוח חסכוני ${ltr(fmtILS(ct.fee))}${ct.thr != null ? `, חינם מ-${ltr(fmtILS(ct.thr))}` : ''}`})</span></dt><dd>${ltr(fmtILS(ct.total))}${ct.free ? ' <span class="chip chip-free">משלוח חינם</span>' : ''}</dd>` : ''}
       <dt>הכנסה נטו <span class="xs faint">(בלי מע"מ ${ltr(esc(s.vat_pct + '%'))})</span></dt><dd>${ltr(fmtILS(x.net, 2))}</dd>
       <dt>עמלות סליקה <span class="xs faint">(${ltr(esc(s.card_pct + '%'))} + ${ltr(fmtILS(s.card_fixed_ils, 2))})</span></dt><dd>${ltr(fmtILS(x.fees, 2))}</dd>
       <dt>שמורת החזרות <span class="xs faint">(${ltr(esc(s.returns_pct + '%'))} מהנטו)</span></dt><dd>${ltr(fmtILS(x.reserve, 2))}</dd>
@@ -2102,7 +2293,32 @@ function econBlock(e){
       <dt class="tot">תרומה</dt><dd class="tot">${ltr(fmtILS(x.contribution, 2))}</dd>
       <dt>אחרי שיווק <span class="xs faint">(CAC ${ltr(fmtILS(s.cac_ils))} ÷ ${ltr(esc(s.items_per_order))} פריטים)</span></dt><dd>${ltr(fmtILS(x.after_marketing, 2))}</dd>
       <dt class="tot">מחיר מומלץ ליעד ${ltr(esc(s.target_margin_pct + '%'))} <span class="xs faint">(נמכר כ-${ltr(esc(q))} יח')</span></dt><dd class="tot">${x.recommended != null ? ltr(fmtILS(Math.ceil(x.recommended))) : (x.landed != null ? 'היעד לא אפשרי בהנחות האלה' : '—')}</dd>
-    </dl></section>`;
+    </dl>
+    ${canEditData() ? `<p class="small"><button type="button" class="linkish" id="econ-price-edit">${isNum(e.retail) ? 'עריכת המחיר לצרכן' : 'קביעת מחיר לצרכן'}</button></p>` : ''}</section>`;
+}
+// the basis of the starting price (data/economics/products.json, pricing team): value in Israel, comparables, note
+function priceBasisBlock(e){
+  const b = e.priceBasis || {}, iv = b.il_value;
+  const base = e.bflat && isNum(e.bflat.retail_ils) ? e.bflat.retail_ils : null;
+  if(!iv && !b.note && !b.src) return '';
+  const SRC = s => /^initial/.test(String(s || '')) ? `מחיר התחלתי (${s})` : /^studio/.test(String(s || '')) ? 'נקבע בסטודיו' : (s || '—');
+  const comps = (iv && iv.comps || []).map(c => `<li>${httpsOk(c.url) ? `<a href="${esc(c.url)}" target="_blank" rel="noopener noreferrer">${esc(c.retailer || hostOf(c.url))}<span class="sr-only">, נפתח בחלון חדש</span></a>` : esc(c.retailer || '')}${c.title ? ` · <span dir="auto">${esc(c.title)}</span>` : ''}${c.size ? ` <span class="faint">(${esc(c.size)})</span>` : ''}${isNum(c.price) ? ` · ${ltr(fmtILS(c.price, c.price % 1 ? 2 : 0))}` : ''}${isNum(c.list_price) && c.list_price > (c.price || 0) ? ` <span class="faint">(מחיר מחוק ${ltr(fmtILS(c.list_price, c.list_price % 1 ? 2 : 0))})</span>` : ''}${c.note ? ` <span class="faint xs">· ${esc(c.note)}</span>` : ''}</li>`).join('');
+  const has3 = iv && [iv.low, iv.typical, iv.high].some(isNum);
+  return `<section class="section mkt" aria-labelledby="h-ilv"><h3 id="h-ilv" class="h-small">בסיס המחיר: שווי בישראל</h3>
+    ${has3 ? `<div class="mkt-scale" role="img" aria-label="${esc(`שווי בישראל: נמוך ${iv.low ?? '?'}, טיפוסי ${iv.typical ?? '?'}, גבוה ${iv.high ?? '?'} שקלים`)}">
+      <div><span class="l">נמוך</span><b>${ltr(fmtILS(iv.low))}</b></div><div><span class="l">טיפוסי</span><b>${ltr(fmtILS(iv.typical))}</b></div><div><span class="l">גבוה</span><b>${ltr(fmtILS(iv.high))}</b></div>
+    </div>` : ''}
+    <dl class="econ-dl">
+      <dt>מקור המחיר</dt><dd>${esc(e.retailEdited ? 'נערך בסטודיו' : SRC(b.src))}</dd>
+      ${e.retailEdited && isNum(base) ? `<dt>המחיר ההתחלתי <span class="xs faint">(לפני העריכה)</span></dt><dd>${ltr(fmtILS(base))}</dd>` : ''}
+      ${b.contains || b.for_qty ? `<dt>מה כולל המחיר</dt><dd>${b.contains ? `<span dir="auto">${esc(b.contains)}</span>` : ''}${b.for_qty ? ` <span class="xs faint">(${ltr(esc(b.for_qty))} יח')</span>` : ''}${e.priceQtyMismatch ? ' ' + qtyMismatchChip(e) : ''}</dd>` : ''}
+      ${isNum(b.customer_total) && !e.retailEdited ? `<dt>ללקוח עם משלוח <span class="xs faint">(בקובץ התמחור)</span></dt><dd>${ltr(fmtILS(b.customer_total))}</dd>` : ''}
+    </dl>
+    ${b.note ? `<p class="small muted" dir="auto">${esc(b.note)}</p>` : ''}
+    ${b.action ? `<p class="small"><strong>${isLoser(e) ? 'מה לעשות' : 'המלצת התמחור'}:</strong> <span dir="auto">${esc(b.action)}</span></p>` : ''}
+    ${iv && iv.note ? `<p class="xs faint" dir="auto">${esc(iv.note)}</p>` : ''}
+    ${comps ? `<details class="mkt-src"><summary>${(iv.comps || []).length} מוצרים דומים בישראל</summary><ul class="small">${comps}</ul></details>` : ''}
+  </section>`;
 }
 function marketBlock(e){
   const M = S.data.market;
@@ -2114,8 +2330,9 @@ function marketBlock(e){
   const pt = bandPoint(e);
   const atPt = isNum(pt) ? econCalc({cost_usd: e.badCurrency ? null : e.price.cost, qty: e.qty, shipping_usd: e.ship.total, retail_ils: pt}, S.ES.v) : null;
   const cur = e.retail;
-  // where the current price sits in the market, per unit
-  const u = isNum(cur) ? cur / (e.qty || 1) : null;
+  // where the current price sits in the market, per market unit (a pair of curtains is one unit)
+  const units = mktUnits(e.qty, m.category);
+  const u = isNum(cur) ? cur / units : null;
   const pos = !isNum(u) || !Array.isArray(c.band) ? '' : u < c.band[0] ? 'מתחת לטווח' : u <= c.band[1] ? 'בתוך הטווח' : u <= c.median ? 'בין הטווח לחציון' : u <= c.high ? 'מעל החציון' : 'מעל היקר בשוק';
   const srcs = (c.sources || []).map(x => `<li>${httpsOk(x.url) ? `<a href="${esc(x.url)}" target="_blank" rel="noopener noreferrer">${esc(x.retailer || hostOf(x.url))}</a>` : esc(x.retailer || '')} · <span dir="auto">${esc(x.title || '')}</span>${x.size ? ` <span class="faint">(${esc(x.size)})</span>` : ''} · ${ltr(fmtILS(x.price, x.price % 1 ? 2 : 0))}${isNum(x.sale_price) ? ` <span class="faint">(במבצע ${ltr(fmtILS(x.sale_price, x.sale_price % 1 ? 2 : 0))})</span>` : ''}</li>`).join('');
   const editable = canEditData();
@@ -2131,12 +2348,12 @@ function marketBlock(e){
       <dt>מרווח במחיר העליון <span class="xs faint">(במחקר: שער ${ltr(esc((M.assumptions || {}).fx_usd_ils ?? 3.7))}, יחידה אחת)</span></dt><dd>${ltr(fmtPct(m.margin_at_band, 1))}</dd>
       <dt>אותו מרווח בשער 3.0</dt><dd>${ltr(fmtPct(m.margin_at_band_fx3, 1))}</dd>
       <dt>בסל של 3 פריטים</dt><dd>${ltr(fmtPct(m.margin_in_bundle, 1))}</dd>
-      <dt>מחיר ל-35% <span class="xs faint">(במחקר)</span></dt><dd>${ltr(fmtILS(m.price_for_35pct))}</dd>
+      <dt>מחיר ל-35% <span class="xs faint">(במחקר, ביעד הקודם; היעד עכשיו ${ltr(esc(S.ES.v.target_margin_pct + '%'))})</span></dt><dd>${ltr(fmtILS(m.price_for_35pct))}</dd>
       ${atPt ? `<dt>במחיר ${ltr(fmtILS(pt))} לפי ההנחות כאן${e.qty > 1 ? ` <span class="xs faint">(${ltr(esc(e.qty))} יח')</span>` : ''}</dt><dd>${isNum(atPt.margin) ? ltr(fmtPct(atPt.margin, 1)) : '—'}</dd>` : ''}
       ${isNum(cur) ? `<dt>המחיר שלך</dt><dd>${ltr(fmtILS(cur))} <span class="xs faint">${esc(pos)}</span></dd>` : ''}
     </dl>
     ${(m.flags || []).length ? `<p class="xs muted">${m.flags.map(f => `<span class="est">${esc(f.he)}</span>`).join(' ')}</p>` : ''}
-    ${isNum(pt) ? `<div class="row"><button type="button" class="btn btn-ghost btn-small" id="mkt-set" ${editable && !atBand ? '' : 'disabled'}>${atBand ? `המחיר כבר ${ltr(fmtILS(pt))}` : `קביעת מחיר לפי הטווח: ${ltr(fmtILS(pt))}`}</button><span class="xs faint">${editable ? (e.qty > 1 ? `${ltr(fmtILS(m.suggested_band[1]))} × ${ltr(esc(e.qty))} יח', מעוגל ל-9. ` : '') + 'ממלא את שדה המחיר בטופס; שומרים כרגיל.' : 'כדי לקבוע מחיר, פתח/י את הדף ב-claude.ai.'}</span></div>` : ''}
+    ${isNum(pt) ? `<div class="row"><button type="button" class="btn btn-ghost btn-small" id="mkt-set" ${editable && !atBand ? '' : 'disabled'}>${atBand ? `המחיר כבר ${ltr(fmtILS(pt))}` : `קביעת מחיר לפי הטווח: ${ltr(fmtILS(pt))}`}</button><span class="xs faint">${editable ? (units > 1 ? `${ltr(fmtILS(m.suggested_band[1]))} × ${ltr(esc(+units.toFixed(2)))}, מעוגל ל-9. ` : (e.qty > 1 && mktPieces(m.category) > 1 ? `המחיר בשוק הוא ל${esc(mktPieces(m.category) === 2 ? 'זוג' : 'סט')}, ו-${ltr(esc(e.qty))} יח' הן ${esc(mktPieces(m.category) === 2 ? 'זוג' : 'סט')} אחד. ` : '')) + 'ממלא את שדה המחיר בטופס; שומרים כרגיל.' : 'כדי לקבוע מחיר, פתח/י את הדף ב-claude.ai.'}</span></div>` : ''}
     ${srcs ? `<details class="mkt-src"><summary>${(c.sources || []).length} מקורות מחיר</summary><ul class="small">${srcs}</ul></details>` : ''}
   </section>`;
 }
@@ -2179,14 +2396,17 @@ function renderDrawer(id, keepScroll){
       <div class="side">
         <div class="chiprow"><span class="chip st-${esc(e.status)}">${esc(P_STATUS[e.status] || e.status)}</span>${(p.dups || []).length ? '<span class="chip chip-dup">כרטיס כפול</span>' : ''}${e.pending ? '<span class="chip chip-pending">ממתין לסנכרון</span>' : ''}</div>
         <p><span class="num price-big" dir="ltr">${esc(fmtUSD(pr.cost))}</span> <span class="muted small">עלות אצל הספק ליחידה</span></p>
+        ${isNum(e.retail) && e.retail > 0 ? `<p class="pprice-line"><span class="num price-big" dir="ltr">${esc(fmtILS(e.retail))}</span> <span class="muted small">מחיר לצרכן</span> ${initialChip(e)}</p>` : ''}
         <p class="qty-line">${qtyHtml(e)}</p>
-        <p>${flagHtml(e, true)}</p>
+        <p>${flagHtml(e, true)}${priceChips(e) ? ' ' + priceChips(e) : ''}</p>
+        ${isLoser(e) && e.priceBasis && e.priceBasis.action ? `<p class="small loss-action"><strong>מה לעשות:</strong> <span dir="auto">${esc(e.priceBasis.action)}</span></p>` : ''}
         ${p.img.note ? `<p class="xs warn-text">${esc(p.img.note)}</p>` : ''}
         <p class="xs faint">${(im.urls || []).length > 1 ? `ועוד ${(im.urls.length - 1)} תמונות אצל הספק` : ''}</p>
       </div>
     </div>
     <section class="section" aria-labelledby="h-links"><h3 id="h-links" class="h-small">קישורים</h3>${links ? `<ul class="links">${links}</ul>` : '<p class="faint small">אין קישורים.</p>'}</section>
     ${econBlock(e)}
+    ${priceBasisBlock(e)}
     ${marketBlock(e)}
     <section class="section" aria-labelledby="h-edit"><h3 id="h-edit" class="h-small">עריכה</h3>
       ${canEditData() ? editFormHtml(e) : noDbLine('השדות מוצגים כפי שהם בריפו ובשינויים שכבר נשמרו.')}
@@ -2227,6 +2447,8 @@ function renderDrawer(id, keepScroll){
   paintVars(body);
   if(canEditData()) bindEditForm(e);
   bindMarket(e);
+  const pe = $('#econ-price-edit');
+  if(pe) pe.onclick = () => { const i = $('#e-retail_ils'); if(i){ i.scrollIntoView({block:'center'}); i.focus(); i.select && i.select(); } };
   if(keepScroll) body.scrollTop = st;
 }
 function showVal(k, v){
@@ -2248,8 +2470,8 @@ function efWrap(k, label, control, help, asFieldset){
 function editFormHtml(e){
   const f = e.flat;
   const tags = [...new Set(Object.keys(TAG_HE).concat(e.bflat.rooms || [], f.rooms || []))];
-  const cj = cjShip(e.id);
-  const shipHelp = (cj ? `ברירת מחדל: CJ ${esc(fmtDay(cj.date))} · ${esc(cj.name || '')} ${cj.days ? esc(cj.days) + ' יום' : ''} · ${ltr(fmtUSD(cj.usd))}. ערך ידני גובר.` : 'אין נתון משלוח מ-CJ למוצר הזה.') + ' שדה ריק חוזר לברירת המחדל.';
+  const fr = frShip(e.id);
+  const shipHelp = (fr ? `ברירת מחדל: ${esc(frLabel(fr, baseEcon(e.id).sup))} · ${esc(fr.name || '')} ${fr.days ? esc(fr.days) + ' יום' : ''} · ${ltr(fmtUSD(fr.usd))}. ערך ידני גובר.` : `${esc(noShipLabel(e.id))}.`) + ' שדה ריק חוזר לברירת המחדל.';
   const num = (k, step, unit) => `<input type="number" id="e-${k}" min="0" step="${step}" inputmode="decimal" value="${isNum(f[k]) ? esc(f[k]) : ''}" aria-describedby="e-${k}-err">`;
   const qd = e.qtyDef || {qty: 1, sure: true};
   const qtyHelp = `ריק = ברירת המחדל: ${esc(qd.qty)} יח'${qd.sure === false ? ' (לא ודאי)' : ''}${qd.reason ? ' · ' + esc(qd.reason) : ''}. העלות כאן תמיד ליחידה; עלות הנחיתה, המחיר לצרכן והמחיר המומלץ הם למכירה כולה.`;
@@ -2468,7 +2690,9 @@ function renderProfit(){
   const withShare = basis.filter(p => isNum(p.econ.ship_share));
   const hi = withShare.filter(p => p.econ.ship_share > 0.5).length;
   const nUnsure = basis.filter(p => !p.qtySure).length, nSets = basis.filter(p => p.qty > 1).length;
-  const nNoFast = basis.filter(p => p.ship.nofast).length;
+  const nNoFast = basis.filter(p => p.ship.nofast).length, nNoRoute = basis.filter(p => p.ship.noroute).length;
+  const nLoss = basis.filter(isLoser).length;
+  const nPriced = basis.filter(p => isNum(p.retail) && p.retail > 0).length, nInitial = basis.filter(p => p.retailInitial).length, nEdited = basis.filter(p => p.retailEdited && isNum(p.retail)).length;
   const est = k => ES.verified[k] ? '' : `<span class="est">${ECON_META.find(m => m.k === k).update ? 'לעדכן' : 'הערכה'}</span>`;
   const methodLabel = (ECON_META.find(m => m.k === 'shipping_method').options.find(o => o[0] === v.shipping_method) || [])[1];
   const restore = keepFocus(box);
@@ -2505,11 +2729,11 @@ function renderProfit(){
       <td class="money">${cell(p, 'ship')}<span class="cell-src">${esc(p.ship.label)}</span>${p.ship.est ? `<span class="cell-src">ל-${ltr(esc(p.qty))} יח' ${ltr(fmtUSD(p.ship.total))} <span class="est">הערכה</span></span>` : ''}</td>
       <td class="money">${ltr(fmtILS(x.landed))}</td>
       <td>${share}</td>
-      <td class="money">${cell(p, 'retail')}<span class="cell-src">נמכר כ-${ltr(esc(p.qty))} יח'</span></td>
+      <td class="money">${cell(p, 'retail')}<span class="cell-src">נמכר כ-${ltr(esc(p.qty))} יח'</span>${p.retailInitial ? `<span class="cell-src">${initialChip(p)}</span>` : ''}${p.priceQtyMismatch ? `<span class="cell-src">${qtyMismatchChip(p)}</span>` : ''}</td>
       ${hasMarket ? `<td class="mkt-cell">${mktCell(p, editable)}</td>` : ''}
       <td class="money">${isNum(x.margin) ? ltr(fmtPct(x.margin, 1)) : '—'}${isNum(x.contribution) ? `<span class="cell-src">תרומה ${ltr(fmtILS(x.contribution))}</span>` : ''}</td>
       <td class="money">${x.recommended != null ? ltr(fmtILS(Math.ceil(x.recommended))) : '—'}${x.recommended != null ? `<span class="cell-src">ל-${ltr(esc(p.qty))} יח'</span>` : ''}</td>
-      <td>${flagHtml(p)}</td>
+      <td>${flagHtml(p)}${priceChips(p) ? `<span class="cell-src">${priceChips(p)}</span>` : ''}</td>
     </tr>`;
   }).join('');
 
@@ -2546,7 +2770,9 @@ function renderProfit(){
       ${hasMarket ? `<div class="tile"><span class="l">מול מחירי השוק</span><span class="v">${vc.viable}<span class="small muted"> כדאי</span></span><span class="s"><span class="flag flag-orange">${vc['bundle-only']} רק בסל</span> · <span class="flag flag-red">${vc['not-viable']} לא כדאי מ-CJ</span>${vc.none ? ` · ${vc.none} לא נבדקו` : ''}</span></div>` : ''}
       <div class="tile"><span class="l">מרווח ממוצע</span><span class="v">${withM.length ? ltr(fmtPct(mean(withM.map(p => p.econ.margin)), 1)) : '—'}</span><span class="s">${withM.length} מוצרים עם כל הנתונים · יעד ${ltr(esc(v.target_margin_pct + '%'))}</span></div>
       <div class="tile"><span class="l"><span class="flag flag-green"><i class="fdot"></i>עומדים ביעד</span></span><span class="v">${fl.green}</span><span class="s"><span class="flag flag-red"><i class="fdot"></i>${fl.red} מתחת ליעד</span></span></div>
-      <div class="tile"><span class="l"><span class="flag flag-orange"><i class="fdot"></i>חסרים נתונים</span></span><span class="v">${fl.orange}</span><span class="s">${missRetail} בלי מחיר · ${missShip + nNoFast} בלי משלוח${nNoFast ? ` (${nNoFast} בלי אפשרות של עד 20 יום)` : ''}</span></div>
+      <div class="tile"><span class="l"><span class="flag flag-orange"><i class="fdot"></i>חסרים נתונים</span></span><span class="v">${fl.orange}</span><span class="s">${missRetail} בלי מחיר · ${missShip + nNoFast + nNoRoute} בלי משלוח${nNoRoute ? ` (${nNoRoute} הספק לא שולח לישראל)` : ''}${nNoFast ? ` (${nNoFast} בלי אפשרות של עד 20 יום)` : ''}</span></div>
+      <div class="tile"><span class="l"><span class="chip chip-loss">מפסידים</span></span><span class="v">${nLoss}</span><span class="s">תרומה שלילית במחיר שלהם: לא למכירה עד שמשנים מחיר, משלוח או ספק (ה.13)</span></div>
+      <div class="tile"><span class="l">מחיר לצרכן</span><span class="v">${nPriced}<span class="small muted"> / ${basis.length}</span></span><span class="s">${nInitial ? `<span class="chip chip-initial">${nInitial} מחיר התחלתי</span> ` : ''}${nEdited} נערכו בסטודיו</span></div>
       <div class="tile"><span class="l">כמות למכירה</span><span class="v">${nSets}<span class="small muted"> נמכרים כסט</span></span><span class="s">${nUnsure ? `<span class="chip chip-unsure">${nUnsure} כמות לא ודאית</span>` : 'כל הכמויות ודאיות'}</span></div>
       <div class="tile"><span class="l">משלוח מעל חצי מעלות הנחיתה</span><span class="v">${hi}<span class="small muted"> / ${withShare.length}</span></span><span class="s">לפי ${esc(methodLabel || '')}</span></div>
     </div>
@@ -2573,7 +2799,7 @@ function renderProfit(){
         <caption class="sr-only">רווחיות לכל מוצר. לחיצה על כותרת ממיינת.</caption>
         <thead><tr>${th('name','מוצר')}${th('slot','עמדה')}<th scope="col" class="money">עלות ליח'</th>${th('qty','כמות','money')}<th scope="col" class="money">משלוח $ ליח'</th>${th('landed','עלות נחיתה','money')}${th('share','חלק המשלוח')}${th('retail','מחיר ₪','money')}${hasMarket ? th('verdict','שוק בישראל') : ''}${th('margin','מרווח','money')}${th('recommended','מחיר מומלץ','money')}${th('flag','דגל')}</tr></thead>
         <tbody>${trs || `<tr><td colspan="${hasMarket ? 12 : 11}">אין מוצרים בסינון.</td></tr>`}</tbody></table></div>
-      <p class="xs faint">כמות = כמה יחידות נמכרות בכל מכירה (ריק = ברירת המחדל מהעמדה; "כמות לא ודאית" = לא ברור מהכרטיס אם העלות ליחידה או לסט). עלות נחיתה = (עלות × כמות + משלוח לכמות) × שער. משלוח לכמות של יותר מיחידה אחת הוא <span class="est">הערכה</span>: משלוח ליחידה + (כמות − 1) × (משלוח ליחידה − $3.72), כי בבדיקת הסלים של CJ כ-$3.72 מכל חבילה קבועים והשאר לפי משקל. המחיר לצרכן והמחיר המומלץ הם למכירה כולה. מרווח = תרומה ÷ הכנסה נטו. מחיר מומלץ = המחיר הנמוך ביותר שמביא את המרווח ליעד, מעוגל למעלה לשקל.${hasMarket ? ` שוק בישראל: פסק הדין והטווח מ-${esc(S.data.market.file)} (${esc(fmtDay(S.data.market.updated))}), לפי עלות CJ, שער ${ltr(esc((S.data.market.assumptions || {}).fx_usd_ils ?? 3.7))} ויחידה אחת: כדאי = 35% ומעלה במחיר העליון של הטווח; רק בסל = מתחת ל-35% לבד, אבל 25% ומעלה בסל של 3. הכפתור ממלא את המחיר לצרכן במחיר העליון של הטווח (שנגמר ב-9), כפול הכמות ומעוגל מטה ל-9 כשנמכרים כמה יחידות; אפשר לערוך אותו אחר כך כרגיל.` : ''}</p>
+      <p class="xs faint">כמות = כמה יחידות נמכרות בכל מכירה (ריק = ברירת המחדל מהעמדה; "כמות לא ודאית" = לא ברור מהכרטיס אם העלות ליחידה או לסט). עלות נחיתה = (עלות × כמות + משלוח לכמות) × שער. משלוח לכמות של יותר מיחידה אחת הוא <span class="est">הערכה</span>: משלוח ליחידה + (כמות − 1) × (משלוח ליחידה − $3.72), כי בבדיקת הסלים של CJ כ-$3.72 מכל חבילה קבועים והשאר לפי משקל. המחיר לצרכן והמחיר המומלץ הם למכירה כולה. <span class="chip chip-initial">מחיר התחלתי</span> = המחיר מ-data/economics/products.json (צוות התמחור, לפי שווי בישראל); הוא נכנס לכל החישובים, ועריכה כאן, במגירה או בכרטיס המוצר גוברת עליו. מרווח = תרומה ÷ הכנסה נטו. מחיר מומלץ = המחיר הנמוך ביותר שמביא את המרווח ליעד, מעוגל למעלה לשקל.${hasMarket ? ` שוק בישראל: פסק הדין והטווח מ-${esc(S.data.market.file)} (${esc(fmtDay(S.data.market.updated))}), לפי עלות CJ, שער ${ltr(esc((S.data.market.assumptions || {}).fx_usd_ils ?? 3.7))} ויחידה אחת, נשפט מחדש מול היעד הנוכחי: כדאי = ${ltr(esc(v.target_margin_pct + '%'))} ומעלה במחיר העליון של הטווח (המרווח שבמחקר); רק בסל = מתחת ל-${ltr(esc(v.target_margin_pct + '%'))} לבד, אבל 25% ומעלה בסל של 3. הכפתור ממלא את המחיר לצרכן במחיר העליון של הטווח (שנגמר ב-9), כפול הכמות ומעוגל מטה ל-9 כשנמכרים כמה יחידות; אפשר לערוך אותו אחר כך כרגיל.` : ''}</p>
     </section>
     <section class="section" aria-labelledby="h-lad">
       <div class="section-head"><h2 id="h-lad">סולם המחירים של הנבחרים</h2><span class="small faint">3 וריאציות לכל עמדה</span></div>
@@ -2692,7 +2918,7 @@ function cmpSlotBand(s){
   for(const id of (s.direct || []).concat(s.shared_ids || [])){ const m = mktOf(id); if(m && m.category) cnt.set(m.category, (cnt.get(m.category) || 0) + 1); }
   let best = null; for(const [k, n] of cnt) if(!best || n > best[1]) best = [k, n];
   const c = best && mktCat(best[0]);
-  return c && Array.isArray(c.band) && isNum(c.band[1]) ? {band: c.band, label: c.label_he} : null;
+  return c && Array.isArray(c.band) && isNum(c.band[1]) ? {band: c.band, label: c.label_he, key: best[0]} : null;
 }
 // One candidate as the screen shows it. Cards go through effProduct (the profit screen's model: studio edits, CJ freight,
 // sell quantity); AliExpress / Zendrop cards without CJ freight use the shipping written in the card. Retail price for the
@@ -2708,16 +2934,17 @@ function cmpRow(c, s, style){
     for(const [k, x] of Object.entries(c.deep || {})){ if(!(k in fits) && isNum(x.fit)) fits[k] = x.fit; if(x.reason) reasons[k] = x.reason; if(x.verdict) verdicts[k] = x.verdict; files[k] = x; }
     const qty = e.qty;
     let ship;
-    if(isNum(e.ship.usd)){ const cj = e.ship.src === 'cj' ? cjShip(c.id) : null; ship = {usd: e.ship.usd, total: e.ship.total, label: e.ship.label, days: cj ? daysOf(cj.days) : null, est: e.ship.est}; }
-    else if(c.ship && isNum(c.ship.usd) && !e.ship.nofast) ship = {usd: c.ship.usd, total: qty > 1 ? shipForQty(c.ship.usd, qty) : c.ship.usd, label: `מהכרטיס (${(CMP_SUP[c.sup] || CMP_SUP.other).he})`, days: c.ship.days, est: qty > 1};
-    else ship = {usd: null, total: null, label: e.ship.label, nofast: !!e.ship.nofast};
+    if(isNum(e.ship.usd)) ship = {usd: e.ship.usd, total: e.ship.total, label: e.ship.label, days: e.ship.days ? daysOf(e.ship.days) : null, est: e.ship.est};
+    else if(c.ship && isNum(c.ship.usd) && !e.ship.nofast && !e.ship.noroute) ship = {usd: c.ship.usd, total: qty > 1 ? shipForQty(c.ship.usd, qty) : c.ship.usd, label: `מהכרטיס (${(CMP_SUP[c.sup] || CMP_SUP.other).he})`, days: c.ship.days, est: qty > 1};
+    else ship = {usd: null, total: null, label: e.ship.label, nofast: !!e.ship.nofast, noroute: !!e.ship.noroute};
     if(!ship.days){ const sh = e.shipping || {}; if(isNum(sh.days_min)) ship.days = [sh.days_min, isNum(sh.days_max) ? sh.days_max : sh.days_min]; }
     let retail = null;
     if(isNum(e.retail) && e.retail > 0) retail = {ils: e.retail, src: 'set'};
-    else { const bp = bandPoint(e); if(isNum(bp)) retail = {ils: bp, src: 'band', band: e.mkt.suggested_band}; else if(sb) retail = {ils: bandAt(sb.band, qty), src: 'slot', band: sb.band}; }
+    else { const bp = bandPoint(e); if(isNum(bp)) retail = {ils: bp, src: 'band', band: e.mkt.suggested_band}; else if(sb) retail = {ils: bandAt(sb.band, mktUnits(qty, sb.key)), src: 'slot', band: sb.band}; }
     const econ = econCalc({cost_usd: e.badCurrency ? null : e.price.cost, qty, shipping_usd: ship.total, retail_ils: retail ? retail.ils : null}, v);
     if(e.badCurrency) econ.missing = econ.missing.map(m => m === 'cost' ? 'dealer' : m);
     if(ship.nofast) econ.missing = econ.missing.map(m => m === 'shipping' ? 'fast_shipping' : m);
+    if(ship.noroute) econ.missing = econ.missing.map(m => m === 'shipping' ? 'no_route' : m);
     return {key: 'card:' + c.id, k: 'card', id: c.id, sup: c.sup, supName: (e.supplier && e.supplier.name) || '', title: e.name, url: e.supplier.product_url,
       status: e.status, rejected: e.status === 'rejected', shared: !!c.shared, qty, qtySure: e.qtySure, qtyReason: (e.qtyDef || {}).reason,
       priceUsd: e.badCurrency ? null : e.price.cost, priceIls: e.badCurrency ? e.price.cost : null, ship, retail, econ,
@@ -2734,7 +2961,7 @@ function cmpRow(c, s, style){
     ? {usd: shipUsd, total: qty > 1 ? shipForQty(shipUsd, qty) : shipUsd, label: c.k === 'deep' ? 'AliExpress, ליקוט מעמיק' : 'AliExpress, קריאה ראשונה ל-API', days: daysOf(val('ship_days')), est: qty > 1}
     : {usd: null, total: null, label: c.no_ship ? 'אין משלוח לישראל' : 'חסר משלוח', days: null, noShip: !!c.no_ship};
   let retail = null;
-  if(sb) retail = {ils: bandAt(sb.band, qty), src: 'slot', band: sb.band};
+  if(sb) retail = {ils: bandAt(sb.band, mktUnits(qty, sb.key)), src: 'slot', band: sb.band};
   if(Array.isArray(band) && isNum(band[1])) retail = {ils: bandAt(band, qty), src: 'file', band};
   const econ = econCalc({cost_usd: isNum(price) ? price : null, qty, shipping_usd: ship.total, retail_ils: retail ? retail.ils : null}, v);
   return {key: c.k + ':' + c.id, k: c.k, id: c.id, sup: c.sup, supName: 'AliExpress', title: c.title, url: c.url, sku: val('sku'),
@@ -2850,10 +3077,14 @@ function renderCompare(){
       if(F.sup) rows = rows.filter(x => x.sup === F.sup);
       if(F.profitable) rows = rows.filter(x => isNum(x.econ.margin) && x.econ.margin >= T);
       if(!rows.length){ nHiddenSlots++; return ''; }
-      const elig = x => st ? cmpEligible(x, st) : STY.some(y => cmpEligible(x, y));
-      const rank = x => winOf.has(x.key) ? 0 : elig(x) ? 1 : (!cmpRejected(x, st) && isNum(x.econ.contribution)) ? 2 : !cmpRejected(x, st) ? 3 : 4;
-      const pu = x => isNum(x.econ.contribution) ? perUnit(x) : -1e9;
-      rows.sort((a, b) => rank(a) - rank(b) || pu(b) - pu(a) || a.title.localeCompare(b.title));
+      // the winner first and rejected rows last; in between design first (user, 2026-10-11): the fit for the chosen style
+      // (Nordic in "all styles") high to low, then the margin. A row under the floor is never hidden for its margin.
+      const loses = x => isNum(x.econ.contribution) && x.econ.contribution < 0;  // ה.13: losing money goes last (not hidden)
+      const rank = x => winOf.has(x.key) ? 0 : cmpRejected(x, st) ? 3 : loses(x) ? 2 : 1;
+      const dz = x => { const f = cmpFit(x, st || 'nordic'); return isNum(f.n) ? f.n : null; };
+      const mz = x => isNum(x.econ.margin) ? x.econ.margin : null;
+      rows.sort((a, b) => rank(a) - rank(b) || ((dz(a) == null) - (dz(b) == null)) || ((dz(b) ?? 0) - (dz(a) ?? 0))
+        || ((mz(a) == null) - (mz(b) == null)) || ((mz(b) ?? 0) - (mz(a) ?? 0)) || a.title.localeCompare(b.title));
       nShownSlots++; nShownRows += rows.length;
       const wst = st ? w[st] : null;
       const head = st
@@ -2910,7 +3141,7 @@ function renderCompare(){
     </section>
     <p class="result-line" aria-live="polite"><span><strong class="num">${nShownRows}</strong> מועמדים ב-<strong class="num">${nShownSlots}</strong> עמדות${nHiddenSlots ? ` · ${nHiddenSlots} עמדות מוסתרות בסינון` : ''}</span></p>
     ${roomHtml}
-    <p class="xs faint formula">רווח ₪ = תרומה למכירה (הכנסה נטו פחות עלות נחיתה, עמלות, שמורת החזרות ואריזה), כמו בעמודה "מרווח" במסך הרווחיות; "אחרי שיווק" מוריד גם CAC לפריט. עלות נחיתה = (מחיר × כמות + משלוח לכמות) × שער. מחיר לצרכן: המחיר שנקבע בסטודיו, אחרת המחיר העליון של טווח השוק של המוצר (הנקודה של כפתור "מחיר ₪…9"), אחרת טווח השוק של העמדה, ובליקוט המעמיק הטווח שבקובץ; כמה יחידות = הטווח × הכמות, מעוגל מטה ל-9. "ל-35%" = המחיר הנמוך ביותר שמביא ליעד. משלוח: CJ לפי שיטת המשלוח שבהגדרות, ‏AliExpress ו-Zendrop לפי מה שכתוב בכרטיס או בקובץ הליקוט. מנצח = הכי הרבה רווח ליחידה (תרומה ÷ כמות), מבין המועמדים שלא נדחו, עם התאמה ${cmpFitMin()}+ לסגנון, עם כל הנתונים ועם רווח מעל אפס לפני שיווק. כרטיס בלי ציוני סגנון בעמדה של הבית הנורדי נחשב לנורדי ומסומן "לא דורג".</p>
+    <p class="xs faint formula">רווח ₪ = תרומה למכירה (הכנסה נטו פחות עלות נחיתה, עמלות, שמורת החזרות ואריזה), כמו בעמודה "מרווח" במסך הרווחיות; "אחרי שיווק" מוריד גם CAC לפריט. עלות נחיתה = (מחיר × כמות + משלוח לכמות) × שער. מחיר לצרכן: המחיר שנקבע בסטודיו, אחרת המחיר העליון של טווח השוק של המוצר (הנקודה של כפתור "מחיר ₪…9"), אחרת טווח השוק של העמדה, ובליקוט המעמיק הטווח שבקובץ; כמה יחידות = הטווח × הכמות, מעוגל מטה ל-9. "ל-${ltr(esc(S.ES.v.target_margin_pct + '%'))}" = המחיר הנמוך ביותר שמביא ליעד. משלוח: CJ לפי שיטת המשלוח שבהגדרות, ‏AliExpress ו-Zendrop לפי מה שכתוב בכרטיס או בקובץ הליקוט. מנצח = הכי הרבה רווח ליחידה (תרומה ÷ כמות), מבין המועמדים שלא נדחו, עם התאמה ${cmpFitMin()}+ לסגנון, עם כל הנתונים ועם רווח מעל אפס לפני שיווק. כרטיס בלי ציוני סגנון בעמדה של הבית הנורדי נחשב לנורדי ומסומן "לא דורג". סדר השורות: המנצח ראשון, אחריו מי שלא מפסיד לפי ציון העיצוב לסגנון (ב"כל הסגנונות": נורדי) מהגבוה לנמוך ואז לפי המרווח, אחריו המפסידים (תרומה שלילית, ה.13), והנדחים בסוף. מוצר מתחת לרף המרווח או מפסיד לא מוסתר.</p>
   </div>`;
   restore();
   const setF = (k, val, focusId) => { S.cmp[k] = val; store.set('cmp', S.cmp); renderCompare(); const el = $('#' + focusId); if(el) el.focus(); };
@@ -2962,7 +3193,7 @@ function cmpRowHtml(x, st, winStyles, T){
   const marginCell = isNum(e.contribution)
     ? `<span class="flag ${cls}"><i class="fdot"></i>${ltr(fmtILS(e.contribution))}</span><span class="cmp-sub cmp-pct-n">${ltr(fmtPct(e.margin, 1))}</span><span class="cmp-sub w">אחרי שיווק ${ltr(fmtILS(e.after_marketing))}</span>`
     : `<span class="flag flag-orange cmp-miss"><i class="fdot"></i>${esc(missText(e))}</span>`;
-  return `<tr class="${isWin ? 'is-win' : ''} ${rej ? 'is-rej' : ''}" data-sup="${esc(x.sup)}" data-key="${esc(x.key)}"${isNum(e.margin) ? ` data-margin="${e.margin.toFixed(4)}"` : ''}>
+  return `<tr class="${isWin ? 'is-win' : ''} ${rej ? 'is-rej' : ''}" data-sup="${esc(x.sup)}" data-key="${esc(x.key)}"${isNum(e.margin) ? ` data-margin="${e.margin.toFixed(4)}"` : ''}${x.retail && isNum(x.retail.ils) ? ` data-retail="${esc(x.retail.ils)}" data-qty="${esc(x.qty)}"` : ''}>
     <th scope="row" class="c-cand">${titleHtml}
       <div class="cand-meta">${chips}</div>
       <div class="cmp-narrow"><span>מחיר ${ltr(esc(priceTxt))}${x.qty > 1 ? ` × ${ltr(esc(x.qty))}` : ''}</span><span>משלוח ${ltr(esc(shipTxt))}${days ? `, ${ltr(esc(days))} יום` : ''}</span><span>לצרכן ${ltr(esc(retailTxt))}${x.retail ? ` <span class="faint">(${esc(RETAIL_SRC_SHORT[x.retail.src])})</span>` : ''}</span><span>התאמה ${st ? ltr(esc(fitTxt)) : esc(fitTxt)}</span></div>

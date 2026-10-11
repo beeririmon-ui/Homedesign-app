@@ -47,6 +47,19 @@ python3 studio/tests/smoke_compare.py --shots   # וגם בונה את הנתו�
 - `--shots` שומר `studio/screens/compare-{400,1280}.png` ו-`studio/screens/furniture-{400,1280}.png` מהנתונים האמיתיים.
 - הכותרות של הקבצים לדוגמה מתחילות ב-FIXTURE, והם אף פעם לא נכנסים לבנייה הרגילה.
 
+```bash
+python3 studio/tests/smoke_products.py           # מסכי המוצרים, המגירה והרווחיות: מחיר, משלוח וכמות
+python3 studio/tests/smoke_products.py --shots   # וגם צילומי מסך מהנתונים האמיתיים ל-assets/qa/studio-2026-10-11/
+```
+
+- בודק את `build.py` בלי דפדפן (כמות למכירה לפי המק"ט שבחדר, קטגוריות שוק שמתומחרות לזוג, קבצי המשלוח והתמחור), ואז בונה עם `studio/tests/fixtures/economics/` ופותח ב-390px וב-1280px עם db מדומה בזיכרון: "CJ לא שולח לישראל (נבדק 11.10)", משלוח מ-Zendrop ומ-AliExpress, "מחיר התחלתי", "מפסיד, לא למכירה", "חריג: אין חלופה בעמדה" / "מתחת לרף 40%", עריכת מחיר מהירה בכרטיס ובטבלה (נכתבת ל-`product_edits`), סינון "בלי עמדה" ו"מפסיד", סדר לפי עיצוב בתוך עמדה, axe-core ובלי גלילה לרוחב.
+- חלק "real data" בונה את הנתונים האמיתיים לתיקייה זמנית ובודק שאין כרטיס CJ עם עלות שמציג "חסר משלוח". `studio/dist` לא נבנה עם נתוני הבדיקה.
+
+### מקורות הכלכלה (2026-10-11)
+- **משלוח:** `freight-cj.json`, ‏`freight-zendrop.json` ו-`freight-aliexpress.json` (אותו מבנה), לפי הספק של הכרטיס; גיבוי: `options.skus[].shipping_il` של המק"ט שבחדר. `status: "no_route"` מוצג כ"<ספק> לא שולח לישראל (נבדק DD.MM)". אין נתון: "חסר משלוח" עם הסיבה.
+- **מחיר לצרכן:** `data/economics/products.json` של צוות התמחור (`retail_ils`, ‏`retail_src`, ‏`il_value`, ‏`customer_total_ils`, ‏`price_for_qty`, ‏`flag`, ‏`slot_alternative_ok`, ‏`action_he`, ‏`addon_only`). מחיר עם `retail_src` שמתחיל ב-initial מסומן "מחיר התחלתי"; עריכה בסטודיו גוברת עליו, ו-`apply_edits.py` כותב אז `retail_src: "studio"`. ללקוח: המחיר + ₪29 מתחת ל-₪299 (‏`site/shared/src/schema/economics.ts`, או `storefront` ב-`settings.json`).
+- **יעד מרווח:** ברירת המחדל 40% (VR1). פסק הדין של מחקר השוק נשפט מחדש מול היעד הנוכחי.
+
 ### בדיקה מקומית
 
 ```bash
