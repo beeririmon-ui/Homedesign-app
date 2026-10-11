@@ -1,138 +1,121 @@
-# AliExpress בקנה מידה (2026-10): סיכום
+# AliExpress בקנה מידה: סיכום (2026-10-11)
 
-שלבים 1–2 (חיפוש ופירוט) רצו מול ה-API בסשן אחר ונעצרו ב-2026-10-11 על מגבלת השימוש (`stop-master.txt`). **שלב 3 (דירוג, השוואה וכרטיסים) רץ אופליין** מאותם נתונים: `detail/<room>.json` והמטמון `data/sources/aliexpress/<id>.json`, בלי אף קריאה ל-AliExpress. שלושה חדרים: סלון, מטבח ופינת אוכל, חדר שינה הורים. כל ששת הסגנונות.
+ליקוט בהיקף גדול דרך ה-API הרשמי של AliExpress (סשן עזר, בקשת המשתמש 2026-10-11: "מאות, לא עשרה"). השיטה: `scripts/ae/scale.py` (סינון רחב → בדיקה מלאה של מחיר SKU ומשלוח לישראל → מבט בתמונה → כרטיס). כל העמדות בכל 8 החדרים (132, בלי 16 הרהיטים הקבועים), לכל ששת הסגנונות, שני סבבים (בסבב 2 שאילתות מתוקנות לעמדות שקיבלו תוצאות שגויות).
+
+## במספרים
+
+| | |
+| --- | --- |
+| שורות סינון (תוצאות חיפוש) | 35,756 |
+| מוצרים שנבדקו לעומק (מחיר SKU + משלוח לישראל) | 3,844 |
+| מוצרים שנבדקו בעין (גיליונות תמונות) | 1,525 |
+| רשומות מוצר×סגנון | 5,594 |
+| כרטיסי טיוטה חדשים | 16 |
+| קריאות API היום (כל הסשן) | 8,395 |
+
+**מכסה שנצפתה:** אין מכסה יומית מוחזרת. מגבלת קצב: עם 3 תהליכים במקביל (כ-1.8 קריאות בשנייה) AliExpress החזיר `ApiCallLimit` ("this ban will last 1 seconds"); עם 2 במקביל זה קרה לעיתים רחוקות. כל עצירה נרשמה, וההרצה המשיכה מהנקודה שבה עצרה. התקרה העצמית הועלתה ל-12,000 ביום לריצה הזו (`scripts/sourcing/budget.py`).
+
+עצירות שנרשמו:
+```
+bath STOP detail at 2026-10-11 17:11:07 UTC: flow control: ApiCallLimit | Api access frequency exceeds the limit. this ban will last 1 seconds
+kids STOP detail at 2026-10-11 16:50:12 UTC: flow control: ApiCallLimit | Api access frequency exceeds the limit. this ban will last 1 seconds
+master STOP all at 2026-10-11 12:03:10 UTC: flow control: ApiCallLimit | Api access frequency exceeds the limit. this ban will last 1 seconds
+work STOP detail at 2026-10-11 12:29:17 UTC: flow control: ApiCallLimit | Api access frequency exceeds the limit. this ban will last 1 seconds
+```
+
+**כלכלה:** נחיתה = (מחיר ה-SKU שמתאים לחדר + המשלוח הזול עד 45 יום) × 3.3. מחיר לצרכן = הקצה העליון של רצועת השוק בישראל (`data/economics/market-prices.json`; ה.10). רווח לפי `pricing.ts` (מע"מ 18%, סליקה 2% + 1.2, החזרות 8%), לפני CAC. כרטיס נכתב רק עם fit 8+ אחרי מבט בתמונה, SKU שמידתו אומתה מול העמדה, עלות לא גבוהה מהכרטיס הקיים, ורווח 40%+ (VR1; פחות מזה רק כשאין חלופה בעמדה ובסגנון, ומסומן).
+
+## כרטיסי הטיוטה
+
+| חדר | עמדה | כרטיס | סגנון, fit | נחיתה ₪ | רווח |
+| --- | --- | --- | --- | --- | --- |
+| corridor | gallery-art | `gallery-art-aliexpress-antique-botanical-posters-prints-710412` | כפרי מודרני 8 | 28 | 74% |
+| corridor | gallery-art | `gallery-art-aliexpress-japanese-wabi-sabi-tree-176323` | ג'פנדי 8 | 25 | 76% |
+| corridor | gallery-art | `gallery-art-aliexpress-simple-nordic-posters-picasso-983896` | נורדי 8 | 25 | 75% |
+| hall | framed-art | `framed-art-aliexpress-japanese-wabi-sabi-tree-176323` | ג'פנדי 8 | 32 | 72% |
+| living-room | curtains | `curtains-aliexpress-beige-linen-sheer-curtains-554205` | מודרני חם 8 | 87 | 31% (חריג VR1) |
+| living-room | framed-art | `framed-art-aliexpress-japandi-wall-art-set-969661` | ג'פנדי 8 | 38 | 69% |
+| living-room | framed-art | `framed-art-aliexpress-mediterranean-wabi-sabi-poster-802890` | ים תיכוני 8 | 29 | 73% |
+| living-room | vase | `vase-aliexpress-vintage-distressed-clay-vase-589009` | ג'פנדי 8.5 | 105 | 48% |
+| living-room | wall-decor | `wall-decor-aliexpress-japandi-wall-art-set-969661` | ג'פנדי 8 | 29 | 69% |
+| master | curtains | `curtains-aliexpress-linen-blend-beige-curtains-122000` | מודרני חם 8 | 78 | 37% (חריג VR1) |
+| work | curtains | `curtains-aliexpress-1pc-japanese-folk-wabi-212463` | ג'פנדי 8 | 111 | 16% (חריג VR1) |
+| work | curtains | `curtains-aliexpress-beige-linen-sheer-curtains-554205` | מודרני חם 8 | 87 | 31% (חריג VR1) |
+| work | curtains | `curtains-aliexpress-cotton-linen-curtain-look-902882` | נורדי 8 | 64 | 47% |
+| work | curtains | `curtains-aliexpress-natural-linen-curtains-84-784378` | כפרי מודרני 8 | 84 | 33% (חריג VR1) |
+| work | framed-art | `framed-art-aliexpress-frameless-minimalist-wall-art-631735` | מודרני חם 8.5 | 26 | 75% |
+| work | framed-art | `framed-art-aliexpress-japanese-wabi-sabi-tree-176323` | ג'פנדי 8.5 | 25 | 76% |
+| work | framed-art | `framed-art-aliexpress-mediterranean-wabi-sabi-poster-802890` | ים תיכוני 8 | 22 | 77% |
+| work | framed-art | `framed-art-aliexpress-modern-minimalist-neutral-gallery-802995` | מודרני חם 8 | 39 | 68% |
+| work | wall-sconce | `wall-sconce-aliexpress-rattan-bamboo-wall-lamp-671943` | בוהו 8 | 66 | 23% (חריג VR1) |
+
+כל הכרטיסים הם DRAFT: צבעים (HEX), מידות מוצר ומשקל ויזואלי ריקים, ו-sourcing-agent משלים אותם. הדפסים שנמכרים בלי מסגרת מסומנים בסיבה. ה-fit הוא ציון סינון בעין, לא ציון המעצב.
+
+## איפה AliExpress זול מהכרטיס הקיים (CJ / Zendrop / ישראלי)
+
+fit 7+ במבט, מידה מאומתת, נחיתה זולה מהכרטיס הקיים באותה עמדה.
+
+| חדר/עמדה | AliExpress | נחיתה ₪ | הכרטיס הקיים | נחיתה ₪ |
+| --- | --- | --- | --- | --- |
+| corridor/ceiling-lights | [Bamboo Ceiling Lamp Indoor Ceiling Light E27 Home ](https://www.aliexpress.com/item/1005010079227644.html) (בוהו 7) | 94 | ceiling-lights-cj-pleated-fabric-saucer-flush-50 (CJ Dropshipping) | 219 |
+| corridor/gallery-art | [Japanese Wabi Sabi Tree Abstract Canvas Print Post](https://www.aliexpress.com/item/1005012443176323.html) (ג'פנדי 8) | 25 | gallery-art-cj-black-botanical-cutout-set3 (CJ Dropshipping) | 83 |
+| dining-room/candle-holders | [Vintage Metal Taper Candle Holder with Handle Tray](https://www.aliexpress.com/item/1005012396864609.html) (כפרי מודרני 7) | 21 | candle-holders-aliexpress-matte-black-iron-pillar-set2 (AliExpress) | 41 |
+| dining-room/framed-art | [Rustic Kitchen Still Life Poster Vintage Bread Art](https://www.aliexpress.com/item/1005011780297081.html) (כפרי מודרני 7) | 19 | framed-art-aliexpress-retro-farmhouse-chicken-botanical-333603 (AliExpress) | 97 |
+| dining-room/paper-towel-holder | [Wooden Paper Towel Holder Rustic Farmhouse Counter](https://www.aliexpress.com/item/1005010107906181.html) (נורדי 7) | 23 | paper-towel-holder-aliexpress-1pc-bamboo-paper-towel-316063 (AliExpress) | 23 |
+| hall/ceiling-light | [Boho Rattan Woven Ceiling Light Semi Flush Mount C](https://www.aliexpress.com/item/1005012561051994.html) (בוהו 7) | 74 | ceiling-light-cj-waxwood-dome-ash-40 (CJ Dropshipping) | 197 |
+| hall/framed-art | [Frameless Minimalist Wall Art Set in Brown and Bei](https://www.aliexpress.com/item/1005010493631735.html) (מודרני חם 7) | 26 | framed-art-cj-line-scribble-white-mat-50 (CJ Dropshipping) | 166 |
+| hall/wall-sconce | [Rattan Bamboo Wall Lamp Sconce Fixture Vintage Boh](https://www.aliexpress.com/item/1005010168671943.html) (בוהו 7) | 66 | wall-sconce-cj-wavy-linen-flush-25 (CJ Dropshipping) | 152 |
+| kids/cushions | [Boho Style Line Cushion Cover Durable Hypoallergen](https://www.aliexpress.com/item/1005012719227422.html) (בוהו 7) | 29 | cushions-cj-dusty-pink-corduroy-patchwork-45 (CJ Dropshipping) | 52 |
+| kids/framed-prints | [Japandi Wall Art Set of 2 Sage Green Landscape Pos](https://www.aliexpress.com/item/1005012553969661.html) (ג'פנדי 7) | 21 | framed-prints-cj-flower-cutout-set-30x40 (CJ Dropshipping) | 69 |
+| kids/pendant | [Rustic Woven Pendant Light Kitchen Island Boho Han](https://www.aliexpress.com/item/1005009394200914.html) (כפרי מודרני 7) | 84 | pendant-cj-fabric-dome-ash-cap-25 (CJ Dropshipping) | 144 |
+| living-room/curtains | [Beige Linen Sheer Curtains for Living Room Modern ](https://www.aliexpress.com/item/1005004556554205.html) (מודרני חם 8) | 87 | curtains-cj-japanese-linen-half-shade (CJ Dropshipping) | 143 |
+| living-room/framed-art | [Vintage Countryside Wall Art Print Retro Rustic Sp](https://www.aliexpress.com/item/1005006849743763.html) (כפרי מודרני 7.5) | 27 | framed-art-cj-morandi-triptych-sage (CJ Dropshipping) | 484 |
+| living-room/vase | [Vintage Distressed Clay Vase, Wabi-Sabi Rustic Cer](https://www.aliexpress.com/item/1005012472589009.html) (ג'פנדי 8.5) | 105 | vase-aliexpress-vintage-distressed-clay-vase-589009 (AliExpress) | 105 |
+| living-room/wall-decor | [Japandi Wall Art Set of 2 Sage Green Landscape Pos](https://www.aliexpress.com/item/1005012553969661.html) (ג'פנדי 8) | 29 | wall-decor-aliexpress-natural-raffia-woven-bohemian-763597 (AliExpress) | 46 |
+| master/bedside-sconces | [Boho Farmhouse Wall Sconces Natural Twine Hand Kni](https://www.aliexpress.com/item/1005009708965037.html) (כפרי מודרני 7) | 88 | bedside-sconces-cj-linen-wave-flush (CJ Dropshipping) | 136 |
+| work/pendant | [Rustic Woven Pendant Light Kitchen Island Boho Han](https://www.aliexpress.com/item/1005009394200914.html) (כפרי מודרני 7.5) | 84 | pendant-cj-fluted-ceramic-wood-cap-short-lantern (CJ Dropshipping) | 115 |
+| work/wall-sconce | [Rattan Bamboo Wall Lamp Sconce Fixture Vintage Boh](https://www.aliexpress.com/item/1005010168671943.html) (בוהו 8) | 66 | wall-sconce-cj-black-swan-arm-white-fabric-cone (CJ Dropshipping) | 85 |
+
+## עמדות בלי שום מוצר שמיש מ-AliExpress
+
+אין אף פריט עם fit 7+ במבט בשום סגנון (הסיבה העיקרית בטבלת החדר).
+
+living-room/planter, living-room/basket, living-room/bowl, living-room/candle-holders, living-room/pouf, dining-room/bench-pad, dining-room/sink-set, dining-room/utensil-crock, dining-room/cutting-boards, dining-room/condiment-set, dining-room/bowl, dining-room/tableware-set, dining-room/mug-set, dining-room/tea-towel, dining-room/step-stool, hall/console-vessel, hall/storage-boxes, hall/bench-cushion, hall/basket, hall/planter, hall/umbrella-stand, hall/runner-rug, master/floor-lamp, master/trinket-dish, master/bedside-carafe, master/throw, master/basket, master/pendant, work/waste-basket, work/magazine-holder, work/shelf-boxes, work/desk-tray, kids/roman-blind, kids/wall-sconce, kids/rug, kids/desk-organizer, kids/toy-cars, kids/doll, kids/bedding, kids/bedspread, kids/soft-toy, kids/toy-basket, kids/skateboard, kids/doll-pram, kids/desk-chair, bath/shower-dispensers, bath/shower-stool, bath/shower-curtain, bath/floor-planter, bath/towel-ladder, bath/storage-basket, bath/toilet-paper-stand, bath/bin, bath/toilet-brush, bath/ledge-planter, bath/reed-diffuser, bath/candle, bath/soap-dispenser, bath/toothbrush-cup, bath/towel-ring, bath/hand-towel, bath/ceiling-light, corridor/runner-rug, corridor/picture-lights, corridor/gallery-stool
+
+## 30 הרווחיים ביותר (fit 7.5+ במבט, מידה מאומתת)
+
+| # | חדר/עמדה | מוצר | סגנון, fit | נחיתה ₪ | מחיר ₪ | רווח ₪ | % |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | dining-room/framed-art | [Bread and Flour Print Country Kitchen Still L](https://www.aliexpress.com/item/1005009177367781.html) | כפרי מודרני 7.5 | 20 | 219 | 145 | 78% |
+| 2 | dining-room/framed-art | [Vintage Autumn Farmhouse Dried Herbs Still Li](https://www.aliexpress.com/item/1005009869352182.html) | כפרי מודרני 7.5 | 20 | 219 | 145 | 78% |
+| 3 | dining-room/framed-art | [Japandi Wall Art Set of 2 Sage Green Landscap](https://www.aliexpress.com/item/1005012553969661.html) | ג'פנדי 7.5 | 21 | 219 | 144 | 78% |
+| 4 | dining-room/framed-art | [Japanese Wabi Sabi Tree Abstract Canvas Print](https://www.aliexpress.com/item/1005012443176323.html) | ג'פנדי 7.5 | 22 | 219 | 144 | 77% |
+| 5 | work/framed-art | [Mediterranean Wabi-Sabi Poster Natural Landsc](https://www.aliexpress.com/item/1005011888802890.html) | ים תיכוני 8 | 22 | 219 | 143 | 77% |
+| 6 | dining-room/framed-art | [2pcs Mediterranean Landscape Canvas Prints Po](https://www.aliexpress.com/item/1005009401711430.html) | ים תיכוני 7.5 | 23 | 219 | 143 | 77% |
+| 7 | work/framed-art | [Scandinavian Minimalist Aesthetic Wall Art Ne](https://www.aliexpress.com/item/1005011956338629.html) | נורדי 7.5 | 24 | 219 | 141 | 76% |
+| 8 | corridor/gallery-art | [Simple Nordic Posters Picasso Boho Black Abst](https://www.aliexpress.com/item/1005006634983896.html) | נורדי 8 | 25 | 219 | 140 | 75% |
+| 9 | work/framed-art | [Frameless Minimalist Wall Art Set in Brown an](https://www.aliexpress.com/item/1005010493631735.html) | מודרני חם 8.5 | 26 | 219 | 139 | 75% |
+| 10 | living-room/framed-art | [Vintage Countryside Wall Art Print Retro Rust](https://www.aliexpress.com/item/1005006849743763.html) | כפרי מודרני 7.5 | 27 | 219 | 138 | 74% |
+| 11 | corridor/gallery-art | [Antique Botanical Posters and Prints Rustic F](https://www.aliexpress.com/item/4000153710412.html) | כפרי מודרני 8 | 28 | 219 | 137 | 74% |
+| 12 | work/framed-art | [Modern Minimalist Boho Lines Abstract Canvas ](https://www.aliexpress.com/item/1005008404475724.html) | מודרני חם 7.5 | 37 | 219 | 128 | 69% |
+| 13 | work/framed-art | [Modern Minimalist Neutral Gallery Wall Art Bl](https://www.aliexpress.com/item/1005006744802995.html) | מודרני חם 8 | 39 | 219 | 126 | 68% |
+| 14 | living-room/vase | [Vintage Distressed Clay Vase, Wabi-Sabi Rusti](https://www.aliexpress.com/item/1005012472589009.html) | ג'פנדי 8.5 | 105 | 299 | 121 | 48% |
+| 15 | living-room/curtains | [Cotton Linen Curtain Look Yarn Tulle S Fold S](https://www.aliexpress.com/item/1005012745902882.html) | נורדי 7.5 | 64 | 179 | 71 | 47% |
+| 16 | master/curtains | [Linen Blend Beige Curtains 96 Inches Long for](https://www.aliexpress.com/item/1005008884122000.html) | מודרני חם 8 | 78 | 179 | 56 | 37% |
+| 17 | work/pendant | [Rustic Woven Pendant Light Kitchen Island Boh](https://www.aliexpress.com/item/1005009394200914.html) | כפרי מודרני 7.5 | 84 | 179 | 51 | 34% |
+| 18 | living-room/curtains | [Natural Linen Curtains 84 Inch Length for Liv](https://www.aliexpress.com/item/1005006755784378.html) | כפרי מודרני 8 | 84 | 179 | 51 | 33% |
+| 19 | work/bookends | [Nature Wooden Bookends Desktop Bookshelf Desk](https://www.aliexpress.com/item/1005012292219885.html) | נורדי 7.5 | 23 | 99 | 51 | 60% |
+| 20 | living-room/curtains | [Beige Linen Sheer Curtains for Living Room Mo](https://www.aliexpress.com/item/1005004556554205.html) | מודרני חם 8 | 87 | 179 | 47 | 31% |
+| 21 | living-room/cushions | [Boho Throw Pillow Cover for Sofa Living Room ](https://www.aliexpress.com/item/1005009261623058.html) | בוהו 7.5 | 30 | 99 | 44 | 53% |
+| 22 | work/desk-organizer | [Stationery Storage Wood Vine Rattan Pen Holde](https://www.aliexpress.com/item/1005013248832816.html) | כפרי מודרני 7.5 | 20 | 59 | 24 | 48% |
+| 23 | work/curtains | [1pc japanese folk wabi-sabi style crumpled li](https://www.aliexpress.com/item/1005006791212463.html) | ג'פנדי 8 | 111 | 179 | 24 | 16% |
+| 24 | work/wall-sconce | [Rattan Bamboo Wall Lamp Sconce Fixture Vintag](https://www.aliexpress.com/item/1005010168671943.html) | בוהו 8 | 66 | 119 | 23 | 23% |
+| 25 | dining-room/dining-rug | [Wabi-sabi Style Carpets for Living Room White](https://www.aliexpress.com/item/1005006306177264.html) | ג'פנדי 7.5 | 591 | 799 | 15 | 2% |
+| 26 | dining-room/kitchen-runner | [VIKAMA 2PC Modern Minimalist Wabi Sabi Kitche](https://www.aliexpress.com/item/1005012628590923.html) | ג'פנדי 7.5 | 92 | 129 | 5 | 5% |
+| 27 | master/bedside-sconces | [Boho Farmhouse Wall Sconces Natural Twine Han](https://www.aliexpress.com/item/1005009708965037.html) | בוהו 7.5 | 88 | 119 | 2 | 2% |
 
 ## קבצים
 
-| קובץ | מה יש בו |
-| --- | --- |
-| `detail/<room>.json` | שלב 2: מוצר, SKU, מחיר, משלוח לישראל (1,457 רשומות) |
-| `../deep-2026-10/<room>.json` | שלב 3, לסטודיו (מסך "השוואת ספקים"): רשומה לכל מוצר×סגנון ברשימה הקצרה, עם SKU שמתאים לחדר, נחיתה, רצועה, רווח, fit, נימוק, השוואה לכרטיס הקיים ו-verdict |
-| `living-room.md`, `dining-room.md`, `master.md` | לכל עמדה: טבלה עם עמודה לכל סגנון, הבחירה הטובה וההשוואה |
-| `review/sheets/` | דפי המגע משלב 2 (שלב 3 הסתכל בתמונות עצמן, בגודל גדול יותר) |
-
-## סיכומים
-
-| חדר | מפורטים | עם מחיר, משלוח ובלי פסילת מידה | ברשימה הקצרה (נבדקו בתמונה) | רשומות מוצר×סגנון | עברו | הכי טוב | כרטיסים חדשים |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| סלון | 526 | 354 | 142 | 233 | 65 | 10 | 8 |
-| מטבח ופינת אוכל | 499 | 311 | 129 | 254 | 23 | 3 | 3 |
-| חדר שינה הורים | 432 | 283 | 125 | 201 | 32 | 1 | 1 |
-| **סה"כ** | **1,457** | **948** | **396** | **688** | **120** | **14** | **12** |
-
-"עברו" = fit 7 ומעלה (סף הסטודיו) ורווח 20% ומעלה במחיר העליון של הרצועה. רשימה קצרה: עד 8 לכל עמדה×סגנון, לפי ציון הסינון של שלב 1 ועוד רווח וקנה מידה, אחרי הוצאת מה שלא מתאים (ראו "השיטה").
-
-## איפה AliExpress מנצח את CJ ו-Zendrop
-
-| חדר / עמדה | סגנון | AliExpress | הכרטיס הקיים |
-| --- | --- | --- | --- |
-| סלון / curtains | נורדי | 1005012745902882, fit 8.0, נחיתה ₪94, רווח 27% | curtains-cj-japanese-linen-half-shade (CJ), fit 7.5, נחיתה ₪143, רווח -5% |
-| סלון / table-runner | בוהו | 1005011825244347, fit 8.0, נחיתה ₪31, רווח 60% | table-runner-zendrop-ben-white-linen-look-33x183 (Zendrop), fit 3, נחיתה ₪46, רווח 46% |
-| סלון / vase | נורדי | 1005012472589009, fit 8.5, נחיתה ₪105, רווח 48% | vase-cj-textured-white-stoneware (CJ), fit 8.5, נחיתה ₪124, רווח 40% |
-| סלון / vase | מודרני חם | 1005012472589009, fit 8.0, נחיתה ₪105, רווח 48% | vase-cj-textured-white-stoneware (CJ), fit 8.5, נחיתה ₪124, רווח 40% |
-| סלון / wall-decor | ים תיכוני | 1005006165763597, fit 8.0, נחיתה ₪46, רווח 56% | wall-decor-zendrop-macrame-diamond-dowel-small (Zendrop), fit 5, נחיתה ₪55, רווח 50% |
-| סלון / wall-decor | בוהו | 1005006165763597, fit 8.5, נחיתה ₪46, רווח 56% | wall-decor-zendrop-macrame-diamond-dowel-small (Zendrop), fit 9, נחיתה ₪55, רווח 50% |
-
-**ממלא סגנון שאין לו כרטיס עם ציון** (הכרטיסים הקיימים בעמדה לא דורגו לסגנון הזה, או שאין כרטיס בכלל):
-
-- סלון / cushions, ג'פנדי: 1005009053464203 (fit 8.0, נחיתה ₪50, רווח 29%)
-- סלון / cushions, כפרי מודרני: 1005012897166217 (fit 8.5, נחיתה ₪42, רווח 38%)
-- סלון / vase, ג'פנדי: 1005012472589009 (fit 8.5, נחיתה ₪105, רווח 48%)
-- סלון / vase, כפרי מודרני: 1005012472589009 (fit 8.0, נחיתה ₪105, רווח 48%)
-- מטבח ופינת אוכל / framed-art, כפרי מודרני: 1005012481333603 (fit 8.0, נחיתה ₪97, רווח 37%)
-- מטבח ופינת אוכל / paper-towel-holder, ג'פנדי: 1005009904316063 (fit 8.0, נחיתה ₪23, רווח 57%)
-- מטבח ופינת אוכל / table-runner, בוהו: 1005009623263532 (fit 8.0, נחיתה ₪33, רווח 58%)
-- חדר שינה הורים / bedding, בוהו: 1005012862500672 (fit 8.5, נחיתה ₪214, רווח 33%)
-
-## עמדות בלי שום מועמד שעבר
-
-בשום סגנון אין מוצר עם fit 7 ומעלה ורווח 20% ומעלה. הסיבה העיקרית בסוגריים.
-
-- **סלון:** framed-art (קנבס בלי מסגרת); wall-sconce (נבדק אחד בתמונה ונדחה; בסינון בעיקר: רווח מתחת ל-20% ברצועה); rug (5 נבדקו בתמונה ונדחו; בסינון בעיקר: רווח מתחת ל-20% ברצועה); floor-lamp (לא המוצר (כותרת)); planter (רווח מתחת ל-20% ברצועה); sofa-cover (10 נבדקו בתמונה ונדחו; בסינון בעיקר: לא המוצר (כותרת)); basket (לא המוצר (כותרת)); magazine-holder (2 נבדקו בתמונה ונדחו; בסינון בעיקר: לא המוצר (כותרת)); bowl (רווח מתחת ל-20% ברצועה); pendant (2 נבדקו בתמונה ונדחו; בסינון בעיקר: רווח מתחת ל-20% ברצועה)
-- **מטבח ופינת אוכל:** dining-pendant (2 נבדקו בתמונה ונדחו; בסינון בעיקר: רווח מתחת ל-20% ברצועה); centerpiece-vase (רווח מתחת ל-20% ברצועה); candle-holders (12 נבדקו בתמונה ונדחו; בסינון בעיקר: לא המוצר (כותרת)); floor-vase (21 נבדקו בתמונה ונדחו; בסינון בעיקר: לא המוצר (כותרת)); bench-pad (7 נבדקו בתמונה ונדחו; בסינון בעיקר: אין מידה שמתאימה לחדר); dining-rug (4 נבדקו בתמונה ונדחו; בסינון בעיקר: אין מידה שמתאימה לחדר); open-shelf-ceramics (רווח מתחת ל-20% ברצועה); kitchen-sconce (3 נבדקו בתמונה ונדחו; בסינון בעיקר: רווח מתחת ל-20% ברצועה); sink-set (6 נבדקו בתמונה ונדחו; בסינון בעיקר: חומר או מילה אסורה); utensil-crock (5 נבדקו בתמונה ונדחו; בסינון בעיקר: חומר או מילה אסורה); cutting-boards (7 נבדקו בתמונה ונדחו; בסינון בעיקר: רווח מתחת ל-20% ברצועה); condiment-set (חומר או מילה אסורה); bowl (רווח מתחת ל-20% ברצועה); mug-set (רווח מתחת ל-20% ברצועה); herb-pots (רווח מתחת ל-20% ברצועה); canisters (2 נבדקו בתמונה ונדחו; בסינון בעיקר: רווח מתחת ל-20% ברצועה); tea-towel (14 נבדקו בתמונה ונדחו); kitchen-runner (אין מידה שמתאימה לחדר); step-stool (4 נבדקו בתמונה ונדחו; בסינון בעיקר: רווח מתחת ל-20% ברצועה)
-- **חדר שינה הורים:** curtains (אין מידה שמתאימה לחדר); framed-art (קנבס בלי מסגרת); bedside-sconces (2 נבדקו בתמונה ונדחו; בסינון בעיקר: רווח מתחת ל-20% ברצועה); sill-vase (רווח מתחת ל-20% ברצועה); planter (רווח מתחת ל-20% ברצועה); floor-lamp (נבדק אחד בתמונה ונדחה; בסינון בעיקר: רווח מתחת ל-20% ברצועה); nightstand-vase (רווח מתחת ל-20% ברצועה); trinket-dish (11 נבדקו בתמונה ונדחו; בסינון בעיקר: חומר או מילה אסורה); bedside-carafe (2 נבדקו בתמונה ונדחו; בסינון בעיקר: רווח מתחת ל-20% ברצועה); pillowcases (4 נבדקו בתמונה ונדחו; בסינון בעיקר: אין מידה שמתאימה לחדר); throw (נבדק אחד בתמונה ונדחה; בסינון בעיקר: רווח מתחת ל-20% ברצועה); basket (נבדק אחד בתמונה ונדחה; בסינון בעיקר: אין מידה שמתאימה לחדר); pendant (2 נבדקו בתמונה ונדחו; בסינון בעיקר: רווח מתחת ל-20% ברצועה)
-
-## 20 הכי רווחיים (מבין אלה שעברו)
-
-| # | חדר / עמדה | מוצר | סגנון (fit) | $ מוצר+משלוח | נחיתה | רצועה | רווח | verdict |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | חדר שינה הורים / rug | [VIKAMA Luxury Minimalist Area Rug Beig](https://www.aliexpress.com/item/1005013204627117.html) | נורדי 7.0, מודרני חם 7.0 | 81.11+1.99 | ₪274 | 649–799 | ₪332 · 49% | חלופה |
-| 2 | סלון / pouf | [Modern PU Leather Pouf Ottoman Cover L](https://www.aliexpress.com/item/1005013014674879.html) | מודרני חם 7.0, ים תיכוני 7.0, בוהו 7.5 | 12.91+4.26 | ₪57 | 349–449 | ₪283 · 74% | חלופה |
-| 3 | סלון / pouf | [Modern PU Leather Pouf Ottoman Cover U](https://www.aliexpress.com/item/1005012884189502.html) | בוהו 7.0 | 14.55+3.90 | ₪61 | 349–449 | ₪279 · 73% | חלופה |
-| 4 | סלון / pouf | [Boho Pattern Ottoman Pouf PU Leather L](https://www.aliexpress.com/item/1005012622343078.html) | ים תיכוני 7.5, בוהו 7.5 | 15.70+4.28 | ₪66 | 349–449 | ₪274 · 72% | חלופה |
-| 5 | סלון / pouf | [New PU Leather Fillable Ottoman Pouf E](https://www.aliexpress.com/item/1005013231174631.html) | ים תיכוני 7.0, בוהו 7.0 | 20.37+1.99 | ₪74 | 349–449 | ₪266 · 70% | חלופה |
-| 6 | חדר שינה הורים / bedding | [100% Washed Cotton Duvet Cover Set Que](https://www.aliexpress.com/item/1005011886972799.html) | מודרני חם 7.0 | 39.74+1.99 | ₪138 | 349–449 | ₪202 · 53% | חלופה |
-| 7 | חדר שינה הורים / bedding | [French Ruffle Cotton Duvet Cover Set K](https://www.aliexpress.com/item/1005010662357058.html) | כפרי מודרני 7.0 | 37.92+4.15 | ₪139 | 349–449 | ₪201 · 53% | חלופה |
-| 8 | חדר שינה הורים / bedding | [Bohemian Pleated Wheat Color Fluffy Du](https://www.aliexpress.com/item/1005010466700189.html) | ים תיכוני 7.0, בוהו 7.5 | 43.14+0.00 | ₪142 | 349–449 | ₪198 · 52% | חלופה |
-| 9 | חדר שינה הורים / bedding | [Boho Chic Wrinkled Duvet Cover Set Ult](https://www.aliexpress.com/item/1005010093087696.html) | בוהו 7.5 | 45.95+0.00 | ₪152 | 349–449 | ₪188 · 50% | חלופה |
-| 10 | חדר שינה הורים / bedding | [Cute Duvet Cover Set with Sheet Pillow](https://www.aliexpress.com/item/1005006190004683.html) | ג'פנדי 7.0, כפרי מודרני 7.5 | 49.44+9.63 | ₪195 | 349–449 | ₪145 · 38% | חלופה |
-| 11 | חדר שינה הורים / bedding | [Boho 3D Tufted Cut Flower Quilt Cover ](https://www.aliexpress.com/item/1005012862500672.html) | מודרני חם 7.0, ים תיכוני 7.0, בוהו 8.5 | 65.00+0.00 | ₪214 | 349–449 | ₪125 · 33% | הכי טוב · כרטיס |
-| 12 | סלון / vase | [Vintage Distressed Clay Vase, Wabi-Sab](https://www.aliexpress.com/item/1005012472589009.html) | נורדי 8.5, מודרני חם 8.0, ג'פנדי 8.5, ים תיכוני 7.5, כפרי מודרני 8.0 | 4.53+27.25 | ₪105 | 229–299 | ₪121 · 48% | הכי טוב · כרטיס |
-| 13 | סלון / vase | [3pcs Bohemian Ceramic Vase Set, Modern](https://www.aliexpress.com/item/1005008455616613.html) | נורדי 7.0, כפרי מודרני 7.0, בוהו 7.0 | 32.92+1.99 | ₪115 | 229–299 | ₪111 · 44% | חלופה |
-| 14 | סלון / candle-holders | [New Rustic Wooden Candlesticks Handmad](https://www.aliexpress.com/item/1005010391178645.html) | כפרי מודרני 7.0 | 3.86+1.99 ×2 | ₪32 | 59–89 | ₪95 · 66% | חלופה |
-| 15 | סלון / wall-decor | [4 Bohemian Wall Art Set - Wooden Bohem](https://www.aliexpress.com/item/1005009168911590.html) | בוהו 7.0 | 8.01+1.99 | ₪33 | 129–169 | ₪94 · 66% | חלופה |
-| 16 | סלון / wall-decor | [Macrame Wall Hanging, Boho Leaves Macr](https://www.aliexpress.com/item/1005011872608079.html) | בוהו 7.0 | 10.93+1.99 | ₪43 | 129–169 | ₪84 · 59% | חלופה |
-| 17 | סלון / wall-decor | [Leaf Macrame Wall Hanging Boho Room Ho](https://www.aliexpress.com/item/1005008100137440.html) | בוהו 7.5 | 12.01+1.99 | ₪46 | 129–169 | ₪81 · 56% | חלופה |
-| 18 | סלון / wall-decor | [Natural Raffia Woven Bohemian Wall Dec](https://www.aliexpress.com/item/1005006165763597.html) | נורדי 7.5, ים תיכוני 8.0, בוהו 8.5 | 12.85+1.16 | ₪46 | 129–169 | ₪81 · 56% | הכי טוב · כרטיס |
-| 19 | סלון / table-runner | [Mediterranean Table Runner Linen Style](https://www.aliexpress.com/item/1005013203386192.html) | ים תיכוני 7.0 | 5.21+1.99 | ₪24 | 89–129 | ₪73 · 67% | חלופה |
-| 20 | סלון / table-runner | [Minimalist Solid Color Table Runner, N](https://www.aliexpress.com/item/1005012179525144.html) | נורדי 7.5, מודרני חם 7.0, ג'פנדי 7.5 | 6.42+1.99 | ₪28 | 89–129 | ₪69 · 63% | חלופה |
-
-## הכרטיסים החדשים (DRAFT)
-
-נכתבו ב-`python3 scripts/ae/ds.py card <id> --slot <room/slot> --sku <SKU של החדר> --id <id> --offline`: מהמטמון בלבד, עם `options` מלא (כל ה-SKU של הספק), ונרשמו ב-`data/sources/seen.json` כ-card. הם טיוטה כמו כל כרטיס API: צבעים (HEX), משקל ויזואלי, מידות המוצר וטקסטורה ריקים; ה-style_scores הם ציון סינון שלי ולא של המעצב. master-designer מדרג ו-qa-agent בודק.
-
-| כרטיס | עמדה | SKU בחדר | נחיתה | רווח | משלוח |
-| --- | --- | --- | --- | --- | --- |
-| `curtains-aliexpress-cotton-linen-curtain-look-902882` | סלון / curtains | Color S Folds Size 1 PC W100cmxH275cm Pr | ₪94 (2 יח') | 27% | הערכה |
-| `cushions-aliexpress-fashion-modern-wabi-sabi-464203` | סלון / cushions | Color 1PCS-White Size 50 x 50cm | ₪50 | 29% | הערכה |
-| `cushions-aliexpress-farmhouse-floral-pillow-covers-166217` | סלון / cushions | Color 1 Size 45×45cm | ₪42 | 38% | הערכה |
-| `table-runner-aliexpress-nordic-table-runner-kitchen-244347` | סלון / table-runner | Color BEIGE Size 30*120cm | ₪31 | 60% | הערכה |
-| `table-runner-aliexpress-boho-macrame-table-runners-263532` | סלון / table-runner | Color A-4 Size 30x120cm Style Other | ₪32 | 59% | הערכה |
-| `table-runner-aliexpress-boho-table-runner-macrame-072806` | סלון / table-runner | Color Khaki with tassel Size 30x120cm | ₪36 | 56% | הערכה |
-| `vase-aliexpress-vintage-distressed-clay-vase-589009` | סלון / vase | Color L | ₪105 | 48% | צוטט |
-| `wall-decor-aliexpress-natural-raffia-woven-bohemian-763597` | סלון / wall-decor | Color 2 Size 30cm | ₪46 | 56% | צוטט |
-| `framed-art-aliexpress-retro-farmhouse-chicken-botanical-333603` | מטבח ופינת אוכל / framed-art | Color G5241 Size (Inch) 30x40cm Wood Fra | ₪97 | 37% | הערכה |
-| `paper-towel-holder-aliexpress-1pc-bamboo-paper-towel-316063` | מטבח ופינת אוכל / paper-towel-holder | Color Single bar Round | ₪23 | 57% | צוטט |
-| `table-runner-aliexpress-boho-macrame-table-runners-263532` | מטבח ופינת אוכל / table-runner | Color A-4 Size 30x140cm Style Other | ₪33 | 58% | הערכה |
-| `bedding-aliexpress-boho-3d-tufted-cut-500672` | חדר שינה הורים / bedding | Color Khaki Size US Queen size 3 pcs | ₪214 | 33% | צוטט |
-
-## לסשן הבא עם ה-API: משלוח ל-SKU של החדר
-
-בשלב 2 נבחר ברוב המקרים ה-SKU הזול (sku-default ב-1,321 מתוך 1,457), שבטקסטיל, בשטיחים ובתמונות הוא המידה הקטנה. שלב 3 בחר מהמטמון את ה-SKU שמתאים למעטפת של העמדה (השתנה ב-208 מתוך 1,229 רשומות עם מחיר), אבל המשלוח צוטט רק ל-SKU של שלב 2. ההערכה: ב-AliExpress Selection Standard (Choice) המשלוח קבוע, 1.99 דולר לפריט בכל 843 הציטוטים של הריצה, בכל מחיר; בשאר החברות המשלוח הוכפל ביחס המחירים בין ה-SKU (מעל פי 1.5) או במודל החבילה של הסטודיו (מתחת). כדאי לצטט את אלה לפני QA (fit 7.5 ומעלה):
-
-```
-python3 scripts/ae/ds.py freight 1005012745902882 --sku 12000059241454224   # living-room/curtains, Color S Folds Size 1 PC W100cmxH275cm Pr
-python3 scripts/ae/ds.py freight 1005009053464203 --sku 12000047728467291   # living-room/cushions, Color 1PCS-White Size 50 x 50cm
-python3 scripts/ae/ds.py freight 1005012897166217 --sku 12000059675354792   # living-room/cushions, Color 1 Size 45×45cm
-python3 scripts/ae/ds.py freight 1005006412064335 --sku 12000037071828314   # living-room/cushions, Color CL006 Size 45x45cm
-python3 scripts/ae/ds.py freight 1005009261623058 --sku 12000048519921711   # living-room/cushions, Color Beige-45x45cm
-python3 scripts/ae/ds.py freight 1005006856211815 --sku 12000038527813258   # living-room/cushions, Color As Picture Size 45x45cm
-python3 scripts/ae/ds.py freight 1005012179525144 --sku 12000057716654671   # living-room/table-runner, Size 40x140cm
-python3 scripts/ae/ds.py freight 1005009813736421 --sku 12000050255861419   # living-room/table-runner, Color Dark Brown Size 1PCS-30x120cm
-python3 scripts/ae/ds.py freight 1005011825244347 --sku 12000056696249963   # living-room/table-runner, Color BEIGE Size 30*120cm
-python3 scripts/ae/ds.py freight 1005009623263532 --sku 12000049664148478   # living-room/table-runner, Color A-4 Size 30x120cm Style Other
-python3 scripts/ae/ds.py freight 1005008814072806 --sku 12000046780624550   # living-room/table-runner, Color Khaki with tassel Size 30x120cm
-python3 scripts/ae/ds.py freight 1005005344284009 --sku 12000032688263947   # living-room/table-runner, Color Size 1 Size 30*120cm Style Other
-python3 scripts/ae/ds.py freight 1005012125608439 --sku 12000057565119394   # dining-room/framed-art, Color G3823 Size (Inch) 30x40cm Wood Fra
-python3 scripts/ae/ds.py freight 1005012481333603 --sku 12000058489859911   # dining-room/framed-art, Color G5241 Size (Inch) 30x40cm Wood Fra
-python3 scripts/ae/ds.py freight 1005009505269164 --sku 12000049305758185   # dining-room/table-runner, Color white Size 33x140cm
-python3 scripts/ae/ds.py freight 1005009623263532 --sku 12000049664148479   # dining-room/table-runner, Color A-4 Size 30x140cm Style Other
-python3 scripts/ae/ds.py freight 1005010466700189 --sku 12000052506947829   # master/bedding, Color Ivory Size 200x200cm
-```
-
-## השיטה (שלב 3)
-
-1. **SKU של החדר:** מכל רשומה, מתשובת `product.get` השמורה: SKU במלאי, לא "contact us", במידה שבמעטפת של העמדה (`data/slots/<room>.json`, ובסלון ה-Design Bible): הזול מבין המתאימים. אם אין מידה שמתאימה בכלל, המוצר יוצא ("לא פוסלים בגלל אפשרות אחת": מספיק SKU אחד שמתאים). בתאורה: תקע אירופאי או 220V, אור חם. בתמונה ממוסגרת: רק SKU עם מסגרת (רוב ההדפסים ב-AliExpress הם קנבס בלי מסגרת, Frame mode = Unframed).
-2. **כלכלה:** כמו בסטודיו: (מחיר × כמות + משלוח לכמות) × 3.3, רווח ב-econCalc במחיר העליון של הרצועה (`data/economics/market-prices.json` דרך `scripts/ae/scale_config.py`). בעמדת זוג (וילונות, זוג מנורות, פמוטים, ציפיות וכו') הכמות היא מספר היחידות, והרצועה נרשמת ליחידה, כך שהסטודיו מחשב אותו מספר (הנימוק כולל "price per piece; set of N = N units").
-3. **רשימה קצרה:** בכל עמדה×סגנון, מהמוצרים שנמצאו לסגנון: בלי מוצר שאינו המוצר (מחזיקי מחסניות, אהילים בלי מנורה, נורת USB, תחתיות), בלי מילים אסורות (פלסטיק, מבריק, ניאון, קרטון, LED strip, זהב/קטיפה בנורדי...), בלי חומר עיקרי מפלסטיק, ורווח לפחות 20%. דירוג: ציון החיפוש + 30×רווח + 10 למידה שמתאימה, פחות על משלוח ארוך או מוערך. עד 8.
-4. **מבט בתמונה:** כל תמונה ראשית הורדה ונבדקה (בדפי מגע של 12), ונתתי fit 1–10 לכל סגנון שהמוצר נמצא בו (ולפעמים לסגנון נוסף שהוא מתאים לו בבירור), עם נימוק בשורה. בפריטים שנכנסו לכרטיס בדקתי גם את תמונות ה-SKU ובחרתי את הצבע שבתמונה.
-5. **השוואה:** מול הכרטיס הקיים בעמדה עם הציון הגבוה לאותו סגנון (בנורדי גם כרטיס בלי ציון, כמו בסטודיו), באותה כמות ובאותו מחיר מכירה. כרטיס בלי משלוח ידוע מקבל 17 דולר, ברירת המחדל של הסטודיו.
-6. **כרטיסים:** fit 8 ומעלה ורווח לפחות כמו הכרטיס הקיים (או שאין כרטיס עם ציון לסגנון), עד 3 לעמדה×סגנון.
-
-## לשים לב
-
-- **רצועות נמוכות מדי:** עציץ רצפה (19–29), אגרטל קטן (29–39), ספל (19), קערה (29–49) ומלח ופלפל לא משאירים 20% אף פעם מ-AliExpress. ברצועת "עציץ" יש כנראה עציצים קטנים; לעציץ רצפה של 38 ס"מ היא לא מתאימה.
-- **השוואה לכרטיסים בסטודיו:** לכרטיס וילון שנמכר בזוג הסטודיו מכפיל את רצועת השוק (שהיא כבר לזוג) בכמות (2), ולכן מראה בכרטיס רווח גבוה מדי. ברשומות של `deep-2026-10` הרצועה רשומה לפאנל, והמספר נכון.
-- **כפילות:** אותו סט מצעים נמכר בשתי חנויות (1005012855035925, ‏1005012862500672); כרטיס רק לחנות עם המלאי הגדול.
-- **רישום במרשם:** רק הכרטיסים. מוצרים שנדחו בתמונה לא סומנו rejected במרשם, כי הדחייה היא לעמדה מסוימת והמרשם הוא למוצר.
+- `<room>.json` / `<room>.md`: כל הרשומות לחדר (גם ב-`../deep-2026-10/<room>.json` למסך "השוואת ספקים" בסטודיו).
+- `screen/<room>.jsonl`: כל שורות החיפוש. `detail/<room>.json`: הבדיקה המלאה. `review/<room>.json`: ציוני המבט. `review/sheets/`: גיליונות התמונות.
 
