@@ -47,8 +47,8 @@ DIST = STUDIO / "dist"
 CACHE = STUDIO / ".cache"
 PAGE_SRC = STUDIO / "src" / "index.html"
 
-LIMIT_BYTES = 12 * 1024 * 1024
-LIMIT_FILES = 240
+LIMIT_BYTES = 60 * 1024 * 1024  # a version holds up to 256MB; each publish sends only new files
+LIMIT_FILES = 480  # a version holds up to 511 files; each publish sends at most 255, so publish new files only
 P_SIZE, P_Q = 360, 72
 F_SIZE, F_Q = 1280, 78
 CA_BUNDLE = Path("/root/.ccr/ca-bundle.crt")
@@ -494,10 +494,10 @@ def sku_pieces(p: dict) -> tuple[int | None, str | None]:
 
 
 def sell_qty_default(p: dict, slot_by_key: dict) -> dict:
-    """Default units per sale (units of the card's cost). The room SKU's own labels come first (sku_pieces): a SKU that
-    is one panel in a slot that shows a pair sells 2; a SKU that is already the pair sells 1. Without them, the slot's
-    set_of counts only when the card says its cost is per piece; when that is unclear the default is 1 and sure=False
-    (the page shows a 'not sure' chip)."""
+    """Default units per sale (units of the card's cost). A room SKU whose own label says it is already a pair or a set
+    (sku_pieces > 1) is never multiplied: qty 1 (not sure when the slot's set is bigger). A one-piece label only confirms
+    the per-piece reading and never raises the quantity by itself; then, as before, the slot's set_of counts only when the
+    card says its cost is per piece, and when that is unclear the default is 1 and sure=False (a 'not sure' chip)."""
     def set_of(k):
         v = (slot_by_key.get(k) or {}).get("set_of")
         return int(v) if isnum(v) and v > 1 else None
@@ -505,7 +505,7 @@ def sell_qty_default(p: dict, slot_by_key: dict) -> dict:
     shared = [(set_of(k), k) for k in p.get("_shared_in") or [] if set_of(k)]
     name, notes = p.get("name") or "", p.get("notes") or ""
     pcs, pcs_label = sku_pieces(p)
-    if pcs is not None:
+    if pcs is not None and pcs > 1:
         m = QTY_COUNT.search(name) or QTY_COUNT.search(notes)
         if home:
             need, why = home, f"העמדה דורשת סט של {home}"
@@ -517,15 +517,26 @@ def sell_qty_default(p: dict, slot_by_key: dict) -> dict:
             why = f"העמדה המשותפת {k} דורשת סט של {need}"
         else:
             need, why = None, None
-        unit = "יחידה אחת" if pcs == 1 else f"{pcs} יח'"
-        if not need or need <= 1:
-            return {"qty": 1, "sure": True, "set_of": None, "reason": None, "sku_pieces": pcs}
-        if pcs >= need:
+        if not need or pcs >= need:
             return {"qty": 1, "sure": True, "set_of": need, "sku_pieces": pcs,
-                    "reason": f"{why}, והמק\"ט שבחדר כבר כולל {unit} ({pcs_label})"}
-        q = -(-need // pcs)
-        return {"qty": q, "sure": True, "set_of": need, "sku_pieces": pcs,
-                "reason": f"{why}, והמחיר של המק\"ט שבחדר הוא ל{unit} ({pcs_label})"}
+                    "reason": f"{why}, והמק\"ט שבחדר כבר כולל {pcs} יח' ({pcs_label})" if need else None}
+        # the SKU is already a pair or a set, smaller than the slot's: never multiply a set by guess
+        return {"qty": 1, "sure": False, "set_of": need, "sku_pieces": pcs,
+                "reason": f"{why}, והמק\"ט שבחדר הוא כבר סט של {pcs} ({pcs_label}). לא ברור אם צריך עוד סט"}
+    out = _sell_qty_notes(name, notes, home, shared)
+    if pcs == 1:
+        out["sku_pieces"] = 1
+        if out["qty"] > 1 and out.get("reason"):
+            out["reason"] += f"; המק\"ט שבחדר הוא יחידה אחת ({pcs_label})"
+        elif not out["sure"] and out.get("set_of"):
+            # the price is per piece; what is open is whether the set is N of this same product (not raised by guess)
+            out["reason"] = (f"העמדה דורשת סט של {out['set_of']}, והמק\"ט שבחדר הוא יחידה אחת ({pcs_label}). "
+                             f"לא ברור אם הסט הוא {out['set_of']} מאותו מוצר")
+    return out
+
+
+def _sell_qty_notes(name: str, notes: str, home, shared) -> dict:
+    """The notes rule (before 2026-10-11): the slot's set_of only when the card says its cost is per piece."""
     pp = any(r.search(name) or r.search(notes) for r in QTY_PER_PIECE)
     ws_strong = any(r.search(notes) for r in QTY_WHOLE_SET_NOTES)
     ws = ws_strong or any(r.search(name) for r in QTY_WHOLE_SET_NAME)
@@ -538,9 +549,16 @@ def sell_qty_default(p: dict, slot_by_key: dict) -> dict:
                 "reason": f"העמדה דורשת סט של {home}, ולא ברור מהכרטיס אם העלות ליחידה או לסט"}
     if pp:
         m = QTY_COUNT.search(name) or QTY_COUNT.search(notes)
-        n = int(next(g for g in m.groups() if g)) if m else (max(shared)[0] if shared else None)
+        if m:
+            n = int(next(g for g in m.groups() if g))
+            why = f"ההערות אומרות שהעלות ליחידה ושהמוצר נמכר כסט של {n}"
+        elif shared:
+            n, k = max(shared)
+            why = f"ההערות אומרות שהעלות ליחידה, והעמדה המשותפת {k} דורשת סט של {n}"
+        else:
+            n, why = None, None
         if n and n > 1:
-            return {"qty": n, "sure": True, "set_of": n, "reason": f"ההערות אומרות שהעלות ליחידה ושהמוצר נמכר כסט של {n}"}
+            return {"qty": n, "sure": True, "set_of": n, "reason": why}
     return {"qty": 1, "sure": True, "set_of": None, "reason": None}
 
 
@@ -1007,7 +1025,9 @@ def _clean_il_value(v):
         url = c.get("url") if isinstance(c.get("url"), str) and c["url"].startswith("https://") else None
         comps.append({"retailer": str(c.get("retailer") or "")[:80], "title": str(c.get("title") or "")[:200],
                       "price": c.get("price") if isnum(c.get("price")) else None, "url": url,
-                      "size": str(c.get("size"))[:80] if c.get("size") else None})
+                      "size": str(c.get("size"))[:80] if c.get("size") else None,
+                      "list_price": c.get("list_price") if isnum(c.get("list_price")) else None,
+                      "note": str(c.get("note"))[:160] if c.get("note") else None})
     out["comps"] = comps[:12]
     for k in ("note", "basis", "date"):
         if isinstance(v.get(k), str):
@@ -1094,7 +1114,7 @@ def load_economics(eco_dir: Path, products: list[dict]) -> dict:
         except Exception as e:
             log(f"  ! cannot read {bp2.name}: {e}")
     n_fr = {"cj": 0, "zendrop": 0, "aliexpress": 0, "card": 0}
-    n_manual = n_no_fast = n_qty = n_no_route = n_initial = 0
+    n_manual = n_no_fast = n_qty = n_no_route = 0
 
     def opt(o):
         if not isinstance(o, dict) or not isnum(o.get("usd")):
@@ -1148,14 +1168,23 @@ def load_economics(eco_dir: Path, products: list[dict]) -> dict:
         for k in ("retail_ils", "compare_at_ils", "customer_total_ils"):
             if isnum(m.get(k)):
                 e[k] = m[k]
-        for k in ("retail_src", "price_note"):
+        for k in ("retail_src", "price_note", "sale_contains", "action_he"):
             if isinstance(m.get(k), str) and m[k].strip():
                 e[k] = m[k].strip()[:400]
+        # the units the pricing team priced (checked against the studio's sell quantity on the page)
+        if isnum(m.get("price_for_qty")) and float(m["price_for_qty"]).is_integer() and m["price_for_qty"] >= 1:
+            e["price_for_qty"] = int(m["price_for_qty"])
+        # VR1 (2026-10-11): the pricing team's verdict at its price (ok / below-floor / loss) and whether the slot has
+        # another product above the 40% floor; the page shows "חריג: אין חלופה בעמדה" or "מתחת לרף 40%"
+        if m.get("flag") in ("ok", "below-floor", "loss"):
+            e["price_flag"] = m["flag"]
+        if isinstance(m.get("slot_alternative_ok"), bool):
+            e["slot_alternative_ok"] = m["slot_alternative_ok"]
+        if m.get("addon_only") is True:
+            e["addon_only"] = True  # sold only as an add-on to an order (the page shows "רק כתוספת לסל")
         iv = _clean_il_value(m.get("il_value"))
         if iv:
             e["il_value"] = iv
-        if "retail_ils" in e and str(e.get("retail_src") or "").startswith("initial"):
-            n_initial += 1
         q = m.get("sell_qty")
         if isnum(q) and float(q).is_integer() and q >= 1:
             e["sell_qty"] = int(q)
@@ -1163,7 +1192,8 @@ def load_economics(eco_dir: Path, products: list[dict]) -> dict:
         out["products"][pid] = e
     out["counts"] = {"shipping_cj": n_fr["cj"], "shipping_zendrop": n_fr["zendrop"], "shipping_aliexpress": n_fr["aliexpress"],
                      "shipping_card": n_fr["card"], "shipping_manual": n_manual, "no_fast_shipping": n_no_fast,
-                     "no_route": n_no_route, "sell_qty": n_qty, "initial_prices": n_initial,
+                     "no_route": n_no_route, "sell_qty": n_qty,
+                     "initial_prices": sum(1 for v in out["products"].values() if "retail_ils" in v and str(v.get("retail_src") or "").startswith("initial")),
                      "retail": sum(1 for v in out["products"].values() if "retail_ils" in v)}
     return out
 
@@ -2098,7 +2128,10 @@ def main() -> int:
     economics = load_economics(eco_dir, products)
     if economics["files"]:
         c = economics.get("counts", {})
-        log(f"  economics: {', '.join(economics['files'])} · shipping from CJ {c.get('shipping_cj', 0)}, manual {c.get('shipping_manual', 0)} · no option within 20 days {c.get('no_fast_shipping', 0)} · retail prices {c.get('retail', 0)} · sell quantities {c.get('sell_qty', 0)}")
+        log(f"  economics: {', '.join(economics['files'])} · shipping from CJ {c.get('shipping_cj', 0)}, Zendrop {c.get('shipping_zendrop', 0)},"
+            f" AliExpress {c.get('shipping_aliexpress', 0)}, card SKU {c.get('shipping_card', 0)}, manual {c.get('shipping_manual', 0)}"
+            f" · no route to Israel {c.get('no_route', 0)} · no option within 20 days {c.get('no_fast_shipping', 0)}"
+            f" · retail prices {c.get('retail', 0)} ({c.get('initial_prices', 0)} initial) · sell quantities {c.get('sell_qty', 0)}")
     else:
         log(f"  economics: no files in {economics['dir']} (the page shows its defaults)")
 

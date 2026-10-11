@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "updated": "2026-10-11T18:00:00+00:00",
+  "note": "FIXTURE for studio/tests/smoke_products.py: pricing-team format (data/economics/products.json). Test prices only, never the real ones.",
+  "products": {
+    "wall-hooks-cj-raw-wood-cylinder-peg-set-of-4": {
+      "retail_ils": 99,
+      "retail_src": "initial-2026-10-11",
+      "il_value": {
+        "low": 69,
+        "typical": 99,
+        "high": 149,
+        "comps": [
+          {
+            "retailer": "FIXTURE IKEA",
+            "title": "FIXTURE wooden pegs, set of 4",
+            "price": 89,
+            "url": "https://www.ikea.com/il/he/"
+          },
+          {
+            "retailer": "FIXTURE Home Style",
+            "title": "FIXTURE oak hooks",
+            "price": 119,
+            "url": "https://www.homestyle.co.il/"
+          },
+          {
+            "retailer": "FIXTURE insecure",
+            "title": "FIXTURE http link is dropped",
+            "price": 79,
+            "url": "http://example.com/"
+          }
+        ]
+      },
+      "customer_total_ils": 128,
+      "price_note": "FIXTURE: in the middle of the Israeli range for a set of 4 oak pegs.",
+      "flag": "ok",
+      "slot_alternative_ok": true
+    },
+    "curtains-aliexpress-cotton-linen-curtain-look-902882": {
+      "retail_ils": 349,
+      "retail_src": "initial-2026-10-11",
+      "il_value": {
+        "low": 179,
+        "typical": 345,
+        "high": 395,
+        "comps": [
+          {
+            "retailer": "FIXTURE IKEA",
+            "title": "FIXTURE linen-look curtain, 2 panels",
+            "price": 345,
+            "url": "https://www.ikea.com/il/he/"
+          }
+        ]
+      },
+      "customer_total_ils": 349,
+      "price_note": "FIXTURE: a pair of 275 cm panels.",
+      "flag": "ok",
+      "slot_alternative_ok": true
+    },
+    "tea-towel-zendrop-cotton-linen-washed-60x45": {
+      "retail_ils": 39,
+      "retail_src": "initial-2026-10-11",
+      "customer_total_ils": 68,
+      "flag": "below-floor",
+      "slot_alternative_ok": false,
+      "addon_only": true,
+      "price_for_qty": 1
+    },
+    "curtains-cj-japanese-linen-half-shade": {
+      "retail_ils": 199,
+      "retail_src": "studio",
+      "flag": "below-floor",
+      "slot_alternative_ok": true
+    },
+    "wall-hooks-cj-light-wood-rail-5-brass-pegs-58": {
+      "retail_ils": 49,
+      "retail_src": "initial-2026-10-11",
+      "price_for_qty": 1,
+      "flag": "loss",
+      "slot_alternative_ok": true,
+      "action_he": "FIXTURE: shipping is more than the price; find a supplier with a lighter parcel."
+    }
+  }
+}

@@ -181,6 +181,23 @@ def fixture_checks(browser, base):
             ctx.close()
 
 
+COOP_HE = {"sent": "נשלחה", "draft": "טיוטה", "none": "אין בקשה", "replied": "ענו"}  # F_COOP in index.html
+
+
+def coop_label(sid: str) -> str | None:
+    """The chip text the furniture screen shows for a supplier's coop_request (same rule as coopChip in index.html)."""
+    import json
+    d = json.loads((ROOT / "data" / "suppliers" / "directory.json").read_text(encoding="utf-8"))
+    s = next((x for x in d.get("suppliers") or [] if x.get("id") == sid), None)
+    c = (s or {}).get("coop_request") or {}
+    st, tone = c.get("state") or "none", c.get("tone")
+    if st == "replied":
+        return "ענו: כן" if tone == "positive" else "ענו: לא" if tone == "negative" else "ענו"
+    if st == "sent" and tone == "bounced":
+        return "נשלחה, המייל חזר"
+    return COOP_HE.get(st, st)
+
+
 def furniture_checks(browser, base):
     for width in (400, 1280):
         for scheme in ("light", "dark"):
@@ -198,7 +215,10 @@ def furniture_checks(browser, base):
             arm = page.locator("#furn-living-room--armchair .fcard", has_text="FIXTURE כורסת נועה")
             check(arm.count() == 1 and "נכשל ב-צילום אמיתי, חומרים" in arm.inner_text(), f"{label}: failed gate checks named")
             check("לא שויכו" in body.inner_text(), f"{label}: unmatched furniture record reported")
-            check("ענו: כן" in page.locator("#fs-furniture-express").locator("xpath=..").locator("xpath=..").inner_text(), f"{label}: furniture-express shows a positive reply")
+            # the expected chip follows the live coop_request in data/suppliers/directory.json (it changes as mails go out)
+            want = coop_label("furniture-express")
+            got = page.locator("#fs-furniture-express").locator("xpath=..").locator("xpath=..").inner_text()
+            check(bool(want) and want in got, f"{label}: furniture-express shows its cooperation state ({want})")
             nm = page.locator(".fsup", has_text="FIXTURE רהיטי צפון")
             check(nm.count() == 1 and "אין דגמים בליקוט" in nm.inner_text() and "ספק חדש" in nm.inner_text(), f"{label}: new supplier without models listed")
             sw = page.evaluate("document.documentElement.scrollWidth")

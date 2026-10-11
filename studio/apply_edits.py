@@ -479,13 +479,21 @@ class Run:
                 changed += 1
                 e["updated_at"] = self.today
                 e["source"] = "studio"
+                # a price set in the studio is no longer the pricing team's starting price ("initial-...")
+                if "retail_ils" in eu and e.get("retail_ils") != old.get("retail_ils"):
+                    if "retail_ils" in e:
+                        e["retail_src"] = "studio"
+                    else:
+                        e.pop("retail_src", None)
                 if any(k in e for k in ECON_KEYS):
                     prods[pid] = e
                 else:
                     prods.pop(pid, None)
             if changed:
-                out = {"version": 1, "note": "שדות כלכלה לכל מוצר (נכתב על ידי studio/apply_edits.py). משלוח ידני (ליחידה) גובר על freight-cj.json. sell_qty = יחידות בכל מכירה.",
-                       "updated": self.today, "products": dict(sorted(prods.items()))}
+                # keep the file's other top-level fields (the pricing team's header); only these three are ours
+                out = {k: v for k, v in cur.items() if k not in ("version", "updated", "products")} if isinstance(cur, dict) else {}
+                out.setdefault("note", "שדות כלכלה לכל מוצר (נכתב על ידי studio/apply_edits.py). משלוח ידני (ליחידה) גובר על freight-cj.json. sell_qty = יחידות בכל מכירה.")
+                out = {"version": 1, **out, "updated": self.today, "products": dict(sorted(prods.items()))}
                 self.say(f"• data/economics/products.json: {changed} products changed ({len(prods)} total)")
                 if not self.args.dry_run:
                     write_json(pp, out)

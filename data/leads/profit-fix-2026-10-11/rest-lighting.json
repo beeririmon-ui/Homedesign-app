@@ -1,0 +1,2612 @@
+{
+ "group": "rest-lighting",
+ "run_id": "profit-fix-rest-lighting",
+ "date": "2026-10-11",
+ "method": "Studio economics per BRIEF.md: fx 3.3, VAT 18%, card 2%+₪1.2, returns 8% of net, packaging 0; shipping for qty q = unit + (q-1)*max(0, unit-3.72); cheapest shipping option to IL, plus the cheapest option within 20 days (within_20d). retail_ils = the slot's Israeli-value price from data/economics/pricing/other-rooms-2026-10-11.json (pairs and sets at the set price, qty = units). Margin before CAC.",
+ "sources_checked": {
+  "CJ": "run profit-fix-rest-lighting: 17 searches (listV2) + 6 product opens + 11 freight quotes = 1,380 points (42 calls, including 8 calls lost to HTTP 429 that were still charged); plus the cached searches of the living-room lighting group (cloth/fabric/linen/paper/pleated/silk/wabi pendants, linen/fabric/swing-arm/plug-in wall lamps, travertine). Results cached under data/sources/cj/.",
+  "AliExpress": "repo API data only: scale-2026-10/screen (all rooms, 1,915 lighting rows), scale-2026-10/detail + deep-2026-10 (all rooms), review sheets, data/sources/aliexpress cache. No aliexpress.com browsing.",
+  "Zendrop": "mcp get_catalog_products (pendant light, fabric lamp, wall lamp, floor lamp, table lamp) + shipping estimates to IL for 5 lamps: $28.41-82.35 per lamp (wall lamps 2016351 $30.18, 3136885 $28.41, 2016617 $37.16; floor lamp 2896731 $82.35; pendant 2755522 $35.05) -> none profitable at the slots' prices.",
+  "Israel": "public pages only (d.co.il directory, zauderer.co.il, nordlight.co.il via the lighting group); no contact made."
+ },
+ "losses": [
+  {
+   "loss_id": "ceiling-light-cj-opal-glass-drum-flush-32",
+   "slot_key": "bath/ceiling-light",
+   "envelope_cm": {
+    "d": [
+     28,
+     34
+    ],
+    "h": [
+     6,
+     10
+    ]
+   },
+   "slot_electrical": "IP44+, CE, 220-240V, hardwired; 2700K; opal glass or matte ceramic",
+   "current": {
+    "card_id": "ceiling-light-cj-opal-glass-drum-flush-32",
+    "card_path": "data/products/bath/ceiling-light/ceiling-light-cj-opal-glass-drum-flush-32.json",
+    "supplier": "CJ Dropshipping",
+    "url": "https://cjdropshipping.com/product/-p-2607081244581611000.html",
+    "retail_ils": 149,
+    "price_for_qty": 1,
+    "il_typical": 199,
+    "cost_usd": 21.23,
+    "ship_usd": 35.25,
+    "ship_option": "CJPacket Eub",
+    "ship_days": "12-50",
+    "landed_ils": 186.38,
+    "contribution_ils": -74.39,
+    "margin_pct": -58.9,
+    "nordic_score": null,
+    "within_20d": {
+     "option": "CJPacket To Door",
+     "ship_usd": 115.53,
+     "days": "11-18",
+     "landed_ils": 451.31,
+     "contribution_ils": -339.32,
+     "margin_pct": -268.7
+    }
+   },
+   "fixes": [
+    {
+     "type": "alternative",
+     "source": "AliExpress",
+     "title": "LED Ceiling Lights for Bathroom IP44 Waterproof AC165-265V 18W/30W/40W (White 30W, Warm White)",
+     "url": "https://www.aliexpress.com/item/1005008494869298.html",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/S1a1d5e19c7694ddbb98db47b1096dc5dU.jpg",
+     "pid_or_item_id": "1005008494869298",
+     "sku_or_vid": "12000046353781872 (White 30W, Warm White, stock 461); also 12000046353781860 White 18W Warm $16.44 (stock 4)",
+     "cost_usd": 19.34,
+     "ship_usd": 1.99,
+     "ship_days": "6-15",
+     "ship_option": "AliExpress Selection Standard (Choice), API quote 2026-10-11 for SKU ...854 of the same listing",
+     "qty": 1,
+     "landed_ils": 70.39,
+     "retail_ils": 149,
+     "contribution_ils": 41.6,
+     "margin_pct": 32.9,
+     "within_20d": {
+      "option": "AliExpress Selection Standard",
+      "ship_usd": 1.99,
+      "days": "6-15",
+      "landed_ils": 70.39,
+      "contribution_ils": 41.6,
+      "margin_pct": 32.9
+     },
+     "dims_cm": {
+      "d": null,
+      "h": null,
+      "note": "diameter per wattage not stated (30W usually ~30 cm); flat round LED disc"
+     },
+     "fits_envelope": "unknown",
+     "nordic_fit_guess": 4.0,
+     "electrical": "listing: IP44 (title), AC165-265V, CE/CCC/RoHS declared, self-contained (hardwired), body PVC/plastic; colour temperature 'Warm White' (K not stated)",
+     "why_he": "גוף צמוד תקרה עם IP44 מוצהר בכותרת, משלוח Choice של $1.99. רווחי, אבל זה דיסק LED שטוח מפלסטיק (PVC) עם טבעת: טכני ופחות יפה מתוף זכוכית האופל המחורצת, והתנ\"ך אוסר פלסטיק. מתאים רק כגיבוי בטיחותי (IP44) אם המעצב יקבל אותו, כי המנורה לא נראית בפריימים הראשיים.",
+     "needs": "מידות לכל SKU, תעודת IP44 ו-CE, תמונה אמיתית; החלטת מעצב על פלסטיק"
+    },
+    {
+     "type": "israeli-supplier",
+     "source": "IL",
+     "title": "IP44 opal-glass or ceramic flush ceiling light from an Israeli lighting importer/wholesaler",
+     "url": null,
+     "image": null,
+     "pid_or_item_id": null,
+     "sku_or_vid": null,
+     "cost_usd": null,
+     "ship_usd": null,
+     "ship_days": null,
+     "ship_option": null,
+     "qty": 1,
+     "landed_ils": null,
+     "retail_ils": 149,
+     "contribution_ils": null,
+     "margin_pct": null,
+     "within_20d": null,
+     "dims_cm": null,
+     "fits_envelope": "unknown",
+     "nordic_fit_guess": null,
+     "electrical": "to ask: IP44 rating, CE/SI 20, 220-240V, 2700K",
+     "why_he": "צמודי תקרה IP44 מזכוכית אופל נפוצים בישראל (טווח קמעונאי ₪79–300). מועמדים לשאול: א. כץ בע\"מ (יבוא וייצור גופי תאורה, כפר טרומן), א.א. סיטונאות חשמל (רעננה, 'מחירים סיטונאיים'), צבי צאודרר (יבואן תאורה טכנית/LED), Nord Light. כדי להרוויח ב-₪149 נחיתה עד כ-₪112 (40%: עד ₪61).",
+     "needs": "מחיר סוחר או דרופשיפ, מלאי, IP44 ות\"י 20, תמונות. לא נוצר קשר",
+     "leads": [
+      "https://www.d.co.il/h-c29740-e0-p0-l0/",
+      "https://www.d.co.il/h-c50010-e0-p0-l0/",
+      "https://www.zauderer.co.il/english",
+      "https://nordlight.co.il/"
+     ]
+    }
+   ],
+   "best": null,
+   "verdict_he": "אין תיקון יפה באותה רמה: גוף IP44 מפלסטיק מ-AliExpress מרוויח 32.9% אבל טכני; ההמלצה: לשאול יבואן ישראלי על צמוד אופל IP44, ובינתיים לשמור את הזכוכית מסומנת 'מפסיד'."
+  },
+  {
+   "loss_id": "vanity-sconces-cj-fluted-resin-updown-white",
+   "slot_key": "bath/vanity-sconces",
+   "envelope_cm": {
+    "w": [
+     10,
+     16
+    ],
+    "h": [
+     18,
+     26
+    ],
+    "projection_max": 12
+   },
+   "slot_electrical": "IP44+, CE, 220-240V, hardwired, no visible cable; 2700K; opal glass, matte glazed ceramic or plaster",
+   "current": {
+    "card_id": "vanity-sconces-cj-fluted-resin-updown-white",
+    "card_path": "data/products/bath/vanity-sconces/vanity-sconces-cj-fluted-resin-updown-white.json",
+    "supplier": "CJ Dropshipping",
+    "url": "https://cjdropshipping.com/product/-p-2411040835121607800.html",
+    "retail_ils": 229,
+    "price_for_qty": 2,
+    "il_typical": 279,
+    "cost_usd": 7.3,
+    "ship_usd": 23.57,
+    "ship_option": "CJPacket Sensitive",
+    "ship_days": "22-27",
+    "landed_ils": 191.47,
+    "contribution_ils": -18.7,
+    "margin_pct": -9.6,
+    "nordic_score": null,
+    "within_20d": {
+     "option": "CJPacket To Door",
+     "ship_usd": 28.2,
+     "days": "11-18",
+     "landed_ils": 222.02,
+     "contribution_ils": -49.26,
+     "margin_pct": -25.4
+    }
+   },
+   "fixes": [
+    {
+     "type": "variant",
+     "source": "CJ",
+     "title": "Same fluted resin up/down lamp, Tricolour White variant",
+     "url": "https://cjdropshipping.com/product/-p-2411040835121607800.html",
+     "image": "https://oss-cf.cjdropshipping.com/product/2024/11/04/08/3e689b89-f212-4620-98ff-7cdd7282faab_trans.jpeg",
+     "pid_or_item_id": "2411040835121607800",
+     "sku_or_vid": "CJYD218128715OL / vid 2510141005531630000",
+     "cost_usd": 6.47,
+     "ship_usd": 23.57,
+     "ship_days": "22-27",
+     "ship_option": "CJPacket Sensitive (assumed same as the warm vid; no Eub line for LED goods)",
+     "qty": 2,
+     "landed_ils": 185.99,
+     "retail_ils": 229,
+     "contribution_ils": -13.23,
+     "margin_pct": -6.8,
+     "within_20d": {
+      "option": "CJPacket To Door",
+      "ship_usd": 28.2,
+      "days": "11-18",
+      "landed_ils": 216.55,
+      "contribution_ils": -43.78,
+      "margin_pct": -22.6
+     },
+     "dims_cm": {
+      "width": 13,
+      "depth": 7.5,
+      "height": 16
+     },
+     "fits_envelope": "borderline",
+     "nordic_fit_guess": null,
+     "electrical": "same as the current card: 110-220V, LED 2x5W, hardwired, IP not stated, CE not stated",
+     "why_he": "אותו גוף בווריאנט הזול ($6.47). עדיין מפסיד: המשלוח (Sensitive, אין קו Eub למוצרי LED) הוא הבעיה.",
+     "needs": "קו משלוח זול יותר מ-CJ (אין)"
+    },
+    {
+     "type": "alternative",
+     "source": "AliExpress",
+     "title": "Nordic Wall Light Aluminum IP65 Waterproof Indoor Wall Lamp Up Down (deexi)",
+     "url": "https://www.aliexpress.com/item/1005008248092420.html",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/S96fa4c1f5d49443ca88fe9c23811700aC.jpg",
+     "pid_or_item_id": "1005008248092420",
+     "sku_or_vid": "12000044371255971 (WHITE, 175x90x28mm 12W, Warm White 2700-3500K, stock 6)",
+     "cost_usd": 14.08,
+     "ship_usd": 1.99,
+     "ship_days": "6-15",
+     "ship_option": "AliExpress Selection Standard (Choice); quoted by the API on 2026-10-11 for SKU 12000044371255973 of the same listing",
+     "qty": 2,
+     "landed_ils": 99.49,
+     "retail_ils": 229,
+     "contribution_ils": 73.27,
+     "margin_pct": 37.8,
+     "within_20d": {
+      "option": "AliExpress Selection Standard",
+      "ship_usd": 1.99,
+      "days": "6-15",
+      "landed_ils": 99.49,
+      "contribution_ils": 73.27,
+      "margin_pct": 37.8
+     },
+     "dims_cm": {
+      "height": 17.5,
+      "width": 9,
+      "depth": 2.8
+     },
+     "fits_envelope": "borderline",
+     "nordic_fit_guess": 5.0,
+     "electrical": "listing: IP65, aluminium body, AC (voltage field 9x-26xV per attributes), CE/CCC/RoHS declared, self-contained install (hardwired)",
+     "why_he": "מנורת קיר למעלה-למטה מאלומיניום לבן עם IP65 מוצהר, 17.5×9×2.8, ב-$14.08 ומשלוח Choice. זוג ב-₪229 מרוויח 37.8%. יתרון אמיתי: IP65 עונה על חובת IP44 בחדר רחצה (לגוף הטיח המחורץ אין IP מוצהר). חיסרון: מראה טכני ושטוח יותר מהשרף המחורץ. גובה 17.5 (חצי ס\"מ מתחת ל-18) ורוחב 9 (ס\"מ מתחת ל-10): לבדוק בפריים. מחיר: Home Center CARDO למעלה/למטה ₪219.9 ליחידה ו-IKEA NYMÅNE ₪79 ליחידה, כך שזוג ב-₪229 נמוך מהשוק.",
+     "needs": "ציטוט משלוח ב-API ל-SKU של 17.5 (מלאי 6 בלבד); CE הצהרה בלבד; 2700K מתוך טווח '2700-3500K'; ציון מעצב (אלומיניום לבן טכני, לא טיח או קרמיקה)",
+     "card_id": "vanity-sconces-aliexpress-ip65-updown-white-175"
+    },
+    {
+     "type": "alternative",
+     "source": "AliExpress",
+     "title": "Nordic Wall Light Aluminum IP65 Waterproof Indoor Wall Lamp Up Down (deexi)",
+     "url": "https://www.aliexpress.com/item/1005008248092420.html",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/S96fa4c1f5d49443ca88fe9c23811700aC.jpg",
+     "pid_or_item_id": "1005008248092420",
+     "sku_or_vid": "12000044371255973 (WHITE, 115x90x28mm 6W, Warm White 2700-3500K, stock 20)",
+     "cost_usd": 11.42,
+     "ship_usd": 1.99,
+     "ship_days": "6-15",
+     "ship_option": "AliExpress Selection Standard (Choice); quoted by the API on 2026-10-11 for SKU 12000044371255973 of the same listing",
+     "qty": 2,
+     "landed_ils": 81.94,
+     "retail_ils": 229,
+     "contribution_ils": 90.82,
+     "margin_pct": 46.8,
+     "within_20d": {
+      "option": "AliExpress Selection Standard",
+      "ship_usd": 1.99,
+      "days": "6-15",
+      "landed_ils": 81.94,
+      "contribution_ils": 90.82,
+      "margin_pct": 46.8
+     },
+     "dims_cm": {
+      "height": 11.5,
+      "width": 9,
+      "depth": 2.8
+     },
+     "fits_envelope": "no",
+     "nordic_fit_guess": 5.0,
+     "electrical": "listing: IP65, aluminium body, AC (voltage field 9x-26xV per attributes), CE/CCC/RoHS declared, self-contained install (hardwired)",
+     "why_he": "אותו ליסטינג, גרסת 11.5 ס\"מ עם ציטוט משלוח ישיר ($1.99) ומלאי 20. 46.8% לזוג, אבל נמוכה מדי למראה (18–26).",
+     "needs": "ציטוט משלוח ב-API ל-SKU של 17.5 (מלאי 6 בלבד); CE הצהרה בלבד; 2700K מתוך טווח '2700-3500K'; ציון מעצב (אלומיניום לבן טכני, לא טיח או קרמיקה)"
+    }
+   ],
+   "best": 1,
+   "verdict_he": "התיקון: זוג מנורות IP65 למעלה-למטה מ-AliExpress (17.5 ס\"מ) ב-₪229, ‏37.8%; בטוח לחדר רחצה אבל טכני יותר, ולכן צריך ציון מעצב וציטוט משלוח ל-SKU."
+  },
+  {
+   "loss_id": "vanity-sconces-cj-ip65-mini-updown-white",
+   "slot_key": "bath/vanity-sconces",
+   "envelope_cm": {
+    "w": [
+     10,
+     16
+    ],
+    "h": [
+     18,
+     26
+    ],
+    "projection_max": 12
+   },
+   "slot_electrical": "IP44+, CE, 220-240V, hardwired, no visible cable; 2700K; opal glass, matte glazed ceramic or plaster",
+   "current": {
+    "card_id": "vanity-sconces-cj-ip65-mini-updown-white",
+    "card_path": "data/products/bath/vanity-sconces/vanity-sconces-cj-ip65-mini-updown-white.json",
+    "supplier": "CJ Dropshipping",
+    "url": "https://cjdropshipping.com/product/-p-2608242353081636800.html",
+    "retail_ils": 49,
+    "price_for_qty": 1,
+    "il_typical": 89,
+    "cost_usd": 3.3,
+    "ship_usd": 11.67,
+    "ship_option": "CJPacket Eub",
+    "ship_days": "12-50",
+    "landed_ils": 49.4,
+    "contribution_ils": -13.38,
+    "margin_pct": -32.2,
+    "nordic_score": null,
+    "within_20d": {
+     "option": "CJPacket To Door",
+     "ship_usd": 20.87,
+     "days": "11-18",
+     "landed_ils": 79.76,
+     "contribution_ils": -43.74,
+     "margin_pct": -105.3
+    }
+   },
+   "fixes": [
+    {
+     "type": "bundle",
+     "source": "CJ",
+     "title": "Same IP65 mini up/down lamp sold as the slot's pair (₪129 for 2)",
+     "url": "https://cjdropshipping.com/product/-p-2608242353081636800.html",
+     "image": "https://oss-cf.cjdropshipping.com/product/2026/08/24/23/fe8556f3-859e-4a10-a2d4-ccf46cb458ca_trans.jpeg",
+     "pid_or_item_id": "2608242353081636800",
+     "sku_or_vid": "CJYD309246902BY / vid 2608250730121631300",
+     "cost_usd": 3.3,
+     "ship_usd": 11.67,
+     "ship_days": "12-50",
+     "ship_option": "CJPacket Eub",
+     "qty": 2,
+     "landed_ils": 86.53,
+     "retail_ils": 129,
+     "contribution_ils": 10.27,
+     "margin_pct": 9.4,
+     "within_20d": {
+      "option": "CJPacket To Door",
+      "ship_usd": 20.87,
+      "days": "11-18",
+      "landed_ils": 147.25,
+      "contribution_ils": -50.45,
+      "margin_pct": -46.1
+     },
+     "dims_cm": {
+      "width": 4.5,
+      "depth": 5.8,
+      "height": 9.5
+     },
+     "fits_envelope": "no",
+     "nordic_fit_guess": null,
+     "electrical": "IP65 (stated), AC 86-265V, 3000K, hardwired; CE not verified",
+     "why_he": "אותו מוצר, נמכר כזוג (העמדה היא זוג, וכלל P1 קובע מכירה כסט). ב-₪129 לזוג: +₪10.3, ‏9.4%. ₪129 הוא גם ההמלצה בקובץ התמחור ('לזוג ₪129'), ו-IKEA NYMÅNE עולה ₪79 ליחידה.",
+     "needs": "אישור מחיר הזוג ₪129; המידה עדיין קטנה מהמעטפה (9.5 מול 18–26)"
+    },
+    {
+     "type": "bundle",
+     "source": "AliExpress",
+     "title": "AliExpress IP65 up/down (white, 115x90x28, warm) sold as a pair at ₪129",
+     "url": "https://www.aliexpress.com/item/1005008248092420.html",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/S96fa4c1f5d49443ca88fe9c23811700aC.jpg",
+     "pid_or_item_id": "1005008248092420",
+     "sku_or_vid": "12000044371255973 (WHITE 115x90x28mm 6W Warm White, stock 20)",
+     "cost_usd": 11.42,
+     "ship_usd": 1.99,
+     "ship_days": "6-15",
+     "ship_option": "AliExpress Selection Standard (Choice), API quote 2026-10-11",
+     "qty": 2,
+     "landed_ils": 81.94,
+     "retail_ils": 129,
+     "contribution_ils": 14.86,
+     "margin_pct": 13.6,
+     "within_20d": {
+      "option": "AliExpress Selection Standard",
+      "ship_usd": 1.99,
+      "days": "6-15",
+      "landed_ils": 81.94,
+      "contribution_ils": 14.86,
+      "margin_pct": 13.6
+     },
+     "dims_cm": {
+      "height": 11.5,
+      "width": 9,
+      "depth": 2.8
+     },
+     "fits_envelope": "no",
+     "nordic_fit_guess": 5.0,
+     "electrical": "listing: IP65, aluminium, CE/CCC/RoHS declared, hardwired",
+     "why_he": "אותו סוג מוצר (למעלה/למטה טכני, IP65), מעט גדול יותר, משלוח מצוטט של $1.99 ו-6–15 ימים. זוג ב-₪129: ‏13.6%. יחידה ב-₪49 עדיין מפסידה.",
+     "needs": "CE הצהרה בלבד; מעט קטן מהמעטפה"
+    }
+   ],
+   "best": 0,
+   "verdict_he": "יחידה ב-₪49 לא יכולה להרוויח; כזוג ב-₪129 אותו מוצר מרוויח 9.4% (או 13.6% בגרסת AliExpress)."
+  },
+  {
+   "loss_id": "ceiling-lights-cj-pleated-fabric-saucer-flush-50",
+   "slot_key": "corridor/ceiling-lights",
+   "envelope_cm": {
+    "d": [
+     30,
+     40
+    ],
+    "projection": [
+     12,
+     20
+    ]
+   },
+   "slot_electrical": "CE, 220-240V, hardwired to the ceiling points, no plug; 2700K",
+   "current": {
+    "card_id": "ceiling-lights-cj-pleated-fabric-saucer-flush-50",
+    "card_path": "data/products/corridor/ceiling-lights/ceiling-lights-cj-pleated-fabric-saucer-flush-50.json",
+    "supplier": "CJ Dropshipping",
+    "url": "https://cjdropshipping.com/product/-p-2507160945591621500.html",
+    "retail_ils": 499,
+    "price_for_qty": 2,
+    "il_typical": 538,
+    "cost_usd": 36.15,
+    "ship_usd": 30.2,
+    "ship_option": "CJPacket Eub",
+    "ship_days": "12-50",
+    "landed_ils": 425.63,
+    "contribution_ils": -47.76,
+    "margin_pct": -11.3,
+    "nordic_score": null,
+    "within_20d": {
+     "option": "CJPacket To Door",
+     "ship_usd": 231.95,
+     "days": "11-18",
+     "landed_ils": 1757.18,
+     "contribution_ils": -1379.31,
+     "margin_pct": -326.2
+    }
+   },
+   "fixes": [
+    {
+     "type": "alternative",
+     "source": "CJ",
+     "title": "Silk Pumpkin Chandelier - Warm Light, Diameter 30cm (flat ribbed fabric lantern)",
+     "url": "https://cjdropshipping.com/product/-p-2507161004071618900.html",
+     "image": "https://oss-cf.cjdropshipping.com/product/2025/07/16/10/42ab8ad0-43e0-4fd7-abc1-ebfcfcdc6536_trans.jpeg",
+     "pid_or_item_id": "2507161004071618900",
+     "sku_or_vid": "CJYD243199105EV / vid 2507161004081614500",
+     "cost_usd": 24.88,
+     "ship_usd": 21.62,
+     "ship_days": "12-50",
+     "ship_option": "CJPacket Eub (freight API 2026-10-11)",
+     "qty": 2,
+     "landed_ils": 294.62,
+     "retail_ils": 499,
+     "contribution_ils": 83.25,
+     "margin_pct": 19.7,
+     "within_20d": {
+      "option": "CJPacket To Door",
+      "ship_usd": 36.54,
+      "days": "11-18",
+      "landed_ils": 393.1,
+      "contribution_ils": -15.23,
+      "margin_pct": -3.6
+     },
+     "dims_cm": {
+      "d": 30,
+      "h": null,
+      "note": "D30 from the variant name; height not stated (about half the diameter in photos); 150 cm suspension wire; carton 40x40x22, 1.42 kg"
+     },
+     "fits_envelope": "borderline",
+     "nordic_fit_guess": 7.0,
+     "electrical": "listing: 'Voltage: <= 36V' (driver; contradicts mains), E27 per the dimension image, hardwired canopy, no plug; CE not stated",
+     "why_he": "פנס המשי השטוח שכבר בסל (נורדי 7.0 בגודל 40) בגודל 30, בתוך טווח הקוטר 30–40, עם Eub של $21.62. זוג ב-₪499 מרוויח 19.7%. פנס עגול-שטוח מבד הוא צורה שהתנ\"ך מתיר במסדרון ('תוף בד או פנס נייר שטוח').",
+     "needs": "קוטר 30 בטווח; זו תלויה על כבל, ולכן צריך לקצר את הכבל כדי לקבל בליטה של 12–20 מהתקרה (לבדוק בפריים); CE ו-220–240V לא אומתו ('≤36V' בליסטינג); פתח תחתון עם טבעת מתכת (נורה גלויה מלמטה?)",
+     "card_id": "ceiling-lights-cj-silk-pumpkin-lantern-30",
+     "same_listing_card": "data/products/pendant/pendant-cj-silk-pumpkin-lantern.json (40 cm, nordic 7.0)"
+    },
+    {
+     "type": "alternative",
+     "source": "CJ",
+     "title": "Artistic Lamp Silk And Pumpkin Pendant Light (Japanese wabi-sabi), Warm Light 30CM",
+     "url": "https://cjdropshipping.com/product/-p-2608080928561604300.html",
+     "image": "https://oss-cf.cjdropshipping.com/product/2026/08/08/09/fef01418-e63e-4cd4-9829-9dfd338673ae_trans.jpeg",
+     "pid_or_item_id": "2608080928561604300",
+     "sku_or_vid": "CJYD304604001AZ / vid 2608080928561605200",
+     "cost_usd": 17.01,
+     "ship_usd": 29.33,
+     "ship_days": "12-50",
+     "ship_option": "CJPacket Eub (freight API 2026-10-11)",
+     "qty": 2,
+     "landed_ils": 293.57,
+     "retail_ils": 499,
+     "contribution_ils": 84.3,
+     "margin_pct": 19.9,
+     "within_20d": {
+      "option": "CJPacket To Door",
+      "ship_usd": 109.66,
+      "days": "11-18",
+      "landed_ils": 823.75,
+      "contribution_ils": -445.88,
+      "margin_pct": -105.4
+     },
+     "dims_cm": {
+      "d": 30,
+      "h": null,
+      "note": "carton 35x35x25, 2.03 kg"
+     },
+     "fits_envelope": "borderline",
+     "nordic_fit_guess": 6.5,
+     "electrical": "listing: 220V per the other agent's 40 cm card; hardwired; CE not stated",
+     "why_he": "פנס משי מצולע מאותה משפחה (הכרטיס pendant-cj-silk-ribbed-pumpkin-40 של קבוצת התאורה הוא ה-40 שלו). רווח דומה לפנס המשי הקיים, בלי ציון מעצב; listedNum 0.",
+     "needs": "ציון מעצב; CE; קיצור כבל לבליטה 12–20"
+    }
+   ],
+   "best": 0,
+   "verdict_he": "פנס המשי 30 ס\"מ (CJ) כזוג ב-₪499: ‏19.7% במקום ‎-11.3%; צריך לקצר את הכבל לבליטה של 12–20 ולאמת CE."
+  },
+  {
+   "loss_id": "ceiling-lights-cj-silk-cocoon-flush-40",
+   "slot_key": "corridor/ceiling-lights",
+   "envelope_cm": {
+    "d": [
+     30,
+     40
+    ],
+    "projection": [
+     12,
+     20
+    ]
+   },
+   "slot_electrical": "CE, 220-240V, hardwired to the ceiling points, no plug; 2700K",
+   "current": {
+    "card_id": "ceiling-lights-cj-silk-cocoon-flush-40",
+    "card_path": "data/products/corridor/ceiling-lights/ceiling-lights-cj-silk-cocoon-flush-40.json",
+    "supplier": "CJ Dropshipping",
+    "url": "https://cjdropshipping.com/product/-p-1758302956073521152.html",
+    "retail_ils": 219,
+    "price_for_qty": 1,
+    "il_typical": 269,
+    "cost_usd": 28.83,
+    "ship_usd": 41.93,
+    "ship_option": "CJPacket Eub",
+    "ship_days": "12-50",
+    "landed_ils": 233.51,
+    "contribution_ils": -68.34,
+    "margin_pct": -36.8,
+    "nordic_score": null,
+    "within_20d": {
+     "option": "CJPacket To Door",
+     "ship_usd": 175.81,
+     "days": "11-18",
+     "landed_ils": 675.31,
+     "contribution_ils": -510.15,
+     "margin_pct": -274.9
+    }
+   },
+   "fixes": [
+    {
+     "type": "alternative",
+     "source": "CJ",
+     "title": "Silk Pumpkin Chandelier - Warm Light, Diameter 30cm (flat ribbed fabric lantern)",
+     "url": "https://cjdropshipping.com/product/-p-2507161004071618900.html",
+     "image": "https://oss-cf.cjdropshipping.com/product/2025/07/16/10/42ab8ad0-43e0-4fd7-abc1-ebfcfcdc6536_trans.jpeg",
+     "pid_or_item_id": "2507161004071618900",
+     "sku_or_vid": "CJYD243199105EV / vid 2507161004081614500",
+     "cost_usd": 24.88,
+     "ship_usd": 21.62,
+     "ship_days": "12-50",
+     "ship_option": "CJPacket Eub (freight API 2026-10-11)",
+     "qty": 1,
+     "landed_ils": 153.45,
+     "retail_ils": 219,
+     "contribution_ils": 11.72,
+     "margin_pct": 6.3,
+     "within_20d": {
+      "option": "CJPacket To Door",
+      "ship_usd": 36.54,
+      "days": "11-18",
+      "landed_ils": 202.69,
+      "contribution_ils": -37.52,
+      "margin_pct": -20.2
+     },
+     "dims_cm": {
+      "d": 30,
+      "h": null,
+      "note": "D30 from the variant name; height not stated (about half the diameter in photos); 150 cm suspension wire; carton 40x40x22, 1.42 kg"
+     },
+     "fits_envelope": "borderline",
+     "nordic_fit_guess": 7.0,
+     "electrical": "listing: 'Voltage: <= 36V' (driver; contradicts mains), E27 per the dimension image, hardwired canopy, no plug; CE not stated",
+     "why_he": "אותו פנס משי 30 ס\"מ, ליחידה ב-₪219: ‏6.3%. כזוג ב-₪449 (המחיר לזוג בקובץ התמחור): 11.9%. בלי הסיכון של 'משי' מפולימר מרוסס ובלי הדמיון לפנסי ה-cocoon.",
+     "needs": "קוטר 30 בטווח; זו תלויה על כבל, ולכן צריך לקצר את הכבל כדי לקבל בליטה של 12–20 מהתקרה (לבדוק בפריים); CE ו-220–240V לא אומתו ('≤36V' בליסטינג); פתח תחתון עם טבעת מתכת (נורה גלויה מלמטה?)",
+     "card_id": "ceiling-lights-cj-silk-pumpkin-lantern-30",
+     "same_listing_card": "data/products/pendant/pendant-cj-silk-pumpkin-lantern.json (40 cm, nordic 7.0)"
+    },
+    {
+     "type": "alternative",
+     "source": "CJ",
+     "title": "Artistic Lamp Silk And Pumpkin Pendant Light (Japanese wabi-sabi), Warm Light 30CM",
+     "url": "https://cjdropshipping.com/product/-p-2608080928561604300.html",
+     "image": "https://oss-cf.cjdropshipping.com/product/2026/08/08/09/fef01418-e63e-4cd4-9829-9dfd338673ae_trans.jpeg",
+     "pid_or_item_id": "2608080928561604300",
+     "sku_or_vid": "CJYD304604001AZ / vid 2608080928561605200",
+     "cost_usd": 17.01,
+     "ship_usd": 29.33,
+     "ship_days": "12-50",
+     "ship_option": "CJPacket Eub (freight API 2026-10-11)",
+     "qty": 1,
+     "landed_ils": 152.92,
+     "retail_ils": 219,
+     "contribution_ils": 12.24,
+     "margin_pct": 6.6,
+     "within_20d": {
+      "option": "CJPacket To Door",
+      "ship_usd": 109.66,
+      "days": "11-18",
+      "landed_ils": 418.01,
+      "contribution_ils": -252.85,
+      "margin_pct": -136.2
+     },
+     "dims_cm": {
+      "d": 30,
+      "h": null,
+      "note": "carton 35x35x25, 2.03 kg"
+     },
+     "fits_envelope": "borderline",
+     "nordic_fit_guess": 6.5,
+     "electrical": "listing: 220V per the other agent's 40 cm card; hardwired; CE not stated",
+     "why_he": "פנס משי מצולע מאותה משפחה (הכרטיס pendant-cj-silk-ribbed-pumpkin-40 של קבוצת התאורה הוא ה-40 שלו). רווח דומה לפנס המשי הקיים, בלי ציון מעצב; listedNum 0.",
+     "needs": "ציון מעצב; CE; קיצור כבל לבליטה 12–20"
+    }
+   ],
+   "best": 0,
+   "verdict_he": "פנס המשי 30 ס\"מ מחליף את ה'קוקון' בלי הפסד (6.3% ליחידה, 11.9% לזוג ב-₪449); ה-cocoon עצמו מפסיד גם במשלוח המצוטט ($41.93)."
+  },
+  {
+   "loss_id": "picture-lights-cj-black-tube-rechargeable",
+   "slot_key": "corridor/picture-lights",
+   "envelope_cm": {
+    "w": [
+     25,
+     32
+    ],
+    "projection": [
+     10,
+     15
+    ],
+    "h": [
+     4,
+     8
+    ]
+   },
+   "slot_electrical": "CE, 220-240V, hardwired to wall points, no visible cable; LED 2700K, CRI 90+, even wash without a hot spot",
+   "current": {
+    "card_id": "picture-lights-cj-black-tube-rechargeable",
+    "card_path": "data/products/corridor/picture-lights/picture-lights-cj-black-tube-rechargeable.json",
+    "supplier": "CJ Dropshipping",
+    "url": "https://cjdropshipping.com/product/-p-2605210139371622300.html",
+    "retail_ils": 59,
+    "price_for_qty": 1,
+    "il_typical": 99,
+    "cost_usd": 5.72,
+    "ship_usd": 12.47,
+    "ship_option": "CJPacket Sensitive",
+    "ship_days": "22-27",
+    "landed_ils": 60.03,
+    "contribution_ils": -16.41,
+    "margin_pct": -32.8,
+    "nordic_score": null,
+    "within_20d": {
+     "option": "CJPacket To Door",
+     "ship_usd": 17.29,
+     "days": "11-18",
+     "landed_ils": 75.93,
+     "contribution_ils": -32.31,
+     "margin_pct": -64.6
+    }
+   },
+   "fixes": [
+    {
+     "type": "bundle",
+     "source": "CJ",
+     "title": "Same rechargeable picture light sold as the slot's set of 3 (₪199)",
+     "url": "https://cjdropshipping.com/product/-p-2605210139371622300.html",
+     "image": "https://cf.cjdropshipping.com/quick/product/23d23cad-a79e-4af2-9939-f285f4798cd3.jpg",
+     "pid_or_item_id": "2605210139371622300",
+     "sku_or_vid": "vid 2605210139371623500",
+     "cost_usd": 5.72,
+     "ship_usd": 12.47,
+     "ship_days": "22-27",
+     "ship_option": "CJPacket Sensitive (battery)",
+     "qty": 3,
+     "landed_ils": 155.53,
+     "retail_ils": 199,
+     "contribution_ils": -5.56,
+     "margin_pct": -3.3,
+     "within_20d": {
+      "option": "CJPacket To Door",
+      "ship_usd": 17.29,
+      "days": "11-18",
+      "landed_ils": 203.25,
+      "contribution_ils": -53.27,
+      "margin_pct": -31.6
+     },
+     "dims_cm": {
+      "width": 30,
+      "depth": null,
+      "height": null
+     },
+     "fits_envelope": "yes",
+     "nordic_fit_guess": null,
+     "electrical": "battery (USB-C rechargeable), 'Voltage: <=36V', CE claimed on an image only; no hardwiring",
+     "why_he": "סט של 3 ב-₪199 עדיין מפסיד (‎-3.3%): המשלוח Sensitive על סוללה הוא $12.47 ליחידה.",
+     "needs": "קו משלוח זול יותר או ספק אחר"
+    },
+    {
+     "type": "alternative",
+     "source": "AliExpress",
+     "title": "1/2PCS LED Wall Picture Light, remote, 13 colours, AAA battery (White Light SKU)",
+     "url": "https://www.aliexpress.com/item/1005012022171778.html",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/Sfa7641515cf343e186982eb85ce27bd3L.jpg",
+     "pid_or_item_id": "1005012022171778",
+     "sku_or_vid": "White Light (screen SKU)",
+     "cost_usd": 3.82,
+     "ship_usd": 1.99,
+     "ship_days": "6-15",
+     "ship_option": "AliExpress Selection Standard (Choice), repo detail data",
+     "qty": 1,
+     "landed_ils": 19.17,
+     "retail_ils": 59,
+     "contribution_ils": 24.45,
+     "margin_pct": 48.9,
+     "within_20d": {
+      "option": "AliExpress Selection Standard",
+      "ship_usd": 1.99,
+      "days": "6-15",
+      "landed_ils": 19.17,
+      "contribution_ils": 24.45,
+      "margin_pct": 48.9
+     },
+     "dims_cm": {
+      "note": "round puck spot (~8 cm), not a bar"
+     },
+     "fits_envelope": "no",
+     "nordic_fit_guess": 3.0,
+     "electrical": "AAA battery, RGB 13 colours, remote; no CE info",
+     "why_he": "רווחי מאוד (48.9%) אבל זה ספוט עגול מפלסטיק עם RGB, לא פס תאורה לתמונה של 25–32 ס\"מ. לא באותה רמה עיצובית.",
+     "needs": "לא מומלץ"
+    }
+   ],
+   "best": null,
+   "verdict_he": "לא נמצא תיקון רווחי באותו מראה. ב-CJ המשלוח Sensitive (סוללה) הורג את המחיר; ב-AliExpress יש רק ספוטים עגולים. לבדוק משלוח ב-API ל-1005011703720678 (זוג פסים נטענים, $17.66) ולשקול מנורת תמונה מחווטת מספק ישראלי."
+  },
+  {
+   "loss_id": "dining-pendant-cj-black-ring-cloth-lantern-50",
+   "slot_key": "dining-room/dining-pendant",
+   "envelope_cm": {
+    "d": [
+     45,
+     55
+    ],
+    "h_max": 30,
+    "cable_min": 130
+   },
+   "slot_electrical": "CE, 220-240V, hardwired to the ceiling point, no plug, no visible cable other than the suspension cord, electrician install; 2700K; bulb hidden",
+   "current": {
+    "card_id": "dining-pendant-cj-black-ring-cloth-lantern-50",
+    "card_path": "data/products/dining/dining-pendant/dining-pendant-cj-black-ring-cloth-lantern-50.json",
+    "supplier": "CJ Dropshipping",
+    "url": "https://cjdropshipping.com/product/-p-1604681294330474496.html",
+    "retail_ils": 229,
+    "price_for_qty": 1,
+    "il_typical": 279,
+    "cost_usd": 51.79,
+    "ship_usd": 29.57,
+    "ship_option": "CJPacket Eub",
+    "ship_days": "12-50",
+    "landed_ils": 268.49,
+    "contribution_ils": -95.73,
+    "margin_pct": -49.3,
+    "nordic_score": 7.0,
+    "within_20d": {
+     "option": "CJPacket To Door",
+     "ship_usd": 294.57,
+     "days": "11-18",
+     "landed_ils": 1142.99,
+     "contribution_ils": -970.23,
+     "margin_pct": -499.9
+    }
+   },
+   "fixes": [
+    {
+     "type": "variant",
+     "source": "CJ",
+     "title": "Same cloth lantern, 40cm size",
+     "url": "https://cjdropshipping.com/product/-p-1604681294330474496.html",
+     "image": "https://cf.cjdropshipping.com/ed27edc9-2d9c-4811-87f6-5a250aef0d53.jpg",
+     "pid_or_item_id": "1604681294330474496",
+     "sku_or_vid": "CJTH164234901AZ / vid 1604681294414360576",
+     "cost_usd": 38.29,
+     "ship_usd": null,
+     "ship_days": null,
+     "ship_option": "not quoted (50 cm: Eub $29.57)",
+     "qty": 1,
+     "landed_ils": null,
+     "retail_ils": 229,
+     "contribution_ils": null,
+     "margin_pct": null,
+     "within_20d": null,
+     "dims_cm": {
+      "d": 40,
+      "h": 30
+     },
+     "fits_envelope": "borderline",
+     "nordic_fit_guess": 7.0,
+     "electrical": "same as the 50 cm: 111-240V, hardwired, CE not stated",
+     "why_he": "אותו פנס בגודל 40 ($38.29). גם עם משלוח של $25 הוא מפסיד (נחיתה כ-₪209 מול נטו ₪194), וקוטר 40 קטן ב-5 מהמעטפה.",
+     "needs": "לא כדאי לצטט"
+    },
+    {
+     "type": "alternative",
+     "source": "CJ",
+     "title": "Silk Pumpkin Chandelier - Warm Light, Diameter 50cm",
+     "url": "https://cjdropshipping.com/product/-p-2507161004071618900.html",
+     "image": "https://oss-cf.cjdropshipping.com/product/2025/07/16/10/4dc35e64-45de-446a-95ba-9f33b6fe2e27.jpg",
+     "pid_or_item_id": "2507161004071618900",
+     "sku_or_vid": "CJYD243199107GT / vid 2507161004081617900",
+     "cost_usd": 38.97,
+     "ship_usd": 35.51,
+     "ship_days": "12-50",
+     "ship_option": "CJPacket Eub (card notes)",
+     "qty": 1,
+     "landed_ils": 245.78,
+     "retail_ils": 229,
+     "contribution_ils": -73.02,
+     "margin_pct": -37.6,
+     "within_20d": null,
+     "dims_cm": {
+      "d": 50,
+      "h": null
+     },
+     "fits_envelope": "yes",
+     "nordic_fit_guess": 7.0,
+     "electrical": "'≤36V' in listing, hardwired, CE not stated",
+     "why_he": "פנס המשי בגודל 50: מתאים בגודל ובמראה (בד), אבל מפסיד: $38.97 + $35.51.",
+     "needs": "—"
+    }
+   ],
+   "best": null,
+   "verdict_he": "לא נמצא תיקון רווחי: כל תלוית בד בקוטר 45–55 נשלחת בקרטון גדול ($30–55). לבדוק משלוח ב-API לתלויות המשי של AliExpress (1005011799036191 ‏$22.86, ‏1005008585971887 ‏$29.83 ב-D40), לבקש מ-CJ (Sourcing) פנס באריזה שטוחה, או מחיר סוחר מ-Nord Light."
+  },
+  {
+   "loss_id": "ceiling-light-cj-waxwood-dome-ash-40",
+   "slot_key": "hall/ceiling-light",
+   "envelope_cm": {
+    "d": [
+     35,
+     45
+    ],
+    "h": [
+     18,
+     25
+    ]
+   },
+   "slot_electrical": "CE, 220-240V, hardwired to the ceiling point, no plug",
+   "current": {
+    "card_id": "ceiling-light-cj-waxwood-dome-ash-40",
+    "card_path": "data/products/entrance/ceiling-light/ceiling-light-cj-waxwood-dome-ash-40.json",
+    "supplier": "CJ Dropshipping",
+    "url": "https://cjdropshipping.com/product/-p-2508280237031614500.html",
+    "retail_ils": 199,
+    "price_for_qty": 1,
+    "il_typical": 249,
+    "cost_usd": 17.58,
+    "ship_usd": 42.19,
+    "ship_option": "CJPacket Eub",
+    "ship_days": "12-50",
+    "landed_ils": 197.24,
+    "contribution_ils": -47.27,
+    "margin_pct": -28.0,
+    "nordic_score": null,
+    "within_20d": {
+     "option": "CJPacket To Door",
+     "ship_usd": 231.43,
+     "days": "11-18",
+     "landed_ils": 821.73,
+     "contribution_ils": -671.76,
+     "margin_pct": -398.3
+    }
+   },
+   "fixes": [
+    {
+     "type": "variant",
+     "source": "CJ",
+     "title": "Same waxwood dome, Small (25x23x20), warm light",
+     "url": "https://cjdropshipping.com/product/-p-2508280237031614500.html",
+     "image": "https://oss-cf.cjdropshipping.com/product/2025/08/28/02/18c8ec5e-2097-4bf3-9e4e-16f4ad3d56f7_trans.jpeg",
+     "pid_or_item_id": "2508280237031614500",
+     "sku_or_vid": "CJYD247045504DW / vid 2508280237031615200",
+     "cost_usd": 14.1,
+     "ship_usd": 29.57,
+     "ship_days": "12-50",
+     "ship_option": "CJPacket Eub (quoted for this vid, kids card)",
+     "qty": 1,
+     "landed_ils": 144.11,
+     "retail_ils": 199,
+     "contribution_ils": 5.86,
+     "margin_pct": 3.5,
+     "within_20d": {
+      "option": "CJPacket To Door",
+      "ship_usd": 94.1,
+      "days": "11-18",
+      "landed_ils": 357.06,
+      "contribution_ils": -207.09,
+      "margin_pct": -122.8
+     },
+     "dims_cm": {
+      "width": 25,
+      "depth": 23,
+      "height": 20
+     },
+     "fits_envelope": "no",
+     "nordic_fit_guess": null,
+     "electrical": "220V stated, hardwired, CE not stated",
+     "why_he": "אותה כיפה בגודל הקטן מרוויחה רק 3.5%, וקוטר 25 קטן ב-10 ס\"מ מהמעטפה (35–45). זה הכרטיס של תלויית הילדים.",
+     "needs": "—"
+    },
+    {
+     "type": "alternative",
+     "source": "CJ",
+     "title": "Silk Pumpkin Chandelier - Warm Light, Diameter 40cm (pool card)",
+     "url": "https://cjdropshipping.com/product/-p-2507161004071618900.html",
+     "image": "https://oss-cf.cjdropshipping.com/product/2025/07/16/10/8a805bcc-ceca-48d5-aaee-2828f524fb45_trans.jpeg",
+     "pid_or_item_id": "2507161004071618900",
+     "sku_or_vid": "CJYD243199106FU / vid 2507161004081615500",
+     "cost_usd": 29.85,
+     "ship_usd": 29.2,
+     "ship_days": "12-50",
+     "ship_option": "CJPacket Eub",
+     "qty": 1,
+     "landed_ils": 194.86,
+     "retail_ils": 199,
+     "contribution_ils": -44.89,
+     "margin_pct": -26.6,
+     "within_20d": {
+      "option": "CJPacket To Door",
+      "ship_usd": 48.44,
+      "days": "11-18",
+      "landed_ils": 258.36,
+      "contribution_ils": -108.38,
+      "margin_pct": -64.3
+     },
+     "dims_cm": {
+      "d": 40,
+      "h": null
+     },
+     "fits_envelope": "borderline",
+     "nordic_fit_guess": 7.0,
+     "electrical": "'≤36V' in listing, hardwired, CE not stated",
+     "why_he": "פנס המשי 40 מתאים לקוטר 35–45 ולחומר הגשר (בד), אבל ב-₪199 הוא מפסיד (‎-26.6%).",
+     "needs": "—"
+    }
+   ],
+   "best": null,
+   "verdict_he": "לא נמצא תיקון רווחי ב-₪199: הכיפה הקטנה קטנה מדי, ופנסי 40 ס\"מ נשלחים ב-$29–36. מועמד לבדיקת משלוח: תלוית המשי D40×H20 של AliExpress (1005008585971887, ‏$29.83; נקודת איזון: משלוח עד $15.6)."
+  },
+  {
+   "loss_id": "table-lamp-cj-pleated-shade-wood-column",
+   "slot_key": "hall/table-lamp",
+   "envelope_cm": {
+    "h": [
+     45,
+     55
+    ],
+    "shade_d": [
+     20,
+     26
+    ],
+    "base_d_max": 14
+   },
+   "slot_electrical": "plug-in: Israeli or EU plug, 220-240V, SI or CE; cable hidden behind the console",
+   "current": {
+    "card_id": "table-lamp-cj-pleated-shade-wood-column",
+    "card_path": "data/products/entrance/table-lamp/table-lamp-cj-pleated-shade-wood-column.json",
+    "supplier": "CJ Dropshipping",
+    "url": "https://cjdropshipping.com/product/-p-2411180318241625900.html",
+    "retail_ils": 149,
+    "price_for_qty": 1,
+    "il_typical": 199,
+    "cost_usd": 19.73,
+    "ship_usd": 40.24,
+    "ship_option": "CJPacket Sensitive",
+    "ship_days": "22-27",
+    "landed_ils": 197.9,
+    "contribution_ils": -85.91,
+    "margin_pct": -68.0,
+    "nordic_score": null,
+    "within_20d": {
+     "option": "CJPacket To Door",
+     "ship_usd": 44.88,
+     "days": "11-18",
+     "landed_ils": 213.21,
+     "contribution_ils": -101.22,
+     "margin_pct": -80.2
+    }
+   },
+   "fixes": [
+    {
+     "type": "alternative",
+     "source": "CJ",
+     "title": "Nordic Three-fork Wood Fabric Table Lamp, EU plug, hemp (linen) drum shade",
+     "url": "https://cjdropshipping.com/product/-p-2506170602401617200.html",
+     "image": "https://oss-cf.cjdropshipping.com/product/2025/06/17/06/6bdad2d5-1be1-42a3-ad1b-0b0d5a534962.jpg",
+     "pid_or_item_id": "2506170602401617200",
+     "sku_or_vid": "CJSN240392502BY / vid 2506170602401617700 (EU-Hemp Shade)",
+     "cost_usd": 9.12,
+     "ship_usd": 13.8,
+     "ship_days": "12-50",
+     "ship_option": "CJPacket Eub (freight API 2026-10-11)",
+     "qty": 1,
+     "landed_ils": 75.64,
+     "retail_ils": 149,
+     "contribution_ils": 36.35,
+     "margin_pct": 28.8,
+     "within_20d": {
+      "option": "CJPacket To Door",
+      "ship_usd": 39.99,
+      "days": "11-18",
+      "landed_ils": 162.06,
+      "contribution_ils": -50.07,
+      "margin_pct": -39.7
+     },
+     "dims_cm": {
+      "height": null,
+      "shade_d": null,
+      "note": "not stated; ~35 tall / shade ~18 estimated from photos (books for scale); carton 19x19x26.5, 0.8 kg"
+     },
+     "fits_envelope": "unknown",
+     "nordic_fit_guess": 7.0,
+     "electrical": "listing: 110-220V, EU plug variant, three-colour bulb included; CE not stated",
+     "why_he": "מנורת שולחן נורדית: חצובה מעץ בהיר ואהיל תוף מפשתן, תקע EU, ב-$9.12 ומשלוח Eub של $13.80. אבל היא קטנה: לפי התמונות כ-35 ס\"מ גובה ואהיל כ-18 (המעטפה 45–55, אהיל 20–26). המידות לא מופיעות בליסטינג.",
+     "needs": "מידות אמיתיות (גובה, קוטר אהיל, פריסת רגליים); CE לא מוצהר; כנראה נמוכה מדי לקונסולה"
+    },
+    {
+     "type": "alternative",
+     "source": "AliExpress",
+     "title": "Nordic Desk Lamp, fabric (linen) cone shade on a tapered wood column (Sckday)",
+     "url": "https://www.aliexpress.com/item/1005008734758186.html",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/S996d3ef2a6e544ecb21b62a2b3ca07c8N.jpg",
+     "pid_or_item_id": "1005008734758186",
+     "sku_or_vid": "12000046446234795 (Linen White, 3 colours dimmable, stock 521k)",
+     "cost_usd": 16.26,
+     "ship_usd": 3.95,
+     "ship_days": "9-19",
+     "ship_option": "AliExpress Standard for Special Goods (API quote 2026-10-11)",
+     "qty": 1,
+     "landed_ils": 66.69,
+     "retail_ils": 149,
+     "contribution_ils": 45.3,
+     "margin_pct": 35.9,
+     "within_20d": {
+      "option": "AliExpress Standard for Special Goods",
+      "ship_usd": 3.95,
+      "days": "9-19",
+      "landed_ils": 66.69,
+      "contribution_ils": 45.3,
+      "margin_pct": 35.9
+     },
+     "dims_cm": {
+      "height": null,
+      "note": "not stated; looks ~30 cm"
+     },
+     "fits_envelope": "unknown",
+     "nordic_fit_guess": 7.5,
+     "electrical": "listing: 5V DC USB, plug type none, CE/LVD/RoHS declared",
+     "why_he": "אהיל פשתן קוני על עמוד עץ בהיר: נורדי מאוד (ציון סינון 7.5). אבל הוא מוזן USB ‏5V (בלי תקע 220V), וכנראה נמוך מ-45.",
+     "needs": "מידות; מתאם USB עם תקע EU/ישראלי ו-CE לצירוף; החלטה אם USB מקובל בעמדה שדורשת 220–240V"
+    }
+   ],
+   "best": null,
+   "verdict_he": "שני מועמדים רווחיים ב-₪149 (חצובת פשתן של CJ ‏28.8%, אהיל פשתן על עץ של AliExpress ‏35.9%), אבל שניהם כנראה נמוכים מ-45 ס\"מ ולשני חסר תקע 220V או מידות. צריך מידות לפני כרטיס."
+  },
+  {
+   "loss_id": "table-lamp-cj-white-teardrop-fabric-cone-25x45",
+   "slot_key": "hall/table-lamp",
+   "envelope_cm": {
+    "h": [
+     45,
+     55
+    ],
+    "shade_d": [
+     20,
+     26
+    ],
+    "base_d_max": 14
+   },
+   "slot_electrical": "plug-in: Israeli or EU plug, 220-240V, SI or CE; cable hidden behind the console",
+   "current": {
+    "card_id": "table-lamp-cj-white-teardrop-fabric-cone-25x45",
+    "card_path": "data/products/entrance/table-lamp/table-lamp-cj-white-teardrop-fabric-cone-25x45.json",
+    "supplier": "CJ Dropshipping",
+    "url": "https://cjdropshipping.com/product/-p-2408090259591603500.html",
+    "retail_ils": 99,
+    "price_for_qty": 1,
+    "il_typical": 149,
+    "cost_usd": 7.96,
+    "ship_usd": 23.96,
+    "ship_option": "CJPacket Sensitive",
+    "ship_days": "22-27",
+    "landed_ils": 105.34,
+    "contribution_ils": -31.33,
+    "margin_pct": -37.3,
+    "nordic_score": null,
+    "within_20d": {
+     "option": "CJPacket To Door",
+     "ship_usd": 28.61,
+     "days": "11-18",
+     "landed_ils": 120.68,
+     "contribution_ils": -46.67,
+     "margin_pct": -55.6
+    }
+   },
+   "fixes": [
+    {
+     "type": "alternative",
+     "source": "CJ",
+     "title": "Nordic Three-fork Wood Fabric Table Lamp, EU plug, hemp (linen) drum shade",
+     "url": "https://cjdropshipping.com/product/-p-2506170602401617200.html",
+     "image": "https://oss-cf.cjdropshipping.com/product/2025/06/17/06/6bdad2d5-1be1-42a3-ad1b-0b0d5a534962.jpg",
+     "pid_or_item_id": "2506170602401617200",
+     "sku_or_vid": "CJSN240392502BY / vid 2506170602401617700 (EU-Hemp Shade)",
+     "cost_usd": 9.12,
+     "ship_usd": 13.8,
+     "ship_days": "12-50",
+     "ship_option": "CJPacket Eub (freight API 2026-10-11)",
+     "qty": 1,
+     "landed_ils": 75.64,
+     "retail_ils": 99,
+     "contribution_ils": -1.63,
+     "margin_pct": -1.9,
+     "within_20d": {
+      "option": "CJPacket To Door",
+      "ship_usd": 39.99,
+      "days": "11-18",
+      "landed_ils": 162.06,
+      "contribution_ils": -88.06,
+      "margin_pct": -105.0
+     },
+     "dims_cm": {
+      "height": null,
+      "shade_d": null,
+      "note": "not stated; ~35 tall / shade ~18 estimated from photos (books for scale); carton 19x19x26.5, 0.8 kg"
+     },
+     "fits_envelope": "unknown",
+     "nordic_fit_guess": 7.0,
+     "electrical": "listing: 110-220V, EU plug variant, three-colour bulb included; CE not stated",
+     "why_he": "מנורת שולחן נורדית: חצובה מעץ בהיר ואהיל תוף מפשתן, תקע EU, ב-$9.12 ומשלוח Eub של $13.80. אבל היא קטנה: לפי התמונות כ-35 ס\"מ גובה ואהיל כ-18 (המעטפה 45–55, אהיל 20–26). המידות לא מופיעות בליסטינג.",
+     "needs": "מידות אמיתיות (גובה, קוטר אהיל, פריסת רגליים); CE לא מוצהר; כנראה נמוכה מדי לקונסולה"
+    },
+    {
+     "type": "alternative",
+     "source": "AliExpress",
+     "title": "Nordic Desk Lamp, fabric (linen) cone shade on a tapered wood column (Sckday)",
+     "url": "https://www.aliexpress.com/item/1005008734758186.html",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/S996d3ef2a6e544ecb21b62a2b3ca07c8N.jpg",
+     "pid_or_item_id": "1005008734758186",
+     "sku_or_vid": "12000046446234795 (Linen White, 3 colours dimmable, stock 521k)",
+     "cost_usd": 16.26,
+     "ship_usd": 3.95,
+     "ship_days": "9-19",
+     "ship_option": "AliExpress Standard for Special Goods (API quote 2026-10-11)",
+     "qty": 1,
+     "landed_ils": 66.69,
+     "retail_ils": 99,
+     "contribution_ils": 7.31,
+     "margin_pct": 8.7,
+     "within_20d": {
+      "option": "AliExpress Standard for Special Goods",
+      "ship_usd": 3.95,
+      "days": "9-19",
+      "landed_ils": 66.69,
+      "contribution_ils": 7.31,
+      "margin_pct": 8.7
+     },
+     "dims_cm": {
+      "height": null,
+      "note": "not stated; looks ~30 cm"
+     },
+     "fits_envelope": "unknown",
+     "nordic_fit_guess": 7.5,
+     "electrical": "listing: 5V DC USB, plug type none, CE/LVD/RoHS declared",
+     "why_he": "אהיל פשתן קוני על עמוד עץ בהיר: נורדי מאוד (ציון סינון 7.5). אבל הוא מוזן USB ‏5V (בלי תקע 220V), וכנראה נמוך מ-45.",
+     "needs": "מידות; מתאם USB עם תקע EU/ישראלי ו-CE לצירוף; החלטה אם USB מקובל בעמדה שדורשת 220–240V"
+    }
+   ],
+   "best": null,
+   "verdict_he": "ב-₪99 החצובה מפסידה (‎-1.9%) ומנורת ה-USB מרוויחה 8.7% בלבד, ושתיהן כנראה נמוכות מהמעטפה. לא נמצא תיקון שמתאים."
+  },
+  {
+   "loss_id": "table-lamp-cj-white-textured-ceramic-linen-drum",
+   "slot_key": "hall/table-lamp",
+   "envelope_cm": {
+    "h": [
+     45,
+     55
+    ],
+    "shade_d": [
+     20,
+     26
+    ],
+    "base_d_max": 14
+   },
+   "slot_electrical": "plug-in: Israeli or EU plug, 220-240V, SI or CE; cable hidden behind the console",
+   "current": {
+    "card_id": "table-lamp-cj-white-textured-ceramic-linen-drum",
+    "card_path": "data/products/entrance/table-lamp/table-lamp-cj-white-textured-ceramic-linen-drum.json",
+    "supplier": "CJ Dropshipping",
+    "url": "https://cjdropshipping.com/product/-p-2610070904461603800.html",
+    "retail_ils": 199,
+    "price_for_qty": 1,
+    "il_typical": 249,
+    "cost_usd": 15.28,
+    "ship_usd": 37.15,
+    "ship_option": "CJPacket Eub",
+    "ship_days": "12-50",
+    "landed_ils": 173.02,
+    "contribution_ils": -23.05,
+    "margin_pct": -13.7,
+    "nordic_score": null,
+    "within_20d": {
+     "option": "CJPacket To Door",
+     "ship_usd": 243.82,
+     "days": "11-18",
+     "landed_ils": 855.03,
+     "contribution_ils": -705.06,
+     "margin_pct": -418.1
+    }
+   },
+   "fixes": [
+    {
+     "type": "alternative",
+     "source": "CJ",
+     "title": "Nordic Three-fork Wood Fabric Table Lamp, EU plug, hemp (linen) drum shade",
+     "url": "https://cjdropshipping.com/product/-p-2506170602401617200.html",
+     "image": "https://oss-cf.cjdropshipping.com/product/2025/06/17/06/6bdad2d5-1be1-42a3-ad1b-0b0d5a534962.jpg",
+     "pid_or_item_id": "2506170602401617200",
+     "sku_or_vid": "CJSN240392502BY / vid 2506170602401617700 (EU-Hemp Shade)",
+     "cost_usd": 9.12,
+     "ship_usd": 13.8,
+     "ship_days": "12-50",
+     "ship_option": "CJPacket Eub (freight API 2026-10-11)",
+     "qty": 1,
+     "landed_ils": 75.64,
+     "retail_ils": 149,
+     "contribution_ils": 36.35,
+     "margin_pct": 28.8,
+     "within_20d": {
+      "option": "CJPacket To Door",
+      "ship_usd": 39.99,
+      "days": "11-18",
+      "landed_ils": 162.06,
+      "contribution_ils": -50.07,
+      "margin_pct": -39.7
+     },
+     "dims_cm": {
+      "height": null,
+      "shade_d": null,
+      "note": "not stated; ~35 tall / shade ~18 estimated from photos (books for scale); carton 19x19x26.5, 0.8 kg"
+     },
+     "fits_envelope": "unknown",
+     "nordic_fit_guess": 7.0,
+     "electrical": "listing: 110-220V, EU plug variant, three-colour bulb included; CE not stated",
+     "why_he": "מנורת שולחן נורדית: חצובה מעץ בהיר ואהיל תוף מפשתן, תקע EU, ב-$9.12 ומשלוח Eub של $13.80. אבל היא קטנה: לפי התמונות כ-35 ס\"מ גובה ואהיל כ-18 (המעטפה 45–55, אהיל 20–26). המידות לא מופיעות בליסטינג.",
+     "needs": "מידות אמיתיות (גובה, קוטר אהיל, פריסת רגליים); CE לא מוצהר; כנראה נמוכה מדי לקונסולה"
+    },
+    {
+     "type": "alternative",
+     "source": "AliExpress",
+     "title": "Nordic Desk Lamp, fabric (linen) cone shade on a tapered wood column (Sckday)",
+     "url": "https://www.aliexpress.com/item/1005008734758186.html",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/S996d3ef2a6e544ecb21b62a2b3ca07c8N.jpg",
+     "pid_or_item_id": "1005008734758186",
+     "sku_or_vid": "12000046446234795 (Linen White, 3 colours dimmable, stock 521k)",
+     "cost_usd": 16.26,
+     "ship_usd": 3.95,
+     "ship_days": "9-19",
+     "ship_option": "AliExpress Standard for Special Goods (API quote 2026-10-11)",
+     "qty": 1,
+     "landed_ils": 66.69,
+     "retail_ils": 149,
+     "contribution_ils": 45.3,
+     "margin_pct": 35.9,
+     "within_20d": {
+      "option": "AliExpress Standard for Special Goods",
+      "ship_usd": 3.95,
+      "days": "9-19",
+      "landed_ils": 66.69,
+      "contribution_ils": 45.3,
+      "margin_pct": 35.9
+     },
+     "dims_cm": {
+      "height": null,
+      "note": "not stated; looks ~30 cm"
+     },
+     "fits_envelope": "unknown",
+     "nordic_fit_guess": 7.5,
+     "electrical": "listing: 5V DC USB, plug type none, CE/LVD/RoHS declared",
+     "why_he": "אהיל פשתן קוני על עמוד עץ בהיר: נורדי מאוד (ציון סינון 7.5). אבל הוא מוזן USB ‏5V (בלי תקע 220V), וכנראה נמוך מ-45.",
+     "needs": "מידות; מתאם USB עם תקע EU/ישראלי ו-CE לצירוף; החלטה אם USB מקובל בעמדה שדורשת 220–240V"
+    }
+   ],
+   "best": null,
+   "verdict_he": "מנורה קרמית 55 ס\"מ היא סוג גדול יותר; המועמדים הקטנים (כ-30–35 ס\"מ) לא מצדיקים ₪199, ולכן חושבו לפי ₪149 (שווי של מנורה קטנה). לא נמצא תיקון באותו גודל.",
+   "notes_he": "price re-derived for the small-lamp class: IKEA/Fox Home small fabric table lamps ₪79–149 (data/economics/pricing/other-rooms-2026-10-11.json comps for this slot), so ₪149 max"
+  },
+  {
+   "loss_id": "wall-sconce-cj-wavy-linen-flush-25",
+   "slot_key": "hall/wall-sconce",
+   "envelope_cm": {
+    "w": [
+     10,
+     16
+    ],
+    "h": [
+     15,
+     22
+    ],
+    "projection_max": 15
+   },
+   "slot_electrical": "CE, 220-240V, hardwired to the wall point, no visible cable, electrician install; 2700K",
+   "current": {
+    "card_id": "wall-sconce-cj-wavy-linen-flush-25",
+    "card_path": "data/products/entrance/wall-sconce/wall-sconce-cj-wavy-linen-flush-25.json",
+    "supplier": "CJ Dropshipping",
+    "url": "https://cjdropshipping.com/product/-p-2512310801421607100.html",
+    "retail_ils": 149,
+    "price_for_qty": 1,
+    "il_typical": 199,
+    "cost_usd": 30.68,
+    "ship_usd": 15.32,
+    "ship_option": "CJPacket Eub",
+    "ship_days": "12-50",
+    "landed_ils": 151.8,
+    "contribution_ils": -39.81,
+    "margin_pct": -31.5,
+    "nordic_score": null,
+    "within_20d": {
+     "option": "CJPacket To Door",
+     "ship_usd": 39.16,
+     "days": "11-18",
+     "landed_ils": 230.47,
+     "contribution_ils": -118.48,
+     "margin_pct": -93.8
+    }
+   },
+   "fixes": [
+    {
+     "type": "alternative",
+     "source": "CJ",
+     "title": "Square fabric panel wall sconce, White D15xH15cm Warm White",
+     "url": "https://cjdropshipping.com/product/-p-2601010327331635600.html",
+     "image": "https://oss-cf.cjdropshipping.com/product/2026/03/27/08/ce1d1cfc-8827-4b3f-b339-e3137c31cff0_trans.jpeg",
+     "pid_or_item_id": "2601010327331635600",
+     "sku_or_vid": "CJYD270937112LO / vid 2603270809541612400",
+     "cost_usd": 20.01,
+     "ship_usd": 13.06,
+     "ship_days": "12-50",
+     "ship_option": "CJPacket Eub (freight API: 15 on 2026-10-09, 12 on 2026-10-11)",
+     "qty": 1,
+     "landed_ils": 109.13,
+     "retail_ils": 149,
+     "contribution_ils": 2.86,
+     "margin_pct": 2.3,
+     "within_20d": {
+      "option": "CJPacket To Door",
+      "ship_usd": 37.17,
+      "days": "11-18",
+      "landed_ils": 188.69,
+      "contribution_ils": -76.7,
+      "margin_pct": -60.7
+     },
+     "dims_cm": {
+      "width": 15,
+      "height": 15,
+      "depth": 12
+     },
+     "fits_envelope": "yes",
+     "nordic_fit_guess": 6.0,
+     "electrical": "listing: 'Voltage: ≤36V' vs 'Light Source: LED E27' (conflict); flush wall plate, hardwired; CE and IP not stated",
+     "why_he": "קוביית הבד 15×15×12 של חדר העבודה, שיושבת בדיוק במעטפה (רוחב 10–16, גובה 15–22, בליטה עד 15). ב-₪149 היא לא מפסידה (2.3%, דק). אהיל בד שמפזר אור לכל הכיוונים, כמו פנס.",
+     "needs": "המתח: בליסטינג 'Voltage: ≤36V' מול 'LED E27' בתמונת המידות, צריך אישור 220–240V; CE ו-IP לא מוצהרים; ציון מעצב (קובייה לבנה 'בסגנון סיני' מול אהיל פשתן בגוון שיבולת שועל)",
+     "card_id": "wall-sconce-cj-white-fabric-cube-15-hall"
+    },
+    {
+     "type": "variant",
+     "source": "CJ",
+     "title": "Square fabric panel wall sconce, White D12xH12cm Warm White",
+     "url": "https://cjdropshipping.com/product/-p-2601010327331635600.html",
+     "image": "https://oss-cf.cjdropshipping.com/product/2026/03/27/08/15738946-e37f-42eb-b953-2d99b3c1740c_trans.jpeg",
+     "pid_or_item_id": "2601010327331635600",
+     "sku_or_vid": "CJYD270937110JQ / vid 2603270809541612100",
+     "cost_usd": 16.86,
+     "ship_usd": 10.53,
+     "ship_days": "12-50",
+     "ship_option": "CJPacket Eub (freight API: 15 on 2026-10-09, 12 on 2026-10-11)",
+     "qty": 1,
+     "landed_ils": 90.39,
+     "retail_ils": 149,
+     "contribution_ils": 21.6,
+     "margin_pct": 17.1,
+     "within_20d": {
+      "option": "CJPacket To Door",
+      "ship_usd": 37.17,
+      "days": "11-18",
+      "landed_ils": 178.3,
+      "contribution_ils": -66.31,
+      "margin_pct": -52.5
+     },
+     "dims_cm": {
+      "width": 12,
+      "height": 12,
+      "depth": 12
+     },
+     "fits_envelope": "borderline",
+     "nordic_fit_guess": 6.0,
+     "electrical": "listing: 'Voltage: ≤36V' vs 'Light Source: LED E27' (conflict); flush wall plate, hardwired; CE and IP not stated",
+     "why_he": "אותה קובייה בגודל 12×12: ‏17.1%. הגובה 12 קטן ב-3 מהמינימום (15): לבדוק בפריים.",
+     "needs": "המתח: בליסטינג 'Voltage: ≤36V' מול 'LED E27' בתמונת המידות, צריך אישור 220–240V; CE ו-IP לא מוצהרים; ציון מעצב (קובייה לבנה 'בסגנון סיני' מול אהיל פשתן בגוון שיבולת שועל)"
+    }
+   ],
+   "best": 0,
+   "verdict_he": "קוביית הבד 15 (CJ) מתאימה במדויק ולא מפסידה (2.3%); בגודל 12 מרוויחה 17.1% אם המעצב יקבל 12 ס\"מ."
+  },
+  {
+   "loss_id": "pendant-cj-fabric-dome-ash-cap-25",
+   "slot_key": "kids/pendant",
+   "envelope_cm": {
+    "d_max": 28,
+    "h": [
+     18,
+     25
+    ]
+   },
+   "slot_electrical": "CE, 220-240V, hardwired to the ceiling point, no plug, no visible cable other than the suspension cord; 2700K LED; no glass",
+   "current": {
+    "card_id": "pendant-cj-fabric-dome-ash-cap-25",
+    "card_path": "data/products/kids/pendant/pendant-cj-fabric-dome-ash-cap-25.json",
+    "supplier": "CJ Dropshipping",
+    "url": "https://cjdropshipping.com/product/-p-2508280237031614500.html",
+    "retail_ils": 119,
+    "price_for_qty": 1,
+    "il_typical": 169,
+    "cost_usd": 14.1,
+    "ship_usd": 29.57,
+    "ship_option": "CJPacket Eub",
+    "ship_days": "12-50",
+    "landed_ils": 144.11,
+    "contribution_ils": -54.91,
+    "margin_pct": -54.4,
+    "nordic_score": null,
+    "within_20d": {
+     "option": "CJPacket To Door",
+     "ship_usd": 94.1,
+     "days": "11-18",
+     "landed_ils": 357.06,
+     "contribution_ils": -267.86,
+     "margin_pct": -265.6
+    }
+   },
+   "fixes": [
+    {
+     "type": "alternative",
+     "source": "AliExpress",
+     "title": "Rustic woven pendant (JOYINLED), A2-18cm, no bulb",
+     "url": "https://www.aliexpress.com/item/1005009394200914.html",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/S932ad3290dfd44248eed33229105fdc7n.jpg",
+     "pid_or_item_id": "1005009394200914",
+     "sku_or_vid": "12000048965034927 (A2-18cm, without bulb)",
+     "cost_usd": 7.74,
+     "ship_usd": 17.69,
+     "ship_days": "8-18",
+     "ship_option": "AliExpress standard shipping (API quote)",
+     "qty": 1,
+     "landed_ils": 83.92,
+     "retail_ils": 119,
+     "contribution_ils": 5.28,
+     "margin_pct": 5.2,
+     "within_20d": {
+      "option": "AliExpress standard shipping",
+      "ship_usd": 17.69,
+      "days": "8-18",
+      "landed_ils": 83.92,
+      "contribution_ils": 5.28,
+      "margin_pct": 5.2
+     },
+     "dims_cm": {
+      "d": 18,
+      "h": 19
+     },
+     "fits_envelope": "yes",
+     "nordic_fit_guess": 5.0,
+     "electrical": "listing: 90-260V, E27, CE/RoHS declared, cord pendant (hardwired canopy)",
+     "why_he": "פעמון קלוע 18 ס\"מ, נכנס במעטפה ומרוויח 5.2%. אבל החומר נצרים/חבל (התנ\"ך דורש בד או נייר בחדר הילדים, וגשר חומר עם תקרת המסדרון), והתחתית פתוחה. לא באותה רמה.",
+     "needs": "לא מומלץ"
+    },
+    {
+     "type": "alternative",
+     "source": "CJ",
+     "title": "Silk Pumpkin Chandelier - Warm Light, Diameter 30cm (flat ribbed fabric lantern)",
+     "url": "https://cjdropshipping.com/product/-p-2507161004071618900.html",
+     "image": "https://oss-cf.cjdropshipping.com/product/2025/07/16/10/42ab8ad0-43e0-4fd7-abc1-ebfcfcdc6536_trans.jpeg",
+     "pid_or_item_id": "2507161004071618900",
+     "sku_or_vid": "CJYD243199105EV / vid 2507161004081614500",
+     "cost_usd": 24.88,
+     "ship_usd": 21.62,
+     "ship_days": "12-50",
+     "ship_option": "CJPacket Eub (freight API 2026-10-11)",
+     "qty": 1,
+     "landed_ils": 153.45,
+     "retail_ils": 119,
+     "contribution_ils": -64.25,
+     "margin_pct": -63.7,
+     "within_20d": {
+      "option": "CJPacket To Door",
+      "ship_usd": 36.54,
+      "days": "11-18",
+      "landed_ils": 202.69,
+      "contribution_ils": -113.49,
+      "margin_pct": -112.5
+     },
+     "dims_cm": {
+      "d": 30,
+      "h": null,
+      "note": "D30 from the variant name; height not stated (about half the diameter in photos); 150 cm suspension wire; carton 40x40x22, 1.42 kg"
+     },
+     "fits_envelope": "borderline",
+     "nordic_fit_guess": 7.0,
+     "electrical": "listing: 'Voltage: <= 36V' (driver; contradicts mains), E27 per the dimension image, hardwired canopy, no plug; CE not stated",
+     "why_he": "פנס המשי 30: חומר הגשר הנכון (בד), אבל ב-₪119 הוא מפסיד, וקוטר 30 גדול ב-2 מהמקסימום (28).",
+     "needs": "קוטר 30 בטווח; זו תלויה על כבל, ולכן צריך לקצר את הכבל כדי לקבל בליטה של 12–20 מהתקרה (לבדוק בפריים); CE ו-220–240V לא אומתו ('≤36V' בליסטינג); פתח תחתון עם טבעת מתכת (נורה גלויה מלמטה?)",
+     "same_listing_card": "data/products/pendant/pendant-cj-silk-pumpkin-lantern.json (40 cm, nordic 7.0)"
+    }
+   ],
+   "best": null,
+   "verdict_he": "לא נמצא תיקון רווחי ויפה: מנורת בד קטנה עולה $14–25 ונשלחת ב-$22–30. מועמד לבדיקת משלוח: תלוית המשי 30 ס\"מ של AliExpress (1005011799036191, ‏$22.86, קוטר 30 = 2 מעל 28; איזון ב-₪119 רק אם המשלוח עד $4.17). הצעה: מחיר ₪149 (טיפוסי ₪169) או ספק ישראלי."
+  },
+  {
+   "loss_id": "wall-sconce-cj-black-folding-arm-woodgrain-cone-18",
+   "slot_key": "kids/wall-sconce",
+   "envelope_cm": {
+    "arm": [
+     30,
+     45
+    ],
+    "shade_d": [
+     12,
+     16
+    ]
+   },
+   "slot_electrical": "CE, 220-240V, hardwired to the wall point, no visible cable, electrician install; 2700K LED; no glass shade",
+   "current": {
+    "card_id": "wall-sconce-cj-black-folding-arm-woodgrain-cone-18",
+    "card_path": "data/products/kids/wall-sconce/wall-sconce-cj-black-folding-arm-woodgrain-cone-18.json",
+    "supplier": "CJ Dropshipping",
+    "url": "https://cjdropshipping.com/product/-p-2508120656271625000.html",
+    "retail_ils": 99,
+    "price_for_qty": 1,
+    "il_typical": 149,
+    "cost_usd": 9.95,
+    "ship_usd": 16.97,
+    "ship_option": "CJPacket Eub",
+    "ship_days": "12-50",
+    "landed_ils": 88.84,
+    "contribution_ils": -14.83,
+    "margin_pct": -17.7,
+    "nordic_score": null,
+    "within_20d": {
+     "option": "CJPacket To Door",
+     "ship_usd": 53.57,
+     "days": "11-18",
+     "landed_ils": 209.62,
+     "contribution_ils": -135.61,
+     "margin_pct": -161.6
+    }
+   },
+   "fixes": [
+    {
+     "type": "variant",
+     "source": "CJ",
+     "title": "Same folding arm, white-light pewter wood-grain variant",
+     "url": "https://cjdropshipping.com/product/-p-2508120656271625000.html",
+     "image": "https://cf.cjdropshipping.com/quick/product/74cf3fcd-2b85-4648-985b-788d5abcd690.jpg",
+     "pid_or_item_id": "2508120656271625000",
+     "sku_or_vid": "CJYD245398305EV / vid 2608130600491615400",
+     "cost_usd": 7.81,
+     "ship_usd": 16.97,
+     "ship_days": "12-50",
+     "ship_option": "assumed same Eub as the warm vid (not quoted)",
+     "qty": 1,
+     "landed_ils": 81.77,
+     "retail_ils": 99,
+     "contribution_ils": -7.77,
+     "margin_pct": -9.3,
+     "within_20d": null,
+     "dims_cm": {
+      "shade_d": 18
+     },
+     "fits_envelope": "borderline",
+     "nordic_fit_guess": null,
+     "electrical": "220V, hardwired ('wiring type'), CE not stated",
+     "why_he": "הווריאנט הזול ($7.81) עדיין מפסיד ב-₪99 (‎-9.3%), והאור שלו קר.",
+     "needs": "—"
+    }
+   ],
+   "best": null,
+   "verdict_he": "לא נמצא תיקון ב-₪99. אותה מנורה מאוזנת בדיוק ב-₪119 (+0.4%, מחיר המנורה השנייה בעמדה; טיפוסי ₪149). לידים לבדיקת משלוח: 1005009605872757 ($16.69)."
+  },
+  {
+   "loss_id": "wall-sconce-cj-black-swing-arm-wood-shade",
+   "slot_key": "kids/wall-sconce",
+   "envelope_cm": {
+    "arm": [
+     30,
+     45
+    ],
+    "shade_d": [
+     12,
+     16
+    ]
+   },
+   "slot_electrical": "CE, 220-240V, hardwired to the wall point, no visible cable, electrician install; 2700K LED; no glass shade",
+   "current": {
+    "card_id": "wall-sconce-cj-black-swing-arm-wood-shade",
+    "card_path": "data/products/kids/wall-sconce/wall-sconce-cj-black-swing-arm-wood-shade.json",
+    "supplier": "CJ Dropshipping",
+    "url": "https://cjdropshipping.com/product/-p-2412090835251617400.html",
+    "retail_ils": 119,
+    "price_for_qty": 1,
+    "il_typical": 169,
+    "cost_usd": 10.78,
+    "ship_usd": 86.78,
+    "ship_option": "CJPacket Sensitive",
+    "ship_days": "22-27",
+    "landed_ils": 321.95,
+    "contribution_ils": -232.75,
+    "margin_pct": -230.8,
+    "nordic_score": null,
+    "within_20d": {
+     "option": "CJPacket To Door",
+     "ship_usd": 91.42,
+     "days": "11-18",
+     "landed_ils": 337.26,
+     "contribution_ils": -248.06,
+     "margin_pct": -246.0
+    }
+   },
+   "fixes": [
+    {
+     "type": "alternative",
+     "source": "CJ",
+     "title": "Kids slot's other card: black folding arm + wood-grain cone 18 (wall-sconce-cj-black-folding-arm-woodgrain-cone-18)",
+     "url": "https://cjdropshipping.com/product/-p-2508120656271625000.html",
+     "image": "https://cf.cjdropshipping.com/quick/product/74cf3fcd-2b85-4648-985b-788d5abcd690.jpg",
+     "pid_or_item_id": "2508120656271625000",
+     "sku_or_vid": "CJYD245398302BY / vid 2508120656271625400",
+     "cost_usd": 9.95,
+     "ship_usd": 16.97,
+     "ship_days": "12-50",
+     "ship_option": "CJPacket Eub",
+     "qty": 1,
+     "landed_ils": 88.84,
+     "retail_ils": 119,
+     "contribution_ils": 0.36,
+     "margin_pct": 0.4,
+     "within_20d": {
+      "option": "CJPacket To Door",
+      "ship_usd": 53.57,
+      "days": "11-18",
+      "landed_ils": 209.62,
+      "contribution_ils": -120.42,
+      "margin_pct": -119.4
+     },
+     "dims_cm": {
+      "shade_d": 18
+     },
+     "fits_envelope": "borderline",
+     "nordic_fit_guess": null,
+     "electrical": "220V, hardwired, CE not stated",
+     "why_he": "אותה שפה (זרוע שחורה מתקפלת עם אהיל במראה עץ) מהכרטיס השני בעמדה, ב-₪119: ‏+₪0.36 (0.4%). לא מפסיד, אבל כמעט בלי רווח. כבר בסל, אין כרטיס חדש.",
+     "needs": "אהיל 18 (2 מעל 12–16); אורך הזרוע לא מוצהר; גרעין העץ כנראה מודפס על מתכת",
+     "existing_card": "data/products/kids/wall-sconce/wall-sconce-cj-black-folding-arm-woodgrain-cone-18.json"
+    }
+   ],
+   "best": 0,
+   "verdict_he": "המנורה עצמה לא ניתנת להצלה (Sensitive ‏$86.8); הזרוע המתקפלת שכבר בעמדה מאוזנת ב-₪119 (0.4%)."
+  },
+  {
+   "loss_id": "bedside-sconces-cj-linen-half-drum-black-trim",
+   "slot_key": "master/bedside-sconces",
+   "envelope_cm": {
+    "w": [
+     12,
+     18
+    ],
+    "h": [
+     15,
+     22
+    ],
+    "projection_max": 22
+   },
+   "slot_electrical": "CE, 220-240V, hardwired to wall points, no visible cable, electrician install; 2700K",
+   "current": {
+    "card_id": "bedside-sconces-cj-linen-half-drum-black-trim",
+    "card_path": "data/products/master/bedside-sconces/bedside-sconces-cj-linen-half-drum-black-trim.json",
+    "supplier": "CJ Dropshipping",
+    "url": "https://cjdropshipping.com/product/-p-2512310801421607100.html",
+    "retail_ils": 349,
+    "price_for_qty": 2,
+    "il_typical": 399,
+    "cost_usd": 30.68,
+    "ship_usd": 15.32,
+    "ship_option": "CJPacket Eub",
+    "ship_days": "12-50",
+    "landed_ils": 291.32,
+    "contribution_ils": -27.4,
+    "margin_pct": -9.3,
+    "nordic_score": null,
+    "within_20d": {
+     "option": "CJPacket To Door",
+     "ship_usd": 39.16,
+     "days": "11-18",
+     "landed_ils": 448.67,
+     "contribution_ils": -184.75,
+     "margin_pct": -62.5
+    }
+   },
+   "fixes": [
+    {
+     "type": "alternative",
+     "source": "CJ",
+     "title": "Square fabric panel wall sconce, White D15xH15cm Warm White",
+     "url": "https://cjdropshipping.com/product/-p-2601010327331635600.html",
+     "image": "https://oss-cf.cjdropshipping.com/product/2026/03/27/08/ce1d1cfc-8827-4b3f-b339-e3137c31cff0_trans.jpeg",
+     "pid_or_item_id": "2601010327331635600",
+     "sku_or_vid": "CJYD270937112LO / vid 2603270809541612400",
+     "cost_usd": 20.01,
+     "ship_usd": 13.06,
+     "ship_days": "12-50",
+     "ship_option": "CJPacket Eub (freight API: 15 on 2026-10-09, 12 on 2026-10-11)",
+     "qty": 2,
+     "landed_ils": 205.99,
+     "retail_ils": 349,
+     "contribution_ils": 57.94,
+     "margin_pct": 19.6,
+     "within_20d": {
+      "option": "CJPacket To Door",
+      "ship_usd": 37.17,
+      "days": "11-18",
+      "landed_ils": 365.11,
+      "contribution_ils": -101.19,
+      "margin_pct": -34.2
+     },
+     "dims_cm": {
+      "width": 15,
+      "height": 15,
+      "depth": 12
+     },
+     "fits_envelope": "yes",
+     "nordic_fit_guess": 6.0,
+     "electrical": "listing: 'Voltage: ≤36V' vs 'Light Source: LED E27' (conflict); flush wall plate, hardwired; CE and IP not stated",
+     "why_he": "זוג קוביות בד 15×15×12: נכנס במעטפה (12–18 / 15–22 / בליטה עד 22) ומרוויח 19.6% ב-₪349. אור רך לכל הכיוונים, בלי נורה גלויה.",
+     "needs": "המתח: בליסטינג 'Voltage: ≤36V' מול 'LED E27' בתמונת המידות, צריך אישור 220–240V; CE ו-IP לא מוצהרים; ציון מעצב (קובייה לבנה 'בסגנון סיני' מול אהיל פשתן בגוון שיבולת שועל)",
+     "card_id": "bedside-sconces-cj-white-fabric-cube-15"
+    },
+    {
+     "type": "variant",
+     "source": "CJ",
+     "title": "Square fabric panel wall sconce, White D12xH12cm Warm White",
+     "url": "https://cjdropshipping.com/product/-p-2601010327331635600.html",
+     "image": "https://oss-cf.cjdropshipping.com/product/2026/03/27/08/15738946-e37f-42eb-b953-2d99b3c1740c_trans.jpeg",
+     "pid_or_item_id": "2601010327331635600",
+     "sku_or_vid": "CJYD270937110JQ / vid 2603270809541612100",
+     "cost_usd": 16.86,
+     "ship_usd": 10.53,
+     "ship_days": "12-50",
+     "ship_option": "CJPacket Eub (freight API: 15 on 2026-10-09, 12 on 2026-10-11)",
+     "qty": 2,
+     "landed_ils": 168.5,
+     "retail_ils": 349,
+     "contribution_ils": 95.42,
+     "margin_pct": 32.3,
+     "within_20d": {
+      "option": "CJPacket To Door",
+      "ship_usd": 37.17,
+      "days": "11-18",
+      "landed_ils": 344.32,
+      "contribution_ils": -80.4,
+      "margin_pct": -27.2
+     },
+     "dims_cm": {
+      "width": 12,
+      "height": 12,
+      "depth": 12
+     },
+     "fits_envelope": "borderline",
+     "nordic_fit_guess": 6.0,
+     "electrical": "listing: 'Voltage: ≤36V' vs 'Light Source: LED E27' (conflict); flush wall plate, hardwired; CE and IP not stated",
+     "why_he": "זוג בגודל 12: ‏32.3%, אבל גובה 12 קטן ב-3 מהמינימום.",
+     "needs": "המתח: בליסטינג 'Voltage: ≤36V' מול 'LED E27' בתמונת המידות, צריך אישור 220–240V; CE ו-IP לא מוצהרים; ציון מעצב (קובייה לבנה 'בסגנון סיני' מול אהיל פשתן בגוון שיבולת שועל)"
+    },
+    {
+     "type": "alternative",
+     "source": "CJ",
+     "title": "Slot's existing card: linen wave flush sconce pair (bedside-sconces-cj-linen-wave-flush)",
+     "url": "https://cjdropshipping.com/product/-p-2601141027171624800.html",
+     "image": "https://cf.cjdropshipping.com/quick/product/2dfcd396-8e51-4e44-8c19-137a4dc255a0.jpg",
+     "pid_or_item_id": "2601141027171624800",
+     "sku_or_vid": "CJYD272955702BY / vid 2601141027171625300",
+     "cost_usd": 29.78,
+     "ship_usd": 11.54,
+     "ship_days": "12-50",
+     "ship_option": "CJPacket Eub",
+     "qty": 2,
+     "landed_ils": 260.44,
+     "retail_ils": 349,
+     "contribution_ils": 3.49,
+     "margin_pct": 1.2,
+     "within_20d": {
+      "option": "CJPacket To Door",
+      "ship_usd": 82.78,
+      "days": "11-18",
+      "landed_ils": 730.62,
+      "contribution_ils": -466.7,
+      "margin_pct": -157.8
+     },
+     "dims_cm": {
+      "width": 24,
+      "height": 20
+     },
+     "fits_envelope": "borderline",
+     "nordic_fit_guess": null,
+     "electrical": "220V, hardwired, CE not stated",
+     "why_he": "כבר בסל: זוג פשתן גלי ב-₪349 לא מפסיד (1.2%). רוחב 24 גדול מ-18.",
+     "needs": "—",
+     "existing_card": "data/products/master/bedside-sconces/bedside-sconces-cj-linen-wave-flush.json"
+    },
+    {
+     "type": "alternative",
+     "source": "CJ",
+     "title": "American-style fabric wall lamp, 2-pack black (white tapered shade on a black stem)",
+     "url": "https://cjdropshipping.com/product/-p-2609291026011628400.html",
+     "image": "https://cf.cjdropshipping.com/quick/product/1bb6ed6b-3eee-464c-a33d-14cc5bd96cbd.jpg",
+     "pid_or_item_id": "2609291026011628400",
+     "sku_or_vid": "CJYD320963001AZ / vid 2609291026011629600 (2 Pack Black)",
+     "cost_usd": 8.33,
+     "ship_usd": 16.97,
+     "ship_days": "12-50",
+     "ship_option": "CJPacket Eub (freight API 2026-10-11)",
+     "qty": 1,
+     "landed_ils": 83.49,
+     "retail_ils": 349,
+     "contribution_ils": 180.43,
+     "margin_pct": 61.0,
+     "within_20d": {
+      "option": "CJPacket To Door",
+      "ship_usd": 45.61,
+      "days": "11-18",
+      "landed_ils": 178.0,
+      "contribution_ils": 85.92,
+      "margin_pct": 29.1
+     },
+     "dims_cm": {
+      "note": "not stated; stem + shade look ~40 cm tall"
+     },
+     "fits_envelope": "no",
+     "nordic_fit_guess": 4.0,
+     "electrical": "listing: 'Power Supply: Wired/Wireless', 'Control: Remote', 'Voltage: ≤36V'; CE not stated",
+     "why_he": "זוג במחיר של $8.33 ומשלוח $16.97 (61%), אבל זה פמוט אמריקאי גבוה עם אהיל לבן, לא נורדי, גבוה בהרבה מ-22, ובליסטינג 'Wired/Wireless, Remote, ≤36V' (כנראה סוללה).",
+     "needs": "לא מומלץ"
+    }
+   ],
+   "best": 0,
+   "verdict_he": "זוג קוביות בד 15 (CJ) ב-₪349: ‏19.6% במקום ‎-9.4%, ויושב במעטפה; בגודל 12: ‏32.3% (גבולי)."
+  },
+  {
+   "loss_id": "floor-lamp-cj-cream-arc-pleated-152",
+   "slot_key": "master/floor-lamp",
+   "envelope_cm": {
+    "shade_d": [
+     35,
+     40
+    ],
+    "h": [
+     150,
+     160
+    ],
+    "base_d_max": 30
+   },
+   "slot_electrical": "plug-in: Israeli or EU plug, 220-240V, SI or CE; cable hidden behind the planter",
+   "current": {
+    "card_id": "floor-lamp-cj-cream-arc-pleated-152",
+    "card_path": "data/products/master/floor-lamp/floor-lamp-cj-cream-arc-pleated-152.json",
+    "supplier": "CJ Dropshipping",
+    "url": "https://cjdropshipping.com/product/-p-2601210248311616800.html",
+    "retail_ils": 349,
+    "price_for_qty": 1,
+    "il_typical": 399,
+    "cost_usd": 12.44,
+    "ship_usd": 765.66,
+    "ship_option": "DHL Official",
+    "ship_days": "3-7",
+    "landed_ils": 2567.73,
+    "contribution_ils": -2303.81,
+    "margin_pct": -778.9,
+    "nordic_score": null,
+    "within_20d": {
+     "option": "DHL Official",
+     "ship_usd": 765.66,
+     "days": "3-7",
+     "landed_ils": 2567.73,
+     "contribution_ils": -2303.81,
+     "margin_pct": -778.9
+    }
+   },
+   "fixes": [
+    {
+     "type": "alternative",
+     "source": "CJ",
+     "title": "Black pole floor lamp with oatmeal linen drum shade (floor-lamp-cj-black-drum-linen, living pool shared with this slot)",
+     "url": "https://cjdropshipping.com/product/-p-1618899526436270080.html",
+     "image": "https://oss-cf.cjdropshipping.com/product/2025/08/05/06/fbdc89df-9c40-4528-9989-0eb259135e9c.jpg",
+     "pid_or_item_id": "1618899526436270080",
+     "sku_or_vid": "CJSN166907905EV / vid 2508050616231611900 (3Color Lamp-Black)",
+     "cost_usd": 9.02,
+     "ship_usd": 34.62,
+     "ship_days": "12-50",
+     "ship_option": "CJPacket Eub (freight API 2026-10-09)",
+     "qty": 1,
+     "landed_ils": 144.01,
+     "retail_ils": 349,
+     "contribution_ils": 119.91,
+     "margin_pct": 40.5,
+     "within_20d": {
+      "option": "CJPacket To Door",
+      "ship_usd": 56.99,
+      "days": "11-18",
+      "landed_ils": 217.83,
+      "contribution_ils": 46.09,
+      "margin_pct": 15.6
+     },
+     "dims_cm": {
+      "height": null,
+      "shade_d": null,
+      "note": "not stated; carton 56x35x20 (segmented pole)"
+     },
+     "fits_envelope": "unknown",
+     "nordic_fit_guess": 6.5,
+     "electrical": "listing: 220V; plug type not stated; CE not mentioned",
+     "why_he": "מנורת רגל ישרה (צללית שהתנ\"ך מתיר; הקשת אסורה) עם אהיל תוף בגוון שיבולת שועל, נשלחת בקרטון 56 ס\"מ ב-Eub ‏$34.62. ‏40.5% ב-₪349. הכרטיס כבר במאגר הסלון, והעמדה מפנה אליו (shared), ולכן לא נכתב כרטיס חדש.",
+     "needs": "מידות (גובה 150–160, אהיל 35–40, בסיס עד 30); תקע EU ו-CE לא אומתו; תמונה אחת בלבד לווריאנט",
+     "existing_card": "data/products/floor-lamp/floor-lamp-cj-black-drum-linen.json"
+    }
+   ],
+   "best": 0,
+   "verdict_he": "מנורת הרגל השחורה עם תוף פשתן מהמאגר המשותף: ‏40.5% ב-₪349 (15.6% במשלוח עד 20 יום); צריך מידות לפני בחירה."
+  },
+  {
+   "loss_id": "floor-lamp-cj-pleated-walnut-stem-158",
+   "slot_key": "master/floor-lamp",
+   "envelope_cm": {
+    "shade_d": [
+     35,
+     40
+    ],
+    "h": [
+     150,
+     160
+    ],
+    "base_d_max": 30
+   },
+   "slot_electrical": "plug-in: Israeli or EU plug, 220-240V, SI or CE; cable hidden behind the planter",
+   "current": {
+    "card_id": "floor-lamp-cj-pleated-walnut-stem-158",
+    "card_path": "data/products/master/floor-lamp/floor-lamp-cj-pleated-walnut-stem-158.json",
+    "supplier": "CJ Dropshipping",
+    "url": "https://cjdropshipping.com/product/-p-2412181217271614600.html",
+    "retail_ils": 349,
+    "price_for_qty": 1,
+    "il_typical": 399,
+    "cost_usd": 31.18,
+    "ship_usd": 144.71,
+    "ship_option": "CJPacket Sensitive",
+    "ship_days": "22-27",
+    "landed_ils": 580.44,
+    "contribution_ils": -316.52,
+    "margin_pct": -107.0,
+    "nordic_score": null,
+    "within_20d": {
+     "option": "CJPacket To Door",
+     "ship_usd": 149.34,
+     "days": "11-18",
+     "landed_ils": 595.72,
+     "contribution_ils": -331.79,
+     "margin_pct": -112.2
+    }
+   },
+   "fixes": [
+    {
+     "type": "alternative",
+     "source": "CJ",
+     "title": "Black pole floor lamp with oatmeal linen drum shade (floor-lamp-cj-black-drum-linen, living pool shared with this slot)",
+     "url": "https://cjdropshipping.com/product/-p-1618899526436270080.html",
+     "image": "https://oss-cf.cjdropshipping.com/product/2025/08/05/06/fbdc89df-9c40-4528-9989-0eb259135e9c.jpg",
+     "pid_or_item_id": "1618899526436270080",
+     "sku_or_vid": "CJSN166907905EV / vid 2508050616231611900 (3Color Lamp-Black)",
+     "cost_usd": 9.02,
+     "ship_usd": 34.62,
+     "ship_days": "12-50",
+     "ship_option": "CJPacket Eub (freight API 2026-10-09)",
+     "qty": 1,
+     "landed_ils": 144.01,
+     "retail_ils": 349,
+     "contribution_ils": 119.91,
+     "margin_pct": 40.5,
+     "within_20d": {
+      "option": "CJPacket To Door",
+      "ship_usd": 56.99,
+      "days": "11-18",
+      "landed_ils": 217.83,
+      "contribution_ils": 46.09,
+      "margin_pct": 15.6
+     },
+     "dims_cm": {
+      "height": null,
+      "shade_d": null,
+      "note": "not stated; carton 56x35x20 (segmented pole)"
+     },
+     "fits_envelope": "unknown",
+     "nordic_fit_guess": 6.5,
+     "electrical": "listing: 220V; plug type not stated; CE not mentioned",
+     "why_he": "מנורת רגל ישרה (צללית שהתנ\"ך מתיר; הקשת אסורה) עם אהיל תוף בגוון שיבולת שועל, נשלחת בקרטון 56 ס\"מ ב-Eub ‏$34.62. ‏40.5% ב-₪349. הכרטיס כבר במאגר הסלון, והעמדה מפנה אליו (shared), ולכן לא נכתב כרטיס חדש.",
+     "needs": "מידות (גובה 150–160, אהיל 35–40, בסיס עד 30); תקע EU ו-CE לא אומתו; תמונה אחת בלבד לווריאנט",
+     "existing_card": "data/products/floor-lamp/floor-lamp-cj-black-drum-linen.json"
+    }
+   ],
+   "best": 0,
+   "verdict_he": "אותו תיקון: מנורת התוף השחורה, ‏40.5%; הקפלים על עמוד אגוז לא ניתנים להצלה (אין קו Eub לקרטון 74 ס\"מ)."
+  },
+  {
+   "loss_id": "pendant-cj-wabi-pleated-fabric-lantern-50",
+   "slot_key": "master/pendant",
+   "envelope_cm": {
+    "d": [
+     40,
+     50
+    ],
+    "h": [
+     25,
+     35
+    ]
+   },
+   "slot_electrical": "CE, 220-240V, hardwired to the ceiling point, no plug",
+   "current": {
+    "card_id": "pendant-cj-wabi-pleated-fabric-lantern-50",
+    "card_path": "data/products/master/pendant/pendant-cj-wabi-pleated-fabric-lantern-50.json",
+    "supplier": "CJ Dropshipping",
+    "url": "https://cjdropshipping.com/product/-p-2602070612531632300.html",
+    "retail_ils": 299,
+    "price_for_qty": 1,
+    "il_typical": 329,
+    "cost_usd": 58.04,
+    "ship_usd": 340.29,
+    "ship_option": "CJPacket To Door",
+    "ship_days": "11-18",
+    "landed_ils": 1314.49,
+    "contribution_ils": -1088.55,
+    "margin_pct": -429.6,
+    "nordic_score": 7.0,
+    "within_20d": {
+     "option": "CJPacket To Door",
+     "ship_usd": 340.29,
+     "days": "11-18",
+     "landed_ils": 1314.49,
+     "contribution_ils": -1088.55,
+     "margin_pct": -429.6
+    }
+   },
+   "fixes": [
+    {
+     "type": "alternative",
+     "source": "CJ",
+     "title": "Silk Pumpkin Chandelier - Warm Light, Diameter 40cm (same SKU as the living pool card)",
+     "url": "https://cjdropshipping.com/product/-p-2507161004071618900.html",
+     "image": "https://oss-cf.cjdropshipping.com/product/2025/07/16/10/8a805bcc-ceca-48d5-aaee-2828f524fb45_trans.jpeg",
+     "pid_or_item_id": "2507161004071618900",
+     "sku_or_vid": "CJYD243199106FU / vid 2507161004081615500",
+     "cost_usd": 29.85,
+     "ship_usd": 29.2,
+     "ship_days": "12-50",
+     "ship_option": "CJPacket Eub (freight API 2026-10-09)",
+     "qty": 1,
+     "landed_ils": 194.86,
+     "retail_ils": 299,
+     "contribution_ils": 31.07,
+     "margin_pct": 12.3,
+     "within_20d": {
+      "option": "CJPacket To Door",
+      "ship_usd": 48.44,
+      "days": "11-18",
+      "landed_ils": 258.36,
+      "contribution_ils": -32.42,
+      "margin_pct": -12.8
+     },
+     "dims_cm": {
+      "d": 40,
+      "h": null,
+      "note": "height not stated (~20 from photos); 150 cm wire; carton 50x50x25"
+     },
+     "fits_envelope": "borderline",
+     "nordic_fit_guess": 7.0,
+     "electrical": "listing: 'Voltage: <= 36V', hardwired canopy, CE not stated",
+     "why_he": "פנס בד שטוח בקוטר 40 (בתוך 40–50), ציון נורדי 7.0 כמו הפנס המפסיד. ‏12.3% ב-₪299. גובה כ-20 מול 25–35: לבדוק במעבר (המנורה לא בפריים הראשי).",
+     "needs": "CE ו-220–240V ('≤36V' בליסטינג); גובה; פתח תחתון",
+     "card_id": "pendant-cj-silk-pumpkin-lantern-40-master"
+    },
+    {
+     "type": "alternative",
+     "source": "CJ",
+     "title": "Silk And Pumpkin Pendant Light 40CM (other listing; card pendant-cj-silk-ribbed-pumpkin-40 by the lighting group)",
+     "url": "https://cjdropshipping.com/product/-p-2608080928561604300.html",
+     "image": "https://oss-cf.cjdropshipping.com/product/2026/08/08/09/c846e836-f36b-4990-8649-7d66e5caafd3_trans.jpeg",
+     "pid_or_item_id": "2608080928561604300",
+     "sku_or_vid": "vid 2608080928561605700",
+     "cost_usd": 28.65,
+     "ship_usd": 35.88,
+     "ship_days": "12-50",
+     "ship_option": "CJPacket Eub (freight API 2026-10-11)",
+     "qty": 1,
+     "landed_ils": 212.95,
+     "retail_ils": 299,
+     "contribution_ils": 12.99,
+     "margin_pct": 5.1,
+     "within_20d": {
+      "option": "CJPacket To Door",
+      "ship_usd": 175.81,
+      "days": "11-18",
+      "landed_ils": 674.72,
+      "contribution_ils": -448.78,
+      "margin_pct": -177.1
+     },
+     "dims_cm": {
+      "d": 40
+     },
+     "fits_envelope": "borderline",
+     "nordic_fit_guess": 6.5,
+     "electrical": "220V, hardwired, CE not stated",
+     "why_he": "אותו סוג פנס, משלוח $35.88: ‏5.1%.",
+     "needs": "ציון מעצב",
+     "existing_card": "data/products/pendant/pendant-cj-silk-ribbed-pumpkin-40.json"
+    },
+    {
+     "type": "alternative",
+     "source": "CJ",
+     "title": "Slot's existing card: light wood slat drum 43 (pendant-cj-light-wood-slat-drum-43)",
+     "url": "https://cjdropshipping.com/product/-p-2604290833421609900.html",
+     "image": null,
+     "pid_or_item_id": "2604290833421609900",
+     "sku_or_vid": "vid 2604290833431600800",
+     "cost_usd": 22.16,
+     "ship_usd": 34.62,
+     "ship_days": "12-50",
+     "ship_option": "CJPacket Eub",
+     "qty": 1,
+     "landed_ils": 187.37,
+     "retail_ils": 299,
+     "contribution_ils": 38.56,
+     "margin_pct": 15.2,
+     "within_20d": {
+      "option": "CJPacket To Door",
+      "ship_usd": 223.44,
+      "days": "11-18",
+      "landed_ils": 810.48,
+      "contribution_ils": -584.54,
+      "margin_pct": -230.7
+     },
+     "dims_cm": {
+      "d": 43,
+      "h": 28
+     },
+     "fits_envelope": "yes",
+     "nordic_fit_guess": null,
+     "electrical": "voltage not stated",
+     "why_he": "כבר בסל: תוף פסי עץ, 15% ב-₪299 (הנורה נראית בין הפסים, אין ציון).",
+     "needs": "—",
+     "existing_card": "data/products/master/pendant/pendant-cj-light-wood-slat-drum-43.json"
+    }
+   ],
+   "best": 0,
+   "verdict_he": "פנס המשי 40 (CJ) ב-₪299: ‏12.3% במקום ‎-364%, באותו ציון נורדי (7.0); אין תיקון באותו פנס קפלים, כי כל פנס 40–50 נשלח בקרטון של 50 ס\"מ."
+  },
+  {
+   "loss_id": "pendant-cj-fluted-ceramic-wood-cap-short-lantern",
+   "slot_key": "work/pendant",
+   "envelope_cm": {
+    "d_max": 28,
+    "h_max": 18
+   },
+   "slot_electrical": "CE, 220-240V, hardwired to the ceiling point, no plug, electrician install; 2700K; bulb hidden (bottom diffuser)",
+   "current": {
+    "card_id": "pendant-cj-fluted-ceramic-wood-cap-short-lantern",
+    "card_path": "data/products/work/pendant/pendant-cj-fluted-ceramic-wood-cap-short-lantern.json",
+    "supplier": "CJ Dropshipping",
+    "url": "https://cjdropshipping.com/product/-p-2507291305251603100.html",
+    "retail_ils": 149,
+    "price_for_qty": 1,
+    "il_typical": 199,
+    "cost_usd": 13.93,
+    "ship_usd": 20.88,
+    "ship_option": "CJPacket Eub",
+    "ship_days": "12-50",
+    "landed_ils": 114.87,
+    "contribution_ils": -2.88,
+    "margin_pct": -2.3,
+    "nordic_score": null,
+    "within_20d": {
+     "option": "CJPacket To Door",
+     "ship_usd": 76.1,
+     "days": "11-18",
+     "landed_ils": 297.1,
+     "contribution_ils": -185.11,
+     "margin_pct": -146.6
+    }
+   },
+   "fixes": [
+    {
+     "type": "alternative",
+     "source": "AliExpress",
+     "title": "Nordic small pendant, adjustable angle, Type B White (9x20)",
+     "url": "https://www.aliexpress.com/item/1005011942036749.html",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/Sb07acc437e0f4cf2ae40fb354aa32161w.jpg",
+     "pid_or_item_id": "1005011942036749",
+     "sku_or_vid": "Type B - White, no bulb (detail data)",
+     "cost_usd": 10.72,
+     "ship_usd": 20.82,
+     "ship_days": "9-19",
+     "ship_option": "AliExpress Standard (repo detail data)",
+     "qty": 1,
+     "landed_ils": 104.08,
+     "retail_ils": 149,
+     "contribution_ils": 7.91,
+     "margin_pct": 6.3,
+     "within_20d": {
+      "option": "AliExpress Standard",
+      "ship_usd": 20.82,
+      "days": "9-19",
+      "landed_ils": 104.08,
+      "contribution_ils": 7.91,
+      "margin_pct": 6.3
+     },
+     "dims_cm": {
+      "d": 9,
+      "h": 20
+     },
+     "fits_envelope": "borderline",
+     "nordic_fit_guess": 5.0,
+     "electrical": "no electrical data in the repo row",
+     "why_he": "גליל לבן קטן עם טבעת עץ, 6.3% ב-₪149. אבל זה ספוט מכוון עם פתח תחתון (הנורה נראית מהמצלמה ב-1.10), גבוה ב-2 מ-18, ולא אהיל לבן חם עם מפזר. פחות יפה מהקרמיקה המחורצת.",
+     "needs": "לא מומלץ"
+    },
+    {
+     "type": "alternative",
+     "source": "AliExpress",
+     "title": "Rustic woven pendant (JOYINLED), A2-18cm",
+     "url": "https://www.aliexpress.com/item/1005009394200914.html",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/S932ad3290dfd44248eed33229105fdc7n.jpg",
+     "pid_or_item_id": "1005009394200914",
+     "sku_or_vid": "12000048965034927",
+     "cost_usd": 7.74,
+     "ship_usd": 17.69,
+     "ship_days": "8-18",
+     "ship_option": "AliExpress standard shipping (API quote)",
+     "qty": 1,
+     "landed_ils": 83.92,
+     "retail_ils": 149,
+     "contribution_ils": 28.07,
+     "margin_pct": 22.2,
+     "within_20d": {
+      "option": "AliExpress standard shipping",
+      "ship_usd": 17.69,
+      "days": "8-18",
+      "landed_ils": 83.92,
+      "contribution_ils": 28.07,
+      "margin_pct": 22.2
+     },
+     "dims_cm": {
+      "d": 18,
+      "h": 19
+     },
+     "fits_envelope": "borderline",
+     "nordic_fit_guess": 5.0,
+     "electrical": "listing: 90-260V, E27, CE declared",
+     "why_he": "פעמון קלוע 18 ס\"מ: ‏22.2% ב-₪149, אבל חום-קלוע, לא 'אהיל לבן חם בגוון הקיר עם מפזר תחתון' שהעמדה דורשת.",
+     "needs": "לא מומלץ"
+    }
+   ],
+   "best": null,
+   "verdict_he": "המפסיד כמעט מאוזן (‎-₪2.9 ליחידה: חסרים כ-$0.9 בנחיתה). לא נמצאה חלופה באותו מראה. הצעה: אותו פנס קרמי אצל ספק אחר או בקשת Sourcing ל-CJ, או ₪159 (טיפוסי ₪199) שבו הוא מרוויח 3.5%."
+  },
+  {
+   "loss_id": "wall-sconce-cj-black-swan-arm-white-fabric-cone",
+   "slot_key": "work/wall-sconce",
+   "envelope_cm": {
+    "w": [
+     10,
+     16
+    ],
+    "h": [
+     15,
+     22
+    ],
+    "projection_max": 20
+   },
+   "slot_electrical": "CE, 220-240V, hardwired to the wall point, no visible cable, electrician install; 2700K",
+   "current": {
+    "card_id": "wall-sconce-cj-black-swan-arm-white-fabric-cone",
+    "card_path": "data/products/work/wall-sconce/wall-sconce-cj-black-swan-arm-white-fabric-cone.json",
+    "supplier": "CJ Dropshipping",
+    "url": "https://cjdropshipping.com/product/-p-2606170257551623500.html",
+    "retail_ils": 79,
+    "price_for_qty": 1,
+    "il_typical": 129,
+    "cost_usd": 6.63,
+    "ship_usd": 19.11,
+    "ship_option": "CJPacket Eub",
+    "ship_days": "12-50",
+    "landed_ils": 84.94,
+    "contribution_ils": -26.13,
+    "margin_pct": -39.0,
+    "nordic_score": null,
+    "within_20d": {
+     "option": "CJPacket To Door",
+     "ship_usd": 60.87,
+     "days": "11-18",
+     "landed_ils": 222.75,
+     "contribution_ils": -163.94,
+     "margin_pct": -244.9
+    }
+   },
+   "fixes": [
+    {
+     "type": "variant",
+     "source": "CJ",
+     "title": "Square fabric panel wall sconce, White D12xH12cm Warm White",
+     "url": "https://cjdropshipping.com/product/-p-2601010327331635600.html",
+     "image": "https://oss-cf.cjdropshipping.com/product/2026/03/27/08/15738946-e37f-42eb-b953-2d99b3c1740c_trans.jpeg",
+     "pid_or_item_id": "2601010327331635600",
+     "sku_or_vid": "CJYD270937110JQ / vid 2603270809541612100",
+     "cost_usd": 16.86,
+     "ship_usd": 10.53,
+     "ship_days": "12-50",
+     "ship_option": "CJPacket Eub (freight API: 15 on 2026-10-09, 12 on 2026-10-11)",
+     "qty": 1,
+     "landed_ils": 90.39,
+     "retail_ils": 79,
+     "contribution_ils": -31.57,
+     "margin_pct": -47.2,
+     "within_20d": {
+      "option": "CJPacket To Door",
+      "ship_usd": 37.17,
+      "days": "11-18",
+      "landed_ils": 178.3,
+      "contribution_ils": -119.49,
+      "margin_pct": -178.5
+     },
+     "dims_cm": {
+      "width": 12,
+      "height": 12,
+      "depth": 12
+     },
+     "fits_envelope": "borderline",
+     "nordic_fit_guess": 6.0,
+     "electrical": "listing: 'Voltage: ≤36V' vs 'Light Source: LED E27' (conflict); flush wall plate, hardwired; CE and IP not stated",
+     "why_he": "קוביית הבד 12 ב-₪79: מפסידה (‎-47.2%).",
+     "needs": "המתח: בליסטינג 'Voltage: ≤36V' מול 'LED E27' בתמונת המידות, צריך אישור 220–240V; CE ו-IP לא מוצהרים; ציון מעצב (קובייה לבנה 'בסגנון סיני' מול אהיל פשתן בגוון שיבולת שועל)"
+    }
+   ],
+   "best": null,
+   "verdict_he": "לא נמצא תיקון ב-₪79: מנורת קיר עם אהיל בד נשלחת מ-CJ ב-$11–19, ומ-Zendrop ב-$28–37. ליד לבדיקת משלוח: 1005007909006505 ‏(אהיל בד לבן על עמוד עץ, $15.47; איזון רק אם המשלוח עד $2.35, כלומר Choice)."
+  },
+  {
+   "loss_id": "wall-sconce-cj-white-fabric-cube-15",
+   "slot_key": "work/wall-sconce",
+   "envelope_cm": {
+    "w": [
+     10,
+     16
+    ],
+    "h": [
+     15,
+     22
+    ],
+    "projection_max": 20
+   },
+   "slot_electrical": "CE, 220-240V, hardwired to the wall point, no visible cable, electrician install; 2700K",
+   "current": {
+    "card_id": "wall-sconce-cj-white-fabric-cube-15",
+    "card_path": "data/products/work/wall-sconce/wall-sconce-cj-white-fabric-cube-15.json",
+    "supplier": "CJ Dropshipping",
+    "url": "https://cjdropshipping.com/product/-p-2601010327331635600.html",
+    "retail_ils": 99,
+    "price_for_qty": 1,
+    "il_typical": 149,
+    "cost_usd": 20.01,
+    "ship_usd": 13.06,
+    "ship_option": "CJPacket Eub",
+    "ship_days": "12-50",
+    "landed_ils": 109.13,
+    "contribution_ils": -35.12,
+    "margin_pct": -41.9,
+    "nordic_score": null,
+    "within_20d": {
+     "option": "CJPacket To Door",
+     "ship_usd": 37.17,
+     "days": "11-18",
+     "landed_ils": 188.69,
+     "contribution_ils": -114.69,
+     "margin_pct": -136.7
+    }
+   },
+   "fixes": [
+    {
+     "type": "variant",
+     "source": "CJ",
+     "title": "Square fabric panel wall sconce, White D12xH12cm Warm White",
+     "url": "https://cjdropshipping.com/product/-p-2601010327331635600.html",
+     "image": "https://oss-cf.cjdropshipping.com/product/2026/03/27/08/15738946-e37f-42eb-b953-2d99b3c1740c_trans.jpeg",
+     "pid_or_item_id": "2601010327331635600",
+     "sku_or_vid": "CJYD270937110JQ / vid 2603270809541612100",
+     "cost_usd": 16.86,
+     "ship_usd": 10.53,
+     "ship_days": "12-50",
+     "ship_option": "CJPacket Eub (freight API: 15 on 2026-10-09, 12 on 2026-10-11)",
+     "qty": 1,
+     "landed_ils": 90.39,
+     "retail_ils": 99,
+     "contribution_ils": -16.38,
+     "margin_pct": -19.5,
+     "within_20d": {
+      "option": "CJPacket To Door",
+      "ship_usd": 37.17,
+      "days": "11-18",
+      "landed_ils": 178.3,
+      "contribution_ils": -104.29,
+      "margin_pct": -124.3
+     },
+     "dims_cm": {
+      "width": 12,
+      "height": 12,
+      "depth": 12
+     },
+     "fits_envelope": "borderline",
+     "nordic_fit_guess": 6.0,
+     "electrical": "listing: 'Voltage: ≤36V' vs 'Light Source: LED E27' (conflict); flush wall plate, hardwired; CE and IP not stated",
+     "why_he": "אותה קובייה בגודל 12 ב-₪99: עדיין מפסידה (‎-19.5%).",
+     "needs": "המתח: בליסטינג 'Voltage: ≤36V' מול 'LED E27' בתמונת המידות, צריך אישור 220–240V; CE ו-IP לא מוצהרים; ציון מעצב (קובייה לבנה 'בסגנון סיני' מול אהיל פשתן בגוון שיבולת שועל)"
+    }
+   ],
+   "best": null,
+   "verdict_he": "לא נמצא תיקון ב-₪99. אותה קובייה מרוויחה בכניסה (₪149) ובזוג ליד המיטה (₪349), ולכן כדאי להעביר אותה לשם. ליד לבדיקת משלוח: 1005007909006505 ($15.47; איזון עד $6.96)."
+  }
+ ],
+ "needs_api_freight_check": [
+  {
+   "item_id": "1005008585971887",
+   "url": "https://www.aliexpress.com/item/1005008585971887.html",
+   "image": "https://ae-pic-a1.aliexpress-media.com/kf/S87cbc1a98e664b81b058cc5483909f17E.jpg",
+   "title": "Wabi Sabi Style Pendant Light E27 Japan Silk Chandelier (D40 x H20 per photo)",
+   "price_usd": 29.83,
+   "orders": 8,
+   "for_slots": {
+    "hall/ceiling-light @199": {
+     "ship_breakeven_usd": 15.62,
+     "ship_for_40pct_usd": -4.83
+    },
+    "master/pendant @299": {
+     "ship_breakeven_usd": 38.64,
+     "ship_for_40pct_usd": 7.92
+    }
+   },
+   "why": "silk 'cloud' pendant D40 H20 fits the hall semi-flush (35-45 / 18-25) and the master pendant; copy check needed"
+  },
+  {
+   "item_id": "1005011799036191",
+   "url": "https://www.aliexpress.com/item/1005011799036191.html",
+   "image": "https://ae-pic-a1.aliexpress-media.com/kf/S5986b21b3e3946998af5765eb941824fN.jpg",
+   "title": "Japanese Wabi Sabi LED Pendant Light Minimalist Silk Hanging Lamp (D30 per photo)",
+   "price_usd": 22.86,
+   "orders": 3,
+   "for_slots": {
+    "corridor/ceiling-lights pair @499 (per-unit ship)": {
+     "ship_breakeven_usd": 36.25,
+     "ship_for_40pct_usd": 10.62
+    },
+    "corridor/ceiling-lights single @219": {
+     "ship_breakeven_usd": 27.19,
+     "ship_for_40pct_usd": 4.69
+    },
+    "kids/pendant @119 (D30 = 2 over 28)": {
+     "ship_breakeven_usd": 4.17,
+     "ship_for_40pct_usd": -8.05
+    },
+    "dining-room/dining-pendant @229": {
+     "note": "D30 is too small for 45-55"
+    }
+   },
+   "why": "wrapped silk lantern D30: corridor size; check that it is not read as a copy of a known wrapped-ribbon lamp"
+  },
+  {
+   "item_id": "1005007909006505",
+   "url": "https://www.aliexpress.com/item/1005007909006505.html",
+   "image": "https://ae-pic-a1.aliexpress-media.com/kf/S98a6bc5178104a8f98f28291213c2459t.jpg",
+   "title": "Nordic Original Wood Wall Lamp (white cloth shade on a light wood holder, white plate)",
+   "price_usd": 15.47,
+   "orders": 0,
+   "for_slots": {
+    "work/wall-sconce @79": {
+     "ship_breakeven_usd": 2.35,
+     "ship_for_40pct_usd": -5.76
+    },
+    "work/wall-sconce @99": {
+     "ship_breakeven_usd": 6.96,
+     "ship_for_40pct_usd": -3.21
+    },
+    "hall/wall-sconce @149": {
+     "ship_breakeven_usd": 18.47,
+     "ship_for_40pct_usd": 3.16
+    }
+   },
+   "why": "the most Nordic fabric wall lamp in the data; projection probably ~20 (hall max 15)"
+  },
+  {
+   "item_id": "1005009605872757",
+   "url": "https://www.aliexpress.com/item/1005009605872757.html",
+   "image": "https://ae-pic-a1.aliexpress-media.com/kf/S736740f92487423db0cfa53670a5adeaX.jpg",
+   "title": "Nordic Living Room Wall Light Swing Long Arm Sconce (25 cm arm, cream cone, pull chain)",
+   "price_usd": 16.69,
+   "orders": 11,
+   "for_slots": {
+    "kids/wall-sconce @99": {
+     "ship_breakeven_usd": 5.74,
+     "ship_for_40pct_usd": -4.43
+    },
+    "kids/wall-sconce @119": {
+     "ship_breakeven_usd": 10.34,
+     "ship_for_40pct_usd": -1.88
+    }
+   },
+   "why": "swing arm 25 (slot 30-45), metal cone (not fabric), chrome plate: weak; only if Choice shipping"
+  },
+  {
+   "item_id": "1005011703720678",
+   "url": "https://www.aliexpress.com/item/1005011703720678.html",
+   "image": "https://ae-pic-a1.aliexpress-media.com/kf/S31b5d3cfac104ba4a1aa0805c17d013df.jpg",
+   "title": "Picture Lighting, 2 Pack USB Rechargeable Paintings Light, 3 Colors, magnetic",
+   "price_usd": 17.66,
+   "orders": 14,
+   "for_slots": {
+    "corridor/picture-lights set of 3 @199 (2 packs)": {
+     "ship_breakeven_usd": 10.13,
+     "ship_for_40pct_usd": -10.32
+    }
+   },
+   "why": "main photo shows round puck lights; only if a bar version exists"
+  }
+ ],
+ "cards_written": [
+  "data/products/corridor/ceiling-lights/ceiling-lights-cj-silk-pumpkin-lantern-30.json",
+  "data/products/master/pendant/pendant-cj-silk-pumpkin-lantern-40-master.json",
+  "data/products/entrance/wall-sconce/wall-sconce-cj-white-fabric-cube-15-hall.json",
+  "data/products/master/bedside-sconces/bedside-sconces-cj-white-fabric-cube-15.json",
+  "data/products/bath/vanity-sconces/vanity-sconces-aliexpress-ip65-updown-white-175.json"
+ ],
+ "existing_cards_used_as_fixes": [
+  "data/products/floor-lamp/floor-lamp-cj-black-drum-linen.json (living pool; master/floor-lamp already shares this pool)",
+  "data/products/kids/wall-sconce/wall-sconce-cj-black-folding-arm-woodgrain-cone-18.json (same slot, at ₪119)",
+  "data/products/master/bedside-sconces/bedside-sconces-cj-linen-wave-flush.json (same slot, 1.2%)",
+  "data/products/master/pendant/pendant-cj-light-wood-slat-drum-43.json (same slot, 15.2%)"
+ ],
+ "summary": {
+  "losing_products": 22,
+  "with_profitable_fix": 10,
+  "best_fix_reaches_40pct": [
+   "floor-lamp-cj-cream-arc-pleated-152",
+   "floor-lamp-cj-pleated-walnut-stem-158"
+  ],
+  "no_fix": [
+   "ceiling-light-cj-opal-glass-drum-flush-32",
+   "picture-lights-cj-black-tube-rechargeable",
+   "dining-pendant-cj-black-ring-cloth-lantern-50",
+   "ceiling-light-cj-waxwood-dome-ash-40",
+   "table-lamp-cj-pleated-shade-wood-column",
+   "table-lamp-cj-white-teardrop-fabric-cone-25x45",
+   "table-lamp-cj-white-textured-ceramic-linen-drum",
+   "pendant-cj-fabric-dome-ash-cap-25",
+   "wall-sconce-cj-black-folding-arm-woodgrain-cone-18",
+   "pendant-cj-fluted-ceramic-wood-cap-short-lantern",
+   "wall-sconce-cj-black-swan-arm-white-fabric-cone",
+   "wall-sconce-cj-white-fabric-cube-15"
+  ],
+  "profitable_but_not_recommended": {
+   "ceiling-light-cj-opal-glass-drum-flush-32": "AliExpress IP44 plastic LED disc 32.9% (design lower)",
+   "table-lamp-cj-pleated-shade-wood-column": "CJ tripod linen lamp 28.8% / AliExpress USB linen lamp 35.9% (probably too short, sizes unknown)",
+   "pendant-cj-fluted-ceramic-wood-cap-short-lantern": "AliExpress woven bell 22.2% (wrong colour/material)"
+  },
+  "cj_points_this_run": 1380
+ }
+}
