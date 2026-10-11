@@ -1712,6 +1712,12 @@ function renderOverview(){
       <span>ממתינות לך: <b class="num">${BS.userOpen}</b> ${BS.userOpen === 1 ? 'פעולה' : 'פעולות'} ו-<b class="num">${open.length}</b> ${open.length === 1 ? 'החלטה' : 'החלטות'}${BS.externalOpen ? ` <span class="faint">· ${BS.externalOpen} ממתינים לגורם חיצוני</span>` : ''}</span>
       <a class="btn btn-ghost btn-small" href="#todo">למסך "ממתין לך"</a>
     </div>`;
+  const OD = (typeof officeData === 'function') ? officeData() : null;
+  const offWork = OD ? OD.agents.filter(x => agentNow(x).state === 'working') : [];
+  const officeLine = OD ? `<div class="todo-line office-line" role="region" aria-label="המשרד">
+      <span><b>המשרד</b>: שרטוט הסוכנים, מי עובד עכשיו וזרימת העבודה ביניהם · <b class="num">${offWork.length}</b> ${offWork.length === 1 ? 'עובד' : 'עובדים'} עכשיו${offWork.length ? ` <span class="faint">(${esc(offWork.slice(0, 4).map(x => x.name_he).join(', '))}${offWork.length > 4 ? '…' : ''})</span>` : ''}</span>
+      <a class="btn btn-ghost btn-small" href="#office">למשרד</a>
+    </div>` : '';
   const top = (blocking.length ? blocking : open).slice(0, 4);
   const waiting = open.length ? `
     <section class="waiting" aria-labelledby="h-wait">
@@ -1784,6 +1790,7 @@ function renderOverview(){
   $('#ov-body').innerHTML = `
     <div class="screen roomy">
       ${todoLine}
+      ${officeLine}
       ${waiting}
       <div class="ov-grid">
         <section class="section" aria-labelledby="h-stages">

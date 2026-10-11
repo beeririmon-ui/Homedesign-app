@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-10-11T21:00:00+00:00",
+  "updated": "2026-10-11T22:20:00+00:00",
   "note": "מרשם הסוכנים למסך 'המשרד' בסטודיו. ההוראות המלאות וההגבלות נקראות מ-.claude/agents/<id>.md (ומ-CLAUDE.md למנהל). state כאן הוא ערך ברירת מחדל בזמן הבנייה; המצב החי נכתב בזמן אמת לאוסף agents במסד הנתונים של הסטודיו. state: working | idle | blocked | planned.",
   "states": {
     "working": "עובד עכשיו",
@@ -78,7 +78,7 @@
       "stage": 0,
       "instructions_src": ".claude/agents/master-designer.md",
       "state": "working",
-      "task_he": "ציון עיצובי ל-102 מוצרים בלי ציון"
+      "task_he": "מרכיב את 8 החדרים ורשימות חוסרים לליקוט הבא"
     },
     {
       "id": "astra",
@@ -118,8 +118,7 @@
       "role_he": "האתר, מנוע השכבות, הגלגל, החנות והסטודיו",
       "stage": 4,
       "instructions_src": ".claude/agents/frontend-dev.md",
-      "state": "working",
-      "task_he": "מסך המשרד בסטודיו"
+      "state": "idle"
     },
     {
       "id": "qa-agent",
@@ -155,8 +154,7 @@
       "name_he": "צוות החלופות הרווחיות",
       "role_he": "מחפש חלופה רווחית באותו מראה לכל מוצר שמפסיד כסף (CJ, AliExpress, Zendrop, ספקים ישראליים)",
       "instructions_src": null,
-      "state": "working",
-      "task_he": "עיצוב ומטבח בשאר הבית"
+      "state": "idle"
     },
     {
       "id": "explorer",
@@ -174,8 +172,9 @@
       "name_he": "ליקוט AliExpress בענן",
       "role_he": "סשן ענן עם גישה ל-API הרשמי של AliExpress: ליקוט מעמיק לכל חדרי הבית",
       "instructions_src": null,
-      "state": "working",
-      "ref": "session_013RCorJtVoLL5N2eFoKhkXP"
+      "state": "idle",
+      "ref": "session_013RCorJtVoLL5N2eFoKhkXP",
+      "task_he": "סיים שלב: 3,959 נבדקו לעומק"
     },
     {
       "id": "cj-daily",
