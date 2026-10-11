@@ -1,0 +1,386 @@
+{
+ "version": 1,
+ "date": "2026-10-11",
+ "purpose": "בדיקות API של AliExpress שנדרשות כדי לסגור חלופות רווחיות למוצרים מפסידים (חוקי הסטודיו ה.13). נאסף מ-data/leads/profit-fix-2026-10-11/*.json",
+ "how": "לכל item_id: ds.py product <id> (אם אין sku או שחסרות מידות), ואז ds.py freight <id> --sku <sku> --to IL. השיטה הזולה וגם הזולה עד 20 יום. לשאילתות: ds.py search עם Choice/משלוח לישראל, עד 20 תוצאות, ואז freight ל-5 המובילות.",
+ "output": "data/leads/profit-fix-2026-10-11/ae-freight-results.json: {item_id: {sku, price_usd, ship_cheapest:{usd,days,company}, ship_under20:{...}, dims, stock, checked_at}}",
+ "items": [
+  {
+   "item_id": "1005009764860850",
+   "sku": null,
+   "title": "Japanese Ceramic Bowl Unique Irregular Design Wabi-Sabi (search price;",
+   "slot": "living-room/bowl"
+  },
+  {
+   "item_id": "1005012097216475",
+   "sku": null,
+   "title": "Salad Bowl Japanese Retro Wood Bowl, solid acacia (search price; size ",
+   "slot": "living-room/bowl"
+  },
+  {
+   "item_id": "1005012632723238",
+   "sku": "12000058885161558 (3pcs 50x70 Unframe, stock 1); 50x60 sku stock 272",
+   "title": "AE unframed 3x50x70 print set (Neutral Botanical Japandi Triptych, BYC",
+   "slot": "living-room/framed-art"
+  },
+  {
+   "item_id": "1005012472589009",
+   "sku": "12000058464365845 (L)",
+   "title": "Vintage Distressed Clay Vase, Wabi-Sabi Rustic Ceramic (L, 31x15) - ex",
+   "slot": "living-room/vase"
+  },
+  {
+   "item_id": "1005004245677742",
+   "sku": "12000032529795708 (White D)",
+   "title": "Minimalist Handmade Art Zen Vase (White D: brushed-ring cylinder 28x14",
+   "slot": "living-room/vase"
+  },
+  {
+   "item_id": "1005006165763597",
+   "sku": "12000036069133824",
+   "title": "Natural Raffia Woven Bohemian Wall Decoration 30CM (existing card)",
+   "slot": "living-room/wall-decor"
+  },
+  {
+   "item_id": "1005008117693205",
+   "sku": null,
+   "title": "European Style Retro Ceramic Vase, coarse clay pot",
+   "slot": null
+  },
+  {
+   "item_id": "1005011524882497",
+   "sku": "the largest size (30+ cm)",
+   "title": "Woven Straw Basket Large Flower Pot Nordic Seaweed, floor standing",
+   "slot": null
+  },
+  {
+   "item_id": "1005012822407051",
+   "sku": "the largest size",
+   "title": "Woven Straw Basket Large Flower Pot Seaweed, floor standing",
+   "slot": null
+  },
+  {
+   "item_id": "1005011659028357",
+   "sku": "Extra Large",
+   "title": "Nordic Seaweed Storage Basket Extra Large Hand Woven Straw Flower Pot",
+   "slot": null
+  },
+  {
+   "item_id": "1005005041219921",
+   "sku": "the largest size",
+   "title": "Woven Plant Basket Seagrass Rattan Planter (white band)",
+   "slot": null
+  },
+  {
+   "item_id": "1005013118770316",
+   "sku": "35x40",
+   "title": "Jute Laundry Basket with Cotton Rope Handles 35x40",
+   "slot": null
+  },
+  {
+   "item_id": "1005009003476072",
+   "sku": "12000047535430431 (Round X Walnut Base, 65x65x160MM, Warm White)",
+   "title": "Wabi Sabi Yellow Marble Wall Lamp Led Bedside ... Travertine (Touch Li",
+   "slot": "living-room/accent-sconces"
+  },
+  {
+   "item_id": "1005012913815529",
+   "sku": "12000059768676190 (Small 15cm, Warm White 2700-3500K)",
+   "title": "Wabi Sabi Natural Travertine LED Wall Sconce, round disc 15 cm with ba",
+   "slot": "living-room/accent-sconces"
+  },
+  {
+   "item_id": "1005005335040251",
+   "sku": "EU plug SKU (not in repo detail data)",
+   "title": "LED American Wall Lamp Folding Swing Arm US EU Plug Switch Fabric Bedr",
+   "slot": "living-room/wall-sconce"
+  },
+  {
+   "item_id": "1005013313498726",
+   "sku": null,
+   "title": "Natural Yellow Travertine Wall Sconce LED Light Modern Minimalist Indo",
+   "slot": null
+  },
+  {
+   "item_id": "1005013145340411",
+   "sku": null,
+   "title": "Retro Travertine Wall Lamp Wabi Sabi Natural Stone LED Sconce Half Moo",
+   "slot": null
+  },
+  {
+   "item_id": "1005010710545263",
+   "sku": null,
+   "title": "Wabi Sabi Yellow Cave Stone Wall Lamp Led Bedroom Bedside ... Traverti",
+   "slot": null
+  },
+  {
+   "item_id": "1005012740485101",
+   "sku": null,
+   "title": "Natural Travertine Stone Wall Sconce Minimalist Wall Light Fixture Rec",
+   "slot": null
+  },
+  {
+   "item_id": "1005009977558012",
+   "sku": null,
+   "title": "Wabi Sabi Natural Stone Wall Light for Living Room Bedroom Stairs Corr",
+   "slot": null
+  },
+  {
+   "item_id": "1005008585971887",
+   "sku": null,
+   "title": "Wabi Sabi Style Pendant Light E27 Japan Silk Chandelier",
+   "slot": null
+  },
+  {
+   "item_id": "1005011799036191",
+   "sku": null,
+   "title": "Japanese Wabi Sabi LED Pendant Light Minimalist Silk Hanging Lamp",
+   "slot": null
+  },
+  {
+   "item_id": "1005009233376602",
+   "sku": null,
+   "title": "Modern Paper Pendant Lamp Eco-Friendly E27 Ceiling Light, Scandinavian",
+   "slot": null
+  },
+  {
+   "item_id": "1005006938520274",
+   "sku": null,
+   "title": "Travertine Bathroom Accessories Set (natural stone soap dispenser, soa",
+   "slot": "bath/reed-diffuser"
+  },
+  {
+   "item_id": "1005011549888151",
+   "sku": null,
+   "title": "Minimalist Matte Ceramic Soap Dispenser, oat speckled with black pump,",
+   "slot": "bath/soap-dispenser"
+  },
+  {
+   "item_id": "1005008380135269",
+   "sku": null,
+   "title": "Wabi Sabi Wind Cave Stone Soap Dispenser, travertine-look with black p",
+   "slot": "bath/soap-dispenser"
+  },
+  {
+   "item_id": "1005007539497342",
+   "sku": null,
+   "title": "Nordic white ceramic bathroom tumbler 280 ml (search price)",
+   "slot": "bath/toothbrush-cup"
+  },
+  {
+   "item_id": "1005012889842426",
+   "sku": "12000059652796011 x2",
+   "title": "Wooden Vintage Tabletop Candle Holder (matte black metal chamberstick:",
+   "slot": "dining-room/candle-holders"
+  },
+  {
+   "item_id": "1005012516096978",
+   "sku": "12000058574957395",
+   "title": "Black - Decorative Candle Holders for Taper Candles, SKU Black-2pcs (m",
+   "slot": "dining-room/candle-holders"
+  },
+  {
+   "item_id": "1005006953173589",
+   "sku": null,
+   "title": "1pc Luxury Nordic Iron Candlestick Candle Cup (search price)",
+   "slot": "dining-room/candle-holders"
+  },
+  {
+   "item_id": "1005009876110673",
+   "sku": null,
+   "title": "Nordic Sealed Ceramic Storage Jars Set with Lid, 260 ml (search price)",
+   "slot": "dining-room/canisters"
+  },
+  {
+   "item_id": "2255800578472233",
+   "sku": "10000007605734235",
+   "title": "Modern Minimalist White Ceramic Matte Flower Vase, SKU Small (19.5 cm)",
+   "slot": "dining-room/centerpiece-vase"
+  },
+  {
+   "item_id": "1005009393237173",
+   "sku": null,
+   "title": "1PC Manual 5/8/10 inch grinder, oak wood (search price, single)",
+   "slot": "dining-room/condiment-set"
+  },
+  {
+   "item_id": "1005012708501335",
+   "sku": "12000059146676973",
+   "title": "Floor Vase with Narrow Neck, Rustic Tall Floor Vase, Matte Textured (o",
+   "slot": "dining-room/floor-vase"
+  },
+  {
+   "item_id": "1005009896016050",
+   "sku": "12000050507804796",
+   "title": "Abstract Minimalism Wabi-Sabi line art poster, 30x40 'With Framed' (PF",
+   "slot": "dining-room/framed-art"
+  },
+  {
+   "item_id": "1005007268792355",
+   "sku": null,
+   "title": "Korean Style white ceramic wrinkle mug (cheapest AE mug with IL freigh",
+   "slot": "dining-room/mug-set"
+  },
+  {
+   "item_id": "1005012534255299",
+   "sku": "12000058657598910",
+   "title": "3/4/5 Hook Wooden Coat Rack, SKU 5 Hooks (bamboo rail, black metal hoo",
+   "slot": "hall/wall-hooks"
+  },
+  {
+   "item_id": "1005012325743023",
+   "sku": "12000058112080850",
+   "title": "Bohemian Solid Wood Wall Hook, SKU 4pcs (light pine oval pegs)",
+   "slot": "hall/wall-hooks"
+  },
+  {
+   "item_id": "1005013257979199",
+   "sku": null,
+   "title": "Wabi sabi Travertine Storage Tray (search price)",
+   "slot": "master/nightstand-tray"
+  },
+  {
+   "item_id": "1005007494925671",
+   "sku": "12000052608209349 + 12000041019962295",
+   "title": "White Ceramic Vases Nordic, SKU A1-0802 bottle 14.3 cm + C3-0233 jar w",
+   "slot": null
+  },
+  {
+   "item_id": "1005006692829025",
+   "sku": "12000038026513588",
+   "title": "Tableware Solid Wood Food Tray, rectangle A1 (19 x 10.5)",
+   "slot": null
+  },
+  {
+   "item_id": "1005008494869298",
+   "sku": "12000046353781872 (White 30W, Warm White, stock 461); also 12000046353781860 White 18W Warm $16.44 (stock 4)",
+   "title": "LED Ceiling Lights for Bathroom IP44 Waterproof AC165-265V 18W/30W/40W",
+   "slot": "bath/ceiling-light"
+  },
+  {
+   "item_id": "1005008248092420",
+   "sku": "12000044371255971 (WHITE, 175x90x28mm 12W, Warm White 2700-3500K, stock 6)",
+   "title": "Nordic Wall Light Aluminum IP65 Waterproof Indoor Wall Lamp Up Down (d",
+   "slot": "bath/vanity-sconces"
+  },
+  {
+   "item_id": "1005007909006505",
+   "sku": null,
+   "title": "Nordic Original Wood Wall Lamp (white cloth shade on a light wood hold",
+   "slot": null
+  },
+  {
+   "item_id": "1005009605872757",
+   "sku": null,
+   "title": "Nordic Living Room Wall Light Swing Long Arm Sconce (25 cm arm, cream ",
+   "slot": null
+  },
+  {
+   "item_id": "1005011703720678",
+   "sku": null,
+   "title": "Picture Lighting, 2 Pack USB Rechargeable Paintings Light, 3 Colors, m",
+   "slot": null
+  },
+  {
+   "item_id": "1005013217912597",
+   "sku": "12000060578928504",
+   "title": "yesBamboo Wood Bath Mat (slatted bamboo duckboard, roll-up), Wooden",
+   "slot": "bath/bath-mat"
+  },
+  {
+   "item_id": "1005011772248198",
+   "sku": "12000056508804708",
+   "title": "Waffle Bath Mat Rug, Khaki 43x61 (microfiber, Choice)",
+   "slot": "bath/bath-mat"
+  },
+  {
+   "item_id": "1005010748099787",
+   "sku": null,
+   "title": "Minimalist Style Linen Texture Shower Curtain, thick polyester (screen",
+   "slot": "bath/shower-curtain"
+  },
+  {
+   "item_id": "1005013238736316",
+   "sku": "12000060587669379",
+   "title": "Chenille non-slip bench cushion, 50D foam pad, 120x30x3 (colour 1)",
+   "slot": "dining-room/bench-pad"
+  },
+  {
+   "item_id": "1005007203888912",
+   "sku": null,
+   "title": "Custom Bench Cushions, bay window / bench seat pad, made to size (scre",
+   "slot": "dining-room/bench-pad"
+  },
+  {
+   "item_id": "1005012812239861",
+   "sku": null,
+   "title": "Round Stable Base Natural Wooden Paper Towel Rack, solid wood, Nordic ",
+   "slot": "dining-room/paper-towel-holder"
+  },
+  {
+   "item_id": "1005010093087696",
+   "sku": "12000051116247631",
+   "title": "Boho Chic Wrinkled (ruched) Duvet Cover Set 135x200, 2 pcs, Beige",
+   "slot": "kids/bedding"
+  },
+  {
+   "item_id": "1005012732180502",
+   "sku": "12000059196236244",
+   "title": "Decrohome / JESSANS linen-blend sheer, S Fold heading, 1PC W132xH270 (",
+   "slot": "living-room/curtains"
+  },
+  {
+   "item_id": "1005009501613202",
+   "sku": "12000049297652642",
+   "title": "DYSSEL deco natural linen look, 2. S FOLDED TAPE, LINEN COLOR W132xH27",
+   "slot": "living-room/curtains"
+  },
+  {
+   "item_id": "3256808664091154",
+   "sku": "12000046939876587",
+   "title": "Same losing listing (Jinora), 2PC set W175xH260 Pull pleated Tape",
+   "slot": "living-room/curtains"
+  },
+  {
+   "item_id": "1005009053464203",
+   "sku": "12000047728467291 x2 + 12000047728467289",
+   "title": "Same wabi-sabi listing as a set: 2 x 50x50 White + 1 x 30x50 White, on",
+   "slot": "living-room/cushions"
+  },
+  {
+   "item_id": "1005007185322385",
+   "sku": "12000039735644867",
+   "title": "OTAUTAU linen bean-bag pouf with filling, D30 x H20 (Choice)",
+   "slot": "living-room/pouf"
+  },
+  {
+   "item_id": "1005013083159273",
+   "sku": "12000060294442683",
+   "title": "Faux-jute flatweave rug (polyester, kilim weave, Choice), 200 x 300",
+   "slot": "living-room/rug"
+  },
+  {
+   "item_id": "1005008478624934",
+   "sku": null,
+   "title": "Minimalist solid colour handmade wool rug, Japanese cream (needs API p",
+   "slot": "living-room/rug"
+  }
+ ],
+ "queries": [
+  "matte black stoneware vase 32cm",
+  "grey matte ceramic jar vase 30cm",
+  "water hyacinth basket 38cm cylinder",
+  "seagrass floor basket handles 40cm",
+  "cotton rope basket 38cm with handles",
+  "matte stoneware shallow bowl 22cm oatmeal",
+  "turned oak wooden bowl 20cm",
+  "black wire magazine rack floor",
+  "charcoal felt magazine holder",
+  "seagrass wall basket 40cm",
+  "rice paper pendant lantern 45cm E27 cord set",
+  "knitted pouf cover cotton",
+  "silk pendant lamp wabi sabi 40cm",
+  "fabric drum wall lamp plug switch",
+  "linen table lamp 50cm EU plug"
+ ]
+}
