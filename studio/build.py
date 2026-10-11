@@ -448,17 +448,84 @@ QTY_WHOLE_SET_NAME = [
     re.compile(r"\b(?:two|three|four|five|six)-piece\b|\b\d+\s*-?\s*(?:pcs|pieces)\s*/\s*set", re.I),
 ]
 QTY_COUNT = re.compile(r"set of (\d+)\s*=\s*\d+\s*units|כסט של (\d+) יחידות", re.I)
+# How many pieces the card's cost covers, read from the room SKU (options.default_sku): the supplier's labels of its
+# option values ("1 PC W100cmxH275cm", "1PC (price is per piece)", "2PC W225cm", "4 pcs", "set of 2", "pair").
+# This is the strongest evidence: a SKU that is already a pair or a set is never multiplied by the slot's set size.
+SKU_PIECES = [
+    (re.compile(r"(?<![\d.])(\d{1,2})\s*-?\s*(?:pcs?|pieces?|panels?)\b(?!\s*(?:/|per)\s*(?:colou?r))", re.I), None),
+    (re.compile(r"\bset\s*of\s*(\d{1,2})\b", re.I), None),
+    (re.compile(r"\bpairs?\b|זוג"), 2),
+    (re.compile(r"\bper\s+piece\b|\bsingle\b|פאנל אחד|יחידה אחת"), 1),
+]
+
+
+def sku_pieces(p: dict) -> tuple[int | None, str | None]:
+    """(pieces the room SKU's price covers, the label that says so), or (None, None) when the card has no options or
+    the SKU labels do not say. When labels disagree the largest count wins (the safe side: never sell a pair twice)."""
+    o = p.get("options") if isinstance(p.get("options"), dict) else None
+    if not o:
+        return None, None
+    sku = next((x for x in o.get("skus") or [] if isinstance(x, dict) and x.get("id") == o.get("default_sku")), None)
+    if not sku:
+        return None, None
+    labels = []
+    for a in o.get("axes") or []:
+        if not isinstance(a, dict):
+            continue
+        vid = (sku.get("values") or {}).get(a.get("id"))
+        v = next((x for x in a.get("values") or [] if isinstance(x, dict) and x.get("id") == vid), None)
+        if v:
+            labels += [str(v.get(k)) for k in ("label_src", "label_he") if v.get(k)]
+    for k in ("label", "name", "label_src"):
+        if isinstance(sku.get(k), str):
+            labels.append(sku[k])
+    found = []
+    for lab in labels:
+        for rx, n in SKU_PIECES:
+            m = rx.search(lab)
+            if m:
+                k = n if n else int(m.group(1))
+                if k >= 1:
+                    found.append((k, lab))
+                break
+    if not found:
+        return None, None
+    return max(found, key=lambda x: x[0])
 
 
 def sell_qty_default(p: dict, slot_by_key: dict) -> dict:
-    """Default units per sale. Uses the slot's set_of only when the card says its cost is per piece;
-    when that is unclear the default is 1 and sure=False (the page shows a 'not sure' chip)."""
+    """Default units per sale (units of the card's cost). The room SKU's own labels come first (sku_pieces): a SKU that
+    is one panel in a slot that shows a pair sells 2; a SKU that is already the pair sells 1. Without them, the slot's
+    set_of counts only when the card says its cost is per piece; when that is unclear the default is 1 and sure=False
+    (the page shows a 'not sure' chip)."""
     def set_of(k):
         v = (slot_by_key.get(k) or {}).get("set_of")
         return int(v) if isnum(v) and v > 1 else None
     home = set_of(p.get("_slot_key")) if p.get("_slot_key") else None
     shared = [(set_of(k), k) for k in p.get("_shared_in") or [] if set_of(k)]
     name, notes = p.get("name") or "", p.get("notes") or ""
+    pcs, pcs_label = sku_pieces(p)
+    if pcs is not None:
+        m = QTY_COUNT.search(name) or QTY_COUNT.search(notes)
+        if home:
+            need, why = home, f"העמדה דורשת סט של {home}"
+        elif m:
+            need = int(next(g for g in m.groups() if g))
+            why = f"ההערות אומרות שהמוצר נמכר כסט של {need}"
+        elif shared:
+            need, k = max(shared)
+            why = f"העמדה המשותפת {k} דורשת סט של {need}"
+        else:
+            need, why = None, None
+        unit = "יחידה אחת" if pcs == 1 else f"{pcs} יח'"
+        if not need or need <= 1:
+            return {"qty": 1, "sure": True, "set_of": None, "reason": None, "sku_pieces": pcs}
+        if pcs >= need:
+            return {"qty": 1, "sure": True, "set_of": need, "sku_pieces": pcs,
+                    "reason": f"{why}, והמק\"ט שבחדר כבר כולל {unit} ({pcs_label})"}
+        q = -(-need // pcs)
+        return {"qty": q, "sure": True, "set_of": need, "sku_pieces": pcs,
+                "reason": f"{why}, והמחיר של המק\"ט שבחדר הוא ל{unit} ({pcs_label})"}
     pp = any(r.search(name) or r.search(notes) for r in QTY_PER_PIECE)
     ws_strong = any(r.search(notes) for r in QTY_WHOLE_SET_NOTES)
     ws = ws_strong or any(r.search(name) for r in QTY_WHOLE_SET_NAME)
@@ -886,40 +953,117 @@ def pick_freight(entry: dict):
     return o["usd"], k, o
 
 
+# Freight files, one per supplier, all in the freight-cj.json format (products[id]: options, cheapest,
+# cheapest_under_20d, fastest_under_20d, checked_at, status, error; optional qty = pieces the quote covers, note).
+FREIGHT_FILES = (("freight-cj.json", "cj"), ("freight-zendrop.json", "zendrop"), ("freight-aliexpress.json", "aliexpress"))
+SITE_ECON_TS = ROOT / "site" / "shared" / "src" / "schema" / "economics.ts"
+STOREFRONT_KEYS = ("shipping_fee_economy_ils", "free_shipping_threshold_ils")
+
+
+def storefront_settings(settings_file: dict | None) -> dict:
+    """Customer-facing shipping (what the customer pays on top of the price): data/economics/settings.json `storefront`
+    first, else DEFAULT_SETTINGS in site/shared/src/schema/economics.ts (the site's own defaults), else 29 / 299."""
+    out = {"shipping_fee_economy_ils": 29, "free_shipping_threshold_ils": 299, "src": "ברירת מחדל"}
+    if SITE_ECON_TS.exists():
+        t = SITE_ECON_TS.read_text(encoding="utf-8")
+        m = re.search(r"DEFAULT_SETTINGS[^=]*=\s*\{(.*?)\};", t, re.S)
+        if m:
+            for k in STOREFRONT_KEYS:
+                v = re.search(rf"\b{k}\s*:\s*(\d+(?:\.\d+)?|null)", m.group(1))
+                if v:
+                    out[k] = None if v.group(1) == "null" else float(v.group(1)) if "." in v.group(1) else int(v.group(1))
+            out["src"] = rel(SITE_ECON_TS)
+    sf = (settings_file or {}).get("storefront") if isinstance(settings_file, dict) else None
+    if isinstance(sf, dict) and any(k in sf for k in STOREFRONT_KEYS):
+        for k in STOREFRONT_KEYS:
+            if k in sf and (isnum(sf[k]) or (k == "free_shipping_threshold_ils" and sf[k] is None)):
+                out[k] = sf[k]
+        out["src"] = "data/economics/settings.json"
+    return out
+
+
+def card_sku_shipping(p: dict):
+    """Shipping to Israel of the room SKU written in the card (options.skus[].shipping_il, USD), as a freight entry.
+    Only the structured field: amounts in the notes are not used here (they are often estimates for another SKU)."""
+    o = p.get("options") if isinstance(p.get("options"), dict) else {}
+    sku = next((x for x in o.get("skus") or [] if isinstance(x, dict) and x.get("id") == o.get("default_sku")), None)
+    si = (sku or {}).get("shipping_il") or {}
+    if not (isnum(si.get("amount")) and str(si.get("currency") or "").upper() == "USD"):
+        return None
+    d = days_pair(si.get("days"))
+    opt = {"usd": float(si["amount"]), "name": si.get("method") or si.get("name") or "המק\"ט שבחדר", "days": f"{d[0]}-{d[1]}" if d else None}
+    return {"options": [opt], "cheapest": opt, "cheapest_under_20d": opt if d and d[1] <= 20 else None, "status": "ok"}
+
+
+def _clean_il_value(v):
+    """il_value from the pricing team: {low, typical, high, comps:[{retailer, title, price, url}]}; only https links."""
+    if not isinstance(v, dict):
+        return None
+    out = {k: v[k] for k in ("low", "typical", "high") if isnum(v.get(k))}
+    comps = []
+    for c in v.get("comps") or []:
+        if not isinstance(c, dict):
+            continue
+        url = c.get("url") if isinstance(c.get("url"), str) and c["url"].startswith("https://") else None
+        comps.append({"retailer": str(c.get("retailer") or "")[:80], "title": str(c.get("title") or "")[:200],
+                      "price": c.get("price") if isnum(c.get("price")) else None, "url": url,
+                      "size": str(c.get("size"))[:80] if c.get("size") else None})
+    out["comps"] = comps[:12]
+    for k in ("note", "basis", "date"):
+        if isinstance(v.get(k), str):
+            out[k] = v[k][:400]
+    return out if (len(out) > 1 or comps) else None
+
+
 def load_economics(eco_dir: Path, products: list[dict]) -> dict:
     out = {"dir": rel(eco_dir) if eco_dir.is_relative_to(ROOT) else str(eco_dir), "settings": None, "budget": None,
-           "products": {}, "freight": None, "bundles": None, "files": []}
+           "products": {}, "freight": None, "freight_files": [], "bundles": None, "files": [], "storefront": None}
+    settings_file = None
+    if eco_dir.exists():
+        sp = eco_dir / "settings.json"
+        if sp.exists():
+            settings_file = read_json(sp)
+            out["settings"] = settings_file.get("economics")
+            out["budget"] = settings_file.get("budget")
+            out["files"].append(sp.name)
+    out["storefront"] = storefront_settings(settings_file)
     if not eco_dir.exists():
         return out
-    sp = eco_dir / "settings.json"
-    if sp.exists():
-        d = read_json(sp)
-        out["settings"] = d.get("economics")
-        out["budget"] = d.get("budget")
-        out["files"].append(sp.name)
     bp = eco_dir / "budget.json"
     if out["budget"] is None and bp.exists():
         out["budget"] = read_json(bp)
         out["files"].append(bp.name)
-    manual = {}
+    manual, pricing_meta = {}, None
     pp = eco_dir / "products.json"
     if pp.exists():
         d = read_json(pp)
         manual = d.get("products", d) if isinstance(d, dict) else {}
+        if not isinstance(manual, dict):
+            manual = {}
         out["files"].append(pp.name)
-    freight, fdate = {}, None
-    fp = eco_dir / "freight-cj.json"
-    if fp.exists():
+        pricing_meta = {"file": rel(pp) if pp.is_relative_to(ROOT) else pp.name,
+                        "updated": first_date(str(d.get("updated") or "")) if isinstance(d, dict) else None}
+    out["pricing"] = pricing_meta
+    freights = {}  # source key -> (products dict, file date)
+    for fname, src in FREIGHT_FILES:
+        fp = eco_dir / fname
+        if not fp.exists():
+            continue
         try:
             d = read_json(fp)
-            freight = d.get("products") or {}
+            fprods = d.get("products") or {}
+            fdate = None
             for k in ("updated", "generated_at", "generated", "date", "checked_at", "as_of", "created"):
                 if d.get(k):
                     fdate = first_date(str(d[k]))
                     if fdate:
                         break
             fdate = fdate or git_date(fp) or dt.date.fromtimestamp(fp.stat().st_mtime).isoformat()
-            out["freight"] = {"file": fp.name, "date": fdate, "products": len(freight)}
+            freights[src] = (fprods, fdate)
+            meta = {"file": fp.name, "src": src, "date": fdate, "products": len(fprods), "source": d.get("source")}
+            out["freight_files"].append(meta)
+            if src == "cj":
+                out["freight"] = {k: meta[k] for k in ("file", "date", "products")}
             out["files"].append(fp.name)
         except Exception as e:
             log(f"  ! cannot read {fp.name}: {e}")
@@ -949,7 +1093,8 @@ def load_economics(eco_dir: Path, products: list[dict]) -> dict:
             out["files"].append(bp2.name)
         except Exception as e:
             log(f"  ! cannot read {bp2.name}: {e}")
-    n_cj = n_manual = n_no_fast = n_qty = 0
+    n_fr = {"cj": 0, "zendrop": 0, "aliexpress": 0, "card": 0}
+    n_manual = n_no_fast = n_qty = n_no_route = n_initial = 0
 
     def opt(o):
         if not isinstance(o, dict) or not isnum(o.get("usd")):
@@ -960,34 +1105,65 @@ def load_economics(eco_dir: Path, products: list[dict]) -> dict:
     for p in products:
         pid = p["id"]
         m = manual.get(pid) or {}
+        if not isinstance(m, dict):
+            m = {}
         e = {}
         if isnum(m.get("shipping_cost_usd")):
             e["manual"] = {"shipping_cost_usd": m["shipping_cost_usd"], "date": first_date(str(m.get("updated_at") or ""))}
             n_manual += 1
-        fe = freight.get(pid)
-        if isinstance(fe, dict):
+        sup = p.get("supplier") or {}
+        skey = supplier_key(sup.get("name"), sup.get("product_url"), (p.get("price") or {}).get("currency"))
+        e["sup"] = skey
+        # the supplier's own freight file first, then any file that has the product, then the card's room SKU
+        order = [skey] + [s for _, s in FREIGHT_FILES if s != skey]
+        src, fe, fdate = None, None, None
+        for s in order:
+            if s in freights and isinstance(freights[s][0].get(pid), dict):
+                src, fe, fdate = s, freights[s][0][pid], freights[s][1]
+                break
+        if fe is None:
+            cs = card_sku_shipping(p)
+            if cs:
+                src, fe, fdate = "card", cs, None
+        if fe is not None:
             under = pick_freight(fe)
-            cj = {"cheapest": opt(fe.get("cheapest")), "under20": opt(under[2]) if under else None,
+            fr = {"src": src, "cheapest": opt(fe.get("cheapest")), "under20": opt(under[2]) if under else None,
                   "date": first_date(str(fe.get("checked_at") or fe.get("date") or "")) or fdate, "status": fe.get("status")}
-            if under is None:
-                n_no_fast += 1
-            if cj["cheapest"] is None:  # no explicit cheapest: the cheapest of all options
-                allo = [opt(o) for o in (fe.get("options") or [])] + [cj["under20"], opt(fe.get("fastest_under_20d"))]
+            if fr["cheapest"] is None:  # no explicit cheapest: the cheapest of all options
+                allo = [opt(o) for o in (fe.get("options") or [])] + [fr["under20"], opt(fe.get("fastest_under_20d"))]
                 allo = [o for o in allo if o]
-                cj["cheapest"] = min(allo, key=lambda o: o["usd"]) if allo else None
-            if cj["cheapest"] or cj["under20"]:
-                n_cj += 1
-            e["cj"] = cj
-        for k in ("retail_ils", "compare_at_ils"):
+                fr["cheapest"] = min(allo, key=lambda o: o["usd"]) if allo else None
+            if fe.get("status") == "no_route" or (fr["cheapest"] is None and fr["under20"] is None):
+                fr["status"] = "no_route"  # the supplier returned no shipping method to Israel
+                n_no_route += 1
+            elif under is None:
+                n_no_fast += 1
+            if isnum(fe.get("qty")) and fe["qty"] > 1:
+                fr["quoted_qty"] = int(fe["qty"])
+            if isinstance(fe.get("note"), str) and fe["note"].strip():
+                fr["note"] = fe["note"].strip()[:300]
+            if fr["cheapest"] or fr["under20"]:
+                n_fr[src] += 1
+            e["freight"] = fr
+        for k in ("retail_ils", "compare_at_ils", "customer_total_ils"):
             if isnum(m.get(k)):
                 e[k] = m[k]
+        for k in ("retail_src", "price_note"):
+            if isinstance(m.get(k), str) and m[k].strip():
+                e[k] = m[k].strip()[:400]
+        iv = _clean_il_value(m.get("il_value"))
+        if iv:
+            e["il_value"] = iv
+        if "retail_ils" in e and str(e.get("retail_src") or "").startswith("initial"):
+            n_initial += 1
         q = m.get("sell_qty")
         if isnum(q) and float(q).is_integer() and q >= 1:
             e["sell_qty"] = int(q)
             n_qty += 1
-        if e:
-            out["products"][pid] = e
-    out["counts"] = {"shipping_cj": n_cj, "shipping_manual": n_manual, "no_fast_shipping": n_no_fast, "sell_qty": n_qty,
+        out["products"][pid] = e
+    out["counts"] = {"shipping_cj": n_fr["cj"], "shipping_zendrop": n_fr["zendrop"], "shipping_aliexpress": n_fr["aliexpress"],
+                     "shipping_card": n_fr["card"], "shipping_manual": n_manual, "no_fast_shipping": n_no_fast,
+                     "no_route": n_no_route, "sell_qty": n_qty, "initial_prices": n_initial,
                      "retail": sum(1 for v in out["products"].values() if "retail_ils" in v)}
     return out
 
@@ -1014,6 +1190,9 @@ SUPPLIER_DECISIONS = {
 }
 
 
+MARKET_PAIR = re.compile(r"(?:^|[\s,(])זוג(?:$|[\s,)])")
+
+
 def load_market(eco_dir: Path) -> dict | None:
     """data/economics/market-prices.json -> {categories, products, assumptions} (only what the page shows)."""
     mp = eco_dir / "market-prices.json"
@@ -1025,6 +1204,10 @@ def load_market(eco_dir: Path) -> dict | None:
     cats = {}
     for k, c in (d.get("categories") or {}).items():
         cats[k] = {f: c.get(f) for f in ("label_he", "low", "median", "high", "p75", "band", "n", "confidence", "verdict", "price_for_35pct_median")}
+        # pieces in one market price: "וילונות בד, זוג" / "ציפיות (זוג)" are priced per pair, so a sale of 2 single panels
+        # is one market unit (not two). An explicit "pieces" in the file wins. "זוגי" (double size) is not a pair.
+        pc = c.get("pieces")
+        cats[k]["pieces"] = int(pc) if isnum(pc) and pc >= 1 else (2 if MARKET_PAIR.search(c.get("label_he") or "") else 1)
         cats[k]["sources"] = [{f: s.get(f) for f in ("retailer", "title", "size", "price", "sale_price", "url", "date")}
                               for s in (c.get("sources") or []) if isinstance(s, dict)]
     prods = {}
