@@ -12,10 +12,13 @@ Product images are downloaded once and cached in studio/.cache/, so a second
 build does not hit the network. Frame conversions are cached there too.
 
 Usage: python3 studio/build.py [--offline] [--economics-dir DIR] [--deep-dir DIR] [--dist DIR]
+                               [--furniture-dir DIR] [--suppliers-dir DIR]
   --offline        never download; products without a cached image get a placeholder.
   --economics-dir  read the economics files from another folder (testing).
   --deep-dir       read the deep AliExpress pass from another folder (testing; default data/leads/aliexpress/deep-2026-10).
   --dist           write the build to another folder (testing; default studio/dist).
+  --furniture-dir  read the furniture leads from another folder (testing; default data/leads/furniture-il).
+  --suppliers-dir  read candidates-furniture-*.json from another folder (testing; default data/suppliers).
 
 Only the Python standard library and Pillow are used.
 """
@@ -1472,6 +1475,396 @@ def build_comparison(slots: dict, products: list[dict], slot_by_key: dict, room_
     }
 
 
+# --------------------------------------------------------------------------- furniture (the "ריהוט" screen)
+
+# Furniture leads from Israeli suppliers (studio-rules ג, "מדור ריהוט וספקים ישראליים", 2026-10-11). Records:
+# {supplier_id, supplier_name, supplier_new, website, room, slot, tier, model_name, url, price_ils, price_type,
+#  dimensions_cm, materials, options: {colors: [{label_he, hex}], fabrics, sizes, finishes}, lead_time,
+#  delivery_assembly, photo_type, image_urls, styles, fit_by_style, wow_gate: {applies, passed, failed_checks, note},
+#  standard?, verdict, reason}
+FURN_DIR = ROOT / "data" / "leads" / "furniture-il"
+FURN_EXPRESS = ROOT / "data" / "leads" / "furniture-express" / "models-2026-10-11.json"
+WOW_REVIEW = ROOT / "docs" / "proposals" / "furniture-wow-review-2026-10-11.md"
+SUPPLIERS_DIR = ROOT / "data" / "suppliers"
+OUTREACH_README = ROOT / "docs" / "suppliers" / "outreach" / "README.md"
+# Tiers of the 16 fixed-product slots, docs/proposals/furniture-wow-review-2026-10-11.md §2 (a record's own tier wins)
+TIER_BY_SLOT = {
+    "living-room/sofa": "A", "living-room/armchair": "A", "master/bed": "A", "dining-room/dining-table": "A",
+    "living-room/coffee-table": "B", "dining-room/dining-chairs": "B", "dining-room/dining-bench": "B", "bath/vanity": "B",
+    "work/desk": "B", "work/chair": "B", "kids/bed": "B",
+    "master/nightstands": "C", "hall/console": "C", "hall/bench": "C", "work/shelf": "C", "kids/desk": "C",
+}
+TIER_FALLBACK = {"A": {"he": "גיבור (וואו חובה)", "need": "עוברים את שער הוואו המלא"},
+                 "B": {"he": "משנית בולטת", "need": "צורה פשוטה מספיקה, אבל הביצוע והחומר חייבים להחזיק תקריב: שערים 1, 3 ו-4"},
+                 "C": {"he": "משנית", "need": "רהיט נקי ופשוט שמתאים לפלטה: שערים 1 ו-3"}}
+GATE_SHORT = {1: "צילום אמיתי", 2: "פרופורציות", 3: "חומרים", 4: "ביצוע", 5: "פרט חתימה", 6: "מבחן השער"}
+FURN_WORDS = re.compile(r"ריהוט|רהיט|ספ[הות]|כורס|מיט|שולח|קונסול|שיד|ספסל|ארון|כיסא|כסא|furniture|sofa|bed|table|chair", re.I)
+
+
+def tier_key(v):
+    s = str(v or "").strip().upper()
+    return {"A": "A", "B": "B", "C": "C", "1": "A", "2": "B", "3": "C", "א": "A", "ב": "B", "ג": "C"}.get(s[:1]) if s else None
+
+
+def verdict_class(v) -> str:
+    t = str(v or "").strip().lower()
+    if not t or re.search(r"pending|ממתין|לבדיקה|לא נבדק", t):
+        return "pending"
+    if re.search(r"reject|להוריד|נדחה|נפסל|drop", t):
+        return "reject"
+    if re.search(r"condition|בתנאי|רק בהתאמה|לשמור רק|maybe|אולי", t):
+        return "conditional"
+    if re.search(r"keep|shortlist|best|pass|approve|candidate|לשמור|מומלץ|מועמד|עבר|מתאים", t):
+        return "ok"
+    return "pending"
+
+
+def photo_key(v, *texts) -> str:
+    t = str(v or "").strip().lower()
+    if t in ("real", "photo", "render", "mixed", "none", "unknown"):
+        return "real" if t == "photo" else t
+    t = " ".join([t] + [str(x or "") for x in texts])
+    # "the photo looks like a render" is a render: any mention of a render wins over the word "photo"
+    if re.search(r"render|הדמי", t, re.I):
+        return "render"
+    return "real" if re.search(r"\breal\b|\bphoto\b|אמיתי|אולם|סטודיו|מהסדנה|צילום טלפון", t, re.I) else "unknown"
+
+
+def price_type_key(v) -> str:
+    t = str(v or "").strip().lower()
+    if re.search(r"dealer|wholesale|trade|סוחר|סיטונ", t):
+        return "dealer"
+    if re.search(r"consumer|retail|list|צרכן|באתר", t):
+        return "consumer"
+    return "unknown"
+
+
+def str_list(v) -> list[str]:
+    if v is None:
+        return []
+    if isinstance(v, str):
+        return [x.strip() for x in re.split(r"[;,،]\s*", v) if x.strip()]
+    out = []
+    for x in v if isinstance(v, list) else [v]:
+        if isinstance(x, dict):
+            x = x.get("label_he") or x.get("label") or x.get("name") or ""
+        if str(x).strip():
+            out.append(str(x).strip())
+    return out
+
+
+def norm_options(o) -> dict:
+    if isinstance(o, str):
+        return {"colors": [], "fabrics": [], "sizes": [], "finishes": [], "text": o.strip() or None}
+    o = o if isinstance(o, dict) else {}
+    colors = []
+    for c in o.get("colors") or []:
+        if isinstance(c, dict):
+            hx = c.get("hex") if isinstance(c.get("hex"), str) and re.fullmatch(r"#[0-9A-Fa-f]{6}", c.get("hex") or "") else None
+            lab = str(c.get("label_he") or c.get("label") or c.get("name") or hx or "").strip()
+            if lab or hx:
+                colors.append({"label_he": lab or hx, "hex": hx})
+        elif isinstance(c, str) and c.strip():
+            colors.append({"label_he": c.strip(), "hex": c.strip() if re.fullmatch(r"#[0-9A-Fa-f]{6}", c.strip()) else None})
+    return {"colors": colors, "fabrics": str_list(o.get("fabrics")), "sizes": str_list(o.get("sizes")),
+            "finishes": str_list(o.get("finishes")), "text": str(o.get("text") or o.get("note") or "").strip() or None}
+
+
+def norm_fits(fits, styles) -> tuple[dict, list]:
+    out = {}
+    for k, v in (fits or {}).items() if isinstance(fits, dict) else []:
+        sk = style_key(k)
+        x = to_num(v.get("score") if isinstance(v, dict) else v)
+        if sk and x is not None:
+            out[sk] = x
+    st = [s for s in (style_key(x) for x in (styles or []) if isinstance(x, str)) if s]
+    return out, list(dict.fromkeys(st))
+
+
+def name_token_re(tok: str):
+    return re.compile(r"(?<![\w֐-׿])" + re.escape(tok) + r"(?![\w֐-׿])")
+
+
+def load_wow_review(path: Path) -> dict:
+    """§1 verdict table (furniture-express), §2 tier labels and the wow gate checks."""
+    out = {"file": rel(path) if path.exists() else None, "verdicts": [], "tiers": dict(TIER_FALLBACK), "gate": []}
+    if not path.exists():
+        return out
+    sec = None
+    gate = False
+    for line in path.read_text(encoding="utf-8").splitlines():
+        if line.startswith("## "):
+            sec = (re.match(r"##\s*(\d+)\.", line) or [None, None])[1]
+            gate = False
+            continue
+        if sec == "1":
+            m = re.match(r"^\|\s*(\d+)\s*\|\s*(.+?)\s*\|\s*(.+?)\s*\|\s*(.+?)\s*\|\s*$", line)
+            if m:
+                name = strip_md(m.group(2))
+                out["verdicts"].append({"n": int(m.group(1)), "token": name.split(" (")[0].strip(),
+                                        "where": (re.search(r"\((.+)\)", name) or [None, ""])[1],
+                                        "verdict": strip_md(m.group(3)), "why": strip_md(m.group(4))})
+        elif sec == "2":
+            m = re.match(r"^\|\s*\*\*([אבג])\.\s*(.+?)\*\*\s*(\(.*?\))?\s*\|.*?\|\s*(.+?)\s*\|\s*$", line)
+            if m:
+                k = tier_key(m.group(1))
+                out["tiers"][k] = {"he": m.group(2).strip(), "where": (m.group(3) or "").strip("() ") or None, "need": strip_md(m.group(4))}
+            if line.startswith("**שער הוואו"):
+                gate = True
+                continue
+            if gate:
+                m = re.match(r"^(\d+)\.\s+(.+)$", line)
+                if m:
+                    out["gate"].append({"n": int(m.group(1)), "short": GATE_SHORT.get(int(m.group(1)), m.group(1)), "text": strip_md(m.group(2))})
+                elif line.strip() and out["gate"]:
+                    gate = False
+    return out
+
+
+def coop_state(sup: dict, readme_rows: dict, board_log: list[dict]) -> dict:
+    """The cooperation request (בקשת שת"פ) to one supplier: none / draft / sent / replied, with the evidence.
+    Order: an explicit coop_request / outreach object in the supplier record; the directory status and outreach_log;
+    the outreach README tables; the board log ("נשלח"/"נשלחו" with the supplier's name)."""
+    for k in ("coop_request", "outreach"):
+        o = sup.get(k)
+        if isinstance(o, dict) and o.get("state") in ("none", "draft", "sent", "replied"):
+            tone = o.get("tone") if o.get("tone") in ("positive", "negative", "bounced") else None
+            return {"state": o["state"], "tone": tone, "date": first_date(str(o.get("date") or "")), "note": o.get("note"), "src": k}
+    status = sup.get("status") or ""
+    logs = [x for x in sup.get("outreach_log") or [] if isinstance(x, str)]
+    if status in ("replied_positive", "declined", "not_relevant") or any(re.search(r"ענו|התקשרו|השיבו|replied", x) for x in logs):
+        hit = next((x for x in reversed(logs) if re.search(r"ענו|התקשרו|השיבו|replied", x)), logs[-1] if logs else "")
+        tone = "positive" if status == "replied_positive" else "negative" if status in ("declined", "not_relevant") else None
+        return {"state": "replied", "tone": tone, "date": first_date(hit), "note": hit, "src": "directory.json"}
+    if status == "email_bounced" or any(re.search(r"נשלח|sent|550|לא קיים", x) for x in logs):
+        hit = next((x for x in reversed(logs)), "")
+        return {"state": "sent", "tone": "bounced" if status == "email_bounced" else None, "date": first_date(hit), "note": hit, "src": "directory.json"}
+    names = sup.get("_aliases") or []
+    row = next((readme_rows[a] for a in names if a in readme_rows), None)
+    if row and re.search(r"נשלח", row):
+        return {"state": "sent", "date": first_date(row), "note": row, "src": rel(OUTREACH_README)}
+    for e in reversed(board_log):
+        t = e.get("text") or ""
+        if re.search(r"נשלח", t) and any(name_token_re(a).search(t) for a in names):
+            return {"state": "sent", "date": e.get("date"), "note": t[:220], "src": "status/board.md"}
+    if (row and "טיוטה" in row) or any("טיוטה" in x for x in logs):
+        return {"state": "draft", "date": first_date(row or ""), "note": row if row and "טיוטה" in row else next(x for x in logs if "טיוטה" in x),
+                "src": rel(OUTREACH_README) if row and "טיוטה" in row else "directory.json"}
+    return {"state": "none", "date": None, "note": row, "src": rel(OUTREACH_README) if row else None}
+
+
+def supplier_aliases(name: str, sid: str) -> list[str]:
+    """Short names the outreach files and the board use: 'רהיטי יראון' -> יראון, 'דיבאני סנטר (...)' -> דיבאני סנטר, דיבאני."""
+    out = []
+    base = re.sub(r'בע"מ|בע״מ', "", re.split(r"\s*[(/:]", name or "")[0]).strip(" ,.-")
+    if base:
+        out.append(base)
+        words = base.split()
+        generic = {"רהיטי", "ריהוט", "קבוצת", "יצרני", "תאורה", "חברת"}
+        if len(words) > 1 and words[0] in generic and len(" ".join(words[1:])) >= 3:
+            out.append(" ".join(words[1:]))
+        if len(words) > 1 and words[0] not in generic and len(words[0]) >= 4:
+            out.append(words[0])
+    for m in re.finditer(r"\(([^)]+)\)", name or ""):
+        t = m.group(1).strip()
+        if 3 <= len(t) <= 30 and not re.search(r"\d|בע\"מ|;|,", t):
+            out.append(t)
+    return list(dict.fromkeys(a for a in out if len(a) >= 3))
+
+
+def readme_outreach_rows(path: Path) -> dict:
+    """supplier short name -> the status cell (main table) or the state cell (Gmail round table) of the outreach README."""
+    rows = {}
+    if not path.exists():
+        return rows
+    for line in path.read_text(encoding="utf-8").splitlines():
+        cells = [c.strip() for c in line.strip().strip("|").split("|")] if line.startswith("|") else []
+        if len(cells) >= 7 and re.fullmatch(r"\d+", cells[0]):
+            for a in supplier_aliases(strip_md(cells[1]), ""):
+                rows.setdefault(a, strip_md(cells[5]))
+        elif len(cells) == 3 and cells[0] not in ("ספק", "---") and not set(cells[0]) <= set("- "):
+            for a in supplier_aliases(strip_md(cells[0]), ""):
+                rows[a] = strip_md(cells[2])  # the Gmail round is newer than the main table
+    return rows
+
+
+def read_records(path: Path):
+    d = read_json(path)
+    if isinstance(d, list):
+        return d, {}
+    if isinstance(d, dict):
+        return next((d[k] for k in ("records", "models", "items", "candidates", "results", "suppliers") if isinstance(d.get(k), list)), []), d
+    return [], {}
+
+
+def load_furniture(order: list[str], products: list[dict], directory: dict | None, board_log: list[dict],
+                   furn_dir: Path, sup_dir: Path) -> dict:
+    room_ids = set(order)
+    # the 16 fixed-product slots, in house order
+    slots = []
+    for rid in order:
+        p = ROOT / "data" / "slots" / f"{rid}.json"
+        if not p.exists():
+            continue
+        for s in read_json(p).get("slots") or []:
+            if s.get("kind") == "fixed-product":
+                key = f"{rid}/{s['id']}"
+                slots.append({"key": key, "room": rid, "id": s["id"], "name_he": s.get("name_he"), "tier": TIER_BY_SLOT.get(key),
+                              "as_shown": s.get("as_shown"), "frames": s.get("frames") or [], "sales_note": s.get("sales_note")})
+    slot_keys = {s["key"] for s in slots}
+    review = load_wow_review(WOW_REVIEW)
+    dir_sups = {s["id"]: s for s in (directory or {}).get("suppliers") or [] if isinstance(s, dict) and s.get("id")}
+    cards_by_url = {}
+    for p in products:
+        u = ((p.get("supplier") or {}).get("product_url") or "").strip()
+        if u and p.get("_slot_key") in slot_keys:
+            cards_by_url[u.rstrip("/").lower()] = p
+
+    models, unmatched, warnings, files = [], [], [], []
+
+    def add(rec: dict, src: str, where: str):
+        room = room_key(rec.get("room"), room_ids)
+        slot = str(rec.get("slot") or "").strip()
+        key = f"{room}/{slot}"
+        if not rec.get("model_name"):
+            return
+        if key not in slot_keys:
+            unmatched.append({"where": where, "why": f"עמדת ריהוט לא קיימת: {rec.get('room')}/{slot}", "title": str(rec.get("model_name"))[:120]})
+            return
+        fits, styles = norm_fits(rec.get("fit_by_style"), rec.get("styles"))
+        url = rec.get("url") if isinstance(rec.get("url"), str) and rec["url"].startswith("https://") else None
+        card = cards_by_url.get((url or "").rstrip("/").lower())
+        wg = rec.get("wow_gate") if isinstance(rec.get("wow_gate"), dict) else None
+        tier = tier_key(rec.get("tier")) or TIER_BY_SLOT.get(key)
+        imgs = [u for u in rec.get("image_urls") or [] if isinstance(u, str) and u.startswith("https://")]
+        m = {
+            "id": re.sub(r"[^\w-]+", "-", f"{rec.get('supplier_id') or 'x'}-{key}-{rec.get('sku') or rec.get('model_name')}")[:120],
+            "src": src, "supplier_id": rec.get("supplier_id"), "supplier_name": rec.get("supplier_name"),
+            "supplier_new": bool(rec.get("supplier_new")), "website": rec.get("website"),
+            "room": room, "slot": slot, "key": key, "tier": tier, "model_name": str(rec["model_name"]).strip(), "url": url,
+            "sku": rec.get("sku"), "price_ils": to_num(rec.get("price_ils")), "price_original_ils": to_num(rec.get("price_original_ils")),
+            "price_type": price_type_key(rec.get("price_type")), "price_type_raw": rec.get("price_type"),
+            "dimensions": rec.get("dimensions_cm") if rec.get("dimensions_cm") is not None else rec.get("dimensions"),
+            "materials": rec.get("materials"), "options": norm_options(rec.get("options")),
+            "lead_time": rec.get("lead_time"), "delivery_assembly": rec.get("delivery_assembly") or rec.get("delivery_notes"),
+            "photo_type": "none" if rec.get("image_urls") == [] and not rec.get("photo_type") else photo_key(rec.get("photo_type"), rec.get("image_note"), rec.get("reason") if src == "furniture-express" else None),
+            "image_note": rec.get("image_note"),
+            "image_urls": imgs[:4], "n_images": len(imgs), "styles": styles, "fits": fits,
+            "wow_gate": {"applies": bool(wg.get("applies", tier == "A")), "passed": wg.get("passed") if isinstance(wg.get("passed"), bool) else None,
+                         "failed_checks": [x for x in (wg.get("failed_checks") or []) if isinstance(x, (int, str))],
+                         "note": wg.get("note")} if wg else {"applies": tier == "A", "passed": None, "failed_checks": [], "note": None},
+            "standard": rec.get("standard"), "verdict": rec.get("verdict"), "verdict_class": verdict_class(rec.get("verdict")),
+            "reason": rec.get("reason"), "sourcing_reason": rec.get("sourcing_reason"),
+            "card_id": card["id"] if card else None, "card_status": card.get("status") if card else None,
+        }
+        models.append(m)
+
+    # 1. the new Israeli supplier leads
+    if furn_dir.exists():
+        for f in sorted(furn_dir.glob("*.json")):
+            try:
+                recs, meta = read_records(f)
+            except Exception as e:
+                warnings.append(f"{f.name}: {type(e).__name__}: {e}"[:200])
+                continue
+            for i, r in enumerate(recs):
+                if isinstance(r, dict):
+                    r = dict(r)
+                    for k in ("supplier_id", "supplier_name", "website", "supplier_new"):
+                        if r.get(k) is None and meta.get(k) is not None:
+                            r[k] = meta[k]
+                    add(r, "furniture-il", f"{f.name} #{i + 1}")
+            files.append({"file": f.name, "records": len(recs),
+                          "date": first_date(str(meta.get("updated") or meta.get("date") or "")) or (git_date(f) if f.is_relative_to(ROOT) else None)
+                          or dt.date.fromtimestamp(f.stat().st_mtime).isoformat()})
+    # 2. furniture-express models with the designer's verdicts (§1 of the wow review; the cards' status wins)
+    if FURN_EXPRESS.exists():
+        fx = dir_sups.get("furniture-express") or {}
+        for i, r in enumerate(read_json(FURN_EXPRESS)):
+            if not isinstance(r, dict) or not r.get("model_name"):
+                continue
+            v = next((x for x in review["verdicts"] if name_token_re(x["token"]).search(str(r["model_name"]))), None)
+            r = dict(r, supplier_id="furniture-express", supplier_name=re.sub(r'\s*בע"מ', "", fx.get("name") or "ריהוט אקספרס"),
+                     website=fx.get("website"), supplier_new=False, price_type="consumer",
+                     verdict=(v or {}).get("verdict"), reason=(v or {}).get("why"), sourcing_reason=r.get("reason"))
+            before = len(models)
+            add(r, "furniture-express", f"{FURN_EXPRESS.name} #{i + 1}")
+            if len(models) > before:
+                m = models[-1]
+                m["review_n"] = v["n"] if v else None
+                if m["card_status"] == "rejected":
+                    m["verdict_class"] = "reject"
+                if m["wow_gate"]["applies"] and m["verdict_class"] == "reject":
+                    m["wow_gate"].update(passed=False, note="נדחה בביקורת הוואו של המעצב (2026-10-11)")
+    # dedupe: the same url from two sources keeps the furniture-il record
+    seen, uniq = set(), []
+    for m in models:
+        k = (m["key"], (m["url"] or m["id"]).lower())
+        if k in seen:
+            continue
+        seen.add(k)
+        uniq.append(m)
+    models = uniq
+
+    # suppliers: furniture suppliers in the directory, new candidates files, and anyone the leads name
+    cand_files, cands = [], []
+    if sup_dir.exists():
+        for f in sorted(sup_dir.glob("candidates-furniture-*.json")):
+            try:
+                recs, meta = read_records(f)
+            except Exception as e:
+                warnings.append(f"{f.name}: {type(e).__name__}: {e}"[:200])
+                continue
+            cand_files.append({"file": f.name, "records": len(recs)})
+            cands += [dict(r, _file=f.name) for r in recs if isinstance(r, dict) and r.get("id")]
+    by_sup: dict[str, list] = {}
+    for m in models:
+        by_sup.setdefault(m["supplier_id"] or m["supplier_name"] or "?", []).append(m)
+    sups = {}
+    for sid, s in dir_sups.items():
+        if s.get("section") == "furniture_il" or (s.get("section") == "general_il" and FURN_WORDS.search(" ".join(s.get("categories") or []))) or sid in by_sup:
+            sups[sid] = dict(s, _new=False)
+    for c in cands:
+        if c["id"] in sups:
+            sups[c["id"]].update({k: v for k, v in c.items() if v not in (None, "", []) and k not in ("id",)})
+        else:
+            sups[c["id"]] = dict(c, _new=True)
+    for sid, ms in by_sup.items():
+        if sid not in sups:
+            m0 = ms[0]
+            sups[sid] = {"id": sid, "name": m0["supplier_name"] or sid, "website": m0["website"], "_new": bool(m0["supplier_new"])}
+    readme_rows = readme_outreach_rows(OUTREACH_README)
+    sup_out = []
+    for sid, s in sups.items():
+        s["_aliases"] = supplier_aliases(s.get("name") or "", sid)
+        ms = by_sup.get(sid, [])
+        fit = s.get("nordic_fit")
+        c = s.get("contact") if isinstance(s.get("contact"), dict) else {}
+        sup_out.append({
+            "id": sid, "name": s.get("name") or sid, "website": s.get("website"), "new": bool(s.get("_new")),
+            "section": s.get("section"), "type": s.get("type"), "location": s.get("location") or s.get("country"),
+            "categories": [x for x in s.get("categories") or [] if isinstance(x, str)],
+            "styles": [x for x in (style_key(y) for y in s.get("styles") or [] if isinstance(y, str)) if x],
+            "price_level": s.get("price_level"), "fit": fit.get("score") if isinstance(fit, dict) else fit,
+            "status": s.get("status"), "why": s.get("why"), "b2b_signals": s.get("b2b_signals"),
+            "contact": {k: v for k, v in c.items() if isinstance(v, str)} if c else ({"text": s["contact"]} if isinstance(s.get("contact"), str) else {}),
+            "log": [x for x in s.get("outreach_log") or [] if isinstance(x, str)][-4:],
+            "coop": coop_state(s, readme_rows, board_log), "file": s.get("_file"),
+            "n_models": len(ms), "n_ok": sum(1 for m in ms if m["verdict_class"] in ("ok", "conditional")),
+        })
+    order_state = {"replied": 0, "sent": 1, "draft": 2, "none": 3}
+    sup_out.sort(key=lambda x: (-x["n_models"], order_state.get(x["coop"]["state"], 9), -(x["fit"] if isnum(x["fit"]) else -1), x["name"]))
+    log(f"  furniture: {len(slots)} slots · {len(models)} models ({sum(1 for m in models if m['src'] == 'furniture-il')} from {len(files)} furniture-il files,"
+        f" {sum(1 for m in models if m['src'] == 'furniture-express')} furniture-express) · {len(sup_out)} suppliers ({len(cands)} from candidates files)"
+        f" · unmatched {len(unmatched)}" + ("" if furn_dir.exists() else f" (no {rel(furn_dir) if furn_dir.is_relative_to(ROOT) else furn_dir} yet)"))
+    for w in warnings:
+        log(f"  ! furniture file {w}")
+    return {"slots": slots, "models": models, "suppliers": sup_out, "tiers": review["tiers"], "gate": review["gate"],
+            "sources": {"furniture_il": {"dir": rel(furn_dir) if furn_dir.is_relative_to(ROOT) else str(furn_dir), "present": bool(files), "files": files},
+                        "express": rel(FURN_EXPRESS) if FURN_EXPRESS.exists() else None, "review": review["file"],
+                        "candidates": cand_files, "unmatched": unmatched[:60], "n_unmatched": len(unmatched), "warnings": warnings}}
+
+
 # --------------------------------------------------------------------------- main
 
 def main() -> int:
@@ -1483,6 +1876,11 @@ def main() -> int:
     deep_dir = DEEP_DIR
     if "--deep-dir" in sys.argv:  # for testing the comparison screen with a fixture (studio/tests/fixtures/)
         deep_dir = Path(sys.argv[sys.argv.index("--deep-dir") + 1]).resolve()
+    furn_dir, sup_dir = FURN_DIR, SUPPLIERS_DIR
+    if "--furniture-dir" in sys.argv:  # testing: furniture leads from another folder (studio/tests/fixtures/furniture-il)
+        furn_dir = Path(sys.argv[sys.argv.index("--furniture-dir") + 1]).resolve()
+    if "--suppliers-dir" in sys.argv:  # testing: candidates-furniture-*.json from another folder
+        sup_dir = Path(sys.argv[sys.argv.index("--suppliers-dir") + 1]).resolve()
     if "--dist" in sys.argv:  # build somewhere else (the smoke test builds the fixture into its own folder)
         DIST = Path(sys.argv[sys.argv.index("--dist") + 1]).resolve()
     t0 = time.time()
@@ -1536,6 +1934,8 @@ def main() -> int:
     if suppliers:
         log(f"  suppliers: {len((suppliers.get('directory') or {}).get('suppliers') or [])} in the directory · {len((suppliers.get('access') or {}).get('options') or [])} access options")
     comparison = build_comparison(slots, products, slot_by_key, order, deep_dir)
+    dir_raw = read_json(SUPPLIERS_DIR / "directory.json") if (SUPPLIERS_DIR / "directory.json").exists() else None
+    furniture = load_furniture(order, products, dir_raw, board["log"], furn_dir, sup_dir)
     qa = load_reports(["assets/qa/*.md", "qa/reports/*.md"], "qa")
     leads = load_reports(["data/leads/**/*.md"], "lead")
 
@@ -1580,6 +1980,11 @@ def main() -> int:
             "standards": p["_standards"], "img": p["_img"], "links": p["_links"], "lead": p["_lead"],
             "sell_qty_default": p["_sell_qty"],
         })
+        # supplier options (studio rules ג, 2026-10-11): the products screen shows how many; the SKU list stays in the card
+        opts = q.pop("options", None)
+        if isinstance(opts, dict):
+            q["options_n"] = len(opts.get("skus") or [])
+            q["options_axes"] = [a.get("name_he") for a in opts.get("axes") or [] if isinstance(a, dict)]
         out_products.append(q)
 
     commit = git("rev-parse", "--short", "HEAD").strip() or None
@@ -1613,6 +2018,7 @@ def main() -> int:
         "styles": styles,
         "suppliers": suppliers,
         "comparison": comparison,
+        "furniture": furniture,
         "reports": qa,
         "leads": leads,
     }

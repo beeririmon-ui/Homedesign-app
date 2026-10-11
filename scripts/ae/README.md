@@ -50,12 +50,15 @@ python3 scripts/ae/auth.py forget    # מחיקת הטוקן השמור
 | `specialinfo <id> [--country IL]` | `aliexpress.ds.product.specialinfo.get` | תעודות (CE ועוד) כפי שהמוכר מצהיר. **לא מורשה לאפליקציה שלנו (2026-10-11): `APPKEY_NOT_ALLOWED`**, ולכן גם `card --certs` נכשל |
 | `category [--id ID]` | `aliexpress.ds.category.get` | שם קטגוריה לפי `cateId` מהחיפוש |
 | `card <id> --slot <room>/<slot> [--out נתיב] [--sku ID] [--certs] [--no-freight]` | מוצר + משלוח (+ תעודות) | כותב כרטיס לפי `data/product-card.schema.json` ורושם במרשם כ-`card`. ראו 3.1 |
+| `backfill-options [card.json ...]` | מטמון בלבד | בונה `options` (כל ה-SKU) לכרטיסי AliExpress קיימים מתשובות `product` השמורות ב-`data/sources/aliexpress/<id>.json`. בלי קריאה ובלי תקציב. כרטיס שכבר יש בו options נשאר כמו שהוא (`--force` בונה מחדש רק `source: "api"`) |
 | `check <id> [...]` / `mark <id> --status ... --reason "..."` | מרשם בלבד | בלי קריאה |
 
 `scripts/sourcing/aliexpress_source.py` הוא כיסוי דק לאותן פקודות (`image` = ‏`image-search`), כדי שכל המקורות ייראו אותו דבר.
 
 ### 3.1 מה `card` ממלא ומה לא
 ממלא מה-API בלבד, בלי להמציא: שם, ‏`supplier` (‏AliExpress, ‏`https://www.aliexpress.com/item/<id>.html`, ‏SKU שנבחר, דירוג המוצר), מחיר ה-SKU (הזול במלאי, או `--sku`) בדולר כפי שחזר, משלוח לישראל (הזול: ימים; הזול והמהיר ב-notes), תמונות (`usage_rights: unclear`), חומרים אם מופיעים במאפיינים, ‏`placement` מקובץ העמדות, ואם `--certs`: ‏`safety.certificates`. **לא ממלא** צבעים (HEX), משקל ויזואלי, מידות המוצר (רק האריזה, ב-notes) וטקסטורה: הם `null`, וה-notes פותחים ב-"DRAFT". sourcing-agent משלים אותם מהתמונות לפני QA. המזהה: `<slot>-aliexpress-<מילים מהכותרת>` (אפשר `--id`).
+
+**אפשרויות (2026-10-11, חוקי הסטודיו ג):** `card` כותב גם `options`: כל ה-SKU של המוצר מ-`ae_item_sku_info_dtos` (שם הציר מ-`sku_property_name`, התווית מ-`property_value_definition_name`), מחיר, מלאי ותמונה לכל SKU, ומשלוח לישראל ל-SKU שיש לו הצעה שמורה. ‏`default_sku` הוא ה-SKU שנבחר (‏`--sku`), והוא היחיד עם `in_room: true`. המיפוי והבדיקה: `scripts/sourcing/options.py`.
 
 דוגמת סבב:
 ```bash

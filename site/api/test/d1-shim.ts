@@ -3,7 +3,7 @@
  * The real thing (workerd + Miniflare D1) is exercised by the e2e suite through `wrangler dev`.
  */
 import { DatabaseSync, type SQLInputValue } from 'node:sqlite';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -71,6 +71,10 @@ const here = dirname(fileURLToPath(import.meta.url));
 /** Applies migrations and the seed SQL built from a catalog. */
 export function migrate(d1: D1Database, seedSql?: string): void {
   const raw = (d1 as unknown as { _raw: DatabaseSync })._raw;
-  raw.exec(readFileSync(resolve(here, '../migrations/0001_init.sql'), 'utf8'));
+  const dir = resolve(here, '../migrations');
+  for (const f of readdirSync(dir)
+    .filter((n) => n.endsWith('.sql'))
+    .sort())
+    raw.exec(readFileSync(resolve(dir, f), 'utf8'));
   if (seedSql) raw.exec(seedSql.replace('PRAGMA defer_foreign_keys = ON;', ''));
 }

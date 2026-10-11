@@ -17,6 +17,8 @@
 | `aliexpress_source.py` | כיסוי דק ל-`scripts/ae/ds.py` (הלקוח האמיתי, 2026-10-10): search / image / product / freight / card / check / mark. בלי AE_DS_APP_KEY ו-AE_DS_APP_SECRET מדפיס "not configured" |
 | `google_vision_source.py` | שלד. רק בודק אם משתנה הסביבה קיים ומדפיס "not configured" |
 | `build_seen.py` | בונה מחדש את המרשם מהכרטיסים ומקובצי `data/leads/**`. בטוח להרצה חוזרת: ממזג ולא מוחק |
+| `options.py` | כל האפשרויות של הספק בכרטיס (`options`, חוקי הסטודיו ג, 2026-10-11): מיפוי SKU לצירים ולתוויות בעברית, בדיקה (`validate`) וכתיבה לכרטיס בלי לגעת בשאר הקובץ. ראו "אפשרויות" למטה |
+| `test_options.py` | בדיקות יחידה למיפוי: `python3 -I scripts/sourcing/test_options.py` |
 
 ## החוק
 1. **לפני שפותחים פריט, בודקים במרשם.** `cj_source.py product` עושה את זה לבד, ומדלג על כל מה שכבר נראה. אל תקראו ל-`scripts/cj.py` ישירות.
@@ -65,6 +67,25 @@ python3 scripts/sourcing/cj_source.py check 2608020808091620300 CJYD2915383
 - `image` עדיין לא מחובר. `source` (בקשת Sourcing ל-CJ) מחובר מ-2026-10-10 ונשלח רק עם `--approved "<מזהה ההחלטה>"` (למשל AC1). כל בקשה נרשמת במרשם כ-`cj-sourcing:<cjSourcingId>` ובמטמון `data/sources/cj-sourcing/`; הסטטוס נבדק ב-`source-status <id> ...` (עד 100 בקריאה, 50 נקודות). **מגבלה (אומתה 2026-10-10): 5 בקשות Sourcing ביום גם ב-API** (הבקשה השישית נדחית, קוד 1600000). תור של בקשות: `source-batch data/leads/cj/sourcing-requests-<date>.json --approved "<החלטה>" --count 5` שולח את הרשומות במצב `pending` ומעדכן את הקובץ.
 - מטמון טרי לא עולה כלום: מוצר 30 יום, משלוח 14 יום, חיפוש 7 ימים.
 - בסיכום הסבב כותבים: כמה קריאות ונקודות (מ-`budget.py status`), וכמה פריטים דולגו בזכות המרשם.
+
+## אפשרויות הספק בכרטיס (`options`, 2026-10-11)
+חוקי הסטודיו ג, "כל האפשרויות של הספק בדף המוצר": הכרטיס שומר את כל ה-SKU של המוצר (מידה, אורך, צבע, דוגמה, גימור, כמות), ודף המוצר מציג את כולם. החדר מציג רק את `default_sku` (‏`in_room`), והמחיר בראש הכרטיס הוא שלו. המבנה: `data/product-card.schema.json`.
+```bash
+# AliExpress: `ds.py card` כותב options לבד (default_sku = ה-SKU שנבחר ב---sku). לכרטיסים קיימים, מהמטמון, בלי קריאה:
+python3 -I scripts/ae/ds.py backfill-options --dry-run
+python3 -I scripts/ae/ds.py backfill-options
+# CJ: אין כותב כרטיסים; אחרי שכרטיס נכתב ביד (מתשובת `product` השמורה):
+python3 -I scripts/sourcing/cj_source.py options <pid> --sku <variantSku>     # מדפיס את האובייקט, בלי קריאה
+python3 -I scripts/sourcing/cj_source.py backfill-options                       # כל כרטיסי CJ, מהמטמון, בלי קריאה
+python3 -I scripts/sourcing/cj_source.py import-cache <dir>                     # תשובות product שנשמרו מחוץ לריפו -> data/sources/cj/
+# בדיקה וסיכום, בלי רשת:
+python3 -I scripts/sourcing/options.py validate
+python3 -I scripts/sourcing/options.py summary
+```
+- **כרטיס שכבר יש בו `options` לא נדרס** (נאסף ביד או אצר אותו sourcing-agent). `--force` בונה מחדש רק `source: "api"`; ‏`source: "manual"` לא נדרס אף פעם.
+- המיפוי: הערכים קובעים את הציר יותר מהשם שהמוכר נתן ("Color: 16cm" הוא מידה, "Size: Warm White 3000K" הוא גוון אור). ציר עם ערך אחד לא נשמר (אין מה לבחור). "Ships From" ו"תקע" (US/EU/UK) אינם בחירה של הלקוח: נשארים רק ה-SKU עם המקור והתקע של ה-SKU שבחדר. ערכים כמו "Contact us" ו-"Custom size" לא נשמרים (אינם מוצר שאפשר להזמין). תוויות בעברית לצבעים, מידות, כמויות וסוגי תלייה מוכרים; מה שלא מוכר נשאר כמו אצל הספק (ב-`label_he`). ה-HEX של צבע נגזר משם הצבע (קירוב), לא מהתמונה.
+- **ב-CJ** ‏`supplier.sku` הוא לפעמים מק"ט המוצר ולא של הווריאציה. ה-SKU שבחדר נמצא כך: מק"ט הווריאציה, ה-vid ב-`data/economics/freight-cj.json`, ה-`vid ... ('<variantKey>')` הראשון בהערות, ואז הווריאציה היחידה במחיר הכרטיס. אם אף אחד לא מתאים, הכרטיס מדולג ומדווח.
+- משלוח לכל SKU (`shipping_il`) נכתב רק כשיש הצעת משלוח שמורה ל-SKU הזה; בלעדיו האתר משתמש במשלוח של המוצר.
 
 ## תור העדיפויות (`gaps.py`)
 `priority = (6 − candidates) × room_weight × style_match − penalty`

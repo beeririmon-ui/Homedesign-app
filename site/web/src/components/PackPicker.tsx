@@ -13,15 +13,21 @@ type Props = {
   id: string;
   /** dark glass surface (the variant wheel) instead of the page */
   onStage?: boolean;
+  /** the chosen supplier option's prices (2026-10-11), when they differ from the product's */
+  prices?: { set: number; unit: number | null; unitEstimated: boolean };
 };
 
-export function PackPicker({ p, value, onChange, id, onStage }: Props) {
+export function PackPicker({ p, value, onChange, id, onStage, prices }: Props) {
   const pack = p.pack;
   if (!pack) return null;
-  const perPiece = Math.ceil(p.price_agorot / pack.set_qty / 100) * 100;
+  const setPrice = prices?.set ?? p.price_agorot;
+  const unitPrice = prices ? prices.unit : pack.unit_price_agorot;
+  if (unitPrice === null) return null;
+  const unitEstimated = prices?.unitEstimated ?? pack.unit_price_estimated;
+  const perPiece = Math.ceil(setPrice / pack.set_qty / 100) * 100;
   const options: { v: Pack; title: string; price: number; hint: string }[] = [
-    { v: 'set', title: `סט של ${pack.set_qty}`, price: p.price_agorot, hint: `${formatIls(perPiece)} לפריט, כמו בתמונה` },
-    { v: 'unit', title: 'יחידה אחת', price: pack.unit_price_agorot, hint: pack.unit_price_estimated ? 'מחיר משוער' : 'פריט בודד' },
+    { v: 'set', title: `סט של ${pack.set_qty}`, price: setPrice, hint: `${formatIls(perPiece)} לפריט, כמו בתמונה` },
+    { v: 'unit', title: 'יחידה אחת', price: unitPrice, hint: unitEstimated ? 'מחיר משוער' : 'פריט בודד' },
   ];
   return (
     <div class={`pack-picker${onStage ? ' on-stage' : ''}`} role="radiogroup" aria-labelledby={`${id}-label`}>

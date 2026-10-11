@@ -9,6 +9,7 @@ type LineRow = {
   variant_id: string;
   product_id: string;
   name_he: string;
+  option_he: string | null;
   pack: Pack;
   qty: number;
   retail_agorot: number;
@@ -34,12 +35,21 @@ export async function openCartOr404(db: D1Database, id: string): Promise<void> {
   if (row.status !== 'open' || row.expires_at < nowIso()) throw new HttpError(409, 'cart_closed');
 }
 
+/**
+ * A variant's prices: its own when it is a supplier option with a price (migration 0002), else the product's.
+ * Used by every query that prices a cart line, so the cart, the checkout and the order agree.
+ */
+export const VARIANT_PRICE_SQL = `COALESCE(v.retail_agorot, p.retail_agorot) AS retail_agorot,
+       CASE WHEN v.retail_agorot IS NULL THEN p.unit_retail_agorot ELSE v.unit_retail_agorot END AS unit_retail_agorot,
+       COALESCE(v.unit_price_estimated, p.unit_price_estimated) AS unit_price_estimated,
+       COALESCE(v.price_provisional, p.price_provisional) AS price_provisional`;
+
 /** Prices always come from D1. Lines whose product is no longer visible are dropped from the view. */
 export async function readCart(db: D1Database, id: string): Promise<Cart> {
   const { results } = await db
     .prepare(
-      `SELECT ci.variant_id, p.id AS product_id, p.name_he, ci.pack, ci.qty, p.retail_agorot, p.unit_retail_agorot,
-              p.unit_price_estimated, p.sell_qty, p.price_provisional
+      `SELECT ci.variant_id, p.id AS product_id, p.name_he, v.option_label_he AS option_he, ci.pack, ci.qty, p.sell_qty,
+              ${VARIANT_PRICE_SQL}
        FROM cart_items ci
        JOIN product_variants v ON v.id = ci.variant_id AND v.active = 1
        JOIN products p ON p.id = v.product_id AND p.visible = 1 AND p.retail_agorot IS NOT NULL
@@ -58,6 +68,7 @@ export async function readCart(db: D1Database, id: string): Promise<Cart> {
         variant_id: r.variant_id,
         product_id: r.product_id,
         name_he: r.name_he,
+        option_he: r.option_he,
         pack: r.pack,
         pack_qty: unit ? 1 : r.sell_qty,
         qty: r.qty,
@@ -82,7 +93,7 @@ export async function setCartItem(db: D1Database, cartId: string, variantId: str
   } else {
     const row = await db
       .prepare(
-        `SELECT p.unit_retail_agorot FROM product_variants v JOIN products p ON p.id = v.product_id
+        `SELECT ${VARIANT_PRICE_SQL} FROM product_variants v JOIN products p ON p.id = v.product_id
          WHERE v.id = ? AND v.active = 1 AND p.visible = 1 AND p.retail_agorot IS NOT NULL`,
       )
       .bind(variantId)

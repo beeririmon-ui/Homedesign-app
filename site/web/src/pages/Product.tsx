@@ -1,4 +1,4 @@
-import { useState } from 'preact/hooks';
+import { useEffect, useState } from 'preact/hooks';
 import type { Pack, PublicProduct } from '@hd/shared';
 import { packLabelHe } from '@hd/shared/packs';
 import { product, slotOf } from '../catalog';
@@ -7,17 +7,25 @@ import { ProductGallery } from '../components/ProductGallery';
 import { addToCart, cartBusy } from '../state/cart';
 import { navigate } from '../router';
 import { pendingOpen } from '../state/room';
-import { PackPicker, packPrice } from '../components/PackPicker';
+import { PackPicker } from '../components/PackPicker';
 import { SafetyRow } from '../components/SafetyRow';
+import { OptionPicker } from '../components/OptionPicker';
+import { defaultVariantId, variantPackPrice, variantView } from '../variants';
 
 export function Product({ p }: { p: PublicProduct }) {
   const [qty, setQty] = useState(1);
   // P1: the set is the default; a single piece is the other choice (only for products sold as a set)
   const [pack, setPack] = useState<Pack>('set');
-  const price = packPrice(p, pack);
-  const estimated = pack === 'unit' && !!p.pack?.unit_price_estimated;
+  // supplier options (2026-10-11): the room's option first; the customer may choose any other
+  const [variantId, setVariantId] = useState(() => defaultVariantId(p));
+  useEffect(() => {
+    setVariantId(defaultVariantId(p));
+  }, [p.id]);
+  const v = variantView(p, variantId) ?? variantView(p)!;
+  const price = variantPackPrice(v, pack);
+  const estimated = pack === 'unit' && v.unit_price_estimated;
   const where = slotOf(p)!;
-  const images = galleryImages(p);
+  const images = galleryImages(p, v.variant_id);
   const dims = [p.dimensions_cm.width, p.dimensions_cm.depth, p.dimensions_cm.height].filter((x): x is number => typeof x === 'number');
   const showInRoom = () => {
     pendingOpen.value = { slot: where.slot.id, option: where.option.position };
@@ -51,10 +59,10 @@ export function Product({ p }: { p: PublicProduct }) {
             ) : null}
           </div>
           <div class="price-row" aria-live="polite">
-            <Price class="price-big" agorot={price} provisional={p.price_provisional && !estimated} />
+            <Price class="price-big" agorot={price} provisional={v.price_provisional && !estimated} />
             {estimated ? <span class="badge badge-temp">מחיר משוער</span> : null}
             {p.pack ? <span class="small">{packLabelHe(pack, p.pack.set_qty)}</span> : null}
-            {p.compare_at_agorot && pack === 'set' ? (
+            {p.compare_at_agorot && pack === 'set' && v.in_room ? (
               <span class="price-old">
                 <span class="sr-only">מחיר קודם: </span>
                 <Price agorot={p.compare_at_agorot} />
@@ -63,7 +71,14 @@ export function Product({ p }: { p: PublicProduct }) {
             <span class="small muted">כולל מע"מ</span>
           </div>
           <p>{p.description_he}</p>
-          <PackPicker p={p} value={pack} onChange={setPack} id={`pack-${p.id}`} />
+          <OptionPicker p={p} value={v.variant_id} onChange={setVariantId} id={`opt-${p.id}`} />
+          <PackPicker
+            p={p}
+            value={pack}
+            onChange={setPack}
+            id={`pack-${p.id}`}
+            prices={{ set: v.price_agorot, unit: v.unit_price_agorot, unitEstimated: v.unit_price_estimated }}
+          />
           <div>
             <h2 class="small" style={{ fontFamily: 'var(--f-body)', fontWeight: 600, marginBottom: 8 }}>
               וריאציות בעמדה
@@ -94,14 +109,16 @@ export function Product({ p }: { p: PublicProduct }) {
             {dims.length ? (
               <>
                 <dt>מידות</dt>
-                <dd>{dims.join(' × ')} ס"מ (לפי הספק)</dd>
+                <dd>
+                  {dims.join(' × ')} ס"מ (לפי הספק{v.in_room ? '' : ', של האפשרות שבחדר'})
+                </dd>
               </>
             ) : null}
-            {p.shipping_days ? (
+            {v.shipping_days ? (
               <>
                 <dt>זמן אספקה</dt>
                 <dd>
-                  {p.shipping_days[0]}–{p.shipping_days[1]} ימים במשלוח החסכוני (הערכה של הספק)
+                  {v.shipping_days[0]}–{v.shipping_days[1]} ימים במשלוח החסכוני (הערכה של הספק)
                 </dd>
               </>
             ) : null}
@@ -129,10 +146,18 @@ export function Product({ p }: { p: PublicProduct }) {
             <button
               type="button"
               class="btn btn-primary"
-              disabled={cartBusy.value}
-              onClick={() => void addToCart(p.variants[0]!.id, p.name_he, qty, pack, p.pack ? packLabelHe(pack, p.pack.set_qty) : undefined)}
+              disabled={cartBusy.value || !v.available}
+              onClick={() =>
+                void addToCart(
+                  v.variant_id,
+                  p.name_he,
+                  qty,
+                  pack,
+                  [v.option_he, p.pack ? packLabelHe(pack, p.pack.set_qty) : null].filter(Boolean).join(', ') || undefined,
+                )
+              }
             >
-              הוספה לסל
+              {v.available ? 'הוספה לסל' : 'אזל אצל הספק'}
             </button>
             <button type="button" class="btn btn-ghost" onClick={showInRoom}>
               הצגה בחדר

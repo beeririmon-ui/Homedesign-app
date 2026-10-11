@@ -7,8 +7,21 @@ import type { Scene } from './engine/types';
 
 export const catalog = catalogJson as unknown as PublicCatalog;
 /** The supplier's original photo of a product, served from our media (FR-I; tools/supplier-images.ts). */
-const supplierImages = (supplierJson as unknown as SupplierImageManifest).products;
+const supplierManifest = supplierJson as unknown as SupplierImageManifest;
+const supplierImages = supplierManifest.products;
 export const supplierImage = (id: string): SupplierImage | null => supplierImages[id] ?? null;
+/** The supplier's picture of option `index` (in the product's options order); the Artifact ships only some of them. */
+export function optionImage(productId: string, index: number): SupplierImage | null {
+  const o = supplierManifest.options?.[productId];
+  const f = o ? o.files[o.sku[index] ?? -1] : undefined;
+  if (!f || (__ARTIFACT__ && !f.artifact)) return null;
+  return {
+    src: `products/${productId}/${f.name}.${supplierManifest.width}`,
+    width: f.width,
+    height: f.height,
+    usage_rights: supplierImages[productId]?.usage_rights ?? 'unclear',
+  };
+}
 const fullScene = sceneJson as unknown as Scene;
 /**
  * The artifact preview ships a reduced media set (≤ 200 files, ≤ 12 MB): WebP only, layers at one width (lo),

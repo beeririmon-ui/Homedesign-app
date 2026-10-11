@@ -13,7 +13,8 @@ Shared by the card writers and their no-API backfills:
                                      shipping_il} -> (options, None) or (None, reason)
   validate(options, card=None)       -> (errors, warnings); errors mirror the JSON schema plus the cross-field rules
   write_options(path, options)       splices the "options" member into the card text (the rest of the file is kept
-                                     byte for byte); never replaces options whose source is "manual"
+                                     byte for byte); a card that already has options keeps them (force replaces
+                                     source "api", never "manual")
 
 CLI (no network):
   python3 -I scripts/sourcing/options.py validate [card.json ...]   every card under data/products when no path
@@ -64,6 +65,20 @@ COLORS = {
     "wine": ("יין", "#6E2A35"), "wine red": ("אדום יין", "#6E2A35"), "burgundy": ("בורדו", "#6D2232"), "orange": ("כתום", "#D9822B"),
     "rust": ("חלודה", "#A4532D"), "terracotta": ("טרקוטה", "#B5653F"), "yellow": ("צהוב", "#E3C34F"), "mustard": ("חרדל", "#C49A2C"),
     "purple": ("סגול", "#6E4F86"), "lavender": ("לבנדר", "#B7A6CC"), "coral": ("אלמוג", "#E07C66"),
+    "grass green": ("ירוק דשא", "#7A9A4E"), "bean green": ("ירוק אפונה", "#9DAE7C"), "matcha green": ("ירוק מאצ'ה", "#A3B07A"),
+    "matcha": ("מאצ'ה", "#A3B07A"), "olive green": ("ירוק זית", "#77784A"), "dark green": ("ירוק כהה", "#2F4A35"),
+    "moss green": ("ירוק טחב", "#6B7046"), "moss": ("טחב", "#6B7046"), "pure white": ("לבן", "#F6F5F2"), "pure black": ("שחור", "#151515"),
+    "milky white": ("לבן חלבי", "#F1ECE2"), "grayish white": ("לבן אפרפר", "#E4E2DD"), "greyish white": ("לבן אפרפר", "#E4E2DD"),
+    "gray blue": ("כחול אפרפר", "#7D8FA3"), "grey blue": ("כחול אפרפר", "#7D8FA3"), "blue gray": ("כחול אפרפר", "#7D8FA3"),
+    "blue grey": ("כחול אפרפר", "#7D8FA3"), "khaki camel": ("קאמל", "#B8915F"), "earthy yellow": ("צהוב אדמה", "#C9A35A"),
+    "coral red": ("אדום אלמוג", "#D2604F"), "rose red": ("אדום ורד", "#B9505F"), "mustard yellow": ("צהוב חרדל", "#C49A2C"),
+    "original cotton color": ("כותנה טבעית", "#E6DCC8"), "original cotton": ("כותנה טבעית", "#E6DCC8"), "original": ("טבעי", None),
+    "light beige gray": ("אפור-בז' בהיר", "#C9C2B6"), "beige gray": ("אפור-בז'", "#B5AD9F"), "beige khaki": ("חאקי בהיר", "#C9B994"),
+    "silver gray": ("אפור כסוף", "#A9A9A6"), "silver grey": ("אפור כסוף", "#A9A9A6"), "medium gray": ("אפור בינוני", "#8E8E8B"),
+    "medium grey": ("אפור בינוני", "#8E8E8B"), "metallic gray": ("אפור מתכתי", "#7F8285"), "smoke gray": ("אפור עשן", "#8A8A88"),
+    "dark blue": ("כחול כהה", "#25344F"), "ice blue": ("כחול קרח", "#BFD3DE"), "light coffee": ("קפה בהיר", "#A07E62"),
+    "truffle brown": ("חום כמהין", "#5B4636"), "earthy orange": ("כתום אדמה", "#C0703C"), "apricot pink": ("ורוד משמש", "#E9B9A4"),
+    "black gold": ("שחור-זהב", "#2A2620"), "white gold": ("לבן-זהב", "#EFE8D8"), "rose gold": ("זהב ורוד", "#C99A8B"),
     "transparent": ("שקוף", "#E8ECEE"), "clear": ("שקוף", "#E8ECEE"), "multicolor": ("צבעוני", None), "multi": ("צבעוני", None),
 }
 SHADES = {"light": ("בהיר", 0.35), "dark": ("כהה", -0.35), "deep": ("עמוק", -0.25), "pale": ("חיוור", 0.45)}
@@ -92,7 +107,7 @@ HEADINGS = [  # curtain heading ("Processing")
     (r"rod\s*pocket", "מנהרה למוט"), (r"s\s*fold|wave", "קפלי S"), (r"velcro", "סקוטש"), (r"hook", "ווים"), (r"tab\s*top", "לולאות"),
 ]
 SIZE_WORDS = {"small": "קטן", "medium": "בינוני", "middle": "בינוני", "large": "גדול", "big": "גדול", "mini": "מיני",
-              "extra large": "גדול מאוד", "x-large": "גדול מאוד", "xl": "XL", "l": "L", "m": "M", "s": "S", "xs": "XS", "xxl": "XXL"}
+              "extra large": "גדול מאוד", "x-large": "גדול מאוד", "plus": "גדול במיוחד", "xl": "XL", "l": "L", "m": "M", "s": "S", "xs": "XS", "xxl": "XXL"}
 KELVIN = re.compile(r"\b\d{4}\s*k\b|warm\s*(?:white|light)|cold\s*(?:white|light)|cool\s*(?:white|light)|neutral\s*(?:white|light)|"
                     r"natural\s*light|white\s*light|daylight|tri-?colou?r", re.I)
 NUM = r"(\d+(?:\.\d+)?)"
@@ -128,16 +143,26 @@ def shade_hex(hex_, k):
     return "#%02X%02X%02X" % tuple(max(0, min(255, c)) for c in rgb)
 
 
+NOISE = re.compile(r"\b(?:in\s*stock|spot|colou?r|colou?rs)\b|^\s*\d+\s+", re.I)
+
+
 def color_of(label):
-    """'Light Camel' -> ('קאמל בהיר', hex); 'Beige Tulle' -> ("בז' (טול)", hex); unknown -> (None, None)."""
+    """'Light Camel' -> ('קאמל בהיר', hex); 'Beige Tulle' -> ("בז' (טול)", hex); 'Blue And White' -> ('כחול ולבן', None);
+    unknown -> (None, None). In a long label the last colour phrase is the colour ('Rose Fairy Light Pink' is a pink)."""
     low = clean(label).lower().replace("_", " ")
     if low in COLORS:
         return COLORS[low]
     if low in WORDS:
         return WORDS[low], None
+    both = re.match(r"^(.+?)\s+(?:and|&|\+)\s+(.+)$", low)
+    if both and both.group(1) in COLORS and both.group(2) in COLORS:
+        return "%s ו%s" % (COLORS[both.group(1)][0], COLORS[both.group(2)][0]), None
+    low = clean(NOISE.sub(" ", low)) or low
+    if low in COLORS:
+        return COLORS[low]
     toks = re.split(r"[\s/,+&-]+", low)
-    for n in (3, 2, 1):  # the longest colour phrase anywhere in the label
-        for i in range(len(toks) - n + 1):
+    for n in (3, 2, 1):  # the longest colour phrase, the last one in the label
+        for i in reversed(range(len(toks) - n + 1)):
             phrase = " ".join(toks[i:i + n])
             if phrase not in COLORS:
                 continue
@@ -146,6 +171,9 @@ def color_of(label):
             if shade:
                 he, hx = "%s %s" % (he, shade[0]), shade_hex(hx, shade[1])
             rest = " ".join(t for j, t in enumerate(toks) if not (i <= j < i + n) and not (shade and j == i - 1))
+            rest = re.sub(r"^(?:and|with|&)\s+|\s+(?:and|with|&)$", "", rest).strip()
+            if rest and words_he(rest) == rest:
+                rest = rest.title()
             if rest:
                 he = "%s (%s)" % (he, words_he(rest))
             return he, hx
@@ -182,13 +210,16 @@ def size_of(label):
         if d and not KELVIN.search(lab):
             dims, span = tuple(x for x in d.groups() if x), d.span()
     if dims:
+        mm = re.match(r"\s*mm\b", lab[span[1]:], re.I) or re.search(r"\d\s*mm\b", lab[span[0]:span[1]], re.I)
+        if mm and not re.search(r"\d\s*mm\b", lab[span[0]:span[1]], re.I):
+            span = (span[0], span[1] + mm.end())
         rest = lab[:span[0]] + " " + lab[span[1]:]
         if pcs:
             rest = rest.replace(pcs.group(0).strip(), " ", 1)
         rest = clean(re.sub(r"(?i)\b(?:size|cm|mm|w|h|l|d)\b|[-–(),:]", " ", rest))
         txt = "×".join(fmt_num(x) for x in dims)
-        vid = "x".join(fmt_num(x) for x in dims)
-        he = '%s ס"מ' % txt
+        vid = "x".join(fmt_num(x) for x in dims) + ("mm" if mm else "")
+        he = '%s %s' % (txt, 'מ"מ' if mm else 'ס"מ')
         if n > 1:
             vid, he = "%dpc-%s" % (n, vid), "%d יח', %s" % (n, he)
         if rest:
@@ -201,8 +232,11 @@ def size_of(label):
         unit_he = {"cm": 'ס"מ', "mm": 'מ"מ', "m": "מ'", "inch": "אינץ'", "in": "אינץ'", '"': "אינץ'"}[unit]
         what = {"diameter": "קוטר ", "dia": "קוטר ", "dia.": "קוטר ", "d": "קוטר ", "height": "גובה ", "h": "גובה ", "length": "אורך "}.get(clean(m.group(1)).lower(), "")
         return "%s%s" % (fmt_num(m.group(2)), "" if unit == "cm" else unit.replace('"', "in")), "%s%s %s" % (what, fmt_num(m.group(2)), unit_he), (1, [float(m.group(2))], "")
+    bare = clean(re.sub(r"\bsize\b", " ", low))  # "Large Size", "Size Small"
+    if bare in SIZE_WORDS and bare != low:
+        low = bare
     if low in SIZE_WORDS:
-        order = ["xs", "s", "mini", "small", "m", "medium", "middle", "l", "large", "big", "xl", "x-large", "extra large", "xxl"]
+        order = ["xs", "s", "mini", "small", "m", "medium", "middle", "l", "large", "big", "xl", "x-large", "extra large", "plus", "xxl"]
         return slug(low), SIZE_WORDS[low], (1, [float(order.index(low)) if low in order else 50.0], "")
     return None
 
@@ -223,8 +257,14 @@ def is_set(labels):
     return bool(labels) and all(SET.match(l) for l in labels)
 
 
+def heading_he(label):
+    return next((he for p, he in HEADINGS if re.search(p, label, re.I)), None)
+
+
 def is_heading(labels):
-    return bool(labels) and all(any(re.search(p, l, re.I) for p, _ in HEADINGS) for l in labels)
+    """Curtain headings ('Hook', 'Grommet Top', 'Pull Pleated Tape'): at least two kinds, no digits ('3 hooks' is a rail)."""
+    he = [heading_he(l) for l in labels]
+    return bool(labels) and all(he) and len(set(he)) >= 2 and not any(re.search(r"\d", l) for l in labels)
 
 
 def is_color(labels):
@@ -378,6 +418,12 @@ def from_variants(rows, default_sku, source="api"):
             ids[lab] = v["id"]
             vals.append(v)
             keyed.append(key)
+        seen_he = {}
+        for v in vals:
+            seen_he[v["label_he"]] = seen_he.get(v["label_he"], 0) + 1
+        for v in vals:  # two values read the same in Hebrew: show the supplier's own words for them
+            if seen_he[v["label_he"]] > 1 and v.get("label_src"):
+                v["label_he"] = v.pop("label_src")
         if all(k is not None for k in keyed):  # sizes and quantities in numeric order
             vals = [v for _, v in sorted(zip(keyed, vals), key=lambda kv: kv[0])]
         axes.append({"src": n, "id": aid, "name_he": name_he, "values": vals, "ids": ids})
@@ -573,7 +619,7 @@ def validate(o, card=None):
         E.append("options.default_sku: %r is not one of the SKUs" % d)
     if card is not None and isinstance(d, str):
         sup = (card.get("supplier") or {}).get("sku")
-        if sup is not None and str(sup) != d:
+        if sup is not None and str(sup) != d and not d.upper().startswith(str(sup).upper()):  # CJ: product SKU + variant suffix
             W.append("options.default_sku %r differs from supplier.sku %r" % (d, sup))
         price = card.get("price") or {}
         ds = next((s for s in skus if isinstance(s, dict) and s.get("id") == d), None)
@@ -631,16 +677,17 @@ def render(o, indent="  "):
 
 
 def write_options(path, options, force=False, dry_run=False):
-    """Puts `options` into the card at `path`, changing nothing else in the file. -> 'written' | 'unchanged' |
-    'kept-manual' (an existing source "manual" object is never replaced unless force)."""
+    """Puts `options` into the card at `path`, changing nothing else in the file. -> 'written' | 'unchanged' | 'kept'.
+    A card that already has options keeps them (curated by sourcing-agent or written by hand, whatever their source):
+    only force replaces them, and never one with source "manual"."""
     with open(path, encoding="utf-8") as f:
         text = f.read()
     card = json.loads(text)
     cur = card.get("options")
-    if isinstance(cur, dict) and cur.get("source") == "manual" and not force:
-        return "kept-manual"
     if cur == options:
         return "unchanged"
+    if cur is not None and (not force or (isinstance(cur, dict) and cur.get("source") == "manual")):
+        return "kept"
     members = _members(text)
     first = members[0][1]
     indent = text[text.rfind("\n", 0, first) + 1:first]

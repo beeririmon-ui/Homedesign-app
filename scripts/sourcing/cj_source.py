@@ -22,7 +22,7 @@ Same CLI shape for every source (see aliexpress_source.py, google_vision_source.
   backfill-options [card.json ...]                      # no call: rebuilds `options` of existing CJ cards from the cache
           # (data/sources/cj/<pid>.json); default variant = supplier.sku, else the vid in data/economics/freight-cj.json,
           # else the first "vid ... ('<variantKey>')" in the notes, else the only variant at the card's price.
-          # Never replaces options with source "manual"
+          # Keeps any existing options (curated); --force rebuilds source "api", never "manual"
   import-cache <dir>                                    # no call: copies /product/query payloads saved elsewhere (JSON dumps
           # of earlier `cj.py product` runs) into data/sources/cj/<pid>.json, for CJ cards that have no cached product yet
   mark    <pid> --status rejected|seen|card --reason "..." [--slot room/slot] [--card-id ID]
@@ -412,15 +412,15 @@ def cj_options(card, payload, card_id=None, pid=None):
     return opts, "; ".join(x for x in ("default by " + how, why) if x)
 
 
-def backfill(paths=None, dry_run=False, log=print):
-    n = {"cards": 0, "written": 0, "unchanged": 0, "kept-manual": 0, "skipped": 0, "no-cache": 0}
+def backfill(paths=None, dry_run=False, log=print, force=False):
+    n = {"cards": 0, "written": 0, "unchanged": 0, "kept": 0, "skipped": 0, "no-cache": 0}
     for p, card, pid in cj_cards(paths):
         n["cards"] += 1
         rel = os.path.relpath(p, cache.REPO)
         cur = card.get("options")
-        if isinstance(cur, dict) and cur.get("source") == "manual":
-            n["kept-manual"] += 1
-            log("keep    %s (options source manual)" % rel)
+        if cur is not None and (not force or (isinstance(cur, dict) and cur.get("source") == "manual")):
+            n["kept"] += 1  # curated or hand-written options stay (only --force rebuilds source "api")
+            log("keep    %s (has options, source %s)" % (rel, (cur or {}).get("source") if isinstance(cur, dict) else "?"))
             continue
         hit = cached_product(pid)
         if not hit:
@@ -437,7 +437,7 @@ def backfill(paths=None, dry_run=False, log=print):
             n["skipped"] += 1
             log("skip    %s: invalid options: %s" % (rel, "; ".join(errs[:3])))
             continue
-        res = sku_options.write_options(p, opts, dry_run=dry_run)
+        res = sku_options.write_options(p, opts, force=force, dry_run=dry_run)
         n[res] += 1
         log("%-7s %s: %d SKUs on %s · %s%s" % ("would" if dry_run and res == "written" else res[:7], rel, len(opts["skus"]),
             ", ".join("%s %d" % (x["id"], len(x["values"])) for x in opts["axes"]), why, "".join(" · warn: " + w for w in warns)))
@@ -445,9 +445,9 @@ def backfill(paths=None, dry_run=False, log=print):
 
 
 def do_backfill(a):
-    n = backfill(a.paths, a.dry_run)
-    print("cj backfill-options: %d cards · %d written · %d unchanged · %d manual kept · %d skipped · %d without a cached product%s" % (
-        n["cards"], n["written"], n["unchanged"], n["kept-manual"], n["skipped"], n["no-cache"], " (dry run: nothing written)" if a.dry_run else ""))
+    n = backfill(a.paths, a.dry_run, force=a.force)
+    print("cj backfill-options: %d cards · %d written · %d unchanged · %d kept (already had options) · %d skipped · %d without a cached product%s" % (
+        n["cards"], n["written"], n["unchanged"], n["kept"], n["skipped"], n["no-cache"], " (dry run: nothing written)" if a.dry_run else ""))
 
 
 def do_options(a):

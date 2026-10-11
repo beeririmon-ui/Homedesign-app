@@ -93,7 +93,7 @@ export const ProductCardSchema = z.looseObject({
       "image": z.string().regex(new RegExp("^https://")).nullable().describe("תמונת הספק של ה-SKU").optional(),
       "in_room": z.boolean().describe("true רק ב-default_sku: האפשרות שמוצגת בחדר").optional(),
     })).min(1).describe("כל צירוף שקיים אצל הספק. צירוף שלא מופיע כאן לא קיים, ודף המוצר לא מאפשר לבחור אותו"),
-    "default_sku": z.string().min(1).describe("ה-SKU שבחדר (נאמנות) וברירת המחדל בדף המוצר; שווה ל-supplier.sku"),
+    "default_sku": z.string().min(1).describe("ה-SKU שבחדר (נאמנות) וברירת המחדל בדף המוצר. כמו supplier.sku; ב-CJ ‏supplier.sku הוא לפעמים מק\"ט המוצר, ו-default_sku הוא מק\"ט הווריאציה שמתחיל בו"),
     "source": z.enum(["api","manual"]),
   }).describe("כל האפשרויות של הספק (2026-10-11, חוקי הסטודיו ג, 'כל האפשרויות של הספק בדף המוצר'). אופציונלי ותוספתי: דף המוצר מציג את כל ה-SKU והלקוח בוחר, כל אחד עם מחיר ומשלוח משלו. החדר מציג רק את default_sku (in_room), אפשרות שקיימת אצל הספק. price ו-supplier.sku של הכרטיס נשארים של default_sku. source: api = נבנה מתגובת ה-API השמורה (backfill-options של ds.py ו-cj_source.py, נבנה מחדש בכל הרצה); manual = נכתב ביד, ואף סקריפט לא דורס אותו").optional(),
   "status": z.enum(["candidate","selected","rejected"]),

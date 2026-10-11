@@ -77,11 +77,14 @@ button,input,select,textarea{font:inherit;color:inherit}
 .tabs{flex:1 1 420px;min-width:0;overflow-x:auto;scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
 .tabs ul{list-style:none;margin:0;padding:0;display:flex;gap:2px}
-.tabs a{display:flex;align-items:center;gap:6px;padding:10px 10px 11px;text-decoration:none;color:var(--ink-2);font-weight:600;white-space:nowrap;border-bottom:2px solid transparent}
+.tabs a{display:flex;align-items:center;gap:6px;padding:10px 8px 11px;text-decoration:none;color:var(--ink-2);font-weight:600;white-space:nowrap;border-bottom:2px solid transparent}
 .tabs a:hover{color:var(--ink)}
 .tabs a[aria-current="page"]{color:var(--ink);border-bottom-color:var(--ink)}
 .tab-badge{min-width:22px;padding:1px 7px;border-radius:999px;background:var(--ink);color:var(--on-ink);font-size:var(--fs-xs);text-align:center;line-height:18px}
 .tab-badge:empty{display:none}
+/* twelve screens: the rail wraps to a second row when it does not fit, instead of hiding tabs behind a scrollbar that is not shown */
+.tabs{overflow:visible}
+.tabs ul{flex-wrap:wrap;gap:0}
 
 @media (max-width:480px){.tabs a{padding:10px 7px 11px;font-size:15px;gap:4px}.tab-badge{min-width:20px;padding:1px 5px}}
 main{max-width:var(--maxw);margin:0 auto;padding-inline:var(--gut);padding-block:24px 64px;outline:none}
@@ -626,11 +629,15 @@ details.room-lad summary{cursor:pointer;font-weight:600}
 .sup-zd{background:transparent;color:var(--ink-2);box-shadow:inset 0 0 0 1px var(--rule-2)}
 .sup-il{background:var(--ink);color:var(--on-ink)}
 .sup-ot{background:var(--sunk);color:var(--ink-2)}
-.cmp-win-tag{background:var(--sage-ink);color:var(--sheet)}
+.cmp-win-tag{background:var(--sage-ink);color:var(--sheet);white-space:normal;line-height:1.3}
+.cmp-miss{white-space:normal;align-items:flex-start;text-align:start;min-width:4.5em}
+.cmp-miss .fdot{margin-top:5px}
+.cmp-matrix th{white-space:normal}
 .cmp-win.is-ok{background:var(--sage-wash);color:var(--sage-ink)}
 .cmp-win.is-low{background:var(--amber-wash);color:var(--amber-ink)}
 .cmp-nowin{background:transparent;color:var(--ink-2);box-shadow:inset 0 0 0 1px var(--rule-2)}
 .cmp-win b,.cmp-nowin b{font-weight:700}
+.cmp-win,.cmp-nowin{white-space:normal;line-height:1.35}
 .cmp-narrow,.cmp-pct-n{display:none}
 .cmp-table td.money{width:1%}
 .cmp-wins{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px 16px;font-size:var(--fs-xs);color:var(--ink-2)}
@@ -651,11 +658,70 @@ details.room-lad summary{cursor:pointer;font-weight:600}
 @media (max-width:760px){
   .cmp-table .w{display:none}
   .cmp-narrow{display:flex;flex-wrap:wrap;gap:2px 12px;font-size:var(--fs-xs);color:var(--ink-2);margin-top:6px}
-  .cmp-narrow > span{white-space:nowrap}
+  .cmp-narrow > span{min-width:0;overflow-wrap:anywhere}
   .cmp-pct-n{display:block}
   .cmp-table .c-cand{min-width:0}
-  .cmp-table th,.cmp-table td{padding:8px 7px}
+  .cmp-table th,.cmp-table td{padding:8px 5px}
+  .cmp-table td .cmp-sub{white-space:normal}
+  .cmp-table td.money{white-space:normal}
+  .cmp-table td.money > .flag:not(.cmp-miss),.cmp-table td.money > span[dir="ltr"]{white-space:nowrap}
 }
+/* furniture (#furniture) */
+.f-slot{display:grid;gap:10px;min-width:0;scroll-margin-top:calc(env(safe-area-inset-top,0px) + 130px)}
+.f-slot-head{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
+.f-slot-head h3{font-size:var(--fs-l);outline:none}
+.f-asshown summary{cursor:pointer;font-size:var(--fs-s);color:var(--ink-2);min-height:24px}
+.f-asshown p{font-size:var(--fs-s);color:var(--ink-2);max-width:80ch;margin-top:4px}
+.tier-A{background:var(--ink);color:var(--on-ink)}
+.tier-B{background:var(--oak-wash);color:var(--oak-ink)}
+.tier-C{background:var(--sunk);color:var(--ink-2)}
+.f-tiles{grid-template-columns:repeat(auto-fill,minmax(min(100%,210px),1fr))}
+.fgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:12px}
+.fcard{background:var(--sheet);border:1px solid var(--rule);border-radius:var(--r);padding:14px;display:grid;gap:8px;align-content:start;min-width:0}
+.fcard.v-ok{box-shadow:inset 0 3px 0 var(--sage-ink)}
+.fcard.v-conditional{box-shadow:inset 0 3px 0 var(--amber-ink)}
+.fcard.v-reject{background:transparent}
+.fcard h4{font-family:var(--f-body);font-size:var(--fs-m);font-weight:700;line-height:1.35;margin:0;overflow-wrap:anywhere}
+.fcard .f-sup{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center;font-size:var(--fs-s);color:var(--ink-2)}
+.f-price{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline}
+.f-price .v{font-family:var(--f-display);font-size:24px;line-height:1.1;font-variant-numeric:tabular-nums}
+.f-price s{color:var(--ink-2);font-size:var(--fs-s)}
+.f-row{display:flex;flex-wrap:wrap;gap:4px 6px;align-items:center}
+.f-lbl{font-size:var(--fs-xs);font-weight:700;color:var(--ink-2);margin-inline-end:2px}
+.f-fit.is-sel{box-shadow:inset 0 0 0 1.5px var(--ink);color:var(--ink)}
+.f-fit.hi{background:var(--sage-wash);color:var(--sage-ink)}
+.f-colors{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;font-size:var(--fs-s)}
+.f-colors > span{display:inline-flex;gap:6px;align-items:center}
+.f-colors .swatch{width:20px;height:20px;border-radius:50%}
+.f-opts{font-size:var(--fs-s);color:var(--ink-2);overflow-wrap:anywhere}
+.f-reason{font-size:var(--fs-s);color:var(--ink-2);overflow-wrap:anywhere}
+.f-gate{font-size:var(--fs-s)}
+.f-gate summary{cursor:pointer;display:inline-flex;gap:6px;align-items:center;min-height:28px}
+.f-gate ol{margin:6px 0 0;padding-inline-start:20px;display:grid;gap:3px;font-size:var(--fs-xs);color:var(--ink-2)}
+.f-gate li.fail{color:var(--brick-ink);font-weight:600}
+.gate-pass{background:var(--sage-wash);color:var(--sage-ink)}
+.gate-fail{background:var(--brick-wash);color:var(--brick-ink)}
+.gate-open{background:var(--amber-wash);color:var(--amber-ink)}
+.v-chip-ok{background:var(--sage-wash);color:var(--sage-ink)}
+.v-chip-conditional{background:var(--amber-wash);color:var(--amber-ink)}
+.v-chip-reject{background:var(--brick-wash);color:var(--brick-ink)}
+.v-chip-pending{background:var(--sunk);color:var(--ink-2)}
+.f-more summary{cursor:pointer;font-size:var(--fs-s);color:var(--ink-2);min-height:28px;display:flex;align-items:center}
+.f-more .fields{margin-top:6px}
+.f-links{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:var(--fs-s);font-weight:600}
+.f-links a{display:inline-flex;align-items:center;min-height:28px}
+.f-hidden{font-size:var(--fs-xs);color:var(--ink-2)}
+.coop-none{background:var(--sunk);color:var(--ink-2)}
+.coop-draft{background:var(--oak-wash);color:var(--oak-ink)}
+.coop-sent{background:var(--amber-wash);color:var(--amber-ink)}
+.coop-bounced,.coop-negative{background:var(--brick-wash);color:var(--brick-ink)}
+.coop-replied,.coop-positive{background:var(--sage-wash);color:var(--sage-ink)}
+.fsup-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));gap:12px}
+.fsup{background:var(--sheet);border:1px solid var(--rule);border-radius:var(--r);padding:14px 16px;display:grid;gap:7px;align-content:start;min-width:0}
+.fsup h3{font-size:17px;overflow-wrap:anywhere}
+.fsup .ev{font-size:var(--fs-xs);color:var(--ink-2);overflow-wrap:anywhere}
+.fsup details summary{cursor:pointer;font-size:var(--fs-xs);color:var(--ink-2);min-height:24px}
+.fsup ul{margin:4px 0 0;padding-inline-start:18px;display:grid;gap:3px;font-size:var(--fs-xs);color:var(--ink-2)}
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 }
@@ -681,6 +747,7 @@ details.room-lad summary{cursor:pointer;font-weight:600}
           <li><a href="#products" data-screen="products">מוצרים</a></li>
           <li><a href="#profit" data-screen="profit">רווחיות</a></li>
           <li><a href="#compare" data-screen="compare">השוואת ספקים</a></li>
+          <li><a href="#furniture" data-screen="furniture">ריהוט</a></li>
           <li><a href="#suppliers" data-screen="suppliers">ספקים</a></li>
           <li><a href="#budget" data-screen="budget">תקציב</a></li>
           <li><a href="#quality" data-screen="quality">איכות</a></li>
@@ -753,6 +820,12 @@ details.room-lad summary{cursor:pointer;font-weight:600}
       <div class="screen-head"><h1 id="h-compare" tabindex="-1">השוואת ספקים</h1><p class="small faint" id="cmp-count"></p></div>
       <p class="lede">לכל עמדה, כל המועמדים מכל הספקים (CJ, ‏Zendrop, ‏AliExpress וספקים ישראליים): מחיר, משלוח לישראל, עלות נחיתה, מחיר לצרכן ורווח. החישוב זהה למסך הרווחיות ובאותן הנחות. המנצח בכל עמדה הוא המועמד שמשאיר הכי הרבה רווח ליחידה, מבין אלה שלא נדחו, שהתאמתם לסגנון 7 ומעלה, שיש להם כל הנתונים ושמרוויחים עליהם.</p>
       <div id="cmp-body"><p class="loading">טוען…</p></div>
+    </section>
+
+    <section class="screen" id="screen-furniture" aria-labelledby="h-furniture" hidden>
+      <div class="screen-head"><h1 id="h-furniture" tabindex="-1">ריהוט</h1><p class="small faint" id="furn-count"></p></div>
+      <p class="lede">16 הרהיטים הקבועים שבבית, שנמכרים כמוצר אחד (F3): כל דגם מכל ספק, עם התאמה לכל סגנון, מחיר, אפשרויות וצבעים, סוג התמונה, שער הוואו בעמדות הגיבור ופסק הדין של המעצב. למטה, ספקי הריהוט ומצב בקשת שיתוף הפעולה עם כל אחד.</p>
+      <div id="furn-body"><p class="loading">טוען…</p></div>
     </section>
 
     <section class="screen" id="screen-suppliers" aria-labelledby="h-suppliers" hidden>
@@ -962,6 +1035,7 @@ const S = {
   profit:Object.assign({sort:'margin', dir:'asc', room:'', rejected:false, showSettings:false, verdict:''}, store.get('profit', {})),
   sup:Object.assign({q:'', section:'', status:'', model:'', sort:'fit'}, store.get('sup', {})), focusDec:null, accessSaving:new Set(), accessErr:null,
   cmp:Object.assign({room:null, style:'nordic', sup:'', profitable:false, rejected:false, unrated:false}, store.get('cmp', {})),
+  furn:Object.assign({room:'', style:'all', tier:'', verdict:'', sup:'', coop:''}, store.get('furn', {})),
   db:null, user:null, uid:null, canWrite:null, dbState:'connecting', dbError:null, dbReady:false,
   dbDocs:new Map(), drafts:{}, saving:new Set(), saved:{}, errors:{},
   edits:new Map(), news:new Map(), settingsDocs:new Map(),
@@ -996,7 +1070,7 @@ async function boot(){
 }
 function renderAll(){
   renderOverview(); renderTodo(); renderDecisions(); renderRoomPick(); renderRoom();
-  initFilters(); renderProducts(); renderProfit(); renderCompare(); renderSuppliers(); renderBudget(); renderReports(); renderLog();
+  initFilters(); renderProducts(); renderProfit(); renderCompare(); renderFurniture(); renderSuppliers(); renderBudget(); renderReports(); renderLog();
 }
 let pendingRender = false;
 function onDataChange(){
@@ -1004,7 +1078,7 @@ function onDataChange(){
   setTimeout(() => {
     pendingRender = false;
     refreshView();
-    renderOverview(); renderTodo(); renderRoom(); renderProducts(); renderProfit(); renderCompare(); renderSuppliers(); renderBudget(); refreshDrawer();
+    renderOverview(); renderTodo(); renderRoom(); renderProducts(); renderProfit(); renderCompare(); renderFurniture(); renderSuppliers(); renderBudget(); refreshDrawer();
   }, 0);
 }
 
@@ -1203,7 +1277,7 @@ function profitBasis(){
 }
 
 /* ---------- routing ---------- */
-const SCREENS = ['overview','todo','decisions','rooms','products','profit','compare','suppliers','budget','quality','log'];
+const SCREENS = ['overview','todo','decisions','rooms','products','profit','compare','furniture','suppliers','budget','quality','log'];
 function route(focus){
   const t = (location.hash || '').replace(/^#/, '');
   let s = SCREENS.includes(t) ? t : null;
@@ -1983,7 +2057,7 @@ function renderProducts(){
         <span class="pname" dir="auto">${esc(p.name)}</span>
         <span class="pslot">${esc(slotLabel(p))}${viaShared ? ' · דרך מאגר משותף' : ''}</span>
         <span class="pslot faint">${esc((p.rooms || []).map(tagName).join(', '))}</span>
-        <span class="prow"><span class="cost num" dir="ltr">${esc(fmtUSD(p.price && p.price.cost))}</span>${days ? `<span><span class="num" dir="ltr">${esc(days)}</span> ימים</span>` : ''}${hex ? `<span class="swrow"><span class="swatch" data-sw="${esc(hex)}"></span><span class="hex" dir="ltr">${esc(hex)}</span></span>` : ''}<span class="faint">${esc(p.supplier && p.supplier.name || '')}</span></span>
+        <span class="prow"><span class="cost num" dir="ltr">${esc(fmtUSD(p.price && p.price.cost))}</span>${days ? `<span><span class="num" dir="ltr">${esc(days)}</span> ימים</span>` : ''}${hex ? `<span class="swrow"><span class="swatch" data-sw="${esc(hex)}"></span><span class="hex" dir="ltr">${esc(hex)}</span></span>` : ''}${p.options_n ? `<span class="popts" title="${esc((p.options_axes || []).join(', '))}"><span class="num">${p.options_n}</span> אפשרויות</span>` : ''}<span class="faint">${esc(p.supplier && p.supplier.name || '')}</span></span>
         <span class="pecon">${flagHtml(p)}${p._new ? '' : ' ' + qtyHtml(p)}</span>
       </span>
     </button>`;
@@ -2603,6 +2677,7 @@ const CMP_SUP = {
 const CMP_GROUP = {aliexpress:'ae', cj:'cjz', zendrop:'cjz', il:'il', other:'other'};
 const CMP_VERDICT = {best:{he:'הליקוט: הכי טוב', cls:'flag-green'}, alternative:{he:'הליקוט: חלופה', cls:''}, reject:{he:'הליקוט: נדחה', cls:'flag-red'}};
 const RETAIL_SRC = {set:'מחיר שנקבע', band:'טווח השוק', slot:'טווח השוק של העמדה', file:'טווח מהליקוט'};
+const RETAIL_SRC_SHORT = {set:'נקבע', band:'טווח', slot:'טווח העמדה', file:'טווח הליקוט'};
 const cmpData = () => (S.data && S.data.comparison) || null;
 const cmpFitMin = () => { const c = cmpData(); return c && isNum(c.fit_min) ? c.fit_min : 7; };
 const cmpStyleHe = id => { const c = cmpData(); const x = c && (c.styles || []).find(s => s.id === id); return x ? x.name_he : (STYLE_HE[id] || id); };
@@ -2817,7 +2892,7 @@ function renderCompare(){
   $('#cmp-count').textContent = `${Object.values(bs).reduce((a, b) => a + b, 0)} מועמדים בכל הבית · ${supCounts}`;
   const scopeName = F.room ? (S.rooms.get(F.room) || {}).name_he : 'כל הבית';
   box.innerHTML = `<div class="screen roomy">
-    <form class="toolbar" id="cmp-filters" role="search" aria-label="סינון השוואת הספקים">
+    <form class="filters" id="cmp-filters" role="search" aria-label="סינון השוואת הספקים">
       <div class="field"><label for="cf-room">חדר</label><select id="cf-room"><option value="">כל הבית</option>${rooms.map(r => `<option value="${esc(r.id)}" ${F.room === r.id ? 'selected' : ''}>${esc(r.name_he)}</option>`).join('')}</select></div>
       <div class="field"><label for="cf-style">סגנון</label><select id="cf-style">${STY.map(x => `<option value="${esc(x)}" ${F.style === x ? 'selected' : ''}>${esc(cmpStyleHe(x))}</option>`).join('')}<option value="all" ${F.style === 'all' ? 'selected' : ''}>כל הסגנונות</option></select></div>
       <div class="field"><label for="cf-sup">ספק</label><select id="cf-sup"><option value="">כל הספקים</option>${supOpts}</select></div>
@@ -2886,16 +2961,16 @@ function cmpRowHtml(x, st, winStyles, T){
   const cmpTo = file && file.compared_to && file.compared_to.card_id ? (() => { const o = S.byId.get(file.compared_to.card_id); return `<p class="cand-reason">מול: <span dir="auto">${esc(o ? o.name.slice(0, 60) : file.compared_to.card_id)}</span>${isNum(file.compared_to.landed_ils) ? ` (נחיתה ${ltr(fmtILS(file.compared_to.landed_ils))} בקובץ)` : ''}</p>`; })() : '';
   const marginCell = isNum(e.contribution)
     ? `<span class="flag ${cls}"><i class="fdot"></i>${ltr(fmtILS(e.contribution))}</span><span class="cmp-sub cmp-pct-n">${ltr(fmtPct(e.margin, 1))}</span><span class="cmp-sub w">אחרי שיווק ${ltr(fmtILS(e.after_marketing))}</span>`
-    : `<span class="flag flag-orange"><i class="fdot"></i>${esc(missText(e))}</span>`;
+    : `<span class="flag flag-orange cmp-miss"><i class="fdot"></i>${esc(missText(e))}</span>`;
   return `<tr class="${isWin ? 'is-win' : ''} ${rej ? 'is-rej' : ''}" data-sup="${esc(x.sup)}" data-key="${esc(x.key)}"${isNum(e.margin) ? ` data-margin="${e.margin.toFixed(4)}"` : ''}>
     <th scope="row" class="c-cand">${titleHtml}
       <div class="cand-meta">${chips}</div>
-      <div class="cmp-narrow"><span>מחיר ${ltr(esc(priceTxt))}${x.qty > 1 ? ` × ${ltr(esc(x.qty))}` : ''}</span><span>משלוח ${ltr(esc(shipTxt))}${days ? `, ${ltr(esc(days))} יום` : ''}</span><span>לצרכן ${ltr(esc(retailTxt))}${x.retail ? ` <span class="faint">(${esc(RETAIL_SRC[x.retail.src])})</span>` : ''}</span><span>התאמה ${st ? ltr(esc(fitTxt)) : esc(fitTxt)}</span></div>
+      <div class="cmp-narrow"><span>מחיר ${ltr(esc(priceTxt))}${x.qty > 1 ? ` × ${ltr(esc(x.qty))}` : ''}</span><span>משלוח ${ltr(esc(shipTxt))}${days ? `, ${ltr(esc(days))} יום` : ''}</span><span>לצרכן ${ltr(esc(retailTxt))}${x.retail ? ` <span class="faint">(${esc(RETAIL_SRC_SHORT[x.retail.src])})</span>` : ''}</span><span>התאמה ${st ? ltr(esc(fitTxt)) : esc(fitTxt)}</span></div>
       ${reason ? `<p class="cand-reason" dir="auto">${esc(reason.length > 220 ? reason.slice(0, 220) + '…' : reason)}</p>` : ''}${cmpTo}
     </th>
     <td class="money w">${ltr(esc(priceTxt))}${priceSub ? `<span class="cmp-sub" dir="auto">${esc(priceSub)}</span>` : ''}</td>
-    <td class="money w">${ltr(esc(shipTxt))}${isNum(x.ship.total) ? `<span class="cmp-sub">${ltr(fmtUSD(x.ship.total))}${days ? ` · ${days} יום` : ''}</span>` : ''}<span class="cmp-sub">${esc(x.ship.label || '')}</span>${x.ship.est ? '<span class="cmp-sub"><span class="est">הערכה לכמות</span></span>' : ''}</td>
-    <td class="money">${ltr(fmtILS(e.landed))}${isNum(e.ship_share) && e.ship_share > 0.5 ? `<span class="cmp-sub warn-text">משלוח ${ltr(fmtPct(e.ship_share))}</span>` : ''}${x.qty > 1 ? `<span class="cmp-sub">ל-${x.qty} יח'</span>` : ''}</td>
+    <td class="money w">${ltr(esc(shipTxt))}${isNum(x.ship.total) ? `<span class="cmp-sub">${ltr(fmtUSD(x.ship.total))}${days ? ` · ${ltr(esc(days))} יום` : ''}</span>` : ''}<span class="cmp-sub">${esc(x.ship.label || '')}</span>${x.ship.est ? '<span class="cmp-sub"><span class="est">הערכה לכמות</span></span>' : ''}</td>
+    <td class="money">${ltr(fmtILS(e.landed))}${isNum(e.ship_share) && e.ship_share > 0.5 ? `<span class="cmp-sub warn-text">משלוח ${ltr(fmtPct(e.ship_share))}</span>` : ''}${x.qty > 1 ? `<span class="cmp-sub">ל-${x.qty}&nbsp;יח'</span>` : ''}</td>
     <td class="money w">${ltr(esc(retailTxt))}${x.retail ? `<span class="cmp-sub">${esc(RETAIL_SRC[x.retail.src])}</span>` : ''}${e.recommended != null ? `<span class="cmp-sub">ל-${ltr(esc(v.target_margin_pct + '%'))}: ${ltr(fmtILS(Math.ceil(e.recommended)))}</span>` : ''}</td>
     <td class="money"${fileTip}>${marginCell}</td>
     <td class="money w">${isNum(e.margin) ? `<span class="flag ${cls}">${ltr(fmtPct(e.margin, 1))}</span>` : '—'}</td>
@@ -2914,6 +2989,164 @@ function cmpJump(key){
   el.scrollIntoView({block: 'start'});
   const h = el.matches('li') ? el : $('h3', el);
   if(h) h.focus({preventScroll: true});
+}
+
+/* ---------- furniture (data.furniture from build.py: the 16 fixed-product slots, Israeli suppliers, wow gate) ---------- */
+const F_VERDICT = {ok: 'מתאים', conditional: 'בתנאים', reject: 'נדחה', pending: 'לא נבדק'};
+const F_PHOTO = {real: 'צילום אמיתי', render: 'הדמיה', mixed: 'צילום והדמיה', unknown: 'סוג תמונה לא צוין', none: 'אין תמונה'};
+const F_PRICE = {dealer: 'מחיר סוחר', consumer: 'מחיר צרכן', unknown: 'סוג מחיר לא ידוע'};
+const F_COOP = {none: 'אין בקשה', draft: 'טיוטה', sent: 'נשלחה', replied: 'ענו'};
+const F_TIER_HE = {A: 'א', B: 'ב', C: 'ג'};
+const furnData = () => (S.data && S.data.furniture) || null;
+function coopChip(c){
+  const st = (c && c.state) || 'none';
+  const tone = c && c.tone;
+  const txt = st === 'replied' ? (tone === 'positive' ? 'ענו: כן' : tone === 'negative' ? 'ענו: לא' : 'ענו')
+    : st === 'sent' && tone === 'bounced' ? 'נשלחה, המייל חזר' : F_COOP[st] || st;
+  const cls = st === 'replied' ? (tone ? 'coop-' + tone : 'coop-replied') : st === 'sent' && tone === 'bounced' ? 'coop-bounced' : 'coop-' + st;
+  return `<span class="chip ${cls}">בקשת שת"פ: ${esc(txt)}</span>`;
+}
+const fFit = (m, st) => isNum(m.fits[st]) ? m.fits[st] : null;
+const fMaxFit = m => { const v = Object.values(m.fits || {}).filter(isNum); return v.length ? Math.max(...v) : null; };
+function gateHtml(m, gate){
+  const g = m.wow_gate || {};
+  if(!g.applies) return '';
+  const failed = new Set((g.failed_checks || []).map(String));
+  const label = g.passed === true ? 'שער הוואו: עבר' : g.passed === false ? (failed.size ? 'שער הוואו: נכשל ב-' + [...failed].map(x => (gate.find(c => String(c.n) === x) || {}).short || x).join(', ') : 'שער הוואו: נכשל') : 'שער הוואו: עוד לא נבדק';
+  const cls = g.passed === true ? 'gate-pass' : g.passed === false ? 'gate-fail' : 'gate-open';
+  return `<details class="f-gate"><summary><span class="chip ${cls}">${esc(label)}</span></summary>
+    ${g.note ? `<p class="f-reason" dir="auto">${esc(g.note)}</p>` : ''}
+    ${gate.length ? `<ol>${gate.map(c => `<li class="${failed.has(String(c.n)) ? 'fail' : ''}">${failed.has(String(c.n)) ? '<span class="sr-only">נכשל: </span>' : ''}<b>${esc(c.short)}:</b> ${esc(c.text)}</li>`).join('')}</ol>` : ''}
+  </details>`;
+}
+function furnCard(m, st, gate){
+  const o = m.options || {};
+  const fits = Object.entries(m.fits || {}).sort((a, b) => b[1] - a[1]);
+  const fitHtml = fits.length ? fits.map(([k, n]) => `<span class="chip f-fit ${k === st ? 'is-sel' : ''} ${n >= cmpFitMin() ? 'hi' : ''}">${esc(cmpStyleHe(k))} ${ltr(esc(n))}</span>`).join('') : '<span class="small faint">אין ציוני סגנון</span>';
+  const colors = (o.colors || []).map(c => `<span>${c.hex ? `<span class="swatch" data-sw="${esc(c.hex)}" aria-hidden="true"></span>` : ''}<span dir="auto">${esc(c.label_he)}</span>${c.hex ? `<span class="sr-only"> (${esc(c.hex)})</span>` : ''}</span>`).join('');
+  const optLines = [['בדים', o.fabrics], ['מידות', o.sizes], ['גימורים', o.finishes]].filter(([, a]) => a && a.length).map(([l, a]) => `<span class="f-lbl">${l}:</span> <span dir="auto">${esc(a.join(' · '))}</span>`);
+  if(o.text) optLines.push(`<span dir="auto">${esc(o.text)}</span>`);
+  const dims = m.dimensions && typeof m.dimensions === 'object' ? ['width', 'depth', 'height'].map(k => m.dimensions[k]).filter(x => x != null).join('×') + ' ס"מ' : (m.dimensions || '');
+  const mats = Array.isArray(m.materials) ? m.materials.join(' · ') : (m.materials || '');
+  const links = [m.url && httpsOk(m.url) ? `<a href="${esc(m.url)}" target="_blank" rel="noopener noreferrer">לדגם אצל הספק<span class="sr-only"> (נפתח בחלון חדש)</span><span aria-hidden="true">&nbsp;↗</span></a>` : '',
+    (m.image_urls || [])[0] && httpsOk(m.image_urls[0]) ? `<a href="${esc(m.image_urls[0])}" target="_blank" rel="noopener noreferrer">תמונה${m.n_images > 1 ? ` (1 מתוך ${m.n_images})` : ''}<span class="sr-only"> (נפתח בחלון חדש)</span><span aria-hidden="true">&nbsp;↗</span></a>` : '',
+    m.card_id && S.byId.has(m.card_id) ? `<button type="button" class="linkish" data-product="${esc(m.card_id)}" aria-haspopup="dialog">כרטיס המוצר</button>` : ''].filter(Boolean).join('');
+  const vtxt = F_VERDICT[m.verdict_class] || m.verdict_class;
+  return `<article class="fcard v-${esc(m.verdict_class)}" aria-labelledby="fm-${esc(m.id)}" data-verdict="${esc(m.verdict_class)}" data-sup="${esc(m.supplier_id || '')}">
+    <h4 id="fm-${esc(m.id)}" dir="auto">${esc(m.model_name)}</h4>
+    <div class="f-sup"><span dir="auto">${esc(m.supplier_name || m.supplier_id || '')}</span>${m.supplier_new ? '<span class="chip chip-new">ספק חדש</span>' : ''}<span class="chip v-chip-${esc(m.verdict_class)}" title="${esc(m.verdict || '')}">${esc(vtxt)}</span></div>
+    <div class="f-price">${isNum(m.price_ils) ? `<span class="v">${ltr(fmtILS(m.price_ils))}</span>` : '<span class="small faint">אין מחיר</span>'}${isNum(m.price_original_ils) && m.price_original_ils > (m.price_ils || 0) ? `<s>${ltr(fmtILS(m.price_original_ils))}</s>` : ''}<span class="chip ${m.price_type === 'dealer' ? 'st-selected' : m.price_type === 'consumer' ? 'chip-warn' : ''}">${esc(F_PRICE[m.price_type] || m.price_type)}</span></div>
+    ${gateHtml(m, gate)}
+    <div class="f-row"><span class="f-lbl">התאמה:</span>${fitHtml}</div>
+    ${colors ? `<div class="f-colors"><span class="f-lbl">צבעים:</span>${colors}</div>` : ''}
+    ${optLines.length ? `<p class="f-opts">${optLines.join('<br>')}</p>` : ''}
+    <div class="f-row"><span class="chip ${m.photo_type === 'render' ? 'chip-warn' : m.photo_type === 'real' ? 'st-selected' : ''}">${esc(F_PHOTO[m.photo_type] || m.photo_type)}</span>${m.standard ? `<span class="chip">תקן: <span dir="auto">${esc(m.standard)}</span></span>` : ''}${m.review_n ? `<span class="chip">ביקורת הוואו #${esc(m.review_n)}</span>` : ''}</div>
+    ${m.reason ? `<p class="f-reason" dir="auto">${esc(m.reason)}</p>` : ''}
+    ${dims || mats || m.lead_time || m.delivery_assembly || m.sourcing_reason || m.image_note ? `<details class="f-more"><summary>עוד פרטים</summary><dl class="fields">
+      ${row('מידות', dims ? `<span dir="auto">${esc(dims)}</span>` : '')}${row('חומרים', mats ? `<span dir="auto">${esc(mats)}</span>` : '')}${row('זמן ייצור', m.lead_time ? `<span dir="auto">${esc(m.lead_time)}</span>` : '')}
+      ${row('משלוח והרכבה', m.delivery_assembly ? `<span dir="auto">${esc(m.delivery_assembly)}</span>` : '')}${row('התמונות', m.image_note ? `<span dir="auto">${esc(m.image_note)}</span>` : '')}${row('ציוני הליקוט', m.sourcing_reason ? `<span dir="auto">${esc(m.sourcing_reason)}</span>` : '')}
+    </dl></details>` : ''}
+    ${links ? `<div class="f-links">${links}</div>` : ''}
+  </article>`;
+}
+function renderFurniture(){
+  if(!S.data) return;
+  const box = $('#furn-body');
+  const FD = furnData();
+  if(!FD || !FD.slots){ box.innerHTML = '<p class="empty">אין נתוני ריהוט. הם נבנים עם <code>python3 studio/build.py</code>.</p>'; return; }
+  const restore = keepFocus(box);
+  const F = S.furn, gate = FD.gate || [], tiers = FD.tiers || {};
+  const STY = ((cmpData() && cmpData().styles) || []).map(x => x.id);
+  const st = F.style && F.style !== 'all' ? F.style : null;
+  const roomIds = [...new Set(FD.slots.map(s => s.room))];
+  const supsWithModels = [...new Map(FD.models.map(m => [m.supplier_id, m.supplier_name || m.supplier_id])).entries()];
+  const vOrder = {ok: 0, conditional: 1, pending: 2, reject: 3};
+  const slots = FD.slots.filter(s => (!F.room || s.room === F.room) && (!F.tier || s.tier === F.tier));
+  let shown = 0, hiddenTotal = 0;
+  const bySlot = new Map(); for(const m of FD.models){ if(!bySlot.has(m.key)) bySlot.set(m.key, []); bySlot.get(m.key).push(m); }
+  // summary over the room / tier in scope (not the style, verdict or supplier filters)
+  const good = s => (bySlot.get(s.key) || []).filter(m => m.verdict_class === 'ok' || m.verdict_class === 'conditional');
+  const heroes = slots.filter(s => s.tier === 'A');
+  const heroPass = heroes.filter(s => (bySlot.get(s.key) || []).some(m => m.wow_gate && m.wow_gate.passed === true));
+  const inScope = slots.flatMap(s => bySlot.get(s.key) || []);
+  const vc = {ok: 0, conditional: 0, pending: 0, reject: 0}; for(const m of inScope) vc[m.verdict_class] = (vc[m.verdict_class] || 0) + 1;
+  const coopCount = {none: 0, draft: 0, sent: 0, replied: 0}; for(const s of FD.suppliers) coopCount[s.coop.state] = (coopCount[s.coop.state] || 0) + 1;
+  const sections = roomIds.filter(r => slots.some(s => s.room === r)).map(rid => {
+    const parts = slots.filter(s => s.room === rid).map(s => {
+      const all = (bySlot.get(s.key) || []).slice();
+      let ms = all.filter(m => (!F.verdict || m.verdict_class === F.verdict) && (!F.sup || m.supplier_id === F.sup) && (!st || isNum(fFit(m, st)) || (m.styles || []).includes(st)));
+      const hidden = all.length - ms.length; hiddenTotal += hidden;
+      ms.sort((a, b) => (vOrder[a.verdict_class] ?? 9) - (vOrder[b.verdict_class] ?? 9) || ((st ? fFit(b, st) : fMaxFit(b)) ?? -1) - ((st ? fFit(a, st) : fMaxFit(a)) ?? -1) || (a.price_ils ?? 1e9) - (b.price_ils ?? 1e9));
+      shown += ms.length;
+      const t = tiers[s.tier] || {};
+      const id = 'furn-' + s.key.replace(/[^\w-]+/g, '--');
+      const okN = good(s).length;
+      return `<section class="f-slot" id="${id}" aria-labelledby="${id}-h">
+        <div class="f-slot-head"><h3 id="${id}-h" tabindex="-1">${esc((s.name_he || s.id).replace(/\s*\(כמו בחדר\)/, ''))}</h3><span class="code-tag" dir="ltr">${esc(s.id)}</span>
+          ${s.tier ? `<span class="chip tier-${esc(s.tier)}" title="${esc(t.need || '')}">דרגה ${esc(F_TIER_HE[s.tier] || s.tier)} · ${esc(t.he || '')}</span>` : ''}
+          <span class="chip ${okN ? 'v-chip-ok' : 'v-chip-pending'}">${okN ? `${okN} דגמים מתאימים או בתנאים` : 'אין עדיין דגם מתאים'}</span></div>
+        ${s.as_shown ? `<details class="f-asshown"><summary>כמו בחדר${t.need ? ' · מה נדרש בדרגה' : ''}</summary><p dir="auto">${esc(s.as_shown)}</p>${t.need ? `<p>${esc(t.need)}</p>` : ''}</details>` : ''}
+        ${ms.length ? `<div class="fgrid">${ms.map(m => furnCard(m, st, gate)).join('')}</div>` : `<p class="f-hidden">${all.length ? 'אין דגמים שמתאימים לסינון.' : 'עוד אין דגמים לעמדה הזו.'}</p>`}
+        ${hidden && ms.length ? `<p class="f-hidden">${hidden} דגמים מוסתרים בסינון.</p>` : ''}
+      </section>`;
+    }).join('');
+    return `<section class="cmp-room" aria-labelledby="furn-r-${esc(rid)}"><div class="section-head"><h2 id="furn-r-${esc(rid)}">${esc((S.rooms.get(rid) || {}).name_he || rid)}</h2><span class="small faint">${slots.filter(s => s.room === rid).length} עמדות ריהוט</span></div>${parts}</section>`;
+  }).join('');
+
+  // suppliers
+  const sups = FD.suppliers.filter(x => !F.coop || x.coop.state === F.coop);
+  const supCards = sups.map(x => {
+    const links = supLinks(Object.assign({}, x, {sample_links: []}));
+    return `<article class="fsup" aria-labelledby="fs-${esc(x.id)}">
+      <div class="row between"><h3 id="fs-${esc(x.id)}" dir="auto">${esc(x.name)}</h3>${x.new ? '<span class="chip chip-new">ספק חדש</span>' : ''}</div>
+      <p class="xs muted">${[x.location ? `<span dir="auto">${esc(x.location)}</span>` : '', SUP_TYPE_HE[x.type] || esc(x.type || ''), SEC_HE[x.section] || '', x.price_level ? `מחיר: <span dir="auto">${esc(x.price_level)}</span>` : '', isNum(x.fit) ? `התאמה לנורדי ${esc(x.fit)}/10` : ''].filter(Boolean).join(' · ')}</p>
+      <div class="chiprow">${coopChip(x.coop)}${x.status && SUP_ST[x.status] ? `<span class="chip ${SUP_ST[x.status].cls}">${esc(SUP_ST[x.status].he)}</span>` : x.status ? `<span class="chip">${esc(x.status)}</span>` : ''}${x.n_models ? `<button type="button" class="chip linkish" data-furn-sup="${esc(x.id)}" aria-label="הצגת ${esc(x.n_models)} הדגמים של ${esc(x.name)}">${esc(x.n_models)} דגמים · ${esc(x.n_ok)} מתאימים</button>` : '<span class="chip">אין דגמים בליקוט</span>'}</div>
+      ${x.coop && x.coop.note ? `<p class="ev" dir="auto">${x.coop.date ? `${esc(fmtDay(x.coop.date))}: ` : ''}${esc(String(x.coop.note).slice(0, 240))}${x.coop.src ? ` <span class="faint">(${esc(x.coop.src)})</span>` : ''}</p>` : ''}
+      ${(x.categories || []).length ? `<p class="xs" dir="auto">${esc(x.categories.join(' · '))}</p>` : ''}
+      ${(x.styles || []).length ? `<p class="xs muted">סגנונות: ${esc(x.styles.map(cmpStyleHe).join(' · '))}</p>` : ''}
+      ${x.why ? `<p class="xs" dir="auto">${esc(x.why)}</p>` : ''}
+      ${(x.log || []).length > 1 ? `<details><summary>יומן הקשר (${x.log.length})</summary><ul>${x.log.map(l => `<li dir="auto">${esc(l)}</li>`).join('')}</ul></details>` : ''}
+      ${links ? `<div class="f-links">${links}</div>` : ''}
+    </article>`;
+  }).join('');
+
+  const src = FD.sources || {}, fil = src.furniture_il || {};
+  const srcLine = fil.present
+    ? `<div class="db-line"><span class="db-dot live"></span><span><strong>ליקוט ריהוט מספקים ישראליים:</strong> ${esc(FD.models.filter(m => m.src === 'furniture-il').length)} דגמים ב-${esc((fil.files || []).length)} קבצים (<code>${esc(fil.dir)}</code>)${(src.candidates || []).length ? ` · ספקים חדשים מ-${esc(src.candidates.map(c => c.file).join(', '))}` : ''}.${src.n_unmatched ? ` <details><summary>${esc(src.n_unmatched)} רשומות לא שויכו לעמדת ריהוט</summary><ul class="plain-ul small">${(src.unmatched || []).map(u => `<li><span dir="auto">${esc(u.title)}</span> · ${esc(u.why)} · <span dir="ltr">${esc(u.where)}</span></li>`).join('')}</ul></details>` : ''}</span></div>`
+    : `<div class="db-line"><span class="db-dot warn"></span><span><strong>הליקוט מספקים ישראליים עוד לא הגיע</strong> (<code>${esc(fil.dir || 'data/leads/furniture-il/')}</code>). כרגע מוצגים דגמי ריהוט אקספרס עם פסקי הדין מביקורת הוואו (<code>${esc(src.review || '')}</code>). הקבצים נכנסים בבנייה הבאה.</span></div>`;
+  $('#furn-count').textContent = `${FD.models.length} דגמים ב-${FD.slots.length} עמדות · ${FD.suppliers.length} ספקים`;
+  const opt = (v, cur, label) => `<option value="${esc(v)}" ${cur === v ? 'selected' : ''}>${label}</option>`;
+  box.innerHTML = `<div class="screen roomy">
+    <form class="filters" id="furn-filters" role="search" aria-label="סינון הריהוט">
+      <div class="field"><label for="ff-room">חדר</label><select id="ff-room">${opt('', F.room, 'כל הבית')}${roomIds.map(r => opt(r, F.room, esc((S.rooms.get(r) || {}).name_he || r))).join('')}</select></div>
+      <div class="field"><label for="ff-style">סגנון</label><select id="ff-style">${opt('all', st ? '' : 'all', 'כל הסגנונות')}${STY.map(x => opt(x, F.style, esc(cmpStyleHe(x)))).join('')}</select></div>
+      <div class="field"><label for="ff-tier">דרגה</label><select id="ff-tier">${opt('', F.tier, 'כל הדרגות')}${['A', 'B', 'C'].map(k => opt(k, F.tier, `${F_TIER_HE[k]} · ${esc((tiers[k] || {}).he || '')}`)).join('')}</select></div>
+      <div class="field"><label for="ff-verdict">פסק דין</label><select id="ff-verdict">${opt('', F.verdict, 'הכול')}${Object.keys(F_VERDICT).map(k => opt(k, F.verdict, `${F_VERDICT[k]} (${vc[k] || 0})`)).join('')}</select></div>
+      <div class="field"><label for="ff-sup">ספק</label><select id="ff-sup">${opt('', F.sup, 'כל הספקים')}${supsWithModels.map(([id, n]) => opt(id, F.sup, esc(n))).join('')}</select></div>
+    </form>
+    ${srcLine}
+    <div class="tiles f-tiles">
+      <div class="tile"><span class="l">עמדות עם דגם מתאים</span><span class="v">${slots.filter(s => good(s).length).length}<span class="small muted"> / ${slots.length}</span></span><span class="s">מתאים או בתנאים, לפי פסק הדין</span></div>
+      ${heroes.length ? `<div class="tile"><span class="l">עמדות גיבור שעברו את שער הוואו</span><span class="v">${heroPass.length}<span class="small muted"> / ${heroes.length}</span></span><span class="s">${heroPass.length < heroes.length ? 'עוד לא: ' : ''}${esc(heroes.filter(s => !heroPass.includes(s)).map(s => (s.name_he || s.id).replace(/\s*\(כמו בחדר\)/, '')).join(' · ') || 'כולן עברו')}</span></div>` : ''}
+      <div class="tile"><span class="l">דגמים</span><span class="v">${inScope.length}</span><span class="s"><span class="flag flag-green">${vc.ok} מתאימים</span> · <span class="flag flag-orange">${vc.conditional} בתנאים</span> · <span class="flag flag-red">${vc.reject} נדחו</span>${vc.pending ? ` · ${vc.pending} לא נבדקו` : ''}</span></div>
+      <div class="tile"><span class="l">בקשות שת"פ לספקים</span><span class="v">${coopCount.sent + coopCount.replied}<span class="small muted"> / ${FD.suppliers.length}</span></span><span class="s">${coopCount.replied} ענו · ${coopCount.sent} נשלחו · ${coopCount.draft} טיוטות · ${coopCount.none} בלי בקשה</span></div>
+    </div>
+    <p class="result-line" aria-live="polite"><span><strong class="num">${shown}</strong> דגמים ב-<strong class="num">${slots.length}</strong> עמדות${hiddenTotal ? ` · ${hiddenTotal} מוסתרים בסינון` : ''}</span></p>
+    ${sections}
+    <section class="section" aria-labelledby="h-fsup">
+      <div class="section-head"><h2 id="h-fsup">ספקי ריהוט ובקשות שיתוף פעולה</h2><span class="small faint">${sups.length} מתוך ${FD.suppliers.length}</span></div>
+      <p class="small muted lede">בקשת שת"פ = הפנייה לספק על מחיר סוחר, משלוח והרכבה, תמונות וייצור לפי הזמנה. כל פנייה נשלחת רק באישורך ועל הסחורה של אותו ספק בלבד (ד.8). המצב נלקח מ-<code>data/suppliers/directory.json</code>, מטבלאות <code>docs/suppliers/outreach/README.md</code> ומהיומן, והמקור מופיע ליד כל מצב.</p>
+      <div class="toolbar"><div class="field"><label for="ff-coop">מצב הבקשה</label><select id="ff-coop">${opt('', F.coop, 'הכול')}${Object.keys(F_COOP).map(k => opt(k, F.coop, `${F_COOP[k]} (${coopCount[k] || 0})`)).join('')}</select></div></div>
+      <div class="fsup-grid">${supCards || '<p class="empty">אין ספקים במצב הזה.</p>'}</div>
+    </section>
+    <p class="xs faint formula">דרגות העמדות ושער הוואו: <code>${esc(src.review || '')}</code> §2. בדרגה א כל דגם עובר את שער הוואו לפני הדירוג; בדרגות ב ו-ג השערים שבטבלה. מחיר צרכן הוא המחיר באתר הספק, לא מחיר סוחר, ולכן אין לו עדיין חישוב רווח. "סוג תמונה" מגיע מהליקוט או מתיאור התמונות, והדמיה לא נשפטת בשער.</p>
+  </div>`;
+  paintVars(box);
+  restore();
+  const setF = (k, val, focusId) => { S.furn[k] = val; store.set('furn', S.furn); renderFurniture(); const el = $('#' + focusId); if(el) el.focus(); };
+  $('#furn-filters').onsubmit = ev => ev.preventDefault();
+  for(const [k, id] of [['room', 'ff-room'], ['style', 'ff-style'], ['tier', 'ff-tier'], ['verdict', 'ff-verdict'], ['sup', 'ff-sup'], ['coop', 'ff-coop']]) $('#' + id).onchange = e => setF(k, e.target.value, id);
+  for(const b of $$('[data-furn-sup]', box)) b.onclick = () => { setF('sup', b.dataset.furnSup, 'ff-sup'); const first = $('#furn-body .f-slot'); if(first) first.scrollIntoView({block: 'start'}); };
 }
 
 /* ---------- suppliers screen ---------- */

@@ -469,6 +469,121 @@ legend {
   color: rgba(244, 241, 236, 0.78);
 }
 
+/* ---------- supplier options (studio rules ג, 2026-10-11) ---------- */
+.opt-picker {
+  display: grid;
+  gap: 14px;
+}
+.opt-axis {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.opt-legend {
+  padding: 0;
+  font-family: var(--f-body);
+  font-weight: 600;
+  font-size: 15px;
+}
+.opt-current {
+  font-weight: 400;
+  color: var(--ink-2);
+}
+.opt-values {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.opt-value {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  font-size: 15px;
+  cursor: pointer;
+}
+/* the native radio covers its label: one tab stop per axis, arrow keys, and the label is the target */
+.opt-value input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: inherit;
+}
+.opt-value:has(input:checked) {
+  border-color: var(--ink);
+  box-shadow: inset 0 0 0 1px var(--ink);
+}
+.opt-value:has(input:focus-visible) {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+.opt-value.is-off {
+  border-style: dashed;
+  color: var(--ink-2);
+  cursor: not-allowed;
+}
+.opt-value.is-off .opt-text {
+  text-decoration: line-through;
+}
+.opt-swatch {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1px solid var(--line-strong);
+  flex: none;
+}
+.opt-values.is-swatches .opt-value {
+  justify-content: center;
+  width: 44px;
+  padding: 0;
+}
+.opt-values.is-swatches .opt-swatch {
+  width: 30px;
+  height: 30px;
+}
+.opt-values.is-swatches .opt-value.is-off .opt-swatch {
+  opacity: 0.4;
+}
+.opt-values.is-swatches .opt-value.is-off::after {
+  content: '';
+  position: absolute;
+  width: 2px;
+  height: 34px;
+  background: var(--ink-2);
+  transform: rotate(45deg);
+  pointer-events: none;
+}
+.opt-select {
+  max-width: 100%;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-size: 15px;
+}
+.opt-select:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+.opt-room-note {
+  margin: 0;
+}
+
 /* ---------- standards and safety (D9) ---------- */
 .safety-list {
   margin: 0;

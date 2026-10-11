@@ -27,6 +27,7 @@ const base: PublicProduct = {
   variants: [{ id: 'candles:default', label_he: 'ברירת מחדל' }],
   pack: { set_qty: 2, unit_price_agorot: 19900, unit_price_estimated: true },
   safety: null,
+  options: null,
 };
 const noop = () => undefined;
 

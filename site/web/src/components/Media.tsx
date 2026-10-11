@@ -2,7 +2,8 @@ import type { Ref } from 'preact';
 import { formatIls } from '@hd/shared/money';
 import type { PublicProduct } from '@hd/shared';
 import { mediaUrl } from '../media';
-import { scene, slotOf, supplierImage, product as productById } from '../catalog';
+import { scene, slotOf, supplierImage, optionImage as optionPhoto, product as productById } from '../catalog';
+import { optionLabelHe, optionsOf } from '../variants';
 import type { GalleryImage } from './ProductGallery';
 
 const FORMATS: ('avif' | 'webp')[] = __ARTIFACT__ ? ['webp'] : scene.formats;
@@ -63,32 +64,41 @@ export function productImage(id: string): string | null {
 
 /**
  * The product page pictures (FR-I): the render from the room first, with a visible note that it is a render, then the
- * supplier's original photo (when tools/supplier-images.ts fetched one).
+ * supplier's original photo (when tools/supplier-images.ts fetched one). With supplier options (2026-10-11) the render
+ * stays the room's option and says which one it is, and the supplier photo is the chosen option's when there is one.
  */
-export function galleryImages(p: PublicProduct): GalleryImage[] {
+export function galleryImages(p: PublicProduct, variantId?: string): GalleryImage[] {
   const out: GalleryImage[] = [];
   const render = productImage(p.id);
-  const sup = supplierImage(p.id);
+  const o = optionsOf(p);
+  const roomSku = o?.skus.find((s) => s.in_room);
+  const chosen = o?.skus.find((s) => s.variant_id === variantId) ?? roomSku;
+  // the listing's own photo for the room's option (FR-I, schema.org image); another option shows its own picture
+  const optImg = chosen && o && !chosen.in_room ? optionPhoto(p.id, o.skus.indexOf(chosen)) : null;
+  const sup = optImg ?? supplierImage(p.id);
+  const roomLabel = roomSku ? optionLabelHe(p, roomSku.values) : '';
   if (render)
     out.push({
       kind: 'render',
       src: render,
-      alt: `הדמיה: ${p.name_he} בחדר`,
+      alt: `הדמיה: ${p.name_he} בחדר${roomLabel ? `, ${roomLabel}` : ''}`,
       width: 600,
       height: 600,
       label: 'הדמיה בחדר',
-      caption: `כך המוצר נראה בחדר (המוצר מרונדר).${sup ? ' התמונה המקורית מהספק בתמונה הבאה.' : ''}`,
+      caption: `כך המוצר נראה בחדר (המוצר מרונדר)${roomLabel ? `, באפשרות ${roomLabel}` : ''}.${sup ? ' התמונה המקורית מהספק בתמונה הבאה.' : ''}`,
     });
-  if (sup)
+  if (sup) {
+    const chosenLabel = optImg && chosen ? optionLabelHe(p, chosen.values) : '';
     out.push({
       kind: 'supplier',
       src: mediaUrl(sup.src, undefined, 'webp'),
-      alt: `תמונת הספק: ${p.name_he}`,
+      alt: `תמונת הספק: ${p.name_he}${chosenLabel ? `, ${chosenLabel}` : ''}`,
       width: sup.width,
       height: sup.height,
       label: 'תמונת הספק',
-      caption: 'התמונה המקורית מהספק.',
+      caption: chosenLabel ? `התמונה המקורית מהספק, באפשרות ${chosenLabel}.` : 'התמונה המקורית מהספק.',
     });
+  }
   return out;
 }
 

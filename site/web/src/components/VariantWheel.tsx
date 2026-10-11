@@ -14,6 +14,7 @@ import { IconClose, IconLeft, IconRight } from './Icons';
 import { addToCart, cartBusy } from '../state/cart';
 import { prefersReducedMotion } from '../motion';
 import { PackPicker, packPrice } from './PackPicker';
+import { defaultVariantId, optionLabelHe, optionsOf } from '../variants';
 
 const STEP_DEG = 34;
 
@@ -269,6 +270,15 @@ export function VariantWheel({ slot, initial, onPreview, onChoose, onCancel }: P
           <>
             <Price class="price" agorot={packPrice(p, pack)} provisional={p.price_provisional} />
             <PackPicker p={p} value={pack} onChange={setPack} id={`wheel-pack-${slot.id}`} onStage />
+            {optionsOf(p) ? (
+              // the room shows one supplier option; all of them are sold from the product page (2026-10-11)
+              <p class="specs opt-hint">
+                בחדר: {optionLabelHe(p, optionsOf(p)!.skus.find((s) => s.in_room)!.values)}. עוד אפשרויות בעמוד המוצר:{' '}
+                {optionsOf(p)!
+                  .axes.map((a) => `${a.name_he} (${a.values.length})`)
+                  .join(', ')}
+              </p>
+            ) : null}
           </>
         ) : (
           <p class="specs">אין עדיין מוצר בעמדה הזו. התצוגה בחדר זמנית.</p>
@@ -291,7 +301,12 @@ export function VariantWheel({ slot, initial, onPreview, onChoose, onCancel }: P
                 type="button"
                 class="btn btn-ghost"
                 disabled={cartBusy.value}
-                onClick={() => void addToCart(p.variants[0]!.id, p.name_he, 1, pack, p.pack ? packLabelHe(pack, p.pack.set_qty) : undefined)}
+                onClick={() => {
+                  // the option the room shows (default_sku), never another one
+                  const room = optionsOf(p)?.skus.find((s) => s.in_room);
+                  const label = [room ? optionLabelHe(p, room.values) : null, p.pack ? packLabelHe(pack, p.pack.set_qty) : null].filter(Boolean).join(', ');
+                  void addToCart(defaultVariantId(p), p.name_he, 1, pack, label || undefined);
+                }}
               >
                 הוספה לסל
               </button>

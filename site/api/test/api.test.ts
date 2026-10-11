@@ -30,6 +30,7 @@ function product(id: string, slot: string, price: number, cost: number, set?: { 
     variants: [{ id: `${id}:default`, label_he: 'ברירת מחדל' }],
     pack: set ? { set_qty: set.n, unit_price_agorot: set.unit, unit_price_estimated: true } : null,
     safety: null,
+    options: null,
   };
   return {
     ...base,
@@ -61,6 +62,30 @@ function product(id: string, slot: string, price: number, cost: number, set?: { 
       DEFAULT_SETTINGS,
     ),
   };
+}
+
+function withOptions(p: FullProduct): FullProduct {
+  const v = (id: string, label: string, sku: string, retail: number, cost: number, ship: number, active: boolean, inRoom: boolean) => ({
+    id: `${p.id}:${id}`,
+    label_he: label,
+    option_label_he: label,
+    supplier_sku: sku,
+    cost_usd_cents: cost,
+    shipping_usd_cents: ship,
+    retail_agorot: retail,
+    unit_retail_agorot: null,
+    price_provisional: true,
+    unit_price_estimated: false,
+    active,
+    in_room: inRoom,
+    supplier_image_url: null,
+  });
+  const variants_full = [
+    v('o-beige45', 'בז\', 45×45 ס"מ', '12000059524978165', 8900, 1117, 1000, true, true),
+    v('o-black60', 'שחור, 60×60 ס"מ', '12000059524978199', 11900, 1599, 1100, true, false),
+    v('o-green50', 'ירוק, 50×50 ס"מ', '12000059524978177', 9900, 1250, 1000, false, false),
+  ];
+  return { ...p, variants: variants_full.map(({ id, label_he }) => ({ id, label_he })), variants_full };
 }
 
 const catalog: FullCatalog = {
@@ -108,6 +133,8 @@ const catalog: FullCatalog = {
     product('vase-b', 'vase', 25900, 2405),
     // P1: a pair sold as a set of 2 (₪349) or as one piece (₪199, estimated)
     product('candles-a', 'candle-holders', 34900, 907, { n: 2, unit: 19900 }),
+    // supplier options (2026-10-11): the room's option, a dearer one, and one out of stock
+    withOptions(product('cushion-a', 'cushions', 8900, 1117)),
   ],
   shipping: [
     { id: 'economy', label_he: 'חסכוני', price_agorot: 2900, free_over_agorot: 29900, days_he: '', provisional: true, is_default: true },
@@ -202,6 +229,39 @@ describe('public api', () => {
     expect((await req(`/api/orders/${body.order_id}`, { headers: { 'x-order-token': 'x'.repeat(32) } })).status).toBe(404);
     const view = (await (await req(`/api/orders/${body.order_id}`, { headers: { 'x-order-token': body.order_token } })).json()) as { status_he: string };
     expect(view.status_he).toBe('ממתינה לתשלום');
+  });
+});
+
+describe('supplier options (2026-10-11)', () => {
+  type CartBody = { subtotal_agorot: number; lines: { variant_id: string; option_he: string | null; unit_price_agorot: number }[] };
+
+  it('each option is its own variant with its own price; the cart names the option; out of stock is refused', async () => {
+    const id = await cartWith('cushion-a:o-black60', 2);
+    const cart = (await (await req(`/api/cart/${id}`)).json()) as CartBody;
+    expect(cart.lines).toEqual([expect.objectContaining({ variant_id: 'cushion-a:o-black60', option_he: 'שחור, 60×60 ס"מ', unit_price_agorot: 11900 })]);
+    expect(cart.subtotal_agorot).toBe(23800);
+    const oos = await req(`/api/cart/${id}/items`, json({ variant_id: 'cushion-a:o-green50', qty: 1 }, 'PUT'));
+    expect(oos.status).toBe(404);
+    // a product without options keeps its single variant and no option label
+    const plain = (await (await req(`/api/cart/${id}/items`, json({ variant_id: 'vase-a:default', qty: 1 }, 'PUT'))).json()) as CartBody;
+    expect(plain.lines.find((l) => l.variant_id === 'vase-a:default')?.option_he).toBeNull();
+  });
+
+  it("checkout snapshots the option's cost, shipping and supplier SKU, and names the option", async () => {
+    const id = await cartWith('cushion-a:o-black60', 1);
+    const body = (await (await req('/api/checkout', json(checkoutBody(id)))).json()) as { order_id: string };
+    const item = await env.DB.prepare(
+      'SELECT name_he, unit_price_agorot, unit_cost_usd_cents, unit_shipping_usd_cents, supplier_sku FROM order_items WHERE order_id = ?',
+    )
+      .bind(body.order_id)
+      .first<Record<string, string | number>>();
+    expect(item).toEqual({
+      name_he: 'מוצר cushion-a (שחור, 60×60 ס"מ)',
+      unit_price_agorot: 11900,
+      unit_cost_usd_cents: 1599,
+      unit_shipping_usd_cents: 1100,
+      supplier_sku: '12000059524978199',
+    });
   });
 });
 

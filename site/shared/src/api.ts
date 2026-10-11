@@ -16,6 +16,8 @@ export const CartLineSchema = z.object({
   variant_id: z.string(),
   product_id: z.string(),
   name_he: z.string(),
+  /** the supplier option chosen on the product page ("בז', 45×45 ס"מ"); null for a product without options */
+  option_he: z.string().nullable(),
   pack: z.enum(PACKS),
   /** pieces in one of this line's sale units: the set size for 'set' (1 when not sold as a set), 1 for 'unit' */
   pack_qty: z.number().int().min(1),

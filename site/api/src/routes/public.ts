@@ -139,7 +139,8 @@ publicApi.post('/checkout', async (c) => {
 
   // cost snapshots for real per-order margin
   const { results: costs } = await c.env.DB.prepare(
-    `SELECT v.id AS variant_id, p.cost_usd_cents, p.shipping_usd_cents, p.sell_qty, v.fulfillment_source, v.supplier_sku
+    `SELECT v.id AS variant_id, COALESCE(v.cost_usd_cents, p.cost_usd_cents) AS cost_usd_cents,
+            COALESCE(v.shipping_usd_cents, p.shipping_usd_cents) AS shipping_usd_cents, p.sell_qty, v.fulfillment_source, v.supplier_sku
      FROM product_variants v JOIN products p ON p.id = v.product_id
      WHERE v.id IN (${cart.lines.map(() => '?').join(',')})`,
   )
@@ -210,7 +211,8 @@ publicApi.post('/checkout', async (c) => {
         i + 1,
         l.product_id,
         l.variant_id,
-        l.name_he,
+        // the snapshot names the supplier option the buyer chose
+        l.option_he ? `${l.name_he} (${l.option_he})` : l.name_he,
         l.qty,
         l.unit_price_agorot,
         cost?.cost_usd_cents ?? 0,

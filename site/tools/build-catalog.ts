@@ -41,6 +41,14 @@ import {
   sellQtyDefault,
   unitPriceEstimateIls,
   publicSafety,
+  optionIssues,
+  skuCostCents,
+  skuShippingCents,
+  skuRetail,
+  optionVariantId,
+  type CardOptions,
+  type FullVariant,
+  type PublicOptions,
 } from '@hd/shared';
 import { REPO, GENERATED, repoPath, sitePath } from './lib/paths';
 import { materialsHe, colorNameHe, hasHebrew } from './lib/hebrew';
@@ -90,8 +98,23 @@ const { settings, defaults_used } = resolveSettings(settingsInput);
 
 /** Cards that fail data/product-card.schema.json are reported and skipped (data/ is not ours to fix). */
 const invalidCards: { path: string; issues: string }[] = [];
+/** Cards whose `options` alone are broken: the product is shown without its options, and the problem is reported. */
+const invalidOptions: { path: string; issues: string }[] = [];
 const cards: { card: ProductCard; path: string }[] = walk(repoPath('data/products')).flatMap((p) => {
-  const parsed = ProductCardSchema.safeParse(readJson(p));
+  const raw = readJson(p) as Record<string, unknown>;
+  let parsed = ProductCardSchema.safeParse(raw);
+  if (!parsed.success && parsed.error.issues.every((i) => i.path[0] === 'options')) {
+    invalidOptions.push({ path: relative(REPO, p), issues: parsed.error.issues.map((i) => `${i.path.join('.')}: ${i.message}`).join('; ') });
+    const { options: _dropped, ...rest } = raw;
+    parsed = ProductCardSchema.safeParse(rest);
+  } else if (parsed.success && parsed.data.options) {
+    const issues = optionIssues(parsed.data.options);
+    if (issues.length) {
+      invalidOptions.push({ path: relative(REPO, p), issues: issues.join('; ') });
+      const { options: _dropped, ...rest } = parsed.data;
+      parsed = ProductCardSchema.safeParse(rest);
+    }
+  }
   if (!parsed.success) {
     invalidCards.push({
       path: relative(REPO, p),
@@ -163,6 +186,127 @@ function productNotes(slot: Slot, fillerNames: string[], o: { wiredInSafety: boo
   return notes;
 }
 
+const daysOf = (d: string | null | undefined): [number, number] | null => {
+  const m = /^(\d+)(?:-(\d+))?$/.exec(d ?? '');
+  return m ? [Number(m[1]), Number(m[2] ?? m[1])] : null;
+};
+type OptionsBuild = { public: PublicOptions; full: FullVariant[] } | null;
+
+/**
+ * Every option of the supplier (card `options`) as variants with their own price: the room's SKU is the product
+ * (its price, cost and shipping), the others go through the same economics (shared/src/options.ts). The public form is
+ * compact (the catalog ships in the JS bundle); variant ids are derived from the value ids (optionVariantId).
+ */
+function buildOptions(
+  card: ProductCard,
+  o: CardOptions,
+  p: {
+    retail: number;
+    provisional: boolean;
+    studioRetailIls: number | null;
+    cost: number;
+    ship: number;
+    sellQty: number;
+    pack: FullProduct['pack'];
+    days: [number, number] | null;
+  },
+  econ: ProductEconomics,
+): OptionsBuild {
+  const dflt = o.skus.find((s) => s.id === o.default_sku);
+  if (!dflt || dflt.price.currency !== 'USD') return null;
+  const dfltCents = usdToCents(dflt.price.amount);
+  const valueOf = (axis: CardOptions['axes'][number], s: CardOptions['skus'][number]) => axis.values.find((v) => v.id === s.values[axis.id])!;
+  const full: FullVariant[] = [];
+  const rows: {
+    s: CardOptions['skus'][number];
+    retail: number;
+    provisional: boolean;
+    unit: number | null;
+    days: [number, number] | null;
+    available: boolean;
+  }[] = [];
+  for (const s of o.skus) {
+    const isDefault = s === dflt;
+    if (s.price.currency !== 'USD') continue;
+    const cost = isDefault ? p.cost : skuCostCents(p.cost, dfltCents, usdToCents(s.price.amount));
+    const ship = isDefault ? p.ship : skuShippingCents(p.ship, dflt.shipping_il, s.shipping_il);
+    const r = skuRetail(
+      {
+        is_default: isDefault,
+        product_retail_agorot: p.retail,
+        product_price_provisional: p.provisional,
+        studio_retail_ils: p.studioRetailIls,
+        sku_override_ils: econ.sku_retail_ils?.[s.id] ?? null,
+        cost_usd_cents: cost,
+        shipping_usd_cents: ship,
+        default_cost_usd_cents: p.cost,
+        default_shipping_usd_cents: p.ship,
+        fx_usd_ils: settings.fx_usd_ils,
+        sell_qty: p.sellQty,
+        strict: STRICT,
+      },
+      settings,
+    );
+    if (!r) continue; // strict build: an option without a studio price is not sold
+    // P1: one piece of a set, per option (the room's keeps the product's unit price)
+    const unit = p.pack ? (isDefault ? p.pack.unit_price_agorot : ilsToAgorot(unitPriceEstimateIls(r.retail_agorot / 100, p.sellQty))) : null;
+    const id = optionVariantId(
+      card.id,
+      o.axes.map((a) => s.values[a.id]!),
+    );
+    if (id.length > 160) throw new Error(`${card.id}: variant id longer than the cart accepts: ${id}`);
+    const available = isDefault || s.stock === undefined || s.stock === null || s.stock > 0;
+    full.push({
+      id,
+      label_he: o.axes.map((a) => `${a.name_he}: ${valueOf(a, s).label_he}`).join(', '),
+      option_label_he: o.axes.map((a) => valueOf(a, s).label_he).join(', '),
+      supplier_sku: s.id,
+      cost_usd_cents: cost,
+      shipping_usd_cents: ship,
+      retail_agorot: r.retail_agorot,
+      unit_retail_agorot: unit,
+      price_provisional: r.provisional,
+      unit_price_estimated: p.pack ? (isDefault ? p.pack.unit_price_estimated : true) : false,
+      active: available,
+      in_room: isDefault,
+      supplier_image_url: s.image && /^https:\/\//.test(s.image) ? s.image : null,
+    });
+    const days = daysOf(s.shipping_il?.days);
+    rows.push({
+      s,
+      retail: r.retail_agorot,
+      provisional: r.provisional,
+      unit,
+      days: days && (!p.days || days[0] !== p.days[0] || days[1] !== p.days[1]) ? days : null,
+      available,
+    });
+  }
+  if (new Set(full.map((v) => v.id)).size !== full.length) throw new Error(`${card.id}: two options share a variant id`);
+  if (rows.length < 2) return null;
+  // the room's option first in the variants (the default everywhere); the public list keeps the supplier's order
+  full.sort((a, b) => Number(b.in_room) - Number(a.in_room));
+  const axes = o.axes.map((a) => ({ a, values: a.values.filter((v) => rows.some((r) => r.s.values[a.id] === v.id)) }));
+  const pv = rows.filter((r) => r.provisional).length * 2 >= rows.length;
+  return {
+    public: {
+      axes: axes.map(({ a, values }) => ({
+        id: a.id,
+        name_he: a.name_he,
+        values: values.map((v) => [v.id, v.label_he, v.hex ?? null] as [string, string, string | null]),
+      })),
+      v: rows.map((r) => axes.map(({ a, values }) => values.findIndex((v) => v.id === r.s.values[a.id]))),
+      p: rows.map((r) => r.retail),
+      room: rows.findIndex((r) => r.s === dflt),
+      off: rows.flatMap((r, i) => (r.available ? [] : [i])),
+      pv,
+      px: rows.flatMap((r, i) => (r.provisional !== pv ? [i] : [])),
+      u: p.pack ? rows.map((r) => r.unit!) : null,
+      d: rows.some((r) => r.days) ? rows.map((r) => r.days) : null,
+    },
+    full,
+  };
+}
+
 function buildProduct(card: ProductCard, path: string, roomId: string, slot: Slot, fillerNames: string[]): FullProduct | HiddenProduct {
   const econ = productEcon[card.id] ?? {};
   const cost = usdToCents(card.price.currency === 'USD' ? card.price.cost : NaN);
@@ -206,6 +350,39 @@ function buildProduct(card: ProductCard, path: string, roomId: string, slot: Slo
   const pack =
     unitIls === null ? null : { set_qty: sellQty, unit_price_agorot: ilsToAgorot(unitIls), unit_price_estimated: typeof econ.unit_retail_ils !== 'number' };
   const safety = publicSafety(card.safety);
+  const opts = card.options
+    ? buildOptions(
+        card,
+        card.options,
+        {
+          retail,
+          provisional,
+          studioRetailIls: typeof econ.retail_ils === 'number' ? econ.retail_ils : null,
+          cost,
+          ship,
+          sellQty,
+          pack,
+          days: shippingDays(card),
+        },
+        econ,
+      )
+    : null;
+  const defaultVariant: FullVariant = {
+    id: `${card.id}:default`,
+    label_he: 'ברירת מחדל',
+    option_label_he: null,
+    supplier_sku: card.supplier.sku ?? null,
+    cost_usd_cents: cost,
+    shipping_usd_cents: ship,
+    retail_agorot: retail,
+    unit_retail_agorot: pack?.unit_price_agorot ?? null,
+    price_provisional: provisional,
+    unit_price_estimated: pack?.unit_price_estimated ?? false,
+    active: true,
+    in_room: true,
+    supplier_image_url: null,
+  };
+  const variantsFull = opts ? opts.full : [defaultVariant];
   return {
     id: card.id,
     room: roomId,
@@ -222,9 +399,11 @@ function buildProduct(card: ProductCard, path: string, roomId: string, slot: Slo
     shipping_days: shippingDays(card),
     notes_he: productNotes(slot, fillerNames, { wiredInSafety: safety?.power === 'wired', packChoice: pack !== null }),
     set_of: slot.set_of ?? null,
-    variants: [{ id: `${card.id}:default`, label_he: 'ברירת מחדל' }],
+    variants: variantsFull.map((v) => ({ id: v.id, label_he: v.label_he })),
     pack,
     safety,
+    options: opts ? opts.public : null,
+    variants_full: variantsFull,
     name_supplier: card.name,
     category: card.category ?? null,
     status: card.status,
@@ -417,9 +596,11 @@ const publicProducts = fullProducts.map((p) => ({
   shipping_days: p.shipping_days,
   notes_he: p.notes_he,
   set_of: p.set_of,
-  variants: p.variants,
+  // with options, the room's variant only: the others are derived from `options` (optionVariantId)
+  variants: p.options ? p.variants.slice(0, 1) : p.variants,
   pack: p.pack,
   safety: p.safety,
+  options: p.options,
 }));
 
 const base = {
@@ -440,6 +621,7 @@ const fullCatalog: FullCatalog = {
   products: fullProducts,
   hidden,
   invalid_cards: invalidCards,
+  invalid_options: invalidOptions,
   economics: {
     settings,
     defaults_used,
@@ -469,6 +651,9 @@ console.log(
       .map((r) => `${r} ${fullProducts.filter((p) => p.supplier_image.usage_rights === r).length}`)
       .join(', ')}`,
     `  fixed-product slots waiting for a card (F3): ${fixedWaiting.length ? fixedWaiting.join(', ') : 'none'}`,
+    `  supplier options (2026-10-11): ${fullProducts.filter((p) => p.options).length} products with options, ${fullProducts.reduce((n, p) => n + (p.options?.v.length ?? 0), 0)} SKUs${
+      invalidOptions.length ? ` · options dropped (invalid): ${invalidOptions.map((c) => `${c.path} (${c.issues})`).join('; ')}` : ''
+    }`,
     `  invalid product cards skipped: ${invalidCards.length}${invalidCards.length ? ' · ' + invalidCards.map((c) => `${c.path} (${c.issues})`).join('; ') : ''}`,
   ].join('\n'),
 );

@@ -8,6 +8,7 @@
  */
 import { z } from 'zod';
 import { PublicSafetySchema } from './safety';
+import { PublicOptionsSchema } from './options';
 
 const Unit = z.number().min(0).max(1);
 
@@ -57,6 +58,11 @@ export const PublicProductSchema = z.object({
     .nullable(),
   /** Standards and safety claims from the card (D9); null when the card has none. */
   safety: PublicSafetySchema.nullable(),
+  /**
+   * Every option of the supplier (card `options`, studio rules ג 2026-10-11), compact (shared/src/options.ts); null when
+   * the product is sold as one SKU. Each option is a variant (optionVariantId); `variants` then holds the room's only.
+   */
+  options: PublicOptionsSchema.nullable(),
 });
 export type PublicProduct = z.infer<typeof PublicProductSchema>;
 
@@ -117,8 +123,29 @@ export const PublicCatalogSchema = z.object({
 });
 export type PublicCatalog = z.infer<typeof PublicCatalogSchema>;
 
+/** One sellable variant with its own price and cost (build-time: seed and admin). */
+export type FullVariant = {
+  id: string;
+  label_he: string;
+  /** the option's label on the product page and in the cart, null for a product without options */
+  option_label_he: string | null;
+  supplier_sku: string | null;
+  cost_usd_cents: number;
+  shipping_usd_cents: number;
+  retail_agorot: number;
+  unit_retail_agorot: number | null;
+  price_provisional: boolean;
+  unit_price_estimated: boolean;
+  active: boolean;
+  in_room: boolean;
+  /** the supplier's picture of this option (tools/supplier-images.ts serves it from our media) */
+  supplier_image_url: string | null;
+};
+
 /** Build-time only (seed, admin). */
 export type FullProduct = PublicProduct & {
+  /** every variant with its own price and cost; the first is the room's (with no options: the product itself) */
+  variants_full?: FullVariant[];
   name_supplier: string;
   category: string | null;
   status: 'candidate' | 'selected' | 'rejected';
@@ -163,6 +190,12 @@ export type SupplierImageManifest = {
   /** the width the files are encoded at (and named by) */
   width: number;
   products: Record<string, SupplierImage>;
+  /**
+   * The supplier's picture of each option (card `options`), by product: one file per distinct picture
+   * (media/products/<id>/<name>.<width>.webp), and per SKU, in the order of the product's `options.v`, the index of its
+   * file (null: none). `artifact`: the file ships with the Artifact (its file limit; the others fall back there).
+   */
+  options?: Record<string, { files: { name: string; width: number; height: number; artifact: boolean }[]; sku: (number | null)[] }>;
   missing: { id: string; reason: string }[];
 };
 
@@ -170,6 +203,8 @@ export type FullCatalog = Omit<PublicCatalog, 'products'> & {
   products: FullProduct[];
   hidden: HiddenProduct[];
   invalid_cards: { path: string; issues: string }[];
+  /** cards shown without their `options` because those are broken (the rest of the card is fine) */
+  invalid_options?: { path: string; issues: string }[];
   economics: {
     settings: import('./schema/economics').EconomicsSettings;
     defaults_used: string[];

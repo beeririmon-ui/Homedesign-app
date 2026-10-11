@@ -7,6 +7,7 @@ import type { Cart, CheckoutRequest, OrderView, Pack } from '@hd/shared';
 import { ORDER_STATUS_HE, type OrderStatus } from '@hd/shared/constants';
 import { catalog } from '../catalog';
 import { validateCheckout } from '../validate';
+import { optionsOf, variantView } from '../variants';
 import { ApiError, type StoreApi } from './types';
 
 type MockCart = { id: string; open: boolean; items: { variant_id: string; pack?: Pack; qty: number }[] };
@@ -49,26 +50,32 @@ const write = (k: string, v: unknown) => store.set(k, JSON.stringify(v));
 const rid = (n = 18) => [...crypto.getRandomValues(new Uint8Array(n))].map((b) => 'abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789'[b % 56]).join('');
 const delay = (ms = 120) => new Promise((r) => setTimeout(r, ms));
 
-const variantIndex = new Map(catalog.products.flatMap((p) => p.variants.map((v) => [v.id, p] as const)));
+// every variant: the product's own, and each supplier option (derived from the compact options, 2026-10-11)
+const variantIndex = new Map(
+  catalog.products.flatMap((p) => [...p.variants.map((v) => v.id), ...(optionsOf(p)?.skus.map((s) => s.variant_id) ?? [])].map((id) => [id, p] as const)),
+);
 
 function view(c: MockCart): Cart {
   // same rules as the Worker (api/src/lib/store.ts): the set by default, one piece only where the product has it
   const lines = c.items.flatMap((i) => {
     const p = variantIndex.get(i.variant_id);
     const pack: Pack = i.pack ?? 'set';
-    if (!p || (pack === 'unit' && !p.pack)) return [];
-    const price = pack === 'unit' ? p.pack!.unit_price_agorot : p.price_agorot;
+    // a supplier option has its own price (studio rules ג, 2026-10-11); an out-of-stock option is not sold
+    const v = p ? variantView(p, i.variant_id) : null;
+    if (!p || !v || !v.available || (pack === 'unit' && (!p.pack || v.unit_price_agorot === null))) return [];
+    const price = pack === 'unit' ? v.unit_price_agorot! : v.price_agorot;
     return [
       {
         variant_id: i.variant_id,
         product_id: p.id,
         name_he: p.name_he,
+        option_he: v.option_he,
         pack,
         pack_qty: pack === 'unit' ? 1 : (p.pack?.set_qty ?? 1),
         qty: i.qty,
         unit_price_agorot: price,
         line_total_agorot: price * i.qty,
-        price_provisional: p.price_provisional || (pack === 'unit' && p.pack!.unit_price_estimated),
+        price_provisional: v.price_provisional || (pack === 'unit' && v.unit_price_estimated),
       },
     ];
   });
@@ -105,7 +112,7 @@ export const mockApi: StoreApi = {
     await delay();
     const c = cartOr404(cartId);
     const p = variantIndex.get(variant_id);
-    if (!p) throw new ApiError(404, 'variant_not_found', 'המוצר לא זמין.');
+    if (!p || !variantView(p, variant_id)?.available) throw new ApiError(404, 'variant_not_found', 'המוצר לא זמין.');
     if (!Number.isInteger(qty) || qty < 0 || qty > 20 || (pack !== 'set' && pack !== 'unit')) throw new ApiError(422, 'invalid_body');
     if (pack === 'unit' && !p.pack) throw new ApiError(422, 'pack_unavailable', 'המוצר הזה נמכר רק כסט.');
     const same = (i: MockCart['items'][number]) => i.variant_id === variant_id && (i.pack ?? 'set') === pack;
@@ -132,7 +139,13 @@ export const mockApi: StoreApi = {
       created_at: new Date().toISOString(),
       total_agorot: v.subtotal_agorot + (ship.free_over_agorot !== null && v.subtotal_agorot >= ship.free_over_agorot ? 0 : ship.price_agorot),
       shipping_method: req.shipping_method,
-      lines: v.lines.map((l) => ({ name_he: l.name_he, pack: l.pack, pack_qty: l.pack_qty, qty: l.qty, line_total_agorot: l.line_total_agorot })),
+      lines: v.lines.map((l) => ({
+        name_he: l.option_he ? `${l.name_he} (${l.option_he})` : l.name_he,
+        pack: l.pack,
+        pack_qty: l.pack_qty,
+        qty: l.qty,
+        line_total_agorot: l.line_total_agorot,
+      })),
     };
     write('hd.mock.orders', { ...orders(), [id]: o });
     c.open = false;

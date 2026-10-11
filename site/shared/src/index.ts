@@ -8,3 +8,4 @@ export * from './money';
 export * from './signature';
 export * from './packs';
 export * from './safety';
+export * from './options';

@@ -4,6 +4,14 @@
  */
 import { test, expect, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+import { readFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import type { PublicCatalog } from '../shared/src/catalog';
+
+// a product with supplier options (2026-10-11), the most axes first: swatches, chips and a list on one page
+const catalog = JSON.parse(readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), '../.generated/catalog.public.json'), 'utf8')) as PublicCatalog;
+const WITH_OPTIONS = catalog.products.filter((p) => p.options).sort((a, b) => b.options!.axes.length - a.options!.axes.length)[0];
 
 const TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'];
 
@@ -44,6 +52,17 @@ for (const scheme of ['light', 'dark'] as const) {
       await expect(page.getByRole('dialog')).toBeVisible();
       await page.waitForTimeout(400);
       await audit(page, `${scheme} wheel`);
+    });
+
+    test('a product with supplier options: swatches, chips or a list, another option chosen', async ({ page }) => {
+      test.skip(!WITH_OPTIONS, 'no product with options in the catalog');
+      await page.goto(`/p/${WITH_OPTIONS!.id}/`);
+      const picker = page.locator('.opt-picker');
+      await expect(picker).toBeVisible();
+      await audit(page, `${scheme} options, the room's option`);
+      await picker.locator('input:not(:checked):not(:disabled)').first().check();
+      await expect(page.locator('.opt-room-note')).toBeVisible();
+      await audit(page, `${scheme} options, another option`);
     });
 
     test('a set product (set or single piece), and its wheel', async ({ page }) => {

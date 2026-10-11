@@ -5,6 +5,7 @@ import { catalog, livingRoom, product, slotOf } from './catalog';
 import { mediaUrl } from './media';
 import { scene } from './catalog';
 import { galleryImages } from './components/Media';
+import { optionsOf } from './variants';
 
 export type Head = { title: string; description: string; canonical: string; jsonLd: object[]; noindex?: boolean; preload?: string };
 
@@ -85,8 +86,23 @@ export function headFor(route: Route): Head {
         material: p.materials_he.join(', ') || undefined,
       };
       // No offer markup while the price is provisional: search engines must never index a price we do not sell at.
-      if (!p.price_provisional)
-        ld.offers = { '@type': 'Offer', price: ilsNumber(p.price_agorot), priceCurrency: 'ILS', availability: 'https://schema.org/InStock', url: canonical };
+      if (!p.price_provisional) {
+        // supplier options (2026-10-11): one offer range over the options sold at a final price
+        const sold = optionsOf(p)?.skus.filter((s) => s.available && !s.price_provisional) ?? [];
+        const prices = sold.map((s) => s.price_agorot);
+        ld.offers =
+          sold.length > 1
+            ? {
+                '@type': 'AggregateOffer',
+                lowPrice: ilsNumber(Math.min(...prices)),
+                highPrice: ilsNumber(Math.max(...prices)),
+                offerCount: sold.length,
+                priceCurrency: 'ILS',
+                availability: 'https://schema.org/InStock',
+                url: canonical,
+              }
+            : { '@type': 'Offer', price: ilsNumber(p.price_agorot), priceCurrency: 'ILS', availability: 'https://schema.org/InStock', url: canonical };
+      }
       return {
         title: `${p.name_he} · ${SITE}`,
         description: p.description_he.slice(0, 155),

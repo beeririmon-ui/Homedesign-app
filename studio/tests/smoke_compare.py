@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
-"""Smoke test for the Studio, focused on the supplier comparison screen (#compare).
+"""Smoke test for the Studio: the supplier comparison screen (#compare), the furniture screen (#furniture), and every
+other screen still rendering.
 
-1. Builds the Studio with the fixture of the deep AliExpress pass (studio/tests/fixtures/deep-2026-10/) into a
-   temporary folder (studio/dist is not touched), serves it locally and opens it in Chromium.
-2. At 400px and 1280px, light and dark: every screen renders without a JavaScript error; the comparison screen shows
-   the summary, the slot tables and the fixture's winners; the filters work and keep focus; there is no horizontal
-   scroll at 400px; and axe-core finds no WCAG 2.0/2.1 A or AA violation on the screen.
-3. With --shots: builds the real data into studio/dist and saves studio/screens/compare-400.png and compare-1280.png.
+1. Builds the Studio with the fixtures (studio/tests/fixtures/: deep-2026-10 for the deep AliExpress pass,
+   furniture-il for the Israeli furniture leads, suppliers for candidates-furniture-*.json) into a temporary folder
+   (studio/dist is not touched), serves it locally and opens it in Chromium.
+2. At 400px and 1280px, light and dark: both screens show their summary, their slots and the fixture's results; the
+   filters work and keep focus; there is no horizontal scroll; axe-core finds no WCAG 2.0/2.1 A or AA violation on
+   either screen; and no screen throws a JavaScript error.
+3. With --shots: builds the real data into studio/dist and saves studio/screens/compare-{400,1280}.png and
+   studio/screens/furniture-{400,1280}.png.
 
 Usage:  python3 studio/tests/smoke_compare.py [--shots] [--keep]
 Needs:  Python Playwright and Chromium (PW_CHROMIUM, default /opt/pw-browsers/chromium); axe-core from
@@ -29,10 +32,11 @@ from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parents[2]
 STUDIO = ROOT / "studio"
-FIXTURE = STUDIO / "tests" / "fixtures" / "deep-2026-10"
+FIXTURES = STUDIO / "tests" / "fixtures"
+FIXTURE = FIXTURES / "deep-2026-10"
 AXE = ROOT / "site" / "node_modules" / "axe-core" / "axe.min.js"
 CHROMIUM = os.environ.get("PW_CHROMIUM", "/opt/pw-browsers/chromium")
-SCREENS = ["overview", "todo", "decisions", "rooms", "products", "profit", "compare", "suppliers", "budget", "quality", "log"]
+SCREENS = ["overview", "todo", "decisions", "rooms", "products", "profit", "compare", "furniture", "suppliers", "budget", "quality", "log"]
 AXE_TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"]
 
 failures: list[str] = []
@@ -44,14 +48,16 @@ def check(ok: bool, what: str) -> None:
         failures.append(what)
 
 
-def build(dist: Path | None, deep: Path | None) -> None:
+def build(dist: Path | None, deep: Path | None, fixtures: bool = False) -> None:
     cmd = [sys.executable, str(STUDIO / "build.py"), "--offline"]
     if deep:
         cmd += ["--deep-dir", str(deep)]
+    if fixtures:
+        cmd += ["--furniture-dir", str(FIXTURES / "furniture-il"), "--suppliers-dir", str(FIXTURES / "suppliers")]
     if dist:
         cmd += ["--dist", str(dist)]
     r = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True)
-    print("\n".join("    " + l for l in r.stdout.splitlines() if "comparison" in l or "dist:" in l))
+    print("\n".join("    " + l for l in r.stdout.splitlines() if "comparison" in l or "furniture" in l or "dist:" in l))
     if r.returncode != 0:
         print(r.stdout, r.stderr)
         raise SystemExit(f"build failed ({r.returncode})")
@@ -68,7 +74,7 @@ def serve(folder: Path):
     return srv, f"http://127.0.0.1:{srv.server_address[1]}/"
 
 
-def open_page(browser, base, width, scheme, block_net=True, state=None):
+def open_page(browser, base, width, scheme, block_net=True, state=None, screen="compare", ready=".cmp-table"):
     ctx = browser.new_context(viewport={"width": width, "height": 900}, color_scheme=scheme, locale="he-IL")
     page = ctx.new_page()
     errors: list[str] = []
@@ -77,18 +83,19 @@ def open_page(browser, base, width, scheme, block_net=True, state=None):
     if block_net:  # fonts and marked come from CDNs; the page has fallbacks
         page.route("**/*", lambda route: route.continue_() if route.request.url.startswith(base) else route.abort())
     page.add_init_script("try{localStorage.clear()}catch(e){}" + (f"localStorage.setItem('studio.cmp', {state!r});" if state else ""))
-    page.goto(base + "#compare")
-    page.wait_for_selector("#screen-compare:not([hidden]) .cmp-table", timeout=15000)
+    page.goto(base + "#" + screen)
+    page.wait_for_selector(f"#screen-{screen}:not([hidden]) {ready}", timeout=15000)
     return ctx, page, errors
 
 
-def axe(page, label):
+def axe(page, label, root="#screen-compare"):
     if not AXE.exists():
         print(f"  skip  axe ({label}): {AXE.relative_to(ROOT)} not found")
         return
-    page.add_script_tag(path=str(AXE))
-    res = page.evaluate("""(tags) => axe.run(document.querySelector('#screen-compare'), {runOnly: {type: 'tag', values: tags}})
-        .then(r => r.violations.map(v => `${v.id} (${v.impact}): ${v.nodes.length} × ${v.nodes[0].target.join(' ')} — ${v.help}`))""", AXE_TAGS)
+    if not page.evaluate("typeof axe !== 'undefined'"):
+        page.add_script_tag(path=str(AXE))
+    res = page.evaluate("""([tags, root]) => axe.run(document.querySelector(root), {runOnly: {type: 'tag', values: tags}})
+        .then(r => r.violations.map(v => `${v.id} (${v.impact}): ${v.nodes.length} × ${v.nodes[0].target.join(' ')} — ${v.help}`))""", [AXE_TAGS, root])
     check(not res, f"axe {label}: no violations" + ("" if not res else "\n        " + "\n        ".join(res[:8])))
 
 
@@ -115,7 +122,9 @@ def fixture_checks(browser, base):
             sw = page.evaluate("document.documentElement.scrollWidth")
             check(sw <= width + 1, f"{label}: no horizontal scroll (scrollWidth {sw})")
             if width == 400:
-                check(page.locator("#living-room-cushions, #cmp-living-room--cushions .cmp-narrow").first.is_visible(), f"{label}: narrow summary line visible")
+                wide = page.eval_on_selector_all("#cmp-body .tbl-wrap", "ws => ws.filter(w => w.scrollWidth > w.clientWidth + 1).length")
+                check(wide == 0, f"{label}: every table fits its box, no sideways scroll inside ({wide} overflow)")
+                check(page.locator("#cmp-living-room--cushions .cmp-narrow").first.is_visible(), f"{label}: narrow summary line visible")
                 check(not page.locator("#cmp-living-room--cushions th.w").first.is_visible(), f"{label}: wide-only columns hidden")
             axe(page, f"{label} nordic")
             # supplier filter keeps focus and shows AliExpress rows only
@@ -151,6 +160,12 @@ def fixture_checks(browser, base):
             check(page.locator("#cmp-kids--toy-cars .cand-title", has_text="FIXTURE Wooden toy cars").count() == 1, f"{label}: kids-boy record lands in the kids room")
             page.select_option("#cf-room", "")
             check(page.locator("#cmp-body .cmp-room").count() >= 8, f"{label}: whole house renders every room")
+            page.check("#cf-rej")
+            page.check("#cf-unr")
+            wide = page.eval_on_selector_all("#cmp-body .tbl-wrap", "ws => ws.filter(w => w.scrollWidth > w.clientWidth + 1).length")
+            check(wide == 0 and page.evaluate("document.documentElement.scrollWidth") <= width + 1, f"{label}: whole house with rejected and unscored rows fits the screen ({wide} tables overflow)")
+            page.uncheck("#cf-rej")
+            page.uncheck("#cf-unr")
             # jump from the summary list to a slot moves focus to its heading
             page.select_option("#cf-room", "living-room")
             page.locator("#cmp-body .tile details").first.locator("summary").click()
@@ -162,6 +177,51 @@ def fixture_checks(browser, base):
             page.locator("#cmp-body .cmp-table button[data-product]").first.click()
             check(page.locator("#drawer[open]").count() == 1, f"{label}: a card opens the product drawer")
             page.keyboard.press("Escape")
+            check(not errors, f"{label}: no JavaScript errors" + ("" if not errors else ": " + "; ".join(errors[:3])))
+            ctx.close()
+
+
+def furniture_checks(browser, base):
+    for width in (400, 1280):
+        for scheme in ("light", "dark"):
+            label = f"furniture {width}px {scheme}"
+            print(f"- fixture, {label}")
+            ctx, page, errors = open_page(browser, base, width, scheme, screen="furniture", ready=".fcard")
+            body = page.locator("#furn-body")
+            check(page.locator("#furn-body .f-slot").count() == 16, f"{label}: the 16 furniture slots")
+            check(page.locator("#furn-body .fcard").count() >= 30, f"{label}: model cards ({page.locator('#furn-body .fcard').count()})")
+            sofa = page.locator("#furn-living-room--sofa .fcard", has_text="FIXTURE ספת אורה")
+            check(sofa.count() == 1 and "שער הוואו: עבר" in sofa.inner_text(), f"{label}: hero sofa passed the wow gate")
+            check(sofa.locator(".chip.chip-new").count() == 1 and "מחיר סוחר" in sofa.inner_text(), f"{label}: new supplier and dealer price")
+            bg = page.eval_on_selector("#furn-living-room--sofa .swatch[data-sw='#E6DCCB']", "e => getComputedStyle(e).backgroundColor")
+            check(bg == "rgb(230, 220, 203)", f"{label}: colour swatch painted from hex ({bg})")
+            arm = page.locator("#furn-living-room--armchair .fcard", has_text="FIXTURE כורסת נועה")
+            check(arm.count() == 1 and "נכשל ב-צילום אמיתי, חומרים" in arm.inner_text(), f"{label}: failed gate checks named")
+            check("לא שויכו" in body.inner_text(), f"{label}: unmatched furniture record reported")
+            check("ענו: כן" in page.locator("#fs-furniture-express").locator("xpath=..").locator("xpath=..").inner_text(), f"{label}: furniture-express shows a positive reply")
+            nm = page.locator(".fsup", has_text="FIXTURE רהיטי צפון")
+            check(nm.count() == 1 and "אין דגמים בליקוט" in nm.inner_text() and "ספק חדש" in nm.inner_text(), f"{label}: new supplier without models listed")
+            sw = page.evaluate("document.documentElement.scrollWidth")
+            check(sw <= width + 1, f"{label}: no horizontal scroll (scrollWidth {sw})")
+            axe(page, label, "#screen-furniture")
+            page.select_option("#ff-verdict", "reject")
+            check(page.evaluate("document.activeElement && document.activeElement.id") == "ff-verdict", f"{label}: focus stays on the verdict filter")
+            vs = page.eval_on_selector_all("#furn-body .fcard", "cs => cs.map(c => c.dataset.verdict)")
+            check(bool(vs) and all(v == "reject" for v in vs), f"{label}: verdict filter ({len(vs)} rejected)")
+            page.select_option("#ff-verdict", "")
+            page.select_option("#ff-tier", "A")
+            check(page.locator("#furn-body .f-slot").count() == 4, f"{label}: tier A = 4 hero slots")
+            page.select_option("#ff-tier", "")
+            page.select_option("#ff-style", "boho")
+            check(page.locator("#furn-body .fcard", has_text="FIXTURE מיטת יחיד אורן").count() == 0, f"{label}: style filter hides a model not scored for boho")
+            page.select_option("#ff-style", "all")
+            page.locator("[data-furn-sup='fixture-oak-studio']").click()
+            sups = page.eval_on_selector_all("#furn-body .fcard", "cs => cs.map(c => c.dataset.sup)")
+            check(page.input_value("#ff-sup") == "fixture-oak-studio" and bool(sups) and all(x == "fixture-oak-studio" for x in sups), f"{label}: a supplier's model count filters to its models ({len(sups)})")
+            page.select_option("#ff-sup", "")
+            page.select_option("#ff-coop", "replied")
+            chips = page.eval_on_selector_all("#furn-body .fsup", "cs => cs.map(c => c.innerText.includes('בקשת שת\"פ: ענו'))")
+            check(bool(chips) and all(chips), f"{label}: cooperation filter ({len(chips)} replied)")
             check(not errors, f"{label}: no JavaScript errors" + ("" if not errors else ": " + "; ".join(errors[:3])))
             ctx.close()
 
@@ -185,15 +245,16 @@ def shots(browser):
     out = STUDIO / "screens"
     out.mkdir(exist_ok=True)
     try:
-        for width, max_h in ((400, 2600), (1280, 2200)):
-            ctx, page, errors = open_page(browser, base, width, "light", block_net=False)
-            page.wait_for_timeout(600)  # web fonts
-            h = page.evaluate("document.documentElement.scrollHeight")
-            p = out / f"compare-{width}.png"
-            page.screenshot(path=str(p), full_page=True, clip={"x": 0, "y": 0, "width": width, "height": min(h, max_h)})
-            print(f"    {p.relative_to(ROOT)} ({width}×{min(h, max_h)} of {h})")
-            check(not errors, f"real data {width}px: no JavaScript errors" + ("" if not errors else ": " + "; ".join(errors[:3])))
-            ctx.close()
+        for screen, ready in (("compare", ".cmp-table"), ("furniture", ".fcard")):
+            for width, max_h in ((400, 2600), (1280, 2200)):
+                ctx, page, errors = open_page(browser, base, width, "light", block_net=False, screen=screen, ready=ready)
+                page.wait_for_timeout(600)  # web fonts
+                h = page.evaluate("document.documentElement.scrollHeight")
+                p = out / f"{screen}-{width}.png"
+                page.screenshot(path=str(p), full_page=True, clip={"x": 0, "y": 0, "width": width, "height": min(h, max_h)})
+                print(f"    {p.relative_to(ROOT)} ({width}×{min(h, max_h)} of {h})")
+                check(not errors, f"real data {screen} {width}px: no JavaScript errors" + ("" if not errors else ": " + "; ".join(errors[:3])))
+                ctx.close()
     finally:
         srv.shutdown()
 
@@ -202,12 +263,13 @@ def main() -> int:
     tmp = Path(tempfile.mkdtemp(prefix="studio-smoke-"))
     dist = tmp / "dist"
     print("- build with the fixture of the deep AliExpress pass")
-    build(dist, FIXTURE)
+    build(dist, FIXTURE, fixtures=True)
     srv, base = serve(dist)
     try:
         with sync_playwright() as pw:
             browser = pw.chromium.launch(executable_path=CHROMIUM if Path(CHROMIUM).exists() else None)
             fixture_checks(browser, base)
+            furniture_checks(browser, base)
             screens_check(browser, base)
             if "--shots" in sys.argv:
                 shots(browser)

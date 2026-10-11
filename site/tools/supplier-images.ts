@@ -16,6 +16,12 @@
  *         ({ products: { <id>: { src: 'products/<id>/supplier.800', width, height, usage_rights } }, missing: [...] })
  *
  * A download that fails is a warning, not a build failure: the product page then shows the render only.
+ *
+ * Supplier options (card `options`, studio rules ג 2026-10-11): the picture of each option too, one file per distinct
+ * picture (media/products/<id>/opt-<hash>.800.webp), listed per product in `options` (aligned with the product's
+ * compact options). The product page swaps the supplier photo for the chosen option's. The Artifact ships only the
+ * first ARTIFACT_OPTION_FILES of them (`artifact: true`), so it stays inside its file limit; the others fall back to
+ * the product's photo there.
  */
 import sharp from 'sharp';
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
@@ -23,7 +29,7 @@ import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { join, dirname } from 'node:path';
 import { tmpdir } from 'node:os';
-import type { FullCatalog, SupplierImageManifest } from '@hd/shared';
+import { expandOptions, type FullCatalog, type SupplierImageManifest } from '@hd/shared';
 import { GENERATED, MEDIA_OUT, sitePath } from './lib/paths';
 
 const WIDTH = 800;
@@ -33,6 +39,8 @@ const CACHE = sitePath('.cache/supplier-images');
 const MANIFEST = join(GENERATED, 'supplier-images.json');
 const UA = 'homedesign-site-build/1.0';
 const MAX_BYTES = 25 * 1024 * 1024;
+/** option pictures shipped with the Artifact (200 files at most there; the room and the products use ~145) */
+const ARTIFACT_OPTION_FILES = 40;
 
 const catalog = JSON.parse(readFileSync(join(GENERATED, 'catalog.full.json'), 'utf8')) as FullCatalog;
 const previous: SupplierImageManifest | null = existsSync(MANIFEST) ? (JSON.parse(readFileSync(MANIFEST, 'utf8')) as SupplierImageManifest) : null;
@@ -111,12 +119,69 @@ async function main() {
     manifest.products[p.id] = { src, width: info.width, height: info.height, usage_rights: p.supplier_image.usage_rights };
     encoded++;
   }
+  // ---- the picture of every supplier option (one file per distinct picture), aligned with options.v ----
+  manifest.options = {};
+  const prevFiles = new Map<string, { width: number; height: number }>(
+    Object.entries(previous?.options ?? {}).flatMap(([pid, o]) => o.files.map((f) => [`products/${pid}/${f.name}.${WIDTH}`, f] as [string, typeof f])),
+  );
+  let artifactFiles = 0;
+  let optEncoded = 0;
+  let optMissing = 0;
+  let optCount = 0;
+  for (const p of catalog.products) {
+    if (!p.options) continue;
+    const byId = new Map((p.variants_full ?? []).map((v) => [v.id, v]));
+    const o = expandOptions(p.id, p.options);
+    const files: NonNullable<SupplierImageManifest['options']>[string]['files'] = [];
+    const fileOf = new Map<string, number | null>();
+    const sku: (number | null)[] = [];
+    for (const s of o.skus) {
+      const url = byId.get(s.variant_id)?.supplier_image_url ?? null;
+      if (!url) {
+        sku.push(null);
+        continue;
+      }
+      if (!fileOf.has(url)) {
+        const name = `opt-${hashOf(url).slice(0, 10)}`;
+        const src = `products/${p.id}/${name}.${WIDTH}`;
+        const out = join(MEDIA_OUT, `${src}.webp`);
+        const prev = prevFiles.get(src);
+        let dims: { width: number; height: number } | null = null;
+        if (!FORCE && prev && existsSync(out) && existsSync(join(CACHE, `${hashOf(url)}.bin`))) dims = prev;
+        else {
+          const buf = await original(url);
+          if (buf) {
+            mkdirSync(dirname(out), { recursive: true });
+            dims = await sharp(buf, { failOn: 'none' })
+              .rotate()
+              .resize({ width: WIDTH, withoutEnlargement: true })
+              .webp({ quality: 80, effort: 5 })
+              .toFile(out);
+            optEncoded++;
+          } else optMissing++;
+        }
+        if (dims) {
+          const artifact = artifactFiles < ARTIFACT_OPTION_FILES;
+          if (artifact) artifactFiles++;
+          files.push({ name, width: dims.width, height: dims.height, artifact });
+          fileOf.set(url, files.length - 1);
+        } else fileOf.set(url, null);
+      }
+      const i = fileOf.get(url) ?? null;
+      sku.push(i);
+      if (i !== null) optCount++;
+    }
+    if (files.length) manifest.options[p.id] = { files, sku };
+  }
   writeFileSync(MANIFEST, JSON.stringify(manifest, null, 1));
   const n = Object.keys(manifest.products).length;
   const rights = (['confirmed', 'unclear', 'none'] as const).map((r) => `${r} ${Object.values(manifest.products).filter((x) => x.usage_rights === r).length}`);
   console.log(
     `supplier images: ${n}/${catalog.products.length} products (${encoded} encoded, ${reused} up to date, ${downloaded} downloaded) → media/products/<id>/supplier.${WIDTH}.webp` +
       ` · usage rights ${rights.join(', ')} (${((Date.now() - t0) / 1000).toFixed(1)}s)`,
+  );
+  console.log(
+    `option pictures: ${optCount} options, ${Object.values(manifest.options).reduce((n, o) => n + o.files.length, 0)} files (${optEncoded} encoded${optMissing ? `, ${optMissing} failed` : ''}) · artifact: ${artifactFiles} files`,
   );
   for (const m of manifest.missing) console.warn(`  missing: ${m.id}: ${m.reason}`);
 }

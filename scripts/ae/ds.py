@@ -12,7 +12,7 @@ Methods (official catalog, category "AE-Dropshipper", https://openservice.aliexp
                registered in data/sources/seen.json as aliexpress:<id> (status card). Writes `options`: every SKU of the
                product (studio rules ג, 2026-10-11), default_sku = the --sku chosen (the option shown in the room)
   backfill-options  rebuilds `options` of existing AliExpress cards from the cached product.get responses in
-               data/sources/aliexpress/<id>.json. No API call, no budget; never replaces options with source "manual"
+               data/sources/aliexpress/<id>.json. No API call, no budget; keeps any existing options (curated); --force rebuilds source "api", never "manual"
   check / mark registry only, no call
 
 Usage:
@@ -586,16 +586,16 @@ def ae_cards(paths=None):
             yield p, card, m.group(1)
 
 
-def backfill(paths=None, dry_run=False, log=print):
+def backfill(paths=None, dry_run=False, log=print, force=False):
     """Options for existing AliExpress cards from the cached product.get responses. No API call. -> counts."""
-    n = {"cards": 0, "written": 0, "unchanged": 0, "kept-manual": 0, "skipped": 0}
+    n = {"cards": 0, "written": 0, "unchanged": 0, "kept": 0, "skipped": 0}
     for p, card, item_id in ae_cards(paths):
         n["cards"] += 1
         rel = os.path.relpath(p, REPO)
         cur = card.get("options")
-        if isinstance(cur, dict) and cur.get("source") == "manual":
-            n["kept-manual"] += 1
-            log("keep    %s (options source manual)" % rel)
+        if cur is not None and (not force or (isinstance(cur, dict) and cur.get("source") == "manual")):
+            n["kept"] += 1  # curated or hand-written options stay (only --force rebuilds source "api")
+            log("keep    %s (has options, source %s)" % (rel, (cur or {}).get("source") if isinstance(cur, dict) else "?"))
             continue
         hit = cache.get(SRC, item_id, "product", allow_stale=True)
         if not hit:
@@ -613,7 +613,7 @@ def backfill(paths=None, dry_run=False, log=print):
             n["skipped"] += 1
             log("skip    %s: invalid options: %s" % (rel, "; ".join(errs[:3])))
             continue
-        res = sku_options.write_options(p, opts, dry_run=dry_run)
+        res = sku_options.write_options(p, opts, force=force, dry_run=dry_run)
         n[res] += 1
         log("%-7s %s: %d SKUs on %s (cached %s)%s%s" % ("would" if dry_run and res == "written" else res[:7], rel, len(opts["skus"]),
             ", ".join("%s %d" % (x["id"], len(x["values"])) for x in opts["axes"]), hit["fetched_at"][:10],
@@ -622,9 +622,9 @@ def backfill(paths=None, dry_run=False, log=print):
 
 
 def do_backfill(a):
-    n = backfill(a.paths, a.dry_run)
-    print("aliexpress backfill-options: %d cards · %d written · %d unchanged · %d manual kept · %d skipped%s" % (
-        n["cards"], n["written"], n["unchanged"], n["kept-manual"], n["skipped"], " (dry run: nothing written)" if a.dry_run else ""))
+    n = backfill(a.paths, a.dry_run, force=a.force)
+    print("aliexpress backfill-options: %d cards · %d written · %d unchanged · %d kept (already had options) · %d skipped%s" % (
+        n["cards"], n["written"], n["unchanged"], n["kept"], n["skipped"], " (dry run: nothing written)" if a.dry_run else ""))
 
 
 # ----------------------------------------------------------------------------- main

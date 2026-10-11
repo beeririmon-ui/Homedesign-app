@@ -305,7 +305,8 @@ test.describe('store', () => {
     await expect(lines).toHaveCount(1);
     await expect(lines.first()).toContainText('סט של 2');
     await page.goto('/checkout/');
-    await expect(page.locator('.summary')).toContainText('(סט של 2) × 1');
+    // the line names the supplier option when the product has options (2026-10-11), then the pack
+    await expect(page.locator('.summary')).toContainText(/\((?:[^()]+, )?סט של 2\) × 1/);
 
     // a product sold as one unit shows no choice, and no standards row without data in its card
     await page.goto('/rooms/living-room/');
