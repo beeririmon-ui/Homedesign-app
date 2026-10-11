@@ -1,169 +1,238 @@
-# AliExpress בקנה מידה, שלב 3 (דירוג וכרטיסים): סלון
-
-2026-10-11 · sourcing-support · אופליין (בלי קריאות API; רק המטמון של הסשן שנעצר). מקור: `detail/living-room.json`. הרשומות לסטודיו: `data/leads/aliexpress/deep-2026-10/living-room.json`.
-
-**במספרים:** 526 מוצרים מפורטים, 354 עם מחיר, משלוח לישראל ובלי פסילת מידה. ברשימה הקצרה 142 מוצרים (176 בחירות עמדה×סגנון), ובכל אחד הסתכלתי בתמונה הראשית. עברו (fit 7 ומעלה ורווח 20% ומעלה) 65 רשומות; 10 "הכי טוב"; **8 כרטיסים חדשים**.
-
-**איך:** עלות נחיתה = (מחיר ה-SKU שמתאים לחדר × כמות + משלוח לישראל) × 3.3. הרווח בנוסחת הסטודיו (econCalc: מע"מ 18%, סליקה 2%+‏1.20, החזרות 8%), במחיר העליון של רצועת השוק, לפני CAC. בעמדה של זוג או סט ממוצר יחיד הכמות היא מספר היחידות, כמו בסטודיו. fit לפי מחוון הסטודיו (צבע 30, חומר 25, צורה 25, קנה מידה 20), אחרי מבט בתמונה; זה ציון סינון ולא הציון של המעצב. "הכי טוב" = הראשון בעמדה×סגנון עם fit 8 ומעלה ורווח לפחות כמו הכרטיס הקיים עם הציון הגבוה לאותו סגנון (או שאין כרטיס כזה). כרטיס: עד 3 לעמדה×סגנון באותם תנאים.
-
-## curtains · וילונות
-
-מפורטים 38 · ברשימה הקצרה 1 · אין מידה שמתאימה לחדר 24 · רווח מתחת ל-20% ברצועה 7 · לא המוצר (כותרת) 3 · אין משלוח לישראל 3
-
-| | נורדי | מודרני חם | ג'פנדי | ים תיכוני | כפרי מודרני | בוהו |
-| --- | --- | --- | --- | --- | --- | --- |
-| הבחירה | [Cotton Linen Curtain Look Yarn Tulle S Fol](https://www.aliexpress.com/item/1005012745902882.html)<br>$13.19+1.99 ×2 · נחיתה ₪94<br>רווח ₪41 · 27% · fit 8.0<br>**הכי טוב** · כרטיס | [Cotton Linen Curtain Look Yarn Tulle S Fol](https://www.aliexpress.com/item/1005012745902882.html)<br>$13.19+1.99 ×2 · נחיתה ₪94<br>רווח ₪41 · 27% · fit 7.0<br>**חלופה** · כרטיס | [Cotton Linen Curtain Look Yarn Tulle S Fol](https://www.aliexpress.com/item/1005012745902882.html)<br>$13.19+1.99 ×2 · נחיתה ₪94<br>רווח ₪41 · 27% · fit 7.5<br>**חלופה** · כרטיס | [Cotton Linen Curtain Look Yarn Tulle S Fol](https://www.aliexpress.com/item/1005012745902882.html)<br>$13.19+1.99 ×2 · נחיתה ₪94<br>רווח ₪41 · 27% · fit 7.5<br>**חלופה** · כרטיס | — | — |
-| SKU | Color S Folds Size 1 PC W100cmxH27 | Color S Folds Size 1 PC W100cmxH27 | Color S Folds Size 1 PC W100cmxH27 | Color S Folds Size 1 PC W100cmxH27 | — | — |
-| מול הכרטיס הקיים | CJ ₪143, fit 7.5, רווח -5% ✓ AliExpress רווחי יותר | CJ ₪143, fit 8.0, רווח -5% ✓ AliExpress רווחי יותר | אין כרטיס עם ציון לסגנון (הזול: CJ ₪143) | אין כרטיס עם ציון לסגנון (הזול: CJ ₪143) | — | — |
-
-**הכי טוב (נורדי):** [1005012745902882](https://www.aliexpress.com/item/1005012745902882.html): וילון שקוף במראה פשתן בשיבולת שועל, קפלי S (גל), פאנל 100×275; זוג = 2 פאנלים. פוליאסטר, והפאנל צר מ-130–150. נחיתה ₪94, רווח 27%; כרטיס `curtains-aliexpress-cotton-linen-curtain-look-902882`.
-
-## framed-art · תמונה ממוסגרת
-
-מפורטים 47 · ברשימה הקצרה 0 · קנבס בלי מסגרת 40 · אין משלוח לישראל 5 · אין מידה שמתאימה לחדר 2
-
-**אין מועמד שעבר.** שום מוצר לא עבר את הסינון (קנבס בלי מסגרת, אין משלוח לישראל, אין מידה שמתאימה לחדר).
-
-## wall-decor · קישוט קיר (ראטן ודומיו)
-
-מפורטים 43 · ברשימה הקצרה 29 · אין מידה שמתאימה לחדר 6 · לא המוצר (כותרת) 4 · חומר או מילה אסורה 2 · רווח מתחת ל-20% ברצועה 2 · אין משלוח לישראל 1
-
-| | נורדי | מודרני חם | ג'פנדי | ים תיכוני | כפרי מודרני | בוהו |
-| --- | --- | --- | --- | --- | --- | --- |
-| הבחירה | [Natural Raffia Woven Bohemian Wall Decorat](https://www.aliexpress.com/item/1005006165763597.html)<br>$12.85+1.16 · נחיתה ₪46<br>רווח ₪81 · 56% · fit 7.5<br>**חלופה** · כרטיס | — | — | [Natural Raffia Woven Bohemian Wall Decorat](https://www.aliexpress.com/item/1005006165763597.html)<br>$12.85+1.16 · נחיתה ₪46<br>רווח ₪81 · 56% · fit 8.0<br>**הכי טוב** · כרטיס | — | [Natural Raffia Woven Bohemian Wall Decorat](https://www.aliexpress.com/item/1005006165763597.html)<br>$12.85+1.16 · נחיתה ₪46<br>רווח ₪81 · 56% · fit 8.5<br>**הכי טוב** · כרטיס |
-| SKU | Color 2 Size 30cm | — | — | Color 2 Size 30cm | — | Color 2 Size 30cm |
-| מול הכרטיס הקיים | CJ ₪62, fit 6.5, רווח 46% ✓ AliExpress רווחי יותר | — | — | Zendrop ₪55, fit 5, רווח 50% ✓ AliExpress רווחי יותר | — | Zendrop ₪55, fit 9, רווח 50% ✓ AliExpress רווחי יותר |
-
-**הכי טוב (ים תיכוני, בוהו):** [1005006165763597](https://www.aliexpress.com/item/1005006165763597.html): קישוט קיר מרפיה טבעית עם פרנזים ומרכז קלוע, 30 ס"מ (מתחת למעטפת 35–45). צבע 2; צבע 3 אזל. נחיתה ₪46, רווח 56%; כרטיס `wall-decor-aliexpress-natural-raffia-woven-bohemian-763597`.
-
-## accent-sconces · זוג מנורות קיר טרוורטין
-
-מפורטים 19 · ברשימה הקצרה 1 · רווח מתחת ל-20% ברצועה 17 · חומר או מילה אסורה 1
-
-| | נורדי | מודרני חם | ג'פנדי | ים תיכוני | כפרי מודרני | בוהו |
-| --- | --- | --- | --- | --- | --- | --- |
-| הבחירה | — | — | — | — | — | [Rattan Bamboo Wall Lamp Sconce Fixture Vin](https://www.aliexpress.com/item/1005010168671943.html)<br>$19.95+0.00 ×2 · נחיתה ₪132<br>רווח ₪41 · 21% · fit 7.5<br>**חלופה** |
-| SKU | — | — | — | — | — | Lampshade Color A |
-| מול הכרטיס הקיים | — | — | — | — | — | אין כרטיס עם ציון לסגנון (הזול: CJ ₪256) |
-
-אין "הכי טוב": אף מועמד לא הגיע ל-fit 8 עם רווח לפחות כמו הכרטיס הקיים.
-
-## wall-sconce · מנורת קיר
-
-מפורטים 13 · ברשימה הקצרה 1 · רווח מתחת ל-20% ברצועה 11 · חומר או מילה אסורה 1
-
-**אין מועמד שעבר.** בתמונות: 1 נבדקו ונדחו (לא המוצר, קנה מידה, סגנון או רווח).
-
-## vase · אגרטל
-
-מפורטים 40 · ברשימה הקצרה 14 · אין נתוני מוצר 12 · לא המוצר (כותרת) 8 · רווח מתחת ל-20% ברצועה 3 · אין מידה שמתאימה לחדר 2 · אין משלוח לישראל 1
-
-| | נורדי | מודרני חם | ג'פנדי | ים תיכוני | כפרי מודרני | בוהו |
-| --- | --- | --- | --- | --- | --- | --- |
-| הבחירה | [Vintage Distressed Clay Vase, Wabi-Sabi Ru](https://www.aliexpress.com/item/1005012472589009.html)<br>$4.53+27.25 · נחיתה ₪105<br>רווח ₪121 · 48% · fit 8.5<br>**הכי טוב** · כרטיס | [Vintage Distressed Clay Vase, Wabi-Sabi Ru](https://www.aliexpress.com/item/1005012472589009.html)<br>$4.53+27.25 · נחיתה ₪105<br>רווח ₪121 · 48% · fit 8.0<br>**הכי טוב** · כרטיס | [Vintage Distressed Clay Vase, Wabi-Sabi Ru](https://www.aliexpress.com/item/1005012472589009.html)<br>$4.53+27.25 · נחיתה ₪105<br>רווח ₪121 · 48% · fit 8.5<br>**הכי טוב** · כרטיס | [Vintage Distressed Clay Vase, Wabi-Sabi Ru](https://www.aliexpress.com/item/1005012472589009.html)<br>$4.53+27.25 · נחיתה ₪105<br>רווח ₪121 · 48% · fit 7.5<br>**חלופה** · כרטיס | [Vintage Distressed Clay Vase, Wabi-Sabi Ru](https://www.aliexpress.com/item/1005012472589009.html)<br>$4.53+27.25 · נחיתה ₪105<br>רווח ₪121 · 48% · fit 8.0<br>**הכי טוב** · כרטיס | [3pcs Bohemian Ceramic Vase Set, Modern Boh](https://www.aliexpress.com/item/1005008455616613.html)<br>$32.92+1.99 · נחיתה ₪115<br>רווח ₪111 · 44% · fit 7.0<br>**חלופה** |
-| SKU | Color L | Color L | Color L | Color L | Color L | Color WHITE |
-| מול הכרטיס הקיים | CJ ₪124, fit 8.5, רווח 40% ✓ AliExpress רווחי יותר | CJ ₪124, fit 8.5, רווח 40% ✓ AliExpress רווחי יותר | אין כרטיס עם ציון לסגנון (הזול: CJ ₪119) | אין כרטיס עם ציון לסגנון (הזול: CJ ₪119) | אין כרטיס עם ציון לסגנון (הזול: CJ ₪119) | CJ ₪132, fit 7.5, רווח 37% ✓ AliExpress רווחי יותר |
-
-**הכי טוב (נורדי, מודרני חם, ג'פנדי, כפרי מודרני):** [1005012472589009](https://www.aliexpress.com/item/1005012472589009.html): אגרטל חרס גס בשמנת עם מרקם 'שחוק', מידה L ‏31×15, מט, צללית כד. משלוח 27 דולר (כבד), ועדיין 48%. נחיתה ₪105, רווח 48%; כרטיס `vase-aliexpress-vintage-distressed-clay-vase-589009`.
-
-## rug · שטיח
-
-מפורטים 45 · ברשימה הקצרה 5 · רווח מתחת ל-20% ברצועה 14 · אין מידה שמתאימה לחדר 14 · לא המוצר (כותרת) 13 · אין משלוח לישראל 1 · אין נתוני מוצר 1
-
-**אין מועמד שעבר.** בתמונות: 5 נבדקו ונדחו (לא המוצר, קנה מידה, סגנון או רווח).
-
-## floor-lamp · מנורת אהיל
-
-מפורטים 15 · ברשימה הקצרה 0 · לא המוצר (כותרת) 7 · רווח מתחת ל-20% ברצועה 4 · אין מידה שמתאימה לחדר 3 · אין משלוח לישראל 1
-
-**אין מועמד שעבר.** שום מוצר לא עבר את הסינון (לא המוצר (כותרת), רווח מתחת ל-20% ברצועה, אין מידה שמתאימה לחדר).
-
-## planter · עציץ
-
-מפורטים 7 · ברשימה הקצרה 0 · רווח מתחת ל-20% ברצועה 6 · אין משלוח לישראל 1
-
-**אין מועמד שעבר.** שום מוצר לא עבר את הסינון (רווח מתחת ל-20% ברצועה, אין משלוח לישראל).
-
-## sofa-cover · כיסוי ספה
-
-מפורטים 45 · ברשימה הקצרה 10 · לא המוצר (כותרת) 27 · אין נתוני מוצר 3 · אין משלוח לישראל 3 · חומר או מילה אסורה 1 · אין מידה שמתאימה לחדר 1
-
-**אין מועמד שעבר.** בתמונות: 10 נבדקו ונדחו (לא המוצר, קנה מידה, סגנון או רווח).
-
-## cushions · כריות ושמיכה (סט)
-
-מפורטים 42 · ברשימה הקצרה 31 · רווח מתחת ל-20% ברצועה 4 · אין משלוח לישראל 4 · לא המוצר (כותרת) 2 · חומר או מילה אסורה 1
-
-| | נורדי | מודרני חם | ג'פנדי | ים תיכוני | כפרי מודרני | בוהו |
-| --- | --- | --- | --- | --- | --- | --- |
-| הבחירה | [Fashion Modern Wabi Sabi Pillow Cover Ultr](https://www.aliexpress.com/item/1005009053464203.html)<br>$13.14+1.99 · נחיתה ₪50<br>רווח ₪24 · 29% · fit 7.5<br>**חלופה** · כרטיס | [Fashion Modern Wabi Sabi Pillow Cover Ultr](https://www.aliexpress.com/item/1005009053464203.html)<br>$13.14+1.99 · נחיתה ₪50<br>רווח ₪24 · 29% · fit 8.5<br>**חלופה** · כרטיס | [Fashion Modern Wabi Sabi Pillow Cover Ultr](https://www.aliexpress.com/item/1005009053464203.html)<br>$13.14+1.99 · נחיתה ₪50<br>רווח ₪24 · 29% · fit 8.0<br>**הכי טוב** · כרטיס | [Farmhouse Floral Pillow Covers Set of 2,Co](https://www.aliexpress.com/item/1005012897166217.html)<br>$12.86+0.00 · נחיתה ₪42<br>רווח ₪32 · 38% · fit 7.0<br>**חלופה** · כרטיס | [Farmhouse Floral Pillow Covers Set of 2,Co](https://www.aliexpress.com/item/1005012897166217.html)<br>$12.86+0.00 · נחיתה ₪42<br>רווח ₪32 · 38% · fit 8.5<br>**הכי טוב** · כרטיס | [Cotton Tufted Cushion Cover With Tassel Re](https://www.aliexpress.com/item/1005006412064335.html)<br>$11.41+1.99 · נחיתה ₪44<br>רווח ₪30 · 36% · fit 8.0<br>**חלופה** |
-| SKU | Color 1PCS-White Size 50 x 50cm | Color 1PCS-White Size 50 x 50cm | Color 1PCS-White Size 50 x 50cm | Color 1 Size 45×45cm | Color 1 Size 45×45cm | Color CL006 Size 45x45cm |
-| מול הכרטיס הקיים | CJ ₪40, fit 8.5, רווח 41% ✗ הכרטיס רווחי יותר | CJ ₪40, fit 8.5, רווח 41% ✗ הכרטיס רווחי יותר | אין כרטיס עם ציון לסגנון (הזול: CJ ₪23) | אין כרטיס עם ציון לסגנון (הזול: CJ ₪23) | אין כרטיס עם ציון לסגנון (הזול: CJ ₪23) | CJ ₪24, fit 7.5, רווח 59% ✗ הכרטיס רווחי יותר |
-
-**הכי טוב (ג'פנדי):** [1005009053464203](https://www.aliexpress.com/item/1005009053464203.html): ציפה בשנייל סלאב בשנהב עם נמש אפור, 50×50 (יש גם קרמל, אפור כהה ו-30×50). מרקם יד, מט. נחיתה ₪50, רווח 29%; כרטיס `cushions-aliexpress-fashion-modern-wabi-sabi-464203`.
-**הכי טוב (כפרי מודרני):** [1005012897166217](https://www.aliexpress.com/item/1005012897166217.html): ציפות בהדפס בלוק פרחוני במרווה על פשתן שנהב, סט של 2, צבע 1, 45×45. המראה הכפרי-סבתאי. נחיתה ₪42, רווח 38%; כרטיס `cushions-aliexpress-farmhouse-floral-pillow-covers-166217`.
-
-כרטיסים נוספים (fit 8, רווחי יותר מהכרטיס הקיים): `cushions-aliexpress-fashion-modern-wabi-sabi-464203`
-
-## basket · סל לחפצים
-
-מפורטים 19 · ברשימה הקצרה 0 · לא המוצר (כותרת) 10 · אין מידה שמתאימה לחדר 7 · רווח מתחת ל-20% ברצועה 2
-
-**אין מועמד שעבר.** שום מוצר לא עבר את הסינון (לא המוצר (כותרת), אין מידה שמתאימה לחדר, רווח מתחת ל-20% ברצועה).
-
-## magazine-holder · מחזיק עיתונים
-
-מפורטים 22 · ברשימה הקצרה 2 · לא המוצר (כותרת) 13 · אין משלוח לישראל 3 · חומר או מילה אסורה 2 · רווח מתחת ל-20% ברצועה 2
-
-**אין מועמד שעבר.** בתמונות: 2 נבדקו ונדחו (לא המוצר, קנה מידה, סגנון או רווח).
-
-## table-runner · ראנר
-
-מפורטים 43 · ברשימה הקצרה 19 · אין מידה שמתאימה לחדר 19 · לא המוצר (כותרת) 2 · אין משלוח לישראל 2 · חומר או מילה אסורה 1
-
-| | נורדי | מודרני חם | ג'פנדי | ים תיכוני | כפרי מודרני | בוהו |
-| --- | --- | --- | --- | --- | --- | --- |
-| הבחירה | [Minimalist Solid Color Table Runner, Nordi](https://www.aliexpress.com/item/1005012179525144.html)<br>$6.42+1.99 · נחיתה ₪28<br>רווח ₪69 · 63% · fit 7.5<br>**חלופה** | [Minimalist Solid Color Table Runner, Nordi](https://www.aliexpress.com/item/1005012179525144.html)<br>$6.42+1.99 · נחיתה ₪28<br>רווח ₪69 · 63% · fit 7.0<br>**חלופה** | [Minimalist Solid Color Table Runner, Nordi](https://www.aliexpress.com/item/1005012179525144.html)<br>$6.42+1.99 · נחיתה ₪28<br>רווח ₪69 · 63% · fit 7.5<br>**חלופה** | [Boho Table Runner Full Sizes With Tassels,](https://www.aliexpress.com/item/1005009813736421.html)<br>$10.14+1.99 · נחיתה ₪40<br>רווח ₪57 · 52% · fit 7.5<br>**חלופה** | [Handmade Embroidered Linen Table Runner Fr](https://www.aliexpress.com/item/1005005943620003.html)<br>$14.00+4.13 · נחיתה ₪60<br>רווח ₪37 · 34% · fit 7.5<br>**חלופה** | [Nordic Table Runner for Kitchen Dining Dec](https://www.aliexpress.com/item/1005011825244347.html)<br>$7.29+1.99 · נחיתה ₪31<br>רווח ₪66 · 60% · fit 8.0<br>**הכי טוב** · כרטיס |
-| SKU | Size 40x140cm | Size 40x140cm | Size 40x140cm | Color Dark Brown Size 1PCS-30x120c | Color 1 Table Runner Size L | Color BEIGE Size 30*120cm |
-| מול הכרטיס הקיים | Zendrop ₪46, fit 7, רווח 46% ✓ AliExpress רווחי יותר | Zendrop ₪46, fit 6, רווח 46% ✓ AliExpress רווחי יותר | אין כרטיס עם ציון לסגנון (הזול: CJ ₪33) | Zendrop ₪46, fit 5, רווח 46% ✓ AliExpress רווחי יותר | Zendrop ₪46, fit 6, רווח 46% ✗ הכרטיס רווחי יותר | Zendrop ₪46, fit 3, רווח 46% ✓ AliExpress רווחי יותר |
-
-**הכי טוב (בוהו):** [1005011825244347](https://www.aliexpress.com/item/1005011825244347.html): ראנר בקליעה פתוחה בשמנת עם פרנזים קשורים, 30×120 בז'. נחיתה ₪31, רווח 60%; כרטיס `table-runner-aliexpress-nordic-table-runner-kitchen-244347`.
-
-כרטיסים נוספים (fit 8, רווחי יותר מהכרטיס הקיים): `table-runner-aliexpress-boho-macrame-table-runners-263532` · `table-runner-aliexpress-boho-table-runner-macrame-072806`
-
-## bowl · קערה נמוכה
-
-מפורטים 4 · ברשימה הקצרה 0 · רווח מתחת ל-20% ברצועה 3 · אין מידה שמתאימה לחדר 1
-
-**אין מועמד שעבר.** שום מוצר לא עבר את הסינון (רווח מתחת ל-20% ברצועה, אין מידה שמתאימה לחדר).
-
-## candle-holders · פמוטים
-
-מפורטים 38 · ברשימה הקצרה 18 · לא המוצר (כותרת) 18 · אין משלוח לישראל 2
-
-| | נורדי | מודרני חם | ג'פנדי | ים תיכוני | כפרי מודרני | בוהו |
-| --- | --- | --- | --- | --- | --- | --- |
-| הבחירה | — | — | — | — | [New Rustic Wooden Candlesticks Handmade Na](https://www.aliexpress.com/item/1005010391178645.html)<br>$3.86+1.99 ×2 · נחיתה ₪32<br>רווח ₪95 · 66% · fit 7.0<br>**חלופה** | — |
-| SKU | — | — | — | — | Color S | — |
-| מול הכרטיס הקיים | — | — | — | — | אין כרטיס עם ציון לסגנון (הזול: CJ ₪75) | — |
-
-אין "הכי טוב": אף מועמד לא הגיע ל-fit 8 עם רווח לפחות כמו הכרטיס הקיים.
-
-## pouf · פוף
-
-מפורטים 22 · ברשימה הקצרה 9 · חומר או מילה אסורה 8 · אין מידה שמתאימה לחדר 4 · רווח מתחת ל-20% ברצועה 1
-
-| | נורדי | מודרני חם | ג'פנדי | ים תיכוני | כפרי מודרני | בוהו |
-| --- | --- | --- | --- | --- | --- | --- |
-| הבחירה | — | [Modern PU Leather Pouf Ottoman Cover Large](https://www.aliexpress.com/item/1005013014674879.html)<br>$12.91+4.26 · נחיתה ₪57<br>רווח ₪283 · 74% · fit 7.0<br>**חלופה** | — | [Boho Pattern Ottoman Pouf PU Leather Large](https://www.aliexpress.com/item/1005012622343078.html)<br>$15.70+4.28 · נחיתה ₪66<br>רווח ₪274 · 72% · fit 7.5<br>**חלופה** | — | [Modern PU Leather Pouf Ottoman Cover Large](https://www.aliexpress.com/item/1005013014674879.html)<br>$12.91+4.26 · נחיתה ₪57<br>רווח ₪283 · 74% · fit 7.5<br>**חלופה** |
-| SKU | — | Color Brown | — | Color B | — | Color Brown |
-| מול הכרטיס הקיים | — | אין כרטיס עם ציון לסגנון (הזול: CJ ₪127) | — | אין כרטיס עם ציון לסגנון (הזול: CJ ₪127) | — | CJ ₪127, fit 8.0, רווח 56% ✓ AliExpress רווחי יותר |
-
-אין "הכי טוב": אף מועמד לא הגיע ל-fit 8 עם רווח לפחות כמו הכרטיס הקיים.
-
-## pendant · מנורת תקרה תלויה
-
-מפורטים 24 · ברשימה הקצרה 2 · רווח מתחת ל-20% ברצועה 14 · אין מידה שמתאימה לחדר 3 · אין משלוח לישראל 3 · לא המוצר (כותרת) 1 · חומר או מילה אסורה 1
-
-**אין מועמד שעבר.** בתמונות: 2 נבדקו ונדחו (לא המוצר, קנה מידה, סגנון או רווח).
+# AliExpress בקנה מידה: living-room (2026-10-11)
+
+סוננו 5254 שורות חיפוש, נבדקו לעומק 657 מוצרים (855 רשומות מוצר×סגנון). best 6 · alternative 479 · reject 370 · כרטיסים חדשים 5.
+
+עלות נחיתה = (מחיר SKU + משלוח זול עד 45 יום) × 3.3. רווח = לפי pricing.ts במחיר העליון של רצועת השוק (מע"מ 18%, עמלה 2%+1.2, החזרות 8%), לפני CAC. fit ≥ 8 רק אחרי מבט בתמונה; fit בלי מבט (screening) מוגבל ל-7. ההשוואה: הכרטיס הקיים בעמדה עם הציון הגבוה לסגנון (אחרת הזול).
+
+## curtains
+
+| סגנון | הבחירה | SKU | $ מוצר+משלוח | נחיתה ₪ | רצועה ₪ | רווח | fit | מול הכרטיס הקיים |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| נורדי | [Cotton Linen Curtain Look Yarn Tulle S Fold Sheer Curtains f](https://www.aliexpress.com/item/1005012745902882.html) · **alternative** | Color S Folds Size 1 PC 132 x 264 cm Pro | 17.37+1.99, 6-15 ימים | 64 | 129–179 | ₪71 · 47% | 7.5 | curtains-aliexpress-cotton-linen-curtain-look-902882 ₪50 (AliExpress) ✗ |
+| מודרני חם | [Beige Linen Sheer Curtains for Living Room Modern Flax Tulle](https://www.aliexpress.com/item/1005004556554205.html) · **best** · כרטיס | Color colour- 01 Size 150 x 270 cm Proce | 13.44+13.04, 22-32 ימים | 87 | 129–179 | ₪47 · 31% | 8 | curtains-cj-japanese-linen-half-shade ₪143 (CJ Dropshipping) ✓ זול/רווחי יותר |
+| ג'פנדי | [Japanese Style Linen Fabric Door Curtain, Kitchen, Bedroom, ](https://www.aliexpress.com/item/1005008868945151.html) · **alternative** · ⚠ מידה לא אומתה (SKU הזול) | Color MULTI Size 65 x 90 cm | 13.66+5.29, 8-18 ימים | 62 | 129–179 | ₪72 · 48% | 7 (סינון) | curtains-aliexpress-cotton-linen-curtain-look-902882 ₪50 (AliExpress) ✗ |
+| ים תיכוני | [Cotton Linen Curtains Boho Daisy Embroidered Farmhouse Windo](https://www.aliexpress.com/item/1005009714980475.html) · **alternative** · ⚠ מידה לא אומתה (SKU הזול) | Color Without tassels Size 1 panel W135X | 17.29+1.99, 6-15 ימים | 64 | 129–179 | ₪71 · 47% | 7 (סינון) | curtains-aliexpress-cotton-linen-curtain-look-902882 ₪50 (AliExpress) ✗ |
+| כפרי מודרני | [Natural Linen Curtains 84 Inch Length for Living Room 1 Pane](https://www.aliexpress.com/item/1005006755784378.html) · **best** | Color LINEN Size 140 x 260 cm Processing | 23.48+1.99, 6-13 ימים | 84 | 129–179 | ₪51 · 33% | 8 | curtains-aliexpress-cotton-linen-curtain-look-902882 ₪50 (AliExpress) ✗ |
+| בוהו | [Boho Hand Braided Curtain Tiebacks 1 Pair, Imitation Linen R](https://www.aliexpress.com/item/1005012041260094.html) · **alternative** | Color Creamy White Size M Length 60cm | 3.54+1.99, 6-13 ימים | 18 | 129–179 | ₪117 · 77% | 7 (סינון) | curtains-cj-japanese-linen-half-shade ₪143 (CJ Dropshipping) ✓ זול/רווחי יותר |
+
+חלופות: נורדי [1005012745902882](https://www.aliexpress.com/item/1005012745902882.html) ₪64/47% · נורדי [1005005988979152](https://www.aliexpress.com/item/1005005988979152.html) ₪26/72% · נורדי [1005008737177999](https://www.aliexpress.com/item/1005008737177999.html) ₪33/67% · נורדי [1005009501613202](https://www.aliexpress.com/item/1005009501613202.html) ₪100/23% · נורדי [1005005178858309](https://www.aliexpress.com/item/1005005178858309.html) ₪109/17% · נורדי [1005011659482827](https://www.aliexpress.com/item/1005011659482827.html) ₪111/16% · נורדי [4001204763561](https://www.aliexpress.com/item/4001204763561.html) ₪118/11% · נורדי [1005004015109194](https://www.aliexpress.com/item/1005004015109194.html) ₪120/10% · מודרני חם [1005007802744810](https://www.aliexpress.com/item/1005007802744810.html) ₪88/31% · מודרני חם [1005009501613202](https://www.aliexpress.com/item/1005009501613202.html) ₪100/23% · מודרני חם [1005008134449290](https://www.aliexpress.com/item/1005008134449290.html) ₪116/12% · מודרני חם [4001204763561](https://www.aliexpress.com/item/4001204763561.html) ₪118/11%
+
+## framed-art
+
+| סגנון | הבחירה | SKU | $ מוצר+משלוח | נחיתה ₪ | רצועה ₪ | רווח | fit | מול הכרטיס הקיים |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| נורדי | [Nordic Simple City Landscape Poster London New York Paris Ro](https://www.aliexpress.com/item/1005006416909774.html) · **alternative** | Color J Size (Inch) 50 x 70 cm | 6.46+1.99, 6-15 ימים | 28 | 149–219 | ₪137 · 74% | 7 (סינון) | framed-art-cj-morandi-triptych-sage ₪484 (CJ Dropshipping) ✓ זול/רווחי יותר |
+| מודרני חם | [Modern Minimalist Wall Art Print Fruits Food Drinks Canvas P](https://www.aliexpress.com/item/1005006883164865.html) · **alternative** | Color 02 Size (Inch) 50 x 70 cm No Frame | 6.29+1.99, 6-15 ימים | 27 | 149–219 | ₪138 · 74% | 7 (סינון) | framed-art-cj-morandi-triptych-sage ₪484 (CJ Dropshipping) ✓ זול/רווחי יותר |
+| ג'פנדי | [Japandi Wall Art Set of 2 Sage Green Landscape Poster Minima](https://www.aliexpress.com/item/1005012553969661.html) · **best** · כרטיס | Color TT 3259-2 pcs Size (Inch) 50 x 70  | 9.45+1.99, 6-13 ימים | 38 | 149–219 | ₪127 · 69% | 8 | framed-art-cj-morandi-triptych-sage ₪484 (CJ Dropshipping) ✓ זול/רווחי יותר |
+| ים תיכוני | [Mediterranean Wabi-Sabi Poster Natural Landscape Wall Art Ca](https://www.aliexpress.com/item/1005011888802890.html) · **best** · כרטיס | Color 03 Size (Inch) 50 x 70 cm No Frame | 6.85+1.99, 6-15 ימים | 29 | 149–219 | ₪136 · 73% | 8 | framed-art-cj-morandi-triptych-sage ₪484 (CJ Dropshipping) ✓ זול/רווחי יותר |
+| כפרי מודרני | [Vintage Countryside Wall Art Print Retro Rustic Spring Natur](https://www.aliexpress.com/item/1005006849743763.html) · **alternative** | Color 02 Size (Inch) 50 x 70 cm  | 6.23+1.99, 6-15 ימים | 27 | 149–219 | ₪138 · 74% | 7.5 | framed-art-cj-morandi-triptych-sage ₪484 (CJ Dropshipping) ✓ זול/רווחי יותר |
+| בוהו | [Boho Abstract Girl Cocktail Vase Leaves Flower Wall Art Canv](https://www.aliexpress.com/item/1005010176008848.html) · **alternative** · ⚠ מידה לא אומתה (SKU הזול) | Color light green Size (Inch) 20X30cm no | 2.78+1.99, 6-15 ימים | 16 | 149–219 | ₪150 · 80% | 7 (סינון) | framed-art-cj-morandi-triptych-sage ₪484 (CJ Dropshipping) ✓ זול/רווחי יותר |
+
+חלופות: נורדי [1005006416909774](https://www.aliexpress.com/item/1005006416909774.html) ₪28/74% · נורדי [1005006292136320](https://www.aliexpress.com/item/1005006292136320.html) ₪28/74% · נורדי [1005007817149112](https://www.aliexpress.com/item/1005007817149112.html) ₪35/70% · נורדי [1005011956338629](https://www.aliexpress.com/item/1005011956338629.html) ₪35/70% · נורדי [1005007871239390](https://www.aliexpress.com/item/1005007871239390.html) ₪36/70% · נורדי [1005012189594465](https://www.aliexpress.com/item/1005012189594465.html) ₪39/68% · נורדי [1005005924784050](https://www.aliexpress.com/item/1005005924784050.html) ₪47/64% · נורדי [1005007167645804](https://www.aliexpress.com/item/1005007167645804.html) ₪58/58% · מודרני חם [1005006883164865](https://www.aliexpress.com/item/1005006883164865.html) ₪27/74% · מודרני חם [1005007180877409](https://www.aliexpress.com/item/1005007180877409.html) ₪29/73% · מודרני חם [1005007593623227](https://www.aliexpress.com/item/1005007593623227.html) ₪31/72% · מודרני חם [1005009121628623](https://www.aliexpress.com/item/1005009121628623.html) ₪34/70%
+
+## wall-decor
+
+| סגנון | הבחירה | SKU | $ מוצר+משלוח | נחיתה ₪ | רצועה ₪ | רווח | fit | מול הכרטיס הקיים |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| נורדי | [Nordic Style Hanging Photo Display Minimalist Decorative Woo](https://www.aliexpress.com/item/1005012575469121.html) · **alternative** | Color Khaki | 5.60+1.99, 6-15 ימים | 25 | 129–169 | ₪102 · 71% | 7 (סינון) | wall-decor-aliexpress-natural-raffia-woven-bohemian-763597 ₪46 (AliExpress) ✓ זול/רווחי יותר |
+| מודרני חם | [Artificial Ivy Wall Decor Dense Foliage Single Vine Trellis ](https://www.aliexpress.com/item/1005008962365897.html) · **alternative** · ⚠ מידה לא אומתה (SKU הזול) | Color 180cm bailv | 5.97+1.99, 6-15 ימים | 26 | 129–169 | ₪101 · 70% | 7 (סינון) | wall-decor-zendrop-macrame-diamond-dowel-small ₪55 (Zendrop) ✓ זול/רווחי יותר |
+| ג'פנדי | [Japandi Wall Art Set of 2 Sage Green Landscape Poster Minima](https://www.aliexpress.com/item/1005012553969661.html) · **best** · כרטיס | Color TT 3259-2 pcs Size (Inch) 40 x 60  | 6.76+1.99, 6-15 ימים | 29 | 129–169 | ₪98 · 69% | 8 | wall-decor-aliexpress-natural-raffia-woven-bohemian-763597 ₪46 (AliExpress) ✓ זול/רווחי יותר |
+| ים תיכוני | [Mediterranean Style Decorative Ornaments Artistic Home Backg](https://www.aliexpress.com/item/1005007052726842.html) · **alternative** · ⚠ מידה לא אומתה (SKU הזול) | Color I-Style | 3.43+1.99, 6-15 ימים | 18 | 129–169 | ₪109 · 76% | 7 (סינון) | wall-decor-aliexpress-natural-raffia-woven-bohemian-763597 ₪46 (AliExpress) ✓ זול/רווחי יותר |
+| כפרי מודרני | [Vintage Farmhouse Wall Decor White Wood Sign Happy Place Hea](https://www.aliexpress.com/item/1005011807975341.html) · **alternative** | Color 1pc | 4.20+1.99, 6-15 ימים | 20 | 129–169 | ₪107 · 75% | 7 (סינון) | wall-decor-zendrop-macrame-diamond-dowel-small ₪55 (Zendrop) ✓ זול/רווחי יותר |
+| בוהו | [Hanging Photo Display Wall Decor - Rustic Boho Wooden Beads ](https://www.aliexpress.com/item/1005012254521510.html) · **alternative** · ⚠ מידה לא אומתה (SKU הזול) | Color A | 5.85+1.99, 6-13 ימים | 26 | 129–169 | ₪101 · 71% | 7 (סינון) | wall-decor-zendrop-macrame-diamond-dowel-small ₪55 (Zendrop) ✓ זול/רווחי יותר |
+
+חלופות: נורדי [1005012575469121](https://www.aliexpress.com/item/1005012575469121.html) ₪25/71% · נורדי [1005012254521510](https://www.aliexpress.com/item/1005012254521510.html) ₪26/71% · נורדי [1005011851549321](https://www.aliexpress.com/item/1005011851549321.html) ₪34/65% · נורדי [1005004347065889](https://www.aliexpress.com/item/1005004347065889.html) ₪42/59% · נורדי [1005006165763597](https://www.aliexpress.com/item/1005006165763597.html) ₪46/56% · מודרני חם [1005008962365897](https://www.aliexpress.com/item/1005008962365897.html) ₪26/70% · מודרני חם [1005009168911590](https://www.aliexpress.com/item/1005009168911590.html) ₪33/66% · מודרני חם [1005011728012413](https://www.aliexpress.com/item/1005011728012413.html) ₪118/6% · ג'פנדי [1005012476712237](https://www.aliexpress.com/item/1005012476712237.html) ₪15/78% · ג'פנדי [1005012632723238](https://www.aliexpress.com/item/1005012632723238.html) ₪29/69% · ג'פנדי [1005011917800636](https://www.aliexpress.com/item/1005011917800636.html) ₪40/61% · ג'פנדי [1005012149040220](https://www.aliexpress.com/item/1005012149040220.html) ₪40/61%
+
+## accent-sconces
+
+| סגנון | הבחירה | SKU | $ מוצר+משלוח | נחיתה ₪ | רצועה ₪ | רווח | fit | מול הכרטיס הקיים |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| נורדי | [Natural Yellow Cave Stone Led Sconce Lamp Nordic Minimalist ](https://www.aliexpress.com/item/1005010526588683.html) · **מפסיד ברצועת השוק** | Lampshade Color D-3190 Size Dia 20cm Col | 53.41+1.99, 6-13 ימים | 183 | 89–119 | ₪-94 · -93% | 7.5 | accent-sconces-aliexpress-indoor-stone-wall-lamp ₪249 |
+| מודרני חם | [Modern Natural Stone Wall Light Sconce, Dark Wood 25cm 110-2](https://www.aliexpress.com/item/1005010399699645.html) · **מפסיד ברצועת השוק** | Lampshade Color 25cm-Natural wood Color  | 73.75+1.99, 6-13 ימים | 250 | 89–119 | ₪-161 · -159% | 7.5 | accent-sconces-cj-ribbed-travertine-half-cylinder-wood-bracket ₪157 |
+| ג'פנדי | [Wabi Sabi Natural Travertine LED Wall Sconce Dia 15/20/25cm ](https://www.aliexpress.com/item/1005012913815529.html) · **מפסיד ברצועת השוק** | Lampshade Color Small 15cm Color Tempera | 37.70+1.99, 6-15 ימים | 131 | 89–119 | ₪-42 · -41% | 8.5 | accent-sconces-cj-ribbed-travertine-half-cylinder-wood-bracket ₪157 |
+| ים תיכוני | — אין מועמד שעבר | | | | | | | |
+| כפרי מודרני | [Boho Farmhouse Wall Sconces Natural Twine Hand Knit Wall Lam](https://www.aliexpress.com/item/1005009708965037.html) · **alternative** · ⚠ מידה לא אומתה (SKU הזול) | Lampshade Color 23x25cm Color Temperatur | 9.26+17.31, 9-19 ימים | 88 | 89–119 | ₪2 · 2% | 6 | accent-sconces-cj-ribbed-travertine-half-cylinder-wood-bracket ₪157 (CJ Dropshipping) ✓ זול/רווחי יותר |
+| בוהו | [Boho Farmhouse Wall Sconces Natural Twine Hand Knit Wall Lam](https://www.aliexpress.com/item/1005009708965037.html) · **alternative** · ⚠ מידה לא אומתה (SKU הזול) | Lampshade Color 23x25cm Color Temperatur | 9.26+17.31, 9-19 ימים | 88 | 89–119 | ₪2 · 2% | 7 | accent-sconces-cj-ribbed-travertine-half-cylinder-wood-bracket ₪157 (CJ Dropshipping) ✓ זול/רווחי יותר |
+
+חלופות: כפרי מודרני [1005009708965037](https://www.aliexpress.com/item/1005009708965037.html) ₪88/2% · בוהו [1005009708965037](https://www.aliexpress.com/item/1005009708965037.html) ₪88/2% · בוהו [1005010168671943](https://www.aliexpress.com/item/1005010168671943.html) ₪66/23%
+
+## wall-sconce
+
+| סגנון | הבחירה | SKU | $ מוצר+משלוח | נחיתה ₪ | רצועה ₪ | רווח | fit | מול הכרטיס הקיים |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| נורדי | — אין מועמד שעבר | | | | | | | |
+| מודרני חם | — אין מועמד שעבר | | | | | | | |
+| ג'פנדי | [Wall Lamp Wabi Sabi Style Decorative Wall Sconce Lamp Apartm](https://www.aliexpress.com/item/1005010335841554.html) · **מפסיד ברצועת השוק** | Lampshade Color indoor-25cm Color Temper | 69.74+1.99, 6-15 ימים | 237 | 89–119 | ₪-148 · -146% | 7.5 | wall-sconce-cj-black-curved-arm-pleated ₪60 |
+| ים תיכוני | [Natural Woven Bohemian Rattan Wall Sconce Brass Base E27 Wal](https://www.aliexpress.com/item/1005012258778712.html) · **מפסיד ברצועת השוק** | Lampshade Color A Color Temperature warm | 9.30+22.22, 9-19 ימים | 104 | 89–119 | ₪-15 · -15% | 7 | wall-sconce-cj-black-curved-arm-pleated ₪60 |
+| כפרי מודרני | [Boho Farmhouse Wall Sconces Natural Twine Hand Knit Wall Lam](https://www.aliexpress.com/item/1005009708965037.html) · **alternative** · ⚠ מידה לא אומתה (SKU הזול) | Lampshade Color 23x25cm Color Temperatur | 9.26+17.31, 9-19 ימים | 88 | 89–119 | ₪2 · 2% | 6 | wall-sconce-cj-black-curved-arm-pleated ₪60 (CJ Dropshipping) ✗ |
+| בוהו | [Boho Farmhouse Wall Sconces Natural Twine Hand Knit Wall Lam](https://www.aliexpress.com/item/1005009708965037.html) · **alternative** · ⚠ מידה לא אומתה (SKU הזול) | Lampshade Color 23x25cm Color Temperatur | 9.26+17.31, 9-19 ימים | 88 | 89–119 | ₪2 · 2% | 7 | wall-sconce-cj-rubberwood-pleated ₪80 (CJ Dropshipping) ✗ |
+
+חלופות: כפרי מודרני [1005009708965037](https://www.aliexpress.com/item/1005009708965037.html) ₪88/2% · בוהו [1005009708965037](https://www.aliexpress.com/item/1005009708965037.html) ₪88/2%
+
+## vase
+
+| סגנון | הבחירה | SKU | $ מוצר+משלוח | נחיתה ₪ | רצועה ₪ | רווח | fit | מול הכרטיס הקיים |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| נורדי | [Simple Nordic Ceramic Vase Decoration Dried Flowers Living R](https://www.aliexpress.com/item/1005011974217816.html) · **alternative** · ⚠ מידה לא אומתה (SKU הזול) | Color Style 4 | 12.47+1.99, 6-15 ימים | 48 | 229–299 | ₪178 · 70% | 7 (סינון) | vase-aliexpress-vintage-distressed-clay-vase-589009 ₪105 (AliExpress) ✓ זול/רווחי יותר |
+| מודרני חם | [Modern Flower Vases For Homes Ceramic Vase Decoration Flower](https://www.aliexpress.com/item/4001308104480.html) · **alternative** · ⚠ מידה לא אומתה (SKU הזול) | Color Lemon yellow | 7.01+1.99, 6-15 ימים | 30 | 229–299 | ₪196 · 77% | 7 (סינון) | vase-cj-textured-white-stoneware ₪124 (CJ Dropshipping) ✓ זול/רווחי יותר |
+| ג'פנדי | [Vintage Distressed Clay Vase, Wabi-Sabi Rustic Ceramic for H](https://www.aliexpress.com/item/1005012472589009.html) · **best** · כרטיס | Color L | 4.53+27.25, 9-19 ימים | 105 | 229–299 | ₪121 · 48% | 8.5 | vase-aliexpress-vintage-distressed-clay-vase-589009 ₪105 (AliExpress) ✓ זול/רווחי יותר |
+| ים תיכוני | [Ceramic Flower Vase Retro Table Decorative Vase Dried Flower](https://www.aliexpress.com/item/1005007013751893.html) · **alternative** · ⚠ מידה לא אומתה (SKU הזול) | Color A2 Ceramic vase | 6.59+1.99, 6-15 ימים | 28 | 229–299 | ₪198 · 78% | 7 (סינון) | vase-aliexpress-vintage-distressed-clay-vase-589009 ₪105 (AliExpress) ✓ זול/רווחי יותר |
+| כפרי מודרני | [Ceramic Flower Vase Retro Table Decorative Vase Dried Flower](https://www.aliexpress.com/item/1005007013751893.html) · **alternative** · ⚠ מידה לא אומתה (SKU הזול) | Color A2 Ceramic vase | 6.59+1.99, 6-15 ימים | 28 | 229–299 | ₪198 · 78% | 7 (סינון) | vase-aliexpress-vintage-distressed-clay-vase-589009 ₪105 (AliExpress) ✓ זול/רווחי יותר |
+| בוהו | [Ceramic Flower Vase Retro Table Decorative Vase Dried Flower](https://www.aliexpress.com/item/1005007013751893.html) · **alternative** · ⚠ מידה לא אומתה (SKU הזול) | Color A2 Ceramic vase | 6.59+1.99, 6-15 ימים | 28 | 229–299 | ₪198 · 78% | 7 (סינון) | vase-cj-white-textured-jar ₪132 (CJ Dropshipping) ✓ זול/רווחי יותר |
+
+חלופות: נורדי [1005011974217816](https://www.aliexpress.com/item/1005011974217816.html) ₪48/70% · נורדי [1005005985228083](https://www.aliexpress.com/item/1005005985228083.html) ₪50/69% · נורדי [1005002623408224](https://www.aliexpress.com/item/1005002623408224.html) ₪54/68% · נורדי [1005010246274868](https://www.aliexpress.com/item/1005010246274868.html) ₪85/56% · נורדי [1005009666214265](https://www.aliexpress.com/item/1005009666214265.html) ₪107/47% · נורדי [1005008795048439](https://www.aliexpress.com/item/1005008795048439.html) ₪112/45% · נורדי [1005004404782249](https://www.aliexpress.com/item/1005004404782249.html) ₪124/40% · נורדי [1005005043007751](https://www.aliexpress.com/item/1005005043007751.html) ₪135/36% · מודרני חם [4001308104480](https://www.aliexpress.com/item/4001308104480.html) ₪30/77% · מודרני חם [1005005549624261](https://www.aliexpress.com/item/1005005549624261.html) ₪57/67% · מודרני חם [1005002665020891](https://www.aliexpress.com/item/1005002665020891.html) ₪72/61% · מודרני חם [1005004245677742](https://www.aliexpress.com/item/1005004245677742.html) ₪73/60%
+
+## rug
+
+| סגנון | הבחירה | SKU | $ מוצר+משלוח | נחיתה ₪ | רצועה ₪ | רווח | fit | מול הכרטיס הקיים |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| נורדי | [Nordic Round Jute Rug Bohemian Hand-Woven Circular Carpet fo](https://www.aliexpress.com/item/1005013288146621.html) · **alternative** · ⚠ מידה לא אומתה (SKU הזול) | Color 2 Size 40 x 40 cm | 4.68+1.99, 6-15 ימים | 22 | 649–799 | ₪584 · 86% | 7 (סינון) | rug-cj-braided-wool-natural ₪2503 (CJ Dropshipping) ✓ זול/רווחי יותר |
+| מודרני חם | [Minimalist Cream Curved Geometric Area Rug Neutral Soft Non ](https://www.aliexpress.com/item/1005012532799427.html) · **alternative** · ⚠ מידה לא אומתה (SKU הזול) | Color 2 Size 40x60cm | 6.88+1.99, 6-15 ימים | 29 | 649–799 | ₪576 · 85% | 7.5 | rug-cj-braided-wool-natural ₪2503 (CJ Dropshipping) ✓ זול/רווחי יותר |
+| ג'פנדי | [VIKAMA Wabi-Sabi Style Irregular Shag Rug Natural Texture Of](https://www.aliexpress.com/item/1005011702686508.html) · **alternative** · ⚠ מידה לא אומתה (SKU הזול) | Color FYR-1 Size 40 x 60 cm 15.8 x 24 in | 7.32+1.99, 6-15 ימים | 31 | 649–799 | ₪575 · 85% | 7 (סינון) | rug-cj-braided-wool-natural ₪2503 (CJ Dropshipping) ✓ זול/רווחי יותר |
+| ים תיכוני | [Warm Sunburst Mosaic Half Round Mat Washable Rug Carpet for ](https://www.aliexpress.com/item/1005011926572331.html) · **alternative** · ⚠ מידה לא אומתה (SKU הזול) | Color 4 Size 40x60cm-felt  | 5.31+1.99, 6-15 ימים | 24 | 649–799 | ₪582 · 86% | 7 (סינון) | rug-cj-braided-wool-natural ₪2503 (CJ Dropshipping) ✓ זול/רווחי יותר |
+| כפרי מודרני | [Fluffy Round Rug Carpets for Living Room Decor Faux Fur Rugs](https://www.aliexpress.com/item/4000684603340.html) · **alternative** · ⚠ מידה לא אומתה (SKU הזול) | Color Red Size 30 x 30 cm | 2.76+1.09, 18-28 ימים | 13 | 649–799 | ₪593 · 88% | 7 (סינון) | rug-cj-braided-wool-natural ₪2503 (CJ Dropshipping) ✓ זול/רווחי יותר |
+| בוהו | [Vintage Bohemian Round Area Rug Ethnic Geometric Diamond Pat](https://www.aliexpress.com/item/1005012854258346.html) · **alternative** · ⚠ מידה לא אומתה (SKU הזול) | Color 3 Size 40x40cm | 4.79+1.99, 6-15 ימים | 22 | 649–799 | ₪583 · 86% | 7 (סינון) | rug-cj-braided-wool-natural ₪2503 (CJ Dropshipping) ✓ זול/רווחי יותר |
+
+חלופות: נורדי [1005013288146621](https://www.aliexpress.com/item/1005013288146621.html) ₪22/86% · נורדי [1005008142601397](https://www.aliexpress.com/item/1005008142601397.html) ₪66/80% · נורדי [1005009176827760](https://www.aliexpress.com/item/1005009176827760.html) ₪87/77% · נורדי [1005007258137059](https://www.aliexpress.com/item/1005007258137059.html) ₪419/28% · נורדי [1005008478055119](https://www.aliexpress.com/item/1005008478055119.html) ₪420/28% · נורדי [1005012932813335](https://www.aliexpress.com/item/1005012932813335.html) ₪34/84% · נורדי [1005008868538834](https://www.aliexpress.com/item/1005008868538834.html) ₪63/80% · מודרני חם [1005012532799427](https://www.aliexpress.com/item/1005012532799427.html) ₪29/85% · מודרני חם [1005006289179967](https://www.aliexpress.com/item/1005006289179967.html) ₪93/76% · מודרני חם [1005010527574509](https://www.aliexpress.com/item/1005010527574509.html) ₪20/86% · מודרני חם [1005012983520524](https://www.aliexpress.com/item/1005012983520524.html) ₪28/85% · מודרני חם [1005006996465853](https://www.aliexpress.com/item/1005006996465853.html) ₪87/77%
+
+## floor-lamp
+
+| סגנון | הבחירה | SKU | $ מוצר+משלוח | נחיתה ₪ | רצועה ₪ | רווח | fit | מול הכרטיס הקיים |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| נורדי | [Table Lamp Shade Retro Linen Fabric Lampshade Bedroom Bedsid](https://www.aliexpress.com/item/1005009294740268.html) · **alternative** · ⚠ מידה לא אומתה (SKU הזול) | Body Color 1 | 12.81+2.55, 8-18 ימים | 51 | 149–219 | ₪114 · 62% | 6.9 (סינון) | floor-lamp-cj-black-drum-linen ₪144 (CJ Dropshipping) ✓ זול/רווחי יותר |
+| מודרני חם | — אין מועמד שעבר | | | | | | | |
+| ג'פנדי | [White Rice Paper Floor Lamp Shade Japanese Style Standing La](https://www.aliexpress.com/item/1005011885358144.html) · **alternative** | — | 5.31+10.10, 8-18 ימים | 51 | 149–219 | ₪114 · 62% | 6.5 | floor-lamp-cj-black-drum-linen ₪144 (CJ Dropshipping) ✓ זול/רווחי יותר |
+| ים תיכוני | [Table Lamp Shade Retro Linen Fabric Lampshade Bedroom Bedsid](https://www.aliexpress.com/item/1005009294740268.html) · **alternative** · ⚠ מידה לא אומתה (SKU הזול) | Body Color 1 | 12.81+2.55, 8-18 ימים | 51 | 149–219 | ₪114 · 62% | 6.9 (סינון) | floor-lamp-cj-black-drum-linen ₪144 (CJ Dropshipping) ✓ זול/רווחי יותר |
+| כפרי מודרני | [Table Lamp Shade Retro Linen Fabric Lampshade Bedroom Bedsid](https://www.aliexpress.com/item/1005009294740268.html) · **alternative** · ⚠ מידה לא אומתה (SKU הזול) | Body Color 1 | 12.81+2.55, 8-18 ימים | 51 | 149–219 | ₪114 · 62% | 7 (סינון) | floor-lamp-cj-black-drum-linen ₪144 (CJ Dropshipping) ✓ זול/רווחי יותר |
+| בוהו | [1Pc Nordic Style Minimalist Floor Lampshade Paper Floor Lamp](https://www.aliexpress.com/item/1005012313384930.html) · **alternative** | Body Color one size | 8.32+1.99, 6-13 ימים | 34 | 149–219 | ₪131 · 71% | 6.7 (סינון) | floor-lamp-cj-black-drum-linen ₪144 (CJ Dropshipping) ✓ זול/רווחי יותר |
+
+חלופות: נורדי [1005009294740268](https://www.aliexpress.com/item/1005009294740268.html) ₪51/62% · נורדי [1005010337297669](https://www.aliexpress.com/item/1005010337297669.html) ₪50/62% · ג'פנדי [1005011885358144](https://www.aliexpress.com/item/1005011885358144.html) ₪51/62% · ים תיכוני [1005009294740268](https://www.aliexpress.com/item/1005009294740268.html) ₪51/62% · כפרי מודרני [1005009294740268](https://www.aliexpress.com/item/1005009294740268.html) ₪51/62% · כפרי מודרני [1005010337297669](https://www.aliexpress.com/item/1005010337297669.html) ₪50/62% · בוהו [1005012313384930](https://www.aliexpress.com/item/1005012313384930.html) ₪34/71% · בוהו [1005009294740268](https://www.aliexpress.com/item/1005009294740268.html) ₪51/62%
+
+## planter
+
+| סגנון | הבחירה | SKU | $ מוצר+משלוח | נחיתה ₪ | רצועה ₪ | רווח | fit | מול הכרטיס הקיים |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| נורדי | — אין מועמד שעבר | | | | | | | |
+| מודרני חם | — אין מועמד שעבר | | | | | | | |
+| ג'פנדי | — אין מועמד שעבר | | | | | | | |
+| ים תיכוני | — אין מועמד שעבר | | | | | | | |
+| כפרי מודרני | — אין מועמד שעבר | | | | | | | |
+| בוהו | — אין מועמד שעבר | | | | | | | |
+
+## sofa-cover
+
+| סגנון | הבחירה | SKU | $ מוצר+משלוח | נחיתה ₪ | רצועה ₪ | רווח | fit | מול הכרטיס הקיים |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| נורדי | [Nordic Ins Style Full Cover Sofa Blanket Universal Sofa Cove](https://www.aliexpress.com/item/1005007540443376.html) · **alternative** · ⚠ מידה לא אומתה (SKU הזול) | Size 90 x 150 cm Color Lvsh-interwoven t | 7.57+1.99, 6-15 ימים | 32 | 279–349 | ₪232 · 79% | 7 (סינון) | sofa-cover-cj-cotton-muslin-fringe ₪85 (CJ Dropshipping) ✓ זול/רווחי יותר |
+| מודרני חם | [Minimalist Loop Yarn Chenille Sofa Cover for All Seasons Liv](https://www.aliexpress.com/item/1005010152347226.html) · **alternative** · ⚠ מידה לא אומתה (SKU הזול) | Color White Specification Pillow Cover-4 | 9.56+1.99, 6-15 ימים | 38 | 279–349 | ₪226 · 76% | 7 (סינון) | sofa-cover-cj-cotton-muslin-fringe ₪85 (CJ Dropshipping) ✓ זול/רווחי יותר |
+| ג'פנדי | [Waffle Jacquard Patio Sofa Cover Waterproof Splash Polar Fle](https://www.aliexpress.com/item/1005009716863217.html) · **alternative** | Color Beige yellow Specification Normal  | 8.89+2.17, 8-18 ימים | 36 | 279–349 | ₪227 · 77% | 7 (סינון) | sofa-cover-cj-acrylic-diamond-knit-tassel ₪77 (CJ Dropshipping) ✓ זול/רווחי יותר |
+| ים תיכוני | [Waterproof Sofa Cushion Covers Sofa Cover For Living Room Si](https://www.aliexpress.com/item/1005003706611627.html) · **alternative** | Color Black Specification Nomal Size L | 12.97+1.99, 6-15 ימים | 49 | 279–349 | ₪214 · 72% | 7 (סינון) | sofa-cover-cj-acrylic-diamond-knit-tassel ₪77 (CJ Dropshipping) ✓ זול/רווחי יותר |
+| כפרי מודרני | [Recliner Sofa Cover Lazy Chair Solid Color Cushion Cover Str](https://www.aliexpress.com/item/1005009514412156.html) · **alternative** · ⚠ מידה לא אומתה (SKU הזול) | Color Blue Specification 1 Seater | 5.41+1.99, 6-15 ימים | 24 | 279–349 | ₪240 · 81% | 7 (סינון) | sofa-cover-cj-acrylic-diamond-knit-tassel ₪77 (CJ Dropshipping) ✓ זול/רווחי יותר |
+| בוהו | [Boho Throw Pillow Cover for Sofa Living Room Tassel Decorati](https://www.aliexpress.com/item/1005009261623058.html) · **alternative** · ⚠ מידה לא אומתה (SKU הזול) | Color Green-30x50cm | 6.11+1.99, 6-13 ימים | 27 | 279–349 | ₪237 · 80% | 7.5 | sofa-cover-cj-washed-hemp-throw ₪164 (CJ Dropshipping) ✓ זול/רווחי יותר |
+
+חלופות: נורדי [1005007540443376](https://www.aliexpress.com/item/1005007540443376.html) ₪32/79% · נורדי [1005010747505388](https://www.aliexpress.com/item/1005010747505388.html) ₪56/70% · נורדי [1005006955641146](https://www.aliexpress.com/item/1005006955641146.html) ₪59/69% · נורדי [1005007423621290](https://www.aliexpress.com/item/1005007423621290.html) ₪61/68% · נורדי [1005010595608506](https://www.aliexpress.com/item/1005010595608506.html) ₪70/66% · נורדי [1005008326046593](https://www.aliexpress.com/item/1005008326046593.html) ₪82/61% · נורדי [1005010805657305](https://www.aliexpress.com/item/1005010805657305.html) ₪105/54% · נורדי [1005009850079092](https://www.aliexpress.com/item/1005009850079092.html) ₪109/52% · נורדי [1005009453849899](https://www.aliexpress.com/item/1005009453849899.html) ₪141/42% · נורדי [1005012684070491](https://www.aliexpress.com/item/1005012684070491.html) ₪160/35% · נורדי [1005006856211815](https://www.aliexpress.com/item/1005006856211815.html) ₪27/80% · מודרני חם [1005010152347226](https://www.aliexpress.com/item/1005010152347226.html) ₪38/76%
+
+## cushions
+
+| סגנון | הבחירה | SKU | $ מוצר+משלוח | נחיתה ₪ | רצועה ₪ | רווח | fit | מול הכרטיס הקיים |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| נורדי | [Nordic Tufted Cushion Cover with Geometric Stripe and Croche](https://www.aliexpress.com/item/1005010199980070.html) · **alternative** | Color B- 45x45cm COVER Specification 45x | 11.52+1.99, 6-15 ימים | 45 | 69–99 | ₪29 · 35% | 7 (סינון) | cushions-cj-boucle-teddy ₪40 (CJ Dropshipping) ✗ |
+| מודרני חם | [Horror Movie Cushion Cover  Stills Pillow For Chairs Home De](https://www.aliexpress.com/item/1005001608768729.html) · **alternative** | Color as picture Size 45x45cm | 5.21+1.99, 6-15 ימים | 24 | 69–99 | ₪50 · 60% | 7 (סינון) | cushions-cj-boucle-teddy ₪40 (CJ Dropshipping) ✓ זול/רווחי יותר |
+| ג'פנדי | [Thickened Chair Cover, Solid-Color Chair Seat Cushion Cover ](https://www.aliexpress.com/item/1005009013073895.html) · **alternative** · ⚠ מידה לא אומתה (SKU הזול) | Color 01 | 2.93+1.99, 6-13 ימים | 16 | 69–99 | ₪58 · 69% | 7.0 (סינון) | cushions-aliexpress-fashion-modern-wabi-sabi-464203 ₪50 (AliExpress) ✓ זול/רווחי יותר |
+| ים תיכוני | [Outdoor Waterproof Cushion Cover 18x18in Throw Pillow Cover ](https://www.aliexpress.com/item/1005005555834479.html) · **alternative** · ⚠ מידה לא אומתה (SKU הזול) | Color Rose Red Size 400mm*400mm | 4.29+1.49, 32-42 ימים | 19 | 69–99 | ₪55 · 65% | 7 (סינון) | cushions-cj-chenille-wide-wale-green ₪23 (CJ Dropshipping) ✓ זול/רווחי יותר |
+| כפרי מודרני | [New Wildflower Pillow Cover Farmhouse Style 45 x 45 Square C](https://www.aliexpress.com/item/1005011530710046.html) · **alternative** · ⚠ מידה לא אומתה (SKU הזול) | Color A | 4.26+1.99, 6-15 ימים | 21 | 69–99 | ₪53 · 64% | 7.0 (סינון) | cushions-aliexpress-farmhouse-floral-pillow-covers-166217 ₪42 (AliExpress) ✓ זול/רווחי יותר |
+| בוהו | [Boho Throw Pillow Cover for Sofa Living Room Tassel Decorati](https://www.aliexpress.com/item/1005009261623058.html) · **alternative** | Color Beige-45 x 45 cm | 7.04+1.99, 6-15 ימים | 30 | 69–99 | ₪44 · 53% | 7.5 | cushions-cj-washed-cotton-frayed ₪24 (CJ Dropshipping) ✗ |
+
+חלופות: נורדי [1005010199980070](https://www.aliexpress.com/item/1005010199980070.html) ₪45/35% · נורדי [1005006955364969](https://www.aliexpress.com/item/1005006955364969.html) ₪48/30% · נורדי [1005005884234766](https://www.aliexpress.com/item/1005005884234766.html) ₪21/63% · נורדי [1005008476063676](https://www.aliexpress.com/item/1005008476063676.html) ₪25/59% · נורדי [33023396692](https://www.aliexpress.com/item/33023396692.html) ₪27/56% · נורדי [1005006856211815](https://www.aliexpress.com/item/1005006856211815.html) ₪27/56% · נורדי [1005005493246395](https://www.aliexpress.com/item/1005005493246395.html) ₪20/64% · מודרני חם [1005001608768729](https://www.aliexpress.com/item/1005001608768729.html) ₪24/60% · מודרני חם [1005013204411310](https://www.aliexpress.com/item/1005013204411310.html) ₪26/58% · מודרני חם [1005008055441414](https://www.aliexpress.com/item/1005008055441414.html) ₪37/44% · מודרני חם [1005010106614888](https://www.aliexpress.com/item/1005010106614888.html) ₪44/35% · ג'פנדי [1005009013073895](https://www.aliexpress.com/item/1005009013073895.html) ₪16/69%
+
+## basket
+
+| סגנון | הבחירה | SKU | $ מוצר+משלוח | נחיתה ₪ | רצועה ₪ | רווח | fit | מול הכרטיס הקיים |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| נורדי | [Nordic Cotton Rope Woven Storage Baskets Organize Boxes Desk](https://www.aliexpress.com/item/1005012719127582.html) · **alternative** | Color white Size Large 30X17X9CM | 8.09+1.99, 6-15 ימים | 33 | 49–69 | ₪18 · 31% | 6.5 (סינון) | basket-cj-jute-rope-cylinder ₪80 (CJ Dropshipping) ✓ זול/רווחי יותר |
+| מודרני חם | — אין מועמד שעבר | | | | | | | |
+| ג'פנדי | [Woven Storage Baskets Kitchen Organizer Handwoven with Handl](https://www.aliexpress.com/item/1005011924094723.html) · **alternative** · ⚠ מידה לא אומתה (SKU הזול) | Color A-Small | 2.51+10.94, 15-25 ימים | 44 | 49–69 | ₪7 · 12% | 6.4 (סינון) | basket-cj-seagrass-belly-xl ₪50 (CJ Dropshipping) ✓ זול/רווחי יותר |
+| ים תיכוני | [Woven Cosmetics Storage Basket Handmade Multi-functional Pap](https://www.aliexpress.com/item/1005012068148958.html) · **alternative** · ⚠ מידה לא אומתה (SKU הזול) | Color S | 5.54+1.99, 6-15 ימים | 25 | 49–69 | ₪26 · 45% | 6.9 (סינון) | basket-zendrop-seagrass-belly-foldable-38 ₪60 (Zendrop) ✓ זול/רווחי יותר |
+| כפרי מודרני | [Wicker Basket Toy Organizer Folding Rattan Seagrass Storage ](https://www.aliexpress.com/item/1005009914199844.html) · **alternative** · ⚠ מידה לא אומתה (SKU הזול) | Color flower basket Sheet Size 18 x 20 x | 5.14+1.99, 6-13 ימים | 24 | 49–69 | ₪28 · 47% | 6.5 | basket-zendrop-seagrass-belly-foldable-38 ₪60 (Zendrop) ✓ זול/רווחי יותר |
+| בוהו | [Woven Storage Baskets Kitchen Organizer Handwoven with Handl](https://www.aliexpress.com/item/1005011924094723.html) · **alternative** · ⚠ מידה לא אומתה (SKU הזול) | Color A-Small | 2.51+10.94, 15-25 ימים | 44 | 49–69 | ₪7 · 12% | 6.8 (סינון) | basket-zendrop-seagrass-belly-foldable-38 ₪60 (Zendrop) ✓ זול/רווחי יותר |
+
+חלופות: נורדי [1005012719127582](https://www.aliexpress.com/item/1005012719127582.html) ₪33/31% · נורדי [1005011924094723](https://www.aliexpress.com/item/1005011924094723.html) ₪44/12% · נורדי [1005005270437856](https://www.aliexpress.com/item/1005005270437856.html) ₪32/32% · נורדי [1005012725310139](https://www.aliexpress.com/item/1005012725310139.html) ₪36/26% · ג'פנדי [1005011924094723](https://www.aliexpress.com/item/1005011924094723.html) ₪44/12% · ים תיכוני [1005012068148958](https://www.aliexpress.com/item/1005012068148958.html) ₪25/45% · ים תיכוני [1005011924094723](https://www.aliexpress.com/item/1005011924094723.html) ₪44/12% · כפרי מודרני [1005009914199844](https://www.aliexpress.com/item/1005009914199844.html) ₪24/47% · כפרי מודרני [1005011924094723](https://www.aliexpress.com/item/1005011924094723.html) ₪44/12% · בוהו [1005011924094723](https://www.aliexpress.com/item/1005011924094723.html) ₪44/12% · בוהו [1005007594937396](https://www.aliexpress.com/item/1005007594937396.html) ₪44/12%
+
+## magazine-holder
+
+| סגנון | הבחירה | SKU | $ מוצר+משלוח | נחיתה ₪ | רצועה ₪ | רווח | fit | מול הכרטיס הקיים |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| נורדי | [Tactically Magnetic Pocket Magazine Holder Standard Clips Ma](https://www.aliexpress.com/item/1005009179515404.html) · **alternative** | Ships From China Mainland | 6.46+4.97, 8-18 ימים | 38 | 89–129 | ₪59 · 54% | 7 (סינון) | magazine-holder-cj-felt-log-basket ₪40 (CJ Dropshipping) ✓ זול/רווחי יותר |
+| מודרני חם | — אין מועמד שעבר | | | | | | | |
+| ג'פנדי | [Magazine Rack Woven Magazine Holder with Sling Book Stand De](https://www.aliexpress.com/item/1005012782060549.html) · **alternative** | — | 7.64+15.09, 9-19 ימים | 75 | 89–129 | ₪22 · 20% | 7 | magazine-holder-cj-felt-snap-bucket ₪36 (CJ Dropshipping) ✗ |
+| ים תיכוני | [Double Magazine Holder Universal 9mm .40 Mag Holster for Glc](https://www.aliexpress.com/item/1005005876357477.html) · **alternative** | Color BLACK | 6.13+1.99, 6-13 ימים | 27 | 89–129 | ₪70 · 64% | 7 (סינון) | magazine-holder-cj-felt-snap-bucket ₪36 (CJ Dropshipping) ✓ זול/רווחי יותר |
+| כפרי מודרני | [Double Magazine Holder Universal 9mm .40 Mag Holster for Glc](https://www.aliexpress.com/item/1005005876357477.html) · **alternative** | Color BLACK | 6.13+1.99, 6-13 ימים | 27 | 89–129 | ₪70 · 64% | 7 (סינון) | magazine-holder-cj-felt-snap-bucket ₪36 (CJ Dropshipping) ✓ זול/רווחי יותר |
+| בוהו | [Magazine Rack Woven Magazine Holder with Sling Book Stand De](https://www.aliexpress.com/item/1005012782060549.html) · **alternative** | — | 7.64+15.09, 9-19 ימים | 75 | 89–129 | ₪22 · 20% | 7.0 (סינון) | magazine-holder-cj-felt-snap-bucket ₪36 (CJ Dropshipping) ✗ |
+
+חלופות: נורדי [1005009179515404](https://www.aliexpress.com/item/1005009179515404.html) ₪38/54% · נורדי [1005003685754537](https://www.aliexpress.com/item/1005003685754537.html) ₪40/52% · נורדי [1005004725824566](https://www.aliexpress.com/item/1005004725824566.html) ₪40/52% · נורדי [1005006328704500](https://www.aliexpress.com/item/1005006328704500.html) ₪44/49% · נורדי [1005005094545458](https://www.aliexpress.com/item/1005005094545458.html) ₪50/43% · נורדי [1005012740547915](https://www.aliexpress.com/item/1005012740547915.html) ₪90/6% · נורדי [1005012141298655](https://www.aliexpress.com/item/1005012141298655.html) ₪38/54% · נורדי [1005012782060549](https://www.aliexpress.com/item/1005012782060549.html) ₪75/20% · ג'פנדי [1005012782060549](https://www.aliexpress.com/item/1005012782060549.html) ₪75/20% · ים תיכוני [1005005876357477](https://www.aliexpress.com/item/1005005876357477.html) ₪27/64% · ים תיכוני [1005011540845142](https://www.aliexpress.com/item/1005011540845142.html) ₪34/58% · ים תיכוני [1005007978784638](https://www.aliexpress.com/item/1005007978784638.html) ₪35/56%
+
+## table-runner
+
+| סגנון | הבחירה | SKU | $ מוצר+משלוח | נחיתה ₪ | רצועה ₪ | רווח | fit | מול הכרטיס הקיים |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| נורדי | [Nordic Cotton Solid Color Table Runner 60*180cm/60*300cm Sof](https://www.aliexpress.com/item/1005012156407052.html) · **alternative** · ⚠ מידה לא אומתה (SKU הזול) | Color sky blue Size 60 x 180 CM | 4.66+1.99, 6-15 ימים | 22 | 89–129 | ₪75 · 68% | 7 (סינון) | table-runner-cj-linen-look-sage-fringe ₪36 (CJ Dropshipping) ✓ זול/רווחי יותר |
+| מודרני חם | [High-End Light Green Textured Table Runner / Minimalist Natu](https://www.aliexpress.com/item/1005010451598962.html) · **alternative** · ⚠ מידה לא אומתה (SKU הזול) | Color ZQ Size 30X45CM | 4.69+1.99, 6-15 ימים | 22 | 89–129 | ₪75 · 68% | 7 (סינון) | table-runner-zendrop-ben-white-linen-look-33x183 ₪46 (Zendrop) ✓ זול/רווחי יותר |
+| ג'פנדי | [Japanese Style Light Blue Wave Table Runner / Elegant Light ](https://www.aliexpress.com/item/1005010472432714.html) · **alternative** · ⚠ מידה לא אומתה (SKU הזול) | Color ZQ Size 30X45CM | 3.87+1.99, 6-15 ימים | 19 | 89–129 | ₪78 · 71% | 7 (סינון) | table-runner-cj-pure-white-woven ₪26 (CJ Dropshipping) ✓ זול/רווחי יותר |
+| ים תיכוני | [Thanksgiving Fall Decor Terracotta Table Runner Gauze Rustic](https://www.aliexpress.com/item/1005010168699796.html) · **alternative** · ⚠ מידה לא אומתה (SKU הזול) | Color Terracotta Size 90 x 180 cm | 4.63+1.99, 6-13 ימים | 22 | 89–129 | ₪75 · 69% | 7 (סינון) | table-runner-zendrop-ben-white-linen-look-33x183 ₪46 (Zendrop) ✓ זול/רווחי יותר |
+| כפרי מודרני | [Nordic Table Runner Farmhouse  with Tassels Cotton Linen  fo](https://www.aliexpress.com/item/1005010607540088.html) · **alternative** · ⚠ מידה לא אומתה (SKU הזול) | Color D3 Size 30X50cm | 3.67+1.99, 6-15 ימים | 19 | 89–129 | ₪78 · 71% | 7 (סינון) | table-runner-zendrop-ben-white-linen-look-33x183 ₪46 (Zendrop) ✓ זול/רווחי יותר |
+| בוהו | [Boho Beige Table Runner, Vintage Farmhouse Bohemian Crochet ](https://www.aliexpress.com/item/1005005972808858.html) · **alternative** · ⚠ מידה לא אומתה (SKU הזול) | Color C Size 24x100cm | 5.12+1.99, 6-15 ימים | 24 | 89–129 | ₪73 · 67% | 7 (סינון) | table-runner-aliexpress-nordic-table-runner-kitchen-244347 ₪31 (AliExpress) ✓ זול/רווחי יותר |
+
+חלופות: נורדי [1005012156407052](https://www.aliexpress.com/item/1005012156407052.html) ₪22/68% · נורדי [1005012179525144](https://www.aliexpress.com/item/1005012179525144.html) ₪29/62% · נורדי [1005012670161497](https://www.aliexpress.com/item/1005012670161497.html) ₪35/56% · נורדי [1005011553209928](https://www.aliexpress.com/item/1005011553209928.html) ₪35/56% · נורדי [1005006467533445](https://www.aliexpress.com/item/1005006467533445.html) ₪46/47% · נורדי [1005009820828244](https://www.aliexpress.com/item/1005009820828244.html) ₪64/30% · מודרני חם [1005010451598962](https://www.aliexpress.com/item/1005010451598962.html) ₪22/68% · מודרני חם [1005012308977732](https://www.aliexpress.com/item/1005012308977732.html) ₪26/65% · מודרני חם [1005012085892287](https://www.aliexpress.com/item/1005012085892287.html) ₪27/64% · מודרני חם [1005005992483562](https://www.aliexpress.com/item/1005005992483562.html) ₪34/58% · מודרני חם [1005013213347732](https://www.aliexpress.com/item/1005013213347732.html) ₪23/68% · ג'פנדי [1005010472432714](https://www.aliexpress.com/item/1005010472432714.html) ₪19/71%
+
+## bowl
+
+| סגנון | הבחירה | SKU | $ מוצר+משלוח | נחיתה ₪ | רצועה ₪ | רווח | fit | מול הכרטיס הקיים |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| נורדי | — אין מועמד שעבר | | | | | | | |
+| מודרני חם | — אין מועמד שעבר | | | | | | | |
+| ג'פנדי | [Wabi Sabi Style Acacia Wood Decorative Serving Platter Oval ](https://www.aliexpress.com/item/1005012509590290.html) · **alternative** · ⚠ מידה לא אומתה (SKU הזול) | Color Oval Tray A | 7.91+1.99, 6-13 ימים | 33 | 29–49 | ₪3 · 8% | 6.5 | bowl-cj-speckled-ivory-wide-bowl-21 ₪51 (CJ Dropshipping) ✓ זול/רווחי יותר |
+| ים תיכוני | — אין מועמד שעבר | | | | | | | |
+| כפרי מודרני | — אין מועמד שעבר | | | | | | | |
+| בוהו | — אין מועמד שעבר | | | | | | | |
+
+חלופות: ג'פנדי [1005012509590290](https://www.aliexpress.com/item/1005012509590290.html) ₪33/8%
+
+## candle-holders
+
+| סגנון | הבחירה | SKU | $ מוצר+משלוח | נחיתה ₪ | רצועה ₪ | רווח | fit | מול הכרטיס הקיים |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| נורדי | [1pcs Candlestick Crafts Simple Nordic Desk Candle Ornament C](https://www.aliexpress.com/item/1005007782580598.html) · **alternative** | Color style1 | 5.41+1.99, 6-15 ימים | 24 | 59–89 | ₪42 · 56% | 7 (סינון) | candle-holders-cj-travertine-pedestal ₪75 (CJ Dropshipping) ✓ זול/רווחי יותר |
+| מודרני חם | [Minimalist Glass Taper Candle Holders, Creative Clear Candle](https://www.aliexpress.com/item/1005012063543853.html) · **alternative** | Color B Size M Number of Pcs 1Pc | 4.59+1.99, 6-15 ימים | 22 | 59–89 | ₪45 · 59% | 7 (סינון) | candle-holders-cj-travertine-pedestal ₪75 (CJ Dropshipping) ✓ זול/רווחי יותר |
+| ג'פנדי | [Smokeless Candle Wicks 2.6-20cm Pre-Waxed Cotton Core Wicks ](https://www.aliexpress.com/item/1005004787972663.html) · **alternative** | Color 2.6CM | 1.87+1.99, 6-13 ימים | 13 | 59–89 | ₪54 · 71% | 7 (סינון) | candle-holders-cj-ceramic-pedestal-tray ₪45 (CJ Dropshipping) ✓ זול/רווחי יותר |
+| ים תיכוני | [Elegant Black European Candle Holder Exquisite Handmade Iron](https://www.aliexpress.com/item/1005012372497822.html) · **alternative** | Color Black | 3.61+2.79, 18-28 ימים | 21 | 59–89 | ₪45 · 60% | 7 (סינון) | candle-holders-cj-ceramic-pedestal-tray ₪45 (CJ Dropshipping) ✓ זול/רווחי יותר |
+| כפרי מודרני | [Handmade Candle Holder Made of Wooden DIY Artwork. Holiday/d](https://www.aliexpress.com/item/1005011565313535.html) · **alternative** | Color candlestick Size S | 5.69+1.99, 6-13 ימים | 25 | 59–89 | ₪41 · 55% | 7 (סינון) | candle-holders-cj-ceramic-pedestal-tray ₪45 (CJ Dropshipping) ✓ זול/רווחי יותר |
+| בוהו | [Handmade Candle Holder Made of Wooden DIY Artwork. Holiday/d](https://www.aliexpress.com/item/1005011565313535.html) · **alternative** | Color candlestick Size S | 5.69+1.99, 6-13 ימים | 25 | 59–89 | ₪41 · 55% | 7 (סינון) | candle-holders-cj-ceramic-pedestal-tray ₪45 (CJ Dropshipping) ✓ זול/רווחי יותר |
+
+חלופות: נורדי [1005007782580598](https://www.aliexpress.com/item/1005007782580598.html) ₪24/56% · נורדי [1005011565313535](https://www.aliexpress.com/item/1005011565313535.html) ₪25/55% · נורדי [1005010420254601](https://www.aliexpress.com/item/1005010420254601.html) ₪29/50% · נורדי [1005006479995889](https://www.aliexpress.com/item/1005006479995889.html) ₪32/46% · נורדי [1005006546557361](https://www.aliexpress.com/item/1005006546557361.html) ₪33/45% · מודרני חם [1005012063543853](https://www.aliexpress.com/item/1005012063543853.html) ₪22/59% · מודרני חם [1005010420254601](https://www.aliexpress.com/item/1005010420254601.html) ₪29/50% · מודרני חם [1005011773714795](https://www.aliexpress.com/item/1005011773714795.html) ₪43/30% · מודרני חם [1005012391304894](https://www.aliexpress.com/item/1005012391304894.html) ₪15/68% · ג'פנדי [1005004787972663](https://www.aliexpress.com/item/1005004787972663.html) ₪13/71% · ג'פנדי [1005010003908716](https://www.aliexpress.com/item/1005010003908716.html) ₪19/63% · ג'פנדי [1005012134803686](https://www.aliexpress.com/item/1005012134803686.html) ₪19/62%
+
+## pouf
+
+| סגנון | הבחירה | SKU | $ מוצר+משלוח | נחיתה ₪ | רצועה ₪ | רווח | fit | מול הכרטיס הקיים |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| נורדי | [OTAUTAU Big Round Pouf Ottoman Cover Without Filler Soft Fau](https://www.aliexpress.com/item/1005005387883314.html) · **alternative** · ⚠ מידה לא אומתה (SKU הזול) | Color white Size 70x25cm-empty cover | 32.40+1.99, 6-15 ימים | 114 | 349–449 | ₪226 · 60% | 7 (סינון) | pouf-cj-cotton-knit-ball-cover ₪127 (CJ Dropshipping) ✓ זול/רווחי יותר |
+| מודרני חם | [OTAUTAU Round Stool D30cm*H20cm Linen Bean Bag Ottoman with ](https://www.aliexpress.com/item/1005007185322385.html) · **alternative** · ⚠ מידה לא אומתה (SKU הזול) | Color black | 11.89+1.99, 6-13 ימים | 46 | 349–449 | ₪294 · 77% | 7 (סינון) | pouf-cj-cotton-knit-ball-cover ₪127 (CJ Dropshipping) ✓ זול/רווחי יותר |
+| ג'פנדי | [OTAUTAU Round Stool D30cm*H20cm Linen Bean Bag Ottoman with ](https://www.aliexpress.com/item/1005007185322385.html) · **alternative** · ⚠ מידה לא אומתה (SKU הזול) | Color black | 11.89+1.99, 6-13 ימים | 46 | 349–449 | ₪294 · 77% | 7 (סינון) | pouf-cj-cotton-knit-ball-cover ₪127 (CJ Dropshipping) ✓ זול/רווחי יותר |
+| ים תיכוני | [OTAUTAU Round Stool D30cm*H20cm Linen Bean Bag Ottoman with ](https://www.aliexpress.com/item/1005007185322385.html) · **alternative** · ⚠ מידה לא אומתה (SKU הזול) | Color black | 11.89+1.99, 6-13 ימים | 46 | 349–449 | ₪294 · 77% | 7 (סינון) | pouf-cj-cotton-knit-ball-cover ₪127 (CJ Dropshipping) ✓ זול/רווחי יותר |
+| כפרי מודרני | [OTAUTAU Round Stool D30cm*H20cm Linen Bean Bag Ottoman with ](https://www.aliexpress.com/item/1005007185322385.html) · **alternative** · ⚠ מידה לא אומתה (SKU הזול) | Color black | 11.89+1.99, 6-13 ימים | 46 | 349–449 | ₪294 · 77% | 7 (סינון) | pouf-cj-cotton-knit-ball-cover ₪127 (CJ Dropshipping) ✓ זול/רווחי יותר |
+| בוהו | [OTAUTAU Round Stool D30cm*H20cm Linen Bean Bag Ottoman with ](https://www.aliexpress.com/item/1005007185322385.html) · **alternative** · ⚠ מידה לא אומתה (SKU הזול) | Color black | 11.89+1.99, 6-13 ימים | 46 | 349–449 | ₪294 · 77% | 7 (סינון) | pouf-cj-cotton-knit-ball-cover ₪127 (CJ Dropshipping) ✓ זול/רווחי יותר |
+
+חלופות: נורדי [1005005387883314](https://www.aliexpress.com/item/1005005387883314.html) ₪114/60% · מודרני חם [1005007185322385](https://www.aliexpress.com/item/1005007185322385.html) ₪46/77% · מודרני חם [1005013014674879](https://www.aliexpress.com/item/1005013014674879.html) ₪57/74% · מודרני חם [1005012884911870](https://www.aliexpress.com/item/1005012884911870.html) ₪59/74% · מודרני חם [1005013070580780](https://www.aliexpress.com/item/1005013070580780.html) ₪92/65% · מודרני חם [1005012751776209](https://www.aliexpress.com/item/1005012751776209.html) ₪94/64% · מודרני חם [1005009044475058](https://www.aliexpress.com/item/1005009044475058.html) ₪178/42% · ג'פנדי [1005007185322385](https://www.aliexpress.com/item/1005007185322385.html) ₪46/77% · ג'פנדי [1005005787944539](https://www.aliexpress.com/item/1005005787944539.html) ₪61/73% · ג'פנדי [1005012622343078](https://www.aliexpress.com/item/1005012622343078.html) ₪66/72% · ג'פנדי [1005012751776209](https://www.aliexpress.com/item/1005012751776209.html) ₪94/64% · ג'פנדי [1005006302100915](https://www.aliexpress.com/item/1005006302100915.html) ₪96/64%
+
+## pendant
+
+| סגנון | הבחירה | SKU | $ מוצר+משלוח | נחיתה ₪ | רצועה ₪ | רווח | fit | מול הכרטיס הקיים |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| נורדי | — אין מועמד שעבר | | | | | | | |
+| מודרני חם | [Modern Travertine Stone Pendant Light Versatile In Various S](https://www.aliexpress.com/item/1005009905387436.html) · **מפסיד ברצועת השוק** | Body Color Walnut short 10cm | 43.50+1.99, 6-13 ימים | 150 | 139–179 | ₪-15 · -10% | 7 | pendant-cj-silk-pumpkin-lantern ₪195 |
+| ג'פנדי | — אין מועמד שעבר | | | | | | | |
+| ים תיכוני | — אין מועמד שעבר | | | | | | | |
+| כפרי מודרני | [Rustic Woven Pendant Light Kitchen Island Boho Hanging Lamp ](https://www.aliexpress.com/item/1005009394200914.html) · **alternative** | Body Color A2-18cm Wattage Warm 3000K | 12.04+17.69, 8-18 ימים | 98 | 139–179 | ₪37 · 24% | 6 | pendant-cj-silk-pumpkin-lantern ₪195 (CJ Dropshipping) ✓ זול/רווחי יותר |
+| בוהו | [Modern Pendant Lamp Vintage Industrial Lampshade Hanging Lig](https://www.aliexpress.com/item/1005012030532216.html) · **alternative** · ⚠ מידה לא אומתה (SKU הזול) | Body Color Blue | 16.54+1.99, 6-15 ימים | 61 | 139–179 | ₪74 · 49% | 6.4 (סינון) | pendant-cj-pleated-pumpkin-lantern-40 ₪333 (CJ Dropshipping) ✓ זול/רווחי יותר |
+
+חלופות: כפרי מודרני [1005009394200914](https://www.aliexpress.com/item/1005009394200914.html) ₪98/24% · בוהו [1005012030532216](https://www.aliexpress.com/item/1005012030532216.html) ₪61/49% · בוהו [1005006261833342](https://www.aliexpress.com/item/1005006261833342.html) ₪76/39%
 
