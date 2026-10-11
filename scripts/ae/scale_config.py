@@ -102,11 +102,11 @@ SLOTS = {
     "hall/runner-rug": dict(q="long woven runner rug 70x250", must=r"rug|runner|carpet", band="rug-small", size=[_s(r"(?:6\d|7\d|80)", r"(?:2[4-7]\d)"), _s(r"(?:6\d|7\d|80)", r"(?:2\d\d)")], ship=12, bad=r"\b(table runner|flannel|3d print|cartoon)\b"),
     "hall/ceiling-light": dict(q="flush mount ceiling light 40cm", must=r"ceiling|flush", band="ceiling-light", size=[r"\b(3[5-9]|4[0-5])\s*cm"], ship=12, bad=r"\b(mini|spotlight|downlight|track)\b"),
     # ------------------------------------------------------------------ corridor
-    "corridor/runner-rug": dict(q="long hallway runner rug", must=r"rug|runner|carpet|mat", band="rug-medium", size=[_s(r"(?:6\d)", r"(?:[3-7]\d\d)")], ship=15, bad=r"\b(table runner|cute animal|cartoon)\b"),
+    "corridor/runner-rug": dict(q="extra long hallway runner rug 60x600", must=r"rug|runner|carpet", band="rug-medium", size=[_s(r"(?:6\d)", r"(?:[5-7]\d\d)"), _s(r"(?:6\d|70|80)", r"(?:[3-7]\d\d)")], ship=15, bad=r"\b(table runner|cute animal|cartoon|flannel|3d print)\b"),
     "corridor/ceiling-lights": dict(q="semi flush ceiling light", must=r"ceiling|flush|lamp|light", band="ceiling-light", size=[r"\b(3\d|40)\s*cm"], ship=12, qty=2),
     "corridor/gallery-art": dict(q="framed art print set of 3", must=r"frame|framed|print|poster|painting|canvas", band="framed-print", size=[_s("40", "50"), _s(r"4\d", r"4\d|5\d")], ship=8),
-    "corridor/picture-lights": dict(q="picture light wall", must=r"picture light|art light|painting light|wall (lamp|light)|sconce|mirror light", bad=r"\b(photo display|garland|clip|beads?)\b", band="wall-sconce", size=[r"\b(2[5-9]|3[0-2])\s*cm"], ship=8, qty=3),
-    "corridor/gallery-stool": dict(q="wooden stool", must=r"stool", band=[149, 199], size=[r"\b(4[2-6])\s*cm"], ship=15),
+    "corridor/picture-lights": dict(q="picture light wall art lamp arm", must=r"picture light|art light|painting light|picture lamp|gallery light", band="wall-sconce", size=[r"\b(2[5-9]|3[0-2])\s*cm"], ship=8, qty=3, bad=r"\b(photo display|garland|clip|beads?|rgb|puck|up ?down|battery)\b"),
+    "corridor/gallery-stool": dict(q="solid wood stool 45cm", must=r"stool", band=[149, 199], size=[r"\b(4[2-6])\s*cm"], ship=15, bad=r"\b(foot ?stool|step|kids|child|miniature|dollhouse|plant stand|bar stool|folding)\b"),
     # ------------------------------------------------------------------ kids
     "kids/roman-blind": dict(q="linen roman shade blind", must=r"roman (shade|blind)|roman curtain|blind", band="curtains", size=[r"(?<!\d)13\d(?!\d)"], ship=8, bad=r"\b(parts?|cord|bracket|clips?|hardware|motor|track only|accessor(y|ies))\b"),
     "kids/framed-prints": dict(q="nursery framed print", must=r"frame|framed|print|poster|painting|canvas", band="kids-decor", size=[_s("30", "40")], ship=5),
