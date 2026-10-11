@@ -36,7 +36,7 @@ FIXTURES = STUDIO / "tests" / "fixtures"
 FIXTURE = FIXTURES / "deep-2026-10"
 AXE = ROOT / "site" / "node_modules" / "axe-core" / "axe.min.js"
 CHROMIUM = os.environ.get("PW_CHROMIUM", "/opt/pw-browsers/chromium")
-SCREENS = ["overview", "todo", "decisions", "rooms", "products", "profit", "compare", "furniture", "suppliers", "budget", "quality", "log"]
+SCREENS = ["overview", "todo", "decisions", "office", "rooms", "products", "profit", "compare", "furniture", "suppliers", "budget", "quality", "log"]
 AXE_TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"]
 
 failures: list[str] = []
@@ -99,6 +99,22 @@ def axe(page, label, root="#screen-compare"):
     check(not res, f"axe {label}: no violations" + ("" if not res else "\n        " + "\n        ".join(res[:8])))
 
 
+def design_first_winner(page, slot_key):
+    """(ok, detail): the slot's winner row is eligible, never loses money, and has the highest fit among eligible rows."""
+    sid = "cmp-" + slot_key.replace("/", "--")
+    rows = page.eval_on_selector_all(f"#{sid} tbody tr", "rs => rs.map(r => ({win: r.classList.contains('is-win'), fit: +r.dataset.fit, elig: r.dataset.elig === '1', loss: r.dataset.loss === '1', m: r.dataset.margin == null ? null : +r.dataset.margin}))")
+    win = [r for r in rows if r["win"]]
+    elig = [r for r in rows if r["elig"]]
+    if not elig:
+        return (not win, "no eligible candidate, no winner")
+    if len(win) != 1:
+        return (False, f"{len(win)} winners")
+    w, best = win[0], max(r["fit"] for r in elig)
+    ties = [r for r in elig if r["fit"] == best]
+    ok = w["elig"] and not w["loss"] and w["fit"] == best and (w["m"] or 0) >= max((r["m"] or 0) for r in ties) - 1e-9
+    return (ok, f"winner fit {w['fit']}, best {best}, {len(elig)} eligible")
+
+
 def winner_title(page, slot_key):
     sid = "cmp-" + slot_key.replace("/", "--")
     loc = page.locator(f"#{sid} tr.is-win .cand-title")
@@ -115,7 +131,11 @@ def fixture_checks(browser, base):
             check(page.locator("#h-cmp-sum").inner_text().startswith("מי מנצח"), f"{label}: summary heading")
             check(page.locator("#cmp-body .tile").count() >= 3, f"{label}: summary tiles")
             check(page.locator("#cmp-body .cmp-slot").count() >= 5, f"{label}: slot tables rendered")
-            check((winner_title(page, "living-room/cushions") or "").startswith("FIXTURE Washed linen"), f"{label}: cushions winner is the fixture AliExpress item (more profit per unit)")
+            # ה.12–13: the winner is the highest design fit among the candidates that do not lose money (ties: higher margin)
+            for key in ("living-room/cushions", "living-room/vase", "living-room/rug"):
+                ok, why = design_first_winner(page, key)
+                check(ok, f"{label}: {key}: winner = highest design fit among non-losing candidates ({why})")
+            check(page.locator("#cmp-body tr.is-win[data-loss]").count() == 0, f"{label}: no winner loses money (ה.13)")
             check((winner_title(page, "living-room/vase") or "").startswith("FIXTURE Matte stoneware"), f"{label}: vase winner is the fixture AliExpress item")
             check(page.locator("#cmp-body .db-line").first.inner_text().find("רשומות") >= 0, f"{label}: deep-pass source line")
             check("לא שויכו" in page.locator("#cmp-body").inner_text(), f"{label}: unmatched record reported")

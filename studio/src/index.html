@@ -757,6 +757,118 @@ details.room-lad summary{cursor:pointer;font-weight:600}
 .fsup .ev{font-size:var(--fs-xs);color:var(--ink-2);overflow-wrap:anywhere}
 .fsup details summary{cursor:pointer;font-size:var(--fs-xs);color:var(--ink-2);min-height:24px}
 .fsup ul{margin:4px 0 0;padding-inline-start:18px;display:grid;gap:3px;font-size:var(--fs-xs);color:var(--ink-2)}
+/* ---------- the office: a blueprint of the studio's agents on warm paper ---------- */
+:root{--st-working:#2F7047;--st-working-glow:#62C184;--st-idle:#C98A2B;--st-blocked:#B4606A;--st-planned:var(--ink-3);--plan-line:#2E2C29;--plan-grid:rgba(60,55,45,.07);--thread:#7A7468}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--st-working:#7DD39B;--st-working-glow:#7DE3A0;--st-idle:#E5B460;--st-blocked:#DD8F98;--plan-line:#DCD7CD;--plan-grid:rgba(230,225,215,.06);--thread:#A9A397}}
+:root[data-theme="dark"]{--st-working:#7DD39B;--st-working-glow:#7DE3A0;--st-idle:#E5B460;--st-blocked:#DD8F98;--plan-line:#DCD7CD;--plan-grid:rgba(230,225,215,.06);--thread:#A9A397}
+.off-top{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;justify-content:space-between}
+.off-counts{display:flex;flex-wrap:wrap;gap:6px}
+.off-legend{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center;font-size:var(--fs-xs);color:var(--ink-2);margin:0;padding:0;list-style:none}
+.off-legend li{display:inline-flex;align-items:center;gap:6px}
+.sw-st{width:22px;height:14px;border-radius:4px;border:2px solid var(--plan-line);background:var(--sheet);display:inline-block}
+.sw-st.working{box-shadow:0 0 0 3px color-mix(in srgb,var(--st-working-glow) 55%,transparent)}
+.sw-st.idle{box-shadow:0 0 0 3px color-mix(in srgb,var(--st-idle) 45%,transparent)}
+.sw-st.blocked{box-shadow:0 0 0 3px color-mix(in srgb,var(--st-blocked) 45%,transparent)}
+.sw-st.planned{border-style:dashed;border-color:var(--ink-3)}
+.sw-thread{width:28px;height:2px;background:var(--st-working);display:inline-block;border-radius:2px;box-shadow:0 0 6px var(--st-working-glow)}
+.chip.st-working{background:color-mix(in srgb,var(--st-working) 16%,var(--sheet));color:var(--sage-ink)}
+.chip.st-idle{background:var(--amber-wash);color:var(--amber-ink)}
+.chip.st-blocked{background:var(--brick-wash);color:var(--brick-ink)}
+.chip.st-planned{background:transparent;color:var(--ink-2);border:1px dashed var(--ink-3);padding:4px 8px}
+.chip .sdot{width:8px;height:8px;border-radius:50%;background:currentColor;display:inline-block}
+.off-plan-box{position:relative;border:1px solid var(--rule);border-radius:var(--r);background:var(--paper);overflow:hidden}
+.off-plan{position:relative;width:100%;aspect-ratio:1200/860;container-type:inline-size}
+.off-plan svg{position:absolute;inset:0;width:100%;height:100%;display:block;direction:ltr}  /* text-anchor is physical on the plan */
+.off-plan .grid{fill:url(#off-grid)}
+.off-plan .wall-out{fill:none;stroke:var(--plan-line);stroke-width:7;stroke-linejoin:miter}
+.off-plan .room{fill:var(--sheet);stroke:var(--plan-line);stroke-width:3}
+.off-plan .room.planned{fill:color-mix(in srgb,var(--sheet) 55%,transparent);stroke:var(--ink-3);stroke-width:2;stroke-dasharray:8 6}
+.off-plan .room.deco{fill:color-mix(in srgb,var(--sheet) 60%,var(--paper));stroke-width:2.2}
+.off-plan .room.open{fill:none;stroke:var(--ink-3);stroke-width:1.2;stroke-dasharray:3 5}
+.off-plan .part{stroke:var(--ink-3);stroke-width:1.4;stroke-dasharray:5 4;fill:none}
+.off-plan .gap{stroke:var(--paper);stroke-width:7}
+.off-plan .gap.in{stroke:var(--sheet)}
+.off-plan .door{fill:none;stroke:var(--ink-3);stroke-width:1.1}
+.off-plan .door-leaf{stroke:var(--plan-line);stroke-width:1.6}
+.off-plan .furn{fill:none;stroke:var(--ink-3);stroke-width:1.2}
+.off-plan .glyph{fill:none;stroke:var(--ink-2);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.off-plan .planned-g .glyph{stroke:var(--ink-3);opacity:.7}
+.off-plan .lamp{stroke:var(--sheet);stroke-width:1.5}
+.off-plan .lamp.working{fill:var(--st-working)} .off-plan .lamp.idle{fill:var(--st-idle)} .off-plan .lamp.blocked{fill:var(--st-blocked)}
+.off-plan .halo{filter:url(#off-blur)}
+.off-plan .halo.working{fill:var(--st-working-glow);opacity:.75;animation:off-breathe 3.4s ease-in-out infinite}
+.off-plan .halo.idle{fill:var(--st-idle);opacity:.32}
+.off-plan .halo.blocked{fill:var(--st-blocked);opacity:.42}
+@keyframes off-breathe{0%,100%{opacity:.38}50%{opacity:.9}}
+.off-plan .ann{fill:var(--ink-2);font:600 13px var(--f-body);letter-spacing:.06em}
+.off-plan .ann.big{font:700 15px var(--f-display);fill:var(--ink)}
+.off-plan .ann.faint{fill:var(--ink-3);font-weight:500}
+.off-plan .deco-t{fill:var(--ink-3);font:600 12px var(--f-body)}
+.off-plan .thread path.line{fill:none;stroke:var(--thread);stroke-width:1.3;opacity:.32;stroke-dasharray:2 5;stroke-linecap:round}
+.off-plan .thread.live path.line{stroke:var(--st-working);opacity:.62;stroke-dasharray:none;stroke-width:1.8}
+.off-plan .off-labels{pointer-events:none;z-index:1}
+.off-plan .tlabel{font:700 12.5px var(--f-body);fill:var(--ink);paint-order:stroke;stroke:var(--paper);stroke-width:6px;stroke-linejoin:round}
+.off-plan .tl{opacity:0}
+.off-plan .tl.is-hl{opacity:1}
+.off-plan .particle{fill:var(--st-working-glow);filter:url(#off-glow)}
+.off-plan.has-hl .thread{opacity:.15}
+.off-plan.has-hl .thread.is-hl{opacity:1}
+.off-plan .thread.is-hl path.line{opacity:1;stroke-width:2.6;stroke:var(--st-working);stroke-dasharray:none}
+.off-plan .thread.is-hl:not(.live) path.line{stroke:var(--plan-line)}
+.room-btn{position:absolute;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:.25cqw;padding:1.1cqw 1cqw .8cqw 2.6cqw;text-align:right;background:transparent;border:0;border-radius:4px;cursor:pointer;color:var(--ink);min-width:0;overflow:hidden}
+.room-btn:hover{background:color-mix(in srgb,var(--ink) 4%,transparent)}
+.room-btn.center{padding-left:13cqw}
+.room-btn.station .rb-role{-webkit-line-clamp:1}  /* the art director's round table stays clear of the text */
+.room-btn:focus-visible{outline:2px solid var(--ink);outline-offset:-5px}
+.room-btn .rb-name{font:700 clamp(9px,1.12cqw,16px)/1.15 var(--f-body);text-shadow:0 0 3px var(--sheet),0 0 3px var(--sheet);overflow-wrap:anywhere}
+.room-btn .rb-role{font-size:clamp(8px,.86cqw,12.5px);line-height:1.25;color:var(--ink-2);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;text-shadow:0 0 3px var(--sheet)}
+.room-btn .rb-state{margin-top:auto;display:inline-flex;align-items:center;gap:.4cqw;font-size:clamp(8px,.8cqw,12px);font-weight:700;align-self:flex-start}
+.room-btn .rb-state .sdot{width:.62cqw;height:.62cqw;min-width:6px;min-height:6px;border-radius:50%;background:currentColor}
+.room-btn.st-working .rb-state{color:var(--sage-ink)} .room-btn.st-idle .rb-state{color:var(--amber-ink)} .room-btn.st-blocked .rb-state{color:var(--brick-ink)} .room-btn.st-planned .rb-state{color:var(--ink-2)}
+.room-btn.st-planned .rb-name{color:var(--ink-2)}
+.room-btn .rb-task{font-size:clamp(8px,.78cqw,11.5px);color:var(--ink-2);display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+.room-btn.st-blocked .rb-task{color:var(--brick-ink)}
+.off-zoom-row{display:none}
+.off-list{display:none}
+.off-wing h3{font-size:var(--fs-l)}
+.off-wing ul{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:8px}
+.off-item{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;align-items:start;width:100%;text-align:right;padding:10px 12px;border:1px solid var(--rule);border-radius:var(--r);background:var(--sheet);cursor:pointer;color:var(--ink)}
+.off-item.st-planned{border-style:dashed;background:transparent}
+.off-item .ldot{grid-row:1/span 3;width:12px;height:12px;border-radius:50%;margin-top:5px;border:2px solid var(--plan-line);background:var(--sheet)}
+.off-item.st-working .ldot{background:var(--st-working);box-shadow:0 0 0 4px color-mix(in srgb,var(--st-working-glow) 40%,transparent)}
+.off-item.st-idle .ldot{background:var(--st-idle)} .off-item.st-blocked .ldot{background:var(--st-blocked)} .off-item.st-planned .ldot{border-style:dashed;border-color:var(--ink-3)}
+.off-item .li-name{font-weight:700}
+.off-item .li-role,.off-item .li-task{font-size:var(--fs-xs);color:var(--ink-2)}
+.off-item:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+@media (max-width:719px){
+  .off-plan-box:not(.zoomed) .room-btn{display:none}
+  .off-plan-box:not(.zoomed) .off-labels{display:none}
+  .off-plan-box.zoomed{overflow:auto;max-height:78vh}
+  .off-plan-box.zoomed .off-plan{width:1100px;max-width:none}
+  .off-zoom-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .off-list{display:grid;gap:22px}
+}
+.office-dlg .agent-sec{display:grid;gap:8px}
+.office-dlg .tools{display:flex;flex-wrap:wrap;gap:6px}
+.office-dlg .tools code{background:var(--sunk);border-radius:999px;padding:3px 9px;font-size:12px}
+.office-dlg .limits{margin:0;padding-inline-start:18px;display:grid;gap:5px;font-size:var(--fs-s)}
+.office-dlg .limits li::marker{color:var(--brick-ink)}
+.office-dlg .board-lines{list-style:none;margin:0;padding:0;display:grid;gap:8px;font-size:var(--fs-s)}
+.office-dlg .board-lines li{border-inline-start:3px solid var(--rule-2);padding-inline-start:9px}
+.office-dlg .flows{margin:0;padding:0;list-style:none;display:grid;gap:6px;font-size:var(--fs-s)}
+.office-dlg .now{border:1px solid var(--rule);border-radius:var(--r);padding:10px 12px;display:grid;gap:4px;background:var(--paper)}
+.md-lite{font-size:var(--fs-s);line-height:1.6;border:1px solid var(--rule);border-radius:var(--r);padding:4px 14px 12px;background:var(--paper);overflow-wrap:anywhere}
+.md-lite h4,.md-lite h5,.md-lite h6{margin:14px 0 4px;font-family:var(--f-body);font-weight:700;font-size:var(--fs-m)}
+.md-lite p{margin:6px 0}
+.md-lite ul,.md-lite ol{margin:6px 0;padding-inline-start:20px}
+.md-lite blockquote{margin:8px 0;padding:6px 10px;border-inline-start:3px solid var(--oak);background:var(--sheet)}
+.md-lite pre{direction:ltr;text-align:left;background:var(--sunk);padding:8px 10px;border-radius:5px;overflow:auto;font-size:12px}
+.md-lite code{background:var(--sunk);border-radius:4px;padding:0 4px}
+.md-lite pre code{background:none;padding:0}
+.md-lite .tbl-wrap{overflow-x:auto}
+.md-lite table{border-collapse:collapse;font-size:var(--fs-xs)}
+.md-lite th,.md-lite td{border:1px solid var(--rule);padding:4px 6px;text-align:right;vertical-align:top}
+.tab-badge.live{background:var(--st-working);color:var(--sheet)}
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 }
@@ -778,6 +890,7 @@ details.room-lad summary{cursor:pointer;font-weight:600}
           <li><a href="#overview" data-screen="overview">סקירה</a></li>
           <li><a href="#todo" data-screen="todo">ממתין לך <span class="tab-badge" id="badge-todo" aria-hidden="true"></span><span class="sr-only" id="badge-todo-sr"></span></a></li>
           <li><a href="#decisions" data-screen="decisions">החלטות <span class="tab-badge" id="badge-dec" aria-hidden="true"></span><span class="sr-only" id="badge-dec-sr"></span></a></li>
+          <li><a href="#office" data-screen="office">המשרד <span class="tab-badge live" id="badge-office" aria-hidden="true"></span><span class="sr-only" id="badge-office-sr"></span></a></li>
           <li><a href="#rooms" data-screen="rooms">חדרים</a></li>
           <li><a href="#products" data-screen="products">מוצרים</a></li>
           <li><a href="#profit" data-screen="profit">רווחיות</a></li>
@@ -847,6 +960,10 @@ details.room-lad summary{cursor:pointer;font-weight:600}
       <div class="pgrid" id="pgrid"><p class="loading">טוען…</p></div>
     </section>
 
+    <section class="screen" id="screen-office" aria-labelledby="h-office" hidden>
+      <div class="screen-head"><h1 id="h-office" tabindex="-1">המשרד</h1><p class="small faint" id="office-sub"></p></div>
+      <div id="office-body"><p class="loading">טוען…</p></div>
+    </section>
     <section class="screen" id="screen-profit" aria-labelledby="h-profit" hidden>
       <div class="screen-head"><h1 id="h-profit" tabindex="-1">רווחיות</h1></div>
       <div id="profit-body"><p class="loading">טוען…</p></div>
@@ -854,7 +971,7 @@ details.room-lad summary{cursor:pointer;font-weight:600}
 
     <section class="screen" id="screen-compare" aria-labelledby="h-compare" hidden>
       <div class="screen-head"><h1 id="h-compare" tabindex="-1">השוואת ספקים</h1><p class="small faint" id="cmp-count"></p></div>
-      <p class="lede">לכל עמדה, כל המועמדים מכל הספקים (CJ, ‏Zendrop, ‏AliExpress וספקים ישראליים): מחיר, משלוח לישראל, עלות נחיתה, מחיר לצרכן ורווח. החישוב זהה למסך הרווחיות ובאותן הנחות. המנצח בכל עמדה הוא המועמד שמשאיר הכי הרבה רווח ליחידה, מבין אלה שלא נדחו, שהתאמתם לסגנון 7 ומעלה, שיש להם כל הנתונים ושמרוויחים עליהם.</p>
+      <p class="lede">לכל עמדה, כל המועמדים מכל הספקים (CJ, ‏Zendrop, ‏AliExpress וספקים ישראליים): מחיר, משלוח לישראל, עלות נחיתה, מחיר לצרכן ורווח. החישוב זהה למסך הרווחיות ובאותן הנחות. המנצח בכל עמדה הוא המועמד עם ציון העיצוב הגבוה ביותר לסגנון, מבין אלה שלא נדחו, שהתאמתם לסגנון 7 ומעלה, שיש להם כל הנתונים ושלא מפסידים כסף; בשוויון, המרווח הגבוה יותר (עיצוב לפני רווח, ה.12; אין מוצר מפסיד, ה.13).</p>
       <div id="cmp-body"><p class="loading">טוען…</p></div>
     </section>
 
@@ -902,6 +1019,15 @@ details.room-lad summary{cursor:pointer;font-weight:600}
     </div>
   </dialog>
 
+  <dialog class="drawer office-dlg" id="agentdlg" aria-labelledby="agent-title">
+    <div class="drawer-in">
+      <div class="drawer-top">
+        <div class="minw0"><p class="eyebrow" id="agent-eyebrow"></p><h2 id="agent-title">סוכן</h2></div>
+        <button class="close" type="button" data-close aria-label="סגירה">×</button>
+      </div>
+      <div class="drawer-body" id="agent-body"></div>
+    </div>
+  </dialog>
   <dialog class="lightbox" id="lightbox" aria-labelledby="lb-cap">
     <div class="lb-in">
       <div class="lb-img"><img id="lb-img" alt=""></div>
@@ -1081,7 +1207,7 @@ const S = {
   edits:new Map(), news:new Map(), settingsDocs:new Map(),
   bulk:{open:false, running:false, done:0, total:0, failed:[]},
   lb:{list:[], i:0}, drawerReturn:null, lbReturn:null, drawerId:null, drawerDirty:false,
-  inline:{}, rowState:{}, quick:null, quickFocus:null, setDirty:false, setDraft:null, setDraftVer:null, drawerMsg:null, budgetWork:null, budgetArmed:null, q:new Map(), addEdit:null
+  inline:{}, rowState:{}, quick:null, quickFocus:null, agentsLive:new Map(), agentOpen:null, officeZoom:false, setDirty:false, setDraft:null, setDraftVer:null, drawerMsg:null, budgetWork:null, budgetArmed:null, q:new Map(), addEdit:null
 };
 S.filters.q = '';
 
@@ -1109,7 +1235,7 @@ async function boot(){
   connectDb();
 }
 function renderAll(){
-  renderOverview(); renderTodo(); renderDecisions(); renderRoomPick(); renderRoom();
+  renderOverview(); renderTodo(); renderDecisions(); renderOffice(); renderRoomPick(); renderRoom();
   initFilters(); renderProducts(); renderProfit(); renderCompare(); renderFurniture(); renderSuppliers(); renderBudget(); renderReports(); renderLog();
 }
 let pendingRender = false;
@@ -1118,7 +1244,7 @@ function onDataChange(){
   setTimeout(() => {
     pendingRender = false;
     refreshView();
-    renderOverview(); renderTodo(); renderRoom(); renderProducts(); renderProfit(); renderCompare(); renderFurniture(); renderSuppliers(); renderBudget(); refreshDrawer();
+    renderOverview(); renderTodo(); renderOffice(); renderRoom(); renderProducts(); renderProfit(); renderCompare(); renderFurniture(); renderSuppliers(); renderBudget(); refreshDrawer();
   }, 0);
 }
 
@@ -1396,7 +1522,7 @@ function profitBasis(){
 }
 
 /* ---------- routing ---------- */
-const SCREENS = ['overview','todo','decisions','rooms','products','profit','compare','furniture','suppliers','budget','quality','log'];
+const SCREENS = ['overview','todo','decisions','office','rooms','products','profit','compare','furniture','suppliers','budget','quality','log'];
 function route(focus){
   const t = (location.hash || '').replace(/^#/, '');
   let s = SCREENS.includes(t) ? t : null;
@@ -1435,12 +1561,22 @@ function go(screen){ if(location.hash === '#'+screen){ route(true); } else { loc
 
 function bindStatic(){
   window.addEventListener('hashchange', () => route(true));
+  if(window.matchMedia){
+    const mq = (q, fn) => { const m = matchMedia(q); if(m.addEventListener) m.addEventListener('change', fn); };
+    mq('(max-width: 719px)', () => offInert());
+    mq('(prefers-reduced-motion: reduce)', () => { if(S.data) renderOffice(); });
+  }
   $('#skip').addEventListener('click', e => { e.preventDefault(); const m = $('#main'); m.focus(); m.scrollIntoView(); });
   for(const dlg of $$('dialog')){
     dlg.addEventListener('click', e => { if(e.target === dlg || e.target.closest('[data-close]')){ if(dlg.id === 'drawer' && S.drawerDirty){ confirmLeave(); return; } closeDialog(dlg); } });
     dlg.addEventListener('close', () => {
       const back = dlg.id === 'drawer' ? S.drawerReturn : dlg.id === 'lightbox' ? S.lbReturn : dlg._return;
       if(dlg.id === 'drawer'){ S.drawerId = null; S.drawerDirty = false; S.drawerMsg = null; }
+      if(dlg.id === 'agentdlg'){
+        // the office may have re-rendered while the panel was open: return to the same room by its id
+        const id = S.agentOpen; S.agentOpen = null;
+        if(!(back && document.contains(back)) && id){ const el = $$(`#office-body [data-agent="${CSS.escape(id)}"]`).find(x => x.offsetParent); if(el){ el.focus({preventScroll:true}); return; } }
+      }
       if(back && document.contains(back)) back.focus({preventScroll:true});
     });
   }
@@ -2004,6 +2140,8 @@ async function connectDb(){
     db.collection('product_edits').onSnapshot(snap => { S.edits = docsOf(snap); onDataChange(); }, fail);
     db.collection('product_new').onSnapshot(snap => { S.news = docsOf(snap); onDataChange(); }, fail);
     db.collection('settings').onSnapshot(snap => { S.settingsDocs = docsOf(snap); onDataChange(); }, fail);
+    // the office: live state per agent, agents/<id> = {state, task_he, since, by}; an empty collection = status/agents.json
+    db.collection('agents').onSnapshot(snap => { S.agentsLive = docsOf(snap); onDataChange(); }, fail);
   }catch(e){ S.dbState = 'error'; fail(e); }
   afterDbState();
 }
@@ -2985,19 +3123,23 @@ function cmpQualifies(r, st){
   const f = cmpFit(r, st);
   return f.kind === 'assumed' || (f.kind === 'score' && f.n >= cmpFitMin());
 }
-// a winner also has to leave a profit before marketing (contribution above zero)
-const cmpEligible = (r, st) => cmpQualifies(r, st) && r.econ.contribution > 0;
-// why a slot has no winner: no candidate at all / none fits with every number / none leaves a profit
+// a winner never loses money (ה.13, 2026-10-11): contribution before marketing of zero or more
+const cmpEligible = (r, st) => cmpQualifies(r, st) && r.econ.contribution >= 0;
+// why a slot has no winner: no candidate at all / none fits with every number / every fitting one loses money
 const cmpNoWin = (rows, st) => !rows.length ? 'empty' : rows.some(r => cmpQualifies(r, st)) ? 'noprofit' : 'nofit';
-const NOWIN_HE = {empty: 'אין אף מועמד', nofit: 'אין מועמד עם התאמה ' + 7 + '+ וכל הנתונים', noprofit: 'אף מועמד מתאים לא משאיר רווח'};
+const NOWIN_HE = {empty: 'אין אף מועמד', nofit: 'אין מועמד עם התאמה ' + 7 + '+ וכל הנתונים', noprofit: 'כל המועמדים המתאימים מפסידים כסף'};
 const perUnit = r => r.econ.contribution / (r.qty || 1);
-function cmpBetter(a, b){
-  const x = perUnit(a), y = perUnit(b);
-  if(Math.abs(x - y) > 1e-6) return x > y;
-  if(Math.abs(a.econ.margin - b.econ.margin) > 1e-9) return a.econ.margin > b.econ.margin;
+// design before profit (ה.12): the design fit for the style decides first; an unscored Nordic card ranks after every scored one
+const winFit = (r, st) => { const f = cmpFit(r, st); return f.kind === 'score' ? f.n : -1; };
+function cmpBetter(a, b, st){
+  const x = winFit(a, st), y = winFit(b, st);
+  if(Math.abs(x - y) > 1e-9) return x > y;
+  if(Math.abs(a.econ.margin - b.econ.margin) > 1e-9) return a.econ.margin > b.econ.margin;   // a tie: the higher margin
+  if(Math.abs(perUnit(a) - perUnit(b)) > 1e-6) return perUnit(a) > perUnit(b);
   return a.econ.landed < b.econ.landed;
 }
-function cmpWinner(rows, st){ let w = null; for(const r of rows) if(cmpEligible(r, st) && (!w || cmpBetter(r, w))) w = r; return w; }
+// the winner of a slot for a style: the highest design fit among the candidates that fit, have every number and do not lose money
+function cmpWinner(rows, st){ let w = null; for(const r of rows) if(cmpEligible(r, st) && (!w || cmpBetter(r, w, st))) w = r; return w; }
 const supBadge = r => { const x = CMP_SUP[r.sup] || CMP_SUP.other; const t = r.sup === 'il' && r.supName ? r.supName : r.sup === 'other' ? (r.supName || x.he) : x.he;
   return `<span class="chip ${x.cls}"${r.sup === 'il' ? ' title="ספק ישראלי"' : ''}>${r.sup === 'il' ? '<span class="sr-only">ספק ישראלי: </span>' : ''}<span dir="auto">${esc(t)}</span></span>`; };
 const missText = e => 'חסר ' + e.missing.map(m => MISS_HE[m] || m).join(' ו');
@@ -3088,7 +3230,7 @@ function renderCompare(){
       nShownSlots++; nShownRows += rows.length;
       const wst = st ? w[st] : null;
       const head = st
-        ? (wst ? `<span class="chip cmp-win ${wst.econ.margin >= T ? 'is-ok' : 'is-low'}">מנצח: <b>${esc((CMP_SUP[wst.sup] || CMP_SUP.other).he)}</b> · רווח ${ltr(fmtILS(wst.econ.contribution))} · ${ltr(fmtPct(wst.econ.margin))}${wst.econ.margin >= T ? '' : ' · מתחת ליעד'}</span>`
+        ? (wst ? `<span class="chip cmp-win ${wst.econ.margin >= T ? 'is-ok' : 'is-low'}">מנצח: <b>${esc((CMP_SUP[wst.sup] || CMP_SUP.other).he)}</b>${winFit(wst, st) >= 0 ? ` · עיצוב ${ltr(esc(winFit(wst, st)))}` : ' · לא דורג'} · רווח ${ltr(fmtILS(wst.econ.contribution))} · ${ltr(fmtPct(wst.econ.margin))}${wst.econ.margin >= T ? '' : ' · מתחת ליעד'}</span>`
                : `<span class="chip cmp-nowin">אין מנצח: ${esc(cmpNoWin(all, st) === 'nofit' ? `אין מועמד עם התאמה ${cmpFitMin()}+ וכל הנתונים` : NOWIN_HE[cmpNoWin(all, st)])}</span>`)
         : '';
       const winsLine = st ? '' : `<ul class="cmp-wins" aria-label="מנצח לפי סגנון">${STY.map(x => { const wr = w[x]; return `<li><span class="st">${esc(cmpStyleHe(x))}:</span> ${wr ? `${supBadge(wr)} ${ltr(fmtILS(wr.econ.contribution))}` : '<span>אין</span>'}</li>`; }).join('')}</ul>`;
@@ -3141,7 +3283,7 @@ function renderCompare(){
     </section>
     <p class="result-line" aria-live="polite"><span><strong class="num">${nShownRows}</strong> מועמדים ב-<strong class="num">${nShownSlots}</strong> עמדות${nHiddenSlots ? ` · ${nHiddenSlots} עמדות מוסתרות בסינון` : ''}</span></p>
     ${roomHtml}
-    <p class="xs faint formula">רווח ₪ = תרומה למכירה (הכנסה נטו פחות עלות נחיתה, עמלות, שמורת החזרות ואריזה), כמו בעמודה "מרווח" במסך הרווחיות; "אחרי שיווק" מוריד גם CAC לפריט. עלות נחיתה = (מחיר × כמות + משלוח לכמות) × שער. מחיר לצרכן: המחיר שנקבע בסטודיו, אחרת המחיר העליון של טווח השוק של המוצר (הנקודה של כפתור "מחיר ₪…9"), אחרת טווח השוק של העמדה, ובליקוט המעמיק הטווח שבקובץ; כמה יחידות = הטווח × הכמות, מעוגל מטה ל-9. "ל-${ltr(esc(S.ES.v.target_margin_pct + '%'))}" = המחיר הנמוך ביותר שמביא ליעד. משלוח: CJ לפי שיטת המשלוח שבהגדרות, ‏AliExpress ו-Zendrop לפי מה שכתוב בכרטיס או בקובץ הליקוט. מנצח = הכי הרבה רווח ליחידה (תרומה ÷ כמות), מבין המועמדים שלא נדחו, עם התאמה ${cmpFitMin()}+ לסגנון, עם כל הנתונים ועם רווח מעל אפס לפני שיווק. כרטיס בלי ציוני סגנון בעמדה של הבית הנורדי נחשב לנורדי ומסומן "לא דורג". סדר השורות: המנצח ראשון, אחריו מי שלא מפסיד לפי ציון העיצוב לסגנון (ב"כל הסגנונות": נורדי) מהגבוה לנמוך ואז לפי המרווח, אחריו המפסידים (תרומה שלילית, ה.13), והנדחים בסוף. מוצר מתחת לרף המרווח או מפסיד לא מוסתר.</p>
+    <p class="xs faint formula">רווח ₪ = תרומה למכירה (הכנסה נטו פחות עלות נחיתה, עמלות, שמורת החזרות ואריזה), כמו בעמודה "מרווח" במסך הרווחיות; "אחרי שיווק" מוריד גם CAC לפריט. עלות נחיתה = (מחיר × כמות + משלוח לכמות) × שער. מחיר לצרכן: המחיר שנקבע בסטודיו, אחרת המחיר העליון של טווח השוק של המוצר (הנקודה של כפתור "מחיר ₪…9"), אחרת טווח השוק של העמדה, ובליקוט המעמיק הטווח שבקובץ; כמה יחידות = הטווח × הכמות, מעוגל מטה ל-9. "ל-${ltr(esc(S.ES.v.target_margin_pct + '%'))}" = המחיר הנמוך ביותר שמביא ליעד. משלוח: CJ לפי שיטת המשלוח שבהגדרות, ‏AliExpress ו-Zendrop לפי מה שכתוב בכרטיס או בקובץ הליקוט. מנצח = ציון העיצוב הגבוה ביותר לסגנון (ה.12), מבין המועמדים שלא נדחו, עם התאמה ${cmpFitMin()}+ לסגנון, עם כל הנתונים ושלא מפסידים כסף, כלומר תרומה של אפס ומעלה לפני שיווק (ה.13); בשוויון בציון, המרווח הגבוה יותר. מוצר מפסיד אף פעם לא מנצח. כרטיס בלי ציוני סגנון בעמדה של הבית הנורדי נחשב לנורדי ומסומן "לא דורג", ומנצח רק כשאין מועמד עם ציון. סדר השורות: המנצח ראשון, אחריו מי שלא מפסיד לפי ציון העיצוב לסגנון (ב"כל הסגנונות": נורדי) מהגבוה לנמוך ואז לפי המרווח, אחריו המפסידים (תרומה שלילית, ה.13), והנדחים בסוף. מוצר מתחת לרף המרווח או מפסיד לא מוסתר.</p>
   </div>`;
   restore();
   const setF = (k, val, focusId) => { S.cmp[k] = val; store.set('cmp', S.cmp); renderCompare(); const el = $('#' + focusId); if(el) el.focus(); };
@@ -3193,7 +3335,7 @@ function cmpRowHtml(x, st, winStyles, T){
   const marginCell = isNum(e.contribution)
     ? `<span class="flag ${cls}"><i class="fdot"></i>${ltr(fmtILS(e.contribution))}</span><span class="cmp-sub cmp-pct-n">${ltr(fmtPct(e.margin, 1))}</span><span class="cmp-sub w">אחרי שיווק ${ltr(fmtILS(e.after_marketing))}</span>`
     : `<span class="flag flag-orange cmp-miss"><i class="fdot"></i>${esc(missText(e))}</span>`;
-  return `<tr class="${isWin ? 'is-win' : ''} ${rej ? 'is-rej' : ''}" data-sup="${esc(x.sup)}" data-key="${esc(x.key)}"${isNum(e.margin) ? ` data-margin="${e.margin.toFixed(4)}"` : ''}${x.retail && isNum(x.retail.ils) ? ` data-retail="${esc(x.retail.ils)}" data-qty="${esc(x.qty)}"` : ''}>
+  return `<tr class="${isWin ? 'is-win' : ''} ${rej ? 'is-rej' : ''}" data-sup="${esc(x.sup)}" data-key="${esc(x.key)}"${isNum(e.margin) ? ` data-margin="${e.margin.toFixed(4)}"` : ''}${x.retail && isNum(x.retail.ils) ? ` data-retail="${esc(x.retail.ils)}" data-qty="${esc(x.qty)}"` : ''} data-fit="${esc(winFit(x, st || 'nordic'))}"${cmpEligible(x, st || 'nordic') ? ' data-elig="1"' : ''}${isNum(e.contribution) && e.contribution < 0 ? ' data-loss="1"' : ''}>
     <th scope="row" class="c-cand">${titleHtml}
       <div class="cand-meta">${chips}</div>
       <div class="cmp-narrow"><span>מחיר ${ltr(esc(priceTxt))}${x.qty > 1 ? ` × ${ltr(esc(x.qty))}` : ''}</span><span>משלוח ${ltr(esc(shipTxt))}${days ? `, ${ltr(esc(days))} יום` : ''}</span><span>לצרכן ${ltr(esc(retailTxt))}${x.retail ? ` <span class="faint">(${esc(RETAIL_SRC_SHORT[x.retail.src])})</span>` : ''}</span><span>התאמה ${st ? ltr(esc(fitTxt)) : esc(fitTxt)}</span></div>
@@ -3648,6 +3790,331 @@ function mdToHtml(md){
   for(const tb of c.querySelectorAll('table')){ const w = document.createElement('div'); w.className = 'tbl-wrap'; tb.replaceWith(w); w.appendChild(tb); }
   for(const h of Array.from(c.querySelectorAll('h1,h2,h3,h4,h5,h6'))){ const lv = Math.min(6, +h.tagName[1] + 1); const n = document.createElement('h' + lv); n.innerHTML = h.innerHTML; h.replaceWith(n); }
   const box = document.createElement('div'); box.appendChild(c); return box.innerHTML;
+}
+
+/* ---------- the office: status/agents.json (build) + the live db collection "agents" ---------- */
+const OFF_STATES = ['working', 'idle', 'blocked', 'planned'];
+const OFF_STATE_HE = {working: 'עובד עכשיו', idle: 'ממתין למשימה', blocked: 'חסום', planned: 'משרד פנוי'};
+const OFF_KIND_HE = {person: 'אדם', agent: 'סוכן קבוע', helper: 'עוזר זמני', cloud: 'סשן בענן או שגרה', planned: 'תפקיד שעוד לא הוקם'};
+const officeData = () => (S.data && S.data.office) || null;
+const offStateHe = st => OFF_STATE_HE[st] || st;
+// the state shown for an agent: the live db document agents/<id> ({state, task_he, since, by}) wins over status/agents.json
+function agentNow(a){
+  const d = S.agentsLive.get(a.id);
+  const live = !!(d && OFF_STATES.includes(d.state));
+  const state = live ? d.state : (OFF_STATES.includes(a.state) ? a.state : 'idle');
+  const liveTask = live && typeof d.task_he === 'string' && d.task_he.trim() ? d.task_he.trim() : null;
+  const task = live ? liveTask : (a.task_he || null);
+  const blocked = state === 'blocked' ? (liveTask || a.blocked_he || a.task_he || null) : null;
+  return {state, live, task: state === 'blocked' ? null : task, blocked, since: live ? (d.since || null) : null, by: live ? (d.by || null) : null};
+}
+const OFF_W = 1200, OFF_H = 860;
+const OFF_GLYPH = {
+  key: 'M8.5 15a4.5 4.5 0 1 1 4-6.5H21l-2 2 2 2-2 2h-6.5a4.5 4.5 0 0 1-4 .5z M7 11h.01',
+  compass: 'M12 3v2 M12 5L7 20 M12 5l5 15 M8.6 15h6.8 M12 3.8a1.6 1.6 0 1 0 0 3.2 1.6 1.6 0 0 0 0-3.2z',
+  search: 'M10.5 4a6.5 6.5 0 1 1 0 13 6.5 6.5 0 0 1 0-13z M15.3 15.3L21 21',
+  swatch: 'M5 20L8 4l4.5.8L9.5 20z M9.5 20L15 6.5l4 1.8L13.5 20z M13.5 20H21v-5',
+  star: 'M12 3l2.6 5.5 6 .7-4.5 4.1 1.3 5.9L12 16.2l-5.4 3 1.3-5.9-4.5-4.1 6-.7z',
+  camera: 'M3.5 8h4l2-3h5l2 3h4v11h-17z M12 10.2a3.6 3.6 0 1 0 0 7.2 3.6 3.6 0 0 0 0-7.2z',
+  film: 'M4 4.5h16v15H4z M8 4.5v15 M16 4.5v15 M4 9h4 M4 15h4 M16 9h4 M16 15h4 M10.8 9.8l3.2 2.2-3.2 2.2z',
+  code: 'M8.5 7L3.5 12l5 5 M15.5 7l5 5-5 5 M13.5 4.5l-3 15',
+  check: 'M12 3a9 9 0 1 1 0 18 9 9 0 0 1 0-18z M8 12.5l3 3 5-6.5',
+  tag: 'M3.5 11.5V4h7.5l9.5 9.5-7.5 7.5z M7.5 7.5h.01',
+  rack: 'M5 3h14v18H5z M5 9h14 M5 15h14 M8 6h.01 M8 12h.01 M8 18h.01 M12 6h4 M12 12h4 M12 18h4',
+  clock: 'M12 3a9 9 0 1 1 0 18 9 9 0 0 1 0-18z M12 7v5l3.2 2.2',
+  mail: 'M3 6h18v12H3z M3 6.5l9 6.8 9-6.8',
+  plus: 'M12 6v12 M6 12h12',
+  megaphone: 'M3 10v4h3.5L14 18V6l-7.5 4z M17 9.2a4 4 0 0 1 0 5.6 M6.5 14l1.4 5',
+  pen: 'M4 20l4.2-1L19 8.2 15.8 5 5 15.8z M13.8 7l3.2 3.2',
+  heart: 'M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.2a4.3 4.3 0 0 1 7.5 2.6C19.5 15.4 12 20 12 20z',
+  headset: 'M4.5 14v-2a7.5 7.5 0 0 1 15 0v2 M4.5 14h3v5h-3z M16.5 14h3v5h-3z M19.5 19c0 1.5-2 2-4.5 2',
+  handshake: 'M2.5 11.5L6.5 7l3.5 1.5L14 7l3.5 1.5 4 3 M6.5 7l-1.5 9 2 2 M17.5 8.5L19 16l-2 2 M9 14.5l2 2 M11 12.5l3 3 M10 8.5l-2.5 3',
+  shekel: 'M6.5 19V5.5h6.2a3.3 3.3 0 0 1 3.3 3.3V14 M10.5 9v10h6.2a3.3 3.3 0 0 0 3.3-3.3V5',
+  cup: 'M5 9h11v5a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5z M16 10.5h2a2.2 2.2 0 0 1 0 4.4h-2 M8.5 3.5v3 M11.5 3.5v3',
+  shelves: 'M4 4h16v16H4z M4 9.3h16 M4 14.6h16 M7 4v5.3 M10 4v5.3 M13 9.3v5.3 M8.5 14.6V20',
+  plant: 'M12 21v-8 M12 13c-4.2 0-6.2-3-6.2-7.2 4.2 0 6.2 3 6.2 7.2z M12 11c0-4.2 2-7.2 6.2-7.2 0 4.2-2 7.2-6.2 7.2z M8.5 21h7',
+  sofa: 'M4.5 11V8.2a2.2 2.2 0 0 1 2.2-2.2h10.6a2.2 2.2 0 0 1 2.2 2.2V11 M3 11h18v6H3z M5 17v2 M19 17v2'
+};
+const OFF_GLYPH_OF = {user: 'key', 'art-director': 'compass', 'sourcing-agent': 'search', 'master-designer': 'swatch', astra: 'star', 'render-agent': 'camera',
+  'motion-agent': 'film', 'frontend-dev': 'code', 'qa-agent': 'check', explorer: 'search', 'supplier-replies': 'mail', marketing: 'megaphone',
+  'content-seo': 'pen', social: 'heart', 'customer-care': 'headset', 'supplier-relations': 'handshake', finance: 'shekel'};
+const glyphOf = a => OFF_GLYPH_OF[a.id] || (/pricing|profit|price/.test(a.id) ? 'tag' : a.kind === 'cloud' ? (a.schedule_he ? 'clock' : 'rack') : a.kind === 'planned' ? 'plus' : 'compass');
+
+// Where every office sits on the plan (plan units, 1200 x 860). Data driven: the wings come from status/agents.json.
+function officeLayout(O){
+  const rooms = new Map(), deco = [];
+  const known = new Set(['core', 'helpers', 'cloud', 'future']);
+  const of = w => O.agents.filter(a => w === 'helpers' ? (a.wing === w || !known.has(a.wing)) : a.wing === w);
+  // the new wing: a row of empty offices across the top (RTL: the first one at the right)
+  const fut = of('future');
+  if(fut.length){ const x0 = 40, x1 = 1160, w = (x1 - x0) / fut.length; fut.forEach((a, i) => rooms.set(a.id, {x: x1 - (i + 1) * w + 4, y: 56, w: w - 8, h: 140, door: 's'})); }
+  // the main floor: the art director in the middle, the user at the entrance, the team in a U around the middle room
+  const core = of('core');
+  const isAD = a => a.id === 'art-director' || (a.instructions && a.instructions.src === 'CLAUDE.md');
+  const ad = core.find(isAD), person = core.find(a => a.kind === 'person' && a !== ad);
+  if(ad) rooms.set(ad.id, {x: 452, y: 370, w: 296, h: 120, door: 'sn', center: true});
+  if(person) rooms.set(person.id, {x: 664, y: 652, w: 236, h: 150, door: 'w', entrance: true});
+  const U = [[760, 244, 140, 110, 's'], [604, 244, 144, 110, 's'], [452, 244, 144, 110, 's'], [300, 244, 140, 110, 's'], [300, 370, 140, 120, 'e'],
+             [300, 506, 140, 110, 'n'], [452, 506, 144, 110, 'n'], [760, 506, 140, 110, 'n'], [760, 370, 140, 120, 'w']];
+  const DECO = [['מטבחון', 'cup'], ['ספריית חומרים', 'swatch'], ['חדר ישיבות קטן', 'sofa']];
+  const rest = core.filter(a => a !== ad && a !== person);
+  let d = 0;
+  U.forEach(([x, y, w, h, door], i) => { const r = {x, y, w, h, door}; if(rest[i]) rooms.set(rest[i].id, r); else { const [label, glyph] = DECO[d++ % DECO.length]; deco.push(Object.assign(r, {label, glyph})); } });
+  // more of the team than the U holds: small offices in the lobby
+  const over = rest.slice(U.length);
+  over.forEach((a, i) => { const w = 260 / over.length; rooms.set(a.id, {x: 300 + i * w + 2, y: 660, w: w - 4, h: 130, door: 'n'}); });
+  // the server room (cloud sessions and routines) on the left, the open shared space (helpers) on the right: one station each
+  const stack = (list, x, w) => { const y0 = 278, y1 = 612, h = (y1 - y0) / Math.max(1, list.length); list.forEach((a, i) => rooms.set(a.id, {x: x + 10, y: y0 + i * h + 4, w: w - 20, h: h - 8, station: true})); };
+  stack(of('cloud'), 40, 240);
+  stack(of('helpers'), 920, 240);
+  return {rooms, deco, lobby: !over.length};
+}
+const ri = v => Math.round(v * 10) / 10;
+function doorSvg(r, side, inner){
+  // a gap in the wall, the door leaf and its swing arc (radius 22), near the room's right end (RTL entry)
+  const L = 22, out = [];
+  const seg = (x1, y1, x2, y2) => out.push(`<line class="gap${inner ? ' in' : ''}" x1="${ri(x1)}" y1="${ri(y1)}" x2="${ri(x2)}" y2="${ri(y2)}"/>`);
+  if(side === 's' || side === 'n'){
+    const y = side === 's' ? r.y + r.h : r.y, x2 = r.x + r.w - 12, x1 = x2 - L, dir = side === 's' ? -1 : 1;
+    seg(x1, y, x2, y);
+    out.push(`<line class="door-leaf" x1="${ri(x2)}" y1="${ri(y)}" x2="${ri(x2)}" y2="${ri(y + dir * L)}"/><path class="door" d="M${ri(x1)} ${ri(y)} A${L} ${L} 0 0 ${dir < 0 ? 1 : 0} ${ri(x2)} ${ri(y + dir * L)}"/>`);
+  } else {
+    const x = side === 'e' ? r.x + r.w : r.x, y1 = r.y + (r.doorAt || 14), y2 = y1 + L, dir = side === 'e' ? -1 : 1;
+    seg(x, y1, x, y2);
+    out.push(`<line class="door-leaf" x1="${ri(x)}" y1="${ri(y1)}" x2="${ri(x + dir * L)}" y2="${ri(y1)}"/><path class="door" d="M${ri(x)} ${ri(y2)} A${L} ${L} 0 0 ${dir < 0 ? 0 : 1} ${ri(x + dir * L)} ${ri(y1)}"/>`);
+  }
+  return out.join('');
+}
+// Hebrew text on the plan: right to left, placed by its physical side (right / center / left) at x
+const svgText = (x, y, cls, side, txt, extra) => `<text class="${cls}" x="${ri(x)}" y="${ri(y)}" direction="rtl" text-anchor="${side === 'right' ? 'start' : side === 'left' ? 'end' : 'middle'}"${extra || ''}>${esc(txt)}</text>`;
+const glyphSvg = (name, x, y, s) => `<path class="glyph" transform="translate(${ri(x)} ${ri(y)}) scale(${s})" d="${OFF_GLYPH[name] || OFF_GLYPH.compass}"/>`;
+function furnSvg(r, kind){
+  const x = r.x, y = r.y, w = r.w, h = r.h, f = [];
+  if(kind === 'center'){ const cx = x + w * 0.27, cy = y + h * 0.58; f.push(`<circle class="furn" cx="${ri(cx)}" cy="${ri(cy)}" r="22"/>`); for(const a of [0, 1.57, 3.14, 4.71]) f.push(`<circle class="furn" cx="${ri(cx + Math.cos(a) * 31)}" cy="${ri(cy + Math.sin(a) * 31)}" r="5"/>`); }
+  else if(kind === 'station'){ f.push(`<rect class="furn" x="${ri(x + 8)}" y="${ri(y + h - 20)}" width="30" height="12" rx="1"/><circle class="furn" cx="${ri(x + 23)}" cy="${ri(y + h - 26)}" r="4"/>`); }
+  else { f.push(`<rect class="furn" x="${ri(x + 9)}" y="${ri(y + h - 23)}" width="36" height="14" rx="1.5"/><circle class="furn" cx="${ri(x + 27)}" cy="${ri(y + h - 30)}" r="5"/>`); }
+  return f.join('');
+}
+// A gentle arc from the edge of one room to the edge of the other; a reverse flow bends to the other side
+function edgePoint(r, t){
+  const cx = r.x + r.w / 2, cy = r.y + r.h / 2, dx = t.x - cx, dy = t.y - cy;
+  const k = Math.min(dx ? (r.w / 2 - 3) / Math.abs(dx) : Infinity, dy ? (r.h / 2 - 3) / Math.abs(dy) : Infinity);
+  return {x: cx + dx * k, y: cy + dy * k};
+}
+function threadGeom(a, b){
+  const ca = {x: a.x + a.w / 2, y: a.y + a.h / 2}, cb = {x: b.x + b.w / 2, y: b.y + b.h / 2};
+  const p = edgePoint(a, cb), q = edgePoint(b, ca);
+  const dx = q.x - p.x, dy = q.y - p.y, d = Math.hypot(dx, dy) || 1, k = Math.min(70, 0.18 * d + 14);
+  const c = {x: (p.x + q.x) / 2 - dy / d * k, y: (p.y + q.y) / 2 + dx / d * k};
+  const mid = {x: 0.25 * p.x + 0.5 * c.x + 0.25 * q.x, y: 0.25 * p.y + 0.5 * c.y + 0.25 * q.y};
+  return {d: `M${ri(p.x)} ${ri(p.y)} Q${ri(c.x)} ${ri(c.y)} ${ri(q.x)} ${ri(q.y)}`, mid, lab: {x: mid.x - dy / d * 13, y: mid.y + dx / d * 13}, len: d + k};
+}
+function officeSvg(O, L, now, reduce, labels){
+  const g = [];
+  g.push(`<defs>
+    <pattern id="off-grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0H0V20" fill="none" stroke="var(--plan-grid)" stroke-width="1"/></pattern>
+    <filter id="off-blur" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="8"/></filter>
+    <filter id="off-glow" x="-200%" y="-200%" width="500%" height="500%"><feGaussianBlur stdDeviation="2.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <marker id="off-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L8 4L0 8z" fill="var(--thread)"/></marker>
+  </defs>`);
+  g.push(`<rect class="grid" x="0" y="0" width="${OFF_W}" height="${OFF_H}"/>`);
+  const ags = O.agents.filter(a => L.rooms.has(a.id));
+  // glows under the rooms
+  for(const a of ags){ const r = L.rooms.get(a.id), st = now.get(a.id).state; if(st === 'planned') continue;
+    g.push(`<rect class="halo ${st}" data-halo="${esc(a.id)}" x="${ri(r.x - 8)}" y="${ri(r.y - 8)}" width="${ri(r.w + 16)}" height="${ri(r.h + 16)}" rx="14"/>`); }
+  // the building: outer walls with the entrance at the bottom
+  g.push(`<path class="wall-out" d="M590 820H24V40H1176V820H650"/>`);
+  g.push(`<path class="door" d="M590 820A30 30 0 0 1 620 790M650 820A30 30 0 0 0 620 790"/><line class="door-leaf" x1="590" y1="820" x2="620" y2="790"/><line class="door-leaf" x1="650" y1="820" x2="620" y2="790"/>`);
+  // wing shells: the server room (closed), the shared space (open plan), the archive and the balcony
+  g.push(`<rect class="room deco" x="40" y="244" width="240" height="372"/>${doorSvg({x: 40, y: 244, w: 240, h: 372, doorAt: 330}, 'e')}`);
+  g.push(`<rect class="room" x="920" y="244" width="240" height="372"/>${doorSvg({x: 920, y: 244, w: 240, h: 372, doorAt: 330}, 'w')}`);
+  g.push(`<rect class="room deco" x="40" y="652" width="240" height="150"/>${doorSvg({x: 40, y: 652, w: 240, h: 150}, 'n')}${glyphSvg('shelves', 54, 668, 0.9)}${svgText(268, 690, 'deco-t', 'right', 'ארכיון דוגמאות')}`);
+  g.push(`<rect class="room open" x="920" y="652" width="240" height="150"/>${glyphSvg('plant', 1120, 668, 1)}${glyphSvg('plant', 940, 740, 0.9)}${svgText(1148, 726, 'deco-t', 'right', 'מרפסת')}`);
+  if(L.lobby) g.push(`${glyphSvg('sofa', 320, 690, 1.3)}${glyphSvg('plant', 520, 668, 1)}${svgText(548, 784, 'deco-t', 'right', 'לובי')}`);
+  for(const r of L.deco) g.push(`<rect class="room deco" x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}"/>${doorSvg(r, r.door)}${glyphSvg(r.glyph, r.x + 10, r.y + 10, 0.85)}${svgText(r.x + r.w - 12, r.y + 30, 'deco-t', 'right', r.label)}`);
+  // the offices
+  for(const a of ags){
+    const r = L.rooms.get(a.id), st = now.get(a.id).state, planned = st === 'planned';
+    const cls = planned ? 'room planned' : 'room';
+    g.push(`<g class="${planned ? 'planned-g' : ''}"><rect class="${cls}" x="${ri(r.x)}" y="${ri(r.y)}" width="${ri(r.w)}" height="${ri(r.h)}"${r.station ? ' rx="3"' : ''}/>`);
+    if(!r.station) for(const side of (r.door || 's')) g.push(doorSvg(r, side, false));
+    g.push(furnSvg(r, r.center ? 'center' : r.station ? 'station' : 'room'));
+    g.push(glyphSvg(glyphOf(a), r.x + 10, r.y + 10, r.station ? 0.75 : 0.85));
+    if(!planned) g.push(`<circle class="lamp ${st}" cx="${ri(r.x + (r.station ? 36 : 40))}" cy="${ri(r.y + 19)}" r="4.5"/>`);
+    g.push('</g>');
+  }
+  // annotations: the wings, the entrance, a title block and north
+  const wn = id => ((O.wings || []).find(w => w.id === id) || {}).name_he || '';
+  g.push(svgText(1176, 28, 'ann big', 'right', `${wn('future')} · משרדים פנויים לתפקידים הבאים`));
+  g.push(svgText(600, 228, 'ann', 'center', wn('core')));
+  g.push(svgText(268, 266, 'ann', 'right', wn('cloud')));
+  g.push(svgText(1148, 266, 'ann', 'right', wn('helpers')));
+  g.push(svgText(620, 846, 'ann faint', 'center', 'כניסה'));
+  g.push(svgText(24, 846, 'ann faint', 'left', 'סטודיו הבית · המשרד · קומה 1 · 1:50'));
+  g.push(`<g transform="translate(1150 840)"><circle class="furn" r="11"/><path class="glyph" d="M0 -9L4 4L0 1L-4 4z"/></g>${svgText(1130, 846, 'ann faint', 'right', 'צפון')}`);
+  // light threads between the offices; light travels along a thread while its source is working
+  for(const [i, f] of O.flows.entries()){
+    const a = L.rooms.get(f.from), b = L.rooms.get(f.to); if(!a || !b) continue;
+    const t = threadGeom(a, b), live = now.get(f.from) && now.get(f.from).state === 'working';
+    const dur = Math.max(2.6, Math.min(6.5, t.len / 105));
+    const parts = live && !reduce ? [0, 1, 2].map(k => `<circle class="particle" r="3.3"><animateMotion dur="${dur.toFixed(2)}s" begin="${(-k * dur / 3).toFixed(2)}s" repeatCount="indefinite" path="${t.d}"/></circle>`).join('') : '';
+    g.push(`<g class="thread${live ? ' live' : ''}" data-from="${esc(f.from)}" data-to="${esc(f.to)}" data-i="${i}"><path class="line" d="${t.d}" marker-end="url(#off-arrow)"/>${parts}</g>`);
+    // the label sits in a layer above the room buttons (shown when the thread is highlighted)
+    labels.push(`<g class="tl" data-from="${esc(f.from)}" data-to="${esc(f.to)}">${svgText(t.lab.x, t.lab.y, 'tlabel', 'center', f.label_he, ' dominant-baseline="middle"')}</g>`);
+  }
+  return `<svg viewBox="0 0 ${OFF_W} ${OFF_H}" aria-hidden="true" focusable="false">${g.join('')}</svg>`;
+}
+function roomAria(a, n){
+  return [a.name_he, a.role_he, offStateHe(n.state), n.blocked ? 'סיבה: ' + n.blocked : n.task ? 'משימה: ' + n.task : ''].filter(Boolean).join(', ');
+}
+function roomBtnHtml(a, r, n){
+  const line = n.blocked || (n.state === 'working' ? n.task : '') || '';
+  return `<button type="button" class="room-btn st-${n.state}${r.center ? ' center' : ''}${r.station ? ' station' : ''}" data-agent="${esc(a.id)}" data-state="${n.state}" data-x="${r.x}" data-y="${r.y}" data-w="${r.w}" data-h="${r.h}" aria-haspopup="dialog" aria-label="${esc(roomAria(a, n))}">
+    <span class="rb-name">${esc(a.name_he)}</span><span class="rb-role">${esc(a.role_he || '')}</span>
+    ${line && r.h >= 90 ? `<span class="rb-task" dir="auto">${esc(line)}</span>` : ''}
+    <span class="rb-state"><i class="sdot"></i>${esc(n.state === 'planned' ? 'פנוי' : offStateHe(n.state))}</span></button>`;
+}
+function renderOffice(){
+  const O = officeData(), box = $('#office-body');
+  const nWork = O ? O.agents.filter(a => agentNow(a).state === 'working').length : 0;
+  $('#badge-office').textContent = nWork ? String(nWork) : ''; $('#badge-office-sr').textContent = nWork ? `, ${nWork} עובדים עכשיו` : '';
+  if(!O){ box.innerHTML = `<p class="empty">אין עדיין status/agents.json.</p>`; return; }
+  const reduce = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+  const now = new Map(O.agents.map(a => [a.id, agentNow(a)]));
+  const L = officeLayout(O);
+  const cnt = {working: 0, idle: 0, blocked: 0, planned: 0}; for(const n of now.values()) cnt[n.state]++;
+  const nLive = O.agents.filter(a => now.get(a.id).live).length;
+  $('#office-sub').textContent = `${O.agents.length} משרדים · ${O.flows.length} זרימות עבודה`;
+  const restore = keepFocus(box);
+  const focusAgent = document.activeElement && box.contains(document.activeElement) && document.activeElement.dataset ? document.activeElement.dataset.agent : null;
+  const wings = (O.wings || []).map(w => {
+    const list = O.agents.filter(a => a.wing === w.id);
+    if(!list.length) return '';
+    return `<section class="off-wing" aria-labelledby="ow-${esc(w.id)}"><h3 id="ow-${esc(w.id)}">${esc(w.name_he)}</h3>${w.desc ? `<p class="xs faint">${esc(w.desc)}</p>` : ''}<ul>${list.map(a => { const n = now.get(a.id);
+      return `<li><button type="button" class="off-item st-${n.state}" data-agent="${esc(a.id)}" data-state="${n.state}" aria-haspopup="dialog" aria-label="${esc(roomAria(a, n))}"><i class="ldot"></i><span class="li-name">${esc(a.name_he)} <span class="chip st-${n.state}">${esc(n.state === 'planned' ? 'פנוי' : offStateHe(n.state))}</span></span><span class="li-role">${esc(a.role_he || '')}</span>${n.blocked || n.task ? `<span class="li-task" dir="auto">${esc(n.blocked || n.task)}</span>` : ''}</button></li>`; }).join('')}</ul></section>`;
+  }).join('');
+  const zoomed = !!S.officeZoom, labels = [];
+  box.innerHTML = `<div class="screen roomy">
+    <p class="lede">שרטוט של משרד הסטודיו ממבט על: כל סוכן בחדר שלו, עם התפקיד והמצב. חדר שעובד עכשיו זוהר בירוק, חדר שממתין בענבר, חדר חסום בוורוד, ומשרד פנוי מסומן בקו מקווקו. חוטי האור מראים איך העבודה עוברת בין הסוכנים, ואור נע לאורך חוט כשהסוכן שבתחילתו עובד. לחיצה על חדר פותחת את ההוראות, הכלים וההגבלות שלו.</p>
+    <div class="off-top">
+      <div class="off-counts" role="group" aria-label="מצב המשרדים">${OFF_STATES.map(k => `<span class="chip st-${k}"><i class="sdot"></i>${cnt[k]} ${esc(k === 'planned' ? 'משרדים פנויים' : offStateHe(k))}</span>`).join('')}</div>
+      <p class="xs faint" id="off-source">${nLive ? `מצב חי ממסד הנתונים של הסטודיו (${nLive} משרדים); השאר לפי ${esc(O.file)}` : `המצב לפי ${esc(O.file)}${O.updated ? ` (${esc(fmtDate(O.updated))})` : ''}. כשסוכן מתחיל או מסיים, המצב החי נכתב לאוסף agents ומופיע כאן מיד.`}</p>
+    </div>
+    <ul class="off-legend" aria-label="מקרא">
+      <li><span class="sw-st working" aria-hidden="true"></span>עובד עכשיו (זוהר ירוק)</li><li><span class="sw-st idle" aria-hidden="true"></span>ממתין למשימה (ענבר)</li>
+      <li><span class="sw-st blocked" aria-hidden="true"></span>חסום (ורוד, עם הסיבה)</li><li><span class="sw-st planned" aria-hidden="true"></span>משרד פנוי (קיר מקווקו)</li>
+      <li><span class="sw-thread" aria-hidden="true"></span>חוט אור: זרימת עבודה; אור נע = המקור עובד</li>
+    </ul>
+    <div class="off-zoom-row"><button type="button" class="btn btn-ghost btn-small" id="off-zoom" aria-pressed="${zoomed}" aria-controls="off-plan-box">${zoomed ? 'חזרה למפה המוקטנת' : 'הגדלת השרטוט'}</button><span class="xs faint">${zoomed ? 'גוללים לצדדים בתוך השרטוט; לחיצה על חדר פותחת אותו.' : 'השרטוט מוקטן; הרשימה שמתחת לחיצה.'}</span></div>
+    <div class="off-plan-box${zoomed ? ' zoomed' : ''}" id="off-plan-box">
+      <div class="off-plan" id="off-plan" data-reduced="${reduce ? 1 : 0}">${officeSvg(O, L, now, reduce, labels)}
+        ${O.agents.filter(a => L.rooms.has(a.id)).map(a => roomBtnHtml(a, L.rooms.get(a.id), now.get(a.id))).join('')}
+        <svg class="off-labels" viewBox="0 0 ${OFF_W} ${OFF_H}" aria-hidden="true" focusable="false">${labels.join('')}</svg>
+      </div>
+    </div>
+    <div class="off-list" aria-label="המשרדים לפי אגפים">${wings}</div>
+  </div>`;
+  // place the room buttons over their rooms (percent of the plan; set from JS, no inline style attributes)
+  for(const b of $$('.room-btn', box)){ const d = b.dataset; Object.assign(b.style, {left: d.x / OFF_W * 100 + '%', top: d.y / OFF_H * 100 + '%', width: d.w / OFF_W * 100 + '%', height: d.h / OFF_H * 100 + '%'}); }
+  bindOffice(box);
+  offInert();
+  restore();
+  // a room button and a list item share the agent id; focus goes back to the one that is visible at this width
+  if(focusAgent){ const el = $$(`[data-agent="${CSS.escape(focusAgent)}"]`, box).find(x => x.offsetParent); if(el && document.activeElement !== el) el.focus({preventScroll: true}); }
+  if(S.agentOpen && $('#agentdlg').open) renderAgentPanel(S.agentOpen, true);
+}
+// below 720px the plan is a mini-map (out of the tab order); the list is the way in, or the zoomed plan
+function offInert(){
+  const box = $('#off-plan-box'); if(!box) return;
+  const narrow = !!(window.matchMedia && matchMedia('(max-width: 719px)').matches);
+  const plan = $('#off-plan');
+  if(narrow && !S.officeZoom){ plan.setAttribute('inert', ''); plan.setAttribute('aria-hidden', 'true'); }
+  else { plan.removeAttribute('inert'); plan.removeAttribute('aria-hidden'); }
+}
+function setOfficeHl(id){
+  const plan = $('#off-plan'); if(!plan) return;
+  plan.classList.toggle('has-hl', !!id);
+  for(const t of $$('.thread, .tl', plan)) t.classList.toggle('is-hl', !!id && (t.dataset.from === id || t.dataset.to === id));
+}
+function bindOffice(box){
+  for(const b of $$('[data-agent]', box)){
+    b.addEventListener('click', () => openAgent(b.dataset.agent, b));
+    if(b.classList.contains('room-btn')){
+      b.addEventListener('mouseenter', () => setOfficeHl(b.dataset.agent)); b.addEventListener('mouseleave', () => setOfficeHl(null));
+      b.addEventListener('focus', () => setOfficeHl(b.dataset.agent)); b.addEventListener('blur', () => setOfficeHl(null));
+    }
+  }
+  const z = $('#off-zoom', box); if(z) z.onclick = () => { S.officeZoom = !S.officeZoom; renderOffice(); const n = $('#off-zoom'); if(n) n.focus(); };
+}
+function openAgent(id, from){
+  const O = officeData(); if(!O || !O.agents.some(a => a.id === id)) return;
+  S.agentOpen = id;
+  renderAgentPanel(id, false);
+  openDialog($('#agentdlg'), from || document.activeElement);
+  $('#agentdlg [data-close]').focus();
+}
+function renderAgentPanel(id, keep){
+  const O = officeData(), a = O && O.agents.find(x => x.id === id); if(!a) return;
+  const n = agentNow(a), ins = a.instructions, body = $('#agent-body'), st = body.scrollTop;
+  const name = x => (O.agents.find(y => y.id === x) || {}).name_he || x;
+  const wing = (O.wings || []).find(w => w.id === a.wing);
+  $('#agent-eyebrow').textContent = [wing && wing.name_he, OFF_KIND_HE[a.kind] || a.kind].filter(Boolean).join(' · ');
+  $('#agent-title').textContent = a.name_he;
+  const limits = [...(a.limits_he || []), ...((ins && ins.limits) || [])].filter((x, i, arr) => arr.indexOf(x) === i);
+  const outF = O.flows.filter(f => f.from === id), inF = O.flows.filter(f => f.to === id);
+  const flowLi = (f, dir) => `<li><span class="xs faint">${dir === 'out' ? 'שולח אל' : 'מקבל מ'}</span> <button type="button" class="linkish" data-agent-go="${esc(dir === 'out' ? f.to : f.from)}">${esc(name(dir === 'out' ? f.to : f.from))}</button>: ${esc(f.label_he)}</li>`;
+  const tools = ins ? (ins.tools ? `<div class="tools">${ins.tools.map(t => `<code dir="ltr">${esc(t)}</code>`).join('')}</div>` : `<p class="small">הקובץ לא מגביל כלים: הסוכן יורש את כל הכלים של הסשן${ins.src === 'CLAUDE.md' ? ' הראשי' : ''}.</p>`)
+    : `<p class="small muted">${a.kind === 'planned' ? 'עוד אין: התפקיד לא הוקם.' : a.kind === 'person' ? 'אדם, לא סוכן.' : 'אין קובץ סוכן קבוע: ההוראות נכתבות בכל הפעלה.'}</p>`;
+  const meta = ins ? [ins.model ? `מודל: <code dir="ltr">${esc(ins.model)}</code>` : '', (ins.skills || []).length ? `כישורים: ${ins.skills.map(x => `<code dir="ltr">${esc(x)}</code>`).join(' ')}` : ''].filter(Boolean).join(' · ') : '';
+  const lines = (a.board && a.board.last) || [];
+  body.innerHTML = `
+    <div class="now">
+      <p><span class="chip st-${n.state}"><i class="sdot"></i>${esc(offStateHe(n.state))}</span> <span class="xs faint">${n.live ? 'מצב חי ממסד הנתונים' : 'לפי status/agents.json'}${n.since ? ` · מאז ${esc(fmtDate(n.since))}` : ''}${n.by ? ` · עודכן על ידי ${esc(n.by)}` : ''}</span></p>
+      ${n.blocked ? `<p class="small"><strong>למה חסום:</strong> <span dir="auto">${esc(n.blocked)}</span></p>` : ''}
+      ${n.task ? `<p class="small"><strong>${n.state === 'working' ? 'עובד על' : 'משימה אחרונה'}:</strong> <span dir="auto">${esc(n.task)}</span></p>` : ''}
+      ${a.schedule_he ? `<p class="small"><strong>לוח זמנים:</strong> ${esc(a.schedule_he)}</p>` : ''}
+      ${a.ref ? `<p class="xs faint">מזהה: <code dir="ltr">${esc(a.ref)}</code></p>` : ''}
+    </div>
+    <section class="agent-sec" aria-labelledby="ag-role"><h3 id="ag-role" class="h-small">תפקיד</h3><p>${esc(a.role_he || '')}</p>${ins && ins.description ? `<p class="small muted" dir="auto">${esc(ins.description)}</p>` : ''}</section>
+    <section class="agent-sec" aria-labelledby="ag-tools"><h3 id="ag-tools" class="h-small">כלים מותרים</h3>${tools}${meta ? `<p class="xs faint">${meta}</p>` : ''}</section>
+    <section class="agent-sec" aria-labelledby="ag-lim"><h3 id="ag-lim" class="h-small">הגבלות</h3>${limits.length ? `<ul class="limits">${limits.map(x => `<li dir="auto">${esc(x)}</li>`).join('')}</ul><p class="xs faint">מ-status/agents.json ומשורות בהוראות שאומרות "לא", "אסור", "אף פעם" או "רק".</p>` : '<p class="small muted">אין הגבלות רשומות.</p>'}</section>
+    ${outF.length || inF.length ? `<section class="agent-sec" aria-labelledby="ag-flow"><h3 id="ag-flow" class="h-small">זרימות עבודה</h3><ul class="flows">${outF.map(f => flowLi(f, 'out')).join('')}${inF.map(f => flowLi(f, 'in')).join('')}</ul></section>` : ''}
+    <section class="agent-sec" aria-labelledby="ag-log"><h3 id="ag-log" class="h-small">ביומן הלוח</h3><p class="small">${a.board ? `${esc(a.board.count)} שורות ב-status/board.md מזכירות את ${esc(a.name_he)}.` : ''}</p>${lines.length ? `<ul class="board-lines">${lines.map(l => `<li><span class="xs faint">${esc(fmtDay(l.date))} · ${esc(l.who || '')}</span><br><span dir="auto">${esc(l.text)}</span></li>`).join('')}</ul>` : ''}</section>
+    <section class="agent-sec" aria-labelledby="ag-ins"><h3 id="ag-ins" class="h-small">ההוראות המלאות</h3>${ins ? `<p class="xs faint">מתוך <code dir="ltr">${esc(ins.src)}</code> · ${esc(ins.lines)} שורות</p><div class="md-lite" dir="rtl">${mdLite(ins.body)}</div>` : '<p class="small muted">אין קובץ הוראות.</p>'}</section>`;
+  for(const b of $$('[data-agent-go]', body)) b.onclick = () => { renderAgentPanel(b.dataset.agentGo, false); S.agentOpen = b.dataset.agentGo; body.scrollTop = 0; $('#agentdlg [data-close]').focus(); };
+  if(keep) body.scrollTop = st;
+}
+// A small, safe markdown renderer for the instructions: everything is escaped first; headings, lists, quotes, code, tables
+function mdLite(md){
+  const lines = String(md || '').replace(/\r/g, '').split('\n');
+  const inline = t => esc(t).replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+    .replace(/\[([^\]]+)\]\((https:\/\/[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+  let out = '', list = null, para = [], code = null, table = null, quote = [];
+  const flushPara = () => { if(para.length){ out += `<p>${inline(para.join(' '))}</p>`; para = []; } };
+  const flushList = () => { if(list){ out += `<${list.tag}>${list.items.map(x => `<li>${inline(x)}</li>`).join('')}</${list.tag}>`; list = null; } };
+  const flushQuote = () => { if(quote.length){ out += `<blockquote>${inline(quote.join(' '))}</blockquote>`; quote = []; } };
+  const flushTable = () => { if(table){ const [h, ...rows] = table; out += `<div class="tbl-wrap"><table><thead><tr>${h.map(c => `<th scope="col">${inline(c)}</th>`).join('')}</tr></thead><tbody>${rows.map(r => `<tr>${r.map(c => `<td>${inline(c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`; table = null; } };
+  const flush = () => { flushPara(); flushList(); flushQuote(); flushTable(); };
+  for(const line of lines){
+    if(code !== null){ if(/^\s*```/.test(line)){ out += `<pre><code>${esc(code.join('\n'))}</code></pre>`; code = null; } else code.push(line); continue; }
+    if(/^\s*```/.test(line)){ flush(); code = []; continue; }
+    const t = line.trim();
+    if(!t){ flush(); continue; }
+    let m;
+    if((m = t.match(/^(#{1,6})\s+(.*)$/))){ flush(); const lv = Math.min(6, m[1].length + 3); out += `<h${lv}>${inline(m[2])}</h${lv}>`; continue; }
+    if(/^(-{3,}|\*{3,})$/.test(t)){ flush(); out += '<hr>'; continue; }
+    if(t.startsWith('|')){ flushPara(); flushList(); flushQuote(); const cells = t.replace(/^\||\|$/g, '').split('|').map(c => c.trim()); if(cells.every(c => /^:?-{2,}:?$/.test(c))) continue; (table = table || []).push(cells); continue; }
+    flushTable();
+    if((m = t.match(/^>\s?(.*)$/))){ flushPara(); flushList(); quote.push(m[1]); continue; }
+    flushQuote();
+    if((m = t.match(/^[-*+]\s+(.*)$/))){ flushPara(); if(!list || list.tag !== 'ul'){ flushList(); list = {tag: 'ul', items: []}; } list.items.push(m[1]); continue; }
+    if((m = t.match(/^\d+[.)]\s+(.*)$/))){ flushPara(); if(!list || list.tag !== 'ol'){ flushList(); list = {tag: 'ol', items: []}; } list.items.push(m[1]); continue; }
+    if(list && /^\s{2,}\S/.test(line)){ list.items[list.items.length - 1] += ' ' + t; continue; }
+    flushList(); para.push(t);
+  }
+  if(code !== null) out += `<pre><code>${esc(code.join('\n'))}</code></pre>`;
+  flush();
+  return out;
 }
 
 /* ---------- log ---------- */

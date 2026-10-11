@@ -906,6 +906,137 @@ def load_blockers() -> dict:
             "source": rel(p)}
 
 
+# --------------------------------------------------------------------------- the office (agents)
+
+AGENTS_JSON = ROOT / "status" / "agents.json"
+OFFICE_STATES = ("working", "idle", "blocked", "planned")
+# board log authors ("who") and words in the text that name each agent; the default is the agent id itself
+OFFICE_ALIASES = {
+    "user": {"who": ("המשתמש",)},
+    "art-director": {"who": ("המנהל",)},
+    "sourcing-agent": {"who": ("sourcing",), "text": ("sourcing-agent",)},
+    "pricing-living": {"who": ("pricing (סלון)",)},
+    "pricing-rest": {"who": ("pricing (שאר",)},
+    "profit-fix": {"who": ("profit-fix",), "text": ("profit-fix",)},
+    "explorer": {"who": ("explorer", "general-purpose")},
+    "aliexpress-scale": {"who": ("aliexpress",), "text": ("aliexpress-scale",)},
+    "cj-daily": {"who": ("שגרה יומית CJ", "שגרה CJ", "cj-daily"), "text": ("שגרת CJ", "cj-daily")},
+    "supplier-replies": {"who": ("supplier-replies",), "text": ("supplier-replies",)},
+}
+# lines of the instructions that state a limit: "לא ...", "אסור", "אף פעם", "רק ..." (and the English equivalents)
+LIMIT_RX = re.compile(r"(?:^|[\s(\"'״„*])(?:לא|אסור|אף\s+פעם|רק)(?=[\s:,.])|\b(?:never|do not|don't|must not|only)\b", re.I)
+# never publish anything that looks like a secret, even if a file ever contained one
+SECRET_RX = [re.compile(r"sk-(?:proj-)?[A-Za-z0-9_\-]{8,}"), re.compile(r"\b[0-9a-fA-F]{24,}\b"),
+             re.compile(r"[\w.+-]+@api\b", re.I), re.compile(r"API@CJ\w*"), re.compile(r"\bAKIA[0-9A-Z]{16}\b"),
+             re.compile(r"(?i)\b(?:api[_-]?key|secret|token|password)\s*[:=]\s*['\"]?[A-Za-z0-9_\-./+]{12,}")]
+
+
+def redact(text: str) -> tuple[str, int]:
+    n = 0
+    for rx in SECRET_RX:
+        text, k = rx.subn("[הוסתר]", text)
+        n += k
+    return text, n
+
+
+def parse_instructions(path: Path) -> dict:
+    """An agent file (.claude/agents/<id>.md: --- name, description, tools, model, skills --- body) or CLAUDE.md (no
+    frontmatter). tools None = the file names none (the agent inherits the session's tools)."""
+    raw = path.read_text(encoding="utf-8")
+    fm, body = {}, raw
+    if raw.startswith("---"):
+        end = raw.find("\n---", 3)
+        if end > 0:
+            for line in raw[3:end].splitlines():
+                m = re.match(r"^([A-Za-z_-]+):\s*(.*)$", line)
+                if m:
+                    fm[m.group(1).lower()] = m.group(2).strip()
+            body = raw[end + 4:].lstrip("\n")
+    body, n_red = redact(body)
+    for k in list(fm):
+        fm[k], k_red = redact(fm[k])
+        n_red += k_red
+    split = lambda v: [x.strip() for x in re.split(r"[,\s]+", v or "") if x.strip()] or None
+    limits, seen, in_code = [], set(), False
+    for line in body.splitlines():
+        t = line.strip()
+        if t.startswith("```"):
+            in_code = not in_code
+            continue
+        if in_code or not t or t.startswith(("#", "|")):
+            continue
+        t = re.sub(r"^(?:>\s*|[-*+]\s+|\d+[.)]\s+)+", "", t)
+        t = re.sub(r"\*\*|`", "", t).strip()
+        for sent in re.split(r"(?<=[.!?])\s+(?=\S)", t):
+            sent = sent.strip()
+            if len(sent) < 6 or not LIMIT_RX.search(sent):
+                continue
+            key = sent[:80]
+            if key in seen:
+                continue
+            seen.add(key)
+            limits.append(sent if len(sent) <= 260 else sent[:257].rstrip() + "…")
+    return {"src": rel(path), "name": fm.get("name"), "description": fm.get("description"), "tools": split(fm.get("tools")),
+            "model": fm.get("model"), "skills": split(fm.get("skills")), "body": body, "limits": limits[:16],
+            "n_limits": len(limits), "redacted": n_red, "lines": body.count("\n") + 1}
+
+
+def office_mentions(aid: str, logs: list[dict]) -> list[dict]:
+    """Board log lines that name the agent: as the author (who) or in the text."""
+    al = OFFICE_ALIASES.get(aid, {})
+    who = al.get("who", (aid,))
+    words = al.get("text", (aid,) if re.search(r"[a-z]-[a-z]", aid) else ())
+    out = []
+    for e in logs:
+        w = e.get("who") or ""
+        if any(w.startswith(x) for x in who) or any(x in (e.get("text") or "") for x in words):
+            out.append(e)
+    return out
+
+
+def load_office(logs: list[dict]) -> dict | None:
+    """status/agents.json + every agent's instructions + its lines in the board log -> data.json "office"."""
+    if not AGENTS_JSON.exists():
+        return None
+    d = read_json(AGENTS_JSON)
+    states = d.get("states") or {}
+    wings = [w for w in d.get("wings") or [] if isinstance(w, dict) and w.get("id")]
+    wing_ids = {w["id"] for w in wings}
+    agents, warn, n_red = [], [], 0
+    for a in d.get("agents") or []:
+        if not isinstance(a, dict) or not a.get("id"):
+            continue
+        q = {k: v for k, v in a.items() if k != "instructions_src"}
+        if q.get("state") not in OFFICE_STATES:
+            warn.append(f"{a['id']}: state {q.get('state')!r} -> idle")
+            q["state"] = "planned" if q.get("kind") == "planned" else "idle"
+        if q.get("wing") not in wing_ids:
+            warn.append(f"{a['id']}: wing {q.get('wing')!r} not in wings")
+        q["limits_he"] = [x for x in (a.get("limits_he") or []) if isinstance(x, str)]
+        src = a.get("instructions_src")
+        q["instructions"] = None
+        if src:
+            sp = (ROOT / src).resolve()
+            if sp.is_relative_to(ROOT) and sp.exists():
+                q["instructions"] = parse_instructions(sp)
+                n_red += q["instructions"]["redacted"]
+            else:
+                warn.append(f"{a['id']}: instructions {src} not found")
+        hits = office_mentions(a["id"], logs)
+        last = sorted(hits, key=lambda e: e.get("date") or "")[-5:][::-1]
+        q["board"] = {"count": len(hits), "last": [{"date": e.get("date"), "who": e.get("who"), "text": redact(e.get("text") or "")[0][:400]} for e in last]}
+        agents.append(q)
+    ids = {a["id"] for a in agents}
+    flows = []
+    for f in d.get("flows") or []:
+        if isinstance(f, dict) and f.get("from") in ids and f.get("to") in ids:
+            flows.append({"from": f["from"], "to": f["to"], "label_he": f.get("label_he") or ""})
+        else:
+            warn.append(f"flow {f!r}: unknown agent")
+    return {"file": rel(AGENTS_JSON), "updated": d.get("updated"), "note": d.get("note"), "states": states, "wings": wings,
+            "agents": agents, "flows": flows, "warnings": warn, "redacted": n_red}
+
+
 def load_reports(globs: list[str], kind: str) -> list[dict]:
     out = []
     seen = set()
@@ -2138,6 +2269,13 @@ def main() -> int:
     board = parse_board(ROOT / "status" / "board.md")
     decisions = load_decisions(order)
     blockers = load_blockers()
+    office = load_office(board["log"])
+    if office:
+        n_ins = sum(1 for a in office["agents"] if a["instructions"])
+        log(f"  office: {len(office['agents'])} offices in {len(office['wings'])} wings · {len(office['flows'])} flows · instructions {n_ins}"
+            f" · board mentions {sum(a['board']['count'] for a in office['agents'])}" + (f" · redacted {office['redacted']}" if office["redacted"] else ""))
+        for w in office["warnings"]:
+            log(f"  ! office: {w}")
     market = load_market(eco_dir)
     styles = load_styles()
     dec_ids = {d.get("id") for d in decisions.get("items") or [] if isinstance(d, dict)}
@@ -2229,6 +2367,7 @@ def main() -> int:
         "log": board["log"],
         "decisions": decisions,
         "blockers": blockers,
+        "office": office,
         "economics": economics,
         "market": market,
         "styles": styles,

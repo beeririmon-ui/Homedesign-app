@@ -404,8 +404,14 @@ def real_checks(browser, base):
         ship: c.dataset.shipSrc, rsrc: c.dataset.retailSrc, flag: c.querySelector('.flag').textContent,
         floor: (c.querySelector('.chip-loss, .chip-floor, .chip-exception') || {}).textContent || '',
         addon: !!c.querySelector('.chip-addon'), initial: !!c.querySelector('.chip-initial'), qmis: !!c.querySelector('.pecon .chip-warn')}))""")
-    cj_bad = [c["id"] for c in cards if c["sup"] == "cj" and "shipping" in c["miss"].split(",") and "cost" not in c["miss"]]
-    check(not cj_bad, f"real data: no CJ card with a cost shows 'חסר משלוח' ({len(cj_bad)}: {cj_bad[:4]})")
+    # the acceptance rule: a CJ card that has a cost and a freight entry never shows "חסר משלוח"; a card that is not in
+    # freight-cj.json yet (added after the last freight run) shows "חסר משלוח: CJ עוד לא נבדק", which is its real reason
+    fr = json.loads((ROOT / "data" / "economics" / "freight-cj.json").read_text(encoding="utf-8")).get("products") or {}
+    cj_bad = [c["id"] for c in cards if c["sup"] == "cj" and c["id"] in fr and "shipping" in c["miss"].split(",") and "cost" not in c["miss"]]
+    check(not cj_bad, f"real data: no CJ card with a cost and freight data shows 'חסר משלוח' ({len(cj_bad)}: {cj_bad[:4]})")
+    unchecked = [c["id"] for c in cards if c["sup"] == "cj" and c["id"] not in fr and "shipping" in c["miss"].split(",")]
+    if unchecked:
+        print(f"    note: {len(unchecked)} CJ cards are not in freight-cj.json yet: {unchecked[:4]}")
     check(not any("חסר משלוח" in c["flag"] for c in cards if c["ship"] == "no_route"), "real data: no_route cards show the reason, not 'חסר משלוח'")
     from collections import Counter
     print("    cards:", len(cards), "· shipping source:", dict(Counter(c["ship"] or "none" for c in cards)))

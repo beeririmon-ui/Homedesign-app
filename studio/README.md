@@ -55,6 +55,16 @@ python3 studio/tests/smoke_products.py --shots   # וגם צילומי מסך מ
 - בודק את `build.py` בלי דפדפן (כמות למכירה לפי המק"ט שבחדר, קטגוריות שוק שמתומחרות לזוג, קבצי המשלוח והתמחור), ואז בונה עם `studio/tests/fixtures/economics/` ופותח ב-390px וב-1280px עם db מדומה בזיכרון: "CJ לא שולח לישראל (נבדק 11.10)", משלוח מ-Zendrop ומ-AliExpress, "מחיר התחלתי", "מפסיד, לא למכירה", "חריג: אין חלופה בעמדה" / "מתחת לרף 40%", עריכת מחיר מהירה בכרטיס ובטבלה (נכתבת ל-`product_edits`), סינון "בלי עמדה" ו"מפסיד", סדר לפי עיצוב בתוך עמדה, axe-core ובלי גלילה לרוחב.
 - חלק "real data" בונה את הנתונים האמיתיים לתיקייה זמנית ובודק שאין כרטיס CJ עם עלות שמציג "חסר משלוח". `studio/dist` לא נבנה עם נתוני הבדיקה.
 
+```bash
+python3 studio/tests/smoke_office.py           # מסך "המשרד": הסוכנים על שרטוט המשרד
+python3 studio/tests/smoke_office.py --shots   # וגם assets/qa/studio-2026-10-11/office-*.png
+```
+
+### המשרד (2026-10-11)
+- **מקור:** `status/agents.json` (אגפים, משרדים, מצבים וזרימות). ‏`build.py` קורא לכל סוכן את `instructions_src` (‏`.claude/agents/<id>.md`: ‏name, ‏description, ‏tools, ‏model, ‏skills וגוף ההוראות; ‏`CLAUDE.md` למנהל), מוציא את השורות שאומרות "לא", "אסור", "אף פעם" או "רק", סופר את השורות של הסוכן ביומן של `status/board.md` ושומר את 5 האחרונות. כל דבר שנראה כמו סוד מוסתר (`[הוסתר]`) לפני שהוא נכנס ל-`data.json`.
+- **מצב חי:** אוסף `agents` ב-db, מסמך לכל סוכן במזהה שלו: `{state, task_he, since, by}`, ‏state אחד מ-working / idle / blocked / planned. הוא גובר על `status/agents.json`; אוסף ריק = הקובץ.
+- **התצוגה:** שרטוט ממבט על (SVG): המנהל בחדר המרכזי, בעל המותג ליד הכניסה, הצוות ב-U סביב המנהל, חדר השרתים (ענן ושגרות), חלל העבודה המשותף (עוזרים) והאגף החדש עם משרדים פנויים בקיר מקווקו. עובד = זוהר ירוק שנושם, ממתין = ענבר, חסום = ורוד עם הסיבה. חוטי אור לאורך הזרימות; אור נע כשהמקור עובד. ‏prefers-reduced-motion עוצר את התנועה. מתחת ל-720px השרטוט הוא מפה מוקטנת והרשימה לפי אגפים היא הדרך פנימה, או "הגדלת השרטוט".
+
 ### מקורות הכלכלה (2026-10-11)
 - **משלוח:** `freight-cj.json`, ‏`freight-zendrop.json` ו-`freight-aliexpress.json` (אותו מבנה), לפי הספק של הכרטיס; גיבוי: `options.skus[].shipping_il` של המק"ט שבחדר. `status: "no_route"` מוצג כ"<ספק> לא שולח לישראל (נבדק DD.MM)". אין נתון: "חסר משלוח" עם הסיבה.
 - **מחיר לצרכן:** `data/economics/products.json` של צוות התמחור (`retail_ils`, ‏`retail_src`, ‏`il_value`, ‏`customer_total_ils`, ‏`price_for_qty`, ‏`flag`, ‏`slot_alternative_ok`, ‏`action_he`, ‏`addon_only`). מחיר עם `retail_src` שמתחיל ב-initial מסומן "מחיר התחלתי"; עריכה בסטודיו גוברת עליו, ו-`apply_edits.py` כותב אז `retail_src: "studio"`. ללקוח: המחיר + ₪29 מתחת ל-₪299 (‏`site/shared/src/schema/economics.ts`, או `storefront` ב-`settings.json`).
