@@ -51,3 +51,17 @@ python3 scripts/sourcing/cj_source.py --by sourcing-support source-batch \
   data/leads/cj/sourcing-requests-2026-10-10.json --approved "AC1 2026-10-10" --count 5
 ```
 Run once a day (2026-10-11, 10-12, 10-13) until `summary.pending` is 0. The batch stops by itself at the daily limit and leaves the rest `pending`; a real failure is recorded under `failures`. `--dry-run` shows what would go out for free.
+
+## Status log
+### 2026-10-11 03:50 UTC (daily routine, run 2)
+Poll of the first five (50 points): none succeeded yet (no `sourceStatus` 3, no `cjProductId`).
+
+| slot | sourceId | sourceStatus | note |
+| --- | --- | --- | --- |
+| living-room/rug | 2610101514064490000 | 16 "Pending", failReason 1 | "We contacted many manufacturers for this product. Unfortunately, no exact same one found. And we have similar ones below for your reference." The similar items are not in the API response; they appear only in the CJ web UI (Sourcing list) or via the CJ agent chat. Treat as soft fail. |
+| living-room/floor-lamp | 2610101514084500302 | 108 "Pending" | in progress |
+| living-room/candle-holders | 2610101514104501300 | 106 "Pending" | in progress |
+| living-room/pouf | 2610101514124481902 | 108 "Pending" | in progress |
+| living-room/curtains | 2610101514144482302 | 16 "Pending", failReason 1 | same "no exact same one found" text as the rug; soft fail, similar items only in the web UI |
+
+Batch 2 sent (5 requests, 2026-10-11T03:51Z): living-room/table-runner 2610110351004506402, living-room/bowl 2610110351024487100, bath/vanity-sconces 2610110351044487502, dining-room/table-runner 2610110351064487000, dining-room/centerpiece-vase 2610110351084496600. Queue: 10 created, 10 pending. Next poll should include all 10 ids.
