@@ -871,7 +871,7 @@ def missing_slots(room):
     return out
 
 
-def image_refs(room, key, n_cards=3, n_ae=3):
+def image_refs(room, key, n_cards=3, n_ae=3, borrow=True):
     """Reference images for a slot: existing cards in the slot (best style score first), then AliExpress items
     reviewed at fit 5-7 (right look, failed on size or detail)."""
     slot = key.split("/")[1]
@@ -898,6 +898,33 @@ def image_refs(room, key, n_cards=3, n_ae=3):
         if fits and 5 <= max(fits) < 8:
             ae.append((max(fits), "ae:" + rec["item_id"], rec["image"]))
     refs += [(i, u) for _, i, u in sorted(ae, key=lambda x: -x[0])[:n_ae]]
+    if not refs and borrow:  # round 5: borrow references from the same slot in other rooms (cards, then AE items at fit 7+)
+        for other in ROOMS:
+            if other == room or "%s/%s" % (other, slot) not in SLOTS:
+                continue
+            od = os.path.join(REPO, "data", "products", slot) if ROOM_DIRS[other] is None else os.path.join(REPO, "data", "products", ROOM_DIRS[other], slot)
+            for p in sorted(glob.glob(os.path.join(od, "*.json"))):
+                try:
+                    c = json.load(open(p))
+                except ValueError:
+                    continue
+                urls = ((c.get("images") or {}).get("urls") or [])
+                best = max([v.get("score") or 0 for v in (c.get("style_scores") or {}).values() if isinstance(v, dict)] or [0])
+                if urls and str(urls[0]).startswith("https://") and c.get("status") != "rejected" and best >= 7:
+                    refs.append(("card:" + str(c.get("id")), urls[0]))
+            orv = os.path.join(OUT, "review", other + ".json")
+            odet = os.path.join(OUT, "detail", other + ".json")
+            if os.path.exists(orv) and os.path.exists(odet):
+                orv, odet = json.load(open(orv)), json.load(open(odet))
+                for rec in odet.values():
+                    fits = [v.get("fit") or 0 for v in (orv.get(rec["item_id"]) or {}).values() if isinstance(v, dict) and v.get("verdict") != "reject"]
+                    if rec.get("slot") == slot and rec.get("image") and fits and max(fits) >= 7:
+                        refs.append(("ae:" + rec["item_id"], rec["image"]))
+        seen_u, uniq = set(), []
+        for i, u in refs:
+            if u not in seen_u:
+                seen_u.add(u); uniq.append((i, u))
+        refs = uniq[:n_cards + n_ae]
     return refs
 
 
