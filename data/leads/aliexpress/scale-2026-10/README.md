@@ -6,24 +6,48 @@
 
 | | |
 | --- | --- |
-| שורות סינון (תוצאות חיפוש) | 35,652 |
-| מוצרים שנבדקו לעומק (מחיר SKU + משלוח לישראל) | 3,959 |
-| מוצרים שנבדקו בעין (גיליונות תמונות) | 1,548 |
-| רשומות מוצר×סגנון | 5,820 |
+| תוצאות חיפוש (ייחודיות) | 40,053, של 13,682 מוצרים שונים |
+| מוצרים שנבדקו לעומק (מחיר SKU + משלוח לישראל) | 5,086 |
+| מוצרים שנבדקו בעין (גיליונות תמונות) | 2,103 |
+| רשומות מוצר×סגנון | 8,594 |
 | כרטיסי טיוטה חדשים | 19 |
-| קריאות API היום (כל הסשן) | 8,411 |
+| קריאות API (2026-10-11: 8,411; 2026-10-12: 2,112) | 10,523 |
 
 **מכסה שנצפתה:** אין מכסה יומית מוחזרת. מגבלת קצב: עם 3 תהליכים במקביל (כ-1.8 קריאות בשנייה) AliExpress החזיר `ApiCallLimit` ("this ban will last 1 seconds"); עם 2 במקביל זה קרה לעיתים רחוקות. כל עצירה נרשמה, וההרצה המשיכה מהנקודה שבה עצרה. התקרה העצמית הועלתה ל-12,000 ביום לריצה הזו (`scripts/sourcing/budget.py`).
 
 עצירות שנרשמו:
 ```
 bath STOP detail at 2026-10-11 17:11:07 UTC: flow control: ApiCallLimit | Api access frequency exceeds the limit. this ban will last 1 seconds
+bath STOP detail at 2026-10-12 04:10:16 UTC: flow control: ApiCallLimit | Api access frequency exceeds the limit. this ban will last 1 seconds
+bath STOP detail at 2026-10-12 04:13:05 UTC: flow control: ApiCallLimit | Api access frequency exceeds the limit. this ban will last 1 seconds
+dining-room STOP detail at 2026-10-12 04:19:14 UTC: flow control: ApiCallLimit | Api access frequency exceeds the limit. this ban will last 1 seconds
+dining-room STOP detail at 2026-10-12 04:22:13 UTC: flow control: ApiCallLimit | Api access frequency exceeds the limit. this ban will last 1 seconds
+dining-room STOP detail at 2026-10-12 04:27:06 UTC: flow control: ApiCallLimit | Api access frequency exceeds the limit. this ban will last 1 seconds
 kids STOP detail at 2026-10-11 16:50:12 UTC: flow control: ApiCallLimit | Api access frequency exceeds the limit. this ban will last 1 seconds
+kids STOP detail at 2026-10-12 04:21:06 UTC: flow control: ApiCallLimit | Api access frequency exceeds the limit. this ban will last 1 seconds
+kids STOP detail at 2026-10-12 04:23:04 UTC: flow control: ApiCallLimit | Api access frequency exceeds the limit. this ban will last 1 seconds
+kids STOP detail at 2026-10-12 04:27:10 UTC: flow control: ApiCallLimit | Api access frequency exceeds the limit. this ban will last 1 seconds
+kids STOP detail at 2026-10-12 04:29:04 UTC: flow control: ApiCallLimit | Api access frequency exceeds the limit. this ban will last 1 seconds
+living-room STOP detail at 2026-10-12 04:09:06 UTC: flow control: ApiCallLimit | Api access frequency exceeds the limit. this ban will last 1 seconds
+living-room STOP detail at 2026-10-12 04:12:04 UTC: flow control: ApiCallLimit | Api access frequency exceeds the limit. this ban will last 1 seconds
+living-room STOP detail at 2026-10-12 04:16:06 UTC: flow control: ApiCallLimit | Api access frequency exceeds the limit. this ban will last 1 seconds
 master STOP all at 2026-10-11 12:03:10 UTC: flow control: ApiCallLimit | Api access frequency exceeds the limit. this ban will last 1 seconds
+master STOP detail at 2026-10-12 04:32:55 UTC: flow control: ApiCallLimit | Api access frequency exceeds the limit. this ban will last 1 seconds
+master STOP detail at 2026-10-12 04:40:05 UTC: flow control: ApiCallLimit | Api access frequency exceeds the limit. this ban will last 1 seconds
+master STOP detail at 2026-10-12 04:42:05 UTC: flow control: ApiCallLimit | Api access frequency exceeds the limit. this ban will last 1 seconds
+master STOP detail at 2026-10-12 04:44:09 UTC: flow control: ApiCallLimit | Api access frequency exceeds the limit. this ban will last 1 seconds
 work STOP detail at 2026-10-11 12:29:17 UTC: flow control: ApiCallLimit | Api access frequency exceeds the limit. this ban will last 1 seconds
+work STOP detail at 2026-10-12 04:48:09 UTC: flow control: ApiCallLimit | Api access frequency exceeds the limit. this ban will last 1 seconds
+work STOP detail at 2026-10-12 04:50:06 UTC: flow control: ApiCallLimit | Api access frequency exceeds the limit. this ban will last 1 seconds
 ```
 
+בסבב 3 הוגדרו רצועות מחיר משוערות (מסומנות estimated) לעציצים, סלים וקופסאות בגודל רצפה ולקערות הגשה, כי קטגוריות השוק (עציץ ₪19–29, סל ₪49–69) מתאימות לפריטים קטנים.
+
 **כלכלה:** נחיתה = (מחיר ה-SKU שמתאים לחדר + המשלוח הזול עד 45 יום) × 3.3. מחיר לצרכן = הקצה העליון של רצועת השוק בישראל (`data/economics/market-prices.json`; ה.10). רווח לפי `pricing.ts` (מע"מ 18%, סליקה 2% + 1.2, החזרות 8%), לפני CAC. כרטיס נכתב רק עם fit 8+ אחרי מבט בתמונה, SKU שמידתו אומתה מול העמדה, עלות לא גבוהה מהכרטיס הקיים, ורווח 40%+ (VR1; פחות מזה רק כשאין חלופה בעמדה ובסגנון, ומסומן).
+
+## סבב 3 (2026-10-12)
+
+ל-65 העמדות שנשארו בלי מוצר שמיש אחרי שני סבבים: שאילתות בלי מילת סגנון (חומר וסוג מוצר), ממוינות לפי הזמנות, 2 עמודים לכל שאילתה, ו-12 הממצאים הטובים בכל עמדה נבדקו לעומק ובעין. **אף מוצר לא הגיע ל-fit 8.** כ-75–85% מהתוצאות היו סוג מוצר שגוי (רשתות ניקוז, סלי כביסה, קערות לחיות, תבניות נרות, חלקי אופניים), והשאר קטנים מדי או בלי עמידות למים. רק 3 עמדות יצאו מרשימת הריקות. מסקנה: בעמדות האלה החיפוש הטקסטואלי של AliExpress לא מוצא מוצר מעוצב, וצריך ספק אחר (CJ, Zendrop, ספק ישראלי) או חיפוש לפי תמונה (`ds.py image-search`) מתמונת הייחוס של המעצב.
 
 ## כרטיסי הטיוטה
 
@@ -57,7 +81,7 @@ fit 7+ במבט, מידה מאומתת, נחיתה זולה מהכרטיס הק�
 
 | חדר/עמדה | AliExpress | נחיתה ₪ | הכרטיס הקיים | נחיתה ₪ |
 | --- | --- | --- | --- | --- |
-| bath/bath-mat | [Waffle Bath Mat Rug Super Absorbent Non Slip Boho ](https://www.aliexpress.com/item/1005011772248198.html) (כפרי מודרני 7) | 37 | bath-mat-cj-tufted-cotton-frame-beige-40x60 (CJ Dropshipping) | 53 |
+| bath/bath-mat | [Waffle Bath Mat Rug Super Absorbent Non Slip Boho ](https://www.aliexpress.com/item/1005011772248198.html) (כפרי מודרני 7) | 37 | bath-mat-aliexpress-waffle-bath-mat-248198 (AliExpress) | 37 |
 | corridor/ceiling-lights | [Bamboo Ceiling Lamp Indoor Ceiling Light E27 Home ](https://www.aliexpress.com/item/1005010079227644.html) (בוהו 7) | 94 | ceiling-lights-cj-silk-pumpkin-lantern-30 (CJ Dropshipping) | 153 |
 | corridor/gallery-art | [Japanese Wabi Sabi Tree Abstract Canvas Print Post](https://www.aliexpress.com/item/1005012443176323.html) (ג'פנדי 8) | 25 | gallery-art-cj-black-botanical-cutout-set3 (CJ Dropshipping) | 83 |
 | dining-room/candle-holders | [Vintage Metal Taper Candle Holder with Handle Tray](https://www.aliexpress.com/item/1005012396864609.html) (כפרי מודרני 7) | 21 | candle-holders-aliexpress-matte-black-iron-pillar-set2 (AliExpress) | 41 |
@@ -66,13 +90,17 @@ fit 7+ במבט, מידה מאומתת, נחיתה זולה מהכרטיס הק�
 | hall/ceiling-light | [Boho Rattan Woven Ceiling Light Semi Flush Mount C](https://www.aliexpress.com/item/1005012561051994.html) (בוהו 7) | 74 | ceiling-light-cj-waxwood-dome-ash-40 (CJ Dropshipping) | 197 |
 | hall/framed-art | [Frameless Minimalist Wall Art Set in Brown and Bei](https://www.aliexpress.com/item/1005010493631735.html) (מודרני חם 7) | 26 | framed-art-cj-line-scribble-white-mat-50 (CJ Dropshipping) | 166 |
 | hall/wall-sconce | [Rattan Bamboo Wall Lamp Sconce Fixture Vintage Boh](https://www.aliexpress.com/item/1005010168671943.html) (בוהו 7) | 66 | wall-sconce-cj-white-fabric-cube-15-hall (CJ Dropshipping) | 109 |
+| kids/bookshelf | [2Pcs Bookshelf,Natural Wood Floating Wall Bookshel](https://www.aliexpress.com/item/1005008149230106.html) (נורדי 7) | 72 | bookshelf-aliexpress-natural-wood-floating-bookshelf-230106 (AliExpress) | 72 |
 | kids/framed-prints | [Japandi Wall Art Set of 2 Sage Green Landscape Pos](https://www.aliexpress.com/item/1005012553969661.html) (ג'פנדי 7) | 21 | framed-prints-cj-flower-cutout-set-30x40 (CJ Dropshipping) | 69 |
 | kids/pendant | [Rustic Woven Pendant Light Kitchen Island Boho Han](https://www.aliexpress.com/item/1005009394200914.html) (כפרי מודרני 7) | 84 | pendant-cj-fabric-dome-ash-cap-25 (CJ Dropshipping) | 144 |
+| living-room/basket | [Seaweed Wicker Basket Rattan Hanging Flowerpot  Di](https://www.aliexpress.com/item/1005001597545859.html) (ים תיכוני 7) | 45 | basket-zendrop-seagrass-belly-foldable-38 (Zendrop) | 60 |
 | living-room/curtains | [Beige Linen Sheer Curtains for Living Room Modern ](https://www.aliexpress.com/item/1005004556554205.html) (מודרני חם 8) | 87 | curtains-cj-japanese-linen-half-shade (CJ Dropshipping) | 143 |
 | living-room/framed-art | [Vintage Countryside Wall Art Print Retro Rustic Sp](https://www.aliexpress.com/item/1005006849743763.html) (כפרי מודרני 7.5) | 27 | framed-art-cj-morandi-triptych-sage (CJ Dropshipping) | 484 |
 | living-room/vase | [Vintage Distressed Clay Vase, Wabi-Sabi Rustic Cer](https://www.aliexpress.com/item/1005012472589009.html) (ג'פנדי 8.5) | 105 | vase-aliexpress-vintage-distressed-clay-vase-589009 (AliExpress) | 105 |
 | living-room/wall-decor | [Japandi Wall Art Set of 2 Sage Green Landscape Pos](https://www.aliexpress.com/item/1005012553969661.html) (ג'פנדי 8) | 29 | wall-decor-aliexpress-natural-raffia-woven-bohemian-763597 (AliExpress) | 46 |
 | master/bedside-sconces | [Boho Farmhouse Wall Sconces Natural Twine Hand Kni](https://www.aliexpress.com/item/1005009708965037.html) (כפרי מודרני 7) | 88 | bedside-sconces-cj-white-fabric-cube-15 (CJ Dropshipping) | 109 |
+| master/curtains | [Natural Linen Voile Curtain 132CM Drop Net Curtain](https://www.aliexpress.com/item/1005008289564712.html) (ים תיכוני 7.5) | 62 | curtains-aliexpress-natural-linen-s-fold-613202 (AliExpress) | 100 |
+| work/bookends | [（Summer6）Nature Bamboo Desktop Organizer Bookends ](https://www.aliexpress.com/item/1005010478897382.html) (ג'פנדי 7) | 20 | bookends-aliexpress-bamboo-bookends-897382 (AliExpress) | 20 |
 | work/pendant | [Rustic Woven Pendant Light Kitchen Island Boho Han](https://www.aliexpress.com/item/1005009394200914.html) (כפרי מודרני 7.5) | 84 | pendant-cj-fluted-ceramic-wood-cap-short-lantern (CJ Dropshipping) | 115 |
 | work/wall-sconce | [Rattan Bamboo Wall Lamp Sconce Fixture Vintage Boh](https://www.aliexpress.com/item/1005010168671943.html) (בוהו 8) | 66 | wall-sconce-cj-black-swan-arm-white-fabric-cone (CJ Dropshipping) | 85 |
 
@@ -80,7 +108,7 @@ fit 7+ במבט, מידה מאומתת, נחיתה זולה מהכרטיס הק�
 
 אין אף פריט עם fit 7+ במבט בשום סגנון (הסיבה העיקרית בטבלת החדר).
 
-living-room/planter, living-room/basket, living-room/bowl, living-room/candle-holders, living-room/pouf, dining-room/bench-pad, dining-room/sink-set, dining-room/utensil-crock, dining-room/cutting-boards, dining-room/condiment-set, dining-room/bowl, dining-room/tableware-set, dining-room/mug-set, dining-room/tea-towel, dining-room/step-stool, hall/console-vessel, hall/storage-boxes, hall/bench-cushion, hall/basket, hall/planter, hall/umbrella-stand, hall/runner-rug, master/floor-lamp, master/trinket-dish, master/bedside-carafe, master/throw, master/basket, master/pendant, work/waste-basket, work/magazine-holder, work/shelf-boxes, work/desk-tray, kids/roman-blind, kids/wall-sconce, kids/rug, kids/desk-organizer, kids/toy-cars, kids/doll, kids/bedding, kids/bedspread, kids/soft-toy, kids/toy-basket, kids/skateboard, kids/doll-pram, kids/desk-chair, bath/shower-dispensers, bath/shower-stool, bath/shower-curtain, bath/floor-planter, bath/towel-ladder, bath/storage-basket, bath/toilet-paper-stand, bath/bin, bath/toilet-brush, bath/ledge-planter, bath/reed-diffuser, bath/candle, bath/soap-dispenser, bath/toothbrush-cup, bath/towel-ring, bath/hand-towel, bath/ceiling-light, corridor/runner-rug, corridor/picture-lights, corridor/gallery-stool
+living-room/planter, living-room/bowl, living-room/candle-holders, living-room/pouf, dining-room/bench-pad, dining-room/sink-set, dining-room/utensil-crock, dining-room/cutting-boards, dining-room/condiment-set, dining-room/bowl, dining-room/tableware-set, dining-room/mug-set, dining-room/tea-towel, dining-room/step-stool, hall/console-vessel, hall/storage-boxes, hall/bench-cushion, hall/basket, hall/planter, hall/umbrella-stand, hall/runner-rug, master/floor-lamp, master/trinket-dish, master/bedside-carafe, master/throw, master/basket, master/pendant, work/waste-basket, work/magazine-holder, work/shelf-boxes, kids/roman-blind, kids/wall-sconce, kids/rug, kids/toy-cars, kids/doll, kids/bedding, kids/bedspread, kids/soft-toy, kids/toy-basket, kids/skateboard, kids/doll-pram, kids/desk-chair, bath/shower-dispensers, bath/shower-stool, bath/shower-curtain, bath/floor-planter, bath/towel-ladder, bath/storage-basket, bath/toilet-paper-stand, bath/bin, bath/toilet-brush, bath/ledge-planter, bath/reed-diffuser, bath/candle, bath/soap-dispenser, bath/toothbrush-cup, bath/towel-ring, bath/hand-towel, bath/ceiling-light, corridor/runner-rug, corridor/picture-lights, corridor/gallery-stool
 
 ## 30 הרווחיים ביותר (fit 7.5+ במבט, מידה מאומתת)
 
@@ -100,19 +128,20 @@ living-room/planter, living-room/basket, living-room/bowl, living-room/candle-ho
 | 12 | work/framed-art | [Modern Minimalist Boho Lines Abstract Canvas ](https://www.aliexpress.com/item/1005008404475724.html) | מודרני חם 7.5 | 37 | 219 | 128 | 69% |
 | 13 | work/framed-art | [Modern Minimalist Neutral Gallery Wall Art Bl](https://www.aliexpress.com/item/1005006744802995.html) | מודרני חם 8 | 39 | 219 | 126 | 68% |
 | 14 | living-room/vase | [Vintage Distressed Clay Vase, Wabi-Sabi Rusti](https://www.aliexpress.com/item/1005012472589009.html) | ג'פנדי 8.5 | 105 | 299 | 121 | 48% |
-| 15 | living-room/curtains | [Cotton Linen Curtain Look Yarn Tulle S Fold S](https://www.aliexpress.com/item/1005012745902882.html) | נורדי 7.5 | 64 | 179 | 71 | 47% |
-| 16 | master/curtains | [Linen Blend Beige Curtains 96 Inches Long for](https://www.aliexpress.com/item/1005008884122000.html) | מודרני חם 8 | 78 | 179 | 56 | 37% |
-| 17 | work/pendant | [Rustic Woven Pendant Light Kitchen Island Boh](https://www.aliexpress.com/item/1005009394200914.html) | כפרי מודרני 7.5 | 84 | 179 | 51 | 34% |
-| 18 | living-room/curtains | [Natural Linen Curtains 84 Inch Length for Liv](https://www.aliexpress.com/item/1005006755784378.html) | כפרי מודרני 8 | 84 | 179 | 51 | 33% |
-| 19 | work/bookends | [Nature Wooden Bookends Desktop Bookshelf Desk](https://www.aliexpress.com/item/1005012292219885.html) | נורדי 7.5 | 23 | 99 | 51 | 60% |
-| 20 | living-room/curtains | [Beige Linen Sheer Curtains for Living Room Mo](https://www.aliexpress.com/item/1005004556554205.html) | מודרני חם 8 | 87 | 179 | 47 | 31% |
-| 21 | living-room/cushions | [Boho Throw Pillow Cover for Sofa Living Room ](https://www.aliexpress.com/item/1005009261623058.html) | בוהו 7.5 | 30 | 99 | 44 | 53% |
-| 22 | work/desk-organizer | [Stationery Storage Wood Vine Rattan Pen Holde](https://www.aliexpress.com/item/1005013248832816.html) | כפרי מודרני 7.5 | 20 | 59 | 24 | 48% |
-| 23 | work/curtains | [1pc japanese folk wabi-sabi style crumpled li](https://www.aliexpress.com/item/1005006791212463.html) | ג'פנדי 8 | 111 | 179 | 24 | 16% |
-| 24 | work/wall-sconce | [Rattan Bamboo Wall Lamp Sconce Fixture Vintag](https://www.aliexpress.com/item/1005010168671943.html) | בוהו 8 | 66 | 119 | 23 | 23% |
-| 25 | dining-room/dining-rug | [Wabi-sabi Style Carpets for Living Room White](https://www.aliexpress.com/item/1005006306177264.html) | ג'פנדי 7.5 | 591 | 799 | 15 | 2% |
-| 26 | dining-room/kitchen-runner | [VIKAMA 2PC Modern Minimalist Wabi Sabi Kitche](https://www.aliexpress.com/item/1005012628590923.html) | ג'פנדי 7.5 | 92 | 129 | 5 | 5% |
-| 27 | master/bedside-sconces | [Boho Farmhouse Wall Sconces Natural Twine Han](https://www.aliexpress.com/item/1005009708965037.html) | בוהו 7.5 | 88 | 119 | 2 | 2% |
+| 15 | master/curtains | [Natural Linen Voile Curtain 132CM Drop Net Cu](https://www.aliexpress.com/item/1005008289564712.html) | ים תיכוני 7.5 | 62 | 179 | 73 | 48% |
+| 16 | living-room/curtains | [Cotton Linen Curtain Look Yarn Tulle S Fold S](https://www.aliexpress.com/item/1005012745902882.html) | נורדי 7.5 | 64 | 179 | 71 | 47% |
+| 17 | master/curtains | [Linen Blend Beige Curtains 96 Inches Long for](https://www.aliexpress.com/item/1005008884122000.html) | מודרני חם 8 | 78 | 179 | 56 | 37% |
+| 18 | work/pendant | [Rustic Woven Pendant Light Kitchen Island Boh](https://www.aliexpress.com/item/1005009394200914.html) | כפרי מודרני 7.5 | 84 | 179 | 51 | 34% |
+| 19 | living-room/curtains | [Natural Linen Curtains 84 Inch Length for Liv](https://www.aliexpress.com/item/1005006755784378.html) | כפרי מודרני 8 | 84 | 179 | 51 | 33% |
+| 20 | work/bookends | [Nature Wooden Bookends Desktop Bookshelf Desk](https://www.aliexpress.com/item/1005012292219885.html) | נורדי 7.5 | 23 | 99 | 51 | 60% |
+| 21 | living-room/curtains | [Beige Linen Sheer Curtains for Living Room Mo](https://www.aliexpress.com/item/1005004556554205.html) | מודרני חם 8 | 87 | 179 | 47 | 31% |
+| 22 | living-room/cushions | [Boho Throw Pillow Cover for Sofa Living Room ](https://www.aliexpress.com/item/1005009261623058.html) | בוהו 7.5 | 30 | 99 | 44 | 53% |
+| 23 | work/desk-organizer | [Stationery Storage Wood Vine Rattan Pen Holde](https://www.aliexpress.com/item/1005013248832816.html) | כפרי מודרני 7.5 | 20 | 59 | 24 | 48% |
+| 24 | work/curtains | [1pc japanese folk wabi-sabi style crumpled li](https://www.aliexpress.com/item/1005006791212463.html) | ג'פנדי 8 | 111 | 179 | 24 | 16% |
+| 25 | work/wall-sconce | [Rattan Bamboo Wall Lamp Sconce Fixture Vintag](https://www.aliexpress.com/item/1005010168671943.html) | בוהו 8 | 66 | 119 | 23 | 23% |
+| 26 | dining-room/dining-rug | [Wabi-sabi Style Carpets for Living Room White](https://www.aliexpress.com/item/1005006306177264.html) | ג'פנדי 7.5 | 591 | 799 | 15 | 2% |
+| 27 | dining-room/kitchen-runner | [VIKAMA 2PC Modern Minimalist Wabi Sabi Kitche](https://www.aliexpress.com/item/1005012628590923.html) | ג'פנדי 7.5 | 92 | 129 | 5 | 5% |
+| 28 | master/bedside-sconces | [Boho Farmhouse Wall Sconces Natural Twine Han](https://www.aliexpress.com/item/1005009708965037.html) | בוהו 7.5 | 88 | 119 | 2 | 2% |
 
 ## קבצים
 
