@@ -25,7 +25,7 @@ REPO = os.path.abspath(os.path.join(HERE, "..", ".."))
 sys.path.insert(0, HERE)
 import ds, client  # noqa: E402
 from ds import budget, cache, registry  # noqa: E402
-from scale_config import SLOTS, STYLES, GLOBAL_BAD, ROOMS, ROOM_DIRS  # noqa: E402
+from scale_config import SLOTS, STYLES, GLOBAL_BAD, ROOMS, ROOM_DIRS, ROUND3  # noqa: E402
 
 OUT = os.path.join(REPO, "data", "leads", "aliexpress", "scale-2026-10")
 DEEP = os.path.join(REPO, "data", "leads", "aliexpress", "deep-2026-10")
@@ -35,6 +35,7 @@ STYLE_HE = {"nordic": "נורדי", "warm-modern": "מודרני חם", "japandi
             "modern-country": "כפרי מודרני", "boho": "בוהו"}
 TODAY = "2026-10-11"
 REPICK = False
+ROUND3_ON = False
 # written by ds.build_card for the cards this run makes (--by aliexpress-scale); other sessions' cards never carry it
 OWN_MARK = "DRAFT from AliExpress DS API (2026-10-11, aliexpress-scale)"
 
@@ -96,8 +97,10 @@ def max_landed(retail, target=0.35):
 
 # ----------------------------------------------------------------------------- screen
 
-def search(a, q, page):
+def search(a, q, page, sort=None):
     params = {"keyWord": q, "local": "en_US", "countryCode": "IL", "currency": "USD", "pageSize": 20, "pageIndex": page}
+    if sort:
+        params["sortBy"] = sort
     hit = cache.get_query(ds.SRC, "search", params)
     if hit:
         return hit["payload"]
@@ -184,6 +187,26 @@ def do_screen(room, a):
                         pages.append(2)
                 rows += got
         print("[screen] %s: %d rows so far" % (key, len(rows)), file=sys.stderr)
+    if ROUND3_ON:
+        for key in slots_of(room):
+            for q in ROUND3.get(key, []):
+                for page in (1, 2):
+                    try:
+                        res = guard(search, a, q, page, "orders,desc")
+                    except client.AeError as e:
+                        print("[screen] skip %r p%d: %s %s" % (q, page, e.code, e.message), file=sys.stderr)
+                        continue
+                    for p in res.get("products") or []:
+                        base = {"item_id": str(p.get("itemId")), "title": p.get("title"), "price_usd": fnum(p.get("targetSalePrice")),
+                                "orders": int(fnum(p.get("orders")) or 0), "rating": fnum(p.get("evaluateRate")),
+                                "image": p.get("itemMainPic"), "query": q, "page": page, "slot": key.split("/")[1],
+                                "cate": p.get("cateId"), "round": 3}
+                        for style in STYLE_ORDER:
+                            r = dict(base, style=style)
+                            r["score"], r["why"] = score_row(r, key, style)
+                            rows.append(r)
+            if ROUND3.get(key):
+                print("[screen] round 3 %s: %d rows so far" % (key, len(rows)), file=sys.stderr)
     with open(path, "w") as f:
         for r in rows:
             f.write(json.dumps(r, ensure_ascii=False) + "\n")
@@ -249,6 +272,24 @@ def shortlist(room, top):
                 if len(ranked) >= top:
                     break
             picks[(slot, style)] = ranked
+        if key in ROUND3:  # weak slot: the best round-3 finds get the full check too, under their best-scoring style
+            best = {}
+            for r in rows:
+                if r["slot"] == slot and r.get("round") == 3 and r["score"] >= 35 and "no-noun" not in r["why"]:
+                    if r["item_id"] not in best or best[r["item_id"]]["score"] < r["score"]:
+                        best[r["item_id"]] = r
+            have = {x["item_id"] for st in STYLE_ORDER for x in picks[(slot, st)]}
+            for r in sorted(best.values(), key=lambda r: -r["score"]):
+                if len(have) >= 12 + len(have & set(best)) and False:
+                    break
+                c = registry.check(ds.key_of(r["item_id"]), reg)
+                if c["action"] == "skip" and (c.get("entry") or {}).get("status") == "rejected":
+                    continue
+                if r["item_id"] not in have:
+                    picks[(slot, r["style"])].append(r)
+                    have.add(r["item_id"])
+                if len([x for x in have if x in best]) >= 12:
+                    break
     return picks
 
 
@@ -381,6 +422,20 @@ def do_sheet(room, per_style):
                     continue
                 seen.add(rec["item_id"])
                 cells.append((style, rec, m))
+        if key in ROUND3:  # weak slot: also show the best round-3 (style-neutral) finds, ranked by screening score
+            det = json.load(open(os.path.join(OUT, "detail", room + ".json")))
+            r3 = []
+            for rec in det.values():
+                if rec.get("slot") != slot or rec["item_id"] in seen or not rec.get("ship_ok") or landed(rec) is None:
+                    continue
+                scr = {st: v for st, v in (rec.get("screen") or {}).items() if v.get("query") in ROUND3[key]}
+                if scr:
+                    st = max(scr, key=lambda x: scr[x]["score"])
+                    band, _ = band_of(SLOTS[key])
+                    r3.append((scr[st]["score"], st, rec, economics(band[1], landed(rec))[1]))
+            for _, st, rec, m in sorted(r3, key=lambda x: -x[0])[:12]:
+                seen.add(rec["item_id"])
+                cells.append((st, rec, m))
         if not cells:
             continue
         W, H, cols = 260, 300, 6
@@ -767,13 +822,15 @@ def main():
     ap.add_argument("--top", type=int, default=8)
     ap.add_argument("--per-style", type=int, default=3)
     ap.add_argument("--no-cards", action="store_true")
+    ap.add_argument("--round3", action="store_true", help="screen: also run the style-neutral round-3 queries (scale_config.ROUND3)")
     ap.add_argument("--repick", action="store_true", help="detail: re-pick the room SKU from the cache (after a size-rule fix)")
     a0 = ap.parse_args()
     if a0.stage == "readme":
         return do_readme() or 0
     a = ns(a0.room, a0.max_calls)
-    global REPICK
+    global REPICK, ROUND3_ON
     REPICK = a0.repick
+    ROUND3_ON = a0.round3
     t0 = time.time()
     try:
         if a0.stage in ("screen", "all"):
