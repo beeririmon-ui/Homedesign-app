@@ -1,0 +1,733 @@
+{
+  "style": "warm-modern",
+  "date": "2026-10-12",
+  "author": "master-designer",
+  "status_he": "קטלוג טיוטה לסגנון שעוד אין לו Bible מאושר (docs/design-bible/warm-modern-brief-draft.md). כל הציונים זמניים. לא שונו כרטיסים, עמדות, בחירות או מסמכים מחייבים.",
+  "economics_he": "נטו = מחיר/1.18; תרומה = נטו − נחיתה − (0.02×מחיר + 1.2) − 0.08×נטו; מרווח = תרומה/נטו, לפני CAC, שער 3.3. price_basis: card = מחיר הכרטיס (data/economics/products.json), slot = מחיר העמדה בחבילה, proposed = מחיר מוצע לפי שווי בישראל שלא אושר (ה.10). זוגות וסטים מתומחרים כמו שהם נמכרים (P1). margin_pct עם estimate=true הוא הערכה.",
+  "scores_note_he": "style_score בבחירה הוא לאפשרות שמוצגת (צבע או מידה). card_scores בסוף הקובץ הוא ציון אחד לכרטיס, במבנה של style_scores, ומשם ממזגים לכרטיסים.",
+  "rooms": {
+    "living-room": {
+      "coverage": { "slots": 21, "with_3": 4, "with_1_2": 5, "empty": 12 },
+      "slots": {
+        "curtains": {
+          "picks": [
+            { "card_id": "curtains-aliexpress-beige-linen-sheer-curtains-554205", "option_he": "ווים או סרט קפלים (לא עיניות), 150×270, זוג", "style_score": 8.0, "price_ils": 349, "price_basis": "proposed", "margin_pct": 30.1, "why_he": "פשתן בז׳ עם סלאב חזק ומט, הבד של מודרני חם, וברירת מחדל ששונה מהנורדי. 270 מול 275–285: לבדוק בפריים, או מידה מותאמת (הליסטינג מקבל)." },
+            { "card_id": "curtains-aliexpress-linen-blend-s-fold-180502", "option_he": "קפלי S, ‏132×270, זוג", "style_score": 8.0, "price_ils": 299, "price_basis": "proposed", "margin_pct": 40.5, "why_he": "משפחת הווילונות של הבית בפשתן טבעי בהיר: הווריאציה הבהירה, והיחידה שעוברת 40%." }
+          ],
+          "gap_he": "חסרה וריאציה כהה בטאופ או פטריה (L ‏60–72), פשתן כבד חצי-אטום, 140×280. בלעדיה שתי הווריאציות בהירות וקרובות.",
+          "shared_with_nordic": true
+        },
+        "framed-art": {
+          "picks": [
+            { "card_id": "framed-art-aliexpress-frameless-minimalist-wall-art-631735", "option_he": "TL2356-3pcs, שלישייה 50×70, מסגרות אגוז ופספרטו עצם", "style_score": 8.5, "price_ils": 379, "price_basis": "slot", "margin_pct": 18, "estimate": true, "conditional_he": "PR1: הדפס בלי מסגרת ומסגור בישראל. הרווח לפי ההערכה ב-profit-fix/decor.md.", "why_he": "מופשט בשמנת, חום ושחור: השפה של הסגנון ונשא האספרסו. שלישייה ברווח 6 היא כ-162, בתוך 145–165." },
+            { "card_id": "framed-art-aliexpress-modern-minimalist-neutral-gallery-802995", "option_he": "01–03, שלישייה 50×70", "style_score": 8.0, "price_ils": 379, "price_basis": "slot", "margin_pct": 18, "estimate": true, "conditional_he": "PR1", "why_he": "צורות אורגניות בשחור וטאופ על בז׳: הווריאציה עם הניגוד. לוודא שהשחור נמדד אספרסו (L ‏12–22) ולא שחור טהור." }
+          ],
+          "gap_he": "שתיהן בלי מסגרת: בלי PR1 או סיטונאי ישראלי לסטים ממוסגרים העמדה ריקה. חסרה וריאציה שלישית שקטה בשמנת וטאופ.",
+          "shared_with_nordic": false
+        },
+        "wall-decor": {
+          "picks": [],
+          "gap_he": "אין. הרפיה והמקרמה של הנורדי אסורות כאן. הכיוון: תבליט טיח עגול 35–45, צלחת אגוז או אגרטל קיר מעץ (ליד AE 1005012850267767, לא נבדק בעין).",
+          "shared_with_nordic": false
+        },
+        "accent-sconces": {
+          "picks": [
+            { "card_id": "accent-sconces-aliexpress-travertine-cylinder-walnut-choice", "style_score": 8.5, "price_ils": 599, "price_basis": "proposed", "margin_pct": 35.0, "why_he": "גליל טרוורטין על לוחית אגוז: הנורדי פסל אותו בגלל האגוז, וכאן זו החתימה. לשאול על אור מעלה-מטה (הליסטינג: למטה בלבד); רוחב 6.5 מתחת ל-10." },
+            { "card_id": "accent-sconces-cj-travertine-block-updown-8x16", "style_score": 8.0, "price_ils": 599, "price_basis": "proposed", "margin_pct": 43.7, "why_he": "בלוק טרוורטין עם אור מעלה-מטה, הרווחי בעמדה. קצוות חדים מהשפה המעוגלת; לוודא מושחז ולא מלוטש." },
+            { "card_id": "accent-sconces-cj-ribbed-travertine-half-cylinder-wood-bracket", "style_score": 8.0, "price_ils": 599, "price_basis": "card", "margin_pct": 29.9, "why_he": "חצי גליל טרוורטין מחורץ: החריצים הם שפת הסגנון. מידות Type B לא מוצהרות; לבקש זרוע כהה אם יש." }
+          ],
+          "gap_he": "שלוש צורות, אף אחת לא מאומתת בחשמל (CE, ‏220–240V). אותה משפחה כמו בנורדי, בברירת מחדל אחרת.",
+          "shared_with_nordic": true
+        },
+        "wall-sconce": {
+          "picks": [],
+          "gap_he": "אין מנורת קריאה עם זרוע שלא מפסידה. הכיוון: זרוע אגוז או ברונזה ואהיל פשתן בקפלים, תקע וכבל קצר לשקע (ג.6). קונוס הטרוורטין על אגוז (מחווט) גיבוי בלבד: בלי זרוע הוא לא מאיר את הכורסה.",
+          "shared_with_nordic": false
+        },
+        "vase": {
+          "picks": [
+            { "card_id": "vase-cj-textured-white-stoneware", "option_he": "Large, ‏32×16", "style_score": 8.5, "price_ils": 229, "price_basis": "card", "margin_pct": 25.2, "why_he": "אבנית לבנה מקומטת, טונאלית ופסלית מול החלון. ברירת מחדל אחרת מהנורדי. לוודא שהלבן לא קר." },
+            { "card_id": "vase-cj-black-matte-stoneware-jar-30", "option_he": "Style4, ‏30×15", "style_score": 8.0, "price_ils": 229, "price_basis": "slot", "margin_pct": 37.5, "why_he": "כד אבנית כהה בחול: נשא האספרסו על האדן. בפיילוט לבדוק שמול החלון הוא נקרא כחומר ולא כחור." },
+            { "card_id": "vase-aliexpress-vintage-distressed-clay-vase-589009", "option_he": "L, ‏31×15", "style_score": 8.0, "price_ils": 229, "price_basis": "card", "margin_pct": 35.0, "why_he": "חרס מסורק בשמנת חמה, ברירת המחדל הנורדית; כאן וריאציה 3, כי המסורק נוטה לכפרי." }
+          ],
+          "gap_he": "אותה שלישייה של VL1 בסדר אחר. חסר כלי בקרמל או טאופ, כדי שתהיה וריאציה בגוון ההדגשה. הענפים: זית יבש או רוסקוס, לא אקליפטוס.",
+          "shared_with_nordic": true
+        },
+        "rug": {
+          "picks": [],
+          "gap_he": "אין שטיח שלא מפסיד: הקלוע של CJ (8.5 בסגנון) מפסיד ‎−137.9%. צריך צמר בלולאות או בוקלה טון-על-טון בגריז׳ 240×340 מספק ישראלי (IL1). ליד בצורה: AE 1005012532799427 (קשתות טון-על-טון), פוליאסטר, מחיר מידה גדולה לא ידוע.",
+          "shared_with_nordic": false
+        },
+        "floor-lamp": {
+          "picks": [],
+          "gap_he": "המנורה הנכונה קיימת: floor-lamp-cj-pleated-walnut-stem-158 (מוט אגוז, פרטי פליז, אהיל קפלים 37, גובה 158, בסיס 26), ‏9.0 בסגנון, ומפסידה ‎−107% בגלל קרטון של 74. לחפש אותה אצל יבואן ישראלי או באריזה שטוחה.",
+          "shared_with_nordic": false
+        },
+        "planter": {
+          "picks": [],
+          "gap_he": "אין כלי בגובה 45 ומעלה. הבטון המחורץ (42×35.5) נמוך ב-9.5 ועבר להורים ולעבודה. צריך כלי מחורץ או בחול, 35×45–50; כבד, ולכן מלאי מקומי (LK1).",
+          "shared_with_nordic": false
+        },
+        "sofa-cover": {
+          "picks": [],
+          "gap_he": "בהמתנה (VR3, ‏LQ1). בסגנון הזה הספה מרונדרת בבוקלה גריז׳ #CDC2B3 עם משענות מעוגלות, וכיסוי רק אחרי דגם.",
+          "shared_with_nordic": false
+        },
+        "cushions": {
+          "picks": [
+            { "card_id": "cushions-cj-boucle-teddy", "set_id": "A", "set_items": [
+                { "card_id": "cushions-cj-boucle-teddy", "option_he": "White, ‏50×50" },
+                { "card_id": "cushions-cj-knitted-chenille-bean-green", "option_he": "21 Camel, ‏45×45" },
+                { "card_id": "cushions-cj-boucle-teddy", "option_he": "Milk Tea, ‏30×50" },
+                { "card_id": "sofa-cover-cj-cotton-muslin-fringe", "option_he": "Flax brown, ‏150×200 (שמיכה)" }
+              ], "style_score": 8.5, "price_ils": 296, "price_basis": "card", "margin_pct": 12.4, "why_he": "סט טונאלי: עצם, תה חלב וקאמל על גריז׳, ומוסלין בפשתן. הקאמל הוא נשא הקרמל. כל הפריטים מליסטינגים של הנורדי, בצבעים אחרים." },
+            { "card_id": "cushions-aliexpress-textured-boucle-throw-pillow", "set_id": "B", "set_items": [
+                { "card_id": "cushions-aliexpress-textured-boucle-throw-pillow", "option_he": "Oatmeal (טאופ), ‏50×50" },
+                { "card_id": "cushions-cj-wide-stripe-corduroy-light-green", "option_he": "Camel" },
+                { "card_id": "cushions-cj-linen-look-charcoal", "option_he": "Beige, ‏30×50" },
+                { "card_id": "sofa-cover-cj-cotton-muslin-fringe", "option_he": "Pecan, ‏150×200 (שמיכה)" }
+              ], "style_score": 8.0, "price_ils": 286, "price_basis": "card", "margin_pct": 13.0, "why_he": "ציר הטקסטורה: בוקלה בטאופ, צלעות קורדרוי בקאמל ופשתן בז׳, ושמיכת Pecan." },
+            { "card_id": "cushions-cj-corduroy-patchwork", "set_id": "C", "set_items": [
+                { "card_id": "cushions-cj-boucle-teddy", "option_he": "Light Brown, ‏50×50" },
+                { "card_id": "cushions-cj-corduroy-patchwork", "option_he": "Dark Coffee, ‏45×45" },
+                { "card_id": "cushions-cj-linen-look-ivory", "option_he": "Light Beige Gray, ‏30×50" },
+                { "card_id": "sofa-cover-cj-cotton-muslin-fringe", "option_he": "Clay, ‏150×200 (שמיכה)" }
+              ], "style_score": 7.5, "price_ils": 296, "price_basis": "card", "margin_pct": 10.6, "why_he": "הווריאציה הכהה: חום בהיר, קפה כהה ואפור-בז׳, ושמיכת Clay. מורידה את מרכז הכובד של הספה בכוונה, ולכן לא ברירת מחדל." }
+          ],
+          "gap_he": "כל הסטים מתחת ל-40% כשכל פריט נשלח לבד. בהזמנה מאוחדת מ-CJ ההערכה 35–40% (profit-fix). סט B כולל פריט AE ולכן משלוח נוסף.",
+          "shared_with_nordic": true
+        },
+        "basket": {
+          "picks": [
+            { "card_id": "basket-cj-jute-rope-cylinder", "style_score": 8.0, "price_ils": 119, "price_basis": "proposed", "margin_pct": 9.0, "why_he": "גליל חבל צפוף בגוון טבעי. ב-₪79 מפסיד, ולכן רק מ-₪119." }
+          ],
+          "gap_he": "חסר הסל של הסגנון: עור קוניאק, לבד בטאופ או חבל באספרסו, 35–38 × 35–42.",
+          "shared_with_nordic": true
+        },
+        "magazine-holder": {
+          "picks": [],
+          "gap_he": "המוצר הנכון קיים ומפסיד: magazine-holder-cj-gunmetal-leather-strap (רצועות עור קוניאק, 8.0, ‎−69.8%). לחפש מתלה עם רצועות עור 26–32 × 18–22 × 36–48 במשלוח זול או מקומי.",
+          "shared_with_nordic": false
+        },
+        "table-runner": {
+          "picks": [],
+          "gap_he": "אין ראנר שמתאים: הקיימים עם פרנזים ארוכים או ארוכים מדי. צריך פשתן כבד בטאופ או עצם, 33×120, מכופל בלי פרנזים. אפשר לוותר על הראנר בסגנון הזה (שאלה למשתמש).",
+          "shared_with_nordic": false
+        },
+        "bowl": {
+          "picks": [
+            { "card_id": "bowl-cj-matte-black-bowl-20", "option_he": "12style, ‏20×8", "style_score": 7.5, "price_ils": 79, "price_basis": "proposed", "margin_pct": 28.7, "why_he": "ברירת מחדל למרות 7.5: נשא האספרסו השני בסלון (כלל 'כל הדגשה פעמיים'), ליד פמוטי הטרוורטין. השחור נמדד #2F2F2E, ניטרלי מעט." },
+            { "card_id": "bowl-cj-glutinous-white-belly-bowl-21", "style_score": 8.0, "price_ils": 79, "price_basis": "proposed", "margin_pct": 8.6, "why_he": "קערת בטן לבנה מט, הווריאציה הבהירה; ברירת המחדל הנורדית." },
+            { "card_id": "bowl-cj-speckled-ivory-wide-bowl-21", "style_score": 7.5, "price_ils": 79, "price_basis": "card", "margin_pct": 11.8, "why_he": "שנהב מנוקד עם שפת חרס, רחבה ונמוכה." }
+          ],
+          "gap_he": "חסרה קערה מאגוז או מטרוורטין (מותר כאן). הרווח של שתי הלבנות נמוך.",
+          "shared_with_nordic": true
+        },
+        "candle-holders": {
+          "picks": [
+            { "card_id": "candle-holders-cj-travertine-pedestal", "option_he": "זוג", "style_score": 9.0, "price_ils": 199, "price_basis": "card", "margin_pct": 7.1, "why_he": "טרוורטין על רגל, חומר הדגל, וחזרה שנייה על הטרוורטין של זוג המנורות." },
+            { "card_id": "candle-holders-cj-ceramic-pedestal-tray", "option_he": "White, זוג", "style_score": 7.0, "price_ils": 149, "price_basis": "proposed", "margin_pct": 37, "estimate": true, "why_he": "קרמיקה לבנה על רגל אגוז; כדורי העץ זרים מעט. משלוח לזוג לא צוטט." }
+          ],
+          "gap_he": "חסר זוג פליז מוברש, השימוש המותר בפליז בסלון.",
+          "shared_with_nordic": true
+        },
+        "pouf": {
+          "picks": [],
+          "gap_he": "אין. פוף בוקלה עגול או עור קוניאק, 42–45 × 35–36; כבד במשלוח, ולכן ספק ישראלי.",
+          "shared_with_nordic": false
+        },
+        "pendant": {
+          "picks": [
+            { "card_id": "pendant-cj-silk-pumpkin-lantern", "style_score": 8.0, "price_ils": 299, "price_basis": "slot", "margin_pct": 12.3, "conditional_he": "זמני: כנראה אותו מוצר כמו ברירת המחדל הנורדית מספק אחר, וזה סותר את כלל הייחוד בעמדת גיבור.", "why_he": "פנס משי מצולע שטוח, רך ומעוגל. מפזר תחתון חובה." }
+          ],
+          "gap_he": "חסרה תלויה ייחודית לסגנון: כדור משי מצולע או אופל 45–50, או תוף טיח, עם כיפה בברונזה.",
+          "shared_with_nordic": true
+        },
+        "sofa": {
+          "picks": [],
+          "gap_he": "רהיט קבוע (תוכנית ב'). מועמדים: TRACE של Tollman's DOT ‏(222×92×79, טאופ, מח 7.5, תמונות ערוכות) ו-AYA ‏(264, LQ1). הוואו של הסגנון: משענות מעוגלות ובוקלה.",
+          "shared_with_nordic": false
+        },
+        "coffee-table": {
+          "picks": [],
+          "gap_he": "רהיט קבוע. מועמד: Olia של IDANA ‏(120×65×38, אלון מלא, מח 7.5). הכיוון: גלולה מאגוז עם משטח 5 ובסיס תוף, לא טרוורטין (הפמוטים כבר מאבן).",
+          "shared_with_nordic": false
+        },
+        "armchair": {
+          "picks": [],
+          "gap_he": "רהיט קבוע. מועמדת: נינה של KADO ‏(71×67×73, קשת עץ מלא, צילום אמיתי, מח 8.5). המשתמש קרא לה 'מוזרה' ושמר אותה לסגנון אחר: החלטה שלו. עומק 67 מול 78.",
+          "shared_with_nordic": false
+        }
+      }
+    },
+    "dining-room": {
+      "coverage": { "slots": 27, "with_3": 3, "with_1_2": 6, "empty": 18 },
+      "slots": {
+        "dining-pendant": {
+          "picks": [
+            { "card_id": "pendant-cj-silk-pumpkin-lantern-40-master", "option_he": "קוטר 50, אור חם", "style_score": 8.0, "price_ils": 399, "price_basis": "proposed", "margin_pct": 17, "estimate": true, "conditional_he": "CE ו-220–240V לא מאומתים; הרווח לפי הנחיתה שהנורדי העריך (כ-₪246).", "why_he": "פנס משי מצולע 50: הצורה הרכה של הסגנון מעל השולחן." }
+          ],
+          "gap_he": "חסרות שתיים, אחת מהן ייחודית לסגנון (הנורדי מחפש את אותו פנס): פעמון קפלים 50 או כיפת טיח.",
+          "shared_with_nordic": true
+        },
+        "table-runner": {
+          "picks": [
+            { "card_id": "table-runner-aliexpress-solid-color-textured-runner-525144", "option_he": "40×140", "style_score": 7.5, "price_ils": 69, "price_basis": "slot", "margin_pct": 40.1, "why_he": "טאופ #9C8C7C, בדיוק הגוון המשני. פוליאסטר, דירוג 1.0 ממכירה אחת, ו-40 מול 38: לבדוק בתקריב." }
+          ],
+          "gap_he": "חסרים פשתן אמיתי בעצם ובקרמל, 33–38 × 135–145.",
+          "shared_with_nordic": true
+        },
+        "centerpiece-vase": {
+          "picks": [
+            { "card_id": "nightstand-vase-aliexpress-handmade-wabi-sabi-vase-665862", "option_he": "Color E, ‏24.5×11", "style_score": 8.5, "price_ils": 179, "price_basis": "proposed", "margin_pct": 15.4, "why_he": "בקבוק וואבי-סאבי בחול מט, טונאלי עם הטרוורטין. ברירת מחדל ולא האבנית הלבנה, כי היא ברירת המחדל של הסלון." },
+            { "card_id": "vase-cj-textured-white-stoneware", "option_he": "Medium, ‏26.5×17.5", "style_score": 8.5, "price_ils": 199, "price_basis": "proposed", "margin_pct": 24, "estimate": true, "why_he": "אבנית לבנה מקומטת. המשלוח צוטט רק ל-Large." },
+            { "card_id": "centerpiece-vase-cj-matte-frosted-tapered-28", "option_he": "Black L", "style_score": 7.5, "price_ils": 199, "price_basis": "card", "margin_pct": 38.1, "why_he": "קונוס מט כהה, נשא אספרסו על השולחן. לוודא שאינו שחור טהור." }
+          ],
+          "gap_he": "",
+          "shared_with_nordic": true
+        },
+        "candle-holders": {
+          "picks": [
+            { "card_id": "candle-holders-cj-travertine-pedestal", "option_he": "זוג, נרות 8 ו-12", "style_score": 9.0, "price_ils": 199, "price_basis": "card", "margin_pct": 7.1, "why_he": "טרוורטין, מותר כאן כי בסגנון אין חובת פחם בפמוטים. נרות נמוכים כדי שהאגרטל יישאר גבוה ב-5 לפחות." },
+            { "card_id": "candle-holders-aliexpress-matte-black-iron-pillar-set2", "style_score": 7.0, "price_ils": 79, "price_basis": "proposed", "margin_pct": 26.5, "why_he": "צלחות ברזל שחור מט נמוכות, הווריאציה הכהה; ברירת המחדל הנורדית." },
+            { "card_id": "candle-holders-cj-ceramic-pedestal-tray", "option_he": "White, זוג", "style_score": 7.0, "price_ils": 149, "price_basis": "proposed", "margin_pct": 37, "estimate": true, "why_he": "קרמיקה על רגל אגוז. משלוח לזוג לא צוטט." }
+          ],
+          "gap_he": "חסרים פמוטי פליז מוברש.",
+          "shared_with_nordic": true
+        },
+        "curtains": {
+          "picks": [
+            { "card_id": "curtains-aliexpress-beige-linen-sheer-curtains-554205", "option_he": "פאנל, ווים, 150×270", "style_score": 8.0, "price_ils": 179, "price_basis": "proposed", "margin_pct": 31, "why_he": "פשתן בז׳ עם סלאב. מול 278–282 לבקש 280." },
+            { "card_id": "curtains-aliexpress-linen-blend-s-fold-180502", "option_he": "פאנל, קפלי S, ‏132×270", "style_score": 8.0, "price_ils": 159, "price_basis": "proposed", "margin_pct": 40.6, "why_he": "משפחת הבית, פשתן טבעי בהיר." },
+            { "card_id": "curtains-aliexpress-cotton-linen-curtain-look-902882", "option_he": "פאנל, קפלי S", "style_score": 7.0, "price_ils": 159, "price_basis": "proposed", "margin_pct": 41.3, "why_he": "שנהב בהיר מעצם הסגנון; הרווחי." }
+          ],
+          "gap_he": "חסרה וריאציה בטאופ; כל השלוש קצרות מ-278.",
+          "shared_with_nordic": true
+        },
+        "floor-vase": { "picks": [], "gap_he": "אגרטל רצפה מחורץ או בחול 55–60 × 28, בחול או אספרסו, עם ענפים יבשים. הוואבי-סאבי הלבן 45 של המאגר נמוך ומפסיד.", "shared_with_nordic": false },
+        "bench-pad": { "picks": [], "gap_he": "כרית בוקלה או פשתן בפטריה או קרמל, 138×33×4. ליד: שניל במידה מותאמת (AE, ממתין לציטוט).", "shared_with_nordic": false },
+        "dining-rug": { "picks": [], "gap_he": "טון-על-טון בגריז׳ 230–240 × 245–250 (אחרי LQ2), ספק ישראלי.", "shared_with_nordic": false },
+        "framed-art": {
+          "picks": [
+            { "card_id": "framed-art-aliexpress-frameless-minimalist-wall-art-631735", "option_he": "TL2356, ‏30×40, מסגרת אגוז דקה", "style_score": 8.5, "price_ils": 119, "price_basis": "slot", "margin_pct": 29, "estimate": true, "conditional_he": "PR1; הערכה: הדפס כ-₪20 ועוד מסגרת מקומית כ-₪40.", "why_he": "אותה סדרה כמו בסלון, הדפס אחר, נשען על המדף: נשא האספרסו של D1." }
+          ],
+          "gap_he": "חסרות שתיים. taupe-block של CJ (ממוסגר, מתאים לסגנון) מפסיד ‎−55%.",
+          "shared_with_nordic": false
+        },
+        "open-shelf-ceramics": { "picks": [], "gap_he": "כד וצנצנת באבנית מט בחול ובאספרסו; מלאי מקומי (LK1).", "shared_with_nordic": false },
+        "kitchen-sconce": {
+          "picks": [
+            { "card_id": "wall-sconce-cj-travertine-dome-15-alt", "style_score": 8.0, "price_ils": 299, "price_basis": "proposed", "margin_pct": 26.2, "why_he": "כיפת טרוורטין 15, אור עבודה למטה. ברירת מחדל ולא הקונוס, כי הקונוס בכניסה ובהורים: אותה משפחה, לא אותה מנורה." },
+            { "card_id": "wall-sconce-cj-travertine-cone-walnut", "style_score": 8.5, "price_ils": 299, "price_basis": "proposed", "margin_pct": 28.4, "why_he": "קונוס טרוורטין על לוחית אגוז." }
+          ],
+          "gap_he": "חשמל לא מאומת. מחיר העמדה לא נקבע (₪299 מוצע, שווי בישראל ₪294–399).",
+          "shared_with_nordic": false
+        },
+        "sink-set": { "picks": [], "gap_he": "מתקן, מברשת ומגש בטרוורטין או קרמיקה מט; מלאי מקומי (LK1), יחד עם האמבטיה.", "shared_with_nordic": false },
+        "utensil-crock": { "picks": [], "gap_he": "כלי אבנית מחורץ 18×13; LK1.", "shared_with_nordic": false },
+        "cutting-boards": { "picks": [], "gap_he": "זוג קרשי אגוז, חתימה של הסגנון; ספק מקומי (LK1). ליד: AE 1005009074463877 (אגוז קטן, לא נבדק).", "shared_with_nordic": false },
+        "condiment-set": { "picks": [], "gap_he": "מטחנות אגוז ובקבוק שמן קרמי בקו אחד; שני הזוגות הקיימים מפסידים.", "shared_with_nordic": false },
+        "bowl": {
+          "picks": [
+            { "card_id": "bowl-cj-glutinous-white-belly-bowl-21", "style_score": 8.0, "price_ils": 79, "price_basis": "proposed", "margin_pct": 8.6, "why_he": "קערת בטן לבנה עם האגסים. הנשא הכהה ב-D1 הוא התמונה ופרזול הברונזה במעטפת." },
+            { "card_id": "bowl-cj-matte-black-bowl-20", "option_he": "12style, ‏20×8", "style_score": 7.5, "price_ils": 79, "price_basis": "proposed", "margin_pct": 28.7, "why_he": "הווריאציה הכהה והרווחית." }
+          ],
+          "gap_he": "רווח נמוך בברירת המחדל; חסרה קערת אגוז.",
+          "shared_with_nordic": true
+        },
+        "paper-towel-holder": { "picks": [], "gap_he": "מעמד אגוז או טרוורטין 30–34; הבמבוק הבהיר 6.5 בסגנון.", "shared_with_nordic": false },
+        "tableware-set": { "picks": [], "gap_he": "סט אבנית בחול עם שפה טבעית; LK1.", "shared_with_nordic": false },
+        "mug-set": { "picks": [], "gap_he": "ספלי אבנית בחול ובקרמל; LK1.", "shared_with_nordic": false },
+        "herb-pots": { "picks": [], "gap_he": "עציצים מחורצים בחול; LK1.", "shared_with_nordic": false },
+        "canisters": { "picks": [], "gap_he": "צנצנות קרמיקה עם מכסי אגוז; Zendrop (8 בסגנון) מפסיד ‎−15.4%.", "shared_with_nordic": false },
+        "tea-towel": {
+          "picks": [
+            { "card_id": "tea-towel-cj-waffle-cotton-beige-45x65-pair", "option_he": "Beige, סט של 4", "style_score": 7.5, "price_ils": 69, "price_basis": "card", "margin_pct": 15.7, "why_he": "ופל כותנה בבז׳; נמכר כסט." }
+          ],
+          "gap_he": "חסרות מגבות פשתן בקרמל ובטאופ.",
+          "shared_with_nordic": true
+        },
+        "kitchen-runner": { "picks": [], "gap_he": "משפחת ראנר לפי מטר (כניסה, מסדרון, מטבח) בגריז׳ טון-על-טון.", "shared_with_nordic": false },
+        "step-stool": { "picks": [], "gap_he": "שרפרף אגוז 30×45 שמשרת גם את המסדרון.", "shared_with_nordic": false },
+        "dining-table": { "picks": [], "gap_he": "רהיט קבוע. הכיוון: שולחן אליפסה או גלולה מאגוז או אלון מעושן, רגל תוף או רגליים עבות. URBANO הוא של הנורדי.", "shared_with_nordic": false },
+        "dining-chairs": { "picks": [], "gap_he": "רהיט קבוע. כיסא עם גב מעוגל מאגוז ומושב בוקלה או עור; מאיה 6.5 בסגנון.", "shared_with_nordic": false },
+        "dining-bench": { "picks": [], "gap_he": "רהיט קבוע. ספסל אגוז עם קצוות מעוגלים.", "shared_with_nordic": false }
+      }
+    },
+    "hall": {
+      "coverage": { "slots": 16, "with_3": 2, "with_1_2": 4, "empty": 10 },
+      "slots": {
+        "framed-art": {
+          "picks": [
+            { "card_id": "framed-art-aliexpress-modern-minimalist-neutral-gallery-802995", "option_he": "02, הדפס 40×50 עם פספרטו במסגרת אגוז 50×60", "style_score": 8.0, "price_ils": 229, "price_basis": "proposed", "margin_pct": 37, "estimate": true, "conditional_he": "PR1; הערכה: הדפס ₪39 ועוד מסגרת מקומית כ-₪60.", "why_he": "צורות אורגניות בשחור וטאופ על קיר טיח. ב-₪129 (מחיר העמדה) עם מסגור מקומי הוא מפסיד." }
+          ],
+          "gap_he": "חסרה יצירה שלישית שלא חוזרת על הסלון והמסדרון, בפורמט ריבועי 50–60.",
+          "shared_with_nordic": false
+        },
+        "table-lamp": { "picks": [], "gap_he": "מנורת פטריה מטרוורטין, אופל או קרמיקה מט, 45–55, תקע EU. הקרמית עם אהיל הפשתן נפסלה בשער התמונות (AI) ומפסידה. ליד: AE 1005007270436779 (פטריה), לבדוק תקע.", "shared_with_nordic": false },
+        "key-tray": {
+          "picks": [
+            { "ae_item_id": "1005008996805240", "style_score": 7.5, "price_ils": 89, "price_basis": "proposed", "margin_pct": 48.8, "why_he": "מגש אקציה 19×10.5 בפינות מעוגלות, עץ חם. 'גימור מעט מבריק': לוודא עד 30 GU." },
+            { "ae_item_id": "1005011962693779", "style_score": 7.0, "price_ils": 89, "price_basis": "proposed", "margin_pct": 48.0, "why_he": "מגש מתכת אובלי שחור מט 22×9.5, הווריאציה הכהה; ברירת המחדל הנורדית." }
+          ],
+          "gap_he": "חסר מגש עור קוניאק. מחיר העמדה (₪119) גבוה משווי מגש קטן, ולכן ₪89.",
+          "shared_with_nordic": true
+        },
+        "console-vessel": {
+          "picks": [
+            { "card_id": "vase-cj-black-matte-stoneware-jar-30", "option_he": "Style4, ‏30×15", "style_score": 8.0, "price_ils": 229, "price_basis": "slot", "margin_pct": 37.5, "why_he": "כד אספרסו על קונסולה וקיר טיח. ברירת מחדל ולא האבנית הלבנה, כי היא על אדן הסלון שנראה דרך הדלת ב-H0." },
+            { "card_id": "vase-aliexpress-vintage-distressed-clay-vase-589009", "style_score": 8.0, "price_ils": 229, "price_basis": "card", "margin_pct": 35.0, "why_he": "חרס בשמנת חמה." },
+            { "card_id": "vase-cj-textured-white-stoneware", "style_score": 8.5, "price_ils": 229, "price_basis": "card", "margin_pct": 25.2, "why_he": "אבנית לבנה מקומטת." }
+          ],
+          "gap_he": "",
+          "shared_with_nordic": true
+        },
+        "storage-boxes": { "picks": [], "gap_he": "זוג קופסאות עור קוניאק או בד פטריה עם מכסה אגוז, 28×21×32.", "shared_with_nordic": false },
+        "bench-cushion": { "picks": [], "gap_he": "כרית בוקלה או שניל בפטריה 112×35×4. ליד: AE 1005013241834466 (שניל במידה מותאמת), לבדוק גוון.", "shared_with_nordic": false },
+        "bench-throw": { "picks": [], "gap_he": "בעיית המבנה של הנורדי בתוקף (שמיכה על כרית מתחלפת). הצעה: לאחד לעמדת טקסטיל ספסל אחת.", "shared_with_nordic": false },
+        "basket": {
+          "picks": [
+            { "card_id": "basket-cj-two-tone-rope-jute-white-30", "style_score": 7.0, "price_ils": 89, "price_basis": "card", "margin_pct": 35.1, "why_he": "חבל דו-גוני 30×30 בתוך המעטפת; קז׳ואל מעט." }
+          ],
+          "gap_he": "חסר סל עור או לבד.",
+          "shared_with_nordic": true
+        },
+        "wall-hooks": {
+          "picks": [
+            { "ae_item_id": "1005012513892313", "style_score": 8.0, "price_ils": 89, "price_basis": "proposed", "margin_pct": 50.6, "why_he": "מסילת אגוז עם 4 ווי מתכת שחורים, הסוג הנכון. האורך כנראה קצר מ-60: לאמת." },
+            { "card_id": "wall-hooks-cj-light-wood-rail-5-brass-pegs-58", "style_score": 7.5, "price_ils": 119, "price_basis": "proposed", "margin_pct": 17, "estimate": true, "why_he": "מסילה עם 5 יתדות פליז, שימוש מותר בפליז. מפסיד ב-₪89." }
+          ],
+          "gap_he": "חסרה וריאציה שלישית: יתדות אגוז בודדות.",
+          "shared_with_nordic": false
+        },
+        "wall-sconce": {
+          "picks": [
+            { "card_id": "wall-sconce-cj-travertine-cone-walnut", "style_score": 8.5, "price_ils": 299, "price_basis": "proposed", "margin_pct": 28.4, "why_he": "קונוס טרוורטין על לוחית אגוז מעל הספסל. בליטה כ-18–20 מול 15: לבדוק בפריים." },
+            { "card_id": "wall-sconce-cj-travertine-dome-15-alt", "style_score": 8.0, "price_ils": 299, "price_basis": "proposed", "margin_pct": 26.2, "why_he": "כיפת טרוורטין 15×15×12, בתוך המעטפת." },
+            { "card_id": "wall-sconce-cj-travertine-cube-updown-12", "style_score": 7.5, "price_ils": 299, "price_basis": "proposed", "margin_pct": 36.9, "why_he": "קוביית טרוורטין מעלה-מטה; 12 נמוכה ב-3." }
+          ],
+          "gap_he": "במחיר העמדה (₪149) שלושתן מפסידות. שער החשמל פתוח בכולן.",
+          "shared_with_nordic": false
+        },
+        "planter": { "picks": [], "gap_he": "גליל צר מחורץ 24×38 בחול או אספרסו.", "shared_with_nordic": false },
+        "umbrella-stand": { "picks": [], "gap_he": "מעמד קרמי מחורץ או עור, 22×48.", "shared_with_nordic": false },
+        "runner-rug": { "picks": [], "gap_he": "משפחת הראנר לפי מטר, 75×260.", "shared_with_nordic": false },
+        "ceiling-light": { "picks": [], "gap_he": "צמודה רכה 40 במשי או אופל. ליד: AE 1005008585971887 (משי 40×20), ממתין למשלוח.", "shared_with_nordic": false },
+        "console": { "picks": [], "gap_he": "רהיט קבוע. קונסולת אגוז עם קצוות מעוגלים (נלה, סימפלי ווד). H של רהיטי טבע היא של הנורדי.", "shared_with_nordic": false },
+        "bench": { "picks": [], "gap_he": "רהיט קבוע. ספסל אגוז עם ריפוד בוקלה.", "shared_with_nordic": false }
+      }
+    },
+    "corridor": {
+      "coverage": { "slots": 5, "with_3": 0, "with_1_2": 2, "empty": 3 },
+      "slots": {
+        "runner-rug": { "picks": [], "gap_he": "ראנר 60×700 טון-על-טון בגריז׳ עם שוליים בטאופ; משפחת הראנר לפי מטר.", "shared_with_nordic": false },
+        "ceiling-lights": {
+          "picks": [
+            { "card_id": "ceiling-lights-cj-silk-pumpkin-lantern-30", "option_he": "30, זוג, תלייה קצרה", "style_score": 8.0, "price_ils": 499, "price_basis": "proposed", "margin_pct": 19.7, "why_he": "פנס משי מצולע 30, אותה משפחה כמו בסלון ובהורים. CE ו-220–240V לא מאומתים." }
+          ],
+          "gap_he": "חסרות שתיים: אופל רך או טיח, חצי-צמוד 30–40.",
+          "shared_with_nordic": true
+        },
+        "gallery-art": {
+          "picks": [
+            { "card_id": "framed-art-aliexpress-modern-minimalist-neutral-gallery-802995", "option_he": "01–03, הדפס 30×40 עם פספרטו במסגרות אגוז 40×50", "style_score": 8.0, "price_ils": 364, "price_basis": "slot", "margin_pct": 27, "estimate": true, "conditional_he": "PR1", "why_he": "שלישייה אחידה, ולא אותה יצירה כמו בסלון." },
+            { "card_id": "framed-art-aliexpress-frameless-minimalist-wall-art-631735", "option_he": "TL2356-3pcs, ‏30×40", "style_score": 8.5, "price_ils": 364, "price_basis": "slot", "margin_pct": 27, "estimate": true, "conditional_he": "PR1", "why_he": "ברירת מחדל רק אם הסלון לא משתמש בה." }
+          ],
+          "gap_he": "שתיהן תלויות ב-PR1.",
+          "shared_with_nordic": false
+        },
+        "picture-lights": { "picks": [], "gap_he": "שלוש מנורות תמונה מפליז מוברש, מחווטות, LED ‏2700K ‏CRI 90+: מקום טבעי לפליז של הסגנון.", "shared_with_nordic": false },
+        "gallery-stool": { "picks": [], "gap_he": "שרפרף אגוז או טרוורטין 28×44.", "shared_with_nordic": false }
+      }
+    },
+    "work": {
+      "coverage": { "slots": 17, "with_3": 2, "with_1_2": 4, "empty": 11 },
+      "slots": {
+        "curtains": {
+          "picks": [
+            { "card_id": "curtains-aliexpress-beige-linen-sheer-curtains-554205", "option_he": "ווים, 150×270, זוג", "style_score": 8.0, "price_ils": 349, "price_basis": "proposed", "margin_pct": 30.1, "why_he": "פשתן בז׳ עם סלאב, משפחת הבית בסגנון." },
+            { "card_id": "curtains-aliexpress-linen-blend-s-fold-180502", "option_he": "קפלי S, זוג", "style_score": 8.0, "price_ils": 299, "price_basis": "proposed", "margin_pct": 40.5, "why_he": "פשתן טבעי בהיר." },
+            { "card_id": "curtains-aliexpress-cotton-linen-curtain-look-902882", "option_he": "קפלי S, זוג", "style_score": 7.0, "price_ils": 264, "price_basis": "slot", "margin_pct": 47.0, "why_he": "שנהב בהיר, הרווחי." }
+          ],
+          "gap_he": "חסר טאופ; שלושתן קצרות מ-278.",
+          "shared_with_nordic": true
+        },
+        "framed-art": { "picks": [], "gap_he": "נדרש פורמט לרוחב 55–60 × 45–50, ושני המופשטים לאורך. לבקש SKU לרוחב או ספק ישראלי.", "shared_with_nordic": false },
+        "wall-sconce": {
+          "picks": [
+            { "card_id": "wall-sconce-cj-travertine-dome-15-alt", "style_score": 8.0, "price_ils": 299, "price_basis": "proposed", "margin_pct": 26.2, "why_he": "ברירת מחדל לפי שפת התאורה: אותה משפחה, מנורה אחרת מהכניסה." },
+            { "card_id": "wall-sconce-cj-travertine-cone-walnut", "style_score": 8.5, "price_ils": 299, "price_basis": "proposed", "margin_pct": 28.4, "why_he": "קונוס טרוורטין על אגוז." },
+            { "card_id": "wall-sconce-cj-travertine-cube-updown-12", "style_score": 7.5, "price_ils": 299, "price_basis": "proposed", "margin_pct": 36.9, "why_he": "קובייה מעלה-מטה." }
+          ],
+          "gap_he": "מחיר העמדה ₪89 לא ריאלי למנורת טרוורטין מחווטת.",
+          "shared_with_nordic": false
+        },
+        "rug": { "picks": [], "gap_he": "160×210 טון-על-טון. ליד: AE 1005012532799427 (קשתות בשמנת, 8 אצל הסוקר), מחיר 160×230 לא ידוע.", "shared_with_nordic": false },
+        "basket": {
+          "picks": [
+            { "card_id": "basket-cj-two-tone-rope-jute-white-30", "style_score": 7.0, "price_ils": 89, "price_basis": "card", "margin_pct": 35.1, "why_he": "חבל דו-גוני 30×30." }
+          ],
+          "gap_he": "חסר סל עור או לבד.",
+          "shared_with_nordic": true
+        },
+        "waste-basket": { "picks": [], "gap_he": "שק נייר רחיץ בקרמל או סל עור 24×30.", "shared_with_nordic": false },
+        "planter": {
+          "picks": [
+            { "card_id": "planter-cj-cement-ribbed-belly", "option_he": "Beige, Large", "style_score": 8.0, "price_ils": 229, "price_basis": "card", "margin_pct": 7.8, "why_he": "בטון מחורץ בגריז׳ 42×35.5; קוטר +4 מהמעטפת, לבדוק בפריים." }
+          ],
+          "gap_he": "רווח נמוך; חסר כלי שני.",
+          "shared_with_nordic": false
+        },
+        "magazine-holder": { "picks": [], "gap_he": "מתלה עם רצועות עור 24–30 × 20–25 × 36–42 (ראו הסלון).", "shared_with_nordic": false },
+        "shelf-boxes": { "picks": [], "gap_he": "זוג קופסאות עור או אגוז, 30×22, בשני גבהים.", "shared_with_nordic": false },
+        "bookends": {
+          "picks": [
+            { "ae_item_id": "1005011774287608", "option_he": "Color A", "style_score": 7.5, "price_ils": 79, "price_basis": "proposed", "margin_pct": 49.9, "why_he": "עץ מעוגל ועבה. הכותרת אגוז שחור והתמונה בוק: לבחור SKU באגוז ולאמת. גובה 13 מול 14–18." },
+            { "ae_item_id": "1005013324559563", "style_score": 7.0, "price_ils": 79, "price_basis": "proposed", "margin_pct": 63.9, "estimate": true, "why_he": "זוג קשתות מתכת כהה, צורת הקשת של הסגנון. לא נבדק בעין." }
+          ],
+          "gap_he": "חסרים תומכי טרוורטין.",
+          "shared_with_nordic": false
+        },
+        "desk-tray": { "picks": [], "gap_he": "מגש טרוורטין או עור 24×20. ליד: AE 1005013257979199 (טרוורטין), ממתין למשלוח.", "shared_with_nordic": false },
+        "desk-organizer": { "picks": [], "gap_he": "כוס עטים מטרוורטין או אגוז 8×12.", "shared_with_nordic": false },
+        "desk-lamp": { "picks": [], "gap_he": "מנורת פטריה מאופל או טרוורטין 40–50, תקע EU.", "shared_with_nordic": false },
+        "pendant": {
+          "picks": [
+            { "card_id": "pendant-cj-fluted-ceramic-wood-cap-short-lantern", "style_score": 8.0, "price_ils": 199, "price_basis": "proposed", "margin_pct": 20.8, "why_he": "קרמיקה מחורצת עם כיפת אגוז, חתימה של הסגנון. ב-₪149 מפסיד. לבדוק מול 28×18 ומפזר תחתון." },
+            { "ae_item_id": "1005009905387436", "option_he": "Walnut short 10cm", "style_score": 7.5, "price_ils": 299, "price_basis": "proposed", "margin_pct": 29.9, "why_he": "גליל טרוורטין 12 עם כובע אגוז. CE ומפזר לא מאומתים." }
+          ],
+          "gap_he": "",
+          "shared_with_nordic": false
+        },
+        "desk": { "picks": [], "gap_he": "רהיט קבוע. שולחן אגוז עם פינות מעוגלות; JOURNALIST של הנורדי.", "shared_with_nordic": false },
+        "shelf": { "picks": [], "gap_he": "רהיט קבוע. מדף אגוז.", "shared_with_nordic": false },
+        "chair": { "picks": [], "gap_he": "רהיט קבוע. כיסא עם גב מעוגל ומושב עור.", "shared_with_nordic": false }
+      }
+    },
+    "master": {
+      "coverage": { "slots": 20, "with_3": 7, "with_1_2": 5, "empty": 8 },
+      "slots": {
+        "curtains": {
+          "picks": [
+            { "card_id": "curtains-aliexpress-beige-linen-sheer-curtains-554205", "option_he": "ווים, 150×270, זוג", "style_score": 8.0, "price_ils": 349, "price_basis": "proposed", "margin_pct": 30.1, "why_he": "ברירת מחדל ששונה מהנורדי (כלל הייחוד בחדר השינה). 270 מול 278–282: מידה מותאמת או CU1." },
+            { "card_id": "curtains-aliexpress-linen-blend-s-fold-180502", "option_he": "קפלי S, זוג", "style_score": 8.0, "price_ils": 299, "price_basis": "proposed", "margin_pct": 40.5, "why_he": "פשתן טבעי בהיר, ברירת המחדל הנורדית." },
+            { "card_id": "curtains-aliexpress-natural-linen-s-fold-613202", "option_he": "פשתן, סרט קפלי S, ‏132×274, זוג", "style_score": 7.5, "price_ils": 299, "price_basis": "proposed", "margin_pct": 12.5, "why_he": "פשתן טבעי; הארוך מבין השלוש." }
+          ],
+          "gap_he": "חסר טאופ.",
+          "shared_with_nordic": true
+        },
+        "framed-art": { "picks": [], "gap_he": "נדרש מופשט לרוחב 120×60 או דיפטיך ריבועים 50–55 במסגרת אגוז; שני המופשטים לאורך. ספק ישראלי או PR1.", "shared_with_nordic": false },
+        "bedside-sconces": {
+          "picks": [
+            { "card_id": "wall-sconce-cj-travertine-cone-walnut", "option_he": "זוג", "style_score": 8.5, "price_ils": 599, "price_basis": "proposed", "margin_pct": 28.7, "why_he": "שני קונוסי טרוורטין על אגוז, אור קריאה למטה. בליטה כ-18–20 בתוך 22." },
+            { "card_id": "wall-sconce-cj-travertine-dome-15-alt", "option_he": "זוג", "style_score": 8.0, "price_ils": 599, "price_basis": "proposed", "margin_pct": 26.2, "why_he": "כיפת טרוורטין 15." }
+          ],
+          "gap_he": "חסרה וריאציה בבד או אופל, למשל זרוע פליז עם אהיל קפלים (הכרטיס הקיים לא מאמת את הגוף).",
+          "shared_with_nordic": false
+        },
+        "sill-vase": {
+          "picks": [
+            { "card_id": "sill-vase-cj-cream-fluted-column-25", "style_score": 8.5, "price_ils": 69, "price_basis": "proposed", "margin_pct": 21, "why_he": "עמוד קרמי מחורץ בשמנת, בתוך המעטפת. ב-₪49 מפסיד." },
+            { "card_id": "vase-cj-black-matte-stoneware-jar-30", "option_he": "Style4", "style_score": 8.0, "price_ils": 199, "price_basis": "proposed", "margin_pct": 29.6, "why_he": "כד אספרסו; 30×15 בגבול העליון." },
+            { "card_id": "vase-aliexpress-vintage-distressed-clay-vase-589009", "style_score": 8.0, "price_ils": 229, "price_basis": "card", "margin_pct": 35.0, "why_he": "חרס בשמנת; 31×15 מעט מחוץ למעטפת." }
+          ],
+          "gap_he": "",
+          "shared_with_nordic": true
+        },
+        "planter": {
+          "picks": [
+            { "card_id": "planter-cj-cement-ribbed-belly", "option_he": "Beige, Large", "style_score": 8.0, "price_ils": 229, "price_basis": "card", "margin_pct": 7.8, "why_he": "בטון מחורץ בגריז׳ 42×35.5, נכנס לקוטר; נמוך ב-2.5." }
+          ],
+          "gap_he": "רווח נמוך; חסרים עוד שניים.",
+          "shared_with_nordic": false
+        },
+        "floor-lamp": { "picks": [], "gap_he": "אותו יעד כמו בסלון: מוט אגוז ואהיל קפלים (pleated-walnut-stem-158, ‏9.0, מפסיד).", "shared_with_nordic": false },
+        "nightstand-tray": { "picks": [], "gap_he": "מגש טרוורטין 30×22; הקיים במאגר קטן ומפסיד.", "shared_with_nordic": false },
+        "nightstand-vase": {
+          "picks": [
+            { "card_id": "nightstand-vase-aliexpress-handmade-wabi-sabi-vase-665862", "option_he": "Color E", "style_score": 8.5, "price_ils": 179, "price_basis": "proposed", "margin_pct": 15.4, "why_he": "בקבוק חול גבוה ודק, הגוון לא נמדד." },
+            { "card_id": "vase-cj-matte-frosted-tapered-28", "option_he": "White L", "style_score": 7.5, "price_ils": 199, "price_basis": "card", "margin_pct": 41.2, "why_he": "קונוס מט לבן." },
+            { "card_id": "vase-cj-matte-frosted-tapered-28", "option_he": "Black L", "style_score": 7.5, "price_ils": 199, "price_basis": "card", "margin_pct": 38.1, "why_he": "קונוס מט כהה, נשא אספרסו." }
+          ],
+          "gap_he": "",
+          "shared_with_nordic": true
+        },
+        "trinket-dish": { "picks": [], "gap_he": "צלוחית טרוורטין או פליז מוברש 10.", "shared_with_nordic": false },
+        "bedside-carafe": { "picks": [], "gap_he": "קנקן וכוס אבנית מט בחול; כל התוצאות מזכוכית.", "shared_with_nordic": false },
+        "candle-holders": {
+          "picks": [
+            { "card_id": "candle-holders-cj-travertine-pedestal", "option_he": "זוג", "style_score": 9.0, "price_ils": 199, "price_basis": "card", "margin_pct": 7.1, "why_he": "טרוורטין, החזרה של זוג הקונוסים." },
+            { "card_id": "candle-holders-cj-ceramic-pedestal-tray", "option_he": "White, זוג", "style_score": 7.0, "price_ils": 149, "price_basis": "proposed", "margin_pct": 37, "estimate": true, "why_he": "קרמיקה על רגל אגוז." },
+            { "card_id": "candle-holders-aliexpress-matte-black-iron-pillar-set2", "style_score": 7.0, "price_ils": 69, "price_basis": "proposed", "margin_pct": 17.2, "why_he": "צלחות ברזל כהה." }
+          ],
+          "gap_he": "",
+          "shared_with_nordic": true
+        },
+        "pillowcases": {
+          "picks": [
+            { "card_id": "pillowcases-cj-pure-linen-envelope-pair-48x74", "option_he": "Half White Pair", "style_score": 8.0, "price_ils": 129, "price_basis": "card", "margin_pct": 21.1, "why_he": "עצם מול ציפה טבעית; למדוד שאינו לבן קר." },
+            { "card_id": "pillowcases-cj-pure-linen-envelope-pair-48x74", "option_he": "Caramel Pairs", "style_score": 8.0, "price_ils": 129, "price_basis": "card", "margin_pct": 21.1, "why_he": "נשא הקרמל במיטה." },
+            { "card_id": "pillowcases-cj-pure-linen-envelope-pair-48x74", "option_he": "Rain And Dew Hemp (טבעי)", "style_score": 8.0, "price_ils": 129, "price_basis": "card", "margin_pct": 21.1, "why_he": "טבעי, טון-על-טון." }
+          ],
+          "gap_he": "שלוש מאותו ליסטינג: מותר בטקסטיל שטוח. 74 מול 65–70.",
+          "shared_with_nordic": true
+        },
+        "bedding": {
+          "picks": [
+            { "card_id": "bedding-cj-washed-linen-natural-set", "option_he": "Natural Linen", "style_score": 8.5, "price_ils": 799, "price_basis": "card", "margin_pct": 44.3, "why_he": "פשתן רחוץ טבעי, עובר 40%." },
+            { "card_id": "bedding-cj-washed-cotton-khaki-set-220x240", "option_he": "Khaki", "style_score": 8.0, "price_ils": 349, "price_basis": "card", "margin_pct": 20.6, "why_he": "כותנה רחוצה בחאקי-גריז׳, מדרגת מחיר אחרת." },
+            { "card_id": "bedding-cj-washed-linen-natural-set", "option_he": "Matcha Brown", "style_score": 7.5, "price_ils": 799, "price_basis": "card", "margin_pct": 44.3, "why_he": "הווריאציה הכהה: ציפה באגוז מזיזה את מרכז הכובד אל המיטה, במכוון ובאיזון עם ציפיות עצם." }
+          ],
+          "gap_he": "",
+          "shared_with_nordic": true
+        },
+        "cushions": {
+          "picks": [
+            { "card_id": "cushions-cj-boucle-teddy", "option_he": "Milk Tea, ‏30×50", "style_score": 8.5, "price_ils": 59, "price_basis": "card", "margin_pct": 8.0, "why_he": "מותנית בוקלה בתה חלב. 50 מול 55–65 בגלל HARGROVE, כמו בנורדי." },
+            { "ae_item_id": "1005010703348724", "option_he": "Beige, ‏30×50", "style_score": 7.5, "price_ils": 79, "price_basis": "proposed", "margin_pct": 46.9, "why_he": "מותנית סרוגה בשמנת עם מרקם; הרווחית." },
+            { "card_id": "cushions-cj-linen-look-charcoal", "option_he": "Beige, ‏30×50", "style_score": 7.5, "price_ils": 49, "price_basis": "card", "margin_pct": 20.9, "why_he": "מראה פשתן בבז׳." }
+          ],
+          "gap_he": "",
+          "shared_with_nordic": true
+        },
+        "throw": {
+          "picks": [
+            { "card_id": "sofa-cover-cj-cotton-muslin-fringe", "option_he": "Pecan, ‏150×200", "style_score": 8.5, "price_ils": 129, "price_basis": "card", "margin_pct": 11.0, "why_he": "מוסלין בקרמל לרגלי המיטה, מקופל לרבעים." },
+            { "card_id": "throw-cj-cotton-linen-light-gray-200x230", "option_he": "Brown", "style_score": 7.5, "price_ils": 229, "price_basis": "card", "margin_pct": 13.4, "why_he": "כותנה-פשתן בחום, רוחב מלא." }
+          ],
+          "gap_he": "חסרה שמיכה בעצם או בטאופ.",
+          "shared_with_nordic": false
+        },
+        "rug": { "picks": [], "gap_he": "שטיח 290×210 טון-על-טון, ספק ישראלי (נראה רק במעבר).", "shared_with_nordic": false },
+        "basket": {
+          "picks": [
+            { "card_id": "basket-cj-jute-rope-cylinder", "style_score": 8.0, "price_ils": 119, "price_basis": "proposed", "margin_pct": 9.0, "why_he": "גליל חבל טבעי." },
+            { "card_id": "basket-cj-two-tone-rope-jute-white-30", "style_score": 7.0, "price_ils": 89, "price_basis": "card", "margin_pct": 35.1, "why_he": "דו-גוני, 30 מול 32–38." }
+          ],
+          "gap_he": "",
+          "shared_with_nordic": true
+        },
+        "pendant": {
+          "picks": [
+            { "card_id": "pendant-cj-silk-pumpkin-lantern-40-master", "option_he": "קוטר 40", "style_score": 8.0, "price_ils": 299, "price_basis": "card", "margin_pct": 12.3, "why_he": "פנס משי מצולע 40; נראה רק במעבר." }
+          ],
+          "gap_he": "",
+          "shared_with_nordic": true
+        },
+        "bed": { "picks": [], "gap_he": "רהיט קבוע. מועמדת: Elora של פוני סטייל (בוקלה, מח 8.5, הדמיה בלבד; צריך צילום אמיתי). HARGROVE הוא של הנורדי (מח 6.5).", "shared_with_nordic": false },
+        "nightstands": { "picks": [], "gap_he": "רהיט קבוע. שידות אגוז מעוגלות.", "shared_with_nordic": false }
+      }
+    },
+    "kids": {
+      "coverage": { "slots": 19, "with_3": 1, "with_1_2": 5, "empty": 13 },
+      "slots": {
+        "roman-blind": { "picks": [], "gap_he": "וילון רומאי פשתן בחול בלי חבל (EN 13120), 136.", "shared_with_nordic": false },
+        "framed-prints": {
+          "picks": [
+            { "card_id": "framed-prints-cj-flower-cutout-set-30x40", "option_he": "חדר הילדה, 2 מתוך סט של 3", "style_score": 7.0, "price_ils": 229, "price_basis": "card", "margin_pct": 53.5, "why_he": "פרחי נייר בחרדל וטרקוטה, חמים וקרובים לקרמל." }
+          ],
+          "gap_he": "חסרות לחדר הילד ושתי וריאציות.",
+          "shared_with_nordic": false
+        },
+        "bookshelf": { "picks": [], "gap_he": "זוג מדפי כריכה 80 בגוון אגוז או אלון; האורן 6.0 בסגנון.", "shared_with_nordic": false },
+        "wall-sconce": { "picks": [], "gap_he": "זרוע עם אהיל בד או פשתן, מחווטת; הקיימות מפסידות.", "shared_with_nordic": false },
+        "rug": { "picks": [], "gap_he": "שטיח כותנה 140×200 בחול עם שוליים בקרמל.", "shared_with_nordic": false },
+        "desk-organizer": { "picks": [], "gap_he": "כוס ומגש מעץ חם או קרמיקה מט.", "shared_with_nordic": false },
+        "toy-cars": { "picks": [], "gap_he": "שער EN71 לא עבר (כמו בנורדי).", "shared_with_nordic": false },
+        "doll": { "picks": [], "gap_he": "שער EN71.", "shared_with_nordic": false },
+        "bedding": {
+          "picks": [
+            { "card_id": "bedding-cj-muslin-cotton-duvet-dune", "style_score": 7.5, "price_ils": 179, "price_basis": "card", "margin_pct": 20.3, "why_he": "מוסלין בחול; 173×229 מול 140×200." }
+          ],
+          "gap_he": "",
+          "shared_with_nordic": true
+        },
+        "bedspread": {
+          "picks": [
+            { "card_id": "bedspread-cj-muslin-blanket-beige-150x200", "option_he": "Beige", "style_score": 8.0, "price_ils": 199, "price_basis": "card", "margin_pct": 41.4, "why_he": "מוסלין בבז׳, עובר 40%. ברירת מחדל ולא ה-Pecan, כי ה-Pecan היא שמיכת ההורים." },
+            { "card_id": "sofa-cover-cj-cotton-muslin-fringe", "option_he": "Pecan, ‏150×200", "style_score": 8.5, "price_ils": 199, "price_basis": "proposed", "margin_pct": 38.7, "why_he": "הווריאציה בקרמל." },
+            { "card_id": "bedspread-cj-six-layer-gauze-quilt", "option_he": "Beige Khaki", "style_score": 7.5, "price_ils": 199, "price_basis": "card", "margin_pct": 47.3, "why_he": "גזה שש שכבות, הרווחית." }
+          ],
+          "gap_he": "",
+          "shared_with_nordic": true
+        },
+        "cushions": {
+          "picks": [
+            { "card_id": "cushions-cj-boucle-teddy", "option_he": "Milk Tea, ‏45×45", "style_score": 8.0, "price_ils": 59, "price_basis": "card", "margin_pct": 8.0, "why_he": "בוקלה בתה חלב; 45 מול 35–40." },
+            { "card_id": "cushions-cj-corduroy-patchwork", "option_he": "Beige, ‏45×45", "style_score": 7.5, "price_ils": 49, "price_basis": "card", "margin_pct": 25.1, "why_he": "טלאי קורדרוי בבז׳, דוגמה טונאלית." }
+          ],
+          "gap_he": "חסרה הכרית הקטנה 30×30.",
+          "shared_with_nordic": false
+        },
+        "soft-toy": { "picks": [], "gap_he": "שער EN71.", "shared_with_nordic": false },
+        "toy-basket": {
+          "picks": [
+            { "card_id": "basket-cj-jute-rope-cylinder", "style_score": 8.0, "price_ils": 119, "price_basis": "proposed", "margin_pct": 9.0, "why_he": "גליל חבל טבעי." },
+            { "card_id": "basket-cj-two-tone-rope-jute-white-30", "style_score": 7.0, "price_ils": 89, "price_basis": "card", "margin_pct": 35.1, "why_he": "דו-גוני." }
+          ],
+          "gap_he": "",
+          "shared_with_nordic": true
+        },
+        "skateboard": { "picks": [], "gap_he": "שער EN 13613.", "shared_with_nordic": false },
+        "doll-pram": { "picks": [], "gap_he": "שער EN71.", "shared_with_nordic": false },
+        "desk-chair": { "picks": [], "gap_he": "כיסא ילד מעץ חם.", "shared_with_nordic": false },
+        "pendant": {
+          "picks": [
+            { "card_id": "pendant-cj-fabric-dome-ash-cap-25", "style_score": 7.0, "price_ils": 229, "price_basis": "proposed", "margin_pct": 14.8, "why_he": "כיפת בד עם כובע אגוז; הנורדי פסל את האגוז. תחתית פתוחה: לבדוק שהנורה לא נראית. מפסיד מתחת ל-₪199." }
+          ],
+          "gap_he": "",
+          "shared_with_nordic": false
+        },
+        "bed": { "picks": [], "gap_he": "רהיט קבוע (שקד, פורסט: של הנורדי).", "shared_with_nordic": false },
+        "desk": { "picks": [], "gap_he": "רהיט קבוע.", "shared_with_nordic": false }
+      }
+    },
+    "bath": {
+      "coverage": { "slots": 23, "with_3": 1, "with_1_2": 6, "empty": 16 },
+      "slots": {
+        "shower-dispensers": { "picks": [], "gap_he": "סט 3 בקבוקים בקרמיקה מט בחול; LK1.", "shared_with_nordic": false },
+        "wall-sconce": {
+          "picks": [
+            { "card_id": "vanity-sconces-cj-fluted-resin-updown-white", "option_he": "יחידה", "style_score": 7.5, "price_ils": 179, "price_basis": "proposed", "margin_pct": 21.7, "conditional_he": "IP44, ‏CE ו-220–240V בכתב.", "why_he": "שרף מחורץ במראה טיח." }
+          ],
+          "gap_he": "חסרות אופל וקרמיקה.",
+          "shared_with_nordic": true
+        },
+        "vanity-sconces": {
+          "picks": [
+            { "card_id": "vanity-sconces-cj-fluted-resin-updown-white", "option_he": "זוג", "style_score": 7.5, "price_ils": 279, "price_basis": "proposed", "margin_pct": 8.2, "conditional_he": "IP44, ‏CE ו-220–240V בכתב.", "why_he": "אותה משפחה כמו B1." }
+          ],
+          "gap_he": "",
+          "shared_with_nordic": true
+        },
+        "bath-mat": {
+          "picks": [
+            { "card_id": "bath-mat-aliexpress-waffle-bath-mat-248198", "option_he": "חאקי", "style_score": 7.5, "price_ils": 84, "price_basis": "slot", "margin_pct": 36.1, "why_he": "ופל משובץ בחאקי, קושר רצפה וטקסטיל." },
+            { "ae_item_id": "1005011547482194", "option_he": "Camel, ‏40×60", "style_score": 7.0, "price_ils": 84, "price_basis": "slot", "margin_pct": 58.7, "why_he": "קאמל, נשא הקרמל בחדר. לא נבדק בעין: חומר וגוון." },
+            { "card_id": "bath-mat-cj-tufted-cotton-frame-beige-40x60", "option_he": "Return Frame Beige", "style_score": 7.5, "price_ils": 84, "price_basis": "slot", "margin_pct": 13.8, "why_he": "כותנה טאפטד בבז׳." }
+          ],
+          "gap_he": "",
+          "shared_with_nordic": true
+        },
+        "shower-stool": { "picks": [], "gap_he": "שרפרף טיק או אגוז 30×44; ספק ישראלי.", "shared_with_nordic": false },
+        "shower-curtain": { "picks": [], "gap_he": "פשתן או כותנה בטאופ, נפילה 255–265.", "shared_with_nordic": false },
+        "floor-planter": { "picks": [], "gap_he": "כלי מחורץ 28×34; LK1.", "shared_with_nordic": false },
+        "towel-ladder": { "picks": [], "gap_he": "סולם אגוז או טיק נשען 40×132.", "shared_with_nordic": false },
+        "bath-towels": {
+          "picks": [
+            { "card_id": "bath-towels-cj-waffle-cotton-milky-white-70x140", "option_he": "זוג", "style_score": 7.5, "price_ils": 129, "price_basis": "proposed", "margin_pct": 31.6, "why_he": "ופל כותנה בלבן חלבי." }
+          ],
+          "gap_he": "חסרות בחול ובטאופ.",
+          "shared_with_nordic": true
+        },
+        "storage-basket": { "picks": [], "gap_he": "סל מלבני עור או חבל צפוף 42×32×21.", "shared_with_nordic": false },
+        "toilet-paper-stand": { "picks": [], "gap_he": "מעמד אגוז או פליז מוברש; השחור 6.5 בסגנון.", "shared_with_nordic": false },
+        "bin": { "picks": [], "gap_he": "פח פדל מט בחול; LK1.", "shared_with_nordic": false },
+        "toilet-brush": { "picks": [], "gap_he": "מברשת בקרמיקה מט; LK1.", "shared_with_nordic": false },
+        "ledge-planter": { "picks": [], "gap_he": "כלי קטן מחורץ; LK1.", "shared_with_nordic": false },
+        "reed-diffuser": { "picks": [], "gap_he": "כלי קרמיקה או טרוורטין אמיתי; הקיים שרף (6.5) ומפסיד.", "shared_with_nordic": false },
+        "candle": { "picks": [], "gap_he": "נר בכלי קרמיקה מט בלי תווית.", "shared_with_nordic": false },
+        "soap-dispenser": { "picks": [], "gap_he": "מתקן טרוורטין אמיתי או קרמיקה מט 17×7; LK1.", "shared_with_nordic": false },
+        "toothbrush-cup": { "picks": [], "gap_he": "כוס הטרוורטין של CJ (9.0) מפסידה בכל מחיר; דרך 1688 (LK1).", "shared_with_nordic": false },
+        "vanity-vase": {
+          "picks": [
+            { "card_id": "vanity-vase-aliexpress-white-ceramic-mini-vase-529337", "style_score": 7.0, "price_ils": 39, "price_basis": "proposed", "margin_pct": 5.5, "why_he": "אגרטלון קרמיקה מט; פריט תוספת." }
+          ],
+          "gap_he": "",
+          "shared_with_nordic": true
+        },
+        "towel-ring": {
+          "picks": [
+            { "card_id": "towel-ring-aliexpress-minimalist-oval-towel-ring-663845", "option_he": "שחור מט", "style_score": 7.5, "price_ils": 69, "price_basis": "proposed", "margin_pct": 32.0, "why_he": "טבעת אובלית." },
+            { "card_id": "towel-ring-aliexpress-minimalist-oval-towel-ring-663845", "option_he": "פליז, רק אם מוברש", "style_score": 7.0, "price_ils": 69, "price_basis": "proposed", "margin_pct": 32.0, "why_he": "הפליז של החדר, בתנאי שאינו מלוטש." }
+          ],
+          "gap_he": "",
+          "shared_with_nordic": true
+        },
+        "hand-towel": {
+          "picks": [
+            { "card_id": "tea-towel-cj-waffle-cotton-beige-45x65-pair", "option_he": "Beige, זוג", "style_score": 7.5, "price_ils": 49, "price_basis": "proposed", "margin_pct": 21.5, "why_he": "ופל בבז׳ מול המגבות הלבנות." }
+          ],
+          "gap_he": "",
+          "shared_with_nordic": true
+        },
+        "ceiling-light": { "picks": [], "gap_he": "צמודת אופל IP44 30; הקיימת מפסידה. יבואן ישראלי (IL1).", "shared_with_nordic": false },
+        "vanity": { "picks": [], "gap_he": "רהיט קבוע. ארון כיור אגוז עם משטח טרוורטין.", "shared_with_nordic": false }
+      }
+    }
+  },
+  "whole_house_he": "148 עמדות: 20 עם שלוש בחירות, 37 עם אחת או שתיים, 91 ריקות (16 מהן רהיטים קבועים). ארבע עמדות התמונה תלויות ב-PR1, ובלעדיו 33 עמדות חלקיות ו-95 ריקות. הבית בנוי על שתי משפחות שעוברות בין החדרים: טרוורטין (זוג המנורות, קונוסים וכיפות בכניסה, במטבח, בעבודה ובהורים, פמוטים) ופשתן-מוסלין-בוקלה מאותם ליסטינגים של הנורדי בצבעי הסגנון. מה שחסר הוא בדיוק מה שהופך אותו למודרני חם ולא לנורדי חם: התמונות, השטיחים, מנורות הרגל והקריאה, אגוז ועור קוניאק, ותלויה ייחודית בסלון. הרווח נמוך: 113 בחירות, ורק 21 מהן עוברות 40%; רוב השאר 7–35%.",
+  "card_scores": {
+    "curtains-aliexpress-beige-linen-sheer-curtains-554205": { "score": 8.0, "reason": "זמני · צ9 ח9 צו7 ק7 · טול פשתן בז׳ עם סלאב חזק ומט; רק ב-SKU ווים או סרט קפלים; 270 מול 275–285" },
+    "curtains-aliexpress-linen-blend-s-fold-180502": { "score": 8.0, "reason": "זמני · צ8 ח9 צו8 ק7 · פשתן טבעי בהיר בקפלי S, משפחת הבית; קצר ב-5" },
+    "curtains-aliexpress-cotton-linen-curtain-look-902882": { "score": 7.0, "reason": "זמני · צ6 ח8 צו8 ק7 · שנהב בהיר מעצם הסגנון; קפלי S" },
+    "curtains-aliexpress-natural-linen-s-fold-613202": { "score": 7.5, "reason": "זמני · צ8 ח8 צו7 ק7 · פשתן טבעי בסרט קפלים 132×274" },
+    "curtains-cj-japanese-linen-half-shade": { "score": 6.5, "reason": "זמני · צ8 ח8 צו6 ק4 · הבד נכון, אבל 260 ומנהרה למוט: קצר ב-15–25" },
+    "framed-art-aliexpress-frameless-minimalist-wall-art-631735": { "score": 8.5, "reason": "זמני · צ9 ח8 צו9 ק8 · מופשט שמנת-חום-שחור, השפה של הסגנון; בלי מסגרת (PR1) ולאורך" },
+    "framed-art-aliexpress-modern-minimalist-neutral-gallery-802995": { "score": 8.0, "reason": "זמני · צ8 ח8 צו8 ק8 · צורות אורגניות בשחור וטאופ; לאמת את השחור כאספרסו; בלי מסגרת (PR1)" },
+    "accent-sconces-aliexpress-travertine-cylinder-walnut-choice": { "score": 8.5, "reason": "זמני · צ10 ח10 צו7 ק7 · טרוורטין על לוחית אגוז, החתימה; אור למטה בלבד ורוחב 6.5" },
+    "accent-sconces-cj-travertine-block-updown-8x16": { "score": 8.0, "reason": "זמני · צ9 ח10 צו6 ק7 · טרוורטין מעלה-מטה; בלוק בקצוות חדים, לוודא מושחז" },
+    "accent-sconces-cj-ribbed-travertine-half-cylinder-wood-bracket": { "score": 8.0, "reason": "זמני · צ9 ח9 צו9 ק4 · חצי גליל מחורץ, שפת הסגנון; מידות Type B לא מוצהרות" },
+    "wall-sconce-cj-travertine-cone-walnut": { "score": 8.5, "reason": "זמני · צ10 ח10 צו7 ק7 · קונוס טרוורטין על אגוז, אור למטה; זרוע שחורה קצרה, בליטה לא מאומתת" },
+    "wall-sconce-cj-travertine-dome-15-alt": { "score": 8.0, "reason": "זמני · צ8 ח10 צו6 ק8 · כיפת טרוורטין 15×15×12; צורה פשוטה, לא נבדקה בתקריב" },
+    "wall-sconce-cj-travertine-cube-updown-12": { "score": 7.5, "reason": "זמני · צ9 ח10 צו6 ק5 · קוביית טרוורטין מעלה-מטה; 12 נמוכה מהמעטפות 15–22" },
+    "vase-cj-textured-white-stoneware": { "score": 8.5, "reason": "זמני · צ8 ח9 צו9 ק8 · אבנית לבנה מקומטת, טונאלית ופסלית; לוודא שהלבן לא קר" },
+    "vase-cj-black-matte-stoneware-jar-30": { "score": 8.0, "reason": "זמני · צ8 ח9 צו7 ק8 · כד אבנית כהה בחול, נשא אספרסו; פחם ניטרלי ולא חום" },
+    "vase-aliexpress-vintage-distressed-clay-vase-589009": { "score": 8.0, "reason": "זמני · צ9 ח8 צו7 ק8 · חרס מסורק בשמנת חמה; המסורק נוטה לכפרי" },
+    "vase-cj-coarse-sand-white-tall": { "score": 8.0, "reason": "זמני · צ8 ח9 צו7 ק8 · לבן מחוספס גבוה; 8.9% רווח, מפסיד בשוויון מול 589009" },
+    "vase-cj-charcoal-carved": { "score": 8.5, "reason": "זמני · צ9 ח9 צו9 ק6 · קרמיקה כהה חרוטה, חתימה; מפסיד ‎−4.8%" },
+    "centerpiece-vase-cj-matte-frosted-tapered-28": { "score": 7.5, "reason": "זמני · צ8 ח8 צו6 ק8 · קונוס מט 28 בלבן או בשחור; צורה גנרית" },
+    "vase-cj-matte-frosted-tapered-28": { "score": 7.5, "reason": "זמני · צ8 ח8 צו6 ק8 · קונוס מט 28 בלבן או בשחור; צורה גנרית" },
+    "nightstand-vase-aliexpress-handmade-wabi-sabi-vase-665862": { "score": 8.5, "reason": "זמני · צ8 ח9 צו9 ק8 · בקבוק וואבי-סאבי בחול מט, גבוה ודק; הגוון לא נמדד" },
+    "sill-vase-cj-cream-fluted-column-25": { "score": 8.5, "reason": "זמני · צ9 ח8 צו9 ק8 · עמוד קרמי מחורץ בשמנת" },
+    "cushions-cj-boucle-teddy": { "score": 8.5, "reason": "זמני · צ9 ח9 צו8 ק8 · בוקלה בלבן, תה חלב וחום בהיר; עלול להיראות טדי בתקריב" },
+    "cushions-cj-knitted-chenille-bean-green": { "score": 8.0, "reason": "זמני · צ8 ח8 צו8 ק8 · שניל סרוג בקאמל, נשא הקרמל; הקאמל צהבהב מעט" },
+    "cushions-aliexpress-textured-boucle-throw-pillow": { "score": 8.0, "reason": "זמני · צ9 ח8 צו8 ק7 · בוקלה בטאופ (Oatmeal) או בבז׳; תמונות PNG" },
+    "cushions-cj-wide-stripe-corduroy-light-green": { "score": 7.5, "reason": "זמני · צ8 ח8 צו6 ק8 · קורדרוי רחב בקאמל; קז׳ואל מעט" },
+    "cushions-cj-linen-look-charcoal": { "score": 7.5, "reason": "זמני · צ8 ח6 צו8 ק8 · מותנית בבז׳; מראה פשתן מפוליאסטר" },
+    "cushions-cj-linen-look-ivory": { "score": 7.5, "reason": "זמני · צ8 ח6 צו8 ק7 · אפור-בז׳ או קפה; מראה פשתן, משלוח יקר" },
+    "cushions-cj-corduroy-patchwork": { "score": 7.5, "reason": "זמני · צ8 ח8 צו6 ק7 · טלאי קורדרוי בקפה כהה או בבז׳; דוגמה טונאלית" },
+    "sofa-cover-cj-cotton-muslin-fringe": { "score": 8.5, "reason": "זמני · צ9 ח9 צו7 ק8 · מוסלין מקומט ב-Flax, ‏Pecan ו-Clay; פרנזים קצרים" },
+    "basket-cj-jute-rope-cylinder": { "score": 8.0, "reason": "זמני · צ8 ח7 צו8 ק8 · גליל חבל צפוף וטבעי; יוטה במינון" },
+    "basket-cj-two-tone-rope-jute-white-30": { "score": 7.0, "reason": "זמני · צ7 ח7 צו7 ק7 · חבל דו-גוני, קז׳ואל; 30×30" },
+    "bowl-cj-matte-black-bowl-20": { "score": 7.5, "reason": "זמני · צ7 ח9 צו7 ק8 · קערה מט כהה, נשא אספרסו; השחור ניטרלי וקערת מרק עמוקה" },
+    "bowl-cj-glutinous-white-belly-bowl-21": { "score": 8.0, "reason": "זמני · צ8 ח9 צו7 ק8 · קערת בטן לבנה מט, פשוטה" },
+    "bowl-cj-speckled-ivory-wide-bowl-21": { "score": 7.5, "reason": "זמני · צ8 ח8 צו7 ק7 · שנהב מנוקד רחב עם שפת חרס" },
+    "candle-holders-cj-travertine-pedestal": { "score": 9.0, "reason": "זמני · צ10 ח10 צו8 ק8 · טרוורטין על רגל, חומר הדגל" },
+    "candle-holders-cj-ceramic-pedestal-tray": { "score": 7.0, "reason": "זמני · צ8 ח8 צו6 ק6 · קרמיקה על רגל אגוז; כדורי עץ שובבים, רוחב 17" },
+    "candle-holders-aliexpress-matte-black-iron-pillar-set2": { "score": 7.0, "reason": "זמני · צ7 ח7 צו7 ק7 · צלחות ברזל שחור מט נמוכות" },
+    "pendant-cj-silk-pumpkin-lantern": { "score": 8.0, "reason": "זמני · צ8 ח7 צו9 ק8 · פנס משי מצולע שטוח, רך; מראה משי מפוליאסטר" },
+    "pendant-cj-silk-pumpkin-lantern-40-master": { "score": 8.0, "reason": "זמני · צ8 ח7 צו9 ק8 · פנס משי מצולע, 30/40/50; מראה משי מפוליאסטר" },
+    "pendant-cj-silk-ribbed-pumpkin-40": { "score": 8.0, "reason": "זמני · צ8 ח7 צו9 ק8 · פנס משי מצולע 40; ברירת המחדל הנורדית, לכן לא בסלון של הסגנון" },
+    "ceiling-lights-cj-silk-pumpkin-lantern-30": { "score": 8.0, "reason": "זמני · צ8 ח7 צו9 ק8 · פנס משי מצולע 30 בתלייה קצרה" },
+    "pendant-cj-fluted-ceramic-wood-cap-short-lantern": { "score": 8.0, "reason": "זמני · צ9 ח9 צו7 ק6 · קרמיקה מחורצת וכיפת אגוז; אהיל פתוח" },
+    "pendant-cj-fabric-dome-ash-cap-25": { "score": 7.0, "reason": "זמני · צ8 ח7 צו7 ק6 · כיפת בד עם כובע אגוז; תחתית פתוחה וכבל חום" },
+    "table-runner-aliexpress-solid-color-textured-runner-525144": { "score": 7.5, "reason": "זמני · צ10 ח5 צו8 ק7 · טאופ מדויק; פוליאסטר, דירוג 1.0, 40 מול 38" },
+    "tea-towel-cj-waffle-cotton-beige-45x65-pair": { "score": 7.5, "reason": "זמני · צ8 ח7 צו7 ק8 · ופל כותנה בבז׳" },
+    "wall-hooks-cj-light-wood-rail-5-brass-pegs-58": { "score": 7.5, "reason": "זמני · צ7 ח8 צו8 ק8 · מסילה עם יתדות פליז; עץ בהיר ולא אגוז" },
+    "planter-cj-cement-ribbed-belly": { "score": 8.0, "reason": "זמני · צ9 ח8 צו9 ק6 · בטון מחורץ בגריז׳ 42×35.5" },
+    "pillowcases-cj-pure-linen-envelope-pair-48x74": { "score": 8.0, "reason": "זמני · צ8 ח10 צו7 ק7 · פשתן טהור בחצי-לבן, קרמל וטבעי; 74 מול 65–70" },
+    "bedding-cj-washed-linen-natural-set": { "score": 8.5, "reason": "זמני · צ9 ח10 צו7 ק8 · פשתן רחוץ טבעי; Matcha Brown לווריאציה הכהה" },
+    "bedding-cj-washed-cotton-khaki-set-220x240": { "score": 8.0, "reason": "זמני · צ9 ח8 צו7 ק8 · כותנה רחוצה בחאקי-גריז׳" },
+    "throw-cj-cotton-linen-light-gray-200x230": { "score": 7.5, "reason": "זמני · צ7 ח8 צו7 ק8 · רק ב-Brown; האפור לא בסגנון" },
+    "bedding-cj-muslin-cotton-duvet-dune": { "score": 7.5, "reason": "זמני · צ9 ח8 צו7 ק5 · מוסלין בחול; 173×229 מול 140×200" },
+    "bedspread-cj-muslin-blanket-beige-150x200": { "score": 8.0, "reason": "זמני · צ9 ח8 צו7 ק8 · מוסלין בבז׳" },
+    "bedspread-cj-six-layer-gauze-quilt": { "score": 7.5, "reason": "זמני · צ7 ח8 צו7 ק8 · גזה בבז׳-חאקי, נוטה לירקרק" },
+    "framed-prints-cj-flower-cutout-set-30x40": { "score": 7.0, "reason": "זמני · צ7 ח7 צו7 ק8 · פרחי נייר בחרדל וטרקוטה; חם, מעט רווי" },
+    "vanity-sconces-cj-fluted-resin-updown-white": { "score": 7.5, "reason": "זמני · צ7 ח7 צו9 ק8 · שרף מחורץ במראה טיח; IP44 ו-CE לא מאומתים" },
+    "bath-mat-aliexpress-waffle-bath-mat-248198": { "score": 7.5, "reason": "זמני · צ8 ח6 צו8 ק8 · ופל משובץ בחאקי; מיקרופייבר" },
+    "bath-mat-cj-tufted-cotton-frame-beige-40x60": { "score": 7.5, "reason": "זמני · צ8 ח8 צו6 ק8 · כותנה טאפטד בבז׳ עם מסגרת" },
+    "bath-towels-cj-waffle-cotton-milky-white-70x140": { "score": 7.5, "reason": "זמני · צ6 ח9 צו8 ק8 · ופל כותנה בלבן חלבי; הסגנון מבקש חול או טאופ" },
+    "vanity-vase-aliexpress-white-ceramic-mini-vase-529337": { "score": 7.0, "reason": "זמני · צ7 ח8 צו6 ק8 · אגרטלון קרמיקה לבנה מט" },
+    "towel-ring-aliexpress-minimalist-oval-towel-ring-663845": { "score": 7.5, "reason": "זמני · צ8 ח6 צו8 ק8 · טבעת אובלית; שחור מט או פליז מוברש בלבד" },
+    "toilet-paper-stand-aliexpress-floor-standing-black-763442": { "score": 6.5, "reason": "זמני · צ6 ח7 צו6 ק7 · מעמד ברזל שחור, תעשייתי מעט" },
+    "floor-lamp-cj-pleated-walnut-stem-158": { "score": 9.0, "reason": "זמני · צ9 ח9 צו9 ק10 · מוט אגוז, פרטי פליז ואהיל קפלים; מפסיד ‎−107%" },
+    "magazine-holder-cj-gunmetal-leather-strap": { "score": 8.0, "reason": "זמני · צ9 ח9 צו8 ק6 · רצועות עור קוניאק; מפסיד ‎−69.8%" },
+    "magazine-holder-cj-felt-log-basket": { "score": 6.5, "reason": "זמני · צ7 ח8 צו7 ק3 · לבד ועור קוניאק; רוחב 45 מחוץ למעטפות" },
+    "rug-cj-braided-wool-natural": { "score": 8.5, "reason": "זמני · צ9 ח9 צו8 ק8 · צמר קלוע טבעי; מפסיד ‎−137.9%" },
+    "toothbrush-cup-cj-silver-travertine-cup": { "score": 9.0, "reason": "זמני · צ10 ח10 צו8 ק8 · טרוורטין אמיתי; מפסיד בכל מחיר (LK1)" },
+    "reed-diffuser-cj-travertine-look-bamboo-lid-milktea": { "score": 6.5, "reason": "זמני · צ8 ח4 צו7 ק7 · שרף שמחקה טרוורטין, מכסה במבוק" },
+    "bookends-aliexpress-beech-wooden-bookends-219885": { "score": 6.5, "reason": "זמני · צ5 ח8 צו7 ק7 · בוק בהיר" },
+    "wall-sconce-cj-black-curved-arm-pleated": { "score": 6.5, "reason": "זמני · צ8 ח6 צו7 ק4 · גוף פליז ואהיל משמש, אבל הגוף שנשלח לא אומת ומחובר לקיר" }
+  }
+}
