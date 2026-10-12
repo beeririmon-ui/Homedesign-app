@@ -1,0 +1,486 @@
+{
+ "version": 1,
+ "round": 3,
+ "source": "cj",
+ "date": "2026-10-12",
+ "by": "sourcing-support",
+ "run_id": "round3-cj",
+ "rules": "studio rules e.10-13 (price by Israeli value, 40% floor VR1, design before profit, no loss) and z (one search list, hide-seen, registry); the slot price and ceilings are the round-3 list's",
+ "economics_basis": {
+  "fx_usd_ils": 3.3,
+  "vat": 0.18,
+  "card_fee": [
+   0.02,
+   1.2
+  ],
+  "returns": 0.08,
+  "margin": "contribution / net revenue, before CAC",
+  "landed": "CJ cost + CJ freight quote to IL (cheapest line, qty 1) x 3.3"
+ },
+ "budget": {
+  "cj_points_used": 1080,
+  "calls": {
+   "search": 16,
+   "product": 24,
+   "freight": 4
+  },
+  "run_cap_points": 3000,
+  "cj_points_used_today_after": 1430,
+  "hidden_by_registry": 17
+ },
+ "queries_run": [
+  "fiber clay floor vase 60cm matte white",
+  "large matte stoneware floor vase 55cm oatmeal",
+  "lightweight floor vase 60cm textured cream",
+  "tall ceramic floor jar 55cm matte grey",
+  "matte stoneware planter 36cm diameter white",
+  "fiber clay round planter 38x40 light",
+  "concrete belly planter 36cm beige",
+  "ceramic floor planter wide 38cm matte oatmeal",
+  "muslin blanket 150x200 sage green cotton",
+  "cotton gauze blanket dusty pink 150x200",
+  "matte black stoneware shallow bowl 22cm",
+  "charcoal matte ceramic decorative bowl 20cm",
+  "speckled oatmeal ceramic bowl 22cm matte",
+  "stonewashed linen duvet cover 220x240 white",
+  "washed french linen bedding set warm white",
+  "linen cotton duvet cover light grey 220x240"
+ ],
+ "queries_not_run": [
+  {
+   "query": "cotton quilt single warm white 150x200",
+   "slots": [
+    "kids/bedspread"
+   ],
+   "why": "spare; the slot already had 3 passing after the tier-3 queries"
+  }
+ ],
+ "slots": {
+  "dining-room/floor-vase": {
+   "priority": "high",
+   "need_variations": 3,
+   "envelope_cm": {
+    "h": [
+     50,
+     65
+    ],
+    "d": [
+     25,
+     32
+    ]
+   },
+   "price_ceiling": {
+    "slot_price_ils": 349,
+    "breakeven_landed_ils": 263.9,
+    "landed_for_40_ils": 145.6
+   },
+   "queries": [
+    "fiber clay floor vase 60cm matte white",
+    "large matte stoneware floor vase 55cm oatmeal",
+    "lightweight floor vase 60cm textured cream",
+    "tall ceramic floor jar 55cm matte grey"
+   ],
+   "found": false,
+   "summary": "No pass. CJ search returns tabletop vases (19-45 cm), rustic distressed jars, lidded storage jars and glossy glazes; nothing in 50-65 x 25-32 in warm white, oat or mist grey.",
+   "not_opened_notable": [
+    {
+     "name": "Vintage Decorative Handmade Stoneware Floor Vase (CJYD2767893)",
+     "pid": "2602260318101607200",
+     "why": "cost $180.60 alone is over the break-even landed cost (about $80)"
+    },
+    {
+     "name": "Jingdezhen Glazed Green Floor-standing Large Vase (CJJT2803809)",
+     "pid": "2603250723341637000",
+     "why": "glossy green glaze (the slot forbids glossy glaze)"
+    },
+    {
+     "name": "Retro Ceramic Sealed Jar Large General Jar / Ceramic Rice Jar",
+     "pid": "2604101013141620400 / 2603010948481634900",
+     "why": "lidded storage jars, not vases"
+    }
+   ],
+   "next": "CJ is exhausted for this slot with these words; per the round-3 plan the slot also has data/leads/round4-noncj/floor-vase.json (non-CJ) and AliExpress.",
+   "opened": [
+    {
+     "pid": "1602174543433576448",
+     "status": "rejected",
+     "reason": "round-3 dining-room/floor-vase: distressed rustic grey-brown scratched glaze, outside the Nordic palette (not mist grey or charcoal); sizes not published (pack 54x34x54)",
+     "card_ids": null
+    },
+    {
+     "pid": "2501310520321608700",
+     "status": "rejected",
+     "reason": "round-3 dining-room/floor-vase: 14 x 20 cm tabletop vase",
+     "card_ids": null
+    },
+    {
+     "pid": "2603040631041636400",
+     "status": "rejected",
+     "reason": "round-3 dining-room/floor-vase: tabletop size, max 30 cm high x 18 cm wide (Large); needs 50-65 x 25-32",
+     "card_ids": null
+    },
+    {
+     "pid": "2603310245091602200",
+     "status": "rejected",
+     "reason": "round-3 dining-room/floor-vase: 45 cm high and about 15 cm wide (pack 50x17x17), too low and slim for 50-65 x 25-32",
+     "card_ids": null
+    }
+   ],
+   "cards": []
+  },
+  "work/planter": {
+   "priority": "high",
+   "need_variations": 2,
+   "envelope_cm": {
+    "pot_d": [
+     34,
+     38
+    ],
+    "pot_h": [
+     36,
+     42
+    ]
+   },
+   "price_ceiling": {
+    "slot_price_ils": 149,
+    "breakeven_landed_ils": 111.99,
+    "landed_for_40_ils": 61.48
+   },
+   "queries": [
+    "matte stoneware planter 36cm diameter white",
+    "fiber clay round planter 38x40 light",
+    "concrete belly planter 36cm beige",
+    "ceramic floor planter wide 38cm matte oatmeal"
+   ],
+   "found": false,
+   "summary": "No pass. The search returns desktop pots (up to ~20 cm), modelling clay and garden troughs. The only 36-40 cm planters are magnesium-oxide sets of 2 at $53.03 and $66.19, whose cost alone is over the break-even landed cost ($33.9 at ILS 149).",
+   "not_opened_notable": [
+    {
+     "name": "Large Round Planters Set Of 2 15.75x14.96 & 12.2X13.39, magnesium oxide (CJFU2798095)",
+     "pid": "2035245268438482945",
+     "why": "$53.03 for the set: over break-even at ILS 149 before shipping"
+    },
+    {
+     "name": "Large Round Planters Set Of 2 16.14x15.75 & 11.8x11.42 (CJFU2798093)",
+     "pid": "2035245233185357825",
+     "why": "$66.19: over break-even"
+    },
+    {
+     "name": "Premium Clay Flower Pot Ceramic Oval Planter (CJYL2663738)",
+     "pid": "2512210322081632500",
+     "why": "$57.71-77.61: over break-even; oval"
+    }
+   ],
+   "next": "A 36-38 cm ceramic pot from China does not land under ILS 112 on CJ; look at Israeli stock or a lighter fibre-clay listing outside CJ.",
+   "opened": [
+    {
+     "pid": "1516305711662379008",
+     "status": "rejected",
+     "reason": "round-3 work/planter: desktop pot, M size about 18 cm (pack 18.5x18.5x16); needs pot 34-38 x 36-42",
+     "card_ids": null
+    }
+   ],
+   "cards": []
+  },
+  "kids/bedspread": {
+   "priority": "low",
+   "need_variations": 1,
+   "envelope_cm": {
+    "folded_l": [
+     55,
+     60
+    ],
+    "folded_w": [
+     95,
+     100
+    ]
+   },
+   "price_ceiling": {
+    "slot_price_ils": 199,
+    "breakeven_landed_ils": 150.0,
+    "landed_for_40_ils": 82.5
+   },
+   "queries": [
+    "muslin blanket 150x200 sage green cotton",
+    "cotton gauze blanket dusty pink 150x200"
+   ],
+   "found": true,
+   "summary": "Found: a sage muslin (the boy's sage, 49.7%) and a light-grey cotton waffle (mist grey, 37.3%). With the two existing 8.0 cards the slot has 3 passing; the spare query was not run. No antique-pink found (every pink on CJ was salmon or peach).",
+   "not_opened_notable": [],
+   "next": "Girl: the sage muslin listing also has a warm white Queen (same price), which can be the girl's option.",
+   "opened": [
+    {
+     "pid": "2506281229401622900",
+     "status": "card",
+     "reason": "card bedspread-cj-cotton-waffle-blanket-light-grey-150x200 (round-3 2026-10-11, kids/bedspread)",
+     "card_ids": [
+      "bedspread-cj-cotton-waffle-blanket-light-grey-150x200"
+     ]
+    },
+    {
+     "pid": "2607201207411621000",
+     "status": "card",
+     "reason": "card bedspread-cj-muslin-grid-gauze-sage-160x220 (round-3 2026-10-11, kids/bedspread)",
+     "card_ids": [
+      "bedspread-cj-muslin-grid-gauze-sage-160x220"
+     ]
+    },
+    {
+     "pid": "1381504247505489920",
+     "status": "rejected",
+     "reason": "round-3 kids/bedspread: all-over cat jacquard pattern (figurative, not a small motif); Pink is salmon, Grey and Yellow carry the same cat print",
+     "card_ids": null
+    },
+    {
+     "pid": "2410310915171617500",
+     "status": "rejected",
+     "reason": "round-3 kids/bedspread: colourful suzani/boho print with blue border, not plain",
+     "card_ids": null
+    },
+    {
+     "pid": "2505230217031623400",
+     "status": "rejected",
+     "reason": "round-3 kids/bedspread: all-over floral jacquard print (pink, green, red) with a green border, not plain",
+     "card_ids": null
+    },
+    {
+     "pid": "2508080533501619200",
+     "status": "rejected",
+     "reason": "round-3 kids/bedspread: only 200x230 (double size), needs 150x200",
+     "card_ids": null
+    },
+    {
+     "pid": "2512151103051626200",
+     "status": "rejected",
+     "reason": "round-3 kids/bedspread: saturated colourways only (periwinkle, salmon pink, aqua, lime, yellow, purple); no sage, mist grey or antique pink",
+     "card_ids": null
+    }
+   ],
+   "cards": [
+    "bedspread-cj-muslin-grid-gauze-sage-160x220",
+    "bedspread-cj-cotton-waffle-blanket-light-grey-150x200"
+   ]
+  },
+  "living-room/bowl": {
+   "priority": "low",
+   "need_variations": 1,
+   "envelope_cm": {
+    "d": [
+     16,
+     24
+    ],
+    "h": [
+     5,
+     9
+    ]
+   },
+   "price_ceiling": {
+    "slot_price_ils": 69,
+    "breakeven_landed_ils": 51.2,
+    "landed_for_40_ils": 27.8
+   },
+   "queries": [
+    "matte black stoneware shallow bowl 22cm",
+    "charcoal matte ceramic decorative bowl 20cm",
+    "speckled oatmeal ceramic bowl 22cm matte"
+   ],
+   "found": true,
+   "summary": "Found the charcoal variation: an 8 inch matte black porcelain bowl, 20 x 8, no loss at ILS 69 (19.9%, below 40%: VR1). It is deeper than the brief (8 vs 5-6.4): check in frame. The sesame-glaze open bowl (20.5 x 5, the right shape) loses money at ILS 69 as a pair of bowls (1.14 kg).",
+   "not_opened_notable": [],
+   "next": "If the designer rejects the deep black bowl: the cream 8 inch bowl of CJJT2329033 (seen, not quoted) or the sesame-glaze pair at ILS 89+.",
+   "opened": [
+    {
+     "pid": "1447121145164861440",
+     "status": "card",
+     "reason": "card bowl-cj-matte-black-bowl-20 (round-3 2026-10-11, living-room/bowl)",
+     "card_ids": [
+      "bowl-cj-matte-black-bowl-20"
+     ]
+    },
+    {
+     "pid": "1453895145245249536",
+     "status": "rejected",
+     "reason": "round-3 living-room/bowl: 13 x 6.8 cm, army green / sky blue / chocolate only",
+     "card_ids": null
+    },
+    {
+     "pid": "1509016900393775104",
+     "status": "rejected",
+     "reason": "round-3 living-room/bowl: 4.5 inch (11 cm) bowl, too small for 16-24",
+     "card_ids": null
+    },
+    {
+     "pid": "1517764695959285760",
+     "status": "rejected",
+     "reason": "round-3 living-room/bowl: 5 inch green breakfast cup with gold spoon",
+     "card_ids": null
+    },
+    {
+     "pid": "1623222327741788160",
+     "status": "rejected",
+     "reason": "round-3 living-room/bowl: scalloped floral-shape salad bowl in white, green, yellow; decorative rim",
+     "card_ids": null
+    },
+    {
+     "pid": "1794915314921119744",
+     "status": "rejected",
+     "reason": "round-3 living-room/bowl: rust brush-stroke swirl reactive glaze, glossy, irregular rim; not a single matte tone",
+     "card_ids": null
+    },
+    {
+     "pid": "2406200258501613200",
+     "status": "rejected",
+     "reason": "round-3 living-room/bowl: loses money at the slot price ILS 69: landed ILS 66.0 ($1.94 per pair + CJPacket Eub shipping $18.05) vs break-even ILS 51.2; matte sesame-glaze open bowl, Milk Yellow nearest to oat; needs about ILS 89 as a pair",
+     "card_ids": null
+    },
+    {
+     "pid": "2503160804311616000",
+     "status": "seen",
+     "reason": "round-3 living-room/bowl: not needed this round (the black 8 inch bowl of CJJT1314490 filled the slot); Matte cream color-8inch bowl CJJT232903306FU $3.34, latte-cream matte about #D0BBA6, deep soup bowl; freight not quoted; possible oat/oak variation later",
+     "card_ids": null
+    }
+   ],
+   "cards": [
+    "bowl-cj-matte-black-bowl-20"
+   ]
+  },
+  "master/bedding": {
+   "priority": "low",
+   "need_variations": 1,
+   "envelope_cm": {
+    "duvet": [
+     200,
+     220
+    ]
+   },
+   "price_ceiling": {
+    "slot_price_ils": 469,
+    "breakeven_landed_ils": 355.1,
+    "landed_for_40_ils": 196.1
+   },
+   "queries": [
+    "stonewashed linen duvet cover 220x240 white",
+    "washed french linen bedding set warm white",
+    "linen cotton duvet cover light grey 220x240"
+   ],
+   "found": false,
+   "summary": "No pass. The plain linen sets on CJ are either already in the registry (5 + 2 + 4 hits hidden) or printed (tropical leaves, butterflies, kids prints) or green/brown cotton. The only plain washed linen set is $99-108 before shipping.",
+   "not_opened_notable": [
+    {
+     "name": "Simple Plain Linen Washed Four-Piece Cotton And Linen Bedding (CJCS1026864)",
+     "pid": "1366995594454896640",
+     "why": "$99.28-108.37 before shipping: at ILS 469 the cost alone is at break-even ($107.6)"
+    },
+    {
+     "name": "Vintage French-style All-cotton Washed Cotton Four-piece Bedding Set (CJCS3148794)",
+     "pid": "2609090819201607900",
+     "why": "washed cotton, no linen slub (the brief asks linen or cotton-linen)"
+    }
+   ],
+   "next": "The default set (bedding-cj-washed-linen-natural-set) has a White colourway still to measure (composition); measuring it may fill this slot without a new product.",
+   "opened": [
+    {
+     "pid": "2503140648021603000",
+     "status": "rejected",
+     "reason": "round-3 master/bedding: solid cotton set only in green and brown; no warm white or light mist grey, not linen",
+     "card_ids": null
+    },
+    {
+     "pid": "2510151248411621300",
+     "status": "rejected",
+     "reason": "round-3 master/bedding: tropical leaf jacquard print with coconut buttons on the pillowcases; not plain",
+     "card_ids": null
+    },
+    {
+     "pid": "2609100355281602900",
+     "status": "rejected",
+     "reason": "round-3 master/bedding: butterfly jacquard print with ruffled lace edges; not plain",
+     "card_ids": null
+    },
+    {
+     "pid": "2609111225551617500",
+     "status": "rejected",
+     "reason": "round-3 master/bedding: cotton sets with kids prints only (stars, cats, bears, flowers)",
+     "card_ids": null
+    }
+   ],
+   "cards": []
+  }
+ },
+ "cards": [
+  {
+   "id": "bedspread-cj-muslin-grid-gauze-sage-160x220",
+   "slot": "kids/bedspread",
+   "pid": "2607201207411621000",
+   "vid": "2607201207411627100",
+   "sku": "CJCS299536706FU",
+   "option": "Sage, Queen 160x220",
+   "cost_usd": 8.38,
+   "freight": {
+    "line": "CJPacket Eub",
+    "usd": 11.67,
+    "days": "12-50"
+   },
+   "slot_price_ils": 199,
+   "landed_ils": 66.2,
+   "contribution_ils": 83.8,
+   "margin_pct": 49.7,
+   "passes_40": true,
+   "flags": [
+    "no 150x200 SKU: Queen 160x220, check the fold in frame",
+    "listing has no description or fibre content",
+    "listedNum 0"
+   ]
+  },
+  {
+   "id": "bedspread-cj-cotton-waffle-blanket-light-grey-150x200",
+   "slot": "kids/bedspread",
+   "pid": "2506281229401622900",
+   "vid": "2506281229401623900",
+   "sku": "CJYD241378706FU",
+   "option": "Light Gray, 150x200",
+   "cost_usd": 9.78,
+   "freight": {
+    "line": "CJPacket Eub",
+    "usd": 16.59,
+    "days": "12-50"
+   },
+   "slot_price_ils": 199,
+   "landed_ils": 87.0,
+   "contribution_ils": 63.0,
+   "margin_pct": 37.3,
+   "passes_40": false,
+   "flags": [
+    "below 40% (VR1 exception, no loss)",
+    "light grey at the low edge of mist grey (L about 75)",
+    "cotton content line says 50"
+   ]
+  },
+  {
+   "id": "bowl-cj-matte-black-bowl-20",
+   "slot": "living-room/bowl",
+   "pid": "1447121145164861440",
+   "vid": "1447121145315856384",
+   "sku": "CJJT131449012LO",
+   "option": "12style: 8 inch black matte, 20x8",
+   "cost_usd": 4.75,
+   "freight": {
+    "line": "CJPacket Eub",
+    "usd": 7.25,
+    "days": "12-50"
+   },
+   "slot_price_ils": 69,
+   "landed_ils": 39.6,
+   "contribution_ils": 11.6,
+   "margin_pct": 19.9,
+   "passes_40": false,
+   "also": "at ILS 79: 28.7%",
+   "flags": [
+    "below 40% (VR1 exception, no loss)",
+    "deep soup-bowl shape, H8 vs 6.4/5.2 of the other variations: check in frame",
+    "only Eub avoids a loss",
+    "CJ weight 280 g looks low: confirm the fee at the first order"
+   ]
+  }
+ ]
+}
