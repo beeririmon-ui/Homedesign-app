@@ -1,0 +1,552 @@
+{
+  "style": "modern-country",
+  "date": "2026-10-12",
+  "author": "master-designer",
+  "scope": "all rooms; one entry per sourcing task. 'slot' is the lead slot and 'also_serves' lists the other slots the same queries serve (rule z.00: a query that serves several slots runs once).",
+  "brief": "docs/design-bible/modern-country-brief-draft.md",
+  "catalog": "data/catalog/modern-country-2026-10-12.json",
+  "formula": "net = price/1.18; contribution = net - landed - (0.02*price + 1.2) - 0.08*net. breakeven_landed = 0.759661*price - 1.2; landed_for_40 = 0.420678*price - 1.2. Landed = (item + shipping to Israel) x 3.3, in ILS, for the quantity sold (pair or set). slot_price_ils here is my proposal by Israeli value (h.10), not approved.",
+  "priority_scale_he": "high: חתימת הסגנון או משטח גדול בפריים (תאורה בפליז ובקפלים, שטיח, גיבור). medium: עמדה בולטת או משפחה של כמה עמדות. low: פריט קטן על משטח או עמדה אחת שקטה.",
+  "query_rules_he": "השאילתות חדשות ושונות ממה שרץ (נבדק מול searched-index.json: לא 'farmhouse/rustic + מוצר', לא 'pleated pendant light', לא 'picture light brass', לא 'wooden blanket ladder', לא 'large terracotta pot'). חומר, גימור, פרט ומידה במקום מילת סגנון. hide-seen תמיד. רק מוצרים שנשלחים לישראל, עם כל המק״טים (מידות וגוונים), משקל וקרטון, ותמונה של המוצר עצמו. ציון 8 ומעלה רק אחרי מבט מעצב. לפסול בלי לפתוח: טקסט, חיות מצוירות, מוטיבים עונתיים, צנצנות מייסון, פח מגולוון, יוטה עם סרט, זהב מבריק, העתקי עיצובים.",
+  "slots": [
+    {
+      "slot": "living-room/wall-sconce",
+      "also_serves": ["master/bedside-sconces", "dining-room/kitchen-sconce", "hall/wall-sconce", "work/wall-sconce", "kids/wall-sconce"],
+      "priority": "high",
+      "need_variations": 3,
+      "spec_he": "זרוע פליז עתיק (סאטן, עד 30 GU), ישרה או מתקפלת; אהיל פשתן בקפלים או empire בשנהב או פשתן טבעי 16–24 (בילדים 12–16, בלי זכוכית); נורה מוסתרת. בסלון plug-in עם כבל קצר לשקע; בשאר מחווט על ידי חשמלאי. CE, ‏220–240V, ‏2700K, כבל בד. וריאציות: פליז ופשתן טבעי, פליז ושנהב בקפלים, עץ צבוע בחלב ואהיל פשתן. אסור: זהב מבריק, חבל קלוע, נורה גלויה, צוואר ברבור, העתקים.",
+      "envelope_cm": {"living_projection": [30, 45], "living_shade_d": [16, 24], "living_total_h": [25, 40], "bedside_w": [12, 18], "bedside_h": [15, 22], "bedside_projection_max": 22, "kitchen_shade_d": [14, 20], "kitchen_projection_max": 20, "kids_arm": [30, 45], "kids_shade_d": [12, 16]},
+      "price_ceiling": {"slot_price_ils": 299, "breakeven_landed_ils": 225.9, "landed_for_40_ils": 124.6},
+      "source_type": "Israeli lighting importer (needs IL1) / AliExpress Choice flat-pack",
+      "queries": [
+        "antique brass wall lamp pleated linen shade plug in cord",
+        "brass swing arm sconce empire fabric shade ivory",
+        "bedside wall lamp aged brass gathered shade pair",
+        "vintage brass reading wall light tapered drum linen shade",
+        "brass wall light small pleated lampshade 16cm"
+      ],
+      "leads": [],
+      "why_he": "חתימת הסגנון, ושש עמדות בלי אף מוצר. בלי מנורת הקריאה אין בסלון משולש אור, ובלי זוג המנורות ליד המיטה אין חתימה לחדר ההורים. אהילי החבל הקלוע (6.5) הם ימיים-בוהו ולא כפריים."
+    },
+    {
+      "slot": "living-room/accent-sconces",
+      "also_serves": [],
+      "priority": "high",
+      "need_variations": 3,
+      "spec_he": "זוג מנורות קיר קטנות משני צדי התמונה: פליז עתיק עם אהיל קפלים קטן, או זכוכית אופל (צבעונית/טוליפ) על לוחית פליז. מחווטות, בלי חוט גלוי, CE, ‏2700K. אור רך על הקיר בלבד.",
+      "envelope_cm": {"w": [10, 14], "h": [12, 18], "projection": [7, 12]},
+      "price_ceiling": {"slot_price_ils": 449, "breakeven_landed_ils": 339.9, "landed_for_40_ils": 187.7, "note_he": "לזוג"},
+      "source_type": "Israeli lighting importer (needs IL1) / AliExpress",
+      "queries": [
+        "aged brass single candle wall light linen clip shade",
+        "small opal glass tulip wall light antique brass",
+        "mini brass wall sconce pair hardwired fabric shade"
+      ],
+      "leads": [],
+      "why_he": "הטרוורטין של הנורדי לא כפרי (6.0). הזוג ממסגר את הגיבור של M0."
+    },
+    {
+      "slot": "corridor/picture-lights",
+      "also_serves": [],
+      "priority": "high",
+      "need_variations": 3,
+      "spec_he": "שלוש מנורות תמונה בפליז עתיק או ברונזה מוברשת, רוחב 25–32, ראש מסתובב, מחווטות לנקודות בקיר, בלי כבל גלוי. LED ‏2700K, ‏CRI 90+, אור אחיד בלי נקודה חמה.",
+      "envelope_cm": {"w": [25, 32], "projection": [10, 15], "h": [4, 8]},
+      "price_ceiling": {"slot_price_ils": 149, "breakeven_landed_ils": 112.0, "landed_for_40_ils": 61.5, "note_he": "ליחידה; הסט נמכר כשלישייה"},
+      "source_type": "Israeli lighting importer (needs IL1) / AliExpress",
+      "queries": [
+        "antique brass art light hardwired 30cm swivel head",
+        "bronze finish gallery painting lamp 220v warm led",
+        "brass painting light wall mounted adjustable arm 30cm"
+      ],
+      "leads": [],
+      "why_he": "הגלריה הבוטנית (8.5) קיימת, אבל בלי מנורות התמונה המסדרון לא נראה כפרי. picture-lights-cj-black-tube-rechargeable שחור ומפסיד."
+    },
+    {
+      "slot": "living-room/rug",
+      "also_serves": ["master/rug", "dining-room/dining-rug", "kids/rug", "work/rug"],
+      "priority": "high",
+      "need_variations": 3,
+      "spec_he": "צמר או צמר-כותנה בערימה נמוכה (עד 10 מ״מ) או קליעה שטוחה. וריאציות: כביסה וינטג' דהויה בשמנת, מרווה וורד-חימר; פס או משבצת טון-על-טון בשמנת; פשוט בפשתן. ממוצע L 70 ומעלה. אסור: ויסקוזה, שאגי, פרסי רווי באדום או כחול, הדפס פוליאסטר מבריק, עגול.",
+      "envelope_cm": {"living": [240, 340], "master": [290, 210], "dining": [230, 220], "kids": [140, 200], "work": [170, 210]},
+      "price_ceiling": {"slot_price_ils": 1299, "breakeven_landed_ils": 985.6, "landed_for_40_ils": 545.3},
+      "source_type": "Israeli supplier (Carpetshop/The Red Carpet B2B, Carmel Floor Design; needs IL1) / local stock",
+      "queries": [
+        "vintage washed wool rug ivory sage 240x340",
+        "low pile faded oushak rug cream green 200x300",
+        "hand loomed cotton wool flatweave rug ivory stripe 240x340",
+        "distressed traditional rug muted beige rose 160x230"
+      ],
+      "leads": [],
+      "why_he": "0 מתוך 5 שטיחי חדר. כל רשומות AliExpress בסגנון הן 40×40 עד 80×120 או הדפסי פלנל ב-200×300 שלא נבדקו. שטיח של 6–12 ק״ג מסין מפסיד."
+    },
+    {
+      "slot": "corridor/runner-rug",
+      "also_serves": ["hall/runner-rug", "dining-room/kitchen-runner"],
+      "priority": "high",
+      "need_variations": 3,
+      "spec_he": "ראנר בחיתוך לפי מטר או במידות: מסדרון 60×700, כניסה 75×260, מטבח 55×260. כביסה וינטג' דהויה, טיקינג בכותנה, או קליעה שטוחה בשמנת. כביס, מונע החלקה.",
+      "envelope_cm": {"corridor": [60, 700], "hall": [75, 260], "kitchen": [55, 260]},
+      "price_ceiling": {"slot_price_ils": 699, "breakeven_landed_ils": 529.8, "landed_for_40_ils": 292.9, "note_he": "למסדרון; בכניסה ובמטבח ₪349 (נחיתה עד 145.6 ל-40%)"},
+      "source_type": "Israeli supplier, cut-to-length (needs IL1)",
+      "queries": [
+        "vintage style runner rug sold by the meter 60cm wide",
+        "washable faded traditional hallway runner 70x260 ivory",
+        "ticking stripe cotton runner rug 60x240 natural"
+      ],
+      "leads": [
+        {"ae_item_id": "1005008493210429", "why_he": "ראנר רטרו אירופאי 60×300, נחיתה ₪144, לא נבדק בעין; 300 בלבד, ולכן רק לכניסה אם יש 260"},
+        {"ae_item_id": "1005008743673515", "why_he": "פרסי רטרו 60×300, אותה הערה"}
+      ],
+      "why_he": "שלוש עמדות רצפה בלי מוצר; במסדרון 700 ס״מ אין מקור שאינו ישראלי."
+    },
+    {
+      "slot": "hall/table-lamp",
+      "also_serves": ["living-room/floor-lamp", "master/floor-lamp", "work/desk-lamp"],
+      "priority": "high",
+      "need_variations": 3,
+      "spec_he": "מנורת שולחן: בסיס קרמיקה בשמנת או במרווה (זיגוג מט או סאטן) או עמוד עץ מחורט; אהיל empire בקפלים מפשתן 20–26; גובה 45–55; בסיס עד 14. מנורת רגל: עמוד פליז עתיק או עץ מחורט, אהיל empire בקפלים 35–40, גובה 150–160. תקע EU או ישראלי, CE. אסור: העתקים (Moragas נפסלה), קשת, נורה גלויה.",
+      "envelope_cm": {"table_h": [45, 55], "table_shade_d": [20, 26], "table_base_d_max": 14, "floor_h": [150, 160], "floor_shade_d": [35, 40], "floor_base_d_max": 30},
+      "price_ceiling": {"slot_price_ils": 299, "breakeven_landed_ils": 225.9, "landed_for_40_ils": 124.6, "note_he": "מנורת שולחן; מנורת רגל ₪449 (נחיתה עד 187.7 ל-40%)"},
+      "source_type": "Israeli lighting importer (needs IL1) / AliExpress flat-pack (folding shade)",
+      "queries": [
+        "ceramic table lamp pleated linen shade sage glaze 50cm",
+        "cream stoneware lamp base small empire shade",
+        "floor lamp aged brass stem pleated empire shade 155cm",
+        "turned wood floor lamp linen pleated shade"
+      ],
+      "leads": [
+        {"card_id": "table-lamp-cj-white-textured-ceramic-linen-drum", "why_he": "קרמיקה ופשתן (7.0), אבל אהיל 32 רחב מהמעטפה ו-‎−13.7% ב-₪199; ב-₪349 ‏30.7%. רק אם יש אהיל 24"}
+      ],
+      "why_he": "חתימת הכניסה ושתי מנורות הקריאה. מנורות הקפלים של CJ מפסידות (‎−107% ומטה) או מעתיקות."
+    },
+    {
+      "slot": "dining-room/dining-pendant",
+      "also_serves": ["living-room/pendant", "master/pendant"],
+      "priority": "high",
+      "need_variations": 3,
+      "spec_he": "תלויה 45–55 (בהורים 40–50, בסלון לפי ה-Bible): כיפת נצרים או ראטן טבעי, בד פשתן בקפלים, או כיפת זכוכית אופל עם צוואר פליז. CE, ‏220–240V, נורה מוסתרת, כבל עד 130 ומעלה. אסור: כלוב חוט, שחור תעשייתי, חבל.",
+      "envelope_cm": {"dining_d": [45, 55], "dining_h_max": 30, "master_d": [40, 50], "master_h": [25, 35]},
+      "price_ceiling": {"slot_price_ils": 349, "breakeven_landed_ils": 263.9, "landed_for_40_ils": 145.6},
+      "source_type": "AliExpress Choice / CJ / Israeli lighting importer",
+      "queries": [
+        "natural rattan dome pendant light 50cm",
+        "gathered linen fabric pendant shade 50cm cream",
+        "milk glass dome pendant antique brass 45cm"
+      ],
+      "leads": [],
+      "why_he": "הקיים היחיד בסגנון הוא ביצת הקפלים של CJ, שמחזיקה רק ב-₪499 עם 10.7%."
+    },
+    {
+      "slot": "corridor/ceiling-lights",
+      "also_serves": ["hall/ceiling-light", "bath/ceiling-light"],
+      "priority": "medium",
+      "need_variations": 3,
+      "spec_he": "חצי-צמודה 30–45: כיפת זכוכית אופל בסגנון בית ספר עם טבעת פליז, או בד פשתן בקפלים. במקלחת IP44, גובה 6–10. CE, מחווטת, ‏2700K.",
+      "envelope_cm": {"corridor_d": [30, 40], "corridor_projection": [12, 20], "hall_d": [35, 45], "hall_h": [18, 25], "bath_d": [28, 34], "bath_h": [6, 10]},
+      "price_ceiling": {"slot_price_ils": 249, "breakeven_landed_ils": 188.0, "landed_for_40_ils": 103.5, "note_he": "ליחידה; במסדרון זוג"},
+      "source_type": "AliExpress Choice / Israeli lighting importer",
+      "queries": [
+        "schoolhouse semi flush ceiling light opal glass brass 35cm",
+        "frosted glass flush ceiling lamp antique brass ring",
+        "ip44 opal glass ceiling light brass trim bathroom"
+      ],
+      "leads": [],
+      "why_he": "שלוש עמדות תקרה ריקות. הרשומות: תעשייתי שחור וחבל."
+    },
+    {
+      "slot": "bath/wall-sconce",
+      "also_serves": ["bath/vanity-sconces"],
+      "priority": "medium",
+      "need_variations": 3,
+      "spec_he": "IP44, מחווטת, בלי כבל. כדור אופל או זכוכית מצולעת על לוחית פליז עתיק, או קרמיקה מזוגגת בשמנת. רוחב 10–16, גובה 18–26, בליטה עד 12 (ליד המראה).",
+      "envelope_cm": {"w": [10, 16], "h": [18, 26], "projection_max": 12},
+      "price_ceiling": {"slot_price_ils": 179, "breakeven_landed_ils": 134.8, "landed_for_40_ils": 74.1},
+      "source_type": "AliExpress Choice / Israeli lighting importer",
+      "queries": [
+        "ip44 opal globe wall light aged brass backplate",
+        "bathroom wall sconce ribbed glass brass small ip44"
+      ],
+      "leads": [],
+      "why_he": "הצלעות בשרף הלבן של הנורדי לא כפריות (6.5)."
+    },
+    {
+      "slot": "hall/framed-art",
+      "also_serves": ["work/framed-art"],
+      "priority": "medium",
+      "need_variations": 3,
+      "spec_he": "הדפס וינטג' (בוטניקה עתיקה, נוף בשמן, טבע דומם), בלי טקסט. כניסה: ריבוע 50–60; עבודה: לרוחב 55–60×45–50. מסגרת אלון או אגוז דקה 1.5–2.5, עומק 2–3.5, פספרטו שנהב 4–6.",
+      "envelope_cm": {"hall_w": [50, 60], "hall_h": [50, 60], "work_w": [55, 60], "work_h": [45, 50]},
+      "price_ceiling": {"slot_price_ils": 249, "breakeven_landed_ils": 188.0, "landed_for_40_ils": 103.5, "note_he": "כולל מסגור"},
+      "source_type": "AliExpress prints + local framing (needs PR1) / Israeli framed-art wholesaler",
+      "queries": [
+        "vintage botanical print square 50x50 sepia",
+        "antique landscape painting print horizontal 60x45",
+        "vintage still life print landscape orientation 60x45"
+      ],
+      "leads": [
+        {"ae_item_id": "4000153710412", "why_he": "הליסטינג הבוטני (8.5); לבדוק אם יש מק״ט ריבועי"},
+        {"ae_item_id": "1005006849743763", "why_he": "נופי שמן (8.0); לבדוק מק״ט לרוחב 60×45"}
+      ],
+      "why_he": "ההדפסים שנמצאו הם 40×50 ו-50×70, ולא מתאימים למעטפות האלה."
+    },
+    {
+      "slot": "dining-room/open-shelf-ceramics",
+      "also_serves": ["dining-room/utensil-crock", "dining-room/canisters", "dining-room/mug-set", "dining-room/tableware-set", "dining-room/herb-pots", "dining-room/condiment-set", "bath/soap-dispenser", "bath/toothbrush-cup", "bath/shower-dispensers"],
+      "priority": "high",
+      "need_variations": 3,
+      "spec_he": "אבנית וחרס בשמנת, במרווה ובזיגוג מנוקד, מט או סאטן: קנקן 18–26 וצנצנת 10–15; כלי לכפות 16–20×12–14; 3 צנצנות עם מכסה עץ (22/18/14); 3 ספלים 9–11; צלחות 26–28; 2 עציצי טרקוטה 10–12 עם תחתית; מטחנות עץ 15–20 וכלי שמן 20–24; משאבת סבון 16–19 עם ראש פליז; כוס 9–11.",
+      "envelope_cm": {"jug_h": [18, 26], "small_h": [10, 15], "crock_h": [16, 20], "canisters_h": [[20, 24], [16, 20], [12, 16]], "mug_h": [9, 11], "herb_pot": [10, 12], "soap_h": [16, 19]},
+      "price_ceiling": {"slot_price_ils": 214, "breakeven_landed_ils": 161.4, "landed_for_40_ils": 88.8, "note_he": "לזוג על המדף; לשאר לפי מחיר העמדה"},
+      "source_type": "Local stock / 1688 agent with consolidated shipping (needs LK1)",
+      "queries": [
+        "cream glazed stoneware milk jug 22cm",
+        "sage green speckled stoneware jar small with lid",
+        "stoneware kitchen canister set wooden lid cream 3 sizes",
+        "speckled cream stoneware mug set of 3",
+        "unglazed clay herb pot with drainage saucer 11cm",
+        "cream ceramic soap pump brass head 18cm"
+      ],
+      "leads": [],
+      "why_he": "עשר עמדות קרמיקה ריקות. קרמיקה כבדה מפסידה בכל משלוח בודד מסין (גם בנורדי), ולכן רק מלאי מקומי."
+    },
+    {
+      "slot": "dining-room/cutting-boards",
+      "also_serves": [],
+      "priority": "low",
+      "need_variations": 3,
+      "spec_he": "זוג קרשי משוט מעץ זית, אקציה או אלון, עם ידית: 42–48 ו-34–40, רוחב 20–26, עובי 1.5–2.5. גימור שמן, בלי לכה.",
+      "envelope_cm": {"h": [[42, 48], [34, 40]], "w": [20, 26], "t": [1.5, 2.5]},
+      "price_ceiling": {"slot_price_ils": 149, "breakeven_landed_ils": 112.0, "landed_for_40_ils": 61.5, "note_he": "לזוג"},
+      "source_type": "AliExpress / CJ",
+      "queries": [
+        "olive wood paddle cutting board 45cm",
+        "acacia wood bread board with handle 38cm",
+        "set of 2 wooden paddle serving boards"
+      ],
+      "leads": [],
+      "why_he": "הרשומות היו כלי נגרות ומיניאטורות."
+    },
+    {
+      "slot": "dining-room/bench-pad",
+      "also_serves": ["hall/bench-cushion"],
+      "priority": "medium",
+      "need_variations": 3,
+      "spec_he": "כרית ספסל בכותנה או פשתן עם שרוכים: טיקינג (פס עד 1 ס״מ) בשמנת ומרווה או בשמנת ואומבר, משבצת קטנה, או פשתן חלק עם צנרת. פינת אוכל 135–140×30–35×3–5; כניסה 110–116×34–38×3–5.",
+      "envelope_cm": {"dining": [137, 32, 4], "hall": [113, 36, 4]},
+      "price_ceiling": {"slot_price_ils": 179, "breakeven_landed_ils": 134.8, "landed_for_40_ils": 74.1},
+      "source_type": "AliExpress (custom size) / Israeli upholsterer",
+      "queries": [
+        "ticking stripe bench cushion with ties 140x35",
+        "long bench seat pad cotton stripe custom size",
+        "linen bench cushion with piping 115x36"
+      ],
+      "leads": [
+        {"ae_item_id": "1005012684625182", "why_he": "כרית ספסל גינה בפסים בהזמנה אישית, לא נבדקה בעין"}
+      ],
+      "why_he": "המשבצת והטיקינג הם חצי מהשפה של הסגנון, ואין אף מוצר בדוגמה כזו."
+    },
+    {
+      "slot": "dining-room/table-runner",
+      "also_serves": ["living-room/table-runner"],
+      "priority": "low",
+      "need_variations": 1,
+      "spec_he": "וריאציה שלישית: ראנר בטיקינג או במשבצת מרווה קטנה (עד 2 ס״מ), כותנה או פשתן. פינת אוכל 33–38×135–145; סלון 33×120.",
+      "envelope_cm": {"dining_w": [33, 38], "dining_l": [135, 145], "living_l": [115, 125]},
+      "price_ceiling": {"slot_price_ils": 89, "breakeven_landed_ils": 66.4, "landed_for_40_ils": 36.2},
+      "source_type": "AliExpress Choice",
+      "queries": [
+        "sage gingham linen table runner 35x140",
+        "ticking stripe table runner cotton 33x140",
+        "small check linen runner green cream"
+      ],
+      "leads": [
+        {"ae_item_id": "1005004312404637", "why_he": "פשתן עם ציציות בשנהב (נבדק בעין), אבל 33×160; לבדוק מק״ט 140"}
+      ],
+      "why_he": "שתי הוריאציות הקיימות הן מאותו כרטיס (מרווה ובז')."
+    },
+    {
+      "slot": "living-room/curtains",
+      "also_serves": ["dining-room/curtains", "master/curtains", "work/curtains"],
+      "priority": "medium",
+      "need_variations": 1,
+      "spec_he": "וריאציה שלישית בכל החלונות: פשתן במרווה, או פשתן טבעי עם סלסול 3–8 בראש או בצד. נפילה 278–282, פאנל 130–150, קפלי S או סיכה. אסור: מנהרה גלויה עם מוט כרום, תחרה רחבה, הדפס.",
+      "envelope_cm": {"panel_w": [130, 150], "drop": [278, 282]},
+      "price_ceiling": {"slot_price_ils": 299, "breakeven_landed_ils": 225.9, "landed_for_40_ils": 124.6, "note_he": "לזוג"},
+      "source_type": "AliExpress (custom length) / Lithuanian linen line (S7)",
+      "queries": [
+        "sage green linen curtain 140x280 pinch pleat",
+        "natural linen curtain ruffle edge 280cm drop",
+        "stonewashed linen drapes 280 cm long sage"
+      ],
+      "leads": [
+        {"ae_item_id": "1005006755784378", "why_he": "פשתן טבעי (8.0, נבדק בעין פעמיים), מק״ט מקסימלי 260; לבקש 280 (פנייה דרך המשתמש). אם מאושר, ברירת המחדל בכל הבית"},
+        {"ae_item_id": "1005012799317966", "why_he": "פשתן עם סלסול, טבעי, 140×260 בלבד; לבדוק אורך מותאם"},
+        {"ae_item_id": "1005005961633690", "why_he": "פשתן 100% במרווה 200×260, אין ציטוט משלוח"}
+      ],
+      "why_he": "בכל ארבעת החלונות יש היום רק טבעי ושנהב."
+    },
+    {
+      "slot": "master/throw",
+      "also_serves": ["hall/bench-throw"],
+      "priority": "medium",
+      "need_variations": 3,
+      "spec_he": "קווילט כותנה תפור או ופל כבוס, 200×230 ומעלה, מקופל לרגלי המיטה ל-180–185×35–45. שנהב, פשתן, מרווה; שוליים גליים או סלסול עד 8 מותרים. בכניסה: שמיכת זריקה 130×170.",
+      "envelope_cm": {"folded_w": [180, 185], "folded_d": [35, 45], "hall_folded": [32, 33, 6]},
+      "price_ceiling": {"slot_price_ils": 299, "breakeven_landed_ils": 225.9, "landed_for_40_ils": 124.6},
+      "source_type": "CJ / AliExpress",
+      "queries": [
+        "stonewashed cotton quilted coverlet 230x250 ivory",
+        "scalloped edge cotton quilt king cream",
+        "waffle cotton bedspread ruffle edge 230x250"
+      ],
+      "leads": [
+        {"card_id": "throw-cj-cotton-waffle-ruffle-khaki-150x200", "why_he": "ופל עם סלסול (7.5, נבדק בעין); לבדוק מק״ט 230×250"}
+      ],
+      "why_he": "הקווילט הוא מוצר מוביל של הסגנון (israel-styles), וכל מה שיש הוא 150×200."
+    },
+    {
+      "slot": "master/pillowcases",
+      "also_serves": ["master/cushions", "master/bedding"],
+      "priority": "medium",
+      "need_variations": 1,
+      "spec_he": "ציפיות פשתן עם סלסול 3–5, זוג 50×75 (65–70×45–50 בפריים). כרית מותן 55–65×33–40 בהדפס בלוק או משבצת. מצעים 200×220 בפרחוני קטן או במשבצת מרווה.",
+      "envelope_cm": {"pillowcase": [70, 48], "lumbar": [60, 36], "duvet": [200, 220]},
+      "price_ceiling": {"slot_price_ils": 149, "breakeven_landed_ils": 112.0, "landed_for_40_ils": 61.5, "note_he": "לזוג ציפיות; מצעים ₪599 (נחיתה עד 250.8 ל-40%)"},
+      "source_type": "CJ / AliExpress",
+      "queries": [
+        "linen pillowcase ruffle edge 50x75 pair natural",
+        "small floral cotton duvet cover 200x220 cream sage",
+        "mini gingham duvet cover queen sage"
+      ],
+      "leads": [
+        {"ae_item_id": "1005013027648144", "why_he": "ציפה פרחונית 200×230, נחיתה ₪81, לא נבדקה בעין"},
+        {"ae_item_id": "1005013284664507", "why_he": "סט כותנה במשבצת 200×230, נחיתה ₪187, לא נבדק"}
+      ],
+      "why_he": "חדר ההורים הוא החזק בסגנון, אבל כולו פשתן חלק. חסרים הסלסול והדוגמה שהופכים אותו לכפרי."
+    },
+    {
+      "slot": "kids/bedding",
+      "also_serves": ["kids/cushions", "kids/roman-blind"],
+      "priority": "medium",
+      "need_variations": 3,
+      "spec_he": "לחדר הילד: ציפת יחיד 140×200 וציפית 50×70 בטיקינג או במשבצת קטנה, כותנה. כריות 35–40 בדוגמה תואמת. וילון רומאי או וילון קשירה מפשתן ברוחב 134–138, ערימה 30–40.",
+      "envelope_cm": {"duvet": [140, 200], "pillow": [50, 70], "cushion": [35, 40], "blind_w": [134, 138], "blind_stack_h": [30, 40]},
+      "price_ceiling": {"slot_price_ils": 199, "breakeven_landed_ils": 150.0, "landed_for_40_ils": 82.5},
+      "source_type": "CJ / AliExpress",
+      "queries": [
+        "ticking stripe single duvet cover 140x200 cotton",
+        "seersucker duvet cover single sage",
+        "linen roman blind 135cm natural with lining",
+        "gingham cushion cover 40x40 sage"
+      ],
+      "leads": [
+        {"ae_item_id": "1005007591996402", "why_he": "ציפה עם סלסול פרחוני, ‏3.7% ב-₪179; רק לילדה ורק במחיר גבוה"}
+      ],
+      "why_he": "לחדר הילד אין היום שום דוגמה. הוא צריך את המשבצת והטיקינג."
+    },
+    {
+      "slot": "bath/shower-curtain",
+      "also_serves": [],
+      "priority": "medium",
+      "need_variations": 3,
+      "spec_he": "וילון מקלחת מכותנה: טיקינג בשמנת ואומבר, ופל בשנהב, או פשתן טבעי. רוחב 180–240, נפילה 255–265, טבעות פליז או ווים מוסתרים (לא כרום). דוחה מים או עם בטנה.",
+      "envelope_cm": {"w": [180, 240], "drop": [255, 265]},
+      "price_ceiling": {"slot_price_ils": 149, "breakeven_landed_ils": 112.0, "landed_for_40_ils": 61.5},
+      "source_type": "AliExpress / CJ",
+      "queries": [
+        "extra long cotton waffle shower curtain 180x260",
+        "ticking stripe fabric shower curtain 200x260",
+        "linen look shower curtain long 240x260 natural"
+      ],
+      "leads": [],
+      "why_he": "בעמדה רק פרת היילנד (קיטש) ווילונות קצרים שמפסידים."
+    },
+    {
+      "slot": "bath/towel-ladder",
+      "also_serves": ["bath/bath-towels", "bath/storage-basket"],
+      "priority": "medium",
+      "need_variations": 3,
+      "spec_he": "סולם עץ נשען 130–135, רוחב 30–45, בחלב צבוע או אלון דבש. מגבות 70×140 ו-50×90 עם פס ארוג בשוליים (מרווה, אומבר). סל ערבה עם בטנת פשתן 40–44×30–34×20–23.",
+      "envelope_cm": {"ladder_w": [30, 45], "ladder_h": [130, 135], "towel": [70, 140], "hand_towel": [50, 90], "basket": [42, 32, 21]},
+      "price_ceiling": {"slot_price_ils": 199, "breakeven_landed_ils": 150.0, "landed_for_40_ils": 82.5, "note_he": "לסולם; מגבות זוג ₪129 (נחיתה עד 53.1)"},
+      "source_type": "AliExpress / CJ / local stock",
+      "queries": [
+        "pine wood leaning towel ladder 5 rungs 130cm",
+        "cotton bath towel woven stripe border 70x140 cream",
+        "willow storage basket linen lined 40x30"
+      ],
+      "leads": [],
+      "why_he": "הסולם הוא חתימת המקלחת הכפרית, ואין לו מוצר גם בנורדי."
+    },
+    {
+      "slot": "hall/storage-boxes",
+      "also_serves": ["master/basket", "work/waste-basket", "work/magazine-holder", "living-room/magazine-holder", "work/shelf-boxes", "living-room/basket", "kids/toy-basket"],
+      "priority": "medium",
+      "need_variations": 3,
+      "spec_he": "ערבה ונצרים במקום קש ים: זוג קופסאות עם מכסה ובטנת פשתן 26–30×20–22×28–35; סל כביסה עם מכסה 32–38; פח נייר 22–26×28–32; סל עיתונים מלבני 24–32×18–25×36–48; סל לבולי עץ 32–38 עם ידיות.",
+      "envelope_cm": {"boxes": [28, 21, 32], "hamper": [35, 35], "waste": [24, 30], "magazine": [28, 22, 42], "log_basket": [35, 35]},
+      "price_ceiling": {"slot_price_ils": 149, "breakeven_landed_ils": 112.0, "landed_for_40_ils": 61.5},
+      "source_type": "AliExpress / CJ (light, flat-ish) / local stock",
+      "queries": [
+        "lidded willow basket linen lining 30x22x30",
+        "wicker laundry hamper with lid 35cm",
+        "rectangular wicker magazine basket",
+        "willow log basket with handles 38cm",
+        "small wicker waste paper basket 25cm"
+      ],
+      "leads": [],
+      "why_he": "שבע עמדות אחסון. היום יש רק סלי בטן מקש ים, שנקראים חופי-בוהו; הערבה היא הכפרית."
+    },
+    {
+      "slot": "living-room/planter",
+      "also_serves": ["hall/planter", "bath/floor-planter", "work/planter", "master/planter", "bath/ledge-planter"],
+      "priority": "medium",
+      "need_variations": 3,
+      "spec_he": "טרקוטה לא מזוגגת וחלקה עם תחתית, או אבנית בזיגוג שמנת. סלון גובה 45 ומעלה; כניסה 22–26×34–40; עבודה 34–38×36–42; הורים 36–42×38–45; רחצה 26–30×30–36 ו-11–14 על המדף.",
+      "envelope_cm": {"living_h_min": 45, "hall": [24, 37], "work": [36, 39], "master": [39, 41], "bath_floor": [28, 33], "bath_ledge": [12, 12]},
+      "price_ceiling": {"slot_price_ils": 249, "breakeven_landed_ils": 188.0, "landed_for_40_ils": 103.5, "note_he": "לסלון; בשאר ₪149 (נחיתה עד 61.5)"},
+      "source_type": "Local stock / Israeli garden supplier (needs LK1)",
+      "queries": [
+        "smooth unglazed clay planter with saucer 45cm",
+        "cream glazed stoneware planter 40cm",
+        "clay pot with drainage saucer 30cm smooth"
+      ],
+      "leads": [],
+      "why_he": "שש עמדות עציץ. סלי הקש ים מכסים שתיים זמנית; הטרקוטה היא החומר של הסגנון."
+    },
+    {
+      "slot": "kids/doll-pram",
+      "also_serves": ["kids/doll", "kids/soft-toy", "kids/toy-cars", "kids/skateboard"],
+      "priority": "medium",
+      "need_variations": 3,
+      "spec_he": "עגלת בובות מנצרים או מעץ עם גגון 30–34×45–50×45–52; בובת בד בשמלת פשתן 22–28; ארנבת ודובי סרוגים מכותנה 25–35; סט 3 מכוניות עץ 10–13; קרש מייפל טבעי 70–80. חובה EN71 / ת״י 562 (סקייטבורד EN 13613).",
+      "envelope_cm": {"pram": [32, 48, 48], "doll_h": [22, 28], "soft_toy_h": [25, 35], "car_l": [10, 13], "skateboard": [75, 20]},
+      "price_ceiling": {"slot_price_ils": 249, "breakeven_landed_ils": 188.0, "landed_for_40_ils": 103.5, "note_he": "לעגלה; בובות ומכוניות ₪129 (נחיתה עד 53.1)"},
+      "source_type": "CJ / AliExpress with EN71 report / Israeli toy importer",
+      "queries": [
+        "wicker doll pram with hood",
+        "cotton rag doll linen dress 30cm",
+        "knitted cotton bunny toy 30cm",
+        "beech wood toy car set of 3",
+        "natural maple skateboard deck 31 inch blank"
+      ],
+      "leads": [],
+      "why_he": "ה'גימיקים' של חדרי הילדים (ב.4) ריקים, ועגלת הנצרים היא החתימה של חדר הילדה."
+    },
+    {
+      "slot": "living-room/wall-decor",
+      "also_serves": [],
+      "priority": "low",
+      "need_variations": 3,
+      "spec_he": "עד 45×45: שלוש צלחות קיר בשמנת עם בוטניקה במרווה (בלי טקסט ובלי דמויות), סל קיר קלוע שטוח, או זר זית או אקליפטוס על חישוק פליז.",
+      "envelope_cm": {"max": [45, 45], "single": [35, 45]},
+      "price_ceiling": {"slot_price_ils": 129, "breakeven_landed_ils": 96.8, "landed_for_40_ils": 53.1},
+      "source_type": "AliExpress / CJ",
+      "queries": [
+        "decorative wall plates set of 3 cream green botanical",
+        "olive branch wreath on brass hoop 40cm",
+        "woven wicker wall basket flat 40cm"
+      ],
+      "leads": [
+        {"ae_item_id": "1005003164993545", "why_he": "סל קיר קלוע (נשלח מבלגיה), אין ציטוט משלוח"}
+      ],
+      "why_he": "כל רשומות העמדה בסגנון היו קיטש מובהק."
+    },
+    {
+      "slot": "corridor/gallery-stool",
+      "also_serves": ["dining-room/step-stool", "bath/shower-stool"],
+      "priority": "low",
+      "need_variations": 3,
+      "spec_he": "שרפרף עם מושב קש קלוע או עץ צבוע 26–30×42–46; שרפרף מדרגה מעץ צבוע בחלב 28–35×40–48; שרפרף טיק למקלחת 28–34×42–46.",
+      "envelope_cm": {"gallery": [28, 28, 44], "step": [32, 44], "shower": [31, 44]},
+      "price_ceiling": {"slot_price_ils": 299, "breakeven_landed_ils": 225.9, "landed_for_40_ils": 124.6},
+      "source_type": "AliExpress flat-pack / Israeli supplier",
+      "queries": [
+        "rush seat wooden stool 45cm",
+        "painted wood two step stool milk white",
+        "teak shower stool 45cm"
+      ],
+      "leads": [
+        {"ae_item_id": "1005010716765493", "why_he": "שרפרף מדרגה מעץ מלא, נחיתה ₪267, לא נבדק בעין; ב-₪449 ‏19%"},
+        {"ae_item_id": "1005008074128315", "why_he": "שרפרף עץ מלא, נחיתה ₪119, מידה לא אומתה"}
+      ],
+      "why_he": "שלושה שרפרפים; העץ המלא מסין יקר במשלוח."
+    },
+    {
+      "slot": "master/trinket-dish",
+      "also_serves": ["master/bedside-carafe", "master/nightstand-vase", "hall/key-tray", "bath/vanity-vase", "hall/console-vessel"],
+      "priority": "low",
+      "need_variations": 3,
+      "spec_he": "צלוחית קרמיקה בשמנת עם שפה גלית 8–12, או צלוחית פליז; קנקן זכוכית מצולעת עם כוס 20–26; קנקן שמנת קטן 22–28 לשידה ולקונסולה; אגרטלון קנקן 11–14 לכיור.",
+      "envelope_cm": {"dish_d": [8, 12], "carafe_h": [20, 26], "pitcher_h": [22, 28], "bud_h": [11, 14]},
+      "price_ceiling": {"slot_price_ils": 59, "breakeven_landed_ils": 43.6, "landed_for_40_ils": 23.6, "note_he": "לצלוחית; קנקן ₪129 (נחיתה עד 53.1)"},
+      "source_type": "AliExpress Choice / local stock",
+      "queries": [
+        "scalloped ceramic trinket dish 10cm cream",
+        "small scalloped brass ring dish",
+        "ribbed glass water carafe with tumbler 600ml",
+        "small cream ceramic pitcher vase 22cm"
+      ],
+      "leads": [
+        {"ae_item_id": "1005008054708905", "why_he": "קנקן חלב סדוק בשמנת, הצורה הנכונה לקונסולה, אבל נחיתה ₪187 ולא נבדק"},
+        {"ae_item_id": "1005005911859967", "why_he": "קנקן וכוס מזכוכית בירוק, נחיתה ₪56, לא נבדק"}
+      ],
+      "why_he": "פריטים קטנים שחסרים לשידה, לכניסה ולכיור; הקנקן הוא הצורה הכפרית שחסרה בכל הבית."
+    },
+    {
+      "slot": "living-room/pouf",
+      "also_serves": [],
+      "priority": "low",
+      "need_variations": 3,
+      "spec_he": "פוף פשתן עם צנרת 45–50, הדום מרופד על רגל עץ מחורטת, או שרפרף נצרים נמוך. אסור: עור מלאכותי, דוגמה מרוקאית.",
+      "envelope_cm": {"d": [45, 50], "h": [35, 40]},
+      "price_ceiling": {"slot_price_ils": 199, "breakeven_landed_ils": 150.0, "landed_for_40_ils": 82.5},
+      "source_type": "AliExpress (cover only allowed) / CJ",
+      "queries": [
+        "linen pouf cover with piping 50cm natural",
+        "upholstered round footstool turned wood legs",
+        "low wicker footstool round 45cm"
+      ],
+      "leads": [],
+      "why_he": "הרשומות הן עור מלאכותי ובוהו."
+    },
+    {
+      "slot": "kids/bookshelf",
+      "also_serves": ["kids/desk-organizer"],
+      "priority": "low",
+      "need_variations": 3,
+      "spec_he": "זוג מדפי תמונה (כריכה לפנים) באורך 80, עומק 8–12, שפה 3–5, צבועים בחלב או מרווה, או אורן טבעי. כוס עפרונות מקש עם מגש 14×12.",
+      "envelope_cm": {"l": 80, "d": [8, 12], "lip_h": [3, 5], "cup_d": [7, 9], "cup_h": [9, 11], "tray": [14, 12]},
+      "price_ceiling": {"slot_price_ils": 199, "breakeven_landed_ils": 150.0, "landed_for_40_ils": 82.5, "note_he": "לזוג מדפים"},
+      "source_type": "AliExpress / CJ",
+      "queries": [
+        "white picture ledge shelf 80cm set of 2",
+        "rattan pencil cup and tray set"
+      ],
+      "leads": [
+        {"ae_item_id": "1005007380078842", "why_he": "זוג מדפי תמונה בלבן, נחיתה ₪70, אורך לא נמדד"},
+        {"ae_item_id": "1005013248832816", "why_he": "כוס הקש מחדר העבודה (7.5); חסר מגש"}
+      ],
+      "why_he": "מדף הספרים הוא חלק מהגדרת חדר הילדה (ב.4)."
+    },
+    {
+      "slot": "living-room/armchair",
+      "also_serves": ["living-room/sofa", "living-room/coffee-table", "dining-room/dining-table", "dining-room/dining-chairs", "dining-room/dining-bench", "hall/console", "hall/bench", "master/bed", "master/nightstands", "kids/bed", "kids/desk", "kids/desk-chair", "work/desk", "work/shelf", "work/chair", "bath/vanity"],
+      "priority": "high",
+      "need_variations": 1,
+      "spec_he": "רהיטים קבועים (F3, דגם אחד, שער הוואו): אלון דבש ועץ צבוע בחלב או במרווה, רגל מחורטת עדינה, ספה ישרה בכיסוי פשתן עם חצאית קפלים, כורסה בפשתן, טיקינג או פרחוני קטן, כיסאות ספינדל או מושב קש, שידות עם ידיות פליז. רק ספקים ישראליים, פנייה רק באישור המשתמש (ד.8).",
+      "envelope_cm": null,
+      "price_ceiling": null,
+      "source_type": "Israeli furniture suppliers only (F3; wow gate WG1; contact only with owner approval)",
+      "queries": [
+        "linen slipcovered sofa 3 seater natural",
+        "spindle back dining chair oak",
+        "painted pine chest of drawers sage",
+        "turned leg oak dining table 180"
+      ],
+      "leads": [],
+      "why_he": "16 עמדות רהיט בלי דגם כפרי. הכורסה בבוקלה ושפת האלון הבהיר של הנורדי לא נקראות כפרי, ולכן לפחות הכורסה וכיסוי הספה חייבים להשתנות (החלטת משתמש)."
+    }
+  ]
+}
