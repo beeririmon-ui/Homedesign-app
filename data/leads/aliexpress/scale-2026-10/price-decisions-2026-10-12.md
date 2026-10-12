@@ -17,7 +17,7 @@
 | עמדה | מוצר | נחיתה ₪ | מחיר ל-40% | מחיר העמדה | השוק (p90) | fit |
 | --- | --- | --- | --- | --- | --- | --- |
 | living-room/accent-sconces | [זוג טרוורטין עגול 15 ס"מ, הילה](https://www.aliexpress.com/item/1005012913815529.html) | 262 לזוג | **629** | 599 | 598 לזוג | ג'פנדי 8.5 |
-| living-room/rug | [שטיח וואבי-סאבי](https://www.aliexpress.com/item/1005012624177264.html) | 696 | **1,659** | 1,299 | 1,612 | ג'פנדי 8 |
+| living-room/rug | [שטיח וואבי-סאבי](https://www.aliexpress.com/item/1005006306177264.html) | 696 | **1,659** | 1,299 | 1,612 | ג'פנדי 8 |
 | dining-room/centerpiece-vase | [אגרטל קרמיקה וואבי-סאבי בעבודת יד](https://www.aliexpress.com/item/1005008552665862.html) | 111 | **269** | 199 | 95 | ג'פנדי 8.5 |
 | living-room/candle-holders | פמוט שיש מינימליסטי (2) | 190–211 | 459–509 | 199 | 219 | מודרני חם 8 |
 | master/bedding | [סט פשתן שטוף](https://www.aliexpress.com/item/1005006916862814.html) | 489 | **1,169** | 469 | 869 | מודרני חם 8 |
