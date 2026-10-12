@@ -303,7 +303,17 @@ def do_write(room, a, write_cards=True):
             continue
         ceil = (slots.get(k) or {}).get("price_ceiling") or {}
         cands = []
+        qty = int(((slots.get(k) or {}).get("envelope_cm") or {}).get("qty") or 1)
         for c in s["candidates"].values():
+            # the slot is sold as a set of qty: a single-unit SKU costs qty times (a pack SKU or title already counts)
+            pack = re.search(r"(?i)\b(pair|2\s*pcs|2\s*pieces|set of %d|%d\s*pcs|%dpcs)\b" % (qty, qty, qty), "%s %s" % (c.get("sku_label") or "", c.get("title") or ""))
+            c = dict(c, units=1 if (qty == 1 or pack) else qty)
+            if c["units"] > 1 and c.get("landed_ils") is not None:
+                c["landed_ils_unit"] = c["landed_ils"]
+                c["landed_ils"] = round(c["landed_ils"] * c["units"], 1)
+                if ceil.get("slot_price_ils"):
+                    c["margin_ils"], c["margin_pct"] = economics(ceil["slot_price_ils"], c["landed_ils"])
+                c["passes"] = passes(c, ceil)
             fits = {stl: v for stl, v in (rv.get(c["item_id"]) or {}).items() if isinstance(v, dict) and "fit" in v}
             c2 = dict(c, fit={stl: v["fit"] for stl, v in fits.items()}, reason={stl: v.get("reason") for stl, v in fits.items()},
                       reviewed=bool(fits), reject=any(v.get("verdict") == "reject" for v in fits.values()))
