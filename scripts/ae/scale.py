@@ -37,7 +37,7 @@ TODAY = "2026-10-11"
 REPICK = False
 ROUND3_ON = False
 # written by ds.build_card for the cards this run makes (--by aliexpress-scale); other sessions' cards never carry it
-OWN_MARK = "DRAFT from AliExpress DS API (2026-10-11, aliexpress-scale)"
+OWN_MARK_RX = re.compile(r"DRAFT from AliExpress DS API \(2026-10-\d\d, aliexpress-scale\)")
 
 
 class Stop(Exception):
@@ -495,7 +495,7 @@ def existing_cards(room):
         except ValueError:
             continue
         slot = os.path.basename(os.path.dirname(p))
-        if OWN_MARK in (c.get("notes") or ""):
+        if OWN_MARK_RX.search(c.get("notes") or ""):
             continue  # this run's own cards are not the baseline to beat
         cost = (c.get("price") or {}).get("cost")
         if not isinstance(cost, (int, float)):
@@ -595,7 +595,8 @@ def do_finalize(room, a, write_cards=True):
             r["beats_existing"] = beats
             r["low_margin"] = r["margin_pct"] < 0.40  # VR1 (studio rules ה.11): 40% minimum
             # the room needs a size: a multi-SKU product whose SKU was not matched by size may be priced on a too-small SKU
-            r["size_unverified"] = bool(SLOTS["%s/%s" % (room, slot)].get("size")) and r.get("sku_pick") == "sku-default" and (r.get("n_skus") or 1) > 1
+            r["size_unverified"] = bool(SLOTS["%s/%s" % (room, slot)].get("size")) and r.get("sku_pick") == "sku-default" and (r.get("n_skus") or 1) > 1 \
+                and sells_sizes(r["item_id"])
         # VR1: card only at >= 40% margin; below 40% only when the slot x style has no >= 40% option (flagged)
         ok = [r for r in live if r["fit"] >= 8 and r.get("beats_existing") and not r["size_unverified"]]
         good = [r for r in ok if r["margin_pct"] >= 0.40]
@@ -642,13 +643,12 @@ def do_finalize(room, a, write_cards=True):
                 continue
             # only a card this run wrote under its own generated id (another session may have renamed or edited it: leave those)
             gen = re.match(r"^%s-aliexpress-[a-z0-9-]+-\d{6}$" % re.escape(str(c.get("slot"))), str(c.get("id")))
-            if OWN_MARK in (c.get("notes") or "") and gen and c.get("id") not in carded and room in (c.get("rooms") or []) \
+            if OWN_MARK_RX.search(c.get("notes") or "") and gen and c.get("id") not in carded and room in (c.get("rooms") or []) \
                     and not c.get("style_scores"):
                 os.remove(path)
                 iid = ds.ITEM_ID.search((c.get("supplier") or {}).get("product_url") or "")
                 if iid:
-                    registry.add(ds.key_of(iid.group(1)), "seen", "scale run 2026-10-11: draft card %s withdrawn (ranking / VR1 40%% rule)" % c.get("id"),
-                                 by="aliexpress-scale", slot="%s/%s" % (room, c.get("slot")), opened=True)
+                    unregister_card(iid.group(1), c.get("id"), "scale run: draft card %s withdrawn (ranking / VR1 40%% rule)" % c.get("id"))
                 print("withdrawn: %s" % os.path.relpath(path, REPO), file=sys.stderr)
     # registry: rejected with reason (only items not carded and not already rejected)
     reg = registry.load()
@@ -663,6 +663,24 @@ def do_finalize(room, a, write_cards=True):
     return recs, carded
 
 
+def unregister_card(item_id, card_id, reason):
+    """Undo a draft card this run wrote and then withdrew: drop the card id from the registry entry; the status goes
+    back to 'seen' only when no other card of the product remains (registry.add only moves status up, by design)."""
+    with registry.locked():
+        reg = registry.load()
+        key, e = registry.resolve(reg, ds.key_of(item_id))
+        if not e:
+            return
+        e["card_ids"] = [c for c in e.get("card_ids") or [] if c != card_id]
+        if e.get("card_id") == card_id:
+            e["card_id"] = e["card_ids"][0] if e["card_ids"] else None
+        reg.get("cards", {}).pop(card_id, None)
+        if not e["card_ids"] and e.get("status") == "card":
+            e["status"] = "seen"
+            e["reason"] = reason
+        registry.save(reg)
+
+
 def add_scale_note(path, rs):
     c = json.load(open(path))
     txt = open(path).read()
@@ -672,6 +690,21 @@ def add_scale_note(path, rs):
     with open(path, "w") as f:
         json.dump(c, f, ensure_ascii=False, indent=2)
         f.write("\n")
+
+
+SIZE_TOKEN = re.compile(r"(?i)\d+(\.\d+)?\s*(cm|mm|inch|in\b|\"|ml|l\b)|\d+\s*[x*×]\s*\d+|\b(xs|s|m|l|xl|xxl|small|medium|large|mini|big)\b")
+
+
+def sells_sizes(item_id):
+    """True when the product's SKUs differ by size (so the cheapest SKU may be the wrong size); a product sold in one
+    size (SKUs are colors only) has its size fixed and checked on the image."""
+    hit = cache.get(ds.SRC, item_id, "product", allow_stale=True)
+    if not hit:
+        return True
+    skus = ds.as_list((hit["payload"].get("result") or {}).get("ae_item_sku_info_dtos"))
+    sizes = {" ".join(m.group(0).lower().replace(" ", "") for m in SIZE_TOKEN.finditer(sku_text(x))) for x in skus}
+    sizes.discard("")
+    return len(sizes) > 1
 
 
 def write_outputs(room, recs, carded):
