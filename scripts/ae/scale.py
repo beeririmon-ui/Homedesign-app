@@ -35,6 +35,8 @@ STYLE_HE = {"nordic": "נורדי", "warm-modern": "מודרני חם", "japandi
             "modern-country": "כפרי מודרני", "boho": "בוהו"}
 TODAY = "2026-10-11"
 REPICK = False
+PAIR_BANDS = {"curtains", "pillowcases"}  # market-prices.json categories priced per pair
+PACK_RX = re.compile(r"(?i)\b(pair|2\s*(pcs|pieces|panels)|2pcs|set of 2|two panels)\b")
 ROUND3_ON = False
 # written by ds.build_card for the cards this run makes (--by aliexpress-scale); other sessions' cards never carry it
 OWN_MARK_RX = re.compile(r"DRAFT from AliExpress DS API \(2026-10-\d\d, aliexpress-scale\)")
@@ -553,6 +555,11 @@ def do_finalize(room, a, write_cards=True):
         cfg = SLOTS[key]
         band, band_src = band_of(cfg)
         L = landed(rec)
+        # market categories priced per pair (curtains, pillowcases): a single-panel SKU counts twice (2026-10-12 fix)
+        units = 1
+        if band_src in PAIR_BANDS and L is not None and not PACK_RX.search("%s %s" % (rec.get("sku_label") or "", rec.get("title") or "")):
+            units = 2
+            L = round(L * 2, 1)
         for style in rec.get("styles", []):
             rvw = (review.get(rec["item_id"]) or {})
             rv = rvw.get(style) or rvw.get("*") or {}
@@ -564,7 +571,7 @@ def do_finalize(room, a, write_cards=True):
                  "url": ds.ITEM_URL % rec["item_id"], "image": rec.get("image"), "sku": rec.get("sku"), "sku_label": rec.get("sku_label"),
                  "sku_pick": rec.get("sku_pick"), "n_skus": rec.get("n_skus"), "price_usd": rec.get("price_usd"), "ship_usd": rec.get("ship_usd"),
                  "ship_days": rec.get("ship_days"), "ship_company": rec.get("ship_company"), "landed_ils": L,
-                 "retail_band_ils": band, "band_source": band_src, "orders": rec.get("orders"), "reviews": rec.get("reviews"),
+                 "retail_band_ils": band, "band_source": band_src, "units": units, "orders": rec.get("orders"), "reviews": rec.get("reviews"),
                  "rating": rec.get("ae_rating"), "materials": rec.get("materials"), "fit": fit, "reviewed": bool(rv),
                  "reason": reason, "compared_to": {"card_id": cmp_["card_id"], "landed_ils": cmp_["landed_ils"], "supplier": cmp_["supplier"]} if cmp_ else None}
             if L is None:
@@ -864,7 +871,7 @@ def missing_slots(room):
     return out
 
 
-def image_refs(room, key, n_cards=3, n_ae=3):
+def image_refs(room, key, n_cards=3, n_ae=3, borrow=True):
     """Reference images for a slot: existing cards in the slot (best style score first), then AliExpress items
     reviewed at fit 5-7 (right look, failed on size or detail)."""
     slot = key.split("/")[1]
@@ -891,6 +898,33 @@ def image_refs(room, key, n_cards=3, n_ae=3):
         if fits and 5 <= max(fits) < 8:
             ae.append((max(fits), "ae:" + rec["item_id"], rec["image"]))
     refs += [(i, u) for _, i, u in sorted(ae, key=lambda x: -x[0])[:n_ae]]
+    if not refs and borrow:  # round 5: borrow references from the same slot in other rooms (cards, then AE items at fit 7+)
+        for other in ROOMS:
+            if other == room or "%s/%s" % (other, slot) not in SLOTS:
+                continue
+            od = os.path.join(REPO, "data", "products", slot) if ROOM_DIRS[other] is None else os.path.join(REPO, "data", "products", ROOM_DIRS[other], slot)
+            for p in sorted(glob.glob(os.path.join(od, "*.json"))):
+                try:
+                    c = json.load(open(p))
+                except ValueError:
+                    continue
+                urls = ((c.get("images") or {}).get("urls") or [])
+                best = max([v.get("score") or 0 for v in (c.get("style_scores") or {}).values() if isinstance(v, dict)] or [0])
+                if urls and str(urls[0]).startswith("https://") and c.get("status") != "rejected" and best >= 7:
+                    refs.append(("card:" + str(c.get("id")), urls[0]))
+            orv = os.path.join(OUT, "review", other + ".json")
+            odet = os.path.join(OUT, "detail", other + ".json")
+            if os.path.exists(orv) and os.path.exists(odet):
+                orv, odet = json.load(open(orv)), json.load(open(odet))
+                for rec in odet.values():
+                    fits = [v.get("fit") or 0 for v in (orv.get(rec["item_id"]) or {}).values() if isinstance(v, dict) and v.get("verdict") != "reject"]
+                    if rec.get("slot") == slot and rec.get("image") and fits and max(fits) >= 7:
+                        refs.append(("ae:" + rec["item_id"], rec["image"]))
+        seen_u, uniq = set(), []
+        for i, u in refs:
+            if u not in seen_u:
+                seen_u.add(u); uniq.append((i, u))
+        refs = uniq[:n_cards + n_ae]
     return refs
 
 
