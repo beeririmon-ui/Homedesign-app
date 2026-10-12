@@ -25,7 +25,7 @@ REPO = os.path.abspath(os.path.join(HERE, "..", ".."))
 sys.path.insert(0, HERE)
 import ds, client  # noqa: E402
 from ds import budget, cache, registry  # noqa: E402
-from scale_config import SLOTS, STYLES, GLOBAL_BAD, ROOMS, ROOM_DIRS, ROUND3  # noqa: E402
+from scale_config import SLOTS, STYLES, GLOBAL_BAD, ROOMS, ROOM_DIRS, ROUND3, STRICT  # noqa: E402
 
 OUT = os.path.join(REPO, "data", "leads", "aliexpress", "scale-2026-10")
 DEEP = os.path.join(REPO, "data", "leads", "aliexpress", "deep-2026-10")
@@ -272,10 +272,13 @@ def shortlist(room, top):
                 if len(ranked) >= top:
                     break
             picks[(slot, style)] = ranked
-        if key in ROUND3:  # weak slot: the best round-3 finds get the full check too, under their best-scoring style
+        for rnd, cap, floor in ((4, 20, 20), (3, 12, 35)):
+          if rnd == 3 and key not in ROUND3:
+              continue
+          if True:  # weak slot: the best round-3 / round-4 finds get the full check too, under their best-scoring style
             best = {}
             for r in rows:
-                if r["slot"] == slot and r.get("round") == 3 and r["score"] >= 35 and "no-noun" not in r["why"]:
+                if r["slot"] == slot and r.get("round") == rnd and r["score"] >= floor and "no-noun" not in r["why"]:
                     if r["item_id"] not in best or best[r["item_id"]]["score"] < r["score"]:
                         best[r["item_id"]] = r
             have = {x["item_id"] for st in STYLE_ORDER for x in picks[(slot, st)]}
@@ -288,7 +291,7 @@ def shortlist(room, top):
                 if r["item_id"] not in have:
                     picks[(slot, r["style"])].append(r)
                     have.add(r["item_id"])
-                if len([x for x in have if x in best]) >= 12:
+                if len([x for x in have if x in best]) >= cap:
                     break
     return picks
 
@@ -422,18 +425,18 @@ def do_sheet(room, per_style):
                     continue
                 seen.add(rec["item_id"])
                 cells.append((style, rec, m))
-        if key in ROUND3:  # weak slot: also show the best round-3 (style-neutral) finds, ranked by screening score
+        for rnd_q, cap in ((lambda q: str(q).startswith(("image:", "cat:")), 24), (lambda q: q in ROUND3.get(key, []), 12)):
             det = json.load(open(os.path.join(OUT, "detail", room + ".json")))
             r3 = []
             for rec in det.values():
                 if rec.get("slot") != slot or rec["item_id"] in seen or not rec.get("ship_ok") or landed(rec) is None:
                     continue
-                scr = {st: v for st, v in (rec.get("screen") or {}).items() if v.get("query") in ROUND3[key]}
+                scr = {st: v for st, v in (rec.get("screen") or {}).items() if rnd_q(v.get("query"))}
                 if scr:
                     st = max(scr, key=lambda x: scr[x]["score"])
                     band, _ = band_of(SLOTS[key])
                     r3.append((scr[st]["score"], st, rec, economics(band[1], landed(rec))[1]))
-            for _, st, rec, m in sorted(r3, key=lambda x: -x[0])[:12]:
+            for _, st, rec, m in sorted(r3, key=lambda x: -x[0])[:cap]:
                 seen.add(rec["item_id"])
                 cells.append((st, rec, m))
         if not cells:
@@ -814,9 +817,178 @@ def do_readme():
     print("README: %d cards, %d wins, %d empty slots, top %d" % (tot["carded"], len(wins), len(empty), len(top)))
 
 
+# ----------------------------------------------------------------------------- round 4: image search for the missing slots
+
+def missing_slots(room):
+    """Slots of the room with no item reviewed at fit >= 7 in any style (from the finalized <room>.json)."""
+    path = os.path.join(OUT, room + ".json")
+    recs = json.load(open(path))["records"] if os.path.exists(path) else []
+    out = []
+    for key in slots_of(room):
+        slot = key.split("/")[1]
+        if not any(r["slot"] == slot and r.get("reviewed") and (r["fit"] or 0) >= 7 for r in recs):
+            out.append(key)
+    return out
+
+
+def image_refs(room, key, n_cards=3, n_ae=3):
+    """Reference images for a slot: existing cards in the slot (best style score first), then AliExpress items
+    reviewed at fit 5-7 (right look, failed on size or detail)."""
+    slot = key.split("/")[1]
+    d = os.path.join(REPO, "data", "products", slot) if ROOM_DIRS[room] is None else os.path.join(REPO, "data", "products", ROOM_DIRS[room], slot)
+    cards = []
+    for p in glob.glob(os.path.join(d, "*.json")):
+        try:
+            c = json.load(open(p))
+        except ValueError:
+            continue
+        urls = ((c.get("images") or {}).get("urls") or [])
+        best = max([v.get("score") or 0 for v in (c.get("style_scores") or {}).values() if isinstance(v, dict)] or [0])
+        if urls and str(urls[0]).startswith("https://") and c.get("status") != "rejected":
+            cards.append((best, "card:" + str(c.get("id")), urls[0]))
+    refs = [(i, u) for _, i, u in sorted(cards, key=lambda x: -x[0])[:n_cards]]
+    rv_path = os.path.join(OUT, "review", room + ".json")
+    rv = json.load(open(rv_path)) if os.path.exists(rv_path) else {}
+    det = json.load(open(os.path.join(OUT, "detail", room + ".json")))
+    ae = []
+    for rec in det.values():
+        if rec.get("slot") != slot or not rec.get("image"):
+            continue
+        fits = [v.get("fit") or 0 for v in (rv.get(rec["item_id"]) or {}).values() if isinstance(v, dict) and v.get("verdict") != "reject"]
+        if fits and 5 <= max(fits) < 8:
+            ae.append((max(fits), "ae:" + rec["item_id"], rec["image"]))
+    refs += [(i, u) for _, i, u in sorted(ae, key=lambda x: -x[0])[:n_ae]]
+    return refs
+
+
+def image_search(a, ref_id, url):
+    params = {"image": url, "type": "similar", "ship_to": "IL", "currency": "USD"}
+    hit = cache.get_query(ds.SRC, "image", params)
+    if hit:
+        return hit["payload"]
+    b64 = ds.load_image_b64(url)
+    ds.spend(a, "image")
+    d = client.call_ok(ds.M_IMAGE, {"param0": {"search_type": "similar", "image_base64": b64, "currency": "USD", "lang": "en",
+                                               "sort_type": "orders", "sort_order": "desc", "ship_to": "IL"}})
+    r = d.get("result") or {}
+    items = r.get("data") or []
+    if isinstance(items, dict):
+        items = next(iter(items.values()), [])
+    res = {"ref": ref_id, "image": url, "products": items}
+    cache.put_query(ds.SRC, "image", params, res, endpoint=ds.M_IMAGE)
+    return res
+
+
+def do_image(room, a):
+    path = os.path.join(OUT, "screen", room + ".jsonl")
+    rows = [json.loads(l) for l in open(path)]
+    done_refs = {r["query"] for r in rows if r.get("round") == 4}
+    added = 0
+    for key in missing_slots(room):
+        for ref_id, url in image_refs(room, key):
+            q = "image:" + ref_id
+            if q in done_refs:
+                continue
+            try:
+                res = guard(image_search, a, ref_id, url)
+            except (client.AeError, OSError, SystemExit) as e:
+                print("[image] skip %s %s: %s" % (key, ref_id, e), file=sys.stderr)
+                continue
+            for p in res.get("products") or []:
+                vol = re.sub(r"[^0-9]", "", str(p.get("latest_volume") or "0")) or "0"
+                price = fnum(p.get("target_sale_price"))
+                base = {"item_id": str(p.get("product_id")), "title": p.get("product_title"),
+                        "price_usd": round(price / 100.0, 2) if price is not None else None, "orders": int(vol),
+                        "rating": (fnum(p.get("evaluate_rate")) or 0) * 20 or None, "image": p.get("product_main_image_url"),
+                        "query": q, "page": 1, "slot": key.split("/")[1], "cate": p.get("second_level_category_id"), "round": 4}
+                for style in STYLE_ORDER:
+                    r = dict(base, style=style)
+                    r["score"], r["why"] = score_row(r, key, style)
+                    rows.append(r)
+                    added += 1
+            done_refs.add(q)
+        print("[image] %s: %d rows so far" % (key, len(rows)), file=sys.stderr)
+    with open(path, "w") as f:
+        for r in rows:
+            f.write(json.dumps(r, ensure_ascii=False) + "\n")
+    print("image %s: %d missing slots, %d new rows" % (room, len(missing_slots(room)), added))
+
+
+def slot_category(room, key):
+    """The most common AliExpress leaf category among screen rows whose title surely names the product (STRICT)."""
+    from collections import Counter
+    rx = STRICT.get(key)
+    if not rx:
+        return None, 0
+    slot = key.split("/")[1]
+    c = Counter()
+    seen = set()
+    for l in open(os.path.join(OUT, "screen", room + ".jsonl")):
+        r = json.loads(l)
+        if r["slot"] != slot or r["item_id"] in seen or not r.get("cate") or r.get("round") == 4:
+            continue
+        seen.add(r["item_id"])
+        if re.search(rx, r.get("title") or "", re.I):
+            c[str(r["cate"]).split(",")[-1]] += 1
+    if not c:
+        return None, 0
+    cat, n = c.most_common(1)[0]
+    return cat, n
+
+
+def do_catlock(room, a):
+    path = os.path.join(OUT, "screen", room + ".jsonl")
+    rows = [json.loads(l) for l in open(path)]
+    done_q = {r["query"] for r in rows if r.get("round") == 4}
+    added = 0
+    for key in missing_slots(room):
+        cat, n = slot_category(room, key)
+        if not cat or n < 2:
+            print("[catlock] %s: no category (%s, %d strict matches)" % (key, cat, n), file=sys.stderr)
+            continue
+        for style in STYLE_ORDER:
+            for w in STYLES[style]["words"][:1]:
+                q = "%s %s" % (w, SLOTS[key]["q"])
+                tag = "cat:%s:%s" % (cat, q)
+                if tag in done_q:
+                    continue
+                params = {"keyWord": q, "local": "en_US", "countryCode": "IL", "currency": "USD", "pageSize": 20, "pageIndex": 1, "categoryId": cat}
+                try:
+                    hit = cache.get_query(ds.SRC, "search", params)
+                    if hit:
+                        res = hit["payload"]
+                    else:
+                        guard(ds.spend, a, "search")
+                        d = guard(client.call_ok, ds.M_SEARCH, params)
+                        data = d.get("data") if isinstance(d, dict) else None
+                        prods = (data or {}).get("products") or []
+                        if isinstance(prods, dict):
+                            prods = next(iter(prods.values()), [])
+                        res = {"query": q, "params": params, "products": prods}
+                        cache.put_query(ds.SRC, "search", params, res, endpoint=ds.M_SEARCH)
+                except client.AeError as e:
+                    print("[catlock] skip %r: %s %s" % (q, e.code, e.message), file=sys.stderr)
+                    continue
+                for p in res.get("products") or []:
+                    base = {"item_id": str(p.get("itemId")), "title": p.get("title"), "price_usd": fnum(p.get("targetSalePrice")),
+                            "orders": int(fnum(p.get("orders")) or 0), "rating": fnum(p.get("evaluateRate")),
+                            "image": p.get("itemMainPic"), "query": tag, "page": 1, "slot": key.split("/")[1], "cate": p.get("cateId"), "round": 4}
+                    for st in STYLE_ORDER:
+                        r = dict(base, style=st)
+                        r["score"], r["why"] = score_row(r, key, st)
+                        rows.append(r)
+                        added += 1
+                done_q.add(tag)
+        print("[catlock] %s: category %s (%d strict matches)" % (key, cat, n), file=sys.stderr)
+    with open(path, "w") as f:
+        for r in rows:
+            f.write(json.dumps(r, ensure_ascii=False) + "\n")
+    print("catlock %s: %d new rows" % (room, added))
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("stage", choices=["screen", "detail", "sheet", "finalize", "all", "readme"])
+    ap.add_argument("stage", choices=["screen", "detail", "sheet", "finalize", "all", "readme", "image", "catlock"])
     ap.add_argument("room", choices=ROOMS + ["all"])
     ap.add_argument("--max-calls", type=int, default=3000)
     ap.add_argument("--top", type=int, default=8)
@@ -839,6 +1011,10 @@ def main():
             do_detail(a0.room, a, a0.top)
         if a0.stage in ("sheet", "all"):
             do_sheet(a0.room, a0.per_style)
+        if a0.stage == "image":
+            do_image(a0.room, a)
+        if a0.stage == "catlock":
+            do_catlock(a0.room, a)
         if a0.stage == "finalize":
             recs, carded = do_finalize(a0.room, a, not a0.no_cards)
             print("finalize %s: %d records, %d cards" % (a0.room, len(recs), len(set(carded))))
