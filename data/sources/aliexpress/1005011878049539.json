@@ -1,0 +1,161 @@
+{
+ "source": "aliexpress",
+ "id": "1005011878049539",
+ "sections": {
+  "product": {
+   "fetched_at": "2026-10-12T08:48:40+00:00",
+   "endpoint": "aliexpress.ds.product.get",
+   "params": {
+    "ship_to_country": "IL",
+    "product_id": "1005011878049539",
+    "target_currency": "USD",
+    "target_language": "en"
+   },
+   "payload": {
+    "result": {
+     "ae_item_sku_info_dtos": [
+      {
+       "sku_attr": "14:193#Black",
+       "offer_sale_price": "38.00",
+       "sku_id": "12000056862095329",
+       "price_include_tax": false,
+       "currency_code": "USD",
+       "sku_price": "75.99",
+       "offer_bulk_sale_price": "38.00",
+       "sku_available_stock": 8,
+       "id": "14:193#Black",
+       "ae_sku_property_dtos": [
+        {
+         "sku_property_value": "black",
+         "sku_image": "https://ae01.alicdn.com/kf/Sb818bca645334816a3c03b707e8f4af0w.jpg",
+         "sku_property_name": "Color",
+         "property_value_definition_name": "Black",
+         "property_value_id": 193,
+         "sku_property_id": 14
+        }
+       ]
+      }
+     ],
+     "ae_multimedia_info_dto": {
+      "image_urls": "https://ae01.alicdn.com/kf/S32934136e10d483aa4977e58bc00212eD.jpg;https://ae01.alicdn.com/kf/Sa79940f6ea744ebf9098d0aaf0c0361aF.jpg;https://ae01.alicdn.com/kf/S70cbc9d810ac43ef94890fbe664a0ed93.jpg;https://ae01.alicdn.com/kf/Sfe3e1ca7cea14d45b5e41df583185ef1s.jpg;https://ae01.alicdn.com/kf/S16fc294bfc854db7b09a1608a18ea9428.jpg;https://ae01.alicdn.com/kf/Sc4b2862bcf4445a28c0a0c0f944c507cF.jpg"
+     },
+     "package_info_dto": {
+      "package_width": 8,
+      "package_height": 6,
+      "package_length": 69,
+      "gross_weight": "0.756",
+      "package_type": false,
+      "product_unit": 100000015
+     },
+     "logistics_info_dto": {
+      "delivery_time": 7,
+      "ship_to_country": "IL"
+     },
+     "product_id_converter_result": {
+      "main_product_id": 1005011878049539,
+      "sub_product_id": "{\"US\":3256811691734787}"
+     },
+     "ae_item_base_info_dto": {
+      "mobile_detail": "<removed; use --full>",
+      "subject": "2m Light Stand Folding Telescoping Tripod Adjustable Lightweight Aluminium Floor Lamp Holder Tripod Outdoor Camping Accessories",
+      "evaluation_count": "11",
+      "sales_count": "80",
+      "product_status_type": "onSelling",
+      "avg_evaluation_rating": "4.9",
+      "separated_listing": false,
+      "currency_code": "CNY",
+      "sl_product": false,
+      "category_id": 200015142,
+      "product_id": 1005011878049539,
+      "detail": "<removed; use --full>"
+     },
+     "has_whole_sale": false,
+     "ae_item_properties": [
+      {
+       "attr_name_id": 2,
+       "attr_value_id": 201512802,
+       "attr_name": "Brand Name",
+       "attr_value": "NONE"
+      },
+      {
+       "attr_name_id": 219,
+       "attr_value_id": 9441741844,
+       "attr_name": "Origin",
+       "attr_value": "Mainland China"
+      },
+      {
+       "attr_name_id": 988,
+       "attr_value_id": 23399554847,
+       "attr_name": "Electric",
+       "attr_value": "No"
+      },
+      {
+       "attr_name_id": 351,
+       "attr_value_id": 284,
+       "attr_name": "Type",
+       "attr_value": "Flashlight"
+      },
+      {
+       "attr_name_id": 10,
+       "attr_value_id": 47,
+       "attr_name": "Material",
+       "attr_value": "COTTON"
+      },
+      {
+       "attr_name_id": 400000603,
+       "attr_value_id": 23399591357,
+       "attr_name": "High-concerned chemical",
+       "attr_value": "none"
+      },
+      {
+       "attr_name_id": 5,
+       "attr_value_id": 361385,
+       "attr_name": "Size",
+       "attr_value": "L"
+      },
+      {
+       "attr_name_id": -1,
+       "attr_name": "Choice",
+       "attr_value": "yes"
+      }
+     ],
+     "ae_store_info": {
+      "store_id": 1105334069,
+      "shipping_speed_rating": "4.6",
+      "communication_rating": "4.6",
+      "store_name": "Shop1105334069 Store",
+      "store_country_code": "CN",
+      "item_as_described_rating": "4.4"
+     }
+    },
+    "rsp_code": 200,
+    "rsp_msg": "Call succeeds",
+    "request_id": "212a6b7f17917949203713820",
+    "_trace_id_": "2151fd3a17917949203697722e0c5e"
+   }
+  },
+  "freight:12000056862095329:IL:1": {
+   "fetched_at": "2026-10-12T08:48:42+00:00",
+   "endpoint": "aliexpress.ds.freight.query",
+   "params": {
+    "quantity": 1,
+    "shipToCountry": "IL",
+    "productId": "1005011878049539",
+    "selectedSkuId": "12000056862095329",
+    "language": "en_US",
+    "locale": "en_US",
+    "currency": "USD"
+   },
+   "payload": {
+    "options": [],
+    "success": false,
+    "code": 506,
+    "msg": "DELIVERY_SERVICE_EXCEPTION",
+    "item_id": "1005011878049539",
+    "sku_id": "12000056862095329",
+    "country": "IL",
+    "qty": 1
+   }
+  }
+ }
+}
