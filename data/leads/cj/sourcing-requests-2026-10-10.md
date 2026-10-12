@@ -109,3 +109,12 @@ Link with fit ≥ 7: 7 slots (candle-holders 7, floor-vase 7, kitchen-sconce 8, 
 **Dry run** (`python3 scripts/sourcing/cj_source.py --dry-run --by sourcing-support source-batch data/leads/cj/sourcing-requests-2026-10-10.json --approved "AC1 2026-10-10" --count 5`): `pending` 13, would send n 11–15 (candle-holders, floor-vase, dining-rug, kitchen-sconce, sink-set) with the new `productUrl` and `remark`, all fields ≤ 200 chars, nothing sent, 0 points. Budget: `sourcing_create` already 5 calls today (the 03:51 batch), so the routine's first real batch of the reworked queue is 2026-10-12; 3 days at 5 per day for 13. Two notes on the pipeline: `--dry-run` is a global flag and goes **before** `source-batch` (after it, argparse rejects it); and `source-batch --dry-run` now prints the exact bodies it would send (slot, productName, productImage, productUrl, price, remark) and runs the 200-char check, instead of slot names only (`scripts/sourcing/cj_source.py`, small change in `do_source_batch`).
 
 **Poll list** stays the 9 open ids (n 1–9); n 10 is closed. When n 21–23 are created, the old ids 2610101514064490000 and 2610101514144482302 can be dropped from the poll.
+
+## 2026-10-12 (שגרה יומית)
+
+- **סטטוס:** 3 בקשות נסגרו.
+  - ראנר פינת האוכל: CJ ענו עם מוצר שכבר בכרטיס (2512200838021632400), סומן "circular".
+  - שטיח הסלון: Sourcing Failed, ‏failReason 8, "We contacted many manufacturers, unfortunately, we were unable to find it".
+  - וילונות הסלון: אותה תשובה.
+  - 6 עדיין Pending: מנורת רגל, פמוטים, פוף, ראנר הסלון, קערה ומנורות המראה.
+- **נשלחו 5 חדשות:** פמוטים לנר עמוד בפחם, אגרטל רצפה, שטיח אוכל, מנורת קיר במטבח, סט כיור. נותרו 8 בתור.
