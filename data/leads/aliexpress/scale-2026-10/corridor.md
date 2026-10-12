@@ -1,6 +1,6 @@
 # AliExpress בקנה מידה: corridor (2026-10-11)
 
-סוננו 3336 שורות חיפוש, נבדקו לעומק 213 מוצרים (357 רשומות מוצר×סגנון). best 3 · alternative 175 · reject 179 · כרטיסים חדשים 3.
+סוננו 3456 שורות חיפוש, נבדקו לעומק 231 מוצרים (381 רשומות מוצר×סגנון). best 3 · alternative 184 · reject 194 · כרטיסים חדשים 3.
 
 עלות נחיתה = (מחיר SKU + משלוח זול עד 45 יום) × 3.3. רווח = לפי pricing.ts במחיר העליון של רצועת השוק (מע"מ 18%, עמלה 2%+1.2, החזרות 8%), לפני CAC. fit ≥ 8 רק אחרי מבט בתמונה; fit בלי מבט (screening) מוגבל ל-7. ההשוואה: הכרטיס הקיים בעמדה עם הציון הגבוה לסגנון (אחרת הזול).
 
@@ -15,7 +15,7 @@
 | כפרי מודרני | [4-Pack Double Sided Tape Roller, 6 mm x 196 Inch Adhesive Ta](https://www.aliexpress.com/item/1005010797177348.html) · **alternative** | Color purple | 4.41+1.99, 6-13 ימים | 21 | 249–329 | ₪228 · 82% | 7 (סינון) | אין כרטיס ✓ זול/רווחי יותר |
 | בוהו | [4-Pack Double Sided Tape Roller, 6 mm x 196 Inch Adhesive Ta](https://www.aliexpress.com/item/1005010797177348.html) · **alternative** | Color purple | 4.41+1.99, 6-13 ימים | 21 | 249–329 | ₪228 · 82% | 7 (סינון) | אין כרטיס ✓ זול/רווחי יותר |
 
-חלופות: נורדי [1005008102068369](https://www.aliexpress.com/item/1005008102068369.html) ₪17/83% · נורדי [1005007851294423](https://www.aliexpress.com/item/1005007851294423.html) ₪32/78% · נורדי [1005012224713024](https://www.aliexpress.com/item/1005012224713024.html) ₪40/75% · נורדי [1005012277653129](https://www.aliexpress.com/item/1005012277653129.html) ₪144/38% · נורדי [1005011853641136](https://www.aliexpress.com/item/1005011853641136.html) ₪144/38% · נורדי [1005008493210429](https://www.aliexpress.com/item/1005008493210429.html) ₪144/38% · נורדי [1005007266209458](https://www.aliexpress.com/item/1005007266209458.html) ₪222/9% · נורדי [1005010606353862](https://www.aliexpress.com/item/1005010606353862.html) ₪39/75% · נורדי [1005012087974334](https://www.aliexpress.com/item/1005012087974334.html) ₪26/80% · נורדי [1005008251371313](https://www.aliexpress.com/item/1005008251371313.html) ₪33/77% · נורדי [1005008660163760](https://www.aliexpress.com/item/1005008660163760.html) ₪62/67% · נורדי [1005007432357767](https://www.aliexpress.com/item/1005007432357767.html) ₪83/59%
+חלופות: נורדי [1005008102068369](https://www.aliexpress.com/item/1005008102068369.html) ₪17/83% · נורדי [1005007851294423](https://www.aliexpress.com/item/1005007851294423.html) ₪32/78% · נורדי [1005012224713024](https://www.aliexpress.com/item/1005012224713024.html) ₪40/75% · נורדי [1005012277653129](https://www.aliexpress.com/item/1005012277653129.html) ₪144/38% · נורדי [1005011853641136](https://www.aliexpress.com/item/1005011853641136.html) ₪144/38% · נורדי [1005008493210429](https://www.aliexpress.com/item/1005008493210429.html) ₪144/38% · נורדי [1005007266209458](https://www.aliexpress.com/item/1005007266209458.html) ₪222/9% · נורדי [1005010606353862](https://www.aliexpress.com/item/1005010606353862.html) ₪39/75% · נורדי [1005012087974334](https://www.aliexpress.com/item/1005012087974334.html) ₪26/80% · נורדי [1005013102366429](https://www.aliexpress.com/item/1005013102366429.html) ₪14/84% · נורדי [1005011677939466](https://www.aliexpress.com/item/1005011677939466.html) ₪30/79% · נורדי [1005008251371313](https://www.aliexpress.com/item/1005008251371313.html) ₪33/77%
 
 ## ceiling-lights
 
