@@ -650,7 +650,10 @@ def do_finalize(room, a, write_cards=True):
                 continue
             # only a card this run wrote under its own generated id (another session may have renamed or edited it: leave those)
             gen = re.match(r"^%s-aliexpress-[a-z0-9-]+-\d{6}$" % re.escape(str(c.get("slot"))), str(c.get("id")))
-            if OWN_MARK_RX.search(c.get("notes") or "") and gen and c.get("id") not in carded and room in (c.get("rooms") or []) \
+            # only cards the scale run itself wrote (its finalize note); never cards from the art-director rounds or with a price proposal
+            if OWN_MARK_RX.search(c.get("notes") or "") and "Scale run 2026-10-11 (screening fit" in (c.get("notes") or "") \
+                    and "PRICE PROPOSAL" not in (c.get("notes") or "") and "Art director" not in (c.get("notes") or "") \
+                    and gen and c.get("id") not in carded and room in (c.get("rooms") or []) \
                     and not c.get("style_scores"):
                 os.remove(path)
                 iid = ds.ITEM_ID.search((c.get("supplier") or {}).get("product_url") or "")
