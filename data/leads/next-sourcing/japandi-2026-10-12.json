@@ -1,0 +1,564 @@
+{
+  "room": "whole-house",
+  "style": "japandi",
+  "date": "2026-10-12",
+  "author": "master-designer",
+  "status_he": "הצעה לסבב החיפוש הבא, לא אישור משתמש. פנייה לספק ישראלי רק באישור הבעלים (ד.8). כל פריט שנמצא עובר מבט מעצב וכרטיס לפני שהוא נכנס לקטלוג.",
+  "catalog": "data/catalog/japandi-2026-10-12.json",
+  "brief": "docs/design-bible/japandi-brief-draft.md",
+  "formula": "net = price/1.18; contribution = net - landed - (0.02*price + 1.2) - 0.08*net. breakeven_landed = 0.759661*price - 1.2; landed_for_40 = 0.420678*price - 1.2. Landed = (item + shipping to Israel) x 3.3, in ILS, for the quantity sold (pair or set).",
+  "priority_scale_he": "high: חתימה של הסגנון (תאורת נייר, תמונת גיבור, שטיח בסיב טבעי) או גיבור של פריים ראשי. medium: עמדה בולטת, נשא עץ כהה או דיו, או עמדה שחסומה בהחלטה שכבר על השולחן. low: פריט קטן, או עמדה שהאיפוק של הסגנון מאפשר להשאיר ריקה.",
+  "query_rules_he": "השאילתות חדשות: לא חוזרות על ה-׳<סגנון> <מוצר>׳ שכבר רצו לכל עמדה, ולא על שאילתות CJ שב-searched-index. הן מחפשות לפי חומר וצורה (וואשי, אגוז, אפר שחור, עץ שרוף, גומא, חבל נייר, דיאטומיט, דיו). רק מוצרים שנשלחים לישראל, עדיפות ל-Choice או לאריזה שטוחה. לכל מוצר: כל ה-SKU במידות ובגוונים, משקל וקרטון, ותמונות של המוצר עצמו. תאורה: CE, ‏220–240V, תקע EU או ישראלי או חיווט, 2700K. אסור לכל הסגנון: העתקי Akari (כולל כדור נייר על רגלי תיל), Secto, Wishbone, שרפרף הפרפר של יאנאגי; קיטש יפני (פוג׳י, גלים, דגי קוי, סמוראים, גיישות, פריחת דובדבן, קליגרפיה וטקסט, בודהה); פליז וזהב; זכוכית שקופה; בוקלה, שניל וסריגה.",
+  "slots": [
+    {
+      "slot": "living-room/floor-lamp",
+      "priority": "high",
+      "need_variations": 3,
+      "spec_he": "החתימה החסרה של הסלון. גובה 145–165. אחת משלוש צורות: פנס נייר עמודי על מסגרת עץ כהה, חצובה מאגוז או אפר שחור עם אהיל נייר, או עמוד דק כהה עם תוף פשתן גולמי. האהיל מסתיר את הנורה מגובה 120. אסור: מנורת קשת, נורה חשופה, כדור נייר על רגלי תיל, פליז.",
+      "envelope_cm": {"h": [145, 165], "shade_d": [35, 38], "shade_h": [25, 35], "base_d_max": 26},
+      "price_ceiling": {"breakeven_landed_ils": 172.8, "landed_for_40_ils": 95.1, "slot_price_ils": 229},
+      "at_alt_price": {"price_ils": 399, "breakeven_landed_ils": 301.9, "landed_for_40_ils": 166.6, "why_he": "מנורת רצפה מעוצבת מעץ ונייר נמכרת בישראל ב-₪399 ומעלה (IKEA ‏₪195–395 לפנסים פשוטים). מחיר למשתמש (ה.10)."},
+      "source_type": "Israeli lighting importer (needs IL1; contact only with owner approval) / AliExpress flat-pack only with CE and EU plug",
+      "queries": [
+        "japanese andon floor lamp washi paper wooden frame 150cm",
+        "walnut wood tripod floor lamp paper shade E27 EU plug",
+        "rice paper column floor lamp 160cm black ash wood",
+        "linen drum shade floor lamp dark wood pole 160cm 220V",
+        "knock down paper floor lantern wooden legs flat pack"
+      ],
+      "leads": [
+        {"ae_item_id": "1005011551314112", "why_he": "מנורת רצפה יפנית מאגוז (7.5), נחיתה ₪585: מפסידה גם ב-₪399. רק אם יש משלוח זול יותר או מחסן באירופה"},
+        {"ae_item_id": "1005011885358144", "why_he": "אהיל נייר 100×32 בלבד; אפשרי רק כחלק ממנורה שמורכבת בארץ"}
+      ],
+      "why_he": "ריקה. בלי מנורת הנייר הסלון הג׳אפנדי נראה כמו הסלון הנורדי עם כד שחור. זו גם פינת הערב במשולש האור."
+    },
+    {
+      "slot": "master/floor-lamp",
+      "priority": "high",
+      "need_variations": 3,
+      "spec_he": "פינת הקריאה בהורים. צורה שונה מהסלון: פנס נייר מרובע על מסגרת עץ כהה (שוג׳י), או חצובה אגוז עם קונוס פשתן 35–40. 2700K, תקע EU או ישראלי, הכבל מוסתר מאחורי העציץ. אסור: קשת, אהיל מתכת, העתקים.",
+      "envelope_cm": {"h": [150, 160], "shade_d": [35, 40], "base_d_max": 30},
+      "price_ceiling": {"breakeven_landed_ils": 263.9, "landed_for_40_ils": 145.6, "slot_price_ils": 349},
+      "at_alt_price": {"price_ils": 399, "breakeven_landed_ils": 301.9, "landed_for_40_ils": 166.6, "why_he": "אותה משפחת מחיר כמו הסלון."},
+      "source_type": "Israeli lighting importer (needs IL1) / AliExpress flat-pack with CE",
+      "queries": [
+        "square paper lantern floor lamp wood frame 155cm",
+        "shoji style floor lamp walnut frame warm light",
+        "black wood floor lamp pleated paper shade 40cm",
+        "minimalist wooden floor lamp linen cone shade EU plug"
+      ],
+      "why_he": "ריקה (ב-AE רק אהילים). וריאציה אחת יכולה להיות משותפת לסלון, אבל ברירת המחדל צריכה להיות שונה."
+    },
+    {
+      "slot": "hall/table-lamp",
+      "priority": "high",
+      "need_variations": 3,
+      "spec_he": "המנורה הראשונה שרואים בבית. גובה 45–55, בסיס צר עד 14: גוף חרס מט באבן או בדיו, או עץ כהה. אהיל נייר או פשתן 20–26 שמסתיר את הנורה. תקע EU או ישראלי. אסור: כדור נייר על רגלי תיל (העתק Akari), זכוכית, פליז.",
+      "envelope_cm": {"h": [45, 55], "shade_d": [20, 26], "base_d_max": 14},
+      "price_ceiling": {"breakeven_landed_ils": 112.0, "landed_for_40_ils": 61.5, "slot_price_ils": 149},
+      "at_alt_price": {"price_ils": 249, "breakeven_landed_ils": 188.0, "landed_for_40_ils": 103.6, "why_he": "מנורת שולחן מחרס ונייר שווה בישראל ₪249 ומעלה; ₪149 מתאים רק למנורה גנרית."},
+      "source_type": "AliExpress (small, ships well) / Israeli lighting importer (IL1)",
+      "queries": [
+        "washi paper table lamp walnut base 50cm",
+        "ceramic table lamp matte stone glaze paper shade",
+        "small andon table lamp wood paper 45cm EU plug",
+        "black ceramic table lamp pleated rice paper shade"
+      ],
+      "leads": [
+        {"ae_item_id": "1005007582176500", "why_he": "לא להביא: כדור נייר על רגלי תיל, 24 גובה, תקע US. מופיע כאן רק כדי שלא יחזור"}
+      ],
+      "why_he": "ריקה. בכניסה המנורה והכלי הם כל הוויניטה; בלי אור חם על הקונסולה הכניסה נראית ריקה, לא מאופקת."
+    },
+    {
+      "slot": "work/desk-lamp",
+      "priority": "medium",
+      "need_variations": 3,
+      "spec_he": "מנורת שולחן קטנה: גוף אגוז או אפר שחור, אהיל נייר או פשתן 16–22, גובה 40–50, בסיס עד 14. תקע EU או ישראלי. אסור: מנורת עבודה מתכתית, כדור או ביצת נייר על רגליים.",
+      "envelope_cm": {"h": [40, 50], "shade_d": [16, 22], "base_d_max": 14},
+      "price_ceiling": {"breakeven_landed_ils": 188.0, "landed_for_40_ils": 103.6, "slot_price_ils": 249, "price_basis_he": "חציון העמדה ריק; ₪249 הוא מחיר מוצע (PRICE1)"},
+      "source_type": "AliExpress",
+      "queries": [
+        "walnut desk lamp paper shade E14 EU plug",
+        "wooden mushroom table lamp rice paper shade small",
+        "black ash wood table lamp linen shade 45cm"
+      ],
+      "why_he": "ריקה, ולחדר העבודה אין היום אף מנורה."
+    },
+    {
+      "slot": "dining-room/dining-pendant",
+      "priority": "high",
+      "need_variations": 3,
+      "spec_he": "הגיבור של D1. פנס וואשי או נייר תות סגלגל או שטוח 45–55, גובה עד 30, מפזר מט בתחתית, כבל 130 ומעלה. וריאציה אחת בפשתן גולמי. מאותה משפחה כמו תלויית הסלון אבל לא אותו מוצר. CE, מחווט. אסור: ראטן עבה, זכוכית, מתכת מבריקה, העתקי Akari.",
+      "envelope_cm": {"d": [45, 55], "h_max": 30, "cable_min": 130},
+      "price_ceiling": {"breakeven_landed_ils": 172.8, "landed_for_40_ils": 95.1, "slot_price_ils": 229},
+      "at_alt_price": {"price_ils": 399, "breakeven_landed_ils": 301.9, "landed_for_40_ils": 166.6, "why_he": "תלויה מעוצבת 50 מעל שולחן אוכל נמכרת בישראל ב-₪399 ומעלה. מחיר למשתמש (ה.10)."},
+      "source_type": "AliExpress flat-pack (folding paper) / Israeli lighting importer (IL1)",
+      "queries": [
+        "washi paper pendant lamp oval 50cm E27 CE",
+        "japanese paper lantern ceiling light 50cm flat pack",
+        "handmade mulberry paper pendant lamp 50cm",
+        "linen pendant lamp flat drum 50cm natural",
+        "bamboo frame paper pendant lamp 50cm dining"
+      ],
+      "leads": [
+        {"ae_item_id": "1005012027077851", "why_he": "פנס ענן (fit 8), נחיתה ₪706: מפסיד גם ב-₪399. לבדוק משלוח אחר או מחסן באירופה"}
+      ],
+      "why_he": "ריקה. זה הפריט הכי בולט בפינת האוכל, ופנס הקפלים הקיים 50 מפסיד 430%."
+    },
+    {
+      "slot": "living-room/pendant",
+      "priority": "medium",
+      "need_variations": 1,
+      "spec_he": "וריאציה שלישית ששונה באמת משני פנסי המשי: פנס וואשי סגלגל או פנס קפלים מנייר 40–50, גובה 22–32, מפזר מט. CE, מחווט.",
+      "envelope_cm": {"d": [40, 50], "h": [22, 32]},
+      "price_ceiling": {"breakeven_landed_ils": 225.9, "landed_for_40_ils": 124.6, "slot_price_ils": 299},
+      "source_type": "AliExpress flat-pack",
+      "queries": [
+        "oval washi paper pendant 45cm cord set E27",
+        "pleated paper pendant lamp 45cm flat pack",
+        "kozo paper pendant light 45cm"
+      ],
+      "why_he": "שתי הבחירות הן אותו פנס משי משני ספקים, כלומר אין בחירה אמיתית. אותו צורך יש בתלויה בהורים."
+    },
+    {
+      "slot": "work/pendant",
+      "also_serves": ["kids/pendant"],
+      "priority": "medium",
+      "need_variations": 3,
+      "spec_he": "פנס נייר או פשתן קטן ושטוח, קוטר עד 28 וגובה עד 18 (בילדים עד 25), מפזר מט, כיפה מעץ אפשרית. CE, מחווט, בלי זכוכית.",
+      "envelope_cm": {"d_max": 28, "h_max": 18, "kids_h": [18, 25]},
+      "price_ceiling": {"breakeven_landed_ils": 112.0, "landed_for_40_ils": 61.5, "slot_price_ils": 149},
+      "at_alt_price": {"price_ils": 119, "breakeven_landed_ils": 89.2, "landed_for_40_ils": 48.9, "why_he": "מחיר עמדת הילדים."},
+      "source_type": "AliExpress (Choice)",
+      "queries": [
+        "small paper lantern pendant 25cm E27",
+        "mini washi pendant light 25cm wooden cap",
+        "small pleated paper pendant 25cm flat"
+      ],
+      "why_he": "שתי העמדות ריקות; כיפות הראטן והאגוז ופנס המשי 30 מפסידים או חורגים."
+    },
+    {
+      "slot": "living-room/wall-sconce",
+      "priority": "high",
+      "need_variations": 3,
+      "spec_he": "מנורת קריאה ליד הכורסה: זרוע אגוז או שחור מט, אהיל נייר או פשתן 18–22, בליטה 30–45, תקע EU וכבל קצר לשקע, או חיווט. אסור: זרוע פליז, אהיל מתכת.",
+      "envelope_cm": {"shade_d": [18, 22], "projection": [30, 45]},
+      "price_ceiling": {"breakeven_landed_ils": 225.9, "landed_for_40_ils": 124.6, "slot_price_ils": 299},
+      "source_type": "AliExpress / Israeli lighting importer (IL1)",
+      "queries": [
+        "walnut swing arm wall lamp paper shade plug in",
+        "black wood wall sconce linen shade reading arm 40cm",
+        "wall mounted reading lamp wooden arm rice paper shade EU plug",
+        "plug in wall sconce pleated paper shade wood arm"
+      ],
+      "why_he": "ריקה, וזה קודקוד במשולש האור. קונוס הטרוורטין על לוחית אגוז בולט רק 18–20 ואין לו אהיל."
+    },
+    {
+      "slot": "hall/ceiling-light",
+      "priority": "medium",
+      "need_variations": 3,
+      "spec_he": "פנס צמוד או חצי-צמוד מנייר או משי, 35–45 × 18–25, מאותה משפחה כמו מנורות המסדרון. CE, מחווט.",
+      "envelope_cm": {"d": [35, 45], "h": [18, 25]},
+      "price_ceiling": {"breakeven_landed_ils": 150.0, "landed_for_40_ils": 82.5, "slot_price_ils": 199},
+      "source_type": "AliExpress flat-pack",
+      "queries": [
+        "flush mount paper lantern ceiling light 40cm",
+        "washi ceiling lamp flush mount 40cm wood frame",
+        "silk flush ceiling light 40cm ribbed"
+      ],
+      "leads": [
+        {"ae_item_id": "1005008585971887", "why_he": "פנס משי 40; ממתין לציטוט משלוח"}
+      ],
+      "why_he": "ריקה. האור הראשון בבית צריך להיות נייר רך, ולא צלחת אופל."
+    },
+    {
+      "slot": "corridor/ceiling-lights",
+      "priority": "medium",
+      "need_variations": 2,
+      "spec_he": "זוג פנסים חצי-צמודים 30–40, בליטה 12–20, נייר או משי, מאותה משפחה כמו הכניסה. CE, מחווט.",
+      "envelope_cm": {"d": [30, 40], "projection": [12, 20]},
+      "price_ceiling": {"breakeven_landed_ils": 271.5, "landed_for_40_ils": 149.8, "slot_price_ils": 359},
+      "at_alt_price": {"price_ils": 499, "breakeven_landed_ils": 377.9, "landed_for_40_ils": 208.7, "why_he": "ב-₪499 לזוג פנס המשי 30 הקיים מרוויח 19.7% (PRICE1)."},
+      "source_type": "AliExpress flat-pack",
+      "queries": [
+        "semi flush paper ceiling light 35cm",
+        "small washi ceiling lamp 35cm close to ceiling",
+        "fabric flush mount ceiling light 35cm natural linen"
+      ],
+      "why_he": "ריקה. פנס המשי 30 (7.5) מפסיד בזוג ב-₪359."
+    },
+    {
+      "slot": "living-room/framed-art",
+      "priority": "high",
+      "need_variations": 2,
+      "spec_he": "שתי וריאציות לצד שלישיית העץ: זוג 70×100 של דיו על נייר (ענף, אבן, משיכת מכחול מופשטת), ונוף ערפל מופשט באבן ובדיו. רקע וואשי או שמנת, דיו לא שחור טהור. מסגרת אגוז או שחור מט 1.5–2, פספרטו. אסור: טקסט וקליגרפיה, פוג׳י, גלים, קוי, ציפורי עגור עם שמש אדומה, תמונות AI עם אנשים.",
+      "envelope_cm": {"total_w": [145, 165], "h": [70, 100], "formats": ["2 x 70x100, gap 8", "3 x 50x70, gap 6", "1 x 150x100 landscape"]},
+      "price_ceiling": {"breakeven_landed_ils": 286.7, "landed_for_40_ils": 158.2, "slot_price_ils": 379},
+      "at_alt_price": {"price_ils": 449, "breakeven_landed_ils": 339.9, "landed_for_40_ils": 187.7, "why_he": "המחיר הטיפוסי בישראל לסט ממוסגר."},
+      "source_type": "AliExpress prints + local framing (needs PR1) / Israeli supplier of framed sets (IL1)",
+      "queries": [
+        "sumi ink painting print 70x100 abstract brush stroke",
+        "japanese ink landscape mist print 50x70 unframed",
+        "zen ink branch print set of 2 70x100 cream background",
+        "abstract stone shapes print set beige charcoal 70x100"
+      ],
+      "leads": [
+        {"card_id": "framed-art-aliexpress-modern-minimalist-neutral-gallery-802995", "why_he": "צורות אורגניות בדיו וטאופ; 40×50 לאורך, ולכן מתאים יותר למסדרון. לבדוק שהשחור לא טהור"}
+      ],
+      "why_he": "יש וריאציה אחת (שלישיית העץ, PR1). צריך עוד שתיים כדי שבסלון תהיה בחירה."
+    },
+    {
+      "slot": "hall/framed-art",
+      "priority": "high",
+      "need_variations": 3,
+      "spec_he": "הדפס ריבועי 50×50 (המעטפת 50–60 ריבועי): ענף בדיו, אבן או עיגול מכחול מופשט (לא אנסו עם טקסט). מסגרת אגוז או שחור מט דקה, פספרטו וואשי.",
+      "envelope_cm": {"w": [50, 60], "h": [50, 60], "frame_depth": [2, 3.5]},
+      "price_ceiling": {"breakeven_landed_ils": 96.8, "landed_for_40_ils": 53.1, "slot_price_ils": 129},
+      "at_alt_price": {"price_ils": 249, "breakeven_landed_ils": 188.0, "landed_for_40_ils": 103.6, "why_he": "ב-₪129 אין מקום למסגור מקומי; ₪249 הוא מחיר ריאלי להדפס ממוסגר 50×50."},
+      "source_type": "AliExpress prints + local framing (needs PR1)",
+      "queries": [
+        "square ink painting print 50x50 japanese minimalist",
+        "square wabi sabi art print 50x50 beige black",
+        "square abstract brush print 50x50 cream unframed"
+      ],
+      "leads": [
+        {"ae_item_id": "1005012603654192", "why_he": "׳Oriental Ink Painting׳ עם מסגרת עץ, 30×80: לא ריבועי, אבל אולי יש מק״ט ריבועי. לא נבדק בעין"}
+      ],
+      "why_he": "ריקה. הדפסי העץ (8.0) קיימים רק לאורך."
+    },
+    {
+      "slot": "work/framed-art",
+      "priority": "medium",
+      "need_variations": 3,
+      "spec_he": "הדפס לרוחב 55–60 × 45–50: נוף ערפל בדיו, ענף אופקי, או מופשט אבן. מסגרת אגוז או שחור מט.",
+      "envelope_cm": {"w": [55, 60], "h": [45, 50], "frame_depth": [2, 3.5]},
+      "price_ceiling": {"breakeven_landed_ils": 286.7, "landed_for_40_ils": 158.2, "slot_price_ils": 379},
+      "source_type": "AliExpress prints + local framing (needs PR1)",
+      "queries": [
+        "landscape ink wash painting print 60x45 horizontal",
+        "horizontal misty mountain ink print 60x40 unframed",
+        "wide minimalist branch print 60x45 beige"
+      ],
+      "why_he": "ריקה. כל הדפסי הג׳אפנדי במאגר לאורך. כרטיסי ‎-work הכפולים צריכים להתמזג לכרטיסי המשפחה."
+    },
+    {
+      "slot": "corridor/gallery-art",
+      "priority": "medium",
+      "need_variations": 2,
+      "spec_he": "שלושה הדפסים 40×45–50, רווח 20: בוטני בדיו או מופשט אבן, רקע וואשי. מסגרת שחורה מט דקה, עומק 2–3.",
+      "envelope_cm": {"w_each": 40, "h_each": [45, 50], "gap": 20, "frame_depth": [2, 3]},
+      "price_ceiling": {"breakeven_landed_ils": 275.3, "landed_for_40_ils": 151.9, "slot_price_ils": 364},
+      "source_type": "AliExpress prints + local framing (needs PR1)",
+      "queries": [
+        "set of 3 ink botanical prints 40x50 beige black",
+        "three panel ink wash abstract print 40x50",
+        "stone color minimalist print set 3 pieces 40x50"
+      ],
+      "leads": [
+        {"ae_item_id": "1005011917800636", "why_he": "שלישיית מרווה BDT183 ‏40×50, ‏76% לפני מסגור; לא נבדקה בעין"}
+      ],
+      "why_he": "יש וריאציה אחת (עץ הוואבי, PR1)."
+    },
+    {
+      "slot": "living-room/rug",
+      "priority": "high",
+      "need_variations": 2,
+      "spec_he": "קליעה שטוחה מסיב טבעי: צמר-יוטה, חוט נייר או מראה טטאמי. אבן או פשתן גולמי, וריאציה אחת עם שוליים דקים בדיו. 200–240 × 290–340, עדיף 240×340. ערימה עד 10 מ״מ. אסור: ויסקוזה, שאגי, פרנזים ארוכים, דוגמה רועשת.",
+      "envelope_cm": {"w": [200, 240], "l": [290, 340], "pile_mm_max": 10},
+      "price_ceiling": {"breakeven_landed_ils": 985.6, "landed_for_40_ils": 545.3, "slot_price_ils": 1299},
+      "source_type": "Israeli supplier (needs IL1) / local stock",
+      "queries": [
+        "wool jute flat weave rug 240x340 stone grey",
+        "paper yarn rug handwoven 200x300 natural",
+        "tatami look woven rug 240x340 bound edge",
+        "flat weave natural rug black border 200x300"
+      ],
+      "leads": [
+        {"ae_item_id": "1005010040579327", "why_he": "פסים, נחיתה ₪387; לא נבדק בעין, כנראה סינתטי"},
+        {"ae_item_id": "1005004054134001", "why_he": "מופשט, נחיתה ₪480; לא נבדק בעין"}
+      ],
+      "why_he": "הבחירה היחידה היא שטיח פוליאסטר בחריג VR1 (‏26.3%). שטיח טבעי של 12 ק״ג מסין לא משתלם."
+    },
+    {
+      "slot": "master/rug",
+      "priority": "medium",
+      "need_variations": 2,
+      "spec_he": "צמר לא צבוע או כותנה-יוטה בקליעה שטוחה, אבן או שיבולת, 280–300 × 200–220 (300 לרוחב החדר). שונה מהסלון בגוון או בקליעה.",
+      "envelope_cm": {"w": [280, 300], "d": [200, 220]},
+      "price_ceiling": {"breakeven_landed_ils": 985.6, "landed_for_40_ils": 545.3, "slot_price_ils": 1299, "price_basis_he": "חציון העמדה ריק; מחיר הסלון"},
+      "source_type": "Israeli supplier (needs IL1)",
+      "queries": [
+        "undyed wool flat weave rug 200x290 oatmeal",
+        "handwoven cotton jute rug 210x290 stone",
+        "soft sisal look rug 200x300 bedroom low pile"
+      ],
+      "why_he": "הבחירה היחידה היא שטיח הפוליאסטר של הסלון."
+    },
+    {
+      "slot": "dining-room/dining-rug",
+      "priority": "medium",
+      "need_variations": 2,
+      "spec_he": "קליעה שטוחה בסיב טבעי באבן, שונה מהסלון (רואים את שניהם דרך הפתח). המידה לפי SLOT2.",
+      "envelope_cm": {"w": [200, 240], "d": [200, 230], "proposed_after_SLOT2": {"w": [230, 240], "d": [245, 250]}},
+      "price_ceiling": {"breakeven_landed_ils": 909.6, "landed_for_40_ils": 503.2, "slot_price_ils": 1199, "price_basis_he": "חציון העמדה ריק; מחיר מוצע"},
+      "source_type": "Israeli supplier (needs IL1)",
+      "queries": [
+        "jute wool blend rug 230x250 stone",
+        "flat weave wool rug square 240x240 natural",
+        "low pile woven rug 200x250 grey beige border"
+      ],
+      "why_he": "הבחירה היחידה היא אותו שטיח כמו בסלון."
+    },
+    {
+      "slot": "living-room/pouf",
+      "priority": "medium",
+      "need_variations": 3,
+      "spec_he": "הפרופיל הנמוך: כרית רצפה עגולה או זאבוטון מרובע 45–50 × 20–30, פשתן גולמי, קנבס באבן או קליעת גומא. חסום עד החלטת J2 (המעטפת היום 42–45 × 35–36).",
+      "envelope_cm": {"d": [45, 50], "h": [20, 30], "note": "proposed in J2; current envelope d 42-45, h 35-36"},
+      "price_ceiling": {"breakeven_landed_ils": 74.0, "landed_for_40_ils": 40.4, "slot_price_ils": 99},
+      "at_alt_price": {"price_ils": 199, "breakeven_landed_ils": 150.0, "landed_for_40_ils": 82.5, "why_he": "כרית רצפה מפשתן או גומא בגודל 50 שווה בישראל ₪199 ומעלה; ₪99 לא מכסה משלוח של מילוי."},
+      "source_type": "AliExpress (cover only, local filling) / Israeli supplier",
+      "queries": [
+        "linen floor cushion round 50cm thick 20cm",
+        "zabuton floor cushion cotton 50x50 stone",
+        "rush woven floor cushion 50cm round",
+        "floor cushion cover only 50cm linen zipper"
+      ],
+      "leads": [
+        {"ae_item_id": "1005006302100915", "why_he": "זאפו קש 30×20: קטן, ומפסיד ב-₪99"},
+        {"ae_item_id": "1005007185322385", "why_he": "פוף פשתן 30×20: קטן מהיעד"}
+      ],
+      "why_he": "ריקה. זה הפריט שמסמן את ׳הנמוך׳ בפריים הראשי."
+    },
+    {
+      "slot": "master/nightstand-tray",
+      "priority": "medium",
+      "need_variations": 3,
+      "spec_he": "מגש מלבני מאגוז או מעץ כהה בשמן, שפה דקה, 28–34 × 20–28 × 1.5–3. וריאציה אחת בחרס מט. אסור: לכה מבריקה, טרוורטין (כבר יש שניים בחדר).",
+      "envelope_cm": {"w": [28, 34], "d": [20, 28], "h": [1.5, 3]},
+      "price_ceiling": {"breakeven_landed_ils": 66.4, "landed_for_40_ils": 36.2, "slot_price_ils": 89},
+      "at_alt_price": {"price_ils": 129, "breakeven_landed_ils": 96.8, "landed_for_40_ils": 53.1, "why_he": "מגש אגוז מלא בגודל 30 נמכר בישראל ב-₪129 ומעלה."},
+      "source_type": "AliExpress (flat, light)",
+      "queries": [
+        "black walnut rectangular tray 30x20 solid wood",
+        "wooden valet tray walnut 30cm thin edge",
+        "solid wood serving tray 30x22 dark oiled"
+      ],
+      "leads": [
+        {"ae_item_id": "1005012509173857", "why_he": "מגש עץ; לא נבדק בעין"},
+        {"ae_item_id": "1005012023258465", "why_he": "מגש עץ; לא נבדק בעין"}
+      ],
+      "why_he": "ריקה. זה הניצחון הזול ביותר: עץ כהה ליד המיטה, פריט שטוח שעובר בדרופשיפינג."
+    },
+    {
+      "slot": "work/desk-tray",
+      "priority": "low",
+      "need_variations": 3,
+      "spec_he": "מגש אגוז או אפר שחור 22–28 × 18–26 × 2–4. וריאציה אחת בחרס בדיו.",
+      "envelope_cm": {"w": [22, 28], "d": [18, 26], "h": [2, 4]},
+      "price_ceiling": {"breakeven_landed_ils": 89.2, "landed_for_40_ils": 48.9, "slot_price_ils": 119},
+      "source_type": "AliExpress",
+      "queries": [
+        "walnut desk tray 25x20 solid wood",
+        "black ash wooden pen tray desk",
+        "solid wood catchall tray 25cm dark finish"
+      ],
+      "leads": [
+        {"ae_item_id": "1005012823648737", "why_he": "מגש עץ מלא 25×15, ‏45.5%; לא נבדק בעין. 15 צר מ-18"}
+      ],
+      "why_he": "ריקה; מגש הטרוורטין מפסיד."
+    },
+    {
+      "slot": "hall/wall-hooks",
+      "priority": "medium",
+      "need_variations": 3,
+      "spec_he": "מתלה יתדות: פס אגוז או אפר שחור 60–80 עם 3–5 יתדות עגולות, בליטה עד 8. וריאציה אחת יתדות נפרדות בשחור מט. אסור: אורן צהוב, וו מתכת מבריק.",
+      "envelope_cm": {"l": [60, 80], "pegs": [3, 5], "projection_max": 8},
+      "price_ceiling": {"breakeven_landed_ils": 47.4, "landed_for_40_ils": 25.7, "slot_price_ils": 64},
+      "at_alt_price": {"price_ils": 99, "breakeven_landed_ils": 74.0, "landed_for_40_ils": 40.4, "why_he": "פס יתדות מאגוז מלא שווה בישראל ₪99 ומעלה."},
+      "source_type": "AliExpress",
+      "queries": [
+        "black walnut peg rail 4 pegs 70cm",
+        "solid wood shaker peg rail dark stain 60cm",
+        "matte black wooden wall pegs set of 4 round"
+      ],
+      "leads": [
+        {"ae_item_id": "1005005983893008", "why_he": "לא נבדק בעין"},
+        {"ae_item_id": "1005013163399116", "why_he": "לא נבדק בעין"}
+      ],
+      "why_he": "הבחירה היחידה היא יתדות עץ גולמי (7.0). העץ הכהה בכניסה הוא החתימה."
+    },
+    {
+      "slot": "work/bookends",
+      "priority": "medium",
+      "need_variations": 2,
+      "spec_he": "זוג תומכי ספרים מאגוז מלא או עץ כהה, 14–18 × 12–16, צורה פשוטה (L, קשת, גוש). אסור: פסלים, ראשים, מתכת מבריקה.",
+      "envelope_cm": {"h": [14, 18], "d": [12, 16]},
+      "price_ceiling": {"breakeven_landed_ils": 58.8, "landed_for_40_ils": 32.0, "slot_price_ils": 79, "price_basis_he": "חציון העמדה ריק; מחיר מוצע"},
+      "source_type": "AliExpress",
+      "queries": [
+        "black walnut bookends solid wood pair",
+        "wooden L shape bookends walnut minimalist",
+        "heavy oak bookends dark stain pair"
+      ],
+      "leads": [
+        {"ae_item_id": "1005011774287608", "why_he": "׳Black Walnut Bookends Japanese Minimalist׳, נחיתה ₪25.4; אם הוא כפי שנראה בשם, הוא ברירת המחדל"}
+      ],
+      "why_he": "יש שתיים (בוק עם מתכת, במבוק), אבל חסר האגוז."
+    },
+    {
+      "slot": "master/bedside-carafe",
+      "priority": "medium",
+      "need_variations": 3,
+      "spec_he": "קנקן אבנית מט עם כוס הפוכה, 20–26 × 9–12. גוונים: אבן, דיו, וואשי. אסור: זכוכית, זיגוג מבריק, דקלים או טקסט.",
+      "envelope_cm": {"h": [20, 26], "d": [9, 12]},
+      "price_ceiling": {"breakeven_landed_ils": 96.8, "landed_for_40_ils": 53.1, "slot_price_ils": 129, "price_basis_he": "חציון העמדה ריק; מחיר מוצע"},
+      "source_type": "local stock (LK1) / AliExpress",
+      "queries": [
+        "stoneware water carafe with cup matte 1L",
+        "ceramic bedside water jug with tumbler lid matte grey",
+        "japanese ceramic water pitcher and cup set"
+      ],
+      "why_he": "ריקה (כל התוצאות מזכוכית). זה אחד מפריטי החתימה של חדר השינה."
+    },
+    {
+      "slot": "living-room/candle-holders",
+      "also_serves": ["master/candle-holders", "dining-room/candle-holders"],
+      "priority": "medium",
+      "need_variations": 2,
+      "spec_he": "פמוטים נמוכים לנר עמוד: עץ שרוף (שוֹ-סוּגי) או חרס שחור מט. מחזיק 8–12, עם נר 15 כולל 22–27, קוטר עליון 9–14. זוג.",
+      "envelope_cm": {"holder_h": [8, 12], "total_h_with_candle": [22, 27], "top_d": [9, 14], "qty": 2},
+      "price_ceiling": {"breakeven_landed_ils": 150.0, "landed_for_40_ils": 82.5, "slot_price_ils": 199},
+      "source_type": "AliExpress",
+      "queries": [
+        "charred wood candle holder pillar low",
+        "black ceramic pillar candle holder low matte",
+        "dark wooden candle holder pillar 10cm",
+        "burnt wood candle plate round"
+      ],
+      "why_he": "יש וריאציה אחת (צלחות ברזל). פמוט העץ השרוף במאגר גבוה מדי (22) ומפסיד."
+    },
+    {
+      "slot": "living-room/planter",
+      "also_serves": ["master/planter", "work/planter", "hall/planter"],
+      "priority": "medium",
+      "need_variations": 3,
+      "spec_he": "כלי רצפה מחרס, בטון או פייברקליי (קל למשלוח), דיו או אבן, גליל או כד רחב. סלון 38×45 ומעלה עם עץ זית; הורים 36–42 × 38–45; עבודה 34–38 × 36–42; כניסה גליל צר 24×38. אסור: זיגוג מבריק, טרקוטה כתומה, דוגמה מצוירת.",
+      "envelope_cm": {"living": {"d": [30, 38], "h": [45, 50]}, "master": {"pot_d": [36, 42], "pot_h": [38, 45]}, "work": {"pot_d": [34, 38], "pot_h": [36, 42]}},
+      "price_ceiling": {"breakeven_landed_ils": 74.0, "landed_for_40_ils": 40.4, "slot_price_ils": 99},
+      "at_alt_price": {"price_ils": 349, "breakeven_landed_ils": 263.9, "landed_for_40_ils": 145.6, "why_he": "כלי רצפה 40 מחרס נמכר בישראל ב-₪299–449; ₪99 מתאים רק לעציץ קטן."},
+      "source_type": "Israeli supplier / local stock (LK1); AliExpress only for fiberclay",
+      "queries": [
+        "fiberclay planter 40cm matte black cylinder",
+        "concrete floor planter 38x45 grey textured",
+        "stoneware floor planter 40cm stone glaze",
+        "large rough clay pot 40cm wabi sabi floor"
+      ],
+      "why_he": "ארבע עמדות ריקות. בלי צמח גדול אחד החדר מאבד את נקודת הטבע שלו."
+    },
+    {
+      "slot": "bath/bath-mat",
+      "priority": "medium",
+      "need_variations": 2,
+      "spec_he": "החתימה של האמבטיה: שטיחון דיאטומיט באבן, או רשת עץ כהה (טיק בשמן). 40–50 × 55–70.",
+      "envelope_cm": {"w": [40, 50], "l": [55, 70]},
+      "price_ceiling": {"breakeven_landed_ils": 62.6, "landed_for_40_ils": 34.1, "slot_price_ils": 84},
+      "source_type": "AliExpress",
+      "queries": [
+        "diatomite bath mat stone grey 40x60",
+        "teak slatted shower mat 50x70 dark",
+        "diatomaceous earth bath mat speckled grey"
+      ],
+      "leads": [
+        {"ae_item_id": "1005012409665979", "why_he": "דיאטומיט, ‏51%; לא נבדק בעין"}
+      ],
+      "why_he": "הבחירה היחידה היא שטיחון ופל (7.0); שטיחון העץ של CJ מפסיד 197%."
+    },
+    {
+      "slot": "bath/bath-towels",
+      "also_serves": ["bath/hand-towel"],
+      "priority": "low",
+      "need_variations": 3,
+      "spec_he": "מגבות כותנה-פשתן או גזה באבן, בדיו ובגולמי, 70×140 ו-50×90. אסור: לבן טהור, קטיפה מבריקה, פסים צבעוניים.",
+      "envelope_cm": {"bath_towel": [70, 140], "hand_towel": [50, 90]},
+      "price_ceiling": {"breakeven_landed_ils": 36.0, "landed_for_40_ils": 19.4, "slot_price_ils": 49},
+      "at_alt_price": {"price_ils": 129, "breakeven_landed_ils": 96.8, "landed_for_40_ils": 53.1, "why_he": "זוג מגבת גוף ומגבת ידיים מגזה נמכר בישראל ב-₪129 ומעלה."},
+      "source_type": "AliExpress / CJ",
+      "queries": [
+        "cotton linen bath towel stone grey 70x140",
+        "japanese gauze bath towel 70x140 natural",
+        "ramie cotton towel set charcoal"
+      ],
+      "leads": [
+        {"ae_item_id": "1005008637805037", "why_he": "כותנה עבה Dark Khaki 70×140; כמעט אפס רווח ב-₪49"}
+      ],
+      "why_he": "ריקה; מגבות הוופל הלבנות של הנורדי לבנות מדי."
+    },
+    {
+      "slot": "dining-room/open-shelf-ceramics",
+      "priority": "medium",
+      "need_variations": 3,
+      "spec_he": "כד אבנית בזיגוג אפר 18–26 וצנצנת חרס שחור עם מכסה עץ 10–15. חסום ב-LK1.",
+      "envelope_cm": {"jug_h": [18, 26], "small_h": [10, 15]},
+      "price_ceiling": {"breakeven_landed_ils": 161.4, "landed_for_40_ils": 88.8, "slot_price_ils": 214},
+      "source_type": "local stock (LK1) / AliExpress",
+      "queries": [
+        "ash glaze stoneware jug 22cm",
+        "black clay jar with wooden lid 12cm",
+        "speckled stoneware pitcher matte 20cm"
+      ],
+      "leads": [
+        {"ae_item_id": "1005008837526491", "why_he": "כד וואבי יפה, מפסיד 26%; לבדוק משלוח אחר"}
+      ],
+      "why_he": "מייצג את כל משפחת הקרמיקה במטבח (9 עמדות). עדיף לפתוח אותה כמלאי מקומי קטן."
+    },
+    {
+      "slot": "master/curtains",
+      "priority": "medium",
+      "need_variations": 2,
+      "spec_he": "ברירת מחדל ג׳אפנדית שונה מהנורדית (כלל הייחוד): פשתן עבה באבן או פשתן גולמי מקומט, 130–150 × 278–282, קפלים או ווים, בלי עיניות מתכת.",
+      "envelope_cm": {"panel_w": [130, 150], "drop": [278, 282]},
+      "price_ceiling": {"breakeven_landed_ils": 199.4, "landed_for_40_ils": 109.9, "slot_price_ils": 264},
+      "source_type": "AliExpress / CJ (custom drop)",
+      "queries": [
+        "heavy washed linen curtain stone grey 140x280 pinch pleat",
+        "raw wrinkled linen curtain natural 140x280 hooks",
+        "slub linen curtain panel taupe 280cm drop"
+      ],
+      "leads": [
+        {"ae_item_id": "1005006997741011", "why_he": "פשתן שמנת עבה (fit 8); רק אם יש נפילה 280 ותלייה בלי עיניות"}
+      ],
+      "why_he": "וילון חדר השינה הוא עמדת גיבור, והבחירה היחידה זהה לנורדי."
+    },
+    {
+      "slot": "living-room/wall-decor",
+      "priority": "low",
+      "need_variations": 2,
+      "spec_he": "מגילת פשתן חלקה 35–45 על מוט אגוז, או צלחת קלועה שטוחה מחבל נייר בקוטר 40. אסור: מקרמה, ראפיה, שמש, טקסט.",
+      "envelope_cm": {"w": [35, 45]},
+      "price_ceiling": {"breakeven_landed_ils": 66.4, "landed_for_40_ils": 36.2, "slot_price_ils": 89},
+      "source_type": "AliExpress",
+      "queries": [
+        "plain linen wall hanging scroll walnut rod 40x50",
+        "paper rope woven wall plate 40cm flat",
+        "fabric scroll wall art natural linen blank"
+      ],
+      "why_he": "ריקה. באיפוק של הג׳אפנדי אפשר גם קיר ריק; מחליטים בפיילוט."
+    },
+    {
+      "slot": "dining-room/floor-vase",
+      "priority": "low",
+      "need_variations": 2,
+      "spec_he": "כד רצפה מחוספס בדיו או באבן, 50–65 × 25–32, עם ענף יחיד. אסור: פורצלן מבריק.",
+      "envelope_cm": {"h": [50, 65], "d": [25, 32]},
+      "price_ceiling": {"breakeven_landed_ils": 263.9, "landed_for_40_ils": 145.6, "slot_price_ils": 349},
+      "source_type": "Israeli supplier / local stock (LK1)",
+      "queries": [
+        "large stoneware floor vase 60cm textured black",
+        "rough clay floor vase 55cm stone grey",
+        "tall matte floor jar 60cm handmade"
+      ],
+      "why_he": "ריקה; האגרטל הלבן במאגר מפסיד."
+    }
+  ]
+}
