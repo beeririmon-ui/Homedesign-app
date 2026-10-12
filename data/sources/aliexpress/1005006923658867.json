@@ -1,0 +1,155 @@
+{
+ "source": "aliexpress",
+ "id": "1005006923658867",
+ "sections": {
+  "product": {
+   "fetched_at": "2026-10-12T04:56:16+00:00",
+   "endpoint": "aliexpress.ds.product.get",
+   "params": {
+    "ship_to_country": "IL",
+    "product_id": "1005006923658867",
+    "target_currency": "USD",
+    "target_language": "en"
+   },
+   "payload": {
+    "result": {
+     "ae_item_sku_info_dtos": [
+      {
+       "sku_attr": "14:29#Random Color",
+       "offer_sale_price": "4.58",
+       "sku_id": "12000038737838694",
+       "price_include_tax": false,
+       "currency_code": "USD",
+       "sku_price": "12.91",
+       "offer_bulk_sale_price": "4.58",
+       "sku_available_stock": 6,
+       "id": "14:29#Random Color",
+       "ae_sku_property_dtos": [
+        {
+         "sku_property_value": "WHITE",
+         "sku_image": "https://ae01.alicdn.com/kf/Scc8dfea67e3f420cb216980cd2b9ab1cc.jpg",
+         "sku_property_name": "Color",
+         "property_value_definition_name": "Random Color",
+         "property_value_id": 29,
+         "sku_property_id": 14
+        }
+       ]
+      }
+     ],
+     "ae_multimedia_info_dto": {
+      "image_urls": "https://ae01.alicdn.com/kf/S154f4199b3c14c2aa9c84ad1a7722285W.jpg;https://ae01.alicdn.com/kf/S926adf93434f4c4db310208f19f719b51.jpg;https://ae01.alicdn.com/kf/S9382cce1ce8c49f692c7d6bca2bdf15bo.jpg;https://ae01.alicdn.com/kf/S78e01e24f15f4f46942027cd86a5220f5.jpg;https://ae01.alicdn.com/kf/Sa6c24a21cab14ef4a6f20c370cec065fk.jpg;https://ae01.alicdn.com/kf/Scc8dfea67e3f420cb216980cd2b9ab1cc.jpg"
+     },
+     "package_info_dto": {
+      "package_width": 9,
+      "package_height": 6,
+      "package_length": 10,
+      "gross_weight": "0.083",
+      "package_type": false,
+      "product_unit": 100000015
+     },
+     "logistics_info_dto": {
+      "delivery_time": 7,
+      "ship_to_country": "IL"
+     },
+     "product_id_converter_result": {
+      "main_product_id": 1005006923658867,
+      "sub_product_id": "{\"US\":3256806737344115}"
+     },
+     "ae_item_base_info_dto": {
+      "mobile_detail": "<removed; use --full>",
+      "subject": "Cute Ice-Crack Glaze Flower Ceramics Succulent Planter Mini Plant Pot Garden Flowerpot For Home Office Decor Plant Pot",
+      "evaluation_count": "6",
+      "sales_count": "9",
+      "product_status_type": "onSelling",
+      "avg_evaluation_rating": "4.3",
+      "separated_listing": false,
+      "currency_code": "CNY",
+      "sl_product": false,
+      "category_id": 100005865,
+      "product_id": 1005006923658867,
+      "detail": "<removed; use --full>"
+     },
+     "has_whole_sale": false,
+     "ae_item_properties": [
+      {
+       "attr_name_id": 2,
+       "attr_value_id": 203055806,
+       "attr_name": "Brand Name",
+       "attr_value": "WHPHous"
+      },
+      {
+       "attr_name_id": 219,
+       "attr_value_id": 9441741844,
+       "attr_name": "Origin",
+       "attr_value": "Mainland China"
+      },
+      {
+       "attr_name_id": 306657049,
+       "attr_value_id": 1984089219,
+       "attr_name": "Department",
+       "attr_value": "Unisex-adult"
+      },
+      {
+       "attr_name_id": 10,
+       "attr_value_id": 365609,
+       "attr_name": "Material",
+       "attr_value": "Porcelain"
+      },
+      {
+       "attr_name_id": 400000603,
+       "attr_value_id": 23399591357,
+       "attr_name": "High-concerned chemical",
+       "attr_value": "none"
+      },
+      {
+       "attr_name_id": 234747215,
+       "attr_value_id": 2467,
+       "attr_name": "Is Smart Device",
+       "attr_value": "no"
+      },
+      {
+       "attr_name_id": -1,
+       "attr_name": "Choice",
+       "attr_value": "yes"
+      }
+     ],
+     "ae_store_info": {
+      "store_id": 1103573245,
+      "shipping_speed_rating": "4.7",
+      "communication_rating": "4.7",
+      "store_name": "BeautyParlour Store",
+      "store_country_code": "CN",
+      "item_as_described_rating": "4.6"
+     }
+    },
+    "rsp_code": 200,
+    "rsp_msg": "Call succeeds",
+    "request_id": "2102ece217917809757635945",
+    "_trace_id_": "2141315917917809757615812e0e58"
+   }
+  },
+  "freight:12000038737838694:IL:1": {
+   "fetched_at": "2026-10-12T04:56:17+00:00",
+   "endpoint": "aliexpress.ds.freight.query",
+   "params": {
+    "quantity": 1,
+    "shipToCountry": "IL",
+    "productId": "1005006923658867",
+    "selectedSkuId": "12000038737838694",
+    "language": "en_US",
+    "locale": "en_US",
+    "currency": "USD"
+   },
+   "payload": {
+    "options": [],
+    "success": false,
+    "code": 506,
+    "msg": "DELIVERY_SERVICE_EXCEPTION",
+    "item_id": "1005006923658867",
+    "sku_id": "12000038737838694",
+    "country": "IL",
+    "qty": 1
+   }
+  }
+ }
+}
