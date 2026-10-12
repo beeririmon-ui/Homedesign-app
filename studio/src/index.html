@@ -869,6 +869,134 @@ details.room-lad summary{cursor:pointer;font-weight:600}
 .md-lite table{border-collapse:collapse;font-size:var(--fs-xs)}
 .md-lite th,.md-lite td{border:1px solid var(--rule);padding:4px 6px;text-align:right;vertical-align:top}
 .tab-badge.live{background:var(--st-working);color:var(--sheet)}
+/* ---------- rooms: the designer's composition ("הרכבה") ---------- */
+.view-pick{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center}
+.view-pick .lbl{font-size:var(--fs-xs);font-weight:700;color:var(--ink-3)}
+.cs-ready-to-lock{background:var(--sage-wash);color:var(--sage-ink)}
+.cs-partial{background:var(--amber-wash);color:var(--amber-ink)}
+.cs-empty{background:transparent;color:var(--ink-2);box-shadow:inset 0 0 0 1px var(--rule-2)}
+.cs-on-hold{background:var(--brick-wash);color:var(--brick-ink)}
+.cs-dot{width:8px;height:8px;border-radius:50%;display:inline-block;flex:none}
+.csd-ready-to-lock{background:var(--sage-ink)} .csd-partial{background:var(--amber-ink)} .csd-empty{border:1.5px solid var(--ink-3)} .csd-on-hold{background:var(--brick-ink)}
+.comp-filter button{display:inline-flex;align-items:center;gap:6px}
+.comp-meta{display:flex;flex-wrap:wrap;gap:4px 18px;font-size:var(--fs-s);color:var(--ink-2)}
+.comp-meta code{overflow-wrap:anywhere}
+.comp-note{font-size:var(--fs-s);color:var(--ink-2);max-width:80ch}
+.comp-texts{display:grid;grid-template-columns:minmax(80px,auto) minmax(0,1fr);gap:6px 14px;margin:0;font-size:var(--fs-s)}
+.comp-texts dt{font-weight:700;color:var(--ink-3);font-size:var(--fs-xs);padding-top:2px}
+.comp-texts dd{margin:0;color:var(--ink-2);overflow-wrap:anywhere;max-width:80ch}
+@media (max-width:480px){.comp-texts{grid-template-columns:1fr;gap:2px}.comp-texts dd{margin-bottom:6px}}
+.comp-subs td,.comp-subs th{white-space:nowrap}
+.comp-subs td.money{text-align:end}
+.comp-check{background:var(--sheet);border:1px solid var(--rule);border-inline-start:3px solid var(--oak);border-radius:var(--r);padding:12px 16px;display:grid;gap:8px;font-size:15px;line-height:1.6;max-width:90ch}
+.comp-check p{overflow-wrap:anywhere}
+.comp-decs{list-style:none;margin:0;padding:0;display:grid;gap:8px;font-size:var(--fs-s)}
+.comp-decs li{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;min-width:0}
+.comp-decs li > span{min-width:0;overflow-wrap:anywhere;flex:1 1 260px;color:var(--ink-2)}
+.comp-slots{list-style:none;margin:0;padding:0;display:grid}
+.comp-slot{display:grid;gap:10px;padding:16px 0 18px;border-bottom:1px solid var(--rule);min-width:0;scroll-margin-top:calc(env(safe-area-inset-top,0px) + 130px)}
+.comp-slot:first-child{padding-top:4px}
+.comp-slot-head{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
+.comp-slot-head h4{font-family:var(--f-display);font-weight:500;font-size:var(--fs-l);line-height:1.2;margin:0;outline:none}
+.comp-block{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center;font-size:var(--fs-s);color:var(--ink-2)}
+.comp-block .bt{overflow-wrap:anywhere}
+.comp-notes{font-size:var(--fs-s);color:var(--ink-2);max-width:90ch;overflow-wrap:anywhere;white-space:pre-line}
+.comp-sub{display:grid;gap:8px;border-inline-start:2px solid var(--rule-2);padding-inline-start:12px;min-width:0}
+.comp-sub h5{font-family:var(--f-body);font-size:var(--fs-m);font-weight:700;margin:0;display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center}
+.comp-more summary{cursor:pointer;font-size:var(--fs-s);color:var(--ink-2);min-height:28px;display:flex;align-items:center}
+.comp-more dl{display:grid;grid-template-columns:minmax(0,1fr);gap:4px;margin:6px 0 0}
+.comp-more dt{font-size:var(--fs-xs);font-weight:700;color:var(--ink-3);margin-top:6px}
+.comp-more dd{margin:0;font-size:var(--fs-s);color:var(--ink-2);overflow-wrap:anywhere;white-space:pre-line}
+.comp-more ul{margin:0;padding-inline-start:18px;display:grid;gap:3px}
+.ptiles{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,150px),1fr));gap:10px}
+@media (max-width:440px){.ptiles{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}}
+.ptile{display:grid;grid-template-rows:auto 1fr;grid-template-columns:minmax(0,1fr);background:var(--sheet);border:1px solid var(--rule);border-radius:var(--r);overflow:hidden;min-width:0;text-align:start;padding:0;color:inherit;font:inherit;align-content:start}
+button.ptile{cursor:pointer}
+button.ptile:hover{border-color:var(--rule-2);box-shadow:0 10px 24px -18px var(--shade)}
+button.ptile:focus-visible{outline-offset:2px}
+.ptile.is-default{border-color:var(--ink);box-shadow:inset 0 3px 0 var(--ink)}
+.ptile.is-gap{border-style:dashed;background:transparent}
+.ptile .ti{position:relative;aspect-ratio:1/1;background:#fff;display:block;overflow:hidden}
+.ptile .ti img{width:100%;height:100%;object-fit:contain;display:block}
+.ptile .ti .role{position:absolute;inset-block-start:6px;inset-inline-start:6px;max-width:calc(100% - 12px);white-space:normal;line-height:1.2}
+.ptile .ti.ph{background:repeating-linear-gradient(135deg,var(--sunk) 0 8px,var(--paper) 8px 16px)}
+.ptile .ti.ph .ph-t{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:10px;font-size:var(--fs-xs);color:var(--ink-2);font-weight:600}
+.ptile.is-gap .ti{background:transparent}
+.ptile .mosaic{display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:1fr;height:100%;gap:1px;background:var(--rule)}
+.ptile .mosaic img{background:#fff}
+.ptile .tb{display:grid;gap:5px;padding:8px 9px 10px;align-content:start;min-width:0}
+.ptile .tn{font-weight:600;font-size:13.5px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+.ptile .to{font-size:var(--fs-xs);color:var(--ink-2);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+.ptile .tc{display:flex;flex-wrap:wrap;gap:4px}
+.ptile .tc .chip{padding:4px 7px;font-size:11.5px}
+.ptile .tl{display:flex;flex-wrap:wrap;gap:2px 10px;font-size:var(--fs-xs);font-weight:600}
+.ptile .tl a,.ptile .tl .linkish{display:inline-flex;align-items:center;min-height:24px}
+.ptile .set-items{list-style:none;margin:0;padding:0;display:grid;gap:2px;font-size:var(--fs-xs)}
+.ptile .set-items .linkish{text-align:start;overflow-wrap:anywhere;min-height:24px}
+.chip-needcard{background:var(--amber-wash);color:var(--amber-ink);border:1px dashed currentColor;padding:4px 8px}
+.chip-hascard{background:var(--sage-wash);color:var(--sage-ink)}
+.chip-missingcard{background:var(--brick-wash);color:var(--brick-ink)}
+.chip-prio-high{background:var(--ink);color:var(--on-ink)}
+.chip-prio-medium{background:var(--oak-wash);color:var(--oak-ink)}
+.chip-prio-low{background:var(--sunk);color:var(--ink-2)}
+.chip-link{border:1px solid currentColor;background:transparent;cursor:pointer;font:inherit;font-size:var(--fs-xs);font-weight:600;line-height:1;padding:4px 8px;border-radius:999px;color:var(--ink-2)}
+.chip-link:hover{color:var(--ink)}
+/* ---------- next sourcing round ("ליקוט הבא") ---------- */
+.src-matrix td{text-align:center}
+.src-matrix td.zero{color:var(--ink-3)}
+.src-matrix th[scope="row"]{background:none;position:static;font-size:var(--fs-s);color:var(--ink);white-space:normal}
+.src-matrix tfoot td,.src-matrix tfoot th{font-weight:700;background:var(--paper)}
+.src-rules{margin:0;padding-inline-start:22px;display:grid;gap:5px;font-size:var(--fs-s);max-width:90ch}
+.src-list{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.src-slot{background:var(--sheet);border:1px solid var(--rule);border-radius:var(--r);padding:14px clamp(12px,2.4vw,20px);display:grid;gap:9px;min-width:0;scroll-margin-top:calc(env(safe-area-inset-top,0px) + 130px)}
+.src-slot.prio-high{box-shadow:inset 0 3px 0 var(--ink)}
+.src-slot.st-hold{background:transparent}
+.src-slot h3{font-size:18px;outline:none;overflow-wrap:anywhere}
+.src-head{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center}
+.src-spec{font-size:15px;max-width:90ch;overflow-wrap:anywhere}
+.src-why{font-size:var(--fs-s);color:var(--ink-2);max-width:90ch;overflow-wrap:anywhere}
+.src-more[open]{display:grid;gap:8px}
+.src-ceil{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:var(--fs-s);color:var(--ink-2);margin:0}
+.src-ceil div{display:flex;gap:6px;align-items:baseline;flex-wrap:wrap}
+.src-ceil dt{font-size:var(--fs-xs);font-weight:700;color:var(--ink-3)}
+.src-ceil dd{margin:0;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+.src-ceil dd .sub{display:inline;font-weight:400}
+.qlist{list-style:none;margin:0;padding:0;display:grid;gap:5px}
+.qlist li{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center;min-width:0}
+.qlist code{direction:ltr;unicode-bidi:isolate;overflow-wrap:anywhere;background:var(--sunk);padding:2px 7px;border-radius:4px;font-size:12.5px;min-width:0}
+.tier-tier1{background:var(--ink);color:var(--on-ink)}
+.tier-tier2{background:var(--oak-wash);color:var(--oak-ink)}
+.tier-tier3{background:var(--sunk);color:var(--ink-2)}
+.tier-spare{background:transparent;color:var(--ink-2);box-shadow:inset 0 0 0 1px var(--rule-2)}
+.tier-deferred{background:var(--brick-wash);color:var(--brick-ink)}
+.tier-none{background:transparent;color:var(--amber-ink);border:1px dashed currentColor;padding:4px 8px}
+.src-res{display:grid;gap:8px;border-top:1px dashed var(--rule-2);padding-top:10px}
+.res-list{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.res-report{display:grid;gap:5px;padding:8px 10px;border:1px solid var(--rule);border-radius:var(--r);background:var(--paper);min-width:0}
+.res-report .rr,.res-report dd{font-size:var(--fs-s);color:var(--ink-2);overflow-wrap:anywhere;max-width:90ch}
+.res-file{display:inline;overflow-wrap:anywhere}
+.res-file + .res-file::before{content:" · "}
+.res-item{display:grid;grid-template-columns:64px minmax(0,1fr);gap:10px;align-items:start;min-width:0}
+.res-item .ri{width:64px;height:64px;border:1px solid var(--rule);border-radius:5px;background:#fff;overflow:hidden;position:relative}
+.res-item .ri img{width:100%;height:100%;object-fit:contain;display:block}
+.res-item .ri.ph{background:repeating-linear-gradient(135deg,var(--sunk) 0 6px,var(--paper) 6px 12px)}
+.res-item .rt{font-weight:600;font-size:var(--fs-s);overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.res-item .rr{font-size:var(--fs-xs);color:var(--ink-2);overflow-wrap:anywhere}
+.nc-list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:10px}
+.nc-item{display:grid;grid-template-columns:72px minmax(0,1fr);gap:10px;align-items:start;background:var(--sheet);border:1px solid var(--rule);border-radius:var(--r);padding:10px;min-width:0}
+.nc-item .ri{width:72px;height:72px;border:1px solid var(--rule);border-radius:5px;background:#fff;overflow:hidden;position:relative}
+.nc-item .ri img{width:100%;height:100%;object-fit:contain;display:block}
+.nc-item .ri.ph{background:repeating-linear-gradient(135deg,var(--sunk) 0 6px,var(--paper) 6px 12px)}
+.nc-item .nt{font-weight:600;font-size:var(--fs-s);overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.nc-item .nm{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center;font-size:var(--fs-xs);color:var(--ink-2);margin-top:4px}
+.drop-table td:first-child{white-space:nowrap}
+.drop-table .code-tag{white-space:normal;overflow-wrap:anywhere}
+.comp-block .dec-link .dl-st,.comp-decs .dec-link .dl-st,.src-slot .dec-link .dl-st{opacity:1}
+.src-slot .chiprow .chip,.comp-slot-head .chip,.ptile .tc .chip,.src-head .chip,.comp-sub h5 .chip{white-space:normal;line-height:1.3;max-width:100%;overflow-wrap:anywhere}
+.src-matrix .tl-long{font-weight:400}
+@media (max-width:560px){.src-matrix .tl-long{display:none}.src-matrix th,.src-matrix td{padding:8px 6px}}
+.drop-table code{direction:ltr;unicode-bidi:isolate;overflow-wrap:anywhere;white-space:normal}
+@media (max-width:560px){.drop-table td:first-child{white-space:normal}}
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 }
@@ -895,6 +1023,7 @@ details.room-lad summary{cursor:pointer;font-weight:600}
           <li><a href="#products" data-screen="products">מוצרים</a></li>
           <li><a href="#profit" data-screen="profit">רווחיות</a></li>
           <li><a href="#compare" data-screen="compare">השוואת ספקים</a></li>
+          <li><a href="#sourcing" data-screen="sourcing">ליקוט הבא</a></li>
           <li><a href="#furniture" data-screen="furniture">ריהוט</a></li>
           <li><a href="#suppliers" data-screen="suppliers">ספקים</a></li>
           <li><a href="#budget" data-screen="budget">תקציב</a></li>
@@ -973,6 +1102,12 @@ details.room-lad summary{cursor:pointer;font-weight:600}
       <div class="screen-head"><h1 id="h-compare" tabindex="-1">השוואת ספקים</h1><p class="small faint" id="cmp-count"></p></div>
       <p class="lede">לכל עמדה, כל המועמדים מכל הספקים (CJ, ‏Zendrop, ‏AliExpress וספקים ישראליים): מחיר, משלוח לישראל, עלות נחיתה, מחיר לצרכן ורווח. החישוב זהה למסך הרווחיות ובאותן הנחות. המנצח בכל עמדה הוא המועמד עם ציון העיצוב הגבוה ביותר לסגנון, מבין אלה שלא נדחו, שהתאמתם לסגנון 7 ומעלה, שיש להם כל הנתונים ושלא מפסידים כסף; בשוויון, המרווח הגבוה יותר (עיצוב לפני רווח, ה.12; אין מוצר מפסיד, ה.13).</p>
       <div id="cmp-body"><p class="loading">טוען…</p></div>
+    </section>
+
+    <section class="screen" id="screen-sourcing" aria-labelledby="h-sourcing" hidden>
+      <div class="screen-head"><h1 id="h-sourcing" tabindex="-1">ליקוט הבא</h1><p class="small faint" id="src-count"></p></div>
+      <p class="lede">רשימת הליקוט המאוחדת של הסבב הבא, מתוך רשימות החוסרים של המעצב בהרכבת החדרים: מה מחפשים בכל עמדה, תקרת המחיר (נחיתה לאיזון ונחיתה למרווח 40%), והשאילתות החדשות לפי שכבות. כל שאילתה נבדקה מול מה שכבר חיפשנו, כדי לא לחפש פעמיים. כשתוצאות הסבב מגיעות, הן מופיעות בכל עמדה.</p>
+      <div id="src-body"><p class="loading">טוען…</p></div>
     </section>
 
     <section class="screen" id="screen-furniture" aria-labelledby="h-furniture" hidden>
@@ -1202,6 +1337,8 @@ const S = {
   sup:Object.assign({q:'', section:'', status:'', model:'', sort:'fit'}, store.get('sup', {})), focusDec:null, accessSaving:new Set(), accessErr:null,
   cmp:Object.assign({room:null, style:'nordic', sup:'', profitable:false, rejected:false, unrated:false}, store.get('cmp', {})),
   furn:Object.assign({room:'', style:'all', tier:'', verdict:'', sup:'', coop:''}, store.get('furn', {})),
+  roomView:store.get('roomView', 'compose'), compStatus:'', compStyle:store.get('compStyle', 'nordic'), srcLimit:30,
+  src:Object.assign({room:'', priority:'', source:'', status:'', withRes:false}, store.get('src', {})),
   db:null, user:null, uid:null, canWrite:null, dbState:'connecting', dbError:null, dbReady:false,
   dbDocs:new Map(), drafts:{}, saving:new Set(), saved:{}, errors:{},
   edits:new Map(), news:new Map(), settingsDocs:new Map(),
@@ -1236,7 +1373,7 @@ async function boot(){
 }
 function renderAll(){
   renderOverview(); renderTodo(); renderDecisions(); renderOffice(); renderRoomPick(); renderRoom();
-  initFilters(); renderProducts(); renderProfit(); renderCompare(); renderFurniture(); renderSuppliers(); renderBudget(); renderReports(); renderLog();
+  initFilters(); renderProducts(); renderProfit(); renderCompare(); renderSourcing(); renderFurniture(); renderSuppliers(); renderBudget(); renderReports(); renderLog();
 }
 let pendingRender = false;
 function onDataChange(){
@@ -1244,7 +1381,7 @@ function onDataChange(){
   setTimeout(() => {
     pendingRender = false;
     refreshView();
-    renderOverview(); renderTodo(); renderOffice(); renderRoom(); renderProducts(); renderProfit(); renderCompare(); renderFurniture(); renderSuppliers(); renderBudget(); refreshDrawer();
+    renderOverview(); renderTodo(); renderOffice(); renderRoom(); renderProducts(); renderProfit(); renderCompare(); renderSourcing(); renderFurniture(); renderSuppliers(); renderBudget(); refreshDrawer();
   }, 0);
 }
 
@@ -1522,7 +1659,7 @@ function profitBasis(){
 }
 
 /* ---------- routing ---------- */
-const SCREENS = ['overview','todo','decisions','office','rooms','products','profit','compare','furniture','suppliers','budget','quality','log'];
+const SCREENS = ['overview','todo','decisions','office','rooms','products','profit','compare','sourcing','furniture','suppliers','budget','quality','log'];
 function route(focus){
   const t = (location.hash || '').replace(/^#/, '');
   let s = SCREENS.includes(t) ? t : null;
@@ -1532,6 +1669,7 @@ function route(focus){
   for(const a of $$('.tabs a')){ if(a.dataset.screen === s) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); }
   if(focus){ window.scrollTo(0,0); const h = $('#h-'+s); if(h) h.focus({preventScroll:true}); }
   if(s === 'decisions' && S.focusDec) focusDecision();
+  if(S.focusEl && (s === 'rooms' || s === 'sourcing')) focusPending();
 }
 // jump to one decision card (from a "AC1" / "FR-C" chip elsewhere): show all, scroll to it, focus its title
 function gotoDecision(id){
@@ -1609,6 +1747,10 @@ function onDocClick(e){
     if($('#drawer').open) closeDialog($('#drawer'));
     Object.assign(S.filters, {room: s ? s.room : '', slot: key, status:'', supplier:'', flag:'', dups:false, pending:false, q:''});
     syncFilterInputs(); renderProducts(); go('products'); return; }
+  const gcomp = e.target.closest('[data-goto-comp]');
+  if(gcomp){ e.preventDefault(); gotoComp(gcomp.dataset.gotoComp); return; }
+  const gsrc = e.target.closest('[data-goto-src]');
+  if(gsrc){ e.preventDefault(); gotoSrc(gsrc.dataset.gotoSrc); return; }
   const gdec = e.target.closest('[data-goto-dec]');
   if(gdec){ e.preventDefault(); gotoDecision(gdec.dataset.gotoDec); return; }
   const gd = e.target.closest('[data-goto]');
@@ -1768,6 +1910,7 @@ function renderOverview(){
     const nOpen = open.filter(d => (d._rooms || []).includes(r.id)).length;
     const cov = roomCover(r);
     const pct = r.slots.length ? Math.round(cov / r.slots.length * 100) : 0;
+    const comp = compsOf(r.id), cc = comp ? (comp.nordic || Object.values(comp)[0]) : null;
     return `<a class="room-card" href="#rooms" data-goto-room="${esc(r.id)}">
       <div class="thumb">${img ? `<img src="${esc(img.src)}" alt="" loading="lazy" width="${img.w}" height="${img.h}">` : ''}</div>
       <div class="body">
@@ -1778,6 +1921,7 @@ function renderOverview(){
           <dt>עמדות</dt><dd>${r.slots.length}</dd>
           <dt>עם 3 מועמדים ומעלה</dt><dd>${cov} מתוך ${r.slots.length}</dd>
           <dt>החלטות פתוחות</dt><dd class="${nOpen ? 'open-count' : ''}">${nOpen}</dd>
+          ${cc ? `<dt>בהרכבה: עם מוצר</dt><dd>${(cc.counts['ready-to-lock'] || 0) + (cc.counts.partial || 0)} מתוך ${cc.slots.length}</dd>` : ''}
         </dl>
         <div class="meter" role="img" aria-label="${pct}% מהעמדות עם 3 מועמדים ומעלה"><span data-w="${pct}"></span></div>
       </div>
@@ -2158,7 +2302,7 @@ function afterDbState(){ renderDecisions(); onDataChange(); $('#add-open').hidde
 function renderRoomPick(){
   if(!S.data) return;
   $('#room-pick').innerHTML = S.data.rooms.map(r => `<button type="button" data-room="${esc(r.id)}" aria-pressed="${r.id === S.room}">${esc(r.name_he)}</button>`).join('');
-  for(const b of $$('#room-pick button')) b.onclick = () => { S.room = b.dataset.room; store.set('room', S.room); renderRoomPick(); renderRoom(); $(`#room-pick [data-room="${CSS.escape(S.room)}"]`).focus(); };
+  for(const b of $$('#room-pick button')) b.onclick = () => { S.room = b.dataset.room; store.set('room', S.room); S.compStatus = ''; renderRoomPick(); renderRoom(); $(`#room-pick [data-room="${CSS.escape(S.room)}"]`).focus(); };
 }
 function renderRoom(){
   if(!S.data) return;
@@ -2186,6 +2330,15 @@ function renderRoom(){
     </tr>`;
   }).join('');
   const cov = roomCover(r);
+  // two views of the room: the designer's composition ("הרכבה", data/compositions) and the frames and slots
+  const comps = compsOf(r.id);
+  const styles = comps ? Object.keys(comps) : [];
+  const view = styles.length && S.roomView !== 'plan' ? 'compose' : 'plan';
+  const restore = keepFocus($('#room-body'));
+  const pick = styles.length ? `<div class="view-pick"><span class="lbl" id="rv-lbl">תצוגה</span><div class="seg" role="group" aria-labelledby="rv-lbl">
+      <button type="button" id="rv-compose" data-room-view="compose" aria-pressed="${view === 'compose'}">הרכבה<span class="n">${esc(styles.map(compStyleHe).join(', '))}</span></button>
+      <button type="button" id="rv-plan" data-room-view="plan" aria-pressed="${view === 'plan'}">פריימים ועמדות</button></div></div>`
+    : `<p class="small faint">אין עדיין הרכבה של המעצב לחדר הזה (<code>data/compositions/</code>).</p>`;
   $('#room-body').innerHTML = `<div class="screen roomy">
     <div class="room-head">
       <h2>${esc(r.name_he)}</h2>
@@ -2198,7 +2351,8 @@ function renderRoom(){
       </div>
       ${r.frames.map(f => f.hero ? `<p class="small muted"><span class="code-tag">${esc(f.id)}</span> ${bidi(f.hero)}</p>` : '').join('')}
     </div>
-    <section class="section" aria-labelledby="h-frames"><div class="section-head"><h3 id="h-frames">פריימים ורינדורים</h3><span class="small faint">${r.images.length} תמונות · לחיצה מגדילה</span></div>
+    ${pick}
+    ${view === 'compose' ? compHtml(r, comps) : `<section class="section" aria-labelledby="h-frames"><div class="section-head"><h3 id="h-frames">פריימים ורינדורים</h3><span class="small faint">${r.images.length} תמונות · לחיצה מגדילה</span></div>
       ${r.images.length ? `<div class="gallery">${imgs}</div>` : '<p class="empty">אין עדיין תמונות לחדר הזה.</p>'}</section>
     <section class="section" aria-labelledby="h-slots"><div class="section-head"><h3 id="h-slots">עמדות</h3><span class="small faint">לחיצה על מזהה פותחת את המוצרים שלה</span></div>
       <div class="tbl-wrap"><table class="slots-table">
@@ -2206,8 +2360,394 @@ function renderRoom(){
         <thead><tr><th scope="col">מזהה</th><th scope="col">שם</th><th scope="col">קטגוריה</th><th scope="col">מיקום</th><th scope="col">פריימים</th><th scope="col">וריאציות נדרשות</th><th scope="col">מועמדים</th><th scope="col">נבחרים</th></tr></thead>
         <tbody>${rows}</tbody></table></div>
       <p class="xs faint">מועמדים = כרטיסים שלא נדחו, כולל שינויים מהסטודיו שעוד לא סונכרנו. המספר האפור הוא כרטיסים ממאגר משותף שהעמדה מפנה אליו בשדה shared. שלושת הריבועים מסמנים את הסף של 3 מועמדים.</p>
-    </section></div>`;
+    </section>`}</div>`;
   for(const b of $$('#room-body [data-shot]')) b.onclick = () => openLightbox(ordered, +b.dataset.shot, b);
+  for(const b of $$('#room-body [data-room-view]')) b.onclick = () => { S.roomView = b.dataset.roomView; store.set('roomView', S.roomView); renderRoom(); const el = $('#rv-' + S.roomView); if(el) el.focus(); };
+  for(const b of $$('#room-body [data-comp-status]')) b.onclick = () => { S.compStatus = b.dataset.compStatus; renderRoom(); const el = $(`#room-body [data-comp-status="${CSS.escape(S.compStatus)}"]`); if(el) el.focus(); say(`${$$('#room-body .comp-slot').length} עמדות מוצגות`); };
+  for(const b of $$('#room-body [data-comp-style]')) b.onclick = () => { S.compStyle = b.dataset.compStyle; store.set('compStyle', S.compStyle); renderRoom(); const el = $(`#room-body [data-comp-style="${CSS.escape(S.compStyle)}"]`); if(el) el.focus(); };
+  wireImgFallback($('#room-body'));
+  paintVars($('#room-body'));
+  restore();
+}
+/* ---------- rooms: the designer's composition (data.compositions from build.py; data/compositions/<room>-<style>-<date>.json) ---------- */
+const CS_HE = {'ready-to-lock':'מוכנה לנעילה', partial:'חלקית', empty:'ריקה', 'on-hold':'בהמתנה'};
+const CS_ORDER = ['ready-to-lock','partial','empty','on-hold'];
+const PRIO_HE = {high:'עדיפות גבוהה', medium:'עדיפות בינונית', low:'עדיפות נמוכה'};
+const compsOf = rid => (((S.data && S.data.compositions) || {}).rooms || {})[rid] || null;
+const aeInfo = item => (((S.data && S.data.compositions) || {}).ae || {})[item] || null;
+const compStyleHe = st => ({nordic:'נורדי', boho:'בוהו', 'warm-modern':'מודרני חם', japandi:"ג'פנדי", mediterranean:'ים תיכוני', 'modern-country':'כפרי מודרני'})[st] || st;
+const csChip = st => `<span class="chip cs-${esc(st)}">${esc(CS_HE[st] || st)}</span>`;
+const prioChip = p => p ? `<span class="chip chip-prio-${esc(p)}">${esc(PRIO_HE[p] || p)}</span>` : '';
+const num1 = n => isNum(n) ? (Math.round(n * 10) / 10).toLocaleString('en-US', {maximumFractionDigits: 1}) : '—';
+// a margin in percent units (34.0 = 34%), coloured against the studio's target (40%, VR1): green at the target, amber under it, red when losing money
+function marginChip(pct, range){
+  const v = isNum(pct) ? pct : (Array.isArray(range) && isNum(range[0]) ? range[0] : null);
+  if(v == null) return '';
+  const T = S.ES.v.target_margin_pct;
+  const cls = v < 0 ? 'flag-red' : v < T - 1e-9 ? 'flag-orange' : 'flag-green';
+  const txt = isNum(pct) ? num1(pct) + '%' : `${num1(range[0])}–${num1(range[1])}%`;
+  return `<span class="chip ${cls}" title="${esc(v < 0 ? 'מפסיד: תרומה שלילית לפני CAC' : v < T ? `מתחת ליעד ${T}%` : `ביעד ${T}% ומעלה`)}">מרווח ${ltr(esc(txt))}</span>`;
+}
+function refChips(ref){
+  const c = [];
+  if(isNum(ref.score)) c.push(`<span class="chip chip-design" title="${esc(ref.provisional ? 'ציון זמני: לא נבדק בעין, או שה-SKU בגוון הנכון לא אומת' : 'ציון העיצוב של המעצב לעמדה')}">ציון ${ltr(esc(ref.score))}${ref.provisional ? ' (זמני)' : ''}</span>`);
+  if(isNum(ref.price_ils)) c.push(`<span class="chip" title="${esc(ref.price_basis || '')}">${ref.price_from ? 'מ-' : ''}${ltr(fmtILS(ref.price_ils))}${ref.price_for ? ` <span class="faint">(${esc(ref.price_for)})</span>` : ''}</span>`);
+  c.push(marginChip(ref.margin_pct, ref.margin_range));
+  if(ref.proposed) c.push(`<span class="chip chip-initial" title="${esc(ref.price_basis || 'מחיר שהמעצב מציע לפי שווי בישראל, לא אושר (ה.10)')}">מחיר מוצע</span>`);
+  if(ref.k === 'ae') c.push('<span class="chip chip-needcard">צריך כרטיס</span>');
+  else if(ref.ae && ref.k === 'card') c.push('<span class="chip chip-hascard" title="המעצב בחר רשומת AliExpress, ובינתיים נכתב לה כרטיס">יש כרטיס</span>');
+  if(ref.k === 'missing') c.push(`<span class="chip chip-missingcard" title="${esc(ref.id)}">הכרטיס לא נמצא</span>`);
+  if(ref.flag === 'exception') c.push('<span class="chip chip-exception" title="מתחת ל-40%, ואין בעמדה חלופה עם ציון עיצוב שווה שעוברת אותו (VR1)">חריג VR1</span>');
+  if(ref.addon_only) c.push('<span class="chip chip-addon">רק כתוספת לסל</span>');
+  if(ref.conditional) c.push('<span class="chip chip-unsure">מותנה</span>');
+  if(ref.borderline) c.push('<span class="chip chip-warn">גבולי</span>');
+  if(ref.temporary) c.push('<span class="chip">זמני</span>');
+  if(ref.k === 'model') c.push('<span class="chip">רהיט קבוע</span>');
+  return c.filter(Boolean).join('');
+}
+// what a tile shows for a product of the composition: the card (live, with studio edits), an AliExpress record without a card, a model
+function refView(ref){
+  const p = ref.k === 'card' ? S.byId.get(ref.id) : null;
+  const ae = ref.ae ? aeInfo(ref.ae) : null;
+  const title = p ? p.name : ref.k === 'ae' ? ((ae && ae.title) || `AliExpress ${ref.ae}`) : ref.k === 'model' ? ref.title : ref.id;
+  const img = p ? (p.img && p.img.src) : ref.k === 'ae' && ae ? (ae.img || ae.img_url) : null;
+  const url = ref.k === 'ae' ? ((ae && ae.url) || `https://www.aliexpress.com/item/${ref.ae}.html`) : null;
+  return {p, title: title || '—', img, url};
+}
+const ROLE_HE = {default:'ברירת מחדל', var2:'וריאציה 2', var3:'וריאציה 3', needs_card:'מועמד'};
+function imgBox(img, ph){
+  return img ? `<span class="ti"><img src="${esc(img)}" alt="" loading="lazy" decoding="async" data-fallback="${esc(ph)}"></span>` : `<span class="ti ph"><span class="ph-t">${esc(ph)}</span></span>`;
+}
+function refTile(ref, label, isDefault){
+  if(!ref) return '';
+  if(ref.k === 'set') return setTile(ref, label, isDefault);
+  const v = refView(ref);
+  const role = `<span class="chip ${isDefault ? 'chip-first' : ''} role">${esc(label)}</span>`;
+  const head = (v.img ? imgBox(v.img, ref.k === 'model' ? 'רהיט קבוע' : 'אין תמונה').replace('<span class="ti">', `<span class="ti">${role}`) : `<span class="ti ph">${role}<span class="ph-t">${esc(ref.k === 'model' ? 'רהיט קבוע' : 'אין תמונה')}</span></span>`);
+  const opt = ref.option && ref.role !== ref.option ? ref.option : (ref.role && !ROLE_HE[ref.role] ? ref.role : '');
+  const body = `<span class="tb"><span class="tn" dir="auto">${esc(v.title)}</span>${opt ? `<span class="to" dir="auto">${esc(opt)}</span>` : ''}<span class="tc">${refChips(ref)}</span>`;
+  const cls = `ptile ${isDefault ? 'is-default' : ''}`;
+  if(v.p) return `<li><button type="button" class="${cls}" data-product="${esc(v.p.id)}" aria-haspopup="dialog">${head}${body}</span></button></li>`;
+  const link = v.url && httpsOk(v.url) ? `<span class="tl"><a href="${esc(v.url)}" target="_blank" rel="noopener noreferrer">AliExpress<span class="sr-only"> (נפתח בחלון חדש)</span><span aria-hidden="true">&nbsp;↗</span></a></span>` : '';
+  return `<li><div class="${cls}" data-ref="${esc(ref.id || ref.title || '')}">${head}${body}${link}</span></div></li>`;
+}
+function setTile(ref, label, isDefault){
+  const items = ref.items || [];
+  const views = items.map(refView);
+  const mosaic = `<span class="ti"><span class="chip ${isDefault ? 'chip-first' : ''} role">${esc(label)}</span><span class="mosaic">${views.slice(0, 4).map(v => v.img ? `<img src="${esc(v.img)}" alt="" loading="lazy" decoding="async" data-fallback="">` : '<span></span>').join('')}</span></span>`;
+  const list = items.map((it, i) => { const v = views[i];
+    const what = `<span dir="auto">${esc(v.title.length > 46 ? v.title.slice(0, 46) + '…' : v.title)}</span>${it.role ? ` <span class="faint" dir="auto">· ${esc(it.role)}</span>` : ''}`;
+    return `<li>${v.p ? `<button type="button" class="linkish" data-product="${esc(v.p.id)}" aria-haspopup="dialog">${what}</button>` : what}${isNum(it.price_ils) ? ` <span class="faint">${ltr(fmtILS(it.price_ils))}</span>` : ''}</li>`; }).join('');
+  return `<li class="span-all"><div class="ptile ${isDefault ? 'is-default' : ''}" data-ref="set-${esc(ref.set_id || '')}">${mosaic}<span class="tb"><span class="tn">סט${ref.set_id ? ' ' + esc(ref.set_id) : ''} · ${items.length} פריטים</span><span class="tc">${refChips(ref)}</span><ul class="set-items">${list}</ul></span></div></li>`;
+}
+// images that do not load (an AliExpress URL offline, a blocked host) become the hatched placeholder
+function wireImgFallback(root){
+  for(const im of $$('img[data-fallback]', root)){
+    const swap = () => { const box = im.parentElement; if(!box) return; const ph = im.dataset.fallback; im.remove(); if(box.classList.contains('ti') || box.classList.contains('ri')){ box.classList.add('ph'); if(ph) box.insertAdjacentHTML('beforeend', `<span class="ph-t">${esc(ph)}</span>`); } };
+    if(im.complete && im.naturalWidth === 0 && im.getAttribute('src')) swap(); else im.addEventListener('error', swap, {once: true});
+  }
+}
+function blockedHtml(list, label){
+  if(!list || !list.length) return '';
+  const parts = list.map(b => {
+    const ids = (b.ids || []);
+    const rest = ids.reduce((t, id) => t.replace(new RegExp('^\\s*' + id.replace(/[-]/g, '\\-') + '\\s*[:·,]?\\s*'), ''), String(b.text || '')).trim();
+    return `${ids.map(id => decChip(id)).join(' ')}${rest ? ` <span class="bt" dir="auto">${esc(rest)}</span>` : ''}`;
+  });
+  return `<p class="comp-block"><span class="flag flag-red"><i class="fdot"></i>${esc(label || 'חסום ב:')}</span> ${parts.join('<span aria-hidden="true"> · </span>')}</p>`;
+}
+function tilesHtml(o, key){
+  const tiles = [];
+  if(o.default) tiles.push(refTile(o.default, ROLE_HE.default, true));
+  (o.variations || []).forEach((v, i) => tiles.push(refTile(v, v.role && ROLE_HE[v.role] ? ROLE_HE[v.role] : `וריאציה ${i + 2}`, false)));
+  if(!o.default && o.candidate_he) tiles.push(refTile({k:'model', title:o.candidate_he}, 'מועמד', false));
+  const shown = (o.default ? 1 : 0) + (o.variations || []).length;
+  const req = ((S.slots.get(key) || {}).variants_required) || 3;
+  const missing = isNum(o.missing) ? o.missing : (o.status === 'partial' ? Math.max(0, req - shown) : 0);
+  if(shown && o.status !== 'on-hold') for(let i = 0; i < Math.min(missing, 3); i++) tiles.push(`<li><div class="ptile is-gap"><span class="ti ph"><span class="ph-t">${esc(`וריאציה ${shown + i + 1} חסרה`)}</span></span></div></li>`);
+  for(const n of o.needs_card || []) tiles.push(refTile(n, 'מועמד, צריך כרטיס', false));
+  if(!tiles.length) return `<p class="small faint">${o.status === 'on-hold' ? 'אין מוצר: העמדה מחכה להחלטה.' : 'אין עדיין מוצר בעמדה.'}</p>`;
+  return `<ul class="ptiles" aria-label="מוצרים בעמדה">${tiles.join('')}</ul>`;
+}
+function refNotes(o){
+  const rows = [];
+  const add = (label, ref) => { if(!ref) return; if(ref.k === 'set') (ref.items || []).forEach(it => add(label, it));
+    if(ref.note){ const v = refView(ref); rows.push(`<dt>${esc(label)}: <span dir="auto">${esc(v.title.length > 60 ? v.title.slice(0, 60) + '…' : v.title)}</span></dt><dd dir="auto">${esc(ref.note)}</dd>`); } };
+  add(ROLE_HE.default, o.default);
+  (o.variations || []).forEach((v, i) => add(`וריאציה ${i + 2}`, v));
+  (o.needs_card || []).forEach(n => add('מועמד', n));
+  return rows.join('');
+}
+function moreHtml(o){
+  const more = (o.more || []).map(m => `<dt>${esc(m.label)}</dt><dd dir="auto">${m.items.length > 1 ? `<ul>${m.items.map(x => `<li>${esc(x)}</li>`).join('')}</ul>` : esc(m.items[0])}</dd>`).join('');
+  const notes = refNotes(o);
+  if(!more && !notes) return '';
+  const n = (o.more || []).length + (notes ? 1 : 0);
+  const labels = (o.more || []).map(m => m.label).slice(0, 3).join(', ');
+  return `<details class="comp-more"><summary>פרטי המוצרים ועוד מהמעצב${labels ? ` (${esc(labels)}${n > 3 ? '…' : ''})` : ''}</summary><dl>${notes}${more}</dl></details>`;
+}
+function compSlotHtml(s, srcByKey){
+  const id = 'comp-' + s.key.replace(/[^\w-]+/g, '--');
+  const frames = (s.frames || []).map(f => `<span class="code-tag">${esc(f)}</span>`).join('');
+  const src = srcByKey.get(s.key);
+  const srcLink = src ? `<button type="button" class="chip-link" data-goto-src="${esc(s.key)}" aria-label="${esc(`לעמדה בליקוט הבא: ${PRIO_HE[src.priority] || ''}`)}">בליקוט הבא${src.priority ? ' · ' + esc(PRIO_HE[src.priority] || src.priority) : ''}</button>` : '';
+  const missing = isNum(s.missing) && s.missing > 0 ? `<span class="chip">חסרות ${esc(s.missing)}</span>` : '';
+  const subs = (s.by_room || []).map(b => `<div class="comp-sub"><h5 class="comp-sub-h">${esc(b.label)} ${b.status ? csChip(b.status) : ''}</h5>${blockedHtml(b.blocked)}${tilesHtml(b, s.key)}${b.notes ? `<p class="comp-notes" dir="auto">${esc(b.notes)}</p>` : ''}${moreHtml(b)}</div>`).join('');
+  const lock = s.lock_ids && s.lock_ids.length ? `<p class="comp-block"><span>הנעילה מחכה ל:</span> ${s.lock_ids.map(x => decChip(x)).join(' ')}</p>` : '';
+  return `<li class="comp-slot" id="${id}" data-status="${esc(s.status)}" data-key="${esc(s.key)}">
+    <div class="comp-slot-head"><h4 id="${id}-h" tabindex="-1">${esc(s.name_he || s.id)}</h4><span class="code-tag" dir="ltr">${esc(s.id)}</span>${csChip(s.status)}${prioChip(s.priority)}${missing}${s.kind ? `<span class="chip" dir="auto">${esc(s.kind)}</span>` : ''}${s.rooms ? `<span class="chip">רק ב${esc(s.rooms.map(x => SUBROOM_HE[x] || x).join(', '))}</span>` : ''}${s.unknown_slot ? '<span class="chip chip-warn">לא בקובץ העמדות</span>' : ''}${frames}${srcLink}</div>
+    ${blockedHtml(s.blocked)}${lock}
+    ${subs || tilesHtml(s, s.key)}
+    ${s.notes ? `<p class="comp-notes" dir="auto">${esc(s.notes)}</p>` : ''}
+    ${isNum(s.proposed_price_ils) ? `<p class="small muted">מחיר מוצע לעמדה: ${ltr(fmtILS(s.proposed_price_ils))} (לא אושר)</p>` : ''}
+    ${moreHtml(s)}
+  </li>`;
+}
+const SUBROOM_HE = {boy:'חדר הילד', girl:'חדר הילדה'};
+function compHtml(r, comps){
+  const styles = Object.keys(comps);
+  const st = styles.includes(S.compStyle) ? S.compStyle : styles[0];
+  const C = comps[st];
+  const T = S.ES.v.target_margin_pct;
+  const N = (S.data.next_sourcing || {});
+  const srcByKey = new Map((N.slots || []).map(x => [x.key, x]));
+  const counts = C.counts || {};
+  const total = C.slots.length;
+  const f = CS_ORDER.includes(S.compStatus) ? S.compStatus : '';
+  const shown = f ? C.slots.filter(s => s.status === f) : C.slots;
+  const filt = `<div class="seg comp-filter" role="group" aria-label="סינון העמדות לפי מצב">
+      <button type="button" data-comp-status="" aria-pressed="${!f}">כל העמדות<span class="n">${total}</span></button>
+      ${CS_ORDER.map(k => `<button type="button" data-comp-status="${k}" aria-pressed="${f === k}" class="cs-btn"><span class="cs-dot csd-${k}" aria-hidden="true"></span>${esc(CS_HE[k])}<span class="n">${esc(counts[k] || 0)}</span></button>`).join('')}
+    </div>`;
+  const fileCounts = C.file_counts ? `<p class="xs faint">בסיכום של הקובץ: ${CS_ORDER.map(k => `${CS_HE[k]} ${C.file_counts[k] || 0}`).join(' · ')}. כאן הספירה מהעמדות עצמן.</p>` : '';
+  const W = C.whole || {}, M = W.main || {};
+  const mCls = isNum(M.margin) ? (M.margin < 0 ? 'flag-red' : M.margin < T ? 'flag-orange' : 'flag-green') : '';
+  const wholeTiles = `<div class="tiles comp-whole">
+      <div class="tile"><span class="l">המראה המלא היום${W.main_from ? ` (${esc(W.main_from)})` : ''}</span><span class="v">${ltr(fmtILS(M.price))}</span><span class="s">${isNum(W.n_items) ? `${esc(W.n_items)} מוצרים${isNum(W.of_slots) ? ` מתוך ${esc(W.of_slots)} עמדות` : ''}` : 'ברירות המחדל שיש להן מוצר'}</span></div>
+      <div class="tile"><span class="l">תרומה לפני CAC</span><span class="v">${ltr(fmtILS(M.contribution))}</span>${isNum(M.landed) ? `<span class="s">נחיתה ${ltr(fmtILS(M.landed))}</span>` : isNum(M.net) ? `<span class="s">נטו ${ltr(fmtILS(M.net))}</span>` : ''}</div>
+      <div class="tile"><span class="l">מרווח משוקלל</span><span class="v"><span class="flag ${mCls}">${isNum(M.margin) ? ltr(esc(num1(M.margin) + '%')) : '—'}</span></span><span class="s">${M.margin_range ? `טווח ${ltr(esc(M.margin_range.join('–') + '%'))} · ` : ''}יעד ${ltr(esc(T + '%'))}${M.margin_computed ? ' · חושב מהתרומה' : ''}</span></div>
+      ${isNum(M.after_cac) ? `<div class="tile"><span class="l">אחרי CAC אחד</span><span class="v">${ltr(fmtILS(M.after_cac))}</span><span class="s">הזמנה אחת של כל המראה</span></div>` : ''}
+      ${isNum(W.full_look) ? `<div class="tile"><span class="l">המראה המלא, הערכה</span><span class="v">${ltr(fmtILS(W.full_look))}</span><span class="s">עם העמדות הריקות</span></div>` : ''}
+    </div>`;
+  const subs = (W.subs || []).length ? `<div class="tbl-wrap" tabindex="0" role="region" aria-label="המראה המלא לפי חלקים"><table class="comp-subs"><caption class="sr-only">המראה המלא לפי חלקים</caption><thead><tr><th scope="col">חלק</th><th scope="col" class="money">מחיר</th><th scope="col" class="money">תרומה</th><th scope="col" class="money">מרווח</th></tr></thead><tbody>${W.subs.map(x => `<tr><th scope="row">${esc(x.label)}</th><td class="money">${ltr(fmtILS(x.price))}</td><td class="money">${ltr(fmtILS(x.contribution))}</td><td class="money">${isNum(x.margin) ? ltr(esc(num1(x.margin) + '%')) : '—'}</td></tr>`).join('')}</tbody></table></div>` : '';
+  const texts = (W.texts || []).concat(C.fixed_he ? [{label:'ריהוט קבוע', text:C.fixed_he}] : [], C.safety_he ? [{label:'שער בטיחות', text:C.safety_he}] : []);
+  const textHtml = texts.length ? `<dl class="comp-texts">${texts.map(x => `<dt>${esc(x.label)}</dt><dd dir="auto">${esc(x.text)}</dd>`).join('')}</dl>` : '';
+  const lists = (W.lists || []).map(l => `<details class="comp-more"><summary>${esc(l.label)} (${l.items.length})</summary><ul>${l.items.map(x => `<li dir="auto">${esc(x)}</li>`).join('')}</ul></details>`).join('');
+  const decs = (C.decisions || []).length ? `<section class="section" aria-labelledby="h-comp-dec"><div class="section-head"><h3 id="h-comp-dec">החלטות שהמעצב מבקש</h3><span class="small faint">${C.decisions.length}</span></div>
+      <ul class="comp-decs">${C.decisions.map(d => `<li>${d.known ? decChip(d.id) : d.id ? `<span class="code-tag" dir="ltr">${esc(d.id)}</span>` : ''}<span dir="auto">${esc(d.text)}</span>${(d.ids || []).filter(x => x !== d.id).map(x => decChip(x, false)).join(' ')}</li>`).join('')}</ul></section>` : '';
+  const swaps = (C.swaps || []).length ? `<details class="comp-more"><summary>החלפות שהמעצב מציע (${C.swaps.length})</summary><ul>${C.swaps.map(x => `<li dir="auto">${esc(x)}</li>`).join('')}</ul></details>` : '';
+  const stylePick = styles.length > 1 ? `<div class="seg" role="group" aria-label="סגנון">${styles.map(x => `<button type="button" data-comp-style="${esc(x)}" aria-pressed="${x === st}">${esc(compStyleHe(x))}</button>`).join('')}</div>` : '';
+  return `<section class="section" aria-labelledby="h-comp">
+      <div class="section-head"><h3 id="h-comp">הרכבה · ${esc(compStyleHe(st))}</h3><span class="small faint">${esc(C.author || '')}${C.date ? ' · ' + esc(fmtDay(C.date)) : ''}${C.frame ? ' · פריים ' + esc(C.frame) : ''}</span></div>
+      ${stylePick}
+      ${C.note ? `<p class="comp-note" dir="auto">${esc(C.note)}</p>` : ''}
+      <div class="comp-meta"><span>קובץ: <code>${esc(C.file)}</code></span>${C.doc ? `<span>לקריאה: <code>${esc(C.doc)}</code></span>` : ''}</div>
+      ${filt}
+      ${fileCounts}
+    </section>
+    <section class="section" aria-labelledby="h-comp-whole"><div class="section-head"><h3 id="h-comp-whole">המראה המלא</h3><span class="small faint">כל ברירות המחדל יחד, במחירים שבהרכבה</span></div>
+      ${wholeTiles}${subs}${textHtml}${lists}</section>
+    ${C.check && C.check.length ? `<section class="section" aria-labelledby="h-comp-check"><div class="section-head"><h3 id="h-comp-check">בדיקת החדר</h3><span class="small faint">פלטה, חומרים, משקל ואיזון</span></div>
+      <div class="comp-check">${C.check.map(p => `<p dir="auto">${esc(p)}</p>`).join('')}</div>${swaps}</section>` : swaps}
+    ${decs}
+    <section class="section" aria-labelledby="h-comp-slots"><div class="section-head"><h3 id="h-comp-slots">עמדות${f ? ': ' + esc(CS_HE[f]) : ''}</h3><span class="small faint" aria-live="polite">${shown.length} מתוך ${total} · לחיצה על מוצר עם כרטיס פותחת אותו</span></div>
+      ${shown.length ? `<ol class="comp-slots">${shown.map(s => compSlotHtml(s, srcByKey)).join('')}</ol>` : '<p class="empty">אין עמדות במצב הזה.</p>'}
+    </section>`;
+}
+// open a slot of a room's composition from elsewhere (the sourcing screen): switch room and view, then focus its heading
+function gotoComp(key){
+  const room = String(key).split('/')[0];
+  if(!S.rooms.has(room)) return;
+  if($('#drawer').open) closeDialog($('#drawer'));
+  S.room = room; store.set('room', room); S.roomView = 'compose'; store.set('roomView', 'compose'); S.compStatus = '';
+  S.focusEl = 'comp-' + key.replace(/[^\w-]+/g, '--');
+  renderRoomPick(); renderRoom(); go('rooms');
+}
+function gotoSrc(key){
+  if($('#drawer').open) closeDialog($('#drawer'));
+  const room = String(key).split('/')[0];
+  if((S.src.room && S.src.room !== room) || S.src.priority || S.src.source || S.src.status || S.src.withRes){ Object.assign(S.src, {room:'', priority:'', source:'', status:'', withRes:false}); store.set('src', S.src); }
+  S.focusEl = 'src-' + key.replace(/[^\w-]+/g, '--');
+  const N = srcData(), i = N && N.slots ? N.slots.findIndex(s => s.key === key) : -1;
+  S.srcLimit = Math.max(SRC_PAGE, i + 1);
+  renderSourcing(); go('sourcing');
+}
+function focusPending(){
+  const id = S.focusEl; S.focusEl = null;
+  const el = id && document.getElementById(id);
+  if(!el){ if(id) say('העמדה לא מוצגת'); return; }
+  el.scrollIntoView({block: 'start'});
+  const h = $('h3, h4', el) || el; h.setAttribute('tabindex', '-1'); h.focus({preventScroll: true});
+}
+
+/* ---------- next sourcing round (data.next_sourcing from build.py: data/leads/next-sourcing/round-N-*.json) ---------- */
+const SRC_HE = {aliexpress:'AliExpress', cj:'CJ', zendrop:'Zendrop', israeli:'ספקים ישראליים', il:'ספק ישראלי', other:'אחר'};
+const TIER_SHORT = {tier1:'שכבה 1', tier2:'שכבה 2', tier3:'שכבה 3', spare:'רזרבה', deferred:'נדחה'};
+const REG_HE = {seen:'נבדק', rejected:'נדחה ב-registry', card:'כרטיס'};
+const srcData = () => (S.data && S.data.next_sourcing) || null;
+const SRC_PAGE = 30;
+function resItem(x){
+  const p = x.card ? S.byId.get(x.card) : null;
+  const img = p ? (p.img && p.img.src) : (x.img || x.img_url);
+  const title = p ? p.name : x.title;
+  const chips = [
+    x.verdict ? `<span class="chip ${/best|pick/i.test(x.verdict) ? 'st-selected' : /reject/i.test(x.verdict) ? 'st-rejected' : ''}">${esc(x.verdict)}</span>` : '',
+    isNum(x.fit) ? `<span class="chip chip-design">התאמה ${ltr(esc(x.fit))}</span>` : '',
+    isNum(x.price_usd) ? `<span class="chip">${ltr(fmtUSD(x.price_usd))}${isNum(x.ship_usd) ? ` + ${ltr(fmtUSD(x.ship_usd))}` : ''}</span>` : '',
+    isNum(x.landed_ils) ? `<span class="chip">נחיתה ${ltr(fmtILS(x.landed_ils, 1))}</span>` : '',
+    isNum(x.margin) ? marginChip(x.margin * 100) : '',
+    x.passes_40 === true ? '<span class="chip flag-green">עובר 40%</span>' : x.passes_40 === false ? '<span class="chip chip-exception">מתחת ל-40%</span>' : '',
+    x.source ? `<span class="chip">${esc(SRC_HE[x.source] || x.source)}</span>` : '',
+    p ? '<span class="chip chip-hascard">כרטיס</span>' : x.card_pending ? `<span class="chip chip-needcard" title="${esc(x.card_pending)}">כרטיס חדש, עוד לא בבנייה</span>` : ''
+  ].filter(Boolean).join('');
+  const name = p ? `<button type="button" class="linkish rt" data-product="${esc(p.id)}" aria-haspopup="dialog" dir="auto">${esc(title)}</button>` : `<span class="rt" dir="auto">${esc(title)}</span>`;
+  const link = x.url && httpsOk(x.url) ? ` <a class="cand-link" href="${esc(x.url)}" target="_blank" rel="noopener noreferrer">לספק<span class="sr-only"> (נפתח בחלון חדש)</span><span aria-hidden="true">&nbsp;↗</span></a>` : '';
+  return `<li class="res-item"><span class="ri ${img ? '' : 'ph'}">${img ? `<img src="${esc(img)}" alt="" loading="lazy" decoding="async" data-fallback="">` : ''}</span>
+    <div class="minw0">${name}${x.option && p ? `<p class="rr" dir="auto">${esc(x.option)}</p>` : ''}<div class="cand-meta">${chips}${link}</div>${x.query ? `<p class="rr">שאילתה: <code dir="ltr">${esc(x.query)}</code></p>` : ''}${x.reason ? `<p class="rr" dir="auto">${esc(x.reason)}</p>` : ''}</div></li>`;
+}
+function ceilHtml(c){
+  if(!c) return '';
+  const usd = v => isNum(v) ? ` <span class="sub faint">(${ltr(fmtUSD(v))})</span>` : '';
+  const rows = [
+    isNum(c.breakeven_landed_ils) ? ['נחיתה לאיזון', `${ltr(fmtILS(c.breakeven_landed_ils, c.breakeven_landed_ils < 100 ? 1 : 0))}${usd(c.breakeven_landed_usd)}`] : null,
+    isNum(c.landed_for_40_ils) ? ['נחיתה למרווח 40%', `${ltr(fmtILS(c.landed_for_40_ils, c.landed_for_40_ils < 100 ? 1 : 0))}${usd(c.landed_for_40_usd)}`] : null,
+    isNum(c.slot_price_ils) ? ['מחיר העמדה', ltr(fmtILS(c.slot_price_ils))] : null,
+    isNum(c.pack_median_ils) ? ['חציון החבילה', ltr(fmtILS(c.pack_median_ils))] : null,
+    isNum(c.proposed_price_ils) ? ['מחיר מוצע', `${ltr(fmtILS(c.proposed_price_ils))}${c.at_proposed && isNum(c.at_proposed.landed_for_40_ils) ? ` <span class="sub faint">(40% בנחיתה עד ${ltr(fmtILS(c.at_proposed.landed_for_40_ils, 1))})</span>` : ''}`] : null,
+    isNum(c.set_of_4_price_ils) ? ['סט של 4', `${ltr(fmtILS(c.set_of_4_price_ils))}${c.at_set_of_4 && isNum(c.at_set_of_4.landed_for_40_ils) ? ` <span class="sub faint">(40% בנחיתה עד ${ltr(fmtILS(c.at_set_of_4.landed_for_40_ils, 1))})</span>` : ''}`] : null
+  ].filter(Boolean);
+  return `${rows.length ? `<dl class="src-ceil">${rows.map(([l, v]) => `<div><dt>${esc(l)}</dt><dd>${v}</dd></div>`).join('')}</dl>` : ''}${(c.notes || []).length ? `<p class="src-why" dir="auto">${c.notes.map(esc).join(' · ')}</p>` : ''}`;
+}
+function srcSlotHtml(s, res, comp){
+  const id = 'src-' + s.key.replace(/[^\w-]+/g, '--');
+  const room = S.rooms.get(s.room);
+  const qs = (s.queries || []).map(q => `<li><code>${esc(q.q)}</code>${q.tier ? `<span class="chip tier-${esc(q.tier)}">${esc(TIER_SHORT[q.tier] || q.tier)}</span>` : '<span class="chip tier-none" title="השאילתה מופיעה בעמדה אבל לא בתוכנית החיפוש (search_plan)">לא בתוכנית</span>'}${q.src && q.src !== s.source ? `<span class="chip">${esc(SRC_HE[q.src] || q.src)}</span>` : ''}${q.shared ? `<span class="chip" title="שאילתה אחת שמשרתת כמה עמדות, רצה פעם אחת">משותפת ל-${esc(q.shared)} עמדות</span>` : ''}</li>`).join('');
+  const rows = (res && res.items) || [], reps = (res && res.reports) || [];
+  const OPEN_HE = {card:'כרטיס', rejected:'נדחו', seen:'נראו', other:'אחר'};
+  const repHtml = reps.map(r => `<div class="res-report">
+      <div class="cand-meta">${r.source ? `<span class="chip">${esc(SRC_HE[r.source] || r.source)}</span>` : ''}${r.found === true ? '<span class="chip st-selected">נמצא</span>' : r.found === false ? '<span class="chip st-rejected">לא נמצא</span>' : ''}${isNum(r.n_queries) ? `<span class="chip">${esc(r.n_queries)} שאילתות</span>` : ''}${r.opened ? `<span class="chip">נפתחו: ${esc(Object.entries(r.opened).map(([k, n]) => `${OPEN_HE[k] || k} ${n}`).join(', '))}</span>` : ''}<span class="xs faint" dir="ltr">${esc(r.file)}</span></div>
+      ${r.summary ? `<p class="rr" dir="auto">${esc(r.summary)}</p>` : ''}${r.next ? `<p class="rr"><b>הלאה:</b> <bdi>${esc(r.next)}</bdi></p>` : ''}
+      ${(r.notable || []).length || (r.opened_rows || []).length ? `<details class="comp-more"><summary>${[(r.opened_rows || []).length ? `נפתחו ולא נכנסו (${r.opened_rows.length})` : '', (r.notable || []).length ? `לא נפתחו (${r.notable.length})` : ''].filter(Boolean).join(' · ')}</summary><dl>${(r.opened_rows || []).map(o => `<dd dir="auto">${esc(OPEN_HE[o.status] || o.status)}: ${esc(o.reason)}</dd>`).join('')}${(r.notable || []).map(n => `<dd dir="auto">לא נפתח: ${esc(n)}</dd>`).join('')}</dl></details>` : ''}
+    </div>`).join('');
+  const resHtml = rows.length || reps.length ? `<div class="src-res"><p class="eyebrow">תוצאות הסבב${rows.length ? ` (${rows.length} מוצרים)` : ''}</p>${repHtml}${rows.length ? `<ul class="res-list">${rows.slice(0, 12).map(resItem).join('')}</ul>` : ''}${rows.length > 12 ? `<p class="xs faint">ועוד ${rows.length - 12} בקובץ.</p>` : ''}</div>` : '';
+  const blocked = (s.blocked || []).length ? `<p class="comp-block"><span class="flag flag-red"><i class="fdot"></i>מחכה ל:</span> ${s.blocked.map(x => decChip(x)).join(' ')}</p>` : '';
+  return `<li class="src-slot ${s.priority === 'high' ? 'prio-high' : ''} ${s.status === 'on-hold' ? 'st-hold' : ''}" id="${id}" data-key="${esc(s.key)}" data-room="${esc(s.room)}" data-priority="${esc(s.priority || '')}" data-source="${esc(s.source || '')}" data-status="${esc(s.status || '')}">
+    <div class="src-head"><h3 id="${id}-h" tabindex="-1">${esc(room ? room.name_he : s.room)} · ${esc(s.name_he || s.id)}</h3><span class="code-tag" dir="ltr">${esc(s.key)}</span></div>
+    <div class="src-head">${prioChip(s.priority)}${s.status ? csChip(s.status) : ''}${s.source ? `<span class="chip ${s.source === 'aliexpress' ? 'sup-ae' : s.source === 'cj' ? 'sup-cj' : s.source === 'israeli' ? 'sup-il' : ''}">${esc(SRC_HE[s.source] || s.source)}</span>` : ''}${isNum(s.need) ? `<span class="chip">חסרות ${esc(s.need)} וריאציות</span>` : ''}${(s.rooms || []).length ? `<span class="chip">${esc(s.rooms.map(x => SUBROOM_HE[x] || x).join(', '))}</span>` : ''}${comp ? `<button type="button" class="chip-link" data-goto-comp="${esc(s.key)}">להרכבה</button>` : ''}</div>
+    ${blocked}
+    ${s.spec ? `<p class="src-spec" dir="auto">${rich(s.spec)}</p>` : ''}
+    ${ceilHtml(s.ceiling)}
+    ${s.why || (s.envelope || []).length || (s.check_first || []).length ? `<details class="comp-more src-more"><summary>${esc(['למה', (s.envelope || []).length ? 'מידות' : '', (s.check_first || []).length ? `מה לבדוק קודם (${s.check_first.length})` : ''].filter(Boolean).join(', '))}</summary>
+      ${s.why ? `<p class="src-why" dir="auto"><b>למה:</b> ${esc(s.why)}</p>` : ''}
+      ${(s.envelope || []).length ? `<div class="chiprow">${s.envelope.map(x => `<span class="chip" dir="ltr">${esc(x)}</span>`).join('')}</div>` : ''}
+      ${(s.check_first || []).length ? `<div><p class="eyebrow">לבדוק קודם</p><ul class="plain-ul small">${s.check_first.map(x => `<li dir="auto">${esc(x)}</li>`).join('')}</ul></div>` : ''}
+    </details>` : ''}
+    ${(() => { const head = `שאילתות חדשות (${(s.queries || []).length})`, seen = isNum(s.searched_n) ? `כבר רצו לעמדה: ${esc(s.searched_n)} שאילתות AliExpress` : '';
+      const body = qs ? `<ul class="qlist">${qs}</ul>` : '<p class="small faint">אין שאילתות חדשות לעמדה.</p>';
+      return s.status === 'on-hold' && qs ? `<details class="comp-more src-more"><summary>${head}, נדחות עד ההחלטה${seen ? ' · ' + seen : ''}</summary>${body}</details>`
+        : `<div><p class="eyebrow">${head}${seen ? ` · <span class="faint">${seen}</span>` : ''}</p>${body}</div>`; })()}
+    ${resHtml}
+  </li>`;
+}
+function renderSourcing(){
+  if(!S.data) return;
+  const box = $('#src-body');
+  const N = srcData();
+  if(!N || !N.present){
+    box.innerHTML = `<p class="empty">אין עדיין רשימת ליקוט (<code>${esc((N && N.dir) || 'data/leads/next-sourcing/')}round-N-*.json</code>). היא נבנית מרשימות החוסרים של המעצב.</p>`;
+    $('#src-count').textContent = ''; return;
+  }
+  const restore = keepFocus(box);
+  const F = S.src;
+  const order = new Map(S.data.rooms.map((r, i) => [r.id, i]));
+  const rooms = [...new Set(N.slots.map(s => s.room))].sort((a, b) => (order.get(a) ?? 99) - (order.get(b) ?? 99));
+  const sources = [...new Set(N.slots.map(s => s.source).filter(Boolean))];
+  if(F.room && !rooms.includes(F.room)) F.room = '';
+  if(F.source && !sources.includes(F.source)) F.source = '';
+  const R = N.results || {};
+  const byRes = {};
+  for(const [k, v] of Object.entries(R.by_slot || {})) (byRes[k] = byRes[k] || {items: [], reports: []}).items = v;
+  for(const [k, v] of Object.entries(R.reports || {})) (byRes[k] = byRes[k] || {items: [], reports: []}).reports = v;
+  if(!R.present) F.withRes = false;
+  const list = N.slots.filter(s => (!F.room || s.room === F.room) && (!F.priority || s.priority === F.priority) && (!F.source || s.source === F.source) && (!F.status || s.status === F.status) && (!F.withRes || byRes[s.key]));
+  const comps = new Set(); for(const st of Object.values(((S.data.compositions || {}).rooms) || {})) for(const c of Object.values(st)) for(const s of c.slots) comps.add(s.key);
+  // a phone does not need 144 slot cards at once: SRC_PAGE at a time, "more" and "all"; a jump to a slot widens the page to include it
+  const shown = list.slice(0, Math.max(SRC_PAGE, S.srcLimit || 0));
+  // totals per tier and per source
+  const srcKeys = [...new Set([].concat(...N.tiers.map(t => Object.keys(t.by_source || {})), Object.keys(N.by_source || {})))].sort((a, b) => (['aliexpress','cj','zendrop','israeli'].indexOf(a) + 1 || 9) - (['aliexpress','cj','zendrop','israeli'].indexOf(b) + 1 || 9));
+  const td = n => `<td class="num ${n ? '' : 'zero'}">${esc(n || 0)}</td>`;
+  const matrix = `<div class="tbl-wrap" tabindex="0" role="region" aria-label="טבלת השאילתות לפי שכבה ומקור"><table class="src-matrix">
+      <caption class="sr-only">שאילתות חדשות לפי שכבה ולפי מקור</caption>
+      <thead><tr><th scope="col">שכבה</th>${srcKeys.map(k => `<th scope="col">${esc(k === 'israeli' ? 'ישראלי' : SRC_HE[k] || k)}</th>`).join('')}<th scope="col">סה"כ</th></tr></thead>
+      <tbody>${N.tiers.map(t => `<tr data-tier="${esc(t.id)}"><th scope="row"><span class="chip tier-${esc(t.id)}">${esc(TIER_SHORT[t.id] || t.id)}</span> <span class="small tl-long">${esc((t.label || '').replace(/^[^·]*·\s*/, ''))}</span></th>${srcKeys.map(k => td((t.by_source || {})[k])).join('')}<td class="num"><b>${esc(t.n)}</b></td></tr>`).join('')}</tbody>
+      <tfoot><tr><th scope="row">לפי מקור</th>${srcKeys.map(k => `<td class="num">${esc((N.by_source || {})[k] || 0)}</td>`).join('')}<td class="num">${esc(N.n_queries)}</td></tr></tfoot>
+    </table></div>`;
+  const SX = N.searched || {};
+  const nHigh = N.slots.filter(s => s.priority === 'high').length, nHold = N.slots.filter(s => s.status === 'on-hold').length;
+  const tiles = `<div class="tiles">
+      <div class="tile"><span class="l">עמדות ברשימה</span><span class="v">${esc(N.slots.length)}</span><span class="s">${nHigh} בעדיפות גבוהה · ${nHold} בהמתנה להחלטה</span></div>
+      <div class="tile"><span class="l">שאילתות חדשות</span><span class="v">${esc(N.n_queries)}</span><span class="s">${Object.entries(N.by_source || {}).map(([k, v]) => `${esc(SRC_HE[k] || k)} ${esc(v)}`).join(' · ')}</span></div>
+      <div class="tile"><span class="l">צריכים רק כרטיס</span><span class="v">${esc((N.needs_card || []).length)}</span><span class="s">${(N.needs_card || []).filter(x => x.card).length} כבר קיבלו כרטיס</span></div>
+      <div class="tile"><span class="l">הוסרו, כבר חיפשנו</span><span class="v">${esc((N.dropped || []).length)}</span><span class="s">שאילתות כמעט זהות למה שרץ</span></div>
+      ${SX.ae_queries != null ? `<div class="tile"><span class="l">כבר חיפשנו (AliExpress)</span><span class="v">${esc(Number(SX.ae_queries).toLocaleString('en-US'))}</span><span class="s">ב-${esc(SX.ae_slots)} עמדות${SX.cj_queries != null ? ` · CJ ${esc(SX.cj_queries)}` : ''}${SX.pending_ae_queries ? ` · ${esc(SX.pending_ae_queries)} ממתינות` : ''}</span></div>` : ''}
+      ${SX.registry_items != null ? `<div class="tile"><span class="l">מוצרים שכבר נפתחו</span><span class="v">${esc(Number(SX.registry_items).toLocaleString('en-US'))}</span><span class="s">ב-registry (<code>${esc(SX.registry_file || '')}</code>), לא נפתחים שוב</span></div>` : ''}
+    </div>`;
+  const resLine = R.present
+    ? `<div class="db-line"><span class="db-dot live"></span><span><strong>תוצאות הסבב:</strong> ${esc(R.n)} מוצרים ו-${esc(Object.values(R.reports || {}).reduce((n, a) => n + a.length, 0))} דוחות עמדה, ב-${esc(Object.keys(byRes).length)} עמדות (<code>${esc(R.dir)}</code>). ${(R.files || []).map(f => `<span class="res-file"><code>${esc(f.file)}</code>${f.source ? ` · ${esc(SRC_HE[f.source] || f.source)}` : ''}${f.date ? ` · ${esc(fmtDay(f.date))}` : ''}${isNum(f.queries_run) ? ` · ${esc(f.queries_run)} שאילתות רצו${f.queries_not_run ? `, ${esc(f.queries_not_run)} לא` : ''}` : ''}${isNum(f.points) ? ` · ${esc(Number(f.points).toLocaleString('en-US'))} נקודות CJ` : ''}${f.md ? ` · לקריאה <code>${esc(f.md)}</code>` : ''}</span>`).join(' ')}${(R.unmatched || []).length ? ` <details><summary>${esc(R.unmatched.length)} רשומות לא שויכו לעמדה</summary><ul class="plain-ul small">${R.unmatched.slice(0, 40).map(u => `<li><span dir="auto">${esc(u.title || '—')}</span> · ${esc(u.slot || 'בלי עמדה')} · <span dir="ltr">${esc(u.where)}</span></li>`).join('')}</ul></details>` : ''}${(R.warnings || []).length ? ` <span class="warn-text">${esc(R.warnings.length)} קבצים לא נקראו: ${esc(R.warnings.join('; '))}</span>` : ''}</span></div>`
+    : `<div class="db-line"><span class="db-dot warn"></span><span><strong>תוצאות הסבב עוד לא הגיעו</strong> (<code>${esc(R.dir || '')}/</code>). כשסוכן הליקוט יכתוב לשם, התוצאות יופיעו בכל עמדה בבנייה הבאה של הסטודיו.</span></div>`;
+  const ncHtml = (N.needs_card || []).map(x => {
+    const ae = aeInfo(x.item) || {};
+    const p = x.card ? S.byId.get(x.card) : null;
+    const img = p ? (p.img && p.img.src) : (ae.img || ae.img_url);
+    const title = p ? p.name : (ae.title || `AliExpress ${x.item}`);
+    const slots = (x.slots || []).map(k => { const s = S.slots.get(k); const r = s && S.rooms.get(s.room); return `<button type="button" class="linkish" data-goto-comp="${esc(k)}">${esc(r ? r.name_he : k.split('/')[0])} · ${esc(s ? (s.name_he || s.id) : k)}</button>`; }).join(', ');
+    return `<li class="nc-item" data-item="${esc(x.item)}"><span class="ri ${img ? '' : 'ph'}">${img ? `<img src="${esc(img)}" alt="" loading="lazy" decoding="async" data-fallback="">` : ''}</span>
+      <div class="minw0">${p ? `<button type="button" class="linkish nt" data-product="${esc(p.id)}" aria-haspopup="dialog" dir="auto">${esc(title)}</button>` : `<span class="nt" dir="auto">${esc(title)}</span>`}
+        <div class="nm">${p ? '<span class="chip chip-hascard">יש כרטיס</span>' : '<span class="chip chip-needcard">צריך כרטיס</span>'}${x.registry ? `<span class="chip">${esc(REG_HE[x.registry] || x.registry)}</span>` : ''}<span class="code-tag" dir="ltr">${esc(x.item)}</span><a href="${esc(ae.url || `https://www.aliexpress.com/item/${x.item}.html`)}" target="_blank" rel="noopener noreferrer">AliExpress<span class="sr-only"> (נפתח בחלון חדש)</span><span aria-hidden="true">&nbsp;↗</span></a></div>
+        ${slots ? `<p class="nm">לעמדה: ${slots}</p>` : ''}</div></li>`;
+  }).join('');
+  const dropped = (N.dropped || []).length ? `<div class="tbl-wrap" tabindex="0" role="region" aria-label="טבלת השאילתות שהוסרו"><table class="drop-table"><caption class="sr-only">שאילתות שהוסרו כי כבר רצה שאילתה כמעט זהה</caption><thead><tr><th scope="col">עמדה</th><th scope="col">השאילתה שהוסרה</th><th scope="col">כבר רצה</th></tr></thead><tbody>${N.dropped.map(x => `<tr><td><span class="code-tag" dir="ltr">${esc(x.slot)}</span></td><td><code>${esc(x.query)}</code></td><td><code>${esc(x.already_ran)}</code></td></tr>`).join('')}</tbody></table></div>` : '<p class="small faint">אין.</p>';
+  const opt = (v, cur, label) => `<option value="${esc(v)}" ${cur === v ? 'selected' : ''}>${esc(label)}</option>`;
+  const cnt = (k, v) => N.slots.filter(s => s[k] === v).length;
+  $('#src-count').textContent = `סבב ${N.round || '?'} · ${fmtDay(N.date)} · ${N.slots.length} עמדות · ${N.n_queries} שאילתות`;
+  box.innerHTML = `<div class="screen roomy">
+    <div class="cmp-src">
+      <div class="db-line"><span class="db-dot live"></span><span><strong>הרשימה:</strong> <code>${esc(N.file)}</code>${N.md ? ` · לקריאה <code>${esc(N.md)}</code>` : ''}${SX.file ? ` · מה כבר חיפשנו: <code>${esc(SX.file)}</code>${SX.updated ? ` (${esc(fmtDay(SX.updated))})` : ''}` : ''}${N.freight_checks_pending ? ` · בדיקות משלוח פתוחות: <code>${esc(N.freight_checks_pending)}</code>` : ''}</span></div>
+      ${resLine}
+    </div>
+    <section class="section" aria-labelledby="h-src-sum"><div class="section-head"><h2 id="h-src-sum">היקף הסבב</h2><span class="small faint">לפי שכבה ולפי מקור</span></div>
+      ${tiles}${matrix}</section>
+    ${(N.rules || []).length ? `<section class="section" aria-labelledby="h-src-rules"><div class="section-head"><h2 id="h-src-rules">כללי הסבב</h2></div><ol class="src-rules">${N.rules.map(x => `<li dir="auto">${esc(x)}</li>`).join('')}</ol></section>` : ''}
+    <section class="section" aria-labelledby="h-src-slots"><div class="section-head"><h2 id="h-src-slots">העמדות, לפי עדיפות</h2><span class="small faint">גבוהה, בינונית ונמוכה; בכל עדיפות ריקות לפני חלקיות, ובהמתנה בסוף</span></div>
+      <form class="filters" id="src-filters" role="search" aria-label="סינון עמדות הליקוט">
+        <div class="field"><label for="sf-room">חדר</label><select id="sf-room">${opt('', F.room, 'כל החדרים')}${rooms.map(r => opt(r, F.room, `${(S.rooms.get(r) || {}).name_he || r} (${cnt('room', r)})`)).join('')}</select></div>
+        <div class="field"><label for="sf-prio">עדיפות</label><select id="sf-prio">${opt('', F.priority, 'כל העדיפויות')}${['high','medium','low'].filter(p => cnt('priority', p)).map(p => opt(p, F.priority, `${PRIO_HE[p]} (${cnt('priority', p)})`)).join('')}</select></div>
+        <div class="field"><label for="sf-src">מקור</label><select id="sf-src">${opt('', F.source, 'כל המקורות')}${sources.map(x => opt(x, F.source, `${SRC_HE[x] || x} (${cnt('source', x)})`)).join('')}</select></div>
+        <div class="field"><label for="sf-status">מצב בהרכבה</label><select id="sf-status">${opt('', F.status, 'כל המצבים')}${CS_ORDER.filter(x => cnt('status', x)).map(x => opt(x, F.status, `${CS_HE[x]} (${cnt('status', x)})`)).join('')}</select></div>
+        ${R.present ? `<div class="field"><span class="check"><input type="checkbox" id="sf-res" ${F.withRes ? 'checked' : ''}><label for="sf-res">רק עמדות עם תוצאות (${N.slots.filter(s => byRes[s.key]).length})</label></span></div>` : ''}
+      </form>
+      <p class="result-line" aria-live="polite"><span><strong class="num">${list.length}</strong> מתוך ${N.slots.length} עמדות${R.present ? ` · ${list.filter(s => byRes[s.key]).length} עם תוצאות` : ''}</span>${F.room || F.priority || F.source || F.status || F.withRes ? '<button type="button" class="linkish" id="sf-reset">ניקוי הסינון</button>' : ''}</p>
+      ${list.length ? `<ol class="src-list">${shown.map(s => srcSlotHtml(s, byRes[s.key], comps.has(s.key))).join('')}</ol>` : '<p class="empty">אין עמדות שמתאימות לסינון.</p>'}
+      ${list.length > shown.length ? `<div class="row"><button type="button" class="btn btn-ghost btn-small" id="sf-more">הצגת עוד ${Math.min(SRC_PAGE, list.length - shown.length)}</button><button type="button" class="linkish" id="sf-all">הצגת כל ${list.length} העמדות</button><span class="small faint">מוצגות ${shown.length} מתוך ${list.length}</span></div>` : ''}
+    </section>
+    <section class="section" aria-labelledby="h-src-nc"><div class="section-head"><h2 id="h-src-nc">צריכים רק כרטיס</h2><span class="small faint">${(N.needs_card || []).length} מוצרי AliExpress שכבר נבחרו, בלי חיפוש</span></div>
+      ${ncHtml ? `<ul class="nc-list">${ncHtml}</ul>` : '<p class="small faint">אין.</p>'}</section>
+    <section class="section" aria-labelledby="h-src-drop"><div class="section-head"><h2 id="h-src-drop">כבר חיפשנו: הוסרו מהרשימה</h2><span class="small faint">${(N.dropped || []).length} שאילתות</span></div>
+      ${dropped}</section>
+  </div>`;
+  restore();
+  const setF = (k, v, focusId) => { S.src[k] = v; store.set('src', S.src); S.srcLimit = SRC_PAGE; renderSourcing(); const el = $('#' + focusId); if(el) el.focus(); };
+  $('#src-filters').onsubmit = e => e.preventDefault();
+  const more = (n) => { const from = shown.length; S.srcLimit = n; renderSourcing(); const li = $$('#src-body .src-slot')[from]; const h = li && $('h3', li); if(h) h.focus(); say(`מוצגות ${$$('#src-body .src-slot').length} עמדות`); };
+  const mb = $('#sf-more'); if(mb) mb.onclick = () => more(shown.length + SRC_PAGE);
+  const ab = $('#sf-all'); if(ab) ab.onclick = () => more(list.length);
+  $('#sf-room').onchange = e => setF('room', e.target.value, 'sf-room');
+  $('#sf-prio').onchange = e => setF('priority', e.target.value, 'sf-prio');
+  $('#sf-src').onchange = e => setF('source', e.target.value, 'sf-src');
+  $('#sf-status').onchange = e => setF('status', e.target.value, 'sf-status');
+  const sr = $('#sf-res'); if(sr) sr.onchange = e => setF('withRes', e.target.checked, 'sf-res');
+  const rb = $('#sf-reset'); if(rb) rb.onclick = () => { Object.assign(S.src, {room:'', priority:'', source:'', status:'', withRes:false}); store.set('src', S.src); renderSourcing(); $('#sf-room').focus(); };
+  wireImgFallback(box);
 }
 function openLightbox(list, i, from){ S.lb = {list, i}; S.lbReturn = from || null; showLb(); openDialog($('#lightbox')); $('#lightbox [data-close]').focus(); }
 function showLb(){ const {list, i} = S.lb; const im = list[i]; if(!im) return;

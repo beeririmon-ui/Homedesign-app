@@ -6,6 +6,7 @@ Reads the repo's source-of-truth files (read-only) and writes:
                         (data/, docs/, assets/ and status/: board.md, decisions.json, blockers.json)
   dist/img/p/<id>.webp  first image of each product, 360px long side, q72
   dist/img/f/<n>.webp   frames and renders, 1280px long side, q78
+  dist/img/a/<h>.webp   AliExpress items without a card (compositions, next sourcing round), 360px, q72
   dist/index.html       the page (copied from studio/src/index.html)
 
 Product images are downloaded once and cached in studio/.cache/, so a second
@@ -13,12 +14,17 @@ build does not hit the network. Frame conversions are cached there too.
 
 Usage: python3 studio/build.py [--offline] [--economics-dir DIR] [--deep-dir DIR] [--dist DIR]
                                [--furniture-dir DIR] [--suppliers-dir DIR]
+                               [--compositions-dir DIR] [--sourcing-dir DIR] [--round-results-dir DIR]
   --offline        never download; products without a cached image get a placeholder.
   --economics-dir  read the economics files from another folder (testing).
   --deep-dir       read the deep AliExpress pass from another folder (testing; default data/leads/aliexpress/deep-2026-10).
   --dist           write the build to another folder (testing; default studio/dist).
   --furniture-dir  read the furniture leads from another folder (testing; default data/leads/furniture-il).
   --suppliers-dir  read candidates-furniture-*.json from another folder (testing; default data/suppliers).
+  --compositions-dir   read the room compositions from another folder (testing; default data/compositions).
+  --sourcing-dir       read round-N-*.json and searched-index.json from another folder (testing; default
+                       data/leads/next-sourcing).
+  --round-results-dir  read the round's results from another folder (default <sourcing-dir>/round-N-results).
 
 Only the Python standard library and Pillow are used.
 """
@@ -2211,6 +2217,936 @@ def load_furniture(order: list[str], products: list[dict], directory: dict | Non
 
 # --------------------------------------------------------------------------- main
 
+# --------------------------------------------------------------------------- compositions and the next sourcing round
+
+# The designer's room compositions (master-designer, 2026-10-11): data/compositions/<room>-<style>-<date>.json, one per
+# room and style, with a human-readable twin in docs/rooms/. Every designer run wrote a slightly different shape (slots as
+# a dict or a list, counts or status_counts, default as a card, an AliExpress record, a set or a furniture model, per-room
+# sub-slots in the kids rooms...), so everything here is read defensively: an odd field is skipped, never fatal.
+COMPOSITIONS_DIR = ROOT / "data" / "compositions"
+ROOMS_DOC_DIR = ROOT / "docs" / "rooms"
+NEXT_SOURCING_DIR = ROOT / "data" / "leads" / "next-sourcing"
+SCALE_DIR = ROOT / "data" / "leads" / "aliexpress" / "scale-2026-10"
+AE_SOURCES = ROOT / "data" / "sources" / "aliexpress"
+COMP_STATUSES = ("ready-to-lock", "partial", "empty", "on-hold")
+COMP_STATUS_ALIASES = {"ready-to-lock": "ready-to-lock", "ready": "ready-to-lock", "ready-for-lock": "ready-to-lock",
+                       "lockable": "ready-to-lock", "partial": "partial", "empty": "empty", "on-hold": "on-hold",
+                       "hold": "on-hold", "onhold": "on-hold", "blocked": "on-hold", "waiting": "on-hold"}
+SUBROOM_HE = {"boy": "חדר הילד", "girl": "חדר הילדה", "both_rooms": "שני החדרים"}
+WHOLE_SUB_HE = {"without_conditional_lights": "בלי המנורות המותנות", "without_conditional_sconce": "בלי מנורת הקיר המותנית",
+                "boy": "חדר הילד", "girl": "חדר הילדה", "both_rooms": "שני החדרים"}
+# text fields of a whole-look block, in the order the page shows them
+WHOLE_TEXT_HE = {"basis_he": "בסיס", "scope_he": "היקף", "note_he": "הערה", "notes_he": "הערות", "missing_he": "מה חסר",
+                 "clean_today_he": "נקי היום", "addon_only_he": "רק כתוספת לסל", "bundles_he": "חבילות", "bundle_hint_he": "חבילה",
+                 "furniture_he": "ריהוט", "repeats_across_rooms_he": "חוזר בין חדרים", "full_look_estimate_note_he": "המראה המלא",
+                 "items_he": "פריטים"}
+# extra designer fields of a slot, shown under "more" in the page
+SLOT_MORE_HE = (("conditions_he", "תנאים"), ("lock_conditions_he", "תנאי נעילה"), ("lock_decision", "החלטת נעילה"),
+                ("structure_issue", "בעיית מבנה"), ("out_he", "לא נכנסו"), ("rejected_he", "נפסלו"),
+                ("kept_aside", "נשארו בצד"), ("leads", "לידים"), ("rejected_records", "רשומות AliExpress שנפסלו"),
+                ("fillers", "מילוי"), ("reassigned_he", "הועבר מעמדה אחרת"), ("family", "משפחה"))
+REF_NOTE_KEYS = ("note_he", "desc_he", "condition_he", "conditional_he", "conditions_he", "incomplete_he", "price_note_he",
+                 "margin_note_he", "score_note", "landed_note")
+REF_OPTION_KEYS = ("option_he", "sku_he", "by_room_option_he", "sku_note")
+TOKEN_RX = re.compile(r"(?<![A-Za-z0-9])([A-Z][A-Z0-9]*(?:-[A-Z0-9]+)*)(?![A-Za-z0-9])")
+AE_ID_RX = re.compile(r"(?<!\d)(\d{11,17})(?!\d)")
+RESULT_LIST_KEYS = ("records", "results", "items", "candidates", "found", "rows", "products")
+TIER_HE = {"tier1": "שכבה 1 · עדיפות גבוהה", "tier2": "שכבה 2 · בינונית", "tier3": "שכבה 3 · נמוכה",
+           "spare": "רזרבה (רק אם העמדה לא מלאה)", "deferred": "נדחה: עמדות בהמתנה להחלטה"}
+TIER_ORDER = ("tier1", "tier2", "tier3", "spare", "deferred")
+
+
+def as_text_list(v) -> list[str]:
+    """A designer field (string, list of strings, list of dicts) as a list of short display lines."""
+    out = []
+    if v is None or v is False:
+        return out
+    if isinstance(v, (str, int, float)):
+        t = str(v).strip()
+        return [t] if t else []
+    if isinstance(v, dict):
+        parts = []
+        for k in ("card_id", "ae_item_id", "item_id", "id", "slot", "model"):
+            if v.get(k):
+                parts.append(("AE " if k in ("ae_item_id", "item_id") else "") + str(v[k]))
+                break
+        if isnum(v.get("score")):
+            parts.append(f"ציון {v['score']}")
+        if isnum(v.get("price_ils")) or isnum(v.get("price_ils_from")):
+            parts.append(f"₪{v.get('price_ils') if isnum(v.get('price_ils')) else 'מ-' + str(v['price_ils_from'])}")
+        for k in ("why_he", "note_he", "he", "note", "reason", "why", "text"):
+            if isinstance(v.get(k), str) and v[k].strip():
+                parts.append(v[k].strip())
+                break
+        return [" · ".join(parts)] if parts else []
+    if isinstance(v, list):
+        for x in v:
+            out.extend(as_text_list(x))
+    return out
+
+
+def comp_status(v) -> str | None:
+    if not isinstance(v, str) or not v.strip():
+        return None
+    k = re.sub(r"[\s_]+", "-", v.strip().lower())
+    return COMP_STATUS_ALIASES.get(k, k)
+
+
+def decision_ids(texts, dec_ids: set) -> list[str]:
+    found = []
+    for t in texts:
+        for m in TOKEN_RX.finditer(str(t or "")):
+            tok = m.group(1)
+            for c in [tok] + (tok.split("-") if "-" in tok else []):
+                if c in dec_ids and c not in found:
+                    found.append(c)
+    return found
+
+
+def first_num(d: dict, *keys):
+    for k in keys:
+        x = to_num(d.get(k)) if not isinstance(d.get(k), bool) else None
+        if x is not None:
+            return x
+    return None
+
+
+class CompCtx:
+    """What the composition and sourcing readers share: cards by id, cards by AliExpress item, AliExpress records."""
+
+    def __init__(self, products: list[dict], dec_ids: set, room_ids: list[str], slot_by_key: dict):
+        self.by_id = {p["id"]: p for p in products}
+        self.dec_ids = dec_ids
+        self.room_ids = room_ids
+        self.slot_by_key = slot_by_key
+        self.aliases = {}
+        if SEEN.exists():
+            try:
+                self.aliases = read_json(SEEN).get("aliases") or {}
+            except Exception as e:
+                log(f"  ! cannot read {rel(SEEN)}: {e}")
+        self.ae_cards: dict[str, list[dict]] = {}
+        for p in products:
+            m = AE_ITEM.search(((p.get("supplier") or {}).get("product_url") or ""))
+            if m:
+                self.ae_cards.setdefault(ae_canon(m.group(1), self.aliases), []).append(p)
+        self.ae: dict[str, dict] = {}  # item -> {title, url, img_url, img}
+        self.wanted: set[str] = set()
+
+    def card_id(self, cid) -> str | None:
+        if not isinstance(cid, str) or not cid.strip():
+            return None
+        c = cid.strip()
+        if c in self.by_id:
+            return c
+        m = re.match(r"[\w.-]+", c)  # "ceiling-lights-...-30 ×2", "vase-... (Medium)"
+        return m.group(0) if m and m.group(0) in self.by_id else None
+
+    def card_for_ae(self, item: str, slot_key: str | None) -> str | None:
+        cs = self.ae_cards.get(item) or []
+        live = [p for p in cs if p.get("status") != "rejected"] or cs
+        same = [p for p in live if p.get("_slot_key") == slot_key]
+        p = (same or live or [None])[0]
+        return p["id"] if p else None
+
+    def want_ae(self, item: str) -> None:
+        if item:
+            self.wanted.add(item)
+
+
+def norm_ref(x, ctx: CompCtx, slot_key: str | None, role: str | None = None) -> dict | None:
+    """One product in a composition (default, variation, set item, whole-look item) in one shape for the page."""
+    if not isinstance(x, dict):
+        if isinstance(x, str) and x.strip():
+            x = {"ae_item_id": x} if AE_ID_RX.fullmatch(re.sub(r"^ae:", "", x.strip())) else {"card_id": x}
+        else:
+            return None
+    r: dict = {}
+    raw_id = x.get("card_id") or (x.get("id") if isinstance(x.get("id"), str) and not str(x.get("id")).startswith("ae:") else None)
+    ae_raw = x.get("ae_item_id") or x.get("item_id") or (str(x["id"])[3:] if isinstance(x.get("id"), str) and str(x["id"]).startswith("ae:") else None)
+    if isinstance(x.get("items"), list) and x["items"]:
+        r["k"] = "set"
+        r["items"] = [i for i in (norm_ref(it, ctx, slot_key, it.get("role") if isinstance(it, dict) else None) for it in x["items"]) if i]
+        if x.get("set_id"):
+            r["set_id"] = str(x["set_id"])
+    elif raw_id:
+        cid = ctx.card_id(raw_id)
+        r["k"] = "card" if cid else "missing"
+        r["id"] = cid or str(raw_id).strip()
+    elif ae_raw:
+        item = ae_canon(ae_raw, ctx.aliases)
+        if not item:
+            return None
+        r["ae"] = item
+        cid = ctx.card_for_ae(item, slot_key)
+        if cid:  # a card was written for this AliExpress item since the composition: show the card
+            r["k"], r["id"] = "card", cid
+        else:
+            r["k"], r["id"] = "ae", "ae:" + item
+        ctx.want_ae(item)
+    elif x.get("model") or x.get("candidate_he"):
+        r["k"] = "model"
+        r["title"] = str(x.get("model") or x.get("candidate_he")).strip()
+    else:
+        return None
+    if role or x.get("role"):
+        r["role"] = str(role or x.get("role"))
+    score = to_num(x.get("score")) if not isinstance(x.get("score"), bool) else None
+    if score is not None:
+        r["score"] = score
+    sn = str(x.get("score_note") or "")
+    if x.get("provisional") is True or sn.lower().startswith("provisional"):
+        r["provisional"] = True
+    for k in ("price_ils", "landed_ils", "margin_pct", "contribution_ils"):
+        v = to_num(x.get(k)) if not isinstance(x.get(k), (bool, list, dict)) else None
+        if v is not None:
+            r[k] = v
+    if r.get("margin_pct") is None and isinstance(x.get("margin_range_pct"), list):
+        ns = [to_num(n) for n in x["margin_range_pct"] if to_num(n) is not None]
+        if ns:
+            r["margin_range"] = [min(ns), max(ns)]
+    if isnum(x.get("price_ils_from")):
+        r["price_ils"], r["price_from"] = float(x["price_ils_from"]), True
+    basis = x.get("price_basis") or x.get("price_src")
+    if isinstance(basis, str) and basis.strip():
+        r["price_basis"] = basis.strip()
+    if x.get("price_proposed") is True or "proposed" in str(basis or "").lower() or "suggested" in str(basis or "").lower():
+        r["proposed"] = True
+    q = x.get("price_for_qty") or x.get("price_for")
+    if q:
+        r["price_for"] = str(q)
+    for flag in ("addon_only", "borderline", "temporary", "needs_card", "estimated", "margin_estimated"):
+        if x.get(flag) is True:
+            r[flag] = True
+    if x.get("conditional") is True or x.get("conditional_he") or x.get("conditions_he") or x.get("condition_he"):
+        r["conditional"] = True
+    if isinstance(x.get("flag"), str) and x["flag"].strip():
+        r["flag"] = x["flag"].strip()
+    opts = [str(x[k]).strip() for k in REF_OPTION_KEYS if isinstance(x.get(k), str) and x[k].strip()]
+    if x.get("dims_cm"):
+        opts.append(f"{x['dims_cm']} ס\"מ" if isinstance(x["dims_cm"], str) else json.dumps(x["dims_cm"], ensure_ascii=False))
+    if opts:
+        r["option"] = " · ".join(opts)
+    notes = []
+    for k in REF_NOTE_KEYS:
+        notes += as_text_list(x.get(k))
+    if isinstance(x.get("alt_price"), dict):
+        a = x["alt_price"]
+        if isnum(a.get("price_ils")) and isnum(a.get("margin_pct")):
+            notes.append(f"ב-₪{a['price_ils']:g}: מרווח {a['margin_pct']:g}%")
+    if isnum(x.get("margin_at_current_price")):
+        notes.append(f"במחיר הנוכחי: מרווח {x['margin_at_current_price']:g}%")
+    if notes:
+        r["note"] = "\n".join(dict.fromkeys(notes))
+    if isinstance(x.get("ship_days"), (str, int)) and str(x["ship_days"]).strip():
+        r["ship_days"] = str(x["ship_days"]).strip()
+    if r["k"] == "model" and isinstance(x.get("note"), str):
+        r["note"] = (r.get("note", "") + "\n" + x["note"]).strip()
+    return r
+
+
+def norm_slot_block(s: dict, ctx: CompCtx, key: str | None) -> dict:
+    """The parts a slot and a per-room sub-slot (kids: boy / girl) share."""
+    o: dict = {}
+    st = comp_status(s.get("status"))
+    if st:
+        o["status"] = st
+    d = norm_ref(s.get("default"), ctx, key, "default") if s.get("default") else None
+    if d:
+        o["default"] = d
+    vars_ = [v for v in (norm_ref(v, ctx, key) for v in (s.get("variations") or []) if v) if v]
+    if vars_:
+        o["variations"] = vars_
+    if not d and s.get("candidate_he"):
+        o["candidate_he"] = str(s["candidate_he"])
+    shown = {r.get("ae") for r in ([d] if d else []) + vars_ if r} | {r.get("id") for r in ([d] if d else []) + vars_ if r}
+    nc = []
+    for n in s.get("needs_card") or []:
+        if isinstance(n, bool):
+            continue
+        item = ae_canon(n.get("item_id") or n.get("ae_item_id") if isinstance(n, dict) else n, ctx.aliases)
+        if item and item not in shown:
+            ref = norm_ref({"ae_item_id": item}, ctx, key, "needs_card")
+            if ref:
+                nc.append(ref)
+    if nc:
+        o["needs_card"] = nc
+    blocked_raw = as_text_list(s.get("blocked_by"))
+    if blocked_raw:
+        o["blocked"] = [{"text": t, "ids": decision_ids([t], ctx.dec_ids)} for t in blocked_raw]
+    notes = as_text_list(s.get("notes_he"))
+    if notes:
+        o["notes"] = "\n".join(notes)
+    more = []
+    for k, label in SLOT_MORE_HE:
+        lines = as_text_list(s.get(k))
+        if lines:
+            more.append({"label": label, "items": lines, "ids": decision_ids(lines, ctx.dec_ids) if k in ("lock_decision", "lock_conditions_he", "conditions_he") else []})
+    if more:
+        o["more"] = more
+    return o
+
+
+def norm_whole(w) -> dict | None:
+    if not isinstance(w, dict):
+        return None
+
+    def totals(b: dict) -> dict:
+        t = {}
+        for out_k, keys in (("price", ("total_price_ils",)), ("contribution", ("total_contribution_ils",)),
+                            ("net", ("total_net_ils",)), ("landed", ("total_landed_ils",)),
+                            ("margin", ("weighted_margin_pct", "blended_margin_pct", "margin_pct")),
+                            ("after_cac", ("contribution_after_one_cac_ils", "contribution_after_cac_ils"))):
+            v = first_num(b, *keys)
+            if v is not None:
+                t[out_k] = v
+        if "margin" not in t and t.get("price") and t.get("contribution") is not None:
+            net = t.get("net") or t["price"] / 1.18
+            t["margin"] = round(t["contribution"] / net * 100, 1) if net else None
+            t["margin_computed"] = True
+        rng = b.get("weighted_margin_range_pct")
+        if isinstance(rng, list) and all(isnum(n) for n in rng) and rng:
+            t["margin_range"] = [min(rng), max(rng)]
+        return t
+
+    o = {"main": totals(w), "subs": [], "texts": [], "lists": []}
+    for k, v in w.items():
+        if isinstance(v, dict) and any(x in v for x in ("total_price_ils", "items", "items_he")):
+            sub = totals(v)
+            n_items = len(v["items"]) if isinstance(v.get("items"), list) else None
+            if sub or n_items:
+                o["subs"].append({"key": k, "label": WHOLE_SUB_HE.get(k, k.replace("_", " ")), **sub, **({"items": n_items} if n_items else {})})
+            if isinstance(v.get("items_he"), str):
+                o["texts"].append({"label": WHOLE_SUB_HE.get(k, k), "text": v["items_he"]})
+    if not o["main"] and o["subs"]:  # kids: no house total, the two rooms together are the total
+        both = next((s for s in o["subs"] if s["key"] == "both_rooms"), None)
+        if both:
+            o["main"] = {k: both[k] for k in ("price", "contribution", "margin", "after_cac", "net") if k in both}
+            o["main_from"] = both["label"]
+    items = w.get("items") if isinstance(w.get("items"), list) else w.get("defaults") if isinstance(w.get("defaults"), list) else None
+    if items is not None:
+        o["n_items"] = len(items)
+    if isnum(w.get("of_slots")):
+        o["of_slots"] = w["of_slots"]
+    if isnum(w.get("slots_with_default")):
+        o["n_items"] = w["slots_with_default"]
+    for k, label in WHOLE_TEXT_HE.items():
+        if isinstance(w.get(k), str) and w[k].strip():
+            o["texts"].append({"label": label, "text": w[k].strip()})
+    if isnum(w.get("full_look_estimate_ils")):
+        o["full_look"] = w["full_look_estimate_ils"]
+    if isnum(w.get("missing_slots_at_slot_price_ils")):
+        o["missing_at_slot_price"] = w["missing_slots_at_slot_price_ils"]
+    for k, label in (("addon_only", "רק כתוספת לסל"), ("excluded", "לא בסכום"), ("furniture_pending_ls1", "ריהוט שמחכה לאישור ספק (LS1)")):
+        lines = as_text_list(w.get(k))
+        if lines:
+            o["lists"].append({"label": label, "items": lines})
+    return o
+
+
+def comp_paragraphs(v) -> list[str]:
+    """room_check_he as paragraphs: a list stays a list; a long string splits before its numbered points '(1)', '(2)'."""
+    out = []
+    for t in as_text_list(v):
+        parts = re.split(r"\s+(?=\(\d{1,2}\)\s)", t)
+        out.extend(p.strip() for p in parts if p.strip())
+    return out
+
+
+def load_compositions(comp_dir: Path, ctx: CompCtx) -> dict:
+    out = {"dir": rel(comp_dir) if comp_dir.is_relative_to(ROOT) else str(comp_dir), "present": False, "rooms": {},
+           "files": [], "warnings": []}
+    if not comp_dir.exists():
+        return out
+    best: dict[tuple, tuple] = {}
+    for f in sorted(comp_dir.glob("*.json")):
+        try:
+            d = read_json(f)
+        except Exception as e:
+            out["warnings"].append(f"{f.name}: {type(e).__name__}: {e}"[:200])
+            continue
+        if not isinstance(d, dict):
+            out["warnings"].append(f"{f.name}: not an object")
+            continue
+        room = room_key(d.get("room") or "", set(ctx.room_ids))
+        if not room:  # from the file name: <room>-<style>-<date>.json
+            m = re.match(r"(.+?)-([a-z-]+?)-(\d{4}-\d{2}-\d{2})$", f.stem)
+            room = room_key(m.group(1), set(ctx.room_ids)) if m else None
+        if not room:
+            out["warnings"].append(f"{f.name}: unknown room {d.get('room')!r}")
+            continue
+        style = style_key(d.get("style")) or style_key((re.match(r".+?-([a-z-]+?)-\d{4}", f.stem) or [None, ""])[1]) or "nordic"
+        date = first_date(str(d.get("date") or "")) or first_date(f.stem) or ""
+        k = (room, style)
+        if k not in best or (date, f.name) > (best[k][0], best[k][1].name):
+            best[k] = (date, f, d)
+    for (room, style), (date, f, d) in sorted(best.items()):
+        try:
+            out["rooms"].setdefault(room, {})[style] = norm_composition(d, f, room, style, date, ctx)
+            out["files"].append(rel(f) if f.is_relative_to(ROOT) else f.name)
+        except Exception as e:  # one bad file never stops the build
+            out["warnings"].append(f"{f.name}: {type(e).__name__}: {e}"[:200])
+    out["present"] = bool(out["rooms"])
+    return out
+
+
+def norm_composition(d: dict, f: Path, room: str, style: str, date: str, ctx: CompCtx) -> dict:
+    raw = d.get("slots")
+    if isinstance(raw, dict):
+        pairs = [(k, v) for k, v in raw.items() if isinstance(v, dict)]
+    elif isinstance(raw, list):
+        pairs = [(str(v.get("slot") or v.get("id") or ""), v) for v in raw if isinstance(v, dict)]
+    else:
+        pairs = []
+    file_slots = {s["id"]: s for k, s in ctx.slot_by_key.items() if k.startswith(room + "/")}
+    order = {sid: i for i, sid in enumerate(file_slots)}
+    slots = []
+    for sid, s in pairs:
+        sid = sid.split("/")[-1].strip()
+        if not sid:
+            continue
+        key = f"{room}/{sid}"
+        o = {"id": sid, "key": key}
+        meta = file_slots.get(sid)
+        if meta:
+            o["name_he"] = meta.get("name_he")
+        else:
+            o["unknown_slot"] = True
+        o.update(norm_slot_block(s, ctx, key))
+        if s.get("priority"):
+            o["priority"] = str(s["priority"])
+        miss = first_num(s, "missing", "missing_variations")
+        if miss is not None:
+            o["missing"] = int(miss)
+        if isinstance(s.get("frames"), list):
+            o["frames"] = [str(x) for x in s["frames"]]
+        if isinstance(s.get("kind"), str):
+            o["kind"] = s["kind"]
+        if isnum(s.get("proposed_price_ils")):
+            o["proposed_price_ils"] = s["proposed_price_ils"]
+        if isinstance(s.get("rooms"), list):
+            o["rooms"] = [str(x) for x in s["rooms"]]
+        if isinstance(s.get("by_room"), dict):
+            subs = []
+            for rk, rv in s["by_room"].items():
+                if isinstance(rv, dict):
+                    subs.append({"room": rk, "label": SUBROOM_HE.get(rk, rk), **norm_slot_block(rv, ctx, key)})
+            if subs:
+                o["by_room"] = subs
+                if "status" not in o:
+                    sts = [x.get("status") for x in subs if x.get("status")]
+                    o["status"] = next((x for x in ("partial", "ready-to-lock", "empty", "on-hold") if x in sts), sts[0] if sts else None)
+        if o.get("status") is None:
+            o["status"] = "partial" if o.get("default") else "empty"
+        lock = next((m for m in o.get("more") or [] if m["label"] == "החלטת נעילה"), None)
+        if lock and lock["ids"]:
+            o["lock_ids"] = lock["ids"]
+        slots.append(o)
+    slots.sort(key=lambda o: (order.get(o["id"], 999), o["id"]))
+    counts = {k: 0 for k in COMP_STATUSES}
+    for o in slots:
+        counts[o["status"]] = counts.get(o["status"], 0) + 1
+    fc = d.get("counts") if isinstance(d.get("counts"), dict) else d.get("status_counts") if isinstance(d.get("status_counts"), dict) else None
+    file_counts = {comp_status(k): v for k, v in fc.items() if isnum(v)} if fc else None
+    if file_counts and all(file_counts.get(k, 0) == counts.get(k, 0) for k in set(file_counts) | set(counts)):
+        file_counts = None  # the file's own summary agrees with its slots
+    doc = d.get("doc") if isinstance(d.get("doc"), str) else None
+    if not doc:
+        guess = ROOMS_DOC_DIR / (f.stem + ".md")
+        doc = rel(guess) if guess.exists() else None
+    decisions = []
+    for x in d.get("decisions_needed") or []:
+        if isinstance(x, dict):
+            text = str(x.get("he") or x.get("why_he") or x.get("text") or "").strip()
+            did = str(x.get("id") or "").strip()
+            decisions.append({"id": did, "known": did in ctx.dec_ids, "existing": x.get("existing"), "text": text,
+                              "ids": decision_ids([text], ctx.dec_ids)})
+        elif isinstance(x, str):
+            decisions.append({"id": "", "known": False, "text": x, "ids": decision_ids([x], ctx.dec_ids)})
+    note = d.get("status_note_he") or d.get("kind")
+    return {
+        "file": rel(f) if f.is_relative_to(ROOT) else f.name, "doc": doc, "room": room, "style": style, "date": date or None,
+        "author": d.get("author"), "frame": d.get("frame"), "note": note if isinstance(note, str) else None,
+        "counts": counts, "file_counts": file_counts,
+        "whole": norm_whole(d.get("whole_look")), "check": comp_paragraphs(d.get("room_check_he")),
+        "decisions": decisions, "swaps": as_text_list(d.get("swaps_he")),
+        "fixed_he": d.get("fixed_furniture_he") if isinstance(d.get("fixed_furniture_he"), str) else None,
+        "safety_he": d.get("safety_gate_he") if isinstance(d.get("safety_gate_he"), str) else None,
+        "slots": slots,
+    }
+
+
+def ae_record_index(items: set[str], ctx: CompCtx, extra_dirs: list[Path]) -> None:
+    """Title, link and image URL for every AliExpress item a composition or the sourcing round shows without a card:
+    first the deep pass records, then the scale run, then the cached API answer in data/sources/aliexpress/<id>.json."""
+    need = {i for i in items if i not in ctx.ae or not ctx.ae[i].get("img_url")}
+    for d in [DEEP_DIR, SCALE_DIR] + extra_dirs:
+        if not need or not d.exists():
+            continue
+        for f in sorted(d.glob("*.json")):
+            try:
+                recs, _ = read_records(f)
+            except Exception:
+                continue
+            for r in recs:
+                if not isinstance(r, dict):
+                    continue
+                item = ae_canon(r.get("item_id") or (AE_ITEM.search(str(r.get("url") or "")) or [None, None])[1], ctx.aliases)
+                if item not in need:
+                    continue
+                info = ctx.ae.setdefault(item, {})
+                img = r.get("image") or r.get("image_url") or r.get("main_image")
+                if isinstance(img, str) and img.startswith("https://") and not info.get("img_url"):
+                    info["img_url"] = img
+                if r.get("title") and not info.get("title"):
+                    info["title"] = str(r["title"]).strip()
+                if info.get("img_url") and info.get("title"):
+                    need.discard(item)
+    for item in list(need):
+        f = AE_SOURCES / f"{item}.json"
+        if not f.exists():
+            continue
+        try:
+            p = ((read_json(f).get("sections") or {}).get("product") or {}).get("payload") or {}
+            res = p.get("result") or {}
+            info = ctx.ae.setdefault(item, {})
+            urls = str((res.get("ae_multimedia_info_dto") or {}).get("image_urls") or "").split(";")
+            if urls and urls[0].startswith("https://") and not info.get("img_url"):
+                info["img_url"] = urls[0]
+            subj = (res.get("ae_item_base_info_dto") or {}).get("subject")
+            if subj and not info.get("title"):
+                info["title"] = str(subj).strip()
+        except Exception:
+            continue
+    for item in items:
+        info = ctx.ae.setdefault(item, {})
+        info.setdefault("url", f"https://www.aliexpress.com/item/{item}.html")
+        info.setdefault("title", f"AliExpress {item}")
+
+
+def build_thumb_images(targets: list[tuple[str, str]], offline: bool, budget: int) -> dict:
+    """Small images of things that are not cards yet (AliExpress items, sourcing results) into dist/img/a/<hash>.webp.
+    targets: [(key, https url)], in priority order. Returns {key: src}; beyond the file budget the page uses the URL."""
+    out, seen = {}, set()
+    todo = []
+    for key, url in targets:
+        if key in seen or not isinstance(url, str) or not url.startswith("https://"):
+            continue
+        seen.add(key)
+        todo.append((key, url))
+    todo = todo[:max(0, budget)]
+
+    def work(kv):
+        key, url = kv
+        b, err, _ = fetch_cached(url, offline)
+        if b is None:
+            return key, None
+        name = hashlib.sha1(url.encode()).hexdigest()[:16]
+        dst = DIST / "img" / "a" / f"{name}.webp"
+        try:
+            if not dst.exists():
+                to_webp(Image.open(io.BytesIO(b)), P_SIZE, P_Q, dst)
+            return key, f"img/a/{name}.webp"
+        except Exception:
+            return key, None
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=8) as ex:
+        for key, src in ex.map(work, todo):
+            if src:
+                out[key] = src
+    return out
+
+
+def latest_round(src_dir: Path) -> tuple[Path | None, int | None]:
+    best = None
+    for f in src_dir.glob("round-*.json"):
+        m = re.match(r"round-(\d+)-(\d{4}-\d{2}-\d{2})$", f.stem)
+        if m:
+            k = (int(m.group(1)), m.group(2))
+            if best is None or k > best[0]:
+                best = (k, f)
+    return (best[1], best[0][0]) if best else (None, None)
+
+
+def norm_result(r: dict, ctx: CompCtx, key: str, source: str | None = None) -> dict:
+    """One product the round found: an AliExpress record, a CJ product or a card written from it."""
+    o: dict = {}
+    url = r.get("url") or r.get("product_url")
+    m_ae = AE_ITEM.search(str(url or ""))
+    raw_item = r.get("item_id") or r.get("ae_item_id") or (m_ae.group(1) if m_ae else None)
+    if not raw_item and str(source or r.get("source") or "").lower() == "aliexpress":
+        raw_item = r.get("product_id")
+    item = ae_canon(raw_item, ctx.aliases) if raw_item else None
+    cid = ctx.card_id(r.get("card_id")) or ctx.card_id(r.get("id")) or (ctx.card_for_ae(item, key) if item else None)
+    if item:
+        o["item"] = item
+    if cid:
+        o["card"] = cid
+    elif isinstance(r.get("card_id") or r.get("id"), str) and re.match(r"^[a-z0-9]+(?:-[a-z0-9.]+){2,}$", str(r.get("card_id") or r.get("id"))):
+        o["card_pending"] = str(r.get("card_id") or r.get("id"))  # a card id the round wrote that this build does not see (yet)
+    o["url"] = url if isinstance(url, str) and url.startswith("https://") else (f"https://www.aliexpress.com/item/{item}.html" if item else None)
+    img = r.get("image") or r.get("image_url") or r.get("main_image") or ((r.get("images") or [None])[0] if isinstance(r.get("images"), list) else None)
+    if isinstance(img, str) and img.startswith("https://"):
+        o["img_url"] = img
+    title = r.get("title") or r.get("name") or (f"AliExpress {item}" if item else None) or o.get("card_pending") or r.get("option")
+    o["title"] = str(title or "").strip() or "—"
+    if isinstance(r.get("option"), str) and r["option"].strip() and r["option"].strip() != o["title"]:
+        o["option"] = r["option"].strip()
+    for out_k, keys in (("price_usd", ("price_usd", "sku_price_usd", "cost_usd", "price")), ("ship_usd", ("ship_usd", "shipping_usd")),
+                        ("landed_ils", ("landed_ils",)), ("retail_ils", ("retail_ils", "price_ils", "slot_price_ils")),
+                        ("margin_ils", ("margin_ils", "contribution_ils")), ("fit", ("fit", "score", "nordic_fit", "design_score"))):
+        v = first_num(r, *keys)
+        if v is not None:
+            o[out_k] = v
+    fr = r.get("freight") if isinstance(r.get("freight"), dict) else {}
+    if "ship_usd" not in o and to_num(fr.get("usd")) is not None:
+        o["ship_usd"] = to_num(fr.get("usd"))
+    m = frac(r.get("margin_pct") if r.get("margin_pct") is not None else r.get("margin"))
+    if m is not None:
+        o["margin"] = m
+    o["ship_days"] = days_pair(r.get("ship_days") or fr.get("days"))
+    if isinstance(r.get("passes_40"), bool):
+        o["passes_40"] = r["passes_40"]
+    for k in ("verdict", "status", "query", "sku"):
+        if isinstance(r.get(k), str) and r[k].strip():
+            o[k] = r[k].strip()
+    src = source or r.get("source")
+    if isinstance(src, str) and src.strip():
+        o["source"] = src.strip().lower()
+    reason = r.get("reason") or r.get("why_he") or r.get("why") or r.get("note_he") or r.get("note")
+    lines = ([reason.strip()] if isinstance(reason, str) and reason.strip() else []) + as_text_list(r.get("flags"))
+    if lines:
+        o["reason"] = " · ".join(lines)[:500]
+    return {k: v for k, v in o.items() if v is not None}
+
+
+REPORT_KEYS = ("summary", "found", "opened", "next", "not_opened_notable", "cards")
+
+
+def norm_report(v: dict, meta: dict, fname: str) -> dict:
+    """A slot's report from a round file ({slots: {"room/slot": {found, summary, next, queries, opened, not_opened_notable, cards}}})."""
+    o: dict = {"file": fname}
+    src = v.get("source") or meta.get("source")
+    if isinstance(src, str) and src.strip():
+        o["source"] = src.strip().lower()
+    if isinstance(v.get("found"), bool):
+        o["found"] = v["found"]
+    for k in ("summary", "next"):
+        if isinstance(v.get(k), str) and v[k].strip():
+            o[k] = v[k].strip()
+    if isinstance(v.get("queries"), list):
+        o["n_queries"] = len(v["queries"])
+    opened = [x for x in v.get("opened") or [] if isinstance(x, dict)]
+    if opened:
+        counts: dict[str, int] = {}
+        for x in opened:
+            s = str(x.get("status") or "other")
+            counts[s] = counts.get(s, 0) + 1
+        o["opened"] = counts
+        o["opened_rows"] = [{"status": str(x.get("status") or ""), "reason": str(x.get("reason") or x.get("why") or "")[:300]}
+                            for x in opened if x.get("status") != "card"][:12]
+    notable = []
+    for x in v.get("not_opened_notable") or []:
+        if isinstance(x, dict):
+            notable.append(" · ".join(str(x[k]).strip() for k in ("name", "why") if x.get(k)))
+        elif isinstance(x, str) and x.strip():
+            notable.append(x.strip())
+    if notable:
+        o["notable"] = notable
+    cards = [str(c) for c in v.get("cards") or [] if isinstance(c, str)]
+    if cards:
+        o["cards"] = cards
+    return o
+
+
+def load_round_results(res_dir: Path, ctx: CompCtx) -> dict:
+    """data/leads/next-sourcing/round-N-results/*.json: what the round found, per slot. Accepted shapes: the sourcing
+    round's report per source ({source, queries_run, budget, slots: {"room/slot": {found, summary, next, opened,
+    not_opened_notable, cards}}, cards: [{id, slot, option, landed_ils, margin_pct, passes_40, flags...}]}, the first real
+    file, cj.json), and the shapes of the other sourcing files: a list of records, {records|results|items: [...]},
+    {slots: {"room/slot": [...]}} or one file per slot (room--slot.json). Every record needs a slot it can be tied to."""
+    out = {"dir": rel(res_dir) if res_dir.is_relative_to(ROOT) else str(res_dir), "present": False, "files": [],
+           "by_slot": {}, "reports": {}, "unmatched": [], "warnings": [], "n": 0}
+    if not res_dir.exists():
+        return out
+    room_ids = set(ctx.room_ids)
+
+    def key_of(*cands):
+        for c in cands:
+            if isinstance(c, (list, tuple)) and len(c) == 2:
+                room, slot = c
+                rk = room_key(str(room or ""), room_ids)
+                if rk and slot and f"{rk}/{slot}" in ctx.slot_by_key:
+                    return f"{rk}/{slot}"
+            elif isinstance(c, str) and c:
+                parts = re.split(r"/|--|__", c.strip(), maxsplit=1)
+                if len(parts) == 2:
+                    rk = room_key(parts[0], room_ids)
+                    if rk and f"{rk}/{parts[1]}" in ctx.slot_by_key:
+                        return f"{rk}/{parts[1]}"
+        return None
+
+    for f in sorted(res_dir.glob("*.json")):
+        try:
+            d = read_json(f)
+        except Exception as e:
+            out["warnings"].append(f"{f.name}: {type(e).__name__}: {e}"[:200])
+            continue
+        meta = d if isinstance(d, dict) else {}
+        source = meta.get("source") if isinstance(meta.get("source"), str) else None
+        groups, reports = [], []
+        if isinstance(d, list):
+            groups.append((None, d))
+        elif isinstance(d, dict):
+            sl = d.get("slots") if isinstance(d.get("slots"), (dict, list)) else d.get("by_slot")
+            if isinstance(sl, dict):
+                for k, v in sl.items():
+                    if isinstance(v, list):
+                        groups.append((k, v))
+                    elif isinstance(v, dict):
+                        recs = next((v[x] for x in RESULT_LIST_KEYS if isinstance(v.get(x), list) and all(isinstance(y, dict) for y in v[x])), None)
+                        if recs is not None:
+                            groups.append((k, recs))
+                        if any(x in v for x in REPORT_KEYS):
+                            reports.append((k, v))
+            elif isinstance(sl, list):
+                for v in sl:
+                    if isinstance(v, dict):
+                        recs = next((v[x] for x in RESULT_LIST_KEYS if isinstance(v.get(x), list)), None)
+                        if recs is not None:
+                            groups.append((v.get("slot") or v.get("key"), recs))
+                        if any(x in v for x in REPORT_KEYS):
+                            reports.append((v.get("slot") or v.get("key"), v))
+            recs = next((d[k] for k in RESULT_LIST_KEYS + ("cards",) if isinstance(d.get(k), list) and all(isinstance(y, dict) for y in d[k])), None)
+            if recs is not None:
+                groups.append((None, recs))
+        n_ok = n_all = 0
+        for hint, recs in groups:
+            for i, r in enumerate(recs):
+                if not isinstance(r, dict):
+                    continue
+                n_all += 1
+                slot_v = r.get("slot") or r.get("slot_key")
+                key = key_of(slot_v if isinstance(slot_v, str) and "/" in slot_v else None,
+                             (r.get("room") or meta.get("room"), slot_v) if isinstance(slot_v, str) and "/" not in slot_v else None,
+                             hint if isinstance(hint, str) else None, (meta.get("room"), hint) if isinstance(hint, str) else None,
+                             meta.get("slot") if isinstance(meta.get("slot"), str) else None,
+                             (meta.get("room"), meta.get("slot")), f.stem)
+                keys = [key] if key else []
+                if not keys and isinstance(r.get("slots"), list):
+                    keys = [k for k in (key_of(x) for x in r["slots"]) if k]
+                if not keys:
+                    out["unmatched"].append({"where": f"{f.name} #{i + 1}", "title": str(r.get("title") or r.get("name") or r.get("item_id") or r.get("id") or "")[:120],
+                                             "slot": str(slot_v or hint or "")[:60]})
+                    continue
+                for k in keys:
+                    out["by_slot"].setdefault(k, []).append(norm_result(r, ctx, k, source))
+                n_ok += 1
+        n_rep = 0
+        for hint, v in reports:
+            key = key_of(hint if isinstance(hint, str) else None, (meta.get("room"), hint) if isinstance(hint, str) else None)
+            if not key:
+                out["unmatched"].append({"where": f"{f.name} · slots", "title": "דוח עמדה", "slot": str(hint or "")[:60]})
+                continue
+            out["reports"].setdefault(key, []).append(norm_report(v, meta, f.name))
+            n_rep += 1
+        st = f.stat()
+        info = {"file": f.name, "records": n_all, "ok": n_ok, "reports": n_rep,
+                "date": first_date(str(meta.get("updated") or meta.get("date") or "")) or dt.date.fromtimestamp(st.st_mtime).isoformat()}
+        if source:
+            info["source"] = source.lower()
+        for k in ("by", "run_id"):
+            if isinstance(meta.get(k), str):
+                info[k] = meta[k]
+        if isinstance(meta.get("queries_run"), list):
+            info["queries_run"] = len(meta["queries_run"])
+        if isinstance(meta.get("queries_not_run"), list):
+            info["queries_not_run"] = len(meta["queries_not_run"])
+        bud = meta.get("budget") if isinstance(meta.get("budget"), dict) else {}
+        if isnum(bud.get("cj_points_used")):
+            info["points"] = bud["cj_points_used"]
+        md = f.with_suffix(".md")
+        if md.exists():
+            info["md"] = rel(md) if md.is_relative_to(ROOT) else md.name
+        out["files"].append(info)
+    vrank = {"best": 0, "pick": 0, "alternative": 1, "candidate": 1, "maybe": 2, "reject": 4, "rejected": 4}
+    for k, rows in out["by_slot"].items():
+        rows.sort(key=lambda x: (0 if x.get("card") or x.get("card_pending") else 1, vrank.get(str(x.get("verdict", "")).lower(), 3),
+                                 -(x.get("fit") or 0), -(x.get("margin") or 0), x.get("title", "")))
+    out["n"] = sum(len(v) for v in out["by_slot"].values())
+    out["n_slots"] = len(set(out["by_slot"]) | set(out["reports"]))
+    out["present"] = bool(out["files"] or out["warnings"])  # a folder of unreadable files still shows, with its warnings
+    return out
+
+
+def load_searched_index(path: Path) -> dict | None:
+    """data/leads/next-sourcing/searched-index.json, as counts only (the full lists hold 1,579 queries)."""
+    if not path.exists():
+        return None
+    try:
+        d = read_json(path)
+    except Exception as e:
+        return {"file": rel(path) if path.is_relative_to(ROOT) else path.name, "error": f"{type(e).__name__}: {e}"[:200]}
+    reg = d.get("registry") if isinstance(d.get("registry"), dict) else {}
+    by_slot = d.get("aliexpress_queries_by_slot") if isinstance(d.get("aliexpress_queries_by_slot"), dict) else {}
+    cj = d.get("cj_queries")
+    pend = d.get("pending_aliexpress_queries")
+    return {
+        "file": rel(path) if path.is_relative_to(ROOT) else path.name, "updated": d.get("updated"), "note": d.get("note"),
+        "registry_file": reg.get("file"), "registry_items": reg.get("items") if isnum(reg.get("items")) else None,
+        "registry_by": {k: v for k, v in (reg.get("by_source_status") or {}).items() if isnum(v)},
+        "ae_queries": sum(len(v) for v in by_slot.values() if isinstance(v, list)), "ae_slots": len(by_slot),
+        "ae_by_slot": {k: len(v) for k, v in by_slot.items() if isinstance(v, list)},
+        "cj_queries": len(cj) if isinstance(cj, (list, dict)) else None,
+        "pending_ae_queries": len(pend) if isinstance(pend, list) else None,
+        "pending_freight_checks": d.get("pending_aliexpress_freight_checks") if isinstance(d.get("pending_aliexpress_freight_checks"), str) else None,
+    }
+
+
+def envelope_lines(env) -> list[str]:
+    out = []
+    if isinstance(env, dict):
+        for k, v in env.items():
+            if isinstance(v, list) and v and all(isnum(x) for x in v):
+                out.append(f"{k} {min(v):g}–{max(v):g}" if len(v) > 1 and min(v) != max(v) else f"{k} {v[0]:g}")
+            elif isnum(v):
+                out.append(f"{k} {v:g}")
+            elif isinstance(v, str) and v.strip():
+                out.append(f"{k}: {v.strip()}")
+            elif isinstance(v, dict):
+                out.extend(f"{k}.{x}" for x in envelope_lines(v))
+    elif isinstance(env, str) and env.strip():
+        out.append(env.strip())
+    return out
+
+
+def load_next_sourcing(src_dir: Path, res_dir: Path | None, ctx: CompCtx, comps: dict) -> dict:
+    out = {"dir": rel(src_dir) if src_dir.is_relative_to(ROOT) else str(src_dir), "present": False, "warnings": []}
+    out["searched"] = load_searched_index(src_dir / "searched-index.json")
+    f, rnd = latest_round(src_dir) if src_dir.exists() else (None, None)
+    if not f:
+        out["results"] = load_round_results(res_dir or src_dir / "round-results", ctx)
+        return out
+    try:
+        d = read_json(f)
+    except Exception as e:
+        out["warnings"].append(f"{f.name}: {type(e).__name__}: {e}"[:200])
+        return out
+    if not isinstance(d, dict):
+        out["warnings"].append(f"{f.name}: not an object")
+        return out
+    md = f.with_suffix(".md")
+    out.update({"present": True, "file": rel(f) if f.is_relative_to(ROOT) else f.name,
+                "md": (rel(md) if md.is_relative_to(ROOT) else md.name) if md.exists() else None,
+                "round": d.get("round") if isnum(d.get("round")) else rnd, "date": d.get("date") or first_date(f.stem),
+                "rules": as_text_list(d.get("rules_he")),
+                "freight_checks_pending": d.get("freight_checks_pending") if isinstance(d.get("freight_checks_pending"), str) else None})
+    # tiers: counts and sources from search_plan (the plan block is the fallback for the counts)
+    plan = d.get("plan") if isinstance(d.get("plan"), dict) else {}
+    sp = d.get("search_plan") if isinstance(d.get("search_plan"), dict) else {}
+    q_tier: dict[tuple, tuple] = {}
+    tiers = []
+    for t in list(TIER_ORDER) + [k for k in list(sp) + list(plan) if k not in TIER_ORDER]:
+        if t not in sp and t not in plan:
+            continue
+        if any(x["id"] == t for x in tiers):
+            continue
+        rows = sp.get(t) if isinstance(sp.get(t), list) else []
+        by_src: dict[str, int] = {}
+        for q in rows:
+            if not isinstance(q, dict):
+                continue
+            src = str(q.get("source") or "other").lower()
+            by_src[src] = by_src.get(src, 0) + 1
+            for sk in q.get("slots") or []:
+                q_tier[(str(sk), str(q.get("query") or ""))] = (t, src, len(q.get("slots") or []))
+        n = len(rows) if rows else (plan.get(t) if isnum(plan.get(t)) else 0)
+        tiers.append({"id": t, "label": TIER_HE.get(t, t), "n": n, "by_source": by_src})
+    out["tiers"] = tiers
+    srch = d.get("searches") if isinstance(d.get("searches"), dict) else {}
+    by_source = {k: len(v) for k, v in srch.items() if isinstance(v, list)}
+    if not by_source:
+        for t in tiers:
+            for k, v in t["by_source"].items():
+                by_source[k] = by_source.get(k, 0) + v
+    out["by_source"] = by_source
+    out["n_queries"] = sum(by_source.values()) or sum(t["n"] for t in tiers)
+    # slots
+    comp_slot = {}
+    for room, styles in (comps.get("rooms") or {}).items():
+        c = styles.get("nordic") or next(iter(styles.values()), None)
+        for s in (c or {}).get("slots") or []:
+            comp_slot[s["key"]] = s
+    by_slot_n = ((out["searched"] or {}).get("ae_by_slot") or {})
+    slots = []
+    for s in d.get("slots") or []:
+        if not isinstance(s, dict):
+            continue
+        key = str(s.get("slot") or s.get("key") or "")
+        if "/" not in key and s.get("room"):
+            key = f"{s['room']}/{key}"
+        room, _, sid = key.partition("/")
+        rk = room_key(room, set(ctx.room_ids)) or room
+        key = f"{rk}/{sid}"
+        meta = ctx.slot_by_key.get(key) or {}
+        pc = s.get("price_ceiling") if isinstance(s.get("price_ceiling"), dict) else {}
+        ceil = {k: pc[k] for k in ("breakeven_landed_ils", "landed_for_40_ils", "slot_price_ils", "pack_median_ils", "breakeven_landed_usd",
+                                   "landed_for_40_usd", "proposed_price_ils", "at_proposed", "set_of_4_price_ils", "at_set_of_4") if pc.get(k) is not None}
+        unit_he = {"pair": "מחיר לזוג", "single": "מחיר ליחידה", "unit": "מחיר ליחידה", "set": "מחיר לסט"}
+        notes = [unit_he.get(str(pc[k]), str(pc[k])) if k == "unit" else (f"המחיר המוצע ל{pc[k]}" if k == "proposed_for" else f"מחיר העמדה ל{pc[k]}" if k == "price_for" else str(pc[k]))
+                 for k in ("unit", "price_for", "proposed_for", "price_note_he", "note", "girl_shaked") if isinstance(pc.get(k), (str, int, float)) and str(pc.get(k)).strip()]
+        if notes:
+            ceil["notes"] = notes
+        qs = []
+        for q in s.get("queries") or []:
+            text = q if isinstance(q, str) else (q.get("query") if isinstance(q, dict) else None)
+            if not text:
+                continue
+            t = q_tier.get((key, text)) or q_tier.get((str(s.get("slot")), text))
+            row = {"q": text}
+            if t:
+                row["tier"], row["src"] = t[0], t[1]
+                if t[2] > 1:
+                    row["shared"] = t[2]
+            qs.append(row)
+        cs = comp_slot.get(key) or {}
+        blocked = sorted({i for b in cs.get("blocked") or [] for i in b.get("ids") or []}, key=str)
+        slots.append({
+            "key": key, "room": rk, "id": sid, "name_he": meta.get("name_he"), "in_slots": bool(meta),
+            "status": comp_status(s.get("status")) or s.get("status"), "priority": str(s.get("priority") or "") or None,
+            "need": int(s["need_variations"]) if isnum(s.get("need_variations")) else None,
+            "source": str(s.get("source_type") or "").lower() or None, "spec": s.get("spec_he") if isinstance(s.get("spec_he"), str) else None,
+            "why": s.get("why_he") if isinstance(s.get("why_he"), str) else None,
+            "check_first": as_text_list(s.get("check_first")), "rooms": s.get("rooms") if isinstance(s.get("rooms"), list) else None,
+            "envelope": envelope_lines(s.get("envelope_cm")), "ceiling": ceil, "queries": qs,
+            "searched_n": by_slot_n.get(key), "blocked": blocked,
+        })
+    prank = {"high": 0, "medium": 1, "low": 2}
+    srank = {"empty": 0, "partial": 1, "ready-to-lock": 2, "on-hold": 3}
+    room_order = {r: i for i, r in enumerate(ctx.room_ids)}
+    slots.sort(key=lambda x: (prank.get(x["priority"] or "", 3), srank.get(x["status"] or "", 4), room_order.get(x["room"], 99), x["id"]))
+    out["slots"] = slots
+    # needs a card: the item, its slots, and whether a card exists by now
+    nc = []
+    for x in d.get("needs_card") or []:
+        item = ae_canon(x.get("item_id") if isinstance(x, dict) else x, ctx.aliases)
+        if not item:
+            continue
+        sl = [str(k) for k in (x.get("slots") or [])] if isinstance(x, dict) else []
+        card = None
+        for k in sl or [None]:
+            card = ctx.card_for_ae(item, k)
+            if card:
+                break
+        ctx.want_ae(item)
+        nc.append({"item": item, "slots": sl, "registry": x.get("registry") if isinstance(x, dict) else None, "card": card})
+    out["needs_card"] = nc
+    out["dropped"] = [{"slot": str(x.get("slot") or ""), "query": str(x.get("query") or ""), "already_ran": str(x.get("already_ran") or "")}
+                      for x in d.get("dropped_as_already_searched") or [] if isinstance(x, dict)]
+    out["results"] = load_round_results(res_dir or src_dir / f"round-{out['round']}-results", ctx)
+    return out
+
+
 def main() -> int:
     global DIST
     offline = "--offline" in sys.argv
@@ -2227,6 +3163,13 @@ def main() -> int:
         sup_dir = Path(sys.argv[sys.argv.index("--suppliers-dir") + 1]).resolve()
     if "--dist" in sys.argv:  # build somewhere else (the smoke test builds the fixture into its own folder)
         DIST = Path(sys.argv[sys.argv.index("--dist") + 1]).resolve()
+    comp_dir, src_dir, res_dir = COMPOSITIONS_DIR, NEXT_SOURCING_DIR, None
+    if "--compositions-dir" in sys.argv:  # testing: room compositions from another folder (studio/tests/fixtures/compositions)
+        comp_dir = Path(sys.argv[sys.argv.index("--compositions-dir") + 1]).resolve()
+    if "--sourcing-dir" in sys.argv:  # testing: round-N-*.json and searched-index.json from another folder
+        src_dir = Path(sys.argv[sys.argv.index("--sourcing-dir") + 1]).resolve()
+    if "--round-results-dir" in sys.argv:  # testing: the round's results from another folder (default <sourcing-dir>/round-N-results)
+        res_dir = Path(sys.argv[sys.argv.index("--round-results-dir") + 1]).resolve()
     t0 = time.time()
     log(f"Studio build · repo {ROOT}")
     plan = read_json(ROOT / "docs" / "house-plan.json")
@@ -2288,6 +3231,41 @@ def main() -> int:
     if suppliers:
         log(f"  suppliers: {len((suppliers.get('directory') or {}).get('suppliers') or [])} in the directory · {len((suppliers.get('access') or {}).get('options') or [])} access options")
     comparison = build_comparison(slots, products, slot_by_key, order, deep_dir)
+    # the designer's room compositions and the next sourcing round (cards may appear while this runs: read once, tolerate gaps)
+    ctx = CompCtx(products, dec_ids, order, slot_by_key)
+    compositions = load_compositions(comp_dir, ctx)
+    next_sourcing = load_next_sourcing(src_dir, res_dir, ctx, compositions)
+    ae_record_index(set(ctx.wanted), ctx, [d for d in (deep_dir,) if d != DEEP_DIR])
+    res = (next_sourcing.get("results") or {})
+    targets = [("ae:" + i, ctx.ae[i].get("img_url")) for i in sorted(ctx.wanted) if ctx.ae.get(i)]
+    targets += [("res:" + r["img_url"], r["img_url"]) for rows in res.get("by_slot", {}).values() for r in rows if not r.get("card") and r.get("img_url")]
+    budget = LIMIT_FILES - sum(1 for x in DIST.rglob("*") if x.is_file()) - 20
+    thumbs = build_thumb_images(targets, offline, budget)
+    for i, info in ctx.ae.items():
+        if thumbs.get("ae:" + i):
+            info["img"] = thumbs["ae:" + i]
+    for rows in res.get("by_slot", {}).values():
+        for r in rows:
+            src = thumbs.get("res:" + r["img_url"]) if r.get("img_url") else None
+            if src:
+                r["img"] = src
+    compositions["ae"] = {i: ctx.ae[i] for i in sorted(ctx.wanted) if i in ctx.ae}
+    n_comp_slots = sum(len(c["slots"]) for st in compositions["rooms"].values() for c in st.values())
+    n_ae_tiles = len(re.findall(r'"k": "ae"', json.dumps(compositions["rooms"])))
+    log(f"  compositions: {len(compositions['rooms'])} rooms · {n_comp_slots} slots · AliExpress records {len(compositions['ae'])}"
+        f" ({sum(1 for i in compositions['ae'] if ctx.ae_cards.get(i))} have a card by now, {n_ae_tiles} tiles still need one)"
+        f" · thumbnails {len(thumbs)} of {len(targets)}"
+        + (f" · warnings {len(compositions['warnings'])}" if compositions["warnings"] else "") + ("" if compositions["present"] else f" (no {compositions['dir']} yet)"))
+    for w in compositions["warnings"] + next_sourcing.get("warnings", []):
+        log(f"  ! {w}")
+    if next_sourcing.get("present"):
+        sx = next_sourcing.get("searched") or {}
+        log(f"  next sourcing: round {next_sourcing.get('round')} · {len(next_sourcing['slots'])} slots · {next_sourcing['n_queries']} queries"
+            f" · needs a card {len(next_sourcing['needs_card'])} · results {res.get('n', 0)} in {len(res.get('files') or [])} files"
+            + ("" if res.get("present") else f" (no {res.get('dir')} yet)")
+            + (f" · searched index: {sx.get('ae_queries')} AliExpress queries in {sx.get('ae_slots')} slots, registry {sx.get('registry_items')}" if sx else ""))
+    else:
+        log(f"  next sourcing: no round-N file in {next_sourcing['dir']}")
     dir_raw = read_json(SUPPLIERS_DIR / "directory.json") if (SUPPLIERS_DIR / "directory.json").exists() else None
     furniture = load_furniture(order, products, dir_raw, board["log"], furn_dir, sup_dir)
     qa = load_reports(["assets/qa/*.md", "qa/reports/*.md"], "qa")
@@ -2374,6 +3352,8 @@ def main() -> int:
         "suppliers": suppliers,
         "comparison": comparison,
         "furniture": furniture,
+        "compositions": compositions,
+        "next_sourcing": next_sourcing,
         "reports": qa,
         "leads": leads,
     }
