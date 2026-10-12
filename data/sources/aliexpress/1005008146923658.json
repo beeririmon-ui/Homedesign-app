@@ -771,6 +771,93 @@
      "_trace_id_": "214114e317917903530166948e10ed"
     }
    }
+  },
+  "freight:12000044034103660:IL:1": {
+   "fetched_at": "2026-10-12T07:43:29+00:00",
+   "endpoint": "aliexpress.ds.freight.query",
+   "params": {
+    "quantity": 1,
+    "shipToCountry": "IL",
+    "productId": "1005008146923658",
+    "selectedSkuId": "12000044034103660",
+    "language": "en_US",
+    "locale": "en_US",
+    "currency": "USD"
+   },
+   "payload": {
+    "options": [
+     {
+      "code": "CAINIAO_STANDARD",
+      "company": "AliExpress standard shipping",
+      "fee": 8.7,
+      "currency": "USD",
+      "days_min": 8,
+      "days_max": 19,
+      "estimated": "Oct 20 - 31",
+      "tracking": true,
+      "free_shipping": false,
+      "ship_from": "CN",
+      "stock": null,
+      "guaranteed_days": "60"
+     }
+    ],
+    "success": true,
+    "code": 200,
+    "msg": "Call succeeds",
+    "item_id": "1005008146923658",
+    "sku_id": "12000044034103660",
+    "country": "IL",
+    "qty": 1,
+    "raw": {
+     "result": {
+      "msg": "Call succeeds",
+      "code": 200,
+      "success": true,
+      "delivery_options": [
+       {
+        "code": "CAINIAO_STANDARD",
+        "shipping_fee_currency": "USD",
+        "free_shipping": false,
+        "mayHavePFS": false,
+        "guaranteed_delivery_days": "60",
+        "max_delivery_days": 19,
+        "tracking": true,
+        "shipping_fee_format": "US $8.70",
+        "delivery_date_desc": "Oct 20 - 31",
+        "company": "AliExpress standard shipping",
+        "ship_from_country": "CN",
+        "min_delivery_days": 8,
+        "shipping_fee_cent": "8.70"
+       }
+      ]
+     },
+     "request_id": "210155f117917910096118455",
+     "_trace_id_": "2140d36217917910096108253e0e40"
+    }
+   }
+  },
+  "freight:12000044034103654:IL:1": {
+   "fetched_at": "2026-10-12T07:43:34+00:00",
+   "endpoint": "aliexpress.ds.freight.query",
+   "params": {
+    "quantity": 1,
+    "shipToCountry": "IL",
+    "productId": "1005008146923658",
+    "selectedSkuId": "12000044034103654",
+    "language": "en_US",
+    "locale": "en_US",
+    "currency": "USD"
+   },
+   "payload": {
+    "options": [],
+    "success": false,
+    "code": 506,
+    "msg": "DELIVERY_SERVICE_EXCEPTION",
+    "item_id": "1005008146923658",
+    "sku_id": "12000044034103654",
+    "country": "IL",
+    "qty": 1
+   }
   }
  }
 }
