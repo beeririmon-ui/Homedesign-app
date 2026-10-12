@@ -1,0 +1,161 @@
+{
+ "source": "aliexpress",
+ "id": "1005010303727079",
+ "sections": {
+  "product": {
+   "fetched_at": "2026-10-12T09:22:19+00:00",
+   "endpoint": "aliexpress.ds.product.get",
+   "params": {
+    "ship_to_country": "IL",
+    "product_id": "1005010303727079",
+    "target_currency": "USD",
+    "target_language": "en"
+   },
+   "payload": {
+    "result": {
+     "ae_item_sku_info_dtos": [
+      {
+       "sku_attr": "14:1063#Navy Blue",
+       "offer_sale_price": "18.97",
+       "sku_id": "12000058171693790",
+       "price_include_tax": false,
+       "currency_code": "USD",
+       "sku_price": "31.10",
+       "offer_bulk_sale_price": "18.97",
+       "sku_available_stock": 3000,
+       "id": "14:1063#Navy Blue",
+       "ae_sku_property_dtos": [
+        {
+         "sku_property_value": "Navy Blue",
+         "sku_property_name": "Color",
+         "property_value_definition_name": "Navy Blue",
+         "property_value_id": 1063,
+         "sku_property_id": 14
+        }
+       ]
+      }
+     ],
+     "ae_multimedia_info_dto": {
+      "image_urls": "https://ae01.alicdn.com/kf/Sa52833266acd4c4e885ec9c91ee75fdei.jpg;https://ae01.alicdn.com/kf/S2447f8fbf4f44e8e93316ee3459f3bb1B.jpg;https://ae01.alicdn.com/kf/S5da47696af624ca19a6c1e3d66da14a45.jpg;https://ae01.alicdn.com/kf/S28ec15dca2e04983882aa69121685733d.jpg;https://ae01.alicdn.com/kf/Sdd3d835ca31c42fcb3f660023afb9e09W.jpg;https://ae01.alicdn.com/kf/Sf147372c205f4e1db5bde7cdac963959H.jpg"
+     },
+     "package_info_dto": {
+      "package_width": 33,
+      "package_height": 6,
+      "package_length": 33,
+      "gross_weight": "0.624",
+      "package_type": false,
+      "product_unit": 100000015
+     },
+     "logistics_info_dto": {
+      "delivery_time": 7,
+      "ship_to_country": "IL"
+     },
+     "product_id_converter_result": {
+      "main_product_id": 1005010303727079,
+      "sub_product_id": "{\"US\":3256810117412327}"
+     },
+     "ae_item_base_info_dto": {
+      "mobile_detail": "<removed; use --full>",
+      "subject": "Delighted- Boho Magazine Rack, Rope Woven Newspaper Rack, Magazine Baskets with Rope Fabric Design, Magazine Holder Storage",
+      "evaluation_count": "0",
+      "sales_count": "0",
+      "product_status_type": "onSelling",
+      "avg_evaluation_rating": "0.0",
+      "separated_listing": false,
+      "currency_code": "USD",
+      "sl_product": false,
+      "category_id": 100003887,
+      "product_id": 1005010303727079,
+      "detail": "<removed; use --full>"
+     },
+     "has_whole_sale": true,
+     "ae_item_properties": [
+      {
+       "attr_name_id": 2,
+       "attr_value_id": 201512802,
+       "attr_name": "Brand Name",
+       "attr_value": "NONE"
+      },
+      {
+       "attr_name_id": 43,
+       "attr_value_id": 23399620951,
+       "attr_name": "Function",
+       "attr_value": "Other"
+      },
+      {
+       "attr_name_id": 217,
+       "attr_value_id": 1983458058,
+       "attr_name": "Feature",
+       "attr_value": "Multiple Uses"
+      },
+      {
+       "attr_name_id": 400000603,
+       "attr_value_id": 23399591357,
+       "attr_name": "High-concerned chemical",
+       "attr_value": "none"
+      },
+      {
+       "attr_name_id": 906,
+       "attr_value_id": 124,
+       "attr_name": "Frame Material",
+       "attr_value": "Plastic"
+      },
+      {
+       "attr_name_id": 521,
+       "attr_value_id": 361466,
+       "attr_name": "Use",
+       "attr_value": "Tools"
+      },
+      {
+       "attr_name_id": 219,
+       "attr_value_id": 9441741844,
+       "attr_name": "Origin",
+       "attr_value": "Mainland China"
+      },
+      {
+       "attr_name_id": 10,
+       "attr_value_id": 57,
+       "attr_name": "Material",
+       "attr_value": "BAMBOO"
+      }
+     ],
+     "ae_store_info": {
+      "store_id": 1798841,
+      "shipping_speed_rating": "4.8",
+      "communication_rating": "4.8",
+      "store_name": "Cool Living Online Store",
+      "store_country_code": "CN",
+      "item_as_described_rating": "4.7"
+     }
+    },
+    "rsp_code": 200,
+    "rsp_msg": "Call succeeds",
+    "request_id": "212a640e17917969390583711",
+    "_trace_id_": "214114e317917969390566454e110e"
+   }
+  },
+  "freight:12000058171693790:IL:1": {
+   "fetched_at": "2026-10-12T09:22:21+00:00",
+   "endpoint": "aliexpress.ds.freight.query",
+   "params": {
+    "quantity": 1,
+    "shipToCountry": "IL",
+    "productId": "1005010303727079",
+    "selectedSkuId": "12000058171693790",
+    "language": "en_US",
+    "locale": "en_US",
+    "currency": "USD"
+   },
+   "payload": {
+    "options": [],
+    "success": false,
+    "code": 506,
+    "msg": "DELIVERY_SERVICE_EXCEPTION",
+    "item_id": "1005010303727079",
+    "sku_id": "12000058171693790",
+    "country": "IL",
+    "qty": 1
+   }
+  }
+ }
+}

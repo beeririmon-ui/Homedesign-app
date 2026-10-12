@@ -1,0 +1,150 @@
+{
+ "source": "aliexpress",
+ "id": "1005012529150210",
+ "sections": {
+  "product": {
+   "fetched_at": "2026-10-12T08:59:14+00:00",
+   "endpoint": "aliexpress.ds.product.get",
+   "params": {
+    "ship_to_country": "IL",
+    "product_id": "1005012529150210",
+    "target_currency": "USD",
+    "target_language": "en"
+   },
+   "payload": {
+    "result": {
+     "ae_item_sku_info_dtos": [
+      {
+       "sku_attr": "14:350852#Ceramic;26:200008120",
+       "offer_sale_price": "4.45",
+       "sku_id": "12000058602267453",
+       "price_include_tax": false,
+       "currency_code": "USD",
+       "sku_price": "7.07",
+       "offer_bulk_sale_price": "4.45",
+       "sku_available_stock": 9998,
+       "id": "14:350852#Ceramic;26:200008120",
+       "ae_sku_property_dtos": [
+        {
+         "sku_property_value": "Orange",
+         "sku_image": "https://ae01.alicdn.com/kf/S2eeab1e26e634c7f9d76db6c2fc950a0V.jpg",
+         "sku_property_name": "Color",
+         "property_value_definition_name": "Ceramic",
+         "property_value_id": 350852,
+         "sku_property_id": 14
+        },
+        {
+         "sku_property_value": "<200ml",
+         "sku_property_name": "Capacity",
+         "property_value_id": 200008120,
+         "sku_property_id": 26
+        }
+       ]
+      }
+     ],
+     "ae_multimedia_info_dto": {
+      "image_urls": "https://ae01.alicdn.com/kf/S35809e39093f438081d33a59165b4052U.png;https://ae01.alicdn.com/kf/S40cb18ef0d1c4611a31bccfbaa7437e9c.png;https://ae01.alicdn.com/kf/S531448448f754b43b9e3ec2cfb003756E.png;https://ae01.alicdn.com/kf/S16985172b100409f80e2fd33ec61c554g.png;https://ae01.alicdn.com/kf/S6badb04d71cf4797950691feed68c66au.jpg;https://ae01.alicdn.com/kf/Sbda8386f2a724a7b9bfae88fa746a2e1N.png"
+     },
+     "package_info_dto": {
+      "package_width": 10,
+      "package_height": 5,
+      "package_length": 10,
+      "gross_weight": "0.143",
+      "package_type": false,
+      "product_unit": 100000015
+     },
+     "logistics_info_dto": {
+      "delivery_time": 7,
+      "ship_to_country": "IL"
+     },
+     "product_id_converter_result": {
+      "main_product_id": 1005012529150210,
+      "sub_product_id": "{\"US\":3256812342835458}"
+     },
+     "ae_item_base_info_dto": {
+      "mobile_detail": "<removed; use --full>",
+      "subject": "Portable Landscape Painting Ceramic Teacup 180ml Exquisite Tea Cup White Porcelain Vintage Master Cup Gift",
+      "evaluation_count": "0",
+      "sales_count": "1",
+      "product_status_type": "onSelling",
+      "avg_evaluation_rating": "0.0",
+      "separated_listing": false,
+      "currency_code": "CNY",
+      "sl_product": false,
+      "category_id": 201309508,
+      "product_id": 1005012529150210,
+      "detail": "<removed; use --full>"
+     },
+     "has_whole_sale": true,
+     "ae_item_properties": [
+      {
+       "attr_name_id": 2,
+       "attr_value_id": 201512802,
+       "attr_name": "Brand Name",
+       "attr_value": "NONE"
+      },
+      {
+       "attr_name_id": 10,
+       "attr_value_id": 747,
+       "attr_name": "Material",
+       "attr_value": "Ceramic"
+      },
+      {
+       "attr_name_id": 400000603,
+       "attr_value_id": 23399591357,
+       "attr_name": "High-concerned chemical",
+       "attr_value": "none"
+      },
+      {
+       "attr_name_id": 6,
+       "attr_value_id": 201725806,
+       "attr_name": "Type",
+       "attr_value": "Teacups"
+      },
+      {
+       "attr_name_id": 219,
+       "attr_value_id": 9441741844,
+       "attr_name": "Origin",
+       "attr_value": "Mainland China"
+      }
+     ],
+     "ae_store_info": {
+      "store_id": 1104671540,
+      "shipping_speed_rating": "4.7",
+      "communication_rating": "4.6",
+      "store_name": "Special Life Store",
+      "store_country_code": "CN",
+      "item_as_described_rating": "4.6"
+     }
+    },
+    "rsp_code": 200,
+    "rsp_msg": "Call succeeds",
+    "request_id": "210171a817917955540658420",
+    "_trace_id_": "2101611117917955540631631e0dd5"
+   }
+  },
+  "freight:12000058602267453:IL:1": {
+   "fetched_at": "2026-10-12T08:59:16+00:00",
+   "endpoint": "aliexpress.ds.freight.query",
+   "params": {
+    "quantity": 1,
+    "shipToCountry": "IL",
+    "productId": "1005012529150210",
+    "selectedSkuId": "12000058602267453",
+    "language": "en_US",
+    "locale": "en_US",
+    "currency": "USD"
+   },
+   "payload": {
+    "options": [],
+    "success": false,
+    "code": 506,
+    "msg": "DELIVERY_SERVICE_EXCEPTION",
+    "item_id": "1005012529150210",
+    "sku_id": "12000058602267453",
+    "country": "IL",
+    "qty": 1
+   }
+  }
+ }
+}
