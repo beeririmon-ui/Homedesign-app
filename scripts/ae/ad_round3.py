@@ -28,6 +28,9 @@ from scale_config import SLOTS, STYLES, GLOBAL_BAD  # noqa: E402
 REPO = scale.REPO
 NS = os.path.join(REPO, "data", "leads", "next-sourcing")
 PLAN = os.path.join(NS, "round-3-2026-10-11.json")
+TIERS = ("tier1", "tier2", "tier3", "spare")
+STYLE = None          # round 4: only the plan's slots for this style; cards score this style
+TAG = "ad3"           # file prefix for sheets / reviews
 INDEX = os.path.join(NS, "searched-index.json")
 RES = os.path.join(NS, "round-3-results")
 STATE = os.path.join(RES, "_ae_state.json")
@@ -52,7 +55,8 @@ def save_json(p, d):
 
 def plan():
     d = json.load(open(PLAN))
-    return d, {s["slot"]: s for s in d["slots"]}
+    sl = [s for s in d["slots"] if STYLE is None or s.get("style") == STYLE]
+    return d, {s["slot"]: s for s in sl}
 
 
 def add_to_index(slot_keys, q):
@@ -91,13 +95,14 @@ def passes(c, ceil):
 
 def entries(d, st, slots):
     """Plan entries in order, with the tier name; spare entries only for slots not full."""
-    for tier in ("tier1", "tier2", "tier3", "spare"):
-        for e in d["search_plan"][tier]:
+    for tier in TIERS:
+        for e in d["search_plan"].get(tier, []):
             if e.get("source") == "aliexpress":
                 yield tier, e
 
 
 def do_search(a, per_query=5):
+    os.makedirs(RES, exist_ok=True)
     d, slots = plan()
     st = load_json(STATE, {"queries_done": [], "slots": {}})
     reg = registry.load()
@@ -105,7 +110,7 @@ def do_search(a, per_query=5):
         q = e["query"]
         if q in st["queries_done"]:
             continue
-        keys = [k for k in e["slots"] if k in slots and slots[k]["status"] != "on-hold"]
+        keys = [k for k in e["slots"] if k in slots and slots[k].get("status") != "on-hold"]
         live = []
         for k in keys:
             s = st["slots"].setdefault(k, {"queries": [], "candidates": {}})
@@ -113,7 +118,7 @@ def do_search(a, per_query=5):
             cap = CAPS.get(slots[k].get("priority"), 2)
             if npass >= 3:
                 continue
-            if tier != "spare" and len(s["queries"]) >= cap:
+            if not tier.endswith("spare") and len(s["queries"]) >= cap:
                 continue
             live.append(k)
         if not live:
@@ -170,6 +175,9 @@ def do_search(a, per_query=5):
                      "orders": int(fnum(p.get("orders")) or 0), "rating": ds.num(base.get("avg_evaluation_rating")),
                      "reviews": base.get("evaluation_count"), "size_ok": size_ok,
                      "no_ship": None if b else (fr.get("msg") or fr.get("code"))}
+                qty = int((slots[k].get("envelope_cm") or {}).get("qty") or 1)
+                if qty > 1 and c["landed_ils"] is not None and not re.search(r"(?i)\b(pair|%d\s*(pcs|pieces|panels)|set of %d)\b" % (qty, qty), "%s %s" % (c["sku_label"], c["title"] or "")):
+                    c["units"], c["landed_ils_unit"], c["landed_ils"] = qty, c["landed_ils"], round(c["landed_ils"] * qty, 1)
                 if c["landed_ils"] is not None and ceil.get("slot_price_ils"):
                     c["margin_ils"], c["margin_pct"] = economics(ceil["slot_price_ils"], c["landed_ils"])
                 c["passes"] = passes(c, ceil)
@@ -269,13 +277,13 @@ def do_sheet(room):
             except Exception:
                 d.text((x + 10, y + 100), "no image", fill="red")
             n += 1
-            index[str(n)] = {"slot": k.split("/")[1], "item_id": c["item_id"], "style": "nordic"}
+            index[str(n)] = {"slot": k.split("/")[1], "item_id": c["item_id"], "style": STYLE or "nordic"}
             d.rectangle([x, y + H - 55, x + W, y + H], fill="white")
             d.text((x + 5, y + H - 52), "#%d %s %s" % (n, "PASS" if c.get("passes") else "----", c["item_id"][-6:]), fill="black")
             d.text((x + 5, y + H - 38), "%.0f ILS %s" % (c["landed_ils"], (c.get("sku_label") or "")[:26]), fill="black")
             d.text((x + 5, y + H - 24), (c.get("title") or "")[:40], fill="gray")
-        sheet.save(os.path.join(SHEETS, "ad3-%s-%s.jpg" % (room, k.split("/")[1])), quality=80)
-    save_json(os.path.join(SHEETS, "ad3-%s-index.json" % room), index)
+        sheet.save(os.path.join(SHEETS, "%s-%s-%s.jpg" % (TAG, room, k.split("/")[1])), quality=80)
+    save_json(os.path.join(SHEETS, "%s-%s-index.json" % (TAG, room)), index)
     print("ad3 sheets %s: %d candidates" % (room, n))
 
 
@@ -292,7 +300,7 @@ def card_id_unique(base):
 def do_write(room, a, write_cards=True):
     d, slots = plan()
     st = load_json(STATE, {"slots": {}})
-    rv = load_json(os.path.join(REVIEW, "ad3-%s.json" % room), {})
+    rv = load_json(os.path.join(REVIEW, "%s-%s.json" % (TAG, room)), {})
     os.makedirs(RES, exist_ok=True)
     out = {"room": room, "date": time.strftime("%Y-%m-%d"), "source": "AliExpress DS API, art director round 3 (scripts/ae/ad_round3.py)", "slots": {}}
     md = ["# סבב 3 של המנהל: %s (AliExpress)" % room, "",
@@ -307,8 +315,11 @@ def do_write(room, a, write_cards=True):
         for c in s["candidates"].values():
             # the slot is sold as a set of qty: a single-unit SKU costs qty times (a pack SKU or title already counts)
             pack = re.search(r"(?i)\b(pair|2\s*pcs|2\s*pieces|set of %d|%d\s*pcs|%dpcs)\b" % (qty, qty, qty), "%s %s" % (c.get("sku_label") or "", c.get("title") or ""))
-            c = dict(c, units=1 if (qty == 1 or pack) else qty)
-            if c["units"] > 1 and c.get("landed_ils") is not None:
+            if c.get("landed_ils_unit") is not None:
+                c = dict(c)
+            else:
+                c = dict(c, units=1 if (qty == 1 or pack) else qty)
+            if c.get("units", 1) > 1 and c.get("landed_ils") is not None and c.get("landed_ils_unit") is None:
                 c["landed_ils_unit"] = c["landed_ils"]
                 c["landed_ils"] = round(c["landed_ils"] * c["units"], 1)
                 if ceil.get("slot_price_ils"):
@@ -332,7 +343,7 @@ def do_write(room, a, write_cards=True):
         md.append("")
         if write_cards:
             for c in cands:
-                if c["passes"] and (c["fit"].get("nordic") or 0) >= 8 and not c["reject"]:
+                if c["passes"] and (c["fit"].get(STYLE or "nordic") or 0) >= 8 and not c["reject"]:
                     existing = None
                     for p in glob.glob(os.path.join(REPO, "data", "products", "**", "*.json"), recursive=True):
                         try:
@@ -350,9 +361,12 @@ def do_write(room, a, write_cards=True):
                                   "--slot", k, "--sku", c["sku"], "--id", cid, "--out", path])
                     if rc in (0, None):
                         cc = json.load(open(path))
-                        cc["notes"] = (cc.get("notes") or "") + " Art director round 3 (2026-10-12): fit %s; landed %s ILS vs ceiling %s (40%%), margin %s at %s ILS. Reviewer: %s" % (
-                            json.dumps(c["fit"]), c["landed_ils"], ceil.get("landed_for_40_ils"),
-                            "%d%%" % round(c["margin_pct"] * 100) if c.get("margin_pct") is not None else "?", ceil.get("slot_price_ils"), c["reason"].get("nordic"))
+                        st_ = STYLE or "nordic"
+                        cc["notes"] = (cc.get("notes") or "") + " Art director %s (2026-10-12): fit %s; landed %s ILS vs ceiling %s (40%%), margin %s at %s ILS. Reviewer: %s" % (
+                            TAG, json.dumps(c["fit"]), c["landed_ils"], ceil.get("landed_for_40_ils"),
+                            "%d%%" % round(c["margin_pct"] * 100) if c.get("margin_pct") is not None else "?", ceil.get("slot_price_ils"), c["reason"].get(st_))
+                        if STYLE:
+                            cc.setdefault("style_scores", {})[STYLE] = {"score": c["fit"].get(STYLE), "reason": "PROVISIONAL (AliExpress visual review, not the designer): %s" % (c["reason"].get(STYLE) or "")}
                         save_json(path, cc)
                         c["card_id"] = cid
                         cards.append(cid)
@@ -362,13 +376,49 @@ def do_write(room, a, write_cards=True):
     print("ad3 write %s: %d slots, %d passing, %d new cards" % (room, len(out["slots"]), sum(v["passed"] for v in out["slots"].values()), len(cards)))
 
 
+def do_combine(name):
+    """Merge the per-room results of this run into <res-dir>/<name>.json and .md (round 4: one file per style)."""
+    out = {"name": name, "date": time.strftime("%Y-%m-%d"), "style": STYLE, "rooms": {}}
+    md = []
+    for p in sorted(glob.glob(os.path.join(RES, "*.json"))):
+        b = os.path.basename(p)
+        if b.startswith("_") or b == name + ".json":
+            continue
+        d = json.load(open(p))
+        if "slots" not in d:
+            continue
+        out["rooms"][d["room"]] = d["slots"]
+        mp = p[:-5] + ".md"
+        if os.path.exists(mp):
+            md.append(open(mp).read())
+    save_json(os.path.join(RES, name + ".json"), out)
+    with open(os.path.join(RES, name + ".md"), "w") as f:
+        f.write("# %s: כל החדרים\n\n" % name + "\n".join(md))
+    print("combine %s: %d rooms" % (name, len(out["rooms"])))
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("stage", choices=["search", "freight", "sheet", "write"])
+    ap.add_argument("stage", choices=["search", "freight", "sheet", "write", "combine"])
     ap.add_argument("room", nargs="?")
     ap.add_argument("--max-calls", type=int, default=6000)
     ap.add_argument("--no-cards", action="store_true")
+    ap.add_argument("--plan", help="plan json (default round 3)")
+    ap.add_argument("--tiers", help="comma list of search_plan tiers")
+    ap.add_argument("--style", help="only this style's slots; cards score this style")
+    ap.add_argument("--res-dir", help="results folder (default round-3-results)")
+    ap.add_argument("--tag", help="file prefix for sheets and reviews (default ad3)")
     a0 = ap.parse_args()
+    global PLAN, TIERS, STYLE, RES, STATE, TAG
+    if a0.plan:
+        PLAN = os.path.join(REPO, a0.plan) if not os.path.isabs(a0.plan) else a0.plan
+    if a0.tiers:
+        TIERS = tuple(a0.tiers.split(","))
+    STYLE = a0.style or STYLE
+    if a0.res_dir:
+        RES = os.path.join(REPO, a0.res_dir)
+        STATE = os.path.join(RES, "_ae_state.json")
+    TAG = a0.tag or TAG
     a = scale.ns("ad3", a0.max_calls)
     try:
         if a0.stage == "search":
@@ -379,6 +429,8 @@ def main():
             do_sheet(a0.room)
         elif a0.stage == "write":
             do_write(a0.room, a, not a0.no_cards)
+        elif a0.stage == "combine":
+            do_combine(a0.room)
     except Stop as e:
         msg = "ad3 STOP %s at %s: %s" % (a0.stage, time.strftime("%Y-%m-%d %H:%M:%S UTC", time.gmtime()), e)
         with open(os.path.join(scale.OUT, "stop-ad3.txt"), "a") as f:
