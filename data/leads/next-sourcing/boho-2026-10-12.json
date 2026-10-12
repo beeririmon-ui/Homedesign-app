@@ -1,0 +1,392 @@
+{
+  "room": "all",
+  "style": "boho",
+  "date": "2026-10-12",
+  "author": "master-designer",
+  "status_he": "רשימה לסבב הליקוט הבא, לפי טיוטת הבוהו (לא Bible מאושר). לפני הרצה: לבדוק מול searched-index.json ו-seen.json (hide-seen).",
+  "formula": "net = price/1.18; contribution = net - landed - (0.02*price + 1.2) - 0.08*net. breakeven_landed = 0.759661*price - 1.2; landed_for_40 = 0.420678*price - 1.2. Landed = (item + shipping to Israel) x 3.3, in ILS, for the quantity sold (pair or set).",
+  "priority_scale_he": "high: גיבור של פריים (שטיח, תמונה, תלויה, מנורת רגל) או משטח גדול. medium: עמדה בולטת או נשאת הדגשה. low: פריט קטן, או נראה רק במעבר.",
+  "query_rules_he": "בלי המילים boho או bohemian: בסבב הקודם הן החזירו בעיקר מתלי עציצים ממקרמה, שמיכות פלנל מודפסות, תכשיטים ואהילי חבל-נייר. בכל שאילתה חומר, מידה וגוון. רק מוצרים שנשלחים לישראל, עדיפות ל-Choice ולאריזה שטוחה או מתקפלת. לכל מוצר: כל המק״טים, משקל וקרטון, ותמונות של המוצר עצמו. תאורה: CE ו-220–240V, ותקע EU או ישראלי למנורות עם תקע. ילדים: EN71. ציון 8 ומעלה רק אחרי מבט מעצב.",
+  "slots": [
+    {
+      "slot": "living-room/rug",
+      "priority": "high",
+      "need_variations": 3,
+      "spec_he": "קילים או דורי (dhurrie) בקליעה שטוחה, או ברבר בסיב נמוך עד 15 מ״מ. צמר, צמר-יוטה או כותנה. רקע חול או קרם; דוגמה (יהלומים, פסים) בחלודה, זית או אוכרה בעד 25% מהשטח; וריאציה אחת חלקה (יוטה-צמר בקליעה עבה). אסור: ויסקוזה, פוליאסטר מודפס במראה קילים, שאגי, צבעים רוויים, וינטג' בלי מק״ט.",
+      "envelope_cm": {"w": [200, 240], "l": [290, 340], "pile_mm_max": 15},
+      "price_ceiling": {"breakeven_landed_ils": 985.6, "landed_for_40_ils": 545.3, "slot_price_ils": 1299},
+      "at_alt_price": {"price_ils": 1599, "breakeven_landed_ils": 1213.5, "landed_for_40_ils": 671.5, "why_he": "קילים צמר 240×340 שווה בישראל יותר משטיח שטוח נייטרלי."},
+      "source_type": "Israeli rug importer or local stock (IL1); AliExpress only if a 200x300 SKU ships under the ceiling",
+      "queries": [
+        "hand woven wool kilim rug 240x340 cream rust diamond",
+        "cotton dhurrie rug 200x300 sand terracotta stripe",
+        "wool jute chunky braided rug 240x340 natural",
+        "low pile wool rug ivory brown diamond lines 200x300"
+      ],
+      "leads": [],
+      "why_he": "ריקה, כ-60% מהרצפה בסלון. ב-AliExpress רק 40×60 ופלנל מודפס. בלי שטיח אין שכבה בוהו בסלון."
+    },
+    {
+      "slot": "living-room/pendant",
+      "priority": "high",
+      "need_variations": 3,
+      "spec_he": "תלויה קלועה רחבה ונמוכה: קוטר 45–50, גובה 25–35. ראטן, קנה, קש ים או במבוק; קליעה צפופה או מפזר פנימי (בלי דוגמה מוטלת על התקרה). מחווטת, CE. אריזה מתקפלת או שטוחה, או ספק מקומי. אסור: נורה חשופה, העתקים (Secto, Bover).",
+      "envelope_cm": {"d": [45, 50], "h": [25, 35]},
+      "price_ceiling": {"breakeven_landed_ils": 301.9, "landed_for_40_ils": 166.6, "slot_price_ils": 399},
+      "source_type": "Israeli lighting importer (IL1) / AliExpress collapsible seagrass shade + CE cord set / CJ sourcing request for flat packing",
+      "queries": [
+        "collapsible seagrass pendant shade 45cm",
+        "foldable rattan lampshade 50cm flat pack",
+        "woven cane drum pendant light 45cm linen liner",
+        "hand woven bamboo dome pendant 48cm inner diffuser"
+      ],
+      "leads": [
+        {"ae_item_id": "1005008665343917", "why_he": "תלויית ראטן וחבל, בלי מחיר ומשלוח בחבילה; לבדוק קוטר ומשלוח"}
+      ],
+      "why_he": "ריקה. תלויית ראטן 45 נוחתת ב-₪497. בשורה אחת: מה שמגדיר בוהו בתקרה נכשל במשלוח, ולכן אריזה מתקפלת."
+    },
+    {
+      "slot": "dining-room/dining-pendant",
+      "priority": "high",
+      "need_variations": 3,
+      "spec_he": "אותה משפחה כמו בסלון, בקוטר 50–55 וגובה עד 30, כבל 130 ומעלה, מחווטת ו-CE, נורה מוסתרת.",
+      "envelope_cm": {"d": [45, 55], "h_max": 30, "cable_min": 130},
+      "price_ceiling": {"breakeven_landed_ils": 339.9, "landed_for_40_ils": 187.7, "slot_price_ils": 449},
+      "source_type": "Israeli lighting importer (IL1) / collapsible shade from AliExpress",
+      "queries": [
+        "rattan dome pendant light 55cm dining",
+        "seagrass bell pendant 50cm foldable",
+        "woven water hyacinth pendant shade 50cm"
+      ],
+      "leads": [],
+      "why_he": "ריקה, הגיבור של D1. החיפוש משותף עם תלויית הסלון: שאילתה אחת לשתי העמדות."
+    },
+    {
+      "slot": "living-room/framed-art",
+      "priority": "high",
+      "need_variations": 3,
+      "spec_he": "זוג 50×70 לאורך או בודדת 100×70. מופשט אדמה: קשתות, שמש, צורות אורגניות ובוטניקה בקו, בטרקוטה, חול, זית וחלודה על רקע קרם. מסגרת עץ טבעי או מנגו, פספרטו קרם, זכוכית נגד השתקפות. אסור: פנים בקו, פרחים רוויים, טקסט, העתקי מאטיס.",
+      "envelope_cm": {"total_w": [145, 165], "h": [70, 100], "center_height": [145, 150]},
+      "price_ceiling": {"breakeven_landed_ils": 339.9, "landed_for_40_ils": 187.7, "slot_price_ils": 449},
+      "source_type": "Israeli framed-art wholesaler / AliExpress prints + local framing (PR1)",
+      "queries": [
+        "earth tone abstract arch print 50x70 terracotta sand set of 2",
+        "organic shapes wall art rust olive cream 50x70",
+        "minimal sun and arch canvas print warm neutral 70x100",
+        "terracotta botanical line print 50x70 wood frame"
+      ],
+      "leads": [
+        {"ae_item_id": "1005009371397490", "why_he": "פרחים מופשטים בטרקוטה 50×70 בלי מסגרת; לא נבדק בעין"},
+        {"ae_item_id": "1005012122266359", "why_he": "זוג שמש וירח בטרקוטה 50×70 בלי מסגרת; לא נבדק בעין"}
+      ],
+      "why_he": "ריקה, הגיבור של M0. רשומות הבוהו לא נבדקו בעין, ורובן פנים בקו או פרחים צבעוניים."
+    },
+    {
+      "slot": "master/framed-art",
+      "priority": "high",
+      "need_variations": 3,
+      "spec_he": "לרוחב 110–120 × 55–65 (או זוג 50×60). אותה שפה כמו בסלון, רגוע יותר: חול, קרם ונגיעת טרקוטה.",
+      "envelope_cm": {"w": [110, 120], "h": [55, 65]},
+      "price_ceiling": {"breakeven_landed_ils": 339.9, "landed_for_40_ils": 187.7, "slot_price_ils": 449},
+      "source_type": "Israeli framed-art wholesaler / PR1",
+      "queries": [
+        "panoramic abstract landscape print 120x60 sand terracotta",
+        "wide neutral earth tone canvas 60x120 framed wood"
+      ],
+      "leads": [],
+      "why_he": "ריקה, העוגן של MB0 מעל המיטה."
+    },
+    {
+      "slot": "living-room/floor-lamp",
+      "priority": "high",
+      "need_variations": 3,
+      "spec_he": "גובה 150–165, אהיל קנה, ראטן או פשתן חול 35–40, בסיס עץ כהה או טריפוד. מסתיר את הנורה מגובה 120. תקע EU או ישראלי, CE. אריזה מפורקת. אסור: מנורת קשת, נורה חשופה.",
+      "envelope_cm": {"h": [150, 165], "shade_d": [35, 40], "base_d_max": 26},
+      "price_ceiling": {"breakeven_landed_ils": 301.9, "landed_for_40_ils": 166.6, "slot_price_ils": 399},
+      "source_type": "AliExpress knock-down / Israeli lighting importer (IL1)",
+      "queries": [
+        "rattan shade floor lamp 160cm wooden tripod EU plug",
+        "cane drum shade floor lamp knock down 155cm",
+        "woven bamboo shade standing lamp walnut base"
+      ],
+      "leads": [],
+      "why_he": "ריקה. מנורת הרגל היא הייחוס של היררכיית האור (100%). אותו חיפוש משרת גם את master/floor-lamp."
+    },
+    {
+      "slot": "living-room/pouf",
+      "priority": "medium",
+      "need_variations": 3,
+      "spec_he": "קוטר 42–48, גובה 35–40. עור אמיתי מט בקוניאק או טבעי (כיסוי בלי מילוי מותר, עם תמונות ממולאות), קילים, או חבל יוטה קלוע. אסור: PU, פוליאסטר מודפס, פרווה.",
+      "envelope_cm": {"d": [42, 48], "h": [35, 40]},
+      "price_ceiling": {"breakeven_landed_ils": 188.0, "landed_for_40_ils": 103.6, "slot_price_ils": 249},
+      "source_type": "AliExpress (cover only, light) / Israeli importer",
+      "queries": [
+        "genuine leather pouf cover unstuffed 45cm cognac",
+        "kilim pouf cover 45x45 wool",
+        "braided jute pouf round 45cm natural"
+      ],
+      "leads": [],
+      "why_he": "ריקה. הפוף הסרוג מפסיד, ופופי ה'מרוקאי' שנמצאו מ-PU."
+    },
+    {
+      "slot": "living-room/vase",
+      "priority": "medium",
+      "need_variations": 2,
+      "spec_he": "טרקוטה מט או זיגוג ריאקטיבי בחלודה או בחום, 25–32 גובה, כד או בקבוק עם ידיות. גם לעמדות: dining-room/centerpiece-vase (20–28), master/nightstand-vase (22–28), hall/console-vessel (25–35).",
+      "envelope_cm": {"h": [25, 32], "d": [12, 18]},
+      "price_ceiling": {"breakeven_landed_ils": 172.8, "landed_for_40_ils": 95.1, "slot_price_ils": 229},
+      "source_type": "local stock (LK1) / AliExpress Choice for light pieces",
+      "queries": [
+        "terracotta vase with handles 30cm matte unglazed",
+        "reactive glaze ceramic vase rust brown 28cm",
+        "clay bottle vase small handle 25cm earthy"
+      ],
+      "leads": [],
+      "why_he": "חסר כלי הטרקוטה, החומר הכי מזוהה עם הבוהו; היום יש רק גשרים שמנת ולבן."
+    },
+    {
+      "slot": "dining-room/floor-vase",
+      "priority": "medium",
+      "need_variations": 3,
+      "spec_he": "אמפורה או כד רצפה מטרקוטה 50–65 עם ידיות, לענפי זית. כבד ושביר.",
+      "envelope_cm": {"h": [50, 65], "d": [25, 32]},
+      "price_ceiling": {"breakeven_landed_ils": 339.9, "landed_for_40_ils": 187.7, "slot_price_ils": 449},
+      "source_type": "local stock / Israeli supplier; CJ sourcing request for a lighter amphora",
+      "queries": [
+        "terracotta floor vase 55cm handles rustic",
+        "large clay amphora vase 60cm earthenware",
+        "fiber clay floor vase terracotta finish 55cm"
+      ],
+      "leads": [
+        {"card_id": "pool-cj-terracotta-amphora-floor-51", "why_he": "9 בבוהו, אבל $182.84 ועוד $37.15 = נחיתה ₪726. לבקש מ-CJ מחיר סיטונאי או מקור אחר"}
+      ],
+      "why_he": "ריקה. האמפורה הכי יפה במאגר מפסידה בכל מחיר סביר."
+    },
+    {
+      "slot": "living-room/planter",
+      "priority": "medium",
+      "need_variations": 2,
+      "spec_he": "כלי טרקוטה מט 38–42 × 36–44, או כלי פייבר-קליי בגימור טרקוטה, ווריאציה בסל ראטן גבוה. נושא עץ של 150–175. גם ל-master/planter ול-hall/planter (22–26 × 34–40).",
+      "envelope_cm": {"d": [38, 48], "h": [34, 44]},
+      "price_ceiling": {"breakeven_landed_ils": 225.9, "landed_for_40_ils": 124.6, "slot_price_ils": 299},
+      "source_type": "local stock (LK1) / AliExpress for woven planters",
+      "queries": [
+        "terracotta planter 40cm matte with saucer",
+        "tall rattan plant basket 25x40 natural",
+        "fiberglass planter terracotta finish round 40cm"
+      ],
+      "leads": [
+        {"ae_item_id": "1005013348772433", "why_he": "סל ראטן לעציץ 38×38, נחיתה ₪61.6; לא נבדק בעין"},
+        {"ae_item_id": "1005004762584255", "why_he": "סל נצרים גבוה M ‏21×35 לכניסה; בלי מחיר; לא נבדק בעין"}
+      ],
+      "why_he": "יש רק סלי בטן מקש ים. חסר כלי טרקוטה, וגם כלי שמתאים לכניסה."
+    },
+    {
+      "slot": "master/rug",
+      "priority": "medium",
+      "need_variations": 2,
+      "spec_he": "קילים או יוטה 280–300 × 200–220. גם dining-room/dining-rug (230–240 × 245–250) ו-work/rug (160–180 × 200–220): פנייה אחת לספק עם שלוש המידות.",
+      "envelope_cm": {"w": [280, 300], "d": [200, 220]},
+      "price_ceiling": {"breakeven_landed_ils": 833.7, "landed_for_40_ils": 461.1, "slot_price_ils": 1099},
+      "source_type": "Israeli rug importer (IL1)",
+      "queries": [
+        "flat weave jute wool rug 200x290 natural cream border",
+        "cotton kilim rug 200x300 rust sand geometric"
+      ],
+      "leads": [],
+      "why_he": "ריקה (רק במעבר), אבל אותו ספק פותר שלוש עמדות."
+    },
+    {
+      "slot": "hall/runner-rug",
+      "priority": "medium",
+      "need_variations": 2,
+      "spec_he": "ראנר קילים או יוטה 70–80 × 250–270. גם dining-room/kitchen-runner (45–60 × 240–280), ו-corridor/runner-rug (58–65 × 680–710, רק לפי מידה או שניים מחוברים).",
+      "envelope_cm": {"w": [70, 80], "l": [250, 270]},
+      "price_ceiling": {"breakeven_landed_ils": 263.9, "landed_for_40_ils": 145.6, "slot_price_ils": 349},
+      "source_type": "Israeli rug importer (IL1) / AliExpress if a 70x250 SKU ships light",
+      "queries": [
+        "jute runner rug 70x250 braided natural",
+        "kilim runner 75x260 wool rust beige",
+        "cotton woven runner 60x240 stripe sand"
+      ],
+      "leads": [],
+      "why_he": "שלוש עמדות ראנר ריקות. ראנר הוא הבוהו הכי זמין בישראל."
+    },
+    {
+      "slot": "hall/table-lamp",
+      "priority": "medium",
+      "need_variations": 3,
+      "spec_he": "45–55 גובה, בסיס קרמיקה בטרקוטה או בזיגוג ריאקטיבי עד קוטר 14, אהיל קנה, ראטן או פשתן חול 20–26. תקע EU או ישראלי, CE. גם ל-work/desk-lamp (40–50).",
+      "envelope_cm": {"h": [45, 55], "shade_d": [20, 26], "base_d_max": 14},
+      "price_ceiling": {"breakeven_landed_ils": 188.0, "landed_for_40_ils": 103.6, "slot_price_ils": 249},
+      "source_type": "AliExpress Choice / Israeli lighting importer",
+      "queries": [
+        "ceramic table lamp terracotta base rattan shade",
+        "small table lamp cane shade wooden base EU plug",
+        "reactive glaze ceramic lamp linen shade 50cm"
+      ],
+      "leads": [],
+      "why_he": "ריקה. רשומות הבוהו הן אהילי חבל-נייר בלי גוף."
+    },
+    {
+      "slot": "hall/ceiling-light",
+      "priority": "low",
+      "need_variations": 2,
+      "spec_he": "צמודת תקרה קלועה 35–45 × 18–25, מחווטת, CE. גם corridor/ceiling-lights (זוג, 30–40) ו-master/pendant (40–50).",
+      "envelope_cm": {"d": [35, 45], "h": [18, 25]},
+      "price_ceiling": {"breakeven_landed_ils": 225.9, "landed_for_40_ils": 124.6, "slot_price_ils": 299},
+      "source_type": "AliExpress",
+      "queries": [
+        "rattan semi flush ceiling light 40cm",
+        "woven bamboo flush mount ceiling lamp 38cm"
+      ],
+      "leads": [],
+      "why_he": "מנורות החבל שנמצאו בקוטר 20–23."
+    },
+    {
+      "slot": "bath/bath-towels",
+      "priority": "medium",
+      "need_variations": 3,
+      "spec_he": "מגבות חמאם (peshtemal) מכותנה עם פסים ופרנזים: גוף 90×170–180, ומגבת יד 50×90. חול עם פס חלודה, קרם עם פס זית, חלודה מלאה. גם bath/hand-towel ו-dining-room/tea-towel.",
+      "envelope_cm": {"bath_towel": [90, 180], "hand_towel": [50, 90]},
+      "price_ceiling": {"breakeven_landed_ils": 112.0, "landed_for_40_ils": 61.5, "slot_price_ils": 149},
+      "price_note_he": "לזוג. מגבת יד בודדת ב-₪59: עד ₪43.6 ועד ₪23.6.",
+      "source_type": "AliExpress Choice / CJ",
+      "queries": [
+        "turkish cotton peshtemal towel 90x180 stripe fringe",
+        "hammam towel set rust beige cotton",
+        "fouta towel 50x90 tassel stripe"
+      ],
+      "leads": [],
+      "why_he": "המקלחת בבוהו ריקה כמעט לגמרי. מגבות חמאם הן הדרך הזולה לשכבה. גם הים-תיכוני ירצה אותן: חיפוש אחד."
+    },
+    {
+      "slot": "bath/towel-ladder",
+      "priority": "low",
+      "need_variations": 2,
+      "spec_he": "סולם במבוק או טיק 30–45 × 130–135. גם bath/shower-stool (טיק או שיטה 28–34 × 42–46).",
+      "envelope_cm": {"w": [30, 45], "h": [130, 135]},
+      "price_ceiling": {"breakeven_landed_ils": 172.8, "landed_for_40_ils": 95.1, "slot_price_ils": 229},
+      "source_type": "AliExpress (flat pack) / Israeli supplier",
+      "queries": [
+        "bamboo towel ladder 130cm lean against wall",
+        "teak shower stool small bathroom",
+        "acacia wood bath stool 45cm"
+      ],
+      "leads": [],
+      "why_he": "ריקות. עץ במקלחת הוא החומר הבוהו היחיד שמותר שם."
+    },
+    {
+      "slot": "living-room/bowl",
+      "priority": "low",
+      "need_variations": 2,
+      "spec_he": "קערת עץ מנגו או שיטה 20–24 × 6–10, שמן מט. גם master/nightstand-tray (מגש 28–34 × 20–28), work/desk-tray (22–28 × 18–26) ו-dining-room/cutting-boards.",
+      "envelope_cm": {"d": [20, 24], "h": [6, 10]},
+      "price_ceiling": {"breakeven_landed_ils": 74.0, "landed_for_40_ils": 40.4, "slot_price_ils": 99},
+      "source_type": "AliExpress Choice",
+      "queries": [
+        "mango wood bowl 22cm decorative",
+        "acacia wood tray 30x22 rectangular handles",
+        "acacia serving board with handle pair"
+      ],
+      "leads": [
+        {"ae_item_id": "1005012097216475", "why_he": "קערת שיטה; לבדוק גוון ומשלוח"}
+      ],
+      "why_he": "העץ הכהה של הבוהו מופיע היום רק במגשי המפתחות בכניסה."
+    },
+    {
+      "slot": "living-room/candle-holders",
+      "priority": "low",
+      "need_variations": 2,
+      "spec_he": "זוג פמוטים לנר עמוד, 8–12 גובה: פליז מיושן או מוברש (לא מבריק), או טרקוטה. גם master/candle-holders ו-dining-room/candle-holders (נמוכים 1–4).",
+      "envelope_cm": {"holder_h": [8, 12], "top_d": [9, 14], "qty": 2},
+      "price_ceiling": {"breakeven_landed_ils": 112.0, "landed_for_40_ils": 61.5, "slot_price_ils": 149},
+      "source_type": "AliExpress Choice",
+      "queries": [
+        "aged brass pillar candle holder pair 10cm",
+        "terracotta pillar candle plate set of 2"
+      ],
+      "leads": [],
+      "why_he": "שלוש עמדות פמוטים ריקות בבוהו."
+    },
+    {
+      "slot": "hall/bench-cushion",
+      "priority": "medium",
+      "need_variations": 2,
+      "spec_he": "כרית ספסל 110–116 × 34–38 × 3–5 בקילים או בכותנה טאפטד בחול. גם dining-room/bench-pad (135–140 × 30–35).",
+      "envelope_cm": {"l": [110, 116], "w": [34, 38], "t": [3, 5]},
+      "price_ceiling": {"breakeven_landed_ils": 172.8, "landed_for_40_ils": 95.1, "slot_price_ils": 229},
+      "source_type": "AliExpress / CJ",
+      "queries": [
+        "kilim bench cushion 115x35",
+        "tufted cotton bench pad 140x35 beige",
+        "woven cotton long seat cushion stripe 120x35"
+      ],
+      "leads": [],
+      "why_he": "שתי עמדות ספסל ריקות. כרית קילים היא שכבת דוגמה זולה ונראית."
+    },
+    {
+      "slot": "living-room/curtains",
+      "priority": "low",
+      "need_variations": 1,
+      "spec_he": "הווריאציה בהדגשה: וילון במראה פשתן בחלודה או בטרקוטה, פאנל 130–150 × 280–300, כיס מוט או לולאות. אותו פאנל לחדר ההורים ולעבודה.",
+      "envelope_cm": {"panel_w": [130, 150], "drop": [280, 300], "qty": 2},
+      "price_ceiling": {"breakeven_landed_ils": 225.9, "landed_for_40_ils": 124.6, "slot_price_ils": 299},
+      "source_type": "AliExpress Choice / CJ",
+      "queries": [
+        "rust linen look curtain 140x290 rod pocket",
+        "terracotta cotton linen curtain panel 280cm"
+      ],
+      "leads": [],
+      "why_he": "שתי הקיימות בגוון בסיס, ובחדר השינה הווילון הוא עמדת גיבור."
+    },
+    {
+      "slot": "hall/umbrella-stand",
+      "priority": "low",
+      "need_variations": 2,
+      "spec_he": "סלים קלועים גבוהים: מעמד מטריות 20–24 × 45–50, פח נייר לעבודה 22–26 × 28–32, סל מלבני למקלחת 40–44 × 30–34 × 20–23, וזוג קופסאות למדף בעבודה.",
+      "envelope_cm": {"d": [20, 24], "h": [45, 50]},
+      "price_ceiling": {"breakeven_landed_ils": 96.8, "landed_for_40_ils": 53.1, "slot_price_ils": 129},
+      "source_type": "AliExpress / Zendrop",
+      "queries": [
+        "tall seagrass basket 22x48 umbrella",
+        "wicker waste basket 25x30",
+        "rectangular seagrass storage basket 42x32"
+      ],
+      "leads": [],
+      "why_he": "ארבע עמדות סלים קטנות ריקות. קש ים קל ונשלח בזול."
+    },
+    {
+      "slot": "living-room/magazine-holder",
+      "priority": "low",
+      "need_variations": 2,
+      "spec_he": "סל מגזינים קלוע מראטן או קש ים 26–32 × 18–25 × 36–45, עם ידית. גם work/magazine-holder.",
+      "envelope_cm": {"w": [26, 32], "d": [18, 25], "h": [36, 45]},
+      "price_ceiling": {"breakeven_landed_ils": 112.0, "landed_for_40_ils": 61.5, "slot_price_ils": 149},
+      "source_type": "AliExpress",
+      "queries": [
+        "rattan magazine basket with handle 30cm",
+        "seagrass magazine rack floor"
+      ],
+      "leads": [
+        {"ae_item_id": "1005009604876006", "why_he": "מקרמה על מעמד עץ מתקפל; ‎−15.9% ב-₪104, ‏16% ב-₪149; לבדוק מידות ואם נראה זול"}
+      ],
+      "why_he": "ריקה בשני חדרים."
+    },
+    {
+      "slot": "kids/rug",
+      "priority": "low",
+      "need_variations": 2,
+      "spec_he": "שטיח כותנה ארוג ורחיץ 140×200 בחול עם פסים או יהלומים רכים. אסור: פרוותי, מודפס, צבעים רוויים.",
+      "envelope_cm": {"w": [140, 140], "l": [200, 200]},
+      "price_ceiling": {"breakeven_landed_ils": 377.9, "landed_for_40_ils": 208.7, "slot_price_ils": 499},
+      "source_type": "AliExpress / Israeli importer",
+      "queries": [
+        "washable cotton woven rug 140x200 beige stripe",
+        "hand woven cotton rug kids 140x200 natural tassel"
+      ],
+      "leads": [],
+      "why_he": "חדרי הילדים בבוהו חסרים רצפה."
+    }
+  ]
+}
