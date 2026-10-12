@@ -1,0 +1,155 @@
+{
+ "source": "aliexpress",
+ "id": "1005012058728237",
+ "sections": {
+  "product": {
+   "fetched_at": "2026-10-12T04:33:48+00:00",
+   "endpoint": "aliexpress.ds.product.get",
+   "params": {
+    "ship_to_country": "IL",
+    "product_id": "1005012058728237",
+    "target_currency": "USD",
+    "target_language": "en"
+   },
+   "payload": {
+    "result": {
+     "ae_item_sku_info_dtos": [
+      {
+       "sku_attr": "14:200006151#Primary color",
+       "offer_sale_price": "7.51",
+       "sku_id": "12000057409288605",
+       "price_include_tax": false,
+       "currency_code": "USD",
+       "sku_price": "15.65",
+       "offer_bulk_sale_price": "7.51",
+       "sku_available_stock": 16,
+       "id": "14:200006151#Primary color",
+       "ae_sku_property_dtos": [
+        {
+         "sku_property_value": "Light Grey",
+         "sku_image": "https://ae01.alicdn.com/kf/S719d2b2323af4a37a295748b006a78f1Q.jpg",
+         "sku_property_name": "Color",
+         "property_value_definition_name": "Primary color",
+         "property_value_id": 200006151,
+         "sku_property_id": 14
+        }
+       ]
+      }
+     ],
+     "ae_multimedia_info_dto": {
+      "image_urls": "https://ae01.alicdn.com/kf/S9834a6ff05b84f4a8aba29a2315d3483p.jpg;https://ae01.alicdn.com/kf/S4df57e3fa6a14c248f2333e12980de8b9.jpg;https://ae01.alicdn.com/kf/S67ecf6cf9ca549b8a462b68db29db04d2.jpg;https://ae01.alicdn.com/kf/Sc2a77d65f6db49b58afeef4d2ed3f032o.jpg;https://ae01.alicdn.com/kf/S38dbacbb1ed44212b133769d8833671dy.jpg;https://ae01.alicdn.com/kf/S92c3fc60c903434b8af68368319fff58e.jpg"
+     },
+     "package_info_dto": {
+      "package_width": 18,
+      "package_height": 15,
+      "package_length": 19,
+      "gross_weight": "0.171",
+      "package_type": false,
+      "product_unit": 100000015
+     },
+     "logistics_info_dto": {
+      "delivery_time": 7,
+      "ship_to_country": "IL"
+     },
+     "product_id_converter_result": {
+      "main_product_id": 1005012058728237,
+      "sub_product_id": "{\"US\":3256811872413485}"
+     },
+     "ae_item_base_info_dto": {
+      "mobile_detail": "<removed; use --full>",
+      "subject": "Garden Hanging Planter Macrame Plant Storage Basket Jute Rope Woven Indoor Outdoor Flower Pot Holder Plant Hangers Home Decor",
+      "evaluation_count": "83",
+      "sales_count": "1000+",
+      "product_status_type": "onSelling",
+      "avg_evaluation_rating": "4.7",
+      "separated_listing": false,
+      "currency_code": "CNY",
+      "sl_product": false,
+      "category_id": 100001806,
+      "product_id": 1005012058728237,
+      "detail": "<removed; use --full>"
+     },
+     "has_whole_sale": false,
+     "ae_item_properties": [
+      {
+       "attr_name_id": 2,
+       "attr_value_id": 201512802,
+       "attr_name": "Brand Name",
+       "attr_value": "NONE"
+      },
+      {
+       "attr_name_id": 400000603,
+       "attr_value_id": 23399591357,
+       "attr_name": "High-concerned chemical",
+       "attr_value": "none"
+      },
+      {
+       "attr_name_id": 219,
+       "attr_value_id": 9441741844,
+       "attr_name": "Origin",
+       "attr_value": "Mainland China"
+      },
+      {
+       "attr_name_id": 1588,
+       "attr_value_id": 365769,
+       "attr_name": "Finishing",
+       "attr_value": "Not Coated"
+      },
+      {
+       "attr_name_id": 6,
+       "attr_value_id": 365848,
+       "attr_name": "Type",
+       "attr_value": "Hanging Baskets"
+      },
+      {
+       "attr_name_id": 100002046,
+       "attr_value_id": 2467,
+       "attr_name": "Set Type",
+       "attr_value": "no"
+      },
+      {
+       "attr_name_id": -1,
+       "attr_name": "Choice",
+       "attr_value": "yes"
+      }
+     ],
+     "ae_store_info": {
+      "store_id": 1105365589,
+      "shipping_speed_rating": "4.7",
+      "communication_rating": "4.7",
+      "store_name": "Shop1105365589 Store",
+      "store_country_code": "CN",
+      "item_as_described_rating": "4.5"
+     }
+    },
+    "rsp_code": 200,
+    "rsp_msg": "Call succeeds",
+    "request_id": "2151e41c17917796283456048",
+    "_trace_id_": "0b8ded7b17917796283433393e10de"
+   }
+  },
+  "freight:12000057409288605:IL:1": {
+   "fetched_at": "2026-10-12T04:33:50+00:00",
+   "endpoint": "aliexpress.ds.freight.query",
+   "params": {
+    "quantity": 1,
+    "shipToCountry": "IL",
+    "productId": "1005012058728237",
+    "selectedSkuId": "12000057409288605",
+    "language": "en_US",
+    "locale": "en_US",
+    "currency": "USD"
+   },
+   "payload": {
+    "options": [],
+    "success": false,
+    "code": 506,
+    "msg": "DELIVERY_SERVICE_EXCEPTION",
+    "item_id": "1005012058728237",
+    "sku_id": "12000057409288605",
+    "country": "IL",
+    "qty": 1
+   }
+  }
+ }
+}
