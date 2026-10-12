@@ -1,0 +1,474 @@
+{
+  "style": "mediterranean",
+  "scope": "whole house (8 rooms)",
+  "date": "2026-10-12",
+  "author": "master-designer",
+  "formula": "net = price/1.18; contribution = net - landed - (0.02*price + 1.2) - 0.08*net. breakeven_landed = 0.759661*price - 1.2; landed_for_40 = 0.420678*price - 1.2. Landed = (item + shipping to Israel) x 3.3, in ILS, for the quantity sold (pair or set).",
+  "priority_scale_he": "high: גיבור של פריים, משטח גדול, קודקוד באור, או פריט שבלעדיו הסגנון לא מזוהה (טרקוטה, עץ זית, תאורה קלועה, יוטה). medium: עמדה בולטת או נושאת הדגשה. low: פריט קטן או עמדה שמושפעת מהחלטה פתוחה.",
+  "query_rules_he": "השאילתות שכבר רצו לעמדות האלה הן בעיקר תבנית של מילת סגנון ועוד ביטוי כללי ('mediterranean ...', 'terracotta ...'), והחזירו רעש (נרתיקי מחסניות, מיניאטורות, פוליאסטר מודפס). כאן כל שאילתה מתארת חומר, צורה ומידה, ונבדקה מול data/leads/next-sourcing/searched-index.json. רק מוצרים שנשלחים לישראל; כל ה-SKU במידות ובגוונים; משקל וגודל קרטון; תמונות של המוצר עצמו. ציון 8 ומעלה רק אחרי מבט מעצב. פריטים כבדים ושבירים (טרקוטה, שטיחים, כלי שולחן) קודם מספק ישראלי או מלאי מקומי (IL1, LK1), ופנייה לספק רק באישור המשתמש.",
+  "slots": [
+    {
+      "slot": "dining-room/dining-pendant",
+      "priority": "high",
+      "need_variations": 3,
+      "spec_he": "הגיבור של D1. תלויה קלועה מקנה, ראטן או קש ים, כיפה רחבה או פעמון, קוטר 45–55, גובה עד 30, כבל 130 ומעלה. בטנה מפזרת (פשתן או אופל) בפנים, כדי שלא תהיה תבנית צל מנומרת; תחתית סגורה או מפזר. גוון טבעי (טווח קש #C8A46E); כיפה בברזל שחור מט או טבעית. מחווטת, CE ו-220–240V, נורה מוסתרת. חומר האהיל משותף לתלויה של הסלון (גשר T-LD). אסור: ראטן מפלסטיק, פרנזים, צבע, מוזאיקה, העתקים.",
+      "envelope_cm": {"d": [45, 55], "h_max": 30, "cable_min": 130},
+      "price_ceiling": {"breakeven_landed_ils": 172.8, "landed_for_40_ils": 95.1, "slot_price_ils": 229},
+      "at_alt_price": {"price_ils": 399, "breakeven_landed_ils": 301.9, "landed_for_40_ils": 166.6, "why_he": "המחיר שהנורדי כבר הציע; תלויה מחווטת בקוטר 50 שווה בישראל יותר מ-₪229."},
+      "source_type": "AliExpress (אהיל שנשלח שטוח או מקופל) / יבואן תאורה ישראלי (IL1)",
+      "queries": [
+        "handwoven rattan dome pendant light 50cm with fabric liner",
+        "seagrass bell pendant lamp 45cm wide",
+        "cane wicker pendant shade low dome 55cm",
+        "woven rattan lampshade with inner linen diffuser"
+      ],
+      "leads": [],
+      "why_he": "ריקה בשני הסגנונות. בים התיכוני זו חתימת החדר וגם הגשר לסלון. רשומות ה-AE בעמדה הן אהילים של 17–20 ס״מ ופנסי מוזאיקה."
+    },
+    {
+      "slot": "living-room/rug",
+      "priority": "high",
+      "need_variations": 3,
+      "spec_he": "יוטה או יוטה-צמר בקליעה שטוחה או קליעת סל, 240×340 (מינימום 200×290), שוליים או פס היקפי בחול או בטרקוטה עמומה, בלי פרנזים או עד 5. L ממוצע 55–75. וריאציה אחת בפשתן-כותנה שטוח בחול. אסור: פוליאסטר מודפס, ויסקוזה, מדליון, יהלומים ברבריים, צורה עגולה.",
+      "envelope_cm": {"w": [200, 240], "l": [290, 340], "pile_mm_max": 15},
+      "price_ceiling": {"breakeven_landed_ils": 985.6, "landed_for_40_ils": 545.3, "slot_price_ils": 1299},
+      "source_type": "ספק שטיחים ישראלי (IL1) / מלאי מקומי",
+      "queries": [
+        "jute wool blend flatweave rug 240x340 with border",
+        "chunky jute basketweave area rug 240x340",
+        "jute rug with cotton border 8x11 natural",
+        "boucle jute rug natural 200x300"
+      ],
+      "leads": [],
+      "why_he": "כ-60% מהרצפה, והפריט שמביא את האדמה לרצפת האלון המשותפת. 12 ק״ג מסין מפסידים."
+    },
+    {
+      "slot": "living-room/pendant",
+      "priority": "high",
+      "need_variations": 3,
+      "spec_he": "קוטר 40–50, גובה אהיל 22–32, צורה רחבה ונמוכה. קנה או ראטן עם בטנה מפזרת; וריאציה לא קלועה: כיפת טיח או קרמיקה מט בלבן סיד. תחתית סגורה (המצלמה רואה אותה). מחווטת, CE. אותו חומר אהיל כמו בתלויה של פינת האוכל.",
+      "envelope_cm": {"d": [40, 50], "h": [22, 32]},
+      "price_ceiling": {"breakeven_landed_ils": 225.9, "landed_for_40_ils": 124.6, "slot_price_ils": 299},
+      "source_type": "AliExpress / יבואן תאורה ישראלי (IL1)",
+      "queries": [
+        "rattan drum pendant light 45cm lined",
+        "woven cane flat pendant lamp 40cm",
+        "plaster dome pendant light 40cm matte white",
+        "natural seagrass pendant low wide shade"
+      ],
+      "leads": [],
+      "why_he": "ריקה. פנסי המשי של הנורדי נקראים יפניים (5.5)."
+    },
+    {
+      "slot": "living-room/planter",
+      "priority": "high",
+      "need_variations": 3,
+      "spec_he": "כלי לעץ הזית (המילוי): גליל או כד בטן מטרקוטה לא מזוגגת, חרס מסויד או פייבר-קליי בגימור טרקוטה, קוטר 30–38, גובה 45–50; עציץ פנימי אטום. וריאציות: טרקוטה טבעית, חרס מסויד לבן, טרקוטה כהה מיושנת. אסור: פלסטיק דמוי חרס, זיגוג מבריק, צלחת תחתית גלויה.",
+      "envelope_cm": {"d": [30, 38], "h": [45, 50]},
+      "price_ceiling": {"breakeven_landed_ils": 74.0, "landed_for_40_ils": 40.4, "slot_price_ils": 99},
+      "at_alt_price": {"price_ils": 299, "breakeven_landed_ils": 225.9, "landed_for_40_ils": 124.6, "why_he": "חציון העמדה בא מסלי קש ים; כלי טרקוטה של 45 ס״מ שווה בישראל ₪249–399."},
+      "source_type": "מקומי: יבואני עציצים ומשתלות (משלוח אחד לכל הטרקוטה בבית) / AliExpress לפייבר-קליי",
+      "queries": [
+        "tall terracotta cylinder planter 45cm unglazed",
+        "limewashed clay planter large indoor",
+        "terracotta belly pot 40cm with inner pot",
+        "fibre clay planter terracotta finish tall round"
+      ],
+      "leads": [],
+      "why_he": "עץ זית בעציץ טרקוטה הוא התמונה של הסגנון. היום יש רק סל קש ים זמני (7.0)."
+    },
+    {
+      "slot": "dining-room/floor-vase",
+      "priority": "high",
+      "need_variations": 3,
+      "spec_he": "אמפורה או כד רצפה מטרקוטה או חרס עם ידיות או בלי, 50–65 × 25–32, מט, פטינה עדינה; מחזיק ענפים (מילוי). וריאציות: טרקוטה, חרס מסויד, חרס כהה.",
+      "envelope_cm": {"h": [50, 65], "d": [25, 32]},
+      "price_ceiling": {"breakeven_landed_ils": 263.9, "landed_for_40_ils": 145.6, "slot_price_ils": 349},
+      "at_alt_price": {"price_ils": 599, "breakeven_landed_ils": 453.8, "landed_for_40_ils": 250.8, "why_he": "הערכה לשווי כד טרקוטה 55 ס״מ בישראל (₪450–800); המשתמש קובע."},
+      "source_type": "יבואן טרקוטה ישראלי / מלאי מקומי; CJ ו-AE רק לפייבר-קליי קל",
+      "queries": [
+        "terracotta amphora vase two handles 55cm",
+        "large clay olive jar floor vase 60cm",
+        "fiber clay amphora terracotta finish",
+        "greek pithos pot terracotta tall"
+      ],
+      "leads": [
+        {"card_id": "pool-cj-terracotta-amphora-floor-51", "why_he": "בדיוק החפץ (8.5), אבל $182.84 ועוד $37.15 משלוח: נחיתה ₪726. לחפש את אותה אמפורה מקומית."}
+      ],
+      "why_he": "הפינה של D1 ריקה; האמפורה היא הנוכחות הים-תיכונית הכי חזקה בפריים."
+    },
+    {
+      "slot": "living-room/floor-lamp",
+      "priority": "high",
+      "need_variations": 3,
+      "spec_he": "גובה 145–165, מוט ברזל שחור מט דק או עץ זית/אקציה, בסיס עד 26; אהיל פשתן 35–38 בחול או לבן סיד; וריאציה עם בסיס קרמי מזוגג. תקע EU או ישראלי, CE, 2700K. אסור: מנורת קשת, נורה חשופה, ראטן פתוח בלי בטנה.",
+      "envelope_cm": {"h": [145, 165], "shade_d": [35, 38], "base_d_max": 26},
+      "price_ceiling": {"breakeven_landed_ils": 172.8, "landed_for_40_ils": 95.1, "slot_price_ils": 229},
+      "at_alt_price": {"price_ils": 399, "breakeven_landed_ils": 301.9, "landed_for_40_ils": 166.6, "why_he": "כמו בנורדי: מנורת רגל מעוצבת שווה בישראל ₪399 ומעלה."},
+      "source_type": "יבואן תאורה ישראלי (IL1) / AliExpress באריזה שטוחה",
+      "queries": [
+        "wrought iron floor lamp linen empire shade",
+        "acacia wood floor lamp pleated linen shade",
+        "ceramic base floor lamp linen shade terracotta glaze",
+        "black iron standing lamp thin stem natural linen"
+      ],
+      "leads": [],
+      "why_he": "ריקה; מנורת המשימה היא הייחוס לכל עוצמות האור בחדר."
+    },
+    {
+      "slot": "living-room/wall-sconce",
+      "priority": "high",
+      "need_variations": 2,
+      "spec_he": "מנורת קריאה עם זרוע, plug-in עם כבל קצר לשקע הצמוד. זרוע ברזל שחורה דקה ואהיל פשתן בחול, או בסיס קרמי עם אהיל פשתן. בליטה 30–45. CE, 220–240V. אותה משפחה משמשת בכניסה, בהורים (זוג), בילדים ובעבודה (מחווטת).",
+      "envelope_cm": {"shade_d": [16, 24], "shade_h": [15, 25], "projection": [30, 45], "total_h": [25, 40]},
+      "price_ceiling": {"breakeven_landed_ils": 225.9, "landed_for_40_ils": 124.6, "slot_price_ils": 299},
+      "source_type": "AliExpress / יבואן תאורה ישראלי (IL1)",
+      "queries": [
+        "wrought iron wall sconce with linen cone shade plug in",
+        "rattan cylinder wall lamp swing arm EU plug",
+        "plaster half moon wall sconce hardwired"
+      ],
+      "leads": [
+        {"ae_item_id": "1005012258778712", "why_he": "גליל קנה על זרוע פליז, כבר בקטלוג (7.0); בליטה 25 וחיווט לא ידוע."}
+      ],
+      "why_he": "יש אחת בלבד, מותנית. משפחת מנורות הקיר חוצה חמישה חדרים."
+    },
+    {
+      "slot": "living-room/framed-art",
+      "priority": "high",
+      "need_variations": 2,
+      "spec_he": "שלישייה 50×70 או זוג 70×100 של צילומי סיד, זית, כדים וקשתות, במסגרת אלון או עץ טבעי דקה (1.5–2.5), פספרטו לבן סיד; או אותם הדפסים בלי מסגרת דרך PR1. אסור: לימונים ודלתות כחולות, טקסט, ים כחול רווי, קנבס בלי מסגרת.",
+      "envelope_cm": {"total_w": [145, 165], "h": [70, 100], "center_height": [145, 150]},
+      "price_ceiling": {"breakeven_landed_ils": 286.7, "landed_for_40_ils": 158.2, "slot_price_ils": 379},
+      "at_alt_price": {"price_ils": 549, "breakeven_landed_ils": 415.9, "landed_for_40_ils": 229.8, "why_he": "שווי סט ממוסגר של שלושה בישראל."},
+      "source_type": "סיטונאי ישראלי לסטים ממוסגרים / AliExpress בלי מסגרת ומסגור מקומי (PR1)",
+      "queries": [
+        "framed mediterranean arch print set of 3 50x70 oak frame",
+        "olive tree photography print framed 70x100",
+        "limewash wall still life print framed set",
+        "greek island white arch photo print framed"
+      ],
+      "leads": [
+        {"ae_item_id": "1005012881887037", "why_he": "קשת עם עץ זית 50×70, בלי מסגרת; לא נבדק בעין."},
+        {"ae_item_id": "1005012574366746", "why_he": "שלושה צללי שמש בחלון 50×70; לא נבדק בעין."}
+      ],
+      "why_he": "יש גיבור אחד (802890, ‏8.0) בלי מסגרת. צריך עוד שתי שלישיות ופתרון מסגור."
+    },
+    {
+      "slot": "master/framed-art",
+      "priority": "high",
+      "need_variations": 3,
+      "spec_he": "תמונה אחת לרוחב מעל המיטה, 110–120 × 55–65: מטע זיתים, קשת פתוחה לים עמום, קיר סיד עם צל ענף. מסגרת אלון דקה, או PR1. הכחול עד 3% מהפריים.",
+      "envelope_cm": {"w": [110, 120], "h": [55, 65]},
+      "price_ceiling": {"breakeven_landed_ils": 286.7, "landed_for_40_ils": 158.2, "slot_price_ils": 379},
+      "source_type": "סיטונאי ישראלי / AliExpress ומסגור מקומי (PR1)",
+      "queries": [
+        "landscape olive grove print framed 120x60",
+        "panoramic mediterranean coast print 100x50 framed",
+        "wide limewash wall olive shadow print landscape"
+      ],
+      "leads": [
+        {"ae_item_id": "1005011599470688", "why_he": "ים וזית 50×100, בלי מסגרת; לא נבדק בעין."},
+        {"ae_item_id": "1005012668458842", "why_he": "עץ זית בכד 50×100; לא נבדק בעין."},
+        {"ae_item_id": "1005010199004567", "why_he": "זית ומדרגות 50×100, ‏52% ב-₪379; לא נבדק בעין."}
+      ],
+      "why_he": "הגיבור של MB0 ריק; בלעדיו הקיר העליון ריק והפריים 'בלי ראש'."
+    },
+    {
+      "slot": "hall/table-lamp",
+      "priority": "high",
+      "need_variations": 3,
+      "spec_he": "מנורת שולחן לקונסולה בפריים הפתיחה: בסיס קרמיקה בזיגוג שמנת, חרס או טרקוטה (כד, דלעת או קנקן), גובה כולל 45–55, אהיל פשתן 20–26 בחול או לבן סיד. תקע EU, CE, 2700K.",
+      "envelope_cm": {"h": [45, 55], "shade_d": [20, 26]},
+      "price_ceiling": {"breakeven_landed_ils": 112.0, "landed_for_40_ils": 61.5, "slot_price_ils": 149},
+      "at_alt_price": {"price_ils": 249, "breakeven_landed_ils": 188.0, "landed_for_40_ils": 103.6, "why_he": "מנורת קרמיקה עם אהיל פשתן שווה בישראל ₪249 ומעלה."},
+      "source_type": "AliExpress / יבואן תאורה ישראלי (IL1)",
+      "queries": [
+        "terracotta ceramic table lamp linen shade EU plug",
+        "cream glazed ceramic gourd table lamp small",
+        "stoneware jug table lamp with linen shade 50cm"
+      ],
+      "leads": [],
+      "why_he": "פריים הפתיחה של האתר בלי מנורה דולקת."
+    },
+    {
+      "slot": "dining-room/tableware-set",
+      "priority": "medium",
+      "need_variations": 3,
+      "spec_he": "קבוצת קרמיקת המטבח כולה (צלחות, ספלים, קערה, צנצנות, כלי לכלי עץ, מתקן סבון): זיגוג שמנת או שיבולת עם שפה חומה חשופה, זיגוג תגובתי חום-שמנת, וטרקוטה. סדרתי, אחיד בין הזמנות. הזמנה מאוחדת אחת.",
+      "envelope_cm": {"plate_d": [20, 27], "mug_h": [9, 11], "bowl_d": [20, 26]},
+      "price_ceiling": {"breakeven_landed_ils": 17.0, "landed_for_40_ils": 8.9, "slot_price_ils": 24},
+      "at_alt_price": {"price_ils": 149, "breakeven_landed_ils": 112.0, "landed_for_40_ils": 61.5, "why_he": "סט 4 צלחות; במחיר העמדה לפריט שום דבר מסין לא מרוויח."},
+      "source_type": "LK1: יבואן ישראלי או סוכן 1688 עם משלוח מאוחד",
+      "queries": [
+        "cream glaze stoneware plates brown raw rim set of 4",
+        "reactive glaze mug brown cream 350ml",
+        "rustic ceramic serving bowl cream glaze 24cm",
+        "speckled stoneware canister wooden lid set of 3"
+      ],
+      "leads": [],
+      "why_he": "‏D2 בנוי כמעט כולו מהעמדות האלה, וכולן ריקות."
+    },
+    {
+      "slot": "dining-room/cutting-boards",
+      "priority": "medium",
+      "need_variations": 3,
+      "spec_he": "זוג קרשי עץ זית עם ידית, 35–45 × 15–22, עובי 1.5–2.5, עורקים טבעיים, שמן מט; וריאציה עגולה. אסור: במבוק, עץ צבוע, לכה.",
+      "envelope_cm": {"l": [35, 45], "w": [15, 22]},
+      "price_ceiling": {"breakeven_landed_ils": 112.0, "landed_for_40_ils": 61.5, "slot_price_ils": null},
+      "at_alt_price": {"price_ils": 149, "breakeven_landed_ils": 112.0, "landed_for_40_ils": 61.5, "why_he": "מחיר מוצע לזוג; אין מחיר עמדה."},
+      "source_type": "AliExpress (עץ זית קל) / יבואן ישראלי",
+      "queries": [
+        "olive wood chopping board with handle 40cm",
+        "olive wood paddle board rustic set of 2",
+        "round olive wood cheese board 30cm"
+      ],
+      "leads": [
+        {"ae_item_id": "1005010070709401", "why_he": "קרש עץ בצורת קשת; לא נבדק בעין ובלי מחיר."}
+      ],
+      "why_he": "עץ הזית הוא החומר החסר הכי בולט בבית; הקרשים הם הכניסה הזולה אליו."
+    },
+    {
+      "slot": "living-room/bowl",
+      "priority": "medium",
+      "need_variations": 2,
+      "spec_he": "קערת עץ זית רדודה או חרס לא מזוגג, קוטר 16–24, גובה 5–9, שפה רכה. משלימה את הקערה המנוקדת (8.0).",
+      "envelope_cm": {"d": [16, 24], "h": [5, 9]},
+      "price_ceiling": {"breakeven_landed_ils": 51.2, "landed_for_40_ils": 27.8, "slot_price_ils": 69},
+      "at_alt_price": {"price_ils": 119, "breakeven_landed_ils": 89.2, "landed_for_40_ils": 48.9, "why_he": "שווי קערת עץ זית בישראל."},
+      "source_type": "AliExpress",
+      "queries": [
+        "olive wood bowl 20cm shallow",
+        "small acacia dough bowl oval 24cm",
+        "terracotta shallow dish unglazed 22cm"
+      ],
+      "leads": [
+        {"ae_item_id": "1005008498373436", "why_he": "קערת בצק מעץ; לא נבדק בעין ובלי מחיר."}
+      ],
+      "why_he": "יש קערה אחת, ובמחיר העמדה כמעט בלי רווח."
+    },
+    {
+      "slot": "living-room/wall-decor",
+      "priority": "medium",
+      "need_variations": 3,
+      "spec_he": "פריט בודד 35–45, שטוח ושקט: צלחת קש ים או עלה דקל קלועה, או צלחת קרמיקה בזיגוג שמנת עם שפה חומה. אסור: פרנזים, צדפים, חרוזים, מקרמה, מראה (כל אלה לבוהו).",
+      "envelope_cm": {"w_or_d": [35, 45], "max": [45, 45]},
+      "price_ceiling": {"breakeven_landed_ils": 66.4, "landed_for_40_ils": 36.2, "slot_price_ils": 89},
+      "source_type": "AliExpress",
+      "queries": [
+        "seagrass wall plate flat 40cm natural",
+        "palm leaf woven wall disc 40cm",
+        "decorative ceramic wall plate cream glaze 40cm"
+      ],
+      "leads": [],
+      "why_he": "ריקה בכוונה: שמש הרפיה (6.5) נשארת לבוהו."
+    },
+    {
+      "slot": "bath/shower-curtain",
+      "priority": "high",
+      "need_variations": 3,
+      "spec_he": "הגיבור של B1: וילון פשתן או כותנה-פשתן בפס (חול-טרקוטה, או כחול-לבן עדין), רוחב 180–240, נפילה 255–265, עם בטנה דוחת מים או וילון פנימי נפרד; טבעות שחורות מט או טבעיות, לא כסופות.",
+      "envelope_cm": {"w": [180, 240], "drop": [255, 265]},
+      "price_ceiling": {"breakeven_landed_ils": 28.4, "landed_for_40_ils": 15.2, "slot_price_ils": 39},
+      "at_alt_price": {"price_ils": 179, "breakeven_landed_ils": 134.8, "landed_for_40_ils": 74.1, "why_he": "₪39 הוא מחיר ישן; וילון פשתן ארוך שווה בישראל ₪179 ומעלה."},
+      "source_type": "AliExpress / ספק טקסטיל ישראלי",
+      "queries": [
+        "striped linen shower curtain extra long 180x260",
+        "cotton slub shower curtain terracotta stripe",
+        "linen blend shower curtain long drop 72x102"
+      ],
+      "leads": [],
+      "why_he": "אין גיבור ל-B1 בשני הסגנונות."
+    },
+    {
+      "slot": "bath/bath-towels",
+      "priority": "medium",
+      "need_variations": 3,
+      "spec_he": "פשטמל (מגבת חמאם) כותנה בפסים, 70×140 עד 90×170, חול עם פס טרקוטה או כחול; זוג. גם למגבת הידיים ולמגבת המטבח (אותו ספק).",
+      "envelope_cm": {"bath_towel": [70, 140]},
+      "price_ceiling": {"breakeven_landed_ils": 36.0, "landed_for_40_ils": 19.4, "slot_price_ils": 49},
+      "at_alt_price": {"price_ils": 129, "breakeven_landed_ils": 96.8, "landed_for_40_ils": 53.1, "why_he": "זוג, כמו בנורדי."},
+      "source_type": "AliExpress / CJ",
+      "queries": [
+        "turkish peshtemal towel striped cotton 90x170",
+        "hammam towel terracotta stripe",
+        "peshtemal bath towel set of 2 natural"
+      ],
+      "leads": [],
+      "why_he": "חתימת המקלחת הים-תיכונית; היום רק ופל לבן."
+    },
+    {
+      "slot": "dining-room/candle-holders",
+      "priority": "medium",
+      "need_variations": 3,
+      "spec_he": "זוג פמוטים נמוכים לנר עמוד: ברזל יצוק שחור מט או טרקוטה, מחזיק 1–4, ראש הנר הנמוך עד 22 והגבוה 16–27.",
+      "envelope_cm": {"holder_h": [1, 12], "total_low_max": 22, "total_high": [16, 27]},
+      "price_ceiling": {"breakeven_landed_ils": 28.4, "landed_for_40_ils": 15.2, "slot_price_ils": 39},
+      "at_alt_price": {"price_ils": 79, "breakeven_landed_ils": 58.8, "landed_for_40_ils": 32.0, "why_he": "המחיר שהנורדי הציע (PRICE1)."},
+      "source_type": "AliExpress",
+      "queries": [
+        "wrought iron pillar candle plate set of 2 rustic",
+        "terracotta pillar candle holder low",
+        "forged iron low candle holder pillar"
+      ],
+      "leads": [
+        {"card_id": "candle-holders-aliexpress-matte-black-iron-pillar-set2", "why_he": "7.5 לים התיכוני; מפסיד ב-₪39, ‏26.5% ב-₪79."}
+      ],
+      "why_he": "ריקה במחיר העמדה הנוכחי."
+    },
+    {
+      "slot": "dining-room/dining-rug",
+      "priority": "high",
+      "need_variations": 3,
+      "spec_he": "יוטה בקליעה שטוחה, כמעט ריבועי 230–240 × 245–250 (המעטפת שהוצעה אחרי LQ2), שוליים בחול.",
+      "envelope_cm": {"w": [230, 240], "l": [245, 250]},
+      "price_ceiling": {"breakeven_landed_ils": 757.7, "landed_for_40_ils": 419.1, "slot_price_ils": null},
+      "at_alt_price": {"price_ils": 999, "breakeven_landed_ils": 757.7, "landed_for_40_ils": 419.1, "why_he": "מחיר מוצע; אין מחיר עמדה."},
+      "source_type": "ספק שטיחים ישראלי (IL1), אותו ספק כמו שטיח הסלון",
+      "queries": [
+        "square jute rug 240x240 flatweave",
+        "jute rug 8x8 natural square"
+      ],
+      "leads": [],
+      "why_he": "החזית של D1 בלי שטיח."
+    },
+    {
+      "slot": "corridor/runner-rug",
+      "priority": "medium",
+      "need_variations": 3,
+      "spec_he": "משפחת ראנר אחת לבית (מסדרון, כניסה, מטבח): יוטה קלועה ברוחב 60–70, לפי מטר, שוליים בחול.",
+      "envelope_cm": {"w": [60, 70], "l_by_meter": true},
+      "price_ceiling": {"breakeven_landed_ils": 301.9, "landed_for_40_ils": 166.6, "slot_price_ils": null},
+      "at_alt_price": {"price_ils": 399, "breakeven_landed_ils": 301.9, "landed_for_40_ils": 166.6, "why_he": "מחיר מוצע ל-3 מטר."},
+      "source_type": "ספק שטיחים ישראלי (IL1)",
+      "queries": [
+        "jute runner rug by the meter 70cm wide",
+        "braided jute hallway runner 60x300",
+        "jute kitchen runner 60x240 natural"
+      ],
+      "leads": [],
+      "why_he": "שלוש עמדות ראנר ריקות; כל רשומות ה-AE פוליאסטר מודפס."
+    },
+    {
+      "slot": "hall/framed-art",
+      "priority": "medium",
+      "need_variations": 3,
+      "spec_he": "הדפס ריבועי 50–60: קשת, צל ענף זית על סיד, כד. מסגרת אלון דקה או PR1.",
+      "envelope_cm": {"w": [50, 60], "h": [50, 60]},
+      "price_ceiling": {"breakeven_landed_ils": 96.8, "landed_for_40_ils": 53.1, "slot_price_ils": 129},
+      "source_type": "AliExpress ומסגור מקומי (PR1) / סיטונאי ישראלי",
+      "queries": [
+        "square arch print 50x50 neutral framed",
+        "olive branch shadow print square 50x50",
+        "mediterranean doorway square print"
+      ],
+      "leads": [],
+      "why_he": "הסדרה של הסלון קיימת רק לאורך."
+    },
+    {
+      "slot": "living-room/magazine-holder",
+      "priority": "medium",
+      "need_variations": 2,
+      "spec_he": "מעמד קשת מברזל שחור מט עם רשת קנה (העיצוב של magazine-holder-cj-arch-iron-cane), אצל מוכר זול יותר. 26–32 × 18–22 × 36–48.",
+      "envelope_cm": {"w": [26, 32], "d": [18, 22], "h": [36, 48]},
+      "price_ceiling": {"breakeven_landed_ils": 77.8, "landed_for_40_ils": 42.6, "slot_price_ils": 104},
+      "at_alt_price": {"price_ils": 179, "breakeven_landed_ils": 134.8, "landed_for_40_ils": 74.1, "why_he": "השווי הטיפוסי בישראל (₪99–229)."},
+      "source_type": "AliExpress",
+      "queries": [
+        "arch magazine rack rattan cane black metal",
+        "cane webbing magazine holder arched frame",
+        "rattan magazine rack floor standing arch"
+      ],
+      "leads": [
+        {"card_id": "magazine-holder-cj-arch-iron-cane", "why_he": "8.0 לים התיכוני, נוחת ₪131 (משלוח $17.84)."}
+      ],
+      "why_he": "העיצוב הנכון קיים; צריך רק מקור זול יותר."
+    },
+    {
+      "slot": "dining-room/herb-pots",
+      "priority": "low",
+      "need_variations": 3,
+      "spec_he": "זוג עציצי טרקוטה 10–12 לא מזוגגים עם תחתית. אותו מקור לעציץ המדף והרצפה במקלחת.",
+      "envelope_cm": {"pot_h": [10, 12], "pot_d": [10, 12]},
+      "price_ceiling": {"breakeven_landed_ils": 43.6, "landed_for_40_ils": 23.6, "slot_price_ils": null},
+      "at_alt_price": {"price_ils": 59, "breakeven_landed_ils": 43.6, "landed_for_40_ils": 23.6, "why_he": "מחיר מוצע לזוג."},
+      "source_type": "מקומי (משתלות), באותו משלוח של שאר הטרקוטה",
+      "queries": [
+        "terracotta herb pot with saucer 12cm set of 2",
+        "unglazed clay pot with saucer 11cm"
+      ],
+      "leads": [],
+      "why_he": "מסין רק מארזים של 80 מיניאטורות."
+    },
+    {
+      "slot": "living-room/pouf",
+      "priority": "low",
+      "need_variations": 3,
+      "spec_he": "פוף קלוע מיוטה או קש ים, קוטר 42–45, גובה 35–36; וריאציה בכיסוי פשתן חול. לא עור מרוקאי.",
+      "envelope_cm": {"d": [42, 45], "h": [35, 36]},
+      "price_ceiling": {"breakeven_landed_ils": 74.0, "landed_for_40_ils": 40.4, "slot_price_ils": 99},
+      "at_alt_price": {"price_ils": 149, "breakeven_landed_ils": 112.0, "landed_for_40_ils": 61.5, "why_he": "כמו בנורדי."},
+      "source_type": "AliExpress / ספק ישראלי",
+      "queries": [
+        "seagrass woven pouf 45cm round",
+        "jute braided pouf ottoman natural 45",
+        "linen pouf cover round 45x35 sand"
+      ],
+      "leads": [],
+      "why_he": "ריקה; עדיפות נמוכה (יוצא ראשון בעומס)."
+    },
+    {
+      "slot": "corridor/gallery-stool",
+      "priority": "low",
+      "need_variations": 2,
+      "spec_he": "שרפרף עץ מלא (זית, טיק או אקציה) 28–34 × 42–46, רגליים עבות, שמן מט. מוצר אחד גם לשרפרף המטבח ולשרפרף המקלחת.",
+      "envelope_cm": {"w": [28, 34], "h": [42, 46]},
+      "price_ceiling": {"breakeven_landed_ils": 225.9, "landed_for_40_ils": 124.6, "slot_price_ils": null},
+      "at_alt_price": {"price_ils": 299, "breakeven_landed_ils": 225.9, "landed_for_40_ils": 124.6, "why_he": "מחיר מוצע."},
+      "source_type": "ספק רהיטים ישראלי / AliExpress באריזה שטוחה",
+      "queries": [
+        "teak wood stool 45cm round seat",
+        "solid acacia stool rustic 45cm",
+        "olive wood stool small round"
+      ],
+      "leads": [],
+      "why_he": "שלוש עמדות שרפרף ריקות בבית."
+    },
+    {
+      "slot": "master/nightstand-tray",
+      "priority": "low",
+      "need_variations": 2,
+      "spec_he": "מגש עץ זית או אקציה 22–26 × 12–16, שפה נמוכה. גם למגש השולחן בחדר העבודה.",
+      "envelope_cm": {"w": [22, 26], "d": [12, 16]},
+      "price_ceiling": {"breakeven_landed_ils": 66.4, "landed_for_40_ils": 36.2, "slot_price_ils": 89},
+      "source_type": "AliExpress",
+      "queries": [
+        "olive wood tray rectangular 25x15",
+        "acacia valet tray oval 24cm",
+        "wooden trinket tray olive wood small"
+      ],
+      "leads": [
+        {"ae_item_id": "1005006468468060", "why_he": "מגש אקציה מלבני, ‏44.8% ב-₪89; לא נבדק בעין."},
+        {"ae_item_id": "1005012823648737", "why_he": "מגש עץ 25×15×4 (חדר העבודה), ‏45.5% ב-₪119; לא נבדק בעין."},
+        {"ae_item_id": "1005013299527250", "why_he": "מגש עץ רטרו 25×15×4, ‏55.8% ב-₪119; לא נבדק בעין."}
+      ],
+      "why_he": "שתי עמדות מגש ריקות; מגש הטרוורטין מפסיד."
+    },
+    {
+      "slot": "kids/framed-prints",
+      "priority": "low",
+      "need_variations": 3,
+      "spec_he": "חדר הילד: 2–3 הדפסי קו בפחם או בכחול עמום (סירת מפרש, דג, ענף זית), ממוסגרים. בלי קריקטורות ובלי טקסט.",
+      "envelope_cm": {"w": [30, 40], "h": [40, 50]},
+      "price_ceiling": {"breakeven_landed_ils": 134.8, "landed_for_40_ils": 74.1, "slot_price_ils": 179},
+      "source_type": "AliExpress ומסגור מקומי (PR1) / CJ ממוסגר",
+      "queries": [
+        "sailboat line art print set kids minimal",
+        "minimal fish line drawing print set of 3",
+        "olive branch line drawing print set of 2"
+      ],
+      "leads": [],
+      "why_he": "לילדה יש בחירה (פרחי מאטיס); לילד אין."
+    }
+  ]
+}
