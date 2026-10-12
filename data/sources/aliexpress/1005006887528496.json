@@ -771,6 +771,93 @@
      "_trace_id_": "210152bd17917903465441687e0fc1"
     }
    }
+  },
+  "freight:12000038628966837:IL:1": {
+   "fetched_at": "2026-10-12T07:43:28+00:00",
+   "endpoint": "aliexpress.ds.freight.query",
+   "params": {
+    "quantity": 1,
+    "shipToCountry": "IL",
+    "productId": "1005006887528496",
+    "selectedSkuId": "12000038628966837",
+    "language": "en_US",
+    "locale": "en_US",
+    "currency": "USD"
+   },
+   "payload": {
+    "options": [],
+    "success": false,
+    "code": 506,
+    "msg": "DELIVERY_SERVICE_EXCEPTION",
+    "item_id": "1005006887528496",
+    "sku_id": "12000038628966837",
+    "country": "IL",
+    "qty": 1
+   }
+  },
+  "freight:12000038628966829:IL:1": {
+   "fetched_at": "2026-10-12T07:43:32+00:00",
+   "endpoint": "aliexpress.ds.freight.query",
+   "params": {
+    "quantity": 1,
+    "shipToCountry": "IL",
+    "productId": "1005006887528496",
+    "selectedSkuId": "12000038628966829",
+    "language": "en_US",
+    "locale": "en_US",
+    "currency": "USD"
+   },
+   "payload": {
+    "options": [
+     {
+      "code": "CAINIAO_STANDARD",
+      "company": "AliExpress standard shipping",
+      "fee": 8.7,
+      "currency": "USD",
+      "days_min": 8,
+      "days_max": 19,
+      "estimated": "Oct 20 - 31",
+      "tracking": true,
+      "free_shipping": false,
+      "ship_from": "CN",
+      "stock": null,
+      "guaranteed_days": "60"
+     }
+    ],
+    "success": true,
+    "code": 200,
+    "msg": "Call succeeds",
+    "item_id": "1005006887528496",
+    "sku_id": "12000038628966829",
+    "country": "IL",
+    "qty": 1,
+    "raw": {
+     "result": {
+      "msg": "Call succeeds",
+      "code": 200,
+      "success": true,
+      "delivery_options": [
+       {
+        "code": "CAINIAO_STANDARD",
+        "shipping_fee_currency": "USD",
+        "free_shipping": false,
+        "mayHavePFS": false,
+        "guaranteed_delivery_days": "60",
+        "max_delivery_days": 19,
+        "tracking": true,
+        "shipping_fee_format": "US $8.70",
+        "delivery_date_desc": "Oct 20 - 31",
+        "company": "AliExpress standard shipping",
+        "ship_from_country": "CN",
+        "min_delivery_days": 8,
+        "shipping_fee_cent": "8.70"
+       }
+      ]
+     },
+     "request_id": "2140faf117917910124263815",
+     "_trace_id_": "2140d36217917910124253284e0f8b"
+    }
+   }
   }
  }
 }
