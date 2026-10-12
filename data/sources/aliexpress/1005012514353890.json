@@ -1,0 +1,142 @@
+{
+ "source": "aliexpress",
+ "id": "1005012514353890",
+ "sections": {
+  "product": {
+   "fetched_at": "2026-10-12T07:58:20+00:00",
+   "endpoint": "aliexpress.ds.product.get",
+   "params": {
+    "ship_to_country": "IL",
+    "product_id": "1005012514353890",
+    "target_currency": "USD",
+    "target_language": "en"
+   },
+   "payload": {
+    "result": {
+     "ae_item_sku_info_dtos": [
+      {
+       "sku_attr": "14:100013775",
+       "offer_sale_price": "4.21",
+       "sku_id": "12000058610932740",
+       "price_include_tax": false,
+       "currency_code": "USD",
+       "sku_price": "8.42",
+       "offer_bulk_sale_price": "4.21",
+       "sku_available_stock": 3,
+       "id": "14:100013775",
+       "ae_sku_property_dtos": [
+        {
+         "sku_property_value": "Beige",
+         "sku_image": "https://ae01.alicdn.com/kf/Sc91fb9f9787344fd9b0e77fc76923d38j.jpg",
+         "sku_property_name": "Color",
+         "property_value_id": 100013775,
+         "sku_property_id": 14
+        }
+       ]
+      }
+     ],
+     "ae_multimedia_info_dto": {
+      "image_urls": "https://ae01.alicdn.com/kf/S50285a882a784b1c923420d1642d9bd1e.jpeg;https://ae01.alicdn.com/kf/S085b8d895fd74460b76e8ca07fa47012S.jpg;https://ae01.alicdn.com/kf/S72c7d0ea25d34d8aa6074a566c8cca31Q.jpg;https://ae01.alicdn.com/kf/S1bf8aa88c1f2478da1bb1a849cf16e7cV.jpg;https://ae01.alicdn.com/kf/Sc91fb9f9787344fd9b0e77fc76923d38j.jpg;https://ae01.alicdn.com/kf/S50b527743fea4aefb6effbe2369aa09cw.jpg"
+     },
+     "package_info_dto": {
+      "package_width": 10,
+      "package_height": 10,
+      "package_length": 11,
+      "gross_weight": "0.087",
+      "package_type": false,
+      "product_unit": 100000015
+     },
+     "logistics_info_dto": {
+      "delivery_time": 7,
+      "ship_to_country": "IL"
+     },
+     "product_id_converter_result": {
+      "main_product_id": 1005012514353890,
+      "sub_product_id": "{\"US\":3256812328039138}"
+     },
+     "ae_item_base_info_dto": {
+      "mobile_detail": "<removed; use --full>",
+      "subject": "1PC Super Cute Duck-Shaped Pen Holder, Fashionable and Large-Capacity Desk Organizer for Office Supplies Organization",
+      "evaluation_count": "0",
+      "sales_count": "8",
+      "product_status_type": "onSelling",
+      "avg_evaluation_rating": "0.0",
+      "separated_listing": false,
+      "currency_code": "CNY",
+      "sl_product": false,
+      "category_id": 211114,
+      "product_id": 1005012514353890,
+      "detail": "<removed; use --full>"
+     },
+     "has_whole_sale": false,
+     "ae_item_properties": [
+      {
+       "attr_name_id": 2,
+       "attr_value_id": 201512802,
+       "attr_name": "Brand Name",
+       "attr_value": "NONE"
+      },
+      {
+       "attr_name_id": 400000603,
+       "attr_value_id": 23399591357,
+       "attr_name": "High-concerned chemical",
+       "attr_value": "none"
+      },
+      {
+       "attr_name_id": 219,
+       "attr_value_id": 9441741844,
+       "attr_name": "Origin",
+       "attr_value": "Mainland China"
+      },
+      {
+       "attr_name_id": 6,
+       "attr_value_id": 100007326,
+       "attr_name": "Type",
+       "attr_value": "Pen Holders"
+      },
+      {
+       "attr_name_id": -1,
+       "attr_name": "Choice",
+       "attr_value": "yes"
+      }
+     ],
+     "ae_store_info": {
+      "store_id": 1105483618,
+      "shipping_speed_rating": "4.7",
+      "communication_rating": "4.7",
+      "store_name": "Shop1105483618 Store",
+      "store_country_code": "CN",
+      "item_as_described_rating": "4.5"
+     }
+    },
+    "rsp_code": 200,
+    "rsp_msg": "Call succeeds",
+    "request_id": "21015bde17917919005911483",
+    "_trace_id_": "2140d36117917919005897502e0ede"
+   }
+  },
+  "freight:12000058610932740:IL:1": {
+   "fetched_at": "2026-10-12T07:58:22+00:00",
+   "endpoint": "aliexpress.ds.freight.query",
+   "params": {
+    "quantity": 1,
+    "shipToCountry": "IL",
+    "productId": "1005012514353890",
+    "selectedSkuId": "12000058610932740",
+    "language": "en_US",
+    "locale": "en_US",
+    "currency": "USD"
+   },
+   "payload": {
+    "options": [],
+    "success": false,
+    "code": 506,
+    "msg": "DELIVERY_SERVICE_EXCEPTION",
+    "item_id": "1005012514353890",
+    "sku_id": "12000058610932740",
+    "country": "IL",
+    "qty": 1
+   }
+  }
+ }
+}
