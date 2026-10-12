@@ -3,7 +3,10 @@
 SLOTS: one entry per product slot (data/slots/*.json, fixed-product furniture excluded: it comes from Israeli suppliers).
   q     base English noun phrase; the run searches "<style word> <q>" for two style words per style
   must  regex: the title must name the product (else the row scores very low)
-  band  market category in data/economics/market-prices.json, or an explicit [lo, hi] ILS band (estimated, flagged)
+  band  market category in data/economics/market-prices.json, or an explicit [lo, hi] ILS band (estimated, flagged).
+        2026-10-12: large planters, baskets and boxes, serving bowls and the dinner set got estimated bands: the market
+        categories (planter 19-29, basket 49-69, ceramic-bowl 29-49) are priced for small items and scored every
+        floor-size product as a loss before anyone looked at it
   size  regexes tried in order on the SKU text to pick the SKU that fits the room (envelope_cm in the slot file)
   ship  USD shipping estimate used only for screening (the detailed stage queries the real freight)
   bad   extra excluded words for this slot
@@ -51,13 +54,13 @@ SLOTS = {
     "living-room/vase": dict(q="ceramic vase", must=r"vase", band="vase-large", size=[r"\b(2[5-9]|3[0-5])\s*cm", r"\bL\b|large"], ship=5, bad=r"\b(artificial|fake|flowers? included)\b"),
     "living-room/rug": dict(q="living room rug", must=r"rug|carpet", band="rug-large", size=[_s(r"(?:200|190)", r"(?:290|300)"), _s(r"(?:160)", r"(?:230)"), _s(r"200", r"250")], ship=25),
     "living-room/floor-lamp": dict(q="floor lamp with linen shade", must=r"floor (lamp|light)|standing lamp", bad=r"\b(lamp ?shade only|replacement shade|shade cover|lampshade for)\b", band="floor-lamp", size=[r"warm|3000", r"eu"], ship=25),
-    "living-room/planter": dict(q="large ceramic floor planter", must=r"planter|pot|flowerpot|plant pot", band="planter", size=[r"\b(2[0-9]|3[0-5])\s*cm", r"\bL\b|large"], ship=6, bad=r"\b(artificial|fake)\b"),
+    "living-room/planter": dict(q="large ceramic floor planter", must=r"planter|pot|flowerpot|plant pot", band=[129, 199], size=[r"\b(2[0-9]|3[0-5])\s*cm", r"\bL\b|large"], ship=6, bad=r"\b(artificial|fake)\b"),
     "living-room/sofa-cover": dict(q="3 seater sofa slipcover", must=r"sofa cover|couch cover|slipcover|sofa slipcover", bad=r"\b(cushion cover|pillow ?case|pillow cover|seat cushion cover only)\b", band="sofa-cover", size=[r"3\s*seat", r"\bL\b|large"], ship=8),
     "living-room/cushions": dict(q="cushion cover", must=r"cushion|pillow", band="cushion-cover", size=[_s("45", "45"), _s("50", "50")], ship=2),
-    "living-room/basket": dict(q="large woven floor basket", must=r"basket", band="basket", size=[r"\bL\b|large", r"\b(3\d|4\d)\s*cm"], ship=6),
+    "living-room/basket": dict(q="large woven floor basket", must=r"basket", band=[99, 149], size=[r"\bL\b|large", r"\b(3\d|4\d)\s*cm"], ship=6),
     "living-room/magazine-holder": dict(q="wooden magazine rack floor", must=r"magazine|newspaper|book rack", band=[89, 129], size=[], ship=6),
     "living-room/table-runner": dict(q="table runner", must=r"runner", band="table-runner", size=[_s(r"3\d", r"1[4-8]\d")], ship=3),
-    "living-room/bowl": dict(q="decorative bowl", must=r"bowl|dish|tray", band="ceramic-bowl", size=[r"\b(2[0-9]|3[0-2])\s*cm"], ship=5),
+    "living-room/bowl": dict(q="decorative bowl", must=r"bowl|dish|tray", band=[79, 119], size=[r"\b(2[0-9]|3[0-2])\s*cm"], ship=5),
     "living-room/candle-holders": dict(q="candle holder", must=r"candle|candlestick", band="candle-holder", size=[], ship=4),
     "living-room/pouf": dict(q="pouf ottoman", must=r"pouf|pouffe|ottoman|footstool|stool", band="pouf", size=[r"\b(4\d|5\d)\s*cm"], ship=15),
     "living-room/pendant": dict(q="pendant light", must=r"pendant|chandelier|ceiling (lamp|light)|hanging (lamp|light)", band="pendant", size=[r"\b(4\d|5\d)\s*cm", r"warm|3000"], ship=15),
@@ -77,9 +80,9 @@ SLOTS = {
     "dining-room/utensil-crock": dict(q="utensil holder crock", must=r"utensil|crock|holder|jar", band="kitchen-canisters", size=[r"\b(1[6-9]|20)\s*cm"], ship=5),
     "dining-room/cutting-boards": dict(q="wooden cutting board", must=r"cutting|chopping|board", band=[59, 89], size=[r"\b(4[0-8])\s*cm", r"\bL\b|large"], ship=5),
     "dining-room/condiment-set": dict(q="salt pepper grinder set", must=r"salt|pepper|grinder|mill|oil|cruet", band="salt-pepper", size=[], ship=5),
-    "dining-room/bowl": dict(q="ceramic fruit bowl", must=r"bowl", band="ceramic-bowl", size=[r"\b(2[0-6])\s*cm"], ship=5),
+    "dining-room/bowl": dict(q="ceramic fruit bowl", must=r"bowl", band=[79, 119], size=[r"\b(2[0-6])\s*cm"], ship=5),
     "dining-room/paper-towel-holder": dict(q="paper towel holder", must=r"paper towel|towel holder|roll holder", band=[59, 89], size=[], ship=5),
-    "dining-room/tableware-set": dict(q="stoneware dinnerware set", must=r"plate|dinnerware|tableware|dish", band=[149, 249], size=[], ship=12),
+    "dining-room/tableware-set": dict(q="stoneware dinnerware set", must=r"plate|dinnerware|tableware|dish", band=[199, 299], size=[], ship=12),
     "dining-room/mug-set": dict(q="ceramic mug", must=r"mug|cup", band="mug", size=[r"\b(3\d\d|4\d\d)\s*ml"], ship=4),
     "dining-room/herb-pots": dict(q="small herb planter pot", must=r"pot|planter", band="planter", size=[r"\b(1[0-2])\s*cm"], ship=4),
     "dining-room/canisters": dict(q="kitchen canister jar set", must=r"canister|jar|container|storage", band="kitchen-canisters", size=[], ship=6),
@@ -91,13 +94,13 @@ SLOTS = {
     "hall/table-lamp": dict(q="table lamp", must=r"table lamp|desk lamp|bedside lamp|lamp", band="table-lamp", size=[r"\b(4[5-9]|5[0-5])\s*cm"], ship=12),
     "hall/key-tray": dict(q="key tray catchall", must=r"tray|dish|plate", band="tray", size=[r"\b(1[6-9]|2[0-2])\s*cm"], ship=4),
     "hall/console-vessel": dict(q="tall ceramic vase 30cm", must=r"vase|vessel|jar", band="vase-large", size=[r"\b(2[5-9]|3[0-5])\s*cm", r"\bL\b|large"], ship=7, bad=r"\b(mini|small|bud vase|artificial|fake)\b"),
-    "hall/storage-boxes": dict(q="woven storage box with lid large", must=r"box|basket|bin|storage", band="basket", size=[r"\b(2[6-9]|3\d)\s*cm", r"\bL\b|large"], ship=7, bad=r"\b(mini|jewelry|cosmetic|desk|drawer organizer)\b"),
+    "hall/storage-boxes": dict(q="woven storage box with lid large", must=r"box|basket|bin|storage", band=[79, 119], size=[r"\b(2[6-9]|3\d)\s*cm", r"\bL\b|large"], ship=7, bad=r"\b(mini|jewelry|cosmetic|desk|drawer organizer)\b"),
     "hall/bench-cushion": dict(q="long bench cushion pad 110cm", must=r"bench (cushion|pad|seat)|seat cushion|bench mat", band="seat-cushion", size=[_s(r"11\d|120", r"3\d|40")], ship=6, bad=r"\b(pillow ?case|cushion cover|throw pillow|decorative pillow|lumbar)\b"),
     "hall/bench-throw": dict(q="throw blanket", must=r"throw|blanket", band="throw", size=[], ship=6),
     "hall/basket": dict(q="woven basket", must=r"basket", band="basket", size=[r"\b(2[8-9]|3[0-4])\s*cm"], ship=5),
     "hall/wall-hooks": dict(q="wooden peg coat rack wall", must=r"hook|peg|rack|hanger", band=[89, 129], size=[r"\b(6\d|7\d|80)\s*cm", r"\b[3-5]\s*(hooks|pegs)"], ship=6),
     "hall/wall-sconce": dict(q="wall sconce", must=r"sconce|wall (lamp|light)", band="wall-sconce", size=[], ship=10),
-    "hall/planter": dict(q="tall ceramic planter 35cm", must=r"planter|pot|flowerpot", band="planter", size=[r"\b(2[2-6]|3[4-9]|40)\s*cm", r"\bL\b|large"], ship=8, bad=r"\b(artificial|fake|mini|succulent|small)\b"),
+    "hall/planter": dict(q="tall ceramic planter 35cm", must=r"planter|pot|flowerpot", band=[99, 149], size=[r"\b(2[2-6]|3[4-9]|40)\s*cm", r"\bL\b|large"], ship=8, bad=r"\b(artificial|fake|mini|succulent|small)\b"),
     "hall/umbrella-stand": dict(q="umbrella stand holder entryway", must=r"umbrella (stand|holder|rack|bucket|storage)", band=[99, 149], size=[], ship=10, bad=r"\b(parasol|patio|outdoor|base for|beach|garden|poster|print|canvas)\b"),
     "hall/runner-rug": dict(q="long woven runner rug 70x250", must=r"rug|runner|carpet", band="rug-small", size=[_s(r"(?:6\d|7\d|80)", r"(?:2[4-7]\d)"), _s(r"(?:6\d|7\d|80)", r"(?:2\d\d)")], ship=12, bad=r"\b(table runner|flannel|3d print|cartoon)\b"),
     "hall/ceiling-light": dict(q="flush mount ceiling light 40cm", must=r"ceiling|flush", band="ceiling-light", size=[r"\b(3[5-9]|4[0-5])\s*cm"], ship=12, bad=r"\b(mini|spotlight|downlight|track)\b"),
@@ -120,7 +123,7 @@ SLOTS = {
     "kids/bedspread": dict(q="quilted bedspread", must=r"quilt|bedspread|coverlet|blanket", band="throw", size=[r"single|twin|150"], ship=8),
     "kids/cushions": dict(q="kids cushion cover", must=r"cushion|pillow", band="cushion-cover", size=[_s(r"3[5-9]|40", r"3[5-9]|40")], ship=3),
     "kids/soft-toy": dict(q="knitted plush bunny soft toy", must=r"plush|teddy|bunny|rabbit|stuffed|soft toy", band="toys", size=[r"\b(2[5-9]|3[0-5])\s*cm"], ship=4, bad=r"\b(keychain|key chain|pendant|bag charm|mini|pillow)\b"),
-    "kids/toy-basket": dict(q="large cotton rope toy storage basket", must=r"basket|bin|storage", band="basket", size=[r"\b(3[2-9]|4\d)\s*cm", r"\bL\b|large"], ship=6, bad=r"\b(mini|desk|cosmetic|car|hanging)\b"),
+    "kids/toy-basket": dict(q="large cotton rope toy storage basket", must=r"basket|bin|storage", band=[89, 129], size=[r"\b(3[2-9]|4\d)\s*cm", r"\bL\b|large"], ship=6, bad=r"\b(mini|desk|cosmetic|car|hanging)\b"),
     "kids/skateboard": dict(q="kids wooden skateboard complete", must=r"skateboard|skate board", band=[149, 199], size=[r"\b(7\d|80)\s*cm"], ship=15, bad=r"\b(finger|fingerboard|mini|deck only|wheels only|grip tape|bearing|truck)\b"),
     "kids/doll-pram": dict(q="wooden doll stroller pram toy", must=r"pram|stroller|carriage|pushchair", band=[199, 249], size=[], ship=20, bad=r"\b(tray|miniature|dollhouse|1/12|1:12|organizer|cup holder|hook|baby stroller accessor)\b"),
     "kids/desk-chair": dict(q="children wooden chair", must=r"chair", band=[249, 349], size=[], ship=25, bad=r"\b(gaming|swivel|office|recliner|cover|cushion only|miniature|dollhouse)\b"),
@@ -130,7 +133,7 @@ SLOTS = {
     "master/framed-art": dict(q="large framed wall art", must=r"frame|framed|print|poster|painting|canvas", band="framed-print", size=[_s(r"1[01]\d", r"(?:5\d|6\d)"), _s(r"(?:5\d|6\d)", r"1[01]\d")], ship=10),
     "master/bedside-sconces": dict(q="bedside wall sconce", must=r"sconce|wall (lamp|light)", band="wall-sconce", size=[], ship=10, qty=2),
     "master/sill-vase": dict(q="bud vase ceramic", must=r"vase", band="vase-small", size=[r"\b(2[2-9]|30)\s*cm"], ship=4, bad=r"\b(artificial|fake)\b"),
-    "master/planter": dict(q="large ceramic floor plant pot 40cm", must=r"planter|pot|flowerpot", band="planter", size=[r"\b(3[6-9]|4[0-2])\s*cm", r"\bL\b|large"], ship=12, bad=r"\b(artificial|fake)\b"),
+    "master/planter": dict(q="large ceramic floor plant pot 40cm", must=r"planter|pot|flowerpot", band=[129, 199], size=[r"\b(3[6-9]|4[0-2])\s*cm", r"\bL\b|large"], ship=12, bad=r"\b(artificial|fake)\b"),
     "master/floor-lamp": dict(q="floor lamp with fabric shade", must=r"floor (lamp|light)|standing lamp", bad=r"\b(lamp ?shade only|replacement shade|shade cover|lampshade for)\b", band="floor-lamp", size=[r"\b1[5-6]\d\s*cm"], ship=25),
     "master/nightstand-tray": dict(q="decorative tray", must=r"tray", band="tray", size=[r"\b(2[8-9]|3[0-4])\s*cm"], ship=5),
     "master/nightstand-vase": dict(q="small ceramic vase", must=r"vase", band="vase-small", size=[r"\b(2[2-8])\s*cm"], ship=4, bad=r"\b(artificial|fake)\b"),
@@ -142,7 +145,7 @@ SLOTS = {
     "master/cushions": dict(q="lumbar pillow cover", must=r"cushion|pillow", band="cushion-cover", size=[_s(r"(?:3[0-9]|40)", r"(?:5[5-9]|6\d)"), _s(r"(?:5[5-9]|6\d)", r"(?:3[0-9]|40)")], ship=3),
     "master/throw": dict(q="knitted throw blanket bed end", must=r"throw|blanket", bad=r"\b(shawl|poncho|wearable|scarf|cape|hoodie)\b", band="throw", size=[_s(r"1[2-5]\d", r"1[7-9]\d|2\d\d")], ship=8),
     "master/rug": dict(q="large area rug 200x300", must=r"rug|carpet", band="rug-large", size=[_s(r"(?:200)", r"(?:2[8-9]\d|300)"), _s("200", r"2\d\d"), _s("160", "230")], ship=25),
-    "master/basket": dict(q="large woven laundry basket", must=r"basket", band="basket", size=[r"\b(3[2-8])\s*cm", r"\bL\b|large"], ship=6),
+    "master/basket": dict(q="large woven laundry basket", must=r"basket", band=[99, 149], size=[r"\b(3[2-8])\s*cm", r"\bL\b|large"], ship=6),
     "master/pendant": dict(q="large pendant lamp 45cm", must=r"pendant|chandelier|ceiling|hanging (lamp|light)", band="pendant", size=[r"\b(4\d|50)\s*cm"], ship=15),
     # ------------------------------------------------------------------ work
     "work/curtains": dict(q="linen curtains", must=r"curtain|drape|panel", band="curtains", size=[_s(r"1[3-5]\d", r"2[6-9]\d"), r"\b2[6-9]\d\b"], ship=5, qty=2),
@@ -151,9 +154,9 @@ SLOTS = {
     "work/rug": dict(q="rug", must=r"rug|carpet", band="rug-medium", size=[_s(r"1[6-8]\d", r"2[0-2]\d"), _s("160", "230")], ship=20),
     "work/basket": dict(q="woven basket", must=r"basket", band="basket", size=[r"\b(2[8-9]|3[0-2])\s*cm"], ship=5),
     "work/waste-basket": dict(q="waste paper basket", must=r"waste|trash|bin|basket", band="basket", size=[r"\b(2[2-9]|3[0-2])\s*cm"], ship=5),
-    "work/planter": dict(q="floor planter pot", must=r"planter|pot|flowerpot", band="planter", size=[r"\b(3[4-8])\s*cm"], ship=12, bad=r"\b(artificial|fake)\b"),
+    "work/planter": dict(q="floor planter pot", must=r"planter|pot|flowerpot", band=[129, 199], size=[r"\b(3[4-8])\s*cm"], ship=12, bad=r"\b(artificial|fake)\b"),
     "work/magazine-holder": dict(q="wooden magazine file holder desk", must=r"magazine|file|holder|organizer", band=[59, 89], size=[], ship=5),
-    "work/shelf-boxes": dict(q="storage box with lid", must=r"box|basket|bin", band="basket", size=[], ship=6),
+    "work/shelf-boxes": dict(q="storage box with lid", must=r"box|basket|bin", band=[79, 119], size=[], ship=6),
     "work/bookends": dict(q="bookends", must=r"bookend|book end|book stand", band=[69, 99], size=[], ship=5),
     "work/desk-tray": dict(q="desk tray organizer", must=r"tray|organizer", band="tray", size=[r"\b(2[2-8])\s*cm"], ship=4),
     "work/desk-organizer": dict(q="pen holder", must=r"pen|pencil|holder|organizer|cup", band=[39, 59], size=[], ship=4),
@@ -166,7 +169,7 @@ SLOTS = {
     "bath/bath-mat": dict(q="bath mat", must=r"mat|rug", band="bath-mat", size=[_s(r"(?:4[0-9]|50)", r"(?:5[5-9]|6\d|70)")], ship=6),
     "bath/shower-stool": dict(q="teak shower stool bench", must=r"stool|bench|seat", band=[149, 199], size=[r"\b(4[0-6])\s*cm"], ship=15, bad=r"\b(foot ?stool|kids|child|squat|potty|plastic|folding)\b"),
     "bath/shower-curtain": dict(q="linen look fabric shower curtain long", must=r"shower curtain", band="shower-curtain", size=[_s(r"1[8-9]\d|2[0-4]\d", r"2[4-7]\d"), _s("180", "200")], ship=5, bad=r"\b(peva|eva|3d print|cartoon|printed|liner)\b"),
-    "bath/floor-planter": dict(q="ceramic planter pot", must=r"planter|pot|flowerpot", band="planter", size=[r"\b(2[6-9]|30)\s*cm"], ship=8, bad=r"\b(artificial|fake)\b"),
+    "bath/floor-planter": dict(q="ceramic planter pot", must=r"planter|pot|flowerpot", band=[99, 149], size=[r"\b(2[6-9]|30)\s*cm"], ship=8, bad=r"\b(artificial|fake)\b"),
     "bath/towel-ladder": dict(q="wooden towel ladder blanket ladder leaning", must=r"towel ladder|blanket ladder|towel rack|towel stand|ladder shelf", band=[149, 199], size=[r"\b1[3-6]\d\s*cm"], ship=15, bad=r"\b(boat|pool|swimming|toy|dollhouse|miniature|step ladder|folding ladder|attic)\b"),
     "bath/bath-towels": dict(q="cotton bath towel", must=r"towel", band="towels", size=[_s("70", "140")], ship=6),
     "bath/storage-basket": dict(q="woven storage basket rectangular shelf", must=r"basket|bin", band="basket", size=[r"\b(4[0-4])\s*cm", r"\bL\b|large"], ship=6, bad=r"\b(caddy|shower caddy|mini|cosmetic|hanging)\b"),

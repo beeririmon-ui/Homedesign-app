@@ -272,6 +272,24 @@ def shortlist(room, top):
                 if len(ranked) >= top:
                     break
             picks[(slot, style)] = ranked
+        if key in ROUND3:  # weak slot: the best round-3 finds get the full check too, under their best-scoring style
+            best = {}
+            for r in rows:
+                if r["slot"] == slot and r.get("round") == 3 and r["score"] >= 35 and "no-noun" not in r["why"]:
+                    if r["item_id"] not in best or best[r["item_id"]]["score"] < r["score"]:
+                        best[r["item_id"]] = r
+            have = {x["item_id"] for st in STYLE_ORDER for x in picks[(slot, st)]}
+            for r in sorted(best.values(), key=lambda r: -r["score"]):
+                if len(have) >= 12 + len(have & set(best)) and False:
+                    break
+                c = registry.check(ds.key_of(r["item_id"]), reg)
+                if c["action"] == "skip" and (c.get("entry") or {}).get("status") == "rejected":
+                    continue
+                if r["item_id"] not in have:
+                    picks[(slot, r["style"])].append(r)
+                    have.add(r["item_id"])
+                if len([x for x in have if x in best]) >= 12:
+                    break
     return picks
 
 
@@ -404,6 +422,20 @@ def do_sheet(room, per_style):
                     continue
                 seen.add(rec["item_id"])
                 cells.append((style, rec, m))
+        if key in ROUND3:  # weak slot: also show the best round-3 (style-neutral) finds, ranked by screening score
+            det = json.load(open(os.path.join(OUT, "detail", room + ".json")))
+            r3 = []
+            for rec in det.values():
+                if rec.get("slot") != slot or rec["item_id"] in seen or not rec.get("ship_ok") or landed(rec) is None:
+                    continue
+                scr = {st: v for st, v in (rec.get("screen") or {}).items() if v.get("query") in ROUND3[key]}
+                if scr:
+                    st = max(scr, key=lambda x: scr[x]["score"])
+                    band, _ = band_of(SLOTS[key])
+                    r3.append((scr[st]["score"], st, rec, economics(band[1], landed(rec))[1]))
+            for _, st, rec, m in sorted(r3, key=lambda x: -x[0])[:12]:
+                seen.add(rec["item_id"])
+                cells.append((st, rec, m))
         if not cells:
             continue
         W, H, cols = 260, 300, 6

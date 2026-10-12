@@ -1,0 +1,148 @@
+{
+ "source": "aliexpress",
+ "id": "1005013257974860",
+ "sections": {
+  "product": {
+   "fetched_at": "2026-10-12T04:15:56+00:00",
+   "endpoint": "aliexpress.ds.product.get",
+   "params": {
+    "ship_to_country": "IL",
+    "product_id": "1005013257974860",
+    "target_currency": "USD",
+    "target_language": "en"
+   },
+   "payload": {
+    "result": {
+     "ae_item_sku_info_dtos": [
+      {
+       "sku_attr": "14:10#1 box",
+       "offer_sale_price": "8.89",
+       "sku_id": "12000060685680463",
+       "price_include_tax": false,
+       "currency_code": "USD",
+       "sku_price": "17.79",
+       "offer_bulk_sale_price": "8.89",
+       "sku_available_stock": 109,
+       "id": "14:10#1 box",
+       "ae_sku_property_dtos": [
+        {
+         "sku_property_value": "Red",
+         "sku_image": "https://ae01.alicdn.com/kf/Sbbc471ca593c4b7d92a5ebe3daeec105U.jpg",
+         "sku_property_name": "Color",
+         "property_value_definition_name": "1 box",
+         "property_value_id": 10,
+         "sku_property_id": 14
+        }
+       ]
+      }
+     ],
+     "ae_multimedia_info_dto": {
+      "image_urls": "https://ae01.alicdn.com/kf/S7d3824fa627a4a1eb26c9f01b8f5cb3c6.jpg;https://ae01.alicdn.com/kf/S69feed8de4f9478b8ddc28f6867100ba8.jpg;https://ae01.alicdn.com/kf/Sde28b272481f4f058f316ad8110321b0M.jpg;https://ae01.alicdn.com/kf/Sbbc471ca593c4b7d92a5ebe3daeec105U.jpg;https://ae01.alicdn.com/kf/S94ac9e8ac09c4408bf74ce1f206ad3b2Y.jpg"
+     },
+     "package_info_dto": {
+      "package_width": 12,
+      "package_height": 12,
+      "package_length": 12,
+      "gross_weight": "0.320",
+      "package_type": false,
+      "product_unit": 100000015,
+      "base_unit": 1
+     },
+     "logistics_info_dto": {
+      "delivery_time": 7,
+      "ship_to_country": "IL"
+     },
+     "product_id_converter_result": {
+      "main_product_id": 1005013257974860,
+      "sub_product_id": "{\"US\":3256813071660108}"
+     },
+     "ae_item_base_info_dto": {
+      "mobile_detail": "<removed; use --full>",
+      "subject": "in Box Taper Candle Holder Set, Home Meditation Healing Smokeless Beeswax Taper, European Atmosphere Beeswax Candle",
+      "evaluation_count": "0",
+      "sales_count": "1",
+      "product_status_type": "onSelling",
+      "avg_evaluation_rating": "0.0",
+      "separated_listing": false,
+      "currency_code": "CNY",
+      "sl_product": false,
+      "category_id": 150404,
+      "product_id": 1005013257974860,
+      "detail": "<removed; use --full>"
+     },
+     "has_whole_sale": false,
+     "ae_item_properties": [
+      {
+       "attr_name_id": 2,
+       "attr_value_id": 201512802,
+       "attr_name": "Brand Name",
+       "attr_value": "NONE"
+      },
+      {
+       "attr_name_id": 400093804,
+       "attr_value_id": -1,
+       "attr_name": "Operating life",
+       "attr_value": "0.5"
+      },
+      {
+       "attr_name_id": 400000603,
+       "attr_value_id": 23399591357,
+       "attr_name": "High-concerned chemical",
+       "attr_value": "none"
+      },
+      {
+       "attr_name_id": 219,
+       "attr_value_id": 9441741844,
+       "attr_name": "Origin",
+       "attr_value": "Mainland China"
+      },
+      {
+       "attr_name_id": 10,
+       "attr_value_id": 8004,
+       "attr_name": "Material",
+       "attr_value": "Paraffin Wax"
+      },
+      {
+       "attr_name_id": 521,
+       "attr_value_id": 365481,
+       "attr_name": "Use",
+       "attr_value": "Holiday"
+      }
+     ],
+     "ae_store_info": {
+      "store_id": 1105849344,
+      "store_name": "Shop1105849344 Store",
+      "store_country_code": "CN"
+     }
+    },
+    "rsp_code": 200,
+    "rsp_msg": "Call succeeds",
+    "request_id": "214125d717917785561343081",
+    "_trace_id_": "2151fce817917785561337268e0ef7"
+   }
+  },
+  "freight:12000060685680463:IL:1": {
+   "fetched_at": "2026-10-12T04:15:58+00:00",
+   "endpoint": "aliexpress.ds.freight.query",
+   "params": {
+    "quantity": 1,
+    "shipToCountry": "IL",
+    "productId": "1005013257974860",
+    "selectedSkuId": "12000060685680463",
+    "language": "en_US",
+    "locale": "en_US",
+    "currency": "USD"
+   },
+   "payload": {
+    "options": [],
+    "success": false,
+    "code": 506,
+    "msg": "DELIVERY_SERVICE_EXCEPTION",
+    "item_id": "1005013257974860",
+    "sku_id": "12000060685680463",
+    "country": "IL",
+    "qty": 1
+   }
+  }
+ }
+}
