@@ -1,0 +1,40 @@
+{
+  "room": "living-room",
+  "style": "nordic",
+  "date": "2026-10-12",
+  "author": "FIXTURE master-designer",
+  "kind": "FIXTURE composition: every odd shape the Studio readers must survive",
+  "status_counts": {"ready-to-lock": 9, "partial": 1, "empty": 1, "on-hold": 2},
+  "slots": [
+    {"slot": "curtains", "status": "Partial",
+     "default": {"card_id": "curtains-aliexpress-linen-blend-s-fold-180502 (pair)", "score": 8.0, "price_ils": 264, "margin_pct": 34.0, "price_basis": "FIXTURE slot median"},
+     "variations": [{"card_id": "FIXTURE-no-such-card", "score": 7.5, "price_ils": 199, "margin_pct": "41%"}],
+     "missing_variations": 1, "needs_card": ["1005012313384930", true],
+     "notes_he": "FIXTURE הערות הווילון"},
+    {"slot": "floor-lamp", "status": "partial",
+     "default": {"ae_item_id": "1005009294740268", "score": 7.0, "provisional": true, "price_ils": 229, "margin_pct": -12.5, "sku_he": "FIXTURE SKU בפשתן"},
+     "variations": []},
+    {"slot": "cushions", "status": "partial",
+     "default": {"set_id": "F", "score": 8.0, "price_ils": 286, "margin_pct": 14.7,
+                 "items": [{"card_id": "cushions-cj-boucle-teddy", "role": "FIXTURE 50×50"}, {"ae_item_id": "1005012671977121", "role": "FIXTURE AE in a set"}]}},
+    {"slot": "rug", "status": "ON HOLD", "blocked_by": "LK1", "notes_he": "FIXTURE השטיח מחכה ל-LK1"},
+    {"slot": "framed-art", "status": "on-hold", "blocked_by": ["PR1: FIXTURE הדפסים בלי מסגרת", "FIXTURE no decision id here"]},
+    {"slot": "sofa", "status": "ready-to-lock", "kind": "fixed, not sold (plan B)", "default": {"model": "FIXTURE AYA 264", "price_ils_from": 9800}},
+    {"slot": "no-such-slot", "status": "empty"},
+    "not a slot",
+    {"slot": "vase", "status": "ready-to-lock", "lock_decision": "VL1 (open with the owner)",
+     "default": {"card_id": "vase-aliexpress-vintage-distressed-clay-vase-589009", "score": 8.5, "price_ils": 229, "margin_pct": 35.0, "flag": "exception"},
+     "conditions_he": ["FIXTURE תנאי ראשון"], "kept_aside": [{"card_id": "FIXTURE-aside", "score": 6.0, "why_he": "FIXTURE בצד"}]}
+  ],
+  "whole_look": {
+    "boy": {"items_he": "FIXTURE פריטים בחדר", "total_price_ils": 500, "total_contribution_ils": 100},
+    "girl": {"total_price_ils": 300, "total_contribution_ils": -10},
+    "excluded": ["FIXTURE לא בסכום"]
+  },
+  "room_check_he": ["FIXTURE בדיקה (1) נקודה ראשונה (2) נקודה שנייה", "FIXTURE בדיקה שנייה"],
+  "decisions_needed": [
+    {"id": "LK1", "he": "FIXTURE החלטה, וגם VL1"},
+    {"id": "fixture-price", "why_he": "FIXTURE מזהה חופשי"},
+    "FIXTURE שורה פשוטה עם PR1"
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "version": 1, "round": 3, "source": "cj", "date": "2026-10-12", "by": "FIXTURE sourcing-support", "run_id": "fixture-cj",
+  "budget": {"cj_points_used": 120},
+  "queries_run": ["FIXTURE floor vase query", "FIXTURE cushion query"],
+  "queries_not_run": [{"query": "FIXTURE spare query", "slots": ["dining-room/floor-vase"], "why": "spare"}],
+  "slots": {
+    "dining-room/floor-vase": {"priority": "high", "queries": ["FIXTURE floor vase query"], "found": false,
+      "summary": "FIXTURE no pass on CJ", "next": "FIXTURE try Israeli stock",
+      "not_opened_notable": [{"name": "FIXTURE glossy floor vase", "pid": "1", "why": "glossy glaze"}],
+      "opened": [{"pid": "2", "status": "rejected", "reason": "FIXTURE too small", "card_ids": null}], "cards": []},
+    "living-room/cushions": {"queries": ["FIXTURE cushion query"], "found": true, "summary": "FIXTURE found two covers",
+      "opened": [{"pid": "3", "status": "card", "card_ids": ["cushions-cj-boucle-teddy"]}, {"pid": "4", "status": "card", "card_ids": ["fixture-new-card-not-built-yet"]}],
+      "cards": ["cushions-cj-boucle-teddy", "fixture-new-card-not-built-yet"]},
+    "nowhere/slot": {"found": false, "summary": "FIXTURE report for a slot that does not exist"}
+  },
+  "cards": [
+    {"id": "cushions-cj-boucle-teddy", "slot": "living-room/cushions", "option": "FIXTURE White 50x50", "cost_usd": 4.1,
+     "freight": {"line": "CJPacket", "usd": 6.5, "days": "9-23"}, "slot_price_ils": 79, "landed_ils": 35.0, "contribution_ils": 21.0,
+     "margin_pct": 31.4, "passes_40": false, "flags": ["FIXTURE flag"]},
+    {"id": "fixture-new-card-not-built-yet", "slot": "living-room/cushions", "option": "FIXTURE Sage 45x45", "cost_usd": 3.2,
+     "slot_price_ils": 79, "landed_ils": 30.0, "margin_pct": 45.0, "passes_40": true}
+  ]
+}

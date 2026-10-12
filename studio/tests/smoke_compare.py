@@ -36,7 +36,7 @@ FIXTURES = STUDIO / "tests" / "fixtures"
 FIXTURE = FIXTURES / "deep-2026-10"
 AXE = ROOT / "site" / "node_modules" / "axe-core" / "axe.min.js"
 CHROMIUM = os.environ.get("PW_CHROMIUM", "/opt/pw-browsers/chromium")
-SCREENS = ["overview", "todo", "decisions", "office", "rooms", "products", "profit", "compare", "furniture", "suppliers", "budget", "quality", "log"]
+SCREENS = ["overview", "todo", "decisions", "office", "rooms", "products", "profit", "compare", "sourcing", "furniture", "suppliers", "budget", "quality", "log"]
 AXE_TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"]
 
 failures: list[str] = []
