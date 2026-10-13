@@ -482,6 +482,8 @@ def do_write(room, a, write_cards=True):
             argv = ["--by", BY, "--run-id", a.run_id, "--max-calls", str(a.max_calls), "card", iid, "--slot", key, "--id", cid, "--out", path]
             if c["sku_or_vid"]:
                 argv += ["--sku", c["sku_or_vid"]]
+            if next(iter(G[key].values())).get("category") == "lighting" or next(iter(G[key].values())).get("electrical"):
+                argv += ["--certs"]  # CE / voltage / plug from specialinfo (studio rules: lighting needs CE and 220-240V)
             rc = ds.main(argv)
             if rc not in (0, None) or not os.path.exists(path):
                 print("card failed %s %s rc=%s" % (key, iid, rc), file=sys.stderr)
