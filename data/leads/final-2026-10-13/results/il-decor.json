@@ -1,0 +1,2174 @@
+{
+  "group": "decor",
+  "date": "2026-10-13",
+  "notes_he": [
+    "נבדקו דפים ציבוריים בלבד (קטלוגי קטגוריה ודפי מוצר), בלי כניסה, טפסים או עקיפת חסימות. לא נוצר קשר עם אף חנות.",
+    "price_ils הוא המחיר לצרכן כפי שמופיע בדף ביום הבדיקה (13.10.2026). ב-Fox Home אלה מחירי מבצע (בדף יש גם מחיר מחוק). vat_included=true רק כשנאמר בדף (Fox Home); null = לא נאמר בדף.",
+    "trade_discount_needed_pct = ההנחה שצריך מהמחיר הקמעוני כדי להגיע ל-40% בנוסחת הסטודיו (net=price/1.18; עלות מקסימלית = 0.52*net - 0.02*price - 1.2 = 0.42068*P - 1.2). העלות נלקחה כמחיר הקמעוני כולל מע״מ (שמרני, בלי קיזוז תשומות). עם קיזוז מע״מ ההנחה הנדרשת קטנה בכ-15%. 0 = כבר מתחת לתקרה במחיר קמעוני.",
+    "slot_price_ils בכל עמדה: מחיר מקובץ הפערים/התמחור כשקיים (מסומן price_basis_he), אחרת הערכה שלי (מסומנת 'הערכה'). האחראי יכול להחליף מחיר ולחשב מחדש לפי הנוסחה.",
+    "styles_needing: לפי כלל החבילות (פער = פחות מ-3 בחירות). בחמשת הסגנונות הקטלוגיים כמעט כל עמדה היא פער. בנורדי אימתתי מהחבילה רק את העמדות שנקראו (bath/vanity-vase, corridor/gallery-art, dining-room/candle-holders, dining-room/centerpiece-vase, dining-room/floor-vase, hall/basket, hall/key-tray, hall/planter, hall/storage-boxes, bath/towel-ladder). בשאר נורדי מסומן כ'לא אומת' בשדה nordic_unverified.",
+    "מראות אינן עמדות מוצר בסטודיו (חוקי הבית: מראה היא מעטפת). לכן לא נאספו מראות, למרות שיש מקורות (Pearl Pictures, Home Center).",
+    "חלק מכתובות ה-URL נלקחו מרשימות קטגוריה ולא נפתחו אחת-אחת; כתובות עם slug קטוע (Elior, Kado) מסומנות בהערה. חנויות שחסמו גישה או לא נקראו מופיעות בסוף ה-md."
+  ],
+  "shops": [
+    {
+      "id": "fox-home",
+      "name": "Fox Home (פוקס הום)",
+      "url": "https://www.foxhome.co.il",
+      "city": "רשת ארצית (חנויות מקריית שמונה עד דימונה); עיר מטה לא צוינה",
+      "b2b_signals": [
+        {
+          "text": "עמוד FOX HOME לעסקים: 'בעלי עסקים, מעצבים ומנהלי רכש' ... 'תנאים מיוחדים לרכישות בכמות' ... 'השאירו פרטים בטופס, ונחזור אליכם עם הצעה מותאמת אישית'. אין מחירון ואין מינימום בדף.",
+          "url": "https://www.foxhome.co.il/pages/b2b"
+        }
+      ],
+      "delivery_he": "משלוח חינם עד הבית מעל ₪249; החזרות בסניפים. מחירי המבצע באתר נמוכים ב-25%-70% ממחיר מחוק ומשתנים. מע״מ כלול (אומת בדף מוצר). ייצור סין לפי דף המוצר.",
+      "covers_slots": ["hall/framed-art", "master/sill-vase", "bath/vanity-vase", "dining-room/bowl", "hall/key-tray", "master/nightstand-tray", "work/desk-tray", "living-room/basket", "hall/basket", "master/basket", "work/basket", "bath/storage-basket", "hall/storage-boxes", "kids/toy-basket", "bath/soap-dispenser", "bath/toothbrush-cup", "bath/toilet-brush", "bath/bin", "dining-room/canisters", "dining-room/cutting-boards", "dining-room/mug-set", "dining-room/tableware-set"]
+    },
+    {
+      "id": "1item",
+      "name": "1item (וואן אייטם)",
+      "url": "https://www.1item.co.il",
+      "city": "כפר סבא (סניף רוטשילד 49); חנות אונליין (Shopify)",
+      "b2b_signals": [
+        {
+          "text": "בדף הבית: 'מועדון אדריכלים ומעצבים' (עם 'תקנון מועדון מעצבים'), 'שירות לעסקים', ו'שת״פים עסקיים' (הקישור האחרון מוביל ל-# ולא לעמוד). אין סיטונאות, דרופשיפינג או אפיליאט בדף.",
+          "url": "https://www.1item.co.il/"
+        }
+      ],
+      "delivery_he": "אספקה 3-7 ימי עסקים; משלוח חינם מעל ₪399 (דמי משלוח מתחת לסכום לא מופיעים בדף הבית). כל המוצרים 'עד ₪99' לפי הבאנר.",
+      "covers_slots": ["corridor/gallery-art", "work/framed-art", "dining-room/framed-art", "hall/console-vessel", "living-room/vase", "dining-room/centerpiece-vase", "master/sill-vase", "living-room/bowl", "dining-room/bowl", "living-room/candle-holders", "hall/key-tray", "master/nightstand-tray", "work/desk-tray", "living-room/basket", "hall/basket", "work/basket", "bath/soap-dispenser", "bath/bin", "dining-room/canisters"]
+    },
+    {
+      "id": "ikea-il",
+      "name": "IKEA ישראל (איקאה)",
+      "url": "https://www.ikea.com/il/he/",
+      "city": "חנויות בפריסה ארצית; שירותי עסקים רק בראשון לציון ובקריית אתא",
+      "b2b_signals": [
+        {
+          "text": "IKEA לעסקים: 'השירותים ללקוחות עסקיים הינם בכפוף לעסקה ראשונה בסך 10,000 ₪ ומעלה'; 'כלל השירותים והממשקים עם היח׳ העסקית ניתנים בסניפים ראשל״צ וקרית אתא בלבד'. אין אחוז הנחה, סיטונאות, דרופשיפינג או אפיליאט בדף.",
+          "url": "https://www.ikea.com/il/he/ikea-business/"
+        }
+      ],
+      "delivery_he": "הובלה עד הבית או המשרד (עלות וזמן בדף השירות https://www.ikea.com/il/he/customer-service/services/delivery/ ולא נקראו). ikea.co.il חוסם גישה (403); הכתובת הפעילה היא ikea.com/il/he.",
+      "covers_slots": ["hall/basket", "work/basket", "master/basket", "living-room/basket", "hall/planter", "dining-room/centerpiece-vase", "master/sill-vase", "bath/vanity-vase", "dining-room/framed-art"]
+    },
+    {
+      "id": "tollmans-dot",
+      "name": "Tollmans DOT (טולמנ׳ס דוט)",
+      "url": "https://www.tollmansdot.co.il",
+      "city": "רשת (בית יהושע, בני ברק, ראשון לציון, גן העיר, מחסן 155 בשפיים); עיר מטה לא צוינה",
+      "b2b_signals": [
+        {
+          "text": "בתפריט: 'מעצבים', 'קשרי אדריכלים' ('עדכונים בלעדיים לאדריכלים ומעצבים'), 'מעצבים בשבילך'. אין בדף טקסט על סיטונאות, מחירי סוחר או יבוא; לא ידוע אם היבואן הרשמי.",
+          "url": "https://www.tollmansdot.co.il/"
+        }
+      ],
+      "delivery_he": "משלוח חינם ברכישת כלים ואביזרים מעל ₪349. מותגים: HAY, Ferm Living, HKLiving, Cooee, Paper Collective, Urban Nature Culture, Olsson & Jensen, KID'S CONCEPT. הרבה כרטיסים מסומנים 'COMING SOON' ובלי תמונה בדף.",
+      "covers_slots": ["living-room/framed-art", "hall/framed-art", "living-room/wall-decor", "hall/console-vessel", "living-room/vase", "dining-room/centerpiece-vase"]
+    },
+    {
+      "id": "tema-shop",
+      "name": "Tema Shop (תמה) - היבואנית של Broste, Hübsch ואחרים",
+      "url": "https://www.tema-shop.com",
+      "city": "תל אביב, קרית שאול 26 (03-6442356)",
+      "b2b_signals": [
+        {
+          "text": "'תמה היא היבואנית הרשמית בישראל של מותגי עיצוב מובילים מאירופה' (Hübsch, Muubs, Broste, Form&Refine, XLBOOM ועוד). אין בדף טקסט מפורש על סיטונאות או מעצבים; יבואן = ערוץ סוחר טבעי.",
+          "url": "https://www.tema-shop.com/"
+        }
+      ],
+      "delivery_he": "'רק עוד ₪300 ומגיע לך משלוח חינם' (תנאים מלאים בעמוד משלוחים והחזרות, לא נקרא). בצילום הדף כל הכרטיסים מסומנים 'אזל מהמלאי' אך המסננים מציגים 76 מתוך 78 במלאי: לאמת.",
+      "covers_slots": ["living-room/bowl", "hall/planter", "living-room/candle-holders"]
+    },
+    {
+      "id": "kado-home",
+      "name": "Kado Home (קאדו הום)",
+      "url": "https://kadohome.co.il",
+      "city": "עפולה (רמז 3) ונתניה (המלאכה 30)",
+      "b2b_signals": [
+        {
+          "text": "באתר: 'ייבוא במחיר סיטונאי' (קישור לעמוד סוחרים) ו'הצטרפו לקהילת המעצבים שלנו'; שמות מוצרים 'ייבוא קאדו הום'.",
+          "url": "https://kadohome.co.il/product-category/%D7%94%D7%95%D7%9D%D7%A1%D7%98%D7%99%D7%99%D7%9C%D7%99%D7%A0%D7%92-%D7%A2%D7%99%D7%A6%D7%95%D7%91-%D7%95%D7%9E%D7%AA%D7%A0%D7%95%D7%AA/%D7%9B%D7%93%D7%99%D7%9D/"
+        }
+      ],
+      "delivery_he": "'משלוחים לכל הארץ'; 12 תשלומים. עלות וזמן לא מופיעים בדף הקטגוריה. כל כדי הרצפה בדף היו 'אזל המלאי' ביום הבדיקה.",
+      "covers_slots": ["dining-room/floor-vase", "hall/console-vessel", "dining-room/centerpiece-vase"]
+    },
+    {
+      "id": "yagur-gardens",
+      "name": "משתלות יגור (Yagur Gardens)",
+      "url": "https://www.yagurgan.co.il",
+      "city": "לא צוין בדף (יגור)",
+      "b2b_signals": [
+        {
+          "text": "בתפריט: 'Hub עסקי' ו'מועדון לקוחות'. אין טקסט על סיטונאות או אדריכלי נוף בדף הקטגוריה; לא נפתח עמוד ה-Hub.",
+          "url": "https://www.yagurgan.co.il/%D7%A2%D7%A6%D7%99%D7%A6%D7%99_%D7%A4%D7%99%D7%91%D7%A8"
+        }
+      ],
+      "delivery_he": "קישור 'משלוחים' בתפריט, התנאים לא נקראו. אין תמונות מוצר בתוכן שנקרא (תמונת מקום-שמור אחת).",
+      "covers_slots": ["hall/planter", "living-room/planter", "master/planter", "work/planter", "bath/floor-planter"]
+    },
+    {
+      "id": "casabella",
+      "name": "Casabella (קאזבלה)",
+      "url": "https://casabella.co.il",
+      "city": "פתח תקווה (משרד אפעל 11); חנויות בבני ברק, ירושלים ופתח תקווה",
+      "b2b_signals": [
+        {
+          "text": "'לקוחות סיטונאים? דברו איתנו' - Suppliers@casabella.co.il (בעמוד קטגוריית האגרטלים). בלי פרטי תנאים.",
+          "url": "https://casabella.co.il/collections/%D7%90%D7%92%D7%A8%D7%98%D7%9C%D7%99%D7%9D"
+        }
+      ],
+      "delivery_he": "אספקה מהירה תוך 2 ימי עסקים, ארצי 2-4 ימי עסקים; משלוח חינם מעל ₪299.",
+      "covers_slots": ["living-room/vase", "dining-room/centerpiece-vase", "master/sill-vase", "bath/vanity-vase"]
+    },
+    {
+      "id": "dar-marrakech",
+      "name": "Dar Marrakech (דאר מרקש)",
+      "url": "https://darmarrakech.co.il",
+      "city": "טירה",
+      "b2b_signals": [
+        {
+          "text": "'למכירה סיטונאית ולעיצוב בהתאמה אישית ניתן לפנות ליהונתן'. עבודת יד ממרוקו ('נעשה בעבודת יד במרוקו').",
+          "url": "https://darmarrakech.co.il/collections/%D7%A1%D7%9C%D7%99%D7%9D-%D7%9C%D7%A2%D7%99%D7%A6%D7%95%D7%91-%D7%95%D7%90%D7%97%D7%A1%D7%95%D7%9F"
+        }
+      ],
+      "delivery_he": "משלוחים חינם מעל ₪399. אין תמונות אמיתיות בתוכן שנקרא (placeholder).",
+      "covers_slots": ["living-room/basket", "living-room/bowl"]
+    },
+    {
+      "id": "decogarden",
+      "name": "Deco Garden",
+      "url": "https://decogarden.co.il",
+      "city": "לא צוין",
+      "b2b_signals": [],
+      "delivery_he": "'משלוחים עד הבית' בלי תנאים. כל הכדים הגדולים היו 'אזל המלאי'. אין טקסט עסקי.",
+      "covers_slots": ["dining-room/floor-vase", "living-room/planter"]
+    },
+    {
+      "id": "melach-haaretz",
+      "name": "מלח הארץ",
+      "url": "https://melach-haaretz.co.il",
+      "city": "הוד השרון (הרכבת 2, מתחם מיקס שרונים)",
+      "b2b_signals": [],
+      "delivery_he": "משלוח חינם מעל ₪499. אין טקסט עסקי.",
+      "covers_slots": ["bath/soap-dispenser", "bath/toothbrush-cup"]
+    },
+    {
+      "id": "idana",
+      "name": "IDANA (אידנה) - יבוא ריהוט סקנדינבי",
+      "url": "https://idanahome.co.il",
+      "city": "תל אביב, קדם 123",
+      "b2b_signals": [
+        {
+          "text": "בתפריט: 'קשרי אדריכלים' ו'מחלקת פרויקטים' (studio@idanahome.co.il). אין בדף טקסט על תנאים. כותרת: 'IDANA - ייבוא ושיווק ריהוט סקנדינבי'.",
+          "url": "https://idanahome.co.il/collections/collections-pictures-art-boho-scandinavian"
+        }
+      ],
+      "delivery_he": "קישור 'משלוחים והחזרות', תנאים לא נקראו.",
+      "covers_slots": ["living-room/framed-art"]
+    },
+    {
+      "id": "print-studio",
+      "name": "Print Studio (פרינט סטודיו)",
+      "url": "https://printstudio.co.il",
+      "city": "תל אביב",
+      "b2b_signals": [
+        {
+          "text": "בתחתית האתר קישור 'תכנית שותפים' (בלי פרטים בדף הבית) - אפיליאט/שותפים. הדפסה בהזמנה (S5 פוסל הדפסה לפי הזמנה).",
+          "url": "https://printstudio.co.il/"
+        }
+      ],
+      "delivery_he": "'משלוחים עד הבית עד 14 ימי עסקים'; משלוח חינם בקנייה מעל ₪600 (לפי תקציר חיפוש). מסגרות בעבודת יד עם זכוכית אמיתית.",
+      "covers_slots": ["master/framed-art", "corridor/gallery-art"]
+    },
+    {
+      "id": "elior",
+      "name": "Elior (אליאור) הדפסי אמנות",
+      "url": "https://www.eliordecor.co.il",
+      "city": "לא צוין (055-7046972)",
+      "b2b_signals": [
+        {
+          "text": "בתפריט הראשי: 'שירות למעצבות' ו'מעצבות הבית' (בלי תיאור). הכול 'לפי הזמנה' עם שינוי מידה וצבע.",
+          "url": "https://www.eliordecor.co.il/category/%D7%94%D7%93%D7%A4%D7%A1%D7%99-%D7%90%D7%95%D7%9E%D7%A0%D7%95%D7%AA/"
+        }
+      ],
+      "delivery_he": "תנאי משלוח לא מופיעים בדף הקטגוריה.",
+      "covers_slots": ["living-room/framed-art"]
+    },
+    {
+      "id": "hagalerya11",
+      "name": "הגלריה (hagalerya11) - עפולה",
+      "url": "https://hagalerya11.co.il",
+      "city": "עפולה, ירושלים 23",
+      "b2b_signals": [],
+      "delivery_he": "'כן, אנחנו שולחים לכל הארץ', מוכן לתלייה; עלות וזמן לא צוינו. הדפסה ומסגור בעבודת יד 'מיוצרות בישראל'. אין טקסט עסקי.",
+      "covers_slots": ["living-room/framed-art", "master/framed-art"]
+    },
+    {
+      "id": "mixmax",
+      "name": "Mix Max (מיקס מקס)",
+      "url": "https://www.mixmax.co.il",
+      "city": "לא נקרא (העמוד מקולקל בקידוד)",
+      "b2b_signals": [],
+      "delivery_he": "דף המוצר מציג שתי אפשרויות משלוח (₪39 ו-₪0), התוויות לא קריאות. עד 14 ימי עסקים לפי תקציר חיפוש.",
+      "covers_slots": ["living-room/framed-art"]
+    },
+    {
+      "id": "pearl-pictures",
+      "name": "פנינת התמונות (Pearl Pictures)",
+      "url": "https://pearlpictures.co.il",
+      "city": "לא צוין (אונליין בלבד; 'כל המוצרים מיוצרים אצלנו', 31 שנה)",
+      "b2b_signals": [
+        {
+          "text": "'כן, אנו מציעים הנחות מיוחדות לוועדי עובדים, בתי מלון, בתי חולים, בתי ספר, משרדים ועוד.' אין תוכנית מעצבים או דרופשיפינג.",
+          "url": "https://pearlpictures.co.il/"
+        }
+      ],
+      "delivery_he": "משלוח ₪25, חינם מעל ₪450; עד 10 ימי עסקים, אזורים מרוחקים עד 17.",
+      "covers_slots": ["master/framed-art"]
+    },
+    {
+      "id": "little-pieces",
+      "name": "Little Pieces (ליטל פיסז)",
+      "url": "https://www.little-pieces.co.il",
+      "city": "לא צוין",
+      "b2b_signals": [],
+      "delivery_he": "קישור 'משלוחים והחזרות' בלבד. אתר Wix.",
+      "covers_slots": ["kids/framed-prints"]
+    },
+    {
+      "id": "sheefa",
+      "name": "שיפה ועצה - אמנות פרקטית",
+      "url": "https://sheefa-art.co.il",
+      "city": "כוכב יאיר (אזור התעשייה החיצוני)",
+      "b2b_signals": [
+        {
+          "text": "קישור בתפריט 'לחברות וארגונים' (בלי מחירים או תנאים; פנייה בוואטסאפ/טופס). מוצרים 'ניתן לחריטה'.",
+          "url": "https://sheefa-art.co.il/wood_type_tags/%D7%96%D7%99%D7%AA/"
+        }
+      ],
+      "delivery_he": "משלוח חינם מעל ₪299; 1-7 ימי עסקים. החזרות 14 ימי עסקים (חוץ ממוצרים עם חריטה).",
+      "covers_slots": ["dining-room/cutting-boards"]
+    },
+    {
+      "id": "adinut",
+      "name": "עדינות (Adinut)",
+      "url": "https://adinut.co.il",
+      "city": "איסוף עצמי מבאר יעקב; עיר החנות לא צוינה",
+      "b2b_signals": [],
+      "delivery_he": "משלוח חינם מעל ₪299; שליח עד הבית 1-7 ימי עסקים; 'במלאי בישראל - משלוח מהיר'. בדף המוצר אין טענת EN71 / ת״י 562 (רק 'הסטנדרטים של PlanToys').",
+      "covers_slots": ["kids/toy-cars"]
+    },
+    {
+      "id": "choopy",
+      "name": "Choopy (צ׳ופי)",
+      "url": "https://choopy.co.il",
+      "city": "לא נבדק",
+      "b2b_signals": [],
+      "delivery_he": "לפי תקציר חיפוש בלבד: משלוח חינם מעל ₪299, 2-6 ימי עסקים. הדף לא נפתח.",
+      "covers_slots": ["kids/toy-cars"]
+    },
+    {
+      "id": "ashertoys",
+      "name": "אשר צעצועים",
+      "url": "https://ashertoys.co.il",
+      "city": "תל אביב, שדרות ירושלים 32",
+      "b2b_signals": [],
+      "delivery_he": "תנאי משלוח לא נקראו (העמוד נחתך). אין טענת תקן בדף שנקרא.",
+      "covers_slots": ["kids/doll-pram"]
+    },
+    {
+      "id": "homeandco",
+      "name": "Home & Co",
+      "url": "https://homeandco.co.il",
+      "city": "לא נבדק",
+      "b2b_signals": [],
+      "delivery_he": "לפי תקציר חיפוש בלבד: משלוח חינם מעל ₪300. הדף לא נפתח.",
+      "covers_slots": ["living-room/basket"]
+    },
+    {
+      "id": "israel-basketry",
+      "name": "Israel Basketry (דוד גרושקו)",
+      "url": "https://israel-basketry.co.il",
+      "city": "עפרה (סדנאות). מעבר לקו הירוק: לבדוק מול מדיניות המותג, כמו שסומן אצל כרמל (docs/suppliers/directory.md)",
+      "b2b_signals": [],
+      "delivery_he": "תנאי משלוח לא מופיעים. טלפון 052-3780939. אין טקסט עסקי.",
+      "covers_slots": ["living-room/basket"]
+    },
+    {
+      "id": "tirador",
+      "name": "Tirador HD (טירדור) - יבואן Bloomingville ו-Zack (לפי תקצירי חיפוש)",
+      "url": "https://www.tiradorhd.co.il",
+      "city": "לא ידוע",
+      "b2b_signals": [
+        {
+          "text": "בתוצאות חיפוש מופיע 'Bloomingville - יבואן רשמי' ו'ייבוא בלעדי של Tirador' לפי עמוד מוצר. האתר עצמו לא נקרא (דף טעינה מחדש ב-JavaScript בלבד), ולכן לא אומת.",
+          "url": "https://www.tiradorhd.co.il/g/23415-%D7%99%D7%A6%D7%A8%D7%9F/183650-Bloomingville"
+        }
+      ],
+      "delivery_he": "לא ידוע (האתר לא נקרא).",
+      "covers_slots": ["hall/umbrella-stand"]
+    },
+    {
+      "id": "magic-moments",
+      "name": "מג׳יק מומנטס (כבר נחקר ב-12.10; נוסף רק מוצר לעמדה חסרה)",
+      "url": "https://www.magic-moments.co.il",
+      "city": "לא נבדק שוב",
+      "b2b_signals": [],
+      "delivery_he": "לא נבדק שוב.",
+      "covers_slots": ["hall/umbrella-stand"]
+    }
+  ],
+  "slots": {
+    "living-room/framed-art": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": true,
+      "slot_price_ils": 379,
+      "price_basis_he": "מחיר העמדה בתמחור הסלון (שלישיית מורנדי ₪379)",
+      "products": [
+        {
+          "shop_id": "idana",
+          "title": "מסגרת אלון מלא 50×70 עם אקריליק אנטי-רפלקטיבי (₪270) + פוסטר Chicura 50×70 (₪210), שני פריטים",
+          "url": "https://idanahome.co.il/collections/collections-pictures-art-boho-scandinavian/products/wooden-frame-50x70-anti-reflective-acrylic",
+          "image": "https://idanahome.co.il/cdn/shop/files/1_36edb5e3-9098-4c31-9d0b-d5b443211f8d_220x260_crop_center@2x.jpg?v=1767781876",
+          "price_ils": 480,
+          "vat_included": null,
+          "dims_cm": "50x70",
+          "material": "אלון מלא, אקריליק; פוסטר נייר",
+          "style_fit_guess": {"nordic": 8, "warm-modern": 6, "japandi": 7, "mediterranean": 5, "modern-country": 5, "boho": 6},
+          "trade_discount_needed_pct": 67,
+          "why_he": "המסגרת בדיוק נורדית (אלון, זכוכית אקרילית נגד השתקפות). הפוסטר הוא דוגמה ממחירון הפוסטרים (₪168-250); סה״כ שני פריטים. יבואן עם 'קשרי אדריכלים' ו'מחלקת פרויקטים'."
+        },
+        {
+          "shop_id": "tollmans-dot",
+          "title": "פוסטר Paper Collective FORMA Y ESPACIO 01 (50×70, ₪187 במבצע) + מסגרת עץ Urban Nature Culture (₪139)",
+          "url": "https://www.tollmansdot.co.il/product/forma_y_espacio_01_50x70/",
+          "image": null,
+          "price_ils": 326,
+          "vat_included": null,
+          "dims_cm": "50x70",
+          "material": "פוסטר נייר + מסגרת עץ ריקה (שני פריטים)",
+          "style_fit_guess": {"nordic": 8, "warm-modern": 7, "japandi": 7, "mediterranean": 5, "modern-country": 5, "boho": 6},
+          "trade_discount_needed_pct": 51,
+          "why_he": "מותג פוסטרים סקנדינבי אמיתי. דף הפוסטר בלי תמונה בתוכן שנקרא (placeholder), ולכן הפיט לא אומת. גדלים נוספים: 70×100 ₪524, 100×140 ₪1,173."
+        },
+        {
+          "shop_id": "mixmax",
+          "title": "שלישיית תמונות על קנבס מתוח וממוסגר, דגם E-533 (50×70 לחלק)",
+          "url": "https://www.mixmax.co.il/product/%D7%A9%D7%9C%D7%A9%D7%94-%D7%A2%D7%9C-%D7%A7%D7%A0%D7%91%D7%A1-%D7%9E%D7%AA%D7%95%D7%97-%D7%95%D7%9E%D7%9E%D7%95%D7%A1%D7%92%D7%A8-%D7%9C%D7%A1%D7%9C%D7%95%D7%9F-%D7%90%D7%95-%D7%9C%D7%9E%D7%A9%D7%A8%D7%93-%D7%93%D7%92%D7%9D-e-533",
+          "image": "https://www.mixmax.co.il/images/itempics/E-533_200920211214261_large.jpg",
+          "price_ils": 399,
+          "vat_included": null,
+          "dims_cm": "50x70 (סדרת מידות עד 100×150; הקריאה של הדף מקולקלת)",
+          "material": "קנבס מתוח (סוג המסגרת לא קריא)",
+          "style_fit_guess": {"nordic": 4, "warm-modern": 5, "japandi": 4, "mediterranean": 4, "modern-country": 3, "boho": 5},
+          "trade_discount_needed_pct": 60,
+          "why_he": "המחיר היחיד הנמוך בסדרה כולה (שלישייה ב-₪399). הדף חזר מקולקל בקידוד, ולכן לא ברור אם המחיר לשלישייה, אם יש מסגרת, והנושא; פיט נמוך עד שנראה תמונה. מפעל קנבס המוני, לא מעצב."
+        },
+        {
+          "shop_id": "hagalerya11",
+          "title": "תמונת זוג אבסטרקטית בגוונים טבעיים M82, ממוסגרת (50×70 עד 100×200)",
+          "url": "https://hagalerya11.co.il/product/%d7%aa%d7%9e%d7%95%d7%a0%d7%aa-%d7%96%d7%95%d7%92-%d7%90%d7%91%d7%a1%d7%98%d7%a8%d7%a7%d7%98%d7%99%d7%aa-%d7%91%d7%92%d7%95%d7%95%d7%a0%d7%99%d7%9d-%d7%98%d7%91%d7%a2%d7%99%d7%99%d7%9d-m82/",
+          "image": "https://hagalerya11.co.il/wp-content/uploads/2026/08/5-33-1014x1024.jpg",
+          "price_ils": 700,
+          "vat_included": null,
+          "dims_cm": "50x70 עד 100x200 (מחיר הקטגוריה ₪700, לא ברור לאיזו מידה)",
+          "material": "קנבס/זכוכית, מסגור בעבודת יד",
+          "style_fit_guess": {"nordic": 4, "warm-modern": 7, "japandi": 5, "mediterranean": 5, "modern-country": 3, "boho": 6},
+          "trade_discount_needed_pct": 77,
+          "why_he": "גוונים טבעיים אבסטרקטיים; ייצור וסגור בישראל. יקר מהעמדה פי 2, בלי טקסט עסקי."
+        },
+        {
+          "shop_id": "elior",
+          "title": "Soft Cotton Beige - הדפס נייר ממוסגר בפורמט לאורך, מסגרת אלומיניום שחורה",
+          "url": "https://www.eliordecor.co.il/product/תמונה-לסלון-soft-cotton-beige-הדפס-נייר-ממוסגר-בפורמ/",
+          "image": "https://www.eliordecor.co.il/wp-content/uploads/2021/05/1-aluminium-frame-black-Soft-cotton-beige-rectangle-living-room.jpg.webp",
+          "price_ils": 400,
+          "vat_included": null,
+          "dims_cm": null,
+          "material": "נייר, מסגרת אלומיניום שחורה",
+          "style_fit_guess": {"nordic": 6, "warm-modern": 6, "japandi": 6, "mediterranean": 5, "modern-country": 6, "boho": 7},
+          "trade_discount_needed_pct": 60,
+          "why_he": "איור בוטני בגווני בז׳, הכול לפי הזמנה (שינוי מידה/צבע), מחיר 'החל מ'. יש שירות מעצבות. כתובת ה-URL נחתכה בדף (slug קטוע)."
+        }
+      ],
+      "verdict_he": "אין תמונה ממוסגרת ישראלית במחיר העמדה. הדרך הקרובה: מסגרת איקאה/Idana + פוסטר מיבואן (Tollmans, Idana) בכ-₪280-480, או ייצור/סיטונאות ממפעל קנבס (Pearl, Hagalerya, Mix Max). נדרשת הנחת סוחר של 50-77% או העלאת מחיר העמדה לכ-₪600-700."
+    },
+    "master/framed-art": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": true,
+      "slot_price_ils": 449,
+      "price_basis_he": "הערכה (מעטפת 110-120×55-65, התמונה הגדולה בבית)",
+      "products": [
+        {
+          "shop_id": "hagalerya11",
+          "title": "תמונת אבסטרקט גיאומטרית שחור ושמנת M78, ממוסגרת",
+          "url": "https://hagalerya11.co.il/product/%d7%aa%d7%9e%d7%95%d7%a0%d7%aa-%d7%90%d7%91%d7%a1%d7%98%d7%a8%d7%a7%d7%98-%d7%92%d7%99%d7%90%d7%95%d7%9e%d7%98%d7%a8%d7%99%d7%aa-%d7%a9%d7%97%d7%95%d7%a8-%d7%95%d7%a9%d7%9e%d7%a0%d7%aa-m78/",
+          "image": "https://hagalerya11.co.il/wp-content/uploads/2026/08/1-29-1-1014x1024.jpg",
+          "price_ils": 700,
+          "vat_included": null,
+          "dims_cm": "50x70 עד 100x200",
+          "material": "קנבס/זכוכית, מסגור בעבודת יד",
+          "style_fit_guess": {"nordic": 6, "warm-modern": 6, "japandi": 7, "mediterranean": 4, "modern-country": 3, "boho": 4},
+          "trade_discount_needed_pct": 73,
+          "why_he": "שחור ושמנת מתאים לג׳פנדי ולנורדי (נשא פחם). מידה 110-120 לא מאומתת בדף."
+        },
+        {
+          "shop_id": "print-studio",
+          "title": "תמונה מופשטת בעיגולים וצורות, סגנון מינימליסטי (קטגוריות נורדי/ג׳פנדי; מחיר 'החל מ')",
+          "url": "https://printstudio.co.il/product/%d7%aa%d7%9e%d7%95%d7%a0%d7%94-%d7%9e%d7%95%d7%a4%d7%a9%d7%98%d7%aa-%d7%a2%d7%99%d7%92%d7%95%d7%9c%d7%99%d7%9d-%d7%9e%d7%99%d7%a0%d7%99%d7%9e%d7%9c%d7%99%d7%a1%d7%98%d7%99%d7%9d/",
+          "image": null,
+          "price_ils": 399,
+          "vat_included": null,
+          "dims_cm": "מידות עד 100×150 (50×70 ו-70×100 מוזכרות); מחיר ₪399-1,990 לפי מידה",
+          "material": "נייר 265 גר׳ מט או קנבס כותנה; מסגרת בעבודת יד עם זכוכית אמיתית",
+          "style_fit_guess": {"nordic": 7, "warm-modern": 7, "japandi": 8, "mediterranean": 5, "modern-country": 4, "boho": 5},
+          "trade_discount_needed_pct": 53,
+          "why_he": "סטודיו עם קטגוריות נורדי וג׳פנדי וקווי-ציור. הדפסה בהזמנה (S5 פוסל), אך יש 'תכנית שותפים' מוצהרת. המחיר ה-399 הוא למידה הקטנה; למידה 110-120 המחיר גבוה יותר."
+        },
+        {
+          "shop_id": "pearl-pictures",
+          "title": "ציור בעבודת יד - חוף ים אנכי, חול/קרם",
+          "url": "https://pearlpictures.co.il/product/%d7%a6%d7%99%d7%95%d7%a8-%d7%a2%d7%91%d7%95%d7%93%d7%aa-%d7%99%d7%93-%d7%97%d7%95%d7%a3-%d7%99%d7%9d-%d7%90%d7%a0%d7%9b%d7%99-%d7%92%d7%9c%d7%99-%d7%97%d7%95%d7%a3/",
+          "image": "https://pearlpictures.co.il/wp-content/uploads/2025/03/SN-12-לאורך-800x800.jpeg",
+          "price_ils": 748,
+          "vat_included": null,
+          "dims_cm": null,
+          "material": "ציור בעבודת יד (3D), מסגור לא צוין",
+          "style_fit_guess": {"nordic": 3, "warm-modern": 6, "japandi": 4, "mediterranean": 7, "modern-country": 3, "boho": 6},
+          "trade_discount_needed_pct": 75,
+          "why_he": "טווח ₪748-1,955 (מחיר מחוק ₪880-2,300). מתאים לים-תיכוני כעוגן; לא נורדי. הנחות מוצהרות לעסקים: מלונות, משרדים, בתי ספר."
+        }
+      ],
+      "verdict_he": "מעטפת 110-120×55-65 היא הכי גדולה בבית, ובמחיר ₪449 אין מקור ישראלי. כל האפשרויות 2.5-3 פי מהמחיר. רק הנחת סוחר של 55-75% או העלאת מחיר העמדה (מגדירה את המוצר כעוגן)."
+    },
+    "hall/framed-art": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": true,
+      "slot_price_ils": 179,
+      "price_basis_he": "תמחור שאר החדרים (תמונה בכניסה ₪129 מול טיפוסי ₪179)",
+      "products": [
+        {
+          "shop_id": "fox-home",
+          "title": "תמונת קיר דקורטיבית בעיצוב בוטני Leaf (60×60, מסגרת בגוון עץ כהה); אחיות: Branch, Garden, Flower",
+          "url": "https://www.foxhome.co.il/products/0332680300",
+          "image": "https://www.foxhome.co.il/cdn/shop/files/0332680300-1.jpg?v=1779875587&width=1000",
+          "price_ils": 149.93,
+          "vat_included": true,
+          "dims_cm": "60x60 (עומק לא צוין)",
+          "material": "50% MDF, 50% קנבס; מסגרת בגוון עץ כהה; איור עלה בטקסטורה מובלטת; ייצור סין",
+          "style_fit_guess": {"nordic": 5, "warm-modern": 5, "japandi": 6, "mediterranean": 5, "modern-country": 7, "boho": 6},
+          "trade_discount_needed_pct": 51,
+          "why_he": "היחיד שנמצא במידה 50-60 ריבוע בדף עם מחיר, אומת מע״מ. מסגרת כהה (לא אלון) ולכן נורדי רק 5; בוטני מתאים לכפרי מודרני. מחיר מבצע 25% (מחוק ₪199.90). ב-Fox יש B2B עם 'עמוד עסקים'."
+        },
+        {
+          "shop_id": "tollmans-dot",
+          "title": "פוסטר Paper Collective OVATA LINEWORK LIGHT 02 (50×50, ₪300) + מסגרת עץ Urban Nature Culture S (₪89)",
+          "url": "https://www.tollmansdot.co.il/product/ovata_linework_light_02_50x50/",
+          "image": "https://www.tollmansdot.co.il/wp-content/uploads/2026/01/Ecom_PPC25397_05.jpg",
+          "price_ils": 389,
+          "vat_included": null,
+          "dims_cm": "50x50 (המסגרת S: מידה לא צוינה)",
+          "material": "פוסטר נייר + מסגרת עץ (שני פריטים)",
+          "style_fit_guess": {"nordic": 8, "warm-modern": 7, "japandi": 8, "mediterranean": 5, "modern-country": 5, "boho": 5},
+          "trade_discount_needed_pct": 81,
+          "why_he": "ציור קו בלבן עם קו כהה, בדיוק הדרישה (קו פחם). התאמת המסגרת לא מאומתת. יקר פי 2 מהעמדה."
+        }
+      ],
+      "verdict_he": "Fox Home נותנת פתרון במחיר סמוך (₪150, 51% הנחה נדרשת). איכות פחות 'מגזינית'. לנורדי/ג׳פנדי מגיעים רק דרך פוסטר מיובא + מסגרת, ביוקר."
+    },
+    "work/framed-art": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": true,
+      "slot_price_ils": 129,
+      "price_basis_he": "הערכה (תמונה בחדר עבודה/כניסה ₪129)",
+      "products": [
+        {
+          "shop_id": "1item",
+          "title": "תמונה במסגרת עץ - יוטה אופקי (40×50, בכיוון אופקי)",
+          "url": "https://www.1item.co.il/products/%D7%AA%D7%9E%D7%95%D7%A0%D7%94-%D7%9E%D7%A1%D7%92%D7%A8%D7%AA-%D7%A2%D7%A5-%D7%99%D7%95%D7%98%D7%94-%D7%90%D7%95%D7%A4%D7%A7%D7%99-40-50-%D7%A1%D7%9E",
+          "image": "https://www.1item.co.il/cdn/shop/files/tmvnh-msgrt-ivh-avfki-4050-sm-990888.jpg?v=1747760617&width=1520",
+          "price_ils": 99,
+          "vat_included": null,
+          "dims_cm": "50x40 (אופקי)",
+          "material": "עץ עם מילוי יוטה",
+          "style_fit_guess": {"nordic": 5, "warm-modern": 5, "japandi": 5, "mediterranean": 6, "modern-country": 4, "boho": 8},
+          "trade_discount_needed_pct": 46,
+          "why_he": "קטן ב-5-10 מהמעטפת (55-60×45-50). אותה סדרה כוללת פלואו, פורסט וטרקוטה (40×50, ₪99). תמונה לא נבדקה בעין. מועדון מעצבים קיים."
+        }
+      ],
+      "verdict_he": "אין מקור במעטפת המדויקת. 1item מציעה 40×50 ב-₪99; לשאר, אותה בעיה כמו בכניסה."
+    },
+    "dining-room/framed-art": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": true,
+      "slot_price_ils": 129,
+      "price_basis_he": "תמחור שאר החדרים (תמונה נשענת ₪129-179)",
+      "products": [
+        {
+          "shop_id": "1item",
+          "title": "תמונה במסגרת עץ - פורסט (40×50)",
+          "url": "https://www.1item.co.il/products/%D7%AA%D7%9E%D7%95%D7%A0%D7%94-%D7%9E%D7%A1%D7%92%D7%A8%D7%AA-%D7%A2%D7%A5-%D7%A4%D7%95%D7%A8%D7%A1%D7%98-40-50-%D7%A1%D7%9E",
+          "image": "https://www.1item.co.il/cdn/shop/files/tmvnh-msgrt-fvrs-4050-sm-2940790.jpg?v=1754837362&width=1536",
+          "price_ils": 99,
+          "vat_included": null,
+          "dims_cm": "40x50",
+          "material": "מסגרת עץ (גוון לא צוין)",
+          "style_fit_guess": {"nordic": 5, "warm-modern": 5, "japandi": 5, "mediterranean": 5, "modern-country": 6, "boho": 5},
+          "trade_discount_needed_pct": 46,
+          "why_he": "גדול ב-5 מהמעטפת 30-35×40-45 (גבולי). תוכן התמונה לא נבדק."
+        },
+        {
+          "shop_id": "ikea-il",
+          "title": "RÖDALM מסגרת אלון-אפקט 40×50 (מסגרת בלבד, בלי תמונה)",
+          "url": "https://www.ikea.com/il/he/p/roedalm-frame-oak-effect-40566398/",
+          "image": "https://www.ikea.com/il/he/images/products/roedalm-frame-oak-effect__1279758_pe931527_s5.jpg?f=xxs",
+          "price_ils": 59,
+          "vat_included": null,
+          "dims_cm": "40x50 (גם 30×40 ו-50×70; שחור/לבן/אלון-אפקט)",
+          "material": "מסגרת, 'אפקט אלון'",
+          "style_fit_guess": {"nordic": 6, "warm-modern": 4, "japandi": 6, "mediterranean": 3, "modern-country": 4, "boho": 3},
+          "trade_discount_needed_pct": 10,
+          "why_he": "רכיב מסגרת בלבד, בזול (₪59); ההדפס יגיע ממקור אחר. 'אפקט אלון' ולא אלון מלא (ה-Bible דורש מסגרת אמיתית)."
+        }
+      ],
+      "verdict_he": "מקור ישראלי לתמונה קטנה ממוסגרת: 1item (₪99). בלי מסגרת אלון מלא במחיר העמדה."
+    },
+    "corridor/gallery-art": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": false,
+      "slot_price_ils": 364,
+      "price_basis_he": "חבילת הפערים (סט של 3 הדפסים 40×45-50)",
+      "products": [
+        {
+          "shop_id": "1item",
+          "title": "שלושה מתוך סדרת תמונות מסגרת עץ 40×50 (פלואו, פורסט, טרקוטה, יוטה) - ₪99 לכל אחת",
+          "url": "https://www.1item.co.il/products/%D7%AA%D7%9E%D7%95%D7%A0%D7%94-%D7%9E%D7%A1%D7%92%D7%A8%D7%AA-%D7%A2%D7%A5-%D7%A4%D7%9C%D7%95%D7%90%D7%95-40-50-%D7%A1%D7%9E",
+          "image": "https://www.1item.co.il/cdn/shop/files/tmvnh-msgrt-flvav-4050-sm-7076406.jpg?v=1755612147&width=1536",
+          "price_ils": 297,
+          "vat_included": null,
+          "dims_cm": "40x50 לכל תמונה (3 יחידות)",
+          "material": "מסגרת עץ (גוון לא צוין)",
+          "style_fit_guess": {"nordic": 5, "warm-modern": 5, "japandi": 5, "mediterranean": 6, "modern-country": 4, "boho": 7},
+          "trade_discount_needed_pct": 49,
+          "why_he": "רוחב 40 ובגובה 50 (בתוך המעטפת 40×45-50). אין אישור שהשלוש מאותה סדרה בעלת קו פחם; הטרקוטה והיוטה מושכים לבוהו וים-תיכוני. המחיר היחיד שקרוב לעמדה."
+        },
+        {
+          "shop_id": "print-studio",
+          "title": "סט של 3 תמונות - קטגוריית ג׳פנדי/נורדי (דוגמה: סט ג׳פנדי שחור-בז׳, ₪979-3,169)",
+          "url": "https://printstudio.co.il/product-category/%d7%a1%d7%98-%d7%a9%d7%9c%d7%99%d7%a9%d7%99%d7%99%d7%aa-%d7%aa%d7%9e%d7%95%d7%a0%d7%95%d7%aa/",
+          "image": null,
+          "price_ils": 979,
+          "vat_included": null,
+          "dims_cm": "לא צוין לסט הספציפי",
+          "material": "נייר מט או קנבס, מסגרות בעבודת יד עם זכוכית אמיתית (זכוכית מבריקה: בעייתי לעמדה)",
+          "style_fit_guess": {"nordic": 7, "warm-modern": 7, "japandi": 8, "mediterranean": 4, "modern-country": 3, "boho": 4},
+          "trade_discount_needed_pct": 84,
+          "why_he": "קרוב לשפה הנדרשת (קו, בז׳ ושחור) אך יקר פי 2.7. 'תכנית שותפים' מוצהרת."
+        }
+      ],
+      "verdict_he": "1item עונה במחיר (₪297 לשלישייה) אבל לא מאומתת התאמה לסדרה אחת עם קו פחם. ל-Print Studio צריך הנחה של כ-84%."
+    },
+    "kids/framed-prints": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": true,
+      "slot_price_ils": 229,
+      "price_basis_he": "תמחור חדרי הילדים (זוג 30×40; ₪229-299)",
+      "products": [
+        {
+          "shop_id": "little-pieces",
+          "title": "הדפסים לחדרי ילדים (דוגמה: פוסטר יוגה עם כלבים) - החל מ-₪79 ליחידה",
+          "url": "https://www.little-pieces.co.il/kids-prints",
+          "image": "https://static.wixstatic.com/media/615c49_bfd02c10719e4b5d831b98df570d8f95~mv2.jpg",
+          "price_ils": 158,
+          "vat_included": null,
+          "dims_cm": null,
+          "material": "הדפס נייר; מסגרת ומידות לא אומתו",
+          "style_fit_guess": {"nordic": 6, "warm-modern": 5, "japandi": 5, "mediterranean": 4, "modern-country": 6, "boho": 5},
+          "trade_discount_needed_pct": 40,
+          "why_he": "מחיר זוג = 2 × ₪79. לא אומת מסגרת אלון או 30×40; חנות Wix קטנה, בלי תנאי משלוח. סגנון הציור לא נבדק."
+        }
+      ],
+      "verdict_he": "אין זוג ממוסגר 30×40 מאומת. לעומת זאת Bring It Home (נחקר ב-12.10) מציע 30×40 במסגרת עץ ב-₪120."
+    },
+    "living-room/wall-decor": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": true,
+      "slot_price_ils": 119,
+      "price_basis_he": "תמחור הסלון (קישוט קיר ₪89-119)",
+      "products": [
+        {
+          "shop_id": "tollmans-dot",
+          "title": "תמונת תבליט SANDSTONE 3 (מחיר מבצע, מחוק ₪1,210)",
+          "url": "https://www.tollmansdot.co.il/product/sandstone-wall-art/",
+          "image": null,
+          "price_ils": 484,
+          "vat_included": null,
+          "dims_cm": null,
+          "material": "תבליט (חומר לא צוין); דף בלי תמונה",
+          "style_fit_guess": {"nordic": 5, "warm-modern": 8, "japandi": 8, "mediterranean": 6, "modern-country": 3, "boho": 6},
+          "trade_discount_needed_pct": 90,
+          "why_he": "תבליט אבן חול הוא חומר העוגן של המודרני החם והג׳פנדי. הדף בלי מידות ובלי תמונה: לא אומת. אחות: SANDSTONE 5 ₪863."
+        }
+      ],
+      "verdict_he": "אין קישוט קיר ראטן/קש ישראלי נראה בסדרה שנבדקה. קישוט קיר קלוע: Israel Basketry (מנדלות קיר, מחיר לא פורסם) ו-Dar Marrakech (אהילים וסלים) לא נבדקו לעומק."
+    },
+    "dining-room/floor-vase": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": false,
+      "slot_price_ils": 349,
+      "price_basis_he": "חבילת הפערים (אגרטל רצפה ₪349)",
+      "products": [
+        {
+          "shop_id": "kado-home",
+          "title": "כד קרמיקה לבן מעוצב פס בולט דגם איקו (3 מידות)",
+          "url": "https://kadohome.co.il/product/%d7%9b%d7%93-%d7%a7%d7%a8%d7%9e%d7%99%d7%a7%d7%94-%d7%9c%d7%91%d7%9f-%d7%9e%d7%a2%d7%95%d7%a6%d7%91-%d7%a4%d7%a1-%d7%91%d7%95%d7%9c%d7%98-%d7%93%d7%92%d7%9d-%d7%90%d7%99%d7%a7%d7%95/",
+          "image": "https://i0.wp.com/kadohome.co.il/wp-content/uploads/2025/09/photoroom_20250930_125509.jpeg?resize=600%2C600&ssl=1",
+          "price_ils": 450,
+          "vat_included": null,
+          "dims_cm": "לא צוין (₪290 לקטן, ₪450 לגדול)",
+          "material": "קרמיקה, לבן",
+          "style_fit_guess": {"nordic": 6, "warm-modern": 8, "japandi": 6, "mediterranean": 5, "modern-country": 5, "boho": 4},
+          "trade_discount_needed_pct": 68,
+          "why_he": "אגרטל רצפה קרמי לבן עם פס מתבלט (מסדרת איקו); המחיר ₪450 לגדול. הכול אזל ביום הבדיקה. יש סיטונאות מוצהרת ('ייבוא במחיר סיטונאי')."
+        },
+        {
+          "shop_id": "kado-home",
+          "title": "כד אבן רצפתי מיוחד גדול/בינוני מחוספס דגם סופיה",
+          "url": "https://kadohome.co.il/product/%d7%9b%d7%93-%d7%90%d7%91%d7%9f-%d7%9e%d7%99%d7%95%d7%97%d7%93-%d7%92%d7%93%d7%95%d7%9c-%d7%91%d7%99%d7%a0%d7%95%d7%a0%d7%99-%d7%9e%d7%97%d7%95%d7%a1%d7%a4%d7%a1-%d7%93%d7%92%d7%9d-%d7%a1%d7%95/",
+          "image": "https://i0.wp.com/kadohome.co.il/wp-content/uploads/2026/06/14978d55-c5cb-4eb8-b157-8e12973436da.png?resize=600%2C600&ssl=1",
+          "price_ils": 299,
+          "vat_included": null,
+          "dims_cm": null,
+          "material": "אבן/מחוספס (לפי הכותרת), צבע לא צוין",
+          "style_fit_guess": {"nordic": 4, "warm-modern": 6, "japandi": 6, "mediterranean": 7, "modern-country": 5, "boho": 7},
+          "trade_discount_needed_pct": 51,
+          "why_he": "כד אבן מחוספס: מתאים לים-תיכוני ובוהו, לא לנורדי (אסור אבן חוץ מאגרטל אחד). אזל במלאי; ה-URL נחתך בדף (slug קטוע)."
+        },
+        {
+          "shop_id": "decogarden",
+          "title": "כד משושה לבן, קוטר 38, גובה 55",
+          "url": "https://decogarden.co.il/products/%D7%9B%D7%93-%D7%9E%D7%A9%D7%95%D7%A9%D7%94-%D7%9C%D7%91%D7%9F-%D7%A7%D7%95%D7%98%D7%A8-38-%D7%92%D7%95%D7%91%D7%94-55-%D7%A1-%D7%9E",
+          "image": "https://decogarden.co.il/cdn/shop/files/D7_9B_D7_93-_D7_9E_D7_A9_D7_95_D7_A9_D7_94-_D7_A2_D7_9D-_D7_A6_D7_9E_D7_97-scaled_17291422-1dc1-48df-a5d1-694ad50b5124.webp?v=1735941241&width=533",
+          "price_ils": 180,
+          "vat_included": null,
+          "dims_cm": "38x55 (קוטר x גובה)",
+          "material": "לא צוין (עציץ/כד)",
+          "style_fit_guess": {"nordic": 5, "warm-modern": 4, "japandi": 4, "mediterranean": 4, "modern-country": 4, "boho": 3},
+          "trade_discount_needed_pct": 19,
+          "why_he": "גובה 55 בתוך 50-65, אבל קוטר 38 מעל 25-32 ב-6. משושה (פאות) שונה מהנדרש. אזל. הכי קרוב למחיר העמדה."
+        }
+      ],
+      "verdict_he": "אין אגרטל רצפה קרמי 50-65 במלאי בישראל במחיר העמדה (₪349). The Collection ₪259 (נחקר ב-12.10) נשאר הטוב ביותר. קאדו: הנחת סוחר של 50-70%."
+    },
+    "hall/console-vessel": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": true,
+      "slot_price_ils": 299,
+      "price_basis_he": "המחיר הקיים (₪299); המעצב הציע ₪489 בהחלטות המחיר",
+      "products": [
+        {
+          "shop_id": "tollmans-dot",
+          "title": "אגרטל Cooee LILIANE 28H, חול",
+          "url": "https://www.tollmansdot.co.il/product/vase_liliane_28_sand/",
+          "image": "https://www.tollmansdot.co.il/wp-content/uploads/2026/07/COOHI07001SA-924X924.jpg",
+          "price_ils": 379,
+          "vat_included": null,
+          "dims_cm": "גובה 28",
+          "material": "לא צוין בדף (קרמיקה/אבנית לפי המותג, לא אומת)",
+          "style_fit_guess": {"nordic": 8, "warm-modern": 8, "japandi": 7, "mediterranean": 7, "modern-country": 6, "boho": 6},
+          "trade_discount_needed_pct": 67,
+          "why_he": "גובה 28 בתוך 25-35, גוון חול. קיים גם בגוון צהבהב. קרוב לשפה של המאסטרפיס הקרמי אבל פריט סדרתי. מותג שוודי שאומת בקטלוג."
+        },
+        {
+          "shop_id": "kado-home",
+          "title": "כד קרמיקה גבוה צר עיטור פסים דגם איקו",
+          "url": "https://kadohome.co.il/product/%d7%9b%d7%93-%d7%a7%d7%a8%d7%9e%d7%99%d7%a7%d7%94-%d7%92%d7%91%d7%95%d7%94-%d7%a6%d7%a8-%d7%a2%d7%99%d7%98%d7%95%d7%a8-%d7%a4%d7%a1%d7%99%d7%9d-%d7%93%d7%92%d7%9d-%d7%90%d7%99%d7%a7%d7%95/",
+          "image": "https://i0.wp.com/kadohome.co.il/wp-content/uploads/2025/09/WhatsApp-Image-2026-06-29-at-13.59.26.jpeg?resize=600%2C600&ssl=1",
+          "price_ils": 149,
+          "vat_included": null,
+          "dims_cm": null,
+          "material": "קרמיקה",
+          "style_fit_guess": {"nordic": 6, "warm-modern": 7, "japandi": 6, "mediterranean": 5, "modern-country": 5, "boho": 4},
+          "trade_discount_needed_pct": 16,
+          "why_he": "כד גבוה וצר קרמי, אזל ביום הבדיקה. מידות לא פורסמו."
+        },
+        {
+          "shop_id": "1item",
+          "title": "אגרטל קרמיקה מעוגל דגם פבל (גבוה)",
+          "url": "https://www.1item.co.il/products/pebble-textured-ceramic-vase",
+          "image": "https://cdn.shopify.com/s/files/1/0719/8490/6483/files/pebble-textured-ceramic-vase.jpg",
+          "price_ils": 69,
+          "vat_included": null,
+          "dims_cm": "17x25x6 (גבוה); נמוך 20x16x6 ב-₪49",
+          "material": "קרמיקה מוגבלת בטקסטורה",
+          "style_fit_guess": {"nordic": 7, "warm-modern": 7, "japandi": 7, "mediterranean": 5, "modern-country": 4, "boho": 5},
+          "trade_discount_needed_pct": 0,
+          "why_he": "גובה 25 בתחתית המעטפת; רוחב 6 מתאים לענף יחיד. כבר מתחת לתקרה במחיר קמעוני. מתאים למי שמוכן לקרמיקה פשוטה."
+        }
+      ],
+      "verdict_he": "יש מילוי במחיר (1item ₪69) ויש 'כד מגזיני' בתשלום (Cooee ₪379, 67% הנחה). לא מעוף של וואבי-סאבי 26.5 מ-AliExpress ב-₪489."
+    },
+    "living-room/vase": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": true,
+      "slot_price_ils": 229,
+      "price_basis_he": "תמחור הסלון (אגרטל ₪229)",
+      "products": [
+        {
+          "shop_id": "tollmans-dot",
+          "title": "אגרטל Cooee LILIANE 28H, חול",
+          "url": "https://www.tollmansdot.co.il/product/vase_liliane_28_sand/",
+          "image": "https://www.tollmansdot.co.il/wp-content/uploads/2026/07/COOHI07001SA-924X924.jpg",
+          "price_ils": 379,
+          "vat_included": null,
+          "dims_cm": "גובה 28",
+          "material": "לא צוין בדף",
+          "style_fit_guess": {"nordic": 8, "warm-modern": 8, "japandi": 7, "mediterranean": 7, "modern-country": 6, "boho": 6},
+          "trade_discount_needed_pct": 75,
+          "why_he": "מתאים לאדן (גובה 25-35). ללא מידות קוטר בדף."
+        },
+        {
+          "shop_id": "tollmans-dot",
+          "title": "אגרטל HKLiving ATELIER M, קרם",
+          "url": "https://www.tollmansdot.co.il/product/vase_atelier_m_cream/",
+          "image": null,
+          "price_ils": 259,
+          "vat_included": null,
+          "dims_cm": null,
+          "material": "לא צוין",
+          "style_fit_guess": {"nordic": 6, "warm-modern": 7, "japandi": 5, "mediterranean": 6, "modern-country": 5, "boho": 8},
+          "trade_discount_needed_pct": 63,
+          "why_he": "מסומן COMING SOON ובלי תמונה; גם בגוונים ירקרק ורוד. פיט נקבע לפי השם בלבד."
+        },
+        {
+          "shop_id": "casabella",
+          "title": "כדי קרמיקה וינטג׳, גוון אבן",
+          "url": "https://casabella.co.il/products/%D7%9B%D7%93%D7%99-%D7%A7%D7%A8%D7%9E%D7%99%D7%A7%D7%94-%D7%95%D7%99%D7%A0%D7%98%D7%92",
+          "image": "https://casabella.co.il/cdn/shop/files/IMG_5226.jpg?v=1742977107&width=1000",
+          "price_ils": 120,
+          "vat_included": null,
+          "dims_cm": null,
+          "material": "קרמיקה",
+          "style_fit_guess": {"nordic": 5, "warm-modern": 5, "japandi": 6, "mediterranean": 7, "modern-country": 6, "boho": 7},
+          "trade_discount_needed_pct": 21,
+          "why_he": "סיטונאות מוצהרת (Suppliers@casabella.co.il). גוון אבן, וינטג׳. מידות לא פורסמו."
+        },
+        {
+          "shop_id": "ikea-il",
+          "title": "STILREN אגרטל 22 ס״מ, לבן או אפור-בז׳ כהה",
+          "url": "https://www.ikea.com/il/he/p/stilren-vase-white-10442045/",
+          "image": "https://www.ikea.com/il/he/images/products/stilren-vase-white__0704329_pe725345_s5.jpg?f=xxs",
+          "price_ils": 59,
+          "vat_included": null,
+          "dims_cm": "גובה 22",
+          "material": "לא צוין בדף הרשימה",
+          "style_fit_guess": {"nordic": 6, "warm-modern": 5, "japandi": 5, "mediterranean": 4, "modern-country": 4, "boho": 3},
+          "trade_discount_needed_pct": 0,
+          "why_he": "גובה 22 נמוך מ-25-35 ב-3 (בתוך טולרנס העבודה). מחיר שוק נמוך. אין הנחת סוחר מוצהרת."
+        }
+      ],
+      "verdict_he": "מקור ישראלי יש, אבל במחיר ₪229 רק תחתית (IKEA, 1item, Casabella). אגרטל מגזיני (Cooee) דורש 75% הנחה."
+    },
+    "dining-room/centerpiece-vase": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": false,
+      "slot_price_ils": 199,
+      "price_basis_he": "חבילת הפערים (אגרטל מרכזי ₪199)",
+      "products": [
+        {
+          "shop_id": "tollmans-dot",
+          "title": "אגרטל Cooee LILIANE 18H, חול",
+          "url": "https://www.tollmansdot.co.il/product/vase_liliane_18_sand/",
+          "image": "https://www.tollmansdot.co.il/wp-content/uploads/2026/07/COOHI07002SA-924X924.jpg",
+          "price_ils": 198,
+          "vat_included": null,
+          "dims_cm": "גובה 18 (נמוך מ-20-28)",
+          "material": "לא צוין בדף",
+          "style_fit_guess": {"nordic": 7, "warm-modern": 7, "japandi": 6, "mediterranean": 6, "modern-country": 5, "boho": 6},
+          "trade_discount_needed_pct": 58,
+          "why_he": "הגוון 'שיבולת שועל' שחסר בעמדה (חול). גובה 18 נמוך מהמעטפת."
+        },
+        {
+          "shop_id": "casabella",
+          "title": "כד קרמיקה פסים, קרם",
+          "url": "https://casabella.co.il/products/%D7%9B%D7%93-%D7%A7%D7%A8%D7%9E%D7%99%D7%A7%D7%94-%D7%A4%D7%A1%D7%99%D7%9D",
+          "image": "https://casabella.co.il/cdn/shop/files/7b9d40141ce0c9077ff96d5f96764439.jpg?v=1783593533&width=1000",
+          "price_ils": 77.5,
+          "vat_included": null,
+          "dims_cm": null,
+          "material": "קרמיקה",
+          "style_fit_guess": {"nordic": 5, "warm-modern": 6, "japandi": 5, "mediterranean": 6, "modern-country": 7, "boho": 6},
+          "trade_discount_needed_pct": 0,
+          "why_he": "קנקן קרמי בקרם, מתאים לכפרי מודרני (קנקן אבנית). מידות לא פורסמו."
+        },
+        {
+          "shop_id": "kado-home",
+          "title": "כד קרמיקה גבוה צר עיטור פסים דגם איקו",
+          "url": "https://kadohome.co.il/product/%d7%9b%d7%93-%d7%a7%d7%a8%d7%9e%d7%99%d7%a7%d7%94-%d7%92%d7%91%d7%95%d7%94-%d7%a6%d7%a8-%d7%a2%d7%99%d7%98%d7%95%d7%a8-%d7%a4%d7%a1%d7%99%d7%9d-%d7%93%d7%92%d7%9d-%d7%90%d7%99%d7%a7%d7%95/",
+          "image": "https://i0.wp.com/kadohome.co.il/wp-content/uploads/2025/09/WhatsApp-Image-2026-06-29-at-13.59.26.jpeg?resize=600%2C600&ssl=1",
+          "price_ils": 149,
+          "vat_included": null,
+          "dims_cm": null,
+          "material": "קרמיקה",
+          "style_fit_guess": {"nordic": 6, "warm-modern": 7, "japandi": 6, "mediterranean": 5, "modern-country": 5, "boho": 4},
+          "trade_discount_needed_pct": 45,
+          "why_he": "אזל; צר וגבוה, מתאים לענפוני זית."
+        },
+        {
+          "shop_id": "ikea-il",
+          "title": "STILREN אגרטל 22 ס״מ, לבן או אפור-בז׳ כהה",
+          "url": "https://www.ikea.com/il/he/p/stilren-vase-dark-grey-beige-40623266/",
+          "image": "https://www.ikea.com/il/he/images/products/stilren-vase-dark-grey-beige__1450873_pe990482_s5.jpg?f=xxs",
+          "price_ils": 59,
+          "vat_included": null,
+          "dims_cm": "גובה 22",
+          "material": "לא צוין בדף הרשימה",
+          "style_fit_guess": {"nordic": 6, "warm-modern": 5, "japandi": 5, "mediterranean": 4, "modern-country": 4, "boho": 3},
+          "trade_discount_needed_pct": 0,
+          "why_he": "בגובה 22 בתוך 20-28; גוון אפור-בז׳ כהה מחפה על אפור הערפל החסר. מחיר מדף ₪59."
+        },
+        {
+          "shop_id": "1item",
+          "title": "אגרטל קרמיקה מעוגל דגם פבל",
+          "url": "https://www.1item.co.il/products/pebble-textured-ceramic-vase",
+          "image": "https://cdn.shopify.com/s/files/1/0719/8490/6483/files/pebble-textured-ceramic-vase.jpg",
+          "price_ils": 69,
+          "vat_included": null,
+          "dims_cm": "17x25x6",
+          "material": "קרמיקה",
+          "style_fit_guess": {"nordic": 7, "warm-modern": 7, "japandi": 7, "mediterranean": 5, "modern-country": 4, "boho": 5},
+          "trade_discount_needed_pct": 0,
+          "why_he": "גובה 25 בתוך 20-28; רוחב 6, פה צר."
+        }
+      ],
+      "verdict_he": "הישראלי מכסה את העמדה במחיר (3 אפשרויות עד ₪80). בעמדה יש כבר 2 פריטים מ-CJ בציון 7-8, ולכן אלה בעיקר חלופות."
+    },
+    "master/sill-vase": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": true,
+      "slot_price_ils": 89,
+      "price_basis_he": "הערכה (תמחור חדר שינה: אגרטל אדן ₪49-89)",
+      "products": [
+        {
+          "shop_id": "casabella",
+          "title": "אגרטלי קרמיקה אומברה, גוון אבן (גם חרדל, תכלת, ירוק)",
+          "url": "https://casabella.co.il/products/%D7%90%D7%92%D7%A8%D7%98%D7%9C%D7%99-%D7%A7%D7%A8%D7%9E%D7%99%D7%A7%D7%94-%D7%90%D7%95%D7%9E%D7%91%D7%A8%D7%94",
+          "image": "https://casabella.co.il/cdn/shop/files/5_df729a28-808c-4b9b-800a-acbbf5f4e0a3.jpg?v=1783591494&width=1000",
+          "price_ils": 59.9,
+          "vat_included": null,
+          "dims_cm": null,
+          "material": "קרמיקה",
+          "style_fit_guess": {"nordic": 6, "warm-modern": 6, "japandi": 6, "mediterranean": 6, "modern-country": 5, "boho": 6},
+          "trade_discount_needed_pct": 40,
+          "why_he": "גוון אבן מתאים; מידות לא פורסמו."
+        },
+        {
+          "shop_id": "1item",
+          "title": "אגרטל קרמיקה מעוגל דגם פבל (גבוה)",
+          "url": "https://www.1item.co.il/products/pebble-textured-ceramic-vase",
+          "image": "https://cdn.shopify.com/s/files/1/0719/8490/6483/files/pebble-textured-ceramic-vase.jpg",
+          "price_ils": 69,
+          "vat_included": null,
+          "dims_cm": "17x25x6",
+          "material": "קרמיקה",
+          "style_fit_guess": {"nordic": 7, "warm-modern": 7, "japandi": 7, "mediterranean": 5, "modern-country": 4, "boho": 5},
+          "trade_discount_needed_pct": 48,
+          "why_he": "גובה 25 בתוך 22-30."
+        },
+        {
+          "shop_id": "ikea-il",
+          "title": "STILREN אגרטל 22 ס״מ",
+          "url": "https://www.ikea.com/il/he/p/stilren-vase-white-10442045/",
+          "image": "https://www.ikea.com/il/he/images/products/stilren-vase-white__0704329_pe725345_s5.jpg?f=xxs",
+          "price_ils": 59,
+          "vat_included": null,
+          "dims_cm": "גובה 22",
+          "material": "לא צוין",
+          "style_fit_guess": {"nordic": 6, "warm-modern": 5, "japandi": 5, "mediterranean": 4, "modern-country": 4, "boho": 3},
+          "trade_discount_needed_pct": 39,
+          "why_he": "בתחתית המעטפת 22-30."
+        },
+        {
+          "shop_id": "fox-home",
+          "title": "אגרטל מפורצלן שחור מט Honir",
+          "url": "https://www.foxhome.co.il/products/0320550200",
+          "image": "https://www.foxhome.co.il/cdn/shop/files/0320550200-1.jpg?v=1751785180&width=1000",
+          "price_ils": 20.97,
+          "vat_included": true,
+          "dims_cm": null,
+          "material": "פורצלן, שחור מט",
+          "style_fit_guess": {"nordic": 5, "warm-modern": 6, "japandi": 7, "mediterranean": 3, "modern-country": 3, "boho": 3},
+          "trade_discount_needed_pct": 0,
+          "why_he": "מחיר מבצע (מחוק ₪69.90). מידות לא פורסמו. שחור מתאים לג׳פנדי (דיו)."
+        }
+      ],
+      "verdict_he": "מכוסה במחיר קמעוני; הבעיה היחידה היא איכות 'מגזינית' ומידות לא פורסמו."
+    },
+    "bath/vanity-vase": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": false,
+      "slot_price_ils": 39,
+      "price_basis_he": "חבילת הפערים (אגרטלון ₪39)",
+      "products": [
+        {
+          "shop_id": "fox-home",
+          "title": "אגרטל מפורצלן שחור מט Honir",
+          "url": "https://www.foxhome.co.il/products/0320550200",
+          "image": "https://www.foxhome.co.il/cdn/shop/files/0320550200-1.jpg?v=1751785180&width=1000",
+          "price_ils": 20.97,
+          "vat_included": true,
+          "dims_cm": null,
+          "material": "פורצלן, שחור מט",
+          "style_fit_guess": {"nordic": 5, "warm-modern": 6, "japandi": 7, "mediterranean": 3, "modern-country": 3, "boho": 3},
+          "trade_discount_needed_pct": 28,
+          "why_he": "מחיר מבצע. מידות לא פורסמו (המעטפת 11-14 גובה)."
+        },
+        {
+          "shop_id": "ikea-il",
+          "title": "STILREN אגרטל 12 ס״מ, לבן או אפור-בז׳ כהה",
+          "url": "https://www.ikea.com/il/he/p/stilren-vase-white-10592365/",
+          "image": "https://www.ikea.com/il/he/images/products/stilren-vase-white__1292624_pe935067_s5.jpg?f=xxs",
+          "price_ils": 25,
+          "vat_included": null,
+          "dims_cm": "גובה 12",
+          "material": "לא צוין בדף הרשימה",
+          "style_fit_guess": {"nordic": 7, "warm-modern": 6, "japandi": 6, "mediterranean": 4, "modern-country": 4, "boho": 3},
+          "trade_discount_needed_pct": 39,
+          "why_he": "גובה 12 בדיוק בתחום 11-14. ₪25."
+        },
+        {
+          "shop_id": "casabella",
+          "title": "אגרטלי קרמיקה כדור, אפור (גם תכלת, מנטה ועוד)",
+          "url": "https://casabella.co.il/products/%D7%90%D7%92%D7%A8%D7%98%D7%9C%D7%99-%D7%A7%D7%A8%D7%9E%D7%99%D7%A7%D7%94-%D7%9B%D7%93%D7%95%D7%A8",
+          "image": "https://casabella.co.il/cdn/shop/files/IMG_3096.jpg?v=1773239950&width=1000",
+          "price_ils": 49.9,
+          "vat_included": null,
+          "dims_cm": null,
+          "material": "קרמיקה",
+          "style_fit_guess": {"nordic": 5, "warm-modern": 5, "japandi": 5, "mediterranean": 4, "modern-country": 4, "boho": 4},
+          "trade_discount_needed_pct": 70,
+          "why_he": "צורת כדור; מידות לא פורסמו."
+        }
+      ],
+      "verdict_he": "IKEA 12 ס״מ ב-₪25 ו-Fox ב-₪21 קרובים לעמדה (₪39). עדיין 28-39% הנחה כדי להגיע ל-40%."
+    },
+    "hall/planter": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": false,
+      "slot_price_ils": 149,
+      "price_basis_he": "חבילת הפערים (עציץ ליד הפורטל ₪149, מוצע ולא מאושר)",
+      "products": [
+        {
+          "shop_id": "ikea-il",
+          "title": "SOJABÖNA עציץ 24 ס״מ, לבן",
+          "url": "https://www.ikea.com/il/he/p/sojaboena-plant-pot-white-40533586/",
+          "image": "https://www.ikea.com/il/he/images/products/sojaboena-plant-pot-white__1157015_pe887435_s5.jpg?f=xxs",
+          "price_ils": 59,
+          "vat_included": null,
+          "dims_cm": "קוטר 24 (גובה לא צוין)",
+          "material": "לא צוין",
+          "style_fit_guess": {"nordic": 6, "warm-modern": 5, "japandi": 5, "mediterranean": 4, "modern-country": 5, "boho": 4},
+          "trade_discount_needed_pct": 0,
+          "why_he": "קוטר 24 בדיוק במעטפת 22-26; גובה 34-40 לא נבדק. קיים גם 32 ס״מ."
+        },
+        {
+          "shop_id": "yagur-gardens",
+          "title": "עציץ נובו 25 ס״מ (פייבר קליי)",
+          "url": "https://www.yagurgan.co.il/כד-נובו-25-סמ-1091562",
+          "image": null,
+          "price_ils": 99.9,
+          "vat_included": null,
+          "dims_cm": "25 (קוטר לפי הכותרת; גובה לא צוין)",
+          "material": "פייבר קליי (קטלוג 'עציצי פיבר'); צבע לא צוין",
+          "style_fit_guess": {"nordic": 5, "warm-modern": 5, "japandi": 5, "mediterranean": 5, "modern-country": 5, "boho": 5},
+          "trade_discount_needed_pct": 38,
+          "why_he": "צבע, גובה ותמונה לא פורסמו בדף שנקרא. רשת משתלות עם 'Hub עסקי'."
+        },
+        {
+          "shop_id": "tema-shop",
+          "title": "עציץ חרס חול 22 UMA (Broste)",
+          "url": "https://www.tema-shop.com/collections/לגינה/products/עציץ-חרס-חול-26-uma-copy",
+          "image": "https://www.tema-shop.com/cdn/shop/files/58000013.jpg",
+          "price_ils": 210,
+          "vat_included": null,
+          "dims_cm": "22 (יחידת מידה לא צוינה)",
+          "material": "חרס/טרקוטה בגוון חול",
+          "style_fit_guess": {"nordic": 5, "warm-modern": 7, "japandi": 6, "mediterranean": 9, "modern-country": 6, "boho": 8},
+          "trade_discount_needed_pct": 71,
+          "why_he": "היבואנית הרשמית של Broste. חרס חול: נכון לים-תיכוני ובוהו. מסומן אזל בצילום הדף (מול מסנן שמראה במלאי)."
+        }
+      ],
+      "verdict_he": "IKEA ב-₪59 עונה למחיר; Yagur כמעט. גובה וצבע לא ידועים. לים-תיכוני: Broste מ-Tema."
+    },
+    "living-room/planter": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": true,
+      "slot_price_ils": 299,
+      "price_basis_he": "המחיר שהמעצב הציע (₪299; הקיים ₪99)",
+      "products": [
+        {
+          "shop_id": "yagur-gardens",
+          "title": "עציץ ביצה ניוקאסל קרם 40 ס״מ (פייבר קליי)",
+          "url": "https://www.yagurgan.co.il/כד-ביצה-ניוקאסל-קרם-40-סמ",
+          "image": null,
+          "price_ils": 225,
+          "vat_included": null,
+          "dims_cm": "40 (קוטר לפי הכותרת; גובה לא צוין)",
+          "material": "פייבר קליי, קרם",
+          "style_fit_guess": {"nordic": 7, "warm-modern": 7, "japandi": 6, "mediterranean": 7, "modern-country": 6, "boho": 7},
+          "trade_discount_needed_pct": 45,
+          "why_he": "קרם ביצה בגודל מתאים לעץ זית. גם 28 ס״מ ב-₪115. בלי תמונה בדף שנקרא."
+        },
+        {
+          "shop_id": "yagur-gardens",
+          "title": "עציץ נובו 45 ס״מ (פייבר קליי)",
+          "url": "https://www.yagurgan.co.il/כד-נובו-45-סמ-1091565",
+          "image": null,
+          "price_ils": 375,
+          "vat_included": null,
+          "dims_cm": "45 (קוטר לפי הכותרת)",
+          "material": "פייבר קליי; צבע לא צוין",
+          "style_fit_guess": {"nordic": 5, "warm-modern": 5, "japandi": 5, "mediterranean": 5, "modern-country": 5, "boho": 5},
+          "trade_discount_needed_pct": 67,
+          "why_he": "הגדול בסדרה; צבע ותמונה לא ידועים."
+        },
+        {
+          "shop_id": "decogarden",
+          "title": "כד משושה לבן, קוטר 38, גובה 55",
+          "url": "https://decogarden.co.il/products/%D7%9B%D7%93-%D7%9E%D7%A9%D7%95%D7%A9%D7%94-%D7%9C%D7%91%D7%9F-%D7%A7%D7%95%D7%98%D7%A8-38-%D7%92%D7%95%D7%91%D7%94-55-%D7%A1-%D7%9E",
+          "image": "https://decogarden.co.il/cdn/shop/files/D7_9B_D7_93-_D7_9E_D7_A9_D7_95_D7_A9_D7_94-_D7_A2_D7_9D-_D7_A6_D7_9E_D7_97-scaled_17291422-1dc1-48df-a5d1-694ad50b5124.webp?v=1735941241&width=533",
+          "price_ils": 180,
+          "vat_included": null,
+          "dims_cm": "38x55",
+          "material": "לא צוין",
+          "style_fit_guess": {"nordic": 5, "warm-modern": 4, "japandi": 4, "mediterranean": 4, "modern-country": 4, "boho": 3},
+          "trade_discount_needed_pct": 31,
+          "why_he": "אזל. הכי קרוב לעמדה במחיר."
+        }
+      ],
+      "verdict_he": "כלי לעץ זית: Yagur 225 (קרם). מחיר העמדה ₪299 מאפשר זאת בהנחה 45%."
+    },
+    "master/planter": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": true,
+      "slot_price_ils": 299,
+      "price_basis_he": "הערכה (עציץ ₪299)",
+      "products": [
+        {
+          "shop_id": "yagur-gardens",
+          "title": "עציץ ביצה ניוקאסל קרם 40 ס״מ",
+          "url": "https://www.yagurgan.co.il/כד-ביצה-ניוקאסל-קרם-40-סמ",
+          "image": null,
+          "price_ils": 225,
+          "vat_included": null,
+          "dims_cm": "40 (קוטר; גובה לא צוין)",
+          "material": "פייבר קליי, קרם",
+          "style_fit_guess": {"nordic": 7, "warm-modern": 7, "japandi": 6, "mediterranean": 7, "modern-country": 6, "boho": 7},
+          "trade_discount_needed_pct": 45,
+          "why_he": "קוטר 40 בתוך 36-42."
+        },
+        {
+          "shop_id": "yagur-gardens",
+          "title": "עציץ נובו 37 ס״מ",
+          "url": "https://www.yagurgan.co.il/כד-נובו-37-סמ-1091564",
+          "image": null,
+          "price_ils": 279,
+          "vat_included": null,
+          "dims_cm": "37 (קוטר)",
+          "material": "פייבר קליי; צבע לא צוין",
+          "style_fit_guess": {"nordic": 5, "warm-modern": 5, "japandi": 5, "mediterranean": 5, "modern-country": 5, "boho": 5},
+          "trade_discount_needed_pct": 55,
+          "why_he": "קוטר 37 בתחום; צבע לא ידוע."
+        }
+      ],
+      "verdict_he": "אפשרות אחת אמיתית (Yagur Newcastle). שאר החנויות שנבדקו נותנות כדים עד 55 גובה."
+    },
+    "work/planter": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": true,
+      "slot_price_ils": 149,
+      "price_basis_he": "הערכה (עציץ ₪99-149)",
+      "products": [
+        {
+          "shop_id": "yagur-gardens",
+          "title": "עציץ נובו 37 ס״מ",
+          "url": "https://www.yagurgan.co.il/כד-נובו-37-סמ-1091564",
+          "image": null,
+          "price_ils": 279,
+          "vat_included": null,
+          "dims_cm": "37 (קוטר)",
+          "material": "פייבר קליי; צבע לא צוין",
+          "style_fit_guess": {"nordic": 5, "warm-modern": 5, "japandi": 5, "mediterranean": 5, "modern-country": 5, "boho": 5},
+          "trade_discount_needed_pct": 78,
+          "why_he": "קוטר 37 במעטפת 34-38. יקר פי 2."
+        },
+        {
+          "shop_id": "yagur-gardens",
+          "title": "עציץ ביצה ניוקאסל קרם 40 ס״מ",
+          "url": "https://www.yagurgan.co.il/כד-ביצה-ניוקאסל-קרם-40-סמ",
+          "image": null,
+          "price_ils": 225,
+          "vat_included": null,
+          "dims_cm": "40",
+          "material": "פייבר קליי, קרם",
+          "style_fit_guess": {"nordic": 7, "warm-modern": 7, "japandi": 6, "mediterranean": 7, "modern-country": 6, "boho": 7},
+          "trade_discount_needed_pct": 73,
+          "why_he": "קוטר 40 גדול ב-2 מהמעטפת."
+        }
+      ],
+      "verdict_he": "במחיר ₪149 אין כלי 34-38. רק עם העלאת מחיר העמדה."
+    },
+    "bath/floor-planter": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": true,
+      "slot_price_ils": 149,
+      "price_basis_he": "הערכה",
+      "products": [
+        {
+          "shop_id": "yagur-gardens",
+          "title": "עציץ ביצה ניוקאסל קרם 28 ס״מ",
+          "url": "https://www.yagurgan.co.il/כד-ביצה-ניוקאסל-קרם-28-סמ",
+          "image": null,
+          "price_ils": 115,
+          "vat_included": null,
+          "dims_cm": "28 (קוטר)",
+          "material": "פייבר קליי, קרם",
+          "style_fit_guess": {"nordic": 7, "warm-modern": 7, "japandi": 6, "mediterranean": 7, "modern-country": 6, "boho": 7},
+          "trade_discount_needed_pct": 47,
+          "why_he": "קוטר 28 בתוך 26-30; מתאים לרטיבות? פייבר קליי מומלץ לחדר רטוב לאחר בדיקה."
+        },
+        {
+          "shop_id": "yagur-gardens",
+          "title": "עציץ נובו 30 ס״מ",
+          "url": "https://www.yagurgan.co.il/כד-נובו-30-סמ-1091563",
+          "image": null,
+          "price_ils": 199,
+          "vat_included": null,
+          "dims_cm": "30 (קוטר)",
+          "material": "פייבר קליי; צבע לא צוין",
+          "style_fit_guess": {"nordic": 5, "warm-modern": 5, "japandi": 5, "mediterranean": 5, "modern-country": 5, "boho": 5},
+          "trade_discount_needed_pct": 69,
+          "why_he": "קוטר 30 בתחום."
+        }
+      ],
+      "verdict_he": "Newcastle 28 קרם ב-₪115 מתאים; הנחה של 47% ל-40%."
+    },
+    "living-room/bowl": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": true,
+      "slot_price_ils": 79,
+      "price_basis_he": "תמחור הסלון (קערה ₪79)",
+      "products": [
+        {
+          "shop_id": "1item",
+          "title": "קערת נוי קרמיקה דגם לונה, קרם, מרקם מכתשים",
+          "url": "https://www.1item.co.il/products/textured-ceramic-decor-bowl-luna",
+          "image": "https://www.1item.co.il/cdn/shop/files/luna-crater-textured-ceramic-decor-bowl-cream-1item.jpg",
+          "price_ils": 79,
+          "vat_included": null,
+          "dims_cm": null,
+          "material": "קרמיקה",
+          "style_fit_guess": {"nordic": 7, "warm-modern": 7, "japandi": 7, "mediterranean": 6, "modern-country": 5, "boho": 6},
+          "trade_discount_needed_pct": 59,
+          "why_he": "קרם בטקסטורה: ליבת הפלטה הנורדית. מידות לא פורסמו (המעטפת קוטר 16-24)."
+        },
+        {
+          "shop_id": "1item",
+          "title": "קערת נוי קרמיקה על רגל דגם דיונה, בז׳-טרקוטה",
+          "url": "https://www.1item.co.il/products/dune-ceramic-bowl",
+          "image": "https://www.1item.co.il/cdn/shop/files/dune-footed-bowl-front-1item.webp",
+          "price_ils": 49,
+          "vat_included": null,
+          "dims_cm": null,
+          "material": "קרמיקה",
+          "style_fit_guess": {"nordic": 4, "warm-modern": 6, "japandi": 4, "mediterranean": 8, "modern-country": 5, "boho": 8},
+          "trade_discount_needed_pct": 35,
+          "why_he": "טרקוטה מתאימה לים-תיכוני ובוהו; על רגל ולא קערה שטוחה."
+        },
+        {
+          "shop_id": "tema-shop",
+          "title": "קערת פורצלן שטוחה בינונית 20×18 SALT (Broste)",
+          "url": "https://www.tema-shop.com/collections/קערות/products/קערת-פורצלן-שטוחה-בינונית",
+          "image": "https://www.tema-shop.com/cdn/shop/files/14533287.jpg",
+          "price_ils": 184,
+          "vat_included": null,
+          "dims_cm": "20x18",
+          "material": "פורצלן",
+          "style_fit_guess": {"nordic": 8, "warm-modern": 7, "japandi": 8, "mediterranean": 5, "modern-country": 6, "boho": 4},
+          "trade_discount_needed_pct": 83,
+          "why_he": "קערה שטוחה 20 בתחום 16-24, בסגנון Broste הדני. יקרה פי 2.3. אחיות: 24×21.8 ₪215, 17×15.5 ₪125."
+        },
+        {
+          "shop_id": "dar-marrakech",
+          "title": "קערה על רגל, לבן (S-XL)",
+          "url": "https://darmarrakech.co.il/products/%D7%A7%D7%A2%D7%A8%D7%94-%D7%A2%D7%9C-%D7%A8%D7%92%D7%9C-%D7%9C%D7%91%D7%9F",
+          "image": null,
+          "price_ils": 99,
+          "vat_included": null,
+          "dims_cm": "ארבע מידות S, M, L, XL (לא פורסמו)",
+          "material": "קרמיקה מרוקאית בעבודת יד",
+          "style_fit_guess": {"nordic": 6, "warm-modern": 6, "japandi": 6, "mediterranean": 8, "modern-country": 5, "boho": 8},
+          "trade_discount_needed_pct": 68,
+          "why_he": "סיטונאות מוצהרת. מחיר ₪99 לגודל S (לא ברור למידה)."
+        }
+      ],
+      "verdict_he": "1item לונה ב-₪79 מכסה את העמדה ללא הנחה (המחיר זהה). פיט נורדי 7."
+    },
+    "dining-room/bowl": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": true,
+      "slot_price_ils": 79,
+      "price_basis_he": "תמחור (קערה ₪39-79; כאן הנחתי ₪79)",
+      "products": [
+        {
+          "shop_id": "fox-home",
+          "title": "קערת הגשה קרמיקה Bistro",
+          "url": "https://www.foxhome.co.il/products/0332095900",
+          "image": "https://www.foxhome.co.il/cdn/shop/files/0332095900-1.jpg?v=1773926089&width=1000",
+          "price_ils": 69.93,
+          "vat_included": true,
+          "dims_cm": null,
+          "material": "קרמיקה",
+          "style_fit_guess": {"nordic": 6, "warm-modern": 5, "japandi": 6, "mediterranean": 5, "modern-country": 6, "boho": 4},
+          "trade_discount_needed_pct": 54,
+          "why_he": "מחיר מבצע (מחוק ₪99.90). מידות וצבע לא פורסמו. דורשים עומק פנימי 5 לפחות."
+        },
+        {
+          "shop_id": "fox-home",
+          "title": "קערת הגשה קרמיקה מרקם Mika, קאמל",
+          "url": "https://www.foxhome.co.il/products/0334386361",
+          "image": "https://www.foxhome.co.il/cdn/shop/files/0334386361-1.jpg?v=1779875444&width=1000",
+          "price_ils": 83.93,
+          "vat_included": true,
+          "dims_cm": null,
+          "material": "קרמיקה בטקסטורה, גוון קאמל",
+          "style_fit_guess": {"nordic": 4, "warm-modern": 7, "japandi": 4, "mediterranean": 5, "modern-country": 6, "boho": 7},
+          "trade_discount_needed_pct": 62,
+          "why_he": "קאמל מתאים למודרני החם ולבוהו. מחיר מבצע (מחוק ₪119.90)."
+        },
+        {
+          "shop_id": "1item",
+          "title": "קערת נוי קרמיקה דגם לונה, קרם",
+          "url": "https://www.1item.co.il/products/textured-ceramic-decor-bowl-luna",
+          "image": "https://www.1item.co.il/cdn/shop/files/luna-crater-textured-ceramic-decor-bowl-cream-1item.jpg",
+          "price_ils": 79,
+          "vat_included": null,
+          "dims_cm": null,
+          "material": "קרמיקה",
+          "style_fit_guess": {"nordic": 7, "warm-modern": 7, "japandi": 7, "mediterranean": 6, "modern-country": 5, "boho": 6},
+          "trade_discount_needed_pct": 59,
+          "why_he": "כנ״ל; מידות לא פורסמו (נדרש קוטר 20-26)."
+        }
+      ],
+      "verdict_he": "זמין במחיר קמעוני, חלקי: מידות לא ידועות. לאמת קוטר ועומק."
+    },
+    "living-room/candle-holders": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": true,
+      "slot_price_ils": 199,
+      "price_basis_he": "תמחור הסלון (פמוטים זוג ₪199)",
+      "products": [
+        {
+          "shop_id": "tema-shop",
+          "title": "ANYA פמוט/אגרטל גדול",
+          "url": "https://www.tema-shop.com/collections/%D7%A0%D7%A8%D7%95%D7%AA/products/anya-%D7%A4%D7%9E%D7%95%D7%98-%D7%90%D7%92%D7%A8%D7%98%D7%9C-%D7%A7%D7%98%D7%9F-copy",
+          "image": "https://www.tema-shop.com/cdn/shop/files/14573038.jpg?v=1790577812&width=533",
+          "price_ils": 460,
+          "vat_included": null,
+          "dims_cm": null,
+          "material": "לא צוין",
+          "style_fit_guess": {"nordic": 6, "warm-modern": 6, "japandi": 6, "mediterranean": 5, "modern-country": 5, "boho": 5},
+          "trade_discount_needed_pct": 82,
+          "why_he": "הפמוט היחיד בקטגוריה (שאר הפריטים נרות ריחניים). אזל, בלי מידות וחומר."
+        },
+        {
+          "shop_id": "1item",
+          "title": "סט פמוטי אבן עם מגש דגם מינרל",
+          "url": "https://www.1item.co.il/products/mineral-stone-shabbat-candlesticks-tray",
+          "image": "https://cdn.shopify.com/s/files/1/0719/8490/6483/files/mineral-stone-shabbat-candlesticks-tray-1item.jpg",
+          "price_ils": 69,
+          "vat_included": null,
+          "dims_cm": "גוף Ø6.5 גובה 5; מגש 16×9.5",
+          "material": "אבן",
+          "style_fit_guess": {"nordic": 4, "warm-modern": 6, "japandi": 5, "mediterranean": 4, "modern-country": 3, "boho": 4},
+          "trade_discount_needed_pct": 0,
+          "why_he": "פמוט לנרות שבת (דקים), לא לנר עמוד Ø7 של הבית: לא מתאים בלי בדיקה. נכנס רק כמצב קצה."
+        }
+      ],
+      "verdict_he": "אין פמוט לנר עמוד בקוטר 7 במחיר. הרשתות הישראליות מוכרות פמוטי שבת, חנוכיות ופמוטי מתכת בזהב/כסף. ספקים רלוונטיים: Tollmans (HAY/Ferm) ו-Tema, ביוקר."
+    },
+    "hall/key-tray": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": false,
+      "slot_price_ils": 119,
+      "price_basis_he": "חבילת הפערים (מגש מפתחות ₪119)",
+      "products": [
+        {
+          "shop_id": "fox-home",
+          "title": "מגש נוי קטן מקרמיקה Connie",
+          "url": "https://www.foxhome.co.il/products/0333252400",
+          "image": "https://www.foxhome.co.il/cdn/shop/files/0333252400-1.jpg?v=1773926150&width=1000",
+          "price_ils": 90.93,
+          "vat_included": true,
+          "dims_cm": null,
+          "material": "קרמיקה",
+          "style_fit_guess": {"nordic": 6, "warm-modern": 6, "japandi": 6, "mediterranean": 5, "modern-country": 5, "boho": 5},
+          "trade_discount_needed_pct": 46,
+          "why_he": "מחיר מבצע (מחוק ₪129.90). מידות לא פורסמו."
+        },
+        {
+          "shop_id": "1item",
+          "title": "מגש בטון דגם קראון, לבן (24 ס״מ או 35)",
+          "url": "https://www.1item.co.il/products/crown-white-concrete-tray-35cm",
+          "image": "https://cdn.shopify.com/s/files/1/0719/8490/6483/files/crown-white-concrete-decorative-tray-35cm.jpg",
+          "price_ils": 79,
+          "vat_included": null,
+          "dims_cm": "קוטר 24 (או 35 ב-₪99)",
+          "material": "בטון משולב פולימר",
+          "style_fit_guess": {"nordic": 6, "warm-modern": 6, "japandi": 7, "mediterranean": 4, "modern-country": 4, "boho": 5},
+          "trade_discount_needed_pct": 38,
+          "why_he": "שפה גלית (בדומה 'מגש בקצה'), קוטר 24 גדול ב-2 מהמעטפת (16-22). גם בחמרה וסהרה."
+        }
+      ],
+      "verdict_he": "זמין בטווח; ללא טרוורטין מושחז אמיתי (הנורדי מעדיף). 38-46% הנחה."
+    },
+    "master/nightstand-tray": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": true,
+      "slot_price_ils": 79,
+      "price_basis_he": "תמחור חדר שינה (מגש שידה ₪59-99)",
+      "products": [
+        {
+          "shop_id": "1item",
+          "title": "מגש עץ דקורטיבי עגול דגם אקו, טבעי",
+          "url": "https://www.1item.co.il/products/round-wooden-decorative-tray-eco",
+          "image": "https://www.1item.co.il/cdn/shop/files/round-wooden-decorative-tray-eco-1item_jpg.jpg",
+          "price_ils": 69,
+          "vat_included": null,
+          "dims_cm": "קוטר 30",
+          "material": "עץ",
+          "style_fit_guess": {"nordic": 7, "warm-modern": 6, "japandi": 7, "mediterranean": 6, "modern-country": 6, "boho": 7},
+          "trade_discount_needed_pct": 54,
+          "why_he": "מגש עגול 30 בתחום 28-34. מחיר ₪69-89 לפי מידה."
+        },
+        {
+          "shop_id": "1item",
+          "title": "מגש עץ מלבני דגם פריים",
+          "url": "https://www.1item.co.il/products/frame-wood-tray-white-edge",
+          "image": "https://cdn.shopify.com/s/files/1/0719/8490/6483/files/rectangular-wood-serving-tray-1item.jpg",
+          "price_ils": 89,
+          "vat_included": null,
+          "dims_cm": "29.5x20",
+          "material": "עץ טבעי",
+          "style_fit_guess": {"nordic": 7, "warm-modern": 6, "japandi": 6, "mediterranean": 6, "modern-country": 6, "boho": 6},
+          "trade_discount_needed_pct": 64,
+          "why_he": "29.5×20 בתחום 28-34×20-28."
+        },
+        {
+          "shop_id": "fox-home",
+          "title": "מגש עם מסגרת קש טבעית Marble",
+          "url": "https://www.foxhome.co.il/products/313850200",
+          "image": "https://www.foxhome.co.il/cdn/shop/files/0313850200-1.jpg?v=1739882300&width=1000",
+          "price_ils": 44.97,
+          "vat_included": true,
+          "dims_cm": null,
+          "material": "קש טבעי",
+          "style_fit_guess": {"nordic": 4, "warm-modern": 5, "japandi": 4, "mediterranean": 7, "modern-country": 5, "boho": 8},
+          "trade_discount_needed_pct": 29,
+          "why_he": "מחיר מבצע (מחוק ₪149.90); מתאים לבוהו וים-תיכוני."
+        }
+      ],
+      "verdict_he": "זמין במחיר קמעוני בטווח ₪45-89."
+    },
+    "work/desk-tray": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": true,
+      "slot_price_ils": 59,
+      "price_basis_he": "הערכה (מגש שולחן)",
+      "products": [
+        {
+          "shop_id": "fox-home",
+          "title": "מגש נרות ממתכת בגוון אפור פחם Nordic",
+          "url": "https://www.foxhome.co.il/products/0322545814",
+          "image": "https://www.foxhome.co.il/cdn/shop/files/0322545814-1.jpg?v=1749038525&width=1000",
+          "price_ils": 23.97,
+          "vat_included": true,
+          "dims_cm": null,
+          "material": "מתכת, אפור פחם",
+          "style_fit_guess": {"nordic": 7, "warm-modern": 5, "japandi": 7, "mediterranean": 4, "modern-country": 5, "boho": 3},
+          "trade_discount_needed_pct": 2,
+          "why_he": "מחיר מבצע (מחוק ₪79.90). מגש נרות, מידות לא פורסמו."
+        },
+        {
+          "shop_id": "1item",
+          "title": "מגש עץ מלבני דגם פריים",
+          "url": "https://www.1item.co.il/products/frame-wood-tray-white-edge",
+          "image": "https://cdn.shopify.com/s/files/1/0719/8490/6483/files/rectangular-wood-serving-tray-1item.jpg",
+          "price_ils": 89,
+          "vat_included": null,
+          "dims_cm": "29.5x20",
+          "material": "עץ טבעי",
+          "style_fit_guess": {"nordic": 7, "warm-modern": 6, "japandi": 6, "mediterranean": 6, "modern-country": 6, "boho": 6},
+          "trade_discount_needed_pct": 73,
+          "why_he": "29.5×20, חורג ב-1.5 מהמעטפת 22-28 לרוחב."
+        }
+      ],
+      "verdict_he": "Fox ב-₪24 במבצע; מידות לא ידועות."
+    },
+    "living-room/basket": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": true,
+      "slot_price_ils": 89,
+      "price_basis_he": "תמחור הסלון (סל ₪79-89)",
+      "products": [
+        {
+          "shop_id": "ikea-il",
+          "title": "BRANÄS סל, ראטן (32×34×32)",
+          "url": "https://www.ikea.com/il/he/p/branaes-basket-rattan-00138432/",
+          "image": "https://www.ikea.com/il/he/images/products/branaes-basket-rattan__0710999_pe727908_s5.jpg",
+          "price_ils": 89,
+          "vat_included": null,
+          "dims_cm": "32x34x32",
+          "material": "ראטן",
+          "style_fit_guess": {"nordic": 6, "warm-modern": 5, "japandi": 5, "mediterranean": 7, "modern-country": 6, "boho": 8},
+          "trade_discount_needed_pct": 59,
+          "why_he": "גם LUSTIGKURRE (יקינטון מים וקש ים, 32×33×32) ב-₪79 ו-KNIPSA (קש ים) ב-₪89. מחיר זהה לעמדה."
+        },
+        {
+          "shop_id": "fox-home",
+          "title": "סלסלה מקש קלועה גדולה בגוון טבעי Bali",
+          "url": "https://www.foxhome.co.il/products/0334520300",
+          "image": "https://www.foxhome.co.il/cdn/shop/files/0334520300-1.jpg",
+          "price_ils": 132.93,
+          "vat_included": true,
+          "dims_cm": null,
+          "material": "קש קלוע, טבעי",
+          "style_fit_guess": {"nordic": 6, "warm-modern": 6, "japandi": 6, "mediterranean": 7, "modern-country": 7, "boho": 8},
+          "trade_discount_needed_pct": 73,
+          "why_he": "מחיר מבצע (מחוק ₪189.90). בינונית ב-₪97.93."
+        },
+        {
+          "shop_id": "dar-marrakech",
+          "title": "סל בייסיק M (קש, קוטר 45, גובה 35)",
+          "url": "https://darmarrakech.co.il/products/סל-קש",
+          "image": null,
+          "price_ils": 139,
+          "vat_included": null,
+          "dims_cm": "קוטר 45, גובה 35",
+          "material": "קש, בעבודת יד במרוקו",
+          "style_fit_guess": {"nordic": 6, "warm-modern": 6, "japandi": 6, "mediterranean": 8, "modern-country": 6, "boho": 9},
+          "trade_discount_needed_pct": 74,
+          "why_he": "מקור סיטונאי מוצהר. גם גבוה Ø40×50 ב-₪249 ו-XL Ø55×50 ב-₪299, וארגז קש 60×40×35 ב-₪299."
+        },
+        {
+          "shop_id": "homeandco",
+          "title": "סלסלת קש גדולה טבעית (לפי תקציר חיפוש)",
+          "url": "https://homeandco.co.il/%D7%97%D7%A0%D7%95%D7%AA/%D7%A1%D7%9C%D7%A1%D7%9C%D7%90%D7%95%D7%AA-%D7%A7%D7%A9",
+          "image": null,
+          "price_ils": 89,
+          "vat_included": null,
+          "dims_cm": null,
+          "material": "קש טבעי",
+          "style_fit_guess": {"nordic": 6, "warm-modern": 6, "japandi": 6, "mediterranean": 7, "modern-country": 6, "boho": 8},
+          "trade_discount_needed_pct": 59,
+          "why_he": "המחיר מתקציר חיפוש ולא אומת בדף; הדף לא נפתח."
+        },
+        {
+          "shop_id": "israel-basketry",
+          "title": "סלסלה מלבנית מערבה (סל אמנות, עוגן מחיר)",
+          "url": "https://israel-basketry.co.il/product/%d7%a1%d7%9c%d7%a1%d7%9c%d7%94-%d7%9e%d7%9c%d7%91%d7%a0%d7%99%d7%aa-%d7%9e%d7%a2%d7%a8%d7%91%d7%94/",
+          "image": null,
+          "price_ils": 1200,
+          "vat_included": null,
+          "dims_cm": null,
+          "material": "ערבה קלועה בעבודת יד",
+          "style_fit_guess": {"nordic": 5, "warm-modern": 6, "japandi": 6, "mediterranean": 7, "modern-country": 7, "boho": 9},
+          "trade_discount_needed_pct": 97,
+          "why_he": "עוגן מדרג מחירים (ה.14), לא ל-40%. יוצר בעפרה: לבדוק מדיניות מותג."
+        }
+      ],
+      "verdict_he": "זמין. אלו סלים ב-₪45-139; IKEA ו-1item במחיר העמדה. כולם 'קש/ראטן' נראה כמעט ללא הבדל בין חנויות."
+    },
+    "hall/basket": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": false,
+      "slot_price_ils": 89,
+      "price_basis_he": "חבילת הפערים (סל מתחת לספסל ₪89)",
+      "products": [
+        {
+          "shop_id": "ikea-il",
+          "title": "LUSTIGKURRE סל, יקינטון מים/קש ים, טבעי (32×33×32)",
+          "url": "https://www.ikea.com/il/he/p/lustigkurre-basket-natural-water-hyacinth-seagrass-30457328/",
+          "image": "https://www.ikea.com/il/he/images/products/lustigkurre-basket-natural-water-hyacinth-seagrass__0922247_pe788098_s5.jpg",
+          "price_ils": 79,
+          "vat_included": null,
+          "dims_cm": "32x33x32",
+          "material": "יקינטון מים וקש ים",
+          "style_fit_guess": {"nordic": 6, "warm-modern": 5, "japandi": 5, "mediterranean": 7, "modern-country": 6, "boho": 8},
+          "trade_discount_needed_pct": 54,
+          "why_he": "קוטר 32, גובה 32 (המעטפת 28-34×26-30, גובה חורג ב-2). יקינטון מים מותר לפי חוקי הסטודיו."
+        },
+        {
+          "shop_id": "fox-home",
+          "title": "סלסלת קש עגולה 30 ס״מ",
+          "url": "https://www.foxhome.co.il/products/227089900",
+          "image": "https://www.foxhome.co.il/cdn/shop/files/0227089900-1.jpg",
+          "price_ils": 59.43,
+          "vat_included": true,
+          "dims_cm": "קוטר 30",
+          "material": "קש",
+          "style_fit_guess": {"nordic": 6, "warm-modern": 6, "japandi": 6, "mediterranean": 7, "modern-country": 6, "boho": 8},
+          "trade_discount_needed_pct": 39,
+          "why_he": "מחיר מבצע (מחוק ₪84.90); קרוב לעמדה. גובה לא צוין."
+        },
+        {
+          "shop_id": "1item",
+          "title": "סלסלת קש עם מכסה דגם נסט (Ø27 ב-₪45)",
+          "url": "https://www.1item.co.il/products/nest-lidded-straw-storage-basket",
+          "image": "https://cdn.shopify.com/s/files/1/0719/8490/6483/files/nest-lidded-straw-storage-basket.jpg",
+          "price_ils": 45,
+          "vat_included": null,
+          "dims_cm": "Ø16 / Ø20 / Ø27 (גדול ₪45)",
+          "material": "קש טבעי",
+          "style_fit_guess": {"nordic": 5, "warm-modern": 5, "japandi": 5, "mediterranean": 6, "modern-country": 6, "boho": 7},
+          "trade_discount_needed_pct": 20,
+          "why_he": "קטן ב-1 מהמעטפת; עם מכסה. מועדון מעצבים קיים."
+        }
+      ],
+      "verdict_he": "הישראלי עונה: Fox ₪59, 1item ₪45, IKEA ₪79. אפשר לקנות כמלאי."
+    },
+    "master/basket": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": true,
+      "slot_price_ils": 129,
+      "price_basis_he": "הערכה (סל חדר שינה ₪89-129)",
+      "products": [
+        {
+          "shop_id": "ikea-il",
+          "title": "KNIPSA סל, קש ים (32×33×32)",
+          "url": "https://www.ikea.com/il/he/p/knipsa-basket-seagrass-20110540/",
+          "image": "https://www.ikea.com/il/he/images/products/knipsa-basket-seagrass__0713061_pe729165_s5.jpg",
+          "price_ils": 89,
+          "vat_included": null,
+          "dims_cm": "32x33x32",
+          "material": "קש ים",
+          "style_fit_guess": {"nordic": 6, "warm-modern": 5, "japandi": 5, "mediterranean": 7, "modern-country": 6, "boho": 8},
+          "trade_discount_needed_pct": 40,
+          "why_he": "בתוך 32-38."
+        },
+        {
+          "shop_id": "fox-home",
+          "title": "סלסלה מקש קלועה גדולה בגוון טבעי Bali",
+          "url": "https://www.foxhome.co.il/products/0334520300",
+          "image": "https://www.foxhome.co.il/cdn/shop/files/0334520300-1.jpg",
+          "price_ils": 132.93,
+          "vat_included": true,
+          "dims_cm": null,
+          "material": "קש קלוע, טבעי",
+          "style_fit_guess": {"nordic": 6, "warm-modern": 6, "japandi": 6, "mediterranean": 7, "modern-country": 7, "boho": 8},
+          "trade_discount_needed_pct": 60,
+          "why_he": "מחיר מבצע (מחוק ₪189.90)."
+        }
+      ],
+      "verdict_he": "זמין."
+    },
+    "work/basket": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": true,
+      "slot_price_ils": 89,
+      "price_basis_he": "הערכה (סל מתחת לשולחן)",
+      "products": [
+        {
+          "shop_id": "fox-home",
+          "title": "סלסלת קש עגולה 30 ס״מ",
+          "url": "https://www.foxhome.co.il/products/227089900",
+          "image": "https://www.foxhome.co.il/cdn/shop/files/0227089900-1.jpg",
+          "price_ils": 59.43,
+          "vat_included": true,
+          "dims_cm": "קוטר 30",
+          "material": "קש",
+          "style_fit_guess": {"nordic": 6, "warm-modern": 6, "japandi": 6, "mediterranean": 7, "modern-country": 6, "boho": 8},
+          "trade_discount_needed_pct": 39,
+          "why_he": "קוטר 30 בתוך 28-32."
+        },
+        {
+          "shop_id": "ikea-il",
+          "title": "LUSTIGKURRE סל, יקינטון מים/קש ים (32×33×32)",
+          "url": "https://www.ikea.com/il/he/p/lustigkurre-basket-natural-water-hyacinth-seagrass-30457328/",
+          "image": "https://www.ikea.com/il/he/images/products/lustigkurre-basket-natural-water-hyacinth-seagrass__0922247_pe788098_s5.jpg",
+          "price_ils": 79,
+          "vat_included": null,
+          "dims_cm": "32x33x32",
+          "material": "יקינטון מים וקש ים",
+          "style_fit_guess": {"nordic": 6, "warm-modern": 5, "japandi": 5, "mediterranean": 7, "modern-country": 6, "boho": 8},
+          "trade_discount_needed_pct": 54,
+          "why_he": "גדול ב-1-5 מהמעטפת 28-32."
+        },
+        {
+          "shop_id": "1item",
+          "title": "סלסלת קש עם מכסה דגם נסט (Ø27)",
+          "url": "https://www.1item.co.il/products/nest-lidded-straw-storage-basket",
+          "image": "https://cdn.shopify.com/s/files/1/0719/8490/6483/files/nest-lidded-straw-storage-basket.jpg",
+          "price_ils": 45,
+          "vat_included": null,
+          "dims_cm": "Ø27",
+          "material": "קש טבעי",
+          "style_fit_guess": {"nordic": 5, "warm-modern": 5, "japandi": 5, "mediterranean": 6, "modern-country": 6, "boho": 7},
+          "trade_discount_needed_pct": 20,
+          "why_he": "קטן מעט מהמעטפת."
+        }
+      ],
+      "verdict_he": "זמין."
+    },
+    "bath/storage-basket": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": true,
+      "slot_price_ils": 99,
+      "price_basis_he": "הערכה",
+      "products": [
+        {
+          "shop_id": "fox-home",
+          "title": "סלסלת קש מלבנית בגוון טבעי Maui",
+          "url": "https://www.foxhome.co.il/products/0334540300",
+          "image": "https://www.foxhome.co.il/cdn/shop/files/0334540300-1.jpg",
+          "price_ils": 48.93,
+          "vat_included": true,
+          "dims_cm": null,
+          "material": "קש, טבעי",
+          "style_fit_guess": {"nordic": 6, "warm-modern": 6, "japandi": 6, "mediterranean": 7, "modern-country": 6, "boho": 8},
+          "trade_discount_needed_pct": 17,
+          "why_he": "מלבנית, מחיר מבצע (מחוק ₪69.90); מידות לא פורסמו (המעטפת 40-44×30-34×20-23)."
+        },
+        {
+          "shop_id": "fox-home",
+          "title": "סל אחסון עם מכסה Conor",
+          "url": "https://www.foxhome.co.il/products/0327895800",
+          "image": "https://www.foxhome.co.il/cdn/shop/files/0327895800-1.jpg",
+          "price_ils": 39.9,
+          "vat_included": true,
+          "dims_cm": null,
+          "material": "לא צוין",
+          "style_fit_guess": {"nordic": 5, "warm-modern": 5, "japandi": 5, "mediterranean": 5, "modern-country": 5, "boho": 5},
+          "trade_discount_needed_pct": 0,
+          "why_he": "עם מכסה; לא ידוע חומר, צבע ומידות."
+        }
+      ],
+      "verdict_he": "זמין, מידות לא ידועות."
+    },
+    "hall/storage-boxes": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": false,
+      "slot_price_ils": 149,
+      "price_basis_he": "חבילת הפערים (זוג ₪149)",
+      "products": [
+        {
+          "shop_id": "fox-home",
+          "title": "זוג סלי אחסון עם מכסה Conor (2 × ₪39.90)",
+          "url": "https://www.foxhome.co.il/products/0327896361",
+          "image": "https://www.foxhome.co.il/cdn/shop/files/0327896361-1.jpg",
+          "price_ils": 79.8,
+          "vat_included": true,
+          "dims_cm": null,
+          "material": "לא צוין (קאמל; יש גם גוונים נוספים)",
+          "style_fit_guess": {"nordic": 4, "warm-modern": 6, "japandi": 4, "mediterranean": 5, "modern-country": 5, "boho": 6},
+          "trade_discount_needed_pct": 23,
+          "why_he": "מחיר זוג. חומר/מידות לא ידועים. נורדי רוצה פשתן או לבד, לא קש."
+        }
+      ],
+      "verdict_he": "אין קופסת בד/לבד/אלון ישראלית שנמצאה. Fox נותנת סל עם מכסה בלבד."
+    },
+    "kids/toy-basket": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": true,
+      "slot_price_ils": 99,
+      "price_basis_he": "הערכה",
+      "products": [
+        {
+          "shop_id": "fox-home",
+          "title": "סלסלה קלועה בינונית מקש בגוון טבעי Bali",
+          "url": "https://www.foxhome.co.il/products/0334530300",
+          "image": "https://www.foxhome.co.il/cdn/shop/files/0334530300-1.jpg",
+          "price_ils": 97.93,
+          "vat_included": true,
+          "dims_cm": null,
+          "material": "קש קלוע, טבעי",
+          "style_fit_guess": {"nordic": 6, "warm-modern": 6, "japandi": 6, "mediterranean": 7, "modern-country": 7, "boho": 8},
+          "trade_discount_needed_pct": 59,
+          "why_he": "מחיר מבצע (מחוק ₪139.90); מידות לא פורסמו (המעטפת 32-36)."
+        },
+        {
+          "shop_id": "fox-home",
+          "title": "סל אחסון עגול עם מכסה תואם Conor",
+          "url": "https://www.foxhome.co.il/products/0327899401",
+          "image": "https://www.foxhome.co.il/cdn/shop/files/0327899401-1.jpg",
+          "price_ils": 39.9,
+          "vat_included": true,
+          "dims_cm": null,
+          "material": "לא צוין",
+          "style_fit_guess": {"nordic": 5, "warm-modern": 5, "japandi": 5, "mediterranean": 5, "modern-country": 5, "boho": 5},
+          "trade_discount_needed_pct": 0,
+          "why_he": "עגול עם מכסה; חומר ומידות לא ידועים."
+        }
+      ],
+      "verdict_he": "זמין."
+    },
+    "bath/soap-dispenser": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": true,
+      "slot_price_ils": 49,
+      "price_basis_he": "תמחור (דיספנסר ₪39-49)",
+      "products": [
+        {
+          "shop_id": "fox-home",
+          "title": "דיספנסר סבון Mali (צבעים משתנים)",
+          "url": "https://www.foxhome.co.il/products/316073939",
+          "image": "https://www.foxhome.co.il/cdn/shop/files/0316073939-1.jpg?v=1740319122&width=1000",
+          "price_ils": 20.97,
+          "vat_included": true,
+          "dims_cm": null,
+          "material": "לא צוין",
+          "style_fit_guess": {"nordic": 5, "warm-modern": 5, "japandi": 5, "mediterranean": 5, "modern-country": 5, "boho": 4},
+          "trade_discount_needed_pct": 7,
+          "why_he": "מחיר מבצע (מחוק ₪69.90). צבע וחומר משתנים בין וריאנטים."
+        },
+        {
+          "shop_id": "fox-home",
+          "title": "סט אביזרי אמבטיה לבן מט Rocky (דיספנסר + כוס)",
+          "url": "https://www.foxhome.co.il/products/0324130100",
+          "image": "https://www.foxhome.co.il/cdn/shop/files/0324130100-1.jpg?v=1760527239&width=1000",
+          "price_ils": 104.93,
+          "vat_included": true,
+          "dims_cm": null,
+          "material": "לא צוין",
+          "style_fit_guess": {"nordic": 7, "warm-modern": 7, "japandi": 7, "mediterranean": 5, "modern-country": 5, "boho": 4},
+          "trade_discount_needed_pct": 62,
+          "why_he": "מחושב מול ₪98 לשני פריטים (דיספנסר + כוס). לבן מט, מחוק ₪149.90."
+        },
+        {
+          "shop_id": "1item",
+          "title": "אביזרי אמבטיה לבנים דגם מונו (פריט לבחירה)",
+          "url": "https://www.1item.co.il/products/mono-white-bathroom-accessories",
+          "image": "https://cdn.shopify.com/s/files/1/0719/8490/6483/files/mono-white-toilet-bin-with-pedal.jpg",
+          "price_ils": 49,
+          "vat_included": null,
+          "dims_cm": null,
+          "material": "לא צוין",
+          "style_fit_guess": {"nordic": 6, "warm-modern": 6, "japandi": 6, "mediterranean": 4, "modern-country": 4, "boho": 4},
+          "trade_discount_needed_pct": 60,
+          "why_he": "סדרה לבנה/שחורה (דיספנסר, כוס, מברשת, פח). מועדון מעצבים."
+        },
+        {
+          "shop_id": "melach-haaretz",
+          "title": "דיספנסר NOVA לבן",
+          "url": "https://melach-haaretz.co.il/product/4701/",
+          "image": "https://melach-haaretz.co.il/wp-content/uploads/2021/03/דיספנסר-לבן-843x1030.png",
+          "price_ils": 140,
+          "vat_included": null,
+          "dims_cm": null,
+          "material": "לא צוין",
+          "style_fit_guess": {"nordic": 6, "warm-modern": 6, "japandi": 6, "mediterranean": 5, "modern-country": 5, "boho": 5},
+          "trade_discount_needed_pct": 86,
+          "why_he": "יקר פי 3 מהעמדה. בצבעי חול ושחור ולבן."
+        }
+      ],
+      "verdict_he": "זמין. מידות וחומר לא ידועים."
+    },
+    "bath/toothbrush-cup": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": true,
+      "slot_price_ils": 49,
+      "price_basis_he": "תמחור (כוס ₪19-79)",
+      "products": [
+        {
+          "shop_id": "fox-home",
+          "title": "כוס למברשות שיניים Mali",
+          "url": "https://www.foxhome.co.il/products/316089997",
+          "image": "https://www.foxhome.co.il/cdn/shop/files/0316089997-1.jpg?v=1740319115&width=1000",
+          "price_ils": 11.97,
+          "vat_included": true,
+          "dims_cm": null,
+          "material": "לא צוין",
+          "style_fit_guess": {"nordic": 5, "warm-modern": 5, "japandi": 5, "mediterranean": 5, "modern-country": 5, "boho": 4},
+          "trade_discount_needed_pct": 0,
+          "why_he": "מחיר מבצע (מחוק ₪39.90)."
+        },
+        {
+          "shop_id": "melach-haaretz",
+          "title": "כוס VALENCIA שחור",
+          "url": "https://melach-haaretz.co.il/product/%d7%9b%d7%95%d7%a1-valencia-%d7%a9%d7%97%d7%95%d7%a8/",
+          "image": "https://melach-haaretz.co.il/wp-content/uploads/2023/12/כוס1-843x1030.png",
+          "price_ils": 35,
+          "vat_included": null,
+          "dims_cm": null,
+          "material": "לא צוין",
+          "style_fit_guess": {"nordic": 5, "warm-modern": 5, "japandi": 6, "mediterranean": 3, "modern-country": 3, "boho": 3},
+          "trade_discount_needed_pct": 45,
+          "why_he": "שחור; גם NOVA לבן ₪84."
+        }
+      ],
+      "verdict_he": "זמין."
+    },
+    "bath/toilet-brush": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": true,
+      "slot_price_ils": 69,
+      "price_basis_he": "הערכה",
+      "products": [
+        {
+          "shop_id": "fox-home",
+          "title": "מברשת אסלה לבנה (גם שחורה)",
+          "url": "https://www.foxhome.co.il/products/0304000100",
+          "image": "https://www.foxhome.co.il/cdn/shop/files/0304000100-1.jpg?v=1739824759&width=1536",
+          "price_ils": 34.93,
+          "vat_included": true,
+          "dims_cm": null,
+          "material": "לא צוין",
+          "style_fit_guess": {"nordic": 6, "warm-modern": 6, "japandi": 6, "mediterranean": 5, "modern-country": 5, "boho": 4},
+          "trade_discount_needed_pct": 20,
+          "why_he": "מחיר מבצע (מחוק ₪49.90); שחורה מתאימה למשפחת השחור-מט."
+        }
+      ],
+      "verdict_he": "זמין."
+    },
+    "bath/bin": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": true,
+      "slot_price_ils": 99,
+      "price_basis_he": "הערכה",
+      "products": [
+        {
+          "shop_id": "1item",
+          "title": "פח אמבטיה דגם מונו, לבן או שחור (3 ליטר, פדל)",
+          "url": "https://www.1item.co.il/products/mono-black-bathroom-accessories",
+          "image": "https://cdn.shopify.com/s/files/1/0719/8490/6483/files/mono-black-bathroom-accessories.jpg",
+          "price_ils": 69,
+          "vat_included": null,
+          "dims_cm": "3 ליטר",
+          "material": "לא צוין",
+          "style_fit_guess": {"nordic": 6, "warm-modern": 6, "japandi": 6, "mediterranean": 4, "modern-country": 4, "boho": 4},
+          "trade_discount_needed_pct": 41,
+          "why_he": "3 ליטר קטן מהמעטפת (קוטר 20-24, גובה 28-32 = כ-9 ליטר). מידות לא אומתו."
+        },
+        {
+          "shop_id": "fox-home",
+          "title": "פח אשפה 6 ליטר Mr. Bin",
+          "url": "https://www.foxhome.co.il/products/0304015800",
+          "image": "https://www.foxhome.co.il/cdn/shop/files/0304015800-1.jpg?v=1745496455&width=1000",
+          "price_ils": 125.93,
+          "vat_included": true,
+          "dims_cm": null,
+          "material": "לא צוין",
+          "style_fit_guess": {"nordic": 6, "warm-modern": 6, "japandi": 6, "mediterranean": 4, "modern-country": 4, "boho": 4},
+          "trade_discount_needed_pct": 68,
+          "why_he": "מחיר מבצע (מחוק ₪179.90); פח פדל? לא צוין."
+        }
+      ],
+      "verdict_he": "זמין, חלקי."
+    },
+    "dining-room/canisters": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": true,
+      "slot_price_ils": 129,
+      "price_basis_he": "תמחור שאר החדרים (צנצנות סט ₪89-129)",
+      "products": [
+        {
+          "shop_id": "fox-home",
+          "title": "אחסוניות קרמיקה בלבן Mono: סוכר, תה, קפה (3 × ₪41.93)",
+          "url": "https://www.foxhome.co.il/products/0336790100",
+          "image": "https://www.foxhome.co.il/cdn/shop/files/0336790100-1.jpg?v=1788074667&width=1000",
+          "price_ils": 125.79,
+          "vat_included": true,
+          "dims_cm": null,
+          "material": "קרמיקה, לבן",
+          "style_fit_guess": {"nordic": 7, "warm-modern": 6, "japandi": 7, "mediterranean": 5, "modern-country": 6, "boho": 4},
+          "trade_discount_needed_pct": 58,
+          "why_he": "שלישיית אחסוניות קרמיקה בלבן, מחיר מבצע (מחוק ₪59.90 ליחידה). אין מכסה אלון (העמדה דורשת); מידות לא פורסמו."
+        },
+        {
+          "shop_id": "1item",
+          "title": "סט קפה תה סוכר דגם קלאסיק שמנת",
+          "url": "https://www.1item.co.il/products/lassic-cream-coffee-tea-sugar-canisters-set",
+          "image": "https://www.1item.co.il/cdn/shop/files/classic-cream-coffee-tea-sugar-canisters-set-1item.jpg",
+          "price_ils": 79,
+          "vat_included": null,
+          "dims_cm": "גובה 13",
+          "material": "מתכת, שמנת-פנינה",
+          "style_fit_guess": {"nordic": 4, "warm-modern": 4, "japandi": 3, "mediterranean": 4, "modern-country": 6, "boho": 3},
+          "trade_discount_needed_pct": 33,
+          "why_he": "מתכת (לא קרמיקה), גובה 13 נמוך מהמעטפת 12-24; לכפרי מודרני."
+        }
+      ],
+      "verdict_he": "יש סט לבן בקרמיקה ב-₪126; אין סט עם מכסי אלון."
+    },
+    "dining-room/cutting-boards": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": true,
+      "slot_price_ils": 129,
+      "price_basis_he": "הערכה (זוג קרשים)",
+      "products": [
+        {
+          "shop_id": "fox-home",
+          "title": "זוג קרשי חיתוך Logan מעץ מלא (מלבני ₪69.93 + מרובע ₪55.93)",
+          "url": "https://www.foxhome.co.il/products/0328140300",
+          "image": "https://www.foxhome.co.il/cdn/shop/files/0328140300-1_6dd6d075-c036-46e4-8df6-f78bd87e9f92.jpg?v=1771509919&width=1000",
+          "price_ils": 125.86,
+          "vat_included": true,
+          "dims_cm": null,
+          "material": "עץ מלא",
+          "style_fit_guess": {"nordic": 6, "warm-modern": 6, "japandi": 6, "mediterranean": 7, "modern-country": 6, "boho": 6},
+          "trade_discount_needed_pct": 58,
+          "why_he": "זוג בצורות שונות; מידות לא פורסמו (נדרש גובה 42-48 ו-34-40, רוחב 20-26). מחיר מבצע."
+        },
+        {
+          "shop_id": "sheefa",
+          "title": "קרש חיתוך והגשה מעץ זית (₪259 ליחידה; זוג ₪518)",
+          "url": "https://sheefa-art.co.il/product/%d7%a7%d7%a8%d7%a9-%d7%97%d7%99%d7%aa%d7%95%d7%9a-%d7%95%d7%94%d7%92%d7%a9%d7%94-%d7%9e%d7%a2%d7%a5-%d7%96%d7%99%d7%aa/",
+          "image": "https://sheefa-art.co.il/wp-content/uploads/elementor/thumbs/3-1-rucq1qzucd83bdrbrgxyn1l77hdrntfvufaxh1trj0.jpg",
+          "price_ils": 518,
+          "vat_included": null,
+          "dims_cm": null,
+          "material": "עץ זית ישראלי",
+          "style_fit_guess": {"nordic": 5, "warm-modern": 6, "japandi": 6, "mediterranean": 9, "modern-country": 7, "boho": 8},
+          "trade_discount_needed_pct": 90,
+          "why_he": "עץ זית ישראלי, יוצר ישראלי עם 'לחברות וארגונים' וחריטה אישית. ים-תיכוני (קרשי עץ זית בחתימה). מחיר מדרג פרימיום."
+        }
+      ],
+      "verdict_he": "Fox במחיר העמדה (58% הנחה נדרשת); שיפה ועצה כמדרג פרימיום לים-תיכוני."
+    },
+    "dining-room/mug-set": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": true,
+      "slot_price_ils": 99,
+      "price_basis_he": "הערכה (סט 3 ספלים)",
+      "products": [
+        {
+          "shop_id": "fox-home",
+          "title": "ספל קרמיקה Bistro לשתייה חמה 260 מ״ל (3 × ₪13.93)",
+          "url": "https://www.foxhome.co.il/products/0332105900",
+          "image": "https://www.foxhome.co.il/cdn/shop/files/0332105900-1.jpg?v=1773926088&width=1000",
+          "price_ils": 41.79,
+          "vat_included": true,
+          "dims_cm": null,
+          "material": "קרמיקה",
+          "style_fit_guess": {"nordic": 5, "warm-modern": 5, "japandi": 5, "mediterranean": 5, "modern-country": 6, "boho": 4},
+          "trade_discount_needed_pct": 3,
+          "why_he": "מחיר מבצע (מחוק ₪19.90 ליחידה). צבע ודגם לא נבדקו."
+        }
+      ],
+      "verdict_he": "זמין ובמחיר, איכות בסיסית."
+    },
+    "dining-room/tableware-set": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": true,
+      "slot_price_ils": 199,
+      "price_basis_he": "הערכה (סט 6 חלקים)",
+      "products": [
+        {
+          "shop_id": "fox-home",
+          "title": "סט 6 קערות מרק קרמיקה Cory, אפור",
+          "url": "https://www.foxhome.co.il/products/0328725800",
+          "image": "https://www.foxhome.co.il/cdn/shop/files/032872580099-1.jpg?v=1771415946&width=1000",
+          "price_ils": 89.92,
+          "vat_included": true,
+          "dims_cm": null,
+          "material": "קרמיקה",
+          "style_fit_guess": {"nordic": 5, "warm-modern": 5, "japandi": 6, "mediterranean": 4, "modern-country": 4, "boho": 3},
+          "trade_discount_needed_pct": 8,
+          "why_he": "קערות מרק בלבד (העמדה: צלחת ארוחה, צלחת קינוח, קערה). מחיר מבצע (מחוק ₪119.90)."
+        }
+      ],
+      "verdict_he": "אין סט שלם מאובחן; Fox ו-1item מוכרות ספלים וקערות. כלי שולחן אבנית מט: נשאר The Collection (נחקר ב-12.10)."
+    },
+    "kids/toy-cars": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": true,
+      "slot_price_ils": 129,
+      "price_basis_he": "תמחור חדרי הילדים (מכוניות ₪129)",
+      "products": [
+        {
+          "shop_id": "adinut",
+          "title": "סט מכוניות מעץ PlanWorld של Plan Toys (5 כלי רכב)",
+          "url": "https://adinut.co.il/product/cars-set/",
+          "image": "https://adinut.co.il/wp-content/uploads/2023/06/cars2020-086-scaled.jpg",
+          "price_ils": 199,
+          "vat_included": null,
+          "dims_cm": "3.3x7.7x3.6 (לא ברור אם לכלי או לסט)",
+          "material": "עץ גומי טבעי, דבקים ללא פורמלדהיד, צבעי מים",
+          "style_fit_guess": {"nordic": 8, "warm-modern": 6, "japandi": 6, "mediterranean": 5, "modern-country": 6, "boho": 7},
+          "trade_discount_needed_pct": 73,
+          "why_he": "חמישה כלי רכב בצבעים עדינים (אדום, צהוב, ירוק, כחול). יחידה אחת במלאי ביום הבדיקה. אין טענת EN71/ת״י 562 בדף: יש לדרוש בכתב (ד.4)."
+        },
+        {
+          "shop_id": "choopy",
+          "title": "סט מכוניות Le Toy Van (לונדון / ניו יורק)",
+          "url": "https://choopy.co.il/collections/%D7%9B%D7%9C%D7%99-%D7%A8%D7%9B%D7%91-%D7%9C%D7%99%D7%9C%D7%93%D7%99%D7%9D-%D7%9E%D7%A2%D7%A5",
+          "image": null,
+          "price_ils": 159,
+          "vat_included": null,
+          "dims_cm": null,
+          "material": "עץ",
+          "style_fit_guess": {"nordic": 5, "warm-modern": 4, "japandi": 4, "mediterranean": 4, "modern-country": 6, "boho": 4},
+          "trade_discount_needed_pct": 67,
+          "why_he": "לפי תקציר חיפוש; הדף לא נפתח. צבעוני."
+        }
+      ],
+      "verdict_he": "יש סט עץ טבעי אחד שנמצא (Plan Toys). חוסר: סט 3 מכוניות לא צבועות עם EN71 מוצהר."
+    },
+    "kids/doll-pram": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": true,
+      "slot_price_ils": 249,
+      "price_basis_he": "הערכה (HILI'S ₪211 ו-Yasha ₪193 מבסיס 12.10 נחשבו 'באיזון')",
+      "products": [
+        {
+          "shop_id": "ashertoys",
+          "title": "עגלה לבובה מעץ",
+          "url": "https://ashertoys.co.il/product/%d7%a2%d7%92%d7%9c%d7%94-%d7%9c%d7%91%d7%95%d7%91%d7%94-%d7%9e%d7%a2%d7%a5/",
+          "image": "https://ashertoys.co.il/wp-content/uploads/2026/01/7131011-300x300.jpeg",
+          "price_ils": 239,
+          "vat_included": null,
+          "dims_cm": null,
+          "material": "עץ",
+          "style_fit_guess": {"nordic": 5, "warm-modern": 4, "japandi": 4, "mediterranean": 4, "modern-country": 6, "boho": 5},
+          "trade_discount_needed_pct": 57,
+          "why_he": "צבע ומידות לא נראו; בלי טענת תקן בדף. ההדמיה של HILI'S ושל העץ של יאשה (נחקרו) קרובות יותר לעמדה."
+        }
+      ],
+      "verdict_he": "העגלה נשארת מוכרת (HILI'S / יאשה, 12.10). אשר צעצועים כחלופה."
+    },
+    "hall/umbrella-stand": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": true,
+      "slot_price_ils": 149,
+      "price_basis_he": "הערכה (מעמד מטריות)",
+      "products": [
+        {
+          "shop_id": "tirador",
+          "title": "מעמד מטריות CIVOS שחור מט (Zack, גרמניה)",
+          "url": "https://www.tiradorhd.co.il/items/8725058-umbrella-stand-civos-black-zack",
+          "image": null,
+          "price_ils": 439,
+          "vat_included": null,
+          "dims_cm": "25x25x49",
+          "material": "מתכת, שחור מט",
+          "style_fit_guess": {"nordic": 7, "warm-modern": 6, "japandi": 8, "mediterranean": 3, "modern-country": 4, "boho": 3},
+          "trade_discount_needed_pct": 86,
+          "why_he": "לפי תקציר חיפוש (מחיר מבצע, מחוק ₪589). גובה 49 בתחום 45-50, קוטר 25 מעט מעל 20-24. האתר לא נקרא."
+        },
+        {
+          "shop_id": "magic-moments",
+          "title": "מעמד מטריות שחור Ombrello (מתכת עם ידית עץ)",
+          "url": "https://www.magic-moments.co.il/product/%D7%9E%D7%A2%D7%9E%D7%93-%D7%9E%D7%98%D7%A8%D7%99%D7%95%D7%AA-%D7%A9%D7%97%D7%95%D7%A8-ombrello/",
+          "image": null,
+          "price_ils": 139,
+          "vat_included": null,
+          "dims_cm": null,
+          "material": "מתכת שחורה, ידית עץ",
+          "style_fit_guess": {"nordic": 7, "warm-modern": 5, "japandi": 7, "mediterranean": 3, "modern-country": 5, "boho": 3},
+          "trade_discount_needed_pct": 56,
+          "why_he": "לפי תקציר חיפוש; מידות לא ידועות. מג׳יק מומנטס כבר נחקרה."
+        }
+      ],
+      "verdict_he": "יש מעמד מתכת שחור; בלי נתוני קוטר/גובה מאומתים."
+    },
+    "dining-room/candle-holders": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": false,
+      "slot_price_ils": 79,
+      "price_basis_he": "חבילת הפערים (מוצע ₪79)",
+      "products": [],
+      "verdict_he": "נבדק ולא נמצא: פמוט פחם נמוך (גובה 1-4) לנר עמוד Ø7. הרשתות הישראליות מוכרות פמוטי שבת וחנוכיות וגם פמוטי מתכת בזהב/כסף (Fox, Home Center). Tollmans ו-Tema מוכרות פמוטים בודדים ביוקר."
+    },
+    "master/candle-holders": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": true,
+      "slot_price_ils": 99,
+      "price_basis_he": "הערכה",
+      "products": [],
+      "verdict_he": "נבדק ולא נמצא (כמו בפינת האוכל)."
+    },
+    "dining-room/utensil-crock": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": true,
+      "slot_price_ils": 79,
+      "price_basis_he": "הערכה",
+      "products": [],
+      "verdict_he": "לא נמצא כלי למקלות מטבח במהלך הסבב. ב-Fox יש 'כלי לצמרונים מקרמיקה Clean' ₪23.97 (מחוק ₪79.90), שאינו כלי מטבח אך נראה דומה: https://www.foxhome.co.il/products/320870100 . לא נבדק לעומק."
+    },
+    "bath/towel-ladder": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": false,
+      "slot_price_ils": 199,
+      "price_basis_he": "חבילת הפערים (₪199)",
+      "products": [],
+      "verdict_he": "נבדק (חיפוש בלבד): סולמות טיק מתקפלים בכמה חנויות אמבט (אבנר׳ס, מקלח, עידן הפרזול, מרקו). גובה אופייני 175 ואנו צריכים 130-135; מחיר 3 מדפים ₪1,290 (אחרי הנחה). לא נפתח אף דף, ללא מידות 130 במחיר. נחשב כלא נמצא."
+    },
+    "bath/shower-stool": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": true,
+      "slot_price_ils": 199,
+      "price_basis_he": "הערכה",
+      "products": [],
+      "verdict_he": "לא נבדק בסבב הזה (חיפוש סולם מגבות לא החזיר שרפרף מקלחת)."
+    },
+    "bath/shower-dispensers": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": true,
+      "slot_price_ils": 99,
+      "price_basis_he": "הערכה",
+      "products": [],
+      "verdict_he": "לא נבדק בנפרד; ראו bath/soap-dispenser (Fox, 1item, Melach)."
+    },
+    "living-room/magazine-holder": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": true,
+      "slot_price_ils": 129,
+      "price_basis_he": "תמחור הסלון (₪79-129)",
+      "products": [],
+      "verdict_he": "לא נבדק בסבב הזה."
+    },
+    "kids/doll": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": true,
+      "slot_price_ils": 129,
+      "price_basis_he": "הערכה",
+      "products": [],
+      "verdict_he": "נבדק ולא נמצא: בובת בד עם רקמה בגוון טבעי ותקן 562. חנויות הצעצועים שנבדקו (Green Toys, YRZ, אשר) מציעות פלסטיק וצבעוני. Woooolf מוכרת מותגי ילדים פרימיום (Grimms, Kapla) בקבוצות רכישה, לא נבדקו מוצרים."
+    },
+    "kids/soft-toy": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": true,
+      "slot_price_ils": 99,
+      "price_basis_he": "הערכה",
+      "products": [],
+      "verdict_he": "לא נבדק בסבב הזה."
+    },
+    "kids/skateboard": {
+      "styles_needing": ["nordic"],
+      "nordic_unverified": true,
+      "slot_price_ils": 79,
+      "price_basis_he": "תמחור ילדים (₪79)",
+      "products": [],
+      "verdict_he": "לא נבדק. מוצר EN 13613; אין לי חנות ספורט ישראלית שנבדקה."
+    },
+    "work/magazine-holder": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": true,
+      "slot_price_ils": 129,
+      "price_basis_he": "הערכה",
+      "products": [],
+      "verdict_he": "לא נבדק בסבב הזה."
+    },
+    "work/bookends": {
+      "styles_needing": ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"],
+      "nordic_unverified": true,
+      "slot_price_ils": 99,
+      "price_basis_he": "הערכה",
+      "products": [],
+      "verdict_he": "נבדק חלקית: החיפוש החזיר תומכי ספרים וינטאג׳ עם ציור יד בשוק מרמלדה (קטגוריית ילדים), לא אלון/אגוז. לא נפתח."
+    }
+  }
+}
