@@ -62,6 +62,7 @@ UA = "Mozilla/5.0 (X11; Linux x86_64) studio-build/1.0"
 
 # Product folders that hold one room's slots: data/products/<dir>/<slot>/<card>.json.
 # Cards directly under data/products/<slot>/ are the living room (the first room).
+# Since card schema 1.1 (2026-10-13, Q2) a card names its room itself (`room`); the folder is the fallback.
 ROOM_DIRS = {
     "bath": "bath",
     "corridor": "corridor",
@@ -334,6 +335,14 @@ def load_products(room_ids=None) -> list[dict]:
         else:
             room = ROOM_DIRS.get(parts[0])
             slot = slot or (parts[1] if len(parts) > 2 else None)
+        # Card schema 1.1 (Q2): the card's own `room` decides; the folder above is the fallback for older cards.
+        own = card.get("room")
+        if isinstance(own, str) and own in (room_ids or set(ROOM_DIRS.values())):
+            if room and room != own and not lead:
+                log(f"  ! {rel(p)}: room '{own}' but its folder says '{room}' (the card's room is used)")
+            room = own
+        elif own is not None:
+            log(f"  ! {rel(p)}: unknown room {own!r} (the folder's room is used)")
         sup = card.get("supplier") or {}
         card["_path"] = rel(p)
         card["_dir"] = "/".join(p.relative_to(ROOT).parts[:-1]) + "/"

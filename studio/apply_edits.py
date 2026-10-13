@@ -20,7 +20,9 @@ What it does:
   * applies each product patch to data/products/**/<id>.json. Only schema fields are
     touched: name, slot, rooms, status, supplier.product_url, supplier.sku, price.cost,
     notes. Extra links go into a [studio-links] block at the end of notes (the schema
-    has no links field). A slot move to another room also moves the file (--no-move to skip).
+    has no links field). A slot move to another room also moves the file (--no-move to skip)
+    and sets the card's `room` (schema 1.1) to the new room. A card's current room is its
+    `room` field, or the room its folder implies when the card has none.
   * writes economics fields (shipping_cost_usd per unit, sell_qty = units per sale, retail_ils,
     compare_at_ils) to data/economics/products.json and the settings to data/economics/settings.json.
     updated_at changes only when a value really changes; an unchanged file is not rewritten.
@@ -110,6 +112,19 @@ def slugify(text: str, n=5) -> str:
     return "-".join(words[:n])
 
 
+def with_room(card: dict, room: str) -> dict:
+    """The card with `room` set, placed just above `slot` (where scripts/migrate_card_room.py puts it)."""
+    out = {}
+    for k, v in card.items():
+        if k == "slot":
+            out["room"] = room
+        if k != "room":
+            out[k] = v
+    if "room" not in out:
+        out["room"] = room
+    return out
+
+
 def write_json(path: Path, data) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
@@ -197,14 +212,16 @@ class Run:
         self.lines.append(s)
 
     def current_room_slot(self, path: Path, card: dict):
+        """(room, slot) of a card: its own `room` (card schema 1.1, Q2), else the room its folder implies."""
         parts = path.relative_to(self.products_dir).parts
+        own = card.get("room") if card.get("room") in self.room_slots else None
         if parts[0] == B.LEADS_DIR:
-            return None, card.get("slot")
+            return own, card.get("slot")
         if len(parts) == 2:
-            return "living-room", card.get("slot") or parts[0]
+            return own or "living-room", card.get("slot") or parts[0]
         if parts[0] == B.POOL_DIR:
-            return None, card.get("slot")
-        return B.ROOM_DIRS.get(parts[0]), card.get("slot") or parts[1]
+            return own, card.get("slot")
+        return own or B.ROOM_DIRS.get(parts[0]), card.get("slot") or parts[1]
 
     def target_path(self, room: str, slot: str, pid: str) -> Path | None:
         if room not in ROOM_FOLDER:
@@ -283,6 +300,8 @@ class Run:
                 errs.append(f"slot: '{new_room}/{new_slot}' is not a slot in data/slots/{new_room}.json")
             else:
                 card["slot"] = new_slot
+                if new_room and card.get("room") != new_room:
+                    card = with_room(card, new_room)  # room follows the slot (schema 1.1)
                 if (new_room, new_slot) != (cur_room, cur_slot) and new_room:
                     tp = self.target_path(new_room, new_slot, pid)
                     if tp and tp != path:
@@ -418,7 +437,9 @@ class Run:
         while pid in self.index:
             pid += "-x"
         missing = []
-        card = {"id": pid, "slot": slot or "", "name": name or f"ליד מ-{host or 'קישור'}"}
+        card = {"id": pid, **({"room": room} if room else {}), "slot": slot or "", "name": name or f"ליד מ-{host or 'קישור'}"}
+        if not room:
+            missing.append("room")
         if not slot:
             missing.append("slot")
         if not name:

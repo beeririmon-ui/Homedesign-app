@@ -4,7 +4,8 @@ import { z } from 'zod';
 
 export const ProductCardSchema = z.looseObject({
   "id": z.string().describe("<slot-id>-<supplier>-<short-name>"),
-  "slot": z.string().describe("מזהה עמדה מתוך data/slots/<room>.json"),
+  "room": z.enum(["living-room","dining-room","hall","work","corridor","kids","master","bath"]).describe("החדר של העמדה: שם הקובץ data/slots/<room>.json (וגם השדה room שבו). ‏room + slot = עמדה אחת בדיוק. מול docs/house-plan.json: ‏living-room = living, ‏dining-room = kitchen-dining, ‏kids = boy + girl (קובץ עמדות אחד; העמדות של חדר אחד בלבד מסומנות שם ב-rooms, וצד הכרטיס נשאר ב-rooms של הכרטיס: kids-boy / kids-girl), והשאר זהים. ל-laundry ול-ensuite-wic אין קובץ עמדות. מול תיקיית הכרטיס: dining = dining-room, ‏entrance = hall, כרטיס ישירות תחת data/products/<slot>/ = living-room. ‏Q2, 1.1"),
+  "slot": z.string().describe("מזהה עמדה מתוך data/slots/<room>.json, כש-<room> הוא השדה room"),
   "name": z.string(),
   "category": z.string().optional(),
   "rooms": z.array(z.string()).optional(),

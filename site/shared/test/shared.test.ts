@@ -22,6 +22,9 @@ import {
   publicSafety,
   safetyLinesHe,
   packLabelHe,
+  CARD_ROOMS,
+  cardRoom,
+  roomFromPath,
 } from '../src';
 import { existsSync } from 'node:fs';
 import { generate } from '../scripts/gen-product-card-schema';
@@ -52,6 +55,51 @@ describe('repo data against the derived schemas', () => {
       if (!r.success && !f.includes('/data/products/pool/')) bad.push(f);
     }
     expect(bad).toEqual([]);
+  });
+
+  it('the card room enum is exactly the rooms of data/slots (schema 1.1)', () => {
+    const ids = readdirSync(resolve(REPO, 'data/slots')).flatMap((f) => {
+      const raw = JSON.parse(readFileSync(resolve(REPO, 'data/slots', f), 'utf8')) as { room?: string; slots?: unknown };
+      if (!Array.isArray(raw.slots)) return [];
+      expect(raw.room, f).toBe(f.replace(/\.json$/, ''));
+      return [raw.room];
+    });
+    expect([...ids].sort()).toEqual([...CARD_ROOMS].sort());
+  });
+
+  it('every card with a room folder names that room, and room + slot is one slot in data/slots', () => {
+    const slotIds = new Map<string, Set<string>>();
+    const idsOf = (room: string): Set<string> => {
+      if (!slotIds.has(room)) {
+        const raw = JSON.parse(readFileSync(resolve(REPO, 'data/slots', `${room}.json`), 'utf8')) as { slots: { id: string }[] };
+        slotIds.set(room, new Set(raw.slots.map((s) => s.id)));
+      }
+      return slotIds.get(room)!;
+    };
+    const bad: string[] = [];
+    for (const f of walk(resolve(REPO, 'data/products'))) {
+      const card = JSON.parse(readFileSync(f, 'utf8')) as { room?: string; slot?: string | null };
+      const folder = roomFromPath(f);
+      if (card.room === undefined) {
+        if (folder !== null) bad.push(`${f}: no room`);
+        continue;
+      }
+      if (folder !== null && folder !== card.room) bad.push(`${f}: room ${card.room}, folder ${folder}`);
+      if (!(CARD_ROOMS as readonly string[]).includes(card.room) || !idsOf(card.room).has(card.slot ?? ''))
+        bad.push(`${f}: ${card.room}/${card.slot} is not a slot`);
+    }
+    expect(bad).toEqual([]);
+  });
+
+  it("cardRoom: the card's room first, its folder as the fallback", () => {
+    expect(cardRoom({ room: 'hall' }, 'data/products/vase/x.json')).toBe('hall');
+    expect(cardRoom({}, 'data/products/vase/x.json')).toBe('living-room');
+    expect(cardRoom({}, '/repo/data/products/entrance/key-tray/x.json')).toBe('hall');
+    expect(cardRoom({}, 'data/products/dining/bowl/x.json')).toBe('dining-room');
+    expect(cardRoom({}, 'data/products/kids/rug/x.json')).toBe('kids');
+    expect(cardRoom({}, 'data/products/pool/vase/x.json')).toBeNull();
+    expect(cardRoom({}, 'data/products/leads/x.json')).toBeNull();
+    expect(cardRoom({ room: 'bedroom' }, 'data/products/master/rug/x.json')).toBe('master');
   });
 });
 

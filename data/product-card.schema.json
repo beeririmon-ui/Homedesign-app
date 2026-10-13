@@ -1,12 +1,21 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Product card",
+  "version": "1.1",
+  "changelog": [
+    "1.1 · 2026-10-13: נוסף שדה חובה room, ‏enum של מזהי החדרים (data/slots/<room>.json), ו-room + slot מצביעים על עמדה אחת בדיוק. החלטת משתמש Q2 (2026-10-09); ‏QA ‏2026-10-13, ‏N3. ‏rooms ו-category לא השתנו. הגירה: scripts/migrate_card_room.py",
+    "1.0 · עד 2026-10-12, בלי מספר גרסה: safety (2026-10-10, ‏Q2) ו-options (2026-10-11) נוספו כשדות אופציונליים"
+  ],
   "description": "כרטיס מוצר אחד. sourcing-agent ממלא הכל חוץ מ-style_scores; master-designer ממלא את style_scores ואת status. 2026-10-10: נוסף שדה safety אופציונלי (החלטת משתמש Q2). 2026-10-11: נוסף שדה options אופציונלי, כל האפשרויות של הספק (חוקי הסטודיו ג, 'כל האפשרויות של הספק בדף המוצר').",
   "type": "object",
-  "required": ["id", "slot", "name", "supplier", "price", "images", "colors", "materials", "visual_weight", "status"],
+  "required": ["id", "room", "slot", "name", "supplier", "price", "images", "colors", "materials", "visual_weight", "status"],
   "properties": {
     "id": { "type": "string", "description": "<slot-id>-<supplier>-<short-name>" },
-    "slot": { "type": "string", "description": "מזהה עמדה מתוך data/slots/<room>.json" },
+    "room": {
+      "enum": ["living-room", "dining-room", "hall", "work", "corridor", "kids", "master", "bath"],
+      "description": "החדר של העמדה: שם הקובץ data/slots/<room>.json (וגם השדה room שבו). ‏room + slot = עמדה אחת בדיוק. מול docs/house-plan.json: ‏living-room = living, ‏dining-room = kitchen-dining, ‏kids = boy + girl (קובץ עמדות אחד; העמדות של חדר אחד בלבד מסומנות שם ב-rooms, וצד הכרטיס נשאר ב-rooms של הכרטיס: kids-boy / kids-girl), והשאר זהים. ל-laundry ול-ensuite-wic אין קובץ עמדות. מול תיקיית הכרטיס: dining = dining-room, ‏entrance = hall, כרטיס ישירות תחת data/products/<slot>/ = living-room. ‏Q2, 1.1"
+    },
+    "slot": { "type": "string", "description": "מזהה עמדה מתוך data/slots/<room>.json, כש-<room> הוא השדה room" },
     "name": { "type": "string" },
     "category": { "type": "string" },
     "rooms": { "type": "array", "items": { "type": "string" } },

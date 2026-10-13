@@ -463,6 +463,7 @@ def build_card(item_id, product, sku, freight, certs, room, slot, card_id, by):
         notes.append("Listed attributes: " + "; ".join("%s = %s" % (p.get("attr_name"), p.get("attr_value")) for p in dims[:8]) + ".")
     card = {
         "id": card_id,
+        "room": room,  # card schema 1.1 (Q2): required, the id of data/slots/<room>.json
         "slot": slot,
         "name": base.get("subject"),
         "category": slot,

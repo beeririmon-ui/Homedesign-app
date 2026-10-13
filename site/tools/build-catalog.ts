@@ -38,6 +38,8 @@ import {
   type FullCatalog,
   type ShippingOption,
   type ProductEconomics,
+  cardRoom,
+  roomFromPath,
   sellQtyDefault,
   unitPriceEstimateIls,
   publicSafety,
@@ -123,6 +125,12 @@ const cards: { card: ProductCard; path: string }[] = walk(repoPath('data/product
     return [];
   }
   return [{ card: parsed.data, path: relative(REPO, p) }];
+});
+
+/** Cards whose own `room` (card schema 1.1, Q2) disagrees with their folder: the card's room is used, and this is reported. */
+const roomVsFolder = cards.flatMap(({ card, path }) => {
+  const folder = roomFromPath(path);
+  return folder !== null && folder !== card.room ? [`${path} (room ${card.room}, folder ${folder})`] : [];
 });
 
 // ---------- rooms and slots ----------
@@ -481,9 +489,9 @@ for (const hr of house.rooms) {
       continue;
     }
     const fillerNames = (sf.fillers ?? []).filter((f) => f.slot === slot.id).map((f) => f.name_he);
-    // Only designer-scored, non-rejected cards of this slot qualify; best Nordic score first.
+    // Only designer-scored, non-rejected cards of this room's slot qualify (card `room`, folder as fallback); best Nordic score first.
     const candidates = cards
-      .filter(({ card, path }) => card.slot === slot.id && path.split('/').length === 4 && card.status !== 'rejected')
+      .filter(({ card, path }) => card.slot === slot.id && cardRoom(card, path) === roomId && card.status !== 'rejected')
       .filter(({ card }) => typeof card.style_scores?.[STYLE]?.score === 'number')
       .sort((a, b) => b.card.style_scores![STYLE]!.score - a.card.style_scores![STYLE]!.score || a.card.id.localeCompare(b.card.id));
     const chosen: FullProduct[] = [];
@@ -654,6 +662,7 @@ console.log(
     `  supplier options (2026-10-11): ${fullProducts.filter((p) => p.options).length} products with options, ${fullProducts.reduce((n, p) => n + (p.options?.v.length ?? 0), 0)} SKUs${
       invalidOptions.length ? ` · options dropped (invalid): ${invalidOptions.map((c) => `${c.path} (${c.issues})`).join('; ')}` : ''
     }`,
+    `  card room vs folder: ${roomVsFolder.length ? `${roomVsFolder.length} disagree (card room used) · ${roomVsFolder.join('; ')}` : 'all agree'}`,
     `  invalid product cards skipped: ${invalidCards.length}${invalidCards.length ? ' · ' + invalidCards.map((c) => `${c.path} (${c.issues})`).join('; ') : ''}`,
   ].join('\n'),
 );
