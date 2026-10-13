@@ -1,4 +1,4 @@
-"""Round 6, the final comprehensive sourcing round (owner, 2026-10-13): one work pack per style.
+"""The final comprehensive sourcing round (owner, 2026-10-13): one work pack per style.
 
 For every style (nordic + the five catalog styles) and every non-furniture slot in data/slots/<room>.json,
 the slot is a gap when it has fewer than 3 picks for that style:
@@ -7,13 +7,13 @@ the slot is a gap when it has fewer than 3 picks for that style:
 Each gap carries the slot spec, the slot's Israeli-value price and price ceilings (Studio formula), the
 style spec and queries the designers wrote (round 3 for nordic, round 4 for the styles), the existing picks,
 and every query already run for that slot (searched-index.json), so no search runs twice.
-Writes data/leads/round-6/<style>.json and data/leads/round-6/index.json.
+Writes data/leads/final-2026-10-13/<style>.json and data/leads/final-2026-10-13/index.json.
 """
 import glob, json, os, collections
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 os.chdir(ROOT)
-OUT = "data/leads/round-6"
+OUT = "data/leads/final-2026-10-13"
 STYLES = ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"]
 IDX = json.load(open("data/leads/next-sourcing/searched-index.json"))
 R3 = {s["slot"]: s for s in json.load(open("data/leads/next-sourcing/round-3-2026-10-11.json"))["slots"]}
@@ -48,7 +48,7 @@ for f in glob.glob("data/compositions/*-nordic-2026-10-11.json"):
     for sid, s in d["slots"].items():
         nordic[f"{d['room']}/{sid}"] = s
 cat = {st: json.load(open(f"data/catalog/{st}-2026-10-12.json")) for st in STYLES[1:]}
-index = {"round": 6, "date": "2026-10-13", "styles": {}}
+index = {"round": "final", "date": "2026-10-13", "styles": {}}
 for st in STYLES:
     gaps = []
     for room in ROOMS:
@@ -81,7 +81,7 @@ for st in STYLES:
             })
     pri = {"high": 0, "medium": 1, "low": 2}
     gaps.sort(key=lambda g: (pri.get(str(g["priority"]).lower(), 1), g["slot"]))
-    pack = {"round": 6, "style": st, "date": "2026-10-13",
+    pack = {"round": "final", "style": st, "date": "2026-10-13",
             "brief": f"docs/design-bible/{'nordic.md' if st == 'nordic' else st + '-brief-draft.md'}",
             "catalog": "data/compositions/<room>-nordic-2026-10-11.json" if st == "nordic" else f"data/catalog/{st}-2026-10-12.json",
             "already_searched_cj_global": IDX["cj_queries"], "gaps": gaps}
