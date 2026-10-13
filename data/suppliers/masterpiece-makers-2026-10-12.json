@@ -1,0 +1,3843 @@
+{
+ "version": 1,
+ "date": "2026-10-12",
+ "completed": "2026-10-13",
+ "author": "sourcing-agent (מחקר מאסטרפיסים)",
+ "request_he": "חוק ה.14 (2026-10-12): בכל חדר ובכל סגנון לפחות מאסטרפיס אחד 'וואו' ללא קשר למחיר, שמשמש עוגן מחיר. מחקר יוצרים: קודם ישראלים, ואחריהם כמה מותגים בינלאומיים שמוכרים לישראל או עובדים לפי הזמנה.",
+ "method_he": "דפים ציבוריים בלבד: קטלוגי Shopify ציבוריים (/products.json, ‏/meta.json), ‏WooCommerce Store API, ‏ודפי מוצר. אתרים שחסמו (403, ‏429, דף ריק) לא נעקפו ומסומנים. לא פנינו לאף אחד, לא נרשמנו ולא נוסחו פניות. מחירים לצרכן ביום הבדיקה (12–13.10.2026).",
+ "currency_note_he": "מחירים במטבע המקורי. ils_approx הוא הערכה גסה בלבד לפי 1 USD = ₪3.3 (ברירת המחדל FR-C), ‏1 EUR ≈ ₪3.85, ‏1 GBP ≈ ₪4.4, לפני משלוח, מכס ומע\"מ יבוא.",
+ "ids": {
+  "styles": [
+   "nordic",
+   "warm-modern",
+   "japandi",
+   "mediterranean",
+   "modern-country",
+   "boho"
+  ],
+  "rooms": [
+   "living-room",
+   "dining-room",
+   "hall",
+   "corridor",
+   "work",
+   "master",
+   "kids-girl",
+   "kids-boy",
+   "bath"
+  ],
+  "tiers": {
+   "masterpiece-anchor": "עוגן מחיר 'וואו' לחדר",
+   "premium": "מדרג פרימיום בעמדה (מתחת לעוגן)"
+  },
+  "fit_levels": [
+   "high",
+   "medium",
+   "low",
+   "unknown"
+  ],
+  "rooms_note_he": "dining-room = מטבח ופינת אוכל (data/slots/dining-room.json); ‏kids-girl / kids-boy = חדרי הילדים (data/slots/kids.json)."
+ },
+ "rules_he": [
+  "ה.14 (2026-10-12): המאסטרפיס יכול להימכר בהזמנה אישית, מאומן או מספק ישראלי, ולא חייב להיות דרופשיפינג.",
+  "ג.4 (2026-09-28) עדיין אומר 'בלי עבודת יד ובלי Etsy'. ה.14 חדש יותר ומתיר אומנים למאסטרפיס, אבל ג.4 לא סומן כמעודכן. מחקר ה-Etsy כבר העלה את זה כשאלה למשתמש (rule_flags בקובץ ה-Etsy); לא מכריעים כאן.",
+  "א.3 נאמנות: פריט יחיד שנמכר פעם אחת כבר לא תואם לרינדור. לכן כל יוצר מסומן: 'הזמנה באתר' לסדרתי ולפי הזמנה, ו'קונסיגנציה' או 'משוריין + דומה בהזמנה' ליחידים.",
+  "ד.3 / S2B: כל גוף תאורה צריך CE ו-220–240V, וגוף ישראלי גם ת\"י 20. אף יוצר ישראלי לא מציין ת\"י 20 בדף; לבקש לפני מכירה.",
+  "ד.4: צעצועים ומוצרי ילדים צריכים EN71 / ת\"י 562, מוצג בדף המוצר. אף יוצר ילדים כאן לא מציין תקן.",
+  "ה.11 / ה.13: קנייה במחיר לצרכן ומכירה באותו מחיר = 0 רווח. צריך מחיר סוחר, עמלת קונסיגנציה או הסכם הזמנה. אין להכניס מאסטרפיס מפסיד.",
+  "ז.00 / ד.8 (2026-10-12): אין פניות לספקים עד שיש אתר עובד. הרשימה מוכנה לשלב הפניות; אף אחד לא נפנה."
+ ],
+ "etsy_cross_reference_he": "מחקר ה-Etsy (data/suppliers/etsy-masterpieces-2026-10-12.json) כבר מכסה 61 פריטים מ-Etsy. כאן אין חנויות Etsy; חפיפות: נועה רזר (NoaRazerStudio), ‏Yahalomis (רשומים בקובץ ה-Etsy, ולכן לא כפולים כאן), ולקיה (off_etsy_israeli_leads). לעץ זית ישראלי במחרטה, מומלץ W1 ‏HolyWoodTurning מקובץ ה-Etsy: לא נמצא כאן יוצר זית ישראלי עם מחיר ציבורי מחוץ ל-Etsy.",
+ "counts_by_category": {
+  "wood": {
+   "makers": 8,
+   "israeli": 7,
+   "international": 1,
+   "with_priced_pieces": 4,
+   "leads_only": 4,
+   "pieces": 11
+  },
+  "ceramics": {
+   "makers": 7,
+   "israeli": 6,
+   "international": 1,
+   "with_priced_pieces": 6,
+   "leads_only": 0,
+   "pieces": 12
+  },
+  "lighting": {
+   "makers": 14,
+   "israeli": 10,
+   "international": 4,
+   "with_priced_pieces": 14,
+   "leads_only": 0,
+   "pieces": 30
+  },
+  "wall-art": {
+   "makers": 8,
+   "israeli": 7,
+   "international": 1,
+   "with_priced_pieces": 6,
+   "leads_only": 2,
+   "pieces": 13
+  },
+  "textiles": {
+   "makers": 3,
+   "israeli": 2,
+   "international": 1,
+   "with_priced_pieces": 3,
+   "leads_only": 0,
+   "pieces": 5
+  },
+  "kids": {
+   "makers": 4,
+   "israeli": 3,
+   "international": 1,
+   "with_priced_pieces": 4,
+   "leads_only": 1,
+   "pieces": 7
+  }
+ },
+ "makers": [
+  {
+   "id": "hilla-shamia",
+   "name": "Hilla Shamia (הילה שמיע)",
+   "category": "wood",
+   "israeli": true,
+   "city": "לא צוין בדף (מוצגת בגלריה SAGA, יפו)",
+   "website": "https://sagatlv.com/products/wood-casting-side-table-hilla-shamia",
+   "instagram": null,
+   "type": "designer-maker",
+   "channel": "saga-tlv",
+   "what_he": "סדרת Wood Casting: גזע עץ ישראלי (לילך פרסי, אקליפטוס, ברוש) שאלומיניום יצוק נשפך לתוכו. רהיטים-פסלים, וגם שעוני מטוטלת מעץ מלא.",
+   "commission": {
+    "level": "not-stated",
+    "quotes": []
+   },
+   "lead_time": "לא צוין",
+   "model_fit": {
+    "consignment": "high",
+    "made_to_order_on_site": "low",
+    "note_he": "כל יציקה יחידה (עץ שונה בכל פעם). מתאים לתצוגה בקונסיגנציה דרך הגלריה, או ל'הזמנה דומה' אחרי שיחה. נאמנות לרינדור (א.3) רק לפריט שמשוריין."
+   },
+   "standards_he": "לא רלוונטי (לא חשמלי)",
+   "priority": "A",
+   "pieces": [
+    {
+     "id": "W-HS1",
+     "name": "Wood Casting Side Table",
+     "url": "https://sagatlv.com/products/wood-casting-side-table-hilla-shamia",
+     "size": "לא צוין בדף",
+     "material": "עץ לילך פרסי ואלומיניום יצוק",
+     "price": {
+      "amount": 11900,
+      "currency": "ILS"
+     },
+     "styles": [
+      "warm-modern",
+      "japandi",
+      "mediterranean"
+     ],
+     "rooms": [
+      "living-room",
+      "master"
+     ],
+     "tier": "masterpiece-anchor",
+     "availability_on_check": true,
+     "why_wow_he": "חתיכת גזע שהמתכת 'נוזלת' בתוכה: פריט אספנים של עיצוב ישראלי, עוגן מחיר חזק לסלון.",
+     "caveats_he": "מידות לא צוינו; יחיד מסוגו."
+    },
+    {
+     "id": "W-HS2",
+     "name": "Wood Casting High Table",
+     "url": "https://sagatlv.com/products/wood-casting-high-table-hilla-shamia",
+     "size": "לא צוין בדף",
+     "material": "עץ אקליפטוס ואלומיניום יצוק",
+     "price": {
+      "amount": 14700,
+      "currency": "ILS"
+     },
+     "styles": [
+      "warm-modern",
+      "japandi"
+     ],
+     "rooms": [
+      "hall",
+      "living-room"
+     ],
+     "tier": "masterpiece-anchor",
+     "availability_on_check": true
+    },
+    {
+     "id": "W-HS3",
+     "name": "Wood Casting Bench",
+     "url": "https://sagatlv.com/products/wood-casting-table-hilla-shamia",
+     "size": "30×100×50 ס\"מ",
+     "material": "עץ ברוש ואלומיניום יצוק",
+     "price": {
+      "amount": 18200,
+      "currency": "ILS"
+     },
+     "styles": [
+      "warm-modern",
+      "japandi",
+      "mediterranean"
+     ],
+     "rooms": [
+      "hall",
+      "master"
+     ],
+     "tier": "masterpiece-anchor",
+     "availability_on_check": true,
+     "why_wow_he": "ספסל כניסה שהוא יצירה. היקר ברשימה: עוגן מחיר מובהק."
+    },
+    {
+     "id": "W-HS4",
+     "name": "Pendulum Clock - Red Oak",
+     "url": "https://sagatlv.com/products/pendulum-clock-red-oak",
+     "size": "לא צוין בדף",
+     "material": "עץ אלון אדום מלא",
+     "price": {
+      "amount": 1600,
+      "currency": "ILS"
+     },
+     "styles": [
+      "nordic",
+      "japandi",
+      "modern-country"
+     ],
+     "rooms": [
+      "work",
+      "hall",
+      "dining-room"
+     ],
+     "tier": "premium",
+     "availability_on_check": true,
+     "caveats_he": "גרסת האלון הבהיר אזלה בבדיקה; זמינים אלון אדום ומהגוני."
+    }
+   ]
+  },
+  {
+   "id": "daniel-elkayam",
+   "name": "Daniel Elkayam (דניאל אלקיים)",
+   "category": "wood",
+   "israeli": true,
+   "city": "לא צוין בדף (מוצג בגלריה SAGA, יפו)",
+   "website": "https://sagatlv.com/products/spotted-wall-piece",
+   "instagram": null,
+   "type": "designer-maker",
+   "channel": "saga-tlv",
+   "what_he": "עץ בטכניקת שריפה מבוקרת (Spotted): עבודת קיר ושולחנות.",
+   "commission": {
+    "level": "not-stated",
+    "quotes": [
+     {
+      "text": "Made using a special technique of controlled burning",
+      "url": "https://sagatlv.com/products/spotted-wall-piece"
+     }
+    ]
+   },
+   "lead_time": "לא צוין",
+   "model_fit": {
+    "consignment": "high",
+    "made_to_order_on_site": "medium",
+    "note_he": "הטכניקה ניתנת לחזרה, אבל כל דוגמת שריפה שונה. 'דומה בהזמנה' סביר; לברר עם המעצב דרך הגלריה."
+   },
+   "standards_he": "לא רלוונטי",
+   "priority": "A",
+   "pieces": [
+    {
+     "id": "W-DE1",
+     "name": "Spotted Wall Piece",
+     "url": "https://sagatlv.com/products/spotted-wall-piece",
+     "size": "120×70×2.5 ס\"מ",
+     "material": "עץ, שריפה מבוקרת (סוג העץ לא צוין)",
+     "price": {
+      "amount": 5600,
+      "currency": "ILS"
+     },
+     "styles": [
+      "japandi",
+      "warm-modern",
+      "nordic"
+     ],
+     "rooms": [
+      "living-room",
+      "master",
+      "work"
+     ],
+     "tier": "masterpiece-anchor",
+     "availability_on_check": true,
+     "why_wow_he": "יצירת קיר מעץ שרוף בנקודות: 'שו סוגי בן' עכשווי. בג'פנדי זה הקו הכהה שהסגנון דורש, בגודל של עבודת קיר מרכזית."
+    },
+    {
+     "id": "W-DE2",
+     "name": "Spotted Wide Table (display)",
+     "url": "https://sagatlv.com/products/long-table",
+     "size": "110×40×35 ס\"מ",
+     "material": "עץ, שריפה מבוקרת",
+     "price": {
+      "amount": 5285,
+      "currency": "ILS"
+     },
+     "styles": [
+      "japandi",
+      "warm-modern"
+     ],
+     "rooms": [
+      "living-room",
+      "hall"
+     ],
+     "tier": "masterpiece-anchor",
+     "availability_on_check": true,
+     "caveats_he": "פריט תצוגה."
+    },
+    {
+     "id": "W-DE3",
+     "name": "Spotted Side Table",
+     "url": "https://sagatlv.com/products/small-side-table-01",
+     "size": "40×40×35 ס\"מ",
+     "material": "עץ, שריפה מבוקרת",
+     "price": {
+      "amount": 2415,
+      "currency": "ILS"
+     },
+     "styles": [
+      "japandi",
+      "warm-modern"
+     ],
+     "rooms": [
+      "living-room",
+      "master",
+      "work"
+     ],
+     "tier": "premium",
+     "availability_on_check": true
+    }
+   ]
+  },
+  {
+   "id": "studio-bow",
+   "name": "Studio Bow",
+   "category": "wood",
+   "israeli": true,
+   "city": "לא צוין בדף (מוצג בגלריה SAGA, יפו)",
+   "website": "https://sagatlv.com/products/wood-mirror-black",
+   "instagram": null,
+   "type": "designer-maker",
+   "channel": "saga-tlv",
+   "what_he": "מראות מעץ אש מלא בכיפוף באדים.",
+   "commission": {
+    "level": "not-stated",
+    "quotes": []
+   },
+   "lead_time": "לא צוין; איסוף עצמי מהגלריה",
+   "model_fit": {
+    "consignment": "medium",
+    "made_to_order_on_site": "high",
+    "note_he": "דגם סדרתי בשתי מידות: מתאים להזמנה דרך האתר."
+   },
+   "standards_he": "לא רלוונטי",
+   "priority": "B",
+   "pieces": [
+    {
+     "id": "W-SB1",
+     "name": "Wood Mirror (ash, steam-bent) - Large",
+     "url": "https://sagatlv.com/products/wood-mirror-black",
+     "size": "Ø60, גובה עד 110 ס\"מ (M: Ø45, עד 85)",
+     "material": "עץ אש 100%, כיפוף באדים",
+     "price": {
+      "amount": 2500,
+      "currency": "ILS",
+      "note_he": "M ‏₪1,600"
+     },
+     "styles": [
+      "nordic",
+      "japandi",
+      "warm-modern"
+     ],
+     "rooms": [
+      "hall",
+      "master",
+      "bath"
+     ],
+     "tier": "premium",
+     "availability_on_check": true,
+     "why_wow_he": "מראה שהמסגרת שלה 'זורמת' מטה כמו טיפה: פריט חתימה לכניסה.",
+     "caveats_he": "הליסטינג בשחור; לברר גימור טבעי. במקלחת המראה היא מעטפת (Bible 1.6), ולכן לא שם."
+    }
+   ]
+  },
+  {
+   "id": "dj-woodart",
+   "name": "David & Jonathan WoodArt",
+   "category": "wood",
+   "israeli": true,
+   "city": "צפת",
+   "website": "https://djwoodart.com/",
+   "instagram": null,
+   "type": "workshop",
+   "what_he": "עץ זית ישראלי עתיק מהגליל (עצים שנפלו), לרוב בשילוב אפוקסי צבעוני: שולחנות, קרשים, פמוטים ויודאיקה.",
+   "commission": {
+    "level": "partial",
+    "quotes": [
+     {
+      "text": "product_type: CUSTOMIZATION (קרשי הגשה)",
+      "url": "https://djwoodart.com/products/butcher-board-designed-for-carving-meat-15"
+     }
+    ]
+   },
+   "lead_time": "לא צוין",
+   "currency_note_he": "החנות בדולר; שולחת ל-CA, ‏DE, ‏IL, ‏US (meta של החנות).",
+   "model_fit": {
+    "consignment": "medium",
+    "made_to_order_on_site": "medium",
+    "note_he": "רוב הפריטים יחידים. הסגנון (אפוקסי כחול-פנינה) מסוכן לים-תיכוני מאופק; רק פריטי זית נקיים."
+   },
+   "standards_he": "לא רלוונטי",
+   "priority": "C",
+   "pieces": [
+    {
+     "id": "W-DJ1",
+     "name": "Breath of the Sea Coffee Table",
+     "url": "https://djwoodart.com/products/breath-of-the-sea-coffee-table",
+     "size": "לא צוין",
+     "material": "שורש זית ישראלי (כ-900 שנה) ואפוקסי כחול-פנינה",
+     "price": {
+      "amount": 19999,
+      "currency": "USD",
+      "ils_approx": 66000.0
+     },
+     "styles": [
+      "mediterranean"
+     ],
+     "rooms": [
+      "living-room"
+     ],
+     "tier": "masterpiece-anchor",
+     "availability_on_check": true,
+     "caveats_he": "אפוקסי מבריק סותר את רשימת החומרים האסורים בנורדי, ובים-תיכוני הוא על הגבול. ריהוט, לא אביזר."
+    },
+    {
+     "id": "W-DJ2",
+     "name": "Pillars of Light candle holders (pair)",
+     "url": "https://djwoodart.com/products/pillars-of-light-flame-of-creation",
+     "size": "לא צוין",
+     "material": "עץ זית עתיק ואפוקסי, חריטה במחרטה",
+     "price": {
+      "amount": 759,
+      "currency": "USD",
+      "ils_approx": 2500.0
+     },
+     "styles": [
+      "mediterranean"
+     ],
+     "rooms": [
+      "dining-room",
+      "living-room"
+     ],
+     "tier": "premium",
+     "availability_on_check": true
+    },
+    {
+     "id": "W-DJ3",
+     "name": "Olive wood butcher board (one-off)",
+     "url": "https://djwoodart.com/products/butcher-board-designed-for-carving-meat-15",
+     "size": "לא צוין",
+     "material": "עץ זית ישראלי עתיק",
+     "price": {
+      "amount": 709,
+      "currency": "USD",
+      "ils_approx": 2340.0,
+      "note_he": "טווח הקרשים $455–715"
+     },
+     "styles": [
+      "mediterranean",
+      "modern-country"
+     ],
+     "rooms": [
+      "dining-room"
+     ],
+     "tier": "premium",
+     "availability_on_check": false,
+     "caveats_he": "כל הקרשים אזלו בבדיקה."
+    }
+   ]
+  },
+  {
+   "id": "gad-levy-art",
+   "name": "Gad Levy Art (גד לוי)",
+   "category": "wood",
+   "israeli": true,
+   "lead_only": true,
+   "city": "רחובות",
+   "website": "https://gadlevyart.co.il/",
+   "instagram": null,
+   "type": "artisan",
+   "what_he": "קערות, לוחות הגשה ושולחנות מעץ זית (גם עם אפוקסי ואבן מקומית).",
+   "commission": {
+    "level": "explicit",
+    "quotes": [
+     {
+      "text": "ניתן להזמין גדלים מותאמים אישית ולהרכיב סטים לפי הצורך",
+      "url": "https://gadlevyart.co.il/%D7%9B%D7%9C%D7%99-%D7%9E%D7%98%D7%91%D7%97"
+     }
+    ]
+   },
+   "lead_time": "לא צוין",
+   "model_fit": {
+    "consignment": "unknown",
+    "made_to_order_on_site": "high",
+    "note_he": "הזמנה לפי מידה מוצהרת; אין מחירים ומידות לקערות בדף."
+   },
+   "standards_he": "לא רלוונטי",
+   "priority": "C",
+   "pieces": []
+  },
+  {
+   "id": "saraf-woodart",
+   "name": "SARAF wood-art (שרף)",
+   "category": "wood",
+   "israeli": true,
+   "lead_only": true,
+   "city": "מושב אורה (ירושלים)",
+   "website": "https://saraf.co.il/",
+   "instagram": null,
+   "type": "workshop",
+   "what_he": "בית מלאכה לעץ זית: כלי הגשה, חפצי נוי, יודאיקה; יש דף 'קערה דקורטיבית זית'.",
+   "commission": {
+    "level": "partial",
+    "quotes": [
+     {
+      "text": "חריטה אישית (כיתוב או תמונה) על עץ זית",
+      "url": "https://saraf.co.il/pages/%D7%97%D7%A8%D7%99%D7%98%D7%94-%D7%A2%D7%9C-%D7%A2%D7%A5"
+     }
+    ]
+   },
+   "lead_time": "לא צוין",
+   "model_fit": {
+    "consignment": "unknown",
+    "made_to_order_on_site": "unknown",
+    "note_he": "האתר החזיר 429 ודף ריק בבדיקה; לא עקפנו. לבדוק שוב."
+   },
+   "standards_he": "לא רלוונטי",
+   "priority": "C",
+   "pieces": []
+  },
+  {
+   "id": "ein-yahav-woodturner",
+   "name": "חריטה אומנותית בעץ (עין יהב)",
+   "category": "wood",
+   "israeli": true,
+   "lead_only": true,
+   "city": "עין יהב, הערבה",
+   "website": "https://www.arava.co.il/business/84/",
+   "instagram": null,
+   "type": "artisan",
+   "what_he": "חרט עץ: צלחות, קערות, קופסאות ופמוטים במחרטה; ביקור בסטודיו בתיאום (לפי תקציר החיפוש).",
+   "commission": {
+    "level": "unknown",
+    "quotes": []
+   },
+   "lead_time": "לא צוין",
+   "model_fit": {
+    "consignment": "unknown",
+    "made_to_order_on_site": "unknown",
+    "note_he": "הדף חסם קריאה אוטומטית (403); המידע מתקציר חיפוש בלבד. שם האמן לא אומת."
+   },
+   "standards_he": "לא רלוונטי",
+   "priority": "C",
+   "pieces": []
+  },
+  {
+   "id": "zanat",
+   "name": "Zanat",
+   "category": "wood",
+   "israeli": false,
+   "lead_only": true,
+   "city": "בוסניה והרצגובינה (קוניץ)",
+   "website": "https://www.zanat.org/",
+   "instagram": null,
+   "type": "brand",
+   "what_he": "גילוף עץ ידני עם מעצבים; מוצרים בהתאמה למלונות, מסעדות ובתים.",
+   "commission": {
+    "level": "partial",
+    "quotes": [
+     {
+      "text": "bespoke products (hotels, restaurants, museums, residences)",
+      "url": "https://www.zanat.org/"
+     }
+    ]
+   },
+   "lead_time": "לא צוין",
+   "model_fit": {
+    "consignment": "low",
+    "made_to_order_on_site": "medium",
+    "note_he": "בורר המשלוח באתר מציג רק מדינות אירופה, בלי ישראל; דרך רשת המכירות בלבד. בלי מחירים ציבוריים."
+   },
+   "standards_he": "לא רלוונטי",
+   "priority": "C",
+   "pieces": []
+  },
+  {
+   "id": "osnat-raichman",
+   "name": "Osnat Raichman (אסנת רייכמן)",
+   "category": "ceramics",
+   "israeli": true,
+   "city": "לא צוין בדף (מוצגת בגלריה SAGA)",
+   "website": "https://sagatlv.com/products/huge-vase-galil-osnat-raichman",
+   "instagram": null,
+   "type": "artist",
+   "channel": "saga-tlv",
+   "what_he": "כדים קרמיים גדולים בהשראת נופי הנגב, הגליל והגולן.",
+   "commission": {
+    "level": "not-stated",
+    "quotes": [
+     {
+      "text": "Osnat aims to remind the viewer of the landscapes of our country, including the Negev, the Galil, or the Golan",
+      "url": "https://sagatlv.com/products/huge-vase-galil-osnat-raichman"
+     }
+    ]
+   },
+   "lead_time": "במלאי (יחיד)",
+   "model_fit": {
+    "consignment": "high",
+    "made_to_order_on_site": "low",
+    "note_he": "יצירה יחידה. 'דומה בהזמנה' לברר מול האמנית."
+   },
+   "standards_he": "לא רלוונטי",
+   "priority": "A",
+   "pieces": [
+    {
+     "id": "C-OR1",
+     "name": "Huge Galil Vase - Brown",
+     "url": "https://sagatlv.com/products/huge-vase-galil-osnat-raichman",
+     "size": "41×24 ס\"מ",
+     "material": "קרמיקה, גלזורות בגווני אדמה",
+     "price": {
+      "amount": 4400,
+      "currency": "ILS"
+     },
+     "styles": [
+      "mediterranean",
+      "warm-modern",
+      "boho",
+      "japandi"
+     ],
+     "rooms": [
+      "living-room",
+      "hall",
+      "dining-room"
+     ],
+     "tier": "masterpiece-anchor",
+     "availability_on_check": true,
+     "why_wow_he": "כד 'נוף הגליל' של אמנית ישראלית: סיפור מקומי וחומר עשיר, גובה 41 על קונסולה או שידה."
+    }
+   ]
+  },
+  {
+   "id": "rina-peleg",
+   "name": "Rina Peleg (רינה פלג)",
+   "category": "ceramics",
+   "israeli": true,
+   "city": "חיפה (לפי הגלריה און ליין)",
+   "website": "https://www.galleryonline.co.il/%D7%A8%D7%99%D7%A0%D7%94-%D7%A4%D7%9C%D7%92",
+   "instagram": null,
+   "type": "artist",
+   "channel": "galleryonline",
+   "what_he": "פסלי קרמיקה בטכניקת 'קליעה': צינורות חימר שנקלעים כמו סל לנפחים גדולים.",
+   "commission": {
+    "level": "not-stated",
+    "quotes": []
+   },
+   "lead_time": "יחידים במלאי",
+   "model_fit": {
+    "consignment": "high",
+    "made_to_order_on_site": "low",
+    "note_he": "יצירות יחידות דרך גלריה און ליין, שיש לה מסלול 'אמנות לעסקים' (קישור בתפריט, בלי פרטים)."
+   },
+   "standards_he": "לא רלוונטי",
+   "priority": "A",
+   "pieces": [
+    {
+     "id": "C-RP1",
+     "name": "קליעה בלבן (Woven White)",
+     "url": "https://www.galleryonline.co.il/%D7%A8%D7%99%D7%A0%D7%94-%D7%A4%D7%9C%D7%92-%D7%A7%D7%9C%D7%99%D7%A2%D7%94-%D7%91%D7%9C%D7%91%D7%9F",
+     "size": "41×39×39 ס\"מ",
+     "material": "קרמיקה לבנה, קליעת צינורות חימר",
+     "price": {
+      "amount": 2850,
+      "currency": "ILS"
+     },
+     "styles": [
+      "nordic",
+      "japandi",
+      "boho",
+      "mediterranean"
+     ],
+     "rooms": [
+      "living-room",
+      "hall",
+      "master"
+     ],
+     "tier": "masterpiece-anchor",
+     "availability_on_check": true,
+     "why_wow_he": "כלי לבן 'קלוע' בגודל פסל: מרקם של סל עם משקל של קרמיקה. משתלב בנורדי ובג'פנדי בלי לשבור את הפלטה."
+    },
+    {
+     "id": "C-RP2",
+     "name": "חלומות ילדות",
+     "url": "https://www.galleryonline.co.il/%D7%A8%D7%99%D7%A0%D7%94-%D7%A4%D7%9C%D7%92-%D7%97%D7%9C%D7%95%D7%9E%D7%95%D7%AA-%D7%99%D7%9C%D7%93%D7%95%D7%AA",
+     "size": "53×24×23 ס\"מ",
+     "material": "קרמיקה, קליעה",
+     "price": {
+      "amount": 4900,
+      "currency": "ILS"
+     },
+     "styles": [
+      "boho",
+      "mediterranean"
+     ],
+     "rooms": [
+      "living-room",
+      "hall"
+     ],
+     "tier": "masterpiece-anchor"
+    },
+    {
+     "id": "C-RP3",
+     "name": "מעשה מרכבה",
+     "url": "https://www.galleryonline.co.il/%D7%A8%D7%99%D7%A0%D7%94-%D7%A4%D7%9C%D7%92-%D7%9E%D7%A2%D7%A9%D7%94-%D7%9E%D7%A8%D7%9B%D7%91%D7%94",
+     "size": "51×50×35 ס\"מ",
+     "material": "קרמיקה, קליעה",
+     "price": {
+      "amount": 4300,
+      "currency": "ILS"
+     },
+     "styles": [
+      "boho",
+      "japandi"
+     ],
+     "rooms": [
+      "living-room"
+     ],
+     "tier": "masterpiece-anchor"
+    }
+   ]
+  },
+  {
+   "id": "cotta-studio",
+   "name": "COTTA Studio",
+   "category": "ceramics",
+   "israeli": true,
+   "city": "תל אביב-יפו",
+   "website": "https://cotta-studio.com/",
+   "instagram": null,
+   "type": "studio",
+   "what_he": "אגרטלים מפורצלן ומסטונוור בעבודת יד; גם סדנאות.",
+   "commission": {
+    "level": "not-stated",
+    "quotes": [
+     {
+      "text": "you're welcome to pick up directly from our Tel Aviv studio (תקציר חיפוש)",
+      "url": "https://cotta-studio.com/"
+     }
+    ]
+   },
+   "lead_time": "במלאי",
+   "model_fit": {
+    "consignment": "medium",
+    "made_to_order_on_site": "medium",
+    "note_he": "אגרטלים בדגם חוזר (שם קבוע לכל דגם): מתאים להזמנה חוזרת."
+   },
+   "standards_he": "לא רלוונטי",
+   "priority": "B",
+   "pieces": [
+    {
+     "id": "C-CO1",
+     "name": "Lola Vase",
+     "url": "https://cotta-studio.com/products/product_d39100b5-7968-4fe8-099a-ad2cbf4edfb6",
+     "size": "51.5×21 ס\"מ",
+     "material": "פורצלן",
+     "price": {
+      "amount": 1300,
+      "currency": "ILS"
+     },
+     "styles": [
+      "nordic",
+      "japandi",
+      "warm-modern"
+     ],
+     "rooms": [
+      "living-room",
+      "hall",
+      "bath"
+     ],
+     "tier": "premium",
+     "availability_on_check": true,
+     "why_wow_he": "אגרטל פורצלן בגובה 51.5: הגבוה בסטודיו, על הקונסולה או ליד המראה."
+    },
+    {
+     "id": "C-CO2",
+     "name": "Alberto Vase",
+     "url": "https://cotta-studio.com/products/product_469a7a32-ed44-11a4-277c-191f0a43230d",
+     "size": "לא צוין בדף",
+     "material": "קרמיקה",
+     "price": {
+      "amount": 1160,
+      "currency": "ILS"
+     },
+     "styles": [
+      "warm-modern",
+      "japandi"
+     ],
+     "rooms": [
+      "living-room",
+      "dining-room"
+     ],
+     "tier": "premium",
+     "availability_on_check": true
+    }
+   ]
+  },
+  {
+   "id": "studio-davka",
+   "name": "Studio Davka (סטודיו דווקא, גילי אילן)",
+   "category": "ceramics",
+   "israeli": true,
+   "city": "חיפה",
+   "website": "https://studiodavka.co.il/",
+   "instagram": null,
+   "type": "studio",
+   "what_he": "כלי קרמיקה ופורצלן בעבודת יד, פסלי 'טרמיטים' מחימר ממוחזר וגופי תאורה קרמיים.",
+   "commission": {
+    "level": "explicit",
+    "quotes": [
+     {
+      "text": "מידות אחרות ניתן ליצור קשר עם הסטודיו על מנת לקבל הצעת מחיר",
+      "url": "https://studiodavka.co.il/products/%D7%92%D7%95%D7%A3-%D7%AA%D7%90%D7%95%D7%A8%D7%94-%D7%A8%D7%A6%D7%A4%D7%AA%D7%99"
+     },
+     {
+      "text": "בהזמנה אישית ונייצר לכם במיוחד",
+      "url": "https://studiodavka.co.il/products/%D7%92%D7%95%D7%A3-%D7%AA%D7%90%D7%95%D7%A8%D7%94-%D7%A8%D7%A6%D7%A4%D7%AA%D7%99"
+     }
+    ]
+   },
+   "lead_time": "\"כל פריט מיוצר לפי הזמנה ולוקח כשבועיים הכנה\"; סטים כחודש",
+   "model_fit": {
+    "consignment": "medium",
+    "made_to_order_on_site": "high",
+    "note_he": "הצעת מחיר למידות אחרות מוצהרת: מתאים ל'הזמנה אישית באתר'."
+   },
+   "standards_he": "גוף התאורה: 220–240VAC מצוין; CE / ת\"י 20 לא מצוינים (ד.3).",
+   "priority": "B",
+   "pieces": [
+    {
+     "id": "C-SD1",
+     "name": "קערת הגשה גדולה (יחידה)",
+     "url": "https://studiodavka.co.il/products/%D7%90%D7%92%D7%A8%D7%98%D7%9C-%D7%A7%D7%A8%D7%9E%D7%99%D7%A7%D7%94-%D7%90%D7%93%D7%9E%D7%94-%D7%91%D7%95%D7%A2%D7%A8%D7%AA-copy",
+     "size": "קוטר כ-40 ס\"מ",
+     "material": "כמה סוגי חימר, גלזורה שקופה בפנים וחומר חשוף בחוץ",
+     "price": {
+      "amount": 1350,
+      "currency": "ILS"
+     },
+     "styles": [
+      "mediterranean",
+      "japandi",
+      "warm-modern"
+     ],
+     "rooms": [
+      "dining-room"
+     ],
+     "tier": "premium",
+     "availability_on_check": true,
+     "why_wow_he": "מרכז שולחן בקוטר 40, חימר חשוף.",
+     "caveats_he": "\"קיימת אחת כזאת בלבד\"."
+    },
+    {
+     "id": "C-SD2",
+     "name": "גוף תאורה רצפתי | טרמיטים",
+     "url": "https://studiodavka.co.il/products/%D7%92%D7%95%D7%A3-%D7%AA%D7%90%D7%95%D7%A8%D7%94-%D7%A8%D7%A6%D7%A4%D7%AA%D7%99",
+     "size": "גוף 26×Ø16, עם המנורה 46 ס\"מ",
+     "material": "חימר ממוחזר בלי גלזורה; LED G9 ‏4W ‏220–240VAC",
+     "price": {
+      "amount": 2200,
+      "currency": "ILS"
+     },
+     "styles": [
+      "boho",
+      "mediterranean",
+      "japandi"
+     ],
+     "rooms": [
+      "living-room",
+      "master"
+     ],
+     "tier": "premium",
+     "availability_on_check": true,
+     "lead_time": "לפי הזמנה (יחיד בתמונה)",
+     "caveats_he": "קטן מכדי להיות עוגן לבד; מתאים לרצפה ליד כורסה."
+    },
+    {
+     "id": "C-SD3",
+     "name": "אגרטל טוטם עם הדפסים",
+     "url": "https://studiodavka.co.il/products/%D7%90%D7%92%D7%A8%D7%98%D7%9C-%D7%98%D7%95%D7%98%D7%9D-%D7%A2%D7%9D-%D7%94%D7%93%D7%A4%D7%A1%D7%99%D7%9D",
+     "size": "גובה 38, קוטר 15 ס\"מ",
+     "material": "פורצלן, יציקה והדפס משי, גלזורה מבריקה",
+     "price": {
+      "amount": 1450,
+      "currency": "ILS"
+     },
+     "styles": [
+      "boho"
+     ],
+     "rooms": [
+      "living-room",
+      "kids-girl"
+     ],
+     "tier": "premium",
+     "availability_on_check": true,
+     "lead_time": "כשבועיים",
+     "caveats_he": "גלזורה מבריקה בגוני אדום-ורוד: לא לנורדי ולג'פנדי."
+    }
+   ]
+  },
+  {
+   "id": "adi-nissani",
+   "name": "Studio Adi Nissani (עדי ניסני)",
+   "category": "ceramics",
+   "israeli": true,
+   "city": "יפו",
+   "website": "https://adinissani.com/",
+   "instagram": null,
+   "type": "artist",
+   "what_he": "כלי שולחן ופריטי הגשה בעבודת יד מחימר 'מדבר', כולל קערות XL ואגרטלי איקבנה.",
+   "commission": {
+    "level": "not-stated",
+    "quotes": []
+   },
+   "lead_time": "חלק מהפריטים באיסוף מהסטודיו בלבד",
+   "model_fit": {
+    "consignment": "medium",
+    "made_to_order_on_site": "medium",
+    "note_he": "דגמים חוזרים בשני גוונים (Desert clay / White Dust)."
+   },
+   "standards_he": "לא רלוונטי",
+   "priority": "B",
+   "pieces": [
+    {
+     "id": "C-AN1",
+     "name": "XL Sea Shell serving bowl",
+     "url": "https://adinissani.com/products/shell-plate-set-of-2-copy",
+     "size": "קוטר 42 ס\"מ",
+     "material": "חימר טבעי בשריפה גבוהה",
+     "price": {
+      "amount": 1100,
+      "currency": "ILS"
+     },
+     "styles": [
+      "mediterranean",
+      "japandi",
+      "warm-modern"
+     ],
+     "rooms": [
+      "dining-room"
+     ],
+     "tier": "premium",
+     "availability_on_check": true,
+     "why_wow_he": "צדף קרמי בקוטר 42 כמרכז שולחן."
+    },
+    {
+     "id": "C-AN2",
+     "name": "Large Bowl with Handles - XL",
+     "url": "https://adinissani.com/products/large-serving-bowl-with-handles",
+     "size": "Ø36, גובה 21 ס\"מ",
+     "material": "חימר טבעי, לבן רך",
+     "price": {
+      "amount": 1100,
+      "currency": "ILS"
+     },
+     "styles": [
+      "mediterranean",
+      "modern-country",
+      "japandi"
+     ],
+     "rooms": [
+      "dining-room",
+      "living-room"
+     ],
+     "tier": "premium",
+     "availability_on_check": true,
+     "caveats_he": "\"Store pick up only!\""
+    }
+   ]
+  },
+  {
+   "id": "yom-yom-ceramic",
+   "name": "Yom Yom Ceramics (יוסי מלכה)",
+   "category": "ceramics",
+   "israeli": true,
+   "city": "כפר רופין",
+   "website": "https://yomyomceramic.co.il/",
+   "instagram": null,
+   "type": "artist",
+   "what_he": "כלי שולחן, אגרטלים ואמנות קרמית מהסטודיו בעמק המעיינות.",
+   "commission": {
+    "level": "not-stated",
+    "quotes": []
+   },
+   "lead_time": "לא צוין",
+   "model_fit": {
+    "consignment": "low",
+    "made_to_order_on_site": "medium",
+    "note_he": "בעיקר טווח פרימיום, לא עוגן."
+   },
+   "standards_he": "לא רלוונטי",
+   "priority": "C",
+   "pieces": [
+    {
+     "id": "C-YY1",
+     "name": "אגרטל ביצת דינוזאור",
+     "url": "https://yomyomceramic.co.il/products/unique-flower-pot-plant-pot-dinosaur-egg-pots-rustic-ceramic-planter-round-primitive-clay-vase-pottery-vase-round-clay-planter",
+     "size": "גובה 17, רוחב 16 ס\"מ",
+     "material": "קרמיקה בעבודת יד",
+     "price": {
+      "amount": 1150,
+      "currency": "ILS"
+     },
+     "styles": [
+      "boho",
+      "mediterranean",
+      "japandi"
+     ],
+     "rooms": [
+      "living-room",
+      "bath"
+     ],
+     "tier": "premium",
+     "availability_on_check": true
+    }
+   ]
+  },
+  {
+   "id": "atelier-vierkant",
+   "name": "Atelier Vierkant",
+   "category": "ceramics",
+   "israeli": false,
+   "city": "בלגיה (מלאי באירופה ובארה\"ב)",
+   "website": "https://www.ateliervierkant.com/",
+   "instagram": null,
+   "type": "brand",
+   "what_he": "כדים, אגרטלים ועציצים פיסוליים גדולים מחימר בעבודת יד, וספסלי חימר; עובדים עם אדריכלים.",
+   "commission": {
+    "level": "explicit",
+    "quotes": [
+     {
+      "text": "Endless customization of surface textures.",
+      "url": "https://www.ateliervierkant.com/"
+     },
+     {
+      "text": "Engobe applications are done on demand and patterns are customized to order.",
+      "url": "https://www.ateliervierkant.com/"
+     }
+    ]
+   },
+   "lead_time": "לא צוין",
+   "model_fit": {
+    "consignment": "low",
+    "made_to_order_on_site": "high",
+    "note_he": "לפי הזמנה, מידות מותאמות. מחירים לא ציבוריים (לפי בקשה)."
+   },
+   "standards_he": "לא רלוונטי",
+   "priority": "B",
+   "pieces": []
+  },
+  {
+   "id": "studio-mabua",
+   "name": "Studio Mabua (אביעד פטל ואפרת צפרן)",
+   "category": "lighting",
+   "israeli": true,
+   "city": "עולש (ליד נורדיה)",
+   "website": "https://studiomabua.com/",
+   "instagram": null,
+   "type": "studio",
+   "what_he": "גופי תאורה בעבודת יד מקרמיקה על האובניים ומפורניר עץ תפור.",
+   "commission": {
+    "level": "explicit",
+    "quotes": [
+     {
+      "text": "Handmade ceramic and wood veneer lighting fixtures, made to order. Serving private clients, interior designers and architects in Israel and worldwide.",
+      "url": "https://studiomabua.com/"
+     },
+     {
+      "text": "MADE TO ORDER. Processing time: 6-8 weeks.",
+      "url": "https://studiomabua.com/products/drop-floor-lamp"
+     }
+    ]
+   },
+   "lead_time": "4–6 שבועות (קרמיקה), 6–8 שבועות (עץ)",
+   "model_fit": {
+    "consignment": "low",
+    "made_to_order_on_site": "high",
+    "note_he": "כל המוצרים לפי הזמנה, ומוצהר שירות למעצבים ואדריכלים. המודל הטבעי: הזמנה דרך האתר עם זמן אספקה מוצג."
+   },
+   "standards_he": "חשמל: לפני מכירה צריך אישור CE ו-220–240V, ובגוף ישראלי גם ת\"י 20 (ד.3, S2B). לא מצוין בדף.",
+   "priority": "A",
+   "pieces": [
+    {
+     "id": "L-MB1",
+     "name": "Wood Veneer Floor Lamp - Drop",
+     "url": "https://studiomabua.com/products/drop-floor-lamp",
+     "size": "גובה כ-145 ס\"מ",
+     "material": "אהילי פורניר עץ תפורים, מבנה מתכת צבוע, ‏2×E27",
+     "price": {
+      "amount": 6300,
+      "currency": "ILS"
+     },
+     "styles": [
+      "japandi",
+      "nordic",
+      "warm-modern"
+     ],
+     "rooms": [
+      "living-room",
+      "work",
+      "master"
+     ],
+     "tier": "masterpiece-anchor",
+     "availability_on_check": true,
+     "lead_time": "6–8 שבועות",
+     "why_wow_he": "האור עובר דרך פורניר עץ דק כמו דרך נייר: פנס ג'פנדי בגובה אדם."
+    },
+    {
+     "id": "L-MB2",
+     "name": "Ceramic Dome Floor Lamp - Eclipse",
+     "url": "https://studiomabua.com/products/eclipse-floor",
+     "size": "גובה 150 ס\"מ",
+     "material": "שני אהילי קרמיקה בעבודת יד, מבנה מתכת, ‏6×G9",
+     "price": {
+      "amount": 5600,
+      "currency": "ILS"
+     },
+     "styles": [
+      "warm-modern",
+      "japandi"
+     ],
+     "rooms": [
+      "living-room",
+      "master"
+     ],
+     "tier": "masterpiece-anchor",
+     "availability_on_check": true,
+     "lead_time": "6–8 שבועות"
+    },
+    {
+     "id": "L-MB3",
+     "name": "Wood Pendant Lamp - Diamante",
+     "url": "https://studiomabua.com/products/diamante",
+     "size": "75/60 ס\"מ",
+     "material": "פורניר אלון על דיקט (CNC)",
+     "price": {
+      "amount": 4600,
+      "currency": "ILS"
+     },
+     "styles": [
+      "nordic",
+      "japandi",
+      "warm-modern"
+     ],
+     "rooms": [
+      "dining-room",
+      "hall",
+      "corridor"
+     ],
+     "tier": "masterpiece-anchor",
+     "availability_on_check": true,
+     "lead_time": "6–8 שבועות"
+    },
+    {
+     "id": "L-MB4",
+     "name": "Ceramic Dome Pendant - Casta",
+     "url": "https://studiomabua.com/products/casta",
+     "size": "כ-40×20 ס\"מ",
+     "material": "קרמיקה על האובניים",
+     "price": {
+      "amount": 2730,
+      "currency": "ILS"
+     },
+     "styles": [
+      "warm-modern",
+      "mediterranean",
+      "modern-country"
+     ],
+     "rooms": [
+      "dining-room"
+     ],
+     "tier": "premium",
+     "availability_on_check": true,
+     "lead_time": "4–6 שבועות"
+    }
+   ]
+  },
+  {
+   "id": "asaf-weinbroom",
+   "name": "Asaf Weinbroom (אסף וינברום)",
+   "category": "lighting",
+   "israeli": true,
+   "city": "תל אביב",
+   "website": "https://www.asafweinbroom.com/",
+   "instagram": null,
+   "type": "studio",
+   "what_he": "סטודיו לתאורה מ-2009: אלון מגולף, טרוורטין, שיש, זכוכית חלבית ופורניר.",
+   "commission": {
+    "level": "explicit",
+    "quotes": [
+     {
+      "text": "לאורך מותאם אישית (עד 240 ס\"מ) ניתן לפנות אלינו לקבלת פרטים",
+      "url": "https://www.asafweinbroom.com/products/catch-240x8"
+     },
+     {
+      "text": "בתפריט: פרויקטים (מגורים, משרדים ומסחר), קביעת פגישה",
+      "url": "https://www.asafweinbroom.com/"
+     }
+    ]
+   },
+   "lead_time": "\"14–40 ימי עסקים לעיבוד ההזמנה\" ועוד 3–21 ימי משלוח",
+   "model_fit": {
+    "consignment": "low",
+    "made_to_order_on_site": "high",
+    "note_he": "דגמים קבועים שמיוצרים לפי הזמנה; התאמת אורך מוצהרת."
+   },
+   "standards_he": "חשמל: לפני מכירה צריך אישור CE ו-220–240V, ובגוף ישראלי גם ת\"י 20 (ד.3, S2B). לא מצוין בדף.",
+   "priority": "A",
+   "pieces": [
+    {
+     "id": "L-AW1",
+     "name": "WEIB SPOT Travertine floor lamp",
+     "url": "https://www.asafweinbroom.com/products/weib-spot-travertine-floor-lamp",
+     "size": "Ø15×Ø13×177 ס\"מ",
+     "material": "בסיס טרוורטין, צינור מתכת לבן, עץ צבוע לבן מט, ‏PAR30",
+     "price": {
+      "amount": 5200,
+      "currency": "ILS"
+     },
+     "styles": [
+      "warm-modern",
+      "japandi"
+     ],
+     "rooms": [
+      "living-room",
+      "master"
+     ],
+     "tier": "masterpiece-anchor",
+     "availability_on_check": true,
+     "lead_time": "14–40 ימי עסקים",
+     "why_wow_he": "טרוורטין כחומר עוגן של המודרני החם, בקו גבוה ונקי."
+    },
+    {
+     "id": "L-AW2",
+     "name": "FUNGI Standing floor lamp",
+     "url": "https://www.asafweinbroom.com/products/fungi-standing-floor-lamp",
+     "size": "Ø30×Ø16×160/180 ס\"מ",
+     "material": "בסיס שיש כבד, טבעת שיש, כיפת זכוכית חלבית",
+     "price": {
+      "amount": 3960,
+      "currency": "ILS"
+     },
+     "styles": [
+      "warm-modern",
+      "nordic",
+      "japandi"
+     ],
+     "rooms": [
+      "living-room",
+      "master",
+      "work"
+     ],
+     "tier": "masterpiece-anchor",
+     "availability_on_check": true,
+     "lead_time": "14–40 ימי עסקים"
+    },
+    {
+     "id": "L-AW3",
+     "name": "RONDO ceiling light Ø62",
+     "url": "https://www.asafweinbroom.com/products/rondo-65",
+     "size": "⌀62×14 ס\"מ (גם ⌀42)",
+     "material": "אהיל פורניר אלון או אגוז ופלטת אקריל, LED ‏60W",
+     "price": {
+      "amount": 4600,
+      "currency": "ILS",
+      "note_he": "Ø42 ‏₪4,250"
+     },
+     "styles": [
+      "nordic",
+      "japandi",
+      "warm-modern"
+     ],
+     "rooms": [
+      "master",
+      "work",
+      "kids-girl",
+      "kids-boy"
+     ],
+     "tier": "masterpiece-anchor",
+     "availability_on_check": true,
+     "lead_time": "14–40 ימי עסקים"
+    },
+    {
+     "id": "L-AW4",
+     "name": "CATCH 240×8 linear pendant",
+     "url": "https://www.asafweinbroom.com/products/catch-240x8",
+     "size": "240×8 ס\"מ (אורך לפי הזמנה)",
+     "material": "שני לוחות אלון, מחברי עץ, LED ‏60W",
+     "price": {
+      "amount": 5620,
+      "currency": "ILS",
+      "note_he": "פורמיקה ₪6,020"
+     },
+     "styles": [
+      "nordic",
+      "japandi",
+      "warm-modern"
+     ],
+     "rooms": [
+      "dining-room"
+     ],
+     "tier": "masterpiece-anchor",
+     "availability_on_check": true,
+     "lead_time": "14–40 ימי עסקים",
+     "caveats_he": "240 ס\"מ ארוך משולחן האוכל; לבקש אורך מותאם."
+    },
+    {
+     "id": "L-AW5",
+     "name": "FUNGI Table Travertine",
+     "url": "https://www.asafweinbroom.com/products/fungi-table-travertine-lamp",
+     "size": "30×36×Ø9.5 ס\"מ",
+     "material": "בסיס אלון מגולף, טבעת שיש, כיפה חלבית",
+     "price": {
+      "amount": 1900,
+      "currency": "ILS"
+     },
+     "styles": [
+      "warm-modern",
+      "nordic"
+     ],
+     "rooms": [
+      "master",
+      "work",
+      "hall"
+     ],
+     "tier": "premium",
+     "availability_on_check": true
+    }
+   ]
+  },
+  {
+   "id": "studio-vayehi",
+   "name": "Studio Vayehi (סטודיו ויהי)",
+   "category": "lighting",
+   "israeli": true,
+   "city": "תל אביב-יפו (הפלך 7)",
+   "website": "https://www.studiovayehi.com/",
+   "instagram": null,
+   "type": "studio",
+   "what_he": "מנורות בעבודת יד מפורניר עץ (אגוז, מייפל, במבוק, אלון, אש), וגם מגשים.",
+   "commission": {
+    "level": "not-stated",
+    "quotes": [
+     {
+      "text": "Production takes up to 3 weeks. Shipping follows within a maximum of 10 days.",
+      "url": "https://www.studiovayehi.com/product-page/monk-floor-lamp"
+     }
+    ]
+   },
+   "lead_time": "עד 3 שבועות ייצור ועד 10 ימי משלוח",
+   "model_fit": {
+    "consignment": "medium",
+    "made_to_order_on_site": "high",
+    "note_he": "דגמים קבועים לפי הזמנה; נמכר גם ב-SAGA."
+   },
+   "standards_he": "חשמל: לפני מכירה צריך אישור CE ו-220–240V, ובגוף ישראלי גם ת\"י 20 (ד.3, S2B). לא מצוין בדף.",
+   "priority": "A",
+   "pieces": [
+    {
+     "id": "L-VY1",
+     "name": "MONK floor lamp",
+     "url": "https://www.studiovayehi.com/product-page/monk-floor-lamp",
+     "size": "גובה 135/157, קוטר 10 ס\"מ",
+     "material": "עץ מכופף ו-LED חם",
+     "price": {
+      "amount": 7500,
+      "currency": "ILS",
+      "note_he": "'החל מ'; לפי עץ, צבע בסיס וגובה"
+     },
+     "styles": [
+      "japandi",
+      "warm-modern",
+      "nordic"
+     ],
+     "rooms": [
+      "living-room",
+      "master"
+     ],
+     "tier": "masterpiece-anchor",
+     "availability_on_check": true,
+     "lead_time": "עד 3 שבועות",
+     "why_wow_he": "קשת עץ דקה עם אור בפנים: פסל אור שקט."
+    },
+    {
+     "id": "L-VY2",
+     "name": "LOOKO floor lamp",
+     "url": "https://www.studiovayehi.com/product-page/looko-floor-lamp",
+     "size": "לא נבדק",
+     "material": "פורניר עץ",
+     "price": {
+      "amount": 4800,
+      "currency": "ILS"
+     },
+     "styles": [
+      "japandi",
+      "nordic"
+     ],
+     "rooms": [
+      "living-room",
+      "work"
+     ],
+     "tier": "masterpiece-anchor",
+     "availability_on_check": true
+    },
+    {
+     "id": "L-VY3",
+     "name": "LIGHT CLOUD walnut pendant",
+     "url": "https://www.studiovayehi.com/product-page/light-cloud-walnut",
+     "size": "XL ‏Ø70×43 (גם 60/50/40/30)",
+     "material": "רצועת פורניר רציפה (אגוז / מייפל / במבוק), ‏E27",
+     "price": {
+      "amount": 1100,
+      "currency": "ILS",
+      "note_he": "'החל מ' = מידה XS; מחיר XL לא מוצג בטקסט"
+     },
+     "styles": [
+      "japandi",
+      "boho",
+      "warm-modern"
+     ],
+     "rooms": [
+      "dining-room",
+      "master",
+      "living-room"
+     ],
+     "tier": "premium",
+     "availability_on_check": true,
+     "lead_time": "עד 3 שבועות"
+    }
+   ]
+  },
+  {
+   "id": "cozi",
+   "name": "Cozi",
+   "category": "lighting",
+   "israeli": true,
+   "city": "לא צוין בדף (SAGA)",
+   "website": "https://sagatlv.com/products/bloom-floor-lamp-oak",
+   "instagram": null,
+   "type": "designer-maker",
+   "channel": "saga-tlv",
+   "what_he": "קולקציית BLOOM: עלי כותרת מאלון מכופף סביב מקור אור; גם LAZI ו-Infinity.",
+   "commission": {
+    "level": "partial",
+    "quotes": [
+     {
+      "text": "*The item made by order, it takes 4 weeks before delivery",
+      "url": "https://sagatlv.com/products/bloom-floor-lamp-oak"
+     },
+     {
+      "text": "1.5 Meter WHITE cable length (if you need more contact us)",
+      "url": "https://sagatlv.com/products/bloom-lamp-white-oak"
+     }
+    ]
+   },
+   "lead_time": "4 שבועות",
+   "model_fit": {
+    "consignment": "medium",
+    "made_to_order_on_site": "high",
+    "note_he": "לפי הזמנה, דגם קבוע."
+   },
+   "standards_he": "חשמל: לפני מכירה צריך אישור CE ו-220–240V, ובגוף ישראלי גם ת\"י 20 (ד.3, S2B). לא מצוין בדף.",
+   "priority": "A",
+   "pieces": [
+    {
+     "id": "L-CZ1",
+     "name": "Bloom Floor Lamp - Oak (Large)",
+     "url": "https://sagatlv.com/products/bloom-floor-lamp-oak",
+     "size": "60×30×175 ס\"מ (S: 145)",
+     "material": "אלון מכופף, ‏E27 LED",
+     "price": {
+      "amount": 4600,
+      "currency": "ILS",
+      "note_he": "S ‏₪4,400; גם אגוז, לבן, שחור"
+     },
+     "styles": [
+      "nordic",
+      "japandi",
+      "warm-modern"
+     ],
+     "rooms": [
+      "living-room",
+      "master"
+     ],
+     "tier": "masterpiece-anchor",
+     "availability_on_check": true,
+     "lead_time": "4 שבועות",
+     "why_wow_he": "פרח עץ בגובה 175 שמאיר מבפנים: אלון בהיר, טבעי ומט, בדיוק בפלטה הנורדית."
+    },
+    {
+     "id": "L-CZ2",
+     "name": "Bloom Lamp - White Oak (pendant)",
+     "url": "https://sagatlv.com/products/bloom-lamp-white-oak",
+     "size": "60×30×40 ס\"מ",
+     "material": "אלון מכופף לבן",
+     "price": {
+      "amount": 2780,
+      "currency": "ILS"
+     },
+     "styles": [
+      "nordic",
+      "japandi"
+     ],
+     "rooms": [
+      "dining-room",
+      "master",
+      "kids-girl"
+     ],
+     "tier": "premium",
+     "availability_on_check": true,
+     "lead_time": "30 יום"
+    },
+    {
+     "id": "L-CZ3",
+     "name": "Lazi Lamp - Oak",
+     "url": "https://sagatlv.com/products/lazy-lamp",
+     "size": "אורך 120/150/180 ס\"מ",
+     "material": "יריעת אלון מעל גליל אור, LED",
+     "price": {
+      "amount": 4600,
+      "currency": "ILS",
+      "amount_high": 5100
+     },
+     "styles": [
+      "nordic",
+      "warm-modern",
+      "japandi"
+     ],
+     "rooms": [
+      "dining-room"
+     ],
+     "tier": "masterpiece-anchor",
+     "availability_on_check": true
+    }
+   ]
+  },
+  {
+   "id": "chen-zalkind",
+   "name": "Chen Zalkind (חן זלקינד)",
+   "category": "lighting",
+   "israeli": true,
+   "city": "לא צוין בדף (SAGA)",
+   "website": "https://sagatlv.com/products/pringles-80",
+   "instagram": null,
+   "type": "designer-maker",
+   "channel": "saga-tlv",
+   "what_he": "גופי תאורה פיסוליים מעץ מכופף בלמינציה, אלון וטרצו.",
+   "commission": {
+    "level": "not-stated",
+    "quotes": [
+     {
+      "text": "זמן אספקה: עד 45 ימי עסקים",
+      "url": "https://sagatlv.com/products/pringles-80"
+     }
+    ]
+   },
+   "lead_time": "עד 45 ימי עסקים",
+   "model_fit": {
+    "consignment": "medium",
+    "made_to_order_on_site": "high",
+    "note_he": "דגמים קבועים במידות קבועות."
+   },
+   "standards_he": "חשמל: לפני מכירה צריך אישור CE ו-220–240V, ובגוף ישראלי גם ת\"י 20 (ד.3, S2B). לא מצוין בדף. קשת T1 מגיעה עם כבל ותקע.",
+   "priority": "A",
+   "pieces": [
+    {
+     "id": "L-CZK1",
+     "name": "Pringles 80 pendant",
+     "url": "https://sagatlv.com/products/pringles-80",
+     "size": "80×45 ס\"מ, גובה כולל 180",
+     "material": "עץ מכופף בלמינציה, כדור זכוכית, מוט מתכת שחור",
+     "price": {
+      "amount": 4400,
+      "currency": "ILS",
+      "note_he": "אגוז; אלון ₪4,200"
+     },
+     "styles": [
+      "warm-modern",
+      "japandi",
+      "nordic"
+     ],
+     "rooms": [
+      "dining-room",
+      "living-room"
+     ],
+     "tier": "masterpiece-anchor",
+     "availability_on_check": true,
+     "lead_time": "עד 45 ימי עסקים",
+     "why_wow_he": "גל עץ שמרחף מעל השולחן: \"פריט עיצובי ייחודי שגונב את ההצגה\" (מתוך הדף)."
+    },
+    {
+     "id": "L-CZK2",
+     "name": "קשת T1 - גוף תאורה קירי",
+     "url": "https://sagatlv.com/products/%D7%A7%D7%A9%D7%AA-t1-%D7%92%D7%95%D7%A3-%D7%AA%D7%90%D7%95%D7%A8%D7%94-%D7%A7%D7%99%D7%A8%D7%99",
+     "size": "לא צוין (\"גדול במיוחד\")",
+     "material": "קשת מתכת דקה, אהיל עץ (אלון / אגוז), כבל 2 מ' עם תקע",
+     "price": {
+      "amount": 4950,
+      "currency": "ILS",
+      "amount_high": 5100
+     },
+     "styles": [
+      "warm-modern",
+      "nordic",
+      "japandi"
+     ],
+     "rooms": [
+      "master",
+      "living-room"
+     ],
+     "tier": "masterpiece-anchor",
+     "availability_on_check": true,
+     "caveats_he": "לא נשלח: איסוף או הובלה."
+    },
+    {
+     "id": "L-CZK3",
+     "name": "אפרו - גוף תאורה קירי",
+     "url": "https://sagatlv.com/products/afro",
+     "size": "35/47/15 ס\"מ",
+     "material": "אלון, MDF, טרצו, ‏G9",
+     "price": {
+      "amount": 2800,
+      "currency": "ILS",
+      "amount_high": 3000
+     },
+     "styles": [
+      "warm-modern",
+      "mediterranean"
+     ],
+     "rooms": [
+      "hall",
+      "corridor"
+     ],
+     "tier": "premium",
+     "availability_on_check": true
+    }
+   ]
+  },
+  {
+   "id": "ariel-zuckerman",
+   "name": "Ariel Zuckerman (אריאל צוקרמן)",
+   "category": "lighting",
+   "israeli": true,
+   "city": "לא צוין בדף (SAGA)",
+   "website": "https://sagatlv.com/products/knitted-dropped",
+   "instagram": null,
+   "type": "designer",
+   "channel": "saga-tlv",
+   "what_he": "סדרת Knitted עטורת פרסים: סריגה תעשייתית עם פרט קרושה בצמר, מתוחה על שלד.",
+   "commission": {
+    "level": "not-stated",
+    "quotes": [
+     {
+      "text": "Designed by Ariel Zuckerman, made in Israel",
+      "url": "https://sagatlv.com/products/knitted-dropped"
+     }
+    ]
+   },
+   "lead_time": "לא צוין",
+   "model_fit": {
+    "consignment": "medium",
+    "made_to_order_on_site": "high",
+    "note_he": "3 מידות ומבחר צבעים: מתאים לגלגל הווריאציות."
+   },
+   "standards_he": "חשמל: לפני מכירה צריך אישור CE ו-220–240V, ובגוף ישראלי גם ת\"י 20 (ד.3, S2B). לא מצוין בדף.",
+   "priority": "B",
+   "pieces": [
+    {
+     "id": "L-AZ1",
+     "name": "Knitted Dropped pendant",
+     "url": "https://sagatlv.com/products/knitted-dropped",
+     "size": "30 / 40 / 50 ס\"מ",
+     "material": "סיב אקרילי סרוג וקרושה מצמר, ‏E27",
+     "price": {
+      "amount": 3200,
+      "currency": "ILS",
+      "note_he": "50 ס\"מ; 40 ₪2,850, ‏30 ₪2,490"
+     },
+     "styles": [
+      "boho",
+      "modern-country"
+     ],
+     "rooms": [
+      "master",
+      "living-room",
+      "kids-girl"
+     ],
+     "tier": "masterpiece-anchor",
+     "availability_on_check": true,
+     "why_wow_he": "אהיל סרוג ביד בגודל 50: טקסטיל שהופך לאור."
+    }
+   ]
+  },
+  {
+   "id": "noa-razer",
+   "name": "Noa Razer (נועה רזר)",
+   "category": "lighting",
+   "israeli": true,
+   "city": "תל אביב (לפי קובץ Etsy)",
+   "website": "https://sagatlv.com/products/large-apilar-lamp-green-and-terracotta",
+   "instagram": null,
+   "type": "designer-maker",
+   "channel": "saga-tlv",
+   "etsy_xref": "NoaRazerStudio (data/suppliers/etsy-masterpieces-2026-10-12.json, israeli_etsy_makers)",
+   "what_he": "קולקציית Apilar: מנורות קרמיקה וטרקוטה מצורות מוערמות, בהשראת קרמיקה ספרדית.",
+   "commission": {
+    "level": "partial",
+    "quotes": [
+     {
+      "text": "allow us 45 days to produce it before delivery",
+      "url": "https://sagatlv.com/products/large-apilar-lamp-green-and-terracotta"
+     }
+    ]
+   },
+   "lead_time": "45 יום",
+   "model_fit": {
+    "consignment": "medium",
+    "made_to_order_on_site": "high",
+    "note_he": "לפי הזמנה; צורות קבועות שמורכבות מחדש."
+   },
+   "standards_he": "חשמל: לפני מכירה צריך אישור CE ו-220–240V, ובגוף ישראלי גם ת\"י 20 (ד.3, S2B). לא מצוין בדף.",
+   "priority": "A",
+   "pieces": [
+    {
+     "id": "L-NR1",
+     "name": "Large Apilar lamp (pendant)",
+     "url": "https://sagatlv.com/products/large-apilar-lamp-green-and-terracotta",
+     "size": "גובה 38, קוטר 20 ס\"מ",
+     "material": "קרמיקה בעבודת יד, ‏E27",
+     "price": {
+      "amount": 2240,
+      "currency": "ILS",
+      "note_he": "שלישייה מעל השולחן ₪6,720; Medium ₪1,960"
+     },
+     "styles": [
+      "mediterranean",
+      "boho"
+     ],
+     "rooms": [
+      "dining-room"
+     ],
+     "tier": "masterpiece-anchor",
+     "availability_on_check": true,
+     "lead_time": "45 יום",
+     "why_wow_he": "שלישיית טרקוטה מעל שולחן האוכל: הים-תיכוני במלואו."
+    }
+   ]
+  },
+  {
+   "id": "gur-inbar",
+   "name": "Gur Inbar (גור ענבר)",
+   "category": "lighting",
+   "israeli": true,
+   "city": "לא צוין בדף (SAGA)",
+   "website": "https://sagatlv.com/products/porcelain-moon-lamp-green-flowers",
+   "instagram": null,
+   "type": "designer-maker",
+   "channel": "saga-tlv",
+   "what_he": "מנורות 'ירח' מפורצלן בעבודת יד עם ציור ידני.",
+   "commission": {
+    "level": "partial",
+    "quotes": [
+     {
+      "text": "This item is made-to-order and shipped within a time frame of up to 4 weeks.",
+      "url": "https://sagatlv.com/products/porcelain-moon-lamp-green-flowers"
+     }
+    ]
+   },
+   "lead_time": "עד 4 שבועות",
+   "model_fit": {
+    "consignment": "medium",
+    "made_to_order_on_site": "high",
+    "note_he": "7 ציורים ושתי מידות: גלגל וריאציות מוכן."
+   },
+   "standards_he": "חשמל: לפני מכירה צריך אישור CE ו-220–240V, ובגוף ישראלי גם ת\"י 20 (ד.3, S2B). לא מצוין בדף.",
+   "priority": "B",
+   "pieces": [
+    {
+     "id": "L-GI1",
+     "name": "Porcelain Moon Lamp - Green Flowers (L)",
+     "url": "https://sagatlv.com/products/porcelain-moon-lamp-green-flowers",
+     "size": "Ø30 (S: Ø23)",
+     "material": "פורצלן, ציור ידני",
+     "price": {
+      "amount": 1700,
+      "currency": "ILS",
+      "note_he": "S ‏₪1,290; גם Blue Waves, Black Storm ועוד"
+     },
+     "styles": [
+      "modern-country",
+      "mediterranean",
+      "boho"
+     ],
+     "rooms": [
+      "master",
+      "kids-girl",
+      "hall"
+     ],
+     "tier": "premium",
+     "availability_on_check": true,
+     "lead_time": "עד 4 שבועות",
+     "why_wow_he": "פורצלן שקוף-למחצה עם פרחים מצוירים ביד: הכפרי המודרני בגרסת אור."
+    }
+   ]
+  },
+  {
+   "id": "adir-yakobi",
+   "name": "Adir Yakobi (אדיר יעקובי)",
+   "category": "lighting",
+   "israeli": true,
+   "city": "לא צוין בדף (SAGA)",
+   "website": "https://sagatlv.com/products/copy-of-floor-lamp-with-hair",
+   "instagram": null,
+   "type": "designer-maker",
+   "channel": "saga-tlv",
+   "what_he": "נברשות קו מפליז עם כדורי זכוכית חלבית, ומראות-אובייקט.",
+   "commission": {
+    "level": "explicit",
+    "quotes": [
+     {
+      "text": "Available for customisation by color shape and size",
+      "url": "https://sagatlv.com/products/copy-of-floor-lamp-with-hair"
+     },
+     {
+      "text": "The lamp made by order, Please allow 30 business days",
+      "url": "https://sagatlv.com/products/copy-of-cactus-chandelier-narrow"
+     }
+    ]
+   },
+   "lead_time": "30 ימי עסקים",
+   "model_fit": {
+    "consignment": "low",
+    "made_to_order_on_site": "high",
+    "note_he": "התאמה של צבע, צורה ומידה מוצהרת."
+   },
+   "standards_he": "חשמל: לפני מכירה צריך אישור CE ו-220–240V, ובגוף ישראלי גם ת\"י 20 (ד.3, S2B). לא מצוין בדף. ‏110–220V מצוין.",
+   "priority": "B",
+   "pieces": [
+    {
+     "id": "L-AY1",
+     "name": "XYZ Chandelier",
+     "url": "https://sagatlv.com/products/copy-of-floor-lamp-with-hair",
+     "size": "115×100 ס\"מ",
+     "material": "מסגרת פליז, כדורי זכוכית חלבית, ‏G9",
+     "price": {
+      "amount": 4200,
+      "currency": "ILS"
+     },
+     "styles": [
+      "warm-modern",
+      "modern-country"
+     ],
+     "rooms": [
+      "dining-room",
+      "living-room"
+     ],
+     "tier": "masterpiece-anchor",
+     "availability_on_check": true,
+     "lead_time": "30 ימי עסקים"
+    },
+    {
+     "id": "L-AY2",
+     "name": "Cactus Chandelier Narrow",
+     "url": "https://sagatlv.com/products/copy-of-xyz-chandelier-3",
+     "size": "200×38×12 ס\"מ",
+     "material": "מסגרת פליז, ‏5×G9",
+     "price": {
+      "amount": 9120,
+      "currency": "ILS"
+     },
+     "styles": [
+      "warm-modern"
+     ],
+     "rooms": [
+      "dining-room"
+     ],
+     "tier": "masterpiece-anchor",
+     "availability_on_check": true,
+     "lead_time": "30 ימי עסקים",
+     "caveats_he": "פליז בולט: לא לנורדי (זהב מלוטש אסור ב-Bible)."
+    }
+   ]
+  },
+  {
+   "id": "lalampa",
+   "name": "LALAMPA",
+   "category": "lighting",
+   "israeli": true,
+   "city": "לא צוין בדף (SAGA)",
+   "website": "https://sagatlv.com/products/oak-light",
+   "instagram": null,
+   "type": "designer-maker",
+   "channel": "saga-tlv",
+   "what_he": "תליות לינאריות מינימליסטיות מאלון בעבודת יד.",
+   "commission": {
+    "level": "not-stated",
+    "quotes": [
+     {
+      "text": "Material: oak wood Hand made",
+      "url": "https://sagatlv.com/products/oak-light"
+     }
+    ]
+   },
+   "lead_time": "לא צוין",
+   "model_fit": {
+    "consignment": "medium",
+    "made_to_order_on_site": "high",
+    "note_he": "3 אורכים."
+   },
+   "standards_he": "חשמל: לפני מכירה צריך אישור CE ו-220–240V, ובגוף ישראלי גם ת\"י 20 (ד.3, S2B). לא מצוין בדף.",
+   "priority": "B",
+   "pieces": [
+    {
+     "id": "L-LL1",
+     "name": "OAK LIGHT linear pendant",
+     "url": "https://sagatlv.com/products/oak-light",
+     "size": "120 / 140 / 160 × 5.3 × 3.5 ס\"מ",
+     "material": "אלון, פס LED ‏24V ‏20W",
+     "price": {
+      "amount": 3500,
+      "currency": "ILS",
+      "note_he": "160 ס\"מ; 140 ₪3,150, ‏120 ₪2,880"
+     },
+     "styles": [
+      "nordic",
+      "japandi"
+     ],
+     "rooms": [
+      "dining-room",
+      "work"
+     ],
+     "tier": "premium",
+     "availability_on_check": true
+    }
+   ]
+  },
+  {
+   "id": "le-klint",
+   "name": "Le Klint",
+   "category": "lighting",
+   "israeli": false,
+   "city": "אודנסה, דנמרק",
+   "website": "https://www.leklint.com/",
+   "instagram": null,
+   "type": "brand",
+   "what_he": "אהילי קפלים מקופלים ביד באודנסה מאז 1943; אייקון סקנדינבי.",
+   "commission": {
+    "level": "partial",
+    "quotes": [
+     {
+      "text": "We take pride in having retained the old craft of folding lampshades in Odense.",
+      "url": "https://www.leklint.com/products/le-klint-1-mega"
+     }
+    ]
+   },
+   "lead_time": "פריטים לפי הזמנה נשלחים תוך 5–20 ימי עסקים; מחוץ לאיחוד 15–30 ימי עסקים, משלוח €125",
+   "ships_to_israel": "ישראל ברשימת יעדי המשלוח של החנות (meta); בתנאים: \"rest of the world\" ‏€125, מכס ומע\"מ על הקונה",
+   "model_fit": {
+    "consignment": "low",
+    "made_to_order_on_site": "high",
+    "note_he": "דגמים סדרתיים עם CE: נאמנות מלאה לרינדור. מחיר סוחר מול היצרן או יבואן."
+   },
+   "standards_he": "CE מוצהר בתנאי השימוש; ת\"י 20 לא רלוונטי לתלייה מחווטת לפי ד.3 (CE מספיק).",
+   "priority": "A",
+   "pieces": [
+    {
+     "id": "L-LK1",
+     "name": "Le Klint 101 Chandelier (Kaare Klint Legacy)",
+     "url": "https://www.leklint.com/products/le-klint-101-chandelier-kaare-klint-legacy",
+     "size": "גובה 46, קוטר 66 ס\"מ, 5 זרועות",
+     "material": "פליז או פליז מושחם, אהילים מקופלים ביד",
+     "price": {
+      "amount": 2299,
+      "currency": "EUR",
+      "ils_approx": 8850.0,
+      "note_he": "פליז מושחם +€240 (לא ברור בדף)"
+     },
+     "styles": [
+      "modern-country",
+      "nordic",
+      "warm-modern"
+     ],
+     "rooms": [
+      "dining-room"
+     ],
+     "tier": "masterpiece-anchor",
+     "availability_on_check": true,
+     "lead_time": "5–20 ימי עסקים + משלוח",
+     "why_wow_he": "גרסה חדשה (2025) לנברשת של קורה קלינט מ-1944: חמישה אהילי קפלים. הכפרי המודרני בגרסת האייקון.",
+     "caveats_he": "בנורדי: פליז מוברש בלבד, לא מלוטש."
+    },
+    {
+     "id": "L-LK2",
+     "name": "Le Klint 1 Mega",
+     "url": "https://www.leklint.com/products/le-klint-1-mega",
+     "size": "Ø85×47 (גם Ø70×42, ‏Ø60×37)",
+     "material": "נייר (גרמניה) או פוליו PVC לבן, קפלים",
+     "price": {
+      "amount": 1119,
+      "currency": "EUR",
+      "ils_approx": 4310.0,
+      "note_he": "Ø85; ‏Ø70 €951, ‏Ø60 €839"
+     },
+     "styles": [
+      "nordic",
+      "japandi",
+      "modern-country"
+     ],
+     "rooms": [
+      "dining-room",
+      "master",
+      "living-room"
+     ],
+     "tier": "masterpiece-anchor",
+     "availability_on_check": true,
+     "lead_time": "5–20 ימי עסקים + משלוח",
+     "why_wow_he": "אהיל קפלים בקוטר 85: נורדי טהור, אור רך דרך נייר."
+    }
+   ]
+  },
+  {
+   "id": "vitra-akari",
+   "name": "Vitra - Akari (Isamu Noguchi)",
+   "category": "lighting",
+   "israeli": false,
+   "city": "שווייץ / גרמניה (יצרן); בישראל: Habitat",
+   "website": "https://www.habitat.co.il/en/products/19",
+   "instagram": null,
+   "type": "brand",
+   "channel": "habitat-il",
+   "what_he": "מנורות נייר וושי ובמבוק של נוגוצ'י (1951 ואילך); האייקון של הג'פנדי.",
+   "commission": {
+    "level": "not-stated",
+    "quotes": []
+   },
+   "lead_time": "באירופה 8–14 שבועות ל-120A (לפי קמעונאים)",
+   "model_fit": {
+    "consignment": "low",
+    "made_to_order_on_site": "medium",
+    "note_he": "Habitat מציגה את Akari 1AD בלי מחיר; 120A לא מופיע אצלה. מחיר לפי בקשה מהיבואן."
+   },
+   "standards_he": "CE (מוצר אירופי); לוודא 230V ותקע ישראלי או חיווט על ידי חשמלאי.",
+   "priority": "B",
+   "pieces": [
+    {
+     "id": "L-AK1",
+     "name": "Akari 120A pendant",
+     "url": "https://royaldesign.de/akari-pendant?p=385537",
+     "size": "קוטר 120 ס\"מ",
+     "material": "נייר וושי ובמבוק",
+     "price": {
+      "amount": 3395,
+      "currency": "EUR",
+      "amount_high": 3485,
+      "ils_approx": 13070.0,
+      "ils_approx_high": 13420.0,
+      "note_he": "מחיר קמעונאי באירופה (royaldesign.de, ‏mohd.it); בישראל לבירור מול Habitat"
+     },
+     "styles": [
+      "japandi",
+      "nordic",
+      "boho"
+     ],
+     "rooms": [
+      "living-room",
+      "dining-room"
+     ],
+     "tier": "masterpiece-anchor",
+     "availability_on_check": true,
+     "lead_time": "8–14 שבועות",
+     "why_wow_he": "פנס נייר בקוטר 120: הג'פנדי בהצהרה אחת."
+    },
+    {
+     "id": "L-AK2",
+     "name": "Akari 1AD (table)",
+     "url": "https://www.habitat.co.il/en/products/19",
+     "size": "לא צוין בדף Habitat",
+     "material": "נייר וושי ובמבוק",
+     "price": {
+      "amount": 404,
+      "currency": "EUR",
+      "ils_approx": 1560.0,
+      "note_he": "קמעונאי אירופי; בישראל לא מוצג מחיר"
+     },
+     "styles": [
+      "japandi",
+      "nordic"
+     ],
+     "rooms": [
+      "master",
+      "work"
+     ],
+     "tier": "premium"
+    }
+   ]
+  },
+  {
+   "id": "artek-a331",
+   "name": "Artek - A331 Beehive (Alvar Aalto)",
+   "category": "lighting",
+   "israeli": false,
+   "city": "פינלנד (יצרן); בישראל: Habitat",
+   "website": "https://www.habitat.co.il/en/products/194",
+   "instagram": null,
+   "type": "brand",
+   "channel": "habitat-il",
+   "what_he": "התליה 'כוורת' של אלוואר אלטו מ-1953.",
+   "commission": {
+    "level": "not-stated",
+    "quotes": []
+   },
+   "lead_time": "באירופה 5–10 שבועות",
+   "model_fit": {
+    "consignment": "low",
+    "made_to_order_on_site": "medium",
+    "note_he": "מוצג ב-Habitat בלי מחיר."
+   },
+   "standards_he": "CE; לחווט על ידי חשמלאי.",
+   "priority": "C",
+   "pieces": [
+    {
+     "id": "L-AR1",
+     "name": "A331 Beehive pendant, brass",
+     "url": "https://www.designville.eu/a331-beehive-pendant-brass",
+     "size": "קוטר 33, גובה 30 ס\"מ",
+     "material": "אלומיניום צבוע, טבעות פליז",
+     "price": {
+      "amount": 1296,
+      "currency": "EUR",
+      "ils_approx": 4990.0,
+      "note_he": "קמעונאי אירופי (designville.eu); לבן עם פליז €1,058 במקום אחר"
+     },
+     "styles": [
+      "nordic",
+      "warm-modern"
+     ],
+     "rooms": [
+      "dining-room",
+      "hall"
+     ],
+     "tier": "premium",
+     "availability_on_check": true,
+     "lead_time": "8–10 שבועות",
+     "caveats_he": "קטן מכדי להיות עוגן יחיד; זוג מעל השולחן."
+    }
+   ]
+  },
+  {
+   "id": "tom-raffield",
+   "name": "Tom Raffield",
+   "category": "lighting",
+   "israeli": false,
+   "city": "פאלמות', בריטניה",
+   "website": "https://www.tomraffield.com/",
+   "instagram": null,
+   "type": "brand",
+   "what_he": "גופי תאורה מעץ בכיפוף באדים, בעבודת יד ולפי הזמנה.",
+   "commission": {
+    "level": "explicit",
+    "quotes": [
+     {
+      "text": "All of our products are handcrafted and made-to-order within a lead time period clearly stated on each product page.",
+      "url": "https://www.tomraffield.com/products/butterfly-pendant-giant"
+     },
+     {
+      "text": "Trade Hub: pricelists, CAD files, spec sheets (\"Get in touch with us\")",
+      "url": "https://www.tomraffield.com/products/butterfly-pendant-giant"
+     }
+    ]
+   },
+   "lead_time": "\"Dispatched in: 2 weeks\" (אזל בבדיקה)",
+   "ships_to_israel": "לא מאושר: בדף נאמר EU, ‏USA, ‏Canada; ישראל רק בבורר המטבע",
+   "model_fit": {
+    "consignment": "low",
+    "made_to_order_on_site": "medium",
+    "note_he": "יש תוכנית סחר. לבדוק משלוח לישראל וחיווט 230V."
+   },
+   "standards_he": "CE/UKCA לא מצוינים בדף.",
+   "priority": "C",
+   "pieces": [
+    {
+     "id": "L-TR1",
+     "name": "Butterfly Pendant Giant",
+     "url": "https://www.tomraffield.com/products/butterfly-pendant-giant",
+     "size": "⌀96×87 ס\"מ, ‏2.6 ק\"ג",
+     "material": "אלון או אגוז בכיפוף באדים, לכה מט",
+     "price": {
+      "amount": 995,
+      "currency": "GBP",
+      "ils_approx": 4380.0,
+      "note_he": "אגוז £1,045"
+     },
+     "styles": [
+      "nordic",
+      "japandi",
+      "warm-modern"
+     ],
+     "rooms": [
+      "dining-room",
+      "living-room"
+     ],
+     "tier": "masterpiece-anchor",
+     "availability_on_check": false,
+     "lead_time": "2 שבועות לפי הדף"
+    }
+   ]
+  },
+  {
+   "id": "inbal-k-assa",
+   "name": "Inbal K. Assa (ענבל ק. אסא)",
+   "category": "wall-art",
+   "israeli": true,
+   "city": "לא צוין בדף (SAGA)",
+   "website": "https://sagatlv.com/products/people-on-the-beach-100-70-canvas",
+   "instagram": null,
+   "type": "artist",
+   "channel": "saga-tlv",
+   "what_he": "ציורי אקריליק מקוריים של חיי היום-יום הישראליים (חוף, בריכה, קהל), והדפסי אמנות במהדורה מוגבלת.",
+   "commission": {
+    "level": "not-stated",
+    "quotes": [
+     {
+      "text": "Original acrylic painting on stretched canvas, Ready to be hanged",
+      "url": "https://sagatlv.com/products/people-on-the-beach-100-70-canvas"
+     }
+    ]
+   },
+   "lead_time": "במלאי",
+   "model_fit": {
+    "consignment": "high",
+    "made_to_order_on_site": "medium",
+    "note_he": "מקור יחיד לקונסיגנציה; ההדפסים (3 מידות, עד ₪3,200) הם המדרג 'המומלץ באמצע' של אותה אמנית."
+   },
+   "standards_he": "לא רלוונטי",
+   "priority": "A",
+   "pieces": [
+    {
+     "id": "A-IA1",
+     "name": "People on the beach - 100×70 canvas",
+     "url": "https://sagatlv.com/products/people-on-the-beach-100-70-canvas",
+     "size": "100×70 ס\"מ",
+     "material": "אקריליק על קנבס",
+     "price": {
+      "amount": 6500,
+      "currency": "ILS"
+     },
+     "styles": [
+      "mediterranean",
+      "boho",
+      "modern-country"
+     ],
+     "rooms": [
+      "living-room",
+      "dining-room"
+     ],
+     "tier": "masterpiece-anchor",
+     "availability_on_check": true,
+     "why_wow_he": "חוף ישראלי מצויר ביד: יצירה מקורית שמספרת 'כאן'."
+    },
+    {
+     "id": "A-IA2",
+     "name": "People at the Pool - round 88",
+     "url": "https://sagatlv.com/products/people-at-the-pool-80x80-canvas",
+     "size": "קנבס עגול, קוטר 88 ס\"מ",
+     "material": "אקריליק על קנבס",
+     "price": {
+      "amount": 15200,
+      "currency": "ILS"
+     },
+     "styles": [
+      "mediterranean",
+      "warm-modern"
+     ],
+     "rooms": [
+      "living-room"
+     ],
+     "tier": "masterpiece-anchor",
+     "availability_on_check": true,
+     "why_wow_he": "עוגן מחיר ברמה של גלריה."
+    },
+    {
+     "id": "A-IA3",
+     "name": "Surfers - fine art print (limited)",
+     "url": "https://sagatlv.com/products/surfers-print",
+     "size": "3 מידות",
+     "material": "הדפס אמנות ממהדורה מוגבלת",
+     "price": {
+      "amount": 600,
+      "currency": "ILS",
+      "amount_high": 3200
+     },
+     "styles": [
+      "mediterranean",
+      "boho"
+     ],
+     "rooms": [
+      "living-room",
+      "kids-boy",
+      "corridor"
+     ],
+     "tier": "premium",
+     "availability_on_check": true
+    }
+   ]
+  },
+  {
+   "id": "aifo",
+   "name": "AIFO (Stephan & Alina Aifo)",
+   "category": "wall-art",
+   "israeli": true,
+   "city": "לא צוין בדף (SAGA)",
+   "website": "https://sagatlv.com/products/copy-of-elephant",
+   "instagram": null,
+   "type": "artist",
+   "channel": "saga-tlv",
+   "what_he": "ציור אקריליק מקורי בפורמט טוטם גבוה.",
+   "commission": {
+    "level": "not-stated",
+    "quotes": []
+   },
+   "lead_time": "במלאי",
+   "model_fit": {
+    "consignment": "high",
+    "made_to_order_on_site": "low",
+    "note_he": "יחיד."
+   },
+   "standards_he": "לא רלוונטי",
+   "priority": "B",
+   "pieces": [
+    {
+     "id": "A-AF1",
+     "name": "Blue Totem",
+     "url": "https://sagatlv.com/products/copy-of-elephant",
+     "size": "210×55 ס\"מ",
+     "material": "אקריליק על קנבס",
+     "price": {
+      "amount": 6300,
+      "currency": "ILS"
+     },
+     "styles": [
+      "mediterranean",
+      "boho"
+     ],
+     "rooms": [
+      "hall",
+      "corridor",
+      "living-room"
+     ],
+     "tier": "masterpiece-anchor",
+     "availability_on_check": true,
+     "why_wow_he": "פורמט אנכי של 2.1 מ': מושלם לקיר צר בכניסה או במסדרון."
+    }
+   ]
+  },
+  {
+   "id": "or-lapid",
+   "name": "Or Lapid (אור לפיד)",
+   "category": "wall-art",
+   "israeli": true,
+   "city": "לא צוין בדף (SAGA)",
+   "website": "https://sagatlv.com/products/original-framed-painting-flowers-in-a-vase-or-lapid",
+   "instagram": null,
+   "type": "artist",
+   "channel": "saga-tlv",
+   "what_he": "ציורים מקוריים קטנים (פסטל, צבעי מים) של פרחים, נוף ישראלי ורגעים יומיומיים, במסגרות אלון.",
+   "commission": {
+    "level": "not-stated",
+    "quotes": []
+   },
+   "lead_time": "במלאי",
+   "model_fit": {
+    "consignment": "high",
+    "made_to_order_on_site": "low",
+    "note_he": "סטים של 3 מקור: קיר גלריה שלם בפריט אחד."
+   },
+   "standards_he": "לא רלוונטי",
+   "priority": "A",
+   "pieces": [
+    {
+     "id": "A-OL1",
+     "name": "Flowers in a Vase - original framed",
+     "url": "https://sagatlv.com/products/original-framed-painting-flowers-in-a-vase-or-lapid",
+     "size": "מסגרת 32×38.5 ס\"מ",
+     "material": "פסטל על נייר, מסגרת אלון, זכוכית אמנות",
+     "price": {
+      "amount": 2500,
+      "currency": "ILS"
+     },
+     "styles": [
+      "modern-country",
+      "nordic"
+     ],
+     "rooms": [
+      "dining-room",
+      "living-room",
+      "master"
+     ],
+     "tier": "premium",
+     "availability_on_check": true,
+     "why_wow_he": "טבע דומם פרחוני מקורי במסגרת אלון: הליבה של הכפרי המודרני."
+    },
+    {
+     "id": "A-OL2",
+     "name": "Colorful Flowers - original framed",
+     "url": "https://sagatlv.com/products/original-framed-painting-colorful-flowers-or-lapid",
+     "size": "מסגרת 32×38.5 ס\"מ",
+     "material": "פסטל על נייר, מסגרת אלון",
+     "price": {
+      "amount": 2500,
+      "currency": "ILS"
+     },
+     "styles": [
+      "modern-country",
+      "boho"
+     ],
+     "rooms": [
+      "dining-room",
+      "master"
+     ],
+     "tier": "premium",
+     "availability_on_check": true
+    },
+    {
+     "id": "A-OL3",
+     "name": "Blurred Flowers - original framed",
+     "url": "https://sagatlv.com/products/original-framed-painting-blurred-flowers-or-lapid",
+     "size": "מסגרת 31×25 ס\"מ",
+     "material": "צבעי מים, מסגרת אלון",
+     "price": {
+      "amount": 1800,
+      "currency": "ILS"
+     },
+     "styles": [
+      "modern-country",
+      "nordic"
+     ],
+     "rooms": [
+      "dining-room",
+      "master"
+     ],
+     "tier": "premium",
+     "availability_on_check": true
+    },
+    {
+     "id": "A-OL4",
+     "name": "At the Museum - set of 3 originals",
+     "url": "https://sagatlv.com/products/original-framed-painting-set-of-3",
+     "size": "3 עבודות ממוסגרות",
+     "material": "מקור, מסגרות אלון",
+     "price": {
+      "amount": 6000,
+      "currency": "ILS"
+     },
+     "styles": [
+      "modern-country",
+      "warm-modern"
+     ],
+     "rooms": [
+      "living-room",
+      "corridor"
+     ],
+     "tier": "masterpiece-anchor",
+     "availability_on_check": true
+    }
+   ]
+  },
+  {
+   "id": "miki-ohana",
+   "name": "Miki Ohana (מיקי אוחנה)",
+   "category": "wall-art",
+   "israeli": true,
+   "city": "לא צוין בדף (SAGA)",
+   "website": "https://sagatlv.com/products/copy-of-group-of-fish-miki-ohana",
+   "instagram": null,
+   "type": "artist",
+   "channel": "saga-tlv",
+   "what_he": "עבודות טקסטיל שנתפרות במכונת תפירה.",
+   "commission": {
+    "level": "not-stated",
+    "quotes": [
+     {
+      "text": "Each work is handmade, so it can change a bit.",
+      "url": "https://sagatlv.com/products/copy-of-group-of-fish-miki-ohana"
+     }
+    ]
+   },
+   "lead_time": "לא צוין",
+   "model_fit": {
+    "consignment": "medium",
+    "made_to_order_on_site": "medium",
+    "note_he": "נושאים חוזרים (דגים)."
+   },
+   "standards_he": "לא רלוונטי",
+   "priority": "C",
+   "pieces": [
+    {
+     "id": "A-MO1",
+     "name": "Big Group of fish",
+     "url": "https://sagatlv.com/products/copy-of-group-of-fish-miki-ohana",
+     "size": "60×46 ס\"מ (±)",
+     "material": "טקסטיל תפור",
+     "price": {
+      "amount": 1800,
+      "currency": "ILS"
+     },
+     "styles": [
+      "mediterranean",
+      "boho"
+     ],
+     "rooms": [
+      "kids-boy",
+      "kids-girl",
+      "bath"
+     ],
+     "tier": "premium",
+     "availability_on_check": true
+    }
+   ]
+  },
+  {
+   "id": "michal-chen-aharon",
+   "name": "Michal Chen Aharon (מיכל חן אהרון)",
+   "category": "wall-art",
+   "israeli": true,
+   "city": "ראשון לציון (גלריה בתיאום)",
+   "website": "https://michal-aharon.co.il/",
+   "instagram": null,
+   "type": "artist",
+   "what_he": "ציורי ענק מקוריים, בעיקר בסגנון פופ-ארט צבעוני.",
+   "commission": {
+    "level": "partial",
+    "quotes": [
+     {
+      "text": "קטגוריה 'ציורים בהתאמה לפי חדר'",
+      "url": "https://michal-aharon.co.il/product-category/%D7%A6%D7%99%D7%95%D7%A8%D7%99%D7%9D-%D7%9E%D7%A7%D7%95%D7%A8%D7%99%D7%99%D7%9D/"
+     }
+    ]
+   },
+   "lead_time": "לא צוין",
+   "model_fit": {
+    "consignment": "medium",
+    "made_to_order_on_site": "medium",
+    "note_he": "התאמה לפי חדר מוצהרת. הסגנון רחוק משישת הסגנונות; אולי לחדר ילדים."
+   },
+   "standards_he": "לא רלוונטי",
+   "priority": "C",
+   "pieces": [
+    {
+     "id": "A-MC1",
+     "name": "אושר צהוב (מקורי)",
+     "url": "https://michal-aharon.co.il/product/%d7%a6%d7%99%d7%95%d7%a8-%d7%9e%d7%a7%d7%95%d7%a8%d7%99-%d7%90%d7%95%d7%a9%d7%a8-%d7%a6%d7%94%d7%95%d7%91/",
+     "size": "לא צוין בדף",
+     "material": "ציור מקורי",
+     "price": {
+      "amount": 6500,
+      "currency": "ILS"
+     },
+     "styles": [
+      "boho"
+     ],
+     "rooms": [
+      "kids-girl",
+      "kids-boy"
+     ],
+     "tier": "masterpiece-anchor",
+     "availability_on_check": true,
+     "caveats_he": "פופ-ארט צבעוני לא מתאים לפלטות של הבית."
+    }
+   ]
+  },
+  {
+   "id": "dussilli-macrame",
+   "name": "Dussilli Macrame",
+   "category": "wall-art",
+   "israeli": true,
+   "lead_only": true,
+   "city": "לא אומת",
+   "website": "https://www.dussillimacrame.co.il/",
+   "instagram": null,
+   "type": "artisan",
+   "what_he": "מקרמה גדולה ו'ענק' בעבודת יד; לפי תקציר החיפוש כ-₪600–2,000, ואפשר לבקש פריט חדש בהתאמה.",
+   "commission": {
+    "level": "partial",
+    "quotes": [
+     {
+      "text": "האתר מציע לפנות ליוצרת כדי להכין פריט חדש בהתאמה (תקציר חיפוש)",
+      "url": "https://www.dussillimacrame.co.il/c/%D7%93%D7%92%D7%9E%D7%99_%D7%9E%D7%A7%D7%A8%D7%9E%D7%94_%D7%92%D7%93%D7%95%D7%9C%D7%99%D7%9D_%D7%91%D7%9E%D7%99%D7%95%D7%97%D7%93"
+     }
+    ]
+   },
+   "lead_time": "לא צוין",
+   "model_fit": {
+    "consignment": "unknown",
+    "made_to_order_on_site": "medium",
+    "note_he": "האתר חסם קריאה (403); לא עקפנו."
+   },
+   "standards_he": "לא רלוונטי",
+   "priority": "C",
+   "pieces": []
+  },
+  {
+   "id": "odily-macrame",
+   "name": "Odily (אודילי)",
+   "category": "wall-art",
+   "israeli": true,
+   "lead_only": true,
+   "city": "לא אומת",
+   "website": "https://www.odily.co.il/",
+   "instagram": null,
+   "type": "artisan",
+   "what_he": "יצירות מקרמה בעבודת יד, סדנאות ועיצוב אישי (לפי תקציר החיפוש).",
+   "commission": {
+    "level": "partial",
+    "quotes": [
+     {
+      "text": "הזמנות מיוחדות ועיצובים בהתאמה אישית (תקציר חיפוש)",
+      "url": "https://www.odily.co.il/"
+     }
+    ]
+   },
+   "lead_time": "לא צוין",
+   "model_fit": {
+    "consignment": "unknown",
+    "made_to_order_on_site": "medium",
+    "note_he": "לא נבדקו מוצרים ומחירים."
+   },
+   "standards_he": "לא רלוונטי",
+   "priority": "C",
+   "pieces": []
+  },
+  {
+   "id": "lale-studio",
+   "name": "Lale Studio & Shop",
+   "category": "wall-art",
+   "israeli": false,
+   "city": "חשנוב, פולין",
+   "website": "https://lalestudio.com/",
+   "instagram": null,
+   "type": "studio",
+   "what_he": "שטיחי קיר וטפיסריות צמר ארוגות ביד, ממוסגרות או תלויות, במידות מותאמות.",
+   "commission": {
+    "level": "explicit",
+    "quotes": [
+     {
+      "text": "Lale Studio & Shop works directly with design professionals on handwoven wool artworks developed around the architecture of each project.",
+      "url": "https://lalestudio.com/pages/trade-program"
+     },
+     {
+      "text": "Trade pricing is reviewed individually based on project scope, quantity and customization.",
+      "url": "https://lalestudio.com/pages/trade-program"
+     },
+     {
+      "text": "Custom dimensions and proportions ... Oversized artworks for tall and double-height walls",
+      "url": "https://lalestudio.com/pages/custom"
+     }
+    ]
+   },
+   "lead_time": "לפי הצעת מחיר; משלוח בינלאומי עם מעקב",
+   "ships_to_israel": "ישראל ברשימת יעדי המשלוח (meta)",
+   "model_fit": {
+    "consignment": "low",
+    "made_to_order_on_site": "high",
+    "note_he": "תוכנית סחר ועבודה בהזמנה מוצהרות: המודל הנקי ביותר ל'הזמנה אישית באתר'."
+   },
+   "standards_he": "לא רלוונטי",
+   "priority": "A",
+   "pieces": [
+    {
+     "id": "A-LS1",
+     "name": "Tupe - Misty Wall Hanging",
+     "url": "https://lalestudio.com/products/tupe-misty-wall-hanging-woven-wall-decoration",
+     "size": "140×250 ס\"מ (גם 140×180)",
+     "material": "צמר טבעי בבז' וטאופ, ארוג ביד",
+     "price": {
+      "amount": 1804,
+      "currency": "USD",
+      "ils_approx": 5950.0,
+      "note_he": "140×180 $1,485"
+     },
+     "styles": [
+      "boho",
+      "japandi",
+      "warm-modern",
+      "nordic"
+     ],
+     "rooms": [
+      "living-room",
+      "master"
+     ],
+     "tier": "masterpiece-anchor",
+     "availability_on_check": true,
+     "why_wow_he": "טפיסריית צמר בגובה 2.5 מ' בגווני בז' וטאופ: בפלטה של רוב הסגנונות."
+    },
+    {
+     "id": "A-LS2",
+     "name": "Linea - Tall Framed Wool Art",
+     "url": "https://lalestudio.com/products/linea-tall-framed-wool-art",
+     "size": "50×200 ס\"מ",
+     "material": "צמר ארוג ביד, מסגרת אלון (או אורן)",
+     "price": {
+      "amount": 2695,
+      "currency": "USD",
+      "ils_approx": 8890.0,
+      "note_he": "מסגרת אורן $2,310"
+     },
+     "styles": [
+      "japandi",
+      "nordic",
+      "warm-modern"
+     ],
+     "rooms": [
+      "corridor",
+      "hall"
+     ],
+     "tier": "masterpiece-anchor",
+     "availability_on_check": true
+    },
+    {
+     "id": "A-LS3",
+     "name": "Denti di Leone (green)",
+     "url": "https://lalestudio.com/products/denti-di-leone-handwoven-green-wall-hanging",
+     "size": "127×130 ס\"מ (גם 78×80)",
+     "material": "צמר ירוק-זית ארוג ביד",
+     "price": {
+      "amount": 935,
+      "currency": "USD",
+      "ils_approx": 3090.0,
+      "note_he": "78×80 $517"
+     },
+     "styles": [
+      "modern-country",
+      "boho",
+      "nordic"
+     ],
+     "rooms": [
+      "master",
+      "kids-girl"
+     ],
+     "tier": "premium",
+     "availability_on_check": true
+    }
+   ]
+  },
+  {
+   "id": "iota",
+   "name": "Iota (iota yarn)",
+   "category": "textiles",
+   "israeli": true,
+   "city": "לא צוין בדף (SAGA)",
+   "website": "https://sagatlv.com/products/outdoor-indoor-rug-sand-stone",
+   "instagram": null,
+   "type": "designer-maker",
+   "channel": "saga-tlv",
+   "what_he": "שטיחים, פופים וכריות רצפה בקרושה 'גרני סקוור' עכשווי, מחוט iota עמיד ל-UV, בעבודת יד.",
+   "commission": {
+    "level": "not-stated",
+    "quotes": [
+     {
+      "text": "Products may vary up to 5% as objects are handmade",
+      "url": "https://sagatlv.com/products/outdoor-indoor-rug-sand-stone"
+     }
+    ]
+   },
+   "lead_time": "לא צוין",
+   "model_fit": {
+    "consignment": "medium",
+    "made_to_order_on_site": "high",
+    "note_he": "8 גוונים ושתי מידות: גלגל וריאציות מוכן."
+   },
+   "standards_he": "לא רלוונטי",
+   "priority": "A",
+   "pieces": [
+    {
+     "id": "T-IO1",
+     "name": "Outdoor Indoor Rug - Sand Stone",
+     "url": "https://sagatlv.com/products/outdoor-indoor-rug-sand-stone",
+     "size": "200×300 ס\"מ (גם 150×200)",
+     "material": "אקריליק עמיד ל-UV בקרושה ידנית, רצועות",
+     "price": {
+      "amount": 13000,
+      "currency": "ILS",
+      "note_he": "150×200 ₪6,800"
+     },
+     "styles": [
+      "boho",
+      "modern-country",
+      "mediterranean"
+     ],
+     "rooms": [
+      "living-room",
+      "kids-girl",
+      "kids-boy"
+     ],
+     "tier": "masterpiece-anchor",
+     "availability_on_check": true,
+     "why_wow_he": "שטיח קרושה ענק בעבודת יד: עוגן מחיר וטקסטורה שאין בשום שטיח סדרתי.",
+     "caveats_he": "אקריליק, לא סיב טבעי: לא לנורדי ולג'פנדי."
+    },
+    {
+     "id": "T-IO2",
+     "name": "Outdoor Indoor Round Pouf - Clay",
+     "url": "https://sagatlv.com/products/outdoor-indoor-round-pouf-clay",
+     "size": "לא צוין",
+     "material": "אקריליק בקרושה ידנית",
+     "price": {
+      "amount": 4070,
+      "currency": "ILS"
+     },
+     "styles": [
+      "boho",
+      "mediterranean"
+     ],
+     "rooms": [
+      "living-room",
+      "kids-girl"
+     ],
+     "tier": "masterpiece-anchor",
+     "availability_on_check": true
+    }
+   ]
+  },
+  {
+   "id": "lakiya-negev-weaving",
+   "name": "Lakiya Negev Weaving (Sidreh / סדרה)",
+   "category": "textiles",
+   "israeli": true,
+   "city": "לקיה / עומר",
+   "website": "https://www.sidreh.org/",
+   "instagram": null,
+   "type": "nonprofit-cooperative",
+   "etsy_xref": "off_etsy_israeli_leads: 'Lakiya Negev Bedouin Weaving (Sidreh)' (data/suppliers/etsy-masterpieces-2026-10-12.json)",
+   "what_he": "שטיחים, טפיסריות וכריות שנארגים ביד על נולי קרקע מצמר כבשי עוואסי מקומיים, בידי נשים בדואיות בנגב (מאז 1991).",
+   "commission": {
+    "level": "partial",
+    "quotes": [
+     {
+      "text": "New collaboration between Princess Basma Center and Sidreh (\"Beautiful combination of wood and wool\")",
+      "url": "https://www.sidreh.org/"
+     },
+     {
+      "text": "Lakiya design edition (Inoue Brothers) from $4,608, lead time 8-10 weeks",
+      "url": "https://suiteny.com/products/lakiya"
+     }
+    ]
+   },
+   "lead_time": "מהדורת המעצבים: 8–10 שבועות",
+   "model_fit": {
+    "consignment": "medium",
+    "made_to_order_on_site": "medium",
+    "note_he": "מחירון עדכני לא נמצא (דפי סדרה ריקים בבדיקה). מחירים ישנים ₪400–4,000 (Frommers). סיפור מקומי חזק."
+   },
+   "standards_he": "לא רלוונטי",
+   "priority": "A",
+   "pieces": [
+    {
+     "id": "T-LK1",
+     "name": "Lakiya hand-woven wool rug (ground loom)",
+     "url": "https://www.sunbula.org/en/article/15/Lakiya-Negev-Bedouin-Weaving",
+     "size": "לא צוין",
+     "material": "צמר עוואסי, אריגת נול קרקע",
+     "price": {
+      "amount": 400,
+      "currency": "ILS",
+      "amount_high": 4000,
+      "note_he": "טווח ישן מ-Frommers; לא עדכני"
+     },
+     "styles": [
+      "boho",
+      "mediterranean",
+      "japandi"
+     ],
+     "rooms": [
+      "living-room",
+      "master",
+      "work"
+     ],
+     "tier": "masterpiece-anchor",
+     "why_wow_he": "אריגה בדואית מהנגב בצמר מקומי: הסיפור הכי ישראלי בטקסטיל."
+    },
+    {
+     "id": "T-LK2",
+     "name": "Lakiya design edition (Inoue Brothers)",
+     "url": "https://suiteny.com/products/lakiya",
+     "size": "לא צוין",
+     "material": "צמר עוואסי",
+     "price": {
+      "amount": 4608,
+      "currency": "USD",
+      "ils_approx": 15210.0,
+      "note_he": "'החל מ'; מהדורת מעצבים בחו\"ל"
+     },
+     "styles": [
+      "japandi",
+      "boho",
+      "warm-modern"
+     ],
+     "rooms": [
+      "living-room"
+     ],
+     "tier": "masterpiece-anchor",
+     "lead_time": "8–10 שבועות"
+    }
+   ]
+  },
+  {
+   "id": "teixidors",
+   "name": "Teixidors",
+   "category": "textiles",
+   "israeli": false,
+   "city": "טרסה, ספרד",
+   "website": "https://www.teixidors.com/",
+   "instagram": null,
+   "type": "social-enterprise",
+   "what_he": "טקסטיל ארוג ביד מאז 1983, על נולים שהם בונים; נוסד כדי לתת עבודה לאנשים עם מוגבלות שכלית.",
+   "commission": {
+    "level": "partial",
+    "quotes": [
+     {
+      "text": "קישורים באתר: Minoristas (קמעונאים), Regalos de empresa",
+      "url": "https://www.teixidors.com/"
+     }
+    ]
+   },
+   "lead_time": "לא צוין",
+   "ships_to_israel": "לא צוין",
+   "model_fit": {
+    "consignment": "low",
+    "made_to_order_on_site": "medium",
+    "note_he": "יש ערוץ קמעונאים; משלוח לישראל לא מאומת; מידות לא בדף."
+   },
+   "standards_he": "לא רלוונטי",
+   "priority": "C",
+   "pieces": [
+    {
+     "id": "T-TX1",
+     "name": "Manta cama Thor",
+     "url": "https://www.teixidors.com/producto/manta-artesanal-diseno-lana-merina-thor/",
+     "size": "לא צוין",
+     "material": "100% צמר מרינו מאקסטרמדורה, ארוג ביד",
+     "price": {
+      "amount": 881,
+      "currency": "EUR",
+      "ils_approx": 3390.0
+     },
+     "styles": [
+      "nordic",
+      "japandi",
+      "modern-country"
+     ],
+     "rooms": [
+      "master"
+     ],
+     "tier": "premium"
+    }
+   ]
+  },
+  {
+   "id": "childwood",
+   "name": "ChildWood",
+   "category": "kids",
+   "israeli": true,
+   "city": "אבן יהודה",
+   "website": "https://www.childwood.co.il/",
+   "instagram": null,
+   "type": "studio",
+   "what_he": "רהיטי משחק ומשחקי דמיון מעץ בעבודת יד בסטודיו: תיאטרון בובות, דוכנים, שולחנות יצירה.",
+   "commission": {
+    "level": "explicit",
+    "quotes": [
+     {
+      "text": "אפשרות חריטה מותאמת אישית",
+      "url": "https://www.childwood.co.il/product/%d7%aa%d7%90%d7%98%d7%a8%d7%95%d7%9f-%d7%91%d7%95%d7%91%d7%95%d7%aa-%d7%9e%d7%a2%d7%a5-%d7%9c%d7%99%d7%9c%d7%93%d7%99%d7%9d/"
+     },
+     {
+      "text": "אפשרות לבחירת הגוון של גג הדוכן ופסי המדפים",
+      "url": "https://www.childwood.co.il/product/%d7%93%d7%95%d7%9b%d7%9f-%d7%92%d7%9c%d7%99%d7%93%d7%94-%d7%9e%d7%a2%d7%a5-%d7%9c%d7%99%d7%9c%d7%93%d7%99%d7%9d/"
+     }
+    ]
+   },
+   "lead_time": "\"אספקה: 21 ימי עסקים\"; הובלה ₪450 (חדרה–גדרה), הרכבה בלי עלות",
+   "model_fit": {
+    "consignment": "low",
+    "made_to_order_on_site": "high",
+    "note_he": "לפי הזמנה עם גוונים וחריטת שם: וריאציות מובנות."
+   },
+   "standards_he": "צעצוע ומוצר ילדים: EN71 / ת\"י 562 חובה ומוצג בדף המוצר (ד.4). לא מצוין בדף.",
+   "priority": "A",
+   "pieces": [
+    {
+     "id": "K-CW1",
+     "name": "תאטרון בובות ענק מעץ",
+     "url": "https://www.childwood.co.il/product/%d7%aa%d7%90%d7%98%d7%a8%d7%95%d7%9f-%d7%91%d7%95%d7%91%d7%95%d7%aa-%d7%9e%d7%a2%d7%a5-%d7%9c%d7%99%d7%9c%d7%93%d7%99%d7%9d/",
+     "size": "91×126×32 ס\"מ",
+     "material": "עץ",
+     "price": {
+      "amount": 1950,
+      "currency": "ILS"
+     },
+     "styles": [
+      "nordic",
+      "modern-country",
+      "japandi"
+     ],
+     "rooms": [
+      "kids-girl"
+     ],
+     "tier": "masterpiece-anchor",
+     "availability_on_check": true,
+     "lead_time": "21 ימי עסקים",
+     "why_wow_he": "במה מעץ בגובה 1.26 עם חריטת שם: פריט החדר שהילדה תזכור."
+    },
+    {
+     "id": "K-CW2",
+     "name": "דוכן גלידה מעץ - L",
+     "url": "https://www.childwood.co.il/product/%d7%93%d7%95%d7%9b%d7%9f-%d7%92%d7%9c%d7%99%d7%93%d7%94-%d7%9e%d7%a2%d7%a5-%d7%9c%d7%99%d7%9c%d7%93%d7%99%d7%9d/",
+     "size": "100×126×40 ס\"מ",
+     "material": "עץ, גג ופסים בגוונים לבחירה",
+     "price": {
+      "amount": 1950,
+      "currency": "ILS"
+     },
+     "styles": [
+      "nordic",
+      "modern-country",
+      "boho"
+     ],
+     "rooms": [
+      "kids-girl",
+      "kids-boy"
+     ],
+     "tier": "masterpiece-anchor",
+     "availability_on_check": true,
+     "lead_time": "21 ימי עסקים"
+    },
+    {
+     "id": "K-CW3",
+     "name": "דוכן שוק מעץ",
+     "url": "https://www.childwood.co.il/product/%d7%93%d7%95%d7%9b%d7%9f-%d7%a9%d7%95%d7%a7-%d7%9e%d7%a2%d7%a5-%d7%9c%d7%99%d7%9c%d7%93%d7%99%d7%9d/",
+     "size": "לא נבדק",
+     "material": "עץ",
+     "price": {
+      "amount": 1890,
+      "currency": "ILS",
+      "note_he": "S ‏₪1,350"
+     },
+     "styles": [
+      "nordic",
+      "modern-country"
+     ],
+     "rooms": [
+      "kids-boy"
+     ],
+     "tier": "masterpiece-anchor",
+     "availability_on_check": true
+    }
+   ]
+  },
+  {
+   "id": "ofer-mor",
+   "name": "עופר מור (סוסי נדנדה)",
+   "category": "kids",
+   "israeli": true,
+   "lead_only": true,
+   "city": "קדימה",
+   "website": "https://newmedia.calcalist.co.il/magazine-13-02-20/m06.html",
+   "instagram": null,
+   "type": "artisan",
+   "what_he": "סוסי נדנדה בעבודת יד מלאה: דיקט ליבנה, אורן, ובגדלים הגדולים מהגוני, בוק, אלון ואגוז.",
+   "commission": {
+    "level": "explicit",
+    "quotes": [
+     {
+      "text": "מ־1,200 שקל לסוס הכי פשוט ועד 10,000 שקל לסוס למבוגרים מעץ איכותי",
+      "url": "https://newmedia.calcalist.co.il/magazine-13-02-20/m06.html"
+     }
+    ]
+   },
+   "lead_time": "לא צוין",
+   "model_fit": {
+    "consignment": "low",
+    "made_to_order_on_site": "high",
+    "note_he": "מקור יחיד: כתבה מכ-2020. לא נמצא אתר; לוודא שהעסק פעיל."
+   },
+   "standards_he": "צעצוע ומוצר ילדים: EN71 / ת\"י 562 חובה ומוצג בדף המוצר (ד.4). לא מצוין בדף.",
+   "priority": "B",
+   "pieces": [
+    {
+     "id": "K-OM1",
+     "name": "סוס נדנדה בעבודת יד (גיל 4–8)",
+     "url": "https://newmedia.calcalist.co.il/magazine-13-02-20/m06.html",
+     "size": "לפי גיל",
+     "material": "אורן; בגדלים הגדולים מהגוני, בוק, אלון או אגוז",
+     "price": {
+      "amount": 1200,
+      "currency": "ILS",
+      "amount_high": 10000,
+      "note_he": "טווח מכתבה מ-2020"
+     },
+     "styles": [
+      "nordic",
+      "modern-country",
+      "boho"
+     ],
+     "rooms": [
+      "kids-boy",
+      "kids-girl"
+     ],
+     "tier": "masterpiece-anchor",
+     "why_wow_he": "סוס נדנדה מעץ מלא של אומן ישראלי: 'וואו' קלאסי לחדר ילדים."
+    }
+   ]
+  },
+  {
+   "id": "ninis",
+   "name": "Ninis (ניניס)",
+   "category": "kids",
+   "israeli": true,
+   "city": "לא צוין",
+   "website": "https://www.ninis.co.il/",
+   "instagram": null,
+   "type": "workshop",
+   "what_he": "צעצועי עץ התפתחותיים (מונטסורי ו-ולדורף) בעבודת יד, תוצרת הארץ.",
+   "commission": {
+    "level": "partial",
+    "quotes": [
+     {
+      "text": "בעבודת יד תוצרת הארץ",
+      "url": "https://www.ninis.co.il/product/%d7%a2%d7%a8%d7%9b%d7%aa-%d7%a7%d7%a9%d7%aa-%d7%91%d7%a2%d7%a0%d7%9f/"
+     }
+    ]
+   },
+   "lead_time": "לא צוין",
+   "model_fit": {
+    "consignment": "low",
+    "made_to_order_on_site": "high",
+    "note_he": "מדרג פרימיום יותר מעוגן."
+   },
+   "standards_he": "צעצוע ומוצר ילדים: EN71 / ת\"י 562 חובה ומוצג בדף המוצר (ד.4). לא מצוין בדף.",
+   "priority": "C",
+   "pieces": [
+    {
+     "id": "K-NN1",
+     "name": "קשת טיפוס ונדנוד",
+     "url": "https://www.ninis.co.il/product/%d7%a7%d7%a9%d7%aa-%d7%98%d7%99%d7%a4%d7%95%d7%a1/",
+     "size": "100×50×50 ס\"מ",
+     "material": "עץ בירץ' ומוטות בוק",
+     "price": {
+      "amount": 820,
+      "currency": "ILS"
+     },
+     "styles": [
+      "nordic",
+      "japandi"
+     ],
+     "rooms": [
+      "kids-boy",
+      "kids-girl"
+     ],
+     "tier": "premium",
+     "availability_on_check": true
+    },
+    {
+     "id": "K-NN2",
+     "name": "ערכת קשת בענן",
+     "url": "https://www.ninis.co.il/product/%d7%a2%d7%a8%d7%9b%d7%aa-%d7%a7%d7%a9%d7%aa-%d7%91%d7%a2%d7%a0%d7%9f/",
+     "size": "62 חלקים",
+     "material": "עץ, עבודת יד",
+     "price": {
+      "amount": 599,
+      "currency": "ILS"
+     },
+     "styles": [
+      "nordic",
+      "boho"
+     ],
+     "rooms": [
+      "kids-girl",
+      "kids-boy"
+     ],
+     "tier": "premium",
+     "availability_on_check": true
+    }
+   ]
+  },
+  {
+   "id": "ostheimer",
+   "name": "Ostheimer",
+   "category": "kids",
+   "israeli": false,
+   "city": "צל אונטר אייכלברג, גרמניה",
+   "website": "https://www.ostheimer.de/",
+   "instagram": null,
+   "type": "brand",
+   "what_he": "צעצועי עץ מלא בעבודת יד (ולדורף) מאז 1939.",
+   "commission": {
+    "level": "not-stated",
+    "quotes": [
+     {
+      "text": "wird in Handarbeit aus Massivholz hergestellt",
+      "url": "https://www.ostheimer.de/products/marchenhaus"
+     }
+    ]
+   },
+   "lead_time": "לא צוין",
+   "ships_to_israel": "ישראל ברשימת יעדי המשלוח (meta)",
+   "model_fit": {
+    "consignment": "low",
+    "made_to_order_on_site": "medium",
+    "note_he": "מותג סדרתי; לבקש תעודת EN71 בכתב."
+   },
+   "standards_he": "צעצוע ומוצר ילדים: EN71 / ת\"י 562 חובה ומוצג בדף המוצר (ד.4). לא מצוין בדף.",
+   "priority": "B",
+   "pieces": [
+    {
+     "id": "K-OS1",
+     "name": "Schaukelpferd (rocking horse)",
+     "url": "https://www.ostheimer.de/products/schaukelpferd",
+     "size": "לא צוין בדף",
+     "material": "עץ אלמון מלא",
+     "price": {
+      "amount": 299.95,
+      "currency": "EUR",
+      "ils_approx": 1150.0
+     },
+     "styles": [
+      "nordic",
+      "modern-country",
+      "japandi"
+     ],
+     "rooms": [
+      "kids-boy",
+      "kids-girl"
+     ],
+     "tier": "masterpiece-anchor",
+     "availability_on_check": true
+    }
+   ]
+  }
+ ],
+ "channels": [
+  {
+   "id": "saga-tlv",
+   "name": "SAGA TLV (גלריה, יפו) + Asufa",
+   "website": "https://sagatlv.com/",
+   "type": "design-gallery",
+   "what_he": "גלריה לעיצוב ישראלי עם כ-100 מעצבים: ריהוט, תאורה, אמנות מקורית, טקסטיל. 407 מוצרים בקטלוג הציבורי, במחירי ₪. אחות בינלאומית: asufadesign.com (בדולר).",
+   "quotes": [
+    {
+     "text": "SAGA is a local design gallery, features about 100 Israeli designers from various fields.",
+     "url": "https://sagatlv.com/"
+    },
+    {
+     "text": "a diverse selection of cutting-edge objects and furniture created by today's brightest Israeli design talents",
+     "url": "https://sagatlv.com/pages/about-us"
+    }
+   ],
+   "model_fit_he": "ערוץ אחד ל-15 מהיוצרים כאן. גלריה עובדת בקונסיגנציה מול מעצבים, ולכן הסכם אחד איתה יכול לכסות עשרות מאסטרפיסים. אין בדף הצהרת B2B; לברר בשלב הפניות.",
+   "makers": [
+    "hilla-shamia",
+    "daniel-elkayam",
+    "studio-bow",
+    "osnat-raichman",
+    "cozi",
+    "chen-zalkind",
+    "ariel-zuckerman",
+    "noa-razer",
+    "gur-inbar",
+    "adir-yakobi",
+    "lalampa",
+    "inbal-k-assa",
+    "aifo",
+    "or-lapid",
+    "miki-ohana",
+    "iota",
+    "studio-vayehi"
+   ]
+  },
+  {
+   "id": "galleryonline",
+   "name": "הגלריה און ליין (Gallery Online)",
+   "website": "https://www.galleryonline.co.il/",
+   "type": "online-gallery",
+   "what_he": "גלריה מקוונת לאמנות ישראלית: ציור ופיסול, כולל פסלי הקרמיקה של רינה פלג.",
+   "quotes": [
+    {
+     "text": "תפריט: 'אמנות לעסקים', 'מתנות לעובדים אמנות ישראלית'",
+     "url": "https://www.galleryonline.co.il/%D7%A8%D7%99%D7%A0%D7%94-%D7%A4%D7%9C%D7%92"
+    }
+   ],
+   "model_fit_he": "יש מסלול לעסקים (לא נקרא). מתאים לאמנות מקורית בקונסיגנציה.",
+   "makers": [
+    "rina-peleg"
+   ]
+  },
+  {
+   "id": "habitat-il",
+   "name": "Habitat (ישראל)",
+   "website": "https://www.habitat.co.il/en/catalog/lighting",
+   "type": "dealer",
+   "what_he": "חנות עיצוב שמציגה מותגים בינלאומיים: Vitra (Akari 1AD), ‏Artek (A331), ‏Brokis, ‏Ligne Roset, ‏Gallotti&Radice, ‏Kartell, ‏BD Barcelona.",
+   "quotes": [],
+   "model_fit_he": "מחירים לא מוצגים באתר. דרך מקומית לאייקונים עם אחריות בישראל.",
+   "makers": [
+    "vitra-akari",
+    "artek-a331"
+   ]
+  },
+  {
+   "id": "artbeat",
+   "name": "ARTBEAT",
+   "website": "https://www.artbeat.co.il/",
+   "type": "online-gallery",
+   "what_he": "אתר אמנות ישראלית עם גלריה מקוונת (מקור, הדפסים, צילום), כ-71 אמנים בתפריט, סינון מחיר עד 'מעל 5,000 ₪'.",
+   "quotes": [],
+   "model_fit_he": "אין מסלול עסקים מוצהר. מעט עבודות גדולות (נמצאה רק 100×70).",
+   "makers": []
+  },
+  {
+   "id": "weart",
+   "name": "Weart (we-art.co.il)",
+   "website": "https://we-art.co.il/",
+   "type": "online-gallery",
+   "what_he": "גלריה לאמנים ישראלים מכל הארץ. נמצאו עבודות שפכטל 80×100 ‏(₪3,500) ו-100×100 ‏(₪8,600) של רונית איציקזון פלדמן.",
+   "quotes": [],
+   "model_fit_he": "רוב העבודות בסגנון רחוק מהבית (זהב, מדיה מעורבת). עדיפות נמוכה.",
+   "makers": []
+  }
+ ],
+ "top3_by_style": {
+  "nordic": [
+   {
+    "piece_id": "L-CZ1",
+    "piece": "Bloom Floor Lamp - Oak (Large)",
+    "maker_id": "cozi",
+    "maker": "Cozi",
+    "israeli": true,
+    "price": {
+     "amount": 4600,
+     "currency": "ILS",
+     "note_he": "S ‏₪4,400; גם אגוז, לבן, שחור"
+    },
+    "price_ils_for_ranking": 4600,
+    "anchor_rooms": [
+     "living-room",
+     "master"
+    ],
+    "url": "https://sagatlv.com/products/bloom-floor-lamp-oak"
+   },
+   {
+    "piece_id": "C-RP1",
+    "piece": "קליעה בלבן (Woven White)",
+    "maker_id": "rina-peleg",
+    "maker": "Rina Peleg (רינה פלג)",
+    "israeli": true,
+    "price": {
+     "amount": 2850,
+     "currency": "ILS"
+    },
+    "price_ils_for_ranking": 2850,
+    "anchor_rooms": [
+     "living-room",
+     "hall"
+    ],
+    "url": "https://www.galleryonline.co.il/%D7%A8%D7%99%D7%A0%D7%94-%D7%A4%D7%9C%D7%92-%D7%A7%D7%9C%D7%99%D7%A2%D7%94-%D7%91%D7%9C%D7%91%D7%9F"
+   },
+   {
+    "piece_id": "L-LK2",
+    "piece": "Le Klint 1 Mega",
+    "maker_id": "le-klint",
+    "maker": "Le Klint",
+    "israeli": false,
+    "price": {
+     "amount": 1119,
+     "currency": "EUR",
+     "ils_approx": 4310.0,
+     "note_he": "Ø85; ‏Ø70 €951, ‏Ø60 €839"
+    },
+    "price_ils_for_ranking": 4310.0,
+    "anchor_rooms": [
+     "dining-room",
+     "master"
+    ],
+    "url": "https://www.leklint.com/products/le-klint-1-mega"
+   }
+  ],
+  "warm-modern": [
+   {
+    "piece_id": "W-HS1",
+    "piece": "Wood Casting Side Table",
+    "maker_id": "hilla-shamia",
+    "maker": "Hilla Shamia (הילה שמיע)",
+    "israeli": true,
+    "price": {
+     "amount": 11900,
+     "currency": "ILS"
+    },
+    "price_ils_for_ranking": 11900,
+    "anchor_rooms": [
+     "living-room",
+     "master"
+    ],
+    "url": "https://sagatlv.com/products/wood-casting-side-table-hilla-shamia"
+   },
+   {
+    "piece_id": "L-AW1",
+    "piece": "WEIB SPOT Travertine floor lamp",
+    "maker_id": "asaf-weinbroom",
+    "maker": "Asaf Weinbroom (אסף וינברום)",
+    "israeli": true,
+    "price": {
+     "amount": 5200,
+     "currency": "ILS"
+    },
+    "price_ils_for_ranking": 5200,
+    "anchor_rooms": [
+     "living-room",
+     "master"
+    ],
+    "url": "https://www.asafweinbroom.com/products/weib-spot-travertine-floor-lamp"
+   },
+   {
+    "piece_id": "L-CZK1",
+    "piece": "Pringles 80 pendant",
+    "maker_id": "chen-zalkind",
+    "maker": "Chen Zalkind (חן זלקינד)",
+    "israeli": true,
+    "price": {
+     "amount": 4400,
+     "currency": "ILS",
+     "note_he": "אגוז; אלון ₪4,200"
+    },
+    "price_ils_for_ranking": 4400,
+    "anchor_rooms": [
+     "dining-room"
+    ],
+    "url": "https://sagatlv.com/products/pringles-80"
+   }
+  ],
+  "japandi": [
+   {
+    "piece_id": "W-DE1",
+    "piece": "Spotted Wall Piece",
+    "maker_id": "daniel-elkayam",
+    "maker": "Daniel Elkayam (דניאל אלקיים)",
+    "israeli": true,
+    "price": {
+     "amount": 5600,
+     "currency": "ILS"
+    },
+    "price_ils_for_ranking": 5600,
+    "anchor_rooms": [
+     "living-room",
+     "master"
+    ],
+    "url": "https://sagatlv.com/products/spotted-wall-piece"
+   },
+   {
+    "piece_id": "L-MB1",
+    "piece": "Wood Veneer Floor Lamp - Drop",
+    "maker_id": "studio-mabua",
+    "maker": "Studio Mabua (אביעד פטל ואפרת צפרן)",
+    "israeli": true,
+    "price": {
+     "amount": 6300,
+     "currency": "ILS"
+    },
+    "price_ils_for_ranking": 6300,
+    "anchor_rooms": [
+     "living-room",
+     "work"
+    ],
+    "url": "https://studiomabua.com/products/drop-floor-lamp"
+   },
+   {
+    "piece_id": "L-AK1",
+    "piece": "Akari 120A pendant",
+    "maker_id": "vitra-akari",
+    "maker": "Vitra - Akari (Isamu Noguchi)",
+    "israeli": false,
+    "price": {
+     "amount": 3395,
+     "currency": "EUR",
+     "amount_high": 3485,
+     "ils_approx": 13070.0,
+     "ils_approx_high": 13420.0,
+     "note_he": "מחיר קמעונאי באירופה (royaldesign.de, ‏mohd.it); בישראל לבירור מול Habitat"
+    },
+    "price_ils_for_ranking": 13070.0,
+    "anchor_rooms": [
+     "living-room",
+     "dining-room"
+    ],
+    "url": "https://royaldesign.de/akari-pendant?p=385537"
+   }
+  ],
+  "mediterranean": [
+   {
+    "piece_id": "C-OR1",
+    "piece": "Huge Galil Vase - Brown",
+    "maker_id": "osnat-raichman",
+    "maker": "Osnat Raichman (אסנת רייכמן)",
+    "israeli": true,
+    "price": {
+     "amount": 4400,
+     "currency": "ILS"
+    },
+    "price_ils_for_ranking": 4400,
+    "anchor_rooms": [
+     "living-room",
+     "hall"
+    ],
+    "url": "https://sagatlv.com/products/huge-vase-galil-osnat-raichman"
+   },
+   {
+    "piece_id": "A-IA1",
+    "piece": "People on the beach - 100×70 canvas",
+    "maker_id": "inbal-k-assa",
+    "maker": "Inbal K. Assa (ענבל ק. אסא)",
+    "israeli": true,
+    "price": {
+     "amount": 6500,
+     "currency": "ILS"
+    },
+    "price_ils_for_ranking": 6500,
+    "anchor_rooms": [
+     "living-room",
+     "dining-room"
+    ],
+    "url": "https://sagatlv.com/products/people-on-the-beach-100-70-canvas"
+   },
+   {
+    "piece_id": "L-NR1",
+    "piece": "Large Apilar lamp (pendant)",
+    "maker_id": "noa-razer",
+    "maker": "Noa Razer (נועה רזר)",
+    "israeli": true,
+    "price": {
+     "amount": 2240,
+     "currency": "ILS",
+     "note_he": "שלישייה מעל השולחן ₪6,720; Medium ₪1,960"
+    },
+    "price_ils_for_ranking": 2240,
+    "anchor_rooms": [
+     "dining-room"
+    ],
+    "url": "https://sagatlv.com/products/large-apilar-lamp-green-and-terracotta"
+   }
+  ],
+  "modern-country": [
+   {
+    "piece_id": "L-LK1",
+    "piece": "Le Klint 101 Chandelier (Kaare Klint Legacy)",
+    "maker_id": "le-klint",
+    "maker": "Le Klint",
+    "israeli": false,
+    "price": {
+     "amount": 2299,
+     "currency": "EUR",
+     "ils_approx": 8850.0,
+     "note_he": "פליז מושחם +€240 (לא ברור בדף)"
+    },
+    "price_ils_for_ranking": 8850.0,
+    "anchor_rooms": [
+     "dining-room"
+    ],
+    "url": "https://www.leklint.com/products/le-klint-101-chandelier-kaare-klint-legacy"
+   },
+   {
+    "piece_id": "A-OL1",
+    "piece": "Flowers in a Vase - original framed",
+    "maker_id": "or-lapid",
+    "maker": "Or Lapid (אור לפיד)",
+    "israeli": true,
+    "price": {
+     "amount": 2500,
+     "currency": "ILS"
+    },
+    "price_ils_for_ranking": 2500,
+    "anchor_rooms": [
+     "dining-room",
+     "living-room"
+    ],
+    "url": "https://sagatlv.com/products/original-framed-painting-flowers-in-a-vase-or-lapid"
+   },
+   {
+    "piece_id": "L-GI1",
+    "piece": "Porcelain Moon Lamp - Green Flowers (L)",
+    "maker_id": "gur-inbar",
+    "maker": "Gur Inbar (גור ענבר)",
+    "israeli": true,
+    "price": {
+     "amount": 1700,
+     "currency": "ILS",
+     "note_he": "S ‏₪1,290; גם Blue Waves, Black Storm ועוד"
+    },
+    "price_ils_for_ranking": 1700,
+    "anchor_rooms": [
+     "master",
+     "kids-girl"
+    ],
+    "url": "https://sagatlv.com/products/porcelain-moon-lamp-green-flowers"
+   }
+  ],
+  "boho": [
+   {
+    "piece_id": "T-IO1",
+    "piece": "Outdoor Indoor Rug - Sand Stone",
+    "maker_id": "iota",
+    "maker": "Iota (iota yarn)",
+    "israeli": true,
+    "price": {
+     "amount": 13000,
+     "currency": "ILS",
+     "note_he": "150×200 ₪6,800"
+    },
+    "price_ils_for_ranking": 13000,
+    "anchor_rooms": [
+     "living-room"
+    ],
+    "url": "https://sagatlv.com/products/outdoor-indoor-rug-sand-stone"
+   },
+   {
+    "piece_id": "A-LS1",
+    "piece": "Tupe - Misty Wall Hanging",
+    "maker_id": "lale-studio",
+    "maker": "Lale Studio & Shop",
+    "israeli": false,
+    "price": {
+     "amount": 1804,
+     "currency": "USD",
+     "ils_approx": 5950.0,
+     "note_he": "140×180 $1,485"
+    },
+    "price_ils_for_ranking": 5950.0,
+    "anchor_rooms": [
+     "living-room",
+     "master"
+    ],
+    "url": "https://lalestudio.com/products/tupe-misty-wall-hanging-woven-wall-decoration"
+   },
+   {
+    "piece_id": "L-AZ1",
+    "piece": "Knitted Dropped pendant",
+    "maker_id": "ariel-zuckerman",
+    "maker": "Ariel Zuckerman (אריאל צוקרמן)",
+    "israeli": true,
+    "price": {
+     "amount": 3200,
+     "currency": "ILS",
+     "note_he": "50 ס\"מ; 40 ₪2,850, ‏30 ₪2,490"
+    },
+    "price_ils_for_ranking": 3200,
+    "anchor_rooms": [
+     "master",
+     "living-room"
+    ],
+    "url": "https://sagatlv.com/products/knitted-dropped"
+   }
+  ],
+  "kids-all-styles": [
+   {
+    "piece_id": "K-CW1",
+    "piece": "תאטרון בובות ענק מעץ",
+    "maker_id": "childwood",
+    "maker": "ChildWood",
+    "israeli": true,
+    "price": {
+     "amount": 1950,
+     "currency": "ILS"
+    },
+    "price_ils_for_ranking": 1950,
+    "anchor_rooms": [
+     "kids-girl"
+    ],
+    "url": "https://www.childwood.co.il/product/%d7%aa%d7%90%d7%98%d7%a8%d7%95%d7%9f-%d7%91%d7%95%d7%91%d7%95%d7%aa-%d7%9e%d7%a2%d7%a5-%d7%9c%d7%99%d7%9c%d7%93%d7%99%d7%9d/"
+   },
+   {
+    "piece_id": "K-CW2",
+    "piece": "דוכן גלידה מעץ - L",
+    "maker_id": "childwood",
+    "maker": "ChildWood",
+    "israeli": true,
+    "price": {
+     "amount": 1950,
+     "currency": "ILS"
+    },
+    "price_ils_for_ranking": 1950,
+    "anchor_rooms": [
+     "kids-boy",
+     "kids-girl"
+    ],
+    "url": "https://www.childwood.co.il/product/%d7%93%d7%95%d7%9b%d7%9f-%d7%92%d7%9c%d7%99%d7%93%d7%94-%d7%9e%d7%a2%d7%a5-%d7%9c%d7%99%d7%9c%d7%93%d7%99%d7%9d/"
+   },
+   {
+    "piece_id": "K-OS1",
+    "piece": "Schaukelpferd (rocking horse)",
+    "maker_id": "ostheimer",
+    "maker": "Ostheimer",
+    "israeli": false,
+    "price": {
+     "amount": 299.95,
+     "currency": "EUR",
+     "ils_approx": 1150.0
+    },
+    "price_ils_for_ranking": 1150.0,
+    "anchor_rooms": [
+     "kids-boy",
+     "kids-girl"
+    ],
+    "url": "https://www.ostheimer.de/products/schaukelpferd"
+   }
+  ]
+ },
+ "alternates_by_style": {
+  "nordic": [
+   "L-LL1",
+   "W-SB1",
+   "L-AR1",
+   "A-OL3"
+  ],
+  "warm-modern": [
+   "L-MB2",
+   "C-OR1",
+   "L-AW3",
+   "W-HS3"
+  ],
+  "japandi": [
+   "L-VY1",
+   "C-RP1",
+   "A-LS2",
+   "W-DE3"
+  ],
+  "mediterranean": [
+   "A-AF1",
+   "C-AN1",
+   "W-HS1",
+   "T-LK1",
+   "etsy:W1 (HolyWoodTurning, olive wood)"
+  ],
+  "modern-country": [
+   "A-OL4",
+   "L-AZ1",
+   "T-TX1",
+   "A-LS3"
+  ],
+  "boho": [
+   "T-LK1",
+   "C-RP2",
+   "L-VY3",
+   "T-IO2"
+  ],
+  "kids-all-styles": [
+   "K-OM1",
+   "K-CW3",
+   "K-NN1"
+  ]
+ },
+ "anchors_by_room": {
+  "living-room": [
+   "W-HS1",
+   "L-CZ1",
+   "L-AW1",
+   "W-DE1",
+   "L-MB1",
+   "C-OR1",
+   "A-IA1",
+   "T-IO1",
+   "A-LS1",
+   "L-AK1"
+  ],
+  "dining-room": [
+   "L-LK1",
+   "L-LK2",
+   "L-CZK1",
+   "L-NR1",
+   "L-AW4",
+   "L-CZ3",
+   "L-LL1",
+   "C-AN1",
+   "C-SD1",
+   "A-OL1"
+  ],
+  "hall": [
+   "W-HS3",
+   "W-SB1",
+   "C-RP1",
+   "A-AF1",
+   "C-OR1",
+   "L-CZK3"
+  ],
+  "corridor": [
+   "A-LS2",
+   "A-AF1",
+   "L-MB3",
+   "A-OL4"
+  ],
+  "work": [
+   "L-MB1",
+   "W-DE3",
+   "L-AW3",
+   "W-HS4",
+   "L-LL1"
+  ],
+  "master": [
+   "L-CZK2",
+   "L-AW3",
+   "W-DE1",
+   "A-LS1",
+   "L-GI1",
+   "T-LK1",
+   "L-LK2"
+  ],
+  "kids-girl": [
+   "K-CW1",
+   "K-CW2",
+   "L-GI1",
+   "K-OM1"
+  ],
+  "kids-boy": [
+   "K-CW3",
+   "K-CW2",
+   "K-OS1",
+   "K-OM1"
+  ],
+  "bath": [
+   "C-CO1",
+   "C-YY1",
+   "A-MO1"
+  ]
+ },
+ "gaps_he": [
+  "עץ זית ישראלי במחרטה, בקנה מידה של מאסטרפיס ועם מחיר ציבורי: לא נמצא מחוץ ל-Etsy (DJ WoodArt בעיקר אפוקסי; גד לוי ושרף בלי מחירים).",
+  "אגרטל רצפה קרמי ישראלי מעל 60 ס\"מ: לא נמצא. הגבוה ביותר כאן: COTTA ‏Lola ‏51.5 ס\"מ. לגודל רצפה: Atelier Vierkant (לפי הזמנה, מחיר לפי בקשה).",
+  "מקלחת: אין מאסטרפיס תאורה (IP44, בלי אהיל בד או נייר). העוגן שם הוא כלי קרמי על המשטח.",
+  "לקיה: אין מחירון עדכני; דפי סדרה ריקים בבדיקה.",
+  "תקנים: אף יוצר ישראלי לא מציין ת\"י 20 (תאורה) או ת\"י 562 (ילדים)."
+ ]
+}
