@@ -1,0 +1,2605 @@
+{
+ "version": 1,
+ "date": "2026-10-12",
+ "author": "sourcing research (Etsy masterpiece scan)",
+ "request": "Owner, 2026-10-12: 'Search etsy' (after studio rule E.14: a 'wow' masterpiece in every room and style, as a price anchor).",
+ "method": {
+  "tools": "WebSearch only (mostly restricted to etsy.com). One WebFetch of an Etsy listing returned HTTP 403; per rule D.6 no retry and no bypass. A uFurnish mirror also returned 403. No Etsy API, no scrapers, no login, no seller contact.",
+  "source_all_picks": "search-snippet",
+  "freshness": "Snippets are cached snapshots; some are over a year old. Prices, stock and ship-from must be re-checked on the live listing before any decision.",
+  "fx": {
+   "ILS_per_USD": 3.3,
+   "ILS_per_EUR_approx": 3.56,
+   "ILS_per_GBP_approx": 4.19,
+   "ILS_per_MXN_approx": 0.179,
+   "ILS_per_AUD_approx": 2.15
+  },
+  "tiers": {
+   "masterpiece-anchor": ">= 2,000 ILS",
+   "premium-variation": "600-2,000 ILS",
+   "mid": "< 600 ILS"
+  },
+  "priority": {
+   "1": "Etsy shop based in Israel",
+   "2": "international, custom / made to order",
+   "3": "international, stock or one-of-a-kind"
+  }
+ },
+ "rule_flags": [
+  "C.4 (2026-09-28) still says 'no handmade and no Etsy'; E.14 (2026-10-12) allows the masterpiece by commission / artisan / Israeli supplier. C.4 is not marked updated, and docs/proposals/style-pools.md also says 'no Etsy, no one-of-a-kind, no made-to-order'. Needs an explicit owner decision on an Etsy/handmade exception for the masterpiece and premium tiers.",
+  "A.3 product fidelity: a one-of-a-kind piece sold once no longer matches the render. Prefer repeatable or made-to-order series; one-of-a-kind only as a piece we own (display/stock) or with a 'similar commission' flow.",
+  "D.3 / S2B: every lamp needs CE and 220-240V; Israeli lamps also IS 20. No listing stated voltage. US (120V) and Japanese (100V) lamps need rewiring; prefer Israeli and EU makers. Pendants and wired sconces are installed by an electrician (C.6).",
+  "D.4: toys and kids products need EN71 / IS 562 shown on the product page. No handmade toy here has a test report (K1 only has EN71 paints).",
+  "E.11 / E.13: buying at Etsy retail and reselling leaves no margin. Margin needs a maker trade price, consignment or commission terms; an affiliate link pays ~4%.",
+  "G.00 (2026-10-12): new supplier outreach waits for a working site. The maker list is for later; nobody was contacted."
+ ],
+ "counts_by_category": {
+  "wood": 9,
+  "ceramics": 11,
+  "lighting": 15,
+  "wall-art": 13,
+  "textiles": 9,
+  "kids": 4
+ },
+ "picks": [
+  {
+   "id": "W1",
+   "category": "wood",
+   "title": "Olive Wood Vase (hand-turned from rescued olive wood)",
+   "url": "https://www.etsy.com/listing/1418933134",
+   "shop": "HolyWoodTurning",
+   "shop_location": {
+    "country": "Israel",
+    "city": "Tel Aviv"
+   },
+   "israeli": true,
+   "priority": 1,
+   "size": "27 x 31 cm (10.62\" W x 12.2\" H)",
+   "material": "Israeli olive wood, lathe-turned",
+   "custom_or_mto": "unclear (single turned piece)",
+   "lead_time": "not in snippet",
+   "ships_to_israel": "domestic (ships from Israel)",
+   "styles": [
+    "mediterranean",
+    "japandi",
+    "warm-modern"
+   ],
+   "rooms": [
+    "living-room",
+    "dining-room"
+   ],
+   "why_wow_he": "עץ זית ישראלי ש'ניצל' ונחרט במחרטה לכלי פיסולי: סיפור מקומי אמיתי.",
+   "tier": "masterpiece-anchor (price unconfirmed)",
+   "caveats_he": "המחיר הוצג רק בפזו מקסיקני; ההמרה משוערת. אם המחיר בפועל ‎$250–320‎ זו וריאציית פרימיום.",
+   "price": {
+    "amount": 16556.74,
+    "amount_high": null,
+    "currency": "MXN",
+    "as_shown": "MX$16,556.74 on a Mexico-locale snapshot (USD price not in snippet; other shop items $250-320)"
+   },
+   "price_ils_approx": 2969,
+   "source": "search-snippet"
+  },
+  {
+   "id": "W2",
+   "category": "wood",
+   "title": "Tall Walnut Wood Sculpture 'Ivory Flow' (hand-carved, signed)",
+   "url": "https://www.etsy.com/listing/1852653200",
+   "shop": "ewebohome",
+   "shop_location": {
+    "country": "Poland",
+    "city": "Rzeszow"
+   },
+   "israeli": false,
+   "priority": 3,
+   "size": "74 x 14 x 14 cm on black steel base",
+   "material": "solid European walnut, matte wax",
+   "custom_or_mto": "one of a kind; seller does not take custom orders",
+   "lead_time": "ready to ship",
+   "ships_to_israel": "not in snippet (EU shipper)",
+   "styles": [
+    "warm-modern",
+    "japandi"
+   ],
+   "rooms": [
+    "living-room",
+    "master"
+   ],
+   "why_wow_he": "פסל אגוז ביומורפי בגובה 74 ס\"מ, חתום ומתוארך: גלריה ולא אביזר.",
+   "caveats_he": "יחידה אחת. אגוז אסור בנורדי. הרישום בן כ-600 יום.",
+   "price": {
+    "amount": 1504.66,
+    "amount_high": null,
+    "currency": "USD",
+    "as_shown": "$1,504.66"
+   },
+   "price_ils_approx": 4965,
+   "tier": "masterpiece-anchor",
+   "source": "search-snippet"
+  },
+  {
+   "id": "W3",
+   "category": "wood",
+   "title": "Walnut Wood Sculpture 'Portal Circle'",
+   "url": "https://www.etsy.com/listing/1891144006",
+   "shop": "ewebohome",
+   "shop_location": {
+    "country": "Poland",
+    "city": "Rzeszow"
+   },
+   "israeli": false,
+   "priority": 3,
+   "size": "57 x 44 x 10 cm incl. black granite base",
+   "material": "solid European walnut, Osmo wax",
+   "custom_or_mto": "one of a kind",
+   "lead_time": "not in snippet",
+   "ships_to_israel": "not in snippet",
+   "styles": [
+    "warm-modern",
+    "japandi"
+   ],
+   "rooms": [
+    "hall",
+    "living-room"
+   ],
+   "why_wow_he": "טבעת אגוז עם חלל פתוח על בסיס גרניט: פריט חתימה לקונסולת הכניסה.",
+   "price": {
+    "amount": 843.2,
+    "amount_high": null,
+    "currency": "USD",
+    "as_shown": "$843.20"
+   },
+   "price_ils_approx": 2783,
+   "tier": "masterpiece-anchor",
+   "source": "search-snippet"
+  },
+  {
+   "id": "W4",
+   "category": "wood",
+   "title": "Abstract Walnut Wood Sculpture 'Flowing Harmony'",
+   "url": "https://www.etsy.com/listing/1767991979",
+   "shop": "ewebohome",
+   "shop_location": {
+    "country": "Poland",
+    "city": "Rzeszow"
+   },
+   "israeli": false,
+   "priority": 3,
+   "size": "54 x 40 x 12 cm",
+   "material": "solid European walnut",
+   "custom_or_mto": "one of a kind",
+   "lead_time": "not in snippet",
+   "ships_to_israel": "not in snippet",
+   "styles": [
+    "warm-modern",
+    "japandi"
+   ],
+   "rooms": [
+    "work",
+    "master"
+   ],
+   "why_wow_he": "פסל עץ חתום במחיר הכניסה של דרגת המאסטרפיס.",
+   "price": {
+    "amount": 662.51,
+    "amount_high": null,
+    "currency": "USD",
+    "as_shown": "$662.51"
+   },
+   "price_ils_approx": 2186,
+   "tier": "masterpiece-anchor",
+   "source": "search-snippet"
+  },
+  {
+   "id": "W5",
+   "category": "wood",
+   "title": "Carved Oak Wood Wall Art, modern design (walnut stain)",
+   "url": "https://www.etsy.com/uk/listing/4329755005",
+   "shop": "navdesigneu",
+   "shop_location": {
+    "country": "Poland",
+    "city": "Wieliczka"
+   },
+   "israeli": false,
+   "priority": 2,
+   "size": "90 x 61 x 2.5 cm, ~8 kg",
+   "material": "solid oak, hand-oiled",
+   "custom_or_mto": "workshop series (other sizes/finishes in shop)",
+   "lead_time": "not in snippet",
+   "ships_to_israel": "not in snippet",
+   "styles": [
+    "japandi",
+    "warm-modern",
+    "nordic"
+   ],
+   "rooms": [
+    "master",
+    "hall"
+   ],
+   "why_wow_he": "תבליט אלון מגולף בגודל 90 ס\"מ: קיר שלם כפריט אחד.",
+   "caveats_he": "לנורדי צריך גימור אלון טבעי ולא צבע אגוז; לבדוק אם קיים.",
+   "price": {
+    "amount": 643.33,
+    "amount_high": 665.15,
+    "currency": "USD",
+    "as_shown": "$643.33-665.15, free shipping (two category pages)"
+   },
+   "price_ils_approx": [
+    2123,
+    2195
+   ],
+   "tier": "masterpiece-anchor",
+   "source": "search-snippet"
+  },
+  {
+   "id": "W6",
+   "category": "wood",
+   "title": "Oak & Black Geometric Wood Wall Art",
+   "url": "https://www.etsy.com/listing/1861636632",
+   "shop": "SquareoffDesign",
+   "shop_location": {
+    "country": null,
+    "city": null
+   },
+   "israeli": false,
+   "priority": 2,
+   "size": "several sizes (not in snippet)",
+   "material": "oak + black stained oak",
+   "custom_or_mto": "size options",
+   "lead_time": "not in snippet",
+   "ships_to_israel": "not in snippet",
+   "styles": [
+    "japandi",
+    "warm-modern"
+   ],
+   "rooms": [
+    "living-room",
+    "hall"
+   ],
+   "why_wow_he": "קומפוזיציה גאומטרית של אלון ודיו: בדיוק 'עץ כהה ודיו' של הג'פנדי.",
+   "price": {
+    "amount": 790.19,
+    "amount_high": 2309.78,
+    "currency": "USD",
+    "as_shown": "$790.19-2,309.78 by size (structured data)"
+   },
+   "price_ils_approx": [
+    2608,
+    7622
+   ],
+   "tier": "masterpiece-anchor",
+   "source": "search-snippet"
+  },
+  {
+   "id": "W7",
+   "category": "wood",
+   "title": "Handmade Large Olive Wood Salad Bowl With Servers (20-40 cm)",
+   "url": "https://www.etsy.com/listing/799687484",
+   "shop": "ArtisRaw",
+   "shop_location": {
+    "country": "Tunisia",
+    "city": "Sfax"
+   },
+   "israeli": false,
+   "priority": 2,
+   "size": "20-40 cm diameter options",
+   "material": "Chemlali olive wood",
+   "custom_or_mto": "series; free personalization",
+   "lead_time": "not in snippet",
+   "ships_to_israel": "not in snippet",
+   "styles": [
+    "mediterranean",
+    "modern-country"
+   ],
+   "rooms": [
+    "dining-room"
+   ],
+   "why_wow_he": "קערת זית תוניסאית גדולה עם מרקם עץ זית אמיתי; יצרן סדרתי (35.4k מכירות), כך שאפשר לרנדר בנאמנות.",
+   "tier": "premium-variation (40 cm set)",
+   "price": {
+    "amount": 117,
+    "amount_high": 530,
+    "currency": "USD",
+    "as_shown": "$117-530 range across bowl/set options"
+   },
+   "price_ils_approx": [
+    386,
+    1749
+   ],
+   "source": "search-snippet"
+  },
+  {
+   "id": "W8",
+   "category": "wood",
+   "title": "Hand-turned cherry burl footed bowl, live edge",
+   "url": "https://www.etsy.com/listing/4353626470",
+   "shop": null,
+   "shop_location": {
+    "country": null,
+    "city": null
+   },
+   "israeli": false,
+   "priority": 3,
+   "size": "not in snippet (modest)",
+   "material": "cherry burl",
+   "custom_or_mto": "one of a kind",
+   "lead_time": "not in snippet",
+   "ships_to_israel": "not in snippet",
+   "styles": [
+    "modern-country",
+    "warm-modern"
+   ],
+   "rooms": [
+    "dining-room",
+    "living-room"
+   ],
+   "why_wow_he": "גבשושית דובדבן עם שפה טבעית והבהק (chatoyance): קטן אבל עשיר.",
+   "price": {
+    "amount": 200,
+    "amount_high": null,
+    "currency": "USD",
+    "as_shown": "$200"
+   },
+   "price_ils_approx": 660,
+   "tier": "premium-variation",
+   "source": "search-snippet"
+  },
+  {
+   "id": "W9",
+   "category": "wood",
+   "title": "Teak Root Fruit Bowl 60 cm long",
+   "url": "https://www.etsy.com/listing/4319064100",
+   "shop": null,
+   "shop_location": {
+    "country": null,
+    "city": null
+   },
+   "israeli": false,
+   "priority": 3,
+   "size": "60 cm long",
+   "material": "teak root, single piece",
+   "custom_or_mto": "each unique",
+   "lead_time": "not in snippet",
+   "ships_to_israel": "not in snippet",
+   "styles": [
+    "boho"
+   ],
+   "rooms": [
+    "living-room"
+   ],
+   "why_wow_he": "שורש טיק מגולף בחתיכה אחת לשולחן הקפה הבוהו.",
+   "price": {
+    "amount": 135,
+    "amount_high": 170,
+    "currency": "USD",
+    "as_shown": "similar listings $135-170 (exact price not in snippet)"
+   },
+   "price_ils_approx": [
+    446,
+    561
+   ],
+   "tier": "mid",
+   "source": "search-snippet"
+  },
+  {
+   "id": "C1",
+   "category": "ceramics",
+   "title": "Extra Large Brutalist Ceramic Sculpture (handbuilt stoneware vessel)",
+   "url": "https://www.etsy.com/listing/1892717573",
+   "shop": "OrelCeramics",
+   "shop_location": {
+    "country": "USA",
+    "city": "New Orleans"
+   },
+   "israeli": false,
+   "priority": 3,
+   "size": "30 W x 56 H x 15 D cm (12 x 22 x 6 in)",
+   "material": "stoneware, artist glazes and oxides",
+   "custom_or_mto": "one of a kind",
+   "lead_time": "not in snippet",
+   "ships_to_israel": "not in snippet",
+   "styles": [
+    "warm-modern",
+    "japandi"
+   ],
+   "rooms": [
+    "living-room",
+    "hall"
+   ],
+   "why_wow_he": "כלי ברוטליסטי בגובה 56 ס\"מ עם שלוש 'עמודות' חתוכות: פסל שמחזיק ענפים.",
+   "price": {
+    "amount": 1050,
+    "amount_high": null,
+    "currency": "USD",
+    "as_shown": "$1,050"
+   },
+   "price_ils_approx": 3465,
+   "tier": "masterpiece-anchor",
+   "source": "search-snippet"
+  },
+  {
+   "id": "C2",
+   "category": "ceramics",
+   "title": "Handmade Korean Baekja White Porcelain Moon Jar (matte), Yi Soon Goo, Icheon",
+   "url": "https://www.etsy.com/listing/1321955365",
+   "shop": null,
+   "shop_location": {
+    "country": "South Korea",
+    "city": "Icheon"
+   },
+   "israeli": false,
+   "priority": 3,
+   "size": "30 / 36 / 45 cm options",
+   "material": "high-fired porcelain, matte glaze",
+   "custom_or_mto": "size options; each handmade",
+   "lead_time": "not in snippet",
+   "ships_to_israel": "not in snippet",
+   "styles": [
+    "japandi",
+    "nordic"
+   ],
+   "rooms": [
+    "living-room",
+    "master"
+   ],
+   "why_wow_he": "צנצנת ירח של אמן קרמיקה מאיצ'און (פרסים 2003–2014): אייקון של שקט.",
+   "caveats_he": "שם החנות לא הופיע בתקציר; מחירים שונים בין צילומי מצב.",
+   "price": {
+    "amount": 768,
+    "amount_high": null,
+    "currency": "USD",
+    "as_shown": "$768 for 36 cm in one snapshot; another large listing $1,460"
+   },
+   "price_ils_approx": 2534,
+   "tier": "masterpiece-anchor",
+   "source": "search-snippet"
+  },
+  {
+   "id": "C3",
+   "category": "ceramics",
+   "title": "Large Antique White Ceramic Floor Vase, French Country Wabi Sabi (70 cm)",
+   "url": "https://www.etsy.com/market/wabi_sabi_floor_vase",
+   "shop": null,
+   "shop_location": {
+    "country": null,
+    "city": null
+   },
+   "israeli": false,
+   "priority": 3,
+   "size": "70 cm tall",
+   "material": "ceramic",
+   "custom_or_mto": "not in snippet",
+   "lead_time": "not in snippet",
+   "ships_to_israel": "free shipping shown (destination unknown)",
+   "styles": [
+    "modern-country",
+    "nordic"
+   ],
+   "rooms": [
+    "living-room",
+    "hall"
+   ],
+   "why_wow_he": "אגרטל רצפה 70 ס\"מ בלבן עתיק: נוכחות פיסולית בפינת החדר.",
+   "caveats_he": "נראה רק בעמוד קטגוריה; מוכר, חומר ו'עבודת יד' לא אומתו.",
+   "price": {
+    "amount": 1104.15,
+    "amount_high": null,
+    "currency": "USD",
+    "as_shown": "$1,104.15 (15% off $1,299), free shipping, 14 reviews"
+   },
+   "price_ils_approx": 3644,
+   "tier": "masterpiece-anchor",
+   "source": "search-snippet"
+  },
+  {
+   "id": "C4",
+   "category": "ceramics",
+   "title": "Large Black Terracotta Floor Vase, Handmade Mediterranean Amphora",
+   "url": "https://www.etsy.com/market/terracotta_amphora",
+   "shop": null,
+   "shop_location": {
+    "country": null,
+    "city": null
+   },
+   "israeli": false,
+   "priority": 3,
+   "size": "not in snippet",
+   "material": "terracotta",
+   "custom_or_mto": "not in snippet",
+   "lead_time": "not in snippet",
+   "ships_to_israel": "not in snippet",
+   "styles": [
+    "mediterranean",
+    "warm-modern"
+   ],
+   "rooms": [
+    "living-room",
+    "hall"
+   ],
+   "why_wow_he": "אמפורת רצפה גדולה: החתימה האדריכלית של הים-תיכוני.",
+   "caveats_he": "נראה רק בעמוד קטגוריה. הגימור השחור דורש בדיקת פלטה (בים-תיכוני הצבע בא מהטרקוטה).",
+   "price": {
+    "amount": 895,
+    "amount_high": null,
+    "currency": "USD",
+    "as_shown": "$895"
+   },
+   "price_ils_approx": 2954,
+   "tier": "masterpiece-anchor",
+   "source": "search-snippet"
+  },
+  {
+   "id": "C5",
+   "category": "ceramics",
+   "title": "Large Stoneware Floor Vase: Textured Wabi Sabi Ceramic Centerpiece",
+   "url": "https://www.etsy.com/listing/1111409535",
+   "shop": "HereAndNowPottery",
+   "shop_location": {
+    "country": "Ukraine",
+    "city": "Kyiv"
+   },
+   "israeli": false,
+   "priority": 3,
+   "size": "30 W x 36 H cm (12 x 14 in)",
+   "material": "hand-built brown clay with recycled ceramics, recycled-ingredient glaze",
+   "custom_or_mto": "handmade, small series",
+   "lead_time": "not in snippet",
+   "ships_to_israel": "not in snippet",
+   "styles": [
+    "nordic",
+    "japandi"
+   ],
+   "rooms": [
+    "dining-room",
+    "living-room"
+   ],
+   "why_wow_he": "משטח לבן מבעבע עם נקודות חומות: וואבי-סאבי אמיתי ביד של קרמיקאית.",
+   "price": {
+    "amount": 340,
+    "amount_high": null,
+    "currency": "USD",
+    "as_shown": "$340"
+   },
+   "price_ils_approx": 1122,
+   "tier": "premium-variation",
+   "source": "search-snippet"
+  },
+  {
+   "id": "C6",
+   "category": "ceramics",
+   "title": "Ceramic Antler Wall Sculpture Set (3 pcs)",
+   "url": "https://www.etsy.com/listing/4352140910",
+   "shop": "MassaaStudio",
+   "shop_location": {
+    "country": "Israel",
+    "city": "Ramat HaSharon (studio in Tel Aviv)"
+   },
+   "israeli": true,
+   "priority": 1,
+   "size": "each 30 x 26 cm (12 x 10 in); 8 in size also",
+   "material": "stoneware, lead-free glaze",
+   "custom_or_mto": "studio series; shop accepts custom orders",
+   "lead_time": "not in snippet",
+   "ships_to_israel": "domestic (Israel)",
+   "styles": [
+    "nordic",
+    "japandi"
+   ],
+   "rooms": [
+    "hall",
+    "kids",
+    "work"
+   ],
+   "why_wow_he": "קרני צבי מקרמיקה כמיצב קיר: מוטיב נורדי בביצוע של סטודיו תל אביבי.",
+   "price": {
+    "amount": 450,
+    "amount_high": null,
+    "currency": "USD",
+    "as_shown": "$450 (single piece $110; B/W/grey set $315)"
+   },
+   "price_ils_approx": 1485,
+   "tier": "premium-variation",
+   "source": "search-snippet"
+  },
+  {
+   "id": "C7",
+   "category": "ceramics",
+   "title": "Large Black Stoneware Fruit Bowl 14.5 in, matte",
+   "url": "https://www.etsy.com/listing/688779379",
+   "shop": "MassaaStudio",
+   "shop_location": {
+    "country": "Israel",
+    "city": "Ramat HaSharon (studio in Tel Aviv)"
+   },
+   "israeli": true,
+   "priority": 1,
+   "size": "37 x 9 cm (14.5 x 3.5 in)",
+   "material": "stoneware, food-safe glaze",
+   "custom_or_mto": "studio series",
+   "lead_time": "not in snippet",
+   "ships_to_israel": "domestic (Israel)",
+   "styles": [
+    "japandi",
+    "warm-modern"
+   ],
+   "rooms": [
+    "dining-room"
+   ],
+   "why_wow_he": "קערה שחורה רחבה ונמוכה, בדיוק 'נמוך ורחב' של הג'פנדי.",
+   "price": {
+    "amount": 235,
+    "amount_high": null,
+    "currency": "USD",
+    "as_shown": "$235, free shipping"
+   },
+   "price_ils_approx": 776,
+   "tier": "premium-variation",
+   "source": "search-snippet"
+  },
+  {
+   "id": "C8",
+   "category": "ceramics",
+   "title": "Ceramic Vase, Modern Minimalist Center Pieces (basalt 'lava clay' studio)",
+   "url": "https://www.etsy.com/listing/254304516",
+   "shop": "Yahalomis",
+   "shop_location": {
+    "country": "Israel",
+    "city": "Tel Aviv"
+   },
+   "israeli": true,
+   "priority": 1,
+   "size": "not in snippet",
+   "material": "ceramic; studio also makes clay from northern-Israel basalt",
+   "custom_or_mto": "studio series",
+   "lead_time": "not in snippet",
+   "ships_to_israel": "domestic (Israel)",
+   "styles": [
+    "nordic",
+    "japandi"
+   ],
+   "rooms": [
+    "dining-room"
+   ],
+   "why_wow_he": "חומר מקומי ייחודי: חמר בזלת מהצפון, עשוי ביד בתל אביב.",
+   "price": {
+    "amount": 135,
+    "amount_high": null,
+    "currency": "USD",
+    "as_shown": "$135"
+   },
+   "price_ils_approx": 446,
+   "tier": "mid",
+   "source": "search-snippet"
+  },
+  {
+   "id": "C9",
+   "category": "ceramics",
+   "title": "Naked raku vases (pair)",
+   "url": "https://www.etsy.com/shop/gidizivanpottery",
+   "shop": "gidizivanpottery",
+   "shop_location": {
+    "country": "Israel",
+    "city": "Sde Yitzhak"
+   },
+   "israeli": true,
+   "priority": 1,
+   "size": "not in snippet",
+   "material": "naked raku",
+   "custom_or_mto": "wheel-thrown, each unique",
+   "lead_time": "not in snippet",
+   "ships_to_israel": "domestic (Israel)",
+   "styles": [
+    "japandi",
+    "boho"
+   ],
+   "rooms": [
+    "master",
+    "living-room"
+   ],
+   "why_wow_he": "ראקו עירום: פני שטח מעושנים וסדוקים, כל כלי שונה.",
+   "caveats_he": "קישור לחנות; הרישום עצמו לא אותר בתקציר.",
+   "price": {
+    "amount": 184.47,
+    "amount_high": null,
+    "currency": "USD",
+    "as_shown": "$184.47"
+   },
+   "price_ils_approx": 609,
+   "tier": "premium-variation",
+   "source": "search-snippet"
+  },
+  {
+   "id": "C10",
+   "category": "ceramics",
+   "title": "Aged Terracotta Amphora Vase With Handles",
+   "url": "https://www.etsy.com/ca/listing/1894657935",
+   "shop": "ArtlandVintage",
+   "shop_location": {
+    "country": "India",
+    "city": null
+   },
+   "israeli": false,
+   "priority": 3,
+   "size": "20 W x 34 H cm",
+   "material": "clay, aged finish",
+   "custom_or_mto": "not in snippet",
+   "lead_time": "not in snippet",
+   "ships_to_israel": "not in snippet",
+   "styles": [
+    "mediterranean"
+   ],
+   "rooms": [
+    "dining-room",
+    "hall"
+   ],
+   "why_wow_he": "אמפורה עם ידיות בגימור מיושן: מחיר ביניים לאותו מראה.",
+   "caveats_he": "'מיושן' הוא גימור, לא עתיק.",
+   "price": {
+    "amount": 172,
+    "amount_high": 177,
+    "currency": "USD",
+    "as_shown": "~172-177 (currency of page), £161.04 on UK page"
+   },
+   "price_ils_approx": [
+    568,
+    584
+   ],
+   "tier": "mid",
+   "source": "search-snippet"
+  },
+  {
+   "id": "C11",
+   "category": "ceramics",
+   "title": "Moroccan Green Tamegroute 'curvy lady' vase sculpture",
+   "url": "https://www.etsy.com/listing/1273135278",
+   "shop": "MoroccanWhite",
+   "shop_location": {
+    "country": "Morocco",
+    "city": null
+   },
+   "israeli": false,
+   "priority": 3,
+   "size": "48 x 24 cm",
+   "material": "Tamegroute earthenware, copper-oxide green glaze",
+   "custom_or_mto": "hand-formed, each unique",
+   "lead_time": "not in snippet",
+   "ships_to_israel": "not in snippet",
+   "styles": [
+    "boho",
+    "mediterranean"
+   ],
+   "rooms": [
+    "living-room",
+    "dining-room"
+   ],
+   "why_wow_he": "זיגוג ירוק-נחושת מכפר תמגרוט: צבע שאין בשום מוצר סדרתי.",
+   "caveats_he": "הגוון הירוק אזל בצילום המצב; לא אטום לגמרי למים.",
+   "price": {
+    "amount": 300,
+    "amount_high": 450,
+    "currency": "USD",
+    "as_shown": "price not shown; comparable large Tamegroute vases $300-450"
+   },
+   "price_ils_approx": [
+    990,
+    1485
+   ],
+   "tier": "premium-variation",
+   "source": "search-snippet"
+  },
+  {
+   "id": "L1",
+   "category": "lighting",
+   "title": "Handmade Ceramic Pendant Light: Carved Texture, Off White Lampshade (50 cm)",
+   "url": "https://www.etsy.com/listing/662502783",
+   "shop": "IrisLightingStudio",
+   "shop_location": {
+    "country": "Israel",
+    "city": "Ben Shemen"
+   },
+   "israeli": true,
+   "priority": 1,
+   "size": "dia 50 x 30 cm, 3.6 kg, 1 m cord, 15 cm canopy",
+   "material": "high-fired hand-thrown ceramic, E27",
+   "custom_or_mto": "custom sizes and colours on request",
+   "lead_time": "not in snippet",
+   "ships_to_israel": "domestic (Israel)",
+   "styles": [
+    "nordic",
+    "japandi",
+    "warm-modern"
+   ],
+   "rooms": [
+    "dining-room",
+    "living-room"
+   ],
+   "why_wow_he": "תלויה קרמית בקוטר 50 עם חריטה ביד, מסטודיו משפחתי מ-1997 שעובד עם אדריכלים.",
+   "compliance_he": "מתח לא צוין. לבקש אישור 230V ות\"י 20; התקנה ע\"י חשמלאי (ג.6).",
+   "price": {
+    "amount": 570,
+    "amount_high": null,
+    "currency": "USD",
+    "as_shown": "$570 on storefront (same title also seen at $270)"
+   },
+   "price_ils_approx": 1881,
+   "tier": "premium-variation",
+   "source": "search-snippet"
+  },
+  {
+   "id": "L2",
+   "category": "lighting",
+   "title": "Handmade Porcelain Pendant Lamp: Pleated 7-light Chandelier",
+   "url": "https://www.etsy.com/listing/659669021",
+   "shop": "IrisLightingStudio",
+   "shop_location": {
+    "country": "Israel",
+    "city": "Ben Shemen"
+   },
+   "israeli": true,
+   "priority": 1,
+   "size": "each shade ~7-12 cm dia x 8 cm; overall not in snippet",
+   "material": "pleated translucent porcelain",
+   "custom_or_mto": "studio series",
+   "lead_time": "not in snippet",
+   "ships_to_israel": "domestic (Israel)",
+   "styles": [
+    "nordic",
+    "warm-modern"
+   ],
+   "rooms": [
+    "dining-room"
+   ],
+   "why_wow_he": "קפלים בפורצלן שקוף: ה'מנורת קפלים' בגרסה של אומנות ולא של נייר.",
+   "tier": "masterpiece-anchor (if price covers the 7-light set)",
+   "caveats_he": "סתירה ברישום: 'מנורה אחת' לעומת 7 גופים; לברר אם המחיר לסט.",
+   "compliance_he": "מתח לא צוין; ת\"י 20 ו-230V לאשר.",
+   "price": {
+    "amount": 665,
+    "amount_high": null,
+    "currency": "USD",
+    "as_shown": "$665 (AU$959.89, ₹56,227)"
+   },
+   "price_ils_approx": 2194,
+   "source": "search-snippet"
+  },
+  {
+   "id": "L3",
+   "category": "lighting",
+   "title": "Handmade Terra Cotta Pendant Light: Carved Ceramic Lampshade",
+   "url": "https://www.etsy.com/listing/1166204263",
+   "shop": "IrisLightingStudio",
+   "shop_location": {
+    "country": "Israel",
+    "city": "Ben Shemen"
+   },
+   "israeli": true,
+   "priority": 1,
+   "size": "bottom dia 18 cm x 20 cm (7.2 x 7.8 in)",
+   "material": "terracotta, carved, E27",
+   "custom_or_mto": "custom sizes and colours on request",
+   "lead_time": "not in snippet",
+   "ships_to_israel": "domestic (Israel)",
+   "styles": [
+    "mediterranean",
+    "boho"
+   ],
+   "rooms": [
+    "dining-room"
+   ],
+   "why_wow_he": "טרקוטה חרוטה ביד מעל אי המטבח, בזוג או בשלשה.",
+   "compliance_he": "מתח לא צוין; ת\"י 20 ו-230V לאשר.",
+   "price": {
+    "amount": 240,
+    "amount_high": 270,
+    "currency": "USD",
+    "as_shown": "$240-270 (shop page)"
+   },
+   "price_ils_approx": [
+    792,
+    891
+   ],
+   "tier": "premium-variation",
+   "source": "search-snippet"
+  },
+  {
+   "id": "L4",
+   "category": "lighting",
+   "title": "Handmade Porcelain Pendant Light: Carved Egg-shaped Hanging Lamp",
+   "url": "https://www.etsy.com/listing/1268467730",
+   "shop": "IrisLightingStudio",
+   "shop_location": {
+    "country": "Israel",
+    "city": "Ben Shemen"
+   },
+   "israeli": true,
+   "priority": 1,
+   "size": "18 x 20 cm (7 x 7.9 in), ~0.9 kg",
+   "material": "porcelain, carved, E27",
+   "custom_or_mto": "studio series",
+   "lead_time": "not in snippet",
+   "ships_to_israel": "domestic (Israel)",
+   "styles": [
+    "nordic",
+    "japandi"
+   ],
+   "rooms": [
+    "master",
+    "work"
+   ],
+   "why_wow_he": "ביצת פורצלן חרוטה שזוהרת דרך הדופן: זוג תלויות ליד המיטה.",
+   "compliance_he": "מתח לא צוין; ת\"י 20 ו-230V לאשר.",
+   "price": {
+    "amount": 195,
+    "amount_high": null,
+    "currency": "USD",
+    "as_shown": "$195"
+   },
+   "price_ils_approx": 644,
+   "tier": "premium-variation",
+   "source": "search-snippet"
+  },
+  {
+   "id": "L5",
+   "category": "lighting",
+   "title": "Handmade Terracotta Hanging Lamp Set: Colorful Ceramic Lampshade",
+   "url": "https://www.etsy.com/listing/776225606",
+   "shop": "NoaRazerStudio",
+   "shop_location": {
+    "country": "Israel",
+    "city": "Tel Aviv"
+   },
+   "israeli": true,
+   "priority": 1,
+   "size": "not in snippet",
+   "material": "terracotta, glazed",
+   "custom_or_mto": "studio series (Apilar collection)",
+   "lead_time": "not in snippet",
+   "ships_to_israel": "domestic (Israel)",
+   "styles": [
+    "mediterranean",
+    "boho"
+   ],
+   "rooms": [
+    "dining-room"
+   ],
+   "why_wow_he": "סט תלויות טרקוטה מצורות מוערמות (קולקציית Apilar), של בוגרת בצלאל.",
+   "compliance_he": "E27, ‏25–40W ברישום אחר של הסטודיו; 230V ות\"י 20 לאשר.",
+   "price": {
+    "amount": 888,
+    "amount_high": null,
+    "currency": "USD",
+    "as_shown": "$888 (listed Aug 10, 2026)"
+   },
+   "price_ils_approx": 2930,
+   "tier": "masterpiece-anchor",
+   "source": "search-snippet"
+  },
+  {
+   "id": "L6",
+   "category": "lighting",
+   "title": "Handmade Terracotta Pendant Light: Green Glazed Ceramic Ceiling Lamp",
+   "url": "https://www.etsy.com/listing/1882533686",
+   "shop": "NoaRazerStudio",
+   "shop_location": {
+    "country": "Israel",
+    "city": "Tel Aviv"
+   },
+   "israeli": true,
+   "priority": 1,
+   "size": "41 cm H x 20 cm dia, 150 cm cable",
+   "material": "terracotta, green glaze, E27 25-40W",
+   "custom_or_mto": "studio series; slight variation per piece",
+   "lead_time": "not in snippet",
+   "ships_to_israel": "domestic (Israel)",
+   "styles": [
+    "mediterranean",
+    "boho"
+   ],
+   "rooms": [
+    "dining-room",
+    "hall"
+   ],
+   "why_wow_he": "עמוד טרקוטה של 41 ס\"מ עם נגיעת זיגוג ירוק: תכשיט מעל השולחן.",
+   "price": {
+    "amount": 674,
+    "amount_high": null,
+    "currency": "USD",
+    "as_shown": "$674 + $30 shipping"
+   },
+   "price_ils_approx": 2224,
+   "tier": "masterpiece-anchor",
+   "source": "search-snippet"
+  },
+  {
+   "id": "L7",
+   "category": "lighting",
+   "title": "Handmade Terracotta Wall Lamp: Ceramic Sconce",
+   "url": "https://www.etsy.com/uk/listing/1506692685",
+   "shop": "NoaRazerStudio",
+   "shop_location": {
+    "country": "Israel",
+    "city": "Tel Aviv"
+   },
+   "israeli": true,
+   "priority": 1,
+   "size": "not in snippet",
+   "material": "terracotta",
+   "custom_or_mto": "studio series",
+   "lead_time": "low stock (3 left)",
+   "ships_to_israel": "domestic (Israel)",
+   "styles": [
+    "mediterranean",
+    "boho"
+   ],
+   "rooms": [
+    "master",
+    "corridor"
+   ],
+   "why_wow_he": "מנורת קריאה מטרקוטה ליד המיטה, באותה משפחה כמו התלויות.",
+   "compliance_he": "מנורת קיר: לפי ג.6 כבל קצר לשקע או חיווט ע\"י חשמלאי; 230V ות\"י 20.",
+   "price": {
+    "amount": 285,
+    "amount_high": null,
+    "currency": "USD",
+    "as_shown": "$285 (UK page £254.60)"
+   },
+   "price_ils_approx": 940,
+   "tier": "premium-variation",
+   "source": "search-snippet"
+  },
+  {
+   "id": "L8",
+   "category": "lighting",
+   "title": "'Sahara' 3D-printed ceramic pendant (concrete-grey clay)",
+   "url": "https://www.etsy.com/il-en/listing/4514132722",
+   "shop": "MelzerStudio",
+   "shop_location": {
+    "country": "Israel",
+    "city": "Modiin"
+   },
+   "israeli": true,
+   "priority": 1,
+   "size": "11 x 12 x 11 cm (4.3 x 4.7 x 4.3 in)",
+   "material": "ceramic / stoneware, 3D-printed in studio",
+   "custom_or_mto": "studio series; 'Sahara Chandelier' sold separately (listing 4450695786)",
+   "lead_time": "not in snippet",
+   "ships_to_israel": "domestic (Israel)",
+   "styles": [
+    "warm-modern",
+    "japandi"
+   ],
+   "rooms": [
+    "work",
+    "master"
+   ],
+   "why_wow_he": "מרקם 'ארוג' של הדפסת קרמיקה, בהשראת דיונות; קטן מספיק לתקרת חדר העבודה (D5 עד 28 ס\"מ).",
+   "compliance_he": "230V ות\"י 20 לאשר.",
+   "price": {
+    "amount": 844.14,
+    "amount_high": 1688.27,
+    "currency": "ILS",
+    "as_shown": "₪844.14-1,688.27 by variant"
+   },
+   "price_ils_approx": [
+    844,
+    1688
+   ],
+   "tier": "premium-variation",
+   "source": "search-snippet"
+  },
+  {
+   "id": "L9",
+   "category": "lighting",
+   "title": "Hand-cut Lace Ceramic Wall Lamp",
+   "url": "https://www.etsy.com/listing/594541215",
+   "shop": "gidizivanpottery",
+   "shop_location": {
+    "country": "Israel",
+    "city": "Sde Yitzhak"
+   },
+   "israeli": true,
+   "priority": 1,
+   "size": "not in snippet",
+   "material": "hand-cut ceramic",
+   "custom_or_mto": "each hand-cut",
+   "lead_time": "low stock",
+   "ships_to_israel": "domestic, free shipping on Israel page",
+   "styles": [
+    "modern-country",
+    "mediterranean"
+   ],
+   "rooms": [
+    "hall",
+    "corridor"
+   ],
+   "why_wow_he": "קרמיקה חתוכה ביד בדוגמת תחרה שמטילה צללים על הקיר.",
+   "compliance_he": "230V ות\"י 20 לאשר; חיווט לפי ג.6.",
+   "price": {
+    "amount": 804,
+    "amount_high": null,
+    "currency": "ILS",
+    "as_shown": "₪804 on Etsy Israel (free shipping); €239.08 + €74.34 shipping on NL page"
+   },
+   "price_ils_approx": 804,
+   "tier": "premium-variation",
+   "source": "search-snippet"
+  },
+  {
+   "id": "L10",
+   "category": "lighting",
+   "title": "Extra Large Dinner Table Pendant Light, 9xE27 (recycled papier-mache / biocomposite)",
+   "url": "https://www.etsy.com/listing/894309458",
+   "shop": "YalanzhiObjects",
+   "shop_location": {
+    "country": "Ukraine",
+    "city": "Kyiv"
+   },
+   "israeli": false,
+   "priority": 2,
+   "size": "170 x 70 x 30 cm (66.9 x 27.6 x 11.8 in), ~6 kg",
+   "material": "recycled paper papier-mache (title says biocomposite), 9 x E27 LED only",
+   "custom_or_mto": "made to order; any colour from palette",
+   "lead_time": "~6 weeks (shop norm)",
+   "ships_to_israel": "not in snippet (express shipping offered by shop)",
+   "styles": [
+    "japandi",
+    "warm-modern",
+    "nordic"
+   ],
+   "rooms": [
+    "dining-room"
+   ],
+   "why_wow_he": "גוף תאורה פיסולי באורך 1.7 מטר מעל שולחן האוכל: השולחן הופך לבמה.",
+   "compliance_he": "230V/CE לבקש; התקנה ע\"י חשמלאי.",
+   "price": {
+    "amount": 1659,
+    "amount_high": null,
+    "currency": "USD",
+    "as_shown": "$1,659"
+   },
+   "price_ils_approx": 5475,
+   "tier": "masterpiece-anchor",
+   "source": "search-snippet"
+  },
+  {
+   "id": "L11",
+   "category": "lighting",
+   "title": "Sculptural Organic Pendant Light PEONY 35 (papier-mache biocomposite)",
+   "url": "https://www.etsy.com/listing/761076642",
+   "shop": "YalanzhiObjects",
+   "shop_location": {
+    "country": "Ukraine",
+    "city": "Kyiv"
+   },
+   "israeli": false,
+   "priority": 2,
+   "size": "35 x 35 x 26 cm, 2.5 kg, 1.5 m cord",
+   "material": "biocomposite papier-mache, E27/E26",
+   "custom_or_mto": "mostly made to order; custom finishes",
+   "lead_time": "~6 weeks",
+   "ships_to_israel": "not in snippet",
+   "styles": [
+    "japandi",
+    "warm-modern"
+   ],
+   "rooms": [
+    "master",
+    "living-room"
+   ],
+   "why_wow_he": "צורת אדמונית פיסולית במרקם אבן רכה, בלי להיראות כמו נייר זול.",
+   "compliance_he": "230V/CE לבקש.",
+   "price": {
+    "amount": 490,
+    "amount_high": null,
+    "currency": "USD",
+    "as_shown": "$490 (PEONY 55: $580)"
+   },
+   "price_ils_approx": 1617,
+   "tier": "premium-variation",
+   "source": "search-snippet"
+  },
+  {
+   "id": "L12",
+   "category": "lighting",
+   "title": "Extra Large Handwoven Rattan Pendant Light | Natural Boho Statement Lamp",
+   "url": "https://www.etsy.com/market/large_wicker_pendant",
+   "shop": null,
+   "shop_location": {
+    "country": null,
+    "city": null
+   },
+   "israeli": false,
+   "priority": 3,
+   "size": "not in snippet",
+   "material": "handwoven rattan",
+   "custom_or_mto": "not in snippet",
+   "lead_time": "not in snippet",
+   "ships_to_israel": "free shipping shown (destination unknown)",
+   "styles": [
+    "boho"
+   ],
+   "rooms": [
+    "dining-room",
+    "living-room"
+   ],
+   "why_wow_he": "תלויה קלועה ענקית: מרכז הכובד של חדר בוהו.",
+   "caveats_he": "נראה רק בעמוד קטגוריה; מוכר ומידות לא ידועים.",
+   "compliance_he": "230V/CE לבקש.",
+   "price": {
+    "amount": 1325,
+    "amount_high": null,
+    "currency": "USD",
+    "as_shown": "$1,325, free shipping"
+   },
+   "price_ils_approx": 4372,
+   "tier": "masterpiece-anchor",
+   "source": "search-snippet"
+  },
+  {
+   "id": "L13",
+   "category": "lighting",
+   "title": "Hand-Sculpted Plaster Table Lamp, Limited Edition Art Light, Made in France (25 cm)",
+   "url": "https://www.etsy.com/market/plaster_lamp",
+   "shop": null,
+   "shop_location": {
+    "country": "France",
+    "city": null
+   },
+   "israeli": false,
+   "priority": 3,
+   "size": "25 cm (or 15 cm)",
+   "material": "hand-sculpted plaster, integrated light source",
+   "custom_or_mto": "limited edition",
+   "lead_time": "not in snippet",
+   "ships_to_israel": "not in snippet",
+   "styles": [
+    "warm-modern",
+    "japandi"
+   ],
+   "rooms": [
+    "master",
+    "living-room"
+   ],
+   "why_wow_he": "מנורת גבס מפוסלת ביד, מהדורה מוגבלת: חלל פתוח שהאור יוצא ממנו.",
+   "caveats_he": "מוכר לא אומת; תיאורי התמונות סותרים.",
+   "compliance_he": "אירופה: CE ו-230V סבירים; לאמת.",
+   "price": {
+    "amount": 329.65,
+    "amount_high": null,
+    "currency": "USD",
+    "as_shown": "$329.65 (15 cm: $211.18 / €180 ships from FR)"
+   },
+   "price_ils_approx": 1088,
+   "tier": "premium-variation",
+   "source": "search-snippet"
+  },
+  {
+   "id": "L14",
+   "category": "lighting",
+   "title": "Japanese Washi Paper Lamp Shade - Model 21A (Ozeki & Co., licensed Akari)",
+   "url": "https://www.etsy.com/listing/4346623692",
+   "shop": "ShopTokyostore (inferred)",
+   "shop_location": {
+    "country": "Japan",
+    "city": null
+   },
+   "israeli": false,
+   "priority": 3,
+   "size": "not in snippet",
+   "material": "washi paper, bamboo, made in Gifu by Ozeki",
+   "custom_or_mto": "production piece (reseller)",
+   "lead_time": "not in snippet",
+   "ships_to_israel": "free shipping shown",
+   "styles": [
+    "japandi"
+   ],
+   "rooms": [
+    "living-room",
+    "master"
+   ],
+   "why_wow_he": "המקור המורשה של עיצוב קלאסי, לא העתק; עבודת יד בגיפו.",
+   "caveats_he": "משווק ולא יוצר. פריט עיצוב מוכר: לאשר מול כלל 'העתקי עיצוב' (ג.4) שזה המקור.",
+   "compliance_he": "יפן 100V: נדרש כבל/בית נורה 230V ו-CE.",
+   "price": {
+    "amount": 652,
+    "amount_high": null,
+    "currency": "USD",
+    "as_shown": "$652, free shipping"
+   },
+   "price_ils_approx": 2152,
+   "tier": "masterpiece-anchor",
+   "source": "search-snippet"
+  },
+  {
+   "id": "L15",
+   "category": "lighting",
+   "title": "Pendant Light - Handmade Pleated Paper Lamp (20 cm)",
+   "url": "https://www.etsy.com/au/listing/4437763073",
+   "shop": "TedzukuriAtelier",
+   "shop_location": {
+    "country": "France",
+    "city": "Paris"
+   },
+   "israeli": false,
+   "priority": 2,
+   "size": "20 x 20 x 20 cm",
+   "material": "acid-free FSC paper from France; cord set optional, E27 LED",
+   "custom_or_mto": "folded to order in Paris atelier",
+   "lead_time": "not in snippet",
+   "ships_to_israel": "not in snippet",
+   "styles": [
+    "nordic",
+    "japandi"
+   ],
+   "rooms": [
+    "kids",
+    "hall",
+    "corridor"
+   ],
+   "why_wow_he": "קפלי נייר שקופלו ביד בפריז: 'מנורת הקפלים' בקנה מידה ביתי.",
+   "compliance_he": "הכבל נמכר בנפרד; CE ו-230V לבקש.",
+   "price": {
+    "amount": 94.81,
+    "amount_high": null,
+    "currency": "AUD",
+    "as_shown": "AU$94.81 (20% off); XL origami pendant €140"
+   },
+   "price_ils_approx": 203,
+   "tier": "mid",
+   "source": "search-snippet"
+  },
+  {
+   "id": "A1",
+   "category": "wall-art",
+   "title": "Neutral Abstract Painting on Canvas (40x48 in)",
+   "url": "https://www.etsy.com/listing/709341889",
+   "shop": "OsnatFineArt (Osnat Tzadok)",
+   "shop_location": {
+    "country": "Israel (ships from Israel; one profile snapshot says Toronto)",
+    "city": null
+   },
+   "israeli": true,
+   "priority": 1,
+   "size": "102 x 122 cm (40 x 48 in)",
+   "material": "acrylic on stretched canvas, signed, certificate",
+   "custom_or_mto": "original; shop also makes 'similar' made-to-order versions",
+   "lead_time": "DHL/FedEx 3-5 business days",
+   "ships_to_israel": "ships from Israel",
+   "styles": [
+    "nordic",
+    "warm-modern"
+   ],
+   "rooms": [
+    "living-room",
+    "master"
+   ],
+   "why_wow_he": "מקור גדול בגווני ניטרל עם מרקם סכין: הקיר מעל הספה הופך לגלריה.",
+   "price": {
+    "amount": 1049,
+    "amount_high": null,
+    "currency": "USD",
+    "as_shown": "$1,049, 1 left"
+   },
+   "price_ils_approx": 3462,
+   "tier": "masterpiece-anchor",
+   "source": "search-snippet"
+  },
+  {
+   "id": "A2",
+   "category": "wall-art",
+   "title": "Big Wall Art, Original Abstract Painting, Earth Tones (60x36 in, custom)",
+   "url": "https://www.etsy.com/listing/1136705758",
+   "shop": "OsnatFineArt (Osnat Tzadok)",
+   "shop_location": {
+    "country": "Israel (ships from Israel)",
+    "city": null
+   },
+   "israeli": true,
+   "priority": 1,
+   "size": "152 x 91 cm (60 x 36 in); snippet also says '5x 12x36'",
+   "material": "acrylic/oil on canvas, shipped stretched",
+   "custom_or_mto": "made to order (recreation of a sold piece); other sizes on request",
+   "lead_time": "~5 business days to recreate + 3-5 days shipping",
+   "ships_to_israel": "ships from Israel",
+   "styles": [
+    "warm-modern",
+    "boho"
+   ],
+   "rooms": [
+    "living-room",
+    "dining-room"
+   ],
+   "why_wow_he": "קנבס של מטר וחצי בגווני אדמה, ואפשר להזמין שוב באותו סגנון: מתאים לרינדור נאמן.",
+   "price": {
+    "amount": 1371,
+    "amount_high": null,
+    "currency": "USD",
+    "as_shown": "$1,371"
+   },
+   "price_ils_approx": 4524,
+   "tier": "masterpiece-anchor",
+   "source": "search-snippet"
+  },
+  {
+   "id": "A3",
+   "category": "wall-art",
+   "title": "Large Textured Abstract Painting 'The Mesh' (earth tones)",
+   "url": "https://www.etsy.com/listing/1552300460",
+   "shop": "OsnatFineArt (Osnat Tzadok)",
+   "shop_location": {
+    "country": "Israel (ships from Israel)",
+    "city": null
+   },
+   "israeli": true,
+   "priority": 1,
+   "size": "large, size options",
+   "material": "acrylic on canvas; black, grey, rust, beige, ochre",
+   "custom_or_mto": "made to order (recreation)",
+   "lead_time": "not in snippet",
+   "ships_to_israel": "ships from Israel",
+   "styles": [
+    "boho",
+    "warm-modern"
+   ],
+   "rooms": [
+    "living-room",
+    "master"
+   ],
+   "why_wow_he": "פלטת חלודה ואוכרה של הבוהו, במרקם עבה: עוגן במחיר הכניסה.",
+   "price": {
+    "amount": 685,
+    "amount_high": null,
+    "currency": "USD",
+    "as_shown": "$685+ (size options)"
+   },
+   "price_ils_approx": 2260,
+   "tier": "masterpiece-anchor",
+   "source": "search-snippet"
+  },
+  {
+   "id": "A4",
+   "category": "wall-art",
+   "title": "Original Painting, Modern Abstract 'Veiled Essence' by Ron Deri",
+   "url": "https://www.etsy.com/listing/1708800381",
+   "shop": "RonDeri",
+   "shop_location": {
+    "country": "Israel",
+    "city": "Tel Aviv"
+   },
+   "israeli": true,
+   "priority": 1,
+   "size": "97 x 79 cm (38 x 31 in)",
+   "material": "acrylic on Italian canvas, German paint",
+   "custom_or_mto": "one of a kind; similar can be made",
+   "lead_time": "not in snippet",
+   "ships_to_israel": "domestic (Israel); ships rolled",
+   "styles": [
+    "warm-modern"
+   ],
+   "rooms": [
+    "living-room"
+   ],
+   "why_wow_he": "מקור של אמן תל אביבי במחיר 'אספנים': העוגן הכי יקר ברשימה הישראלית.",
+   "caveats_he": "הפלטה לא אומתה; רוב העבודות בחנות צבעוניות וחיות. לבדוק התאמה לפני בחירה.",
+   "price": {
+    "amount": 3375,
+    "amount_high": null,
+    "currency": "USD",
+    "as_shown": "$3,375"
+   },
+   "price_ils_approx": 11138,
+   "tier": "masterpiece-anchor",
+   "source": "search-snippet"
+  },
+  {
+   "id": "A5",
+   "category": "wall-art",
+   "title": "Japanese Maple and Pagoda, Original Sumi-e, ink on rice paper (54x24 in)",
+   "url": "https://www.etsy.com/listing/950348169",
+   "shop": "AnnaVladiArt",
+   "shop_location": {
+    "country": null,
+    "city": null
+   },
+   "israeli": false,
+   "priority": 3,
+   "size": "132 x 62 cm",
+   "material": "Japanese ink and mineral pigments on handmade rice paper",
+   "custom_or_mto": "original",
+   "lead_time": "not in snippet",
+   "ships_to_israel": "not in snippet",
+   "styles": [
+    "japandi"
+   ],
+   "rooms": [
+    "master",
+    "living-room"
+   ],
+   "why_wow_he": "סומי-אה מקורי באורך 1.3 מטר: 'דיו על נייר' של הג'פנדי, ביד.",
+   "price": {
+    "amount": 960,
+    "amount_high": null,
+    "currency": "USD",
+    "as_shown": "$960, 1 left"
+   },
+   "price_ils_approx": 3168,
+   "tier": "masterpiece-anchor",
+   "source": "search-snippet"
+  },
+  {
+   "id": "A6",
+   "category": "wall-art",
+   "title": "Large neutral textured abstract (layered fabric, texture medium, acrylic)",
+   "url": "https://www.etsy.com/listing/569171756",
+   "shop": "Jae Landow (not confirmed)",
+   "shop_location": {
+    "country": null,
+    "city": null
+   },
+   "israeli": false,
+   "priority": 3,
+   "size": "large (options)",
+   "material": "layered fabrics, texture mediums, acrylic; cream/taupe/charcoal/black",
+   "custom_or_mto": "stretched or floating frame",
+   "lead_time": "not in snippet",
+   "ships_to_israel": "not in snippet",
+   "styles": [
+    "nordic",
+    "japandi",
+    "warm-modern"
+   ],
+   "rooms": [
+    "living-room",
+    "master"
+   ],
+   "why_wow_he": "תבליט בדים ומרקם בגווני שמנת ופחם: עומק בלי צבע.",
+   "price": {
+    "amount": 810.66,
+    "amount_high": null,
+    "currency": "EUR",
+    "as_shown": "€810.66+, 1 left"
+   },
+   "price_ils_approx": 2889,
+   "tier": "masterpiece-anchor",
+   "source": "search-snippet"
+  },
+  {
+   "id": "A7",
+   "category": "wall-art",
+   "title": "Large-Scale Woven Tapestry | Extra Large Fiber Wall Art (380 x 170 cm)",
+   "url": "https://www.etsy.com/listing/4431676134",
+   "shop": "KnitushkiStore",
+   "shop_location": {
+    "country": "Ukraine",
+    "city": "Kyiv"
+   },
+   "israeli": false,
+   "priority": 2,
+   "size": "380 W x 170 H cm",
+   "material": "wool, cotton, recycled materials, sari silk",
+   "custom_or_mto": "commissions in similar or custom design",
+   "lead_time": "not in snippet",
+   "ships_to_israel": "not in snippet",
+   "styles": [
+    "boho",
+    "warm-modern"
+   ],
+   "rooms": [
+    "living-room",
+    "master"
+   ],
+   "why_wow_he": "שטיח קיר ארוג ברוחב כמעט 4 מטרים: הקיר כולו יצירה.",
+   "price": {
+    "amount": 3300,
+    "amount_high": null,
+    "currency": "USD",
+    "as_shown": "$3,300 (25% off $4,400); a commission listed at $18,000"
+   },
+   "price_ils_approx": 10890,
+   "tier": "masterpiece-anchor",
+   "source": "search-snippet"
+  },
+  {
+   "id": "A8",
+   "category": "wall-art",
+   "title": "Extra Large Fiber Art, Macrame Wall Hanging (7 ft x 6 ft)",
+   "url": "https://www.etsy.com/listing/4295704023",
+   "shop": "MiddayMoonMacrame",
+   "shop_location": {
+    "country": "USA",
+    "city": "Cedar Rapids, Iowa"
+   },
+   "israeli": false,
+   "priority": 3,
+   "size": "213 x 183 cm (84 x 72 in)",
+   "material": "cotton cord, natural and brown",
+   "custom_or_mto": "not in snippet",
+   "lead_time": "not in snippet",
+   "ships_to_israel": "free shipping shown (destination unknown)",
+   "styles": [
+    "boho"
+   ],
+   "rooms": [
+    "living-room"
+   ],
+   "why_wow_he": "מקרמה גאומטרי של 2 מטרים כיצירת אמנות, לא קישוט (מקרמה רק בבוהו).",
+   "price": {
+    "amount": 2850,
+    "amount_high": 3800,
+    "currency": "USD",
+    "as_shown": "$2,850 (sale) to $3,800, free shipping"
+   },
+   "price_ils_approx": [
+    9405,
+    12540
+   ],
+   "tier": "masterpiece-anchor",
+   "source": "search-snippet"
+  },
+  {
+   "id": "A9",
+   "category": "wall-art",
+   "title": "Large Handwoven Fiber Art Tapestry - commissions (e.g. 'Story of Us', 6x4 ft)",
+   "url": "https://www.etsy.com/au/listing/1466307233",
+   "shop": "RebeccaWhitakerArt",
+   "shop_location": {
+    "country": "USA",
+    "city": "Spanish Fork, Utah"
+   },
+   "israeli": false,
+   "priority": 2,
+   "size": "up to 9 x 7 ft (commission)",
+   "material": "wool, cotton, silk, hemp, linen; up to 5 in relief",
+   "custom_or_mto": "commission, custom palette",
+   "lead_time": "3-6 months",
+   "ships_to_israel": "not in snippet",
+   "styles": [
+    "boho",
+    "warm-modern"
+   ],
+   "rooms": [
+    "living-room"
+   ],
+   "why_wow_he": "פסל קיר טקסטילי בתבליט של 12 ס\"מ: עוגן קיצוני שמסביר 'אמנות' בלי מילים.",
+   "caveats_he": "יקר מאוד ומרוחק; מתאים יותר כהשראה או כמבחן לעוגן קיצוני.",
+   "price": {
+    "amount": 7000,
+    "amount_high": 39000,
+    "currency": "USD",
+    "as_shown": "shop pieces $7,000 (28x35 in) to $39,000; 6x4 ft piece was a commission"
+   },
+   "price_ils_approx": [
+    23100,
+    128700
+   ],
+   "tier": "masterpiece-anchor",
+   "source": "search-snippet"
+  },
+  {
+   "id": "A10",
+   "category": "wall-art",
+   "title": "Handwoven wall hanging, pure undyed natural wool on bamboo",
+   "url": "https://www.etsy.com/listing/1654307321",
+   "shop": "DzevStudio",
+   "shop_location": {
+    "country": "Bulgaria",
+    "city": "Varna"
+   },
+   "israeli": false,
+   "priority": 2,
+   "size": "67 x 90 cm (woven part 67 x 67)",
+   "material": "undyed natural wool, bamboo rod",
+   "custom_or_mto": "other sizes and colours to order",
+   "lead_time": "not in snippet",
+   "ships_to_israel": "not in snippet; seller warns of import fees",
+   "styles": [
+    "nordic",
+    "japandi"
+   ],
+   "rooms": [
+    "kids",
+    "hall",
+    "work"
+   ],
+   "why_wow_he": "אריגת צמר לא צבוע על נול ביתי: מרקם רך לקיר קטן.",
+   "tier": "premium-variation (estimate)",
+   "price": {
+    "amount": null,
+    "amount_high": null,
+    "currency": "USD",
+    "as_shown": "not in snippet"
+   },
+   "price_ils_approx": null,
+   "source": "search-snippet"
+  },
+  {
+   "id": "A11",
+   "category": "wall-art",
+   "title": "Original Painting on Canvas, Olive Tree Landscape of Provence (40x40 cm)",
+   "url": "https://www.etsy.com/listing/1591113383",
+   "shop": null,
+   "shop_location": {
+    "country": "France (subject)",
+    "city": null
+   },
+   "israeli": false,
+   "priority": 3,
+   "size": "40 x 40 cm",
+   "material": "oil on stretched canvas, signed, certificate",
+   "custom_or_mto": "original",
+   "lead_time": "not in snippet",
+   "ships_to_israel": "not in snippet",
+   "styles": [
+    "mediterranean",
+    "modern-country"
+   ],
+   "rooms": [
+    "dining-room",
+    "hall"
+   ],
+   "why_wow_he": "שמן מקורי של מטע זיתים: נוף ים-תיכוני אמיתי במחיר וריאציה.",
+   "price": {
+    "amount": 277.81,
+    "amount_high": null,
+    "currency": "USD",
+    "as_shown": "$277.81"
+   },
+   "price_ils_approx": 917,
+   "tier": "premium-variation",
+   "source": "search-snippet"
+  },
+  {
+   "id": "A12",
+   "category": "wall-art",
+   "title": "Vintage Original Oil on Canvas, English Landscape 'A Walk With Mother' (Johnny Gaston)",
+   "url": "https://www.etsy.com/listing/1075889437",
+   "shop": null,
+   "shop_location": {
+    "country": null,
+    "city": null
+   },
+   "israeli": false,
+   "priority": 3,
+   "size": "93 x 67 cm, gold antique-style frame",
+   "material": "oil on canvas (vintage original)",
+   "custom_or_mto": "one of a kind (vintage)",
+   "lead_time": "not in snippet",
+   "ships_to_israel": "not in snippet",
+   "styles": [
+    "modern-country"
+   ],
+   "rooms": [
+    "living-room",
+    "master"
+   ],
+   "why_wow_he": "נוף כפרי אנגלי מקורי במסגרת מוזהבת: החתימה של הכפרי המודרני.",
+   "tier": "masterpiece-anchor (estimate, price unknown)",
+   "price": {
+    "amount": null,
+    "amount_high": null,
+    "currency": "USD",
+    "as_shown": "not in snippet"
+   },
+   "price_ils_approx": null,
+   "source": "search-snippet"
+  },
+  {
+   "id": "A13",
+   "category": "wall-art",
+   "title": "Large macrame wall hanging 60 x 40 in",
+   "url": "https://www.etsy.com/market/60_inch_macrame_wall_hanging",
+   "shop": "Bonniehandmadee",
+   "shop_location": {
+    "country": null,
+    "city": null
+   },
+   "israeli": false,
+   "priority": 3,
+   "size": "152 x 102 cm",
+   "material": "cotton cord",
+   "custom_or_mto": "size options",
+   "lead_time": "not in snippet",
+   "ships_to_israel": "not in snippet",
+   "styles": [
+    "boho"
+   ],
+   "rooms": [
+    "master",
+    "living-room"
+   ],
+   "why_wow_he": "מקרמה גדול במחיר אמצע: וריאציה זולה לצד המאסטרפיס A8.",
+   "price": {
+    "amount": 198.75,
+    "amount_high": null,
+    "currency": "USD",
+    "as_shown": "$198.75+ (25% off $265+)"
+   },
+   "price_ils_approx": 656,
+   "tier": "premium-variation",
+   "source": "search-snippet"
+  },
+  {
+   "id": "T1",
+   "category": "textiles",
+   "title": "Handwoven Carpet 8'x6' of Natural Wool",
+   "url": "https://www.etsy.com/listing/1618453266",
+   "shop": "DzevStudio",
+   "shop_location": {
+    "country": "Bulgaria",
+    "city": "Varna"
+   },
+   "israeli": false,
+   "priority": 2,
+   "size": "183 x 244 cm (custom lengths open; widths > ~83 cm are strips sewn together)",
+   "material": "100% undyed, unbleached wool, flatweave",
+   "custom_or_mto": "made to order; custom size and colours",
+   "lead_time": "not in snippet",
+   "ships_to_israel": "ships from Bulgaria; possible import fees",
+   "styles": [
+    "nordic",
+    "japandi",
+    "warm-modern"
+   ],
+   "rooms": [
+    "living-room",
+    "master"
+   ],
+   "why_wow_he": "שטיח צמר לא צבוע שנארג ביד בבולגריה, בכל מידה: אפשר להתאים למעטפת 240x340.",
+   "caveats_he": "תפרים בין רצועות (מעל 83 ס\"מ רוחב); לבדוק מראה בפריים.",
+   "price": {
+    "amount": 780,
+    "amount_high": null,
+    "currency": "USD",
+    "as_shown": "$780"
+   },
+   "price_ils_approx": 2574,
+   "tier": "masterpiece-anchor",
+   "source": "search-snippet"
+  },
+  {
+   "id": "T2",
+   "category": "textiles",
+   "title": "Handwoven Natural Wool Carpet 5'x7', undyed",
+   "url": "https://www.etsy.com/listing/1618469782",
+   "shop": "DzevStudio",
+   "shop_location": {
+    "country": "Bulgaria",
+    "city": "Varna"
+   },
+   "israeli": false,
+   "priority": 2,
+   "size": "150 x 210 cm",
+   "material": "100% undyed wool, three strips sewn",
+   "custom_or_mto": "made to order",
+   "lead_time": "not in snippet",
+   "ships_to_israel": "ships from Bulgaria",
+   "styles": [
+    "nordic",
+    "japandi"
+   ],
+   "rooms": [
+    "work",
+    "kids"
+   ],
+   "why_wow_he": "אותו צמר טבעי בגודל של חדר העבודה (160x210).",
+   "price": {
+    "amount": 482.31,
+    "amount_high": null,
+    "currency": "USD",
+    "as_shown": "$482.31 (7x7 ft: $567.83)"
+   },
+   "price_ils_approx": 1592,
+   "tier": "premium-variation",
+   "source": "search-snippet"
+  },
+  {
+   "id": "T3",
+   "category": "textiles",
+   "title": "Handwoven wool runner 67 x 150 cm, natural undyed",
+   "url": "https://www.etsy.com/listing/178348399",
+   "shop": "DzevStudio",
+   "shop_location": {
+    "country": "Bulgaria",
+    "city": "Varna"
+   },
+   "israeli": false,
+   "priority": 2,
+   "size": "67 x 150 cm (custom lengths)",
+   "material": "undyed, unbleached wool",
+   "custom_or_mto": "custom length",
+   "lead_time": "not in snippet",
+   "ships_to_israel": "ships from Bulgaria",
+   "styles": [
+    "nordic",
+    "japandi",
+    "modern-country"
+   ],
+   "rooms": [
+    "hall",
+    "corridor"
+   ],
+   "why_wow_he": "ראנר צמר טבעי באורך לפי מידה, לכניסה (70–80 x 250–270).",
+   "price": {
+    "amount": 147.98,
+    "amount_high": 324.61,
+    "currency": "USD",
+    "as_shown": "$147.98-324.61"
+   },
+   "price_ils_approx": [
+    488,
+    1071
+   ],
+   "tier": "mid",
+   "source": "search-snippet"
+  },
+  {
+   "id": "T4",
+   "category": "textiles",
+   "title": "Handmade Beni Ourain Berber Rug, cream wool (duplicated at chosen size)",
+   "url": "https://www.etsy.com/listing/1175400608",
+   "shop": null,
+   "shop_location": {
+    "country": "Morocco",
+    "city": null
+   },
+   "israeli": false,
+   "priority": 2,
+   "size": "any size",
+   "material": "hand-knotted Moroccan wool",
+   "custom_or_mto": "made to order at chosen size",
+   "lead_time": "custom Beni Ourain sellers quote 3-5 weeks",
+   "ships_to_israel": "not in snippet",
+   "styles": [
+    "boho",
+    "nordic"
+   ],
+   "rooms": [
+    "living-room",
+    "master"
+   ],
+   "why_wow_he": "שטיח ברברי קשור ביד במידה מדויקת: הרצפה של חדר בוהו.",
+   "tier": "masterpiece-anchor at living-room size (estimate)",
+   "price": {
+    "amount": 399,
+    "amount_high": 3692,
+    "currency": "USD",
+    "as_shown": "$399+ to $3,692 by size"
+   },
+   "price_ils_approx": [
+    1317,
+    12184
+   ],
+   "source": "search-snippet"
+  },
+  {
+   "id": "T5",
+   "category": "textiles",
+   "title": "Handwoven Organic Wool Blanket: Queen Size, Heavy Plaid Throw",
+   "url": "https://www.etsy.com/listing/1306306502",
+   "shop": "WINTAWOOL",
+   "shop_location": {
+    "country": null,
+    "city": null
+   },
+   "israeli": false,
+   "priority": 3,
+   "size": "150 x 200 cm, ~2.3 kg",
+   "material": "raw wool, handwoven",
+   "custom_or_mto": "not in snippet",
+   "lead_time": "not in snippet",
+   "ships_to_israel": "not in snippet",
+   "styles": [
+    "modern-country",
+    "nordic"
+   ],
+   "rooms": [
+    "master"
+   ],
+   "why_wow_he": "שמיכת צמר כבדה במשבצת: הטקסטיל של הכפרי המודרני על המיטה.",
+   "price": {
+    "amount": 238,
+    "amount_high": null,
+    "currency": "USD",
+    "as_shown": "$238 (FR page €212.57 + shipping)"
+   },
+   "price_ils_approx": 785,
+   "tier": "premium-variation",
+   "source": "search-snippet"
+  },
+  {
+   "id": "T6",
+   "category": "textiles",
+   "title": "Handwoven Wool Blanket: Carpathian Organic Sheep Wool (lizhnyk)",
+   "url": "https://www.etsy.com/listing/806838915",
+   "shop": "CarpathianCrafts",
+   "shop_location": {
+    "country": "Ukraine",
+    "city": "Kosiv"
+   },
+   "israeli": false,
+   "priority": 3,
+   "size": "not in snippet",
+   "material": "Carpathian sheep wool, wooden loom, natural dyes",
+   "custom_or_mto": "each loom-made",
+   "lead_time": "not in snippet",
+   "ships_to_israel": "free shipping shown (destination unknown)",
+   "styles": [
+    "nordic",
+    "boho",
+    "modern-country"
+   ],
+   "rooms": [
+    "living-room",
+    "master"
+   ],
+   "why_wow_he": "ליז'ניק קרפטי: צמר פרוותי שנארג ונחבט במים, טקסטורה שאין בסדרתי.",
+   "price": {
+    "amount": 175.8,
+    "amount_high": null,
+    "currency": "USD",
+    "as_shown": "$175.80, 3 left; free shipping on many items"
+   },
+   "price_ils_approx": 580,
+   "tier": "mid",
+   "source": "search-snippet"
+  },
+  {
+   "id": "T7",
+   "category": "textiles",
+   "title": "Handwoven Wool Blanket, Scandinavian Style, White and Gray",
+   "url": "https://www.etsy.com/uk/listing/1698441427",
+   "shop": "WoollyRug",
+   "shop_location": {
+    "country": null,
+    "city": null
+   },
+   "israeli": false,
+   "priority": 3,
+   "size": "140 x 200 cm",
+   "material": "wool, handwoven",
+   "custom_or_mto": "not in snippet",
+   "lead_time": "2 left",
+   "ships_to_israel": "not in snippet",
+   "styles": [
+    "nordic"
+   ],
+   "rooms": [
+    "master",
+    "living-room"
+   ],
+   "why_wow_he": "אריגה לבנה-אפורה פשוטה: וריאציית האמצע של השמיכה הנורדית.",
+   "price": {
+    "amount": 88.66,
+    "amount_high": null,
+    "currency": "GBP",
+    "as_shown": "£88.66 (£140.81 incl. postage); $93.50 on other pages"
+   },
+   "price_ils_approx": 372,
+   "tier": "mid",
+   "source": "search-snippet"
+  },
+  {
+   "id": "T8",
+   "category": "textiles",
+   "title": "Handwoven Wool Throw Blanket With Macrame Fringe",
+   "url": "https://www.etsy.com/listing/1440434275",
+   "shop": "PoppysPillowBoutique",
+   "shop_location": {
+    "country": "Mexico (made)",
+    "city": null
+   },
+   "israeli": false,
+   "priority": 3,
+   "size": "221 x 79 cm (87 x 31 in)",
+   "material": "100% sheep wool, pedal/waist loom",
+   "custom_or_mto": "not in snippet",
+   "lead_time": "out of stock",
+   "ships_to_israel": "not in snippet",
+   "styles": [
+    "boho"
+   ],
+   "rooms": [
+    "living-room"
+   ],
+   "why_wow_he": "צמר ארוג עם פרנזים במקרמה: שכבה בוהו על כורסה.",
+   "caveats_he": "הצמר מחוספס, למטרות נוי; אין החזרות.",
+   "price": {
+    "amount": 123.03,
+    "amount_high": null,
+    "currency": "USD",
+    "as_shown": "$123.03 (out of stock in snapshot)"
+   },
+   "price_ils_approx": 406,
+   "tier": "mid",
+   "source": "search-snippet"
+  },
+  {
+   "id": "T9",
+   "category": "textiles",
+   "title": "100% Linen Turkish Throw, hand-loomed",
+   "url": "https://www.etsy.com/listing/822706348",
+   "shop": null,
+   "shop_location": {
+    "country": "Turkey",
+    "city": null
+   },
+   "israeli": false,
+   "priority": 3,
+   "size": "not in snippet",
+   "material": "100% linen, hand-loomed, summer weight",
+   "custom_or_mto": "not in snippet",
+   "lead_time": "not in snippet",
+   "ships_to_israel": "not in snippet",
+   "styles": [
+    "mediterranean"
+   ],
+   "rooms": [
+    "living-room",
+    "master"
+   ],
+   "why_wow_he": "פשתן שנארג ביד על נול טורקי: הטקסטיל הקיצי של הים-תיכוני.",
+   "price": {
+    "amount": 112,
+    "amount_high": null,
+    "currency": "USD",
+    "as_shown": "~$112 (sale)"
+   },
+   "price_ils_approx": 370,
+   "tier": "mid",
+   "source": "search-snippet"
+  },
+  {
+   "id": "K1",
+   "category": "kids",
+   "title": "Luxury Handmade Wooden Dollhouse 'House of New York'",
+   "url": "https://www.etsy.com/listing/1689469421",
+   "shop": "LittleForestAnimals",
+   "shop_location": {
+    "country": null,
+    "city": null
+   },
+   "israeli": false,
+   "priority": 3,
+   "size": "127 x 84 x 51 cm, 49 kg",
+   "material": "wood, EN71-certified paints; furniture and textiles included",
+   "custom_or_mto": "handmade",
+   "lead_time": "not in snippet",
+   "ships_to_israel": "free worldwide shipping stated",
+   "styles": [
+    "nordic",
+    "modern-country"
+   ],
+   "rooms": [
+    "kids"
+   ],
+   "why_wow_he": "בית בובות של 1.27 מטר עם רהיטים: עוגן ברור לחדר הילדה.",
+   "compliance_he": "רק הצבעים מוצהרים EN71; צריך דוח EN71 / ת\"י 562 למוצר עצמו לפני מכירה (ד.4).",
+   "price": {
+    "amount": 1617.76,
+    "amount_high": null,
+    "currency": "USD",
+    "as_shown": "$1,617.76, free worldwide shipping (FedEx/UPS)"
+   },
+   "price_ils_approx": 5339,
+   "tier": "masterpiece-anchor",
+   "source": "search-snippet"
+  },
+  {
+   "id": "K2",
+   "category": "kids",
+   "title": "Wooden Whale Large 48\" Wall Art, hand carved from solid wood",
+   "url": "https://www.etsy.com/listing/191633913",
+   "shop": "RobertPorcello",
+   "shop_location": {
+    "country": null,
+    "city": null
+   },
+   "israeli": false,
+   "priority": 2,
+   "size": "122 x 28 x 4 cm (48 x 11 x 1.5 in)",
+   "material": "solid wood, 5 colours, faces left or right",
+   "custom_or_mto": "made to order",
+   "lead_time": "not in snippet",
+   "ships_to_israel": "not in snippet",
+   "styles": [
+    "nordic",
+    "modern-country",
+    "mediterranean"
+   ],
+   "rooms": [
+    "kids"
+   ],
+   "why_wow_he": "לווייתן עץ של 1.2 מטר מעל מיטת הילד: חפץ גדול ושמח שאינו צעצוע.",
+   "compliance_he": "קישוט קיר, לא צעצוע; לאשר עם המשתמש שאינו בתחולת ד.4.",
+   "price": {
+    "amount": 219,
+    "amount_high": 249,
+    "currency": "USD",
+    "as_shown": "$219 (extra-large version $249)"
+   },
+   "price_ils_approx": [
+    723,
+    822
+   ],
+   "tier": "premium-variation",
+   "source": "search-snippet"
+  },
+  {
+   "id": "K3",
+   "category": "kids",
+   "title": "Handcrafted Wooden Rocking Horse, natural Danish oil finish",
+   "url": "https://www.etsy.com/market/scandinavian_rocking_horse",
+   "shop": null,
+   "shop_location": {
+    "country": null,
+    "city": null
+   },
+   "israeli": false,
+   "priority": 3,
+   "size": "not in snippet",
+   "material": "wood, Danish oil",
+   "custom_or_mto": "not in snippet",
+   "lead_time": "not in snippet",
+   "ships_to_israel": "free shipping shown (destination unknown)",
+   "styles": [
+    "nordic",
+    "japandi"
+   ],
+   "rooms": [
+    "kids"
+   ],
+   "why_wow_he": "סוס נדנדה בעץ טבעי: הפריט הנורדי הקלאסי לחדר ילדים.",
+   "compliance_he": "צעצוע: חובה EN71 / ת\"י 562 (ד.4).",
+   "price": {
+    "amount": 286.21,
+    "amount_high": null,
+    "currency": "USD",
+    "as_shown": "$286.21, free shipping (104 reviews)"
+   },
+   "price_ils_approx": 944,
+   "tier": "premium-variation",
+   "source": "search-snippet"
+  },
+  {
+   "id": "K4",
+   "category": "kids",
+   "title": "Opening wooden tree set with peg doll figurines",
+   "url": "https://www.etsy.com/shop/WoodenEducationalToy",
+   "shop": "WoodenEducationalToy",
+   "shop_location": {
+    "country": "Israel",
+    "city": "Rehovot"
+   },
+   "israeli": true,
+   "priority": 1,
+   "size": "not in snippet",
+   "material": "wood, water-based paint",
+   "custom_or_mto": "small batches",
+   "lead_time": "not in snippet",
+   "ships_to_israel": "domestic (Israel)",
+   "styles": [
+    "nordic",
+    "modern-country"
+   ],
+   "rooms": [
+    "kids"
+   ],
+   "why_wow_he": "עץ נפתח עם בובות יתד, מסדנה ישראלית: פריט מדף לחדר הילדה.",
+   "compliance_he": "צעצוע: חובה EN71 / ת\"י 562 (ד.4).",
+   "price": {
+    "amount": 69.26,
+    "amount_high": null,
+    "currency": "USD",
+    "as_shown": "$69.26 (sale from $92.35)"
+   },
+   "price_ils_approx": 229,
+   "tier": "mid",
+   "source": "search-snippet"
+  }
+ ],
+ "top3_by_style": {
+  "nordic": [
+   "A1",
+   "L1",
+   "T1"
+  ],
+  "warm-modern": [
+   "W2",
+   "L10",
+   "C1"
+  ],
+  "japandi": [
+   "C2",
+   "A5",
+   "W6"
+  ],
+  "mediterranean": [
+   "L5",
+   "W1",
+   "C4"
+  ],
+  "modern-country": [
+   "C3",
+   "L9",
+   "T5"
+  ],
+  "boho": [
+   "A7",
+   "L12",
+   "T4"
+  ],
+  "kids": [
+   "K1",
+   "K2",
+   "K3"
+  ]
+ },
+ "israeli_etsy_makers": [
+  {
+   "shop": "IrisLightingStudio",
+   "maker": "Iris Rapaport",
+   "location": "Ben Shemen",
+   "url": "https://www.etsy.com/shop/IrisLightingStudio",
+   "what": "hand-thrown ceramic and porcelain pendants (carved, perforated, pleated, terracotta); family studio since 1997; serves architects; ~1.5k sales, 4.6-4.9",
+   "custom": "custom sizes and colours",
+   "fit": [
+    "nordic",
+    "japandi",
+    "warm-modern",
+    "mediterranean"
+   ],
+   "priority": "A",
+   "picks": [
+    "L1",
+    "L2",
+    "L3",
+    "L4"
+   ]
+  },
+  {
+   "shop": "NoaRazerStudio",
+   "maker": "Noa Razer",
+   "location": "Tel Aviv",
+   "url": "https://www.etsy.com/shop/NoaRazerStudio",
+   "what": "terracotta pendants, sconces and sets (Apilar collection of stacked shapes); Bezalel ceramics and glass",
+   "custom": "series",
+   "fit": [
+    "mediterranean",
+    "boho"
+   ],
+   "priority": "A",
+   "picks": [
+    "L5",
+    "L6",
+    "L7"
+   ]
+  },
+  {
+   "shop": "MelzerStudio",
+   "maker": "Yehonatan (Jonathan) Melzer",
+   "location": "Modiin",
+   "url": "https://www.etsy.com/il-en/listing/4514132722",
+   "what": "3D-printed ceramic pendants and the 'Sahara' chandelier",
+   "custom": "variants",
+   "fit": [
+    "warm-modern",
+    "japandi"
+   ],
+   "priority": "A",
+   "picks": [
+    "L8"
+   ]
+  },
+  {
+   "shop": "OsnatFineArt",
+   "maker": "Osnat Tzadok",
+   "location": "ships from Israel (one profile snapshot: Toronto)",
+   "url": "https://www.etsy.com/shop/OsnatFineArt",
+   "what": "large textured abstracts; made-to-order recreations of sold pieces; signed, certificate",
+   "custom": "made to order, size on request",
+   "fit": [
+    "nordic",
+    "warm-modern",
+    "boho"
+   ],
+   "priority": "A",
+   "picks": [
+    "A1",
+    "A2",
+    "A3"
+   ]
+  },
+  {
+   "shop": "HolyWoodTurning",
+   "maker": null,
+   "location": "Tel Aviv",
+   "url": "https://www.etsy.com/listing/1418933134",
+   "what": "lathe-turned vessels from rescued Israeli olive wood and reclaimed wood",
+   "custom": "unclear",
+   "fit": [
+    "mediterranean",
+    "japandi",
+    "warm-modern"
+   ],
+   "priority": "A",
+   "picks": [
+    "W1"
+   ]
+  },
+  {
+   "shop": "MassaaStudio",
+   "maker": null,
+   "location": "Ramat HaSharon (studio in Tel Aviv)",
+   "url": "https://www.etsy.com/shop/MassaaStudio",
+   "what": "stoneware: antler wall sculptures, large bowls; ~2.7k sales, 4.9",
+   "custom": "custom orders with quote",
+   "fit": [
+    "nordic",
+    "japandi"
+   ],
+   "priority": "B",
+   "picks": [
+    "C6",
+    "C7"
+   ]
+  },
+  {
+   "shop": "gidizivanpottery",
+   "maker": "Gidi Zivan",
+   "location": "Sde Yitzhak",
+   "url": "https://www.etsy.com/shop/gidizivanpottery",
+   "what": "wheel-thrown pottery, raku, hand-cut lace ceramic wall lamps; 30+ years",
+   "custom": "each unique",
+   "fit": [
+    "modern-country",
+    "mediterranean",
+    "japandi"
+   ],
+   "priority": "B",
+   "picks": [
+    "C9",
+    "L9"
+   ]
+  },
+  {
+   "shop": "Yahalomis",
+   "maker": "Tal and Roy Yahalomi",
+   "location": "Tel Aviv",
+   "url": "https://www.etsy.com/shop/Yahalomis",
+   "what": "minimal vases and home accessories; own basalt 'lava rocks' clay from northern Israel",
+   "custom": "series",
+   "fit": [
+    "nordic",
+    "japandi"
+   ],
+   "priority": "B",
+   "picks": [
+    "C8"
+   ]
+  },
+  {
+   "shop": "RonDeri",
+   "maker": "Ron Deri",
+   "location": "Tel Aviv",
+   "url": "https://www.etsy.com/shop/RonDeri",
+   "what": "large original acrylic/gold-leaf abstracts ($290 to $37,500) and prints",
+   "custom": "'similar' paintings on request",
+   "fit": [
+    "warm-modern"
+   ],
+   "priority": "C",
+   "picks": [
+    "A4"
+   ],
+   "note": "mostly vivid palettes"
+  },
+  {
+   "shop": "NoaCeramicStudio",
+   "maker": null,
+   "location": "Ramat Yishai",
+   "url": "https://www.etsy.com/shop/NoaCeramicStudio",
+   "what": "modern rustic tableware, small vases/planters",
+   "custom": null,
+   "fit": [
+    "modern-country"
+   ],
+   "priority": "C",
+   "picks": []
+  },
+  {
+   "shop": "FreshPottery",
+   "maker": "Sharon Boneh",
+   "location": "Giv'atayim (per one snippet)",
+   "url": "https://www.etsy.com/shop/FreshPottery",
+   "what": "hand-thrown rustic tableware; ~3.8k sales, 5.0",
+   "custom": null,
+   "fit": [
+    "nordic",
+    "modern-country"
+   ],
+   "priority": "C",
+   "picks": []
+  },
+  {
+   "shop": "RetroStyleCeramics",
+   "maker": "Nizah Miller",
+   "location": "Jaffa",
+   "url": "https://www.etsy.com/shop/RetroStyleCeramics",
+   "what": "retro-style housewares",
+   "custom": null,
+   "fit": [],
+   "priority": "C",
+   "picks": []
+  },
+  {
+   "shop": "zoharshaham",
+   "maker": "Zohar Shaham",
+   "location": "village in southern Israel",
+   "url": null,
+   "what": "handmade tableware and home decor (Bezalel 2005)",
+   "custom": null,
+   "fit": [
+    "nordic",
+    "japandi"
+   ],
+   "priority": "C",
+   "picks": []
+  },
+  {
+   "shop": "WoodenEducationalToy",
+   "maker": null,
+   "location": "Rehovot",
+   "url": "https://www.etsy.com/shop/WoodenEducationalToy",
+   "what": "small-batch Montessori wooden toys",
+   "custom": null,
+   "fit": [
+    "nordic"
+   ],
+   "priority": "C",
+   "picks": [
+    "K4"
+   ],
+   "note": "EN71 / IS 562 needed"
+  },
+  {
+   "shop": "StudioRust",
+   "maker": null,
+   "location": "production partner in Israel (shop location not confirmed)",
+   "url": "https://www.etsy.com/shop/StudioRust",
+   "what": "CNC one-piece round mirror frames in white oak / African walnut, hand finished",
+   "custom": null,
+   "fit": [
+    "nordic",
+    "warm-modern"
+   ],
+   "priority": "C",
+   "picks": []
+  }
+ ],
+ "off_etsy_israeli_leads": [
+  {
+   "name": "Lakiya Negev Bedouin Weaving (Sidreh)",
+   "location": "Lakiya / Omer",
+   "what": "rugs hand-woven on ground looms from Awassi wool; older sources quote NIS 400-4,000",
+   "fit": [
+    "boho",
+    "mediterranean",
+    "japandi"
+   ],
+   "note": "not on Etsy; strong local textile masterpiece story"
+  },
+  {
+   "name": "AKA Charlie Studio",
+   "location": "Israel",
+   "what": "brass and concrete lamps (old blog roundup only)",
+   "fit": [
+    "warm-modern"
+   ],
+   "note": "status unknown"
+  }
+ ],
+ "etsy_channel_notes": {
+  "affiliate": "Etsy affiliate runs through Awin; commonly ~4% (2% for user-generated content), 30-day cookie, manual approval, low-traffic sites rejected; Israel eligibility not verified.",
+  "display_or_stock": "Buy one piece per style from an Israeli maker, photograph it ourselves, render it faithfully, sell '1 in stock, then made to order' under a written maker agreement.",
+  "commission": "Makers with repeatable series (IrisLightingStudio, NoaRazerStudio, MelzerStudio, OsnatFineArt recreations, DzevStudio, YalanzhiObjects, ArtisRaw) suit made-to-order product pages with lead times."
+ }
+}
