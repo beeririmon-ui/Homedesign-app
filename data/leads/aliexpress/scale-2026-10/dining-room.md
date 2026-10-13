@@ -1,6 +1,6 @@
 # AliExpress בקנה מידה: dining-room (2026-10-11)
 
-סוננו 15325 שורות חיפוש, נבדקו לעומק 1099 מוצרים (1905 רשומות מוצר×סגנון). best 0 · alternative 890 · reject 1015 · כרטיסים חדשים 0.
+סוננו 15947 שורות חיפוש, נבדקו לעומק 1156 מוצרים (2247 רשומות מוצר×סגנון). best 0 · alternative 907 · reject 1340 · כרטיסים חדשים 0.
 
 עלות נחיתה = (מחיר SKU + משלוח זול עד 45 יום) × 3.3. רווח = לפי pricing.ts במחיר העליון של רצועת השוק (מע"מ 18%, עמלה 2%+1.2, החזרות 8%), לפני CAC. fit ≥ 8 רק אחרי מבט בתמונה; fit בלי מבט (screening) מוגבל ל-7. ההשוואה: הכרטיס הקיים בעמדה עם הציון הגבוה לסגנון (אחרת הזול).
 
@@ -84,7 +84,7 @@
 
 | סגנון | הבחירה | SKU | $ מוצר+משלוח | נחיתה ₪ | רצועה ₪ | רווח | fit | מול הכרטיס הקיים |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| נורדי | — אין מועמד שעבר | | | | | | | |
+| נורדי | [5cm Long Bench Cushions Chair Seat Sofa Pillow Seat Bay Wind](https://www.aliexpress.com/item/1005008543910556.html) · **מפסיד ברצועת השוק** | Color color 10 rice gray Specification 1 | 38.71+9.80, 18-29 ימים | 160 | 49–69 | ₪-109 · -186% | 7 | bench-pad-cj-tufted-long-cushion-khaki-120 ₪102 |
 | מודרני חם | [Cute Powder Sponge Puffs Foundation Cream Cushion Puff Cat C](https://www.aliexpress.com/item/1005010648744901.html) · **alternative** | Color Pink | 2.04+0.59, 18-30 ימים | 9 | 49–69 | ₪42 · 73% | 7 (סינון) | bench-pad-cj-tufted-long-cushion-khaki-120 ₪102 (CJ Dropshipping) ✓ זול/רווחי יותר |
 | ג'פנדי | [Cute Powder Sponge Puffs Foundation Cream Cushion Puff Cat C](https://www.aliexpress.com/item/1005010648744901.html) · **alternative** | Color Pink | 2.04+0.59, 18-30 ימים | 9 | 49–69 | ₪42 · 73% | 7 (סינון) | bench-pad-cj-tufted-long-cushion-khaki-120 ₪102 (CJ Dropshipping) ✓ זול/רווחי יותר |
 | ים תיכוני | [Cute Powder Sponge Puffs Foundation Cream Cushion Puff Cat C](https://www.aliexpress.com/item/1005010648744901.html) · **alternative** | Color Pink | 2.04+0.59, 18-30 ימים | 9 | 49–69 | ₪42 · 73% | 7 (סינון) | bench-pad-cj-tufted-long-cushion-khaki-120 ₪102 (CJ Dropshipping) ✓ זול/רווחי יותר |
@@ -180,7 +180,7 @@
 | כפרי מודרני | [5Pcs Emery Board Nail Files, Straight Sandpaper Files for Na](https://www.aliexpress.com/item/1005005768054953.html) · **alternative** | Color Black | 1.95+1.99, 6-13 ימים | 13 | 59–89 | ₪53 · 71% | 7 (סינון) | אין כרטיס ✓ זול/רווחי יותר |
 | בוהו | [5Pcs Emery Board Nail Files, Straight Sandpaper Files for Na](https://www.aliexpress.com/item/1005005768054953.html) · **alternative** | Color Black | 1.95+1.99, 6-13 ימים | 13 | 59–89 | ₪53 · 71% | 7 (סינון) | אין כרטיס ✓ זול/רווחי יותר |
 
-חלופות: נורדי [1005005768054953](https://www.aliexpress.com/item/1005005768054953.html) ₪13/71% · נורדי [1005010783863103](https://www.aliexpress.com/item/1005010783863103.html) ₪13/70% · נורדי [1005006692829025](https://www.aliexpress.com/item/1005006692829025.html) ₪23/57% · נורדי [1005009646524578](https://www.aliexpress.com/item/1005009646524578.html) ₪27/53% · נורדי [1005011529668364](https://www.aliexpress.com/item/1005011529668364.html) ₪36/41% · נורדי [1005009654757932](https://www.aliexpress.com/item/1005009654757932.html) ₪61/7% · נורדי [1005012559093219](https://www.aliexpress.com/item/1005012559093219.html) ₪44/30% · נורדי [1005010070709401](https://www.aliexpress.com/item/1005010070709401.html) ₪56/14% · מודרני חם [1005005455180774](https://www.aliexpress.com/item/1005005455180774.html) ₪30/49% · מודרני חם [1005009896807985](https://www.aliexpress.com/item/1005009896807985.html) ₪36/41% · מודרני חם [1005009654757932](https://www.aliexpress.com/item/1005009654757932.html) ₪61/7% · מודרני חם [1005010070709401](https://www.aliexpress.com/item/1005010070709401.html) ₪56/14%
+חלופות: נורדי [1005005768054953](https://www.aliexpress.com/item/1005005768054953.html) ₪13/71% · נורדי [1005010783863103](https://www.aliexpress.com/item/1005010783863103.html) ₪13/70% · נורדי [1005006692829025](https://www.aliexpress.com/item/1005006692829025.html) ₪23/57% · נורדי [1005009646524578](https://www.aliexpress.com/item/1005009646524578.html) ₪27/53% · נורדי [1005011529668364](https://www.aliexpress.com/item/1005011529668364.html) ₪36/41% · נורדי [1005012559093219](https://www.aliexpress.com/item/1005012559093219.html) ₪44/30% · נורדי [1005010070709401](https://www.aliexpress.com/item/1005010070709401.html) ₪56/14% · מודרני חם [1005005455180774](https://www.aliexpress.com/item/1005005455180774.html) ₪30/49% · מודרני חם [1005008406387432](https://www.aliexpress.com/item/1005008406387432.html) ₪47/26% · מודרני חם [1005007409605921](https://www.aliexpress.com/item/1005007409605921.html) ₪50/22% · מודרני חם [1005010342718561](https://www.aliexpress.com/item/1005010342718561.html) ₪56/14% · מודרני חם [1005009955445124](https://www.aliexpress.com/item/1005009955445124.html) ₪57/12%
 
 ## condiment-set
 
