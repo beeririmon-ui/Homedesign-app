@@ -1,0 +1,173 @@
+{
+ "source": "aliexpress",
+ "id": "1005007192186469",
+ "sections": {
+  "product": {
+   "fetched_at": "2026-10-13T15:06:59+00:00",
+   "endpoint": "aliexpress.ds.product.get",
+   "params": {
+    "ship_to_country": "IL",
+    "product_id": "1005007192186469",
+    "target_currency": "USD",
+    "target_language": "en"
+   },
+   "payload": {
+    "result": {
+     "ae_item_sku_info_dtos": [
+      {
+       "sku_attr": "1343:3426#4pcs",
+       "offer_sale_price": "11.96",
+       "sku_id": "12000039754836219",
+       "price_include_tax": false,
+       "currency_code": "USD",
+       "sku_price": "34.16",
+       "offer_bulk_sale_price": "11.96",
+       "sku_available_stock": 95,
+       "id": "1343:3426#4pcs",
+       "ae_sku_property_dtos": [
+        {
+         "sku_property_value": "Apple",
+         "sku_image": "https://ae01.alicdn.com/kf/S1628bcf7a9de4f7cae63c1532313078f9.jpg",
+         "sku_property_name": "Scent",
+         "property_value_definition_name": "4pcs",
+         "property_value_id": 3426,
+         "sku_property_id": 1343
+        }
+       ]
+      }
+     ],
+     "ae_multimedia_info_dto": {
+      "image_urls": "https://ae01.alicdn.com/kf/Sa8a5695cf040400abb6a02411aa7da6co.jpg;https://ae01.alicdn.com/kf/Se00fb458195841e0a4e1743a9b6e29714.jpg;https://ae01.alicdn.com/kf/Sb0a1d10099bc441fa59184075f7b7b91C.jpg;https://ae01.alicdn.com/kf/Scb64a025208b435a87bab9cff907adadz.jpg;https://ae01.alicdn.com/kf/S8a620d9117a040a48ff2434f6c7df7abI.jpg;https://ae01.alicdn.com/kf/S894d14f69afb44cba84495bdcc4c653eF.jpg"
+     },
+     "package_info_dto": {
+      "package_width": 14,
+      "package_height": 9,
+      "package_length": 17,
+      "gross_weight": "0.260",
+      "package_type": true,
+      "product_unit": 100000015
+     },
+     "logistics_info_dto": {
+      "delivery_time": 7,
+      "ship_to_country": "IL"
+     },
+     "product_id_converter_result": {
+      "main_product_id": 1005007192186469,
+      "sub_product_id": "{\"US\":3256807005871717}"
+     },
+     "ae_item_base_info_dto": {
+      "mobile_detail": "<removed; use --full>",
+      "subject": "4pcsLemongrass Mosquito Repellent Candle Hotel Outdoor Restaurant Indoor Iron Box Lemongrass Oil Mosquito Repellent Aromatherapy",
+      "evaluation_count": "0",
+      "sales_count": "4",
+      "product_status_type": "onSelling",
+      "avg_evaluation_rating": "0.0",
+      "separated_listing": false,
+      "currency_code": "CNY",
+      "sl_product": false,
+      "category_id": 100001776,
+      "product_id": 1005007192186469,
+      "detail": "<removed; use --full>"
+     },
+     "has_whole_sale": false,
+     "ae_item_properties": [
+      {
+       "attr_name_id": 2,
+       "attr_value_id": 201512802,
+       "attr_name": "Brand Name",
+       "attr_value": "NONE"
+      },
+      {
+       "attr_name_id": 219,
+       "attr_value_id": 9441741844,
+       "attr_name": "Origin",
+       "attr_value": "Mainland China"
+      },
+      {
+       "attr_name_id": -1,
+       "attr_name": "Choice",
+       "attr_value": "yes"
+      }
+     ],
+     "ae_store_info": {
+      "store_id": 1103617885,
+      "shipping_speed_rating": "4.5",
+      "communication_rating": "4.4",
+      "store_name": "Ladybug Choice Store",
+      "store_country_code": "CN",
+      "item_as_described_rating": "4.4"
+     }
+    },
+    "rsp_code": 200,
+    "rsp_msg": "Call succeeds",
+    "request_id": "0b83c70d17919040196574175",
+    "_trace_id_": "2102f1cd17919040196568332e108a"
+   }
+  },
+  "freight:12000039754836219:IL:1": {
+   "fetched_at": "2026-10-13T15:07:01+00:00",
+   "endpoint": "aliexpress.ds.freight.query",
+   "params": {
+    "quantity": 1,
+    "shipToCountry": "IL",
+    "productId": "1005007192186469",
+    "selectedSkuId": "12000039754836219",
+    "language": "en_US",
+    "locale": "en_US",
+    "currency": "USD"
+   },
+   "payload": {
+    "options": [
+     {
+      "code": "CAINIAO_FULFILLMENT_STD_PRE_SG",
+      "company": "AliExpress Selection Standard Fast for Special Goods\n",
+      "fee": 1.99,
+      "currency": "USD",
+      "days_min": 13,
+      "days_max": 18,
+      "estimated": "Oct 26 - 31",
+      "tracking": true,
+      "free_shipping": false,
+      "ship_from": "CN",
+      "stock": "95",
+      "guaranteed_days": "60"
+     }
+    ],
+    "success": true,
+    "code": 200,
+    "msg": "Call succeeds",
+    "item_id": "1005007192186469",
+    "sku_id": "12000039754836219",
+    "country": "IL",
+    "qty": 1,
+    "raw": {
+     "result": {
+      "msg": "Call succeeds",
+      "code": 200,
+      "success": true,
+      "delivery_options": [
+       {
+        "code": "CAINIAO_FULFILLMENT_STD_PRE_SG",
+        "shipping_fee_currency": "USD",
+        "free_shipping": false,
+        "mayHavePFS": false,
+        "guaranteed_delivery_days": "60",
+        "max_delivery_days": 18,
+        "tracking": true,
+        "shipping_fee_format": "US $1.99",
+        "delivery_date_desc": "Oct 26 - 31",
+        "company": "AliExpress Selection Standard Fast for Special Goods\n",
+        "ship_from_country": "CN",
+        "min_delivery_days": 13,
+        "available_stock": "95",
+        "shipping_fee_cent": "1.99"
+       }
+      ]
+     },
+     "request_id": "2101521417919040214925967",
+     "_trace_id_": "2140d36117919040214911909e0d7b"
+    }
+   }
+  }
+ }
+}
