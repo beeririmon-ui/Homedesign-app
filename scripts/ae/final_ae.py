@@ -424,7 +424,9 @@ def existing_card_for(room, slot, iid):
 def do_write(room, a, write_cards=True):
     P = load_plan(room)
     idx = json.load(open(os.path.join(WORK, "fin-%s-index.json" % room)))
-    rev = json.load(open(os.path.join(WORK, "fin-rev-%s.json" % room)))
+    rev = {}
+    for rp in sorted(glob.glob(os.path.join(WORK, "fin-rev-%s.json" % room)) + glob.glob(os.path.join(WORK, "fin-rev-%s-*.json" % room))):
+        rev.update(json.load(open(rp)))  # the review may come in parts (fin-rev-<room>-a.json, -b.json)
     det = json.load(open(det_path(room))) if os.path.exists(det_path(room)) else {}
     old = json.load(open(os.path.join(scale.OUT, "detail", room + ".json")))
     G = gaps()
