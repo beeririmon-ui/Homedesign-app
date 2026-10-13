@@ -39,6 +39,27 @@ def on_hold():
     return out
 
 
+VARIANT_AXES = {"color", "style", "pattern", "print"}
+
+
+def card_variants():
+    """card id -> how many look variants it offers (colour / print / style values), capped at 3 (rule ג.3, 2026-10-13)."""
+    out = {}
+    for f in glob.glob("data/products/**/*.json", recursive=True):
+        try:
+            d = json.load(open(f))
+        except Exception:
+            continue
+        cid = d.get("id") or os.path.basename(f)[:-5]
+        n = 1
+        for a in ((d.get("options") or {}).get("axes") or []):
+            if a.get("id") in VARIANT_AXES:
+                n = max(n, len(a.get("values") or []))
+        out[cid] = min(3, n)
+        out.setdefault(os.path.basename(f)[:-5], min(3, n))
+    return out
+
+
 def results():
     cards = collections.defaultdict(lambda: collections.defaultdict(set))   # style -> slot -> card ids
     il = collections.defaultdict(lambda: collections.defaultdict(set))      # style -> slot -> product urls
@@ -72,6 +93,7 @@ def results():
 def main():
     elig, hold = eligible(), on_hold()
     cards, il, queries = results()
+    var = card_variants()
     cov = {"date": datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%MZ"), "fit_threshold": FIT, "styles": {}, "remaining": {}}
     tot = collections.Counter()
     for st in STYLES:
@@ -85,7 +107,9 @@ def main():
             if not g:
                 ready += 1; anyc += 1; one_ready += 1; one_any += 1
                 continue
-            n_ready = g["have"] + len(cards[st].get(s, ()))
+            have_ids = [p.get("card_id") for p in g.get("existing_picks") or [] if p.get("card_id")]
+            have_var = sum(var.get(c, 1) for c in have_ids) + (g["have"] - len(have_ids))
+            n_ready = max(g["have"], have_var) + sum(var.get(c, 1) for c in cards[st].get(s, ()) if c not in have_ids)
             n_any = n_ready + len(il[st].get(s, ()))
             ready += n_ready >= 3
             anyc += n_any >= 3
@@ -108,7 +132,7 @@ def main():
                     "target_pct": 90}
     json.dump(cov, open(f"{D}/coverage.json", "w"), ensure_ascii=False, indent=1)
     lines = [f"# כיסוי הסבב האחרון ({cov['date']})", "",
-             "עמדה מכוסה בסגנון = 3 אפשרויות: בחירות קיימות + כרטיסים חדשים בהתאמה 7+ (\"מוכן\"), ועם מוצרי חנויות ישראליות (\"כולל ישראל\", דורש מחיר סוחר). היעד: 90%.", "",
+             "עמדה מכוסה בסגנון = 3 אפשרויות: בחירות קיימות + כרטיסים חדשים בהתאמה 7+ (\"מוכן\"). צבע או הדפס של אותו מוצר נספר כאפשרות (ג.3, 2026-10-13), עד 3 לכרטיס. \"כולל ישראל\" = גם מוצרי חנויות ישראליות (דורש מחיר סוחר). היעד: 90% עם לפחות אפשרות אחת.", "",
              "| סגנון | עמדות | 3 אפשרויות, מוכן | 3 אפשרויות, כולל ישראל | לפחות אחת, מוכן | לפחות אחת, כולל ישראל |", "| --- | --- | --- | --- | --- | --- |"]
     for st, c in cov["styles"].items():
         lines.append(f"| {NAMES[st]} | {c['eligible']} | {c['pct_ready']}% | {c['pct_any']}% | {c['pct_one_ready']}% | {c['pct_one_any']}% |")
