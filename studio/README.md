@@ -60,6 +60,12 @@ python3 studio/tests/smoke_products.py --shots   # וגם צילומי מסך מ
 - חלק "real data" בונה את הנתונים האמיתיים לתיקייה זמנית ובודק שאין כרטיס CJ עם עלות שמציג "חסר משלוח". `studio/dist` לא נבנה עם נתוני הבדיקה.
 
 ```bash
+python3 studio/tests/smoke_decisions.py        # תשובה להחלטה: update למסמך קיים, set להחלטה שרק ב-data.json
+```
+
+- בונה את הנתונים האמיתיים לתיקייה זמנית ופותח את מסך ההחלטות עם ה-db המדומה (כמו ב-db האמיתי, ‏`update` על מסמך שלא קיים נדחה ב-`invalid_argument`). החלטה שנזרעה נענית בכרטיס ונכתבת ב-`update` עם התשובה בלבד, ושאר השדות נשמרים. החלטה שרק ב-`data.json` נענית בכרטיס ונכתבת ב-`set`: השדות שלה (בלי `_src`, ‏`_rooms`, ‏`_order`) ועוד `{status:"answered", answer:{option, note, at, by}}`, בלי שגיאה בכרטיס, ואחרי העדכון החי הכרטיס מציג את התשובה.
+
+```bash
 python3 studio/tests/smoke_office.py           # מסך "המשרד": הסוכנים על שרטוט המשרד
 python3 studio/tests/smoke_office.py --shots   # וגם assets/qa/studio-2026-10-11/office-*.png
 ```
@@ -103,13 +109,13 @@ cd studio/dist && python3 -m http.server 8765
 
 1. מפרסמים את `studio/dist/index.html` עם כל שאר הקבצים ב-`dist/` (‏`data.json` וכל `img/`), כקבצים נלווים באותם נתיבים יחסיים.
 2. מצהירים על capabilities ‏`{db:{}, user:{}}`.
-3. זורעים את collection ‏`decisions`: מסמך לכל החלטה, במזהה שלה (T1, ‏D1...), עם השדות של `status/decisions.json`. הדף עצמו לא זורע.
+3. זורעים את collection ‏`decisions`: מסמך לכל החלטה, במזהה שלה (T1, ‏D1...), עם השדות של `status/decisions.json`. הדף עצמו לא זורע מראש: כשבתור כבר יש החלטות, החלטה חדשה שעוד לא נזרעה מוצגת מ-`data.json` ואפשר לענות עליה, והמסמך שלה נוצר כשעונים. כשהתור ריק לגמרי, הכול לקריאה בלבד כמו קודם.
 
 ## ה-db של הדף
 
 | מסלול | מי כותב | מבנה |
 | --- | --- | --- |
-| `decisions/<id>` | המנהל זורע; הדף כותב `update` בלבד | השדות של `status/decisions.json`. תשובה: `{status:"answered", answer:{option, note, at, by}}` |
+| `decisions/<id>` | המנהל זורע; הדף כותב `update`, או `set` כשהמסמך חסר | השדות של `status/decisions.json`. תשובה: `{status:"answered", answer:{option, note, at, by}}`. כשהמסמך חסר (ההחלטה רק ב-`data.json`), ‏`set` יוצר אותו מכל השדות של ההחלטה, בלי `_src`, ‏`_rooms` ו-`_order`, ועוד התשובה |
 | `product_edits/<product id>` | הדף, `set` של כל המסמך | `{fields:{רק שדות ששונו}, history:[{at, by, changes:[{field, from, to}]}], synced:false, updated_at}` |
 | `product_new/<auto id>` | הדף, `add` / `set` / `delete` | `{url, room, slot, name, cost_usd, note, links, created_at, by, updated_at, synced:false}` |
 | `settings/economics` | הדף | הערכים של ההנחות (ראו "רווחיות") ו-`verified:{<key>: bool}` |

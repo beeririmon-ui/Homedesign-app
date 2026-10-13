@@ -24,7 +24,7 @@
     "U7": "house ~170 m2 net",
     "U8": "kids' rooms: Nordic, playful kid touches, boy and girl distinct. 1.1: see U19",
     "U9": "living products seen from C0/H0 are rendered with the living defaults; frontend may composite the living layers there",
-    "U10": "room-to-room transitions play 2.3-3.4 s depending on shot count (E0 stays 2.2-2.6 s; T-E0 with its 13 deg pan: open_1_1)",
+    "U10": "room-to-room transitions play 2.3-3.4 s depending on shot count (E0 stays 2.2-2.6 s; T-E0 with its 13 deg pan ~2.6-2.9 s, accepted: D8, 2026-10-09)",
     "U11": "mixed: full route for kitchen-dining and master, lean for the rest",
     "U12": "build order as 'build_order'",
     "fillers": "every standalone object in a frame is a product; only fillers that show a product in use may be unsold (Design Bible 1.5)",
@@ -176,8 +176,8 @@
   },
 
   "transitions": [
-    {"id": "T-E0", "from": "hall H0", "to": "living M0", "segments": [{"type": "pan", "at": "H0", "yaw": [12, 25], "deg": 13}, {"type": "dolly", "from": [2.877, 9.039], "to": [1.25, 5.55], "yaw": 25, "len_m": 3.85, "through": "O-entry-living", "status": "approved E0, unchanged"}], "reverse": true, "play_s_approx": [2.6, 2.9], "note": "1.1 = E0' of house-framing; the pan adds ~0.4 s to the approved 2.2-2.6 (open_1_1)", "min_jamb_clearance_m": 0.478},
-    {"id": "T-LD", "from": "living M0", "to": "kitchen-dining D1", "segments": [{"type": "pan", "id": "P0", "yaw": [25, 0], "status": "approved"}, {"type": "pan", "id": "P1", "yaw": [0, -35]}, {"type": "dolly", "heading": -35, "from": [1.25, 5.55, 1.20], "to": [2.80, 3.80, 1.10], "len_m": 2.34, "oblique_deg": 6.5, "through": "O-living-dining", "crossing": [2.575, 4.054], "min_jamb_clearance_m": 0.286}, {"type": "pan", "id": "P2", "at": "PD", "yaw": [-35, -56], "deg": 21}], "reverse": true, "play_s_approx": 3.4, "note": "1.1 = T-LD'' of house-framing; 4 shots at the U10 upper limit. motion-agent may compare P0 + 2 x 28 deg pans at M0 + one dolly heading -56 (open_1_1)"},
+    {"id": "T-E0", "from": "hall H0", "to": "living M0", "segments": [{"type": "pan", "at": "H0", "yaw": [12, 25], "deg": 13}, {"type": "dolly", "from": [2.877, 9.039], "to": [1.25, 5.55], "yaw": 25, "len_m": 3.85, "through": "O-entry-living", "status": "approved E0, unchanged"}], "reverse": true, "play_s_approx": [2.6, 2.9], "note": "1.1 = E0' of house-framing; the pan adds ~0.4 s to the approved 2.2-2.6 (accepted: D8, 2026-10-09)", "min_jamb_clearance_m": 0.478},
+    {"id": "T-LD", "from": "living M0", "to": "kitchen-dining D1", "segments": [{"type": "pan", "id": "P0", "yaw": [25, 0], "status": "approved"}, {"type": "pan", "id": "P1", "yaw": [0, -35]}, {"type": "dolly", "heading": -35, "from": [1.25, 5.55, 1.20], "to": [2.80, 3.80, 1.10], "len_m": 2.34, "oblique_deg": 6.5, "through": "O-living-dining", "crossing": [2.575, 4.054], "min_jamb_clearance_m": 0.286}, {"type": "pan", "id": "P2", "at": "PD", "yaw": [-35, -56], "deg": 21}], "reverse": true, "play_s_approx": 3.4, "note": "1.1 = T-LD'' of house-framing; 4 shots at the U10 upper limit, ~3.4 s accepted (D8, 2026-10-09)"},
     {"id": "P-D", "from": "D1", "to": "D2", "segments": [{"type": "pan", "at": "PD", "yaw": [-56, -91], "deg": 35}], "reverse": true, "play_s_approx": [1.2, 1.6], "note": "in-room pan between the two kitchen-dining frames (U15)"},
     {"id": "T-HW", "from": "hall H0", "to": "work W0", "segments": [{"type": "pan", "at": "H0", "yaw": [12, 0], "deg": 12}, {"type": "slide", "heading": 0, "from": [2.877, 9.039, 1.20], "to": [-0.825, 8.55, 1.10], "len_m": 3.73, "through": "O-hall-work", "crossing": [0.725, 8.755], "min_jamb_clearance_m": 0.233}, {"type": "pull-back", "heading": 0, "from": [-0.825, 8.55, 1.10], "to": [-0.825, 9.85, 1.10], "len_m": 1.30}], "reverse": true, "play_s_approx": 3.3, "note": "1.1 = T-HW' (wall wipe through the work door, then the reveal of the desk wall)"},
     {"id": "T-HC", "from": "hall H0", "to": "corridor C0", "segments": [{"type": "pan", "id": "PH", "at": "H0", "yaw": [12, 0], "deg": 12}, {"type": "pull-back", "rail": "R1+R2", "from": [2.877, 9.039], "to": [2.397, 17.110], "yaw": 0, "len_m": 8.09, "through": "O-hall-corridor", "min_jamb_clearance_m": 0.268}], "reverse": true, "play_s_approx": 3.0},
@@ -187,10 +187,11 @@
     {"id": "P-B", "from": "B1", "to": "B2", "segments": [{"type": "pan", "at": "CB", "yaw": [-22, -57], "deg": 35}], "reverse": true, "play_s_approx": [1.2, 1.6], "note": "in-room pan between the two bath frames (U15)"},
     {"id": "T-CM", "from": "corridor C0", "to": "master MB0", "segments": [{"type": "pull-back", "heading": 0, "from": [2.397, 17.110, 1.20], "to": [2.45, 21.05, 1.20], "len_m": 3.94, "through": "O-corridor-master", "min_jamb_clearance_m": 0.402}, {"type": "slide", "heading": 0, "from": [2.45, 21.05, 1.20], "to": [-0.70, 21.05, 1.05], "len_m": 3.15}], "reverse": true, "play_s_approx": 2.8, "note": "1.1 = T-CM' (no pan: the bed wall is revealed by the lateral move)"}
   ],
-  "transition_playback_U10": "Room-to-room transitions play 2.3-3.4 s (approx values per transition above). E0 alone stays 2.2-2.6 s; T-E0 with its 13 deg pan is ~2.6-2.9 (open_1_1). In-room pans P-B and P-D play 1.2-1.6 s. Render speeds, easing and creep per Design Bible 'grading and motion'; pull-back renders at entry-dolly speed (~0.7 m/s). Jamb clearances are clay-measured (round-1/round-2 selfcheck); play times are estimates.",
+  "transition_playback_U10": "Room-to-room transitions play 2.3-3.4 s (approx values per transition above). E0 alone stays 2.2-2.6 s; T-E0 with its 13 deg pan is ~2.6-2.9 (accepted, D8). In-room pans P-B and P-D play 1.2-1.6 s. Render speeds, easing and creep per Design Bible 'grading and motion'; pull-back renders at entry-dolly speed (~0.7 m/s). Jamb clearances are clay-measured (round-1/round-2 selfcheck); play times are estimates.",
 
   "frames_1_1": {
-    "note": "One row per master frame. Slots and per-frame membership: data/slots/<file>. Binding counting rule (Bible 1.7 S11, user decision D1 2026-10-10): a slot counts only if its product is >= 50% visible and covers >= 0.5% of the frame; a set counts once; not counted: neighbouring-room products seen through an opening, fillers, shell, fixed furniture. The 'counted' / 'as_shown' numbers below are the clay estimates under the rejected Bible 1.6 wording; the counts under the binding rule: docs/proposals/density-after-d1.md. Minimum is a floor (U16).",
+    "note": "One row per master frame. Slots and per-frame membership: data/slots/<file>. Binding counting rule (Bible 1.7.1 S11, user decisions D1 2026-10-10 and D1B 2026-10-11): a slot counts only if its product is >= 50% visible and covers >= 0.5% of the frame; a set counts once; fixed-product furniture (sofa, coffee table, armchair, dining table, chairs, bench, beds, nightstands, desks and the other fixed-product slots) counts under the same rule (D1B); not counted: neighbouring-room products seen through an opening, fillers, shell, fixed furniture that is not sold. A frame still short gets sold products from docs/proposals/density-after-d1.md (D1B). The 'counted' / 'as_shown' numbers below are the clay estimates under the rejected Bible 1.6 wording; the D1 counts in that proposal were measured without fixed-product. Pass/fail per frame: see remeasure_d1b. Minimum is a floor (U16).",
+    "remeasure_d1b": {"to_remeasure_with_fixed_product_counted": ["M0 (sofa, coffee-table, armchair)", "D1 (table, chairs, bench)", "D2 (table end, bench)", "H0 (console, bench)", "W0 (desk, shelf, chair)", "K-boy / K-girl (bed, desk)", "MB0 (bed, nightstands)", "B2 (vanity)"], "unchanged_by_d1b": ["C0 (no fixed-product)", "B1 (only the vanity's top corner enters)"], "how": "next clay (motion-agent): F10 with the fixed-product layers in the index pass; no recount in the documents until then"},
     "M0": {"room": "living", "kind": "full", "min": 14, "slots_file": "data/slots/living-room.json 1.3.3", "in_frame": 18, "counted": 18, "lit": ["floor-lamp", "wall-sconce", "pendant", "accent-sconces"], "status": "approved, unchanged (not re-measured with F10)"},
     "D1": {"room": "kitchen-dining", "kind": "full", "min": 14, "slots_file": "data/slots/dining-room.json 0.2", "in_frame": 19, "counted": 19, "as_shown": 19, "lit": ["dining-pendant (ceiling)", "kitchen-sconce (wall)", "under-shelf + niche LED (cabinet, shell)"]},
     "D2": {"room": "kitchen-dining", "kind": "full", "min": 14, "slots_file": "data/slots/dining-room.json 0.2", "in_frame": 18, "counted": 17, "as_shown": 16, "lit": ["kitchen-sconce (wall)", "under-shelf + niche LED (cabinet, shell)"]},
@@ -223,7 +224,7 @@
   "fillers_rule": {
     "status": "approved 2026-10-06 (\"2.טוב\"), Design Bible 1.5 chapter 'fillers: product contents that are not sold'",
     "user_rule_verbatim": ["רק לוודא שכל הפרופס יהיו מוצרים בכל החדרים", "לא..בסדר שלא נמכור את מילוי המוצר, נרות, זית, עיתונים..כל עוד הם מדגישים על השימוש במוצר"],
-    "rule": "Every standalone object in any frame is a sellable product (a slot with a product card). Only 'fillers' may be unsold: contents that show a sold product in use (candles in the candle holders, plant in the planter, magazines in the holder, stems in a vase). A filler is identical in all 3 variations of its slot, never in the cart, and the product page says it is not included. Anything else that is not a product stays out of frame. Fixed furniture and shell (sofa, tables, chairs, beds, cabinets, sanitary ware, the bath mirror per U6) are neither fillers nor products.",
+    "rule": "Every standalone object in any frame is a sellable product (a slot with a product card). Only 'fillers' may be unsold: contents that show a sold product in use (candles in the candle holders, plant in the planter, magazines in the holder, stems in a vase). A filler is identical in all 3 variations of its slot, never in the cart, and the product page says it is not included. Anything else that is not a product stays out of frame. Fixed furniture and shell (sofa, tables, chairs, beds, cabinets, sanitary ware, the bath mirror per U6) are not fillers; fixed furniture sold as shown is a fixed-product slot (F3, 2026-10-10), the rest is neither filler nor product.",
     "fillers_per_room": {
       "living": ["branches (vase)", "olive-tree (planter)", "candles (candle-holders)", "magazines (magazine-holder)"],
       "hall": ["stems (console-vessel)", "plant (planter)", "umbrella (umbrella-stand)"],
@@ -232,7 +233,7 @@
       "work": ["plant (planter)", "magazines (magazine-holder)", "books (bookends)", "pencils (desk-organizer)"],
       "boy": ["pillow inserts (cushions)", "children's books (bookshelf)", "football (toy-basket)", "pencils (desk-organizer)"],
       "girl": ["pillow inserts (cushions)", "children's books (bookshelf)", "knitted balls (toy-basket)", "pencils (desk-organizer)", "muslin blanket + mini pillow (doll-pram)"],
-      "master": ["stems (nightstand-vase)", "candles (candle-holders)", "plant (planter)", "one stem (sill-vase)"],
+      "master": ["stems (nightstand-vase)", "candles (candle-holders)", "plant (planter)", "one stem (sill-vase)", "pillow insert (cushions)"],
       "bath": ["plants (ledge-planter, floor-planter)", "soap and liquids (shower-dispensers, soap-dispenser)", "toothbrushes (toothbrush-cup)", "reeds + oil (reed-diffuser)", "wax (candle)", "one sprig (vanity-vase)", "rolled towels (storage-basket)", "paper rolls (toilet-paper-stand)"]
     },
     "kept_out_of_frame": ["books on nightstands and anywhere except the kids' bookshelf and the work bookends (1.1)", "coats/bags on the hall hooks (hooks stay empty)", "keys in the key tray (tray stays empty)", "laptop, papers and stationery on the desks (pencils in the organizer are a filler)", "toys that are not a product slot (kids: soft-toy, toy-cars, skateboard, doll, doll-pram are products)", "fruit or food other than the listed fillers", "appliances on the kitchen counter", "cookbooks", "toiletries outside the bath product slots and their fillers"]
@@ -256,11 +257,11 @@
     },
     "transitions": {"note": "1.0 set (50,544) + the 13 deg pan of T-E0, P2 of T-LD and the in-room pans P-B and P-D", "total": 59000},
     "house_total_excl_living": {"mixed": 415300, "contingency": 24000, "mixed_with_contingency": 439300, "vs_1_0": "+133,100 (~+43%) against 306,200"},
-    "range_note": "+-15%; rough, for the user's decision (open_1_1). Saving lever: D2 products on the lean route (about -35,000)"
+    "range_note": "+-15%; rough. The saving lever (D2 products on the lean route, about -35,000) was declined: D2 is rendered on the full route (D10, 2026-10-09)"
   },
 
   "frame_checks": {
-    "note": "1.1: every master frame passes F1-F12 (docs/proposals/house-framing.json acceptance_checks + round_2.acceptance_checks_added) on the clay before credits, and again on the shell render. F10 uses the Bible 1.7 counting rule (D1: >= 50% visible and >= 0.5% of the frame).",
+    "note": "1.1: every master frame passes F1-F12 (docs/proposals/house-framing.json acceptance_checks + round_2.acceptance_checks_added) on the clay before credits, and again on the shell render. F10 uses the Bible 1.7.1 counting rule (D1: >= 50% visible and >= 0.5% of the frame; D1B: fixed-product furniture counts).",
     "F1": "hero on a third (u 0.30-0.36 / 0.64-0.70) or at 0.50 +-0.01 in u0 0.50 frames",
     "F2": "window per S4/S4': whole with >= 0.03 to every edge, or cut >= 15% of its width; head cut by the top edge only if >= 0.05 above it; window <= 30% of the frame width; second frames may have none (S10)",
     "F3": "no tangent < 0.02: object-edge (unless cut >= 15%), object-object (kissing contours or sliver overlaps), architectural lines",
@@ -270,7 +271,7 @@
     "F7": "hall and corridor mean L >= 95 with roof light (sky only), wall gradient readable",
     "F8": "U6: the mirror reflects only blank wall (one pass per camera point)",
     "F9": "every transition: jamb clearance >= 0.15, last frame identical to the master camera, U10 play time",
-    "F10": "density per frame >= the minimum (Bible 1.7 S11, counting rule D1: a slot counts if its product is >= 50% visible and >= 0.5% of the frame)",
+    "F10": "density per frame >= the minimum (Bible 1.7.1 S11, counting rule D1: a slot counts if its product is >= 50% visible and >= 0.5% of the frame; D1B, 2026-10-11: fixed-product furniture counts under the same rule)",
     "F11": "the lamps listed for the frame are lit and visible; <= 3 lit typologies; no visible cable in kids and bath",
     "F12": "two-frame rooms: both frames from the identical point; the pan between them <= 35 deg"
   },
@@ -298,21 +299,28 @@
   },
 
   "open_1_1": [
-    "Counting rule for S11: decided (D1, 2026-10-10): the proposal's wording stays: a slot counts only if its product is >= 50% visible and covers >= 0.5% of the frame; a set counts once. The 1.1 wording ('every identifiable product', >= 0.05% of the frame) is rejected. Consequence: in the round-2 clay this rule counts 1-8 products per frame, and every frame is below the minimum (docs/proposals/density-after-d1.md); the follow-up is with the user.",
-    "D2 reads sparse from 4.4 m (motion-agent 6/10: props read as dots, half the frame is floor). Inside the approved frame: D2 props at the top of their envelopes, step-stool, a readable kitchen runner; product reading happens in the full-route close-ups. Tightening the frame itself would change the approved composition: options (a) keep (recommended for now), (b) shift-only reframe of D2 (v0 0.43 -> 0.47, slightly less floor), (c) a separate D2 point closer to the kitchen, reached by a short dolly instead of the pan P-D.",
-    "W0 pendant: kept (ceiling light, user request) but smaller and higher; alternative: a semi-flush light out of frame, which gives back round 1's clean desk wall (W0 13 products, 2 lit lamps).",
+    "Counting rule for S11: decided (D1, 2026-10-10, and D1B, 2026-10-11). D1: the proposal's wording stays: a slot counts only if its product is >= 50% visible and covers >= 0.5% of the frame; a set counts once; the 1.1 wording ('every identifiable product', >= 0.05% of the frame) is rejected. D1B: fixed-product furniture (sofa, coffee table, armchair, dining table, chairs, bench, beds, nightstands, desks) counts toward density under the same rule; a frame that is still short gets sold products from docs/proposals/density-after-d1.md. Every frame with fixed-product in it is to be re-measured with fixed-product counted (frames_1_1.remeasure_d1b); C0 and B1 are unchanged by D1B.",
+    "resolved (D4, 2026-10-09): D2 stays as it is and is judged on the render. (Was: D2 reads sparse from 4.4 m, motion-agent 6/10; inside the approved frame D2 props sit at the top of their envelopes, with the step-stool and a readable kitchen runner.)",
+    "resolved (D5, 2026-10-09): W0 pendant kept, small (d <= 28) and higher; no semi-flush alternative.",
     "B2 F5: 2.54 m to the mirror wall (< 2.8) accepted as approved.",
     "Bath light: white balance 4000 K for B1/B2 (exception to 4600 K) and a stronger daylight fill at the window, so the bath is not dark on daylight and not orange with lamps.",
-    "Designer additions made under the 2026-10-08 density decision, not visible in the approved clay: hall storage-boxes and bench-throw (and the basket moved to the bench's corner end); corridor gallery-stool (runner narrowed to 60, optional picture-ledge dropped); work desk-organizer; master bedside-carafe, sill-vase, trinket-dish; kitchen step-stool. Each is the first to go if the mock-up reads busy.",
-    "Transit-only products (not in any master frame, so not tappable there): hall runner-rug and ceiling-light, master rug, basket and pendant, bath ceiling-light. Keep them as products (seen in the transitions and the corridor vista) or drop them.",
-    "T-E0 plays ~2.6-2.9 s with the 13 deg pan (U10 said E0 2.2-2.6).",
-    "T-LD: 4 shots at ~3.4 s (U10 limit) vs the alternative (2 x 28 deg pans at M0 + one dolly).",
-    "Bath lighting: wall only in frame (default) or an extra low pendant west of the vanity.",
-    "Kids' toy safety standard (EN 71 / Israeli SI 562, skateboard EN 13613) as a hard gate in docs/brand-brief.md (Bible 1.6 has it as a default).",
-    "Cost: ~+133,000 credits (~+43%) vs 1.0; option: D2 products on the lean route (~-35,000)."
+    "resolved (docs/studio-rules.md ג.0, 2026-10-09): the designer additions made under the 2026-10-08 density decision are approved: hall storage-boxes and bench-throw (and the basket moved to the bench's corner end); corridor gallery-stool (runner narrowed to 60, optional picture-ledge dropped); work desk-organizer; master bedside-carafe, sill-vase, trinket-dish; kitchen step-stool. Not visible in the approved clay: to be measured in the next clay; each is the first to go if the mock-up reads busy.",
+    "resolved (D3, 2026-10-10): transit-only products (hall runner-rug and ceiling-light, master rug, basket and pendant, bath ceiling-light) are sold like any product; no hotspot in a master frame, sold through the room list and the product page.",
+    "resolved (D8, 2026-10-09): T-E0 plays ~2.6-2.9 s with the 13 deg pan (U10 said E0 2.2-2.6), accepted.",
+    "resolved (D8, 2026-10-09): T-LD 4 shots at ~3.4 s, accepted.",
+    "resolved (D6, 2026-10-09): bath lighting: no pendant by the vanity; the two wall lights are enough.",
+    "resolved (D9, 2026-10-09, docs/studio-rules.md ד.4): kids' toy safety standard (EN 71 / Israeli SI 562, skateboard EN 13613) is mandatory and goes in docs/brand-brief.md.",
+    "resolved (D10, 2026-10-09): D2 is rendered on the full route; cost ~+133,000 credits (~+43%) vs 1.0 stands.",
+    "resolved (D7 + F3, 2026-10-10): the kids' bed and desk are for sale as fixed-product slots (one product each, no variants); if no supplier is found they stay fixed furniture. The kids' layout may change for the beds that are found (LQ4, 2026-10-11, docs/studio-rules.md ג.0); that is a separate change with its own approval. (1.1.1, QA Q19)",
+    "Dining pendant diameter 45-55 (data/slots/dining-room.json, nordic-dining 12.1; the older Bible lighting table says 50-65). (1.1.1, QA Q19)",
+    "Bath window (QA Q3): documented as an accepted exception (windows W-bath behind_1_1_1). Proposals for the user, not applied: (a) a light well at the hall's SE corner, invisible in every frame and transition; (b) move the window to X 3.95-4.75, which changes B1."
   ],
 
   "changelog": {
+    "1.1.1": [
+      "2026-10-13 QA round-2 consistency fixes (no design change), assets/qa/round2-binding-docs-qa.md: documented_walls corner block fixed (Q3) and the bath window documented as an accepted exception, with the light well and the window move as proposals only (Q3); master filler pillow insert (Q13); open_1_1 synced with the studio decisions (D3-D10, studio-rules ג.0) and two missing items added (Q19); drawings marked superseded (Q21); fillers_rule wording aligned with F3.",
+      "User decision D1B (2026-10-11, docs/studio-rules.md ב.9): fixed-product furniture counts toward density under the D1 rule; frames_1_1 note + remeasure_d1b, frame_checks F10 and open_1_1[0]. No recount: frames are re-measured on the next clay."
+    ],
     "1.1": [
       "Approved 2026-10-08 (\"סבב 2 נראה מעולה\") on assets/blockout/house/framing/round2/all-round2.jpg; density decision 2026-10-08 (\"כתוב מינימום מוצרים..לדעתי כמה שיותר שהמעצב יחליט שזה לא גורע. ו3 וואריציות מתאימות לנורדי לכל מוצר\").",
       "Cameras: H0 yaw 25 -> 12 (H-B); D0 -> D1/D2 at PD; W0, K-boy, K-girl, MB0 moved (W-A, K-A, MB-A); B0 -> B1/B2 at CB; heights per room (U14); S1 -> S1'.",

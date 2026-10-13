@@ -47,9 +47,14 @@ def answer_in_card(page, did, option, note):
     card.locator(f"input[type=radio][value='{option}']").check()
     card.locator("textarea").fill(note)
     card.locator("[data-save]").click()
-    page.wait_for_function(f"() => (window.__db.decisions[{json.dumps(did)}] || {{}}).status === 'answered'", timeout=5000)
-    page.wait_for_function(f"() => {{ const b = document.querySelector('.dcard[data-id={json.dumps(did)}] [data-save]'); return b && !b.disabled; }}", timeout=5000)
-    return page.evaluate(f"window.__db.decisions[{json.dumps(did)}]")
+    # done = saved and the card is idle again, or the card shows an error (then the checks below fail with its text)
+    page.wait_for_function(f"""() => {{ const c = document.querySelector('.dcard[data-id={json.dumps(did)}]');
+        if(c && c.querySelector('.save-state.err')) return true;
+        const b = c && c.querySelector('[data-save]');
+        return (window.__db.decisions[{json.dumps(did)}] || {{}}).status === 'answered' && b && !b.disabled; }}""", timeout=8000)
+    err = card.locator(".save-state.err")
+    check(err.count() == 0, f"{did}: saved without an error in the card" + ("" if not err.count() else f" ({err.inner_text()})"))
+    return page.evaluate(f"window.__db.decisions[{json.dumps(did)}] || {{}}")
 
 
 def writes(page, did):
@@ -81,7 +86,6 @@ def browser_checks(browser, base, seeded: dict, static: dict):
     check(doc.get("FIXTURE_db_only") == "kept" and doc.get("title") == seeded.get("title") and doc.get("options") == seeded.get("options"),
           f"{sid}: the doc's other fields are kept")
     check(not any(k in doc for k in UI_FIELDS), f"{sid}: no UI field in the db doc ({[k for k in UI_FIELDS if k in doc]})")
-    check(page.locator(f".dcard[data-id='{sid}'] .save-state.err").count() == 0, f"{sid}: no error in the card")
 
     # 2. a decision only in data.json: set() creates the doc from its own fields plus the answer
     print(f"- {tid}: a decision that is only in data.json")
@@ -97,10 +101,9 @@ def browser_checks(browser, base, seeded: dict, static: dict):
           f"{tid}: the decision's own fields are in the doc ({len(own)}: {', '.join(sorted(own))}{'; differ: ' + str(differ) if differ else ''})")
     check(not any(k in doc for k in UI_FIELDS), f"{tid}: no UI field in the db doc ({[k for k in UI_FIELDS if k in doc]})")
     card = page.locator(f".dcard[data-id='{tid}']")
-    check(card.locator(".save-state.err").count() == 0, f"{tid}: no error in the card")
     label = next(o["label"] for o in static["options"] if o["id"] == t_opt)
-    page.wait_for_function(f"() => {{ const b = document.querySelector('.dcard[data-id={json.dumps(tid)}] .answer-box'); return b && b.textContent.includes({json.dumps(label)}); }}", timeout=5000)
-    check(card.locator(".chip.st-answered").count() >= 1, f"{tid}: the card shows the answer from the db ({label})")
+    shown = page.evaluate(f"() => {{ const b = document.querySelector('.dcard[data-id={json.dumps(tid)}] .answer-box'); return !!b && b.textContent.includes({json.dumps(label)}); }}")
+    check(shown and card.locator(".chip.st-answered").count() >= 1, f"{tid}: the card shows the answer from the db ({label})")
     check((page.evaluate(f"window.__db.decisions[{json.dumps(sid)}].answer") or {}).get("option") == s_opt, f"{sid}: untouched by the second answer")
 
     # 3. the mock behaves like the real db, so the old update-only code fails here
