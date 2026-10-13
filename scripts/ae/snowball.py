@@ -3,7 +3,7 @@
 
 The user's screenshots showed it: image search from a photo of the right product finds the exact listing and its twins,
 where text search does not (README "סבב 6"). Here the seeds are the products the visual review liked (round 6 sheets,
-fit >= 7 in some style, right type) for every slot still empty; each seed's main image goes to ds.image.searchV2
+fit >= 5 in some style, right type; a slot is empty when nothing reached 7) for every slot still empty; each seed's main image goes to ds.image.searchV2
 (results sorted by orders). Results that name the product (must / STRICT) and look alike (similarity >= 0.55) are
 added to the screen file (round 7), the 10 best per slot by orders and similarity get product.get + freight
 (round6 detail machinery) and a sheet review/sheets/r7-<room>-<slot>.jpg for the visual review.
@@ -35,7 +35,7 @@ def seeds(room, key, n=3):
             continue
         r = rv.get(rec["item_id"]) or {}
         fits = [v.get("fit") or 0 for v in r.values() if isinstance(v, dict) and v.get("verdict") != "reject"]
-        if fits and max(fits) >= 7:
+        if fits and max(fits) >= 5:  # missing slots have nothing at 7; right type, close look (5-7) seeds its twins
             out.append((max(fits), rec["item_id"], rec["image"]))
     out.sort(key=lambda x: -x[0])
     return out[:n]
