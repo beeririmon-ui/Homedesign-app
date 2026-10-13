@@ -50,8 +50,18 @@ def harvest(feed, cat, max_pages, a):
             try:
                 d = guard(client.call_ok, M_FEED, p)
             except client.AeError as e:
+                # "405 The result is empty" also comes mid-feed (lighting stopped at page 25 of 338): wait, retry, then skip
                 print("[feeds] %s p%d: %s %s" % (feed, page, e.code, e.message), file=sys.stderr)
-                break
+                st["empty"] = st.get("empty", 0) + 1
+                if st["empty"] >= 6:
+                    st["empty"] = 0
+                    json.dump(st, open(state_p, "w"))
+                    break
+                time.sleep(10)
+                if st["empty"] % 2 == 0:
+                    st["page"] = page  # two misses on this page: skip it
+                continue
+            st["empty"] = 0
             r = d.get("result") or {}
             prods = r.get("products") or []
             if isinstance(prods, dict):
