@@ -207,10 +207,10 @@ def do_sheet(room, prefix="r6"):
 STYLES6 = ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"]
 
 
-def do_merge(room):
+def do_merge(room, prefix="r6"):
     """Visual review of the r6 sheets (review/r6rev-<room>.json, by sheet number) -> review/<room>.json (by item id)."""
-    src = os.path.join(OUT, "review", "r6rev-%s.json" % room)
-    idx = json.load(open(os.path.join(OUT, "review", "sheets", "r6-%s-index.json" % room)))
+    src = os.path.join(OUT, "review", "%srev-%s.json" % (prefix, room))
+    idx = json.load(open(os.path.join(OUT, "review", "sheets", "%s-%s-index.json" % (prefix, room))))
     rv_path = os.path.join(OUT, "review", room + ".json")
     rv = json.load(open(rv_path)) if os.path.exists(rv_path) else {}
     n = 0
@@ -223,7 +223,7 @@ def do_merge(room):
             fit = (v.get("styles") or {}).get(st)
             if fit is None:
                 continue
-            e = {"fit": fit, "reason": v.get("reason"), "review": "r6"}
+            e = {"fit": fit, "reason": v.get("reason"), "review": prefix}
             if not v.get("type_ok", True):
                 e["verdict"] = "reject"
             rec[st] = e
@@ -242,8 +242,8 @@ def do_merge(room):
 
 def main():
     stage, room = sys.argv[1], sys.argv[2]
-    if stage == "merge":
-        do_merge(room)
+    if stage in ("merge", "merge7"):
+        do_merge(room, "r7" if stage == "merge7" else "r6")
         return 0
     a = scale.ns(room, 6000)
     try:
