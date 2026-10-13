@@ -559,13 +559,15 @@
       "blocks": "דירוג מוצרים לילדים ולמקלחת",
       "source": "data/product-card.schema.json",
       "asked": "2026-10-09",
-      "status": "applied",
+      "status": "answered",
       "answer": {
         "option": "yes",
         "note": "",
         "at": "2026-10-09T22:49:15Z",
         "via": "studio"
-      }
+      },
+      "applied": null,
+      "applied_he": "חלקי: אובייקט safety נוסף לסכמה ב-2026-10-10. שדה החדר עוד לא יושם (QA 2026-10-13, ‏N3), ו-frontend-dev מיישם אותו."
     },
     {
       "id": "Q5",
@@ -2677,6 +2679,56 @@
         "מדרג המחירים בגלגל"
       ],
       "source": "docs/strategy/masterpiece-and-price-tiers-2026-10-12.md",
+      "asked": "2026-10-13",
+      "status": "open"
+    },
+    {
+      "id": "Q3W",
+      "group": "בית",
+      "title": "חלון המקלחת",
+      "question": "חלון המקלחת יוצא בחלקו אל קיר הכניסה ולא אל החצר. להשאיר אותו כחריג מתועד?",
+      "context": "הכשל לא נראה באף פריים ובאף מעבר. החפיפה של הקירות בתוכנית כבר תוקנה. החלופה: להזיז את החלון ל-X 3.95–4.75. זה משנה את פריים B1 ואת מקום המנורה. ‏assets/qa/round2-binding-docs-qa.md ‏(Q3).",
+      "options": [
+        {
+          "id": "keep",
+          "label": "להשאיר כחריג מתועד",
+          "desc": "שום דבר לא משתנה בפריימים",
+          "recommended": true
+        },
+        {
+          "id": "move",
+          "label": "להזיז את החלון",
+          "desc": "B1 ומנורת B1 זזים, ובדיקת clay חוזרת",
+          "recommended": false
+        }
+      ],
+      "blocks": [],
+      "source": "assets/qa/round2-binding-docs-recheck-2026-10-13.md",
+      "asked": "2026-10-13",
+      "status": "open"
+    },
+    {
+      "id": "U9B",
+      "group": "בית",
+      "title": "מוצרי הכניסה מהמסדרון",
+      "question": "מוצרי הכניסה שנראים מפריים המסדרון C0: לרנדר אותם בברירות המחדל, כמו את מוצרי הסלון (U9)?",
+      "context": "U9 קבע שמוצרי הסלון שנראים מ-C0 ומ-H0 מרונדרים בברירות המחדל, בלי גלגל. ההערה בקובץ המסדרון מרחיבה את זה גם למוצרי הכניסה, אבל אין לזה אישור. כן: פחות רינדורים. לא: כל מוצר בכניסה מתעדכן גם בפריים המסדרון לפי הבחירה, וזה דורש עוד שכבות.",
+      "options": [
+        {
+          "id": "yes",
+          "label": "כן, בברירות המחדל",
+          "desc": "פחות רינדורים",
+          "recommended": true
+        },
+        {
+          "id": "no",
+          "label": "לא, לפי בחירת הלקוח",
+          "desc": "עוד שכבות לפריים C0",
+          "recommended": false
+        }
+      ],
+      "blocks": [],
+      "source": "assets/qa/round2-binding-docs-recheck-2026-10-13.md",
       "asked": "2026-10-13",
       "status": "open"
     }
