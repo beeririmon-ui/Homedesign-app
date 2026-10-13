@@ -1,0 +1,164 @@
+{
+ "source": "aliexpress",
+ "id": "1005012482419084",
+ "sections": {
+  "product": {
+   "fetched_at": "2026-10-13T22:00:33+00:00",
+   "endpoint": "aliexpress.ds.product.get",
+   "params": {
+    "ship_to_country": "IL",
+    "product_id": "1005012482419084",
+    "target_currency": "USD",
+    "target_language": "en"
+   },
+   "payload": {
+    "result": {
+     "ae_item_sku_info_dtos": [
+      {
+       "sku_attr": "",
+       "offer_sale_price": "28.77",
+       "sku_id": "12000058521360569",
+       "price_include_tax": false,
+       "currency_code": "USD",
+       "sku_price": "57.55",
+       "offer_bulk_sale_price": "28.77",
+       "sku_available_stock": 50,
+       "id": ""
+      }
+     ],
+     "ae_multimedia_info_dto": {
+      "image_urls": "https://ae01.alicdn.com/kf/S7b88525640a04419ad69768199ad7ac7o.jpg;https://ae01.alicdn.com/kf/S5025cc8c49ee469eae5dcc24a735e621h.jpg;https://ae01.alicdn.com/kf/S8b9282706fda4524bae9a7f2bba59d7cU.jpg;https://ae01.alicdn.com/kf/S8fb743949dcb4670862134bac33b352bN.jpg;https://ae01.alicdn.com/kf/S8d7aebcf47b541b19024d4c4a0c0284aY.jpg;https://ae01.alicdn.com/kf/S40e2aca054274295ae688c3647d22e17S.jpg"
+     },
+     "package_info_dto": {
+      "package_width": 36,
+      "package_height": 36,
+      "package_length": 41,
+      "gross_weight": "5.100",
+      "package_type": false,
+      "product_unit": 100000015,
+      "base_unit": 1
+     },
+     "logistics_info_dto": {
+      "delivery_time": 7,
+      "ship_to_country": "IL"
+     },
+     "product_id_converter_result": {
+      "main_product_id": 1005012482419084,
+      "sub_product_id": "{\"US\":3256812296104332}"
+     },
+     "ae_item_base_info_dto": {
+      "mobile_detail": "<removed; use --full>",
+      "subject": "Creative desktop book rack Floor shelf Nordic cotton rope woven storage rack Folding magazine rack Photo props",
+      "evaluation_count": "0",
+      "sales_count": "0",
+      "product_status_type": "onSelling",
+      "avg_evaluation_rating": "0.0",
+      "separated_listing": false,
+      "currency_code": "CNY",
+      "sl_product": false,
+      "category_id": 200367150,
+      "product_id": 1005012482419084,
+      "detail": "<removed; use --full>"
+     },
+     "has_whole_sale": false,
+     "ae_item_properties": [
+      {
+       "attr_name_id": 2,
+       "attr_value_id": 201512802,
+       "attr_name": "Brand Name",
+       "attr_value": "NONE"
+      },
+      {
+       "attr_name_id": 400000603,
+       "attr_value_id": 23399591357,
+       "attr_name": "High-concerned chemical",
+       "attr_value": "none"
+      },
+      {
+       "attr_name_id": 219,
+       "attr_value_id": 9441741844,
+       "attr_name": "Origin",
+       "attr_value": "Mainland China"
+      }
+     ],
+     "ae_store_info": {
+      "store_id": 1105477731,
+      "shipping_speed_rating": "4.9",
+      "communication_rating": "4.9",
+      "store_name": "Kangstar Supply 0602 Store",
+      "store_country_code": "CN",
+      "item_as_described_rating": "4.9"
+     }
+    },
+    "rsp_code": 200,
+    "rsp_msg": "Call succeeds",
+    "request_id": "21016c2317919288333238310",
+    "_trace_id_": "21013cc617919288333216098e0e86"
+   }
+  },
+  "freight:12000058521360569:IL:1": {
+   "fetched_at": "2026-10-13T22:00:35+00:00",
+   "endpoint": "aliexpress.ds.freight.query",
+   "params": {
+    "quantity": 1,
+    "shipToCountry": "IL",
+    "productId": "1005012482419084",
+    "selectedSkuId": "12000058521360569",
+    "language": "en_US",
+    "locale": "en_US",
+    "currency": "USD"
+   },
+   "payload": {
+    "options": [
+     {
+      "code": "CAINIAO_STANDARD",
+      "company": "AliExpress standard shipping",
+      "fee": 102.61,
+      "currency": "USD",
+      "days_min": 22,
+      "days_max": 33,
+      "estimated": "Nov 05 - 16",
+      "tracking": true,
+      "free_shipping": false,
+      "ship_from": "CN",
+      "stock": null,
+      "guaranteed_days": "60"
+     }
+    ],
+    "success": true,
+    "code": 200,
+    "msg": "Call succeeds",
+    "item_id": "1005012482419084",
+    "sku_id": "12000058521360569",
+    "country": "IL",
+    "qty": 1,
+    "raw": {
+     "result": {
+      "msg": "Call succeeds",
+      "code": 200,
+      "success": true,
+      "delivery_options": [
+       {
+        "code": "CAINIAO_STANDARD",
+        "shipping_fee_currency": "USD",
+        "free_shipping": false,
+        "mayHavePFS": false,
+        "guaranteed_delivery_days": "60",
+        "max_delivery_days": 33,
+        "tracking": true,
+        "shipping_fee_format": "US $102.61",
+        "delivery_date_desc": "Nov 05 - 16",
+        "company": "AliExpress standard shipping",
+        "ship_from_country": "CN",
+        "min_delivery_days": 22,
+        "shipping_fee_cent": "102.61"
+       }
+      ]
+     },
+     "request_id": "21016c2317919288352058841",
+     "_trace_id_": "2140f88817919288352037566e0f87"
+    }
+   }
+  }
+ }
+}
