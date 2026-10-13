@@ -201,6 +201,99 @@
     "request_id": "0b8deea517918986407822159",
     "_trace_id_": "212a7b8d17918986407806549e0fa6"
    }
+  },
+  "freight:12000051553970357:IL:1": {
+   "fetched_at": "2026-10-13T13:37:23+00:00",
+   "endpoint": "aliexpress.ds.freight.query",
+   "params": {
+    "quantity": 1,
+    "shipToCountry": "IL",
+    "productId": "1005010215508112",
+    "selectedSkuId": "12000051553970357",
+    "language": "en_US",
+    "locale": "en_US",
+    "currency": "USD"
+   },
+   "payload": {
+    "options": [
+     {
+      "code": "CAINIAO_STANDARD",
+      "company": "AliExpress standard shipping",
+      "fee": 10.27,
+      "currency": "USD",
+      "days_min": 8,
+      "days_max": 19,
+      "estimated": "Oct. 21 - Nov. 01",
+      "tracking": true,
+      "free_shipping": false,
+      "ship_from": "CN",
+      "stock": null,
+      "guaranteed_days": "60"
+     },
+     {
+      "code": "DHL",
+      "company": "DHL",
+      "fee": 46.96,
+      "currency": "USD",
+      "days_min": 4,
+      "days_max": 16,
+      "estimated": "Oct 17 - 29",
+      "tracking": true,
+      "free_shipping": false,
+      "ship_from": "CN",
+      "stock": null,
+      "guaranteed_days": "35"
+     }
+    ],
+    "success": true,
+    "code": 200,
+    "msg": "Call succeeds",
+    "item_id": "1005010215508112",
+    "sku_id": "12000051553970357",
+    "country": "IL",
+    "qty": 1,
+    "raw": {
+     "result": {
+      "msg": "Call succeeds",
+      "code": 200,
+      "success": true,
+      "delivery_options": [
+       {
+        "code": "CAINIAO_STANDARD",
+        "shipping_fee_currency": "USD",
+        "free_shipping": false,
+        "mayHavePFS": false,
+        "guaranteed_delivery_days": "60",
+        "max_delivery_days": 19,
+        "tracking": true,
+        "shipping_fee_format": "US $10.27",
+        "delivery_date_desc": "Oct. 21 - Nov. 01",
+        "company": "AliExpress standard shipping",
+        "ship_from_country": "CN",
+        "min_delivery_days": 8,
+        "shipping_fee_cent": "10.27"
+       },
+       {
+        "code": "DHL",
+        "shipping_fee_currency": "USD",
+        "free_shipping": false,
+        "mayHavePFS": false,
+        "guaranteed_delivery_days": "35",
+        "max_delivery_days": 16,
+        "tracking": true,
+        "shipping_fee_format": "US $46.96",
+        "delivery_date_desc": "Oct 17 - 29",
+        "company": "DHL",
+        "ship_from_country": "CN",
+        "min_delivery_days": 4,
+        "shipping_fee_cent": "46.96"
+       }
+      ]
+     },
+     "request_id": "2101694617918986427636597",
+     "_trace_id_": "210152bd17918986427616061e101a"
+    }
+   }
   }
  }
 }
