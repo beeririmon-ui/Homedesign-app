@@ -160,7 +160,7 @@ def do_detail(room, a):
     print("r6 detail %s: %d records" % (room, n))
 
 
-def do_sheet(room):
+def do_sheet(room, prefix="r6"):
     from PIL import Image, ImageDraw
     import urllib.request
     det = json.load(open(os.path.join(OUT, "detail", room + ".json")))
@@ -199,13 +199,52 @@ def do_sheet(room):
             d.text((x + 5, y + H - 52), "#%d q%s %s" % (n, c.get("r6_quality"), c["item_id"][-6:]), fill="black")
             d.text((x + 5, y + H - 38), "%.0f ILS %s" % (scale.landed(c), (c.get("sku_label") or "")[:26]), fill="black")
             d.text((x + 5, y + H - 24), (c.get("title") or "")[:40], fill="gray")
-        sheet.save(os.path.join(odir, "r6-%s-%s.jpg" % (room, slot)), quality=80)
-    json.dump(index, open(os.path.join(odir, "r6-%s-index.json" % room), "w"), indent=0)
-    print("r6 sheets %s: %d candidates in %d slots" % (room, n, len(sl)))
+        sheet.save(os.path.join(odir, "%s-%s-%s.jpg" % (prefix, room, slot)), quality=80)
+    json.dump(index, open(os.path.join(odir, "%s-%s-index.json" % (prefix, room)), "w"), indent=0)
+    print("%s sheets %s: %d candidates in %d slots" % (prefix, room, n, len(sl)))
+
+
+STYLES6 = ["nordic", "warm-modern", "japandi", "mediterranean", "modern-country", "boho"]
+
+
+def do_merge(room):
+    """Visual review of the r6 sheets (review/r6rev-<room>.json, by sheet number) -> review/<room>.json (by item id)."""
+    src = os.path.join(OUT, "review", "r6rev-%s.json" % room)
+    idx = json.load(open(os.path.join(OUT, "review", "sheets", "r6-%s-index.json" % room)))
+    rv_path = os.path.join(OUT, "review", room + ".json")
+    rv = json.load(open(rv_path)) if os.path.exists(rv_path) else {}
+    n = 0
+    for num, v in json.load(open(src)).items():
+        ent = idx.get(str(num))
+        if not ent:
+            continue
+        rec = rv.setdefault(ent["item_id"], {})
+        for st in STYLES6:
+            fit = (v.get("styles") or {}).get(st)
+            if fit is None:
+                continue
+            e = {"fit": fit, "reason": v.get("reason"), "review": "r6"}
+            if not v.get("type_ok", True):
+                e["verdict"] = "reject"
+            rec[st] = e
+        n += 1
+    json.dump(rv, open(rv_path, "w"), ensure_ascii=False, indent=0)
+    # finalize walks rec["styles"]: the r6 records were searched without a style, so all six styles are judged
+    det_path = os.path.join(OUT, "detail", room + ".json")
+    det = json.load(open(det_path))
+    for ent in idx.values():
+        rec = det.get("%s|%s" % (ent["slot"], ent["item_id"]))
+        if rec:
+            rec["styles"] = sorted(set(rec.get("styles") or []) | set(STYLES6))
+    json.dump(det, open(det_path, "w"), ensure_ascii=False, indent=0)
+    print("r6 merge %s: %d items" % (room, n))
 
 
 def main():
     stage, room = sys.argv[1], sys.argv[2]
+    if stage == "merge":
+        do_merge(room)
+        return 0
     a = scale.ns(room, 6000)
     try:
         if stage == "search":
