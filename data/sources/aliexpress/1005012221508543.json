@@ -1,0 +1,175 @@
+{
+ "source": "aliexpress",
+ "id": "1005012221508543",
+ "sections": {
+  "product": {
+   "fetched_at": "2026-10-13T15:10:53+00:00",
+   "endpoint": "aliexpress.ds.product.get",
+   "params": {
+    "ship_to_country": "IL",
+    "product_id": "1005012221508543",
+    "target_currency": "USD",
+    "target_language": "en"
+   },
+   "payload": {
+    "result": {
+     "ae_item_sku_info_dtos": [
+      {
+       "sku_attr": "14:350850#gold",
+       "offer_sale_price": "8.48",
+       "sku_id": "12000057807172640",
+       "price_include_tax": false,
+       "currency_code": "USD",
+       "sku_price": "16.01",
+       "offer_bulk_sale_price": "8.48",
+       "sku_available_stock": 17,
+       "id": "14:350850#gold",
+       "sku_bulk_order": 2,
+       "ae_sku_property_dtos": [
+        {
+         "sku_property_value": "Gold",
+         "sku_image": "https://ae01.alicdn.com/kf/S9c4d0b50ead547ddb4deb12e1f1f71f1j.jpg",
+         "sku_property_name": "Color",
+         "property_value_definition_name": "gold",
+         "property_value_id": 350850,
+         "sku_property_id": 14
+        }
+       ]
+      }
+     ],
+     "ae_multimedia_info_dto": {
+      "image_urls": "https://ae01.alicdn.com/kf/S20c57ae892e34d3c9c9efebeb20a0ff7z.jpg;https://ae01.alicdn.com/kf/S9c4d0b50ead547ddb4deb12e1f1f71f1j.jpg"
+     },
+     "package_info_dto": {
+      "package_width": 25,
+      "package_height": 25,
+      "package_length": 70,
+      "gross_weight": "2.300",
+      "package_type": false,
+      "product_unit": 100000015,
+      "base_unit": 1
+     },
+     "logistics_info_dto": {
+      "delivery_time": 7,
+      "ship_to_country": "IL"
+     },
+     "product_id_converter_result": {
+      "main_product_id": 1005012221508543,
+      "sub_product_id": "{\"US\":3256812035193791}"
+     },
+     "ae_item_base_info_dto": {
+      "mobile_detail": "<removed; use --full>",
+      "subject": "Gold Metal Umbrella Stand: Chic Entrance Organizer for Apartments",
+      "evaluation_count": "1",
+      "sales_count": "5",
+      "product_status_type": "onSelling",
+      "avg_evaluation_rating": "5.0",
+      "separated_listing": false,
+      "currency_code": "CNY",
+      "sl_product": false,
+      "category_id": 201346310,
+      "product_id": 1005012221508543,
+      "detail": "<removed; use --full>"
+     },
+     "has_whole_sale": false,
+     "ae_item_properties": [
+      {
+       "attr_name_id": 2,
+       "attr_value_id": 201512802,
+       "attr_name": "Brand Name",
+       "attr_value": "NONE"
+      },
+      {
+       "attr_name_id": 219,
+       "attr_value_id": 9441741844,
+       "attr_name": "Origin",
+       "attr_value": "Mainland China"
+      },
+      {
+       "attr_name_id": 400000603,
+       "attr_value_id": 23399591357,
+       "attr_name": "High-concerned chemical",
+       "attr_value": "none"
+      }
+     ],
+     "ae_store_info": {
+      "store_id": 1104930099,
+      "shipping_speed_rating": "4.9",
+      "communication_rating": "5.0",
+      "store_name": "Yunsutongkeyu001 Store",
+      "store_country_code": "CN",
+      "item_as_described_rating": "4.9"
+     }
+    },
+    "rsp_code": 200,
+    "rsp_msg": "Call succeeds",
+    "request_id": "0bb4a80e17919042533481878",
+    "_trace_id_": "0b8ded7b17919042533468162e1183"
+   }
+  },
+  "freight:12000057807172640:IL:1": {
+   "fetched_at": "2026-10-13T15:10:55+00:00",
+   "endpoint": "aliexpress.ds.freight.query",
+   "params": {
+    "quantity": 1,
+    "shipToCountry": "IL",
+    "productId": "1005012221508543",
+    "selectedSkuId": "12000057807172640",
+    "language": "en_US",
+    "locale": "en_US",
+    "currency": "USD"
+   },
+   "payload": {
+    "options": [
+     {
+      "code": "CAINIAO_STANDARD",
+      "company": "AliExpress standard shipping",
+      "fee": 50.88,
+      "currency": "USD",
+      "days_min": 18,
+      "days_max": 29,
+      "estimated": "Oct. 31 - Nov. 11",
+      "tracking": true,
+      "free_shipping": false,
+      "ship_from": "CN",
+      "stock": null,
+      "guaranteed_days": "60"
+     }
+    ],
+    "success": true,
+    "code": 200,
+    "msg": "Call succeeds",
+    "item_id": "1005012221508543",
+    "sku_id": "12000057807172640",
+    "country": "IL",
+    "qty": 1,
+    "raw": {
+     "result": {
+      "msg": "Call succeeds",
+      "code": 200,
+      "success": true,
+      "delivery_options": [
+       {
+        "code": "CAINIAO_STANDARD",
+        "shipping_fee_currency": "USD",
+        "free_shipping": false,
+        "mayHavePFS": false,
+        "guaranteed_delivery_days": "60",
+        "max_delivery_days": 29,
+        "tracking": true,
+        "shipping_fee_format": "US $50.88",
+        "delivery_date_desc": "Oct. 31 - Nov. 11",
+        "company": "AliExpress standard shipping",
+        "ship_from_country": "CN",
+        "min_delivery_days": 18,
+        "shipping_fee_cent": "50.88"
+       }
+      ]
+     },
+     "request_id": "212a73a517919042552262199",
+     "_trace_id_": "2141149b17919042552243587e0c97"
+    }
+   }
+  }
+ }
+}
