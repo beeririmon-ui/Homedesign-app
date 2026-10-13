@@ -1,10 +1,10 @@
 {
-  "version": "1.1 / approved 2026-10-08",
+  "version": "1.1.1 / 1.1 approved 2026-10-08; 1.1.1 2026-10-13: QA round-2 consistency fixes (no design change) + user decision D1B (2026-10-11)",
   "author": "master-designer",
   "status": "BINDING. 1.0 approved 2026-10-06 (\"1.טוב 2.טוב\"). 1.1 approved 2026-10-08 (verbatim: \"סבב 2 נראה מעולה\") on the framing clay assets/blockout/house/framing/round2/all-round2.jpg: the frames exactly as shown there (round-2 K-boy, K-girl, B1, B2, D1, D2 and the round-1 picks H-B, C-B, W-A, MB-A with the S11/S12 additions), the whole-house density rule S11 and the lighting plan S12. Camera and layout values are the clay-measured ones (assets/blockout/house/framing/round2/selfcheck.json, framing/selfcheck.json). Clay fails that remain in the approved frames (F3 tangents, F4 weak, F5 at H0 and B2) are listed in frame_fixes_1_1_x: nudges up to 0.10 m are closed by master-designer in 1.1.x and reported; anything larger goes back to the user. Choices not visible in the clay are defaults until the user answers (open_1_1). Changing a room, opening, window or camera still needs user approval.",
   "supersedes": "1.0 (2026-10-06); superseded values are kept in history_1_0. Proposal sources: docs/proposals/house-framing.md/.json 0.2 (rounds 1 and 2).",
   "companion": "docs/house-plan.md",
-  "drawings": "docs/proposals/house-plan/ (1.0 geometry; not redrawn for 1.1). The 1.1 geometry is built by assets/blockout/house/build_house.py --framing (framing.py, framing_r2.py).",
+  "drawings": "SUPERSEDED: docs/proposals/house-plan/ shows the 1.0 geometry and was not redrawn for 1.1; every room, camera and transition changed in 1.1 (hall, work, kids, master, bath, kitchen-dining, the rail) is wrong there. Not binding; never take a value from those drawings. The 1.1 geometry is this file, built by assets/blockout/house/build_house.py --framing (framing.py, framing_r2.py). (1.1.1, QA Q21)",
   "user_decisions": {
     "2026_10_06_plan_inputs_verbatim": "מאשר פתח בסלון, ילד ילדה עם גימיקים לילדים בכוון הנורדי, מאשר מידות מחזיק עיתונים, ללא ממד, רמת מילוי חדרים מעורב, בית 170 מר",
     "2026_10_06_approval_verbatim": "1.טוב 2.טוב",
@@ -80,7 +80,8 @@
   "documented_walls": [
     {"where": "girl / master, X -2.30..1.55, Y 17.36-17.66", "t": 0.30, "why": "double partition for acoustic separation between the kids' room and the parents' bedroom; it also lines up with the corridor end wall (Y 17.51-17.66)"},
     {"where": "X 0.65-1.55, Y 9.80-10.25 (junction of work, hall, boy, corridor)", "t": "0.30-0.45 mass", "why": "service riser (AC/plumbing) at the junction of four rooms; never in a frame"},
-    {"where": "X 3.25-3.95, Y 9.60-9.95", "t": 0.35, "why": "junction of the bath east exterior wall and the hall south exterior wall"}
+    {"where": "X 3.60-3.95, Y 9.60-9.95 (corner block)", "t": 0.35, "why": "junction of the hall south exterior wall (X 3.60-3.95) and the bath east exterior wall (Y 9.60-9.95). 1.1.1 (QA Q3): was written X 3.25-3.95, which overlapped the hall interior (hall to Y 9.80)"},
+    {"where": "X 3.25-3.60, Y 9.80-9.95", "t": 0.15, "why": "hall / bath partition (interior). 1.1.1 (QA Q3): documented; the bath window's X 3.45-3.60 part backs onto it (windows W-bath, accepted exception)"}
   ],
 
   "shell_common": {
@@ -113,7 +114,7 @@
     {"id": "W-boy", "room": "boy", "facade": "north", "plane_x": -2.30, "y": [10.75, 12.15], "sill": 0.75, "head": 2.70, "frame_1_1": "K-boy: u 0-0.230 (23% cut), head out at the top; roman blind inside the reveal"},
     {"id": "W-girl", "room": "girl", "facade": "north", "plane_x": -2.30, "y": [14.38, 15.78], "sill": 0.75, "head": 2.70},
     {"id": "W-master", "room": "master", "facade": "north", "plane_x": -2.30, "y": [18.10, 19.60], "sill": 0.75, "head": 2.70, "frame_1_1": "MB0: u 0-0.138 (46% cut)"},
-    {"id": "W-bath", "room": "bath", "facade": "east (onto the shaded entrance court)", "plane_y": 9.95, "wall_t": 0.35, "x": [3.45, 4.25], "sill": 1.00, "head": 2.15, "glass": "fluted (privacy, diffuse)", "changed_1_1": "G-B1r2 (was X 3.95-4.95, sill 1.30, head 2.40); B1: whole, u 0.163-0.352, head v 0.049-0.088; B2: out of frame (S10)"},
+    {"id": "W-bath", "room": "bath", "facade": "east (onto the shaded entrance court for X 3.95-4.25 only; see behind_1_1_1)", "plane_y": 9.95, "wall_t": 0.35, "x": [3.45, 4.25], "sill": 1.00, "head": 2.15, "glass": "fluted (privacy, diffuse)", "changed_1_1": "G-B1r2 (was X 3.95-4.95, sill 1.30, head 2.40); B1: whole, u 0.163-0.352, head v 0.049-0.088; B2: out of frame (S10)", "behind_1_1_1": "QA Q3 (2026-10-13). The court (porch) starts at X 3.95, so only X 3.95-4.25 (0.30 of 0.80) faces outside; X 3.60-3.95 backs onto the corner block and X 3.45-3.60 onto the hall/bath partition (documented_walls). ACCEPTED EXCEPTION (render set, as approved in the clay; no geometry change): the fluted glass shows no view, and the whole window is rendered as daylit by the soft area light outside it (lighting_intent_bath_1_1). Never visible: the wall behind is out of H0, C0, B1, B2 and every transition. Proposals, NOT applied (open_1_1): (a) a small open light well at the hall's SE corner (about X 3.25-3.95 x Y 9.25-9.60, the hall corner wall stepped in; out of H0, C0 and every transition; to be dimensioned on the clay) so that the whole window is physically daylit; (b) move the window to X 3.95-4.75, which changes B1 (window est. u 0.286-0.454, the B1 sconce at X 4.70 must move) and needs the user."},
     {"id": "W-ensuite", "room": "ensuite-wic", "facade": "south", "note": "frosted, never in a frame"}
   ],
 

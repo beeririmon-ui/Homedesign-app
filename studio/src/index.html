@@ -1837,7 +1837,8 @@ function decisionsAll(){
   return list;
 }
 const isBlocking = d => (d.status || 'open') === 'open' && !!String(d.blocks || '').trim();
-const canAnswer = d => S.dbState === 'live' && d._src === 'db' && S.canWrite !== false && (d.status || 'open') !== 'applied' && !S.bulk.running;
+// a decision only in data.json (_src 'static') is answerable too: writeAnswer creates its db doc
+const canAnswer = d => S.dbState === 'live' && (d._src === 'db' || d._src === 'static') && S.canWrite !== false && (d.status || 'open') !== 'applied' && !S.bulk.running;
 const recommended = d => (d.options || []).filter(o => o.recommended);
 
 /* ---------- overview ---------- */
@@ -2226,7 +2227,7 @@ function decCard(d){
       <div class="note-field"><label for="note-${esc(d.id)}">הערה חופשית (לא חובה)</label><textarea id="note-${esc(d.id)}" rows="2">${esc(note)}</textarea></div>
       <div class="dact"><button type="button" class="btn" data-save="${esc(d.id)}" ${saving || !chosen ? 'disabled' : ''}>${saving ? 'שומר…' : ans ? 'עדכון התשובה' : 'שמירת התשובה'}</button>
         <span class="save-state ${err ? 'err' : ''}" role="${err ? 'alert' : 'status'}">${err ? esc(err) : savedAt ? 'נשמר.' : !chosen ? 'בחר/י אפשרות כדי לשמור.' : ''}</span></div>` : ''}
-    <p class="dmeta">${d.source ? `<span>מקור: <code>${esc(d.source)}</code></span>` : ''}${d.asked ? `<span>נשאלה ${esc(fmtDay(d.asked))}</span>` : ''}${roomNames.length ? `<span>חדרים: ${esc(roomNames.join(', '))}</span>` : ''}${d._src === 'static' && S.dbState === 'live' ? '<span>עוד לא בתור התשובות, לקריאה בלבד</span>' : ''}</p>
+    <p class="dmeta">${d.source ? `<span>מקור: <code>${esc(d.source)}</code></span>` : ''}${d.asked ? `<span>נשאלה ${esc(fmtDay(d.asked))}</span>` : ''}${roomNames.length ? `<span>חדרים: ${esc(roomNames.join(', '))}</span>` : ''}</p>
   </article>`;
 }
 function bindCard(card){
@@ -2264,7 +2265,16 @@ async function writeAnswer(id, option, note){
   if(!S.db) throw {code:'not_granted'};
   const by = await whoId();
   const body = {status:'answered', answer:{option, note:String(note || '').trim(), at:new Date().toISOString(), by}};
-  await dbWrite('decisions/' + id, () => S.db.collection('decisions').doc(id).update(body));
+  const ref = S.db.collection('decisions').doc(id);
+  await dbWrite('decisions/' + id, () => {
+    return ref.update(body);
+    // only in data.json (status/decisions.json), not in the db yet: update rejects a missing doc, so create it
+    // from the decision's own fields (without the UI-only _src/_rooms/_order) plus the answer
+    const stat = ((S.data?.decisions?.items) || []).find(d => d.id === id) || {id};
+    const doc = Object.assign({}, stat, body);
+    for(const k of ['_src', '_rooms', '_order']) delete doc[k];
+    return ref.set(doc);
+  });
 }
 
 /* ---------- db connection ---------- */

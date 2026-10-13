@@ -178,9 +178,11 @@ def serve(folder: Path):
     return srv, f"http://127.0.0.1:{srv.server_address[1]}/"
 
 
-# an in-memory stand-in for the published page's db (window.claude.use('db') / use('user')); window.__db holds the docs
+# an in-memory stand-in for the published page's db (window.claude.use('db') / use('user')); window.__db holds the docs,
+# window.__dbLog every write as {op, path}. Like the real db, update rejects invalid_argument when the doc does not exist.
 MOCK_DB = """
 window.__db = Object.assign({product_edits:{}, product_new:{}, settings:{}, decisions:{}}, %s);
+window.__dbLog = [];
 (() => {
   const subs = {};
   const clone = v => JSON.parse(JSON.stringify(v));
@@ -189,9 +191,12 @@ window.__db = Object.assign({product_edits:{}, product_new:{}, settings:{}, deci
   const coll = n => ({
     onSnapshot(cb){ (subs[n] = subs[n] || []).push(cb); setTimeout(() => cb(snap(n)), 0); return () => {}; },
     doc(id){ return {
-      async set(v){ (window.__db[n] = window.__db[n] || {})[id] = clone(v); notify(n); },
-      async update(v){ window.__db[n][id] = Object.assign(window.__db[n][id] || {}, clone(v)); notify(n); },
-      async delete(){ delete window.__db[n][id]; notify(n); } }; },
+      async set(v){ window.__dbLog.push({op: 'set', path: n + '/' + id}); (window.__db[n] = window.__db[n] || {})[id] = clone(v); notify(n); },
+      async update(v){
+        window.__dbLog.push({op: 'update', path: n + '/' + id});
+        if(!(window.__db[n] && window.__db[n][id])) throw {code: 'invalid_argument', message: 'update: no document ' + n + '/' + id};
+        window.__db[n][id] = Object.assign(window.__db[n][id], clone(v)); notify(n); },
+      async delete(){ window.__dbLog.push({op: 'delete', path: n + '/' + id}); delete window.__db[n][id]; notify(n); } }; },
     async add(v){ const id = 'n' + Math.random().toString(36).slice(2, 8); (window.__db[n] = window.__db[n] || {})[id] = clone(v); notify(n); return {id}; }
   });
   const db = {collection: coll};
