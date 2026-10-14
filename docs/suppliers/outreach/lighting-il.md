@@ -4,6 +4,7 @@
 > - The owner (2026-10-14) asked for outreach to Israeli lighting suppliers to open now, ahead of the site.
 >   - Small suppliers come first: makers, studios and small importers who would welcome a startup.
 >   - Not the big chains that advertise on radio and TV, and not designers who insist on exclusivity.
+> - **Don't explain the concept in writing** (owner, 2026-10-14). Say only that we're building a realistic, innovative shopping experience. The details come in the conversation, after they show interest.
 > - **Two steps:**
 >   1. A short opening email that presents the innovation and asks whether they're interested in principle.
 >   2. Only if they say yes: the list of specific models we want, and the terms questions.
@@ -20,13 +21,13 @@ Personal details go only into the Gmail draft, never into this file:
 
 שלום [שם איש הקשר / צוות שם הספק],
 
-אני בארי רימון. אנחנו בעיצומו של פיתוח חוויית קנייה חדשה לעיצוב הבית. במקום קטלוג של תמונות על רקע לבן, הלקוח נכנס לבית מעוצב ומרונדר בריאליזם מלא ומסתובב בו מחדר לחדר. הוא נוגע במנורה, בכרית או באגרטל, מחליף ביניהם ורואה את החדר משתנה מולו. אותו בית מולבש בשישה סגנונות עיצוב: נורדי, מודרני חם, ג'פנדי, ים-תיכוני, כפרי מודרני ובוהו. כל פריט שרואים בבית אפשר לקנות.
+אני בארי רימון. אנחנו בונים חוויית קנייה ריאליסטית וחדשנית לעיצוב הבית.
 
-בבית כזה התאורה היא לא עוד מוצר על המדף. היא מה שיוצר את האווירה של כל חדר, ולכן אנחנו מחפשים לה שותפים ישראלים, יוצרים וספקים שיצטרפו אלינו מההתחלה.
+בחוויה שלנו התאורה היא לא עוד מוצר על המדף. היא מה שיוצר את האווירה, ולכן אנחנו מחפשים לה שותפים ישראלים, יוצרים וספקים שיצטרפו אלינו מההתחלה.
 
 [משפט אחד אישי לספק: מה אהבנו אצלכם, למשל "אהבנו במיוחד את האהילים מפשתן ואת הגימור בעץ אלון"].
 
-נשמח לדעת אם תהיו פתוחים לשיתוף פעולה: להציג דגמים שלכם בבית שלנו ולמכור אותם דרך האתר, במודל שנוח לכם. אם זה מעניין אתכם, יש לנו רשימה קצרה של דגמים מהקטלוג שלכם שהיינו רוצים להציג. נשמח לשלוח אותה ולתאם שיחה קצרה.
+נשמח לדעת אם תהיו פתוחים לשיתוף פעולה: להציג דגמים שלכם ולמכור אותם דרך האתר, במודל שנוח לכם. אם זה מעניין אתכם, יש לנו רשימה קצרה של דגמים מהקטלוג שלכם שהיינו רוצים להציג. נשמח לשלוח אותה ולתאם שיחה קצרה, ובה נספר יותר.
 
 תודה,
 בארי רימון
