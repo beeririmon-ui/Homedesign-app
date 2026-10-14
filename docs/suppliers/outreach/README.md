@@ -110,3 +110,8 @@
 | לגת באור | lagatbaor10@gmail.com | **נשלח 2026-10-14** (אישור המשתמש: "יאללה נשלח להם"). מעקב: אם אין תשובה תוך 5 ימי עסקים, תזכורת קצרה אחת או טלפון |
 | Nord Light | אין דוא"ל ציבורי | טלפון לאולם התצוגה או טופס באתר; המשתמש מחליט |
 | פנטזיה מרוקאית | אין דוא"ל ציבורי | טופס בדף הסיטונאות; אהילים בלי חיווט, עדיפות נמוכה |
+
+## Israeli lighting, round 2 (2026-10-14)
+Details: lighting-il-round2.md.
+- 3 email drafts (Karma, JAVA, Orban) are waiting for the owner's approval.
+- 3 suppliers (Simple Design, Ad Designs, Oli) are reached through a contact form, which the owner fills in.
