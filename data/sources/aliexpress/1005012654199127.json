@@ -1,0 +1,193 @@
+{
+ "source": "aliexpress",
+ "id": "1005012654199127",
+ "sections": {
+  "product": {
+   "fetched_at": "2026-10-13T22:21:01+00:00",
+   "endpoint": "aliexpress.ds.product.get",
+   "params": {
+    "ship_to_country": "IL",
+    "product_id": "1005012654199127",
+    "target_currency": "USD",
+    "target_language": "en"
+   },
+   "payload": {
+    "result": {
+     "ae_item_sku_info_dtos": [
+      {
+       "sku_attr": "14:29",
+       "offer_sale_price": "1237.65",
+       "sku_id": "12000058994530342",
+       "price_include_tax": false,
+       "currency_code": "USD",
+       "sku_price": "1237.65",
+       "offer_bulk_sale_price": "1237.65",
+       "sku_available_stock": 500,
+       "id": "14:29",
+       "ae_sku_property_dtos": [
+        {
+         "sku_property_value": "WHITE",
+         "sku_image": "https://ae01.alicdn.com/kf/Scbde34017d6847eda64c472fa0e25884u.jpg",
+         "sku_property_name": "Color",
+         "property_value_id": 29,
+         "sku_property_id": 14
+        }
+       ]
+      },
+      {
+       "sku_attr": "14:10",
+       "offer_sale_price": "88.17",
+       "sku_id": "12000059002880383",
+       "price_include_tax": false,
+       "currency_code": "USD",
+       "sku_price": "88.17",
+       "offer_bulk_sale_price": "88.17",
+       "sku_available_stock": 468,
+       "id": "14:10",
+       "ae_sku_property_dtos": [
+        {
+         "sku_property_value": "Red",
+         "sku_image": "https://ae01.alicdn.com/kf/S2b8410ade49a45aeb6111401f3ab3330T.png",
+         "sku_property_name": "Color",
+         "property_value_id": 10,
+         "sku_property_id": 14
+        }
+       ]
+      }
+     ],
+     "ae_multimedia_info_dto": {
+      "image_urls": "https://ae01.alicdn.com/kf/Sd6f49bcc8c7b427f86f2557feceb7b7c0.jpg;https://ae01.alicdn.com/kf/Scbde34017d6847eda64c472fa0e25884u.jpg;https://ae01.alicdn.com/kf/S1f4bc3f1bd774d86bd62fdbb74c92ea7X.jpg;https://ae01.alicdn.com/kf/Sc549016e518c45c29bf5a46d0f663706G.jpg;https://ae01.alicdn.com/kf/Sd102c8b9e9c145cc81a36d7b8b004fb0O.jpg"
+     },
+     "package_info_dto": {
+      "package_width": 1,
+      "package_height": 1,
+      "package_length": 1,
+      "gross_weight": "0.100",
+      "package_type": false,
+      "product_unit": 100000015
+     },
+     "logistics_info_dto": {
+      "delivery_time": 7,
+      "ship_to_country": "IL"
+     },
+     "product_id_converter_result": {
+      "main_product_id": 1005012654199127,
+      "sub_product_id": "{\"US\":3256812467884375}"
+     },
+     "ae_item_base_info_dto": {
+      "mobile_detail": "<removed; use --full>",
+      "subject": "Freestanding Solid Wood Bookshelf with Storage Cubes, Wall-Mounted Style Organizer for Living Room, Kids’ Room, and Home Storage",
+      "evaluation_count": "1",
+      "sales_count": "33",
+      "product_status_type": "onSelling",
+      "avg_evaluation_rating": "5.0",
+      "separated_listing": false,
+      "currency_code": "CNY",
+      "sl_product": false,
+      "category_id": 202246203,
+      "product_id": 1005012654199127,
+      "detail": "<removed; use --full>"
+     },
+     "has_whole_sale": false,
+     "ae_item_properties": [
+      {
+       "attr_name_id": 2,
+       "attr_value_id": 201512802,
+       "attr_name": "Brand Name",
+       "attr_value": "NONE"
+      },
+      {
+       "attr_name_id": 400000603,
+       "attr_value_id": 23399591357,
+       "attr_name": "High-concerned chemical",
+       "attr_value": "none"
+      },
+      {
+       "attr_name_id": 10,
+       "attr_value_id": 762,
+       "attr_name": "Material",
+       "attr_value": "Solid Wood"
+      },
+      {
+       "attr_name_id": 219,
+       "attr_value_id": 9441741844,
+       "attr_name": "Origin",
+       "attr_value": "Mainland China"
+      }
+     ],
+     "ae_store_info": {
+      "store_id": 1105714586,
+      "store_name": "Shop1105714586 Store",
+      "store_country_code": "CN"
+     }
+    },
+    "rsp_code": 200,
+    "rsp_msg": "Call succeeds",
+    "request_id": "2140fd5217919300612655716",
+    "_trace_id_": "2140f88817919300612631585e10b9"
+   }
+  },
+  "freight:12000059002880383:IL:1": {
+   "fetched_at": "2026-10-13T22:21:03+00:00",
+   "endpoint": "aliexpress.ds.freight.query",
+   "params": {
+    "quantity": 1,
+    "shipToCountry": "IL",
+    "productId": "1005012654199127",
+    "selectedSkuId": "12000059002880383",
+    "language": "en_US",
+    "locale": "en_US",
+    "currency": "USD"
+   },
+   "payload": {
+    "options": [
+     {
+      "code": "CAINIAO_PREMIUM",
+      "company": "AliExpress Premium shipping",
+      "fee": 0.0,
+      "currency": null,
+      "days_min": 11,
+      "days_max": 13,
+      "estimated": "Oct 25 - 27",
+      "tracking": true,
+      "free_shipping": true,
+      "ship_from": "CN",
+      "stock": "468",
+      "guaranteed_days": "60"
+     }
+    ],
+    "success": true,
+    "code": 200,
+    "msg": "Call succeeds",
+    "item_id": "1005012654199127",
+    "sku_id": "12000059002880383",
+    "country": "IL",
+    "qty": 1,
+    "raw": {
+     "result": {
+      "msg": "Call succeeds",
+      "code": 200,
+      "success": true,
+      "delivery_options": [
+       {
+        "code": "CAINIAO_PREMIUM",
+        "free_shipping": true,
+        "mayHavePFS": false,
+        "guaranteed_delivery_days": "60",
+        "max_delivery_days": 13,
+        "tracking": true,
+        "delivery_date_desc": "Oct 25 - 27",
+        "company": "AliExpress Premium shipping",
+        "ship_from_country": "CN",
+        "min_delivery_days": 11,
+        "available_stock": "468"
+       }
+      ]
+     },
+     "request_id": "21016c2317919300634253063",
+     "_trace_id_": "21013cc617919300634232187e0eda"
+    }
+   }
+  }
+ }
+}
