@@ -199,6 +199,71 @@
     "request_id": "21411fe917919502609088556",
     "_trace_id_": "2151fd3a17919502609075561e0cf0"
    }
+  },
+  "freight:12000057836465477:IL:1": {
+   "fetched_at": "2026-10-14T03:59:43+00:00",
+   "endpoint": "aliexpress.ds.freight.query",
+   "params": {
+    "quantity": 1,
+    "shipToCountry": "IL",
+    "productId": "1005012239801837",
+    "selectedSkuId": "12000057836465477",
+    "language": "en_US",
+    "locale": "en_US",
+    "currency": "USD"
+   },
+   "payload": {
+    "options": [
+     {
+      "code": "CAINIAO_FULFILLMENT_STD_LARGE",
+      "company": "AliExpress Selection Shipping for Large Goods",
+      "fee": 1.99,
+      "currency": "USD",
+      "days_min": 8,
+      "days_max": 16,
+      "estimated": "Oct 22 - 30",
+      "tracking": true,
+      "free_shipping": false,
+      "ship_from": "CN",
+      "stock": "5",
+      "guaranteed_days": "60"
+     }
+    ],
+    "success": true,
+    "code": 200,
+    "msg": "Call succeeds",
+    "item_id": "1005012239801837",
+    "sku_id": "12000057836465477",
+    "country": "IL",
+    "qty": 1,
+    "raw": {
+     "result": {
+      "msg": "Call succeeds",
+      "code": 200,
+      "success": true,
+      "delivery_options": [
+       {
+        "code": "CAINIAO_FULFILLMENT_STD_LARGE",
+        "shipping_fee_currency": "USD",
+        "free_shipping": false,
+        "mayHavePFS": false,
+        "guaranteed_delivery_days": "60",
+        "max_delivery_days": 16,
+        "tracking": true,
+        "shipping_fee_format": "US $1.99",
+        "delivery_date_desc": "Oct 22 - 30",
+        "company": "AliExpress Selection Shipping for Large Goods",
+        "ship_from_country": "CN",
+        "min_delivery_days": 8,
+        "available_stock": "5",
+        "shipping_fee_cent": "1.99"
+       }
+      ]
+     },
+     "request_id": "2151e4fa17919503827994049",
+     "_trace_id_": "2141315917919503827971294e10ba"
+    }
+   }
   }
  }
 }
