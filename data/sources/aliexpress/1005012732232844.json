@@ -932,6 +932,99 @@
     "country": "IL",
     "qty": 1
    }
+  },
+  "freight:12000059159391569:IL:1": {
+   "fetched_at": "2026-10-14T06:39:43+00:00",
+   "endpoint": "aliexpress.ds.freight.query",
+   "params": {
+    "quantity": 1,
+    "shipToCountry": "IL",
+    "productId": "1005012732232844",
+    "selectedSkuId": "12000059159391569",
+    "language": "en_US",
+    "locale": "en_US",
+    "currency": "USD"
+   },
+   "payload": {
+    "options": [
+     {
+      "code": "CPAP",
+      "company": "China Post Air Parcel",
+      "fee": 54.79,
+      "currency": "USD",
+      "days_min": 20,
+      "days_max": 55,
+      "estimated": "Nov. 03 - Dec. 08",
+      "tracking": true,
+      "free_shipping": false,
+      "ship_from": "CN",
+      "stock": null,
+      "guaranteed_days": "60"
+     },
+     {
+      "code": "CAINIAO_STANDARD",
+      "company": "AliExpress standard shipping",
+      "fee": 55.62,
+      "currency": "USD",
+      "days_min": 21,
+      "days_max": 32,
+      "estimated": "Nov 04 - 15",
+      "tracking": true,
+      "free_shipping": false,
+      "ship_from": "CN",
+      "stock": null,
+      "guaranteed_days": "60"
+     }
+    ],
+    "success": true,
+    "code": 200,
+    "msg": "Call succeeds",
+    "item_id": "1005012732232844",
+    "sku_id": "12000059159391569",
+    "country": "IL",
+    "qty": 1,
+    "raw": {
+     "result": {
+      "msg": "Call succeeds",
+      "code": 200,
+      "success": true,
+      "delivery_options": [
+       {
+        "code": "CPAP",
+        "shipping_fee_currency": "USD",
+        "free_shipping": false,
+        "mayHavePFS": false,
+        "guaranteed_delivery_days": "60",
+        "max_delivery_days": 55,
+        "tracking": true,
+        "shipping_fee_format": "US $54.79",
+        "delivery_date_desc": "Nov. 03 - Dec. 08",
+        "company": "China Post Air Parcel",
+        "ship_from_country": "CN",
+        "min_delivery_days": 20,
+        "shipping_fee_cent": "54.79"
+       },
+       {
+        "code": "CAINIAO_STANDARD",
+        "shipping_fee_currency": "USD",
+        "free_shipping": false,
+        "mayHavePFS": false,
+        "guaranteed_delivery_days": "60",
+        "max_delivery_days": 32,
+        "tracking": true,
+        "shipping_fee_format": "US $55.62",
+        "delivery_date_desc": "Nov 04 - 15",
+        "company": "AliExpress standard shipping",
+        "ship_from_country": "CN",
+        "min_delivery_days": 21,
+        "shipping_fee_cent": "55.62"
+       }
+      ]
+     },
+     "request_id": "212a6b7f17919599835823684",
+     "_trace_id_": "2151fce817919599835818923e0f8e"
+    }
+   }
   }
  }
 }

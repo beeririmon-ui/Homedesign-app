@@ -36,6 +36,7 @@ WORK = os.path.join(scale.OUT, "final")
 INDEX = os.path.join(REPO, "data", "leads", "next-sourcing", "searched-index.json")
 BY = "aliexpress-final"
 TAG = "final-round 2026-10-13"
+RESNAME = None  # wave 3 writes one file (wave3-aliexpress) instead of aliexpress-<room>
 
 
 def gaps():
@@ -443,7 +444,14 @@ def do_write(room, a, write_cards=True):
     for rp in sorted(glob.glob(os.path.join(WORK, "fin-rev-%s.json" % room)) + glob.glob(os.path.join(WORK, "fin-rev-%s-*.json" % room))):
         rev.update(json.load(open(rp)))  # the review may come in parts (fin-rev-<room>-a.json, -b.json)
     det = json.load(open(det_path(room))) if os.path.exists(det_path(room)) else {}
-    old = json.load(open(os.path.join(scale.OUT, "detail", room + ".json")))
+    olds = {}
+
+    def old_rec(key, iid):
+        r_ = key.split("/")[0]
+        if r_ not in olds:
+            pth = os.path.join(scale.OUT, "detail", r_ + ".json")
+            olds[r_] = json.load(open(pth)) if os.path.exists(pth) else {}
+        return olds[r_].get("%s|%s" % (key.split("/")[1], iid))
     G = gaps()
     result = {"room": room, "source": "AliExpress (official DS API)", "date": "2026-10-13", "method": __doc__.split("\n\n")[1].strip(),
               "api_calls": None, "slots": {}}
@@ -453,7 +461,7 @@ def do_write(room, a, write_cards=True):
         if not v:
             continue
         key = e["key"]
-        rec = det.get("%s|%s" % (key, e["item_id"])) or old.get("%s|%s" % (key.split("/")[1], e["item_id"])) or {}
+        rec = det.get("%s|%s" % (key, e["item_id"])) or old_rec(key, e["item_id"]) or {}
         p = P[key]
         styles = {s: float((v.get("styles") or {}).get(s, 0) or 0) for s in STYLES}
         c = {"source": "AliExpress", "id": e["item_id"], "url": ds.ITEM_URL % e["item_id"], "title": rec.get("title"),
@@ -469,6 +477,9 @@ def do_write(room, a, write_cards=True):
                          and styles[s] >= 7 and c["econ"].get(s) and c["econ"][s]["contribution_ils"] >= 0]
         first = next((x for x in c["econ"].values() if x), None)
         c.update(landed_ils=first and first["landed_ils"], slot_price_ils=p["slot_price"], margin_pct={s: x and x["margin_pct"] for s, x in c["econ"].items()})
+        if rec.get("cert"):
+            c["standard_declared"] = rec["cert"]
+            c["ip_rating"] = rec.get("ip")
         cands.setdefault(key, []).append(c)
     carded = []
     for key, p in P.items():
@@ -490,7 +501,8 @@ def do_write(room, a, write_cards=True):
         slot = key.split("/")[1]
         for c in picks:
             iid = c["id"]
-            cid, path = existing_card_for(room, slot, iid)
+            kroom = key.split("/")[0]
+            cid, path = existing_card_for(kroom, slot, iid)
             if cid in existing or (cid and path):
                 c["card_id"] = cid
                 c["card_note"] = "existing card"
@@ -498,7 +510,7 @@ def do_write(room, a, write_cards=True):
             if not write_cards:
                 continue
             cid = "%s-aliexpress-%s-%s" % (slot, ds.slugify(c["title"] or iid, words=4, maxlen=36), iid[-6:])
-            path = card_path(room, slot, cid)
+            path = card_path(kroom, slot, cid)
             argv = ["--by", BY, "--run-id", a.run_id, "--max-calls", str(a.max_calls), "card", iid, "--slot", key, "--id", cid, "--out", path]
             if c["sku_or_vid"]:
                 argv += ["--sku", c["sku_or_vid"]]
@@ -515,7 +527,21 @@ def do_write(room, a, write_cards=True):
                              "Envelope: %s%s. %s " % (TAG, c["qty"], c["sku_label"], ec, fits, c["fits_envelope"],
                                                       " (%s)" % c["dims_cm"] if c.get("dims_cm") else "", c["why_he"] or "")) + (card.get("notes") or "")
             g0 = next(iter(G[key].values()))
-            if g0.get("category") == "lighting" or g0.get("electrical") or g0.get("safety") or key.startswith("kids/"):
+            if c.get("standard_declared"):
+                sd = c["standard_declared"]
+                saf = card.get("safety") or {"ce": None, "ip_rating": None, "toy_standard": [], "power": None, "plug_type": None,
+                                             "voltage": None, "certificates": [], "source": "aliexpress.ds.product.get attributes"}
+                saf.setdefault("certificates", []).append({"name": "%s (seller attribute)" % sd, "url": None, "verified": False})
+                if "CE" in sd.upper():
+                    saf["ce"] = True
+                if "EN71" in sd.upper().replace(" ", ""):
+                    saf["toy_standard"] = sorted(set((saf.get("toy_standard") or []) + ["EN71"]))
+                if c.get("ip_rating"):
+                    saf["ip_rating"] = c["ip_rating"]
+                card["safety"] = saf
+                card["notes"] += (" standard_declared: %s (seller attribute, Certification). Owner rule S2B: enough to list as a candidate; "
+                                  "the certificate file is requested before the first sale." % sd)
+            elif g0.get("category") == "lighting" or g0.get("electrical") or g0.get("safety") or key.startswith("kids/"):
                 # ds.product.specialinfo.get answers APPKEY_NOT_ALLOWED for this app: certificates are not checked here
                 card["notes"] += (" SAFETY TO VERIFY before listing: certificates are not available from the API for this app "
                                   "(specialinfo APPKEY_NOT_ALLOWED); lighting needs CE and 220-240V with an EU/IL plug, kids items EN71 / ת\"י 562.")
@@ -547,7 +573,7 @@ def do_write(room, a, write_cards=True):
                                 "candidates": [{k: v for k, v in c.items() if k != "eligible"} | {"eligible_styles": c["eligible"]} for c in cs],
                                 "verdict_he": verdict}
     os.makedirs(RES, exist_ok=True)
-    json.dump(result, open(os.path.join(RES, "aliexpress-%s.json" % room), "w"), ensure_ascii=False, indent=1)
+    json.dump(result, open(os.path.join(RES, (RESNAME or "aliexpress-%s" % room) + ".json"), "w"), ensure_ascii=False, indent=1)
     write_md(room, result, P)
     add_index(room, P)
     print("final write %s: %d cards" % (room, len(carded)))
@@ -565,7 +591,7 @@ def write_md(room, result, P):
         tot += len(cards)
         L.append("| %s | %s | %s | %s |" % (key, ", ".join(s["styles_needing"]), "<br>".join(cards) or "—", s["verdict_he"].replace("|", "/")))
     L += ["", "סה\"כ כרטיסים (כולל קיימים שנבחרו שוב): %d." % tot]
-    open(os.path.join(RES, "aliexpress-%s.md" % room), "w").write("\n".join(L) + "\n")
+    open(os.path.join(RES, (RESNAME or "aliexpress-%s" % room) + ".md"), "w").write("\n".join(L) + "\n")
 
 
 def add_index(room, P):
