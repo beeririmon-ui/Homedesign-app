@@ -421,6 +421,21 @@ def existing_card_for(room, slot, iid):
     return None, None
 
 
+def coverage_need(key, styles):
+    """Owner 2026-10-14 (studio rules ג.3, ז): 3 options per slot per style; colours of one listing count as options.
+    -> {style: options still missing} from coverage.json (a style missing from remaining is covered)."""
+    try:
+        cov = json.load(open(os.path.join(PACKS, "coverage.json")))["remaining"]
+    except (OSError, ValueError, KeyError):
+        return {s: 3 for s in styles}
+    out = {}
+    for s in styles:
+        for e in cov.get(s, []):
+            if e.get("slot") == key:
+                out[s] = max(0, (e.get("need") or 3) - (e.get("have_ready") or 0))
+    return out
+
+
 def do_write(room, a, write_cards=True):
     P = load_plan(room)
     idx = json.load(open(os.path.join(WORK, "fin-%s-index.json" % room)))
@@ -448,6 +463,8 @@ def do_write(room, a, write_cards=True):
              "style_fit_guess": styles, "found_by": e.get("source"), "card_id": None, "why_he": v.get("reason"), "econ": {}}
         for s in p["styles"]:
             c["econ"][s] = econ(rec, p["slot_price"].get(s), p["qty"])
+        vf = v.get("variants_fit") or {}
+        c["variants_fit"] = {s: int(vf.get(s, 1 if styles[s] >= 7 else 0) or 0) for s in STYLES}
         c["eligible"] = [s for s in p["styles"] if c["type_ok"] and c["fits_envelope"] in ("yes", "borderline")
                          and styles[s] >= 7 and c["econ"].get(s) and c["econ"][s]["contribution_ils"] >= 0]
         first = next((x for x in c["econ"].values() if x), None)
@@ -457,16 +474,19 @@ def do_write(room, a, write_cards=True):
     for key, p in P.items():
         cs = cands.get(key, [])
         existing = set(p["existing"])
+        # options still missing per style (coverage.json); a listing with several fitting colours fills several options
+        want = coverage_need(key, p["styles"])
         picks, per_style = [], {s: 0 for s in p["styles"]}
-        for c in sorted(cs, key=lambda c: (-len(c["eligible"]), -sum(c["style_fit_guess"][s] for s in c["eligible"]),
+        for c in sorted(cs, key=lambda c: (-sum(max(1, c["variants_fit"][s]) for s in c["eligible"] if want.get(s)),
+                                           -sum(c["style_fit_guess"][s] for s in c["eligible"]),
                                            -max([x["margin_pct"] for x in c["econ"].values() if x] or [0]))):
             if not c["eligible"] or len(picks) >= 8:
                 continue
-            if not any(per_style[s] < 2 for s in c["eligible"]):
+            if not any(per_style[s] < want.get(s, 0) for s in c["eligible"]):
                 continue
             picks.append(c)
             for s in c["eligible"]:
-                per_style[s] += 1
+                per_style[s] += max(1, c["variants_fit"][s])
         slot = key.split("/")[1]
         for c in picks:
             iid = c["id"]
@@ -492,7 +512,7 @@ def do_write(room, a, write_cards=True):
             card.setdefault("room", room)
             ec = "; ".join("%s: price ₪%s, landed ₪%s, margin %s%%" % (s, p["slot_price"].get(s), x["landed_ils"], x["margin_pct"])
                            for s, x in c["econ"].items() if x and s in c["eligible"])
-            fits = ", ".join("%s %g" % (s, c["style_fit_guess"][s]) for s in STYLES)
+            fits = ", ".join("%s %g (%d colours)" % (s, c["style_fit_guess"][s], c["variants_fit"][s]) for s in STYLES)
             card["notes"] = ("%s: AliExpress, qty %d, SKU %s. Economics at the slot price: %s. Style fit guess (not a score): %s. "
                              "Envelope: %s%s. %s " % (TAG, c["qty"], c["sku_label"], ec, fits, c["fits_envelope"],
                                                       " (%s)" % c["dims_cm"] if c.get("dims_cm") else "", c["why_he"] or "")) + (card.get("notes") or "")
@@ -511,8 +531,8 @@ def do_write(room, a, write_cards=True):
                 registry.add(ds.key_of(c["id"]), st, why, by=BY, slot=key, opened=True, url=c["url"])
             except Exception as e:
                 print("registry %s: %s" % (c["id"], e), file=sys.stderr)
-        need = {s: G[key][s].get("need") for s in p["styles"]}
-        filled = {s: sum(1 for c in picks if s in c["eligible"]) for s in p["styles"]}
+        need = {s: want.get(s, 0) for s in p["styles"]}
+        filled = {s: sum(max(1, c["variants_fit"][s]) for c in picks if s in c["eligible"]) for s in p["styles"]}
         if picks:
             verdict = "נמצאו %d מוצרים: %s" % (len(picks), ", ".join("%s %d/%s" % (s, filled[s], need[s]) for s in p["styles"] if filled[s]))
         elif cs:
