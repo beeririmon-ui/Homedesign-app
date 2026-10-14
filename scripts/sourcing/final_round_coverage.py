@@ -61,7 +61,7 @@ def card_variants():
 
 
 def results():
-    cards = collections.defaultdict(lambda: collections.defaultdict(set))   # style -> slot -> card ids
+    cards = collections.defaultdict(lambda: collections.defaultdict(dict))  # style -> slot -> {card id: fitting colour variants or None}
     il = collections.defaultdict(lambda: collections.defaultdict(set))      # style -> slot -> product urls
     queries = {"cj": set(), "zendrop": set()}
     for f in glob.glob(f"{D}/results/*.json"):
@@ -86,7 +86,9 @@ def results():
                     if is_il:
                         il[st][key].add(c.get("url") or c.get("title"))
                     elif c.get("card_id"):
-                        cards[st][key].add(c["card_id"])
+                        vf = (c.get("variants_fit") or {}).get(st)
+                        prev = cards[st][key].get(c["card_id"])
+                        cards[st][key][c["card_id"]] = max(x for x in (vf, prev, 0) if x is not None) or None
     return cards, il, queries
 
 
@@ -109,7 +111,7 @@ def main():
                 continue
             have_ids = [p.get("card_id") for p in g.get("existing_picks") or [] if p.get("card_id")]
             have_var = sum(var.get(c, 1) for c in have_ids) + (g["have"] - len(have_ids))
-            n_ready = max(g["have"], have_var) + sum(var.get(c, 1) for c in cards[st].get(s, ()) if c not in have_ids)
+            n_ready = max(g["have"], have_var) + sum(min(3, n) if n else var.get(c, 1) for c, n in cards[st].get(s, {}).items() if c not in have_ids)
             n_any = n_ready + len(il[st].get(s, ()))
             ready += n_ready >= 3
             anyc += n_any >= 3
