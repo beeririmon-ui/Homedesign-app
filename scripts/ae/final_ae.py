@@ -502,8 +502,6 @@ def do_write(room, a, write_cards=True):
             argv = ["--by", BY, "--run-id", a.run_id, "--max-calls", str(a.max_calls), "card", iid, "--slot", key, "--id", cid, "--out", path]
             if c["sku_or_vid"]:
                 argv += ["--sku", c["sku_or_vid"]]
-            if next(iter(G[key].values())).get("category") == "lighting" or next(iter(G[key].values())).get("electrical"):
-                argv += ["--certs"]  # CE / voltage / plug from specialinfo (studio rules: lighting needs CE and 220-240V)
             rc = ds.main(argv)
             if rc not in (0, None) or not os.path.exists(path):
                 print("card failed %s %s rc=%s" % (key, iid, rc), file=sys.stderr)
@@ -516,6 +514,11 @@ def do_write(room, a, write_cards=True):
             card["notes"] = ("%s: AliExpress, qty %d, SKU %s. Economics at the slot price: %s. Style fit guess (not a score): %s. "
                              "Envelope: %s%s. %s " % (TAG, c["qty"], c["sku_label"], ec, fits, c["fits_envelope"],
                                                       " (%s)" % c["dims_cm"] if c.get("dims_cm") else "", c["why_he"] or "")) + (card.get("notes") or "")
+            g0 = next(iter(G[key].values()))
+            if g0.get("category") == "lighting" or g0.get("electrical") or g0.get("safety") or key.startswith("kids/"):
+                # ds.product.specialinfo.get answers APPKEY_NOT_ALLOWED for this app: certificates are not checked here
+                card["notes"] += (" SAFETY TO VERIFY before listing: certificates are not available from the API for this app "
+                                  "(specialinfo APPKEY_NOT_ALLOWED); lighting needs CE and 220-240V with an EU/IL plug, kids items EN71 / ת\"י 562.")
             card["style_scores"] = {}
             json.dump(card, open(path, "w"), ensure_ascii=False, indent=2)
             open(path, "a").write("\n")
