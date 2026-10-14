@@ -892,6 +892,70 @@
      "_trace_id_": "2101611117917947435117945e0efe"
     }
    }
+  },
+  "freight:12000048183435583:IL:1": {
+   "fetched_at": "2026-10-14T07:21:29+00:00",
+   "endpoint": "aliexpress.ds.freight.query",
+   "params": {
+    "quantity": 1,
+    "shipToCountry": "IL",
+    "productId": "1005006767417255",
+    "selectedSkuId": "12000048183435583",
+    "language": "en_US",
+    "locale": "en_US",
+    "currency": "USD"
+   },
+   "payload": {
+    "options": [
+     {
+      "code": "FEDEX",
+      "company": "Fedex IP",
+      "fee": 391.03,
+      "currency": "USD",
+      "days_min": 18,
+      "days_max": 35,
+      "estimated": "Nov 01 - 18",
+      "tracking": true,
+      "free_shipping": false,
+      "ship_from": "CN",
+      "stock": null,
+      "guaranteed_days": "35"
+     }
+    ],
+    "success": true,
+    "code": 200,
+    "msg": "Call succeeds",
+    "item_id": "1005006767417255",
+    "sku_id": "12000048183435583",
+    "country": "IL",
+    "qty": 1,
+    "raw": {
+     "result": {
+      "msg": "Call succeeds",
+      "code": 200,
+      "success": true,
+      "delivery_options": [
+       {
+        "code": "FEDEX",
+        "shipping_fee_currency": "USD",
+        "free_shipping": false,
+        "mayHavePFS": false,
+        "guaranteed_delivery_days": "35",
+        "max_delivery_days": 35,
+        "tracking": true,
+        "shipping_fee_format": "US $391.03",
+        "delivery_date_desc": "Nov 01 - 18",
+        "company": "Fedex IP",
+        "ship_from_country": "CN",
+        "min_delivery_days": 18,
+        "shipping_fee_cent": "391.03"
+       }
+      ]
+     },
+     "request_id": "0bb4a36417919624890528629",
+     "_trace_id_": "2151fd3a17919624890502144e106a"
+    }
+   }
   }
  }
 }

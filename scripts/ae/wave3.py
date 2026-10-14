@@ -279,6 +279,60 @@ def do_expand():
     print("w3 expand: %d slot candidates from %d reviewed items" % (n, len(rev)))
 
 
+BAD_SKU = re.compile(r"cold|6000|6500|daylight|white light|neutral|4000|4500|tri[- ]?colou?r|three colou?r|dimmable 3|\b(us|au|uk)\b ?plug|plug type (us|au|uk)", re.I)
+
+
+def sku_score(label):
+    t = label or ""
+    s = 0
+    s += 3 if re.search(r"warm|3000|2700", t, re.I) else 0
+    s -= 5 if re.search(r"cold|6000|6500|daylight|white light", t, re.I) else 0
+    s -= 2 if re.search(r"neutral|4000|4500|tri[- ]?colou?r|three colou?r", t, re.I) else 0
+    s -= 5 if re.search(r"\b(us|au|uk)\b ?plug|plug type ?:? ?(us|au|uk)\b", t, re.I) else 0
+    s += 1 if re.search(r"\beu\b", t, re.I) else 0
+    return s
+
+
+def do_fixsku(a):
+    """Lights: the chosen SKU is often cold/neutral light or a US/AU/UK plug; take the warm-light EU SKU of the same listing."""
+    path = F.det_path(ROOM)
+    det = json.load(open(path))
+    n = 0
+    for k, r in det.items():
+        if not (r.get("cert") and r.get("sku") and not k.split("|")[0].split("/")[1] in ("toy-cars", "doll", "soft-toy", "doll-pram")):
+            continue
+        if not BAD_SKU.search(r.get("sku_label") or ""):
+            continue
+        hit = cache.get(ds.SRC, r["item_id"], "product", allow_stale=True)
+        if not hit:
+            continue
+        skus = ds.as_list((hit["payload"].get("result") or {}).get("ae_item_sku_info_dtos"))
+        cur = sku_score(r.get("sku_label"))
+        light_rx = r"warm|cold|neutral|light|white|daylight|tri|colou?r(ed)?|temperature|emitting|\d{4} ?k|plug|type|us|eu|uk|au|remote|dimming|dimmable"
+
+        def keep(x):  # the same size / body colour as the chosen SKU: only the light colour or the plug changes
+            a_ = {w for w in re.findall(r"[a-z0-9]+", (r.get("sku_label") or "").lower()) if not re.fullmatch(light_rx, w)}
+            b_ = {w for w in re.findall(r"[a-z0-9]+", sku_text(x).lower()) if not re.fullmatch(light_rx, w)}
+            return len(a_ & b_) - len(a_ ^ b_)
+        best = max(skus, key=lambda x: (keep(x), sku_score(sku_text(x)), -(ds.num(x.get("offer_sale_price")) or 999)), default=None)
+        if best is not None and keep(best) < max(keep(x) for x in skus):
+            best = None
+        if not best or sku_score(sku_text(best)) <= cur:
+            continue
+        r.update(sku=str(best.get("sku_id")), sku_label=sku_text(best), sku_pick="warm-eu",
+                 price_usd=ds.num(best.get("offer_sale_price")) or ds.num(best.get("sku_price")))
+        a.slot = r["key"]
+        try:
+            fr, _ = guard(ds.fetch_freight, a, r["item_id"], r["sku"], "IL", 1)
+        except client.AeError as e:
+            fr = {"options": [], "msg": "%s %s" % (e.code, e.message)}
+        b = best_freight(fr.get("options"))
+        r.update(ship_usd=b["fee"] if b else None, ship_days="%s-%s" % (b.get("days_min"), b.get("days_max")) if b else None, ship_ok=bool(b))
+        n += 1
+    json.dump(det, open(path, "w"), ensure_ascii=False, indent=0)
+    print("w3 fixsku: %d light SKUs switched to warm light / EU plug" % n)
+
+
 def main():
     stage = sys.argv[1]
     a = scale.ns(ROOM, 3000)
@@ -303,6 +357,8 @@ def main():
             F.do_sheet(ROOM)
         elif stage == "gsheet":
             do_gsheet()
+        elif stage == "fixsku":
+            do_fixsku(a)
         elif stage == "expand":
             do_expand()
         elif stage == "write":

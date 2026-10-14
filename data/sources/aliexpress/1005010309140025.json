@@ -1127,6 +1127,96 @@
      "_trace_id_": "2151fca717919600124578260e0e8f"
     }
    }
+  },
+  "freight:12000058249790937:IL:1": {
+   "fetched_at": "2026-10-14T07:21:39+00:00",
+   "endpoint": "aliexpress.ds.freight.query",
+   "params": {
+    "quantity": 1,
+    "shipToCountry": "IL",
+    "productId": "1005010309140025",
+    "selectedSkuId": "12000058249790937",
+    "language": "en_US",
+    "locale": "en_US",
+    "currency": "USD"
+   },
+   "payload": {
+    "options": [
+     {
+      "code": "CPAP",
+      "company": "China Post Air Parcel",
+      "fee": 0.0,
+      "currency": null,
+      "days_min": 6,
+      "days_max": 41,
+      "estimated": "Oct. 20 - Nov. 24",
+      "tracking": true,
+      "free_shipping": true,
+      "ship_from": "CN",
+      "stock": null,
+      "guaranteed_days": "60"
+     },
+     {
+      "code": "CAINIAO_STANDARD",
+      "company": "AliExpress standard shipping",
+      "fee": 180.21,
+      "currency": "USD",
+      "days_min": 7,
+      "days_max": 18,
+      "estimated": "Oct. 21 - Nov. 01",
+      "tracking": true,
+      "free_shipping": false,
+      "ship_from": "CN",
+      "stock": null,
+      "guaranteed_days": "60"
+     }
+    ],
+    "success": true,
+    "code": 200,
+    "msg": "Call succeeds",
+    "item_id": "1005010309140025",
+    "sku_id": "12000058249790937",
+    "country": "IL",
+    "qty": 1,
+    "raw": {
+     "result": {
+      "msg": "Call succeeds",
+      "code": 200,
+      "success": true,
+      "delivery_options": [
+       {
+        "code": "CPAP",
+        "free_shipping": true,
+        "mayHavePFS": false,
+        "guaranteed_delivery_days": "60",
+        "max_delivery_days": 41,
+        "tracking": true,
+        "delivery_date_desc": "Oct. 20 - Nov. 24",
+        "company": "China Post Air Parcel",
+        "ship_from_country": "CN",
+        "min_delivery_days": 6
+       },
+       {
+        "code": "CAINIAO_STANDARD",
+        "shipping_fee_currency": "USD",
+        "free_shipping": false,
+        "mayHavePFS": false,
+        "guaranteed_delivery_days": "60",
+        "max_delivery_days": 18,
+        "tracking": true,
+        "shipping_fee_format": "US $180.21",
+        "delivery_date_desc": "Oct. 21 - Nov. 01",
+        "company": "AliExpress standard shipping",
+        "ship_from_country": "CN",
+        "min_delivery_days": 7,
+        "shipping_fee_cent": "180.21"
+       }
+      ]
+     },
+     "request_id": "0bafcbae17919624994796619",
+     "_trace_id_": "2141149b17919624994775733e0fad"
+    }
+   }
   }
  }
 }
