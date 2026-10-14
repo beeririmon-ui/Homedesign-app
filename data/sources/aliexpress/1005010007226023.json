@@ -449,6 +449,70 @@
      "_trace_id_": "2140d36117919537913693243e0d39"
     }
    }
+  },
+  "freight:12000050822948397:IL:1": {
+   "fetched_at": "2026-10-14T06:41:34+00:00",
+   "endpoint": "aliexpress.ds.freight.query",
+   "params": {
+    "quantity": 1,
+    "shipToCountry": "IL",
+    "productId": "1005010007226023",
+    "selectedSkuId": "12000050822948397",
+    "language": "en_US",
+    "locale": "en_US",
+    "currency": "USD"
+   },
+   "payload": {
+    "options": [
+     {
+      "code": "Other",
+      "company": "Seller's Shipping Method",
+      "fee": 70.65,
+      "currency": "USD",
+      "days_min": 69,
+      "days_max": 69,
+      "estimated": "Dec. 22",
+      "tracking": false,
+      "free_shipping": false,
+      "ship_from": "CN",
+      "stock": null,
+      "guaranteed_days": "60"
+     }
+    ],
+    "success": true,
+    "code": 200,
+    "msg": "Call succeeds",
+    "item_id": "1005010007226023",
+    "sku_id": "12000050822948397",
+    "country": "IL",
+    "qty": 1,
+    "raw": {
+     "result": {
+      "msg": "Call succeeds",
+      "code": 200,
+      "success": true,
+      "delivery_options": [
+       {
+        "code": "Other",
+        "shipping_fee_currency": "USD",
+        "free_shipping": false,
+        "mayHavePFS": false,
+        "guaranteed_delivery_days": "60",
+        "max_delivery_days": 69,
+        "tracking": false,
+        "shipping_fee_format": "US $70.65",
+        "delivery_date_desc": "Dec. 22",
+        "company": "Seller's Shipping Method",
+        "ship_from_country": "CN",
+        "min_delivery_days": 69,
+        "shipping_fee_cent": "70.65"
+       }
+      ]
+     },
+     "request_id": "2101694617919600941013334",
+     "_trace_id_": "2101611117919600941002677e0d1a"
+    }
+   }
   }
  }
 }
