@@ -129,10 +129,10 @@ def main():
     cov["total"] = {"eligible": tot["eligible"], "covered_ready": tot["ready"], "covered_any": tot["any"],
                     "pct_ready": round(100 * tot["ready"] / tot["eligible"], 1), "pct_any": round(100 * tot["any"] / tot["eligible"], 1),
                     "pct_one_ready": round(100 * tot["one_ready"] / tot["eligible"], 1), "pct_one_any": round(100 * tot["one_any"] / tot["eligible"], 1),
-                    "target_pct": 90}
+                    "target_pct": 90, "target_metric": "pct_ready (3 options per slot, colours count)"}
     json.dump(cov, open(f"{D}/coverage.json", "w"), ensure_ascii=False, indent=1)
     lines = [f"# כיסוי הסבב האחרון ({cov['date']})", "",
-             "עמדה מכוסה בסגנון = 3 אפשרויות: בחירות קיימות + כרטיסים חדשים בהתאמה 7+ (\"מוכן\"). צבע או הדפס של אותו מוצר נספר כאפשרות (ג.3, 2026-10-13), עד 3 לכרטיס. \"כולל ישראל\" = גם מוצרי חנויות ישראליות (דורש מחיר סוחר). היעד: 90% עם לפחות אפשרות אחת.", "",
+             "עמדה מכוסה בסגנון = 3 אפשרויות: בחירות קיימות + כרטיסים חדשים בהתאמה 7+ (\"מוכן\"). צבע או הדפס של אותו מוצר נספר כאפשרות (ג.3, 2026-10-13), עד 3 לכרטיס. \"כולל ישראל\" = גם מוצרי חנויות ישראליות (דורש מחיר סוחר). היעד: 90% עם 3 אפשרויות (2026-10-14).", "",
              "| סגנון | עמדות | 3 אפשרויות, מוכן | 3 אפשרויות, כולל ישראל | לפחות אחת, מוכן | לפחות אחת, כולל ישראל |", "| --- | --- | --- | --- | --- | --- |"]
     for st, c in cov["styles"].items():
         lines.append(f"| {NAMES[st]} | {c['eligible']} | {c['pct_ready']}% | {c['pct_any']}% | {c['pct_one_ready']}% | {c['pct_one_any']}% |")
