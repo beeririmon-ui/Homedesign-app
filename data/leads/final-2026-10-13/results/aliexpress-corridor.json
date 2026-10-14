@@ -1,0 +1,4975 @@
+{
+ "room": "corridor",
+ "source": "AliExpress (official DS API)",
+ "date": "2026-10-13",
+ "method": "Input: the gap packs data/leads/final-2026-10-13/<style>.json (709 slot x style gaps; slot spec, price ceiling, existing\npicks, designer spec and queries, already_searched_aliexpress). One search per slot for all styles together:\n  plan    per slot: the styles that need it, their slot prices, 2-4 new queries (designer queries first, round robin\n          over the styles; never a query already in already_searched_aliexpress, searched-index.json or our screen files)\n  search  text search pages 1-2 per query + image search from 2 close earlier candidates (reviewed fit >= 6), filtered by\n          product type (scale_config must / STRICT, excluded words) and --hide-seen (registry)\n  detail  the 12 best new items per slot by quality (names the product, orders, rating; price only as a loose cap)\n          get product.get, the room SKU and freight to IL. Plus the pool: earlier-round items already reviewed at fit >= 7\n          for a style that needs the slot (cache only)\n  sheet   contact sheets per slot -> scale-2026-10/final/fin-<room>-<slot>.jpg + fin-<room>-index.json + brief\n  (visual review: fin-rev-<room>.json, fit guess 1-10 for all six styles, type_ok, fits_envelope)\n  write   a card (ds.py card) for an item with fit guess >= 7 for a style that needs the slot, no loss at that style's\n          slot price and an envelope that fits (borderline allowed); up to 2 per needing style, 8 per slot, items that\n          serve several styles first. No style_scores (the designers score in the finishing pass).\n          -> data/leads/final-2026-10-13/results/aliexpress-<room>.json + .md; queries -> searched-index.json\nEconomics as the Studio: fx 3.3, VAT 18%, card fee 2% + 1.2, returns 8% of net; shipping for q units:\nunit + (q-1) * max(0, unit - 3.72) USD.",
+ "api_calls": null,
+ "slots": {
+  "corridor/ceiling-lights": {
+   "styles_needing": [
+    "nordic",
+    "warm-modern",
+    "japandi",
+    "mediterranean",
+    "modern-country",
+    "boho"
+   ],
+   "queries_aliexpress": [
+    "semi flush paper ceiling light 35cm",
+    "schoolhouse semi flush ceiling light opal glass brass 35cm",
+    "semi flush ceiling light",
+    "rattan ceiling light"
+   ],
+   "candidates": [
+    {
+     "source": "AliExpress",
+     "id": "1005011824656544",
+     "url": "https://www.aliexpress.com/item/1005011824656544.html",
+     "title": "Bamboo Ceiling Lamp Indoor Ceiling Light E27 Home Warm White Chandelier Light Bulb-Free Grass Vine Craf Room Decoration",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/S6700b3d9d544446caf935823deec0337Z.jpg",
+     "sku_or_vid": "12000056701454584",
+     "sku_label": "Body Color Big-30 cm Emitting Color Warm White",
+     "cost_usd": 27.93,
+     "ship_usd": 1.99,
+     "ship_days": "6-13",
+     "qty": 2,
+     "dims_cm": "Ø30x~20",
+     "fits_envelope": "borderline",
+     "type_ok": true,
+     "style_fit_guess": {
+      "nordic": 5.0,
+      "warm-modern": 5.0,
+      "japandi": 6.5,
+      "mediterranean": 7.0,
+      "modern-country": 5.5,
+      "boho": 8.0
+     },
+     "found_by": "search",
+     "card_id": null,
+     "why_he": "חצי-צמודה קלועה במבוק, 30 ס״מ; לא בד/נייר כנדרש בנורדי, מצוינת לבוהו",
+     "econ": {
+      "nordic": {
+       "landed_ils": 190.9,
+       "contribution_ils": 80.6,
+       "margin_pct": 26.5
+      },
+      "warm-modern": {
+       "landed_ils": 190.9,
+       "contribution_ils": 80.6,
+       "margin_pct": 26.5
+      },
+      "japandi": {
+       "landed_ils": 190.9,
+       "contribution_ils": 80.6,
+       "margin_pct": 26.5
+      },
+      "mediterranean": {
+       "landed_ils": 190.9,
+       "contribution_ils": 80.6,
+       "margin_pct": 26.5
+      },
+      "modern-country": {
+       "landed_ils": 190.9,
+       "contribution_ils": -2.9,
+       "margin_pct": -1.4
+      },
+      "boho": {
+       "landed_ils": 190.9,
+       "contribution_ils": 80.6,
+       "margin_pct": 26.5
+      }
+     },
+     "variants_fit": {
+      "nordic": 0,
+      "warm-modern": 0,
+      "japandi": 0,
+      "mediterranean": 1,
+      "modern-country": 0,
+      "boho": 1
+     },
+     "landed_ils": 190.9,
+     "slot_price_ils": {
+      "nordic": 359,
+      "warm-modern": 359,
+      "japandi": 359,
+      "mediterranean": 359,
+      "modern-country": 249,
+      "boho": 359
+     },
+     "margin_pct": {
+      "nordic": 26.5,
+      "warm-modern": 26.5,
+      "japandi": 26.5,
+      "mediterranean": 26.5,
+      "modern-country": -1.4,
+      "boho": 26.5
+     },
+     "eligible_styles": [
+      "mediterranean",
+      "boho"
+     ]
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005008248086617",
+     "url": "https://www.aliexpress.com/item/1005008248086617.html",
+     "title": "Retro Led Bamboo Woven Ceiling Lamp Corridor Aisle Living Room Ceiling Light E27 Woven Lamps Decorative Fixtures",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/S2e51f03c6d46441e9eac5a9a7ad2d9a1N.jpg",
+     "sku_or_vid": "12000044371424730",
+     "sku_label": "Body Color Wood color Emitting Color E 27 220-240 v Wattage No light bulb",
+     "cost_usd": 16.05,
+     "ship_usd": 1.99,
+     "ship_days": "6-13",
+     "qty": 2,
+     "dims_cm": "Ø30x14",
+     "fits_envelope": "yes",
+     "type_ok": true,
+     "style_fit_guess": {
+      "nordic": 5.0,
+      "warm-modern": 5.0,
+      "japandi": 6.5,
+      "mediterranean": 7.0,
+      "modern-country": 5.5,
+      "boho": 8.0
+     },
+     "found_by": "search",
+     "card_id": "ceiling-lights-aliexpress-retro-led-bamboo-woven-086617",
+     "why_he": "חצי-צמודה קלועה במבוק 30×14, ארבעה דגמי קליעה ב-220V; חזקה לבוהו",
+     "econ": {
+      "nordic": {
+       "landed_ils": 112.5,
+       "contribution_ils": 159.0,
+       "margin_pct": 52.3
+      },
+      "warm-modern": {
+       "landed_ils": 112.5,
+       "contribution_ils": 159.0,
+       "margin_pct": 52.3
+      },
+      "japandi": {
+       "landed_ils": 112.5,
+       "contribution_ils": 159.0,
+       "margin_pct": 52.3
+      },
+      "mediterranean": {
+       "landed_ils": 112.5,
+       "contribution_ils": 159.0,
+       "margin_pct": 52.3
+      },
+      "modern-country": {
+       "landed_ils": 112.5,
+       "contribution_ils": 75.5,
+       "margin_pct": 35.8
+      },
+      "boho": {
+       "landed_ils": 112.5,
+       "contribution_ils": 159.0,
+       "margin_pct": 52.3
+      }
+     },
+     "variants_fit": {
+      "nordic": 0,
+      "warm-modern": 0,
+      "japandi": 0,
+      "mediterranean": 4,
+      "modern-country": 0,
+      "boho": 4
+     },
+     "landed_ils": 112.5,
+     "slot_price_ils": {
+      "nordic": 359,
+      "warm-modern": 359,
+      "japandi": 359,
+      "mediterranean": 359,
+      "modern-country": 249,
+      "boho": 359
+     },
+     "margin_pct": {
+      "nordic": 52.3,
+      "warm-modern": 52.3,
+      "japandi": 52.3,
+      "mediterranean": 52.3,
+      "modern-country": 35.8,
+      "boho": 52.3
+     },
+     "eligible_styles": [
+      "mediterranean",
+      "boho"
+     ]
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005008821386479",
+     "url": "https://www.aliexpress.com/item/1005008821386479.html",
+     "title": "American Style Medieval Cream White Shell Glass Pendant Light Nordic Minimalist Modern for Living Room Bedroom Room Decoration",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/Sf31303a6c0504be3884a3ae63db19ac8D.jpg",
+     "sku_or_vid": "12000046815283547",
+     "sku_label": "Emitting Color Cold White Lampshade Color Diameter 40 cm",
+     "cost_usd": 134.85,
+     "ship_usd": 34.28,
+     "ship_days": "76-76",
+     "qty": 2,
+     "dims_cm": "Ø40, stem",
+     "fits_envelope": "borderline",
+     "type_ok": true,
+     "style_fit_guess": {
+      "nordic": 3.0,
+      "warm-modern": 6.5,
+      "japandi": 4.0,
+      "mediterranean": 6.0,
+      "modern-country": 5.0,
+      "boho": 4.0
+     },
+     "found_by": "search",
+     "card_id": null,
+     "why_he": "צלחות זכוכית שמנת עם מוט פליז; זכוכית אסורה בנורדי, SKU אור קר, יקר מאוד",
+     "econ": {
+      "nordic": {
+       "landed_ils": 1104.0,
+       "contribution_ils": -832.5,
+       "margin_pct": -273.6
+      },
+      "warm-modern": {
+       "landed_ils": 1104.0,
+       "contribution_ils": -832.5,
+       "margin_pct": -273.6
+      },
+      "japandi": {
+       "landed_ils": 1104.0,
+       "contribution_ils": -832.5,
+       "margin_pct": -273.6
+      },
+      "mediterranean": {
+       "landed_ils": 1104.0,
+       "contribution_ils": -832.5,
+       "margin_pct": -273.6
+      },
+      "modern-country": {
+       "landed_ils": 1104.0,
+       "contribution_ils": -916.0,
+       "margin_pct": -434.1
+      },
+      "boho": {
+       "landed_ils": 1104.0,
+       "contribution_ils": -832.5,
+       "margin_pct": -273.6
+      }
+     },
+     "variants_fit": {
+      "nordic": 0,
+      "warm-modern": 1,
+      "japandi": 0,
+      "mediterranean": 0,
+      "modern-country": 0,
+      "boho": 0
+     },
+     "landed_ils": 1104.0,
+     "slot_price_ils": {
+      "nordic": 359,
+      "warm-modern": 359,
+      "japandi": 359,
+      "mediterranean": 359,
+      "modern-country": 249,
+      "boho": 359
+     },
+     "margin_pct": {
+      "nordic": -273.6,
+      "warm-modern": -273.6,
+      "japandi": -273.6,
+      "mediterranean": -273.6,
+      "modern-country": -434.1,
+      "boho": -273.6
+     },
+     "eligible_styles": []
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005010007226023",
+     "url": "https://www.aliexpress.com/item/1005010007226023.html",
+     "title": "French Vintage Glass Ceiling Lamp Indoor Lighting Chandelier for Living Room Dining Room Bedroom Home Decor",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/Sb83a278befa0485da8afe6b105c17846e.jpg",
+     "sku_or_vid": "12000050822948396",
+     "sku_label": "Emitting Color 3 colors switchable Lampshade Color Diameter 40 cm",
+     "cost_usd": 171.52,
+     "ship_usd": 70.65,
+     "ship_days": "69-69",
+     "qty": 2,
+     "dims_cm": "Ø40, stem",
+     "fits_envelope": "borderline",
+     "type_ok": true,
+     "style_fit_guess": {
+      "nordic": 3.0,
+      "warm-modern": 6.5,
+      "japandi": 4.0,
+      "mediterranean": 6.0,
+      "modern-country": 5.0,
+      "boho": 4.0
+     },
+     "found_by": "search",
+     "card_id": null,
+     "why_he": "גרסה דומה של זכוכית קונכיה עם פליז, 799 ש״ח ליחידה; לא חומר נדרש ברוב הסגנונות",
+     "econ": {
+      "nordic": {
+       "landed_ils": 1586.0,
+       "contribution_ils": -1314.5,
+       "margin_pct": -432.1
+      },
+      "warm-modern": {
+       "landed_ils": 1586.0,
+       "contribution_ils": -1314.5,
+       "margin_pct": -432.1
+      },
+      "japandi": {
+       "landed_ils": 1586.0,
+       "contribution_ils": -1314.5,
+       "margin_pct": -432.1
+      },
+      "mediterranean": {
+       "landed_ils": 1586.0,
+       "contribution_ils": -1314.5,
+       "margin_pct": -432.1
+      },
+      "modern-country": {
+       "landed_ils": 1586.0,
+       "contribution_ils": -1398.0,
+       "margin_pct": -662.5
+      },
+      "boho": {
+       "landed_ils": 1586.0,
+       "contribution_ils": -1314.5,
+       "margin_pct": -432.1
+      }
+     },
+     "variants_fit": {
+      "nordic": 0,
+      "warm-modern": 1,
+      "japandi": 0,
+      "mediterranean": 0,
+      "modern-country": 0,
+      "boho": 0
+     },
+     "landed_ils": 1586.0,
+     "slot_price_ils": {
+      "nordic": 359,
+      "warm-modern": 359,
+      "japandi": 359,
+      "mediterranean": 359,
+      "modern-country": 249,
+      "boho": 359
+     },
+     "margin_pct": {
+      "nordic": -432.1,
+      "warm-modern": -432.1,
+      "japandi": -432.1,
+      "mediterranean": -432.1,
+      "modern-country": -662.5,
+      "boho": -432.1
+     },
+     "eligible_styles": []
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005004093257950",
+     "url": "https://www.aliexpress.com/item/1005004093257950.html",
+     "title": "Bamboo Hanging Lamp Pendant Ceiling Light Rattan Wicker Lustre Hand Knit Braiding Suspended Home Dining люстра потол",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/Sbca29c8d20f448bb8f3c0333ab8cefeee.jpg",
+     "sku_or_vid": "12000047499676109",
+     "sku_label": "Body Color Dia 16 x 33 cm Size Ship with 24 h Ships From China Mainland",
+     "cost_usd": 26.6,
+     "ship_usd": 1.99,
+     "ship_days": "6-15",
+     "qty": 2,
+     "dims_cm": "Ø16x33",
+     "fits_envelope": "no",
+     "type_ok": false,
+     "style_fit_guess": {
+      "nordic": 3.0,
+      "warm-modern": 3.0,
+      "japandi": 4.0,
+      "mediterranean": 5.0,
+      "modern-country": 4.0,
+      "boho": 6.0
+     },
+     "found_by": "search",
+     "card_id": null,
+     "why_he": "תלויה על כבל ולא חצי-צמודה; SKU קטן מדי",
+     "econ": {
+      "nordic": {
+       "landed_ils": 182.1,
+       "contribution_ils": 89.4,
+       "margin_pct": 29.4
+      },
+      "warm-modern": {
+       "landed_ils": 182.1,
+       "contribution_ils": 89.4,
+       "margin_pct": 29.4
+      },
+      "japandi": {
+       "landed_ils": 182.1,
+       "contribution_ils": 89.4,
+       "margin_pct": 29.4
+      },
+      "mediterranean": {
+       "landed_ils": 182.1,
+       "contribution_ils": 89.4,
+       "margin_pct": 29.4
+      },
+      "modern-country": {
+       "landed_ils": 182.1,
+       "contribution_ils": 5.9,
+       "margin_pct": 2.8
+      },
+      "boho": {
+       "landed_ils": 182.1,
+       "contribution_ils": 89.4,
+       "margin_pct": 29.4
+      }
+     },
+     "variants_fit": {
+      "nordic": 0,
+      "warm-modern": 0,
+      "japandi": 0,
+      "mediterranean": 0,
+      "modern-country": 0,
+      "boho": 0
+     },
+     "landed_ils": 182.1,
+     "slot_price_ils": {
+      "nordic": 359,
+      "warm-modern": 359,
+      "japandi": 359,
+      "mediterranean": 359,
+      "modern-country": 249,
+      "boho": 359
+     },
+     "margin_pct": {
+      "nordic": 29.4,
+      "warm-modern": 29.4,
+      "japandi": 29.4,
+      "mediterranean": 29.4,
+      "modern-country": 2.8,
+      "boho": 29.4
+     },
+     "eligible_styles": []
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005007626881400",
+     "url": "https://www.aliexpress.com/item/1005007626881400.html",
+     "title": "Bamboo Hand Weaving Pendant Lights 36cm Hanging LED Ceiling Lamp Chandelier Fixture Rattan Hand Craft Woven Home Bedroom Decor",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/S5cd03a0cffe7470f8012d61958724ac9p.jpg",
+     "sku_or_vid": "12000041556379936",
+     "sku_label": "Body Color 36 cm Wattage no light bulb",
+     "cost_usd": 26.21,
+     "ship_usd": 1.99,
+     "ship_days": "6-13",
+     "qty": 2,
+     "dims_cm": "Ø22x26",
+     "fits_envelope": "borderline",
+     "type_ok": false,
+     "style_fit_guess": {
+      "nordic": 3.0,
+      "warm-modern": 3.0,
+      "japandi": 4.0,
+      "mediterranean": 5.0,
+      "modern-country": 4.0,
+      "boho": 6.0
+     },
+     "found_by": "search",
+     "card_id": null,
+     "why_he": "תלויה על כבל (לא חצי-צמודה), במבוק קלוע",
+     "econ": {
+      "nordic": {
+       "landed_ils": 179.6,
+       "contribution_ils": 91.9,
+       "margin_pct": 30.2
+      },
+      "warm-modern": {
+       "landed_ils": 179.6,
+       "contribution_ils": 91.9,
+       "margin_pct": 30.2
+      },
+      "japandi": {
+       "landed_ils": 179.6,
+       "contribution_ils": 91.9,
+       "margin_pct": 30.2
+      },
+      "mediterranean": {
+       "landed_ils": 179.6,
+       "contribution_ils": 91.9,
+       "margin_pct": 30.2
+      },
+      "modern-country": {
+       "landed_ils": 179.6,
+       "contribution_ils": 8.4,
+       "margin_pct": 4.0
+      },
+      "boho": {
+       "landed_ils": 179.6,
+       "contribution_ils": 91.9,
+       "margin_pct": 30.2
+      }
+     },
+     "variants_fit": {
+      "nordic": 0,
+      "warm-modern": 0,
+      "japandi": 0,
+      "mediterranean": 0,
+      "modern-country": 0,
+      "boho": 0
+     },
+     "landed_ils": 179.6,
+     "slot_price_ils": {
+      "nordic": 359,
+      "warm-modern": 359,
+      "japandi": 359,
+      "mediterranean": 359,
+      "modern-country": 249,
+      "boho": 359
+     },
+     "margin_pct": {
+      "nordic": 30.2,
+      "warm-modern": 30.2,
+      "japandi": 30.2,
+      "mediterranean": 30.2,
+      "modern-country": 4.0,
+      "boho": 30.2
+     },
+     "eligible_styles": []
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005007728846911",
+     "url": "https://www.aliexpress.com/item/1005007728846911.html",
+     "title": "Retro Bamboo Woven Ceiling Light Aisle Restaurant Living Room Dining Room E27 Woven Lamps Home Decorative Fixtures Ceiling Lamp",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/Sd6dabeede7da41fa9e1d724232719d4a9.jpg",
+     "sku_or_vid": "12000042077865311",
+     "sku_label": "Body Color 30 cm",
+     "cost_usd": 29.4,
+     "ship_usd": 1.99,
+     "ship_days": "6-15",
+     "qty": 2,
+     "dims_cm": "Ø30",
+     "fits_envelope": "yes",
+     "type_ok": true,
+     "style_fit_guess": {
+      "nordic": 5.0,
+      "warm-modern": 5.0,
+      "japandi": 6.5,
+      "mediterranean": 7.0,
+      "modern-country": 5.5,
+      "boho": 8.0
+     },
+     "found_by": "search",
+     "card_id": null,
+     "why_he": "חצי-צמודה במבוק 30 ס״מ, צורת כיפה טבעית; בוהו/ים-תיכוני",
+     "econ": {
+      "nordic": {
+       "landed_ils": 200.6,
+       "contribution_ils": 70.9,
+       "margin_pct": 23.3
+      },
+      "warm-modern": {
+       "landed_ils": 200.6,
+       "contribution_ils": 70.9,
+       "margin_pct": 23.3
+      },
+      "japandi": {
+       "landed_ils": 200.6,
+       "contribution_ils": 70.9,
+       "margin_pct": 23.3
+      },
+      "mediterranean": {
+       "landed_ils": 200.6,
+       "contribution_ils": 70.9,
+       "margin_pct": 23.3
+      },
+      "modern-country": {
+       "landed_ils": 200.6,
+       "contribution_ils": -12.6,
+       "margin_pct": -6.0
+      },
+      "boho": {
+       "landed_ils": 200.6,
+       "contribution_ils": 70.9,
+       "margin_pct": 23.3
+      }
+     },
+     "variants_fit": {
+      "nordic": 0,
+      "warm-modern": 0,
+      "japandi": 0,
+      "mediterranean": 1,
+      "modern-country": 0,
+      "boho": 1
+     },
+     "landed_ils": 200.6,
+     "slot_price_ils": {
+      "nordic": 359,
+      "warm-modern": 359,
+      "japandi": 359,
+      "mediterranean": 359,
+      "modern-country": 249,
+      "boho": 359
+     },
+     "margin_pct": {
+      "nordic": 23.3,
+      "warm-modern": 23.3,
+      "japandi": 23.3,
+      "mediterranean": 23.3,
+      "modern-country": -6.0,
+      "boho": 23.3
+     },
+     "eligible_styles": [
+      "mediterranean",
+      "boho"
+     ]
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005009340417529",
+     "url": "https://www.aliexpress.com/item/1005009340417529.html",
+     "title": "Modern White Glass Ceiling Chandelier French Cream Chandelier Luxury Living Room Bedroom Kitchen Dining Room Hanging Lamp",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/S0e0f375dad1f4ac0aaadb89b170e7f12E.jpg",
+     "sku_or_vid": "12000048805460560",
+     "sku_label": "Emitting Color White Light Size Diameter 40 cm",
+     "cost_usd": 123.06,
+     "ship_usd": 0.0,
+     "ship_days": "83-83",
+     "qty": 2,
+     "dims_cm": "Ø40, stem",
+     "fits_envelope": "borderline",
+     "type_ok": true,
+     "style_fit_guess": {
+      "nordic": 3.0,
+      "warm-modern": 6.5,
+      "japandi": 4.0,
+      "mediterranean": 6.0,
+      "modern-country": 5.0,
+      "boho": 4.0
+     },
+     "found_by": "search",
+     "card_id": null,
+     "why_he": "זכוכית קונכיה עם פליז, SKU אור לבן קר; יקרה, לא לנורדי",
+     "econ": {
+      "nordic": {
+       "landed_ils": 812.2,
+       "contribution_ils": -540.7,
+       "margin_pct": -177.7
+      },
+      "warm-modern": {
+       "landed_ils": 812.2,
+       "contribution_ils": -540.7,
+       "margin_pct": -177.7
+      },
+      "japandi": {
+       "landed_ils": 812.2,
+       "contribution_ils": -540.7,
+       "margin_pct": -177.7
+      },
+      "mediterranean": {
+       "landed_ils": 812.2,
+       "contribution_ils": -540.7,
+       "margin_pct": -177.7
+      },
+      "modern-country": {
+       "landed_ils": 812.2,
+       "contribution_ils": -624.2,
+       "margin_pct": -295.8
+      },
+      "boho": {
+       "landed_ils": 812.2,
+       "contribution_ils": -540.7,
+       "margin_pct": -177.7
+      }
+     },
+     "variants_fit": {
+      "nordic": 0,
+      "warm-modern": 1,
+      "japandi": 0,
+      "mediterranean": 0,
+      "modern-country": 0,
+      "boho": 0
+     },
+     "landed_ils": 812.2,
+     "slot_price_ils": {
+      "nordic": 359,
+      "warm-modern": 359,
+      "japandi": 359,
+      "mediterranean": 359,
+      "modern-country": 249,
+      "boho": 359
+     },
+     "margin_pct": {
+      "nordic": -177.7,
+      "warm-modern": -177.7,
+      "japandi": -177.7,
+      "mediterranean": -177.7,
+      "modern-country": -295.8,
+      "boho": -177.7
+     },
+     "eligible_styles": []
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005012118871125",
+     "url": "https://www.aliexpress.com/item/1005012118871125.html",
+     "title": "Vintage Bamboo Ceiling Lamp Indoor Chandelier Ceiling Light Fixture E27 Home Lighting Living Room Bedroom Wooden Chassis",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/S262d3f518e9d4ea59e8a85b1c11ee725z.jpg",
+     "sku_or_vid": "12000057556861504",
+     "sku_label": "Body Color L Size Size E 27 Base",
+     "cost_usd": 18.7,
+     "ship_usd": 1.99,
+     "ship_days": "6-15",
+     "qty": 2,
+     "dims_cm": "Ø20–30?x14",
+     "fits_envelope": "borderline",
+     "type_ok": true,
+     "style_fit_guess": {
+      "nordic": 5.0,
+      "warm-modern": 5.0,
+      "japandi": 6.5,
+      "mediterranean": 6.5,
+      "modern-country": 5.5,
+      "boho": 7.5
+     },
+     "found_by": "search",
+     "card_id": null,
+     "why_he": "חצי-צמודה במבוק, מידת L לא ברורה (התמונה 20 ס״מ)",
+     "econ": {
+      "nordic": {
+       "landed_ils": 130.0,
+       "contribution_ils": 141.5,
+       "margin_pct": 46.5
+      },
+      "warm-modern": {
+       "landed_ils": 130.0,
+       "contribution_ils": 141.5,
+       "margin_pct": 46.5
+      },
+      "japandi": {
+       "landed_ils": 130.0,
+       "contribution_ils": 141.5,
+       "margin_pct": 46.5
+      },
+      "mediterranean": {
+       "landed_ils": 130.0,
+       "contribution_ils": 141.5,
+       "margin_pct": 46.5
+      },
+      "modern-country": {
+       "landed_ils": 130.0,
+       "contribution_ils": 58.0,
+       "margin_pct": 27.5
+      },
+      "boho": {
+       "landed_ils": 130.0,
+       "contribution_ils": 141.5,
+       "margin_pct": 46.5
+      }
+     },
+     "variants_fit": {
+      "nordic": 0,
+      "warm-modern": 0,
+      "japandi": 0,
+      "mediterranean": 1,
+      "modern-country": 0,
+      "boho": 1
+     },
+     "landed_ils": 130.0,
+     "slot_price_ils": {
+      "nordic": 359,
+      "warm-modern": 359,
+      "japandi": 359,
+      "mediterranean": 359,
+      "modern-country": 249,
+      "boho": 359
+     },
+     "margin_pct": {
+      "nordic": 46.5,
+      "warm-modern": 46.5,
+      "japandi": 46.5,
+      "mediterranean": 46.5,
+      "modern-country": 27.5,
+      "boho": 46.5
+     },
+     "eligible_styles": [
+      "boho"
+     ]
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005009522914459",
+     "url": "https://www.aliexpress.com/item/1005009522914459.html",
+     "title": "Slaapkamer Boerderij Land Interieur Achtergrond Wandlamp Retro Japanse Stijl Bamboe Wandlamp Lamp for Bedroom",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/Se58c86e5a57346e18ef019e872d6c630e.jpg",
+     "sku_or_vid": "12000049358866373",
+     "sku_label": "Lampshade Color A Wattage No light bulb",
+     "cost_usd": 22.59,
+     "ship_usd": 1.99,
+     "ship_days": "6-13",
+     "qty": 2,
+     "dims_cm": "~Ø30",
+     "fits_envelope": "borderline",
+     "type_ok": false,
+     "style_fit_guess": {
+      "nordic": 3.0,
+      "warm-modern": 3.0,
+      "japandi": 4.5,
+      "mediterranean": 5.0,
+      "modern-country": 4.0,
+      "boho": 6.0
+     },
+     "found_by": "search",
+     "card_id": null,
+     "why_he": "תלויה עם בית נורה מעץ (לא חצי-צמודה), כותרת: מנורת קיר",
+     "econ": {
+      "nordic": {
+       "landed_ils": 155.7,
+       "contribution_ils": 115.8,
+       "margin_pct": 38.1
+      },
+      "warm-modern": {
+       "landed_ils": 155.7,
+       "contribution_ils": 115.8,
+       "margin_pct": 38.1
+      },
+      "japandi": {
+       "landed_ils": 155.7,
+       "contribution_ils": 115.8,
+       "margin_pct": 38.1
+      },
+      "mediterranean": {
+       "landed_ils": 155.7,
+       "contribution_ils": 115.8,
+       "margin_pct": 38.1
+      },
+      "modern-country": {
+       "landed_ils": 155.7,
+       "contribution_ils": 32.3,
+       "margin_pct": 15.3
+      },
+      "boho": {
+       "landed_ils": 155.7,
+       "contribution_ils": 115.8,
+       "margin_pct": 38.1
+      }
+     },
+     "variants_fit": {
+      "nordic": 0,
+      "warm-modern": 0,
+      "japandi": 0,
+      "mediterranean": 0,
+      "modern-country": 0,
+      "boho": 0
+     },
+     "landed_ils": 155.7,
+     "slot_price_ils": {
+      "nordic": 359,
+      "warm-modern": 359,
+      "japandi": 359,
+      "mediterranean": 359,
+      "modern-country": 249,
+      "boho": 359
+     },
+     "margin_pct": {
+      "nordic": 38.1,
+      "warm-modern": 38.1,
+      "japandi": 38.1,
+      "mediterranean": 38.1,
+      "modern-country": 15.3,
+      "boho": 38.1
+     },
+     "eligible_styles": []
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005011881463362",
+     "url": "https://www.aliexpress.com/item/1005011881463362.html",
+     "title": "Hand Knitted Bamboo Pendant Light Retro E27 Chandelier Natural Rattan Wicker Desk Lamp for Bedroom Kitchen Lighting Fixtures",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/S55513bf0518042a38a646acadd3fa886w.jpg",
+     "sku_or_vid": "12000056895057778",
+     "sku_label": "Body Color A style 01 Wattage Without blub",
+     "cost_usd": 35.79,
+     "ship_usd": 1.99,
+     "ship_days": "6-15",
+     "qty": 2,
+     "dims_cm": "Ø23x36",
+     "fits_envelope": "no",
+     "type_ok": false,
+     "style_fit_guess": {
+      "nordic": 2.0,
+      "warm-modern": 2.0,
+      "japandi": 3.0,
+      "mediterranean": 3.0,
+      "modern-country": 3.0,
+      "boho": 4.0
+     },
+     "found_by": "search",
+     "card_id": null,
+     "why_he": "מנורת שולחן עם תקע, לא מנורת תקרה",
+     "econ": {
+      "nordic": {
+       "landed_ils": 242.8,
+       "contribution_ils": 28.7,
+       "margin_pct": 9.4
+      },
+      "warm-modern": {
+       "landed_ils": 242.8,
+       "contribution_ils": 28.7,
+       "margin_pct": 9.4
+      },
+      "japandi": {
+       "landed_ils": 242.8,
+       "contribution_ils": 28.7,
+       "margin_pct": 9.4
+      },
+      "mediterranean": {
+       "landed_ils": 242.8,
+       "contribution_ils": 28.7,
+       "margin_pct": 9.4
+      },
+      "modern-country": {
+       "landed_ils": 242.8,
+       "contribution_ils": -54.8,
+       "margin_pct": -26.0
+      },
+      "boho": {
+       "landed_ils": 242.8,
+       "contribution_ils": 28.7,
+       "margin_pct": 9.4
+      }
+     },
+     "variants_fit": {
+      "nordic": 0,
+      "warm-modern": 0,
+      "japandi": 0,
+      "mediterranean": 0,
+      "modern-country": 0,
+      "boho": 0
+     },
+     "landed_ils": 242.8,
+     "slot_price_ils": {
+      "nordic": 359,
+      "warm-modern": 359,
+      "japandi": 359,
+      "mediterranean": 359,
+      "modern-country": 249,
+      "boho": 359
+     },
+     "margin_pct": {
+      "nordic": 9.4,
+      "warm-modern": 9.4,
+      "japandi": 9.4,
+      "mediterranean": 9.4,
+      "modern-country": -26.0,
+      "boho": 9.4
+     },
+     "eligible_styles": []
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005008071787903",
+     "url": "https://www.aliexpress.com/item/1005008071787903.html",
+     "title": "Modern Minimalist Glass Ceiling Light Cream White Ceiling Chandeliers For Living Room Dining Room Bedroom Light Home Decor E14",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/Se25d92c680944183a5fa594bf83ce702S.jpg",
+     "sku_or_vid": "12000044407290463",
+     "sku_label": "Emitting Color Warm White Lampshade Color Diameter 40 cm",
+     "cost_usd": 115.24,
+     "ship_usd": 0.0,
+     "ship_days": "22-32",
+     "qty": 2,
+     "dims_cm": "Ø40, stem",
+     "fits_envelope": "borderline",
+     "type_ok": true,
+     "style_fit_guess": {
+      "nordic": 3.0,
+      "warm-modern": 7.0,
+      "japandi": 4.0,
+      "mediterranean": 6.0,
+      "modern-country": 5.0,
+      "boho": 4.0
+     },
+     "found_by": "earlier round, reviewed",
+     "card_id": null,
+     "why_he": "זכוכית קונכיה שמנת ופליז, אור חם; מתאים יחסית למודרני חם, יקר",
+     "econ": {
+      "nordic": {
+       "landed_ils": 760.6,
+       "contribution_ils": -489.1,
+       "margin_pct": -160.8
+      },
+      "warm-modern": {
+       "landed_ils": 760.6,
+       "contribution_ils": -489.1,
+       "margin_pct": -160.8
+      },
+      "japandi": {
+       "landed_ils": 760.6,
+       "contribution_ils": -489.1,
+       "margin_pct": -160.8
+      },
+      "mediterranean": {
+       "landed_ils": 760.6,
+       "contribution_ils": -489.1,
+       "margin_pct": -160.8
+      },
+      "modern-country": {
+       "landed_ils": 760.6,
+       "contribution_ils": -572.6,
+       "margin_pct": -271.4
+      },
+      "boho": {
+       "landed_ils": 760.6,
+       "contribution_ils": -489.1,
+       "margin_pct": -160.8
+      }
+     },
+     "variants_fit": {
+      "nordic": 0,
+      "warm-modern": 1,
+      "japandi": 0,
+      "mediterranean": 0,
+      "modern-country": 0,
+      "boho": 0
+     },
+     "landed_ils": 760.6,
+     "slot_price_ils": {
+      "nordic": 359,
+      "warm-modern": 359,
+      "japandi": 359,
+      "mediterranean": 359,
+      "modern-country": 249,
+      "boho": 359
+     },
+     "margin_pct": {
+      "nordic": -160.8,
+      "warm-modern": -160.8,
+      "japandi": -160.8,
+      "mediterranean": -160.8,
+      "modern-country": -271.4,
+      "boho": -160.8
+     },
+     "eligible_styles": []
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005010079227644",
+     "url": "https://www.aliexpress.com/item/1005010079227644.html",
+     "title": "Bamboo Ceiling Lamp Indoor Ceiling Light E27 Home Warm White Chandelier Light Bulb-Free Grass Vine Craf Room Decoration",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/S6700b3d9d544446caf935823deec0337Z.jpg",
+     "sku_or_vid": "12000051061488356",
+     "sku_label": "Body Color Big-30 cm Emitting Color Warm White",
+     "cost_usd": 26.63,
+     "ship_usd": 1.99,
+     "ship_days": "6-13",
+     "qty": 2,
+     "dims_cm": "Ø30x~20",
+     "fits_envelope": "borderline",
+     "type_ok": true,
+     "style_fit_guess": {
+      "nordic": 5.0,
+      "warm-modern": 5.0,
+      "japandi": 6.5,
+      "mediterranean": 7.0,
+      "modern-country": 5.5,
+      "boho": 8.0
+     },
+     "found_by": "earlier round, reviewed",
+     "card_id": null,
+     "why_he": "כפילות של #1 (אותו מוצר); במבוק קלוע 30 ס״מ, חזק לבוהו",
+     "econ": {
+      "nordic": {
+       "landed_ils": 182.3,
+       "contribution_ils": 89.2,
+       "margin_pct": 29.3
+      },
+      "warm-modern": {
+       "landed_ils": 182.3,
+       "contribution_ils": 89.2,
+       "margin_pct": 29.3
+      },
+      "japandi": {
+       "landed_ils": 182.3,
+       "contribution_ils": 89.2,
+       "margin_pct": 29.3
+      },
+      "mediterranean": {
+       "landed_ils": 182.3,
+       "contribution_ils": 89.2,
+       "margin_pct": 29.3
+      },
+      "modern-country": {
+       "landed_ils": 182.3,
+       "contribution_ils": 5.7,
+       "margin_pct": 2.7
+      },
+      "boho": {
+       "landed_ils": 182.3,
+       "contribution_ils": 89.2,
+       "margin_pct": 29.3
+      }
+     },
+     "variants_fit": {
+      "nordic": 0,
+      "warm-modern": 0,
+      "japandi": 0,
+      "mediterranean": 1,
+      "modern-country": 0,
+      "boho": 1
+     },
+     "landed_ils": 182.3,
+     "slot_price_ils": {
+      "nordic": 359,
+      "warm-modern": 359,
+      "japandi": 359,
+      "mediterranean": 359,
+      "modern-country": 249,
+      "boho": 359
+     },
+     "margin_pct": {
+      "nordic": 29.3,
+      "warm-modern": 29.3,
+      "japandi": 29.3,
+      "mediterranean": 29.3,
+      "modern-country": 2.7,
+      "boho": 29.3
+     },
+     "eligible_styles": [
+      "mediterranean",
+      "boho"
+     ]
+    }
+   ],
+   "verdict_he": "נמצאו 1 מוצרים: mediterranean 4/3, boho 4/1"
+  },
+  "corridor/gallery-art": {
+   "styles_needing": [
+    "nordic",
+    "warm-modern",
+    "japandi",
+    "mediterranean",
+    "modern-country",
+    "boho"
+   ],
+   "queries_aliexpress": [
+    "abstract line drawing framed canvas 40x50 black frame",
+    "set of 3 ink botanical prints 40x50 beige black",
+    "framed art print set of 3",
+    "wooden framed art print set"
+   ],
+   "candidates": [
+    {
+     "source": "AliExpress",
+     "id": "1005011616642676",
+     "url": "https://www.aliexpress.com/item/1005011616642676.html",
+     "title": "1pc frameless Canvas painting Simple Nordic Picasso Boho Black Abstract Posters Prints Canvas Painting Minimalism Wall Art Pictu",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/S841e2b77d45945bcbaccb7db4ccdbeafV.jpg",
+     "sku_or_vid": "12000056064665297",
+     "sku_label": "Color J Size (Inch) 40 x 50 cm",
+     "cost_usd": 4.13,
+     "ship_usd": 1.99,
+     "ship_days": "6-15",
+     "qty": 3,
+     "dims_cm": "40x50",
+     "fits_envelope": "yes",
+     "type_ok": true,
+     "style_fit_guess": {
+      "nordic": 6.5,
+      "warm-modern": 6.5,
+      "japandi": 6.0,
+      "mediterranean": 4.5,
+      "modern-country": 5.0,
+      "boho": 5.5
+     },
+     "found_by": "search",
+     "card_id": null,
+     "why_he": "הדפס קו מופשט על טאופ/שמנת, סדרה של 5 גוונים; בלי מסגרת, פחם מעט",
+     "econ": {
+      "nordic": {
+       "landed_ils": 47.5,
+       "contribution_ils": 227.8,
+       "margin_pct": 73.9
+      },
+      "warm-modern": {
+       "landed_ils": 47.5,
+       "contribution_ils": 227.8,
+       "margin_pct": 73.9
+      },
+      "japandi": {
+       "landed_ils": 47.5,
+       "contribution_ils": 227.8,
+       "margin_pct": 73.9
+      },
+      "mediterranean": {
+       "landed_ils": 47.5,
+       "contribution_ils": 227.8,
+       "margin_pct": 73.9
+      },
+      "modern-country": {
+       "landed_ils": 47.5,
+       "contribution_ils": 227.8,
+       "margin_pct": 73.9
+      },
+      "boho": {
+       "landed_ils": 47.5,
+       "contribution_ils": 227.8,
+       "margin_pct": 73.9
+      }
+     },
+     "variants_fit": {
+      "nordic": 3,
+      "warm-modern": 3,
+      "japandi": 2,
+      "mediterranean": 0,
+      "modern-country": 0,
+      "boho": 1
+     },
+     "landed_ils": 47.5,
+     "slot_price_ils": {
+      "nordic": 364,
+      "warm-modern": 364,
+      "japandi": 364,
+      "mediterranean": 364,
+      "modern-country": 364,
+      "boho": 364
+     },
+     "margin_pct": {
+      "nordic": 73.9,
+      "warm-modern": 73.9,
+      "japandi": 73.9,
+      "mediterranean": 73.9,
+      "modern-country": 73.9,
+      "boho": 73.9
+     },
+     "eligible_styles": []
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005010139400410",
+     "url": "https://www.aliexpress.com/item/1005010139400410.html",
+     "title": "Pet Dog And Cat Paw Print Ink Set Pad Safe Non Toxic Baby Handprints Wash Free Easy Clean DIY Footprints Pet Souvenirs Top Rated",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/S61344746a122467189b337691cfb3eaak.png",
+     "sku_or_vid": "12000051290629230",
+     "sku_label": "Color 1 pcs S",
+     "cost_usd": 2.08,
+     "ship_usd": 1.99,
+     "ship_days": "6-13",
+     "qty": 3,
+     "dims_cm": "9.5x5.7",
+     "fits_envelope": "no",
+     "type_ok": false,
+     "style_fit_guess": {
+      "nordic": 1.0,
+      "warm-modern": 1.0,
+      "japandi": 1.0,
+      "mediterranean": 1.0,
+      "modern-country": 1.0,
+      "boho": 1.0
+     },
+     "found_by": "search",
+     "card_id": null,
+     "why_he": "כרית דיו להדפסי כפות, לא הדפס אמנות",
+     "econ": {
+      "nordic": {
+       "landed_ils": 27.2,
+       "contribution_ils": 248.1,
+       "margin_pct": 80.4
+      },
+      "warm-modern": {
+       "landed_ils": 27.2,
+       "contribution_ils": 248.1,
+       "margin_pct": 80.4
+      },
+      "japandi": {
+       "landed_ils": 27.2,
+       "contribution_ils": 248.1,
+       "margin_pct": 80.4
+      },
+      "mediterranean": {
+       "landed_ils": 27.2,
+       "contribution_ils": 248.1,
+       "margin_pct": 80.4
+      },
+      "modern-country": {
+       "landed_ils": 27.2,
+       "contribution_ils": 248.1,
+       "margin_pct": 80.4
+      },
+      "boho": {
+       "landed_ils": 27.2,
+       "contribution_ils": 248.1,
+       "margin_pct": 80.4
+      }
+     },
+     "variants_fit": {
+      "nordic": 0,
+      "warm-modern": 0,
+      "japandi": 0,
+      "mediterranean": 0,
+      "modern-country": 0,
+      "boho": 0
+     },
+     "landed_ils": 27.2,
+     "slot_price_ils": {
+      "nordic": 364,
+      "warm-modern": 364,
+      "japandi": 364,
+      "mediterranean": 364,
+      "modern-country": 364,
+      "boho": 364
+     },
+     "margin_pct": {
+      "nordic": 80.4,
+      "warm-modern": 80.4,
+      "japandi": 80.4,
+      "mediterranean": 80.4,
+      "modern-country": 80.4,
+      "boho": 80.4
+     },
+     "eligible_styles": []
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005012046725331",
+     "url": "https://www.aliexpress.com/item/1005012046725331.html",
+     "title": "1pc frameless Canvas painting Simple Nordic Picasso Boho Black Abstract Posters Prints Canvas Painting Minimalism Wall Art Pi",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/S2122106e3e9045048e166412f6f88f23C.jpg",
+     "sku_or_vid": "12000057383740915",
+     "sku_label": "Color G Size (Inch) 40 x 50 cm",
+     "cost_usd": 4.74,
+     "ship_usd": 1.99,
+     "ship_days": "6-15",
+     "qty": 3,
+     "dims_cm": "40x50",
+     "fits_envelope": "yes",
+     "type_ok": true,
+     "style_fit_guess": {
+      "nordic": 6.5,
+      "warm-modern": 6.5,
+      "japandi": 6.0,
+      "mediterranean": 4.5,
+      "modern-country": 5.0,
+      "boho": 5.5
+     },
+     "found_by": "search",
+     "card_id": null,
+     "why_he": "אותה סדרת קו מופשט (D–I), טאופ ושמנת; בלי מסגרת",
+     "econ": {
+      "nordic": {
+       "landed_ils": 53.5,
+       "contribution_ils": 221.8,
+       "margin_pct": 71.9
+      },
+      "warm-modern": {
+       "landed_ils": 53.5,
+       "contribution_ils": 221.8,
+       "margin_pct": 71.9
+      },
+      "japandi": {
+       "landed_ils": 53.5,
+       "contribution_ils": 221.8,
+       "margin_pct": 71.9
+      },
+      "mediterranean": {
+       "landed_ils": 53.5,
+       "contribution_ils": 221.8,
+       "margin_pct": 71.9
+      },
+      "modern-country": {
+       "landed_ils": 53.5,
+       "contribution_ils": 221.8,
+       "margin_pct": 71.9
+      },
+      "boho": {
+       "landed_ils": 53.5,
+       "contribution_ils": 221.8,
+       "margin_pct": 71.9
+      }
+     },
+     "variants_fit": {
+      "nordic": 3,
+      "warm-modern": 3,
+      "japandi": 2,
+      "mediterranean": 0,
+      "modern-country": 0,
+      "boho": 1
+     },
+     "landed_ils": 53.5,
+     "slot_price_ils": {
+      "nordic": 364,
+      "warm-modern": 364,
+      "japandi": 364,
+      "mediterranean": 364,
+      "modern-country": 364,
+      "boho": 364
+     },
+     "margin_pct": {
+      "nordic": 71.9,
+      "warm-modern": 71.9,
+      "japandi": 71.9,
+      "mediterranean": 71.9,
+      "modern-country": 71.9,
+      "boho": 71.9
+     },
+     "eligible_styles": []
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005010661239904",
+     "url": "https://www.aliexpress.com/item/1005010661239904.html",
+     "title": "Abstract Gallery Wall Art Print Painting Vintage Boho Minimalist Prints Room Decor Canvas Poster Home Bedroom Living Room Decor",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/S72e69e0b17c046b083a0e6425d110506Q.jpg",
+     "sku_or_vid": "12000053108995136",
+     "sku_label": "Color DA 4969 Size (Inch) 20 x 30 cm Unframe",
+     "cost_usd": 2.32,
+     "ship_usd": 1.99,
+     "ship_days": "6-15",
+     "qty": 3,
+     "dims_cm": "30x40/40x60",
+     "fits_envelope": "no",
+     "type_ok": true,
+     "style_fit_guess": {
+      "nordic": 6.0,
+      "warm-modern": 6.0,
+      "japandi": 5.5,
+      "mediterranean": 4.5,
+      "modern-country": 5.0,
+      "boho": 5.5
+     },
+     "found_by": "search",
+     "card_id": null,
+     "why_he": "קווים מופשטים על טאופ; אין מידה 40×50 בקו, ה-SKU 20×30",
+     "econ": {
+      "nordic": {
+       "landed_ils": 29.5,
+       "contribution_ils": 245.8,
+       "margin_pct": 79.7
+      },
+      "warm-modern": {
+       "landed_ils": 29.5,
+       "contribution_ils": 245.8,
+       "margin_pct": 79.7
+      },
+      "japandi": {
+       "landed_ils": 29.5,
+       "contribution_ils": 245.8,
+       "margin_pct": 79.7
+      },
+      "mediterranean": {
+       "landed_ils": 29.5,
+       "contribution_ils": 245.8,
+       "margin_pct": 79.7
+      },
+      "modern-country": {
+       "landed_ils": 29.5,
+       "contribution_ils": 245.8,
+       "margin_pct": 79.7
+      },
+      "boho": {
+       "landed_ils": 29.5,
+       "contribution_ils": 245.8,
+       "margin_pct": 79.7
+      }
+     },
+     "variants_fit": {
+      "nordic": 3,
+      "warm-modern": 3,
+      "japandi": 2,
+      "mediterranean": 0,
+      "modern-country": 0,
+      "boho": 1
+     },
+     "landed_ils": 29.5,
+     "slot_price_ils": {
+      "nordic": 364,
+      "warm-modern": 364,
+      "japandi": 364,
+      "mediterranean": 364,
+      "modern-country": 364,
+      "boho": 364
+     },
+     "margin_pct": {
+      "nordic": 79.7,
+      "warm-modern": 79.7,
+      "japandi": 79.7,
+      "mediterranean": 79.7,
+      "modern-country": 79.7,
+      "boho": 79.7
+     },
+     "eligible_styles": []
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005011750362838",
+     "url": "https://www.aliexpress.com/item/1005011750362838.html",
+     "title": "Black Lines Drawing Girl Body Rainbow Abstract Posters Prints Wall Art Canvas Painting Hotel Bar Pictures For Living Room Decor",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/S33705b534a634211b1a816d8f108938el.jpg",
+     "sku_or_vid": "12000056435036378",
+     "sku_label": "Color 1 Size (Inch) 40 x 50 cm Unframed",
+     "cost_usd": 4.83,
+     "ship_usd": 1.99,
+     "ship_days": "6-15",
+     "qty": 3,
+     "dims_cm": "40x50",
+     "fits_envelope": "yes",
+     "type_ok": true,
+     "style_fit_guess": {
+      "nordic": 4.5,
+      "warm-modern": 5.0,
+      "japandi": 4.0,
+      "mediterranean": 3.5,
+      "modern-country": 3.5,
+      "boho": 5.0
+     },
+     "found_by": "search",
+     "card_id": null,
+     "why_he": "רישום קו של גוף אישה וגרסאות צבעוניות; דמויות אסורות בנורדי",
+     "econ": {
+      "nordic": {
+       "landed_ils": 54.4,
+       "contribution_ils": 220.9,
+       "margin_pct": 71.6
+      },
+      "warm-modern": {
+       "landed_ils": 54.4,
+       "contribution_ils": 220.9,
+       "margin_pct": 71.6
+      },
+      "japandi": {
+       "landed_ils": 54.4,
+       "contribution_ils": 220.9,
+       "margin_pct": 71.6
+      },
+      "mediterranean": {
+       "landed_ils": 54.4,
+       "contribution_ils": 220.9,
+       "margin_pct": 71.6
+      },
+      "modern-country": {
+       "landed_ils": 54.4,
+       "contribution_ils": 220.9,
+       "margin_pct": 71.6
+      },
+      "boho": {
+       "landed_ils": 54.4,
+       "contribution_ils": 220.9,
+       "margin_pct": 71.6
+      }
+     },
+     "variants_fit": {
+      "nordic": 0,
+      "warm-modern": 1,
+      "japandi": 0,
+      "mediterranean": 0,
+      "modern-country": 0,
+      "boho": 1
+     },
+     "landed_ils": 54.4,
+     "slot_price_ils": {
+      "nordic": 364,
+      "warm-modern": 364,
+      "japandi": 364,
+      "mediterranean": 364,
+      "modern-country": 364,
+      "boho": 364
+     },
+     "margin_pct": {
+      "nordic": 71.6,
+      "warm-modern": 71.6,
+      "japandi": 71.6,
+      "mediterranean": 71.6,
+      "modern-country": 71.6,
+      "boho": 71.6
+     },
+     "eligible_styles": []
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005012004060580",
+     "url": "https://www.aliexpress.com/item/1005012004060580.html",
+     "title": "Abstract Floral Wall Art Set of 3, Colorful Modern Flower Poster Prints, Bright Botanical Home Decor, Contemporary Art Set",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/S4201d4e4aa2842818934cfe906198aabL.jpg",
+     "sku_or_vid": "12000057246497439",
+     "sku_label": "Color BYC 601-3 pcs Size (Inch) 40 x 50 cm Unframe",
+     "cost_usd": 6.95,
+     "ship_usd": 1.99,
+     "ship_days": "6-15",
+     "qty": 3,
+     "dims_cm": "40x50 x3",
+     "fits_envelope": "yes",
+     "type_ok": true,
+     "style_fit_guess": {
+      "nordic": 2.0,
+      "warm-modern": 3.0,
+      "japandi": 2.0,
+      "mediterranean": 3.5,
+      "modern-country": 3.0,
+      "boho": 4.5
+     },
+     "found_by": "search",
+     "card_id": null,
+     "why_he": "שלישיית פרחים צבעונית ורוויה; סותר את כל המפרטים",
+     "econ": {
+      "nordic": {
+       "landed_ils": 75.4,
+       "contribution_ils": 199.9,
+       "margin_pct": 64.8
+      },
+      "warm-modern": {
+       "landed_ils": 75.4,
+       "contribution_ils": 199.9,
+       "margin_pct": 64.8
+      },
+      "japandi": {
+       "landed_ils": 75.4,
+       "contribution_ils": 199.9,
+       "margin_pct": 64.8
+      },
+      "mediterranean": {
+       "landed_ils": 75.4,
+       "contribution_ils": 199.9,
+       "margin_pct": 64.8
+      },
+      "modern-country": {
+       "landed_ils": 75.4,
+       "contribution_ils": 199.9,
+       "margin_pct": 64.8
+      },
+      "boho": {
+       "landed_ils": 75.4,
+       "contribution_ils": 199.9,
+       "margin_pct": 64.8
+      }
+     },
+     "variants_fit": {
+      "nordic": 0,
+      "warm-modern": 0,
+      "japandi": 0,
+      "mediterranean": 0,
+      "modern-country": 0,
+      "boho": 0
+     },
+     "landed_ils": 75.4,
+     "slot_price_ils": {
+      "nordic": 364,
+      "warm-modern": 364,
+      "japandi": 364,
+      "mediterranean": 364,
+      "modern-country": 364,
+      "boho": 364
+     },
+     "margin_pct": {
+      "nordic": 64.8,
+      "warm-modern": 64.8,
+      "japandi": 64.8,
+      "mediterranean": 64.8,
+      "modern-country": 64.8,
+      "boho": 64.8
+     },
+     "eligible_styles": []
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005009697115402",
+     "url": "https://www.aliexpress.com/item/1005009697115402.html",
+     "title": "Black Lines Drawing Girl Body Rainbow Abstract Posters Prints Wall Art Canvas Painting Hotel Bar Pictures For Living Room Decor",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/S482cc05a306a4eb8a1b97b364e66e9d4l.jpg",
+     "sku_or_vid": "12000049884080996",
+     "sku_label": "Size (Inch) 40 X 50 cm No Framed Color H",
+     "cost_usd": 8.67,
+     "ship_usd": 1.99,
+     "ship_days": "6-15",
+     "qty": 3,
+     "dims_cm": "40x50",
+     "fits_envelope": "yes",
+     "type_ok": true,
+     "style_fit_guess": {
+      "nordic": 4.5,
+      "warm-modern": 5.0,
+      "japandi": 4.0,
+      "mediterranean": 3.5,
+      "modern-country": 3.5,
+      "boho": 5.0
+     },
+     "found_by": "search",
+     "card_id": null,
+     "why_he": "אותה סדרת גוף/קשת כמו #18; דמויות ומוטיבי קשת",
+     "econ": {
+      "nordic": {
+       "landed_ils": 92.4,
+       "contribution_ils": 182.9,
+       "margin_pct": 59.3
+      },
+      "warm-modern": {
+       "landed_ils": 92.4,
+       "contribution_ils": 182.9,
+       "margin_pct": 59.3
+      },
+      "japandi": {
+       "landed_ils": 92.4,
+       "contribution_ils": 182.9,
+       "margin_pct": 59.3
+      },
+      "mediterranean": {
+       "landed_ils": 92.4,
+       "contribution_ils": 182.9,
+       "margin_pct": 59.3
+      },
+      "modern-country": {
+       "landed_ils": 92.4,
+       "contribution_ils": 182.9,
+       "margin_pct": 59.3
+      },
+      "boho": {
+       "landed_ils": 92.4,
+       "contribution_ils": 182.9,
+       "margin_pct": 59.3
+      }
+     },
+     "variants_fit": {
+      "nordic": 0,
+      "warm-modern": 1,
+      "japandi": 0,
+      "mediterranean": 0,
+      "modern-country": 0,
+      "boho": 1
+     },
+     "landed_ils": 92.4,
+     "slot_price_ils": {
+      "nordic": 364,
+      "warm-modern": 364,
+      "japandi": 364,
+      "mediterranean": 364,
+      "modern-country": 364,
+      "boho": 364
+     },
+     "margin_pct": {
+      "nordic": 59.3,
+      "warm-modern": 59.3,
+      "japandi": 59.3,
+      "mediterranean": 59.3,
+      "modern-country": 59.3,
+      "boho": 59.3
+     },
+     "eligible_styles": []
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005010559163962",
+     "url": "https://www.aliexpress.com/item/1005010559163962.html",
+     "title": "1pc Wabi Sabi Japandi Scandinavian Wall Art, Frameless Beige & Brown Zen Tree Branches Poster for Living Room Bedroom Decortions",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/S7b791a3f81204e2db594acd8c142e4cfD.jpg",
+     "sku_or_vid": "12000052811171677",
+     "sku_label": "Color ZWD 973 Size (Inch) 20 x 30 cm no frame",
+     "cost_usd": 3.17,
+     "ship_usd": 0.0,
+     "ship_days": "19-30",
+     "qty": 3,
+     "dims_cm": "30x40/40x60",
+     "fits_envelope": "no",
+     "type_ok": true,
+     "style_fit_guess": {
+      "nordic": 5.0,
+      "warm-modern": 6.0,
+      "japandi": 7.0,
+      "mediterranean": 4.5,
+      "modern-country": 5.0,
+      "boho": 6.0
+     },
+     "found_by": "search",
+     "card_id": null,
+     "why_he": "עץ וואבי-סאבי בבז׳ וחום; אין 40×50, בלוק חום גדול מ-10%",
+     "econ": {
+      "nordic": {
+       "landed_ils": 31.4,
+       "contribution_ils": 243.9,
+       "margin_pct": 79.1
+      },
+      "warm-modern": {
+       "landed_ils": 31.4,
+       "contribution_ils": 243.9,
+       "margin_pct": 79.1
+      },
+      "japandi": {
+       "landed_ils": 31.4,
+       "contribution_ils": 243.9,
+       "margin_pct": 79.1
+      },
+      "mediterranean": {
+       "landed_ils": 31.4,
+       "contribution_ils": 243.9,
+       "margin_pct": 79.1
+      },
+      "modern-country": {
+       "landed_ils": 31.4,
+       "contribution_ils": 243.9,
+       "margin_pct": 79.1
+      },
+      "boho": {
+       "landed_ils": 31.4,
+       "contribution_ils": 243.9,
+       "margin_pct": 79.1
+      }
+     },
+     "variants_fit": {
+      "nordic": 0,
+      "warm-modern": 1,
+      "japandi": 1,
+      "mediterranean": 0,
+      "modern-country": 0,
+      "boho": 1
+     },
+     "landed_ils": 31.4,
+     "slot_price_ils": {
+      "nordic": 364,
+      "warm-modern": 364,
+      "japandi": 364,
+      "mediterranean": 364,
+      "modern-country": 364,
+      "boho": 364
+     },
+     "margin_pct": {
+      "nordic": 79.1,
+      "warm-modern": 79.1,
+      "japandi": 79.1,
+      "mediterranean": 79.1,
+      "modern-country": 79.1,
+      "boho": 79.1
+     },
+     "eligible_styles": []
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005010758945249",
+     "url": "https://www.aliexpress.com/item/1005010758945249.html",
+     "title": "Set of 3 Neutral Floral Print Set: Abstract Botanical Art, Earth Tones, Digital Download",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/S7a2054499ff94b828d79a9dd246fbc50Q.jpg",
+     "sku_or_vid": "12000053414397446",
+     "sku_label": "Color TT 1920-1 Size (Inch) 20 x 30 cm no frame",
+     "cost_usd": 2.18,
+     "ship_usd": 1.99,
+     "ship_days": "6-15",
+     "qty": 3,
+     "dims_cm": "30x40/40x60 x3",
+     "fits_envelope": "borderline",
+     "type_ok": true,
+     "style_fit_guess": {
+      "nordic": 4.5,
+      "warm-modern": 6.5,
+      "japandi": 5.0,
+      "mediterranean": 6.5,
+      "modern-country": 6.0,
+      "boho": 7.0
+     },
+     "found_by": "search",
+     "card_id": "gallery-art-aliexpress-set-3-neutral-floral-945249",
+     "why_he": "שלישיית צבעונים בטרקוטה ואדמה; אין 40×50, טון חם מדי לנורדי",
+     "econ": {
+      "nordic": {
+       "landed_ils": 28.1,
+       "contribution_ils": 247.2,
+       "margin_pct": 80.1
+      },
+      "warm-modern": {
+       "landed_ils": 28.1,
+       "contribution_ils": 247.2,
+       "margin_pct": 80.1
+      },
+      "japandi": {
+       "landed_ils": 28.1,
+       "contribution_ils": 247.2,
+       "margin_pct": 80.1
+      },
+      "mediterranean": {
+       "landed_ils": 28.1,
+       "contribution_ils": 247.2,
+       "margin_pct": 80.1
+      },
+      "modern-country": {
+       "landed_ils": 28.1,
+       "contribution_ils": 247.2,
+       "margin_pct": 80.1
+      },
+      "boho": {
+       "landed_ils": 28.1,
+       "contribution_ils": 247.2,
+       "margin_pct": 80.1
+      }
+     },
+     "variants_fit": {
+      "nordic": 0,
+      "warm-modern": 1,
+      "japandi": 0,
+      "mediterranean": 1,
+      "modern-country": 1,
+      "boho": 1
+     },
+     "landed_ils": 28.1,
+     "slot_price_ils": {
+      "nordic": 364,
+      "warm-modern": 364,
+      "japandi": 364,
+      "mediterranean": 364,
+      "modern-country": 364,
+      "boho": 364
+     },
+     "margin_pct": {
+      "nordic": 80.1,
+      "warm-modern": 80.1,
+      "japandi": 80.1,
+      "mediterranean": 80.1,
+      "modern-country": 80.1,
+      "boho": 80.1
+     },
+     "eligible_styles": [
+      "boho"
+     ]
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005013266664201",
+     "url": "https://www.aliexpress.com/item/1005013266664201.html",
+     "title": "(No frame)Japanese Wabi Sabi Tree Abstract Canvas Print Poster Japandi Vintage Minimalist Neutral Art Prints Wall Art Home De",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/S551826c6c37e4b9984b2098f62ed39dfk.jpg",
+     "sku_or_vid": "12000060704906143",
+     "sku_label": "Color 01 Size (Inch) 40 x 50 cm",
+     "cost_usd": 2.54,
+     "ship_usd": 1.99,
+     "ship_days": "6-15",
+     "qty": 3,
+     "dims_cm": "40x50",
+     "fits_envelope": "yes",
+     "type_ok": true,
+     "style_fit_guess": {
+      "nordic": 5.0,
+      "warm-modern": 6.0,
+      "japandi": 7.0,
+      "mediterranean": 4.5,
+      "modern-country": 5.0,
+      "boho": 6.0
+     },
+     "found_by": "search",
+     "card_id": null,
+     "why_he": "עץ וואבי-סאבי בבז׳ וחום, דגם אחד; ג׳פנדי טוב, בלי מסגרת",
+     "econ": {
+      "nordic": {
+       "landed_ils": 31.7,
+       "contribution_ils": 243.6,
+       "margin_pct": 79.0
+      },
+      "warm-modern": {
+       "landed_ils": 31.7,
+       "contribution_ils": 243.6,
+       "margin_pct": 79.0
+      },
+      "japandi": {
+       "landed_ils": 31.7,
+       "contribution_ils": 243.6,
+       "margin_pct": 79.0
+      },
+      "mediterranean": {
+       "landed_ils": 31.7,
+       "contribution_ils": 243.6,
+       "margin_pct": 79.0
+      },
+      "modern-country": {
+       "landed_ils": 31.7,
+       "contribution_ils": 243.6,
+       "margin_pct": 79.0
+      },
+      "boho": {
+       "landed_ils": 31.7,
+       "contribution_ils": 243.6,
+       "margin_pct": 79.0
+      }
+     },
+     "variants_fit": {
+      "nordic": 0,
+      "warm-modern": 1,
+      "japandi": 1,
+      "mediterranean": 0,
+      "modern-country": 0,
+      "boho": 1
+     },
+     "landed_ils": 31.7,
+     "slot_price_ils": {
+      "nordic": 364,
+      "warm-modern": 364,
+      "japandi": 364,
+      "mediterranean": 364,
+      "modern-country": 364,
+      "boho": 364
+     },
+     "margin_pct": {
+      "nordic": 79.0,
+      "warm-modern": 79.0,
+      "japandi": 79.0,
+      "mediterranean": 79.0,
+      "modern-country": 79.0,
+      "boho": 79.0
+     },
+     "eligible_styles": [
+      "japandi"
+     ]
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005009748224681",
+     "url": "https://www.aliexpress.com/item/1005009748224681.html",
+     "title": "5 Pieces DIY Wooden Picture Frames Unfinished Solid Wood Photo Picture Frames Wooden Picture Frame Crafts DIY Painting Birthday",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/S36d317348a244e3294eeab6f76848da6U.jpg",
+     "sku_or_vid": "12000050037759002",
+     "sku_label": "Color 1 set",
+     "cost_usd": 10.52,
+     "ship_usd": 1.99,
+     "ship_days": "6-13",
+     "qty": 3,
+     "dims_cm": "~10x15",
+     "fits_envelope": "no",
+     "type_ok": false,
+     "style_fit_guess": {
+      "nordic": 1.0,
+      "warm-modern": 1.0,
+      "japandi": 1.0,
+      "mediterranean": 1.0,
+      "modern-country": 1.0,
+      "boho": 1.0
+     },
+     "found_by": "search",
+     "card_id": null,
+     "why_he": "מסגרות עץ DIY קטנות לצילום, לא הדפס",
+     "econ": {
+      "nordic": {
+       "landed_ils": 110.7,
+       "contribution_ils": 164.6,
+       "margin_pct": 53.4
+      },
+      "warm-modern": {
+       "landed_ils": 110.7,
+       "contribution_ils": 164.6,
+       "margin_pct": 53.4
+      },
+      "japandi": {
+       "landed_ils": 110.7,
+       "contribution_ils": 164.6,
+       "margin_pct": 53.4
+      },
+      "mediterranean": {
+       "landed_ils": 110.7,
+       "contribution_ils": 164.6,
+       "margin_pct": 53.4
+      },
+      "modern-country": {
+       "landed_ils": 110.7,
+       "contribution_ils": 164.6,
+       "margin_pct": 53.4
+      },
+      "boho": {
+       "landed_ils": 110.7,
+       "contribution_ils": 164.6,
+       "margin_pct": 53.4
+      }
+     },
+     "variants_fit": {
+      "nordic": 0,
+      "warm-modern": 0,
+      "japandi": 0,
+      "mediterranean": 0,
+      "modern-country": 0,
+      "boho": 0
+     },
+     "landed_ils": 110.7,
+     "slot_price_ils": {
+      "nordic": 364,
+      "warm-modern": 364,
+      "japandi": 364,
+      "mediterranean": 364,
+      "modern-country": 364,
+      "boho": 364
+     },
+     "margin_pct": {
+      "nordic": 53.4,
+      "warm-modern": 53.4,
+      "japandi": 53.4,
+      "mediterranean": 53.4,
+      "modern-country": 53.4,
+      "boho": 53.4
+     },
+     "eligible_styles": []
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005012313085232",
+     "url": "https://www.aliexpress.com/item/1005012313085232.html",
+     "title": "Nordic Modern Black White Line Canvas Print Poster Abstract Wall Art with Wooden Frame Frameless or Black Aluminum Frame for Liv",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/S29a4740b208940cb86eea8e8058b3050S.png",
+     "sku_or_vid": "12000058075018511",
+     "sku_label": "Color P 13 Size (Inch) 20 x 30 cm No Frame",
+     "cost_usd": 3.73,
+     "ship_usd": 1.99,
+     "ship_days": "6-15",
+     "qty": 3,
+     "dims_cm": "20x30 (SKU)",
+     "fits_envelope": "borderline",
+     "type_ok": true,
+     "style_fit_guess": {
+      "nordic": 6.0,
+      "warm-modern": 6.0,
+      "japandi": 6.0,
+      "mediterranean": 3.5,
+      "modern-country": 4.5,
+      "boho": 4.0
+     },
+     "found_by": "earlier round, reviewed",
+     "card_id": null,
+     "why_he": "מופשט שחור-לבן במכחול; שטח פחם גדול מ-10%, SKU 20×30",
+     "econ": {
+      "nordic": {
+       "landed_ils": 43.5,
+       "contribution_ils": 231.8,
+       "margin_pct": 75.1
+      },
+      "warm-modern": {
+       "landed_ils": 43.5,
+       "contribution_ils": 231.8,
+       "margin_pct": 75.1
+      },
+      "japandi": {
+       "landed_ils": 43.5,
+       "contribution_ils": 231.8,
+       "margin_pct": 75.1
+      },
+      "mediterranean": {
+       "landed_ils": 43.5,
+       "contribution_ils": 231.8,
+       "margin_pct": 75.1
+      },
+      "modern-country": {
+       "landed_ils": 43.5,
+       "contribution_ils": 231.8,
+       "margin_pct": 75.1
+      },
+      "boho": {
+       "landed_ils": 43.5,
+       "contribution_ils": 231.8,
+       "margin_pct": 75.1
+      }
+     },
+     "variants_fit": {
+      "nordic": 1,
+      "warm-modern": 1,
+      "japandi": 1,
+      "mediterranean": 0,
+      "modern-country": 0,
+      "boho": 0
+     },
+     "landed_ils": 43.5,
+     "slot_price_ils": {
+      "nordic": 364,
+      "warm-modern": 364,
+      "japandi": 364,
+      "mediterranean": 364,
+      "modern-country": 364,
+      "boho": 364
+     },
+     "margin_pct": {
+      "nordic": 75.1,
+      "warm-modern": 75.1,
+      "japandi": 75.1,
+      "mediterranean": 75.1,
+      "modern-country": 75.1,
+      "boho": 75.1
+     },
+     "eligible_styles": []
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005010451989501",
+     "url": "https://www.aliexpress.com/item/1005010451989501.html",
+     "title": "2pcs/set Japanese Retro Wabi Sabi Mountains Abstract Canvas Print Poster Modern Minimalist Art Print Home Decor Wall Art Poster",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/S32230f6580b34ef7af68b17a664fb6e8W.jpg",
+     "sku_or_vid": "12000052456744076",
+     "sku_label": "Color 2 pcs Size (Inch) 40 x 50 cm No Frame",
+     "cost_usd": 14.51,
+     "ship_usd": 2.86,
+     "ship_days": "8-18",
+     "qty": 3,
+     "dims_cm": "40x50 x2",
+     "fits_envelope": "borderline",
+     "type_ok": true,
+     "style_fit_guess": {
+      "nordic": 5.5,
+      "warm-modern": 6.0,
+      "japandi": 7.0,
+      "mediterranean": 5.0,
+      "modern-country": 5.5,
+      "boho": 5.5
+     },
+     "found_by": "earlier round, reviewed",
+     "card_id": null,
+     "why_he": "הרים וואבי-סאבי בירוק ובז׳, סט של 2 בלבד (צריך 3)",
+     "econ": {
+      "nordic": {
+       "landed_ils": 153.1,
+       "contribution_ils": 122.2,
+       "margin_pct": 39.6
+      },
+      "warm-modern": {
+       "landed_ils": 153.1,
+       "contribution_ils": 122.2,
+       "margin_pct": 39.6
+      },
+      "japandi": {
+       "landed_ils": 153.1,
+       "contribution_ils": 122.2,
+       "margin_pct": 39.6
+      },
+      "mediterranean": {
+       "landed_ils": 153.1,
+       "contribution_ils": 122.2,
+       "margin_pct": 39.6
+      },
+      "modern-country": {
+       "landed_ils": 153.1,
+       "contribution_ils": 122.2,
+       "margin_pct": 39.6
+      },
+      "boho": {
+       "landed_ils": 153.1,
+       "contribution_ils": 122.2,
+       "margin_pct": 39.6
+      }
+     },
+     "variants_fit": {
+      "nordic": 0,
+      "warm-modern": 0,
+      "japandi": 1,
+      "mediterranean": 0,
+      "modern-country": 0,
+      "boho": 0
+     },
+     "landed_ils": 153.1,
+     "slot_price_ils": {
+      "nordic": 364,
+      "warm-modern": 364,
+      "japandi": 364,
+      "mediterranean": 364,
+      "modern-country": 364,
+      "boho": 364
+     },
+     "margin_pct": {
+      "nordic": 39.6,
+      "warm-modern": 39.6,
+      "japandi": 39.6,
+      "mediterranean": 39.6,
+      "modern-country": 39.6,
+      "boho": 39.6
+     },
+     "eligible_styles": [
+      "japandi"
+     ]
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005011632288696",
+     "url": "https://www.aliexpress.com/item/1005011632288696.html",
+     "title": "6pcs/set Mediterranean Olive Trees Lemon Plants Canvas Prints Neutral Coastal Wall Art Posters for Modern Living Room Home Decor",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/S6731929850f34c2bbf58808a85df604fc.jpg",
+     "sku_or_vid": "12000056108099498",
+     "sku_label": "Color WO 2128-6 pcs Size (Inch) 20 x 30 cm No Frame",
+     "cost_usd": 4.15,
+     "ship_usd": 1.99,
+     "ship_days": "6-15",
+     "qty": 3,
+     "dims_cm": "20x30 x6",
+     "fits_envelope": "borderline",
+     "type_ok": true,
+     "style_fit_guess": {
+      "nordic": 4.0,
+      "warm-modern": 5.0,
+      "japandi": 4.0,
+      "mediterranean": 7.5,
+      "modern-country": 6.0,
+      "boho": 5.5
+     },
+     "found_by": "earlier round, reviewed",
+     "card_id": null,
+     "why_he": "סט ים-תיכוני: זיתים, לימון וכדים; SKU 20×30 קטן",
+     "econ": {
+      "nordic": {
+       "landed_ils": 47.7,
+       "contribution_ils": 227.6,
+       "margin_pct": 73.8
+      },
+      "warm-modern": {
+       "landed_ils": 47.7,
+       "contribution_ils": 227.6,
+       "margin_pct": 73.8
+      },
+      "japandi": {
+       "landed_ils": 47.7,
+       "contribution_ils": 227.6,
+       "margin_pct": 73.8
+      },
+      "mediterranean": {
+       "landed_ils": 47.7,
+       "contribution_ils": 227.6,
+       "margin_pct": 73.8
+      },
+      "modern-country": {
+       "landed_ils": 47.7,
+       "contribution_ils": 227.6,
+       "margin_pct": 73.8
+      },
+      "boho": {
+       "landed_ils": 47.7,
+       "contribution_ils": 227.6,
+       "margin_pct": 73.8
+      }
+     },
+     "variants_fit": {
+      "nordic": 0,
+      "warm-modern": 0,
+      "japandi": 0,
+      "mediterranean": 1,
+      "modern-country": 0,
+      "boho": 0
+     },
+     "landed_ils": 47.7,
+     "slot_price_ils": {
+      "nordic": 364,
+      "warm-modern": 364,
+      "japandi": 364,
+      "mediterranean": 364,
+      "modern-country": 364,
+      "boho": 364
+     },
+     "margin_pct": {
+      "nordic": 73.8,
+      "warm-modern": 73.8,
+      "japandi": 73.8,
+      "mediterranean": 73.8,
+      "modern-country": 73.8,
+      "boho": 73.8
+     },
+     "eligible_styles": [
+      "mediterranean"
+     ]
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005012636918374",
+     "url": "https://www.aliexpress.com/item/1005012636918374.html",
+     "title": "3pcs/Set Retro Rustic Cottage Plant Floral Poster Unframed Vintage Olive Branch Olive Leaf Canvas Painting for Living Room Decor",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/A853a87cb777743b39958c4f28b64c2c3e.png",
+     "sku_or_vid": "12000060084473548",
+     "sku_label": "Color ZWD 34464-3 pcs Size (Inch) 20 x 30 cm No Frame",
+     "cost_usd": 2.46,
+     "ship_usd": 1.99,
+     "ship_days": "6-15",
+     "qty": 3,
+     "dims_cm": "20x30 x3",
+     "fits_envelope": "borderline",
+     "type_ok": true,
+     "style_fit_guess": {
+      "nordic": 3.5,
+      "warm-modern": 4.5,
+      "japandi": 3.5,
+      "mediterranean": 7.0,
+      "modern-country": 6.0,
+      "boho": 5.0
+     },
+     "found_by": "earlier round, reviewed",
+     "card_id": null,
+     "why_he": "סמטאות כפר ים-תיכוני עם צמחייה; SKU 20×30, צבעוני יחסית",
+     "econ": {
+      "nordic": {
+       "landed_ils": 30.9,
+       "contribution_ils": 244.4,
+       "margin_pct": 79.2
+      },
+      "warm-modern": {
+       "landed_ils": 30.9,
+       "contribution_ils": 244.4,
+       "margin_pct": 79.2
+      },
+      "japandi": {
+       "landed_ils": 30.9,
+       "contribution_ils": 244.4,
+       "margin_pct": 79.2
+      },
+      "mediterranean": {
+       "landed_ils": 30.9,
+       "contribution_ils": 244.4,
+       "margin_pct": 79.2
+      },
+      "modern-country": {
+       "landed_ils": 30.9,
+       "contribution_ils": 244.4,
+       "margin_pct": 79.2
+      },
+      "boho": {
+       "landed_ils": 30.9,
+       "contribution_ils": 244.4,
+       "margin_pct": 79.2
+      }
+     },
+     "variants_fit": {
+      "nordic": 0,
+      "warm-modern": 0,
+      "japandi": 0,
+      "mediterranean": 1,
+      "modern-country": 1,
+      "boho": 0
+     },
+     "landed_ils": 30.9,
+     "slot_price_ils": {
+      "nordic": 364,
+      "warm-modern": 364,
+      "japandi": 364,
+      "mediterranean": 364,
+      "modern-country": 364,
+      "boho": 364
+     },
+     "margin_pct": {
+      "nordic": 79.2,
+      "warm-modern": 79.2,
+      "japandi": 79.2,
+      "mediterranean": 79.2,
+      "modern-country": 79.2,
+      "boho": 79.2
+     },
+     "eligible_styles": [
+      "mediterranean"
+     ]
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005010374658063",
+     "url": "https://www.aliexpress.com/item/1005010374658063.html",
+     "title": "Set of 2 Beige Boho Prints,Boho Art Prints,Neutral Wall Art,Palm Leaf Boho Print,Living Room Wall,Neutral Wall Prints,Gift Idea",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/S18d188ba35874f2f96f68a76a0019ecf1.jpg",
+     "sku_or_vid": "12000052186469685",
+     "sku_label": "Color TT 1775-1 Size (Inch) 20 x 30 cm no frame",
+     "cost_usd": 2.2,
+     "ship_usd": 1.99,
+     "ship_days": "6-15",
+     "qty": 3,
+     "dims_cm": "20x30 x2",
+     "fits_envelope": "borderline",
+     "type_ok": true,
+     "style_fit_guess": {
+      "nordic": 5.5,
+      "warm-modern": 6.0,
+      "japandi": 5.5,
+      "mediterranean": 5.5,
+      "modern-country": 5.0,
+      "boho": 7.0
+     },
+     "found_by": "earlier round, reviewed",
+     "card_id": null,
+     "why_he": "עלה דקל בבז׳ בוהו, סט של 2 ו-SKU 20×30",
+     "econ": {
+      "nordic": {
+       "landed_ils": 28.3,
+       "contribution_ils": 247.0,
+       "margin_pct": 80.1
+      },
+      "warm-modern": {
+       "landed_ils": 28.3,
+       "contribution_ils": 247.0,
+       "margin_pct": 80.1
+      },
+      "japandi": {
+       "landed_ils": 28.3,
+       "contribution_ils": 247.0,
+       "margin_pct": 80.1
+      },
+      "mediterranean": {
+       "landed_ils": 28.3,
+       "contribution_ils": 247.0,
+       "margin_pct": 80.1
+      },
+      "modern-country": {
+       "landed_ils": 28.3,
+       "contribution_ils": 247.0,
+       "margin_pct": 80.1
+      },
+      "boho": {
+       "landed_ils": 28.3,
+       "contribution_ils": 247.0,
+       "margin_pct": 80.1
+      }
+     },
+     "variants_fit": {
+      "nordic": 1,
+      "warm-modern": 1,
+      "japandi": 1,
+      "mediterranean": 0,
+      "modern-country": 0,
+      "boho": 1
+     },
+     "landed_ils": 28.3,
+     "slot_price_ils": {
+      "nordic": 364,
+      "warm-modern": 364,
+      "japandi": 364,
+      "mediterranean": 364,
+      "modern-country": 364,
+      "boho": 364
+     },
+     "margin_pct": {
+      "nordic": 80.1,
+      "warm-modern": 80.1,
+      "japandi": 80.1,
+      "mediterranean": 80.1,
+      "modern-country": 80.1,
+      "boho": 80.1
+     },
+     "eligible_styles": [
+      "boho"
+     ]
+    }
+   ],
+   "verdict_he": "נמצאו 1 מוצרים: boho 1/1"
+  },
+  "corridor/gallery-stool": {
+   "styles_needing": [
+    "nordic",
+    "warm-modern",
+    "japandi",
+    "mediterranean",
+    "modern-country",
+    "boho"
+   ],
+   "queries_aliexpress": [
+    "teak wood stool 45cm round seat",
+    "rush seat wooden stool 45cm",
+    "oak wood wooden stool",
+    "solid acacia stool rustic 45cm"
+   ],
+   "candidates": [
+    {
+     "source": "AliExpress",
+     "id": "1005012045974612",
+     "url": "https://www.aliexpress.com/item/1005012045974612.html",
+     "title": "Wooden Stool Stable Footrest Solution Storage Friendly Design Foot Rest Under Desk Perfect For Compact Rooms",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/Sed5697bc5a2f4ed88dd6a244a9aa7be9V.jpg",
+     "sku_or_vid": "12000057376052764",
+     "sku_label": "Color WHITE S",
+     "cost_usd": 40.36,
+     "ship_usd": 1.99,
+     "ship_days": "6-15",
+     "qty": 1,
+     "dims_cm": "30x20x12",
+     "fits_envelope": "no",
+     "type_ok": false,
+     "style_fit_guess": {
+      "nordic": 2.0,
+      "warm-modern": 2.0,
+      "japandi": 2.0,
+      "mediterranean": 2.0,
+      "modern-country": 2.0,
+      "boho": 2.0
+     },
+     "found_by": "search",
+     "card_id": null,
+     "why_he": "הדום רגליים נמוך 12 ס״מ, לא שרפרף",
+     "econ": {
+      "nordic": {
+       "landed_ils": 139.8,
+       "contribution_ils": 10.2,
+       "margin_pct": 6.0
+      },
+      "warm-modern": {
+       "landed_ils": 139.8,
+       "contribution_ils": 10.2,
+       "margin_pct": 6.0
+      },
+      "japandi": {
+       "landed_ils": 139.8,
+       "contribution_ils": 10.2,
+       "margin_pct": 6.0
+      },
+      "mediterranean": {
+       "landed_ils": 139.8,
+       "contribution_ils": 10.2,
+       "margin_pct": 6.0
+      },
+      "modern-country": {
+       "landed_ils": 139.8,
+       "contribution_ils": 86.1,
+       "margin_pct": 34.0
+      },
+      "boho": {
+       "landed_ils": 139.8,
+       "contribution_ils": 10.2,
+       "margin_pct": 6.0
+      }
+     },
+     "variants_fit": {
+      "nordic": 0,
+      "warm-modern": 0,
+      "japandi": 0,
+      "mediterranean": 0,
+      "modern-country": 0,
+      "boho": 0
+     },
+     "landed_ils": 139.8,
+     "slot_price_ils": {
+      "nordic": 199,
+      "warm-modern": 199,
+      "japandi": 199,
+      "mediterranean": 199,
+      "modern-country": 299,
+      "boho": 199
+     },
+     "margin_pct": {
+      "nordic": 6.0,
+      "warm-modern": 6.0,
+      "japandi": 6.0,
+      "mediterranean": 6.0,
+      "modern-country": 34.0,
+      "boho": 6.0
+     },
+     "eligible_styles": []
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005013250562346",
+     "url": "https://www.aliexpress.com/item/1005013250562346.html",
+     "title": "Mid Century Solid Wood Stool Modern Minimalist Upholstered Dressing Stool Small Stool Designer Living Room Furniture Hocker FYSO",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/Sf444ddf96806498daf858a48a82d10aaq.jpg",
+     "sku_or_vid": "12000060615123332",
+     "sku_label": "Color style 1",
+     "cost_usd": 236.55,
+     "ship_usd": 0.0,
+     "ship_days": "6-41",
+     "qty": 1,
+     "dims_cm": null,
+     "fits_envelope": "borderline",
+     "type_ok": true,
+     "style_fit_guess": {
+      "nordic": 4.5,
+      "warm-modern": 6.5,
+      "japandi": 6.0,
+      "mediterranean": 4.0,
+      "modern-country": 4.0,
+      "boho": 4.5
+     },
+     "found_by": "search",
+     "card_id": null,
+     "why_he": "שרפרף מרופד עם בסיס עץ שחור, 781 ש״ח; מידות לא ידועות",
+     "econ": {
+      "nordic": {
+       "landed_ils": 780.6,
+       "contribution_ils": -630.6,
+       "margin_pct": -373.9
+      },
+      "warm-modern": {
+       "landed_ils": 780.6,
+       "contribution_ils": -630.6,
+       "margin_pct": -373.9
+      },
+      "japandi": {
+       "landed_ils": 780.6,
+       "contribution_ils": -630.6,
+       "margin_pct": -373.9
+      },
+      "mediterranean": {
+       "landed_ils": 780.6,
+       "contribution_ils": -630.6,
+       "margin_pct": -373.9
+      },
+      "modern-country": {
+       "landed_ils": 780.6,
+       "contribution_ils": -554.7,
+       "margin_pct": -218.9
+      },
+      "boho": {
+       "landed_ils": 780.6,
+       "contribution_ils": -630.6,
+       "margin_pct": -373.9
+      }
+     },
+     "variants_fit": {
+      "nordic": 0,
+      "warm-modern": 2,
+      "japandi": 1,
+      "mediterranean": 0,
+      "modern-country": 0,
+      "boho": 0
+     },
+     "landed_ils": 780.6,
+     "slot_price_ils": {
+      "nordic": 199,
+      "warm-modern": 199,
+      "japandi": 199,
+      "mediterranean": 199,
+      "modern-country": 299,
+      "boho": 199
+     },
+     "margin_pct": {
+      "nordic": -373.9,
+      "warm-modern": -373.9,
+      "japandi": -373.9,
+      "mediterranean": -373.9,
+      "modern-country": -218.9,
+      "boho": -373.9
+     },
+     "eligible_styles": []
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005012957725537",
+     "url": "https://www.aliexpress.com/item/1005012957725537.html",
+     "title": "Stools & Ottomans Living Room Furniture, Solid Wood Rattan Woven Low Stool, Antique Minimalist Sofa Entry Shoe‑Changing Stool",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/S17797336e6504ce39c72b499a9cb86a0l.jpg",
+     "sku_or_vid": "12000059888898591",
+     "sku_label": "Color A 2",
+     "cost_usd": 30.04,
+     "ship_usd": 251.95,
+     "ship_days": "11-13",
+     "qty": 1,
+     "dims_cm": null,
+     "fits_envelope": "borderline",
+     "type_ok": true,
+     "style_fit_guess": {
+      "nordic": 5.0,
+      "warm-modern": 5.5,
+      "japandi": 6.0,
+      "mediterranean": 6.5,
+      "modern-country": 7.0,
+      "boho": 7.0
+     },
+     "found_by": "search",
+     "card_id": null,
+     "why_he": "שרפרף עץ כהה עם מושב קש קלוע, כנראה נמוך; כפרי טוב",
+     "econ": {
+      "nordic": {
+       "landed_ils": 930.6,
+       "contribution_ils": -780.6,
+       "margin_pct": -462.9
+      },
+      "warm-modern": {
+       "landed_ils": 930.6,
+       "contribution_ils": -780.6,
+       "margin_pct": -462.9
+      },
+      "japandi": {
+       "landed_ils": 930.6,
+       "contribution_ils": -780.6,
+       "margin_pct": -462.9
+      },
+      "mediterranean": {
+       "landed_ils": 930.6,
+       "contribution_ils": -780.6,
+       "margin_pct": -462.9
+      },
+      "modern-country": {
+       "landed_ils": 930.6,
+       "contribution_ils": -704.7,
+       "margin_pct": -278.1
+      },
+      "boho": {
+       "landed_ils": 930.6,
+       "contribution_ils": -780.6,
+       "margin_pct": -462.9
+      }
+     },
+     "variants_fit": {
+      "nordic": 0,
+      "warm-modern": 0,
+      "japandi": 1,
+      "mediterranean": 2,
+      "modern-country": 2,
+      "boho": 2
+     },
+     "landed_ils": 930.6,
+     "slot_price_ils": {
+      "nordic": 199,
+      "warm-modern": 199,
+      "japandi": 199,
+      "mediterranean": 199,
+      "modern-country": 299,
+      "boho": 199
+     },
+     "margin_pct": {
+      "nordic": -462.9,
+      "warm-modern": -462.9,
+      "japandi": -462.9,
+      "mediterranean": -462.9,
+      "modern-country": -278.1,
+      "boho": -462.9
+     },
+     "eligible_styles": []
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005012876978846",
+     "url": "https://www.aliexpress.com/item/1005012876978846.html",
+     "title": "Solid Wood Small Chair Home Shoe Changing Stool Medium Antique Low Stool Living Room Bench Retro Rattan Stool",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/S62357dcf05d14c1b9f30f706b296c175N.jpg",
+     "sku_or_vid": "12000059617288023",
+     "sku_label": "Color Black Rope Weaving M",
+     "cost_usd": 42.45,
+     "ship_usd": 380.4,
+     "ship_days": "7-18",
+     "qty": 1,
+     "dims_cm": null,
+     "fits_envelope": "borderline",
+     "type_ok": true,
+     "style_fit_guess": {
+      "nordic": 4.5,
+      "warm-modern": 5.5,
+      "japandi": 6.0,
+      "mediterranean": 6.5,
+      "modern-country": 6.5,
+      "boho": 6.5
+     },
+     "found_by": "search",
+     "card_id": null,
+     "why_he": "שרפרף קש עם עץ אגוז/שחור, נמוך-בינוני, 1,395 ש״ח יקר מאוד",
+     "econ": {
+      "nordic": {
+       "landed_ils": 1395.4,
+       "contribution_ils": -1245.4,
+       "margin_pct": -738.5
+      },
+      "warm-modern": {
+       "landed_ils": 1395.4,
+       "contribution_ils": -1245.4,
+       "margin_pct": -738.5
+      },
+      "japandi": {
+       "landed_ils": 1395.4,
+       "contribution_ils": -1245.4,
+       "margin_pct": -738.5
+      },
+      "mediterranean": {
+       "landed_ils": 1395.4,
+       "contribution_ils": -1245.4,
+       "margin_pct": -738.5
+      },
+      "modern-country": {
+       "landed_ils": 1395.4,
+       "contribution_ils": -1169.5,
+       "margin_pct": -461.5
+      },
+      "boho": {
+       "landed_ils": 1395.4,
+       "contribution_ils": -1245.4,
+       "margin_pct": -738.5
+      }
+     },
+     "variants_fit": {
+      "nordic": 0,
+      "warm-modern": 0,
+      "japandi": 1,
+      "mediterranean": 2,
+      "modern-country": 2,
+      "boho": 2
+     },
+     "landed_ils": 1395.4,
+     "slot_price_ils": {
+      "nordic": 199,
+      "warm-modern": 199,
+      "japandi": 199,
+      "mediterranean": 199,
+      "modern-country": 299,
+      "boho": 199
+     },
+     "margin_pct": {
+      "nordic": -738.5,
+      "warm-modern": -738.5,
+      "japandi": -738.5,
+      "mediterranean": -738.5,
+      "modern-country": -461.5,
+      "boho": -738.5
+     },
+     "eligible_styles": []
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005008858179423",
+     "url": "https://www.aliexpress.com/item/1005008858179423.html",
+     "title": "Vintage Stackable Solid Wood Stool Upholstered Low Bench Square Seat Ottoman for Bedroom Small Apartment Dining Room Chair",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/S2b2cad24ef93442c8b5d326d3b10fd9fM.jpg",
+     "sku_or_vid": "12000046971722389",
+     "sku_label": "Color Black Rack - Green",
+     "cost_usd": 74.5,
+     "ship_usd": 149.1,
+     "ship_days": "6-41",
+     "qty": 1,
+     "dims_cm": "32x32x47",
+     "fits_envelope": "borderline",
+     "type_ok": true,
+     "style_fit_guess": {
+      "nordic": 3.0,
+      "warm-modern": 4.0,
+      "japandi": 3.0,
+      "mediterranean": 3.0,
+      "modern-country": 3.5,
+      "boho": 4.0
+     },
+     "found_by": "search",
+     "card_id": null,
+     "why_he": "מסגרת שחורה עם ריפוד בהדפס נמר/ירוק; מראה זול",
+     "econ": {
+      "nordic": {
+       "landed_ils": 737.9,
+       "contribution_ils": -587.9,
+       "margin_pct": -348.6
+      },
+      "warm-modern": {
+       "landed_ils": 737.9,
+       "contribution_ils": -587.9,
+       "margin_pct": -348.6
+      },
+      "japandi": {
+       "landed_ils": 737.9,
+       "contribution_ils": -587.9,
+       "margin_pct": -348.6
+      },
+      "mediterranean": {
+       "landed_ils": 737.9,
+       "contribution_ils": -587.9,
+       "margin_pct": -348.6
+      },
+      "modern-country": {
+       "landed_ils": 737.9,
+       "contribution_ils": -512.0,
+       "margin_pct": -202.0
+      },
+      "boho": {
+       "landed_ils": 737.9,
+       "contribution_ils": -587.9,
+       "margin_pct": -348.6
+      }
+     },
+     "variants_fit": {
+      "nordic": 0,
+      "warm-modern": 1,
+      "japandi": 0,
+      "mediterranean": 0,
+      "modern-country": 0,
+      "boho": 0
+     },
+     "landed_ils": 737.9,
+     "slot_price_ils": {
+      "nordic": 199,
+      "warm-modern": 199,
+      "japandi": 199,
+      "mediterranean": 199,
+      "modern-country": 299,
+      "boho": 199
+     },
+     "margin_pct": {
+      "nordic": -348.6,
+      "warm-modern": -348.6,
+      "japandi": -348.6,
+      "mediterranean": -348.6,
+      "modern-country": -202.0,
+      "boho": -348.6
+     },
+     "eligible_styles": []
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005010196581566",
+     "url": "https://www.aliexpress.com/item/1005010196581566.html",
+     "title": "Rustic Wood Stool with Deep Grain,Vintage Side Table for Living Room,Reclaimed Log Stool,Hand-Carved Root Sculpturefor Farmhouse",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/S74ca5a829f714d2482d0e44e9d46c1240.jpg",
+     "sku_or_vid": "12000051490051643",
+     "sku_label": "Color A walnut",
+     "cost_usd": 111.68,
+     "ship_usd": 248.42,
+     "ship_days": "6-41",
+     "qty": 1,
+     "dims_cm": "31x45",
+     "fits_envelope": "borderline",
+     "type_ok": true,
+     "style_fit_guess": {
+      "nordic": 4.0,
+      "warm-modern": 7.0,
+      "japandi": 6.0,
+      "mediterranean": 7.0,
+      "modern-country": 5.5,
+      "boho": 7.0
+     },
+     "found_by": "search",
+     "card_id": null,
+     "why_he": "שרפרף גזע בצורת שעון חול, אגוז; עץ מלא עבה מתאים לים-תיכוני",
+     "econ": {
+      "nordic": {
+       "landed_ils": 1188.3,
+       "contribution_ils": -1038.3,
+       "margin_pct": -615.7
+      },
+      "warm-modern": {
+       "landed_ils": 1188.3,
+       "contribution_ils": -1038.3,
+       "margin_pct": -615.7
+      },
+      "japandi": {
+       "landed_ils": 1188.3,
+       "contribution_ils": -1038.3,
+       "margin_pct": -615.7
+      },
+      "mediterranean": {
+       "landed_ils": 1188.3,
+       "contribution_ils": -1038.3,
+       "margin_pct": -615.7
+      },
+      "modern-country": {
+       "landed_ils": 1188.3,
+       "contribution_ils": -962.4,
+       "margin_pct": -379.8
+      },
+      "boho": {
+       "landed_ils": 1188.3,
+       "contribution_ils": -1038.3,
+       "margin_pct": -615.7
+      }
+     },
+     "variants_fit": {
+      "nordic": 0,
+      "warm-modern": 3,
+      "japandi": 2,
+      "mediterranean": 4,
+      "modern-country": 2,
+      "boho": 4
+     },
+     "landed_ils": 1188.3,
+     "slot_price_ils": {
+      "nordic": 199,
+      "warm-modern": 199,
+      "japandi": 199,
+      "mediterranean": 199,
+      "modern-country": 299,
+      "boho": 199
+     },
+     "margin_pct": {
+      "nordic": -615.7,
+      "warm-modern": -615.7,
+      "japandi": -615.7,
+      "mediterranean": -615.7,
+      "modern-country": -379.8,
+      "boho": -615.7
+     },
+     "eligible_styles": []
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005012427256523",
+     "url": "https://www.aliexpress.com/item/1005012427256523.html",
+     "title": "1Set Rolling Stool Adjustable Height with Wheels  PU Leather Waterproof Oil-Resistant Round Rolling Stool 45-56cm Black Red Blue",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/S1c6d4a08a30d4431bd96cca23d9c5706F.jpg",
+     "sku_or_vid": "12000058360562097",
+     "sku_label": "Color 44-56 cm Blue",
+     "cost_usd": 70.5,
+     "ship_usd": 1.99,
+     "ship_days": "8-16",
+     "qty": 1,
+     "dims_cm": "44-56 high",
+     "fits_envelope": "borderline",
+     "type_ok": false,
+     "style_fit_guess": {
+      "nordic": 1.0,
+      "warm-modern": 1.0,
+      "japandi": 1.0,
+      "mediterranean": 1.0,
+      "modern-country": 1.0,
+      "boho": 1.0
+     },
+     "found_by": "search",
+     "card_id": null,
+     "why_he": "כיסא מספרה על גלגלים, כחול; לא מתאים",
+     "econ": {
+      "nordic": {
+       "landed_ils": 239.2,
+       "contribution_ils": -89.2,
+       "margin_pct": -52.9
+      },
+      "warm-modern": {
+       "landed_ils": 239.2,
+       "contribution_ils": -89.2,
+       "margin_pct": -52.9
+      },
+      "japandi": {
+       "landed_ils": 239.2,
+       "contribution_ils": -89.2,
+       "margin_pct": -52.9
+      },
+      "mediterranean": {
+       "landed_ils": 239.2,
+       "contribution_ils": -89.2,
+       "margin_pct": -52.9
+      },
+      "modern-country": {
+       "landed_ils": 239.2,
+       "contribution_ils": -13.3,
+       "margin_pct": -5.2
+      },
+      "boho": {
+       "landed_ils": 239.2,
+       "contribution_ils": -89.2,
+       "margin_pct": -52.9
+      }
+     },
+     "variants_fit": {
+      "nordic": 0,
+      "warm-modern": 0,
+      "japandi": 0,
+      "mediterranean": 0,
+      "modern-country": 0,
+      "boho": 0
+     },
+     "landed_ils": 239.2,
+     "slot_price_ils": {
+      "nordic": 199,
+      "warm-modern": 199,
+      "japandi": 199,
+      "mediterranean": 199,
+      "modern-country": 299,
+      "boho": 199
+     },
+     "margin_pct": {
+      "nordic": -52.9,
+      "warm-modern": -52.9,
+      "japandi": -52.9,
+      "mediterranean": -52.9,
+      "modern-country": -5.2,
+      "boho": -52.9
+     },
+     "eligible_styles": []
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005012348338193",
+     "url": "https://www.aliexpress.com/item/1005012348338193.html",
+     "title": "For Small Stool for Home Use, Woven Low Stool, Solid Wood Living Room Sofa Coffee Table Stool",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/S4a5822126085456fbf85615207ac5c1fi.jpg",
+     "sku_or_vid": "12000058155528065",
+     "sku_label": "Color Seat 2",
+     "cost_usd": 26.64,
+     "ship_usd": 41.63,
+     "ship_days": "83-83",
+     "qty": 1,
+     "dims_cm": "28x28x28",
+     "fits_envelope": "no",
+     "type_ok": true,
+     "style_fit_guess": {
+      "nordic": 4.5,
+      "warm-modern": 5.0,
+      "japandi": 5.5,
+      "mediterranean": 5.5,
+      "modern-country": 6.5,
+      "boho": 6.5
+     },
+     "found_by": "search",
+     "card_id": null,
+     "why_he": "שרפרף קש עם רגליים שחורות, גובה 28 נמוך מדי",
+     "econ": {
+      "nordic": {
+       "landed_ils": 225.3,
+       "contribution_ils": -75.3,
+       "margin_pct": -44.7
+      },
+      "warm-modern": {
+       "landed_ils": 225.3,
+       "contribution_ils": -75.3,
+       "margin_pct": -44.7
+      },
+      "japandi": {
+       "landed_ils": 225.3,
+       "contribution_ils": -75.3,
+       "margin_pct": -44.7
+      },
+      "mediterranean": {
+       "landed_ils": 225.3,
+       "contribution_ils": -75.3,
+       "margin_pct": -44.7
+      },
+      "modern-country": {
+       "landed_ils": 225.3,
+       "contribution_ils": 0.6,
+       "margin_pct": 0.3
+      },
+      "boho": {
+       "landed_ils": 225.3,
+       "contribution_ils": -75.3,
+       "margin_pct": -44.7
+      }
+     },
+     "variants_fit": {
+      "nordic": 0,
+      "warm-modern": 0,
+      "japandi": 1,
+      "mediterranean": 1,
+      "modern-country": 2,
+      "boho": 2
+     },
+     "landed_ils": 225.3,
+     "slot_price_ils": {
+      "nordic": 199,
+      "warm-modern": 199,
+      "japandi": 199,
+      "mediterranean": 199,
+      "modern-country": 299,
+      "boho": 199
+     },
+     "margin_pct": {
+      "nordic": -44.7,
+      "warm-modern": -44.7,
+      "japandi": -44.7,
+      "mediterranean": -44.7,
+      "modern-country": 0.3,
+      "boho": -44.7
+     },
+     "eligible_styles": []
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005013305678547",
+     "url": "https://www.aliexpress.com/item/1005013305678547.html",
+     "title": "Solid Household Living Room Retro Medieval High Value Imitation Rattan Weaving Low Small Bench Shoe Changing Coffee Stool",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/S4ab6c657f91b4840ab5583cd43639219e.jpg",
+     "sku_or_vid": "12000060754959446",
+     "sku_label": "Color Black rope bench.",
+     "cost_usd": 13.07,
+     "ship_usd": 25.37,
+     "ship_days": "69-69",
+     "qty": 1,
+     "dims_cm": null,
+     "fits_envelope": "borderline",
+     "type_ok": true,
+     "style_fit_guess": {
+      "nordic": 4.0,
+      "warm-modern": 4.5,
+      "japandi": 5.0,
+      "mediterranean": 5.5,
+      "modern-country": 6.0,
+      "boho": 6.0
+     },
+     "found_by": "search",
+     "card_id": null,
+     "why_he": "ספסל/שרפרף חבל נמוך, דמוי ראטן, זול; גובה כנראה נמוך",
+     "econ": {
+      "nordic": {
+       "landed_ils": 126.9,
+       "contribution_ils": 23.1,
+       "margin_pct": 13.7
+      },
+      "warm-modern": {
+       "landed_ils": 126.9,
+       "contribution_ils": 23.1,
+       "margin_pct": 13.7
+      },
+      "japandi": {
+       "landed_ils": 126.9,
+       "contribution_ils": 23.1,
+       "margin_pct": 13.7
+      },
+      "mediterranean": {
+       "landed_ils": 126.9,
+       "contribution_ils": 23.1,
+       "margin_pct": 13.7
+      },
+      "modern-country": {
+       "landed_ils": 126.9,
+       "contribution_ils": 99.0,
+       "margin_pct": 39.1
+      },
+      "boho": {
+       "landed_ils": 126.9,
+       "contribution_ils": 23.1,
+       "margin_pct": 13.7
+      }
+     },
+     "variants_fit": {
+      "nordic": 0,
+      "warm-modern": 0,
+      "japandi": 0,
+      "mediterranean": 1,
+      "modern-country": 2,
+      "boho": 2
+     },
+     "landed_ils": 126.9,
+     "slot_price_ils": {
+      "nordic": 199,
+      "warm-modern": 199,
+      "japandi": 199,
+      "mediterranean": 199,
+      "modern-country": 299,
+      "boho": 199
+     },
+     "margin_pct": {
+      "nordic": 13.7,
+      "warm-modern": 13.7,
+      "japandi": 13.7,
+      "mediterranean": 13.7,
+      "modern-country": 39.1,
+      "boho": 13.7
+     },
+     "eligible_styles": []
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005012244232821",
+     "url": "https://www.aliexpress.com/item/1005012244232821.html",
+     "title": "Stool Solid Wood Woven Chinese Household Low Stool Entry Entrance Door Shoe Change Living Room Flower Stand Small Stool",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/Sbe2f7ee13c7f457b940498c2210cc172n.jpg",
+     "sku_or_vid": "12000057837321626",
+     "sku_label": "Color Walnut low stool",
+     "cost_usd": 15.15,
+     "ship_usd": 149.42,
+     "ship_days": "2-19",
+     "qty": 1,
+     "dims_cm": null,
+     "fits_envelope": "borderline",
+     "type_ok": true,
+     "style_fit_guess": {
+      "nordic": 4.5,
+      "warm-modern": 5.0,
+      "japandi": 5.5,
+      "mediterranean": 6.0,
+      "modern-country": 6.5,
+      "boho": 6.5
+     },
+     "found_by": "search",
+     "card_id": null,
+     "why_he": "שרפרף קש נמוך, SKU אגוז אבל בתמונה שחור",
+     "econ": {
+      "nordic": {
+       "landed_ils": 543.1,
+       "contribution_ils": -393.1,
+       "margin_pct": -233.1
+      },
+      "warm-modern": {
+       "landed_ils": 543.1,
+       "contribution_ils": -393.1,
+       "margin_pct": -233.1
+      },
+      "japandi": {
+       "landed_ils": 543.1,
+       "contribution_ils": -393.1,
+       "margin_pct": -233.1
+      },
+      "mediterranean": {
+       "landed_ils": 543.1,
+       "contribution_ils": -393.1,
+       "margin_pct": -233.1
+      },
+      "modern-country": {
+       "landed_ils": 543.1,
+       "contribution_ils": -317.2,
+       "margin_pct": -125.2
+      },
+      "boho": {
+       "landed_ils": 543.1,
+       "contribution_ils": -393.1,
+       "margin_pct": -233.1
+      }
+     },
+     "variants_fit": {
+      "nordic": 0,
+      "warm-modern": 0,
+      "japandi": 1,
+      "mediterranean": 1,
+      "modern-country": 2,
+      "boho": 2
+     },
+     "landed_ils": 543.1,
+     "slot_price_ils": {
+      "nordic": 199,
+      "warm-modern": 199,
+      "japandi": 199,
+      "mediterranean": 199,
+      "modern-country": 299,
+      "boho": 199
+     },
+     "margin_pct": {
+      "nordic": -233.1,
+      "warm-modern": -233.1,
+      "japandi": -233.1,
+      "mediterranean": -233.1,
+      "modern-country": -125.2,
+      "boho": -233.1
+     },
+     "eligible_styles": []
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005013209070389",
+     "url": "https://www.aliexpress.com/item/1005013209070389.html",
+     "title": "Shoe changing stool, woven stool, medieval rope woven stool, ins style Nordic solid wood home low stool with",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/S91abfda296464a15bd26fc8c81d1a1111.jpg",
+     "sku_or_vid": "12000060506277525",
+     "sku_label": "Color Walnut stool",
+     "cost_usd": 35.9,
+     "ship_usd": 30.0,
+     "ship_days": "19-27",
+     "qty": 1,
+     "dims_cm": null,
+     "fits_envelope": "borderline",
+     "type_ok": true,
+     "style_fit_guess": {
+      "nordic": 4.0,
+      "warm-modern": 4.5,
+      "japandi": 5.0,
+      "mediterranean": 5.5,
+      "modern-country": 6.0,
+      "boho": 6.0
+     },
+     "found_by": "search",
+     "card_id": null,
+     "why_he": "SKU שרפרף אגוז אבל התמונה כיסא עם משענת שחור; לא תואם",
+     "econ": {
+      "nordic": {
+       "landed_ils": 217.5,
+       "contribution_ils": -67.5,
+       "margin_pct": -40.0
+      },
+      "warm-modern": {
+       "landed_ils": 217.5,
+       "contribution_ils": -67.5,
+       "margin_pct": -40.0
+      },
+      "japandi": {
+       "landed_ils": 217.5,
+       "contribution_ils": -67.5,
+       "margin_pct": -40.0
+      },
+      "mediterranean": {
+       "landed_ils": 217.5,
+       "contribution_ils": -67.5,
+       "margin_pct": -40.0
+      },
+      "modern-country": {
+       "landed_ils": 217.5,
+       "contribution_ils": 8.4,
+       "margin_pct": 3.3
+      },
+      "boho": {
+       "landed_ils": 217.5,
+       "contribution_ils": -67.5,
+       "margin_pct": -40.0
+      }
+     },
+     "variants_fit": {
+      "nordic": 0,
+      "warm-modern": 0,
+      "japandi": 0,
+      "mediterranean": 1,
+      "modern-country": 1,
+      "boho": 1
+     },
+     "landed_ils": 217.5,
+     "slot_price_ils": {
+      "nordic": 199,
+      "warm-modern": 199,
+      "japandi": 199,
+      "mediterranean": 199,
+      "modern-country": 299,
+      "boho": 199
+     },
+     "margin_pct": {
+      "nordic": -40.0,
+      "warm-modern": -40.0,
+      "japandi": -40.0,
+      "mediterranean": -40.0,
+      "modern-country": 3.3,
+      "boho": -40.0
+     },
+     "eligible_styles": []
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005009504443099",
+     "url": "https://www.aliexpress.com/item/1005009504443099.html",
+     "title": "Shoe Changing Stool, Woven Stool, Medieval Rope Woven Stool, Ins Style Nordic Solid Wood Home Low Stool With",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/S4131d1732856425599fdad8519f466d66.jpg",
+     "sku_or_vid": "12000049303515208",
+     "sku_label": "Color Walnut stool",
+     "cost_usd": 70.01,
+     "ship_usd": 1.99,
+     "ship_days": "8-16",
+     "qty": 1,
+     "dims_cm": null,
+     "fits_envelope": "borderline",
+     "type_ok": true,
+     "style_fit_guess": {
+      "nordic": 4.5,
+      "warm-modern": 5.0,
+      "japandi": 5.5,
+      "mediterranean": 6.0,
+      "modern-country": 6.5,
+      "boho": 6.5
+     },
+     "found_by": "earlier round, reviewed",
+     "card_id": null,
+     "why_he": "שרפרף קש נמוך באגוז כהה; כפרי/בוהו סביר, גובה כנראה נמוך",
+     "econ": {
+      "nordic": {
+       "landed_ils": 237.6,
+       "contribution_ils": -87.6,
+       "margin_pct": -52.0
+      },
+      "warm-modern": {
+       "landed_ils": 237.6,
+       "contribution_ils": -87.6,
+       "margin_pct": -52.0
+      },
+      "japandi": {
+       "landed_ils": 237.6,
+       "contribution_ils": -87.6,
+       "margin_pct": -52.0
+      },
+      "mediterranean": {
+       "landed_ils": 237.6,
+       "contribution_ils": -87.6,
+       "margin_pct": -52.0
+      },
+      "modern-country": {
+       "landed_ils": 237.6,
+       "contribution_ils": -11.7,
+       "margin_pct": -4.6
+      },
+      "boho": {
+       "landed_ils": 237.6,
+       "contribution_ils": -87.6,
+       "margin_pct": -52.0
+      }
+     },
+     "variants_fit": {
+      "nordic": 0,
+      "warm-modern": 0,
+      "japandi": 1,
+      "mediterranean": 1,
+      "modern-country": 1,
+      "boho": 1
+     },
+     "landed_ils": 237.6,
+     "slot_price_ils": {
+      "nordic": 199,
+      "warm-modern": 199,
+      "japandi": 199,
+      "mediterranean": 199,
+      "modern-country": 299,
+      "boho": 199
+     },
+     "margin_pct": {
+      "nordic": -52.0,
+      "warm-modern": -52.0,
+      "japandi": -52.0,
+      "mediterranean": -52.0,
+      "modern-country": -4.6,
+      "boho": -52.0
+     },
+     "eligible_styles": []
+    }
+   ],
+   "verdict_he": "לא נמצא מוצר עובר. הקרוב: 1005012957725537 (fit 7, שרפרף עץ כהה עם מושב קש קלוע, כנראה נמוך; כפרי טוב)"
+  },
+  "corridor/picture-lights": {
+   "styles_needing": [
+    "nordic",
+    "warm-modern",
+    "japandi",
+    "mediterranean",
+    "modern-country",
+    "boho"
+   ],
+   "queries_aliexpress": [
+    "museum picture lamp hardwired satin brass",
+    "antique brass art light hardwired 30cm swivel head",
+    "rattan picture light",
+    "art gallery wall light brass 30cm 2700K"
+   ],
+   "candidates": [
+    {
+     "source": "AliExpress",
+     "id": "1005008195905528",
+     "url": "https://www.aliexpress.com/item/1005008195905528.html",
+     "title": "American Mirror Picture Light Bookcase Lamp Simple Bathroom Cabinet Light Retro Decorative Lamps",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/Sffdb9f9d7cef4546942749723107a0c31.jpg",
+     "sku_or_vid": "12000044198985505",
+     "sku_label": "Lampshade Color C",
+     "cost_usd": 69.6,
+     "ship_usd": 7.83,
+     "ship_days": "12-23",
+     "qty": 3,
+     "dims_cm": null,
+     "fits_envelope": "borderline",
+     "type_ok": true,
+     "style_fit_guess": {
+      "nordic": 7.0,
+      "warm-modern": 5.5,
+      "japandi": 6.0,
+      "mediterranean": 5.0,
+      "modern-country": 6.0,
+      "boho": 4.5
+     },
+     "found_by": "search",
+     "card_id": null,
+     "why_he": "מנורת תמונה שחורה עם זרוע; צבעים A–D לא מפורשים, רוחב לא ידוע",
+     "econ": {
+      "nordic": {
+       "landed_ils": 742.0,
+       "contribution_ils": -698.4,
+       "margin_pct": -1396.8
+      },
+      "warm-modern": {
+       "landed_ils": 742.0,
+       "contribution_ils": -402.1,
+       "margin_pct": -105.7
+      },
+      "japandi": {
+       "landed_ils": 742.0,
+       "contribution_ils": -698.4,
+       "margin_pct": -1396.8
+      },
+      "mediterranean": {
+       "landed_ils": 742.0,
+       "contribution_ils": -698.4,
+       "margin_pct": -1396.8
+      },
+      "modern-country": {
+       "landed_ils": 742.0,
+       "contribution_ils": -630.0,
+       "margin_pct": -498.9
+      },
+      "boho": {
+       "landed_ils": 742.0,
+       "contribution_ils": -698.4,
+       "margin_pct": -1396.8
+      }
+     },
+     "variants_fit": {
+      "nordic": 1,
+      "warm-modern": 1,
+      "japandi": 1,
+      "mediterranean": 0,
+      "modern-country": 1,
+      "boho": 0
+     },
+     "landed_ils": 742.0,
+     "slot_price_ils": {
+      "nordic": 59,
+      "warm-modern": 449,
+      "japandi": 59,
+      "mediterranean": 59,
+      "modern-country": 149,
+      "boho": 59
+     },
+     "margin_pct": {
+      "nordic": -1396.8,
+      "warm-modern": -105.7,
+      "japandi": -1396.8,
+      "mediterranean": -1396.8,
+      "modern-country": -498.9,
+      "boho": -1396.8
+     },
+     "eligible_styles": []
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005009059162446",
+     "url": "https://www.aliexpress.com/item/1005009059162446.html",
+     "title": "Antique Brass LED Wall Lamps Classic in Bathroom with Swing Arm over Mirrors Picture Lighting Fixtures Indoor 110V / 220V",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/S0db09a2d5ed140a1bf662284da60b6e2K.jpg",
+     "sku_or_vid": "12000047759704998",
+     "sku_label": "Lampshade Color Brass Color Temperature Warm light 3000 K Wattage 8 50 CM LONG",
+     "cost_usd": 68.35,
+     "ship_usd": 0.0,
+     "ship_days": "6-41",
+     "qty": 3,
+     "dims_cm": "50-90x6.5, proj 14",
+     "fits_envelope": "no",
+     "type_ok": true,
+     "style_fit_guess": {
+      "nordic": 2.0,
+      "warm-modern": 5.0,
+      "japandi": 2.0,
+      "mediterranean": 4.0,
+      "modern-country": 6.0,
+      "boho": 3.5
+     },
+     "found_by": "search",
+     "card_id": null,
+     "why_he": "פליז עתיק מעוטר, אורך 50 ומעלה (צריך 25–32)",
+     "econ": {
+      "nordic": {
+       "landed_ils": 676.7,
+       "contribution_ils": -633.1,
+       "margin_pct": -1266.2
+      },
+      "warm-modern": {
+       "landed_ils": 676.7,
+       "contribution_ils": -336.8,
+       "margin_pct": -88.5
+      },
+      "japandi": {
+       "landed_ils": 676.7,
+       "contribution_ils": -633.1,
+       "margin_pct": -1266.2
+      },
+      "mediterranean": {
+       "landed_ils": 676.7,
+       "contribution_ils": -633.1,
+       "margin_pct": -1266.2
+      },
+      "modern-country": {
+       "landed_ils": 676.7,
+       "contribution_ils": -564.7,
+       "margin_pct": -447.2
+      },
+      "boho": {
+       "landed_ils": 676.7,
+       "contribution_ils": -633.1,
+       "margin_pct": -1266.2
+      }
+     },
+     "variants_fit": {
+      "nordic": 0,
+      "warm-modern": 1,
+      "japandi": 0,
+      "mediterranean": 0,
+      "modern-country": 1,
+      "boho": 0
+     },
+     "landed_ils": 676.7,
+     "slot_price_ils": {
+      "nordic": 59,
+      "warm-modern": 449,
+      "japandi": 59,
+      "mediterranean": 59,
+      "modern-country": 149,
+      "boho": 59
+     },
+     "margin_pct": {
+      "nordic": -1266.2,
+      "warm-modern": -88.5,
+      "japandi": -1266.2,
+      "mediterranean": -1266.2,
+      "modern-country": -447.2,
+      "boho": -1266.2
+     },
+     "eligible_styles": []
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005013273484993",
+     "url": "https://www.aliexpress.com/item/1005013273484993.html",
+     "title": "LED Picture Light Adjustable Tube Wall Lamp 43cm 55cm for Painting Gallery Mirror Artwork Wall Decor",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/S203588bfa85749d2b7f713be11689391A.jpg",
+     "sku_or_vid": "12000060668175843",
+     "sku_label": "Lampshade Color black Size 43 cm Color Temperature Cool White(5500-7000 K)",
+     "cost_usd": 27.81,
+     "ship_usd": 14.11,
+     "ship_days": "7-18",
+     "qty": 3,
+     "dims_cm": "43/55",
+     "fits_envelope": "no",
+     "type_ok": true,
+     "style_fit_guess": {
+      "nordic": 5.5,
+      "warm-modern": 5.0,
+      "japandi": 5.0,
+      "mediterranean": 4.0,
+      "modern-country": 4.5,
+      "boho": 4.0
+     },
+     "found_by": "search",
+     "card_id": null,
+     "why_he": "צינור שחור/זהב/כסוף 43 ס״מ ומעלה; SKU אור קר",
+     "econ": {
+      "nordic": {
+       "landed_ils": 390.5,
+       "contribution_ils": -346.9,
+       "margin_pct": -693.8
+      },
+      "warm-modern": {
+       "landed_ils": 390.5,
+       "contribution_ils": -50.6,
+       "margin_pct": -13.3
+      },
+      "japandi": {
+       "landed_ils": 390.5,
+       "contribution_ils": -346.9,
+       "margin_pct": -693.8
+      },
+      "mediterranean": {
+       "landed_ils": 390.5,
+       "contribution_ils": -346.9,
+       "margin_pct": -693.8
+      },
+      "modern-country": {
+       "landed_ils": 390.5,
+       "contribution_ils": -278.5,
+       "margin_pct": -220.6
+      },
+      "boho": {
+       "landed_ils": 390.5,
+       "contribution_ils": -346.9,
+       "margin_pct": -693.8
+      }
+     },
+     "variants_fit": {
+      "nordic": 1,
+      "warm-modern": 1,
+      "japandi": 1,
+      "mediterranean": 0,
+      "modern-country": 0,
+      "boho": 0
+     },
+     "landed_ils": 390.5,
+     "slot_price_ils": {
+      "nordic": 59,
+      "warm-modern": 449,
+      "japandi": 59,
+      "mediterranean": 59,
+      "modern-country": 149,
+      "boho": 59
+     },
+     "margin_pct": {
+      "nordic": -693.8,
+      "warm-modern": -13.3,
+      "japandi": -693.8,
+      "mediterranean": -693.8,
+      "modern-country": -220.6,
+      "boho": -693.8
+     },
+     "eligible_styles": []
+    }
+   ],
+   "verdict_he": "לא נמצא מוצר עובר. הקרוב: 1005008195905528 (fit 7, מנורת תמונה שחורה עם זרוע; צבעים A–D לא מפורשים, רוחב לא ידוע)"
+  },
+  "corridor/runner-rug": {
+   "styles_needing": [
+    "nordic",
+    "warm-modern",
+    "japandi",
+    "mediterranean",
+    "modern-country",
+    "boho"
+   ],
+   "queries_aliexpress": [
+    "flat weave runner by the meter 60cm cotton",
+    "jute runner rug by the meter 70cm wide",
+    "vintage style runner rug sold by the meter 60cm wide",
+    "cotton linen hallway runner rug"
+   ],
+   "candidates": [
+    {
+     "source": "AliExpress",
+     "id": "1005008094587611",
+     "url": "https://www.aliexpress.com/item/1005008094587611.html",
+     "title": "Corridor Runner Carpets for Hallway Living Room Decoration Home Aisle Floor Mats Luxury Entryway Decor Area Long Strip Rug",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/Sa28564093959446fb4beff295d17ac87h.jpg",
+     "sku_or_vid": "12000044898255585",
+     "sku_label": "Color XH 109-Lint-free 2 Size 60 x 300 cm 23.6 x 118 in",
+     "cost_usd": 38.28,
+     "ship_usd": 5.43,
+     "ship_days": "7-18",
+     "qty": 1,
+     "dims_cm": "60x300",
+     "fits_envelope": "no",
+     "type_ok": true,
+     "style_fit_guess": {
+      "nordic": 2.0,
+      "warm-modern": 3.5,
+      "japandi": 2.0,
+      "mediterranean": 2.0,
+      "modern-country": 2.0,
+      "boho": 2.0
+     },
+     "found_by": "search",
+     "card_id": null,
+     "why_he": "הדפס שיש אפור בפוליאסטר, אורך 300 בלבד",
+     "econ": {
+      "nordic": {
+       "landed_ils": 144.2,
+       "contribution_ils": 104.5,
+       "margin_pct": 37.5
+      },
+      "warm-modern": {
+       "landed_ils": 144.2,
+       "contribution_ils": 104.5,
+       "margin_pct": 37.5
+      },
+      "japandi": {
+       "landed_ils": 144.2,
+       "contribution_ils": 104.5,
+       "margin_pct": 37.5
+      },
+      "mediterranean": {
+       "landed_ils": 144.2,
+       "contribution_ils": 104.5,
+       "margin_pct": 37.5
+      },
+      "modern-country": {
+       "landed_ils": 144.2,
+       "contribution_ils": 385.6,
+       "margin_pct": 65.1
+      },
+      "boho": {
+       "landed_ils": 144.2,
+       "contribution_ils": 104.5,
+       "margin_pct": 37.5
+      }
+     },
+     "variants_fit": {
+      "nordic": 0,
+      "warm-modern": 0,
+      "japandi": 0,
+      "mediterranean": 0,
+      "modern-country": 0,
+      "boho": 0
+     },
+     "landed_ils": 144.2,
+     "slot_price_ils": {
+      "nordic": 329,
+      "warm-modern": 329,
+      "japandi": 329,
+      "mediterranean": 329,
+      "modern-country": 699,
+      "boho": 329
+     },
+     "margin_pct": {
+      "nordic": 37.5,
+      "warm-modern": 37.5,
+      "japandi": 37.5,
+      "mediterranean": 37.5,
+      "modern-country": 65.1,
+      "boho": 37.5
+     },
+     "eligible_styles": []
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005011822461944",
+     "url": "https://www.aliexpress.com/item/1005011822461944.html",
+     "title": "Basketball Boy Bedroom Extra Long Runner Rug Hallway Mat Indoor Entrance Door Mat Living Room Floor Carpet Sports Decor",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/S6f81419cfd204af6858a230c818a9787b.jpg",
+     "sku_or_vid": "12000056692581954",
+     "sku_label": "Color 1 pc-40 X 60 CM",
+     "cost_usd": 6.29,
+     "ship_usd": 1.99,
+     "ship_days": "6-15",
+     "qty": 1,
+     "dims_cm": "40x60",
+     "fits_envelope": "no",
+     "type_ok": false,
+     "style_fit_guess": {
+      "nordic": 1.0,
+      "warm-modern": 1.0,
+      "japandi": 1.0,
+      "mediterranean": 1.0,
+      "modern-country": 1.0,
+      "boho": 1.0
+     },
+     "found_by": "search",
+     "card_id": null,
+     "why_he": "שטיחון כדורסל LOVE לילדים, לא ראנר",
+     "econ": {
+      "nordic": {
+       "landed_ils": 27.3,
+       "contribution_ils": 221.4,
+       "margin_pct": 79.4
+      },
+      "warm-modern": {
+       "landed_ils": 27.3,
+       "contribution_ils": 221.4,
+       "margin_pct": 79.4
+      },
+      "japandi": {
+       "landed_ils": 27.3,
+       "contribution_ils": 221.4,
+       "margin_pct": 79.4
+      },
+      "mediterranean": {
+       "landed_ils": 27.3,
+       "contribution_ils": 221.4,
+       "margin_pct": 79.4
+      },
+      "modern-country": {
+       "landed_ils": 27.3,
+       "contribution_ils": 502.5,
+       "margin_pct": 84.8
+      },
+      "boho": {
+       "landed_ils": 27.3,
+       "contribution_ils": 221.4,
+       "margin_pct": 79.4
+      }
+     },
+     "variants_fit": {
+      "nordic": 0,
+      "warm-modern": 0,
+      "japandi": 0,
+      "mediterranean": 0,
+      "modern-country": 0,
+      "boho": 0
+     },
+     "landed_ils": 27.3,
+     "slot_price_ils": {
+      "nordic": 329,
+      "warm-modern": 329,
+      "japandi": 329,
+      "mediterranean": 329,
+      "modern-country": 699,
+      "boho": 329
+     },
+     "margin_pct": {
+      "nordic": 79.4,
+      "warm-modern": 79.4,
+      "japandi": 79.4,
+      "mediterranean": 79.4,
+      "modern-country": 84.8,
+      "boho": 79.4
+     },
+     "eligible_styles": []
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005010393114811",
+     "url": "https://www.aliexpress.com/item/1005010393114811.html",
+     "title": "Home Use Runner Rug Vintage Airplane Runway Carpet Living Room Personalized Bedroom Bedside Sofa Home Decoration Floor Mat",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/S5970ad6b2fba474c90e15cdcfeafb3b15.jpg",
+     "sku_or_vid": "12000052260391133",
+     "sku_label": "Color 3 Size 40 X 120 CM",
+     "cost_usd": 9.34,
+     "ship_usd": 1.99,
+     "ship_days": "6-15",
+     "qty": 1,
+     "dims_cm": "40x120",
+     "fits_envelope": "no",
+     "type_ok": true,
+     "style_fit_guess": {
+      "nordic": 1.0,
+      "warm-modern": 1.0,
+      "japandi": 1.0,
+      "mediterranean": 1.0,
+      "modern-country": 1.0,
+      "boho": 1.5
+     },
+     "found_by": "search",
+     "card_id": null,
+     "why_he": "ראנר בהדפס מסלול המראה, קטן ובלי התאמה סגנונית",
+     "econ": {
+      "nordic": {
+       "landed_ils": 37.4,
+       "contribution_ils": 211.3,
+       "margin_pct": 75.8
+      },
+      "warm-modern": {
+       "landed_ils": 37.4,
+       "contribution_ils": 211.3,
+       "margin_pct": 75.8
+      },
+      "japandi": {
+       "landed_ils": 37.4,
+       "contribution_ils": 211.3,
+       "margin_pct": 75.8
+      },
+      "mediterranean": {
+       "landed_ils": 37.4,
+       "contribution_ils": 211.3,
+       "margin_pct": 75.8
+      },
+      "modern-country": {
+       "landed_ils": 37.4,
+       "contribution_ils": 492.4,
+       "margin_pct": 83.1
+      },
+      "boho": {
+       "landed_ils": 37.4,
+       "contribution_ils": 211.3,
+       "margin_pct": 75.8
+      }
+     },
+     "variants_fit": {
+      "nordic": 0,
+      "warm-modern": 0,
+      "japandi": 0,
+      "mediterranean": 0,
+      "modern-country": 0,
+      "boho": 0
+     },
+     "landed_ils": 37.4,
+     "slot_price_ils": {
+      "nordic": 329,
+      "warm-modern": 329,
+      "japandi": 329,
+      "mediterranean": 329,
+      "modern-country": 699,
+      "boho": 329
+     },
+     "margin_pct": {
+      "nordic": 75.8,
+      "warm-modern": 75.8,
+      "japandi": 75.8,
+      "mediterranean": 75.8,
+      "modern-country": 83.1,
+      "boho": 75.8
+     },
+     "eligible_styles": []
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005012250999032",
+     "url": "https://www.aliexpress.com/item/1005012250999032.html",
+     "title": "VIKAMA Black Vintage Snake Floral Runner Rug Non-Slip Washable Floor Mat for Hallway Living Room Home Decor",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/Seab38818b32a4601ba47eb03f204cda4W.png",
+     "sku_or_vid": "12000057869513679",
+     "sku_label": "Color SJR-2 Size 60 x 300 cm 24 x 118 inch",
+     "cost_usd": 40.28,
+     "ship_usd": 1.99,
+     "ship_days": "6-15",
+     "qty": 1,
+     "dims_cm": "60x300",
+     "fits_envelope": "no",
+     "type_ok": true,
+     "style_fit_guess": {
+      "nordic": 2.0,
+      "warm-modern": 2.5,
+      "japandi": 2.0,
+      "mediterranean": 3.0,
+      "modern-country": 3.5,
+      "boho": 4.0
+     },
+     "found_by": "search",
+     "card_id": null,
+     "why_he": "פרחוני ירוק כהה עם נחש, דוגמה צפופה, אורך 300",
+     "econ": {
+      "nordic": {
+       "landed_ils": 139.5,
+       "contribution_ils": 109.2,
+       "margin_pct": 39.2
+      },
+      "warm-modern": {
+       "landed_ils": 139.5,
+       "contribution_ils": 109.2,
+       "margin_pct": 39.2
+      },
+      "japandi": {
+       "landed_ils": 139.5,
+       "contribution_ils": 109.2,
+       "margin_pct": 39.2
+      },
+      "mediterranean": {
+       "landed_ils": 139.5,
+       "contribution_ils": 109.2,
+       "margin_pct": 39.2
+      },
+      "modern-country": {
+       "landed_ils": 139.5,
+       "contribution_ils": 390.3,
+       "margin_pct": 65.9
+      },
+      "boho": {
+       "landed_ils": 139.5,
+       "contribution_ils": 109.2,
+       "margin_pct": 39.2
+      }
+     },
+     "variants_fit": {
+      "nordic": 0,
+      "warm-modern": 0,
+      "japandi": 0,
+      "mediterranean": 0,
+      "modern-country": 0,
+      "boho": 0
+     },
+     "landed_ils": 139.5,
+     "slot_price_ils": {
+      "nordic": 329,
+      "warm-modern": 329,
+      "japandi": 329,
+      "mediterranean": 329,
+      "modern-country": 699,
+      "boho": 329
+     },
+     "margin_pct": {
+      "nordic": 39.2,
+      "warm-modern": 39.2,
+      "japandi": 39.2,
+      "mediterranean": 39.2,
+      "modern-country": 65.9,
+      "boho": 39.2
+     },
+     "eligible_styles": []
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005012015413611",
+     "url": "https://www.aliexpress.com/item/1005012015413611.html",
+     "title": "Vintage Green Floral Graphic Runner Rug Wildflower Print Hallway Mat Non-Slip Welcome Rug for Corridor Kitchen Bedroom",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/Sbdbda2dd71b741edb5cf049fae36f5a50.jpg",
+     "sku_or_vid": "12000057289095176",
+     "sku_label": "Color 1 Size 40 x 120 cm-Felt",
+     "cost_usd": 11.01,
+     "ship_usd": 1.99,
+     "ship_days": "6-15",
+     "qty": 1,
+     "dims_cm": "40x120",
+     "fits_envelope": "no",
+     "type_ok": true,
+     "style_fit_guess": {
+      "nordic": 2.0,
+      "warm-modern": 2.0,
+      "japandi": 2.0,
+      "mediterranean": 3.0,
+      "modern-country": 4.0,
+      "boho": 4.0
+     },
+     "found_by": "search",
+     "card_id": null,
+     "why_he": "פרחוני ירוק מודפס, קטן מאוד",
+     "econ": {
+      "nordic": {
+       "landed_ils": 42.9,
+       "contribution_ils": 205.8,
+       "margin_pct": 73.8
+      },
+      "warm-modern": {
+       "landed_ils": 42.9,
+       "contribution_ils": 205.8,
+       "margin_pct": 73.8
+      },
+      "japandi": {
+       "landed_ils": 42.9,
+       "contribution_ils": 205.8,
+       "margin_pct": 73.8
+      },
+      "mediterranean": {
+       "landed_ils": 42.9,
+       "contribution_ils": 205.8,
+       "margin_pct": 73.8
+      },
+      "modern-country": {
+       "landed_ils": 42.9,
+       "contribution_ils": 486.9,
+       "margin_pct": 82.2
+      },
+      "boho": {
+       "landed_ils": 42.9,
+       "contribution_ils": 205.8,
+       "margin_pct": 73.8
+      }
+     },
+     "variants_fit": {
+      "nordic": 0,
+      "warm-modern": 0,
+      "japandi": 0,
+      "mediterranean": 0,
+      "modern-country": 0,
+      "boho": 0
+     },
+     "landed_ils": 42.9,
+     "slot_price_ils": {
+      "nordic": 329,
+      "warm-modern": 329,
+      "japandi": 329,
+      "mediterranean": 329,
+      "modern-country": 699,
+      "boho": 329
+     },
+     "margin_pct": {
+      "nordic": 73.8,
+      "warm-modern": 73.8,
+      "japandi": 73.8,
+      "mediterranean": 73.8,
+      "modern-country": 82.2,
+      "boho": 73.8
+     },
+     "eligible_styles": []
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005009569335104",
+     "url": "https://www.aliexpress.com/item/1005009569335104.html",
+     "title": "vikama 2x6 Hallway Runner Rug Washable Non Slip Solid Pink Modern Minimalism Soft Low-Pile Indoor Carpet for Kitchen Home Decor",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/Scb9df633832c4f99afb313d299116fbec.jpg",
+     "sku_or_vid": "12000049490611513",
+     "sku_label": "Color GDSXB 17-4 Size 40 X 120 CM(1.3 X 3.9 FT",
+     "cost_usd": 24.32,
+     "ship_usd": 1.99,
+     "ship_days": "6-15",
+     "qty": 1,
+     "dims_cm": "60x240",
+     "fits_envelope": "borderline",
+     "type_ok": true,
+     "style_fit_guess": {
+      "nordic": 4.5,
+      "warm-modern": 4.0,
+      "japandi": 4.0,
+      "mediterranean": 5.5,
+      "modern-country": 5.5,
+      "boho": 4.5
+     },
+     "found_by": "search",
+     "card_id": null,
+     "why_he": "ראנר חלק כחול עם שוליים גליים, 60×240 (שלוש יחידות = 720)",
+     "econ": {
+      "nordic": {
+       "landed_ils": 86.8,
+       "contribution_ils": 161.9,
+       "margin_pct": 58.1
+      },
+      "warm-modern": {
+       "landed_ils": 86.8,
+       "contribution_ils": 161.9,
+       "margin_pct": 58.1
+      },
+      "japandi": {
+       "landed_ils": 86.8,
+       "contribution_ils": 161.9,
+       "margin_pct": 58.1
+      },
+      "mediterranean": {
+       "landed_ils": 86.8,
+       "contribution_ils": 161.9,
+       "margin_pct": 58.1
+      },
+      "modern-country": {
+       "landed_ils": 86.8,
+       "contribution_ils": 443.0,
+       "margin_pct": 74.8
+      },
+      "boho": {
+       "landed_ils": 86.8,
+       "contribution_ils": 161.9,
+       "margin_pct": 58.1
+      }
+     },
+     "variants_fit": {
+      "nordic": 0,
+      "warm-modern": 0,
+      "japandi": 0,
+      "mediterranean": 1,
+      "modern-country": 1,
+      "boho": 0
+     },
+     "landed_ils": 86.8,
+     "slot_price_ils": {
+      "nordic": 329,
+      "warm-modern": 329,
+      "japandi": 329,
+      "mediterranean": 329,
+      "modern-country": 699,
+      "boho": 329
+     },
+     "margin_pct": {
+      "nordic": 58.1,
+      "warm-modern": 58.1,
+      "japandi": 58.1,
+      "mediterranean": 58.1,
+      "modern-country": 74.8,
+      "boho": 58.1
+     },
+     "eligible_styles": []
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005009856983476",
+     "url": "https://www.aliexpress.com/item/1005009856983476.html",
+     "title": "VIKAMA Vintage BOHO Long Strip Crystal Velvet Carpet, Staircase Corridor, Living Room Bedroom Sunroom Hardwood Floor Home Decor",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/S58268584921240e38658933e79caca3aM.jpg",
+     "sku_or_vid": "12000050387967167",
+     "sku_label": "Color SJR- Size 60 X 300 CM",
+     "cost_usd": 40.98,
+     "ship_usd": 1.99,
+     "ship_days": "6-15",
+     "qty": 1,
+     "dims_cm": "60x300",
+     "fits_envelope": "no",
+     "type_ok": true,
+     "style_fit_guess": {
+      "nordic": 3.5,
+      "warm-modern": 4.5,
+      "japandi": 3.0,
+      "mediterranean": 5.0,
+      "modern-country": 5.5,
+      "boho": 6.0
+     },
+     "found_by": "search",
+     "card_id": null,
+     "why_he": "בהיר עם מדליון מודפס, קטיפה פוליאסטר; אורך 300",
+     "econ": {
+      "nordic": {
+       "landed_ils": 141.8,
+       "contribution_ils": 106.9,
+       "margin_pct": 38.4
+      },
+      "warm-modern": {
+       "landed_ils": 141.8,
+       "contribution_ils": 106.9,
+       "margin_pct": 38.4
+      },
+      "japandi": {
+       "landed_ils": 141.8,
+       "contribution_ils": 106.9,
+       "margin_pct": 38.4
+      },
+      "mediterranean": {
+       "landed_ils": 141.8,
+       "contribution_ils": 106.9,
+       "margin_pct": 38.4
+      },
+      "modern-country": {
+       "landed_ils": 141.8,
+       "contribution_ils": 388.0,
+       "margin_pct": 65.5
+      },
+      "boho": {
+       "landed_ils": 141.8,
+       "contribution_ils": 106.9,
+       "margin_pct": 38.4
+      }
+     },
+     "variants_fit": {
+      "nordic": 0,
+      "warm-modern": 0,
+      "japandi": 0,
+      "mediterranean": 0,
+      "modern-country": 0,
+      "boho": 1
+     },
+     "landed_ils": 141.8,
+     "slot_price_ils": {
+      "nordic": 329,
+      "warm-modern": 329,
+      "japandi": 329,
+      "mediterranean": 329,
+      "modern-country": 699,
+      "boho": 329
+     },
+     "margin_pct": {
+      "nordic": 38.4,
+      "warm-modern": 38.4,
+      "japandi": 38.4,
+      "mediterranean": 38.4,
+      "modern-country": 65.5,
+      "boho": 38.4
+     },
+     "eligible_styles": []
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005010373542776",
+     "url": "https://www.aliexpress.com/item/1005010373542776.html",
+     "title": "Hallway Carpet Runner Rug Long Carpets Black Floral Design Non-slip Machine Washable Rug Home Decor Rugs Alfombra Del Pasillo",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/Sba4ec271261449118aaf11fa163a5cecK.jpg",
+     "sku_or_vid": "12000052182807088",
+     "sku_label": "Color FQ 4888-YZ Size 50 x 160 cm",
+     "cost_usd": 35.48,
+     "ship_usd": 57.14,
+     "ship_days": "15-26",
+     "qty": 1,
+     "dims_cm": "50x160",
+     "fits_envelope": "no",
+     "type_ok": true,
+     "style_fit_guess": {
+      "nordic": 2.0,
+      "warm-modern": 2.0,
+      "japandi": 2.0,
+      "mediterranean": 4.0,
+      "modern-country": 4.5,
+      "boho": 4.5
+     },
+     "found_by": "search",
+     "card_id": null,
+     "why_he": "פרחוני טורקיז צפוף, קצר",
+     "econ": {
+      "nordic": {
+       "landed_ils": 305.6,
+       "contribution_ils": -56.9,
+       "margin_pct": -20.4
+      },
+      "warm-modern": {
+       "landed_ils": 305.6,
+       "contribution_ils": -56.9,
+       "margin_pct": -20.4
+      },
+      "japandi": {
+       "landed_ils": 305.6,
+       "contribution_ils": -56.9,
+       "margin_pct": -20.4
+      },
+      "mediterranean": {
+       "landed_ils": 305.6,
+       "contribution_ils": -56.9,
+       "margin_pct": -20.4
+      },
+      "modern-country": {
+       "landed_ils": 305.6,
+       "contribution_ils": 224.2,
+       "margin_pct": 37.8
+      },
+      "boho": {
+       "landed_ils": 305.6,
+       "contribution_ils": -56.9,
+       "margin_pct": -20.4
+      }
+     },
+     "variants_fit": {
+      "nordic": 0,
+      "warm-modern": 0,
+      "japandi": 0,
+      "mediterranean": 0,
+      "modern-country": 0,
+      "boho": 0
+     },
+     "landed_ils": 305.6,
+     "slot_price_ils": {
+      "nordic": 329,
+      "warm-modern": 329,
+      "japandi": 329,
+      "mediterranean": 329,
+      "modern-country": 699,
+      "boho": 329
+     },
+     "margin_pct": {
+      "nordic": -20.4,
+      "warm-modern": -20.4,
+      "japandi": -20.4,
+      "mediterranean": -20.4,
+      "modern-country": 37.8,
+      "boho": -20.4
+     },
+     "eligible_styles": []
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005011809822886",
+     "url": "https://www.aliexpress.com/item/1005011809822886.html",
+     "title": "Retro Wave Runner Rug with Orange and Brown Swirl Rug Funky Mid Century Modern Carpet 70s Aesthetic Hallway Floor Decor for Home",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/S5e6e199a9def48528ce7fa7ef1dde89eD.jpg",
+     "sku_or_vid": "12000056633363261",
+     "sku_label": "Color 1 Size 40 x 120 cm-Felt",
+     "cost_usd": 11.73,
+     "ship_usd": 1.99,
+     "ship_days": "6-15",
+     "qty": 1,
+     "dims_cm": "40x120",
+     "fits_envelope": "no",
+     "type_ok": true,
+     "style_fit_guess": {
+      "nordic": 1.5,
+      "warm-modern": 2.5,
+      "japandi": 1.5,
+      "mediterranean": 3.0,
+      "modern-country": 2.0,
+      "boho": 5.0
+     },
+     "found_by": "search",
+     "card_id": null,
+     "why_he": "גל רטרו כתום-חום שנות ה-70, קטן",
+     "econ": {
+      "nordic": {
+       "landed_ils": 45.3,
+       "contribution_ils": 203.4,
+       "margin_pct": 73.0
+      },
+      "warm-modern": {
+       "landed_ils": 45.3,
+       "contribution_ils": 203.4,
+       "margin_pct": 73.0
+      },
+      "japandi": {
+       "landed_ils": 45.3,
+       "contribution_ils": 203.4,
+       "margin_pct": 73.0
+      },
+      "mediterranean": {
+       "landed_ils": 45.3,
+       "contribution_ils": 203.4,
+       "margin_pct": 73.0
+      },
+      "modern-country": {
+       "landed_ils": 45.3,
+       "contribution_ils": 484.5,
+       "margin_pct": 81.8
+      },
+      "boho": {
+       "landed_ils": 45.3,
+       "contribution_ils": 203.4,
+       "margin_pct": 73.0
+      }
+     },
+     "variants_fit": {
+      "nordic": 0,
+      "warm-modern": 0,
+      "japandi": 0,
+      "mediterranean": 0,
+      "modern-country": 0,
+      "boho": 1
+     },
+     "landed_ils": 45.3,
+     "slot_price_ils": {
+      "nordic": 329,
+      "warm-modern": 329,
+      "japandi": 329,
+      "mediterranean": 329,
+      "modern-country": 699,
+      "boho": 329
+     },
+     "margin_pct": {
+      "nordic": 73.0,
+      "warm-modern": 73.0,
+      "japandi": 73.0,
+      "mediterranean": 73.0,
+      "modern-country": 81.8,
+      "boho": 73.0
+     },
+     "eligible_styles": []
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005012150214181",
+     "url": "https://www.aliexpress.com/item/1005012150214181.html",
+     "title": "VIKAMA Non-slip Runner Rug Airport Runway for Hallway Home Decor",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/S7307146e620b434d8e60c5b3f82f94568.jpg",
+     "sku_or_vid": "12000057637996194",
+     "sku_label": "Color FLR-4 Size 40 X 120 CM",
+     "cost_usd": 11.66,
+     "ship_usd": 1.99,
+     "ship_days": "6-15",
+     "qty": 1,
+     "dims_cm": "40x120",
+     "fits_envelope": "no",
+     "type_ok": true,
+     "style_fit_guess": {
+      "nordic": 1.0,
+      "warm-modern": 1.0,
+      "japandi": 1.0,
+      "mediterranean": 1.0,
+      "modern-country": 1.0,
+      "boho": 1.0
+     },
+     "found_by": "search",
+     "card_id": null,
+     "why_he": "מסלול המראה, לא מתאים",
+     "econ": {
+      "nordic": {
+       "landed_ils": 45.0,
+       "contribution_ils": 203.7,
+       "margin_pct": 73.1
+      },
+      "warm-modern": {
+       "landed_ils": 45.0,
+       "contribution_ils": 203.7,
+       "margin_pct": 73.1
+      },
+      "japandi": {
+       "landed_ils": 45.0,
+       "contribution_ils": 203.7,
+       "margin_pct": 73.1
+      },
+      "mediterranean": {
+       "landed_ils": 45.0,
+       "contribution_ils": 203.7,
+       "margin_pct": 73.1
+      },
+      "modern-country": {
+       "landed_ils": 45.0,
+       "contribution_ils": 484.8,
+       "margin_pct": 81.8
+      },
+      "boho": {
+       "landed_ils": 45.0,
+       "contribution_ils": 203.7,
+       "margin_pct": 73.1
+      }
+     },
+     "variants_fit": {
+      "nordic": 0,
+      "warm-modern": 0,
+      "japandi": 0,
+      "mediterranean": 0,
+      "modern-country": 0,
+      "boho": 0
+     },
+     "landed_ils": 45.0,
+     "slot_price_ils": {
+      "nordic": 329,
+      "warm-modern": 329,
+      "japandi": 329,
+      "mediterranean": 329,
+      "modern-country": 699,
+      "boho": 329
+     },
+     "margin_pct": {
+      "nordic": 73.1,
+      "warm-modern": 73.1,
+      "japandi": 73.1,
+      "mediterranean": 73.1,
+      "modern-country": 81.8,
+      "boho": 73.1
+     },
+     "eligible_styles": []
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005012628388464",
+     "url": "https://www.aliexpress.com/item/1005012628388464.html",
+     "title": "Multi Color Patchwork Checkered Runner Rug Vintage Striped Design Indoor Mat For Hallway Bedroom Doorway Decoration Accent",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/S3a648b34d14342449a83188dde220086v.jpg",
+     "sku_or_vid": "12000058898070133",
+     "sku_label": "Color 3 Size 40 x 120 cm",
+     "cost_usd": 10.19,
+     "ship_usd": 1.99,
+     "ship_days": "6-15",
+     "qty": 1,
+     "dims_cm": "40x120",
+     "fits_envelope": "no",
+     "type_ok": true,
+     "style_fit_guess": {
+      "nordic": 2.0,
+      "warm-modern": 2.5,
+      "japandi": 2.0,
+      "mediterranean": 3.5,
+      "modern-country": 4.0,
+      "boho": 5.0
+     },
+     "found_by": "search",
+     "card_id": null,
+     "why_he": "טלאים משובצים צבעוניים, קטן",
+     "econ": {
+      "nordic": {
+       "landed_ils": 40.2,
+       "contribution_ils": 208.5,
+       "margin_pct": 74.8
+      },
+      "warm-modern": {
+       "landed_ils": 40.2,
+       "contribution_ils": 208.5,
+       "margin_pct": 74.8
+      },
+      "japandi": {
+       "landed_ils": 40.2,
+       "contribution_ils": 208.5,
+       "margin_pct": 74.8
+      },
+      "mediterranean": {
+       "landed_ils": 40.2,
+       "contribution_ils": 208.5,
+       "margin_pct": 74.8
+      },
+      "modern-country": {
+       "landed_ils": 40.2,
+       "contribution_ils": 489.6,
+       "margin_pct": 82.7
+      },
+      "boho": {
+       "landed_ils": 40.2,
+       "contribution_ils": 208.5,
+       "margin_pct": 74.8
+      }
+     },
+     "variants_fit": {
+      "nordic": 0,
+      "warm-modern": 0,
+      "japandi": 0,
+      "mediterranean": 0,
+      "modern-country": 0,
+      "boho": 1
+     },
+     "landed_ils": 40.2,
+     "slot_price_ils": {
+      "nordic": 329,
+      "warm-modern": 329,
+      "japandi": 329,
+      "mediterranean": 329,
+      "modern-country": 699,
+      "boho": 329
+     },
+     "margin_pct": {
+      "nordic": 74.8,
+      "warm-modern": 74.8,
+      "japandi": 74.8,
+      "mediterranean": 74.8,
+      "modern-country": 82.7,
+      "boho": 74.8
+     },
+     "eligible_styles": []
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005005616397758",
+     "url": "https://www.aliexpress.com/item/1005005616397758.html",
+     "title": "1.2M Wide Red Wedding Carpet Custom Length Aisle Runner Indoor Outdoor Decoration Carpet Event Party Home Textiles Rug",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/Saee2dca7ac4c411c86a562773fe77cf2C.jpg",
+     "sku_or_vid": "12000033760760782",
+     "sku_label": "Color RED Width 1.2 M Length 6 M",
+     "cost_usd": 17.53,
+     "ship_usd": 1.99,
+     "ship_days": "6-13",
+     "qty": 1,
+     "dims_cm": "120x600+",
+     "fits_envelope": "no",
+     "type_ok": false,
+     "style_fit_guess": {
+      "nordic": 1.0,
+      "warm-modern": 1.0,
+      "japandi": 1.0,
+      "mediterranean": 1.0,
+      "modern-country": 1.0,
+      "boho": 1.0
+     },
+     "found_by": "search",
+     "card_id": null,
+     "why_he": "שטיח אירועים אדום ברוחב 1.2 מ׳",
+     "econ": {
+      "nordic": {
+       "landed_ils": 64.4,
+       "contribution_ils": 184.3,
+       "margin_pct": 66.1
+      },
+      "warm-modern": {
+       "landed_ils": 64.4,
+       "contribution_ils": 184.3,
+       "margin_pct": 66.1
+      },
+      "japandi": {
+       "landed_ils": 64.4,
+       "contribution_ils": 184.3,
+       "margin_pct": 66.1
+      },
+      "mediterranean": {
+       "landed_ils": 64.4,
+       "contribution_ils": 184.3,
+       "margin_pct": 66.1
+      },
+      "modern-country": {
+       "landed_ils": 64.4,
+       "contribution_ils": 465.4,
+       "margin_pct": 78.6
+      },
+      "boho": {
+       "landed_ils": 64.4,
+       "contribution_ils": 184.3,
+       "margin_pct": 66.1
+      }
+     },
+     "variants_fit": {
+      "nordic": 0,
+      "warm-modern": 0,
+      "japandi": 0,
+      "mediterranean": 0,
+      "modern-country": 0,
+      "boho": 0
+     },
+     "landed_ils": 64.4,
+     "slot_price_ils": {
+      "nordic": 329,
+      "warm-modern": 329,
+      "japandi": 329,
+      "mediterranean": 329,
+      "modern-country": 699,
+      "boho": 329
+     },
+     "margin_pct": {
+      "nordic": 66.1,
+      "warm-modern": 66.1,
+      "japandi": 66.1,
+      "mediterranean": 66.1,
+      "modern-country": 78.6,
+      "boho": 66.1
+     },
+     "eligible_styles": []
+    },
+    {
+     "source": "AliExpress",
+     "id": "1005012491883680",
+     "url": "https://www.aliexpress.com/item/1005012491883680.html",
+     "title": "VIKAMA Vintage Medallion Runner Rug Neutral Beige Floral Pattern Non Slip Washable Kitchen Hallway Long Floor Carpet Decor",
+     "image": "https://ae-pic-a1.aliexpress-media.com/kf/S5f18e92c58394690aa9eeb10fbe8ae48a.png",
+     "sku_or_vid": "12000058517883486",
+     "sku_label": "Color FSJR-7 Size 60 x 300 cm 24 x 118 inch",
+     "cost_usd": 43.92,
+     "ship_usd": 1.99,
+     "ship_days": "6-15",
+     "qty": 1,
+     "dims_cm": "60x300",
+     "fits_envelope": "no",
+     "type_ok": true,
+     "style_fit_guess": {
+      "nordic": 3.5,
+      "warm-modern": 5.0,
+      "japandi": 3.0,
+      "mediterranean": 5.5,
+      "modern-country": 6.0,
+      "boho": 6.0
+     },
+     "found_by": "earlier round, reviewed",
+     "card_id": null,
+     "why_he": "מדליון בז׳ מודפס בפוליאסטר; מדליון אסור בנורדי, אורך 300",
+     "econ": {
+      "nordic": {
+       "landed_ils": 151.5,
+       "contribution_ils": 97.2,
+       "margin_pct": 34.9
+      },
+      "warm-modern": {
+       "landed_ils": 151.5,
+       "contribution_ils": 97.2,
+       "margin_pct": 34.9
+      },
+      "japandi": {
+       "landed_ils": 151.5,
+       "contribution_ils": 97.2,
+       "margin_pct": 34.9
+      },
+      "mediterranean": {
+       "landed_ils": 151.5,
+       "contribution_ils": 97.2,
+       "margin_pct": 34.9
+      },
+      "modern-country": {
+       "landed_ils": 151.5,
+       "contribution_ils": 378.3,
+       "margin_pct": 63.9
+      },
+      "boho": {
+       "landed_ils": 151.5,
+       "contribution_ils": 97.2,
+       "margin_pct": 34.9
+      }
+     },
+     "variants_fit": {
+      "nordic": 0,
+      "warm-modern": 0,
+      "japandi": 0,
+      "mediterranean": 0,
+      "modern-country": 1,
+      "boho": 1
+     },
+     "landed_ils": 151.5,
+     "slot_price_ils": {
+      "nordic": 329,
+      "warm-modern": 329,
+      "japandi": 329,
+      "mediterranean": 329,
+      "modern-country": 699,
+      "boho": 329
+     },
+     "margin_pct": {
+      "nordic": 34.9,
+      "warm-modern": 34.9,
+      "japandi": 34.9,
+      "mediterranean": 34.9,
+      "modern-country": 63.9,
+      "boho": 34.9
+     },
+     "eligible_styles": []
+    }
+   ],
+   "verdict_he": "לא נמצא מוצר עובר. הקרוב: 1005009856983476 (fit 6, בהיר עם מדליון מודפס, קטיפה פוליאסטר; אורך 300)"
+  }
+ }
+}
