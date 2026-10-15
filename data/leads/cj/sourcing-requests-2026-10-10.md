@@ -144,3 +144,11 @@ Link with fit ≥ 7: 7 slots (candle-holders 7, floor-vase 7, kitchen-sconce 8, 
   - צנצנות: failReason 8, "unable to find it".
   - 2 עדיין Pending: פמוטים לפינת האוכל ומנורת קיר במטבח.
 - **נשלחו 3 אחרונות:** שטיח בסלון 240×300, וילון שקוף 140×280 ואגרטל מרכזי חלק. התור ריק. כשכל הסטטוסים יהיו סופיים, השגרה נסגרת.
+
+## 2026-10-15 (the daily routine, final run)
+
+- **Status:** the last 5 requests are closed.
+  - Dining candle holders, kitchen sconce, living-room rug 240×300, sheer curtain 140×280: all failed with failReason 8, "unable to find it".
+  - The plain centerpiece vase: CJ returned pid 2604130808271634100, which already has a card (centerpiece-vase-cj-sandy-white-bead-band-25). That makes it circular, and there is no new product.
+- **The queue is empty and every status is final.** All 23 requests are closed, and the daily routine is turned off.
+- **Lesson:** CJ sourcing mostly returns products we already have or fails. It isn't a source of new products for us.
