@@ -13,6 +13,9 @@
   --brick-ink:#8A3A2A; --brick-wash:#F2E0DA;
   --amber-ink:#87500F; --amber-wash:#F5E2C4;
   --shade:rgba(42,42,41,.22); --scrim:rgba(30,30,29,.46);
+  /* room boards: the "candidate" tag on oak, and the coverage ramp (one hue, light to dark; ink stays >= 5.5:1 on every step) */
+  --on-oak:#2A2A29;
+  --heat-0:#F3F2EE; --heat-1:#E3E7DB; --heat-2:#CDD5C2; --heat-3:#B3BFA5; --heat-4:#97A588;
   --f-display:"Frank Ruhl Libre","David Libre","Times New Roman",serif;
   --f-body:"Assistant","Heebo","Arial Hebrew",system-ui,-apple-system,"Segoe UI",sans-serif;
   --f-mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
@@ -28,6 +31,8 @@
   --brick-ink:#F0B3A5; --brick-wash:#3D2621;
   --amber-ink:#F2C47E; --amber-wash:#3E2F18;
   --shade:rgba(0,0,0,.5); --scrim:rgba(0,0,0,.62);
+  --on-oak:#1B1B1A;
+  --heat-0:#2A2A28; --heat-1:#2F352B; --heat-2:#3A4434; --heat-3:#46553E; --heat-4:#546649;
   color-scheme:dark;
 }}
 :root[data-theme="dark"]{
@@ -39,6 +44,8 @@
   --brick-ink:#F0B3A5; --brick-wash:#3D2621;
   --amber-ink:#F2C47E; --amber-wash:#3E2F18;
   --shade:rgba(0,0,0,.5); --scrim:rgba(0,0,0,.62);
+  --on-oak:#1B1B1A;
+  --heat-0:#2A2A28; --heat-1:#2F352B; --heat-2:#3A4434; --heat-3:#46553E; --heat-4:#546649;
   color-scheme:dark;
 }
 @media (min-width:720px){:root{--gut:28px}}
@@ -997,6 +1004,121 @@ button.ptile:focus-visible{outline-offset:2px}
 @media (max-width:560px){.src-matrix .tl-long{display:none}.src-matrix th,.src-matrix td{padding:8px 6px}}
 .drop-table code{direction:ltr;unicode-bidi:isolate;overflow-wrap:anywhere;white-space:normal}
 @media (max-width:560px){.drop-table td:first-child{white-space:normal}}
+/* room boards (לוחות חדרים, 2026-10-17): the owner's product boards, one per style and room, with the coverage map above */
+#bd-body{display:grid;gap:26px;min-width:0}
+.bd-pick{display:grid;gap:10px}
+.bd-segs{display:grid;gap:8px}
+.bd-segs .seg-row{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center}
+.bd-segs .seg-l{font-size:var(--fs-xs);font-weight:700;color:var(--ink-3);min-width:3.2em}
+.bd-sel{display:none;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+@media (max-width:599px){.bd-segs{display:none}.bd-sel{display:grid}}
+.bd-mx{border-collapse:separate;border-spacing:3px;width:100%;table-layout:fixed;font-size:var(--fs-s)}
+.bd-mx th,.bd-mx td{padding:0;border:0;background:none;position:static;vertical-align:middle;text-align:center}
+.bd-mx thead th{font-size:var(--fs-xs);font-weight:700;color:var(--ink-3);white-space:normal;line-height:1.2;padding:0 1px 5px;vertical-align:bottom}
+.bd-mx tbody th{font-size:var(--fs-xs);font-weight:700;color:var(--ink-2);text-align:start;padding-inline-end:6px;white-space:normal;line-height:1.25}
+.bd-mx tbody tr:hover td{background:none}
+.bd-mx-wide col.c-h{width:7.5em}
+.bd-mx-narrow col.c-h{width:6.2em}
+.bd-mx-narrow{display:none}
+@media (max-width:599px){.bd-mx-wide{display:none}.bd-mx-narrow{display:table}}
+.bd-cell{width:100%;min-height:42px;border:1px solid transparent;border-radius:5px;display:grid;place-items:center;align-content:center;gap:1px;cursor:pointer;color:var(--ink);font:inherit;padding:4px 2px;background:var(--heat-0);line-height:1.1}
+.bd-cell[data-bin="1"]{background:var(--heat-1)}
+.bd-cell[data-bin="2"]{background:var(--heat-2)}
+.bd-cell[data-bin="3"]{background:var(--heat-3)}
+.bd-cell[data-bin="4"]{background:var(--heat-4)}
+.bd-cell:hover{border-color:var(--ink)}
+.bd-cell[aria-current="true"]{box-shadow:0 0 0 2px var(--paper),0 0 0 4px var(--ink)}
+.bd-cell .p{font-weight:700;font-variant-numeric:tabular-nums;font-size:var(--fs-s)}
+.bd-cell .n{font-size:11px;font-variant-numeric:tabular-nums}
+.bd-scale{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:center;font-size:var(--fs-xs);color:var(--ink-2);margin:0;padding:0;list-style:none}
+.bd-scale li{display:inline-flex;gap:5px;align-items:center}
+.bd-scale i{width:16px;height:12px;border-radius:3px;border:1px solid var(--rule-2);display:inline-block}
+.bd-head{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:end;justify-content:space-between}
+.bd-head h2{font-size:var(--fs-xxl);outline:none}
+.bd-sub{color:var(--ink-2);margin-top:4px}
+.bd-grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:16px}
+@media (max-width:1099px){.bd-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media (max-width:859px){.bd-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:599px){.bd-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.bt{position:relative;display:flex;flex-direction:column;min-width:0;background:var(--sheet);border:1px solid var(--rule);border-radius:10px;overflow:hidden}
+.bt:hover{border-color:var(--rule-2);box-shadow:0 10px 24px -18px var(--shade)}
+.bt-main{display:flex;flex-direction:column;align-items:stretch;text-align:start;background:none;border:0;padding:0;margin:0;color:inherit;font:inherit;cursor:pointer;flex:1 1 auto;min-width:0}
+.bt-main:focus-visible{outline-offset:-3px}
+.bt-im{position:relative;display:block;aspect-ratio:1/1;background:#fff;overflow:hidden}
+.bt-im img{width:100%;height:100%;object-fit:cover;display:block}
+.bt-im.ph{background:repeating-linear-gradient(135deg,var(--sunk) 0 8px,var(--paper) 8px 16px)}
+.bt-tag{position:absolute;inset-block-start:8px;inset-inline-start:8px;font-size:11.5px;font-weight:700;line-height:1;padding:4px 9px;border-radius:999px;background:var(--ink);color:var(--on-ink)}
+.bt-tag.c{background:var(--oak);color:var(--on-oak)}
+.bt-noimg{position:absolute;inset-block-end:8px;inset-inline-start:8px}
+.bt-body{display:grid;gap:5px;padding:9px 10px 8px;min-width:0;align-content:start}
+.bt-slot{font-weight:700;font-size:14.5px;line-height:1.25}
+.bt-name{font-size:var(--fs-xs);color:var(--ink-2);line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere;min-height:2.7em}
+.bt-row{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center}
+.bt-price{font-weight:700;font-size:17px;font-variant-numeric:tabular-nums}
+.bt-sup{font-size:var(--fs-xs);color:var(--ink-3);font-weight:700}
+.bt-alts{display:flex;gap:6px;padding:0 10px 10px}
+.bt-alt{width:44px;height:44px;padding:0;border:1px solid var(--rule);border-radius:6px;overflow:hidden;background:#fff;cursor:pointer;flex:none;display:block}
+.bt-alt img{width:100%;height:100%;object-fit:cover;display:block}
+.bt-alt.ph{background:repeating-linear-gradient(135deg,var(--sunk) 0 6px,var(--paper) 6px 12px)}
+.bt-alt:hover{border-color:var(--ink)}
+.bt-empty{background:var(--sunk);border:2px dashed var(--rule-2);min-height:180px}
+.bt-empty:hover{box-shadow:none;border-color:var(--rule-2)}
+.bt-miss{display:grid;gap:2px;justify-items:center;text-align:center;padding:34px 10px;color:var(--ink-2);font-size:15px}
+.bt-miss b{color:var(--ink)}
+.bd-chip{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:700;line-height:1.25;padding:3px 8px;border-radius:999px;background:var(--sunk);color:var(--ink-2);max-width:100%;overflow-wrap:anywhere}
+.bd-chip.tone-good{background:var(--sage-wash);color:var(--sage-ink)}
+.bd-chip.tone-warn{background:var(--amber-wash);color:var(--amber-ink)}
+.bd-chip.tone-bad{background:var(--brick-wash);color:var(--brick-ink)}
+.bd-chip.tone-info{background:var(--oak-wash);color:var(--oak-ink)}
+.bd-chip.tone-neutral{background:var(--sunk);color:var(--ink-2)}
+.bd-more{font-size:11.5px;font-weight:700;color:var(--ink-3)}
+.bd-legend{font-size:var(--fs-s);color:var(--ink-2);max-width:110ch}
+.bd-tbl{min-width:760px}
+.bd-tbl th,.bd-tbl td{vertical-align:middle}
+.bd-tbl thead th{z-index:2}
+.bd-tbl .c-slot{position:sticky;inset-inline-start:0;z-index:1;background:var(--sheet);font-weight:700;font-size:var(--fs-s);color:var(--ink);white-space:normal;min-width:7.5em;max-width:10em}
+.bd-tbl thead .c-slot{background:var(--paper);z-index:3}
+.bd-tbl tbody tr:hover td,.bd-tbl tbody tr:hover th{background:var(--paper)}
+.bd-tbl .tp{display:flex;gap:10px;align-items:center;min-width:0}
+.bd-tbl .tp-th,.bd-list .tp-th{width:48px;height:48px;border-radius:6px;overflow:hidden;flex:none;border:1px solid var(--rule);background:#fff;padding:0;display:block}
+.bd-tbl .tp-th img,.bd-list .tp-th img{width:100%;height:100%;object-fit:cover;display:block}
+.bd-tbl .tp-th.ph,.bd-list .tp-th.ph{background:repeating-linear-gradient(135deg,var(--sunk) 0 6px,var(--paper) 6px 12px)}
+/* the table view on a phone: the same rows as a stacked list, so supplier, status and margin are seen without a sideways swipe */
+.bd-list{display:none;list-style:none;margin:0;padding:0;border:1px solid var(--rule);border-radius:var(--r);background:var(--sheet)}
+@media (max-width:599px){.bd-tbl-wrap{display:none}.bd-list{display:block}}
+.bl-slot{display:grid;gap:8px;padding:11px 12px 12px;border-bottom:1px solid var(--rule);min-width:0}
+.bl-slot:last-child{border-bottom:0}
+.bl-slot.is-empty{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;justify-content:space-between}
+.bl-h{font-family:var(--f-body);font-weight:700;font-size:var(--fs-s);line-height:1.3;margin:0}
+.bl-picks{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.bl-pick{display:grid;gap:6px;min-width:0}
+.bl-pick.is-alt{padding-inline-start:10px;border-inline-start:2px solid var(--rule)}
+.bl-pick.is-alt .tp-th{width:38px;height:38px}
+.bl-main{display:flex;gap:10px;align-items:center;background:none;border:0;padding:0;margin:0;font:inherit;color:inherit;text-align:start;cursor:pointer;min-width:0}
+.bl-t{display:grid;gap:3px;min-width:0}
+.bl-n{font-size:var(--fs-s);line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+.bl-meta{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center;min-width:0}
+.bl-price{font-weight:700;font-size:var(--fs-s);font-variant-numeric:tabular-nums}
+.bd-tbl .tp-t{display:grid;gap:3px;min-width:0}
+.bd-tbl .tp-n{text-align:start;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere;max-width:34ch;font-size:var(--fs-s)}
+.bd-tbl .c-st{min-width:9em}
+.bd-tbl .c-st .bd-chip{margin-block:1px}
+.bd-tbl button.tp{background:none;border:0;padding:0;margin:0;font:inherit;color:inherit;cursor:pointer;text-align:start}
+.bd-tbl button.tp:hover .tp-n{text-decoration:underline;text-decoration-color:var(--rule-2);text-underline-offset:3px}
+.bd-tbl .sub{display:block;font-size:11px;color:var(--ink-3)}
+.bd-scale i[data-bin="0"]{background:var(--heat-0)}
+.bd-scale i[data-bin="1"]{background:var(--heat-1)}
+.bd-scale i[data-bin="2"]{background:var(--heat-2)}
+.bd-scale i[data-bin="3"]{background:var(--heat-3)}
+.bd-scale i[data-bin="4"]{background:var(--heat-4)}
+
+.bd-tbl .c-num{text-align:end;white-space:nowrap;font-variant-numeric:tabular-nums}
+.bd-tbl tr.is-alt td,.bd-tbl tr.is-alt th{border-top:0;font-size:var(--fs-xs)}
+.bd-tbl tr.is-alt .c-slot{font-weight:600;color:var(--ink-3)}
+.bd-tbl tr.is-alt .tp-th{width:38px;height:38px}
+.bd-tbl tr.is-empty .c-slot{color:var(--ink-2)}
+.bd-tbl tr.has-alt td,.bd-tbl tr.has-alt th{border-bottom-style:dotted}
+
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 }
@@ -1020,6 +1142,7 @@ button.ptile:focus-visible{outline-offset:2px}
           <li><a href="#decisions" data-screen="decisions">החלטות <span class="tab-badge" id="badge-dec" aria-hidden="true"></span><span class="sr-only" id="badge-dec-sr"></span></a></li>
           <li><a href="#office" data-screen="office">המשרד <span class="tab-badge live" id="badge-office" aria-hidden="true"></span><span class="sr-only" id="badge-office-sr"></span></a></li>
           <li><a href="#rooms" data-screen="rooms">חדרים</a></li>
+          <li><a href="#boards" data-screen="boards">לוחות חדרים</a></li>
           <li><a href="#products" data-screen="products">מוצרים</a></li>
           <li><a href="#profit" data-screen="profit">רווחיות</a></li>
           <li><a href="#compare" data-screen="compare">השוואת ספקים</a></li>
@@ -1059,6 +1182,12 @@ button.ptile:focus-visible{outline-offset:2px}
       <div class="screen-head"><h1 id="h-rooms" tabindex="-1">חדרים</h1></div>
       <div class="room-pick" id="room-pick" role="group" aria-label="בחירת חדר"></div>
       <div id="room-body"><p class="loading">טוען…</p></div>
+    </section>
+
+    <section class="screen" id="screen-boards" aria-labelledby="h-boards" hidden>
+      <div class="screen-head"><h1 id="h-boards" tabindex="-1">לוחות חדרים</h1><p class="small faint" id="bd-count"></p></div>
+      <p class="lede">לוח מוצרים לכל סגנון וחדר, כמו התמונות של 16.10: "נבחר" הוא בחירת המעצב, "מועמד" הוא מוצר מהליקוט האחרון שעוד לא עבר את המעצב, ועמדה בלי מוצר מסומנת "חסר". לכל מוצר: הספק, הסטטוס מול הספק והרווח. לחיצה על מוצר פותחת את הכרטיס שלו. הנתונים מחושבים ב-<code>scripts/boards/room_boards.py</code>, אותו חישוב כמו התמונות.</p>
+      <div id="bd-body"><p class="loading">טוען…</p></div>
     </section>
 
     <section class="screen" id="screen-products" aria-labelledby="h-products" hidden>
@@ -1337,6 +1466,7 @@ const S = {
   sup:Object.assign({q:'', section:'', status:'', model:'', sort:'fit'}, store.get('sup', {})), focusDec:null, accessSaving:new Set(), accessErr:null,
   cmp:Object.assign({room:null, style:'nordic', sup:'', profitable:false, rejected:false, unrated:false}, store.get('cmp', {})),
   furn:Object.assign({room:'', style:'all', tier:'', verdict:'', sup:'', coop:''}, store.get('furn', {})),
+  bd:Object.assign({style:'nordic', room:'living-room', view:'tiles'}, store.get('boards', {})),
   roomView:store.get('roomView', 'compose'), compStatus:'', compStyle:store.get('compStyle', 'nordic'), srcLimit:30,
   src:Object.assign({room:'', priority:'', source:'', status:'', withRes:false}, store.get('src', {})),
   db:null, user:null, uid:null, canWrite:null, dbState:'connecting', dbError:null, dbReady:false,
@@ -1372,7 +1502,7 @@ async function boot(){
   connectDb();
 }
 function renderAll(){
-  renderOverview(); renderTodo(); renderDecisions(); renderOffice(); renderRoomPick(); renderRoom();
+  renderOverview(); renderTodo(); renderDecisions(); renderOffice(); renderRoomPick(); renderRoom(); renderBoards();
   initFilters(); renderProducts(); renderProfit(); renderCompare(); renderSourcing(); renderFurniture(); renderSuppliers(); renderBudget(); renderReports(); renderLog();
 }
 let pendingRender = false;
@@ -1381,7 +1511,7 @@ function onDataChange(){
   setTimeout(() => {
     pendingRender = false;
     refreshView();
-    renderOverview(); renderTodo(); renderOffice(); renderRoom(); renderProducts(); renderProfit(); renderCompare(); renderSourcing(); renderFurniture(); renderSuppliers(); renderBudget(); refreshDrawer();
+    renderOverview(); renderTodo(); renderOffice(); renderRoom(); renderBoards(); renderProducts(); renderProfit(); renderCompare(); renderSourcing(); renderFurniture(); renderSuppliers(); renderBudget(); refreshDrawer();
   }, 0);
 }
 
@@ -1659,7 +1789,7 @@ function profitBasis(){
 }
 
 /* ---------- routing ---------- */
-const SCREENS = ['overview','todo','decisions','office','rooms','products','profit','compare','sourcing','furniture','suppliers','budget','quality','log'];
+const SCREENS = ['overview','todo','decisions','office','rooms','boards','products','profit','compare','sourcing','furniture','suppliers','budget','quality','log'];
 function route(focus){
   const t = (location.hash || '').replace(/^#/, '');
   let s = SCREENS.includes(t) ? t : null;
@@ -4672,6 +4802,207 @@ function mdLite(md){
   if(code !== null) out += `<pre><code>${esc(code.join('\n'))}</code></pre>`;
   flush();
   return out;
+}
+
+/* ---------- room boards (לוחות חדרים, 2026-10-17) ---------- */
+// One board per style and room, exactly as scripts/boards/room_boards.py computes them (studio/build.py writes them to
+// data.json "boards"; the same function renders the owner's board images). The page only shows them: the coverage map,
+// the board as tiles or as a table (supplier, status with the supplier, margin), and the product drawer on a tap.
+const BD_TONES = new Set(['good','warn','bad','info','neutral']);
+const BD_BINS = ['0–19%','20–39%','40–59%','60–79%','80–100%'];
+const bdData = () => { const B = S.data && S.data.boards; return B && Array.isArray(B.boards) && B.boards.length ? B : null; };
+const bdShare = b => { const c = b.counts || {}; return c.slots ? ((c.chosen || 0) + (c.candidate || 0)) / c.slots : null; };
+const bdPct = x => x == null ? '—' : Math.round(x * 100) + '%';
+const bdBin = x => x == null ? 0 : Math.max(0, Math.min(4, Math.floor(x * 5 + 1e-9)));
+const bdShek = n => isNum(n) ? '₪' + Math.round(n).toLocaleString('en-US') : '';
+const bdTone = t => BD_TONES.has(t) ? t : 'neutral';
+const bdLabel = (B, code) => (B.status_labels || {})[code] || {he: code, tone: 'neutral', why: ''};
+const bdProd = pk => S.byId.get(pk.card_id) || null;
+const bdName = pk => { const p = bdProd(pk); return (p && p.name) || pk.card_id; };
+const bdSup = pk => (pk.supplier && pk.supplier.name) || '—';
+function bdImg(pk){
+  const p = bdProd(pk), im = p && p.img;
+  return im && im.src ? `<img src="${esc(im.src)}" alt="" loading="lazy" width="${esc(im.w || '')}" height="${esc(im.h || '')}">` : '';
+}
+function bdStChip(B, st){
+  const L = bdLabel(B, st.code);
+  return `<span class="bd-chip tone-${bdTone(L.tone)}" data-code="${esc(st.code)}" title="${esc(st.why || L.why || '')}">${esc(L.he)}</span>`;
+}
+function bdMarginText(B, m){
+  if(!m || !isNum(m.pct)) return 'לא תומחר';
+  const src = (B.margin_src_he || {})[m.src] || m.src || '';
+  return `רווח ${num1(m.pct)}%${isNum(m.price) ? ` במחיר ${bdShek(m.price)}` : ''}${src ? ' · מקור: ' + src : ''}${m.file ? ` (${m.file})` : ''}`;
+}
+function bdMarginChip(B, m){
+  if(!m || !isNum(m.pct)) return `<span class="bd-chip tone-neutral bd-margin" data-tone="none" title="אין חישוב רווח: לא בבחירת המעצב, לא בקובץ התמחור ולא בליקוט">לא תומחר</span>`;
+  const tone = bdTone(m.tone);
+  return `<span class="bd-chip tone-${tone} bd-margin" data-tone="${tone}" title="${esc(bdMarginText(B, m))}">רווח <span dir="ltr">${esc(num1(m.pct))}%</span></span>`;
+}
+// one line for an alternate's label and tooltip: name · supplier · statuses · margin
+const bdLine = (B, pk) => [bdName(pk), bdSup(pk) !== '—' ? 'ספק ' + bdSup(pk) : '', ...(pk.supplier_status || []).map(s => bdLabel(B, s.code).he),
+  pk.margin && isNum(pk.margin.pct) ? `רווח ${num1(pk.margin.pct)}%` : 'לא תומחר'].filter(Boolean).join(' · ');
+
+function bdTile(B, s){
+  const name = esc(s.name_he || s.id);
+  if(!s.picks || !s.picks.length) return `<li class="bt bt-empty" data-slot="${esc(s.id)}" data-status="${esc(s.status)}"><div class="bt-miss"><span class="bt-slot">${name}</span><b>${s.status === 'on-hold' ? 'בהמתנה' : 'חסר'}</b></div></li>`;
+  const main = s.picks[0], p = bdProd(main), img = bdImg(main), sts = main.supplier_status || [];
+  const tag = s.status === 'chosen' ? '<span class="bt-tag">נבחר</span>' : '<span class="bt-tag c">מועמד</span>';
+  const noimg = p && p.img && p.img.ok === false ? '<span class="bt-noimg chip">אין תמונה</span>' : '';
+  const more = sts.length > 1 ? `<span class="bd-more" dir="ltr" title="${esc(sts.slice(1).map(x => bdLabel(B, x.code).he).join(' · '))}">+${sts.length - 1}</span>` : '';
+  const body = `<span class="bt-im${img ? '' : ' ph'}">${img}${tag}${noimg}</span>
+    <span class="bt-body">
+      <span class="bt-slot">${name}</span>
+      <span class="bt-name" dir="auto">${esc(bdName(main))}</span>
+      <span class="bt-row">${isNum(main.price) && main.price ? `<span class="bt-price" dir="ltr">${esc(bdShek(main.price))}</span>` : ''}${bdMarginChip(B, main.margin)}</span>
+      <span class="bt-row"><span class="bt-sup">${esc(bdSup(main))}</span>${sts.length ? bdStChip(B, sts[0]) + more : ''}</span>
+    </span>`;
+  const head = p ? `<button type="button" class="bt-main" data-product="${esc(main.card_id)}" aria-haspopup="dialog">${body}</button>`
+                 : `<div class="bt-main" title="${esc(`הכרטיס ${main.card_id} לא נמצא בנתונים`)}">${body}</div>`;
+  const alts = s.picks.slice(1, 3).map(pk => {
+    const im = bdImg(pk), lab = 'חלופה: ' + bdLine(B, pk);
+    return bdProd(pk) ? `<button type="button" class="bt-alt${im ? '' : ' ph'}" data-product="${esc(pk.card_id)}" data-alt="1" aria-haspopup="dialog" aria-label="${esc(lab)}" title="${esc(lab)}">${im}</button>`
+                      : `<span class="bt-alt ph" role="img" aria-label="${esc(lab)}" title="${esc(lab)}"></span>`;
+  }).join('');
+  return `<li class="bt" data-slot="${esc(s.id)}" data-status="${esc(s.status)}" data-card="${esc(main.card_id)}">${head}${alts ? `<div class="bt-alts">${alts}</div>` : ''}</li>`;
+}
+
+function bdTable(B, b){
+  const rows = [];
+  for(const s of b.slots){
+    const name = esc(s.name_he || s.id);
+    if(!s.picks || !s.picks.length){
+      const hold = s.status === 'on-hold';
+      rows.push(`<tr class="is-empty" data-slot="${esc(s.id)}" data-status="${esc(s.status)}"><th scope="row" class="c-slot">${name}</th><td colspan="5"><span class="bd-chip tone-${hold ? 'warn' : 'neutral'}">${hold ? 'בהמתנה' : 'חסר'}</span></td></tr>`);
+      continue;
+    }
+    s.picks.forEach((pk, i) => {
+      const p = bdProd(pk), im = bdImg(pk), sts = pk.supplier_status || [], m = pk.margin;
+      const role = i ? '' : s.status === 'chosen' ? ' <span class="bd-chip tone-neutral">נבחר</span>' : ' <span class="bd-chip tone-info">מועמד</span>';
+      const inner = `<span class="tp-th${im ? '' : ' ph'}">${im}</span><span class="tp-t"><span class="tp-n" dir="auto">${esc(bdName(pk))}</span>${role ? `<span>${role}</span>` : ''}</span>`;
+      const prod = p ? `<button type="button" class="tp" data-product="${esc(pk.card_id)}" aria-haspopup="dialog">${inner}</button>` : `<div class="tp">${inner}</div>`;
+      const price = isNum(pk.price) && pk.price ? `<span dir="ltr">${esc(bdShek(pk.price))}</span>`
+        : m && isNum(m.price) ? `<span class="muted" dir="ltr">${esc(bdShek(m.price))}</span><span class="sub">לפי חישוב הרווח</span>` : '—';
+      const cls = [i ? 'is-alt' : 'is-main', i < s.picks.length - 1 ? 'has-alt' : ''].filter(Boolean).join(' ');
+      rows.push(`<tr class="${cls}" data-slot="${esc(s.id)}" data-status="${esc(s.status)}" data-card="${esc(pk.card_id)}">
+        <th scope="row" class="c-slot">${i ? `<span class="sr-only">${name}, </span>חלופה ${i}` : name}</th>
+        <td class="c-prod">${prod}</td>
+        <td class="c-sup">${esc(bdSup(pk))}</td>
+        <td class="c-st">${sts.length ? sts.map(x => bdStChip(B, x)).join(' ') : '—'}</td>
+        <td class="c-num">${price}</td>
+        <td class="c-num">${bdMarginChip(B, m)}</td></tr>`);
+    });
+  }
+  const cap = `${b.room_he} · ${b.style_he}: עמדה, מוצר, ספק, סטטוס מול הספק, מחיר ורווח`;
+  return `<div class="tbl-wrap bd-tbl-wrap" tabindex="0" role="region" aria-label="${esc('הלוח כטבלה: ' + b.room_he + ' · ' + b.style_he)}"><table class="bd-tbl"><caption class="sr-only">${esc(cap)}</caption>
+    <thead><tr><th scope="col" class="c-slot">עמדה</th><th scope="col">מוצר</th><th scope="col">ספק</th><th scope="col">סטטוס מול הספק</th><th scope="col" class="c-num">מחיר</th><th scope="col" class="c-num">רווח %</th></tr></thead>
+    <tbody>${rows.join('')}</tbody></table></div>${bdList(B, b)}`;
+}
+// the same rows, stacked, for a phone (CSS shows one of the two)
+function bdList(B, b){
+  const items = b.slots.map(s => {
+    const name = esc(s.name_he || s.id);
+    if(!s.picks || !s.picks.length){
+      const hold = s.status === 'on-hold';
+      return `<li class="bl-slot is-empty" data-slot="${esc(s.id)}" data-status="${esc(s.status)}"><h3 class="bl-h">${name}</h3><span class="bd-chip tone-${hold ? 'warn' : 'neutral'}">${hold ? 'בהמתנה' : 'חסר'}</span></li>`;
+    }
+    const picks = s.picks.map((pk, i) => {
+      const p = bdProd(pk), im = bdImg(pk), sts = pk.supplier_status || [], m = pk.margin;
+      const role = `<span><span class="bd-chip tone-${i ? 'neutral' : s.status === 'chosen' ? 'neutral' : 'info'}">${i ? `חלופה ${i}` : s.status === 'chosen' ? 'נבחר' : 'מועמד'}</span></span>`;
+      const inner = `<span class="tp-th${im ? '' : ' ph'}">${im}</span><span class="bl-t"><span class="bl-n" dir="auto">${esc(bdName(pk))}</span>${role}</span>`;
+      const price = isNum(pk.price) && pk.price ? `<span class="bl-price" dir="ltr">${esc(bdShek(pk.price))}</span>`
+        : m && isNum(m.price) ? `<span class="muted xs" title="המחיר שלפיו חושב הרווח"><span dir="ltr">${esc(bdShek(m.price))}</span> לפי חישוב הרווח</span>` : '';
+      return `<li class="bl-pick${i ? ' is-alt' : ''}" data-card="${esc(pk.card_id)}">
+        ${p ? `<button type="button" class="bl-main" data-product="${esc(pk.card_id)}" aria-haspopup="dialog">${inner}</button>` : `<div class="bl-main">${inner}</div>`}
+        <div class="bl-meta"><span class="bt-sup">${esc(bdSup(pk))}</span>${sts.map(x => bdStChip(B, x)).join('')}${price}${bdMarginChip(B, m)}</div></li>`;
+    }).join('');
+    return `<li class="bl-slot" data-slot="${esc(s.id)}" data-status="${esc(s.status)}"><h3 class="bl-h">${name}</h3><ul class="bl-picks">${picks}</ul></li>`;
+  }).join('');
+  return `<ul class="bd-list" aria-label="${esc(`${b.room_he} · ${b.style_he}: עמדה, מוצר, ספק, סטטוס מול הספק, מחיר ורווח`)}">${items}</ul>`;
+}
+
+function bdMatrix(B, F){
+  const map = new Map(B.boards.map(b => [b.style + '|' + b.room, b]));
+  const cell = (st, rm) => {
+    const b = map.get(st.id + '|' + rm.id);
+    if(!b) return '<td>—</td>';
+    const sh = bdShare(b), c = b.counts || {}, cur = st.id === F.style && rm.id === F.room;
+    const lab = `${rm.he} · ${st.he}: ${bdPct(sh)} מהעמדות עם מוצר (${c.chosen || 0} נבחרו, ${c.candidate || 0} מועמדים, ${c.missing || 0} חסרות, מתוך ${c.slots || 0})`;
+    return `<td><button type="button" class="bd-cell" data-bd-cell="${esc(st.id + '|' + rm.id)}" data-bin="${bdBin(sh)}" data-share="${sh == null ? '' : Math.round(sh * 100)}"${cur ? ' aria-current="true"' : ''} aria-label="${esc(lab)}" title="${esc(lab)}"><span class="p" dir="ltr">${bdPct(sh)}</span><span class="n" dir="ltr">${(c.chosen || 0) + (c.candidate || 0)}/${c.slots || 0}</span></button></td>`;
+  };
+  const cols = n => `<colgroup><col class="c-h">${'<col>'.repeat(n)}</colgroup>`;
+  const wide = `<table class="bd-mx bd-mx-wide"><caption class="sr-only">אחוז העמדות עם מוצר (נבחר או מועמד): סגנון בשורות, חדר בעמודות</caption>${cols(B.rooms.length)}
+    <thead><tr><td></td>${B.rooms.map(r => `<th scope="col">${esc(r.he)}</th>`).join('')}</tr></thead>
+    <tbody>${B.styles.map(st => `<tr><th scope="row">${esc(st.he)}</th>${B.rooms.map(r => cell(st, r)).join('')}</tr>`).join('')}</tbody></table>`;
+  const narrow = `<table class="bd-mx bd-mx-narrow"><caption class="sr-only">אחוז העמדות עם מוצר (נבחר או מועמד): חדר בשורות, סגנון בעמודות</caption>${cols(B.styles.length)}
+    <thead><tr><td></td>${B.styles.map(st => `<th scope="col">${esc(st.he)}</th>`).join('')}</tr></thead>
+    <tbody>${B.rooms.map(r => `<tr><th scope="row">${esc(r.he)}</th>${B.styles.map(st => cell(st, r)).join('')}</tr>`).join('')}</tbody></table>`;
+  const scale = `<ul class="bd-scale" aria-label="מקרא: אחוז העמדות עם מוצר"><li class="faint">מילוי:</li>${BD_BINS.map((l, i) => `<li><i data-bin="${i}" aria-hidden="true"></i><span dir="ltr">${l}</span></li>`).join('')}</ul>`;
+  return `<section class="section" aria-labelledby="h-bd-mx"><div class="section-head"><h2 id="h-bd-mx" class="h-mid">מפת הכיסוי</h2><span class="small faint">אחוז העמדות עם מוצר (נבחר או מועמד) בכל לוח. לחיצה פותחת את הלוח</span></div>${wide}${narrow}${scale}</section>`;
+}
+
+function bdSet(patch, focusSel){
+  Object.assign(S.bd, patch);
+  store.set('boards', {style: S.bd.style, room: S.bd.room, view: S.bd.view});
+  renderBoards();
+  if(focusSel){ const el = $$(focusSel, $('#bd-body')).find(x => x.offsetParent); if(el) el.focus({preventScroll:true}); }
+}
+
+function renderBoards(){
+  if(!S.data) return;
+  const box = $('#bd-body'), B = bdData();
+  if(!B){
+    const err = S.data.boards && S.data.boards.error;
+    box.innerHTML = `<p class="empty">אין לוחות בנתונים. הם נבנים עם <code>python3 studio/build.py</code> מ-<code>scripts/boards/room_boards.py</code>.${err ? ` <span class="small">(${esc(err)})</span>` : ''}</p>`;
+    $('#bd-count').textContent = '';
+    return;
+  }
+  // the element that had focus, by what it stands for (the markup is rebuilt)
+  const a = document.activeElement;
+  let back = null;
+  if(a && box.contains(a)){
+    for(const k of ['bdStyle', 'bdRoom', 'bdView', 'bdCell', 'product']) if(a.dataset && a.dataset[k] != null){ back = `[data-${k.replace(/[A-Z]/g, m => '-' + m.toLowerCase())}="${CSS.escape(a.dataset[k])}"]`; break; }
+    if(!back && a.id) back = '#' + CSS.escape(a.id);
+  }
+  const F = S.bd;
+  if(!B.styles.some(x => x.id === F.style)) F.style = B.styles[0].id;
+  if(!B.rooms.some(x => x.id === F.room)) F.room = B.rooms[0].id;
+  if(F.view !== 'table') F.view = 'tiles';
+  const b = B.boards.find(x => x.style === F.style && x.room === F.room) || B.boards[0];
+  const all = B.boards.reduce((n, x) => n + ((x.counts || {}).slots || 0), 0);
+  const filled = B.boards.reduce((n, x) => n + ((x.counts || {}).chosen || 0) + ((x.counts || {}).candidate || 0), 0);
+  $('#bd-count').textContent = `${B.boards.length} לוחות · ${filled} מתוך ${all} עמדות עם מוצר`;
+  const seg = (key, list, cur, label) => `<div class="seg-row"><span class="seg-l" aria-hidden="true">${label}</span><div class="seg" role="group" aria-label="${label}">${list.map(x => `<button type="button" data-bd-${key}="${esc(x.id)}" aria-pressed="${x.id === cur}">${esc(x.he)}</button>`).join('')}</div></div>`;
+  const sel = (id, list, cur, label) => `<div class="field"><label for="${id}">${label}</label><select id="${id}">${list.map(x => `<option value="${esc(x.id)}"${x.id === cur ? ' selected' : ''}>${esc(x.he)}</option>`).join('')}</select></div>`;
+  const c = b.counts || {};
+  box.innerHTML = `${bdMatrix(B, F)}
+    <div class="bd-pick">
+      <div class="bd-segs">${seg('style', B.styles, F.style, 'סגנון')}${seg('room', B.rooms, F.room, 'חדר')}</div>
+      <div class="bd-sel">${sel('bd-style', B.styles, F.style, 'סגנון')}${sel('bd-room', B.rooms, F.room, 'חדר')}</div>
+    </div>
+    <section class="section bd-board" aria-labelledby="h-bd-board" data-style="${esc(b.style)}" data-room="${esc(b.room)}">
+      <div class="bd-head">
+        <div class="minw0"><h2 id="h-bd-board" tabindex="-1">${esc(b.room_he)} · ${esc(b.style_he)}</h2>
+          <p class="bd-sub" id="bd-sub">${c.slots || 0} עמדות: ${c.chosen || 0} עם בחירת מעצב, ${c.candidate || 0} עם מועמד מהליקוט האחרון, ${c.missing || 0} חסרות. סכום ברירות המחדל: <span dir="ltr">${esc(bdShek(b.total || 0))}</span></p></div>
+        <div class="seg" role="group" aria-label="תצוגת הלוח"><button type="button" data-bd-view="tiles" aria-pressed="${F.view === 'tiles'}">אריחים</button><button type="button" data-bd-view="table" aria-pressed="${F.view === 'table'}">טבלה</button></div>
+      </div>
+      ${F.view === 'table' ? bdTable(B, b) : `<ul class="bd-grid" aria-label="${esc(`העמדות של ${b.room_he} · ${b.style_he}, לפי הסדר בקובץ העמדות`)}">${b.slots.map(s => bdTile(B, s)).join('')}</ul>`}
+      <p class="bd-legend">${esc(B.legend_he || '')} רווח: ירוק 40% ומעלה, ענבר 25–40%, אדום מתחת ל-25% או הפסד, ו"לא תומחר" כשאין חישוב (המקור לפי הסדר: בחירת המעצב, קובץ התמחור, הליקוט האחרון).</p>
+    </section>`;
+  for(const x of $$('[data-bd-style]', box)) x.onclick = () => bdSet({style: x.dataset.bdStyle}, `[data-bd-style="${CSS.escape(x.dataset.bdStyle)}"]`);
+  for(const x of $$('[data-bd-room]', box)) x.onclick = () => bdSet({room: x.dataset.bdRoom}, `[data-bd-room="${CSS.escape(x.dataset.bdRoom)}"]`);
+  for(const x of $$('[data-bd-view]', box)) x.onclick = () => bdSet({view: x.dataset.bdView}, `[data-bd-view="${CSS.escape(x.dataset.bdView)}"]`);
+  $('#bd-style').onchange = e => bdSet({style: e.target.value}, '#bd-style');
+  $('#bd-room').onchange = e => bdSet({room: e.target.value}, '#bd-room');
+  for(const x of $$('[data-bd-cell]', box)) x.onclick = () => {
+    const [style, room] = x.dataset.bdCell.split('|');
+    bdSet({style, room}, null);
+    // the board under the sticky masthead (four rows of tabs on a phone), not behind it
+    const h = $('#h-bd-board'); h.focus({preventScroll:true});
+    const mast = $('.mast'), top = h.getBoundingClientRect().top + window.scrollY - (mast ? mast.offsetHeight : 0) - 12;
+    window.scrollTo(0, Math.max(0, top));
+    say(h.textContent);
+  };
+  if(back){ const el = $$(back, box).find(x => x.offsetParent); if(el) el.focus({preventScroll:true}); }
 }
 
 /* ---------- log ---------- */

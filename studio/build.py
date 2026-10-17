@@ -9,6 +9,9 @@ Reads the repo's source-of-truth files (read-only) and writes:
   dist/img/a/<h>.webp   AliExpress items without a card (compositions, next sourcing round), 360px, q72
   dist/index.html       the page (copied from studio/src/index.html)
 
+The room boards ("לוחות חדרים", data.json "boards") come from scripts/boards/room_boards.py, the single source of their
+logic; every card on a board gets its dist/img/p/<id>.webp from the same product-image pipeline and cache.
+
 Product images are downloaded once and cached in studio/.cache/, so a second
 build does not hit the network. Frame conversions are cached there too.
 
@@ -33,6 +36,7 @@ from __future__ import annotations
 import concurrent.futures
 import datetime as dt
 import hashlib
+import importlib.util
 import io
 import json
 import os
@@ -2226,6 +2230,77 @@ def load_furniture(order: list[str], products: list[dict], directory: dict | Non
 
 # --------------------------------------------------------------------------- main
 
+# --------------------------------------------------------------------------- room boards (לוחות חדרים)
+
+BOARDS_SRC = ROOT / "scripts" / "boards" / "room_boards.py"
+BOARD_TEXT_KEYS = {"why", "name_he", "he", "legend_he", "style_he", "room_he", "error", "file"}
+SLUG_RX = re.compile(r"^[a-z0-9][a-z0-9_.-]{0,160}$")
+
+
+def load_slot_ids() -> dict:
+    """room -> the slots of data/slots/<room>.json (only ids are needed), for checking the ids on the boards."""
+    out = {}
+    for f in sorted((ROOT / "data" / "slots").glob("*.json")):
+        try:
+            out[f.stem] = [s for s in read_json(f).get("slots") or [] if isinstance(s, dict) and isinstance(s.get("id"), str)]
+        except Exception:
+            continue
+    return out
+
+
+def load_boards(products: list[dict], offline: bool) -> dict:
+    """The room boards (2026-10-17): one board per style and room, exactly as scripts/boards/room_boards.py computes them
+    (that module is the single source of the logic; its CLI renders the same data as images). Every card on a board must
+    have its thumbnail in dist/img/p/<id>.webp: the product-image pipeline already makes one per card, and any card that
+    is still without one goes through the same pipeline here. Nothing secret may reach data.json: the boards pass the same
+    redact() check as the office."""
+    try:
+        spec = importlib.util.spec_from_file_location("room_boards", BOARDS_SRC)
+        rb = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(rb)
+        data = rb.boards()
+    except Exception as e:  # the rest of the Studio is still built; the screen says why it is empty
+        log(f"  ! boards: {rel(BOARDS_SRC)} failed: {type(e).__name__}: {e}")
+        return {"present": False, "error": f"{type(e).__name__}: {e}"[:300], "src": rel(BOARDS_SRC), "boards": []}
+    by_id = {p["id"]: p for p in products}
+    ids = sorted({pk["card_id"] for b in data["boards"] for s in b["slots"] for pk in s.get("picks") or []})
+    todo = [by_id[i] for i in ids if i in by_id and not (DIST / "img" / "p" / f"{i}.webp").exists()]
+    if todo:
+        build_product_images(todo, offline)
+    not_cards = [i for i in ids if i not in by_id]
+    placeholders = [i for i in ids if i in by_id and not (by_id[i].get("_img") or {}).get("ok")]
+    with_file = [i for i in ids if (DIST / "img" / "p" / f"{i}.webp").exists()]
+    # secrets: the free text (labels, the reasons quoted from a card's notes) goes through redact(); ids are not free
+    # text (a card file's id, a slot of data/slots/): they must be known slugs. redact() is not run on the ids, because
+    # its "sk-..." pattern also matches inside "desk-organizer" and would break the links.
+    n_red = 0
+
+    def scrub(o):
+        nonlocal n_red
+        if isinstance(o, dict):
+            for k, v in o.items():
+                if isinstance(v, str) and k in BOARD_TEXT_KEYS:
+                    o[k], n = redact(v)
+                    n_red += n
+                elif isinstance(v, (dict, list)):
+                    scrub(v)
+        elif isinstance(o, list):
+            for v in o:
+                scrub(v)
+    scrub(data)
+    slot_ids = {s["id"] for rows in load_slot_ids().values() for s in rows}
+    bad_ids = sorted({x for b in data["boards"] for s in b["slots"] for x in [s["id"]] + [pk["card_id"] for pk in s.get("picks") or []]
+                      if not SLUG_RX.match(x) or (x not in by_id and x not in slot_ids)})
+    if bad_ids:
+        log(f"  ! boards: ids that are neither a card nor a slot, or not a plain slug: {', '.join(bad_ids[:6])}")
+    if n_red:
+        log(f"  ! boards: {n_red} secret-looking strings redacted in the free text")
+    data.update({"present": True, "src": rel(BOARDS_SRC), "redacted": n_red, "bad_ids": bad_ids,
+                 "images": {"cards": len(ids), "with_file": len(with_file), "placeholders": placeholders, "not_cards": not_cards,
+                            "built_now": [p["id"] for p in todo]}})
+    return data
+
+
 # --------------------------------------------------------------------------- compositions and the next sourcing round
 
 # The designer's room compositions (master-designer, 2026-10-11): data/compositions/<room>-<style>-<date>.json, one per
@@ -3203,6 +3278,14 @@ def main() -> int:
 
     pstats = build_product_images(products, offline)
     log(f"  product images: downloaded {pstats['downloaded']} · from cache {pstats['cached']} · failed {pstats['failed']} · used a later image {pstats['fallback']}")
+    boards = load_boards(products, offline)
+    if boards.get("present"):
+        bi = boards["images"]
+        n_fill = sum(1 for b in boards["boards"] for s in b["slots"] if s["status"] in ("chosen", "candidate"))
+        n_all = sum(len(b["slots"]) for b in boards["boards"])
+        log(f"  boards: {len(boards['boards'])} (styles {len(boards['styles'])} x rooms {len(boards['rooms'])}) · slots {n_all}, filled {n_fill}"
+            f" · cards {bi['cards']}, thumbnails {bi['with_file']} ({len(bi['placeholders'])} placeholders, {len(bi['built_now'])} built now)"
+            + (f" · not a card {len(bi['not_cards'])}" if bi["not_cards"] else "") + f" · redacted {boards['redacted']}")
 
     frames = collect_frames(plan, order, rooms)
     hits = build_frame_images(frames)
@@ -3363,6 +3446,7 @@ def main() -> int:
         "furniture": furniture,
         "compositions": compositions,
         "next_sourcing": next_sourcing,
+        "boards": boards,
         "reports": qa,
         "leads": leads,
     }
