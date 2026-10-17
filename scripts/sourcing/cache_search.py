@@ -4,7 +4,8 @@ plus every listing that came back in a cached AliExpress search (2026-10-17, mas
 Index (rebuilt when missing or older than the cache): ~/.cache/sourcing/cache-index.json
   opened products   data/sources/aliexpress/<id>.json, data/sources/cj/<pid>.json  -> title, price, image, weight,
                     package, cheapest cached freight to IL (fee + days), store, registry status
-  search listings   data/sources/aliexpress/queries/search-*.json -> title, price, image, orders (no freight: "listed")
+  search listings   data/sources/aliexpress/queries/search-*.json and data/sources/cj/queries/*.json -> title, price,
+                    image, orders (no freight: "listed")
 
   python3 -I scripts/sourcing/cache_search.py "seagrass" "basket"          # all words must appear in the title
   python3 -I scripts/sourcing/cache_search.py --any "bamboo,teak" "stool"  # plus at least one of the --any words
@@ -127,6 +128,28 @@ def build():
                          "image": p.get("itemMainPic"), "url": f"https://www.aliexpress.com/item/{p.get('itemId')}.html",
                          "orders": p.get("orders"), "freight_usd": None, "found_by": [q] if q else [],
                          "registry": r.get("status") or ("seen" if r else None),
+                         "registry_reason": (r.get("reason") or "")[:120], "card_ids": r.get("card_ids") or []}
+    for f in glob.glob(os.path.join(CJ, "queries", "*.json")):   # CJ search/list results (audit 2026-10-17, F4)
+        try:
+            d = json.load(open(f))
+        except Exception:
+            continue
+        q = (d.get("params") or {}).get("q") or (d.get("payload") or {}).get("query")
+        for p in (d.get("payload") or {}).get("products") or []:
+            key = f"cj:{p.get('id')}"
+            if key in recs:
+                recs[key].setdefault("found_by", [])
+                if q and q not in recs[key]["found_by"] and len(recs[key]["found_by"]) < 5:
+                    recs[key]["found_by"].append(q)
+                continue
+            r = reg.get(key) or {}
+            sp = str(p.get("sellPrice") or "")
+            nums = [x for x in (_f(v) for v in re.split(r"[-~ ]+", sp)) if x]
+            recs[key] = {"key": key, "src": "cj", "kind": "listed", "title": p.get("nameEn") or "",
+                         "usd_min": min(nums) if nums else None, "usd_max": max(nums) if nums else None,
+                         "image": p.get("bigImage"), "url": f"https://cjdropshipping.com/product/-p-{p.get('id')}.html",
+                         "category": p.get("category"), "orders": p.get("listedNum"), "freight_usd": None,
+                         "found_by": [q] if q else [], "registry": r.get("status") or ("seen" if r else None),
                          "registry_reason": (r.get("reason") or "")[:120], "card_ids": r.get("card_ids") or []}
     os.makedirs(os.path.dirname(IDX), exist_ok=True)
     json.dump({"built_from": ROOT, "records": list(recs.values())}, open(IDX, "w"))

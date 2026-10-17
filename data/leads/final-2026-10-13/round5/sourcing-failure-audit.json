@@ -1,6 +1,7 @@
 {
  "date": "2026-10-17",
  "by": "sourcing auditor (BRIEF-sourcing-failure-audit.md)",
+ "data_state_he": "כל המספרים נמדדו אחרי סבב 5c (commit e05f0127, כיסוי 57.0%).",
  "scope_note_he": "ניתוח בלבד: לא נכתבו כרטיסים, לא נערכו תוצאות, עמדות, מסמכים או סקריפטים. 30 חיפושי CJ (run-id audit, 1,500 נקודות, 30 קריאות) נשמרו במטמון data/sources/cj/queries.",
  "baseline": {
   "nordic": {
@@ -26,10 +27,10 @@
   },
   "mediterranean": {
    "eligible": 132,
-   "covered_ready": 75,
-   "pct_ready": 56.8,
+   "covered_ready": 76,
+   "pct_ready": 57.6,
    "goal_80": 106,
-   "short": 31
+   "short": 30
   },
   "modern-country": {
    "eligible": 132,
@@ -66,9 +67,9 @@
    "short": 31
   },
   "mediterranean": {
-   "covered_ready": 75,
-   "pct_ready": 56.8,
-   "short": 31
+   "covered_ready": 76,
+   "pct_ready": 57.6,
+   "short": 30
   },
   "modern-country": {
    "covered_ready": 65,
@@ -81,14 +82,14 @@
    "short": 41
   }
  },
- "shortfall_to_80_total": 181,
+ "shortfall_to_80_total": 180,
  "open_style_slots": {
-  "total": 332,
+  "total": 331,
   "with_0_options": 229,
-  "with_1": 49,
-  "with_2": 54,
-  "never_saw_a_7plus_product": 168,
-  "with_a_blocked_7plus_candidate": 115
+  "with_1": 47,
+  "with_2": 55,
+  "never_saw_a_7plus_product": 164,
+  "with_a_blocked_7plus_candidate": 121
  },
  "findings": [
   {
@@ -96,16 +97,16 @@
    "rank": 1,
    "type": "rule",
    "title_he": "כיסוי שקיים בבית ולא נספר: חנויות ישראליות, סטודיו שותפים ושטיחי בוטיק",
-   "style_slots_gain_est": 53,
-   "gain_basis_he": "53 עמדות-סגנון מגיעות ל-3 עם il-* + שותפים + שטיחים (33 כבר ב-pct_any, 20 חדשות). ל-pct_ready רק אחרי מחיר סוחר.",
+   "style_slots_gain_est": 52,
+   "gain_basis_he": "52 עמדות-סגנון מגיעות ל-3 עם il-*, השותפים והשטיחים (32 כבר ב-pct_any, 20 חדשות). ל-pct_ready רק אחרי מחיר סוחר.",
    "evidence": [
-    "il-*: 33 עמדות-סגנון (pct_any 61.1% מול pct_ready 56.8%)",
+    "il-*: 32 עמדות-סגנון (pct_any 61.1% מול pct_ready 57.0%)",
     "partners-lighting-picks-2026-10-15: 11 (מהן 8 מעבר ל-il)",
     "rugs-il-boutique: 14, rugs-il-online: 19; karpetim: 0 (פוליאסטר, ג.0 2026-10-16)",
     "23 מתוך 48 עמדות-השטיח הפתוחות נסגרות רק כך",
-    "לפי סגנון: {'nordic': 8, 'warm-modern': 7, 'japandi': 11, 'mediterranean': 12, 'modern-country': 2, 'boho': 13}"
+    "לפי סגנון: {'nordic': 8, 'warm-modern': 7, 'japandi': 11, 'mediterranean': 11, 'modern-country': 2, 'boho': 13}"
    ],
-   "fix_he": "להחליט אם המדד ל-80% הוא pct_any (עם סימון 'דורש מחיר סוחר'), או לפתוח עכשיו פנייה לספקי השטיחים והתאורה (ז.00 2026-10-12 קובע שפניות מחכות לאתר עובד).",
+   "fix_he": "החלטה: המדד ל-80% הוא pct_any (עם סימון 'דורש מחיר סוחר'), או פותחים עכשיו פנייה לספקי השטיחים והתאורה (ז.00, 2026-10-12, קובע שפניות מחכות לאתר עובד).",
    "decides": "owner"
   },
   {
@@ -114,14 +115,14 @@
    "type": "slot",
    "title_he": "עמדות שלא שוות חיפוש: 8 עמדות פתוחות בכל הסגנונות, בלי שום מוצר 7+",
    "style_slots_gain_est": 37,
-   "gain_basis_he": "47 עמדות-סגנון פתוחות. אם 8 העמדות יוצאו מהמונה (או יעברו לספק ישראלי/רהיט קבוע), היעד של 80% יורד ב-6 סגירות בכל סגנון וב-7 בנורדי: שווה ערך ל-37 סגירות.",
+   "gain_basis_he": "47 עמדות-סגנון פתוחות. אם 8 העמדות יוצאות מהמונה (או עוברות לספק ישראלי או לרהיט קבוע), היעד של 80% יורד ב-6 סגירות בכל סגנון וב-7 בנורדי: שווה ערך ל-37 סגירות.",
    "evidence": [
-    "36 עמדות פתוחות בכל הסגנונות; 8 מהן עם התאמה מקסימלית מתחת ל-7 בכל סגנון",
-    "229 מתוך 332 עמדות-הסגנון הפתוחות הן 0 אפשרויות",
-    "168 עמדות-סגנון פתוחות לא ראו אף מוצר 7+ (102 עצרו ב-6–6.9)",
+    "36 עמדות פתוחות בכל הסגנונות; ב-8 מהן ההתאמה הגבוהה ביותר מתחת ל-7 בכל סגנון (8–28 מוצרים נבדקו לעמדה)",
+    "229 מתוך 331 עמדות-הסגנון הפתוחות הן 0 אפשרויות",
+    "164 עמדות-סגנון פתוחות לא ראו אף מוצר 7+ (101 עצרו ב-6–6.9)",
     "21 עמדות-סגנון פתוחות הן בעמדות שנראות רק במעבר (בלי נקודת מוצר)"
    ],
-   "fix_he": "המשתמש מחליט לכל אחת מ-8 העמדות: להוציא מהמונה, להעביר לרהיט קבוע (הצעת המעצב Q4), או לספק ישראלי. לא לחפש בהן שוב בסין.",
+   "fix_he": "המשתמש מחליט לכל אחת מ-8 העמדות: להוציא מהמונה, להפוך לרהיט קבוע (הצעת המעצב Q4), או להעביר לספק ישראלי. לא לחפש בהן שוב בסין.",
    "decides": "owner"
   },
   {
@@ -130,13 +131,13 @@
    "type": "threshold",
    "title_he": "סף ההתאמה: 6.5 כאפשרות שלישית",
    "style_slots_gain_est": 14,
-   "gain_basis_he": "14 עמדות-סגנון עם 2 אפשרויות ומועמד 6.5 שכבר יש לו כרטיס (ריאלי). עם לידים בלי כרטיס: עד 30; על הספירה המתוקנת: עד 36. חלק מהלידים חסומים גם במחיר או במידה.",
+   "gain_basis_he": "14 עמדות-סגנון עם 2 אפשרויות ומועמד 6.5 שכבר יש לו כרטיס (ריאלי). עם לידים בלי כרטיס: עד 31; על הספירה המתוקנת: עד 37. חלק מהלידים חסומים גם במחיר או במידה.",
    "evidence": [
-    "6.5–6.9 נספר: 65 עמדות-סגנון נסגרות; כרטיסים קיימים 6–6.9: 53",
-    "ביקורת המעצב (round5): 121 ציונים זהים, 61 הורדו, 5 הועלו; 0 עלו מתחת ל-7 ל-7 ומעלה, 22 ירדו מתחת ל-7. כלומר דירוג מחדש לא יציל אותם: זו החלטת סף",
-    "213 מתוך 293 עמדות-הסגנון הפתוחות בחמשת הסגנונות בלי מפרט מעצב בחבילה (designer_spec_he ריק): הניחוש של הצוות נעשה בלי מפרט"
+    "אם 6.5–6.9 נספר: 65 עמדות-סגנון נסגרות; כרטיסים קיימים בציון 6–6.9: 53",
+    "ביקורת המעצב (סבב 5): 121 ציונים נשארו, 61 ירדו, 5 עלו. אף ציון לא עלה מתחת ל-7 ל-7 ומעלה, ו-22 ירדו מתחת ל-7. כלומר דירוג מחדש לא יציל אותם: זו החלטת סף",
+    "ב-213 מתוך 293 עמדות-הסגנון הפתוחות בחמשת הסגנונות אין מפרט מעצב בחבילה (designer_spec_he ריק)"
    ],
-   "fix_he": "להתיר מוצר 6.5 כאפשרות השלישית בלבד, כשיש כבר שתיים 7+ ובאישור המעצב מול תמונה. הסף 7 כתוב ב-FIT = 7.0 (final_round_coverage.py) וב-data/catalog/final/BRIEF.md ('a pick needs ≥ 7').",
+   "fix_he": "להתיר מוצר 6.5 כאפשרות השלישית בלבד, באישור המעצב מול תמונה. הסף: FIT = 7.0 (final_round_coverage.py) ו-data/catalog/final/BRIEF.md, שורה 40 ('a pick needs ≥ 7').",
    "decides": "owner"
   },
   {
@@ -145,96 +146,132 @@
    "type": "search",
    "title_he": "מילות החיפוש ועומק החיפוש",
    "style_slots_gain_est": 10,
-   "gain_basis_he": "הערכה 5–15: 723 לידים חדשים לפי כותרת ב-10 העמדות שנבדקו (591 במטמון, 132 ב-CJ); בשיעור ההמרה ההיסטורי 4–5% זה 25–35 כרטיסים, אבל רוב העמדות האלה ב-0 וצריכות 3 לכל סגנון.",
+   "gain_basis_he": "הערכה 5–15: 723 לידים חדשים לפי כותרת ב-10 העמדות שנבדקו (591 במטמון, 132 ב-CJ). בשיעור ההמרה ההיסטורי (4–5%) זה 25–35 כרטיסים, אבל רוב העמדות האלה ב-0 וצריכות 3 בכל סגנון.",
    "evidence": [
-    "AliExpress: 2,408 מתוך 4,514 חיפושים הם תבנית '<סגנון> <מוצר>'. רק 28% מהתוצאות שלהם חדשות, מול 41% בשאר",
-    "AliExpress: 3,449 עמודים ראשונים, 981 שניים, 84 שלישיים. בעמוד 2 45% חדשים ובעמוד 3 53%, מול 30% בעמוד 1",
-    "AliExpress מתאים מילים ב-OR: חציון 'total' 3,596 בשאילתה של 1–2 מילים ו-32,582 בשאילתה של 7 מילים ומעלה",
-    "CJ מתאים מילים ב-OR: רק 14% מהכותרות מכילות את כל המילים בשאילתה של 3–4 מילים, ו-5% בשאילתה של 5 מילים ומעלה",
-    "cache_search.py לא קורא את רשימות החיפוש של CJ: 12,277 מוצרים, ו-12,155 מהם לא נפתחו ולא במרשם. ב-AliExpress נפתחו 7,025 מתוך 30,473 מוצרים שהופיעו ברשימות (23%)",
-    "שמות סחר שחסרו: hall/storage-boxes 0 שאילתות (sundries, desktop storage), master/nightstand-tray 0 (storage tray, jewelry tray), kitchen-runner 1 (floor mat), gallery-stool 1, canisters בלי 'storage tank'",
-    "32 עמדות פתוחות (91 עמדות-סגנון) בלי חיפוש ב-Zendrop, אבל Zendrop נתן רק 9 מתוך 460 כרטיסים",
-    "הבדיקה: 30 חיפושי CJ (1,500 נקודות): 558 תוצאות, 381 לא נראו מעולם, 132 לידים סבירים לפי כותרת"
+    "AliExpress: 2,408 מתוך 4,514 חיפושים הם בתבנית '<סגנון> <מוצר>', ורק 28% מהתוצאות שלהם חדשות (41% בשאר)",
+    "AliExpress: נקראו 3,449 עמודים ראשונים, 981 שניים ו-84 שלישיים. בעמוד 2 היו 45% חדשים ובעמוד 3 ‏53%, מול 30% בעמוד 1",
+    "AliExpress מתאים מילים ב-OR: חציון 'total' הוא 3,596 בשאילתה של 1–2 מילים ו-32,582 בשאילתה של 7+ מילים",
+    "CJ מתאים מילים ב-OR: רק 14% מהכותרות מכילות את כל המילים בשאילתה של 3–4 מילים, ו-5% בשאילתה של 5+",
+    "cache_search.py לא קורא את רשימות החיפוש של CJ: ‏12,277 מוצרים, ו-12,155 מהם לא נפתחו ולא במרשם. ב-AliExpress נפתחו 7,025 מתוך 30,473 המוצרים ברשימות (23%)",
+    "שמות סחר שחסרו: hall/storage-boxes 0 (sundries, desktop storage), master/nightstand-tray 0 (storage tray, jewelry tray), kitchen-runner 1 (floor mat), gallery-stool 1, canisters בלי 'storage tank'",
+    "32 עמדות פתוחות (91 עמדות-סגנון) לא חופשו ב-Zendrop, אבל Zendrop נתן רק 9 מתוך 460 כרטיסים",
+    "הבדיקה: 30 חיפושי CJ (1,500 נקודות) החזירו 558 תוצאות, מהן 381 שלא נראו מעולם ו-132 לידים סבירים לפי כותרת. מילות המוכרים עבדו ב-6 מתוך 10 עמדות",
+    "סבב 5c (round5c-aliexpress.md) הגיע לאותה מסקנה: כ-2,000 מודעות נסרקו, 55 נפתחו ו-3 כרטיסים. החוסם הוא מידה, משלוח ותקן"
    ],
-   "fix_he": "ב-AliExpress: בלי מילת סגנון, 2–4 מילים של המוכר, עמודים 1–3, מיון לפי הזמנות. ב-CJ: 1–3 מילים בלי מילות סגנון. לפני כל חיפוש, לעבור על המטמון כולל רשימות CJ (העתק cache_search ב-scratchpad). רשימת השאילתות המתוקנות: corrected_queries.",
+   "fix_he": "ב-AliExpress: בלי מילת סגנון, 2–4 מילים של המוכר, עמודים 1–3, מיון לפי הזמנות. ב-CJ: ‏1–3 מילים בלי מילת סגנון. לפני כל חיפוש, לעבור על המטמון כולל רשימות CJ. הרשימה המתוקנת: corrected_queries.",
    "decides": "art director"
   },
   {
-   "id": "F6",
+   "id": "F9",
    "rank": 5,
+   "type": "rule",
+   "title_he": "הצעת 5c: פריטי רצפה כבדים מספק ישראלי (עציצים, אגרטל רצפה, שרפרפים, פוף, מעמד מטריות)",
+   "style_slots_gain_est": 9,
+   "gain_basis_he": "ב-11 העמדות יש 47 עמדות-סגנון פתוחות. 9 מהן כבר ב-2, וכל אחת נסגרת באפשרות ישראלית אחת (ב-5 מהן כבר יש מוצר ישראלי, שנספר ב-F1). השאר (38) צריכות 2–3 אפשרויות לסגנון. התקרה: 47.",
+   "evidence": [
+    "העמדות: bath/floor-planter, living-room/planter, master/planter, work/planter, hall/planter, dining-room/floor-vase, corridor/gallery-stool, dining-room/step-stool, bath/shower-stool, living-room/pouf, hall/umbrella-stand",
+    "לפי סגנון: נורדי 6, מודרני חם 8, ג'פנדי 10, ים-תיכוני 7, כפרי 8, בוהו 8",
+    "9 עמדות-סגנון ב-2: bath/floor-planter (מודרני חם, כפרי, בוהו), living-room/planter (מודרני חם), hall/planter (ים-תיכוני, בוהו), gallery-stool (כפרי, בוהו), umbrella-stand (כפרי)",
+    "כל 111 החסומים בהפסד באים מסבב 5, אחרי תמחור לפי שווי בישראל; ב-AliExpress המשלוח לרהיט הוא $76–200 (5c)",
+    "המוצרים הישראליים שכבר קיימים בעמדות האלה (il-decor) סוגרים 5 עמדות-סגנון ב-pct_any"
+   ],
+   "fix_he": "נכון בכיוון: ב-AliExpress העמדות האלה לא ייסגרו. אבל זה דורש פנייה ומחיר סוחר, וז.00 (2026-10-12) קובע שפניות מחכות לאתר עובד. מומלץ: המשתמש מאשר פנייה לספק עציצים ושרפרפים אחד, ובינתיים פריטים כאלה מוצגים לפי PRE1/LK1.",
+   "decides": "owner"
+  },
+  {
+   "id": "F6",
+   "rank": 6,
    "type": "rule",
    "title_he": "מעטפת המידות",
    "style_slots_gain_est": 8,
-   "gain_basis_he": "49 מועמדים 7+ חסומים רק במידות; הקלה סוגרת 13 עמדות-סגנון (עליון 29). ריאלית 5–13, רובם מעל 10%.",
+   "gain_basis_he": "59 מועמדים 7+ חסומים רק במידות. הקלה סוגרת 15 עמדות-סגנון (תקרה: 32). ריאלית 5–15, כי רובם מעל 10%.",
    "evidence": [
     "רוב החסומים במידות הם מעל 10% ולא 'כמה ס\"מ' (למשל קערה בגובה 5–5.7 מול 7–11, מנורת שולחן 28 מול 45–55)",
-    "31 מועמדים 7+ ב-28 עמדות-סגנון כתובים 'לבדוק בפריים' או מחכים להחלטת מעטפת (למשל הרחבת מנורת הקיר בבוהו 'עדיין לא אושרה'); חלקם חסומים גם בהפסד",
+    "31 מועמדים 7+ ב-28 עמדות-סגנון כתובים 'לבדוק בפריים' או מחכים להחלטת מעטפת (למשל: הרחבת מנורת הקיר בבוהו 'עדיין לא אושרה'); חלקם חסומים גם בהפסד",
     "מעטפות של ערך אחד: kids/rug ‏140×200 בדיוק, kids/bookshelf אורך 80; corridor/runner-rug ‏680–710; bath/ceiling-light גובה 6–10"
    ],
-   "fix_he": "המעצב מכריע מיד ב-31 ה'לבדוק בפריים', ומציע למשתמש טווח במקום ערך בודד ב-kids/rug וב-kids/bookshelf.",
+   "fix_he": "המעצב מכריע מיד ב-31 ה'לבדוק בפריים', ומציע טווח במקום ערך בודד ב-kids/rug וב-kids/bookshelf. המשתמש מאשר (העמדות הן מסמך מחייב).",
    "decides": "owner"
   },
   {
    "id": "F5",
-   "rank": 6,
+   "rank": 7,
    "type": "bug",
    "title_he": "המרשם: 'אין משלוח לישראל' לפי SKU אחד",
    "style_slots_gain_est": 5,
-   "gain_basis_he": "הערכה 3–10: 6 מוצרים בהתאמה 7–8 בעמדות פתוחות נדחו כך, וכולם נשלחים בפועל ב-SKU אחר במטמון. ועוד 597 שלא דורגו כלל.",
+   "gain_basis_he": "הערכה 3–10: 6 מוצרים בהתאמה 7–8 בעמדות פתוחות נדחו כך, וכולם נשלחים בפועל ב-SKU אחר שכבר במטמון. ועוד 597 נדחו לפני שדורגו.",
    "evidence": [
-    "605 פריטים ב-seen.json במצב rejected עם 'no shipping to IL (DELIVERY_SERVICE_EXCEPTION)' (2026-10-11/12)",
-    "ב-560 מהם נבדק משלוח ל-SKU אחד בלבד; ב-518 יש יותר מ-SKU אחד",
-    "ב-44 מתוך 45 פריטים שבהם נבדקו שני SKU ומעלה, SKU אחר כן נשלח לישראל",
-    "6 מתוך 6 הנדחים עם fit 7+ נשלחים ב-SKU אחר: 1005001597545859 ($1.99), 1005008146923658 ($8.70), 1005008257879951 ($66.74), 1005009402783790 ($20.31), 1005009977558012 ($24.09), 1005013006042182 ($1.99)",
+    "605 פריטים ב-seen.json במצב rejected עם 'no shipping to IL (DELIVERY_SERVICE_EXCEPTION)', רובם מ-2026-10-11/12",
+    "ב-560 מהם נבדק משלוח ל-SKU אחד בלבד",
+    "ב-44 מתוך 45 פריטים שבהם נבדקו שני SKU או יותר, SKU אחר כן נשלח לישראל",
+    "6 מתוך 6 הנדחים עם התאמה 7+ נשלחים ב-SKU אחר: 1005001597545859 ($1.99), 1005008146923658 ($8.70), 1005008257879951 ($66.74), 1005009402783790 ($20.31), 1005009977558012 ($24.09), 1005013006042182 ($1.99)",
     "597 מהם נדחו לפני דירוג סגנון (אין fit ברשומה)",
-    "גם לידים טובים שלא הפכו לכרטיס: 4 כוסות ראטן ב-aliexpress-work (fit 7.0 לבוהו, 17–48%; 1005013248832816 ב-48% בלי חוסם) לא קיבלו כרטיס, והן סוגרות את boho:work/desk-organizer"
+    "ליד טוב שלא הפך לכרטיס: 4 כוסות ראטן ב-aliexpress-work (בוהו 7.0, ‏17–48%). אחת מהן, 1005013248832816, ב-48% ובלי שום חוסם. הן סוגרות את boho:work/desk-organizer"
    ],
-   "fix_he": "לסמן DELIVERY_SERVICE_EXCEPTION כבעיה של SKU ולא של מוצר; לבדוק מחדש SKU אחר מהמטמון (חינם) ולדרג את 597 הנדחים לפני חיפוש חדש.",
+   "fix_he": "לרשום DELIVERY_SERVICE_EXCEPTION כבעיה של SKU, לא של מוצר. לבדוק SKU אחר מהמטמון (חינם), לדרג את 597 הנדחים לפני חיפוש חדש, ולכתוב כרטיס לכוס 1005013248832816.",
    "decides": "art director"
   },
   {
+   "id": "F10",
+   "rank": 8,
+   "type": "rule",
+   "title_he": "הצעת 5c: הרחבת המעטפות של וילון המקלחת, מדף הספרים לילדים ומתלה היתדות",
+   "style_slots_gain_est": 1,
+   "gain_basis_he": "בשלוש העמדות פתוחות רק 9 עמדות-סגנון (וילון: כפרי ובוהו; מדף ספרים: 6; מתלה יתדות: בוהו). מועמדי 7+ שחסומים במידה הזו סוגרים היום 0–1 מהן. התקרה, אחרי חיפוש חדש בשוק הרחב: 9.",
+   "evidence": [
+    "וילון מקלחת (נפילה 255–265): בבוהו 1005009938333899 (8.0, נפילה מקסימלית 210) נותן אפשרות 1 מתוך 3; 1005009330407914 (8.0) חסום גם ברוחב 140 ובהפסד. בכפרי (יש 1) רק 1005005780741547 ב-6.5. סוגר 0",
+    "מדף ספרים לילדים (אורך 80, זוג): 2410141005261605400 (42 ס\"מ, נורדי 7) מעלה את הנורדי ל-2, ו-1005007471139220 (50 ס\"מ, כפרי 7) מעלה את הכפרי ל-1. סוגר 0",
+    "מתלה יתדות (60–80): בבוהו (יש 1), 1565638804562784256 (8.0, ‏40–50, אבל בליטה מעל 8) ו-1376442157082218496 (7.5, ‏40 ס\"מ, לא נפתח). סוגר 1, ורק אם מוותרים גם על הבליטה",
+    "המפרט מחייב: וילון המקלחת יורד ממסילת התקרה ב-2.665–2.69 עד הרצפה (nordic.md, 1.6; data/slots/bath.json). וילון 180×200 על מוט גבוה משנה את הרינדור",
+    "כרית הספסל (עובי 3–5 מול 8–10 בשוק, 5c): אין היום מועמד 7+ שחסום רק בעובי"
+   ],
+   "fix_he": "רווח קטן מול שינוי במסמך מחייב. מומלץ רק במדף הספרים: זוג מדפים של 40–50 בכל קומה (4 יחידות), כי העמדה פתוחה בכל 6 הסגנונות. בוילון ובמתלה לא שווה לשנות.",
+   "decides": "owner"
+  },
+  {
    "id": "F7",
-   "rank": 7,
+   "rank": 9,
    "type": "rule",
    "title_he": "אין מוצר מפסיד (ה.13) ומשלוח כבד",
    "style_slots_gain_est": 0,
-   "gain_basis_he": "42 מועמדים 7+ חסומים רק בהפסד, וסוגרים 14 עמדות-סגנון. כל ההפסדים האלה נמדדו בסבב 5 לפי השווי בישראל, ולכן לא ניתן להקל בלי לשנות את ה.13.",
+   "gain_basis_he": "50 מועמדים 7+ חסומים רק בהפסד, וסוגרים 15 עמדות-סגנון. כולם נמדדו בסבב 5 לפי השווי בישראל, ולכן אין מה להקל בלי לשנות את ה.13.",
    "evidence": [
-    "101 מתוך 101 המועמדים שחסומים בהפסד מגיעים מקבצי round5* (תומחרו לפי שווי בישראל)",
+    "111 מתוך 111 המועמדים שחסומים בהפסד באים מקבצי round5* (תומחרו לפי שווי בישראל)",
     "המקרים: שרפרפים, תלויות ראטן, מנורות רצפה ותקרה, עציצי רצפה"
    ],
-   "fix_he": "להשאיר את ה.13. מוצרים כאלה יכולים להופיע לפי PRE1/LK1 עם 'המלאי אינו זמין כעת', אבל לא נספרים כמוכנים. אפשר לספור אותם במדד נפרד.",
+   "fix_he": "להשאיר את ה.13. מוצרים כאלה יכולים להופיע לפי PRE1/LK1 עם 'המלאי אינו זמין כעת' ולהיספר במדד נפרד, לא כ'מוכנים'. המסלול האמיתי: F9.",
    "decides": "owner"
   },
   {
    "id": "F8",
-   "rank": 8,
+   "rank": 10,
    "type": "bug",
    "title_he": "באגים בספירה: הכיסוי מנופח, לא חסר",
    "style_slots_gain_est": -9,
-   "gain_basis_he": "הרצה של העתק מתוקן: 437 ל-428 (56.8% ל-55.7%). נורדי עם 23 עמדות on-hold: ‏54.5% במקום 64.2%.",
+   "gain_basis_he": "הרצה של העתק מתוקן: 438 ל-429 (57.0% ל-55.8%). בנורדי, עם 23 עמדות on-hold: ‏54.5% במקום 64.2%.",
    "evidence": [
-    "אותו ליסטינג נספר פעמיים באותה עמדה (עותקים '-master', '-work', 'size twins'): 10 עמדות-סגנון יורדות מתחת ל-3, למשל pendant-cj-silk-pumpkin-lantern ב-3 כרטיסים",
-    "צירי צבע בשם 'other': ‏31 כרטיסים; תיקון מוסיף עמדה אחת (modern-country:dining-room/bowl)",
-    "variants_fit: 0 נספר כ'לא ידוע' ונופל לכל הצירים (1 מקרה, 0 השפעה); כרטיס כפול ב-existing_picks (1 מקרה, 0 השפעה)",
+    "אותו ליסטינג נספר פעמיים באותה עמדה (עותקי '-master' ו-'-work', ותאומי מידה): 10 עמדות-סגנון יורדות מתחת ל-3. למשל, pendant-cj-silk-pumpkin-lantern בשלושה כרטיסים",
+    "צירי צבע בשם 'other': ‏31 כרטיסים. התיקון מוסיף עמדה אחת (modern-country:dining-room/bowl)",
+    "variants_fit: 0 נספר כ'לא ידוע' ונופל לכל הצירים (מקרה אחד, 0 השפעה); כרטיס כפול ב-existing_picks (מקרה אחד, 0 השפעה)",
     "מפתחות עמדה לא תואמים: 0 מתוך 951 מפתחות ב-39 קבצי תוצאות",
-    "כרטיסים שהספירה לא רואה: 116 כרטיסים לא מוזכרים; 11 מהם 7+ בעמדה פתוחה, וכולם נפסלו בכוונה בהרכב (הפסד או מעטפת): 0 רווח",
-    "חבילות 2026-10-13 תואמות להרכבים (2026-10-11) ולקטלוגים (2026-10-12), שלא השתנו מאז. אבל 23 עמדות on-hold בנורדי לא נספרות כלל (PR1 אושר, LK1/PRE1 הוחלטו); 5 מהן כבר עם 3",
-    "7 בחירות קיימות מצביעות על כרטיסים במצב rejected (למשל candle-holders-cj-ceramic-pedestal-tray ב-3 עמדות מודרני חם): עד 4 עמדות-סגנון בסיכון",
+    "כרטיסים שהספירה לא רואה: 116 כרטיסים לא מוזכרים. רק 11 מהם 7+ בעמדה פתוחה, וכולם נפסלו בכוונה בהרכב (הפסד או מעטפת): 0 רווח",
+    "חבילות 2026-10-13 תואמות להרכבים (2026-10-11) ולקטלוגים (2026-10-12), שלא השתנו מאז. אבל 23 עמדות on-hold בנורדי לא נספרות כלל, אף ש-PR1 אושר ו-LK1/PRE1 הוחלטו. 5 מהן כבר עם 3",
+    "7 בחירות קיימות מצביעות על כרטיסים במצב rejected (למשל candle-holders-cj-ceramic-pedestal-tray בשלוש עמדות במודרני החם): עד 4 עמדות-סגנון בסיכון",
     "34 עמדות-סגנון מכוסות נשענות על ניחוש צוות שלא עבר ביקורת. בשיעור ההורדה של ביקורת סבב 5 (40 מתוך 183 ציוני 7+ ירדו מתחת ל-7 או נדחו, ‏22%), צפויות כ-7 להיפתח"
    ],
-   "fix_he": "להחיל את round5/coverage-fix.patch: ליסטינג נספר פעם אחת לעמדה, צבעים בצירי 'other', variants_fit 0 = 1, ושדה דיווח לנורדי כולל on-hold. ולהעביר את 34 העמדות לביקורת מעצב.",
+   "fix_he": "להחיל את round5/coverage-fix.patch: ליסטינג נספר פעם אחת בעמדה, צבעים בצירי 'other' נספרים, variants_fit 0 = 1, ושדה דיווח לנורדי שכולל את ה-on-hold. בנוסף, להעביר את 34 העמדות לביקורת מעצב.",
    "decides": "art director"
   }
  ],
  "rules_table": [
   {
    "rule": "ce",
-   "candidates_7plus_any": 27,
+   "candidates_7plus_any": 29,
    "candidates_7plus_alone": 8,
-   "style_slots_closed_if_eased_alone": 1,
-   "upper_if_all_its_blockers_eased": 5,
+   "style_slots_closed_if_eased_alone": 2,
+   "upper_if_all_its_blockers_eased": 7,
    "closed": [
+    "boho:master/pendant",
     "modern-country:master/floor-lamp"
    ]
   },
@@ -309,7 +346,7 @@
   },
   {
    "rule": "no_ship_il",
-   "candidates_7plus_any": 9,
+   "candidates_7plus_any": 10,
    "candidates_7plus_alone": 2,
    "style_slots_closed_if_eased_alone": 0,
    "upper_if_all_its_blockers_eased": 1,
@@ -388,20 +425,20 @@
   }
  ],
  "registry_rejections_by_reason": {
-  "total_rejected": 5266,
-  "no_label": 2134,
+  "total_rejected": 5318,
+  "no_label": 2159,
   "low_fit": 754,
-  "no_shipping_IL": 656,
-  "loss": 411,
+  "no_shipping_IL": 659,
+  "loss": 420,
   "sku_or_image": 338,
-  "plastic": 233,
-  "envelope": 224,
-  "colour_or_finish": 193,
+  "plastic": 235,
+  "envelope": 225,
+  "colour_or_finish": 201,
   "wrong_type": 184,
-  "synthetic_fibre": 121,
-  "heavy": 96,
+  "synthetic_fibre": 125,
+  "heavy": 100,
   "copy": 43,
-  "CE": 40,
+  "CE": 43,
   "set": 35,
   "same_look": 28,
   "IP44": 6,
@@ -3091,20 +3128,6 @@
    "how": "AliExpress: no style word, pages 1-3, sortBy orders; CJ: 1-3 words, no style word; open the listings already in the cache first (xsearch incl. CJ listings)"
   },
   {
-   "slot": "master/nightstand-tray",
-   "styles_open": 3,
-   "aliexpress": [
-    "storage tray",
-    "jewelry tray wood",
-    "travertine tray"
-   ],
-   "cj": [
-    "storage tray",
-    "jewelry tray"
-   ],
-   "how": "AliExpress: no style word, pages 1-3, sortBy orders; CJ: 1-3 words, no style word; open the listings already in the cache first (xsearch incl. CJ listings)"
-  },
-  {
    "slot": "master/pendant",
    "styles_open": 3,
    "aliexpress": [
@@ -3273,6 +3296,20 @@
    "cj": [
     "flower pot large",
     "plant basket"
+   ],
+   "how": "AliExpress: no style word, pages 1-3, sortBy orders; CJ: 1-3 words, no style word; open the listings already in the cache first (xsearch incl. CJ listings)"
+  },
+  {
+   "slot": "master/nightstand-tray",
+   "styles_open": 2,
+   "aliexpress": [
+    "storage tray",
+    "jewelry tray wood",
+    "travertine tray"
+   ],
+   "cj": [
+    "storage tray",
+    "jewelry tray"
    ],
    "how": "AliExpress: no style word, pages 1-3, sortBy orders; CJ: 1-3 words, no style word; open the listings already in the cache first (xsearch incl. CJ listings)"
   },
@@ -3660,20 +3697,20 @@
  ],
  "near_misses": {
   "summary": {
-   "rows_6_0_to_6_9": 893,
-   "rows_6_5": 308,
-   "style_slots_with_6_x": 245,
-   "style_slots_with_6_5": 145,
+   "rows_6_0_to_6_9": 933,
+   "rows_6_5": 300,
+   "style_slots_with_6_x": 247,
+   "style_slots_with_6_5": 144,
    "close_if_all_6_0_to_6_9_counted": 160,
    "close_if_6_5_counted": 65,
    "close_if_existing_cards_6_0_to_6_9_counted": 53,
-   "close_if_one_6_5_allowed_as_third_option": 30,
+   "close_if_one_6_5_allowed_as_third_option": 31,
    "close_if_one_6_5_card_allowed_as_third_option": 14,
    "reason_mentions_in_6_5_rows": {
-    "מידה/מעטפת": 138,
-    "גוון": 89,
-    "חומר": 74,
-    "מחיר/משלוח": 69,
+    "מידה/מעטפת": 134,
+    "גוון": 87,
+    "חומר": 72,
+    "מחיר/משלוח": 68,
     "תמונה/איכות": 33,
     "צורה/סגנון": 30,
     "גימור": 19
@@ -3712,6 +3749,16 @@
    },
    {
     "style": "boho",
+    "slot": "dining-room/dining-pendant",
+    "have_ready": 2,
+    "candidate": "aliexpress:1005007538985114",
+    "carded": false,
+    "fit": 6.5,
+    "file": "aliexpress-dining-room.json",
+    "why_he": "ראטן קלוע וואבי SKU D בקוטר 50 אור חם; בתמונה דגם קונוס קטן, לא ברור שזו הצורה"
+   },
+   {
+    "style": "boho",
     "slot": "dining-room/utensil-crock",
     "have_ready": 2,
     "candidate": "aliexpress:1005010058661147",
@@ -3719,6 +3766,16 @@
     "fit": 6.5,
     "file": "aliexpress-dining-room.json",
     "why_he": "כלי עץ שיטה מסתובב; S קטן במעט, L כנראה מתאים"
+   },
+   {
+    "style": "boho",
+    "slot": "master/pendant",
+    "have_ready": 2,
+    "candidate": "cj:2412070943201617000",
+    "carded": false,
+    "fit": 6.5,
+    "file": "cj-zendrop-master-corridor.json",
+    "why_he": "חבל 'קנבוס' מלאכותי, קטן מ-25. נדחה."
    },
    {
     "style": "boho",
@@ -3829,16 +3886,6 @@
     "fit": 6.5,
     "file": "basket-dining-master-kids.json",
     "why_he": "עמוד במבוק על בסיס עגול 11.5: במבוק מותר במטבח בג'אפנדי ובבוהו, ומעמד עץ פשוט נמצא במאגר הכפרי. גובה 28.5 מול 30–34: גבולי."
-   },
-   {
-    "style": "mediterranean",
-    "slot": "master/nightstand-tray",
-    "have_ready": 2,
-    "candidate": "aliexpress:1005011962477157",
-    "carded": false,
-    "fit": 6.5,
-    "file": "aliexpress-master.json",
-    "why_he": "מגש אקציה מלבני צר עם שפה; גוון בינוני, לא אלון; מתאים למגש הים-תיכוני"
    },
    {
     "style": "mediterranean",
@@ -5177,7 +5224,7 @@
    {
     "style": "boho",
     "slot": "dining-room/dining-pendant",
-    "have_ready": 1,
+    "have_ready": 2,
     "fit": 6.5,
     "id": "aliexpress:1005007538985114",
     "carded": false,
@@ -5193,7 +5240,7 @@
    {
     "style": "boho",
     "slot": "dining-room/dining-pendant",
-    "have_ready": 1,
+    "have_ready": 2,
     "fit": 6.5,
     "id": "cj:1713784558061105152",
     "carded": false,
@@ -6943,110 +6990,6 @@
     "why_he": "טרוורטין אמיתי למודרני החם, אבל 1.2 ק\"ג: מפסיד ב-₪89 (-31.8%); ב-₪149 17%. אין כרטיס."
    },
    {
-    "style": "mediterranean",
-    "slot": "master/nightstand-tray",
-    "have_ready": 2,
-    "fit": 6.5,
-    "id": "aliexpress:1005011962477157",
-    "carded": false,
-    "file": "aliexpress-master.json",
-    "reasons": [
-     "מידה/מעטפת",
-     "גוון"
-    ],
-    "why_he": "מגש אקציה מלבני צר עם שפה; גוון בינוני, לא אלון; מתאים למגש הים-תיכוני"
-   },
-   {
-    "style": "mediterranean",
-    "slot": "master/nightstand-tray",
-    "have_ready": 2,
-    "fit": 6.5,
-    "id": "aliexpress:1005008169234498",
-    "carded": false,
-    "file": "aliexpress-master.json",
-    "reasons": [
-     "חומר"
-    ],
-    "why_he": "מגש ראטן עגול עם ידיות – בוהו/ים-תיכוני; ראטן אסור בנורדי; עגול ולא מלבני"
-   },
-   {
-    "style": "mediterranean",
-    "slot": "master/nightstand-tray",
-    "have_ready": 2,
-    "fit": 6.5,
-    "id": "aliexpress:1005012293002331",
-    "carded": false,
-    "file": "aliexpress-master.json",
-    "reasons": [
-     "גוון"
-    ],
-    "why_he": "מגשי אקציה בצורות שונות עם שפה; גוון בינוני"
-   },
-   {
-    "style": "mediterranean",
-    "slot": "master/nightstand-tray",
-    "have_ready": 2,
-    "fit": 6.5,
-    "id": "aliexpress:1005008996805240",
-    "carded": false,
-    "file": "aliexpress-master.json",
-    "reasons": [
-     "מידה/מעטפת"
-    ],
-    "why_he": "מגש אקציה אליפטי מינימלי, יפה, אבל S קטן; L אולי מתאים"
-   },
-   {
-    "style": "mediterranean",
-    "slot": "master/nightstand-tray",
-    "have_ready": 2,
-    "fit": 6.5,
-    "id": "cj:1390193116576878592",
-    "carded": false,
-    "file": "cj-zendrop-master-corridor.json",
-    "reasons": [],
-    "why_he": "סל-מגש עמוק (6.5–8) ולא מגש שפה נמוכה. נדחה."
-   },
-   {
-    "style": "mediterranean",
-    "slot": "master/nightstand-tray",
-    "have_ready": 2,
-    "fit": 6.5,
-    "id": "cj:1436884142066372608",
-    "carded": false,
-    "file": "cj-zendrop-master-corridor.json",
-    "reasons": [
-     "מידה/מעטפת",
-     "חומר"
-    ],
-    "why_he": "גובה 6 מול 1.5–3, ראטן אסור בנורדי. נדחה."
-   },
-   {
-    "style": "mediterranean",
-    "slot": "master/nightstand-tray",
-    "have_ready": 2,
-    "fit": 6.5,
-    "id": "cj:2501200638211624700",
-    "carded": false,
-    "file": "cj-zendrop-master-corridor.json",
-    "reasons": [
-     "מחיר/משלוח"
-    ],
-    "why_he": "טרוורטין אמיתי למודרני החם, אבל 1.2 ק\"ג: מפסיד ב-₪89 (-31.8%); ב-₪149 17%. אין כרטיס."
-   },
-   {
-    "style": "mediterranean",
-    "slot": "master/nightstand-tray",
-    "have_ready": 2,
-    "fit": 6.5,
-    "id": "cj:1391665022618439680",
-    "carded": false,
-    "file": "wave2-storage.json",
-    "reasons": [
-     "מידה/מעטפת"
-    ],
-    "why_he": "שלושה עצים (בוק לנורדי, שיטה לים-תיכוני), אבל 20×11.8: קטן מדי. נדחה."
-   },
-   {
     "style": "modern-country",
     "slot": "master/nightstand-tray",
     "have_ready": 1,
@@ -7073,7 +7016,7 @@
    {
     "style": "boho",
     "slot": "master/pendant",
-    "have_ready": 1,
+    "have_ready": 2,
     "fit": 6.5,
     "id": "cj:2412070943201617000",
     "carded": false,
@@ -8280,7 +8223,7 @@
    "electrical": null,
    "transition_only": false,
    "verdict": "not worth searching",
-   "special_he": "שטיח 160–180 × 200–220 מסיב טבעי. 8 מועמדים נפסלו על פוליאסטר. יש 3 שטיחים טבעיים אצל ספק ישראלי."
+   "special_he": "שטיח 160–180 × 200–220 מסיב טבעי. 5 מתוך 17 המוצרים נפסלו על סיב סינתטי. יש 3 שטיחים טבעיים אצל ספק ישראלי."
   },
   {
    "slot": "bath/shower-stool",
@@ -8427,9 +8370,9 @@
   {
    "slot": "kids/bookshelf",
    "styles_open": 6,
-   "products_seen": 14,
+   "products_seen": 16,
    "best_fit_any_style": 7.0,
-   "rows_fit7": 1,
+   "rows_fit7": 2,
    "sum_ready": 2,
    "envelope_cm": {
     "l": 80,
@@ -8475,9 +8418,9 @@
   {
    "slot": "living-room/pouf",
    "styles_open": 6,
-   "products_seen": 21,
+   "products_seen": 22,
    "best_fit_any_style": 7.5,
-   "rows_fit7": 5,
+   "rows_fit7": 7,
    "sum_ready": 0,
    "envelope_cm": null,
    "set_of": null,
@@ -8645,7 +8588,7 @@
   {
    "slot": "dining-room/condiment-set",
    "styles_open": 5,
-   "products_seen": 24,
+   "products_seen": 28,
    "best_fit_any_style": 7.5,
    "rows_fit7": 5,
    "sum_ready": 3,
@@ -8668,9 +8611,9 @@
   {
    "slot": "corridor/gallery-stool",
    "styles_open": 6,
-   "products_seen": 29,
+   "products_seen": 31,
    "best_fit_any_style": 7.5,
-   "rows_fit7": 18,
+   "rows_fit7": 19,
    "sum_ready": 5,
    "envelope_cm": {
     "w": [
@@ -8745,9 +8688,9 @@
   {
    "slot": "dining-room/canisters",
    "styles_open": 5,
-   "products_seen": 25,
+   "products_seen": 27,
    "best_fit_any_style": 8.0,
-   "rows_fit7": 4,
+   "rows_fit7": 5,
    "sum_ready": 0,
    "envelope_cm": {
     "h": [
@@ -8926,7 +8869,7 @@
  ],
  "outside_count": {
   "il": {
-   "closes": 33,
+   "closes": 32,
    "closes_beyond_il": 0,
    "style_slots": [
     "nordic:living-room/floor-lamp",
@@ -8949,7 +8892,6 @@
     "japandi:work/rug",
     "japandi:work/wall-sconce",
     "mediterranean:hall/planter",
-    "mediterranean:master/nightstand-tray",
     "mediterranean:work/wall-sconce",
     "modern-country:living-room/floor-lamp",
     "modern-country:master/floor-lamp",
@@ -9032,7 +8974,7 @@
    "style_slots": []
   },
   "all_outside": {
-   "closes": 53,
+   "closes": 52,
    "closes_beyond_il": 0,
    "style_slots": [
     "nordic:kids/rug",
@@ -9067,7 +9009,6 @@
     "mediterranean:kids/rug",
     "mediterranean:living-room/pendant",
     "mediterranean:living-room/rug",
-    "mediterranean:master/nightstand-tray",
     "mediterranean:master/pendant",
     "mediterranean:master/rug",
     "mediterranean:work/pendant",
@@ -9095,18 +9036,18 @@
   "file": "data/leads/final-2026-10-13/round5/coverage-fix.patch",
   "applies_to": "scripts/sourcing/final_round_coverage.py",
   "before": {
-   "covered_ready": 437,
-   "pct_ready": 56.8
+   "covered_ready": 438,
+   "pct_ready": 57.0
   },
   "after": {
-   "covered_ready": 428,
-   "pct_ready": 55.7
+   "covered_ready": 429,
+   "pct_ready": 55.8
   },
   "per_style_after": {
    "nordic": 61.5,
    "warm-modern": 61.4,
    "japandi": 56.8,
-   "mediterranean": 56.8,
+   "mediterranean": 57.6,
    "modern-country": 49.2,
    "boho": 49.2
   },
