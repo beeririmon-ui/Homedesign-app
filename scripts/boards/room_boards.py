@@ -7,6 +7,15 @@ Sources, in order of authority:
      for that style, to fill slots that are still short of 3.                       -> "candidate"
 Furniture (kind: fixed-product) is left out: it follows plan B (Israeli suppliers).
 
+What never reaches a board (2026-10-17, QA studio-qa-2026-10-17 B3):
+  - a card whose `status` is "rejected";
+  - a card the designer rejected for that slot (data/leads/final-2026-10-13/round*/designer-audit*.json, read through
+    audits() / audit_for() of scripts/sourcing/final_round_coverage.py, the single source of that logic: an entry with
+    "slots" applies only there, "*" everywhere, later files override earlier ones);
+  - a card the designer scored below 7 for that style: the designer's fit replaces the team's guess, for picks and
+    candidates alike. A candidate the designer kept is marked "reviewed", not "unreviewed".
+Each board lists what was left out and why (`dropped`), so the screen can say so.
+
   python3 scripts/boards/room_boards.py <out_dir>        # writes <style>-<room>.html and summary.json
                                                          # (the .jpg boards were screenshots of these pages)
 
@@ -30,9 +39,12 @@ ST_HE = {"nordic": "נורדי", "warm-modern": "מודרני חם", "japandi": 
 ROOMS = ["living-room", "dining-room", "master", "kids", "work", "hall", "corridor", "bath"]
 ROOM_HE = {"living-room": "סלון", "dining-room": "מטבח ופינת אוכל", "master": "חדר שינה", "kids": "חדר ילדים",
            "work": "חדר עבודה", "hall": "כניסה", "corridor": "מסדרון", "bath": "חדר רחצה"}
-LEGEND_HE = ('"נבחר": בחירת המעצב (ברירת המחדל, ובקטן הווריאציות). "מועמד": מוצר מהליקוט האחרון בהתאמה 7 ומעלה, '
-             'שעוד לא עבר את המעצב. בלי ריהוט קבוע (ספקים ישראליים).')
+LEGEND_HE = ('"נבחר": בחירת המעצב (ברירת המחדל, ובקטן הווריאציות). "מועמד": מוצר מהליקוט האחרון בהתאמה 7 ומעלה '
+             '(לפי ציון המעצב כשהוא בדק אותו). מוצר שנדחה, או שהמעצב דחה בעמדה או נתן לו פחות מ-7 בסגנון, לא מופיע. '
+             'בלי ריהוט קבוע (ספקים ישראליים).')
 RESULTS_GLOB = "data/leads/final-2026-10-13/results/*.json"
+COVERAGE_PY = "scripts/sourcing/final_round_coverage.py"  # audits() and audit_for(): the designer's verdicts
+FIT_MIN = 7.0
 MARGIN_FLOOR = 40.0   # VR1, studio rules ה.11
 MARGIN_AMBER = 25.0   # the coordinator's colour bands: >= 40 green, 25-40 amber, below 25 (or a loss) red
 TOY_SLOTS = {"kids/toy-cars", "kids/doll", "kids/soft-toy", "kids/doll-pram", "kids/skateboard"}
@@ -53,8 +65,11 @@ STATUS = {
     "coop-replied": ("ענו", "good", "הספק הישראלי ענה לבקשת השת\"פ (data/suppliers/directory.json)"),
     "coop-none": ("לא פנינו", "neutral", "עוד לא פנינו לספק הישראלי (data/suppliers/directory.json)"),
     "unreviewed": ("מועמד, לא נבדק", "neutral", "מהליקוט האחרון, עוד לא עבר את המעצב"),
+    "reviewed": ("המעצב בדק", "info", "מועמד שהמעצב בדק בביקורת סבב 5 והשאיר (designer-audit)"),
     "ready": ("מוכן לדרופשיפינג", "good", "ספק דרופשיפינג, מתומחר, בלי דגל חוסם"),
 }
+DROPPED_HE = {"rejected": "הכרטיס נדחה (status: rejected)", "designer-reject": "המעצב דחה אותו בעמדה הזו (ביקורת סבב 5)",
+              "designer-fit": "המעצב נתן לו פחות מ-7 בסגנון הזה"}
 MARGIN_SRC_HE = {"pick": "בחירת המעצב (הרכבה או קטלוג)", "economics": "קובץ התמחור (data/economics/products.json)",
                  "leads": "הליקוט האחרון (final-2026-10-13)"}
 
@@ -99,7 +114,8 @@ def cards():
         out[cid] = {"id": cid, "name": d.get("name") or cid, "urls": urls or [], "price": price,
                     "supplier": sup, "safety": d.get("safety") if isinstance(d.get("safety"), dict) else {},
                     "notes": d.get("notes") if isinstance(d.get("notes"), str) else "",
-                    "currency": econ.get("currency") if isinstance(econ, dict) else None}
+                    "currency": econ.get("currency") if isinstance(econ, dict) else None,
+                    "status": d.get("status") if isinstance(d.get("status"), str) else None}
         out.setdefault(os.path.basename(f)[:-5], out[cid])
     return out
 
@@ -151,23 +167,106 @@ def lead_results():
     return out
 
 
-def candidates(style, room, results=None):
+_COVERAGE = None
+
+
+def coverage_module():
+    """scripts/sourcing/final_round_coverage.py as a module (its audits() and audit_for() are the single source of the
+    designer's verdicts). The script moves to the repo root when imported and reads relative paths, so the working
+    directory is restored after the import and around every call (importing room_boards must not change it)."""
+    global _COVERAGE
+    if _COVERAGE is None:
+        import importlib.util
+        cwd = os.getcwd()
+        try:
+            spec = importlib.util.spec_from_file_location("final_round_coverage", _p(COVERAGE_PY))
+            m = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(m)
+        finally:
+            os.chdir(cwd)
+        _COVERAGE = m
+    return _COVERAGE
+
+
+def load_audits():
+    """((card id, slot key or "*") -> the designer's audit entry, error or None). A failure is reported, not hidden:
+    without the audits the boards would show cards the designer rejected."""
+    cwd = os.getcwd()
+    try:
+        os.chdir(ROOT)
+        return coverage_module().audits(), None
+    except Exception as e:
+        return {}, f"{COVERAGE_PY}: {type(e).__name__}: {e}"[:300]
+    finally:
+        os.chdir(cwd)
+
+
+def audit_for(audit, card_id, key):
+    """The designer's entry for this card in this slot ("room/slot"): the slot's own entry first, then "*"."""
+    if not audit or not card_id:
+        return None
+    try:
+        return coverage_module().audit_for(audit, card_id, key)
+    except Exception:
+        return audit.get((card_id, key)) or audit.get((card_id, "*"))
+
+
+def _fit(v):
+    try:
+        x = float(v)
+    except (TypeError, ValueError):
+        return None
+    return x if math.isfinite(x) else None
+
+
+def designer_fit(a, style):
+    """The designer's fit for this style from an audit entry, or None when the designer did not score this style."""
+    return _fit(((a or {}).get("fit") or {}).get(style)) if isinstance((a or {}).get("fit"), dict) else None
+
+
+def candidates(style, room, results=None, ctx=None):
+    """slot id -> [(card id, fit)] of the final round's cards with a fit >= 7 for this style, best first. With a Context:
+    a rejected card and a card the designer rejected for the slot are left out, and the designer's fit replaces the
+    team's guess (the way final_round_coverage.py counts them)."""
     out = {}
+    audit = ctx.audit if ctx is not None else {}
+    cat = ctx.cat if ctx is not None else {}
     for _, d in (results if results is not None else lead_results()):
         for key, s in (d.get("slots") or {}).items():
             if not key.startswith(room + "/"):
                 continue
             sid = key.split("/", 1)[1]
             for c in s.get("candidates") or []:
-                fit = (c.get("style_fit_guess") or {}).get(style)
-                try:
-                    fit = float(fit or 0)
-                except (TypeError, ValueError):
-                    fit = 0
-                if fit >= 7 and c.get("card_id"):
+                cid = c.get("card_id")
+                if not cid:
+                    continue
+                if (cat.get(cid) or {}).get("status") == "rejected":
+                    continue
+                a = audit_for(audit, cid, key)
+                if a and a.get("verdict") == "reject":
+                    continue
+                fit = designer_fit(a, style)
+                if fit is None:
+                    fit = _fit((c.get("style_fit_guess") or {}).get(style)) or 0
+                if fit >= FIT_MIN:
                     out.setdefault(sid, {})
-                    out[sid][c["card_id"]] = max(fit, out[sid].get(c["card_id"], 0))
+                    out[sid][cid] = max(fit, out[sid].get(cid, 0))
     return {k: sorted(v.items(), key=lambda x: -x[1]) for k, v in out.items()}
+
+
+def left_out(ctx, style, room, sid, cid):
+    """Why a pick never reaches the board, or None: rejected card, the designer's reject in this slot, or the designer's
+    fit below 7 for this style."""
+    card = ctx.cat.get(cid) or {}
+    if card.get("status") == "rejected":
+        return "rejected"
+    a = audit_for(ctx.audit, cid, f"{room}/{sid}")
+    if a and a.get("verdict") == "reject":
+        return "designer-reject"
+    fit = designer_fit(a, style)
+    if fit is not None and fit < FIT_MIN:
+        return "designer-fit"
+    return None
 
 
 # --------------------------------------------------------------------------- supplier, margin, status (2026-10-17)
@@ -197,6 +296,7 @@ class Context:
     def __init__(self, cat=None):
         self.cat = cat if cat is not None else cards()
         self.results = lead_results()
+        self.audit, self.audit_error = load_audits()
         eco = _load("data/economics/products.json") or {}
         self.economics = eco.get("products") if isinstance(eco.get("products"), dict) else {}
         directory = _load("data/suppliers/directory.json") or {}
@@ -287,7 +387,7 @@ def _tone(m):
     return {k: v for k, v in m.items() if v is not None}
 
 
-def statuses_of(ctx, room, sid, card, sup, margin, role, price):
+def statuses_of(ctx, room, sid, card, sup, margin, role, price, style=None):
     """The product's status with the supplier, most important first: [{code, why?}] (labels in STATUS)."""
     out = []
 
@@ -315,7 +415,13 @@ def statuses_of(ctx, room, sid, card, sup, margin, role, price):
     if sup.get("key") == "il":
         add(COOP_STATE.get(_coop(ctx, sup.get("name")), "coop-none"))
     if role == "candidate":
-        add("unreviewed")
+        a = audit_for(getattr(ctx, "audit", None), card.get("id"), key)
+        if a and a.get("verdict") != "reject":
+            fit = designer_fit(a, style) if style else None
+            verdict = {"keep": "השאיר", "lower-fit": "הוריד את הציון"}.get(a.get("verdict"), a.get("verdict") or "בדק")
+            add("reviewed", f"המעצב בדק ({verdict})" + (f": ציון {fit:g} בסגנון הזה" if fit is not None else ""))
+        else:
+            add("unreviewed")
     elif not out and sup.get("key") in DROPSHIP and (margin or price):
         add("ready")
     return out
@@ -327,13 +433,22 @@ def board_data(style, room, cat=None, ctx=None):
     """One board: the slots in the slot file's order, with status chosen / candidate / missing / on-hold."""
     ctx = ctx or Context(cat)
     cat = ctx.cat
-    ch, ca = chosen(style, room), candidates(style, room, ctx.results)
+    ch, ca = chosen(style, room), candidates(style, room, ctx.results, ctx)
     out, n_chosen, n_cand, n_hold, total = [], 0, 0, 0, 0
+    dropped = []
     for s in slots(room):
         sid = s["id"]
         name = s.get("name_he") or sid
         picks = (ch.get(sid) or {}).get("picks") or []
         status = (ch.get(sid) or {}).get("status")
+        kept = []
+        for p in picks:  # a designer pick that was rejected since, or that the designer's audit rules out here
+            why = left_out(ctx, style, room, sid, p[0])
+            if why:
+                dropped.append({"slot": sid, "card_id": p[0], "role": p[2], "why": why})
+            else:
+                kept.append(p)
+        picks = kept
         role = "chosen"
         if not picks and ca.get(sid):
             picks = [(cid, (cat.get(cid) or {}).get("price"), "candidate", None) for cid, _ in ca[sid][:3]]
@@ -361,7 +476,7 @@ def board_data(style, room, cat=None, ctx=None):
                 sup = supplier_of(card)
                 margin = margin_of(ctx, style, room, sid, card["id"], p[3] if len(p) > 3 else None, p[2])
                 row_p.update({"supplier": sup, "margin": margin,
-                              "supplier_status": statuses_of(ctx, room, sid, card, sup, margin, role, p[1])})
+                              "supplier_status": statuses_of(ctx, room, sid, card, sup, margin, role, p[1], style)})
             except Exception as e:
                 row_p["error"] = f"{type(e).__name__}: {e}"[:160]
             rows.append(row_p)
@@ -370,7 +485,7 @@ def board_data(style, room, cat=None, ctx=None):
     n = len(out)
     return {"style": style, "room": room, "style_he": ST_HE[style], "room_he": ROOM_HE[room], "slots": out,
             "counts": {"slots": n, "chosen": n_chosen, "candidate": n_cand, "missing": n - n_chosen - n_cand, "on_hold": n_hold},
-            "total": total}
+            "total": total, "dropped": dropped}
 
 
 def boards(cat=None):
@@ -379,7 +494,8 @@ def boards(cat=None):
     return {"styles": [{"id": s, "he": ST_HE[s]} for s in STYLES], "rooms": [{"id": r, "he": ROOM_HE[r]} for r in ROOMS],
             "legend_he": LEGEND_HE, "margin_floor": MARGIN_FLOOR, "margin_amber": MARGIN_AMBER,
             "status_labels": {k: {"he": v[0], "tone": v[1], "why": v[2]} for k, v in STATUS.items()},
-            "margin_src_he": MARGIN_SRC_HE,
+            "margin_src_he": MARGIN_SRC_HE, "dropped_he": DROPPED_HE,
+            "audit": {"entries": len(ctx.audit), "error": ctx.audit_error},
             "boards": [board_data(st, room, ctx=ctx) for st in STYLES for room in ROOMS]}
 
 

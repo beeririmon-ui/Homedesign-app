@@ -17,7 +17,9 @@ EXPORT.json (the Studio's "sync file" button produces exactly this):
 Lists may also be given as {id: data} objects.
 
 What it does:
-  * applies each product patch to data/products/**/<id>.json. Only schema fields are
+  * applies each product patch to the card whose `id` is the document's id (data/products/**, whatever the file is
+    called: zendrop-2883892.json holds basket-zendrop-seagrass-belly-foldable-38; the file name is only a fallback).
+    An id that two cards claim is refused and listed under Problems (rename one card first). Only schema fields are
     touched: name, slot, rooms, status, supplier.product_url, supplier.sku, price.cost,
     notes. Extra links go into a [studio-links] block at the end of notes (the schema
     has no links field). A slot move to another room also moves the file (--no-move to skip)
@@ -189,7 +191,9 @@ class Run:
         self.products_dir = root / "data" / "products"
         self.eco_dir = root / "data" / "economics"
         self.schema = json.loads((root / "data" / "product-card.schema.json").read_text(encoding="utf-8"))
-        self.index = {p.stem: p for p in self.products_dir.rglob("*.json")}
+        # cards by their own id (a file name that is not the id, zendrop-2883892.json, is only the fallback); an id that
+        # more than one file claims is never written to: the edit would land in the wrong card
+        self.index, self.dup_ids = B.card_index(self.products_dir)
         self.room_slots = {}
         for f in (root / "data" / "slots").glob("*.json"):
             try:
@@ -236,6 +240,11 @@ class Run:
         if doc.get("synced") and not self.args.all:
             return
         f = nested(doc.get("fields") or {})
+        if pid in self.dup_ids:
+            self.problems.append(f"{pid}: {len(self.dup_ids[pid])} cards have this id ("
+                                 + ", ".join(str(x.relative_to(self.root)) for x in self.dup_ids[pid])
+                                 + "); rename one of them, then sync again (skipped)")
+            return
         path = self.index.get(pid)
         if not path:
             self.problems.append(f"{pid}: no card with this id under data/products/ (skipped)")
@@ -557,6 +566,8 @@ def main() -> int:
     export = json.loads(Path(args.export).read_text(encoding="utf-8"))
     run = Run(root, args)
     run.say(f"Studio sync · {'DRY RUN · ' if args.dry_run else ''}repo {root}")
+    for cid, paths in sorted(run.dup_ids.items()):
+        run.say(f"! duplicate card id {cid}: {', '.join(str(x.relative_to(root)) for x in paths)} (edits to it are refused)")
     run.say("")
     edits = as_items(export.get("product_edits"))
     news = as_items(export.get("product_new"))

@@ -407,7 +407,7 @@
 | כפרי | bath/floor-planter | planter-zendrop-seagrass-belly-38x34 | גבולי, ‏±7% |
 | כפרי | bath/ledge-planter | herb-pots-cj-fern-print-terracotta-pot-11-pair | 4.5% מתחת לגובה |
 | כפרי | hall/bench-cushion | bench-cushion-aliexpress-custom-bench-cushion-chenille-743098 | מידה רק בהזמנה מיוחדת |
-| כפרי | kids/pendant | pendant-aliexpress-rustic-woven-pendant-light-200914 | ראטן |
+| כפרי | kids/pendant | pendant-aliexpress-rustic-woven-pendant-light-200914-kids | ראטן |
 | כפרי | work/bookends | bookends-aliexpress-bamboo-bookends-897382 | במבוק |
 | כפרי | work/desk-tray | desk-tray-cj-acacia-organic-tray-30x20 | 2 ס"מ מעבר לרוחב |
 | נורדי | work/shelf-boxes | basket-cj-jute-cotton-rope-cylinder-30-work | סלים עגולים במקום קופסאות |

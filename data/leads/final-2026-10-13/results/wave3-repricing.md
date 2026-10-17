@@ -64,7 +64,7 @@
 | living-room/floor-lamp | עמוד עץ מלא כהה, אהיל קפלים לבן ובסיס פליז (518387) | ₪229 → ₪949 | ₪683.2 | 4.5% ⚑ | `floor-lamp-aliexpress-chinese-solid-wood-floor-518387` |
 | living-room/pendant | תוף פשתן תלת-שכבתי 40, אור חם (979993) | ₪299 → ₪439 | ₪295.1 | 10% ⚑ | `pendant-aliexpress-wabi-sabi-cloth-pendant-979993` |
 | master/bedside-sconces | חבל מדורג (968057) | ₪349 → ₪499 | ₪199.9 | 42.1% | `bedside-sconces-aliexpress-joyinled-boho-style-sconce-968057` |
-| master/floor-lamp | עמוד עץ מלא כהה, אהיל קפלים לבן ובסיס פליז (518387) | ₪349 → ₪949 | ₪683.2 | 4.5% ⚑ | `floor-lamp-aliexpress-chinese-solid-wood-floor-518387` |
+| master/floor-lamp | עמוד עץ מלא כהה, אהיל קפלים לבן ובסיס פליז (518387) | ₪349 → ₪949 | ₪683.2 | 4.5% ⚑ | `floor-lamp-aliexpress-chinese-solid-wood-floor-518387-master` |
 
 ⚑ = מתחת לרף 40% (ה.11). כל הכרטיסים: `status: candidate`, ‏`safety.certificates` עם CE (ו-IP65 בקוביות הטרוורטין) כ-"seller attribute" עם קישור לרישום, `safety.ce: true`. צבעים, משקל ויזואלי ומידות מולאו מתמונות הרישום כהערכה, לבדיקה ב-QA. כל הכרטיסים עוברים את `product-card.schema.json` 1.1.
 

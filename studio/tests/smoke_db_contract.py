@@ -6,21 +6,24 @@ the test fails until frontend-dev (and the card owners) fix them, and then keeps
 
 1. Python, no browser:
    - every card id under data/products/** is unique: product_edits/<id> must point at exactly one card (DB-2);
-   - apply_edits.py finds every card by its id: its index is the file name, so a card whose file name is not its id
-     (zendrop-2883892.json, furniture-express-*.json) can never be synced (DB-3);
+   - apply_edits.py finds every card by its id (its Run.index, the one it writes through): a card whose file name is not
+     its id (zendrop-2883892.json, furniture-express-*.json) must still be found, and an id two cards claim is refused (DB-3);
    - every answered decision in status/decisions.json stores `answer` as the page reads it, {option, note, at, by},
      not a bare option string next to answer_text (DB-1);
    - every answer whose option is not one of the decision's options carries a note or answer_text, so the page has
      something to show instead of a raw id.
    With --db DIR (an export of the published page's db: DIR/decisions/<id>.json, then DIR/out/<id>.json written over
-   it and DIR/out/<id>-ans.json applied as an update, the way the art director syncs):
+   it and DIR/out/<id>-<suffix>.json (-ans, -fix) applied as an update, with {"__delete__": true} removing a field, the
+   way the art director syncs):
    - no decision is open in the db while the repo has it answered or applied;
    - no db document stores `answer` as a bare string.
 2. Browser (the real data built offline into a temp folder, the mock db of smoke_products.py):
    - a decision answered in the repo whose db document is still open (LK1 before the 17.10 sync) is not shown as open,
      and is not in "לאשר את כל ההמלצות הפתוחות" (the bulk approve would overwrite the owner's answer) (DB-4);
-   - a db document with a string answer (VR1 as it is in the db today) shows the answer text, not an empty "התשובה:";
-   - read-only (no db): the same decision from data.json shows its answer text;
+   - a db document with a string answer (as VR1 was in the db before the 17.10 sync; when no such answer is left, one is
+     made from an answered decision) shows the answer text, never "function at()";
+   - read-only (no db): the same decision from data.json shows its answer text, and so does a data.json whose answer is
+     a bare string next to answer_text (the old repo shape);
    - no JavaScript errors.
 
 Usage:  python3 studio/tests/smoke_db_contract.py [--db DIR] [--keep]
@@ -28,9 +31,11 @@ Exit code 0 = all checks passed, 1 = a check failed.
 """
 from __future__ import annotations
 
+import importlib.util
 import json
 import shutil
 import sys
+import types
 import tempfile
 from collections import defaultdict
 from pathlib import Path
@@ -47,6 +52,15 @@ UI_FIELDS = ("_src", "_rooms", "_order")
 
 def arg(name):
     return sys.argv[sys.argv.index(name) + 1] if name in sys.argv and sys.argv.index(name) + 1 < len(sys.argv) else None
+
+
+def apply_edits_run():
+    """studio/apply_edits.py's Run on the repo, read-only: its index is the one an edit is written through."""
+    spec = importlib.util.spec_from_file_location("apply_edits_test", ROOT / "studio" / "apply_edits.py")
+    m = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(m)
+    args = types.SimpleNamespace(dry_run=True, no_move=True, all=False, force=False)
+    return m.Run(ROOT, args)
 
 
 def repo_decisions() -> dict:
@@ -72,10 +86,12 @@ def python_checks():
     dups = {k: v for k, v in by_id.items() if len(v) > 1}
     check(not dups, f"every card id is unique ({len(by_id)} ids)" + "".join(
         f"\n        {k}: " + ", ".join(str(p.relative_to(ROOT)) for p in v) for k, v in sorted(dups.items())))
-    index = {p.stem for v in by_id.values() for p in v}   # apply_edits.Run.index: {file stem: path}
-    lost = sorted(k for k in by_id if k not in index)
-    check(not lost, f"apply_edits.py finds every card by its id ({len(lost)} cannot be synced)" + "".join(
+    run = apply_edits_run()
+    lost = sorted(k for k, v in by_id.items() if len(v) == 1 and run.index.get(k) != v[0])
+    check(not lost, f"apply_edits.py finds every card by its id ({len(lost)} cannot be synced; "
+          f"{sum(1 for k, v in by_id.items() if v[0].stem != k)} file names are not the id)" + "".join(
         f"\n        {k} ({by_id[k][0].relative_to(ROOT)})" for k in lost))
+    check(set(run.dup_ids) == set(dups), f"apply_edits.py knows the duplicate ids and refuses them ({sorted(run.dup_ids)})")
 
     print("- status/decisions.json: the answer as the page reads it")
     dec = repo_decisions()
@@ -92,15 +108,31 @@ def python_checks():
     check(not bare, f"an answer outside the options carries a note or answer_text ({', '.join(bare) or 'none'})")
 
 
+def _update(doc: dict, patch: dict) -> dict:
+    for k, v in patch.items():
+        if isinstance(v, dict) and v.get("__delete__") is True:
+            doc.pop(k, None)
+        else:
+            doc[k] = v
+    return doc
+
+
 def load_db(folder: Path) -> dict:
+    """The db as the art director left it: the export, then out/<id>.json (whole documents), then out/<id>-<suffix>.json
+    (updates: -ans, -fix, ...) in name order. A decision id may contain a dash (FR-A): an update is a file whose name
+    minus its last "-word" is a known document."""
     db = {f.stem: json.loads(f.read_text(encoding="utf-8")) for f in sorted((folder / "decisions").glob("*.json"))}
     out = folder / "out"
     if out.is_dir():
-        for f in sorted(out.glob("*.json")):
-            if not f.stem.endswith("-ans"):
-                db[f.stem] = json.loads(f.read_text(encoding="utf-8"))
-        for f in sorted(out.glob("*-ans.json")):
-            db.setdefault(f.stem[:-4], {}).update(json.loads(f.read_text(encoding="utf-8")))
+        files = sorted(out.glob("*.json"))
+        whole, updates = [], []
+        for f in files:
+            base, _, suffix = f.stem.rpartition("-")
+            (updates if base and suffix.isalpha() and suffix.islower() and (base in db or (out / f"{base}.json").exists()) else whole).append((base, f))
+        for _, f in whole:
+            db[f.stem] = json.loads(f.read_text(encoding="utf-8"))
+        for base, f in updates:
+            _update(db.setdefault(base, {}), json.loads(f.read_text(encoding="utf-8")))
     return db
 
 
@@ -120,7 +152,20 @@ def db_checks(folder: Path):
 # --------------------------------------------------------------------------- 2. browser
 
 def answered_with_string(dec: dict) -> dict | None:
-    return next((d for d in dec.values() if isinstance(d.get("answer"), str) and str(d.get("answer_text") or "").strip()), None)
+    """A decision whose answer is a bare option string next to answer_text; when none is left (the 17.10 sync), one is
+    made from an answered decision with a note, in the old shape, so the page is still tested against it."""
+    found = next((d for d in dec.values() if isinstance(d.get("answer"), str) and str(d.get("answer_text") or "").strip()), None)
+    if found:
+        return found
+    src = next((d for d in dec.values() if isinstance(d.get("answer"), dict) and str(d["answer"].get("note") or "").strip()
+                and d["answer"].get("option") not in {o.get("id") for o in d.get("options") or []}), None) \
+        or next((d for d in dec.values() if isinstance(d.get("answer"), dict) and str(d["answer"].get("note") or "").strip()), None)
+    if not src:
+        return None
+    a = src["answer"]
+    old = {k: v for k, v in src.items() if k != "answer"}
+    old.update({"answer": a.get("option") or "", "answer_text": a["note"], "answered": str(a.get("at") or "")[:10] or None})
+    return old
 
 
 def answered_in_repo(dec: dict) -> dict | None:
@@ -151,19 +196,51 @@ def browser_checks(browser, base):
     bulk = page.evaluate("() => [...document.querySelectorAll('#dec-confirm li code')].map(e => e.textContent)")
     check(rid not in bulk, f"{rid}: not in the bulk approve list ({len(bulk)} in the list)")
     text = s_dec.get("answer_text", "")
-    shown = page.evaluate(f"""() => {{ const b = document.querySelector('.dcard[data-id={json.dumps(sid)}] .answer-box');
-        return b ? b.textContent.replace(/\\s+/g, ' ').trim() : ''; }}""")
-    check(text[:20] in shown, f"{sid}: the db's string answer shows its text ('{shown[:80]}')")
+    shown = answer_text(page, sid)
+    check(text[:20] in shown and "function" not in shown, f"{sid}: the db's string answer shows its text ('{shown[:80]}')")
+    check(not page.evaluate("document.getElementById('dec-list').textContent.includes('function at')"), "live db: no decision card says 'function at()'")
     check(not errors, "live db: no JavaScript errors" + ("" if not errors else ": " + "; ".join(errors[:3])))
     ctx.close()
 
     print(f"- read-only (no db): {sid} from data.json")
     ctx, page, errors = T.open_page(browser, base, 390, screen="decisions", ready=".dcard", db=False)
-    shown = page.evaluate(f"""() => {{ const b = document.querySelector('.dcard[data-id={json.dumps(sid)}] .answer-box');
-        return b ? b.textContent.replace(/\\s+/g, ' ').trim() : ''; }}""")
+    shown = answer_text(page, sid)
     check(text[:20] in shown, f"{sid}: the answer text is shown read-only ('{shown[:80]}')")
+    check(not page.evaluate("document.getElementById('dec-list').textContent.includes('function at')"), "read-only: no decision card says 'function at()'")
     check(not errors, "read-only: no JavaScript errors" + ("" if not errors else ": " + "; ".join(errors[:3])))
     ctx.close()
+
+
+def old_shape_checks(browser, dist: Path, tmp: Path):
+    """data.json from a repo that still stores answers as a bare string next to answer_text (before the 17.10 sync)."""
+    dec = repo_decisions()
+    s_dec = answered_with_string(dec)
+    if not s_dec:
+        print("  skip  no answered decision with a note")
+        return
+    sid = s_dec["id"]
+    print(f"- read-only, the old repo shape in data.json: {sid} with answer '{s_dec['answer']}' and answer_text")
+    d2 = tmp / "old-shape"
+    shutil.copytree(dist, d2)
+    data = json.loads((d2 / "data.json").read_text(encoding="utf-8"))
+    for it in data["decisions"]["items"]:
+        if it["id"] == sid:
+            it.update({k: s_dec[k] for k in ("answer", "answer_text", "answered")})
+    (d2 / "data.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+    srv, base = T.serve(d2)
+    try:
+        ctx, page, errors = T.open_page(browser, base, 1280, screen="decisions", ready=".dcard", db=False)
+        shown = answer_text(page, sid)
+        check(s_dec["answer_text"][:20] in shown and "function" not in shown, f"{sid}: a bare string answer shows answer_text ('{shown[:80]}')")
+        check(not errors, "old shape: no JavaScript errors" + ("" if not errors else ": " + "; ".join(errors[:3])))
+        ctx.close()
+    finally:
+        srv.shutdown()
+
+
+def answer_text(page, did) -> str:
+    return page.evaluate(f"""() => {{ const b = document.querySelector('.dcard[data-id={json.dumps(did)}] .answer-box');
+        return b ? b.textContent.replace(/\\s+/g, ' ').trim() : ''; }}""")
 
 
 def main() -> int:
@@ -188,6 +265,7 @@ def main() -> int:
                     browser_checks(browser, base)
                 finally:
                     srv.shutdown()
+                old_shape_checks(browser, tmp / "dist", tmp)
                 browser.close()
     finally:
         if "--keep" not in sys.argv:

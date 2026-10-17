@@ -2,12 +2,16 @@
 """Build "the Studio" (internal back-office) into studio/dist/.
 
 Reads the repo's source-of-truth files (read-only) and writes:
-  dist/data.json        everything the page shows, computed from the repo
-                        (data/, docs/, assets/ and status/: board.md, decisions.json, blockers.json)
-  dist/img/p/<id>.webp  first image of each product, 360px long side, q72
+  dist/data.json        what the overview and most screens need, computed from the repo
+                        (data/, docs/, assets/ and status/: board.md, decisions.json, blockers.json); under 4 MB
+  dist/data-<name>.json the heavy parts the page loads when their screen opens (CHUNKS: the comparison's rooms, the
+                        sourcing results, furniture, boards, lead reports); data.json "chunks" lists them
+  dist/img/s/<room>-<n>-<hash>.webp  the product pictures, packed 36 to a sheet (6 x 6 cells of 320px, q74):
+                        one file per card did not fit the artifact's file limit (QA 2026-10-17, B1)
   dist/img/f/<n>.webp   frames and renders, 1280px long side, q78
-  dist/img/a/<h>.webp   AliExpress items without a card (compositions, next sourcing round), 360px, q72
   dist/index.html       the page (copied from studio/src/index.html)
+At the end it prints the published paths (studio/published-files.json) that this build no longer produces: the
+publish removes them, so the version stays under 511 files. Duplicate card ids are reported loudly.
 
 The room boards ("לוחות חדרים", data.json "boards") come from scripts/boards/room_boards.py, the single source of their
 logic; every card on a board gets its dist/img/p/<id>.webp from the same product-image pipeline and cache.
@@ -46,6 +50,7 @@ import ssl
 import subprocess
 import sys
 import time
+import urllib.parse
 import urllib.request
 from pathlib import Path
 
@@ -312,6 +317,27 @@ def pid_of(url: str) -> str | None:
     return m.group(1) if m else None
 
 
+def card_index(base: Path) -> tuple[dict, dict]:
+    """(card id -> path, card id -> [paths] for ids that more than one file claims), for data/products/**.
+    A card is found by its own `id`; the file name is only the fallback (a card without an id, or an old reference by
+    file name: zendrop-2883892.json holds basket-zendrop-seagrass-belly-foldable-38). The first file wins a duplicate."""
+    index, dups, stems = {}, {}, {}
+    for p in sorted(base.rglob("*.json")):
+        try:
+            cid = json.loads(p.read_text(encoding="utf-8")).get("id")
+        except Exception:
+            cid = None
+        cid = cid if isinstance(cid, str) and cid.strip() else p.stem
+        if cid in index:
+            dups.setdefault(cid, [index[cid]]).append(p)
+        else:
+            index[cid] = p
+        stems.setdefault(p.stem, p)
+    for stem, p in stems.items():
+        index.setdefault(stem, p)
+    return index, dups
+
+
 def load_products(room_ids=None) -> list[dict]:
     base = ROOT / "data" / "products"
     products = []
@@ -321,6 +347,11 @@ def load_products(room_ids=None) -> list[dict]:
         except Exception as e:  # keep going, report it
             log(f"  ! cannot read {rel(p)}: {e}")
             continue
+        if not isinstance(card, dict):
+            log(f"  ! {rel(p)}: not a card (a JSON object)")
+            continue
+        if not (isinstance(card.get("id"), str) and card["id"].strip()):
+            card["id"] = p.stem
         parts = p.relative_to(base).parts
         room = None
         slot = card.get("slot")
@@ -467,6 +498,33 @@ QTY_WHOLE_SET_NAME = [
     re.compile(r"\b(?:two|three|four|five|six)-piece\b|\b\d+\s*-?\s*(?:pcs|pieces)\s*/\s*set", re.I),
 ]
 QTY_COUNT = re.compile(r"set of (\d+)\s*=\s*\d+\s*units|כסט של (\d+) יחידות", re.I)
+# "2 x $1.48", "(2 x 1.48 + 8.26)", "3 x 9.98 USD", "2 × $20.01 =": the notes price a sale of N units of the card's cost
+# (QA 2026-10-17, M5: pair and set cards were sold as one unit). Only a money reading counts, never "15 x 15 x 30 cm".
+TIMES_COST = re.compile(r"(?<![\d.,])([2-9])\s*[x×]\s*(\$\s*)?(\d+(?:\.\d+)?)(\s*(?:USD|\+|=))?")
+
+
+def notes_times_cost(p: dict) -> tuple[int, str] | None:
+    """(N, the words) when the card's notes price the sale as N x the card's own cost, else None."""
+    cost = (p.get("price") or {}).get("cost")
+    if not isnum(cost) or cost <= 0:
+        return None
+    for m in TIMES_COST.finditer(p.get("notes") or ""):
+        if not (m.group(2) or m.group(4)):
+            continue
+        if abs(float(m.group(3)) - cost) <= 0.011:
+            return int(m.group(1)), m.group(0).strip()
+    return None
+
+
+def lead_qty(p: dict) -> tuple[int, str] | None:
+    """(units in the sale, file) from the card's final-round record (qty_in_sale / qty), when more than one."""
+    lr = p.get("_lead_rec") or {}
+    c = lr.get("rec") or {}
+    for k in ("qty_in_sale", "qty"):
+        q = c.get(k)
+        if isnum(q) and float(q).is_integer() and q > 1:
+            return int(q), lr.get("file") or ""
+    return None
 # How many pieces the card's cost covers, read from the room SKU (options.default_sku): the supplier's labels of its
 # option values ("1 PC W100cmxH275cm", "1PC (price is per piece)", "2PC W225cm", "4 pcs", "set of 2", "pair").
 # This is the strongest evidence: a SKU that is already a pair or a set is never multiplied by the slot's set size.
@@ -523,6 +581,9 @@ def sell_qty_default(p: dict, slot_by_key: dict) -> dict:
     home = set_of(p.get("_slot_key")) if p.get("_slot_key") else None
     shared = [(set_of(k), k) for k in p.get("_shared_in") or [] if set_of(k)]
     name, notes = p.get("name") or "", p.get("notes") or ""
+    own = p.get("sell_qty")
+    if isnum(own) and float(own).is_integer() and own >= 1:
+        return {"qty": int(own), "sure": True, "set_of": home, "reason": f"הכרטיס קובע {int(own)} יח' למכירה (sell_qty)"}
     pcs, pcs_label = sku_pieces(p)
     if pcs is not None and pcs > 1:
         m = QTY_COUNT.search(name) or QTY_COUNT.search(notes)
@@ -543,6 +604,15 @@ def sell_qty_default(p: dict, slot_by_key: dict) -> dict:
         return {"qty": 1, "sure": False, "set_of": need, "sku_pieces": pcs,
                 "reason": f"{why}, והמק\"ט שבחדר הוא כבר סט של {pcs} ({pcs_label}). לא ברור אם צריך עוד סט"}
     out = _sell_qty_notes(name, notes, home, shared)
+    if out["qty"] == 1:
+        # the card says the cost is per unit and prices the sale as N units: the round's record, then the notes
+        lq, tc = lead_qty(p), notes_times_cost(p)
+        if lq:
+            out = {"qty": lq[0], "sure": True, "set_of": home or lq[0],
+                   "reason": f"הליקוט האחרון מתמחר {lq[0]} יח' במכירה ({lq[1]}), והעלות בכרטיס ליחידה"}
+        elif tc:
+            out = {"qty": tc[0], "sure": True, "set_of": home or tc[0],
+                   "reason": f"ההערות מחשבות את המכירה כ-{tc[0]} × העלות שבכרטיס (\"{tc[1][:40]}\")"}
     if pcs == 1:
         out["sku_pieces"] = 1
         if out["qty"] > 1 and out.get("reason"):
@@ -631,48 +701,30 @@ def to_webp(img: Image.Image, size: int, quality: int, out: Path) -> tuple[int, 
     return img.size
 
 
-def placeholder(hex_color: str, out: Path) -> tuple[int, int]:
-    try:
-        c = tuple(int(hex_color[i:i + 2], 16) for i in (1, 3, 5))
-    except Exception:
-        c = (217, 214, 208)
-    img = Image.new("RGB", (P_SIZE, P_SIZE), (238, 236, 232))
-    d = ImageDraw.Draw(img)
-    d.rectangle([60, 60, P_SIZE - 60, P_SIZE - 60], fill=c)
-    for x in range(-P_SIZE, P_SIZE, 18):  # hatching marks it as "no photo"
-        d.line([(x, P_SIZE), (x + P_SIZE, 0)], fill=(220, 217, 211), width=2)
-    d.rectangle([60, 60, P_SIZE - 60, P_SIZE - 60], fill=c)
-    out.parent.mkdir(parents=True, exist_ok=True)
-    img.save(out, "WEBP", quality=P_Q, method=6)
-    return img.size
-
-
 def build_product_images(products: list[dict], offline: bool) -> dict:
+    """Pick each product's picture: the first of its first 3 image URLs that is in the cache or downloads (into
+    studio/.cache/p/). Nothing is written to dist here: pack_product_sheets() draws every picture into a sheet."""
     stats = {"downloaded": 0, "cached": 0, "failed": 0, "fallback": 0}
 
     def work(p):
         urls = (p.get("images") or {}).get("urls") or []
-        out = DIST / "img" / "p" / f"{p['id']}.webp"
         errors = []
         for i, url in enumerate(urls[:3]):
+            if not isinstance(url, str):
+                continue
             b, err, cached = fetch_cached(url, offline)
             if b is None:
                 errors.append(f"#{i + 1}: {err}")
                 continue
-            try:
-                w, h = to_webp(Image.open(io.BytesIO(b)), P_SIZE, P_Q, out)
-            except Exception as e:
-                errors.append(f"#{i + 1}: {type(e).__name__}: {e}"[:160])
-                continue
             note = None
             if i > 0:
                 note = f"התמונה הראשונה לא נטענה ({errors[0]}); מוצגת תמונה {i + 1}."
-            return p["id"], {"src": f"img/p/{p['id']}.webp", "w": w, "h": h, "ok": True, "index": i,
-                             "cached": cached, "note": note}
-        w, h = placeholder((p.get("colors") or {}).get("dominant_hex", ""), out)
+            return p["id"], {"ok": True, "index": i, "cached": cached, "note": note,
+                             "_src": str(CACHE / "p" / (hashlib.sha1(url.encode()).hexdigest()[:20] + ".bin"))}
         why = "; ".join(errors) if errors else "אין כתובות תמונה בכרטיס"
-        return p["id"], {"src": f"img/p/{p['id']}.webp", "w": w, "h": h, "ok": False, "index": None,
-                         "cached": False, "note": f"ההורדה נכשלה, מוצג מקום שמור בצבע הדומיננטי. {why}"}
+        return p["id"], {"ok": False, "index": None, "cached": False,
+                         "note": f"ההורדה נכשלה, מוצג מקום שמור בצבע הדומיננטי. {why}",
+                         "_ph": str((p.get("colors") or {}).get("dominant_hex") or "")}
 
     results = {}
     with concurrent.futures.ThreadPoolExecutor(max_workers=8) as ex:
@@ -688,6 +740,129 @@ def build_product_images(products: list[dict], offline: bool) -> dict:
                 stats["fallback"] += 1
     for p in products:
         p["_img"] = results[p["id"]]
+    return stats
+
+
+# Product pictures are packed into sheets (2026-10-17, QA B1: one file per card hit the artifact's file limit, and the
+# house will have thousands of products). A sheet is a grid of square cells, each picture contained in its cell on white
+# (every product box in the page is a white square). Sheets are per room, the cards in slot order, so a room's screens
+# load a few sheets; the name carries a hash of what is drawn, so a changed sheet is a new file (never a stale cache)
+# and an unchanged one keeps its name between builds (the publish sends only new names).
+SHEET_CELL, SHEET_COLS, SHEET_ROWS, SHEET_Q = 320, 6, 6, 74
+SHEET_PAD = 4  # white margin inside a cell: no bleed from the next cell when the browser scales the sheet
+
+
+def _cell_image(info: dict) -> tuple[Image.Image | None, str | None]:
+    """(the picture fitted to a cell, error) from the cached bytes, or (None, error)."""
+    try:
+        im = Image.open(info["_src"])
+        im.draft("RGB", (SHEET_CELL * 2, SHEET_CELL * 2))
+        if im.mode in ("P", "LA", "RGBA", "PA"):
+            im = im.convert("RGBA")
+            bg = Image.new("RGBA", im.size, (255, 255, 255, 255))
+            bg.alpha_composite(im)
+            im = bg.convert("RGB")
+        elif im.mode != "RGB":
+            im = im.convert("RGB")
+        box = SHEET_CELL - 2 * SHEET_PAD
+        im.thumbnail((box, box), Image.LANCZOS)
+        return im, None
+    except Exception as e:
+        return None, f"{type(e).__name__}: {e}"[:160]
+
+
+def _cell_placeholder(hex_color: str) -> Image.Image:
+    try:
+        c = tuple(int(hex_color[i:i + 2], 16) for i in (1, 3, 5))
+    except Exception:
+        c = (217, 214, 208)
+    n = SHEET_CELL
+    img = Image.new("RGB", (n, n), (238, 236, 232))
+    d = ImageDraw.Draw(img)
+    for x in range(-n, n, 16):  # hatching marks it as "no photo"
+        d.line([(x, n), (x + n, 0)], fill=(220, 217, 211), width=2)
+    m = n // 6
+    d.rectangle([m, m, n - m, n - m], fill=c)
+    return img
+
+
+def sheet_group(p: dict) -> str:
+    return "leads" if p.get("_lead") else (p.get("_room") or ("pool" if p.get("_pool") else "other"))
+
+
+def pack_product_sheets(products: list[dict]) -> dict:
+    """Draw every product's picture into dist/img/s/<group>-<n>-<hash>.webp and point p["_img"] at its cell:
+    {sheet, cell: [col, row], grid: [cols, rows]}. Sheets are cached in studio/.cache/s/ by what they hold."""
+    out_dir = DIST / "img" / "s"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    cdir = CACHE / "s"
+    cdir.mkdir(parents=True, exist_ok=True)
+    groups: dict[str, list[dict]] = {}
+    for p in products:
+        groups.setdefault(sheet_group(p), []).append(p)
+    per = SHEET_COLS * SHEET_ROWS
+    stats = {"sheets": 0, "cells": 0, "from_cache": 0, "bytes": 0, "decode_failed": 0}
+    jobs = []
+    for g in sorted(groups):
+        rows = sorted(groups[g], key=lambda p: (p.get("_slot_key") or "~", p["id"]))
+        for n in range(0, len(rows), per):
+            jobs.append((g, n // per, rows[n:n + per]))
+
+    def key_of(cells):
+        parts = [f"{SHEET_CELL}|{SHEET_COLS}|{SHEET_PAD}|{SHEET_Q}"]
+        for p in cells:
+            im = p["_img"]
+            parts.append(f"{p['id']}:{Path(im['_src']).name if im.get('_src') else 'ph' + im.get('_ph', '')}")
+        return hashlib.sha1("\n".join(parts).encode()).hexdigest()
+
+    def work(job):
+        g, i, cells = job
+        h = key_of(cells)
+        rows_n = (len(cells) + SHEET_COLS - 1) // SHEET_COLS
+        cols_n = SHEET_COLS if rows_n > 1 else len(cells)
+        name = f"{g}-{i + 1}-{h[:10]}.webp"
+        cached, meta = cdir / f"{h}.webp", cdir / f"{h}.json"
+        failed = {}
+        if cached.exists() and meta.exists():
+            try:
+                failed = json.loads(meta.read_text(encoding="utf-8")).get("failed") or {}
+                shutil.copyfile(cached, out_dir / name)
+                return g, i, cells, name, cols_n, rows_n, failed, True
+            except Exception:
+                failed = {}
+        sheet = Image.new("RGB", (cols_n * SHEET_CELL, rows_n * SHEET_CELL), (255, 255, 255))
+        for k, p in enumerate(cells):
+            x0, y0 = (k % SHEET_COLS) * SHEET_CELL, (k // SHEET_COLS) * SHEET_CELL
+            im, err = (_cell_image(p["_img"]) if p["_img"].get("_src") else (None, None))
+            if im is None:
+                if err:
+                    failed[p["id"]] = err
+                ph = _cell_placeholder(p["_img"].get("_ph") or (p.get("colors") or {}).get("dominant_hex") or "")
+                sheet.paste(ph, (x0, y0))
+            else:
+                sheet.paste(im, (x0 + (SHEET_CELL - im.width) // 2, y0 + (SHEET_CELL - im.height) // 2))
+        tmp = cached.with_suffix(".tmp")
+        sheet.save(tmp, "WEBP", quality=SHEET_Q, method=6)
+        tmp.replace(cached)
+        meta.write_text(json.dumps({"failed": failed, "ids": [p["id"] for p in cells]}), encoding="utf-8")
+        shutil.copyfile(cached, out_dir / name)
+        return g, i, cells, name, cols_n, rows_n, failed, False
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=4) as ex:
+        for g, i, cells, name, cols_n, rows_n, failed, hit in ex.map(work, jobs):
+            stats["sheets"] += 1
+            stats["cells"] += len(cells)
+            stats["from_cache"] += hit
+            stats["bytes"] += (out_dir / name).stat().st_size
+            for k, p in enumerate(cells):
+                im = p["_img"]
+                if p["id"] in failed and im.get("ok"):
+                    stats["decode_failed"] += 1
+                    im.update({"ok": False, "note": f"התמונה לא נפתחה ({failed[p['id']]}), מוצג מקום שמור."})
+                im.update({"sheet": f"img/s/{name}", "cell": [k % SHEET_COLS, k // SHEET_COLS], "grid": [cols_n, rows_n]})
+    for p in products:
+        for k in ("_src", "_ph"):
+            p["_img"].pop(k, None)
     return stats
 
 
@@ -1185,6 +1360,93 @@ def _clean_il_value(v):
     return out if (len(out) > 1 or comps) else None
 
 
+_BOARDS_MODULES: dict = {}
+
+
+def boards_module():
+    """scripts/boards/room_boards.py (BOARDS_SRC) as a module, loaded once per path."""
+    key = str(BOARDS_SRC)
+    if key not in _BOARDS_MODULES:
+        spec = importlib.util.spec_from_file_location("room_boards", BOARDS_SRC)
+        m = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(m)
+        _BOARDS_MODULES[key] = m
+    return _BOARDS_MODULES[key]
+
+
+def lead_records() -> dict:
+    """card id -> {rec, file, date}: the card's final-round record with a plain price (the repriced one first, then the
+    newest), the same records the boards read their margin from (room_boards.Context.records_any)."""
+    try:
+        ctx = boards_module().Context(cat={})
+    except Exception as e:
+        log(f"  ! final-round records: {rel(BOARDS_SRC)}: {type(e).__name__}: {e}")
+        return {}
+    out = {}
+    for cid, recs in ctx.records_any.items():
+        for _flag, date, fname, c in recs:
+            if isnum(c.get("price_ils")) and c["price_ils"] > 0:
+                out[cid] = {"rec": c, "file": fname, "date": date}
+                break
+    return out
+
+
+# premium pricing (ה.10, 2026-10-17): the designer judged the product premium, so the price may go up to the typical
+# Israeli price; the owner approves it ("תמחור פרימיום, לאישור")
+PREMIUM_RX = re.compile(r"premium\s+pricing\s*\(\s*(?:ה|h)\.\s*10|תמחור\s+פרימיום", re.I)
+
+
+def card_economics(p: dict) -> dict:
+    """A card without a row in data/economics/products.json (QA 2026-10-17, M4: the round-5 cards showed "חסר מחיר"):
+    its starting price from the card itself (price.retail_ils, price.suggested_retail), else from its final-round record
+    (price_ils at the Israeli value, the record the boards show), with the record's comparisons, its verdict against the
+    40% floor (ה.11) and whether it is priced as premium (ה.10). Marked "initial-...": a starting price, not approved."""
+    out = {}
+    pr = p.get("price") or {}
+    lr = p.get("_lead_rec") or {}
+    rec = lr.get("rec") or {}
+    for k, src in (("retail_ils", "initial-card"), ("suggested_retail", "initial-card")):
+        if isnum(pr.get(k)) and pr[k] > 0 and str(pr.get("currency") or "USD").upper() in ("USD", "ILS"):
+            out.update({"retail_ils": pr[k], "retail_src": src})
+            break
+    if "retail_ils" not in out and isnum(rec.get("price_ils")) and rec["price_ils"] > 0:
+        out.update({"retail_ils": rec["price_ils"], "retail_src": f"initial-leads ({lr.get('file')})"})
+    if not out:
+        return {}
+    if isinstance(rec.get("price_basis_he"), str) and rec["price_basis_he"].strip():
+        out["price_note"] = rec["price_basis_he"].strip()[:400]
+    comps = []
+    for c in rec.get("comps") or []:
+        url = c if isinstance(c, str) else (c.get("url") if isinstance(c, dict) else None)
+        if isinstance(url, str) and url.startswith("https://"):
+            comps.append({"retailer": re.sub(r"^www\.", "", urllib.parse.urlparse(url).hostname or ""), "title": "",
+                          "price": c.get("price") if isinstance(c, dict) and isnum(c.get("price")) else None, "url": url})
+    if comps:
+        iv = _clean_il_value({"comps": comps, "note": "ההשוואות מהליקוט האחרון (" + str(lr.get("file") or "") + ")"})
+        if iv:
+            out["il_value"] = iv
+    m = rec.get("margin_pct")
+    if isnum(m) and out["retail_ils"] == rec.get("price_ils"):
+        out["lead_margin_pct"] = m
+        out["price_flag"] = "loss" if m < 0 else "below-floor" if m < 40 else "ok"
+    out["from_card"] = True
+    return out
+
+
+def lead_freight(p: dict) -> dict | None:
+    """Shipping to Israel from the card's final-round record (ship_usd for the units of the sale), as a freight entry;
+    only when no freight file and no room SKU has it."""
+    lr = p.get("_lead_rec") or {}
+    c = lr.get("rec") or {}
+    if not isnum(c.get("ship_usd")) or c["ship_usd"] < 0:
+        return None
+    d = days_pair(c.get("ship_days"))
+    q = next((int(c[k]) for k in ("qty_in_sale", "qty") if isnum(c.get(k)) and float(c[k]).is_integer() and c[k] >= 1), 1)
+    opt = {"usd": float(c["ship_usd"]), "name": "מהליקוט", "days": f"{d[0]}-{d[1]}" if d else None}
+    return {"options": [opt], "cheapest": opt, "cheapest_under_20d": opt if d and d[1] <= 20 else None, "status": "ok",
+            "qty": q, "checked_at": lr.get("date"), "note": f"משלוח מהרשומה בליקוט האחרון ({lr.get('file')}), ל-{q} יח'"}
+
+
 def load_economics(eco_dir: Path, products: list[dict]) -> dict:
     out = {"dir": rel(eco_dir) if eco_dir.is_relative_to(ROOT) else str(eco_dir), "settings": None, "budget": None,
            "products": {}, "freight": None, "freight_files": [], "bundles": None, "files": [], "storefront": None}
@@ -1263,7 +1525,8 @@ def load_economics(eco_dir: Path, products: list[dict]) -> dict:
             out["files"].append(bp2.name)
         except Exception as e:
             log(f"  ! cannot read {bp2.name}: {e}")
-    n_fr = {"cj": 0, "zendrop": 0, "aliexpress": 0, "card": 0}
+    n_fr = {"cj": 0, "zendrop": 0, "aliexpress": 0, "card": 0, "leads": 0}
+    n_from_card = 0
     n_manual = n_no_fast = n_qty = n_no_route = 0
 
     def opt(o):
@@ -1295,6 +1558,10 @@ def load_economics(eco_dir: Path, products: list[dict]) -> dict:
             cs = card_sku_shipping(p)
             if cs:
                 src, fe, fdate = "card", cs, None
+        if fe is None and pid not in manual:
+            lf = lead_freight(p)
+            if lf:
+                src, fe, fdate = "leads", lf, lf.get("checked_at")
         if fe is not None:
             under = pick_freight(fe)
             fr = {"src": src, "cheapest": opt(fe.get("cheapest")), "under20": opt(under[2]) if under else None,
@@ -1339,9 +1606,17 @@ def load_economics(eco_dir: Path, products: list[dict]) -> dict:
         if isnum(q) and float(q).is_integer() and q >= 1:
             e["sell_qty"] = int(q)
             n_qty += 1
+        if pid not in manual:
+            ce = card_economics(p)
+            if ce:
+                e.update(ce)
+                n_from_card += 1
+        if m.get("premium") is True or PREMIUM_RX.search(p.get("notes") or "") or PREMIUM_RX.search(str(e.get("price_note") or "")):
+            e["premium"] = True
         out["products"][pid] = e
     out["counts"] = {"shipping_cj": n_fr["cj"], "shipping_zendrop": n_fr["zendrop"], "shipping_aliexpress": n_fr["aliexpress"],
-                     "shipping_card": n_fr["card"], "shipping_manual": n_manual, "no_fast_shipping": n_no_fast,
+                     "shipping_card": n_fr["card"], "shipping_leads": n_fr["leads"], "from_card": n_from_card,
+                     "shipping_manual": n_manual, "no_fast_shipping": n_no_fast,
                      "no_route": n_no_route, "sell_qty": n_qty,
                      "initial_prices": sum(1 for v in out["products"].values() if "retail_ils" in v and str(v.get("retail_src") or "").startswith("initial")),
                      "retail": sum(1 for v in out["products"].values() if "retail_ils" in v)}
@@ -2251,25 +2526,24 @@ def load_slot_ids() -> dict:
 def load_boards(products: list[dict], offline: bool) -> dict:
     """The room boards (2026-10-17): one board per style and room, exactly as scripts/boards/room_boards.py computes them
     (that module is the single source of the logic; its CLI renders the same data as images). Every card on a board must
-    have its thumbnail in dist/img/p/<id>.webp: the product-image pipeline already makes one per card, and any card that
-    is still without one goes through the same pipeline here. Nothing secret may reach data.json: the boards pass the same
-    redact() check as the office."""
+    have its picture: the product-image pipeline gives every card one (a cell in a sheet, pack_product_sheets()), and any
+    card that is still without one goes through the same pipeline here. Nothing secret may reach data.json: the boards
+    pass the same redact() check as the office."""
     try:
-        spec = importlib.util.spec_from_file_location("room_boards", BOARDS_SRC)
-        rb = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(rb)
-        data = rb.boards()
+        data = boards_module().boards()
     except Exception as e:  # the rest of the Studio is still built; the screen says why it is empty
         log(f"  ! boards: {rel(BOARDS_SRC)} failed: {type(e).__name__}: {e}")
         return {"present": False, "error": f"{type(e).__name__}: {e}"[:300], "src": rel(BOARDS_SRC), "boards": []}
+    if (data.get("audit") or {}).get("error"):
+        log(f"  ! boards: the designer audits did not load: {data['audit']['error']}")
     by_id = {p["id"]: p for p in products}
     ids = sorted({pk["card_id"] for b in data["boards"] for s in b["slots"] for pk in s.get("picks") or []})
-    todo = [by_id[i] for i in ids if i in by_id and not (DIST / "img" / "p" / f"{i}.webp").exists()]
+    todo = [by_id[i] for i in ids if i in by_id and not by_id[i].get("_img")]
     if todo:
         build_product_images(todo, offline)
     not_cards = [i for i in ids if i not in by_id]
     placeholders = [i for i in ids if i in by_id and not (by_id[i].get("_img") or {}).get("ok")]
-    with_file = [i for i in ids if (DIST / "img" / "p" / f"{i}.webp").exists()]
+    with_file = [i for i in ids if i in by_id and by_id[i].get("_img")]
     # secrets: the free text (labels, the reasons quoted from a card's notes) goes through redact(); ids are not free
     # text (a card file's id, a slot of data/slots/): they must be known slugs. redact() is not run on the ids, because
     # its "sk-..." pattern also matches inside "desk-organizer" and would break the links.
@@ -3231,6 +3505,106 @@ def load_next_sourcing(src_dir: Path, res_dir: Path | None, ctx: CompCtx, comps:
     return out
 
 
+# --------------------------------------------------------------------------- official coverage, data chunks, publish
+
+COVERAGE_JSON = ROOT / "data" / "leads" / "final-2026-10-13" / "coverage.json"
+
+
+def load_coverage(path: Path = COVERAGE_JSON) -> dict:
+    """The official coverage (scripts/sourcing/final_round_coverage.py -> coverage.json): per style and in total, the
+    share of slots with 3 options ready to sell (pct_ready) and with Israeli shops too (pct_any). The Studio shows it on
+    the overview and the boards screen (QA 2026-10-17, M7); the boards' own map counts something else."""
+    if not path.exists():
+        return {"present": False, "file": rel(path)}
+    try:
+        d = read_json(path)
+    except Exception as e:
+        log(f"  ! coverage: cannot read {rel(path)}: {e}")
+        return {"present": False, "file": rel(path), "error": f"{type(e).__name__}: {e}"[:200]}
+    keys = ("eligible", "covered_ready", "covered_any", "pct_ready", "pct_any", "pct_one_ready", "pct_one_any",
+            "on_hold", "pct_ready_incl_on_hold")
+    styles = []
+    for sid, v in (d.get("styles") or {}).items():
+        if isinstance(v, dict):
+            styles.append(dict({"id": sid, "he": STYLE_FALLBACK_HE.get(sid, sid)}, **{k: v[k] for k in keys if isnum(v.get(k))}))
+    order = {s: i for i, s in enumerate(STYLE_ORDER)}
+    styles.sort(key=lambda s: order.get(s["id"], 99))
+    tot = d.get("total") or {}
+    return {"present": True, "file": rel(path), "date": d.get("date"), "fit_threshold": d.get("fit_threshold"),
+            "styles": styles, "total": {k: tot[k] for k in keys + ("target_pct",) if isnum(tot.get(k))},
+            "target_metric": tot.get("target_metric") if isinstance(tot.get("target_metric"), str) else None,
+            "remaining": {k: len(v) for k, v in (d.get("remaining") or {}).items() if isinstance(v, list)}}
+
+
+# The screens that are not the overview load their data when they open (QA 2026-10-17, M9: one 14.9 MB data.json took
+# 17.9 s to the overview on a slow phone). Each chunk file holds {key: value} for whole keys (None) or {key: {sub: ...}}
+# for the heavy parts of a key whose light parts stay in data.json; data.json "chunks" lists them for the page.
+CHUNKS = (("compare", "comparison", ("rooms",)), ("sourcing", "next_sourcing", ("results", "dropped")),
+          ("furniture", "furniture", None), ("boards", "boards", None), ("leads", "leads", None))
+CORE_LIMIT_BYTES = 4 * 1024 * 1024  # the first load (data.json); a warning above it
+
+
+def split_chunks(data: dict) -> dict:
+    """Move the chunks out of data (in place) and return {file name: chunk}; data["chunks"] says where they went."""
+    files, index = {}, {}
+    for name, key, subs in CHUNKS:
+        if key not in data or data[key] is None:
+            continue
+        v = data[key]
+        if subs is None:
+            part = {key: v}
+            del data[key]
+        elif isinstance(v, dict) and any(s in v for s in subs):
+            part = {key: {s: v.pop(s) for s in subs if s in v}}
+        else:
+            continue
+        fname = f"data-{name}.json"
+        files[fname] = part
+        index[name] = {"file": fname, "keys": {key: list(subs) if subs else None}}
+    data["chunks"] = index
+    return files
+
+
+def read_dist_data(dist: Path) -> dict:
+    """data.json with its chunks merged back (for the tests and tools that read a build)."""
+    data = json.loads((dist / "data.json").read_text(encoding="utf-8"))
+    for name, c in (data.get("chunks") or {}).items():
+        f = dist / c["file"]
+        if not f.exists():
+            continue
+        part = json.loads(f.read_text(encoding="utf-8"))
+        for key, subs in (c.get("keys") or {}).items():
+            if subs is None:
+                data[key] = part.get(key)
+            elif isinstance(part.get(key), dict):
+                data.setdefault(key, {}).update(part[key])
+    return data
+
+
+# The paths of the published version (Artifact files listing). After a publish, the art director refreshes it (the
+# Artifact tool: action "list", scope "files"). The build prints what the publish must remove: paths in it that this
+# build no longer produces (old img/a and img/p pictures, older sheets), so the version stays under 511 files.
+PUBLISHED_FILES = STUDIO / "published-files.json"
+PUBLISH_MAX_SEND, VERSION_MAX_FILES = 255, 511
+
+
+def publish_plan(produced: list[str], path: Path = PUBLISHED_FILES) -> dict:
+    out = {"file": rel(path), "present": path.exists(), "stale": [], "new": [], "published": None}
+    if not path.exists():
+        return out
+    try:
+        d = read_json(path)
+        pub = d.get("paths") if isinstance(d, dict) else d
+        pub = [x for x in pub or [] if isinstance(x, str)]
+    except Exception as e:
+        out["error"] = f"{type(e).__name__}: {e}"[:200]
+        return out
+    prod = set(produced)
+    out.update({"published": len(pub), "version": d.get("version") if isinstance(d, dict) else None,
+                "stale": sorted(set(pub) - prod), "new": sorted(prod - set(pub))})
+    return out
+
+
 def main() -> int:
     global DIST
     offline = "--offline" in sys.argv
@@ -3260,20 +3634,31 @@ def main() -> int:
     order, rooms = load_rooms(plan)
     slots = load_slots(order, rooms)
     products = load_products(set(order))
+    # one id, one card (QA 2026-10-17, M1): a second card with the same id hides the first in the Studio, and a Studio
+    # edit would land in the wrong file (studio/apply_edits.py refuses such an id). Said loudly, here and at the end.
+    by_id_paths: dict[str, list[str]] = {}
+    for p in products:
+        by_id_paths.setdefault(p["id"], []).append(p["_path"])
+    dup_ids = {k: v for k, v in sorted(by_id_paths.items()) if len(v) > 1}
+    for k, v in dup_ids.items():
+        log(f"  ! DUPLICATE CARD ID {k}: {', '.join(v)}")
     n_dup = mark_duplicates(products)
     attach_candidates(slots, products)
     slot_by_key = {s["key"]: s for rows in slots.values() for s in rows}
+    recs = lead_records()
     for p in products:
+        p["_lead_rec"] = recs.get(p["id"])
         p["_sell_qty"] = sell_qty_default(p, slot_by_key)
     n_qty = sum(1 for p in products if p["_sell_qty"]["qty"] > 1)
     n_unsure = sum(1 for p in products if not p["_sell_qty"]["sure"])
-    log(f"  rooms {len(order)} · slots {sum(len(v) for v in slots.values())} · products {len(products)} · duplicate cards {n_dup}")
+    log(f"  rooms {len(order)} · slots {sum(len(v) for v in slots.values())} · products {len(products)} ({len(by_id_paths)} ids)"
+        f" · duplicate cards {n_dup} (same supplier listing) · duplicate ids {len(dup_ids)}")
     log(f"  sell quantity: {n_qty} cards sold as a set by default · {n_unsure} not sure (default 1)")
 
     # fresh dist (studio/dist is generated output)
     if DIST.exists():
         shutil.rmtree(DIST)
-    (DIST / "img" / "p").mkdir(parents=True)
+    (DIST / "img" / "s").mkdir(parents=True)
     (DIST / "img" / "f").mkdir(parents=True)
 
     pstats = build_product_images(products, offline)
@@ -3297,7 +3682,8 @@ def main() -> int:
         log(f"  economics: {', '.join(economics['files'])} · shipping from CJ {c.get('shipping_cj', 0)}, Zendrop {c.get('shipping_zendrop', 0)},"
             f" AliExpress {c.get('shipping_aliexpress', 0)}, card SKU {c.get('shipping_card', 0)}, manual {c.get('shipping_manual', 0)}"
             f" · no route to Israel {c.get('no_route', 0)} · no option within 20 days {c.get('no_fast_shipping', 0)}"
-            f" · retail prices {c.get('retail', 0)} ({c.get('initial_prices', 0)} initial) · sell quantities {c.get('sell_qty', 0)}")
+            f" · retail prices {c.get('retail', 0)} ({c.get('initial_prices', 0)} initial, {c.get('from_card', 0)} from the card or its final-round record"
+            f", shipping from that record {c.get('shipping_leads', 0)}) · sell quantities {c.get('sell_qty', 0)}")
     else:
         log(f"  economics: no files in {economics['dir']} (the page shows its defaults)")
 
@@ -3331,8 +3717,9 @@ def main() -> int:
     res = (next_sourcing.get("results") or {})
     targets = [("ae:" + i, ctx.ae[i].get("img_url")) for i in sorted(ctx.wanted) if ctx.ae.get(i)]
     targets += [("res:" + r["img_url"], r["img_url"]) for rows in res.get("by_slot", {}).values() for r in rows if not r.get("card") and r.get("img_url")]
-    budget = LIMIT_FILES - sum(1 for x in DIST.rglob("*") if x.is_file()) - 20
-    thumbs = build_thumb_images(targets, offline, budget)
+    # no more one-file thumbnails of AliExpress items without a card (dist/img/a, QA 2026-10-17 B1): those tiles show the
+    # supplier's image URL, and the product pictures are packed into sheets
+    thumbs = build_thumb_images(targets, offline, 0)
     for i, info in ctx.ae.items():
         if thumbs.get("ae:" + i):
             info["img"] = thumbs["ae:" + i]
@@ -3395,9 +3782,23 @@ def main() -> int:
     for p in products:
         status_counts[p.get("status") or "unknown"] = status_counts.get(p.get("status") or "unknown", 0) + 1
 
+    sheets = pack_product_sheets(products)
+    pstats["failed"] += sheets["decode_failed"]
+    log(f"  product sheets: {sheets['sheets']} sheets ({SHEET_COLS}x{SHEET_ROWS} cells of {SHEET_CELL}px) · {sheets['cells']} pictures"
+        f" · {sheets['from_cache']} from cache · {sheets['bytes'] / 1024 / 1024:.2f} MB" + (f" · {sheets['decode_failed']} did not open" if sheets["decode_failed"] else ""))
+    coverage = load_coverage()
+    if coverage.get("present"):
+        ct = coverage.get("total") or {}
+        log(f"  official coverage ({coverage['file']}, {coverage.get('date')}): 3 options ready {ct.get('pct_ready')}% · with Israeli shops {ct.get('pct_any')}%")
+    else:
+        log(f"  official coverage: no {coverage['file']}")
+
     out_products = []
     for p in products:
         q = {k: v for k, v in p.items() if not k.startswith("_")}
+        im = q.get("images")
+        if isinstance(im, dict) and isinstance(im.get("urls"), list):  # the page shows only how many (QA M9: data.json weight)
+            q["images"] = dict({k: v for k, v in im.items() if k != "urls"}, n=len(im["urls"]))
         q.update({
             "path": p["_path"], "room": p["_room"], "slot_key": p["_slot_key"], "pool": p["_pool"],
             "pid": p["_pid"], "dups": p["_dups"], "shared_in": p["_shared_in"], "in_rooms": p["_in_rooms"],
@@ -3420,9 +3821,12 @@ def main() -> int:
             "dirty": [l[3:] for l in dirty],
             "built_at": dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
             "product_images": pstats,
+            "product_sheets": sheets,
         },
         "counts": {
-            "products": len(products),
+            "products": len(by_id_paths),
+            "cards": len(products),
+            "duplicate_ids": dup_ids,
             "by_status": status_counts,
             "duplicates": n_dup,
             "images_failed": pstats["failed"],
@@ -3449,7 +3853,11 @@ def main() -> int:
         "boards": boards,
         "reports": qa,
         "leads": leads,
+        "coverage": coverage,
     }
+    for fname, part in split_chunks(data).items():
+        (DIST / fname).write_text(json.dumps(part, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+        data["chunks"][next(c for c in data["chunks"] if data["chunks"][c]["file"] == fname)]["bytes"] = (DIST / fname).stat().st_size
     (DIST / "data.json").write_text(json.dumps(data, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
 
     if not PAGE_SRC.exists():
@@ -3459,8 +3867,47 @@ def main() -> int:
 
     files = [p for p in DIST.rglob("*") if p.is_file()]
     total = sum(p.stat().st_size for p in files)
-    log(f"  dist: {len(files)} files · {total / 1024 / 1024:.2f} MB (limits {LIMIT_FILES} files, {LIMIT_BYTES / 1024 / 1024:.0f} MB)")
-    log(f"  data.json {(DIST / 'data.json').stat().st_size / 1024:.0f} KB · commit {commit}{' (uncommitted changes)' if dirty else ''}")
+    produced = sorted(str(p.relative_to(DIST)) for p in files)
+    core = (DIST / "data.json").stat().st_size
+    chunk_line = ", ".join(f"{c['file']} {c['bytes'] / 1024:.0f} KB" for c in data["chunks"].values())
+    log(f"  dist: {len(files)} files · {total / 1024 / 1024:.2f} MB (limits {LIMIT_FILES} files, {LIMIT_BYTES / 1024 / 1024:.0f} MB)"
+        f" · {sum(1 for x in produced if x.startswith('img/s/'))} product sheets, {sum(1 for x in produced if x.startswith('img/f/'))} frames")
+    log(f"  data.json {core / 1024:.0f} KB (the first load; limit {CORE_LIMIT_BYTES / 1024 / 1024:.0f} MB)"
+        f" · chunks {chunk_line} · commit {commit}{' (uncommitted changes)' if dirty else ''}")
+    if core > CORE_LIMIT_BYTES:
+        log("  ! data.json is over 4 MB: the overview loads slowly on a phone (move a heavy key into a chunk)")
+    plan = publish_plan(produced)
+    if plan["present"] and plan.get("published") is not None:
+        send = sorted(set(plan["new"]) | {x for x in produced if not x.startswith("img/")})
+        entries = len(send) + len(plan["stale"])
+        n_batches = max(1, -(-entries // PUBLISH_MAX_SEND))
+        log(f"  publish: {len(send)} files to send (new paths, the page and the data) and {len(plan['stale'])} to remove; the published version"
+            f" holds {plan['published']} ({plan['file']}{', ' + plan['version'] if plan.get('version') else ''}), after the publish {len(files)}")
+        if n_batches > 1:
+            log(f"  publish in {n_batches} batches of at most {PUBLISH_MAX_SEND} entries: first the {len(send)} files"
+                f" (the version then holds {plan['published'] + len(plan['new'])}, under {VERSION_MAX_FILES}), then the removals")
+        if plan["published"] + len(plan["new"]) > VERSION_MAX_FILES:
+            log(f"  ! sending the new files first would pass {VERSION_MAX_FILES} files in the version: remove the stale paths first")
+        try:  # the same plan as a file for the publish (outside dist, which is published as it is); not from test builds
+            if DIST.resolve() != (STUDIO / "dist").resolve():
+                raise RuntimeError("a build into another folder (--dist) does not replace it")
+            (CACHE / "publish-plan.json").write_text(json.dumps({"built_at": data["build"]["built_at"], "commit": commit,
+                "published": plan["file"], "send": send, "remove": plan["stale"]}, ensure_ascii=False, indent=1), encoding="utf-8")
+            log(f"  the plan: {rel(CACHE / 'publish-plan.json')}")
+        except Exception as e:
+            log(f"  (no publish plan file: {e})")
+        if plan["stale"]:
+            log(f"  published paths this build no longer produces ({len(plan['stale'])}): remove them in the publish (null):")
+            for x in plan["stale"]:
+                log(f"    {x}")
+    elif plan.get("error"):
+        log(f"  ! {plan['file']}: {plan['error']}")
+    else:
+        log(f"  publish: no {plan['file']} (the published paths), so the stale paths are not known")
+    if dup_ids:
+        log(f"  ! DUPLICATE CARD IDS ({len(dup_ids)}): the Studio shows one card per id, and studio/apply_edits.py refuses edits to them:")
+        for k, v in dup_ids.items():
+            log(f"    {k}: {', '.join(v)}")
     log(f"done in {time.time() - t0:.1f}s")
     if total > LIMIT_BYTES or len(files) > LIMIT_FILES:
         log("  ! dist is over the limit")

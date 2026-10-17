@@ -10,13 +10,21 @@
      EN71), a CJ sconce without CE is "חסר תקן", a shade-only pendant needs the E27 set, the margin comes from the pick,
      then data/economics/products.json, then the final round, and its tone follows 40% / 25%; an Israeli supplier gets
      the outreach state of data/suppliers/directory.json; a broken card never stops the boards;
-   - studio/build.py load_boards(): every card on a board is a product with dist/img/p/<id>.webp, nothing redacted, no
-     unknown id; a missing module leaves an empty, explained screen instead of a failed build.
+   - nothing rejected on a board (QA 2026-10-17, B3): no card whose status is "rejected", no card the designer rejected
+     for that slot (designer-audit*.json through final_round_coverage.audit_for, slot-aware), no candidate the designer
+     scored below 7 for the style; a candidate the designer kept is "המעצב בדק", the rest "מועמד, לא נבדק"; every pick
+     left out is listed in the board's `dropped` with a known reason;
+   - studio/build.py load_boards(): every card on a board is a product with a picture (a cell of a sheet in
+     dist/img/s/), nothing redacted, no unknown id; a missing module leaves an empty, explained screen instead of a
+     failed build. The boards are a chunk (data-boards.json) that the page loads when the screen opens.
 2. Browser, the real data built offline into a temp folder (studio/dist is not touched):
    - the screen renders from the nav; the coverage map has 48 cells; all 48 boards open from the map (1280px, light) and
      from the selects (400px, dark, table view): heading, the counts line, one tile or row per slot, the tags, the
      empty tiles; no horizontal scroll at 400px; no JavaScript errors;
    - a tile opens the product drawer for its card, an alternate opens its own card, Escape returns focus to the tile;
+   - the margins agree with the profitability screen (QA 2026-10-17, M4): a pick with a live margin shows the margin
+     #profit shows for that card, its tone follows 40% / 25%; the others show the board's margin;
+   - the official coverage (coverage.json) is on the screen, and the map says it is another measure;
    - the table view: the columns, the chips and the margins of the known cards;
    - the last style, room and view are remembered (localStorage), and the page still works when localStorage throws;
    - axe-core finds no WCAG 2.0/2.1 A or AA violation in the screen (tiles and table, light and dark).
@@ -142,7 +150,8 @@ def python_checks():
         codes = [x["code"] for x in p["supplier_status"]]
         check(codes[0] == "on-hold" and "Jellycat" in (p["supplier_status"][0].get("why") or "") and labels["on-hold"]["he"] == "בהמתנה",
               f"the teddy is 'בהמתנה' first, with the art director's note ({b['style']}/{b['room']}/{s['id']}: {codes})")
-        check("no-standard" in codes and "unreviewed" in codes, f"the teddy: no EN71 ('חסר תקן'), a candidate not reviewed ({codes})")
+        check("no-standard" in codes and ("unreviewed" in codes or "reviewed" in codes),
+              f"the teddy: no EN71 ('חסר תקן'), a candidate with its review state ({codes})")
         check(p["supplier"] == {"key": "aliexpress", "name": "AliExpress"} and p["margin"]["src"] == "leads" and p["margin"]["tone"] == "good",
               f"the teddy: AliExpress, margin from the final round's repricing ({p['margin']})")
     else:
@@ -173,8 +182,39 @@ def python_checks():
     ready = [p for b in B["boards"] for s in b["slots"] for p in s.get("picks") or [] if any(x["code"] == "ready" for x in p["supplier_status"])]
     check(ready and all(p["supplier"]["key"] in ("cj", "aliexpress", "zendrop") and p["role"] != "candidate" and len(p["supplier_status"]) == 1 for p in ready),
           f"'מוכן לדרופשיפינג' only on a chosen dropshipping card without another status ({len(ready)})")
-    cands = [p for b in B["boards"] for s in b["slots"] if s["status"] == "candidate" for p in s["picks"]]
-    check(all(any(x["code"] == "unreviewed" for x in p["supplier_status"]) for p in cands), f"every candidate is 'מועמד, לא נבדק' ({len(cands)})")
+    cands = [(b, s, p) for b in B["boards"] for s in b["slots"] if s["status"] == "candidate" for p in s["picks"]]
+    ctx = R.Context()
+    wrong = []
+    for b, s, p in cands:
+        a = R.audit_for(ctx.audit, p["card_id"], f"{b['room']}/{s['id']}")
+        want = "reviewed" if a and a.get("verdict") != "reject" else "unreviewed"
+        if sum(1 for x in p["supplier_status"] if x["code"] in ("reviewed", "unreviewed")) != 1 or not any(x["code"] == want for x in p["supplier_status"]):
+            wrong.append(f"{b['style']}/{b['room']}/{s['id']}/{p['card_id']}")
+    check(not wrong and cands, f"every candidate is 'המעצב בדק' when the designer audited it there, else 'מועמד, לא נבדק' "
+          f"({len(cands)}; {sum(1 for b, s, p in cands if any(x['code'] == 'reviewed' for x in p['supplier_status']))} reviewed) {wrong[:3]}")
+
+    print("- nothing rejected on a board (B3)")
+    check(not ctx.audit_error and ctx.audit, f"the designer audits load through final_round_coverage.py ({len(ctx.audit)} entries, error {ctx.audit_error})")
+    on = [(b, s, p) for b in B["boards"] for s in b["slots"] for p in s.get("picks") or []]
+    rejected = [f"{b['style']}/{b['room']}/{s['id']}/{p['card_id']}" for b, s, p in on if (ctx.cat.get(p["card_id"]) or {}).get("status") == "rejected"]
+    check(not rejected, f"no card whose status is 'rejected' is on a board {rejected[:3]}")
+    vetoed = [f"{b['style']}/{b['room']}/{s['id']}/{p['card_id']}" for b, s, p in on
+              if (R.audit_for(ctx.audit, p["card_id"], f"{b['room']}/{s['id']}") or {}).get("verdict") == "reject"]
+    check(not vetoed, f"no card the designer rejected for that slot is on a board {vetoed[:3]}")
+    low = [f"{b['style']}/{b['room']}/{s['id']}/{p['card_id']}" for b, s, p in on
+           if (lambda f: f is not None and f < 7)(R.designer_fit(R.audit_for(ctx.audit, p["card_id"], f"{b['room']}/{s['id']}"), b["style"]))]
+    check(not low, f"no pick the designer scored below 7 for the style is on a board {low[:3]}")
+    # the audit is slot-aware: a reject in one slot leaves the card in its other slots
+    sl = [(k, a) for k, a in ctx.audit.items() if k[1] != "*" and a.get("verdict") == "reject" and (k[0], "*") not in ctx.audit]
+    if sl:
+        (cid, key), a = sl[0]
+        check(R.audit_for(ctx.audit, cid, key) is a and R.audit_for(ctx.audit, cid, "living-room/no-such-slot") is None,
+              f"a reject for one slot applies in that slot only ({cid} in {key})")
+    reasons = {d["why"] for b in B["boards"] for d in b.get("dropped") or []}
+    check(reasons <= set(B["dropped_he"]), f"every pick left out has a known reason ({sorted(reasons)})")
+    gone = {d["card_id"] for b in B["boards"] for d in b.get("dropped") or []}
+    check(not any(p["card_id"] in gone and (ctx.cat.get(p["card_id"]) or {}).get("status") == "rejected" for b, s, p in on),
+          f"a pick left out because it was rejected is not on any board ({len(gone)} cards left out)")
     allc = {x["code"] for b in B["boards"] for s in b["slots"] for p in s.get("picks") or [] for x in p["supplier_status"]}
     check(allc <= set(labels), f"every status code has a label ({sorted(allc - set(labels))})")
     ctx = R.Context()
@@ -255,6 +295,38 @@ def expect_board(st, b, view):
     return ok
 
 
+def margin_shown_ok(chip, pk) -> bool:
+    """A margin chip on a board: the live one (data-src "live", checked against #profit separately) has the tone of its
+    number; any other is the board's margin, with its tone."""
+    src, pct, tone = chip.get_attribute("data-src"), chip.get_attribute("data-pct"), chip.get_attribute("data-tone")
+    if src == "live":
+        x = float(pct)
+        return tone == ("bad" if x < 25 else "good" if x >= 40 else "warn") or tone == "bad"
+    m = pk["margin"]
+    return (not m and tone == "none") or bool(m and pct == f"{m['pct']:.1f}" and tone == m["tone"])
+
+
+def agree_checks(page, B):
+    """The boards and the profitability screen show the same margin for the same card (live margins)."""
+    print("- the boards' margins agree with the profitability screen")
+    seen = {}
+    for style, room in (("nordic", "living-room"), ("warm-modern", "work"), ("boho", "bath"), ("japandi", "kids")):
+        page.click(f".bd-mx-wide .bd-cell[data-bd-cell='{style}|{room}']")
+        page.click("[data-bd-view='table']")
+        for row in page.locator("#bd-body .bd-tbl tr[data-card]").all():
+            chip = row.locator(".bd-margin")
+            if chip.get_attribute("data-src") == "live":
+                seen.setdefault(row.get_attribute("data-card"), chip.get_attribute("data-pct"))
+    page.click("[data-bd-view='tiles']")
+    page.goto(page.url.split("#")[0] + "#profit")
+    page.wait_for_selector("#screen-profit:not([hidden]) tr[data-pid]", timeout=15000)
+    prof = page.evaluate("Object.fromEntries([...document.querySelectorAll('#screen-profit tr[data-pid]')].map(r => [r.dataset.pid, r.dataset.margin]))")
+    bad = [(cid, pct, prof.get(cid)) for cid, pct in seen.items() if prof.get(cid) != pct]
+    check(seen and not bad, f"{len(seen)} picks with a live margin show the margin of #profit {bad[:3]}")
+    page.goto(page.url.split("#")[0] + "#boards")
+    page.wait_for_selector("#screen-boards:not([hidden]) #h-bd-board", timeout=15000)
+
+
 def browser_checks(browser, base, D):
     B = D["boards"]
     names = {p["id"]: p["name"] for p in D["products"]}
@@ -276,7 +348,8 @@ def browser_checks(browser, base, D):
     check(expect_board(st, find(B, "nordic", "living-room"), "tiles") and st["current"] == ["nordic|living-room"],
           f"the default board is the Nordic living room: {st['sub']}")
     legend = page.locator(".bd-legend").inner_text()
-    check('"נבחר": בחירת המעצב' in legend and '"מועמד": מוצר מהליקוט האחרון בהתאמה 7 ומעלה, שעוד לא עבר את המעצב' in legend and "בלי ריהוט קבוע" in legend,
+    check('"נבחר": בחירת המעצב' in legend and '"מועמד": מוצר מהליקוט האחרון בהתאמה 7 ומעלה (לפי ציון המעצב כשהוא בדק אותו)' in legend
+          and "המעצב דחה בעמדה" in legend and "בלי ריהוט קבוע" in legend,
           "the legend line, as in the board images")
     cols = page.evaluate("getComputedStyle(document.querySelector('#bd-body .bd-grid')).gridTemplateColumns.split(' ').length")
     gap = page.evaluate("getComputedStyle(document.querySelector('#bd-body .bd-grid')).columnGap")
@@ -301,10 +374,13 @@ def browser_checks(browser, base, D):
     main = sl["picks"][0]
     txt = tile.inner_text()
     lab = B["status_labels"][main["supplier_status"][0]["code"]]["he"] if main["supplier_status"] else None
-    check(main["supplier"]["name"] in txt and (lab is None or lab in txt) and (f"{main['margin']['pct']:g}%" in txt if main["margin"] else "לא תומחר" in txt),
-          f"tile '{sl['name_he']}': supplier {main['supplier']['name']}, status '{lab}', margin {main['margin'] and main['margin']['pct']}")
-    tone = tile.locator(".bd-margin").get_attribute("data-tone")
-    check(tone == (main["margin"] or {}).get("tone", "none"), f"the margin chip's colour follows its tone ({tone})")
+    chip = tile.locator(".bd-margin")
+    live = chip.get_attribute("data-src") == "live"
+    first = tile.locator(".bd-chip[data-code]").first
+    lab_shown = first.inner_text() if tile.locator(".bd-chip[data-code]").count() else None
+    check(main["supplier"]["name"] in txt and (live or lab is None or lab == lab_shown) and (lab_shown is None or lab_shown in [x["he"] for x in B["status_labels"].values()]),
+          f"tile '{sl['name_he']}': supplier {main['supplier']['name']}, status '{lab_shown}' (board: '{lab}'), margin {chip.get_attribute('data-pct')} ({chip.get_attribute('data-src')})")
+    check(margin_shown_ok(chip, main), f"the margin chip: the board's or the live one, and its colour follows its tone ({chip.get_attribute('data-tone')})")
     tile.locator(".bt-main").click()
     page.wait_for_selector("#drawer[open]")
     check(page.locator("#drawer-title").inner_text().strip() == names[main["card_id"]].strip(), f"the tile opens the drawer of {main['card_id']}")
@@ -320,7 +396,7 @@ def browser_checks(browser, base, D):
     sc = next(((b, s) for b, s, i, p in picks_of(B, SCONCE) if b["style"] == "nordic" and i == 0), None)
     if sc:
         page.click(f".bd-mx-wide .bd-cell[data-bd-cell='{sc[0]['style']}|{sc[0]['room']}']")
-        t = page.locator(f"#bd-body li.bt[data-card='{SCONCE}']")
+        t = page.locator(f"#bd-body li.bt[data-card='{SCONCE}']").first
         check(t.locator(".bd-chip[data-code='no-standard']").count() == 1 and "CJ" in t.inner_text() and t.locator(".bd-margin").get_attribute("data-tone") == "good",
               "the CJ sconce tile: 'חסר תקן', CJ, a green margin")
     ready = next(((b, s) for b in B["boards"] for s in b["slots"] if s.get("picks") and s["picks"][0]["supplier_status"] and
@@ -330,6 +406,17 @@ def browser_checks(browser, base, D):
         t = page.locator(f"#bd-body li.bt[data-slot='{ready[1]['id']}']")
         check("מוכן לדרופשיפינג" in t.inner_text(), f"'מוכן לדרופשיפינג' on {ready[0]['style']}/{ready[0]['room']}/{ready[1]['id']}")
     T.axe(page, "1280px light tiles", "#screen-boards")
+
+    print("- the official coverage and the map's own measure (M7)")
+    cov = D.get("coverage") or {}
+    if cov.get("present"):
+        sec = page.locator("#bd-body [data-cov='boards']")
+        tot = f"{cov['total']['pct_ready']:g}%"
+        check(sec.count() == 1 and tot in sec.inner_text() and sec.locator("tbody tr").count() == len(cov["styles"]),
+              f"the boards screen shows the official coverage ({tot}, {len(cov['styles'])} styles)")
+        check("לא הכיסוי הרשמי" in page.locator("#bd-count").inner_text() and "זה לא הכיסוי הרשמי" in page.locator("#bd-body").inner_text(),
+              "the map's share of slots with a product says it is not the official coverage")
+    agree_checks(page, B)
 
     print("- the table view")
     page.click(".bd-mx-wide .bd-cell[data-bd-cell='nordic|living-room']")
@@ -349,8 +436,8 @@ def browser_checks(browser, base, D):
         page.click(f".bd-mx-wide .bd-cell[data-bd-cell='{b['style']}|{b['room']}']")
         r = page.locator(f"#bd-body .bd-tbl tr[data-card='{TEDDY}']")
         check(r.count() == 1 and r.locator(".c-st .bd-chip").first.inner_text() == "בהמתנה" and "AliExpress" in r.inner_text()
-              and f"{p['margin']['pct']:g}%" in r.locator(".bd-margin").inner_text(),
-              f"the teddy's row: 'בהמתנה' first, AliExpress, {p['margin']['pct']}% ({b['style']}/{b['room']}, alternate {i})")
+              and margin_shown_ok(r.locator(".bd-margin"), p),
+              f"the teddy's row: 'בהמתנה' first, AliExpress, margin {r.locator('.bd-margin').get_attribute('data-pct')} ({r.locator('.bd-margin').get_attribute('data-src')}) ({b['style']}/{b['room']}, alternate {i})")
         r.locator("button.tp").click()
         page.wait_for_selector("#drawer[open]")
         check(page.locator("#drawer-title").inner_text().strip() == names[TEDDY].strip(), "a table row opens the drawer of its card")
@@ -395,7 +482,7 @@ def browser_checks(browser, base, D):
         page.select_option("#bd-room", b["room"])
         li = page.locator(f"#bd-body .bd-list li.bl-pick[data-card='{TEDDY}']")
         check(li.count() == 1 and li.locator(".bd-chip[data-code]").first.inner_text() == "בהמתנה" and "AliExpress" in li.inner_text()
-              and f"{p['margin']['pct']:g}%" in li.locator(".bd-margin").inner_text(), "400px list: the teddy is 'בהמתנה', AliExpress, with its margin")
+              and margin_shown_ok(li.locator(".bd-margin"), p), "400px list: the teddy is 'בהמתנה', AliExpress, with its margin")
         li.locator("button.bl-main").click()
         page.wait_for_selector("#drawer[open]")
         check(page.locator("#drawer-title").inner_text().strip() == names[TEDDY].strip(), "400px list: a product opens its drawer")
@@ -462,6 +549,7 @@ def empty_checks(browser, dist: Path, tmp: Path):
     d2.mkdir(parents=True, exist_ok=True)
     data = json.loads((dist / "data.json").read_text(encoding="utf-8"))
     data["boards"] = {"present": False, "error": "FIXTURE: module failed", "boards": []}
+    (data.get("chunks") or {}).pop("boards", None)  # the boards are in data.json itself here, not a chunk
     (d2 / "data.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
     shutil.copyfile(dist / "index.html", d2 / "index.html")
     srv, base = T.serve(d2)
@@ -499,8 +587,8 @@ def shots(browser):
             page.add_init_script("try{localStorage.clear();localStorage.setItem('studio.boards', " + json.dumps(json.dumps({"style": "nordic", "room": "living-room", "view": view})) + ")}catch(e){}")
             page.goto(base + "#boards")
             page.wait_for_selector("#screen-boards:not([hidden]) #h-bd-board", timeout=15000)
-            page.evaluate("document.querySelectorAll('#bd-body img[loading=lazy]').forEach(i => { i.loading = 'eager'; })")
-            page.wait_for_function("() => [...document.querySelectorAll('#bd-body img')].every(i => i.complete)", timeout=30000)
+            page.evaluate("window.__studioPictures.all()")
+            page.wait_for_function("() => window.__studioPictures.ready().then(() => true)", timeout=30000)
             page.wait_for_timeout(700)  # web fonts
             p = SCREENS / f"{name}.png"
             page.screenshot(path=str(p), full_page=True)
@@ -519,12 +607,15 @@ def main() -> int:
     try:
         print("- build with the real data (offline)")
         T.build(tmp / "dist", None)
-        D = json.loads((tmp / "dist" / "data.json").read_text(encoding="utf-8"))
+        D = T.load_build().read_dist_data(tmp / "dist")
+        check("boards" not in json.loads((tmp / "dist" / "data.json").read_text(encoding="utf-8")) and (tmp / "dist" / "data-boards.json").exists(),
+              "the boards are a chunk (data-boards.json), not in the first load")
         bi = D["boards"]["images"]
+        imgs = {p["id"]: p.get("img") or {} for p in D["products"]}
         missing = [i for i in {p["card_id"] for b in D["boards"]["boards"] for s in b["slots"] for p in s.get("picks") or []}
-                   if not (tmp / "dist" / "img" / "p" / f"{i}.webp").exists()]
+                   if not (imgs.get(i, {}).get("sheet") and (tmp / "dist" / imgs[i]["sheet"]).exists())]
         check(not missing and bi["with_file"] == bi["cards"] and not bi["not_cards"],
-              f"the build made a thumbnail for every card on a board ({bi['with_file']} of {bi['cards']}; placeholders offline: {len(bi['placeholders'])})")
+              f"every card on a board has its picture in a sheet ({bi['with_file']} of {bi['cards']}; placeholders offline: {len(bi['placeholders'])})")
         check(D["boards"]["redacted"] == 0 and D["boards"]["bad_ids"] == [], "the boards pass the secret check, every id known")
         srv, base = T.serve(tmp / "dist")
         try:

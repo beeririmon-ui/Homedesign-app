@@ -16,7 +16,7 @@
 | hall/wall-sconce | modern-country, boho | wall-sconce-aliexpress-handwoven-rattan-wall-lamp-915640 | נמצאו 1 מוצרים: boho 1/1 |
 | kids/doll | nordic, warm-modern, japandi, mediterranean, modern-country, boho | doll-aliexpress-soft-plush-toys-waldorf-664801 | נמצאו 1 מוצרים: nordic 3/3 |
 | kids/doll-pram | nordic, warm-modern, japandi, mediterranean, modern-country, boho | — | לא נמצא מוצר עובר. הקרוב: 1005009016375901 (fit 5, עגלת מטריה לבובות, שלדת מתכת בז' ובד מודפס (FL 8103-F פרחוני אפור-בז'); 28×47×56 — קרוב למעטפת; לא עץ ולא גגון כותנה חלק) |
-| kids/pendant | mediterranean, modern-country, boho | pendant-aliexpress-rustic-woven-pendant-light-200914 | נמצאו 1 מוצרים: mediterranean 1/3, boho 1/0 |
+| kids/pendant | mediterranean, modern-country, boho | pendant-aliexpress-rustic-woven-pendant-light-200914-kids | נמצאו 1 מוצרים: mediterranean 1/3, boho 1/0 |
 | kids/skateboard | nordic, warm-modern, japandi, mediterranean, modern-country, boho | — | לא נמצאו מועמדים מהסוג הנכון |
 | kids/soft-toy | nordic, warm-modern, japandi, mediterranean, modern-country, boho | soft-toy-aliexpress-handmade-crochet-bunny-baby-999497 | נמצאו 1 מוצרים: nordic 4/1 |
 | kids/toy-cars | nordic, warm-modern, japandi, mediterranean, modern-country, boho | toy-cars-aliexpress-baby-wooden-toys-beech-975232 | נמצאו 1 מוצרים: nordic 8/1, warm-modern 8/1, japandi 8/1, modern-country 8/1, boho 8/3 |

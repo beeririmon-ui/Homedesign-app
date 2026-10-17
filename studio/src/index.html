@@ -320,8 +320,12 @@ input[type="search"],select{width:100%;min-height:40px;padding:7px 10px;border:1
 .loss-action{border-inline-start:3px solid var(--brick-ink);padding-inline-start:8px;margin:0}
 .chip-addon{background:var(--sunk);color:var(--ink-2)}
 .chip-exception{background:var(--amber-wash);color:var(--amber-ink)}
+.chip-premium{background:var(--oak-wash);color:var(--oak-ink)}
 .pcard .pimg{position:relative;aspect-ratio:1/1;background:#fff;display:block;max-width:100%}
 .pcard .pimg img{width:100%;height:100%;object-fit:contain;display:block}
+/* a product picture: one square cell of a sheet (build.py pack_product_sheets), set as a background when it nears the view */
+.spr{display:block;width:100%;height:100%;background-repeat:no-repeat;background-color:#fff}
+.mosaic .spr{min-height:0}
 .pcard .pimg .chips{position:absolute;inset-block-start:7px;inset-inline-start:7px;display:flex;flex-wrap:wrap;gap:4px}
 .pcard .pimg .noimg{position:absolute;inset-block-end:7px;inset-inline-start:7px}
 .pcard .pbody{display:grid;gap:4px;padding:9px 10px 11px;align-content:start;min-width:0}
@@ -1013,6 +1017,13 @@ button.ptile:focus-visible{outline-offset:2px}
 .bd-sel{display:none;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
 @media (max-width:599px){.bd-segs{display:none}.bd-sel{display:grid}}
 .bd-mx{border-collapse:separate;border-spacing:3px;width:100%;table-layout:fixed;font-size:var(--fs-s)}
+/* the official coverage (coverage.json): overview card and the boards screen */
+.cov-total{margin:0;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px}
+.cov-tbl th,.cov-tbl td{padding:6px 10px;text-align:start;border-bottom:1px solid var(--rule)}
+.cov-tbl td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.cov-tbl .meter{display:block;min-width:80px}
+.cov-tbl th:last-child,.cov-tbl td:last-child{width:30%}
+.cov-kv dd{white-space:nowrap}
 .bd-mx th,.bd-mx td{padding:0;border:0;background:none;position:static;vertical-align:middle;text-align:center}
 .bd-mx thead th{font-size:var(--fs-xs);font-weight:700;color:var(--ink-3);white-space:normal;line-height:1.2;padding:0 1px 5px;vertical-align:bottom}
 .bd-mx tbody th{font-size:var(--fs-xs);font-weight:700;color:var(--ink-2);text-align:start;padding-inline-end:6px;white-space:normal;line-height:1.25}
@@ -1186,7 +1197,7 @@ button.ptile:focus-visible{outline-offset:2px}
 
     <section class="screen" id="screen-boards" aria-labelledby="h-boards" hidden>
       <div class="screen-head"><h1 id="h-boards" tabindex="-1">לוחות חדרים</h1><p class="small faint" id="bd-count"></p></div>
-      <p class="lede">לוח מוצרים לכל סגנון וחדר, כמו התמונות של 16.10: "נבחר" הוא בחירת המעצב, "מועמד" הוא מוצר מהליקוט האחרון שעוד לא עבר את המעצב, ועמדה בלי מוצר מסומנת "חסר". לכל מוצר: הספק, הסטטוס מול הספק והרווח. לחיצה על מוצר פותחת את הכרטיס שלו. הנתונים מחושבים ב-<code>scripts/boards/room_boards.py</code>, אותו חישוב כמו התמונות.</p>
+      <p class="lede">לוח מוצרים לכל סגנון וחדר, כמו התמונות של 16.10: "נבחר" הוא בחירת המעצב, "מועמד" הוא מוצר מהליקוט האחרון בהתאמה 7 ומעלה (עם "המעצב בדק" כשעבר את ביקורת המעצב), ועמדה בלי מוצר מסומנת "חסר". מוצר שנדחה, או שהמעצב דחה בעמדה, לא מופיע. לכל מוצר: הספק, הסטטוס מול הספק והרווח. לחיצה על מוצר פותחת את הכרטיס שלו. הנתונים מחושבים ב-<code>scripts/boards/room_boards.py</code>, אותו חישוב כמו התמונות.</p>
       <div id="bd-body"><p class="loading">טוען…</p></div>
     </section>
 
@@ -1356,7 +1367,7 @@ const say = msg => { const el = $('#live'); el.textContent = ''; setTimeout(()=>
 const isNum = v => typeof v === 'number' && isFinite(v);
 const fmtDay = d => { if(!d) return ''; const [y,m,dd] = String(d).slice(0,10).split('-'); return `${+dd}.${+m}.${y}`; };
 const fmtDM = d => { if(!d) return ''; const [, m, dd] = String(d).slice(0,10).split('-'); return `${+dd}.${+m}`; };
-const fmtDate = iso => { if(!iso) return ''; if(/^\d{4}-\d{2}-\d{2}$/.test(iso)) return fmtDay(iso); try{ return new Intl.DateTimeFormat('he-IL',{day:'numeric',month:'numeric',year:'numeric',hour:'2-digit',minute:'2-digit',timeZone:'Asia/Jerusalem'}).format(new Date(iso)); }catch(e){ return iso; } };
+const fmtDate = iso => { if(!iso || typeof iso !== 'string') return ''; if(/^\d{4}-\d{2}-\d{2}(?:T00:00(?::00(?:\.0+)?)?Z)?$/.test(iso)) return fmtDay(iso); try{ return new Intl.DateTimeFormat('he-IL',{day:'numeric',month:'numeric',year:'numeric',hour:'2-digit',minute:'2-digit',timeZone:'Asia/Jerusalem'}).format(new Date(iso)); }catch(e){ return iso; } };
 const fmtUSD = n => isNum(n) ? '$' + n.toLocaleString('en-US',{minimumFractionDigits:2, maximumFractionDigits:2}) : '—';
 const fmtILS = (n, dec=0) => isNum(n) ? (n < 0 ? '−' : '') + '₪ ' + Math.abs(n).toLocaleString('en-US',{minimumFractionDigits:dec, maximumFractionDigits:dec}) : '—';
 const fmtPct = (x, dec=0) => isNum(x) ? (x*100).toFixed(dec).replace('-', '−') + '%' : '—';
@@ -1382,7 +1393,7 @@ const WHO = {user:'המשתמש', manager:'המנהל', 'master-designer':'maste
 const FLAG_HE = {green:'עומד ביעד', red:'מתחת ליעד', orange:'חסרים נתונים'};
 const MISS_HE = {cost:'עלות', shipping:'משלוח', retail:'מחיר', fast_shipping:'משלוח מהיר (עד 20 יום)', currency:'עלות בדולר', dealer:'מחיר סוחר', no_route:'משלוח לישראל'};
 // where a freight quote comes from (data/economics/freight-<supplier>.json, or the room SKU's shipping_il in the card)
-const FR_HE = {cj:'CJ', zendrop:'Zendrop', aliexpress:'AliExpress', card:'המק"ט בכרטיס'};
+const FR_HE = {cj:'CJ', zendrop:'Zendrop', aliexpress:'AliExpress', card:'המק"ט בכרטיס', leads:'הליקוט האחרון'};
 const SUP_KEY_HE = {cj:'CJ', zendrop:'Zendrop', aliexpress:'AliExpress', il:'ספק ישראלי', other:'הספק'};
 
 /* ---------- economics: settings, defaults, calculation ---------- */
@@ -1453,6 +1464,49 @@ function econCalc(inp, s){
 }
 /* econ:end */
 
+/* ---------- product pictures: sheets ---------- */
+// build.py packs every product picture into dist/img/s/<room>-<n>-<hash>.webp, a grid of square cells (one file per card
+// did not fit the artifact's file limit, QA 2026-10-17 B1). p.img = {sheet, cell:[col,row], grid:[cols,rows], ok, note}.
+// picHtml() draws a cell as a span; its background is set (in JS: the page has no inline style attributes) when the span
+// comes near the viewport, so a screen loads only the sheets it shows. Any other picture (an AliExpress record without a
+// card) is a plain lazy <img>.
+function picHtml(img, opt){
+  const o = opt || {};
+  if(img && typeof img === 'object' && img.sheet){
+    const [c, r] = img.cell || [0, 0], [C, R] = img.grid || [1, 1];
+    return `<span class="spr" data-sheet="${esc(img.sheet)}" data-cell="${esc([c, r, C, R].join(','))}"${o.alt ? ` role="img" aria-label="${esc(o.alt)}"` : ' aria-hidden="true"'}></span>`;
+  }
+  const src = img && typeof img === 'object' ? img.src : img;
+  if(!src) return '';
+  return `<img src="${esc(src)}" alt="${esc(o.alt || '')}" loading="lazy" decoding="async"${o.fallback != null ? ` data-fallback="${esc(o.fallback)}"` : ''}>`;
+}
+const hasPic = img => !!(img && (typeof img === 'object' ? (img.sheet || img.src) : img));
+const SHEETS = new Map();  // sheet url -> Promise (loaded or failed)
+function loadSheet(url){
+  if(!SHEETS.has(url)) SHEETS.set(url, new Promise(res => { const im = new Image(); im.onload = im.onerror = () => res(url); im.src = url; }));
+  return SHEETS.get(url);
+}
+function showSprite(el){
+  const url = el.dataset.sheet; if(!url) return;
+  const [c, r, C, R] = String(el.dataset.cell || '0,0,1,1').split(',').map(Number);
+  el.style.backgroundSize = `${C * 100}% ${R * 100}%`;
+  el.style.backgroundPosition = `${C > 1 ? c / (C - 1) * 100 : 0}% ${R > 1 ? r / (R - 1) * 100 : 0}%`;
+  el.style.backgroundImage = `url("${url.replace(/["\\]/g, '')}")`;
+  el.removeAttribute('data-sheet');
+  loadSheet(url);
+}
+const spriteIO = 'IntersectionObserver' in window ? new IntersectionObserver(es => {
+  for(const e of es) if(e.isIntersecting){ spriteIO.unobserve(e.target); showSprite(e.target); }
+}, {rootMargin: '600px 0px'}) : null;
+function watchSprites(){
+  for(const el of document.querySelectorAll('.spr[data-sheet]:not([data-obs])')){ el.setAttribute('data-obs', ''); if(spriteIO) spriteIO.observe(el); else showSprite(el); }
+}
+// one pass per batch of DOM changes (a screen's innerHTML): every new cell is watched
+if('MutationObserver' in window) new MutationObserver(() => watchSprites()).observe(document.documentElement, {childList: true, subtree: true});
+// for screenshots and tests: draw every cell now, and wait for the sheets that were asked for
+window.__studioPictures = {all(){ for(const el of document.querySelectorAll('.spr[data-sheet]')) showSprite(el); return this.ready(); },
+  ready(){ return Promise.all([...SHEETS.values()]).then(l => l.length); }};
+
 /* ---------- state ---------- */
 const S = {
   data:null, rooms:new Map(), slots:new Map(), base:new Map(),
@@ -1469,6 +1523,7 @@ const S = {
   bd:Object.assign({style:'nordic', room:'living-room', view:'tiles'}, store.get('boards', {})),
   roomView:store.get('roomView', 'compose'), compStatus:'', compStyle:store.get('compStyle', 'nordic'), srcLimit:30,
   src:Object.assign({room:'', priority:'', source:'', status:'', withRes:false}, store.get('src', {})),
+  chunkState:{}, chunkErr:{},
   db:null, user:null, uid:null, canWrite:null, dbState:'connecting', dbError:null, dbReady:false,
   dbDocs:new Map(), drafts:{}, saving:new Set(), saved:{}, errors:{},
   edits:new Map(), news:new Map(), settingsDocs:new Map(),
@@ -1500,6 +1555,38 @@ async function boot(){
   renderAll();
   route(false);
   connectDb();
+}
+/* ---------- data chunks: the heavy parts load when their screen opens (QA 2026-10-17, M9) ---------- */
+// data.json "chunks" (build.py CHUNKS): {name: {file, keys: {key: null (the whole key) | [sub keys]}, bytes}}
+const SCREEN_CHUNKS = {compare:['compare'], sourcing:['sourcing'], furniture:['furniture'], boards:['boards'], quality:['leads']};
+const CHUNK_RENDER = {compare:() => renderCompare(), sourcing:() => renderSourcing(), furniture:() => renderFurniture(), boards:() => renderBoards(), leads:() => renderReports()};
+const chunkInfo = n => (S.data && S.data.chunks && S.data.chunks[n]) || null;
+const chunkReady = n => !chunkInfo(n) || S.chunkState[n] === 'ready';
+function needChunk(n){
+  const c = chunkInfo(n);
+  if(!c || S.chunkState[n] === 'ready' || S.chunkState[n] === 'loading') return;
+  S.chunkState[n] = 'loading'; delete S.chunkErr[n];
+  fetch('./' + c.file, {cache:'no-cache'}).then(r => { if(!r.ok) throw new Error('HTTP ' + r.status); return r.json(); }).then(part => {
+    for(const [key, subs] of Object.entries(c.keys || {})){
+      if(subs == null) S.data[key] = part[key];
+      else S.data[key] = Object.assign(S.data[key] || {}, part[key] || {});
+    }
+    S.chunkState[n] = 'ready';
+  }).catch(e => { S.chunkState[n] = 'error'; S.chunkErr[n] = (e && e.message) || String(e); }).then(() => {
+    (CHUNK_RENDER[n] || (() => {}))();
+    if(n === 'sourcing' && S.focusEl && S.screen === 'sourcing') focusPending();
+  });
+}
+// a screen whose data is still on its way: a status line in its box (and the load, when the screen is open)
+function chunkGate(n, box, screen){
+  if(chunkReady(n)) return true;
+  if(S.screen === screen) needChunk(n);
+  const c = chunkInfo(n);
+  box.innerHTML = S.chunkState[n] === 'error'
+    ? `<div class="toast-err" role="alert"><strong>לא הצלחתי לטעון את <code>${esc(c.file)}</code>.</strong> ${esc(S.chunkErr[n] || '')} <button type="button" class="btn btn-ghost btn-small" data-chunk-retry="${esc(n)}">לנסות שוב</button></div>`
+    : `<p class="empty chunk-wait" role="status">טוען את הנתונים של המסך (<code>${esc(c.file)}</code>${isNum(c.bytes) ? `, ${esc(Math.round(c.bytes / 1024).toLocaleString('en-US'))} KB` : ''})…</p>`;
+  const b = $('[data-chunk-retry]', box); if(b) b.onclick = () => { S.chunkState[n] = null; needChunk(n); CHUNK_RENDER[n](); };
+  return false;
 }
 function renderAll(){
   renderOverview(); renderTodo(); renderDecisions(); renderOffice(); renderRoomPick(); renderRoom(); renderBoards();
@@ -1637,9 +1724,11 @@ function effProduct(p){
   e.qty = qtyOk(f.sell_qty) ? f.sell_qty : (qtyOk(qd.qty) ? qd.qty : 1);
   e.qtySet = qtyOk(f.sell_qty);
   e.qtySure = e.qtySet || qd.sure !== false;
-  // shipping for the sale: per-unit shipping x qty, estimated from the CJ bundle test (fixed part per parcel)
-  ship.total = e.qty > 1 ? shipForQty(ship.usd, e.qty) : ship.usd;
-  ship.est = e.qty > 1 && isNum(ship.usd);
+  // shipping for the sale: per-unit shipping x qty, estimated from the CJ bundle test (fixed part per parcel); a quote
+  // that was made for exactly the units of the sale (freight qty, the final round's ship_usd) is the sale's shipping
+  const quotedForSale = fr && qtyOk(fr.quoted_qty) && fr.quoted_qty === e.qty && ship.src === fr.src;
+  ship.total = quotedForSale ? ship.usd : e.qty > 1 ? shipForQty(ship.usd, e.qty) : ship.usd;
+  ship.est = e.qty > 1 && isNum(ship.usd) && !quotedForSale;
   e.ship = ship; e.retail = f.retail_ils; e.compare_at = f.compare_at_ils;
   // the starting price from data/economics/products.json (pricing team, retail_src "initial-..."): a real price for every
   // number on the page, marked "מחיר התחלתי" until someone edits it in the studio (the edit wins and the mark goes away)
@@ -1647,6 +1736,11 @@ function effProduct(p){
   e.retailEdited = 'retail_ils' in pf;
   e.addonOnly = be.addon_only === true;
   e.priceFlag = be.price_flag || null; e.slotAltOk = typeof be.slot_alternative_ok === 'boolean' ? be.slot_alternative_ok : null;
+  // a price from the card or its final-round record (no row in the pricing file, QA 2026-10-17 M4): the floor chip asks
+  // the slot itself whether another product clears the target (refreshView), and premium pricing waits for the owner
+  e.fromCard = be.from_card === true && !e.retailEdited;
+  e.premium = be.premium === true;
+  e.leadMargin = isNum(be.lead_margin_pct) ? be.lead_margin_pct : null;
   e.priceBasis = {src: be.retail_src || null, il_value: be.il_value || null, note: be.price_note || null, customer_total: isNum(be.customer_total_ils) ? be.customer_total_ils : null,
     for_qty: qtyOk(be.price_for_qty) ? be.price_for_qty : null, contains: be.sale_contains || null, action: be.action_he || null};
   // the file's price is for price_for_qty units; when the studio sells another quantity the price does not fit the sale
@@ -1684,7 +1778,8 @@ function isLoser(e){
 const loserChip = e => isLoser(e) ? `<span class="chip chip-loss" title="${esc(isNum(e.econ.contribution) ? `תרומה ${fmtILS(e.econ.contribution)} למכירה במחיר הזה` : 'לפי קובץ התמחור')}">מפסיד, לא למכירה</span>` : '';
 const addonChip = e => e && e.addonOnly ? '<span class="chip chip-addon" title="מוצר שנמכר רק כתוספת להזמנה (addon_only בקובץ התמחור)">רק כתוספת לסל</span>' : '';
 // all the price-state chips of a product, in order of weight: losing money, under the floor, add-on only, quantity mismatch
-const priceChips = e => [loserChip(e), isLoser(e) ? '' : floorChip(e), addonChip(e)].filter(Boolean).join(' ');
+const premiumChip = e => e && e.premium ? `<span class="chip chip-premium" title="${esc('המעצב קבע שהמוצר נראה איכותי, והמחיר עד המחיר הטיפוסי בישראל (ה.10, 2026-10-17). מחכה לאישור המשתמש.')}">תמחור פרימיום, לאישור</span>` : '';
+const priceChips = e => [loserChip(e), isLoser(e) ? '' : floorChip(e), premiumChip(e), addonChip(e)].filter(Boolean).join(' ');
 function floorChip(e){
   if(!e || e._new || typeof e.slotAltOk !== 'boolean') return '';
   const T = S.ES.v.target_margin_pct;
@@ -1694,7 +1789,10 @@ function floorChip(e){
                      : `<span class="chip chip-exception" title="${esc(`המרווח מתחת לרף ${T}%, ואין בעמדה מוצר אחר שעובר אותו`)}">חריג: אין חלופה בעמדה</span>`;
 }
 const qtyMismatchChip = e => e && e.priceQtyMismatch ? `<span class="chip chip-warn" title="${esc(`המחיר בקובץ התמחור הוא ל-${e.priceBasis.for_qty} יח', והסטודיו מוכר ${e.qty} יח' בכל מכירה`)}">המחיר בקובץ ל-${esc(e.priceBasis.for_qty)} יח', נמכר כ-${esc(e.qty)}</span>` : '';
-const initialChip = e => e && e.retailInitial ? `<span class="chip chip-initial" title="${esc('מחיר התחלתי מ-data/economics/products.json' + (e.priceBasis && e.priceBasis.src ? ` (${e.priceBasis.src})` : '') + '. עריכה בסטודיו גוברת עליו.')}">מחיר התחלתי</span>` : '';
+const initialSrcHe = s => /^initial-card/.test(String(s || '')) ? 'מחיר התחלתי מהכרטיס (price.suggested_retail), לא אושר'
+  : /^initial-leads/.test(String(s || '')) ? `מחיר התחלתי מהליקוט האחרון, לפי שווי בישראל (${String(s).replace(/^initial-leads\s*/, '').replace(/[()]/g, '')}), לא אושר`
+  : 'מחיר התחלתי מ-data/economics/products.json' + (s ? ` (${s})` : '');
+const initialChip = e => e && e.retailInitial ? `<span class="chip chip-initial" title="${esc(initialSrcHe(e.priceBasis && e.priceBasis.src) + '. עריכה בסטודיו גוברת עליו.')}">מחיר התחלתי</span>` : '';
 // "sold as N units" label, shown next to every price; amber chip when the quantity is a guess
 function qtyHtml(e, opts){
   if(!e || e._new) return '';
@@ -1721,6 +1819,11 @@ function refreshView(){
   S.ES = econSettings();
   S.view = S.data.products.map(effProduct).concat(Array.from(S.news, ([id, d]) => leadProduct(id, d)));
   S.byId = new Map(S.view.map(p => [p.id, p]));
+  // ה.11 for a price from the card: is there another product in the slot that clears the target, at its own price?
+  const T = S.ES.v.target_margin_pct / 100, clears = new Map();
+  for(const p of S.view) if(p.slot_key && p.status !== 'rejected' && !p._new && isNum(p.econ.margin) && p.econ.margin >= T - 1e-9 && !(isNum(p.econ.contribution) && p.econ.contribution < 0))
+    (clears.get(p.slot_key) || clears.set(p.slot_key, []).get(p.slot_key)).push(p.id);
+  for(const p of S.view) if(p.fromCard && p.slotAltOk === null) p.slotAltOk = (clears.get(p.slot_key) || []).some(id => id !== p.id);
   S.slotStats = new Map();
   for(const r of S.data.rooms) for(const s of r.slots){
     const direct = S.view.filter(p => p.slot_key === s.key);
@@ -1798,8 +1901,9 @@ function route(focus){
   for(const id of SCREENS){ $('#screen-'+id).hidden = id !== s; }
   for(const a of $$('.tabs a')){ if(a.dataset.screen === s) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); }
   if(focus){ window.scrollTo(0,0); const h = $('#h-'+s); if(h) h.focus({preventScroll:true}); }
+  for(const n of SCREEN_CHUNKS[s] || []) needChunk(n);
   if(s === 'decisions' && S.focusDec) focusDecision();
-  if(S.focusEl && (s === 'rooms' || s === 'sourcing')) focusPending();
+  if(S.focusEl && (s === 'rooms' || (s === 'sourcing' && chunkReady('sourcing')))) focusPending();
 }
 // jump to one decision card (from a "AC1" / "FR-C" chip elsewhere): show all, scroll to it, focus its title
 function gotoDecision(id){
@@ -1947,26 +2051,73 @@ function errText(e){
 function noDbLine(what){ return `<div class="db-line"><span class="db-dot warn"></span><span><strong>תצוגה לקריאה בלבד.</strong> ${esc(what)} כדי לערוך, פתח/י את הדף ב-claude.ai.</span></div>`; }
 
 /* ---------- decisions model ---------- */
+// An answer as the page reads it: {option, note, at, by}. Older answers were a bare option string next to answer_text
+// and answered, in the repo and in the db (QA 2026-10-17, B2: a string's .at is String.prototype.at, and the card
+// printed "function at() { [native code] }"). Whatever the shape, the page shows the option's label and the note.
+function normAnswer(d){
+  if(!d) return null;
+  const a = d.answer;
+  const txt = typeof d.answer_text === 'string' ? d.answer_text.trim() : '';
+  const day = typeof d.answered === 'string' && d.answered.trim() ? d.answered.trim() : null;
+  let o;
+  if(a && typeof a === 'object' && !Array.isArray(a)) o = {option: a.option, note: a.note, at: a.at, by: a.by || a.via};
+  else if((typeof a === 'string' && a.trim()) || typeof a === 'number') o = {option: String(a).trim(), note: '', at: null, by: null};
+  else if(txt) o = {option: null, note: '', at: null, by: null};
+  else return null;
+  o.option = (typeof o.option === 'string' && o.option.trim()) ? o.option.trim() : (typeof o.option === 'number' ? String(o.option) : null);
+  o.note = typeof o.note === 'string' ? o.note : '';
+  if(!o.note.trim() && txt) o.note = txt;
+  o.at = typeof o.at === 'string' && o.at.trim() ? o.at.trim() : day;
+  o.by = typeof o.by === 'string' && o.by.trim() ? o.by.trim() : null;
+  return o;
+}
+const isAnsweredStatus = s => s === 'answered' || s === 'applied';
+function answerTime(a){
+  if(!a || !a.at) return -Infinity;
+  const t = Date.parse(/^\d{4}-\d{2}-\d{2}$/.test(a.at) ? a.at + 'T00:00:00Z' : a.at);
+  return isFinite(t) ? t : -Infinity;
+}
+// The repo (data.json, status/decisions.json) and the db document of one decision (QA 2026-10-17, M3): when both are
+// answered, the newer answer (`at`) wins (a tie goes to the db, the live page); when only the repo is answered (answered
+// in the chat, the db still open) the repo's answer shows. "applied" (db) and "answered" (repo) both count as answered;
+// with the same option on both sides the furthest status shows. The db's text fields win as before.
+function mergeDecision(r, b, id, i){
+  const d = Object.assign({}, r || {}, b || {});
+  d.id = id;
+  d._src = b ? 'db' : 'static';
+  d._rooms = r ? r._rooms : ((b && b.rooms) || []);
+  d._order = r ? r._order : 1000 + i;
+  const ra = normAnswer(r), ba = normAnswer(b);
+  const rs = (r && r.status) || 'open', bs = (b && b.status) || 'open';
+  const rDone = !!ra || isAnsweredStatus(rs), bDone = !!ba || isAnsweredStatus(bs);
+  let win = b ? 'db' : 'repo';
+  if(r && b){
+    if(rDone && !bDone) win = 'repo';
+    else if(rDone && bDone && answerTime(ra) > answerTime(ba)) win = 'repo';
+  }
+  d.answer = win === 'repo' ? ra : ba;
+  d.status = win === 'repo' ? rs : bs;
+  if(r && b && ra && ba && ra.option === ba.option && isAnsweredStatus(rs) && isAnsweredStatus(bs)) d.status = (rs === 'applied' || bs === 'applied') ? 'applied' : 'answered';
+  if(d.answer && (d.status || 'open') === 'open') d.status = 'answered';
+  d._ansSrc = win;
+  d._repoAhead = !!(r && b && win === 'repo' && rDone && !bDone);
+  return d;
+}
 function decisionsAll(){
   const stat = (S.data?.decisions?.items) || [];
+  const live = S.dbState === 'live';
   const meta = new Map(stat.map(d => [d.id, d]));
-  let list;
-  if(S.dbState === 'live'){
-    list = [];
-    for(const [id, doc] of S.dbDocs){
-      const m = meta.get(id);
-      list.push(Object.assign({}, doc, {id, _src:'db', _rooms: m ? m._rooms : (doc.rooms || []), _order: m ? m._order : 1000 + list.length}));
-    }
-    for(const d of stat){ if(!S.dbDocs.has(d.id)) list.push(Object.assign({}, d, {_src:'static'})); }
-  } else {
-    list = stat.map(d => Object.assign({}, d, {_src:'static'}));
-  }
+  const ids = stat.map(d => d.id);
+  if(live) for(const id of S.dbDocs.keys()) if(!meta.has(id)) ids.push(id);
+  const list = ids.map((id, i) => mergeDecision(meta.get(id) || null, live ? (S.dbDocs.get(id) || null) : null, id, i));
   const rank = s => s === 'open' ? 0 : s === 'answered' ? 1 : s === 'applied' ? 2 : 3;
   const st = d => d.status || 'open';
   list.sort((a,b) => rank(st(a)) - rank(st(b)) || (isBlocking(b) - isBlocking(a)) || (a._order - b._order));
   return list;
 }
-const isBlocking = d => (d.status || 'open') === 'open' && !!String(d.blocks || '').trim();
+const isBlocking = d => (d.status || 'open') === 'open' && !d.answer && !!String(d.blocks || '').trim();
+// "approve all recommendations" only ever answers an open decision that has no answer anywhere (repo or db)
+const isBulkable = d => (d.status || 'open') === 'open' && !d.answer && canAnswer(d) && recommended(d).length === 1;
 // a decision only in data.json (_src 'static') is answerable too: writeAnswer creates its db doc
 const canAnswer = d => S.dbState === 'live' && (d._src === 'db' || d._src === 'static') && S.canWrite !== false && (d.status || 'open') !== 'applied' && !S.bulk.running;
 const recommended = d => (d.options || []).filter(o => o.recommended);
@@ -2079,6 +2230,7 @@ function renderOverview(){
             <p><span class="stat bignum">${prods.length}</span> <span class="muted">כרטיסי מוצר</span>${nNew ? ` <span class="chip chip-new">+${nNew} לידים חדשים</span>` : ''}</p>
             <div class="stack" role="img" aria-label="${keys.map(k => `${P_STATUS[k] || k} ${bs[k] || 0}`).join(', ')}">${stack}</div>
             <dl class="kv">${statusRows}</dl>
+            ${Object.keys(D.counts.duplicate_ids || {}).length ? `<p class="small"><span class="flag flag-red"><i class="fdot"></i>${Object.keys(D.counts.duplicate_ids).length} מזהים כפולים: ${Object.entries(D.counts.duplicate_ids).map(([k, v]) => `<code dir="ltr">${esc(k)}</code> (${esc(v.length)} קבצים)`).join(', ')}. הסטודיו מציג כרטיס אחד לכל מזהה, וסנכרון עריכה אליהם נחסם.</span></p>` : ''}
             <p class="small muted">${D.counts.duplicates} כרטיסים כפולים · ${D.counts.images_failed ? `${D.counts.images_failed} בלי תמונה` : 'לכל המוצרים יש תמונה'}${pending ? ` · <span class="flag flag-orange">${pending} ממתינים לסנכרון</span>` : ''}</p>
           </div>
           <div class="section-head"><h2>רווחיות</h2><a class="small" href="#profit">למסך הרווחיות</a></div>
@@ -2092,6 +2244,7 @@ function renderOverview(){
             <p class="small muted">המשלוח הוא יותר ממחצית עלות הנחיתה ב-${hiShip} מתוך ${pb.filter(p => isNum(p.econ.ship_share)).length} מוצרים.</p>
             <p class="small muted">הקמה ${ltr(fmtILS(be.oneTime))} · קבועות ${ltr(fmtILS(be.monthly))} לחודש · ${be.setupOrders != null ? `נקודת איזון: ${be.setupOrders.toLocaleString('en-US')} הזמנות` : !be.n ? 'נקודת האיזון מחכה למחירים' : '<span class="flag flag-red">לא מתאזן: התרומה להזמנה שלילית</span>'} · <a href="#budget">לתקציב</a></p>
           </div>
+          ${coverageCard()}
           ${stylesCard()}
         </aside>
       </div>
@@ -2107,6 +2260,34 @@ function renderOverview(){
     </div>`;
   paintVars($('#ov-body'));
   for(const li of $$('#ov-body .log-item')) li.classList.add('clamp');
+}
+// The official coverage (data/leads/final-2026-10-13/coverage.json, scripts/sourcing/final_round_coverage.py, QA 2026-10-17
+// M7): slots with 3 options ready to sell (pct_ready) and with Israeli shops too (pct_any), per style and in total.
+const covData = () => { const C = S.data && S.data.coverage; return C && C.present ? C : null; };
+const covPct = x => isNum(x) ? `${num1(x)}%` : '—';
+const COV_NOTE = 'עמדה מכוסה בסגנון = 3 אפשרויות למכירה: בחירות קיימות וכרטיסים מהליקוט האחרון בהתאמה 7 ומעלה (לפי ציון המעצב כשבדק, וכרטיס שהמעצב דחה לא נספר). צבע או הדפס של אותו מוצר נספר כאפשרות.';
+function coverageCard(){
+  const C = covData(); if(!C) return '';
+  const T = C.total || {};
+  return `<div class="section-head"><h2 id="h-cov-ov">כיסוי רשמי</h2><a class="small" href="#boards">ללוחות</a></div>
+    <div class="side-card cov-official" data-cov="overview">
+      <p class="cov-total"><span class="stat bignum" dir="ltr">${esc(covPct(T.pct_ready))}</span> <span class="muted">מהעמדות עם 3 אפשרויות מוכנות (${esc(T.covered_ready ?? '—')} מתוך ${esc(T.eligible ?? '—')}) · היעד ${esc(isNum(T.target_pct) ? T.target_pct : 90)}%</span></p>
+      <p class="small muted">כולל חנויות ישראליות: <b dir="ltr">${esc(covPct(T.pct_any))}</b></p>
+      <dl class="kv cov-kv">${(C.styles || []).map(s => `<dt><span class="dot" data-bg="var(--sage-ink)"></span><span>${esc(s.he)}</span></dt><dd dir="ltr">${esc(covPct(s.pct_ready))} <span class="faint">(${esc(covPct(s.pct_any))})</span></dd>`).join('')}</dl>
+      <p class="xs faint">בסוגריים: כולל חנויות ישראליות. ${esc(COV_NOTE)} מקור: <code>${esc(C.file)}</code>${C.date ? `, ${esc(fmtDate(C.date))}` : ''}.</p>
+    </div>`;
+}
+function coverageSection(){
+  const C = covData(); if(!C) return '';
+  const T = C.total || {};
+  const rows = (C.styles || []).map(s => `<tr data-style="${esc(s.id)}"><th scope="row">${esc(s.he)}</th><td class="num"><span dir="ltr">${esc(covPct(s.pct_ready))}</span></td><td class="num"><span dir="ltr">${esc(covPct(s.pct_any))}</span></td><td class="num"><span dir="ltr">${esc(s.covered_ready ?? '—')}/${esc(s.eligible ?? '—')}</span></td><td><span class="meter" aria-hidden="true"><span data-w="${Math.max(0, Math.min(100, Number(s.pct_ready) || 0))}"></span></span></td></tr>`).join('');
+  return `<section class="section cov-official" aria-labelledby="h-bd-cov" data-cov="boards">
+    <div class="section-head"><h2 id="h-bd-cov" class="h-mid">הכיסוי הרשמי</h2><span class="small faint"><code>${esc(C.file)}</code>${C.date ? ` · ${esc(fmtDate(C.date))}` : ''}</span></div>
+    <p class="cov-total"><span class="stat bignum" dir="ltr">${esc(covPct(T.pct_ready))}</span> <span class="muted">מהעמדות בכל הסגנונות עם 3 אפשרויות מוכנות (${esc(T.covered_ready ?? '—')} מתוך ${esc(T.eligible ?? '—')}), היעד ${esc(isNum(T.target_pct) ? T.target_pct : 90)}%. כולל חנויות ישראליות: <b dir="ltr">${esc(covPct(T.pct_any))}</b>.</span></p>
+    <div class="tbl-wrap" tabindex="0" role="region" aria-label="הכיסוי הרשמי לפי סגנון"><table class="cov-tbl"><caption class="sr-only">הכיסוי הרשמי לפי סגנון: 3 אפשרויות מוכנות, כולל חנויות ישראליות, ומספר העמדות</caption>
+      <thead><tr><th scope="col">סגנון</th><th scope="col">3 אפשרויות, מוכן</th><th scope="col">כולל ישראל</th><th scope="col">עמדות מכוסות</th><th scope="col"><span class="sr-only">מד</span></th></tr></thead><tbody>${rows}</tbody></table></div>
+    <p class="xs faint">${esc(COV_NOTE)} המדד הרשמי של הליקוט, מ-<code>scripts/sourcing/final_round_coverage.py</code>.</p>
+  </section>`;
 }
 // overview: style demand ranking in Israel (data/strategy/israel-styles.json). A proposal until decision ST2.
 const TREND = {rising:{he:'עולה', ar:'↑', cls:'flag-green'}, stable:{he:'יציב', ar:'→', cls:''}, declining:{he:'יורד', ar:'↓', cls:'flag-red'}};
@@ -2268,7 +2449,7 @@ function renderDecisions(){
   const counts = {all:all.length, open:0, answered:0, applied:0};
   for(const d of all){ const s = d.status || 'open'; if(counts[s] != null) counts[s]++; }
   $('#dec-status').innerHTML = dbStatusHtml();
-  const bulkable = all.filter(d => (d.status || 'open') === 'open' && canAnswer(d) && recommended(d).length === 1);
+  const bulkable = all.filter(isBulkable);
   const f = S.decFilter;
   $('#dec-bar').innerHTML = `
     <div class="seg" role="group" aria-label="סינון לפי סטטוס">
@@ -2309,6 +2490,9 @@ async function runBulk(list){
   const B = S.bulk; B.open = false; B.running = true; B.done = 0; B.total = list.length; B.failed = [];
   renderDecisions();
   for(const d of list){
+    // checked again right before the write: an answer that arrived meanwhile (repo or db) is never overwritten
+    const cur = decisionsAll().find(x => x.id === d.id);
+    if(!cur || cur.answer || (cur.status || 'open') !== 'open'){ B.done++; renderBulk([]); continue; }
     const o = recommended(d)[0];
     const note = (S.drafts[d.id] && S.drafts[d.id].note) || '';
     try{ await writeAnswer(d.id, o.id, note); delete S.drafts[d.id]; }
@@ -2320,7 +2504,28 @@ async function runBulk(list){
   renderDecisions(); renderOverview();
 }
 function optLabel(d, id){ const o = (d.options || []).find(o => o.id === id); return o ? o.label : id; }
-function whoLabel(by){ if(!by) return ''; if(S.uid && by === S.uid) return 'על ידך'; return 'על ידי משתמש אחר'; }
+const optKnown = (d, id) => !!id && (d.options || []).some(o => o.id === id);
+function whoLabel(by){
+  if(!by) return '';
+  if(S.uid && by === S.uid) return 'על ידך';
+  const b = String(by).toLowerCase();
+  if(/chat|צ.?אט/.test(b)) return 'בצ׳אט';
+  if(/telegram|טלגרם/.test(b)) return 'בטלגרם';
+  if(b === 'studio') return 'בסטודיו';
+  if(/^manager|המנהל/.test(b)) return 'על ידי המנהל';
+  if(b === 'user' || b === 'owner') return 'על ידי המשתמש';
+  return 'על ידי משתמש אחר';
+}
+// the answer box: the chosen option's label and the note; an option that is not in the list shows the note instead of a raw id
+function answerBoxHtml(d, ans){
+  const known = optKnown(d, ans.option);
+  const main = known ? optLabel(d, ans.option) : (ans.note || (ans.option ? ans.option.replace(/[-_]+/g, ' ') : '') || '—');
+  const extra = known ? (ans.note ? `<span class="muted">הערה: ${esc(ans.note)}</span>` : '')
+    : (ans.option ? `<span class="xs faint">האפשרות שנרשמה: <code dir="ltr">${esc(ans.option)}</code> (לא ברשימת האפשרויות)</span>` : '');
+  const when = [fmtDate(ans.at), whoLabel(ans.by)].filter(Boolean).join(' ');
+  const ahead = d._repoAhead ? ' <span class="chip st-answered" title="התשובה נרשמה בריפו (status/decisions.json), והמסמך ב-db עוד פתוח">נענתה בריפו</span>' : '';
+  return `<div class="answer-box"><span><strong>התשובה:</strong> ${esc(main)}${ahead}</span>${extra}${when ? `<span class="xs faint">${esc(when)}</span>` : ''}</div>`;
+}
 function decCard(d){
   const st = d.status || 'open';
   const editable = canAnswer(d);
@@ -2342,7 +2547,7 @@ function decCard(d){
   const saving = S.saving.has(d.id);
   const err = S.errors[d.id];
   const savedAt = S.saved[d.id] && (Date.now() - S.saved[d.id] < 6000);
-  const answerBox = ans ? `<div class="answer-box"><span><strong>התשובה:</strong> ${esc(optLabel(d, ans.option))}</span>${ans.note ? `<span class="muted">הערה: ${esc(ans.note)}</span>` : ''}<span class="xs faint">${esc(fmtDate(ans.at))} ${esc(whoLabel(ans.by))}</span></div>` : '';
+  const answerBox = ans ? answerBoxHtml(d, ans) : '';
   return `<article class="dcard is-${esc(st)} ${blocking ? 'is-blocking' : ''}" data-id="${esc(d.id)}" aria-labelledby="dt-${esc(d.id)}">
     <div class="dhead"><span class="did">${esc(d.id)}</span><span class="dgroup">${esc(d.group || '')}</span><span class="spacer"></span>
       ${blocking ? '<span class="chip chip-block">חוסמת</span>' : ''}<span class="chip st-${esc(st)}">${esc(D_STATUS[st] || st)}</span></div>
@@ -2550,13 +2755,13 @@ function refView(ref){
   const p = ref.k === 'card' ? S.byId.get(ref.id) : null;
   const ae = ref.ae ? aeInfo(ref.ae) : null;
   const title = p ? p.name : ref.k === 'ae' ? ((ae && ae.title) || `AliExpress ${ref.ae}`) : ref.k === 'model' ? ref.title : ref.id;
-  const img = p ? (p.img && p.img.src) : ref.k === 'ae' && ae ? (ae.img || ae.img_url) : null;
+  const img = p ? (hasPic(p.img) ? p.img : null) : ref.k === 'ae' && ae ? (ae.img || ae.img_url) : null;
   const url = ref.k === 'ae' ? ((ae && ae.url) || `https://www.aliexpress.com/item/${ref.ae}.html`) : null;
   return {p, title: title || '—', img, url};
 }
 const ROLE_HE = {default:'ברירת מחדל', var2:'וריאציה 2', var3:'וריאציה 3', needs_card:'מועמד'};
 function imgBox(img, ph){
-  return img ? `<span class="ti"><img src="${esc(img)}" alt="" loading="lazy" decoding="async" data-fallback="${esc(ph)}"></span>` : `<span class="ti ph"><span class="ph-t">${esc(ph)}</span></span>`;
+  return hasPic(img) ? `<span class="ti">${picHtml(img, {fallback: ph})}</span>` : `<span class="ti ph"><span class="ph-t">${esc(ph)}</span></span>`;
 }
 function refTile(ref, label, isDefault){
   if(!ref) return '';
@@ -2574,7 +2779,7 @@ function refTile(ref, label, isDefault){
 function setTile(ref, label, isDefault){
   const items = ref.items || [];
   const views = items.map(refView);
-  const mosaic = `<span class="ti"><span class="chip ${isDefault ? 'chip-first' : ''} role">${esc(label)}</span><span class="mosaic">${views.slice(0, 4).map(v => v.img ? `<img src="${esc(v.img)}" alt="" loading="lazy" decoding="async" data-fallback="">` : '<span></span>').join('')}</span></span>`;
+  const mosaic = `<span class="ti"><span class="chip ${isDefault ? 'chip-first' : ''} role">${esc(label)}</span><span class="mosaic">${views.slice(0, 4).map(v => hasPic(v.img) ? picHtml(v.img, {fallback: ''}) : '<span></span>').join('')}</span></span>`;
   const list = items.map((it, i) => { const v = views[i];
     const what = `<span dir="auto">${esc(v.title.length > 46 ? v.title.slice(0, 46) + '…' : v.title)}</span>${it.role ? ` <span class="faint" dir="auto">· ${esc(it.role)}</span>` : ''}`;
     return `<li>${v.p ? `<button type="button" class="linkish" data-product="${esc(v.p.id)}" aria-haspopup="dialog">${what}</button>` : what}${isNum(it.price_ils) ? ` <span class="faint">${ltr(fmtILS(it.price_ils))}</span>` : ''}</li>`; }).join('');
@@ -2728,7 +2933,7 @@ const srcData = () => (S.data && S.data.next_sourcing) || null;
 const SRC_PAGE = 30;
 function resItem(x){
   const p = x.card ? S.byId.get(x.card) : null;
-  const img = p ? (p.img && p.img.src) : (x.img || x.img_url);
+  const img = p ? (hasPic(p.img) ? p.img : null) : (x.img || x.img_url);
   const title = p ? p.name : x.title;
   const chips = [
     x.verdict ? `<span class="chip ${/best|pick/i.test(x.verdict) ? 'st-selected' : /reject/i.test(x.verdict) ? 'st-rejected' : ''}">${esc(x.verdict)}</span>` : '',
@@ -2742,7 +2947,7 @@ function resItem(x){
   ].filter(Boolean).join('');
   const name = p ? `<button type="button" class="linkish rt" data-product="${esc(p.id)}" aria-haspopup="dialog" dir="auto">${esc(title)}</button>` : `<span class="rt" dir="auto">${esc(title)}</span>`;
   const link = x.url && httpsOk(x.url) ? ` <a class="cand-link" href="${esc(x.url)}" target="_blank" rel="noopener noreferrer">לספק<span class="sr-only"> (נפתח בחלון חדש)</span><span aria-hidden="true">&nbsp;↗</span></a>` : '';
-  return `<li class="res-item"><span class="ri ${img ? '' : 'ph'}">${img ? `<img src="${esc(img)}" alt="" loading="lazy" decoding="async" data-fallback="">` : ''}</span>
+  return `<li class="res-item"><span class="ri ${img ? '' : 'ph'}">${img ? picHtml(img, {fallback: ''}) : ''}</span>
     <div class="minw0">${name}${x.option && p ? `<p class="rr" dir="auto">${esc(x.option)}</p>` : ''}<div class="cand-meta">${chips}${link}</div>${x.query ? `<p class="rr">שאילתה: <code dir="ltr">${esc(x.query)}</code></p>` : ''}${x.reason ? `<p class="rr" dir="auto">${esc(x.reason)}</p>` : ''}</div></li>`;
 }
 function ceilHtml(c){
@@ -2792,6 +2997,7 @@ function srcSlotHtml(s, res, comp){
 function renderSourcing(){
   if(!S.data) return;
   const box = $('#src-body');
+  if(!chunkGate('sourcing', box, 'sourcing')){ $('#src-count').textContent = ''; return; }
   const N = srcData();
   if(!N || !N.present){
     box.innerHTML = `<p class="empty">אין עדיין רשימת ליקוט (<code>${esc((N && N.dir) || 'data/leads/next-sourcing/')}round-N-*.json</code>). היא נבנית מרשימות החוסרים של המעצב.</p>`;
@@ -2838,10 +3044,10 @@ function renderSourcing(){
   const ncHtml = (N.needs_card || []).map(x => {
     const ae = aeInfo(x.item) || {};
     const p = x.card ? S.byId.get(x.card) : null;
-    const img = p ? (p.img && p.img.src) : (ae.img || ae.img_url);
+    const img = p ? (hasPic(p.img) ? p.img : null) : (ae.img || ae.img_url);
     const title = p ? p.name : (ae.title || `AliExpress ${x.item}`);
     const slots = (x.slots || []).map(k => { const s = S.slots.get(k); const r = s && S.rooms.get(s.room); return `<button type="button" class="linkish" data-goto-comp="${esc(k)}">${esc(r ? r.name_he : k.split('/')[0])} · ${esc(s ? (s.name_he || s.id) : k)}</button>`; }).join(', ');
-    return `<li class="nc-item" data-item="${esc(x.item)}"><span class="ri ${img ? '' : 'ph'}">${img ? `<img src="${esc(img)}" alt="" loading="lazy" decoding="async" data-fallback="">` : ''}</span>
+    return `<li class="nc-item" data-item="${esc(x.item)}"><span class="ri ${img ? '' : 'ph'}">${img ? picHtml(img, {fallback: ''}) : ''}</span>
       <div class="minw0">${p ? `<button type="button" class="linkish nt" data-product="${esc(p.id)}" aria-haspopup="dialog" dir="auto">${esc(title)}</button>` : `<span class="nt" dir="auto">${esc(title)}</span>`}
         <div class="nm">${p ? '<span class="chip chip-hascard">יש כרטיס</span>' : '<span class="chip chip-needcard">צריך כרטיס</span>'}${x.registry ? `<span class="chip">${esc(REG_HE[x.registry] || x.registry)}</span>` : ''}<span class="code-tag" dir="ltr">${esc(x.item)}</span><a href="${esc(ae.url || `https://www.aliexpress.com/item/${x.item}.html`)}" target="_blank" rel="noopener noreferrer">AliExpress<span class="sr-only"> (נפתח בחלון חדש)</span><span aria-hidden="true">&nbsp;↗</span></a></div>
         ${slots ? `<p class="nm">לעמדה: ${slots}</p>` : ''}</div></li>`;
@@ -3014,7 +3220,7 @@ function renderProducts(){
     const viaShared = f.slot && f.slot !== NO_SLOT && p.slot_key !== f.slot;
     const sh = p.shipping || {};
     const days = sh.days_min != null ? (sh.days_max != null && sh.days_max !== sh.days_min ? `${sh.days_min}–${sh.days_max}` : `${sh.days_min}`) : null;
-    const img = p._new ? `<span class="lead-ph">אין תמונה עד הסנכרון</span>` : `<img src="${esc(p.img.src)}" alt="" loading="lazy" width="${p.img.w}" height="${p.img.h}">`;
+    const img = p._new ? `<span class="lead-ph">אין תמונה עד הסנכרון</span>` : picHtml(p.img);
     const shipTip = isNum(p.ship.usd) ? `משלוח לישראל ליחידה · ${p.ship.label}${p.qty > 1 ? ` · ל-${p.qty} יח' ${fmtUSD(p.ship.total)}` : ''}` : '';
     const price = isNum(p.retail) && p.retail > 0 ? `<span class="pprice"><span class="num" dir="ltr">${esc(fmtILS(p.retail))}</span>${p.retailInitial ? initialChip(p) : ''}</span>` : '';
     // data-* for the smoke test and for scripts: flag, what is missing, where shipping and the price come from, units per sale
@@ -3217,7 +3423,7 @@ function renderDrawer(id, keepScroll){
   const hist = (e.history || []).slice().reverse().slice(0, 12).map(h => `<li><span class="xs faint">${esc(fmtDate(h.at))} ${esc(whoLabel(h.by))}</span><br>${(h.changes || []).map(c => `${esc(EDIT_LABEL[c.field] || c.field)}: ${esc(showVal(c.field, c.from))} ← ${esc(showVal(c.field, c.to))}`).join('<br>')}</li>`).join('');
   body.innerHTML = `
     <div class="d-hero">
-      <div class="pic"><img src="${esc(p.img.src)}" alt="${esc(e.name)}" width="${p.img.w}" height="${p.img.h}"></div>
+      <div class="pic">${picHtml(p.img, {alt: e.name || p.id})}</div>
       <div class="side">
         <div class="chiprow"><span class="chip st-${esc(e.status)}">${esc(P_STATUS[e.status] || e.status)}</span>${(p.dups || []).length ? '<span class="chip chip-dup">כרטיס כפול</span>' : ''}${e.pending ? '<span class="chip chip-pending">ממתין לסנכרון</span>' : ''}</div>
         <p><span class="num price-big" dir="ltr">${esc(fmtUSD(pr.cost))}</span> <span class="muted small">עלות אצל הספק ליחידה</span></p>
@@ -3226,7 +3432,7 @@ function renderDrawer(id, keepScroll){
         <p>${flagHtml(e, true)}${priceChips(e) ? ' ' + priceChips(e) : ''}</p>
         ${isLoser(e) && e.priceBasis && e.priceBasis.action ? `<p class="small loss-action"><strong>מה לעשות:</strong> <span dir="auto">${esc(e.priceBasis.action)}</span></p>` : ''}
         ${p.img.note ? `<p class="xs warn-text">${esc(p.img.note)}</p>` : ''}
-        <p class="xs faint">${(im.urls || []).length > 1 ? `ועוד ${(im.urls.length - 1)} תמונות אצל הספק` : ''}</p>
+        <p class="xs faint">${(isNum(im.n) ? im.n : (im.urls || []).length) > 1 ? `ועוד ${(isNum(im.n) ? im.n : im.urls.length) - 1} תמונות אצל הספק` : ''}</p>
       </div>
     </div>
     <section class="section" aria-labelledby="h-links"><h3 id="h-links" class="h-small">קישורים</h3>${links ? `<ul class="links">${links}</ul>` : '<p class="faint small">אין קישורים.</p>'}</section>
@@ -3546,7 +3752,7 @@ function renderProfit(){
   const trs = rows.map(p => {
     const x = p.econ;
     const share = isNum(x.ship_share) ? `<span class="share ${x.ship_share > 0.5 ? 'hi' : ''}"><span>${ltr(fmtPct(x.ship_share))}${x.ship_share > 0.5 ? ' · מעל חצי' : ''}</span><span class="bar"><span data-w="${Math.round(x.ship_share * 100)}"></span></span></span>` : '<span class="faint">—</span>';
-    return `<tr>
+    return `<tr data-pid="${esc(p.id)}" data-margin="${isNum(x.margin) ? esc((Math.round(x.margin * 1000) / 10).toFixed(1)) : ''}">
       <td class="pname-cell"><button type="button" class="linkish" data-product="${esc(p.id)}" dir="auto">${esc(p.name)}</button>${p.pending ? ' <span class="chip chip-pending">ממתין לסנכרון</span>' : ''}${p.status !== 'candidate' ? ` <span class="chip st-${esc(p.status)}">${esc(P_STATUS[p.status])}</span>` : ''}</td>
       <td>${esc(slotLabel(p))}</td>
       <td class="money">${ltr(fmtUSD(p.price.cost))}${p.qty > 1 && isNum(p.price.cost) ? `<span class="cell-src">× ${ltr(esc(p.qty))} = ${ltr(fmtUSD(p.price.cost * p.qty))}</span>` : ''}</td>
@@ -3834,6 +4040,7 @@ const missText = e => 'חסר ' + e.missing.map(m => MISS_HE[m] || m).join(' ו'
 function renderCompare(){
   if(!S.data) return;
   const box = $('#cmp-body');
+  if(!chunkGate('compare', box, 'compare')){ $('#cmp-count').textContent = ''; return; }
   const C = cmpData();
   if(!C || !C.rooms){ box.innerHTML = '<p class="empty">אין נתוני השוואה. הם נבנים עם <code>python3 studio/build.py</code>.</p>'; $('#cmp-count').textContent = ''; return; }
   const restore = keepFocus(box);
@@ -4112,6 +4319,7 @@ function furnCard(m, st, gate){
 function renderFurniture(){
   if(!S.data) return;
   const box = $('#furn-body');
+  if(!chunkGate('furniture', box, 'furniture')) return;
   const FD = furnData();
   if(!FD || !FD.slots){ box.innerHTML = '<p class="empty">אין נתוני ריהוט. הם נבנים עם <code>python3 studio/build.py</code>.</p>'; return; }
   const restore = keepFocus(box);
@@ -4453,12 +4661,14 @@ async function saveBudget(){
 /* ---------- reports ---------- */
 function renderReports(){
   const D = S.data; const all = (D.reports || []).concat(D.leads || []);
-  if(!all.length){ $('#rep-list').innerHTML = ''; $('#rep-view').innerHTML = '<p class="empty">אין דוחות.</p>'; return; }
-  if(!S.report || !all.find(r => r.id === S.report)) S.report = (D.reports[0] || all[0]).id;
+  const leadsWait = !chunkReady('leads');
+  if(leadsWait && S.screen === 'quality') needChunk('leads');
+  if(!all.length){ $('#rep-list').innerHTML = ''; $('#rep-view').innerHTML = leadsWait ? '<p class="empty chunk-wait" role="status">טוען את סיכומי הליד…</p>' : '<p class="empty">אין דוחות.</p>'; return; }
+  if(!S.report || !all.find(r => r.id === S.report)) S.report = ((D.reports || [])[0] || all[0]).id;
   const item = r => `<li><button type="button" class="rep-btn" data-rep="${esc(r.id)}" aria-current="${r.id === S.report}"><span class="t">${esc(r.title)}</span>${r.date ? `<span class="m num">${esc(fmtDay(r.date))}</span>` : ''}<span class="m path" dir="ltr">${esc(r.path)}</span></button></li>`;
   $('#rep-list').innerHTML = `
     <div><h2>דוחות QA</h2><ul>${(D.reports || []).map(item).join('') || '<li class="faint small">אין</li>'}</ul></div>
-    <div><h2>סיכומי ליד</h2><p class="xs faint">חיפושי הספקים של sourcing-agent</p><ul>${(D.leads || []).map(item).join('') || '<li class="faint small">אין</li>'}</ul></div>`;
+    <div><h2>סיכומי ליד</h2><p class="xs faint">חיפושי הספקים של sourcing-agent</p><ul>${(D.leads || []).map(item).join('') || (leadsWait ? `<li class="faint small" role="status">${S.chunkState.leads === 'error' ? 'לא נטענו (' + esc(S.chunkErr.leads || '') + ')' : 'נטענים…'}</li>` : '<li class="faint small">אין</li>')}</ul></div>`;
   for(const b of $$('#rep-list [data-rep]')) b.onclick = () => { S.report = b.dataset.rep; store.set('report', S.report); renderReports(); const v = $('#rep-view'); v.focus({preventScroll:true}); if(window.innerWidth < 860) v.scrollIntoView({block:'start'}); };
   const r = all.find(x => x.id === S.report);
   $('#rep-view').setAttribute('tabindex','-1');
@@ -4822,30 +5032,59 @@ const bdName = pk => { const p = bdProd(pk); return (p && p.name) || pk.card_id;
 const bdSup = pk => (pk.supplier && pk.supplier.name) || '—';
 function bdImg(pk){
   const p = bdProd(pk), im = p && p.img;
-  return im && im.src ? `<img src="${esc(im.src)}" alt="" loading="lazy" width="${esc(im.w || '')}" height="${esc(im.h || '')}">` : '';
+  return hasPic(im) ? picHtml(im) : '';
 }
 function bdStChip(B, st){
   const L = bdLabel(B, st.code);
   return `<span class="bd-chip tone-${bdTone(L.tone)}" data-code="${esc(st.code)}" title="${esc(st.why || L.why || '')}">${esc(L.he)}</span>`;
 }
+// The margin a board shows agrees with the profitability screen (QA 2026-10-17, M4): a product with a live margin (its
+// price, cost, units and shipping with the current assumptions, as on #profit) shows that one. The designer's own price
+// in a composition or catalog (src "pick") keeps its margin; without a live one the board's margin stays (the pricing
+// file, the final round's record).
+const BD_LIVE_HE = 'חישוב חי, כמו במסך הרווחיות';
+function bdMargin(B, pk){
+  const m = pk.margin, p = bdProd(pk);
+  if(m && m.src === 'pick') return m;
+  if(p && !p._new && isNum(p.econ.margin) && isNum(p.retail) && p.retail > 0){
+    const pct = Math.round(p.econ.margin * 1000) / 10;
+    const floor = isNum(B.margin_floor) ? B.margin_floor : 40, amber = isNum(B.margin_amber) ? B.margin_amber : 25;
+    const loss = isNum(p.econ.contribution) && p.econ.contribution < 0;
+    return {pct, price: p.retail, src: 'live', flag: loss ? 'loss' : pct >= floor ? 'ok' : 'below-floor',
+            tone: (loss || pct < amber) ? 'bad' : pct >= floor ? 'good' : 'warn', exception: !!(m && m.exception)};
+  }
+  return m;
+}
+// the statuses with a live margin: "מפסיד" / "מתחת ל-40%" / "מוכן לדרופשיפינג" follow that margin, the rest stay
+const BD_MARGIN_CODES = new Set(['loss', 'below-floor', 'ready']), BD_FIRST_CODES = new Set(['on-hold', 'no-standard', 'shade-set']);
+function bdStatuses(B, pk, role){
+  const sts = pk.supplier_status || [], m = bdMargin(B, pk);
+  if(!m || m.src !== 'live') return sts;
+  const keep = sts.filter(x => !BD_MARGIN_CODES.has(x.code));
+  const old = sts.find(x => x.code === 'below-floor');
+  const add = m.flag === 'loss' ? [{code: 'loss'}] : m.flag === 'below-floor' ? [old || {code: 'below-floor'}] : [];
+  const out = keep.filter(x => BD_FIRST_CODES.has(x.code)).concat(add, keep.filter(x => !BD_FIRST_CODES.has(x.code)));
+  if(!out.length && role !== 'candidate' && pk.supplier && ['cj', 'aliexpress', 'zendrop'].includes(pk.supplier.key)) out.push({code: 'ready'});
+  return out;
+}
 function bdMarginText(B, m){
   if(!m || !isNum(m.pct)) return 'לא תומחר';
-  const src = (B.margin_src_he || {})[m.src] || m.src || '';
+  const src = m.src === 'live' ? BD_LIVE_HE : (B.margin_src_he || {})[m.src] || m.src || '';
   return `רווח ${num1(m.pct)}%${isNum(m.price) ? ` במחיר ${bdShek(m.price)}` : ''}${src ? ' · מקור: ' + src : ''}${m.file ? ` (${m.file})` : ''}`;
 }
 function bdMarginChip(B, m){
-  if(!m || !isNum(m.pct)) return `<span class="bd-chip tone-neutral bd-margin" data-tone="none" title="אין חישוב רווח: לא בבחירת המעצב, לא בקובץ התמחור ולא בליקוט">לא תומחר</span>`;
+  if(!m || !isNum(m.pct)) return `<span class="bd-chip tone-neutral bd-margin" data-tone="none" data-src="" title="אין חישוב רווח: לא בבחירת המעצב, לא בקובץ התמחור ולא בליקוט">לא תומחר</span>`;
   const tone = bdTone(m.tone);
-  return `<span class="bd-chip tone-${tone} bd-margin" data-tone="${tone}" title="${esc(bdMarginText(B, m))}">רווח <span dir="ltr">${esc(num1(m.pct))}%</span></span>`;
+  return `<span class="bd-chip tone-${tone} bd-margin" data-tone="${tone}" data-src="${esc(m.src || '')}" data-pct="${esc(Number(m.pct).toFixed(1))}" title="${esc(bdMarginText(B, m))}">רווח <span dir="ltr">${esc(num1(m.pct))}%</span></span>`;
 }
 // one line for an alternate's label and tooltip: name · supplier · statuses · margin
-const bdLine = (B, pk) => [bdName(pk), bdSup(pk) !== '—' ? 'ספק ' + bdSup(pk) : '', ...(pk.supplier_status || []).map(s => bdLabel(B, s.code).he),
-  pk.margin && isNum(pk.margin.pct) ? `רווח ${num1(pk.margin.pct)}%` : 'לא תומחר'].filter(Boolean).join(' · ');
+const bdLine = (B, pk, role) => { const m = bdMargin(B, pk); return [bdName(pk), bdSup(pk) !== '—' ? 'ספק ' + bdSup(pk) : '', ...bdStatuses(B, pk, role).map(s => bdLabel(B, s.code).he),
+  m && isNum(m.pct) ? `רווח ${num1(m.pct)}%` : 'לא תומחר'].filter(Boolean).join(' · '); };
 
 function bdTile(B, s){
   const name = esc(s.name_he || s.id);
   if(!s.picks || !s.picks.length) return `<li class="bt bt-empty" data-slot="${esc(s.id)}" data-status="${esc(s.status)}"><div class="bt-miss"><span class="bt-slot">${name}</span><b>${s.status === 'on-hold' ? 'בהמתנה' : 'חסר'}</b></div></li>`;
-  const main = s.picks[0], p = bdProd(main), img = bdImg(main), sts = main.supplier_status || [];
+  const main = s.picks[0], p = bdProd(main), img = bdImg(main), sts = bdStatuses(B, main, main.role);
   const tag = s.status === 'chosen' ? '<span class="bt-tag">נבחר</span>' : '<span class="bt-tag c">מועמד</span>';
   const noimg = p && p.img && p.img.ok === false ? '<span class="bt-noimg chip">אין תמונה</span>' : '';
   const more = sts.length > 1 ? `<span class="bd-more" dir="ltr" title="${esc(sts.slice(1).map(x => bdLabel(B, x.code).he).join(' · '))}">+${sts.length - 1}</span>` : '';
@@ -4853,13 +5092,13 @@ function bdTile(B, s){
     <span class="bt-body">
       <span class="bt-slot">${name}</span>
       <span class="bt-name" dir="auto">${esc(bdName(main))}</span>
-      <span class="bt-row">${isNum(main.price) && main.price ? `<span class="bt-price" dir="ltr">${esc(bdShek(main.price))}</span>` : ''}${bdMarginChip(B, main.margin)}</span>
+      <span class="bt-row">${isNum(main.price) && main.price ? `<span class="bt-price" dir="ltr">${esc(bdShek(main.price))}</span>` : ''}${bdMarginChip(B, bdMargin(B, main))}</span>
       <span class="bt-row"><span class="bt-sup">${esc(bdSup(main))}</span>${sts.length ? bdStChip(B, sts[0]) + more : ''}</span>
     </span>`;
   const head = p ? `<button type="button" class="bt-main" data-product="${esc(main.card_id)}" aria-haspopup="dialog">${body}</button>`
                  : `<div class="bt-main" title="${esc(`הכרטיס ${main.card_id} לא נמצא בנתונים`)}">${body}</div>`;
   const alts = s.picks.slice(1, 3).map(pk => {
-    const im = bdImg(pk), lab = 'חלופה: ' + bdLine(B, pk);
+    const im = bdImg(pk), lab = 'חלופה: ' + bdLine(B, pk, pk.role);
     return bdProd(pk) ? `<button type="button" class="bt-alt${im ? '' : ' ph'}" data-product="${esc(pk.card_id)}" data-alt="1" aria-haspopup="dialog" aria-label="${esc(lab)}" title="${esc(lab)}">${im}</button>`
                       : `<span class="bt-alt ph" role="img" aria-label="${esc(lab)}" title="${esc(lab)}"></span>`;
   }).join('');
@@ -4876,7 +5115,7 @@ function bdTable(B, b){
       continue;
     }
     s.picks.forEach((pk, i) => {
-      const p = bdProd(pk), im = bdImg(pk), sts = pk.supplier_status || [], m = pk.margin;
+      const p = bdProd(pk), im = bdImg(pk), sts = bdStatuses(B, pk, pk.role), m = bdMargin(B, pk);
       const role = i ? '' : s.status === 'chosen' ? ' <span class="bd-chip tone-neutral">נבחר</span>' : ' <span class="bd-chip tone-info">מועמד</span>';
       const inner = `<span class="tp-th${im ? '' : ' ph'}">${im}</span><span class="tp-t"><span class="tp-n" dir="auto">${esc(bdName(pk))}</span>${role ? `<span>${role}</span>` : ''}</span>`;
       const prod = p ? `<button type="button" class="tp" data-product="${esc(pk.card_id)}" aria-haspopup="dialog">${inner}</button>` : `<div class="tp">${inner}</div>`;
@@ -4906,7 +5145,7 @@ function bdList(B, b){
       return `<li class="bl-slot is-empty" data-slot="${esc(s.id)}" data-status="${esc(s.status)}"><h3 class="bl-h">${name}</h3><span class="bd-chip tone-${hold ? 'warn' : 'neutral'}">${hold ? 'בהמתנה' : 'חסר'}</span></li>`;
     }
     const picks = s.picks.map((pk, i) => {
-      const p = bdProd(pk), im = bdImg(pk), sts = pk.supplier_status || [], m = pk.margin;
+      const p = bdProd(pk), im = bdImg(pk), sts = bdStatuses(B, pk, pk.role), m = bdMargin(B, pk);
       const role = `<span><span class="bd-chip tone-${i ? 'neutral' : s.status === 'chosen' ? 'neutral' : 'info'}">${i ? `חלופה ${i}` : s.status === 'chosen' ? 'נבחר' : 'מועמד'}</span></span>`;
       const inner = `<span class="tp-th${im ? '' : ' ph'}">${im}</span><span class="bl-t"><span class="bl-n" dir="auto">${esc(bdName(pk))}</span>${role}</span>`;
       const price = isNum(pk.price) && pk.price ? `<span class="bl-price" dir="ltr">${esc(bdShek(pk.price))}</span>`
@@ -4937,7 +5176,7 @@ function bdMatrix(B, F){
     <thead><tr><td></td>${B.styles.map(st => `<th scope="col">${esc(st.he)}</th>`).join('')}</tr></thead>
     <tbody>${B.rooms.map(r => `<tr><th scope="row">${esc(r.he)}</th>${B.styles.map(st => cell(st, r)).join('')}</tr>`).join('')}</tbody></table>`;
   const scale = `<ul class="bd-scale" aria-label="מקרא: אחוז העמדות עם מוצר"><li class="faint">מילוי:</li>${BD_BINS.map((l, i) => `<li><i data-bin="${i}" aria-hidden="true"></i><span dir="ltr">${l}</span></li>`).join('')}</ul>`;
-  return `<section class="section" aria-labelledby="h-bd-mx"><div class="section-head"><h2 id="h-bd-mx" class="h-mid">מפת הכיסוי</h2><span class="small faint">אחוז העמדות עם מוצר (נבחר או מועמד) בכל לוח. לחיצה פותחת את הלוח</span></div>${wide}${narrow}${scale}</section>`;
+  return `<section class="section" aria-labelledby="h-bd-mx"><div class="section-head"><h2 id="h-bd-mx" class="h-mid">עמדות עם מוצר בכל לוח</h2><span class="small faint">אחוז העמדות עם מוצר אחד לפחות (נבחר או מועמד) בכל לוח. זה לא הכיסוי הרשמי שלמעלה (3 אפשרויות מוכנות). לחיצה פותחת את הלוח</span></div>${wide}${narrow}${scale}</section>`;
 }
 
 function bdSet(patch, focusSel){
@@ -4949,7 +5188,9 @@ function bdSet(patch, focusSel){
 
 function renderBoards(){
   if(!S.data) return;
-  const box = $('#bd-body'), B = bdData();
+  const box = $('#bd-body');
+  if(!chunkGate('boards', box, 'boards')){ $('#bd-count').textContent = ''; return; }
+  const B = bdData();
   if(!B){
     const err = S.data.boards && S.data.boards.error;
     box.innerHTML = `<p class="empty">אין לוחות בנתונים. הם נבנים עם <code>python3 studio/build.py</code> מ-<code>scripts/boards/room_boards.py</code>.${err ? ` <span class="small">(${esc(err)})</span>` : ''}</p>`;
@@ -4970,11 +5211,14 @@ function renderBoards(){
   const b = B.boards.find(x => x.style === F.style && x.room === F.room) || B.boards[0];
   const all = B.boards.reduce((n, x) => n + ((x.counts || {}).slots || 0), 0);
   const filled = B.boards.reduce((n, x) => n + ((x.counts || {}).chosen || 0) + ((x.counts || {}).candidate || 0), 0);
-  $('#bd-count').textContent = `${B.boards.length} לוחות · ${filled} מתוך ${all} עמדות עם מוצר`;
+  const cov = covData();
+  $('#bd-count').textContent = `${B.boards.length} לוחות · ${filled} מתוך ${all} עמדות עם מוצר (${bdPct(all ? filled / all : null)}, לא הכיסוי הרשמי)` + (cov ? ` · הכיסוי הרשמי ${covPct((cov.total || {}).pct_ready)}` : '');
   const seg = (key, list, cur, label) => `<div class="seg-row"><span class="seg-l" aria-hidden="true">${label}</span><div class="seg" role="group" aria-label="${label}">${list.map(x => `<button type="button" data-bd-${key}="${esc(x.id)}" aria-pressed="${x.id === cur}">${esc(x.he)}</button>`).join('')}</div></div>`;
   const sel = (id, list, cur, label) => `<div class="field"><label for="${id}">${label}</label><select id="${id}">${list.map(x => `<option value="${esc(x.id)}"${x.id === cur ? ' selected' : ''}>${esc(x.he)}</option>`).join('')}</select></div>`;
   const c = b.counts || {};
-  box.innerHTML = `${bdMatrix(B, F)}
+  const gone = B.boards.reduce((n, x) => n + (x.dropped || []).length, 0);
+  box.innerHTML = `${coverageSection()}${bdMatrix(B, F)}
+    ${gone || (B.audit && B.audit.error) ? `<p class="small muted bd-gone">${gone ? `${esc(gone)} בחירות לא מוצגות בלוחות, כי הכרטיס נדחה או שהמעצב דחה אותו בעמדה או נתן לו פחות מ-7 בסגנון.` : ''}${B.audit && B.audit.error ? ` <span class="warn-text">ביקורות המעצב לא נטענו: ${esc(B.audit.error)}</span>` : ''}</p>` : ''}
     <div class="bd-pick">
       <div class="bd-segs">${seg('style', B.styles, F.style, 'סגנון')}${seg('room', B.rooms, F.room, 'חדר')}</div>
       <div class="bd-sel">${sel('bd-style', B.styles, F.style, 'סגנון')}${sel('bd-room', B.rooms, F.room, 'חדר')}</div>
@@ -5002,6 +5246,7 @@ function renderBoards(){
     window.scrollTo(0, Math.max(0, top));
     say(h.textContent);
   };
+  paintVars(box);
   if(back){ const el = $$(back, box).find(x => x.offsetParent); if(el) el.focus({preventScroll:true}); }
 }
 
