@@ -1,0 +1,186 @@
+{
+ "source": "aliexpress",
+ "id": "1005010695223208",
+ "sections": {
+  "product": {
+   "fetched_at": "2026-10-17T16:03:15+00:00",
+   "endpoint": "aliexpress.ds.product.get",
+   "params": {
+    "ship_to_country": "IL",
+    "product_id": "1005010695223208",
+    "target_currency": "USD",
+    "target_language": "en"
+   },
+   "payload": {
+    "result": {
+     "ae_item_sku_info_dtos": [
+      {
+       "sku_attr": "14:10#A;200007763:201336100",
+       "offer_sale_price": "15.50",
+       "sku_id": "12000053214013032",
+       "limit_strategy": "create_order_fail",
+       "price_include_tax": false,
+       "currency_code": "USD",
+       "sku_price": "35.23",
+       "buy_amount_limit_set_by_promotion": "999",
+       "offer_bulk_sale_price": "15.50",
+       "sku_available_stock": 489,
+       "id": "14:10#A;200007763:201336100",
+       "ae_sku_property_dtos": [
+        {
+         "sku_property_value": "China Mainland",
+         "sku_property_name": "Ships From",
+         "property_value_id": 201336100,
+         "sku_property_id": 200007763
+        },
+        {
+         "sku_property_value": "Red",
+         "sku_image": "https://ae01.alicdn.com/kf/S4fbe82638f6e48f7b6103bf51bf5a4f7l.jpg",
+         "sku_property_name": "Color",
+         "property_value_definition_name": "A",
+         "property_value_id": 10,
+         "sku_property_id": 14
+        }
+       ]
+      }
+     ],
+     "ae_multimedia_info_dto": {
+      "image_urls": "https://ae01.alicdn.com/kf/S43cb666215c441da8996e8e91dc543ffZ.jpg;https://ae01.alicdn.com/kf/Saa1c209c66dd472b8a8be89e6434cbaaq.jpg;https://ae01.alicdn.com/kf/Se643b68f40ff44d8bc32d991aa3bfa2ar.jpg;https://ae01.alicdn.com/kf/S64ad3015549847d282d2137b31b2683du.jpg;https://ae01.alicdn.com/kf/Sf39c549cac8048c2a45e1f1da747f79e8.jpg;https://ae01.alicdn.com/kf/Sdedb0b0d881a43e28c2a310dbb2d365bj.jpg"
+     },
+     "package_info_dto": {
+      "package_width": 16,
+      "package_height": 6,
+      "package_length": 26,
+      "gross_weight": "0.400",
+      "package_type": false,
+      "product_unit": 100000015
+     },
+     "logistics_info_dto": {
+      "delivery_time": 7,
+      "ship_to_country": "IL"
+     },
+     "product_id_converter_result": {
+      "main_product_id": 1005010695223208,
+      "sub_product_id": "{\"US\":3256810508908456}"
+     },
+     "ae_item_base_info_dto": {
+      "mobile_detail": "<removed; use --full>",
+      "subject": "Wooden Decorative Bowl Handcrafted Bread Tray Bohemian Rustic Bowl for Candle Fruit Table Centerpiece Kitchen Serving Counter",
+      "evaluation_count": "0",
+      "sales_count": "5",
+      "product_status_type": "onSelling",
+      "avg_evaluation_rating": "0.0",
+      "separated_listing": false,
+      "currency_code": "USD",
+      "sl_product": false,
+      "category_id": 100003308,
+      "product_id": 1005010695223208,
+      "detail": "<removed; use --full>"
+     },
+     "has_whole_sale": false,
+     "ae_item_properties": [
+      {
+       "attr_name_id": 2,
+       "attr_value_id": 201512802,
+       "attr_name": "Brand Name",
+       "attr_value": "NONE"
+      },
+      {
+       "attr_name_id": 400000603,
+       "attr_value_id": 23399591357,
+       "attr_name": "High-concerned chemical",
+       "attr_value": "none"
+      },
+      {
+       "attr_name_id": 219,
+       "attr_value_id": 9441741844,
+       "attr_name": "Origin",
+       "attr_value": "Mainland China"
+      },
+      {
+       "attr_name_id": 20662,
+       "attr_value_id": 100007610,
+       "attr_name": "Feature",
+       "attr_value": "Stocked"
+      },
+      {
+       "attr_name_id": -1,
+       "attr_value_id": -1,
+       "attr_name": "suitable_for",
+       "attr_value": "family"
+      },
+      {
+       "attr_name_id": -1,
+       "attr_value_id": -1,
+       "attr_name": "usage_scenarios",
+       "attr_value": "home"
+      },
+      {
+       "attr_name_id": 10,
+       "attr_value_id": 350383,
+       "attr_name": "Material",
+       "attr_value": "Wood"
+      },
+      {
+       "attr_name_id": 10,
+       "attr_value_id": 361202,
+       "attr_name": "Material",
+       "attr_value": "Wood"
+      }
+     ],
+     "ae_store_info": {
+      "store_id": 1102814635,
+      "shipping_speed_rating": "4.3",
+      "communication_rating": "4.3",
+      "store_name": "Wakuwaku2077 Store",
+      "store_country_code": "CN",
+      "item_as_described_rating": "4.1"
+     }
+    },
+    "rsp_code": 200,
+    "rsp_msg": "Call succeeds",
+    "request_id": "212a715417922529950864742",
+    "_trace_id_": "212a7b8d17922529950843789e0fc8"
+   }
+  },
+  "freight:12000053214013032:IL:1": {
+   "fetched_at": "2026-10-17T16:03:17+00:00",
+   "endpoint": "aliexpress.ds.freight.query",
+   "params": {
+    "quantity": 1,
+    "shipToCountry": "IL",
+    "productId": "1005010695223208",
+    "selectedSkuId": "12000053214013032",
+    "language": "en_US",
+    "locale": "en_US",
+    "currency": "USD"
+   },
+   "payload": {
+    "options": [
+     {
+      "code": "CAINIAO_STANDARD",
+      "company": "AliExpress standard shipping",
+      "fee": 0.0,
+      "currency": null,
+      "days_min": 8,
+      "days_max": 15,
+      "estimated": "Oct. 25 - Nov. 01",
+      "tracking": true,
+      "free_shipping": true,
+      "ship_from": "CN",
+      "stock": null,
+      "guaranteed_days": "60"
+     }
+    ],
+    "success": true,
+    "code": 200,
+    "msg": "Call succeeds",
+    "item_id": "1005010695223208",
+    "sku_id": "12000053214013032",
+    "country": "IL",
+    "qty": 1,
+    "raw": null
+   }
+  }
+ }
+}
