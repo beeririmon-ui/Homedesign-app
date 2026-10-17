@@ -12,7 +12,7 @@ This is the AliExpress part of the massive round to 80% in every style. The rest
 1. Pull the branch `claude/agent-system-brand-launch-ax87dv`.
 2. Check that the token is there: `python3 scripts/ae/auth.py status`.
    - If there is no token, or it can't be refreshed, the owner authorizes once, per `scripts/ae/README.md` §2.
-   - The owner types the code into the terminal himself. Never paste a key, secret, code or token into a chat or a file.
+   - In a terminal, the owner types the code himself. In a cloud session the owner may paste the redirect link (`127.0.0.1/callback?code=...`) into the chat: the code is single-use and expires in minutes (studio-rules ח.3). Exchange it at once with `auth.py code`. Never a key, a secret or a token in a chat or a file.
    - The app is in Test status, so the token lasts about a day and the refresh about two. `ds.py` refreshes by itself while it can.
 3. Refresh the targets, so you work on what is still missing after the cloud teams:
    ```bash
