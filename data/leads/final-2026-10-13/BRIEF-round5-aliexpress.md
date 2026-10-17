@@ -22,6 +22,16 @@ The owner decided on the round-5 audit questions. See `docs/studio-rules.md` ה.
   - Kids' items need EN71 declared, not only CE.
 - **Round 5b:** a cloud team is on furniture and boxes now. Its queue is `round5/ae-queue-5b.json`.
 
+## Continue, 2026-10-17 evening (after the first AliExpress pass)
+When the owner writes "תמשיך":
+1. Pull, then re-run `final_round_coverage.py` and `round5_targets.py`. Coverage now applies the designer audit and R5Q1.
+2. Open the two new queues:
+   - `round5/ae-queue-5b.json`: 24 listings for furniture, planters and boxes. It includes a freight check for MGO size 44 and the seagrass box 1005006768278100.
+   - `round5/ae-queue-sofa.json`: 11 listings for the designed sofa fabric, plus its suggested queries. Kantha has not been searched yet.
+   - For the sofa fabric, the spec is `round5/sofa-fabric-brief.md` and the R5Q1 section of each `docs/design-bible/<style>-brief-draft.md`. The designer's remap is `results/round5b-designer-remap.json`.
+3. Then search for the weakest styles. Use the remaining-gap list in `round5/targets.json`, and start with modern country and boho.
+4. Write the results to `results/round5c-aliexpress.json` and `.md`, in the same shape. Commit and push after each group.
+
 ## Step 0. Access
 1. Pull the branch `claude/agent-system-brand-launch-ax87dv`.
 2. Check that the token is there: `python3 scripts/ae/auth.py status`.
