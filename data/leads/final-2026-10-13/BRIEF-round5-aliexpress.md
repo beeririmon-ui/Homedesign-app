@@ -8,6 +8,20 @@ This is the AliExpress part of the massive round to 80% in every style. The rest
 - the cap;
 - the output shape.
 
+## Update 2026-10-17 (owner decisions, read on every pull)
+The owner decided on the round-5 audit questions. See `docs/studio-rules.md` ה.10 "מוצר שנראה איכותי" and ז "החלטות המשתמש על ביקורת המעצב".
+- **Premium pricing:** a product that looks high-quality may be priced up to the typical Israeli comp. Never above the highest comp, and still no loss.
+- **Furniture-type slots stay for sale:** shower stool, towel ladder, step stool, kids' chair, kids' bookshelf, gallery stool, pouf, planters.
+- **New envelopes:**
+  - `work/shelf-boxes`: both boxes h 12–18.
+  - `hall/storage-boxes`: each box 26–34 × 20–30 × 20–35, or one long basket 55–68 × 25–30 × 20–30.
+- **Prints:** sold unframed, and the product page says "ללא מסגרת".
+- **The sofa slot outside Nordic** is a designed fabric laid on the sofa. See `round5/sofa-fabric-brief.md` once it's pushed.
+- **Coverage:** `final_round_coverage.py` now applies the master-designer's audit (`round5/designer-audit.json`).
+  - Near-identical items count as one option: the pleated walnut floor lamps were all one look.
+  - Kids' items need EN71 declared, not only CE.
+- **Round 5b:** a cloud team is on furniture and boxes now. Its queue is `round5/ae-queue-5b.json`.
+
 ## Step 0. Access
 1. Pull the branch `claude/agent-system-brand-launch-ax87dv`.
 2. Check that the token is there: `python3 scripts/ae/auth.py status`.
