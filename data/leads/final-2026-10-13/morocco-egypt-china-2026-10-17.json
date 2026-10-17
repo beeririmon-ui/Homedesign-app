@@ -1,0 +1,1233 @@
+{
+ "date": "2026-10-17",
+ "brief": "docs/studio-rules.md ז, 'ספקים לחסרים: מרוקו, מצרים וסין'",
+ "assumptions": {
+  "fx_ils_per_usd": 3.3,
+  "egp_per_usd": 51.3722,
+  "egp_source": "https://currencyconvert.online/usd/egp (2026-07-26, 51.3722)",
+  "mad_per_usd": 9.3348,
+  "mad_source": "https://www.poundsterlinglive.com/history/USD-MAD-2026 (2026-09-01)",
+  "formula": "net=price/1.18; fees=0.02*price+1.2; returns=0.08*net; contribution=net-landed-fees-returns; landed=(cost+shipping)*3.3 (+₪48 ערכת E27 לאהיל)",
+  "shipping_he": "אף ספק לא פרסם מחיר משלוח לישראל. לכן מוצגים: מרווח לפני משלוח, תקרת משלוח לאיזון ולמרווח 40%, וההנחה שדרושה מהמחיר הציבורי. ייחוס: Eurosender, חבילה ממצרים לישראל מ-€73.27 ומ מרוקו מ-€119.82, לפני מע\"מ (https://www.eurosender.com/en/gdd/shipping-egypt-israel, https://eurosender.com/en/gdd/shipping-morocco-israel).",
+  "import_vat_he": "פטור יבוא אישי עלה ל-$150 (צו מ-23.12.2025, https://www.taxand.com/our-thinking/insights/israel-key-vat-and-customs-updates-effective-in-2026/). מעל זה הלקוח משלם מע\"מ יבוא אלא אם המשלוח DDP. מכס על שטיחים: לא אומת."
+ },
+ "shipping_lanes": {
+  "egypt_israel": "DHL Express Egypt משרת את ישראל; תוספת 'Elevated Risk' הושעתה מ-25.9.2026 (https://mydhl.express.dhl/eg/en/important-information.html).",
+  "morocco_israel": "DHL Express Morocco משרת את ישראל; אותה השעיה מ-25.9.2026 (https://mydhl.express.dhl/ma/fr/important-information.html).",
+  "aramex_postal": "לא נמצא מקור רשמי ל-Aramex או לדואר מרוקו/מצרים לישראל."
+ },
+ "suppliers": [
+  {
+   "slug": "kiliim",
+   "rank_group": "egypt-rugs",
+   "rank": 1,
+   "name": "Kiliim",
+   "country": "מצרים",
+   "city": "קהיר (סטודיו במעדי); אריגה בפווה",
+   "type": "מותג-יצרן (מעבדת אריגה עם אומנים)",
+   "website": "https://intl.kiliim.com/",
+   "social": "https://www.instagram.com/kiliim_",
+   "email": "info@kiliim.com",
+   "reorderable": "כן: קטלוג סדרתי, כל דגם ב-6 מידות קבועות (60×90 עד 170×260), 'אפשר להתאים מידה או צבע לכל דגם' (FAQ). כל יחידה עבודת יד עם שונות קלה.",
+   "shipping_israel": {
+    "status": "כן, באתר",
+    "evidence": "בחנות הבינלאומית 'Israel (USD $)' במבחר המדינות, וישראל ברשימת מחשבון המשלוח בעגלה (https://intl.kiliim.com/pages/faqs). קו DHL Express ממצרים לישראל פעיל (https://mydhl.express.dhl/eg/en/important-information.html).",
+    "method": "לא צוין (שליח בינלאומי)",
+    "days": "במלאי: יציאה תוך 3–5 ימי עסקים; לפי הזמנה: 3–6 שבועות (https://intl.kiliim.com/policies/shipping-policy)",
+    "price": "לא צוין; מחושב בקופה. מכס ומס על הקונה (מדיניות המשלוח)"
+   },
+   "trade": "דף Wholesale and Trade עם טופס: עובדים עם חנויות, מלונות ויזמים (https://kiliim.com/pages/wholesale). MOQ והנחה: לא צוין. דרופשיפ: לא צוין.",
+   "flags_he": "המחיר הבינלאומי בדולר גבוה ממחיר השוק הישראלי לשטיחים דומים; בלי מחיר סוחר אין רווח.",
+   "products": [
+    {
+     "name": "Sediments Rug (Desert Neutrals)",
+     "url": "https://intl.kiliim.com/products/sediments-rug",
+     "sizes_cm": "60×90 $85.50 · 70×150 $153 · 100×150 $189 · 100×200 $270 · 150×200 $364.50 · 170×260 $535.50",
+     "price": 364.5,
+     "currency": "USD",
+     "material": "צמר על בסיס כותנה, אריגה ידנית",
+     "slots": [
+      "kids/rug",
+      "work/rug"
+     ],
+     "fits_envelope": "borderline (150×200 מול 140×200 ומול 160–180×200–220)",
+     "style_fit_guess": {
+      "nordic": 7,
+      "warm-modern": 7,
+      "japandi": 6,
+      "mediterranean": 6,
+      "modern-country": 6,
+      "boho": 6
+     },
+     "wired": false,
+     "ce_220_240v": "לא צוין",
+     "image": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/morocco-egypt/kiliim/sediments-rug.jpg",
+     "comps": [
+      {
+       "name": "מתריב, פולו 10 צמר 140×200",
+       "price_ils": 2200,
+       "url": "https://www.carpets-matriv.co.il/product/%d7%a9%d7%98%d7%99%d7%97-%d7%a4%d7%95%d7%9c%d7%95-%d7%a6%d7%9e%d7%a8-"
+      },
+      {
+       "name": "תומיק, שטיח מרוקאי 150/200 צמר",
+       "price_ils": 1950,
+       "url": "https://www.tomik.co.il/products/%D7%A9%D7%98%D7%99%D7%97-%D7%9E%D7%A8%D7%95%D7%A7%D7%90%D7%99"
+      },
+      {
+       "name": "Nortli, YUKI יוטה-כותנה 140×200",
+       "price_ils": 1638,
+       "url": "https://nortli.co.il/products/yuki-rug-70-200-copy-1"
+      }
+     ],
+     "economics": {
+      "price_ils": 1790,
+      "cost_usd": 364.5,
+      "cost_ils": 1202.8,
+      "set_ils": 0,
+      "margin_before_shipping_pct": 10.3,
+      "contribution_before_shipping_ils": 155.7,
+      "max_shipping_usd_breakeven": 47.2,
+      "max_shipping_usd_for_40": -136.7,
+      "discount_needed_for_40_at_zero_shipping_pct": 37
+     },
+     "notes_he": "שמנת עם מוטיבים דקים. מידה מותאמת 140×200 או 170×210 אפשרית לפי ה-FAQ, המחיר לא צוין."
+    },
+    {
+     "name": "White Fringe Rug",
+     "url": "https://intl.kiliim.com/products/white-fringe",
+     "sizes_cm": "כמו למעלה: 150×200 $364.50 · 170×260 $535.50",
+     "price": 364.5,
+     "currency": "USD",
+     "material": "צמר על בסיס כותנה; שורות פרנזים (טקסטורה ברברית)",
+     "slots": [
+      "work/rug",
+      "kids/rug"
+     ],
+     "fits_envelope": "borderline",
+     "style_fit_guess": {
+      "nordic": 5,
+      "warm-modern": 6,
+      "japandi": 4,
+      "mediterranean": 5,
+      "modern-country": 5,
+      "boho": 7
+     },
+     "wired": false,
+     "ce_220_240v": "לא צוין",
+     "image": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/morocco-egypt/kiliim/white-fringe.jpg",
+     "comps": [
+      {
+       "name": "מתריב, פולו 10 צמר 140×200",
+       "price_ils": 2200,
+       "url": "https://www.carpets-matriv.co.il/product/%d7%a9%d7%98%d7%99%d7%97-%d7%a4%d7%95%d7%9c%d7%95-%d7%a6%d7%9e%d7%a8-"
+      },
+      {
+       "name": "תומיק, שטיח מרוקאי 150/200 צמר",
+       "price_ils": 1950,
+       "url": "https://www.tomik.co.il/products/%D7%A9%D7%98%D7%99%D7%97-%D7%9E%D7%A8%D7%95%D7%A7%D7%90%D7%99"
+      },
+      {
+       "name": "Nortli, YUKI יוטה-כותנה 140×200",
+       "price_ils": 1638,
+       "url": "https://nortli.co.il/products/yuki-rug-70-200-copy-1"
+      }
+     ],
+     "economics": {
+      "price_ils": 1790,
+      "cost_usd": 364.5,
+      "cost_ils": 1202.8,
+      "set_ils": 0,
+      "margin_before_shipping_pct": 10.3,
+      "contribution_before_shipping_ils": 155.7,
+      "max_shipping_usd_breakeven": 47.2,
+      "max_shipping_usd_for_40": -136.7,
+      "discount_needed_for_40_at_zero_shipping_pct": 37
+     },
+     "notes_he": ""
+    },
+    {
+     "name": "Jute Segments Rug",
+     "url": "https://intl.kiliim.com/products/jute-segments-rug-2",
+     "sizes_cm": "60×90 $68.10 · 70×150 $119.07 · 100×150 $170.10 · 100×200 $252 · 150×200 $378 · 170×260 $567",
+     "price": 378,
+     "currency": "USD",
+     "material": "תערובת יוטה וכותנה על בסיס כותנה",
+     "slots": [
+      "work/rug",
+      "kids/rug"
+     ],
+     "fits_envelope": "borderline",
+     "style_fit_guess": {
+      "nordic": 6,
+      "warm-modern": 5,
+      "japandi": 7,
+      "mediterranean": 7,
+      "modern-country": 6,
+      "boho": 6
+     },
+     "wired": false,
+     "ce_220_240v": "לא צוין",
+     "image": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/morocco-egypt/kiliim/jute-segments-rug-2.jpg",
+     "comps": [
+      {
+       "name": "KUALA, DAKOTA יוטה 140×195",
+       "price_ils": 1337.7,
+       "url": "https://kualastyle.com/products/dakota-%D7%A9%D7%98%D7%99%D7%97-%D7%9E%D7%A2%D7%95%D7%A6%D7%91-%D7%9E%D7%99%D7%95%D7%98%D7%94-%D7%91%D7%92%D7%95%D7%95%D7%9F-%D7%98%D7%91%D7%A2%D7%99"
+      },
+      {
+       "name": "Nortli, YUKI 140×200",
+       "price_ils": 1638,
+       "url": "https://nortli.co.il/products/yuki-rug-70-200-copy-1"
+      },
+      {
+       "name": "Nortli, LUMI יוטה-כותנה 140×200",
+       "price_ils": 1779,
+       "url": "https://nortli.co.il/products/jane-rug-copy-2"
+      }
+     ],
+     "economics": {
+      "price_ils": 1490,
+      "cost_usd": 378,
+      "cost_ils": 1247.4,
+      "set_ils": 0,
+      "margin_before_shipping_pct": -9.2,
+      "contribution_before_shipping_ils": -116.7,
+      "max_shipping_usd_breakeven": -35.4,
+      "max_shipping_usd_for_40": -188.4,
+      "discount_needed_for_40_at_zero_shipping_pct": 50
+     },
+     "notes_he": ""
+    },
+    {
+     "name": "Beige Archways Rug",
+     "url": "https://intl.kiliim.com/products/beige-archways-rug",
+     "sizes_cm": "60×90 $115 · 70×150 $195 · 100×150 $250 · 100×200 $330 · 150×200 $495 · 170×260 $750",
+     "price": 495,
+     "currency": "USD",
+     "material": "100% כותנה",
+     "slots": [
+      "kids/rug",
+      "work/rug"
+     ],
+     "fits_envelope": "borderline",
+     "style_fit_guess": {
+      "nordic": 6,
+      "warm-modern": 7,
+      "japandi": 6,
+      "mediterranean": 6,
+      "modern-country": 5,
+      "boho": 5
+     },
+     "wired": false,
+     "ce_220_240v": "לא צוין",
+     "image": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/morocco-egypt/kiliim/beige-archways-rug.jpg",
+     "comps": [
+      {
+       "name": "Tollman's dot, Lorena Canals LINES L כותנה 140×200",
+       "price_ils": 1011,
+       "url": "https://www.tollmansdot.co.il/product/lines_l_washable_rug/"
+      },
+      {
+       "name": "Tollman's dot, Lorena Canals BLOOM ROSE 140×200",
+       "price_ils": 967,
+       "url": "https://www.tollmansdot.co.il/product/140x200-bloom-rose/"
+      },
+      {
+       "name": "HōM, קילים הדס 01 צמר 140×200",
+       "price_ils": 437.5,
+       "url": "https://www.carpetshop.co.il/products/hadas-kilim-01-green-white-with-fringes"
+      }
+     ],
+     "economics": {
+      "price_ils": 1690,
+      "cost_usd": 495,
+      "cost_ils": 1633.5,
+      "set_ils": 0,
+      "margin_before_shipping_pct": -24.5,
+      "contribution_before_shipping_ils": -350.9,
+      "max_shipping_usd_breakeven": -106.3,
+      "max_shipping_usd_for_40": -279.9,
+      "discount_needed_for_40_at_zero_shipping_pct": 57
+     },
+     "notes_he": ""
+    },
+    {
+     "name": "Checkered Jute Rug",
+     "url": "https://intl.kiliim.com/products/checkered-jute-rug",
+     "sizes_cm": "60×90 $64.80 · 70×150 $132.30 · 100×150 $170.10 · 100×200 $252 · 150×200 $378 · 170×260 $567",
+     "price": 378,
+     "currency": "USD",
+     "material": "יוטה (חומר מלא לא צוין בדף)",
+     "slots": [
+      "work/rug"
+     ],
+     "fits_envelope": "borderline",
+     "style_fit_guess": {
+      "nordic": 4,
+      "warm-modern": 5,
+      "japandi": 5,
+      "mediterranean": 6,
+      "modern-country": 6,
+      "boho": 7
+     },
+     "wired": false,
+     "ce_220_240v": "לא צוין",
+     "image": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/morocco-egypt/kiliim/checkered-jute-rug.jpg",
+     "comps": [
+      {
+       "name": "KUALA, DAKOTA יוטה 140×195",
+       "price_ils": 1337.7,
+       "url": "https://kualastyle.com/products/dakota-%D7%A9%D7%98%D7%99%D7%97-%D7%9E%D7%A2%D7%95%D7%A6%D7%91-%D7%9E%D7%99%D7%95%D7%98%D7%94-%D7%91%D7%92%D7%95%D7%95%D7%9F-%D7%98%D7%91%D7%A2%D7%99"
+      },
+      {
+       "name": "Nortli, YUKI 140×200",
+       "price_ils": 1638,
+       "url": "https://nortli.co.il/products/yuki-rug-70-200-copy-1"
+      },
+      {
+       "name": "Nortli, LUMI יוטה-כותנה 140×200",
+       "price_ils": 1779,
+       "url": "https://nortli.co.il/products/jane-rug-copy-2"
+      }
+     ],
+     "economics": {
+      "price_ils": 1490,
+      "cost_usd": 378,
+      "cost_ils": 1247.4,
+      "set_ils": 0,
+      "margin_before_shipping_pct": -9.2,
+      "contribution_before_shipping_ils": -116.7,
+      "max_shipping_usd_breakeven": -35.4,
+      "max_shipping_usd_for_40": -188.4,
+      "discount_needed_for_40_at_zero_shipping_pct": 50
+     },
+     "notes_he": ""
+    }
+   ]
+  },
+  {
+   "slug": "kufuf",
+   "rank_group": "egypt-rugs",
+   "rank": 2,
+   "name": "KUFUF®",
+   "country": "מצרים",
+   "city": "אריגה בפווה (כפר א-שייח'); אולם תצוגה בהליופוליס, קהיר",
+   "type": "מותג-יצרן (אומני פווה), גם B2B",
+   "website": "https://kufuf-kilim.com/",
+   "social": "https://www.instagram.com/kufufkilim",
+   "email": "לא צוין (טופס בלבד, https://kufuf-kilim.com/pages/contact)",
+   "reorderable": "כן: סדרות (Masriyat, Barez, Riwayat...) בכמה מידות וצבעים; 'Custom Orders' לפי מידה תוך 4–5 שבועות (מדיניות המשלוח).",
+   "shipping_israel": {
+    "status": "לא באתר",
+    "evidence": "בורר המדינות בקופה: מדינות האיחוד, מצרים, קטאר וארה\"ב בלבד; ישראל לא ברשימה (https://kufuf-kilim.com/pages/b2b-trade). 'All products are made in Egypt and ship from Egypt' (https://kufuf-kilim.com/policies/shipping-policy).",
+    "method": "לא צוין",
+    "days": "במלאי 2–3 שבועות; לפי הזמנה 4–5 שבועות",
+    "price": "לא צוין ('משתנה לפי משקל ויעד')"
+   },
+   "trade": "B2B קיים: איחוד האמירויות, בריטניה, ארה\"ב, דנמרק וסעודיה (https://kufuf-kilim.com/pages/b2b-trade). טופס בלבד. MOQ: לא צוין. 5% הנחה מ-5 פריטים באתר.",
+   "flags_he": "המחירים באתר בלירה מצרית (שוק מקומי). המחיר לייצוא לא צוין. אהילי הקילים מגיעים עם כבל (מחווטים), CE לא צוין.",
+   "products": [
+    {
+     "name": "Tadreega Cotton Carpet (בז')",
+     "url": "https://kufuf-kilim.com/products/tadreega-cotton-carpet",
+     "sizes_cm": "150×200 EGP 5,635 · 200×300 EGP 11,185",
+     "price": 11185,
+     "currency": "EGP",
+     "material": "כותנה, קילים ארוג ביד",
+     "slots": [
+      "living-room/rug"
+     ],
+     "fits_envelope": "yes (200×300)",
+     "style_fit_guess": {
+      "nordic": 3,
+      "warm-modern": 5,
+      "japandi": 4,
+      "mediterranean": 6,
+      "modern-country": 5,
+      "boho": 7
+     },
+     "wired": false,
+     "ce_220_240v": "לא צוין",
+     "image": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/morocco-egypt/kufuf/tadreega-cotton-carpet.jpg",
+     "comps": [
+      {
+       "name": "HōM, EVY כותנה 200×290",
+       "price_ils": 1046.5,
+       "url": "https://www.carpetshop.co.il/products/evy-cream"
+      },
+      {
+       "name": "HōM, קילים סקנדינבי 16 צמר 200×290",
+       "price_ils": 1256.5,
+       "url": "https://www.carpetshop.co.il/products/scandinavian-kilim-16-grey-white-with-fringes"
+      },
+      {
+       "name": "הוגה, כותנה חלק 303 200×290",
+       "price_ils": 1020,
+       "url": "https://hogacarpets.co.il/shop/%D7%9B%D7%9C-%D7%94%D7%A9%D7%98%D7%99%D7%97%D7%99%D7%9D/import-placeholder-for-4496/"
+      }
+     ],
+     "economics": {
+      "price_ils": 1190,
+      "cost_usd": 217.72,
+      "cost_ils": 718.5,
+      "set_ils": 0,
+      "margin_before_shipping_pct": 18.3,
+      "contribution_before_shipping_ils": 184.3,
+      "max_shipping_usd_breakeven": 55.8,
+      "max_shipping_usd_for_40": -66.4,
+      "discount_needed_for_40_at_zero_shipping_pct": 30
+     },
+     "notes_he": "מעבר גוונים מבז'-כתום לשמנת. אותו דגם ב-150×200 (EGP 5,635) לחדר עבודה, גבולי."
+    },
+    {
+     "name": "Motifa Cotton Kilim Rug (בז')",
+     "url": "https://kufuf-kilim.com/products/motifa-cotton-kilim-rug",
+     "sizes_cm": "70×150 EGP 2,030 · 150×200 EGP 5,635",
+     "price": 5635,
+     "currency": "EGP",
+     "material": "כותנה, קילים",
+     "slots": [
+      "kids/rug",
+      "work/rug"
+     ],
+     "fits_envelope": "borderline",
+     "style_fit_guess": {
+      "nordic": 3,
+      "warm-modern": 4,
+      "japandi": 3,
+      "mediterranean": 5,
+      "modern-country": 4,
+      "boho": 6
+     },
+     "wired": false,
+     "ce_220_240v": "לא צוין",
+     "image": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/morocco-egypt/kufuf/motifa-cotton-kilim-rug.jpg",
+     "comps": [
+      {
+       "name": "Tollman's dot, Lorena Canals LINES L כותנה 140×200",
+       "price_ils": 1011,
+       "url": "https://www.tollmansdot.co.il/product/lines_l_washable_rug/"
+      },
+      {
+       "name": "Tollman's dot, Lorena Canals BLOOM ROSE 140×200",
+       "price_ils": 967,
+       "url": "https://www.tollmansdot.co.il/product/140x200-bloom-rose/"
+      },
+      {
+       "name": "HōM, קילים הדס 01 צמר 140×200",
+       "price_ils": 437.5,
+       "url": "https://www.carpetshop.co.il/products/hadas-kilim-01-green-white-with-fringes"
+      }
+     ],
+     "economics": {
+      "price_ils": 890,
+      "cost_usd": 109.69,
+      "cost_ils": 362.0,
+      "set_ils": 0,
+      "margin_before_shipping_pct": 41.5,
+      "contribution_before_shipping_ils": 312.9,
+      "max_shipping_usd_breakeven": 94.8,
+      "max_shipping_usd_for_40": 3.4,
+      "discount_needed_for_40_at_zero_shipping_pct": 0
+     },
+     "notes_he": "התמונה בצהוב; הגוון הבז' קיים כ-SKU."
+    },
+    {
+     "name": "Stripes Kilim Rug (צמר, ברונזה)",
+     "url": "https://kufuf-kilim.com/products/stripped-wool-kilim-rugs",
+     "sizes_cm": "50×100 EGP 2,285 · 160×230 EGP 6,950",
+     "price": 6950,
+     "currency": "EGP",
+     "material": "צמר, קילים",
+     "slots": [
+      "work/rug"
+     ],
+     "fits_envelope": "borderline (230 מול 200–220)",
+     "style_fit_guess": {
+      "nordic": 2,
+      "warm-modern": 4,
+      "japandi": 2,
+      "mediterranean": 5,
+      "modern-country": 4,
+      "boho": 6
+     },
+     "wired": false,
+     "ce_220_240v": "לא צוין",
+     "image": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/morocco-egypt/kufuf/stripped-wool-kilim-rugs.jpg",
+     "comps": [
+      {
+       "name": "מתריב, חלוקי נחל צמר 160×230",
+       "price_ils": 2200,
+       "url": "https://www.carpets-matriv.co.il/product/%d7%a9%d7%98%d7%99%d7%97-%d7%97%d7%9c%d7%95%d7%a7%d7%99-%d7%a0%d7%97%d7%9c-%d7%a6%d7%9e%d7%a8-%d7%98%d7%91%d7%a2%d7%99/"
+      },
+      {
+       "name": "Bring It Home, Taival צמר 160×230",
+       "price_ils": 1800,
+       "url": "https://www.bringithome.co.il/products/taival"
+      },
+      {
+       "name": "HōM, קילים סקנדינבי 16 צמר 160×230",
+       "price_ils": 822.5,
+       "url": "https://www.carpetshop.co.il/products/scandinavian-kilim-16-grey-white-with-fringes"
+      }
+     ],
+     "economics": {
+      "price_ils": 1190,
+      "cost_usd": 135.29,
+      "cost_ils": 446.4,
+      "set_ils": 0,
+      "margin_before_shipping_pct": 45.3,
+      "contribution_before_shipping_ils": 456.3,
+      "max_shipping_usd_breakeven": 138.3,
+      "max_shipping_usd_for_40": 16.0,
+      "discount_needed_for_40_at_zero_shipping_pct": 0
+     },
+     "notes_he": ""
+    },
+    {
+     "name": "Basic Shaggy Kilim Carpet (גריז')",
+     "url": "https://kufuf-kilim.com/products/basic-shaggy-wool-kilim-carpet",
+     "sizes_cm": "100×150 EGP 3,385 · 150×200 EGP 6,685",
+     "price": 6685,
+     "currency": "EGP",
+     "material": "צמר, קילים עם פלומה",
+     "slots": [
+      "kids/rug",
+      "work/rug"
+     ],
+     "fits_envelope": "borderline",
+     "style_fit_guess": {
+      "nordic": 5,
+      "warm-modern": 5,
+      "japandi": 4,
+      "mediterranean": 4,
+      "modern-country": 5,
+      "boho": 6
+     },
+     "wired": false,
+     "ce_220_240v": "לא צוין",
+     "image": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/morocco-egypt/kufuf/basic-shaggy-wool-kilim-carpet.jpg",
+     "comps": [
+      {
+       "name": "מתריב, פולו 10 צמר 140×200",
+       "price_ils": 2200,
+       "url": "https://www.carpets-matriv.co.il/product/%d7%a9%d7%98%d7%99%d7%97-%d7%a4%d7%95%d7%9c%d7%95-%d7%a6%d7%9e%d7%a8-"
+      },
+      {
+       "name": "תומיק, שטיח מרוקאי 150/200 צמר",
+       "price_ils": 1950,
+       "url": "https://www.tomik.co.il/products/%D7%A9%D7%98%D7%99%D7%97-%D7%9E%D7%A8%D7%95%D7%A7%D7%90%D7%99"
+      },
+      {
+       "name": "Nortli, YUKI יוטה-כותנה 140×200",
+       "price_ils": 1638,
+       "url": "https://nortli.co.il/products/yuki-rug-70-200-copy-1"
+      }
+     ],
+     "economics": {
+      "price_ils": 1290,
+      "cost_usd": 130.13,
+      "cost_ils": 429.4,
+      "set_ils": 0,
+      "margin_before_shipping_pct": 50.2,
+      "contribution_before_shipping_ils": 549.3,
+      "max_shipping_usd_breakeven": 166.5,
+      "max_shipping_usd_for_40": 34.0,
+      "discount_needed_for_40_at_zero_shipping_pct": 0
+     },
+     "notes_he": ""
+    },
+    {
+     "name": "Motion Lamp Shade, תלויה (בז')",
+     "url": "https://kufuf-kilim.com/products/motion-lamp-shades-copy",
+     "sizes_cm": "תלויה: אהיל 40 רוחב × 37 גובה, כבל 100 · שולחן: 55 גובה, אהיל 19/38×25",
+     "price": 3000,
+     "currency": "EGP",
+     "material": "אהיל קילים ארוג על מסגרת",
+     "slots": [
+      "master/pendant",
+      "living-room/pendant"
+     ],
+     "fits_envelope": "borderline (גובה 37 מול 25–35; קוטר 40 מול 45–50 בבוהו בסלון)",
+     "style_fit_guess": {
+      "nordic": 3,
+      "warm-modern": 4,
+      "japandi": 3,
+      "mediterranean": 5,
+      "modern-country": 5,
+      "boho": 7
+     },
+     "wired": true,
+     "ce_220_240v": "לא צוין",
+     "image": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/morocco-egypt/kufuf/motion-lamp-shades-copy.jpg",
+     "comps": [
+      {
+       "name": "פנטזיה מרוקאית, אהיל רפיה 'יהלום' Ø50×30, בלי חיווט (₪208 מבצע, ₪260 רגיל)",
+       "price_ils": 260,
+       "url": "https://moroccofantasy.co.il/products/%D7%90%D7%94%D7%99%D7%9C-%D7%A7%D7%95%D7%A0%D7%95%D7%A1-%D7%A1%D7%A8%D7%95%D7%92"
+      },
+      {
+       "name": "פנטזיה מרוקאית, אהיל דקל פראי, בלי חיווט (₪359 מבצע; wave4-shades)",
+       "price_ils": 359,
+       "url": "https://moroccofantasy.co.il/collections/%D7%90%D7%94%D7%99%D7%9C%D7%99%D7%9D-%D7%9E%D7%A8%D7%95%D7%A7%D7%90%D7%99%D7%9D"
+      }
+     ],
+     "economics": {
+      "price_ils": 349,
+      "cost_usd": 58.4,
+      "cost_ils": 240.7,
+      "set_ils": 48,
+      "margin_before_shipping_pct": 7.8,
+      "contribution_before_shipping_ils": 23.2,
+      "max_shipping_usd_breakeven": 7.0,
+      "max_shipping_usd_for_40": -28.8,
+      "discount_needed_for_40_at_zero_shipping_pct": 49
+     },
+     "notes_he": "נמכר עם כבל. נכנס רק אם KUFUF מוכרים את האהיל בלי חיווט (ז, 2026-10-14) ועם ערכת E27 מאושרת; המחשב כולל ₪48 לערכה. בד אטום, בלי דוגמה מוטלת."
+    }
+   ]
+  },
+  {
+   "slug": "fair-trade-egypt",
+   "rank_group": "egypt-lighting",
+   "rank": 1,
+   "name": "Fair Trade Egypt",
+   "country": "מצרים",
+   "city": "קהיר (נסר סיטי)",
+   "type": "יצואן סחר הוגן (רשת אומנים)",
+   "website": "https://fairtradeegypt.org/",
+   "social": "לא נבדק",
+   "email": "info@fairtradeegypt.org",
+   "reorderable": "חלקי: מנורות אלבסטר וקילימים בקטלוג עם קודי פריט (ALB-706-...), כל אחת חצובה ביד; עקביות בין יחידות לא צוינה.",
+   "shipping_israel": {
+    "status": "רק B2B",
+    "evidence": "'We currently do not ship internationally except for wholesale and B2B orders' (https://fairtradeegypt.org/policies/shipping-policy).",
+    "method": "לא צוין",
+    "days": "לא צוין",
+    "price": "לא צוין"
+   },
+   "trade": "דף Wholesale: '17 years experience in exporting' לאירופה ולארה\"ב, אריזה ומיתוג לפי בקשה, הצעות מחיר להובלה (https://fairtradeegypt.org/pages/wholesale). MOQ: לא צוין.",
+   "flags_he": "מנורות מחווטות, CE ומתח לא צוינו; מידות לא צוינו. בלי CE לא עומד ב-S2B.",
+   "products": [
+    {
+     "name": "Alabaster Side Lamp עם אהיל פשתן (ענבר)",
+     "url": "https://fairtradeegypt.org/products/alabaster-side-lamp-1",
+     "sizes_cm": "לא צוין",
+     "price": 2200,
+     "currency": "EGP",
+     "material": "גוף אלבסטר חצוב ביד, אהיל פשתן",
+     "slots": [
+      "hall/table-lamp"
+     ],
+     "fits_envelope": "לא ידוע (מידות לא צוינו)",
+     "style_fit_guess": {
+      "nordic": 3,
+      "warm-modern": 6,
+      "japandi": 3,
+      "mediterranean": 6,
+      "modern-country": 4,
+      "boho": 6
+     },
+     "wired": true,
+     "ce_220_240v": "לא צוין",
+     "image": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/morocco-egypt/fair-trade-egypt/alabaster-side-lamp-1.jpg",
+     "comps": [],
+     "economics": {
+      "price_ils": 249,
+      "cost_usd": 42.82,
+      "cost_ils": 141.3,
+      "set_ils": 0,
+      "margin_before_shipping_pct": 22.1,
+      "contribution_before_shipping_ils": 46.6,
+      "max_shipping_usd_breakeven": 14.1,
+      "max_shipping_usd_for_40": -11.4,
+      "discount_needed_for_40_at_zero_shipping_pct": 27
+     },
+     "notes_he": "אין השוואה ישראלית מאומתת למנורת אלבסטר; המחיר הוא מחיר העמדה במודרני החם (₪249). חסום ב-S2B עד הצהרת CE."
+    },
+    {
+     "name": "Alabaster Side Lamp עם אהיל פשתן (שיש לבן-כתום)",
+     "url": "https://fairtradeegypt.org/products/alabaster-side-lamp",
+     "sizes_cm": "לא צוין",
+     "price": 2100,
+     "currency": "EGP",
+     "material": "גוף אלבסטר, אהיל פשתן",
+     "slots": [
+      "hall/table-lamp"
+     ],
+     "fits_envelope": "לא ידוע",
+     "style_fit_guess": {
+      "nordic": 3,
+      "warm-modern": 6,
+      "japandi": 3,
+      "mediterranean": 6,
+      "modern-country": 4,
+      "boho": 5
+     },
+     "wired": true,
+     "ce_220_240v": "לא צוין",
+     "image": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/morocco-egypt/fair-trade-egypt/alabaster-side-lamp.jpg",
+     "comps": [],
+     "economics": {
+      "price_ils": 249,
+      "cost_usd": 40.88,
+      "cost_ils": 134.9,
+      "set_ils": 0,
+      "margin_before_shipping_pct": 25.1,
+      "contribution_before_shipping_ils": 53.1,
+      "max_shipping_usd_breakeven": 16.1,
+      "max_shipping_usd_for_40": -9.5,
+      "discount_needed_for_40_at_zero_shipping_pct": 23
+     },
+     "notes_he": ""
+    }
+   ]
+  },
+  {
+   "slug": "anou",
+   "rank_group": "morocco-rugs",
+   "rank": 1,
+   "name": "The Anou Cooperative",
+   "country": "מרוקו",
+   "city": "ארצי (קואופרטיבים באטלס; טוויה באית בוגמז, צביעה בפס)",
+   "type": "קואופרטיב בבעלות אומנים (600+ אומנים)",
+   "website": "https://www.theanou.com/",
+   "social": "לא נבדק",
+   "email": "hello@theanou.com",
+   "reorderable": "כן, בהזמנה: 'Any rug on Anou can be woven again to your size, your colors and your finishing' (https://www.theanou.com/made-to-order). כל שטיח עבודת יד, עם שונות.",
+   "shipping_israel": {
+    "status": "לא",
+    "evidence": "ישראל לא מופיעה ברשימת יעדי המשלוח באתר (נבדק ב-HTML של https://www.theanou.com/made-to-order: יש Iran, Iraq, Ireland, Jordan, Lebanon, אין IL).",
+    "method": "לא צוין",
+    "days": "לא צוין",
+    "price": "לא צוין"
+   },
+   "trade": "Retail Partnerships: הנחות של 10–50% על מלאי ישן, עמלת Anou ‏13% או 23%, הפחתה לשותפים קבועים (https://www.theanou.com/retail-partnerships). MOQ: לא צוין.",
+   "flags_he": "לא שולח לישראל לפי האתר. המחיר למ\"ר שקוף ונמוך יחסית, אבל רוב השטיחים בערימה (פלומה), לא בקליעה שטוחה.",
+   "products": [
+    {
+     "name": "שטיח בהזמנה, Association Zaouia (הזול בטבלה), 140×200",
+     "url": "https://www.theanou.com/custom-order-performance",
+     "sizes_cm": "$132 למ\"ר: 140×200 = $369.6 (מחושב)",
+     "price": 132,
+     "currency": "USD/m²",
+     "material": "צמר אטלס, טוויה ב-AWSco",
+     "slots": [
+      "kids/rug"
+     ],
+     "fits_envelope": "yes (לפי הזמנה)",
+     "style_fit_guess": {
+      "nordic": 6,
+      "warm-modern": 6,
+      "japandi": 4,
+      "mediterranean": 4,
+      "modern-country": 5,
+      "boho": 8
+     },
+     "wired": false,
+     "ce_220_240v": "לא צוין",
+     "image": null,
+     "comps": [
+      {
+       "name": "מתריב, פולו 10 צמר 140×200",
+       "price_ils": 2200,
+       "url": "https://www.carpets-matriv.co.il/product/%d7%a9%d7%98%d7%99%d7%97-%d7%a4%d7%95%d7%9c%d7%95-%d7%a6%d7%9e%d7%a8-"
+      },
+      {
+       "name": "תומיק, שטיח מרוקאי 150/200 צמר",
+       "price_ils": 1950,
+       "url": "https://www.tomik.co.il/products/%D7%A9%D7%98%D7%99%D7%97-%D7%9E%D7%A8%D7%95%D7%A7%D7%90%D7%99"
+      },
+      {
+       "name": "Nortli, YUKI יוטה-כותנה 140×200",
+       "price_ils": 1638,
+       "url": "https://nortli.co.il/products/yuki-rug-70-200-copy-1"
+      }
+     ],
+     "economics": {
+      "price_ils": 1790,
+      "cost_usd": 369.6,
+      "cost_ils": 1219.7,
+      "set_ils": 0,
+      "margin_before_shipping_pct": 9.2,
+      "contribution_before_shipping_ils": 138.9,
+      "max_shipping_usd_breakeven": 42.1,
+      "max_shipping_usd_for_40": -141.8,
+      "discount_needed_for_40_at_zero_shipping_pct": 38
+     },
+     "notes_he": "המחיר למ\"ר כולל את עמלת ה-23% (https://www.theanou.com/made-to-order)."
+    },
+    {
+     "name": "שטיח בהזמנה, Zaouia, ראנר כניסה 75×260",
+     "url": "https://www.theanou.com/custom-order-performance",
+     "sizes_cm": "$132 למ\"ר: 75×260 = $257.4 (מחושב)",
+     "price": 132,
+     "currency": "USD/m²",
+     "material": "צמר",
+     "slots": [
+      "hall/runner-rug"
+     ],
+     "fits_envelope": "yes",
+     "style_fit_guess": {
+      "nordic": 6,
+      "warm-modern": 6,
+      "japandi": 4,
+      "mediterranean": 4,
+      "modern-country": 5,
+      "boho": 8
+     },
+     "wired": false,
+     "ce_220_240v": "לא צוין",
+     "image": null,
+     "comps": [
+      {
+       "name": "פנטזיה מרוקאית, מרזוגה 80×250",
+       "price_ils": 1700,
+       "url": "https://moroccofantasy.co.il/products/%D7%A9%D7%98%D7%99%D7%97-%D7%A6%D7%9E%D7%A8-%D7%9E%D7%A8%D7%96%D7%95%D7%92%D7%94"
+      },
+      {
+       "name": "צמר, קטלינה CL-21 ראנר 80×250",
+       "price_ils": 1790.99,
+       "url": "https://tzemer.co.il/product/%D7%A7%D7%98%D7%9C%D7%99%D7%A0%D7%94-cl-21-%D7%A8%D7%90%D7%A0%D7%A8/"
+      },
+      {
+       "name": "Dar Marrakech, ראנר מדינה 60×280",
+       "price_ils": 2499,
+       "url": "https://darmarrakech.co.il/products/%D7%A9%D7%98%D7%99%D7%97-%D7%91%D7%A8%D7%91%D7%A8-%D7%A8%D7%90%D7%A0%D7%A8-%D7%9E%D7%93%D7%99%D7%A0%D7%94"
+      }
+     ],
+     "economics": {
+      "price_ils": 1490,
+      "cost_usd": 257.4,
+      "cost_ils": 849.4,
+      "set_ils": 0,
+      "margin_before_shipping_pct": 22.3,
+      "contribution_before_shipping_ils": 281.3,
+      "max_shipping_usd_breakeven": 85.2,
+      "max_shipping_usd_for_40": -67.8,
+      "discount_needed_for_40_at_zero_shipping_pct": 26
+     },
+     "notes_he": ""
+    },
+    {
+     "name": "שטיח בהזמנה, Zaouia, ראנר מסדרון 60×700",
+     "url": "https://www.theanou.com/custom-order-performance",
+     "sizes_cm": "$132 למ\"ר: 60×700 = $554.4 (מחושב)",
+     "price": 132,
+     "currency": "USD/m²",
+     "material": "צמר",
+     "slots": [
+      "corridor/runner-rug"
+     ],
+     "fits_envelope": "yes",
+     "style_fit_guess": {
+      "nordic": 6,
+      "warm-modern": 6,
+      "japandi": 4,
+      "mediterranean": 4,
+      "modern-country": 5,
+      "boho": 8
+     },
+     "wired": false,
+     "ce_220_240v": "לא צוין",
+     "image": null,
+     "comps": [
+      {
+       "name": "מחיר מוצע לעמדה בנורדי (targets.json)",
+       "price_ils": 990,
+       "url": "data/leads/final-2026-10-13/round5/targets.json"
+      }
+     ],
+     "economics": {
+      "price_ils": 990,
+      "cost_usd": 554.4,
+      "cost_ils": 1829.5,
+      "set_ils": 0,
+      "margin_before_shipping_pct": -128.6,
+      "contribution_before_shipping_ils": -1078.7,
+      "max_shipping_usd_breakeven": -326.9,
+      "max_shipping_usd_for_40": -428.6,
+      "discount_needed_for_40_at_zero_shipping_pct": 77
+     },
+     "notes_he": "אין השוואה ישראלית ל-60×700; ₪990 הוא המחיר המוצע לעמדה."
+    },
+    {
+     "name": "שטיח בהזמנה, Zaouia, סלון 240×340",
+     "url": "https://www.theanou.com/custom-order-performance",
+     "sizes_cm": "$132 למ\"ר: 240×340 = $1,077.1 (מחושב)",
+     "price": 132,
+     "currency": "USD/m²",
+     "material": "צמר",
+     "slots": [
+      "living-room/rug"
+     ],
+     "fits_envelope": "yes",
+     "style_fit_guess": {
+      "nordic": 6,
+      "warm-modern": 6,
+      "japandi": 4,
+      "mediterranean": 4,
+      "modern-country": 5,
+      "boho": 8
+     },
+     "wired": false,
+     "ce_220_240v": "לא צוין",
+     "image": null,
+     "comps": [
+      {
+       "name": "Afrita, CASA בני מרירת בהזמנה 250×350",
+       "price_ils": 12200,
+       "url": "https://myafrita.com/product/%d7%a9%d7%98%d7%99%d7%97-%d7%a6%d7%9e%d7%a8-%d7%9e%d7%a8%d7%95%d7%a7%d7%90%d7%99-casa/"
+      },
+      {
+       "name": "BuyCarpet, עידן צמר 240×340",
+       "price_ils": 6291,
+       "url": "https://www.buycarpet.co.il/product/%D7%A9%D7%98%D7%99%D7%97-%D7%A2%D7%99%D7%93%D7%9F-%D7%A6%D7%9E%D7%A8-%D7%A2%D7%91%D7%95%D7%93%D7%AA-%D7%99%D7%93-%D7%90%D7%A4%D7%95%D7%A8-%D7%91%D7%94%D7%99%D7%A8/"
+      },
+      {
+       "name": "Dar Marrakech, ברבר קארה 195×305",
+       "price_ils": 5199,
+       "url": "https://darmarrakech.co.il/products/%D7%A9%D7%98%D7%99%D7%97-%D7%91%D7%A8%D7%91%D7%A8-%D7%A7%D7%90%D7%A8%D7%94"
+      }
+     ],
+     "economics": {
+      "price_ils": 5900,
+      "cost_usd": 1077.12,
+      "cost_ils": 3554.5,
+      "set_ils": 0,
+      "margin_before_shipping_pct": 18.5,
+      "contribution_before_shipping_ils": 926.3,
+      "max_shipping_usd_breakeven": 280.7,
+      "max_shipping_usd_for_40": -325.4,
+      "discount_needed_for_40_at_zero_shipping_pct": 30
+     },
+     "notes_he": "רמת פרימיום (ה.10, 2026-10-17): מתחת ל-BuyCarpet עידן ₪6,291 ול-Afrita."
+    }
+   ]
+  },
+  {
+   "slug": "beni-rugs",
+   "rank_group": "morocco-rugs",
+   "rank": 2,
+   "name": "Beni Rugs (BENI)",
+   "country": "מרוקו (ייצור) / ארה\"ב (משרד, ניו יורק)",
+   "city": "לא צוין (מתקני אריגה וכביסה משלה במרוקו)",
+   "type": "יצרן משולב אנכית",
+   "website": "https://www.benirugs.com/",
+   "social": "לא נבדק",
+   "email": "bonjour@benirugs.com",
+   "reorderable": "כן: כל שטיח בהזמנה מקטלוג קבוע, 3 גוונים לדגם, מידה מותאמת; סטייה עד 5% (https://www.benirugs.com/products/channel-natural-wool-taupe).",
+   "shipping_israel": {
+    "status": "לא אומת",
+    "evidence": "בינלאומי ב-DDP, 'all relevant import taxes and duties are included' (https://www.benirugs.com/faq). בורר 'Shipping to' נטען ב-JavaScript; ישראל לא אומתה.",
+    "method": "FedEx (מוזכר לגבי מכסים בארה\"ב)",
+    "days": "ייצור 12–16 שבועות עד 9'×12', ‏16–20 מעל",
+    "price": "לא צוין"
+   },
+   "trade": "Trade Program למעצבים, מלונות ופרויקטים: מחיר מיוחד, דוגמאות, התאמות (https://www.benirugs.com/trade). MOQ: לא צוין.",
+   "flags_he": "פרימיום אמריקאי (3'×5' מ-$775–930). ערימת Atlas ממוצעת 1.25 אינץ' (32 מ\"מ), מעל 15 מ\"מ; רק כווריאציית ברבר או מאסטרפיס.",
+   "products": [
+    {
+     "name": "Channel, Natural Wool + Taupe",
+     "url": "https://www.benirugs.com/products/channel-natural-wool-taupe",
+     "sizes_cm": "מ-$775; 3'×5' ‏$930 בתצורה שבדף; מידות עד 12'×15' (מחיר לא צוין)",
+     "price": 930,
+     "currency": "USD",
+     "material": "100% צמר, Atlas pile",
+     "slots": [
+      "living-room/rug (מאסטרפיס)"
+     ],
+     "fits_envelope": "לפי הזמנה",
+     "style_fit_guess": {
+      "nordic": 5,
+      "warm-modern": 6,
+      "japandi": 3,
+      "mediterranean": 3,
+      "modern-country": 4,
+      "boho": 7
+     },
+     "wired": false,
+     "ce_220_240v": "לא צוין",
+     "image": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/morocco-egypt/beni-rugs/channel-natural-wool-taupe.jpg",
+     "comps": [],
+     "economics": null,
+     "notes_he": ""
+    }
+   ]
+  },
+  {
+   "slug": "benisouk",
+   "rank_group": "morocco-rugs",
+   "rank": 3,
+   "name": "Benisouk",
+   "country": "מרוקו / ארה\"ב",
+   "city": "לוס אנג'לס · קזבלנקה · מרקש",
+   "type": "אטלייה וקמעונאי",
+   "website": "https://benisouk.com/",
+   "social": "לא נבדק",
+   "email": "contact@benisouk.com",
+   "reorderable": "חלקי: קטגוריית Made to order ו-Custom sizes; גם וינטג' יחיד.",
+   "shipping_israel": {
+    "status": "לא ברשימה",
+    "evidence": "רשימת 'We ship to' לא כוללת את ישראל; 'may be able to deliver even if your destination is not listed. Write to contact@benisouk.com' (https://benisouk.com/pages/shipping-returns).",
+    "method": "לא צוין",
+    "days": "לא צוין",
+    "price": "מחושב בקופה"
+   },
+   "trade": "קישור Trade בתפריט; תנאים לא נקראו.",
+   "flags_he": "מחיר 'From $28 / sq ft' בעמוד הקטגוריה; 200×300 ≈ $1,808 (מחושב). יקר מהיבואנים הישראליים.",
+   "products": [
+    {
+     "name": "Bestsellers, לפי רגל רבועה",
+     "url": "https://benisouk.com/pages/shipping-returns",
+     "sizes_cm": "From $28/sq ft; ‏200×300 = 64.6 sq ft ≈ $1,808 (מחושב)",
+     "price": 28,
+     "currency": "USD/sq ft",
+     "material": "צמר (Beni Mguild, Azilal ועוד)",
+     "slots": [
+      "living-room/rug"
+     ],
+     "fits_envelope": "לפי הזמנה",
+     "style_fit_guess": {
+      "nordic": 5,
+      "warm-modern": 6,
+      "japandi": 3,
+      "mediterranean": 3,
+      "modern-country": 4,
+      "boho": 8
+     },
+     "wired": false,
+     "ce_220_240v": "לא צוין",
+     "image": null,
+     "comps": [
+      {
+       "name": "Afrita, CASA בני מרירת בהזמנה 250×350",
+       "price_ils": 12200,
+       "url": "https://myafrita.com/product/%d7%a9%d7%98%d7%99%d7%97-%d7%a6%d7%9e%d7%a8-%d7%9e%d7%a8%d7%95%d7%a7%d7%90%d7%99-casa/"
+      },
+      {
+       "name": "BuyCarpet, עידן צמר 240×340",
+       "price_ils": 6291,
+       "url": "https://www.buycarpet.co.il/product/%D7%A9%D7%98%D7%99%D7%97-%D7%A2%D7%99%D7%93%D7%9F-%D7%A6%D7%9E%D7%A8-%D7%A2%D7%91%D7%95%D7%93%D7%AA-%D7%99%D7%93-%D7%90%D7%A4%D7%95%D7%A8-%D7%91%D7%94%D7%99%D7%A8/"
+      },
+      {
+       "name": "Dar Marrakech, ברבר קארה 195×305",
+       "price_ils": 5199,
+       "url": "https://darmarrakech.co.il/products/%D7%A9%D7%98%D7%99%D7%97-%D7%91%D7%A8%D7%91%D7%A8-%D7%A7%D7%90%D7%A8%D7%94"
+      }
+     ],
+     "economics": {
+      "price_ils": 5900,
+      "cost_usd": 1808.24,
+      "cost_ils": 5967.2,
+      "set_ils": 0,
+      "margin_before_shipping_pct": -29.7,
+      "contribution_before_shipping_ils": -1486.4,
+      "max_shipping_usd_breakeven": -450.4,
+      "max_shipping_usd_for_40": -1056.5,
+      "discount_needed_for_40_at_zero_shipping_pct": 58
+     },
+     "notes_he": ""
+    }
+   ]
+  },
+  {
+   "slug": "marrakeche-al-amal",
+   "rank_group": "morocco-lighting",
+   "rank": 1,
+   "name": "marrakeche.com (קואופרטיב Al Amal)",
+   "country": "מרוקו",
+   "city": "מרקש (ליד באב דוקאלה)",
+   "type": "קמעונאי + קואופרטיב נשים (דום ורפיה)",
+   "website": "https://www.marrakeche.com/",
+   "social": "לא נבדק",
+   "email": "לא צוין (האתר חסום)",
+   "reorderable": "כנראה כן (דגמים במידות S/M/L), לא אומת.",
+   "shipping_israel": {
+    "status": "לא אומת",
+    "evidence": "האתר החזיר 403 (Cloudflare) ל-curl ול-WebFetch; עצרנו. הנתונים מקטעי חיפוש בלבד.",
+    "method": "לא צוין",
+    "days": "לא צוין",
+    "price": "לא צוין"
+   },
+   "trade": "תוכנית סיטונאות למעצבים, חנויות ומלונות (קטע חיפוש, לא אומת).",
+   "flags_he": "חסום. אהיל דום חרוטי 30/40/55 ס\"מ, $77–97 (קטע חיפוש); תלוית רפיה 14″×20″ עם בית נורה E26 (אמריקאי). לא אומת.",
+   "products": []
+  },
+  {
+   "slug": "marrakech-metacraft",
+   "rank_group": "morocco-lighting",
+   "rank": 2,
+   "name": "Marrakech Metacraft Ltd",
+   "country": "מרוקו",
+   "city": "מרקש",
+   "type": "יצרן (תלויות רפיה קלועה)",
+   "website": "https://www.faire.com/product/p_tea6aab6nb (Faire)",
+   "social": "לא נבדק",
+   "email": "לא צוין",
+   "reorderable": "כנראה כן (מוצר סיטונאי ב-Faire), לא אומת.",
+   "shipping_israel": {
+    "status": "לא",
+    "evidence": "נמכר דרך Faire בלבד לפי מה שנמצא; Faire לא פתוח לישראל (docs/suppliers/deep-research-2026-10.md).",
+    "method": "—",
+    "days": "—",
+    "price": "—"
+   },
+   "trade": "מינימום הזמנה סיטונאי $195 ב-Faire (קטע חיפוש).",
+   "flags_he": "תלוית רפיה קלועה בצורת פנס. ערוץ סגור לנו כרגע.",
+   "products": []
+  },
+  {
+   "slug": "sirocco-living",
+   "rank_group": "egypt-lighting",
+   "rank": 2,
+   "name": "SiroccoLiving ApS",
+   "country": "דנמרק (מותג) / מצרים (ייצור)",
+   "city": "סדנה בחאן אל-ח'לילי, קהיר",
+   "type": "מותג אירופי שמייצר במצרים",
+   "website": "https://siroccoliving.com/ (דף פתיחה ישן)",
+   "social": "Maison&Objet: https://mom.maison-objet.com/en/product/59456/copper-brass-lamp",
+   "email": "לא צוין",
+   "reorderable": "כן, קו דגמים (עגול Ø35 ו-Ø45, לפי Maison&Objet).",
+   "shipping_israel": {
+    "status": "לא אומת",
+    "evidence": "תנאי סיטונאות מאחורי התחברות ב-Maison&Objet; האתר הדני לא נגיש מהסשן.",
+    "method": "לא צוין",
+    "days": "לא צוין",
+    "price": "לא צוין"
+   },
+   "trade": "סיטונאות דרך Maison&Objet (דורש חשבון).",
+   "flags_he": "נחושת מנוקבת שמטילה דוגמה על הקיר והתקרה: סותר 'בלי דוגמה מוטלת' בבוהו ובים-תיכוני. מאסטרפיס בלבד. כמותג אירופי, סביר שיש CE, לא אומת.",
+   "products": []
+  },
+  {
+   "slug": "yadawee",
+   "rank_group": "egypt-decor",
+   "rank": 3,
+   "name": "Yadawee",
+   "country": "מצרים",
+   "city": "6 באוקטובר, גיזה",
+   "type": "יצרן B2B (אומנים מקומיים ופליטים, MADE51)",
+   "website": "https://www.yadawee.com/",
+   "social": "לא נבדק",
+   "email": "hello@yadawee.com",
+   "reorderable": "כן: מוצרים מוכנים וייצור לפי הזמנה, כולל הדפסה ואריזה (דף הבית).",
+   "shipping_israel": {
+    "status": "לא צוין",
+    "evidence": "הדף מזכיר 'logistical needs', בלי רשימת מדינות.",
+    "method": "לא צוין",
+    "days": "לא צוין",
+    "price": "לא צוין"
+   },
+   "trade": "B2B בלבד; MOQ לא צוין.",
+   "flags_he": "מגבות מטבח, סלים וסינרים: רלוונטי לעמדות כפרי ובוהו (מגבת מטבח, סלים), לא לשטיחים ותאורה. אין מחירים באתר.",
+   "products": []
+  },
+  {
+   "slug": "madeinegypt-directory",
+   "rank_group": "egypt-lighting",
+   "rank": 3,
+   "name": "Made in Egypt (מדריך ספקים)",
+   "country": "מצרים",
+   "city": "חאן אל-ח'לילי ואל-נחאסין (נחושת ופליז); סיווה (סיבי דקל)",
+   "type": "מדריך B2B עם בקשות הצעת מחיר",
+   "website": "https://www.madeinegypt.com/supplier/egyptian-brass-and-copperwork-district",
+   "social": "—",
+   "email": "לא צוין",
+   "reorderable": "לא ידוע",
+   "shipping_israel": {
+    "status": "לא צוין",
+    "evidence": "רשומות בלי תמונות ומחירים (קטעי חיפוש); https://madeinegypt.com/supplier/siwa-oasis-palm-and-natural-crafts-283",
+    "method": "—",
+    "days": "—",
+    "price": "—"
+   },
+   "trade": "בקשת הצעת מחיר בלבד (טופס; לא בוצע).",
+   "flags_he": "ליד בלבד, בלי מוצר.",
+   "products": []
+  }
+ ],
+ "china_and_new_sources": [
+  {
+   "slug": "banggood-open-platform",
+   "name": "Banggood Open Platform",
+   "status": "חדש ואומת: API רשמי",
+   "api": "כן: GetProductList, GetProductInfo (תמונות בלי סימן מים), GetShipments לפי יעד, ImportOrder (דרופשיפ), GetTrackInfo, GetCountries; ללא דמי הצטרפות (https://api.banggood.com/, https://api.banggood.com/index.php?com=document&article_id=2)",
+   "shopify_needed": "לא (API ישיר)",
+   "israel": "לא אומת: עמוד המשלוחים הציבורי לא נמצא (404). בודקים ב-GetShipments עם IL אחרי פתיחת חשבון.",
+   "slots_fit": "נמוך-בינוני: בעיקר אלקטרוניקה וכלים; תאורה ועיצוב הבית קיימים, אבל שטיחים בעיקר סינתטיים. אולי מנורות עם CE (לבדוק לכל דגם).",
+   "contact": "openplatform@banggood.com (תמיכה טכנית)",
+   "verdict_he": "היחיד החדש עם API רשמי ופתוח. שווה בדיקה עצמית של המשתמש: חשבון, AppID ו-GetShipments ל-IL."
+  },
+  {
+   "slug": "dhgate",
+   "name": "DHgate",
+   "status": "חסום",
+   "api": "open.dhgate.com קיים, אבל התוכן נטען רק ב-JavaScript; דף הדרופשיפינג החזיר 403. לא אומת.",
+   "shopify_needed": "לא ידוע",
+   "israel": "לא אומת",
+   "slots_fit": "—",
+   "verdict_he": "עצרנו בחסימה. לא ממליץ עכשיו."
+  },
+  {
+   "slug": "alibaba-dropshipping",
+   "name": "Alibaba.com Dropshipping Center",
+   "status": "לא חדש",
+   "api": "לפי מדריך 2026 (מקור משני): המרכז חינמי, ההזמנות והמלאי ידניים בלי כלי צד שלישי, ואפליקציית Shopify הישנה ירדה (https://easync.io/tr/articles/alibabadan-shopifya-dropshipping-2026-kilavuzu/). dropshipping.alibaba.com לא נגיש מהסשן.",
+   "shopify_needed": "—",
+   "israel": "לפי ספק",
+   "slots_fit": "פריטים כבדים בכמות (PRE1/LK1)",
+   "verdict_he": "לא ערוץ API. נשאר לעתיד, להזמנות גדולות (PRE1)."
+  },
+  {
+   "slug": "1688-cross-border",
+   "name": "1688 Cross-border API (寻源通)",
+   "status": "לא מתאים ישירות",
+   "api": "API חוצה-גבולות לשותפי רכש וסוכנים, לא לקונה זר ישיר (https://amp.kr-asia.com/where-does-1688-fit-into-alibabas-e-commerce-game-plan; https://en.jiemian.com/article/10563314.html).",
+   "shopify_needed": "—",
+   "israel": "דרך סוכן",
+   "slots_fit": "—",
+   "verdict_he": "נשארים עם סוכן 1688 (BuckyDrop וכו', כבר במחקר הקודם)."
+  },
+  {
+   "slug": "chinabrands",
+   "name": "Chinabrands",
+   "status": "נסגר",
+   "api": "—",
+   "shopify_needed": "—",
+   "israel": "—",
+   "slots_fit": "—",
+   "verdict_he": "נסגר ב-2024 לפי כמה מקורות משניים (https://avada.io/blog/chinabrands-review/). לא נמצא יורש רשמי."
+  },
+  {
+   "slug": "vidaxl",
+   "name": "vidaXL Dropshipping (B2B)",
+   "status": "אומת מחדש: לא לישראל",
+   "api": "כן: Order API עם sandbox (https://b2b.vidaxl.com/pages/8-api)",
+   "shopify_needed": "לא",
+   "israel": "לא: דף Delivery information מפרט מדינות אירופה, קנדה ואוסטרליה, בלי ישראל (https://b2b.vidaxl.com/pages/14-delivery-information)",
+   "slots_fit": "ריהוט ופריטי רצפה כבדים",
+   "verdict_he": "לא רלוונטי כל עוד אין ישראל."
+  },
+  {
+   "slug": "bigbuy",
+   "name": "BigBuy",
+   "status": "לא השתנה",
+   "api": "API קיים (מחקר קודם)",
+   "shopify_needed": "לא",
+   "israel": "לא אומת: דף academy החזיר 403. דף המסים: משלוח מחוץ לאיחוד נחשב יצוא ופטור ממע\"מ ספרדי (https://bigbuy.eu/en/taxes.html, קטע חיפוש).",
+   "slots_fit": "שטיחים ווילונות (מחקר קודם)",
+   "verdict_he": "טיוטת הפנייה הקיימת (docs/suppliers/outreach/bigbuy.md) נשארת הדרך לברר."
+  },
+  {
+   "slug": "tomtop",
+   "name": "Tomtop",
+   "status": "לא אומת",
+   "api": "לא נמצא תיעוד API לדרופשיפ",
+   "shopify_needed": "—",
+   "israel": "לא נמצא",
+   "slots_fit": "—",
+   "verdict_he": "לא ממשיכים."
+  }
+ ]
+}
