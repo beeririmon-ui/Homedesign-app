@@ -1,0 +1,552 @@
+{
+ "date": "2026-10-17",
+ "auditor": "master-designer",
+ "round": "5d",
+ "basis_he": "ביקורת כשלי הליקוט (round5/sourcing-failure-audit.json): F8 (34 עמדות-סגנון מכוסות שנשענות רק על ניחוש צוות), F6 (31 מועמדים 'לבדוק בפריים' ו-59 מועמדים 7+ שנחסמו רק במידה), והחלטת המשתמש AU5 (docs/studio-rules.md ז, 'מוצרים שנחסמו בגלל מידה'). החלטות המשתמש R5C1 (וילון מקלחת 200–265, מדף ספרים 40–80, מתלה יתדות 40–80) נכנסו באמצע העבודה והן מוחלות כאן כמו שהן.",
+ "reconstruction_he": "ב-JSON של הביקורת אין רשימת מזהים ל-34 ול-31, רק ספירה (F8 evidence, F6 evidence), והסקריפט שספר אותן לא נשמר. בניתי את הרשימות מחדש מ-scratchpad/audit/table.json ו-rules_out.json של המבקר. (א) ניחוש צוות = אפשרות שנספרת רק משורת תוצאות של צוות ליקוט (cj-zendrop, aliexpress-*, wave2/3/4, round5-aliexpress, round5b, round5c), בלי ציון מעצב לאותו כרטיס, סגנון ועמדה (קבצי basket-* ו-round5b-designer-remap הם של המעצב, וגם round*/designer-audit*). נמצאו 55 עמדות-סגנון מכוסות שיש בהן לפחות אפשרות אחת כזו, ב-54 כרטיסים. בדקתי את כולם, כך ש-34 העמדות שבהן הניחוש הוא האפשרות השלישית נמצאות בתוך הבדיקה. (ב) 'לבדוק בפריים' = 36 שורות של מועמדים 7+ בעמדות פתוחות שה-why_he שלהן מחכה להחלטת מעצב על מידה (31 של הביקורת בתוכן), ועוד 2 כרטיסים גבוליים בעמדות מכוסות. (ג) 59 = השורות ב-rules_out.json שהחוסם הקשיח היחיד שלהן הוא מעטפה, בדיוק לפי rules.py.",
+ "method_he": "ציון לפי המחוון (צבע 30, חומר 25, צורה 25, קנה מידה 20), מעוגל לחצאים, מול nordic.md 1.7.2 ובריפי הסגנונות. fit רק לסגנונות שהצוות נתן בהם 7 ומעלה בעמדה מכוסה. variants_fit = כמה צבעים, דגמים או צורות באמת נספרים; 0 = לא נספר; אותו מראה מכמה רישומים נספר פעם אחת (נציג אחד, השאר reject כספק גיבוי, כמו בביקורת סבב 5). את התמונה ראיתי ב-studio/dist/img/p ב-49 מתוך 54 הכרטיסים (image_seen). מועמדי המידה בלי כרטיס נשפטו מטקסט התוצאה. שימו לב: fit בקובץ הזה חל על הכרטיס בכל העמדות שבהן הוא מופיע (כך final_round_coverage.py קורא אותו); איפה שזה משנה עמדה אחרת, זה כתוב בהערה.",
+ "cards": [
+  {
+   "card_id": "vanity-sconces-aliexpress-wabi-sabi-yellow-marble-037853",
+   "team": "wave3-repricing", "slots": ["bath/vanity-sconces"], "image_seen": true,
+   "checked": true,
+   "fit": {"japandi": 7.5, "mediterranean": 7.5},
+   "variants_fit": {"japandi": 1, "mediterranean": 1},
+   "envelope_ok": true,
+   "flags": ["cube-sku-under-envelope", "dims-unpublished", "thin-margin-8.1", "2-sold"],
+   "verdict": "lower-fit",
+   "note_he": "טרוורטין מט, IP65 ו-CE מוצהרים: חומר נכון לג'פנדי (במינון) ולים-תיכוני. נספר רק Style A (המלבן הגבוה). Style B הוא קובייה בגובה 10–12, מתחת ל-18–26 ליד המראה, וליד מראה בגובה 70 הוא נקרא כמנורת לילה. לאמת בליטה עד 12."
+  },
+  {
+   "card_id": "wall-sconce-aliexpress-wabi-sabi-yellow-marble-037853",
+   "team": "wave3-repricing", "slots": ["bath/wall-sconce"], "image_seen": true,
+   "checked": true,
+   "fit": {"japandi": 7.5, "mediterranean": 7.5},
+   "variants_fit": {"japandi": 1, "mediterranean": 1},
+   "envelope_ok": true,
+   "flags": ["near-duplicate-family", "dims-unpublished", "thin-margin-11.3"],
+   "verdict": "lower-fit",
+   "note_he": "אותו רישום. נספר רק המלבן הגבוה: הקובייה (Style B) היא אותו מראה כמו 430468, ושתי קוביות טרוורטין זהות הן לא בחירה אמיתית. לאמת בליטה עד 12."
+  },
+  {
+   "card_id": "vanity-sconces-aliexpress-walnut-color-yellow-travertine-332886",
+   "team": "wave3-repricing", "slots": ["bath/vanity-sconces"], "image_seen": true,
+   "checked": true,
+   "fit": {"japandi": 8, "mediterranean": 7},
+   "variants_fit": {"japandi": 0, "mediterranean": 0},
+   "envelope_ok": false,
+   "flags": ["ip44-missing", "envelope-out-h28"],
+   "verdict": "reject",
+   "note_he": "גליל טרוורטין על לוחית אגוז עם אור מעלה-מטה: יפה מאוד לג'פנדי. אבל אין IP מוצהר (ip_rating null), ובמקלחת IP44 חובה (ד.5), וגם הגובה 28 מעל 26. מקומו בזוג מנורות הקיר בסלון בג'פנדי ובמודרני החם, לא במקלחת."
+  },
+  {
+   "card_id": "wall-sconce-aliexpress-wabi-sabi-natural-stone-430468",
+   "team": "wave3-repricing", "slots": ["bath/wall-sconce"], "image_seen": true,
+   "checked": true,
+   "fit": {"japandi": 7.5, "mediterranean": 7.5},
+   "variants_fit": {"japandi": 0, "mediterranean": 0},
+   "envelope_ok": false,
+   "flags": ["envelope-out-h", "dims-unpublished"],
+   "verdict": "reject",
+   "note_he": "קוביית טרוורטין נקייה, IP65. אבל לפי המאפיינים הגובה עד 10 מול 18–24: על הקיר הריק של B1, כמנורת הקיר היחידה בפריים, היא נקראת כמנורת לילה. לא הרחבתי את המעטפה: אין מידה מאומתת, והגוף צריך לשאת את הקיר."
+  },
+  {
+   "card_id": "kitchen-sconce-aliexpress-boho-farmhouse-wall-sconces-856204",
+   "team": "wave3-repricing", "slots": ["dining-room/kitchen-sconce"], "image_seen": true,
+   "checked": true,
+   "fit": {"boho": 7.5},
+   "variants_fit": {"boho": 1},
+   "envelope_ok": true,
+   "flags": ["family-representative"],
+   "verdict": "keep",
+   "note_he": "נציג משפחת חצי-גליל החבל המדורג (8 רישומים באותו מראה). 23×25 נכנס במעטפה המורחבת (dining-room.json 0.2.3): 23 ס״מ מהקולט ו-8 מעל הכד. 45.2% ב-₪299, CE."
+  },
+  {
+   "card_id": "kitchen-sconce-aliexpress-rattan-wall-lamp-retro-143381",
+   "team": "wave3-repricing", "slots": ["dining-room/kitchen-sconce"], "image_seen": true,
+   "checked": true,
+   "fit": {"boho": 8},
+   "variants_fit": {"boho": 1},
+   "envelope_ok": true,
+   "flags": ["dims-unpublished"],
+   "verdict": "keep",
+   "note_he": "חצי-גליל מרשת קנה (cane) בדבש: מראה אחר מהחבל, רשת צפופה שזוהרת בלי דוגמת צל. 43% ב-₪299, CE. לאמת רוחב עד 24."
+  },
+  {
+   "card_id": "kitchen-sconce-aliexpress-natural-woven-bohemian-rattan-778712",
+   "team": "wave3-repricing", "slots": ["dining-room/kitchen-sconce"], "image_seen": true,
+   "checked": true,
+   "fit": {"boho": 7.5},
+   "variants_fit": {"boho": 1},
+   "envelope_ok": true,
+   "flags": ["image-ai-lifestyle"],
+   "verdict": "keep",
+   "note_he": "גליל קנה על זרוע בגוון פליז מיושן, 17×25×27: נכנס במעטפה המורחבת (בליטה 25, גובה 28). הצורה השלישית בעמדה. תמונת האווירה נוצרה כנראה ב-AI: לרנדר מתמונות המוצר. 48.1%."
+  },
+  {
+   "card_id": "kitchen-sconce-aliexpress-rustic-wooden-wall-sconce-632957",
+   "team": "wave3-repricing", "slots": ["dining-room/kitchen-sconce"], "image_seen": true,
+   "checked": true,
+   "fit": {"boho": 7},
+   "variants_fit": {"boho": 1},
+   "envelope_ok": true,
+   "flags": ["sku-label-black-verify", "thin-margin-37.2"],
+   "verdict": "keep",
+   "note_he": "גליל חבל קטן על דיסק עץ, 13.5×16.5: בתוך המעטפה המקורית. ה-SKU היחיד מסומן 'black': לוודא שהחבל טבעי ושרק הבית שחור."
+  },
+  {
+   "card_id": "kitchen-sconce-aliexpress-joyinled-boho-style-sconce-968057",
+   "team": "wave3-repricing", "slots": ["dining-room/kitchen-sconce"], "image_seen": true,
+   "checked": true, "fit": {"boho": 7.5}, "variants_fit": {"boho": 0}, "envelope_ok": true,
+   "flags": ["near-duplicate-family", "sold-as-pair"],
+   "verdict": "reject",
+   "note_he": "אותו חצי-גליל חבל מדורג. נמכר כזוג ב-₪499, והעמדה במטבח היא מנורה אחת. נשאר כרטיס לזוג ליד המיטה (bedside-sconces) וכספק גיבוי."
+  },
+  {
+   "card_id": "kitchen-sconce-aliexpress-joyinled-e27-rustic-rattan-568607",
+   "team": "wave3-repricing", "slots": ["dining-room/kitchen-sconce"], "image_seen": true,
+   "checked": true, "fit": {"boho": 7.5}, "variants_fit": {"boho": 0}, "envelope_ok": true,
+   "flags": ["near-duplicate-family"], "verdict": "reject",
+   "note_he": "אותו חצי-גליל חבל מדורג. ספק גיבוי בלבד (38.3%)."
+  },
+  {
+   "card_id": "kitchen-sconce-aliexpress-popular-modern-wall-lamps-215962",
+   "team": "wave3-repricing", "slots": ["dining-room/kitchen-sconce"], "image_seen": true,
+   "checked": true, "fit": {"boho": 7.5}, "variants_fit": {"boho": 0}, "envelope_ok": true,
+   "flags": ["near-duplicate-family"], "verdict": "reject",
+   "note_he": "אותו חצי-גליל חבל מדורג, 22×25. ספק גיבוי בלבד (43.3%)."
+  },
+  {
+   "card_id": "kitchen-sconce-aliexpress-joyinled-hemp-rope-wall-473459",
+   "team": "wave3-repricing", "slots": ["dining-room/kitchen-sconce"], "image_seen": true,
+   "checked": true, "fit": {"boho": 7.5}, "variants_fit": {"boho": 0}, "envelope_ok": true,
+   "flags": ["near-duplicate-family"], "verdict": "reject",
+   "note_he": "אותו חצי-גליל חבל מדורג. ספק גיבוי בלבד (40.1%)."
+  },
+  {
+   "card_id": "kitchen-sconce-aliexpress-joyinled-hemp-rope-wall-425458",
+   "team": "wave3-repricing", "slots": ["dining-room/kitchen-sconce"], "image_seen": true,
+   "checked": true, "fit": {"boho": 7.5}, "variants_fit": {"boho": 0}, "envelope_ok": true,
+   "flags": ["near-duplicate-family"], "verdict": "reject",
+   "note_he": "אותו חצי-גליל חבל מדורג. ספק גיבוי בלבד (40.4%)."
+  },
+  {
+   "card_id": "kitchen-sconce-aliexpress-led-vintage-bamboo-sconce-009589",
+   "team": "wave3-repricing", "slots": ["dining-room/kitchen-sconce"], "image_seen": true,
+   "checked": true, "fit": {"boho": 7}, "variants_fit": {"boho": 0}, "envelope_ok": true,
+   "flags": ["near-duplicate-family", "sku-label-green-unclear"], "verdict": "reject",
+   "note_he": "אותו חצי-גליל חבל, בגוון כהה יותר, ותווית ה-SKU 'green' לא ברורה. ספק גיבוי בלבד."
+  },
+  {
+   "card_id": "kitchen-sconce-aliexpress-vintage-design-hand-woven-747191",
+   "team": "wave3-repricing", "slots": ["dining-room/kitchen-sconce"], "image_seen": true,
+   "checked": true, "fit": {"boho": 7.5}, "variants_fit": {"boho": 0}, "envelope_ok": true,
+   "flags": ["near-duplicate-family"], "verdict": "reject",
+   "note_he": "חצי-גליל חבל דו-שכבתי: אותו מראה במטבח. הכרטיס הנפרד שלו בכניסה (wall-sconce-...-747191) נשאר."
+  },
+  {
+   "card_id": "kitchen-sconce-aliexpress-bamboo-wall-lamp-plug-313733",
+   "team": "wave3-repricing", "slots": ["dining-room/kitchen-sconce"], "image_seen": true,
+   "checked": true, "fit": {"boho": 8}, "variants_fit": {"boho": 0}, "envelope_ok": false,
+   "flags": ["plug-in-visible-cable", "projection-over"], "verdict": "reject",
+   "note_he": "פנס קלוע על זרוע עץ, יפה לבוהו, אבל עם תקע וכבל קלוע שיורד לאורך הקיר. העמדה מחווטת בלי כבל גלוי, והזרוע בולטת יותר מ-25."
+  },
+  {
+   "card_id": "kitchen-sconce-aliexpress-bamboo-lantern-wall-lamp-632341",
+   "team": "wave3-repricing", "slots": ["dining-room/kitchen-sconce"], "image_seen": true,
+   "checked": true, "fit": {"boho": 8}, "variants_fit": {"boho": 0}, "envelope_ok": false,
+   "flags": ["plug-in-visible-cable", "projection-over"], "verdict": "reject",
+   "note_he": "כדור במבוק על זרוע עץ עם תקע וכבל גלוי לרצפה: סותר את דרישת החיווט בעמדה. מתאים לחדר שבו מותר כבל."
+  },
+  {
+   "card_id": "kitchen-sconce-aliexpress-plug-wall-sconce-handcrafted-159685",
+   "team": "wave3-repricing", "slots": ["dining-room/kitchen-sconce"], "image_seen": true,
+   "checked": true, "fit": {"boho": 8}, "variants_fit": {"boho": 0}, "envelope_ok": false,
+   "flags": ["plug-in-visible-cable"], "verdict": "reject",
+   "note_he": "כדור במבוק על זרוע עץ, Plug-in: אותה בעיה של כבל גלוי מעל המשטח. לא לעמדה הזו."
+  },
+  {
+   "card_id": "doll-aliexpress-cotton-filled-waldorf-doll-512465",
+   "team": "wave3-repricing", "slots": ["kids/doll"], "image_seen": true,
+   "checked": true, "fit": {"nordic": 6, "modern-country": 6, "boho": 6}, "variants_fit": {"nordic": 0, "modern-country": 0, "boho": 0}, "envelope_ok": false,
+   "flags": ["images-artisan-suspected", "same-image-all-skus", "dims-unpublished", "EN71-not-stated", "thin-margin-5.1"], "verdict": "reject",
+   "note_he": "בובת וולדורף בקופסת מתנה, בסגנון של אמנית בובות; אותה תמונה לכל ה-SKU, בלי מידה. אי אפשר לרנדר נאמנה מוצר שלא רואים, וזו לא סחורה סדרתית (ג.4). העמדה נשארת מכוסה בבובות 063285 ו-999497."
+  },
+  {
+   "card_id": "doll-aliexpress-soft-plush-toys-waldorf-664801",
+   "team": "wave3-aliexpress", "slots": ["kids/doll"], "image_seen": true,
+   "checked": true, "fit": {"nordic": 5.5, "modern-country": 5.5, "boho": 5.5}, "variants_fit": {"nordic": 0, "modern-country": 0, "boho": 0}, "envelope_ok": false,
+   "flags": ["images-other-brand", "EN71-not-stated"], "verdict": "reject",
+   "note_he": "בתמונה כתוב על הקופסה שם של אמנית בובות (Tanita Elizarova): תמונה שאולה של עבודת יד ייחודית. לא סדרתי, לא נאמן, ובלי EN71."
+  },
+  {
+   "card_id": "pendant-aliexpress-joyinled-dia-25-modern-115646",
+   "team": "wave3-repricing", "slots": ["kids/pendant"], "image_seen": true,
+   "checked": true, "fit": {"mediterranean": 6.5, "boho": 7}, "variants_fit": {"mediterranean": 0, "boho": 1}, "envelope_ok": true,
+   "flags": ["open-weave-shadow-pattern", "needs-opal-bulb", "sku-black-selected", "thin-margin-12.2"], "verdict": "lower-fit",
+   "note_he": "כיפת ראטן בלולאות צפופות, 25: עמוסה ופרועה, והקליעה הפתוחה מטילה רשת צל. בבוהו 7 עם נורת אופל, ב-SKU הטבעי. בים-תיכוני 6.5: הבריף מבקש סיב שקט וחומר שימושי, ואת זה הוא לא."
+  },
+  {
+   "card_id": "toy-cars-aliexpress-children-s-montessori-traffic-147494",
+   "team": "wave3-repricing", "slots": ["kids/toy-cars"], "image_seen": true,
+   "checked": true, "fit": {"nordic": 6, "warm-modern": 5.5, "japandi": 5, "modern-country": 6, "boho": 5.5}, "variants_fit": {"nordic": 0, "warm-modern": 0, "japandi": 0, "modern-country": 0, "boho": 0}, "envelope_ok": false,
+   "flags": ["envelope-out-small", "printed-mat-numbers", "pastel-colours"], "verdict": "reject",
+   "note_he": "מכוניות קטנות (כ-5–6) בצבעי פסטל על שטיח משחק מודפס עם מספרים וכבישים. העמדה היא 3 מכוניות עץ בגודל 10–13 על השולחן, והמוצר שנמכר הוא בעיקר השטיח. לא נאמן לעמדה."
+  },
+  {
+   "card_id": "toy-cars-aliexpress-baby-wooden-toys-beech-975232",
+   "team": "wave3-aliexpress", "slots": ["kids/toy-cars"], "image_seen": true,
+   "checked": true, "fit": {"nordic": 7, "warm-modern": 7.5, "japandi": 7.5, "modern-country": 7.5, "boho": 7}, "variants_fit": {"nordic": 1, "warm-modern": 2, "japandi": 2, "modern-country": 2, "boho": 2}, "envelope_ok": true,
+   "flags": ["EN71-not-stated", "red-sku-out", "envelope-borderline-8.9"], "verdict": "keep",
+   "note_he": "מכוניות עץ עם גלגלי כדור, בבוק טבעי ובאגוז: נקי ואיכותי. נספרים בוק ואגוז (בנורדי רק בוק), לא האדום. 8.9×4.8 מול 10–13: על שולחן הילד, שלוש מכוניות בשורה נקראות נכון. EN71 לפני מכירה (ד.4)."
+  },
+  {
+   "card_id": "toy-cars-aliexpress-wooden-toys-beech-wood-138166",
+   "team": "wave3-repricing", "slots": ["kids/toy-cars"], "image_seen": true,
+   "checked": true, "fit": {"nordic": 7, "warm-modern": 7.5, "japandi": 7.5, "modern-country": 7.5, "boho": 7}, "variants_fit": {"nordic": 2, "warm-modern": 2, "japandi": 2, "modern-country": 2, "boho": 2}, "envelope_ok": true,
+   "flags": ["EN71-not-stated", "dims-unpublished", "thin-margin-3.4", "moving-part"], "verdict": "keep",
+   "note_he": "כלי עבודה מבוק עם פרטי אגוז (מחפר, מערבל, דחפור, משאית): איכות טובה, וכל סט של 3 כלים הוא וריאציית צורה. לאמת אורך עד 15 וזרוע נעה בטוחה. 3.4% (ה.11)."
+  },
+  {
+   "card_id": "bedside-sconces-aliexpress-joyinled-boho-style-sconce-968057",
+   "team": "wave3-repricing", "slots": ["master/bedside-sconces"], "image_seen": true,
+   "checked": true, "fit": {"boho": 7.5}, "variants_fit": {"boho": 1}, "envelope_ok": true,
+   "flags": ["sold-as-pair"], "verdict": "keep",
+   "note_he": "זוג חצי-גלילי חבל 23×25 משני צדי המיטה: נכנס במעטפה המורחבת (master.json 1.0.2) ונקרא כזוג מלון בוהו. 42.1% לזוג ב-₪499."
+  },
+  {
+   "card_id": "planter-aliexpress-nordic-style-natural-seagrass-839727",
+   "team": "aliexpress-work", "slots": ["work/planter"], "image_seen": true,
+   "checked": true, "fit": {"nordic": 6.5, "modern-country": 6.5, "boho": 7}, "variants_fit": {"nordic": 0, "modern-country": 0, "boho": 0}, "envelope_ok": false,
+   "flags": ["envelope-out-small"], "verdict": "reject",
+   "note_he": "סט כלי קש ים קטנים; הגדול בקוטר עד כ-21 מול 34–38 בפינה שליד החלון, ושם העציץ הוא משקל נגד לחלון. כבר סומן ב-14.10 בהתאמת הסל. לא מרחיבים: כלי של 21 לא נושא את הפינה."
+  },
+  {
+   "card_id": "storage-basket-cj-cotton-rope-basket-43x33x19",
+   "team": "cj-wave2", "slots": ["bath/storage-basket"], "image_seen": true,
+   "checked": true, "fit": {"boho": 6}, "variants_fit": {"boho": 0}, "envelope_ok": true,
+   "flags": ["boho-no-weave-in-bath"], "verdict": "lower-fit",
+   "note_he": "בבוהו קליעה במקלחת אסורה (בריף הבוהו, סעיף 7), כמו שקבעתי ב-14.10 בהתאמת הסל. הצוות נתן 7.5. בים-תיכוני ובכפרי נשאר 7 לפי ההתאמה."
+  },
+  {
+   "card_id": "storage-basket-cj-two-tone-cotton-rope-basket-38x25x23",
+   "team": "cj-wave2", "slots": ["bath/storage-basket", "hall/basket"], "image_seen": true,
+   "checked": true, "fit": {"boho": 6}, "variants_fit": {"boho": 0}, "envelope_ok": true,
+   "flags": ["boho-no-weave-in-bath", "per-card-fit-also-hits-hall-basket"], "verdict": "lower-fit",
+   "note_he": "אותה סיבה. שימו לב: הציון חל על הכרטיס בכל העמדות, ולכן הוא יורד גם מ-hall/basket בבוהו, ששם הוא מותר. העמדה בכניסה מכוסה בבוהו גם בלעדיו, אבל הסקריפט צריך ציון לפי עמדה."
+  },
+  {
+   "card_id": "cutting-boards-cj-black-walnut-paddle-pair-39-34",
+   "team": "cj-wave2", "slots": ["dining-room/cutting-boards"], "image_seen": true,
+   "checked": true, "fit": {"boho": 7}, "variants_fit": {"boho": 1}, "envelope_ok": true,
+   "flags": [], "verdict": "keep",
+   "note_he": "אגוז מלא בשמן, L כ-30: בתוך 'עץ כהה' של הבוהו (#7A5536). הצורה נקייה ולא אתנית, אבל לצד קרש הזית והשיטה הוא וריאציה כהה טובה. 7 ולא 7.5."
+  },
+  {
+   "card_id": "umbrella-stand-cj-solid-wood-umbrella-bucket-hex-19x49",
+   "team": "cj-wave2", "slots": ["hall/umbrella-stand"], "image_seen": true,
+   "checked": true, "fit": {"nordic": 6.5}, "variants_fit": {"nordic": 0}, "envelope_ok": true,
+   "flags": ["shape-not-per-spec"], "verdict": "lower-fit",
+   "note_he": "שרוול עץ בהיר מתחדד ומשושה: נקרא כאגרטל רצפה, והמפרט הנורדי מבקש גליל. מסכים עם ההתאמה מ-14.10 (6.5). במודרני חם, בג'פנדי ובכפרי לא משתנה."
+  },
+  {
+   "card_id": "toilet-paper-stand-aliexpress-matte-black-freestanding-toilet-paper-stand-with",
+   "team": "round5-aliexpress", "slots": ["bath/toilet-paper-stand"], "image_seen": true,
+   "checked": true, "fit": {"warm-modern": 7}, "variants_fit": {"warm-modern": 2}, "envelope_ok": true,
+   "flags": ["same-look-as-basket-stands", "silver-sku-out"], "verdict": "keep",
+   "note_he": "מעמד 60 עם עמוד לגלילים ובסיס 17: במעטפה. השחור הוא אותו מראה כמו שני המעמדים השחורים שכבר בעמדה; מה שמוסיף בחירה אמיתית הוא הזהב המוברש (לא הכסוף). נספרים שחור וזהב מוברש."
+  },
+  {
+   "card_id": "candle-holders-aliexpress-black-lava-stone-candle-holders",
+   "team": "round5-aliexpress", "slots": ["dining-room/candle-holders"], "image_seen": true,
+   "checked": true, "fit": {"japandi": 7}, "variants_fit": {"japandi": 1}, "envelope_ok": true,
+   "flags": [], "verdict": "keep",
+   "note_he": "זוג פמוטי אבן לבה מחוררת, 11 ו-7: דיו מרקמי ווואבי, טוב לג'פנדי. 7 ולא 8: החריטה המחורצת והרגל, כשהג'אפנדי מעדיף צלחת נמוכה."
+  },
+  {
+   "card_id": "paper-towel-holder-aliexpress-solid-wood-slotted-paper-towel-stand",
+   "team": "round5-aliexpress", "slots": ["dining-room/paper-towel-holder"], "image_seen": true,
+   "checked": true, "fit": {"nordic": 7.5, "warm-modern": 8, "japandi": 8}, "variants_fit": {"nordic": 1, "warm-modern": 2, "japandi": 2}, "envelope_ok": true,
+   "flags": ["image-ai-lifestyle", "near-duplicate-of-slotted-round-base-31"], "verdict": "keep",
+   "note_he": "עמוד עץ עם חריץ על בסיס עגול, 31: נקי ומדויק. בנורדי רק הטבעי (אגוז אסור), במודרני חם אגוז ושיטה, בג'פנדי אגוז וטבעי. זה אותו מראה כמו paper-towel-holder-aliexpress-slotted-wood-round-base-31: אחד מהשניים הוא ספק גיבוי."
+  },
+  {
+   "card_id": "table-runner-aliexpress-open-weave-linen-runner",
+   "team": "round5-aliexpress", "slots": ["living-room/table-runner"], "image_seen": true,
+   "checked": true, "fit": {"japandi": 7}, "variants_fit": {"japandi": 2}, "envelope_ok": true,
+   "flags": ["image-ai-lifestyle", "fibre-verify"], "verdict": "keep",
+   "note_he": "ראנר בקליעה פתוחה 30×120 בגוון פשתן וקפה: 'קליעה נראית' של הג'אפנדי. בתמונה הוא נראה כמו סיסל: לאמת שהסיב פשתן. נספרים בז' וקפה."
+  },
+  {
+   "card_id": "desk-tray-aliexpress-bamboo-round-tray-with-scalloped-edge",
+   "team": "round5-aliexpress", "slots": ["work/desk-tray"], "image_seen": true,
+   "checked": true, "fit": {"modern-country": 7, "boho": 7}, "variants_fit": {"modern-country": 1, "boho": 1}, "envelope_ok": true,
+   "flags": ["image-ai-lifestyle"], "verdict": "keep",
+   "note_he": "מגש במבוק עגול 23 עם שפה גלית: במעטפה. בבוהו במבוק מותר, ובכפרי השפה הגלית היא בדיוק 'קצוות גליים'. התמונה כנראה רינדור: לרנדר מתמונות המוצר."
+  },
+  {
+   "card_id": "shelf-boxes-aliexpress-seagrass-lidded-box-32x22-pair",
+   "team": "round5b", "slots": ["work/shelf-boxes"], "image_seen": true,
+   "checked": true, "fit": {"mediterranean": 7, "boho": 7.5}, "variants_fit": {"mediterranean": 1, "boho": 1}, "envelope_ok": true,
+   "flags": [], "verdict": "keep",
+   "note_he": "קופסת קש ים עם מכסה ולולאה, 32×22×13: בדיוק R5Q2. בים-תיכוני 7, סיב שימושי בגוון טבעי; לשים לב למכסת 2 פריטים קלועים בפריים."
+  },
+  {
+   "card_id": "planter-zendrop-seagrass-belly-38x34",
+   "team": "round5b", "slots": ["bath/floor-planter"], "image_seen": true,
+   "checked": true, "fit": {"mediterranean": 7.5}, "variants_fit": {"mediterranean": 1}, "envelope_ok": true,
+   "flags": ["envelope-borderline-7pct"], "verdict": "keep",
+   "note_he": "ה-SKU d32×h28 כסל לעציץ במקלחת: קוטר +2 וגובה −2, והצמח מוסיף גובה. בפריים B1 הוא יושב בין קבוצת הרצפה לשטיחון ונקרא נכון. סל קש ים הוא חתימת המקלחת בים-תיכוני. הציון חל על הכרטיס גם בעמדות האחרות (שם 8; עדיין נספר)."
+  },
+  {
+   "card_id": "dining-pendant-aliexpress-hand-woven-bamboo-wave-pendant",
+   "team": "round5c", "slots": ["dining-room/dining-pendant"], "image_seen": true,
+   "checked": true, "fit": {"japandi": 6.5, "boho": 7.5}, "variants_fit": {"japandi": 0, "boho": 1}, "envelope_ok": true,
+   "flags": ["open-weave-shadow-pattern", "envelope-borderline-d60"], "verdict": "lower-fit",
+   "note_he": "גל במבוק קלוע 60×20: קליעה פתוחה שמטילה דוגמת צל, ובג'פנדי מעל השולחן מבקשים פנס נייר או משי סגור (6.5). בבוהו 7.5. הקוטר 60 מול 45–55 עובר מעל שולחן של 160."
+  },
+  {
+   "card_id": "nightstand-tray-aliexpress-acacia-wood-rectangular-tray-with-low-rim",
+   "team": "round5c", "slots": ["master/nightstand-tray"], "image_seen": true,
+   "checked": true, "fit": {"warm-modern": 7, "mediterranean": 7.5}, "variants_fit": {"warm-modern": 0, "mediterranean": 0}, "envelope_ok": false,
+   "flags": ["envelope-out-depth", "pack-spec-conflict"], "verdict": "reject",
+   "note_he": "מגש שיטה יפה, אבל 25×11.8 מול 28–34 × 20–28: המגש נושא את האגרטל (קוטר עד 14) ואת הצלוחית, ובעומק 12 הם לא נכנסים זה ליד זה. בשידה הוא נקרא כמגש עטים. לא הרחבתי. למנהל: במפרט הים-תיכוני בחבילה כתוב 22–26 × 12–16, בסתירה לעמדה."
+  },
+  {
+   "card_id": "pendant-aliexpress-handwoven-bamboo-wave-pendant",
+   "team": "round5c", "slots": ["master/pendant"], "image_seen": true,
+   "checked": true, "fit": {"japandi": 6.5, "boho": 7.5}, "variants_fit": {"japandi": 0, "boho": 1}, "envelope_ok": true,
+   "flags": ["open-weave-shadow-pattern"], "verdict": "lower-fit",
+   "note_he": "אותה צורת גל בקוטר 50: בג'פנדי האור צריך לעבור דרך נייר או משי, והקליעה הפתוחה מטילה רשת (6.5). בבוהו 7.5."
+  },
+  {
+   "card_id": "wall-sconce-aliexpress-vintage-design-hand-woven-747191",
+   "team": "wave3-repricing", "slots": ["hall/wall-sconce"], "image_seen": true,
+   "checked": true, "fit": {"boho": 7.5}, "variants_fit": {"boho": 1}, "envelope_ok": true,
+   "flags": ["dims-unpublished"], "verdict": "keep",
+   "note_he": "חצי-גליל חבל דו-שכבתי צמוד לקיר: בקיר הצדי של H0 (זווית של כ-45°) הרוחב נקרא כ-70% ממנו, ובמעטפה המורחבת (hall.json 1.0.4) הוא עובר. 39.8%."
+  },
+  {
+   "card_id": "wall-sconce-aliexpress-handwoven-rattan-wall-lamp-915640",
+   "team": "wave3-aliexpress", "slots": ["hall/wall-sconce"], "image_seen": true,
+   "checked": true, "fit": {"boho": 7.5}, "variants_fit": {"boho": 1}, "envelope_ok": true,
+   "flags": ["projection-unpublished", "image-ai-lifestyle"], "verdict": "keep",
+   "note_he": "פנס חבל 17×16 תלוי מזרוע עץ: אותה טיפולוגיה כמו כדור הבמבוק 671943 שכבר בעמדה. לאמת בליטה עד 20 וחיווט לקיר. 8 ולא יותר: הסליל השחור על הזרוע מעט קישוטי."
+  },
+  {
+   "card_id": "soft-toy-aliexpress-30cm-lovely-curly-teddy-548628",
+   "team": "wave3-repricing", "slots": ["kids/soft-toy"], "image_seen": true,
+   "checked": true, "fit": {"modern-country": 6.5}, "variants_fit": {"modern-country": 0}, "envelope_ok": true,
+   "flags": ["replica-risk-jellycat-bartholomew", "polyester-plush", "EN71-not-stated"], "verdict": "lower-fit",
+   "note_he": "דובי מתולתל בקרמל ובחום: קרוב מאוד לדובי Bartholomew של Jellycat (סיכון העתק), פרווה פוליאסטר. בכפרי 6.5."
+  },
+  {
+   "card_id": "soft-toy-aliexpress-handmade-crochet-bunny-baby-999497",
+   "team": "wave3-aliexpress", "slots": ["kids/soft-toy"], "image_seen": true,
+   "checked": true, "fit": {"nordic": 7.5, "warm-modern": 7, "japandi": 6.5, "modern-country": 7.5, "boho": 7}, "variants_fit": {"nordic": 3, "warm-modern": 2, "japandi": 0, "modern-country": 3, "boho": 3}, "envelope_ok": true,
+   "flags": ["EN71-not-stated", "variant-labels-mismatch-photo"], "verdict": "lower-fit",
+   "note_he": "ארנבות ודובי סרוגים: נורדי בשמנת, לבן ובז'; מודרני חם בבז' ובחום. בג'פנדי סריגה עבה אסורה (6.5), כמו בכרטיס הבובה של אותו רישום. לאמת שה-SKU בחדר הוא באמת ארנבת. EN71 לפני מכירה."
+  },
+  {
+   "card_id": "pendant-aliexpress-wabi-sabi-cloth-pendant-979993",
+   "team": "wave3-repricing", "slots": ["living-room/pendant"], "image_seen": true,
+   "checked": true, "fit": {"nordic": 7.5, "warm-modern": 7, "japandi": 7.5}, "variants_fit": {"nordic": 1, "warm-modern": 1, "japandi": 1}, "envelope_ok": true,
+   "flags": ["walnut-finials", "thin-margin-10"], "verdict": "keep",
+   "note_he": "תוף פשתן תלת-שכבתי 40 עם מוטות אגוז: זו שפת התלויה הנורדית (תוף פשתן), ובג'פנדי בד שזוהר. האגוז קטן מאוד; בנורדי לבקש גימור אלון אם יש. במודרני חם 7: לא המשי המצולע של הסגנון. 10% (ה.11)."
+  },
+  {
+   "card_id": "desk-lamp-aliexpress-solid-wood-table-lamp-045552",
+   "team": "wave3-aliexpress", "slots": ["work/desk-lamp"], "image_seen": true,
+   "checked": true, "fit": {"modern-country": 7}, "variants_fit": {"modern-country": 1}, "envelope_ok": true,
+   "flags": ["dims-unpublished", "image-ai-lifestyle", "plug-eu-verify"], "verdict": "keep",
+   "note_he": "בסיס כדורי עץ מחורט ואהיל קפלים: כפרי. ה-SKU 'Small' בעץ טבעי ותקע EU. לאמת גובה 40–50 ואהיל עד 22: אם האהיל רחב יותר, הוא נוגע בפינה הימנית של התמונה (7.5 ס״מ)."
+  },
+  {
+   "card_id": "framed-art-cj-black-ink-abstract-wide-mat-50-pair",
+   "team": "wave3-custom-framed", "slots": ["master/framed-art"], "image_seen": true,
+   "checked": true, "fit": {"nordic": 7}, "variants_fit": {"nordic": 1}, "envelope_ok": true,
+   "flags": ["plexiglass-glazing", "same-series-as-corridor"], "verdict": "keep",
+   "note_he": "זוג מופשט בדיו שחור עם פספרטו לבן רחב ומסגרת שחורה דקה: פחם מבוקר על שמנת, 110×50 מעל המיטה (גובה −9%, עובד). זכוכית הפלקסי משקפת: לבקש בלי זיגוג או לרנדר מט."
+  },
+  {
+   "card_id": "gallery-art-cj-black-ink-abstract-wide-mat-40-set3",
+   "team": "wave3-custom-framed", "slots": ["corridor/gallery-art"], "image_seen": true,
+   "checked": true, "fit": {"nordic": 7, "japandi": 7.5}, "variants_fit": {"nordic": 1, "japandi": 1}, "envelope_ok": true,
+   "flags": ["same-series-as-master"], "verdict": "keep",
+   "note_he": "שלושה ריבועי 40×40 של אותה סדרה, בלי זיגוג: דיו על נייר של הג'אפנדי, פחם של הנורדי. הגובה 40 מול 45–50: המעטפה הורחבה ל-40–50 (corridor.json 1.0.2), כי סדרת ריבועים נקראת מכוונת."
+  },
+  {
+   "card_id": "ceiling-light-aliexpress-flat-oval-paper-lantern-shade-40",
+   "team": "wave4-shades", "slots": ["hall/ceiling-light"], "image_seen": true,
+   "checked": true, "fit": {"nordic": 7.5, "japandi": 8}, "variants_fit": {"nordic": 1, "japandi": 1}, "envelope_ok": true,
+   "flags": ["shade-only-with-certified-kit", "image-ai-lifestyle"], "verdict": "keep",
+   "note_he": "פנס נייר אליפטי שטוח 40×22: בדיוק 'פנס נייר שטוח' של הנורדי וחתימת הג'פנדי, ולא צורת Akari. במעטפה (35–45 × 18–25). אהיל בלבד, עם ערכת תלייה E27 עם תקן (ז, 2026-10-14)."
+  },
+  {
+   "card_id": "ceiling-lights-aliexpress-flat-oval-paper-lantern-shade-40-pair",
+   "team": "wave4-shades", "slots": ["corridor/ceiling-lights"], "image_seen": true,
+   "checked": true, "fit": {"nordic": 7.5, "japandi": 8}, "variants_fit": {"nordic": 1, "japandi": 1}, "envelope_ok": true,
+   "flags": ["shade-only-with-certified-kit", "projection-borderline"], "verdict": "keep",
+   "note_he": "אותו פנס כזוג במסדרון: הבליטה 22 ועוד הבית מול 12–20. לתלות על כבל קצר צמוד לתקרה, כך שהתחתית ב-2.45; בפריים C0 הרחוק נקרא כחצי-צמוד."
+  },
+  {
+   "card_id": "ceiling-light-aliexpress-pleated-cone-shade-41",
+   "team": "wave4-shades", "slots": ["hall/ceiling-light"], "image_seen": true,
+   "checked": true, "fit": {"modern-country": 7.5}, "variants_fit": {"modern-country": 2}, "envelope_ok": true,
+   "flags": ["shade-only-with-certified-kit", "same-shade-three-rooms"], "verdict": "keep",
+   "note_he": "קונוס קפלים 41: 'אהילי קפלים' של הכפרי. נספרים שנהב ובז' (13 הצבעים כוללים רוויים שלא נספרים). במעטפה."
+  },
+  {
+   "card_id": "dining-pendant-aliexpress-pleated-cone-shade-41",
+   "team": "wave4-shades", "slots": ["dining-room/dining-pendant"], "image_seen": true,
+   "checked": true, "fit": {"modern-country": 7}, "variants_fit": {"modern-country": 2}, "envelope_ok": true,
+   "flags": ["envelope-borderline-d41", "same-shade-three-rooms"], "verdict": "keep",
+   "note_he": "41 מול 45–55 (−9%): מעל שולחן של 160 הוא מעט קטן לגיבור של D1, אבל בתוך ה-10%. לתלות 5 ס״מ נמוך יותר. 7 ולא 7.5."
+  },
+  {
+   "card_id": "pendant-aliexpress-pleated-cone-shade-41",
+   "team": "wave4-shades", "slots": ["living-room/pendant"], "image_seen": true,
+   "checked": true, "fit": {"modern-country": 7}, "variants_fit": {"modern-country": 2}, "envelope_ok": true,
+   "flags": ["same-shade-three-rooms"], "verdict": "keep",
+   "note_he": "אותו אהיל בסלון: במעטפה. הסלון ופינת האוכל נראים יחד דרך הפתח, ולכן בשני החדרים לא לבחור אותו בברירת המחדל באותו צבע."
+  },
+  {
+   "card_id": "bin-aliexpress-natural-water-hyacinth-waste-basket",
+   "team": "round5-aliexpress", "slots": ["bath/bin"], "image_seen": false,
+   "checked": true, "fit": {"mediterranean": 7, "boho": 6}, "variants_fit": {"mediterranean": 1, "boho": 0}, "envelope_ok": true,
+   "flags": ["boho-no-weave-in-bath", "not-a-pedal-bin"], "verdict": "lower-fit",
+   "note_he": "סל יקינטון מים 19×28: קוטר −1 מ-20 עובר ליד המעמד. בים-תיכוני 7 (סל קש של המקלחת). בבוהו 6: קליעה במקלחת אסורה. שיפוט מטקסט."
+  }
+ ],
+ "size_review": [
+  {"id": "aliexpress:1005009115721608", "slot": "corridor/gallery-stool", "styles": ["boho"], "list": "F6-59", "dims_cm": "~35-38 d (est.)", "envelope_ok": false, "verdict": "fail", "reason_he": "תוף ראטן בקוטר 35–38 מול מושב 26–30, מתחת לגלריה במסדרון צר; וגם מפסיד (נחיתה ₪587)."},
+  {"id": "zendrop:2624310", "slot": "dining-room/tableware-set", "styles": ["japandi", "mediterranean", "modern-country"], "list": "F6-59", "dims_cm": "26.7 / 17.8 / 12.7", "envelope_ok": true, "verdict": "pass", "needs_card": true, "reason_he": "ערימה על מדף ב-1.58: צלחת צד 17.8 וקערה 12.7 לא נראות שונות מרחוק. המעטפה הורחבה (17–22, 12–16). צריך תמחור: 6 חלקים $75.8 לפני משלוח."},
+  {"id": "cj:2409020723381627600", "slot": "dining-room/tableware-set", "styles": ["japandi", "mediterranean", "boho"], "list": "F6-59", "dims_cm": "largest plate 23", "envelope_ok": true, "verdict": "pass", "needs_card": true, "reason_he": "צלחת בסיס 23 מתאימה למדף בעומק 25 טוב יותר מ-28. המעטפה הורחבה ל-23–28."},
+  {"id": "aliexpress:1005009708965037", "slot": "living-room/accent-sconces", "styles": ["boho"], "list": "F6-59 + F6-borderline", "dims_cm": "23x25", "envelope_ok": false, "verdict": "fail", "reason_he": "23 רחב גם מההרחבה של הבוהו (18): המנורה השמאלית מגיעה לקצה קישוט הקיר, והקיר מעל הספה נעמס."},
+  {"id": "aliexpress:1005012258778712", "card_id": "kitchen-sconce-aliexpress-natural-woven-bohemian-rattan-778712", "slot": "living-room/accent-sconces", "styles": ["boho"], "list": "F6-59 + F6-borderline", "dims_cm": "17 x 25 proj x 27 h", "envelope_ok": true, "verdict": "pass", "needs_card": true, "reason_he": "גליל קנה על פליז מיושן בהרחבת הבוהו (עד 18 × 28, בליטה 25): 0.13 לפחות לשפת התמונה ו-0.18 מעל קישוט הקיר. הכרטיס קיים במטבח; צריך שורת תוצאה בעמדה הזו, כזוג."},
+  {"id": "aliexpress:1005008888023343", "slot": "living-room/floor-lamp", "styles": ["japandi"], "list": "F6-59", "dims_cm": "~130, shade 17", "envelope_ok": false, "verdict": "fail", "reason_he": "אהיל צינור 17 נקרא כמקל, ושלולית האור על הספה חלשה. גם בהרחבה (24–30) לא נכנס."},
+  {"id": "aliexpress:1005011911415208", "slot": "living-room/floor-lamp", "styles": ["japandi"], "list": "F6-59 + F6-borderline", "dims_cm": "~127, tube 26", "envelope_ok": true, "verdict": "pass", "needs_card": true, "reason_he": "פנס עמודי נמוך על חצובת אגוז: האהיל זוהר ב-0.95–1.27 מעל הסל ומתחת לטרוורטין הימנית, זה ה'נמוך' של הג'פנדי. המעטפה הורחבה בג'פנדי בלבד. משלוח חינם; לאמת CE ותקע EU."},
+  {"id": "aliexpress:1005009680336599", "slot": "living-room/floor-lamp", "styles": ["japandi"], "list": "F6-59", "dims_cm": "unpublished, narrow tube", "envelope_ok": false, "verdict": "fail", "reason_he": "בלי מידות, ואותה צורה כמו הכרטיס 217361 שכבר בעמדה; 14.2%."},
+  {"id": "aliexpress:1005011551314112", "slot": "living-room/floor-lamp", "styles": ["japandi"], "list": "F6-59", "dims_cm": "~127 tube", "envelope_ok": true, "verdict": "blocked", "reason_he": "המידה עובדת, אבל זה אותו טריפוד ופנס כמו WENYUN 1005011911415208: ספק גיבוי, לא אפשרות נפרדת."},
+  {"id": "aliexpress:1005012740547915", "slot": "work/magazine-holder", "styles": ["boho"], "list": "F6-59", "dims_cm": "34 x 39 x 33", "envelope_ok": true, "verdict": "pass", "needs_card": true, "reason_he": "בין קצה השולחן לקיר יש מקום ל-35, ועומק 39 נגמר בתוך עומק השולחן: המעמד לא בולט קדימה ב-W0. המעטפה הורחבה. צריך תמחור לפי ה.10: הרישומים האחים הפסידו במשלוח."},
+  {"id": "aliexpress:1005009708965037", "slot": "work/wall-sconce", "styles": ["boho"], "list": "F6-59", "dims_cm": "23x25", "envelope_ok": false, "verdict": "fail", "reason_he": "אהיל 23 מול 13 ליד ערימת הווילון: התיקון של W-HC4 (אהיל עד 13, פלטה עד 8) מחייב."},
+  {"id": "aliexpress:1005012099550914", "slot": "work/wall-sconce", "styles": ["japandi"], "list": "F6-59", "dims_cm": "plate D18-20", "envelope_ok": false, "verdict": "fail", "reason_he": "פלטת טרוורטין 18–20 מול פלטה עד 8, 0.009 מערימת הווילון בפריים: הייתה נוגעת בווילון."},
+  {"id": "aliexpress:1005008337720117", "slot": "work/wall-sconce", "styles": ["japandi"], "list": "F6-59", "dims_cm": "plate D20", "envelope_ok": false, "verdict": "fail", "reason_he": "אותה סיבה: פלטה 20 מול 8 ליד הווילון."},
+  {"id": "aliexpress:1005009533539268", "slot": "work/wall-sconce", "styles": ["japandi"], "list": "F6-59", "dims_cm": "plate D18-20", "envelope_ok": false, "verdict": "fail", "reason_he": "אותה סיבה."},
+  {"id": "aliexpress:1005010728545008", "slot": "work/wall-sconce", "styles": ["japandi"], "list": "F6-59", "dims_cm": "plate D18-20", "envelope_ok": false, "verdict": "fail", "reason_he": "אותה סיבה."},
+  {"id": "aliexpress:1005011855057684", "slot": "work/waste-basket", "styles": ["boho"], "list": "F6-59", "dims_cm": "19 d x 28 h", "envelope_ok": true, "verdict": "pass", "needs_card": true, "reason_he": "פח צר יותר מתחת לשולחן נקרא קל יותר ולא נוגע בדופן. המעטפה הורחבה ל-19–26. צריך תמחור (נחיתה ₪97)."},
+  {"id": "cj:2410141005261605400", "slot": "kids/bookshelf", "styles": ["nordic"], "list": "F6-59", "dims_cm": "41.9 x 10.2 x 8.9, pair", "envelope_ok": true, "verdict": "pass", "needs_card": true, "reason_he": "לפי R5C1 (40–80, שניים בשורה): שני זוגות, זוג לכל שורה, עם רווח 0–4. צריך כרטיס ותמחור."},
+  {"id": "zendrop:2611216", "slot": "kids/rug", "styles": ["boho"], "list": "F6-59", "dims_cm": "70x160", "envelope_ok": false, "verdict": "fail", "reason_he": "שטיח ליד מיטה, לא שטיח חדר: גם בטווח החדש (120–160 × 170–220) הוא חצי מהרוחב."},
+  {"id": "aliexpress:1005012336155345", "slot": "living-room/pendant", "styles": ["boho"], "list": "F6-59", "dims_cm": "45x45", "envelope_ok": false, "verdict": "fail", "reason_he": "פעמון בגובה 45 מול 25–35 מעל שולחן הקפה: יורד לתוך קו הראייה לתמונה, ונחיתה ₪662."},
+  {"id": "aliexpress:1005009931411835", "slot": "master/pendant", "styles": ["mediterranean"], "list": "F6-59", "dims_cm": "d30", "envelope_ok": false, "verdict": "fail", "reason_he": "30 מול 40–50 באמצע חדר השינה: נקרא כמנורת מסדרון. וגם 107$."},
+  {"id": "aliexpress:1005013217963021", "slot": "bath/floor-planter", "styles": ["boho"], "list": "F6-59", "dims_cm": "25 x 23", "envelope_ok": false, "verdict": "fail", "reason_he": "קליעה במקלחת אסורה בבוהו, והגובה 23 מול 30–36."},
+  {"id": "aliexpress:1005009938333899", "slot": "bath/shower-curtain", "styles": ["boho"], "list": "F6-59", "dims_cm": "180 x 210", "envelope_ok": true, "verdict": "pass", "needs_card": true, "reason_he": "לפי R5C1 (נפילה 200–265, עם ווי הארכה מתחת ל-255) הנפילה 210 נכנסת. טאפטינג בז' עם גדילים: בוהו 8. צריך כרטיס, תמחור וווי הארכה."},
+  {"id": "aliexpress:1005010695223208", "slot": "dining-room/bowl", "styles": ["modern-country", "boho"], "list": "F6-59", "dims_cm": "25 x 15 x 5", "envelope_ok": true, "verdict": "pass", "needs_card": true, "reason_he": "קערת בצק 25×15: שני אגסים זה ליד זה, והמצלמה ב-1.10 רואה את הפירות. המעטפה הורחבה (גובה 5–11, אליפסה עם צלע קצרה 15 לפחות). נחיתה ₪51."},
+  {"id": "cj:1392716043398549504", "card_id": "bowl-cj-speckled-stoneware-rattan-handle-bowl-19", "slot": "dining-room/bowl", "styles": ["modern-country", "boho", "mediterranean"], "list": "F6-59", "dims_cm": "L 25.5 x 5.7", "envelope_ok": true, "verdict": "pass", "needs_card": true, "reason_he": "המידה L של קערת החרס עם ידיות הראטן: עומק פנימי 5 לפחות, כמו בכלל המאגר. הכרטיס קיים במידה S לסלון; צריך את ה-SKU של L ושורה בעמדה."},
+  {"id": "cj:2407160838251626400", "slot": "dining-room/bowl", "styles": ["boho"], "list": "F6-59", "dims_cm": "16.5 x 8", "envelope_ok": false, "verdict": "fail", "reason_he": "16.5 מול 20–26: שלושה אגסים עולים על השפה. קערת אטריות, לא קערת פירות."},
+  {"id": "aliexpress:1005008842782133", "slot": "dining-room/canisters", "styles": ["japandi"], "list": "F6-59", "dims_cm": "12 and 16.5 h, d 8-9", "envelope_ok": false, "verdict": "fail", "reason_he": "רק שתי מידות, ואין שלישייה יורדת לנישה."},
+  {"id": "cj:630486F8-02A0-4D93-85DA-D3D4DEAF41C9", "slot": "dining-room/canisters", "styles": ["japandi", "warm-modern"], "list": "F6-59", "dims_cm": "8.2 / 14.5 / 18.2 h", "envelope_ok": false, "verdict": "fail", "reason_he": "הקטנה 8.2 נמוכה גם מהמעטפה המורחבת (11–16), ומפסיד בכל מחיר שהשוק תומך בו."},
+  {"id": "cj:1475674474018902016", "slot": "dining-room/canisters", "styles": ["japandi"], "list": "F6-59", "dims_cm": "12 / 14.6 / 19 h, d 8.2-14.8", "envelope_ok": true, "verdict": "pass", "needs_card": true, "reason_he": "שלישייה יורדת בזיגוג ריאקטיבי, בתוך הנישה (33.8 מתוך 46). המעטפה הורחבה. 2.5 ק״ג: צריך תמחור לפני כרטיס."},
+  {"id": "aliexpress:1005010183239871", "slot": "dining-room/mug-set", "styles": ["modern-country"], "list": "F6-59", "dims_cm": "d 6.6, 150 ml", "envelope_ok": false, "verdict": "fail", "reason_he": "ספל אספרסו, לא ספל: על המדף נקרא כצעצוע; ומלאי 1–2 לצבע לא מספיק לשלושה."},
+  {"id": "aliexpress:1005010212366405", "slot": "dining-room/mug-set", "styles": ["modern-country"], "list": "F6-59", "dims_cm": "unknown", "envelope_ok": false, "verdict": "fail", "reason_he": "אין מידה, ונחיתה ₪235 לספל: מפסיד."},
+  {"id": "aliexpress:1005007594266581", "slot": "dining-room/open-shelf-ceramics", "styles": ["japandi"], "list": "F6-59", "dims_cm": "jar 8.8 x 7.8, bottle 15", "envelope_ok": false, "verdict": "fail", "reason_he": "כד 15 מול 18–26 וצנצנת 7.8 מול 10–15: הזוג קטן מדי ליד התמונה על המדף; מלאי 1–2."},
+  {"id": "aliexpress:1005012771129294", "slot": "dining-room/open-shelf-ceramics", "styles": ["japandi"], "list": "F6-59", "dims_cm": "jug 18-27", "envelope_ok": true, "verdict": "blocked", "reason_he": "הכד במידה, אבל העמדה היא זוג ואין צנצנת מאותו קו; כד בודד נוחת ב-₪190."},
+  {"id": "aliexpress:1005012499583360", "slot": "hall/storage-boxes", "styles": ["boho"], "list": "F6-59", "dims_cm": "none published", "envelope_ok": false, "verdict": "fail", "reason_he": "אין שום מידה, ותמונות האווירה נוצרו ב-AI: אי אפשר לשפוט ולא לרנדר נאמנה."},
+  {"id": "aliexpress:1005012473537838", "slot": "hall/table-lamp", "styles": ["warm-modern"], "list": "F6-59", "dims_cm": "17.5 x 25", "envelope_ok": false, "verdict": "fail", "reason_he": "25 מול 45–55: על הקונסולה, מתחת לתמונה שמתחילה ב-1.30, המנורה נעלמת והמשולש מנורה-מגש-כלי נשבר."},
+  {"id": "aliexpress:1005002672043730", "slot": "hall/wall-sconce", "styles": ["modern-country"], "list": "F6-59", "dims_cm": "shade 11/15 x 14, H30, proj 20", "envelope_ok": true, "verdict": "pass", "needs_card": true, "reason_he": "זרוע נר בפליז ואהיל בד: בקיר הצדי ב-45° הבליטה נקראת כ-14; עם גובה 30 היא ב-1.79–2.09, 7 ס״מ מעל היתדות. המעטפה הורחבה. CE, שנהב ובז'."},
+  {"id": "aliexpress:1005012815596512", "slot": "living-room/magazine-holder", "styles": ["boho"], "list": "F6-59", "dims_cm": "~38 x 28 x 12", "envelope_ok": false, "verdict": "fail", "reason_he": "סל מגש נמוך, לא מחזיק עיתונים זקוף: סוג מוצר אחר."},
+  {"id": "aliexpress:1005007232202922", "slot": "living-room/wall-sconce", "styles": ["modern-country"], "list": "F6-59", "dims_cm": "~16 x 25, proj ~20", "envelope_ok": false, "verdict": "fail", "reason_he": "בליטה 20 מול זרוע קריאה 30–45: האור לא מגיע לכורסה. זה תפקיד אחר."},
+  {"id": "aliexpress:1005009668202802", "slot": "work/framed-art", "styles": ["warm-modern"], "list": "F6-59", "dims_cm": "portrait only", "envelope_ok": false, "verdict": "fail", "reason_he": "רק לאורך, והעמדה בין השולחן למדף היא לרוחב 55–60 × 45–50; גבוה ב-10 מהמקום."},
+  {"id": "aliexpress:1005012850267767", "slot": "living-room/wall-decor", "styles": ["warm-modern"], "list": "F6-59", "dims_cm": "~20 (package 10x10x5)", "envelope_ok": false, "verdict": "fail", "reason_he": "כ-20 מול 35–45 על הקיר האחורי: נקרא כנקודה, ואין מידה מפורסמת."},
+  {"id": "aliexpress:4001162414673", "slot": "hall/table-lamp", "styles": ["modern-country"], "list": "F6-59", "dims_cm": "~28 x 24", "envelope_ok": false, "verdict": "fail", "reason_he": "28 מול 45–55: מנורת לילה על קונסולה. אותה בעיה כמו הטרוורטין."},
+  {"id": "aliexpress:1005008955326664", "slot": "work/wall-sconce", "styles": ["modern-country"], "list": "F6-59 + F6-borderline", "dims_cm": "shade 14, h26, proj 20, plate 13", "envelope_ok": false, "verdict": "fail", "reason_he": "פלטה 13 מול 8 ליד ערימת הווילון (W-HC4). מתאים למנורת הקיר בכניסה בכפרי, אם ייכתב כרטיס שם."},
+  {"id": "zendrop:2785553", "slot": "hall/umbrella-stand", "styles": ["boho"], "list": "F6-59", "dims_cm": "26 x 30", "envelope_ok": false, "verdict": "fail", "reason_he": "גובה 30 מול 45–50: מטריה נופלת מסל כזה. זה סל עציץ."},
+  {"id": "cj:1565638804562784256", "slot": "hall/wall-hooks", "styles": ["boho"], "list": "F6-59", "dims_cm": "~40/50, deep shelf", "envelope_ok": false, "verdict": "fail", "reason_he": "האורך עובר עכשיו לפי R5C1 (40–80), אבל המדף העמוק בולט הרבה מעל 8 ממש מתחת למנורת הקיר ב-1.94: שני גופים בולטים זה על זה."},
+  {"id": "aliexpress:4000139550892", "slot": "living-room/pouf", "styles": ["mediterranean", "boho"], "list": "F6-59", "dims_cm": "d38 x h30", "envelope_ok": true, "verdict": "blocked", "reason_he": "פוף נמוך וקטן לפני הכורסה נקרא נכון. חסום רק בהפסד (נחיתה ₪572), ולכן לא הרחבתי."},
+  {"id": "cj:1367408337569845248", "slot": "dining-room/kitchen-runner", "styles": ["mediterranean", "boho"], "list": "F6-59", "dims_cm": "35 x 250", "envelope_ok": false, "verdict": "fail", "reason_he": "35 מול 45–60 לפני המשטח: נקרא כראנר שולחן על הרצפה, ולא מכסה את אזור העמידה."},
+  {"id": "aliexpress:1005006345175244", "slot": "bath/toilet-brush", "styles": ["japandi"], "list": "F6-59", "dims_cm": "12x12x37, wall-mounted", "envelope_ok": false, "verdict": "fail", "reason_he": "תלוי על הקיר, והעמדה עומדת על הרצפה לפני הפח בקבוצת הרצפה."},
+  {"id": "aliexpress:1005006134249662", "slot": "bath/toilet-brush", "styles": ["japandi"], "list": "F6-59", "dims_cm": "12x12x36, wall-mounted", "envelope_ok": false, "verdict": "fail", "reason_he": "אותה סיבה."},
+  {"id": "aliexpress:1005010236692407", "slot": "dining-room/canisters", "styles": ["modern-country"], "list": "F6-59", "dims_cm": "single ~13 x 18", "envelope_ok": false, "verdict": "fail", "reason_he": "צנצנת אחת במידה אחת: אין שלישייה, ונחיתה ₪280."},
+  {"id": "aliexpress:1005007471139220", "slot": "kids/bookshelf", "styles": ["modern-country"], "list": "F6-59", "dims_cm": "50 x 12 x 20", "envelope_ok": true, "verdict": "pass", "needs_card": true, "reason_he": "מדף אורן אחד של 50 בכל שורה, ממורכז: בתוך 40–80 של R5C1 וה-l_per_tier 45–84. שניים בשורה (100) לא נכנסים. צריך תמחור (נחיתה ₪144)."},
+  {"id": "aliexpress:1005013193019065", "slot": "corridor/gallery-stool", "styles": ["nordic", "japandi", "mediterranean", "boho"], "list": "F6-borderline", "dims_cm": "32 x 32 x 44", "envelope_ok": true, "verdict": "blocked", "reason_he": "מושב 32 מול 30 מתחת לגלריה עובד. חסום בהפסד (נחיתה ₪788), ולכן לא הרחבתי."},
+  {"id": "aliexpress:1005013221725005", "slot": "dining-room/sink-set", "styles": ["warm-modern", "japandi"], "list": "F6-borderline", "dims_cm": "15.3 x 6 x 16", "envelope_ok": true, "verdict": "blocked", "reason_he": "גובה 16 מול 17 לא נראה. חסום כי זה פריט אחד ולא סט של 3."},
+  {"id": "aliexpress:1005012142300525", "slot": "dining-room/tableware-set", "styles": ["japandi", "mediterranean", "modern-country"], "list": "F6-borderline", "dims_cm": "26.7 / 20.3 / 12", "envelope_ok": true, "verdict": "pass", "needs_card": true, "reason_he": "קערה 12 בראש הערימה. המעטפה הורחבה (12–16). אותו קו כמו קערת הגלים. 4.5% ב-₪399: לסמן (ה.11)."},
+  {"id": "floor-lamp-aliexpress-pleated-walnut-43x158-177278-master", "card_id": "floor-lamp-aliexpress-pleated-walnut-43x158-177278-master", "slot": "master/floor-lamp", "styles": ["warm-modern", "modern-country"], "list": "F6-borderline", "dims_cm": "shade 43, h158", "envelope_ok": true, "verdict": "blocked", "reason_he": "אהיל 43 בפינת הקריאה עובד. נשאר חסום כאותו מראה כמו 062736 (ביקורת סבב 5)."},
+  {"id": "tea-towel-aliexpress-pure-linen-towel-38x55", "card_id": "tea-towel-aliexpress-pure-linen-towel-38x55", "slot": "dining-room/tea-towel", "styles": ["boho"], "list": "F6-borderline", "dims_cm": "38 x 55", "envelope_ok": false, "verdict": "fail", "reason_he": "על ידית התנור היא נפתחת ל-38 רוחב מול 22–26: מכסה חצי מחזית התנור. הדחייה מסבב 5 נשארת."},
+  {"id": "cj:1705144683208388608", "slot": "hall/storage-boxes", "styles": ["modern-country"], "list": "F6-borderline", "dims_cm": "31 x 26 x 37", "envelope_ok": true, "verdict": "blocked", "reason_he": "גובה 37 מול 35 עובד. חסום בהפסד (2 ק״ג לסל)."},
+  {"id": "aliexpress:1005006768278100", "slot": "work/shelf-boxes", "styles": ["boho"], "list": "F6-borderline", "dims_cm": "29 x 19 x 12", "envelope_ok": true, "verdict": "blocked", "reason_he": "עומק 19 מול 20 לא נראה על המדף. חסום בהפסד; R5C3 אישר לחפש את אותה קופסה אצל מוכר זול יותר."},
+  {"id": "roman-blind-aliexpress-linen-tie-up-roman-shade-150", "card_id": "roman-blind-aliexpress-linen-tie-up-roman-shade-150", "slot": "kids/roman-blind", "styles": ["japandi", "modern-country"], "list": "F6-borderline", "dims_cm": "W150", "envelope_ok": false, "verdict": "fail", "reason_he": "הווילון יושב בתוך הספי (136). 150 לא נכנס פנימה, ומחוץ לספי הוא משנה את החלון."},
+  {"id": "cj:2608201021331639200", "slot": "kids/rug", "styles": ["warm-modern"], "list": "F6-borderline", "dims_cm": "150 x 200", "envelope_ok": true, "verdict": "blocked", "reason_he": "150×200 נכנס בטווח החדש. חסום כי הסיב סינתטי (ג.0)."},
+  {"id": "zendrop:2435677", "slot": "living-room/rug", "styles": ["boho"], "list": "F6-borderline", "dims_cm": "244 x 305", "envelope_ok": true, "verdict": "blocked", "reason_he": "המידה עובדת. אין משלוח לישראל (ספק אמריקאי)."},
+  {"id": "aliexpress:1005012523372929", "slot": "living-room/pendant", "styles": ["boho"], "list": "F6-borderline", "dims_cm": "D36-38.5, H13-15", "envelope_ok": false, "verdict": "fail", "reason_he": "צלוחית במבוק בגובה 14 מול 25–35, פתוחה מלמטה: מהמצלמה רואים את הנורה, והקליעה מטילה רשת."},
+  {"id": "cj:2608300209161600400", "slot": "living-room/magazine-holder", "styles": ["warm-modern"], "list": "F6-borderline", "dims_cm": "32 x 23 x 34", "envelope_ok": true, "verdict": "blocked", "reason_he": "עומק +1 וגובה −2 לא נראים בחזית. חסום בהפסד."},
+  {"id": "aliexpress:1005005532674549", "slot": "bath/ledge-planter", "styles": ["japandi", "boho"], "list": "F6-borderline", "dims_cm": "12 x 10 + saucer", "envelope_ok": true, "verdict": "blocked", "reason_he": "גובה 10 עם התחתית עובד על המדף. חסום במחיר: נחיתה ₪140 מול שווי של עד ₪185, כלומר לא רווחי."},
+  {"id": "aliexpress:1005009105041173", "slot": "bath/toilet-brush", "styles": ["mediterranean"], "list": "F6-borderline", "dims_cm": "11 x 40", "envelope_ok": true, "verdict": "blocked", "reason_he": "קוטר 11 מול 10 לפני הפח לא נראה. חסום בהפסד."},
+  {"id": "aliexpress:1005012951198712", "slot": "bath/toilet-brush", "styles": ["mediterranean"], "list": "F6-borderline", "dims_cm": "11 x 40", "envelope_ok": true, "verdict": "blocked", "reason_he": "אותו דבר; נחיתה ₪222."},
+  {"id": "aliexpress:1005008561559475", "slot": "hall/planter", "styles": ["boho"], "list": "F6-borderline", "dims_cm": "27 x 37", "envelope_ok": true, "verdict": "blocked", "reason_he": "קוטר 27 מול 26 עובד ליד הפורטל. חסום בהפסד (16 ק״ג)."},
+  {"id": "aliexpress:1005012923580024", "slot": "hall/storage-boxes", "styles": ["boho"], "list": "F6-borderline", "dims_cm": "33 x 25.5 x 18", "envelope_ok": true, "verdict": "blocked", "reason_he": "גובה 18 מול 20 עובד. חסום בהפסד (זוג ₪291 מול ₪70–100 לסל)."},
+  {"id": "floor-lamp-aliexpress-pleated-walnut-800798", "card_id": "floor-lamp-aliexpress-pleated-walnut-800798", "slot": "living-room/floor-lamp", "styles": ["warm-modern", "modern-country"], "list": "F6-borderline", "dims_cm": "unpublished", "envelope_ok": false, "verdict": "blocked", "reason_he": "בלי מידות אי אפשר לשפוט בפריים, והוא אותו מראה כמו 062736 (ביקורת סבב 5)."},
+  {"id": "bin-cj-bent-walnut-round-swing-lid", "card_id": "bin-cj-bent-walnut-round-swing-lid", "slot": "bath/bin", "styles": ["warm-modern", "japandi"], "list": "F6-borderline", "dims_cm": "D26 top / D21 x 32", "envelope_ok": true, "verdict": "blocked", "reason_he": "קוטר עליון 26 מול 24 ליד המעמד עובד. חסום בסיכון העתק (Saito Wood), כמו בביקורת סבב 5."},
+  {"id": "shower-curtain-aliexpress-cotton-linen-look-panel-200x250", "card_id": "shower-curtain-aliexpress-cotton-linen-look-panel-200x250", "slot": "bath/shower-curtain", "styles": ["modern-country"], "list": "F6-borderline", "dims_cm": "W200 x H250", "envelope_ok": true, "verdict": "blocked", "reason_he": "לפי R5C1 הנפילה 250 עכשיו בתוך 200–265. הפסיקה העיצובית מסבב 5 (פוליאסטר שקוף) נשארת."},
+  {"id": "shower-curtain-aliexpress-beige-flax-sheer-panel-200x270", "card_id": "shower-curtain-aliexpress-beige-flax-sheer-panel-200x270", "slot": "bath/shower-curtain", "styles": ["modern-country"], "list": "F6-borderline", "dims_cm": "W200 x L270", "envelope_ok": true, "verdict": "blocked", "reason_he": "270 מול 265 (+2%): נאסף 5 ס״מ במסילה. הפסיקה העיצובית מסבב 5 נשארת."}
+ ],
+ "envelope_changes": [
+  {"file": "data/slots/dining-room.json", "version": "0.2.2 -> 0.2.3", "slot": "kitchen-sconce", "old": "shade_d 14-20, projection <= 20, h 15-25", "new": "shade_d 14-24, projection <= 25, h 15-28", "why_he": "חצאי-גליל חבל וקנה 23×25 וגליל קנה 17×25×27 של הבוהו: עדיין 23 ס״מ מהקולט ו-8 מעל הכד."},
+  {"file": "data/slots/dining-room.json", "version": "0.2.3", "slot": "bowl", "old": "h 7-11", "new": "h 5-11; oval allowed with short side >= 15", "why_he": "עומק פנימי 5 (כלל המאגר) קובע; המצלמה רואה את האגסים מלמעלה. סירה צרה של 12 נשארת בחוץ."},
+  {"file": "data/slots/dining-room.json", "version": "0.2.3", "slot": "tableware-set", "old": "dinner 26-28, side 19-22, bowl 14-16", "new": "dinner 23-28, side 17-22, bowl 12-16", "why_he": "ערימה על מדף בעומק כ-25: 2–3 ס״מ לא נראים, והסדר גדול-בינוני-קערה נשמר."},
+  {"file": "data/slots/dining-room.json", "version": "0.2.3", "slot": "canisters", "old": "h 20-24 / 16-20 / 12-16, d 11-13", "new": "h 18-24 / 14-20 / 11-16, d 8-15", "why_he": "שלישייה יורדת בתוך נישה של 46: צנצנת צרה או רחבה יותר בכל מדרגה עדיין נקראת סט."},
+  {"file": "data/slots/work.json", "version": "1.0.3 -> 1.0.4", "slot": "magazine-holder", "old": "w 24-30, d 20-25, h 36-42", "new": "w 24-35, d 20-40, h 32-42", "why_he": "יש 35 בין קצה השולחן לקיר, ו-40 עומק נגמר בתוך עומק השולחן."},
+  {"file": "data/slots/work.json", "version": "1.0.4", "slot": "waste-basket", "old": "d 22-26", "new": "d 19-26", "why_he": "פח צר מתחת לשולחן נקרא קל יותר."},
+  {"file": "data/slots/kids.json", "version": "1.0.4 (merged by the art director with R5C1)", "slot": "rug", "old": "w 140, l 200 (exact)", "new": "w 120-160, l 170-220", "why_he": "טווח באישור המשתמש (AU5); המרכז והריצה של 0.26 מתחת למיטה נשמרים."},
+  {"file": "data/slots/kids.json", "version": "1.0.4", "slot": "bookshelf", "old": "l 80 (exact)", "new": "owner R5C1: l 40-80, two per row at 40-50; designer AU5: l_per_tier 45-84", "why_he": "הערך של המשתמש קובע. הוספתי רק כלל לשורה: מדף אחד ממורכז או שניים זה ליד זה."},
+  {"file": "data/slots/hall.json", "version": "1.0.4 (merged with R5C1 wall-hooks)", "slot": "wall-sconce", "old": "w 10-16, h 15-22, projection <= 15", "new": "w 10-24, h 15-30, projection <= 20", "why_he": "בקיר הצדי ב-45° רוחב ובליטה נקראים כ-70%; ב-30 גובה המנורה עדיין 7 ס״מ מעל היתדות."},
+  {"file": "data/slots/master.json", "version": "1.0.1 -> 1.0.2", "slot": "bedside-sconces", "old": "w 12-18, h 15-22", "new": "w 12-24, h 15-26", "why_he": "זוג חבל 23×25 בתוך רוחב השידות, 0.20 משפת המיטה, והתמונה נשארת המוקד."},
+  {"file": "data/slots/living-room.json", "version": "1.3.4 -> 1.3.5", "slot": "accent-sconces", "old": "10-14 x 12-18, projection 7-12 (all styles)", "new": "boho only: up to 18 wide, 28 high, projection 25; other styles unchanged", "why_he": "הרחבת הבוהו מהבריף, מוחלת עכשיו: 0.13 לפחות לתמונה ו-0.18 מעל קישוט הקיר. 23 נשאר בחוץ."},
+  {"file": "data/slots/living-room.json", "version": "1.3.5", "slot": "floor-lamp", "old": "shade 35-38 (all styles)", "new": "japandi only: low column lantern, total 125-140, shade 24-30; other styles unchanged", "why_he": "חתימת ה'נמוך' של הג'פנדי: האהיל זוהר מעל הסל ומתחת לטרוורטין, והאור עדיין על הספה."},
+  {"file": "data/slots/corridor.json", "version": "1.0.1 -> 1.0.2", "slot": "gallery-art", "old": "h_each 45-50", "new": "h_each 40-50", "why_he": "סדרת שלושה ריבועי 40 בתוך קו 1.70, באותו מיקום בפריים."},
+  {"file": "docs/design-bible/nordic.md", "version": "1.7.1 -> 1.7.2", "slot": "kids bookshelf, kids rug", "old": "80; 140x200", "new": "40-80 (R5C1), 45-84 per tier; rug 120-160 x 170-220; nordic defaults unchanged", "why_he": "הטווחים שהמשתמש אישר, עם ברירת המחדל הנורדית."},
+  {"file": "docs/design-bible/nordic-dining.md", "version": "0.2 -> 0.2.1", "slot": "note only", "old": "-", "new": "the widened dining envelopes apply to the other styles; nordic values unchanged", "why_he": "כדי שהנספח והעמדה לא יסתרו זה את זה."},
+  {"file": "docs/design-bible/japandi-brief-draft.md", "version": "0.2 -> 0.3", "slot": "living-room floor-lamp", "old": "-", "new": "low column lantern 125-140, shade 24-30", "why_he": "מנורת הרצפה מנייר שחסרה בטבלת החתימות."},
+  {"file": "docs/design-bible/boho-brief-draft.md", "version": "2026-10-17 note", "slot": "accent, kitchen, bedside, hall sconces", "old": "accent extension 'for approval'", "new": "applied under AU5 plus the three sconce envelopes", "why_he": "רישום של מה שהוחל."}
+ ],
+ "not_widened_he": "לא הרחבתי כשהמועמד היחיד חסום גם בחוק קשה (הפסד, סיב, תקן, העתק, סט): שרפרף הגלריה, הפוף, מעמד העיתונים בסלון, קופסאות הכניסה והמדף, מברשת האסלה, העציצים, הפח הכפוף ומנורת הרצפה בהורים. בכולם המידה עובדת בפריים, וזה רשום ב-size_review, אבל מעטפה לא משתנה בשביל מוצר שלא נמכר. לא נגעתי במנורת הקיר בחדר העבודה (תיקון W-HC4 מחייב), באמבטיה (IP44 ומנורות שטוחות ליד המראה), במגש השידה ובווילון הרומאי (בתוך הספי).",
+ "slots_below_3": [
+  {"style": "japandi", "slot": "bath/vanity-sconces", "after": 1, "why_he": "332886 בלי IP; מ-037853 נספר רק המלבן הגבוה."},
+  {"style": "mediterranean", "slot": "bath/vanity-sconces", "after": 1, "why_he": "אותה סיבה."},
+  {"style": "japandi", "slot": "bath/wall-sconce", "after": 1, "why_he": "430468 נמוך מדי לקיר; הקובייה של 037853 היא אותו מראה."},
+  {"style": "mediterranean", "slot": "bath/wall-sconce", "after": 1, "why_he": "אותה סיבה."},
+  {"style": "japandi", "slot": "kids/soft-toy", "after": 1, "why_he": "הארנבת הסרוגה 6.5 (סריגה עבה); נשאר רק 'bear' של 063285."},
+  {"style": "mediterranean", "slot": "kids/pendant", "after": 0, "why_he": "115646 היה האפשרות היחידה, 6.5."},
+  {"style": "modern-country", "slot": "work/planter", "after": 2, "why_he": "839727 קטן מדי לפינה."},
+  {"style": "boho", "slot": "bath/storage-basket", "after": 0, "why_he": "שני סלי החבל: קליעה במקלחת אסורה בבוהו."},
+  {"style": "nordic", "slot": "hall/umbrella-stand", "after": 0, "why_he": "המשושה המתחדד 6.5 (המפרט מבקש גליל); כרטיס אחד ספר את עצמו 3 פעמים בצבעים."},
+  {"style": "mediterranean", "slot": "master/nightstand-tray", "after": 2, "why_he": "מגש 25×11.8 לא נושא את האגרטל והצלוחית."}
+ ],
+ "needs_card": [
+  {"source_id": "aliexpress:1005011911415208", "slot": "living-room/floor-lamp", "styles": {"japandi": 7}, "note_he": "WENYUN, פנס עמודי ~127 על חצובת אגוז. לאמת CE ותקע EU."},
+  {"source_id": "aliexpress:1005012258778712", "card_id": "kitchen-sconce-aliexpress-natural-woven-bohemian-rattan-778712", "slot": "living-room/accent-sconces", "styles": {"boho": 7.5}, "note_he": "כרטיס קיים; שורת תוצאה בעמדה כזוג (set_of 2)."},
+  {"source_id": "aliexpress:1005012740547915", "slot": "work/magazine-holder", "styles": {"boho": 7.5}, "note_he": "מקרמה על X עץ 34×39×33. תמחור לפי ה.10 לפני כרטיס."},
+  {"source_id": "aliexpress:1005011855057684", "slot": "work/waste-basket", "styles": {"boho": 7}, "note_he": "יקינטון מים 19×28. תמחור."},
+  {"source_id": "cj:2410141005261605400", "slot": "kids/bookshelf", "styles": {"nordic": 7}, "note_he": "זוג מדפי כריכה 42, שני זוגות לשתי השורות."},
+  {"source_id": "aliexpress:1005007471139220", "slot": "kids/bookshelf", "styles": {"modern-country": 7}, "note_he": "מדף אורן עם מוט 50, אחד בכל שורה."},
+  {"source_id": "aliexpress:1005010695223208", "slot": "dining-room/bowl", "styles": {"modern-country": 7, "boho": 7.5}, "note_he": "קערת בצק מגולפת 25×15×5."},
+  {"source_id": "cj:1392716043398549504", "card_id": "bowl-cj-speckled-stoneware-rattan-handle-bowl-19", "slot": "dining-room/bowl", "styles": {"modern-country": 7, "mediterranean": 7.5, "boho": 7.5}, "note_he": "להוסיף את ה-SKU של L ‏(25.5×5.7) ושורה בעמדה."},
+  {"source_id": "cj:1475674474018902016", "slot": "dining-room/canisters", "styles": {"japandi": 7.5}, "note_he": "שלישיית צנצנות תה בזיגוג ריאקטיבי. 2.5 ק״ג: תמחור קודם."},
+  {"source_id": "zendrop:2624310", "slot": "dining-room/tableware-set", "styles": {"japandi": 7, "mediterranean": 7, "modern-country": 7.5}, "note_he": "סט שומשום 6 חלקים. תמחור עם משלוח Zendrop."},
+  {"source_id": "cj:2409020723381627600", "slot": "dining-room/tableware-set", "styles": {"japandi": 7, "mediterranean": 7.5, "boho": 7}, "note_he": "סט חרס בזיגוג ריאקטיבי, צלחת בסיס 23."},
+  {"source_id": "aliexpress:1005012142300525", "slot": "dining-room/tableware-set", "styles": {"japandi": 7, "mediterranean": 7.5, "modern-country": 7}, "note_he": "קו הגלים, 26.7/20.3/12. 4.5% ב-₪399: לסמן (ה.11)."},
+  {"source_id": "aliexpress:1005002672043730", "slot": "hall/wall-sconce", "styles": {"modern-country": 7}, "note_he": "זרוע נר בפליז ואהיל בד, CE, שנהב ובז'."},
+  {"source_id": "aliexpress:1005009938333899", "slot": "bath/shower-curtain", "styles": {"boho": 8}, "note_he": "טאפטינג שברון 180×210 עם גדילים, בז' ולבן. ווי הארכה לפי R5C1."}
+ ],
+ "summary": {
+  "cards_checked": 54,
+  "keep": 26, "lower_fit": 11, "reject": 17,
+  "covered_style_slots_with_team_guess": 55,
+  "slots_falling_below_3": 10,
+  "size_review_rows": {"f6_59": 59, "f6_borderline_rows": 36, "unique_entries": 66},
+  "f6_59_size_works": 24, "f6_59_pass_now": 20,
+  "borderline_rows_size_works": 30, "borderline_rows_pass_now": 5,
+  "envelopes_widened": 13,
+  "needs_card": 14
+ }
+}
