@@ -1,0 +1,1448 @@
+{
+ "version": 1,
+ "date": "2026-10-17",
+ "brief": "data/leads/final-2026-10-13/BRIEF-china-hub-branding.md",
+ "doc": "docs/suppliers/china-hub-branding-2026-10-17.md",
+ "method": "public pages only, read 2026-10-17; no sign-up, form, chat, email or quote; stopped at CJ validation pages (help-center, service-fee, integrations/tiktok-shop)",
+ "rates": {
+  "usd_ils": 3.3,
+  "usd_cny": 6.72,
+  "usd_cny_source": "https://currencybeacon.com/index.php/rates/USD/CNY (09.09.2026, as in deep-research-2026-10.md)"
+ },
+ "answers": {
+  "real_israel_line": {
+   "found": true,
+   "who": "logistics lines, not agents: Uspeed/RunnerExpress, Takesend, J-NET",
+   "days": "6-12 working days (Uspeed 2025), 5-9 (Takesend 2020)",
+   "price": "Uspeed from CNY 70/kg (2022, ~$10.4/kg); Takesend 2020: ~$7.7 / $14.4 / $24.5 for 0.5 / 1.5 / 3 kg",
+   "verified_current": false,
+   "market_median_days": 10
+  },
+  "cj_branding": {
+   "yes": true,
+   "moq": 1,
+   "price": null,
+   "note": "not published; packaging must be in the same warehouse as the product"
+  },
+  "cj_fast_israel_line": {
+   "exists": false,
+   "note": "5 lines: Eub 12-50 (actual weight), To Door 11-18 / Liquid 9-23 / Sensitive 22-27 (volumetric), DHL 3-7 from $138"
+  },
+  "zendrop_branding": "black-and-white thank-you card on paid plans; custom packaging only in Private Agent Program; Israel avg 23.4 business days",
+  "recommendation": "Do not switch now. With owner approval (after the site works), email Tizmun, BuckyDrop and ARTEX; test 3 parcels with a line billed by actual weight. Keep CJ Eub meanwhile; never CJ To Door for decor. Use CJ custom packaging (MOQ 1) for a basic insert card. Israeli 3PL (dpack) + LCL only for items above 20-30 units/month."
+ },
+ "ranking": [
+  {
+   "rank": 1,
+   "id": "tizmun",
+   "why": "closest fit: Israeli, China warehouses, QC photos, branding on request, private line 8-12 business days, $1.5/parcel, no stated minimum",
+   "risk": "no reviews; prices ambiguous"
+  },
+  {
+   "rank": 2,
+   "id": "buckydrop",
+   "why": "most solid platform: WooCommerce + API, 1688/Taobao, CNY 9.9/parcel, QC photos, branding add-ons, Israel on EMS-HZ (actual weight under 40 cm), Trustpilot 4.8/118",
+   "risk": "Israel days/price and branding prices unpublished"
+  },
+  {
+   "rank": 3,
+   "id": "artex",
+   "why": "Israeli, no minimum (1 order/month), branding and inserts, 8-12 business days, pickup point or door",
+   "risk": "no QC mentioned; no reviews"
+  },
+  {
+   "rank": 4,
+   "id": "cj",
+   "why": "no new company; custom packaging MOQ 1 for insert cards",
+   "risk": "no faster Israel line; price unpublished"
+  },
+  {
+   "rank": 5,
+   "id": "dpack",
+   "why": "Israeli 3PL with no hard minimum and branded packaging, for bestsellers via LCL later",
+   "risk": "pays off only at ~60-150 units/month"
+  }
+ ],
+ "companies": [
+  {
+   "id": "cj",
+   "name": "CJdropshipping",
+   "type": "platform + warehouses",
+   "location": "CN (Yiwu, Jinhua, Dongguan)",
+   "israeli": false,
+   "status": "existing supplier; not contacted for this brief",
+   "branding": {
+    "offered": [
+     "box",
+     "mailer",
+     "insert",
+     "500+ packaging types",
+     "POD",
+     "private label"
+    ],
+    "moq": "1 (\"as low as ONE unit\")",
+    "price": null,
+    "price_note": "not published; help-center and service-fee pages redirect to validation (not read). Search snippet only: $1.20/carton 50x50x40 China warehouse, not verified",
+    "limits": "packaging deducted only when product and packaging are in the same warehouse (2020)",
+    "sources": [
+     "https://cjdropshipping.com/customPackaging",
+     "https://blog.cjdropshipping.cn/detail/all-you-want-to-know-about-custom-packaging",
+     "https://cjdropshipping.com/blogs/cj-news/Zendrop-or-CJdropshipping"
+    ]
+   },
+   "israel": {
+    "listed": true,
+    "lines": [
+     {
+      "name": "CJPacket Eub",
+      "days": "12-50",
+      "billing": "actual weight: 3.72 + 12.61/kg",
+      "usd_0_5kg": 10.03,
+      "usd_1_5kg": 22.64,
+      "usd_3kg": 41.56,
+      "estimate": false,
+      "limits": null,
+      "source": "data/sources/cj/*.json (CJ API freightCalculate, to=IL, fetched up to 2026-10-17)",
+      "note": "exact fit 215/215 quotes"
+     },
+     {
+      "name": "CJPacket To Door",
+      "days": "11-18",
+      "billing": "volumetric (LxWxH/6000) approx 7.98 + 19.42/kg",
+      "usd_0_5kg": 17.69,
+      "usd_1_5kg": 37.11,
+      "usd_3kg": 66.23,
+      "estimate": true,
+      "limits": null,
+      "source": "data/sources/cj/*.json (CJ API freightCalculate, to=IL, fetched up to 2026-10-17)",
+      "note": "about half of quotes within $1 of the formula"
+     },
+     {
+      "name": "CJPacket Sensitive",
+      "days": "22-27",
+      "billing": "volumetric (approx To Door minus 4.6)",
+      "usd_0_5kg": 14.84,
+      "usd_1_5kg": 35.47,
+      "usd_3kg": 65.94,
+      "estimate": true,
+      "limits": null,
+      "source": "data/sources/cj/*.json (CJ API freightCalculate, to=IL, fetched up to 2026-10-17)",
+      "note": "bin medians 0.35-0.65 / 1.3-1.7 / 2.5-3.5 kg"
+     },
+     {
+      "name": "CJPacket Liquid Line",
+      "days": "9-23",
+      "billing": "volumetric",
+      "usd_0_5kg": null,
+      "usd_1_5kg": null,
+      "usd_3kg": null,
+      "estimate": false,
+      "limits": null,
+      "source": "data/sources/cj/*.json (CJ API freightCalculate, to=IL, fetched up to 2026-10-17)",
+      "note": null
+     },
+     {
+      "name": "DHL Official",
+      "days": "3-7",
+      "billing": "express",
+      "usd_0_5kg": 138.41,
+      "usd_1_5kg": 185.97,
+      "usd_3kg": 233.52,
+      "estimate": false,
+      "limits": null,
+      "source": "data/sources/cj/*.json (CJ API freightCalculate, to=IL, fetched up to 2026-10-17)",
+      "note": "min at 0.5 kg; medians at 1.5 and 3 kg"
+     }
+    ],
+    "fast_5_10_line": false
+   },
+   "minimums": {
+    "order": "none (dropship)",
+    "monthly_fee": 0,
+    "storage": "private inventory 'typically free for a period'",
+    "3pl_inbound": "overseas warehouses: 10 pcs/variant, 100 pcs total (2019)"
+   },
+   "sources_buy": {
+    "1688_taobao": "Sourcing request with 1688/Taobao link",
+    "takes_other_suppliers": "3PL fulfillment service for own goods (2019); combining with CJ items not stated",
+    "consolidates": "within the same warehouse (measured 19-24% saving, data/economics/fulfillment-research.md)"
+   },
+   "qc": "'99% Sampling Inspection Rate' (CJ claim)",
+   "api": "yes (in use)",
+   "contact": "support@cjdropshipping.com (already used 2026-10-14)",
+   "reliability": {
+    "trustpilot": null,
+    "note": "TrustScore withheld for guideline breach; fake reviews removed; 13,475 reviews",
+    "url": "https://www.trustpilot.com/review/cjdropshipping.com"
+   }
+  },
+  {
+   "id": "zendrop",
+   "name": "Zendrop",
+   "type": "platform",
+   "location": "US + China fulfillment",
+   "israeli": false,
+   "status": "public pages only; account not used",
+   "branding": {
+    "offered": [
+     "thank-you card (black-and-white) on paid plans",
+     "custom packaging and private label only via Private Agent Program"
+    ],
+    "moq": "Private Agent: MOQ + upfront (amount not stated)",
+    "price": "card included in Pro $49 / Plus $79 per month",
+    "sources": [
+     "https://support.zendrop.com/en/articles/11909179-what-branding-features-does-zendrop-offer-and-how-can-i-use-them-effectively",
+     "https://support.zendrop.com/en/articles/8176511-private-labeling-custom-packaging",
+     "https://support.zendrop.com/en/articles/11942599-zendrop-product-packaging",
+     "https://upsell.zendrop.com/plus"
+    ]
+   },
+   "israel": {
+    "listed": true,
+    "lines": [
+     {
+      "name": "Zendrop regular",
+      "days": "MCP estimate 14; measured avg 23.4 business days",
+      "billing": "not published",
+      "usd_0_5kg": null,
+      "usd_1_5kg": null,
+      "usd_3kg": null,
+      "estimate": false,
+      "limits": "no liquids/ointments to Israel",
+      "source": "https://support.zendrop.com/en/articles/8487356-zendrop-shipping-times-by-country",
+      "note": "examples (MCP 2026-10-10/11): cushion $7.00, wall lamp 1-1.5 kg $35.05, seagrass basket 0.31 kg $7.74"
+     }
+    ],
+    "fast_5_10_line": false
+   },
+   "minimums": {
+    "order": "none",
+    "monthly_fee": "Free / Pro $49 / Plus $79",
+    "private_agent": "conflicting: 10 sales over 3 days vs 10 a day (search results)"
+   },
+   "sources_buy": {
+    "catalog": "Zendrop catalog (same sources as CJ per docs/suppliers/zendrop-test-2026-10.md)"
+   },
+   "qc": null,
+   "api": "MCP works without a store (tested 2026-10-10); no WooCommerce",
+   "contact": "support chat",
+   "reliability": {
+    "trustpilot": 4.6,
+    "reviews": 20667,
+    "url": "https://www.trustpilot.com/review/zendrop.com"
+   }
+  },
+  {
+   "id": "buckydrop",
+   "name": "BuckyDrop",
+   "type": "1688/Taobao agent platform",
+   "location": "Shenzhen / Hong Kong; 'founded 2018' (own blog)",
+   "israeli": false,
+   "status": "not contacted",
+   "branding": {
+    "offered": [
+     "customized packaging replacement",
+     "OEM packaging materials",
+     "bubble mailer",
+     "thank-you cards",
+     "branded labels",
+     "tag replacement"
+    ],
+    "moq": null,
+    "price": null,
+    "sources": [
+     "https://www.buckydrop.com/en/start-branded-dropshipping/",
+     "https://www.buckydrop.com/en/services/pricing/"
+    ]
+   },
+   "israel": {
+    "listed": true,
+    "lines": [
+     {
+      "name": "EMS Preferential Line-HZ",
+      "days": "not published (EMS to Israel ~11 days per Goodhope, earlier research)",
+      "billing": "actual weight if all sides <40 cm, else max(actual, LxWxH/6000), from 2025-09-29",
+      "usd_0_5kg": null,
+      "usd_1_5kg": null,
+      "usd_3kg": null,
+      "estimate": false,
+      "limits": null,
+      "source": "https://blog.buckydrop.com/ems-preferential-line-hz-logistics-billing-rule-adjustment-for-certain-countries/",
+      "note": null
+     }
+    ],
+    "fast_5_10_line": null
+   },
+   "minimums": {
+    "order": "Free plan 30 orders; Pro CNY 199/month unlimited",
+    "fees": "CNY 9.9 per parcel (<=5 pcs), CNY 2 per extra pc, CNY 2/kg over 8 kg",
+    "storage": "30 days free, then CNY 0.2 per 0.02 m3 per day"
+   },
+   "sources_buy": {
+    "1688_taobao": "no sourcing fee",
+    "other_platforms": "per-SKU fee",
+    "takes_other_suppliers": "not verified",
+    "consolidates": true
+   },
+   "qc": "inspection and photos as paid service; 5-15 CNY per site testimonial",
+   "api": "Shopify, WooCommerce; API listed in menu (terms not read)",
+   "contact": "support@buckydrop.com; marketing@buckydrop.com (https://www.buckydrop.com/en/contact_us/)",
+   "reliability": {
+    "trustpilot": 4.8,
+    "reviews": 118,
+    "one_star_pct": 5,
+    "url": "https://www.trustpilot.com/review/buckydrop.com"
+   }
+  },
+  {
+   "id": "tizmun",
+   "name": "תזמון (נ.א תזמון בע\"מ)",
+   "type": "Israeli agent + private line",
+   "location": "IL (Moshav Eliad); two warehouses in China (city not stated); 'since 2018'",
+   "israeli": true,
+   "status": "not contacted",
+   "branding": {
+    "offered": [
+     "personal branding if needed",
+     "careful packing"
+    ],
+    "moq": null,
+    "price": null,
+    "sources": [
+     "https://www.tizmun.co.il/%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%A1%D7%95%D7%9B%D7%9F-%D7%95%D7%A7%D7%95-%D7%9E%D7%A9%D7%9C%D7%95%D7%97%D7%99%D7%9D-%D7%A4%D7%A8%D7%98%D7%99-%D7%9E%D7%A1%D7%99%D7%9F/"
+    ]
+   },
+   "israel": {
+    "listed": true,
+    "lines": [
+     {
+      "name": "Tizmun private line",
+      "days": "8-12 business days",
+      "billing": "not published",
+      "usd_0_5kg": null,
+      "usd_1_5kg": null,
+      "usd_3kg": null,
+      "estimate": false,
+      "limits": "weight/size limits not stated",
+      "source": "https://www.tizmun.co.il/%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%A1%D7%95%D7%9B%D7%9F-%D7%95%D7%A7%D7%95-%D7%9E%D7%A9%D7%9C%D7%95%D7%97%D7%99%D7%9D-%D7%A4%D7%A8%D7%98%D7%99-%D7%9E%D7%A1%D7%99%D7%9F/",
+      "note": "packages STARTER 36 ILS (25 shipments), PRO 32 ILS (100), ADVANCED 29 ILS (500), excl. VAT; unclear if full China-Israel route"
+     }
+    ],
+    "fast_5_10_line": null
+   },
+   "minimums": {
+    "order": "not stated (form option 'just starting')",
+    "fees": "agent fee $1.5 per parcel"
+   },
+   "sources_buy": {
+    "platforms": "AliExpress and 'supplier sites'; 1688 not mentioned",
+    "consolidates": true
+   },
+   "qc": "orders a unit, photographs and tests before bulk",
+   "api": "not mentioned (WhatsApp agent, English)",
+   "contact": "WhatsApp 054-9625150; email obfuscated",
+   "reliability": {
+    "trustpilot": null,
+    "note": "no reviews found; small marketing agency",
+    "url": null
+   }
+  },
+  {
+   "id": "artex",
+   "name": "ARTEX Agency",
+   "type": "Israeli digital agency with China warehouse",
+   "location": "Guangdong, CN",
+   "israeli": true,
+   "status": "not contacted",
+   "branding": {
+    "offered": [
+     "branded packaging",
+     "inserts",
+     "posters"
+    ],
+    "moq": null,
+    "price": null,
+    "sources": [
+     "https://www.artex.co.il/%D7%9E%D7%97%D7%A1%D7%9F-%D7%9C%D7%95%D7%92%D7%99%D7%A1%D7%98%D7%99-%D7%91%D7%A1%D7%99%D7%9F-%D7%9C%D7%97%D7%A0%D7%95%D7%99%D7%95%D7%AA-ecommerce/"
+    ]
+   },
+   "israel": {
+    "listed": true,
+    "lines": [
+     {
+      "name": "ARTEX (DHL/UPS/FedEx among carriers; pickup point or door)",
+      "days": "8-12 business days (stated average 12 days)",
+      "billing": "by weight and size, not published",
+      "usd_0_5kg": null,
+      "usd_1_5kg": null,
+      "usd_3kg": null,
+      "estimate": false,
+      "limits": null,
+      "source": "https://www.artex.co.il/%D7%9E%D7%97%D7%A1%D7%9F-%D7%9C%D7%95%D7%92%D7%99%D7%A1%D7%98%D7%99-%D7%91%D7%A1%D7%99%D7%9F-%D7%9C%D7%97%D7%A0%D7%95%D7%99%D7%95%D7%AA-ecommerce/",
+      "note": null
+     }
+    ],
+    "fast_5_10_line": null
+   },
+   "minimums": {
+    "order": "none ('1 order a month')",
+    "fees": "service free; pay per package; pay per order, later every 2-4 weeks"
+   },
+   "sources_buy": {
+    "platforms": "your supplier ships to the warehouse; can find suppliers",
+    "consolidates": null
+   },
+   "qc": null,
+   "api": "Shopify, WooCommerce, Amazon, Etsy, eBay, 'other systems'",
+   "contact": "WhatsApp 972525038640; email obfuscated",
+   "reliability": {
+    "trustpilot": null,
+    "note": "no reviews found; page claims 5 years, 500+ customers"
+   }
+  },
+  {
+   "id": "china-purchasing-agent",
+   "name": "China Purchasing Agent",
+   "type": "agent",
+   "location": "CN",
+   "israeli": false,
+   "status": "not contacted",
+   "branding": {
+    "offered": [
+     "logo on product",
+     "custom box",
+     "insert card"
+    ],
+    "moq": null,
+    "price": null,
+    "sources": [
+     "https://chinapurchasingagent.com/dropshipping/"
+    ]
+   },
+   "israel": {
+    "listed": true,
+    "lines": [
+     {
+      "name": "ePacket",
+      "days": "7-20 business days",
+      "billing": "actual weight: CNY 17 + CNY 60/kg",
+      "usd_0_5kg": 6.99,
+      "usd_1_5kg": 15.92,
+      "usd_3kg": 29.32,
+      "estimate": false,
+      "limits": "<=3 kg; sum of sides <=90 cm, longest <=60 cm; no compensation",
+      "source": "https://chinapurchasingagent.com/dropshipping/",
+      "note": null
+     }
+    ],
+    "fast_5_10_line": false
+   },
+   "minimums": {
+    "fees": "handling $1.5 (10+ orders/month) down to $0.8 (5,000+)",
+    "storage": "90 days free"
+   },
+   "sources_buy": {
+    "consolidates": true
+   },
+   "qc": "pre-shipment inspection",
+   "api": "Shopify, WooCommerce, Magento, BigCommerce etc.",
+   "contact": null,
+   "reliability": {
+    "note": "site counters show 0 years / 0 customers (warning sign)"
+   }
+  },
+  {
+   "id": "chinadivision",
+   "name": "Chinadivision",
+   "type": "3PL",
+   "location": "Shenzhen",
+   "israeli": false,
+   "status": "not contacted",
+   "branding": {
+    "offered": [
+     "custom materials and inserts on request"
+    ],
+    "moq": null,
+    "price": null,
+    "sources": [
+     "https://www.chinadivision.com/pricing"
+    ]
+   },
+   "israel": {
+    "listed": null,
+    "lines": [],
+    "note": "calculator loads by JavaScript; Israel not verified",
+    "fast_5_10_line": null
+   },
+   "minimums": {
+    "order": "no MOQ, no monthly minimum",
+    "fees": "pick & pack from $0.59/order; receiving $0; setup $0",
+    "storage": "30 days free"
+   },
+   "sources_buy": {
+    "takes_other_suppliers": "3PL (inventory from any supplier)"
+   },
+   "qc": null,
+   "api": "Store API free; Shopify, WooCommerce, TikTok Shop, Etsy",
+   "contact": "form",
+   "reliability": {
+    "trustpilot": 3.6,
+    "reviews": 44,
+    "one_star_pct": 59,
+    "url": "https://www.trustpilot.com/review/chinadivision.com"
+   }
+  },
+  {
+   "id": "dropshipman",
+   "name": "Dropshipman",
+   "type": "agent app",
+   "location": "CN",
+   "israeli": false,
+   "status": "not contacted",
+   "branding": {
+    "offered": [
+     "logo card",
+     "logo tape",
+     "logo sticker"
+    ],
+    "moq": "card 500, tape 12 rolls, sticker 1,000 (2022)",
+    "price": null,
+    "lead_time": "<5 business days",
+    "sources": [
+     "https://www.dropshipman.com/blog/how-does-the-custom-packaging-process-work"
+    ]
+   },
+   "israel": {
+    "listed": null,
+    "lines": [],
+    "fast_5_10_line": null
+   },
+   "minimums": {
+    "monthly_fee": "$0 / 19.90 / 49.90 / 79.90 (https://www.dropshipman.com/pricing)"
+   },
+   "api": "Shopify and TikTok Shop (US) only - problem for custom store",
+   "contact": null,
+   "reliability": null
+  },
+  {
+   "id": "hypersku",
+   "name": "HyperSKU",
+   "type": "agent",
+   "location": "CN",
+   "israeli": false,
+   "status": "not contacted",
+   "branding": {
+    "offered": [
+     "custom branding & packaging via agent"
+    ],
+    "moq": null,
+    "price": null,
+    "sources": [
+     "https://www.hypersku.com/solutions/customization-private-label/"
+    ]
+   },
+   "israel": {
+    "listed": false,
+    "lines": [],
+    "note": "'5-12 days global'; Israel not on page",
+    "fast_5_10_line": null
+   },
+   "minimums": {
+    "monthly_fee": 0
+   },
+   "api": "Shopify, WooCommerce, Etsy, TikTok, BigCommerce, Shoplazza; Open API (earlier research)",
+   "contact": null,
+   "reliability": "see aggregators-2026-10.md"
+  },
+  {
+   "id": "sup-dropshipping",
+   "name": "Sup Dropshipping",
+   "type": "agent app",
+   "location": "CN",
+   "israeli": false,
+   "status": "not contacted",
+   "branding": {
+    "offered": [
+     "design",
+     "packaging",
+     "labeling",
+     "tagging"
+    ],
+    "moq": null,
+    "price": "packaging pack in Pro $19.90 / Premium $29.90; charged in Basic",
+    "sources": [
+     "https://apps.shopify.com/sup-dropshipping-2"
+    ]
+   },
+   "israel": {
+    "listed": null,
+    "lines": []
+   },
+   "api": "Shopify app",
+   "reliability": null
+  },
+  {
+   "id": "fulfillman",
+   "name": "Fulfillman",
+   "type": "agent + 3PL",
+   "location": "CN",
+   "israeli": false,
+   "status": "not contacted",
+   "branding": {
+    "offered": [
+     "branding with logo / custom packaging on request"
+    ],
+    "moq": null,
+    "price": null,
+    "sources": [
+     "https://www.fulfillman.com/"
+    ]
+   },
+   "israel": {
+    "listed": null,
+    "lines": [],
+    "note": "carriers DHL, EMS, Yanwen, Yun, 4PX, UBI; Israel not mentioned"
+   },
+   "api": "Shopify, BigCommerce, WooCommerce, Magento, Amazon, eBay",
+   "contact": "info@fulfillman.com",
+   "reliability": null
+  },
+  {
+   "id": "leeline",
+   "name": "Leeline Sourcing",
+   "type": "sourcing agent",
+   "location": "CN",
+   "israeli": false,
+   "status": "not contacted",
+   "branding": {
+    "offered": [
+     "branded packaging",
+     "logo",
+     "inserts (+2-3 working days)"
+    ],
+    "moq": null,
+    "price": null,
+    "sources": [
+     "https://leelinesourcing.com/pricing/"
+    ]
+   },
+   "israel": {
+    "listed": null,
+    "lines": []
+   },
+   "minimums": {
+    "fees": "processing $1-2 per order; free storage (page ~1,383 days old)"
+   },
+   "reliability": "see deep-research-2026-10.md"
+  },
+  {
+   "id": "pfc-express",
+   "name": "PFC Express",
+   "type": "logistics + warehousing",
+   "location": "Shenzhen",
+   "israeli": false,
+   "status": "not contacted",
+   "branding": null,
+   "israel": {
+    "listed": null,
+    "lines": [],
+    "note": "special lines 7-12 days from $5.80/kg; Middle East line lists UAE/KSA/Kuwait only; postal 10-20 days from $3.20/kg"
+   },
+   "sources": [
+    "https://en.pfcexpress.com/services/global-shipping"
+   ]
+  },
+  {
+   "id": "baohero",
+   "name": "Baohero",
+   "type": "Taobao agent",
+   "location": "CN",
+   "israeli": false,
+   "status": "not contacted",
+   "branding": {
+    "offered": [
+     "business logo",
+     "remove price tags",
+     "protective wrapping"
+    ],
+    "price": null,
+    "sources": [
+     "https://baohero.com/taobao-agent-israel"
+    ]
+   },
+   "israel": {
+    "listed": true,
+    "lines": [
+     {
+      "name": "DHL",
+      "days": "3-7 working days",
+      "billing": "-",
+      "usd_0_5kg": null,
+      "usd_1_5kg": null,
+      "usd_3kg": null,
+      "estimate": false,
+      "limits": null,
+      "source": null,
+      "note": null
+     },
+     {
+      "name": "EMS",
+      "days": "7-10 working days",
+      "billing": "actual weight",
+      "usd_0_5kg": null,
+      "usd_1_5kg": null,
+      "usd_3kg": null,
+      "estimate": false,
+      "limits": null,
+      "source": null,
+      "note": null
+     },
+     {
+      "name": "ePacket",
+      "days": "7-14 working days",
+      "billing": "-",
+      "usd_0_5kg": null,
+      "usd_1_5kg": null,
+      "usd_3kg": null,
+      "estimate": false,
+      "limits": "<=2 kg",
+      "source": null,
+      "note": null
+     }
+    ]
+   },
+   "minimums": {
+    "storage": "120 days free"
+   },
+   "qc": "photos free when defect suspected",
+   "contact": "WhatsApp/WeChat +8618871488894 only"
+  },
+  {
+   "id": "betterluck",
+   "name": "BETTERluck Shipping (blshipping)",
+   "type": "forwarder",
+   "location": "Guangzhou",
+   "israeli": false,
+   "status": "not contacted",
+   "branding": {
+    "offered": [],
+    "note": "repacking and consolidation; no branding"
+   },
+   "israel": {
+    "listed": true,
+    "lines": [
+     {
+      "name": "ePacket",
+      "days": "5-9 working days (marketing)",
+      "billing": "-",
+      "usd_0_5kg": null,
+      "usd_1_5kg": null,
+      "usd_3kg": null,
+      "estimate": false,
+      "limits": null,
+      "source": null,
+      "note": null
+     },
+     {
+      "name": "EMS",
+      "days": "3-5 working days (marketing)",
+      "billing": "-",
+      "usd_0_5kg": null,
+      "usd_1_5kg": null,
+      "usd_3kg": null,
+      "estimate": false,
+      "limits": null,
+      "source": null,
+      "note": null
+     }
+    ]
+   },
+   "minimums": {
+    "order": "no MOQ (ePacket)"
+   },
+   "contact": "sales8@blshipping.com",
+   "sources": [
+    "https://blshipping.com/agent/from_China_to_Israel_Customs_Clearance_dropshipping_logistics"
+   ]
+  },
+  {
+   "id": "justchinait",
+   "name": "JustChinait",
+   "type": "agent (Hebrew site)",
+   "location": "CN",
+   "israeli": false,
+   "status": "not contacted",
+   "branding": {
+    "offered": [
+     "labeling and packaging (no detail)"
+    ],
+    "price": null
+   },
+   "israel": {
+    "listed": null,
+    "lines": []
+   },
+   "sources_buy": {
+    "platforms": "1688, Taobao, AliExpress",
+    "consolidates": true
+   },
+   "contact": "info@justchinait.com",
+   "sources": [
+    "https://www.justchinait.com/iw/"
+   ]
+  },
+  {
+   "id": "merchant-center",
+   "name": "Merchant Center (with HyperSKU)",
+   "type": "Israeli fulfillment partner",
+   "location": "IL",
+   "israeli": true,
+   "status": "not contacted",
+   "branding": {
+    "offered": [
+     "branded packaging (paid)"
+    ],
+    "price": null
+   },
+   "israel": {
+    "listed": true,
+    "lines": [],
+    "note": "recommends Jnet or YunExpress"
+   },
+   "qc": "quality checks at packing",
+   "api": "API integration",
+   "contact": "form only",
+   "sources": [
+    "https://merchantcenter.co.il/fulfillment-services/"
+   ]
+  },
+  {
+   "id": "linktochina",
+   "name": "LinkToChina",
+   "type": "Israeli sourcing/QC in Shenzhen (B2B)",
+   "location": "Shenzhen (founder Liran Sudman, in Shenzhen since 2006; founded 2012)",
+   "israeli": true,
+   "status": "not contacted",
+   "branding": null,
+   "qc": "factory audits, photo report",
+   "contact": "WhatsApp +86 188 2343 8011",
+   "sources": [
+    "https://www.linktochina.co.il/"
+   ]
+  },
+  {
+   "id": "onestop",
+   "name": "OneStop",
+   "type": "Israeli 3PL with Dongguan warehouse",
+   "israeli": true,
+   "status": "refused 2026-10-11 (200 orders/month minimum)",
+   "sources": [
+    "docs/suppliers/outreach/README.md",
+    "https://onestopwh.co.il/%D7%A7%D7%95-%D7%A4%D7%A8%D7%98%D7%99-%D7%90%D7%99%D7%A7%D7%95%D7%9E%D7%A8%D7%A1-%D7%A1%D7%99%D7%9F-%D7%9C%D7%99%D7%A9%D7%A8%D7%90%D7%9C/"
+   ],
+   "israel": {
+    "lines": [
+     {
+      "name": "OneStop sea",
+      "days": "30-45 days",
+      "billing": "-",
+      "usd_0_5kg": null,
+      "usd_1_5kg": null,
+      "usd_3kg": null,
+      "estimate": false,
+      "limits": null,
+      "source": null,
+      "note": null
+     }
+    ]
+   }
+  },
+  {
+   "id": "yakkyofy",
+   "name": "Yakkyofy",
+   "status": "earlier research",
+   "note": "Israel only on ePacket; branding needs Premium $59-79/month",
+   "sources": [
+    "docs/suppliers/yakkyofy.md"
+   ]
+  },
+  {
+   "id": "eprolo",
+   "name": "EPROLO",
+   "status": "earlier research",
+   "note": "branding only for clothing stores",
+   "sources": [
+    "docs/suppliers/deep-research-2026-10.md"
+   ]
+  },
+  {
+   "id": "nichedropshipping",
+   "name": "NicheDropshipping",
+   "status": "unreachable (HTTP 521 again)",
+   "sources": [
+    "https://www.nichedropshipping.com/custom-packaging/"
+   ]
+  }
+ ],
+ "israel_lines": [
+  {
+   "id": "uspeed",
+   "name": "Uspeed (优时派) Israel small-parcel line / RunnerExpress",
+   "type": "Israel special line (logistics, B2B)",
+   "founded": 2016,
+   "hq": "Shenzhen",
+   "israel_ops": "own clearance and last mile via Israeli subsidiary RunnerExpress since 2021; Israel warehouse; sole Israeli partner of AliExpress merchant warehouse & Cainiao official warehouse since 2022",
+   "days": "6-8 working days (2023); 6-12 working days (2025); weekly departures",
+   "price": "from CNY 70/kg (2022)",
+   "usd_0_5kg": 5.21,
+   "usd_1_5kg": 15.62,
+   "usd_3kg": 31.25,
+   "estimate": true,
+   "billing": "volumetric /6000; min parcel 100 g",
+   "contact": "info@u-speedex.com.hk; 189 4818 7408",
+   "sources": [
+    "https://www.u-speedex.com/news/info?id=326",
+    "https://www.u-speedex.com/news/info?id=345",
+    "https://www.u-speedex.com/news/info?id=889"
+   ]
+  },
+  {
+   "id": "takesend-general",
+   "name": "Takesend (泰嘉) Israel general cargo line",
+   "days": "5-8",
+   "price": "CNY 33.82 first 0.1 kg + CNY 4.5 per 0.1 kg (2020)",
+   "usd_0_5kg": 7.71,
+   "usd_1_5kg": 14.41,
+   "usd_3kg": 24.45,
+   "stale": true,
+   "limits": "no liquids, pastes, batteries, cosmetics",
+   "clearance": "Israel Post clearance model; DDP supported; last mile Israel Post",
+   "contact": "400-098-5699",
+   "sources": [
+    "https://www.takesend.com/news/7404.html"
+   ]
+  },
+  {
+   "id": "takesend-il",
+   "name": "Takesend Israel line",
+   "days": "5-9",
+   "price": "CNY 18.86 first 0.05 kg + CNY 3.7 per 0.05 kg (2020)",
+   "usd_0_5kg": 7.76,
+   "usd_1_5kg": 18.77,
+   "usd_3kg": 35.29,
+   "stale": true,
+   "sources": [
+    "https://www.takesend.com/news/7404.html"
+   ]
+  },
+  {
+   "id": "jnet",
+   "name": "J-NET",
+   "founded": 2011,
+   "hq": "Shanghai",
+   "israel_ops": "self-operated warehouse and office in Israel; private line; AliExpress preferred logistics supplier",
+   "price": null,
+   "sources": [
+    "https://www.ordertracker.com/carriers/j-net"
+   ]
+  },
+  {
+   "id": "xinhan",
+   "name": "Guangzhou Xinhan (鑫汉) Israel air DDP",
+   "days": "7-12",
+   "minimum": "10 kg air; LCL from 0.5 CBM (28-38 days)",
+   "clearance": "duty and 18% VAT locked in quote",
+   "last_mile": "ZEX, Fastgo",
+   "sources": [
+    "https://www.9656556.com/wuliu/15942.html"
+   ]
+  },
+  {
+   "id": "gaash",
+   "name": "GAASH Worldwide",
+   "type": "Israeli e-commerce last mile (B2B)",
+   "clients": "eBay, ASOS, AliExpress, SHEIN",
+   "sla_il": "next day to 4 days",
+   "median_from_cn_days": 15,
+   "sources": [
+    "https://asiabusinessoutlook.com/services-and-consulting/cover-story/gaash-worldwide-creating-centre-of-excellence-in-ecommerce-service-deliverability-cid-41.html",
+    "https://parcelsapp.com/en/delivery-times/china/israel"
+   ]
+  },
+  {
+   "id": "market",
+   "name": "Measured China to Israel (all services)",
+   "median_days": 10,
+   "p90_days": 18,
+   "period": "2026-09-13..2026-10-10",
+   "parcels_from_china": 4875,
+   "by_carrier": {
+    "Israel Post": {
+     "median": 10,
+     "range": "7-19"
+    },
+    "YunExpress": {
+     "median": 15,
+     "range": "10-22"
+    },
+    "GAASH": {
+     "median": 15,
+     "range": "10-22"
+    }
+   },
+   "sources": [
+    "https://parcelsapp.com/en/shipping-reports/destinations/israel",
+    "https://parcelsapp.com/en/delivery-times/china/israel"
+   ]
+  }
+ ],
+ "israel_3pl": [
+  {
+   "id": "dpack",
+   "name": "dpack",
+   "location": "Tel Aviv, Karmiel",
+   "minimum": "'אין לנו כמות מינימום קשיחה'",
+   "small_business": true,
+   "branding": "manufactures branded packaging",
+   "price": null,
+   "china_consolidation": false,
+   "contact": "office@dpack.co.il; 03-6127040",
+   "sources": [
+    "https://dpack.co.il/%D7%A9%D7%99%D7%A8%D7%95%D7%AA%D7%99-%D7%90%D7%97%D7%A1%D7%A0%D7%94-%D7%95%D7%94%D7%A4%D7%A6%D7%94/"
+   ]
+  },
+  {
+   "id": "emachsan",
+   "name": "אי-מחסן",
+   "location": "Modiin",
+   "minimum": null,
+   "branding": "packing to spec, branded",
+   "price": "quote within a business day",
+   "china_consolidation": null,
+   "sources": [
+    "https://emachsan.com/"
+   ]
+  },
+  {
+   "id": "extra-logistics",
+   "name": "Extra Logistics",
+   "location": "Be'er Tuvia",
+   "minimum": null,
+   "branding": null,
+   "price": null,
+   "contact": "073-2111457",
+   "sources": [
+    "https://extralogistics.co.il/%D7%90%D7%97%D7%A1%D7%95%D7%9F-%D7%A1%D7%97%D7%95%D7%A8%D7%94/"
+   ]
+  },
+  {
+   "id": "sea-lcl",
+   "name": "Sea LCL China to Israel",
+   "price": "$50-80/CBM (Gindi), $59 (Spider), $79.73 (Sino, Oct 2026); model fixed ~$950/shipment",
+   "break_even": "~60-150 units/month (fulfillment-research.md 4.3)",
+   "sources": [
+    "data/economics/fulfillment-research.md",
+    "https://www.sino-shipping.com/freight-china-israel/"
+   ]
+  }
+ ],
+ "economics": {
+  "formula": {
+   "net": "price/1.18",
+   "landed": "(product + shipping + agent fee + branding) * 3.3",
+   "contribution": "net - landed - (0.02*price + 1.2) - 0.08*net",
+   "margin": "contribution/net (before CAC)",
+   "delivery_fee_effect": "+22.03 ILS contribution when the customer pays 29 ILS delivery (under 299 ILS)"
+  },
+  "assumptions": {
+   "product_cost": "same as CJ (conservative; 1688 discount not counted)",
+   "packed_dims": "estimate",
+   "branding_usd_per_order": {
+    "value": 0.7,
+    "estimate": true,
+    "basis": "logo mailer $0.40-0.50 (Reddit anecdote, Jan 2024) + card and sticker"
+   },
+   "agent_fee_usd": {
+    "value": 1.5,
+    "source": "Tizmun $1.5/parcel; CPA $1.5 (10+ orders/month); BuckyDrop CNY 9.9"
+   },
+   "cj_eub": "3.72 + 12.61*kg actual (fit on CJ API data)",
+   "cj_todoor": "7.98 + 19.42*chargeable kg (estimate)",
+   "import_tax": "none: declared value under $75"
+  },
+  "setup_one_time": {
+   "cj": {
+    "usd": 0,
+    "note": "MOQ 1; unit price unknown; design by us"
+   },
+   "agent": {
+    "usd_range": [
+     300,
+     450
+    ],
+    "ils_range": [
+     1000,
+     1500
+    ],
+    "estimate": true,
+    "basis": "500 mailers x $0.45 + 500 cards + 1,000 stickers (MOQs per Dropshipman 2022) + 3 test parcels ~ $75"
+   }
+  },
+  "products": [
+   {
+    "product": "throw",
+    "label": "cotton throw",
+    "ref_card": "sofa-cover-cj-cotton-muslin-fringe",
+    "weight_kg": 0.6,
+    "packed_dims_cm": [
+     30,
+     20,
+     5
+    ],
+    "agent_packed_dims_cm": [
+     30,
+     20,
+     5
+    ],
+    "chargeable_kg_cj": 0.6,
+    "chargeable_kg_agent": 0.6,
+    "product_cost_usd": 11.64,
+    "price_ils": 129,
+    "scenarios": [
+     {
+      "id": "cj_eub",
+      "label": "CJ Eub",
+      "ship_usd": 11.29,
+      "agent_fee_usd": 0,
+      "branding_usd": 0,
+      "unit_cost_usd": 22.93,
+      "landed_ils": 75.66,
+      "days": "12-50",
+      "contribution_ils": 21.14,
+      "margin_pct": 19.3
+     },
+     {
+      "id": "cj_todoor",
+      "label": "CJ To Door",
+      "ship_usd": 19.63,
+      "agent_fee_usd": 0,
+      "branding_usd": 0,
+      "unit_cost_usd": 31.27,
+      "landed_ils": 103.2,
+      "days": "11-18",
+      "contribution_ils": -6.4,
+      "margin_pct": -5.9
+     },
+     {
+      "id": "cj_eub_branding",
+      "label": "CJ Eub + CJ custom packaging",
+      "ship_usd": 11.29,
+      "agent_fee_usd": 0,
+      "branding_usd": 0.7,
+      "unit_cost_usd": 23.63,
+      "landed_ils": 77.97,
+      "days": "12-50",
+      "contribution_ils": 18.83,
+      "margin_pct": 17.2
+     },
+     {
+      "id": "agent_il_line_volumetric",
+      "label": "agent + Israel line by volume (Uspeed CNY70/kg, /6000) + branding",
+      "ship_usd": 6.25,
+      "agent_fee_usd": 1.5,
+      "branding_usd": 0.7,
+      "unit_cost_usd": 20.09,
+      "landed_ils": 66.3,
+      "days": "6-12 working days + 1-3 handling",
+      "contribution_ils": 30.5,
+      "margin_pct": 27.9
+     },
+     {
+      "id": "agent_il_line_weight",
+      "label": "agent + Israel line by weight (Takesend general 2020) + branding",
+      "ship_usd": 8.38,
+      "agent_fee_usd": 1.5,
+      "branding_usd": 0.7,
+      "unit_cost_usd": 22.22,
+      "landed_ils": 73.33,
+      "days": "5-8",
+      "contribution_ils": 23.47,
+      "margin_pct": 21.5
+     },
+     {
+      "id": "agent_epacket",
+      "label": "agent + ePacket (CPA) + branding",
+      "ship_usd": 7.89,
+      "agent_fee_usd": 1.5,
+      "branding_usd": 0.7,
+      "unit_cost_usd": 21.73,
+      "landed_ils": 71.7,
+      "days": "7-20 business days",
+      "contribution_ils": 25.1,
+      "margin_pct": 23.0
+     }
+    ]
+   },
+   {
+    "product": "vase",
+    "label": "ceramic vase",
+    "ref_card": "vase-cj-textured-white-stoneware",
+    "weight_kg": 1.2,
+    "packed_dims_cm": [
+     22,
+     22,
+     30
+    ],
+    "agent_packed_dims_cm": [
+     22,
+     22,
+     30
+    ],
+    "chargeable_kg_cj": 2.42,
+    "chargeable_kg_agent": 2.42,
+    "product_cost_usd": 10.24,
+    "price_ils": 229,
+    "scenarios": [
+     {
+      "id": "cj_eub",
+      "label": "CJ Eub",
+      "ship_usd": 18.85,
+      "agent_fee_usd": 0,
+      "branding_usd": 0,
+      "unit_cost_usd": 29.09,
+      "landed_ils": 96.0,
+      "days": "12-50",
+      "contribution_ils": 76.76,
+      "margin_pct": 39.6
+     },
+     {
+      "id": "cj_todoor",
+      "label": "CJ To Door",
+      "ship_usd": 54.98,
+      "agent_fee_usd": 0,
+      "branding_usd": 0,
+      "unit_cost_usd": 65.22,
+      "landed_ils": 215.21,
+      "days": "11-18",
+      "contribution_ils": -42.45,
+      "margin_pct": -21.9
+     },
+     {
+      "id": "cj_eub_branding",
+      "label": "CJ Eub + CJ custom packaging",
+      "ship_usd": 18.85,
+      "agent_fee_usd": 0,
+      "branding_usd": 0.7,
+      "unit_cost_usd": 29.79,
+      "landed_ils": 98.31,
+      "days": "12-50",
+      "contribution_ils": 74.45,
+      "margin_pct": 38.4
+     },
+     {
+      "id": "agent_il_line_volumetric",
+      "label": "agent + Israel line by volume (Uspeed CNY70/kg, /6000) + branding",
+      "ship_usd": 25.21,
+      "agent_fee_usd": 1.5,
+      "branding_usd": 0.7,
+      "unit_cost_usd": 37.65,
+      "landed_ils": 124.24,
+      "days": "6-12 working days + 1-3 handling",
+      "contribution_ils": 48.52,
+      "margin_pct": 25.0
+     },
+     {
+      "id": "agent_il_line_weight",
+      "label": "agent + Israel line by weight (Takesend general 2020) + branding",
+      "ship_usd": 12.4,
+      "agent_fee_usd": 1.5,
+      "branding_usd": 0.7,
+      "unit_cost_usd": 24.84,
+      "landed_ils": 81.97,
+      "days": "5-8",
+      "contribution_ils": 90.79,
+      "margin_pct": 46.8
+     },
+     {
+      "id": "agent_epacket",
+      "label": "agent + ePacket (CPA) + branding",
+      "ship_usd": 13.24,
+      "agent_fee_usd": 1.5,
+      "branding_usd": 0.7,
+      "unit_cost_usd": 25.68,
+      "landed_ils": 84.76,
+      "days": "7-20 business days",
+      "contribution_ils": 88.01,
+      "margin_pct": 45.3
+     }
+    ]
+   },
+   {
+    "product": "basket",
+    "label": "seagrass basket",
+    "ref_card": "basket-cj-seagrass-belly",
+    "weight_kg": 0.8,
+    "packed_dims_cm": [
+     37,
+     35,
+     35
+    ],
+    "agent_packed_dims_cm": [
+     38,
+     38,
+     10
+    ],
+    "chargeable_kg_cj": 7.55,
+    "chargeable_kg_agent": 2.41,
+    "product_cost_usd": 8.0,
+    "price_ils": 89,
+    "scenarios": [
+     {
+      "id": "cj_eub",
+      "label": "CJ Eub",
+      "ship_usd": 13.81,
+      "agent_fee_usd": 0,
+      "branding_usd": 0,
+      "unit_cost_usd": 21.81,
+      "landed_ils": 71.97,
+      "days": "12-50",
+      "contribution_ils": -5.56,
+      "margin_pct": -7.4
+     },
+     {
+      "id": "cj_todoor",
+      "label": "CJ To Door",
+      "ship_usd": 154.68,
+      "agent_fee_usd": 0,
+      "branding_usd": 0,
+      "unit_cost_usd": 162.68,
+      "landed_ils": 536.85,
+      "days": "11-18",
+      "contribution_ils": -470.44,
+      "margin_pct": -623.7
+     },
+     {
+      "id": "cj_eub_branding",
+      "label": "CJ Eub + CJ custom packaging",
+      "ship_usd": 13.81,
+      "agent_fee_usd": 0,
+      "branding_usd": 0.7,
+      "unit_cost_usd": 22.51,
+      "landed_ils": 74.28,
+      "days": "12-50",
+      "contribution_ils": -7.87,
+      "margin_pct": -10.4
+     },
+     {
+      "id": "agent_il_line_volumetric",
+      "label": "agent + Israel line by volume (Uspeed CNY70/kg, /6000) + branding",
+      "ship_usd": 25.07,
+      "agent_fee_usd": 1.5,
+      "branding_usd": 0.7,
+      "unit_cost_usd": 35.27,
+      "landed_ils": 116.39,
+      "days": "6-12 working days + 1-3 handling",
+      "contribution_ils": -49.98,
+      "margin_pct": -66.3
+     },
+     {
+      "id": "agent_il_line_weight",
+      "label": "agent + Israel line by weight (Takesend general 2020) + branding",
+      "ship_usd": 9.72,
+      "agent_fee_usd": 1.5,
+      "branding_usd": 0.7,
+      "unit_cost_usd": 19.92,
+      "landed_ils": 65.74,
+      "days": "5-8",
+      "contribution_ils": 0.67,
+      "margin_pct": 0.9
+     },
+     {
+      "id": "agent_epacket",
+      "label": "agent + ePacket (CPA) + branding",
+      "ship_usd": 9.67,
+      "agent_fee_usd": 1.5,
+      "branding_usd": 0.7,
+      "unit_cost_usd": 19.87,
+      "landed_ils": 65.58,
+      "days": "7-20 business days",
+      "contribution_ils": 0.83,
+      "margin_pct": 1.1
+     }
+    ]
+   }
+  ]
+ },
+ "email_drafts": [
+  {
+   "company": "tizmun",
+   "channel": "WhatsApp 054-9625150 or site email",
+   "language": "he",
+   "status": "draft, not sent",
+   "topics": [
+    "Israel line carrier, days, price 0.5/1.5/3 kg, actual vs volumetric, limits, tracking",
+    "what STARTER/PRO/ADVANCED packages cover",
+    "customs/VAT over $75",
+    "receiving from CJ/AliExpress/1688/factories and consolidating; storage",
+    "QC photos per order and price",
+    "branding MOQ/unit price/design/storage",
+    "dense repacking (fold basket, protect ceramics), breakage policy",
+    "minimums, monthly fees, payment",
+    "API/CSV for a custom store, tracking back",
+    "3 test parcels"
+   ]
+  },
+  {
+   "company": "buckydrop",
+   "channel": "support@buckydrop.com",
+   "language": "en",
+   "status": "draft, not sent",
+   "topics": [
+    "Israel lines (EMS Preferential-HZ), days, price 0.5/1.5/3 kg, actual-weight line, limits, DDP/VAT",
+    "branding prices and minimums, small runs, packaging storage",
+    "receiving parcels from other suppliers and combining with 1688 purchases",
+    "QC with photos price",
+    "API docs; orders without Shopify/WooCommerce",
+    "ceramics packing, breakage and loss policy",
+    "sea LCL to Israel for bulk"
+   ]
+  },
+  {
+   "company": "artex",
+   "channel": "WhatsApp 972525038640 or site email",
+   "language": "he",
+   "status": "draft, not sent",
+   "topics": [
+    "price 0.5/1.5/3 kg pickup vs door, actual vs volumetric, carrier, limits",
+    "customs/VAT over $75",
+    "receiving from several suppliers, consolidation, storage",
+    "QC and photos",
+    "branding MOQ/unit price/printing",
+    "ceramics packing, breakage",
+    "API/CSV, tracking",
+    "3 test parcels"
+   ]
+  },
+  {
+   "company": "cj",
+   "channel": "CJ personal agent (dashboard), owner approval",
+   "language": "en",
+   "status": "questions only",
+   "topics": [
+    "unit price/MOQ for insert card, sticker, logo mailer and their warehouse",
+    "an Israel line billed by actual weight faster than Eub",
+    "sourced 1688 item packed with CJ items in one parcel",
+    "3PL inbound of outside goods to China warehouse, current minimum"
+   ]
+  }
+ ],
+ "not_verified": [
+  "current Israel line prices (Uspeed 2022 'from', Takesend 2020)",
+  "CJ custom packaging price and whether MOQ 1 applies to all types",
+  "Tizmun package prices scope and weight limits",
+  "all '5-10 day' claims (only ParcelsApp median is measured)",
+  "BuckyDrop Israel days/price and outside-supplier inbound",
+  "ARTEX and Tizmun reliability (no reviews)",
+  "breakage policies for ceramics"
+ ]
+}
