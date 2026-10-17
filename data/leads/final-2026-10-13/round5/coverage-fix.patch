@@ -1,0 +1,119 @@
+--- a/scripts/sourcing/final_round_coverage.py
++++ b/scripts/sourcing/final_round_coverage.py
+@@ -8,7 +8,7 @@
+   python3 scripts/sourcing/final_round_coverage.py              # writes coverage.json / coverage.md
+   python3 scripts/sourcing/final_round_coverage.py --merge-index # also merges CJ/Zendrop queries into searched-index.json
+ """
+-import glob, json, os, sys, collections, datetime
++import glob, json, os, re, sys, collections, datetime
+ 
+ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+ os.chdir(ROOT)
+@@ -40,6 +40,13 @@
+ 
+ 
+ VARIANT_AXES = {"color", "style", "pattern", "print"}
++# Axes the options mapper could not name ("other", "finish", "set") still carry colours on 31 cards
++# (e.g. "Dark German Gray", "Large Size Palegreen"). Count only the values that read as a colour.
++COLOUR_AXES = {"other", "finish", "set"}
++COLOUR_WORD = re.compile(r"(white|black|gr[ae]y|beige|khaki|cream|ivory|brown|green|blue|pink|red|yellow|orange|purple|natural|"
++                         r"oat|sand|camel|caramel|coffee|olive|sage|navy|rust|terracotta|linen|jute|hemp|dune|mustard|ginger|lemon|"
++                         r"wine|charcoal|taupe|\btan\b|walnut|\boak\b|teal|mint|lilac|apricot|peach|glaze|colou?r|turmeric|celadon|milk|"
++                         r"\btea\b|primary|bleach)", re.I)
+ 
+ 
+ def card_variants():
+@@ -53,13 +60,36 @@
+         cid = d.get("id") or os.path.basename(f)[:-5]
+         n = 1
+         for a in ((d.get("options") or {}).get("axes") or []):
++            vals = a.get("values") or []
+             if a.get("id") in VARIANT_AXES:
+-                n = max(n, len(a.get("values") or []))
++                n = max(n, len(vals))
++            elif a.get("id") in COLOUR_AXES:
++                k = sum(1 for v in vals if COLOUR_WORD.search(str(v.get("label_src") or v.get("label_he") or v.get("id") or "")))
++                if k >= 2:
++                    n = max(n, k)
+         out[cid] = min(3, n)
+         out.setdefault(os.path.basename(f)[:-5], min(3, n))
+     return out
+ 
+ 
++def card_listing():
++    """card id -> the supplier listing it was cut from ("aliexpress:<item>", "cj:<pid>"). Card copies made for another room
++    ("-master", "-work", "-hall") and size twins of one listing are the same product: they count once per slot."""
++    out = {}
++    for f in glob.glob("data/products/**/*.json", recursive=True):
++        try:
++            d = json.load(open(f))
++        except Exception:
++            continue
++        cid = d.get("id") or os.path.basename(f)[:-5]
++        u = (d.get("supplier") or {}).get("product_url") or ""
++        m = re.findall(r"(\d{10,}|[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12})", u)
++        src = "aliexpress" if "aliexpress" in u else "cj" if "cjdropshipping" in u else "zendrop" if "zendrop" in u else "card"
++        out[cid] = f"{src}:{m[-1]}" if m else f"card:{cid}"
++        out.setdefault(os.path.basename(f)[:-5], out[cid])
++    return out
++
++
+ def audits():
+     """card id -> the master-designer's audit entry (round*/designer-audit*.json, 2026-10-17). Its verdict and scores
+     override the team's guess: "reject" drops the card from the count; otherwise its fit and variants_fit replace the
+@@ -105,6 +135,8 @@
+                         il[st][key].add(c.get("url") or c.get("title"))
+                     elif c.get("card_id"):
+                         vf = (c.get("variants_fit") or {}).get(st)
++                        if vf == 0:
++                            vf = 1  # "no extra colour fits" means the card itself, not "unknown" (which falls back to every axis)
+                         prev = cards[st][key].get(c["card_id"])
+                         cards[st][key][c["card_id"]] = max(x for x in (vf, prev, 0) if x is not None) or None
+     return cards, il, queries
+@@ -114,6 +146,22 @@
+     elig, hold = eligible(), on_hold()
+     cards, il, queries = results()
+     var = card_variants()
++    lst = card_listing()
++
++    def options(g, st, s):
++        """Options for a gap slot: one per supplier listing (its colours, capped at 3), plus picks without a card."""
++        have_ids = [p.get("card_id") for p in g.get("existing_picks") or [] if p.get("card_id")]
++        groups, picks_in = collections.defaultdict(int), collections.Counter()
++        for c in have_ids:
++            L = lst.get(c, f"card:{c}")
++            picks_in[L] += 1
++            groups[L] = max(groups[L], var.get(c, 1))
++        for c, n in cards[st].get(s, {}).items():
++            if c not in have_ids:
++                L = lst.get(c, f"card:{c}")
++                groups[L] = max(groups[L], min(3, n) if n else var.get(c, 1))
++        return sum(min(3, max(v, picks_in[L])) for L, v in groups.items()) + (g["have"] - len(have_ids))
++
+     cov = {"date": datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%MZ"), "fit_threshold": FIT, "styles": {}, "remaining": {}}
+     tot = collections.Counter()
+     for st in STYLES:
+@@ -127,9 +175,7 @@
+             if not g:
+                 ready += 1; anyc += 1; one_ready += 1; one_any += 1
+                 continue
+-            have_ids = [p.get("card_id") for p in g.get("existing_picks") or [] if p.get("card_id")]
+-            have_var = sum(var.get(c, 1) for c in have_ids) + (g["have"] - len(have_ids))
+-            n_ready = max(g["have"], have_var) + sum(min(3, n) if n else var.get(c, 1) for c, n in cards[st].get(s, {}).items() if c not in have_ids)
++            n_ready = options(g, st, s)
+             n_any = n_ready + len(il[st].get(s, ()))
+             ready += n_ready >= 3
+             anyc += n_any >= 3
+@@ -144,6 +190,12 @@
+                              "pct_ready": round(100 * ready / n, 1), "pct_any": round(100 * anyc / n, 1),
+                              "one_ready": one_ready, "one_any": one_any,
+                              "pct_one_ready": round(100 * one_ready / n, 1), "pct_one_any": round(100 * one_any / n, 1)}
++        if st == "nordic" and hold:
++            # Report only: the Nordic on-hold slots (compositions 2026-10-11) as if they were open gaps with no picks.
++            held = sorted(s for s in elig if s in hold)
++            h_ready = sum(options({"have": 0, "existing_picks": []}, st, s) >= 3 for s in held)
++            cov["styles"][st].update({"on_hold": len(held), "on_hold_already_covered": h_ready,
++                                      "pct_ready_incl_on_hold": round(100 * (ready + h_ready) / (n + len(held)), 1)})
+         cov["remaining"][st] = remaining
+         tot["eligible"] += n; tot["ready"] += ready; tot["any"] += anyc; tot["one_ready"] += one_ready; tot["one_any"] += one_any
+     cov["total"] = {"eligible": tot["eligible"], "covered_ready": tot["ready"], "covered_any": tot["any"],
