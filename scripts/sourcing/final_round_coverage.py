@@ -60,7 +60,19 @@ def card_variants():
     return out
 
 
+def audits():
+    """card id -> the master-designer's audit entry (round*/designer-audit.json, 2026-10-17). Its verdict and scores
+    override the team's guess: "reject" drops the card from the count; otherwise its fit and variants_fit replace the
+    team's values for the styles it scored."""
+    out = {}
+    for f in sorted(glob.glob(f"{D}/round*/designer-audit.json")):
+        for c in json.load(open(f)).get("cards") or []:
+            out[c["card_id"]] = c
+    return out
+
+
 def results():
+    audit = audits()
     cards = collections.defaultdict(lambda: collections.defaultdict(dict))  # style -> slot -> {card id: fitting colour variants or None}
     il = collections.defaultdict(lambda: collections.defaultdict(set))      # style -> slot -> product urls
     queries = {"cj": set(), "zendrop": set()}
@@ -76,6 +88,12 @@ def results():
             queries["zendrop"] |= set(s.get("queries_zendrop") or [])
             for c in (s.get("products") if is_il else s.get("candidates")) or []:
                 fit = c.get("style_fit_guess") or {}
+                a = audit.get(c.get("card_id")) if not is_il else None
+                if a:
+                    if a.get("verdict") == "reject":
+                        continue
+                    fit = {**fit, **(a.get("fit") or {})}
+                    c = {**c, "variants_fit": {**(c.get("variants_fit") or {}), **(a.get("variants_fit") or {})}}
                 for st in STYLES:
                     try:
                         ok = float(fit.get(st) or 0) >= FIT
@@ -134,7 +152,7 @@ def main():
                     "target_pct": 90, "target_metric": "pct_ready (3 options per slot, colours count)"}
     json.dump(cov, open(f"{D}/coverage.json", "w"), ensure_ascii=False, indent=1)
     lines = [f"# כיסוי הסבב האחרון ({cov['date']})", "",
-             "עמדה מכוסה בסגנון = 3 אפשרויות: בחירות קיימות + כרטיסים חדשים בהתאמה 7+ (\"מוכן\"). צבע או הדפס של אותו מוצר נספר כאפשרות (ג.3, 2026-10-13), עד 3 לכרטיס. \"כולל ישראל\" = גם מוצרי חנויות ישראליות (דורש מחיר סוחר). היעד: 90% עם 3 אפשרויות (2026-10-14).", "",
+             "עמדה מכוסה בסגנון = 3 אפשרויות: בחירות קיימות + כרטיסים חדשים בהתאמה 7+ (\"מוכן\"). צבע או הדפס של אותו מוצר נספר כאפשרות (ג.3, 2026-10-13), עד 3 לכרטיס. \"כולל ישראל\" = גם מוצרי חנויות ישראליות (דורש מחיר סוחר). היעד: 90% עם 3 אפשרויות (2026-10-14). כרטיס שעבר ביקורת מעצב (round*/designer-audit.json) נספר לפי הציון של המעצב, וכרטיס שנדחה לא נספר.", "",
              "| סגנון | עמדות | 3 אפשרויות, מוכן | 3 אפשרויות, כולל ישראל | לפחות אחת, מוכן | לפחות אחת, כולל ישראל |", "| --- | --- | --- | --- | --- | --- |"]
     for st, c in cov["styles"].items():
         lines.append(f"| {NAMES[st]} | {c['eligible']} | {c['pct_ready']}% | {c['pct_any']}% | {c['pct_one_ready']}% | {c['pct_one_any']}% |")
