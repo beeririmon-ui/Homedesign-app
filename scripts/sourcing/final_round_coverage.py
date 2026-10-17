@@ -93,12 +93,19 @@ def card_listing():
 def audits():
     """card id -> the master-designer's audit entry (round*/designer-audit*.json, 2026-10-17). Its verdict and scores
     override the team's guess: "reject" drops the card from the count; otherwise its fit and variants_fit replace the
-    team's values for the styles it scored."""
+    team's values for the styles it scored. An entry that lists "slots" applies only in those slots (a card can be wrong
+    in one slot and right in another); an entry without "slots" applies everywhere. Later files override earlier ones."""
     out = {}
     for f in sorted(glob.glob(f"{D}/round*/designer-audit*.json")):
         for c in json.load(open(f)).get("cards") or []:
-            out[c["card_id"]] = c
+            slots = c.get("slots") or ["*"]
+            for s in ([slots] if isinstance(slots, str) else slots):
+                out[(c["card_id"], s)] = c
     return out
+
+
+def audit_for(audit, card_id, slot):
+    return audit.get((card_id, slot)) or audit.get((card_id, "*"))
 
 
 def results():
@@ -118,7 +125,7 @@ def results():
             queries["zendrop"] |= set(s.get("queries_zendrop") or [])
             for c in (s.get("products") if is_il else s.get("candidates")) or []:
                 fit = c.get("style_fit_guess") or {}
-                a = audit.get(c.get("card_id")) if not is_il else None
+                a = audit_for(audit, c.get("card_id"), key) if not is_il else None
                 if a:
                     if a.get("verdict") == "reject":
                         continue

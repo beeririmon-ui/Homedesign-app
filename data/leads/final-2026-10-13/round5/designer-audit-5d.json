@@ -4,7 +4,7 @@
  "round": "5d",
  "basis_he": "ביקורת כשלי הליקוט (round5/sourcing-failure-audit.json): F8 (34 עמדות-סגנון מכוסות שנשענות רק על ניחוש צוות), F6 (31 מועמדים 'לבדוק בפריים' ו-59 מועמדים 7+ שנחסמו רק במידה), והחלטת המשתמש AU5 (docs/studio-rules.md ז, 'מוצרים שנחסמו בגלל מידה'). החלטות המשתמש R5C1 (וילון מקלחת 200–265, מדף ספרים 40–80, מתלה יתדות 40–80) נכנסו באמצע העבודה והן מוחלות כאן כמו שהן.",
  "reconstruction_he": "ב-JSON של הביקורת אין רשימת מזהים ל-34 ול-31, רק ספירה (F8 evidence, F6 evidence), והסקריפט שספר אותן לא נשמר. בניתי את הרשימות מחדש מ-scratchpad/audit/table.json ו-rules_out.json של המבקר. (א) ניחוש צוות = אפשרות שנספרת רק משורת תוצאות של צוות ליקוט (cj-zendrop, aliexpress-*, wave2/3/4, round5-aliexpress, round5b, round5c), בלי ציון מעצב לאותו כרטיס, סגנון ועמדה (קבצי basket-* ו-round5b-designer-remap הם של המעצב, וגם round*/designer-audit*). נמצאו 55 עמדות-סגנון מכוסות שיש בהן לפחות אפשרות אחת כזו, ב-54 כרטיסים. בדקתי את כולם, כך ש-34 העמדות שבהן הניחוש הוא האפשרות השלישית נמצאות בתוך הבדיקה. (ב) 'לבדוק בפריים' = 36 שורות של מועמדים 7+ בעמדות פתוחות שה-why_he שלהן מחכה להחלטת מעצב על מידה (31 של הביקורת בתוכן), ועוד 2 כרטיסים גבוליים בעמדות מכוסות. (ג) 59 = השורות ב-rules_out.json שהחוסם הקשיח היחיד שלהן הוא מעטפה, בדיוק לפי rules.py.",
- "method_he": "ציון לפי המחוון (צבע 30, חומר 25, צורה 25, קנה מידה 20), מעוגל לחצאים, מול nordic.md 1.7.2 ובריפי הסגנונות. fit רק לסגנונות שהצוות נתן בהם 7 ומעלה בעמדה מכוסה. variants_fit = כמה צבעים, דגמים או צורות באמת נספרים; 0 = לא נספר; אותו מראה מכמה רישומים נספר פעם אחת (נציג אחד, השאר reject כספק גיבוי, כמו בביקורת סבב 5). את התמונה ראיתי ב-studio/dist/img/p ב-49 מתוך 54 הכרטיסים (image_seen). מועמדי המידה בלי כרטיס נשפטו מטקסט התוצאה. שימו לב: fit בקובץ הזה חל על הכרטיס בכל העמדות שבהן הוא מופיע (כך final_round_coverage.py קורא אותו); איפה שזה משנה עמדה אחרת, זה כתוב בהערה.",
+ "method_he": "ציון לפי המחוון (צבע 30, חומר 25, צורה 25, קנה מידה 20), מעוגל לחצאים, מול nordic.md 1.7.2 ובריפי הסגנונות. fit רק לסגנונות שהצוות נתן בהם 7 ומעלה בעמדה מכוסה. variants_fit = כמה צבעים, דגמים או צורות באמת נספרים; 0 = לא נספר; אותו מראה מכמה רישומים נספר פעם אחת (נציג אחד, השאר reject כספק גיבוי, כמו בביקורת סבב 5). את התמונה הראשית ב-studio/dist/img/p ראיתי בכל 54 הכרטיסים (image_seen); מידות ו-SKU מהכרטיס ומשורת התוצאה. מועמדי המידה בלי כרטיס נשפטו מטקסט התוצאה (rules_out.json), לא מתמונה. שימו לב: fit בקובץ הזה חל על הכרטיס בכל העמדות שבהן הוא מופיע (כך final_round_coverage.py קורא אותו); איפה שזה משנה עמדה אחרת, זה כתוב בהערה.",
  "cards": [
   {
    "card_id": "vanity-sconces-aliexpress-wabi-sabi-yellow-marble-037853",
@@ -37,7 +37,7 @@
    "envelope_ok": false,
    "flags": ["ip44-missing", "envelope-out-h28"],
    "verdict": "reject",
-   "note_he": "גליל טרוורטין על לוחית אגוז עם אור מעלה-מטה: יפה מאוד לג'פנדי. אבל אין IP מוצהר (ip_rating null), ובמקלחת IP44 חובה (ד.5), וגם הגובה 28 מעל 26. מקומו בזוג מנורות הקיר בסלון בג'פנדי ובמודרני החם, לא במקלחת."
+   "note_he": "גליל טרוורטין על לוחית אגוז עם אור מעלה-מטה: יפה מאוד לג'פנדי. אבל אין IP מוצהר (ip_rating null), ובמקלחת IP44 חובה (ד.5), וגם הגובה 28 מעל 26. מקומו במנורת הקיר בכניסה בג'פנדי ובמודרני החם (hall/wall-sconce, עד 30 גובה ו-20 בליטה אחרי AU5), לא במקלחת. בתמונה לוגו של המותג: לא להציג."
   },
   {
    "card_id": "wall-sconce-aliexpress-wabi-sabi-natural-stone-430468",
@@ -247,7 +247,7 @@
    "team": "cj-wave2", "slots": ["hall/umbrella-stand"], "image_seen": true,
    "checked": true, "fit": {"nordic": 6.5}, "variants_fit": {"nordic": 0}, "envelope_ok": true,
    "flags": ["shape-not-per-spec"], "verdict": "lower-fit",
-   "note_he": "שרוול עץ בהיר מתחדד ומשושה: נקרא כאגרטל רצפה, והמפרט הנורדי מבקש גליל. מסכים עם ההתאמה מ-14.10 (6.5). במודרני חם, בג'פנדי ובכפרי לא משתנה."
+   "note_he": "שרוול עץ בהיר מרובע ומתחדד (22 למעלה, 17 למטה, 50 גובה): נקרא כאגרטל רצפה, והמפרט הנורדי מבקש גליל. מסכים עם ההתאמה מ-14.10 (6.5). במודרני חם, בג'פנדי ובכפרי לא משתנה."
   },
   {
    "card_id": "toilet-paper-stand-aliexpress-matte-black-freestanding-toilet-paper-stand-with",
@@ -331,7 +331,7 @@
    "team": "wave3-aliexpress", "slots": ["hall/wall-sconce"], "image_seen": true,
    "checked": true, "fit": {"boho": 7.5}, "variants_fit": {"boho": 1}, "envelope_ok": true,
    "flags": ["projection-unpublished", "image-ai-lifestyle"], "verdict": "keep",
-   "note_he": "פנס חבל 17×16 תלוי מזרוע עץ: אותה טיפולוגיה כמו כדור הבמבוק 671943 שכבר בעמדה. לאמת בליטה עד 20 וחיווט לקיר. 8 ולא יותר: הסליל השחור על הזרוע מעט קישוטי."
+   "note_he": "פנס חבל 17×16 תלוי מזרוע עץ: אותה טיפולוגיה כמו כדור הבמבוק 671943 שכבר בעמדה. לאמת בליטה עד 20 וחיווט לקיר. 7.5 ולא יותר: הסליל השחור על הזרוע מעט קישוטי."
   },
   {
    "card_id": "soft-toy-aliexpress-30cm-lovely-curly-teddy-548628",
@@ -359,7 +359,7 @@
    "team": "wave3-aliexpress", "slots": ["work/desk-lamp"], "image_seen": true,
    "checked": true, "fit": {"modern-country": 7}, "variants_fit": {"modern-country": 1}, "envelope_ok": true,
    "flags": ["dims-unpublished", "image-ai-lifestyle", "plug-eu-verify"], "verdict": "keep",
-   "note_he": "בסיס כדורי עץ מחורט ואהיל קפלים: כפרי. ה-SKU 'Small' בעץ טבעי ותקע EU. לאמת גובה 40–50 ואהיל עד 22: אם האהיל רחב יותר, הוא נוגע בפינה הימנית של התמונה (7.5 ס״מ)."
+   "note_he": "בסיס של שלושה כדורי עץ ואהיל קפלים: כפרי. התמונה הראשית היא האגוז; לכפרי נבחר Small Natural Wood, ולרינדור צריך את התמונה של ה-SKU הטבעי. לוודא תקע EU. לאמת גובה 40–50 ואהיל עד 22: אם האהיל רחב יותר, הוא נוגע בפינה הימנית של התמונה (7.5 ס״מ)."
   },
   {
    "card_id": "framed-art-cj-black-ink-abstract-wide-mat-50-pair",
@@ -412,10 +412,10 @@
   },
   {
    "card_id": "bin-aliexpress-natural-water-hyacinth-waste-basket",
-   "team": "round5-aliexpress", "slots": ["bath/bin"], "image_seen": false,
+   "team": "round5-aliexpress", "slots": ["bath/bin"], "image_seen": true,
    "checked": true, "fit": {"mediterranean": 7, "boho": 6}, "variants_fit": {"mediterranean": 1, "boho": 0}, "envelope_ok": true,
    "flags": ["boho-no-weave-in-bath", "not-a-pedal-bin"], "verdict": "lower-fit",
-   "note_he": "סל יקינטון מים 19×28: קוטר −1 מ-20 עובר ליד המעמד. בים-תיכוני 7 (סל קש של המקלחת). בבוהו 6: קליעה במקלחת אסורה. שיפוט מטקסט."
+   "note_he": "סל יקינטון מים 19×28: קוטר −1 מ-20 עובר ליד המעמד. בים-תיכוני 7 (סל קש של המקלחת). בבוהו 6: קליעה במקלחת אסורה. בתמונה שם החנות מוטבע בתחתית: לא להציג אותה בדף המוצר."
   }
  ],
  "size_review": [
@@ -472,7 +472,7 @@
   {"id": "aliexpress:1005013221725005", "slot": "dining-room/sink-set", "styles": ["warm-modern", "japandi"], "list": "F6-borderline", "dims_cm": "15.3 x 6 x 16", "envelope_ok": true, "verdict": "blocked", "reason_he": "גובה 16 מול 17 לא נראה. חסום כי זה פריט אחד ולא סט של 3."},
   {"id": "aliexpress:1005012142300525", "slot": "dining-room/tableware-set", "styles": ["japandi", "mediterranean", "modern-country"], "list": "F6-borderline", "dims_cm": "26.7 / 20.3 / 12", "envelope_ok": true, "verdict": "pass", "needs_card": true, "reason_he": "קערה 12 בראש הערימה. המעטפה הורחבה (12–16). אותו קו כמו קערת הגלים. 4.5% ב-₪399: לסמן (ה.11)."},
   {"id": "floor-lamp-aliexpress-pleated-walnut-43x158-177278-master", "card_id": "floor-lamp-aliexpress-pleated-walnut-43x158-177278-master", "slot": "master/floor-lamp", "styles": ["warm-modern", "modern-country"], "list": "F6-borderline", "dims_cm": "shade 43, h158", "envelope_ok": true, "verdict": "blocked", "reason_he": "אהיל 43 בפינת הקריאה עובד. נשאר חסום כאותו מראה כמו 062736 (ביקורת סבב 5)."},
-  {"id": "tea-towel-aliexpress-pure-linen-towel-38x55", "card_id": "tea-towel-aliexpress-pure-linen-towel-38x55", "slot": "dining-room/tea-towel", "styles": ["boho"], "list": "F6-borderline", "dims_cm": "38 x 55", "envelope_ok": false, "verdict": "fail", "reason_he": "על ידית התנור היא נפתחת ל-38 רוחב מול 22–26: מכסה חצי מחזית התנור. הדחייה מסבב 5 נשארת."},
+  {"id": "tea-towel-aliexpress-pure-linen-towel-38x55", "card_id": "tea-towel-aliexpress-pure-linen-towel-38x55", "slot": "dining-room/tea-towel", "styles": ["boho"], "list": "F6-borderline", "dims_cm": "38 x 55", "envelope_ok": false, "verdict": "fail", "reason_he": "מקופלת על ידית התנור היא 38×27 (רחבה ב-46%) או 19×27 (קצרה וצרה), ואין קיפול שנותן 22–26 × 32–38. הדחייה מסבב 5 נשארת: מקומה במקלחת."},
   {"id": "cj:1705144683208388608", "slot": "hall/storage-boxes", "styles": ["modern-country"], "list": "F6-borderline", "dims_cm": "31 x 26 x 37", "envelope_ok": true, "verdict": "blocked", "reason_he": "גובה 37 מול 35 עובד. חסום בהפסד (2 ק״ג לסל)."},
   {"id": "aliexpress:1005006768278100", "slot": "work/shelf-boxes", "styles": ["boho"], "list": "F6-borderline", "dims_cm": "29 x 19 x 12", "envelope_ok": true, "verdict": "blocked", "reason_he": "עומק 19 מול 20 לא נראה על המדף. חסום בהפסד; R5C3 אישר לחפש את אותה קופסה אצל מוכר זול יותר."},
   {"id": "roman-blind-aliexpress-linen-tie-up-roman-shade-150", "card_id": "roman-blind-aliexpress-linen-tie-up-roman-shade-150", "slot": "kids/roman-blind", "styles": ["japandi", "modern-country"], "list": "F6-borderline", "dims_cm": "W150", "envelope_ok": false, "verdict": "fail", "reason_he": "הווילון יושב בתוך הספי (136). 150 לא נכנס פנימה, ומחוץ לספי הוא משנה את החלון."},
@@ -519,7 +519,7 @@
   {"style": "mediterranean", "slot": "kids/pendant", "after": 0, "why_he": "115646 היה האפשרות היחידה, 6.5."},
   {"style": "modern-country", "slot": "work/planter", "after": 2, "why_he": "839727 קטן מדי לפינה."},
   {"style": "boho", "slot": "bath/storage-basket", "after": 0, "why_he": "שני סלי החבל: קליעה במקלחת אסורה בבוהו."},
-  {"style": "nordic", "slot": "hall/umbrella-stand", "after": 0, "why_he": "המשושה המתחדד 6.5 (המפרט מבקש גליל); כרטיס אחד ספר את עצמו 3 פעמים בצבעים."},
+  {"style": "nordic", "slot": "hall/umbrella-stand", "after": 0, "why_he": "השרוול המרובע המתחדד 6.5 (המפרט מבקש גליל); כרטיס אחד ספר את עצמו 3 פעמים בצבעים."},
   {"style": "mediterranean", "slot": "master/nightstand-tray", "after": 2, "why_he": "מגש 25×11.8 לא נושא את האגרטל והצלוחית."}
  ],
  "needs_card": [
@@ -536,17 +536,18 @@
   {"source_id": "cj:2409020723381627600", "slot": "dining-room/tableware-set", "styles": {"japandi": 7, "mediterranean": 7.5, "boho": 7}, "note_he": "סט חרס בזיגוג ריאקטיבי, צלחת בסיס 23."},
   {"source_id": "aliexpress:1005012142300525", "slot": "dining-room/tableware-set", "styles": {"japandi": 7, "mediterranean": 7.5, "modern-country": 7}, "note_he": "קו הגלים, 26.7/20.3/12. 4.5% ב-₪399: לסמן (ה.11)."},
   {"source_id": "aliexpress:1005002672043730", "slot": "hall/wall-sconce", "styles": {"modern-country": 7}, "note_he": "זרוע נר בפליז ואהיל בד, CE, שנהב ובז'."},
-  {"source_id": "aliexpress:1005009938333899", "slot": "bath/shower-curtain", "styles": {"boho": 8}, "note_he": "טאפטינג שברון 180×210 עם גדילים, בז' ולבן. ווי הארכה לפי R5C1."}
+  {"source_id": "aliexpress:1005009938333899", "slot": "bath/shower-curtain", "styles": {"boho": 8}, "note_he": "טאפטינג שברון 180×210 עם גדילים, בז' ולבן. ווי הארכה לפי R5C1."},
+  {"source_id": "aliexpress (listing of vanity-sconces-aliexpress-walnut-color-yellow-travertine-332886)", "slot": "hall/wall-sconce", "styles": {"japandi": 8, "warm-modern": 8}, "note_he": "גליל טרוורטין על אגוז, h 28. כרטיס חדש עם card_id נפרד לכניסה: ה-reject כאן חל על כרטיס המקלחת בכל העמדות. לאמת בליטה עד 20 ו-CE."}
  ],
  "summary": {
   "cards_checked": 54,
   "keep": 26, "lower_fit": 11, "reject": 17,
   "covered_style_slots_with_team_guess": 55,
   "slots_falling_below_3": 10,
-  "size_review_rows": {"f6_59": 59, "f6_borderline_rows": 36, "unique_entries": 66},
+  "size_review_rows": {"f6_59": 59, "f6_borderline_rows": 36, "entries": 70, "note": "one entry per candidate and slot; multi-style entries count as one row per style; 4 entries are in both lists"},
   "f6_59_size_works": 24, "f6_59_pass_now": 20,
-  "borderline_rows_size_works": 30, "borderline_rows_pass_now": 5,
+  "borderline_rows_size_works": 28, "borderline_rows_pass_now": 5,
   "envelopes_widened": 13,
-  "needs_card": 14
+  "needs_card": 15
  }
 }
