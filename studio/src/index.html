@@ -112,6 +112,7 @@ main{max-width:var(--maxw);margin:0 auto;padding-inline:var(--gut);padding-block
 .std-unverified{background:var(--oak-wash);color:var(--oak-ink)}
 .chip-block{background:var(--ink);color:var(--on-ink)}
 .chip-dup{background:transparent;color:var(--brick-ink);border:1px solid currentColor;padding:4px 8px}
+.pimg .chip-dup{background:var(--sheet)} /* on the white picture box the outline chip needs its own ground (dark mode) */
 .code-tag{font-family:var(--f-mono);font-size:12px;padding:2px 6px;border-radius:4px;background:var(--sunk);color:var(--ink-2);white-space:nowrap}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;padding:8px 16px;border-radius:var(--r);border:1px solid var(--ink);background:var(--ink);color:var(--on-ink);font-weight:600;font-size:15px;cursor:pointer;text-decoration:none}
 .btn:hover{filter:brightness(1.12)}
@@ -1023,6 +1024,7 @@ button.ptile:focus-visible{outline-offset:2px}
 .cov-tbl td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
 .cov-tbl .meter{display:block;min-width:80px}
 .cov-tbl th:last-child,.cov-tbl td:last-child{width:30%}
+@media (max-width:560px){.cov-tbl th:last-child,.cov-tbl td:last-child{display:none}.cov-tbl th,.cov-tbl td{padding:6px 7px}}
 .cov-kv dd{white-space:nowrap}
 .bd-mx th,.bd-mx td{padding:0;border:0;background:none;position:static;vertical-align:middle;text-align:center}
 .bd-mx thead th{font-size:var(--fs-xs);font-weight:700;color:var(--ink-3);white-space:normal;line-height:1.2;padding:0 1px 5px;vertical-align:bottom}
@@ -1558,8 +1560,9 @@ async function boot(){
 }
 /* ---------- data chunks: the heavy parts load when their screen opens (QA 2026-10-17, M9) ---------- */
 // data.json "chunks" (build.py CHUNKS): {name: {file, keys: {key: null (the whole key) | [sub keys]}, bytes}}
-const SCREEN_CHUNKS = {compare:['compare'], sourcing:['sourcing'], furniture:['furniture'], boards:['boards'], quality:['leads']};
-const CHUNK_RENDER = {compare:() => renderCompare(), sourcing:() => renderSourcing(), furniture:() => renderFurniture(), boards:() => renderBoards(), leads:() => renderReports()};
+const SCREEN_CHUNKS = {compare:['compare'], sourcing:['sourcing'], furniture:['furniture'], boards:['boards'], quality:['leads'], log:['log']};
+const CHUNK_RENDER = {compare:() => renderCompare(), sourcing:() => renderSourcing(), furniture:() => renderFurniture(), boards:() => renderBoards(), leads:() => renderReports(),
+  log:() => { renderLog(); renderOverview(); }};
 const chunkInfo = n => (S.data && S.data.chunks && S.data.chunks[n]) || null;
 const chunkReady = n => !chunkInfo(n) || S.chunkState[n] === 'ready';
 function needChunk(n){
@@ -1750,7 +1753,9 @@ function effProduct(p){
   e.history = (doc && doc.history) || [];
   const cur = p.price && p.price.currency;
   e.badCurrency = !!cur && String(cur).toUpperCase() !== 'USD';
-  e.econ = econCalc({cost_usd: e.badCurrency ? null : f.cost, qty: e.qty, shipping_usd: ship.total, retail_ils: f.retail_ils}, S.ES.v);
+  // the final round's cost of the whole sale when it is not N x the card's cost (a mixed set), until the cost or the units are edited
+  e.saleCost = e.fromCard && isNum(be.sale_cost_usd) && !('cost' in pf) && !('sell_qty' in pf) ? be.sale_cost_usd : null;
+  e.econ = econCalc({cost_usd: e.badCurrency ? null : (e.saleCost != null ? e.saleCost / e.qty : f.cost), qty: e.qty, shipping_usd: ship.total, retail_ils: f.retail_ils}, S.ES.v);
   e.mkt = mktOf(p.id);
   if(e.badCurrency) e.econ.missing = e.econ.missing.map(m => m === 'cost' ? 'currency' : m);
   if(ship.nofast) e.econ.missing = e.econ.missing.map(m => m === 'shipping' ? 'fast_shipping' : m);
@@ -1778,8 +1783,9 @@ function isLoser(e){
 const loserChip = e => isLoser(e) ? `<span class="chip chip-loss" title="${esc(isNum(e.econ.contribution) ? `תרומה ${fmtILS(e.econ.contribution)} למכירה במחיר הזה` : 'לפי קובץ התמחור')}">מפסיד, לא למכירה</span>` : '';
 const addonChip = e => e && e.addonOnly ? '<span class="chip chip-addon" title="מוצר שנמכר רק כתוספת להזמנה (addon_only בקובץ התמחור)">רק כתוספת לסל</span>' : '';
 // all the price-state chips of a product, in order of weight: losing money, under the floor, add-on only, quantity mismatch
+const saleCostChip = e => e && e.saleCost != null ? `<span class="chip chip-initial" title="${esc(`הליקוט האחרון תמחר את המכירה כולה (${e.qty} פריטים) ב-${fmtUSD(e.saleCost)}, לא ${e.qty} × העלות שבכרטיס (${fmtUSD(e.price && e.price.cost)}). החישוב משתמש בעלות של הליקוט עד שהעלות או הכמות נערכות.`)}">עלות הסט מהליקוט ${esc(fmtUSD(e.saleCost))}</span>` : '';
 const premiumChip = e => e && e.premium ? `<span class="chip chip-premium" title="${esc('המעצב קבע שהמוצר נראה איכותי, והמחיר עד המחיר הטיפוסי בישראל (ה.10, 2026-10-17). מחכה לאישור המשתמש.')}">תמחור פרימיום, לאישור</span>` : '';
-const priceChips = e => [loserChip(e), isLoser(e) ? '' : floorChip(e), premiumChip(e), addonChip(e)].filter(Boolean).join(' ');
+const priceChips = e => [loserChip(e), isLoser(e) ? '' : floorChip(e), premiumChip(e), saleCostChip(e), addonChip(e)].filter(Boolean).join(' ');
 function floorChip(e){
   if(!e || e._new || typeof e.slotAltOk !== 'boolean') return '';
   const T = S.ES.v.target_margin_pct;
@@ -2285,7 +2291,7 @@ function coverageSection(){
     <div class="section-head"><h2 id="h-bd-cov" class="h-mid">הכיסוי הרשמי</h2><span class="small faint"><code>${esc(C.file)}</code>${C.date ? ` · ${esc(fmtDate(C.date))}` : ''}</span></div>
     <p class="cov-total"><span class="stat bignum" dir="ltr">${esc(covPct(T.pct_ready))}</span> <span class="muted">מהעמדות בכל הסגנונות עם 3 אפשרויות מוכנות (${esc(T.covered_ready ?? '—')} מתוך ${esc(T.eligible ?? '—')}), היעד ${esc(isNum(T.target_pct) ? T.target_pct : 90)}%. כולל חנויות ישראליות: <b dir="ltr">${esc(covPct(T.pct_any))}</b>.</span></p>
     <div class="tbl-wrap" tabindex="0" role="region" aria-label="הכיסוי הרשמי לפי סגנון"><table class="cov-tbl"><caption class="sr-only">הכיסוי הרשמי לפי סגנון: 3 אפשרויות מוכנות, כולל חנויות ישראליות, ומספר העמדות</caption>
-      <thead><tr><th scope="col">סגנון</th><th scope="col">3 אפשרויות, מוכן</th><th scope="col">כולל ישראל</th><th scope="col">עמדות מכוסות</th><th scope="col"><span class="sr-only">מד</span></th></tr></thead><tbody>${rows}</tbody></table></div>
+      <thead><tr><th scope="col">סגנון</th><th scope="col">3 אפשרויות, מוכן</th><th scope="col">כולל ישראל</th><th scope="col">עמדות</th><th scope="col"><span class="sr-only">מד</span></th></tr></thead><tbody>${rows}</tbody></table></div>
     <p class="xs faint">${esc(COV_NOTE)} המדד הרשמי של הליקוט, מ-<code>scripts/sourcing/final_round_coverage.py</code>.</p>
   </section>`;
 }
@@ -5230,7 +5236,7 @@ function renderBoards(){
         <div class="seg" role="group" aria-label="תצוגת הלוח"><button type="button" data-bd-view="tiles" aria-pressed="${F.view === 'tiles'}">אריחים</button><button type="button" data-bd-view="table" aria-pressed="${F.view === 'table'}">טבלה</button></div>
       </div>
       ${F.view === 'table' ? bdTable(B, b) : `<ul class="bd-grid" aria-label="${esc(`העמדות של ${b.room_he} · ${b.style_he}, לפי הסדר בקובץ העמדות`)}">${b.slots.map(s => bdTile(B, s)).join('')}</ul>`}
-      <p class="bd-legend">${esc(B.legend_he || '')} רווח: ירוק 40% ומעלה, ענבר 25–40%, אדום מתחת ל-25% או הפסד, ו"לא תומחר" כשאין חישוב (המקור לפי הסדר: בחירת המעצב, קובץ התמחור, הליקוט האחרון).</p>
+      <p class="bd-legend">${esc(B.legend_he || '')} רווח: ירוק 40% ומעלה, ענבר 25–40%, אדום מתחת ל-25% או הפסד, ו"לא תומחר" כשאין חישוב. המקור לפי הסדר: המחיר של המעצב בהרכבה או בקטלוג; אחרת החישוב החי, אותו רווח כמו במסך הרווחיות; אחרת קובץ התמחור או הליקוט האחרון.</p>
     </section>`;
   for(const x of $$('[data-bd-style]', box)) x.onclick = () => bdSet({style: x.dataset.bdStyle}, `[data-bd-style="${CSS.escape(x.dataset.bdStyle)}"]`);
   for(const x of $$('[data-bd-room]', box)) x.onclick = () => bdSet({room: x.dataset.bdRoom}, `[data-bd-room="${CSS.escape(x.dataset.bdRoom)}"]`);
@@ -5252,7 +5258,9 @@ function renderBoards(){
 
 /* ---------- log ---------- */
 function renderLog(){
-  const D = S.data; const log = D.log || [];
+  const D = S.data;
+  if(!chunkGate('log', $('#log-body'), 'log')){ $('#log-who').innerHTML = ''; $('#log-count').textContent = ''; return; }
+  const log = D.log || [];
   const counts = {}; for(const e of log) counts[e.who_key] = (counts[e.who_key] || 0) + 1;
   const keys = ['user','manager','master-designer','sourcing-agent','motion-agent','render-agent','qa-agent','frontend-dev','astra','other'].filter(k => counts[k]);
   if(S.logWho !== 'all' && !counts[S.logWho]) S.logWho = 'all';

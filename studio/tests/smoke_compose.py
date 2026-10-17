@@ -494,7 +494,7 @@ def main() -> int:
     build(dist_a, "--round-results-dir", str(FIX_RES))
     print("- build B: fixture compositions, no results")
     build(dist_b, "--compositions-dir", str(FIX_COMP), "--round-results-dir", str(tmp / "no-results"))
-    data_a = json.loads((dist_a / "data.json").read_text(encoding="utf-8"))
+    data_a = load_build().read_dist_data(dist_a)  # data.json with its chunks (the sourcing results load with their screen)
     srv_a, base_a = serve(dist_a)
     srv_b, base_b = serve(dist_b)
     try:

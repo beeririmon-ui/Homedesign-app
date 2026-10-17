@@ -516,14 +516,31 @@ def notes_times_cost(p: dict) -> tuple[int, str] | None:
     return None
 
 
+LEAD_FX = 3.3  # the final round priced at the conservative rate of FR-C (2026-10-10)
+
+
 def lead_qty(p: dict) -> tuple[int, str] | None:
-    """(units in the sale, file) from the card's final-round record (qty_in_sale / qty), when more than one."""
+    """(units in the sale, where it says so) from the card's final-round record, when more than one: its qty_in_sale /
+    qty, else what its landed cost implies (landed = (units x the card's cost + shipping) x 3.3: the wave-3 repricing
+    priced "the pair" or "the set of 3" without a qty field)."""
     lr = p.get("_lead_rec") or {}
     c = lr.get("rec") or {}
     for k in ("qty_in_sale", "qty"):
         q = c.get(k)
         if isnum(q) and float(q).is_integer() and q > 1:
             return int(q), lr.get("file") or ""
+    cost = (p.get("price") or {}).get("cost")
+    if any(isnum(c.get(k)) for k in ("qty_in_sale", "qty")) or not (isnum(c.get("landed_ils")) and isnum(cost) and cost > 0):
+        return None
+    if isnum(c.get("ship_usd")):
+        ship = c["ship_usd"]
+    else:
+        cs = card_sku_shipping(p)
+        ship = ((cs or {}).get("cheapest") or {}).get("usd") or 0
+    q = (c["landed_ils"] / LEAD_FX - ship) / cost
+    n = round(q)
+    if 2 <= n <= 12 and abs(q - n) <= 0.05 * n:
+        return n, f"{lr.get('file') or ''}, לפי עלות הנחיתה ₪{c['landed_ils']:g}"
     return None
 # How many pieces the card's cost covers, read from the room SKU (options.default_sku): the supplier's labels of its
 # option values ("1 PC W100cmxH275cm", "1PC (price is per piece)", "2PC W225cm", "4 pcs", "set of 2", "pair").
@@ -1053,6 +1070,8 @@ def infer_decision_rooms(d: dict, room_ids: list[str]) -> list[str]:
     for rid in room_ids:
         if re.search(r"data/slots/" + re.escape(rid) + r"\.json|(?:,\s*)" + re.escape(rid) + r"\.json", text):
             found.append(rid)
+    # "כניסה לבית" / "לכניסה לסל" is admission, not the entrance hall (QA 2026-10-17, L8: VR1 showed "חלל כניסה")
+    text = re.sub(r"ל?כניסה\s+ל(?:בית|סל)", " ", text)
     for rid, words in ROOM_WORDS.items():
         if rid in room_ids and rid not in found and any(w in text for w in words):
             found.append(rid)
@@ -1073,6 +1092,9 @@ def load_decisions(room_ids: list[str]) -> dict:
         it["_order"] = i
         it["_rooms"] = infer_decision_rooms(it, room_ids)
         items.append(it)
+    bare = [it.get("id") for it in items if isinstance(it.get("answer"), str)]
+    if bare:  # the page shows them (it normalizes the shape), but the repo should store {option, note, at, via}
+        log(f"  ! status/decisions.json: {len(bare)} answers are a bare string, not {{option, note, at, via}}: {', '.join(map(str, bare[:8]))}")
     return {"items": items, "note": d.get("note"), "updated": d.get("updated"), "version": d.get("version"),
             "source": rel(p)}
 
@@ -1429,6 +1451,16 @@ def card_economics(p: dict) -> dict:
     if isnum(m) and out["retail_ils"] == rec.get("price_ils"):
         out["lead_margin_pct"] = m
         out["price_flag"] = "loss" if m < 0 else "below-floor" if m < 40 else "ok"
+        if isnum(rec.get("landed_ils")):
+            out["lead_landed_ils"] = rec["landed_ils"]
+    # a sale that is not N units of the card's cost (a mixed stack of plates, a pitcher with its jar): the record's cost
+    # of the whole sale, so the margin is the record's and not "6 x the big plate"
+    cost, rc, q = pr.get("cost"), rec.get("cost_usd"), (p.get("_sell_qty") or {}).get("qty") or 1
+    if isnum(rc) and rc > 0 and isnum(cost) and cost > 0 and out["retail_ils"] == rec.get("price_ils"):
+        per_unit = abs(rc - cost) <= max(0.011, 0.03 * cost)
+        whole = abs(rc - cost * q) <= max(0.02, 0.03 * rc)
+        if not per_unit and not whole:
+            out["sale_cost_usd"] = rc
     out["from_card"] = True
     return out
 
@@ -1441,7 +1473,9 @@ def lead_freight(p: dict) -> dict | None:
     if not isnum(c.get("ship_usd")) or c["ship_usd"] < 0:
         return None
     d = days_pair(c.get("ship_days"))
-    q = next((int(c[k]) for k in ("qty_in_sale", "qty") if isnum(c.get(k)) and float(c[k]).is_integer() and c[k] >= 1), 1)
+    # the record's shipping is for the sale it priced: its qty, else the units the Studio sells (the same sale)
+    q = next((int(c[k]) for k in ("qty_in_sale", "qty") if isnum(c.get(k)) and float(c[k]).is_integer() and c[k] >= 1),
+             (p.get("_sell_qty") or {}).get("qty") or 1)
     opt = {"usd": float(c["ship_usd"]), "name": "מהליקוט", "days": f"{d[0]}-{d[1]}" if d else None}
     return {"options": [opt], "cheapest": opt, "cheapest_under_20d": opt if d and d[1] <= 20 else None, "status": "ok",
             "qty": q, "checked_at": lr.get("date"), "note": f"משלוח מהרשומה בליקוט האחרון ({lr.get('file')}), ל-{q} יח'"}
@@ -3540,7 +3574,8 @@ def load_coverage(path: Path = COVERAGE_JSON) -> dict:
 # 17.9 s to the overview on a slow phone). Each chunk file holds {key: value} for whole keys (None) or {key: {sub: ...}}
 # for the heavy parts of a key whose light parts stay in data.json; data.json "chunks" lists them for the page.
 CHUNKS = (("compare", "comparison", ("rooms",)), ("sourcing", "next_sourcing", ("results", "dropped")),
-          ("furniture", "furniture", None), ("boards", "boards", None), ("leads", "leads", None))
+          ("furniture", "furniture", None), ("boards", "boards", None), ("leads", "leads", None), ("log", "log", None))
+CORE_TAIL = {"log": 12}  # a whole-key chunk whose last entries stay in data.json (the overview shows the latest log lines)
 CORE_LIMIT_BYTES = 4 * 1024 * 1024  # the first load (data.json); a warning above it
 
 
@@ -3554,6 +3589,8 @@ def split_chunks(data: dict) -> dict:
         if subs is None:
             part = {key: v}
             del data[key]
+            if key in CORE_TAIL and isinstance(v, list):
+                data[key] = v[-CORE_TAIL[key]:]
         elif isinstance(v, dict) and any(s in v for s in subs):
             part = {key: {s: v.pop(s) for s in subs if s in v}}
         else:

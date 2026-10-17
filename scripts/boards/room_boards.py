@@ -502,13 +502,15 @@ def boards(cat=None):
 # --------------------------------------------------------------------------- the CLI: one HTML page per board
 
 def image(cid, cat, cache):
-    local = _p(f"studio/dist/img/p/{cid}.webp")
-    if os.path.exists(local):
-        return os.path.abspath(local)
     urls = (cat.get(cid) or {}).get("urls") or []
     if not urls:
         return None
     url = urls[0]
+    # the Studio build's download cache (studio/.cache/p/<sha1(url)[:20]>.bin): the product pictures are packed into
+    # sheets in studio/dist since 2026-10-17, so there is no one-file picture per card there any more
+    built = _p(f"studio/.cache/p/{hashlib.sha1(url.encode()).hexdigest()[:20]}.bin")
+    if os.path.exists(built) and os.path.getsize(built) > 2000:
+        return os.path.abspath(built)
     path = os.path.join(cache, hashlib.md5(url.encode()).hexdigest()[:16] + ".jpg")
     if not os.path.exists(path):
         subprocess.run(["curl", "-sL", "--max-time", "25", "-o", path, url], check=False)
