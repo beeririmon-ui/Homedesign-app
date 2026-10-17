@@ -61,11 +61,11 @@ def card_variants():
 
 
 def audits():
-    """card id -> the master-designer's audit entry (round*/designer-audit.json, 2026-10-17). Its verdict and scores
+    """card id -> the master-designer's audit entry (round*/designer-audit*.json, 2026-10-17). Its verdict and scores
     override the team's guess: "reject" drops the card from the count; otherwise its fit and variants_fit replace the
     team's values for the styles it scored."""
     out = {}
-    for f in sorted(glob.glob(f"{D}/round*/designer-audit.json")):
+    for f in sorted(glob.glob(f"{D}/round*/designer-audit*.json")):
         for c in json.load(open(f)).get("cards") or []:
             out[c["card_id"]] = c
     return out
