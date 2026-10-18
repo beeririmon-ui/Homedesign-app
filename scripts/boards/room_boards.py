@@ -97,6 +97,44 @@ def _load(rel_or_abs):
         return None
 
 
+PRICING_REL = "data/economics/products.json"
+_STABLE = {}
+
+
+def load_json_stable(rel_or_abs, tries=4, wait=1.5):
+    """(data, note) of a JSON file another team may be writing right now (data/economics/products.json: the pricing team,
+    2026-10-18). A read that does not parse is tried again `tries` times, `wait` seconds apart; then the committed
+    version (git show HEAD:<path>) is used and `note` says so. (None, note) when neither parses; (None, None) when the
+    file does not exist. Read once per path and process: the Studio build and the boards see the same version."""
+    path = rel_or_abs if os.path.isabs(rel_or_abs) else _p(rel_or_abs)
+    if path in _STABLE:
+        return _STABLE[path]
+    if not os.path.exists(path):
+        return None, None
+    err = None
+    for i in range(max(1, tries)):
+        try:
+            with open(path, encoding="utf-8") as f:
+                out = (json.load(f), None)
+            _STABLE[path] = out
+            return out
+        except (json.JSONDecodeError, UnicodeDecodeError, OSError) as e:
+            err = f"{type(e).__name__}: {e}"[:160]
+            if i + 1 < tries:
+                import time
+                time.sleep(wait)
+    rel = os.path.relpath(path, ROOT)
+    out = (None, f"{rel} does not parse ({err}) and no committed version could be read")
+    if not rel.startswith(".."):
+        try:
+            text = subprocess.run(["git", "-C", ROOT, "show", f"HEAD:{rel}"], capture_output=True, text=True, timeout=30, check=True).stdout
+            out = (json.loads(text), f"{rel} does not parse right now ({err}): the committed version (HEAD) is used")
+        except Exception as e:
+            out = (None, f"{rel} does not parse ({err}), and HEAD:{rel} neither ({type(e).__name__})")
+    _STABLE[path] = out
+    return out
+
+
 def cards():
     out = {}
     for f in glob.glob(_p("data/products/**/*.json"), recursive=True):
@@ -297,8 +335,11 @@ class Context:
         self.cat = cat if cat is not None else cards()
         self.results = lead_results()
         self.audit, self.audit_error = load_audits()
-        eco = _load("data/economics/products.json") or {}
+        # the pricing file may be mid-write (the pricing team, 2026-10-18): a stable read, else the committed version
+        eco, self.pricing_note = load_json_stable(PRICING_REL)
+        eco = eco if isinstance(eco, dict) else {}
         self.economics = eco.get("products") if isinstance(eco.get("products"), dict) else {}
+        self.economics = {k: v for k, v in self.economics.items() if isinstance(v, dict)}
         directory = _load("data/suppliers/directory.json") or {}
         self.directory = [s for s in directory.get("suppliers") or [] if isinstance(s, dict)]
         self.slot_cat = {}
@@ -496,6 +537,7 @@ def boards(cat=None):
             "status_labels": {k: {"he": v[0], "tone": v[1], "why": v[2]} for k, v in STATUS.items()},
             "margin_src_he": MARGIN_SRC_HE, "dropped_he": DROPPED_HE,
             "audit": {"entries": len(ctx.audit), "error": ctx.audit_error},
+            "pricing_note": getattr(ctx, "pricing_note", None),
             "boards": [board_data(st, room, ctx=ctx) for st in STYLES for room in ROOMS]}
 
 

@@ -208,12 +208,22 @@ def load_rooms(plan: dict) -> tuple[list[str], dict]:
         for s in (transit.get(r["id"]) or {}).get("transit_only", []):
             if s not in room["transit_only"]:
                 room["transit_only"].append(s)
-    # any slots file the plan does not list still gets a room
+    # any slots file the plan does not list still gets a room, when it has slots: data/slots/filler-replacements.json
+    # (a list of `items`, no room in the plan) showed as a ninth room with 0 frames and 0 slots (QA 2026-10-17, L3)
     for f in sorted((ROOT / "data" / "slots").glob("*.json")):
         rid = f.stem
-        if rid not in rooms:
-            rooms[rid] = {"id": rid, "house_rooms": [], "name_parts": [rid], "frames": [], "transit_only": []}
-            order.append(rid)
+        if rid in rooms:
+            continue
+        try:
+            sl = read_json(f).get("slots")
+        except Exception as e:
+            log(f"  ! {rel(f)}: {type(e).__name__}: {e}"[:200])
+            sl = None
+        if not sl:
+            log(f"  slots file without slots, not a room: {rel(f)}")
+            continue
+        rooms[rid] = {"id": rid, "house_rooms": [], "name_parts": [rid], "frames": [], "transit_only": []}
+        order.append(rid)
     for room in rooms.values():
         room["name_he"] = " + ".join(room.pop("name_parts"))
     return order, rooms
@@ -258,8 +268,27 @@ def load_slots(order: list[str], rooms: dict) -> dict:
                 "for_rooms": s.get("rooms"),
                 "electrical": s.get("electrical"),
                 "safety": s.get("safety"),
+                # the slot's envelope as data/slots has it now (QA 2026-10-17, L6: the sourcing screen showed only the
+                # round-3 envelopes of 12.10), and its alternative form (hall/storage-boxes: one long basket, set_of 1)
+                "envelope": envelope_lines(s.get("envelope_cm")) or None,
+                "alternative_form": alt_forms(s.get("alternative_form")) or None,
             })
         out[rid] = rows
+    return out
+
+
+def alt_forms(v) -> list[dict]:
+    """A slot's alternative_form (one object or a list) as the page and sell_qty_default() read it."""
+    out = []
+    for a in (v if isinstance(v, list) else [v] if isinstance(v, dict) else []):
+        if not isinstance(a, dict):
+            continue
+        so = a.get("set_of")
+        out.append({"id": str(a.get("id") or "") or None, "name_he": a.get("name_he") if isinstance(a.get("name_he"), str) else None,
+                    "set_of": int(so) if isnum(so) and float(so).is_integer() and so >= 1 else None,
+                    "envelope": envelope_lines(a.get("envelope_cm")) or None,
+                    "envelope_cm": a.get("envelope_cm") if isinstance(a.get("envelope_cm"), dict) else None,
+                    "note": a.get("note") if isinstance(a.get("note"), str) else None})
     return out
 
 
@@ -390,6 +419,39 @@ def load_products(room_ids=None) -> list[dict]:
         card["_lead"] = lead
         products.append(card)
     return products
+
+
+def schema_check(products: list[dict]) -> dict:
+    """QA 2026-10-17, L1: the cards that do not follow data/product-card.schema.json, by the validator a Studio edit goes
+    through (studio/apply_edits.py validate). Read-only: the cards are the sourcing agent's to fix; the Studio shows the
+    errors (the overview counts them by kind, the product drawer lists them). Sets p["_schema"]."""
+    out = {"schema": "data/product-card.schema.json", "checked": 0, "failing": 0, "by_kind": {}, "error": None}
+    try:
+        spec = importlib.util.spec_from_file_location("studio_apply_edits", STUDIO / "apply_edits.py")
+        m = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(m)
+        schema = read_json(ROOT / out["schema"])
+    except Exception as e:
+        out["error"] = f"{type(e).__name__}: {e}"[:200]
+        for p in products:
+            p["_schema"] = None
+        return out
+    kinds: dict[str, int] = {}
+    for p in products:
+        p["_schema"] = None
+        try:
+            errs = m.validate(read_json(ROOT / p["_path"]), schema)
+        except Exception as e:
+            errs = [f"$: {type(e).__name__}"]
+        out["checked"] += 1
+        if not errs:
+            continue
+        out["failing"] += 1
+        p["_schema"] = errs[:6]
+        for k in {re.sub(r"\[\d+\]", "[]", x) for x in errs}:
+            kinds[k] = kinds.get(k, 0) + 1
+    out["by_kind"] = dict(sorted(kinds.items(), key=lambda kv: -kv[1]))
+    return out
 
 
 def mark_duplicates(products: list[dict]) -> int:
@@ -601,6 +663,13 @@ def sell_qty_default(p: dict, slot_by_key: dict) -> dict:
     own = p.get("sell_qty")
     if isnum(own) and float(own).is_integer() and own >= 1:
         return {"qty": int(own), "sure": True, "set_of": home, "reason": f"הכרטיס קובע {int(own)} יח' למכירה (sell_qty)"}
+    # the slot's alternative form (data/slots alternative_form, QA 2026-10-17 L6): hall/storage-boxes is a pair, or one
+    # long basket (set_of 1). A card of that form is one sale of its own set, never 2 x a long basket.
+    alt = alt_form_of(p, slot_by_key.get(p.get("_slot_key")) or {}) if p.get("_slot_key") else None
+    if alt:
+        n = alt["set_of"] or 1
+        return {"qty": n, "sure": True, "set_of": n, "alt_form": alt["id"],
+                "reason": f"הצורה החלופית של העמדה ({alt['name_he'] or alt['id']}): {n} יח' במכירה" + (f", {alt['why']}" if alt.get("why") else "")}
     pcs, pcs_label = sku_pieces(p)
     if pcs is not None and pcs > 1:
         m = QTY_COUNT.search(name) or QTY_COUNT.search(notes)
@@ -639,6 +708,31 @@ def sell_qty_default(p: dict, slot_by_key: dict) -> dict:
             out["reason"] = (f"העמדה דורשת סט של {out['set_of']}, והמק\"ט שבחדר הוא יחידה אחת ({pcs_label}). "
                              f"לא ברור אם הסט הוא {out['set_of']} מאותו מוצר")
     return out
+
+
+ALT_TOL_CM = 3
+
+
+def alt_form_of(p: dict, slot: dict) -> dict | None:
+    """The slot's alternative form this card is (data/slots alternative_form), or None. A card is that form when its
+    name or notes name it (its id, "long basket" for "long-basket", its Hebrew name), or when its width falls in the
+    form's own width range (within ALT_TOL_CM): a 60 cm basket in hall/storage-boxes, whose pair is 26-34 cm each."""
+    forms = slot.get("alternative_form") or []
+    if not forms:
+        return None
+    text = f"{p.get('name') or ''}\n{p.get('notes') or ''}".lower()
+    dims = p.get("dimensions_cm") if isinstance(p.get("dimensions_cm"), dict) else {}
+    width = dims.get("width") if isnum(dims.get("width")) else None
+    for a in forms:
+        words = [w for w in (a.get("id"), (a.get("id") or "").replace("-", " "), a.get("name_he")) if w]
+        hit = next((w for w in words if w.lower() in text), None)
+        if hit:
+            return dict(a, why=f"הכרטיס מציין \"{hit}\"")
+        rng = (a.get("envelope_cm") or {}).get("w")
+        if width is not None and isinstance(rng, list) and len(rng) == 2 and all(isnum(x) for x in rng) \
+                and min(rng) - ALT_TOL_CM <= width <= max(rng) + ALT_TOL_CM:
+            return dict(a, why=f"רוחב {width:g} ס\"מ בטווח של הצורה החלופית ({min(rng):g}–{max(rng):g})")
+    return None
 
 
 def _sell_qty_notes(name: str, notes: str, home, shared) -> dict:
@@ -680,6 +774,21 @@ def ssl_ctx():
     return _ssl_ctx
 
 
+def ascii_url(url: str) -> str:
+    """An IRI as a URI urllib can send: Hebrew letters in the path (rihut-express.co.il/.../כסא-צייסר-1200x1200.jpg)
+    made every download fail with UnicodeEncodeError (QA 2026-10-17, L7). Existing %XX escapes are kept; a non-ASCII
+    host goes through IDNA. The cache key stays the URL as the card writes it."""
+    if url.isascii():
+        return url
+    u = urllib.parse.urlsplit(url)
+    host = u.netloc
+    if u.hostname and not u.hostname.isascii():
+        host = host.replace(u.hostname, u.hostname.encode("idna").decode("ascii"))
+    q = lambda s, safe: urllib.parse.quote(s, safe=safe)
+    return urllib.parse.urlunsplit((u.scheme, host, q(u.path, "/%:@!$&'()*+,;=~"), q(u.query, "=&%:@!$'()*+,;/?~"),
+                                    q(u.fragment, "%:@!$&'()*+,;=/?~")))
+
+
 def fetch_cached(url: str, offline: bool) -> tuple[bytes | None, str, bool]:
     """Return (bytes, error, from_cache)."""
     h = hashlib.sha1(url.encode()).hexdigest()[:20]
@@ -693,7 +802,7 @@ def fetch_cached(url: str, offline: bool) -> tuple[bytes | None, str, bool]:
     last = ""
     for attempt in range(2):
         try:
-            req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "image/*,*/*;q=0.8"})
+            req = urllib.request.Request(ascii_url(url), headers={"User-Agent": UA, "Accept": "image/*,*/*;q=0.8"})
             with urllib.request.urlopen(req, context=ssl_ctx(), timeout=25) as r:
                 b = r.read()
             Image.open(io.BytesIO(b)).verify()
@@ -1396,13 +1505,26 @@ def boards_module():
     return _BOARDS_MODULES[key]
 
 
+_FINAL_CTX: dict = {}
+
+
+def final_round_context():
+    """room_boards.Context(cat={}) once per build: the final round's records, the designer's audits and the pricing file,
+    read the way the boards read them. None (said loudly) when it cannot be built."""
+    if "ctx" not in _FINAL_CTX:
+        try:
+            _FINAL_CTX["ctx"] = boards_module().Context(cat={})
+        except Exception as e:
+            log(f"  ! final-round records: {rel(BOARDS_SRC)}: {type(e).__name__}: {e}")
+            _FINAL_CTX["ctx"] = None
+    return _FINAL_CTX["ctx"]
+
+
 def lead_records() -> dict:
     """card id -> {rec, file, date}: the card's final-round record with a plain price (the repriced one first, then the
     newest), the same records the boards read their margin from (room_boards.Context.records_any)."""
-    try:
-        ctx = boards_module().Context(cat={})
-    except Exception as e:
-        log(f"  ! final-round records: {rel(BOARDS_SRC)}: {type(e).__name__}: {e}")
+    ctx = final_round_context()
+    if ctx is None:
         return {}
     out = {}
     for cid, recs in ctx.records_any.items():
@@ -1411,6 +1533,88 @@ def lead_records() -> dict:
                 out[cid] = {"rec": c, "file": fname, "date": date}
                 break
     return out
+
+
+def _fits(v) -> dict:
+    """{style: score} with numeric scores only (0 stays: "does not count for this style")."""
+    out = {}
+    for k, x in (v.items() if isinstance(v, dict) else []):
+        if k in STYLE_ORDER and isnum(x) and not isinstance(x, bool):
+            out[k] = round(float(x), 2) if not float(x).is_integer() else int(x)
+    return out
+
+
+def audit_files(entries) -> dict:
+    """id(entry) -> the audit file it came from (relative to the final-round folder). audits() keeps the entries only;
+    the same files are read again, in its order, and matched by content."""
+    try:
+        d = ROOT / boards_module().coverage_module().D
+    except Exception:
+        d = ROOT / "data" / "leads" / "final-2026-10-13"
+    by_text = {}
+    for f in sorted(d.glob("round*/designer-audit*.json")):
+        try:
+            for c in read_json(f).get("cards") or []:
+                by_text[json.dumps(c, sort_keys=True, ensure_ascii=False)] = str(f.relative_to(d))
+        except Exception:
+            continue
+    return {id(e): by_text.get(json.dumps(e, sort_keys=True, ensure_ascii=False)) for e in entries}
+
+
+def attach_fit_sources(products: list[dict]) -> dict:
+    """QA 2026-10-17, M6: what the products and compare screens know about a card's fit, per slot.
+      _audit  {slot key or "*": the designer's entry}: the master-designer's audits (round*/designer-audit*.json), read
+              through room_boards.load_audits() -> scripts/sourcing/final_round_coverage.py audits(), the single source
+              of that logic (an entry with "slots" applies only there, "*" everywhere, later files override earlier
+              ones); the page picks an entry the way audit_for() does: the slot's own entry, then "*".
+              verdict "reject" = rejected for that slot (the card stays in the basket); "lower-fit" = a lower score.
+      _guess  {slot key: the team's style_fit_guess}: the final round's records for that slot, newest first per style.
+    The designer's fit replaces the team's guess wherever the designer scored a style."""
+    ctx = final_round_context()
+    stats = {"audit_entries": 0, "cards_audited": 0, "rejected": 0, "lowered": 0, "kept": 0, "cards_guess": 0, "error": None}
+    for p in products:
+        p["_audit"], p["_guess"] = {}, {}
+    if ctx is None:
+        stats["error"] = "no final-round context"
+        return stats
+    stats["error"] = getattr(ctx, "audit_error", None)
+    by_id = {p["id"]: p for p in products}
+    audit = getattr(ctx, "audit", None) or {}
+    files = audit_files(list(audit.values()))
+    for (cid, slot), a in audit.items():
+        p = by_id.get(cid)
+        if p is None or not isinstance(a, dict):
+            continue
+        v = str(a.get("verdict") or "") or None
+        p["_audit"][slot] = {k: x for k, x in {
+            "v": v, "fit": _fits(a.get("fit")), "vf": _fits(a.get("variants_fit")),
+            "note": a.get("note_he") if isinstance(a.get("note_he"), str) else None,
+            "flags": [str(x) for x in a.get("flags") or [] if isinstance(x, (str, int, float))][:8],
+            "seen": a.get("image_seen") if isinstance(a.get("image_seen"), bool) else None,
+            "env_ok": a.get("envelope_ok") if isinstance(a.get("envelope_ok"), bool) else None,
+            "team": a.get("team") if isinstance(a.get("team"), str) else None,
+            "file": files.get(id(a)),
+        }.items() if x not in (None, {}, [])}
+        stats["audit_entries"] += 1
+        stats["rejected"] += v == "reject"
+        stats["lowered"] += v == "lower-fit"
+        stats["kept"] += v == "keep"
+    for (slot, cid), recs in (getattr(ctx, "records", None) or {}).items():
+        p = by_id.get(cid)
+        if p is None:
+            continue
+        fit, src = {}, None
+        for _flag, date, fname, c in sorted(recs, key=lambda r: (r[1], r[2]), reverse=True):
+            g = _fits(c.get("style_fit_guess"))
+            for k, x in g.items():
+                if k not in fit:
+                    fit[k] = x
+                    src = src or {"file": fname, "date": date or None}
+        if fit:
+            p["_guess"][slot] = dict(src or {}, fit=fit)
+    stats["cards_audited"] = sum(1 for p in products if p["_audit"])
+    stats["cards_guess"] = sum(1 for p in products if p["_guess"])
+    return stats
 
 
 # premium pricing (ה.10, 2026-10-17): the designer judged the product premium, so the price may go up to the typical
@@ -1502,13 +1706,22 @@ def load_economics(eco_dir: Path, products: list[dict]) -> dict:
     manual, pricing_meta = {}, None
     pp = eco_dir / "products.json"
     if pp.exists():
-        d = read_json(pp)
+        # the pricing team edits this file while the Studio builds (2026-10-18): a read that does not parse is tried
+        # again, then the committed version is used (room_boards.load_json_stable, the boards read the same version)
+        try:
+            d, note = boards_module().load_json_stable(str(pp))
+        except Exception as e:
+            d, note = None, f"{rel(pp) if pp.is_relative_to(ROOT) else pp.name}: {type(e).__name__}: {e}"[:200]
+        if note:
+            log(f"  ! pricing: {note}")
         manual = d.get("products", d) if isinstance(d, dict) else {}
         if not isinstance(manual, dict):
             manual = {}
-        out["files"].append(pp.name)
+        if d is not None:
+            out["files"].append(pp.name)
         pricing_meta = {"file": rel(pp) if pp.is_relative_to(ROOT) else pp.name,
-                        "updated": first_date(str(d.get("updated") or "")) if isinstance(d, dict) else None}
+                        "updated": first_date(str(d.get("updated") or "")) if isinstance(d, dict) else None,
+                        "note": note, "rows": len(manual)}
     out["pricing"] = pricing_meta
     freights = {}  # source key -> (products dict, file date)
     for fname, src in FREIGHT_FILES:
