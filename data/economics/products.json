@@ -1,10 +1,11 @@
 {
  "version": 1,
- "updated": "2026-10-13",
- "note": "מחיר התחלתי לפי שווי בישראל (חוקי הסטודיו ה.10–13). נבנה מ-data/economics/pricing/*-2026-10-11.json. retail_ils הוא המחיר לצרכן לכל המכירה; עריכה בסטודיו גוברת עליו. flag: ok ≥40%, below-floor 0–40%, loss = מפסיד, לא למכירה.",
+ "updated": "2026-10-18",
+ "note": "מחיר התחלתי לפי שווי בישראל (חוקי הסטודיו ה.10–13). נבנה מ-data/economics/pricing/*-2026-10-11.json. retail_ils הוא המחיר לצרכן לכל המכירה; עריכה בסטודיו גוברת עליו. flag: ok ≥40%, below-floor 0–40%, loss = מפסיד, לא למכירה. 2026-10-18 (תיקון תמחור): 15 שורות לכרטיסים שהמכירה שלהם אינה N × העלות שבכרטיס (סטים, זוגות, אהיל + סט תלייה): sale_cost_usd ו-sale_shipping_usd הם העלות והמשלוח של המכירה כולה; shipping_cost_usd הוא מה שהסטודיו קורא, ו-shipping_includes_usd הוא החלק של העלות שהכרטיס לא מכסה ונישא עליו.",
  "sources": [
   "data/economics/pricing/living-room-2026-10-11.json",
-  "data/economics/pricing/other-rooms-2026-10-11.json"
+  "data/economics/pricing/other-rooms-2026-10-11.json",
+  "data/leads/final-2026-10-13/round5/pricing-fix-2026-10-18.md"
  ],
  "products": {
   "accent-sconces-aliexpress-indoor-stone-wall-lamp": {
@@ -8562,6 +8563,1203 @@
    "nordic_score": 3.0,
    "ship_estimated": false,
    "price_note": "ראנר בוהו בעבודת מקרמה: IKEA ₪39–79, Fox Home ₪91 במבצע, Cotton Club ₪150. אין בעמדה חלופה שמגיעה ל-40% בציון עיצוב שווה או גבוה: החריג יכול לחול."
+  },
+  "ceiling-light-aliexpress-flat-oval-paper-lantern-shade-40": {
+   "retail_ils": 169,
+   "retail_src": "initial-2026-10-18",
+   "price_for_qty": 1,
+   "sell_qty": 1,
+   "sale_contains": "פנס נייר אורז אובלי Ø40, אהיל בלבד (בלי חלקי חשמל) + סט תלייה E27 מוסמכים (IKEA HAVSDJUP, ממלאי בישראל; ז, 2026-10-14)",
+   "sale_cost_usd": 21.17,
+   "sale_shipping_usd": 1.99,
+   "landed_ils": 76.43,
+   "cost_parts": [
+    {
+     "item": "אהיל AliExpress 12000060627931541 (1Pc)",
+     "qty": 1,
+     "cost_usd": 6.62,
+     "ship_usd": 1.99,
+     "ship_basis": "AliExpress Selection Standard 6-15 יום (מטמון 2026-10-12)"
+    },
+    {
+     "item": "סט תלייה E27 מוסמך IKEA HAVSDJUP",
+     "qty": 1,
+     "cost_usd": 14.55,
+     "cost_ils": 48.0,
+     "ship_usd": 0,
+     "ship_basis": "כלול בעלות הסט: ליקוט, אריזה ונקודת איסוף בישראל"
+    }
+   ],
+   "shipping_cost_usd": 16.54,
+   "updated_at": "2026-10-18T12:00:00Z",
+   "shipping_includes_usd": 14.55,
+   "il_value": {
+    "low": 39,
+    "typical": 245,
+    "high": 379.9,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "GULLSUDARE/HAVSDJUP נייר אורז 45 (אהיל + סט)",
+      "size": null,
+      "price": 39,
+      "url": "https://www.ikea.com/il/he/p/gullsudare-havsdjup-pendant-lamp-white-s29613301/",
+      "note": "רצפת השוק"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "TRUBBRUFSE מנורת תקרה סוף 45",
+      "size": null,
+      "price": 145,
+      "url": "https://www.ikea.com/il/he/p/trubbrufse-ceiling-lamp-sedge-90601337/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "KRANBALK מנורת תקרה בז'",
+      "size": null,
+      "price": 245,
+      "url": "https://www.ikea.com/il/he/p/kranbalk-ceiling-lamp-beige-90549405/"
+     },
+     {
+      "retailer": "דיל תאורה",
+      "title": "תלייה מבד משי לוק 40",
+      "size": null,
+      "price": 379.9,
+      "url": "https://dealteora.co.il/products/מנורת-תלייה-מבד-משי-דגם-לוק-40-60-ס-מ"
+     }
+    ],
+    "basis": "השוואות מ-wave4-shades.json; typical = חציון ההשוואות, בלי רצפת השוק",
+    "date": "2026-10-18"
+   },
+   "customer_total_ils": 198,
+   "vs_typical_pct": -19,
+   "margin_pct": 35.4,
+   "contribution_ils": 50.75,
+   "contribution_with_fee_ils": 72.78,
+   "flag": "below-floor",
+   "slot_alternative_ok": true,
+   "nordic_score": null,
+   "ship_estimated": false,
+   "price_note": "עלות המכירה $21.17 + משלוח $1.99 = נחיתה ₪76.4. הסטודיו לוקח מהכרטיס רק $6.62, ולכן המשלוח הידני ($16.54) כולל גם את סט התלייה ($14.55). לא לערוך אותו בלי להשאיר את זה בפנים. מחיר ₪169 מהליקוט (wave4-shades.json), לפי שווי בישראל (ה.10): typical ₪245. מתחת לרף 40% (ה.11).",
+   "results_row": {
+    "file": "data/leads/final-2026-10-13/results/wave4-shades.json",
+    "margin_pct": 35.5
+   },
+   "fix": {
+    "date": "2026-10-18",
+    "missing_he": "סט התלייה המוסמך (₪48)",
+    "report": "data/leads/final-2026-10-13/round5/pricing-fix-2026-10-18.md"
+   }
+  },
+  "ceiling-lights-aliexpress-flat-oval-paper-lantern-shade-40-pair": {
+   "retail_ils": 279,
+   "retail_src": "initial-2026-10-18",
+   "price_for_qty": 1,
+   "sell_qty": 1,
+   "sale_contains": "זוג פנסי נייר אורז אובליים Ø40 (מק\"ט 2Pcs), אהיל בלבד (בלי חלקי חשמל) + 2 סטי תלייה E27 מוסמכים (IKEA HAVSDJUP, ממלאי בישראל; ז, 2026-10-14)",
+   "sale_cost_usd": 30.08,
+   "sale_shipping_usd": 1.99,
+   "landed_ils": 105.83,
+   "cost_parts": [
+    {
+     "item": "אהיל AliExpress 12000060627931542 (2Pcs)",
+     "qty": 1,
+     "cost_usd": 8.87,
+     "ship_usd": 1.99,
+     "ship_basis": "6-15 יום, הערכה לפי ה-SKU של יחידה (2Pcs לא תומחר)"
+    },
+    {
+     "item": "2 סטי תלייה E27 מוסמך IKEA HAVSDJUP, חבילה אחת",
+     "qty": 1,
+     "cost_usd": 21.21,
+     "cost_ils": 70.0,
+     "ship_usd": 0,
+     "ship_basis": "כלול בעלות הסט: ליקוט, אריזה ונקודת איסוף בישראל"
+    }
+   ],
+   "shipping_cost_usd": 23.2,
+   "updated_at": "2026-10-18T12:00:00Z",
+   "shipping_includes_usd": 21.21,
+   "il_value": {
+    "low": 78,
+    "typical": 490,
+    "high": 759.8,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "GULLSUDARE/HAVSDJUP נייר אורז 45 (אהיל + סט) (×2 לזוג)",
+      "size": "יחידה",
+      "price": 39,
+      "url": "https://www.ikea.com/il/he/p/gullsudare-havsdjup-pendant-lamp-white-s29613301/",
+      "note": "רצפת השוק"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "TRUBBRUFSE מנורת תקרה סוף 45 (×2 לזוג)",
+      "size": "יחידה",
+      "price": 145,
+      "url": "https://www.ikea.com/il/he/p/trubbrufse-ceiling-lamp-sedge-90601337/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "KRANBALK מנורת תקרה בז' (×2 לזוג)",
+      "size": "יחידה",
+      "price": 245,
+      "url": "https://www.ikea.com/il/he/p/kranbalk-ceiling-lamp-beige-90549405/"
+     },
+     {
+      "retailer": "דיל תאורה",
+      "title": "תלייה מבד משי לוק 40 (×2 לזוג)",
+      "size": "יחידה",
+      "price": 379.9,
+      "url": "https://dealteora.co.il/products/מנורת-תלייה-מבד-משי-דגם-לוק-40-60-ס-מ"
+     }
+    ],
+    "basis": "השוואות מ-wave4-shades.json; typical = חציון ההשוואות לזוג, בלי רצפת השוק",
+    "date": "2026-10-18"
+   },
+   "customer_total_ils": 308,
+   "vs_typical_pct": -37,
+   "margin_pct": 44.4,
+   "contribution_ils": 104.92,
+   "contribution_with_fee_ils": 126.95,
+   "flag": "ok",
+   "slot_alternative_ok": true,
+   "nordic_score": null,
+   "ship_estimated": true,
+   "price_note": "עלות המכירה $30.08 + משלוח $1.99 = נחיתה ₪105.8. הסטודיו לוקח מהכרטיס רק $8.87, ולכן המשלוח הידני ($23.20) כולל גם את המק\"ט השני ($21.21). לא לערוך אותו בלי להשאיר את זה בפנים. מחיר ₪279 מהליקוט (wave4-shades.json), לפי שווי בישראל (ה.10): typical ₪490.",
+   "results_row": {
+    "file": "data/leads/final-2026-10-13/results/wave4-shades.json",
+    "margin_pct": 44.4
+   },
+   "fix": {
+    "date": "2026-10-18",
+    "missing_he": "סט התלייה המוסמך לזוג (₪70)",
+    "report": "data/leads/final-2026-10-13/round5/pricing-fix-2026-10-18.md"
+   }
+  },
+  "dining-pendant-aliexpress-pleated-cone-shade-41": {
+   "retail_ils": 199,
+   "retail_src": "initial-2026-10-18",
+   "price_for_qty": 1,
+   "sell_qty": 1,
+   "sale_contains": "אהיל בד בקפלים, חרוט Ø41, אהיל בלבד (בלי חלקי חשמל) + סט תלייה E27 מוסמכים (IKEA HAVSDJUP, ממלאי בישראל; ז, 2026-10-14)",
+   "sale_cost_usd": 23.16,
+   "sale_shipping_usd": 1.16,
+   "landed_ils": 80.26,
+   "cost_parts": [
+    {
+     "item": "אהיל AliExpress 12000043515055097 (white)",
+     "qty": 1,
+     "cost_usd": 8.61,
+     "ship_usd": 1.16,
+     "ship_basis": "AliExpress standard 8-18 יום (מטמון 2026-10-11)"
+    },
+    {
+     "item": "סט תלייה E27 מוסמך IKEA HAVSDJUP",
+     "qty": 1,
+     "cost_usd": 14.55,
+     "cost_ils": 48.0,
+     "ship_usd": 0,
+     "ship_basis": "כלול בעלות הסט: ליקוט, אריזה ונקודת איסוף בישראל"
+    }
+   ],
+   "shipping_cost_usd": 15.71,
+   "updated_at": "2026-10-18T12:00:00Z",
+   "shipping_includes_usd": 14.55,
+   "il_value": {
+    "low": 195,
+    "typical": 364,
+    "high": 489,
+    "comps": [
+     {
+      "retailer": "Fine Lab",
+      "title": "אהיל פשתן parlour 35/60, אהיל בלבד",
+      "size": null,
+      "price": 349,
+      "url": "https://finelab.shop/products/linen-fringed-shade-parlour-shade"
+     },
+     {
+      "retailer": "Fine Lab",
+      "title": "אהיל פשתן אוליביה",
+      "size": null,
+      "price": 489,
+      "url": "https://finelab.shop/products/olivia-linen-lampshade"
+     },
+     {
+      "retailer": "דיל תאורה",
+      "title": "תלייה מבד משי לוק 40",
+      "size": null,
+      "price": 379.9,
+      "url": "https://dealteora.co.il/products/מנורת-תלייה-מבד-משי-דגם-לוק-40-60-ס-מ"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "VINDKAST תלויה טקסטיל 50",
+      "size": null,
+      "price": 195,
+      "url": "https://www.ikea.com/il/he/p/vindkast-pendant-lamp-white-20450520/"
+     }
+    ],
+    "basis": "השוואות מ-wave4-shades.json; typical = חציון ההשוואות, בלי רצפת השוק",
+    "date": "2026-10-18"
+   },
+   "customer_total_ils": 228,
+   "vs_typical_pct": -37,
+   "margin_pct": 41.3,
+   "contribution_ils": 69.71,
+   "contribution_with_fee_ils": 91.74,
+   "flag": "ok",
+   "slot_alternative_ok": false,
+   "nordic_score": null,
+   "ship_estimated": false,
+   "price_note": "עלות המכירה $23.16 + משלוח $1.16 = נחיתה ₪80.3. הסטודיו לוקח מהכרטיס רק $8.61, ולכן המשלוח הידני ($15.71) כולל גם את סט התלייה ($14.55). לא לערוך אותו בלי להשאיר את זה בפנים. מחיר ₪199 מהליקוט (wave4-shades.json), לפי שווי בישראל (ה.10): typical ₪364.",
+   "results_row": {
+    "file": "data/leads/final-2026-10-13/results/wave4-shades.json",
+    "margin_pct": 41.3
+   },
+   "fix": {
+    "date": "2026-10-18",
+    "missing_he": "סט התלייה המוסמך (₪48)",
+    "report": "data/leads/final-2026-10-13/round5/pricing-fix-2026-10-18.md"
+   }
+  },
+  "ceiling-light-aliexpress-pleated-cone-shade-41": {
+   "retail_ils": 199,
+   "retail_src": "initial-2026-10-18",
+   "price_for_qty": 1,
+   "sell_qty": 1,
+   "sale_contains": "אהיל בד בקפלים, חרוט Ø41, אהיל בלבד (בלי חלקי חשמל) + סט תלייה E27 מוסמכים (IKEA HAVSDJUP, ממלאי בישראל; ז, 2026-10-14)",
+   "sale_cost_usd": 23.16,
+   "sale_shipping_usd": 1.16,
+   "landed_ils": 80.26,
+   "cost_parts": [
+    {
+     "item": "אהיל AliExpress 12000043515055097 (white)",
+     "qty": 1,
+     "cost_usd": 8.61,
+     "ship_usd": 1.16,
+     "ship_basis": "AliExpress standard 8-18 יום (מטמון 2026-10-11)"
+    },
+    {
+     "item": "סט תלייה E27 מוסמך IKEA HAVSDJUP",
+     "qty": 1,
+     "cost_usd": 14.55,
+     "cost_ils": 48.0,
+     "ship_usd": 0,
+     "ship_basis": "כלול בעלות הסט: ליקוט, אריזה ונקודת איסוף בישראל"
+    }
+   ],
+   "shipping_cost_usd": 15.71,
+   "updated_at": "2026-10-18T12:00:00Z",
+   "shipping_includes_usd": 14.55,
+   "il_value": {
+    "low": 195,
+    "typical": 364,
+    "high": 489,
+    "comps": [
+     {
+      "retailer": "Fine Lab",
+      "title": "אהיל פשתן parlour 35/60, אהיל בלבד",
+      "size": null,
+      "price": 349,
+      "url": "https://finelab.shop/products/linen-fringed-shade-parlour-shade"
+     },
+     {
+      "retailer": "Fine Lab",
+      "title": "אהיל פשתן אוליביה",
+      "size": null,
+      "price": 489,
+      "url": "https://finelab.shop/products/olivia-linen-lampshade"
+     },
+     {
+      "retailer": "דיל תאורה",
+      "title": "תלייה מבד משי לוק 40",
+      "size": null,
+      "price": 379.9,
+      "url": "https://dealteora.co.il/products/מנורת-תלייה-מבד-משי-דגם-לוק-40-60-ס-מ"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "VINDKAST תלויה טקסטיל 50",
+      "size": null,
+      "price": 195,
+      "url": "https://www.ikea.com/il/he/p/vindkast-pendant-lamp-white-20450520/"
+     }
+    ],
+    "basis": "השוואות מ-wave4-shades.json; typical = חציון ההשוואות, בלי רצפת השוק",
+    "date": "2026-10-18"
+   },
+   "customer_total_ils": 228,
+   "vs_typical_pct": -37,
+   "margin_pct": 41.3,
+   "contribution_ils": 69.71,
+   "contribution_with_fee_ils": 91.74,
+   "flag": "ok",
+   "slot_alternative_ok": false,
+   "nordic_score": null,
+   "ship_estimated": false,
+   "price_note": "עלות המכירה $23.16 + משלוח $1.16 = נחיתה ₪80.3. הסטודיו לוקח מהכרטיס רק $8.61, ולכן המשלוח הידני ($15.71) כולל גם את סט התלייה ($14.55). לא לערוך אותו בלי להשאיר את זה בפנים. מחיר ₪199 מהליקוט (wave4-shades.json), לפי שווי בישראל (ה.10): typical ₪364.",
+   "results_row": {
+    "file": "data/leads/final-2026-10-13/results/wave4-shades.json",
+    "margin_pct": 41.3
+   },
+   "fix": {
+    "date": "2026-10-18",
+    "missing_he": "סט התלייה המוסמך (₪48)",
+    "report": "data/leads/final-2026-10-13/round5/pricing-fix-2026-10-18.md"
+   }
+  },
+  "pendant-aliexpress-pleated-cone-shade-41": {
+   "retail_ils": 199,
+   "retail_src": "initial-2026-10-18",
+   "price_for_qty": 1,
+   "sell_qty": 1,
+   "sale_contains": "אהיל בד בקפלים, חרוט Ø41, אהיל בלבד (בלי חלקי חשמל) + סט תלייה E27 מוסמכים (IKEA HAVSDJUP, ממלאי בישראל; ז, 2026-10-14)",
+   "sale_cost_usd": 23.16,
+   "sale_shipping_usd": 1.16,
+   "landed_ils": 80.26,
+   "cost_parts": [
+    {
+     "item": "אהיל AliExpress 12000043515055097 (white)",
+     "qty": 1,
+     "cost_usd": 8.61,
+     "ship_usd": 1.16,
+     "ship_basis": "AliExpress standard 8-18 יום (מטמון 2026-10-11)"
+    },
+    {
+     "item": "סט תלייה E27 מוסמך IKEA HAVSDJUP",
+     "qty": 1,
+     "cost_usd": 14.55,
+     "cost_ils": 48.0,
+     "ship_usd": 0,
+     "ship_basis": "כלול בעלות הסט: ליקוט, אריזה ונקודת איסוף בישראל"
+    }
+   ],
+   "shipping_cost_usd": 15.71,
+   "updated_at": "2026-10-18T12:00:00Z",
+   "shipping_includes_usd": 14.55,
+   "il_value": {
+    "low": 195,
+    "typical": 364,
+    "high": 489,
+    "comps": [
+     {
+      "retailer": "Fine Lab",
+      "title": "אהיל פשתן parlour 35/60, אהיל בלבד",
+      "size": null,
+      "price": 349,
+      "url": "https://finelab.shop/products/linen-fringed-shade-parlour-shade"
+     },
+     {
+      "retailer": "Fine Lab",
+      "title": "אהיל פשתן אוליביה",
+      "size": null,
+      "price": 489,
+      "url": "https://finelab.shop/products/olivia-linen-lampshade"
+     },
+     {
+      "retailer": "דיל תאורה",
+      "title": "תלייה מבד משי לוק 40",
+      "size": null,
+      "price": 379.9,
+      "url": "https://dealteora.co.il/products/מנורת-תלייה-מבד-משי-דגם-לוק-40-60-ס-מ"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "VINDKAST תלויה טקסטיל 50",
+      "size": null,
+      "price": 195,
+      "url": "https://www.ikea.com/il/he/p/vindkast-pendant-lamp-white-20450520/"
+     }
+    ],
+    "basis": "השוואות מ-wave4-shades.json; typical = חציון ההשוואות, בלי רצפת השוק",
+    "date": "2026-10-18"
+   },
+   "customer_total_ils": 228,
+   "vs_typical_pct": -37,
+   "margin_pct": 41.3,
+   "contribution_ils": 69.71,
+   "contribution_with_fee_ils": 91.74,
+   "flag": "ok",
+   "slot_alternative_ok": false,
+   "nordic_score": null,
+   "ship_estimated": false,
+   "price_note": "עלות המכירה $23.16 + משלוח $1.16 = נחיתה ₪80.3. הסטודיו לוקח מהכרטיס רק $8.61, ולכן המשלוח הידני ($15.71) כולל גם את סט התלייה ($14.55). לא לערוך אותו בלי להשאיר את זה בפנים. מחיר ₪199 מהליקוט (wave4-shades.json), לפי שווי בישראל (ה.10): typical ₪364.",
+   "results_row": {
+    "file": "data/leads/final-2026-10-13/results/wave4-shades.json",
+    "margin_pct": 41.3
+   },
+   "fix": {
+    "date": "2026-10-18",
+    "missing_he": "סט התלייה המוסמך (₪48)",
+    "report": "data/leads/final-2026-10-13/round5/pricing-fix-2026-10-18.md"
+   }
+  },
+  "pendant-aliexpress-scalloped-pleated-shade-26-ivory": {
+   "retail_ils": 229,
+   "retail_src": "initial-2026-10-18",
+   "price_for_qty": 1,
+   "sell_qty": 1,
+   "sale_contains": "אהיל קפלים אמפייר בשנהב Ø26, אהיל בלבד (בלי חלקי חשמל) + סט תלייה E27 מוסמכים (IKEA HAVSDJUP, ממלאי בישראל; ז, 2026-10-14)",
+   "sale_cost_usd": 31.57,
+   "sale_shipping_usd": 1.99,
+   "landed_ils": 110.75,
+   "cost_parts": [
+    {
+     "item": "אהיל AliExpress 12000060257573710 (ivory, 1 PC)",
+     "qty": 1,
+     "cost_usd": 17.02,
+     "ship_usd": 1.99,
+     "ship_basis": "6-15 יום, הערכה לפי ה-SKU החום (השנהב לא תומחר)"
+    },
+    {
+     "item": "סט תלייה E27 מוסמך IKEA HAVSDJUP",
+     "qty": 1,
+     "cost_usd": 14.55,
+     "cost_ils": 48.0,
+     "ship_usd": 0,
+     "ship_basis": "כלול בעלות הסט: ליקוט, אריזה ונקודת איסוף בישראל"
+    }
+   ],
+   "shipping_cost_usd": 16.54,
+   "updated_at": "2026-10-18T12:00:00Z",
+   "shipping_includes_usd": 14.55,
+   "il_value": {
+    "low": 195,
+    "typical": 234,
+    "high": 349,
+    "comps": [
+     {
+      "retailer": "לדמרקט",
+      "title": "WOOD ACT 28×25",
+      "size": null,
+      "price": 195,
+      "url": "https://ledmarket.co.il/products/מנורת-תלייה-wood-act-שלוש-צורות-לבחירה-מעץ-טבעי"
+     },
+     {
+      "retailer": "ŪBJECT",
+      "title": "ZETA ראטן Ø30",
+      "size": null,
+      "price": 219,
+      "url": "https://ubject.co.il/product/גוף-תאורה-zeta/"
+     },
+     {
+      "retailer": "ŪBJECT",
+      "title": "HERR ראטן Ø33",
+      "size": null,
+      "price": 249,
+      "url": "https://ubject.co.il/product/גוף-תאורה-herr/"
+     },
+     {
+      "retailer": "Fine Lab",
+      "title": "אהיל פשתן parlour 35, אהיל בלבד",
+      "size": null,
+      "price": 349,
+      "url": "https://finelab.shop/products/linen-fringed-shade-parlour-shade"
+     }
+    ],
+    "basis": "השוואות מ-wave4-shades.json; typical = חציון ההשוואות, בלי רצפת השוק",
+    "date": "2026-10-18"
+   },
+   "customer_total_ils": 258,
+   "vs_typical_pct": 10,
+   "margin_pct": 32.0,
+   "contribution_ils": 62.01,
+   "contribution_with_fee_ils": 84.04,
+   "flag": "below-floor",
+   "slot_alternative_ok": false,
+   "nordic_score": null,
+   "ship_estimated": true,
+   "price_note": "עלות המכירה $31.57 + משלוח $1.99 = נחיתה ₪110.8. הסטודיו לוקח מהכרטיס רק $17.02, ולכן המשלוח הידני ($16.54) כולל גם את סט התלייה ($14.55). לא לערוך אותו בלי להשאיר את זה בפנים. מחיר ₪229 מהליקוט (wave4-shades.json), לפי שווי בישראל (ה.10): typical ₪234. מתחת לרף 40% (ה.11).",
+   "results_row": {
+    "file": "data/leads/final-2026-10-13/results/wave4-shades.json",
+    "margin_pct": 32.0
+   },
+   "fix": {
+    "date": "2026-10-18",
+    "missing_he": "סט התלייה המוסמך (₪48)",
+    "report": "data/leads/final-2026-10-13/round5/pricing-fix-2026-10-18.md"
+   }
+  },
+  "ceiling-lights-aliexpress-scalloped-pleated-shade-26-pair": {
+   "retail_ils": 399,
+   "retail_src": "initial-2026-10-18",
+   "price_for_qty": 1,
+   "sell_qty": 1,
+   "sale_contains": "זוג אהילי קפלים אמפייר בשנהב Ø26 (מק\"ט 2 pcs), אהיל בלבד (בלי חלקי חשמל) + 2 סטי תלייה E27 מוסמכים (IKEA HAVSDJUP, ממלאי בישראל; ז, 2026-10-14)",
+   "sale_cost_usd": 45.31,
+   "sale_shipping_usd": 1.99,
+   "landed_ils": 156.09,
+   "cost_parts": [
+    {
+     "item": "אהיל AliExpress 12000060257573712 (ivory, 2 pcs)",
+     "qty": 1,
+     "cost_usd": 24.1,
+     "ship_usd": 1.99,
+     "ship_basis": "6-15 יום, הערכה לפי ה-SKU של יחידה (2 pcs לא תומחר)"
+    },
+    {
+     "item": "2 סטי תלייה E27 מוסמך IKEA HAVSDJUP, חבילה אחת",
+     "qty": 1,
+     "cost_usd": 21.21,
+     "cost_ils": 70.0,
+     "ship_usd": 0,
+     "ship_basis": "כלול בעלות הסט: ליקוט, אריזה ונקודת איסוף בישראל"
+    }
+   ],
+   "shipping_cost_usd": 23.2,
+   "updated_at": "2026-10-18T12:00:00Z",
+   "shipping_includes_usd": 21.21,
+   "il_value": {
+    "low": 390,
+    "typical": 729,
+    "high": 978,
+    "comps": [
+     {
+      "retailer": "Fine Lab",
+      "title": "אהיל פשתן parlour 35/60, אהיל בלבד (×2 לזוג)",
+      "size": "יחידה",
+      "price": 349,
+      "url": "https://finelab.shop/products/linen-fringed-shade-parlour-shade"
+     },
+     {
+      "retailer": "Fine Lab",
+      "title": "אהיל פשתן אוליביה (×2 לזוג)",
+      "size": "יחידה",
+      "price": 489,
+      "url": "https://finelab.shop/products/olivia-linen-lampshade"
+     },
+     {
+      "retailer": "דיל תאורה",
+      "title": "תלייה מבד משי לוק 40 (×2 לזוג)",
+      "size": "יחידה",
+      "price": 379.9,
+      "url": "https://dealteora.co.il/products/מנורת-תלייה-מבד-משי-דגם-לוק-40-60-ס-מ"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "VINDKAST תלויה טקסטיל 50 (×2 לזוג)",
+      "size": "יחידה",
+      "price": 195,
+      "url": "https://www.ikea.com/il/he/p/vindkast-pendant-lamp-white-20450520/"
+     }
+    ],
+    "basis": "השוואות מ-wave4-shades.json; typical = חציון ההשוואות לזוג, בלי רצפת השוק",
+    "date": "2026-10-18"
+   },
+   "customer_total_ils": 399,
+   "vs_typical_pct": -45,
+   "margin_pct": 43.1,
+   "contribution_ils": 145.81,
+   "contribution_with_fee_ils": null,
+   "flag": "ok",
+   "slot_alternative_ok": true,
+   "nordic_score": null,
+   "ship_estimated": true,
+   "price_note": "עלות המכירה $45.31 + משלוח $1.99 = נחיתה ₪156.1. הסטודיו לוקח מהכרטיס רק $24.10, ולכן המשלוח הידני ($23.20) כולל גם את המק\"ט השני ($21.21). לא לערוך אותו בלי להשאיר את זה בפנים. מחיר ₪399 מהליקוט (wave4-shades.json), לפי שווי בישראל (ה.10): typical ₪729.",
+   "results_row": {
+    "file": "data/leads/final-2026-10-13/results/wave4-shades.json",
+    "margin_pct": 43.1
+   },
+   "fix": {
+    "date": "2026-10-18",
+    "missing_he": "סט התלייה המוסמך לזוג (₪70)",
+    "report": "data/leads/final-2026-10-13/round5/pricing-fix-2026-10-18.md"
+   }
+  },
+  "vanity-sconces-aliexpress-walnut-color-yellow-travertine-332886": {
+   "retail_ils": 659,
+   "retail_src": "initial-2026-10-18",
+   "price_for_qty": 2,
+   "sell_qty": 2,
+   "sale_contains": "זוג מנורות קיר טרוורטין (2 יח' של המק\"ט שבחדר)",
+   "sale_cost_usd": 55.26,
+   "sale_shipping_usd": 60.12,
+   "landed_ils": 380.75,
+   "cost_parts": [
+    {
+     "item": "מנורת קיר טרוורטין על אגוז, SKU 12000051976080272",
+     "qty": 2,
+     "cost_usd": 27.63,
+     "ship_usd": 31.92,
+     "ship_basis": "המק\"ט שבכרטיס $31.92 ליחידה, 24-32 יום; לזוג בנוסחת הסטודיו"
+    }
+   ],
+   "il_value": {
+    "low": 588,
+    "typical": 780,
+    "high": 798,
+    "basis": "wave3-repricing.json: 2×₪390 טיפוסי (2×₪294 עד 2×₪399)",
+    "comps": [
+     {
+      "retailer": "Nord Light",
+      "title": "מנורת קיר טרוורטין צילינדר NL-W721 (×2 לזוג)",
+      "size": "יחידה",
+      "price": 399,
+      "url": "https://nordlight.co.il/products/מנורת-קיר-טרוורטין-צילינדר-nl-w721"
+     },
+     {
+      "retailer": "קמחי תאורה",
+      "title": "גוף תאורה קירי טרוורטין UP & DOWN (×2 לזוג)",
+      "size": "יחידה",
+      "price": 390,
+      "url": "https://www.kamchi.co.il/product/גוף-תאורה-קירי-טרוורטין-up-down/"
+     },
+     {
+      "retailer": "Nord Light",
+      "title": "TRAVERTINO 332 מנורת קיר טרוונטין בשילוב עץ (×2 לזוג)",
+      "size": "יחידה",
+      "price": 294,
+      "url": "https://nordlight.co.il/products/untitled-jan23_12-30"
+     }
+    ],
+    "date": "2026-10-18"
+   },
+   "customer_total_ils": 659,
+   "vs_typical_pct": -16,
+   "margin_pct": 21.2,
+   "contribution_ils": 118.67,
+   "contribution_with_fee_ils": null,
+   "flag": "below-floor",
+   "slot_alternative_ok": false,
+   "nordic_score": null,
+   "ship_estimated": true,
+   "price_note": "עלות המכירה $55.26 + משלוח $60.12 (נוסחת הסטודיו לכל הסט) = נחיתה ₪380.8. מחיר ₪659 מהליקוט (wave3-repricing.json), לפי שווי בישראל (ה.10): typical ₪780. מתחת לרף 40% (ה.11).",
+   "results_row": {
+    "file": "data/leads/final-2026-10-13/results/wave3-repricing.json",
+    "margin_pct": 21.2
+   },
+   "fix": {
+    "date": "2026-10-18",
+    "missing_he": "כמות: הסטודיו מכר 3 יח' (מהליקוט), המחיר והנחיתה הם לזוג",
+    "report": "data/leads/final-2026-10-13/round5/pricing-fix-2026-10-18.md"
+   }
+  },
+  "gallery-art-cj-black-ink-abstract-wide-mat-40-set3": {
+   "retail_ils": 749,
+   "retail_src": "initial-2026-10-18",
+   "price_for_qty": 1,
+   "sell_qty": 1,
+   "sale_contains": "שלישיית הדפסי דיו ממוסגרים 40×40 (3 הדפסים שונים; העלות בכרטיס $38.79 היא כבר לשלושה)",
+   "sale_cost_usd": 38.79,
+   "sale_shipping_usd": 81.27,
+   "landed_ils": 396.2,
+   "cost_parts": [
+    {
+     "item": "הדפס דיו ממוסגר 40×40, Style A conventional (CJJT219466301AZ)",
+     "qty": 3,
+     "cost_usd": 12.93,
+     "ship_usd": 29.57,
+     "ship_basis": "CJPacket Eub $29.57 ליחידה, 12-50 יום; לשלושה בנוסחת הסטודיו"
+    }
+   ],
+   "shipping_cost_usd": 81.27,
+   "updated_at": "2026-10-18T12:00:00Z",
+   "il_value": {
+    "low": 297,
+    "typical": 979,
+    "high": 1167,
+    "basis": "wave3-custom-framed-light.json: שלישייה מעצבית טיפוסית כ-₪979",
+    "comps": [
+     {
+      "retailer": "Print Studio",
+      "title": "קטגוריית שלישיות (נורדי/ג'פנדי)",
+      "size": "שלישייה",
+      "price": 979,
+      "url": "https://printstudio.co.il/product-category/%d7%a1%d7%98-%d7%a9%d7%9c%d7%99%d7%a9%d7%99%d7%99%d7%aa-%d7%aa%d7%9e%d7%95%d7%a0%d7%95%d7%aa/"
+     },
+     {
+      "retailer": "Tollmans",
+      "title": "פוסטר 50×50 עם מסגרת (×3 לשלישייה)",
+      "size": "יחידה",
+      "price": 389,
+      "url": "https://www.tollmansdot.co.il/product/ovata_linework_light_02_50x50/"
+     },
+     {
+      "retailer": "1item",
+      "title": "סדרת מסגרת עץ 40×50, ₪297 לשלוש, בלי פספרטו",
+      "size": "שלישייה",
+      "price": 297,
+      "url": "https://www.1item.co.il/products/%D7%AA%D7%9E%D7%95%D7%A0%D7%94-%D7%9E%D7%A1%D7%92%D7%A8%D7%AA-%D7%A2%D7%A5-%D7%A4%D7%9C%D7%95%D7%90%D7%95-40-50-%D7%A1%D7%9E",
+      "note": "רצפת השוק"
+     }
+    ],
+    "date": "2026-10-18"
+   },
+   "customer_total_ils": 749,
+   "vs_typical_pct": -23,
+   "margin_pct": 27.0,
+   "contribution_ils": 171.59,
+   "contribution_with_fee_ils": null,
+   "flag": "below-floor",
+   "slot_alternative_ok": true,
+   "nordic_score": null,
+   "ship_estimated": true,
+   "price_note": "עלות המכירה $38.79 + משלוח $81.27 (נוסחת הסטודיו לכל הסט) = נחיתה ₪396.2. מחיר ₪749 מהליקוט (wave3-custom-framed-light.json), לפי שווי בישראל (ה.10): typical ₪979. מתחת לרף 40% (ה.11).",
+   "results_row": {
+    "file": "data/leads/final-2026-10-13/results/wave3-custom-framed-light.json",
+    "margin_pct": 27.0
+   },
+   "fix": {
+    "date": "2026-10-18",
+    "missing_he": "משלוח לשלושה: הכרטיס נשא משלוח של הדפס אחד ($29.57 מול $81.27)",
+    "report": "data/leads/final-2026-10-13/round5/pricing-fix-2026-10-18.md"
+   }
+  },
+  "framed-art-cj-black-ink-abstract-wide-mat-50-pair": {
+   "retail_ils": 649,
+   "retail_src": "initial-2026-10-18",
+   "price_for_qty": 1,
+   "sell_qty": 1,
+   "sale_contains": "זוג הדפסי דיו ממוסגרים 50×50 (דיפטיך; העלות בכרטיס $29.18 היא כבר לזוג)",
+   "sale_cost_usd": 29.18,
+   "sale_shipping_usd": 82.42,
+   "landed_ils": 368.28,
+   "cost_parts": [
+    {
+     "item": "הדפס דיו ממוסגר 50×50 עם זכוכית, Style A (CJJT219466304DW)",
+     "qty": 2,
+     "cost_usd": 14.59,
+     "ship_usd": 43.07,
+     "ship_basis": "CJPacket Eub $43.07 ליחידה, 12-50 יום; לזוג בנוסחת הסטודיו"
+    }
+   ],
+   "shipping_cost_usd": 82.42,
+   "updated_at": "2026-10-18T12:00:00Z",
+   "il_value": {
+    "low": 299.86,
+    "typical": 790,
+    "high": 800,
+    "basis": "wave3-custom-framed-light.json: זוג מעצבים טיפוסי כ-₪790",
+    "comps": [
+     {
+      "retailer": "Tollmans",
+      "title": "פוסטר Paper Collective 50×50 עם מסגרת (×2 לזוג)",
+      "size": "יחידה",
+      "price": 389,
+      "url": "https://www.tollmansdot.co.il/product/ovata_linework_light_02_50x50/"
+     },
+     {
+      "retailer": "אליאור דקור",
+      "title": "הדפס נייר במסגרת אלומיניום שחורה (×2 לזוג)",
+      "size": "יחידה",
+      "price": 400,
+      "url": "https://www.eliordecor.co.il/product/תמונה-לסלון-soft-cotton-beige-הדפס-נייר-ממוסגר-בפורמ/"
+     },
+     {
+      "retailer": "Print Studio",
+      "title": "מופשט מינימליסטי, מ-₪399 (×2 לזוג)",
+      "size": "יחידה",
+      "price": 399,
+      "url": "https://printstudio.co.il/product/%d7%aa%d7%9e%d7%95%d7%a0%d7%94-%d7%9e%d7%95%d7%a4%d7%a9%d7%98%d7%aa-%d7%a2%d7%99%d7%92%d7%95%d7%9c%d7%99%d7%9d-%d7%9e%d7%99%d7%a0%d7%99%d7%9e%d7%9c%d7%99%d7%a1%d7%98%d7%99%d7%9d/"
+     },
+     {
+      "retailer": "Fox Home",
+      "title": "Leaf 60×60 (×2 לזוג)",
+      "size": "יחידה",
+      "price": 149.93,
+      "url": "https://www.foxhome.co.il/products/0332680300",
+      "note": "רצפת השוק"
+     }
+    ],
+    "date": "2026-10-18"
+   },
+   "customer_total_ils": 649,
+   "vs_typical_pct": -18,
+   "margin_pct": 22.5,
+   "contribution_ils": 123.54,
+   "contribution_with_fee_ils": null,
+   "flag": "below-floor",
+   "slot_alternative_ok": false,
+   "nordic_score": null,
+   "ship_estimated": true,
+   "price_note": "עלות המכירה $29.18 + משלוח $82.42 (נוסחת הסטודיו לכל הסט) = נחיתה ₪368.3. מחיר ₪649 מהליקוט (wave3-custom-framed-light.json), לפי שווי בישראל (ה.10): typical ₪790. מתחת לרף 40% (ה.11).",
+   "results_row": {
+    "file": "data/leads/final-2026-10-13/results/wave3-custom-framed-light.json",
+    "margin_pct": 22.5
+   },
+   "fix": {
+    "date": "2026-10-18",
+    "missing_he": "משלוח לזוג: הכרטיס נשא משלוח של הדפס אחד ($43.07 מול $82.42)",
+    "report": "data/leads/final-2026-10-13/round5/pricing-fix-2026-10-18.md"
+   }
+  },
+  "open-shelf-ceramics-cj-patina-clay-pitcher-and-jar": {
+   "retail_ils": 229,
+   "retail_src": "initial-2026-10-18",
+   "price_for_qty": 1,
+   "sell_qty": 1,
+   "sale_contains": "זוג למדף: קנקן חרס פטינה 24 (SY C03D140) + צנצנת עגולה 15 (SY C03D137)",
+   "sale_cost_usd": 9.71,
+   "sale_shipping_usd": 37.78,
+   "landed_ils": 156.72,
+   "cost_parts": [
+    {
+     "item": "קנקן חרס פטינה SY C03D140 (CJJT316296205EV, הכרטיס)",
+     "qty": 1,
+     "cost_usd": 5.4,
+     "ship_usd": 24.53,
+     "ship_basis": "CJPacket Eub 12-50 יום"
+    },
+    {
+     "item": "צנצנת עגולה SY C03D137 (CJJT316296203CX)",
+     "qty": 1,
+     "cost_usd": 4.31,
+     "ship_usd": 16.97,
+     "ship_basis": "CJPacket Eub 12-50 יום"
+    }
+   ],
+   "shipping_cost_usd": 42.09,
+   "updated_at": "2026-10-18T12:00:00Z",
+   "shipping_includes_usd": 4.31,
+   "il_value": {
+    "low": 89,
+    "typical": 220,
+    "high": 240,
+    "basis": "round5-ceramics.json: casabella ₪99.9–120 ליחידה, 1item ₪89–99; typical = קנקן ₪99.9 + צנצנת ₪120",
+    "comps": [
+     {
+      "retailer": "casabella",
+      "title": "כדי קרמיקה וינטג",
+      "size": "יחידה",
+      "price": 120,
+      "url": "https://casabella.co.il/products/כדי-קרמיקה-וינטג"
+     },
+     {
+      "retailer": "casabella",
+      "title": "קנקן היילי לפרחים",
+      "size": "יחידה",
+      "price": 99.9,
+      "url": "https://casabella.co.il/products/קנקן-היילי-לפרחים"
+     },
+     {
+      "retailer": "1item",
+      "title": "אגרטל חרס מיו (89–99)",
+      "size": "יחידה",
+      "price": 99,
+      "url": "https://www.1item.co.il/products/אגרטל-חרס-מיו"
+     }
+    ],
+    "date": "2026-10-18"
+   },
+   "customer_total_ils": 258,
+   "vs_typical_pct": 17,
+   "margin_pct": 8.3,
+   "contribution_ils": 16.04,
+   "contribution_with_fee_ils": 38.07,
+   "flag": "below-floor",
+   "slot_alternative_ok": false,
+   "nordic_score": null,
+   "ship_estimated": true,
+   "price_note": "עלות המכירה $9.71 + משלוח $37.78 = נחיתה ₪156.7. הסטודיו לוקח מהכרטיס רק $5.40, ולכן המשלוח הידני ($42.09) כולל גם את המק\"ט השני ($4.31). לא לערוך אותו בלי להשאיר את זה בפנים. מחיר ₪229 מהליקוט (round5-ceramics.json), לפי שווי בישראל (ה.10): typical ₪220. מתחת לרף 40% (ה.11).",
+   "results_row": {
+    "file": "data/leads/final-2026-10-13/results/round5-ceramics.json",
+    "margin_pct": 8.3
+   },
+   "fix": {
+    "date": "2026-10-18",
+    "missing_he": "הצנצנת ($4.31) ומשלוח הזוג ($37.78 מול $24.53)",
+    "report": "data/leads/final-2026-10-13/round5/pricing-fix-2026-10-18.md"
+   }
+  },
+  "cutting-boards-cj-acacia-paddle-pair-43-35": {
+   "retail_ils": 149,
+   "retail_src": "initial-2026-10-18",
+   "price_for_qty": 1,
+   "sell_qty": 1,
+   "sale_contains": "זוג משוטי שיטה: H 43×25 + D 35×25 (העלות בכרטיס $5.98 היא כבר לזוג)",
+   "sale_cost_usd": 5.98,
+   "sale_shipping_usd": 20.63,
+   "landed_ils": 87.81,
+   "cost_parts": [
+    {
+     "item": "קרש משוט שיטה H 43×25×1.5 (CJCJ294695508HS)",
+     "qty": 1,
+     "cost_usd": 3.35,
+     "ship_usd": 13.44,
+     "ship_basis": "CJPacket Eub 12-50 יום"
+    },
+    {
+     "item": "קרש משוט שיטה D 35×25×1.5 (CJCJ294695504DW)",
+     "qty": 1,
+     "cost_usd": 2.63,
+     "ship_usd": 10.91,
+     "ship_basis": "CJPacket Eub 12-50 יום"
+    }
+   ],
+   "shipping_cost_usd": 20.63,
+   "updated_at": "2026-10-18T12:00:00Z",
+   "il_value": {
+    "low": 125.86,
+    "typical": 170,
+    "high": 358,
+    "basis": "round5-storage-rooms.json: זוג משוטי שיטה כ-₪170",
+    "comps": [
+     {
+      "retailer": "הום סנטר",
+      "title": "קרש הגשה סולתם משיטה 15.4×50.9",
+      "size": "יחידה",
+      "price": 49.9,
+      "url": "https://www.homecenter.co.il/products/1709128789489",
+      "note": "רצפת השוק"
+     },
+     {
+      "retailer": "Fox Home",
+      "title": "זוג קרשי עץ Logan",
+      "size": "זוג",
+      "price": 125.86,
+      "url": "https://www.foxhome.co.il/products/0328140300"
+     },
+     {
+      "retailer": "cuttingboard.co.il",
+      "title": "קרשי משוט עם ידית, ₪149–179 ליחידה",
+      "size": "יחידה",
+      "price": 179,
+      "url": "https://www.cuttingboard.co.il/product-category/%D7%A7%D7%A8%D7%A9%D7%99-%D7%97%D7%99%D7%AA%D7%95%D7%9A/"
+     }
+    ],
+    "date": "2026-10-18"
+   },
+   "customer_total_ils": 178,
+   "vs_typical_pct": 5,
+   "margin_pct": 19.1,
+   "contribution_ils": 24.18,
+   "contribution_with_fee_ils": 46.21,
+   "flag": "below-floor",
+   "slot_alternative_ok": false,
+   "nordic_score": null,
+   "ship_estimated": true,
+   "price_note": "עלות המכירה $5.98 + משלוח $20.63 (נוסחת הסטודיו לכל הסט) = נחיתה ₪87.8. מחיר ₪149 מהליקוט (round5-storage-rooms.json), לפי שווי בישראל (ה.10): typical ₪170. מתחת לרף 40% (ה.11).",
+   "results_row": {
+    "file": "data/leads/final-2026-10-13/results/round5-storage-rooms.json",
+    "margin_pct": 19.2
+   },
+   "fix": {
+    "date": "2026-10-18",
+    "missing_he": "כמות: הסטודיו מכר 2 × $5.98 (הזוג פעמיים) ושני משלוחים של הגדול",
+    "report": "data/leads/final-2026-10-13/round5/pricing-fix-2026-10-18.md"
+   }
+  },
+  "condiment-set-cj-kiln-stoneware-oil-cruet-trio": {
+   "retail_ils": 179,
+   "retail_src": "initial-2026-10-18",
+   "price_for_qty": 1,
+   "sell_qty": 1,
+   "sale_contains": "שלישייה: בקבוק שמן קרמי Kiln Baked + זוג מטחנות עץ גומי 15.2 (שני מק\"טים של CJ, הזמנה אחת)",
+   "sale_cost_usd": 8.42,
+   "sale_shipping_usd": 16.58,
+   "landed_ils": 82.5,
+   "cost_parts": [
+    {
+     "item": "בקבוק שמן Kiln Baked White (CJYD289918002BY, הכרטיס)",
+     "qty": 1,
+     "cost_usd": 3.61,
+     "ship_usd": 10.65,
+     "ship_basis": "CJPacket Eub 12-50 יום"
+    },
+    {
+     "item": "זוג מטחנות עץ גומי 15.2 (condiment-set-cj-rubberwood-mill-pair-6in, מק\"ט זוג)",
+     "qty": 1,
+     "cost_usd": 4.81,
+     "ship_usd": 9.65,
+     "ship_basis": "CJPacket Eub 12-50 יום (freight-cj.json, 2026-10-11)"
+    }
+   ],
+   "shipping_cost_usd": 21.39,
+   "updated_at": "2026-10-18T12:00:00Z",
+   "shipping_includes_usd": 4.81,
+   "il_value": {
+    "low": 129,
+    "typical": 175,
+    "high": 207,
+    "basis": "round5-ceramics.json; typical = חציון: darmarrakech ₪129, tema ₪175, IKEA 3×₪69",
+    "comps": [
+     {
+      "retailer": "darmarrakech",
+      "title": "מעמד מלח פלפל | שלישיה",
+      "size": "שלישייה",
+      "price": 129,
+      "url": "https://darmarrakech.co.il/products/מעמד-מלח-פלפל-שלישיה"
+     },
+     {
+      "retailer": "tema-shop",
+      "title": "מלחייה ופלפלייה משיש ELEMENTS",
+      "size": "זוג",
+      "price": 175,
+      "url": "https://www.tema-shop.com/products/מלחייה-ופלפלייה-משיש-elements"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "INTRESSANT מטחנת תבלינים (×3 לשלישייה)",
+      "size": "יחידה",
+      "price": 69,
+      "url": "https://www.ikea.com/il/he/p/intressant-spice-mill-acacia-50301897/"
+     }
+    ],
+    "date": "2026-10-18"
+   },
+   "customer_total_ils": 208,
+   "vs_typical_pct": 19,
+   "margin_pct": 34.5,
+   "contribution_ils": 52.28,
+   "contribution_with_fee_ils": 74.31,
+   "flag": "below-floor",
+   "slot_alternative_ok": false,
+   "nordic_score": null,
+   "ship_estimated": true,
+   "price_note": "עלות המכירה $8.42 + משלוח $16.58 = נחיתה ₪82.5. הסטודיו לוקח מהכרטיס רק $3.61, ולכן המשלוח הידני ($21.39) כולל גם את המק\"ט השני ($4.81). לא לערוך אותו בלי להשאיר את זה בפנים. מחיר ₪179 מהליקוט (round5-ceramics.json), לפי שווי בישראל (ה.10): typical ₪175. מתחת לרף 40% (ה.11).",
+   "results_row": {
+    "file": "data/leads/final-2026-10-13/results/round5-ceramics.json",
+    "margin_pct": 26.4
+   },
+   "fix": {
+    "date": "2026-10-18",
+    "missing_he": "זוג המטחנות ($4.81) ומשלוח השלישייה ($16.58 מול $10.65)",
+    "report": "data/leads/final-2026-10-13/round5/pricing-fix-2026-10-18.md"
+   }
+  },
+  "wall-decor-cj-water-hyacinth-round-38": {
+   "retail_ils": 89,
+   "retail_src": "initial-2026-10-18",
+   "price_for_qty": 1,
+   "sell_qty": 1,
+   "sale_contains": "צלחת קיר קלועה אחת Ø38, יקינטון מים",
+   "sale_cost_usd": 1.67,
+   "sale_shipping_usd": 8.97,
+   "landed_ils": 35.11,
+   "cost_parts": [
+    {
+     "item": "צלחת קלועה יקינטון מים Ø38 (CJJT111471505EV)",
+     "qty": 1,
+     "cost_usd": 1.67,
+     "ship_usd": 8.97,
+     "ship_basis": "CJPacket Liquid Line 9-23 יום, הצעה ל-vid של 38 ס\"מ (2026-10-17), הקו שהליקוט בחר"
+    }
+   ],
+   "shipping_cost_usd": 8.97,
+   "updated_at": "2026-10-18T12:00:00Z",
+   "il_value": {
+    "low": 49.9,
+    "typical": 98,
+    "high": 399,
+    "basis": "round5-art-toys.json; typical = Fox Home Bali (חומר ועבודה דומים)",
+    "comps": [
+     {
+      "retailer": "הום סנטר",
+      "title": "סט 4 פלייסמנטים עגולים Ø38 (PVC, לא קלוע)",
+      "size": "סט 4",
+      "price": 49.9,
+      "url": "https://www.homecenter.co.il/products/5150617836",
+      "note": "רצפת השוק"
+     },
+     {
+      "retailer": "Fox Home",
+      "title": "סלסלה קלועה מקש Bali בינונית",
+      "size": null,
+      "price": 97.93,
+      "url": "https://www.foxhome.co.il/products/0334530300"
+     },
+     {
+      "retailer": "Huize",
+      "title": "מקרמה לקיר בעבודת יד 80×80",
+      "size": null,
+      "price": 399,
+      "url": "https://huize.co.il/product/%D7%9E%D7%A7%D7%A8%D7%9E%D7%94-%D7%9C%D7%A7%D7%99%D7%A8/"
+     }
+    ],
+    "date": "2026-10-18"
+   },
+   "customer_total_ils": 118,
+   "vs_typical_pct": 20,
+   "margin_pct": 41.5,
+   "contribution_ils": 31.3,
+   "contribution_with_fee_ils": 53.33,
+   "flag": "ok",
+   "slot_alternative_ok": true,
+   "nordic_score": null,
+   "ship_estimated": false,
+   "price_note": "עלות המכירה $1.67 + משלוח $8.97 (נוסחת הסטודיו לכל הסט) = נחיתה ₪35.1. מחיר ₪89 מהליקוט (round5-art-toys.json), לפי שווי בישראל (ה.10): typical ₪98.",
+   "results_row": {
+    "file": "data/leads/final-2026-10-13/results/round5-art-toys.json",
+    "margin_pct": 41.5
+   },
+   "fix": {
+    "date": "2026-10-18",
+    "missing_he": "קו המשלוח: הכרטיס נושא Eub ‏12–50 יום ($7.25); הליקוט תמחר Liquid Line ‏9–23 יום ($8.97)",
+    "report": "data/leads/final-2026-10-13/round5/pricing-fix-2026-10-18.md"
+   }
+  },
+  "wall-decor-cj-corn-husk-round-38": {
+   "retail_ils": 89,
+   "retail_src": "initial-2026-10-18",
+   "price_for_qty": 1,
+   "sell_qty": 1,
+   "sale_contains": "צלחת קיר קלועה אחת Ø38, עלי תירס ויקינטון, בלי פרנזים",
+   "sale_cost_usd": 1.97,
+   "sale_shipping_usd": 8.56,
+   "landed_ils": 34.75,
+   "cost_parts": [
+    {
+     "item": "צלחת קלועה עלי תירס Ø38 בלי פרנזים (CJJT159324005EV)",
+     "qty": 1,
+     "cost_usd": 1.97,
+     "ship_usd": 8.56,
+     "ship_basis": "CJPacket Liquid Line 9-23 יום, הצעה ל-vid של 38 ס\"מ (2026-10-17), הקו שהליקוט בחר"
+    }
+   ],
+   "shipping_cost_usd": 8.56,
+   "updated_at": "2026-10-18T12:00:00Z",
+   "il_value": {
+    "low": 49.9,
+    "typical": 98,
+    "high": 399,
+    "basis": "round5-art-toys.json; typical = Fox Home Bali (חומר ועבודה דומים)",
+    "comps": [
+     {
+      "retailer": "הום סנטר",
+      "title": "סט 4 פלייסמנטים עגולים Ø38 (PVC, לא קלוע)",
+      "size": "סט 4",
+      "price": 49.9,
+      "url": "https://www.homecenter.co.il/products/5150617836",
+      "note": "רצפת השוק"
+     },
+     {
+      "retailer": "Fox Home",
+      "title": "סלסלה קלועה מקש Bali בינונית",
+      "size": null,
+      "price": 97.93,
+      "url": "https://www.foxhome.co.il/products/0334530300"
+     },
+     {
+      "retailer": "Huize",
+      "title": "מקרמה לקיר בעבודת יד 80×80",
+      "size": null,
+      "price": 399,
+      "url": "https://huize.co.il/product/%D7%9E%D7%A7%D7%A8%D7%9E%D7%94-%D7%9C%D7%A7%D7%99%D7%A8/"
+     }
+    ],
+    "date": "2026-10-18"
+   },
+   "customer_total_ils": 118,
+   "vs_typical_pct": 20,
+   "margin_pct": 42.0,
+   "contribution_ils": 31.66,
+   "contribution_with_fee_ils": 53.69,
+   "flag": "ok",
+   "slot_alternative_ok": true,
+   "nordic_score": null,
+   "ship_estimated": false,
+   "price_note": "עלות המכירה $1.97 + משלוח $8.56 (נוסחת הסטודיו לכל הסט) = נחיתה ₪34.8. מחיר ₪89 מהליקוט (round5-art-toys.json), לפי שווי בישראל (ה.10): typical ₪98.",
+   "results_row": {
+    "file": "data/leads/final-2026-10-13/results/round5-art-toys.json",
+    "margin_pct": 42.0
+   },
+   "fix": {
+    "date": "2026-10-18",
+    "missing_he": "קו המשלוח: הכרטיס נושא Eub ‏12–50 יום ($7.00); הליקוט תמחר Liquid Line ‏9–23 יום ($8.56)",
+    "report": "data/leads/final-2026-10-13/round5/pricing-fix-2026-10-18.md"
+   }
   }
  }
 }
