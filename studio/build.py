@@ -1569,11 +1569,14 @@ def attach_fit_sources(products: list[dict]) -> dict:
               ones); the page picks an entry the way audit_for() does: the slot's own entry, then "*".
               verdict "reject" = rejected for that slot (the card stays in the basket); "lower-fit" = a lower score.
       _guess  {slot key: the team's style_fit_guess}: the final round's records for that slot, newest first per style.
+      _au3    [{slot, style}]: the owner approved the card at fit 6.5 as that slot's third option in that style (AU3,
+              2026-10-18; owner_approved() of final_round_coverage.py through room_boards, the boards' own rule).
     The designer's fit replaces the team's guess wherever the designer scored a style."""
     ctx = final_round_context()
-    stats = {"audit_entries": 0, "cards_audited": 0, "rejected": 0, "lowered": 0, "kept": 0, "cards_guess": 0, "error": None}
+    stats = {"audit_entries": 0, "cards_audited": 0, "rejected": 0, "lowered": 0, "kept": 0, "cards_guess": 0, "au3": 0,
+             "error": None}
     for p in products:
-        p["_audit"], p["_guess"] = {}, {}
+        p["_audit"], p["_guess"], p["_au3"] = {}, {}, []
     if ctx is None:
         stats["error"] = "no final-round context"
         return stats
@@ -1612,6 +1615,13 @@ def attach_fit_sources(products: list[dict]) -> dict:
                     src = src or {"file": fname, "date": date or None}
         if fit:
             p["_guess"][slot] = dict(src or {}, fit=fit)
+    for cid, slot, st in sorted(getattr(ctx, "approved", None) or ()):
+        p = by_id.get(cid)
+        if p is not None:
+            p["_au3"].append({"slot": slot, "style": st})
+            stats["au3"] += 1
+    if getattr(ctx, "approved_error", None):
+        stats["error"] = "; ".join(x for x in (stats["error"], ctx.approved_error) if x)
     stats["cards_audited"] = sum(1 for p in products if p["_audit"])
     stats["cards_guess"] = sum(1 for p in products if p["_guess"])
     return stats
@@ -3983,7 +3993,8 @@ def main() -> int:
         f" · duplicate cards {n_dup} (same supplier listing) · duplicate ids {len(dup_ids)}")
     log(f"  sell quantity: {n_qty} cards sold as a set by default · {n_unsure} not sure (default 1)")
     log(f"  designer audits: {fstats['audit_entries']} entries on {fstats['cards_audited']} cards (rejected for a slot {fstats['rejected']},"
-        f" lower fit {fstats['lowered']}, kept {fstats['kept']}) · the team's fit guess on {fstats['cards_guess']} cards")
+        f" lower fit {fstats['lowered']}, kept {fstats['kept']}) · the team's fit guess on {fstats['cards_guess']} cards"
+        f" · owner-approved third options (AU3) {fstats['au3']}")
     if fstats.get("error"):
         log(f"  ! designer audits: {fstats['error']} (the products and compare screens show no designer verdicts)")
     if schema.get("error"):
@@ -4150,7 +4161,7 @@ def main() -> int:
             "sell_qty_default": p["_sell_qty"],
         })
         # the designer's audit per slot and the team's guess per slot (QA M6); the schema errors (QA L1)
-        for k, src in (("audit", "_audit"), ("guess", "_guess"), ("schema_errors", "_schema")):
+        for k, src in (("audit", "_audit"), ("guess", "_guess"), ("au3", "_au3"), ("schema_errors", "_schema")):
             if p.get(src):
                 q[k] = p[src]
         # supplier options (studio rules ג, 2026-10-11): the products screen shows how many; the SKU list stays in the card

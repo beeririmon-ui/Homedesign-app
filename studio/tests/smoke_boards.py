@@ -12,8 +12,13 @@
      the outreach state of data/suppliers/directory.json; a broken card never stops the boards;
    - nothing rejected on a board (QA 2026-10-17, B3): no card whose status is "rejected", no card the designer rejected
      for that slot (designer-audit*.json through final_round_coverage.audit_for, slot-aware), no candidate the designer
-     scored below 7 for the style; a candidate the designer kept is "המעצב בדק", the rest "מועמד, לא נבדק"; every pick
-     left out is listed in the board's `dropped` with a known reason;
+     scored below 7 for the style (6.5 is enough where the owner approved the card for that slot and style, AU3);
+     a candidate the designer kept is "המעצב בדק", the rest "מועמד, לא נבדק"; every pick left out is listed in the
+     board's `dropped` with a known reason;
+   - AU3 (2026-10-18): the cards the owner approved at 6.5 as a slot's third option (final_round_coverage.py
+     owner_approved(), round5/au3-approved.json) are on the board of that slot and style with the chip
+     "אושר כאפשרות שלישית (AU3)", unless the slot already shows 3 options; nowhere else does a 6.5 count, and the chip is
+     on no other pick;
    - studio/build.py load_boards(): every card on a board is a product with a picture (a cell of a sheet in
      dist/img/s/), nothing redacted, no unknown id; a missing module leaves an empty, explained screen instead of a
      failed build. The boards are a chunk (data-boards.json) that the page loads when the screen opens.
@@ -202,8 +207,10 @@ def python_checks():
               if (R.audit_for(ctx.audit, p["card_id"], f"{b['room']}/{s['id']}") or {}).get("verdict") == "reject"]
     check(not vetoed, f"no card the designer rejected for that slot is on a board {vetoed[:3]}")
     low = [f"{b['style']}/{b['room']}/{s['id']}/{p['card_id']}" for b, s, p in on
-           if (lambda f: f is not None and f < 7)(R.designer_fit(R.audit_for(ctx.audit, p["card_id"], f"{b['room']}/{s['id']}"), b["style"]))]
-    check(not low, f"no pick the designer scored below 7 for the style is on a board {low[:3]}")
+           if (lambda f: f is not None and not R.fit_counts(f, ctx.approved, p["card_id"], f"{b['room']}/{s['id']}", b["style"]))(
+               R.designer_fit(R.audit_for(ctx.audit, p["card_id"], f"{b['room']}/{s['id']}"), b["style"]))]
+    check(not low, f"no pick the designer scored below 7 for the style is on a board (6.5 where the owner approved it, AU3) {low[:3]}")
+    au3_checks(R, ctx, B)
     # the audit is slot-aware: a reject in one slot leaves the card in its other slots
     sl = [(k, a) for k, a in ctx.audit.items() if k[1] != "*" and a.get("verdict") == "reject" and (k[0], "*") not in ctx.audit]
     if sl:
@@ -243,6 +250,42 @@ def python_checks():
     d = Bd.load_boards(products, True)
     check(d["present"] is False and d["boards"] == [] and d.get("error"), "a missing boards module leaves an explained empty screen, not a failed build")
     return B
+
+
+def au3_checks(R, ctx, B):
+    """AU3 (2026-10-18): the owner approved 13 rows (card, slot, style) at fit 6.5 as the slot's third option."""
+    print("- AU3: the owner's approved third options")
+    cov = R.coverage_module()
+    approved = set(cov.owner_approved()) if hasattr(cov, "owner_approved") else None
+    if approved is None:
+        print("  skip  final_round_coverage.py has no owner_approved() (before AU3)")
+        return
+    check(ctx.approved == approved and not ctx.approved_error,
+          f"the boards read owner_approved() of final_round_coverage.py ({len(ctx.approved)} rows, error {ctx.approved_error})")
+    check(R.fit_counts(6.5, approved, *next(iter(approved))) if approved else True, "a fit of 6.5 counts for an approved (card, slot, style)")
+    check(not R.fit_counts(6.5, approved, "no-such-card", "bath/bin", "nordic") and R.fit_counts(7, set(), "x", "bath/bin", "nordic")
+          and not R.fit_counts(6.4, approved, *next(iter(approved))) if approved else True,
+          "6.5 does not count without the approval, 7 always does, 6.4 never")
+    boards = {(b["style"], b["room"]): b for b in B["boards"]}
+    shown, full, missing = [], [], []
+    for cid, key, st in sorted(approved):
+        room, sid = key.split("/", 1)
+        sl = next((x for x in (boards.get((st, room)) or {}).get("slots") or [] if x["id"] == sid), None)
+        picks = (sl or {}).get("picks") or []
+        p = next((x for x in picks if x["card_id"] == cid), None)
+        if p and any(x["code"] == "au3" for x in p["supplier_status"]):
+            shown.append((st, key, cid))
+        elif not p and len(picks) >= 3:
+            full.append((st, key, cid))   # the slot already shows 3 options: no third option is needed
+        else:
+            missing.append(f"{st}/{key}/{cid}" + (" (no chip)" if p else ""))
+    check(not missing and shown, f"every approved card is on its board in that slot and style with 'אושר כאפשרות שלישית (AU3)'"
+          f" ({len(shown)} shown, {len(full)} where the slot already shows 3 options) {missing[:3]}")
+    stray = [f"{b['style']}/{b['room']}/{s['id']}/{p['card_id']}" for b in B["boards"] for s in b["slots"] for p in s.get("picks") or []
+             if any(x["code"] == "au3" for x in p["supplier_status"]) and (p["card_id"], f"{b['room']}/{s['id']}", b["style"]) not in approved]
+    check(not stray, f"the AU3 chip is on no other pick {stray[:3]}")
+    lab = (B.get("status_labels") or {}).get("au3", {})
+    check(lab.get("he") == "אושר כאפשרות שלישית (AU3)", f"the chip's label ({lab.get('he')})")
 
 
 # --------------------------------------------------------------------------- 2. browser

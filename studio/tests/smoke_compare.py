@@ -8,6 +8,10 @@ other screen still rendering.
 2. At 400px and 1280px, light and dark: both screens show their summary, their slots and the fixture's results; the
    filters work and keep focus; there is no horizontal scroll; axe-core finds no WCAG 2.0/2.1 A or AA violation on
    either screen; and no screen throws a JavaScript error.
+   The fit of a card (QA 2026-10-17, M6; subjects from the build): a round-5 card without style_scores shows the team's
+   guess with its source ("הצוות"), never "לא דורג"; a card the designer lowered shows the designer's fit ("המעצב") and
+   "ציון הורד"; a card the designer rejected for the slot is hidden as rejected and, with "כולל נדחים", shows
+   "נדחה לעמדה (המעצב)".
 3. With --shots: builds the real data into studio/dist and saves studio/screens/compare-{400,1280}.png and
    studio/screens/furniture-{400,1280}.png.
 
@@ -204,6 +208,66 @@ def fixture_checks(browser, base):
 COOP_HE = {"sent": "נשלחה", "draft": "טיוטה", "none": "אין בקשה", "replied": "ענו"}  # F_COOP in index.html
 
 
+def fit_source_checks(browser, base, dist: Path):
+    """M6 on the compare screen: the designer's or the team's fit, with its source, for the cards without style_scores."""
+    import importlib.util
+    import json
+    spec = importlib.util.spec_from_file_location("studio_build_cmp", STUDIO / "build.py")
+    B = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(B)
+    D = B.read_dist_data(dist)
+    P = {p["id"]: p for p in D["products"]}
+    styles = [x["id"] for x in D["comparison"]["styles"]]
+    team = lowered = vetoed = None
+    for rid, slots in (D["comparison"].get("rooms") or {}).items():
+        for sid, cands in slots.items():
+            key = f"{rid}/{sid}"
+            for c in cands:
+                p = P.get(c["id"]) if c["k"] == "card" else None
+                if not p or p.get("status") == "rejected" or p.get("style_scores"):
+                    continue
+                a = (p.get("audit") or {}).get(key) or (p.get("audit") or {}).get("*")
+                g = ((p.get("guess") or {}).get(key) or {}).get("fit") or {}
+                deep = c.get("deep") or {}
+                if not a and not team:
+                    st = next((x for x in styles if x in g and x not in deep), None)
+                    if st:
+                        team = (rid, key, st, c["id"], g[st])
+                if a and a.get("v") == "lower-fit" and not lowered:
+                    st = next((x for x in styles if x in (a.get("fit") or {})), None)
+                    if st:
+                        lowered = (rid, key, st, c["id"], a["fit"][st])
+                if a and a.get("v") == "reject" and not vetoed:
+                    vetoed = (rid, key, styles[0], c["id"], None)
+    print(f"- the fit's source on the compare screen (M6): team {team and team[3]}, lowered {lowered and lowered[3]}, rejected {vetoed and vetoed[3]}")
+    if not team:
+        check(False, "the build has a round-5 card in the comparison with only the team's guess")
+        return
+
+    def row(subject, rejected=False):
+        rid, key, st, cid, _ = subject
+        state = json.dumps({"room": rid, "style": st, "sup": "", "profitable": False, "rejected": rejected, "unrated": True})
+        ctx, page, errors = open_page(browser, base, 1280, "light", state=state)
+        tr = page.locator(f"#cmp-{key.replace('/', '--')} tr[data-key='card:{cid}']")
+        out = {"n": tr.count(), "fit": tr.locator("td.w").last.inner_text() if tr.count() else "",
+               "chips": tr.locator(".cand-meta").inner_text() if tr.count() else "", "errors": errors}
+        ctx.close()
+        return out
+
+    r = row(team)
+    check(r["n"] == 1 and f"{team[4]}/10" in r["fit"] and "הצוות" in r["fit"] and "לא דורג" not in r["fit"],
+          f"{team[3]} in {team[1]}, {team[2]}: the team's fit {team[4]} with its source, not 'לא דורג' ({r['fit']!r})")
+    if lowered:
+        r = row(lowered)
+        check(r["n"] == 1 and f"{lowered[4]}/10" in r["fit"] and "המעצב" in r["fit"] and "ציון הורד" in r["chips"],
+              f"{lowered[3]} in {lowered[1]}: the designer's fit {lowered[4]} ('המעצב') and 'ציון הורד' ({r['fit']!r})")
+    if vetoed:
+        hidden, shown = row(vetoed), row(vetoed, rejected=True)
+        check(hidden["n"] == 0 and shown["n"] == 1 and "נדחה לעמדה (המעצב)" in shown["chips"],
+              f"{vetoed[3]} in {vetoed[1]}: rejected by the designer, hidden, and with 'כולל נדחים' 'נדחה לעמדה (המעצב)'")
+    check(not r["errors"], "fit sources: no JavaScript errors" + ("" if not r["errors"] else ": " + "; ".join(r["errors"][:3])))
+
+
 def coop_label(sid: str) -> str | None:
     """The chip text the furniture screen shows for a supplier's coop_request (same rule as coopChip in index.html)."""
     import json
@@ -309,6 +373,7 @@ def main() -> int:
         with sync_playwright() as pw:
             browser = pw.chromium.launch(executable_path=CHROMIUM if Path(CHROMIUM).exists() else None)
             fixture_checks(browser, base)
+            fit_source_checks(browser, base, dist)
             furniture_checks(browser, base)
             screens_check(browser, base)
             if "--shots" in sys.argv:
