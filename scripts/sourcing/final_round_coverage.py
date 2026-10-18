@@ -114,8 +114,17 @@ def audit_for(audit, card_id, slot):
     return audit.get((card_id, slot)) or audit.get((card_id, "*"))
 
 
+def owner_approved():
+    """(card id, slot, style) the owner accepted at fit 6.5 as the third option of a slot (AU3, 2026-10-18)."""
+    p = f"{D}/round5/au3-approved.json"
+    if not os.path.exists(p):
+        return set()
+    return {(a["card_id"], a["slot"], a["style"]) for a in json.load(open(p)).get("approved") or [] if a.get("card_id")}
+
+
 def results():
     audit = audits()
+    approved = owner_approved()
     cards = collections.defaultdict(lambda: collections.defaultdict(dict))  # style -> slot -> {card id: fitting colour variants or None}
     il = collections.defaultdict(lambda: collections.defaultdict(set))      # style -> slot -> product urls
     queries = {"cj": set(), "zendrop": set()}
@@ -139,7 +148,8 @@ def results():
                     c = {**c, "variants_fit": {**(c.get("variants_fit") or {}), **(a.get("variants_fit") or {})}}
                 for st in STYLES:
                     try:
-                        ok = float(fit.get(st) or 0) >= FIT
+                        f_st = float(fit.get(st) or 0)
+                        ok = f_st >= FIT or (f_st >= 6.5 and (c.get("card_id"), key, st) in approved)
                     except (TypeError, ValueError):
                         ok = False
                     if not ok:
