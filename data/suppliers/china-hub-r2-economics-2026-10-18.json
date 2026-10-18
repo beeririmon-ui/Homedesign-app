@@ -1,0 +1,2774 @@
+{
+ "version": 1,
+ "date": "2026-10-18",
+ "what": "China middle station, round 2: synthesis economics (6 real products x 4 scenarios x 3 branding levels), VAT exposure, recommendations and a proposed HUB1",
+ "doc": "docs/suppliers/china-hub-r2-2026-10-18.md",
+ "owner_question": "אם יש מישהו שימתג וישלח את זה מסין ישירות בזמן קצר יותר (2026-10-18)",
+ "direct_answer_he": "לא נמצאה חברה שמוכיחה משלוח מהיר יותר מסין לישראל. אף קו לא נמדד מתחת לכ-10 ימים: הקו הזול שאפשר למדוד (ePacket דרך סוכן) נמצא בחציון השוק, 10 ימים ו-90% תוך 18, וכנראה גם CJ Eub. תחנת ביניים כן נותנת מיתוג ומחיר נמוך יותר במוצרי CJ.",
+ "inputs": [
+  "data/leads/final-2026-10-13/BRIEF-china-hub-round2.md",
+  "docs/suppliers/china-hub-branding-2026-10-17.md",
+  "data/suppliers/china-hub-branding-2026-10-17.json",
+  "docs/suppliers/china-hub-r2-lines-2026-10-18.md",
+  "data/suppliers/china-hub-r2-lines-2026-10-18.json",
+  "docs/suppliers/china-hub-r2-operators-2026-10-18.md",
+  "data/suppliers/china-hub-r2-operators-2026-10-18.json",
+  "data/economics/settings.json",
+  "data/economics/products.json",
+  "data/economics/freight-cj.json",
+  "data/economics/pricing/living-room-2026-10-11.json",
+  "data/economics/fulfillment-research.md",
+  "data/products/**/*.json",
+  "data/sources/cj/*.json",
+  "data/sources/aliexpress/1005013246071028.json",
+  "docs/suppliers/outreach/README.md",
+  "status/decisions.json (read only)"
+ ],
+ "method": "no web research, no contact; every number from an input file or marked הערכה / ישן / לא אומת; python3 -I over cached data",
+ "marks": {
+  "לא אומת": "not from an official source, or source blocked",
+  "הערכה": "own calculation or assumption",
+  "ישן": "source from before 2025"
+ },
+ "rates": {
+  "usd_ils": 3.3,
+  "usd_cny": 6.72,
+  "source": "data/economics/settings.json; brief"
+ },
+ "formula": {
+  "net": "P / 1.18",
+  "landed": "(product + line + agent/warehouse fee + branding) x 3.3 (+ ILS-side parts already inside sale_cost_usd)",
+  "fees": "0.02 x P + 1.2",
+  "returns": "0.08 x net",
+  "contribution": "net - landed - fees - returns",
+  "margin_pct": "contribution / net x 100 (before CAC)",
+  "rules": "ה.11: below 40% only when the slot has no alternative; ה.13: no loss (contribution < 0)",
+  "P": "retail_ils from data/economics/products.json (customer delivery fee of ₪29 under ₪299 not included, as in margin_pct)"
+ },
+ "assumptions": [
+  {
+   "what": "product price at an agent or warehouse = today's supplier price",
+   "mark": "הערכה (שמרנית; כמו סבב 1)"
+  },
+  {
+   "what": "domestic China freight from the supplier to the agent/warehouse not included; each ¥1 = ₪0.49 per order",
+   "mark": "לא פורסם"
+  },
+  {
+   "what": "weights and packed dims from the CJ variant cache (CJ bills Eub on this weight: quotes match 3.72 + 12.61 x kg) or the AliExpress package fields",
+   "mark": "נתונים פנימיים"
+  },
+  {
+   "what": "folded basket 38x38x10 cm",
+   "mark": "הערכה (סבב 1)"
+  },
+  {
+   "what": "branding levels: none 0; basic $0.10-0.35 (tissue + card + sticker, MOQ 100, Track B s.4); full $0.70 (round 1 s.6)",
+   "mark": "הערכה; ברמה 'מלא' באגרטל ייתכן שצריך קופסה מודפסת, $2.5-4 (Track B)"
+  },
+  {
+   "what": "no customs and no import VAT in the scenario economics (declared value under $75)",
+   "mark": "הערכה; ראו vat_exposure"
+  },
+  {
+   "what": "possible ¥15 e-EMS surcharge (2026-04-21 agent table, returned 503) not included; it would add ₪7.37 per parcel",
+   "mark": "לא אומת (Track A)"
+  }
+ ],
+ "scenario_defs": {
+  "cj_eub_today": {
+   "rate": "$3.72 + $12.61/kg, actual weight",
+   "source": "Track A lines[cj-eub]; quotes in data/economics/freight-cj.json and card notes",
+   "days_claimed": "12-50",
+   "days_measured": "proxy median 10, P90 18 (ParcelsApp 'Cainiao, China Post' -> Israel Post, n=2,535, 60 days to 2026-10-16); CJ Eub in that group = הערכה"
+  },
+  "aliexpress_today": {
+   "rate": "AliExpress Selection Standard $1.99",
+   "source": "data/sources/aliexpress/1005013246071028.json (2026-10-12)",
+   "days_claimed": "6-15",
+   "days_measured": "proxy, same group (Cainiao)"
+  },
+  "agent_epacket": {
+   "rate": "¥17 + ¥60/kg, actual weight, <=3 kg (CPA; 2 kg in an old 1688 table), L+W+H <=90, longest <=60",
+   "agent_fee_usd": 1.5,
+   "source": "Track A lines[epacket-cpa] (price undated); fee: round 1 s.6 (CPA)",
+   "days_claimed": "7-20 business days (CPA)",
+   "days_measured": "proxy median 10, P90 18, plus 1-3 agent handling days (round 1)",
+   "compensation": "none for loss, delay or damage (CPA)"
+  },
+  "takesend_2021": {
+   "rate": "¥24.4 + ¥58.8/kg, actual weight under 2 kg; 0.1-5 kg; L+2(W+H) <=200, longest <=120",
+   "warehouse_fee": "¥1 first item (+¥0.3 each extra), inbound free, 60 days free storage",
+   "source": "Track B (泰嘉云仓, 以色列专线 2021-08-11; rules 2024-12-19); Track A takesend-il-2021 lists the general line at ¥57.8",
+   "days_claimed": "1-2 days to first scan + 7-9 (2021)",
+   "days_measured": null,
+   "mark": "ישן; the line is not in Takesend's current catalog (Track A)"
+  },
+  "buckydrop_ems": {
+   "rate": null,
+   "agent_fee": "¥9.9 per parcel (round 1)",
+   "billing": "actual weight when every side <60 cm, else max(actual, L x W x H / 6000) (notice 2025-10-20, Track B)",
+   "days_claimed": null,
+   "other_agent_same_line": "Superbuy 14-21 days; 4 kg ¥676 (JadeShip, לא אומת, Track B)",
+   "price_status": "לא פורסם",
+   "ceiling": "computed maximum line price that keeps a target margin (not a published price)"
+  },
+  "reference_ems_goodhope": {
+   "rate": "(335 + 100 x (ceil(kg/0.5)-1)) x 0.537 CNY",
+   "source": "Track A lines[ems-china-post] (Goodhope, '2026')",
+   "note": "China Post EMS at a list discount via a forwarder. Not BuckyDrop's price; shown only as an indicator for an EMS-based line"
+  }
+ },
+ "branding_levels_usd": {
+  "none": 0,
+  "basic": [
+   0.1,
+   0.35
+  ],
+  "full": 0.7
+ },
+ "products": [
+  {
+   "key": "throw",
+   "id": "sofa-cover-cj-cotton-muslin-fringe",
+   "name_he": "שמיכת מוסלין כותנה 150×200",
+   "card": "data/products/sofa-cover/sofa-cover-cj-cotton-muslin-fringe.json",
+   "retail_ils": 129,
+   "cost_usd": 11.64,
+   "cost_note": "price.cost בכרטיס = cost_usd בתמחור",
+   "kg": 0.82,
+   "dims_cm": [
+    30,
+    20,
+    4
+   ],
+   "dims_source": "CJ variant vid 2512040550081634900: 820 g, 300×200×40 mm (data/sources/cj)",
+   "vol_kg_6000": 0.4,
+   "econ_row": {
+    "margin_pct": 11.0,
+    "flag": "below-floor",
+    "note": null
+   },
+   "scenarios": {
+    "cj_eub_today": {
+     "eligible": true,
+     "line_usd": 14.06,
+     "line_formula_usd": 14.06,
+     "agent_fee_usd": 0,
+     "line_source": "CJ freightCalculate quote (data/economics/freight-cj.json or card notes, 2026-10-09..17); formula 3.72 + 12.61×kg (Track A cj-eub)",
+     "billing": "actual weight",
+     "days": {
+      "claimed": "12–50 (CJ API)",
+      "measured_proxy": {
+       "median_days": 10,
+       "p90_days": 18,
+       "n": 2535,
+       "period": "60 days to 2026-10-16",
+       "group": "ParcelsApp 'Cainiao, China Post' -> Israel Post",
+       "source": "https://parcelsapp.com/en/delivery-times/china/israel",
+       "via": "data/suppliers/china-hub-r2-lines-2026-10-18.json (lines[].measured)",
+       "mark": "נמדד בעקיפין (קבוצה, לא לפי קו)"
+      },
+      "note": "הערכה ש-CJ Eub עובר בדואר סין ודואר ישראל (Track A not_verified #5)"
+     },
+     "branding": {
+      "none": {
+       "landed_ils": 84.81,
+       "contribution_ils": 11.99,
+       "margin_pct": 11.0
+      },
+      "basic": {
+       "landed_ils": [
+        85.14,
+        85.97
+       ],
+       "contribution_ils": [
+        11.66,
+        10.83
+       ],
+       "margin_pct": [
+        10.7,
+        9.9
+       ]
+      },
+      "full": {
+       "landed_ils": 87.12,
+       "contribution_ils": 9.68,
+       "margin_pct": 8.9
+      }
+     },
+     "branding_note": "מחיר האריזה של CJ לא פורסם; אותן רמות מיתוג בהערכה"
+    },
+    "agent_epacket": {
+     "eligible": true,
+     "line_usd": 9.85,
+     "agent_fee_usd": 1.5,
+     "line_source": "Track A epacket-cpa: ¥17 + ¥60/kg, actual weight, ≤3 kg, L+W+H ≤90, longest ≤60 (CPA, price undated)",
+     "billing": "actual weight",
+     "days": {
+      "claimed": "7–20 business days (CPA)",
+      "measured_proxy": {
+       "median_days": 10,
+       "p90_days": 18,
+       "n": 2535,
+       "period": "60 days to 2026-10-16",
+       "group": "ParcelsApp 'Cainiao, China Post' -> Israel Post",
+       "source": "https://parcelsapp.com/en/delivery-times/china/israel",
+       "via": "data/suppliers/china-hub-r2-lines-2026-10-18.json (lines[].measured)",
+       "mark": "נמדד בעקיפין (קבוצה, לא לפי קו)"
+      },
+      "plus_agent_handling_days": "1–3 (סבב 1)"
+     },
+     "branding": {
+      "none": {
+       "landed_ils": 75.87,
+       "contribution_ils": 20.93,
+       "margin_pct": 19.1
+      },
+      "basic": {
+       "landed_ils": [
+        76.2,
+        77.03
+       ],
+       "contribution_ils": [
+        20.6,
+        19.77
+       ],
+       "margin_pct": [
+        18.8,
+        18.1
+       ]
+      },
+      "full": {
+       "landed_ils": 78.18,
+       "contribution_ils": 18.62,
+       "margin_pct": 17.0
+      }
+     },
+     "marks": [
+      "מחיר הקו בלי תאריך",
+      "דמי סוכן $1.5 (CPA, סבב 1)",
+      "מחיר המוצר אצל הסוכן = המחיר היום (הערכה שמרנית)"
+     ]
+    },
+    "takesend_2021": {
+     "eligible": true,
+     "line_usd": 10.81,
+     "agent_fee_usd": 0.15,
+     "line_source": "Takesend 以色列专线 2021-08-11: ¥58.8/kg + ¥24.4 per parcel, actual weight under 2 kg (Track B; Track A takesend-il-2021 general line ¥57.8)",
+     "fee_source": "泰嘉云仓 outbound ¥1 first item (+¥0.3 each extra), inbound free, 60 days free storage (Track B)",
+     "billing": "actual weight (<2 kg)",
+     "days": {
+      "claimed": "1–2 to first scan + 7–9 delivery (2021)",
+      "measured": null,
+      "mark": "מוצהר, ישן, לא נמדד"
+     },
+     "branding": {
+      "none": {
+       "landed_ils": 74.56,
+       "contribution_ils": 22.23,
+       "margin_pct": 20.3
+      },
+      "basic": {
+       "landed_ils": [
+        74.89,
+        75.72
+       ],
+       "contribution_ils": [
+        21.9,
+        21.08
+       ],
+       "margin_pct": [
+        20.0,
+        19.3
+       ]
+      },
+      "full": {
+       "landed_ils": 76.87,
+       "contribution_ils": 19.92,
+       "margin_pct": 18.2
+      }
+     },
+     "marks": [
+      "ישן (מחיר 2021)",
+      "הקו לא מופיע בקטלוג של Takesend היום (Track A)",
+      "חומרי אריזה רגילים 'במחיר עלות': לא נכלל",
+      "מחיר המוצר = המחיר היום (הערכה שמרנית)"
+     ]
+    },
+    "buckydrop_ems": {
+     "eligible": true,
+     "line_usd": null,
+     "agent_fee_usd": 1.47,
+     "landed_ils": null,
+     "margin_pct": null,
+     "billing": "actual weight",
+     "billing_source": "BuckyDrop notice 2025-10-20: actual weight when every side <60 cm (Track B)",
+     "days": {
+      "claimed": null,
+      "other_agent_same_line": "Superbuy on EMS Preferential-HZ: 14–21 (JadeShip, לא אומת, Track B)",
+      "measured": null
+     },
+     "price_status": "לא פורסם (מחשבון רק בחשבון, Track A/B)",
+     "ceiling_line_usd": {
+      "match_today_margin": 12.57,
+      "margin_40": 2.97,
+      "no_loss": 16.22
+     },
+     "ceiling_note": "תקרה מחושבת לפי נוסחת הסטודיו, בלי מיתוג, עם ¥9.9 דמי חבילה: המחיר המרבי שהקו יכול לעלות. לא מחיר שפורסם."
+    },
+    "reference_ems_goodhope": {
+     "line_usd": 34.76,
+     "agent_fee_usd": 1.5,
+     "landed_ils": 158.07,
+     "contribution_ils": -61.28,
+     "margin_pct": -56.1,
+     "note": "EMS של דואר סין במחיר מחירון בהנחה של 46.3% (Goodhope 2026, Track A). לא המחיר של BuckyDrop; רק אינדיקציה"
+    }
+   },
+   "gain_vs_today_ils_no_branding": {
+    "agent_epacket": 8.94,
+    "takesend_2021": 10.25
+   }
+  },
+  {
+   "key": "cushion",
+   "id": "cushions-cj-washed-cotton-frayed",
+   "name_he": "ציפית כותנה משופשפת",
+   "card": "data/products/cushions/cushions-cj-washed-cotton-frayed.json",
+   "retail_ils": 49,
+   "cost_usd": 1.93,
+   "cost_note": "price.cost בכרטיס = cost_usd בתמחור",
+   "kg": 0.14,
+   "dims_cm": [
+    30,
+    20,
+    3
+   ],
+   "dims_source": "CJ variant: 140 g, 300×200×30 mm (data/sources/cj)",
+   "vol_kg_6000": 0.3,
+   "econ_row": {
+    "margin_pct": 27.8,
+    "flag": "below-floor",
+    "note": null
+   },
+   "scenarios": {
+    "cj_eub_today": {
+     "eligible": true,
+     "line_usd": 5.49,
+     "line_formula_usd": 5.49,
+     "agent_fee_usd": 0,
+     "line_source": "CJ freightCalculate quote (data/economics/freight-cj.json or card notes, 2026-10-09..17); formula 3.72 + 12.61×kg (Track A cj-eub)",
+     "billing": "actual weight",
+     "days": {
+      "claimed": "12–50 (CJ API)",
+      "measured_proxy": {
+       "median_days": 10,
+       "p90_days": 18,
+       "n": 2535,
+       "period": "60 days to 2026-10-16",
+       "group": "ParcelsApp 'Cainiao, China Post' -> Israel Post",
+       "source": "https://parcelsapp.com/en/delivery-times/china/israel",
+       "via": "data/suppliers/china-hub-r2-lines-2026-10-18.json (lines[].measured)",
+       "mark": "נמדד בעקיפין (קבוצה, לא לפי קו)"
+      },
+      "note": "הערכה ש-CJ Eub עובר בדואר סין ודואר ישראל (Track A not_verified #5)"
+     },
+     "branding": {
+      "none": {
+       "landed_ils": 24.49,
+       "contribution_ils": 11.54,
+       "margin_pct": 27.8
+      },
+      "basic": {
+       "landed_ils": [
+        24.82,
+        25.64
+       ],
+       "contribution_ils": [
+        11.21,
+        10.38
+       ],
+       "margin_pct": [
+        27.0,
+        25.0
+       ]
+      },
+      "full": {
+       "landed_ils": 26.8,
+       "contribution_ils": 9.23,
+       "margin_pct": 22.2
+      }
+     },
+     "branding_note": "מחיר האריזה של CJ לא פורסם; אותן רמות מיתוג בהערכה"
+    },
+    "agent_epacket": {
+     "eligible": true,
+     "line_usd": 3.78,
+     "agent_fee_usd": 1.5,
+     "line_source": "Track A epacket-cpa: ¥17 + ¥60/kg, actual weight, ≤3 kg, L+W+H ≤90, longest ≤60 (CPA, price undated)",
+     "billing": "actual weight",
+     "days": {
+      "claimed": "7–20 business days (CPA)",
+      "measured_proxy": {
+       "median_days": 10,
+       "p90_days": 18,
+       "n": 2535,
+       "period": "60 days to 2026-10-16",
+       "group": "ParcelsApp 'Cainiao, China Post' -> Israel Post",
+       "source": "https://parcelsapp.com/en/delivery-times/china/israel",
+       "via": "data/suppliers/china-hub-r2-lines-2026-10-18.json (lines[].measured)",
+       "mark": "נמדד בעקיפין (קבוצה, לא לפי קו)"
+      },
+      "plus_agent_handling_days": "1–3 (סבב 1)"
+     },
+     "branding": {
+      "none": {
+       "landed_ils": 23.79,
+       "contribution_ils": 12.23,
+       "margin_pct": 29.5
+      },
+      "basic": {
+       "landed_ils": [
+        24.12,
+        24.95
+       ],
+       "contribution_ils": [
+        11.9,
+        11.08
+       ],
+       "margin_pct": [
+        28.7,
+        26.7
+       ]
+      },
+      "full": {
+       "landed_ils": 26.1,
+       "contribution_ils": 9.92,
+       "margin_pct": 23.9
+      }
+     },
+     "marks": [
+      "מחיר הקו בלי תאריך",
+      "דמי סוכן $1.5 (CPA, סבב 1)",
+      "מחיר המוצר אצל הסוכן = המחיר היום (הערכה שמרנית)"
+     ]
+    },
+    "takesend_2021": {
+     "eligible": true,
+     "line_usd": 4.86,
+     "agent_fee_usd": 0.15,
+     "line_source": "Takesend 以色列专线 2021-08-11: ¥58.8/kg + ¥24.4 per parcel, actual weight under 2 kg (Track B; Track A takesend-il-2021 general line ¥57.8)",
+     "fee_source": "泰嘉云仓 outbound ¥1 first item (+¥0.3 each extra), inbound free, 60 days free storage (Track B)",
+     "billing": "actual weight (<2 kg)",
+     "days": {
+      "claimed": "1–2 to first scan + 7–9 delivery (2021)",
+      "measured": null,
+      "mark": "מוצהר, ישן, לא נמדד"
+     },
+     "branding": {
+      "none": {
+       "landed_ils": 22.88,
+       "contribution_ils": 13.14,
+       "margin_pct": 31.6
+      },
+      "basic": {
+       "landed_ils": [
+        23.21,
+        24.04
+       ],
+       "contribution_ils": [
+        12.81,
+        11.98
+       ],
+       "margin_pct": [
+        30.8,
+        28.9
+       ]
+      },
+      "full": {
+       "landed_ils": 25.19,
+       "contribution_ils": 10.83,
+       "margin_pct": 26.1
+      }
+     },
+     "marks": [
+      "ישן (מחיר 2021)",
+      "הקו לא מופיע בקטלוג של Takesend היום (Track A)",
+      "חומרי אריזה רגילים 'במחיר עלות': לא נכלל",
+      "מחיר המוצר = המחיר היום (הערכה שמרנית)"
+     ]
+    },
+    "buckydrop_ems": {
+     "eligible": true,
+     "line_usd": null,
+     "agent_fee_usd": 1.47,
+     "landed_ils": null,
+     "margin_pct": null,
+     "billing": "actual weight",
+     "billing_source": "BuckyDrop notice 2025-10-20: actual weight when every side <60 cm (Track B)",
+     "days": {
+      "claimed": null,
+      "other_agent_same_line": "Superbuy on EMS Preferential-HZ: 14–21 (JadeShip, לא אומת, Track B)",
+      "measured": null
+     },
+     "price_status": "לא פורסם (מחשבון רק בחשבון, Track A/B)",
+     "ceiling_line_usd": {
+      "match_today_margin": 4.01,
+      "margin_40": 2.48,
+      "no_loss": 7.51
+     },
+     "ceiling_note": "תקרה מחושבת לפי נוסחת הסטודיו, בלי מיתוג, עם ¥9.9 דמי חבילה: המחיר המרבי שהקו יכול לעלות. לא מחיר שפורסם."
+    },
+    "reference_ems_goodhope": {
+     "line_usd": 26.77,
+     "agent_fee_usd": 1.5,
+     "landed_ils": 99.66,
+     "contribution_ils": -63.64,
+     "margin_pct": -153.2,
+     "note": "EMS של דואר סין במחיר מחירון בהנחה של 46.3% (Goodhope 2026, Track A). לא המחיר של BuckyDrop; רק אינדיקציה"
+    }
+   },
+   "gain_vs_today_ils_no_branding": {
+    "agent_epacket": 0.7,
+    "takesend_2021": 1.61
+   }
+  },
+  {
+   "key": "vase",
+   "id": "vase-cj-textured-white-stoneware",
+   "name_he": "אגרטל אבן לבן מחוספס",
+   "card": "data/products/vase/vase-cj-textured-white-stoneware.json",
+   "retail_ils": 229,
+   "cost_usd": 10.24,
+   "cost_note": "price.cost בכרטיס = cost_usd בתמחור",
+   "kg": 1.87,
+   "dims_cm": [
+    23,
+    23,
+    39
+   ],
+   "dims_source": "CJ variant: 1,870 g, 230×230×390 mm (data/sources/cj)",
+   "vol_kg_6000": 3.44,
+   "econ_row": {
+    "margin_pct": 25.2,
+    "flag": "below-floor",
+    "note": null
+   },
+   "scenarios": {
+    "cj_eub_today": {
+     "eligible": true,
+     "line_usd": 27.31,
+     "line_formula_usd": 27.3,
+     "agent_fee_usd": 0,
+     "line_source": "CJ freightCalculate quote (data/economics/freight-cj.json or card notes, 2026-10-09..17); formula 3.72 + 12.61×kg (Track A cj-eub)",
+     "billing": "actual weight",
+     "days": {
+      "claimed": "12–50 (CJ API)",
+      "measured_proxy": {
+       "median_days": 10,
+       "p90_days": 18,
+       "n": 2535,
+       "period": "60 days to 2026-10-16",
+       "group": "ParcelsApp 'Cainiao, China Post' -> Israel Post",
+       "source": "https://parcelsapp.com/en/delivery-times/china/israel",
+       "via": "data/suppliers/china-hub-r2-lines-2026-10-18.json (lines[].measured)",
+       "mark": "נמדד בעקיפין (קבוצה, לא לפי קו)"
+      },
+      "note": "הערכה ש-CJ Eub עובר בדואר סין ודואר ישראל (Track A not_verified #5)"
+     },
+     "branding": {
+      "none": {
+       "landed_ils": 123.91,
+       "contribution_ils": 48.85,
+       "margin_pct": 25.2
+      },
+      "basic": {
+       "landed_ils": [
+        124.24,
+        125.07
+       ],
+       "contribution_ils": [
+        48.52,
+        47.69
+       ],
+       "margin_pct": [
+        25.0,
+        24.6
+       ]
+      },
+      "full": {
+       "landed_ils": 126.22,
+       "contribution_ils": 46.54,
+       "margin_pct": 24.0
+      }
+     },
+     "branding_note": "מחיר האריזה של CJ לא פורסם; אותן רמות מיתוג בהערכה"
+    },
+    "agent_epacket": {
+     "eligible": true,
+     "line_usd": 19.23,
+     "agent_fee_usd": 1.5,
+     "line_source": "Track A epacket-cpa: ¥17 + ¥60/kg, actual weight, ≤3 kg, L+W+H ≤90, longest ≤60 (CPA, price undated)",
+     "billing": "actual weight",
+     "days": {
+      "claimed": "7–20 business days (CPA)",
+      "measured_proxy": {
+       "median_days": 10,
+       "p90_days": 18,
+       "n": 2535,
+       "period": "60 days to 2026-10-16",
+       "group": "ParcelsApp 'Cainiao, China Post' -> Israel Post",
+       "source": "https://parcelsapp.com/en/delivery-times/china/israel",
+       "via": "data/suppliers/china-hub-r2-lines-2026-10-18.json (lines[].measured)",
+       "mark": "נמדד בעקיפין (קבוצה, לא לפי קו)"
+      },
+      "plus_agent_handling_days": "1–3 (סבב 1)"
+     },
+     "branding": {
+      "none": {
+       "landed_ils": 102.19,
+       "contribution_ils": 70.57,
+       "margin_pct": 36.4
+      },
+      "basic": {
+       "landed_ils": [
+        102.52,
+        103.34
+       ],
+       "contribution_ils": [
+        70.24,
+        69.42
+       ],
+       "margin_pct": [
+        36.2,
+        35.8
+       ]
+      },
+      "full": {
+       "landed_ils": 104.5,
+       "contribution_ils": 68.26,
+       "margin_pct": 35.2
+      }
+     },
+     "marks": [
+      "מחיר הקו בלי תאריך",
+      "דמי סוכן $1.5 (CPA, סבב 1)",
+      "מחיר המוצר אצל הסוכן = המחיר היום (הערכה שמרנית)"
+     ]
+    },
+    "takesend_2021": {
+     "eligible": true,
+     "line_usd": 19.99,
+     "agent_fee_usd": 0.15,
+     "line_source": "Takesend 以色列专线 2021-08-11: ¥58.8/kg + ¥24.4 per parcel, actual weight under 2 kg (Track B; Track A takesend-il-2021 general line ¥57.8)",
+     "fee_source": "泰嘉云仓 outbound ¥1 first item (+¥0.3 each extra), inbound free, 60 days free storage (Track B)",
+     "billing": "actual weight (<2 kg)",
+     "days": {
+      "claimed": "1–2 to first scan + 7–9 delivery (2021)",
+      "measured": null,
+      "mark": "מוצהר, ישן, לא נמדד"
+     },
+     "branding": {
+      "none": {
+       "landed_ils": 100.26,
+       "contribution_ils": 72.5,
+       "margin_pct": 37.4
+      },
+      "basic": {
+       "landed_ils": [
+        100.59,
+        101.42
+       ],
+       "contribution_ils": [
+        72.17,
+        71.35
+       ],
+       "margin_pct": [
+        37.2,
+        36.8
+       ]
+      },
+      "full": {
+       "landed_ils": 102.57,
+       "contribution_ils": 70.19,
+       "margin_pct": 36.2
+      }
+     },
+     "marks": [
+      "ישן (מחיר 2021)",
+      "הקו לא מופיע בקטלוג של Takesend היום (Track A)",
+      "חומרי אריזה רגילים 'במחיר עלות': לא נכלל",
+      "מחיר המוצר = המחיר היום (הערכה שמרנית)"
+     ]
+    },
+    "buckydrop_ems": {
+     "eligible": true,
+     "line_usd": null,
+     "agent_fee_usd": 1.47,
+     "landed_ils": null,
+     "margin_pct": null,
+     "billing": "actual weight",
+     "billing_source": "BuckyDrop notice 2025-10-20: actual weight when every side <60 cm (Track B)",
+     "days": {
+      "claimed": null,
+      "other_agent_same_line": "Superbuy on EMS Preferential-HZ: 14–21 (JadeShip, לא אומת, Track B)",
+      "measured": null
+     },
+     "price_status": "לא פורסם (מחשבון רק בחשבון, Track A/B)",
+     "ceiling_line_usd": {
+      "match_today_margin": 25.82,
+      "margin_40": 17.12,
+      "no_loss": 40.64
+     },
+     "ceiling_note": "תקרה מחושבת לפי נוסחת הסטודיו, בלי מיתוג, עם ¥9.9 דמי חבילה: המחיר המרבי שהקו יכול לעלות. לא מחיר שפורסם."
+    },
+    "reference_ems_goodhope": {
+     "line_usd": 50.74,
+     "agent_fee_usd": 1.5,
+     "landed_ils": 206.19,
+     "contribution_ils": -33.43,
+     "margin_pct": -17.2,
+     "note": "EMS של דואר סין במחיר מחירון בהנחה של 46.3% (Goodhope 2026, Track A). לא המחיר של BuckyDrop; רק אינדיקציה"
+    }
+   },
+   "gain_vs_today_ils_no_branding": {
+    "agent_epacket": 21.72,
+    "takesend_2021": 23.65
+   }
+  },
+  {
+   "key": "basket_unfolded",
+   "id": "basket-cj-seagrass-belly",
+   "name_he": "סל סיגרס בטן, לא מקופל",
+   "card": "data/products/basket/basket-cj-seagrass-belly.json",
+   "retail_ils": 89,
+   "cost_usd": 8.0,
+   "cost_note": "price.cost בכרטיס = cost_usd בתמחור",
+   "kg": 0.716,
+   "dims_cm": [
+    37,
+    35,
+    35
+   ],
+   "dims_source": "CJ variant vid 1449351417306419200: 716 g, 370×350×350 mm (data/sources/cj)",
+   "vol_kg_6000": 7.55,
+   "econ_row": {
+    "margin_pct": -2.7,
+    "flag": "loss",
+    "note": null
+   },
+   "scenarios": {
+    "cj_eub_today": {
+     "eligible": true,
+     "line_usd": 12.75,
+     "line_formula_usd": 12.75,
+     "agent_fee_usd": 0,
+     "line_source": "CJ freightCalculate quote (data/economics/freight-cj.json or card notes, 2026-10-09..17); formula 3.72 + 12.61×kg (Track A cj-eub)",
+     "billing": "actual weight",
+     "days": {
+      "claimed": "12–50 (CJ API)",
+      "measured_proxy": {
+       "median_days": 10,
+       "p90_days": 18,
+       "n": 2535,
+       "period": "60 days to 2026-10-16",
+       "group": "ParcelsApp 'Cainiao, China Post' -> Israel Post",
+       "source": "https://parcelsapp.com/en/delivery-times/china/israel",
+       "via": "data/suppliers/china-hub-r2-lines-2026-10-18.json (lines[].measured)",
+       "mark": "נמדד בעקיפין (קבוצה, לא לפי קו)"
+      },
+      "note": "הערכה ש-CJ Eub עובר בדואר סין ודואר ישראל (Track A not_verified #5)"
+     },
+     "branding": {
+      "none": {
+       "landed_ils": 68.47,
+       "contribution_ils": -2.07,
+       "margin_pct": -2.7
+      },
+      "basic": {
+       "landed_ils": [
+        68.81,
+        69.63
+       ],
+       "contribution_ils": [
+        -2.4,
+        -3.22
+       ],
+       "margin_pct": [
+        -3.2,
+        -4.3
+       ]
+      },
+      "full": {
+       "landed_ils": 70.78,
+       "contribution_ils": -4.38,
+       "margin_pct": -5.8
+      }
+     },
+     "branding_note": "מחיר האריזה של CJ לא פורסם; אותן רמות מיתוג בהערכה"
+    },
+    "agent_epacket": {
+     "eligible": false,
+     "reason": "מעבר למגבלות ePacket: סכום צלעות 107 ס\"מ (עד 90), צלע ארוכה 37 (עד 60)"
+    },
+    "takesend_2021": {
+     "eligible": true,
+     "line_usd": 9.9,
+     "agent_fee_usd": 0.15,
+     "line_source": "Takesend 以色列专线 2021-08-11: ¥58.8/kg + ¥24.4 per parcel, actual weight under 2 kg (Track B; Track A takesend-il-2021 general line ¥57.8)",
+     "fee_source": "泰嘉云仓 outbound ¥1 first item (+¥0.3 each extra), inbound free, 60 days free storage (Track B)",
+     "billing": "actual weight (<2 kg)",
+     "days": {
+      "claimed": "1–2 to first scan + 7–9 delivery (2021)",
+      "measured": null,
+      "mark": "מוצהר, ישן, לא נמדד"
+     },
+     "branding": {
+      "none": {
+       "landed_ils": 59.55,
+       "contribution_ils": 6.86,
+       "margin_pct": 9.1
+      },
+      "basic": {
+       "landed_ils": [
+        59.88,
+        60.7
+       ],
+       "contribution_ils": [
+        6.53,
+        5.71
+       ],
+       "margin_pct": [
+        8.7,
+        7.6
+       ]
+      },
+      "full": {
+       "landed_ils": 61.86,
+       "contribution_ils": 4.55,
+       "margin_pct": 6.0
+      }
+     },
+     "marks": [
+      "ישן (מחיר 2021)",
+      "הקו לא מופיע בקטלוג של Takesend היום (Track A)",
+      "חומרי אריזה רגילים 'במחיר עלות': לא נכלל",
+      "מחיר המוצר = המחיר היום (הערכה שמרנית)"
+     ]
+    },
+    "buckydrop_ems": {
+     "eligible": true,
+     "line_usd": null,
+     "agent_fee_usd": 1.47,
+     "landed_ils": null,
+     "margin_pct": null,
+     "billing": "actual weight",
+     "billing_source": "BuckyDrop notice 2025-10-20: actual weight when every side <60 cm (Track B)",
+     "days": {
+      "claimed": null,
+      "other_agent_same_line": "Superbuy on EMS Preferential-HZ: 14–21 (JadeShip, לא אומת, Track B)",
+      "measured": null
+     },
+     "price_status": "לא פורסם (מחשבון רק בחשבון, Track A/B)",
+     "ceiling_line_usd": {
+      "match_today_margin": 11.27,
+      "margin_40": 1.51,
+      "no_loss": 10.65
+     },
+     "ceiling_note": "תקרה מחושבת לפי נוסחת הסטודיו, בלי מיתוג, עם ¥9.9 דמי חבילה: המחיר המרבי שהקו יכול לעלות. לא מחיר שפורסם."
+    },
+    "reference_ems_goodhope": {
+     "line_usd": 34.76,
+     "agent_fee_usd": 1.5,
+     "landed_ils": 146.06,
+     "contribution_ils": -79.65,
+     "margin_pct": -105.6,
+     "note": "EMS של דואר סין במחיר מחירון בהנחה של 46.3% (Goodhope 2026, Track A). לא המחיר של BuckyDrop; רק אינדיקציה"
+    }
+   },
+   "gain_vs_today_ils_no_branding": {
+    "takesend_2021": 8.92
+   }
+  },
+  {
+   "key": "basket_folded",
+   "id": "basket-cj-seagrass-belly",
+   "name_he": "סל סיגרס בטן, מקופל",
+   "card": "data/products/basket/basket-cj-seagrass-belly.json",
+   "retail_ils": 89,
+   "cost_usd": 8.0,
+   "cost_note": "price.cost בכרטיס = cost_usd בתמחור",
+   "kg": 0.716,
+   "dims_cm": [
+    38,
+    38,
+    10
+   ],
+   "dims_source": "משקל CJ 716 g; מידות מקופל 38×38×10 = הערכה של סבב 1 (china-hub-branding-2026-10-17.md §6)",
+   "vol_kg_6000": 2.41,
+   "econ_row": {
+    "margin_pct": -2.7,
+    "flag": "loss",
+    "note": null
+   },
+   "scenarios": {
+    "cj_eub_today": {
+     "eligible": true,
+     "line_usd": 12.75,
+     "line_formula_usd": 12.75,
+     "agent_fee_usd": 0,
+     "line_source": "CJ freightCalculate quote (data/economics/freight-cj.json or card notes, 2026-10-09..17); formula 3.72 + 12.61×kg (Track A cj-eub)",
+     "billing": "actual weight",
+     "days": {
+      "claimed": "12–50 (CJ API)",
+      "measured_proxy": {
+       "median_days": 10,
+       "p90_days": 18,
+       "n": 2535,
+       "period": "60 days to 2026-10-16",
+       "group": "ParcelsApp 'Cainiao, China Post' -> Israel Post",
+       "source": "https://parcelsapp.com/en/delivery-times/china/israel",
+       "via": "data/suppliers/china-hub-r2-lines-2026-10-18.json (lines[].measured)",
+       "mark": "נמדד בעקיפין (קבוצה, לא לפי קו)"
+      },
+      "note": "הערכה ש-CJ Eub עובר בדואר סין ודואר ישראל (Track A not_verified #5)"
+     },
+     "branding": {
+      "none": {
+       "landed_ils": 68.47,
+       "contribution_ils": -2.07,
+       "margin_pct": -2.7
+      },
+      "basic": {
+       "landed_ils": [
+        68.81,
+        69.63
+       ],
+       "contribution_ils": [
+        -2.4,
+        -3.22
+       ],
+       "margin_pct": [
+        -3.2,
+        -4.3
+       ]
+      },
+      "full": {
+       "landed_ils": 70.78,
+       "contribution_ils": -4.38,
+       "margin_pct": -5.8
+      }
+     },
+     "branding_note": "מחיר האריזה של CJ לא פורסם; אותן רמות מיתוג בהערכה"
+    },
+    "agent_epacket": {
+     "eligible": true,
+     "line_usd": 8.92,
+     "agent_fee_usd": 1.5,
+     "line_source": "Track A epacket-cpa: ¥17 + ¥60/kg, actual weight, ≤3 kg, L+W+H ≤90, longest ≤60 (CPA, price undated)",
+     "billing": "actual weight",
+     "days": {
+      "claimed": "7–20 business days (CPA)",
+      "measured_proxy": {
+       "median_days": 10,
+       "p90_days": 18,
+       "n": 2535,
+       "period": "60 days to 2026-10-16",
+       "group": "ParcelsApp 'Cainiao, China Post' -> Israel Post",
+       "source": "https://parcelsapp.com/en/delivery-times/china/israel",
+       "via": "data/suppliers/china-hub-r2-lines-2026-10-18.json (lines[].measured)",
+       "mark": "נמדד בעקיפין (קבוצה, לא לפי קו)"
+      },
+      "plus_agent_handling_days": "1–3 (סבב 1)"
+     },
+     "branding": {
+      "none": {
+       "landed_ils": 60.79,
+       "contribution_ils": 5.62,
+       "margin_pct": 7.4
+      },
+      "basic": {
+       "landed_ils": [
+        61.12,
+        61.95
+       ],
+       "contribution_ils": [
+        5.29,
+        4.46
+       ],
+       "margin_pct": [
+        7.0,
+        5.9
+       ]
+      },
+      "full": {
+       "landed_ils": 63.1,
+       "contribution_ils": 3.31,
+       "margin_pct": 4.4
+      }
+     },
+     "marks": [
+      "מחיר הקו בלי תאריך",
+      "דמי סוכן $1.5 (CPA, סבב 1)",
+      "מחיר המוצר אצל הסוכן = המחיר היום (הערכה שמרנית)",
+      "קיפול ואריזה מחדש: מחיר לא פורסם, לא נכלל"
+     ]
+    },
+    "takesend_2021": {
+     "eligible": true,
+     "line_usd": 9.9,
+     "agent_fee_usd": 0.15,
+     "line_source": "Takesend 以色列专线 2021-08-11: ¥58.8/kg + ¥24.4 per parcel, actual weight under 2 kg (Track B; Track A takesend-il-2021 general line ¥57.8)",
+     "fee_source": "泰嘉云仓 outbound ¥1 first item (+¥0.3 each extra), inbound free, 60 days free storage (Track B)",
+     "billing": "actual weight (<2 kg)",
+     "days": {
+      "claimed": "1–2 to first scan + 7–9 delivery (2021)",
+      "measured": null,
+      "mark": "מוצהר, ישן, לא נמדד"
+     },
+     "branding": {
+      "none": {
+       "landed_ils": 59.55,
+       "contribution_ils": 6.86,
+       "margin_pct": 9.1
+      },
+      "basic": {
+       "landed_ils": [
+        59.88,
+        60.7
+       ],
+       "contribution_ils": [
+        6.53,
+        5.71
+       ],
+       "margin_pct": [
+        8.7,
+        7.6
+       ]
+      },
+      "full": {
+       "landed_ils": 61.86,
+       "contribution_ils": 4.55,
+       "margin_pct": 6.0
+      }
+     },
+     "marks": [
+      "ישן (מחיר 2021)",
+      "הקו לא מופיע בקטלוג של Takesend היום (Track A)",
+      "חומרי אריזה רגילים 'במחיר עלות': לא נכלל",
+      "מחיר המוצר = המחיר היום (הערכה שמרנית)"
+     ]
+    },
+    "buckydrop_ems": {
+     "eligible": true,
+     "line_usd": null,
+     "agent_fee_usd": 1.47,
+     "landed_ils": null,
+     "margin_pct": null,
+     "billing": "actual weight",
+     "billing_source": "BuckyDrop notice 2025-10-20: actual weight when every side <60 cm (Track B)",
+     "days": {
+      "claimed": null,
+      "other_agent_same_line": "Superbuy on EMS Preferential-HZ: 14–21 (JadeShip, לא אומת, Track B)",
+      "measured": null
+     },
+     "price_status": "לא פורסם (מחשבון רק בחשבון, Track A/B)",
+     "ceiling_line_usd": {
+      "match_today_margin": 11.27,
+      "margin_40": 1.51,
+      "no_loss": 10.65
+     },
+     "ceiling_note": "תקרה מחושבת לפי נוסחת הסטודיו, בלי מיתוג, עם ¥9.9 דמי חבילה: המחיר המרבי שהקו יכול לעלות. לא מחיר שפורסם."
+    },
+    "reference_ems_goodhope": {
+     "line_usd": 34.76,
+     "agent_fee_usd": 1.5,
+     "landed_ils": 146.06,
+     "contribution_ils": -79.65,
+     "margin_pct": -105.6,
+     "note": "EMS של דואר סין במחיר מחירון בהנחה של 46.3% (Goodhope 2026, Track A). לא המחיר של BuckyDrop; רק אינדיקציה"
+    }
+   },
+   "gain_vs_today_ils_no_branding": {
+    "agent_epacket": 7.68,
+    "takesend_2021": 8.92
+   }
+  },
+  {
+   "key": "pendant_paper",
+   "id": "ceiling-light-aliexpress-flat-oval-paper-lantern-shade-40",
+   "name_he": "אהיל פנס נייר אורז Ø40 + סט תלייה IKEA",
+   "card": "data/products/entrance/ceiling-light/ceiling-light-aliexpress-flat-oval-paper-lantern-shade-40.json",
+   "retail_ils": 169,
+   "cost_usd": 21.17,
+   "cost_note": "sale_cost_usd: אהיל $6.62 + סט תלייה IKEA $14.55 (₪48, בישראל). הקו ודמי הסוכן חלים רק על האהיל",
+   "kg": 0.138,
+   "dims_cm": [
+    33,
+    20,
+    17
+   ],
+   "dims_source": "AliExpress package: 0.138 kg, 33×20×17 cm (data/sources/aliexpress/1005013246071028.json)",
+   "vol_kg_6000": 1.87,
+   "econ_row": {
+    "margin_pct": 35.4,
+    "flag": "below-floor",
+    "note": null
+   },
+   "scenarios": {
+    "aliexpress_today": {
+     "eligible": true,
+     "line_usd": 1.99,
+     "agent_fee_usd": 0,
+     "line_source": "AliExpress Selection Standard $1.99, 6–15 days (data/sources/aliexpress/1005013246071028.json, 2026-10-12)",
+     "billing": "per item (AE)",
+     "days": {
+      "claimed": "6–15 (AE API)",
+      "measured_proxy": {
+       "median_days": 10,
+       "p90_days": 18,
+       "n": 2535,
+       "period": "60 days to 2026-10-16",
+       "group": "ParcelsApp 'Cainiao, China Post' -> Israel Post",
+       "source": "https://parcelsapp.com/en/delivery-times/china/israel",
+       "via": "data/suppliers/china-hub-r2-lines-2026-10-18.json (lines[].measured)",
+       "mark": "נמדד בעקיפין (קבוצה, לא לפי קו)"
+      },
+      "note": "Cainiao בתוך אותה קבוצה נמדדת (Track A benchmarks)"
+     },
+     "branding": {
+      "none": {
+       "landed_ils": 76.43,
+       "contribution_ils": 50.75,
+       "margin_pct": 35.4
+      },
+      "basic": {
+       "landed_ils": [
+        76.76,
+        77.58
+       ],
+       "contribution_ils": [
+        50.42,
+        49.6
+       ],
+       "margin_pct": [
+        35.2,
+        34.6
+       ]
+      },
+      "full": {
+       "landed_ils": 78.74,
+       "contribution_ils": 48.44,
+       "margin_pct": 33.8
+      }
+     },
+     "branding_note": "ב-AliExpress אין מיתוג; השורות עם מיתוג הן תאורטיות"
+    },
+    "cj_eub_today": {
+     "eligible": false,
+     "reason": "לא מוצר CJ; היום נשלח ב-AliExpress"
+    },
+    "agent_epacket": {
+     "eligible": true,
+     "line_usd": 3.76,
+     "agent_fee_usd": 1.5,
+     "line_source": "Track A epacket-cpa: ¥17 + ¥60/kg, actual weight, ≤3 kg, L+W+H ≤90, longest ≤60 (CPA, price undated)",
+     "billing": "actual weight",
+     "days": {
+      "claimed": "7–20 business days (CPA)",
+      "measured_proxy": {
+       "median_days": 10,
+       "p90_days": 18,
+       "n": 2535,
+       "period": "60 days to 2026-10-16",
+       "group": "ParcelsApp 'Cainiao, China Post' -> Israel Post",
+       "source": "https://parcelsapp.com/en/delivery-times/china/israel",
+       "via": "data/suppliers/china-hub-r2-lines-2026-10-18.json (lines[].measured)",
+       "mark": "נמדד בעקיפין (קבוצה, לא לפי קו)"
+      },
+      "plus_agent_handling_days": "1–3 (סבב 1)"
+     },
+     "branding": {
+      "none": {
+       "landed_ils": 87.23,
+       "contribution_ils": 39.96,
+       "margin_pct": 27.9
+      },
+      "basic": {
+       "landed_ils": [
+        87.56,
+        88.38
+       ],
+       "contribution_ils": [
+        39.63,
+        38.8
+       ],
+       "margin_pct": [
+        27.7,
+        27.1
+       ]
+      },
+      "full": {
+       "landed_ils": 89.54,
+       "contribution_ils": 37.65,
+       "margin_pct": 26.3
+      }
+     },
+     "marks": [
+      "מחיר הקו בלי תאריך",
+      "דמי סוכן $1.5 (CPA, סבב 1)",
+      "מחיר המוצר אצל הסוכן = המחיר היום (הערכה שמרנית)"
+     ]
+    },
+    "takesend_2021": {
+     "eligible": true,
+     "line_usd": 4.84,
+     "agent_fee_usd": 0.15,
+     "line_source": "Takesend 以色列专线 2021-08-11: ¥58.8/kg + ¥24.4 per parcel, actual weight under 2 kg (Track B; Track A takesend-il-2021 general line ¥57.8)",
+     "fee_source": "泰嘉云仓 outbound ¥1 first item (+¥0.3 each extra), inbound free, 60 days free storage (Track B)",
+     "billing": "actual weight (<2 kg)",
+     "days": {
+      "claimed": "1–2 to first scan + 7–9 delivery (2021)",
+      "measured": null,
+      "mark": "מוצהר, ישן, לא נמדד"
+     },
+     "branding": {
+      "none": {
+       "landed_ils": 86.32,
+       "contribution_ils": 40.86,
+       "margin_pct": 28.5
+      },
+      "basic": {
+       "landed_ils": [
+        86.65,
+        87.47
+       ],
+       "contribution_ils": [
+        40.53,
+        39.71
+       ],
+       "margin_pct": [
+        28.3,
+        27.7
+       ]
+      },
+      "full": {
+       "landed_ils": 88.63,
+       "contribution_ils": 38.55,
+       "margin_pct": 26.9
+      }
+     },
+     "marks": [
+      "ישן (מחיר 2021)",
+      "הקו לא מופיע בקטלוג של Takesend היום (Track A)",
+      "חומרי אריזה רגילים 'במחיר עלות': לא נכלל",
+      "מחיר המוצר = המחיר היום (הערכה שמרנית)"
+     ]
+    },
+    "buckydrop_ems": {
+     "eligible": true,
+     "line_usd": null,
+     "agent_fee_usd": 1.47,
+     "landed_ils": null,
+     "margin_pct": null,
+     "billing": "actual weight",
+     "billing_source": "BuckyDrop notice 2025-10-20: actual weight when every side <60 cm (Track B)",
+     "days": {
+      "claimed": null,
+      "other_agent_same_line": "Superbuy on EMS Preferential-HZ: 14–21 (JadeShip, לא אומת, Track B)",
+      "measured": null
+     },
+     "price_status": "לא פורסם (מחשבון רק בחשבון, Track A/B)",
+     "ceiling_line_usd": {
+      "match_today_margin": 0.53,
+      "margin_40": -1.46,
+      "no_loss": 15.9
+     },
+     "ceiling_note": "תקרה מחושבת לפי נוסחת הסטודיו, בלי מיתוג, עם ¥9.9 דמי חבילה: המחיר המרבי שהקו יכול לעלות. לא מחיר שפורסם."
+    },
+    "reference_ems_goodhope": {
+     "line_usd": 26.77,
+     "agent_fee_usd": 1.5,
+     "landed_ils": 163.15,
+     "contribution_ils": -35.97,
+     "margin_pct": -25.1,
+     "note": "EMS של דואר סין במחיר מחירון בהנחה של 46.3% (Goodhope 2026, Track A). לא המחיר של BuckyDrop; רק אינדיקציה"
+    }
+   },
+   "gain_vs_today_ils_no_branding": {
+    "agent_epacket": -10.8,
+    "takesend_2021": -9.89
+   }
+  },
+  {
+   "key": "wall_decor",
+   "id": "wall-decor-cj-water-hyacinth-round-38",
+   "name_he": "צלחת קיר קלועה יקינטון מים Ø38",
+   "card": "data/products/wall-decor/wall-decor-cj-water-hyacinth-round-38.json",
+   "retail_ils": 89,
+   "cost_usd": 1.67,
+   "cost_note": "price.cost בכרטיס = cost_usd בתמחור",
+   "kg": 0.28,
+   "dims_cm": [
+    40,
+    40,
+    3
+   ],
+   "dims_source": "CJ variant vid 1390198180590784512: 280 g, 400×400×30 mm (card notes + data/sources/cj)",
+   "vol_kg_6000": 0.8,
+   "econ_row": {
+    "margin_pct": 41.5,
+    "flag": "ok",
+    "note": "ברשומה: Liquid Line $8.97, ‏9–23 יום (fix 2026-10-18); כאן Eub $7.25"
+   },
+   "scenarios": {
+    "cj_eub_today": {
+     "eligible": true,
+     "line_usd": 7.25,
+     "line_formula_usd": 7.25,
+     "agent_fee_usd": 0,
+     "line_source": "CJ freightCalculate quote (data/economics/freight-cj.json or card notes, 2026-10-09..17); formula 3.72 + 12.61×kg (Track A cj-eub)",
+     "billing": "actual weight",
+     "days": {
+      "claimed": "12–50 (CJ API)",
+      "measured_proxy": {
+       "median_days": 10,
+       "p90_days": 18,
+       "n": 2535,
+       "period": "60 days to 2026-10-16",
+       "group": "ParcelsApp 'Cainiao, China Post' -> Israel Post",
+       "source": "https://parcelsapp.com/en/delivery-times/china/israel",
+       "via": "data/suppliers/china-hub-r2-lines-2026-10-18.json (lines[].measured)",
+       "mark": "נמדד בעקיפין (קבוצה, לא לפי קו)"
+      },
+      "note": "הערכה ש-CJ Eub עובר בדואר סין ודואר ישראל (Track A not_verified #5)"
+     },
+     "branding": {
+      "none": {
+       "landed_ils": 29.44,
+       "contribution_ils": 36.97,
+       "margin_pct": 49.0
+      },
+      "basic": {
+       "landed_ils": [
+        29.77,
+        30.59
+       ],
+       "contribution_ils": [
+        36.64,
+        35.82
+       ],
+       "margin_pct": [
+        48.6,
+        47.5
+       ]
+      },
+      "full": {
+       "landed_ils": 31.75,
+       "contribution_ils": 34.66,
+       "margin_pct": 46.0
+      }
+     },
+     "branding_note": "מחיר האריזה של CJ לא פורסם; אותן רמות מיתוג בהערכה"
+    },
+    "agent_epacket": {
+     "eligible": true,
+     "line_usd": 5.03,
+     "agent_fee_usd": 1.5,
+     "line_source": "Track A epacket-cpa: ¥17 + ¥60/kg, actual weight, ≤3 kg, L+W+H ≤90, longest ≤60 (CPA, price undated)",
+     "billing": "actual weight",
+     "days": {
+      "claimed": "7–20 business days (CPA)",
+      "measured_proxy": {
+       "median_days": 10,
+       "p90_days": 18,
+       "n": 2535,
+       "period": "60 days to 2026-10-16",
+       "group": "ParcelsApp 'Cainiao, China Post' -> Israel Post",
+       "source": "https://parcelsapp.com/en/delivery-times/china/israel",
+       "via": "data/suppliers/china-hub-r2-lines-2026-10-18.json (lines[].measured)",
+       "mark": "נמדד בעקיפין (קבוצה, לא לפי קו)"
+      },
+      "plus_agent_handling_days": "1–3 (סבב 1)"
+     },
+     "branding": {
+      "none": {
+       "landed_ils": 27.06,
+       "contribution_ils": 39.35,
+       "margin_pct": 52.2
+      },
+      "basic": {
+       "landed_ils": [
+        27.39,
+        28.21
+       ],
+       "contribution_ils": [
+        39.02,
+        38.2
+       ],
+       "margin_pct": [
+        51.7,
+        50.6
+       ]
+      },
+      "full": {
+       "landed_ils": 29.37,
+       "contribution_ils": 37.04,
+       "margin_pct": 49.1
+      }
+     },
+     "marks": [
+      "מחיר הקו בלי תאריך",
+      "דמי סוכן $1.5 (CPA, סבב 1)",
+      "מחיר המוצר אצל הסוכן = המחיר היום (הערכה שמרנית)"
+     ]
+    },
+    "takesend_2021": {
+     "eligible": true,
+     "line_usd": 6.08,
+     "agent_fee_usd": 0.15,
+     "line_source": "Takesend 以色列专线 2021-08-11: ¥58.8/kg + ¥24.4 per parcel, actual weight under 2 kg (Track B; Track A takesend-il-2021 general line ¥57.8)",
+     "fee_source": "泰嘉云仓 outbound ¥1 first item (+¥0.3 each extra), inbound free, 60 days free storage (Track B)",
+     "billing": "actual weight (<2 kg)",
+     "days": {
+      "claimed": "1–2 to first scan + 7–9 delivery (2021)",
+      "measured": null,
+      "mark": "מוצהר, ישן, לא נמדד"
+     },
+     "branding": {
+      "none": {
+       "landed_ils": 26.07,
+       "contribution_ils": 40.34,
+       "margin_pct": 53.5
+      },
+      "basic": {
+       "landed_ils": [
+        26.4,
+        27.22
+       ],
+       "contribution_ils": [
+        40.01,
+        39.19
+       ],
+       "margin_pct": [
+        53.0,
+        52.0
+       ]
+      },
+      "full": {
+       "landed_ils": 28.38,
+       "contribution_ils": 38.03,
+       "margin_pct": 50.4
+      }
+     },
+     "marks": [
+      "ישן (מחיר 2021)",
+      "הקו לא מופיע בקטלוג של Takesend היום (Track A)",
+      "חומרי אריזה רגילים 'במחיר עלות': לא נכלל",
+      "מחיר המוצר = המחיר היום (הערכה שמרנית)"
+     ]
+    },
+    "buckydrop_ems": {
+     "eligible": true,
+     "line_usd": null,
+     "agent_fee_usd": 1.47,
+     "landed_ils": null,
+     "margin_pct": null,
+     "billing": "actual weight",
+     "billing_source": "BuckyDrop notice 2025-10-20: actual weight when every side <60 cm (Track B)",
+     "days": {
+      "claimed": null,
+      "other_agent_same_line": "Superbuy on EMS Preferential-HZ: 14–21 (JadeShip, לא אומת, Track B)",
+      "measured": null
+     },
+     "price_status": "לא פורסם (מחשבון רק בחשבון, Track A/B)",
+     "ceiling_line_usd": {
+      "match_today_margin": 5.78,
+      "margin_40": 7.84,
+      "no_loss": 16.98
+     },
+     "ceiling_note": "תקרה מחושבת לפי נוסחת הסטודיו, בלי מיתוג, עם ¥9.9 דמי חבילה: המחיר המרבי שהקו יכול לעלות. לא מחיר שפורסם."
+    },
+    "reference_ems_goodhope": {
+     "line_usd": 26.77,
+     "agent_fee_usd": 1.5,
+     "landed_ils": 98.8,
+     "contribution_ils": -32.39,
+     "margin_pct": -42.9,
+     "note": "EMS של דואר סין במחיר מחירון בהנחה של 46.3% (Goodhope 2026, Track A). לא המחיר של BuckyDrop; רק אינדיקציה"
+    }
+   },
+   "gain_vs_today_ils_no_branding": {
+    "agent_epacket": 2.38,
+    "takesend_2021": 3.37
+   }
+  }
+ ],
+ "economics_readout_he": [
+  "במוצרי CJ התחנה זולה יותר בלי מיתוג: אגרטל ₪21.7–23.7, שמיכה ₪8.9–10.3, סל ₪7.7–8.9, צלחת קיר ₪2.4–3.4, ציפית ₪0.7–1.6 לפריט.",
+  "הסל עובר מהפסד (−2.7%) לרווח קטן (7.4–9.1%), גם בלי קיפול ב-Takesend (משקל אמיתי מתחת ל-2 ק\"ג).",
+  "האגרטל עולה מ-25.2% ל-36.4–37.4%, עדיין מתחת ל-40%.",
+  "במוצר AliExpress Choice התחנה מייקרת: אהיל הנייר מאבד ₪9.9–10.8 (‏35.4% → 27.9–28.5%).",
+  "מיתוג בסיסי עולה ₪0.33–1.16 ומלא ₪2.31 להזמנה: 0.2–0.6 נקודות מרווח באגרטל, ועד 5.6 נקודות בציפית של ₪49.",
+  "החיסכון במוצרים הקלים קטן מספיק כדי שמשלוח פנימי בסין (₪0.49 לכל ¥1) או תוספת ¥15 ל-e邮宝 (₪7.37) ימחקו אותו."
+ ],
+ "vat_exposure": {
+  "threshold_usd": 75,
+  "threshold_status": "back to $75 since 2026-06-01 evening (Knesset revoked the $130 order); no new order found to 2026-10-18 (Track A import_rules_2026)",
+  "test": "threshold on the value of the goods only, without freight when stated separately; above it 18% VAT on the whole CIF value (Track A)",
+  "door_fees_ils": {
+   "israel_post_release_taxable_up_to_1000_usd": 80.73,
+   "credit_allocation": "2.34% of taxes, min 23.40",
+   "mark": "ישן (מחירון 2021, Track A)"
+  },
+  "split_rule": "parcels from the same supplier to the same importer within 72 hours count as one shipment (צו ייבוא אישי, תשע\"ט-2019, s.3; Track A)",
+  "scenarios": {
+   "A_supplier_cost": "declared = our supplier cost of the China parcel (parts bought in Israel excluded); VAT base = (cost + freight backed out of the row) x 3.3",
+   "B_customer_price": "declared = what the customer paid (customer_total_ils); VAT base = that amount",
+   "C_price_net_of_vat_sensitivity": "declared = price / 1.18 (sensitivity only)"
+  },
+  "method_marks": "הערכה: which value is declared is the open question; CIF uses the row's freight; fees from the 2021 Israel Post list (ישן)",
+  "counts": {
+   "rows_above_247": 35,
+   "israeli_supplier_rows": 1,
+   "imported_rows": 34,
+   "A_supplier_cost_cross_75": 3,
+   "B_customer_price_cross_75": 34,
+   "C_net_of_vat_cross_75": 33,
+   "A_near_75_usd_60_75": 4
+  },
+  "A_crossing_rows_all_flagged_loss": [
+   "rug-cj-braided-wool-natural",
+   "bedding-cj-cotton-linen-duvet-beige",
+   "pool-cj-terracotta-amphora-floor-51"
+  ],
+  "B_flags_of_crossing_rows": {
+   "loss": 15,
+   "below-floor": 15,
+   "ok": 4
+  },
+  "B_door_total_range_ils": [
+   157.95,
+   337.95
+  ],
+  "rows": [
+   {
+    "id": "accent-sconces-aliexpress-indoor-stone-wall-lamp",
+    "retail_ils": 299,
+    "customer_total_ils": 299,
+    "qty_in_sale": 1,
+    "unit_cost_usd": 51.94,
+    "sale_cost_usd": 51.94,
+    "china_parcel_cost_usd": 51.94,
+    "freight_usd_backed_out": 23.39,
+    "flag": "loss",
+    "margin_pct": -8.9,
+    "A_supplier_cost": {
+     "declared_usd": 51.94,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_total_ils": 0.0,
+     "customer_all_in_ils": 299.0
+    },
+    "B_customer_price": {
+     "declared_usd": 90.61,
+     "crosses_75": true,
+     "vat_ils": 53.82,
+     "door_total_ils": 157.95,
+     "customer_all_in_ils": 456.95
+    },
+    "C_price_net_of_vat_sensitivity": {
+     "declared_usd": 76.78,
+     "crosses_75": true
+    },
+    "israeli_supplier": false
+   },
+   {
+    "id": "accent-sconces-cj-ribbed-travertine-half-cylinder-wood-bracket",
+    "retail_ils": 599,
+    "customer_total_ils": 599,
+    "qty_in_sale": 2,
+    "unit_cost_usd": 23.72,
+    "sale_cost_usd": 47.44,
+    "china_parcel_cost_usd": 47.44,
+    "freight_usd_backed_out": 44.08,
+    "flag": "below-floor",
+    "margin_pct": 29.9,
+    "A_supplier_cost": {
+     "declared_usd": 47.44,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_total_ils": 0.0,
+     "customer_all_in_ils": 599.0
+    },
+    "B_customer_price": {
+     "declared_usd": 181.52,
+     "crosses_75": true,
+     "vat_ils": 107.82,
+     "door_total_ils": 211.95,
+     "customer_all_in_ils": 810.95
+    },
+    "C_price_net_of_vat_sensitivity": {
+     "declared_usd": 153.83,
+     "crosses_75": true
+    },
+    "israeli_supplier": false
+   },
+   {
+    "id": "curtains-aliexpress-cotton-linen-texture-translucent-091154",
+    "retail_ils": 299,
+    "customer_total_ils": 299,
+    "qty_in_sale": 2,
+    "unit_cost_usd": 35.58,
+    "sale_cost_usd": 71.16,
+    "china_parcel_cost_usd": 71.16,
+    "freight_usd_backed_out": 1.99,
+    "flag": "loss",
+    "margin_pct": -6.1,
+    "A_supplier_cost": {
+     "declared_usd": 71.16,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_total_ils": 0.0,
+     "customer_all_in_ils": 299.0
+    },
+    "B_customer_price": {
+     "declared_usd": 90.61,
+     "crosses_75": true,
+     "vat_ils": 53.82,
+     "door_total_ils": 157.95,
+     "customer_all_in_ils": 456.95
+    },
+    "C_price_net_of_vat_sensitivity": {
+     "declared_usd": 76.78,
+     "crosses_75": true
+    },
+    "israeli_supplier": false
+   },
+   {
+    "id": "curtains-aliexpress-cotton-linen-texture-translucent",
+    "retail_ils": 299,
+    "customer_total_ils": 299,
+    "qty_in_sale": 2,
+    "unit_cost_usd": 29.94,
+    "sale_cost_usd": 59.88,
+    "china_parcel_cost_usd": 59.88,
+    "freight_usd_backed_out": 1.99,
+    "flag": "below-floor",
+    "margin_pct": 8.6,
+    "A_supplier_cost": {
+     "declared_usd": 59.88,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_total_ils": 0.0,
+     "customer_all_in_ils": 299.0
+    },
+    "B_customer_price": {
+     "declared_usd": 90.61,
+     "crosses_75": true,
+     "vat_ils": 53.82,
+     "door_total_ils": 157.95,
+     "customer_all_in_ils": 456.95
+    },
+    "C_price_net_of_vat_sensitivity": {
+     "declared_usd": 76.78,
+     "crosses_75": true
+    },
+    "israeli_supplier": false
+   },
+   {
+    "id": "framed-art-cj-morandi-triptych-sage",
+    "retail_ils": 379,
+    "customer_total_ils": 379,
+    "qty_in_sale": 1,
+    "unit_cost_usd": 15.75,
+    "sale_cost_usd": 15.75,
+    "china_parcel_cost_usd": 15.75,
+    "freight_usd_backed_out": 130.82,
+    "flag": "loss",
+    "margin_pct": -61.3,
+    "A_supplier_cost": {
+     "declared_usd": 15.75,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_total_ils": 0.0,
+     "customer_all_in_ils": 379.0
+    },
+    "B_customer_price": {
+     "declared_usd": 114.85,
+     "crosses_75": true,
+     "vat_ils": 68.22,
+     "door_total_ils": 172.35,
+     "customer_all_in_ils": 551.35
+    },
+    "C_price_net_of_vat_sensitivity": {
+     "declared_usd": 97.33,
+     "crosses_75": true
+    },
+    "israeli_supplier": false
+   },
+   {
+    "id": "pendant-cj-pleated-pumpkin-lantern-40",
+    "retail_ils": 299,
+    "customer_total_ils": 299,
+    "qty_in_sale": 1,
+    "unit_cost_usd": 46.1,
+    "sale_cost_usd": 46.1,
+    "china_parcel_cost_usd": 46.1,
+    "freight_usd_backed_out": 54.8,
+    "flag": "loss",
+    "margin_pct": -42.2,
+    "A_supplier_cost": {
+     "declared_usd": 46.1,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_total_ils": 0.0,
+     "customer_all_in_ils": 299.0
+    },
+    "B_customer_price": {
+     "declared_usd": 90.61,
+     "crosses_75": true,
+     "vat_ils": 53.82,
+     "door_total_ils": 157.95,
+     "customer_all_in_ils": 456.95
+    },
+    "C_price_net_of_vat_sensitivity": {
+     "declared_usd": 76.78,
+     "crosses_75": true
+    },
+    "israeli_supplier": false
+   },
+   {
+    "id": "pendant-cj-silk-pumpkin-lantern",
+    "retail_ils": 299,
+    "customer_total_ils": 299,
+    "qty_in_sale": 1,
+    "unit_cost_usd": 29.85,
+    "sale_cost_usd": 29.85,
+    "china_parcel_cost_usd": 29.85,
+    "freight_usd_backed_out": 29.2,
+    "flag": "below-floor",
+    "margin_pct": 12.3,
+    "A_supplier_cost": {
+     "declared_usd": 29.85,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_total_ils": 0.0,
+     "customer_all_in_ils": 299.0
+    },
+    "B_customer_price": {
+     "declared_usd": 90.61,
+     "crosses_75": true,
+     "vat_ils": 53.82,
+     "door_total_ils": 157.95,
+     "customer_all_in_ils": 456.95
+    },
+    "C_price_net_of_vat_sensitivity": {
+     "declared_usd": 76.78,
+     "crosses_75": true
+    },
+    "israeli_supplier": false
+   },
+   {
+    "id": "pendant-cj-tiered-fabric-drum",
+    "retail_ils": 329,
+    "customer_total_ils": 329,
+    "qty_in_sale": 1,
+    "unit_cost_usd": 43.28,
+    "sale_cost_usd": 43.28,
+    "china_parcel_cost_usd": 43.28,
+    "freight_usd_backed_out": 54.8,
+    "flag": "loss",
+    "margin_pct": -26.9,
+    "A_supplier_cost": {
+     "declared_usd": 43.28,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_total_ils": 0.0,
+     "customer_all_in_ils": 329.0
+    },
+    "B_customer_price": {
+     "declared_usd": 99.7,
+     "crosses_75": true,
+     "vat_ils": 59.22,
+     "door_total_ils": 163.35,
+     "customer_all_in_ils": 492.35
+    },
+    "C_price_net_of_vat_sensitivity": {
+     "declared_usd": 84.49,
+     "crosses_75": true
+    },
+    "israeli_supplier": false
+   },
+   {
+    "id": "rug-cj-braided-wool-natural",
+    "retail_ils": 1299,
+    "customer_total_ils": 1299,
+    "qty_in_sale": 1,
+    "unit_cost_usd": 267.54,
+    "sale_cost_usd": 267.54,
+    "china_parcel_cost_usd": 267.54,
+    "freight_usd_backed_out": 491.08,
+    "flag": "loss",
+    "margin_pct": -137.9,
+    "A_supplier_cost": {
+     "declared_usd": 267.54,
+     "crosses_75": true,
+     "vat_ils": 450.62,
+     "door_total_ils": 554.75,
+     "customer_all_in_ils": 1853.75
+    },
+    "B_customer_price": {
+     "declared_usd": 393.64,
+     "crosses_75": true,
+     "vat_ils": 233.82,
+     "door_total_ils": 337.95,
+     "customer_all_in_ils": 1636.95
+    },
+    "C_price_net_of_vat_sensitivity": {
+     "declared_usd": 333.59,
+     "crosses_75": true
+    },
+    "israeli_supplier": false
+   },
+   {
+    "id": "wall-sconce-cj-travertine-cone-walnut",
+    "retail_ils": 299,
+    "customer_total_ils": 299,
+    "qty_in_sale": 1,
+    "unit_cost_usd": 17.08,
+    "sale_cost_usd": 17.08,
+    "china_parcel_cost_usd": 17.08,
+    "freight_usd_backed_out": 29.57,
+    "flag": "below-floor",
+    "margin_pct": 28.4,
+    "A_supplier_cost": {
+     "declared_usd": 17.08,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_total_ils": 0.0,
+     "customer_all_in_ils": 299.0
+    },
+    "B_customer_price": {
+     "declared_usd": 90.61,
+     "crosses_75": true,
+     "vat_ils": 53.82,
+     "door_total_ils": 157.95,
+     "customer_all_in_ils": 456.95
+    },
+    "C_price_net_of_vat_sensitivity": {
+     "declared_usd": 76.78,
+     "crosses_75": true
+    },
+    "israeli_supplier": false
+   },
+   {
+    "id": "wall-sconce-cj-travertine-disc-25",
+    "retail_ils": 379,
+    "customer_total_ils": 379,
+    "qty_in_sale": 1,
+    "unit_cost_usd": 38.14,
+    "sale_cost_usd": 38.14,
+    "china_parcel_cost_usd": 38.14,
+    "freight_usd_backed_out": 35.76,
+    "flag": "below-floor",
+    "margin_pct": 13.3,
+    "A_supplier_cost": {
+     "declared_usd": 38.14,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_total_ils": 0.0,
+     "customer_all_in_ils": 379.0
+    },
+    "B_customer_price": {
+     "declared_usd": 114.85,
+     "crosses_75": true,
+     "vat_ils": 68.22,
+     "door_total_ils": 172.35,
+     "customer_all_in_ils": 551.35
+    },
+    "C_price_net_of_vat_sensitivity": {
+     "declared_usd": 97.33,
+     "crosses_75": true
+    },
+    "israeli_supplier": false
+   },
+   {
+    "id": "wall-sconce-cj-travertine-dome-15-alt",
+    "retail_ils": 299,
+    "customer_total_ils": 299,
+    "qty_in_sale": 1,
+    "unit_cost_usd": 18.24,
+    "sale_cost_usd": 18.24,
+    "china_parcel_cost_usd": 18.24,
+    "freight_usd_backed_out": 30.11,
+    "flag": "below-floor",
+    "margin_pct": 26.2,
+    "A_supplier_cost": {
+     "declared_usd": 18.24,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_total_ils": 0.0,
+     "customer_all_in_ils": 299.0
+    },
+    "B_customer_price": {
+     "declared_usd": 90.61,
+     "crosses_75": true,
+     "vat_ils": 53.82,
+     "door_total_ils": 157.95,
+     "customer_all_in_ils": 456.95
+    },
+    "C_price_net_of_vat_sensitivity": {
+     "declared_usd": 76.78,
+     "crosses_75": true
+    },
+    "israeli_supplier": false
+   },
+   {
+    "id": "wall-sconce-cj-travertine-dome-15-pull",
+    "retail_ils": 299,
+    "customer_total_ils": 299,
+    "qty_in_sale": 1,
+    "unit_cost_usd": 16.09,
+    "sale_cost_usd": 16.09,
+    "china_parcel_cost_usd": 16.09,
+    "freight_usd_backed_out": 84.76,
+    "flag": "loss",
+    "margin_pct": -42.2,
+    "A_supplier_cost": {
+     "declared_usd": 16.09,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_total_ils": 0.0,
+     "customer_all_in_ils": 299.0
+    },
+    "B_customer_price": {
+     "declared_usd": 90.61,
+     "crosses_75": true,
+     "vat_ils": 53.82,
+     "door_total_ils": 157.95,
+     "customer_all_in_ils": 456.95
+    },
+    "C_price_net_of_vat_sensitivity": {
+     "declared_usd": 76.78,
+     "crosses_75": true
+    },
+    "israeli_supplier": false
+   },
+   {
+    "id": "ceiling-lights-cj-pleated-fabric-saucer-flush-50",
+    "retail_ils": 499,
+    "customer_total_ils": 499,
+    "qty_in_sale": 2,
+    "unit_cost_usd": 36.15,
+    "sale_cost_usd": 72.3,
+    "china_parcel_cost_usd": 72.3,
+    "freight_usd_backed_out": 56.68,
+    "flag": "loss",
+    "margin_pct": -11.3,
+    "A_supplier_cost": {
+     "declared_usd": 72.3,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_total_ils": 0.0,
+     "customer_all_in_ils": 499.0
+    },
+    "B_customer_price": {
+     "declared_usd": 151.21,
+     "crosses_75": true,
+     "vat_ils": 89.82,
+     "door_total_ils": 193.95,
+     "customer_all_in_ils": 692.95
+    },
+    "C_price_net_of_vat_sensitivity": {
+     "declared_usd": 128.15,
+     "crosses_75": true
+    },
+    "israeli_supplier": false
+   },
+   {
+    "id": "gallery-art-cj-black-botanical-cutout-set3",
+    "retail_ils": 349,
+    "customer_total_ils": 349,
+    "qty_in_sale": 1,
+    "unit_cost_usd": 14.53,
+    "sale_cost_usd": 14.53,
+    "china_parcel_cost_usd": 14.53,
+    "freight_usd_backed_out": 10.65,
+    "flag": "ok",
+    "margin_pct": 61.1,
+    "A_supplier_cost": {
+     "declared_usd": 14.53,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_total_ils": 0.0,
+     "customer_all_in_ils": 349.0
+    },
+    "B_customer_price": {
+     "declared_usd": 105.76,
+     "crosses_75": true,
+     "vat_ils": 62.82,
+     "door_total_ils": 166.95,
+     "customer_all_in_ils": 515.95
+    },
+    "C_price_net_of_vat_sensitivity": {
+     "declared_usd": 89.63,
+     "crosses_75": true
+    },
+    "israeli_supplier": false
+   },
+   {
+    "id": "dining-chairs-furniture-express-maya",
+    "retail_ils": 399,
+    "qty_in_sale": 1,
+    "unit_cost": 399,
+    "unit_cost_currency": "ILS",
+    "sale_cost_usd": null,
+    "israeli_supplier": true,
+    "note": "ספק ישראלי (ריהוט אקספרס): לא יבוא, אין חשיפה למע\"מ יבוא"
+   },
+   {
+    "id": "bedding-cj-cream-ruffle-rosebud-set",
+    "retail_ils": 299,
+    "customer_total_ils": 299,
+    "qty_in_sale": 1,
+    "unit_cost_usd": 16.35,
+    "sale_cost_usd": 16.35,
+    "china_parcel_cost_usd": 16.35,
+    "freight_usd_backed_out": 31.85,
+    "flag": "below-floor",
+    "margin_pct": 26.4,
+    "A_supplier_cost": {
+     "declared_usd": 16.35,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_total_ils": 0.0,
+     "customer_all_in_ils": 299.0
+    },
+    "B_customer_price": {
+     "declared_usd": 90.61,
+     "crosses_75": true,
+     "vat_ils": 53.82,
+     "door_total_ils": 157.95,
+     "customer_all_in_ils": 456.95
+    },
+    "C_price_net_of_vat_sensitivity": {
+     "declared_usd": 76.78,
+     "crosses_75": true
+    },
+    "israeli_supplier": false
+   },
+   {
+    "id": "bedding-aliexpress-boho-3d-tufted-cut-500672",
+    "retail_ils": 349,
+    "customer_total_ils": 349,
+    "qty_in_sale": 1,
+    "unit_cost_usd": 65.0,
+    "sale_cost_usd": 65.0,
+    "china_parcel_cost_usd": 65.0,
+    "freight_usd_backed_out": 0.0,
+    "flag": "below-floor",
+    "margin_pct": 16.7,
+    "A_supplier_cost": {
+     "declared_usd": 65.0,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_total_ils": 0.0,
+     "customer_all_in_ils": 349.0
+    },
+    "B_customer_price": {
+     "declared_usd": 105.76,
+     "crosses_75": true,
+     "vat_ils": 62.82,
+     "door_total_ils": 166.95,
+     "customer_all_in_ils": 515.95
+    },
+    "C_price_net_of_vat_sensitivity": {
+     "declared_usd": 89.63,
+     "crosses_75": true
+    },
+    "israeli_supplier": false
+   },
+   {
+    "id": "bedding-cj-cotton-linen-duvet-beige",
+    "retail_ils": 479,
+    "customer_total_ils": 479,
+    "qty_in_sale": 1,
+    "unit_cost_usd": 128.36,
+    "sale_cost_usd": 128.36,
+    "china_parcel_cost_usd": 128.36,
+    "freight_usd_backed_out": 107.99,
+    "flag": "loss",
+    "margin_pct": -102.8,
+    "A_supplier_cost": {
+     "declared_usd": 128.36,
+     "crosses_75": true,
+     "vat_ils": 140.39,
+     "door_total_ils": 244.52,
+     "customer_all_in_ils": 723.52
+    },
+    "B_customer_price": {
+     "declared_usd": 145.15,
+     "crosses_75": true,
+     "vat_ils": 86.22,
+     "door_total_ils": 190.35,
+     "customer_all_in_ils": 669.35
+    },
+    "C_price_net_of_vat_sensitivity": {
+     "declared_usd": 123.01,
+     "crosses_75": true
+    },
+    "israeli_supplier": false
+   },
+   {
+    "id": "bedding-cj-plain-linen-flat-sheet-raw-jute-260x280",
+    "retail_ils": 469,
+    "customer_total_ils": 469,
+    "qty_in_sale": 1,
+    "unit_cost_usd": 50.14,
+    "sale_cost_usd": 50.14,
+    "china_parcel_cost_usd": 50.14,
+    "freight_usd_backed_out": 19.0,
+    "flag": "below-floor",
+    "margin_pct": 31.9,
+    "A_supplier_cost": {
+     "declared_usd": 50.14,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_total_ils": 0.0,
+     "customer_all_in_ils": 469.0
+    },
+    "B_customer_price": {
+     "declared_usd": 142.12,
+     "crosses_75": true,
+     "vat_ils": 84.42,
+     "door_total_ils": 188.55,
+     "customer_all_in_ils": 657.55
+    },
+    "C_price_net_of_vat_sensitivity": {
+     "declared_usd": 120.44,
+     "crosses_75": true
+    },
+    "israeli_supplier": false
+   },
+   {
+    "id": "bedding-cj-washed-cotton-khaki-set-220x240",
+    "retail_ils": 349,
+    "customer_total_ils": 349,
+    "qty_in_sale": 1,
+    "unit_cost_usd": 30.68,
+    "sale_cost_usd": 30.68,
+    "china_parcel_cost_usd": 30.68,
+    "freight_usd_backed_out": 30.84,
+    "flag": "below-floor",
+    "margin_pct": 20.6,
+    "A_supplier_cost": {
+     "declared_usd": 30.68,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_total_ils": 0.0,
+     "customer_all_in_ils": 349.0
+    },
+    "B_customer_price": {
+     "declared_usd": 105.76,
+     "crosses_75": true,
+     "vat_ils": 62.82,
+     "door_total_ils": 166.95,
+     "customer_all_in_ils": 515.95
+    },
+    "C_price_net_of_vat_sensitivity": {
+     "declared_usd": 89.63,
+     "crosses_75": true
+    },
+    "israeli_supplier": false
+   },
+   {
+    "id": "bedding-cj-washed-linen-natural-set",
+    "retail_ils": 799,
+    "customer_total_ils": 799,
+    "qty_in_sale": 1,
+    "unit_cost_usd": 48.68,
+    "sale_cost_usd": 48.68,
+    "china_parcel_cost_usd": 48.68,
+    "freight_usd_backed_out": 43.96,
+    "flag": "ok",
+    "margin_pct": 44.3,
+    "A_supplier_cost": {
+     "declared_usd": 48.68,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_total_ils": 0.0,
+     "customer_all_in_ils": 799.0
+    },
+    "B_customer_price": {
+     "declared_usd": 242.12,
+     "crosses_75": true,
+     "vat_ils": 143.82,
+     "door_total_ils": 247.95,
+     "customer_all_in_ils": 1046.95
+    },
+    "C_price_net_of_vat_sensitivity": {
+     "declared_usd": 205.19,
+     "crosses_75": true
+    },
+    "israeli_supplier": false
+   },
+   {
+    "id": "bedside-sconces-cj-linen-half-drum-black-trim",
+    "retail_ils": 349,
+    "customer_total_ils": 349,
+    "qty_in_sale": 2,
+    "unit_cost_usd": 30.68,
+    "sale_cost_usd": 61.36,
+    "china_parcel_cost_usd": 61.36,
+    "freight_usd_backed_out": 26.92,
+    "flag": "loss",
+    "margin_pct": -9.3,
+    "A_supplier_cost": {
+     "declared_usd": 61.36,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_total_ils": 0.0,
+     "customer_all_in_ils": 349.0
+    },
+    "B_customer_price": {
+     "declared_usd": 105.76,
+     "crosses_75": true,
+     "vat_ils": 62.82,
+     "door_total_ils": 166.95,
+     "customer_all_in_ils": 515.95
+    },
+    "C_price_net_of_vat_sensitivity": {
+     "declared_usd": 89.63,
+     "crosses_75": true
+    },
+    "israeli_supplier": false
+   },
+   {
+    "id": "bedside-sconces-cj-linen-wave-flush",
+    "retail_ils": 349,
+    "customer_total_ils": 349,
+    "qty_in_sale": 2,
+    "unit_cost_usd": 29.78,
+    "sale_cost_usd": 59.56,
+    "china_parcel_cost_usd": 59.56,
+    "freight_usd_backed_out": 19.36,
+    "flag": "below-floor",
+    "margin_pct": 1.2,
+    "A_supplier_cost": {
+     "declared_usd": 59.56,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_total_ils": 0.0,
+     "customer_all_in_ils": 349.0
+    },
+    "B_customer_price": {
+     "declared_usd": 105.76,
+     "crosses_75": true,
+     "vat_ils": 62.82,
+     "door_total_ils": 166.95,
+     "customer_all_in_ils": 515.95
+    },
+    "C_price_net_of_vat_sensitivity": {
+     "declared_usd": 89.63,
+     "crosses_75": true
+    },
+    "israeli_supplier": false
+   },
+   {
+    "id": "floor-lamp-cj-cream-arc-pleated-152",
+    "retail_ils": 349,
+    "customer_total_ils": 349,
+    "qty_in_sale": 1,
+    "unit_cost_usd": 12.44,
+    "sale_cost_usd": 12.44,
+    "china_parcel_cost_usd": 12.44,
+    "freight_usd_backed_out": 765.66,
+    "flag": "loss",
+    "margin_pct": -778.9,
+    "A_supplier_cost": {
+     "declared_usd": 12.44,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_total_ils": 0.0,
+     "customer_all_in_ils": 349.0
+    },
+    "B_customer_price": {
+     "declared_usd": 105.76,
+     "crosses_75": true,
+     "vat_ils": 62.82,
+     "door_total_ils": 166.95,
+     "customer_all_in_ils": 515.95
+    },
+    "C_price_net_of_vat_sensitivity": {
+     "declared_usd": 89.63,
+     "crosses_75": true
+    },
+    "israeli_supplier": false
+   },
+   {
+    "id": "floor-lamp-cj-pleated-walnut-stem-158",
+    "retail_ils": 349,
+    "customer_total_ils": 349,
+    "qty_in_sale": 1,
+    "unit_cost_usd": 31.18,
+    "sale_cost_usd": 31.18,
+    "china_parcel_cost_usd": 31.18,
+    "freight_usd_backed_out": 144.71,
+    "flag": "loss",
+    "margin_pct": -107.0,
+    "A_supplier_cost": {
+     "declared_usd": 31.18,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_total_ils": 0.0,
+     "customer_all_in_ils": 349.0
+    },
+    "B_customer_price": {
+     "declared_usd": 105.76,
+     "crosses_75": true,
+     "vat_ils": 62.82,
+     "door_total_ils": 166.95,
+     "customer_all_in_ils": 515.95
+    },
+    "C_price_net_of_vat_sensitivity": {
+     "declared_usd": 89.63,
+     "crosses_75": true
+    },
+    "israeli_supplier": false
+   },
+   {
+    "id": "pendant-cj-light-wood-slat-drum-43",
+    "retail_ils": 299,
+    "customer_total_ils": 299,
+    "qty_in_sale": 1,
+    "unit_cost_usd": 22.16,
+    "sale_cost_usd": 22.16,
+    "china_parcel_cost_usd": 22.16,
+    "freight_usd_backed_out": 34.62,
+    "flag": "below-floor",
+    "margin_pct": 15.2,
+    "A_supplier_cost": {
+     "declared_usd": 22.16,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_total_ils": 0.0,
+     "customer_all_in_ils": 299.0
+    },
+    "B_customer_price": {
+     "declared_usd": 90.61,
+     "crosses_75": true,
+     "vat_ils": 53.82,
+     "door_total_ils": 157.95,
+     "customer_all_in_ils": 456.95
+    },
+    "C_price_net_of_vat_sensitivity": {
+     "declared_usd": 76.78,
+     "crosses_75": true
+    },
+    "israeli_supplier": false
+   },
+   {
+    "id": "pendant-cj-wabi-pleated-fabric-lantern-50",
+    "retail_ils": 299,
+    "customer_total_ils": 299,
+    "qty_in_sale": 1,
+    "unit_cost_usd": 58.04,
+    "sale_cost_usd": 58.04,
+    "china_parcel_cost_usd": 58.04,
+    "freight_usd_backed_out": 340.29,
+    "flag": "loss",
+    "margin_pct": -429.6,
+    "A_supplier_cost": {
+     "declared_usd": 58.04,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_total_ils": 0.0,
+     "customer_all_in_ils": 299.0
+    },
+    "B_customer_price": {
+     "declared_usd": 90.61,
+     "crosses_75": true,
+     "vat_ils": 53.82,
+     "door_total_ils": 157.95,
+     "customer_all_in_ils": 456.95
+    },
+    "C_price_net_of_vat_sensitivity": {
+     "declared_usd": 76.78,
+     "crosses_75": true
+    },
+    "israeli_supplier": false
+   },
+   {
+    "id": "pool-cj-terracotta-amphora-floor-51",
+    "retail_ils": 479,
+    "customer_total_ils": 479,
+    "qty_in_sale": 1,
+    "unit_cost_usd": 182.84,
+    "sale_cost_usd": 182.84,
+    "china_parcel_cost_usd": 182.84,
+    "freight_usd_backed_out": 37.15,
+    "flag": "loss",
+    "margin_pct": -89.5,
+    "A_supplier_cost": {
+     "declared_usd": 182.84,
+     "crosses_75": true,
+     "vat_ils": 130.67,
+     "door_total_ils": 234.8,
+     "customer_all_in_ils": 713.8
+    },
+    "B_customer_price": {
+     "declared_usd": 145.15,
+     "crosses_75": true,
+     "vat_ils": 86.22,
+     "door_total_ils": 190.35,
+     "customer_all_in_ils": 669.35
+    },
+    "C_price_net_of_vat_sensitivity": {
+     "declared_usd": 123.01,
+     "crosses_75": true
+    },
+    "israeli_supplier": false
+   },
+   {
+    "id": "pool-cj-wabi-sabi-floor-vase-white",
+    "retail_ils": 349,
+    "customer_total_ils": 349,
+    "qty_in_sale": 1,
+    "unit_cost_usd": 26.2,
+    "sale_cost_usd": 26.2,
+    "china_parcel_cost_usd": 26.2,
+    "freight_usd_backed_out": 59.72,
+    "flag": "loss",
+    "margin_pct": -6.6,
+    "A_supplier_cost": {
+     "declared_usd": 26.2,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_total_ils": 0.0,
+     "customer_all_in_ils": 349.0
+    },
+    "B_customer_price": {
+     "declared_usd": 105.76,
+     "crosses_75": true,
+     "vat_ils": 62.82,
+     "door_total_ils": 166.95,
+     "customer_all_in_ils": 515.95
+    },
+    "C_price_net_of_vat_sensitivity": {
+     "declared_usd": 89.63,
+     "crosses_75": true
+    },
+    "israeli_supplier": false
+   },
+   {
+    "id": "ceiling-lights-aliexpress-flat-oval-paper-lantern-shade-40-pair",
+    "retail_ils": 279,
+    "customer_total_ils": 308,
+    "qty_in_sale": 1,
+    "unit_cost_usd": 8.87,
+    "sale_cost_usd": 30.08,
+    "china_parcel_cost_usd": 8.87,
+    "freight_usd_backed_out": 1.99,
+    "flag": "ok",
+    "margin_pct": 44.4,
+    "A_supplier_cost": {
+     "declared_usd": 8.87,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_total_ils": 0.0,
+     "customer_all_in_ils": 308.0
+    },
+    "B_customer_price": {
+     "declared_usd": 84.55,
+     "crosses_75": true,
+     "vat_ils": 55.44,
+     "door_total_ils": 159.57,
+     "customer_all_in_ils": 467.57
+    },
+    "C_price_net_of_vat_sensitivity": {
+     "declared_usd": 71.65,
+     "crosses_75": false
+    },
+    "israeli_supplier": false
+   },
+   {
+    "id": "ceiling-lights-aliexpress-scalloped-pleated-shade-26-pair",
+    "retail_ils": 399,
+    "customer_total_ils": 399,
+    "qty_in_sale": 1,
+    "unit_cost_usd": 24.1,
+    "sale_cost_usd": 45.31,
+    "china_parcel_cost_usd": 24.1,
+    "freight_usd_backed_out": 1.99,
+    "flag": "ok",
+    "margin_pct": 43.1,
+    "A_supplier_cost": {
+     "declared_usd": 24.1,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_total_ils": 0.0,
+     "customer_all_in_ils": 399.0
+    },
+    "B_customer_price": {
+     "declared_usd": 120.91,
+     "crosses_75": true,
+     "vat_ils": 71.82,
+     "door_total_ils": 175.95,
+     "customer_all_in_ils": 574.95
+    },
+    "C_price_net_of_vat_sensitivity": {
+     "declared_usd": 102.47,
+     "crosses_75": true
+    },
+    "israeli_supplier": false
+   },
+   {
+    "id": "vanity-sconces-aliexpress-walnut-color-yellow-travertine-332886",
+    "retail_ils": 659,
+    "customer_total_ils": 659,
+    "qty_in_sale": 2,
+    "unit_cost_usd": 27.63,
+    "sale_cost_usd": 55.26,
+    "china_parcel_cost_usd": 55.26,
+    "freight_usd_backed_out": 60.12,
+    "flag": "below-floor",
+    "margin_pct": 21.2,
+    "A_supplier_cost": {
+     "declared_usd": 55.26,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_total_ils": 0.0,
+     "customer_all_in_ils": 659.0
+    },
+    "B_customer_price": {
+     "declared_usd": 199.7,
+     "crosses_75": true,
+     "vat_ils": 118.62,
+     "door_total_ils": 222.75,
+     "customer_all_in_ils": 881.75
+    },
+    "C_price_net_of_vat_sensitivity": {
+     "declared_usd": 169.23,
+     "crosses_75": true
+    },
+    "israeli_supplier": false
+   },
+   {
+    "id": "gallery-art-cj-black-ink-abstract-wide-mat-40-set3",
+    "retail_ils": 749,
+    "customer_total_ils": 749,
+    "qty_in_sale": 1,
+    "unit_cost_usd": 38.79,
+    "sale_cost_usd": 38.79,
+    "china_parcel_cost_usd": 38.79,
+    "freight_usd_backed_out": 81.27,
+    "flag": "below-floor",
+    "margin_pct": 27.0,
+    "A_supplier_cost": {
+     "declared_usd": 38.79,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_total_ils": 0.0,
+     "customer_all_in_ils": 749.0
+    },
+    "B_customer_price": {
+     "declared_usd": 226.97,
+     "crosses_75": true,
+     "vat_ils": 134.82,
+     "door_total_ils": 238.95,
+     "customer_all_in_ils": 987.95
+    },
+    "C_price_net_of_vat_sensitivity": {
+     "declared_usd": 192.35,
+     "crosses_75": true
+    },
+    "israeli_supplier": false
+   },
+   {
+    "id": "framed-art-cj-black-ink-abstract-wide-mat-50-pair",
+    "retail_ils": 649,
+    "customer_total_ils": 649,
+    "qty_in_sale": 1,
+    "unit_cost_usd": 29.18,
+    "sale_cost_usd": 29.18,
+    "china_parcel_cost_usd": 29.18,
+    "freight_usd_backed_out": 82.42,
+    "flag": "below-floor",
+    "margin_pct": 22.5,
+    "A_supplier_cost": {
+     "declared_usd": 29.18,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_total_ils": 0.0,
+     "customer_all_in_ils": 649.0
+    },
+    "B_customer_price": {
+     "declared_usd": 196.67,
+     "crosses_75": true,
+     "vat_ils": 116.82,
+     "door_total_ils": 220.95,
+     "customer_all_in_ils": 869.95
+    },
+    "C_price_net_of_vat_sensitivity": {
+     "declared_usd": 166.67,
+     "crosses_75": true
+    },
+    "israeli_supplier": false
+   }
+  ],
+  "prices_changed": false,
+  "accountant_question_he": "שלום, אנחנו עוסק מורשה שמקים חנות אונליין לעיצוב הבית ועובד בדרופשיפינג: הלקוח בישראל משלם לנו, אנחנו מוציאים חשבונית עם מע\"מ 18% על כל המכירה, והספק בסין שולח את החבילה ישירות ללקוח, בדרך כלל בדואר. שלוש שאלות: (1) איזה ערך צריך להופיע בהצהרת המכס על החבילה: המחיר ששילמנו לספק, או המחיר שהלקוח שילם לנו (עם מע\"מ או בלעדיו)? (2) כשהערך עובר את תקרת הפטור של $75, האם הלקוח משלם מע\"מ יבוא נוסף על המע\"מ שכבר גבינו, ואם כן, האם יש דרך חוקית למנוע את הכפל (למשל שאנחנו נהיה היבואן, או שנשלם את המס מראש)? (3) מה חובה, או מומלץ, לכתוב בדף המוצר ובקופה על מסים ועמלות שחרור בחבילה מעל $75? תודה."
+ },
+ "speed_honesty_he": "אף קו לא נמדד מתחת לכ-10 ימים. כל קו שאפשר למדוד מסין לישראל (ePacket, EMS, Cainiao, וכנראה CJ Eub) נמצא בקבוצה אחת: חציון 10 ימים, 90% תוך 18. YunExpress נמדד לבד: חציון 15, ‏P90 ‏22. ה-6–9 ימים של Takesend ו-Uspeed מוצהרים, ישנים, והקווים לא מופיעים היום באתרים שלהן. הנתון היחיד מתחת ל-10 הוא מדגם של 25 חבילות YunExpress מ-2023 שבחרה ARTEX בעצמה (חציון 8, ישן).",
+ "hub_gains_he": {
+  "gives": [
+   "מחיר: ₪0.7–23.7 לפריט במוצרי CJ, בלי מיתוג",
+   "מיתוג: ₪0.33–2.31 להזמנה",
+   "איחוד מכמה ספקים בחבילה אחת: חוסך את דמי החבילה (¥17 = ₪8.35 ב-ePacket, ¥24.4 = ₪11.98 ב-Takesend) לכל פריט נוסף. CJ כבר מאחדת בתוך המחסן שלה",
+   "אחידות: אריזה אחת, צילום ובדיקה לפני משלוח, מעקב ממקור אחד"
+  ],
+  "does_not_give": [
+   "מהירות מוכחת",
+   "כיסוי לשבירה בקרמיקה",
+   "רווח במוצרי AliExpress Choice ($1.99 משלוח)",
+   "פתרון לתמחור: שמיכה, ציפית וסל נשארים מתחת ל-40%",
+   "פחות סיכון: חשבון חדש, תשלום מראש, 1–3 ימי טיפול ונקודת כשל נוספת"
+  ]
+ },
+ "recommendations": [
+  {
+   "rank": 1,
+   "who": "BuckyDrop",
+   "why": "the only operator whose whole chain is public: outside parcels (CJ, AliExpress, own supplier) consolidated, QC and photos, manual orders and API without Shopify, EMS to Israel billed by actual weight under 60 cm, Trustpilot 4.8 (118)",
+   "main_number": "EMS-HZ must cost at most $17.12 for the vase (1.87 kg) to reach 40%, $25.82 to match CJ Eub; at most $12.57 for the throw (0.82 kg) to match CJ Eub (computed ceilings)",
+   "next_step": "email 5.1 after the site works (ז); ask also whether e邮宝/ePacket to Israel exists",
+   "verify_first": [
+    "price and days to Israel",
+    "fragile items are excluded from compensation",
+    "YunExpress to Israel after the 2025-06-17 suspension",
+    "indirect Superbuy figure ¥676 for 4 kg (לא אומת) suggests EMS-HZ may cost about twice CJ Eub"
+   ]
+  },
+  {
+   "rank": 2,
+   "who": "Takesend 泰嘉云仓",
+   "why": "lowest computed landed cost on all 5 CJ rows; public warehouse prices; Israel line by actual weight under 2 kg",
+   "main_number": "vase ₪100.26 vs ₪123.91 at CJ Eub (+₪23.65, 25.2% -> 37.4%); basket from -2.7% to 9.1% unfolded (2021 price, ישן)",
+   "next_step": "email 5.2 after the site works",
+   "verify_first": [
+    "the Israel line still exists (not in the current catalog)",
+    "today's price",
+    "'仿牌及贴牌产品' in the Israel prohibited list vs our own logo",
+    "breakage insurance terms",
+    "account minimum and prepayment"
+   ]
+  },
+  {
+   "rank": 3,
+   "who": "תזמון (נ.א. תזמון בע\"מ)",
+   "why": "Israeli, registered 2018, Hebrew, $1.5 per parcel, photo and check included, WooCommerce and tracking",
+   "main_number": "$1.5 = ₪4.95 per parcel; line price, carrier and billing not published; the ₪29-36 packs are domestic Israeli courier",
+   "next_step": "email 5.3 (Hebrew) after the site works",
+   "verify_first": [
+    "line price for 0.6/1.2/3 kg",
+    "carrier and last mile",
+    "accepts goods bought elsewhere",
+    "no reviews"
+   ]
+  },
+  {
+   "rank": 4,
+   "who": "CJ basic branding (insert card + sticker), no new company",
+   "why": "MOQ 1 on CJ's page, same account and API",
+   "main_number": "about ₪0.33-1.16 per order (הערכה); 0.2-2.8 margin points; no speed change",
+   "next_step": "round 1 s.8.4 question to the CJ agent, with approval",
+   "verify_first": [
+    "CJ unit price (not published)"
+   ]
+  },
+  {
+   "rank": 5,
+   "who": "what not to do",
+   "why": "fast volumetric lines (CJ To Door, Uspeed /6000: the vase counts 3.44 kg) erase the margin; ARTEX's visible lines are YunExpress (measured median 15, P90 22) and Yanwen, so slower than the market; consolidating a multi-item order above $75 hands the customer VAT and fees",
+   "main_number": "Uspeed 2022 on the vase: ¥26 + ¥78 x 3.44 = ¥294 (≈₪144) vs ePacket ₪63.4 (הערכה, ישן)",
+   "next_step": "keep round 1's ARTEX draft unsent; no To Door for decor",
+   "verify_first": []
+  }
+ ],
+ "email_drafts": {
+  "where": "docs/suppliers/china-hub-r2-2026-10-18.md s.5",
+  "status": "drafts only, not sent",
+  "to": [
+   "BuckyDrop (support@buckydrop.com, English)",
+   "Takesend 泰嘉云仓 (site contact; email not collected, English)",
+   "תזמון (as in round 1 s.8.1, Hebrew)"
+  ],
+  "new_questions": [
+   "billing basis, divisor and threshold",
+   "measured days and sample tracking numbers",
+   "ceramic breakage and packing",
+   "parcels from outside suppliers",
+   "branding minimums and own materials",
+   "the Israel line and last mile",
+   "price for 0.6, 1.2 and 3 kg",
+   "declared value over $75"
+  ],
+  "placeholders": [
+   "[שם]",
+   "[שם העסק]"
+  ]
+ },
+ "hub1_proposal": {
+  "id": "HUB1",
+  "group": "ספקים",
+  "title": "תחנת ביניים בסין: מיתוג ומשלוח מהיר",
+  "question": "סבב 2 לא מצא קו מסין שמהיר יותר באופן מוכח. מה עושים עם תחנת ביניים?",
+  "context": "סבב 2 (2026-10-18, docs/suppliers/china-hub-r2-2026-10-18.md). מהירות: אף קו לא נמדד מתחת ל-10 ימים. הקו הזול שאפשר למדוד (ePacket דרך סוכן) נמצא בחציון השוק, 10 ימים ו-90% תוך 18, וכנראה גם CJ Eub. מחיר: במוצרי CJ התחנה חוסכת לפריט ₪22–24 באגרטל, ₪9–10 בשמיכה ו-₪8–9 בסל (שעובר מהפסד לרווח קטן). במוצרי AliExpress Choice היא מייקרת (₪10 באהיל). מיתוג: ₪0.3–2.3 להזמנה. המובילות: BuckyDrop (כל השירות מתועד, המחיר לישראל לא פורסם, שבירה לא מכוסה), Takesend 泰嘉云仓 (הזולה בחישוב, אבל לפי מחיר 2021 והקו לא מופיע היום), תזמון (ישראלית, מחיר הקו לא פורסם). ARTEX ירדה: הקווים שלה הם YunExpress (נמדד 15 ימים, 90% תוך 22) ו-Yanwen. מע\"מ: 35 מוצרים מעל ₪247. אם מצהירים על מחיר הלקוח, כל 34 המיובאים עוברים $75, והלקוח משלם בדלת ₪158–338. שאלה לרואה חשבון מוכנה, בלי פרטים אישיים.",
+  "options": [
+   {
+    "id": "later",
+    "label": "לא עכשיו. אחרי שיש אתר: מיילים ל-BuckyDrop, ל-Takesend ולתזמון, ו-3 חבילות ניסיון עם מעקב",
+    "desc": "המלצת הסיכום. התחנה לא קונה מהירות מוכחת, אז קודם מודדים. בינתיים נשארים ב-CJ Eub, ושואלים רואה חשבון את שאלת המע\"מ (זו לא פנייה לספק)",
+    "recommended": true
+   },
+   {
+    "id": "cj-insert",
+    "label": "עכשיו לשאול את הסוכן ב-CJ על מחיר כרטיס insert ומדבקה",
+    "desc": "מיתוג בסיסי בלי חברה חדשה, כ-₪0.3–1.2 להזמנה (הערכה). לא מזרז את המשלוח",
+    "recommended": false
+   },
+   {
+    "id": "now",
+    "label": "לשלוח עכשיו את 3 המיילים",
+    "desc": "חריג לכלל קודם אתר עובד. הטיוטות מוכנות בסיכום",
+    "recommended": false
+   },
+   {
+    "id": "close",
+    "label": "לסגור את הנושא: נשארים ב-CJ Eub בלי תחנה",
+    "desc": "מוותרים על ₪1–24 לפריט במוצרי CJ ועל מיתוג",
+    "recommended": false
+   }
+  ],
+  "blocks": [],
+  "source": "docs/suppliers/china-hub-r2-2026-10-18.md",
+  "asked": "2026-10-18",
+  "status": "open"
+ },
+ "not_verified": [
+  "current (2025-2026) price of every Israel line: Takesend 2021, Uspeed 2022, ePacket at CPA undated; BuckyDrop EMS-HZ not published",
+  "whether Takesend still sells the Israel line (not in its current catalog)",
+  "per-line measured days: only the 'Cainiao, China Post' group (proxy) and YunExpress; CJ Eub inside that group is הערכה",
+  "domestic China freight from the supplier to the warehouse (not included; ₪0.49 per ¥1)",
+  "product price at an agent = today's price (הערכה); for the AliExpress lantern, buying the same item on 1688",
+  "folded basket dims 38x38x10 (round 1 estimate) and the repack fee",
+  "branding: CJ unit price; Alibaba figures are search snippets; shipping of materials to the warehouse; a printed box for ceramics ($2.5-4)",
+  "breakage cover for ceramics: BuckyDrop excludes fragile items, Takesend insurance terms unpublished, ePacket no compensation",
+  "extra weight of protective repacking for the vase (1.87 kg now; the old e-EMS table limit is 2 kg)",
+  "a possible ¥15 e-EMS surcharge (2026-04-21, 503)",
+  "declared value in dropshipping, double VAT, and Israel Post recipient fees in 2026 (the list read is from 2021)",
+  "Takesend's '贴牌产品' restriction vs a product or parcel with our logo"
+ ]
+}
