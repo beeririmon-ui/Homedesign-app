@@ -440,6 +440,24 @@ details.snips li span{direction:ltr;unicode-bidi:isolate}
 .chip-new{background:var(--ink);color:var(--on-ink)}
 .chip-unsure{background:var(--amber-wash);color:var(--amber-ink);border:1px dashed currentColor;padding:4px 8px}
 .chip-warn{background:var(--amber-wash);color:var(--amber-ink)}
+/* the designer's audit on a card (QA 2026-10-17, M6), the team's guess, and a synced edit (M8) */
+.chip-guess{background:var(--sheet);color:var(--ink-2);border:1px dashed var(--ink-3);padding:4px 8px}
+.chip-design-o{background:var(--sheet);color:var(--ink);border:1px solid var(--rule-2);padding:4px 8px}
+.chip-aud-reject{background:var(--brick-wash);color:var(--brick-ink);border:1px solid currentColor;padding:4px 8px}
+.chip-aud-lower{background:var(--amber-wash);color:var(--amber-ink)}
+.chip-aud-keep{background:var(--sage-wash);color:var(--sage-ink)}
+.chip-synced{background:var(--sunk);color:var(--ink-2)}
+.paudit{display:flex;flex-wrap:wrap;gap:4px;min-width:0}
+.paudit .chip{white-space:normal;line-height:1.25}
+.aud-list{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.aud-list li{border:1px solid var(--rule);border-radius:var(--r);padding:8px 10px;background:var(--sheet);min-width:0}
+.aud-list .aud-head{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.aud-list .aud-fit{font-size:var(--fs-xs);color:var(--ink-2);margin:4px 0 0;overflow-wrap:anywhere}
+.aud-list .aud-note{margin:4px 0 0;font-size:var(--fs-s);overflow-wrap:anywhere}
+.cur-list{display:grid;gap:8px;margin-top:8px}
+.cur-item{border:1px solid var(--rule);border-radius:var(--r);padding:8px 10px;background:var(--sheet);display:grid;gap:6px;min-width:0}
+.src-current .chip{white-space:normal;line-height:1.3;max-width:100%;overflow-wrap:anywhere}
+.schema-line summary{cursor:pointer}
 .qty-tag{display:inline-block;font-size:11px;font-weight:600;color:var(--ink-2);white-space:nowrap}
 .qty-line{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 .cell-in.qty-in{width:4.2em}
@@ -1215,10 +1233,13 @@ button.ptile:focus-visible{outline-offset:2px}
         <div class="field"><label for="f-flag">רווחיות</label><select id="f-flag">
           <option value="">הכול</option><option value="green">עומד ביעד</option><option value="red">מתחת ליעד</option><option value="loss">מפסיד (תרומה שלילית)</option><option value="orange">חסרים נתונים</option>
         </select></div>
+        <div class="field"><label for="f-audit">ביקורת המעצב</label><select id="f-audit">
+          <option value="">הכול</option><option value="flagged">נדחה לעמדה או ציון הורד</option><option value="reject">נדחה לעמדה (המעצב)</option><option value="lower-fit">ציון הורד</option><option value="keep">המעצב בדק והשאיר</option><option value="team">רק הערכת הצוות</option>
+        </select></div>
         <div class="field"><label for="f-supplier">ספק</label><select id="f-supplier"></select></div>
         <div class="field"><label for="f-sort">מיון</label><select id="f-sort">
           <option value="default">לפי חדר ועמדה, ובכל עמדה לפי העיצוב</option>
-          <option value="design">ציון עיצוב נורדי: מהגבוה לנמוך</option>
+          <option value="design">ציון עיצוב נורדי: מהגבוה לנמוך (המעצב, אחריו הצוות)</option>
           <option value="cost-asc">עלות: מהזולה ליקרה</option>
           <option value="cost-desc">עלות: מהיקרה לזולה</option>
           <option value="margin-asc">מרווח: מהנמוך לגבוה</option>
@@ -1376,6 +1397,16 @@ const fmtPct = (x, dec=0) => isNum(x) ? (x*100).toFixed(dec).replace('-', '−')
 const ltr = html => `<span dir="ltr">${html}</span>`;
 const bidi = txt => `<span dir="ltr">${esc(txt)}</span>`;
 const mean = a => a.length ? a.reduce((s,x) => s + x, 0) / a.length : null;
+const median = a => { if(!a.length) return null; const b = a.slice().sort((x, y) => x - y), m = b.length >> 1; return b.length % 2 ? b[m] : (b[m - 1] + b[m]) / 2; };
+// the margin of a list of products (QA 2026-10-17, L5): the plain mean was pulled by outliers (−779%, −430%) to −32.5%
+// while the median was −7.5%. The median leads; the revenue-weighted margin (all contribution / all net revenue, one
+// sale of each) and the mean go next to it.
+function marginStats(list){
+  const w = list.filter(p => isNum(p.econ.margin) && isNum(p.econ.net) && isNum(p.econ.contribution));
+  const ms = w.map(p => p.econ.margin), net = w.reduce((t, p) => t + p.econ.net, 0);
+  return {n: w.length, median: median(ms), mean: mean(ms), weighted: net > 0 ? w.reduce((t, p) => t + p.econ.contribution, 0) / net : null};
+}
+const marginStatsLine = m => `משוקלל לפי הכנסה ${ltr(fmtPct(m.weighted, 1))} · ממוצע פשוט ${ltr(fmtPct(m.mean, 1))}`;
 const hostOf = u => { try{ return new URL(u).hostname.replace(/^www\./,''); }catch(e){ return ''; } };
 const httpsOk = u => typeof u === 'string' && /^https:\/\/[^\s/]+\.[^\s]+$/.test(u.trim());
 
@@ -1389,7 +1420,8 @@ const QUALITY = {high:'גבוהה', medium:'בינונית', low:'נמוכה'};
 const RIGHTS = {confirmed:'מאושרות', unclear:'לא ברורות', none:'אין'};
 const LIGHT = {direct:'ישיר', diffuse:'מפוזר', mixed:'משולב'};
 const TAG_HE = {'living-room':'סלון','bedroom':'חדר שינה','hallway':'כניסה','dining':'פינת אוכל','kitchen-dining':'מטבח ופינת אוכל','bath':'מקלחת','work':'עבודה','master':'הורים','corridor':'מסדרון','kids':'ילדים','kids-boy':'ילד','kids-girl':'ילדה'};
-const STYLE_HE = {nordic:'נורדי', boho:'בוהו', 'warm-modern':'מודרני חם'};
+const STYLE_HE = {nordic:'נורדי', 'warm-modern':'מודרני חם', japandi:'ג\'פנדי', mediterranean:'ים-תיכוני', 'modern-country':'כפרי מודרני', boho:'בוהו'};
+const STYLE_KEYS = Object.keys(STYLE_HE);
 const STD_HE = {unknown:'לא ידוע', unverified:'לא מאומת', stated:'מוצהר בהערות'};
 const WHO = {user:'המשתמש', manager:'המנהל', 'master-designer':'master-designer', 'sourcing-agent':'sourcing', 'motion-agent':'motion-agent', 'render-agent':'render-agent', 'qa-agent':'qa-agent', 'frontend-dev':'frontend-dev', astra:'astra', other:'אחר'};
 const FLAG_HE = {green:'עומד ביעד', red:'מתחת ליעד', orange:'חסרים נתונים'};
@@ -1514,7 +1546,7 @@ const S = {
   data:null, rooms:new Map(), slots:new Map(), base:new Map(),
   view:[], byId:new Map(), slotStats:new Map(), ES:null,
   screen:'overview', room:store.get('room', null),
-  filters:Object.assign({q:'', room:'', slot:'', status:'', supplier:'', flag:'', sort:'default', dups:false, pending:false}, store.get('filters', {})),
+  filters:Object.assign({q:'', room:'', slot:'', status:'', supplier:'', flag:'', audit:'', sort:'default', dups:false, pending:false}, store.get('filters', {})),
   report:store.get('report', null), logWho:store.get('logWho', 'all'), logQ:'',
   decFilter:store.get('decFilter','all'),
   todo:Object.assign({kind:'all', showDone:false}, store.get('todo', {})), todoSaving:new Set(), todoErr:null,
@@ -1698,10 +1730,33 @@ function norm(k, v){
 }
 const same = (k, a, b) => JSON.stringify(norm(k, a)) === JSON.stringify(norm(k, b));
 
+/* a product_edits document the art director marked synced (studio/apply_edits.py wrote it to the repo, then synced:true
+   and synced_at). Once this build is newer than the sync, the repo holds that edit, or something newer (a price the
+   pricing team changed since): the document's fields no longer override the repo (QA 2026-10-17, M8), and the card says
+   "סונכרן". A date-only synced_at ("2026-10-13") counts as the end of that day (a build of the same day keeps the db's
+   value); a synced document without synced_at keeps overriding, as before (its time is not known). */
+function syncTime(v){
+  if(typeof v !== 'string' || !v.trim()) return null;
+  const x = v.trim(), t = /^\d{4}-\d{2}-\d{2}$/.test(x) ? Date.parse(x + 'T23:59:59Z') : Date.parse(x);
+  return isFinite(t) ? t : null;
+}
+function syncedState(doc){
+  if(!doc || !doc.synced) return null;
+  const at = syncTime(doc.synced_at), built = Date.parse(((S.data && S.data.build) || {}).built_at || '');
+  return {at: typeof doc.synced_at === 'string' ? doc.synced_at : null, stale: at != null && isFinite(built) && at < built};
+}
+function syncedChip(e){
+  if(!e || !e.synced) return '';
+  const when = e.synced.at ? ' ב-' + fmtDay(e.synced.at) : '', built = fmtDay(((S.data && S.data.build) || {}).built_at);
+  const tip = e.synced.stale ? `העריכה מהסטודיו סונכרנה לריפו${when}, והבנייה (${built}) כבר כוללת אותה: מוצגים הערכים מהריפו`
+    : `העריכה סונכרנה לריפו${when}${e.synced.at ? ', אחרי הבנייה הזו' : ''}: עד הבנייה הבאה מוצגים הערכים מה-db`;
+  return `<span class="chip chip-synced" title="${esc(tip)}">סונכרן</span>`;
+}
 function effProduct(p){
   const doc = S.edits.get(p.id);
+  const ss = syncedState(doc);
   const bf = baseFlat(p);
-  const pf = doc ? fieldsToFlat(doc.fields, p) : {};
+  const pf = doc && !(ss && ss.stale) ? fieldsToFlat(doc.fields, p) : {};
   const f = Object.assign({}, bf, pf);
   const e = Object.assign({}, p);
   e.name = f.name; e.status = f.status; e.rooms = f.rooms || []; e.notes = f.notes; e.links = f.links || [];
@@ -1750,6 +1805,7 @@ function effProduct(p){
   e.priceQtyMismatch = !e.retailEdited && isNum(be.retail_ils) && qtyOk(be.price_for_qty) && be.price_for_qty !== e.qty;
   e.flat = f; e.bflat = bf; e.pflat = pf;
   e.pending = !!(doc && !doc.synced && Object.keys(pf).length);
+  e.synced = ss;
   e.history = (doc && doc.history) || [];
   const cur = p.price && p.price.currency;
   e.badCurrency = !!cur && String(cur).toUpperCase() !== 'USD';
@@ -1985,7 +2041,7 @@ function onDocClick(e){
   const sl = e.target.closest('[data-goto-slot]');
   if(sl){ e.preventDefault(); const key = sl.dataset.gotoSlot; const s = S.slots.get(key);
     if($('#drawer').open) closeDialog($('#drawer'));
-    Object.assign(S.filters, {room: s ? s.room : '', slot: key, status:'', supplier:'', flag:'', dups:false, pending:false, q:''});
+    Object.assign(S.filters, {room: s ? s.room : '', slot: key, status:'', supplier:'', flag:'', audit:'', dups:false, pending:false, q:''});
     syncFilterInputs(); renderProducts(); go('products'); return; }
   const gcomp = e.target.closest('[data-goto-comp]');
   if(gcomp){ e.preventDefault(); gotoComp(gcomp.dataset.gotoComp); return; }
@@ -2183,12 +2239,17 @@ function renderOverview(){
   const total = prods.length || 1;
   const stack = keys.filter(k => bs[k]).map(k => `<span class="s-${esc(k)}" data-w="${(bs[k]/total*100).toFixed(2)}"></span>`).join('');
   const dotCls = {candidate:'var(--ink-3)', selected:'var(--sage-ink)', rejected:'var(--brick-ink)'};
-  const statusRows = keys.map(k => `<dt><span class="dot" data-bg="${dotCls[k] || 'var(--rule-2)'}"></span><span>${esc(P_STATUS[k] || k)}</span></dt><dd>${bs[k] || 0}</dd>`).join('');
+  // "נבחר" as a card status (QA L4): no card carries it, the choices live in the compositions and catalogs (the boards)
+  const statusRows = keys.map(k => `<dt><span class="dot" data-bg="${dotCls[k] || 'var(--rule-2)'}"></span><span>${esc(k === 'selected' ? 'נבחר (סטטוס בכרטיס)' : P_STATUS[k] || k)}</span></dt><dd>${bs[k] || 0}</dd>`).join('');
+  const cb = D.counts.chosen_on_boards;
+  const chosenLine = cb ? `<p class="small" data-chosen="${esc(cb.cards)}">נבחרו בהרכבה או בקטלוג: <b>${esc(cb.cards)}</b> כרטיסים, ב-${esc(cb.slots)} מתוך ${esc(cb.of)} עמדות-סגנון (${esc(cb.boards)} לוחות) · <a href="#boards">ללוחות</a></p>` : '';
+  const sch = D.schema || {};
+  const schemaLine = sch.failing ? `<details class="small schema-line"><summary><span class="flag flag-orange"><i class="fdot"></i>${esc(sch.failing)} כרטיסים לא עומדים בסכמה</span> <span class="faint">(${esc(sch.schema || '')}, לתיקון ב-sourcing-agent)</span></summary><ul class="plain-ul xs">${Object.entries(sch.by_kind || {}).map(([k, n]) => `<li><b>${esc(n)}</b> · <code dir="ltr">${esc(k)}</code></li>`).join('')}</ul></details>` : '';
   const pending = S.view.filter(p => p.pending).length;
   const nNew = S.view.filter(p => p._new).length;
 
   const pb = profitBasis();
-  const margins = pb.filter(p => isNum(p.econ.margin)).map(p => p.econ.margin);
+  const ms = marginStats(pb);
   const fl = {green:0, red:0, orange:0}; for(const p of pb) fl[p.econ.flag]++;
   const hiShip = pb.filter(p => isNum(p.econ.ship_share) && p.econ.ship_share > 0.5).length;
   const be = breakEven();
@@ -2236,12 +2297,15 @@ function renderOverview(){
             <p><span class="stat bignum">${prods.length}</span> <span class="muted">כרטיסי מוצר</span>${nNew ? ` <span class="chip chip-new">+${nNew} לידים חדשים</span>` : ''}</p>
             <div class="stack" role="img" aria-label="${keys.map(k => `${P_STATUS[k] || k} ${bs[k] || 0}`).join(', ')}">${stack}</div>
             <dl class="kv">${statusRows}</dl>
+            ${chosenLine}
             ${Object.keys(D.counts.duplicate_ids || {}).length ? `<p class="small"><span class="flag flag-red"><i class="fdot"></i>${Object.keys(D.counts.duplicate_ids).length} מזהים כפולים: ${Object.entries(D.counts.duplicate_ids).map(([k, v]) => `<code dir="ltr">${esc(k)}</code> (${esc(v.length)} קבצים)`).join(', ')}. הסטודיו מציג כרטיס אחד לכל מזהה, וסנכרון עריכה אליהם נחסם.</span></p>` : ''}
             <p class="small muted">${D.counts.duplicates} כרטיסים כפולים · ${D.counts.images_failed ? `${D.counts.images_failed} בלי תמונה` : 'לכל המוצרים יש תמונה'}${pending ? ` · <span class="flag flag-orange">${pending} ממתינים לסנכרון</span>` : ''}</p>
+            ${schemaLine}
           </div>
           <div class="section-head"><h2>רווחיות</h2><a class="small" href="#profit">למסך הרווחיות</a></div>
           <div class="side-card">
-            <p><span class="stat bignum">${margins.length ? ltr(fmtPct(mean(margins), 1)) : '—'}</span> <span class="muted">מרווח ממוצע${margins.length ? ` (${margins.length} מוצרים עם כל הנתונים)` : ''}</span></p>
+            <p><span class="stat bignum" id="ov-margin">${ms.n ? ltr(fmtPct(ms.median, 1)) : '—'}</span> <span class="muted">מרווח חציוני${ms.n ? ` (${ms.n} מוצרים עם כל הנתונים)` : ''}</span></p>
+            ${ms.n ? `<p class="small muted">${marginStatsLine(ms)}</p>` : ''}
             <dl class="kv">
               <dt><span class="dot" data-bg="var(--sage-ink)"></span><span>עומדים ביעד ${ltr(esc(S.ES.v.target_margin_pct + '%'))}</span></dt><dd>${fl.green}</dd>
               <dt><span class="dot" data-bg="var(--brick-ink)"></span><span>מתחת ליעד</span></dt><dd>${fl.red}</dd>
@@ -2969,9 +3033,43 @@ function ceilHtml(c){
   ].filter(Boolean);
   return `${rows.length ? `<dl class="src-ceil">${rows.map(([l, v]) => `<div><dt>${esc(l)}</dt><dd>${v}</dd></div>`).join('')}</dl>` : ''}${(c.notes || []).length ? `<p class="src-why" dir="auto">${c.notes.map(esc).join(' · ')}</p>` : ''}`;
 }
+// the round that runs now (QA 2026-10-17, L6): <final round>/round<N>/targets.json from build.py, with what each style
+// still needs per slot and the envelope as data/slots has it today
+function currentRoundHtml(C){
+  const STY = STYLE_KEYS.filter(k => (C.shortfall || {})[k]);
+  const td = n => `<td class="num ${n ? '' : 'zero'}">${esc(isNum(n) ? n : '—')}</td>`;
+  const table = STY.length ? `<div class="tbl-wrap" tabindex="0" role="region" aria-label="מה חסר לכל סגנון בסבב ${esc(C.round)}"><table class="src-matrix">
+      <caption class="sr-only">לכל סגנון: עמדות שנספרות, עמדות עם 3 אפשרויות מוכנות, היעד וכמה עוד חסרות</caption>
+      <thead><tr><th scope="col">סגנון</th><th scope="col">עמדות</th><th scope="col">מוכנות</th><th scope="col">יעד ${esc(C.target_pct || 80)}%</th><th scope="col">חסרות</th></tr></thead>
+      <tbody>${STY.map(k => { const v = C.shortfall[k]; return `<tr><th scope="row">${esc(STYLE_HE[k])}</th>${td(v.eligible)}${td(v.covered_ready)}${td(v.goal_80)}${td(v.more_needed)}</tr>`; }).join('')}</tbody>
+    </table></div>` : '';
+  const PR = {high: 'גבוהה', medium: 'בינונית', low: 'נמוכה'};
+  const items = (C.targets || []).map(t => {
+    const s = S.slots.get(t.slot), room = s && S.rooms.get(s.room);
+    const need = STYLE_KEYS.filter(k => t.styles && t.styles[k] && t.styles[k].need > 0).map(k => `<span class="chip" title="${esc(`יש ${t.styles[k].have ?? 0} מוכנות, חסרות ${t.styles[k].need}`)}">${esc(STYLE_HE[k])} ${esc(t.styles[k].need)}</span>`).join('');
+    const env = (t.envelope || []).map(x => `<span class="chip" dir="ltr">${esc(x)}</span>`).join('');
+    const alt = (t.alternative_form || []).map(a => `<span class="chip chip-design-o" title="${esc(a.note || '')}">צורה חלופית: ${esc(a.name_he || a.id || '')}${isNum(a.set_of) ? `, ${esc(a.set_of)} יח'` : ''}</span>${(a.envelope || []).map(x => `<span class="chip" dir="ltr">${esc(x)}</span>`).join('')}`).join('');
+    return `<li class="cur-item" data-slot="${esc(t.slot)}">
+      <div class="src-head"><span class="small"><b>${esc(room ? room.name_he : t.slot.split('/')[0])} · ${esc(t.name_he || (s && s.name_he) || t.slot)}</b></span><span class="code-tag" dir="ltr">${esc(t.slot)}</span>${t.priority ? `<span class="chip chip-prio-${esc(t.priority)}">${esc(PR[t.priority] || t.priority)}</span>` : ''}${t.in_slots === false ? '<span class="chip chip-warn">לא בקובץ העמדות</span>' : ''}</div>
+      ${need ? `<div class="chiprow" aria-label="חסרות לפי סגנון">${need}</div>` : ''}
+      ${env ? `<div class="chiprow"><span class="xs faint">המעטפת היום${t.slots_version ? ` (גרסה ${esc(t.slots_version)})` : ''}:</span>${env}</div>` : ''}
+      ${alt ? `<div class="chiprow">${alt}</div>` : ''}
+      ${(t.envelope_round || []).length ? `<p class="xs faint">בקובץ היעדים: <span dir="ltr">${esc(t.envelope_round.join(' · '))}</span> (המעטפת השתנתה מאז)</p>` : ''}
+    </li>`;
+  }).join('');
+  return `<section class="section src-current" aria-labelledby="h-src-cur">
+    <div class="section-head"><h2 id="h-src-cur">הסבב הנוכחי: סבב ${esc(C.round)}</h2><span class="small faint"><code>${esc(C.file)}</code>${C.date ? ` · ${esc(fmtDay(C.date))}` : ''}${C.metric ? ` · <span dir="ltr">${esc(C.metric)}</span>` : ''}</span></div>
+    ${table}
+    <details class="comp-more"><summary>${esc((C.targets || []).length)} עמדות יעד, לפי עדיפות ומה שחסר</summary><ul class="plain-ul cur-list">${items}</ul></details>
+  </section>`;
+}
 function srcSlotHtml(s, res, comp){
   const id = 'src-' + s.key.replace(/[^\w-]+/g, '--');
   const room = S.rooms.get(s.room);
+  // the envelope as data/slots has it today (QA 2026-10-17, L6), when it is not the one this round's list wrote
+  const envNow = (S.slots.get(s.key) || {}).envelope || [];
+  const envDiff = envNow.length > 0 && JSON.stringify(envNow) !== JSON.stringify(s.envelope || []);
+  const envChips = a => `<div class="chiprow">${a.map(x => `<span class="chip" dir="ltr">${esc(x)}</span>`).join('')}</div>`;
   const qs = (s.queries || []).map(q => `<li><code>${esc(q.q)}</code>${q.tier ? `<span class="chip tier-${esc(q.tier)}">${esc(TIER_SHORT[q.tier] || q.tier)}</span>` : '<span class="chip tier-none" title="השאילתה מופיעה בעמדה אבל לא בתוכנית החיפוש (search_plan)">לא בתוכנית</span>'}${q.src && q.src !== s.source ? `<span class="chip">${esc(SRC_HE[q.src] || q.src)}</span>` : ''}${q.shared ? `<span class="chip" title="שאילתה אחת שמשרתת כמה עמדות, רצה פעם אחת">משותפת ל-${esc(q.shared)} עמדות</span>` : ''}</li>`).join('');
   const rows = (res && res.items) || [], reps = (res && res.reports) || [];
   const OPEN_HE = {card:'כרטיס', rejected:'נדחו', seen:'נראו', other:'אחר'};
@@ -2988,9 +3086,10 @@ function srcSlotHtml(s, res, comp){
     ${blocked}
     ${s.spec ? `<p class="src-spec" dir="auto">${rich(s.spec)}</p>` : ''}
     ${ceilHtml(s.ceiling)}
-    ${s.why || (s.envelope || []).length || (s.check_first || []).length ? `<details class="comp-more src-more"><summary>${esc(['למה', (s.envelope || []).length ? 'מידות' : '', (s.check_first || []).length ? `מה לבדוק קודם (${s.check_first.length})` : ''].filter(Boolean).join(', '))}</summary>
+    ${s.why || (s.envelope || []).length || envDiff || (s.check_first || []).length ? `<details class="comp-more src-more"><summary>${esc(['למה', (s.envelope || []).length || envDiff ? (envDiff ? 'מידות (השתנו מאז)' : 'מידות') : '', (s.check_first || []).length ? `מה לבדוק קודם (${s.check_first.length})` : ''].filter(Boolean).join(', '))}</summary>
       ${s.why ? `<p class="src-why" dir="auto"><b>למה:</b> ${esc(s.why)}</p>` : ''}
-      ${(s.envelope || []).length ? `<div class="chiprow">${s.envelope.map(x => `<span class="chip" dir="ltr">${esc(x)}</span>`).join('')}</div>` : ''}
+      ${envDiff ? `<p class="eyebrow">המעטפת היום (data/slots${room && room.slots_version ? `, גרסה ${esc(room.slots_version)}` : ''})</p>${envChips(envNow)}${(s.envelope || []).length ? `<p class="eyebrow">ברשימת הסבב (ישנה)</p>${envChips(s.envelope)}` : ''}`
+        : (s.envelope || []).length ? envChips(s.envelope) : ''}
       ${(s.check_first || []).length ? `<div><p class="eyebrow">לבדוק קודם</p><ul class="plain-ul small">${s.check_first.map(x => `<li dir="auto">${esc(x)}</li>`).join('')}</ul></div>` : ''}
     </details>` : ''}
     ${(() => { const head = `שאילתות חדשות (${(s.queries || []).length})`, seen = isNum(s.searched_n) ? `כבר רצו לעמדה: ${esc(s.searched_n)} שאילתות AliExpress` : '';
@@ -3061,13 +3160,16 @@ function renderSourcing(){
   const dropped = (N.dropped || []).length ? `<div class="tbl-wrap" tabindex="0" role="region" aria-label="טבלת השאילתות שהוסרו"><table class="drop-table"><caption class="sr-only">שאילתות שהוסרו כי כבר רצה שאילתה כמעט זהה</caption><thead><tr><th scope="col">עמדה</th><th scope="col">השאילתה שהוסרה</th><th scope="col">כבר רצה</th></tr></thead><tbody>${N.dropped.map(x => `<tr><td><span class="code-tag" dir="ltr">${esc(x.slot)}</span></td><td><code>${esc(x.query)}</code></td><td><code>${esc(x.already_ran)}</code></td></tr>`).join('')}</tbody></table></div>` : '<p class="small faint">אין.</p>';
   const opt = (v, cur, label) => `<option value="${esc(v)}" ${cur === v ? 'selected' : ''}>${esc(label)}</option>`;
   const cnt = (k, v) => N.slots.filter(s => s[k] === v).length;
-  $('#src-count').textContent = `סבב ${N.round || '?'} · ${fmtDay(N.date)} · ${N.slots.length} עמדות · ${N.n_queries} שאילתות`;
+  const CUR = N.current && N.current.present ? N.current : null;
+  $('#src-count').textContent = CUR ? `הסבב הנוכחי: ${CUR.round} · ${CUR.targets.length} עמדות יעד · רשימת השאילתות של סבב ${N.round || '?'} (${fmtDay(N.date)})`
+    : `סבב ${N.round || '?'} · ${fmtDay(N.date)} · ${N.slots.length} עמדות · ${N.n_queries} שאילתות`;
   box.innerHTML = `<div class="screen roomy">
     <div class="cmp-src">
-      <div class="db-line"><span class="db-dot live"></span><span><strong>הרשימה:</strong> <code>${esc(N.file)}</code>${N.md ? ` · לקריאה <code>${esc(N.md)}</code>` : ''}${SX.file ? ` · מה כבר חיפשנו: <code>${esc(SX.file)}</code>${SX.updated ? ` (${esc(fmtDay(SX.updated))})` : ''}` : ''}${N.freight_checks_pending ? ` · בדיקות משלוח פתוחות: <code>${esc(N.freight_checks_pending)}</code>` : ''}</span></div>
+      <div class="db-line"><span class="db-dot live"></span><span><strong>${CUR ? `רשימת השאילתות של סבב ${esc(N.round || '?')} (${esc(fmtDay(N.date))}), לא הסבב הנוכחי:` : 'הרשימה:'}</strong> <code>${esc(N.file)}</code>${N.md ? ` · לקריאה <code>${esc(N.md)}</code>` : ''}${SX.file ? ` · מה כבר חיפשנו: <code>${esc(SX.file)}</code>${SX.updated ? ` (${esc(fmtDay(SX.updated))})` : ''}` : ''}${N.freight_checks_pending ? ` · בדיקות משלוח פתוחות: <code>${esc(N.freight_checks_pending)}</code>` : ''}</span></div>
       ${resLine}
     </div>
-    <section class="section" aria-labelledby="h-src-sum"><div class="section-head"><h2 id="h-src-sum">היקף הסבב</h2><span class="small faint">לפי שכבה ולפי מקור</span></div>
+    ${CUR ? currentRoundHtml(CUR) : ''}
+    <section class="section" aria-labelledby="h-src-sum"><div class="section-head"><h2 id="h-src-sum">${CUR ? `היקף רשימת סבב ${esc(N.round || '?')}` : 'היקף הסבב'}</h2><span class="small faint">לפי שכבה ולפי מקור</span></div>
       ${tiles}${matrix}</section>
     ${(N.rules || []).length ? `<section class="section" aria-labelledby="h-src-rules"><div class="section-head"><h2 id="h-src-rules">כללי הסבב</h2></div><ol class="src-rules">${N.rules.map(x => `<li dir="auto">${esc(x)}</li>`).join('')}</ol></section>` : ''}
     <section class="section" aria-labelledby="h-src-slots"><div class="section-head"><h2 id="h-src-slots">העמדות, לפי עדיפות</h2><span class="small faint">גבוהה, בינונית ונמוכה; בכל עדיפות ריקות לפני חלקיות, ובהמתנה בסוף</span></div>
@@ -3121,12 +3223,13 @@ function initFilters(){
   if(F.slot && F.slot !== NO_SLOT && !S.slots.has(F.slot)) F.slot = '';
   if(F.status && !statuses.includes(F.status)) F.status = '';
   if(F.supplier && !sups.includes(F.supplier)) F.supplier = '';
+  if(F.audit && !(F.audit in AUD_FILTER_HE)) F.audit = '';
   fillSlotSelect();
   syncFilterInputs();
   const upd = () => { readFilters(); renderProducts(); };
   $('#f-q').addEventListener('input', upd);
   $('#f-room').addEventListener('change', () => { S.filters.room = $('#f-room').value; const s = S.slots.get(S.filters.slot); if(s && S.filters.room && s.room !== S.filters.room) S.filters.slot = ''; fillSlotSelect(); syncFilterInputs(); upd(); });
-  for(const id of ['#f-slot','#f-status','#f-supplier','#f-flag','#f-sort','#f-dups','#f-pending']) $(id).addEventListener('change', upd);
+  for(const id of ['#f-slot','#f-status','#f-supplier','#f-flag','#f-audit','#f-sort','#f-dups','#f-pending']) $(id).addEventListener('change', upd);
   $('#filters').addEventListener('submit', e => e.preventDefault());
 }
 function slotOptions(room, withEmpty){
@@ -3143,19 +3246,64 @@ function syncFilterInputs(){
   const f = S.filters;
   if(S.data) fillSlotSelect();
   $('#f-q').value = f.q; $('#f-room').value = f.room; $('#f-slot').value = f.slot; $('#f-status').value = f.status;
-  $('#f-supplier').value = f.supplier; $('#f-flag').value = f.flag || ''; $('#f-sort').value = f.sort; $('#f-dups').checked = !!f.dups; $('#f-pending').checked = !!f.pending;
+  $('#f-supplier').value = f.supplier; $('#f-flag').value = f.flag || ''; $('#f-audit').value = f.audit || ''; $('#f-sort').value = f.sort; $('#f-dups').checked = !!f.dups; $('#f-pending').checked = !!f.pending;
 }
 function readFilters(){
   const f = S.filters;
   f.q = $('#f-q').value; f.room = $('#f-room').value; f.slot = $('#f-slot').value; f.status = $('#f-status').value;
-  f.supplier = $('#f-supplier').value; f.flag = $('#f-flag').value; f.sort = $('#f-sort').value; f.dups = $('#f-dups').checked; f.pending = $('#f-pending').checked;
+  f.supplier = $('#f-supplier').value; f.flag = $('#f-flag').value; f.audit = $('#f-audit').value; f.sort = $('#f-sort').value; f.dups = $('#f-dups').checked; f.pending = $('#f-pending').checked;
   store.set('filters', Object.assign({}, f, {q:''}));
 }
 const tagName = t => TAG_HE[t] || (S.rooms.get(t) && S.rooms.get(t).name_he) || t;
 // "פינת אוכל · פמוטים, סלון · אגרטל": the slots a card is shared into (data/slots shared_ids)
 const sharedSlotsText = p => (p.shared_in || []).map(k => { const s = S.slots.get(k); const r = s && S.rooms.get(s.room); return `${r ? r.name_he : (s ? s.room : k.split('/')[0])} · ${s ? (s.name_he || s.id) : k}`; }).join(', ');
-// the designer's Nordic score of a card (style_scores.nordic.score, 0-10), or null when it is not scored yet
-const designScore = p => { const x = p && p.style_scores && p.style_scores.nordic; return x && isNum(x.score) ? x.score : null; };
+/* a card's fit and the designer's verdict, per slot (QA 2026-10-17, M6). build.py writes
+   p.audit = {slot key or "*": {v, fit, vf, note, flags, seen, env_ok, team, file}}: the master-designer's audits
+     (round*/designer-audit*.json, read through scripts/sourcing/final_round_coverage.py audits()); auditOf() picks an
+     entry the way its audit_for() does: the slot's own entry, then "*". v "reject" = rejected for that slot (the card
+     stays in the basket), "lower-fit" = the designer lowered the team's score, "keep" = checked and kept.
+   p.guess = {slot key: {fit, file, date}}: the team's style_fit_guess in the final round (round-5 cards have no
+     style_scores).
+   The fit of a style: the designer's audit for the slot, else the designer's style_scores, else the team's guess. */
+const auditOf = (p, key) => { const a = p && p.audit; return a ? ((key && a[key]) || a['*'] || null) : null; };
+const guessOf = (p, key) => { const g = p && p.guess; if(!g) return null; return (key && g[key]) || (p.slot_key && g[p.slot_key]) || Object.values(g)[0] || null; };
+const AUD_HE = {reject: 'נדחה לעמדה (המעצב)', 'lower-fit': 'ציון הורד', keep: 'המעצב בדק'};
+const AUD_FILTER_HE = {flagged: 'נדחה לעמדה או ציון הורד', reject: 'נדחה לעמדה (המעצב)', 'lower-fit': 'ציון הורד', keep: 'המעצב בדק והשאיר', team: 'רק הערכת הצוות'};
+const FIT_SRC_HE = {audit: 'המעצב', scores: 'המעצב', team: 'הצוות', deep: 'הליקוט המעמיק'};
+function fitOf(p, key, st){
+  const a = auditOf(p, key);
+  if(a && a.fit && isNum(a.fit[st])) return {n: a.fit[st], src: 'audit', file: a.file || null};
+  const x = p && p.style_scores && p.style_scores[st];
+  if(x && isNum(x.score)) return {n: x.score, src: 'scores', file: 'style_scores'};
+  const g = guessOf(p, key);
+  if(g && g.fit && isNum(g.fit[st])) return {n: g.fit[st], src: 'team', file: g.file || null};
+  return null;
+}
+// the slot a card is shown in on the products screen: the filtered slot when it comes in through a shared slot
+const shownSlot = p => { const f = (S.filters || {}).slot; return f && f !== NO_SLOT && p.slot_key !== f && (p.shared_in || []).includes(f) ? f : p.slot_key; };
+const audVerdict = p => { const a = auditOf(p, shownSlot(p)); return a && a.v ? a.v : null; };
+// the designer's Nordic score of a card in its shown slot (0-10), or null when only the team guessed it (or nobody)
+const designScore = p => { const f = fitOf(p, shownSlot(p), 'nordic'); return f && f.src !== 'team' ? f.n : null; };
+const guessScore = p => { const f = fitOf(p, shownSlot(p), 'nordic'); return f && f.src === 'team' ? f.n : null; };
+// the card's fit chip: Nordic when anyone scored it, else the style it fits best; the team's guess is dashed
+function fitChip(p){
+  const key = shownSlot(p);
+  let st = 'nordic', f = fitOf(p, key, 'nordic');
+  if(!f) for(const k of STYLE_KEYS){ const x = fitOf(p, key, k); if(x && (!f || x.n > f.n || (x.n === f.n && f.src === 'team' && x.src !== 'team'))){ f = x; st = k; } }
+  if(!f) return '';
+  const lab = STYLE_HE[st] || st;
+  if(f.src === 'team') return `<span class="chip chip-guess" title="${esc(`הערכת הצוות בליקוט${f.file ? ` (${f.file})` : ''}. המעצב עוד לא נתן ציון ל${lab} בעמדה הזו`)}"><span class="sr-only">הערכת הצוות: </span>${esc(lab)} <b dir="ltr">${esc(f.n)}</b></span>`;
+  const tip = f.src === 'audit' ? `ציון המעצב ל${lab} בעמדה (ביקורת${f.file ? ` ${f.file}` : ''}), גובר על הערכת הצוות` : `ציון העיצוב של המעצב ל${lab} (style_scores)`;
+  return `<span class="chip ${st === 'nordic' ? 'chip-design' : 'chip-sty chip-design-o'}" title="${esc(tip)}">${esc(lab)} <b dir="ltr">${esc(f.n)}</b></span>`;
+}
+// the designer's verdict for the shown slot: "נדחה לעמדה (המעצב)" or "ציון הורד" (with the designer's note as the title)
+function auditChip(p, key){
+  const a = auditOf(p, key === undefined ? shownSlot(p) : key);
+  if(!a || (a.v !== 'reject' && a.v !== 'lower-fit')) return '';
+  const fits = Object.entries(a.fit || {}).map(([k, n]) => `${STYLE_HE[k] || k} ${n}`).join(', ');
+  const tip = [a.v === 'reject' ? 'המעצב דחה את המוצר לעמדה הזו. הוא נשאר בסל המוצרים (ה.12).' : 'המעצב הוריד את הציון של הצוות.', fits ? `ציון המעצב: ${fits}.` : '', a.note || '', a.file ? `(${a.file})` : ''].filter(Boolean).join(' ');
+  return `<span class="chip ${a.v === 'reject' ? 'chip-aud-reject' : 'chip-aud-lower'}" title="${esc(tip)}">${esc(AUD_HE[a.v])}</span>`;
+}
 function slotLabel(p){
   if(!p.slot_key){
     if(p._new) return 'ליד בלי עמדה';
@@ -3179,6 +3327,12 @@ function filtered(){
     if(f.supplier && !(p.supplier && p.supplier.name === f.supplier)) return false;
     if(f.flag === 'loss'){ if(!isLoser(p)) return false; }
     else if(f.flag && p.econ.flag !== f.flag) return false;
+    if(f.audit){ // the designer's audit for the slot the card is shown in (QA M6)
+      const v = audVerdict(p);
+      if(f.audit === 'flagged'){ if(v !== 'reject' && v !== 'lower-fit') return false; }
+      else if(f.audit === 'team'){ if(designScore(p) != null || guessScore(p) == null || v) return false; }
+      else if(v !== f.audit) return false;
+    }
     if(f.dups && !(p.dups || []).length) return false;
     if(f.pending && !p.pending) return false;
     if(toks.length){ const h = haystack(p); if(!toks.every(t => h.includes(t))) return false; }
@@ -3188,9 +3342,14 @@ function filtered(){
   const slotIdx = new Map(); S.data.rooms.forEach(r => r.slots.forEach((s,i) => slotIdx.set(s.key, i)));
   const cost = p => isNum(p.price && p.price.cost) ? p.price.cost : Infinity;
   const mg = p => isNum(p.econ.margin) ? p.econ.margin : null;
-  // design first (user, 2026-10-11): products that do not lose money first (ה.13: losing ones last, never hidden), then
-  // the Nordic design score high to low, then the margin high to low; unscored after scored
-  const byDesign = (a, b) => (isLoser(a) - isLoser(b)) || ((designScore(a) == null) - (designScore(b) == null)) || ((designScore(b) ?? 0) - (designScore(a) ?? 0))
+  // design first (user, 2026-10-11): products that do not lose money first (ה.13: losing ones last, never hidden), and
+  // among them the ones the designer rejected for the slot after the rest (QA M6, kept in the basket, ה.12); then the
+  // Nordic fit high to low: the designer's score first (its audit, else style_scores), then the team's guess, then
+  // unscored; then the margin high to low
+  const audRej = p => audVerdict(p) === 'reject';
+  const tier = p => designScore(p) != null ? 0 : guessScore(p) != null ? 1 : 2;
+  const fitN = p => designScore(p) ?? guessScore(p) ?? 0;
+  const byDesign = (a, b) => (isLoser(a) - isLoser(b)) || (audRej(a) - audRej(b)) || (tier(a) - tier(b)) || (fitN(b) - fitN(a))
     || ((mg(a) == null) - (mg(b) == null)) || ((mg(b) ?? 0) - (mg(a) ?? 0)) || a.id.localeCompare(b.id);
   if(f.sort === 'cost-asc') list.sort((a,b) => cost(a) - cost(b));
   else if(f.sort === 'cost-desc') list.sort((a,b) => (cost(b) === Infinity ? -1 : cost(b)) - (cost(a) === Infinity ? -1 : cost(a)));
@@ -3212,9 +3371,9 @@ function renderProducts(){
   renderSyncLine();
   const list = filtered();
   const f = S.filters;
-  const active = [f.room && S.rooms.get(f.room)?.name_he, f.slot && (f.slot === NO_SLOT ? 'בלי עמדה' : (S.slots.get(f.slot)?.name_he || f.slot)), f.status && (P_STATUS[f.status] || f.status), f.flag && (f.flag === 'loss' ? 'מפסיד' : FLAG_HE[f.flag]), f.supplier, f.dups && 'כפולים', f.pending && 'ממתינים לסנכרון', f.q.trim() && `"${f.q.trim()}"`].filter(Boolean);
+  const active = [f.room && S.rooms.get(f.room)?.name_he, f.slot && (f.slot === NO_SLOT ? 'בלי עמדה' : (S.slots.get(f.slot)?.name_he || f.slot)), f.status && (P_STATUS[f.status] || f.status), f.flag && (f.flag === 'loss' ? 'מפסיד' : FLAG_HE[f.flag]), f.audit && AUD_FILTER_HE[f.audit], f.supplier, f.dups && 'כפולים', f.pending && 'ממתינים לסנכרון', f.q.trim() && `"${f.q.trim()}"`].filter(Boolean);
   $('#p-result').innerHTML = `<span><strong class="num">${list.length}</strong> מתוך ${S.view.length} מוצרים${active.length ? ` · ${esc(active.join(' · '))}` : ''}</span>${active.length ? '<button type="button" class="linkish" id="f-reset">ניקוי הסינון</button>' : ''}`;
-  const rb = $('#f-reset'); if(rb) rb.onclick = () => { Object.assign(S.filters, {q:'', room:'', slot:'', status:'', supplier:'', flag:'', dups:false, pending:false}); syncFilterInputs(); readFilters(); renderProducts(); $('#f-q').focus(); };
+  const rb = $('#f-reset'); if(rb) rb.onclick = () => { Object.assign(S.filters, {q:'', room:'', slot:'', status:'', supplier:'', flag:'', audit:'', dups:false, pending:false}); syncFilterInputs(); readFilters(); renderProducts(); $('#f-q').focus(); };
   if(!list.length){ $('#pgrid').innerHTML = `<p class="empty span-all">אין מוצרים שמתאימים לסינון.${f.slot === NO_SLOT ? ' כל המוצרים משובצים בעמדה או במאגר משותף.' : f.slot ? ' לעמדה הזו עוד אין כרטיסי מוצר.' : ''}</p>`; return; }
   const restore = keepFocus($('#pgrid'));
   // a card or its price button has no id: after a re-render (a db snapshot, a save) focus goes back to the same one
@@ -3230,15 +3389,16 @@ function renderProducts(){
     const shipTip = isNum(p.ship.usd) ? `משלוח לישראל ליחידה · ${p.ship.label}${p.qty > 1 ? ` · ל-${p.qty} יח' ${fmtUSD(p.ship.total)}` : ''}` : '';
     const price = isNum(p.retail) && p.retail > 0 ? `<span class="pprice"><span class="num" dir="ltr">${esc(fmtILS(p.retail))}</span>${p.retailInitial ? initialChip(p) : ''}</span>` : '';
     // data-* for the smoke test and for scripts: flag, what is missing, where shipping and the price come from, units per sale
-    const dat = `data-pid="${esc(p.id)}" data-flag="${esc(p.econ.flag)}" data-miss="${esc(p.econ.missing.join(','))}" data-ship-src="${esc(p.ship.src || (p.ship.noroute ? 'no_route' : p.ship.nofast ? 'nofast' : ''))}" data-qty="${esc(p.qty)}" data-retail-src="${esc(!isNum(p.retail) ? '' : p.retailInitial ? 'initial' : p.retailEdited ? 'studio' : 'file')}" data-sup="${esc(baseEcon(p.id).sup || '')}"`;
+    const dat = `data-pid="${esc(p.id)}" data-flag="${esc(p.econ.flag)}" data-miss="${esc(p.econ.missing.join(','))}" data-ship-src="${esc(p.ship.src || (p.ship.noroute ? 'no_route' : p.ship.nofast ? 'nofast' : ''))}" data-qty="${esc(p.qty)}" data-retail-src="${esc(!isNum(p.retail) ? '' : p.retailInitial ? 'initial' : p.retailEdited ? 'studio' : 'file')}" data-sup="${esc(baseEcon(p.id).sup || '')}" data-audit="${esc(p._new ? '' : audVerdict(p) || '')}" data-fit-src="${esc(p._new ? '' : ((fitOf(p, shownSlot(p), 'nordic') || {}).src || ''))}"${p.synced ? ` data-synced="${p.synced.stale ? 'stale' : 'live'}"` : ''}`;
     return `<div class="pcard-w${S.quick && S.quick.id === p.id ? ' is-quick' : ''}" ${dat}><button type="button" class="pcard" data-product="${esc(p.id)}" aria-haspopup="dialog">
       <span class="pimg ${p._new ? 'ph' : ''}">${img}
-        <span class="chips">${p._new ? '<span class="chip chip-new">ליד חדש</span>' : `<span class="chip st-${esc(p.status)}">${esc(P_STATUS[p.status] || p.status)}</span>`}${designScore(p) != null ? `<span class="chip chip-design" title="ציון העיצוב הנורדי של המעצב (style_scores.nordic)">נורדי <b dir="ltr">${esc(designScore(p))}</b></span>` : ''}${(p.dups || []).length ? '<span class="chip chip-dup">כפול</span>' : ''}${p.pending ? '<span class="chip chip-pending">ממתין לסנכרון</span>' : ''}</span>
+        <span class="chips">${p._new ? '<span class="chip chip-new">ליד חדש</span>' : `<span class="chip st-${esc(p.status)}">${esc(P_STATUS[p.status] || p.status)}</span>`}${p._new ? '' : fitChip(p)}${(p.dups || []).length ? '<span class="chip chip-dup">כפול</span>' : ''}${p.pending ? '<span class="chip chip-pending">ממתין לסנכרון</span>' : syncedChip(p)}</span>
         ${p._new || p.img.ok ? '' : '<span class="noimg chip">אין תמונה</span>'}</span>
       <span class="pbody">
         <span class="pname" dir="auto">${esc(p.name)}</span>
         <span class="pslot">${esc(slotLabel(p))}${viaShared ? ' · דרך מאגר משותף' : ''}</span>
         <span class="pslot faint">${esc((p.rooms || []).map(tagName).join(', '))}</span>
+        ${p._new ? '' : (a => a ? `<span class="paudit">${a}</span>` : '')(auditChip(p))}
         <span class="prow"><span class="cost num" dir="ltr" title="עלות אצל הספק ליחידה">${esc(fmtUSD(p.price && p.price.cost))}</span>${isNum(p.ship.usd) ? `<span class="pship" title="${esc(shipTip)}"><span class="num" dir="ltr">+${esc(fmtUSD(p.ship.usd))}</span> משלוח</span>` : ''}${price}</span>
         <span class="prow pmeta">${days ? `<span><span class="num" dir="ltr">${esc(days)}</span> ימים</span>` : ''}${hex ? `<span class="swrow"><span class="swatch" data-sw="${esc(hex)}"></span><span class="hex" dir="ltr">${esc(hex)}</span></span>` : ''}${p.options_n ? `<span class="popts" title="${esc((p.options_axes || []).join(', '))}"><span class="num">${p.options_n}</span> אפשרויות</span>` : ''}<span class="faint">${esc(p.supplier && p.supplier.name || '')}</span></span>
         <span class="pecon">${flagHtml(p)}${p._new ? '' : ' ' + qtyHtml(p)}${priceChips(p) ? ' ' + priceChips(p) : ''}</span>
@@ -3405,6 +3565,30 @@ function bindMarket(e){
     say(`המחיר בטופס עודכן ל-${pt} שקלים. לשמירה לוחצים "שמירת השינויים".`);
   };
 }
+// the fit of every style in a slot, with where it comes from: "נורדי 8 (המעצב) · בוהו 7 (הצוות)" (QA M6)
+function fitsLine(p, key){
+  const parts = STYLE_KEYS.map(st => [st, fitOf(p, key, st)]).filter(([, f]) => f);
+  if(!parts.length) return '';
+  return parts.map(([st, f]) => `<span class="${f.src === 'team' ? 'faint' : ''}">${esc(STYLE_HE[st])} <b dir="ltr">${esc(f.n)}</b> (${esc(FIT_SRC_HE[f.src])})</span>`).join(' · ');
+}
+// the designer's audit entries of a card, every slot, and the team's guess per slot (QA 2026-10-17, M6)
+function auditBlock(p){
+  const entries = Object.entries(p.audit || {}), guesses = Object.entries(p.guess || {});
+  if(!entries.length && !guesses.length) return '';
+  const slotTxt = k => { if(k === '*') return 'כל העמדות'; const s = S.slots.get(k); return s ? `${(S.rooms.get(s.room) || {}).name_he || s.room} · ${s.name_he || s.id}` : k; };
+  const fitTxt = fit => Object.entries(fit || {}).map(([k, n]) => `${STYLE_HE[k] || k} ${n}`).join(' · ');
+  const cls = v => v === 'reject' ? 'chip-aud-reject' : v === 'lower-fit' ? 'chip-aud-lower' : 'chip-aud-keep';
+  const li = entries.map(([k, a]) => `<li><div class="aud-head"><span class="chip ${cls(a.v)}">${esc(AUD_HE[a.v] || a.v || 'נבדק')}</span><span class="small">${esc(slotTxt(k))}</span>${a.seen === true ? '<span class="chip">נבדק בתמונה</span>' : ''}${a.env_ok === false ? '<span class="chip chip-warn">מחוץ למעטפת</span>' : ''}</div>
+      ${fitTxt(a.fit) ? `<p class="aud-fit">ציון המעצב: ${esc(fitTxt(a.fit))}</p>` : ''}${a.note ? `<p class="aud-note" dir="auto">${esc(a.note)}</p>` : ''}
+      <p class="xs faint"><code>${esc(a.file || 'designer-audit')}</code>${(a.flags || []).length ? ' · <span dir="ltr">' + esc(a.flags.join(', ')) + '</span>' : ''}</p></li>`).join('');
+  const gl = guesses.map(([k, g]) => `<li><div class="aud-head"><span class="chip chip-guess">הערכת הצוות</span><span class="small">${esc(slotTxt(k))}</span></div>
+      <p class="aud-fit">${esc(fitTxt(g.fit))}</p><p class="xs faint"><code>${esc(g.file || '')}</code>${g.date ? ' · ' + esc(fmtDay(g.date)) : ''}</p></li>`).join('');
+  return `<section class="section" aria-labelledby="h-aud"><h3 id="h-aud" class="h-small">ביקורת המעצב והתאמה לסגנון</h3>
+    <p class="xs faint">ציון המעצב (הביקורת לעמדה, אחריה style_scores) גובר על הערכת הצוות. מוצר שנדחה לעמדה נשאר בסל המוצרים (ה.12).</p>
+    ${li ? `<ul class="aud-list">${li}</ul>` : '<p class="small faint">המעצב עוד לא בדק את הכרטיס בביקורת.</p>'}
+    ${gl ? `<details class="aud-guess"><summary>הערכת הצוות בליקוט (${guesses.length} ${guesses.length === 1 ? 'עמדה' : 'עמדות'})</summary><ul class="aud-list">${gl}</ul></details>` : ''}
+  </section>`;
+}
 function renderDrawer(id, keepScroll){
   const e = S.byId.get(id);
   if(!e){ closeDialog($('#drawer')); return; }
@@ -3423,7 +3607,7 @@ function renderDrawer(id, keepScroll){
   const dups = (p.dups || []).map(x => { const q = S.byId.get(x); return `<li><button type="button" class="linkish" data-product="${esc(x)}">${esc(x)}</button>${q ? ` <span class="faint xs">· ${esc(slotLabel(q))}</span>` : ''}</li>`; }).join('');
   const shared = (p.shared_in || []).map(k => { const s = S.slots.get(k); const r = s && S.rooms.get(s.room); return `<button type="button" class="linkish" data-goto-slot="${esc(k)}">${esc(r ? r.name_he : '')} · ${esc(s ? (s.name_he || s.id) : k)}</button>`; }).join(', ');
   const ships = (sh.ships_to || []).join(', ');
-  const known = new Set(['id','slot','name','category','rooms','placement','supplier','price','shipping','dimensions_cm','colors','materials','texture','finish','visual_weight','lighting','images','style_scores','status','notes','path','room','slot_key','pool','pid','dups','shared_in','in_rooms','standards','img','links','lead']);
+  const known = new Set(['id','slot','name','category','rooms','placement','supplier','price','shipping','dimensions_cm','colors','materials','texture','finish','visual_weight','lighting','images','style_scores','status','notes','path','room','slot_key','pool','pid','dups','shared_in','in_rooms','standards','img','links','lead','audit','guess','schema_errors','sell_qty_default','options_n','options_axes']);
   const extraFields = Object.keys(p).filter(k => !known.has(k)).map(k => row(k, `<code>${esc(JSON.stringify(p[k]))}</code>`)).join('');
   const links = [sup.product_url ? linkItem(`עמוד המוצר אצל ${sup.name || 'הספק'}`, sup.product_url) : ''].concat((e.links || []).map(l => linkItem(l.label, l.url))).join('');
   const hist = (e.history || []).slice().reverse().slice(0, 12).map(h => `<li><span class="xs faint">${esc(fmtDate(h.at))} ${esc(whoLabel(h.by))}</span><br>${(h.changes || []).map(c => `${esc(EDIT_LABEL[c.field] || c.field)}: ${esc(showVal(c.field, c.from))} ← ${esc(showVal(c.field, c.to))}`).join('<br>')}</li>`).join('');
@@ -3431,7 +3615,7 @@ function renderDrawer(id, keepScroll){
     <div class="d-hero">
       <div class="pic">${picHtml(p.img, {alt: e.name || p.id})}</div>
       <div class="side">
-        <div class="chiprow"><span class="chip st-${esc(e.status)}">${esc(P_STATUS[e.status] || e.status)}</span>${(p.dups || []).length ? '<span class="chip chip-dup">כרטיס כפול</span>' : ''}${e.pending ? '<span class="chip chip-pending">ממתין לסנכרון</span>' : ''}</div>
+        <div class="chiprow"><span class="chip st-${esc(e.status)}">${esc(P_STATUS[e.status] || e.status)}</span>${auditChip(e, e.slot_key)}${(p.dups || []).length ? '<span class="chip chip-dup">כרטיס כפול</span>' : ''}${e.pending ? '<span class="chip chip-pending">ממתין לסנכרון</span>' : syncedChip(e)}</div>
         <p><span class="num price-big" dir="ltr">${esc(fmtUSD(pr.cost))}</span> <span class="muted small">עלות אצל הספק ליחידה</span></p>
         ${isNum(e.retail) && e.retail > 0 ? `<p class="pprice-line"><span class="num price-big" dir="ltr">${esc(fmtILS(e.retail))}</span> <span class="muted small">מחיר לצרכן</span> ${initialChip(e)}</p>` : ''}
         <p class="qty-line">${qtyHtml(e)}</p>
@@ -3442,6 +3626,7 @@ function renderDrawer(id, keepScroll){
       </div>
     </div>
     <section class="section" aria-labelledby="h-links"><h3 id="h-links" class="h-small">קישורים</h3>${links ? `<ul class="links">${links}</ul>` : '<p class="faint small">אין קישורים.</p>'}</section>
+    ${auditBlock(p)}
     ${econBlock(e)}
     ${priceBasisBlock(e)}
     ${marketBlock(e)}
@@ -3474,7 +3659,8 @@ function renderDrawer(id, keepScroll){
       ${row('משקל ויזואלי', esc(WEIGHT[p.visual_weight] || p.visual_weight || ''))}
       ${li ? row('תאורה', [li.color_temp_k ? `<span class="num">${esc(li.color_temp_k)}K</span>` : '', li.light_type ? esc(LIGHT[li.light_type] || li.light_type) : ''].filter(Boolean).join(' · ') || '<span class="faint">לא צוין</span>') : ''}
       ${row('תמונות', `איכות ${esc(QUALITY[im.quality] || im.quality || '?')} · זכויות שימוש ${esc(RIGHTS[im.usage_rights] || im.usage_rights || '?')}`)}
-      ${row('ציוני סגנון', scores ? `<div class="score">${scores}</div>` : '<span class="faint">עוד לא דורג</span>')}
+      ${row('ציוני סגנון', scores ? `<div class="score">${scores}</div>` : fitsLine(e, e.slot_key) || '<span class="faint">עוד לא דורג</span>')}
+      ${row('סכמת הכרטיס', (p.schema_errors || []).length ? `<span class="chip chip-warn">לא עומד בסכמה</span><ul class="plain-ul xs">${p.schema_errors.map(x => `<li><code dir="ltr">${esc(x)}</code></li>`).join('')}</ul><span class="xs faint">לתיקון בכרטיס (sourcing-agent), לפי data/product-card.schema.json</span>` : '')}
       ${row('כרטיסים כפולים', dups ? `<ul class="plain-ul">${dups}</ul>` : '')}
       ${row('קובץ', `<code>${esc(p.path)}</code>`)}
       ${extraFields}
@@ -3721,6 +3907,7 @@ function renderProfit(){
   const ES = S.ES, v = ES.v, P = S.profit;
   const basis = profitBasis();
   const withM = basis.filter(p => isNum(p.econ.margin));
+  const pms = marginStats(basis);
   const fl = {green:0, red:0, orange:0}; for(const p of basis) fl[p.econ.flag]++;
   const missShip = basis.filter(p => p.econ.missing.includes('shipping')).length;
   const missRetail = basis.filter(p => p.econ.missing.includes('retail')).length;
@@ -3801,11 +3988,13 @@ function renderProfit(){
       <div class="tbl-wrap"><table><thead><tr><th scope="col">עמדה</th><th scope="col">נבחרים</th><th scope="col">סולם מחירים (זול ← יקר)</th></tr></thead><tbody>${lines}</tbody></table></div></details>`;
   }).join('');
 
+  const pnote = ((S.data.economics || {}).pricing || {}).note;  // the pricing file was mid-write at build time (2026-10-18)
   box.innerHTML = `<div class="screen roomy">
     ${editable ? '' : noDbLine('המספרים מחושבים מהריפו ומברירות המחדל.')}
+    ${pnote ? `<div class="db-line"><span class="db-dot warn"></span><span><strong>קובץ התמחור לא נקרא בבנייה הזו.</strong> <span dir="ltr">${esc(pnote)}</span></span></div>` : ''}
     <div class="tiles">
       ${hasMarket ? `<div class="tile"><span class="l">מול מחירי השוק</span><span class="v">${vc.viable}<span class="small muted"> כדאי</span></span><span class="s"><span class="flag flag-orange">${vc['bundle-only']} רק בסל</span> · <span class="flag flag-red">${vc['not-viable']} לא כדאי מ-CJ</span>${vc.none ? ` · ${vc.none} לא נבדקו` : ''}</span></div>` : ''}
-      <div class="tile"><span class="l">מרווח ממוצע</span><span class="v">${withM.length ? ltr(fmtPct(mean(withM.map(p => p.econ.margin)), 1)) : '—'}</span><span class="s">${withM.length} מוצרים עם כל הנתונים · יעד ${ltr(esc(v.target_margin_pct + '%'))}</span></div>
+      <div class="tile"><span class="l">מרווח חציוני</span><span class="v">${withM.length ? ltr(fmtPct(pms.median, 1)) : '—'}</span><span class="s">${withM.length ? marginStatsLine(pms) + ' · ' : ''}${withM.length} מוצרים עם כל הנתונים · יעד ${ltr(esc(v.target_margin_pct + '%'))}</span></div>
       <div class="tile"><span class="l"><span class="flag flag-green"><i class="fdot"></i>עומדים ביעד</span></span><span class="v">${fl.green}</span><span class="s"><span class="flag flag-red"><i class="fdot"></i>${fl.red} מתחת ליעד</span></span></div>
       <div class="tile"><span class="l"><span class="flag flag-orange"><i class="fdot"></i>חסרים נתונים</span></span><span class="v">${fl.orange}</span><span class="s">${missRetail} בלי מחיר · ${missShip + nNoFast + nNoRoute} בלי משלוח${nNoRoute ? ` (${nNoRoute} הספק לא שולח לישראל)` : ''}${nNoFast ? ` (${nNoFast} בלי אפשרות של עד 20 יום)` : ''}</span></div>
       <div class="tile"><span class="l"><span class="chip chip-loss">מפסידים</span></span><span class="v">${nLoss}</span><span class="s">תרומה שלילית במחיר שלהם: לא למכירה עד שמשנים מחיר, משלוח או ספק (ה.13)</span></div>
@@ -3963,12 +4152,20 @@ function cmpSlotBand(s){
 // slot's market band, else the band the deep pass wrote. All numbers come from econCalc with the current settings.
 function cmpRow(c, s, style){
   const v = S.ES.v, sb = cmpSlotBand(s);
-  const fits = {}, reasons = {}, verdicts = {}, files = {};
+  const fits = {}, fitSrc = {}, reasons = {}, verdicts = {}, files = {};
   if(c.k === 'card'){
     const e = S.byId.get(c.id); if(!e) return null;
-    const scores = (S.base.get(c.id) || {}).style_scores || {};
-    for(const [k, x] of Object.entries(scores)) if(x && isNum(x.score)) fits[k] = x.score;
-    for(const [k, x] of Object.entries(c.deep || {})){ if(!(k in fits) && isNum(x.fit)) fits[k] = x.fit; if(x.reason) reasons[k] = x.reason; if(x.verdict) verdicts[k] = x.verdict; files[k] = x; }
+    const base = S.base.get(c.id) || {};
+    const scores = base.style_scores || {};
+    // the fit of a style in this slot (QA 2026-10-17, M6): the designer's audit for the slot, then the designer's
+    // style_scores, then the deep pass, then the team's guess in the final round; each with its source
+    const aud = auditOf(base, s.key);
+    const g = (base.guess || {})[s.key] || guessOf(base, s.key);
+    for(const [k, n] of Object.entries((aud && aud.fit) || {})) if(isNum(n)){ fits[k] = n; fitSrc[k] = 'audit'; }
+    for(const [k, x] of Object.entries(scores)) if(!(k in fits) && x && isNum(x.score)){ fits[k] = x.score; fitSrc[k] = 'scores'; }
+    for(const [k, x] of Object.entries(c.deep || {})){ if(!(k in fits) && isNum(x.fit)){ fits[k] = x.fit; fitSrc[k] = 'deep'; } if(x.reason) reasons[k] = x.reason; if(x.verdict) verdicts[k] = x.verdict; files[k] = x; }
+    for(const [k, n] of Object.entries((g && g.fit) || {})) if(!(k in fits) && isNum(n)){ fits[k] = n; fitSrc[k] = 'team'; }
+    const audV = aud && aud.v ? aud.v : null;
     const qty = e.qty;
     let ship;
     if(isNum(e.ship.usd)) ship = {usd: e.ship.usd, total: e.ship.total, label: e.ship.label, days: e.ship.days ? daysOf(e.ship.days) : null, est: e.ship.est};
@@ -3983,12 +4180,14 @@ function cmpRow(c, s, style){
     if(ship.nofast) econ.missing = econ.missing.map(m => m === 'shipping' ? 'fast_shipping' : m);
     if(ship.noroute) econ.missing = econ.missing.map(m => m === 'shipping' ? 'no_route' : m);
     return {key: 'card:' + c.id, k: 'card', id: c.id, sup: c.sup, supName: (e.supplier && e.supplier.name) || '', title: e.name, url: e.supplier.product_url,
-      status: e.status, rejected: e.status === 'rejected', shared: !!c.shared, qty, qtySure: e.qtySure, qtyReason: (e.qtyDef || {}).reason,
+      status: e.status, rejected: e.status === 'rejected' || audV === 'reject', audit: audV, auditNote: aud ? aud.note || null : null,
+      shared: !!c.shared, qty, qtySure: e.qtySure, qtyReason: (e.qtyDef || {}).reason,
       priceUsd: e.badCurrency ? null : e.price.cost, priceIls: e.badCurrency ? e.price.cost : null, ship, retail, econ,
-      fits, verdicts, reasons, files, unrated: !Object.keys(scores).length, note: c.note || null};
+      fits, fitSrc, verdicts, reasons, files, unrated: !Object.keys(scores).length && !Object.values(fitSrc).some(x => x === 'audit' || x === 'team'),
+      note: (audV === 'reject' || audV === 'lower-fit') && aud.note ? aud.note : c.note || null};
   }
   // 'deep' (the deep AliExpress pass) or 'api' (the first AliExpress API call): one style's own price when a style is chosen
-  for(const [k, x] of Object.entries(c.styles || {})){ if(isNum(x.fit)) fits[k] = x.fit; if(x.reason) reasons[k] = x.reason; if(x.verdict) verdicts[k] = x.verdict; files[k] = x; }
+  for(const [k, x] of Object.entries(c.styles || {})){ if(isNum(x.fit)){ fits[k] = x.fit; fitSrc[k] = 'deep'; } if(x.reason) reasons[k] = x.reason; if(x.verdict) verdicts[k] = x.verdict; files[k] = x; }
   const pick = (style && c.styles && c.styles[style]) || {};
   const val = k => pick[k] != null ? pick[k] : c[k];
   const q = c.qty || {qty: 1, sure: true};
@@ -4004,14 +4203,24 @@ function cmpRow(c, s, style){
   return {key: c.k + ':' + c.id, k: c.k, id: c.id, sup: c.sup, supName: 'AliExpress', title: c.title, url: c.url, sku: val('sku'),
     status: c.rejected ? 'rejected' : 'candidate', rejected: !!c.rejected, shared: false, qty, qtySure: q.sure !== false, qtyReason: q.reason,
     priceUsd: isNum(price) ? price : null, priceFrom: !!c.price_from, priceIls: null, ship, retail, econ,
-    fits, verdicts, reasons, files, unrated: false, note: c.note || null};
+    fits, fitSrc, verdicts, reasons, files, unrated: false, note: c.note || null};
 }
 // fit for one style: a score (card style_scores first, then the deep pass); 'assumed' = an unscored card in the Nordic house
 // (its slot was sourced for the Nordic house, so it counts for Nordic and is marked "not scored"); otherwise none
 function cmpFit(r, st){
-  if(isNum(r.fits[st])) return {n: r.fits[st], kind: 'score'};
+  if(isNum(r.fits[st])) return {n: r.fits[st], kind: 'score', src: (r.fitSrc || {})[st] || null};
   if(st === 'nordic' && r.k === 'card' && r.unrated) return {n: null, kind: 'assumed'};
   return {n: null, kind: 'none'};
+}
+// where a row's fit comes from (QA M6): "המעצב" / "הצוות" / "הליקוט המעמיק"; in "all styles", grouped by source
+function cmpFitSrc(r, st){
+  if(r.k !== 'card') return '';  // an AliExpress record of the deep pass or the API call: its fit is always the pass's
+  const src = r.fitSrc || {};
+  if(st) return isNum(r.fits[st]) && src[st] ? FIT_SRC_HE[src[st]] : '';
+  const by = new Map();
+  for(const k of Object.keys(r.fits)) if(src[k]){ const h = FIT_SRC_HE[src[k]]; if(!by.has(h)) by.set(h, []); by.get(h).push(cmpStyleHe(k)); }
+  if(by.size <= 1) return by.size ? 'לפי ' + [...by.keys()][0] : '';
+  return [...by].map(([h, ks]) => `${h}: ${ks.join(', ')}`).join(' · ');
 }
 const cmpRejected = (r, st) => r.rejected || (st ? r.verdicts[st] === 'reject' : (Object.keys(r.verdicts).length > 0 && Object.values(r.verdicts).every(x => x === 'reject')));
 // an item of the deep pass belongs to the styles the pass proposed it for
@@ -4130,7 +4339,7 @@ function renderCompare(){
       nShownSlots++; nShownRows += rows.length;
       const wst = st ? w[st] : null;
       const head = st
-        ? (wst ? `<span class="chip cmp-win ${wst.econ.margin >= T ? 'is-ok' : 'is-low'}">מנצח: <b>${esc((CMP_SUP[wst.sup] || CMP_SUP.other).he)}</b>${winFit(wst, st) >= 0 ? ` · עיצוב ${ltr(esc(winFit(wst, st)))}` : ' · לא דורג'} · רווח ${ltr(fmtILS(wst.econ.contribution))} · ${ltr(fmtPct(wst.econ.margin))}${wst.econ.margin >= T ? '' : ' · מתחת ליעד'}</span>`
+        ? (wst ? `<span class="chip cmp-win ${wst.econ.margin >= T ? 'is-ok' : 'is-low'}">מנצח: <b>${esc((CMP_SUP[wst.sup] || CMP_SUP.other).he)}</b>${winFit(wst, st) >= 0 ? ` · עיצוב ${ltr(esc(winFit(wst, st)))}${cmpFitSrc(wst, st) ? ` (${esc(cmpFitSrc(wst, st))})` : ''}` : ' · לא דורג'} · רווח ${ltr(fmtILS(wst.econ.contribution))} · ${ltr(fmtPct(wst.econ.margin))}${wst.econ.margin >= T ? '' : ' · מתחת ליעד'}</span>`
                : `<span class="chip cmp-nowin">אין מנצח: ${esc(cmpNoWin(all, st) === 'nofit' ? `אין מועמד עם התאמה ${cmpFitMin()}+ וכל הנתונים` : NOWIN_HE[cmpNoWin(all, st)])}</span>`)
         : '';
       const winsLine = st ? '' : `<ul class="cmp-wins" aria-label="מנצח לפי סגנון">${STY.map(x => { const wr = w[x]; return `<li><span class="st">${esc(cmpStyleHe(x))}:</span> ${wr ? `${supBadge(wr)} ${ltr(fmtILS(wr.econ.contribution))}` : '<span>אין</span>'}</li>`; }).join('')}</ul>`;
@@ -4214,7 +4423,8 @@ function cmpRowHtml(x, st, winStyles, T){
     supBadge(x),
     isWin ? `<span class="chip cmp-win-tag">מנצח${st ? '' : ': ' + esc(winStyles.map(cmpStyleHe).join(', '))}</span>` : '',
     x.status === 'selected' ? '<span class="chip st-selected">נבחר</span>' : '',
-    rej ? '<span class="chip st-rejected">נדחה</span>' : '',
+    rej ? (x.audit === 'reject' && x.status !== 'rejected' ? `<span class="chip chip-aud-reject" title="${esc(x.auditNote || 'המעצב דחה את המוצר לעמדה הזו')}">${esc(AUD_HE.reject)}</span>` : '<span class="chip st-rejected">נדחה</span>') : '',
+    x.audit === 'lower-fit' ? `<span class="chip chip-aud-lower" title="${esc(x.auditNote || 'המעצב הוריד את הציון של הצוות')}">${esc(AUD_HE['lower-fit'])}</span>` : '',
     verdict && CMP_VERDICT[verdict] ? `<span class="chip verdict ${CMP_VERDICT[verdict].cls}"><i class="fdot"></i>${esc(CMP_VERDICT[verdict].he)}</span>` : '',
     x.shared ? '<span class="chip">ממאגר משותף</span>' : '',
     x.k === 'api' ? '<span class="chip">קריאה ראשונה ל-API</span>' : '',
@@ -4229,6 +4439,7 @@ function cmpRowHtml(x, st, winStyles, T){
   const retailTxt = x.retail ? fmtILS(x.retail.ils) : '—';
   const fitTxt = !st ? Object.keys(x.fits).length ? Object.entries(x.fits).filter(([k]) => cmpData().styles.some(s => s.id === k)).map(([k, n]) => `${cmpStyleHe(k)} ${n}`).join(' · ') || '—' : '—'
     : fit.kind === 'score' ? `${fit.n}/10` : fit.kind === 'assumed' ? 'לא דורג' : '—';
+  const fitSub = cmpFitSrc(x, st);
   const cls = e.flag === 'orange' ? 'flag-orange' : e.flag === 'red' ? 'flag-red' : 'flag-green';
   const fileTip = file && (isNum(file.landed_ils) || isNum(file.margin_ils)) ? ` title="${esc(`בקובץ הליקוט: נחיתה ${fmtILS(file.landed_ils)}, רווח ${fmtILS(file.margin_ils)}${isNum(file.margin_pct) ? ' (' + fmtPct(file.margin_pct) + ')' : ''}. כאן מחושב מחדש לפי ההנחות של מסך הרווחיות.`)}"` : '';
   const cmpTo = file && file.compared_to && file.compared_to.card_id ? (() => { const o = S.byId.get(file.compared_to.card_id); return `<p class="cand-reason">מול: <span dir="auto">${esc(o ? o.name.slice(0, 60) : file.compared_to.card_id)}</span>${isNum(file.compared_to.landed_ils) ? ` (נחיתה ${ltr(fmtILS(file.compared_to.landed_ils))} בקובץ)` : ''}</p>`; })() : '';
@@ -4238,7 +4449,7 @@ function cmpRowHtml(x, st, winStyles, T){
   return `<tr class="${isWin ? 'is-win' : ''} ${rej ? 'is-rej' : ''}" data-sup="${esc(x.sup)}" data-key="${esc(x.key)}"${isNum(e.margin) ? ` data-margin="${e.margin.toFixed(4)}"` : ''}${x.retail && isNum(x.retail.ils) ? ` data-retail="${esc(x.retail.ils)}" data-qty="${esc(x.qty)}"` : ''} data-fit="${esc(winFit(x, st || 'nordic'))}"${cmpEligible(x, st || 'nordic') ? ' data-elig="1"' : ''}${isNum(e.contribution) && e.contribution < 0 ? ' data-loss="1"' : ''}>
     <th scope="row" class="c-cand">${titleHtml}
       <div class="cand-meta">${chips}</div>
-      <div class="cmp-narrow"><span>מחיר ${ltr(esc(priceTxt))}${x.qty > 1 ? ` × ${ltr(esc(x.qty))}` : ''}</span><span>משלוח ${ltr(esc(shipTxt))}${days ? `, ${ltr(esc(days))} יום` : ''}</span><span>לצרכן ${ltr(esc(retailTxt))}${x.retail ? ` <span class="faint">(${esc(RETAIL_SRC_SHORT[x.retail.src])})</span>` : ''}</span><span>התאמה ${st ? ltr(esc(fitTxt)) : esc(fitTxt)}</span></div>
+      <div class="cmp-narrow"><span>מחיר ${ltr(esc(priceTxt))}${x.qty > 1 ? ` × ${ltr(esc(x.qty))}` : ''}</span><span>משלוח ${ltr(esc(shipTxt))}${days ? `, ${ltr(esc(days))} יום` : ''}</span><span>לצרכן ${ltr(esc(retailTxt))}${x.retail ? ` <span class="faint">(${esc(RETAIL_SRC_SHORT[x.retail.src])})</span>` : ''}</span><span>התאמה ${st ? ltr(esc(fitTxt)) : esc(fitTxt)}${fitSub ? ` (${esc(fitSub)})` : ''}</span></div>
       ${reason ? `<p class="cand-reason" dir="auto">${esc(reason.length > 220 ? reason.slice(0, 220) + '…' : reason)}</p>` : ''}${cmpTo}
     </th>
     <td class="money w">${ltr(esc(priceTxt))}${priceSub ? `<span class="cmp-sub" dir="auto">${esc(priceSub)}</span>` : ''}</td>
@@ -4247,7 +4458,7 @@ function cmpRowHtml(x, st, winStyles, T){
     <td class="money w">${ltr(esc(retailTxt))}${x.retail ? `<span class="cmp-sub">${esc(RETAIL_SRC[x.retail.src])}</span>` : ''}${e.recommended != null ? `<span class="cmp-sub">ל-${ltr(esc(v.target_margin_pct + '%'))}: ${ltr(fmtILS(Math.ceil(e.recommended)))}</span>` : ''}</td>
     <td class="money"${fileTip}>${marginCell}</td>
     <td class="money w">${isNum(e.margin) ? `<span class="flag ${cls}">${ltr(fmtPct(e.margin, 1))}</span>` : '—'}</td>
-    <td class="w">${esc(fitTxt)}${fit && fit.kind === 'assumed' ? '<span class="cmp-sub">נחשב נורדי</span>' : ''}</td>
+    <td class="w">${esc(fitTxt)}${fit && fit.kind === 'assumed' ? '<span class="cmp-sub">נחשב נורדי</span>' : ''}${fitSub ? `<span class="cmp-sub" data-fit-src>${esc(fitSub)}</span>` : ''}</td>
   </tr>`;
 }
 function cmpJump(key){

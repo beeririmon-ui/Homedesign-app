@@ -2861,6 +2861,18 @@ TIER_HE = {"tier1": "שכבה 1 · עדיפות גבוהה", "tier2": "שכבה 
 TIER_ORDER = ("tier1", "tier2", "tier3", "spare", "deferred")
 
 
+def chosen_on_boards(boards: dict) -> dict | None:
+    """QA 2026-10-17, L4: what is chosen lives in the compositions and catalogs (the boards), not in a card's `status`
+    (no card is "selected"), so the overview's "נבחר 0" said nothing. The boards' count, for the overview (the boards
+    themselves load with their screen)."""
+    if not boards or not boards.get("present"):
+        return None
+    slots = [s for b in boards.get("boards") or [] for s in b.get("slots") or []]
+    chosen = [s for s in slots if s.get("status") == "chosen"]
+    cards = {p.get("card_id") for s in chosen for p in s.get("picks") or [] if p.get("card_id")}
+    return {"slots": len(chosen), "of": len(slots), "cards": len(cards), "boards": len(boards.get("boards") or [])}
+
+
 def as_text_list(v) -> list[str]:
     """A designer field (string, list of strings, list of dicts) as a list of short display lines."""
     out = []
@@ -3752,6 +3764,70 @@ def load_next_sourcing(src_dir: Path, res_dir: Path | None, ctx: CompCtx, comps:
     return out
 
 
+FINAL_ROUND_DIR = ROOT / "data" / "leads" / "final-2026-10-13"
+
+
+def load_current_round(slot_by_key: dict, rooms: dict, base: Path = FINAL_ROUND_DIR) -> dict:
+    """QA 2026-10-17, L6: the sourcing round that runs now (<final round>/round<N>/targets.json, the highest N: round 5
+    since 17.10), not only the round-3 list of 12.10 that the sourcing screen showed as "the next". Per target slot: what
+    each style still needs, the envelope as data/slots has it today (and the slots file's version), the round's own
+    envelope when it differs, and the slot's alternative form."""
+    out = {"present": False, "dir": rel(base) if base.is_relative_to(ROOT) else str(base), "warnings": []}
+    best = None
+    for f in base.glob("round*/targets.json"):
+        m = re.match(r"round(\d+)", f.parent.name)
+        if m and (best is None or int(m.group(1)) > best[0]):
+            best = (int(m.group(1)), f)
+    if not best:
+        return out
+    rnd, f = best
+    try:
+        d = read_json(f)
+    except Exception as e:
+        out["warnings"].append(f"{rel(f)}: {type(e).__name__}: {e}"[:200])
+        return out
+    if not isinstance(d, dict):
+        out["warnings"].append(f"{rel(f)}: not an object")
+        return out
+    shortfall = {}
+    for st, v in (d.get("shortfall") or {}).items():
+        if st in STYLE_ORDER and isinstance(v, dict):
+            shortfall[st] = {k: v[k] for k in ("eligible", "covered_ready", "goal_80", "more_needed") if isnum(v.get(k))}
+    targets = []
+    for t in d.get("targets") or []:
+        if not isinstance(t, dict) or not isinstance(t.get("slot"), str) or "/" not in t["slot"]:
+            continue
+        key = t["slot"]
+        meta = slot_by_key.get(key) or {}
+        spec = t.get("spec") if isinstance(t.get("spec"), dict) else {}
+        styles = {}
+        for st, v in (t.get("styles") or {}).items():
+            if st in STYLE_ORDER and isinstance(v, dict):
+                styles[st] = {"have": v.get("have_ready") if isnum(v.get("have_ready")) else None,
+                              "need": v.get("need") if isnum(v.get("need")) else None}
+        env_now = meta.get("envelope") or []
+        env_round = envelope_lines(spec.get("envelope_cm"))
+        room = key.split("/", 1)[0]
+        targets.append({k: v for k, v in {
+            "slot": key, "in_slots": bool(meta), "name_he": meta.get("name_he") or spec.get("name_he"),
+            "category": t.get("category"), "priority": t.get("priority"), "group": t.get("group"), "styles": styles,
+            "need": sum(int(v["need"]) for v in styles.values() if isnum(v.get("need"))),
+            "envelope": env_now or None, "slots_version": (rooms.get(room) or {}).get("slots_version"),
+            "envelope_round": env_round if env_round and env_round != env_now else None,
+            "set_of": meta.get("set_of") if meta else spec.get("set_of"), "alternative_form": meta.get("alternative_form"),
+        }.items() if v is not None})
+    prank = {"high": 0, "medium": 1, "low": 2}
+    targets.sort(key=lambda x: (prank.get(str(x.get("priority")), 3), -x["need"], x["slot"]))
+    groups = {str(k): v for k, v in (d.get("groups") or {}).items() if isnum(v)} if isinstance(d.get("groups"), dict) else {}
+    out.update({"present": True, "file": rel(f) if f.is_relative_to(ROOT) else str(f), "round": rnd,
+                "date": d.get("date") if isinstance(d.get("date"), str) else None,
+                "target_pct": d.get("target_pct_per_style") if isnum(d.get("target_pct_per_style")) else None,
+                "metric": d.get("metric") if isinstance(d.get("metric"), str) else None,
+                "shortfall": shortfall, "groups": groups, "targets": targets,
+                "slots_versions": {rid: r.get("slots_version") for rid, r in rooms.items() if r.get("slots_version")}})
+    return out
+
+
 # --------------------------------------------------------------------------- official coverage, data chunks, publish
 
 COVERAGE_JSON = ROOT / "data" / "leads" / "final-2026-10-13" / "coverage.json"
@@ -3786,7 +3862,7 @@ def load_coverage(path: Path = COVERAGE_JSON) -> dict:
 # The screens that are not the overview load their data when they open (QA 2026-10-17, M9: one 14.9 MB data.json took
 # 17.9 s to the overview on a slow phone). Each chunk file holds {key: value} for whole keys (None) or {key: {sub: ...}}
 # for the heavy parts of a key whose light parts stay in data.json; data.json "chunks" lists them for the page.
-CHUNKS = (("compare", "comparison", ("rooms",)), ("sourcing", "next_sourcing", ("results", "dropped")),
+CHUNKS = (("compare", "comparison", ("rooms",)), ("sourcing", "next_sourcing", ("results", "dropped", "current")),
           ("furniture", "furniture", None), ("boards", "boards", None), ("leads", "leads", None), ("log", "log", None))
 CORE_TAIL = {"log": 12}  # a whole-key chunk whose last entries stay in data.json (the overview shows the latest log lines)
 CORE_LIMIT_BYTES = 4 * 1024 * 1024  # the first load (data.json); a warning above it
@@ -3901,9 +3977,20 @@ def main() -> int:
         p["_sell_qty"] = sell_qty_default(p, slot_by_key)
     n_qty = sum(1 for p in products if p["_sell_qty"]["qty"] > 1)
     n_unsure = sum(1 for p in products if not p["_sell_qty"]["sure"])
+    fstats = attach_fit_sources(products)
+    schema = schema_check(products)
     log(f"  rooms {len(order)} · slots {sum(len(v) for v in slots.values())} · products {len(products)} ({len(by_id_paths)} ids)"
         f" · duplicate cards {n_dup} (same supplier listing) · duplicate ids {len(dup_ids)}")
     log(f"  sell quantity: {n_qty} cards sold as a set by default · {n_unsure} not sure (default 1)")
+    log(f"  designer audits: {fstats['audit_entries']} entries on {fstats['cards_audited']} cards (rejected for a slot {fstats['rejected']},"
+        f" lower fit {fstats['lowered']}, kept {fstats['kept']}) · the team's fit guess on {fstats['cards_guess']} cards")
+    if fstats.get("error"):
+        log(f"  ! designer audits: {fstats['error']} (the products and compare screens show no designer verdicts)")
+    if schema.get("error"):
+        log(f"  ! card schema check: {schema['error']}")
+    else:
+        log(f"  card schema: {schema['failing']} of {schema['checked']} cards do not follow {schema['schema']} (the sourcing agent's to fix)"
+            + "".join(f"\n      {n:3d}  {k}" for k, n in list(schema["by_kind"].items())[:8]))
 
     # fresh dist (studio/dist is generated output)
     if DIST.exists():
@@ -3963,6 +4050,13 @@ def main() -> int:
     ctx = CompCtx(products, dec_ids, order, slot_by_key)
     compositions = load_compositions(comp_dir, ctx)
     next_sourcing = load_next_sourcing(src_dir, res_dir, ctx, compositions)
+    next_sourcing["current"] = load_current_round(slot_by_key, rooms)
+    cur = next_sourcing["current"]
+    if cur.get("present"):
+        log(f"  current sourcing round: {cur['round']} ({cur['file']}, {cur.get('date')}) · {len(cur['targets'])} target slots"
+            f" · {sum(1 for t in cur['targets'] if t.get('envelope_round'))} with a round envelope that data/slots has changed since")
+    for w in cur.get("warnings") or []:
+        log(f"  ! current round: {w}")
     ae_record_index(set(ctx.wanted), ctx, [d for d in (deep_dir,) if d != DEEP_DIR])
     res = (next_sourcing.get("results") or {})
     targets = [("ae:" + i, ctx.ae[i].get("img_url")) for i in sorted(ctx.wanted) if ctx.ae.get(i)]
@@ -4055,6 +4149,10 @@ def main() -> int:
             "standards": p["_standards"], "img": p["_img"], "links": p["_links"], "lead": p["_lead"],
             "sell_qty_default": p["_sell_qty"],
         })
+        # the designer's audit per slot and the team's guess per slot (QA M6); the schema errors (QA L1)
+        for k, src in (("audit", "_audit"), ("guess", "_guess"), ("schema_errors", "_schema")):
+            if p.get(src):
+                q[k] = p[src]
         # supplier options (studio rules ג, 2026-10-11): the products screen shows how many; the SKU list stays in the card
         opts = q.pop("options", None)
         if isinstance(opts, dict):
@@ -4078,6 +4176,8 @@ def main() -> int:
             "cards": len(products),
             "duplicate_ids": dup_ids,
             "by_status": status_counts,
+            "chosen_on_boards": chosen_on_boards(boards),
+            "schema_failing": schema.get("failing"),
             "duplicates": n_dup,
             "images_failed": pstats["failed"],
             "rooms": len(order),
@@ -4104,6 +4204,8 @@ def main() -> int:
         "reports": qa,
         "leads": leads,
         "coverage": coverage,
+        "audits": fstats,
+        "schema": {k: schema.get(k) for k in ("schema", "checked", "failing", "by_kind", "error")},
     }
     for fname, part in split_chunks(data).items():
         (DIST / fname).write_text(json.dumps(part, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
@@ -4127,42 +4229,59 @@ def main() -> int:
     if core > CORE_LIMIT_BYTES:
         log("  ! data.json is over 4 MB: the overview loads slowly on a phone (move a heavy key into a chunk)")
     plan = publish_plan(produced)
-    if plan["present"] and plan.get("published") is not None:
-        send = sorted(set(plan["new"]) | {x for x in produced if not x.startswith("img/")})
-        entries = len(send) + len(plan["stale"])
-        n_batches = max(1, -(-entries // PUBLISH_MAX_SEND))
-        log(f"  publish: {len(send)} files to send (new paths, the page and the data) and {len(plan['stale'])} to remove; the published version"
-            f" holds {plan['published']} ({plan['file']}{', ' + plan['version'] if plan.get('version') else ''}), after the publish {len(files)}")
-        if n_batches > 1:
-            log(f"  publish in {n_batches} batches of at most {PUBLISH_MAX_SEND} entries: first the {len(send)} files"
-                f" (the version then holds {plan['published'] + len(plan['new'])}, under {VERSION_MAX_FILES}), then the removals")
-        if plan["published"] + len(plan["new"]) > VERSION_MAX_FILES:
-            log(f"  ! sending the new files first would pass {VERSION_MAX_FILES} files in the version: remove the stale paths first")
-        try:  # the same plan as a file for the publish (outside dist, which is published as it is); not from test builds
-            if DIST.resolve() != (STUDIO / "dist").resolve():
-                raise RuntimeError("a build into another folder (--dist) does not replace it")
-            (CACHE / "publish-plan.json").write_text(json.dumps({"built_at": data["build"]["built_at"], "commit": commit,
-                "published": plan["file"], "send": send, "remove": plan["stale"]}, ensure_ascii=False, indent=1), encoding="utf-8")
-            log(f"  the plan: {rel(CACHE / 'publish-plan.json')}")
-        except Exception as e:
-            log(f"  (no publish plan file: {e})")
-        if plan["stale"]:
-            log(f"  published paths this build no longer produces ({len(plan['stale'])}): remove them in the publish (null):")
-            for x in plan["stale"]:
-                log(f"    {x}")
-    elif plan.get("error"):
-        log(f"  ! {plan['file']}: {plan['error']}")
-    else:
-        log(f"  publish: no {plan['file']} (the published paths), so the stale paths are not known")
     if dup_ids:
         log(f"  ! DUPLICATE CARD IDS ({len(dup_ids)}): the Studio shows one card per id, and studio/apply_edits.py refuses edits to them:")
         for k, v in dup_ids.items():
             log(f"    {k}: {', '.join(v)}")
     log(f"done in {time.time() - t0:.1f}s")
-    if total > LIMIT_BYTES or len(files) > LIMIT_FILES:
+    over = total > LIMIT_BYTES or len(files) > LIMIT_FILES
+    if over:
         log("  ! dist is over the limit")
-        return 2
-    return 0
+    print_publish_plan(plan, produced, len(files), data["build"]["built_at"], commit, over)
+    return 2 if over else 0
+
+
+def print_publish_plan(plan: dict, produced: list[str], n_files: int, built_at: str, commit: str | None, over: bool) -> None:
+    """The last lines of the build: what the publish sends and what it removes (null), against the published paths
+    (studio/published-files.json). The page, data.json and its chunks are always sent (same names, new content); a
+    picture sheet carries a hash of its content, so only new names are sent. Also written to studio/.cache/publish-plan.json
+    (not from a test build into another folder)."""
+    log("")
+    if over:
+        log("PUBLISH PLAN: do not publish, dist is over the limit")
+        return
+    if plan.get("error"):
+        log(f"PUBLISH PLAN: ! {plan['file']}: {plan['error']}")
+        return
+    if not plan["present"] or plan.get("published") is None:
+        log(f"PUBLISH PLAN: no {plan['file']} (the published paths): send all {len(produced)} files; the stale paths are not known")
+        return
+    send = sorted(set(plan["new"]) | {x for x in produced if not x.startswith("img/")})
+    remove = plan["stale"]
+    entries = len(send) + len(remove)
+    n_batches = max(1, -(-entries // PUBLISH_MAX_SEND))
+    log(f"PUBLISH PLAN (against {plan['file']}{', version ' + plan['version'] if plan.get('version') else ''}: {plan['published']} files published)")
+    log(f"  send {len(send)}: the page, data.json and its chunks, and every new path")
+    for x in send:
+        log(f"    {x}")
+    log(f"  remove {len(remove)} (null): published paths this build no longer produces" + ("" if remove else ": none"))
+    for x in remove:
+        log(f"    {x}")
+    log(f"  after the publish the version holds {n_files} files (limit {VERSION_MAX_FILES}); {entries} entries in"
+        f" {n_batches} publish{'es' if n_batches > 1 else ''} (at most {PUBLISH_MAX_SEND} each)")
+    if n_batches > 1:
+        log(f"  in {n_batches} batches: first the {len(send)} files (the version then holds {plan['published'] + len(plan['new'])},"
+            f" under {VERSION_MAX_FILES}), then the removals")
+    if plan["published"] + len(plan["new"]) > VERSION_MAX_FILES:
+        log(f"  ! sending the new files first would pass {VERSION_MAX_FILES} files in the version: remove the stale paths first")
+    try:  # the same plan as a file for the publish (outside dist, which is published as it is); not from test builds
+        if DIST.resolve() != (STUDIO / "dist").resolve():
+            raise RuntimeError("a build into another folder (--dist) does not replace it")
+        (CACHE / "publish-plan.json").write_text(json.dumps({"built_at": built_at, "commit": commit, "published": plan["file"],
+            "send": send, "remove": remove}, ensure_ascii=False, indent=1), encoding="utf-8")
+        log(f"  the plan as a file: {rel(CACHE / 'publish-plan.json')}")
+    except Exception as e:
+        log(f"  (no plan file: {e})")
 
 
 if __name__ == "__main__":
