@@ -292,7 +292,10 @@ def synced_checks(browser, base, dist: Path):
           f"{new}: synced after the build, the db's price stays until the next build, with 'סונכרן' ({b})")
     check(c and c["price"] == want(pend, 17) and c["src"] == "studio" and c["pending"] and not c["chip"],
           f"{pend}: not synced, the db's price and 'ממתין לסנכרון' ({c})")
-    exp = json.loads(page.evaluate("exportJson()"))
+    page.click("#exp-open")  # the sync file, as the art director copies it from the page
+    page.wait_for_selector("#exportdlg[open] #exp-ta")
+    exp = json.loads(page.input_value("#exp-ta"))
+    page.keyboard.press("Escape")
     check(sorted(x["id"] for x in exp["product_edits"]) == [pend], f"the sync file holds only the edit that is not synced ({[x['id'] for x in exp['product_edits']]})")
     check(not errors, "synced edits: no JavaScript errors" + ("" if not errors else ": " + "; ".join(errors[:3])))
     ctx.close()

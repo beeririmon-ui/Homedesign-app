@@ -48,6 +48,11 @@ export const ProductEconomicsSchema = z.looseObject({
   compare_at_ils: NonNeg.nullable().optional(),
   /** Supplier units shipped per unit sold (e.g. a "set of 2" bought as two singles). Default 1. */
   sell_qty: z.number().int().min(1).max(50).nullable().optional(),
+  /**
+   * The cost of the whole sale in USD when it is not sell_qty x the card's cost (2026-10-18): a shade with its certified
+   * suspension set, a pitcher with its jar. It replaces the card's cost; shipping_cost_usd is then shipping only.
+   */
+  sale_cost_usd: NonNeg.nullable().optional(),
   /** Price of one piece when a set (sell_qty > 1) is also sold singly (P1). Without it the site shows an estimate. */
   unit_retail_ils: NonNeg.nullable().optional(),
   fulfillment_source: z.enum(FULFILLMENT_SOURCES).nullable().optional(),

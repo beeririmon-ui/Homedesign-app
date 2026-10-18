@@ -1,7 +1,7 @@
 {
  "version": 1,
  "updated": "2026-10-18",
- "note": "מחיר התחלתי לפי שווי בישראל (חוקי הסטודיו ה.10–13). נבנה מ-data/economics/pricing/*-2026-10-11.json. retail_ils הוא המחיר לצרכן לכל המכירה; עריכה בסטודיו גוברת עליו. flag: ok ≥40%, below-floor 0–40%, loss = מפסיד, לא למכירה. 2026-10-18 (תיקון תמחור): 15 שורות לכרטיסים שהמכירה שלהם אינה N × העלות שבכרטיס (סטים, זוגות, אהיל + סט תלייה): sale_cost_usd ו-sale_shipping_usd הם העלות והמשלוח של המכירה כולה; shipping_cost_usd הוא מה שהסטודיו קורא, ו-shipping_includes_usd הוא החלק של העלות שהכרטיס לא מכסה ונישא עליו.",
+ "note": "מחיר התחלתי לפי שווי בישראל (חוקי הסטודיו ה.10–13). נבנה מ-data/economics/pricing/*-2026-10-11.json. retail_ils הוא המחיר לצרכן לכל המכירה; עריכה בסטודיו גוברת עליו. flag: ok ≥40%, below-floor 0–40%, loss = מפסיד, לא למכירה. 2026-10-18 (תיקון תמחור): 15 שורות לכרטיסים שהמכירה שלהם אינה N × העלות שבכרטיס (סטים, זוגות, אהיל + סט תלייה): sale_cost_usd ו-sale_shipping_usd הם העלות והמשלוח של המכירה כולה; הסטודיו והאתר קוראים את sale_cost_usd כעלות המכירה, ו-shipping_cost_usd הוא משלוח בלבד (2026-10-18: shipping_includes_usd הוסר מ-9 שורות: 7 אהילים, הקנקן והצנצנת ושלישיית הבקבוק).",
  "sources": [
   "data/economics/pricing/living-room-2026-10-11.json",
   "data/economics/pricing/other-rooms-2026-10-11.json",
@@ -8590,9 +8590,8 @@
      "ship_basis": "כלול בעלות הסט: ליקוט, אריזה ונקודת איסוף בישראל"
     }
    ],
-   "shipping_cost_usd": 16.54,
+   "shipping_cost_usd": 1.99,
    "updated_at": "2026-10-18T12:00:00Z",
-   "shipping_includes_usd": 14.55,
    "il_value": {
     "low": 39,
     "typical": 245,
@@ -8640,7 +8639,7 @@
    "slot_alternative_ok": true,
    "nordic_score": null,
    "ship_estimated": false,
-   "price_note": "עלות המכירה $21.17 + משלוח $1.99 = נחיתה ₪76.4. הסטודיו לוקח מהכרטיס רק $6.62, ולכן המשלוח הידני ($16.54) כולל גם את סט התלייה ($14.55). לא לערוך אותו בלי להשאיר את זה בפנים. מחיר ₪169 מהליקוט (wave4-shades.json), לפי שווי בישראל (ה.10): typical ₪245. מתחת לרף 40% (ה.11).",
+   "price_note": "עלות המכירה $21.17 + משלוח $1.99 = נחיתה ₪76.4. עלות המכירה נקראת מ-sale_cost_usd, והמשלוח הידני הוא משלוח בלבד (2026-10-18). מחיר ₪169 מהליקוט (wave4-shades.json), לפי שווי בישראל (ה.10): typical ₪245. מתחת לרף 40% (ה.11).",
    "results_row": {
     "file": "data/leads/final-2026-10-13/results/wave4-shades.json",
     "margin_pct": 35.5
@@ -8677,9 +8676,8 @@
      "ship_basis": "כלול בעלות הסט: ליקוט, אריזה ונקודת איסוף בישראל"
     }
    ],
-   "shipping_cost_usd": 23.2,
+   "shipping_cost_usd": 1.99,
    "updated_at": "2026-10-18T12:00:00Z",
-   "shipping_includes_usd": 21.21,
    "il_value": {
     "low": 78,
     "typical": 490,
@@ -8727,7 +8725,7 @@
    "slot_alternative_ok": true,
    "nordic_score": null,
    "ship_estimated": true,
-   "price_note": "עלות המכירה $30.08 + משלוח $1.99 = נחיתה ₪105.8. הסטודיו לוקח מהכרטיס רק $8.87, ולכן המשלוח הידני ($23.20) כולל גם את המק\"ט השני ($21.21). לא לערוך אותו בלי להשאיר את זה בפנים. מחיר ₪279 מהליקוט (wave4-shades.json), לפי שווי בישראל (ה.10): typical ₪490.",
+   "price_note": "עלות המכירה $30.08 + משלוח $1.99 = נחיתה ₪105.8. עלות המכירה נקראת מ-sale_cost_usd, והמשלוח הידני הוא משלוח בלבד (2026-10-18). מחיר ₪279 מהליקוט (wave4-shades.json), לפי שווי בישראל (ה.10): typical ₪490.",
    "results_row": {
     "file": "data/leads/final-2026-10-13/results/wave4-shades.json",
     "margin_pct": 44.4
@@ -8764,9 +8762,8 @@
      "ship_basis": "כלול בעלות הסט: ליקוט, אריזה ונקודת איסוף בישראל"
     }
    ],
-   "shipping_cost_usd": 15.71,
+   "shipping_cost_usd": 1.16,
    "updated_at": "2026-10-18T12:00:00Z",
-   "shipping_includes_usd": 14.55,
    "il_value": {
     "low": 195,
     "typical": 364,
@@ -8813,7 +8810,7 @@
    "slot_alternative_ok": false,
    "nordic_score": null,
    "ship_estimated": false,
-   "price_note": "עלות המכירה $23.16 + משלוח $1.16 = נחיתה ₪80.3. הסטודיו לוקח מהכרטיס רק $8.61, ולכן המשלוח הידני ($15.71) כולל גם את סט התלייה ($14.55). לא לערוך אותו בלי להשאיר את זה בפנים. מחיר ₪199 מהליקוט (wave4-shades.json), לפי שווי בישראל (ה.10): typical ₪364.",
+   "price_note": "עלות המכירה $23.16 + משלוח $1.16 = נחיתה ₪80.3. עלות המכירה נקראת מ-sale_cost_usd, והמשלוח הידני הוא משלוח בלבד (2026-10-18). מחיר ₪199 מהליקוט (wave4-shades.json), לפי שווי בישראל (ה.10): typical ₪364.",
    "results_row": {
     "file": "data/leads/final-2026-10-13/results/wave4-shades.json",
     "margin_pct": 41.3
@@ -8850,9 +8847,8 @@
      "ship_basis": "כלול בעלות הסט: ליקוט, אריזה ונקודת איסוף בישראל"
     }
    ],
-   "shipping_cost_usd": 15.71,
+   "shipping_cost_usd": 1.16,
    "updated_at": "2026-10-18T12:00:00Z",
-   "shipping_includes_usd": 14.55,
    "il_value": {
     "low": 195,
     "typical": 364,
@@ -8899,7 +8895,7 @@
    "slot_alternative_ok": false,
    "nordic_score": null,
    "ship_estimated": false,
-   "price_note": "עלות המכירה $23.16 + משלוח $1.16 = נחיתה ₪80.3. הסטודיו לוקח מהכרטיס רק $8.61, ולכן המשלוח הידני ($15.71) כולל גם את סט התלייה ($14.55). לא לערוך אותו בלי להשאיר את זה בפנים. מחיר ₪199 מהליקוט (wave4-shades.json), לפי שווי בישראל (ה.10): typical ₪364.",
+   "price_note": "עלות המכירה $23.16 + משלוח $1.16 = נחיתה ₪80.3. עלות המכירה נקראת מ-sale_cost_usd, והמשלוח הידני הוא משלוח בלבד (2026-10-18). מחיר ₪199 מהליקוט (wave4-shades.json), לפי שווי בישראל (ה.10): typical ₪364.",
    "results_row": {
     "file": "data/leads/final-2026-10-13/results/wave4-shades.json",
     "margin_pct": 41.3
@@ -8936,9 +8932,8 @@
      "ship_basis": "כלול בעלות הסט: ליקוט, אריזה ונקודת איסוף בישראל"
     }
    ],
-   "shipping_cost_usd": 15.71,
+   "shipping_cost_usd": 1.16,
    "updated_at": "2026-10-18T12:00:00Z",
-   "shipping_includes_usd": 14.55,
    "il_value": {
     "low": 195,
     "typical": 364,
@@ -8985,7 +8980,7 @@
    "slot_alternative_ok": false,
    "nordic_score": null,
    "ship_estimated": false,
-   "price_note": "עלות המכירה $23.16 + משלוח $1.16 = נחיתה ₪80.3. הסטודיו לוקח מהכרטיס רק $8.61, ולכן המשלוח הידני ($15.71) כולל גם את סט התלייה ($14.55). לא לערוך אותו בלי להשאיר את זה בפנים. מחיר ₪199 מהליקוט (wave4-shades.json), לפי שווי בישראל (ה.10): typical ₪364.",
+   "price_note": "עלות המכירה $23.16 + משלוח $1.16 = נחיתה ₪80.3. עלות המכירה נקראת מ-sale_cost_usd, והמשלוח הידני הוא משלוח בלבד (2026-10-18). מחיר ₪199 מהליקוט (wave4-shades.json), לפי שווי בישראל (ה.10): typical ₪364.",
    "results_row": {
     "file": "data/leads/final-2026-10-13/results/wave4-shades.json",
     "margin_pct": 41.3
@@ -9022,9 +9017,8 @@
      "ship_basis": "כלול בעלות הסט: ליקוט, אריזה ונקודת איסוף בישראל"
     }
    ],
-   "shipping_cost_usd": 16.54,
+   "shipping_cost_usd": 1.99,
    "updated_at": "2026-10-18T12:00:00Z",
-   "shipping_includes_usd": 14.55,
    "il_value": {
     "low": 195,
     "typical": 234,
@@ -9071,7 +9065,7 @@
    "slot_alternative_ok": false,
    "nordic_score": null,
    "ship_estimated": true,
-   "price_note": "עלות המכירה $31.57 + משלוח $1.99 = נחיתה ₪110.8. הסטודיו לוקח מהכרטיס רק $17.02, ולכן המשלוח הידני ($16.54) כולל גם את סט התלייה ($14.55). לא לערוך אותו בלי להשאיר את זה בפנים. מחיר ₪229 מהליקוט (wave4-shades.json), לפי שווי בישראל (ה.10): typical ₪234. מתחת לרף 40% (ה.11).",
+   "price_note": "עלות המכירה $31.57 + משלוח $1.99 = נחיתה ₪110.8. עלות המכירה נקראת מ-sale_cost_usd, והמשלוח הידני הוא משלוח בלבד (2026-10-18). מחיר ₪229 מהליקוט (wave4-shades.json), לפי שווי בישראל (ה.10): typical ₪234. מתחת לרף 40% (ה.11).",
    "results_row": {
     "file": "data/leads/final-2026-10-13/results/wave4-shades.json",
     "margin_pct": 32.0
@@ -9108,9 +9102,8 @@
      "ship_basis": "כלול בעלות הסט: ליקוט, אריזה ונקודת איסוף בישראל"
     }
    ],
-   "shipping_cost_usd": 23.2,
+   "shipping_cost_usd": 1.99,
    "updated_at": "2026-10-18T12:00:00Z",
-   "shipping_includes_usd": 21.21,
    "il_value": {
     "low": 390,
     "typical": 729,
@@ -9157,7 +9150,7 @@
    "slot_alternative_ok": true,
    "nordic_score": null,
    "ship_estimated": true,
-   "price_note": "עלות המכירה $45.31 + משלוח $1.99 = נחיתה ₪156.1. הסטודיו לוקח מהכרטיס רק $24.10, ולכן המשלוח הידני ($23.20) כולל גם את המק\"ט השני ($21.21). לא לערוך אותו בלי להשאיר את זה בפנים. מחיר ₪399 מהליקוט (wave4-shades.json), לפי שווי בישראל (ה.10): typical ₪729.",
+   "price_note": "עלות המכירה $45.31 + משלוח $1.99 = נחיתה ₪156.1. עלות המכירה נקראת מ-sale_cost_usd, והמשלוח הידני הוא משלוח בלבד (2026-10-18). מחיר ₪399 מהליקוט (wave4-shades.json), לפי שווי בישראל (ה.10): typical ₪729.",
    "results_row": {
     "file": "data/leads/final-2026-10-13/results/wave4-shades.json",
     "margin_pct": 43.1
@@ -9410,9 +9403,8 @@
      "ship_basis": "CJPacket Eub 12-50 יום"
     }
    ],
-   "shipping_cost_usd": 42.09,
+   "shipping_cost_usd": 37.78,
    "updated_at": "2026-10-18T12:00:00Z",
-   "shipping_includes_usd": 4.31,
    "il_value": {
     "low": 89,
     "typical": 220,
@@ -9452,7 +9444,7 @@
    "slot_alternative_ok": false,
    "nordic_score": null,
    "ship_estimated": true,
-   "price_note": "עלות המכירה $9.71 + משלוח $37.78 = נחיתה ₪156.7. הסטודיו לוקח מהכרטיס רק $5.40, ולכן המשלוח הידני ($42.09) כולל גם את המק\"ט השני ($4.31). לא לערוך אותו בלי להשאיר את זה בפנים. מחיר ₪229 מהליקוט (round5-ceramics.json), לפי שווי בישראל (ה.10): typical ₪220. מתחת לרף 40% (ה.11).",
+   "price_note": "עלות המכירה $9.71 + משלוח $37.78 = נחיתה ₪156.7. עלות המכירה נקראת מ-sale_cost_usd, והמשלוח הידני הוא משלוח בלבד (2026-10-18). מחיר ₪229 מהליקוט (round5-ceramics.json), לפי שווי בישראל (ה.10): typical ₪220. מתחת לרף 40% (ה.11).",
    "results_row": {
     "file": "data/leads/final-2026-10-13/results/round5-ceramics.json",
     "margin_pct": 8.3
@@ -9566,9 +9558,8 @@
      "ship_basis": "CJPacket Eub 12-50 יום (freight-cj.json, 2026-10-11)"
     }
    ],
-   "shipping_cost_usd": 21.39,
+   "shipping_cost_usd": 16.58,
    "updated_at": "2026-10-18T12:00:00Z",
-   "shipping_includes_usd": 4.81,
    "il_value": {
     "low": 129,
     "typical": 175,
@@ -9608,7 +9599,7 @@
    "slot_alternative_ok": false,
    "nordic_score": null,
    "ship_estimated": true,
-   "price_note": "עלות המכירה $8.42 + משלוח $16.58 = נחיתה ₪82.5. הסטודיו לוקח מהכרטיס רק $3.61, ולכן המשלוח הידני ($21.39) כולל גם את המק\"ט השני ($4.81). לא לערוך אותו בלי להשאיר את זה בפנים. מחיר ₪179 מהליקוט (round5-ceramics.json), לפי שווי בישראל (ה.10): typical ₪175. מתחת לרף 40% (ה.11).",
+   "price_note": "עלות המכירה $8.42 + משלוח $16.58 = נחיתה ₪82.5. עלות המכירה נקראת מ-sale_cost_usd, והמשלוח הידני הוא משלוח בלבד (2026-10-18). מחיר ₪179 מהליקוט (round5-ceramics.json), לפי שווי בישראל (ה.10): typical ₪175. מתחת לרף 40% (ה.11).",
    "results_row": {
     "file": "data/leads/final-2026-10-13/results/round5-ceramics.json",
     "margin_pct": 26.4

@@ -317,14 +317,17 @@ function buildOptions(
 
 function buildProduct(card: ProductCard, path: string, roomId: string, slot: Slot, fillerNames: string[]): FullProduct | HiddenProduct {
   const econ = productEcon[card.id] ?? {};
-  const cost = usdToCents(card.price.currency === 'USD' ? card.price.cost : NaN);
+  // units per sale: the studio's sell_qty, else the studio's own default rule (studio/build.py sell_qty_default)
+  const qtyDefault = sellQtyDefault(card, slot.set_of);
+  const sellQty = econ.sell_qty ?? qtyDefault.qty;
+  // the cost of the whole sale from the pricing file (sale_cost_usd, 2026-10-18: a shade with its suspension set), per
+  // unit sold; else the card's cost. The row's shipping_cost_usd is then shipping only (the studio reads it the same way)
+  const saleCost = typeof econ.sale_cost_usd === 'number' && econ.sale_cost_usd > 0 ? econ.sale_cost_usd : null;
+  const cost = usdToCents(saleCost !== null ? saleCost / sellQty : card.price.currency === 'USD' ? card.price.cost : NaN);
   if (!Number.isFinite(cost)) return { id: card.id, slot: slot.id, reason: `price.currency ${card.price.currency} is not USD` };
   const shipping = resolveShippingUsd(card.id, econ.shipping_cost_usd, freight, settings);
   const shippingFromDefault = shipping.source === 'default';
   const ship = usdToCents(shipping.usd);
-  // units per sale: the studio's sell_qty, else the studio's own default rule (studio/build.py sell_qty_default)
-  const qtyDefault = sellQtyDefault(card, slot.set_of);
-  const sellQty = econ.sell_qty ?? qtyDefault.qty;
   const fulfillment = econ.fulfillment_source ?? 'dropship_cj';
   let retailIls = typeof econ.retail_ils === 'number' ? econ.retail_ils : null;
   let provisional = false;

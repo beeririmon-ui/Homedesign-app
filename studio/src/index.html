@@ -300,6 +300,7 @@ input[type="search"],select{width:100%;min-height:40px;padding:7px 10px;border:1
 .pcard{grid-template-columns:minmax(0,1fr)}
 .pcard .pbody{grid-template-columns:minmax(0,1fr)}
 .pcard .pecon .flag{white-space:normal;align-items:baseline}
+.pcard .pecon .chip{white-space:normal;line-height:1.25;max-width:100%}
 .pcard .pecon .flag .fdot{flex:none;align-self:center}
 .pcard-w>.pcard:hover{box-shadow:none}
 .pcard-w>.pcard:focus-visible{outline-offset:-3px}
@@ -689,6 +690,7 @@ details.room-lad summary{cursor:pointer;font-weight:600}
 .cand-reason{font-size:var(--fs-xs);color:var(--ink-2);margin-top:4px;overflow-wrap:anywhere}
 .cand-link{font-size:var(--fs-xs);font-weight:600;white-space:nowrap;display:inline-flex;align-items:center;min-height:24px}
 .cmp-sub{display:block;font-size:var(--fs-xs);color:var(--ink-2);white-space:nowrap;font-weight:400}
+.cmp-sub.wrap{white-space:normal;min-width:7em}
 .sup-ae{background:var(--oak-wash);color:var(--oak-ink)}
 .sup-cj{background:var(--sunk);color:var(--ink)}
 .sup-zd{background:transparent;color:var(--ink-2);box-shadow:inset 0 0 0 1px var(--rule-2)}
@@ -972,9 +974,9 @@ button.ptile:focus-visible{outline-offset:2px}
 .chip-link{border:1px solid currentColor;background:transparent;cursor:pointer;font:inherit;font-size:var(--fs-xs);font-weight:600;line-height:1;padding:4px 8px;border-radius:999px;color:var(--ink-2)}
 .chip-link:hover{color:var(--ink)}
 /* ---------- next sourcing round ("ליקוט הבא") ---------- */
-.src-matrix td{text-align:center}
-.src-matrix td.zero{color:var(--ink-3)}
-.src-matrix th[scope="row"]{background:none;position:static;font-size:var(--fs-s);color:var(--ink);white-space:normal}
+.src-matrix td,.cur-matrix td{text-align:center}
+.src-matrix td.zero,.cur-matrix td.zero{color:var(--ink-3)}
+.src-matrix th[scope="row"],.cur-matrix th[scope="row"]{background:none;position:static;font-size:var(--fs-s);color:var(--ink);white-space:normal}
 .src-matrix tfoot td,.src-matrix tfoot th{font-weight:700;background:var(--paper)}
 .src-rules{margin:0;padding-inline-start:22px;display:grid;gap:5px;font-size:var(--fs-s);max-width:90ch}
 .src-list{list-style:none;margin:0;padding:0;display:grid;gap:12px}
@@ -1022,9 +1024,9 @@ button.ptile:focus-visible{outline-offset:2px}
 .drop-table td:first-child{white-space:nowrap}
 .drop-table .code-tag{white-space:normal;overflow-wrap:anywhere}
 .comp-block .dec-link .dl-st,.comp-decs .dec-link .dl-st,.src-slot .dec-link .dl-st{opacity:1}
-.src-slot .chiprow .chip,.comp-slot-head .chip,.ptile .tc .chip,.src-head .chip,.comp-sub h5 .chip{white-space:normal;line-height:1.3;max-width:100%;overflow-wrap:anywhere}
+.src-slot .chiprow .chip,.comp-slot-head .chip,.ptile .tc .chip,.src-head .chip,.comp-sub h5 .chip,.src-res .cand-meta .chip{white-space:normal;line-height:1.3;max-width:100%;overflow-wrap:anywhere}
 .src-matrix .tl-long{font-weight:400}
-@media (max-width:560px){.src-matrix .tl-long{display:none}.src-matrix th,.src-matrix td{padding:8px 6px}}
+@media (max-width:560px){.src-matrix .tl-long{display:none}.src-matrix th,.src-matrix td,.cur-matrix th,.cur-matrix td{padding:8px 6px}}
 .drop-table code{direction:ltr;unicode-bidi:isolate;overflow-wrap:anywhere;white-space:normal}
 @media (max-width:560px){.drop-table td:first-child{white-space:normal}}
 /* room boards (לוחות חדרים, 2026-10-17): the owner's product boards, one per style and room, with the coverage map above */
@@ -1809,8 +1811,11 @@ function effProduct(p){
   e.history = (doc && doc.history) || [];
   const cur = p.price && p.price.currency;
   e.badCurrency = !!cur && String(cur).toUpperCase() !== 'USD';
-  // the final round's cost of the whole sale when it is not N x the card's cost (a mixed set), until the cost or the units are edited
-  e.saleCost = e.fromCard && isNum(be.sale_cost_usd) && !('cost' in pf) && !('sell_qty' in pf) ? be.sale_cost_usd : null;
+  // the cost of the whole sale when it is not N x the card's cost: from the pricing file (sale_cost_usd, 2026-10-18: a
+  // shade with its suspension set, a pitcher with its jar) or from the final round's record (a mixed set). Kept until the
+  // cost or the units are edited in the studio; a price edit keeps it
+  e.saleCost = isNum(be.sale_cost_usd) && be.sale_cost_usd > 0 && !('cost' in pf) && !('sell_qty' in pf) ? be.sale_cost_usd : null;
+  e.saleCostSrc = e.saleCost != null ? (be.sale_cost_src || (be.from_card ? 'leads' : 'pricing')) : null;
   e.econ = econCalc({cost_usd: e.badCurrency ? null : (e.saleCost != null ? e.saleCost / e.qty : f.cost), qty: e.qty, shipping_usd: ship.total, retail_ils: f.retail_ils}, S.ES.v);
   e.mkt = mktOf(p.id);
   if(e.badCurrency) e.econ.missing = e.econ.missing.map(m => m === 'cost' ? 'currency' : m);
@@ -1839,7 +1844,13 @@ function isLoser(e){
 const loserChip = e => isLoser(e) ? `<span class="chip chip-loss" title="${esc(isNum(e.econ.contribution) ? `תרומה ${fmtILS(e.econ.contribution)} למכירה במחיר הזה` : 'לפי קובץ התמחור')}">מפסיד, לא למכירה</span>` : '';
 const addonChip = e => e && e.addonOnly ? '<span class="chip chip-addon" title="מוצר שנמכר רק כתוספת להזמנה (addon_only בקובץ התמחור)">רק כתוספת לסל</span>' : '';
 // all the price-state chips of a product, in order of weight: losing money, under the floor, add-on only, quantity mismatch
-const saleCostChip = e => e && e.saleCost != null ? `<span class="chip chip-initial" title="${esc(`הליקוט האחרון תמחר את המכירה כולה (${e.qty} פריטים) ב-${fmtUSD(e.saleCost)}, לא ${e.qty} × העלות שבכרטיס (${fmtUSD(e.price && e.price.cost)}). החישוב משתמש בעלות של הליקוט עד שהעלות או הכמות נערכות.`)}">עלות הסט מהליקוט ${esc(fmtUSD(e.saleCost))}</span>` : '';
+const saleCostChip = e => {
+  if(!e || e.saleCost == null) return '';
+  const fromFile = e.saleCostSrc === 'pricing', what = fromFile ? 'קובץ התמחור' : 'הליקוט האחרון';
+  const contains = e.priceBasis && e.priceBasis.contains ? ` (${e.priceBasis.contains})` : '';
+  const tip = `${what} מתמחר את המכירה כולה${contains} ב-${fmtUSD(e.saleCost)}, לא ${e.qty > 1 ? e.qty + ' × ' : ''}העלות שבכרטיס (${fmtUSD(e.price && e.price.cost)}). המשלוח הוא משלוח בלבד. החישוב משתמש בעלות הזו עד שהעלות או הכמות נערכות בסטודיו.`;
+  return `<span class="chip chip-initial" data-sale-cost="${esc(e.saleCostSrc)}" title="${esc(tip)}">עלות המכירה ${esc(fmtUSD(e.saleCost))}<span class="sr-only"> (${esc(what)})</span></span>`;
+};
 const premiumChip = e => e && e.premium ? `<span class="chip chip-premium" title="${esc('המעצב קבע שהמוצר נראה איכותי, והמחיר עד המחיר הטיפוסי בישראל (ה.10, 2026-10-17). מחכה לאישור המשתמש.')}">תמחור פרימיום, לאישור</span>` : '';
 const priceChips = e => [loserChip(e), isLoser(e) ? '' : floorChip(e), premiumChip(e), saleCostChip(e), addonChip(e)].filter(Boolean).join(' ');
 function floorChip(e){
@@ -3038,7 +3049,7 @@ function ceilHtml(c){
 function currentRoundHtml(C){
   const STY = STYLE_KEYS.filter(k => (C.shortfall || {})[k]);
   const td = n => `<td class="num ${n ? '' : 'zero'}">${esc(isNum(n) ? n : '—')}</td>`;
-  const table = STY.length ? `<div class="tbl-wrap" tabindex="0" role="region" aria-label="מה חסר לכל סגנון בסבב ${esc(C.round)}"><table class="src-matrix">
+  const table = STY.length ? `<div class="tbl-wrap" tabindex="0" role="region" aria-label="מה חסר לכל סגנון בסבב ${esc(C.round)}"><table class="cur-matrix">
       <caption class="sr-only">לכל סגנון: עמדות שנספרות, עמדות עם 3 אפשרויות מוכנות, היעד וכמה עוד חסרות</caption>
       <thead><tr><th scope="col">סגנון</th><th scope="col">עמדות</th><th scope="col">מוכנות</th><th scope="col">יעד ${esc(C.target_pct || 80)}%</th><th scope="col">חסרות</th></tr></thead>
       <tbody>${STY.map(k => { const v = C.shortfall[k]; return `<tr><th scope="row">${esc(STYLE_HE[k])}</th>${td(v.eligible)}${td(v.covered_ready)}${td(v.goal_80)}${td(v.more_needed)}</tr>`; }).join('')}</tbody>
@@ -3960,7 +3971,7 @@ function renderProfit(){
     return `<tr data-pid="${esc(p.id)}" data-margin="${isNum(x.margin) ? esc((Math.round(x.margin * 1000) / 10).toFixed(1)) : ''}">
       <td class="pname-cell"><button type="button" class="linkish" data-product="${esc(p.id)}" dir="auto">${esc(p.name)}</button>${p.pending ? ' <span class="chip chip-pending">ממתין לסנכרון</span>' : ''}${p.status !== 'candidate' ? ` <span class="chip st-${esc(p.status)}">${esc(P_STATUS[p.status])}</span>` : ''}</td>
       <td>${esc(slotLabel(p))}</td>
-      <td class="money">${ltr(fmtUSD(p.price.cost))}${p.qty > 1 && isNum(p.price.cost) ? `<span class="cell-src">× ${ltr(esc(p.qty))} = ${ltr(fmtUSD(p.price.cost * p.qty))}</span>` : ''}</td>
+      <td class="money">${ltr(fmtUSD(p.price.cost))}${p.saleCost != null ? `<span class="cell-src" data-sale-cost="${esc(p.saleCostSrc || '')}">עלות המכירה ${ltr(fmtUSD(p.saleCost))}${p.saleCostSrc === 'pricing' ? ' (קובץ התמחור)' : ' (הליקוט)'}</span>` : p.qty > 1 && isNum(p.price.cost) ? `<span class="cell-src">× ${ltr(esc(p.qty))} = ${ltr(fmtUSD(p.price.cost * p.qty))}</span>` : ''}</td>
       <td class="money">${cell(p, 'qty')}${qtyHtml(p, {block: true})}</td>
       <td class="money">${cell(p, 'ship')}<span class="cell-src">${esc(p.ship.label)}</span>${p.ship.est ? `<span class="cell-src">ל-${ltr(esc(p.qty))} יח' ${ltr(fmtUSD(p.ship.total))} <span class="est">הערכה</span></span>` : ''}</td>
       <td class="money">${ltr(fmtILS(x.landed))}</td>
@@ -4187,14 +4198,15 @@ function cmpRow(c, s, style){
     let retail = null;
     if(isNum(e.retail) && e.retail > 0) retail = {ils: e.retail, src: 'set'};
     else { const bp = bandPoint(e); if(isNum(bp)) retail = {ils: bp, src: 'band', band: e.mkt.suggested_band}; else if(sb) retail = {ils: bandAt(sb.band, mktUnits(qty, sb.key)), src: 'slot', band: sb.band}; }
-    const econ = econCalc({cost_usd: e.badCurrency ? null : e.price.cost, qty, shipping_usd: ship.total, retail_ils: retail ? retail.ils : null}, v);
+    // the whole sale's cost when the pricing file or the final round has it (a shade with its suspension set), as on the profit screen
+    const econ = econCalc({cost_usd: e.badCurrency ? null : (e.saleCost != null ? e.saleCost / qty : e.price.cost), qty, shipping_usd: ship.total, retail_ils: retail ? retail.ils : null}, v);
     if(e.badCurrency) econ.missing = econ.missing.map(m => m === 'cost' ? 'dealer' : m);
     if(ship.nofast) econ.missing = econ.missing.map(m => m === 'shipping' ? 'fast_shipping' : m);
     if(ship.noroute) econ.missing = econ.missing.map(m => m === 'shipping' ? 'no_route' : m);
     return {key: 'card:' + c.id, k: 'card', id: c.id, sup: c.sup, supName: (e.supplier && e.supplier.name) || '', title: e.name, url: e.supplier.product_url,
       status: e.status, rejected: e.status === 'rejected' || audV === 'reject', audit: audV, auditNote: aud ? aud.note || null : null,
       shared: !!c.shared, qty, qtySure: e.qtySure, qtyReason: (e.qtyDef || {}).reason,
-      priceUsd: e.badCurrency ? null : e.price.cost, priceIls: e.badCurrency ? e.price.cost : null, ship, retail, econ,
+      priceUsd: e.badCurrency ? null : (e.saleCost != null ? e.saleCost / qty : e.price.cost), priceIls: e.badCurrency ? e.price.cost : null, saleCostSrc: e.saleCostSrc || null, ship, retail, econ,
       fits, fitSrc, verdicts, reasons, files, unrated: !Object.keys(scores).length && !Object.values(fitSrc).some(x => x === 'audit' || x === 'team'),
       note: (audV === 'reject' || audV === 'lower-fit') && aud.note ? aud.note : c.note || null};
   }
@@ -4444,7 +4456,7 @@ function cmpRowHtml(x, st, winStyles, T){
     link
   ].join('');
   const priceTxt = x.priceIls != null ? fmtILS(x.priceIls) : isNum(x.priceUsd) ? (x.priceFrom ? 'מ-' : '') + fmtUSD(x.priceUsd) : '—';
-  const priceSub = x.priceIls != null ? 'מחיר צרכן באתר הספק' : (x.qty > 1 && isNum(x.priceUsd) ? `× ${x.qty} = ${fmtUSD(x.priceUsd * x.qty)}` : (x.sku ? `SKU ${x.sku}` : ''));
+  const priceSub = x.priceIls != null ? 'מחיר צרכן באתר הספק' : x.saleCostSrc ? `עלות המכירה${x.qty > 1 && isNum(x.priceUsd) ? ` ${fmtUSD(x.priceUsd * x.qty)}` : ''}` : (x.qty > 1 && isNum(x.priceUsd) ? `× ${x.qty} = ${fmtUSD(x.priceUsd * x.qty)}` : (x.sku ? `SKU ${x.sku}` : ''));
   const shipIls = isNum(x.ship.total) ? x.ship.total * v.usd_ils : null;
   const shipTxt = isNum(shipIls) ? fmtILS(shipIls, shipIls < 10 ? 1 : 0) : (x.ship.noShip ? 'אין משלוח' : '—');
   const days = daysTxt(x.ship.days);
@@ -4470,7 +4482,7 @@ function cmpRowHtml(x, st, winStyles, T){
     <td class="money w">${ltr(esc(retailTxt))}${x.retail ? `<span class="cmp-sub">${esc(RETAIL_SRC[x.retail.src])}</span>` : ''}${e.recommended != null ? `<span class="cmp-sub">ל-${ltr(esc(v.target_margin_pct + '%'))}: ${ltr(fmtILS(Math.ceil(e.recommended)))}</span>` : ''}</td>
     <td class="money"${fileTip}>${marginCell}</td>
     <td class="money w">${isNum(e.margin) ? `<span class="flag ${cls}">${ltr(fmtPct(e.margin, 1))}</span>` : '—'}</td>
-    <td class="w">${esc(fitTxt)}${fit && fit.kind === 'assumed' ? '<span class="cmp-sub">נחשב נורדי</span>' : ''}${fitSub ? `<span class="cmp-sub" data-fit-src>${esc(fitSub)}</span>` : ''}</td>
+    <td class="w">${esc(fitTxt)}${fit && fit.kind === 'assumed' ? '<span class="cmp-sub">נחשב נורדי</span>' : ''}${fitSub ? `<span class="cmp-sub wrap" data-fit-src>${esc(fitSub)}</span>` : ''}</td>
   </tr>`;
 }
 function cmpJump(key){

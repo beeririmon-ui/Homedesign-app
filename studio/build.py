@@ -1675,6 +1675,7 @@ def card_economics(p: dict) -> dict:
         whole = abs(rc - cost * q) <= max(0.02, 0.03 * rc)
         if not per_unit and not whole:
             out["sale_cost_usd"] = rc
+            out["sale_cost_src"] = "leads"
     out["from_card"] = True
     return out
 
@@ -1783,7 +1784,7 @@ def load_economics(eco_dir: Path, products: list[dict]) -> dict:
         except Exception as e:
             log(f"  ! cannot read {bp2.name}: {e}")
     n_fr = {"cj": 0, "zendrop": 0, "aliexpress": 0, "card": 0, "leads": 0}
-    n_from_card = 0
+    n_from_card = n_sale = 0
     n_manual = n_no_fast = n_qty = n_no_route = 0
 
     def opt(o):
@@ -1800,6 +1801,11 @@ def load_economics(eco_dir: Path, products: list[dict]) -> dict:
         e = {}
         if isnum(m.get("shipping_cost_usd")):
             e["manual"] = {"shipping_cost_usd": m["shipping_cost_usd"], "date": first_date(str(m.get("updated_at") or ""))}
+            # a row that still folds part of the sale's cost into the shipping (shipping_includes_usd) while it also has
+            # sale_cost_usd would count that cost twice: the shipping is unfolded here (shipping only, 2026-10-18)
+            inc = m.get("shipping_includes_usd")
+            if isnum(m.get("sale_cost_usd")) and m["sale_cost_usd"] > 0 and isnum(inc) and 0 < inc <= m["shipping_cost_usd"]:
+                e["manual"].update(shipping_cost_usd=round(m["shipping_cost_usd"] - inc, 4), unfolded_usd=inc)
             n_manual += 1
         sup = p.get("supplier") or {}
         skey = supplier_key(sup.get("name"), sup.get("product_url"), (p.get("price") or {}).get("currency"))
@@ -1863,6 +1869,13 @@ def load_economics(eco_dir: Path, products: list[dict]) -> dict:
         if isnum(q) and float(q).is_integer() and q >= 1:
             e["sell_qty"] = int(q)
             n_qty += 1
+        # the cost of the whole sale from the pricing row (2026-10-18): a shade with its certified suspension set, a pitcher
+        # with its jar, a cruet with its mills. It replaces the card's cost x the units; the row's shipping is shipping only
+        # (before, the pricing team had to fold the extra cost into shipping_cost_usd, as shipping_includes_usd)
+        if isnum(m.get("sale_cost_usd")) and m["sale_cost_usd"] > 0:
+            e["sale_cost_usd"] = round(float(m["sale_cost_usd"]), 4)
+            e["sale_cost_src"] = "pricing"
+            n_sale += 1
         if pid not in manual:
             ce = card_economics(p)
             if ce:
@@ -1874,7 +1887,7 @@ def load_economics(eco_dir: Path, products: list[dict]) -> dict:
     out["counts"] = {"shipping_cj": n_fr["cj"], "shipping_zendrop": n_fr["zendrop"], "shipping_aliexpress": n_fr["aliexpress"],
                      "shipping_card": n_fr["card"], "shipping_leads": n_fr["leads"], "from_card": n_from_card,
                      "shipping_manual": n_manual, "no_fast_shipping": n_no_fast,
-                     "no_route": n_no_route, "sell_qty": n_qty,
+                     "no_route": n_no_route, "sell_qty": n_qty, "sale_cost_pricing": n_sale,
                      "initial_prices": sum(1 for v in out["products"].values() if "retail_ils" in v and str(v.get("retail_src") or "").startswith("initial")),
                      "retail": sum(1 for v in out["products"].values() if "retail_ils" in v)}
     return out
@@ -1929,7 +1942,7 @@ def load_market(eco_dir: Path) -> dict | None:
         q["flags"] = [{"id": f, "he": FLAG_HE.get(f, f)} for f in (e.get("flags") or [])]
         prods[pid] = q
     a = d.get("assumptions") or {}
-    return {"file": rel(mp), "updated": d.get("updated"), "categories": cats, "products": prods,
+    return {"file": rel(mp) if mp.is_relative_to(ROOT) else str(mp), "updated": d.get("updated"), "categories": cats, "products": prods,
             "assumptions": {k: a.get(k) for k in ("fx_usd_ils", "target_margin", "cac_ils", "returns_reserve", "verdict", "band", "qty")}}
 
 
@@ -4031,7 +4044,8 @@ def main() -> int:
             f" AliExpress {c.get('shipping_aliexpress', 0)}, card SKU {c.get('shipping_card', 0)}, manual {c.get('shipping_manual', 0)}"
             f" · no route to Israel {c.get('no_route', 0)} · no option within 20 days {c.get('no_fast_shipping', 0)}"
             f" · retail prices {c.get('retail', 0)} ({c.get('initial_prices', 0)} initial, {c.get('from_card', 0)} from the card or its final-round record"
-            f", shipping from that record {c.get('shipping_leads', 0)}) · sell quantities {c.get('sell_qty', 0)}")
+            f", shipping from that record {c.get('shipping_leads', 0)}) · sell quantities {c.get('sell_qty', 0)}"
+            f" · the whole sale's cost from the pricing file {c.get('sale_cost_pricing', 0)}")
     else:
         log(f"  economics: no files in {economics['dir']} (the page shows its defaults)")
 

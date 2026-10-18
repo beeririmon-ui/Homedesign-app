@@ -126,6 +126,7 @@ python3 studio/tests/smoke_db_contract.py --db DIR  # חוזה ה-db (QA 2026-10
 - **משלוח:** `freight-cj.json`, ‏`freight-zendrop.json` ו-`freight-aliexpress.json` (אותו מבנה), לפי הספק של הכרטיס; גיבוי: `options.skus[].shipping_il` של המק"ט שבחדר. `status: "no_route"` מוצג כ"<ספק> לא שולח לישראל (נבדק DD.MM)". אין נתון: "חסר משלוח" עם הסיבה.
 - **מחיר לצרכן:** `data/economics/products.json` של צוות התמחור (`retail_ils`, ‏`retail_src`, ‏`il_value`, ‏`customer_total_ils`, ‏`price_for_qty`, ‏`flag`, ‏`slot_alternative_ok`, ‏`action_he`, ‏`addon_only`). מחיר עם `retail_src` שמתחיל ב-initial מסומן "מחיר התחלתי"; עריכה בסטודיו גוברת עליו, ו-`apply_edits.py` כותב אז `retail_src: "studio"`. ללקוח: המחיר + ₪29 מתחת ל-₪299 (‏`site/shared/src/schema/economics.ts`, או `storefront` ב-`settings.json`).
 - **יעד מרווח:** ברירת המחדל 40% (VR1). פסק הדין של מחקר השוק נשפט מחדש מול היעד הנוכחי.
+- **עלות המכירה כולה (2026-10-18):** שורת תמחור עם `sale_cost_usd` (אהיל עם סט תלייה מוסמך, קנקן עם צנצנת, בקבוק עם מטחנות) נותנת את עלות המכירה כולה, במקום העלות שבכרטיס כפול הכמות. `shipping_cost_usd` של השורה הוא משלוח בלבד. הדף מציג "עלות המכירה מקובץ התמחור", גם במסך הרווחיות ובהשוואה, ועריכת עלות או כמות בסטודיו מבטלת אותה. שורה שעוד נושאת `shipping_includes_usd` (חלק מהעלות בתוך המשלוח) נפתחת בבנייה, כדי שהעלות לא תיספר פעמיים. גם האתר (`site/tools/build-catalog.ts`) קורא את `sale_cost_usd`.
 
 ### בדיקה מקומית
 
