@@ -19,6 +19,12 @@ NAMES = {"nordic": "נורדי", "warm-modern": "מודרני חם", "japandi": 
          "modern-country": "כפרי מודרני", "boho": "בוהו"}
 
 
+def excluded():
+    """Slots the owner took out of the count (AU2, 2026-10-18): shown as "out of stock" in the house, not counted."""
+    p = f"{D}/round5/excluded-slots.json"
+    return set(json.load(open(p)).get("slots") or []) if os.path.exists(p) else set()
+
+
 def eligible():
     out = set()
     for f in glob.glob("data/slots/*.json"):
@@ -28,7 +34,7 @@ def eligible():
         room = os.path.basename(f)[:-5]
         sl = d["slots"] if isinstance(d["slots"], list) else list(d["slots"].values())
         out |= {f"{room}/{s['id']}" for s in sl if s.get("kind") != "fixed-product"}
-    return out
+    return out - excluded()
 
 
 def on_hold():
