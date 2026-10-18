@@ -22,6 +22,15 @@ The owner decided on the round-5 audit questions. See `docs/studio-rules.md` ה.
   - Kids' items need EN71 declared, not only CE.
 - **Round 5b:** a cloud team is on furniture and boxes now. Its queue is `round5/ae-queue-5b.json`.
 
+## Continue 2, 2026-10-18 (after the audit and round 5d)
+When the owner writes "תמשיך" again:
+1. Pull, then re-run `final_round_coverage.py` and `round5_targets.py`. Coverage now applies the designer audits per slot (`round5/designer-audit*.json`, the `slots` field).
+2. Open the queues:
+   - `round5/ae-queue-5d.json`: 6 listings, plus `queries_for_ae_session`, the audit's corrected queries. Use them: no style words, 1–4 seller words, pages 1–3, sorted by orders.
+   - `round5/ae-queue-cards.json`: a freight check for the plates of the kiln tableware set.
+   - Skip the 8 dead slots: AU2 in `status/decisions.json`, and the audit's `dead_slots`.
+3. Write the results to `results/round5e-aliexpress.json` and `.md`, in the same shape. Commit and push after each group.
+
 ## Continue, 2026-10-17 evening (after the first AliExpress pass)
 When the owner writes "תמשיך":
 1. Pull, then re-run `final_round_coverage.py` and `round5_targets.py`. Coverage now applies the designer audit and R5Q1.
