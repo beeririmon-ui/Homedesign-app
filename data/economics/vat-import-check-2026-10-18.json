@@ -1,0 +1,2367 @@
+{
+ "version": 1,
+ "date": "2026-10-18",
+ "what": "VAT, customs and dropshipping check for the owner's CPA meeting (VAT1): 6 questions, sources, confidence, price effects on the 34 imported products above ₪247",
+ "doc": "docs/ops/vat-import-check-2026-10-18.md",
+ "brief": "docs/ops/BRIEF-vat-check-2026-10-18.md",
+ "decision": "VAT1",
+ "disclaimer_he": "זה מחקר, לא ייעוץ מקצועי: לא חוות דעת של רואה חשבון, עורך דין או עמיל מכס. אין לשנות לפיו מחיר, תקנון או הצהרה לפני אישור של איש מקצוע.",
+ "method": "public pages only, human pace; no contact, no forms, no ruling requests; stopped at every 403/redirect/geo-block; laws read on he.wikisource.org (consolidated, not the binding Reshumot text); python3 -I over repo data for the price effects",
+ "marks": {
+  "מקור רשמי": "law, regulation, order, or a Tax Authority / Ministry of Economy / Israel Post publication",
+  "דעה מקצועית": "CPA or lawyer blog, think-tank paper",
+  "לא אומת": "not read directly (blocked or search result only), or non-official",
+  "ישן": "before 2024",
+  "הערכה": "own calculation or analysis"
+ },
+ "rates": {
+  "usd_ils": 3.3,
+  "usd_ils_sensitivity": 3.0,
+  "vat_rate": 0.18,
+  "source": "data/economics/settings.json (unverified); fulfillment-research.md (~3.0 in 2026)"
+ },
+ "bottom_line_he": [
+  "הערך המוצהר הוא מה שהלקוח שילם לנו (חשבונית הרכישה של היבואן, שהוא הלקוח), לא עלות הספק. פתוח: עם המע\"מ שלנו או בלעדיו (בינוני).",
+  "במבנה של היום יש כפל מע\"מ בכל חבילה מעל $75: ₪98–432 להזמנה. את מע\"מ היבוא אי אפשר לקזז (ס' 38, תק' 16א) (גבוה).",
+  "פתוח: האם המכירה שלנו בכלל \"עסקה בישראל\" (ס' 14 לחוק מע\"מ + ס' 8(ג) לחוק המכר). אין החלטת מיסוי, חוזר או פסק דין, והבלוגים חלוקים (נמוך).",
+  "הדרכים: אנחנו היבואן (9 מתוך 34 שורדים), גבייה בקופה (לא מבטלת כפל; 2 שורדים אם סופגים), פיצול (לא עוזר), מלאי מקומי (נקי), מחיר מתחת לסף (₪247 / ₪292).",
+  "עוסק פטור 2026: תקרה ₪122,833. מבטל כפל, לא את החיוב בדלת. +0.1403 × P לתרומה. כ-410 הזמנות של ₪299 בשנה (גבוה לתקרה).",
+  "חוק הגנת הצרכן ס' 14ג(ו): מס ועמלות בדלת הם חלק מ\"מחיר הנכס\" וחייבים להופיע לפני ההזמנה. עיצום ₪25,950 לתאגיד (גבוה / בינוני).",
+  "תקנים ביבוא אישי: מנורות מיטלטלות, צעצועים, מוצרי ילדים וקרמיקה פטורים (תוספת שלישית). גוף תאורה קבוע כנראה לא. ייתכן שדרופשיפינג בכלל לא יבוא אישי (\"שלא באמצעות עוסק\") (נמוך).",
+  "לא משנים מחירים עד תשובות רו\"ח ועמיל מכס. עד אז: ערך = מחיר הלקוח, ולכן 34 המוצרים יוצרים חיוב בדלת."
+ ],
+ "answers": [
+  {
+   "id": "Q1",
+   "question_he": "איזה ערך מוצהר על החבילה, ומי היבואן",
+   "short_answer_he": "בחבילה שממוענת ללקוח, היבואן הוא הלקוח. ערך המכס ביבוא אישי נקבע לפי המחיר בחשבונית הרכישה של היבואן, ועוד הובלה וביטוח. כלומר מה שהלקוח שילם לנו, לא עלות הספק. פתוח: האם המע\"מ שגבינו נכלל (ב' = P, או ג' = P/1.18). כשהחשבונית מוטלת בספק, המכס קובע לפי מחיר המכירה בארץ בלי מסים, קרוב לג'.",
+   "confidence": "medium",
+   "confidence_notes_he": "הכלל: גבוה (חוק ונוהל רשמי מ-2017). החלתו על דרופשיפינג: אין מקור ישיר. ב' מול ג': נמוך.",
+   "legal_basis": [
+    {
+     "ref": "פקודת המכס ס' 132(א), 133(א)",
+     "quote_he": "המחיר ששולם או שיש לשלמו בעד הטובין, בעת מכירתם לשם ייצוא לישראל",
+     "source": "customs-ordinance"
+    },
+    {
+     "ref": "פקודת המכס ס' 1, \"בעל\"",
+     "quote_he": "הבעל, היבואן, היצואן, הנִשגָר או הסוכן",
+     "source": "customs-ordinance"
+    },
+    {
+     "ref": "חוק מע\"מ ס' 16",
+     "quote_he": "ביבוא... – בעל הטובין כמשמעותו בפקודת המכס",
+     "source": "vat-law"
+    },
+    {
+     "ref": "אוגדן מכס פרק 2, הגדרות",
+     "quote_he": "יבואן – ביבוא אישי – יחיד המייבא רכב או טובין לשימושו העצמי",
+     "source": "customs-valuation-manual"
+    },
+    {
+     "ref": "אוגדן מכס פרק 2, 2.5.3",
+     "quote_he": "ייקבע על-פי המחיר המצוין בחשבונית/הסכם הרכישה, בהוספת עלויות נוספות",
+     "source": "customs-valuation-manual"
+    },
+    {
+     "ref": "אוגדן מכס פרק 2, 2.5.3(ד)(3)",
+     "quote_he": "ערך הטובין ייקבע על פי מחיר המכירה של הטובין בארץ, לא כולל מסים והוצאות נוספות",
+     "source": "customs-valuation-manual"
+    },
+    {
+     "ref": "דואר ישראל, הבהרות בנושא עמילות מכס",
+     "quote_he": "מוקד עמילות המכס יבקש צילומי הזמנה ולעיתים אף הצהרת מהות",
+     "source": "post-broker-clarifications"
+    }
+   ],
+   "under_declaration_risks_he": [
+    "עיכוב או סירוב לשחרר (ס' 65(ב), 196, 198)",
+    "עבירה: הצהרה כוזבת (ס' 212(א)(4)); חשבון מכר כוזב (ס' 212(א)(3))",
+    "חילוט (ס' 204(9))",
+    "עיצום (ס' 223ב): ₪2,500 על פרטים לא נכונים; ליבואן 10% מהפרש המס או ₪5,000, הגבוה",
+    "קודם כל על הלקוח, כי הוא היבואן; אצלנו: תלונות, ביטולים וחשיפה צרכנית (הערכה)"
+   ],
+   "conflicts_he": [
+    "fulfillment-research.md הניח ש-CJ מצהיר על עלות המוצר (לא אומת)"
+   ],
+   "cpa_must_confirm_he": "איזה סכום הספק צריך לכתוב בהצהרה ובחשבונית שבחבילה (P, P/1.18 או עלות הספק), ומה עושים עם המע\"מ שגבינו."
+  },
+  {
+   "id": "Q2",
+   "question_he": "האם המע\"מ נגבה פעמיים",
+   "short_answer_he": "במבנה של היום (מורשה שגובה 18% על P, והלקוח הוא היבואן): כן, מעל $75. את מע\"מ היבוא אנחנו לא יכולים לקזז (ס' 38, תק' 16א). אבל לא ברור שהמכירה שלנו חייבת: לפי ס' 14 לחוק מע\"מ, נכס נחשב נמכר בישראל אם היה בישראל בעת המסירה לקונה. לפי ס' 8(ג) לחוק המכר, במכר עם הובלה המסירה היא בהעמדה לרשות המוביל. לא נמצאו החלטת מיסוי, חוזר או פסק דין.",
+   "confidence": "low",
+   "confidence_notes_he": "שאי אפשר לקזז: גבוה. שהמכירה שלנו חייבת במע\"מ: נמוך.",
+   "legal_basis": [
+    {
+     "ref": "חוק מע\"מ ס' 2",
+     "quote_he": "על עסקה בישראל ועל יבוא טובין יוטל מס ערך מוסף",
+     "source": "vat-law"
+    },
+    {
+     "ref": "חוק מע\"מ ס' 14",
+     "quote_he": "יראו נכס כנמכר בישראל אם הנכס היה בישראל בעת מסירתו לקונה, או אם יוצא מישראל",
+     "source": "vat-law"
+    },
+    {
+     "ref": "חוק מע\"מ ס' 38",
+     "quote_he": "ובלבד שהצהרת הייבוא או המסמך האחר נושאים את שמו של העוסק כבעל הטובין",
+     "source": "vat-law"
+    },
+    {
+     "ref": "תקנות מע\"מ, תק' 16א",
+     "quote_he": "לא יהא ניתן לניכוי מס תשומות ששולם על יבוא טובין על פי רשמון יבוא הרשום על שמו של סוכן ליבוא אישי",
+     "source": "vat-regs"
+    },
+    {
+     "ref": "חוק המכר ס' 8(ג)",
+     "quote_he": "תהא המסירה בהעמדת הממכר לרשות המוביל",
+     "source": "sale-law"
+    },
+    {
+     "ref": "חוק המכר ס' 33",
+     "quote_he": "הבעלות בממכר עוברת לקונה במסירתו",
+     "source": "sale-law"
+    }
+   ],
+   "analysis_he": "הערכה: אם המסירה ללקוח היא בסין, המכירה לא בישראל, והלקוח באמת היבואן. אם המסירה בבית הלקוח, המכירה בישראל, אבל בעת היבוא אנחנו או הספק \"בעל הטובין\". המבנה היום משלב את שתי העמדות, ומכאן הכפל. אפשרות שלישית, בלי מקור: המרווח שלנו כשירות לתושב ישראל.",
+   "professional_opinions": [
+    {
+     "source": "blog-bookkeepers",
+     "position_he": "עמדת רשויות מע\"מ, לפי הכותבים: עסקה בישראל, חייבת. אין מספר החלטה. הרשות \"אמורה לפרסם\" עמדה",
+     "date": "2018-02-28"
+    },
+    {
+     "source": "blog-dray",
+     "position_he": "מכירה ללקוח בישראל חייבת גם אם נשלחה מחו\"ל. אין מקור",
+     "date": "2024-12-28"
+    },
+    {
+     "source": "blog-bshcpa",
+     "position_he": "לפי ס' 14: דרופשיפינג מחוץ לתחולה; מס תשומות לא ינוכה (ס' 41). מתייחס ללקוחות בחו\"ל",
+     "date": "2024-06-21"
+    },
+    {
+     "source": "blog-zscpa",
+     "position_he": "הטובין לא עוברים בישראל, ולכן על פניו אין צורך בתיק מע\"מ; במודל מעורב צריך. לא דן בלקוח ישראלי",
+     "date": null
+    }
+   ],
+   "conflicts_he": [
+    "הבלוגים חלוקים: שניים אומרים חייב, שניים אומרים מחוץ לתחולה (בהקשר של לקוח בחו\"ל). אף אחד לא דן בכפל",
+    "fulfillment-research.md מייחס את עמדת ה-18% ל\"זיו שיפר\". בדף הכותב הוא זיו כרסנטי, והדף לא אומר זאת"
+   ],
+   "official_ruling_found": false,
+   "cpa_must_confirm_he": "האם המכירה חייבת, על כל המחיר או רק על המרווח, והאם תנאי מסירה בתקנון משנים את התשובה."
+  },
+  {
+   "id": "Q3",
+   "question_he": "דרכים חוקיות להימנע מכפל ומחיוב בדלת",
+   "short_answer_he": "(א) אנחנו היבואן ומקזזים: רק כשאנחנו הבעלים בעת היבוא. כ-₪89 נטו לחבילה (הערכה), בלי פטור $75 ועם תקינה מסחרית. (ב) גבייה בקופה: שקיפות, אבל לא מבטלת כפל. לא נמצא הסדר רשמי לגבייה במקור. (ג) פיצול: כלל 72 השעות, ולא עוזר למוצר בודד. (ד) מלאי מקומי: הפתרון הנקי. (ה) מחיר מתחת לסף. (ו) עוסק פטור: מבטל כפל, לא את החיוב בדלת.",
+   "confidence": "medium",
+   "confidence_notes_he": "עלות שחרור לחבילה מסחרית לא אומתה. נוסח פרט 614 לא נקרא.",
+   "options": [
+    {
+     "id": "importer_of_record",
+     "solves_he": "מע\"מ אחד, ואין חיוב בדלת",
+     "requires_he": [
+      "בעלות בעת היבוא; לא \"סוכן ליבוא אישי\" (תק' 16א)",
+      "הצהרה על שמנו לכל חבילה (ס' 38)",
+      "בלי פטור $75 (פרט 614 ל\"שימוש עצמי\", לא אומת): מע\"מ מהדולר הראשון, מקוזז",
+      "₪81.42 + ₪23.60 לשחרור, כ-₪89 נטו (הערכה)",
+      "תקינה מסחרית"
+     ],
+     "survivors_of_34": 9
+    },
+    {
+     "id": "collect_at_checkout",
+     "solves_he": "שקיפות; לא מבטלת כפל אם אנחנו מורשה",
+     "requires_he": [
+      "מוביל שמשלם בשם הלקוח (DHL: השולח משלם), או חיוב מראש של דואר ישראל",
+      "גילוי לפני ההזמנה (ס' 14ג(ו))",
+      "רישום כגבייה עבור הלקוח (לרו\"ח)",
+      "אין הסדר רשמי לגבייה במקור; קהלת מציע הסדר כזה (12.2025)"
+     ],
+     "survivors_of_34_if_we_absorb": {
+      "B": 2,
+      "C": 3
+     }
+    },
+    {
+     "id": "split_order",
+     "solves_he": "רק הזמנה של כמה פריטים שכל אחד מתחת ל-$75",
+     "requires_he": [
+      "72 שעות בין חבילות מאותו ספק לאותו יבואן (צו ייבוא אישי ס' 3(ב)(2))",
+      "לא עוזר לאף אחד מה-34",
+      "לשכת המסחר: חל גם על ספקים שונים. סותר את הצו, לא אומת"
+     ]
+    },
+    {
+     "id": "local_stock",
+     "solves_he": "יבוא מסחרי אחד, מקוזז; אין חיוב בדלת",
+     "requires_he": [
+      "עמיל מכס",
+      "תקינה מסחרית",
+      "הון במלאי",
+      "נקודת איזון של כ-60–150 יחידות בחודש (fulfillment-research.md §4)"
+     ]
+    },
+    {
+     "id": "price_below_threshold",
+     "solves_he": "אין מס ואין עמלה",
+     "requires_he": [
+      "ערך ב': עד ₪247.5 ב-3.3, או ₪225 ב-3.0",
+      "ערך ג': עד ₪292 ב-3.3, או ₪265.5 ב-3.0"
+     ]
+    },
+    {
+     "id": "exempt_dealer",
+     "solves_he": "אין מע\"מ על המכירה, ולכן אין כפל; החיוב בדלת נשאר",
+     "requires_he": [
+      "ראו Q4"
+     ]
+    }
+   ],
+   "conflicts_he": [
+    "bizportal ‏13.07.2026: המע\"מ \"על כל שקל עודף מעל רף ה-75 דולר\". ship.co.il ו-protocol: על כל ה-CIF. מסמך הכנסת (לפי תוצאת חיפוש): הפטור רק לטובין \"שערכם אינו עולה 75 דולר\". החישוב מניח כל הערך"
+   ],
+   "cpa_must_confirm_he": "האם יבוא על שמנו אפשרי ובאיזה מחיר לחבילה, ואיך רושמים מס שנגבה בקופה."
+  },
+  {
+   "id": "Q4",
+   "question_he": "עוסק פטור מול עוסק מורשה ב-2026",
+   "short_answer_he": "התקרה ב-2026: ₪122,833 מחזור בשנה מכל העסקים (ב-2024 וב-2025: ₪120,000). מסחר במוצרים מותר. פטור לא גובה מע\"מ ולא מקזז: נטו = P, והתרומה גדלה ב-0.1403 × P. בחריגה מהתקרה עוברים למורשה.",
+   "confidence": "high",
+   "confidence_notes_he": "התקרה: גבוה. מותר במסחר: בינוני (הרשימה בתקנות לא נקראה). מה קורה ביום החריגה: בינוני–נמוך.",
+   "ceiling_ils": {
+    "2024": 120000,
+    "2025": 120000,
+    "2026": 122833
+   },
+   "legal_basis": [
+    {
+     "ref": "חוק מע\"מ ס' 1, \"עוסק פטור\"",
+     "quote_he": "בשנים 2024 ו־2025, 120,000 ש״ח; בשנת 2026, 122,833 ש״ח",
+     "source": "vat-law"
+    },
+    {
+     "ref": "רשות המסים, סכומים ושיעורים במע\"מ",
+     "quote_he": "עוסק פטור... 1.1.2026... 122,833 (לפי תוצאת חיפוש)",
+     "source": "ita-vat-amounts"
+    },
+    {
+     "ref": "חוק מע\"מ ס' 31(3)",
+     "quote_he": "עסקאות של עוסק פטור (פטורות)",
+     "source": "vat-law"
+    },
+    {
+     "ref": "חוק מע\"מ ס' 59(א)",
+     "quote_he": "ירד ועמד שנתיים רצופות למטה מן הסכום המחייב רישום",
+     "source": "vat-law"
+    }
+   ],
+   "formula": {
+    "licensed": {
+     "net": "P / 1.18",
+     "output_vat": "P - P/1.18",
+     "input_vat": "deductible"
+    },
+    "exempt": {
+     "net": "P",
+     "output_vat": 0,
+     "input_vat": "not deductible (Israeli expenses at gross cost)",
+     "contribution_delta": "+0.92 x (P - P/1.18) = +0.1403 x P"
+    }
+   },
+   "ceiling_orders_at_299": 410,
+   "crossing_he": "לפי בן שושן ותוצאות חיפוש מכל-זכות: חייבים מרגע החריגה, ופקיד מע\"מ מסווג מחדש. בחריגה לא מהותית אפשר לבקש שלא (דעה מקצועית / לא אומת).",
+   "cpa_must_confirm_he": "האם מותר לנו להיות פטור, האם מכירות מחוץ לתחולה נספרות במחזור, ומה קורה ביום החריגה."
+  },
+  {
+   "id": "Q5",
+   "question_he": "מה חוק הגנת הצרכן מחייב בדף המוצר ובקופה",
+   "short_answer_he": "בעסקת מכר מרחוק, \"מחיר הנכס\" כולל \"כל תוספת או הוצאה אחרות שיחולו על הצרכן\" (ס' 14ג(ו)). לכן מע\"מ יבוא ועמלות שחרור צריכים להופיע לפני ההזמנה, בשקלים, וגם במסמך הגילוי (14ג(ב)). ס' 17ב (המחיר הכולל) מכסה מסים \"הנגבים על ידי עוסק\". עיצום לכל הפרה (ס' 22ג): ₪25,950 לתאגיד ו-₪8,260 ליחיד ב-2026.",
+   "confidence": "high",
+   "confidence_notes_he": "החובה: גבוה. האם חובה לכלול במחיר המוצג או שגילוי ברור מספיק: בינוני (לעו\"ד).",
+   "legal_basis": [
+    {
+     "ref": "חוק הגנת הצרכן ס' 14ג(א)(3)",
+     "quote_he": "מחיר הנכס או השירות ותנאי התשלום האפשריים",
+     "source": "consumer-law"
+    },
+    {
+     "ref": "חוק הגנת הצרכן ס' 14ג(ו)",
+     "quote_he": "מחירו הכולל של הנכס... לרבות דמי ההובלה וכן כל תוספת או הוצאה אחרות שיחולו על הצרכן",
+     "source": "consumer-law"
+    },
+    {
+     "ref": "חוק הגנת הצרכן ס' 17א",
+     "quote_he": "סך כל המסים החלים עליהם או על מכירתם והנגבים על ידי עוסק",
+     "source": "consumer-law"
+    },
+    {
+     "ref": "חוק הגנת הצרכן ס' 17ב(ב)",
+     "quote_he": "המחיר הכולל בלבד, במטבע ישראלי, במקום הנראה לעין",
+     "source": "consumer-law"
+    },
+    {
+     "ref": "חוק הגנת הצרכן ס' 22ג",
+     "quote_he": "עיצום: 22,000 לתאגיד / 7,000 ליחיד, מתואם ל-2026 ל-25,950 / 8,260",
+     "source": "consumer-law"
+    }
+   ],
+   "recommended_wording_he": {
+    "product_page_all_imported": "המוצר נשלח ישירות מהספק בחו\"ל. זמן האספקה: X–Y ימי עסקים. ארץ הייצור: סין.",
+    "product_page_above_75": "ייתכנו תשלומים נוספים במסירה. חבילה מחו\"ל שערכה מעל 75$ (כ-₪247) חייבת במע\"מ יבוא של 18%. את המס גובה רשות המסים מהנמען, ודואר ישראל מוסיף עמלת שחרור של ₪81.42 ודמי אשראי של לפחות ₪23.60. במוצר הזה הסכום הוא כ-₪159 (הערכה לפי השער והמחירון של היום). הוא לא נכלל במחיר ולא משולם לנו.",
+    "checkout_line": "תשלומים צפויים במסירה (מע\"מ יבוא ועמלות): כ-₪___. [ ] קראתי והבנתי.",
+    "below_threshold": "בהזמנה שערכה הכולל מעל 75$ ייתכנו מע\"מ יבוא ועמלות במסירה. אנחנו שולחים כל הזמנה בחבילה אחת.",
+    "disclosure_document": "אותם סכומים; שם היצרן וארץ הייצור; זכות הביטול ודרכה.",
+    "avoid": "לא לכתוב \"ללא מכס ומסים\" כשזה לא בטוח (ס' 2)."
+   },
+   "wording_status": "טיוטה לבדיקת עו\"ד",
+   "consumer_authority_publication_found": false,
+   "cpa_must_confirm_he": "(עו\"ד) האם חובה לכלול את החיוב בדלת במחיר המוצג, או שמספיק גילוי ברור עם הערכה."
+  },
+  {
+   "id": "Q6",
+   "question_he": "תקנים ביבוא אישי: תאורה, מוצרי ילדים וכלי אוכל קרמיים",
+   "short_answer_he": "כשמדובר באמת ביבוא אישי, לפי התוספת השלישית לצו ייבוא אישי פטורים: מנורות מיטלטלות (ת\"י 20 חלקים 1 ו-2.4), מנורות מיטלטלות לילדים (2.10), צעצועים (ת\"י 562), מוצרי תינוקות וכלי אוכל לילדים (ת\"י 682, 14988, 1157, 14372), וכלי שולחן קרמיים (ת\"י 1003). חובה גם ביבוא אישי (תוספת שנייה, 94.05): גומחה, רחוב, נימת להט, בריכה, מובלים, מערכות להט ורפואי. גוף תאורה קבוע (ת\"י 20 חלק 2.1) לא מופיע בשום תוספת, ודורש חשמלאי, ולכן כנראה לא פטור. אבל ייתכן שדרופשיפינג בכלל לא \"יבוא אישי\" (\"שלא באמצעות עוסק\", ס' 3(א)(1)), ואז חלים כללי היבוא המסחרי.",
+   "confidence": "medium",
+   "confidence_notes_he": "התוספות: בינוני–גבוה (נוסח רשמי משולב, ללא תאריך). גוף קבוע: נמוך. האם זה בכלל יבוא אישי: נמוך.",
+   "by_category": [
+    {
+     "category": "portable_lamps",
+     "standard": "ת\"י 20 חלק 1, 2.4",
+     "personal_import": "exempt (schedule 3)",
+     "confidence": "medium-high"
+    },
+    {
+     "category": "portable_children_lamps",
+     "standard": "ת\"י 20 חלק 2.10",
+     "personal_import": "exempt (schedule 3)",
+     "confidence": "medium-high"
+    },
+    {
+     "category": "fixed_luminaires_pendant_ceiling_wall",
+     "standard": "ת\"י 20 חלק 2.1",
+     "personal_import": "not listed; likely not exempt (installation needs an electrician, Standards Law s.9(a)(2))",
+     "confidence": "low"
+    },
+    {
+     "category": "special_9405_types",
+     "standard": "ת\"י 20 חלקים 2.2, 2.3, 2.6, 2.18, 2.19, 2.23, 2.25; ת\"י 61558",
+     "personal_import": "must comply (schedule 2)",
+     "confidence": "medium-high"
+    },
+    {
+     "category": "shade_without_wiring",
+     "standard": "—",
+     "personal_import": "not electrical; the standard applies to the hanging kit (studio-rules 2026-10-14)",
+     "confidence": "medium"
+    },
+    {
+     "category": "toys",
+     "standard": "ת\"י 562 חלקים 1, 2, 3, 7, 8",
+     "personal_import": "exempt (schedule 3); Ministry page 9503: no conditions up to 5 units",
+     "confidence": "medium-high"
+    },
+    {
+     "category": "baby_and_children_items",
+     "standard": "ת\"י 682, 1048, 1548, 1888, 1273, 14988, 1157, 12586, 5817, 14372",
+     "personal_import": "exempt (schedule 3)",
+     "confidence": "medium-high"
+    },
+    {
+     "category": "food_contact_ceramic_glass_tableware",
+     "standard": "ת\"י 1003 חלקים 1.1, 1.2",
+     "personal_import": "exempt (schedule 3)",
+     "confidence": "medium-high"
+    }
+   ],
+   "legal_basis": [
+    {
+     "ref": "חוק התקנים ס' 9(א)(2)",
+     "quote_he": "לשם התקנתו, הפעלתו או תחזוקתו לא נדרש לפי דין בעל מקצוע... מיובא לשימוש אישי או משפחתי",
+     "source": "standards-law"
+    },
+    {
+     "ref": "צו ייבוא אישי ס' 2(ג)(1)-(2)",
+     "quote_he": "פטורים מחובת עמידה בדרישות התקן הרשמי / עליהם לעמוד בדרישות התקן הרשמי",
+     "source": "personal-import-order-economy"
+    },
+    {
+     "ref": "צו ייבוא אישי ס' 3(א)(1)",
+     "quote_he": "הם מיובאים שלא באמצעות עוסק",
+     "source": "personal-import-order-nevo"
+    },
+    {
+     "ref": "משרד הכלכלה, תאורה לבית 9405190000",
+     "quote_he": "בדיקת מעבדה – מכון התקנים",
+     "source": "economy-590"
+    },
+    {
+     "ref": "משרד הכלכלה, מנורת תלייה 9405190000",
+     "quote_he": "אין דרישה; קישור לבקשת פטור מהצגת אישור תקן",
+     "source": "economy-608"
+    }
+   ],
+   "track_a_conflict_resolution_he": "מסלול A קרא את נבו עד פרק 85, שם הדף נקטע. במהדורה של משרד הכלכלה 94.05 מופיע בתוספת השנייה, רק בסוגים מיוחדים. fulfillment-research (שער עולמי: ת\"י 20 חל גם ביבוא אישי) מתיישב עם גוף קבוע (2.1) ולא עם מיטלטל (2.4). פתוח: שני דפי משרד הכלכלה על 9405.19 סותרים זה את זה.",
+   "reform_he": "\"מה שטוב לאירופה\": מ-01.01.2025 בפעימות, צעצועים מ-01.02.2025. משנה את המסלול המסחרי (לשכת המסחר, לפי תוצאת חיפוש; 307, לא אומת). חוק התקנים: תיקונים ב-2024 וב-2026; מסלול אמריקאי מ-22.1.2027. לא נמצא שינוי בתוספות של צו ייבוא אישי אחרי 9.7.2024. תיקוני התשפ\"ה והתשפ\"ז מוזכרים בכותרת בלי תוכן.",
+   "cpa_must_confirm_he": "(עמיל מכס) האם חבילה שעוסק ישראלי מכר היא יבוא אישי, והאם גוף תאורה קבוע פטור."
+  }
+ ],
+ "pricing": {
+  "prices_changed": false,
+  "inputs": [
+   "data/suppliers/china-hub-r2-economics-2026-10-18.json -> vat_exposure.rows (34 imported)",
+   "data/economics/products.json -> contribution_ils, margin_pct, flag"
+  ],
+  "door_fees_ils": {
+   "release_taxable": 81.42,
+   "credit_allocation_pct": 2.34,
+   "credit_allocation_min": 23.6,
+   "storage_per_day_from_day_21": 9.4,
+   "source": "post-fee-list-2025",
+   "replaces": "Track A 2021 list (80.73 + 23.40)"
+  },
+  "scenarios": {
+   "A_supplier_cost": "declared = supplier parcel cost (as in Track A); VAT base from Track A; new fee list",
+   "B_customer_price": "threshold test on P (goods only); VAT base = customer_total_ils",
+   "C_price_net_of_vat": "threshold test on P/1.18; VAT base = customer_total_ils/1.18 (also what customs sets if it rejects the invoice)"
+  },
+  "options": {
+   "licensed_customer_importer": "today: flags unchanged; customer pays door B/C; double VAT = (P - P/1.18) + B import VAT",
+   "licensed_prepay_door": "we absorb the customer's import VAT + fees (not deductible): contribution - door",
+   "licensed_importer_of_record": "import VAT deductible; per-parcel release ≈ (81.42 + 23.60)/1.18 = ₪89 net (estimate)",
+   "exempt_customer_importer": "net = P; contribution + 0.92 x (P - P/1.18); door unchanged",
+   "price_ceiling_ils": {
+    "B_at_3_3": 247.5,
+    "B_at_3_0": 225.0,
+    "C_at_3_3": 292.05,
+    "C_at_3_0": 265.5
+   }
+  },
+  "summary": {
+   "products": 34,
+   "A_supplier_cost_cross_75": 3,
+   "B_customer_price_cross_75": 34,
+   "C_net_of_vat_cross_75": 33,
+   "C_cross_75_at_3_0": 34,
+   "B_door_range_ils": [
+    158.84,
+    338.84
+   ],
+   "C_door_range_ils": [
+    150.63,
+    303.17
+   ],
+   "A_crossing_door_ils": {
+    "rug-cj-braided-wool-natural": 555.64,
+    "bedding-cj-cotton-linen-duvet-beige": 245.41,
+    "pool-cj-terracotta-amphora-floor-51": 235.69
+   },
+   "licensed_flags": {
+    "ok": 4,
+    "below-floor": 15,
+    "loss": 15
+   },
+   "exempt_flags": {
+    "ok": 5,
+    "below-floor": 19,
+    "loss": 10
+   },
+   "prepay_door_survivors": {
+    "B": 2,
+    "C": 3
+   },
+   "importer_of_record_survivors": 9,
+   "importer_of_record_cost_net_ils": 89.0,
+   "double_vat_B_range_ils": [
+    98.0,
+    431.97
+   ],
+   "extra_products_crossing_B_at_3_0": 16,
+   "extra_products_note": "16 imported products priced ₪229 cross under B at ₪3.0/$ (₪225 threshold); not computed per product"
+  },
+  "rows": [
+   {
+    "id": "accent-sconces-aliexpress-indoor-stone-wall-lamp",
+    "retail_ils": 299,
+    "qty_in_sale": 1,
+    "licensed": {
+     "net_ils": 253.39,
+     "output_vat_ils": 45.61,
+     "contribution_ils": -22.65,
+     "margin_pct": -8.9,
+     "flag": "loss",
+     "double_vat_B_ils": 99.43,
+     "double_vat_C_ils": 91.22,
+     "contribution_if_we_prepay_door_B_ils": -181.49,
+     "contribution_if_we_prepay_door_C_ils": -173.28,
+     "contribution_if_importer_of_record_ils": -111.65
+    },
+    "exempt": {
+     "net_ils": 299,
+     "contribution_ils": 19.31,
+     "margin_pct": 6.5,
+     "flag": "below-floor"
+    },
+    "A_supplier_cost": {
+     "declared_usd": 51.94,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_ils": 0.0
+    },
+    "B_customer_price": {
+     "declared_usd": 90.61,
+     "crosses_75": true,
+     "vat_ils": 53.82,
+     "door_ils": 158.84,
+     "crosses_75_at_3_0": true
+    },
+    "C_price_net_of_vat": {
+     "declared_usd": 76.78,
+     "crosses_75": true,
+     "vat_ils": 45.61,
+     "door_ils": 150.63,
+     "crosses_75_at_3_0": true
+    },
+    "customer_all_in_B_ils": 457.84,
+    "customer_all_in_C_ils": 449.63
+   },
+   {
+    "id": "accent-sconces-cj-ribbed-travertine-half-cylinder-wood-bracket",
+    "retail_ils": 599,
+    "qty_in_sale": 2,
+    "licensed": {
+     "net_ils": 507.63,
+     "output_vat_ils": 91.37,
+     "contribution_ils": 151.82,
+     "margin_pct": 29.9,
+     "flag": "below-floor",
+     "double_vat_B_ils": 199.19,
+     "double_vat_C_ils": 182.74,
+     "contribution_if_we_prepay_door_B_ils": -61.02,
+     "contribution_if_we_prepay_door_C_ils": -44.57,
+     "contribution_if_importer_of_record_ils": 62.82
+    },
+    "exempt": {
+     "net_ils": 599,
+     "contribution_ils": 235.88,
+     "margin_pct": 39.4,
+     "flag": "below-floor"
+    },
+    "A_supplier_cost": {
+     "declared_usd": 47.44,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_ils": 0.0
+    },
+    "B_customer_price": {
+     "declared_usd": 181.52,
+     "crosses_75": true,
+     "vat_ils": 107.82,
+     "door_ils": 212.84,
+     "crosses_75_at_3_0": true
+    },
+    "C_price_net_of_vat": {
+     "declared_usd": 153.83,
+     "crosses_75": true,
+     "vat_ils": 91.37,
+     "door_ils": 196.39,
+     "crosses_75_at_3_0": true
+    },
+    "customer_all_in_B_ils": 811.84,
+    "customer_all_in_C_ils": 795.39
+   },
+   {
+    "id": "curtains-aliexpress-cotton-linen-texture-translucent-091154",
+    "retail_ils": 299,
+    "qty_in_sale": 2,
+    "licensed": {
+     "net_ils": 253.39,
+     "output_vat_ils": 45.61,
+     "contribution_ils": -15.46,
+     "margin_pct": -6.1,
+     "flag": "loss",
+     "double_vat_B_ils": 99.43,
+     "double_vat_C_ils": 91.22,
+     "contribution_if_we_prepay_door_B_ils": -174.3,
+     "contribution_if_we_prepay_door_C_ils": -166.09,
+     "contribution_if_importer_of_record_ils": -104.46
+    },
+    "exempt": {
+     "net_ils": 299,
+     "contribution_ils": 26.5,
+     "margin_pct": 8.9,
+     "flag": "below-floor"
+    },
+    "A_supplier_cost": {
+     "declared_usd": 71.16,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_ils": 0.0
+    },
+    "B_customer_price": {
+     "declared_usd": 90.61,
+     "crosses_75": true,
+     "vat_ils": 53.82,
+     "door_ils": 158.84,
+     "crosses_75_at_3_0": true
+    },
+    "C_price_net_of_vat": {
+     "declared_usd": 76.78,
+     "crosses_75": true,
+     "vat_ils": 45.61,
+     "door_ils": 150.63,
+     "crosses_75_at_3_0": true
+    },
+    "customer_all_in_B_ils": 457.84,
+    "customer_all_in_C_ils": 449.63
+   },
+   {
+    "id": "curtains-aliexpress-cotton-linen-texture-translucent",
+    "retail_ils": 299,
+    "qty_in_sale": 2,
+    "licensed": {
+     "net_ils": 253.39,
+     "output_vat_ils": 45.61,
+     "contribution_ils": 21.77,
+     "margin_pct": 8.6,
+     "flag": "below-floor",
+     "double_vat_B_ils": 99.43,
+     "double_vat_C_ils": 91.22,
+     "contribution_if_we_prepay_door_B_ils": -137.07,
+     "contribution_if_we_prepay_door_C_ils": -128.86,
+     "contribution_if_importer_of_record_ils": -67.23
+    },
+    "exempt": {
+     "net_ils": 299,
+     "contribution_ils": 63.73,
+     "margin_pct": 21.3,
+     "flag": "below-floor"
+    },
+    "A_supplier_cost": {
+     "declared_usd": 59.88,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_ils": 0.0
+    },
+    "B_customer_price": {
+     "declared_usd": 90.61,
+     "crosses_75": true,
+     "vat_ils": 53.82,
+     "door_ils": 158.84,
+     "crosses_75_at_3_0": true
+    },
+    "C_price_net_of_vat": {
+     "declared_usd": 76.78,
+     "crosses_75": true,
+     "vat_ils": 45.61,
+     "door_ils": 150.63,
+     "crosses_75_at_3_0": true
+    },
+    "customer_all_in_B_ils": 457.84,
+    "customer_all_in_C_ils": 449.63
+   },
+   {
+    "id": "framed-art-cj-morandi-triptych-sage",
+    "retail_ils": 379,
+    "qty_in_sale": 1,
+    "licensed": {
+     "net_ils": 321.19,
+     "output_vat_ils": 57.81,
+     "contribution_ils": -196.97,
+     "margin_pct": -61.3,
+     "flag": "loss",
+     "double_vat_B_ils": 126.03,
+     "double_vat_C_ils": 115.62,
+     "contribution_if_we_prepay_door_B_ils": -370.21,
+     "contribution_if_we_prepay_door_C_ils": -359.8,
+     "contribution_if_importer_of_record_ils": -285.97
+    },
+    "exempt": {
+     "net_ils": 379,
+     "contribution_ils": -143.78,
+     "margin_pct": -37.9,
+     "flag": "loss"
+    },
+    "A_supplier_cost": {
+     "declared_usd": 15.75,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_ils": 0.0
+    },
+    "B_customer_price": {
+     "declared_usd": 114.85,
+     "crosses_75": true,
+     "vat_ils": 68.22,
+     "door_ils": 173.24,
+     "crosses_75_at_3_0": true
+    },
+    "C_price_net_of_vat": {
+     "declared_usd": 97.33,
+     "crosses_75": true,
+     "vat_ils": 57.81,
+     "door_ils": 162.83,
+     "crosses_75_at_3_0": true
+    },
+    "customer_all_in_B_ils": 552.24,
+    "customer_all_in_C_ils": 541.83
+   },
+   {
+    "id": "pendant-cj-pleated-pumpkin-lantern-40",
+    "retail_ils": 299,
+    "qty_in_sale": 1,
+    "licensed": {
+     "net_ils": 253.39,
+     "output_vat_ils": 45.61,
+     "contribution_ils": -107.03,
+     "margin_pct": -42.2,
+     "flag": "loss",
+     "double_vat_B_ils": 99.43,
+     "double_vat_C_ils": 91.22,
+     "contribution_if_we_prepay_door_B_ils": -265.87,
+     "contribution_if_we_prepay_door_C_ils": -257.66,
+     "contribution_if_importer_of_record_ils": -196.03
+    },
+    "exempt": {
+     "net_ils": 299,
+     "contribution_ils": -65.07,
+     "margin_pct": -21.8,
+     "flag": "loss"
+    },
+    "A_supplier_cost": {
+     "declared_usd": 46.1,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_ils": 0.0
+    },
+    "B_customer_price": {
+     "declared_usd": 90.61,
+     "crosses_75": true,
+     "vat_ils": 53.82,
+     "door_ils": 158.84,
+     "crosses_75_at_3_0": true
+    },
+    "C_price_net_of_vat": {
+     "declared_usd": 76.78,
+     "crosses_75": true,
+     "vat_ils": 45.61,
+     "door_ils": 150.63,
+     "crosses_75_at_3_0": true
+    },
+    "customer_all_in_B_ils": 457.84,
+    "customer_all_in_C_ils": 449.63
+   },
+   {
+    "id": "pendant-cj-silk-pumpkin-lantern",
+    "retail_ils": 299,
+    "qty_in_sale": 1,
+    "licensed": {
+     "net_ils": 253.39,
+     "output_vat_ils": 45.61,
+     "contribution_ils": 31.07,
+     "margin_pct": 12.3,
+     "flag": "below-floor",
+     "double_vat_B_ils": 99.43,
+     "double_vat_C_ils": 91.22,
+     "contribution_if_we_prepay_door_B_ils": -127.77,
+     "contribution_if_we_prepay_door_C_ils": -119.56,
+     "contribution_if_importer_of_record_ils": -57.93
+    },
+    "exempt": {
+     "net_ils": 299,
+     "contribution_ils": 73.03,
+     "margin_pct": 24.4,
+     "flag": "below-floor"
+    },
+    "A_supplier_cost": {
+     "declared_usd": 29.85,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_ils": 0.0
+    },
+    "B_customer_price": {
+     "declared_usd": 90.61,
+     "crosses_75": true,
+     "vat_ils": 53.82,
+     "door_ils": 158.84,
+     "crosses_75_at_3_0": true
+    },
+    "C_price_net_of_vat": {
+     "declared_usd": 76.78,
+     "crosses_75": true,
+     "vat_ils": 45.61,
+     "door_ils": 150.63,
+     "crosses_75_at_3_0": true
+    },
+    "customer_all_in_B_ils": 457.84,
+    "customer_all_in_C_ils": 449.63
+   },
+   {
+    "id": "pendant-cj-tiered-fabric-drum",
+    "retail_ils": 329,
+    "qty_in_sale": 1,
+    "licensed": {
+     "net_ils": 278.81,
+     "output_vat_ils": 50.19,
+     "contribution_ils": -74.94,
+     "margin_pct": -26.9,
+     "flag": "loss",
+     "double_vat_B_ils": 109.41,
+     "double_vat_C_ils": 100.38,
+     "contribution_if_we_prepay_door_B_ils": -239.18,
+     "contribution_if_we_prepay_door_C_ils": -230.15,
+     "contribution_if_importer_of_record_ils": -163.94
+    },
+    "exempt": {
+     "net_ils": 329,
+     "contribution_ils": -28.77,
+     "margin_pct": -8.7,
+     "flag": "loss"
+    },
+    "A_supplier_cost": {
+     "declared_usd": 43.28,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_ils": 0.0
+    },
+    "B_customer_price": {
+     "declared_usd": 99.7,
+     "crosses_75": true,
+     "vat_ils": 59.22,
+     "door_ils": 164.24,
+     "crosses_75_at_3_0": true
+    },
+    "C_price_net_of_vat": {
+     "declared_usd": 84.49,
+     "crosses_75": true,
+     "vat_ils": 50.19,
+     "door_ils": 155.21,
+     "crosses_75_at_3_0": true
+    },
+    "customer_all_in_B_ils": 493.24,
+    "customer_all_in_C_ils": 484.21
+   },
+   {
+    "id": "rug-cj-braided-wool-natural",
+    "retail_ils": 1299,
+    "qty_in_sale": 1,
+    "licensed": {
+     "net_ils": 1100.85,
+     "output_vat_ils": 198.15,
+     "contribution_ils": -1517.85,
+     "margin_pct": -137.9,
+     "flag": "loss",
+     "double_vat_B_ils": 431.97,
+     "double_vat_C_ils": 396.3,
+     "contribution_if_we_prepay_door_B_ils": -1856.69,
+     "contribution_if_we_prepay_door_C_ils": -1821.02,
+     "contribution_if_importer_of_record_ils": -1606.85
+    },
+    "exempt": {
+     "net_ils": 1299,
+     "contribution_ils": -1335.55,
+     "margin_pct": -102.8,
+     "flag": "loss"
+    },
+    "A_supplier_cost": {
+     "declared_usd": 267.54,
+     "crosses_75": true,
+     "vat_ils": 450.62,
+     "door_ils": 555.64
+    },
+    "B_customer_price": {
+     "declared_usd": 393.64,
+     "crosses_75": true,
+     "vat_ils": 233.82,
+     "door_ils": 338.84,
+     "crosses_75_at_3_0": true
+    },
+    "C_price_net_of_vat": {
+     "declared_usd": 333.59,
+     "crosses_75": true,
+     "vat_ils": 198.15,
+     "door_ils": 303.17,
+     "crosses_75_at_3_0": true
+    },
+    "customer_all_in_B_ils": 1637.84,
+    "customer_all_in_C_ils": 1602.17
+   },
+   {
+    "id": "wall-sconce-cj-travertine-cone-walnut",
+    "retail_ils": 299,
+    "qty_in_sale": 1,
+    "licensed": {
+     "net_ils": 253.39,
+     "output_vat_ils": 45.61,
+     "contribution_ils": 71.99,
+     "margin_pct": 28.4,
+     "flag": "below-floor",
+     "double_vat_B_ils": 99.43,
+     "double_vat_C_ils": 91.22,
+     "contribution_if_we_prepay_door_B_ils": -86.85,
+     "contribution_if_we_prepay_door_C_ils": -78.64,
+     "contribution_if_importer_of_record_ils": -17.01
+    },
+    "exempt": {
+     "net_ils": 299,
+     "contribution_ils": 113.95,
+     "margin_pct": 38.1,
+     "flag": "below-floor"
+    },
+    "A_supplier_cost": {
+     "declared_usd": 17.08,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_ils": 0.0
+    },
+    "B_customer_price": {
+     "declared_usd": 90.61,
+     "crosses_75": true,
+     "vat_ils": 53.82,
+     "door_ils": 158.84,
+     "crosses_75_at_3_0": true
+    },
+    "C_price_net_of_vat": {
+     "declared_usd": 76.78,
+     "crosses_75": true,
+     "vat_ils": 45.61,
+     "door_ils": 150.63,
+     "crosses_75_at_3_0": true
+    },
+    "customer_all_in_B_ils": 457.84,
+    "customer_all_in_C_ils": 449.63
+   },
+   {
+    "id": "wall-sconce-cj-travertine-disc-25",
+    "retail_ils": 379,
+    "qty_in_sale": 1,
+    "licensed": {
+     "net_ils": 321.19,
+     "output_vat_ils": 57.81,
+     "contribution_ils": 42.84,
+     "margin_pct": 13.3,
+     "flag": "below-floor",
+     "double_vat_B_ils": 126.03,
+     "double_vat_C_ils": 115.62,
+     "contribution_if_we_prepay_door_B_ils": -130.4,
+     "contribution_if_we_prepay_door_C_ils": -119.99,
+     "contribution_if_importer_of_record_ils": -46.16
+    },
+    "exempt": {
+     "net_ils": 379,
+     "contribution_ils": 96.03,
+     "margin_pct": 25.3,
+     "flag": "below-floor"
+    },
+    "A_supplier_cost": {
+     "declared_usd": 38.14,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_ils": 0.0
+    },
+    "B_customer_price": {
+     "declared_usd": 114.85,
+     "crosses_75": true,
+     "vat_ils": 68.22,
+     "door_ils": 173.24,
+     "crosses_75_at_3_0": true
+    },
+    "C_price_net_of_vat": {
+     "declared_usd": 97.33,
+     "crosses_75": true,
+     "vat_ils": 57.81,
+     "door_ils": 162.83,
+     "crosses_75_at_3_0": true
+    },
+    "customer_all_in_B_ils": 552.24,
+    "customer_all_in_C_ils": 541.83
+   },
+   {
+    "id": "wall-sconce-cj-travertine-dome-15-alt",
+    "retail_ils": 299,
+    "qty_in_sale": 1,
+    "licensed": {
+     "net_ils": 253.39,
+     "output_vat_ils": 45.61,
+     "contribution_ils": 66.38,
+     "margin_pct": 26.2,
+     "flag": "below-floor",
+     "double_vat_B_ils": 99.43,
+     "double_vat_C_ils": 91.22,
+     "contribution_if_we_prepay_door_B_ils": -92.46,
+     "contribution_if_we_prepay_door_C_ils": -84.25,
+     "contribution_if_importer_of_record_ils": -22.62
+    },
+    "exempt": {
+     "net_ils": 299,
+     "contribution_ils": 108.34,
+     "margin_pct": 36.2,
+     "flag": "below-floor"
+    },
+    "A_supplier_cost": {
+     "declared_usd": 18.24,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_ils": 0.0
+    },
+    "B_customer_price": {
+     "declared_usd": 90.61,
+     "crosses_75": true,
+     "vat_ils": 53.82,
+     "door_ils": 158.84,
+     "crosses_75_at_3_0": true
+    },
+    "C_price_net_of_vat": {
+     "declared_usd": 76.78,
+     "crosses_75": true,
+     "vat_ils": 45.61,
+     "door_ils": 150.63,
+     "crosses_75_at_3_0": true
+    },
+    "customer_all_in_B_ils": 457.84,
+    "customer_all_in_C_ils": 449.63
+   },
+   {
+    "id": "wall-sconce-cj-travertine-dome-15-pull",
+    "retail_ils": 299,
+    "qty_in_sale": 1,
+    "licensed": {
+     "net_ils": 253.39,
+     "output_vat_ils": 45.61,
+     "contribution_ils": -106.87,
+     "margin_pct": -42.2,
+     "flag": "loss",
+     "double_vat_B_ils": 99.43,
+     "double_vat_C_ils": 91.22,
+     "contribution_if_we_prepay_door_B_ils": -265.71,
+     "contribution_if_we_prepay_door_C_ils": -257.5,
+     "contribution_if_importer_of_record_ils": -195.87
+    },
+    "exempt": {
+     "net_ils": 299,
+     "contribution_ils": -64.91,
+     "margin_pct": -21.7,
+     "flag": "loss"
+    },
+    "A_supplier_cost": {
+     "declared_usd": 16.09,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_ils": 0.0
+    },
+    "B_customer_price": {
+     "declared_usd": 90.61,
+     "crosses_75": true,
+     "vat_ils": 53.82,
+     "door_ils": 158.84,
+     "crosses_75_at_3_0": true
+    },
+    "C_price_net_of_vat": {
+     "declared_usd": 76.78,
+     "crosses_75": true,
+     "vat_ils": 45.61,
+     "door_ils": 150.63,
+     "crosses_75_at_3_0": true
+    },
+    "customer_all_in_B_ils": 457.84,
+    "customer_all_in_C_ils": 449.63
+   },
+   {
+    "id": "ceiling-lights-cj-pleated-fabric-saucer-flush-50",
+    "retail_ils": 499,
+    "qty_in_sale": 2,
+    "licensed": {
+     "net_ils": 422.88,
+     "output_vat_ils": 76.12,
+     "contribution_ils": -47.76,
+     "margin_pct": -11.3,
+     "flag": "loss",
+     "double_vat_B_ils": 165.94,
+     "double_vat_C_ils": 152.24,
+     "contribution_if_we_prepay_door_B_ils": -242.6,
+     "contribution_if_we_prepay_door_C_ils": -228.9,
+     "contribution_if_importer_of_record_ils": -136.76
+    },
+    "exempt": {
+     "net_ils": 499,
+     "contribution_ils": 22.27,
+     "margin_pct": 4.5,
+     "flag": "below-floor"
+    },
+    "A_supplier_cost": {
+     "declared_usd": 72.3,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_ils": 0.0
+    },
+    "B_customer_price": {
+     "declared_usd": 151.21,
+     "crosses_75": true,
+     "vat_ils": 89.82,
+     "door_ils": 194.84,
+     "crosses_75_at_3_0": true
+    },
+    "C_price_net_of_vat": {
+     "declared_usd": 128.15,
+     "crosses_75": true,
+     "vat_ils": 76.12,
+     "door_ils": 181.14,
+     "crosses_75_at_3_0": true
+    },
+    "customer_all_in_B_ils": 693.84,
+    "customer_all_in_C_ils": 680.14
+   },
+   {
+    "id": "gallery-art-cj-black-botanical-cutout-set3",
+    "retail_ils": 349,
+    "qty_in_sale": 1,
+    "licensed": {
+     "net_ils": 295.76,
+     "output_vat_ils": 53.24,
+     "contribution_ils": 180.83,
+     "margin_pct": 61.1,
+     "flag": "ok",
+     "double_vat_B_ils": 116.06,
+     "double_vat_C_ils": 106.48,
+     "contribution_if_we_prepay_door_B_ils": 12.99,
+     "contribution_if_we_prepay_door_C_ils": 22.57,
+     "contribution_if_importer_of_record_ils": 91.83
+    },
+    "exempt": {
+     "net_ils": 349,
+     "contribution_ils": 229.81,
+     "margin_pct": 65.8,
+     "flag": "ok"
+    },
+    "A_supplier_cost": {
+     "declared_usd": 14.53,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_ils": 0.0
+    },
+    "B_customer_price": {
+     "declared_usd": 105.76,
+     "crosses_75": true,
+     "vat_ils": 62.82,
+     "door_ils": 167.84,
+     "crosses_75_at_3_0": true
+    },
+    "C_price_net_of_vat": {
+     "declared_usd": 89.63,
+     "crosses_75": true,
+     "vat_ils": 53.24,
+     "door_ils": 158.26,
+     "crosses_75_at_3_0": true
+    },
+    "customer_all_in_B_ils": 516.84,
+    "customer_all_in_C_ils": 507.26
+   },
+   {
+    "id": "bedding-cj-cream-ruffle-rosebud-set",
+    "retail_ils": 299,
+    "qty_in_sale": 1,
+    "licensed": {
+     "net_ils": 253.39,
+     "output_vat_ils": 45.61,
+     "contribution_ils": 66.88,
+     "margin_pct": 26.4,
+     "flag": "below-floor",
+     "double_vat_B_ils": 99.43,
+     "double_vat_C_ils": 91.22,
+     "contribution_if_we_prepay_door_B_ils": -91.96,
+     "contribution_if_we_prepay_door_C_ils": -83.75,
+     "contribution_if_importer_of_record_ils": -22.12
+    },
+    "exempt": {
+     "net_ils": 299,
+     "contribution_ils": 108.84,
+     "margin_pct": 36.4,
+     "flag": "below-floor"
+    },
+    "A_supplier_cost": {
+     "declared_usd": 16.35,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_ils": 0.0
+    },
+    "B_customer_price": {
+     "declared_usd": 90.61,
+     "crosses_75": true,
+     "vat_ils": 53.82,
+     "door_ils": 158.84,
+     "crosses_75_at_3_0": true
+    },
+    "C_price_net_of_vat": {
+     "declared_usd": 76.78,
+     "crosses_75": true,
+     "vat_ils": 45.61,
+     "door_ils": 150.63,
+     "crosses_75_at_3_0": true
+    },
+    "customer_all_in_B_ils": 457.84,
+    "customer_all_in_C_ils": 449.63
+   },
+   {
+    "id": "bedding-aliexpress-boho-3d-tufted-cut-500672",
+    "retail_ils": 349,
+    "qty_in_sale": 1,
+    "licensed": {
+     "net_ils": 295.76,
+     "output_vat_ils": 53.24,
+     "contribution_ils": 49.42,
+     "margin_pct": 16.7,
+     "flag": "below-floor",
+     "double_vat_B_ils": 116.06,
+     "double_vat_C_ils": 106.48,
+     "contribution_if_we_prepay_door_B_ils": -118.42,
+     "contribution_if_we_prepay_door_C_ils": -108.84,
+     "contribution_if_importer_of_record_ils": -39.58
+    },
+    "exempt": {
+     "net_ils": 349,
+     "contribution_ils": 98.4,
+     "margin_pct": 28.2,
+     "flag": "below-floor"
+    },
+    "A_supplier_cost": {
+     "declared_usd": 65.0,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_ils": 0.0
+    },
+    "B_customer_price": {
+     "declared_usd": 105.76,
+     "crosses_75": true,
+     "vat_ils": 62.82,
+     "door_ils": 167.84,
+     "crosses_75_at_3_0": true
+    },
+    "C_price_net_of_vat": {
+     "declared_usd": 89.63,
+     "crosses_75": true,
+     "vat_ils": 53.24,
+     "door_ils": 158.26,
+     "crosses_75_at_3_0": true
+    },
+    "customer_all_in_B_ils": 516.84,
+    "customer_all_in_C_ils": 507.26
+   },
+   {
+    "id": "bedding-cj-cotton-linen-duvet-beige",
+    "retail_ils": 479,
+    "qty_in_sale": 1,
+    "licensed": {
+     "net_ils": 405.93,
+     "output_vat_ils": 73.07,
+     "contribution_ils": -417.28,
+     "margin_pct": -102.8,
+     "flag": "loss",
+     "double_vat_B_ils": 159.29,
+     "double_vat_C_ils": 146.14,
+     "contribution_if_we_prepay_door_B_ils": -608.52,
+     "contribution_if_we_prepay_door_C_ils": -595.37,
+     "contribution_if_importer_of_record_ils": -506.28
+    },
+    "exempt": {
+     "net_ils": 479,
+     "contribution_ils": -350.06,
+     "margin_pct": -73.1,
+     "flag": "loss"
+    },
+    "A_supplier_cost": {
+     "declared_usd": 128.36,
+     "crosses_75": true,
+     "vat_ils": 140.39,
+     "door_ils": 245.41
+    },
+    "B_customer_price": {
+     "declared_usd": 145.15,
+     "crosses_75": true,
+     "vat_ils": 86.22,
+     "door_ils": 191.24,
+     "crosses_75_at_3_0": true
+    },
+    "C_price_net_of_vat": {
+     "declared_usd": 123.01,
+     "crosses_75": true,
+     "vat_ils": 73.07,
+     "door_ils": 178.09,
+     "crosses_75_at_3_0": true
+    },
+    "customer_all_in_B_ils": 670.24,
+    "customer_all_in_C_ils": 657.09
+   },
+   {
+    "id": "bedding-cj-plain-linen-flat-sheet-raw-jute-260x280",
+    "retail_ils": 469,
+    "qty_in_sale": 1,
+    "licensed": {
+     "net_ils": 397.46,
+     "output_vat_ils": 71.54,
+     "contribution_ils": 126.92,
+     "margin_pct": 31.9,
+     "flag": "below-floor",
+     "double_vat_B_ils": 155.96,
+     "double_vat_C_ils": 143.08,
+     "contribution_if_we_prepay_door_B_ils": -62.52,
+     "contribution_if_we_prepay_door_C_ils": -49.64,
+     "contribution_if_importer_of_record_ils": 37.92
+    },
+    "exempt": {
+     "net_ils": 469,
+     "contribution_ils": 192.74,
+     "margin_pct": 41.1,
+     "flag": "ok"
+    },
+    "A_supplier_cost": {
+     "declared_usd": 50.14,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_ils": 0.0
+    },
+    "B_customer_price": {
+     "declared_usd": 142.12,
+     "crosses_75": true,
+     "vat_ils": 84.42,
+     "door_ils": 189.44,
+     "crosses_75_at_3_0": true
+    },
+    "C_price_net_of_vat": {
+     "declared_usd": 120.44,
+     "crosses_75": true,
+     "vat_ils": 71.54,
+     "door_ils": 176.56,
+     "crosses_75_at_3_0": true
+    },
+    "customer_all_in_B_ils": 658.44,
+    "customer_all_in_C_ils": 645.56
+   },
+   {
+    "id": "bedding-cj-washed-cotton-khaki-set-220x240",
+    "retail_ils": 349,
+    "qty_in_sale": 1,
+    "licensed": {
+     "net_ils": 295.76,
+     "output_vat_ils": 53.24,
+     "contribution_ils": 60.91,
+     "margin_pct": 20.6,
+     "flag": "below-floor",
+     "double_vat_B_ils": 116.06,
+     "double_vat_C_ils": 106.48,
+     "contribution_if_we_prepay_door_B_ils": -106.93,
+     "contribution_if_we_prepay_door_C_ils": -97.35,
+     "contribution_if_importer_of_record_ils": -28.09
+    },
+    "exempt": {
+     "net_ils": 349,
+     "contribution_ils": 109.89,
+     "margin_pct": 31.5,
+     "flag": "below-floor"
+    },
+    "A_supplier_cost": {
+     "declared_usd": 30.68,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_ils": 0.0
+    },
+    "B_customer_price": {
+     "declared_usd": 105.76,
+     "crosses_75": true,
+     "vat_ils": 62.82,
+     "door_ils": 167.84,
+     "crosses_75_at_3_0": true
+    },
+    "C_price_net_of_vat": {
+     "declared_usd": 89.63,
+     "crosses_75": true,
+     "vat_ils": 53.24,
+     "door_ils": 158.26,
+     "crosses_75_at_3_0": true
+    },
+    "customer_all_in_B_ils": 516.84,
+    "customer_all_in_C_ils": 507.26
+   },
+   {
+    "id": "bedding-cj-washed-linen-natural-set",
+    "retail_ils": 799,
+    "qty_in_sale": 1,
+    "licensed": {
+     "net_ils": 677.12,
+     "output_vat_ils": 121.88,
+     "contribution_ils": 300.06,
+     "margin_pct": 44.3,
+     "flag": "ok",
+     "double_vat_B_ils": 265.7,
+     "double_vat_C_ils": 243.76,
+     "contribution_if_we_prepay_door_B_ils": 51.22,
+     "contribution_if_we_prepay_door_C_ils": 73.16,
+     "contribution_if_importer_of_record_ils": 211.06
+    },
+    "exempt": {
+     "net_ils": 799,
+     "contribution_ils": 412.19,
+     "margin_pct": 51.6,
+     "flag": "ok"
+    },
+    "A_supplier_cost": {
+     "declared_usd": 48.68,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_ils": 0.0
+    },
+    "B_customer_price": {
+     "declared_usd": 242.12,
+     "crosses_75": true,
+     "vat_ils": 143.82,
+     "door_ils": 248.84,
+     "crosses_75_at_3_0": true
+    },
+    "C_price_net_of_vat": {
+     "declared_usd": 205.19,
+     "crosses_75": true,
+     "vat_ils": 121.88,
+     "door_ils": 226.9,
+     "crosses_75_at_3_0": true
+    },
+    "customer_all_in_B_ils": 1047.84,
+    "customer_all_in_C_ils": 1025.9
+   },
+   {
+    "id": "bedside-sconces-cj-linen-half-drum-black-trim",
+    "retail_ils": 349,
+    "qty_in_sale": 2,
+    "licensed": {
+     "net_ils": 295.76,
+     "output_vat_ils": 53.24,
+     "contribution_ils": -27.4,
+     "margin_pct": -9.3,
+     "flag": "loss",
+     "double_vat_B_ils": 116.06,
+     "double_vat_C_ils": 106.48,
+     "contribution_if_we_prepay_door_B_ils": -195.24,
+     "contribution_if_we_prepay_door_C_ils": -185.66,
+     "contribution_if_importer_of_record_ils": -116.4
+    },
+    "exempt": {
+     "net_ils": 349,
+     "contribution_ils": 21.58,
+     "margin_pct": 6.2,
+     "flag": "below-floor"
+    },
+    "A_supplier_cost": {
+     "declared_usd": 61.36,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_ils": 0.0
+    },
+    "B_customer_price": {
+     "declared_usd": 105.76,
+     "crosses_75": true,
+     "vat_ils": 62.82,
+     "door_ils": 167.84,
+     "crosses_75_at_3_0": true
+    },
+    "C_price_net_of_vat": {
+     "declared_usd": 89.63,
+     "crosses_75": true,
+     "vat_ils": 53.24,
+     "door_ils": 158.26,
+     "crosses_75_at_3_0": true
+    },
+    "customer_all_in_B_ils": 516.84,
+    "customer_all_in_C_ils": 507.26
+   },
+   {
+    "id": "bedside-sconces-cj-linen-wave-flush",
+    "retail_ils": 349,
+    "qty_in_sale": 2,
+    "licensed": {
+     "net_ils": 295.76,
+     "output_vat_ils": 53.24,
+     "contribution_ils": 3.49,
+     "margin_pct": 1.2,
+     "flag": "below-floor",
+     "double_vat_B_ils": 116.06,
+     "double_vat_C_ils": 106.48,
+     "contribution_if_we_prepay_door_B_ils": -164.35,
+     "contribution_if_we_prepay_door_C_ils": -154.77,
+     "contribution_if_importer_of_record_ils": -85.51
+    },
+    "exempt": {
+     "net_ils": 349,
+     "contribution_ils": 52.47,
+     "margin_pct": 15.0,
+     "flag": "below-floor"
+    },
+    "A_supplier_cost": {
+     "declared_usd": 59.56,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_ils": 0.0
+    },
+    "B_customer_price": {
+     "declared_usd": 105.76,
+     "crosses_75": true,
+     "vat_ils": 62.82,
+     "door_ils": 167.84,
+     "crosses_75_at_3_0": true
+    },
+    "C_price_net_of_vat": {
+     "declared_usd": 89.63,
+     "crosses_75": true,
+     "vat_ils": 53.24,
+     "door_ils": 158.26,
+     "crosses_75_at_3_0": true
+    },
+    "customer_all_in_B_ils": 516.84,
+    "customer_all_in_C_ils": 507.26
+   },
+   {
+    "id": "floor-lamp-cj-cream-arc-pleated-152",
+    "retail_ils": 349,
+    "qty_in_sale": 1,
+    "licensed": {
+     "net_ils": 295.76,
+     "output_vat_ils": 53.24,
+     "contribution_ils": -2303.81,
+     "margin_pct": -778.9,
+     "flag": "loss",
+     "double_vat_B_ils": 116.06,
+     "double_vat_C_ils": 106.48,
+     "contribution_if_we_prepay_door_B_ils": -2471.65,
+     "contribution_if_we_prepay_door_C_ils": -2462.07,
+     "contribution_if_importer_of_record_ils": -2392.81
+    },
+    "exempt": {
+     "net_ils": 349,
+     "contribution_ils": -2254.83,
+     "margin_pct": -646.1,
+     "flag": "loss"
+    },
+    "A_supplier_cost": {
+     "declared_usd": 12.44,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_ils": 0.0
+    },
+    "B_customer_price": {
+     "declared_usd": 105.76,
+     "crosses_75": true,
+     "vat_ils": 62.82,
+     "door_ils": 167.84,
+     "crosses_75_at_3_0": true
+    },
+    "C_price_net_of_vat": {
+     "declared_usd": 89.63,
+     "crosses_75": true,
+     "vat_ils": 53.24,
+     "door_ils": 158.26,
+     "crosses_75_at_3_0": true
+    },
+    "customer_all_in_B_ils": 516.84,
+    "customer_all_in_C_ils": 507.26
+   },
+   {
+    "id": "floor-lamp-cj-pleated-walnut-stem-158",
+    "retail_ils": 349,
+    "qty_in_sale": 1,
+    "licensed": {
+     "net_ils": 295.76,
+     "output_vat_ils": 53.24,
+     "contribution_ils": -316.52,
+     "margin_pct": -107.0,
+     "flag": "loss",
+     "double_vat_B_ils": 116.06,
+     "double_vat_C_ils": 106.48,
+     "contribution_if_we_prepay_door_B_ils": -484.36,
+     "contribution_if_we_prepay_door_C_ils": -474.78,
+     "contribution_if_importer_of_record_ils": -405.52
+    },
+    "exempt": {
+     "net_ils": 349,
+     "contribution_ils": -267.54,
+     "margin_pct": -76.7,
+     "flag": "loss"
+    },
+    "A_supplier_cost": {
+     "declared_usd": 31.18,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_ils": 0.0
+    },
+    "B_customer_price": {
+     "declared_usd": 105.76,
+     "crosses_75": true,
+     "vat_ils": 62.82,
+     "door_ils": 167.84,
+     "crosses_75_at_3_0": true
+    },
+    "C_price_net_of_vat": {
+     "declared_usd": 89.63,
+     "crosses_75": true,
+     "vat_ils": 53.24,
+     "door_ils": 158.26,
+     "crosses_75_at_3_0": true
+    },
+    "customer_all_in_B_ils": 516.84,
+    "customer_all_in_C_ils": 507.26
+   },
+   {
+    "id": "pendant-cj-light-wood-slat-drum-43",
+    "retail_ils": 299,
+    "qty_in_sale": 1,
+    "licensed": {
+     "net_ils": 253.39,
+     "output_vat_ils": 45.61,
+     "contribution_ils": 38.56,
+     "margin_pct": 15.2,
+     "flag": "below-floor",
+     "double_vat_B_ils": 99.43,
+     "double_vat_C_ils": 91.22,
+     "contribution_if_we_prepay_door_B_ils": -120.28,
+     "contribution_if_we_prepay_door_C_ils": -112.07,
+     "contribution_if_importer_of_record_ils": -50.44
+    },
+    "exempt": {
+     "net_ils": 299,
+     "contribution_ils": 80.52,
+     "margin_pct": 26.9,
+     "flag": "below-floor"
+    },
+    "A_supplier_cost": {
+     "declared_usd": 22.16,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_ils": 0.0
+    },
+    "B_customer_price": {
+     "declared_usd": 90.61,
+     "crosses_75": true,
+     "vat_ils": 53.82,
+     "door_ils": 158.84,
+     "crosses_75_at_3_0": true
+    },
+    "C_price_net_of_vat": {
+     "declared_usd": 76.78,
+     "crosses_75": true,
+     "vat_ils": 45.61,
+     "door_ils": 150.63,
+     "crosses_75_at_3_0": true
+    },
+    "customer_all_in_B_ils": 457.84,
+    "customer_all_in_C_ils": 449.63
+   },
+   {
+    "id": "pendant-cj-wabi-pleated-fabric-lantern-50",
+    "retail_ils": 299,
+    "qty_in_sale": 1,
+    "licensed": {
+     "net_ils": 253.39,
+     "output_vat_ils": 45.61,
+     "contribution_ils": -1088.55,
+     "margin_pct": -429.6,
+     "flag": "loss",
+     "double_vat_B_ils": 99.43,
+     "double_vat_C_ils": 91.22,
+     "contribution_if_we_prepay_door_B_ils": -1247.39,
+     "contribution_if_we_prepay_door_C_ils": -1239.18,
+     "contribution_if_importer_of_record_ils": -1177.55
+    },
+    "exempt": {
+     "net_ils": 299,
+     "contribution_ils": -1046.59,
+     "margin_pct": -350.0,
+     "flag": "loss"
+    },
+    "A_supplier_cost": {
+     "declared_usd": 58.04,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_ils": 0.0
+    },
+    "B_customer_price": {
+     "declared_usd": 90.61,
+     "crosses_75": true,
+     "vat_ils": 53.82,
+     "door_ils": 158.84,
+     "crosses_75_at_3_0": true
+    },
+    "C_price_net_of_vat": {
+     "declared_usd": 76.78,
+     "crosses_75": true,
+     "vat_ils": 45.61,
+     "door_ils": 150.63,
+     "crosses_75_at_3_0": true
+    },
+    "customer_all_in_B_ils": 457.84,
+    "customer_all_in_C_ils": 449.63
+   },
+   {
+    "id": "pool-cj-terracotta-amphora-floor-51",
+    "retail_ils": 479,
+    "qty_in_sale": 1,
+    "licensed": {
+     "net_ils": 405.93,
+     "output_vat_ils": 73.07,
+     "contribution_ils": -363.29,
+     "margin_pct": -89.5,
+     "flag": "loss",
+     "double_vat_B_ils": 159.29,
+     "double_vat_C_ils": 146.14,
+     "contribution_if_we_prepay_door_B_ils": -554.53,
+     "contribution_if_we_prepay_door_C_ils": -541.38,
+     "contribution_if_importer_of_record_ils": -452.29
+    },
+    "exempt": {
+     "net_ils": 479,
+     "contribution_ils": -296.07,
+     "margin_pct": -61.8,
+     "flag": "loss"
+    },
+    "A_supplier_cost": {
+     "declared_usd": 182.84,
+     "crosses_75": true,
+     "vat_ils": 130.67,
+     "door_ils": 235.69
+    },
+    "B_customer_price": {
+     "declared_usd": 145.15,
+     "crosses_75": true,
+     "vat_ils": 86.22,
+     "door_ils": 191.24,
+     "crosses_75_at_3_0": true
+    },
+    "C_price_net_of_vat": {
+     "declared_usd": 123.01,
+     "crosses_75": true,
+     "vat_ils": 73.07,
+     "door_ils": 178.09,
+     "crosses_75_at_3_0": true
+    },
+    "customer_all_in_B_ils": 670.24,
+    "customer_all_in_C_ils": 657.09
+   },
+   {
+    "id": "pool-cj-wabi-sabi-floor-vase-white",
+    "retail_ils": 349,
+    "qty_in_sale": 1,
+    "licensed": {
+     "net_ils": 295.76,
+     "output_vat_ils": 53.24,
+     "contribution_ils": -19.61,
+     "margin_pct": -6.6,
+     "flag": "loss",
+     "double_vat_B_ils": 116.06,
+     "double_vat_C_ils": 106.48,
+     "contribution_if_we_prepay_door_B_ils": -187.45,
+     "contribution_if_we_prepay_door_C_ils": -177.87,
+     "contribution_if_importer_of_record_ils": -108.61
+    },
+    "exempt": {
+     "net_ils": 349,
+     "contribution_ils": 29.37,
+     "margin_pct": 8.4,
+     "flag": "below-floor"
+    },
+    "A_supplier_cost": {
+     "declared_usd": 26.2,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_ils": 0.0
+    },
+    "B_customer_price": {
+     "declared_usd": 105.76,
+     "crosses_75": true,
+     "vat_ils": 62.82,
+     "door_ils": 167.84,
+     "crosses_75_at_3_0": true
+    },
+    "C_price_net_of_vat": {
+     "declared_usd": 89.63,
+     "crosses_75": true,
+     "vat_ils": 53.24,
+     "door_ils": 158.26,
+     "crosses_75_at_3_0": true
+    },
+    "customer_all_in_B_ils": 516.84,
+    "customer_all_in_C_ils": 507.26
+   },
+   {
+    "id": "ceiling-lights-aliexpress-flat-oval-paper-lantern-shade-40-pair",
+    "retail_ils": 279,
+    "qty_in_sale": 1,
+    "licensed": {
+     "net_ils": 236.44,
+     "output_vat_ils": 42.56,
+     "contribution_ils": 104.92,
+     "margin_pct": 44.4,
+     "flag": "ok",
+     "double_vat_B_ils": 98.0,
+     "double_vat_C_ils": 42.56,
+     "contribution_if_we_prepay_door_B_ils": -55.54,
+     "contribution_if_we_prepay_door_C_ils": 104.92,
+     "contribution_if_importer_of_record_ils": 15.92
+    },
+    "exempt": {
+     "net_ils": 279,
+     "contribution_ils": 144.07,
+     "margin_pct": 51.6,
+     "flag": "ok"
+    },
+    "A_supplier_cost": {
+     "declared_usd": 8.87,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_ils": 0.0
+    },
+    "B_customer_price": {
+     "declared_usd": 84.55,
+     "crosses_75": true,
+     "vat_ils": 55.44,
+     "door_ils": 160.46,
+     "crosses_75_at_3_0": true
+    },
+    "C_price_net_of_vat": {
+     "declared_usd": 71.65,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_ils": 0.0,
+     "crosses_75_at_3_0": true
+    },
+    "customer_all_in_B_ils": 468.46,
+    "customer_all_in_C_ils": 308.0
+   },
+   {
+    "id": "ceiling-lights-aliexpress-scalloped-pleated-shade-26-pair",
+    "retail_ils": 399,
+    "qty_in_sale": 1,
+    "licensed": {
+     "net_ils": 338.14,
+     "output_vat_ils": 60.86,
+     "contribution_ils": 145.81,
+     "margin_pct": 43.1,
+     "flag": "ok",
+     "double_vat_B_ils": 132.68,
+     "double_vat_C_ils": 121.72,
+     "contribution_if_we_prepay_door_B_ils": -31.03,
+     "contribution_if_we_prepay_door_C_ils": -20.07,
+     "contribution_if_importer_of_record_ils": 56.81
+    },
+    "exempt": {
+     "net_ils": 399,
+     "contribution_ils": 201.81,
+     "margin_pct": 50.6,
+     "flag": "ok"
+    },
+    "A_supplier_cost": {
+     "declared_usd": 24.1,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_ils": 0.0
+    },
+    "B_customer_price": {
+     "declared_usd": 120.91,
+     "crosses_75": true,
+     "vat_ils": 71.82,
+     "door_ils": 176.84,
+     "crosses_75_at_3_0": true
+    },
+    "C_price_net_of_vat": {
+     "declared_usd": 102.47,
+     "crosses_75": true,
+     "vat_ils": 60.86,
+     "door_ils": 165.88,
+     "crosses_75_at_3_0": true
+    },
+    "customer_all_in_B_ils": 575.84,
+    "customer_all_in_C_ils": 564.88
+   },
+   {
+    "id": "vanity-sconces-aliexpress-walnut-color-yellow-travertine-332886",
+    "retail_ils": 659,
+    "qty_in_sale": 2,
+    "licensed": {
+     "net_ils": 558.47,
+     "output_vat_ils": 100.53,
+     "contribution_ils": 118.67,
+     "margin_pct": 21.2,
+     "flag": "below-floor",
+     "double_vat_B_ils": 219.15,
+     "double_vat_C_ils": 201.06,
+     "contribution_if_we_prepay_door_B_ils": -104.97,
+     "contribution_if_we_prepay_door_C_ils": -86.88,
+     "contribution_if_importer_of_record_ils": 29.67
+    },
+    "exempt": {
+     "net_ils": 659,
+     "contribution_ils": 211.15,
+     "margin_pct": 32.0,
+     "flag": "below-floor"
+    },
+    "A_supplier_cost": {
+     "declared_usd": 55.26,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_ils": 0.0
+    },
+    "B_customer_price": {
+     "declared_usd": 199.7,
+     "crosses_75": true,
+     "vat_ils": 118.62,
+     "door_ils": 223.64,
+     "crosses_75_at_3_0": true
+    },
+    "C_price_net_of_vat": {
+     "declared_usd": 169.23,
+     "crosses_75": true,
+     "vat_ils": 100.53,
+     "door_ils": 205.55,
+     "crosses_75_at_3_0": true
+    },
+    "customer_all_in_B_ils": 882.64,
+    "customer_all_in_C_ils": 864.55
+   },
+   {
+    "id": "gallery-art-cj-black-ink-abstract-wide-mat-40-set3",
+    "retail_ils": 749,
+    "qty_in_sale": 1,
+    "licensed": {
+     "net_ils": 634.75,
+     "output_vat_ils": 114.25,
+     "contribution_ils": 171.59,
+     "margin_pct": 27.0,
+     "flag": "below-floor",
+     "double_vat_B_ils": 249.07,
+     "double_vat_C_ils": 228.5,
+     "contribution_if_we_prepay_door_B_ils": -68.25,
+     "contribution_if_we_prepay_door_C_ils": -47.68,
+     "contribution_if_importer_of_record_ils": 82.59
+    },
+    "exempt": {
+     "net_ils": 749,
+     "contribution_ils": 276.7,
+     "margin_pct": 36.9,
+     "flag": "below-floor"
+    },
+    "A_supplier_cost": {
+     "declared_usd": 38.79,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_ils": 0.0
+    },
+    "B_customer_price": {
+     "declared_usd": 226.97,
+     "crosses_75": true,
+     "vat_ils": 134.82,
+     "door_ils": 239.84,
+     "crosses_75_at_3_0": true
+    },
+    "C_price_net_of_vat": {
+     "declared_usd": 192.35,
+     "crosses_75": true,
+     "vat_ils": 114.25,
+     "door_ils": 219.27,
+     "crosses_75_at_3_0": true
+    },
+    "customer_all_in_B_ils": 988.84,
+    "customer_all_in_C_ils": 968.27
+   },
+   {
+    "id": "framed-art-cj-black-ink-abstract-wide-mat-50-pair",
+    "retail_ils": 649,
+    "qty_in_sale": 1,
+    "licensed": {
+     "net_ils": 550.0,
+     "output_vat_ils": 99.0,
+     "contribution_ils": 123.54,
+     "margin_pct": 22.5,
+     "flag": "below-floor",
+     "double_vat_B_ils": 215.82,
+     "double_vat_C_ils": 198.0,
+     "contribution_if_we_prepay_door_B_ils": -98.3,
+     "contribution_if_we_prepay_door_C_ils": -80.48,
+     "contribution_if_importer_of_record_ils": 34.54
+    },
+    "exempt": {
+     "net_ils": 649,
+     "contribution_ils": 214.62,
+     "margin_pct": 33.1,
+     "flag": "below-floor"
+    },
+    "A_supplier_cost": {
+     "declared_usd": 29.18,
+     "crosses_75": false,
+     "vat_ils": 0.0,
+     "door_ils": 0.0
+    },
+    "B_customer_price": {
+     "declared_usd": 196.67,
+     "crosses_75": true,
+     "vat_ils": 116.82,
+     "door_ils": 221.84,
+     "crosses_75_at_3_0": true
+    },
+    "C_price_net_of_vat": {
+     "declared_usd": 166.67,
+     "crosses_75": true,
+     "vat_ils": 99.0,
+     "door_ils": 204.02,
+     "crosses_75_at_3_0": true
+    },
+    "customer_all_in_B_ils": 870.84,
+    "customer_all_in_C_ils": 853.02
+   }
+  ],
+  "marks": "הערכה: declared value is the open question; fees from the Israel Post list (file 2025-04-20); exempt margin is on P, not P/1.18"
+ },
+ "cpa_questions_he": [
+  "(עמיל מכס) הערך: חבילה שהספק בסין שולח ישירות ללקוח פרטי שקנה מאיתנו. איזה ערך נכון בהצהרה ובחשבונית שבחבילה: מה שהלקוח שילם לנו, עם המע\"מ שגבינו או בלעדיו, או מה ששילמנו לספק? ומה עושים כשהמכס מבקש צילום הזמנה?",
+  "(רו\"ח) מקום המכירה: לפי ס' 14 לחוק מע\"מ וס' 8(ג) ו-33 לחוק המכר, האם אפשר לקבוע בתקנון שהמסירה והבעלות עוברות במסירה למוביל בחו\"ל? אם כן, האם המכירה מחוץ לתחולה, האם המרווח שלנו ייחשב שירות חייב, ומה קורה למס התשומות (ס' 41)?",
+  "(רו\"ח) כפל: אם המכירה חייבת ב-18%, האם יש דרך חוקית לנכות או למנוע את מע\"מ היבוא שהלקוח משלם?",
+  "(עמיל מכס) יבואן רשום: אם נייבא כל חבילה על שמנו (ס' 38, תק' 16א), מה צריך, כמה זה עולה לחבילה, והאם פטור ה-$75 (פרט 614) חל על יבוא מסחרי?",
+  "(עמיל מכס) \"שלא באמצעות עוסק\": האם חבילה שעוסק ישראלי מכר ושלח מחו\"ל היא יבוא אישי (צו ייבוא אישי ס' 3(א)(1))? אם לא, אילו אישורי תקן נדרשים למנורות, לקרמיקה ולצעצועים? והאם גוף תאורה בחיבור קבוע פטור ביבוא אישי (חוק התקנים ס' 9(א)(2))?",
+  "(רו\"ח) גבייה בקופה: אם נגבה מהלקוח מראש את מע\"מ היבוא והעמלות ונעביר אותם למוביל, האם רושמים את זה כגבייה עבור הלקוח או כמחזור שלנו? ואיזה מוביל משלם בשם הלקוח?",
+  "(רו\"ח) עוסק פטור: האם מותר לנו להיות פטור בפעילות הזו? האם מכירות מחוץ לתחולת חוק מע\"מ נספרות בתקרה של ₪122,833? ומה קורה מהעסקה שבה חוצים אותה?",
+  "(רו\"ח, או עו\"ד לצרכנות) גילוי: לפי ס' 14ג(ו), האם חובה לכלול את מע\"מ היבוא ואת העמלות במחיר המוצג, או שמספיקה שורה ברורה עם הערכה בשקלים בדף המוצר ובקופה?"
+ ],
+ "sources": [
+  {
+   "id": "vat-law",
+   "title": "חוק מס ערך מוסף, התשל\"ו-1975 (ויקיטקסט, נוסח משולב; תיקון אחרון בדף: תשפ\"ו)",
+   "url": "https://he.wikisource.org/wiki/חוק_מס_ערך_מוסף",
+   "date": "תשפ\"ו (נוסח משולב)",
+   "mark": "מקור רשמי",
+   "read": "2026-10-18",
+   "used_for": [
+    "Q2",
+    "Q3",
+    "Q4"
+   ]
+  },
+  {
+   "id": "vat-regs",
+   "title": "תקנות מס ערך מוסף, התשל\"ו-1976, תקנה 16א (ויקיטקסט)",
+   "url": "https://he.wikisource.org/wiki/תקנות_מס_ערך_מוסף",
+   "date": null,
+   "mark": "מקור רשמי",
+   "read": "2026-10-18",
+   "used_for": [
+    "Q2",
+    "Q3"
+   ]
+  },
+  {
+   "id": "customs-ordinance",
+   "title": "פקודת המכס [נוסח חדש] (ויקיטקסט; תיקון אחרון: תשפ\"ו)",
+   "url": "https://he.wikisource.org/wiki/פקודת_המכס",
+   "date": "תשפ\"ו (נוסח משולב)",
+   "mark": "מקור רשמי",
+   "read": "2026-10-18",
+   "used_for": [
+    "Q1"
+   ]
+  },
+  {
+   "id": "sale-law",
+   "title": "חוק המכר, התשכ\"ח-1968, ס' 8, 22, 33 (ויקיטקסט; תיקון אחרון תשפ\"ד)",
+   "url": "https://he.wikisource.org/wiki/חוק_המכר",
+   "date": "2024 (תיקון אחרון)",
+   "mark": "מקור רשמי",
+   "read": "2026-10-18",
+   "used_for": [
+    "Q2"
+   ]
+  },
+  {
+   "id": "consumer-law",
+   "title": "חוק הגנת הצרכן, התשמ\"א-1981, ס' 2, 4, 14ג, 17א, 17ב, 22ג, 31 (ויקיטקסט)",
+   "url": "https://he.wikisource.org/wiki/חוק_הגנת_הצרכן",
+   "date": "תשפ\"ד (תיקון אחרון שנראה)",
+   "mark": "מקור רשמי",
+   "read": "2026-10-18",
+   "used_for": [
+    "Q5"
+   ]
+  },
+  {
+   "id": "standards-law",
+   "title": "חוק התקנים, התשי\"ג-1953, ס' 9 (ויקיטקסט; תיקונים עד 2026)",
+   "url": "https://he.wikisource.org/wiki/חוק_התקנים",
+   "date": "2026 (תיקון אחרון בכותרת ס' 9)",
+   "mark": "מקור רשמי",
+   "read": "2026-10-18",
+   "used_for": [
+    "Q6"
+   ]
+  },
+  {
+   "id": "personal-import-order-nevo",
+   "title": "צו ייבוא אישי, תשע\"ט-2019 (נבו; הדף נקטע אחרי 67,580 תווים)",
+   "url": "https://www.nevo.co.il/law_html/law01/502_131.htm",
+   "date": "2024-07-09 (תיקון מתוארך אחרון)",
+   "mark": "מקור רשמי",
+   "read": "2026-10-18",
+   "used_for": [
+    "Q3",
+    "Q6"
+   ]
+  },
+  {
+   "id": "personal-import-order-economy",
+   "title": "צו יבוא אישי, מהדורה דיגיטלית (משרד הכלכלה והתעשייה)",
+   "url": "https://apps.economy.gov.il/Apps/PersonalImport/Home/Digital_Order/",
+   "date": null,
+   "mark": "מקור רשמי",
+   "read": "2026-10-18",
+   "used_for": [
+    "Q6"
+   ]
+  },
+  {
+   "id": "economy-590",
+   "title": "משרד הכלכלה, יבוא אישי: תאורה לבית (9405190000)",
+   "url": "https://apps.economy.gov.il/Apps/PersonalImport/Product/Index/590",
+   "date": null,
+   "mark": "מקור רשמי",
+   "read": "2026-10-18",
+   "used_for": [
+    "Q6"
+   ]
+  },
+  {
+   "id": "economy-608",
+   "title": "משרד הכלכלה, יבוא אישי: מנורת תלייה / נברשת (9405190000)",
+   "url": "https://apps.economy.gov.il/Apps/PersonalImport/Product/Index/608",
+   "date": null,
+   "mark": "מקור רשמי",
+   "read": "2026-10-18",
+   "used_for": [
+    "Q6"
+   ]
+  },
+  {
+   "id": "economy-530",
+   "title": "משרד הכלכלה, יבוא אישי: צעצועים (9503000000)",
+   "url": "https://apps.economy.gov.il/Apps/PersonalImport/Product/Index/530",
+   "date": null,
+   "mark": "מקור רשמי",
+   "read": "2026-10-18",
+   "used_for": [
+    "Q6"
+   ]
+  },
+  {
+   "id": "economy-408",
+   "title": "משרד הכלכלה, יבוא אישי: ריהוט לחדרי ילדים (9403600000)",
+   "url": "https://apps.economy.gov.il/Apps/PersonalImport/Product/Index/408",
+   "date": null,
+   "mark": "מקור רשמי",
+   "read": "2026-10-18",
+   "used_for": [
+    "Q6"
+   ]
+  },
+  {
+   "id": "customs-valuation-manual",
+   "title": "רשות המסים, אוגדן מכס (סחר-חוץ), פרק 2 – הערכה",
+   "url": "https://www.gov.il/BlobFolder/policy/noaalmeches2/he/Noal_2_Aarcha_ACC.pdf",
+   "date": "2017-03-30",
+   "mark": "מקור רשמי; ישן",
+   "read": "2026-10-18",
+   "used_for": [
+    "Q1"
+   ]
+  },
+  {
+   "id": "ita-vat-amounts",
+   "title": "רשות המסים, סכומים ושיעורים במע\"מ (403; לפי תוצאת חיפוש)",
+   "url": "https://www.gov.il/he/departments/general/vat-rate-amount-new",
+   "date": "2026-01-01 (תחולה)",
+   "mark": "מקור רשמי; לא אומת (לא נפתח)",
+   "read": "2026-10-18",
+   "used_for": [
+    "Q4"
+   ]
+  },
+  {
+   "id": "post-tax-clarifications",
+   "title": "דואר ישראל, הבהרות בנושא מיסי יבוא",
+   "url": "https://israelpost.co.il/%D7%93%D7%95%D7%90%D7%A8-%D7%91%D7%99%D7%A0%D7%9C%D7%90%D7%95%D7%9E%D7%99/%D7%94%D7%91%D7%94%D7%A8%D7%95%D7%AA-%D7%91%D7%A0%D7%95%D7%A9%D7%90-%D7%9E%D7%99%D7%A1%D7%99-%D7%99%D7%91%D7%95%D7%90",
+   "date": null,
+   "mark": "מקור רשמי",
+   "read": "2026-10-18",
+   "used_for": [
+    "Q1"
+   ]
+  },
+  {
+   "id": "post-broker-clarifications",
+   "title": "דואר ישראל, הבהרות בנושא עמילות מכס",
+   "url": "https://israelpost.co.il/%D7%93%D7%95%D7%90%D7%A8-%D7%91%D7%99%D7%A0%D7%9C%D7%90%D7%95%D7%9E%D7%99/%D7%94%D7%91%D7%94%D7%A8%D7%95%D7%AA-%D7%91%D7%A0%D7%95%D7%A9%D7%90-%D7%A2%D7%9E%D7%99%D7%9C%D7%95%D7%AA-%D7%9E%D7%9B%D7%A1",
+   "date": null,
+   "mark": "מקור רשמי",
+   "read": "2026-10-18",
+   "used_for": [
+    "Q1"
+   ]
+  },
+  {
+   "id": "post-fee-list-2025",
+   "title": "דואר ישראל, מחירון עמילות מכס ביבוא (הקובץ נוצר 20.04.2025)",
+   "url": "https://cdn-mypostpublic.israelpost.co.il/media/media/kyphsgst/10-8102279228-mehiron-amilut-mehes_a5_02.pdf",
+   "date": "2025-04-20 (מטא-דאטה של הקובץ)",
+   "mark": "מקור רשמי",
+   "read": "2026-10-18",
+   "used_for": [
+    "Q3",
+    "pricing"
+   ]
+  },
+  {
+   "id": "blog-bookkeepers",
+   "title": "The Bookkeepers, סוגיות מע\"מ בעסקאות דרופשיפינג כשהלקוח תושב ישראל",
+   "url": "https://www.thebookkeepers.co.il/single-post/2018/02/28/%D7%A1%D7%95%D7%92%D7%99%D7%95%D7%AA-%D7%9E%D7%A2%D7%9E-%D7%91%D7%A2%D7%A1%D7%A7%D7%90%D7%95%D7%AA-%D7%93%D7%A8%D7%95%D7%A4%D7%A9%D7%99%D7%A4%D7%99%D7%A0%D7%92-%D7%9B%D7%A9%D7%94%D7%9C%D7%A7%D7%95%D7%97-%D7%AA%D7%95%D7%A9%D7%91-%D7%99%D7%A9%D7%A8%D7%90%D7%9C",
+   "date": "2018-02-28",
+   "mark": "דעה מקצועית; ישן",
+   "read": "2026-10-18",
+   "used_for": [
+    "Q2"
+   ]
+  },
+  {
+   "id": "blog-dray",
+   "title": "Dray & Dray, דרופשיפינג ומיסוי בישראל",
+   "url": "https://cpa-dray.com/he/blog/דרופשיפינג/",
+   "date": "2024-12-28",
+   "mark": "דעה מקצועית",
+   "read": "2026-10-18",
+   "used_for": [
+    "Q2"
+   ]
+  },
+  {
+   "id": "blog-bshcpa",
+   "title": "רו\"ח אמנון בן שושן, עסקאות דרופשיפינג – היבטי מיסוי",
+   "url": "https://www.bshcpa.co.il/דרופשיפינג/",
+   "date": "2024-06-21",
+   "mark": "דעה מקצועית",
+   "read": "2026-10-18",
+   "used_for": [
+    "Q2",
+    "Q4"
+   ]
+  },
+  {
+   "id": "blog-zscpa",
+   "title": "רו\"ח זיו כרסנטי, מיסוי על דרופשיפינג",
+   "url": "https://www.zscpa.co.il/%D7%9E%D7%99%D7%A1%D7%95%D7%99-%D7%A2%D7%9C-%D7%93%D7%A8%D7%95%D7%A4%D7%A9%D7%99%D7%A4%D7%99%D7%A0%D7%92/",
+   "date": null,
+   "mark": "דעה מקצועית",
+   "read": "2026-10-18",
+   "used_for": [
+    "Q2"
+   ]
+  },
+  {
+   "id": "kohelet-2025",
+   "title": "פורום קהלת, התייחסות להצעה להכפלת תקרת הפטור ממע\"מ ל-150 דולר",
+   "url": "https://www.kohelet.org.il/wp-content/uploads/2026/02/התייחסות-להצעה-להכפלת-תקרת-הפטור-ממעמ-על-יבוא-חבילות-אישיות-ל-150-דולר.pdf",
+   "date": "2025-12-15",
+   "mark": "דעה מקצועית",
+   "read": "2026-10-18",
+   "used_for": [
+    "Q3"
+   ]
+  },
+  {
+   "id": "bizportal-2026-07",
+   "title": "bizportal, עלי אקספרס גובה מע\"מ בקופה מעל $75",
+   "url": "https://www.bizportal.co.il/career/news/article/20035795",
+   "date": "2026-07-13",
+   "mark": "לא אומת",
+   "read": "2026-10-18",
+   "used_for": [
+    "Q3"
+   ]
+  },
+  {
+   "id": "ynet-aliexpress",
+   "title": "ynet, מירב קריסטל, מע\"מ בעלי אקספרס מעל $75",
+   "url": "https://www.ynet.co.il/economy/article/s1zfb1xso",
+   "date": "כ-2022-11 (הסקה)",
+   "mark": "לא אומת; ישן",
+   "read": "2026-10-18",
+   "used_for": [
+    "Q3"
+   ]
+  },
+  {
+   "id": "dhl-faq",
+   "title": "DHL ישראל, שאלות נפוצות – היטלים ומיסים",
+   "url": "https://mydhl.express.dhl/il/he/help-and-support/faqs/duties-and-taxes.html",
+   "date": null,
+   "mark": "לא אומת",
+   "read": "2026-10-18",
+   "used_for": [
+    "Q1",
+    "Q3"
+   ]
+  },
+  {
+   "id": "track-a",
+   "title": "מסלול A: docs/suppliers/china-hub-r2-lines-2026-10-18.md §4 (תקרת $75 מ-01.06.2026; ship.co.il 2020; protocol)",
+   "url": null,
+   "date": "2026-10-18",
+   "mark": "פנימי (מקורותיו: חדשות, לא אומת / ישן)",
+   "read": "2026-10-18",
+   "used_for": [
+    "Q3",
+    "pricing"
+   ]
+  }
+ ],
+ "blocked": [
+  {
+   "site": "fs.knesset.gov.il",
+   "result": "303 redirect to maintenance-page-geo",
+   "what": "Knesset research paper on the personal-import exemption; law PDF"
+  },
+  {
+   "site": "gov.il vat-rate-amount-new",
+   "result": "403",
+   "what": "Tax Authority VAT amounts table"
+  },
+  {
+   "site": "nevo.co.il 502_131",
+   "result": "page truncated at 67,580 characters (chapter 85)",
+   "what": "rest of צו ייבוא אישי schedules; completed from the Ministry of Economy digital edition"
+  },
+  {
+   "site": "chamber.org.il reform page",
+   "result": "307 redirect",
+   "what": "'מה שטוב לאירופה' stages"
+  },
+  {
+   "site": "capitax.co.il",
+   "result": "broken encoding",
+   "what": "VAT commentary; not used"
+  }
+ ],
+ "not_verified": [
+  "whether our sale is a transaction in Israel (s.14) under our terms",
+  "whether the 18% we charge is part of the customs value (B vs C)",
+  "the wording of פרט 614 and whether it covers commercial imports",
+  "whether dropshipped parcels are 'personal import' (s.3(a)(1) 'שלא באמצעות עוסק')",
+  "fixed luminaires (ת\"י 20 part 2.1) in personal import; the two Ministry pages for 9405.19 conflict",
+  "release cost of a commercial per-parcel declaration",
+  "an official VAT collection scheme for foreign sellers (none found)",
+  "content of the תשפ\"ה-2025 / תשפ\"ז-2026 amendments to צו ייבוא אישי",
+  "the official representative USD/ILS rate customs uses (3.3 assumed)"
+ ],
+ "contact_made": false,
+ "files_changed": [],
+ "personal_details": false
+}
