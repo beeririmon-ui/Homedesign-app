@@ -16,7 +16,10 @@ the test fails until frontend-dev (and the card owners) fix them, and then keeps
    it and DIR/out/<id>-<suffix>.json (-ans, -fix) applied as an update, with {"__delete__": true} removing a field, the
    way the art director syncs):
    - no decision is open in the db while the repo has it answered or applied;
-   - no db document stores `answer` as a bare string.
+   - no db document stores `answer` as a bare string;
+   - WARNING, never a failure (read-only, 2026-10-18): decisions the db has "applied" while the repo still has them
+     "answered" (16 on 17.10). No tool syncs a decision's status between the two; the art director aligns
+     status/decisions.json. The other drift is printed as info.
 2. Browser (the real data built offline into a temp folder, the mock db of smoke_products.py):
    - a decision answered in the repo whose db document is still open (LK1 before the 17.10 sync) is not shown as open,
      and is not in "לאשר את כל ההמלצות הפתוחות" (the bulk approve would overwrite the owner's answer) (DB-4);
@@ -24,6 +27,9 @@ the test fails until frontend-dev (and the card owners) fix them, and then keeps
      made from an answered decision) shows the answer text, never "function at()";
    - read-only (no db): the same decision from data.json shows its answer text, and so does a data.json whose answer is
      a bare string next to answer_text (the old repo shape);
+   - a product_edits document marked synced (QA 2026-10-17, M8): synced before the build, its fields no longer override
+     the repo (the card shows the repo's price and "סונכרן", not "ממתין לסנכרון"); synced after the build, the db's value
+     stays until the next build (also "סונכרן"); not synced, the db's value and "ממתין לסנכרון";
    - no JavaScript errors.
 
 Usage:  python3 studio/tests/smoke_db_contract.py [--db DIR] [--keep]
@@ -48,6 +54,14 @@ import smoke_products as T  # noqa: E402  (shared helpers: build, serve, open_pa
 ROOT = T.ROOT
 check = T.check
 UI_FIELDS = ("_src", "_rooms", "_order")
+warnings: list[str] = []
+
+
+def warn(ok: bool, what: str) -> None:
+    """A finding that is reported, never a failure (the test stays read-only and green)."""
+    print(("  ok    " if ok else "  WARN  ") + what, flush=True)
+    if not ok:
+        warnings.append(what)
 
 
 def arg(name):
@@ -144,9 +158,13 @@ def db_checks(folder: Path):
     check(not stale, f"no decision is open in the db while the repo has it answered ({', '.join(stale) or 'none'})")
     strings = sorted(i for i, d in db.items() if isinstance(d.get("answer"), str))
     check(not strings, f"no db document stores the answer as a bare string ({', '.join(strings) or 'none'})")
+    # the db ahead of the repo: applied there, answered here (QA 2026-10-17 §3, 16 decisions). A warning, not a failure
+    ahead = sorted(i for i in dec if i in db and (dec[i].get("status") or "open") == "answered" and db[i].get("status") == "applied")
+    warn(not ahead, f"no decision is 'applied' in the db and 'answered' in the repo ({len(ahead)} pairs"
+         + (f": {', '.join(ahead)}; align status/decisions.json" if ahead else "") + ")")
     drift = sorted(f"{i} repo {dec[i].get('status')} / db {db[i].get('status')}" for i in dec
-                   if i in db and (dec[i].get("status") or "open") != (db[i].get("status") or "open"))
-    print(f"  info  status drift between the repo and the db: {len(drift)}" + "".join(f"\n        {x}" for x in drift))
+                   if i in db and (dec[i].get("status") or "open") != (db[i].get("status") or "open") and i not in ahead)
+    print(f"  info  other status drift between the repo and the db: {len(drift)}" + "".join(f"\n        {x}" for x in drift))
 
 
 # --------------------------------------------------------------------------- 2. browser
@@ -238,6 +256,48 @@ def old_shape_checks(browser, dist: Path, tmp: Path):
         srv.shutdown()
 
 
+def synced_checks(browser, base, dist: Path):
+    """QA 2026-10-17, M8: a product_edits document marked synced stops overriding the repo once the build is newer."""
+    data = T.load_build().read_dist_data(dist)
+    built = data["build"]["built_at"]
+    econ = (data.get("economics") or {}).get("products") or {}
+    shown = {p["id"] for p in data["products"] if p.get("slot_key")}
+    ids = [k for k, v in sorted(econ.items()) if k in shown and isinstance(v.get("retail_ils"), (int, float)) and v["retail_ils"] > 20][:3]
+    if len(ids) < 3:
+        print("  skip  fewer than 3 cards with a price in the build")
+        return
+    old, new, pend = ids
+    seed = {"product_edits": {
+        old: {"fields": {"economics": {"retail_ils": econ[old]["retail_ils"] + 11}}, "history": [], "synced": True,
+              "synced_at": "2026-10-01", "updated_at": "2026-09-30T10:00:00Z"},
+        new: {"fields": {"economics": {"retail_ils": econ[new]["retail_ils"] + 13}}, "history": [], "synced": True,
+              "synced_at": "2999-01-01T00:00:00Z", "updated_at": "2999-01-01T00:00:00Z"},
+        pend: {"fields": {"economics": {"retail_ils": econ[pend]["retail_ils"] + 17}}, "history": [], "synced": False,
+               "updated_at": "2026-10-18T05:00:00Z"},
+    }}
+    print(f"- synced product edits (M8), build {built}: {old} synced 1.10, {new} synced after the build, {pend} not synced")
+    ctx, page, errors = T.open_page(browser, base, 1280, screen="products", ready=".pcard", seed=seed)
+    page.wait_for_function(f"() => !!document.querySelector('.pcard-w[data-pid={json.dumps(pend)}] .chip-pending')", timeout=10000)
+
+    def state(pid):
+        return page.evaluate(f"""() => {{ const c = document.querySelector('.pcard-w[data-pid={json.dumps(pid)}]'); if(!c) return null;
+            const pr = c.querySelector('.pprice .num');
+            return {{price: pr ? pr.textContent.replace(/[^0-9.]/g, '') : '', src: c.dataset.retailSrc, synced: c.dataset.synced || '',
+                     chip: !!c.querySelector('.chip-synced'), pending: !!c.querySelector('.chip-pending')}}; }}""")
+    a, b, c = state(old), state(new), state(pend)
+    want = lambda pid, d: str(round(econ[pid]["retail_ils"] + d))
+    check(a and a["price"] == want(old, 0) and a["src"] != "studio" and a["chip"] and not a["pending"] and a["synced"] == "stale",
+          f"{old}: synced before the build, the repo's price shows (₪{want(old, 0)}, not ₪{want(old, 11)}) with 'סונכרן' ({a})")
+    check(b and b["price"] == want(new, 13) and b["src"] == "studio" and b["chip"] and not b["pending"] and b["synced"] == "live",
+          f"{new}: synced after the build, the db's price stays until the next build, with 'סונכרן' ({b})")
+    check(c and c["price"] == want(pend, 17) and c["src"] == "studio" and c["pending"] and not c["chip"],
+          f"{pend}: not synced, the db's price and 'ממתין לסנכרון' ({c})")
+    exp = json.loads(page.evaluate("exportJson()"))
+    check(sorted(x["id"] for x in exp["product_edits"]) == [pend], f"the sync file holds only the edit that is not synced ({[x['id'] for x in exp['product_edits']]})")
+    check(not errors, "synced edits: no JavaScript errors" + ("" if not errors else ": " + "; ".join(errors[:3])))
+    ctx.close()
+
+
 def answer_text(page, did) -> str:
     return page.evaluate(f"""() => {{ const b = document.querySelector('.dcard[data-id={json.dumps(did)}] .answer-box');
         return b ? b.textContent.replace(/\\s+/g, ' ').trim() : ''; }}""")
@@ -263,6 +323,7 @@ def main() -> int:
                 srv, base = T.serve(tmp / "dist")
                 try:
                     browser_checks(browser, base)
+                    synced_checks(browser, base, tmp / "dist")
                 finally:
                     srv.shutdown()
                 old_shape_checks(browser, tmp / "dist", tmp)
@@ -272,7 +333,8 @@ def main() -> int:
             shutil.rmtree(tmp, ignore_errors=True)
         else:
             print(f"kept {tmp}")
-    print(f"\n{'FAILED' if T.failures else 'PASSED'}: {len(T.failures)} failed checks")
+    print(f"\n{'FAILED' if T.failures else 'PASSED'}: {len(T.failures)} failed checks"
+          + (f", {len(warnings)} warning{'s' if len(warnings) > 1 else ''} (reported, not a failure)" if warnings else ""))
     return 1 if T.failures else 0
 
 

@@ -20,6 +20,12 @@
    - slot filter "בלי עמדה", shared slots on pool cards, design-first order in a slot;
    - 390px and 1280px: no horizontal scroll, axe-core finds no WCAG A/AA violation in the cards and the drawer, no JS errors.
 3. Real data (built offline into a temp folder): no CJ card shows "חסר משלוח" while it has a cost; the counts are printed.
+   The designer's audit per slot (QA 2026-10-17, M6; subjects picked from the build, the repo moves): a card the designer
+   rejected for its slot shows "נדחה לעמדה (המעצב)", a lowered one "ציון הורד" and the designer's fit (not the team's
+   guess), a round-5 card without style_scores shows the team's guess as a dashed chip; the "ביקורת המעצב" filter; the
+   drawer's audit section. AU3: a card the owner approved at 6.5 shows "אושר כאפשרות שלישית (AU3)" in that slot.
+   build.py: the alternative form of a slot (hall/storage-boxes, one long basket) sells one unit; a Hebrew image URL
+   downloads (QA L7).
 4. --shots: screenshots into assets/qa/studio-2026-10-11/ (products, drawer, profit at 1280 and 390). The real data is used;
    when data/economics/products.json does not exist yet, the fixture pricing file is laid over a copy of data/economics
    (temp folder; studio/dist is never built with fixture prices).
@@ -106,6 +112,21 @@ def python_checks():
     check(q["qty"] == 2 and q["sure"], "without options the notes rule still works (per piece + pair slot = 2)")
     q = B.sell_qty_default({"name": "x", "notes": "", "_slot_key": "r/pair", "_shared_in": []}, slots)
     check(q["qty"] == 1 and not q["sure"], "without options and without a hint: 1, not sure")
+
+    # QA L6: a slot's alternative form (hall/storage-boxes: a pair, or one long basket, set_of 1)
+    alt = {"r/boxes": {"key": "r/boxes", "set_of": 2, "alternative_form": B.alt_forms(
+        {"id": "long-basket", "name_he": "סל ארוך אחד במקום הזוג", "set_of": 1, "envelope_cm": {"w": [55, 68], "d": [25, 30], "h": [20, 30]}})}}
+    q = B.sell_qty_default({"name": "FIXTURE seagrass long basket", "notes": "price per piece", "_slot_key": "r/boxes", "_shared_in": [],
+                            "dimensions_cm": {"width": 60, "depth": 28, "height": 25}}, alt)
+    check(q["qty"] == 1 and q["sure"] and q.get("alt_form") == "long-basket", f"a 60 cm basket in a pair slot with a long-basket form sells 1 ({q['qty']}, {q['reason']})")
+    q = B.sell_qty_default({"name": "FIXTURE box", "notes": "price per piece", "_slot_key": "r/boxes", "_shared_in": [],
+                            "dimensions_cm": {"width": 30, "depth": 25, "height": 25}}, alt)
+    check(q["qty"] == 2 and not q.get("alt_form"), f"a 30 cm box in the same slot is still the pair (qty {q['qty']})")
+    q = B.sell_qty_default({"name": "FIXTURE long-basket", "notes": "", "_slot_key": "r/boxes", "_shared_in": []}, alt)
+    check(q["qty"] == 1 and q.get("alt_form") == "long-basket", "a card that names the form is that form, without dimensions")
+    # QA L7: an image URL with Hebrew letters in its path is sent percent-encoded (it failed with UnicodeEncodeError)
+    u = B.ascii_url("https://www.rihut-express.co.il/wp-content/uploads/2025/05/כסא-1200x1200.jpg?x=%D7%90")
+    check(u.isascii() and "%D7%9B%D7%A1%D7%90-1200x1200.jpg" in u and u.endswith("?x=%D7%90"), f"a Hebrew image path is percent-encoded ({u[-48:]})")
 
     # the three AliExpress curtain cards of the repo
     plan = B.read_json(ROOT / "docs" / "house-plan.json")
@@ -446,6 +467,64 @@ def real_checks(browser, base):
         ctx.close()
 
 
+def audit_checks(browser, base, dist: Path):
+    """QA 2026-10-17, M6 and AU3, on the real build: the subjects come from its own data.json."""
+    print("- real data: the designer's audit per slot (M6) and the owner's third options (AU3)")
+    D = load_build().read_dist_data(dist)
+    P = D["products"]
+    own = lambda p: (p.get("audit") or {}).get(p.get("slot_key") or "") or (p.get("audit") or {}).get("*") or {}
+    rej = next((p for p in P if own(p).get("v") == "reject"), None)
+    low = next((p for p in P if own(p).get("v") == "lower-fit" and "nordic" in (own(p).get("fit") or {}) and not p.get("style_scores")
+                and ((p.get("guess") or {}).get(p["slot_key"]) or {}).get("fit", {}).get("nordic") not in (None, own(p)["fit"]["nordic"])), None)
+    r5 = next((p for p in P if p.get("slot_key") and not p.get("style_scores") and not own(p)
+               and "nordic" in ((p.get("guess") or {}).get(p["slot_key"]) or {}).get("fit", {})), None)
+    au = next((p for p in P if any(a["slot"] == p.get("slot_key") for a in p.get("au3") or [])), None)
+    n_flag = sum(1 for p in P if own(p).get("v") in ("reject", "lower-fit"))
+    print(f"    subjects: rejected {rej and rej['id']}, lowered {low and low['id']}, team guess {r5 and r5['id']}, AU3 {au and au['id']}"
+          f" · {n_flag} cards flagged in their own slot")
+    if not (rej and low and r5):
+        check(False, "the build has a rejected, a lowered and a team-guessed card to test")
+        return
+    for width in (1280, 390):
+        label = f"audit {width}px"
+        ctx, page, errors = open_page(browser, base, width, db=False)
+        c = card(page, rej["id"])
+        check(c.get_attribute("data-audit") == "reject" and c.locator(".chip-aud-reject").inner_text() == "נדחה לעמדה (המעצב)",
+              f"{label}: {rej['id']} rejected for {rej['slot_key']}: 'נדחה לעמדה (המעצב)'")
+        c = card(page, low["id"])
+        want = own(low)["fit"]["nordic"]
+        got = c.locator(".chip-design b").inner_text() if c.locator(".chip-design b").count() else None
+        check(c.locator(".chip-aud-lower").inner_text() == "ציון הורד" and got is not None and float(got) == float(want)
+              and c.get_attribute("data-fit-src") == "audit",
+              f"{label}: {low['id']}: 'ציון הורד' and the designer's Nordic {want}, not the team's {low['guess'][low['slot_key']]['fit']['nordic']} ({got})")
+        c = card(page, r5["id"])
+        g = r5["guess"][r5["slot_key"]]["fit"]["nordic"]
+        got = c.locator(".chip-guess b").inner_text() if c.locator(".chip-guess b").count() else None
+        check(got is not None and float(got) == float(g) and c.get_attribute("data-fit-src") == "team" and c.locator(".chip-design").count() == 0,
+              f"{label}: {r5['id']} (no style_scores): the team's guess, dashed ({got} = {g})")
+        page.select_option("#f-audit", "flagged")
+        aud = page.eval_on_selector_all(".pcard-w", "e => e.map(x => x.dataset.audit)")
+        check(aud and set(aud) <= {"reject", "lower-fit"} and {"reject", "lower-fit"} <= set(aud),
+              f"{label}: filter 'נדחה לעמדה או ציון הורד' shows both and only them ({len(aud)})")
+        if au:
+            page.select_option("#f-audit", "au3")
+            ids = page.eval_on_selector_all(".pcard-w", "e => e.map(x => [x.dataset.pid, !!x.querySelector('.chip-au3')])")
+            check(au["id"] in [x[0] for x in ids] and all(x[1] for x in ids) and card(page, au["id"]).locator(".chip-au3").inner_text() == "אושר כאפשרות שלישית (AU3)",
+                  f"{label}: filter AU3: {len(ids)} cards, each with 'אושר כאפשרות שלישית (AU3)'")
+        page.select_option("#f-audit", "")
+        no_hscroll(page, width, f"{label} products")
+        if width == 1280:
+            axe(page, f"{label} products grid", "#pgrid")
+            open_drawer(page, rej["id"])
+            txt = page.locator("#drawer #h-aud").locator("xpath=..").inner_text()
+            note = (own(rej).get("note") or "")[:24]
+            check("נדחה לעמדה (המעצב)" in txt and note in txt, f"{label}: the drawer lists the designer's verdict and note")
+            axe(page, f"{label} drawer", "#drawer")
+            close_drawer(page)
+        check(not errors, f"{label}: no JavaScript errors" + ("" if not errors else ": " + "; ".join(errors[:3])))
+        ctx.close()
+
+
 def shots(browser, tmp: Path):
     print("- screenshots (real data) into " + str(SHOTS.relative_to(ROOT)))
     eco = None
@@ -521,6 +600,7 @@ def main() -> int:
             srv, base = serve(tmp / "dist-real")
             try:
                 real_checks(browser, base)
+                audit_checks(browser, base, tmp / "dist-real")
             finally:
                 srv.shutdown()
             if "--shots" in sys.argv:

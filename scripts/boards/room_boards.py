@@ -40,11 +40,12 @@ ROOMS = ["living-room", "dining-room", "master", "kids", "work", "hall", "corrid
 ROOM_HE = {"living-room": "סלון", "dining-room": "מטבח ופינת אוכל", "master": "חדר שינה", "kids": "חדר ילדים",
            "work": "חדר עבודה", "hall": "כניסה", "corridor": "מסדרון", "bath": "חדר רחצה"}
 LEGEND_HE = ('"נבחר": בחירת המעצב (ברירת המחדל, ובקטן הווריאציות). "מועמד": מוצר מהליקוט האחרון בהתאמה 7 ומעלה '
-             '(לפי ציון המעצב כשהוא בדק אותו). מוצר שנדחה, או שהמעצב דחה בעמדה או נתן לו פחות מ-7 בסגנון, לא מופיע. '
+             '(לפי ציון המעצב כשהוא בדק אותו), או 6.5 כשהמשתמש אישר אותו כאפשרות שלישית בעמדה ובסגנון (AU3). מוצר שנדחה, או שהמעצב דחה בעמדה או נתן לו פחות מ-7 בסגנון, לא מופיע. '
              'בלי ריהוט קבוע (ספקים ישראליים).')
 RESULTS_GLOB = "data/leads/final-2026-10-13/results/*.json"
 COVERAGE_PY = "scripts/sourcing/final_round_coverage.py"  # audits() and audit_for(): the designer's verdicts
 FIT_MIN = 7.0
+FIT_OWNER = 6.5  # AU3 (2026-10-18): the owner accepted these cards at 6.5 as a slot's third option, per slot and style
 MARGIN_FLOOR = 40.0   # VR1, studio rules ה.11
 MARGIN_AMBER = 25.0   # the coordinator's colour bands: >= 40 green, 25-40 amber, below 25 (or a loss) red
 TOY_SLOTS = {"kids/toy-cars", "kids/doll", "kids/soft-toy", "kids/doll-pram", "kids/skateboard"}
@@ -66,6 +67,7 @@ STATUS = {
     "coop-none": ("לא פנינו", "neutral", "עוד לא פנינו לספק הישראלי (data/suppliers/directory.json)"),
     "unreviewed": ("מועמד, לא נבדק", "neutral", "מהליקוט האחרון, עוד לא עבר את המעצב"),
     "reviewed": ("המעצב בדק", "info", "מועמד שהמעצב בדק בביקורת סבב 5 והשאיר (designer-audit)"),
+    "au3": ("אושר כאפשרות שלישית (AU3)", "info", "המשתמש אישר את המוצר בציון 6.5 כאפשרות השלישית בעמדה ובסגנון האלה (AU3, 2026-10-18)"),
     "ready": ("מוכן לדרופשיפינג", "good", "ספק דרופשיפינג, מתומחר, בלי דגל חוסם"),
 }
 DROPPED_HE = {"rejected": "הכרטיס נדחה (status: rejected)", "designer-reject": "המעצב דחה אותו בעמדה הזו (ביקורת סבב 5)",
@@ -239,6 +241,25 @@ def load_audits():
         os.chdir(cwd)
 
 
+def load_owner_approved():
+    """({(card id, slot key, style)} the owner accepted at fit 6.5 as the slot's third option, error or None), from
+    owner_approved() of scripts/sourcing/final_round_coverage.py (AU3, round5/au3-approved.json), the single source."""
+    cwd = os.getcwd()
+    try:
+        os.chdir(ROOT)
+        return set(coverage_module().owner_approved()), None
+    except Exception as e:
+        return set(), f"{COVERAGE_PY} owner_approved(): {type(e).__name__}: {e}"[:300]
+    finally:
+        os.chdir(cwd)
+
+
+def fit_counts(fit, approved, cid, key, style):
+    """The coverage rule (final_round_coverage.py): a fit of 7 or more, or of 6.5 or more when the owner approved this card
+    for this slot and style (AU3)."""
+    return fit is not None and (fit >= FIT_MIN or (fit >= FIT_OWNER and (cid, key, style) in (approved or ())))
+
+
 def audit_for(audit, card_id, key):
     """The designer's entry for this card in this slot ("room/slot"): the slot's own entry first, then "*"."""
     if not audit or not card_id:
@@ -263,12 +284,14 @@ def designer_fit(a, style):
 
 
 def candidates(style, room, results=None, ctx=None):
-    """slot id -> [(card id, fit)] of the final round's cards with a fit >= 7 for this style, best first. With a Context:
+    """slot id -> [(card id, fit)] of the final round's cards with a fit >= 7 for this style (or >= 6.5 when the owner
+    approved the card for this slot and style, AU3), best first. With a Context:
     a rejected card and a card the designer rejected for the slot are left out, and the designer's fit replaces the
     team's guess (the way final_round_coverage.py counts them)."""
     out = {}
     audit = ctx.audit if ctx is not None else {}
     cat = ctx.cat if ctx is not None else {}
+    approved = getattr(ctx, "approved", None) or set()
     for _, d in (results if results is not None else lead_results()):
         for key, s in (d.get("slots") or {}).items():
             if not key.startswith(room + "/"):
@@ -286,7 +309,7 @@ def candidates(style, room, results=None, ctx=None):
                 fit = designer_fit(a, style)
                 if fit is None:
                     fit = _fit((c.get("style_fit_guess") or {}).get(style)) or 0
-                if fit >= FIT_MIN:
+                if fit_counts(fit, approved, cid, key, style):
                     out.setdefault(sid, {})
                     out[sid][cid] = max(fit, out[sid].get(cid, 0))
     return {k: sorted(v.items(), key=lambda x: -x[1]) for k, v in out.items()}
@@ -302,7 +325,7 @@ def left_out(ctx, style, room, sid, cid):
     if a and a.get("verdict") == "reject":
         return "designer-reject"
     fit = designer_fit(a, style)
-    if fit is not None and fit < FIT_MIN:
+    if fit is not None and not fit_counts(fit, getattr(ctx, "approved", None), cid, f"{room}/{sid}", style):
         return "designer-fit"
     return None
 
@@ -335,6 +358,7 @@ class Context:
         self.cat = cat if cat is not None else cards()
         self.results = lead_results()
         self.audit, self.audit_error = load_audits()
+        self.approved, self.approved_error = load_owner_approved()
         # the pricing file may be mid-write (the pricing team, 2026-10-18): a stable read, else the committed version
         eco, self.pricing_note = load_json_stable(PRICING_REL)
         eco = eco if isinstance(eco, dict) else {}
@@ -465,6 +489,8 @@ def statuses_of(ctx, room, sid, card, sup, margin, role, price, style=None):
             add("unreviewed")
     elif not out and sup.get("key") in DROPSHIP and (margin or price):
         add("ready")
+    if style and (card.get("id"), key, style) in (getattr(ctx, "approved", None) or ()):
+        add("au3")  # counted at 6.5 because the owner approved it in this slot and style (AU3)
     return out
 
 
@@ -494,6 +520,15 @@ def board_data(style, room, cat=None, ctx=None):
         if not picks and ca.get(sid):
             picks = [(cid, (cat.get(cid) or {}).get("price"), "candidate", None) for cid, _ in ca[sid][:3]]
             role = "candidate"
+        elif picks and len(picks) < 3:
+            # AU3 (2026-10-18): a card the owner approved at 6.5 as this slot's third option, in this style, joins the
+            # designer's picks as a candidate (marked "אושר כאפשרות שלישית (AU3)")
+            have = {p[0] for p in picks}
+            for cid, _fit in ca.get(sid) or []:
+                if len(picks) >= 3:
+                    break
+                if cid not in have and (cid, f"{room}/{sid}", style) in (getattr(ctx, "approved", None) or ()):
+                    picks.append((cid, (cat.get(cid) or {}).get("price"), "candidate", None))
         picks = [p for p in picks if p[0] in cat]
         row = {"id": sid, "name_he": name}
         if not picks:
@@ -517,7 +552,8 @@ def board_data(style, room, cat=None, ctx=None):
                 sup = supplier_of(card)
                 margin = margin_of(ctx, style, room, sid, card["id"], p[3] if len(p) > 3 else None, p[2])
                 row_p.update({"supplier": sup, "margin": margin,
-                              "supplier_status": statuses_of(ctx, room, sid, card, sup, margin, role, p[1], style)})
+                              "supplier_status": statuses_of(ctx, room, sid, card, sup, margin,
+                                                             "candidate" if p[2] == "candidate" else role, p[1], style)})
             except Exception as e:
                 row_p["error"] = f"{type(e).__name__}: {e}"[:160]
             rows.append(row_p)
@@ -537,6 +573,7 @@ def boards(cat=None):
             "status_labels": {k: {"he": v[0], "tone": v[1], "why": v[2]} for k, v in STATUS.items()},
             "margin_src_he": MARGIN_SRC_HE, "dropped_he": DROPPED_HE,
             "audit": {"entries": len(ctx.audit), "error": ctx.audit_error},
+            "owner_approved": {"entries": len(ctx.approved), "error": ctx.approved_error, "fit_min": FIT_OWNER},
             "pricing_note": getattr(ctx, "pricing_note", None),
             "boards": [board_data(st, room, ctx=ctx) for st in STYLES for room in ROOMS]}
 

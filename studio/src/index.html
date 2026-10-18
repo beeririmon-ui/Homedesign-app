@@ -1217,7 +1217,7 @@ button.ptile:focus-visible{outline-offset:2px}
 
     <section class="screen" id="screen-boards" aria-labelledby="h-boards" hidden>
       <div class="screen-head"><h1 id="h-boards" tabindex="-1">לוחות חדרים</h1><p class="small faint" id="bd-count"></p></div>
-      <p class="lede">לוח מוצרים לכל סגנון וחדר, כמו התמונות של 16.10: "נבחר" הוא בחירת המעצב, "מועמד" הוא מוצר מהליקוט האחרון בהתאמה 7 ומעלה (עם "המעצב בדק" כשעבר את ביקורת המעצב), ועמדה בלי מוצר מסומנת "חסר". מוצר שנדחה, או שהמעצב דחה בעמדה, לא מופיע. לכל מוצר: הספק, הסטטוס מול הספק והרווח. לחיצה על מוצר פותחת את הכרטיס שלו. הנתונים מחושבים ב-<code>scripts/boards/room_boards.py</code>, אותו חישוב כמו התמונות.</p>
+      <p class="lede">לוח מוצרים לכל סגנון וחדר, כמו התמונות של 16.10: "נבחר" הוא בחירת המעצב, "מועמד" הוא מוצר מהליקוט האחרון בהתאמה 7 ומעלה (עם "המעצב בדק" כשעבר את ביקורת המעצב), או 6.5 כשהמשתמש אישר אותו כאפשרות שלישית בעמדה ובסגנון (AU3), ועמדה בלי מוצר מסומנת "חסר". מוצר שנדחה, או שהמעצב דחה בעמדה, לא מופיע. לכל מוצר: הספק, הסטטוס מול הספק והרווח. לחיצה על מוצר פותחת את הכרטיס שלו. הנתונים מחושבים ב-<code>scripts/boards/room_boards.py</code>, אותו חישוב כמו התמונות.</p>
       <div id="bd-body"><p class="loading">טוען…</p></div>
     </section>
 
@@ -1234,7 +1234,7 @@ button.ptile:focus-visible{outline-offset:2px}
           <option value="">הכול</option><option value="green">עומד ביעד</option><option value="red">מתחת ליעד</option><option value="loss">מפסיד (תרומה שלילית)</option><option value="orange">חסרים נתונים</option>
         </select></div>
         <div class="field"><label for="f-audit">ביקורת המעצב</label><select id="f-audit">
-          <option value="">הכול</option><option value="flagged">נדחה לעמדה או ציון הורד</option><option value="reject">נדחה לעמדה (המעצב)</option><option value="lower-fit">ציון הורד</option><option value="keep">המעצב בדק והשאיר</option><option value="team">רק הערכת הצוות</option>
+          <option value="">הכול</option><option value="flagged">נדחה לעמדה או ציון הורד</option><option value="reject">נדחה לעמדה (המעצב)</option><option value="lower-fit">ציון הורד</option><option value="keep">המעצב בדק והשאיר</option><option value="au3">אושר כאפשרות שלישית (AU3)</option><option value="team">רק הערכת הצוות</option>
         </select></div>
         <div class="field"><label for="f-supplier">ספק</label><select id="f-supplier"></select></div>
         <div class="field"><label for="f-sort">מיון</label><select id="f-sort">
@@ -3259,7 +3259,7 @@ const tagName = t => TAG_HE[t] || (S.rooms.get(t) && S.rooms.get(t).name_he) || 
 const sharedSlotsText = p => (p.shared_in || []).map(k => { const s = S.slots.get(k); const r = s && S.rooms.get(s.room); return `${r ? r.name_he : (s ? s.room : k.split('/')[0])} · ${s ? (s.name_he || s.id) : k}`; }).join(', ');
 /* a card's fit and the designer's verdict, per slot (QA 2026-10-17, M6). build.py writes
    p.audit = {slot key or "*": {v, fit, vf, note, flags, seen, env_ok, team, file}}: the master-designer's audits
-     (round*/designer-audit*.json, read through scripts/sourcing/final_round_coverage.py audits()); auditOf() picks an
+     (round<N>/designer-audit<suffix>.json, read through scripts/sourcing/final_round_coverage.py audits()); auditOf() picks an
      entry the way its audit_for() does: the slot's own entry, then "*". v "reject" = rejected for that slot (the card
      stays in the basket), "lower-fit" = the designer lowered the team's score, "keep" = checked and kept.
    p.guess = {slot key: {fit, file, date}}: the team's style_fit_guess in the final round (round-5 cards have no
@@ -3268,7 +3268,7 @@ const sharedSlotsText = p => (p.shared_in || []).map(k => { const s = S.slots.ge
 const auditOf = (p, key) => { const a = p && p.audit; return a ? ((key && a[key]) || a['*'] || null) : null; };
 const guessOf = (p, key) => { const g = p && p.guess; if(!g) return null; return (key && g[key]) || (p.slot_key && g[p.slot_key]) || Object.values(g)[0] || null; };
 const AUD_HE = {reject: 'נדחה לעמדה (המעצב)', 'lower-fit': 'ציון הורד', keep: 'המעצב בדק'};
-const AUD_FILTER_HE = {flagged: 'נדחה לעמדה או ציון הורד', reject: 'נדחה לעמדה (המעצב)', 'lower-fit': 'ציון הורד', keep: 'המעצב בדק והשאיר', team: 'רק הערכת הצוות'};
+const AUD_FILTER_HE = {flagged: 'נדחה לעמדה או ציון הורד', reject: 'נדחה לעמדה (המעצב)', 'lower-fit': 'ציון הורד', keep: 'המעצב בדק והשאיר', au3: 'אושר כאפשרות שלישית (AU3)', team: 'רק הערכת הצוות'};
 const FIT_SRC_HE = {audit: 'המעצב', scores: 'המעצב', team: 'הצוות', deep: 'הליקוט המעמיק'};
 function fitOf(p, key, st){
   const a = auditOf(p, key);
@@ -3295,6 +3295,16 @@ function fitChip(p){
   if(f.src === 'team') return `<span class="chip chip-guess" title="${esc(`הערכת הצוות בליקוט${f.file ? ` (${f.file})` : ''}. המעצב עוד לא נתן ציון ל${lab} בעמדה הזו`)}"><span class="sr-only">הערכת הצוות: </span>${esc(lab)} <b dir="ltr">${esc(f.n)}</b></span>`;
   const tip = f.src === 'audit' ? `ציון המעצב ל${lab} בעמדה (ביקורת${f.file ? ` ${f.file}` : ''}), גובר על הערכת הצוות` : `ציון העיצוב של המעצב ל${lab} (style_scores)`;
   return `<span class="chip ${st === 'nordic' ? 'chip-design' : 'chip-sty chip-design-o'}" title="${esc(tip)}">${esc(lab)} <b dir="ltr">${esc(f.n)}</b></span>`;
+}
+// AU3 (2026-10-18): the owner approved the card at fit 6.5 as the third option of a slot, per style. build.py reads
+// owner_approved() of scripts/sourcing/final_round_coverage.py, the rule the boards and the coverage count with:
+// a fit of 7 or more, or of 6.5 or more for an approved (card, slot, style)
+const au3Of = (p, key) => (p && p.au3 || []).filter(a => a.slot === key);
+function au3Chip(p, key){
+  const a = au3Of(p, key === undefined ? shownSlot(p) : key);
+  if(!a.length) return '';
+  const sts = a.map(x => STYLE_HE[x.style] || x.style).join(', ');
+  return `<span class="chip chip-aud-keep chip-au3" title="${esc(`המשתמש אישר את המוצר בציון 6.5 כאפשרות השלישית בעמדה הזו, ב${sts} (AU3, 2026-10-18). נספר בכיסוי ומופיע בלוח.`)}">אושר כאפשרות שלישית (AU3)</span>`;
 }
 // the designer's verdict for the shown slot: "נדחה לעמדה (המעצב)" or "ציון הורד" (with the designer's note as the title)
 function auditChip(p, key){
@@ -3330,6 +3340,7 @@ function filtered(){
     if(f.audit){ // the designer's audit for the slot the card is shown in (QA M6)
       const v = audVerdict(p);
       if(f.audit === 'flagged'){ if(v !== 'reject' && v !== 'lower-fit') return false; }
+      else if(f.audit === 'au3'){ if(!au3Of(p, shownSlot(p)).length) return false; }
       else if(f.audit === 'team'){ if(designScore(p) != null || guessScore(p) == null || v) return false; }
       else if(v !== f.audit) return false;
     }
@@ -3398,7 +3409,7 @@ function renderProducts(){
         <span class="pname" dir="auto">${esc(p.name)}</span>
         <span class="pslot">${esc(slotLabel(p))}${viaShared ? ' · דרך מאגר משותף' : ''}</span>
         <span class="pslot faint">${esc((p.rooms || []).map(tagName).join(', '))}</span>
-        ${p._new ? '' : (a => a ? `<span class="paudit">${a}</span>` : '')(auditChip(p))}
+        ${p._new ? '' : (a => a ? `<span class="paudit">${a}</span>` : '')(auditChip(p) + au3Chip(p))}
         <span class="prow"><span class="cost num" dir="ltr" title="עלות אצל הספק ליחידה">${esc(fmtUSD(p.price && p.price.cost))}</span>${isNum(p.ship.usd) ? `<span class="pship" title="${esc(shipTip)}"><span class="num" dir="ltr">+${esc(fmtUSD(p.ship.usd))}</span> משלוח</span>` : ''}${price}</span>
         <span class="prow pmeta">${days ? `<span><span class="num" dir="ltr">${esc(days)}</span> ימים</span>` : ''}${hex ? `<span class="swrow"><span class="swatch" data-sw="${esc(hex)}"></span><span class="hex" dir="ltr">${esc(hex)}</span></span>` : ''}${p.options_n ? `<span class="popts" title="${esc((p.options_axes || []).join(', '))}"><span class="num">${p.options_n}</span> אפשרויות</span>` : ''}<span class="faint">${esc(p.supplier && p.supplier.name || '')}</span></span>
         <span class="pecon">${flagHtml(p)}${p._new ? '' : ' ' + qtyHtml(p)}${priceChips(p) ? ' ' + priceChips(p) : ''}</span>
@@ -3573,8 +3584,8 @@ function fitsLine(p, key){
 }
 // the designer's audit entries of a card, every slot, and the team's guess per slot (QA 2026-10-17, M6)
 function auditBlock(p){
-  const entries = Object.entries(p.audit || {}), guesses = Object.entries(p.guess || {});
-  if(!entries.length && !guesses.length) return '';
+  const entries = Object.entries(p.audit || {}), guesses = Object.entries(p.guess || {}), au3 = p.au3 || [];
+  if(!entries.length && !guesses.length && !au3.length) return '';
   const slotTxt = k => { if(k === '*') return 'כל העמדות'; const s = S.slots.get(k); return s ? `${(S.rooms.get(s.room) || {}).name_he || s.room} · ${s.name_he || s.id}` : k; };
   const fitTxt = fit => Object.entries(fit || {}).map(([k, n]) => `${STYLE_HE[k] || k} ${n}`).join(' · ');
   const cls = v => v === 'reject' ? 'chip-aud-reject' : v === 'lower-fit' ? 'chip-aud-lower' : 'chip-aud-keep';
@@ -3586,6 +3597,7 @@ function auditBlock(p){
   return `<section class="section" aria-labelledby="h-aud"><h3 id="h-aud" class="h-small">ביקורת המעצב והתאמה לסגנון</h3>
     <p class="xs faint">ציון המעצב (הביקורת לעמדה, אחריה style_scores) גובר על הערכת הצוות. מוצר שנדחה לעמדה נשאר בסל המוצרים (ה.12).</p>
     ${li ? `<ul class="aud-list">${li}</ul>` : '<p class="small faint">המעצב עוד לא בדק את הכרטיס בביקורת.</p>'}
+    ${au3.length ? `<p class="small"><span class="chip chip-aud-keep">אושר כאפשרות שלישית (AU3)</span> ${esc(au3.map(a => `${slotTxt(a.slot)}, ${STYLE_HE[a.style] || a.style}`).join(' · '))}. <span class="xs faint">המשתמש אישר בציון 6.5 (2026-10-18).</span></p>` : ''}
     ${gl ? `<details class="aud-guess"><summary>הערכת הצוות בליקוט (${guesses.length} ${guesses.length === 1 ? 'עמדה' : 'עמדות'})</summary><ul class="aud-list">${gl}</ul></details>` : ''}
   </section>`;
 }
@@ -3607,7 +3619,7 @@ function renderDrawer(id, keepScroll){
   const dups = (p.dups || []).map(x => { const q = S.byId.get(x); return `<li><button type="button" class="linkish" data-product="${esc(x)}">${esc(x)}</button>${q ? ` <span class="faint xs">· ${esc(slotLabel(q))}</span>` : ''}</li>`; }).join('');
   const shared = (p.shared_in || []).map(k => { const s = S.slots.get(k); const r = s && S.rooms.get(s.room); return `<button type="button" class="linkish" data-goto-slot="${esc(k)}">${esc(r ? r.name_he : '')} · ${esc(s ? (s.name_he || s.id) : k)}</button>`; }).join(', ');
   const ships = (sh.ships_to || []).join(', ');
-  const known = new Set(['id','slot','name','category','rooms','placement','supplier','price','shipping','dimensions_cm','colors','materials','texture','finish','visual_weight','lighting','images','style_scores','status','notes','path','room','slot_key','pool','pid','dups','shared_in','in_rooms','standards','img','links','lead','audit','guess','schema_errors','sell_qty_default','options_n','options_axes']);
+  const known = new Set(['id','slot','name','category','rooms','placement','supplier','price','shipping','dimensions_cm','colors','materials','texture','finish','visual_weight','lighting','images','style_scores','status','notes','path','room','slot_key','pool','pid','dups','shared_in','in_rooms','standards','img','links','lead','audit','guess','au3','schema_errors','sell_qty_default','options_n','options_axes']);
   const extraFields = Object.keys(p).filter(k => !known.has(k)).map(k => row(k, `<code>${esc(JSON.stringify(p[k]))}</code>`)).join('');
   const links = [sup.product_url ? linkItem(`עמוד המוצר אצל ${sup.name || 'הספק'}`, sup.product_url) : ''].concat((e.links || []).map(l => linkItem(l.label, l.url))).join('');
   const hist = (e.history || []).slice().reverse().slice(0, 12).map(h => `<li><span class="xs faint">${esc(fmtDate(h.at))} ${esc(whoLabel(h.by))}</span><br>${(h.changes || []).map(c => `${esc(EDIT_LABEL[c.field] || c.field)}: ${esc(showVal(c.field, c.from))} ← ${esc(showVal(c.field, c.to))}`).join('<br>')}</li>`).join('');
@@ -3615,7 +3627,7 @@ function renderDrawer(id, keepScroll){
     <div class="d-hero">
       <div class="pic">${picHtml(p.img, {alt: e.name || p.id})}</div>
       <div class="side">
-        <div class="chiprow"><span class="chip st-${esc(e.status)}">${esc(P_STATUS[e.status] || e.status)}</span>${auditChip(e, e.slot_key)}${(p.dups || []).length ? '<span class="chip chip-dup">כרטיס כפול</span>' : ''}${e.pending ? '<span class="chip chip-pending">ממתין לסנכרון</span>' : syncedChip(e)}</div>
+        <div class="chiprow"><span class="chip st-${esc(e.status)}">${esc(P_STATUS[e.status] || e.status)}</span>${auditChip(e, e.slot_key)}${au3Chip(e, e.slot_key)}${(p.dups || []).length ? '<span class="chip chip-dup">כרטיס כפול</span>' : ''}${e.pending ? '<span class="chip chip-pending">ממתין לסנכרון</span>' : syncedChip(e)}</div>
         <p><span class="num price-big" dir="ltr">${esc(fmtUSD(pr.cost))}</span> <span class="muted small">עלות אצל הספק ליחידה</span></p>
         ${isNum(e.retail) && e.retail > 0 ? `<p class="pprice-line"><span class="num price-big" dir="ltr">${esc(fmtILS(e.retail))}</span> <span class="muted small">מחיר לצרכן</span> ${initialChip(e)}</p>` : ''}
         <p class="qty-line">${qtyHtml(e)}</p>
