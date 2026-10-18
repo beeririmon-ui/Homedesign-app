@@ -1,0 +1,170 @@
+{
+ "source": "aliexpress",
+ "id": "1005012452618840",
+ "sections": {
+  "product": {
+   "fetched_at": "2026-10-18T07:11:38+00:00",
+   "endpoint": "aliexpress.ds.product.get",
+   "params": {
+    "ship_to_country": "IL",
+    "product_id": "1005012452618840",
+    "target_currency": "USD",
+    "target_language": "en"
+   },
+   "payload": {
+    "result": {
+     "ae_item_sku_info_dtos": [
+      {
+       "sku_attr": "14:175;166:100010517",
+       "offer_sale_price": "26.09",
+       "sku_id": "12000058398567623",
+       "price_include_tax": false,
+       "currency_code": "USD",
+       "sku_price": "52.18",
+       "offer_bulk_sale_price": "26.09",
+       "sku_available_stock": 3,
+       "id": "14:175;166:100010517",
+       "ae_sku_property_dtos": [
+        {
+         "sku_property_value": "green",
+         "sku_image": "https://ae01.alicdn.com/kf/S25d6a64190fc4482b638234d36c3a2d8T.jpg",
+         "sku_property_name": "Color",
+         "property_value_id": 175,
+         "sku_property_id": 14
+        },
+        {
+         "sku_property_value": "8 inch",
+         "sku_property_name": "Diameter",
+         "property_value_id": 100010517,
+         "sku_property_id": 166
+        }
+       ]
+      }
+     ],
+     "ae_multimedia_info_dto": {
+      "image_urls": "https://ae01.alicdn.com/kf/S54973c3856f34ff99298ae0a33760f7dz.jpg;https://ae01.alicdn.com/kf/S25d6a64190fc4482b638234d36c3a2d8T.jpg;https://ae01.alicdn.com/kf/Sf3bb37c72f544638892900a1dac6aed2c.jpg;https://ae01.alicdn.com/kf/S3eb1c7145bb44dfb9e8213ed58c11d07T.jpg;https://ae01.alicdn.com/kf/Sad28b52abcbc4d0bbc1f20b3f2078d42P.jpg;https://ae01.alicdn.com/kf/Sb7521fd4c5f5428294e36eb51d674190f.jpg"
+     },
+     "package_info_dto": {
+      "package_width": 25,
+      "package_height": 11,
+      "package_length": 25,
+      "gross_weight": "0.798",
+      "package_type": false,
+      "product_unit": 100000015
+     },
+     "logistics_info_dto": {
+      "delivery_time": 7,
+      "ship_to_country": "IL"
+     },
+     "product_id_converter_result": {
+      "main_product_id": 1005012452618840,
+      "sub_product_id": "{\"US\":3256812266304088}"
+     },
+     "ae_item_base_info_dto": {
+      "mobile_detail": "<removed; use --full>",
+      "subject": "Vintage Kiln Transmutation Ceramic Bowl Retro Salad Pasta Bowl Large Capacity Porcelain Soup Bowls Aesthetic Tableware Gift",
+      "evaluation_count": "0",
+      "sales_count": "7",
+      "product_status_type": "onSelling",
+      "avg_evaluation_rating": "0.0",
+      "separated_listing": false,
+      "currency_code": "CNY",
+      "sl_product": false,
+      "category_id": 100003308,
+      "product_id": 1005012452618840,
+      "detail": "<removed; use --full>"
+     },
+     "has_whole_sale": false,
+     "ae_item_properties": [
+      {
+       "attr_name_id": 2,
+       "attr_value_id": 201512802,
+       "attr_name": "Brand Name",
+       "attr_value": "NONE"
+      },
+      {
+       "attr_name_id": 400000603,
+       "attr_value_id": 23399591357,
+       "attr_name": "High-concerned chemical",
+       "attr_value": "none"
+      },
+      {
+       "attr_name_id": 219,
+       "attr_value_id": 9441741844,
+       "attr_name": "Origin",
+       "attr_value": "Mainland China"
+      },
+      {
+       "attr_name_id": 10,
+       "attr_value_id": 365609,
+       "attr_name": "Material",
+       "attr_value": "Porcelain"
+      },
+      {
+       "attr_name_id": 100004843,
+       "attr_value_id": 100007563,
+       "attr_name": "Dinnerware Type",
+       "attr_value": "Bowls"
+      },
+      {
+       "attr_name_id": -1,
+       "attr_name": "Choice",
+       "attr_value": "yes"
+      }
+     ],
+     "ae_store_info": {
+      "store_id": 1105555113,
+      "shipping_speed_rating": "4.5",
+      "communication_rating": "4.6",
+      "store_name": "OMNI-ONE Store",
+      "store_country_code": "CN",
+      "item_as_described_rating": "4.5"
+     }
+    },
+    "rsp_code": 200,
+    "rsp_msg": "Call succeeds",
+    "request_id": "2101521417923074985313693",
+    "_trace_id_": "21013cc017923074985294587e0f9f"
+   }
+  },
+  "freight:12000058398567623:IL:1": {
+   "fetched_at": "2026-10-18T07:11:41+00:00",
+   "endpoint": "aliexpress.ds.freight.query",
+   "params": {
+    "quantity": 1,
+    "shipToCountry": "IL",
+    "productId": "1005012452618840",
+    "selectedSkuId": "12000058398567623",
+    "language": "en_US",
+    "locale": "en_US",
+    "currency": "USD"
+   },
+   "payload": {
+    "options": [
+     {
+      "code": "CAINIAO_FULFILLMENT_STD",
+      "company": "AliExpress Selection Standard",
+      "fee": 1.99,
+      "currency": "USD",
+      "days_min": 6,
+      "days_max": 13,
+      "estimated": "Oct 24 - 31",
+      "tracking": true,
+      "free_shipping": false,
+      "ship_from": "CN",
+      "stock": "3",
+      "guaranteed_days": "60"
+     }
+    ],
+    "success": true,
+    "code": 200,
+    "msg": "Call succeeds",
+    "item_id": "1005012452618840",
+    "sku_id": "12000058398567623",
+    "country": "IL",
+    "qty": 1,
+    "raw": null
+   }
+  }
+ }
+}
