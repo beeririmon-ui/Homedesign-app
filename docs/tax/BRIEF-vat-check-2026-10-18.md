@@ -51,7 +51,7 @@ The owner (2026-10-18): "תוכלי לעשות בדיקת רואה חשבון ל
 - No contact with anyone. No forms. No ruling requests.
 
 ## Output
-- `docs/ops/vat-import-check-2026-10-18.md`, in Hebrew:
+- `docs/tax/vat-import-check-2026-10-18.md`, in Hebrew:
   - a disclaimer line;
   - a bottom line of at most 8 points;
   - for each question: the short answer, the legal basis with sources, the confidence (high, medium or low), and what a CPA must confirm;
