@@ -68,3 +68,51 @@ Thanks, then the list of their rugs: a link to each, the size, and the room and 
   - Dar Marrakech: one-off pieces, and the site's photos are AI-generated.
 - **One-off pieces** (Tomik, Art Java, פנטזיה מרוקאית, הבית המרוקאי): only if the designer picked one of their rugs, and then the email asks whether a similar rug can be made again.
 - **Already contacted:** הנסיכה אונליין (a reminder is drafted in Gmail) and NOOL (a form).
+
+## Status after the designer's picks (2026-10-19)
+The master-designer picked 19 rugs from 8 suppliers (`data/leads/final-2026-10-13/rugs-il-picks-2026-10-19.json` and `.md`). The image sheet was shown to the owner. **The final round 1 is set by the picks**; the 8 other addresses in the table above get no email this round.
+
+| Supplier | Channel | Picks | State |
+| --- | --- | --- | --- |
+| השטיח האדום / HōM | b2b@carpetshop.co.il | P07, P13, P14, P19 | Gmail draft, chain wording. Waiting for the owner's approval |
+| BuyCarpet | info@buycarpet.co.il | P09, P10 | Gmail draft, chain wording. Waiting for approval |
+| עפריתה | myafrita@gmail.com | P03, P04 | Gmail draft. Waiting for approval, and for the owner's decision on a premium anchor (ה.14) |
+| בית שטיחי רות | ddiem26@gmail.com | P11, P12 | Gmail draft. Waiting for approval |
+| נורטלי | nortlishop@gmail.com | P15, P16 | Gmail draft. Waiting for approval |
+| טולמנ'ס | Form: https://www.tollmansdot.co.il/contact-us/ | P01, P02, P05, P06, P17 | The owner sends the text below in the form |
+| ג'וזפון | Form: https://www.josephon-carpets.co.il/pages/contact | P08 | The owner sends the text below in the form. P08 counts only if they confirm 80% or more natural fibre |
+| דאר מרקש | darismyhome@gmail.com | P18, the only kitchen runner | Waiting for the owner's decision: the designer recommends bringing it back (the Medina photo looks real) |
+
+### The form texts (the owner adds his phone)
+
+**טולמנ'ס**
+
+> שלום לצוות טולמנ'ס,
+>
+> אני בארי רימון. אנחנו בונים חוויית קנייה ריאליסטית וחדשנית לעיצוב הבית.
+>
+> בחוויה שלנו השטיח הוא לא עוד מוצר על המדף. הוא מה שמחזיק את כל החדר, ולכן אנחנו מחפשים לו שותפים ישראלים, אורגים, יוצרים וספקים שיצטרפו אלינו מההתחלה.
+>
+> אהבנו את שטיחי LINIE DESIGN שאתם מביאים, ובמיוחד את ASKO באוף-וויט ואת NYOKO הלבן, ואת שטיח הכותנה הרחיץ LINES L של Lorena Canals.
+>
+> נשמח לדעת אם תהיו פתוחים לשיתוף פעולה: להציג שטיחים שלכם ולמכור אותם דרך האתר, במודל שנוח לכם. אם זה מעניין אתכם, יש לנו רשימה קצרה של שטיחים מהקטלוג שלכם שהיינו רוצים להציג. נשמח לשלוח אותה ולתאם שיחה קצרה, ובה נספר יותר.
+>
+> תודה,
+> בארי רימון
+> [טלפון]
+
+**ג'וזפון**
+
+> שלום לצוות ג'וזפון,
+>
+> אני בארי רימון. אנחנו בונים חוויית קנייה ריאליסטית וחדשנית לעיצוב הבית.
+>
+> בחוויה שלנו השטיח הוא לא עוד מוצר על המדף. הוא מה שמחזיק את כל החדר, ולכן אנחנו מחפשים לו שותפים ישראלים, אורגים, יוצרים וספקים שיצטרפו אלינו מההתחלה.
+>
+> אהבנו את Woven 4 בגוון אבן, ואת האפשרות להזמין אותו אצלכם במידה ובגוון אחרים.
+>
+> נשמח לדעת אם תהיו פתוחים לשיתוף פעולה: להציג שטיחים שלכם ולמכור אותם דרך האתר, במודל שנוח לכם. אם זה מעניין אתכם, יש לנו רשימה קצרה של שטיחים מהקטלוג שלכם שהיינו רוצים להציג. נשמח לשלוח אותה ולתאם שיחה קצרה, ובה נספר יותר.
+>
+> תודה,
+> בארי רימון
+> [טלפון]

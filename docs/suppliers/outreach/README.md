@@ -118,3 +118,17 @@
 Details: lighting-il-round2.md.
 - 3 email drafts (Karma, JAVA, Orban) are waiting for the owner's approval.
 - 3 suppliers (Simple Design, Ad Designs, Oli) are reached through a contact form, which the owner fills in.
+
+## Israeli rugs, round 1: opening email (2026-10-19)
+The text, in the lighting style, is in `rugs-il-round1-2026-10-19.md`. The rugs are the master-designer's 19 picks (`data/leads/final-2026-10-13/rugs-il-picks-2026-10-19.json`).
+| Supplier | Address | State |
+| --- | --- | --- |
+| השטיח האדום / HōM | b2b@carpetshop.co.il | Gmail draft, 2026-10-19. Waiting for the owner's approval |
+| BuyCarpet | info@buycarpet.co.il | Gmail draft, 2026-10-19. Waiting for approval |
+| עפריתה | myafrita@gmail.com | Gmail draft, 2026-10-19. Waiting for approval |
+| בית שטיחי רות | ddiem26@gmail.com | Gmail draft, 2026-10-19. Waiting for approval |
+| נורטלי | nortlishop@gmail.com | Gmail draft, 2026-10-19. Waiting for approval |
+| טולמנ'ס, ג'וזפון | Website forms | The text is ready; the owner sends it |
+| דאר מרקש | darismyhome@gmail.com | Waiting for the owner's decision |
+| הנסיכה אונליין (reminder) | nesicha1online@gmail.com | A reminder draft in the original thread, 2026-10-19. Waiting for approval |
+
