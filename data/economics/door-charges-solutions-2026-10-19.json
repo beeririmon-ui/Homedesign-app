@@ -1,0 +1,1394 @@
+{
+  "version": 1,
+  "date": "2026-10-19",
+  "what": "Legal ways to avoid the import VAT and fees the customer pays at the door on parcels above $75, and the double VAT; ranked, with costs per parcel, legal basis and confidence. Research, not professional advice.",
+  "doc": "docs/tax/door-charges-solutions-2026-10-19.md",
+  "brief": "docs/tax/BRIEF-door-charges-solutions-2026-10-19.md",
+  "builds_on": [
+    "docs/tax/vat-import-check-2026-10-18.md",
+    "data/economics/vat-import-check-2026-10-18.json",
+    "docs/suppliers/china-hub-r2-lines-2026-10-18.md",
+    "data/economics/fulfillment-research.md"
+  ],
+  "decision": "VAT1",
+  "disclaimer_he": "זה מחקר, לא ייעוץ מקצועי: לא חוות דעת של רואה חשבון, עורך דין או עמיל מכס. אין לשנות לפיו מחיר, תקנון, הצהרה או ספק לפני אישור בכתב של איש מקצוע.",
+  "method": "public pages only, human pace; no contact, no forms, no quote requests, no ruling requests; stopped at every 403/redirect/geo-block/429; laws read on he.wikisource.org (consolidated, unofficial text) on 2026-10-19",
+  "marks": {
+    "מקור רשמי": "law, regulation, order; Tax Authority / Ministry of Economy / Israel Post publication; a courier's official page about its own service",
+    "דעה מקצועית": "CPA or lawyer blog, think-tank paper",
+    "לא אומת": "not read directly (blocked or search result only), or non-official (news, forwarder marketing)",
+    "ישן": "before 2024",
+    "הערכה": "own calculation or analysis"
+  },
+  "example": {
+    "retail_ils": 299,
+    "usd_ils": 3.3,
+    "usd_ils_source": "data/economics/settings.json (unverified)",
+    "cny_ils": 0.49,
+    "cny_ils_source": "as used in docs/suppliers/china-hub-r2-lines-2026-10-18.md",
+    "declared_value": "B: what the customer paid (conservative assumption from the 2026-10-18 check)",
+    "import_vat_ils": 53.82,
+    "israel_post_fees_ils": 105.02,
+    "door_total_ils": 158.84,
+    "our_output_vat_today_ils": 45.61
+  },
+  "bottom_line_he": [
+    "אין בישראל הסדר כמו IOSS: אין סעיף בחוק מע\"מ לגבייה בידי ספק זר או פלטפורמה; פורום קהלת הציע הסדר כזה ב-12.2025. AliExpress עובדת ב-DDP: גובה בקופה, והמוביל משלם בשם הלקוח שנשאר היבואן. אותו מסלול פתוח לנו דרך שליח 'השולח משלם' או תשלום מקוון בדואר ישראל. זה מבטל את התשלום בדלת, לא את הכפל.",
+    "ממצא חדש: סעיף 11א לחוק מע\"מ. במכירה לפני הפדייה, כשהצהרת היבוא על שם הקונה, מחיר העסקה שלנו הוא התמורה פחות ערך המכס. מטרתו 'למנוע כפל מס' (החלטת מיסוי 1716/18). אם חל על דרופשיפינג: מעל $75 כמעט אין מע\"מ על המכירה שלנו, ועד $75 רק על המרווח. ביטחון נמוך–בינוני; השאלה הראשונה לרו\"ח.",
+    "הדירוג: (1) מלאי מקומי לרבי-מכר; (2) מחיר אמיתי מתחת ל-$75; (3) גבייה בקופה והמוביל משלם בשם הלקוח; (4) סעיף 11א; (5) אנחנו היבואן של כל חבילה. השילוב של 3 ו-4 נותן תוצאה כמו של AliExpress: בלי תשלום בדלת, עם מע\"מ אחד, בכפוף לרו\"ח.",
+    "עמיל שמשחרר על שמנו: חוקי, ₪89–212 נטו לחבילה ועוד ₪20.5 אגרת מחשב. בלי פטור $75, וכל חבילה צריכה הצהרה מסחרית משלה. במנורה שחייבת אישור תקן: ₪658 בדואר ישראל. לא נמצא עמיל ייעודי בשם.",
+    "המוכר משלם בשם הלקוח, במוצר ₪299: דואר ישראל ₪158.84, ‏DHL ‏₪177.62 לפני ההובלה, ‏UPS ‏₪184.34. ב-34 המוצרים: ספיגה בלבד, 2 ברווח; ספיגה עם 11א, 6 ברווח; 11א והלקוח משלם את המס בשורה נפרדת: 5 תקין / 19 מתחת לרצפה / 10 מפסיד.",
+    "חבילות נפרדות: מאותו ספק לאותו יבואן בתוך 72 שעות = משלוח אחד (צו ייבוא אישי ס' 3(ב)(2); דואר ישראל מחיל על המס). לגיטימי רק כשספקים שונים באמת שולחים פריטים שונים. לא עוזר לפריט בודד מעל $75. ייתכן איחוד לפי תעודת זהות (לא אומת).",
+    "מודל סוכן: מע\"מ רק על העמלה, אם המסמכים בשם הספק (ס' 17(א)). הלקוח עדיין משלם בדלת. בגרסת 'סוכן קנייה' העמלה לא נכללת בערך המכס (ס' 133(א)(1)(א)), ו-31 מתוך 34 יורדים מתחת ל-$75, אבל זה התאום החוקי של הצהרת חסר. ביטחון נמוך.",
+    "אסור: הצהרה על עלות הספק כשאנחנו המוכר; קווי 包税 שמחירם נמוך מההובלה ועוד 18% מהערך; פיצול או תזמון מכוון; 'מתנה'; תעודות זהות של אחרים; עמיל 'שלא חושף'. עד שרו\"ח ועמיל עונים על שאלות 9–15: לא משנים דבר."
+  ],
+  "solutions": [
+    {
+      "rank": 1,
+      "id": "local-stock-bestsellers",
+      "name_he": "מלאי מקומי לרבי-מכר",
+      "brief_area": 7,
+      "how_it_works_he": "יבוא מסחרי מרוכז על שם העסק (DAP ועמיל מכס על שמנו), ניכוי מע\"מ היבוא כמס תשומות, ומחסן הפצה בישראל. רשמון אחד לכל משלוח, לא לכל חבילה.",
+      "legal_basis": [
+        {
+          "text_he": "חוק מע\"מ ס' 38(א): ניכוי כשהצהרת היבוא נושאת את שם העוסק כבעל הטובין",
+          "sources": [
+            "vat-law"
+          ]
+        },
+        {
+          "text_he": "פקודת המכס ס' 62(א): בעל הטובין מגיש הצהרת יבוא",
+          "sources": [
+            "customs-ordinance"
+          ]
+        }
+      ],
+      "cost_per_parcel": {
+        "text_he": "אין עלות מכס לחבילה. במנורה החיסכון ליחידה הוא $8.69–13.11 לעומת CJ. נקודת איזון: כ-60–150 יחידות בחודש בסל מעורב, 25–55 מנורות (fulfillment-research.md §4). עלות התקינה לא כלולה.",
+        "example_ils": null
+      },
+      "customer_pays_at_door": false,
+      "removes_double_vat": "yes",
+      "providers": [
+        "אי-מחסן",
+        "HFD",
+        "HSP",
+        "dpack",
+        "OneStop",
+        "גינדי (LCL)",
+        "Spider",
+        "Sino Shipping"
+      ],
+      "confidence": "high",
+      "confidence_notes_he": "החוק: גבוה. העלויות: בינוני, כמו במחקר המקורי.",
+      "cautions_he": [
+        "משלח DDP שמשחרר על שם גורם אחר לא מאפשר ניכוי. DDPCHAIN: 'without holding an importer code or licence yourself' (לא אומת).",
+        "תקינה מסחרית: ת\"י 20 לתאורה, ת\"י 1003 לקרמיקה, ת\"י 562 לצעצועים."
+      ],
+      "must_confirm_he": "עמיל מכס: מסלול אישור התקן למנורות ביבוא מסחרי אחרי הרפורמה האירופית, והצעות מחיר (לפי fulfillment-research.md §5).",
+      "link": "data/economics/fulfillment-research.md"
+    },
+    {
+      "rank": 2,
+      "id": "true-price-under-75",
+      "name_he": "מחיר אמיתי שמתחת ל-$75",
+      "brief_area": null,
+      "how_it_works_he": "המחיר שהלקוח משלם, והערך המוצהר, נשארים עד הסף. אין מס ואין עמלה.",
+      "legal_basis": [
+        {
+          "text_he": "פרט 614 לצו תעריף המכס: 'שימוש עצמי', ומחיר עסקה עד $75 (לפי מקורות משניים; לא נקרא)",
+          "sources": [
+            "chamber-614-search"
+          ]
+        }
+      ],
+      "cost_per_parcel": {
+        "text_he": "₪0. התקרה: ₪247.5 (ב-₪3.3) או ₪225 (ב-₪3.0) בערך ב'; ₪292 או ₪265.5 בערך ג'.",
+        "example_ils": 0
+      },
+      "customer_pays_at_door": false,
+      "removes_double_vat": "not_applicable_no_import_vat",
+      "providers": [],
+      "confidence": "high",
+      "confidence_notes_he": "הסף: גבוה. הנוסח המדויק של הפרט לא נקרא.",
+      "must_confirm_he": "שאלה 1 בבדיקה הקודמת: איזה ערך מצהירים (ב' או ג').",
+      "link": "docs/tax/vat-import-check-2026-10-18.md §3"
+    },
+    {
+      "rank": 3,
+      "id": "checkout-collection-carrier-pays",
+      "name_he": "גבייה בקופה, והמוביל משלם בשם הלקוח (DDP / DTP)",
+      "brief_area": [
+        1,
+        2,
+        4
+      ],
+      "how_it_works_he": "גובים בקופה, בשורה נפרדת, את מע\"מ היבוא ואת העמלות. השליח משחרר ביבוא אישי על שם הלקוח, משלם למכס ומחייב אותנו. או: משלמים באתר של דואר ישראל, לפי מספר הפריט, אחרי שהחבילה הגיעה. זה מה ש-AliExpress עושה.",
+      "importer_of_record": "the customer (personal import declaration in the customer's name)",
+      "legal_basis": [
+        {
+          "text_he": "פקודת המכס ס' 62(ב): המנהל רשאי לקבוע מתי מי שאינו בעל הטובין מגיש הצהרה בעבורו ביבוא לשימוש עצמי",
+          "sources": [
+            "customs-ordinance"
+          ]
+        },
+        {
+          "text_he": "אוגדן מכס פרק 1 (14.03.2024): סוגי ההצהרה 'יבוא אישי-בלדרים', 'יבוא אישי-דואר חבילות', 'יבוא אישי-אינטרנט'",
+          "sources": [
+            "noal-1-release"
+          ]
+        },
+        {
+          "text_he": "DHL ישראל: 'השולח בוחר מראש לשלם את כל החיובים (והמכסים והמסים)'",
+          "sources": [
+            "dhl-il-faq"
+          ]
+        },
+        {
+          "text_he": "UPS: 'UPS may prepay duties, taxes and other government charges on behalf of the payer'",
+          "sources": [
+            "ups-il-charges"
+          ]
+        },
+        {
+          "text_he": "דואר ישראל: תשלום באתר רק אחרי שהפריט הגיע, ורק מס עד ₪300",
+          "sources": [
+            "post-pay-customs"
+          ]
+        },
+        {
+          "text_he": "חוק מע\"מ ס' 7(1): מס 'שהוטל בדין על הקונה' לא נכלל במחיר העסקה (בסיס אפשרי לרישום כתשלום בשם הלקוח; הערכה)",
+          "sources": [
+            "vat-law"
+          ]
+        }
+      ],
+      "cost_per_parcel": {
+        "text_he": "דואר ישראל: 18% מהערך + ₪105.02. DHL ‏(DTP): ‏18% + ₪83.8 + ₪40, לפני ההובלה. UPS: ‏18% + $17.55 + 3% (מינימום $22).",
+        "example_ils": {
+          "israel_post": 158.84,
+          "dhl_dtp_before_freight": 177.62,
+          "ups": 184.34
+        }
+      },
+      "customer_pays_at_door": false,
+      "removes_double_vat": "no_unless_combined_with_11a_or_s14",
+      "providers": [
+        "DHL Express Israel (Duties & Taxes Paid)",
+        "UPS (Duty and Tax Forwarding, Disbursement)",
+        "Israel Post (online customs payment)",
+        "FedEx (bill duties to sender; not verified)",
+        "Xinhan (not verified)",
+        "Quefeng (not verified)"
+      ],
+      "confidence": "high",
+      "confidence_notes_he": "החוקיות: גבוה. המחירים: בינוני. לא ברור אילו עמלות של DHL חלות כשהשולח משלם. איך רושמים את זה בספרים: נמוך.",
+      "must_confirm_he": "רו\"ח: רישום כתשלום בשם הלקוח (ס' 7(1)), ודין עמלות השחרור (ס' 7(2)). עמיל: מי מקבל תשלום מראש מהשולח לחבילת יבוא אישי, ואיך הלקוח מקבל אסמכתה.",
+      "consumer_law_he": "אם גובים את המס בקופה, הוא חלק מ'המחיר הכולל' (חוק הגנת הצרכן ס' 17ב; הבדיקה הקודמת §5)."
+    },
+    {
+      "rank": 4,
+      "id": "vat-law-11a-difference",
+      "name_he": "סעיף 11א: מע\"מ על המכירה שלנו רק על ההפרש",
+      "brief_area": [
+        6
+      ],
+      "how_it_works_he": "הלקוח נשאר היבואן, וההצהרה על שמו לפי המחיר שלנו. אנחנו מוציאים חשבונית מס על התמורה פחות ערך הטובין לעניין מס היבוא. מעל $75 זה בערך 0. עד $75 (יבוא פטור), לפי החלטה 1716/18: על המרווח.",
+      "legal_basis": [
+        {
+          "text_he": "חוק מע\"מ ס' 11א: 'מחירה של עסקה של מכירת טובין מיובאים לפני פדייתם מפיקוח רשות המכס, כשהצהרת הייבוא ערוכה על שמו של הקונה, הוא התמורה שהוסכם עליה בניכוי מחיר הטובין לענין המס על ייבואם'",
+          "sources": [
+            "vat-law"
+          ]
+        },
+        {
+          "text_he": "חוק מע\"מ ס' 11(א): מחיר טובין ביבוא = ערכם לפי פקודת המכס ס' 129–134א",
+          "sources": [
+            "vat-law"
+          ]
+        },
+        {
+          "text_he": "החלטת מיסוי 1716/18: מטרת הסעיף 'למנוע כפל מס, למקרים בהם מכירת הטובין לקונה נעשית בטרם שחרורם מן המכס'. כשהלקוח פטור ביבוא, המחיר הוא ההפרש בין התמורה לבין המחיר ששולם לספק",
+          "sources": [
+            "ruling-1716-18"
+          ]
+        }
+      ],
+      "cost_per_parcel": {
+        "text_he": "₪0 לחבילה. כ-₪41.96 יותר בתרומה של מוצר ב-₪299 (0.1403 × P).",
+        "example_ils": 0
+      },
+      "customer_pays_at_door": true,
+      "customer_pays_at_door_note": "false when combined with solution 3",
+      "removes_double_vat": "yes_if_confirmed",
+      "providers": [],
+      "confidence": "low-medium",
+      "confidence_notes_he": "הסעיף ומטרתו: גבוה. החלתו על טובין שנשלחים ישירות מחו\"ל ועדיין לא בפיקוח המכס בישראל: נמוך, אין מקור. ההחלטה קובעת 'מגבלות ותנאים נוספים' שלא פורסמו בתמצית.",
+      "conditions_he": [
+        "המכירה נעשית לפני הפדייה",
+        "הצהרת היבוא על שם הלקוח",
+        "ערך המכס = המחיר שלנו (ערך ב')",
+        "מסמך לכל חבילה שמראה את ערך המכס",
+        "הקשר לס' 14: אם המכירה מחוץ לתחולה, 11א מיותר"
+      ],
+      "must_confirm_he": "שאלה 9. ייתכן שכדאי לבקש החלטת מיסוי (לא נעשה, לפי הכללים)."
+    },
+    {
+      "rank": 5,
+      "id": "business-importer-of-record-per-parcel",
+      "name_he": "אנחנו היבואן של כל חבילה (עמיל שמשחרר על שמנו)",
+      "brief_area": [
+        3
+      ],
+      "how_it_works_he": "הספק שולח לכתובת של הלקוח, והשליח או דואר ישראל מגישים 'יבוא מסחרי-בלדרים' על שם העסק. אנחנו משלמים את מע\"מ היבוא ומקזזים. הבעלות עוברת ללקוח בישראל, ולכן המכירה שלנו חייבת ב-18%: מע\"מ אחד.",
+      "legal_basis": [
+        {
+          "text_he": "חוק מע\"מ ס' 38(א)",
+          "sources": [
+            "vat-law"
+          ]
+        },
+        {
+          "text_he": "תקנה 16א: אין ניכוי לסוכן ליבוא אישי. לכן העסק חייב להיות הבעלים, לא סוכן",
+          "sources": [
+            "vat-regs-16a"
+          ]
+        },
+        {
+          "text_he": "אוגדן מכס פרק 1: 'יבוא מסחרי-בלדרים'; הצהרה מסחרית 'אך ורק לישות משפטית רשומה... ובלבד שהיבואן רשום במע\"מ'; חתימה של סוכן מכס",
+          "sources": [
+            "noal-1-release"
+          ]
+        },
+        {
+          "text_he": "פקודת המכס ס' 62(א): הצהרה לכל משלוח, כלומר לכל חבילה",
+          "sources": [
+            "customs-ordinance"
+          ]
+        },
+        {
+          "text_he": "פקודת המכס ס' 129 ופרט 614: פטור $75 רק ל'שימוש עצמי'",
+          "sources": [
+            "customs-ordinance",
+            "chamber-614-search"
+          ]
+        },
+        {
+          "text_he": "תקנות המכס, תקנה 11א: אגרת מחשב ₪41.5, ומחצית (₪20.5) עד FOB של $1,000; אגרת ביטחון ₪48.5 מעל $500",
+          "sources": [
+            "customs-regs"
+          ]
+        }
+      ],
+      "cost_per_parcel": {
+        "text_he": "דואר ישראל ₪105.02 (כ-₪89 נטו). דואר ישראל, טובין שחייבים 'אישור חוקיות יבוא': ₪658.44 (כ-₪558 נטו). DSV ‏'יבוא מסחרי': ₪250. עמיל כללי: ₪250–450 + מע\"מ. ועוד אגרת מחשב ₪20.5. מע\"מ היבוא מהדולר הראשון, מקוזז (תזרים).",
+        "example_ils": {
+          "israel_post_net": 89.0,
+          "israel_post_needs_approval_net": 558.0,
+          "dsv_commercial": 250,
+          "gov_computer_fee": 20.5
+        }
+      },
+      "customer_pays_at_door": false,
+      "removes_double_vat": "yes",
+      "per_parcel_customs_entry": true,
+      "commercial_standards_apply": true,
+      "providers": [
+        "Israel Post customs brokerage",
+        "DHL Express / UPS / FedEx (licensed customs agents)",
+        "DSV Israel",
+        "Gindi (customs broker)"
+      ],
+      "providers_note_he": "לא נמצא עמיל 'דיגיטלי' שמפרסם שחרור של חבילות B2C בשם העסק.",
+      "consolidation_option_he": "UPS World Ease: כמה משלוחים ל'master shipment' עם יבואן אחד. חוזי; לא אומת לסין→ישראל.",
+      "survivors_of_34": 9,
+      "confidence": "medium",
+      "confidence_notes_he": "המסגרת המשפטית: בינוני–גבוה. העלות לחבילה ומסלול התקינה לכל חבילה: נמוך.",
+      "must_confirm_he": "שאלה 11. בנוסף: הפתרון סותר את פתרון 6 (תנאי מסירה בחו\"ל)."
+    },
+    {
+      "rank": 6,
+      "id": "delivery-abroad-terms",
+      "name_he": "תנאי מסירה בחו\"ל (ס' 14)",
+      "brief_area": [
+        6
+      ],
+      "how_it_works_he": "בתקנון: המסירה, הבעלות והסיכון עוברים כשהחבילה נמסרת למוביל בסין. אז המכירה לא 'בישראל', ונשאר רק מע\"מ היבוא של הלקוח.",
+      "legal_basis": [
+        {
+          "text_he": "חוק מע\"מ ס' 14 (בבדיקה הקודמת)",
+          "sources": [
+            "vat-law"
+          ]
+        },
+        {
+          "text_he": "חוק המכר ס' 8(ג) ו-33 (בבדיקה הקודמת)",
+          "sources": [
+            "sale-law"
+          ]
+        },
+        {
+          "text_he": "חדש: חוק מע\"מ ס' 22(א): 'במכר טובין חל החיוב במס עם מסירתם לקונה... \"מסירה\" כמשמעותה בסעיף 8 לחוק המכר'",
+          "sources": [
+            "vat-law"
+          ]
+        }
+      ],
+      "cost_per_parcel": {
+        "text_he": "₪0",
+        "example_ils": 0
+      },
+      "customer_pays_at_door": true,
+      "customer_pays_at_door_note": "false when combined with solution 3",
+      "removes_double_vat": "yes_if_confirmed",
+      "providers": [],
+      "confidence": "low",
+      "confidence_notes_he": "אין החלטת מיסוי, חוזר או פסק דין. רואי החשבון חלוקים (הבדיקה הקודמת §2).",
+      "must_confirm_he": "שאלה 2 בבדיקה הקודמת."
+    },
+    {
+      "rank": 7,
+      "id": "exempt-dealer",
+      "name_he": "עוסק פטור",
+      "brief_area": null,
+      "how_it_works_he": "אין מע\"מ על המכירה, ולכן אין כפל. החיוב בדלת נשאר.",
+      "legal_basis": [
+        {
+          "text_he": "חוק מע\"מ ס' 1 ('עוסק פטור'), ס' 31(3): תקרה של ₪122,833 ב-2026",
+          "sources": [
+            "vat-law"
+          ]
+        }
+      ],
+      "cost_per_parcel": {
+        "text_he": "₪0. ‏+0.1403 × P לתרומה.",
+        "example_ils": 0
+      },
+      "customer_pays_at_door": true,
+      "removes_double_vat": "yes",
+      "providers": [],
+      "confidence": "high",
+      "confidence_notes_he": "התקרה: גבוה. פרטים בבדיקה הקודמת §4.",
+      "must_confirm_he": "שאלה 7 בבדיקה הקודמת."
+    },
+    {
+      "rank": 8,
+      "id": "supplier-agent-marketplace",
+      "name_he": "מודל סוכן של הספק (שוק)",
+      "brief_area": [
+        6
+      ],
+      "how_it_works_he": "הספק הוא המוכר, והחשבונית ללקוח בשמו. אנחנו מקבלים עמלה מהספק. המחזור שלנו הוא רק העמלה.",
+      "legal_basis": [
+        {
+          "text_he": "חוק מע\"מ ס' 17(א): השולח הוא המוכר והשלוח נותן שירות, 'אם עובדת השליחות ושמו של העוסק כשולח צויינו על המסמכים'. אחרת: 'כנמכר... פעמיים'",
+          "sources": [
+            "vat-law"
+          ]
+        },
+        {
+          "text_he": "ס' 30(א)(5): שיעור אפס לשירות לתושב חוץ, אבל לא כשהשירות ניתן בפועל 'גם לתושב ישראל בישראל'",
+          "sources": [
+            "vat-law"
+          ]
+        },
+        {
+          "text_he": "עו\"ד אלי דורון (2019): תיווך לתושב חוץ ב-0%, 'כל מקרה לגופו'",
+          "sources": [
+            "doron-2019"
+          ]
+        }
+      ],
+      "cost_per_parcel": {
+        "text_he": "₪0 ישיר. דורש מבנה חוזי וחשבונות ספק.",
+        "example_ils": 0
+      },
+      "customer_pays_at_door": true,
+      "removes_double_vat": "yes",
+      "vat_on_commission": "0% or 18% (CPA)",
+      "providers": [],
+      "risks_he": [
+        "סיווג מחדש לפי ס' 17(ב) או ס' 138",
+        "אחריות כלפי הצרכן לא נבדקה",
+        "סותר מותג ממותג",
+        "ערך המכס כולל את העמלה, ולכן החיוב בדלת לא משתנה"
+      ],
+      "confidence": "low",
+      "must_confirm_he": "שאלה 13."
+    },
+    {
+      "rank": 9,
+      "id": "customer-buying-agent",
+      "name_he": "סוכן קנייה של הלקוח",
+      "brief_area": [
+        6
+      ],
+      "how_it_works_he": "הלקוח קונה מהספק במחיר הספק, ומשלם לנו בנפרד דמי שירות על הייצוג בקנייה. ערך המכס הוא מחיר הספק וההובלה, בלי העמלה.",
+      "legal_basis": [
+        {
+          "text_he": "פקודת המכס ס' 133(א)(1)(א): מוסיפים לערך 'עמלות ודמי תיווך למעט עמלות קניה'. 'עמלות קניה' הן תשלומים שהיבואן משלם לסוכנו על ייצוג בקנייה בחו\"ל",
+          "sources": [
+            "customs-ordinance"
+          ]
+        },
+        {
+          "text_he": "תקנה 16א מכירה ב'סוכן ליבוא אישי'",
+          "sources": [
+            "vat-regs-16a"
+          ]
+        },
+        {
+          "text_he": "חוק מע\"מ ס' 15(א)(2): שירות לתושב ישראל ניתן בישראל, ולכן 18% על העמלה",
+          "sources": [
+            "vat-law"
+          ]
+        }
+      ],
+      "cost_per_parcel": {
+        "text_he": "₪0 ישיר.",
+        "example_ils": 0
+      },
+      "customer_pays_at_door": "no_for_31_of_34",
+      "removes_double_vat": "yes",
+      "providers": [],
+      "risks_he": [
+        "התאום החוקי של הצהרת חסר: אם בפועל אנחנו המוכר, זו עבירה (פקודת המכס ס' 212(א)(4); חוק מע\"מ ס' 17(ב), 138)",
+        "דורש להציג ללקוח את מחיר הספק ואת העמלה בנפרד",
+        "לא מתאים לחנות ממותגת"
+      ],
+      "confidence": "low",
+      "must_confirm_he": "שאלה 13."
+    },
+    {
+      "rank": 10,
+      "id": "genuinely-separate-parcels",
+      "name_he": "חבילות נפרדות, רק כשהן באמת נפרדות",
+      "brief_area": [
+        5
+      ],
+      "how_it_works_he": "ספקים שונים שולחים פריטים שונים, כל אחד כשהוא מוכן. הערך של כל חבילה הוא החלק האמיתי שלה.",
+      "legal_basis": [
+        {
+          "text_he": "צו ייבוא אישי ס' 3(ב)(2): 'משלוחים שיישלחו מאותו ספק לאותו יבואן בהפרש של עד 72 שעות ביניהם, ייחשבו כמשלוח אחד'",
+          "sources": [
+            "personal-import-order"
+          ]
+        },
+        {
+          "text_he": "דואר ישראל: 'מאותו ספק לאותו לקוח... ייחשבו כמשלוח אחד', ומסי היבוא לפי הערך הכולל. 'לא ניתן לפצל חבילות'",
+          "sources": [
+            "post-receiving",
+            "post-import-tax"
+          ]
+        },
+        {
+          "text_he": "bizportal 06.01.2026: איחוד אוטומטי לפי תעודת זהות (לא אומת)",
+          "sources": [
+            "bizportal-2026-01"
+          ]
+        }
+      ],
+      "cost_per_parcel": {
+        "text_he": "דמי חבילה נוספים: כ-₪8 ב-ePacket (¥17), כ-₪12 ב-CJ Eub ($3.72), ועוד המשקל.",
+        "example_ils": 8.3
+      },
+      "customer_pays_at_door": "only_if_each_parcel_le_75",
+      "removes_double_vat": "not_applicable",
+      "providers": [],
+      "confidence": "medium",
+      "confidence_notes_he": "הכלל לאותו ספק: גבוה. ספקים שונים ואיחוד לפי תעודת זהות: נמוך. הנוסח של פרט 614 לא נקרא.",
+      "must_confirm_he": "שאלה 14."
+    }
+  ],
+  "recommended_combinations_he": [
+    "3 + 4: גבייה בקופה, תשלום דרך המוביל על שם הלקוח לפי הערך האמיתי, וחשבונית מס רק על ההפרש. התוצאה: בלי תשלום בדלת, ומע\"מ אחד. בכפוף לאישור רו\"ח.",
+    "3 + 6: אותה תוצאה בדרך אחרת (המכירה מחוץ לתחולה).",
+    "5 ו-6 סותרים זה את זה: בפתרון 5 הבעלות עוברת בישראל, ובפתרון 6 בסין."
+  ],
+  "areas": [
+    {
+      "area": 1,
+      "topic": "IOSS-like advance collection",
+      "answer_he": "אין הסדר רשמי בישראל: אין סעיף בחוק מע\"מ, וקהלת הציעה הסדר ב-15.12.2025. AliExpress (מ-07.2026, לפי חדשות): גבייה בקופה מעל $75, והמוביל משלם בשם הלקוח, שנשאר היבואן. עסק ישראלי יכול להשתמש באותו מסלול דרך שליח או דואר ישראל (פתרון 3). ב-CJ וב-Zendrop אין קו DDP לישראל בנתונים שלנו.",
+      "confidence": "medium-high"
+    },
+    {
+      "area": 2,
+      "topic": "DDP lines and couriers",
+      "answer_he": "היבואן הוא הלקוח. השולח משלם. הערך המוצהר צריך להיות המחיר האמיתי. DHL ו-UPS מפרסמים את השירות ואת העמלות. FedEx לא אומת. קווים סיניים: תקינים רק כשמצהירים על הערך האמיתי, ויש גורם שחרור ישראלי מורשה (לפי Xinhan עצמה). מחיר כולל שנמוך מההובלה ועוד 18% מעיד על הצהרת חסר.",
+      "confidence": "high for couriers, low for Chinese lines"
+    },
+    {
+      "area": 3,
+      "topic": "Customs broker clearing in the business's name",
+      "answer_he": "חוקי, רק כשאנחנו הבעלים בעת היבוא (ס' 38, תקנה 16א). כל חבילה צריכה הצהרה מסחרית משלה ('יבוא מסחרי-בלדרים'), חתומה בידי סוכן מכס. ‏₪89–212 נטו לחבילה, ועוד ₪20.5 אגרה. בלי פטור $75. תקינה מסחרית; בדואר ישראל, מנורה שחייבת אישור: ₪658. לא נמצא ספק ייעודי בשם.",
+      "confidence": "medium"
+    },
+    {
+      "area": 4,
+      "topic": "Seller pays on the customer's behalf",
+      "answer_he": "אפשר: DHL ‏DTP, ‏UPS, או דואר ישראל באתר (אחרי ההגעה, עד ₪300 מס). זה מבטל את ההפתעה, לא את הכפל, כי היבוא של הלקוח. ייתכן שהרישום הוא תשלום בשם הלקוח לפי ס' 7(1) (הערכה). הכפל נעלם רק עם 11א או עם ס' 14.",
+      "confidence": "high (legality), low (recording)"
+    },
+    {
+      "area": 5,
+      "topic": "Separate parcels",
+      "answer_he": "מאותו ספק לאותו יבואן בתוך 72 שעות = משלוח אחד (צו ייבוא אישי ס' 3(ב)(2)); דואר ישראל ו-DSV מחילים זאת על המס. לגיטימי רק לספקים שונים באמת. לא עוזר לפריט בודד מעל $75. ייתכן איחוד לפי תעודת זהות.",
+      "confidence": "high (rule), low (different suppliers)"
+    },
+    {
+      "area": 6,
+      "topic": "Structure: agent model, delivery-abroad terms, and s.11A",
+      "answer_he": "סוכן של הספק: מע\"מ רק על העמלה, אם המסמכים בשם הספק (ס' 17(א)); הלקוח עדיין משלם בדלת. סוכן קנייה: העמלה לא בערך המכס (ס' 133(א)(1)(א)), אבל סיכון גבוה. תנאי מסירה בחו\"ל: מקור חדש, ס' 22(א) לחוק מע\"מ מפנה לס' 8 לחוק המכר. ממצא חדש: ס' 11א והחלטה 1716/18.",
+      "confidence": "low"
+    },
+    {
+      "area": 7,
+      "topic": "Local stock for bestsellers",
+      "answer_he": "לא חושב מחדש; ראו fulfillment-research.md §2, §4, §5. הצהרה על שמנו (DAP ועמיל), לא DDP על שם אחר.",
+      "confidence": "high"
+    }
+  ],
+  "not_allowed": [
+    {
+      "id": "declare-supplier-cost",
+      "what_he": "להצהיר על עלות הספק, או כל ערך נמוך מהמחיר ששולם, כשאנחנו המוכר",
+      "why_he": "ערך המכס הוא המחיר ששולם בעד הטובין. ביבוא לשימוש עצמי: ערך העסקה לפי ס' 132. הצהרה לא נכונה היא עבירה, ויש עליה עיצום",
+      "sources": [
+        "customs-ordinance",
+        "self-use-valuation-regs"
+      ],
+      "sections": [
+        "פקודת המכס 132",
+        "212(א)(4)",
+        "223ב",
+        "תקנה 2(א)"
+      ]
+    },
+    {
+      "id": "cheap-baoshui-lines",
+      "what_he": "קווי '包税' שמחירם הכולל נמוך מההובלה ועוד 18% מהערך האמיתי ועמלות",
+      "why_he": "בלי הצהרת חסר החשבון לא מסתדר. Xinhan: '必然低申报', וקנס של 30%–100%. הסיכון על הלקוח, כי הוא היבואן. דוגמה: '1 ק\"ג מ-¥62' הם כ-₪30, והמע\"מ לבדו על מוצר ב-₪299 הוא ₪53.82",
+      "sources": [
+        "xinhan-15951",
+        "xinhan-15943",
+        "customs-ordinance"
+      ],
+      "sections": [
+        "פקודת המכס 204(9)"
+      ]
+    },
+    {
+      "id": "deliberate-splitting-or-timing",
+      "what_he": "לפצל הזמנה בכוונה, או לתזמן חבילות של אותו ספק במרווח של יותר מ-72 שעות כדי לרדת מתחת ל-$75",
+      "why_he": "כלל 72 השעות; ופעולה ש'אחת ממטרותיה העיקריות היא הימנעות ממס' – המנהל רשאי להתעלם ממנה (חל גם על מע\"מ יבוא). Xinhan ממליצה לתכנן מרווחים: לא לאמץ",
+      "sources": [
+        "personal-import-order",
+        "vat-law",
+        "kohelet-2025"
+      ],
+      "sections": [
+        "צו ייבוא אישי 3(ב)(2)",
+        "חוק מע\"מ 138(א)"
+      ]
+    },
+    {
+      "id": "non-disclosing-broker",
+      "what_he": "'עמיל דיגיטלי שלא חושף': עמיל או קו שלא מציג למכס את החשבונית האמיתית, או מצרף חשבונית נמוכה",
+      "why_he": "חשבון מכר כוזב והטעיית פקיד מכס הן עבירות. המכס מבקש צילומי הזמנה",
+      "sources": [
+        "customs-ordinance",
+        "post-brokerage"
+      ],
+      "sections": [
+        "פקודת המכס 212(א)(3)",
+        "212(א)(9)"
+      ]
+    },
+    {
+      "id": "gift-or-sample",
+      "what_he": "להצהיר 'מתנה' או 'דוגמה'",
+      "why_he": "הצהרה לא נכונה. DHL: אין הקלה למתנות או לדוגמאות. 'שימוש עצמי' כולל מתנה רק כשיחיד ייבא ונתן אותה",
+      "sources": [
+        "customs-ordinance",
+        "dhl-ebilling"
+      ],
+      "sections": [
+        "פקודת המכס 129",
+        "212(א)(4)"
+      ]
+    },
+    {
+      "id": "other-ids",
+      "what_he": "לרשום חבילות על שם בני משפחה או על תעודות זהות אחרות",
+      "why_he": "הצהרה כוזבת על היבואן. מעל $150 נדרשת תעודת הזהות של הנמען",
+      "sources": [
+        "customs-ordinance",
+        "post-import-tax"
+      ],
+      "sections": [
+        "פקודת המכס 212(א)(4)"
+      ]
+    },
+    {
+      "id": "own-stock-as-personal-import",
+      "what_he": "להביא מלאי שלנו במסלול יבוא אישי",
+      "why_he": "יבוא אישי הוא 'שלא באמצעות עוסק' ו'לשימושו האישי'. פרט 614 הוא ל'שימוש עצמי'",
+      "sources": [
+        "personal-import-order",
+        "customs-ordinance"
+      ],
+      "sections": [
+        "צו ייבוא אישי 3(א)",
+        "פקודת המכס 129"
+      ]
+    },
+    {
+      "id": "deduct-without-our-name",
+      "what_he": "לנכות מע\"מ יבוא מהצהרה שלא על שמנו (DDP של צד שלישי, או עמיל כסוכן ליבוא אישי)",
+      "why_he": "ניכוי רק כשההצהרה נושאת את שם העוסק כבעל הטובין; תקנה 16א אוסרת לסוכן ליבוא אישי",
+      "sources": [
+        "vat-law",
+        "vat-regs-16a"
+      ],
+      "sections": [
+        "חוק מע\"מ 38(א)",
+        "תקנה 16א"
+      ]
+    },
+    {
+      "id": "no-taxes-claim",
+      "what_he": "לכתוב באתר 'ללא מכס ומסים' כשזה לא בטוח",
+      "why_he": "הטעיה",
+      "sources": [
+        "consumer-law"
+      ],
+      "sections": [
+        "חוק הגנת הצרכן 2"
+      ]
+    },
+    {
+      "id": "paper-buying-agent",
+      "what_he": "'סוכן קנייה' על הנייר בלבד, כשבפועל אנחנו המוכר",
+      "why_he": "עסקה מלאכותית והצהרת חסר",
+      "sources": [
+        "vat-law",
+        "customs-ordinance"
+      ],
+      "sections": [
+        "חוק מע\"מ 17(ב)",
+        "138",
+        "פקודת המכס 212(א)(4)"
+      ]
+    }
+  ],
+  "pricing_effect": {
+    "prices_changed": false,
+    "inputs": [
+      "data/economics/vat-import-check-2026-10-18.json -> pricing.rows (B value, ₪3.3, Israel Post 2025 fees)"
+    ],
+    "products": 34,
+    "scenarios": {
+      "today_licensed_customer_importer": {
+        "door_ils_range": [
+          158.84,
+          338.84
+        ],
+        "flags": {
+          "ok": 4,
+          "below-floor": 15,
+          "loss": 15
+        }
+      },
+      "checkout_collection_customer_pays_separately_no_11a": {
+        "door_ils": 0,
+        "flags": "unchanged; double VAT remains"
+      },
+      "we_absorb_no_11a": {
+        "door_ils": 0,
+        "survivors_positive": 2
+      },
+      "11a_customer_pays_import_vat_separately": {
+        "door_ils": "0 with solution 3, else unchanged",
+        "contribution_delta": "+0.92 x (P - P/1.18) = +0.1403 x P",
+        "flags": {
+          "ok": 5,
+          "below-floor": 19,
+          "loss": 10
+        }
+      },
+      "11a_and_we_absorb": {
+        "door_ils": 0,
+        "survivors_positive": 6,
+        "flags": {
+          "below-floor": 6,
+          "loss": 28
+        },
+        "survivors": [
+          "accent-sconces-cj-ribbed-travertine-half-cylinder-wood-bracket",
+          "gallery-art-cj-black-botanical-cutout-set3",
+          "bedding-cj-plain-linen-flat-sheet-raw-jute-260x280",
+          "bedding-cj-washed-linen-natural-set",
+          "ceiling-lights-aliexpress-scalloped-pleated-shade-26-pair",
+          "gallery-art-cj-black-ink-abstract-wide-mat-40-set3"
+        ]
+      },
+      "importer_of_record_per_parcel_89_net": {
+        "door_ils": 0,
+        "survivors_positive": 9,
+        "source": "vat-import-check-2026-10-18.json"
+      },
+      "buying_agent_supplier_value": {
+        "below_75_of_34": 31,
+        "note": "A_supplier_cost in the 2026-10-18 check; legal only if genuinely the customer's buying agent"
+      }
+    },
+    "contribution_delta_11a_examples_ils": {
+      "279": 39.15,
+      "299": 41.96,
+      "349": 48.98,
+      "479": 67.22,
+      "799": 112.13,
+      "1299": 182.3
+    },
+    "marks": "הערכה"
+  },
+  "fees_reference": {
+    "israel_post_2025": {
+      "short_declaration_exempt": 35.4,
+      "release_taxable": 81.42,
+      "credit_pct": 2.34,
+      "credit_min": 23.6,
+      "paperwork_transfer": 81.9,
+      "poa_prep": 94.4,
+      "detailed_declaration_over_1000_or_needs_approval": 181.72,
+      "special_approvals": 453.12,
+      "storage_per_day_from_day_21": 9.4,
+      "vat_included": true,
+      "source": "post-fee-list-2025"
+    },
+    "israel_post_online_payment": {
+      "after_arrival_only": true,
+      "max_tax_online_ils": 300,
+      "source": "post-pay-customs"
+    },
+    "dhl_il_2026": {
+      "duty_tax_processing_account": 83.8,
+      "duty_tax_processing_non_account_receiver": 361,
+      "clearance_processing_vat_exempt": 40,
+      "non_routine_entry": 361,
+      "multiline_over_5": 74.3,
+      "bonded_storage_per_day": 5.9,
+      "bonded_storage_per_kg_day": 1.3,
+      "currency": "ILS",
+      "effective": "2026-01-01",
+      "source": "dhl-il-customs-services"
+    },
+    "ups_il": {
+      "duty_tax_forwarding_usd": 17.55,
+      "disbursement_pct": 3,
+      "disbursement_min_usd": 22,
+      "additional_tariff_line_usd": 3.0,
+      "date": null,
+      "source": "ups-il-charges"
+    },
+    "gov_entry_fees_2025": {
+      "computer_fee": 41.5,
+      "computer_fee_fob_le_1000": 20.5,
+      "security_fee": 48.5,
+      "security_fee_exempt_fob_le_usd": 500,
+      "source": "customs-regs"
+    },
+    "dsv_il": {
+      "release_75_130": 59,
+      "release_131_500": 95,
+      "release_501_1000": 125,
+      "release_over_1000": 250,
+      "commercial_import": 250,
+      "transfer_to_external_broker_commercial": 150,
+      "source": "dsv-il-ecommerce",
+      "mark": "לא אומת"
+    }
+  },
+  "cpa_questions_he": {
+    "add_to": "docs/tax/vat-import-check-2026-10-18.md §8 (questions 1–8)",
+    "new": [
+      {
+        "n": 9,
+        "to": "רו\"ח",
+        "q": "סעיף 11א: מכירה ללקוח פרטי, שהספק שולח ישירות מסין, כשהצהרת היבוא היא יבוא אישי על שם הלקוח ולפי המחיר שלנו. האם זו 'מכירת טובין מיובאים לפני פדייתם'? אם כן, מעל $75: האם מחיר העסקה הוא P פחות ערך המכס (בערך 0)? עד $75: האם, לפי החלטה 1716/18, ‏P פחות מחיר הספק וההובלה? איזה מסמך צריך להחזיק לכל חבילה? האם לבקש החלטת מיסוי?"
+      },
+      {
+        "n": 10,
+        "to": "רו\"ח",
+        "q": "גבייה בקופה ותשלום דרך המוביל: האם מע\"מ היבוא שנגבה בשורה נפרדת ושולם בשם הלקוח הוא מס 'שהוטל בדין על הקונה' (ס' 7(1)), ולכן לא חלק ממחיר העסקה? ועמלות השחרור (ס' 7(2))? איך רושמים?"
+      },
+      {
+        "n": 11,
+        "to": "עמיל מכס",
+        "q": "יבואן לכל חבילה: האם דואר ישראל או שליח יגישו 'יבוא מסחרי-בלדרים' על שם העסק לחבילה שנמסרת לכתובת של לקוח? כמה זה עולה לחבילה, כולל אגרת מחשב? האם אפשר הצהרה מרוכזת (UPS World Ease)? איזה אישור תקן נדרש לכל חבילה של מנורה, אחרי הרפורמה האירופית?"
+      },
+      {
+        "n": 12,
+        "to": "רו\"ח",
+        "q": "סעיף 20 לחוק מע\"מ: אם נקבל על עצמנו, בהסכמת המנהל, את מע\"מ היבוא של הלקוח, האם נוכל לנכות אותו? או שס' 38 ותקנה 16א חוסמים?"
+      },
+      {
+        "n": 13,
+        "to": "רו\"ח ועו\"ד צרכנות",
+        "q": "מודל סוכן: מה המינימום כדי שהמחזור שלנו יהיה רק העמלה (ס' 17(א))? האם העמלה בשיעור אפס (ס' 30(א)(5)) או 18%? מי אחראי כלפי הצרכן? והאם 'סוכן קנייה' (פקודת המכס ס' 133(א)(1)(א)) תקף לחנות שמציגה את מחיר הספק ואת העמלה בנפרד?"
+      },
+      {
+        "n": 14,
+        "to": "עמיל מכס",
+        "q": "כלל 72 השעות: מה המקור המחייב לעניין המס, פרט 614 או צו ייבוא אישי ס' 3(ב)(2)? האם המערכת מאחדת לפי תעודת זהות גם חבילות מספקים שונים?"
+      },
+      {
+        "n": 15,
+        "to": "עמיל מכס",
+        "q": "קווי DDP סיניים: איך מוודאים שקו '包税' מצהיר על הערך האמיתי, ושיש לו גורם שחרור ישראלי מורשה? איזה מסמך אנחנו או הלקוח צריכים לקבל?"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "id": "vat-law",
+      "title": "חוק מס ערך מוסף, התשל\"ו-1975 (ויקיטקסט, נוסח משולב; תיקון אחרון בדף: תשפ\"ו)",
+      "url": "https://he.wikisource.org/wiki/חוק_מס_ערך_מוסף",
+      "date": "תשפ\"ו (נוסח משולב)",
+      "mark": "מקור רשמי",
+      "read": "2026-10-19",
+      "used_for": [
+        "s.2",
+        "s.7",
+        "s.11",
+        "s.11A",
+        "s.14",
+        "s.15",
+        "s.16",
+        "s.17",
+        "s.20",
+        "s.22",
+        "s.30(a)(5)",
+        "s.38",
+        "s.60",
+        "s.138"
+      ]
+    },
+    {
+      "id": "customs-ordinance",
+      "title": "פקודת המכס (ויקיטקסט, נוסח משולב)",
+      "url": "https://he.wikisource.org/wiki/פקודת_המכס",
+      "date": "תשפ\"ו (נוסח משולב)",
+      "mark": "מקור רשמי",
+      "read": "2026-10-19",
+      "used_for": [
+        "s.62",
+        "s.129",
+        "s.132",
+        "s.133",
+        "s.134A",
+        "s.204",
+        "s.212",
+        "s.223B"
+      ]
+    },
+    {
+      "id": "self-use-valuation-regs",
+      "title": "תקנות המכס (חישוב ערכם של טובין שיובאו לשימוש עצמי), התשס\"ז-2006",
+      "url": "https://he.wikisource.org/wiki/תקנות_המכס_(חישוב_ערכם_של_טובין_שיובאו_לשימוש_עצמי)",
+      "date": "תיקון אחרון תשפ\"ד",
+      "mark": "מקור רשמי",
+      "read": "2026-10-19",
+      "used_for": [
+        "reg. 2(a): value = transaction value under s.132"
+      ]
+    },
+    {
+      "id": "customs-regs",
+      "title": "תקנות המכס, תקנה 11א (אגרות)",
+      "url": "https://he.wikisource.org/wiki/תקנות_המכס",
+      "date": "סכומים 'החל מינואר 2025'",
+      "mark": "מקור רשמי",
+      "read": "2026-10-19",
+      "used_for": [
+        "computer fee ₪41.5 / ₪20.5",
+        "security fee ₪48.5"
+      ]
+    },
+    {
+      "id": "personal-import-order",
+      "title": "צו ייבוא אישי, התשע\"ט-2019, מהדורה דיגיטלית של משרד הכלכלה",
+      "url": "https://apps.economy.gov.il/Apps/PersonalImport/Home/Digital_Order/",
+      "date": "ללא תאריך; מצטטת תיקון התשפ\"ד-2024",
+      "mark": "מקור רשמי",
+      "read": "2026-10-19",
+      "used_for": [
+        "s.3(a)",
+        "s.3(b)(2) 72-hour rule"
+      ]
+    },
+    {
+      "id": "vat-regs-16a",
+      "title": "תקנות מס ערך מוסף, תקנה 16א",
+      "url": "https://he.wikisource.org/wiki/תקנות_מס_ערך_מוסף",
+      "date": "נוסח משולב",
+      "mark": "מקור רשמי",
+      "read": "2026-10-18 (not re-read)",
+      "used_for": [
+        "no deduction for a personal-import agent"
+      ]
+    },
+    {
+      "id": "sale-law",
+      "title": "חוק המכר, התשכ\"ח-1968, ס' 8 ו-33",
+      "url": "https://he.wikisource.org/wiki/חוק_המכר",
+      "date": "תיקון אחרון תשפ\"ד",
+      "mark": "מקור רשמי",
+      "read": "2026-10-18 (not re-read)",
+      "used_for": [
+        "delivery to carrier"
+      ]
+    },
+    {
+      "id": "consumer-law",
+      "title": "חוק הגנת הצרכן, ס' 2, 14ג, 17ב",
+      "url": "https://he.wikisource.org/wiki/חוק_הגנת_הצרכן",
+      "date": "נוסח משולב",
+      "mark": "מקור רשמי",
+      "read": "2026-10-18 (not re-read)",
+      "used_for": [
+        "misleading",
+        "total price"
+      ]
+    },
+    {
+      "id": "noal-1-release",
+      "title": "רשות המסים, אוגדן מכס פרק 1 – תהליך השחרור",
+      "url": "https://www.gov.il/BlobFolder/policy/noaalmeches1/he/Noal_1_Shichror_ACC.pdf",
+      "date": "2024-03-14",
+      "mark": "מקור רשמי",
+      "read": "2026-10-19",
+      "used_for": [
+        "declaration types incl. 'יבוא מסחרי-בלדרים', 'יבוא אישי-בלדרים'",
+        "commercial declaration only for a VAT-registered entity",
+        "signed by a customs agent"
+      ]
+    },
+    {
+      "id": "ruling-1716-18",
+      "title": "רשות המסים, החלטת מיסוי 1716/18 – מחיר העסקה לפי סעיף 11א כשהטובין המיובאים פטורים ממע\"מ (שאינה בהסכם); תמצית באתר haimasher.com",
+      "url": "http://www.haimasher.com/%D7%94%D7%97%D7%9C%D7%98%D7%AA-%D7%9E%D7%99%D7%A1%D7%95%D7%99-1716-18-%D7%9E%D7%A1-%D7%A2%D7%A8%D7%9A-%D7%9E%D7%95%D7%A1%D7%A3-%D7%9E%D7%97%D7%99%D7%A8-%D7%94%D7%A2%D7%A1%D7%A7%D7%94-%D7%9C%D7%A4%D7%99-%D7%A1%D7%A2%D7%99%D7%A3-11%D7%90-%D7%9C%D7%97%D7%95%D7%A7-%D7%9E%D7%A2%D7%9E-%D7%91%D7%9E%D7%A7%D7%A8%D7%94-%D7%91%D7%95-%D7%94%D7%98%D7%95%D7%91%D7%99%D7%9F-%D7%94%D7%9E%D7%99%D7%95%D7%91%D7%90%D7%99%D7%9D-%D7%A4%D7%98%D7%95%D7%A8%D7%99%D7%9D-%D7%9E%D7%9E%D7%A2%D7%9E",
+      "date": "2018",
+      "mark": "מקור רשמי (תמצית מאתר משני), ישן",
+      "read": "2026-10-19",
+      "used_for": [
+        "purpose of s.11A",
+        "base when import is exempt"
+      ]
+    },
+    {
+      "id": "post-fee-list-2025",
+      "title": "דואר ישראל, מחירון עמילות מכס",
+      "url": "https://cdn-mypostpublic.israelpost.co.il/media/media/kyphsgst/10-8102279228-mehiron-amilut-mehes_a5_02.pdf",
+      "date": "2025-04-20 (file)",
+      "mark": "מקור רשמי",
+      "read": "2026-10-19",
+      "used_for": [
+        "release ₪81.42",
+        "credit 2.34%/₪23.60",
+        "needs-approval ₪181.72 + ₪453.12"
+      ]
+    },
+    {
+      "id": "post-pay-customs",
+      "title": "דואר ישראל, תשלום מכס",
+      "url": "https://israelpost.co.il/%D7%A9%D7%99%D7%A8%D7%95%D7%AA%D7%99%D7%9D/%D7%AA%D7%A9%D7%9C%D7%95%D7%9D-%D7%9E%D7%9B%D7%A1/",
+      "date": "ללא תאריך",
+      "mark": "מקור רשמי",
+      "read": "2026-10-19",
+      "used_for": [
+        "pay after arrival only",
+        "max ₪300 tax online"
+      ]
+    },
+    {
+      "id": "post-import-tax",
+      "title": "דואר ישראל, הבהרות בנושא מיסי יבוא",
+      "url": "https://israelpost.co.il/%D7%93%D7%95%D7%90%D7%A8-%D7%91%D7%99%D7%A0%D7%9C%D7%90%D7%95%D7%9E%D7%99/%D7%94%D7%91%D7%94%D7%A8%D7%95%D7%AA-%D7%91%D7%A0%D7%95%D7%A9%D7%90-%D7%9E%D7%99%D7%A1%D7%99-%D7%99%D7%91%D7%95%D7%90",
+      "date": "ללא תאריך",
+      "mark": "מקור רשמי",
+      "read": "2026-10-19",
+      "used_for": [
+        "'לא ניתן לפצל חבילות'",
+        "ID above $150"
+      ]
+    },
+    {
+      "id": "post-receiving",
+      "title": "דואר ישראל, קבלת חבילות",
+      "url": "https://israelpost.co.il/pages/receiving_parcels?opendocument=",
+      "date": "ללא תאריך; עדיין כתוב $150 (לא עודכן)",
+      "mark": "מקור רשמי",
+      "read": "2026-10-19",
+      "used_for": [
+        "72-hour rule applied to taxes",
+        "SMS payment"
+      ]
+    },
+    {
+      "id": "post-brokerage",
+      "title": "דואר ישראל, הבהרות בנושא עמילות מכס",
+      "url": "https://israelpost.co.il/%D7%93%D7%95%D7%90%D7%A8-%D7%91%D7%99%D7%A0%D7%9C%D7%90%D7%95%D7%9E%D7%99/%D7%94%D7%91%D7%94%D7%A8%D7%95%D7%AA-%D7%91%D7%A0%D7%95%D7%A9%D7%90-%D7%A2%D7%9E%D7%99%D7%9C%D7%95%D7%AA-%D7%9E%D7%9B%D7%A1",
+      "date": "ללא תאריך",
+      "mark": "מקור רשמי",
+      "read": "2026-10-18 (not re-read)",
+      "used_for": [
+        "customs asks for order screenshots"
+      ]
+    },
+    {
+      "id": "dhl-il-faq",
+      "title": "DHL Express ישראל, שאלות נפוצות – מכס ומסים",
+      "url": "https://mydhl.express.dhl/il/he/help-and-support/faqs/duties-and-taxes.html",
+      "date": "ללא תאריך (©2026)",
+      "mark": "מקור רשמי",
+      "read": "2026-10-19",
+      "used_for": [
+        "recipient pays by default",
+        "sender may pay all charges"
+      ]
+    },
+    {
+      "id": "dhl-ebilling",
+      "title": "DHL ebilling FAQ, ישראל",
+      "url": "https://ebilling.dhl.com/gpp/web/faq/il/",
+      "date": "ללא תאריך",
+      "mark": "מקור רשמי",
+      "read": "2026-10-19",
+      "used_for": [
+        "DTP on the AWB",
+        "no concession for gifts or samples"
+      ]
+    },
+    {
+      "id": "dhl-il-customs-services",
+      "title": "DHL Express ישראל, Customs Services",
+      "url": "https://mydhl.express.dhl/il/en/ship/customs-services.html",
+      "date": "בתוקף מ-2026-01-01 (עודכן 2025-12-01)",
+      "mark": "מקור רשמי",
+      "read": "2026-10-19",
+      "used_for": [
+        "fees in ILS"
+      ]
+    },
+    {
+      "id": "ups-il-charges",
+      "title": "UPS, Additional Services & Charges, Israel",
+      "url": "https://ups.com/assets/resources/webcontent/en_GB/additional-service-charge-il.pdf",
+      "date": "ללא תאריך",
+      "mark": "מקור רשמי",
+      "read": "2026-10-19",
+      "used_for": [
+        "Duty and Tax Forwarding $17.55",
+        "Disbursement 3%/$22",
+        "World Ease"
+      ]
+    },
+    {
+      "id": "kohelet-2025",
+      "title": "פורום קהלת, התייחסות להצעה להכפלת תקרת הפטור ממע\"מ ל-150 דולר (דר' מיכאל שראל)",
+      "url": "https://www.kohelet.org.il/wp-content/uploads/2026/02/התייחסות-להצעה-להכפלת-תקרת-הפטור-ממעמ-על-יבוא-חבילות-אישיות-ל-150-דולר.pdf",
+      "date": "2025-12-15",
+      "mark": "דעה מקצועית",
+      "read": "2026-10-19",
+      "used_for": [
+        "proposal of VAT collection at source = not existing",
+        "splitting as tax-avoiding behaviour"
+      ]
+    },
+    {
+      "id": "doron-2019",
+      "title": "עו\"ד אלי דורון, 'דרופשיפינג: מי אמר שהמתווך חייב במע\"מ?', Bizzness",
+      "url": "https://bizzness.net/%D7%93%D7%A8%D7%95%D7%A4%D7%A9%D7%99%D7%A4%D7%99%D7%A0%D7%92-%D7%9E%D7%99-%D7%90%D7%9E%D7%A8-%D7%A9%D7%94%D7%9E%D7%AA%D7%95%D7%95%D7%9A-%D7%97%D7%99%D7%99%D7%91-%D7%91%D7%9E%D7%A2%D7%9E/",
+      "date": "2019-07-31",
+      "mark": "דעה מקצועית, ישן",
+      "read": "2026-10-19",
+      "used_for": [
+        "intermediary to a foreign resident at 0%"
+      ]
+    },
+    {
+      "id": "krisi-2020",
+      "title": "עו\"ד משה קריסי, מסחר באיביי ובאמזון בשיטת דרופשיפינג – היבטי מס",
+      "url": "https://krisitax.com/%D7%9E%D7%A1%D7%97%D7%A8-%D7%93%D7%A8%D7%95%D7%A4%D7%A9%D7%99%D7%A4%D7%99%D7%A0%D7%92-%D7%94%D7%99%D7%91%D7%98%D7%99-%D7%9E%D7%A1/",
+      "date": "2020-05-18",
+      "mark": "דעה מקצועית, ישן",
+      "read": "2026-10-19",
+      "used_for": [
+        "no discussion of double VAT"
+      ]
+    },
+    {
+      "id": "bizportal-aliexpress",
+      "title": "bizportal, AliExpress גובה מע\"מ בקופה",
+      "url": "https://www.bizportal.co.il/career/news/article/20035795",
+      "date": "2026-07-13",
+      "mark": "לא אומת",
+      "read": "2026-10-19",
+      "used_for": [
+        "checkout collection above $75"
+      ]
+    },
+    {
+      "id": "jfeed-aliexpress",
+      "title": "JFeed, AliExpress Israel delivery",
+      "url": "https://www.jfeed.com/news-israel/aliexpress-israel-delivery",
+      "date": "2026-07-15",
+      "mark": "לא אומת",
+      "read": "2026-10-19",
+      "used_for": [
+        "shipping companies used to collect on arrival"
+      ]
+    },
+    {
+      "id": "ynetnews-aliexpress",
+      "title": "ynetnews, Buying from AliExpress in Israel? Here's what is changing",
+      "url": "https://www.ynetnews.com/business/article/rkxxssg4gg",
+      "date": "ללא תאריך",
+      "mark": "לא אומת",
+      "read": "2026-10-19",
+      "used_for": [
+        "'collecting VAT before shipping, similar to Amazon'"
+      ]
+    },
+    {
+      "id": "hon-aliexpress",
+      "title": "חון, מע\"מ על אלי אקספרס כבר נגבה בקופה מעל 75 דולר",
+      "url": "https://www.hon.co.il/?p=282288",
+      "date": "ללא תאריך",
+      "mark": "לא אומת",
+      "read": "2026-10-19",
+      "used_for": [
+        "under-declared parcels still checked"
+      ]
+    },
+    {
+      "id": "bizportal-2026-01",
+      "title": "bizportal, הטבה וקוץ בה: התחום האפור של רפורמת המכס",
+      "url": "https://www.bizportal.co.il/general/news/article/20025907",
+      "date": "2026-01-06",
+      "mark": "לא אומת",
+      "read": "2026-10-19",
+      "used_for": [
+        "aggregation by ID within 72 hours"
+      ]
+    },
+    {
+      "id": "ynet-ddp-sites",
+      "title": "ynet, בלגן הפטור ממע\"מ על קניות מחו\"ל",
+      "url": "https://www.ynet.co.il/economy/article/rklbthhu11l",
+      "date": "~2026-02-25",
+      "mark": "לא אומת",
+      "read": "2026-10-19",
+      "used_for": [
+        "DDP sites collect at checkout"
+      ]
+    },
+    {
+      "id": "dsv-il-ecommerce",
+      "title": "DSV ישראל, E-commerce",
+      "url": "https://il.dsv.com/page-our-solutions/ecommerce/",
+      "date": "מדיניות הפרטיות: 08.2025; שתי גרסאות סותרות בדף",
+      "mark": "לא אומת",
+      "read": "2026-10-19",
+      "used_for": [
+        "release fees",
+        "commercial import ₪250",
+        "72-hour wording"
+      ]
+    },
+    {
+      "id": "gindi-fees",
+      "title": "גינדי, עלות עמילות מכס",
+      "url": "https://www.gindi-smart.com/customs-brokerage-fees/",
+      "date": "2026-10-07 (updated)",
+      "mark": "לא אומת",
+      "read": "2026-10-19",
+      "used_for": [
+        "broker fee ₪250–450"
+      ]
+    },
+    {
+      "id": "xinhan-15951",
+      "title": "Xinhan (鑫汉), Israel line article 15951",
+      "url": "https://www.9656556.com/wuliu/15951.html",
+      "date": "~2026 ('לפני חודש')",
+      "mark": "לא אומת",
+      "read": "2026-10-19",
+      "used_for": [
+        "'必然低申报'",
+        "fine 30%–100%",
+        "'plan time gaps'"
+      ]
+    },
+    {
+      "id": "xinhan-15943",
+      "title": "Xinhan (鑫汉), Israel line article 15943",
+      "url": "https://www.9656556.com/wuliu/15943.html",
+      "date": "~2026",
+      "mark": "לא אומת",
+      "read": "2026-10-19",
+      "used_for": [
+        "compliant DDP = licensed Israeli clearance entity + true value + VAT paid on behalf"
+      ]
+    },
+    {
+      "id": "xinhan-15945",
+      "title": "Xinhan (鑫汉), Israel line article 15945",
+      "url": "https://www.9656556.com/wuliu/15945.html",
+      "date": "~2026-05",
+      "mark": "לא אומת",
+      "read": "2026-10-19",
+      "used_for": [
+        "'真实货值申报'"
+      ]
+    },
+    {
+      "id": "quefeng-2026",
+      "title": "Quefeng, 2026年中国到以色列专线双清包税到门",
+      "url": "https://www.quefenglogistics.com/cms/yiseliezhuanxian/204.html",
+      "date": "2026-04-10",
+      "mark": "לא אומת",
+      "read": "2026-10-19",
+      "used_for": [
+        "'如实申报'",
+        "¥35 per parcel"
+      ]
+    },
+    {
+      "id": "ddpchain",
+      "title": "DDPCHAIN, Israel",
+      "url": "https://ddpchain.com/israel",
+      "date": "2026",
+      "mark": "לא אומת",
+      "read": "2026-10-19",
+      "used_for": [
+        "DDP without importer code"
+      ]
+    },
+    {
+      "id": "chamber-614-search",
+      "title": "לשכת המסחר, פרט 614 (תוצאת חיפוש בלבד; הדף הפנה 307)",
+      "url": "https://www.chamber.org.il/foreigntrade/1109/1111/70052/",
+      "date": "ללא תאריך",
+      "mark": "לא אומת",
+      "read": "search result only",
+      "used_for": [
+        "'שימוש עצמי', transaction price up to $75"
+      ]
+    },
+    {
+      "id": "amazon-terms-search",
+      "title": "Amazon, International Shipping Terms / Import Fees Deposit (תוצאת חיפוש בלבד; amazon.com 503)",
+      "url": "https://www.amazon.com/gp/help/customer/display.html?nodeId=GVDNARTHZN5A7NXG",
+      "date": "ללא תאריך",
+      "mark": "לא אומת",
+      "read": "search result only",
+      "used_for": [
+        "customer is importer of record; Designated Carrier pays on behalf"
+      ]
+    },
+    {
+      "id": "fedex-il-search",
+      "title": "FedEx ישראל, עמלות יבוא (תוצאת חיפוש בלבד; שגיאת הרשאה)",
+      "url": "https://fedex.com/en-il/shipping/import-fees.html",
+      "date": "ללא תאריך",
+      "mark": "לא אומת",
+      "read": "search result only",
+      "used_for": [
+        "2.5% or ₪56 clearance fee",
+        "billed to recipient unless sender requests"
+      ]
+    }
+  ],
+  "blocked": [
+    {
+      "site": "fs.knesset.gov.il",
+      "result": "303 redirect to maintenance-page-geo",
+      "what": "Knesset research paper on the personal-import exemption"
+    },
+    {
+      "site": "amazon.com",
+      "result": "503",
+      "what": "International Shipping Terms"
+    },
+    {
+      "site": "fedex.com",
+      "result": "permission error page (treated as 403)",
+      "what": "Israel import fees; regulatory alerts"
+    },
+    {
+      "site": "information.iherb.com",
+      "result": "403",
+      "what": "DDP help article"
+    },
+    {
+      "site": "goldfarb.com",
+      "result": "403",
+      "what": "Customs & trade update April 2026"
+    },
+    {
+      "site": "chamber.org.il",
+      "result": "307 redirect",
+      "what": "text of tariff item 614"
+    },
+    {
+      "site": "dhl.com/discover",
+      "result": "503",
+      "what": "Israel regulatory changes notice"
+    },
+    {
+      "site": "jdn.co.il",
+      "result": "503",
+      "what": "electrical-products reform article"
+    },
+    {
+      "site": "he.wikisource.org",
+      "result": "429 once; paused, retried once, succeeded",
+      "what": "תקנות המכס"
+    },
+    {
+      "site": "iherb.com/shipping/il",
+      "result": "JS-only, no content",
+      "what": "Israel shipping page"
+    },
+    {
+      "site": "haimasher.com (PDF)",
+      "result": "scanned PDF, no text",
+      "what": "full text of ruling 1716/18"
+    }
+  ],
+  "not_verified": [
+    "How AliExpress remits the VAT it collects at checkout (no official statement found)",
+    "Whether s.11A applies to goods shipped directly from abroad to an Israeli consumer",
+    "The exact text of tariff item 614 and whether the 72-hour rule is written into the tax exemption",
+    "Aggregation by ID number across different suppliers",
+    "Which DHL fees apply when the shipper pays (DTP)",
+    "FedEx Israel fees and terms",
+    "Any Israeli customs broker that clears B2C parcels in the seller's name",
+    "Per-parcel standards approval route for lamps after the EU reform",
+    "Whether Chinese DDP lines (Xinhan, Quefeng) declare true value and who their Israeli clearance entity is",
+    "Whether Israel Post's ₪81.42 fee already includes the ₪20.5 computer fee",
+    "The 2026 amounts of the customs entry fees (wikisource shows 'from January 2025')"
+  ],
+  "contact_made": false,
+  "forms_or_quotes": false,
+  "files_changed": [],
+  "new_files": [
+    "docs/tax/door-charges-solutions-2026-10-19.md",
+    "data/economics/door-charges-solutions-2026-10-19.json"
+  ],
+  "personal_details": false,
+  "note_for_manager": "docs/tax/README.md asks that every new tax document be added to its file list; not done here because the brief forbids editing existing files."
+}
