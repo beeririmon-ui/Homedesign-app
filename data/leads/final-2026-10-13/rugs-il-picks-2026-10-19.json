@@ -1,0 +1,824 @@
+{
+ "date": "2026-10-19",
+ "by": "master-designer",
+ "purpose_he": "השטיחים מהספקים הישראליים שהמשתמש יראה ויאשר לפני המיילים (המשתמש, 2026-10-16: 'לבחור את השטיחים קודם, תראי לי, ואז נשלח מיילים'). הקובץ הזה הוא המקור למשפט האישי ולרשימת השטיחים בהודעה 2 של docs/suppliers/outreach/rugs-il-round1-2026-10-19.md.",
+ "au1_he": "לפי AU1 (2026-10-18) אף שטיח כאן לא נספר בכיסוי עד שיש עם הספק הסכמה על מחיר סוחר ועל אספקה. לא נוצר קשר עם אף ספק, ולא שונה אף קובץ קיים.",
+ "inputs": [
+  "data/leads/final-2026-10-13/rugs-il-boutique-2026-10-16.json",
+  "data/leads/final-2026-10-13/rugs-il-online-2026-10-16.json",
+  "docs/suppliers/rugs-il-boutique-2026-10-16.md",
+  "docs/suppliers/rugs-il-online-2026-10-16.md",
+  "data/leads/final-2026-10-13/round5/targets.json",
+  "data/leads/final-2026-10-13/round5/excluded-slots.json",
+  "data/slots/living-room.json, master.json, dining-room.json, kids.json, hall.json, corridor.json, work.json",
+  "docs/design-bible/nordic.md 1.7.2, docs/design-bible/nordic-dining.md 0.2.1, docs/design-bible/*-brief-draft.md",
+  "docs/studio-rules.md"
+ ],
+ "image_dir": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/rugs",
+ "envelopes_cm": {
+  "living-room/rug": "200–240 × 290–340. בנורדי כלל הרגליים מתקיים רק בעומק 235–240 בפועל (Bible, rug), ולכן בנורדי 240×340. בשאר הסגנונות 200×290 ומעלה.",
+  "master/rug": "280–300 × 200–220 (מתחת למיטה, נראה רק במעבר).",
+  "dining-room/dining-rug": "200–240 × 200–230 בקובץ העמדות (מיקום 230×220). אחרי LQ2 המפרט של המעצב ב-targets.json מבקש 230–240 × 245–250, וזה עוד לא עודכן בקובץ העמדות. כל השטיחים לעמדה הזו הם במידה מותאמת.",
+  "kids/rug": "120–160 × 170–220 (AU5, kids.json 1.0.3). מחקר הבוטיק עבד עוד לפי 140×200 בדיוק, ולכן נוספו כאן גם 120×170, 130×190 ו-140×190.",
+  "dining-room/kitchen-runner": "45–60 × 240–280.",
+  "excluded_AU2": "hall/runner-rug 70–80 × 250–270, corridor/runner-rug 58–65 × 680–710, work/rug 160–180 × 200–220. לא נבחר להן שטיח; מועמדים מסומנים ב-excluded_slot_flags."
+ },
+ "scoring_he": "מחוון interior-design-rules: צבע 30%, חומר וטקסטורה 25%, צורה וקו 25%, קנה מידה 20%, מעוגל לחצאים. נורדי לפי ה-Bible 1.7.2 ו-nordic-dining 0.2.1; שאר הסגנונות לפי טיוטות הבריף ולפי designer_spec_he ב-targets.json (ציון עבודה). כל הציונים אחרי בדיקה בעין של התמונות. ציון מתחת ל-7 לא נבחר.",
+ "picks": [
+  {
+   "id": "P01",
+   "supplier": "Tollman's dot (טולמנ'ס)",
+   "supplier_slug": "tollmansdot",
+   "brand": "LINIE DESIGN",
+   "rug": "ASKO אוף-וויט",
+   "rug_slug": "asko-linie-offwhite",
+   "url": "https://www.tollmansdot.co.il/product/asko-offwhite02x3/",
+   "url_other_sizes": [
+    "https://www.tollmansdot.co.il/product/asko-off-white-250/",
+    "https://www.tollmansdot.co.il/product/asko-off-white-170/"
+   ],
+   "material": "90% צמר, 10% כותנה אורגנית, אריגה שטוחה בעבודת יד, הודו",
+   "natural_fibre": "100% טבעי",
+   "sizes_and_prices": [
+    {"size": "200×300", "price_ils": 2373, "regular_ils": 2894},
+    {"size": "250×350", "price_ils": 3590, "regular_ils": 5521, "note_he": "דף נפרד, ייתכן בגוון אחר: לוודא"},
+    {"size": "170×240", "price_ils": 1604, "regular_ils": 1956}
+   ],
+   "price_basis_he": "מחיר לצרכן באתר אחרי הנחה, 2026-10-16, כולל מע״מ",
+   "image": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/rugs/tollmansdot/asko-linie-offwhite.jpg",
+   "slot_styles": [
+    {"slot": "living-room/rug", "style": "nordic", "fit": 9, "size": "240×340", "custom_size": "כן: 240×340. בקטלוג 250×350, גבולי (+10 ס״מ בכל צד), לבדוק בפריים", "role": "default"},
+    {"slot": "master/rug", "style": "nordic", "fit": 9, "size": "200×300", "custom_size": "לא", "role": "default"},
+    {"slot": "dining-room/dining-rug", "style": "nordic", "fit": 8.5, "size": "240×250 או 230×220", "custom_size": "כן: לברר אם LINIE DESIGN מייצרת במידה", "role": "variation"},
+    {"slot": "living-room/rug", "style": "modern-country", "fit": 7.5, "size": "200×300", "custom_size": "לא", "role": "variation (החלק)"},
+    {"slot": "master/rug", "style": "modern-country", "fit": 7.5, "size": "200×300", "custom_size": "לא", "role": "variation (החלק)"},
+    {"slot": "dining-room/dining-rug", "style": "modern-country", "fit": 7, "size": "240×250 או 230×220", "custom_size": "כן", "role": "variation (החלק)"}
+   ],
+   "also_fits": [
+    {"slot": "living-room/rug", "style": "warm-modern", "fit": 7.5},
+    {"slot": "living-room/rug", "style": "japandi", "fit": 7.5, "note_he": "לא נבחר: בג'פנדי השטיח הוא עמדת זהות, ולא כדאי שיהיה זהה לנורדי"}
+   ],
+   "why_he": "אריגה שטוחה בשמנת חם עם סלאב אנכי עדין: הנורדי בדיוק, נבדל מהספה בטקסטורה ולא בצבע, וצמר במחיר אמצע.",
+   "custom_size_needed": true,
+   "flags_he": [
+    "מותג LINIE DESIGN: מכירה ורינדור דרך חנות שלישית תלויים גם באישור המותג",
+    "טולמנ'ס: טופס בלבד, המשתמש שולח דרך האתר",
+    "מול ספה בשיבולת שועל #E6DCCB ההפרש בבהירות קטן: הטקסטורה חייבת להיקרא ברינדור (כלל הניגוד מול הספה)"
+   ]
+  },
+  {
+   "id": "P02",
+   "supplier": "Tollman's dot (טולמנ'ס)",
+   "supplier_slug": "tollmansdot",
+   "brand": "LINIE DESIGN",
+   "rug": "NYOKO לבן",
+   "rug_slug": "nyoko-linie-white",
+   "url": "https://www.tollmansdot.co.il/product/nyoko-white-online/",
+   "url_other_sizes": [
+    "https://www.tollmansdot.co.il/product/nyoko-white-170/"
+   ],
+   "material": "100% צמר טבעי, ארוג ביד",
+   "natural_fibre": "100% טבעי",
+   "sizes_and_prices": [
+    {"size": "200×300", "price_ils": 2440, "regular_ils": 2975},
+    {"size": "170×240", "price_ils": 1648, "regular_ils": 2010},
+    {"size": "250×350", "price_ils": null, "note_he": "קיים באתר, המחיר לא נבדק"}
+   ],
+   "price_basis_he": "מחיר לצרכן באתר אחרי הנחה, 2026-10-16, כולל מע״מ",
+   "image": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/rugs/tollmansdot/nyoko-linie-white.jpg",
+   "slot_styles": [
+    {"slot": "living-room/rug", "style": "nordic", "fit": 8.5, "size": "240×340", "custom_size": "כן: 240×340, או 250×350 מהקטלוג (גבולי)", "role": "variation"},
+    {"slot": "master/rug", "style": "nordic", "fit": 8.5, "size": "200×300", "custom_size": "לא", "role": "variation"},
+    {"slot": "dining-room/dining-rug", "style": "nordic", "fit": 8, "size": "240×250 או 230×220", "custom_size": "כן: לברר מול LINIE DESIGN", "role": "default (שונה מברירת המחדל של הסלון, כי רואים את שני החדרים יחד)"}
+   ],
+   "also_fits": [
+    {"slot": "living-room/rug", "style": "japandi", "fit": 7.5}
+   ],
+   "why_he": "צמר לבן עם יהלום טון-על-טון ונימור אפור דק: וריאציה נורדית עם דוגמה שקטה, באותה משפחה של ASKO ובכל זאת בחירה אחרת.",
+   "custom_size_needed": true,
+   "flags_he": [
+    "מותג LINIE DESIGN, טופס בלבד (כמו P01)",
+    "לוודא שהנימור האפור לא כחלחל (בנורדי אפור כחלחל מחוץ לטווח)"
+   ]
+  },
+  {
+   "id": "P03",
+   "supplier": "Afrita (עפריתה)",
+   "supplier_slug": "afrita",
+   "rug": "CASA, בני מרירת בהזמנה אישית",
+   "rug_slug": "casa-beni-mrirt-custom",
+   "url": "https://myafrita.com/product/%d7%a9%d7%98%d7%99%d7%97-%d7%a6%d7%9e%d7%a8-%d7%9e%d7%a8%d7%95%d7%a7%d7%90%d7%99-casa/",
+   "material": "צמר כבשים, קשר כפול (Beni Mrirt), פלומה עבה, עבודת יד במרוקו; פרנזים לבחירה",
+   "natural_fibre": "100% טבעי",
+   "sizes_and_prices": [
+    {"size": "200×300", "price_ils": 8600},
+    {"size": "250×300", "price_ils": 9800},
+    {"size": "250×350", "price_ils": 12200},
+    {"size": "150×220", "price_ils": 3900},
+    {"size": "240×340 (מותאם)", "price_ils": null, "note_he": "בהזמנה אישית בכל מידה; המחיר בהצעה"}
+   ],
+   "price_basis_he": "מחיר לצרכן באתר, 2026-10-16, כולל מע״מ. מחיר זהה לכל דגמי ההזמנה האישית",
+   "image": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/rugs/afrita/casa-beni-mrirt-custom.jpg",
+   "slot_styles": [
+    {"slot": "living-room/rug", "style": "nordic", "fit": 8, "size": "240×340", "custom_size": "כן: 240×340 בהזמנה אישית", "role": "variation (הברבר היחיד שמותר בנורדי; עוגן פרימיום)"},
+    {"slot": "master/rug", "style": "nordic", "fit": 8, "size": "200×300", "custom_size": "לא", "role": "variation"}
+   ],
+   "also_fits": [
+    {"slot": "living-room/rug", "style": "boho", "fit": 7, "note_he": "בבוהו ברבר עד 15 מ״מ, והפלומה כאן עבה"},
+    {"slot": "living-room/rug", "style": "warm-modern", "fit": 7}
+   ],
+   "why_he": "בני מרירת בשנהב עם קווי פחם דקים: וריאציית הברבר היחידה שהנורדי מתיר, ועוגן הפרימיום של החדר (ה.14). נארג בכל מידה, כולל 240×340 שהסלון צריך.",
+   "custom_size_needed": true,
+   "flags_he": [
+    "לאשר גובה פלומה עד 30 מ״מ (Bible: וריאציית ברבר אחת עד 30) ופרנזים עד 8 ס״מ או בלי",
+    "הקווים שחורים: צריכים להיקרא כפחם ולא כשחור טהור (L מתחת ל-12 מחוץ לטווח)",
+    "זמן ייצור 10–14 שבועות (דף INSAF): לכתוב בדף המוצר",
+    "מחיר פרימיום (₪8,600 ל-200×300): מתאים לאסטרטגיית העוגן (ה.14), דורש החלטת משתמש (owner_decisions)"
+   ]
+  },
+  {
+   "id": "P04",
+   "supplier": "Afrita (עפריתה)",
+   "supplier_slug": "afrita",
+   "rug": "ZHR, שטיח מרוקאי בהזמנה אישית (אדרה עדינה)",
+   "rug_slug": "zhr-beni-mrirt-custom",
+   "url": "https://myafrita.com/product/%d7%a9%d7%98%d7%99%d7%97-%d7%91%d7%94%d7%96%d7%9e%d7%a0%d7%94-%d7%90%d7%99%d7%a9%d7%99%d7%aa-zhr/",
+   "material": "צמר מובחר, בני מרירת בעבודת יד במרוקו, דוגמת אדרה",
+   "natural_fibre": "100% טבעי",
+   "sizes_and_prices": [
+    {"size": "200×300", "price_ils": 8600},
+    {"size": "250×350", "price_ils": 12200},
+    {"size": "240×340 (מותאם)", "price_ils": null, "note_he": "בהזמנה אישית; המחיר בהצעה"}
+   ],
+   "price_basis_he": "מחיר לצרכן באתר, 2026-10-16, כולל מע״מ",
+   "image": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/rugs/afrita/zhr-beni-mrirt-custom.jpg",
+   "slot_styles": [
+    {"slot": "living-room/rug", "style": "warm-modern", "fit": 9, "size": "200×300 (עדיף 240×340 מותאם)", "custom_size": "לא חובה; 240×340 עדיף", "role": "variation (פרימיום)"},
+    {"slot": "master/rug", "style": "warm-modern", "fit": 9, "size": "200×300", "custom_size": "לא", "role": "variation (פרימיום)"}
+   ],
+   "also_fits": [
+    {"slot": "living-room/rug", "style": "nordic", "fit": 7.5},
+    {"slot": "living-room/rug", "style": "japandi", "fit": 7, "note_he": "בג'פנדי ערימה עד 10 מ״מ"},
+    {"slot": "living-room/rug", "style": "boho", "fit": 7}
+   ],
+   "why_he": "אדרה טון-על-טון בגריז' פטריה: הלב של המודרני החם, שטיח שנקרא כחומר ולא כדוגמה.",
+   "custom_size_needed": false,
+   "flags_he": [
+    "במודרני חם מותרת וריאציה אחת עם ערימה עד 25 מ״מ: לאשר גובה פלומה",
+    "זמן ייצור 10–14 שבועות; מחיר פרימיום כמו P03"
+   ]
+  },
+  {
+   "id": "P05",
+   "supplier": "Tollman's dot (טולמנ'ס)",
+   "supplier_slug": "tollmansdot",
+   "brand": "LINIE DESIGN",
+   "rug": "AGNER קרם",
+   "rug_slug": "agner-linie-beige",
+   "url": "https://www.tollmansdot.co.il/product/carpet-agner-beige-100-wool-200x300/",
+   "url_other_sizes": [
+    "https://www.tollmansdot.co.il/product/agner-rug-beige-170-240/"
+   ],
+   "material": "100% צמר",
+   "natural_fibre": "100% טבעי",
+   "sizes_and_prices": [
+    {"size": "200×300", "price_ils": 4830, "regular_ils": 6995},
+    {"size": "170×240", "price_ils": 3890, "regular_ils": 4744}
+   ],
+   "price_basis_he": "מחיר לצרכן באתר אחרי הנחה, 2026-10-16, כולל מע״מ",
+   "image": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/rugs/tollmansdot/agner-linie-beige.jpg",
+   "slot_styles": [
+    {"slot": "living-room/rug", "style": "warm-modern", "fit": 8.5, "size": "200×300", "custom_size": "לא (במודרני חם 200×290 ומעלה)", "role": "default (מלאי מקומי, FR-D)"},
+    {"slot": "master/rug", "style": "warm-modern", "fit": 8.5, "size": "200×300", "custom_size": "לא", "role": "default"}
+   ],
+   "also_fits": [
+    {"slot": "living-room/rug", "style": "nordic", "fit": 8.5, "note_he": "חלופה ראשונה בנורדי אם P02 או P03 נופלים"}
+   ],
+   "why_he": "צמר מלאנז' עבה בקרם-בז' בלולאות גסות: טקסטורה אדריכלית ושקטה למודרני חם, בלי ערימה גבוהה.",
+   "custom_size_needed": false,
+   "flags_he": [
+    "מותג LINIE DESIGN, טופס בלבד",
+    "לאשר גובה ערימה עד 15 מ״מ (מודרני חם)"
+   ]
+  },
+  {
+   "id": "P06",
+   "supplier": "Tollman's dot (טולמנ'ס)",
+   "supplier_slug": "tollmansdot",
+   "brand": "LINIE DESIGN",
+   "rug": "BURANO חול",
+   "rug_slug": "burano-linie-sand",
+   "url": "https://www.tollmansdot.co.il/product/burano-rug/",
+   "material": "100% צמר, אריגה שטוחה",
+   "natural_fibre": "100% טבעי",
+   "sizes_and_prices": [
+    {"size": "200×300", "price_ils": 2290, "regular_ils": 4181, "note_he": "45% הנחה; בדף 'מיקום: בית יהושע, רדיזיין'"}
+   ],
+   "price_basis_he": "מחיר לצרכן באתר אחרי הנחה, 2026-10-16, כולל מע״מ",
+   "image": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/rugs/tollmansdot/burano-linie-sand.jpg",
+   "slot_styles": [
+    {"slot": "living-room/rug", "style": "warm-modern", "fit": 8, "size": "200×300", "custom_size": "לא", "role": "variation"},
+    {"slot": "master/rug", "style": "warm-modern", "fit": 8, "size": "200×300", "custom_size": "לא", "role": "variation"},
+    {"slot": "dining-room/dining-rug", "style": "warm-modern", "fit": 8, "size": "240×250 או 230×220", "custom_size": "כן: לברר מול LINIE DESIGN", "role": "variation"},
+    {"slot": "living-room/rug", "style": "japandi", "fit": 7.5, "size": "200×300", "custom_size": "לא", "role": "variation (השוליים)"},
+    {"slot": "living-room/rug", "style": "modern-country", "fit": 7, "size": "200×300", "custom_size": "לא", "role": "variation"},
+    {"slot": "master/rug", "style": "modern-country", "fit": 7, "size": "200×300", "custom_size": "לא", "role": "variation"}
+   ],
+   "also_fits": [
+    {"slot": "living-room/rug", "style": "nordic", "fit": 7.5},
+    {"slot": "living-room/rug", "style": "mediterranean", "fit": 7}
+   ],
+   "why_he": "חול עם מסגרת טאופ רחבה: מלבן מחויט שעובד במודרני חם, בג'פנדי ובכפרי, ושטיח אחד שמכסה שלושה סגנונות.",
+   "custom_size_needed": false,
+   "flags_he": [
+    "נראה כפריט תצוגה או אאוטלט: לוודא שאפשר להזמין שוב ולא רק את היחידה שבבית יהושע",
+    "מותג LINIE DESIGN, טופס בלבד"
+   ]
+  },
+  {
+   "id": "P07",
+   "supplier": "השטיח האדום / HōM",
+   "supplier_slug": "hom-carpetshop",
+   "rug": "מוניקה 05 אפור (MONICA)",
+   "rug_slug": "monica-05-wool-grey",
+   "url": "https://www.carpetshop.co.il/products/monica-05-gray",
+   "material": "100% צמר טבעי, ארוג ביד בהודו, שתי-וערב עדין",
+   "natural_fibre": "100% טבעי",
+   "sizes_and_prices": [
+    {"size": "240×340", "price_ils": 3594, "regular_ils": 5990},
+    {"size": "200×290", "price_ils": 2394, "regular_ils": 3990},
+    {"size": "140×190", "price_ils": 1134, "regular_ils": 1890},
+    {"size": "120×170", "price_ils": 894, "regular_ils": 1490}
+   ],
+   "price_basis_he": "מחיר לצרכן באתר, 2026-10-16, בלי קופון. כל המידות זמינות",
+   "image": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/rugs/hom-carpetshop/monica-05-wool-grey.jpg",
+   "slot_styles": [
+    {"slot": "living-room/rug", "style": "japandi", "fit": 9, "size": "240×340", "custom_size": "לא", "role": "default"},
+    {"slot": "master/rug", "style": "japandi", "fit": 9, "size": "200×290", "custom_size": "לא", "role": "variation"},
+    {"slot": "kids/rug", "style": "japandi", "fit": 7.5, "size": "140×190", "custom_size": "לא", "role": "default"},
+    {"slot": "dining-room/dining-rug", "style": "warm-modern", "fit": 7.5, "size": "240×250 או 230×220", "custom_size": "כן: דרך HōM BUSINESS ('התאמה אישית מלאה')", "role": "variation"}
+   ],
+   "also_fits": [
+    {"slot": "living-room/rug", "style": "warm-modern", "fit": 7.5},
+    {"slot": "living-room/rug", "style": "nordic", "fit": 6.5, "note_he": "לא נבחר: L בערך 60, כבד מדי לנורדי"}
+   ],
+   "why_he": "צמר באבן חמה, כמעט חלק: הג'פנדי הנמוך והשקט, במלאי בכל המידות, כולל 240×340.",
+   "custom_size_needed": false,
+   "flags_he": []
+  },
+  {
+   "id": "P08",
+   "supplier": "Josephon Carpets (ג'וזפון)",
+   "supplier_slug": "josephon",
+   "rug": "Woven 4, אבן",
+   "rug_slug": "woven-4-stone",
+   "url": "https://www.josephon-carpets.co.il/products/urban-texture-moderns-5",
+   "material": "לא צוין בדף (אריגת יד צפופה, פרנזים לבנים)",
+   "natural_fibre": "לא ידוע: חייב אישור בכתב של 80% סיבים טבעיים לפחות לפני שהוא נספר",
+   "sizes_and_prices": [
+    {"size": "200×300", "price_ils": 7200},
+    {"size": "250×300", "price_ils": 10500},
+    {"size": "170×240", "price_ils": 4800},
+    {"size": "300×400", "price_ils": 14500}
+   ],
+   "price_basis_he": "מחיר לצרכן באתר, 2026-10-16, כולל מע״מ. לפי דף הבית רבים מהדגמים ניתנים להזמנה במידה ובגוון",
+   "image": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/rugs/josephon/woven-4-stone.jpg",
+   "slot_styles": [
+    {"slot": "living-room/rug", "style": "japandi", "fit": 8.5, "size": "200×300 (250×300 גבולי)", "custom_size": "לא חובה; 240×340 עדיף", "role": "variation"},
+    {"slot": "master/rug", "style": "japandi", "fit": 8.5, "size": "200×300", "custom_size": "לא", "role": "variation"},
+    {"slot": "dining-room/dining-rug", "style": "japandi", "fit": 8, "size": "240×250 או 230×220", "custom_size": "כן", "role": "default"},
+    {"slot": "dining-room/dining-rug", "style": "warm-modern", "fit": 7.5, "size": "240×250 או 230×220", "custom_size": "כן", "role": "variation"}
+   ],
+   "also_fits": [
+    {"slot": "living-room/rug", "style": "warm-modern", "fit": 7.5}
+   ],
+   "why_he": "אריגה צפופה בגוון אבן, עם עומק ותנועה בחוט: הג'פנדי במדרג הפרימיום, וניתן להזמין במידה, גם לפינת האוכל.",
+   "custom_size_needed": true,
+   "flags_he": [
+    "החומר לא צוין: בלי אישור של 80% טבעי השטיח יוצא (חוק 2026-10-16)",
+    "טופס בלבד, המשתמש שולח דרך האתר",
+    "₪7,200 ל-200×300: מדרג פרימיום; הרווחיות נבדקת רק מול מחיר סוחר"
+   ]
+  },
+  {
+   "id": "P09",
+   "supplier": "BuyCarpet (שטיחים בסנטר ב.ש.)",
+   "supplier_slug": "buycarpet",
+   "rug": "רן, צמר עבודת יד, בז'",
+   "rug_slug": "ran-wool-beige",
+   "url": "https://www.buycarpet.co.il/product/%D7%A9%D7%98%D7%99%D7%97-%D7%A8%D7%9F-%D7%A6%D7%9E%D7%A8-%D7%A2%D7%91%D7%95%D7%93%D7%AA-%D7%99%D7%93-%D7%91%D7%96/",
+   "material": "צמר, עבודת יד, עובי 8 מ״מ, הודו",
+   "natural_fibre": "100% טבעי",
+   "sizes_and_prices": [
+    {"size": "130×190", "price_ils": 449.5, "regular_ils": 899},
+    {"size": "200×290", "price_ils": 949.5, "regular_ils": 1899},
+    {"size": "240×340", "price_ils": 1349.5, "regular_ils": 2699}
+   ],
+   "price_basis_he": "מחיר מבצע 50% באתר, 2026-10-16. כל המידות במלאי",
+   "image": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/rugs/buycarpet/ran-wool-beige.jpg",
+   "slot_styles": [
+    {"slot": "master/rug", "style": "japandi", "fit": 8, "size": "200×290", "custom_size": "לא", "role": "default (קליעה שונה מברירת המחדל של הסלון)"},
+    {"slot": "kids/rug", "style": "japandi", "fit": 7.5, "size": "130×190", "custom_size": "לא", "role": "variation"},
+    {"slot": "kids/rug", "style": "nordic", "fit": 7, "size": "130×190", "custom_size": "לא", "role": "variation (K-boy: שיבולת שועל עם קו פחם)"}
+   ],
+   "also_fits": [
+    {"slot": "living-room/rug", "style": "nordic", "fit": 7.5, "note_he": "השטיח היחיד מסוגו במלאי ב-240×340; חלופת כניסה (₪1,349.5) אם P02 או P03 נופלים"},
+    {"slot": "living-room/rug", "style": "japandi", "fit": 8}
+   ],
+   "why_he": "צמר דק בגריז' עם פסי דיו: הפס היחיד של הג'פנדי בחדר השינה, ובמידה הקטנה שטיח ילד נורדי במחיר כניסה.",
+   "custom_size_needed": false,
+   "flags_he": [
+    "המחיר באתר הוא מבצע 50%: השווי בישראל קרוב למחיר המבצע, ולכן נדרש מחיר סוחר נמוך ממנו",
+    "בתמונה הפסים נקראים מעט קרים: לבדוק מול הפלטה החמה ברינדור"
+   ]
+  },
+  {
+   "id": "P10",
+   "supplier": "BuyCarpet (שטיחים בסנטר ב.ש.)",
+   "supplier_slug": "buycarpet",
+   "rug": "יוטה בוקלה, טבעי (בלי פרנזים)",
+   "rug_slug": "jute-boucle-natural",
+   "url": "https://www.buycarpet.co.il/product/%D7%A9%D7%98%D7%99%D7%97-%D7%99%D7%95%D7%98%D7%94-%D7%91%D7%95%D7%A7%D7%9C%D7%94-%D7%98%D7%91%D7%A2%D7%99/",
+   "material": "יוטה, אריגה שטוחה בעבודת יד, הודו",
+   "natural_fibre": "100% טבעי",
+   "sizes_and_prices": [
+    {"size": "200×290", "price_ils": 1079.1, "regular_ils": 1199},
+    {"size": "120×170", "price_ils": 404.1, "regular_ils": 449},
+    {"size": "160×230", "price_ils": 719.1, "regular_ils": 799}
+   ],
+   "price_basis_he": "מחיר באתר אחרי 10% הנחה, 2026-10-16. 'רב מכר'",
+   "image": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/rugs/buycarpet/jute-boucle-natural.jpg",
+   "slot_styles": [
+    {"slot": "living-room/rug", "style": "mediterranean", "fit": 8.5, "size": "200×290", "custom_size": "לא (המינימום בים-התיכוני)", "role": "default"},
+    {"slot": "master/rug", "style": "mediterranean", "fit": 8.5, "size": "200×290", "custom_size": "לא", "role": "default"},
+    {"slot": "living-room/rug", "style": "boho", "fit": 8.5, "size": "200×290", "custom_size": "לא", "role": "default (הווריאציה החלקה, FR-D)"},
+    {"slot": "master/rug", "style": "boho", "fit": 8.5, "size": "200×290", "custom_size": "לא", "role": "default"},
+    {"slot": "kids/rug", "style": "mediterranean", "fit": 7.5, "size": "120×170", "custom_size": "לא", "role": "default"},
+    {"slot": "dining-room/dining-rug", "style": "mediterranean", "fit": 8, "size": "240×250 או 230×220", "custom_size": "כן: לא ידוע אם BuyCarpet מייצרים במידה", "role": "variation"},
+    {"slot": "dining-room/dining-rug", "style": "boho", "fit": 8, "size": "240×250 או 230×220", "custom_size": "כן: לא ידוע", "role": "variation"}
+   ],
+   "also_fits": [
+    {"slot": "kids/rug", "style": "boho", "fit": 7},
+    {"slot": "living-room/rug", "style": "japandi", "fit": 6.5}
+   ],
+   "why_he": "יוטה בקליעת סל גסה בגוון דבש, עם צילום אמיתי בסלון: השטיח של הים-התיכוני והווריאציה החלקה של הבוהו, במחיר כניסה.",
+   "custom_size_needed": false,
+   "flags_he": [
+    "ב-200×290 בלבד (240×340 לא קיים): עומד במינימום של ים-תיכוני ובוהו, לא בנורדי",
+    "לא לבלבל עם הגרסה עם הפרנזים (פרנזים ארוכים מ-5 ס״מ, מחוץ לים-התיכוני)",
+    "יוטה בחדר ילדים מחוספסת למגע: מקובל בים-התיכוני, לציין בדף המוצר"
+   ]
+  },
+  {
+   "id": "P11",
+   "supplier": "בית שטיחי רות (Marvadim)",
+   "supplier_slug": "marvadim-ruth",
+   "rug": "ABACCA ABC 251A",
+   "rug_slug": "abacca-abc-251a-jute-hemp",
+   "url": "https://www.marvadim.co.il/product/abacca-abc-251a/",
+   "material": "יוטה וקנבוס (HEMP), קליעת צמה",
+   "natural_fibre": "100% טבעי",
+   "sizes_and_prices": [
+    {"size": "240×300", "price_ils": null},
+    {"size": "180×270", "price_ils": null},
+    {"size": "270×360", "price_ils": null}
+   ],
+   "price_basis_he": "אין מחירים באתר; הצעת מחיר בלבד",
+   "image": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/rugs/marvadim-ruth/abacca-abc-251a-jute-hemp.jpg",
+   "slot_styles": [
+    {"slot": "living-room/rug", "style": "mediterranean", "fit": 8, "size": "240×300", "custom_size": "לא", "role": "variation"},
+    {"slot": "master/rug", "style": "mediterranean", "fit": 7.5, "size": "240×300 (גבולי: עומק 240 מול 220) או 210×290 מותאם", "custom_size": "עדיף כן: 210×290", "role": "variation"},
+    {"slot": "dining-room/dining-rug", "style": "mediterranean", "fit": 7.5, "size": "240×250 או 230×220", "custom_size": "כן (הספק מייצר לפי מידה)", "role": "variation"}
+   ],
+   "also_fits": [
+    {"slot": "living-room/rug", "style": "boho", "fit": 7.5}
+   ],
+   "why_he": "יוטה וקנבוס בקליעת צמה, 240×300: טקסטורה שנייה לים-התיכוני באותה משפחת דבש, בעומק שהסלון אוהב.",
+   "custom_size_needed": true,
+   "flags_he": [
+    "תמונה 480 פיקסל מקטלוג 2017: לא מספיקה לרינדור נאמן עד שמגיעים צילומים חדשים (שאלה 5 בהודעה 2)",
+    "אין מחיר; לוודא שהדגם עדיין בקטלוג"
+   ]
+  },
+  {
+   "id": "P12",
+   "supplier": "בית שטיחי רות (Marvadim)",
+   "supplier_slug": "marvadim-ruth",
+   "rug": "Natural Fiber NF 443A, טבעי צהבהב, מסגרת טבעית",
+   "rug_slug": "nf-443a-sisal",
+   "url": "https://www.marvadim.co.il/product/natural-fiber-nf-443a-%d7%98%d7%91%d7%a2%d7%99-%d7%a6%d7%94%d7%91%d7%94%d7%91-%d7%9e%d7%a1%d7%92%d7%a8%d7%aa-%d7%98%d7%91%d7%a2%d7%99/",
+   "material": "סיזל, שוליים מבד",
+   "natural_fibre": "100% טבעי",
+   "sizes_and_prices": [
+    {"size": "240×300", "price_ils": null},
+    {"size": "210×270", "price_ils": null},
+    {"size": "120×180", "price_ils": null},
+    {"size": "75×240 (ראנר)", "price_ils": null}
+   ],
+   "price_basis_he": "אין מחירים באתר; הצעת מחיר בלבד. 'costume made'",
+   "image": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/rugs/marvadim-ruth/nf-443a-sisal.jpg",
+   "slot_styles": [
+    {"slot": "living-room/rug", "style": "mediterranean", "fit": 7.5, "size": "240×300", "custom_size": "לא", "role": "variation (שוליים)"},
+    {"slot": "master/rug", "style": "mediterranean", "fit": 7.5, "size": "210×270 (גבולי: רוחב 270 מול 280)", "custom_size": "עדיף כן: 210×290", "role": "variation"},
+    {"slot": "dining-room/dining-rug", "style": "mediterranean", "fit": 7.5, "size": "240×250 או 230×220", "custom_size": "כן", "role": "default"},
+    {"slot": "dining-room/dining-rug", "style": "japandi", "fit": 7.5, "size": "240×250 או 230×220", "custom_size": "כן", "role": "variation (מראה טטאמי עם שוליים)"}
+   ],
+   "also_fits": [
+    {"slot": "living-room/rug", "style": "japandi", "fit": 7.5},
+    {"slot": "hall/runner-rug", "style": "mediterranean", "fit": 7, "note_he": "75×240, גבולי באורך; העמדה מוחרגת (AU2)"}
+   ],
+   "why_he": "סיזל דק עם שוליים מבד: המראה של טטאמי לג'פנדי ושל 'פס היקפי' לים-התיכוני, ונתפר לפי מידה, כולל פינת האוכל.",
+   "custom_size_needed": true,
+   "flags_he": [
+    "תמונה 480 פיקסל מקטלוג 2017: צריך צילום חדש לפני רינדור",
+    "בתמונה גוון צהבהב-ירקרק: לאשר גוון בדוגמה; אין מחיר",
+    "סיזל לא ברשימת החומרים של הנורדי, ולכן לא מוצע שם"
+   ]
+  },
+  {
+   "id": "P13",
+   "supplier": "השטיח האדום / HōM",
+   "supplier_slug": "hom-carpetshop",
+   "rug": "קילים סקנדינבי 16 אפור-לבן עם פרנזים",
+   "rug_slug": "scandi-kilim-16-grey-white",
+   "url": "https://www.carpetshop.co.il/products/scandinavian-kilim-16-grey-white-with-fringes",
+   "material": "100% צמר, קילים ארוג ביד, דו-צדדי, פרנזים",
+   "natural_fibre": "100% טבעי",
+   "sizes_and_prices": [
+    {"size": "240×340", "price_ils": 2166.5, "regular_ils": 6190},
+    {"size": "200×290", "price_ils": 1256.5, "regular_ils": 3590},
+    {"size": "160×230", "price_ils": 822.5, "regular_ils": 2350}
+   ],
+   "price_basis_he": "מחיר באתר, 2026-10-16, בלי קופון. זמינים 160×230, 200×290, 240×340",
+   "image": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/rugs/hom-carpetshop/scandi-kilim-16-grey-white.jpg",
+   "slot_styles": [
+    {"slot": "living-room/rug", "style": "boho", "fit": 7.5, "size": "240×340", "custom_size": "לא", "role": "variation (הקילים)"},
+    {"slot": "master/rug", "style": "boho", "fit": 7.5, "size": "200×290", "custom_size": "לא", "role": "variation"},
+    {"slot": "dining-room/dining-rug", "style": "boho", "fit": 7.5, "size": "240×250 או 230×220", "custom_size": "כן: דרך HōM BUSINESS", "role": "default"}
+   ],
+   "also_fits": [],
+   "why_he": "קילים צמר דו-צדדי בטאופ עם מעוינים בשנהב: הקילים שהבוהו צריך, צילום אמיתי, ובמלאי עד 240×340.",
+   "custom_size_needed": false,
+   "flags_he": [
+    "הרקע טאופ-אפור, קר וכהה מהחול של הבוהו: זו הווריאציה האפורה, לא ברירת מחדל",
+    "לאשר אורך פרנזים עד 8 ס״מ"
+   ]
+  },
+  {
+   "id": "P14",
+   "supplier": "השטיח האדום / HōM",
+   "supplier_slug": "hom-carpetshop",
+   "rug": "ברבר מרוקאי 03 לבן-שחור עם פרנזים",
+   "rug_slug": "berber-03-white-black",
+   "url": "https://www.carpetshop.co.il/products/moroccan-berber-03-white-black-with-fringes",
+   "material": "100% צמר, עבודת יד, פלומה רכה, פרנזים",
+   "natural_fibre": "100% טבעי",
+   "sizes_and_prices": [
+    {"size": "200×300", "price_ils": 2607.5, "regular_ils": 7450}
+   ],
+   "price_basis_he": "מחיר באתר, 2026-10-16, בלי קופון. רק 200×300 קיים",
+   "image": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/rugs/hom-carpetshop/berber-03-white-black.jpg",
+   "slot_styles": [
+    {"slot": "living-room/rug", "style": "boho", "fit": 7.5, "size": "200×300", "custom_size": "לא", "role": "variation (הברבר)"},
+    {"slot": "master/rug", "style": "boho", "fit": 7.5, "size": "200×300", "custom_size": "לא", "role": "variation"}
+   ],
+   "also_fits": [],
+   "why_he": "בני אוריין קלאסי, שנהב עם רשת מעוינים כהה: הברבר שמזהה את הבוהו מרחוק, במחיר אמצע.",
+   "custom_size_needed": false,
+   "flags_he": [
+    "חריגה מנומקת: בטיוטת הבוהו ברבר עד 15 מ״מ, והפלומה כאן גבוהה יותר. הסיבה: זה הברבר החתימתי של הסגנון, והבריף עוד טיוטה",
+    "קווים כהים מחוץ לפלטת הבוהו: בפריים לצמצם שחור אחר",
+    "דוגמה מסורתית, לא העתק של עיצוב מוגן"
+   ]
+  },
+  {
+   "id": "P15",
+   "supplier": "Nortli (נורטלי), נציגות Broste Copenhagen",
+   "supplier_slug": "nortli",
+   "brand": "Broste Copenhagen",
+   "rug": "LUMI 140×200",
+   "rug_slug": "lumi-jute-cotton-140x200",
+   "url": "https://nortli.co.il/products/jane-rug-copy-2",
+   "material": "יוטה וכותנה",
+   "natural_fibre": "100% טבעי",
+   "sizes_and_prices": [
+    {"size": "140×200", "price_ils": 1779}
+   ],
+   "price_basis_he": "מחיר לצרכן באתר, 2026-10-16",
+   "image": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/rugs/nortli/lumi-jute-cotton-140x200.jpg",
+   "slot_styles": [
+    {"slot": "kids/rug", "style": "warm-modern", "fit": 7.5, "size": "140×200", "custom_size": "לא", "role": "default"},
+    {"slot": "kids/rug", "style": "boho", "fit": 7.5, "size": "140×200", "custom_size": "לא", "role": "default"},
+    {"slot": "kids/rug", "style": "nordic", "fit": 7, "size": "140×200", "custom_size": "לא", "role": "variation (K-girl)"}
+   ],
+   "also_fits": [],
+   "why_he": "יוטה ושמנת בצורות קשת רכות: שטיח ילדים שקט בדיוק 140×200, שעובד במודרני חם, בבוהו ובנורדי.",
+   "custom_size_needed": false,
+   "flags_he": [
+    "התמונה קטנה (השטיח כ-300 פיקסל): לבקש צילום מלא לפני רינדור",
+    "OEKO-TEX מועדף בחדר ילדים: לשאול"
+   ]
+  },
+  {
+   "id": "P16",
+   "supplier": "Nortli (נורטלי), נציגות Broste Copenhagen",
+   "supplier_slug": "nortli",
+   "brand": "Broste Copenhagen",
+   "rug": "YUKI 140×200",
+   "rug_slug": "yuki-jute-140x200",
+   "url": "https://nortli.co.il/products/yuki-rug-70-200-copy-1",
+   "material": "יוטה ארוגה בעבודת יד עם פסי כותנה כפולים, פרנזים קצרים",
+   "natural_fibre": "100% טבעי",
+   "sizes_and_prices": [
+    {"size": "140×200", "price_ils": 1638},
+    {"size": "70×200", "price_ils": 799, "note_he": "קצר מדי לראנר הכניסה"}
+   ],
+   "price_basis_he": "מחיר לצרכן באתר, 2026-10-16",
+   "image": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/rugs/nortli/yuki-jute-140x200.jpg",
+   "slot_styles": [
+    {"slot": "kids/rug", "style": "japandi", "fit": 7, "size": "140×200", "custom_size": "לא", "role": "variation (פסי שוג'י)"},
+    {"slot": "kids/rug", "style": "mediterranean", "fit": 7, "size": "140×200", "custom_size": "לא", "role": "variation (פס)"},
+    {"slot": "kids/rug", "style": "boho", "fit": 7, "size": "140×200", "custom_size": "לא", "role": "variation"}
+   ],
+   "also_fits": [
+    {"slot": "kids/rug", "style": "nordic", "fit": 6.5}
+   ],
+   "why_he": "יוטה עם פסי דיו כפולים: פסי שוג'י לחדר ילדים בג'פנדי, ופס פשוט לים-התיכוני ולבוהו.",
+   "custom_size_needed": false,
+   "flags_he": [
+    "חריגה מנומקת בג'פנדי: הפרנזים כ-3–4 ס״מ, והבריף מתיר עד 2. נבחר כי אין חלופת יוטה עם פס בגודל הזה",
+    "התמונה קטנה: לבקש צילום מלא; OEKO-TEX: לשאול"
+   ]
+  },
+  {
+   "id": "P17",
+   "supplier": "Tollman's dot (טולמנ'ס)",
+   "supplier_slug": "tollmansdot",
+   "brand": "Lorena Canals",
+   "rug": "LINES L, שטיח רחיץ",
+   "rug_slug": "lorena-lines-l-cotton-140x200",
+   "url": "https://www.tollmansdot.co.il/product/lines_l_washable_rug/",
+   "material": "כותנה, עבודת יד, כביס במכונה",
+   "natural_fibre": "100% טבעי",
+   "sizes_and_prices": [
+    {"size": "140×200", "price_ils": 1011, "regular_ils": 1189}
+   ],
+   "price_basis_he": "מחיר לצרכן באתר אחרי הנחה, 2026-10-16",
+   "image": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/rugs/tollmansdot/lorena-lines-l-cotton-140x200.jpg",
+   "slot_styles": [
+    {"slot": "kids/rug", "style": "modern-country", "fit": 8, "size": "140×200", "custom_size": "לא", "role": "default"}
+   ],
+   "also_fits": [
+    {"slot": "kids/rug", "style": "boho", "fit": 6.5}
+   ],
+   "why_he": "כותנה רחיצה עם משבצת קווים דקה באדום, ירוק וחרדל: המשבצת של הכפרי המודרני, והשטיח היחיד בשני הקטלוגים שעובד בסגנון הזה.",
+   "custom_size_needed": false,
+   "flags_he": [
+    "מותג Lorena Canals: מכירה דרך חנות שלישית תלויה גם במותג",
+    "הקו האדום רווי יחסית: נקודה דקה, עד 5% מהשטח, מותר",
+    "OEKO-TEX: לשאול"
+   ]
+  },
+  {
+   "id": "P18",
+   "supplier": "דאר מרקש (Dar Marrakech)",
+   "supplier_slug": "dar-marrakech",
+   "rug": "ראנר מדינה, ברבר",
+   "rug_slug": "runner-medina-60x280",
+   "url": "https://darmarrakech.co.il/products/%D7%A9%D7%98%D7%99%D7%97-%D7%91%D7%A8%D7%91%D7%A8-%D7%A8%D7%90%D7%A0%D7%A8-%D7%9E%D7%93%D7%99%D7%A0%D7%94",
+   "material": "100% צמר, עבודת יד במרוקו, פלומה, פרנזים",
+   "natural_fibre": "100% טבעי",
+   "sizes_and_prices": [
+    {"size": "60×280", "price_ils": 2499, "note_he": "'שטיח הניתן גם להזמנה אישית'"}
+   ],
+   "price_basis_he": "מחיר לצרכן באתר, 2026-10-16",
+   "image": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/rugs/dar-marrakech/runner-medina-60x280.jpg",
+   "slot_styles": [
+    {"slot": "dining-room/kitchen-runner", "style": "boho", "fit": 8, "size": "60×280", "custom_size": "לא", "role": "default"},
+    {"slot": "dining-room/kitchen-runner", "style": "warm-modern", "fit": 7.5, "size": "60×280", "custom_size": "לא", "role": "default"},
+    {"slot": "dining-room/kitchen-runner", "style": "nordic", "fit": 7, "size": "60×280", "custom_size": "לא", "role": "default"}
+   ],
+   "also_fits": [
+    {"slot": "corridor/runner-rug", "style": "boho", "fit": 8, "note_he": "רק בהזמנה אישית 60×700; העמדה מוחרגת (AU2)"},
+    {"slot": "hall/runner-rug", "style": "boho", "fit": 8, "note_he": "רק בהזמנה אישית 80×260; העמדה מוחרגת (AU2)"}
+   ],
+   "why_he": "ראנר בני אוריין בשנהב עם מסגרת קווים אפורה, 60×280 בדיוק: הראנר היחיד בשני הקטלוגים שנכנס לעמדת המטבח.",
+   "custom_size_needed": false,
+   "flags_he": [
+    "המנהל הוציא את דאר מרקש מסבב 1 (תמונות AI באתר ופריטים יחידים). התמונה של מדינה נראית צילום מוצר אמיתי, והדגם 'ניתן להזמנה אישית'. דורש החלטת משתמש",
+    "חריגה מנומקת בנורדי: nordic-dining מבקש אריגה שטוחה ועמידה לניקוי, וזה צמר עם פלומה ופרנזים. נבחר כי אין ראנר אחר במעטפת",
+    "באנר 'אנחנו עוברים' באתר"
+   ]
+  },
+  {
+   "id": "P19",
+   "supplier": "השטיח האדום / HōM",
+   "supplier_slug": "hom-carpetshop",
+   "rug": "אייבי קרם (EVY)",
+   "rug_slug": "evy-cotton-cream",
+   "url": "https://www.carpetshop.co.il/products/evy-cream",
+   "material": "100% כותנה, ארוג ביד, טקסטורה בכמה גבהים, כביס במכונה",
+   "natural_fibre": "100% טבעי",
+   "sizes_and_prices": [
+    {"size": "120×170", "price_ils": 276.5, "regular_ils": 790},
+    {"size": "200×290", "price_ils": 1046.5, "regular_ils": 2990},
+    {"size": "240×340", "price_ils": 1396.5, "regular_ils": 3990}
+   ],
+   "price_basis_he": "מחיר באתר, 2026-10-16, בלי קופון. 140×190 לא זמין",
+   "image": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/rugs/hom-carpetshop/evy-cotton-cream.jpg",
+   "slot_styles": [
+    {"slot": "kids/rug", "style": "nordic", "fit": 7.5, "size": "120×170", "custom_size": "לא", "role": "default (מתאים לשני החדרים)"},
+    {"slot": "kids/rug", "style": "warm-modern", "fit": 7.5, "size": "120×170", "custom_size": "לא", "role": "variation"},
+    {"slot": "kids/rug", "style": "boho", "fit": 7.5, "size": "120×170", "custom_size": "לא", "role": "variation"}
+   ],
+   "also_fits": [
+    {"slot": "living-room/rug", "style": "warm-modern", "fit": 7.5},
+    {"slot": "living-room/rug", "style": "boho", "fit": 7},
+    {"slot": "living-room/rug", "style": "nordic", "fit": 7}
+   ],
+   "why_he": "כותנה רחיצה בשמנת עם קשתות טון-על-טון: שטיח ילדים רך שמתאים גם לילד וגם לילדה, במחיר כניסה.",
+   "custom_size_needed": false,
+   "flags_he": [
+    "התמונה היא צילום חדר, והשטיח מוסתר בחלקו: לבקש צילום מלא לפני רינדור",
+    "120×170 הוא הקצה התחתון של המעטפת (AU5); ברירת המחדל הנורדית היא 140×200, ולכן לבדוק בפריים",
+    "OEKO-TEX: לשאול"
+   ]
+  }
+ ],
+ "counts_per_slot_style": {
+  "living-room/rug": {
+   "nordic": {"picks": ["P01", "P02", "P03"], "ready_now": 0},
+   "warm-modern": {"picks": ["P05", "P04", "P06"], "ready_now": 1},
+   "japandi": {"picks": ["P07", "P08", "P06"], "ready_now": 1},
+   "mediterranean": {"picks": ["P10", "P11", "P12"], "ready_now": 0},
+   "modern-country": {"picks": ["P01", "P06"], "ready_now": 0},
+   "boho": {"picks": ["P10", "P13", "P14"], "ready_now": 0}
+  },
+  "master/rug": {
+   "nordic": {"picks": ["P01", "P02", "P03"], "ready_now": 0},
+   "warm-modern": {"picks": ["P05", "P04", "P06"], "ready_now": 1},
+   "japandi": {"picks": ["P09", "P07", "P08"], "ready_now": 1},
+   "mediterranean": {"picks": ["P10", "P11", "P12"], "ready_now": 0},
+   "modern-country": {"picks": ["P01", "P06"], "ready_now": 0},
+   "boho": {"picks": ["P10", "P13", "P14"], "ready_now": 0}
+  },
+  "dining-room/dining-rug": {
+   "nordic": {"picks": ["P02", "P01"], "ready_now": 0},
+   "warm-modern": {"picks": ["P07", "P06", "P08"], "ready_now": 1},
+   "japandi": {"picks": ["P08", "P12"], "ready_now": 1},
+   "mediterranean": {"picks": ["P12", "P11", "P10"], "ready_now": 0},
+   "modern-country": {"picks": ["P01"], "ready_now": 0},
+   "boho": {"picks": ["P13", "P10"], "ready_now": 0}
+  },
+  "kids/rug": {
+   "nordic": {"picks": ["P19", "P09", "P15"], "ready_now": 0},
+   "warm-modern": {"picks": ["P15", "P19"], "ready_now": 0},
+   "japandi": {"picks": ["P07", "P09", "P16"], "ready_now": 0},
+   "mediterranean": {"picks": ["P10", "P16"], "ready_now": 0},
+   "modern-country": {"picks": ["P17"], "ready_now": 0},
+   "boho": {"picks": ["P15", "P19", "P16"], "ready_now": 0}
+  },
+  "dining-room/kitchen-runner": {
+   "nordic": {"picks": ["P18"], "ready_now": 0},
+   "warm-modern": {"picks": ["P18"], "ready_now": 0},
+   "japandi": {"picks": [], "ready_now": 0},
+   "mediterranean": {"picks": [], "ready_now": 0},
+   "modern-country": {"picks": [], "ready_now": 0},
+   "boho": {"picks": ["P18"], "ready_now": 0}
+  }
+ },
+ "could_close_after_deal": [
+  {"slot": "living-room/rug", "style": "nordic", "needs_he": "שלושתם: טולמנ'ס (P01, P02) ועפריתה (P03). אם עפריתה לא מצטרפת, P05 או P09 משלימים"},
+  {"slot": "master/rug", "style": "nordic", "needs_he": "כמו בסלון"},
+  {"slot": "kids/rug", "style": "nordic", "needs_he": "HōM (P19), BuyCarpet (P09), נורטלי (P15)"},
+  {"slot": "living-room/rug", "style": "warm-modern", "needs_he": "שניים מתוך P04, P05, P06; טולמנ'ס לבד מספיקה"},
+  {"slot": "master/rug", "style": "warm-modern", "needs_he": "כמו בסלון"},
+  {"slot": "dining-room/dining-rug", "style": "warm-modern", "needs_he": "שניים מתוך P06, P07, P08, כולם במידה מותאמת"},
+  {"slot": "living-room/rug", "style": "japandi", "needs_he": "שניים מתוך P06, P07, P08"},
+  {"slot": "master/rug", "style": "japandi", "needs_he": "שניים מתוך P07, P08, P09; HōM ו-BuyCarpet מספיקות"},
+  {"slot": "dining-room/dining-rug", "style": "japandi", "needs_he": "P08 (ג'וזפון) ו-P12 (בית שטיחי רות), במידה מותאמת"},
+  {"slot": "kids/rug", "style": "japandi", "needs_he": "HōM (P07), BuyCarpet (P09), נורטלי (P16)"},
+  {"slot": "living-room/rug", "style": "mediterranean", "needs_he": "BuyCarpet (P10) ובית שטיחי רות (P11, P12)"},
+  {"slot": "master/rug", "style": "mediterranean", "needs_he": "כמו בסלון; שניים גבוליים במידה"},
+  {"slot": "dining-room/dining-rug", "style": "mediterranean", "needs_he": "P10, P11, P12, כולם במידה מותאמת"},
+  {"slot": "living-room/rug", "style": "boho", "needs_he": "BuyCarpet (P10) ו-HōM (P13, P14)"},
+  {"slot": "master/rug", "style": "boho", "needs_he": "כמו בסלון"},
+  {"slot": "kids/rug", "style": "boho", "needs_he": "נורטלי (P15, P16) ו-HōM (P19)"}
+ ],
+ "could_close_by_style": {"nordic": 3, "warm-modern": 3, "japandi": 4, "mediterranean": 3, "modern-country": 0, "boho": 3, "total": 16},
+ "not_closing_he": [
+  "כפרי מודרני: סלון והורים 2 (P01, P06), ילדים 1 (P17), פינת אוכל 1. אין בשני הקטלוגים כביסה דהויה או פרחוני עדין.",
+  "ראנר מטבח: רק P18, בנורדי, במודרני חם ובבוהו. בג'פנדי, בים-התיכוני ובכפרי אין אף ראנר במעטפת.",
+  "פינת אוכל בנורדי (2) ובבוהו (2): הכול במידה מותאמת, ותלוי בתשובות.",
+  "ילדים במודרני חם (2) ובים-התיכוני (2)."
+ ],
+ "suppliers": [
+  {
+   "slug": "tollmansdot",
+   "name": "Tollman's dot (טולמנ'ס)",
+   "contact": "טופס בלבד: https://www.tollmansdot.co.il/contact-us/",
+   "b2b": "מפורש: פרויקטים עסקיים וקשרי אדריכלים",
+   "picks": ["P01", "P02", "P05", "P06", "P17"],
+   "personal_line_he": "אהבנו את שטיחי LINIE DESIGN שאתם מביאים, ובמיוחד את ASKO באוף-וויט ואת NYOKO הלבן, ואת שטיח הכותנה הרחיץ LINES L של Lorena Canals.",
+   "needs_owner_decision": false,
+   "notes_he": "המשתמש שולח בטופס. מותגים מוגנים: לשאול גם על אישור המותג לרינדור ולמכירה. לשאול על מידה מותאמת (240×340 לסלון, 240×250 לפינת האוכל) ועל BURANO מעבר ליחידה שבאאוטלט."
+  },
+  {
+   "slug": "hom-carpetshop",
+   "name": "השטיח האדום / HōM",
+   "contact": "b2b@carpetshop.co.il",
+   "b2b": "מפורש: HōM BUSINESS, מחירים מסחריים, התאמה אישית",
+   "picks": ["P07", "P13", "P14", "P19"],
+   "personal_line_he": "אהבנו את מוניקה 05 מצמר ואת קילים סקנדינבי 16, ואת שטיח הכותנה הרחיץ EVY עם הקשתות, ואת זה שכולם נארגים ביד.",
+   "needs_owner_decision": false,
+   "notes_he": "רשת: הפסקה השנייה בנוסח הרשתות. לשאול על מידה מותאמת לפינת האוכל (P07, P13)."
+  },
+  {
+   "slug": "buycarpet",
+   "name": "BuyCarpet (שטיחים בסנטר ב.ש.)",
+   "contact": "info@buycarpet.co.il",
+   "b2b": "חזק: תוכנית מעצבים; החברה האם מספקת רשתות",
+   "picks": ["P09", "P10"],
+   "personal_line_he": "אהבנו את שטיח הצמר 'רן' ואת שטיח היוטה בוקלה, שמגיעים אצלכם בכל המידות שאנחנו צריכים, מחדר ילדים ועד סלון.",
+   "needs_owner_decision": false,
+   "notes_he": "רשת: הפסקה השנייה בנוסח הרשתות. המחירים באתר במבצע (50% ו-10%)."
+  },
+  {
+   "slug": "afrita",
+   "name": "Afrita (עפריתה)",
+   "contact": "myafrita@gmail.com",
+   "b2b": "מפורש: דף סיטונאות לחנויות ולמעצבי פנים",
+   "picks": ["P03", "P04"],
+   "personal_line_he": "אהבנו את קולקציית בני מרירת בהזמנה אישית שלכם, ובמיוחד את CASA בשנהב עם הקווים הדקים ואת ZHR עם האדרה בגריז', ואת זה שכל שטיח נארג במידה שבוחרים.",
+   "needs_owner_decision": true,
+   "notes_he": "החלטה על מדרג המחיר (₪8,600 ומעלה, owner_decisions 4). זמן ייצור 10–14 שבועות. לבקש 240×340 וגובה פלומה."
+  },
+  {
+   "slug": "josephon",
+   "name": "Josephon Carpets (ג'וזפון)",
+   "contact": "טופס בלבד: https://www.josephon-carpets.co.il/pages/contact",
+   "b2b": "דף ייעוץ למעצבים ולאדריכלים",
+   "picks": ["P08"],
+   "personal_line_he": "אהבנו את Woven 4 בגוון אבן, ואת האפשרות להזמין אותו אצלכם במידה ובגוון אחרים.",
+   "needs_owner_decision": false,
+   "notes_he": "המשתמש שולח בטופס. השאלה הראשונה: ממה השטיח עשוי."
+  },
+  {
+   "slug": "marvadim-ruth",
+   "name": "בית שטיחי רות (Marvadim)",
+   "contact": "ddiem26@gmail.com",
+   "b2b": "חלש: ייצור לפי מידה ויעוץ, בלי דף סוחרים",
+   "picks": ["P11", "P12"],
+   "personal_line_he": "אהבנו את שטיחי הסיבים הטבעיים שלכם, ובמיוחד את הסיזל NF-443A עם השוליים ואת ABACCA מיוטה וקנבוס, ואת הניסיון המשפחתי שלכם מאז 1980.",
+   "needs_owner_decision": false,
+   "notes_he": "נבחר למרות B2B חלש: הספק היחיד עם סיבים טבעיים בעומק 240 ובייצור לפי מידה לים-התיכוני ולפינת האוכל. לבקש מחירים וצילומים חדשים."
+  },
+  {
+   "slug": "nortli",
+   "name": "Nortli (נורטלי)",
+   "contact": "nortlishop@gmail.com",
+   "b2b": "אין דף סוחרים; נציגת Broste Copenhagen בישראל",
+   "picks": ["P15", "P16"],
+   "personal_line_he": "אהבנו את שטיחי היוטה YUKI ו-LUMI של Broste Copenhagen, בדיוק במידה של חדר ילדים.",
+   "needs_owner_decision": false,
+   "notes_he": "נבחר למרות שאין דף סוחרים: השטיחים הטבעיים היחידים במעוצב של 140×200. לשאול על OEKO-TEX."
+  },
+  {
+   "slug": "dar-marrakech",
+   "name": "דאר מרקש (Dar Marrakech)",
+   "contact": "darismyhome@gmail.com",
+   "b2b": "'למכירה סיטונאית ולעיצוב בהתאמה אישית ניתן לפנות'",
+   "picks": ["P18"],
+   "personal_line_he": "אהבנו את ראנר הצמר 'מדינה' בשנהב עם מסגרת הקווים, ואת זה שאפשר להזמין אצלכם במידה אישית.",
+   "needs_owner_decision": true,
+   "notes_he": "המנהל הוציא אותם מסבב 1. המעצב ממליץ להחזיר בגלל הראנר היחיד למטבח (owner_decisions 1). לבקש צילומים אמיתיים, ומחיר ל-60×700 ול-80×260."
+  }
+ ],
+ "suppliers_without_picks": [
+  {"slug": "tzemer", "name": "צמר שטיחים יפים (Tzemer)", "status_he": "דורש החלטת משתמש לפני כל קשר: אחד משמונת הסניפים במעלה אדומים (Dcity). אין בחירה בסבב הזה. המועמד היחיד שלו ששווה משהו הוא ראנר הצמר קטלינה CL-21 ב-80×250 לכניסה, עמדה מוחרגת (excluded_slot_flags). תמונות 'חבל 01' ו'חבל פרימיום' הן הדמיה, ולא נבחרו."},
+  {"slug": "matriv", "name": "שטיחי מתריב", "status_he": "אין בחירה: 'חלוקי נחל' (נורדי 8) נכנס רק לעמדת העבודה המוחרגת; 'חבל עם כותנה' (בוהו 8) הוא יוטה חלקה שנייה אחרי P10. בלי מייל בסבב הזה."},
+  {"slug": "bring-it-home", "name": "Bring It Home", "status_he": "אין בחירה: Taival ו-Myky (נורדי 8, מודרני חם 8) מסומנים 'לא זמין'. לבדוק שוב אם יחזרו למלאי."},
+  {"slug": "david-ashkenazi", "name": "David Ashkenazi Rugs", "status_he": "אין בחירה: Touareg (נורדי 8.5) הוא עתודת פרימיום, אבל אין מחיר והעמדה הנורדית מלאה. אם עפריתה לא מצטרפת, הוא החלופה ל-P03."},
+  {"slug": "kuala", "name": "KUALA", "status_he": "אין בחירה: קולורדו (ים-תיכוני 8) במלאי רק ב-160×230; דקוטה וארוזונה ב-140×195 כהים וחלודים מדי (6.5–7). לשקול שוב אם 200×290 חוזר למלאי."},
+  {"slug": "moroccofantasy", "name": "פנטזיה מרוקאית", "status_he": "אין בחירה: שטיחים יפים לבוהו (8.5), אבל כולם יחידים, ושניים מתוך ארבעה אזלו."},
+  {"slug": "moroccan-home", "name": "הבית המרוקאי", "status_he": "אין בחירה: פריטים יחידים בצבעים רוויים."},
+  {"slug": "carpetempire", "name": "אימפריית השטיחים", "status_he": "אין בחירה: מידות גבוליות בלבד, יחידים, הדמיית חדר."},
+  {"slug": "hoga", "name": "הוגה שטיחים", "status_he": "אין בחירה: איס 18 ו-3 (בוהו 7.5) רק לעבודה ולילדים, בלי דף עסקים, והעמדות מלאות."},
+  {"slug": "tomik, art-java, galeria-kilims, elsebeth, lakiya", "name": "תומיק, Art Java, גלריה קילימס, Elsebeth, לקייה", "status_he": "אין בחירה: פריטים יחידים, צבעים רוויים, תיק עבודות בלי קטלוג, או מידה מחוץ לעמדה."},
+  {"slug": "rugs-and-co", "name": "Rugs & Co", "status_he": "אין בחירה: התמונות הן הדמיות, החומר צמר עם טנסל או משי, ועדיין לבדוק את הקשר לקבוצת כרמל."},
+  {"slug": "iota, ikea-il", "name": "iota, IKEA", "status_he": "לא דורגו לבחירה: iota סינתטי ברובו (נפסל לפי חוק הסיבים הטבעיים); ל-IKEA אין מסלול שיתוף פעולה."}
+ ],
+ "excluded_slot_flags": [
+  {"slot": "hall/runner-rug", "candidates_he": "קטלינה CL-21 של צמר (80×250, צמר, צילום אמיתי; בוהו 7.5, דורש החלטה על צמר); גפן 02 של HōM (80×250, כותנה; כפרי 7); מדינה של דאר מרקש בהזמנה אישית 80×260 (בוהו 8); NF-443A ב-75×240 (גבולי באורך; ים-תיכוני 7).", "recommendation_he": "לא לפתוח עכשיו. עמדה שחוזרת לספירה עם פחות מ-3 אפשרויות מורידה את pct_ready. בהודעה 2 לבקש מחירים ל-80×260 מ-HōM ומדאר מרקש, ולפתוח רק אם יש 3 לסגנון."},
+  {"slot": "corridor/runner-rug", "candidates_he": "רק בהזמנה אישית: מדינה (דאר מרקש) ב-60×700, שאלה לעפריתה (90×400 בקטלוג), ל-HōM ולבית שטיחי רות.", "recommendation_he": "לא לפתוח עכשיו; לשאול את הספקים על 60×700 בהודעה 2."},
+  {"slot": "work/rug", "candidates_he": "'חלוקי נחל' של מתריב (160×230, צמר בוקלה; נורדי 8, מודרני חם 8, גבולי ב-10 ס״מ); קולורדו של KUALA (160×230; ים-תיכוני 8); P09 ו-P10 ב-160×230.", "recommendation_he": "השטיח החזק ביותר לפתיחה מחדש, אבל 230 ארוך ב-10 ס״מ מהמעטפת. לא לפתוח בלי בדיקה בפריים W0 ובלי 3 אפשרויות לכל סגנון."}
+ ],
+ "owner_decisions": [
+  {"id": 1, "question_he": "להחזיר את דאר מרקש לסבב 1, רק בשביל ראנר מדינה?", "recommendation_he": "כן. זה הראנר היחיד למטבח בשני הקטלוגים, והתמונה שלו נראית צילום אמיתי. במייל לבקש צילומים אמיתיים."},
+  {"id": 2, "question_he": "צמר (סניף במעלה אדומים): לפנות או לא?", "recommendation_he": "לא בסבב הזה. אין לו בחירה בעמדה שנספרת; קטלינה רלוונטית רק לראנר הכניסה המוחרג."},
+  {"id": 3, "question_he": "לפתוח מחדש עמדה מוחרגת (כניסה, מסדרון, עבודה)?", "recommendation_he": "לא עכשיו. רק כשיש 3 אפשרויות לסגנון (ראו excluded_slot_flags)."},
+  {"id": 4, "question_he": "שטיחי עפריתה (₪8,600 ל-200×300, ובמידה של הסלון יותר) באתר, כעוגן פרימיום לפי ה.14?", "recommendation_he": "כן, כמדרג העליון בסלון הנורדי ובמודרני החם, לצד טולמנ'ס באמצע ו-BuyCarpet בכניסה."},
+  {"id": 5, "question_he": "איזו מידה לבקש לפינת האוכל: 230×220 (קובץ העמדות) או 240×250 (המפרט אחרי LQ2)?", "recommendation_he": "240×250, כמו בנוסח הפנייה, ולעדכן את קובץ העמדות אחרי אישור."},
+  {"id": 6, "question_he": "בסלון הנורדי השטיח חייב עומק 240. מקבלים 250×350 מהקטלוג (גבולי ב-10 ס״מ) או מבקשים 240×340 מותאם?", "recommendation_he": "לבקש 240×340 מטולמנ'ס ומעפריתה, ו-250×350 רק אם הוא עובר בדיקה בפריים."}
+ ]
+}
