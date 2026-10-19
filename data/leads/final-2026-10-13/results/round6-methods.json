@@ -1,0 +1,4651 @@
+{
+ "group": "round6-methods",
+ "date": "2026-10-19",
+ "by": "sourcing-agent (round 6, track B)",
+ "cj_points_used": 8840,
+ "cj_calls": 196,
+ "zendrop_calls": 0,
+ "aliexpress_calls": 0,
+ "google_vision_key_available": false,
+ "method": "BRIEF-round6-new-channels.md track B: image-first (queue), CJ by category id, proven sellers, cache by attribute, blocker per zero style-slot",
+ "cards_written": [
+  {
+   "card_id": "wall-hooks-cj-rattan-oval-frame-3-hooks-40",
+   "slot": "hall/wall-hooks",
+   "styles": [
+    "boho"
+   ],
+   "method": "envelope-recheck",
+   "closes": [
+    "boho:hall/wall-hooks"
+   ]
+  }
+ ],
+ "methods": {
+  "image_first": {
+   "vision_key": false,
+   "note_he": "GOOGLE_VISION_API_KEY לא מוגדר בסביבה; google_vision_source.py הוא שלד. נבנה תור לחיפוש לפי תמונה ב-AliExpress.",
+   "queue": "round5/ae-queue-6-images.json",
+   "items": 134,
+   "near_misses": 89,
+   "counted_card_seeds": 45,
+   "distinct_style_slots_that_close_if_found": 41,
+   "cards": 0
+  },
+  "cj_by_category": {
+   "list_calls": 172,
+   "points": 8600,
+   "unique_listings_seen": 5332,
+   "hidden_by_registry": 117,
+   "opened": 21,
+   "freight_quotes": 5,
+   "cards": 0,
+   "storage_category_full_sweep": {
+    "category": "2502140315331600200",
+    "pages": 64,
+    "unique_listings": 3650
+   },
+   "findings_he": [
+    "/product/list בלי מילה מחזיר את החדשים ביותר: בעמודים הראשונים בעיקר מחסני ארה\"ב/בריטניה/אירופה (Walmart, SONGMICS, VASAGLE, Outsunny), רהיטים כבדים, כביסה וארונות.",
+    "שם עם כמה מילים בלי קטגוריה מתנהג כ-OR (magazine rack: ‏8,429 תוצאות, כמעט כולן לא קשורות). מילה אחת בתוך קטגוריה היא חיפוש תת-מחרוזת מדויק (Pendant + lampshade: ‏4).",
+    "קטגוריות התאורה דלות (Pendant+bamboo/seagrass/jute/paper: ‏0) ואין בהן CE מוצהר: 0 מתוך 162 מנורות CJ במטמון מצהירות CE.",
+    "רק 12 מזהי קטגוריה ידועים (docs/suppliers/cj-categories.md); ל-Home Office Storage, ‏Bathroom Storage, ‏Kitchen Storage ו-Storage Bottles & Jars אין מזהה, והעטיפה לא חושפת /product/getCategory."
+   ]
+  },
+  "proven_sellers": {
+   "cj": {
+    "counted_cj_cards": 163,
+    "with_supplier_name": 0,
+    "cached_cj_with_supplier_name": 24,
+    "api_supplier_filter": false,
+    "family_opened": "Xianju Baishun Arts & Crafts (7 acacia listings): 6 opened, 0 pass",
+    "cards": 0
+   },
+   "aliexpress": {
+    "counted_ae_cards_with_store": 171,
+    "stores": 140,
+    "cached_products_of_those_stores": 648,
+    "new_pass_from_cache": 0,
+    "queue": "round5/ae-queue-6-stores.json",
+    "stores_queued": 50,
+    "lighting_stores_queued": 32,
+    "note_he": "ב-DS API אין קריאה לרשימת מוצרי חנות; התור לסשן ה-AliExpress."
+   }
+  },
+  "cache_by_attribute": {
+   "records": "52,500 in the cache_search index; 9,524 opened products parsed for SKU labels, AE properties and CJ descriptions",
+   "sku_size_matches": 53,
+   "sku_size_matches_new_to_slot": 53,
+   "ce_lamps_cached": 782,
+   "ce_lamps_seen_undecided": 315,
+   "judged": 24,
+   "cards": 0,
+   "note_he": "התאמת מידת SKU (AxBxC) מול 8 מעטפות של קופסאות, סלים ומגשים, וסינון CE ומתח במאפייני AliExpress. כל ההתאמות נבדקו בתמונה: נכשלו במחיר-משלוח, בגובה, או בסגנון. המטמון כבר נכרה בסבבים 5–5f."
+  }
+ },
+ "zero_style_slots_blockers": {
+  "count": 112,
+  "by_primary": {
+   "style": 34,
+   "price": 17,
+   "size": 25,
+   "standard": 6,
+   "freight": 6,
+   "no_product": 11,
+   "israeli_shop_AU1": 11,
+   "stock": 1,
+   "no_il_shipping": 1
+  },
+  "per_style_slot": {
+   "boho:bath/bin": {
+    "primary": "style",
+    "judged": 31,
+    "best_fit": 6.0,
+    "fit7_blocked": 0,
+    "blockers": {},
+    "examples": []
+   },
+   "japandi:bath/bin": {
+    "primary": "price",
+    "judged": 31,
+    "best_fit": 8.0,
+    "fit7_blocked": 2,
+    "blockers": {
+     "size": 1,
+     "loss": 1,
+     "replica": 1
+    },
+    "examples": [
+     {
+      "id": "1430717049499422720",
+      "fit": 8.0,
+      "blockers": [
+       "replica"
+      ],
+      "file": "round5-storage-bath-hall.json",
+      "margin": 0,
+      "env": "yes",
+      "why": "במידה בדיוק ויפה, אבל התמונות הן של סל הנייר עם המכסה המתנדנד של Saito Wood (מותג עיצוב יפני): חשד להעתק או לתמונות שאולות. נדחה (ג.4)."
+     },
+     {
+      "id": "2603030314101627400",
+      "fit": 7.0,
+      "blockers": [
+       "loss",
+       "size"
+      ],
+      "file": "round5-storage-bath-hall.json",
+      "margin": 0,
+      "env": "no",
+      "why": "חילוץ נכשל: 2 ק\"ג באריזה 42×22×42 (נפח 6.5 ק\"ג), משלוח כבד שמפיל אותו מתחת לשווי בישראל (~₪149). הפסד אמיתי, נשאר נדחה."
+     }
+    ]
+   },
+   "modern-country:bath/bin": {
+    "primary": "style",
+    "judged": 31,
+    "best_fit": 6.0,
+    "fit7_blocked": 0,
+    "blockers": {},
+    "examples": []
+   },
+   "warm-modern:bath/bin": {
+    "primary": "price",
+    "judged": 31,
+    "best_fit": 7.5,
+    "fit7_blocked": 2,
+    "blockers": {
+     "size": 1,
+     "loss": 1,
+     "replica": 1
+    },
+    "examples": [
+     {
+      "id": "1430717049499422720",
+      "fit": 7.5,
+      "blockers": [
+       "replica"
+      ],
+      "file": "round5-storage-bath-hall.json",
+      "margin": 0,
+      "env": "yes",
+      "why": "במידה בדיוק ויפה, אבל התמונות הן של סל הנייר עם המכסה המתנדנד של Saito Wood (מותג עיצוב יפני): חשד להעתק או לתמונות שאולות. נדחה (ג.4)."
+     },
+     {
+      "id": "2603030314101627400",
+      "fit": 7.0,
+      "blockers": [
+       "loss",
+       "size"
+      ],
+      "file": "round5-storage-bath-hall.json",
+      "margin": 0,
+      "env": "no",
+      "why": "חילוץ נכשל: 2 ק\"ג באריזה 42×22×42 (נפח 6.5 ק\"ג), משלוח כבד שמפיל אותו מתחת לשווי בישראל (~₪149). הפסד אמיתי, נשאר נדחה."
+     }
+    ]
+   },
+   "japandi:bath/ceiling-light": {
+    "primary": "price",
+    "judged": 84,
+    "best_fit": 7.0,
+    "fit7_blocked": 2,
+    "blockers": {
+     "loss": 2
+    },
+    "examples": [
+     {
+      "id": "1005010309140025",
+      "fit": 7.0,
+      "blockers": [
+       "loss"
+      ],
+      "file": "wave3-repricing.json",
+      "margin": -72.8,
+      "env": null,
+      "why": "טבעת טרוורטין 38 – רחבה מעט; SKU נבחר 6000K קר"
+     },
+     {
+      "id": "1005010228428551",
+      "fit": 7.0,
+      "blockers": [
+       "loss"
+      ],
+      "file": "wave3-repricing.json",
+      "margin": -22.8,
+      "env": null,
+      "why": "טבעת טרוורטין 38; SKU אור ניטרלי 4000K"
+     }
+    ]
+   },
+   "modern-country:bath/ceiling-light": {
+    "primary": "style",
+    "judged": 84,
+    "best_fit": 6.0,
+    "fit7_blocked": 0,
+    "blockers": {},
+    "examples": []
+   },
+   "nordic:bath/ceiling-light": {
+    "primary": "price",
+    "judged": 84,
+    "best_fit": 7.0,
+    "fit7_blocked": 8,
+    "blockers": {
+     "loss": 8,
+     "material": 8,
+     "standard": 2
+    },
+    "examples": [
+     {
+      "id": "1005007452122011",
+      "fit": 7.0,
+      "blockers": [
+       "loss",
+       "material"
+      ],
+      "file": "wave3-repricing.json",
+      "margin": -44.3,
+      "env": null,
+      "why": "זכוכית אופל דונאט 32; SKU אור ניטרלי – לבחור חם; גובה 13"
+     },
+     {
+      "id": "1005009229528573",
+      "fit": 7.0,
+      "blockers": [
+       "loss",
+       "material"
+      ],
+      "file": "wave3-repricing.json",
+      "margin": -60.1,
+      "env": null,
+      "why": "זכוכית אופל דונאט 32; SKU נבחר אור קר – לבחור חם"
+     },
+     {
+      "id": "1005008503056368",
+      "fit": 7.0,
+      "blockers": [
+       "loss",
+       "material"
+      ],
+      "file": "wave3-repricing.json",
+      "margin": -4.4,
+      "env": null,
+      "why": "זכוכית אופל 'אפרסמון' 32 לבן חלבי; SKU תלת-גווני – לכוון חם"
+     }
+    ]
+   },
+   "warm-modern:bath/ceiling-light": {
+    "primary": "price",
+    "judged": 84,
+    "best_fit": 7.0,
+    "fit7_blocked": 8,
+    "blockers": {
+     "loss": 8,
+     "material": 8,
+     "standard": 2
+    },
+    "examples": [
+     {
+      "id": "1005007452122011",
+      "fit": 7.0,
+      "blockers": [
+       "loss",
+       "material"
+      ],
+      "file": "wave3-repricing.json",
+      "margin": -44.3,
+      "env": null,
+      "why": "זכוכית אופל דונאט 32; SKU אור ניטרלי – לבחור חם; גובה 13"
+     },
+     {
+      "id": "1005009229528573",
+      "fit": 7.0,
+      "blockers": [
+       "loss",
+       "material"
+      ],
+      "file": "wave3-repricing.json",
+      "margin": -60.1,
+      "env": null,
+      "why": "זכוכית אופל דונאט 32; SKU נבחר אור קר – לבחור חם"
+     },
+     {
+      "id": "1005008503056368",
+      "fit": 7.0,
+      "blockers": [
+       "loss",
+       "material"
+      ],
+      "file": "wave3-repricing.json",
+      "margin": -4.4,
+      "env": null,
+      "why": "זכוכית אופל 'אפרסמון' 32 לבן חלבי; SKU תלת-גווני – לכוון חם"
+     }
+    ]
+   },
+   "boho:bath/shower-stool": {
+    "primary": "size",
+    "judged": 19,
+    "best_fit": 7.0,
+    "fit7_blocked": 2,
+    "blockers": {
+     "size": 1,
+     "no_il_shipping": 1
+    },
+    "examples": [
+     {
+      "id": "1956982306888204290",
+      "fit": 7.0,
+      "blockers": [
+       "size"
+      ],
+      "file": "round5-storage-bath-hall.json",
+      "margin": 0,
+      "env": "no",
+      "why": "חילוץ נכשל: רוחב 51 מול 28–34 (חריגה של 50%) ואין מידה קטנה אצל הספק; ממחסן אמריקאי ב-$63 בלי משלוח לישראל."
+     },
+     {
+      "id": "2373969",
+      "fit": 7.0,
+      "blockers": [
+       "no_il_shipping"
+      ],
+      "file": "round5b-furniture-boxes.json",
+      "margin": 0,
+      "env": "borderline",
+      "why": "ספק אמריקאי: אומדן משלוח Zendrop לישראל ריק (אין משלוח). כל תוצאות 'teak stool' ב-Zendrop הן Amazon Products (US). חסום."
+     }
+    ]
+   },
+   "japandi:bath/shower-stool": {
+    "primary": "style",
+    "judged": 19,
+    "best_fit": 6.0,
+    "fit7_blocked": 0,
+    "blockers": {},
+    "examples": []
+   },
+   "mediterranean:bath/shower-stool": {
+    "primary": "style",
+    "judged": 19,
+    "best_fit": 6.5,
+    "fit7_blocked": 0,
+    "blockers": {},
+    "examples": []
+   },
+   "modern-country:bath/shower-stool": {
+    "primary": "style",
+    "judged": 19,
+    "best_fit": 6.0,
+    "fit7_blocked": 0,
+    "blockers": {},
+    "examples": []
+   },
+   "nordic:bath/shower-stool": {
+    "primary": "size",
+    "judged": 19,
+    "best_fit": 7.0,
+    "fit7_blocked": 2,
+    "blockers": {
+     "size": 1,
+     "no_il_shipping": 1
+    },
+    "examples": [
+     {
+      "id": "1956982306888204290",
+      "fit": 7.0,
+      "blockers": [
+       "size"
+      ],
+      "file": "round5-storage-bath-hall.json",
+      "margin": 0,
+      "env": "no",
+      "why": "חילוץ נכשל: רוחב 51 מול 28–34 (חריגה של 50%) ואין מידה קטנה אצל הספק; ממחסן אמריקאי ב-$63 בלי משלוח לישראל."
+     },
+     {
+      "id": "2373969",
+      "fit": 7.0,
+      "blockers": [
+       "no_il_shipping"
+      ],
+      "file": "round5b-furniture-boxes.json",
+      "margin": 0,
+      "env": "borderline",
+      "why": "ספק אמריקאי: אומדן משלוח Zendrop לישראל ריק (אין משלוח). כל תוצאות 'teak stool' ב-Zendrop הן Amazon Products (US). חסום."
+     }
+    ]
+   },
+   "warm-modern:bath/shower-stool": {
+    "primary": "style",
+    "judged": 19,
+    "best_fit": 6.5,
+    "fit7_blocked": 0,
+    "blockers": {},
+    "examples": []
+   },
+   "boho:bath/storage-basket": {
+    "primary": "size",
+    "judged": 28,
+    "best_fit": 8.0,
+    "fit7_blocked": 7,
+    "blockers": {
+     "israeli_shop_AU1": 1,
+     "size": 6,
+     "duplicate": 1,
+     "stock": 2
+    },
+    "examples": [
+     {
+      "id": "https://www.foxhome.co.il/products/0334540300",
+      "fit": 8.0,
+      "blockers": [
+       "israeli_shop_AU1",
+       "size"
+      ],
+      "file": "il-decor.json",
+      "margin": null,
+      "env": null,
+      "why": "מלבנית, מחיר מבצע (מחוק ₪69.90); מידות לא פורסמו (המעטפת 40-44×30-34×20-23)."
+     },
+     {
+      "id": "1005011658969890",
+      "fit": 8.0,
+      "blockers": [
+       "size"
+      ],
+      "file": "round5e-aliexpress.json",
+      "margin": 0,
+      "env": "no",
+      "why": "הסל הגדול 30×20×9 קטן בהרבה מהמעטפת 40–44 × 30–34 × 20–23."
+     },
+     {
+      "id": "2511030834381619700",
+      "fit": 7.5,
+      "blockers": [
+       "size"
+      ],
+      "file": "wave2-storage.json",
+      "margin": null,
+      "env": "no",
+      "why": "יקינטון מים עם ידיות עץ, יפה לבוהו, אבל 35×18×13 ו-920 גרם: קטן מדי. נדחה."
+     }
+    ]
+   },
+   "japandi:bath/storage-basket": {
+    "primary": "size",
+    "judged": 28,
+    "best_fit": 7.0,
+    "fit7_blocked": 2,
+    "blockers": {
+     "size": 2,
+     "stock": 1
+    },
+    "examples": [
+     {
+      "id": "1005003094264414",
+      "fit": 7.0,
+      "blockers": [
+       "size",
+       "stock"
+      ],
+      "file": "round5-storage-bath-hall.json",
+      "margin": 0,
+      "env": "no",
+      "why": "חילוץ נכשל: המידה הגדולה 40×29 נכונה, אבל גובה 13 מול 20–23 (נמוך ב-35%), ומלאי 25. לא בגלל המחיר."
+     },
+     {
+      "id": "1005010273153548",
+      "fit": 7.0,
+      "blockers": [
+       "size"
+      ],
+      "file": "round5e-aliexpress.json",
+      "margin": 0,
+      "env": "no",
+      "why": "ארגז עץ עם לוחות קנה, יפה לג'פנדי ולמודרני חם, אבל מידת ה-Large לא מצוינת (הקטן 30×20×14) והמשלוח כבד: עלות נחיתה כ-220 ₪ מול מחיר עמדה 29."
+     }
+    ]
+   },
+   "modern-country:bath/toilet-brush": {
+    "primary": "style",
+    "judged": 31,
+    "best_fit": 6.5,
+    "fit7_blocked": 0,
+    "blockers": {},
+    "examples": []
+   },
+   "boho:bath/toilet-paper-stand": {
+    "primary": "style",
+    "judged": 24,
+    "best_fit": 6.5,
+    "fit7_blocked": 0,
+    "blockers": {},
+    "examples": []
+   },
+   "modern-country:bath/toilet-paper-stand": {
+    "primary": "style",
+    "judged": 24,
+    "best_fit": 6.0,
+    "fit7_blocked": 0,
+    "blockers": {},
+    "examples": []
+   },
+   "boho:bath/towel-ring": {
+    "primary": "size",
+    "judged": 36,
+    "best_fit": 7.0,
+    "fit7_blocked": 2,
+    "blockers": {
+     "no_il_shipping": 1,
+     "size": 2,
+     "material": 2,
+     "duplicate": 1
+    },
+    "examples": [
+     {
+      "id": "1005013180349421",
+      "fit": 7.0,
+      "blockers": [
+       "material",
+       "no_il_shipping",
+       "size"
+      ],
+      "file": "round5e-aliexpress.json",
+      "margin": 0,
+      "env": "no",
+      "why": "מראה בוהו אמיתי, אבל הטבעת כ-8–10 ס\"מ (מעטפת 16–18), החומר מוצהר 'פלסטיק', תמונות האווירה נראות מיוצרות, ואין משלוח לישראל."
+     },
+     {
+      "id": "1005013180373779",
+      "fit": 7.0,
+      "blockers": [
+       "duplicate",
+       "material",
+       "size"
+      ],
+      "file": "round5e-aliexpress.json",
+      "margin": 0,
+      "env": "no",
+      "why": "אותו מוצר כמו הקודם: טבעת כ-8–10 ס\"מ, מתחת למעטפת 16–18; חומר מוצהר פלסטיק."
+     }
+    ]
+   },
+   "modern-country:bath/vanity-sconces": {
+    "primary": "standard",
+    "judged": 30,
+    "best_fit": 8.0,
+    "fit7_blocked": 3,
+    "blockers": {
+     "standard": 3,
+     "size": 2
+    },
+    "examples": [
+     {
+      "id": "1005010461244878",
+      "fit": 8.0,
+      "blockers": [
+       "size",
+       "standard"
+      ],
+      "file": "round5-aliexpress.json",
+      "margin": 0,
+      "env": "no",
+      "why": "אופל 'בית ספר' על צוואר פליז עתיק, יפה מאוד לכפרי מודרני, אבל לא מוגן מים (אין IP44, חובה במקלחת לפי ד.5), רוחב 20 מול 10–16 ובליטה 25 מול עד 12. נדחה."
+     },
+     {
+      "id": "1005011534348592",
+      "fit": 8.0,
+      "blockers": [
+       "size",
+       "standard"
+      ],
+      "file": "round5-aliexpress.json",
+      "margin": 0,
+      "env": "no",
+      "why": "אותו גוף 'בית ספר' אצל ספק אחר וזול יותר, ואותה בעיה: אין IP44, רוחב ~20 ובליטה ~25 מול עד 12 במקלחת. נדחה."
+     },
+     {
+      "id": "2609110517571604500",
+      "fit": 7.0,
+      "blockers": [
+       "standard"
+      ],
+      "file": "round5-lighting.json",
+      "margin": null,
+      "env": "yes",
+      "why": "≤36V G9, בלי IP ובלי CE — חסום למקלחת (ד.5, S2B)."
+     }
+    ]
+   },
+   "modern-country:bath/wall-sconce": {
+    "primary": "size",
+    "judged": 21,
+    "best_fit": 8.0,
+    "fit7_blocked": 2,
+    "blockers": {
+     "size": 2,
+     "standard": 2
+    },
+    "examples": [
+     {
+      "id": "1005010461244878",
+      "fit": 8.0,
+      "blockers": [
+       "size",
+       "standard"
+      ],
+      "file": "round5-aliexpress.json",
+      "margin": 0,
+      "env": "no",
+      "why": "אופל 'בית ספר' על צוואר פליז עתיק, יפה מאוד לכפרי מודרני, אבל לא מוגן מים (אין IP44, חובה במקלחת לפי ד.5), רוחב 20 מול 10–16 ובליטה 25 מול עד 12. נדחה."
+     },
+     {
+      "id": "1005011534348592",
+      "fit": 8.0,
+      "blockers": [
+       "size",
+       "standard"
+      ],
+      "file": "round5-aliexpress.json",
+      "margin": 0,
+      "env": "no",
+      "why": "אותו גוף 'בית ספר' אצל ספק אחר וזול יותר, ואותה בעיה: אין IP44, רוחב ~20 ובליטה ~25 מול עד 12 במקלחת. נדחה."
+     }
+    ]
+   },
+   "japandi:corridor/gallery-stool": {
+    "primary": "freight",
+    "judged": 34,
+    "best_fit": 8.0,
+    "fit7_blocked": 3,
+    "blockers": {
+     "loss": 3,
+     "size": 1
+    },
+    "examples": [
+     {
+      "id": "1005007997798374",
+      "fit": 8.0,
+      "blockers": [
+       "loss"
+      ],
+      "file": "round5e-aliexpress.json",
+      "margin": -10.4,
+      "env": "borderline",
+      "why": "שרפרף שעון-חול מעץ מלא, פיסולי ויפה (8 למודרני חם ולג'פנדי). רוחב 32 (גבולי, לבדוק בפריים). אבל עלות נחיתה כ-838 ₪ ומחיר טיפוסי בישראל כ-500–990: מפסיד."
+     },
+     {
+      "id": "1005013193019065",
+      "fit": 7.0,
+      "blockers": [
+       "loss"
+      ],
+      "file": "round5-aliexpress.json",
+      "margin": -117.8,
+      "env": "borderline",
+      "why": "שרפרף מרובע עץ עם מושב קנה, קווים נקיים ויפים; 32 ס\"מ גבולי, לבדוק בפריים. אבל עלות $103 ומשלוח $136 נותנים נחיתה 788 ₪ – מפסיד בכל מחיר ריאלי."
+     },
+     {
+      "id": "1005009978712423",
+      "fit": 7.0,
+      "blockers": [
+       "loss",
+       "size"
+      ],
+      "file": "round5c-aliexpress.json",
+      "margin": 0,
+      "env": "no",
+      "why": "שרפרף עץ גומי עם מושב חבל נייר, יפה ומתאים לנורדי/ג'פנדי/כפרי, אבל רוחב 35 (‎+17% מעל 30) והמשלוח $127 מביא נחת ~₪588 – מפסיד מול שוק שרפרפים כאלה בישראל."
+     }
+    ]
+   },
+   "nordic:corridor/gallery-stool": {
+    "primary": "freight",
+    "judged": 34,
+    "best_fit": 7.0,
+    "fit7_blocked": 3,
+    "blockers": {
+     "size": 2,
+     "loss": 3
+    },
+    "examples": [
+     {
+      "id": "1005008788426888",
+      "fit": 7.0,
+      "blockers": [
+       "loss",
+       "size"
+      ],
+      "file": "round5-aliexpress.json",
+      "margin": -92.8,
+      "env": "no",
+      "why": "שרפרף אשור מלבני עם מושב חבל בסגנון וגנר; רחב מהמעטפה (מלבני ~46) ומשלוח $127 הופך אותו למפסיד (נחיתה 615 ₪)."
+     },
+     {
+      "id": "1005013193019065",
+      "fit": 7.0,
+      "blockers": [
+       "loss"
+      ],
+      "file": "round5-aliexpress.json",
+      "margin": -117.8,
+      "env": "borderline",
+      "why": "שרפרף מרובע עץ עם מושב קנה, קווים נקיים ויפים; 32 ס\"מ גבולי, לבדוק בפריים. אבל עלות $103 ומשלוח $136 נותנים נחיתה 788 ₪ – מפסיד בכל מחיר ריאלי."
+     },
+     {
+      "id": "1005009978712423",
+      "fit": 7.0,
+      "blockers": [
+       "loss",
+       "size"
+      ],
+      "file": "round5c-aliexpress.json",
+      "margin": 0,
+      "env": "no",
+      "why": "שרפרף עץ גומי עם מושב חבל נייר, יפה ומתאים לנורדי/ג'פנדי/כפרי, אבל רוחב 35 (‎+17% מעל 30) והמשלוח $127 מביא נחת ~₪588 – מפסיד מול שוק שרפרפים כאלה בישראל."
+     }
+    ]
+   },
+   "warm-modern:corridor/gallery-stool": {
+    "primary": "price",
+    "judged": 34,
+    "best_fit": 8.0,
+    "fit7_blocked": 1,
+    "blockers": {
+     "loss": 1
+    },
+    "examples": [
+     {
+      "id": "1005007997798374",
+      "fit": 8.0,
+      "blockers": [
+       "loss"
+      ],
+      "file": "round5e-aliexpress.json",
+      "margin": -10.4,
+      "env": "borderline",
+      "why": "שרפרף שעון-חול מעץ מלא, פיסולי ויפה (8 למודרני חם ולג'פנדי). רוחב 32 (גבולי, לבדוק בפריים). אבל עלות נחיתה כ-838 ₪ ומחיר טיפוסי בישראל כ-500–990: מפסיד."
+     }
+    ]
+   },
+   "boho:corridor/picture-lights": {
+    "primary": "no_product",
+    "judged": 12,
+    "best_fit": 4.0,
+    "fit7_blocked": 0,
+    "blockers": {},
+    "examples": []
+   },
+   "japandi:corridor/picture-lights": {
+    "primary": "no_product",
+    "judged": 12,
+    "best_fit": 5.0,
+    "fit7_blocked": 0,
+    "blockers": {},
+    "examples": []
+   },
+   "mediterranean:corridor/picture-lights": {
+    "primary": "no_product",
+    "judged": 12,
+    "best_fit": 4.0,
+    "fit7_blocked": 0,
+    "blockers": {},
+    "examples": []
+   },
+   "modern-country:corridor/picture-lights": {
+    "primary": "size",
+    "judged": 12,
+    "best_fit": 7.0,
+    "fit7_blocked": 2,
+    "blockers": {
+     "size": 1,
+     "standard": 1,
+     "unclassified": 1
+    },
+    "examples": [
+     {
+      "id": "2503100338261606200",
+      "fit": 7.0,
+      "blockers": [
+       "size",
+       "standard"
+      ],
+      "file": "round5-lighting.json",
+      "margin": null,
+      "env": "no",
+      "why": "40 מול 25–32 (25% מעל) ו-CE לא מוצהר. נפסל."
+     },
+     {
+      "id": "1005012786446230",
+      "fit": 7.0,
+      "blockers": [],
+      "file": "wave3-aliexpress.json",
+      "margin": null,
+      "env": "yes",
+      "why": "מנורת תמונה וינטג׳ בזהב עם צוואר — טובה לכפרי/חם; 38 (6 מעל); נבחר 53 — להחליף ל-38 Warm"
+     }
+    ]
+   },
+   "nordic:corridor/picture-lights": {
+    "primary": "price",
+    "judged": 12,
+    "best_fit": 7.0,
+    "fit7_blocked": 1,
+    "blockers": {
+     "loss": 1
+    },
+    "examples": [
+     {
+      "id": "1005008195905528",
+      "fit": 7.0,
+      "blockers": [
+       "loss"
+      ],
+      "file": "round5-lighting.json",
+      "margin": -46,
+      "env": "borderline",
+      "why": "שלישייה: ₪742 נחיתה מול שווי ~₪600 (דיל תאורה ליטל LED ‏3×₪199.9). הפסד אמיתי. נפסל."
+     }
+    ]
+   },
+   "warm-modern:corridor/picture-lights": {
+    "primary": "size",
+    "judged": 12,
+    "best_fit": 7.0,
+    "fit7_blocked": 1,
+    "blockers": {
+     "size": 1,
+     "standard": 1
+    },
+    "examples": [
+     {
+      "id": "2503100338261606200",
+      "fit": 7.0,
+      "blockers": [
+       "size",
+       "standard"
+      ],
+      "file": "round5-lighting.json",
+      "margin": null,
+      "env": "no",
+      "why": "40 מול 25–32 (25% מעל) ו-CE לא מוצהר. נפסל."
+     }
+    ]
+   },
+   "boho:dining-room/canisters": {
+    "primary": "size",
+    "judged": 30,
+    "best_fit": 7.0,
+    "fit7_blocked": 1,
+    "blockers": {
+     "size": 1
+    },
+    "examples": [
+     {
+      "id": "1005005258693601",
+      "fit": 7.0,
+      "blockers": [
+       "size"
+      ],
+      "file": "round5e-aliexpress.json",
+      "margin": 0,
+      "env": "no",
+      "why": "צנצנת ראטן איכותית, אבל נמכרת רק בשתי מידות (20 ו-28 בקוטר) – לא שלישייה יורדת, והקוטר 20 רחוק מהמעטפת d 8–15. נדחה."
+     }
+    ]
+   },
+   "japandi:dining-room/canisters": {
+    "primary": "freight",
+    "judged": 30,
+    "best_fit": 8.0,
+    "fit7_blocked": 4,
+    "blockers": {
+     "israeli_shop_AU1": 1,
+     "size": 2,
+     "loss": 2
+    },
+    "examples": [
+     {
+      "id": "1005008842782133",
+      "fit": 8.0,
+      "blockers": [
+       "size"
+      ],
+      "file": "round5-aliexpress.json",
+      "margin": 0,
+      "env": "no",
+      "why": "צנצנות חרס יפניות מצוינות ליפנדי, אבל יש רק שתי מידות (12 ו-16.5) בקוטר 8–9, ואין את הגבוהה (20–24). הקוטר צר מ-11–13."
+     },
+     {
+      "id": "1475674474018902016",
+      "fit": 7.5,
+      "blockers": [
+       "loss"
+      ],
+      "file": "round5-designer-cards.json",
+      "margin": -64.2,
+      "env": "yes",
+      "why": "לא נכתב כרטיס: מפסיד. המשלוח ל-IL (נבדק היום, CJPacket Eub): גדולה 2.5 ק\"ג $35.51, בינונית $19.11, קטנה $10.27; נחיתה ₪272.6 מול סטים ישראליים ב-₪79–210 (ה.13). אין מידה קלה יותר ש"
+     },
+     {
+      "id": "https://www.foxhome.co.il/products/0336790100",
+      "fit": 7.0,
+      "blockers": [
+       "israeli_shop_AU1"
+      ],
+      "file": "il-decor.json",
+      "margin": null,
+      "env": null,
+      "why": "שלישיית אחסוניות קרמיקה בלבן, מחיר מבצע (מחוק ₪59.90 ליחידה). אין מכסה אלון (העמדה דורשת); מידות לא פורסמו."
+     }
+    ]
+   },
+   "mediterranean:dining-room/canisters": {
+    "primary": "style",
+    "judged": 30,
+    "best_fit": 6.0,
+    "fit7_blocked": 0,
+    "blockers": {},
+    "examples": []
+   },
+   "modern-country:dining-room/canisters": {
+    "primary": "size",
+    "judged": 30,
+    "best_fit": 7.0,
+    "fit7_blocked": 1,
+    "blockers": {
+     "size": 1
+    },
+    "examples": [
+     {
+      "id": "1005010236692407",
+      "fit": 7.0,
+      "blockers": [
+       "size"
+      ],
+      "file": "round5c-aliexpress.json",
+      "margin": 0,
+      "env": "no",
+      "why": "צנצנת יפה בעבודת יד שמתאימה לכפרי, אבל יש רק מידה אחת, ועלות נחיתה של 280 ₪ לצנצנת אחת; סט של 3 גבהים לא קיים."
+     }
+    ]
+   },
+   "warm-modern:dining-room/canisters": {
+    "primary": "price",
+    "judged": 30,
+    "best_fit": 7.0,
+    "fit7_blocked": 1,
+    "blockers": {
+     "size": 1,
+     "loss": 1
+    },
+    "examples": [
+     {
+      "id": "630486F8-02A0-4D93-85DA-D3D4DEAF41C9",
+      "fit": 7.0,
+      "blockers": [
+       "loss",
+       "size"
+      ],
+      "file": "round5-storage-rooms.json",
+      "margin": 12.6,
+      "env": "no",
+      "why": "תמחור לפי השווי: השוק בישראל לסט ₪79–126 (פוקס Mono 3 × ₪41.93, 1item ‏₪79), ונחיתה ₪128.8 (2.1 ק\"ג): מפסיד בכל מחיר שהשוק תומך בו. גם הגבהים (8–18) נמוכים מ-14/18/22. נשאר בלי כרט"
+     }
+    ]
+   },
+   "mediterranean:dining-room/dining-pendant": {
+    "primary": "price",
+    "judged": 54,
+    "best_fit": 8.0,
+    "fit7_blocked": 7,
+    "blockers": {
+     "israeli_shop_AU1": 1,
+     "loss": 5,
+     "standard": 1,
+     "size": 1,
+     "duplicate": 1
+    },
+    "examples": [
+     {
+      "id": "1005010452173413",
+      "fit": 8.0,
+      "blockers": [
+       "loss"
+      ],
+      "file": "wave3-repricing.json",
+      "margin": -57.8,
+      "env": null,
+      "why": "כיפת ראטן חומה 45 – קליעה פתוחה, תבנית צל; 3000K"
+     },
+     {
+      "id": "1005004131706427",
+      "fit": 8.0,
+      "blockers": [
+       "loss"
+      ],
+      "file": "round5c-aliexpress.json",
+      "margin": -45.4,
+      "env": "yes",
+      "why": "בדיוק לפי המפרט הים-תיכוני: קליעה עם בטנה פנימית ותחתית מפזרת, קוטר 50. אבל עולה 222$ (731 ש\"ח נחיתה) מול השוואות בישראל של 195–640: מפסיד. נפסל."
+     },
+     {
+      "id": "2412060717211601300",
+      "fit": 7.5,
+      "blockers": [
+       "loss",
+       "standard"
+      ],
+      "file": "round5-lighting.json",
+      "margin": null,
+      "env": "yes",
+      "why": "משלוח $184 = הפסד אמיתי, ו-CE לא מוצהר. נפסל."
+     }
+    ]
+   },
+   "boho:dining-room/sink-set": {
+    "primary": "style",
+    "judged": 15,
+    "best_fit": 6.0,
+    "fit7_blocked": 0,
+    "blockers": {},
+    "examples": []
+   },
+   "japandi:dining-room/sink-set": {
+    "primary": "price",
+    "judged": 15,
+    "best_fit": 7.0,
+    "fit7_blocked": 2,
+    "blockers": {
+     "size": 1,
+     "loss": 1,
+     "standard": 1
+    },
+    "examples": [
+     {
+      "id": "1005012088062199",
+      "fit": 7.0,
+      "blockers": [
+       "loss",
+       "size"
+      ],
+      "file": "round5-storage-rooms.json",
+      "margin": null,
+      "env": "no",
+      "why": "תמחור לפי השווי: נחיתה ₪161.5 (משלוח שמור) מול סטים דומים בישראל ₪119–178 (Tirador, Terminal X): מפסיד. וזה סט אמבטיה (כוסות), לא מברשת כלים. נשאר בלי כרטיס."
+     },
+     {
+      "id": "1005013221725005",
+      "fit": 7.0,
+      "blockers": [
+       "standard"
+      ],
+      "file": "round5-aliexpress.json",
+      "margin": 0,
+      "env": "borderline",
+      "why": "מתקן במראה טרוורטין שמנת עם משאבה שחורה, יפה למודרני חם, אבל זה פריט אחד ולא סט של 3: אין מברשת ואין מגש נפרד. גובה 16 (גבולי מול 17–21)."
+     }
+    ]
+   },
+   "mediterranean:dining-room/sink-set": {
+    "primary": "style",
+    "judged": 15,
+    "best_fit": 6.0,
+    "fit7_blocked": 0,
+    "blockers": {},
+    "examples": []
+   },
+   "modern-country:dining-room/sink-set": {
+    "primary": "style",
+    "judged": 15,
+    "best_fit": 6.0,
+    "fit7_blocked": 0,
+    "blockers": {},
+    "examples": []
+   },
+   "warm-modern:dining-room/sink-set": {
+    "primary": "price",
+    "judged": 15,
+    "best_fit": 8.0,
+    "fit7_blocked": 2,
+    "blockers": {
+     "size": 1,
+     "loss": 1,
+     "standard": 1
+    },
+    "examples": [
+     {
+      "id": "1005013221725005",
+      "fit": 8.0,
+      "blockers": [
+       "standard"
+      ],
+      "file": "round5-aliexpress.json",
+      "margin": 0,
+      "env": "borderline",
+      "why": "מתקן במראה טרוורטין שמנת עם משאבה שחורה, יפה למודרני חם, אבל זה פריט אחד ולא סט של 3: אין מברשת ואין מגש נפרד. גובה 16 (גבולי מול 17–21)."
+     },
+     {
+      "id": "1005012088062199",
+      "fit": 7.0,
+      "blockers": [
+       "loss",
+       "size"
+      ],
+      "file": "round5-storage-rooms.json",
+      "margin": null,
+      "env": "no",
+      "why": "תמחור לפי השווי: נחיתה ₪161.5 (משלוח שמור) מול סטים דומים בישראל ₪119–178 (Tirador, Terminal X): מפסיד. וזה סט אמבטיה (כוסות), לא מברשת כלים. נשאר בלי כרטיס."
+     }
+    ]
+   },
+   "boho:dining-room/step-stool": {
+    "primary": "size",
+    "judged": 17,
+    "best_fit": 7.0,
+    "fit7_blocked": 1,
+    "blockers": {
+     "size": 1,
+     "replica": 1
+    },
+    "examples": [
+     {
+      "id": "1005013240397432",
+      "fit": 7.0,
+      "blockers": [
+       "replica",
+       "size"
+      ],
+      "file": "round5-aliexpress.json",
+      "margin": 0,
+      "env": "no",
+      "why": "העתק ישיר של שרפרף Pierre Jeanneret (רגלי V וקנה), ואסור לנו רפליקה של פריט מעצבים. גם רוחב 40 מול 28–35, ומשלוח $176 (Standard) על $139."
+     }
+    ]
+   },
+   "japandi:dining-room/step-stool": {
+    "primary": "size",
+    "judged": 17,
+    "best_fit": 8.0,
+    "fit7_blocked": 1,
+    "blockers": {
+     "size": 1,
+     "replica": 1
+    },
+    "examples": [
+     {
+      "id": "1005013240397432",
+      "fit": 8.0,
+      "blockers": [
+       "replica",
+       "size"
+      ],
+      "file": "round5-aliexpress.json",
+      "margin": 0,
+      "env": "no",
+      "why": "העתק ישיר של שרפרף Pierre Jeanneret (רגלי V וקנה), ואסור לנו רפליקה של פריט מעצבים. גם רוחב 40 מול 28–35, ומשלוח $176 (Standard) על $139."
+     }
+    ]
+   },
+   "mediterranean:dining-room/step-stool": {
+    "primary": "style",
+    "judged": 17,
+    "best_fit": 6.0,
+    "fit7_blocked": 0,
+    "blockers": {},
+    "examples": []
+   },
+   "modern-country:dining-room/step-stool": {
+    "primary": "style",
+    "judged": 17,
+    "best_fit": 6.0,
+    "fit7_blocked": 0,
+    "blockers": {},
+    "examples": []
+   },
+   "nordic:dining-room/step-stool": {
+    "primary": "style",
+    "judged": 17,
+    "best_fit": 6.0,
+    "fit7_blocked": 0,
+    "blockers": {},
+    "examples": []
+   },
+   "warm-modern:dining-room/step-stool": {
+    "primary": "size",
+    "judged": 17,
+    "best_fit": 8.0,
+    "fit7_blocked": 1,
+    "blockers": {
+     "size": 1,
+     "replica": 1
+    },
+    "examples": [
+     {
+      "id": "1005013240397432",
+      "fit": 8.0,
+      "blockers": [
+       "replica",
+       "size"
+      ],
+      "file": "round5-aliexpress.json",
+      "margin": 0,
+      "env": "no",
+      "why": "העתק ישיר של שרפרף Pierre Jeanneret (רגלי V וקנה), ואסור לנו רפליקה של פריט מעצבים. גם רוחב 40 מול 28–35, ומשלוח $176 (Standard) על $139."
+     }
+    ]
+   },
+   "boho:hall/storage-boxes": {
+    "primary": "size",
+    "judged": 49,
+    "best_fit": 8.0,
+    "fit7_blocked": 5,
+    "blockers": {
+     "size": 5,
+     "loss": 4,
+     "stock": 2
+    },
+    "examples": [
+     {
+      "id": "1005012923580024",
+      "fit": 8.0,
+      "blockers": [
+       "loss",
+       "size"
+      ],
+      "file": "round5-aliexpress.json",
+      "margin": -83.8,
+      "env": "borderline",
+      "why": "קופסת יקינטון מים יפה עם מכסה וידיות. במעטפה החדשה של הכניסה ה-L גבולית (גובה 18 מול 20, לבדוק בפריים), וה-S ‏28.5×21×14.5 מתאימה בדיוק למדף בעבודה. אבל $42 ליחידה: זוג נוחת ב-₪291"
+     },
+     {
+      "id": "1005012499583360",
+      "fit": 7.0,
+      "blockers": [
+       "size"
+      ],
+      "file": "round5-aliexpress.json",
+      "margin": 0,
+      "env": "no",
+      "why": "קופסת קש ים נקייה עם מכסה, אבל אין שום מידה בליסטינג (רק S/M/L ותמונות שנוצרו ב-AI), והמשלוח למידה S לבדה הוא $21. אי אפשר לאשר מעטפה."
+     },
+     {
+      "id": "1005007386854858",
+      "fit": 7.0,
+      "blockers": [
+       "loss",
+       "size",
+       "stock"
+      ],
+      "file": "round5-aliexpress.json",
+      "margin": -2.8,
+      "env": "no",
+      "why": "קופסת קש ים מלבנית עם מכסה, חומר אמיתי, אבל המידה לא מוצהרת ולפי הקרטון הגובה כנראה כ-17, מתחת ל-20. בזוג המחיר הישראלי (כ-₪179) לא מכסה את העלות, ויש רק 7 במלאי."
+     }
+    ]
+   },
+   "japandi:hall/storage-boxes": {
+    "primary": "style",
+    "judged": 49,
+    "best_fit": 6.0,
+    "fit7_blocked": 0,
+    "blockers": {},
+    "examples": []
+   },
+   "mediterranean:hall/storage-boxes": {
+    "primary": "price",
+    "judged": 49,
+    "best_fit": 7.0,
+    "fit7_blocked": 2,
+    "blockers": {
+     "size": 2,
+     "loss": 2,
+     "stock": 2
+    },
+    "examples": [
+     {
+      "id": "1005007386854858",
+      "fit": 7.0,
+      "blockers": [
+       "loss",
+       "size",
+       "stock"
+      ],
+      "file": "round5-aliexpress.json",
+      "margin": -2.8,
+      "env": "no",
+      "why": "קופסת קש ים מלבנית עם מכסה, חומר אמיתי, אבל המידה לא מוצהרת ולפי הקרטון הגובה כנראה כ-17, מתחת ל-20. בזוג המחיר הישראלי (כ-₪179) לא מכסה את העלות, ויש רק 7 במלאי."
+     },
+     {
+      "id": "4000162528005",
+      "fit": 7.0,
+      "blockers": [
+       "loss",
+       "size",
+       "stock"
+      ],
+      "file": "round5e-aliexpress.json",
+      "margin": -15.2,
+      "env": "no",
+      "why": "קופסת קש ים עם מכסה בגוון כתום-דבש. הגדולה ביותר 32×23×15, נמוכה מדי לכניסה (גובה 20–35, חסר 25%) ואין גרסה של 55–68. מתאימה במידה לקופסאות המדף בעבודה (28–32 × 20–24 × 12–18), אבל"
+     }
+    ]
+   },
+   "modern-country:hall/storage-boxes": {
+    "primary": "freight",
+    "judged": 49,
+    "best_fit": 7.0,
+    "fit7_blocked": 1,
+    "blockers": {
+     "loss": 1
+    },
+    "examples": [
+     {
+      "id": "1705144683208388608",
+      "fit": 7.0,
+      "blockers": [
+       "loss"
+      ],
+      "file": "round5b-furniture-boxes.json",
+      "margin": 1.1,
+      "env": "borderline",
+      "why": "ליד של המעצב לכפרי (ערבה טבעית עם בטנת משבצת לבנה, 7). 2.05 ק\"ג לסל, Eub לזוג $55.43: נחיתה ₪223 מול ₪60–200 לסל ערבה בישראל. הפסד אמיתי בנפח; נדחה מהר."
+     }
+    ]
+   },
+   "nordic:hall/storage-boxes": {
+    "primary": "size",
+    "judged": 49,
+    "best_fit": 7.0,
+    "fit7_blocked": 1,
+    "blockers": {
+     "size": 1
+    },
+    "examples": [
+     {
+      "id": "1402242217426423808",
+      "fit": 7.0,
+      "blockers": [
+       "size"
+      ],
+      "file": "round5d-audit-fixes.json",
+      "margin": null,
+      "env": "no",
+      "why": "קופסת קנבס לבנה עם ידיות עור, לבן בלבד. S נמוכה מ-20 (רצפת העמדה), M רחבה ב-12%. לא נכנס."
+     }
+    ]
+   },
+   "warm-modern:hall/storage-boxes": {
+    "primary": "style",
+    "judged": 49,
+    "best_fit": 6.5,
+    "fit7_blocked": 0,
+    "blockers": {},
+    "examples": []
+   },
+   "boho:hall/table-lamp": {
+    "primary": "price",
+    "judged": 42,
+    "best_fit": 9.0,
+    "fit7_blocked": 2,
+    "blockers": {
+     "israeli_shop_AU1": 1,
+     "loss": 1,
+     "standard": 1
+    },
+    "examples": [
+     {
+      "id": "https://finelab.shop/products/chocolate-raffia-table-lamp",
+      "fit": 9.0,
+      "blockers": [
+       "israeli_shop_AU1"
+      ],
+      "file": "il-lighting.json",
+      "margin": null,
+      "env": null,
+      "why": "בוהו בלבד."
+     },
+     {
+      "id": "2601290355081633900",
+      "fit": 7.0,
+      "blockers": [
+       "loss",
+       "standard"
+      ],
+      "file": "round5-lighting.json",
+      "margin": null,
+      "env": "borderline",
+      "why": "במחיר שווי ₪329 אולי לא מפסיד, אבל CE לא מוצהר ב-CJ (אף מנורה מ-162 במטמון CJ לא מצהירה CE) — חסום לפי ד/S2B."
+     }
+    ]
+   },
+   "japandi:hall/table-lamp": {
+    "primary": "israeli_shop_AU1",
+    "judged": 42,
+    "best_fit": 8.0,
+    "fit7_blocked": 3,
+    "blockers": {
+     "israeli_shop_AU1": 2,
+     "size": 1,
+     "loss": 1,
+     "standard": 1
+    },
+    "examples": [
+     {
+      "id": "https://www.ikea.com/il/he/p/vindkraft-table-lamp-white-moulded-paper-pulp-20492803/",
+      "fit": 8.0,
+      "blockers": [
+       "israeli_shop_AU1"
+      ],
+      "file": "il-lighting.json",
+      "margin": null,
+      "env": null,
+      "why": "גובה תואם. גוף אחד ללא אהיל פשתן נפרד."
+     },
+     {
+      "id": "2917655",
+      "fit": 7.5,
+      "blockers": [
+       "loss",
+       "size",
+       "standard"
+      ],
+      "file": "round5-lighting.json",
+      "margin": null,
+      "env": "no",
+      "why": "משלוח $143 = הפסד אמיתי גם בשווי (₪279–329); בלי מידות ובלי CE מוצהר. נפסל."
+     },
+     {
+      "id": "https://nordlight.co.il/products/מנורת-שולחן-scandi-tripod-מנורת-לילה-מעוצבת-עם-רגלי-עץ",
+      "fit": 7.0,
+      "blockers": [
+       "israeli_shop_AU1"
+      ],
+      "file": "il-lighting.json",
+      "margin": null,
+      "env": null,
+      "why": "מראה נורדי נכון; הדף מציין אזל בגוון עץ. יש לבדוק גובה: העמדה 45-55."
+     }
+    ]
+   },
+   "mediterranean:hall/table-lamp": {
+    "primary": "size",
+    "judged": 42,
+    "best_fit": 7.0,
+    "fit7_blocked": 1,
+    "blockers": {
+     "size": 1,
+     "standard": 1
+    },
+    "examples": [
+     {
+      "id": "2502050313311618700",
+      "fit": 7.0,
+      "blockers": [
+       "size",
+       "standard"
+      ],
+      "file": "round5-lighting.json",
+      "margin": null,
+      "env": "no",
+      "why": "62×36 מול 45–55 ואהיל 20–26: יותר מ-10% מחוץ למעטפת; CE לא מוצהר. נפסל."
+     }
+    ]
+   },
+   "nordic:hall/table-lamp": {
+    "primary": "israeli_shop_AU1",
+    "judged": 42,
+    "best_fit": 8.0,
+    "fit7_blocked": 3,
+    "blockers": {
+     "israeli_shop_AU1": 2,
+     "size": 1,
+     "standard": 1
+    },
+    "examples": [
+     {
+      "id": "https://nordlight.co.il/products/מנורת-שולחן-scandi-tripod-מנורת-לילה-מעוצבת-עם-רגלי-עץ",
+      "fit": 8.0,
+      "blockers": [
+       "israeli_shop_AU1"
+      ],
+      "file": "il-lighting.json",
+      "margin": null,
+      "env": null,
+      "why": "מראה נורדי נכון; הדף מציין אזל בגוון עץ. יש לבדוק גובה: העמדה 45-55."
+     },
+     {
+      "id": "https://www.ikea.com/il/he/p/vindkraft-table-lamp-white-moulded-paper-pulp-20492803/",
+      "fit": 7.0,
+      "blockers": [
+       "israeli_shop_AU1"
+      ],
+      "file": "il-lighting.json",
+      "margin": null,
+      "env": null,
+      "why": "גובה תואם. גוף אחד ללא אהיל פשתן נפרד."
+     },
+     {
+      "id": "2502050313311618700",
+      "fit": 7.0,
+      "blockers": [
+       "size",
+       "standard"
+      ],
+      "file": "round5-lighting.json",
+      "margin": null,
+      "env": "no",
+      "why": "62×36 מול 45–55 ואהיל 20–26: יותר מ-10% מחוץ למעטפת; CE לא מוצהר. נפסל."
+     }
+    ]
+   },
+   "warm-modern:hall/table-lamp": {
+    "primary": "size",
+    "judged": 42,
+    "best_fit": 7.0,
+    "fit7_blocked": 3,
+    "blockers": {
+     "israeli_shop_AU1": 1,
+     "size": 2,
+     "no_il_shipping": 1,
+     "material": 1
+    },
+    "examples": [
+     {
+      "id": "https://nordlight.co.il/products/מנורת-שולחן-stone-column-מנורה-דקורטיבית-לשידת-לילה",
+      "fit": 7.0,
+      "blockers": [
+       "israeli_shop_AU1"
+      ],
+      "file": "il-lighting.json",
+      "margin": null,
+      "env": null,
+      "why": "בסיס אבן במקום קרמיקה; אהיל בד."
+     },
+     {
+      "id": "1005012473537838",
+      "fit": 7.0,
+      "blockers": [
+       "size"
+      ],
+      "file": "round5-lighting.json",
+      "margin": null,
+      "env": "no",
+      "why": "עמוד טרוורטין ותוף פשתן 17.5, אבל גובה 25 בלבד (מעטפת 45–55). לא נכתב."
+     },
+     {
+      "id": "1005009989394328",
+      "fit": 7.0,
+      "blockers": [
+       "material",
+       "no_il_shipping",
+       "size"
+      ],
+      "file": "round5-aliexpress.json",
+      "margin": 0,
+      "env": "no",
+      "why": "פטריית טרוורטין עם אהיל זכוכית: יפה למודרני חם, אבל גובה 31 מול 45–55 בכניסה (וגם מתחת ל-40 בעבודה), ואין משלוח לישראל בתוצאה. נדחה."
+     }
+    ]
+   },
+   "boho:hall/umbrella-stand": {
+    "primary": "size",
+    "judged": 21,
+    "best_fit": 7.0,
+    "fit7_blocked": 1,
+    "blockers": {
+     "size": 1
+    },
+    "examples": [
+     {
+      "id": "2785553",
+      "fit": 7.0,
+      "blockers": [
+       "size"
+      ],
+      "file": "round5-storage-bath-hall.json",
+      "margin": 0,
+      "env": "no",
+      "why": "קש ים טבעי, אבל גובה 30 מול 45–50. לא מעמד מטריות."
+     }
+    ]
+   },
+   "mediterranean:hall/umbrella-stand": {
+    "primary": "style",
+    "judged": 21,
+    "best_fit": 6.5,
+    "fit7_blocked": 0,
+    "blockers": {},
+    "examples": []
+   },
+   "nordic:hall/umbrella-stand": {
+    "primary": "israeli_shop_AU1",
+    "judged": 21,
+    "best_fit": 7.0,
+    "fit7_blocked": 2,
+    "blockers": {
+     "israeli_shop_AU1": 2
+    },
+    "examples": [
+     {
+      "id": "https://www.tiradorhd.co.il/items/8725058-umbrella-stand-civos-black-zack",
+      "fit": 7.0,
+      "blockers": [
+       "israeli_shop_AU1"
+      ],
+      "file": "il-decor.json",
+      "margin": null,
+      "env": null,
+      "why": "לפי תקציר חיפוש (מחיר מבצע, מחוק ₪589). גובה 49 בתחום 45-50, קוטר 25 מעט מעל 20-24. האתר לא נקרא."
+     },
+     {
+      "id": "https://www.magic-moments.co.il/product/%D7%9E%D7%A2%D7%9E%D7%93-%D7%9E%D7%98%D7%A8%D7%99%D7%95%D7%AA-%D7%A9%D7%97%D7%95%D7%A8-ombrello/",
+      "fit": 7.0,
+      "blockers": [
+       "israeli_shop_AU1"
+      ],
+      "file": "il-decor.json",
+      "margin": null,
+      "env": null,
+      "why": "לפי תקציר חיפוש; מידות לא ידועות. מג׳יק מומנטס כבר נחקרה."
+     }
+    ]
+   },
+   "boho:kids/bookshelf": {
+    "primary": "stock",
+    "judged": 19,
+    "best_fit": 7.0,
+    "fit7_blocked": 2,
+    "blockers": {
+     "stock": 2
+    },
+    "examples": [
+     {
+      "id": "1005012702640405",
+      "fit": 7.0,
+      "blockers": [
+       "stock"
+      ],
+      "file": "round5c-aliexpress.json",
+      "margin": 0,
+      "env": "borderline",
+      "why": "עץ בהיר עם מוט חרוזים, בוהו 7, אבל המלאי הוא יחידה אחת וצריך 4. גם במחיר: 4 יחידות עולות כ-₪482 בנחיתה מול כ-₪316 בשוק. נדחה."
+     },
+     {
+      "id": "1005013182981138",
+      "fit": 7.0,
+      "blockers": [
+       "stock"
+      ],
+      "file": "round5e-aliexpress.json",
+      "margin": 7.8,
+      "env": "borderline",
+      "why": "מדף גלים 40 נכנס לסידור של זוג לכל קומה (38–42), אבל כל התמונות רינדורי AI, העומק והשפה לא מצוינים, הלבן במלאי 3 בלבד, ובסט של 4 התרומה כ-₪22 (7.8%) עם משלוח שכנראה חסר. לא עובר בב"
+     }
+    ]
+   },
+   "japandi:kids/bookshelf": {
+    "primary": "style",
+    "judged": 19,
+    "best_fit": 6.0,
+    "fit7_blocked": 0,
+    "blockers": {},
+    "examples": []
+   },
+   "modern-country:kids/bookshelf": {
+    "primary": "no_il_shipping",
+    "judged": 19,
+    "best_fit": 7.0,
+    "fit7_blocked": 4,
+    "blockers": {
+     "stock": 3,
+     "no_il_shipping": 3,
+     "loss": 1
+    },
+    "examples": [
+     {
+      "id": "1005010779839151",
+      "fit": 7.0,
+      "blockers": [
+       "stock"
+      ],
+      "file": "round5c-aliexpress.json",
+      "margin": 1.0,
+      "env": "borderline",
+      "why": "מדף לבן-חלבי 40×10 עם מוט חרוזים, מתאים לכפרי (7). אבל ארבעה מדפים עולים כ-₪231 בנחיתה, ובמחיר השוק (כ-316 ₪) התרומה כ-1% בלבד ותלויה במשלוח, והמלאי 5–6 סטים. נדחה."
+     },
+     {
+      "id": "1005011675243277",
+      "fit": 7.0,
+      "blockers": [
+       "no_il_shipping",
+       "stock"
+      ],
+      "file": "round5c-aliexpress.json",
+      "margin": 0,
+      "env": "yes",
+      "why": "שפה גלית יפה לכפרי, 40 ס\"מ (שניים בשורה), אבל במלאי יש יחידה אחת ואין משלוח לישראל. נדחה."
+     },
+     {
+      "id": "1005006761737409",
+      "fit": 7.0,
+      "blockers": [
+       "no_il_shipping",
+       "stock"
+      ],
+      "file": "round5c-aliexpress.json",
+      "margin": 0,
+      "env": "yes",
+      "why": "זוג מדפי אורן עם מוט קדמי בפשטות שייקר, כ-40 ס\"מ, מתאים לכפרי (7). אבל אין משלוח לישראל במודעה (ומלאי 7). נדחה."
+     }
+    ]
+   },
+   "warm-modern:kids/bookshelf": {
+    "primary": "no_product",
+    "judged": 19,
+    "best_fit": 5.5,
+    "fit7_blocked": 0,
+    "blockers": {},
+    "examples": []
+   },
+   "mediterranean:kids/desk-organizer": {
+    "primary": "style",
+    "judged": 25,
+    "best_fit": 6.5,
+    "fit7_blocked": 0,
+    "blockers": {},
+    "examples": []
+   },
+   "boho:kids/wall-sconce": {
+    "primary": "style",
+    "judged": 21,
+    "best_fit": 6.0,
+    "fit7_blocked": 0,
+    "blockers": {},
+    "examples": []
+   },
+   "japandi:kids/wall-sconce": {
+    "primary": "no_product",
+    "judged": 21,
+    "best_fit": 5.0,
+    "fit7_blocked": 0,
+    "blockers": {},
+    "examples": []
+   },
+   "mediterranean:kids/wall-sconce": {
+    "primary": "style",
+    "judged": 21,
+    "best_fit": 6.0,
+    "fit7_blocked": 0,
+    "blockers": {},
+    "examples": []
+   },
+   "modern-country:kids/wall-sconce": {
+    "primary": "standard",
+    "judged": 21,
+    "best_fit": 7.0,
+    "fit7_blocked": 1,
+    "blockers": {
+     "standard": 1
+    },
+    "examples": [
+     {
+      "id": "1005007495772212",
+      "fit": 7.0,
+      "blockers": [
+       "standard"
+      ],
+      "file": "round5-aliexpress.json",
+      "margin": 0,
+      "env": "yes",
+      "why": "זרוע מתקפלת ואהיל בד מתחדד 10/17×16, נקי ויפה, אבל ברשימה מופיע רק CCC בלי CE (מתח 90–260V). מנורה מחווטת בלי CE מוצהר = נדחית (ז 2026-10-14)."
+     }
+    ]
+   },
+   "nordic:kids/wall-sconce": {
+    "primary": "standard",
+    "judged": 21,
+    "best_fit": 7.0,
+    "fit7_blocked": 1,
+    "blockers": {
+     "standard": 1
+    },
+    "examples": [
+     {
+      "id": "1005007495772212",
+      "fit": 7.0,
+      "blockers": [
+       "standard"
+      ],
+      "file": "round5-aliexpress.json",
+      "margin": 0,
+      "env": "yes",
+      "why": "זרוע מתקפלת ואהיל בד מתחדד 10/17×16, נקי ויפה, אבל ברשימה מופיע רק CCC בלי CE (מתח 90–260V). מנורה מחווטת בלי CE מוצהר = נדחית (ז 2026-10-14)."
+     }
+    ]
+   },
+   "warm-modern:kids/wall-sconce": {
+    "primary": "style",
+    "judged": 21,
+    "best_fit": 6.0,
+    "fit7_blocked": 0,
+    "blockers": {},
+    "examples": []
+   },
+   "boho:living-room/floor-lamp": {
+    "primary": "israeli_shop_AU1",
+    "judged": 43,
+    "best_fit": 9.0,
+    "fit7_blocked": 1,
+    "blockers": {
+     "israeli_shop_AU1": 1
+    },
+    "examples": [
+     {
+      "id": "https://finelab.shop/products/chocolate-raffia-floor-lamp",
+      "fit": 9.0,
+      "blockers": [
+       "israeli_shop_AU1"
+      ],
+      "file": "il-lighting.json",
+      "margin": null,
+      "env": null,
+      "why": "מתאימה לבוהו וג׳פנדי ולא לנורדי. יקרה לעמדה; שימוש כמאסטרפיס בלבד."
+     }
+    ]
+   },
+   "mediterranean:living-room/floor-lamp": {
+    "primary": "style",
+    "judged": 43,
+    "best_fit": 6.0,
+    "fit7_blocked": 0,
+    "blockers": {},
+    "examples": []
+   },
+   "boho:living-room/magazine-holder": {
+    "primary": "size",
+    "judged": 25,
+    "best_fit": 8.0,
+    "fit7_blocked": 3,
+    "blockers": {
+     "size": 3
+    },
+    "examples": [
+     {
+      "id": "1005009310365687",
+      "fit": 8.0,
+      "blockers": [
+       "size"
+      ],
+      "file": "round5-aliexpress.json",
+      "margin": 0,
+      "env": "no",
+      "why": "נדחה: המראה בוהו וים-תיכוני מצוין, אבל המשלוח $145 (7.5 ק\"ג באריזה 48×45×42) והרוחב כנראה כ-44 ס\"מ, מעל 32."
+     },
+     {
+      "id": "1005012932859034",
+      "fit": 7.5,
+      "blockers": [
+       "size"
+      ],
+      "file": "round5-storage-rooms.json",
+      "margin": null,
+      "env": "no",
+      "why": "כל שישת רישומי המקרמה על X עץ (…859034, …823137, …557189, …547915, …206963, …162044, …060549) רחבים ועמוקים בכ-20–30% מהמעטפת ונמוכים ממנה, ומשלוח $15–20 על 0.65–0.95 ק\"ג. אין מידה"
+     },
+     {
+      "id": "1005012815596512",
+      "fit": 7.0,
+      "blockers": [
+       "size"
+      ],
+      "file": "round5-aliexpress.json",
+      "margin": 0,
+      "env": "no",
+      "why": "נדחה: זה סל מגש נמוך (גובה כ-12) עם ידיות עץ, לא סל מגזינים זקוף בגובה 36–45."
+     }
+    ]
+   },
+   "mediterranean:living-room/magazine-holder": {
+    "primary": "size",
+    "judged": 25,
+    "best_fit": 7.0,
+    "fit7_blocked": 1,
+    "blockers": {
+     "size": 1
+    },
+    "examples": [
+     {
+      "id": "1005009310365687",
+      "fit": 7.0,
+      "blockers": [
+       "size"
+      ],
+      "file": "round5-aliexpress.json",
+      "margin": 0,
+      "env": "no",
+      "why": "נדחה: המראה בוהו וים-תיכוני מצוין, אבל המשלוח $145 (7.5 ק\"ג באריזה 48×45×42) והרוחב כנראה כ-44 ס\"מ, מעל 32."
+     }
+    ]
+   },
+   "modern-country:living-room/magazine-holder": {
+    "primary": "style",
+    "judged": 25,
+    "best_fit": 6.0,
+    "fit7_blocked": 0,
+    "blockers": {},
+    "examples": []
+   },
+   "nordic:living-room/magazine-holder": {
+    "primary": "no_product",
+    "judged": 25,
+    "best_fit": 4.5,
+    "fit7_blocked": 0,
+    "blockers": {},
+    "examples": []
+   },
+   "warm-modern:living-room/magazine-holder": {
+    "primary": "price",
+    "judged": 25,
+    "best_fit": 7.5,
+    "fit7_blocked": 1,
+    "blockers": {
+     "size": 1,
+     "loss": 1
+    },
+    "examples": [
+     {
+      "id": "2608300209161600400",
+      "fit": 7.5,
+      "blockers": [
+       "loss",
+       "size"
+      ],
+      "file": "round5-storage-rooms.json",
+      "margin": 6.0,
+      "env": "borderline",
+      "why": "נפתח מחדש (force, חילוץ מעטפת): עומק 23 וגובה 34 גבוליים (עד 6%). אבל 1.55 ק\"ג: משלוח $23.27, נחיתה ₪161, נקודת איזון כ-₪214, ובשווי בישראל (₪149–229) מפסיד או 6% בקצה העליון. נדחה"
+     }
+    ]
+   },
+   "boho:living-room/pouf": {
+    "primary": "size",
+    "judged": 26,
+    "best_fit": 7.0,
+    "fit7_blocked": 3,
+    "blockers": {
+     "israeli_shop_AU1": 1,
+     "no_il_shipping": 1,
+     "size": 2
+    },
+    "examples": [
+     {
+      "id": "https://www.limmes.co.il/product-category/%d7%a4%d7%95%d7%a4%d7%99%d7%9d/",
+      "fit": 7.0,
+      "blockers": [
+       "israeli_shop_AU1"
+      ],
+      "file": "il-textiles.json",
+      "margin": null,
+      "env": null,
+      "why": "סטודיו ישראלי שמייצר הכל לפי הזמנה, עם קישור למוסדות. הכתובת לשאלת מחיר סוחר על פוף סרוג 42-45 קוטר."
+     },
+     {
+      "id": "2111302512845250562",
+      "fit": 7.0,
+      "blockers": [
+       "no_il_shipping",
+       "size"
+      ],
+      "file": "round5-storage-rooms.json",
+      "margin": null,
+      "env": "no",
+      "why": "חבל נייר כפול בבז', יפה לבוהו ולים-תיכוני, אבל $61 ממחסן ארה\"ב ובלי מידות: לא נפתח."
+     },
+     {
+      "id": "4000139550892",
+      "fit": 7.0,
+      "blockers": [
+       "size"
+      ],
+      "file": "round5c-aliexpress.json",
+      "margin": 0,
+      "env": "no",
+      "why": "פוף קלוע טבעי ויפה לים-תיכוני ולבוהו, אבל 38×30 (מתחת ל-42–45 × 35–36 ביותר מ-10%), ועלות נחיתה 572 ₪."
+     }
+    ]
+   },
+   "japandi:living-room/pouf": {
+    "primary": "size",
+    "judged": 26,
+    "best_fit": 7.0,
+    "fit7_blocked": 1,
+    "blockers": {
+     "size": 1
+    },
+    "examples": [
+     {
+      "id": "1005009633275798",
+      "fit": 7.0,
+      "blockers": [
+       "size"
+      ],
+      "file": "round5c-aliexpress.json",
+      "margin": 0,
+      "env": "no",
+      "why": "הדום פשתן מרובע וואבי-סאבי, יפה לג'פנדי, אבל מרובע 40×42 (גובה +17%, לא גליל) ומשלוח $116 – נחת ~₪584."
+     }
+    ]
+   },
+   "mediterranean:living-room/pouf": {
+    "primary": "size",
+    "judged": 26,
+    "best_fit": 7.0,
+    "fit7_blocked": 2,
+    "blockers": {
+     "no_il_shipping": 1,
+     "size": 2
+    },
+    "examples": [
+     {
+      "id": "2111302512845250562",
+      "fit": 7.0,
+      "blockers": [
+       "no_il_shipping",
+       "size"
+      ],
+      "file": "round5-storage-rooms.json",
+      "margin": null,
+      "env": "no",
+      "why": "חבל נייר כפול בבז', יפה לבוהו ולים-תיכוני, אבל $61 ממחסן ארה\"ב ובלי מידות: לא נפתח."
+     },
+     {
+      "id": "4000139550892",
+      "fit": 7.0,
+      "blockers": [
+       "size"
+      ],
+      "file": "round5c-aliexpress.json",
+      "margin": 0,
+      "env": "no",
+      "why": "פוף קלוע טבעי ויפה לים-תיכוני ולבוהו, אבל 38×30 (מתחת ל-42–45 × 35–36 ביותר מ-10%), ועלות נחיתה 572 ₪."
+     }
+    ]
+   },
+   "modern-country:living-room/pouf": {
+    "primary": "no_product",
+    "judged": 26,
+    "best_fit": 5.5,
+    "fit7_blocked": 0,
+    "blockers": {},
+    "examples": []
+   },
+   "nordic:living-room/pouf": {
+    "primary": "freight",
+    "judged": 26,
+    "best_fit": 7.5,
+    "fit7_blocked": 2,
+    "blockers": {
+     "loss": 2
+    },
+    "examples": [
+     {
+      "id": "2512291109531602600",
+      "fit": 7.5,
+      "blockers": [
+       "loss"
+      ],
+      "file": "round5b-furniture-boxes.json",
+      "margin": -0.1,
+      "env": "borderline",
+      "why": "כרטיס קיים (pouf-cj-cotton-knit-ball-cover) שלא נספר. חילוץ נכשל: קוטר 50 מול 42–45 (+11%), ובמחיר הטיפוסי ₪169 כיסוי בלבד מפסיד (−0.1%; ₪179 = 4.9%, ועם קו Sensitive הפסד). לא נספ"
+     },
+     {
+      "id": "4000528998843",
+      "fit": 7.0,
+      "blockers": [
+       "loss"
+      ],
+      "file": "round5b-furniture-boxes.json",
+      "margin": 0,
+      "env": "borderline",
+      "why": "פוף ממולא (לא כיסוי, בניגוד להנחיית המעצב), נחיתה ₪220 מעל כל השוואה ישראלית (₪139–199): הפסד. נדחה."
+     }
+    ]
+   },
+   "warm-modern:living-room/pouf": {
+    "primary": "style",
+    "judged": 26,
+    "best_fit": 6.0,
+    "fit7_blocked": 0,
+    "blockers": {},
+    "examples": []
+   },
+   "japandi:living-room/wall-sconce": {
+    "primary": "size",
+    "judged": 36,
+    "best_fit": 8.0,
+    "fit7_blocked": 1,
+    "blockers": {
+     "israeli_shop_AU1": 1,
+     "size": 1
+    },
+    "examples": [
+     {
+      "id": "https://www.ikea.com/il/he/p/varptross-wall-lamp-wired-in-installation-bamboo-20595132/",
+      "fit": 8.0,
+      "blockers": [
+       "israeli_shop_AU1",
+       "size"
+      ],
+      "file": "il-lighting.json",
+      "margin": null,
+      "env": null,
+      "why": "חדשה בקטלוג; מראה ג׳פנדי. חיווט קבוע. מחיר הצרכן ₪145 נמוך מתקרת העלות לעמדה, אך לא ניתן למכור ב-₪299."
+     }
+    ]
+   },
+   "modern-country:living-room/wall-sconce": {
+    "primary": "standard",
+    "judged": 36,
+    "best_fit": 8.0,
+    "fit7_blocked": 2,
+    "blockers": {
+     "standard": 2
+    },
+    "examples": [
+     {
+      "id": "1005010156082353",
+      "fit": 8.0,
+      "blockers": [
+       "standard"
+      ],
+      "file": "round5e-aliexpress.json",
+      "margin": 0,
+      "env": "yes",
+      "why": "מראה כפרי מצוין: זרוע פליז מתקפלת, דיסק אגוז ואהיל קפלים. נפסל כי אין CE מוצהר (רק CCC) במנורה עם כבל."
+     },
+     {
+      "id": "1005007495772212",
+      "fit": 7.0,
+      "blockers": [
+       "standard"
+      ],
+      "file": "round5-aliexpress.json",
+      "margin": 0,
+      "env": "yes",
+      "why": "זרוע מתקפלת ואהיל בד 17 (בתחום), אבל אין CE מוצהר (רק CCC) ואין גרסת תקע EU. נדחה על תקן."
+     }
+    ]
+   },
+   "nordic:living-room/wall-sconce": {
+    "primary": "standard",
+    "judged": 36,
+    "best_fit": 7.0,
+    "fit7_blocked": 1,
+    "blockers": {
+     "standard": 1
+    },
+    "examples": [
+     {
+      "id": "1005007495772212",
+      "fit": 7.0,
+      "blockers": [
+       "standard"
+      ],
+      "file": "round5-aliexpress.json",
+      "margin": 0,
+      "env": "yes",
+      "why": "זרוע מתקפלת ואהיל בד 17 (בתחום), אבל אין CE מוצהר (רק CCC) ואין גרסת תקע EU. נדחה על תקן."
+     }
+    ]
+   },
+   "warm-modern:living-room/wall-sconce": {
+    "primary": "standard",
+    "judged": 36,
+    "best_fit": 7.0,
+    "fit7_blocked": 1,
+    "blockers": {
+     "standard": 1
+    },
+    "examples": [
+     {
+      "id": "1005010156082353",
+      "fit": 7.0,
+      "blockers": [
+       "standard"
+      ],
+      "file": "round5e-aliexpress.json",
+      "margin": 0,
+      "env": "yes",
+      "why": "מראה כפרי מצוין: זרוע פליז מתקפלת, דיסק אגוז ואהיל קפלים. נפסל כי אין CE מוצהר (רק CCC) במנורה עם כבל."
+     }
+    ]
+   },
+   "boho:master/floor-lamp": {
+    "primary": "israeli_shop_AU1",
+    "judged": 30,
+    "best_fit": 9.0,
+    "fit7_blocked": 1,
+    "blockers": {
+     "israeli_shop_AU1": 1
+    },
+    "examples": [
+     {
+      "id": "https://finelab.shop/products/chocolate-raffia-floor-lamp",
+      "fit": 9.0,
+      "blockers": [
+       "israeli_shop_AU1"
+      ],
+      "file": "il-lighting.json",
+      "margin": null,
+      "env": null,
+      "why": "בוהו."
+     }
+    ]
+   },
+   "japandi:master/floor-lamp": {
+    "primary": "israeli_shop_AU1",
+    "judged": 30,
+    "best_fit": 7.0,
+    "fit7_blocked": 1,
+    "blockers": {
+     "israeli_shop_AU1": 1
+    },
+    "examples": [
+     {
+      "id": "https://www.ikea.com/il/he/p/kinnahult-floor-lamp-ash-white-10559257/",
+      "fit": 7.0,
+      "blockers": [
+       "israeli_shop_AU1"
+      ],
+      "file": "il-lighting.json",
+      "margin": null,
+      "env": null,
+      "why": "גובה 150, בתחתית הטווח."
+     }
+    ]
+   },
+   "mediterranean:master/floor-lamp": {
+    "primary": "style",
+    "judged": 30,
+    "best_fit": 6.0,
+    "fit7_blocked": 0,
+    "blockers": {},
+    "examples": []
+   },
+   "nordic:master/floor-lamp": {
+    "primary": "israeli_shop_AU1",
+    "judged": 30,
+    "best_fit": 7.0,
+    "fit7_blocked": 2,
+    "blockers": {
+     "israeli_shop_AU1": 2,
+     "size": 1
+    },
+    "examples": [
+     {
+      "id": "https://nordlight.co.il/products/white-floor-lamp-fabric-shade",
+      "fit": 7.0,
+      "blockers": [
+       "israeli_shop_AU1",
+       "size"
+      ],
+      "file": "il-lighting.json",
+      "margin": null,
+      "env": null,
+      "why": "גובה 167 מעל 150-160 ואהיל 30 מתחת ל-35-40. הכי קרוב."
+     },
+     {
+      "id": "https://www.ikea.com/il/he/p/kinnahult-floor-lamp-ash-white-10559257/",
+      "fit": 7.0,
+      "blockers": [
+       "israeli_shop_AU1"
+      ],
+      "file": "il-lighting.json",
+      "margin": null,
+      "env": null,
+      "why": "גובה 150, בתחתית הטווח."
+     }
+    ]
+   },
+   "nordic:master/nightstand-tray": {
+    "primary": "freight",
+    "judged": 43,
+    "best_fit": 7.5,
+    "fit7_blocked": 4,
+    "blockers": {
+     "israeli_shop_AU1": 2,
+     "size": 1,
+     "loss": 2
+    },
+    "examples": [
+     {
+      "id": "1393439287588032512",
+      "fit": 7.5,
+      "blockers": [
+       "loss",
+       "size"
+      ],
+      "file": "round5-storage-rooms.json",
+      "margin": -11.3,
+      "env": "yes",
+      "why": "מגש פורצלן מט לבן בצורת גלולה, בדיוק 'אבנית מט בלבן חם' של הנורדי, אבל 1.34 ק\"ג: משלוח $20.64, נחיתה ₪118, נקודת איזון כ-₪155 מעל השוק. מפסיד. נדחה."
+     },
+     {
+      "id": "https://www.1item.co.il/products/round-wooden-decorative-tray-eco",
+      "fit": 7.0,
+      "blockers": [
+       "israeli_shop_AU1"
+      ],
+      "file": "il-decor.json",
+      "margin": null,
+      "env": null,
+      "why": "מגש עגול 30 בתחום 28-34. מחיר ₪69-89 לפי מידה."
+     },
+     {
+      "id": "https://www.1item.co.il/products/frame-wood-tray-white-edge",
+      "fit": 7.0,
+      "blockers": [
+       "israeli_shop_AU1"
+      ],
+      "file": "il-decor.json",
+      "margin": null,
+      "env": null,
+      "why": "29.5×20 בתחום 28-34×20-28."
+     }
+    ]
+   },
+   "mediterranean:master/pendant": {
+    "primary": "price",
+    "judged": 43,
+    "best_fit": 8.0,
+    "fit7_blocked": 5,
+    "blockers": {
+     "israeli_shop_AU1": 1,
+     "loss": 3,
+     "standard": 2,
+     "size": 2
+    },
+    "examples": [
+     {
+      "id": "1005010452173413",
+      "fit": 8.0,
+      "blockers": [
+       "loss"
+      ],
+      "file": "wave3-repricing.json",
+      "margin": -57.8,
+      "env": null,
+      "why": "כיפת ראטן חומה 45 – קליעה פתוחה, תבנית צל; 3000K"
+     },
+     {
+      "id": "2507150418081621400",
+      "fit": 7.5,
+      "blockers": [
+       "loss",
+       "standard"
+      ],
+      "file": "round5-lighting.json",
+      "margin": 22,
+      "env": "yes",
+      "why": "בשווי ₪449 כבר לא מפסיד (22%), אבל מנורה מחווטת ש-CJ לא מצהיר עליה CE — חסום (ד, S2B). אם CJ ישלחו CE DoC (בקשת התקנים), זה כרטיס מוכן."
+     },
+     {
+      "id": "https://www.ikea.com/il/he/p/narrkolv-pendant-lamp-rattan-00594341/",
+      "fit": 7.0,
+      "blockers": [
+       "israeli_shop_AU1"
+      ],
+      "file": "il-lighting.json",
+      "margin": null,
+      "env": null,
+      "why": "בוהו."
+     }
+    ]
+   },
+   "boho:work/desk-lamp": {
+    "primary": "style",
+    "judged": 26,
+    "best_fit": 6.0,
+    "fit7_blocked": 0,
+    "blockers": {},
+    "examples": []
+   },
+   "japandi:work/desk-lamp": {
+    "primary": "israeli_shop_AU1",
+    "judged": 26,
+    "best_fit": 8.0,
+    "fit7_blocked": 2,
+    "blockers": {
+     "israeli_shop_AU1": 2,
+     "size": 1
+    },
+    "examples": [
+     {
+      "id": "https://www.ikea.com/il/he/p/vindkraft-table-lamp-white-moulded-paper-pulp-20492803/",
+      "fit": 8.0,
+      "blockers": [
+       "israeli_shop_AU1"
+      ],
+      "file": "il-lighting.json",
+      "margin": null,
+      "env": null,
+      "why": "גובה תואם לעמדה."
+     },
+     {
+      "id": "https://nordlight.co.il/products/מנורת-שולחן-scandi-tripod-מנורת-לילה-מעוצבת-עם-רגלי-עץ",
+      "fit": 7.0,
+      "blockers": [
+       "israeli_shop_AU1",
+       "size"
+      ],
+      "file": "il-lighting.json",
+      "margin": null,
+      "env": null,
+      "why": "מתחת לתקרה ₪169."
+     }
+    ]
+   },
+   "mediterranean:work/desk-lamp": {
+    "primary": "no_product",
+    "judged": 26,
+    "best_fit": 5.5,
+    "fit7_blocked": 0,
+    "blockers": {},
+    "examples": []
+   },
+   "nordic:work/desk-lamp": {
+    "primary": "israeli_shop_AU1",
+    "judged": 26,
+    "best_fit": 8.0,
+    "fit7_blocked": 3,
+    "blockers": {
+     "israeli_shop_AU1": 3,
+     "size": 1
+    },
+    "examples": [
+     {
+      "id": "https://nordlight.co.il/products/מנורת-שולחן-scandi-tripod-מנורת-לילה-מעוצבת-עם-רגלי-עץ",
+      "fit": 8.0,
+      "blockers": [
+       "israeli_shop_AU1",
+       "size"
+      ],
+      "file": "il-lighting.json",
+      "margin": null,
+      "env": null,
+      "why": "מתחת לתקרה ₪169."
+     },
+     {
+      "id": "https://nordlight.co.il/products/מנורת-שולחן-nordic-soft-מנורת-לילה-אלגנטית-בשילוב-בסיס-בגוון-עץ",
+      "fit": 7.0,
+      "blockers": [
+       "israeli_shop_AU1"
+      ],
+      "file": "il-lighting.json",
+      "margin": null,
+      "env": null,
+      "why": "זולה; הדף מציין אזל בגוון עץ."
+     },
+     {
+      "id": "https://www.ikea.com/il/he/p/vindkraft-table-lamp-white-moulded-paper-pulp-20492803/",
+      "fit": 7.0,
+      "blockers": [
+       "israeli_shop_AU1"
+      ],
+      "file": "il-lighting.json",
+      "margin": null,
+      "env": null,
+      "why": "גובה תואם לעמדה."
+     }
+    ]
+   },
+   "warm-modern:work/desk-lamp": {
+    "primary": "style",
+    "judged": 26,
+    "best_fit": 6.0,
+    "fit7_blocked": 0,
+    "blockers": {},
+    "examples": []
+   },
+   "mediterranean:work/desk-organizer": {
+    "primary": "style",
+    "judged": 26,
+    "best_fit": 6.5,
+    "fit7_blocked": 0,
+    "blockers": {},
+    "examples": []
+   },
+   "nordic:work/desk-tray": {
+    "primary": "israeli_shop_AU1",
+    "judged": 29,
+    "best_fit": 7.0,
+    "fit7_blocked": 2,
+    "blockers": {
+     "israeli_shop_AU1": 2,
+     "size": 1
+    },
+    "examples": [
+     {
+      "id": "https://www.foxhome.co.il/products/0322545814",
+      "fit": 7.0,
+      "blockers": [
+       "israeli_shop_AU1"
+      ],
+      "file": "il-decor.json",
+      "margin": null,
+      "env": null,
+      "why": "מחיר מבצע (מחוק ₪79.90). מגש נרות, מידות לא פורסמו."
+     },
+     {
+      "id": "https://www.1item.co.il/products/frame-wood-tray-white-edge",
+      "fit": 7.0,
+      "blockers": [
+       "israeli_shop_AU1",
+       "size"
+      ],
+      "file": "il-decor.json",
+      "margin": null,
+      "env": null,
+      "why": "29.5×20, חורג ב-1.5 מהמעטפת 22-28 לרוחב."
+     }
+    ]
+   },
+   "japandi:work/magazine-holder": {
+    "primary": "style",
+    "judged": 23,
+    "best_fit": 6.5,
+    "fit7_blocked": 0,
+    "blockers": {},
+    "examples": []
+   },
+   "mediterranean:work/magazine-holder": {
+    "primary": "no_product",
+    "judged": 23,
+    "best_fit": 5.0,
+    "fit7_blocked": 0,
+    "blockers": {},
+    "examples": []
+   },
+   "modern-country:work/magazine-holder": {
+    "primary": "no_product",
+    "judged": 23,
+    "best_fit": 4.0,
+    "fit7_blocked": 0,
+    "blockers": {},
+    "examples": []
+   },
+   "nordic:work/magazine-holder": {
+    "primary": "no_product",
+    "judged": 23,
+    "best_fit": 5.0,
+    "fit7_blocked": 0,
+    "blockers": {},
+    "examples": []
+   },
+   "warm-modern:work/magazine-holder": {
+    "primary": "price",
+    "judged": 23,
+    "best_fit": 7.5,
+    "fit7_blocked": 1,
+    "blockers": {
+     "loss": 1
+    },
+    "examples": [
+     {
+      "id": "2608300209161600400",
+      "fit": 7.5,
+      "blockers": [
+       "loss"
+      ],
+      "file": "round5-storage-rooms.json",
+      "margin": 6.0,
+      "env": "borderline",
+      "why": "כמו בסלון: מפסיד בשווי בישראל. נדחה."
+     }
+    ]
+   },
+   "japandi:work/shelf-boxes": {
+    "primary": "style",
+    "judged": 44,
+    "best_fit": 6.5,
+    "fit7_blocked": 0,
+    "blockers": {},
+    "examples": []
+   },
+   "warm-modern:work/shelf-boxes": {
+    "primary": "price",
+    "judged": 44,
+    "best_fit": 7.0,
+    "fit7_blocked": 1,
+    "blockers": {
+     "loss": 1,
+     "stock": 1,
+     "material": 1
+    },
+    "examples": [
+     {
+      "id": "1005011528913221",
+      "fit": 7.0,
+      "blockers": [
+       "loss",
+       "material",
+       "stock"
+      ],
+      "file": "round5b-furniture-boxes.json",
+      "margin": -6.7,
+      "env": "yes",
+      "why": "ליד של המעצב (נורדי ומודרני חם). מפסיד במחיר הישראלי: זוג נוחת ב-₪57.6, וקופסאות בד עם מכסה נמכרות בישראל ב-₪35–40. תמחור פרימיום לא מוצדק לקופסת ארון עם צנרת PU (בנורדי PU אסור במ"
+     }
+    ]
+   },
+   "modern-country:work/wall-sconce": {
+    "primary": "size",
+    "judged": 27,
+    "best_fit": 7.5,
+    "fit7_blocked": 1,
+    "blockers": {
+     "size": 1,
+     "standard": 1
+    },
+    "examples": [
+     {
+      "id": "1005008955326664",
+      "fit": 7.5,
+      "blockers": [
+       "size",
+       "standard"
+      ],
+      "file": "round5-lighting.json",
+      "margin": null,
+      "env": "no",
+      "why": "זרוע נר בפליז או שחור ואהיל פשתן קטן, CE; אבל גובה 26 ופלטה 13 מול 15–22 ו-≤8. לכניסה/מטבח בכפרי (גבולי בגובה)."
+     }
+    ]
+   },
+   "nordic:work/wall-sconce": {
+    "primary": "israeli_shop_AU1",
+    "judged": 27,
+    "best_fit": 8.0,
+    "fit7_blocked": 1,
+    "blockers": {
+     "israeli_shop_AU1": 1
+    },
+    "examples": [
+     {
+      "id": "https://ubject.co.il/product/גוף-תאורה-elena-wall/",
+      "fit": 8.0,
+      "blockers": [
+       "israeli_shop_AU1"
+      ],
+      "file": "il-lighting.json",
+      "margin": null,
+      "env": null,
+      "why": "יקרה לעמדה."
+     }
+    ]
+   }
+  }
+ },
+ "relaxation_gains": {
+  "single_blocker_closes": {
+   "size": 11,
+   "loss": 19,
+   "israeli_shop_AU1": 14,
+   "standard": 4,
+   "duplicate": 4,
+   "unclassified": 2
+  },
+  "rows": {
+   "size": [
+    "boho:bath/storage-basket",
+    "boho:corridor/gallery-stool",
+    "boho:dining-room/dining-pendant",
+    "boho:hall/wall-hooks",
+    "boho:living-room/magazine-holder",
+    "boho:living-room/pendant",
+    "boho:master/pendant",
+    "modern-country:master/pendant",
+    "boho:work/magazine-holder",
+    "boho:work/wall-sconce",
+    "japandi:work/wall-sconce"
+   ],
+   "loss": [
+    "mediterranean:bath/toilet-brush",
+    "boho:corridor/gallery-stool",
+    "mediterranean:corridor/gallery-stool",
+    "modern-country:corridor/gallery-stool",
+    "boho:dining-room/dining-pendant",
+    "mediterranean:dining-room/dining-pendant",
+    "nordic:dining-room/dining-pendant",
+    "warm-modern:dining-room/dining-pendant",
+    "modern-country:living-room/floor-lamp",
+    "nordic:living-room/floor-lamp",
+    "boho:living-room/pendant",
+    "warm-modern:master/floor-lamp",
+    "mediterranean:master/nightstand-tray",
+    "boho:master/pendant",
+    "modern-country:master/pendant",
+    "nordic:master/pendant",
+    "warm-modern:master/pendant",
+    "japandi:work/pendant",
+    "boho:work/shelf-boxes"
+   ],
+   "israeli_shop_AU1": [
+    "warm-modern:corridor/ceiling-lights",
+    "boho:dining-room/dining-pendant",
+    "modern-country:living-room/floor-lamp",
+    "nordic:living-room/floor-lamp",
+    "boho:living-room/pendant",
+    "boho:living-room/wall-sconce",
+    "mediterranean:master/nightstand-tray",
+    "boho:master/pendant",
+    "nordic:master/pendant",
+    "warm-modern:master/pendant",
+    "boho:work/pendant",
+    "boho:work/wall-sconce",
+    "japandi:work/wall-sconce",
+    "mediterranean:work/wall-sconce"
+   ],
+   "standard": [
+    "boho:dining-room/dining-pendant",
+    "modern-country:living-room/accent-sconces",
+    "modern-country:living-room/floor-lamp",
+    "warm-modern:master/floor-lamp"
+   ],
+   "duplicate": [
+    "boho:kids/desk-organizer",
+    "modern-country:kids/desk-organizer",
+    "modern-country:living-room/accent-sconces",
+    "modern-country:living-room/floor-lamp"
+   ],
+   "unclassified": [
+    "nordic:master/pendant",
+    "warm-modern:master/pendant"
+   ]
+  },
+  "au3_more_6_5_third_option": {
+   "boho:dining-room/bowl": [
+    "bowl-aliexpress-kiln-corrugated-raw-rim-bowl-23",
+    "bowl-cj-burnt-paulownia-footed-bowl-23"
+   ],
+   "modern-country:kids/pendant": [
+    "pendant-aliexpress-rustic-woven-pendant-light-200914-kids"
+   ],
+   "modern-country:hall/bench-cushion": [
+    "bench-cushion-aliexpress-custom-bench-cushion-chenille-743098",
+    "bench-cushion-aliexpress-linen-look-box-cushion-110x35x5",
+    "bench-cushion-aliexpress-linen-look-flat-cushion-110x35x3"
+   ],
+   "modern-country:hall/ceiling-light": [
+    "ceiling-light-aliexpress-semi-circular-natural-handmade-958145"
+   ],
+   "modern-country:kids/desk-organizer": [
+    "desk-organizer-cj-walnut-beech-square-pen-cup-8x11"
+   ]
+  },
+  "pre1_exclusion_target_gain": {
+   "slots": [
+    "dining-room/step-stool",
+    "living-room/pouf",
+    "bath/shower-stool"
+   ],
+   "style_slots_less_needed": 17
+  }
+ },
+ "owner_questions": [
+  {
+   "id": "R6Q1",
+   "type": "AU3 extension (6.5 as third option, case by case)",
+   "gain_style_slots": 5,
+   "closes": [
+    "modern-country:kids/pendant",
+    "modern-country:hall/bench-cushion",
+    "modern-country:hall/ceiling-light",
+    "modern-country:kids/desk-organizer",
+    "boho:dining-room/bowl"
+   ],
+   "cards": {
+    "boho:dining-room/bowl": [
+     "bowl-aliexpress-kiln-corrugated-raw-rim-bowl-23",
+     "bowl-cj-burnt-paulownia-footed-bowl-23"
+    ],
+    "modern-country:kids/pendant": [
+     "pendant-aliexpress-rustic-woven-pendant-light-200914-kids"
+    ],
+    "modern-country:hall/bench-cushion": [
+     "bench-cushion-aliexpress-custom-bench-cushion-chenille-743098",
+     "bench-cushion-aliexpress-linen-look-box-cushion-110x35x5",
+     "bench-cushion-aliexpress-linen-look-flat-cushion-110x35x3"
+    ],
+    "modern-country:hall/ceiling-light": [
+     "ceiling-light-aliexpress-semi-circular-natural-handmade-958145"
+    ],
+    "modern-country:kids/desk-organizer": [
+     "desk-organizer-cj-walnut-beech-square-pen-cup-8x11"
+    ]
+   },
+   "question_he": "לאשר 5 כרטיסים קיימים בציון 6.5 כאפשרות השלישית, כמו ב-AU3 (המעצב מאשר כל אחד מול תמונה)? כל אחד סוגר עמדה שיש בה כבר 2 אפשרויות 7+."
+  },
+  {
+   "id": "R6Q2",
+   "type": "PRE1 display-only slots out of the count (like AU2)",
+   "gain_style_slots": 17,
+   "slots": [
+    "dining-room/step-stool",
+    "living-room/pouf",
+    "bath/shower-stool"
+   ],
+   "question_he": "להוציא מהמונה את שרפרף המדרגה, הפוף ושרפרף המקלחת (מוצגים 'המלאי אינו זמין כעת', כמו 8 העמדות של AU2)? רהיטים כבדים, 0 אפשרויות בכל 6 הסגנונות אחרי 17–28 מוצרים לכל עמדה, ו-R5C2 כבר קבע להם מסלול PRE1. היעד יורד ב-17 עמדות-סגנון (נורדי 2, כל השאר 3)."
+  },
+  {
+   "id": "R6Q3",
+   "type": "AU1: Israeli lighting suppliers (trade price)",
+   "gain_style_slots": 14,
+   "rows": [
+    "warm-modern:corridor/ceiling-lights",
+    "boho:dining-room/dining-pendant",
+    "modern-country:living-room/floor-lamp",
+    "nordic:living-room/floor-lamp",
+    "boho:living-room/pendant",
+    "boho:living-room/wall-sconce",
+    "mediterranean:master/nightstand-tray",
+    "boho:master/pendant",
+    "nordic:master/pendant",
+    "warm-modern:master/pendant",
+    "boho:work/pendant",
+    "boho:work/wall-sconce",
+    "japandi:work/wall-sconce",
+    "mediterranean:work/wall-sconce"
+   ],
+   "question_he": "לפתוח פנייה לספקי התאורה הישראליים (כמו לשטיחים ב-2026-10-19)? ב-14 עמדות-סגנון של תאורה ואחסון חסרה אפשרות אחת, והיא כבר קיימת אצל ספק ישראלי; הן נסגרות ברגע שיש מחיר סוחר."
+  },
+  {
+   "id": "R6Q4",
+   "type": "CE declaration (S2B)",
+   "gain_style_slots": 2,
+   "items": {
+    "modern-country:living-room/accent-sconces": "1005013093006420",
+    "modern-country:living-room/floor-lamp": "1005007077212946",
+    "warm-modern:master/floor-lamp (1 of 2)": "1005011965542974"
+   },
+   "question_he": "לשלוח למוכרים של 3 מנורות שחסומות רק ב-CE (מוצהר CCC בלבד) בקשה ל-CE DoC מהאפליקציה, כמו ב-2026-10-14? אם יאשרו: 2 עמדות נסגרות בכפרי ועוד אחת מתקדמת במודרני החם. ובמקביל: להעביר את בקשת ה-CE ל-CJ (נשלחה 2026-10-14, אין תשובה) לסוכן האישי בלוח הבקרה."
+  }
+ ],
+ "designer_items_no_owner_decision": [
+  {
+   "slot": "master/pendant",
+   "style": "modern-country",
+   "id": "1005011787559695",
+   "note_he": "כיפת פשתן גלית D45 בגובה 20 מול 25–35 (AU5, החלטת מעצב). ₪399 = 22.5%. סוגרת את הכפרי."
+  },
+  {
+   "slot": "master/pendant",
+   "style": "boho",
+   "id": "1005012336155345",
+   "note_he": "פעמון במבוק 45×45 (גובה 45 מול 25–35). בוהו 8."
+  },
+  {
+   "slot": "work/wall-sconce",
+   "style": "japandi",
+   "id": "1005012099550914",
+   "note_he": "פלטת טרוורטין D18–20 מול פלטה עד 8."
+  },
+  {
+   "slot": "work/wall-sconce",
+   "style": "boho",
+   "id": "1005009708965037",
+   "note_he": "חצי-גליל חבל 23×25 מול אהיל 10–13."
+  }
+ ],
+ "queues": {
+  "images": "round5/ae-queue-6-images.json",
+  "stores": "round5/ae-queue-6-stores.json",
+  "images_envelope_rechecks": 7
+ },
+ "slots": {
+  "work/magazine-holder": {
+   "queries_cj": [
+    "[cat Storage] magazine",
+    "[cat Furniture] magazine",
+    "magazine rack",
+    "magazine holder",
+    "newspaper",
+    "magazine"
+   ],
+   "queries_zendrop": [],
+   "queries_cache": [
+    "skufit: 24-35 x 20-40 x 32-42",
+    "form magazine|newspaper|book|file, not plastic/wall"
+   ],
+   "candidates": [
+    {
+     "source": "CJ",
+     "found_by": "cj-category",
+     "id": "2610010845351616000",
+     "url": "https://cjdropshipping.com/product/-p-2610010845351616000.html",
+     "title": "Wrought iron newspaper rack (wall-mounted mesh file holder) 35x22x8",
+     "image": "",
+     "sku_or_vid": "2610010845351616900",
+     "cost_usd": 2.94,
+     "ship_usd": 0,
+     "ship_days": "",
+     "landed_ils": 9.7,
+     "price_ils": null,
+     "price_basis_he": "",
+     "comps": [],
+     "margin_pct": null,
+     "dims_cm": "35x22x8 (wall)",
+     "fits_envelope": "no",
+     "style_fit_guess": {
+      "nordic": 4,
+      "warm-modern": 3,
+      "japandi": 3,
+      "mediterranean": 3,
+      "modern-country": 3,
+      "boho": 2
+     },
+     "variants_fit": {},
+     "card_id": null,
+     "why_he": "round6 2026-10-19: נמצא בעיון בקטגוריית Storage Bags & Cases & Boxes עם 'magazine'. זה מתקן קיר מרשת משרדית ולא מחזיק עומד (רשת משרדית אסורה בנורדי). נדחה."
+    },
+    {
+     "source": "CJ",
+     "found_by": "cj-category",
+     "id": "2110281432208674817",
+     "url": "https://cjdropshipping.com/product/-p-2110281432208674817.html",
+     "title": "Bamboo + acrylic vinyl record crate 35x30x28 (UK warehouse)",
+     "image": "",
+     "sku_or_vid": "2110281432342892545",
+     "cost_usd": 14.06,
+     "ship_usd": 0,
+     "ship_days": "",
+     "landed_ils": 46.4,
+     "price_ils": null,
+     "price_basis_he": "",
+     "comps": [],
+     "margin_pct": null,
+     "dims_cm": "35x30x28",
+     "fits_envelope": "borderline",
+     "style_fit_guess": {
+      "nordic": 3,
+      "warm-modern": 4,
+      "japandi": 4,
+      "mediterranean": 3,
+      "modern-country": 3,
+      "boho": 3
+     },
+     "variants_fit": {},
+     "card_id": null,
+     "why_he": "round6 2026-10-19: אקריליק ובמבוק, מחסן בריטניה (UKH), 2.6 ק\"ג. אקריליק פוסל. נדחה."
+    }
+   ],
+   "verdict_he": "0 כרטיסים. נבדקו ונדחו: Wrought iron newspaper rack (wall-mounte; Bamboo + acrylic vinyl record crate 35x3"
+  },
+  "hall/storage-boxes": {
+   "queries_cj": [
+    "[cat Storage Bags&Cases&Boxes] '' p1-64 (all)",
+    "[cat Storage] basket",
+    "[cat Storage] box",
+    "[cat Storage] linen",
+    "[cat Storage] felt",
+    "[cat Storage] rattan",
+    "[cat Storage] cotton",
+    "[cat Storage] leather",
+    "[cat Storage] lid p2",
+    "seagrass",
+    "wicker",
+    "hyacinth",
+    "storage basket",
+    "storage box"
+   ],
+   "queries_zendrop": [],
+   "queries_cache": [
+    "skufit: AxBxC in SKU labels vs 26-34 x 20-30 x 20-35 (+-10%), basket/box words, natural materials",
+    "skufit long: 55-68 x 25-30 x 20-30"
+   ],
+   "candidates": [
+    {
+     "source": "CJ",
+     "found_by": "cj-category",
+     "id": "2609280842331610500",
+     "url": "https://cjdropshipping.com/product/-p-2609280842331610500.html",
+     "title": "Square cotton rope laundry basket 38x30x46 / 28x28",
+     "image": "",
+     "sku_or_vid": "",
+     "cost_usd": 9.55,
+     "ship_usd": 0,
+     "ship_days": "",
+     "landed_ils": 31.5,
+     "price_ils": null,
+     "price_basis_he": "",
+     "comps": [],
+     "margin_pct": null,
+     "dims_cm": "38x30x46",
+     "fits_envelope": "no",
+     "style_fit_guess": {
+      "nordic": 4,
+      "warm-modern": 4,
+      "japandi": 4,
+      "mediterranean": 5,
+      "modern-country": 5,
+      "boho": 5.5
+     },
+     "variants_fit": {},
+     "card_id": null,
+     "why_he": "round6 2026-10-19: סל כביסה, גבוה מדי לקופסאות הכניסה (20–35) ו-1.4 ק\"ג. נדחה."
+    },
+    {
+     "source": "CJ",
+     "found_by": "cj-name",
+     "id": "2110999113764884481",
+     "url": "https://cjdropshipping.com/product/-p-2110999113764884481.html",
+     "title": "Acacia storage box with lid, metal latch and side handles (S 40x22x22, L 50-60)",
+     "image": "",
+     "sku_or_vid": "2110999113819410433",
+     "cost_usd": 25.53,
+     "ship_usd": 0,
+     "ship_days": "",
+     "landed_ils": 84.2,
+     "price_ils": null,
+     "price_basis_he": "",
+     "comps": [],
+     "margin_pct": null,
+     "dims_cm": "40x22x22 (S)",
+     "fits_envelope": "no",
+     "style_fit_guess": {
+      "nordic": 5,
+      "warm-modern": 6.5,
+      "japandi": 6.5,
+      "mediterranean": 6,
+      "modern-country": 6,
+      "boho": 5
+     },
+     "variants_fit": {},
+     "card_id": null,
+     "why_he": "round6 2026-10-19: ספק מוכח-חלקית (Xianju Baishun, משפחת שיטה של 7 מוצרים חדשים). ה-S ברוחב 40 מול 26–34 (‎+18%), ה-L גדול בהרבה, 2.2–4.7 ק\"ג. נדחה."
+    },
+    {
+     "source": "AliExpress",
+     "found_by": "cache-attribute",
+     "id": "1005008480586450",
+     "url": "https://www.aliexpress.com/item/1005008480586450.html",
+     "title": "Woven jute/paper-rope belly basket with dark stripe bands and jute handles, 30x29x21",
+     "image": "",
+     "sku_or_vid": "12000045335528516",
+     "cost_usd": 15.61,
+     "ship_usd": 6.38,
+     "ship_days": "8-19",
+     "landed_ils": 132.9,
+     "price_ils": 169,
+     "price_basis_he": "זוג סלים קלועים: IKEA BRANÄS ₪89, ‏Fox Home Bali ₪97.93, ‏IKEA KNIPSA ₪89 → זוג טיפוסי ₪178–196; 10% מתחת = ₪169",
+     "comps": [
+      "https://www.ikea.com/il/he/p/branaes-basket-rattan-00138432/",
+      "https://www.foxhome.co.il/products/0334530300",
+      "https://www.ikea.com/il/he/p/knipsa-basket-seagrass-20110540/"
+     ],
+     "margin_pct": -4.0,
+     "dims_cm": "30x29x21",
+     "fits_envelope": "yes",
+     "style_fit_guess": {
+      "nordic": 3,
+      "warm-modern": 3.5,
+      "japandi": 4,
+      "mediterranean": 6,
+      "modern-country": 5.5,
+      "boho": 7
+     },
+     "variants_fit": {
+      "boho": 1
+     },
+     "card_id": null,
+     "why_he": "round6 2026-10-19: נמצא בהתאמת מידת SKU (30×29×21 בתוך 26–34 × 20–30 × 20–35) ולא נבדק לכניסה. בוהו 7 (סל קלוע בטבעי עם פסים כהים וידיות יוטה). אבל משלוח $6.38 ליחידה: זוג נוחת ₪132.9, ‏-4.0% ב-₪169 (5.9% רק ב-₪189, מעל הטיפוסי). לא נכתב כרטיס; בתור חיפוש-התמונה (אותו סל אצל מוכר עם משלוח $1.99)."
+    }
+   ],
+   "verdict_he": "0 כרטיסים. עיון מלא בקטגוריית האחסון של CJ (64 עמודים, 3,650 ליסטינגים) לא הביא אף קופסה או סל במידה ובחומר; רוב הקטגוריה מחסני ארה\"ב/אירופה, כביסה וארונות. מהמטמון: סל קלוע בוהו 30×29×21 (בוהו 7) מפסיד בזוג בגלל משלוח $6.38 ליחידה → לתור חיפוש התמונה."
+  },
+  "work/shelf-boxes": {
+   "queries_cj": [
+    "[cat Storage] wood",
+    "[cat Storage] bamboo",
+    "acacia",
+    "walnut",
+    "cane"
+   ],
+   "queries_zendrop": [],
+   "queries_cache": [
+    "skufit: 28-32 x 20-24 x 12-18"
+   ],
+   "candidates": [
+    {
+     "source": "CJ",
+     "found_by": "cj-category",
+     "id": "2609100641211607400",
+     "url": "https://cjdropshipping.com/product/-p-2609100641211607400.html",
+     "title": "Black wood frame box with cane-webbing panels, S 30x20x14 (also L 35x25x16)",
+     "image": "https://cf.cjdropshipping.com/quick/product/bfdf8453-3fe5-4d8d-8f59-186327591b6e.jpg",
+     "sku_or_vid": "2609100641211608300",
+     "cost_usd": 5.73,
+     "ship_usd": 26.17,
+     "ship_days": "12-50",
+     "landed_ils": 124.2,
+     "price_ils": 229,
+     "price_basis_he": "זוג קופסאות קלועות/קנה: Zara Home סל סי-גראס מלבני עם מכסה ₪119.90–149.90, ‏IKEA BRANÄS ₪89, ‏Home Center קופסת עץ M ₪69.90 → זוג טיפוסי כ-₪240–260; ₪229 לזוג",
+     "comps": [
+      "https://www.zarahome.com/il/סל-סי-גראס-מלבני-עם-מכסה-l41589049",
+      "https://www.ikea.com/il/he/p/branaes-basket-rattan-00138432/",
+      "https://www.homecenter.co.il/products/5252713018"
+     ],
+     "margin_pct": 25.0,
+     "dims_cm": "30x20x14 (S)",
+     "fits_envelope": "yes",
+     "style_fit_guess": {
+      "nordic": 5,
+      "warm-modern": 5.5,
+      "japandi": 6.5,
+      "mediterranean": 6.5,
+      "modern-country": 5,
+      "boho": 6.5
+     },
+     "variants_fit": {
+      "japandi": 0
+     },
+     "card_id": null,
+     "why_he": "round6 2026-10-19: עובר במידה ובכלכלה (זוג נוחת ₪124.2, ‏25.0% ב-₪229; Eub לזוג $26.17, 12–50 ימים), אבל אף סגנון שצריך את העמדה לא מגיע ל-7: בבריף הג'פנדי ראטן מותר רק כאהיל, במודרני החם פאנל קנה עד 20% מהמוצר, ובבוהו המסגרת השחורה. לא נכתב כרטיס; נשאר seen כליד למעצב."
+    },
+    {
+     "source": "CJ",
+     "found_by": "cj-category",
+     "id": "2110928127122030593",
+     "url": "https://cjdropshipping.com/product/-p-2110928127122030593.html",
+     "title": "Acacia open box with handle 30x20x15 (BAISURE brand photos)",
+     "image": "https://cf.cjdropshipping.com/34fd7ffc-fe6f-45a9-9314-4a0c3e67cf0d.jpg",
+     "sku_or_vid": "2110928127231082498",
+     "cost_usd": 14.15,
+     "ship_usd": 36.519999999999996,
+     "ship_days": "12-50",
+     "landed_ils": 213.9,
+     "price_ils": 269,
+     "price_basis_he": "זוג קופסאות עץ פתוחות: Home Center קופסת עץ M ₪69.90 ועד ₪129 לעץ מלא → זוג כ-₪200–260",
+     "comps": [
+      "https://www.zarahome.com/il/סל-סי-גראס-מלבני-עם-מכסה-l41589049",
+      "https://www.ikea.com/il/he/p/branaes-basket-rattan-00138432/",
+      "https://www.homecenter.co.il/products/5252713018"
+     ],
+     "margin_pct": -4.7,
+     "dims_cm": "30x20x15",
+     "fits_envelope": "yes",
+     "style_fit_guess": {
+      "nordic": 5,
+      "warm-modern": 6.5,
+      "japandi": 6.5,
+      "mediterranean": 6.5,
+      "modern-country": 6,
+      "boho": 5.5
+     },
+     "variants_fit": {},
+     "card_id": null,
+     "why_he": "round6 2026-10-19: במידה, אבל זוג נוחת ₪213.9 ומפסיד גם ב-₪269 (-4.7%); תמונות עם לוגו מותג. נדחה."
+    },
+    {
+     "source": "CJ",
+     "found_by": "cj-name",
+     "id": "2110994015976243202",
+     "url": "https://cjdropshipping.com/product/-p-2110994015976243202.html",
+     "title": "Acacia box with lid L 31x21x17 (S 26x15x11)",
+     "image": "",
+     "sku_or_vid": "2110994016047546370",
+     "cost_usd": 25.76,
+     "ship_usd": 49.12,
+     "ship_days": "12-50",
+     "landed_ils": 332.1,
+     "price_ils": 349,
+     "price_basis_he": "זוג קופסאות עץ עם מכסה, ₪150–180 ליחידה בשוק",
+     "comps": [
+      "https://www.zarahome.com/il/סל-סי-גראס-מלבני-עם-מכסה-l41589049",
+      "https://www.ikea.com/il/he/p/branaes-basket-rattan-00138432/",
+      "https://www.homecenter.co.il/products/5252713018"
+     ],
+     "margin_pct": -23.1,
+     "dims_cm": "31x21x17",
+     "fits_envelope": "yes",
+     "style_fit_guess": {
+      "nordic": 5,
+      "warm-modern": 6.5,
+      "japandi": 7,
+      "mediterranean": 6.5,
+      "modern-country": 6,
+      "boho": 5.5
+     },
+     "variants_fit": {},
+     "card_id": null,
+     "why_he": "round6 2026-10-19: קופסת שיטה עם מכסה במידה המדויקת לקופסאות המדף, ג'פנדי 7. אבל 1.8 ק\"ג: Eub לזוג $49.12, נחיתה ₪332.1, מפסיד (-23.1% ב-₪349). נדחה (הפסד אמיתי במשלוח)."
+    },
+    {
+     "source": "CJ",
+     "found_by": "cj-name",
+     "id": "1490200622279036928",
+     "url": "https://cjdropshipping.com/product/-p-1490200622279036928.html",
+     "title": "Seagrass two-handle tray basket S/M/L 24-30 x 15-20 x 9-10",
+     "image": "",
+     "sku_or_vid": "",
+     "cost_usd": 5.14,
+     "ship_usd": 0,
+     "ship_days": "",
+     "landed_ils": 17.0,
+     "price_ils": null,
+     "price_basis_he": "",
+     "comps": [],
+     "margin_pct": null,
+     "dims_cm": "30x20x10 (L)",
+     "fits_envelope": "no",
+     "style_fit_guess": {
+      "nordic": 4,
+      "warm-modern": 4,
+      "japandi": 5,
+      "mediterranean": 6.5,
+      "modern-country": 6,
+      "boho": 7
+     },
+     "variants_fit": {},
+     "card_id": null,
+     "why_he": "round6 2026-10-19: נמוך מדי לקופסאות המדף (10 מול 12–18). נדחה (מידה)."
+    },
+    {
+     "source": "AliExpress",
+     "found_by": "cache-attribute",
+     "id": "1005009318751651",
+     "url": "https://www.aliexpress.com/item/1005009318751651.html",
+     "title": "Same cream linen zip box, S-8L 30x20x14",
+     "image": "",
+     "sku_or_vid": "12000048733944406",
+     "cost_usd": 10.38,
+     "ship_usd": 1.99,
+     "ship_days": "6-15",
+     "landed_ils": 75.1,
+     "price_ils": 99,
+     "price_basis_he": "זוג קופסאות בד עם מכסה, ₪35–45 ליחידה",
+     "comps": [
+      "https://www.homecenter.co.il/products/1765721023994",
+      "https://www.ikea.com/il/he/p/droena-box-with-lid-s29634266/"
+     ],
+     "margin_pct": -1.3,
+     "dims_cm": "30x20x14",
+     "fits_envelope": "yes",
+     "style_fit_guess": {
+      "nordic": 5.5,
+      "warm-modern": 6.5,
+      "japandi": 5,
+      "mediterranean": 4,
+      "modern-country": 5,
+      "boho": 3
+     },
+     "variants_fit": {},
+     "card_id": null,
+     "why_he": "round6 2026-10-19: המידה S נכנסת לקופסאות המדף, ובמודרני החם המפרט מבקש 'עור קוניאק או בד פטריה'; אבל זו קופסת ארון עם רוכסן (6.5) וזוג נוחת ₪75.1: מפסיד גם ב-₪99. נדחה."
+    },
+    {
+     "source": "AliExpress",
+     "found_by": "cache-attribute",
+     "id": "1005012031136915",
+     "url": "https://www.aliexpress.com/item/1005012031136915.html",
+     "title": "Square cotton rope basket 32x22x13 (black / brown / white)",
+     "image": "",
+     "sku_or_vid": "",
+     "cost_usd": 18.91,
+     "ship_usd": 1.99,
+     "ship_days": "",
+     "landed_ils": 69.0,
+     "price_ils": null,
+     "price_basis_he": "",
+     "comps": [],
+     "margin_pct": null,
+     "dims_cm": "32x22x13",
+     "fits_envelope": "yes",
+     "style_fit_guess": {
+      "nordic": 5,
+      "warm-modern": 5.5,
+      "japandi": 6,
+      "mediterranean": 5.5,
+      "modern-country": 5.5,
+      "boho": 6.5
+     },
+     "variants_fit": {},
+     "card_id": null,
+     "why_he": "round6 2026-10-19: במידה, אבל $18.91 ליחידה וחבל כותנה פשוט: אף סגנון שצריך לא מגיע ל-7. נדחה."
+    },
+    {
+     "source": "AliExpress",
+     "found_by": "cache-attribute",
+     "id": "1005012378332629",
+     "url": "https://www.aliexpress.com/item/1005012378332629.html",
+     "title": "Grey cotton-linen lidded box, small 32x24x18",
+     "image": "",
+     "sku_or_vid": "",
+     "cost_usd": 51.11,
+     "ship_usd": 1.99,
+     "ship_days": "",
+     "landed_ils": 175.2,
+     "price_ils": null,
+     "price_basis_he": "",
+     "comps": [],
+     "margin_pct": null,
+     "dims_cm": "32x24x18",
+     "fits_envelope": "yes",
+     "style_fit_guess": {
+      "nordic": 6,
+      "warm-modern": 6,
+      "japandi": 6,
+      "mediterranean": 4,
+      "modern-country": 4.5,
+      "boho": 3
+     },
+     "variants_fit": {},
+     "card_id": null,
+     "why_he": "round6 2026-10-19: $51 ליחידה לקופסת בד: זוג נוחת מעל ₪340. נדחה (הפסד)."
+    }
+   ],
+   "verdict_he": "0 כרטיסים. קופסת הקנה השחורה (CJ) עוברת במידה ובכלכלה אבל לא מגיעה ל-7 באף סגנון שצריך; קופסאות השיטה מפסידות במשלוח (1.3–1.8 ק\"ג)."
+  },
+  "bath/storage-basket": {
+   "queries_cj": [],
+   "queries_zendrop": [],
+   "queries_cache": [
+    "skufit: 40-44 x 30-34 x 20-23"
+   ],
+   "candidates": [
+    {
+     "source": "CJ",
+     "found_by": "cj-category",
+     "id": "2110989670538887169",
+     "url": "https://cjdropshipping.com/product/-p-2110989670538887169.html",
+     "title": "Acacia crate with handles 42x32x21",
+     "image": "https://cf.cjdropshipping.com/f418fafa-2144-45b0-a10b-c372580d6cd8.jpg",
+     "sku_or_vid": "2110989670589218817",
+     "cost_usd": 25.76,
+     "ship_usd": 28.95,
+     "ship_days": "12-50",
+     "landed_ils": 180.5,
+     "price_ils": 199,
+     "price_basis_he": "ארגז עץ 40 ס\"מ בשוק ₪149–199",
+     "comps": [
+      "https://www.zarahome.com/il/סל-סי-גראס-מלבני-עם-מכסה-l41589049",
+      "https://www.ikea.com/il/he/p/branaes-basket-rattan-00138432/",
+      "https://www.homecenter.co.il/products/5252713018"
+     ],
+     "margin_pct": -18.1,
+     "dims_cm": "42x32x21",
+     "fits_envelope": "yes",
+     "style_fit_guess": {
+      "nordic": 4,
+      "warm-modern": 5,
+      "japandi": 6,
+      "mediterranean": 6,
+      "modern-country": 6.5,
+      "boho": 5.5
+     },
+     "variants_fit": {},
+     "card_id": null,
+     "why_he": "round6 2026-10-19: במידה המדויקת למדף האמבטיה, אבל ארגז כפרי מחוספס (ג'פנדי 6) ו-2 ק\"ג: נחיתה ₪180.5, מפסיד ב-₪199. נדחה."
+    },
+    {
+     "source": "CJ",
+     "found_by": "cj-name",
+     "id": "2110973309112631298",
+     "url": "https://cjdropshipping.com/product/-p-2110973309112631298.html",
+     "title": "Acacia crate & slatted tray S/M/L 40x24x6/12/18",
+     "image": "",
+     "sku_or_vid": "",
+     "cost_usd": 10.35,
+     "ship_usd": 0,
+     "ship_days": "",
+     "landed_ils": 34.2,
+     "price_ils": null,
+     "price_basis_he": "",
+     "comps": [],
+     "margin_pct": null,
+     "dims_cm": "40x24x18 (L)",
+     "fits_envelope": "no",
+     "style_fit_guess": {
+      "nordic": 4,
+      "warm-modern": 5,
+      "japandi": 5.5,
+      "mediterranean": 5.5,
+      "modern-country": 6,
+      "boho": 5
+     },
+     "variants_fit": {},
+     "card_id": null,
+     "why_he": "round6 2026-10-19: עומק 24 מול 30–34. נדחה (מידה)."
+    },
+    {
+     "source": "AliExpress",
+     "found_by": "cache-attribute",
+     "id": "1005012261233958",
+     "url": "https://www.aliexpress.com/item/1005012261233958.html",
+     "title": "Cream linen-look hard box with zip lid and cognac PU handles, 25L 40x30x21",
+     "image": "",
+     "sku_or_vid": "12000057902567502",
+     "cost_usd": 15.01,
+     "ship_usd": 1.99,
+     "ship_days": "6-13",
+     "landed_ils": 56.1,
+     "price_ils": 59,
+     "price_basis_he": "קופסת בד עם מכסה: Home Center Softex ‏19L ₪29.90–44.90, ‏IKEA DRÖNA ₪35 → ₪59 כבר מעל השוק",
+     "comps": [
+      "https://www.homecenter.co.il/products/1765721023994",
+      "https://www.ikea.com/il/he/p/droena-box-with-lid-s29634266/"
+     ],
+     "margin_pct": -25.0,
+     "dims_cm": "40x30x21",
+     "fits_envelope": "yes",
+     "style_fit_guess": {
+      "nordic": 5.5,
+      "warm-modern": 6.5,
+      "japandi": 5,
+      "mediterranean": 4,
+      "modern-country": 5,
+      "boho": 3
+     },
+     "variants_fit": {},
+     "card_id": null,
+     "why_he": "round6 2026-10-19: במידה המדויקת, אבל קופסת ארון עם רוכסן; בג'פנדי עור קוניאק ועור מלאכותי אסורים, במודרני החם 6.5. נחיתה ₪56.1: מפסיד ב-₪59 (‎−25%). אותה מסקנה כמו בסבב 5 לקופסה הדומה 1005011528913221. נדחה."
+    }
+   ],
+   "verdict_he": "0 כרטיסים: ארגז השיטה מפסיד (2 ק\"ג), קופסת הבד עם הרוכסן מפסידה מול ₪35–45 בשוק."
+  },
+  "dining-room/canisters": {
+   "queries_cj": [
+    "storage tank",
+    "tea caddy",
+    "canister",
+    "storage jar",
+    "sealed jar p2",
+    "caddy"
+   ],
+   "queries_zendrop": [],
+   "queries_cache": [],
+   "candidates": [
+    {
+     "source": "CJ",
+     "found_by": "cj-name",
+     "id": "2604100631571627800",
+     "url": "https://cjdropshipping.com/product/-p-2604100631571627800.html",
+     "title": "Cloisonne ceramic tea canister S/L",
+     "image": "",
+     "sku_or_vid": "",
+     "cost_usd": 0,
+     "ship_usd": 0,
+     "ship_days": "",
+     "landed_ils": null,
+     "price_ils": null,
+     "price_basis_he": "",
+     "comps": [],
+     "margin_pct": null,
+     "dims_cm": "",
+     "fits_envelope": "no",
+     "style_fit_guess": {
+      "nordic": 3,
+      "warm-modern": 4,
+      "japandi": 4,
+      "mediterranean": 4,
+      "modern-country": 4,
+      "boho": 4
+     },
+     "variants_fit": {},
+     "card_id": null,
+     "why_he": "round6 2026-10-19: קלואזונה סיני ברוויה גבוהה, שתי מידות. נדחה (סגנון)."
+    },
+    {
+     "source": "CJ",
+     "found_by": "cj-name",
+     "id": "2604090901391637300",
+     "url": "https://cjdropshipping.com/product/-p-2604090901391637300.html",
+     "title": "Overglaze 'lychee' ceramic tea caddy S/L",
+     "image": "",
+     "sku_or_vid": "",
+     "cost_usd": 0,
+     "ship_usd": 0,
+     "ship_days": "",
+     "landed_ils": null,
+     "price_ils": null,
+     "price_basis_he": "",
+     "comps": [],
+     "margin_pct": null,
+     "dims_cm": "",
+     "fits_envelope": "no",
+     "style_fit_guess": {
+      "nordic": 3,
+      "warm-modern": 4,
+      "japandi": 4,
+      "mediterranean": 4,
+      "modern-country": 4,
+      "boho": 4
+     },
+     "variants_fit": {},
+     "card_id": null,
+     "why_he": "round6 2026-10-19: זיגוג-על סיני, שתי מידות, 1.1–1.6 ק\"ג. נדחה."
+    },
+    {
+     "source": "CJ",
+     "found_by": "cj-name",
+     "id": "2608281514291617300",
+     "url": "https://cjdropshipping.com/product/-p-2608281514291617300.html",
+     "title": "Large ceramic seasoning jar 1.2 L (cream/brown/black)",
+     "image": "",
+     "sku_or_vid": "",
+     "cost_usd": 0,
+     "ship_usd": 0,
+     "ship_days": "",
+     "landed_ils": null,
+     "price_ils": null,
+     "price_basis_he": "",
+     "comps": [],
+     "margin_pct": null,
+     "dims_cm": "",
+     "fits_envelope": "no",
+     "style_fit_guess": {
+      "nordic": 3,
+      "warm-modern": 4,
+      "japandi": 4,
+      "mediterranean": 4,
+      "modern-country": 4,
+      "boho": 4
+     },
+     "variants_fit": {},
+     "card_id": null,
+     "why_he": "round6 2026-10-19: מידה אחת בלבד, אין שלישייה יורדת. נדחה."
+    },
+    {
+     "source": "CJ",
+     "found_by": "cj-name",
+     "id": "2604100738111601300",
+     "url": "https://cjdropshipping.com/product/-p-2604100738111601300.html",
+     "title": "Decal ceramic jar tea canister, 2 kg",
+     "image": "",
+     "sku_or_vid": "",
+     "cost_usd": 0,
+     "ship_usd": 0,
+     "ship_days": "",
+     "landed_ils": null,
+     "price_ils": null,
+     "price_basis_he": "",
+     "comps": [],
+     "margin_pct": null,
+     "dims_cm": "",
+     "fits_envelope": "no",
+     "style_fit_guess": {
+      "nordic": 3,
+      "warm-modern": 4,
+      "japandi": 4,
+      "mediterranean": 4,
+      "modern-country": 4,
+      "boho": 4
+     },
+     "variants_fit": {},
+     "card_id": null,
+     "why_he": "round6 2026-10-19: מדבקה סינית, 2 ק\"ג, מידה אחת. נדחה."
+    },
+    {
+     "source": "CJ",
+     "found_by": "cj-name",
+     "id": "1544499820994506752",
+     "url": "https://cjdropshipping.com/product/-p-1544499820994506752.html",
+     "title": "Ceramic airtight jar with bamboo lid, gold pattern",
+     "image": "",
+     "sku_or_vid": "",
+     "cost_usd": 0,
+     "ship_usd": 0,
+     "ship_days": "",
+     "landed_ils": null,
+     "price_ils": null,
+     "price_basis_he": "",
+     "comps": [],
+     "margin_pct": null,
+     "dims_cm": "",
+     "fits_envelope": "no",
+     "style_fit_guess": {
+      "nordic": 3,
+      "warm-modern": 4,
+      "japandi": 4,
+      "mediterranean": 4,
+      "modern-country": 4,
+      "boho": 4
+     },
+     "variants_fit": {},
+     "card_id": null,
+     "why_he": "round6 2026-10-19: מידה אחת, דוגמת זהב. נדחה."
+    }
+   ],
+   "verdict_he": "0: חמש צנצנות CJ, כולן מידה אחת או עיטור סיני. החוסם נשאר: אין שלישייה יורדת קלה מספיק."
+  },
+  "master/nightstand-tray": {
+   "queries_cj": [],
+   "queries_zendrop": [],
+   "queries_cache": [
+    "skufit: 28-34 x 20-28 x 1.5-3"
+   ],
+   "candidates": [
+    {
+     "source": "CJ",
+     "found_by": "cj-name",
+     "id": "2110279600060936194",
+     "url": "https://cjdropshipping.com/product/-p-2110279600060936194.html",
+     "title": "Acacia rounded-rectangle tray with raised edge, M 30x20x2 (S 22x15x2)",
+     "image": "",
+     "sku_or_vid": "2110279600451006467",
+     "cost_usd": 5.18,
+     "ship_usd": 0,
+     "ship_days": "",
+     "landed_ils": 17.1,
+     "price_ils": null,
+     "price_basis_he": "",
+     "comps": [],
+     "margin_pct": null,
+     "dims_cm": "30x20x2",
+     "fits_envelope": "yes",
+     "style_fit_guess": {
+      "nordic": 4,
+      "warm-modern": 6,
+      "japandi": 6,
+      "mediterranean": 6.5,
+      "modern-country": 6,
+      "boho": 6.5
+     },
+     "variants_fit": {},
+     "card_id": null,
+     "why_he": "round6 2026-10-19: במידה, אבל בנורדי שיטה אסורה (טווח האלון בלבד), ובים-תיכוני זה היה מגש השיטה ה-30×20 השלישי בעמדה (שניים כבר נספרים): אותו מראה, 6.5. לא נכתב כרטיס."
+    },
+    {
+     "source": "AliExpress",
+     "found_by": "cache-attribute",
+     "id": "1005012427002044",
+     "url": "https://www.aliexpress.com/item/1005012427002044.html",
+     "title": "Round acacia tray 29.5x1.5",
+     "image": "",
+     "sku_or_vid": "",
+     "cost_usd": 0,
+     "ship_usd": 1.99,
+     "ship_days": "",
+     "landed_ils": null,
+     "price_ils": null,
+     "price_basis_he": "",
+     "comps": [],
+     "margin_pct": null,
+     "dims_cm": "",
+     "fits_envelope": "borderline",
+     "style_fit_guess": {
+      "nordic": 4,
+      "warm-modern": 6,
+      "japandi": 6,
+      "mediterranean": 6.5,
+      "modern-country": 6,
+      "boho": 6.5
+     },
+     "variants_fit": {},
+     "card_id": null,
+     "why_he": "round6 2026-10-19: עגול ושיטה: בנורדי מלבן מעוגל באלון בלבד. נדחה."
+    }
+   ],
+   "verdict_he": "0 כרטיסים. נבדקו ונדחו: Acacia rounded-rectangle tray with raise; Round acacia tray 29.5x1.5"
+  },
+  "work/desk-tray": {
+   "queries_cj": [
+    "wooden tray",
+    "storage tray",
+    "travertine",
+    "terrazzo"
+   ],
+   "queries_zendrop": [],
+   "queries_cache": [
+    "skufit: 22-28 x 18-26 x 2-4"
+   ],
+   "candidates": [
+    {
+     "source": "CJ",
+     "found_by": "cj-name",
+     "id": "2110549866666176514",
+     "url": "https://cjdropshipping.com/product/-p-2110549866666176514.html",
+     "title": "Square-leg acacia tray 32x22x7",
+     "image": "",
+     "sku_or_vid": "",
+     "cost_usd": 9.89,
+     "ship_usd": 0,
+     "ship_days": "",
+     "landed_ils": 32.6,
+     "price_ils": null,
+     "price_basis_he": "",
+     "comps": [],
+     "margin_pct": null,
+     "dims_cm": "32x22x7",
+     "fits_envelope": "no",
+     "style_fit_guess": {
+      "nordic": 4,
+      "warm-modern": 6,
+      "japandi": 6,
+      "mediterranean": 6,
+      "modern-country": 5.5,
+      "boho": 5.5
+     },
+     "variants_fit": {},
+     "card_id": null,
+     "why_he": "round6 2026-10-19: גובה 7 עם רגליים מול 2–4. נדחה."
+    },
+    {
+     "source": "AliExpress",
+     "found_by": "cache-attribute",
+     "id": "1005007565374816",
+     "url": "https://www.aliexpress.com/item/1005007565374816.html",
+     "title": "Black wood serving tray 25x18x2",
+     "image": "",
+     "sku_or_vid": "",
+     "cost_usd": 0,
+     "ship_usd": 1.99,
+     "ship_days": "",
+     "landed_ils": null,
+     "price_ils": null,
+     "price_basis_he": "",
+     "comps": [],
+     "margin_pct": null,
+     "dims_cm": "",
+     "fits_envelope": "borderline",
+     "style_fit_guess": {
+      "nordic": 4.5,
+      "warm-modern": 6,
+      "japandi": 6.5,
+      "mediterranean": 5,
+      "modern-country": 4.5,
+      "boho": 5
+     },
+     "variants_fit": {},
+     "card_id": null,
+     "why_he": "round6 2026-10-19: עץ שחור/כהה: אסור במפרט הנורדי למגש השולחן. נדחה."
+    },
+    {
+     "source": "AliExpress",
+     "found_by": "cache-attribute",
+     "id": "1005012996011312",
+     "url": "https://www.aliexpress.com/item/1005012996011312.html",
+     "title": "Dark wood footed vanity tray 30x20x4",
+     "image": "",
+     "sku_or_vid": "",
+     "cost_usd": 0,
+     "ship_usd": 1.99,
+     "ship_days": "",
+     "landed_ils": null,
+     "price_ils": null,
+     "price_basis_he": "",
+     "comps": [],
+     "margin_pct": null,
+     "dims_cm": "",
+     "fits_envelope": "borderline",
+     "style_fit_guess": {
+      "nordic": 4.5,
+      "warm-modern": 6,
+      "japandi": 6.5,
+      "mediterranean": 5,
+      "modern-country": 4.5,
+      "boho": 5
+     },
+     "variants_fit": {},
+     "card_id": null,
+     "why_he": "round6 2026-10-19: עץ כהה על רגליים, רוחב 30 (‎+7%). אסור בנורדי. נדחה."
+    }
+   ],
+   "verdict_he": "0 כרטיסים. נבדקו ונדחו: Square-leg acacia tray 32x22x7; Black wood serving tray 25x18x2; Dark wood footed vanity tray 30x20x4"
+  },
+  "corridor/gallery-stool": {
+   "queries_cj": [
+    "[cat Furniture] shoe",
+    "[cat Furniture] rack"
+   ],
+   "queries_zendrop": [],
+   "queries_cache": [],
+   "candidates": [
+    {
+     "source": "CJ",
+     "found_by": "cj-name",
+     "id": "2610061001091631700",
+     "url": "https://cjdropshipping.com/product/-p-2610061001091631700.html",
+     "title": "Wicker shoe-changing stool 50x30x40, 3 kg",
+     "image": "",
+     "sku_or_vid": "",
+     "cost_usd": 27.5,
+     "ship_usd": 0,
+     "ship_days": "",
+     "landed_ils": 90.8,
+     "price_ils": null,
+     "price_basis_he": "",
+     "comps": [],
+     "margin_pct": null,
+     "dims_cm": "50x30x40",
+     "fits_envelope": "no",
+     "style_fit_guess": {
+      "nordic": 4,
+      "warm-modern": 4,
+      "japandi": 5,
+      "mediterranean": 6,
+      "modern-country": 6.5,
+      "boho": 6.5
+     },
+     "variants_fit": {},
+     "card_id": null,
+     "why_he": "round6 2026-10-19: ספסלון 50 ברוחב ו-40 בגובה, לא שרפרף 26–30 × 42–46. נדחה."
+    },
+    {
+     "source": "CJ",
+     "found_by": "cj-name",
+     "id": "2609220124421601700",
+     "url": "https://cjdropshipping.com/product/-p-2609220124421601700.html",
+     "title": "Wicker + solid wood square stool, 5 kg, carton 51x43x49",
+     "image": "",
+     "sku_or_vid": "",
+     "cost_usd": 63.37,
+     "ship_usd": 0,
+     "ship_days": "",
+     "landed_ils": 209.1,
+     "price_ils": null,
+     "price_basis_he": "",
+     "comps": [],
+     "margin_pct": null,
+     "dims_cm": "~45x45x45",
+     "fits_envelope": "no",
+     "style_fit_guess": {
+      "nordic": 5,
+      "warm-modern": 6,
+      "japandi": 6.5,
+      "mediterranean": 6,
+      "modern-country": 6.5,
+      "boho": 6
+     },
+     "variants_fit": {},
+     "card_id": null,
+     "why_he": "round6 2026-10-19: 5 ק\"ג וקרטון 51×43×49: המשלוח הורג כל מחיר. נדחה."
+    }
+   ],
+   "verdict_he": "0 כרטיסים. נבדקו ונדחו: Wicker shoe-changing stool 50x30x40, 3 k; Wicker + solid wood square stool, 5 kg, "
+  },
+  "hall/wall-hooks": {
+   "queries_cj": [],
+   "queries_zendrop": [],
+   "queries_cache": [
+    "envelope re-check: near misses rejected on length 40 vs 60-80 before R5C1 (40-80, 2026-10-17)"
+   ],
+   "candidates": [
+    {
+     "source": "CJ",
+     "found_by": "envelope-recheck",
+     "id": "1376442157082218496",
+     "url": "https://cjdropshipping.com/product/-p-1376442157082218496.html",
+     "title": "Bent-rattan oval wall frame with cross bar and 3 rattan hooks, 40 x 29 (natural)",
+     "image": "https://cf.cjdropshipping.com/1617004261496.jpg",
+     "sku_or_vid": "1376442158403424256",
+     "cost_usd": 9.96,
+     "ship_usd": 10.27,
+     "ship_days": "12-50",
+     "landed_ils": 66.8,
+     "price_ils": 109,
+     "price_basis_he": "כ-16% מתחת למתלה עץ 5 ווים טיפוסי בישראל (₪129–130; Collectie ₪220); אותו מחיר כמו מתלה הענף של הבוהו",
+     "comps": [
+      "https://www.homecenter.co.il/products/5253012439",
+      "https://www.magic-moments.co.il/product/%D7%9E%D7%AA%D7%9C%D7%94-%D7%A2%D7%A5-%D7%A2%D7%9D-%D7%95%D7%95%D7%99-%D7%AA%D7%9C%D7%99%D7%99%D7%94-iron-5/",
+      "https://www.collectie.co.il/products/product-68"
+     ],
+     "margin_pct": 16.1,
+     "dims_cm": "40 x 29, projection ~5-8 (est.)",
+     "fits_envelope": "borderline",
+     "style_fit_guess": {
+      "nordic": 3,
+      "warm-modern": 3.5,
+      "japandi": 4,
+      "mediterranean": 6,
+      "modern-country": 5,
+      "boho": 7.5
+     },
+     "variants_fit": {
+      "boho": 1
+     },
+     "card_id": "wall-hooks-cj-rattan-oval-frame-3-hooks-40",
+     "why_he": "round6 2026-10-19: שיטה חדשה: התאמה מחדש של כמעט-התאמות מול המעטפות הנוכחיות ב-data/slots (12 עמדות שהמעטפה שלהן הורחבה אחרי שהמועמדים נדחו). הליסטינג נדחה בגל 2 ובסבב 5 רק על אורך 40 מול 60–80, ולא נפתח מעולם; R5C1 (2026-10-17) הרחיב את מתלה היתדות ל-40–80. נפתח היום: 40×29, 3 ווים, 520 גרם, Eub ‏$10.27 (12–50 ימים). נחיתה ₪66.8, ב-₪109 ‏16.0% (ה.11: האפשרות השלישית היחידה לבוהו). בליטה לא מפורסמת (כ-5–8 לפי התמונות): גבולי, לבדוק בפריים H0. בוהו 7.5 (ראטן כפוף אמיתי עם קשירות קנה). סוגר את hall/wall-hooks בבוהו (2→3)."
+    }
+   ],
+   "verdict_he": "כרטיס אחד: מתלה ראטן 40×29 עם 3 ווים (בוהו 7.5, ‏16% ב-₪109). העמדה נסגרת בבוהו (2→3)."
+  },
+  "living-room/pouf": {
+   "queries_cj": [
+    "[cat Furniture] ottoman",
+    "[cat Furniture] pouf",
+    "[cat Furniture] footstool",
+    "pouf",
+    "footstool"
+   ],
+   "queries_zendrop": [],
+   "queries_cache": [],
+   "candidates": [
+    {
+     "source": "CJ",
+     "found_by": "never-opened",
+     "id": "2111302512845250562",
+     "url": "https://cjdropshipping.com/product/-p-2111302512845250562.html",
+     "title": "Round paper-rope / cattail pouf, double-strand beige (US warehouse)",
+     "image": "",
+     "sku_or_vid": "",
+     "cost_usd": 61.14,
+     "ship_usd": 0,
+     "ship_days": "",
+     "landed_ils": 201.8,
+     "price_ils": null,
+     "price_basis_he": "",
+     "comps": [],
+     "margin_pct": null,
+     "dims_cm": "37x37x45 (carton)",
+     "fits_envelope": "no",
+     "style_fit_guess": {
+      "nordic": 4,
+      "warm-modern": 4,
+      "japandi": 6,
+      "mediterranean": 7,
+      "modern-country": 5.5,
+      "boho": 7
+     },
+     "variants_fit": {},
+     "card_id": null,
+     "why_he": "round6 2026-10-19: המועמד היחיד של CJ בעמדות הפער עם התאמה 7+ שלא נפתח מעולם. נפתח היום: מחסן ארה\"ב ('Temu self-pickup'), 4.76 ק\"ג, ו-CJ לא מחזיר שום אפשרות משלוח לישראל. נדחה."
+    }
+   ],
+   "verdict_he": "0 כרטיסים. נבדקו ונדחו: Round paper-rope / cattail pouf, double-"
+  },
+  "bath/bin": {
+   "queries_cj": [
+    "trash can",
+    "wastebasket",
+    "waste basket",
+    "dustbin"
+   ],
+   "queries_zendrop": [],
+   "queries_cache": [
+    "form trash|waste|bin + wood|bamboo|rattan|hyacinth|ceramic"
+   ],
+   "candidates": [
+    {
+     "source": "AliExpress",
+     "found_by": "cache-attribute",
+     "id": "1005007103245982",
+     "url": "https://www.aliexpress.com/item/1005007103245982.html",
+     "title": "Slim wood-veneer open waste bin 29.5x15x30",
+     "image": "",
+     "sku_or_vid": "",
+     "cost_usd": 0,
+     "ship_usd": 0,
+     "ship_days": "",
+     "landed_ils": null,
+     "price_ils": null,
+     "price_basis_he": "",
+     "comps": [],
+     "margin_pct": null,
+     "dims_cm": "",
+     "fits_envelope": "no",
+     "style_fit_guess": {
+      "nordic": 5,
+      "warm-modern": 6,
+      "japandi": 6,
+      "mediterranean": 4.5,
+      "modern-country": 4.5,
+      "boho": 4
+     },
+     "variants_fit": {},
+     "card_id": null,
+     "why_he": "round6 2026-10-19: נמצא בחיפוש לפי חומר (wood) וצורה. מלבן צר 29.5×15 מול פח עגול בקוטר 20–24, בלי מכסה ופדל; בסבב 5 סומן 'חיקוי עץ'. נדחה."
+    },
+    {
+     "source": "AliExpress",
+     "found_by": "cache-attribute",
+     "id": "1005008559475525",
+     "url": "https://www.aliexpress.com/item/1005008559475525.html",
+     "title": "Slim wood-veneer open waste bin 29.5x15x30",
+     "image": "",
+     "sku_or_vid": "",
+     "cost_usd": 0,
+     "ship_usd": 0,
+     "ship_days": "",
+     "landed_ils": null,
+     "price_ils": null,
+     "price_basis_he": "",
+     "comps": [],
+     "margin_pct": null,
+     "dims_cm": "",
+     "fits_envelope": "no",
+     "style_fit_guess": {
+      "nordic": 5,
+      "warm-modern": 6,
+      "japandi": 6,
+      "mediterranean": 4.5,
+      "modern-country": 4.5,
+      "boho": 4
+     },
+     "variants_fit": {},
+     "card_id": null,
+     "why_he": "round6 2026-10-19: נמצא בחיפוש לפי חומר (wood) וצורה. מלבן צר 29.5×15 מול פח עגול בקוטר 20–24, בלי מכסה ופדל; בסבב 5 סומן 'חיקוי עץ'. נדחה."
+    },
+    {
+     "source": "AliExpress",
+     "found_by": "cache-attribute",
+     "id": "1005012910756797",
+     "url": "https://www.aliexpress.com/item/1005012910756797.html",
+     "title": "Slim wood-veneer open waste bin 29.5x15x30",
+     "image": "",
+     "sku_or_vid": "",
+     "cost_usd": 0,
+     "ship_usd": 0,
+     "ship_days": "",
+     "landed_ils": null,
+     "price_ils": null,
+     "price_basis_he": "",
+     "comps": [],
+     "margin_pct": null,
+     "dims_cm": "",
+     "fits_envelope": "no",
+     "style_fit_guess": {
+      "nordic": 5,
+      "warm-modern": 6,
+      "japandi": 6,
+      "mediterranean": 4.5,
+      "modern-country": 4.5,
+      "boho": 4
+     },
+     "variants_fit": {},
+     "card_id": null,
+     "why_he": "round6 2026-10-19: נמצא בחיפוש לפי חומר (wood) וצורה. מלבן צר 29.5×15 מול פח עגול בקוטר 20–24, בלי מכסה ופדל; בסבב 5 סומן 'חיקוי עץ'. נדחה."
+    }
+   ],
+   "verdict_he": "0 כרטיסים. נבדקו ונדחו: Slim wood-veneer open waste bin 29.5x15x; Slim wood-veneer open waste bin 29.5x15x; Slim wood-veneer open waste bin 29.5x15x"
+  },
+  "dining-room/utensil-crock": {
+   "queries_cj": [],
+   "queries_zendrop": [],
+   "queries_cache": [
+    "form + material + 16-20 cm"
+   ],
+   "candidates": [
+    {
+     "source": "AliExpress",
+     "found_by": "cache-attribute",
+     "id": "1005013057576367",
+     "url": "https://www.aliexpress.com/item/1005013057576367.html",
+     "title": "Wicker vase 14x18",
+     "image": "",
+     "sku_or_vid": "",
+     "cost_usd": 11.46,
+     "ship_usd": 1.99,
+     "ship_days": "",
+     "landed_ils": 44.4,
+     "price_ils": null,
+     "price_basis_he": "",
+     "comps": [],
+     "margin_pct": null,
+     "dims_cm": "14x18",
+     "fits_envelope": "yes",
+     "style_fit_guess": {
+      "nordic": 3,
+      "warm-modern": 3,
+      "japandi": 4,
+      "mediterranean": 5.5,
+      "modern-country": 5.5,
+      "boho": 6
+     },
+     "variants_fit": {},
+     "card_id": null,
+     "why_he": "round6 2026-10-19: במידה, אבל אגרטל עם צוואר צר (לא כלי לכפות), תמונות AI ומלאי 1. נדחה."
+    }
+   ],
+   "verdict_he": "0 כרטיסים. נבדקו ונדחו: Wicker vase 14x18"
+  },
+  "hall/table-lamp": {
+   "queries_cj": [],
+   "queries_zendrop": [],
+   "queries_cache": [
+    "AE props: Certification ~ CE, Voltage 220/90-260, title table|desk|bedside lamp, not judged for the slot"
+   ],
+   "candidates": [
+    {
+     "source": "AliExpress",
+     "found_by": "cache-attribute",
+     "id": "1005009703873534",
+     "url": "https://www.aliexpress.com/item/1005009703873534.html",
+     "title": "Glossy ceramic ball lamp with fabric cone (pink/blue/red)",
+     "image": "",
+     "sku_or_vid": "",
+     "cost_usd": 0,
+     "ship_usd": 0,
+     "ship_days": "",
+     "landed_ils": null,
+     "price_ils": null,
+     "price_basis_he": "",
+     "comps": [],
+     "margin_pct": null,
+     "dims_cm": "",
+     "fits_envelope": "no",
+     "style_fit_guess": {
+      "nordic": 4,
+      "warm-modern": 4,
+      "japandi": 3.5,
+      "mediterranean": 4,
+      "modern-country": 5,
+      "boho": 4
+     },
+     "variants_fit": {},
+     "card_id": null,
+     "why_he": "round6 2026-10-19: סינון CE ומתח במאפייני המוצר (782 מנורות CE במטמון, 315 נפתחו ולא הוכרעו). קרמיקה מבריקה בצבעים רוויים וצוואר זהב. נדחה (סגנון)."
+    },
+    {
+     "source": "AliExpress",
+     "found_by": "cache-attribute",
+     "id": "1005012566878020",
+     "url": "https://www.aliexpress.com/item/1005012566878020.html",
+     "title": "Cream ceramic ball lamp with pleated drum 16, height 30",
+     "image": "",
+     "sku_or_vid": "",
+     "cost_usd": 0,
+     "ship_usd": 0,
+     "ship_days": "",
+     "landed_ils": null,
+     "price_ils": null,
+     "price_basis_he": "",
+     "comps": [],
+     "margin_pct": null,
+     "dims_cm": "",
+     "fits_envelope": "no",
+     "style_fit_guess": {
+      "nordic": 4,
+      "warm-modern": 4,
+      "japandi": 3.5,
+      "mediterranean": 4,
+      "modern-country": 5,
+      "boho": 4
+     },
+     "variants_fit": {},
+     "card_id": null,
+     "why_he": "round6 2026-10-19: סינון CE ומתח במאפייני המוצר (782 מנורות CE במטמון, 315 נפתחו ולא הוכרעו). גובה 30 מול 40–55 (‎−25%). נדחה (מידה)."
+    },
+    {
+     "source": "AliExpress",
+     "found_by": "cache-attribute",
+     "id": "1005011970782442",
+     "url": "https://www.aliexpress.com/item/1005011970782442.html",
+     "title": "Pleated cone shade on tapered wood column and tray base (220V, CE)",
+     "image": "",
+     "sku_or_vid": "",
+     "cost_usd": 0,
+     "ship_usd": 0,
+     "ship_days": "",
+     "landed_ils": null,
+     "price_ils": null,
+     "price_basis_he": "",
+     "comps": [],
+     "margin_pct": null,
+     "dims_cm": "",
+     "fits_envelope": "no",
+     "style_fit_guess": {
+      "nordic": 4,
+      "warm-modern": 4,
+      "japandi": 3.5,
+      "mediterranean": 4,
+      "modern-country": 5,
+      "boho": 4
+     },
+     "variants_fit": {},
+     "card_id": null,
+     "why_he": "round6 2026-10-19: סינון CE ומתח במאפייני המוצר (782 מנורות CE במטמון, 315 נפתחו ולא הוכרעו). האהיל כ-30–35 והבסיס כ-20 מול 20–26 ועד 14; אין משלוח במטמון. נדחה (מידה)."
+    }
+   ],
+   "verdict_he": "0: סינון CE ומתח במטמון לא הביא מנורה בגובה 45–55 עם אהיל 20–26 ובסיס עד 14."
+  },
+  "work/desk-lamp": {
+   "queries_cj": [],
+   "queries_zendrop": [],
+   "queries_cache": [
+    "same CE/voltage property filter"
+   ],
+   "candidates": [
+    {
+     "source": "AliExpress",
+     "found_by": "cache-attribute",
+     "id": "1005007257527147",
+     "url": "https://www.aliexpress.com/item/1005007257527147.html",
+     "title": "Stacked ceramic pebble lamp with glass globe, 24 cm",
+     "image": "",
+     "sku_or_vid": "",
+     "cost_usd": 0,
+     "ship_usd": 0,
+     "ship_days": "",
+     "landed_ils": null,
+     "price_ils": null,
+     "price_basis_he": "",
+     "comps": [],
+     "margin_pct": null,
+     "dims_cm": "",
+     "fits_envelope": "no",
+     "style_fit_guess": {
+      "nordic": 4,
+      "warm-modern": 4,
+      "japandi": 3.5,
+      "mediterranean": 4,
+      "modern-country": 5,
+      "boho": 4
+     },
+     "variants_fit": {},
+     "card_id": null,
+     "why_he": "round6 2026-10-19: סינון CE ומתח במאפייני המוצר (782 מנורות CE במטמון, 315 נפתחו ולא הוכרעו). 24 ס\"מ וזכוכית. נדחה."
+    },
+    {
+     "source": "AliExpress",
+     "found_by": "cache-attribute",
+     "id": "1005005677043610",
+     "url": "https://www.aliexpress.com/item/1005005677043610.html",
+     "title": "Wooden polyhedron E27 base, no shade",
+     "image": "",
+     "sku_or_vid": "",
+     "cost_usd": 0,
+     "ship_usd": 0,
+     "ship_days": "",
+     "landed_ils": null,
+     "price_ils": null,
+     "price_basis_he": "",
+     "comps": [],
+     "margin_pct": null,
+     "dims_cm": "",
+     "fits_envelope": "no",
+     "style_fit_guess": {
+      "nordic": 4,
+      "warm-modern": 4,
+      "japandi": 3.5,
+      "mediterranean": 4,
+      "modern-country": 5,
+      "boho": 4
+     },
+     "variants_fit": {},
+     "card_id": null,
+     "why_he": "round6 2026-10-19: סינון CE ומתח במאפייני המוצר (782 מנורות CE במטמון, 315 נפתחו ולא הוכרעו). בסיס בלבד, בלי אהיל. נדחה."
+    },
+    {
+     "source": "AliExpress",
+     "found_by": "cache-attribute",
+     "id": "1005006203132897",
+     "url": "https://www.aliexpress.com/item/1005006203132897.html",
+     "title": "Wooden E27 base, no shade",
+     "image": "",
+     "sku_or_vid": "",
+     "cost_usd": 0,
+     "ship_usd": 0,
+     "ship_days": "",
+     "landed_ils": null,
+     "price_ils": null,
+     "price_basis_he": "",
+     "comps": [],
+     "margin_pct": null,
+     "dims_cm": "",
+     "fits_envelope": "no",
+     "style_fit_guess": {
+      "nordic": 4,
+      "warm-modern": 4,
+      "japandi": 3.5,
+      "mediterranean": 4,
+      "modern-country": 5,
+      "boho": 4
+     },
+     "variants_fit": {},
+     "card_id": null,
+     "why_he": "round6 2026-10-19: סינון CE ומתח במאפייני המוצר (782 מנורות CE במטמון, 315 נפתחו ולא הוכרעו). בסיס בלבד. נדחה."
+    },
+    {
+     "source": "AliExpress",
+     "found_by": "cache-attribute",
+     "id": "1005005821791618",
+     "url": "https://www.aliexpress.com/item/1005005821791618.html",
+     "title": "Wood + metal gooseneck desk lamp, dome 12",
+     "image": "",
+     "sku_or_vid": "",
+     "cost_usd": 0,
+     "ship_usd": 0,
+     "ship_days": "",
+     "landed_ils": null,
+     "price_ils": null,
+     "price_basis_he": "",
+     "comps": [],
+     "margin_pct": null,
+     "dims_cm": "",
+     "fits_envelope": "no",
+     "style_fit_guess": {
+      "nordic": 4,
+      "warm-modern": 4,
+      "japandi": 3.5,
+      "mediterranean": 4,
+      "modern-country": 5,
+      "boho": 4
+     },
+     "variants_fit": {},
+     "card_id": null,
+     "why_he": "round6 2026-10-19: סינון CE ומתח במאפייני המוצר (782 מנורות CE במטמון, 315 נפתחו ולא הוכרעו). מנורת עבודה מתכתית: אסורה בנורדי ובג'פנדי. נדחה."
+    },
+    {
+     "source": "AliExpress",
+     "found_by": "cache-attribute",
+     "id": "1005005568188787",
+     "url": "https://www.aliexpress.com/item/1005005568188787.html",
+     "title": "Wood + metal gooseneck desk lamp E27",
+     "image": "",
+     "sku_or_vid": "",
+     "cost_usd": 0,
+     "ship_usd": 0,
+     "ship_days": "",
+     "landed_ils": null,
+     "price_ils": null,
+     "price_basis_he": "",
+     "comps": [],
+     "margin_pct": null,
+     "dims_cm": "",
+     "fits_envelope": "no",
+     "style_fit_guess": {
+      "nordic": 4,
+      "warm-modern": 4,
+      "japandi": 3.5,
+      "mediterranean": 4,
+      "modern-country": 5,
+      "boho": 4
+     },
+     "variants_fit": {},
+     "card_id": null,
+     "why_he": "round6 2026-10-19: סינון CE ומתח במאפייני המוצר (782 מנורות CE במטמון, 315 נפתחו ולא הוכרעו). כמו הקודמת. נדחה."
+    }
+   ],
+   "verdict_he": "0: אותו סינון; המנורות עם CE ו-220V הן מנורות עבודה מתכתיות או בסיסים בלי אהיל."
+  },
+  "master/pendant": {
+   "queries_cj": [],
+   "queries_zendrop": [],
+   "queries_cache": [
+    "shade-only and CE pendants 38-52 cm, cached IL freight"
+   ],
+   "candidates": [
+    {
+     "source": "AliExpress",
+     "found_by": "cache-attribute",
+     "id": "1005011787559695",
+     "url": "https://www.aliexpress.com/item/1005011787559695.html",
+     "title": "Wavy-edge linen panel dome pendant D45, h 20, no bulb (CE, 90-260V)",
+     "image": "",
+     "sku_or_vid": "12000056559610263",
+     "cost_usd": 68.46,
+     "ship_usd": 0.0,
+     "ship_days": "8-19",
+     "landed_ils": 225.9,
+     "price_ils": 399,
+     "price_basis_he": "Fine Lab אהיל פשתן ₪349–489, דיל תאורה 'לוק' 40 ₪379.9 → ₪399",
+     "comps": [
+      "https://finelab.shop/products/linen-fringed-shade-parlour-shade",
+      "https://finelab.shop/products/olivia-linen-lampshade",
+      "https://dealteora.co.il/products/מנורת-תלייה-מבד-משי-דגם-לוק-40-60-ס-מ"
+     ],
+     "margin_pct": 22.5,
+     "dims_cm": "45x20",
+     "fits_envelope": "no",
+     "style_fit_guess": {
+      "nordic": 6,
+      "warm-modern": 5.5,
+      "japandi": 5.5,
+      "mediterranean": 5.5,
+      "modern-country": 7.5,
+      "boho": 6.5
+     },
+     "variants_fit": {
+      "modern-country": 1
+     },
+     "card_id": null,
+     "why_he": "round6 2026-10-19: חסום רק בגובה: 20 מול 25–35 (‎−20%, round5-lighting). כפרי 7.5–8, ובשווי ₪399 ‏22.5% (נחיתה ₪225.9, משלוח חינם). לכפרי יש 2 אפשרויות בעמדה: אם המעצב מרחיב את גובה התלויה בהורים ל-20 (AU5), העמדה נסגרת בכפרי. לא נכתב כרטיס (מעטפה)."
+    }
+   ],
+   "verdict_he": "0 כרטיסים. כיפת הפשתן הגלית D45 (כפרי 7.5, ‏22.5%) חסומה רק בגובה 20 מול 25–35: שאלה למעצב (AU5), סוגרת את הכפרי."
+  },
+  "dining-room/step-stool": {
+   "queries_cj": [
+    "[cat Furniture] '' p1-3",
+    "[cat Furniture] step",
+    "[cat Furniture] stool p2",
+    "step stool",
+    "wooden stool"
+   ],
+   "queries_zendrop": [],
+   "queries_cache": [],
+   "candidates": [],
+   "verdict_he": "0 כרטיסים. החיפוש החדש (CJ לפי קטגוריה או שם) לא החזיר מועמד שווה פתיחה."
+  },
+  "bath/shower-stool": {
+   "queries_cj": [
+    "[cat Furniture] teak",
+    "shower stool",
+    "bath stool"
+   ],
+   "queries_zendrop": [],
+   "queries_cache": [],
+   "candidates": [],
+   "verdict_he": "0 כרטיסים. החיפוש החדש (CJ לפי קטגוריה או שם) לא החזיר מועמד שווה פתיחה."
+  },
+  "dining-room/sink-set": {
+   "queries_cj": [
+    "soap dispenser",
+    "sponge holder",
+    "dish soap"
+   ],
+   "queries_zendrop": [],
+   "queries_cache": [],
+   "candidates": [],
+   "verdict_he": "0 כרטיסים. החיפוש החדש (CJ לפי קטגוריה או שם) לא החזיר מועמד שווה פתיחה."
+  },
+  "bath/toilet-brush": {
+   "queries_cj": [
+    "toilet brush"
+   ],
+   "queries_zendrop": [],
+   "queries_cache": [],
+   "candidates": [],
+   "verdict_he": "0 כרטיסים. החיפוש החדש (CJ לפי קטגוריה או שם) לא החזיר מועמד שווה פתיחה."
+  },
+  "bath/toilet-paper-stand": {
+   "queries_cj": [
+    "toilet paper holder"
+   ],
+   "queries_zendrop": [],
+   "queries_cache": [],
+   "candidates": [],
+   "verdict_he": "0 כרטיסים. החיפוש החדש (CJ לפי קטגוריה או שם) לא החזיר מועמד שווה פתיחה."
+  },
+  "bath/towel-ring": {
+   "queries_cj": [
+    "towel ring"
+   ],
+   "queries_zendrop": [],
+   "queries_cache": [],
+   "candidates": [],
+   "verdict_he": "0 כרטיסים. החיפוש החדש (CJ לפי קטגוריה או שם) לא החזיר מועמד שווה פתיחה."
+  },
+  "hall/umbrella-stand": {
+   "queries_cj": [
+    "umbrella stand",
+    "umbrella holder",
+    "umbrella"
+   ],
+   "queries_zendrop": [],
+   "queries_cache": [],
+   "candidates": [],
+   "verdict_he": "0 כרטיסים. החיפוש החדש (CJ לפי קטגוריה או שם) לא החזיר מועמד שווה פתיחה."
+  },
+  "work/desk-organizer": {
+   "queries_cj": [
+    "pen holder",
+    "pencil holder"
+   ],
+   "queries_zendrop": [],
+   "queries_cache": [],
+   "candidates": [],
+   "verdict_he": "0 כרטיסים. החיפוש החדש (CJ לפי קטגוריה או שם) לא החזיר מועמד שווה פתיחה."
+  },
+  "kids/bookshelf": {
+   "queries_cj": [
+    "picture ledge",
+    "book shelf",
+    "floating shelf"
+   ],
+   "queries_zendrop": [],
+   "queries_cache": [],
+   "candidates": [],
+   "verdict_he": "0 כרטיסים. החיפוש החדש (CJ לפי קטגוריה או שם) לא החזיר מועמד שווה פתיחה."
+  },
+  "dining-room/dining-pendant": {
+   "queries_cj": [
+    "[cat Pendant] lampshade",
+    "[cat Pendant] shade",
+    "[cat Pendant] bamboo",
+    "[cat Pendant] seagrass",
+    "[cat Pendant] jute",
+    "[cat Pendant] paper",
+    "[cat Pendant] linen",
+    "[cat Ceiling] rattan"
+   ],
+   "queries_zendrop": [],
+   "queries_cache": [
+    "shade-only: lampshade + rattan|bamboo|seagrass|jute|linen|paper, 40-56 cm, cached IL freight"
+   ],
+   "candidates": [],
+   "verdict_he": "0 כרטיסים. החיפוש החדש (CJ לפי קטגוריה או שם) לא החזיר מועמד שווה פתיחה."
+  },
+  "living-room/wall-sconce": {
+   "queries_cj": [
+    "[cat Wall Lamps] swing",
+    "[cat Wall Lamps] reading",
+    "[cat Wall Lamps] plug",
+    "[cat Wall Lamps] linen",
+    "[cat Wall Lamps] fabric",
+    "[cat Wall Lamps] rattan",
+    "[cat Wall Lamps] wood"
+   ],
+   "queries_zendrop": [],
+   "queries_cache": [],
+   "candidates": [],
+   "verdict_he": "0 כרטיסים. החיפוש החדש (CJ לפי קטגוריה או שם) לא החזיר מועמד שווה פתיחה."
+  },
+  "corridor/picture-lights": {
+   "queries_cj": [
+    "[cat Wall Lamps] picture"
+   ],
+   "queries_zendrop": [],
+   "queries_cache": [],
+   "candidates": [],
+   "verdict_he": "0 כרטיסים. החיפוש החדש (CJ לפי קטגוריה או שם) לא החזיר מועמד שווה פתיחה."
+  },
+  "bath/ceiling-light": {
+   "queries_cj": [
+    "[cat Ceiling] IP44",
+    "[cat Ceiling] waterproof",
+    "[cat Ceiling] moisture",
+    "[cat Ceiling] linen"
+   ],
+   "queries_zendrop": [],
+   "queries_cache": [],
+   "candidates": [],
+   "verdict_he": "0 כרטיסים. החיפוש החדש (CJ לפי קטגוריה או שם) לא החזיר מועמד שווה פתיחה."
+  },
+  "dining-room/kitchen-runner": {
+   "queries_cj": [
+    "[cat Floor Mats] kitchen",
+    "[cat Floor Mats] linen",
+    "[cat Floor Mats] jute",
+    "[cat Floor Mats] hemp",
+    "[cat Floor Mats] wool",
+    "[cat Floor Mats] sisal",
+    "[cat Floor Mats] runner"
+   ],
+   "queries_zendrop": [],
+   "queries_cache": [],
+   "candidates": [],
+   "verdict_he": "0 כרטיסים. החיפוש החדש (CJ לפי קטגוריה או שם) לא החזיר מועמד שווה פתיחה."
+  },
+  "bath/shower-curtain": {
+   "queries_cj": [
+    "[cat Curtains] shower",
+    "[cat Curtains] linen"
+   ],
+   "queries_zendrop": [],
+   "queries_cache": [],
+   "candidates": [],
+   "verdict_he": "0 כרטיסים. החיפוש החדש (CJ לפי קטגוריה או שם) לא החזיר מועמד שווה פתיחה."
+  },
+  "kids/roman-blind": {
+   "queries_cj": [
+    "[cat Curtains] roman"
+   ],
+   "queries_zendrop": [],
+   "queries_cache": [],
+   "candidates": [],
+   "verdict_he": "0 כרטיסים. החיפוש החדש (CJ לפי קטגוריה או שם) לא החזיר מועמד שווה פתיחה."
+  },
+  "living-room/sofa-cover": {
+   "queries_cj": [
+    "[cat Comforters] throw",
+    "[cat Comforters] muslin",
+    "[cat Comforters] waffle"
+   ],
+   "queries_zendrop": [],
+   "queries_cache": [],
+   "candidates": [],
+   "verdict_he": "0 כרטיסים. החיפוש החדש (CJ לפי קטגוריה או שם) לא החזיר מועמד שווה פתיחה."
+  },
+  "hall/bench-cushion": {
+   "queries_cj": [
+    "[cat Cushion Covers] bench",
+    "[cat Cushion Covers] lumbar"
+   ],
+   "queries_zendrop": [],
+   "queries_cache": [],
+   "candidates": [],
+   "verdict_he": "0 כרטיסים. החיפוש החדש (CJ לפי קטגוריה או שם) לא החזיר מועמד שווה פתיחה."
+  },
+  "living-room/magazine-holder": {
+   "queries_cj": [],
+   "queries_zendrop": [],
+   "queries_cache": [
+    "skufit: 26-32 x 18-22 x 36-48"
+   ],
+   "candidates": [],
+   "verdict_he": "0 כרטיסים. החיפוש החדש (CJ לפי קטגוריה או שם) לא החזיר מועמד שווה פתיחה."
+  },
+  "work/pendant": {
+   "queries_cj": [],
+   "queries_zendrop": [],
+   "queries_cache": [
+    "CE pendants or shades 15-28 cm, cached IL freight, not judged for work/kids pendant"
+   ],
+   "candidates": [],
+   "verdict_he": "0 כרטיסים. החיפוש החדש (CJ לפי קטגוריה או שם) לא החזיר מועמד שווה פתיחה."
+  },
+  "bath/toothbrush-cup": {
+   "queries_cj": [],
+   "queries_zendrop": [],
+   "queries_cache": [
+    "form + material + 9-11 cm"
+   ],
+   "candidates": [],
+   "verdict_he": "0 כרטיסים. החיפוש החדש (CJ לפי קטגוריה או שם) לא החזיר מועמד שווה פתיחה."
+  },
+  "dining-room/bowl": {
+   "queries_cj": [],
+   "queries_zendrop": [],
+   "queries_cache": [
+    "form + material + 7-11 cm"
+   ],
+   "candidates": [],
+   "verdict_he": "0 כרטיסים. החיפוש החדש (CJ לפי קטגוריה או שם) לא החזיר מועמד שווה פתיחה."
+  }
+ }
+}

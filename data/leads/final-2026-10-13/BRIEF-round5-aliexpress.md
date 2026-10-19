@@ -22,6 +22,15 @@ The owner decided on the round-5 audit questions. See `docs/studio-rules.md` ה.
   - Kids' items need EN71 declared, not only CE.
 - **Round 5b:** a cloud team is on furniture and boxes now. Its queue is `round5/ae-queue-5b.json`.
 
+## Continue 3, 2026-10-19 (round 6: images and proven stores)
+When the owner writes "תמשיך" again:
+1. Pull, then re-run `final_round_coverage.py` and `round5_targets.py`. Coverage is 61.3%; 139 style-slots are missing for 80% per style.
+2. Open the two new queues:
+   - `round5/ae-queue-6-images.json`: 134 image searches (`image-search <url> --type similar`) from approved cards and near misses, for gap slots. If the matches pass, they can close up to 41 style-slots. Also 7 slots whose envelope was widened, with new queries.
+   - `round5/ae-queue-6-stores.json`: 50 proven stores, 32 of them lighting with CE. Look through each store's other products for the gap slots, using whatever the DS API allows.
+3. Skip the dead slots (AU2) and the slots in R6Q2 if the owner says yes (`status/decisions.json`).
+4. Write the results to `results/round6-aliexpress.json` and `.md`, in the same shape. Commit and push after each group.
+
 ## Continue 2, 2026-10-18 (after the audit and round 5d)
 When the owner writes "תמשיך" again:
 1. Pull, then re-run `final_round_coverage.py` and `round5_targets.py`. Coverage now applies the designer audits per slot (`round5/designer-audit*.json`, the `slots` field).
