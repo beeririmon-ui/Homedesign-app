@@ -70,3 +70,18 @@ Check the formula against `studio/build.py` and `site/shared/src/schema/economic
 - Don't edit binding docs, slots or the coverage script.
 - Validate every JSON.
 - No commits.
+
+## Correction (2026-10-20, after the first pass)
+The first pass raised 162 prices because the scenario definition above was too wide. It was reverted (commit be35e4b0). `scripts/economics/no_loss.py` holds the agent's mid-correction version (commit 32ef3435, not validated). The corrected rules:
+1. **Shipping method.** The worst case runs only over the method we actually ship with by default: the cheapest method that ships the product to Israel, tracked where the supplier offers tracking (usually CJ Eub, or the AliExpress method on the card). Never CJ To Door, DHL or any express line when a cheaper method exists. If express is the **only** method, the product is listed separately as "express only".
+2. **Quantity.** The Studio's combined-parcel formula: freight for q = unit + (q−1)·max(0, unit−3.72). Not one parcel per unit.
+3. **`kitchen-sconce-…-632957`** is one unit, not four.
+4. **Variants, colours and sizes** stay in the worst case.
+5. **Prices:** new price = max(current price, corrected no-loss price), rounded up to an ending in 9. Never lower. The owner's cushion (₪69) is never changed; its corrected no-loss price is reported (decision NL1).
+
+**This run is report mode only.** Nothing in `data/economics/products.json`, in the cards or in the Studio changes. The manager reads the report, then a second short brief applies it.
+
+### Output of the report run
+- `scripts/economics/no_loss.py`: finished and validated (`--check` runs; a `--report` mode writes the files below without touching data).
+- `data/economics/no-loss-report-2026-10-20.json`: per product: current price, worst scenario (method, quantity, variant), worst contribution, break-even, proposed price, flag (`ok` / `below-floor` / `above-market` with the ratio to the highest comp / `express-only` / `cannot-compute` with the reason).
+- `data/economics/no-loss-report-2026-10-20.md` (Hebrew): the counts, the raises (range and median ratio), the above-market list, the express-only list, the products that cannot be computed, the count of products above ₪247 before and after, and the rejected round-5/6 candidates that failed only on a loss (fit 7+) with their no-loss price, ratio and coverage gain per style.
