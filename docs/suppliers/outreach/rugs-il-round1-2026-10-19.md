@@ -119,3 +119,53 @@ The master-designer picked 19 rugs from 8 suppliers (`data/leads/final-2026-10-1
 > תודה,
 > בארי רימון
 > [טלפון]
+
+## Round 1b (2026-10-20): the handmade pick replaces the 19.10 pick
+The owner found the 19.10 pick banal. The designer re-picked 24 handmade, natural-fibre rugs, 21 of them patterned or colourful (`data/leads/final-2026-10-13/rugs-il-picks-2026-10-20.json`). The image sheet went to the owner on 2026-10-20. **Nothing is sent until the owner approves the sheet.** The personal lines below come from the designer's `suppliers[].personal_line_he`.
+
+| Supplier | Channel | Picks | Draft state |
+| --- | --- | --- | --- |
+| דאר מרקש | darismyhome@gmail.com | H07, H08, H13, H20, H22, H24 (6; 22 slot-style pairs depend on it) | new Gmail draft. Message 2 asks for the original photos (AI images on the site) |
+| מתריב | email@matriv.co.il | H09 פולו 10 (default in 3 styles) | new Gmail draft |
+| השטיח האדום / HōM | b2b@carpetshop.co.il | H04, H10, H15 | the 19.10 draft, personal line replaced (chain wording) |
+| נורטלי | nortlishop@gmail.com | H05, H06, H17 | the 19.10 draft, personal line replaced |
+| עפריתה | myafrita@gmail.com | H02, H12 | the 19.10 draft, personal line replaced. All made-to-order models show "אזל המלאי": message 2 asks first whether ordering is open |
+| BuyCarpet | info@buycarpet.co.il | H16, H23 | the 19.10 draft, personal line replaced (chain wording) |
+| דוד אשכנזי | studio@davidashkenazirugs.com | H21 Row (no price, material not stated) | new Gmail draft |
+| טולמנ'ס | form: https://www.tollmansdot.co.il/contact-us/ | H01, H03, H14, H18, H19 (3 protected brands: ask for brand approval to render) | the owner sends the form text below |
+| ג'וזפון | form: https://www.josephon-carpets.co.il/pages/contact | H11 Nomad (material not stated) | the owner sends the form text below |
+| בית שטיחי רות | ddiem26@gmail.com | none in this pick | the 19.10 draft is deleted |
+
+### Form texts (the owner adds his phone)
+
+**טולמנ'ס**
+
+> שלום לצוות טולמנ'ס,
+>
+> אני בארי רימון. אנחנו בונים חוויית קנייה ריאליסטית וחדשנית לעיצוב הבית.
+>
+> בחוויה שלנו השטיח הוא לא עוד מוצר על המדף. הוא מה שמחזיק את כל החדר, ולכן אנחנו מחפשים לו שותפים ישראלים, אורגים, יוצרים וספקים שיצטרפו אלינו מההתחלה.
+>
+> אהבנו את COLOURS SAFFRON של Nani Marquina בטרקוטה, את NYOKO של LINIE DESIGN שנארג ביד, ואת שטיחי הכותנה במשבצות של Lorena Canals.
+>
+> נשמח לדעת אם תהיו פתוחים לשיתוף פעולה: להציג שטיחים שלכם ולמכור אותם דרך האתר, במודל שנוח לכם. אם זה מעניין אתכם, יש לנו רשימה קצרה של שטיחים מהקטלוג שלכם שהיינו רוצים להציג. נשמח לשלוח אותה ולתאם שיחה קצרה, ובה נספר יותר.
+>
+> תודה,
+> בארי רימון
+> [טלפון]
+
+**ג'וזפון**
+
+> שלום לצוות ג'וזפון,
+>
+> אני בארי רימון. אנחנו בונים חוויית קנייה ריאליסטית וחדשנית לעיצוב הבית.
+>
+> בחוויה שלנו השטיח הוא לא עוד מוצר על המדף. הוא מה שמחזיק את כל החדר, ולכן אנחנו מחפשים לו שותפים ישראלים, אורגים, יוצרים וספקים שיצטרפו אלינו מההתחלה.
+>
+> אהבנו את קולקציית Desert Loom שלכם, ובמיוחד את Nomad עם יהלומי הפחם על רקע החאקי, ואת זה שאפשר להזמין אצלכם כל דגם במידה שאינה במלאי.
+>
+> נשמח לדעת אם תהיו פתוחים לשיתוף פעולה: להציג שטיחים שלכם ולמכור אותם דרך האתר, במודל שנוח לכם. אם זה מעניין אתכם, יש לנו רשימה קצרה של שטיחים מהקטלוג שלכם שהיינו רוצים להציג. נשמח לשלוח אותה ולתאם שיחה קצרה, ובה נספר יותר.
+>
+> תודה,
+> בארי רימון
+> [טלפון]
