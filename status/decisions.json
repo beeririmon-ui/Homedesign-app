@@ -2471,7 +2471,13 @@
       "blocks": [],
       "source": "docs/proposals/room-composition-decisions-2026-10-11.md",
       "asked": "2026-10-11",
-      "status": "open"
+      "status": "answered",
+      "answer": {
+        "option": "all",
+        "note": "לפי כלל ה.13 מ-2026-10-20 ('אין מוצר מפסיד בשום צורה'): המחיר שלא מפסיד נקבע אוטומטית על ידי scripts/economics/no_loss.py. הערכים שבטבלה יוחלפו בחישוב המתוקן.",
+        "at": "2026-10-20T16:30:00Z",
+        "via": "manager, per ה.13 2026-10-20"
+      }
     },
     {
       "id": "SLOT2",
@@ -2677,7 +2683,13 @@
       "blocks": [],
       "source": "data/leads/aliexpress/scale-2026-10/README.md",
       "asked": "2026-10-12",
-      "status": "open"
+      "status": "answered",
+      "answer": {
+        "option": "all",
+        "note": "לפי כלל ה.13 מ-2026-10-20 ('אין מוצר מפסיד בשום צורה'): המחיר שלא מפסיד נקבע אוטומטית על ידי scripts/economics/no_loss.py. הערכים שבטבלה יוחלפו בחישוב המתוקן.",
+        "at": "2026-10-20T16:30:00Z",
+        "via": "manager, per ה.13 2026-10-20"
+      }
     },
     {
       "id": "MP",
@@ -2801,7 +2813,13 @@
       ],
       "source": "data/leads/final-2026-10-13/coverage.md",
       "asked": "2026-10-14",
-      "status": "open"
+      "status": "answered",
+      "answer": {
+        "option": "neither",
+        "note": "נענה דרך AU1 (2026-10-18): 'עד שאין תשובה וודאית עם סוחרים ישראלים לא מחשיבים אותם'. המדד pct_ready, דרופשיפינג בלבד.",
+        "at": "2026-10-20T16:30:00Z",
+        "via": "manager, per AU1"
+      }
     },
     {
       "id": "PRE1",
@@ -3489,6 +3507,92 @@
       "blocks": [],
       "source": "data/leads/final-2026-10-13/results/round6-methods.md",
       "asked": "2026-10-19",
+      "status": "open"
+    },
+    {
+      "id": "NL1",
+      "group": "כלכלה",
+      "title": "כרית הוואבי-סאבי: המחיר שקבעת מפסיד במידה אחת",
+      "question": "קבעת בסטודיו ₪69 לכרית הוואבי-סאבי. במידה שבחדר היא מרוויחה ₪1.29, אבל במידה 30×50 היא מפסידה ₪8.56. מה עושים?",
+      "context": "כלל ה.13 מ-2026-10-20: אין מוצר מפסיד בשום צורה, כולל כל וריאנט. המחיר שלא מפסיד באף מידה הוא ₪89. מחיר שהמשתמש קבע בסטודיו לא משתנה בלי אישורו (data/economics/BRIEF-no-loss-2026-10-20.md).",
+      "options": [
+        {
+          "id": "raise",
+          "label": "להעלות ל-₪89",
+          "desc": "המחיר שלא מפסיד באף מידה",
+          "recommended": true
+        },
+        {
+          "id": "drop-size",
+          "label": "להשאיר ₪69 ולהוריד את המידה 30×50",
+          "desc": "נמכרת רק במידה שבחדר",
+          "recommended": false
+        },
+        {
+          "id": "keep",
+          "label": "להשאיר ₪69 בכל המידות",
+          "desc": "חריג מפורש לכלל ה.13",
+          "recommended": false
+        }
+      ],
+      "blocks": [],
+      "source": "data/economics/BRIEF-no-loss-2026-10-20.md",
+      "asked": "2026-10-20",
+      "status": "open"
+    },
+    {
+      "id": "AE1",
+      "group": "ליקוט",
+      "title": "סשן AliExpress חדש לסבב 6",
+      "question": "לפתוח סשן AliExpress חדש? ההקשר של הסשן הקיים כמעט מלא (695 אלף מתוך מיליון), והחיבור ל-AliExpress פג אחרי יומיים. תצטרך לאשר שוב את החיבור בדפדפן, כמו ב-17.10.",
+      "context": "מחכים לו: 134 חיפושי תמונה (ae-queue-6-images.json, עד 41 עמדות-סגנון אם ההתאמות עוברות) ו-50 חנויות מוכחות (ae-queue-6-stores.json, 32 מהן תאורה עם CE). ההוראות ב-BRIEF-round5-aliexpress.md, 'Continue 3'. הסשן הקיים עוד מחכה לתשובה על מנורת הכיפה מראטן (המלצה: לוותר).",
+      "options": [
+        {
+          "id": "open",
+          "label": "כן, לפתוח סשן חדש",
+          "desc": "אישור חיבור מחדש בדפדפן, אחר כך Continue 3",
+          "recommended": true
+        },
+        {
+          "id": "wait",
+          "label": "לא עכשיו",
+          "desc": "התורים מחכים",
+          "recommended": false
+        }
+      ],
+      "blocks": [
+        "ae-queue-6-images.json",
+        "ae-queue-6-stores.json"
+      ],
+      "source": "data/leads/final-2026-10-13/BRIEF-round5-aliexpress.md",
+      "asked": "2026-10-20",
+      "status": "open"
+    },
+    {
+      "id": "SITE1",
+      "group": "אתר",
+      "title": "תיקוני אתר וסטודיו שהצטברו",
+      "question": "להפעיל את frontend-dev על התיקונים שהצטברו? 78 כרטיסים לא עוברים את הסכמה, 2 בדיקות אתר נכשלות, ו-5 פערי כלכלה בין האתר לסטודיו.",
+      "context": "פערי הכלכלה (ביקורת no-loss, 2026-10-20): משלוח לכמה יחידות ליניארי באתר מול נוסחת החבילה המשולבת בסטודיו; משלוח ברירת מחדל של $17 כשאין נתון; מחיר זמני של 40% לכרטיסים בלי שורה; מחיר אפשרות זולה (skuRetail) שמפסיד כ-0.8 מהפרש העלות; אין תווית 'יקר מהשוק' ב-build.py. בלי התיקונים האתר יכול להציג מחיר שמפסיד גם אחרי כלל ה.13.",
+      "options": [
+        {
+          "id": "now",
+          "label": "כן, עכשיו",
+          "desc": "frontend-dev, אחרי החישוב המתוקן של no-loss",
+          "recommended": true
+        },
+        {
+          "id": "later",
+          "label": "אחרי סבב ההחלטות",
+          "desc": "",
+          "recommended": false
+        }
+      ],
+      "blocks": [
+        "ה.13 באתר"
+      ],
+      "source": "data/economics/BRIEF-no-loss-2026-10-20.md",
+      "asked": "2026-10-20",
       "status": "open"
     }
   ]
