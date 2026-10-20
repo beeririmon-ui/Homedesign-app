@@ -313,39 +313,61 @@ def _est_from_text(text: str) -> float | None:
     return float(a.group(1) or a.group(2)) if a else None
 
 
+EXPRESS_RX = re.compile(r"\bDHL\b|fedex|\bUPS\b|\bTNT\b|\bEMS\b|aramex|premium|to\s*door|(?<!ali)express", re.I)
+
+
+def default_quote(options: list[dict]) -> dict | None:
+    """The method we ship with by default (manager, 2026-10-20): the cheapest method to Israel, tracked where the supplier
+    offers tracking; an express line (DHL, UPS, FedEx, Aramex, Premium, CJ To Door) only when it is the only method.
+    {usd, label, express} or None."""
+    ok = [o for o in options if isinstance(o, dict) and isnum(o.get("usd"))]
+    if not ok:
+        return None
+    tracked = [o for o in ok if o.get("tracking") is True]
+    pool = tracked if tracked and any(o.get("tracking") is False for o in ok) else ok
+    std = [o for o in pool if not EXPRESS_RX.search(str(o.get("name") or ""))]
+    pick = min(std or pool, key=lambda o: o["usd"])
+    return {"usd": float(pick["usd"]), "label": f"{pick.get('name') or ''} {pick.get('days') or ''}".strip(), "express": not std}
+
+
+def inv_ship_for_qty(q_usd: float, n: int) -> float:
+    """One piece's freight from a quote for n pieces, by the Studio's combined-parcel formula (shipForQty inverted)."""
+    if n <= 1:
+        return q_usd
+    u = (q_usd + (n - 1) * PARCEL_FIXED_USD) / n
+    return u if u >= PARCEL_FIXED_USD else q_usd
+
+
 def freight(p: dict, e: dict, ctx: Ctx, n: int) -> dict:
-    """The room SKU's freight evidence, per method: unit (one piece), sale (n pieces), single (one piece of the set),
-    with where each number comes from and whether it is an estimate."""
+    """The room SKU's freight by the default method (the cheapest tracked method to Israel; express only when it is the
+    only one): one piece, the sale of n pieces (the Studio's combined-parcel formula unless a real quote for n pieces
+    exists), and one piece of the set; with where each number comes from and whether it is an estimate. Every quote of
+    that method found (the Studio's freight file or card SKU, the manual figure, the cached supplier answers) is read
+    and the highest one is taken."""
     pid, flags, notes = p["id"], [], []
     fr = e.get("freight") or {}
     manual = (e.get("manual") or {}).get("shipping_cost_usd")
-    unit = {"economy": [], "fast": []}   # [(usd, source)] quotes for ONE piece
-    sale = {"economy": [], "fast": []}   # [(usd, source)] quotes for exactly n pieces (n > 1)
+    unit, sale = [], []   # [(usd, source, express)] for ONE piece / for exactly n pieces (n > 1)
     if fr.get("status") == "no_route":
         return {"no_route": True, "flags": ["no-route"], "notes": [f"{fr.get('src')}: אין משלוח לישראל"]}
     qq = int(fr.get("quoted_qty") or 1)
-    for m, key in (("economy", "cheapest"), ("fast", "under20")):
-        o = fr.get(key) if m == "fast" else (fr.get("cheapest") or fr.get("under20"))
-        if isinstance(o, dict) and isnum(o.get("usd")):
-            src = f"Studio {fr.get('src')}: {o.get('name') or ''} {o.get('days') or ''}".strip()
-            if qq > 1:
-                if qq == n:
-                    sale[m].append((float(o["usd"]), src + f" (ל-{qq} יח')"))
-                else:  # a quote for qq pieces: per piece at most the whole quote (worst case)
-                    unit[m].append((float(o["usd"]), src + f" (ל-{qq} יח', נלקח ליחידה)"))
-                    flags.append("freight-quote-other-qty")
-            else:
-                unit[m].append((float(o["usd"]), src))
+    raw = (ctx.freight_files.get(fr.get("src")) or {}).get(pid) if fr.get("src") in ("cj", "zendrop", "aliexpress") else None
+    opts = [o for o in (raw or {}).get("options") or [] if isinstance(o, dict)]
+    if not opts:
+        opts = [o for o in (fr.get("cheapest"), fr.get("under20")) if isinstance(o, dict)]
+    dq = default_quote(opts)
+    if dq:
+        src = f"Studio {fr.get('src')}: {dq['label']}"
+        if qq > 1 and qq == n:
+            sale.append((dq["usd"], src + f" (ל-{qq} יח')", dq["express"]))
+        elif qq > 1:
+            unit.append((inv_ship_for_qty(dq["usd"], qq), src + f" (ל-{qq} יח', ליחידה לפי נוסחת החבילה)", dq["express"]))
+            flags.append("freight-quote-other-qty")
+        else:
+            unit.append((dq["usd"], src, dq["express"]))
     if isnum(manual):
-        for m in ("economy", "fast"):  # the Studio uses the manual figure for both methods
-            unit[m].append((float(manual), "ידני (data/economics/products.json shipping_cost_usd)"))
-    # the cached supplier answers for the room SKU (qty 1 and qty n): the worst quote of each method the Studio offers for
-    # this product. A method the Studio does not offer (no quote within 20 days in its freight data) is not added from
-    # the cache: "every shipping method offered" is the Studio's (an AliExpress Premium or DHL line it never shows is not)
-    offered = {m for m in ("economy", "fast") if unit[m] or sale[m]}
-    from_cache = not offered
-    if from_cache:
-        offered = {"economy"}  # no freight in the Studio: a cached quote beats an estimate, economy only
+        unit.append((float(manual), "ידני (data/economics/products.json shipping_cost_usd)", False))
+    from_cache = not unit and not sale
     sup = p.get("supplier") or {}
     url = sup.get("product_url") or ""
     o = p.get("options") if isinstance(p.get("options"), dict) else {}
@@ -353,86 +375,89 @@ def freight(p: dict, e: dict, ctx: Ctx, n: int) -> dict:
     cache = []
     ae = _ae_item(url)
     if ae:
-        cache += [(f"מטמון AliExpress {ae} sku {sku}", sku, qty, opts) for (sku, qty), opts in source_quotes("aliexpress", ae).items()
+        cache += [(f"מטמון AliExpress {ae} sku {sku}", qty, os_) for (sku, qty), os_ in source_quotes("aliexpress", ae).items()
                   if sku == room_sku]
     cj_entry = ctx.freight_files.get("cj", {}).get(pid) or {}
     cpid, vid = cj_entry.get("pid") or _cj_pid(url), cj_entry.get("vid")
     if cpid and not vid:
         vid = cj_vid(cpid, room_sku)
     if cpid and vid:
-        cache += [(f"מטמון CJ vid {v}", v, qty, opts) for (v, qty), opts in source_quotes("cj", cpid).items() if v == str(vid)]
+        cache += [(f"מטמון CJ vid {v}", qty, os_) for (v, qty), os_ in source_quotes("cj", cpid).items() if v == str(vid)]
     n_cache = 0
-    for lab, _sku, qty, opts in cache:
-        ms = _methods(opts)
-        # no freight in the Studio: a CJ quote is read the way freight-cj.json is (cheapest, and cheapest within 20 days)
-        for m in (offered | ({"fast"} if from_cache and lab.startswith("מטמון CJ") else set())):
-            if ms.get(m):
-                tgt = unit if qty == 1 else sale if qty == n else None
-                if tgt is not None:
-                    tgt[m].append((ms[m][0], f"{lab} ×{qty}: {ms[m][1]}"))
-                    n_cache += 1
+    for lab, qty, os_ in cache:
+        d = default_quote(os_)
+        if not d:
+            continue
+        if qty == 1:
+            unit.append((d["usd"], f"{lab} ×1: {d['label']}", d["express"]))
+        elif qty == n:
+            sale.append((d["usd"], f"{lab} ×{qty}: {d['label']}", d["express"]))
+        else:
+            continue
+        n_cache += 1
     if from_cache and n_cache:
         flags.append("freight-from-cache-only")
-        notes.append("לסטודיו אין משלוח למוצר; נלקח ממטמון הספק (חסכוני בלבד)")
+        notes.append("לסטודיו אין משלוח למוצר; נלקח ממטמון הספק")
     m_other = re.search(r"estimated from SKU (\d+)", p.get("notes") or "")
-    if m_other and m_other.group(1) != room_sku and not any("מטמון" in x[1] for x in unit["economy"]):
+    if m_other and m_other.group(1) != room_sku and not any("מטמון" in x[1] for x in unit):
         flags.append("freight-from-other-sku")
         notes.append(f"המשלוח נמדד על מק\"ט אחר ({m_other.group(1)}), לא על המק\"ט שבחדר: הערכה")
     estimated = False
-    if not unit["economy"] and not sale["economy"]:
+    if not unit and not sale:
         # no quote at all: the worst of the estimates written for this product
         ests = []
-        t = _est_from_text(p.get("notes") or "")
-        if t is not None:
-            ests.append((t, "הערות הכרטיס (הערכה)"))
+        tx = _est_from_text(p.get("notes") or "")
+        if tx is not None:
+            ests.append((tx, "הערות הכרטיס (הערכה)", False))
         pr = ctx.pricing.get(pid) or {}
         if isnum(pr.get("ship_usd_per_unit_used")):
-            ests.append((float(pr["ship_usd_per_unit_used"]), f"קובץ התמחור: {str(pr.get('ship_src_used') or '')[:80]} (הערכה)"))
+            ests.append((float(pr["ship_usd_per_unit_used"]), f"קובץ התמחור: {str(pr.get('ship_src_used') or '')[:80]} (הערכה)", False))
         rec = (p.get("_lead_rec") or {}).get("rec") or {}
         if isnum(rec.get("ship_usd")) and rec["ship_usd"] >= 0:
             rq = next((int(rec[k]) for k in ("qty_in_sale", "qty") if isnum(rec.get(k)) and rec[k] >= 1), 1)
             src = f"הליקוט האחרון {p['_lead_rec'].get('file')} (ל-{rq} יח', הערכה)"
             if rq == 1:
-                ests.append((float(rec["ship_usd"]), src))
+                ests.append((float(rec["ship_usd"]), src, False))
             elif rq == n:
-                sale["economy"].append((float(rec["ship_usd"]), src))
+                sale.append((float(rec["ship_usd"]), src, False))
         if ests:
-            u = max(ests, key=lambda x: x[0])
-            unit["economy"].append(u)
+            unit.append(max(ests, key=lambda x: x[0]))
             notes.append("משלוח מוערך: " + "; ".join(f"${x[0]:g} {x[1]}" for x in ests))
-        if ests or sale["economy"]:
+        if ests or sale:
             estimated = True
             flags.append("freight-estimated")
     out = {"no_route": False, "flags": flags, "notes": notes, "estimated": estimated, "methods": {}}
-    for m in ("economy", "fast"):
-        u = max(unit[m], key=lambda x: x[0]) if unit[m] else None
-        sq = max(sale[m], key=lambda x: x[0]) if sale[m] else None
-        if u is None and sq is None:
-            out["methods"][m] = None
-            continue
-        if n == 1:
-            sale_usd, sale_src, sale_est = u[0], u[1], False
-        elif sq is not None:
-            sale_usd, sale_src, sale_est = max(sq[0], u[0] if u else 0.0), sq[1], False
-        else:  # an estimate for n pieces: its worst case, one parcel per piece
-            sale_usd, sale_src, sale_est = n * u[0], f"{n} × {u[1]}", True
-        if u is not None:
-            single_usd, single_src, single_est = u[0], u[1], False
-        else:  # only a quote for the whole set: one piece costs at most that
-            single_usd, single_src, single_est = sq[0], sq[1] + " (חבילה אחת לסט, נלקח ליחידה)", True
-        studio_usd = None
-        if isnum(manual):
-            studio_usd = ship_for_qty(float(manual), n) if n > 1 else float(manual)
-        out["methods"][m] = {"unit_usd": u[0] if u else None, "unit_src": u[1] if u else None,
-                             "sale_usd": round(sale_usd, 4), "sale_src": sale_src, "sale_estimated": sale_est,
-                             "single_usd": round(single_usd, 4), "single_src": single_src, "single_estimated": single_est,
-                             "all_unit": unit[m], "all_sale": sale[m], "studio_manual_sale_usd": studio_usd}
-    if out["methods"].get("economy") is None and out["methods"].get("fast") is None:
+    # an express quote counts only when no standard quote exists (the express line is then the only method)
+    std_u, std_s = [x for x in unit if not x[2]], [x for x in sale if not x[2]]
+    express_only = not std_u and not std_s and bool(unit or sale)
+    if not express_only:
+        unit, sale = std_u, std_s
+    u = max(unit, key=lambda x: x[0]) if unit else None
+    sq = max(sale, key=lambda x: x[0]) if sale else None
+    if u is None and sq is None:
+        out["methods"]["economy"] = None
         out["missing"] = True
         out["flags"].append("freight-missing")
-    elif out["methods"].get("fast") is None:
-        out["flags"].append("no-fast-method")
-    if n > 1 and any((out["methods"].get(m) or {}).get("sale_estimated") for m in ("economy", "fast")):
+        return out
+    if n == 1:
+        sale_usd, sale_src, sale_est = u[0], u[1], False
+    elif sq is not None:
+        sale_usd, sale_src, sale_est = max(sq[0], u[0] if u else 0.0), sq[1], False
+    else:  # the Studio's combined parcel for n pieces (no data says this supplier splits the shipment)
+        sale_usd, sale_src, sale_est = ship_for_qty(u[0], n), f"{u[1]}, ל-{n} יח' בחבילה אחת (יחידה + (n−1) × (יחידה − $3.72))", True
+    if u is not None:
+        single_usd, single_src, single_est = u[0], u[1], False
+    else:  # only a quote for the whole set: one piece by the same formula, inverted
+        single_usd, single_src, single_est = inv_ship_for_qty(sq[0], n), sq[1] + " (ליחידה לפי נוסחת החבילה)", True
+    out["methods"]["economy"] = {"unit_usd": u[0] if u else None, "unit_src": u[1] if u else None,
+                                 "sale_usd": round(sale_usd, 4), "sale_src": sale_src, "sale_estimated": sale_est,
+                                 "single_usd": round(single_usd, 4), "single_src": single_src, "single_estimated": single_est,
+                                 "all_unit": unit, "all_sale": sale}
+    out["express_only"] = express_only
+    if express_only:
+        out["flags"].append("express-only")
+        notes.append("לספק אין במוצר הזה שיטה רגילה: המשלוח היחיד הוא אקספרס (" + (u or sq)[1] + ")")
+    if n > 1 and sale_est:
         out["flags"].append("qty-freight-estimated")
     return out
 
