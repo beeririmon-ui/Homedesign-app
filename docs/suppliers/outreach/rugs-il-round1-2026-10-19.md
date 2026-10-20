@@ -69,6 +69,9 @@ Thanks, then the list of their rugs: a link to each, the size, and the room and 
 - **One-off pieces** (Tomik, Art Java, פנטזיה מרוקאית, הבית המרוקאי): only if the designer picked one of their rugs, and then the email asks whether a similar rug can be made again.
 - **Already contacted:** הנסיכה אונליין (a reminder is drafted in Gmail) and NOOL (a form).
 
+## On hold (2026-10-20)
+The owner found the 19 picks "very banal" and wants handmade, natural, patterned and colourful rugs. The 5 Gmail drafts below are **on hold and must not be sent**. A new search and a new pick follow (`data/leads/final-2026-10-13/BRIEF-rugs-il-handmade-2026-10-20.md`), and the emails will be rewritten for that list.
+
 ## Status after the designer's picks (2026-10-19)
 The master-designer picked 19 rugs from 8 suppliers (`data/leads/final-2026-10-13/rugs-il-picks-2026-10-19.json` and `.md`). The image sheet was shown to the owner. **The final round 1 is set by the picks**; the 8 other addresses in the table above get no email this round.
 
