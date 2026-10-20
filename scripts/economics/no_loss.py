@@ -4,49 +4,60 @@
 "בא נוודא שאין דבר כזה מוצר מפסיד בשום צורה! יכול להיות יקר ללקוח אבל אין מפסיד!"
 
 For every product the Studio or the site can sell, this computes the worst-case contribution (before CAC, in the
-Studio formula) over all its scenarios, the break-even price, and the no-loss price: the lowest price on the Studio's
+Studio formula) over its scenarios, the break-even price, and the no-loss price: the lowest price on the Studio's
 usual endings (a whole shekel that ends in 9: 19, 29 ... 149, 159 ...) whose contribution is zero or more in every
-scenario. A price is never lowered, and a price the owner set in the Studio is never changed (it is listed instead).
+scenario. Proposed price = max(current price, no-loss price). A price is never lowered, and a price the owner set in
+the Studio is never changed (it is reported instead; today: the wabi-sabi cushion at ₪69, decision NL1).
 
-The Studio formula (studio/src/index.html econCalc, the same as site/shared/src/pricing.ts unitEconomics):
+The corrected scenario rules (BRIEF-no-loss-2026-10-20.md, "Correction", after the first pass raised 162 prices):
+  1. Shipping method: only the method we ship with by default, the cheapest method to Israel, tracked where the
+     supplier offers tracking (usually CJ Eub, or the AliExpress method on the card). Never CJ To Door, DHL or any
+     express line when a cheaper method exists. A product whose only method is express is listed as "express only".
+  2. Quantity: the Studio's combined parcel, freight for q = unit + (q − 1) · max(0, unit − 3.72). Not a parcel per unit.
+  3. kitchen-sconce-aliexpress-rustic-wooden-wall-sconce-632957 is one unit (the Studio inferred 4 from the record).
+  4. Variants, colours and sizes stay in the worst case; an estimated freight is taken at its worst case.
+  5. Proposed price = max(current, no-loss), rounded up to an ending in 9. Never lower.
+
+The Studio formula (studio/src/index.html econCalc; site/shared/src/pricing.ts unitEconomics is the same formula):
     net = P / (1 + vat)            fees = P * card_pct + card_fixed       reserve = net * returns_pct
     landed = (unit cost * q + freight for q) * usd_ils
     contribution = net - landed - fees - reserve - packaging            margin = contribution / net
-The customer's delivery fee (₪29 under ₪299, express ₪59 on the site) is not revenue in the Studio formula, so it is
-not counted here either (the conservative side).
+The customer's delivery fee (₪29 under ₪299) is not revenue in the Studio formula, so it is not counted here either.
 
 What the Studio sells is read the way the Studio reads it: studio/build.py is imported and its own loaders run
 (load_products, sell_qty_default, lead_records, load_economics), so the unit count, the cost of the sale, the freight
 source and the starting price are exactly the Studio's.
 
-Scenarios of one product (every one must give a contribution >= 0):
-  * the sale (the units the Studio sells, sell_qty), by every shipping method offered: economy (the cheapest quote)
-    and fast (the cheapest quote within 20 days, ה.4), when the supplier has one;
+Scenarios of one product (every one must give a contribution >= 0), all by the default shipping method:
+  * the sale (the units the Studio sells, sell_qty), freight by the combined-parcel formula (a real quote for exactly
+    those units, when one exists, is taken as it is);
   * one piece of a set (ה.6, P1: a set is also sold singly), at unit_retail_ils or the site's estimate
     (site/shared/src/packs.ts unitPriceEstimateIls), with the freight of one piece;
-  * every other supplier option (card `options.skus`, in stock, USD), at the price the site gives it
-    (site/shared/src/options.ts skuRetail: the room SKU's price moved by the difference of the 40% recommendations),
-    with its own cost and freight, and its single piece;
-  * more than one sale in a cart is never worse per sale: freight for more units is at most the sum of the parts.
-Freight: every quote found for the room SKU (the Studio's freight file or card SKU, the pricing team's manual figure,
-the cached supplier answers in data/sources/aliexpress and data/sources/cj, the final-round record) and the worst of
-them per method. A freight for several units that is an estimate (the Studio's $3.72-per-parcel saving) is taken at
-its worst case: one parcel per unit (N x the unit quote), unless a real quote for those units exists. A product with
-no quote at all takes the worst of the estimates written for it (card notes, the pricing file, the final round), and
-is flagged.
+  * every other supplier option in stock (card `options.skus`, USD), at the price the site gives it
+    (site/shared/src/options.ts skuRetail: the room SKU's price moved by the difference of the 40% recommendations,
+    or the Studio's sku_retail_ils), with its own cost and freight, and its single piece;
+  * more than one sale in a cart is never worse per sale (the combined parcel is at most the sum of the parts).
+Freight: every quote of the default method found for the room SKU (the Studio's freight file or card SKU, the pricing
+team's manual figure, the cached supplier answers in data/sources, the final-round record) and the highest of them.
+A product with no quote at all takes the worst of the estimates written for it (card notes, the pricing file, the
+final round) and is flagged.
 
   python3 -I scripts/economics/no_loss.py                     # audit, summary on stdout
   python3 -I scripts/economics/no_loss.py --json FILE         # the full audit as JSON
-  python3 -I scripts/economics/no_loss.py --apply             # raise the prices in their source of truth, write the
-                                                              # change log data/economics/no-loss-changes-<date>.json
-  python3 -I scripts/economics/no_loss.py --report [--tests F] # write data/economics/no-loss-audit-<date>.json and .md
-                                                              # (F: a JSON of test results to include)
-  python3 -I scripts/economics/no_loss.py --check             # exit 1 when a product (not owner-set) still loses
+  python3 -I scripts/economics/no_loss.py --report            # report mode: writes data/economics/no-loss-report-<date>.json
+                                                              # and .md, touches no data
+  python3 -I scripts/economics/no_loss.py --check             # invariants of the computation; exit 1 when a product (not
+                                                              # owner-set, not express-only) loses at its current price,
+                                                              # exit 2 when an invariant fails
+  python3 -I scripts/economics/no_loss.py --apply             # the apply brief: raise the prices in their source of truth
+                                                              # and write data/economics/no-loss-changes-<date>.json
+                                                              # (exercised on a scratch copy of the repo on 2026-10-20,
+                                                              # not on the repo itself)
   --db DIR      a Studio db export (DIR/product_edits/<id>.json): prices the owner set there are never changed
-  --date YYYY-MM-DD   the date written on changes (default: today)
+  --date YYYY-MM-DD   the date written on the reports (default: today)
 
-Importable: audit(), product_scenarios(), worst_case(), no_loss_price(), break_even_price(), contribution().
-Only the standard library. Reads cached data only; no supplier is contacted.
+Importable: audit(), product_scenarios(), worst_case(), no_loss_price(), break_even_price(), contribution(),
+rejected_loss_only(). Only the standard library. Reads cached data only; no supplier is contacted.
 """
 from __future__ import annotations
 
@@ -60,6 +71,7 @@ import math
 import os
 import re
 import sys
+from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent.parent
@@ -75,8 +87,14 @@ STUDIO_DEFAULTS = {"usd_ils": 3.3, "vat_pct": 18, "card_pct": 2, "card_fixed_ils
                    "packaging_ils": 0, "target_margin_pct": 40, "items_per_order": 1.4}
 PARCEL_FIXED_USD = 3.72  # the Studio's per-parcel fixed part (CJ basket test, freight-bundles.json)
 UNIT_PREMIUM = 1.15      # site/shared/src/packs.ts: one piece of a set costs 15% more per piece
-FAST_DAYS = 20           # ה.4: the fast method = the cheapest option that arrives within 20 days (Studio "under20")
+VAT_THRESHOLD_ILS = 247  # $75 x 3.3: the personal-import VAT exemption (docs/tax/README.md); counted before and after
 EPS = 1e-9
+
+# Units of the sale fixed by the manager (2026-10-20, correction rule 3), where the Studio's own reading is wrong.
+UNIT_OVERRIDES = {
+    "kitchen-sconce-aliexpress-rustic-wooden-wall-sconce-632957":
+        (1, "המנהל (2026-10-20): מנורת מטבח אחת, לא 4. הסטודיו הסיק 4 יח' מעלות הנחיתה ברשומה (₪100.6 = יחידה אחת + משלוח)"),
+}
 
 
 # --------------------------------------------------------------------------- formula
@@ -141,8 +159,16 @@ def recommended(landed_ils: float, s: dict) -> int | None:
 
 
 def ship_for_qty(unit_usd: float, q: int) -> float:
-    """The Studio's estimate (shipForQty): unit + (q - 1) * max(0, unit - 3.72)."""
+    """The Studio's combined parcel (shipForQty): unit + (q - 1) * max(0, unit - 3.72)."""
     return unit_usd + (q - 1) * max(0.0, unit_usd - PARCEL_FIXED_USD)
+
+
+def inv_ship_for_qty(q_usd: float, n: int) -> float:
+    """One piece's freight from a quote for n pieces, by the Studio's combined-parcel formula (shipForQty inverted)."""
+    if n <= 1:
+        return q_usd
+    u = (q_usd + (n - 1) * PARCEL_FIXED_USD) / n
+    return u if u >= PARCEL_FIXED_USD else q_usd
 
 
 # --------------------------------------------------------------------------- the Studio's view
@@ -152,6 +178,7 @@ class Ctx:
 
     def __init__(self, eco_dir: Path = ECO, db: Path | None = None):
         self.eco_dir = eco_dir
+        self.db = db
         self.s = load_settings(eco_dir)
         spec = importlib.util.spec_from_file_location("studio_build_for_no_loss", BUILD_PY)
         B = importlib.util.module_from_spec(spec)
@@ -219,25 +246,6 @@ class Ctx:
 
 # --------------------------------------------------------------------------- freight evidence
 
-def _days_max(d) -> int | None:
-    if isnum(d):
-        return int(d)
-    nums = [int(x) for x in re.findall(r"\d+", str(d or ""))]
-    return max(nums) if nums else None
-
-
-def _methods(options: list[dict]) -> dict:
-    """{economy: (usd, label), fast: (usd, label) or None} from [{usd, days, name}] quotes."""
-    ok = [o for o in options if isnum(o.get("usd"))]
-    if not ok:
-        return {}
-    eco = min(ok, key=lambda o: o["usd"])
-    fast_ok = [o for o in ok if (_days_max(o.get("days")) or 999) <= FAST_DAYS]
-    fast = min(fast_ok, key=lambda o: o["usd"]) if fast_ok else None
-    lab = lambda o: f"{o.get('name') or ''} {o.get('days') or ''}".strip()
-    return {"economy": (float(eco["usd"]), lab(eco)), "fast": (float(fast["usd"]), lab(fast)) if fast else None}
-
-
 def _ae_item(url: str) -> str | None:
     m = re.search(r"aliexpress\.[a-z.]+/item/(\d+)\.html", url or "", re.I)
     return m.group(1) if m else None
@@ -252,7 +260,7 @@ _SRC_CACHE: dict = {}
 
 
 def source_quotes(kind: str, pid: str | None) -> dict:
-    """{(sku or vid, qty): [{usd, days, name}]} from the cached supplier answers (data/sources/<kind>/<id>.json)."""
+    """{(sku or vid, qty): [{usd, days, name, tracking}]} from the cached supplier answers (data/sources/<kind>/<id>.json)."""
     if not pid:
         return {}
     key = (kind, pid)
@@ -279,7 +287,7 @@ def source_quotes(kind: str, pid: str | None) -> dict:
                         continue
                     dmax = o.get("days_max")
                     opts.append({"usd": float(o["fee"]), "days": f"{o.get('days_min')}-{dmax}" if dmax else None,
-                                 "name": o.get("company") or o.get("code")})
+                                 "name": o.get("company") or o.get("code"), "tracking": o.get("tracking")})
                 elif isnum(o.get("usd")):
                     opts.append({"usd": float(o["usd"]), "days": o.get("days"), "name": o.get("name")})
             if opts:
@@ -313,41 +321,37 @@ def _est_from_text(text: str) -> float | None:
     return float(a.group(1) or a.group(2)) if a else None
 
 
+# an express line: DHL, UPS, FedEx, TNT, EMS, Aramex, "Premium", CJ To Door, "...Express" (not AliExpress itself)
 EXPRESS_RX = re.compile(r"\bDHL\b|fedex|\bUPS\b|\bTNT\b|\bEMS\b|aramex|premium|to\s*door|(?<!ali)express", re.I)
 
 
+def is_express(name) -> bool:
+    return bool(EXPRESS_RX.search(str(name or "")))
+
+
 def default_quote(options: list[dict]) -> dict | None:
-    """The method we ship with by default (manager, 2026-10-20): the cheapest method to Israel, tracked where the supplier
-    offers tracking; an express line (DHL, UPS, FedEx, Aramex, Premium, CJ To Door) only when it is the only method.
-    {usd, label, express} or None."""
+    """The method we ship with by default (correction rule 1): the cheapest method to Israel, tracked where the supplier
+    offers tracking; an express line only when it is the only method. {usd, label, express, free} or None."""
     ok = [o for o in options if isinstance(o, dict) and isnum(o.get("usd"))]
     if not ok:
         return None
     tracked = [o for o in ok if o.get("tracking") is True]
     pool = tracked if tracked and any(o.get("tracking") is False for o in ok) else ok
-    std = [o for o in pool if not EXPRESS_RX.search(str(o.get("name") or ""))]
+    std = [o for o in pool if not is_express(o.get("name"))]
     pick = min(std or pool, key=lambda o: o["usd"])
-    return {"usd": float(pick["usd"]), "label": f"{pick.get('name') or ''} {pick.get('days') or ''}".strip(), "express": not std}
-
-
-def inv_ship_for_qty(q_usd: float, n: int) -> float:
-    """One piece's freight from a quote for n pieces, by the Studio's combined-parcel formula (shipForQty inverted)."""
-    if n <= 1:
-        return q_usd
-    u = (q_usd + (n - 1) * PARCEL_FIXED_USD) / n
-    return u if u >= PARCEL_FIXED_USD else q_usd
+    return {"usd": float(pick["usd"]), "label": f"{pick.get('name') or ''} {pick.get('days') or ''}".strip(),
+            "express": not std, "free": float(pick["usd"]) == 0.0}
 
 
 def freight(p: dict, e: dict, ctx: Ctx, n: int) -> dict:
-    """The room SKU's freight by the default method (the cheapest tracked method to Israel; express only when it is the
-    only one): one piece, the sale of n pieces (the Studio's combined-parcel formula unless a real quote for n pieces
-    exists), and one piece of the set; with where each number comes from and whether it is an estimate. Every quote of
-    that method found (the Studio's freight file or card SKU, the manual figure, the cached supplier answers) is read
-    and the highest one is taken."""
+    """The room SKU's freight by the default method: one piece, the sale of n pieces (the combined parcel unless a real
+    quote for n pieces exists), and one piece of the set; where each number comes from and whether it is an estimate.
+    Every quote of that method found (the Studio's freight file or card SKU, the manual figure, the cached supplier
+    answers) is read and the highest one is taken (an estimate at its worst case)."""
     pid, flags, notes = p["id"], [], []
     fr = e.get("freight") or {}
     manual = (e.get("manual") or {}).get("shipping_cost_usd")
-    unit, sale = [], []   # [(usd, source, express)] for ONE piece / for exactly n pieces (n > 1)
+    unit, sale = [], []   # [(usd, source, express, free)] for ONE piece / for exactly n pieces (n > 1)
     if fr.get("status") == "no_route":
         return {"no_route": True, "flags": ["no-route"], "notes": [f"{fr.get('src')}: אין משלוח לישראל"]}
     qq = int(fr.get("quoted_qty") or 1)
@@ -357,16 +361,18 @@ def freight(p: dict, e: dict, ctx: Ctx, n: int) -> dict:
         opts = [o for o in (fr.get("cheapest"), fr.get("under20")) if isinstance(o, dict)]
     dq = default_quote(opts)
     if dq:
-        src = f"Studio {fr.get('src')}: {dq['label']}"
+        src = f"הסטודיו ({fr.get('src')}): {dq['label']}"
         if qq > 1 and qq == n:
-            sale.append((dq["usd"], src + f" (ל-{qq} יח')", dq["express"]))
+            sale.append((dq["usd"], src + f" (ל-{qq} יח')", dq["express"], dq["free"]))
         elif qq > 1:
-            unit.append((inv_ship_for_qty(dq["usd"], qq), src + f" (ל-{qq} יח', ליחידה לפי נוסחת החבילה)", dq["express"]))
+            # quoted for another count of pieces (a set of 4 pegs sold as one unit): the Studio takes it as the unit's
+            # freight (effProduct: quotedForSale only when quoted_qty == the units sold), and so does this
+            unit.append((dq["usd"], src + f" (הוצע ל-{qq} יח'; נלקח ליחידת מכירה, כמו בסטודיו)", dq["express"], dq["free"]))
             flags.append("freight-quote-other-qty")
         else:
-            unit.append((dq["usd"], src, dq["express"]))
+            unit.append((dq["usd"], src, dq["express"], dq["free"]))
     if isnum(manual):
-        unit.append((float(manual), "ידני (data/economics/products.json shipping_cost_usd)", False))
+        unit.append((float(manual), "ידני (data/economics/products.json shipping_cost_usd)", False, float(manual) == 0.0))
     from_cache = not unit and not sale
     sup = p.get("supplier") or {}
     url = sup.get("product_url") or ""
@@ -389,9 +395,9 @@ def freight(p: dict, e: dict, ctx: Ctx, n: int) -> dict:
         if not d:
             continue
         if qty == 1:
-            unit.append((d["usd"], f"{lab} ×1: {d['label']}", d["express"]))
+            unit.append((d["usd"], f"{lab} ×1: {d['label']}", d["express"], d["free"]))
         elif qty == n:
-            sale.append((d["usd"], f"{lab} ×{qty}: {d['label']}", d["express"]))
+            sale.append((d["usd"], f"{lab} ×{qty}: {d['label']}", d["express"], d["free"]))
         else:
             continue
         n_cache += 1
@@ -408,25 +414,28 @@ def freight(p: dict, e: dict, ctx: Ctx, n: int) -> dict:
         ests = []
         tx = _est_from_text(p.get("notes") or "")
         if tx is not None:
-            ests.append((tx, "הערות הכרטיס (הערכה)", False))
+            ests.append((tx, "הערות הכרטיס (הערכה)", False, tx == 0.0))
         pr = ctx.pricing.get(pid) or {}
         if isnum(pr.get("ship_usd_per_unit_used")):
-            ests.append((float(pr["ship_usd_per_unit_used"]), f"קובץ התמחור: {str(pr.get('ship_src_used') or '')[:80]} (הערכה)", False))
+            ests.append((float(pr["ship_usd_per_unit_used"]), f"קובץ התמחור: {str(pr.get('ship_src_used') or '')[:80]} (הערכה)", False, False))
         rec = (p.get("_lead_rec") or {}).get("rec") or {}
         if isnum(rec.get("ship_usd")) and rec["ship_usd"] >= 0:
             rq = next((int(rec[k]) for k in ("qty_in_sale", "qty") if isnum(rec.get(k)) and rec[k] >= 1), 1)
             src = f"הליקוט האחרון {p['_lead_rec'].get('file')} (ל-{rq} יח', הערכה)"
+            exp = is_express(f"{rec.get('why_he') or ''} {rec.get('price_basis_he') or ''}") and "To Door" in f"{rec.get('why_he')}{rec.get('price_basis_he')}"
             if rq == 1:
-                ests.append((float(rec["ship_usd"]), src, False))
+                ests.append((float(rec["ship_usd"]), src, exp, False))
             elif rq == n:
-                sale.append((float(rec["ship_usd"]), src, False))
+                sale.append((float(rec["ship_usd"]), src, exp, False))
         if ests:
             unit.append(max(ests, key=lambda x: x[0]))
             notes.append("משלוח מוערך: " + "; ".join(f"${x[0]:g} {x[1]}" for x in ests))
         if ests or sale:
             estimated = True
             flags.append("freight-estimated")
-    out = {"no_route": False, "flags": flags, "notes": notes, "estimated": estimated, "methods": {}}
+    out = {"no_route": False, "flags": flags, "notes": notes, "estimated": estimated,
+           "all_quotes": [{"usd": round(x[0], 4), "src": x[1], "express": x[2], "for_units": 1} for x in unit]
+                         + [{"usd": round(x[0], 4), "src": x[1], "express": x[2], "for_units": n} for x in sale]}
     # an express quote counts only when no standard quote exists (the express line is then the only method)
     std_u, std_s = [x for x in unit if not x[2]], [x for x in sale if not x[2]]
     express_only = not std_u and not std_s and bool(unit or sale)
@@ -435,7 +444,6 @@ def freight(p: dict, e: dict, ctx: Ctx, n: int) -> dict:
     u = max(unit, key=lambda x: x[0]) if unit else None
     sq = max(sale, key=lambda x: x[0]) if sale else None
     if u is None and sq is None:
-        out["methods"]["economy"] = None
         out["missing"] = True
         out["flags"].append("freight-missing")
         return out
@@ -443,20 +451,21 @@ def freight(p: dict, e: dict, ctx: Ctx, n: int) -> dict:
         sale_usd, sale_src, sale_est = u[0], u[1], False
     elif sq is not None:
         sale_usd, sale_src, sale_est = max(sq[0], u[0] if u else 0.0), sq[1], False
-    else:  # the Studio's combined parcel for n pieces (no data says this supplier splits the shipment)
-        sale_usd, sale_src, sale_est = ship_for_qty(u[0], n), f"{u[1]}, ל-{n} יח' בחבילה אחת (יחידה + (n−1) × (יחידה − $3.72))", True
+    else:  # the Studio's combined parcel for n pieces (correction rule 2)
+        sale_usd, sale_src, sale_est = ship_for_qty(u[0], n), f"{u[1]}, ל-{n} יח' בחבילה משולבת (יחידה + (n−1) × max(0, יחידה − $3.72))", True
     if u is not None:
         single_usd, single_src, single_est = u[0], u[1], False
     else:  # only a quote for the whole set: one piece by the same formula, inverted
         single_usd, single_src, single_est = inv_ship_for_qty(sq[0], n), sq[1] + " (ליחידה לפי נוסחת החבילה)", True
-    out["methods"]["economy"] = {"unit_usd": u[0] if u else None, "unit_src": u[1] if u else None,
-                                 "sale_usd": round(sale_usd, 4), "sale_src": sale_src, "sale_estimated": sale_est,
-                                 "single_usd": round(single_usd, 4), "single_src": single_src, "single_estimated": single_est,
-                                 "all_unit": unit, "all_sale": sale}
+    bound = u or sq
+    out["method"] = {"label": bound[1], "express": bound[2], "free": bound[3],
+                     "unit_usd": round(u[0], 4) if u else None, "unit_src": u[1] if u else None,
+                     "sale_usd": round(sale_usd, 4), "sale_src": sale_src, "sale_estimated": sale_est,
+                     "single_usd": round(single_usd, 4), "single_src": single_src, "single_estimated": single_est}
     out["express_only"] = express_only
     if express_only:
         out["flags"].append("express-only")
-        notes.append("לספק אין במוצר הזה שיטה רגילה: המשלוח היחיד הוא אקספרס (" + (u or sq)[1] + ")")
+        notes.append("לספק אין במוצר הזה שיטה רגילה: המשלוח היחיד הוא אקספרס (" + bound[1] + (", חינם" if bound[3] else "") + ")")
     if n > 1 and sale_est:
         out["flags"].append("qty-freight-estimated")
     return out
@@ -523,8 +532,12 @@ def _sku_cost(card_unit: float, default_sku: float, sku: float) -> float:
     return max(0.0, card_unit + (sku - default_sku))
 
 
+ROOM_SKU_HE = "המק\"ט שבחדר"
+
+
 def product_scenarios(p: dict, e: dict, ctx: Ctx, n_override: int | None = None) -> dict:
-    """Inputs and scenarios of one product. Each scenario: {id, kind, method, label_he, landed_ils, price(P) -> ILS}."""
+    """Inputs and scenarios of one product. Each scenario: {id, kind, quantity, variant, variant_sku, method, label_he,
+    landed_ils, freight_usd, freight_src, estimated, price(P) -> the price it is sold at when the product is priced P}."""
     s = ctx.s
     fx = s["usd_ils"]
     pid = p["id"]
@@ -535,48 +548,48 @@ def product_scenarios(p: dict, e: dict, ctx: Ctx, n_override: int | None = None)
     if not (isnum(sq) and sq >= 1) and n > 1 and "לפי עלות הנחיתה" in str((p.get("_sell_qty") or {}).get("reason") or ""):
         # the Studio read the units of the sale off the record's landed cost (studio/build.py lead_qty), not off a qty field
         flags.append("qty-inferred-from-landed")
+    studio_n = n
+    if pid in UNIT_OVERRIDES and n_override is None:
+        n, why = UNIT_OVERRIDES[pid]
+        flags.append("unit-override")
+        notes.append(f"כמות המכירה נקבעה ל-{n} (הסטודיו: {studio_n}): {why}")
     if n_override:
         n = n_override
     cur = str(pr.get("currency") or "USD").upper()
     sale_cost = e.get("sale_cost_usd") if isnum(e.get("sale_cost_usd")) and e["sale_cost_usd"] > 0 else None
     if cur != "USD" and sale_cost is None:
-        return {"n": n, "missing": f"עלות במטבע {cur}, לא בדולר", "flags": ["cost-not-usd"], "scenarios": []}
+        return {"n": n, "studio_n": studio_n, "missing": f"עלות במטבע {cur}, לא בדולר", "flags": ["cost-not-usd"], "scenarios": []}
     unit_cost = sale_cost / n if sale_cost is not None else pr.get("cost")
     if not isnum(unit_cost):
-        return {"n": n, "missing": "אין עלות", "flags": ["cost-missing"], "scenarios": []}
+        return {"n": n, "studio_n": studio_n, "missing": "אין עלות", "flags": ["cost-missing"], "scenarios": []}
     unit_cost = float(unit_cost)
-    costs = [("cost", unit_cost, "עלות המכירה מקובץ התמחור" if e.get("sale_cost_src") == "pricing" else
-              "עלות המכירה מהליקוט" if e.get("sale_cost_src") == "leads" else "עלות הכרטיס")]
+    cost_src = ("עלות המכירה מקובץ התמחור" if e.get("sale_cost_src") == "pricing" else
+                "עלות המכירה מהליקוט" if e.get("sale_cost_src") == "leads" else "עלות הכרטיס")
     if e.get("sale_cost_src") == "leads":
-        # the whole sale's cost comes from the final round's record, and the Studio keeps it only while the price is the
-        # record's (card_economics): a raised price goes to a products.json row that carries sale_cost_usd (apply())
         flags.append("sale-cost-from-leads")
+    row = ctx.rows.get(pid) or {}
+    if isnum(row.get("price_for_qty")) and int(row["price_for_qty"]) != n:
+        flags.append("price-qty-mismatch")
+        notes.append(f"המחיר בקובץ התמחור הוא ל-{int(row['price_for_qty'])} יח', והמכירה כאן היא {n} יח'")
     fr = freight(p, e, ctx, n)
     flags += fr["flags"]
     notes += fr["notes"]
     if fr.get("no_route"):
-        return {"n": n, "missing": "הספק לא שולח לישראל", "flags": flags, "notes": notes, "scenarios": []}
+        return {"n": n, "studio_n": studio_n, "missing": "הספק לא שולח לישראל", "flags": flags, "notes": notes, "scenarios": []}
     if fr.get("missing"):
-        return {"n": n, "missing": "אין משלוח ואין הערכה", "flags": flags, "notes": notes, "scenarios": []}
-    unit_retail = (ctx.rows.get(pid) or {}).get("unit_retail_ils")
+        return {"n": n, "studio_n": studio_n, "missing": "אין משלוח ואין הערכה", "flags": flags, "notes": notes, "scenarios": []}
+    fm = fr["method"]
+    unit_retail = row.get("unit_retail_ils")
     unit_retail = unit_retail if isnum(unit_retail) and unit_retail > 0 else None
-    scen = []
-    for m in ("economy", "fast"):
-        fm = fr["methods"].get(m)
-        if not fm:
-            continue
-        mh = "חסכוני" if m == "economy" else "מהיר (עד 20 יום)"
-        for ck, c, ch in costs:
-            scen.append({"id": f"sale/{m}" + ("" if ck == "cost" else f"/{ck}"), "kind": "sale", "method": m,
-                         "label_he": f"המכירה ({n} יח'), משלוח {mh}" + ("" if ck == "cost" else f", {ch}"),
-                         "landed_ils": (c * n + fm["sale_usd"]) * fx, "freight_usd": fm["sale_usd"],
-                         "freight_src": fm["sale_src"], "estimated": fm["sale_estimated"], "price": lambda P: P})
-            if n > 1:
-                up = (lambda P, n=n: unit_retail) if unit_retail else (lambda P, n=n: unit_price_estimate(P, n))
-                scen.append({"id": f"single/{m}" + ("" if ck == "cost" else f"/{ck}"), "kind": "single", "method": m,
-                             "label_he": f"יחידה אחת מהסט, משלוח {mh}" + ("" if unit_retail else " (מחיר היחידה: ההערכה של האתר)"),
-                             "landed_ils": (c + fm["single_usd"]) * fx, "freight_usd": fm["single_usd"],
-                             "freight_src": fm["single_src"], "estimated": fm["single_estimated"], "price": up})
+    scen = [{"id": "sale", "kind": "sale", "quantity": n, "variant": ROOM_SKU_HE, "variant_sku": None, "method": fm["label"],
+             "label_he": f"המכירה ({n} יח'), {ROOM_SKU_HE}", "landed_ils": (unit_cost * n + fm["sale_usd"]) * fx,
+             "freight_usd": fm["sale_usd"], "freight_src": fm["sale_src"], "estimated": fm["sale_estimated"], "price": lambda P: P}]
+    if n > 1:
+        up = (lambda P, n=n: unit_retail) if unit_retail else (lambda P, n=n: unit_price_estimate(P, n))
+        scen.append({"id": "single", "kind": "single", "quantity": 1, "variant": ROOM_SKU_HE, "variant_sku": None, "method": fm["label"],
+                     "label_he": "יחידה אחת מהסט" + ("" if unit_retail else " (מחיר היחידה: ההערכה של האתר)"),
+                     "landed_ils": (unit_cost + fm["single_usd"]) * fx, "freight_usd": fm["single_usd"],
+                     "freight_src": fm["single_src"], "estimated": fm["single_estimated"], "price": up})
     # the other supplier options, at the price the site gives them (skuRetail with the Studio's price)
     o = p.get("options") if isinstance(p.get("options"), dict) else None
     n_var = 0
@@ -585,13 +598,19 @@ def product_scenarios(p: dict, e: dict, ctx: Ctx, n_override: int | None = None)
         # options are the set's parts, not variants of the sale, so they are not priced as the sale
         flags.append("options-are-set-parts")
         o = None
+    elif o and sale_cost is not None:
+        # the sale's cost is not the room SKU's (a shade with its suspension set, a pitcher with its jar): the site prices
+        # each option on that sale cost moved by the SKU difference (skuCostCents), and so does this; check that the
+        # options are variants of the sale and not its parts
+        flags.append("options-with-sale-cost")
+        notes.append("עלות המכירה אינה עלות המק\"ט שבחדר: מחיר האפשרויות חושב על עלות המכירה כמו באתר; לבדוק שהאפשרויות הן וריאנטים ולא חלקי הסט")
     if o and cur == "USD":
         skus = [x for x in o.get("skus") or [] if isinstance(x, dict)]
         dflt = next((x for x in skus if x.get("id") == o.get("default_sku")), None)
         dprice = ((dflt or {}).get("price") or {})
         if dflt and str(dprice.get("currency") or "").upper() == "USD" and isnum(dprice.get("amount")):
             dq = (dflt.get("shipping_il") or {})
-            eco_unit = (fr["methods"].get("economy") or fr["methods"].get("fast"))["single_usd"]
+            eco_unit = fm["single_usd"]
             rec_d = recommended((unit_cost + eco_unit) * n * fx, s)
             ae = _ae_item((p.get("supplier") or {}).get("product_url") or "")
             cache = source_quotes("aliexpress", ae) if ae else {}
@@ -610,7 +629,7 @@ def product_scenarios(p: dict, e: dict, ctx: Ctx, n_override: int | None = None)
                     delta = float(xq["amount"]) - float(dq["amount"])
                 site_unit = max(0.0, eco_unit + delta)
                 rec_x = recommended((xc + site_unit) * n * fx, s)
-                ov = (((ctx.rows.get(pid) or {}).get("sku_retail_ils")) or {}).get(str(x.get("id")))
+                ov = (row.get("sku_retail_ils") or {}).get(str(x.get("id")))
                 if isnum(ov) and ov > 0:
                     xprice = (lambda P, v=ov: v)
                 elif rec_x is None or rec_d is None:
@@ -618,37 +637,30 @@ def product_scenarios(p: dict, e: dict, ctx: Ctx, n_override: int | None = None)
                 else:
                     xprice = (lambda P, rx=rec_x, rd=rec_d: (P + (rx - rd)) if P + (rx - rd) > 0 else rx)
                 n_var += 1
-                own = {}
+                # the SKU's own quote in the cache, by the default method (its worst case against the room SKU's moved quote)
+                own = None
                 for (sku, qty), opts in cache.items():
                     if sku == str(x.get("id")) and qty == 1:
-                        own = _methods(opts)
+                        own = default_quote(opts)
                 lab = ", ".join(f"{k}={v}" for k, v in (x.get("values") or {}).items())[:80]
-                for m in ("economy", "fast"):
-                    fm = fr["methods"].get(m)
-                    if not fm:
-                        continue
-                    # the room SKU's (worst-case) freight moved by the SKU's own difference, never below the SKU's own quote
-                    u = max(0.0, fm["single_usd"] + delta)
-                    sale_usd = max(0.0, fm["sale_usd"] + n * delta)
-                    if own.get(m):
-                        u = max(u, own[m][0])
-                        sale_usd = max(sale_usd, n * own[m][0])
-                    mh = "חסכוני" if m == "economy" else "מהיר"
-                    scen.append({"id": f"variant/{x.get('id')}/{m}", "kind": "variant", "method": m, "sku": x.get("id"),
-                                 "label_he": f"אפשרות {lab}, משלוח {mh} (מחיר האפשרות לפי האתר)",
-                                 "landed_ils": (xc * n + sale_usd) * fx, "freight_usd": sale_usd,
-                                 "freight_src": "ההפרש של המק\"ט + " + str(fm["single_src"]), "estimated": n > 1 or not own.get(m),
-                                 "price": xprice})
-                    if n > 1:
-                        scen.append({"id": f"variant-single/{x.get('id')}/{m}", "kind": "variant-single", "method": m,
-                                     "sku": x.get("id"), "label_he": f"יחידה אחת, אפשרות {lab}, משלוח {mh}",
-                                     "landed_ils": (xc + u) * fx, "freight_usd": u, "freight_src": "ההפרש של המק\"ט",
-                                     "estimated": True,
-                                     "price": (lambda P, f=xprice, n=n: unit_price_estimate(f(P), n))})
-    # what the Studio itself shows (its own freight: the manual figure or the method's quote, shipForQty for n units)
-    studio = studio_shown(p, e, ctx, n, unit_cost)
-    return {"n": n, "unit_cost_usd": unit_cost, "costs": costs, "freight": fr, "scenarios": scen, "flags": sorted(set(flags)),
-            "notes": notes, "variants": n_var, "studio": studio, "unit_retail_ils": unit_retail}
+                u = max(0.0, fm["single_usd"] + delta)
+                sale_usd = max(0.0, fm["sale_usd"] + n * delta)
+                if own and not own["express"]:
+                    u = max(u, own["usd"])
+                    sale_usd = max(sale_usd, ship_for_qty(own["usd"], n))
+                scen.append({"id": f"variant/{x.get('id')}", "kind": "variant", "quantity": n, "variant": lab, "variant_sku": x.get("id"),
+                             "method": fm["label"], "label_he": f"אפשרות {lab} ({n} יח'; מחיר האפשרות לפי האתר)",
+                             "landed_ils": (xc * n + sale_usd) * fx, "freight_usd": sale_usd,
+                             "freight_src": "ההפרש של המק\"ט + " + str(fm["single_src"]), "estimated": n > 1 or not own,
+                             "price": xprice})
+                if n > 1:
+                    scen.append({"id": f"variant-single/{x.get('id')}", "kind": "variant-single", "quantity": 1, "variant": lab,
+                                 "variant_sku": x.get("id"), "method": fm["label"], "label_he": f"יחידה אחת, אפשרות {lab}",
+                                 "landed_ils": (xc + u) * fx, "freight_usd": u, "freight_src": "ההפרש של המק\"ט", "estimated": True,
+                                 "price": (lambda P, f=xprice, n=n: unit_price_estimate(f(P), n))})
+    studio = studio_shown(p, e, ctx, studio_n, unit_cost if sale_cost is None else sale_cost / studio_n)
+    return {"n": n, "studio_n": studio_n, "unit_cost_usd": unit_cost, "cost_src": cost_src, "freight": fr, "scenarios": scen,
+            "flags": sorted(set(flags)), "notes": notes, "variants": n_var, "studio": studio, "unit_retail_ils": unit_retail}
 
 
 def studio_shown(p: dict, e: dict, ctx: Ctx, n: int, unit_cost: float) -> dict | None:
@@ -664,7 +676,7 @@ def studio_shown(p: dict, e: dict, ctx: Ctx, n: int, unit_cost: float) -> dict |
     else:
         return None
     tot = usd if qfs else (ship_for_qty(usd, n) if n > 1 else usd)
-    return {"freight_usd": round(tot, 4), "src": src, "landed_ils": (unit_cost * n + tot) * ctx.s["usd_ils"]}
+    return {"units": n, "freight_usd": round(tot, 4), "src": src, "landed_ils": (unit_cost * n + tot) * ctx.s["usd_ils"]}
 
 
 def worst_case(P: float, scen: list[dict], s: dict) -> tuple[float, dict | None, float | None]:
@@ -678,17 +690,16 @@ def worst_case(P: float, scen: list[dict], s: dict) -> tuple[float, dict | None,
     return best
 
 
-def _pick(scen, kinds=None, methods=None):
-    return [x for x in scen if (kinds is None or x["kind"] in kinds) and (methods is None or x["method"] in methods)]
+def _pick(scen, kinds=None):
+    return [x for x in scen if kinds is None or x["kind"] in kinds]
 
 
-def no_loss_price(P0: float | None, scen: list[dict], s: dict, kinds: set | None = None, methods: set | None = None) -> int | None:
+def no_loss_price(P0: float | None, scen: list[dict], s: dict, kinds: set | None = None) -> int | None:
     """The lowest price >= P0 (never lower) on the ...9 endings with a contribution >= 0 in every scenario."""
-    sc = _pick(scen, kinds, methods)
+    sc = _pick(scen, kinds)
     if not sc:
         return None
-    P = P0 if (P0 and worst_case(P0, sc, s)[0] >= -EPS) else None
-    if P is not None:
+    if P0 and worst_case(P0, sc, s)[0] >= -EPS:
         return P0
     P = charm_up((P0 or 9) + (1 if P0 else 0))
     while P < 1_000_000:
@@ -698,9 +709,9 @@ def no_loss_price(P0: float | None, scen: list[dict], s: dict, kinds: set | None
     return None
 
 
-def break_even_price(scen: list[dict], s: dict, kinds: set | None = None, methods: set | None = None) -> float | None:
+def break_even_price(scen: list[dict], s: dict, kinds: set | None = None) -> float | None:
     """The (continuous) product price at which the worst scenario breaks even."""
-    sc = _pick(scen, kinds, methods)
+    sc = _pick(scen, kinds)
     if not sc:
         return None
     lo, hi = 0.0, 1.0
@@ -717,14 +728,24 @@ def break_even_price(scen: list[dict], s: dict, kinds: set | None = None, method
 
 # --------------------------------------------------------------------------- scope
 
+def _coverage_module():
+    spec = importlib.util.spec_from_file_location("final_round_coverage_for_no_loss", COVERAGE_PY)
+    m = importlib.util.module_from_spec(spec)
+    cwd = os.getcwd()
+    try:
+        spec.loader.exec_module(m)  # it moves to the repo root; restored below
+    finally:
+        os.chdir(cwd)
+    return m
+
+
 def coverage_counted() -> dict:
     """card id -> [(slot, style)] the coverage script counts (final_round_coverage.py results() + the packs' picks)."""
     cwd = os.getcwd()
     out: dict = {}
     try:
-        spec = importlib.util.spec_from_file_location("final_round_coverage_for_no_loss", COVERAGE_PY)
-        m = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(m)  # it moves to the repo root; restored below
+        m = _coverage_module()
+        os.chdir(ROOT)
         with contextlib.redirect_stderr(io.StringIO()):
             cards, _il, _q = m.results()
         for st, by_slot in cards.items():
@@ -744,6 +765,13 @@ def coverage_counted() -> dict:
 
 # --------------------------------------------------------------------------- audit
 
+def _scen_out(x: dict, R: float, c: float, s: dict) -> dict:
+    return {"scenario": x["id"], "kind": x["kind"], "label_he": x["label_he"], "method": x["method"], "quantity": x["quantity"],
+            "variant": x["variant"], "variant_sku": x.get("variant_sku"), "sold_at_ils": R, "landed_ils": round(x["landed_ils"], 2),
+            "freight_usd": round(x["freight_usd"], 4), "freight_src": x["freight_src"], "freight_estimated": x["estimated"],
+            "contribution_ils": round(c, 2), "margin_pct": round(100 * (margin(R, x["landed_ils"], s) or 0), 1)}
+
+
 def audit(eco_dir: Path = ECO, db: Path | None = None, ctx: Ctx | None = None) -> dict:
     ctx = ctx or Ctx(eco_dir, db)
     s = ctx.s
@@ -760,7 +788,8 @@ def audit(eco_dir: Path = ECO, db: Path | None = None, ctx: Ctx | None = None) -
         scope = [k for k, ok in (("products.json", pid in ctx.rows), ("coverage", pid in counted),
                                  ("studio-price", p is not None and "retail_ils" in ctx.E.get(pid, {}))) if ok]
         if p is None:
-            rows.append({"id": pid, "scope": scope, "status": "no-card", "missing": "אין כרטיס במוצרים"})
+            rows.append({"id": pid, "scope": scope, "status": "no-card", "flag": "cannot-compute", "missing": "אין כרטיס במוצרים",
+                         "current_price_ils": (ctx.rows.get(pid) or {}).get("retail_ils")})
             continue
         e = ctx.E.get(pid, {})
         src = price_source(p, e, ctx)
@@ -769,245 +798,106 @@ def audit(eco_dir: Path = ECO, db: Path | None = None, ctx: Ctx | None = None) -
         sc = product_scenarios(p, e, ctx)
         r = {"id": pid, "card": p["_path"], "slot": p.get("_slot_key"), "scope": scope,
              "counted_in": sorted({f"{a}:{b}" for a, b in counted.get(pid, [])}),
-             "price_source": {k: v for k, v in src.items() if k != "retail_ils"}, "price_ils": P0, "sale_units": sc["n"],
-             "flags": sc.get("flags", []), "notes": sc.get("notes", [])}
+             "price_source": {k: v for k, v in src.items() if k != "retail_ils"}, "current_price_ils": P0,
+             "sale_units": sc["n"], "studio_units": sc.get("studio_n"), "flags": sc.get("flags", []), "notes": sc.get("notes", [])}
         if not sc["scenarios"]:
-            r.update(status="cannot-compute", missing=sc.get("missing"))
+            r.update(status="cannot-compute", flag="cannot-compute", missing=sc.get("missing"))
             rows.append(r)
             continue
         scen = sc["scenarios"]
-        sale_kinds = {"sale"}
-        P_sale = no_loss_price(P0, scen, s, sale_kinds)
-        P_single = no_loss_price(P0, scen, s, {"sale", "single"})
+        fr = sc["freight"]
+        express_only = bool(fr.get("express_only"))
         P_all = no_loss_price(P0, scen, s)
-        P_eco = no_loss_price(P0, scen, s, methods={"economy"})
-        P_eco_sale = no_loss_price(P0, scen, s, kinds=sale_kinds, methods={"economy"})
+        P_floor = no_loss_price(None, scen, s)   # the lowest no-loss price regardless of the current one
+        P_room = no_loss_price(P0, scen, s, {"sale"})
+        P_room_single = no_loss_price(P0, scen, s, {"sale", "single"})
         w0 = worst_case(P0, scen, s) if P0 else (None, None, None)
         be = break_even_price(scen, s)
         hc, hc_src = highest_comp(p, e, ctx, sc["n"])
-        if "qty-inferred-from-landed" in sc.get("flags", []):
+        owner = src["kind"] == "owner"
+        loses = P0 is not None and w0[0] < -EPS
+        # the proposed price (rule 5): max(current, no-loss); never for the owner's price; express-only is listed, not raised
+        if express_only:
+            proposed, status = P0, "express-only"   # listed separately (rule 1), with or without a price
+        elif P0 is None:
+            proposed, status = P_all, "no-price"
+        elif owner:
+            proposed, status = P0, ("owner-set-loses" if loses else "ok")
+        elif loses:
+            proposed, status = P_all, "raise"
+        else:
+            proposed, status = P0, "ok"
+        r.update({
+            "unit_cost_usd": round(sc["unit_cost_usd"], 4), "cost_src": sc["cost_src"], "variants_checked": sc["variants"],
+            "scenarios": len(scen),
+            "freight": {"method": fr["method"]["label"], "express_only": express_only, "free": fr["method"]["free"],
+                        "unit_usd": fr["method"]["unit_usd"], "unit_src": fr["method"]["unit_src"],
+                        "sale_usd": fr["method"]["sale_usd"], "sale_src": fr["method"]["sale_src"], "sale_estimated": fr["method"]["sale_estimated"],
+                        "single_usd": fr["method"]["single_usd"], "all_quotes": fr["all_quotes"]},
+            "worst_at_current": None if w0[1] is None else _scen_out(w0[1], w0[2], w0[0], s),
+            "break_even_ils": be, "no_loss_ils": P_all, "no_loss_floor_ils": P_floor, "no_loss_room_sku_ils": P_room,
+            "no_loss_room_sku_with_single_ils": P_room_single,
+            "proposed_price_ils": proposed, "raised": bool(P0 and proposed and proposed > P0),
+            "raise_ratio": round(proposed / P0, 3) if (P0 and proposed) else None,
+            "highest_comp_ils": round(hc, 2) if hc else None, "highest_comp_src": hc_src,
+            "status": status,
+        })
+        if proposed:
+            wp = worst_case(proposed, scen, s)
+            sale_sc = scen[0]
+            r["at_proposed"] = {"sale_contribution_ils": round(contribution(proposed, sale_sc["landed_ils"], s), 2),
+                                "sale_margin_pct": round(100 * (margin(proposed, sale_sc["landed_ils"], s) or 0), 1),
+                                "worst": _scen_out(wp[1], wp[2], wp[0], s)}
+            r["ratio_to_highest_comp"] = round(proposed / hc, 2) if hc else None
+        # the flag of the brief: ok (40%+) / below-floor (0-40%) / above-market (the no-loss price is above the highest comp)
+        if status in ("ok", "raise"):
+            forced_above = bool(hc and P_floor and P_floor > hc)   # the rule forces a price above the market
+            m_sale = r["at_proposed"]["sale_margin_pct"]
+            if forced_above:
+                r["flag"] = "above-market"
+            else:
+                r["flag"] = "ok" if m_sale >= s["target_margin_pct"] - 1e-6 else "below-floor"
+            r["flag_detail"] = {"sale_margin_pct": m_sale, "worst_margin_pct": r["at_proposed"]["worst"]["margin_pct"],
+                                "highest_comp_ils": r["highest_comp_ils"], "ratio_to_highest_comp": r.get("ratio_to_highest_comp"),
+                                "current_above_highest_comp": bool(hc and P0 and P0 > hc and not forced_above)}
+        elif status == "express-only":
+            r["flag"] = "express-only"
+            r["express"] = {"method": fr["method"]["label"], "freight_usd": fr["method"]["sale_usd"], "free": fr["method"]["free"],
+                            "loses_at_current": loses, "no_loss_at_express_ils": P_all, "ratio_to_highest_comp": round(P_all / hc, 2) if (P_all and hc) else None,
+                            "note_he": "אין לספק שיטה רגילה למוצר הזה; המחיר שלא מפסיד כאן מחושב במשלוח האקספרס היחיד. להחלטת המנהל: להציע עם עלות משלוח "
+                                       "בנפרד, לסמן 'המלאי אינו זמין כעת', או לחפש רישום אחר"}
+        elif status == "owner-set-loses":
+            r["flag"] = "owner-set"
+            r["owner_set"] = {"where": src["where"], "price_ils": P0, "no_loss_ils": P_all, "break_even_ils": be,
+                              "flag_if_raised": "above-market" if (hc and P_all and P_all > hc) else
+                              ("ok" if r["at_proposed"] and margin(P_all, scen[0]["landed_ils"], s) * 100 >= s["target_margin_pct"] else "below-floor"),
+                              "ratio_to_highest_comp_if_raised": round(P_all / hc, 2) if (P_all and hc) else None,
+                              "note_he": "מחיר שהמשתמש קבע בסטודיו: לא משתנה; מדווח (NL1)"}
+        elif status == "no-price":
+            r["flag"] = "no-price"
+        st = sc.get("studio")
+        r["studio_shown"] = None
+        if st and P0:
+            r["studio_shown"] = {"units": st["units"], "contribution_ils": round(contribution(P0, st["landed_ils"], s), 2),
+                                 "margin_pct": round(100 * margin(P0, st["landed_ils"], s), 1), "freight_usd": st["freight_usd"],
+                                 "src": st["src"], "landed_ils": round(st["landed_ils"], 2)}
+            if r["studio_shown"]["contribution_ils"] < -0.005 and status == "ok":
+                # the Studio's own card (its `cheapest` quote, shipForQty) shows a loss where the default method does not
+                r["flags"] = sorted(set(r["flags"]) | {"studio-shows-loss"})
+                r["notes"].append(f"הסטודיו עצמו מציג הפסד במחיר הנוכחי (₪{r['studio_shown']['contribution_ils']:g}, משלוח ${st['freight_usd']:g} "
+                                  f"מ-{st['src']}), אבל בשיטת ברירת המחדל של הדוח אין הפסד")
+            rm = (ctx.rows.get(pid) or {}).get("margin_pct")
+            if isnum(rm) and abs(rm - r["studio_shown"]["margin_pct"]) > 1.0:
+                # the pricing team's margin in products.json was computed on other inputs (another price, SKU or quantity)
+                r["flags"] = sorted(set(r["flags"]) | {"row-margin-differs"})
+                r["notes"].append(f"margin_pct בקובץ התמחור ({rm:g}%) שונה מקריאת הסטודיו במחיר הנוכחי ({r['studio_shown']['margin_pct']:g}%): "
+                                  "חושב על מחיר, מק\"ט או כמות אחרים")
+        if "qty-inferred-from-landed" in r["flags"] and sc["n"] > 1:
             one = product_scenarios(p, e, ctx, n_override=1)
             r["if_one_unit"] = {"no_loss_ils": no_loss_price(None, one["scenarios"], s) if one["scenarios"] else None,
                                 "note_he": f"הסטודיו מניח {sc['n']} יח' לפי עלות הנחיתה ברשומה; אם המכירה היא יחידה אחת, זה המחיר שלא מפסיד"}
-        r.update({
-            "unit_cost_usd": round(sc["unit_cost_usd"], 4), "variants_checked": sc["variants"],
-            "scenarios": len(scen), "freight": {m: ({k: v for k, v in (sc["freight"]["methods"].get(m) or {}).items()
-                                                      if k in ("unit_usd", "unit_src", "sale_usd", "sale_src", "sale_estimated", "single_usd", "single_estimated")}
-                                                     if sc["freight"]["methods"].get(m) else None) for m in ("economy", "fast")},
-            "studio_shown": None,
-            "worst_at_price": None if w0[1] is None else {"contribution_ils": round(w0[0], 2), "scenario": w0[1]["id"],
-                                                          "label_he": w0[1]["label_he"], "sold_at_ils": w0[2],
-                                                          "landed_ils": round(w0[1]["landed_ils"], 2), "freight_src": w0[1]["freight_src"]},
-            "break_even_ils": be, "no_loss_ils": P_all, "no_loss_sale_only_ils": P_sale, "no_loss_with_single_ils": P_single,
-            "no_loss_economy_only_ils": P_eco, "no_loss_economy_sale_ils": P_eco_sale,
-            "highest_comp_ils": round(hc, 2) if hc else None, "highest_comp_src": hc_src,
-        })
-        st = sc.get("studio")
-        if st and P0:
-            r["studio_shown"] = {"contribution_ils": round(contribution(P0, st["landed_ils"], s), 2),
-                                 "margin_pct": round(100 * margin(P0, st["landed_ils"], s), 1), "freight_usd": st["freight_usd"],
-                                 "src": st["src"], "landed_ils": round(st["landed_ils"], 2),
-                                 "contribution_with_fee_ils": round(contribution(P0 + 29, st["landed_ils"], s), 2) if P0 < 299 else None}
-        if P0 is None:
-            r["status"] = "no-price"
-        elif w0[0] >= -EPS:
-            r["status"] = "ok"
-        elif src["kind"] == "owner":
-            r["status"] = "owner-set-loses"
-        else:
-            r["status"] = "raise"
         rows.append(r)
-    return {"settings": s, "rows": rows, "ctx": ctx}
-
-
-def floor_flag(m: float | None, s: dict) -> str:
-    return "ok" if m is not None and m >= s["target_margin_pct"] / 100 - EPS else "below-floor"
-
-
-# --------------------------------------------------------------------------- apply
-
-def _dump(path: Path, data) -> None:
-    """Write JSON in the file's own format (indent, trailing newline), validated before it is written."""
-    indent, nl = 1, "\n"
-    if path.exists():
-        old = path.read_text(encoding="utf-8")
-        m = re.match(r"[{\[]\n( +)", old)
-        indent = len(m.group(1)) if m else 1
-        nl = "\n" if old.endswith("\n") else ""
-    txt = json.dumps(data, ensure_ascii=False, indent=indent) + nl
-    json.loads(txt)  # valid JSON before it is written
-    path.write_text(txt, encoding="utf-8")
-
-
-def _record_il_value(p: dict, date: str) -> dict | None:
-    """The final round's comparables of a card as products.json il_value (retailer, title, price, url)."""
-    lr = p.get("_lead_rec") or {}
-    comps = []
-    for c in (lr.get("rec") or {}).get("comps") or []:
-        if not isinstance(c, dict):
-            continue
-        price = next((c[k] for k in ("price_ils", "price") if isnum(c.get(k))), None)
-        title = str(c.get("title") or c.get("name") or c.get("shop_title") or "")
-        retailer = str(c.get("retailer") or (title.split(" – ")[0].split(" - ")[0].split(",")[0] if title else ""))[:80]
-        comps.append({"retailer": retailer, "title": title[:200], "price": price, "url": c.get("url")})
-    if not comps:
-        return None
-    return {"comps": comps, "note": f"ההשוואות מהליקוט האחרון ({lr.get('file')}), ליחידה; הועתקו ב-{date} (אין מוצר מפסיד)"}
-
-
-def apply(res: dict, date: str) -> dict:
-    """Raise every losing price to its no-loss price in its source of truth:
-      products.json row   -> its retail_ils (the old one kept as retail_before_no_loss_ils, retail_src initial-no-loss-<date>)
-      the card's own price -> that field (price.retail_ils or price.suggested_retail)
-      the final round's record -> a price.retail_ils on the card, which the Studio reads before the record
-                              (studio/build.py card_economics); the results file is left as it is
-      a record whose sale cost is not N x the card's (a mixed set) -> a products.json row with that sale_cost_usd, so the
-                              Studio keeps the whole sale's cost (it drops the record's cost once the price differs)
-    A price the owner set is never changed; it is listed."""
-    ctx: Ctx = res["ctx"]
-    pj_path = ctx.eco_dir / "products.json"
-    pj = json.loads(pj_path.read_text(encoding="utf-8"))
-    rows = pj["products"]
-    changes, owner, cannot = [], [], []
-    card_edits: dict[str, dict] = {}
-    for r in res["rows"]:
-        st = r.get("status")
-        if st == "owner-set-loses":
-            owner.append(r)
-            continue
-        if st in ("cannot-compute", "no-card"):
-            cannot.append(r)
-            continue
-        if st != "raise":
-            continue
-        new, old = r["no_loss_ils"], r["price_ils"]
-        if new is None or not new > old:
-            continue
-        src = r["price_source"]
-        w = r["worst_at_price"]
-        p = ctx.by_id[r["id"]]
-        e = ctx.E.get(r["id"], {})
-        kind = src["kind"]
-        if kind == "leads" and "sale-cost-from-leads" in r["flags"]:
-            target, fld = "products.json (שורה חדשה)", f"products.{r['id']}"
-        elif kind == "leads":
-            target, fld = src["card"], "price.retail_ils"
-        elif kind == "card":
-            target, fld = src["where"], src["field"]
-        else:
-            target, fld = "data/economics/products.json", src["field"]
-        reason = (f"בתרחיש הגרוע ({w['label_he']}) התרומה ₪{w['contribution_ils']:g} במחיר ₪{old:g}; "
-                  f"המחיר הנמוך שלא מפסיד באף תרחיש: ₪{new:g} (נקודת איזון ₪{r['break_even_ils']:g})")
-        hc = r.get("highest_comp_ils")
-        ch = {"id": r["id"], "price_source": kind, "file": target, "field": fld,
-              "old_price_ils": old, "new_price_ils": new, "sale_units": r["sale_units"],
-              "worst_scenario": w["scenario"], "worst_scenario_he": w["label_he"], "worst_sold_at_ils": w["sold_at_ils"],
-              "worst_contribution_at_old_ils": w["contribution_ils"], "worst_landed_ils": w["landed_ils"],
-              "worst_freight_src": w["freight_src"], "break_even_ils": r["break_even_ils"],
-              "no_loss_economy_only_ils": r.get("no_loss_economy_only_ils"), "no_loss_sale_only_ils": r.get("no_loss_sale_only_ils"),
-              "highest_comp_ils": hc, "highest_comp_src": r.get("highest_comp_src"),
-              "ratio_to_highest_comp": round(new / hc, 2) if hc else None, "above_market": bool(hc and new > hc),
-              "flags": r["flags"], "reason_he": reason, "date": date}
-        if kind == "leads":
-            ch["record_unchanged"] = src["where"]
-        changes.append(ch)
-        if kind == "products.json":
-            row = rows[r["id"]]
-            row.setdefault("retail_before_no_loss_ils", old)
-            row["retail_ils"] = new
-            row["retail_src"] = f"initial-no-loss-{date}"
-            if row.get("price_for_qty") != r["sale_units"]:
-                ch["price_for_qty"] = {"old": row.get("price_for_qty"), "new": r["sale_units"]}
-                row["price_for_qty"] = r["sale_units"]  # the price is now for the sale as the Studio sells it
-        elif target.startswith("products.json"):
-            rec = (p.get("_lead_rec") or {}).get("rec") or {}
-            row = {"retail_ils": new, "retail_src": f"initial-no-loss-{date}", "retail_before_no_loss_ils": old,
-                   "price_for_qty": r["sale_units"], "sell_qty": r["sale_units"],
-                   "sale_cost_usd": round(float(e["sale_cost_usd"]), 4),
-                   "sale_contains": (p.get("name") or "")[:200] or None,
-                   "price_note": (str(rec.get("price_basis_he") or "").strip()[:400] or None),
-                   "source": {"record": src["where"], "card": p["_path"], "added": date,
-                              "why": "המחיר הועלה (אין מוצר מפסיד); הסטודיו שומר את עלות המכירה מהליקוט רק כשהמחיר הוא של הרשומה, "
-                                     "ולכן העלות של הסט כולו נכתבת כאן (sale_cost_usd)"},
-                   "ship_estimated": any("estimated" in f for f in r["flags"])}
-            iv = _record_il_value(p, date)
-            if iv:
-                row["il_value"] = iv
-            rows[r["id"]] = {k: v for k, v in row.items() if v is not None}
-        else:
-            card_edits[target] = {"field": fld, "new": new, "old": old, "id": r["id"]}
-    # the cards (their own price, or a price over the final round's record)
-    for f, ed in card_edits.items():
-        path = ROOT / f
-        card = json.loads(path.read_text(encoding="utf-8"))
-        fld = ed["field"].split(".", 1)[1]
-        card.setdefault("price", {})[fld] = ed["new"]
-        note = (f"[no-loss {date}] מחיר לצרכן ₪{ed['new']:g} (היה ₪{ed['old']:g}): המחיר הנמוך שלא מפסיד באף תרחיש "
-                f"(ה.13, 2026-10-20; data/economics/no-loss-changes-{date}.json).")
-        notes = card.get("notes") or ""
-        if f"[no-loss {date}]" not in notes:
-            card["notes"] = (notes.rstrip() + "\n" + note) if notes.strip() else note
-        _dump(path, card)
-    return {"changes": changes, "owner": owner, "cannot": cannot, "pj": pj, "pj_path": pj_path}
-
-
-def refresh_rows(res: dict, pj: dict, date: str, before: dict) -> list[dict]:
-    """products.json, from the audit AFTER the raise: margin, contribution and flags at the row's price as the Studio reads
-    it, and the no-loss facts. `flag` stays the floor flag the Studio, the boards and the site read (ok >= 40%,
-    below-floor 0-40%; "loss" only where the Studio's own reading is still negative), and `flags` adds "above-market"
-    (raised above the highest comparable) and "loses-in-worst-case" (an owner-set price that loses in a scenario).
-    Returns the rows whose flag, margin or contribution changed against `before` (the file as it was)."""
-    ctx: Ctx = res["ctx"]
-    s = ctx.s
-    out = []
-    by = {r["id"]: r for r in res["rows"]}
-    for pid, row in pj["products"].items():
-        r = by.get(pid)
-        old = {k: (before.get(pid) or {}).get(k) for k in ("retail_ils", "flag", "margin_pct", "contribution_ils")}
-        if not r or r.get("status") in ("cannot-compute", "no-card", "no-price"):
-            if r and r.get("status") == "cannot-compute":
-                row["no_loss"] = {"date": date, "cannot_compute": r.get("missing"), "flags": r.get("flags")}
-            continue
-        P = row["retail_ils"]
-        st = r.get("studio_shown")
-        if st:
-            row["contribution_ils"] = st["contribution_ils"]
-            row["margin_pct"] = st["margin_pct"]
-            row["contribution_with_fee_ils"] = st.get("contribution_with_fee_ils")
-        loses = r.get("status") in ("owner-set-loses", "raise")
-        raised = row.get("retail_src") == f"initial-no-loss-{date}"
-        hc = r.get("highest_comp_ils")
-        if st and st["contribution_ils"] < 0:
-            row["flag"] = "loss"
-        else:
-            row["flag"] = floor_flag(st["margin_pct"] / 100 if st else None, s)
-        flags = [row["flag"]]
-        above = bool(raised and hc and P > hc)
-        if above:
-            flags.append("above-market")
-        if loses:
-            flags.append("loses-in-worst-case")
-        row["flags"] = flags
-        row["customer_total_ils"] = P if P >= 299 else P + 29
-        iv = row.get("il_value") or {}
-        if isnum(iv.get("typical")) and iv["typical"] > 0:
-            row["vs_typical_pct"] = round(100 * (row["customer_total_ils"] - iv["typical"]) / iv["typical"])
-        w = r.get("worst_at_price") or {}
-        nl = {"date": date, "worst_contribution_ils": w.get("contribution_ils"), "worst_scenario": w.get("scenario"),
-              "worst_scenario_he": w.get("label_he"), "break_even_ils": r["break_even_ils"], "no_loss_ils": r["no_loss_ils"],
-              "no_loss_economy_only_ils": r.get("no_loss_economy_only_ils"),
-              "highest_comp_ils": hc, "ratio_to_highest_comp": round(P / hc, 2) if hc else None, "above_market": above,
-              "estimated_inputs": [f for f in r["flags"] if "estimated" in f or "missing" in f or "other-sku" in f or "cache" in f],
-              "scenarios": r.get("scenarios"), "variants_checked": r.get("variants_checked")}
-        if r.get("status") == "owner-set-loses":
-            nl["owner_set"] = True
-        if raised:
-            nl["raised_from_ils"] = row.get("retail_before_no_loss_ils")
-        row["no_loss"] = nl
-        new = {"retail_ils": P, "flag": row.get("flag"), "margin_pct": row.get("margin_pct"), "contribution_ils": row.get("contribution_ils")}
-        if old != new:
-            out.append({"id": pid, "old": old, "new": new, "flags": flags})
-    return out
+    return {"settings": s, "rows": rows, "ctx": ctx, "db": str(db) if db else None}
 
 
 # --------------------------------------------------------------------------- rejected candidates (report only)
@@ -1127,17 +1017,6 @@ REVIEW = {
 LOSS_RX = re.compile(r"מפסיד|הפסד|\bloss|loses|losing", re.I)
 
 
-def _coverage_module():
-    spec = importlib.util.spec_from_file_location("final_round_coverage_for_no_loss_gain", COVERAGE_PY)
-    m = importlib.util.module_from_spec(spec)
-    cwd = os.getcwd()
-    try:
-        spec.loader.exec_module(m)
-    finally:
-        os.chdir(cwd)
-    return m
-
-
 def coverage_counts(extra: dict | None = None) -> dict:
     """{style: {eligible, ready, one_ready}} by the coverage script's own rule (its functions, nothing written), with
     `extra` {style: {slot: {listing key: variants}}} counted as if those candidates had cards."""
@@ -1191,10 +1070,54 @@ def coverage_counts(extra: dict | None = None) -> dict:
         os.chdir(cwd)
 
 
+def candidate_freight(c: dict, q: int) -> dict:
+    """A candidate's freight for the sale by the corrected rules, from the cached supplier answers (the record's SKU, else
+    the worst over the SKUs in the cache), else the record's own ship_usd (for the sale it priced). {sale_usd, src,
+    express, estimated}."""
+    src = str(c.get("source") or "").lower()
+    cid = str(c.get("id") or "")
+    sv = str(c.get("sku_or_vid") or "")
+    quotes = source_quotes("aliexpress", cid) if src.startswith("ali") else source_quotes("cj", cid) if src == "cj" else {}
+    per_sku: dict = {}
+    for (sku, qty), opts in quotes.items():
+        d = default_quote(opts)
+        if d:
+            per_sku.setdefault(sku, {})[qty] = d
+    text = f"{c.get('why_he') or ''} {c.get('price_basis_he') or ''}"
+    rec_ship = float(c["ship_usd"]) if isnum(c.get("ship_usd")) and c["ship_usd"] >= 0 else None
+    rec_express = bool(re.search(r"to\s*door|\bDHL\b|fedex|\bUPS\b|aramex", text, re.I))
+    if per_sku:
+        if sv in per_sku:
+            cands = [(sv, per_sku[sv])]
+        else:
+            cands = sorted(per_sku.items())
+        best = None
+        for sku, byq in cands:
+            d1 = byq.get(1) or min(byq.values(), key=lambda d: d["usd"])
+            unit = d1["usd"] if 1 in byq else inv_ship_for_qty(d1["usd"], min(byq))
+            sale = byq[q]["usd"] if q in byq else ship_for_qty(unit, q)
+            cand = {"sale_usd": round(sale, 4), "unit_usd": round(unit, 4), "sku": sku, "sku_match": sku == sv or not sv,
+                    "method": d1["label"], "express": d1["express"],
+                    "estimated": q not in byq and q > 1, "src": f"מטמון {('AliExpress' if src.startswith('ali') else 'CJ')} {cid} {sku}: {d1['label']}"
+                    + (f" (ל-{q} יח' בחבילה משולבת)" if q not in byq and q > 1 else "")}
+            if best is None or cand["sale_usd"] > best["sale_usd"] or (cand["express"] is False and best["express"]):
+                best = cand if (best is None or not (best["express"] is False and cand["express"])) else best
+        if best and not (best["express"] and rec_ship is not None and not rec_express and rec_ship < best["sale_usd"]):
+            if rec_ship is not None and not rec_express and rec_ship > best["sale_usd"] and not best["express"]:
+                best = dict(best, sale_usd=round(rec_ship, 4), src=f"הרשומה (${rec_ship:g} למכירה, גבוה מהמטמון {best['src']})")
+            best["record_ship_usd"] = rec_ship
+            best["record_express"] = rec_express
+            return best
+    if rec_ship is None:
+        return {"sale_usd": None, "src": "אין משלוח ברשומה ולא במטמון", "express": False, "estimated": True, "record_ship_usd": None}
+    return {"sale_usd": round(rec_ship, 4), "src": "הרשומה (ship_usd למכירה)" + (" — קו אקספרס לפי הנימוק" if rec_express else ""),
+            "express": rec_express, "estimated": True, "record_ship_usd": rec_ship, "record_express": rec_express}
+
+
 def rejected_loss_only(s: dict) -> dict:
     """Round-5 and round-6 candidates without a card, fit 7+, rejected only because they lost money: their no-loss price
-    (economy, the record's own freight for the sale), the ratio to the highest Israeli price, and the coverage gain per
-    style if they were counted. Report only: no result file and no coverage file is written."""
+    (the default method, the combined parcel), the ratio to the highest Israeli price, and the coverage gain per style if
+    they were counted. Report only: no result file and no coverage file is written."""
     reviewed, keep, unknown = [], [], []
     for f in sorted(glob.glob(str(FINAL / "results" / "round*-*.json"))):
         d = json.load(open(f))
@@ -1223,9 +1146,21 @@ def rejected_loss_only(s: dict) -> dict:
                 if verdict != "in":
                     continue
                 q = next((int(c[k]) for k in ("qty_in_sale", "qty") if isnum(c.get(k)) and c[k] >= 1), 1)
-                landed = c.get("landed_ils") if isnum(c.get("landed_ils")) and c["landed_ils"] > 0 else None
-                if landed is None and isnum(c.get("cost_usd")) and isnum(c.get("ship_usd")) and c["cost_usd"] > 0:
-                    landed = (c["cost_usd"] * q + c["ship_usd"]) * s["usd_ils"]
+                cost = float(c["cost_usd"]) if isnum(c.get("cost_usd")) and c["cost_usd"] > 0 else None
+                fr = candidate_freight(c, q)
+                rec_landed = float(c["landed_ils"]) if isnum(c.get("landed_ils")) and c["landed_ils"] > 0 else None
+                rec_ship = fr.get("record_ship_usd")
+                # the record's landed cost is the sourcing team's figure for the whole sale (its cost_usd is sometimes per
+                # unit, sometimes per sale): keep it and replace only the freight by the corrected rules
+                if fr.get("sale_usd") is not None and rec_landed is not None and rec_ship is not None:
+                    landed = rec_landed + (fr["sale_usd"] - rec_ship) * s["usd_ils"]
+                    fr["landed_basis"] = "הנחיתה שברשומה, עם המשלוח המתוקן במקום משלוח הרשומה"
+                elif cost is not None and fr.get("sale_usd") is not None:
+                    landed = (cost * q + fr["sale_usd"]) * s["usd_ils"]
+                    fr["landed_basis"] = "עלות × כמות + המשלוח המתוקן"
+                else:
+                    landed = rec_landed
+                    fr["landed_basis"] = "הנחיתה שברשומה"
                 comps = [x.get("price_ils") or x.get("price") for x in c.get("comps") or [] if isinstance(x, dict)]
                 comps = [x for x in comps if isnum(x) and x > 0]
                 if high:
@@ -1238,20 +1173,19 @@ def rejected_loss_only(s: dict) -> dict:
                     hc, hsrc = None, None
                 be = round(break_even_for(landed, s), 2) if landed else None
                 nl = charm_up(be) if be else None
-                row.update({"sale_units": q, "landed_ils": round(landed, 2) if landed else None, "record_price_ils": c.get("price_ils"),
+                row.update({"sale_units": q, "cost_usd": cost, "freight": fr, "landed_ils": round(landed, 2) if landed else None,
+                            "record_landed_ils": c.get("landed_ils"), "record_price_ils": c.get("price_ils"),
                             "break_even_ils": be, "no_loss_ils": nl, "highest_comp_ils": hc, "highest_comp_src": hsrc,
                             "ratio_to_highest_comp": round(nl / hc, 2) if nl and hc else None,
-                            "scope_he": "חסכוני בלבד, לפי המשלוח שברשומה; אין כרטיס, ולכן משלוח מהיר, אפשרויות ויחידה בודדת לא נבדקו"})
+                            "scope_he": "שיטת ברירת המחדל (המטמון, אחרת המשלוח שברשומה), המכירה כולה; אין כרטיס, ולכן אפשרויות ויחידה בודדת לא נבדקו"})
                 keep.append(row)
     # coverage gain: every kept candidate counted as a card with its fit (one listing per supplier item)
     base = coverage_counts()
     extra: dict = {}
     for r in keep:
         key = f"{str(r['source'] or 'x').lower()}:{r['id']}"
-        rec_vf = {}
-        for k, v in r["fit_7_plus"].items():
+        for k in r["fit_7_plus"]:
             extra.setdefault(k, {}).setdefault(r["slot"], {})[key] = 1
-            rec_vf[k] = 1
     after = coverage_counts(extra)
     gain = {st: {"eligible": base[st]["eligible"], "ready_before": base[st]["ready"], "ready_after": after[st]["ready"],
                  "slots_gained": after[st]["ready"] - base[st]["ready"],
@@ -1259,214 +1193,271 @@ def rejected_loss_only(s: dict) -> dict:
                  "pct_points": round(after[st]["pct_ready"] - base[st]["pct_ready"], 1),
                  "one_ready_before": base[st]["one_ready"], "one_ready_after": after[st]["one_ready"]} for st in base}
     tot_e = sum(g["eligible"] for g in gain.values())
-    gain["total"] = {"eligible": tot_e, "ready_before": sum(g["ready_before"] for g in gain.values()),
-                     "ready_after": sum(g["ready_after"] for g in gain.values() if isinstance(g, dict) and "ready_after" in g)}
-    gain["total"]["pct_before"] = round(100 * gain["total"]["ready_before"] / tot_e, 1)
-    gain["total"]["pct_after"] = round(100 * gain["total"]["ready_after"] / tot_e, 1)
+    tot = {"eligible": tot_e, "ready_before": sum(g["ready_before"] for g in gain.values()), "ready_after": sum(g["ready_after"] for g in gain.values())}
+    tot["pct_before"] = round(100 * tot["ready_before"] / tot_e, 1)
+    tot["pct_after"] = round(100 * tot["ready_after"] / tot_e, 1)
+    gain["total"] = tot
     return {"reviewed": reviewed, "kept": keep, "unreviewed": unknown, "coverage": gain,
             "method_he": "כל מועמד בלי כרטיס בהתאמה 7+ שהרשומה שלו מפסידה נקרא ידנית: 'in' רק כשההפסד הוא סיבת הדחייה היחידה. "
-                         "הרווח בכיסוי מחושב בכלל של final_round_coverage.py (פונקציות הסקריפט, בלי לכתוב קובץ), כאילו לכל מועמד יש כרטיס "
-                         "באפשרות אחת (צבע אחד) בסגנונות שבהם ההתאמה 7+."}
+                         "המשלוח: שיטת ברירת המחדל מהמטמון של הספק (המק\"ט שברשומה, אחרת הגרוע מבין המק\"טים), בחבילה משולבת לכמות; "
+                         "בלי מטמון, המשלוח שברשומה. הרווח בכיסוי מחושב בכלל של final_round_coverage.py (פונקציות הסקריפט, בלי לכתוב קובץ), "
+                         "כאילו לכל מועמד יש כרטיס באפשרות אחת (צבע אחד) בסגנונות שבהם ההתאמה 7+."}
 
 
 # --------------------------------------------------------------------------- report
 
-FORMULA_DIFFS = [
+FORMULA_NOTES = [
     {"topic": "נוסחת התרומה", "studio": "studio/src/index.html econCalc: נטו = P/1.18; עמלה = 2%·P + ₪1.2; שמורה = 8% מהנטו; אריזה 0; תרומה = נטו − נחיתה − עמלה − שמורה",
      "site": "site/shared/src/pricing.ts unitEconomics: אותה נוסחה, באגורות (עיגול בכל שלב, הפרש של אגורות)", "same": True},
     {"topic": "הגדרות", "studio": "data/economics/settings.json + ברירות המחדל של ECON_META (שער 3.3, מע\"מ 18%, 2% + ₪1.2, החזרות 8%, יעד 40%)",
      "site": "site/shared/src/schema/economics.ts DEFAULT_SETTINGS + resolveSettings: אותם ערכים", "same": True},
-    {"topic": "משלוח לכמות", "studio": "יחידה + (q − 1) × max(0, יחידה − $3.72) (הערכה); הצעה שנמדדה לכל המכירה (quoted_qty = q) נלקחת כמו שהיא",
-     "site": "cogs = (עלות + משלוח) × q: ליניארי, בלי חיסכון החבילה; הצעה לכל המכירה (משלוח הליקוט, sale_shipping) נכפלת ב-q", "same": False},
-    {"topic": "מקור המשלוח", "studio": "ידני (products.json) ← freight-cj / freight-zendrop / freight-aliexpress ← המק\"ט בכרטיס ← רשומת הסבב האחרון",
-     "site": "ידני ← freight-cj.json בלבד ← ברירת מחדל $17: למוצרי AliExpress ו-Zendrop בלי משלוח ידני האתר מחשב $17", "same": False},
+    {"topic": "משלוח לכמות", "studio": "shipForQty: יחידה + (q − 1) × max(0, יחידה − $3.72); הצעה שנמדדה לכל המכירה (quoted_qty = q) נלקחת כמו שהיא. **זה הכלל של הדוח (תיקון 2)**",
+     "site": "cogsAgorot = (עלות + משלוח ליחידה) × q: ליניארי, בלי חיסכון החבילה (שמרני יותר); build-catalog.ts", "same": False},
+    {"topic": "שיטת המשלוח", "studio": "ידני (products.json) ← freight-cj / freight-zendrop / freight-aliexpress (cheapest) ← המק\"ט בכרטיס ← רשומת הסבב האחרון",
+     "site": "ידני ← freight-cj.json cheapest ← ברירת מחדל $17 (resolveShippingUsd): למוצרי AliExpress ו-Zendrop בלי משלוח ידני האתר מחשב $17", "same": False},
     {"topic": "מקור המחיר", "studio": "עריכה בסטודיו (db) ← products.json retail_ils ← מחיר בכרטיס (price.retail_ils / suggested_retail) ← price_ils ברשומת הסבב",
-     "site": "products.json retail_ils בלבד; בלי שורה: מחיר מומלץ ב-40% (זמני), ובבנייה קפדנית לא מוצג. מחירי הכרטיס והסבב לא מגיעים לאתר", "same": False},
+     "site": "products.json retail_ils בלבד; בלי שורה: מחיר מומלץ ב-40% (זמני), ובבנייה קפדנית (--strict-prices) לא מוצג", "same": False},
     {"topic": "אפשרויות הספק (וריאנטים)", "studio": "רק המק\"ט שבחדר",
-     "site": "options.ts skuRetail: P + (המומלץ של האפשרות − המומלץ של המק\"ט שבחדר). אפשרות זולה יורדת במחיר פי ~2.4 מהירידה בעלות, ומפסידה ~0.8 מהפרש העלות; בבנייה קפדנית אפשרות בלי sku_retail_ils לא נמכרת", "same": False},
+     "site": "options.ts skuRetail: sku_retail_ils של הסטודיו, אחרת P + (המומלץ של האפשרות − המומלץ של המק\"ט שבחדר); בבנייה קפדנית אפשרות בלי sku_retail_ils לא נמכרת", "same": False},
     {"topic": "יחידה אחת מסט (P1)", "studio": "לא מוצג", "site": "packs.ts unitPriceEstimateIls: ceil(P/N × 1.15) מעוגל מטה ל-9, או unit_retail_ils", "same": False},
-    {"topic": "דמי משלוח ללקוח", "studio": "לא נספרים כהכנסה", "site": "₪29 (חינם מ-₪299), מהיר ₪59; לא נספרים בתרומה", "same": True},
 ]
 
+PRICE_TRUTH = {
+    "owner": "עריכה בסטודיו (db product_edits), מסונכרנת ל-products.json עם retail_src studio. לא משתנה",
+    "products.json": "data/economics/products.json products.<id>.retail_ils: הסטודיו והאתר קוראים אותו",
+    "card": "כרטיס המוצר price.suggested_retail או price.retail_ils: הסטודיו בלבד",
+    "leads": "price_ils ברשומת הסבב האחרון (data/leads/final-2026-10-13/results/*.json): הסטודיו בלבד, דרך room_boards.Context; בהחלה המחיר החדש נרשם בכרטיס (price.retail_ils), שהסטודיו קורא לפני הרשומה",
+    "none": "אין מחיר: כרטיס שנספר בכיסוי בלי מחיר בשום מקום",
+    "pricing": "data/economics/pricing/*-2026-10-11.json: המקור שממנו נבנה products.json; אף אחד לא קורא אותו היום (היסטוריה)",
+}
 
-def write_reports(res: dict, date: str, tests: dict | None) -> tuple[Path, Path]:
+
+def _median(xs):
+    xs = sorted(xs)
+    if not xs:
+        return None
+    k = len(xs) // 2
+    return xs[k] if len(xs) % 2 else (xs[k - 1] + xs[k]) / 2
+
+
+def build_report(res: dict, date: str) -> dict:
     ctx: Ctx = res["ctx"]
     s = ctx.s
-    log_p = ECO / f"no-loss-changes-{date}.json"
-    log = json.loads(log_p.read_text(encoding="utf-8")) if log_p.exists() else {"changes": []}
-    ch = log.get("changes") or []
-    rej = rejected_loss_only(s)
     rows = res["rows"]
-    from collections import Counter
-    by_src = Counter(c["price_source"] for c in ch)
-    above = sorted([c for c in ch if c.get("above_market")], key=lambda c: -(c.get("ratio_to_highest_comp") or 0))
-    still = [r for r in rows if r.get("status") == "raise"]
+    rej = rejected_loss_only(s)
+    raises = [r for r in rows if r.get("status") == "raise"]
+    ratios = [r["raise_ratio"] for r in raises]
+    above = sorted([r for r in rows if r.get("flag") == "above-market"], key=lambda r: -(r.get("ratio_to_highest_comp") or 0))
+    express = [r for r in rows if r.get("status") == "express-only"]
     owner = [r for r in rows if r.get("status") == "owner-set-loses"]
-    cannot = [r for r in rows if r.get("status") == "cannot-compute"]
+    cannot = [r for r in rows if r.get("status") in ("cannot-compute", "no-card")]
     noprice = [r for r in rows if r.get("status") == "no-price"]
+    priced = [r for r in rows if isnum(r.get("current_price_ils"))]
+    pj = [r for r in priced if "products.json" in r["scope"]]
+    thr = VAT_THRESHOLD_ILS
+    above247 = {
+        "threshold_ils": thr, "why": "$75 × 3.3: תקרת הפטור ממע\"מ ביבוא אישי (docs/tax/README.md)",
+        "products_json_rows": {"before": sum(1 for r in pj if r["current_price_ils"] > thr),
+                               "after": sum(1 for r in pj if (r.get("proposed_price_ils") or r["current_price_ils"]) > thr),
+                               "rows": len(pj)},
+        "all_priced": {"before": sum(1 for r in priced if r["current_price_ils"] > thr),
+                       "after": sum(1 for r in priced if (r.get("proposed_price_ils") or r["current_price_ils"]) > thr),
+                       "products": len(priced)},
+        "crossing": sorted([r["id"] for r in priced if r["current_price_ils"] <= thr < (r.get("proposed_price_ils") or 0)]),
+        "note_he": "'אחרי' = המחירים המוצעים; מחיר המשתמש ומוצרי אקספרס-בלבד נשארים במחירם הנוכחי",
+    }
+    cause = Counter((r["worst_at_current"]["kind"]) for r in raises)
+    est = Counter(f for r in rows for f in (r.get("flags") or []))
     truth = Counter(r["price_source"]["kind"] for r in rows if "price_source" in r)
-    # where each price lived before this change (a final-round price now on the card or in a new products.json row)
-    truth_before = Counter(truth)
-    for c in ch:
-        if c["price_source"] == "leads":
-            truth_before["leads"] += 1
-            truth_before["products.json" if str(c["file"]).startswith("products.json") else "card"] -= 1
-    checks = [r for r in rows if "qty-inferred-from-landed" in (r.get("flags") or []) and r["id"] in {c["id"] for c in ch}]
-    est = Counter(f for r in rows if r.get("status") in ("ok", "owner-set-loses") for f in (r.get("flags") or [])
-                  if "estimated" in f or "other-sku" in f or "cache" in f or "no-fast" in f)
-    ratios = [c["new_price_ils"] / c["old_price_ils"] for c in ch]
-    cause = Counter()
-    for c in ch:
-        sc = c["worst_scenario"].split("/")
-        cause[(sc[0], sc[-1] if sc[-1] in ("economy", "fast") else sc[1] if len(sc) > 1 else "")] += 1
-    fast_only = [c for c in ch if c.get("no_loss_economy_only_ils") is not None and c["no_loss_economy_only_ils"] <= c["old_price_ils"]]
+    def brief(r):
+        w = r.get("worst_at_current") or {}
+        ap = r.get("at_proposed") or {}
+        return {"id": r["id"], "slot": r.get("slot"), "scope": r["scope"], "price_source": r["price_source"]["kind"],
+                "current_price_ils": r.get("current_price_ils"), "sale_units": r.get("sale_units"),
+                "worst_scenario": {k: w.get(k) for k in ("scenario", "kind", "method", "quantity", "variant", "variant_sku", "sold_at_ils", "landed_ils", "freight_usd", "freight_estimated")} if w else None,
+                "worst_contribution_ils": w.get("contribution_ils"), "worst_margin_pct": w.get("margin_pct"),
+                "break_even_ils": r.get("break_even_ils"), "no_loss_ils": r.get("no_loss_ils"), "no_loss_floor_ils": r.get("no_loss_floor_ils"),
+                "no_loss_room_sku_ils": r.get("no_loss_room_sku_ils"), "proposed_price_ils": r.get("proposed_price_ils"),
+                "raise_ratio": r.get("raise_ratio"), "margin_at_proposed_pct": ap.get("sale_margin_pct"),
+                "worst_margin_at_proposed_pct": (ap.get("worst") or {}).get("margin_pct"),
+                "highest_comp_ils": r.get("highest_comp_ils"), "ratio_to_highest_comp": r.get("ratio_to_highest_comp"),
+                "flag": r.get("flag"), "status": r.get("status"), "flags": r.get("flags"), "missing": r.get("missing"),
+                "express": r.get("express"), "owner_set": r.get("owner_set"), "if_one_unit": r.get("if_one_unit")}
     out = {
-        "date": date, "rule": "docs/studio-rules.md ה.13 (2026-10-20): אין מוצר מפסיד בשום צורה; יכול להיות יקר ללקוח",
-        "script": "python3 -I scripts/economics/no_loss.py --apply / --report / --check",
-        "settings": s,
+        "date": date, "mode": "report (nothing changed)",
+        "rule": "docs/studio-rules.md ה.13 (2026-10-20): אין מוצר מפסיד בשום צורה; יכול להיות יקר ללקוח. תיקון הכללים: BRIEF-no-loss-2026-10-20.md, Correction",
+        "script": "python3 -I scripts/economics/no_loss.py --report [--db DIR]",
+        "settings": s, "studio_db": res.get("db"),
+        "corrected_rules_he": [
+            "שיטת משלוח: רק שיטת ברירת המחדל, הזולה לישראל, עם מעקב כשהספק מציע (בדרך כלל CJ Eub או השיטה של AliExpress בכרטיס). לא To Door, DHL או אקספרס כשיש זולה יותר; אקספרס-בלבד נרשם בנפרד",
+            "כמות: החבילה המשולבת של הסטודיו, משלוח ל-q = יחידה + (q−1) × max(0, יחידה − $3.72)",
+            "kitchen-sconce-aliexpress-rustic-wooden-wall-sconce-632957: יחידה אחת",
+            "וריאנטים, צבעים וגדלים נשארים בתרחיש הגרוע; משלוח מוערך בתרחיש הגרוע שלו",
+            "מחיר מוצע = max(הנוכחי, המחיר שלא מפסיד), מעוגל למעלה לסיומת 9. לא יורד. הכרית של המשתמש (₪69) מדווחת ולא משתנה"],
         "formula": {"contribution": "net − landed − (card_pct·P + card_fixed) − returns_pct·net − packaging; net = P/(1+vat); landed = (unit cost·q + freight for q)·usd_ils",
-                    "price_endings": "שקל שלם שנגמר ב-9 (charmRoundUpIls של האתר)", "compare": FORMULA_DIFFS,
-                    "agree": "נוסחת התרומה וההגדרות זהות; הקלטים שונים: משלוח לכמות, מקור המשלוח, מקור המחיר, האפשרויות והיחידה הבודדת (ראו compare)"},
-        "price_truth": {"counts_after": dict(truth), "counts_before": {k: v for k, v in truth_before.items() if v}, "where": {
-            "products.json": "data/economics/products.json products.<id>.retail_ils: הסטודיו והאתר",
-            "owner": "עריכה בסטודיו (db product_edits), מסונכרנת ל-products.json עם retail_src studio",
-            "card": "כרטיס המוצר price.suggested_retail או price.retail_ils: הסטודיו בלבד",
-            "leads": "price_ils ברשומת הסבב האחרון (data/leads/final-2026-10-13/results/*.json): הסטודיו בלבד, דרך room_boards.Context; מחיר חדש נרשם בכרטיס (price.retail_ils), שהסטודיו קורא לפני הרשומה, והרשומה לא משתנה",
-            "pricing": "data/economics/pricing/*-2026-10-11.json: המקור שממנו נבנה products.json; אף אחד לא קורא אותו היום (היסטוריה)"}},
-        "scenarios_he": ["המכירה (sell_qty) במשלוח חסכוני ובמשלוח מהיר (עד 20 יום) כשהסטודיו מציע אותו",
-                         "יחידה אחת מסט (P1), במחיר היחידה של האתר",
-                         "כל אפשרות ספק במלאי, במחיר שהאתר נותן לה, ויחידה אחת ממנה",
-                         "כמה מכירות בסל: לא גרוע יותר (משלוח לכמה יחידות ≤ סכום החלקים)",
-                         "משלוח: ההצעה הגרועה מכל המקורות לכל שיטה; משלוח לכמה יחידות שהוא הערכה = חבילה לכל יחידה; בלי הצעה בכלל = ההערכה הגבוהה, מסומן"],
-        "summary": {"audited": len(rows), "by_status": dict(Counter(r.get("status") for r in rows)),
-                    "raised": len(ch), "raised_by_source": dict(by_src),
-                    "raise_ratio_min": round(min(ratios), 2) if ratios else None, "raise_ratio_median": round(sorted(ratios)[len(ratios) // 2], 2) if ratios else None,
+                    "price_endings": "שקל שלם שנגמר ב-9 (charmRoundUpIls של האתר)", "compare": FORMULA_NOTES,
+                    "agree_he": "נוסחת התרומה וההגדרות זהות בסטודיו ובאתר; הקלטים שונים (משלוח לכמות, מקור המשלוח, מקור המחיר, האפשרויות והיחידה הבודדת). "
+                                "הדוח הולך לפי הסטודיו במשלוח לכמות (תיקון 2) ולפי האתר במחיר האפשרויות והיחידה הבודדת (זה מה שנמכר שם)"},
+        "price_truth": {"counts": dict(truth), "where": PRICE_TRUTH},
+        "summary": {"audited": len(rows), "by_status": dict(Counter(r.get("status") for r in rows)), "by_flag": dict(Counter(r.get("flag") for r in rows)),
+                    "raises": len(raises),
+                    "raise_ratio_min": round(min(ratios), 2) if ratios else None, "raise_ratio_median": round(_median(ratios), 2) if ratios else None,
                     "raise_ratio_max": round(max(ratios), 2) if ratios else None,
-                    "old_price_range_ils": [min(c["old_price_ils"] for c in ch), max(c["old_price_ils"] for c in ch)] if ch else None,
-                    "new_price_range_ils": [min(c["new_price_ils"] for c in ch), max(c["new_price_ils"] for c in ch)] if ch else None,
-                    "binding_scenario": {f"{k[0]}/{k[1]}": v for k, v in cause.items()},
-                    "raised_only_for_fast_method": len(fast_only),
-                    "above_market": len(above), "above_market_max_ratio": above[0]["ratio_to_highest_comp"] if above else None,
-                    "still_losing_not_owner": len(still), "owner_set_losing": len(owner), "cannot_compute": len(cannot),
-                    "counted_without_price": len(noprice)},
-        "raised": ch,
-        "above_market": [{k: c.get(k) for k in ("id", "old_price_ils", "new_price_ils", "highest_comp_ils", "highest_comp_src", "ratio_to_highest_comp", "worst_scenario_he")} for c in above],
-        "owner_set": [{"id": r["id"], "price_ils": r["price_ils"], "where": r["price_source"]["where"], "worst": r.get("worst_at_price"),
-                       "no_loss_ils": r.get("no_loss_ils"), "break_even_ils": r.get("break_even_ils"),
-                       "studio_shown": r.get("studio_shown")} for r in owner],
-        "cannot_compute": [{"id": r["id"], "price_ils": r.get("price_ils"), "missing": r.get("missing"), "flags": r.get("flags"), "scope": r.get("scope")} for r in cannot],
-        "counted_without_price": [{"id": r["id"], "slot": r.get("slot"), "break_even_ils": r.get("break_even_ils"), "no_loss_ils": r.get("no_loss_ils"),
-                                   "flags": r.get("flags")} for r in noprice],
-        "quantity_checks": [{"id": r["id"], "studio_units": r["sale_units"], "price_ils": r["price_ils"],
-                             "raised_from_ils": next((c["old_price_ils"] for c in ch if c["id"] == r["id"]), None),
-                             "if_one_unit": r.get("if_one_unit")} for r in checks],
-        "estimated_inputs": dict(est),
-        "tests": tests,
+                    "current_price_range_ils": [min(r["current_price_ils"] for r in raises), max(r["current_price_ils"] for r in raises)] if raises else None,
+                    "proposed_price_range_ils": [min(r["proposed_price_ils"] for r in raises), max(r["proposed_price_ils"] for r in raises)] if raises else None,
+                    "raise_bound_by": dict(cause),
+                    "raises_room_sku_only_would_suffice": sum(1 for r in raises if r.get("no_loss_room_sku_ils") is not None and r["no_loss_room_sku_ils"] <= r["current_price_ils"]),
+                    "above_market": len(above), "above_market_max_ratio": above[0].get("ratio_to_highest_comp") if above else None,
+                    "express_only": len(express), "owner_set_losing": len(owner), "cannot_compute": len(cannot), "no_price": len(noprice),
+                    "ok_at_current": sum(1 for r in rows if r.get("status") == "ok")},
+        "above_247": above247,
+        "raises": [brief(r) for r in sorted(raises, key=lambda r: -(r["raise_ratio"] or 0))],
+        "above_market": [{k: brief(r)[k] for k in ("id", "current_price_ils", "proposed_price_ils", "highest_comp_ils", "ratio_to_highest_comp", "worst_scenario")} for r in above],
+        "express_only": [brief(r) for r in express],
+        "owner_set": [brief(r) for r in owner],
+        "cannot_compute": [{"id": r["id"], "scope": r.get("scope"), "current_price_ils": r.get("current_price_ils"), "missing": r.get("missing"), "flags": r.get("flags")} for r in cannot],
+        "no_price": [{"id": r["id"], "slot": r.get("slot"), "counted_in": r.get("counted_in"), "no_loss_ils": r.get("no_loss_ils"), "break_even_ils": r.get("break_even_ils"),
+                      "flag": r.get("flag"), "flags": r.get("flags")} for r in noprice],
+        "quantity_checks": [{"id": r["id"], "studio_units": r.get("studio_units"), "sale_units": r["sale_units"], "current_price_ils": r["current_price_ils"],
+                             "proposed_price_ils": r.get("proposed_price_ils"), "if_one_unit": r.get("if_one_unit"), "flags": r.get("flags")}
+                            for r in rows if {"qty-inferred-from-landed", "unit-override", "price-qty-mismatch"} & set(r.get("flags") or [])],
+        "row_margin_check": {"rows_compared": sum(1 for r in rows if r.get("studio_shown") and isnum((ctx.rows.get(r["id"]) or {}).get("margin_pct"))),
+                             "differ_over_1pt": [r["id"] for r in rows if "row-margin-differs" in (r.get("flags") or [])],
+                             "note_he": "margin_pct של צוות התמחור ב-products.json מול קריאת הסטודיו של הדוח באותו מחיר: בדיקת הנוסחה והקלטים"},
+        "flag_counts": dict(est),
         "rejected_candidates": rej,
+        "products": [brief(r) for r in rows],
         "rows": rows,
     }
-    jp = ECO / f"no-loss-audit-{date}.json"
-    _dump(jp, out)
-    mp = ECO / f"no-loss-audit-{date}.md"
-    mp.write_text(render_md(out), encoding="utf-8")
-    return jp, mp
+    return out
 
 
 def _ils(x):
     return "—" if x is None else f"₪{x:,.0f}" if float(x).is_integer() else f"₪{x:,.2f}"
 
 
+def _ws(w: dict | None) -> str:
+    if not w:
+        return "—"
+    q = w.get("quantity")
+    v = w.get("variant")
+    return f"{w.get('method')}; {q} יח'; {v}" + (f" (נמכר ב-{_ils(w.get('sold_at_ils'))})" if w.get("kind") != "sale" else "")
+
+
 def render_md(o: dict) -> str:
     S = o["summary"]
-    L = [f"# אין מוצר מפסיד: ביקורת ותיקון מחירים ({o['date']})", "",
+    A = o["above_247"]
+    L = [f"# אין מוצר מפסיד: דוח (מצב דיווח, {o['date']})", "",
          "הכלל (ה.13, תיקון 2026-10-20): \"בא נוודא שאין דבר כזה מוצר מפסיד בשום צורה! יכול להיות יקר ללקוח אבל אין מפסיד!\". "
-         "לכל מוצר שהסטודיו או האתר יכולים למכור חושבה התרומה בתרחיש הגרוע ביותר, ומחיר שמפסיד הועלה למחיר הנמוך שלא מפסיד, "
-         "גם מעל ההשוואה הישראלית הגבוהה. שום מחיר לא ירד, ומחיר שהמשתמש קבע בסטודיו לא שונה.", "",
-         "הסקריפט: `python3 -I scripts/economics/no_loss.py` (ביקורת), `--apply` (תיקון), `--report` (הדוח הזה), `--check` (יוצא ב-1 אם נשאר מוצר מפסיד).", "",
-         "## בקצרה", "",
-         f"- נבדקו {S['audited']} מוצרים: כל שורה ב-products.json, כל כרטיס שסקריפט הכיסוי סופר, וכל כרטיס שיש לו מחיר בסטודיו.",
-         f"- הועלו {S['raised']} מחירים ({', '.join(f'{k} {v}' for k, v in S['raised_by_source'].items())}). "
-         f"מ-{_ils(S['old_price_range_ils'][0])}–{_ils(S['old_price_range_ils'][1])} ל-{_ils(S['new_price_range_ils'][0])}–{_ils(S['new_price_range_ils'][1])}; "
-         f"פי {S['raise_ratio_min']} עד פי {S['raise_ratio_max']} (חציון פי {S['raise_ratio_median']})." if S.get("raised") else "- לא הועלה אף מחיר.",
-         f"- {S['above_market']} מוצרים יקרים מהשוק עכשיו (מעל ההשוואה הגבוהה), היחס הגבוה פי {S['above_market_max_ratio']}.",
-         f"- {S['raised_only_for_fast_method']} מהמחירים הועלו רק בגלל המשלוח המהיר: במשלוח חסכוני בלבד המחיר הקודם לא הפסיד.",
-         f"- מוצרים שעדיין מפסידים (לא של המשתמש): {S['still_losing_not_owner']}. מחיר של המשתמש שמפסיד: {S['owner_set_losing']}. "
-         f"אי אפשר לחשב: {S['cannot_compute']}. כרטיסים שנספרים בכיסוי בלי מחיר בכלל: {S['counted_without_price']}.", "",
-         "## הנוסחה, ואיפה המחיר חי", "",
-         f"- תרומה = נטו − נחיתה − (2% מהמחיר + ₪1.2) − 8% מהנטו; נטו = מחיר ÷ 1.18; נחיתה = (עלות ליחידה × כמות + משלוח לכמות) × 3.3. "
-         "לפני CAC. דמי המשלוח שהלקוח משלם (₪29, מהיר ₪59) לא נספרים, כמו בסטודיו.",
-         "- סיומת המחיר: שקל שלם שנגמר ב-9 (19, 29 … 149, 159), כמו המחירים בקובץ התמחור ו-charmRoundUpIls של האתר.", ""]
-    L += ["| מקור המחיר | לפני | אחרי | מי קורא אותו |", "| --- | --- | --- | --- |"]
-    who = o["price_truth"]["where"]
-    cb, ca = o["price_truth"]["counts_before"], o["price_truth"]["counts_after"]
-    for k in ("products.json", "owner", "card", "leads", "none"):
-        L.append(f"| {k} | {cb.get(k, 0)} | {ca.get(k, 0)} | {who.get(k, 'אין מחיר: כרטיס שנספר בכיסוי או שאין לו משלוח')} |")
-    L += ["", f"- {who['pricing']}", "", "### הסטודיו מול האתר", "", "| נושא | הסטודיו | האתר | זהה |", "| --- | --- | --- | --- |"]
+         "לכל מוצר שהסטודיו או האתר יכולים למכור חושבה התרומה בתרחיש הגרוע ביותר לפי הכללים המתוקנים, ומוצע מחיר = max(הנוכחי, המחיר שלא מפסיד). "
+         "**שום דבר לא שונה**: לא products.json, לא הכרטיסים, לא הסטודיו ולא האתר. המנהל קורא, ובריף קצר שני מחיל.", "",
+         f"הסקריפט: `python3 -I scripts/economics/no_loss.py --report --db <ייצוא db של הסטודיו>` (הדוח הזה; הקובץ המלא: `no-loss-report-{o['date']}.json`), "
+         "`--check` (אינווריאנטים; יוצא ב-1 כל עוד יש מוצר שמפסיד במחירו הנוכחי), `--apply` (לבריף ההחלה; לא הורץ).", "",
+         "## הכללים המתוקנים", ""] + [f"{i + 1}. {x}" for i, x in enumerate(o["corrected_rules_he"])]
+    L += ["", "## בקצרה", "",
+          f"- נבדקו {S['audited']} מוצרים: כל שורה ב-products.json, כל כרטיס שסקריפט הכיסוי סופר, וכל כרטיס שיש לו מחיר בסטודיו. "
+          f"לפי סטטוס: {', '.join(f'{k} {v}' for k, v in S['by_status'].items())}.",
+          (f"- **הועלות מוצעות: {S['raises']}** (מתוך {S['ok_at_current'] + S['raises'] + S['owner_set_losing'] + S['express_only']} מוצרים עם מחיר שאפשר לחשב). "
+           f"מ-{_ils(S['current_price_range_ils'][0])}–{_ils(S['current_price_range_ils'][1])} ל-{_ils(S['proposed_price_range_ils'][0])}–{_ils(S['proposed_price_range_ils'][1])}; "
+           f"פי {S['raise_ratio_min']} עד פי {S['raise_ratio_max']}, חציון פי {S['raise_ratio_median']}.") if S["raises"] else "- לא מוצעת אף העלאה.",
+          f"- מה קבע את ההעלאה: {', '.join(f'{k} {v}' for k, v in S['raise_bound_by'].items())} "
+          f"(sale = המכירה במק\"ט שבחדר; variant = אפשרות ספק במחיר שהאתר נותן לה; single = יחידה אחת מסט במחיר ההערכה של האתר). "
+          f"ב-{S['raises_room_sku_only_would_suffice']} מהן המחיר הנוכחי לא מפסיד במק\"ט שבחדר, וההעלאה באה רק מהאפשרויות או מהיחידה הבודדת כפי שהאתר מתמחר אותן.",
+          f"- **יקר מהשוק: {S['above_market']}** (המחיר שלא מפסיד מעל ההשוואה הגבוהה); היחס הגבוה פי {S['above_market_max_ratio']}.",
+          f"- **אקספרס בלבד: {S['express_only']}** (לספק אין שיטה רגילה למוצר); רשומים בנפרד, בלי העלאה מוצעת.",
+          f"- מחיר של המשתמש שמפסיד: {S['owner_set_losing']} (הכרית, NL1). אי אפשר לחשב: {S['cannot_compute']}. כרטיסים שנספרים בכיסוי בלי מחיר בכלל: {S['no_price']}.",
+          f"- בדיקת הנוסחה: ב-{o['row_margin_check']['rows_compared'] - len(o['row_margin_check']['differ_over_1pt'])} מתוך {o['row_margin_check']['rows_compared']} שורות products.json "
+          f"המרווח של צוות התמחור שווה לקריאת הסטודיו של הדוח (עד נקודה); שונה ב-{len(o['row_margin_check']['differ_over_1pt'])}: "
+          + ", ".join(f"`{x}`" for x in o["row_margin_check"]["differ_over_1pt"]) + " (מחיר, מק\"ט או כמות אחרים; `row-margin-differs`).",
+          f"- **מעל ₪{A['threshold_ils']}** ({A['why']}): שורות products.json {A['products_json_rows']['before']} → {A['products_json_rows']['after']} "
+          f"(מתוך {A['products_json_rows']['rows']}); כל המוצרים עם מחיר {A['all_priced']['before']} → {A['all_priced']['after']} (מתוך {A['all_priced']['products']}). "
+          f"{A['note_he']}.", "",
+          "## הנוסחה, ואיפה המחיר חי", "",
+          f"- תרומה = נטו − נחיתה − (2% מהמחיר + ₪1.2) − 8% מהנטו; נטו = מחיר ÷ 1.18; נחיתה = (עלות ליחידה × כמות + משלוח לכמות) × 3.3. לפני CAC. "
+          "דמי המשלוח שהלקוח משלם לא נספרים, כמו בסטודיו. סיומת המחיר: שקל שלם שנגמר ב-9.",
+          f"- הגדרות: {', '.join(f'{k} {v}' for k, v in o['settings'].items())} (data/economics/settings.json + ברירות המחדל של הסטודיו).",
+          f"- ייצוא ה-db של הסטודיו שנקרא: `{o.get('studio_db') or 'לא נמסר'}` (עריכות מחיר של המשתמש).", "",
+          "| מקור המחיר | מוצרים | מי קורא אותו |", "| --- | --- | --- |"]
+    for k in ("owner", "products.json", "card", "leads", "none"):
+        L.append(f"| {k} | {o['price_truth']['counts'].get(k, 0)} | {PRICE_TRUTH[k]} |")
+    L += ["", f"- {PRICE_TRUTH['pricing']}", "", "### הסטודיו מול האתר", "", "| נושא | הסטודיו | האתר | זהה |", "| --- | --- | --- | --- |"]
     for d in o["formula"]["compare"]:
         L.append(f"| {d['topic']} | {d['studio']} | {d['site']} | {'כן' if d['same'] else 'לא'} |")
-    L += ["", f"מסקנה: {o['formula']['agree']}. לא נבחרה אחת מהן בשקט: הביקורת לוקחת את הגרוע מבין השתיים בכל נקודה "
-          "(משלוח לכמות כחבילה לכל יחידה, מחיר האפשרות והיחידה הבודדת כמו באתר, משלוח מכל המקורות של הסטודיו).", "",
-          "## התרחישים", ""] + [f"- {x}" for x in o["scenarios_he"]]
-    L += ["", "## מה הועלה", "",
-          "\"חסכוני בלבד\" = המחיר שהיה מספיק אילו המשלוח המהיר לא היה מוצע במוצר (לא הוחל; להחלטת המשתמש).", "",
-          "| מוצר | מקור | היה | עכשיו | חסכוני בלבד | התרחיש הגרוע | השוואה גבוהה | פי מההשוואה |", "| --- | --- | --- | --- | --- | --- | --- | --- |"]
-    for c in sorted(o["raised"], key=lambda c: -c["new_price_ils"] / c["old_price_ils"]):
-        L.append(f"| `{c['id']}` | {c['price_source']} | {_ils(c['old_price_ils'])} | {_ils(c['new_price_ils'])} | {_ils(c.get('no_loss_economy_only_ils'))} | "
-                 f"{c['worst_scenario_he']} | {_ils(c.get('highest_comp_ils'))} | {c.get('ratio_to_highest_comp') or '—'} |")
-    L += ["", f"התרחיש שקבע את המחיר: " + ", ".join(f"{k} {v}" for k, v in S["binding_scenario"].items()) + ".", "",
-          "## יקר מהשוק", "", f"{S['above_market']} מוצרים. מסומנים `above-market` ב-`flags` וב-`no_loss` של השורה (הסטודיו עוד לא מציג תווית כזו: build.py מעביר רק ok, below-floor ו-loss).", "",
-          "| מוצר | מחיר חדש | השוואה גבוהה | יחס |", "| --- | --- | --- | --- |"]
+    L += ["", f"מסקנה: {o['formula']['agree_he']}.", "",
+          "## ההעלאות המוצעות", "",
+          "\"מק\"ט בלבד\" = המחיר שלא מפסיד כשבודקים רק את המכירה במק\"ט שבחדר (בלי אפשרויות ויחידה בודדת): כשהוא שווה למחיר הנוכחי, ההעלאה באה מתמחור האפשרויות באתר (skuRetail) או מהיחידה הבודדת. "
+          "\"מרווח\" = המרווח במחיר המוצע במכירה הרגילה (מק\"ט שבחדר, שיטת ברירת המחדל). הדגל: ok ≥40%, below-floor 0–40%, above-market = המחיר שלא מפסיד מעל ההשוואה הגבוהה.", "",
+          "| מוצר | מקור | נוכחי | מוצע | פי | התרחיש הגרוע (שיטה; כמות; וריאנט) | תרומה היום | נקודת איזון | מק\"ט בלבד | מרווח | השוואה גבוהה | פי מההשוואה | דגל |",
+          "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |"]
+    for r in o["raises"]:
+        L.append(f"| `{r['id']}` | {r['price_source']} | {_ils(r['current_price_ils'])} | {_ils(r['proposed_price_ils'])} | {r['raise_ratio']:.2f} | "
+                 f"{_ws(r['worst_scenario'])} | {_ils(r['worst_contribution_ils'])} | {_ils(r['break_even_ils'])} | {_ils(r['no_loss_room_sku_ils'])} | "
+                 f"{r['margin_at_proposed_pct']}% | {_ils(r['highest_comp_ils'])} | {r['ratio_to_highest_comp'] if r['ratio_to_highest_comp'] is not None else '—'} | {r['flag']} |")
+    L += ["", "## יקר מהשוק", "", f"{S['above_market']} מוצרים: המחיר שלא מפסיד מעל ההשוואה הישראלית הגבוהה. מסומנים `above-market` (הסטודיו עוד לא מציג תווית כזו).", "",
+          "| מוצר | נוכחי | מוצע | השוואה גבוהה | יחס | התרחיש הגרוע |", "| --- | --- | --- | --- | --- | --- |"]
     for a in o["above_market"]:
-        L.append(f"| `{a['id']}` | {_ils(a['new_price_ils'])} | {_ils(a['highest_comp_ils'])} | פי {a['ratio_to_highest_comp']} |")
-    L += ["", "## מחיר שהמשתמש קבע ומפסיד (לא שונה)", ""]
+        L.append(f"| `{a['id']}` | {_ils(a['current_price_ils'])} | {_ils(a['proposed_price_ils'])} | {_ils(a['highest_comp_ils'])} | פי {a['ratio_to_highest_comp']} | {_ws(a['worst_scenario'])} |")
+    L += ["", "## אקספרס בלבד", "", "לספק אין שיטה רגילה למוצר: המשלוח היחיד הוא To Door, DHL או FedEx. לא מוצעת העלאה; המחיר שלא מפסיד כאן הוא במשלוח האקספרס היחיד, להחלטת המנהל "
+          "(להציע עם משלוח בנפרד, לסמן \"המלאי אינו זמין כעת\", או לחפש רישום אחר).", "",
+          "| מוצר | נוכחי | השיטה היחידה | משלוח למכירה | מפסיד היום | מחיר שלא מפסיד באקספרס | השוואה גבוהה | יחס |", "| --- | --- | --- | --- | --- | --- | --- | --- |"]
+    for r in o["express_only"]:
+        x = r["express"] or {}
+        L.append(f"| `{r['id']}` | {_ils(r['current_price_ils'])} | {x.get('method')}{' (חינם)' if x.get('free') else ''} | ${x.get('freight_usd'):g} | "
+                 f"{'כן' if x.get('loses_at_current') else ('אין מחיר' if r['current_price_ils'] is None else 'לא')} | {_ils(x.get('no_loss_at_express_ils'))} | {_ils(r['highest_comp_ils'])} | "
+                 f"{x.get('ratio_to_highest_comp') if x.get('ratio_to_highest_comp') is not None else '—'} |")
+    L += ["", "## מחיר שהמשתמש קבע ומפסיד (לא שונה; NL1)", ""]
     if o["owner_set"]:
         for r in o["owner_set"]:
-            w = r.get("worst") or {}
-            st = r.get("studio_shown") or {}
-            L.append(f"- `{r['id']}` ב-{_ils(r['price_ils'])} ({r['where']}). במק\"ט שבחדר התרומה {_ils(st.get('contribution_ils'))} "
-                     f"(מרווח {st.get('margin_pct')}%), אבל בתרחיש הגרוע ({w.get('label_he')}) {_ils(w.get('contribution_ils'))}. "
-                     f"המחיר שלא מפסיד באף תרחיש: {_ils(r.get('no_loss_ils'))} (נקודת איזון {_ils(r.get('break_even_ils'))}). להחלטת המשתמש.")
+            os_ = r["owner_set"]
+            L.append(f"- `{r['id']}` ב-{_ils(r['current_price_ils'])} ({os_['where']}). התרחיש הגרוע: {_ws(r['worst_scenario'])}, תרומה {_ils(r['worst_contribution_ils'])}. "
+                     f"**המחיר שלא מפסיד: {_ils(os_['no_loss_ils'])}** (נקודת איזון {_ils(os_['break_even_ils'])}); במק\"ט שבחדר בלבד: {_ils(r['no_loss_room_sku_ils'])}. "
+                     f"אם יועלה: דגל {os_['flag_if_raised']}, פי {os_['ratio_to_highest_comp_if_raised']} מההשוואה הגבוהה ({_ils(r['highest_comp_ils'])}). להחלטת המשתמש.")
     else:
         L.append("- אין.")
-    L += ["", "## לבדוק: כמות המכירה", "",
-          "במוצרים האלה הסטודיו קרא את מספר היחידות במכירה מעלות הנחיתה שברשומה (studio/build.py lead_qty), לא משדה כמות. "
-          "המחיר הועלה לפי הכמות שהסטודיו מוכר. ברשימה רק מוצרים שבהם המחיר הקודם לא היה מפסיד אילו המכירה הייתה יחידה אחת (העמודה האחרונה: המחיר הנמוך שלא מפסיד ליחידה אחת)."]
-    L += ["", "| מוצר | יח' בסטודיו | היה | עכשיו | אם יחידה אחת |", "| --- | --- | --- | --- | --- |"]
-    for q in o.get("quantity_checks") or []:
-        one = (q.get("if_one_unit") or {}).get("no_loss_ils")
-        if one is None or q.get("raised_from_ils") is None or one > q["raised_from_ils"]:
-            continue  # at one unit the old price would lose too: the quantity does not change the verdict
-        if "pair" in q["id"]:
-            continue  # a pair by its own name: the Studio's two units are right
-        L.append(f"| `{q['id']}` | {q['studio_units']} | {_ils(q.get('raised_from_ils'))} | {_ils(q['price_ils'])} | {_ils((q.get('if_one_unit') or {}).get('no_loss_ils'))} |")
-    L += ["", "`kitchen-sconce-aliexpress-rustic-wooden-wall-sconce-632957`: עלות הנחיתה ברשומה (₪100.6) היא בדיוק יחידה אחת ועוד משלוח ($8.01 + $22.49 במטמון AliExpress, × 3.3), "
-          "והעמדה היא מנורה אחת: כנראה הסטודיו טועה ב-4 יח'. מומלץ לקבוע כמות 1 ולהחזיר את המחיר ל-₪229 בהחלטת המשתמש. "
-          "`toy-cars-aliexpress-wooden-toys-beech-wood-138166`: הנחיתה ברשומה (₪115) מתאימה ל-3 יח' ב-$1.99, אבל הנימוק אומר \"פריט בודד (יש SKU סט)\": לבדוק מה נמכר.",
-          "", "## קלטים מוערכים", ""]
-    for k, v in sorted((o.get("estimated_inputs") or {}).items(), key=lambda x: -x[1]):
-        L.append(f"- `{k}`: {v} מוצרים")
-    L += ["", "freight-estimated = אין הצעת משלוח, נלקחה ההערכה הגבוהה; qty-freight-estimated = משלוח לכמה יחידות לפי חבילה לכל יחידה; "
-          "freight-from-other-sku = המשלוח נמדד על מק\"ט אחר; freight-from-cache-only = לסטודיו אין משלוח, נלקח ממטמון הספק; "
-          "no-fast-method = אין לספק משלוח עד 20 יום בנתוני הסטודיו (אם יוצע מהיר במוצר כזה, הוא לא נבדק).", "",
-          "## אי אפשר לחשב", ""]
+    L += ["", "## אי אפשר לחשב", ""]
     for r in o["cannot_compute"]:
-        L.append(f"- `{r['id']}` ({', '.join(r.get('scope') or [])}): {r.get('missing')}" + (f", מחיר {_ils(r['price_ils'])}" if r.get("price_ils") else ""))
-    L += ["", f"כרטיסים שנספרים בכיסוי ואין להם מחיר בכלל ({S['counted_without_price']}): המחיר שלא מפסיד לכל אחד ב-JSON (`counted_without_price`), כמחיר התחלה מוצע. לא נכתב מחיר.", "",
-          "## בדיקות", ""]
-    t = o.get("tests") or {}
-    if t:
-        for k, v in t.items():
-            L.append(f"- {k}: {v}")
-    else:
-        L.append("- לא הורצו בדוח הזה.")
+        L.append(f"- `{r['id']}` ({', '.join(r.get('scope') or [])}): {r.get('missing')}" + (f", מחיר {_ils(r['current_price_ils'])}" if r.get("current_price_ils") else ""))
+    L += ["", f"כרטיסים שנספרים בכיסוי ואין להם מחיר בשום מקום ({S['no_price']}): המחיר שלא מפסיד לכל אחד ב-JSON (`no_price`), כרצפה למחיר התחלה. לא נכתב מחיר.", "",
+          f"## מוצרים מעל ₪{A['threshold_ils']}", "",
+          f"- {A['why']}. מעל הסף הלקוח עלול לשלם מע\"מ ועמלת שחרור בדלת (VAT1 פתוחה).",
+          f"- שורות products.json: **{A['products_json_rows']['before']} לפני → {A['products_json_rows']['after']} אחרי** (מתוך {A['products_json_rows']['rows']}).",
+          f"- כל המוצרים עם מחיר ({A['all_priced']['products']}): **{A['all_priced']['before']} לפני → {A['all_priced']['after']} אחרי**.",
+          f"- חוצים את הסף בגלל ההעלאה ({len(A['crossing'])}): " + (", ".join(f"`{x}`" for x in A["crossing"]) or "אין") + ".",
+          f"- {A['note_he']}.", "",
+          "## כמות המכירה: בדיקות", "",
+          "במוצרים האלה הסטודיו קרא את מספר היחידות במכירה מעלות הנחיתה שברשומה (studio/build.py lead_qty), לא משדה כמות, או שהמחיר בקובץ התמחור הוא לכמות אחרת "
+          "מזו שהסטודיו מוכר (`price-qty-mismatch`). המחיר נבדק לפי הכמות שהסטודיו מוכר, חוץ ממנורת המטבח (תיקון 3: יחידה אחת). "
+          "העמודה האחרונה: המחיר שלא מפסיד אילו המכירה הייתה יחידה אחת.", "",
+          "| מוצר | יח' בסטודיו | יח' בדוח | נוכחי | מוצע | אם יחידה אחת | סימון |", "| --- | --- | --- | --- | --- | --- | --- |"]
+    for q in o["quantity_checks"]:
+        one = (q.get("if_one_unit") or {}).get("no_loss_ils")
+        one_s = _ils(one) if one is not None else ("יחידה אחת בדוח" if q["sale_units"] == 1 else "—")
+        fl = ", ".join(f for f in q.get("flags") or [] if f in ("qty-inferred-from-landed", "unit-override", "price-qty-mismatch"))
+        L.append(f"| `{q['id']}` | {q['studio_units']} | {q['sale_units']} | {_ils(q['current_price_ils'])} | {_ils(q['proposed_price_ils'])} | {one_s} | {fl} |")
+    L += ["", "## קלטים מוערכים וסימונים", ""]
+    for k, v in sorted(o["flag_counts"].items(), key=lambda x: -x[1]):
+        L.append(f"- `{k}`: {v} מוצרים")
+    L += ["", "freight-estimated = אין הצעת משלוח, נלקחה ההערכה הגבוהה; qty-freight-estimated = משלוח לכמה יחידות לפי נוסחת החבילה המשולבת; "
+          "freight-from-other-sku = המשלוח נמדד על מק\"ט אחר; freight-from-cache-only = לסטודיו אין משלוח, נלקח ממטמון הספק; freight-quote-other-qty = ההצעה לכמות אחרת, "
+          "תורגמה ליחידה; qty-inferred-from-landed = הכמות הוסקה מעלות הנחיתה; unit-override = כמות שהמנהל קבע; price-qty-mismatch = המחיר בקובץ לכמות אחרת מהמכירה; "
+          "sale-cost-from-leads = עלות המכירה מהרשומה (בהחלה צריך שורה ב-products.json עם sale_cost_usd); options-are-set-parts = האפשרויות הן חלקי הסט, לא וריאנטים; "
+          "express-only = רק אקספרס; no-route = הספק לא שולח לישראל; cost-not-usd = העלות לא בדולר.", ""]
     rj = o["rejected_candidates"]
-    L += ["", "## מועמדים שנדחו רק בגלל הפסד (סבבים 5 ו-6, התאמה 7+)", "",
-          f"נקראו {len(rj['reviewed'])} מועמדים בלי כרטיס שהרשומה שלהם מפסידה; {len(rj['kept'])} נדחו רק בגלל ההפסד. {rj['method_he']} "
-          "המחיר שלא מפסיד כאן הוא במשלוח שברשומה בלבד. דיווח בלבד: לא שונה אף קובץ תוצאות ולא סקריפט הכיסוי.", "",
-          "| עמדה | מוצר | סגנונות 7+ | נחיתה | מחיר שלא מפסיד | השוואה גבוהה | יחס | הערה |", "| --- | --- | --- | --- | --- | --- | --- | --- |"]
+    L += ["## מועמדים שנדחו רק בגלל הפסד (סבבים 5 ו-6, התאמה 7+)", "",
+          f"נקראו {len(rj['reviewed'])} מועמדים בלי כרטיס שהרשומה שלהם מפסידה; **{len(rj['kept'])} נדחו רק בגלל ההפסד**. {rj['method_he']} "
+          "דיווח בלבד: לא שונה אף קובץ תוצאות ולא סקריפט הכיסוי. להחלטת המשתמש.", "",
+          "| עמדה | מוצר | סגנונות 7+ | יח' | משלוח (שיטה) | נחיתה | נקודת איזון | מחיר שלא מפסיד | השוואה גבוהה | יחס | הערה |",
+          "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |"]
     for r in sorted(rj["kept"], key=lambda r: (r["slot"], r["ratio_to_highest_comp"] or 0)):
-        L.append(f"| {r['slot']} | {r['source']} {r['id']} | {', '.join(f'{k} {v:g}' for k, v in r['fit_7_plus'].items())} | {_ils(r.get('landed_ils'))} | "
-                 f"{_ils(r.get('no_loss_ils'))} | {_ils(r.get('highest_comp_ils'))} | {r.get('ratio_to_highest_comp') or '—'} | {r.get('note_he') or ''} |")
+        fr = r.get("freight") or {}
+        rs = fr.get("record_ship_usd")
+        rec_s = f"; ברשומה ${rs:g}" if (rs is not None and fr.get("sale_usd") is not None and abs(rs - fr["sale_usd"]) > 0.01) else ""
+        if rec_s and fr.get("sku_match") is False:
+            rec_s += ", מק\"ט אחר במטמון"
+        L.append(f"| {r['slot']} | {r['source']} {r['id']} | {', '.join(f'{k} {v:g}' for k, v in r['fit_7_plus'].items())} | {r['sale_units']} | "
+                 f"{'$' + format(fr.get('sale_usd'), 'g') if fr.get('sale_usd') is not None else '—'} ({fr.get('method') or fr.get('src')}{'; אקספרס' if fr.get('express') else ''}{rec_s}) | "
+                 f"{_ils(r.get('landed_ils'))} | {_ils(r.get('break_even_ils'))} | {_ils(r.get('no_loss_ils'))} | {_ils(r.get('highest_comp_ils'))} | "
+                 f"{r.get('ratio_to_highest_comp') if r.get('ratio_to_highest_comp') is not None else '—'} | {r.get('note_he') or ''} |")
     L += ["", "### הרווח בכיסוי אם ייספרו", "", "| סגנון | עמדות | 3 אפשרויות היום | אם ייספרו | נוספו |", "| --- | --- | --- | --- | --- |"]
     for st, g in rj["coverage"].items():
         if st == "total":
@@ -1475,22 +1466,280 @@ def render_md(o: dict) -> str:
     tt = rj["coverage"]["total"]
     L.append(f"| **סה\"כ** | {tt['eligible']} | {tt['ready_before']} ({tt['pct_before']}%) | {tt['ready_after']} ({tt['pct_after']}%) | +{tt['ready_after'] - tt['ready_before']} |")
     L += ["", "שאר המועמדים שנקראו נדחו גם מסיבה אחרת (מעטפת, CE או IP44, קליעה פתוחה, מלאי, כפילות); הסיבה לכל אחד ב-JSON (`rejected_candidates.reviewed`).", "",
-          "## מה עוד צריך", "",
-          "- המשתמש: לאשר או לשנות את המחירים שהועלו, ובמיוחד את היקרים מהשוק. אפשרות: לגבות משלוח מהיר בנפרד במוצרים כבדים, או לא להציע אותו בהם, "
-          "ואז המחיר לפי החסכוני מספיק (`no_loss_economy_only_ils` לכל מוצר).",
-          "- frontend-dev: מחיר האפשרויות באתר (skuRetail) מוריד אפשרות זולה יותר ממה שהעלות יורדת, והאתר מחשב משלוח $17 למוצרי AliExpress ו-Zendrop; "
-          "תווית \"יקר מהשוק\" בסטודיו (build.py מעביר היום רק ok, below-floor ו-loss).",
-          "- לוחות החדרים (scripts/boards/room_boards.py) קוראים את המרווח של כרטיסי הסבב מהרשומה, לא מהמחיר החדש בכרטיס.",
-          "- ממשיכים לחפש חלופה זולה יותר באותו מראה למוצרים שהועלו הרבה (ה.13).", ""]
+          "## מה בריף ההחלה יעשה (לא בוצע)", "",
+          "- products.json: retail_ils של כל שורה שמועלית (הישן נשמר ב-retail_before_no_loss_ils, retail_src initial-no-loss-<תאריך>), ועדכון flag/flags/no_loss.",
+          "- כרטיס עם מחיר משלו (price.suggested_retail / price.retail_ils): השדה בכרטיס; מחיר מרשומת הסבב: price.retail_ils בכרטיס (הרשומה לא משתנה); "
+          "רשומה שעלות המכירה שלה אינה N × הכרטיס: שורה חדשה ב-products.json עם sale_cost_usd.",
+          "- הכרית של המשתמש: לפי NL1. אקספרס-בלבד: לפי החלטת המנהל.",
+          "- אחר כך: build הסטודיו, 7 בדיקות העשן, ספירת המוצרים מעל ₪247 שוב.", ""]
     return "\n".join(L)
+
+
+def _dump(path: Path, data) -> None:
+    """Write JSON (validated before it is written)."""
+    txt = json.dumps(data, ensure_ascii=False, indent=1) + "\n"
+    json.loads(txt)
+    path.write_text(txt, encoding="utf-8")
+
+
+def write_report(res: dict, date: str) -> tuple[Path, Path]:
+    out = build_report(res, date)
+    jp = ECO / f"no-loss-report-{date}.json"
+    _dump(jp, out)
+    mp = ECO / f"no-loss-report-{date}.md"
+    mp.write_text(render_md(out), encoding="utf-8")
+    return jp, mp
+
+
+# --------------------------------------------------------------------------- check
+
+def check(res: dict) -> tuple[list[str], list[dict]]:
+    """Invariants of the computation (exit 2 when one fails) and the products that lose at their current price."""
+    s = res["settings"]
+    ctx: Ctx = res["ctx"]
+    bad = []
+    # the formula against a hand computation and against the Studio's econCalc constants
+    P, Lnd = 100.0, 50.0
+    want = P / 1.18 - Lnd - (P * 0.02 + 1.2) - 0.08 * P / 1.18
+    if abs(contribution(P, Lnd, {**STUDIO_DEFAULTS}) - want) > 1e-9:
+        bad.append("contribution() differs from the Studio formula")
+    if charm_up(183.2) != 189 or charm_up(190) != 199 or charm_up(9) != 9 or charm_down(115) != 109 or charm_down(189) != 189:
+        bad.append("charm rounding differs from pricing.ts / packs.ts")
+    if abs(ship_for_qty(8.77, 3) - (8.77 + 2 * (8.77 - 3.72))) > 1e-9 or ship_for_qty(1.99, 4) != 1.99:
+        bad.append("ship_for_qty differs from shipForQty")
+    if unit_price_estimate(199, 3) != 69 or unit_price_estimate(63, 2) != 39:
+        bad.append("unit_price_estimate differs from packs.ts")
+    if abs(break_even_for(50, STUDIO_DEFAULTS) - (50 + 1.2) / ((1 - 0.08) / 1.18 - 0.02)) > 1e-9:
+        bad.append("break_even_for differs from the formula")
+    for r in res["rows"]:
+        if r.get("status") in ("cannot-compute", "no-card"):
+            continue
+        P0, Pn, Pp = r.get("current_price_ils"), r.get("no_loss_ils"), r.get("proposed_price_ils")
+        if Pp is not None and P0 is not None and Pp < P0:
+            bad.append(f"{r['id']}: proposed {Pp} < current {P0}")
+        if r.get("raised") and Pp % 10 != 9:
+            bad.append(f"{r['id']}: proposed {Pp} does not end in 9")
+        if r.get("status") in ("raise", "ok", "no-price") and r.get("at_proposed") and r["at_proposed"]["worst"]["contribution_ils"] < -0.005:
+            bad.append(f"{r['id']}: worst contribution at proposed {Pp} is {r['at_proposed']['worst']['contribution_ils']}")
+        if r.get("status") == "raise" and r.get("worst_at_current", {}).get("contribution_ils", 0) >= 0:
+            bad.append(f"{r['id']}: status raise but the current price does not lose")
+        if r.get("status") == "ok" and r.get("worst_at_current") and r["worst_at_current"]["contribution_ils"] < -0.005:
+            bad.append(f"{r['id']}: status ok but the current price loses")
+        if Pn is not None and r.get("break_even_ils") is not None and Pn + 1e-6 < r["break_even_ils"] and not (P0 and P0 >= r["break_even_ils"]):
+            bad.append(f"{r['id']}: no-loss {Pn} below break-even {r['break_even_ils']}")
+        if r.get("id") in UNIT_OVERRIDES and r.get("sale_units") != UNIT_OVERRIDES[r["id"]][0]:
+            bad.append(f"{r['id']}: unit override not applied")
+        if r["id"] in ctx.owner_edits and Pp != P0:
+            bad.append(f"{r['id']}: an owner-set price was changed")
+    # minimality: the next lower ...9 price above the current one loses (for the raises)
+    for r in res["rows"]:
+        if r.get("status") != "raise":
+            continue
+        p = ctx.by_id[r["id"]]
+        sc = product_scenarios(p, ctx.E.get(r["id"], {}), ctx)
+        lower = r["proposed_price_ils"] - 10
+        if lower > r["current_price_ils"] and worst_case(lower, sc["scenarios"], s)[0] >= -EPS:
+            bad.append(f"{r['id']}: {lower} would also not lose; proposed {r['proposed_price_ils']} is not minimal")
+    losing = [r for r in res["rows"] if r.get("status") == "raise"]
+    return bad, losing
+
+
+# --------------------------------------------------------------------------- apply (the apply brief; not run in report mode)
+
+def _dump_like(path: Path, data) -> None:
+    """Write JSON in the file's own format (indent, trailing newline), validated before it is written."""
+    indent, nl = 1, "\n"
+    if path.exists():
+        old = path.read_text(encoding="utf-8")
+        m = re.match(r"[{\[]\n( +)", old)
+        indent = len(m.group(1)) if m else 1
+        nl = "\n" if old.endswith("\n") else ""
+    txt = json.dumps(data, ensure_ascii=False, indent=indent) + nl
+    json.loads(txt)
+    path.write_text(txt, encoding="utf-8")
+
+
+def _record_il_value(p: dict, date: str) -> dict | None:
+    """The final round's comparables of a card as products.json il_value (retailer, title, price, url)."""
+    lr = p.get("_lead_rec") or {}
+    comps = []
+    for c in (lr.get("rec") or {}).get("comps") or []:
+        if not isinstance(c, dict):
+            continue
+        price = next((c[k] for k in ("price_ils", "price") if isnum(c.get(k))), None)
+        title = str(c.get("title") or c.get("name") or c.get("shop_title") or "")
+        retailer = str(c.get("retailer") or (title.split(" – ")[0].split(" - ")[0].split(",")[0] if title else ""))[:80]
+        comps.append({"retailer": retailer, "title": title[:200], "price": price, "url": c.get("url")})
+    if not comps:
+        return None
+    return {"comps": comps, "note": f"ההשוואות מהליקוט האחרון ({lr.get('file')}), ליחידה; הועתקו ב-{date} (אין מוצר מפסיד)"}
+
+
+def apply(res: dict, date: str) -> dict:
+    """Raise every losing price (status raise) to its proposed price in its source of truth:
+      products.json row   -> its retail_ils (the old one kept as retail_before_no_loss_ils, retail_src initial-no-loss-<date>)
+      the card's own price -> that field (price.retail_ils or price.suggested_retail)
+      the final round's record -> a price.retail_ils on the card, which the Studio reads before the record
+                              (studio/build.py card_economics); the results file is left as it is
+      a record whose sale cost is not N x the card's (a mixed set) -> a products.json row with that sale_cost_usd
+    A price the owner set is never changed; express-only products are not changed; both are listed."""
+    ctx: Ctx = res["ctx"]
+    pj_path = ctx.eco_dir / "products.json"
+    pj = json.loads(pj_path.read_text(encoding="utf-8"))
+    rows = pj["products"]
+    changes, owner, cannot, express = [], [], [], []
+    card_edits: dict[str, dict] = {}
+    for r in res["rows"]:
+        st = r.get("status")
+        if st == "owner-set-loses":
+            owner.append(r)
+            continue
+        if st == "express-only":
+            express.append(r)
+            continue
+        if st in ("cannot-compute", "no-card"):
+            cannot.append(r)
+            continue
+        if st != "raise":
+            continue
+        new, old = r["proposed_price_ils"], r["current_price_ils"]
+        if new is None or not new > old:
+            continue
+        src = r["price_source"]
+        w = r["worst_at_current"]
+        p = ctx.by_id[r["id"]]
+        e = ctx.E.get(r["id"], {})
+        kind = src["kind"]
+        if kind == "leads" and "sale-cost-from-leads" in r["flags"]:
+            target, fld = "products.json (שורה חדשה)", f"products.{r['id']}"
+        elif kind == "leads":
+            target, fld = src["card"], "price.retail_ils"
+        elif kind == "card":
+            target, fld = src["where"], src["field"]
+        else:
+            target, fld = "data/economics/products.json", src["field"]
+        reason = (f"בתרחיש הגרוע ({w['label_he']}; {w['method']}) התרומה ₪{w['contribution_ils']:g} במחיר ₪{old:g}; "
+                  f"המחיר הנמוך שלא מפסיד באף תרחיש: ₪{new:g} (נקודת איזון ₪{r['break_even_ils']:g})")
+        hc = r.get("highest_comp_ils")
+        ch = {"id": r["id"], "price_source": kind, "file": target, "field": fld,
+              "old_price_ils": old, "new_price_ils": new, "sale_units": r["sale_units"],
+              "worst_scenario": w["scenario"], "worst_scenario_he": w["label_he"], "worst_method": w["method"], "worst_quantity": w["quantity"],
+              "worst_variant": w["variant"], "worst_sold_at_ils": w["sold_at_ils"], "worst_contribution_at_old_ils": w["contribution_ils"],
+              "worst_landed_ils": w["landed_ils"], "worst_freight_src": w["freight_src"], "break_even_ils": r["break_even_ils"],
+              "no_loss_room_sku_ils": r.get("no_loss_room_sku_ils"), "highest_comp_ils": hc, "highest_comp_src": r.get("highest_comp_src"),
+              "ratio_to_highest_comp": round(new / hc, 2) if hc else None, "flag": r.get("flag"),
+              "flags": r["flags"], "reason_he": reason, "date": date}
+        if kind == "leads":
+            ch["record_unchanged"] = src["where"]
+        changes.append(ch)
+        if kind == "products.json":
+            row = rows[r["id"]]
+            row.setdefault("retail_before_no_loss_ils", old)
+            row["retail_ils"] = new
+            row["retail_src"] = f"initial-no-loss-{date}"
+            if row.get("price_for_qty") != r["sale_units"]:
+                ch["price_for_qty"] = {"old": row.get("price_for_qty"), "new": r["sale_units"]}
+                row["price_for_qty"] = r["sale_units"]
+            if r["id"] in UNIT_OVERRIDES:
+                row["sell_qty"] = r["sale_units"]
+        elif target.startswith("products.json"):
+            rec = (p.get("_lead_rec") or {}).get("rec") or {}
+            row = {"retail_ils": new, "retail_src": f"initial-no-loss-{date}", "retail_before_no_loss_ils": old,
+                   "price_for_qty": r["sale_units"], "sell_qty": r["sale_units"],
+                   "sale_cost_usd": round(float(e["sale_cost_usd"]), 4),
+                   "sale_contains": (p.get("name") or "")[:200] or None,
+                   "price_note": (str(rec.get("price_basis_he") or "").strip()[:400] or None),
+                   "source": {"record": src["where"], "card": p["_path"], "added": date,
+                              "why": "המחיר הועלה (אין מוצר מפסיד); הסטודיו שומר את עלות המכירה מהליקוט רק כשהמחיר הוא של הרשומה, "
+                                     "ולכן העלות של הסט כולו נכתבת כאן (sale_cost_usd)"},
+                   "ship_estimated": any("estimated" in f for f in r["flags"])}
+            iv = _record_il_value(p, date)
+            if iv:
+                row["il_value"] = iv
+            rows[r["id"]] = {k: v for k, v in row.items() if v is not None}
+        else:
+            card_edits[target] = {"field": fld, "new": new, "old": old, "id": r["id"]}
+    for f, ed in card_edits.items():
+        path = ROOT / f
+        card = json.loads(path.read_text(encoding="utf-8"))
+        fld = ed["field"].split(".", 1)[1]
+        card.setdefault("price", {})[fld] = ed["new"]
+        if ed["id"] in UNIT_OVERRIDES:
+            card["sell_qty"] = UNIT_OVERRIDES[ed["id"]][0]
+        note = (f"[no-loss {date}] מחיר לצרכן ₪{ed['new']:g} (היה ₪{ed['old']:g}): המחיר הנמוך שלא מפסיד באף תרחיש "
+                f"(ה.13, 2026-10-20; data/economics/no-loss-changes-{date}.json).")
+        notes = card.get("notes") or ""
+        if f"[no-loss {date}]" not in notes:
+            card["notes"] = (notes.rstrip() + "\n" + note) if notes.strip() else note
+        _dump_like(path, card)
+    return {"changes": changes, "owner": owner, "cannot": cannot, "express": express, "pj": pj, "pj_path": pj_path}
+
+
+def refresh_rows(res: dict, pj: dict, date: str, before: dict) -> list[dict]:
+    """products.json after the raise: margin, contribution and flags at the row's price as the Studio reads it, and the
+    no-loss facts. `flag` stays the floor flag the Studio, the boards and the site read (ok >= 40%, below-floor 0-40%;
+    "loss" only where the Studio's own reading is still negative); `flags` adds "above-market" and
+    "loses-in-worst-case" (an owner-set price that loses in a scenario). Returns the rows that changed against `before`."""
+    ctx: Ctx = res["ctx"]
+    s = ctx.s
+    out = []
+    by = {r["id"]: r for r in res["rows"]}
+    for pid, row in pj["products"].items():
+        r = by.get(pid)
+        old = {k: (before.get(pid) or {}).get(k) for k in ("retail_ils", "flag", "margin_pct", "contribution_ils")}
+        if not r or r.get("status") in ("cannot-compute", "no-card", "no-price"):
+            if r and r.get("status") == "cannot-compute":
+                row["no_loss"] = {"date": date, "cannot_compute": r.get("missing"), "flags": r.get("flags")}
+            continue
+        P = row["retail_ils"]
+        st = r.get("studio_shown")
+        if st:
+            row["contribution_ils"] = st["contribution_ils"]
+            row["margin_pct"] = st["margin_pct"]
+        loses = r.get("status") in ("owner-set-loses", "raise")
+        raised = row.get("retail_src") == f"initial-no-loss-{date}"
+        hc = r.get("highest_comp_ils")
+        if st and st["contribution_ils"] < 0:
+            row["flag"] = "loss"
+        else:
+            m = st["margin_pct"] / 100 if st else None
+            row["flag"] = "ok" if m is not None and m >= s["target_margin_pct"] / 100 - EPS else "below-floor"
+        flags = [row["flag"]]
+        if r.get("flag") == "above-market":
+            flags.append("above-market")
+        if loses:
+            flags.append("loses-in-worst-case")
+        if r.get("status") == "express-only":
+            flags.append("express-only")
+        row["flags"] = flags
+        row["customer_total_ils"] = P if P >= 299 else P + 29
+        iv = row.get("il_value") or {}
+        if isnum(iv.get("typical")) and iv["typical"] > 0:
+            row["vs_typical_pct"] = round(100 * (row["customer_total_ils"] - iv["typical"]) / iv["typical"])
+        w = r.get("worst_at_current") or {}
+        nl = {"date": date, "worst_contribution_ils": w.get("contribution_ils"), "worst_scenario": w.get("scenario"),
+              "worst_scenario_he": w.get("label_he"), "worst_method": w.get("method"), "break_even_ils": r["break_even_ils"],
+              "no_loss_ils": r["no_loss_ils"], "no_loss_room_sku_ils": r.get("no_loss_room_sku_ils"),
+              "highest_comp_ils": hc, "ratio_to_highest_comp": round(P / hc, 2) if hc else None, "above_market": r.get("flag") == "above-market",
+              "estimated_inputs": [f for f in r["flags"] if "estimated" in f or "missing" in f or "other-sku" in f or "cache" in f],
+              "scenarios": r.get("scenarios"), "variants_checked": r.get("variants_checked")}
+        if r.get("status") == "owner-set-loses":
+            nl["owner_set"] = True
+        if raised:
+            nl["raised_from_ils"] = row.get("retail_before_no_loss_ils")
+        row["no_loss"] = nl
+        new = {"retail_ils": P, "flag": row.get("flag"), "margin_pct": row.get("margin_pct"), "contribution_ils": row.get("contribution_ils")}
+        if old != new:
+            out.append({"id": pid, "old": old, "new": new, "flags": flags})
+    return out
 
 
 # --------------------------------------------------------------------------- CLI
 
 def summary(res: dict) -> dict:
-    from collections import Counter
     st = Counter(r.get("status") for r in res["rows"])
-    return {"products": len(res["rows"]), "by_status": dict(st)}
+    fl = Counter(r.get("flag") for r in res["rows"])
+    return {"products": len(res["rows"]), "by_status": dict(st), "by_flag": dict(fl)}
 
 
 def main(argv: list[str]) -> int:
@@ -1501,54 +1750,58 @@ def main(argv: list[str]) -> int:
     res = audit(ECO, db)
     print(json.dumps(summary(res), ensure_ascii=False))
     if arg("--json"):
-        Path(arg("--json")).write_text(json.dumps({"settings": res["settings"], "rows": res["rows"]}, ensure_ascii=False, indent=1) + "\n",
+        Path(arg("--json")).write_text(json.dumps({"settings": res["settings"], "db": res.get("db"), "rows": res["rows"]}, ensure_ascii=False, indent=1) + "\n",
                                        encoding="utf-8")
+    rc = 0
     if "--apply" in argv:
         pj_path = ECO / "products.json"
         before = json.loads(pj_path.read_text(encoding="utf-8"))["products"]
         a = apply(res, date)
-        _dump(a["pj_path"], a["pj"])                       # 1. the prices (and the new rows)
+        _dump_like(a["pj_path"], a["pj"])                  # 1. the prices (and the new rows)
         res1 = audit(ECO, db)                              # 2. the Studio's reading of the new prices
         pj = json.loads(pj_path.read_text(encoding="utf-8"))
         fc = refresh_rows(res1, pj, date, before)          # 3. margins, flags and no-loss facts at the new prices
         pj["updated"] = date
         n_rows = len([c for c in a["changes"] if c["price_source"] == "products.json"])
-        add = (f" {date} (אין מוצר מפסיד, ה.13 בתיקון 2026-10-20): {n_rows} מחירים הועלו למחיר הנמוך שלא מפסיד באף תרחיש "
-               f"(retail_src initial-no-loss-{date}; המחיר הקודם ב-retail_before_no_loss_ils), ונוספו שורות לכרטיסי סבב שעלות המכירה שלהם "
-               "אינה N × עלות הכרטיס. flag הוא רף הרווח כמו שהסטודיו קורא אותו (ok ≥40%, below-floor 0–40%); flags מוסיף above-market (הועלה מעל "
-               "ההשוואה הגבוהה) ו-loses-in-worst-case (מחיר של המשתמש שמפסיד בתרחיש); no_loss = התרחיש הגרוע, נקודת האיזון והיחס להשוואה "
-               f"(data/economics/no-loss-audit-{date}.json).")
+        add = (f" {date} (אין מוצר מפסיד, ה.13 בתיקון 2026-10-20, הכללים המתוקנים): {n_rows} מחירים הועלו למחיר הנמוך שלא מפסיד באף תרחיש "
+               f"(retail_src initial-no-loss-{date}; המחיר הקודם ב-retail_before_no_loss_ils). flag הוא רף הרווח כמו שהסטודיו קורא אותו "
+               "(ok ≥40%, below-floor 0–40%); flags מוסיף above-market, express-only ו-loses-in-worst-case; no_loss = התרחיש הגרוע, נקודת האיזון והיחס להשוואה "
+               f"(data/economics/no-loss-changes-{date}.json).")
         if f"{date} (אין מוצר מפסיד" not in pj.get("note", ""):
             pj["note"] = pj.get("note", "") + add
         src = f"data/economics/no-loss-changes-{date}.json"
         if src not in pj.get("sources", []):
             pj.setdefault("sources", []).append(src)
-        _dump(pj_path, pj)
-        res2 = audit(ECO, db)                              # 4. verify: nothing loses (but the owner's price)
+        _dump_like(pj_path, pj)
+        res2 = audit(ECO, db)                              # 4. verify: nothing loses (but the owner's price and express-only)
         left = [r["id"] for r in res2["rows"] if r.get("status") == "raise"]
-        log = {"date": date, "rule": "docs/studio-rules.md ה.13 (2026-10-20): אין מוצר מפסיד בשום צורה",
+        log = {"date": date, "rule": "docs/studio-rules.md ה.13 (2026-10-20): אין מוצר מפסיד בשום צורה; הכללים המתוקנים (BRIEF, Correction)",
                "script": "python3 -I scripts/economics/no_loss.py --apply", "settings": res["settings"],
                "changes": a["changes"], "products_json_rows_refreshed": fc,
-               "owner_set_not_changed": [{"id": r["id"], "price_ils": r["price_ils"], "where": r["price_source"]["where"],
-                                          "worst": r.get("worst_at_price"), "no_loss_ils": r.get("no_loss_ils"),
+               "owner_set_not_changed": [{"id": r["id"], "price_ils": r["current_price_ils"], "where": r["price_source"]["where"],
+                                          "worst": r.get("worst_at_current"), "no_loss_ils": r.get("no_loss_ils"),
                                           "break_even_ils": r.get("break_even_ils")} for r in a["owner"]],
-               "cannot_compute": [{"id": r["id"], "price_ils": r.get("price_ils"), "missing": r.get("missing"), "flags": r.get("flags")}
+               "express_only_not_changed": [{"id": r["id"], "price_ils": r["current_price_ils"], "express": r.get("express")} for r in a["express"]],
+               "cannot_compute": [{"id": r["id"], "price_ils": r.get("current_price_ils"), "missing": r.get("missing"), "flags": r.get("flags")}
                                   for r in a["cannot"]],
                "verified_after": {"audited": len(res2["rows"]), "by_status": summary(res2)["by_status"], "still_losing": left}}
-        _dump(ECO / f"no-loss-changes-{date}.json", log)
+        _dump_like(ECO / f"no-loss-changes-{date}.json", log)
         print(f"applied: {len(a['changes'])} prices raised, {len(fc)} products.json rows refreshed, "
-              f"{len(a['owner'])} owner-set listed, {len(a['cannot'])} cannot be computed; still losing after: {len(left)}")
+              f"{len(a['owner'])} owner-set listed, {len(a['express'])} express-only listed, {len(a['cannot'])} cannot be computed; still losing after: {len(left)}")
         res = res2
     if "--report" in argv:
-        tests = json.loads(Path(arg("--tests")).read_text(encoding="utf-8")) if arg("--tests") else None
-        jp, mp = write_reports(res, date, tests)
+        jp, mp = write_report(res, date)
         print(f"report: {jp.relative_to(ROOT)}, {mp.relative_to(ROOT)}")
     if "--check" in argv:
-        bad = [r for r in res["rows"] if r.get("status") == "raise"]
-        for r in bad:
-            print("LOSS", r["id"], r["price_ils"], r["worst_at_price"])
-        return 1 if bad else 0
-    return 0
+        bad, losing = check(res)
+        for b in bad:
+            print("INVARIANT", b)
+        for r in losing:
+            w = r["worst_at_current"]
+            print(f"LOSS {r['id']} current ₪{r['current_price_ils']:g} worst ₪{w['contribution_ils']:g} ({w['method']}; {w['quantity']} יח'; {w['variant']}) -> ₪{r['proposed_price_ils']:g}")
+        print(f"check: {len(bad)} invariant failures, {len(losing)} products lose at their current price")
+        rc = 2 if bad else 1 if losing else 0
+    return rc
 
 
 if __name__ == "__main__":

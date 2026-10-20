@@ -85,3 +85,14 @@ The first pass raised 162 prices because the scenario definition above was too w
 - `scripts/economics/no_loss.py`: finished and validated (`--check` runs; a `--report` mode writes the files below without touching data).
 - `data/economics/no-loss-report-2026-10-20.json`: per product: current price, worst scenario (method, quantity, variant), worst contribution, break-even, proposed price, flag (`ok` / `below-floor` / `above-market` with the ratio to the highest comp / `express-only` / `cannot-compute` with the reason).
 - `data/economics/no-loss-report-2026-10-20.md` (Hebrew): the counts, the raises (range and median ratio), the above-market list, the express-only list, the products that cannot be computed, the count of products above ₪247 before and after, and the rejected round-5/6 candidates that failed only on a loss (fit 7+) with their no-loss price, ratio and coverage gain per style.
+
+## Apply (2026-10-20, after the report run)
+The report (`no-loss-report-2026-10-20.md`) proposes 113 raises: 66 driven by a variant price the site derives (skuRetail), 46 by the room SKU, 1 by a single unit. 85 of the 113 stay within the highest Israeli comp. The manager's apply policy:
+1. **Headline price = max(current price, `no_loss_room_sku_ils`)**, rounded up to an ending in 9. The room SKU, sold in its sale units, by the default shipping method. Of the 66 variant-driven rows, 21 need no raise and 45 get the smaller room-SKU raise.
+2. **Variant prices the site derives are not a reason to raise the headline.** The fix is the site's rule: a derived variant price is floored at that variant's own no-loss price. Record this for SITE1 in the audit, with the list of the 66 rows.
+3. **`price-qty-mismatch` (2 rows):** when `price_for_qty` is 1 and the slot sells more units, the sale price is price × units. Check both rows by hand and state the result.
+4. **Express-only (6):** no raise. Flag `express-only`; they stay not for sale until decision NL2 (raise, or "המלאי אינו זמין כעת" per PRE1).
+5. **The owner's cushion:** unchanged (NL1).
+6. **Cannot compute (10):** flag and list.
+7. Flags: `ok` (40% or more), `below-floor` (0–40%), `above-market` (above the highest comp, with the ratio). Products with ratio above 2 are listed for decision NL2.
+8. Then: `no_loss.py --check` at 0; the Studio build (regular, with images) and the 7 smoke tests; the site unit tests; the count of products above ₪247 before and after; `no-loss-changes-2026-10-20.json` (old, new, scenario, reason); the final `no-loss-audit-2026-10-20.md` and `.json`. Don't publish the Studio. No commits.
