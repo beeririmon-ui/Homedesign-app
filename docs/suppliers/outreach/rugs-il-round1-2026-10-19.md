@@ -121,17 +121,17 @@ The master-designer picked 19 rugs from 8 suppliers (`data/leads/final-2026-10-1
 > [טלפון]
 
 ## Round 1b (2026-10-20): the handmade pick replaces the 19.10 pick
-The owner found the 19.10 pick banal. The designer re-picked 24 handmade, natural-fibre rugs, 21 of them patterned or colourful (`data/leads/final-2026-10-13/rugs-il-picks-2026-10-20.json`). The image sheet went to the owner on 2026-10-20. **Nothing is sent until the owner approves the sheet.** The personal lines below come from the designer's `suppliers[].personal_line_he`.
+The owner found the 19.10 pick banal. The designer re-picked 24 handmade, natural-fibre rugs, 21 of them patterned or colourful (`data/leads/final-2026-10-13/rugs-il-picks-2026-10-20.json`). The image sheet went to the owner on 2026-10-20. **Sent 2026-10-23** (the owner: "בואי נשלח את המיילים לספקי השטיחים, בצורה שמרמזת על סוג של סטרט אפ כמו ששלחנו לנורות"). The 7 emails went from the owner's Gmail; the two forms are his to send. The personal lines below come from the designer's `suppliers[].personal_line_he`.
 
 | Supplier | Channel | Picks | Draft state |
 | --- | --- | --- | --- |
-| דאר מרקש | darismyhome@gmail.com | H07, H08, H13, H20, H22, H24 (6; 22 slot-style pairs depend on it) | new Gmail draft. Message 2 asks for the original photos (AI images on the site) |
-| מתריב | email@matriv.co.il | H09 פולו 10 (default in 3 styles) | new Gmail draft |
-| השטיח האדום / HōM | b2b@carpetshop.co.il | H04, H10, H15 | the 19.10 draft, personal line replaced (chain wording) |
-| נורטלי | nortlishop@gmail.com | H05, H06, H17 | the 19.10 draft, personal line replaced |
-| עפריתה | myafrita@gmail.com | H02, H12 | the 19.10 draft, personal line replaced. All made-to-order models show "אזל המלאי": message 2 asks first whether ordering is open |
-| BuyCarpet | info@buycarpet.co.il | H16, H23 | the 19.10 draft, personal line replaced (chain wording) |
-| דוד אשכנזי | studio@davidashkenazirugs.com | H21 Row (no price, material not stated) | new Gmail draft |
+| דאר מרקש | darismyhome@gmail.com | H07, H08, H13, H20, H22, H24 (6; 22 slot-style pairs depend on it) | **sent 2026-10-23**. Message 2 asks for the original photos (AI images on the site) |
+| מתריב | email@matriv.co.il | H09 פולו 10 (default in 3 styles) | **sent 2026-10-23** |
+| השטיח האדום / HōM | b2b@carpetshop.co.il | H04, H10, H15 | **sent 2026-10-23** (chain wording) |
+| נורטלי | nortlishop@gmail.com | H05, H06, H17 | **sent 2026-10-23** |
+| עפריתה | myafrita@gmail.com | H02, H12 | **sent 2026-10-23**. All made-to-order models show "אזל המלאי": message 2 asks first whether ordering is open |
+| BuyCarpet | info@buycarpet.co.il | H16, H23 | **sent 2026-10-23** (chain wording) |
+| דוד אשכנזי | studio@davidashkenazirugs.com | H21 Row (no price, material not stated) | **sent 2026-10-23** |
 | טולמנ'ס | form: https://www.tollmansdot.co.il/contact-us/ | H01, H03, H14, H18, H19 (3 protected brands: ask for brand approval to render) | the owner sends the form text below |
 | ג'וזפון | form: https://www.josephon-carpets.co.il/pages/contact | H11 Nomad (material not stated) | the owner sends the form text below |
 | בית שטיחי רות | ddiem26@gmail.com | none in this pick | the 19.10 draft is deleted |
@@ -169,3 +169,5 @@ The owner found the 19.10 pick banal. The designer re-picked 24 handmade, natura
 > תודה,
 > בארי רימון
 > [טלפון]
+
+**Follow-up:** no reply within 5 business days (by 2026-10-30) → one short reminder, or a phone call to the business line.
