@@ -1,0 +1,152 @@
+{
+ "asset_id": "m0-A-retake-retake",
+ "room": "living-room",
+ "style": "nordic",
+ "frame": "M0",
+ "recipe": "A",
+ "stage": "recipe-v5 draft 2K (Phase A, gate 1)",
+ "date": "2026-10-24",
+ "tool": "var2 MCP var2_create_image",
+ "model": "flux-2",
+ "type": "image-to-image",
+ "resolution": "2K",
+ "quality": null,
+ "aspect_ratio": "16:9",
+ "returned_size_px": [
+  1920,
+  1072
+ ],
+ "seed": null,
+ "seed_note": "model exposes no seed; a regenerate is a new sample",
+ "input_image": {
+  "local": "assets/blockout/living-room/m0-clay-4k.png",
+  "sha256": "d8c69da8cca5d2499cbdb63da5942a657f2653a34c49637c4f73d90cc0cf8df3",
+  "var2_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/295a52df-67ec-467c-9da1-6359f8fef976.png",
+  "upload": "var2_request_upload + PUT; downloaded back, sha256 identical"
+ },
+ "image_refs": [],
+ "negative_prompt": null,
+ "negative_note": "no negative field; the prohibitions are the last paragraph of the prompt",
+ "prompt": "Use the attached clay render as the exact blueprint. Keep every wall, the corner, the window opening and its deep reveals, cornice, skirting, floor and ceiling lines, the camera height, lens and angle, and the position, size and angle of every furniture piece (sofa, coffee table, armchair) exactly as in the clay. Move, resize, add or remove nothing. Only turn the clay into real materials and real light, and add the products listed below at their stated places.\n\nPhotoreal editorial photograph for a top Scandinavian interiors magazine: a Copenhagen living room at 3 pm in mid-winter. Full-frame camera, 24 mm shift lens at 1.2 m, level, verticals straight, deep focus.\n\nLight: the tall north window on the left is the only key light, a large soft source, no direct sun. It rakes from left to right and falls off: the back wall is brightest by the corner and a gentle half stop darker at the right edge; the window wall sits in soft shade. Every object has a lit left face, a soft shadow side and a feathered shadow falling right and slightly toward the camera, with short dense contact shadows under the legs. The reveals glow. The window is the brightest area yet holds detail: a pale winter garden of bare birches under thin high cloud. White balance about 4600 K: walls warm white, never pink, yellow or grey. Two practicals are on, low, 2700 K: the pendant glows from within and leaves a faint warm pool on the table centre; the travertine wall lamps throw soft warm fans up and down the wall. Lamps cast no shadows. Real contrast, never milky.\n\nMaterials: walls and ceiling in matte mineral paint, warm white, a faint chalky hand-brushed movement seen only in the raking light. Wide oiled white-oak planks, 25 cm by 3-4 m, pale honey, long straight grain, a few pin knots, fine seams, matte with a soft window sheen. Sofa in coarse slubby oatmeal cotton-linen on tapered oak legs. Table and armchair frame in solid oiled light oak, visible grain, eased edges; armchair cushions in mist-grey wool boucle with tight loops.\n\nProducts, exactly these:\n1. Curtains: two sheer natural linen-blend panels with visible slub, S-fold heading on a slim matte black rod under the cornice, wider than the window, drawn open into narrow stacks beside the glass, glowing with transmitted daylight, hems touching the floor.\n2. On the sill, centred in the back casement: a 31 cm cream distressed clay jar vase, matte, coarse hand texture, with three or four eucalyptus stems of round silver-sage leaves leaning slightly left.\n3. Back wall between the corner and the sofa, low: one 30 cm round natural raffia sunburst with a woven centre.\n4. Back wall above each end of the sofa: two small 8 x 16 cm honed travertine block wall lamps with open pores, hardwired, no cables. The wall between them stays bare.\n5. High above the table centre: a closed 40 cm flattened pumpkin lantern in warm-white ribbed fabric on a thin black rod from the top edge.\n6. Sofa: a warm-white boucle cushion and a sage knitted chenille cushion at the left end, a charcoal slub-linen lumbar at the right end, a crinkled warm-white muslin throw with a short frayed fringe over the right arm and front of the right seat.\n7. Coffee table: a muted grey-sage linen runner with a short knotted fringe across the left third, draping evenly; bare oak centre; at the right, two honed travertine pedestal holders with unlit warm-white pillar candles, the taller at left, and in front a 21 cm warm-white matte stoneware bowl, empty.\n8. Floor right of the sofa: an empty 38 cm seagrass belly basket with a folded collar and two loop handles.\n\nNothing else: no artwork, rug, floor lamp, plant, pouf, books, mirror, glass, socket or cable. No text, no people. No sun patches, beams, bloom, haze, glow halos, HDR look, grain or vignette.\n",
+ "prompt_source": "assets/prompts/recipe-v5.nordic/m0-A.txt (master-designer, 2026-10-24)",
+ "prompt_chars": 3788,
+ "prompt_deviation": "none: sent as the file text",
+ "idempotency_key": "recipe-v5-m0-A-retake-20261024",
+ "var2": {
+  "placeholder_id": "55b33271-ae21-40ce-b1e9-db30fe820780",
+  "task_id": "c0a2aa6744721e2ce2a89fb09fbbdb2b",
+  "result_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/img-c0a2aa6744721e2ce2a89fb09fbbdb2b-0-1792879591546-a822fed8.jpg",
+  "share_url": "https://www.var2.ai/image/55b33271-ae21-40ce-b1e9-db30fe820780"
+ },
+ "credits_estimated": 480,
+ "credits": 480,
+ "attempt": 2,
+ "attempt_note": "second attempt, same prompt and clay: the first (m0-A) broke the clay lock (brief: one retake allowed)",
+ "grade": {
+  "applied": true,
+  "script": "assets/renders/living-room/nordic/recipe-v5/process.py",
+  "params": {
+   "white_balance": {
+    "patch": [
+     0.467,
+     0.385
+    ],
+    "H_before": 28.2,
+    "H_target": 36,
+    "gains_rgb": [
+     0.884,
+     1.0754,
+     0.884
+    ]
+   },
+   "exposure": {
+    "patch": [
+     0.467,
+     0.385
+    ],
+    "target_L": 93.0,
+    "needed_stops": 2.861,
+    "applied_stops": 0.2,
+    "flag": "DARK: needs more than +0.2 stop, not lifted further"
+   },
+   "saturation": "chroma x0.90 (linear, toward luminance)",
+   "highlight_rolloff": {
+    "knee_L": 94,
+    "asymptote_L": 97.25,
+    "on": "max channel, hue kept"
+   },
+   "s_curve": {
+    "mix": 0.12,
+    "shape": "smoothstep blend"
+   },
+   "black_point": {
+    "darkest_patch_L_before": 0.2,
+    "lift_to_L": 12.5,
+    "blend": 0.1235
+   },
+   "grain": "none",
+   "vignette": "none"
+  },
+  "output": "assets/renders/living-room/nordic/recipe-v5/m0-A-retake-graded.png",
+  "rule": "docs/render-recipe-nordic-2026-10-24.md 2.6: WB on the hero-wall patch, exposure capped +-0.2 stop, chroma -10%, roll-off from L 94, S curve 0.12, black point to L 12.5 only if below 12, no grain, no vignette"
+ },
+ "output": "assets/renders/living-room/nordic/recipe-v5/m0-A-retake.png",
+ "output_raw": "assets/renders/living-room/nordic/recipe-v5/raw/m0-A-retake.jpg",
+ "normalised_16_9": "non-uniform resize 1920x1072 -> 1920x1080 (+0.75% vertical), no crop",
+ "clay_lock": {
+  "method": "phase correlation of gradient maps vs the clay resized to the output, per region (du/dv as frame fractions); peaks below ~0.03 are unreliable, so the verdict is visual (clay-edge overlay) with the numbers as support",
+  "regions": {
+   "frame": {
+    "du": 0.0109,
+    "dv": -0.05,
+    "peak": 0.012,
+    "ncc": 0.083
+   },
+   "corner+cornice": {
+    "du": -0.0198,
+    "dv": -0.0019,
+    "peak": 0.036,
+    "ncc": null
+   },
+   "window": {
+    "du": -0.0115,
+    "dv": -0.0028,
+    "peak": 0.025,
+    "ncc": null
+   },
+   "sofa": {
+    "du": 0.0016,
+    "dv": -0.0176,
+    "peak": 0.033,
+    "ncc": -0.018
+   },
+   "table": {
+    "du": -0.0177,
+    "dv": -0.0111,
+    "peak": 0.021,
+    "ncc": -0.069
+   },
+   "armchair": {
+    "du": 0.0198,
+    "dv": 0.0259,
+    "peak": 0.036,
+    "ncc": 0.0
+   },
+   "ceiling-band": {
+    "du": -0.0453,
+    "dv": 0.0037,
+    "peak": 0.019,
+    "ncc": -0.047
+   },
+   "floor/skirting-right": {
+    "du": 0.0099,
+    "dv": -0.0481,
+    "peak": 0.028,
+    "ncc": -0.021
+   }
+  },
+  "auto_worst_abs_shift": 0.05
+ },
+ "measurements": "assets/renders/living-room/nordic/recipe-v5/m0-A-retake-measurements.json",
+ "self_check_verdict": "Geometry holds this time (window, corner, cornice, sofa, table, armchair on the clay edges; small drift at the sofa; the auto 0.05 is the dark floor/ceiling regions misreading). Prompt adherence fails again: NONE of the 8 products rendered (no curtains, vase, sunburst, travertine lamps, pendant, cushions, throw, runner, holders, bowl, basket) and forbidden items added: a lit tripod floor lamp, radiator, Persian rug, two side tables, sockets with cables, books, cups; dark rough grey plaster, dark walnut floor, a sun patch; very dark (frame mean L 37, needs +2.9 stop). Both flux-2 attempts fail the recipe: in image-to-image it treats the clay as a loose look reference and the text as weak guidance. No third attempt (brief)."
+}

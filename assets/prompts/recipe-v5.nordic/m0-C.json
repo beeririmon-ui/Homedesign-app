@@ -1,0 +1,152 @@
+{
+ "asset_id": "m0-C",
+ "room": "living-room",
+ "style": "nordic",
+ "frame": "M0",
+ "recipe": "C",
+ "stage": "recipe-v5 draft 2K (Phase A, gate 1)",
+ "date": "2026-10-24",
+ "tool": "var2 MCP var2_create_image",
+ "model": "nano-banana-2",
+ "type": "image-to-image",
+ "resolution": "2K",
+ "quality": null,
+ "aspect_ratio": "16:9",
+ "returned_size_px": [
+  2752,
+  1536
+ ],
+ "seed": null,
+ "seed_note": "model exposes no seed; a regenerate is a new sample",
+ "input_image": {
+  "local": "assets/blockout/living-room/m0-clay-4k.png",
+  "sha256": "d8c69da8cca5d2499cbdb63da5942a657f2653a34c49637c4f73d90cc0cf8df3",
+  "var2_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/295a52df-67ec-467c-9da1-6359f8fef976.png",
+  "upload": "var2_request_upload + PUT; downloaded back, sha256 identical"
+ },
+ "image_refs": [],
+ "negative_prompt": null,
+ "negative_note": "no negative field; the prohibitions are the last paragraph of the prompt",
+ "prompt": "Use the attached clay render as the exact blueprint. Keep every wall, the corner, the window opening and its deep reveals, cornice, skirting, floor and ceiling lines, the camera height, lens and angle, and the position, size and angle of every furniture piece (sofa, coffee table, armchair) exactly as in the clay. Move, resize, add or remove nothing. Only turn the clay into real materials and real light, and add the products listed below at their stated places.\n\nMake it a finished photograph from a top design magazine: a Copenhagen living room at 3 pm in mid-winter, 24 mm shift lens at 1.2 m, level, verticals straight, everything sharp.\n\nExposure and light: expose for a bright room. The back wall by the corner is almost white but shows its texture; the window glass is brighter still, never blown. Daylight comes only from the north window on the left, soft, no direct sun. It sweeps across the back wall and fades a gentle half stop toward the right edge, while the window wall stays in soft shade. Every object has a lit left side, a soft shadow side and a feathered shadow falling right and toward the camera, with short contact shadows; the gap under the sofa is deep but not black. The reveals glow. Outside: a pale winter garden, bare birches, thin high cloud. White balance 4600 K: warm white walls, never pink, peach, yellow or grey. The pendant and the two travertine lamps are switched on, low, 2700 K, glowing from within, casting no shadows.\n\nSurfaces: matte warm-white mineral paint with a faint chalky movement; pale honey oiled oak planks, 25 cm wide, long straight grain; slubby oatmeal cotton-linen sofa on oak legs; oiled light oak table and armchair frame; mist-grey wool boucle armchair cushions with tight loops. Real-life imperfection, not CGI: softly creased linen, cushions plumped but not identical, crisp textures in the side light.\n\nAdd exactly these products and nothing else:\n- Sheer natural linen-blend curtains with visible slub on a slim matte black rod under the cornice, pulled open into two narrow stacks beside the glass, never over it, softly backlit, hems touching the floor.\n- On the sill in the middle of the back casement: a 31 cm cream distressed clay jar vase with three or four eucalyptus stems, round silver-sage leaves, leaning slightly left.\n- On the back wall left of the sofa, low: one 30 cm round natural raffia sunburst with a woven centre.\n- On the back wall above each end of the sofa: a small 8 x 16 cm honed travertine block wall lamp washing the wall up and down, hardwired, no cable. The wall between them stays bare.\n- High above the centre of the coffee table: a closed 40 cm flattened pumpkin lantern of warm-white ribbed fabric on a thin black rod.\n- On the sofa: warm-white boucle and sage knitted cushions at the left end, a charcoal linen lumbar at the right end, a crinkled warm-white muslin throw with a frayed fringe over the right arm.\n- On the coffee table: a grey-sage linen runner with a short knotted fringe across the left third; bare oak in the middle; at the right two honed travertine pedestal holders with unlit warm-white pillar candles, the taller at left, and a 21 cm warm-white matte stoneware bowl in front, empty. The candles are unlit, no flame. Nothing stands on the runner.\n- On the floor right of the sofa: an empty 38 cm seagrass belly basket with loop handles.\n\nLeave out: artwork, rug, floor lamp, plants, pouf, books, mirrors, glass, sockets, cables, text, people. No sun patches, light rays, bloom, haze, glow halos, HDR look, grain or vignette.\n",
+ "prompt_source": "assets/prompts/recipe-v5.nordic/m0-C.txt (master-designer, 2026-10-24)",
+ "prompt_chars": 3547,
+ "prompt_deviation": "none: sent as the file text",
+ "idempotency_key": "recipe-v5-m0-C-20261024",
+ "var2": {
+  "placeholder_id": "2c6bf5f9-5b5f-48f6-9951-08a02c7f166d",
+  "task_id": "9340159aa53c067f22c6918570a2c8d6",
+  "result_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nano2-9340159aa53c067f22c6918570a2c8d6-0-1792878978848-7fe2238d.jpg",
+  "share_url": "https://www.var2.ai/image/2c6bf5f9-5b5f-48f6-9951-08a02c7f166d"
+ },
+ "credits_estimated": 400,
+ "credits": 400,
+ "attempt": 1,
+ "attempt_note": "first and only attempt",
+ "grade": {
+  "applied": true,
+  "script": "assets/renders/living-room/nordic/recipe-v5/process.py",
+  "params": {
+   "white_balance": {
+    "patch": [
+     0.467,
+     0.385
+    ],
+    "H_before": 25.0,
+    "H_target": 36,
+    "gains_rgb": [
+     0.9629,
+     1.0163,
+     0.9629
+    ]
+   },
+   "exposure": {
+    "patch": [
+     0.467,
+     0.385
+    ],
+    "target_L": 93.0,
+    "needed_stops": 1.179,
+    "applied_stops": 0.2,
+    "flag": "DARK: needs more than +0.2 stop, not lifted further"
+   },
+   "saturation": "chroma x0.90 (linear, toward luminance)",
+   "highlight_rolloff": {
+    "knee_L": 94,
+    "asymptote_L": 97.25,
+    "on": "max channel, hue kept"
+   },
+   "s_curve": {
+    "mix": 0.12,
+    "shape": "smoothstep blend"
+   },
+   "black_point": {
+    "darkest_patch_L_before": 2.9,
+    "lift_to_L": 12.5,
+    "blend": 0.0989
+   },
+   "grain": "none",
+   "vignette": "none"
+  },
+  "output": "assets/renders/living-room/nordic/recipe-v5/m0-C-graded.png",
+  "rule": "docs/render-recipe-nordic-2026-10-24.md 2.6: WB on the hero-wall patch, exposure capped +-0.2 stop, chroma -10%, roll-off from L 94, S curve 0.12, black point to L 12.5 only if below 12, no grain, no vignette"
+ },
+ "output": "assets/renders/living-room/nordic/recipe-v5/m0-C.png",
+ "output_raw": "assets/renders/living-room/nordic/recipe-v5/raw/m0-C.jpg",
+ "normalised_16_9": "non-uniform resize 2752x1536 -> 2752x1548 (+0.78% vertical), no crop",
+ "clay_lock": {
+  "method": "phase correlation of gradient maps vs the clay resized to the output, per region (du/dv as frame fractions); peaks below ~0.03 are unreliable, so the verdict is visual (clay-edge overlay) with the numbers as support",
+  "regions": {
+   "frame": {
+    "du": 0.0,
+    "dv": -0.0019,
+    "peak": 0.04,
+    "ncc": 0.139
+   },
+   "corner+cornice": {
+    "du": 0.0,
+    "dv": 0.0026,
+    "peak": 0.145,
+    "ncc": 0.027
+   },
+   "window": {
+    "du": 0.0,
+    "dv": 0.0026,
+    "peak": 0.012,
+    "ncc": 0.053
+   },
+   "sofa": {
+    "du": 0.0,
+    "dv": -0.0019,
+    "peak": 0.059,
+    "ncc": 0.1
+   },
+   "table": {
+    "du": -0.0004,
+    "dv": -0.0019,
+    "peak": 0.04,
+    "ncc": 0.079
+   },
+   "armchair": {
+    "du": 0.0,
+    "dv": -0.0026,
+    "peak": 0.046,
+    "ncc": 0.187
+   },
+   "ceiling-band": {
+    "du": -0.0164,
+    "dv": 0.0071,
+    "peak": 0.018,
+    "ncc": 0.014
+   },
+   "floor/skirting-right": {
+    "du": -0.0109,
+    "dv": -0.0517,
+    "peak": 0.028,
+    "ncc": 0.05
+   }
+  },
+  "auto_worst_abs_shift": 0.0517
+ },
+ "measurements": "assets/renders/living-room/nordic/recipe-v5/m0-C-measurements.json",
+ "self_check_verdict": "Best clay lock (auto <=0.003 on walls, window, sofa, table, armchair; visually exact). Products as listed except the raffia sunburst standing on the floor against the wall instead of hung; curtains heavier than sheer. Greyer and darker, as predicted: floor S 17 (Bible 30-45), back wall by the corner L 64 raw / 72 graded vs 92-95; needs about +1.2 stop, capped at +0.2 (recorded dark)."
+}

@@ -1,0 +1,146 @@
+{
+ "asset_id": "h0-A",
+ "room": "hall",
+ "style": "nordic",
+ "frame": "H0",
+ "recipe": "A",
+ "stage": "recipe-v5 draft 2K (Phase A, gate 1)",
+ "date": "2026-10-24",
+ "tool": "var2 MCP var2_create_image",
+ "model": "flux-2",
+ "type": "image-to-image",
+ "resolution": "2K",
+ "quality": null,
+ "aspect_ratio": "16:9",
+ "returned_size_px": [
+  1920,
+  1072
+ ],
+ "seed": null,
+ "seed_note": "model exposes no seed; a regenerate is a new sample",
+ "input_image": {
+  "local": "assets/blockout/house/framing/round2/H-B-lit.png",
+  "sha256": "016515e675948f09b46e230c03150183b42da6828fbb4384364000f56f904abe",
+  "var2_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/f8994c5f-b328-45a1-bc52-df9151155ad0.png",
+  "upload": "var2_request_upload + PUT; downloaded back, sha256 identical"
+ },
+ "image_refs": [],
+ "negative_prompt": null,
+ "negative_note": "no negative field; the prohibitions are the last paragraph of the prompt",
+ "prompt": "Use the attached clay render as the exact blueprint. Keep every wall, the open double door to the living room with its oak-lined portal, the floor and ceiling lines, the camera height, lens and angle, and the position, size and angle of every furniture piece (the oak bench on the left, the oak console on the right, and the living-room sofa, table and armchair seen through the door) exactly as in the clay. Move, resize, add or remove nothing. Only turn the clay into real materials and real light. The plain small shapes on the console, bench, walls and floors are placement guides: render the products listed below at their guides; every other guide becomes bare oak, bare wall or bare floor.\n\nPhotoreal editorial photograph for a top Scandinavian interiors magazine: the entrance hall of a Nordic garden house at 3 pm in mid-winter. 24 mm shift lens at 1.2 m, level, verticals straight, all sharp. A threshold of light: the bright living room through the door on the left third, the console vignette on the right third.\n\nLight: the hall has no window. A frosted roof light just above the frame, over the bench, pours soft top light down the left wall, bright under the ceiling and softening toward the floor. The facing wall takes soft light from the left and grows slightly darker toward the right corner. The living room through the door is the brightest part of the frame, about two thirds of a stop brighter than the hall, lit by its tall north window on the left: it glows and pulls the eye. Its light spills a soft pale fan across the threshold floor and warms the inner edge of the oak portal. One practical is on, 2700 K: the small fabric cube wall lamp above the bench glows evenly through its faces, casting no shadow. Feathered shadows fall right and toward the camera; short contact shadows under legs; deep but open shade under the bench and console. No sun patch. White balance 4600 K: warm white walls, never pink, yellow or grey. Real contrast, never milky.\n\nMaterials: matte mineral paint, warm white, with a faint chalky movement; wide oiled white-oak planks, pale honey, long straight grain, running through the threshold into the living room; bench, console and portal in solid oiled light oak, visible grain, eased edges. Real-life imperfection, not CGI: crisp grain, weave and clay texture in the side light.\n\nProducts, exactly these:\n1. Console, right end: a 31 cm cream distressed clay jar vase, matte, coarse hand texture, with three to five slender dried stems in sage and oat tones.\n2. Console, middle: an empty slim 22 cm oval tray in matte black metal.\n3. Left wall, at 1.7 m: four light pine oval wall pegs in a row, empty, no rail board.\n4. Left wall above the pegs: a 15 cm cube wall lamp covered in fine linen-like fabric, hardwired, no cable.\n5. Under the bench at its far end, by the corner: an empty 30 cm coiled rope basket, top third warm-white cotton, the rest natural jute, two cut-out handles.\n6. The living room through the door shows only its own products: on the oatmeal sofa a white boucle, a sage and a charcoal cushion and a white muslin throw; on the oak table a grey-sage linen runner, two travertine candle holders with unlit candles and a white bowl; sheer linen curtains at the window; a small raffia sunburst and two small travertine lamps on the bare back wall; a warm-white ribbed fabric lantern glowing above the table.\n\nThe bench seat is bare oak. The wall above the console is bare. The floor beside the console is bare.\n\nNothing else: no artwork, table lamp, mirror, rug, coats, bags, shoes, keys, umbrella, plant, pouf, books, glass, socket or cable. No text, no people. No bloom, haze, light rays, glow halos, HDR look, grain or vignette.\n",
+ "prompt_source": "assets/prompts/recipe-v5.nordic/h0-A.txt (master-designer, 2026-10-24)",
+ "prompt_chars": 3705,
+ "prompt_deviation": "none: sent as the file text",
+ "idempotency_key": "recipe-v5-h0-A-20261024",
+ "var2": {
+  "placeholder_id": "13a4326b-7e22-4bf8-928e-7cd8da6743eb",
+  "task_id": "a7f56cb6905ad6bced52af5f7d8aad03",
+  "result_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/img-a7f56cb6905ad6bced52af5f7d8aad03-0-1792879022557-a3a1c5ee.jpg",
+  "share_url": "https://www.var2.ai/image/13a4326b-7e22-4bf8-928e-7cd8da6743eb"
+ },
+ "credits_estimated": 480,
+ "credits": 480,
+ "attempt": 1,
+ "attempt_note": "first and only attempt",
+ "grade": {
+  "applied": true,
+  "script": "assets/renders/hall/nordic/recipe-v5/process.py",
+  "params": {
+   "white_balance": {
+    "patch": [
+     0.52,
+     0.3
+    ],
+    "H_before": 27.9,
+    "H_target": 36,
+    "gains_rgb": [
+     0.8927,
+     1.0654,
+     0.8927
+    ]
+   },
+   "exposure": {
+    "patch": [
+     0.52,
+     0.3
+    ],
+    "target_L": 80.0,
+    "needed_stops": 0.82,
+    "applied_stops": 0.2,
+    "flag": "DARK: needs more than +0.2 stop, not lifted further"
+   },
+   "saturation": "chroma x0.90 (linear, toward luminance)",
+   "highlight_rolloff": {
+    "knee_L": 94,
+    "asymptote_L": 97.25,
+    "on": "max channel, hue kept"
+   },
+   "s_curve": {
+    "mix": 0.12,
+    "shape": "smoothstep blend"
+   },
+   "black_point": {
+    "darkest_patch_L_before": 2.6,
+    "lift_to_L": 12.5,
+    "blend": 0.1018
+   },
+   "grain": "none",
+   "vignette": "none"
+  },
+  "output": "assets/renders/hall/nordic/recipe-v5/h0-A-graded.png",
+  "rule": "docs/render-recipe-nordic-2026-10-24.md 2.6: WB on the hero-wall patch, exposure capped +-0.2 stop, chroma -10%, roll-off from L 94, S curve 0.12, black point to L 12.5 only if below 12, no grain, no vignette"
+ },
+ "output": "assets/renders/hall/nordic/recipe-v5/h0-A.png",
+ "output_raw": "assets/renders/hall/nordic/recipe-v5/raw/h0-A.jpg",
+ "normalised_16_9": "non-uniform resize 1920x1072 -> 1920x1080 (+0.75% vertical), no crop",
+ "clay_lock": {
+  "method": "phase correlation of gradient maps vs the clay resized to the output, per region (du/dv as frame fractions); peaks below ~0.03 are unreliable, so the verdict is visual (clay-edge overlay) with the numbers as support",
+  "regions": {
+   "frame": {
+    "du": -0.0151,
+    "dv": -0.0028,
+    "peak": 0.048,
+    "ncc": 0.069
+   },
+   "left-wall strip (bench, pegs, sconce)": {
+    "du": -0.0083,
+    "dv": 0.0009,
+    "peak": 0.017,
+    "ncc": null
+   },
+   "living door + portal": {
+    "du": -0.0135,
+    "dv": -0.0028,
+    "peak": 0.064,
+    "ncc": 0.121
+   },
+   "console": {
+    "du": -0.012,
+    "dv": -0.0019,
+    "peak": 0.038,
+    "ncc": 0.106
+   },
+   "right wall/corner": {
+    "du": -0.0073,
+    "dv": -0.0074,
+    "peak": 0.013,
+    "ncc": 0.051
+   },
+   "ceiling-band": {
+    "du": -0.0198,
+    "dv": 0.0028,
+    "peak": 0.023,
+    "ncc": 0.044
+   },
+   "floor centre": {
+    "du": -0.0146,
+    "dv": -0.0019,
+    "peak": 0.045,
+    "ncc": 0.078
+   }
+  },
+  "auto_worst_abs_shift": 0.0198
+ },
+ "measurements": "assets/renders/hall/nordic/recipe-v5/h0-A-measurements.json",
+ "self_check_verdict": "Clay lock holds (auto worst 0.0198, a uniform ~1.5% leftward shift; portal, door, console, bench on the edges). Styling fails because the model rendered the clay placeholders literally: egg sculpture on a pedestal (plant guide), blank panel on the wall (art guide), plain cylinder on the console (vase guide), umbrella-stand cylinder, a lit table lamp and a grey rug in the living (both forbidden), rough stone plaster walls, peg rail as a shelf, no rope basket. Confirms the designer's README: H0 needs a clay with placeholders only for the defaults before a retake."
+}
