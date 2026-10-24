@@ -50,3 +50,15 @@ QA (qa-agent) then measures the clay lock (edges, furniture positions) and the g
 - Products in frame are the room's real defaults; fillers only per the filler rule. No invented décor.
 - Never print keys or tokens. Only the scripts and the MCP touch var2.
 - Prompt records for every job; raw and graded files kept; no commits.
+
+## 6. Phase D: the product-swap method (added 2026-10-24)
+The owner (2026-10-24): "גם החלפת המוצרים עושה מעין כתמים על התמונה ולא נראה מושלם, אז או שנמצא שיטה אחרת או שנעשה חיתוך מדוייק לכל מוצר מתחלף".
+
+Today's swap (a variant layer composited over the room) leaves blotches: a halo or a grade step around the product, a shadow that doesn't match, texture that changes outside the product (`assets/qa/swap-diff/*.diff.png`). The site needs combinations (any cushion with any sofa cover with any rug), so whole-frame renders per variant can't replace layers; the layers must be **pixel-exact outside the product**.
+
+**A method test on one frame and two slots** (the recipe winner's M0, or the old styled preview until it exists; slots: `vase` on the sill and `cushions` on the sofa, one variant each), three methods, same prompt, same grade:
+1. **Region edit:** `grok-imagine-image-2` segment-map (free) → segment-edit of the product's segments only; every other pixel untouched by design. Check its resolution ceiling (1K/2K) and whether the edit can be lifted to the 4K master by a mask.
+2. **Diff cutout:** a full-frame image-to-image render of the variant under the clay lock → a mask from the diff against the base (threshold + morphology) intersected with a segmentation of the product → alpha matting with a 2–4 px feather → composite; the shadow comes with the mask because the diff includes it.
+3. **Reference cutout:** the product rendered in isolation (studio, remove-background) and placed by the slot's geometry, with a separately rendered contact shadow. The current approach, as the control.
+
+**Measure, per method (qa-agent, the `swap-diff` tooling):** residual difference outside the product mask (mean and max ΔE, must be ~0), halo width at the edge in px, shadow continuity, grade match (L/S of the wall next to the product before and after), and the look in the Studio compare at zoom. **Deliver:** a sheet with the three results and the numbers, and a recommendation. The owner decides the method (decision RND2) before the series of layers. Cost: about 6 jobs at 1K–2K, under 3,000 tokens.
