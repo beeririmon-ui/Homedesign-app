@@ -2,7 +2,7 @@
  "stage": "Phase B drafts (briefs/nordic-house-render-2026-10-24.md section 7), recipe B: gpt-image-2-5, quality sunburst, 2K, 16:9, image-to-image from the round-3 clay",
  "date": "2026-10-25",
  "cap_tokens": 12000,
- "spent_tokens": 4800,
+ "spent_tokens": 5400,
  "clay": {
   "D1": {
    "local": "assets/blockout/house/framing/round3/D1.png",
@@ -351,7 +351,7 @@
    "room": "master",
    "prompt_file": "mb0.txt",
    "attempt": 1,
-   "status": "submitted",
+   "status": "done",
    "model": "gpt-image-2-5",
    "quality": "sunburst",
    "idempotency_key": "recipe-v5-phaseB-mb0-20261025",
@@ -373,7 +373,38 @@
    "task_id": "f9315fb877db18cea49dc43eac67f077",
    "credits": 600,
    "credits_estimated": 600,
-   "submitted_at": "2026-10-25T22:51Z"
+   "submitted_at": "2026-10-25T22:51Z",
+   "result_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/gpt25-f9315fb877db18cea49dc43eac67f077-0-1792968817563-eb78f777.png",
+   "raw_ext": "png",
+   "returned_size": [
+    2736,
+    1536
+   ],
+   "graded": "assets/renders/master/nordic/recipe-v5/mb0-graded.png",
+   "out_dir": "assets/renders/master/nordic/recipe-v5",
+   "lock": {
+    "visual": "holds",
+    "worst_shift": 0.0598,
+    "strong_peaks": 0.0,
+    "note": "all automated peaks weak (<0.013; the bed wall is textureless); visually the bed, headboard, nightstands, wainscot cap, window and art sit on the clay lines"
+   },
+   "verdict": "draft accepted: lock holds, nothing invented; 12 of 13 products in their boxes; the sill vase sits ~0.04 of the frame width left of its placeholder (at the window edge instead of the jamb)",
+   "products": {
+    "framed-art": "in box",
+    "bedside-sconces": "in box horizontally, ~1.3x the box height (fluted triple cylinders instead of the flat wave lamp of the card: fidelity for the designer)",
+    "curtains": "in box",
+    "sill-vase": "DISPLACED: fluted vase at the frame edge, one vase-width left of its box; branch oversized",
+    "planter": "in box (pot + olive, crown inside the box)",
+    "nightstand-vase": "in box",
+    "trinket-dish": "in box",
+    "candle-holders": "in box",
+    "pillowcases": "in box",
+    "cushions": "in box (lumbar)",
+    "bedding": "in box",
+    "throw": "in box (mist-grey across the foot)",
+    "invented": "none (no rug, no floor lamp)"
+   },
+   "note": "raw dark (+0.6 stop asked, +0.2 applied): bed wall L 73.7 -> 81.0; sill vase displaced to the frame edge; sconces 1.3x tall"
   },
   {
    "id": "k-boy",
@@ -381,7 +412,7 @@
    "room": "boy",
    "prompt_file": "k-boy.txt",
    "attempt": 1,
-   "status": "submitted",
+   "status": "done",
    "model": "gpt-image-2-5",
    "quality": "sunburst",
    "idempotency_key": "recipe-v5-phaseB-kboy-20261025",
@@ -400,7 +431,35 @@
    "task_id": "fabd2174b804bf41c8761d26d8b7ced8",
    "credits": 600,
    "credits_estimated": 600,
-   "submitted_at": "2026-10-25T22:51Z"
+   "submitted_at": "2026-10-25T22:51Z",
+   "result_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/gpt25-fabd2174b804bf41c8761d26d8b7ced8-0-1792968821509-1516a6be.png",
+   "raw_ext": "png",
+   "returned_size": [
+    2736,
+    1536
+   ],
+   "graded": "assets/renders/boy/nordic/recipe-v5/k-boy-graded.png",
+   "out_dir": "assets/renders/boy/nordic/recipe-v5",
+   "lock": {
+    "visual": "holds",
+    "worst_shift": 0.0591,
+    "strong_peaks": 0.0156,
+    "note": "bed (dv 0.014), window, blind, shelves, basket and desk on the clay lines; the desk 0.059 is a weak peak (0.015) on a textureless wall"
+   },
+   "verdict": "draft accepted: lock holds, nothing invented; 8 of 9 products in their boxes; the three toy cars render ~2x the 9 x 5 card size",
+   "products": {
+    "roman-blind": "in box",
+    "bookshelf": "in box (two tiers, three books each)",
+    "cushions": "in box",
+    "soft-toy": "in box (teddy)",
+    "bedding": "in box (striped)",
+    "bedspread": "in box (muslin, folded)",
+    "toy-basket": "in box (with the football)",
+    "rug": "in box (jute, double black stripes)",
+    "toy-cars": "OVERSIZE: ~2x the box, spread over 0.10 of the frame width on the desk",
+    "invented": "none"
+   },
+   "note": "exposure within cap (+0.17): hero wall L 85.1 -> 90.4; sage band L 61 -> 66; toy cars 2x"
   },
   {
    "id": "k-girl",
@@ -494,7 +553,7 @@
    "room": "living-room",
    "prompt_file": "m0-v6.txt",
    "attempt": 1,
-   "status": "submitted",
+   "status": "done",
    "model": "gpt-image-2-5",
    "quality": "sunburst",
    "idempotency_key": "recipe-v5-phaseB-m0v6-20261025",
@@ -520,7 +579,77 @@
    "credits": 600,
    "credits_estimated": 600,
    "submitted_at": "2026-10-25T22:51Z",
-   "clay_note": "assets/blockout/living-room/m0-clay-4k.png per the coordinator (2026-10-25 evening); the m0-v6.txt header asked for an M0 clay with placeholders; the round-3 M0 placeholder clay was not rendered (the run stopped at K-girl during the session pause and was restarted for K-girl, B1, B2, W0 only)"
+   "clay_note": "assets/blockout/living-room/m0-clay-4k.png per the coordinator (2026-10-25 evening); the m0-v6.txt header asked for an M0 clay with placeholders; the round-3 M0 placeholder clay was not rendered (the run stopped at K-girl during the session pause and was restarted for K-girl, B1, B2, W0 only)",
+   "result_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/gpt25-d6d1017dc050cbd58d803fcd0ca6fe35-0-1792968843082-d28df2bd.png",
+   "raw_ext": "png",
+   "returned_size": [
+    2736,
+    1536
+   ],
+   "graded": "assets/renders/living-room/nordic/recipe-v5/m0-v6-graded.png",
+   "out_dir": "assets/renders/living-room/nordic/recipe-v5",
+   "lock": {
+    "visual": "BROKE (sofa)",
+    "worst_shift": 0.0552,
+    "strong_peaks": 0.0,
+    "note": "walls, cornice, window, curtains rod, armchair and rug on the clay lines; the sofa is rendered ~22% wider than the clay silhouette (u 0.49-0.885 against the clay sofa 0.52-0.84: arms added outside the clay), the table ~10% wider (inside tolerance)"
+   },
+   "verdict": "draft rejected on the furniture lock: sofa 22% wider than the clay; nothing invented; retake m0-v6-r2",
+   "products": {
+    "framed-art": "three prints over the sofa, in place",
+    "accent-sconces": "in place, lit",
+    "wall-decor": "raffia sunburst in place",
+    "pendant": "in place, lit, above the table",
+    "curtains": "in place",
+    "vase": "on the sill with eucalyptus",
+    "wall-sconce": "swing-arm over the armchair, cord to a socket",
+    "floor-lamp": "tripod right of the sofa, lit, basket at its base",
+    "rug": "braided, under table and front legs",
+    "cushions": "boucle + sage left, charcoal lumbar right, throw on the right arm",
+    "table-runner": "sage runner left third",
+    "candle-holders": "two travertine holders right",
+    "bowl": "21 cm bowl right",
+    "invented": "none"
+   },
+   "note": "attempt 1: sofa 22% wider than the clay; raw ~1.2 stops dark (back wall L 63.9 -> 71.0 graded, Bible target 92-95)",
+   "manifest_status": "Phase B draft, attempt 1, REJECTED by the render-agent self-check (sofa rendered 22% wider than the clay); kept for the record, superseded by m0-v6-r2"
+  },
+  {
+   "id": "m0-v6-r2",
+   "frame": "M0",
+   "room": "living-room",
+   "prompt_file": "m0-v6.txt",
+   "attempt": 2,
+   "status": "submitted",
+   "model": "gpt-image-2-5",
+   "quality": "sunburst",
+   "idempotency_key": "recipe-v5-phaseB-m0v6-20261025-r2",
+   "refs": [
+    "https://ae01.alicdn.com/kf/Sf7d0432bcab14eba8f32b9c6f2232d36B.jpg",
+    "https://ae01.alicdn.com/kf/S277efff1ec8e42efb9200ee7c5a4d9f6t.jpg",
+    "https://cf.cjdropshipping.com/quick/product/a8634a1d-983b-4a15-8e20-f5b662b89f9f.jpg",
+    "https://oss-cf.cjdropshipping.com/product/2024/08/23/03/fc394992-638e-4235-abef-3731f45e02c7_trans.jpeg",
+    "https://ae01.alicdn.com/kf/S03bee60876b4459faeb2167e220265833.jpg",
+    "https://oss-cf.cjdropshipping.com/product/2025/09/29/07/15372189-5624-4ce3-b6e7-d3ed40d3d76d_trans.jpeg",
+    "https://oss-cf.cjdropshipping.com/product/2026/08/08/09/c846e836-f36b-4990-8649-7d66e5caafd3_trans.jpeg",
+    "https://file.zendrop.com/products/83/7e/a75cb5e948b7b3280683b19ab275_import.webp",
+    "https://oss-cf.cjdropshipping.com/product/2025/12/04/05/857d7708-21e9-471c-a853-aabde32fe3ee.jpg",
+    "https://cf.cjdropshipping.com/quick/product/d4def2f1-fdf6-44bc-a65c-9a90ad47f840.jpg",
+    "https://oss-cf.cjdropshipping.com/product/2025/05/30/10/87c036c4-e87a-4545-837a-23106ff0d858.jpg",
+    "https://ae01.alicdn.com/kf/S55561bdb1c504f3b83d801383fcfaec73.jpg",
+    "https://cf.cjdropshipping.com/quick/product/2736eed6-7f8e-49d7-8652-d9e719a72430.jpg",
+    "https://cf.cjdropshipping.com/quick/product/635be4cd-9b07-4238-bb0f-e709154b4740.jpg",
+    "https://oss-cf.cjdropshipping.com/product/2026/04/07/08/8281f262-bc9c-4a77-9def-5be4d642a1ac.jpg"
+   ],
+   "placeholder_id": "2b11ef82-9552-49ac-adbb-274f7567d1ba",
+   "task_id": "b60ff09f282a4a15c8e166fc96527096",
+   "credits": 600,
+   "credits_estimated": 600,
+   "submitted_at": "2026-10-25T22:59Z",
+   "clay_note": "assets/blockout/living-room/m0-clay-4k.png per the coordinator (2026-10-25 evening); the m0-v6.txt header asked for an M0 clay with placeholders; the round-3 M0 placeholder clay was not rendered (the run stopped at K-girl during the session pause and was restarted for K-girl, B1, B2, W0 only)",
+   "raw_ext": "png",
+   "out_dir": "assets/renders/living-room/nordic/recipe-v5",
+   "attempt_note": "retake: attempt 1 rendered the sofa 22% wider than the clay (furniture lock); same prompt, clay and refs, new sample"
   }
  ]
 }

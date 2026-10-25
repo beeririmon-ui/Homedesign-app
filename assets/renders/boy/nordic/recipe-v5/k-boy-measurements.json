@@ -1,0 +1,249 @@
+{
+ "asset_id": "k-boy",
+ "frame": "K-boy",
+ "raw": "/home/user/homedesign-app/assets/renders/boy/nordic/recipe-v5/raw/k-boy.png",
+ "returned_size_px": [
+  2736,
+  1536
+ ],
+ "normalised_size_px": [
+  2736,
+  1539
+ ],
+ "resize_16_9": "non-uniform resize 2736x1536 -> 2736x1539 (+0.20% vertical), no crop",
+ "clay": "/home/user/homedesign-app/assets/blockout/house/framing/round3/K-boy.png",
+ "clay_selfcheck": "/home/user/homedesign-app/assets/blockout/house/framing/round3/selfcheck.json",
+ "clay_lock": {
+  "frame": {
+   "du": -0.0004,
+   "dv": 0.0559,
+   "peak": 0.006,
+   "ncc": null
+  },
+  "upper-left": {
+   "du": 0.0004,
+   "dv": -0.0026,
+   "peak": 0.029,
+   "ncc": 0.068
+  },
+  "upper-right": {
+   "du": 0.0007,
+   "dv": 0.0253,
+   "peak": 0.016,
+   "ncc": 0.102
+  },
+  "lower-left": {
+   "du": 0.0084,
+   "dv": 0.0156,
+   "peak": 0.031,
+   "ncc": 0.019
+  },
+  "lower-right": {
+   "du": -0.0018,
+   "dv": 0.0442,
+   "peak": 0.012,
+   "ncc": null
+  },
+  "ceiling-band": {
+   "du": 0.0011,
+   "dv": 0.0084,
+   "peak": 0.052,
+   "ncc": 0.162
+  },
+  "floor-band": {
+   "du": -0.0033,
+   "dv": 0.0305,
+   "peak": 0.01,
+   "ncc": null
+  },
+  "boy bed 96x196 (fixed)": {
+   "du": 0.0048,
+   "dv": 0.0143,
+   "peak": 0.041,
+   "ncc": 0.033
+  },
+  "boy desk 90x50 (fixed)": {
+   "du": -0.0106,
+   "dv": 0.0591,
+   "peak": 0.015,
+   "ncc": null
+  },
+  "window W-boy": {
+   "du": 0.0172,
+   "dv": -0.0143,
+   "peak": 0.008,
+   "ncc": null
+  }
+ },
+ "clay_lock_worst_abs_shift": 0.0591,
+ "clay_lock_worst_abs_shift_strong_peaks": 0.0156,
+ "clay_lock_pass_0_02_strong_peaks": true,
+ "clay_lock_note": "regions = whole frame, quadrants, ceiling/floor bands and the clay boxes of fixed furniture / windows / openings; peaks below ~0.03 are unreliable (weak texture), so the verdict is visual (<aid>-lock.png) with the strong-peak number as support",
+ "product_boxes_clay": {
+  "boy/roman-blind": [
+   0.0,
+   0.2188,
+   0.0,
+   0.1713
+  ],
+  "boy/bedding": [
+   0.1818,
+   0.4529,
+   0.5755,
+   0.8019
+  ],
+  "boy/bedspread": [
+   0.3359,
+   0.5419,
+   0.6014,
+   0.7889
+  ],
+  "boy/cushions": [
+   0.2984,
+   0.4034,
+   0.4694,
+   0.6051
+  ],
+  "boy/soft-toy": [
+   0.199,
+   0.2339,
+   0.5102,
+   0.6037
+  ],
+  "boy/bookshelf": [
+   0.4195,
+   0.562,
+   0.1319,
+   0.3648
+  ],
+  "boy/rug": [
+   0.0,
+   0.693,
+   0.8375,
+   1.0
+  ],
+  "boy/toy-basket": [
+   0.2513,
+   0.3667,
+   0.7167,
+   1.0
+  ],
+  "boy/toy-cars": [
+   0.6776,
+   0.7398,
+   0.5509,
+   0.5819
+  ]
+ },
+ "product_box_rule": "each product inside its clay box +-15 % of the box size (<aid>-boxes.png); read visually",
+ "grade_target_L": 90.0,
+ "measure_before": {
+  "hero_wall_mid (0.398,0.138) clay L 73.7": [
+   29.8,
+   20.9,
+   85.1
+  ],
+  "paint_block (0.535,0.458) clay L 69.8": [
+   58.8,
+   7.4,
+   61.0
+  ],
+  "ceiling (0.550,0.040) clay L 66.7": [
+   28.7,
+   17.4,
+   75.9
+  ],
+  "floor_centre (0.500,0.930) clay L 35.8": [
+   29.0,
+   24.6,
+   35.9
+  ],
+  "brightest area (window / door): L p50 / p99 / max": [
+   81.8,
+   99.4,
+   100.0
+  ],
+  "pixels with a 255 channel: inside / outside that area": [
+   2158,
+   22
+  ],
+  "darkest 0.5% patch L [12-15]": 9.6,
+  "frame mean L": 55.9
+ },
+ "grade": {
+  "white_balance": {
+   "patch": [
+    0.3977159559726715,
+    0.13752734661102295
+   ],
+   "H_before": 29.8,
+   "H_target": 36,
+   "gains_rgb": [
+    0.988,
+    1.005,
+    0.988
+   ],
+   "gain_clip": "0.9-1.1"
+  },
+  "exposure": {
+   "patch": [
+    0.3977159559726715,
+    0.13752734661102295
+   ],
+   "target_L": 90.0,
+   "needed_stops": 0.165,
+   "applied_stops": 0.165,
+   "flag": "within cap"
+  },
+  "saturation": "chroma x0.90 (linear, toward luminance)",
+  "highlight_rolloff": {
+   "knee_L": 94,
+   "asymptote_L": 97.25,
+   "on": "max channel, hue kept"
+  },
+  "s_curve": {
+   "mix": 0.12,
+   "shape": "smoothstep blend"
+  },
+  "black_point": {
+   "darkest_patch_L_before": 9.7,
+   "lift_to_L": 12.5,
+   "blend": 0.0312
+  },
+  "grain": "none",
+  "vignette": "none"
+ },
+ "measure_after": {
+  "hero_wall_mid (0.398,0.138) clay L 73.7": [
+   36.2,
+   27.8,
+   90.4
+  ],
+  "paint_block (0.535,0.458) clay L 69.8": [
+   63.7,
+   8.6,
+   66.3
+  ],
+  "ceiling (0.550,0.040) clay L 66.7": [
+   33.0,
+   20.3,
+   81.3
+  ],
+  "floor_centre (0.500,0.930) clay L 35.8": [
+   29.4,
+   21.0,
+   39.5
+  ],
+  "brightest area (window / door): L p50 / p99 / max": [
+   87.1,
+   97.3,
+   97.5
+  ],
+  "pixels with a 255 channel: inside / outside that area": [
+   0,
+   0
+  ],
+  "darkest 0.5% patch L [12-15]": 12.5,
+  "frame mean L": 60.2
+ }
+}
