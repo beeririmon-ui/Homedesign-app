@@ -2,7 +2,7 @@
  "stage": "Phase B drafts (briefs/nordic-house-render-2026-10-24.md section 7), recipe B: gpt-image-2-5, quality sunburst, 2K, 16:9, image-to-image from the round-3 clay",
  "date": "2026-10-25",
  "cap_tokens": 12000,
- "spent_tokens": 5400,
+ "spent_tokens": 6000,
  "clay": {
   "D1": {
    "local": "assets/blockout/house/framing/round3/D1.png",
@@ -59,6 +59,14 @@
    "put": "200",
    "verified": true,
    "size": 6825672
+  },
+  "K-girl": {
+   "local": "assets/blockout/house/framing/round3/K-girl.png",
+   "sha256": "33d2f2749d9b7f5dd750b65f6019adfdbd326aa9ca3b0f9b2c5dfb7d8d9401f4",
+   "var2_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/64d01801-e7ee-4136-ba2e-7f738ada1f8c.png",
+   "put": "200",
+   "verified": true,
+   "size": 8098947
   }
  },
  "jobs": [
@@ -181,7 +189,8 @@
     "invented": "none"
    },
    "note": "attempt 1 rejected on the lock; retake = d2-r2",
-   "manifest_status": "Phase B draft, attempt 1, REJECTED by the render-agent self-check (clay lock broke: 0.03-0.04 vertical shift); kept for the record, superseded by d2-r2"
+   "manifest_status": "Phase B draft, attempt 1, REJECTED by the render-agent self-check (clay lock broke: 0.03-0.04 vertical shift); kept for the record, superseded by d2-r2",
+   "sheet": false
   },
   {
    "id": "d2-r2",
@@ -240,7 +249,8 @@
     "tea-towel": "in box (hangs a little longer)",
     "invented": "none"
    },
-   "note": "attempt 2 (retake): lock still 0.02-0.03 high on the kitchen run; art 1.3x, mills 2x, jars 1.8x oversize"
+   "note": "attempt 2 (retake): lock still 0.02-0.03 high on the kitchen run; art 1.3x, mills 2x, jars 1.8x oversize",
+   "sheet": true
   },
   {
    "id": "h0-B",
@@ -467,7 +477,7 @@
    "room": "girl",
    "prompt_file": "k-girl.txt",
    "attempt": 1,
-   "status": "pending",
+   "status": "submitted",
    "model": "gpt-image-2-5",
    "quality": "sunburst",
    "idempotency_key": "recipe-v5-phaseB-kgirl-20261025",
@@ -482,7 +492,12 @@
     "https://ae01.alicdn.com/kf/S933ec917c0c0401c804e23cc1b14269fm.jpg",
     "https://cf.cjdropshipping.com/16d626dd-b2ac-4e75-895b-bedd311c32a7_trans.jpeg",
     "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/rugs/nortli/lumi-jute-cotton-140x200.jpg"
-   ]
+   ],
+   "placeholder_id": "3faba6bb-9981-4999-8678-311f166f2083",
+   "task_id": "e583926923a0b72c1905e6e54912524e",
+   "credits": 600,
+   "credits_estimated": 600,
+   "submitted_at": "2026-10-25T23:05Z"
   },
   {
    "id": "b1",
@@ -594,7 +609,7 @@
     "strong_peaks": 0.0,
     "note": "walls, cornice, window, curtains rod, armchair and rug on the clay lines; the sofa is rendered ~22% wider than the clay silhouette (u 0.49-0.885 against the clay sofa 0.52-0.84: arms added outside the clay), the table ~10% wider (inside tolerance)"
    },
-   "verdict": "draft rejected on the furniture lock: sofa 22% wider than the clay; nothing invented; retake m0-v6-r2",
+   "verdict": "kept as the M0 draft (the better of the two samples): the furniture lock broke on the sofa in both (22% wider here, ~30% in the retake), architecture, window, armchair and rug hold; nothing invented; flagged for the designer: the sofa width needs the placeholder clay or a prompt line",
    "products": {
     "framed-art": "three prints over the sofa, in place",
     "accent-sconces": "in place, lit",
@@ -612,7 +627,8 @@
     "invented": "none"
    },
    "note": "attempt 1: sofa 22% wider than the clay; raw ~1.2 stops dark (back wall L 63.9 -> 71.0 graded, Bible target 92-95)",
-   "manifest_status": "Phase B draft, attempt 1, REJECTED by the render-agent self-check (sofa rendered 22% wider than the clay); kept for the record, superseded by m0-v6-r2"
+   "manifest_status": "Phase B draft for gate 2 (room sheet), attempt 1 kept over the retake; self-checked by the render-agent: sofa rendered 22% wider than the clay (furniture lock), ~1.2 stops under the Bible wall targets; awaiting qa-agent / master-designer / user (not for site)",
+   "sheet": true
   },
   {
    "id": "m0-v6-r2",
@@ -620,7 +636,7 @@
    "room": "living-room",
    "prompt_file": "m0-v6.txt",
    "attempt": 2,
-   "status": "submitted",
+   "status": "done",
    "model": "gpt-image-2-5",
    "quality": "sunburst",
    "idempotency_key": "recipe-v5-phaseB-m0v6-20261025-r2",
@@ -649,7 +665,27 @@
    "clay_note": "assets/blockout/living-room/m0-clay-4k.png per the coordinator (2026-10-25 evening); the m0-v6.txt header asked for an M0 clay with placeholders; the round-3 M0 placeholder clay was not rendered (the run stopped at K-girl during the session pause and was restarted for K-girl, B1, B2, W0 only)",
    "raw_ext": "png",
    "out_dir": "assets/renders/living-room/nordic/recipe-v5",
-   "attempt_note": "retake: attempt 1 rendered the sofa 22% wider than the clay (furniture lock); same prompt, clay and refs, new sample"
+   "attempt_note": "retake: attempt 1 rendered the sofa 22% wider than the clay (furniture lock); same prompt, clay and refs, new sample",
+   "result_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/gpt25-b60ff09f282a4a15c8e166fc96527096-0-1792969297610-3a64b1d9.png",
+   "returned_size": [
+    2736,
+    1536
+   ],
+   "graded": "assets/renders/living-room/nordic/recipe-v5/m0-v6-r2-graded.png",
+   "lock": {
+    "visual": "BROKE (sofa, armchair, table)",
+    "worst_shift": 0.0479,
+    "strong_peaks": 0.0104,
+    "note": "walls, cornice, window and rug edge on the clay lines; the sofa ~30% wider than the clay silhouette, the table ~20% wider and shifted left (du -0.048), the armchair shifted left ~0.05 and enlarged (du -0.035): worse than attempt 1"
+   },
+   "verdict": "retake rejected: furniture lock broke more than in attempt 1 (sofa, table and armchair all resized / shifted); nothing invented",
+   "products": {
+    "all 15": "rendered in place, as in attempt 1",
+    "invented": "none"
+   },
+   "note": "attempt 2 (retake): sofa ~30% wider, armchair and table shifted left; raw ~1.2 stops dark (back wall L 63.2)",
+   "manifest_status": "Phase B draft, attempt 2 (retake), REJECTED by the render-agent self-check (sofa, table and armchair off the clay); kept for the record; attempt 1 (m0-v6) is the M0 draft on the sheet",
+   "sheet": false
   }
  ]
 }

@@ -20,8 +20,9 @@ ORDER = [("M0", "living-room", "living room"), ("D1", "kitchen-dining", "kitchen
 jobs = json.load(open(sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, "jobs.json")))
 by_frame = {}
 for j in jobs.get("jobs", []):
-    if j.get("status") == "done":
-        by_frame[j["frame"]] = j                      # the last done job of a frame (the retake when there is one)
+    if j.get("status") == "done" and j.get("sheet") is not False:
+        if j.get("sheet") or j["frame"] not in by_frame or not by_frame[j["frame"]].get("sheet"):
+            by_frame[j["frame"]] = j                  # the accepted job of a frame (sheet: true), else the last done one
 TW, TH, PAD, LAB = 960, 540, 14, 72
 try:
     font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 24)

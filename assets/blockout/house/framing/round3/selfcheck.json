@@ -4988,6 +4988,849 @@
       },
       "overlay": "framing/round3/overlays/K-boy.png",
       "runtime_s": 904
+    },
+    "K-girl": {
+      "frame": "K-girl",
+      "room": "girl",
+      "round2_id": "K2-girl",
+      "camera": {
+        "id": "K-girl",
+        "room": "girl",
+        "loc": [
+          1.1,
+          16.63,
+          1.0
+        ],
+        "yaw": 33,
+        "u0": 0.52,
+        "v0": 0.44,
+        "status": "1.1 (K2-girl)",
+        "hero": ""
+      },
+      "image": "framing/round3/K-girl.png",
+      "resolution": [
+        3840,
+        2160
+      ],
+      "samples": 36,
+      "placeholders_shown": [
+        "girl/bedding",
+        "girl/bedspread",
+        "girl/bookshelf",
+        "girl/cushions",
+        "girl/doll",
+        "girl/framed-prints",
+        "girl/roman-blind",
+        "girl/rug",
+        "girl/soft-toy",
+        "girl/toy-basket"
+      ],
+      "built_generic": [],
+      "missing": [],
+      "lamps_on": [],
+      "lamps_off": [
+        "girl/pendant",
+        "girl/wall-sconce"
+      ],
+      "mean_L": 150.3,
+      "mean_L_round2": 172.3,
+      "designer_notes": "k-girl.txt: no pendant, wall lamp, chair, pram; daylight only",
+      "est_vs_measured": [
+        {
+          "key": "NE_corner_u",
+          "est": 0.303,
+          "measured": 0.303,
+          "dev": -0.0,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "window_u (left edge .. west jamb)",
+          "est": [
+            0.0,
+            0.23
+          ],
+          "measured": [
+            0.0,
+            0.2301
+          ],
+          "dev": [
+            0.0,
+            0.0001
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "window_cut_pct",
+          "est": 23,
+          "measured": 23.1,
+          "dev": 0.1,
+          "flag_gt_tol": false,
+          "tol": 2,
+          "note": ""
+        },
+        {
+          "key": "roman-blind bottom v (Z 1.85 at the jamb)",
+          "est": 0.13,
+          "measured": 0.1706,
+          "dev": 0.0406,
+          "flag_gt_tol": true,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "bed_front_u (corners at Y front, Z 0.50)",
+          "est": [
+            0.15,
+            0.46
+          ],
+          "measured": [
+            0.1512,
+            0.4613
+          ],
+          "dev": [
+            0.0012,
+            0.0013
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "mattress_v (bedding top 0.50 at the front: far / near corner)",
+          "est": [
+            0.64,
+            0.73
+          ],
+          "measured": [
+            0.6179,
+            0.7018
+          ],
+          "dev": [
+            -0.0221,
+            -0.0282
+          ],
+          "flag_gt_tol": true,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "pendant_u (shade rim, geometry)",
+          "est": [
+            0.28,
+            0.33
+          ],
+          "measured": [
+            0.2764,
+            0.3292
+          ],
+          "dev": [
+            -0.0036,
+            -0.0008
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "pendant_v (shade top 1.66 .. bottom 1.45, centre)",
+          "est": [
+            0.22,
+            0.3
+          ],
+          "measured": [
+            0.2297,
+            0.2966
+          ],
+          "dev": [
+            0.0097,
+            -0.0034
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "wall-sconce (plate centre) u",
+          "est": 0.7,
+          "measured": 0.6971,
+          "dev": -0.0029,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "wall-sconce (plate centre) v",
+          "est": 0.33,
+          "measured": 0.334,
+          "dev": 0.004,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "wall-sconce shade centre u (arm end, 0.39 out)",
+          "est": null,
+          "measured": 0.6632,
+          "dev": null,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": "no est; the shade sits at the arm end"
+        },
+        {
+          "key": "bookshelf_u (pixels)",
+          "est": [
+            0.43,
+            0.56
+          ],
+          "measured": [
+            0.4195,
+            0.562
+          ],
+          "dev": [
+            -0.0105,
+            0.002
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "bookshelf_v (pixels)",
+          "est": [
+            0.15,
+            0.35
+          ],
+          "measured": [
+            0.1319,
+            0.3648
+          ],
+          "dev": [
+            -0.0181,
+            0.0148
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "framed-prints_u (pixels)",
+          "est": [
+            0.75,
+            0.9
+          ],
+          "measured": [
+            0.7391,
+            0.9258
+          ],
+          "dev": [
+            -0.0109,
+            0.0258
+          ],
+          "flag_gt_tol": true,
+          "tol": 0.02,
+          "note": "pair X 0.38-1.02 (format kept, see build notes)"
+        },
+        {
+          "key": "framed-prints top v",
+          "est": 0.055,
+          "measured": 0.0481,
+          "dev": -0.0069,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "desk-chair back centre u",
+          "est": 0.73,
+          "measured": 0.7124,
+          "dev": -0.0176,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "desk-chair back top v",
+          "est": 0.62,
+          "measured": 0.6226,
+          "dev": 0.0026,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "desk_u (top front corners)",
+          "est": [
+            0.63,
+            0.91
+          ],
+          "measured": [
+            0.626,
+            0.912
+          ],
+          "dev": [
+            -0.004,
+            0.002
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "desk top v (front, centre)",
+          "est": 0.6,
+          "measured": 0.6026,
+          "dev": 0.0026,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "toy-basket_u (pixels)",
+          "est": [
+            0.27,
+            0.38
+          ],
+          "measured": [
+            0.2513,
+            0.3667
+          ],
+          "dev": [
+            -0.0187,
+            -0.0133
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "toy-basket_v (pixels)",
+          "est": [
+            0.78,
+            0.96
+          ],
+          "measured": [
+            0.7056,
+            1.0
+          ],
+          "dev": [
+            -0.0744,
+            0.04
+          ],
+          "flag_gt_tol": true,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "paint line v (Z 1.25: corner / desk)",
+          "est": [
+            0.34,
+            0.38
+          ],
+          "measured": [
+            0.3687,
+            0.3263
+          ],
+          "dev": [
+            0.0287,
+            -0.0537
+          ],
+          "flag_gt_tol": true,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "top_edge_on_east_wall_Z (corner)",
+          "est": null,
+          "measured": 2.5437,
+          "dev": null,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": "round 1 measured 2.54"
+        }
+      ],
+      "est_flags": [
+        "roman-blind bottom v (Z 1.85 at the jamb)",
+        "mattress_v (bedding top 0.50 at the front: far / near corner)",
+        "framed-prints_u (pixels)",
+        "toy-basket_v (pixels)",
+        "paint line v (Z 1.25: corner / desk)"
+      ],
+      "items_visible": {
+        "girl bed 96x196 (fixed)": {
+          "kind": "furniture",
+          "frame_area_pct": 5.98,
+          "visible_pct": 55.1,
+          "cut_by_edge_pct": 0.0
+        },
+        "girl/roman-blind": {
+          "kind": "proxy",
+          "frame_area_pct": 2.91,
+          "visible_pct": 28.0,
+          "cut_by_edge_pct": 72.0
+        },
+        "girl/bookshelf": {
+          "kind": "proxy",
+          "frame_area_pct": 2.23,
+          "visible_pct": 100.0,
+          "cut_by_edge_pct": 0.0
+        },
+        "girl/cushions": {
+          "kind": "proxy",
+          "frame_area_pct": 1.28,
+          "visible_pct": 97.3,
+          "cut_by_edge_pct": 0.0
+        },
+        "girl desk 90x50 (fixed)": {
+          "kind": "furniture",
+          "frame_area_pct": 2.92,
+          "visible_pct": 97.1,
+          "cut_by_edge_pct": 2.0
+        },
+        "girl/doll": {
+          "kind": "proxy",
+          "frame_area_pct": 0.31,
+          "visible_pct": 100.0,
+          "cut_by_edge_pct": 0.0
+        },
+        "girl/bedding": {
+          "kind": "proxy",
+          "frame_area_pct": 2.46,
+          "visible_pct": 47.4,
+          "cut_by_edge_pct": 0.0
+        },
+        "girl/toy-basket": {
+          "kind": "proxy",
+          "frame_area_pct": 3.02,
+          "visible_pct": 90.4,
+          "cut_by_edge_pct": 9.6
+        },
+        "girl/framed-prints": {
+          "kind": "proxy",
+          "frame_area_pct": 3.38,
+          "visible_pct": 100.0,
+          "cut_by_edge_pct": 0.0
+        },
+        "girl/rug": {
+          "kind": "proxy",
+          "frame_area_pct": 4.53,
+          "visible_pct": 11.1,
+          "cut_by_edge_pct": 83.5
+        },
+        "girl/bedspread": {
+          "kind": "proxy",
+          "frame_area_pct": 1.75,
+          "visible_pct": 76.2,
+          "cut_by_edge_pct": 0.0
+        },
+        "girl/soft-toy": {
+          "kind": "proxy",
+          "frame_area_pct": 0.28,
+          "visible_pct": 81.8,
+          "cut_by_edge_pct": 0.0
+        },
+        "window W-girl": {
+          "kind": "window",
+          "frame_area_pct": 3.38,
+          "visible_pct": 32.3,
+          "cut_by_edge_pct": 59.0
+        }
+      },
+      "F3_tangents": {
+        "edge_tangents": [],
+        "object_object_tangents": [
+          {
+            "a": "girl/cushions",
+            "b": "girl/bedspread",
+            "kind": "gap",
+            "gap": 0.0161,
+            "dist3d_m": 0.52,
+            "rule": "silhouettes apart by < 0.02 (kissing contours)"
+          },
+          {
+            "a": "girl/bedding",
+            "b": "girl/toy-basket",
+            "kind": "overlap",
+            "overlap_thickness": 0.0273,
+            "cover_of_back": 0.041,
+            "behind": "girl/bedding",
+            "dist3d_m": 0.17,
+            "rule": "overlap thinner than 0.03 and < 60% of the back item"
+          },
+          {
+            "a": "girl/toy-basket",
+            "b": "girl/bedspread",
+            "kind": "overlap",
+            "overlap_thickness": 0.0039,
+            "cover_of_back": 0.004,
+            "behind": "girl/bedspread",
+            "dist3d_m": 0.155,
+            "rule": "overlap thinner than 0.03 and < 60% of the back item"
+          },
+          {
+            "a": "girl/soft-toy",
+            "b": "window W-girl",
+            "kind": "overlap",
+            "overlap_thickness": 0.0039,
+            "cover_of_back": 0.002,
+            "behind": "window W-girl",
+            "dist3d_m": 0.2,
+            "rule": "overlap thinner than 0.03 and < 60% of the back item"
+          }
+        ],
+        "note": "edge: visible bbox margin 0 < m < 0.02; object-object as round 2 (ray-cast silhouettes, 512x288)"
+      },
+      "boxes": {
+        "girl bed 96x196 (fixed)": {
+          "kind": "furniture",
+          "box": [
+            0.1516,
+            0.5898,
+            0.5565,
+            0.9569
+          ],
+          "px": 496045
+        },
+        "girl desk 90x50 (fixed)": {
+          "kind": "furniture",
+          "box": [
+            0.6266,
+            0.9193,
+            0.5648,
+            1.0
+          ],
+          "px": 242550
+        },
+        "girl/roman-blind": {
+          "kind": "proxy",
+          "box": [
+            0.0,
+            0.2188,
+            0.0,
+            0.1713
+          ],
+          "px": 241343
+        },
+        "girl/bedding": {
+          "kind": "proxy",
+          "box": [
+            0.1818,
+            0.4529,
+            0.5755,
+            0.8019
+          ],
+          "px": 204409
+        },
+        "girl/bedspread": {
+          "kind": "proxy",
+          "box": [
+            0.3359,
+            0.5419,
+            0.6014,
+            0.7889
+          ],
+          "px": 144997
+        },
+        "girl/cushions": {
+          "kind": "proxy",
+          "box": [
+            0.2984,
+            0.4034,
+            0.4694,
+            0.6051
+          ],
+          "px": 106426
+        },
+        "girl/soft-toy": {
+          "kind": "proxy",
+          "box": [
+            0.199,
+            0.2339,
+            0.5102,
+            0.6037
+          ],
+          "px": 23066
+        },
+        "girl/bookshelf": {
+          "kind": "proxy",
+          "box": [
+            0.4195,
+            0.562,
+            0.1319,
+            0.3648
+          ],
+          "px": 184680
+        },
+        "girl/framed-prints": {
+          "kind": "proxy",
+          "box": [
+            0.7391,
+            0.9258,
+            0.0481,
+            0.2773
+          ],
+          "px": 280094
+        },
+        "girl/rug": {
+          "kind": "proxy",
+          "box": [
+            0.0,
+            0.693,
+            0.8375,
+            1.0
+          ],
+          "px": 375383
+        },
+        "girl/toy-basket": {
+          "kind": "proxy",
+          "box": [
+            0.2513,
+            0.3667,
+            0.7056,
+            1.0
+          ],
+          "px": 250286
+        },
+        "girl/doll": {
+          "kind": "proxy",
+          "box": [
+            0.6966,
+            0.7302,
+            0.4597,
+            0.5787
+          ],
+          "px": 25644
+        },
+        "window W-girl": {
+          "kind": "window",
+          "box": [
+            0.0,
+            0.2299,
+            0.0,
+            0.5366
+          ],
+          "px": 280756
+        }
+      },
+      "rules_designer": [
+        {
+          "rule": "toy basket vs the bottom edge: cut, or >= 0.03 clear",
+          "bottom_v": 1.0,
+          "margin": 0.0,
+          "ok": true
+        },
+        {
+          "rule": "doll-pram covers the front-left desk leg decisively",
+          "leg": "girl_desk2_leg.001",
+          "leg_silhouette_px": 753,
+          "covered_pct": 0.0,
+          "ok": false
+        }
+      ],
+      "density_F10": {
+        "result": "fail",
+        "counted": 5,
+        "minimum": 11,
+        "target": [
+          12,
+          15
+        ],
+        "info_counted_if_area_ge_0_2pct": 7,
+        "info_counted_any_area_ge_50pct_visible": 7,
+        "frame_kind": "lean",
+        "in_target": false,
+        "categories": [
+          "decor/play",
+          "storage/function",
+          "textile"
+        ],
+        "four_categories_ok": false,
+        "missing_categories": [
+          "lighting",
+          "ceramics/tableware"
+        ],
+        "slots": [
+          {
+            "slot": "framed-prints",
+            "category": "decor/play",
+            "frame_area_pct": 3.38,
+            "visible_pct": 100.0,
+            "cut_by_edge_pct": 0.0,
+            "counted": true,
+            "why_not": null
+          },
+          {
+            "slot": "toy-basket",
+            "category": "storage/function",
+            "frame_area_pct": 3.02,
+            "visible_pct": 90.4,
+            "cut_by_edge_pct": 9.6,
+            "counted": true,
+            "why_not": null
+          },
+          {
+            "slot": "bookshelf",
+            "category": "storage/function",
+            "frame_area_pct": 2.23,
+            "visible_pct": 100.0,
+            "cut_by_edge_pct": 0.0,
+            "counted": true,
+            "why_not": null
+          },
+          {
+            "slot": "bedspread",
+            "category": "textile",
+            "frame_area_pct": 1.75,
+            "visible_pct": 76.2,
+            "cut_by_edge_pct": 0.0,
+            "counted": true,
+            "why_not": null
+          },
+          {
+            "slot": "cushions",
+            "category": "textile",
+            "frame_area_pct": 1.28,
+            "visible_pct": 97.3,
+            "cut_by_edge_pct": 0.0,
+            "counted": true,
+            "why_not": null
+          },
+          {
+            "slot": "rug",
+            "category": "textile",
+            "frame_area_pct": 4.53,
+            "visible_pct": 11.1,
+            "cut_by_edge_pct": 83.5,
+            "counted": false,
+            "why_not": "visible < 50%"
+          },
+          {
+            "slot": "roman-blind",
+            "category": "textile",
+            "frame_area_pct": 2.91,
+            "visible_pct": 28.0,
+            "cut_by_edge_pct": 72.0,
+            "counted": false,
+            "why_not": "visible < 50%"
+          },
+          {
+            "slot": "bedding",
+            "category": "textile",
+            "frame_area_pct": 2.46,
+            "visible_pct": 47.4,
+            "cut_by_edge_pct": 0.0,
+            "counted": false,
+            "why_not": "visible < 50%"
+          },
+          {
+            "slot": "doll",
+            "category": "decor/play",
+            "frame_area_pct": 0.31,
+            "visible_pct": 100.0,
+            "cut_by_edge_pct": 0.0,
+            "counted": false,
+            "why_not": "area < 0.5%"
+          },
+          {
+            "slot": "soft-toy",
+            "category": "textile",
+            "frame_area_pct": 0.28,
+            "visible_pct": 81.8,
+            "cut_by_edge_pct": 0.0,
+            "counted": false,
+            "why_not": "area < 0.5%"
+          }
+        ],
+        "rule": "counted = own-room product proxy >= 50% visible (ray-cast silhouette incl. outside the frame) and >= 0.5% of the frame; sets once; fillers, shell, fixed furniture, neighbouring rooms not counted"
+      },
+      "heroes_thirds": [
+        {
+          "hero": "NE corner + pendant (window corner)",
+          "u": 0.303,
+          "ok": true
+        },
+        {
+          "hero": "pendant centre",
+          "u": 0.3031,
+          "ok": true
+        },
+        {
+          "hero": "desk sconce plate (right third)",
+          "u": 0.6971,
+          "ok": true
+        }
+      ],
+      "lamps": [],
+      "wall_patches": {
+        "hero_wall_high": {
+          "u": 0.398,
+          "v": 0.01,
+          "xyz": [
+            -1.5,
+            13.88,
+            2.35
+          ],
+          "note": "outside the frame"
+        },
+        "hero_wall_mid": {
+          "u": 0.39771589636802673,
+          "v": 0.13752728700637817,
+          "L_hsl": 73.6,
+          "Y_lin": 0.5078,
+          "stops_vs_mid": 1.5,
+          "xyz": [
+            -1.5,
+            13.88,
+            1.95
+          ]
+        },
+        "paint_block": {
+          "u": 0.534853994846344,
+          "v": 0.45833390951156616,
+          "L_hsl": 69.9,
+          "Y_lin": 0.4533,
+          "stops_vs_mid": 1.33,
+          "xyz": [
+            -0.6,
+            13.879999999999999,
+            0.95
+          ]
+        },
+        "north_wall": {
+          "u": -0.283,
+          "v": -0.21,
+          "xyz": [
+            -2.3,
+            16.23,
+            2.2
+          ],
+          "note": "outside the frame"
+        },
+        "ceiling": {
+          "u": 0.55,
+          "v": 0.04,
+          "L_hsl": 66.8,
+          "Y_lin": 0.4117,
+          "stops_vs_mid": 1.19
+        },
+        "floor_centre": {
+          "u": 0.5,
+          "v": 0.93,
+          "L_hsl": 36.1,
+          "Y_lin": 0.1179,
+          "stops_vs_mid": -0.61
+        }
+      },
+      "light_balance": {},
+      "camera_clearance_m": {
+        "min": 0.53,
+        "nearest": "leaf_corridor_girl"
+      },
+      "overlay": "framing/round3/overlays/K-girl.png",
+      "runtime_s": 792
     }
   }
 }

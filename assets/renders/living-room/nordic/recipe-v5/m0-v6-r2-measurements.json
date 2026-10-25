@@ -1,0 +1,240 @@
+{
+ "asset_id": "m0-v6-r2",
+ "frame": "M0",
+ "raw": "/home/user/homedesign-app/assets/renders/living-room/nordic/recipe-v5/raw/m0-v6-r2.png",
+ "returned_size_px": [
+  2736,
+  1536
+ ],
+ "normalised_size_px": [
+  2736,
+  1539
+ ],
+ "resize_16_9": "non-uniform resize 2736x1536 -> 2736x1539 (+0.20% vertical), no crop",
+ "clay": "/home/user/homedesign-app/assets/blockout/living-room/m0-clay-4k.png",
+ "clay_selfcheck": null,
+ "clay_lock": {
+  "frame": {
+   "du": 0.0362,
+   "dv": 0.0045,
+   "peak": 0.013,
+   "ncc": 0.049
+  },
+  "corner+cornice": {
+   "du": 0.0091,
+   "dv": 0.0195,
+   "peak": 0.016,
+   "ncc": -0.021
+  },
+  "window": {
+   "du": -0.0113,
+   "dv": -0.0468,
+   "peak": 0.008,
+   "ncc": null
+  },
+  "sofa": {
+   "du": -0.0073,
+   "dv": 0.0104,
+   "peak": 0.052,
+   "ncc": -0.008
+  },
+  "table": {
+   "du": -0.0479,
+   "dv": -0.0273,
+   "peak": 0.02,
+   "ncc": -0.049
+  },
+  "armchair": {
+   "du": -0.0347,
+   "dv": -0.0006,
+   "peak": 0.017,
+   "ncc": -0.004
+  },
+  "ceiling-band": {
+   "du": 0.0143,
+   "dv": 0.013,
+   "peak": 0.014,
+   "ncc": -0.011
+  },
+  "floor/skirting-right": {
+   "du": -0.0058,
+   "dv": 0.0201,
+   "peak": 0.015,
+   "ncc": 0.006
+  }
+ },
+ "clay_lock_worst_abs_shift": 0.0479,
+ "clay_lock_worst_abs_shift_strong_peaks": 0.0104,
+ "clay_lock_pass_0_02_strong_peaks": true,
+ "clay_lock_note": "regions = whole frame, quadrants, ceiling/floor bands and the clay boxes of fixed furniture / windows / openings; peaks below ~0.03 are unreliable (weak texture), so the verdict is visual (<aid>-lock.png) with the strong-peak number as support",
+ "product_boxes_clay": {},
+ "product_box_rule": "each product inside its clay box +-15 % of the box size (<aid>-boxes.png); read visually",
+ "grade_target_L": 93.0,
+ "measure_before": {
+  "back wall near corner (0.467,0.385) [target 92-95]": [
+   29.0,
+   20.1,
+   63.2
+  ],
+  "back wall behind sofa (0.69,0.22) [88-91]": [
+   28.5,
+   17.7,
+   64.8
+  ],
+  "back wall right edge (0.97,0.31) [82-86]": [
+   28.1,
+   28.8,
+   62.8
+  ],
+  "window wall (0.10,0.30)": [
+   28.2,
+   32.1,
+   61.7
+  ],
+  "ceiling (0.55,0.04)": [
+   28.2,
+   21.2,
+   64.5
+  ],
+  "sofa back (0.70,0.60)": [
+   28.0,
+   16.9,
+   56.5
+  ],
+  "armchair seat (0.31,0.75)": [
+   27.8,
+   36.2,
+   31.4
+  ],
+  "table top oak (0.62,0.715)": [
+   29.8,
+   24.8,
+   60.0
+  ],
+  "brightest area (window / door): L p50 / p99 / max": [
+   86.3,
+   100.0,
+   100.0
+  ],
+  "pixels with a 255 channel: inside / outside that area": [
+   14641,
+   1304
+  ],
+  "darkest 0.5% patch L [12-15]": 3.6,
+  "frame mean L": 58.0,
+  "floor median HSL (u0.42-0.98,v0.87-0.99) [H30-40 S30-45 L68-78]": [
+   27.9,
+   21.1,
+   58.4
+  ],
+  "contact shadow under sofa: min L / p1": [
+   5.3,
+   7.3
+  ]
+ },
+ "grade": {
+  "white_balance": {
+   "patch": [
+    0.467,
+    0.385
+   ],
+   "H_before": 29.0,
+   "H_target": 36,
+   "gains_rgb": [
+    0.9597,
+    1.0186,
+    0.9597
+   ],
+   "gain_clip": "0.9-1.1"
+  },
+  "exposure": {
+   "patch": [
+    0.467,
+    0.385
+   ],
+   "target_L": 93.0,
+   "needed_stops": 1.197,
+   "applied_stops": 0.2,
+   "flag": "DARK: needs more than +0.2 stop, not lifted further"
+  },
+  "saturation": "chroma x0.90 (linear, toward luminance)",
+  "highlight_rolloff": {
+   "knee_L": 94,
+   "asymptote_L": 97.25,
+   "on": "max channel, hue kept"
+  },
+  "s_curve": {
+   "mix": 0.12,
+   "shape": "smoothstep blend"
+  },
+  "black_point": {
+   "darkest_patch_L_before": 3.6,
+   "lift_to_L": 12.5,
+   "blend": 0.0922
+  },
+  "grain": "none",
+  "vignette": "none"
+ },
+ "measure_after": {
+  "back wall near corner (0.467,0.385) [target 92-95]": [
+   36.0,
+   21.9,
+   70.2
+  ],
+  "back wall behind sofa (0.69,0.22) [88-91]": [
+   37.0,
+   19.3,
+   71.7
+  ],
+  "back wall right edge (0.97,0.31) [82-86]": [
+   32.8,
+   31.2,
+   69.8
+  ],
+  "window wall (0.10,0.30)": [
+   32.3,
+   34.6,
+   68.8
+  ],
+  "ceiling (0.55,0.04)": [
+   35.2,
+   23.1,
+   71.5
+  ],
+  "sofa back (0.70,0.60)": [
+   34.2,
+   17.9,
+   63.6
+  ],
+  "armchair seat (0.31,0.75)": [
+   28.9,
+   25.2,
+   38.9
+  ],
+  "table top oak (0.62,0.715)": [
+   34.7,
+   26.2,
+   67.0
+  ],
+  "brightest area (window / door): L p50 / p99 / max": [
+   92.1,
+   96.9,
+   97.3
+  ],
+  "pixels with a 255 channel: inside / outside that area": [
+   0,
+   0
+  ],
+  "darkest 0.5% patch L [12-15]": 12.5,
+  "frame mean L": 64.7,
+  "floor median HSL (u0.42-0.98,v0.87-0.99) [H30-40 S30-45 L68-78]": [
+   33.3,
+   21.1,
+   65.5
+  ],
+  "contact shadow under sofa: min L / p1": [
+   13.9,
+   15.8
+  ]
+ }
+}
