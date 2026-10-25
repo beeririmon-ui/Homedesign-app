@@ -5831,6 +5831,717 @@
       },
       "overlay": "framing/round3/overlays/K-girl.png",
       "runtime_s": 792
+    },
+    "B1": {
+      "frame": "B1",
+      "room": "bath",
+      "round2_id": "B1",
+      "camera": {
+        "id": "B1",
+        "room": "bath",
+        "loc": [
+          3.8,
+          13.2,
+          1.15
+        ],
+        "yaw": -22,
+        "u0": 0.52,
+        "v0": 0.46,
+        "status": "arrival",
+        "hero": "the shower curtain gathered at the L corner, right third (u 0.666), limestone and niche behind it"
+      },
+      "image": "framing/round3/B1.png",
+      "resolution": [
+        3840,
+        2160
+      ],
+      "samples": 36,
+      "placeholders_shown": [
+        "bath/bath-mat",
+        "bath/candle",
+        "bath/reed-diffuser",
+        "bath/shower-curtain",
+        "bath/shower-dispensers",
+        "bath/toilet-paper-stand",
+        "bath/vanity-sconces",
+        "bath/wall-sconce"
+      ],
+      "built_generic": [],
+      "missing": [],
+      "lamps_on": [
+        "bath/shower-downlight",
+        "bath/vanity-sconces",
+        "bath/wall-sconce"
+      ],
+      "lamps_off": [
+        "bath/ceiling-light"
+      ],
+      "mean_L": 170.3,
+      "mean_L_round2": 139.2,
+      "designer_notes": "b1.txt: curtain gathered at (5.30, 11.15); no stool, ladder, towels, floor planter, ledge planter, bin, brush; east vanity sconce lit (cut at the right edge); shower downlight lit at low power (4 W), ceiling light off; bath window light x3 (plan 3)",
+      "est_vs_measured": [
+        {
+          "key": "NE_corner_u (3.25, 9.95)",
+          "est": 0.11,
+          "measured": 0.1098,
+          "dev": -0.0002,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "window_u (X 3.45 / 4.25)",
+          "est": [
+            0.163,
+            0.353
+          ],
+          "measured": [
+            0.1633,
+            0.3523
+          ],
+          "dev": [
+            0.0003,
+            -0.0007
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "window head v (Z 2.15 at the jambs)",
+          "est": [
+            0.05,
+            0.09
+          ],
+          "measured": [
+            0.0488,
+            0.0875
+          ],
+          "dev": [
+            -0.0012,
+            -0.0025
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "window sill v (Z 1.00, centre)",
+          "est": 0.52,
+          "measured": 0.5186,
+          "dev": -0.0014,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "wc + ledge u (pixels)",
+          "est": [
+            0.21,
+            0.33
+          ],
+          "measured": [
+            0.1146,
+            0.3919
+          ],
+          "dev": [
+            -0.0954,
+            0.0619
+          ],
+          "flag_gt_tol": true,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "sconce (4.70, 9.95, 1.70) uv",
+          "est": [
+            0.44,
+            0.27
+          ],
+          "measured": [
+            0.4438,
+            0.2654
+          ],
+          "dev": [
+            0.0038,
+            -0.0046
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "shower east wall u (X 5.20 .. corner)",
+          "est": [
+            0.56,
+            0.7
+          ],
+          "measured": [
+            0.5352,
+            0.6988
+          ],
+          "dev": [
+            -0.0248,
+            -0.0012
+          ],
+          "flag_gt_tol": true,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "SE_corner_u (6.25, 9.95)",
+          "est": 0.699,
+          "measured": 0.6988,
+          "dev": -0.0002,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "shower south wall u (corner .. Y 11.15)",
+          "est": [
+            0.7,
+            0.88
+          ],
+          "measured": [
+            0.6988,
+            0.8757
+          ],
+          "dev": [
+            -0.0012,
+            -0.0043
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "curtain stack u (pixels)",
+          "est": [
+            0.64,
+            0.69
+          ],
+          "measured": [
+            0.6654,
+            0.725
+          ],
+          "dev": [
+            0.0254,
+            0.035
+          ],
+          "flag_gt_tol": true,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "right_edge_on_south_wall_Y",
+          "est": 11.65,
+          "measured": 11.6543,
+          "dev": 0.0043,
+          "flag_gt_tol": false,
+          "tol": 0.05,
+          "note": ""
+        },
+        {
+          "key": "floor visible from depth (m)",
+          "est": 2.52,
+          "measured": 2.524,
+          "dev": 0.004,
+          "flag_gt_tol": false,
+          "tol": 0.03,
+          "note": "formula"
+        }
+      ],
+      "est_flags": [
+        "wc + ledge u (pixels)",
+        "shower east wall u (X 5.20 .. corner)",
+        "curtain stack u (pixels)"
+      ],
+      "items_visible": {
+        "bath/wall-sconce": {
+          "kind": "proxy",
+          "frame_area_pct": 0.19,
+          "visible_pct": 100.0,
+          "cut_by_edge_pct": 0.0
+        },
+        "bath/bath-mat": {
+          "kind": "proxy",
+          "frame_area_pct": 1.01,
+          "visible_pct": 87.8,
+          "cut_by_edge_pct": 12.3
+        },
+        "bath/candle": {
+          "kind": "proxy",
+          "frame_area_pct": 0.09,
+          "visible_pct": 100.0,
+          "cut_by_edge_pct": 0.0
+        },
+        "bath/shower-curtain": {
+          "kind": "proxy",
+          "frame_area_pct": 5.96,
+          "visible_pct": 78.1,
+          "cut_by_edge_pct": 21.9
+        },
+        "bath/reed-diffuser": {
+          "kind": "proxy",
+          "frame_area_pct": 0.19,
+          "visible_pct": 100.0,
+          "cut_by_edge_pct": 0.0
+        },
+        "bath/shower-dispensers": {
+          "kind": "proxy",
+          "frame_area_pct": 0.29,
+          "visible_pct": 100.0,
+          "cut_by_edge_pct": 0.0
+        },
+        "bath/toilet-paper-stand": {
+          "kind": "proxy",
+          "frame_area_pct": 0.4,
+          "visible_pct": 99.5,
+          "cut_by_edge_pct": 0.0
+        },
+        "bath vanity 110 (fixed)": {
+          "kind": "furniture",
+          "frame_area_pct": 2.73,
+          "visible_pct": 6.2,
+          "cut_by_edge_pct": 93.8
+        },
+        "bath/vanity-sconces": {
+          "kind": "proxy",
+          "frame_area_pct": 0.41,
+          "visible_pct": 10.2,
+          "cut_by_edge_pct": 89.8
+        },
+        "window W-bath": {
+          "kind": "window",
+          "frame_area_pct": 3.5,
+          "visible_pct": 97.3,
+          "cut_by_edge_pct": 0.0
+        },
+        "bath WC + limestone ledge (fixed)": {
+          "kind": "furniture",
+          "frame_area_pct": 11.13,
+          "visible_pct": 99.9,
+          "cut_by_edge_pct": 0.0
+        }
+      },
+      "F3_tangents": {
+        "edge_tangents": [],
+        "object_object_tangents": [
+          {
+            "a": "window W-bath",
+            "b": "bath WC + limestone ledge (fixed)",
+            "kind": "gap",
+            "gap": 0.0137,
+            "dist3d_m": 0.05,
+            "rule": "silhouettes apart by < 0.02 (kissing contours)"
+          }
+        ],
+        "note": "edge: visible bbox margin 0 < m < 0.02; object-object as round 2 (ray-cast silhouettes, 512x288)"
+      },
+      "boxes": {
+        "bath fluted glazing": {
+          "kind": "architecture",
+          "box": [
+            0.1901,
+            0.3279,
+            0.1204,
+            0.4856
+          ],
+          "px": 395410
+        },
+        "bath WC + limestone ledge (fixed)": {
+          "kind": "furniture",
+          "box": [
+            0.1146,
+            0.3919,
+            0.5333,
+            0.9755
+          ],
+          "px": 923457
+        },
+        "shower fittings, matte black (shell)": {
+          "kind": "architecture",
+          "box": [
+            0.725,
+            0.7854,
+            0.0856,
+            0.5435
+          ],
+          "px": 13610
+        },
+        "bath vanity 110 (fixed)": {
+          "kind": "furniture",
+          "box": [
+            0.9208,
+            1.0,
+            0.6032,
+            1.0
+          ],
+          "px": 226131
+        },
+        "bath/shower-curtain": {
+          "kind": "proxy",
+          "box": [
+            0.6654,
+            0.725,
+            0.0,
+            1.0
+          ],
+          "px": 494589
+        },
+        "bath/shower-dispensers": {
+          "kind": "proxy",
+          "box": [
+            0.7599,
+            0.8115,
+            0.4361,
+            0.4972
+          ],
+          "px": 23656
+        },
+        "bath/bath-mat": {
+          "kind": "proxy",
+          "box": [
+            0.482,
+            0.632,
+            0.8949,
+            1.0
+          ],
+          "px": 83403
+        },
+        "bath/toilet-paper-stand": {
+          "kind": "proxy",
+          "box": [
+            0.3919,
+            0.4294,
+            0.6472,
+            0.9046
+          ],
+          "px": 32969
+        },
+        "bath/reed-diffuser": {
+          "kind": "proxy",
+          "box": [
+            0.3104,
+            0.3331,
+            0.4083,
+            0.5389
+          ],
+          "px": 15423
+        },
+        "bath/candle": {
+          "kind": "proxy",
+          "box": [
+            0.2862,
+            0.3076,
+            0.5005,
+            0.5417
+          ],
+          "px": 7196
+        },
+        "bath/wall-sconce": {
+          "kind": "proxy",
+          "box": [
+            0.4318,
+            0.462,
+            0.2292,
+            0.2944
+          ],
+          "px": 15404
+        },
+        "bath/vanity-sconces": {
+          "kind": "proxy",
+          "box": [
+            0.9526,
+            1.0,
+            0.1602,
+            0.2551
+          ],
+          "px": 33905
+        },
+        "window W-bath": {
+          "kind": "window",
+          "box": [
+            0.1633,
+            0.3523,
+            0.0486,
+            0.5218
+          ],
+          "px": 290095
+        }
+      },
+      "rules_designer": [
+        {
+          "rule": "curtain stack vs the SE corner line (B1, info)",
+          "stack_u": [
+            0.6654,
+            0.725
+          ],
+          "corner_u": 0.6988,
+          "gap": -0.0262,
+          "ok": false
+        }
+      ],
+      "density_F10": {
+        "result": "fail",
+        "counted": 2,
+        "minimum": 11,
+        "target": [
+          12,
+          15
+        ],
+        "info_counted_if_area_ge_0_2pct": 4,
+        "info_counted_any_area_ge_50pct_visible": 7,
+        "frame_kind": "lean",
+        "in_target": false,
+        "categories": [
+          "textile"
+        ],
+        "four_categories_ok": false,
+        "missing_categories": [
+          "lighting",
+          "ceramics/tableware",
+          "storage/function"
+        ],
+        "slots": [
+          {
+            "slot": "shower-curtain",
+            "category": "textile",
+            "frame_area_pct": 5.96,
+            "visible_pct": 78.1,
+            "cut_by_edge_pct": 21.9,
+            "counted": true,
+            "why_not": null
+          },
+          {
+            "slot": "bath-mat",
+            "category": "textile",
+            "frame_area_pct": 1.01,
+            "visible_pct": 87.8,
+            "cut_by_edge_pct": 12.3,
+            "counted": true,
+            "why_not": null
+          },
+          {
+            "slot": "vanity-sconces",
+            "category": "lighting",
+            "frame_area_pct": 0.41,
+            "visible_pct": 10.2,
+            "cut_by_edge_pct": 89.8,
+            "counted": false,
+            "why_not": "visible < 50%"
+          },
+          {
+            "slot": "toilet-paper-stand",
+            "category": "storage/function",
+            "frame_area_pct": 0.4,
+            "visible_pct": 99.5,
+            "cut_by_edge_pct": 0.0,
+            "counted": false,
+            "why_not": "area < 0.5%"
+          },
+          {
+            "slot": "shower-dispensers",
+            "category": "ceramics/tableware",
+            "frame_area_pct": 0.29,
+            "visible_pct": 100.0,
+            "cut_by_edge_pct": 0.0,
+            "counted": false,
+            "why_not": "area < 0.5%"
+          },
+          {
+            "slot": "wall-sconce",
+            "category": "lighting",
+            "frame_area_pct": 0.19,
+            "visible_pct": 100.0,
+            "cut_by_edge_pct": 0.0,
+            "counted": false,
+            "why_not": "area < 0.5%"
+          },
+          {
+            "slot": "reed-diffuser",
+            "category": "ceramics/tableware",
+            "frame_area_pct": 0.19,
+            "visible_pct": 100.0,
+            "cut_by_edge_pct": 0.0,
+            "counted": false,
+            "why_not": "area < 0.5%"
+          },
+          {
+            "slot": "candle",
+            "category": "ceramics/tableware",
+            "frame_area_pct": 0.09,
+            "visible_pct": 100.0,
+            "cut_by_edge_pct": 0.0,
+            "counted": false,
+            "why_not": "area < 0.5%"
+          }
+        ],
+        "rule": "counted = own-room product proxy >= 50% visible (ray-cast silhouette incl. outside the frame) and >= 0.5% of the frame; sets once; fillers, shell, fixed furniture, neighbouring rooms not counted"
+      },
+      "heroes_thirds": [
+        {
+          "hero": "shower curtain stack (L corner 5.20, 11.15)",
+          "u": 0.6657,
+          "ok": true
+        },
+        {
+          "hero": "window centre (left third)",
+          "u": 0.2625,
+          "ok": false
+        },
+        {
+          "hero": "WC centre",
+          "u": 0.2644,
+          "ok": false
+        }
+      ],
+      "lamps": [
+        {
+          "lamp": "bath/shower-downlight",
+          "typology": "ceiling",
+          "shell": true,
+          "glow_px": 0,
+          "visible": false
+        },
+        {
+          "lamp": "bath/vanity-sconces",
+          "typology": "wall",
+          "shell": false,
+          "glow_px": 67810,
+          "visible": true
+        },
+        {
+          "lamp": "bath/wall-sconce",
+          "typology": "wall",
+          "shell": false,
+          "glow_px": 15404,
+          "visible": true
+        }
+      ],
+      "F8_mirror": {
+        "result": "pass",
+        "samples": 2304,
+        "hits": {
+          "hwall_38": {
+            "frac": 0.875,
+            "x": [
+              3.25,
+              3.25
+            ],
+            "y": [
+              10.1398,
+              12.2538
+            ],
+            "z": [
+              1.2012,
+              2.6652
+            ]
+          },
+          "bath_ceiling": {
+            "frac": 0.125,
+            "x": [
+              3.253,
+              3.8124
+            ],
+            "y": [
+              10.1415,
+              12.352
+            ],
+            "z": [
+              2.7,
+              2.7
+            ]
+          }
+        },
+        "non_wall_objects": [],
+        "wall_Y_range": [
+          10.1398,
+          12.2538
+        ],
+        "wall_Z_range": [
+          1.2012,
+          2.6652
+        ],
+        "designer_est": "north wall Y 10.03-12.12, Z 1.15-2.70 + a ceiling strip; door 0.27 outside, window 0.08",
+        "method": "ray-cast: 48x48 grid on the whole mirror from CB, reflected camera rays; every object hit listed",
+        "inside_frame": {
+          "samples": 0,
+          "hits": {}
+        }
+      },
+      "wall_patches": {
+        "hero_wall_high": {
+          "u": 0.6205058097839355,
+          "v": 0.07897204160690308,
+          "L_hsl": 74.7,
+          "Y_lin": 0.5422,
+          "stops_vs_mid": 1.59,
+          "xyz": [
+            5.72,
+            9.95,
+            2.35
+          ]
+        },
+        "hero_wall_mid": {
+          "u": 0.6205058097839355,
+          "v": 0.20598137378692627,
+          "L_hsl": 72.6,
+          "Y_lin": 0.5147,
+          "stops_vs_mid": 1.52,
+          "xyz": [
+            5.72,
+            9.95,
+            1.95
+          ]
+        },
+        "limestone_shower": {
+          "u": 0.7152009606361389,
+          "v": 0.22559189796447754,
+          "L_hsl": 67.9,
+          "Y_lin": 0.4538,
+          "stops_vs_mid": 1.33,
+          "xyz": [
+            6.25,
+            10.1,
+            1.9
+          ]
+        },
+        "wall_beside_window": {
+          "u": 0.4143461287021637,
+          "v": 0.154197096824646,
+          "L_hsl": 81.8,
+          "Y_lin": 0.6554,
+          "stops_vs_mid": 1.86,
+          "xyz": [
+            4.55,
+            9.95,
+            2.0
+          ]
+        },
+        "ceiling": {
+          "u": 0.55,
+          "v": 0.04,
+          "L_hsl": 72.4,
+          "Y_lin": 0.5079,
+          "stops_vs_mid": 1.5
+        },
+        "floor_centre": {
+          "u": 0.5,
+          "v": 0.93,
+          "L_hsl": 62.5,
+          "Y_lin": 0.382,
+          "stops_vs_mid": 1.09
+        }
+      },
+      "light_balance": {},
+      "camera_clearance_m": {
+        "min": 0.19,
+        "nearest": "leaf_corridor_bath"
+      },
+      "overlay": "framing/round3/overlays/B1.png",
+      "runtime_s": 931
     }
   }
 }
