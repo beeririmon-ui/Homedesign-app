@@ -2,7 +2,7 @@
  "stage": "Phase B drafts (briefs/nordic-house-render-2026-10-24.md section 7), recipe B: gpt-image-2-5, quality sunburst, 2K, 16:9, image-to-image from the round-3 clay",
  "date": "2026-10-25",
  "cap_tokens": 12000,
- "spent_tokens": 1800,
+ "spent_tokens": 3000,
  "clay": {
   "D1": {
    "local": "assets/blockout/house/framing/round3/D1.png",
@@ -27,6 +27,14 @@
    "put": "200",
    "verified": true,
    "size": 8085836
+  },
+  "C0": {
+   "local": "assets/blockout/house/framing/round3/C0.png",
+   "sha256": "508027e5f47d31ec7853cd025444f35226fc5bca0f7b5f67fa893a7d35a22eee",
+   "var2_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/7e5d3ab3-1015-4f6e-a20b-ed2c7994cd2f.png",
+   "put": "200",
+   "verified": true,
+   "size": 7172117
   }
  },
  "jobs": [
@@ -216,7 +224,7 @@
    "room": "hall",
    "prompt_file": "h0-B.txt",
    "attempt": 1,
-   "status": "pending",
+   "status": "submitted",
    "model": "gpt-image-2-5",
    "quality": "sunburst",
    "idempotency_key": "recipe-v5-phaseB-h0B-20261025",
@@ -230,7 +238,13 @@
     "https://cf.cjdropshipping.com/quick/product/92b01af2-3326-44b8-b956-e7a45be02326.jpg",
     "https://cf.cjdropshipping.com/1619935797764.jpg",
     "https://oss-cf.cjdropshipping.com/product/2025/03/01/01/dc598ed2-3d74-4b96-b8e2-4eed288231bc_trans.jpeg"
-   ]
+   ],
+   "placeholder_id": "eaa020ba-cfcf-435e-9162-a37aceec753c",
+   "task_id": "6ded1d9903e151d722bb79c76321933a",
+   "credits": 600,
+   "credits_estimated": 600,
+   "submitted_at": "2026-10-25T14:10Z",
+   "clay_note": "round-3 H0.png (hall roof x1.6, the same factor as C0); the x1.35 test render (extra/H0-hallroof-1.35.png) moved the hall wall < 1 L, so it was not used"
   },
   {
    "id": "c0",
@@ -238,14 +252,45 @@
    "room": "corridor",
    "prompt_file": "c0.txt",
    "attempt": 1,
-   "status": "pending",
+   "status": "done",
    "model": "gpt-image-2-5",
    "quality": "sunburst",
    "idempotency_key": "recipe-v5-phaseB-c0-20261025",
    "refs": [
     "https://oss-cf.cjdropshipping.com/product/2024/11/14/05/6866ca4b-fd73-42e5-95f4-89a736528365_trans.jpeg",
     "https://ae01.alicdn.com/kf/S7a2dc7cc39e1447989e1eb94752b1588h.jpg"
-   ]
+   ],
+   "placeholder_id": "d76d150f-5fee-4078-ad8e-8c7350051849",
+   "task_id": "7d884c5321c7b8db036f5688c4d7b3d9",
+   "credits": 600,
+   "credits_estimated": 600,
+   "submitted_at": "2026-10-25T14:09Z",
+   "result_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/gpt25-7d884c5321c7b8db036f5688c4d7b3d9-0-1792937429666-ca1401da.png",
+   "raw_ext": "png",
+   "returned_size": [
+    2736,
+    1536
+   ],
+   "graded": "assets/renders/corridor/nordic/recipe-v5/c0-graded.png",
+   "out_dir": "assets/renders/corridor/nordic/recipe-v5",
+   "lock": {
+    "visual": "holds",
+    "worst_shift": 0.0117,
+    "strong_peaks": 0.0065,
+    "note": "every portal, door, slot, skirting and plank line on the clay line; the hall console and the living vista through the portal in place"
+   },
+   "verdict": "draft accepted: lock holds (0.007), nothing invented, all products in their boxes",
+   "products": {
+    "gallery-art": "in box: three frames on one top line, squares foreshortened by the angle; frames read a touch heavier than the thin aluminium of the card",
+    "ceiling-lights": "in box (the far lantern), lit",
+    "hall/framed-art": "in box",
+    "hall/console-vessel": "in box",
+    "hall/key-tray": "in box",
+    "living vista": "its own products only (prints, sofa, lamps, rug)",
+    "right wall": "empty as asked",
+    "invented": "none"
+   },
+   "note": "raw bright (-0.37 stop asked, -0.2 applied): hero wall L 90.7 -> 87.2; gallery frames a touch heavy"
   },
   {
    "id": "mb0",

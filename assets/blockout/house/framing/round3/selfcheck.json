@@ -2956,6 +2956,553 @@
       },
       "overlay": "framing/round3/overlays/H0.png",
       "runtime_s": 1122
+    },
+    "C0": {
+      "frame": "C0",
+      "room": "corridor",
+      "round2_id": "C-B",
+      "camera": {
+        "id": "C0",
+        "room": "corridor",
+        "loc": [
+          2.397,
+          17.11,
+          1.2
+        ],
+        "yaw": 0,
+        "u0": 0.5,
+        "v0": 0.46,
+        "status": "unchanged camera; 1.1 shell C-B",
+        "hero": "a gallery of light: the left wall washed from the roof slot, leading to the glowing hall and living vista"
+      },
+      "image": "framing/round3/C0.png",
+      "resolution": [
+        3840,
+        2160
+      ],
+      "samples": 36,
+      "placeholders_shown": [
+        "corridor/ceiling-lights",
+        "corridor/gallery-art",
+        "hall/console-vessel",
+        "hall/framed-art",
+        "hall/key-tray",
+        "hall/umbrella-stand",
+        "living/accent-sconces",
+        "living/basket",
+        "living/bowl",
+        "living/candle-holders",
+        "living/curtains",
+        "living/cushions",
+        "living/floor-lamp",
+        "living/framed-art",
+        "living/pendant",
+        "living/rug",
+        "living/sofa-cover",
+        "living/table-runner",
+        "living/vase",
+        "living/wall-decor",
+        "living/wall-sconce"
+      ],
+      "built_generic": [],
+      "missing": [],
+      "lamps_on": [
+        "corridor/ceiling-lights",
+        "living/accent-sconces",
+        "living/floor-lamp",
+        "living/pendant",
+        "living/wall-sconce"
+      ],
+      "lamps_off": [
+        "corridor/picture-lights"
+      ],
+      "mean_L": 190.6,
+      "mean_L_round2": 186.8,
+      "designer_notes": "c0.txt: picture-light bars removed, no runner, no stool; hall vista = the H0 rebuild (console vignette seen through the portal), living beyond = M0 clay + verdict 3.3 items",
+      "est_vs_measured": [
+        {
+          "key": "gallery_u (prints Y 15.6 / 14.0)",
+          "est": [
+            0.192,
+            0.35
+          ],
+          "measured": [
+            0.1923,
+            0.3506
+          ],
+          "dev": [
+            0.0003,
+            0.0006
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "nearest_print_top_v (1.70, 15.6, 1.70)",
+          "est": 0.067,
+          "measured": 0.0676,
+          "dev": 0.0006,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "slot/ceiling visible from Y (top edge meets Z 2.70, centre column)",
+          "est": 13.24,
+          "measured": 13.2453,
+          "dev": 0.0053,
+          "flag_gt_tol": false,
+          "tol": 0.05,
+          "note": "slot visible for Y < this"
+        },
+        {
+          "key": "girl_door_jamb_u (1.70, 16.26)",
+          "est": -0.047,
+          "measured": -0.0467,
+          "dev": 0.0003,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        }
+      ],
+      "est_flags": [],
+      "items_visible": {
+        "corridor/gallery-art": {
+          "kind": "proxy",
+          "frame_area_pct": 3.55,
+          "visible_pct": 100.0,
+          "cut_by_edge_pct": 0.0
+        },
+        "corridor/ceiling-lights": {
+          "kind": "proxy",
+          "frame_area_pct": 0.2,
+          "visible_pct": 8.7,
+          "cut_by_edge_pct": 91.3
+        },
+        "hall console": {
+          "kind": "furniture",
+          "frame_area_pct": 0.08,
+          "visible_pct": 100.0,
+          "cut_by_edge_pct": 0.0
+        },
+        "hall/framed-art": {
+          "kind": "proxy",
+          "frame_area_pct": 0.17,
+          "visible_pct": 100.0,
+          "cut_by_edge_pct": 0.0
+        },
+        "door leaves": {
+          "kind": "door",
+          "frame_area_pct": 6.7,
+          "visible_pct": 21.1,
+          "cut_by_edge_pct": 4.6
+        },
+        "living/rug": {
+          "kind": "proxy",
+          "frame_area_pct": 0.05,
+          "visible_pct": 23.7,
+          "cut_by_edge_pct": 0.0
+        },
+        "bath WC + limestone ledge (fixed)": {
+          "kind": "furniture",
+          "frame_area_pct": 0.09,
+          "visible_pct": 5.5,
+          "cut_by_edge_pct": 0.0
+        }
+      },
+      "F3_tangents": {
+        "edge_tangents": [],
+        "object_object_tangents": [],
+        "note": "edge: visible bbox margin 0 < m < 0.02; object-object as round 2 (ray-cast silhouettes, 512x288)"
+      },
+      "boxes": {
+        "G-H1 roof light": {
+          "kind": "architecture",
+          "box": [
+            0.4409,
+            0.462,
+            0.2329,
+            0.238
+          ],
+          "px": 875
+        },
+        "hall console": {
+          "kind": "furniture",
+          "box": [
+            0.5094,
+            0.5596,
+            0.5042,
+            0.5963
+          ],
+          "px": 6408
+        },
+        "hall/framed-art": {
+          "kind": "proxy",
+          "box": [
+            0.5203,
+            0.5484,
+            0.3884,
+            0.4491
+          ],
+          "px": 14148
+        },
+        "hall/console-vessel": {
+          "kind": "proxy",
+          "box": [
+            0.5461,
+            0.5573,
+            0.475,
+            0.5051
+          ],
+          "px": 2789
+        },
+        "hall/key-tray": {
+          "kind": "proxy",
+          "box": [
+            0.531,
+            0.5448,
+            0.5009,
+            0.5051
+          ],
+          "px": 413
+        },
+        "G-H4 oak portal": {
+          "kind": "architecture",
+          "box": [
+            0.4409,
+            0.4909,
+            0.3162,
+            0.5926
+          ],
+          "px": 22524
+        },
+        "G-C1b roof-light slot": {
+          "kind": "architecture",
+          "box": [
+            0.407,
+            0.4518,
+            0.0,
+            0.1366
+          ],
+          "px": 23617
+        },
+        "corridor/gallery-art": {
+          "kind": "proxy",
+          "box": [
+            0.1922,
+            0.357,
+            0.1069,
+            0.4407
+          ],
+          "px": 294524
+        },
+        "G-C3 oak portal": {
+          "kind": "architecture",
+          "box": [
+            0.4352,
+            0.5654,
+            0.2116,
+            0.6588
+          ],
+          "px": 62819
+        },
+        "bath fluted glazing": {
+          "kind": "architecture",
+          "box": [
+            0.6206,
+            0.626,
+            0.3222,
+            0.4792
+          ],
+          "px": 7119
+        },
+        "bath WC + limestone ledge (fixed)": {
+          "kind": "furniture",
+          "box": [
+            0.6206,
+            0.626,
+            0.5014,
+            0.6644
+          ],
+          "px": 7392
+        },
+        "living/accent-sconces": {
+          "kind": "proxy",
+          "box": [
+            0.4536,
+            0.4568,
+            0.4162,
+            0.4273
+          ],
+          "px": 288
+        },
+        "living/framed-art": {
+          "kind": "proxy",
+          "box": [
+            0.4409,
+            0.4458,
+            0.4162,
+            0.4648
+          ],
+          "px": 1995
+        },
+        "living/rug": {
+          "kind": "proxy",
+          "box": [
+            0.4409,
+            0.4776,
+            0.5463,
+            0.5611
+          ],
+          "px": 4307
+        },
+        "corridor/ceiling-lights": {
+          "kind": "proxy",
+          "box": [
+            0.4758,
+            0.525,
+            0.131,
+            0.188
+          ],
+          "px": 16910
+        },
+        "window W-bath": {
+          "kind": "window",
+          "box": [
+            0.6206,
+            0.626,
+            0.3028,
+            0.4917
+          ],
+          "px": 1449
+        },
+        "door leaves": {
+          "kind": "door",
+          "box": [
+            0.6659,
+            0.7331,
+            0.0,
+            1.0
+          ],
+          "px": 555735
+        },
+        "living/floor-lamp": {
+          "kind": "proxy",
+          "box": [
+            0.4612,
+            0.476,
+            0.4389,
+            0.5167
+          ],
+          "px": 2988
+        },
+        "living/basket": {
+          "kind": "proxy",
+          "box": [
+            0.4615,
+            0.476,
+            0.5167,
+            0.5463
+          ],
+          "px": 3575
+        },
+        "living/sofa-cover": {
+          "kind": "proxy",
+          "box": [
+            0.4409,
+            0.449,
+            0.512,
+            0.5157
+          ],
+          "px": 229
+        },
+        "living/cushions": {
+          "kind": "proxy",
+          "box": [
+            0.4409,
+            0.449,
+            0.4815,
+            0.5125
+          ],
+          "px": 2059
+        }
+      },
+      "density_F10": {
+        "result": "fail",
+        "counted": 1,
+        "minimum": 5,
+        "target": [
+          5,
+          7
+        ],
+        "info_counted_if_area_ge_0_2pct": 1,
+        "info_counted_any_area_ge_50pct_visible": 1,
+        "frame_kind": "transit",
+        "in_target": false,
+        "categories": [
+          "decor/play"
+        ],
+        "four_categories_ok": false,
+        "missing_categories": [
+          "textile",
+          "lighting",
+          "ceramics/tableware",
+          "storage/function"
+        ],
+        "slots": [
+          {
+            "slot": "gallery-art",
+            "category": "decor/play",
+            "frame_area_pct": 3.55,
+            "visible_pct": 100.0,
+            "cut_by_edge_pct": 0.0,
+            "counted": true,
+            "why_not": null
+          },
+          {
+            "slot": "ceiling-lights",
+            "category": "lighting",
+            "frame_area_pct": 0.2,
+            "visible_pct": 8.7,
+            "cut_by_edge_pct": 91.3,
+            "counted": false,
+            "why_not": "visible < 50%"
+          }
+        ],
+        "rule": "counted = own-room product proxy >= 50% visible (ray-cast silhouette incl. outside the frame) and >= 0.5% of the frame; sets once; fillers, shell, fixed furniture, neighbouring rooms not counted"
+      },
+      "heroes_thirds": [
+        {
+          "hero": "enfilade axis (vanishing point)",
+          "u": 0.5,
+          "ok": false
+        }
+      ],
+      "lamps": [
+        {
+          "lamp": "corridor/ceiling-lights",
+          "typology": "ceiling",
+          "shell": false,
+          "glow_px": 33820,
+          "visible": true
+        },
+        {
+          "lamp": "living/accent-sconces",
+          "typology": "wall",
+          "shell": false,
+          "glow_px": 576,
+          "visible": true
+        },
+        {
+          "lamp": "living/floor-lamp",
+          "typology": "floor",
+          "shell": false,
+          "glow_px": 2988,
+          "visible": true
+        },
+        {
+          "lamp": "living/pendant",
+          "typology": "ceiling",
+          "shell": false,
+          "glow_px": 0,
+          "visible": false
+        },
+        {
+          "lamp": "living/wall-sconce",
+          "typology": "wall",
+          "shell": false,
+          "glow_px": 0,
+          "visible": false
+        }
+      ],
+      "wall_patches": {
+        "hero_wall_high": {
+          "u": 0.28,
+          "v": -0.186,
+          "xyz": [
+            1.7,
+            15.0,
+            2.35
+          ],
+          "note": "outside the frame"
+        },
+        "hero_wall_mid": {
+          "u": 0.2797788679599762,
+          "v": 0.038725852966308594,
+          "L_hsl": 87.1,
+          "Y_lin": 0.7497,
+          "stops_vs_mid": 2.06,
+          "xyz": [
+            1.7,
+            15.0,
+            1.95
+          ]
+        },
+        "right_wall": {
+          "u": 0.6506965756416321,
+          "v": 0.3075646758079529,
+          "L_hsl": 78.5,
+          "Y_lin": 0.5922,
+          "stops_vs_mid": 1.72,
+          "xyz": [
+            3.1,
+            14.0,
+            1.6
+          ]
+        },
+        "ceiling": {
+          "u": 0.55,
+          "v": 0.04,
+          "L_hsl": 68.0,
+          "Y_lin": 0.44,
+          "stops_vs_mid": 1.29
+        },
+        "floor_centre": {
+          "u": 0.5,
+          "v": 0.93,
+          "L_hsl": 71.7,
+          "Y_lin": 0.4948,
+          "stops_vs_mid": 1.46
+        }
+      },
+      "light_balance": {
+        "living_back_wall_x_hit": 1.05,
+        "living_slice_end": {
+          "u": 0.4475216269493103,
+          "v": 0.43921947479248047,
+          "L_hsl": 80.6,
+          "Y_lin": 0.6356,
+          "stops_vs_mid": 1.82
+        },
+        "hall_end_wall": {
+          "u": 0.5125773549079895,
+          "v": 0.4269558787345886,
+          "L_hsl": 71.2,
+          "Y_lin": 0.4776,
+          "stops_vs_mid": 1.41
+        },
+        "corridor_left_wall_gallery": {
+          "u": 0.2797788679599762,
+          "v": 0.5723398327827454,
+          "L_hsl": 75.7,
+          "Y_lin": 0.5542,
+          "stops_vs_mid": 1.62
+        },
+        "corridor_right_wall": {
+          "u": 0.7221167087554932,
+          "v": 0.4038301706314087,
+          "L_hsl": 77.6,
+          "Y_lin": 0.5857,
+          "stops_vs_mid": 1.7
+        }
+      },
+      "camera_clearance_m": {
+        "min": 0.5636,
+        "nearest": "hwall_19"
+      },
+      "overlay": "framing/round3/overlays/C0.png",
+      "runtime_s": 2251
     }
   }
 }
