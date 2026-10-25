@@ -48,10 +48,11 @@ for k, (fid, room, label) in enumerate(ORDER):
         sheet.paste(im, (x + (TW - im.size[0]) // 2, y + LAB + (TH - im.size[1]) // 2))
         lk = j.get('lock', '?')
         lk = lk.get('visual', '?') if isinstance(lk, dict) else lk
-        sub = f"{j['model']} {j.get('quality') or ''} 2K  attempt {j['attempt']}  lock {lk}  {j.get('products', {}).get('invented', '') if isinstance(j.get('products'), dict) else ''}"
+        sub = j.get("sheet_label") or f"{j['model']} {j.get('quality') or ''} 2K  attempt {j['attempt']}  lock {lk}"
     else:
         dr.rectangle((x, y + LAB, x + TW, y + LAB + TH), fill=(60, 60, 60))
-        dr.text((x + 20, y + LAB + TH // 2 - 10), "no draft (see jobs.json)", fill=(200, 200, 200), font=small)
+        blocked = [b for b in jobs.get("jobs", []) if b["frame"] == fid]
+        dr.text((x + 20, y + LAB + TH // 2 - 10), "no draft: " + (blocked[-1].get("sheet_label") or "see jobs.json") if blocked else "no draft (see jobs.json)", fill=(200, 200, 200), font=small)
         sub = ""
     dr.text((x + 6, y + 6), f"{fid}  |  {label}", fill=(245, 245, 245), font=font)
     if sub:
