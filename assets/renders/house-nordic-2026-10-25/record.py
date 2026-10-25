@@ -11,7 +11,9 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, "..", "..", ".."))
-jobs_path = sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, "jobs.json")
+DRY = "--dry" in sys.argv
+args = [a for a in sys.argv[1:] if a != "--dry"]
+jobs_path = args[0] if args else os.path.join(HERE, "jobs.json")
 J = json.load(open(jobs_path))
 tpl = json.load(open(os.path.join(REPO, "assets", "prompts", "recipe-v5.nordic", "record-template.json")))
 man_path = os.path.join(REPO, "assets", "manifest.json")
@@ -63,15 +65,20 @@ for j in J["jobs"]:
                           "roll-off from L 94, S curve 0.12, black point to L 12.5 only if below 12, no grain, no vignette"},
         "measurements": out_dir + j["id"] + "-measurements.json", "self_check_verdict": j.get("verdict", ""),
         "output": out_dir + j["id"] + ".png", "output_raw": out_dir + "raw/" + j["id"] + "." + j["raw_ext"]})
-    json.dump(rec, open(os.path.join(REPO, "assets", "prompts", "recipe-v5.nordic", j["id"] + ".json"), "w"), indent=1, ensure_ascii=False)
+    rec["clay_note"] = j.get("clay_note")
+    rec["lock_verdict"] = j.get("lock")
+    if not DRY:
+        json.dump(rec, open(os.path.join(REPO, "assets", "prompts", "recipe-v5.nordic", j["id"] + ".json"), "w"), indent=1, ensure_ascii=False)
+    status = j.get("manifest_status") or "Phase B draft for gate 2 (room sheet); self-checked by the render-agent, awaiting qa-agent / master-designer / user (not for site)"
     for suffix, path, kind in [("", out_dir + j["id"] + ".png", "recipe-v5-phaseB-draft"), ("-graded", out_dir + j["id"] + "-graded.png", "recipe-v5-phaseB-draft-graded")]:
         aid = "recipe-v5-" + j["id"] + suffix
         if aid in have:
             continue
         man["assets"].append({"id": aid, "path": path, "room": j["room"], "style": "nordic", "kind": kind, "frame": j["frame"], "recipe": "B",
-                              "model": j["model"], "status": "Phase B draft for gate 2 (room sheet); self-checked, awaiting qa-agent / master-designer / user (not for site)",
+                              "model": j["model"], "attempt": j["attempt"], "status": status, "clay": clay["local"],
                               "prompt_record": f"assets/prompts/recipe-v5.nordic/{j['id']}.json", "created": j.get("date", "2026-10-25")})
         have.add(aid)
-    print("record", j["id"])
-json.dump(man, open(man_path, "w"), indent=1, ensure_ascii=False)
-print("manifest assets:", len(man["assets"]))
+    print("record", j["id"], "| prompt", rec["prompt_chars"], "chars | refs", len(refs), "| lock", (j.get("lock") or {}).get("visual") if isinstance(j.get("lock"), dict) else j.get("lock"))
+if not DRY:
+    json.dump(man, open(man_path, "w"), indent=1, ensure_ascii=False)
+print("manifest assets:", len(man["assets"]), "(dry run, nothing written)" if DRY else "")

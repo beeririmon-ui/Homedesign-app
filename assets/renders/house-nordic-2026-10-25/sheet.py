@@ -22,7 +22,7 @@ by_frame = {}
 for j in jobs.get("jobs", []):
     if j.get("status") == "done":
         by_frame[j["frame"]] = j                      # the last done job of a frame (the retake when there is one)
-TW, TH, PAD, LAB = 960, 540, 14, 44
+TW, TH, PAD, LAB = 960, 540, 14, 72
 try:
     font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 24)
     small = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
@@ -54,6 +54,6 @@ for k, (fid, room, label) in enumerate(ORDER):
         sub = ""
     dr.text((x + 6, y + 6), f"{fid}  |  {label}", fill=(245, 245, 245), font=font)
     if sub:
-        dr.text((x + 6, y + LAB + 6), sub[:120], fill=(255, 230, 150), font=small)
+        dr.text((x + 6, y + 40), sub[:120], fill=(255, 230, 150), font=small)
 sheet.save(OUT, quality=86)
 print(OUT, sheet.size, len(by_frame), "frames")
