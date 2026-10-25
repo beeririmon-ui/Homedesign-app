@@ -1,0 +1,60 @@
+# m0-v6: recipe B (gpt-image-2-5, quality sunburst, 2K, 16:9, image-to-image). m0-B with the verdict's five changes (docs/render-recipe-verdict-2026-10-24.md 2) and real cards in the hero and lighting slots. master-designer, 2026-10-25.
+# Clay input: a 3840x2160 M0 clay with placeholders for every product below (positions: data/slots/living-room.json, Bible "Plan B"; the proxies of assets/blockout/house/living-clay.png are the start), the design socket under the wall lamp, no pouf, planter or magazine-holder proxy. If not ready: assets/blockout/living-room/m0-clay-4k.png (no proxies), as in m0-B. The same clay is the vista in H0 and C0.
+# The render-agent strips every line that starts with # before sending. Prompt = the text after this block.
+# No slot is locked (VL1 open): every card here is "candidate, not locked".
+#   framed-art (hero)  framed-art-aliexpress-minimal-geometric-triptych-prints, SKU 12000039454944614 colour 1, 3 x 50x70 (card note: Nordic 8; sold unframed, shown framed per PR1; store has 1 review: print quality to check)
+#   accent-sconces     accent-sconces-cj-travertine-block-updown-8x16 x2 (7.5)
+#   wall-decor         wall-decor-aliexpress-natural-raffia-woven-bohemian-763597 (7.0; temporary, leans boho)
+#   pendant            pendant-cj-silk-ribbed-pumpkin-40 (7.5)
+#   curtains           curtains-aliexpress-linen-blend-s-fold-180502 (8.0; pair)
+#   vase               vase-aliexpress-vintage-distressed-clay-vase-589009 (8.5; L 31)
+#   wall-sconce        wall-sconce-cj-black-swing-arm-fabric (7.0; plug-in, EU plug; shade colour as shipped to verify)
+#   floor-lamp         floor-lamp-aliexpress-wabi-sabi-japan-floor-217361 (team fit 8, not designer-audited; no dimensions on the card; shade probably under the nordic 35-38)
+#   basket             basket-zendrop-seagrass-belly-38x34 (7.5; temporary)
+#   rug                rug-cj-braided-wool-natural, option Square no-fringe 230x330 (8.0)
+#   cushions (set A)   cushions-cj-boucle-teddy 50x50 white, cushions-cj-knitted-chenille-bean-green 45, cushions-cj-linen-look-charcoal 30x50, sofa-cover-cj-cotton-muslin-fringe (8.0 set)
+#   table-runner       table-runner-cj-linen-look-sage-fringe (7.0)
+#   candle-holders     candle-holders-cj-travertine-pedestal x2 (8.5)
+#   bowl               bowl-cj-glutinous-white-belly-bowl-21 (8.0)
+#   fixed              sofa, coffee table, armchair: clay (LQ1, IDANA pending)
+# Explicitly empty: planter (only seagrass bellies at 7+; the basket and the raffia already use the fibre quota), pouf (best under 7), magazine-holder (no card in the 32x22 envelope), sofa-cover (no slipcover at 7+; fixed oatmeal upholstery).
+# Close-up references, crop to the product only. usage_rights: unclear on every card (internal render reference only):
+#   1 https://ae01.alicdn.com/kf/Sf7d0432bcab14eba8f32b9c6f2232d36B.jpg  (triptych, colour 1)
+#   2 https://ae01.alicdn.com/kf/S277efff1ec8e42efb9200ee7c5a4d9f6t.jpg  (floor lamp)
+#   3 https://cf.cjdropshipping.com/quick/product/a8634a1d-983b-4a15-8e20-f5b662b89f9f.jpg  (swing-arm wall lamp)
+#   4 https://oss-cf.cjdropshipping.com/product/2024/08/23/03/fc394992-638e-4235-abef-3731f45e02c7_trans.jpeg  (braided wool rug)
+#   5 https://ae01.alicdn.com/kf/S03bee60876b4459faeb2167e220265833.jpg  (raffia sunburst)
+#   6 https://oss-cf.cjdropshipping.com/product/2025/09/29/07/15372189-5624-4ce3-b6e7-d3ed40d3d76d_trans.jpeg  (travertine block lamp)
+#   7 https://oss-cf.cjdropshipping.com/product/2026/08/08/09/c846e836-f36b-4990-8649-7d66e5caafd3_trans.jpeg  (ribbed pumpkin pendant)
+#   8 https://file.zendrop.com/products/83/7e/a75cb5e948b7b3280683b19ab275_import.webp  (seagrass belly basket)
+#   9 https://oss-cf.cjdropshipping.com/product/2025/12/04/05/857d7708-21e9-471c-a853-aabde32fe3ee.jpg  (muslin throw)
+#  10 https://cf.cjdropshipping.com/quick/product/d4def2f1-fdf6-44bc-a65c-9a90ad47f840.jpg  (travertine holders)
+#  11 https://oss-cf.cjdropshipping.com/product/2025/05/30/10/87c036c4-e87a-4545-837a-23106ff0d858.jpg  (belly bowl)
+#  12 https://ae01.alicdn.com/kf/S55561bdb1c504f3b83d801383fcfaec73.jpg  (589009 jar)
+#  13 https://cf.cjdropshipping.com/quick/product/2736eed6-7f8e-49d7-8652-d9e719a72430.jpg  (sage runner)
+#  14 https://cf.cjdropshipping.com/quick/product/635be4cd-9b07-4238-bb0f-e709154b4740.jpg  (boucle cushion)
+#  15 https://oss-cf.cjdropshipping.com/product/2026/04/07/08/8281f262-bc9c-4a77-9def-5be4d642a1ac.jpg  (sage knit cushion)
+#  The model takes 16 inputs: clay + 15. Curtains and the charcoal lumbar go without a reference (large, described in words). Crop every image to the product only (recipe 2.1).
+
+Use the attached clay render as the exact blueprint. Keep every wall, opening, window, cornice, skirting, floor and ceiling line, the camera height, lens and angle, and the position, size and angle of every furniture piece and built-in exactly as in the clay. Move, resize, add or remove nothing. Each placeholder shape in the clay marks one product listed below; render it there at the stated size. Only turn the clay into real materials and light. The other attached images are close-ups of the exact products: match their form, colour and texture. Positions are fractions of frame width (x) and height (y) from the top-left.
+
+1. PHOTO. Editorial interior for a top design magazine: a Copenhagen living room, 3 pm mid-winter, 24 mm shift lens at 1.2 m, level, straight verticals, all sharp. Hero: the three prints over the sofa, right third.
+
+2. LIGHT. Only key: diffuse daylight from the north window on the left, no direct sun. Exposed for the walls: the back wall by the corner reads clean warm white, just under the glowing reveals; the glass one step brighter, still detailed. Half a stop falloff to the right edge; window wall in soft shade. Each piece has a lit left face and a right side about one stop darker; armchair and table throw long feathered shadows to the right and toward the camera; short dense contact shadows. The ceiling a touch darker than the walls, darkest at the top right. White balance 4600 K: warm white, never pink, yellow or grey; real contrast, never milky. Practicals 2700 K, low, no shadows: the pendant lays a soft warm pool on the bare middle of the table, as wide as the table is deep; warm pools on the sofa's right end (floor lamp) and the armchair (wall lamp); the travertine lamps soft fans up and down the wall.
+
+3. MATERIALS. Matte mineral paint #F4F1EC. Wide oiled white-oak planks, pale honey #D6BF9E. Sofa: slubby oatmeal cotton-linen #E6DCCB, tapered oak legs. Table and armchair frame: oiled oak #C8A27A, soft satin sheen, one long soft window highlight along the table top and down the planks, no mirror reflection. Armchair: mist-grey wool boucle.
+
+4. PRODUCTS, exactly these:
+a. ART centred above the sofa at 1.48 m: three 50 x 70 portrait prints, minimal shapes in oatmeal, sand and charcoal on off-white, thin light-oak frames 6 cm apart, together three quarters of the sofa's width.
+b. Either side of the art: two hand-sized honed travertine block lamps, hardwired.
+c. A small natural raffia sunburst, narrower than one seat cushion, low, left of the sofa's left end, below-left of the left travertine lamp.
+d. PENDANT, high above the table, well above the wall lamps: a closed flat pumpkin lantern in warm-white ribbed fabric, narrower than the table is deep, thin black rod.
+e. CURTAINS: sheer natural linen-blend #EDE7DB, S-fold, slim black rod, narrow backlit stacks, hems on the floor.
+f. SILL: a 31 cm cream distressed clay jar, 3-4 eucalyptus stems.
+g. WINDOW WALL over the armchair: a matte black folding swing-arm lamp, tapered warm-white fabric shade, a short straight cord into a flush socket below.
+h. Right of the sofa: a slim light-wood tripod lamp, tall warm-white fabric column shade, top under the right travertine lamp, base behind an empty seagrass belly basket half the arm's height.
+i. RUG under the table and the front legs of sofa and armchair: 230 x 330 flat braided wool, cream and oatmeal, no fringe.
+j. SOFA: warm-white boucle and sage knit cushions left, a charcoal linen lumbar right; a thin crinkled muslin throw, short frayed fringe, over the right arm.
+k. TABLE: sage-grey linen runner, left third; bare centre; right, two hand-sized travertine holders, unlit candles 15 and 10 cm, a 21 cm warm-white bowl.
+
+5. NOT IN FRAME: plant, pouf, magazines, books, mirror, glass, loose cable, text, people. No sun patches, beams, bloom, haze, glow halos, HDR look, grain or vignette.
