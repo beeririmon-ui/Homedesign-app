@@ -7195,6 +7195,512 @@
       },
       "overlay": "framing/round3/overlays/B2.png",
       "runtime_s": 921
+    },
+    "W0": {
+      "frame": "W0",
+      "room": "work",
+      "round2_id": "W-A",
+      "camera": {
+        "id": "W0",
+        "room": "work",
+        "loc": [
+          -0.825,
+          9.85,
+          1.1
+        ],
+        "yaw": 0,
+        "u0": 0.5,
+        "v0": 0.46,
+        "status": "1.1 (W-A)",
+        "hero": "the built-in desk wall, dead centre (one-point symmetric)"
+      },
+      "image": "framing/round3/W0.png",
+      "resolution": [
+        3840,
+        2160
+      ],
+      "samples": 36,
+      "placeholders_shown": [
+        "work/basket",
+        "work/bookends",
+        "work/curtains",
+        "work/desk-organizer",
+        "work/planter",
+        "work/rug",
+        "work/shelf-boxes",
+        "work/waste-basket"
+      ],
+      "built_generic": [
+        "work/desk-organizer"
+      ],
+      "missing": [],
+      "lamps_on": [],
+      "lamps_off": [
+        "work/desk-lamp",
+        "work/pendant",
+        "work/wall-sconce"
+      ],
+      "mean_L": 178.2,
+      "mean_L_round2": 199.7,
+      "designer_notes": "w0.txt: no pendant, wall lamp, desk lamp, art, tray, magazine holder; organizer on the desk; curtain stack per 1.1.x; daylight only",
+      "est_vs_measured": [
+        {
+          "key": "window_visible_Y",
+          "est": [
+            7.15,
+            7.88
+          ],
+          "measured": [
+            7.15,
+            7.8832
+          ],
+          "dev": [
+            0.0,
+            0.0032
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "window_u",
+          "est": [
+            0.0,
+            0.136
+          ],
+          "measured": [
+            0.0,
+            0.1358
+          ],
+          "dev": [
+            0.0,
+            -0.0002
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "window_cut_pct",
+          "est": 39,
+          "measured": 38.9,
+          "dev": -0.1,
+          "flag_gt_tol": false,
+          "tol": 2,
+          "note": ""
+        },
+        {
+          "key": "NE_corner_u (-2.30, 6.35)",
+          "est": 0.219,
+          "measured": 0.219,
+          "dev": 0.0,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "SE_corner_u (0.65, 6.35)",
+          "est": 0.781,
+          "measured": 0.781,
+          "dev": -0.0,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "desk_centre_u (pixels)",
+          "est": 0.5,
+          "measured": 0.5,
+          "dev": 0.0,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "door_jamb_Y8.10_u (0.65, 8.10)",
+          "est": 1.06,
+          "measured": 1.0619,
+          "dev": 0.0019,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "top_edge_on_east_wall_Z",
+          "est": 2.46,
+          "measured": 2.4584,
+          "dev": -0.0016,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "camera_to_east_wall_m",
+          "est": 3.5,
+          "measured": 3.5,
+          "dev": 0.0,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        }
+      ],
+      "est_flags": [],
+      "items_visible": {
+        "work/desk-organizer": {
+          "kind": "proxy",
+          "frame_area_pct": 0.08,
+          "visible_pct": 100.0,
+          "cut_by_edge_pct": 0.0
+        },
+        "window W-work": {
+          "kind": "window",
+          "frame_area_pct": 5.39,
+          "visible_pct": 13.7,
+          "cut_by_edge_pct": 84.2
+        },
+        "work/basket": {
+          "kind": "proxy",
+          "frame_area_pct": 0.84,
+          "visible_pct": 99.9,
+          "cut_by_edge_pct": 0.0
+        },
+        "work/bookends": {
+          "kind": "proxy",
+          "frame_area_pct": 0.47,
+          "visible_pct": 82.7,
+          "cut_by_edge_pct": 0.0
+        },
+        "work/shelf-boxes": {
+          "kind": "proxy",
+          "frame_area_pct": 0.71,
+          "visible_pct": 80.0,
+          "cut_by_edge_pct": 0.0
+        },
+        "work/curtains": {
+          "kind": "proxy",
+          "frame_area_pct": 5.07,
+          "visible_pct": 11.5,
+          "cut_by_edge_pct": 88.4
+        },
+        "work/planter": {
+          "kind": "proxy",
+          "frame_area_pct": 5.98,
+          "visible_pct": 97.5,
+          "cut_by_edge_pct": 0.0
+        },
+        "work/rug": {
+          "kind": "proxy",
+          "frame_area_pct": 3.88,
+          "visible_pct": 4.0,
+          "cut_by_edge_pct": 95.8
+        },
+        "work/waste-basket": {
+          "kind": "proxy",
+          "frame_area_pct": 0.72,
+          "visible_pct": 100.0,
+          "cut_by_edge_pct": 0.0
+        },
+        "desk chair": {
+          "kind": "furniture",
+          "frame_area_pct": 3.23,
+          "visible_pct": 98.6,
+          "cut_by_edge_pct": 1.2
+        }
+      },
+      "F3_tangents": {
+        "edge_tangents": [],
+        "object_object_tangents": [
+          {
+            "a": "work/basket",
+            "b": "work/rug",
+            "kind": "gap",
+            "gap": 0.0156,
+            "dist3d_m": 0.2,
+            "rule": "silhouettes apart by < 0.02 (kissing contours)"
+          },
+          {
+            "a": "work/basket",
+            "b": "desk chair",
+            "kind": "gap",
+            "gap": 0.0137,
+            "dist3d_m": 0.358,
+            "rule": "silhouettes apart by < 0.02 (kissing contours)"
+          },
+          {
+            "a": "work/rug",
+            "b": "work/waste-basket",
+            "kind": "gap",
+            "gap": 0.0098,
+            "dist3d_m": 0.125,
+            "rule": "silhouettes apart by < 0.02 (kissing contours)"
+          }
+        ],
+        "note": "edge: visible bbox margin 0 < m < 0.02; object-object as round 2 (ray-cast silhouettes, 512x288)"
+      },
+      "boxes": {
+        "work/curtains": {
+          "kind": "proxy",
+          "box": [
+            0.124,
+            0.1779,
+            0.0,
+            0.9537
+          ],
+          "px": 420393
+        },
+        "built-in oak desk + shelf": {
+          "kind": "architecture",
+          "box": [
+            0.3161,
+            0.6839,
+            0.2546,
+            0.9046
+          ],
+          "px": 391187
+        },
+        "desk chair": {
+          "kind": "furniture",
+          "box": [
+            0.4354,
+            0.5646,
+            0.6009,
+            1.0
+          ],
+          "px": 267786
+        },
+        "work/shelf-boxes": {
+          "kind": "proxy",
+          "box": [
+            0.3612,
+            0.6388,
+            0.2005,
+            0.2546
+          ],
+          "px": 58938
+        },
+        "work/basket": {
+          "kind": "proxy",
+          "box": [
+            0.3609,
+            0.4232,
+            0.7389,
+            0.8806
+          ],
+          "px": 69428
+        },
+        "work/planter": {
+          "kind": "proxy",
+          "box": [
+            0.1919,
+            0.3276,
+            0.3769,
+            0.8991
+          ],
+          "px": 496279
+        },
+        "work/rug": {
+          "kind": "proxy",
+          "box": [
+            0.2628,
+            0.7372,
+            0.9046,
+            1.0
+          ],
+          "px": 322218
+        },
+        "work/bookends": {
+          "kind": "proxy",
+          "box": [
+            0.4589,
+            0.5271,
+            0.1792,
+            0.2546
+          ],
+          "px": 38763
+        },
+        "work/waste-basket": {
+          "kind": "proxy",
+          "box": [
+            0.5844,
+            0.638,
+            0.7495,
+            0.8912
+          ],
+          "px": 60069
+        },
+        "work/desk-organizer": {
+          "kind": "proxy",
+          "box": [
+            0.3914,
+            0.4086,
+            0.5343,
+            0.5838
+          ],
+          "px": 6946
+        },
+        "window W-work": {
+          "kind": "window",
+          "box": [
+            0.0,
+            0.124,
+            0.0,
+            0.637
+          ],
+          "px": 447246
+        }
+      },
+      "density_F10": {
+        "result": "fail",
+        "counted": 4,
+        "minimum": 11,
+        "target": [
+          12,
+          15
+        ],
+        "info_counted_if_area_ge_0_2pct": 5,
+        "info_counted_any_area_ge_50pct_visible": 6,
+        "frame_kind": "lean",
+        "in_target": false,
+        "categories": [
+          "ceramics/tableware",
+          "storage/function"
+        ],
+        "four_categories_ok": false,
+        "missing_categories": [
+          "textile",
+          "lighting"
+        ],
+        "slots": [
+          {
+            "slot": "planter",
+            "category": "ceramics/tableware",
+            "frame_area_pct": 5.98,
+            "visible_pct": 97.5,
+            "cut_by_edge_pct": 0.0,
+            "counted": true,
+            "why_not": null
+          },
+          {
+            "slot": "basket",
+            "category": "storage/function",
+            "frame_area_pct": 0.84,
+            "visible_pct": 99.9,
+            "cut_by_edge_pct": 0.0,
+            "counted": true,
+            "why_not": null
+          },
+          {
+            "slot": "waste-basket",
+            "category": "storage/function",
+            "frame_area_pct": 0.72,
+            "visible_pct": 100.0,
+            "cut_by_edge_pct": 0.0,
+            "counted": true,
+            "why_not": null
+          },
+          {
+            "slot": "shelf-boxes",
+            "category": "storage/function",
+            "frame_area_pct": 0.71,
+            "visible_pct": 80.0,
+            "cut_by_edge_pct": 0.0,
+            "counted": true,
+            "why_not": null
+          },
+          {
+            "slot": "curtains",
+            "category": "textile",
+            "frame_area_pct": 5.07,
+            "visible_pct": 11.5,
+            "cut_by_edge_pct": 88.4,
+            "counted": false,
+            "why_not": "visible < 50%"
+          },
+          {
+            "slot": "rug",
+            "category": "textile",
+            "frame_area_pct": 3.88,
+            "visible_pct": 4.0,
+            "cut_by_edge_pct": 95.8,
+            "counted": false,
+            "why_not": "visible < 50%"
+          },
+          {
+            "slot": "bookends",
+            "category": "storage/function",
+            "frame_area_pct": 0.47,
+            "visible_pct": 82.7,
+            "cut_by_edge_pct": 0.0,
+            "counted": false,
+            "why_not": "area < 0.5%"
+          },
+          {
+            "slot": "desk-organizer",
+            "category": "storage/function",
+            "frame_area_pct": 0.08,
+            "visible_pct": 100.0,
+            "cut_by_edge_pct": 0.0,
+            "counted": false,
+            "why_not": "area < 0.5%"
+          }
+        ],
+        "rule": "counted = own-room product proxy >= 50% visible (ray-cast silhouette incl. outside the frame) and >= 0.5% of the frame; sets once; fillers, shell, fixed furniture, neighbouring rooms not counted"
+      },
+      "heroes_thirds": [
+        {
+          "hero": "desk centre",
+          "u": 0.5,
+          "ok": false
+        }
+      ],
+      "lamps": [],
+      "wall_patches": {
+        "hero_wall_high": {
+          "u": 0.4999999403953552,
+          "v": 0.03671973943710327,
+          "L_hsl": 75.7,
+          "Y_lin": 0.5399,
+          "stops_vs_mid": 1.58,
+          "xyz": [
+            -0.825,
+            6.35,
+            2.35
+          ]
+        },
+        "hero_wall_mid": {
+          "u": 0.4999999403953552,
+          "v": 0.12137579917907715,
+          "L_hsl": 75.4,
+          "Y_lin": 0.5356,
+          "stops_vs_mid": 1.57,
+          "xyz": [
+            -0.825,
+            6.35,
+            2.1
+          ]
+        },
+        "ceiling": {
+          "u": 0.55,
+          "v": 0.04,
+          "L_hsl": 75.8,
+          "Y_lin": 0.5417,
+          "stops_vs_mid": 1.59
+        },
+        "floor_centre": {
+          "u": 0.5,
+          "v": 0.93,
+          "L_hsl": 68.4,
+          "Y_lin": 0.4392,
+          "stops_vs_mid": 1.29
+        }
+      },
+      "light_balance": {},
+      "camera_clearance_m": {
+        "min": 0.25,
+        "nearest": "hwall_16"
+      },
+      "overlay": "framing/round3/overlays/W0.png",
+      "runtime_s": 788
     }
   }
 }
