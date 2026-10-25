@@ -62,3 +62,18 @@ Today's swap (a variant layer composited over the room) leaves blotches: a halo 
 3. **Reference cutout:** the product rendered in isolation (studio, remove-background) and placed by the slot's geometry, with a separately rendered contact shadow. The current approach, as the control.
 
 **Measure, per method (qa-agent, the `swap-diff` tooling):** residual difference outside the product mask (mean and max ΔE, must be ~0), halo width at the edge in px, shadow continuity, grade match (L/S of the wall next to the product before and after), and the look in the Studio compare at zoom. **Deliver:** a sheet with the three results and the numbers, and a recommendation. The owner decides the method (decision RND2) before the series of layers. Cost: about 6 jobs at 1K–2K, under 3,000 tokens.
+
+## 7. Phase B, started 2026-10-25: the master frames of the other rooms
+The owner (2026-10-25): "מה עם שאר החדרים?". Gate 1 is taken as **recipe B (gpt-image-2-5, quality sunburst)**, the recommendation of the designer and the manager, unless the owner says otherwise. No 4K and no series beyond the 2K drafts until the owner approves the room sheet (Gate 2).
+
+**Frames (house-plan 1.1, build order):** D1, D2, H0 (retake), C0, MB0, K-boy, K-girl, B1, B2, W0, and M0 v6 with the verdict's five prompt changes. 11 jobs at 2K (600 each), one retake each at most: **cap 12,000 tokens** for this batch.
+
+**Products in frame.** For each slot of the frame: the locked default; else the best catalogue candidate for nordic with fit ≥ 7 (a real card in `data/products/`, named by id in the prompt file's `#` header, flagged "candidate, not locked"); else explicitly empty, and fillers only per the filler rule. Hero slots get a candidate whenever one exists: an empty hero pulls other objects into its place (the M0 lesson). Every small product is described with its size relative to the furniture next to it, and a close-up reference of the product is attached where the card has a usable image.
+
+**Clay first (0 tokens).** The round-2 clays predate the 1.1.x frame fixes and carry placeholders for empty slots. Before the drafts, the render-agent rebuilds each frame's clay at 3840×2160 from `assets/blockout/house/` (`build_house.py`, `framing_r2.py`): the 1.1.x camera values from `house-plan.json`, placeholders **only** for the slots that will hold a product in the draft (per the designer's per-frame list), the S12 lamps lit, neutral albedo, and the hall 2/3 stop darker than the living room seen through the opening (verdict §3). The living room seen from H0 and C0 is the M0 clay.
+
+**Prompts.** The designer writes `assets/prompts/recipe-v5.nordic/<frame>.txt` per frame (≤ 3,900 characters, the clay-lock paragraph first, recipe B with the verdict's five changes, the room's Bible annex and `docs/rooms/<room>-nordic-2026-10-11.md`), plus `m0-v6.txt`, and a per-frame placeholder list for the clay in `docs/rooms-render-plan-2026-10-25.md`.
+
+**QA, per draft:** clay lock (edges and furniture within 0.5% of the frame), each product within ±15% of its slot box, the Bible's light targets as amended if BIB1 passes, no invented objects. A draft that fails the lock or invents objects gets its one retake; otherwise it goes on the sheet as is, with the finding.
+
+**Deliver:** `assets/renders/<room>/nordic/recipe-v5/<frame>.png` and `-graded.png`, prompt records, measurements, and one sheet `assets/renders/house-nordic-sheet-2026-10-25.jpg` with all 11 frames in the house-plan order, labelled, for the owner.
