@@ -1,0 +1,349 @@
+{
+ "version": "1.2 (render-agent, 2026-10-25 12:40): per-frame lists = docs/rooms-render-plan-2026-10-25.md section 3 (= the prompt headers; D2 per the corrected section: its own list only); card sizes per the plan; M0 lamps lit and seen lit from H0 / C0",
+ "source": "prompt headers via plan_from_headers.py + render-agent lamp sets and vista lists",
+ "rules": "placeholders = the products the prompt renders (incl. stand-ins); 'Explicitly empty' slots have no proxy; lamps = the lamp slots among the placeholders + the shell LEDs of the kitchen (round-2 FRAME_LAMPS); the bath shower downlight stays off as in round 2; the living seen from H0 / C0 = the M0 v6 placeholder clay (same products as m0-v6.txt; geometry decides what the door shows); C0 also shows the H0 console vignette through the portal",
+ "hall_cube_lamp": null,
+ "frames": {
+  "D1": {
+   "placeholders": [
+    "dining-pendant",
+    "table-runner",
+    "centerpiece-vase",
+    "candle-holders",
+    "curtains",
+    "bench-pad",
+    "framed-art",
+    "condiment-set",
+    "bowl",
+    "tableware-set",
+    "mug-set",
+    "dining-rug",
+    "kitchen-runner"
+   ],
+   "lamps": [
+    "kitchen-dining/dining-pendant",
+    "kitchen-dining/led-shelves",
+    "kitchen-dining/led-niche"
+   ],
+   "also_visible": [],
+   "empty_per_designer": [
+    "floor-vase",
+    "kitchen-sconce",
+    "sink-set",
+    "utensil-crock",
+    "cutting-boards",
+    "open-shelf-ceramics"
+   ],
+   "prompt_file": "d1.txt",
+   "notes": "d1.txt: kitchen sconce empty (off); pendant + shelf/niche LEDs lit"
+  },
+  "D2": {
+   "placeholders": [
+    "bench-pad",
+    "framed-art",
+    "condiment-set",
+    "bowl",
+    "paper-towel-holder",
+    "tableware-set",
+    "mug-set",
+    "canisters",
+    "tea-towel",
+    "dining-rug",
+    "kitchen-runner"
+   ],
+   "lamps": [
+    "kitchen-dining/led-shelves",
+    "kitchen-dining/led-niche"
+   ],
+   "also_visible": [],
+   "empty_per_designer": [
+    "herb-pots",
+    "step-stool",
+    "kitchen-sconce",
+    "sink-set",
+    "utensil-crock",
+    "cutting-boards",
+    "open-shelf-ceramics"
+   ],
+   "prompt_file": "d2.txt",
+   "notes": "d2.txt: same point PD as D1; sconce empty; LEDs lit; step-stool empty"
+  },
+  "H0": {
+   "placeholders": [
+    "framed-art",
+    "console-vessel",
+    "key-tray",
+    "wall-hooks",
+    "wall-sconce",
+    "bench-cushion",
+    "bench-throw",
+    "basket",
+    "umbrella-stand"
+   ],
+   "lamps": [
+    "hall/wall-sconce",
+    "living/pendant",
+    "living/floor-lamp",
+    "living/wall-sconce",
+    "living/accent-sconces"
+   ],
+   "also_visible": [
+    "living/framed-art",
+    "living/accent-sconces",
+    "living/wall-decor",
+    "living/pendant",
+    "living/curtains",
+    "living/vase",
+    "living/wall-sconce",
+    "living/floor-lamp",
+    "living/basket",
+    "living/rug",
+    "living/cushions",
+    "living/table-runner",
+    "living/candle-holders",
+    "living/bowl",
+    "living/sofa-cover"
+   ],
+   "empty_per_designer": [
+    "table-lamp",
+    "storage-boxes",
+    "planter",
+    "ceiling-light"
+   ],
+   "prompt_file": "h0-B.txt",
+   "notes": "h0-B.txt: table-lamp, planter, storage-boxes removed; wall-sconce = 15 cm fabric cube (lit); 4 oval pegs, no rail board; hall walls ~2/3 stop under the living (hall roof light x2.0); living through the door = M0 clay + verdict 3.3 items"
+  },
+  "C0": {
+   "placeholders": [
+    "gallery-art",
+    "ceiling-lights"
+   ],
+   "lamps": [
+    "corridor/ceiling-lights",
+    "living/pendant",
+    "living/floor-lamp",
+    "living/wall-sconce",
+    "living/accent-sconces"
+   ],
+   "also_visible": [
+    "living/framed-art",
+    "living/accent-sconces",
+    "living/wall-decor",
+    "living/pendant",
+    "living/curtains",
+    "living/vase",
+    "living/wall-sconce",
+    "living/floor-lamp",
+    "living/basket",
+    "living/rug",
+    "living/cushions",
+    "living/table-runner",
+    "living/candle-holders",
+    "living/bowl",
+    "living/sofa-cover",
+    "hall/framed-art",
+    "hall/console-vessel",
+    "hall/key-tray",
+    "hall/umbrella-stand"
+   ],
+   "empty_per_designer": [
+    "picture-lights",
+    "runner-rug",
+    "gallery-stool"
+   ],
+   "prompt_file": "c0.txt",
+   "notes": "c0.txt: picture-light bars removed, no runner, no stool; hall vista = the H0 rebuild (console vignette seen through the portal), living beyond = M0 clay + verdict 3.3 items"
+  },
+  "MB0": {
+   "placeholders": [
+    "framed-art",
+    "bedside-sconces",
+    "curtains",
+    "sill-vase",
+    "planter",
+    "nightstand-vase",
+    "trinket-dish",
+    "candle-holders",
+    "pillowcases",
+    "bedding",
+    "cushions",
+    "throw"
+   ],
+   "lamps": [
+    "master/bedside-sconces"
+   ],
+   "also_visible": [],
+   "empty_per_designer": [
+    "floor-lamp",
+    "nightstand-tray",
+    "bedside-carafe",
+    "basket",
+    "pendant"
+   ],
+   "prompt_file": "mb0.txt",
+   "notes": "mb0.txt: floor-lamp removed; 1.1.x nudges; sconce pair lit"
+  },
+  "K-boy": {
+   "placeholders": [
+    "roman-blind",
+    "bookshelf",
+    "bedding",
+    "bedspread",
+    "cushions",
+    "soft-toy",
+    "toy-basket",
+    "toy-cars",
+    "rug"
+   ],
+   "lamps": [],
+   "also_visible": [],
+   "empty_per_designer": [
+    "pendant",
+    "wall-sconce",
+    "framed-prints",
+    "desk-organizer",
+    "desk-chair",
+    "skateboard"
+   ],
+   "prompt_file": "k-boy.txt",
+   "notes": "k-boy.txt: no pendant, wall lamp, prints, chair, skateboard; daylight only (both lamp slots empty)"
+  },
+  "K-girl": {
+   "placeholders": [
+    "roman-blind",
+    "framed-prints",
+    "bookshelf",
+    "bedding",
+    "bedspread",
+    "cushions",
+    "soft-toy",
+    "doll",
+    "toy-basket",
+    "rug"
+   ],
+   "lamps": [],
+   "also_visible": [],
+   "empty_per_designer": [
+    "pendant",
+    "wall-sconce",
+    "desk-organizer",
+    "desk-chair",
+    "doll-pram"
+   ],
+   "prompt_file": "k-girl.txt",
+   "notes": "k-girl.txt: no pendant, wall lamp, chair, pram; daylight only"
+  },
+  "B1": {
+   "placeholders": [
+    "shower-curtain",
+    "wall-sconce",
+    "vanity-sconces",
+    "bath-mat",
+    "toilet-paper-stand",
+    "reed-diffuser",
+    "candle",
+    "shower-dispensers"
+   ],
+   "lamps": [
+    "bath/wall-sconce",
+    "bath/vanity-sconces",
+    "bath/shower-downlight"
+   ],
+   "also_visible": [],
+   "empty_per_designer": [
+    "shower-stool",
+    "floor-planter",
+    "towel-ladder",
+    "bin",
+    "toilet-brush",
+    "ledge-planter"
+   ],
+   "prompt_file": "b1.txt",
+   "notes": "b1.txt: curtain gathered at (5.30, 11.15); no stool, ladder, towels, floor planter, ledge planter, bin, brush; east vanity sconce lit (cut at the right edge); shower downlight lit at low power (4 W), ceiling light off; bath window light x3 (plan 3)"
+  },
+  "B2": {
+   "placeholders": [
+    "vanity-sconces",
+    "shower-curtain",
+    "shower-dispensers",
+    "soap-dispenser",
+    "toothbrush-cup",
+    "vanity-vase",
+    "storage-basket",
+    "towel-ring",
+    "hand-towel"
+   ],
+   "lamps": [
+    "bath/vanity-sconces",
+    "bath/wall-sconce",
+    "bath/shower-downlight"
+   ],
+   "also_visible": [],
+   "empty_per_designer": [
+    "shower-stool",
+    "towel-ladder",
+    "floor-planter"
+   ],
+   "prompt_file": "b2.txt",
+   "notes": "b2.txt: same point CB as B1, same products and light; F8 mirror pass from CB in selfcheck; shower downlight lit at low power"
+  },
+  "W0": {
+   "placeholders": [
+    "curtains",
+    "basket",
+    "waste-basket",
+    "planter",
+    "shelf-boxes",
+    "bookends",
+    "desk-organizer",
+    "rug"
+   ],
+   "lamps": [],
+   "also_visible": [],
+   "empty_per_designer": [
+    "framed-art",
+    "pendant",
+    "wall-sconce",
+    "desk-lamp",
+    "desk-tray",
+    "magazine-holder"
+   ],
+   "prompt_file": "w0.txt",
+   "notes": "w0.txt: no pendant, wall lamp, desk lamp, art, tray, magazine holder; organizer on the desk; curtain stack per 1.1.x; daylight only"
+  },
+  "M0": {
+   "placeholders": [
+    "framed-art",
+    "accent-sconces",
+    "wall-decor",
+    "pendant",
+    "curtains",
+    "vase",
+    "wall-sconce",
+    "floor-lamp",
+    "basket",
+    "rug",
+    "cushions",
+    "table-runner",
+    "candle-holders",
+    "bowl",
+    "sofa-cover"
+   ],
+   "lamps": [
+    "living/pendant",
+    "living/floor-lamp",
+    "living/wall-sconce",
+    "living/accent-sconces"
+   ],
+   "also_visible": [],
+   "empty_per_designer": [
+    "planter",
+    "pouf",
+    "magazine-holder",
+    "sofa-cover"
+   ],
+   "prompt_file": "m0-v6.txt",
+   "notes": "m0-v6.txt: a 3840x2160 M0 clay with placeholders for every product (the designer's first choice; m0-clay-4k.png without proxies is the fallback the manager named); daylight only like m0-clay-4k; pouf, planter, magazine-holder, sofa-cover: no proxy; sofa-cover = the muslin fringe throw of cushions set A (the v4 px_throw proxy over the right arm), not a slipcover"
+  }
+ }
+}
