@@ -15,7 +15,7 @@ while body and body[0].strip() == '':
     body.pop(0)
 prompt = '\n'.join(body)
 refs = [idx['refs'][k]['var2_url'] for k in idx['frames'][job['frame']] if idx['refs'].get(k, {}).get('var2_url')]
-clay_local = {'M0': 'assets/blockout/house/framing/round3/M0.png'}.get(job['frame'], f"assets/blockout/house/framing/round3/{job['frame']}.png")
+clay_local = {'M0': 'assets/blockout/living-room/m0-clay-4k.png'}.get(job['frame'], f"assets/blockout/house/framing/round3/{job['frame']}.png")
 p = os.path.join(REPO, clay_local)
 sha = hashlib.sha256(open(p, 'rb').read()).hexdigest() if os.path.exists(p) else None
 out = dict(id=jid, frame=job['frame'], prompt_chars=len(prompt), ascii=prompt.isascii(), refs=len(refs), clay=clay_local, clay_sha256=sha,
