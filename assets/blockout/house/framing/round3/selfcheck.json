@@ -6542,6 +6542,659 @@
       },
       "overlay": "framing/round3/overlays/B1.png",
       "runtime_s": 931
+    },
+    "B2": {
+      "frame": "B2",
+      "room": "bath",
+      "round2_id": "B2",
+      "camera": {
+        "id": "B2",
+        "room": "bath",
+        "loc": [
+          3.8,
+          13.2,
+          1.15
+        ],
+        "yaw": -57,
+        "u0": 0.52,
+        "v0": 0.46,
+        "status": "second frame (pan -35 from B1)",
+        "hero": "mirror and vanity between the sconce pair, right third (mirror centre u 0.672)"
+      },
+      "image": "framing/round3/B2.png",
+      "resolution": [
+        3840,
+        2160
+      ],
+      "samples": 36,
+      "placeholders_shown": [
+        "bath/hand-towel",
+        "bath/shower-curtain",
+        "bath/shower-dispensers",
+        "bath/soap-dispenser",
+        "bath/storage-basket",
+        "bath/toothbrush-cup",
+        "bath/towel-ring",
+        "bath/vanity-sconces",
+        "bath/vanity-vase"
+      ],
+      "built_generic": [],
+      "missing": [],
+      "lamps_on": [
+        "bath/shower-downlight",
+        "bath/vanity-sconces"
+      ],
+      "lamps_off": [
+        "bath/ceiling-light",
+        "bath/wall-sconce"
+      ],
+      "mean_L": 149.1,
+      "mean_L_round2": 136.7,
+      "designer_notes": "b2.txt: same point CB as B1, same products and light; F8 mirror pass from CB in selfcheck; shower downlight lit at low power",
+      "est_vs_measured": [
+        {
+          "key": "east wall visible from X (left edge on Y 9.95)",
+          "est": 4.92,
+          "measured": 4.9221,
+          "dev": 0.0021,
+          "flag_gt_tol": false,
+          "tol": 0.05,
+          "note": ""
+        },
+        {
+          "key": "SE_corner_u (6.25, 9.95)",
+          "est": 0.278,
+          "measured": 0.2775,
+          "dev": -0.0005,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "shower south wall u (corner .. Y 11.15)",
+          "est": [
+            0.28,
+            0.44
+          ],
+          "measured": [
+            0.2775,
+            0.4391
+          ],
+          "dev": [
+            -0.0025,
+            -0.0009
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "curtain stack u (pixels)",
+          "est": [
+            0.22,
+            0.27
+          ],
+          "measured": [
+            0.2411,
+            0.3047
+          ],
+          "dev": [
+            0.0211,
+            0.0347
+          ],
+          "flag_gt_tol": true,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "towel ladder u (pixels)",
+          "est": [
+            0.43,
+            0.52
+          ],
+          "measured": null,
+          "dev": null,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "vanity sconces u (Y 11.62 / 12.98 at the wall)",
+          "est": [
+            0.51,
+            0.87
+          ],
+          "measured": [
+            0.5221,
+            0.8725
+          ],
+          "dev": [
+            0.0121,
+            0.0025
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "vanity u (wall line Y 11.75 / 12.85)",
+          "est": [
+            0.55,
+            0.83
+          ],
+          "measured": [
+            0.5477,
+            0.829
+          ],
+          "dev": [
+            -0.0023,
+            -0.001
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "mirror centre u",
+          "est": 0.672,
+          "measured": 0.6718,
+          "dev": -0.0002,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "mirror v (top 1.95 / bottom 1.15 at the centre)",
+          "est": [
+            0.09,
+            0.46
+          ],
+          "measured": [
+            0.0874,
+            0.46
+          ],
+          "dev": [
+            -0.0026,
+            0.0
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "towel ring u (Y 12.98)",
+          "est": 0.87,
+          "measured": 0.8725,
+          "dev": 0.0025,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        }
+      ],
+      "est_flags": [
+        "curtain stack u (pixels)"
+      ],
+      "items_visible": {
+        "bath/shower-curtain": {
+          "kind": "proxy",
+          "frame_area_pct": 6.35,
+          "visible_pct": 75.7,
+          "cut_by_edge_pct": 24.3
+        },
+        "bath/hand-towel": {
+          "kind": "proxy",
+          "frame_area_pct": 1.3,
+          "visible_pct": 99.0,
+          "cut_by_edge_pct": 0.0
+        },
+        "U6 mirror": {
+          "kind": "mirror",
+          "frame_area_pct": 9.02,
+          "visible_pct": 99.2,
+          "cut_by_edge_pct": 0.0
+        },
+        "bath/storage-basket": {
+          "kind": "proxy",
+          "frame_area_pct": 1.97,
+          "visible_pct": 99.9,
+          "cut_by_edge_pct": 0.2
+        },
+        "bath/shower-dispensers": {
+          "kind": "proxy",
+          "frame_area_pct": 0.25,
+          "visible_pct": 100.0,
+          "cut_by_edge_pct": 0.0
+        },
+        "bath/soap-dispenser": {
+          "kind": "proxy",
+          "frame_area_pct": 0.21,
+          "visible_pct": 100.0,
+          "cut_by_edge_pct": 0.0
+        },
+        "bath/toothbrush-cup": {
+          "kind": "proxy",
+          "frame_area_pct": 0.21,
+          "visible_pct": 94.4,
+          "cut_by_edge_pct": 0.0
+        },
+        "bath vanity 110 (fixed)": {
+          "kind": "furniture",
+          "frame_area_pct": 10.81,
+          "visible_pct": 80.2,
+          "cut_by_edge_pct": 11.2
+        },
+        "bath/vanity-sconces": {
+          "kind": "proxy",
+          "frame_area_pct": 0.74,
+          "visible_pct": 100.0,
+          "cut_by_edge_pct": 0.0
+        },
+        "bath/vanity-vase": {
+          "kind": "proxy",
+          "frame_area_pct": 0.27,
+          "visible_pct": 100.0,
+          "cut_by_edge_pct": 0.0
+        }
+      },
+      "F3_tangents": {
+        "edge_tangents": [],
+        "object_object_tangents": [],
+        "note": "edge: visible bbox margin 0 < m < 0.02; object-object as round 2 (ray-cast silhouettes, 512x288)"
+      },
+      "boxes": {
+        "shower fittings, matte black (shell)": {
+          "kind": "architecture",
+          "box": [
+            0.3047,
+            0.3625,
+            0.0847,
+            0.5403
+          ],
+          "px": 12719
+        },
+        "bath vanity 110 (fixed)": {
+          "kind": "furniture",
+          "box": [
+            0.4737,
+            0.832,
+            0.488,
+            1.0
+          ],
+          "px": 897039
+        },
+        "U6 mirror": {
+          "kind": "mirror",
+          "box": [
+            0.5594,
+            0.807,
+            0.05,
+            0.4537
+          ],
+          "px": 747956
+        },
+        "mirror oak frame": {
+          "kind": "architecture",
+          "box": [
+            0.5549,
+            0.813,
+            0.0394,
+            0.4602
+          ],
+          "px": 66118
+        },
+        "bath/shower-curtain": {
+          "kind": "proxy",
+          "box": [
+            0.2411,
+            0.3047,
+            0.0,
+            1.0
+          ],
+          "px": 527032
+        },
+        "bath/shower-dispensers": {
+          "kind": "proxy",
+          "box": [
+            0.3388,
+            0.3857,
+            0.4375,
+            0.4949
+          ],
+          "px": 20365
+        },
+        "bath/vanity-sconces": {
+          "kind": "proxy",
+          "box": [
+            0.4964,
+            0.8951,
+            0.1264,
+            0.2903
+          ],
+          "px": 61498
+        },
+        "bath/soap-dispenser": {
+          "kind": "proxy",
+          "box": [
+            0.7214,
+            0.7448,
+            0.5148,
+            0.6051
+          ],
+          "px": 17430
+        },
+        "bath/toothbrush-cup": {
+          "kind": "proxy",
+          "box": [
+            0.7547,
+            0.7802,
+            0.5019,
+            0.606
+          ],
+          "px": 17617
+        },
+        "bath/vanity-vase": {
+          "kind": "proxy",
+          "box": [
+            0.7833,
+            0.8099,
+            0.4875,
+            0.613
+          ],
+          "px": 22226
+        },
+        "bath/towel-ring": {
+          "kind": "proxy",
+          "box": [
+            0.8411,
+            0.9018,
+            0.5634,
+            0.5852
+          ],
+          "px": 2912
+        },
+        "bath/hand-towel": {
+          "kind": "proxy",
+          "box": [
+            0.8289,
+            0.9148,
+            0.5782,
+            0.7426
+          ],
+          "px": 107958
+        },
+        "bath/storage-basket": {
+          "kind": "proxy",
+          "box": [
+            0.5508,
+            0.6948,
+            0.8241,
+            1.0
+          ],
+          "px": 163029
+        }
+      },
+      "rules_designer": [
+        {
+          "rule": "curtain stack vs the SE corner line: overlap >= 0.03 or clear >= 0.02",
+          "stack_u": [
+            0.2411,
+            0.3047
+          ],
+          "corner_u": 0.2775,
+          "overlap": 0.0272,
+          "ok": false
+        }
+      ],
+      "density_F10": {
+        "result": "fail",
+        "counted": 4,
+        "minimum": 11,
+        "target": [
+          12,
+          15
+        ],
+        "info_counted_if_area_ge_0_2pct": 8,
+        "info_counted_any_area_ge_50pct_visible": 8,
+        "frame_kind": "lean",
+        "in_target": false,
+        "categories": [
+          "lighting",
+          "storage/function",
+          "textile"
+        ],
+        "four_categories_ok": false,
+        "missing_categories": [
+          "ceramics/tableware"
+        ],
+        "slots": [
+          {
+            "slot": "shower-curtain",
+            "category": "textile",
+            "frame_area_pct": 6.35,
+            "visible_pct": 75.7,
+            "cut_by_edge_pct": 24.3,
+            "counted": true,
+            "why_not": null
+          },
+          {
+            "slot": "storage-basket",
+            "category": "storage/function",
+            "frame_area_pct": 1.97,
+            "visible_pct": 99.9,
+            "cut_by_edge_pct": 0.2,
+            "counted": true,
+            "why_not": null
+          },
+          {
+            "slot": "hand-towel",
+            "category": "textile",
+            "frame_area_pct": 1.3,
+            "visible_pct": 99.0,
+            "cut_by_edge_pct": 0.0,
+            "counted": true,
+            "why_not": null
+          },
+          {
+            "slot": "vanity-sconces",
+            "category": "lighting",
+            "frame_area_pct": 0.74,
+            "visible_pct": 100.0,
+            "cut_by_edge_pct": 0.0,
+            "counted": true,
+            "why_not": null
+          },
+          {
+            "slot": "vanity-vase",
+            "category": "ceramics/tableware",
+            "frame_area_pct": 0.27,
+            "visible_pct": 100.0,
+            "cut_by_edge_pct": 0.0,
+            "counted": false,
+            "why_not": "area < 0.5%"
+          },
+          {
+            "slot": "shower-dispensers",
+            "category": "ceramics/tableware",
+            "frame_area_pct": 0.25,
+            "visible_pct": 100.0,
+            "cut_by_edge_pct": 0.0,
+            "counted": false,
+            "why_not": "area < 0.5%"
+          },
+          {
+            "slot": "soap-dispenser",
+            "category": "ceramics/tableware",
+            "frame_area_pct": 0.21,
+            "visible_pct": 100.0,
+            "cut_by_edge_pct": 0.0,
+            "counted": false,
+            "why_not": "area < 0.5%"
+          },
+          {
+            "slot": "toothbrush-cup",
+            "category": "ceramics/tableware",
+            "frame_area_pct": 0.21,
+            "visible_pct": 94.4,
+            "cut_by_edge_pct": 0.0,
+            "counted": false,
+            "why_not": "area < 0.5%"
+          }
+        ],
+        "rule": "counted = own-room product proxy >= 50% visible (ray-cast silhouette incl. outside the frame) and >= 0.5% of the frame; sets once; fillers, shell, fixed furniture, neighbouring rooms not counted"
+      },
+      "heroes_thirds": [
+        {
+          "hero": "mirror centre",
+          "u": 0.6718,
+          "ok": true
+        },
+        {
+          "hero": "SE corner (left)",
+          "u": 0.2775,
+          "ok": false
+        }
+      ],
+      "lamps": [
+        {
+          "lamp": "bath/shower-downlight",
+          "typology": "ceiling",
+          "shell": true,
+          "glow_px": 0,
+          "visible": false
+        },
+        {
+          "lamp": "bath/vanity-sconces",
+          "typology": "wall",
+          "shell": false,
+          "glow_px": 122996,
+          "visible": true
+        }
+      ],
+      "F8_mirror": {
+        "result": "pass",
+        "samples": 2304,
+        "hits": {
+          "hwall_38": {
+            "frac": 0.875,
+            "x": [
+              3.25,
+              3.25
+            ],
+            "y": [
+              10.1398,
+              12.2538
+            ],
+            "z": [
+              1.2012,
+              2.6652
+            ]
+          },
+          "bath_ceiling": {
+            "frac": 0.125,
+            "x": [
+              3.253,
+              3.8124
+            ],
+            "y": [
+              10.1415,
+              12.352
+            ],
+            "z": [
+              2.7,
+              2.7
+            ]
+          }
+        },
+        "non_wall_objects": [],
+        "wall_Y_range": [
+          10.1398,
+          12.2538
+        ],
+        "wall_Z_range": [
+          1.2012,
+          2.6652
+        ],
+        "designer_est": "north wall Y 10.03-12.12, Z 1.15-2.70 + a ceiling strip; door 0.27 outside, window 0.08",
+        "method": "ray-cast: 48x48 grid on the whole mirror from CB, reflected camera rays; every object hit listed",
+        "inside_frame": {
+          "samples": 2304,
+          "hits": {
+            "hwall_38": {
+              "frac": 0.875,
+              "x": [
+                3.25,
+                3.25
+              ],
+              "y": [
+                10.1398,
+                12.2538
+              ],
+              "z": [
+                1.2012,
+                2.6652
+              ]
+            },
+            "bath_ceiling": {
+              "frac": 0.125,
+              "x": [
+                3.253,
+                3.8124
+              ],
+              "y": [
+                10.1415,
+                12.352
+              ],
+              "z": [
+                2.7,
+                2.7
+              ]
+            }
+          }
+        }
+      },
+      "wall_patches": {
+        "hero_wall_high": {
+          "u": 0.672,
+          "v": -0.099,
+          "xyz": [
+            6.25,
+            12.3,
+            2.35
+          ],
+          "note": "outside the frame"
+        },
+        "hero_wall_mid": {
+          "u": 0.672,
+          "v": -0.076,
+          "xyz": [
+            6.25,
+            12.3,
+            2.3
+          ],
+          "note": "outside the frame"
+        },
+        "ceiling": {
+          "u": 0.55,
+          "v": 0.04,
+          "L_hsl": 70.7,
+          "Y_lin": 0.4839,
+          "stops_vs_mid": 1.43
+        },
+        "floor_centre": {
+          "u": 0.5,
+          "v": 0.93,
+          "L_hsl": 21.4,
+          "Y_lin": 0.0489,
+          "stops_vs_mid": -1.88
+        }
+      },
+      "light_balance": {},
+      "camera_clearance_m": {
+        "min": 0.19,
+        "nearest": "leaf_corridor_bath"
+      },
+      "overlay": "framing/round3/overlays/B2.png",
+      "runtime_s": 921
     }
   }
 }
