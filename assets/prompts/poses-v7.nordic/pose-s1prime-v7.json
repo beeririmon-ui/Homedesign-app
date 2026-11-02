@@ -1,0 +1,209 @@
+{
+ "asset_id": "pose-s1prime-v7",
+ "room": "corridor",
+ "style": "nordic",
+ "frame": "S1prime",
+ "recipe": "B (gpt-image-2-5 sunburst), v7 wow pass - transition pose, route R",
+ "stage": "Nordic walk-through test (briefs/nordic-house-render-2026-10-24.md 8); 2K, not a site asset; gate 2 applies to the finals",
+ "date": "2026-11-02",
+ "tool": "var2 MCP var2_create_image",
+ "model": "gpt-image-2-5",
+ "type": "image-to-image",
+ "resolution": "2K",
+ "quality": "sunburst",
+ "aspect_ratio": "16:9",
+ "returned_size_px": [
+  2736,
+  1536
+ ],
+ "seed": null,
+ "seed_note": "model exposes no seed; a regenerate is a new sample",
+ "input_image": {
+  "local": "/home/user/homedesign-app/assets/blockout/house/framing/round4/poses/S1prime.png",
+  "sha256": "188fe7e5c06babda2e0d20960e98b58291ba56492bef3e7846f9c02259533a58",
+  "var2_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/16165a55-087b-48a0-bc27-ebd15e344bc7.png",
+  "upload": "var2_request_upload + PUT (curl); downloaded back, sha256 identical"
+ },
+ "image_refs": [
+  {
+   "n": 1,
+   "var2_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/22eb21ef-57c4-4243-9bca-7b3182715c31.jpg"
+  },
+  {
+   "n": 2,
+   "var2_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/4eb8ab5b-64b2-4da6-950a-1af102e82451.jpg"
+  },
+  {
+   "n": 3,
+   "var2_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/db543244-0cc5-46fe-a92d-c4bc00a1d5ad.jpg"
+  }
+ ],
+ "negative_prompt": null,
+ "negative_note": "no negative field; the prohibitions are the last paragraph of the prompt",
+ "prompt": "Use the attached clay render as the exact blueprint. Keep every wall, opening, window, cornice, skirting, floor and ceiling line, the camera height, lens and angle, and the position, size and angle of every furniture piece and built-in exactly as in the clay. Move, resize, add or remove nothing. Each placeholder shape in the clay marks one product listed below; render it there at the stated size. Only turn the clay into real materials and light. The other attached images are close-ups of the exact products: match their form, colour and texture. Positions are fractions of frame width (x) and height (y) from the top-left.\n\n1. PHOTO. A frame from a camera move through the same house: the same room, products, light and grade as the attached crops of the master photographs (reference 1; the neighbouring rooms as references 2, 3). They are cut from photographs taken from other cameras and show the look only; the clay alone sets the framing, the position and the size of everything; render only what this clay shows. 24 mm shift lens at 1.2 m, level, straight verticals, all sharp.\n\n2. LIGHT. No window. A continuous frosted roof slot along the top of the left wall is the key: soft top light washing the left wall, brightest under the slot, falling off smoothly toward the floor and toward the camera. Exposed for that wall: clean white just under the glowing slot. The vista at the end is the brightest area, one step over that wall, still detailed: the oak portal, the hall console under its print, the living room beyond. The right wall and its flush doors sit in soft shade, a calm gradient. The oak floor carries one long soft sheen toward the hall. Each object: a lit upper-left face, a darker side, dense contact shadows. Dropped ceiling a touch darker, darkest top right. No sun patch. Real contrast, never milky. 4600 K: whites white, never cream, pink or grey. The corridor paper lanterns are above the frame, out of view.\n\n3. MATERIALS. Matte mineral paint #F4F1EC, faint chalky movement in the raking light. Flush doors in the wall colour, matte black levers. Wide oiled white-oak planks, pale honey #D6BF9E, the whole length. The portal at the end: oiled oak #C8A27A.\n\n4. PRODUCTS, one per line, each on its clay placeholder:\nc. THE VISTA is exactly the rooms of references 2 and 3: in the hall a black line print over the oak console with one white ceramic vase and a black oval tray, nothing beside the console; beyond, the living room's three prints between two glowing travertine cubes over the oatmeal sofa, under the ribbed silk lantern; no floor lamp.\n\n5. NOT IN FRAME: corridor lamps, picture lights, runner or rug, stool, plants, anything on the right wall or doors, shoes, books, mirror, glass, cable, text, people. No sun patches, beams, bloom, haze, halos, HDR, grain or vignette.",
+ "prompt_source": "assets/prompts/poses-v7.nordic/S1prime.txt",
+ "prompt_chars": 2813,
+ "prompt_deviation": "lines starting with # stripped as the header instructs",
+ "idempotency_key": "v7-pose-s1prime-v7-20261102-a1",
+ "var2": {
+  "placeholder_id": "d2b70254-5b76-4746-92a0-e3aef8da7e1b",
+  "task_id": "dab6e93df5dafa24c316e82b78eb1378",
+  "result_url": null,
+  "share_url": "https://www.var2.ai/image/d2b70254-5b76-4746-92a0-e3aef8da7e1b"
+ },
+ "credits_estimated": 600,
+ "credits": 600,
+ "attempt": 1,
+ "attempt_note": "first and only attempt",
+ "grade": {
+  "applied": true,
+  "script": "assets/renders/house-nordic-v7-2026-11-02/process_v7.py",
+  "params": {
+   "white_balance": {
+    "patch": [
+     0.8136666417121887,
+     0.904444508254528
+    ],
+    "H_before": 30.3,
+    "H_target": 36,
+    "gains_rgb": [
+     0.9818,
+     1.0078,
+     0.9818
+    ],
+    "gain_clip": "0.9-1.1"
+   },
+   "exposure": {
+    "patch": [
+     0.8136666417121887,
+     0.904444508254528
+    ],
+    "target_L": 82.0,
+    "needed_stops": 0.365,
+    "applied_stops": 0.2,
+    "flag": "DARK: needs more than +0.2 stop, not lifted further"
+   },
+   "saturation": "chroma x0.90 (linear, toward luminance)",
+   "highlight_rolloff": {
+    "knee_L": 94,
+    "asymptote_L": 97.25,
+    "on": "max channel, hue kept"
+   },
+   "s_curve": {
+    "mix": 0.12,
+    "shape": "smoothstep blend"
+   },
+   "black_point": {
+    "darkest_patch_L_before": 12.0,
+    "lift": "none (already >= 12)"
+   },
+   "grain": "none",
+   "vignette": "none"
+  },
+  "output": "assets/renders/poses/nordic/v7/pose-s1prime-v7-graded.png",
+  "rule": "docs/render-recipe-nordic-2026-10-24.md 2.6 (the Bible grade): WB on the hero-wall patch, exposure capped +-0.2 stop, chroma -10%, roll-off from L 94, S curve 0.12, black point to L 12.5 only if below 12, no grain, no vignette"
+ },
+ "output": "assets/renders/poses/nordic/v7/pose-s1prime-v7.png",
+ "output_raw": "assets/renders/poses/nordic/v7/raw/pose-s1prime-v7.png",
+ "image_refs_source": "assets/renders/house-nordic-v7-2026-11-02/poses.json + refs/index-v7.json",
+ "normalised_16_9": "non-uniform resize 2736x1536 -> 2736x1539 (+0.20% vertical), no crop",
+ "overscan": {
+  "on": false
+ },
+ "clay_lock": {
+  "method": "regions = whole frame, quadrants, ceiling/floor bands and the clay boxes of fixed furniture / windows / openings; peaks below ~0.03 are unreliable (weak texture), so the verdict is visual (<aid>-lock.png) with the strong-peak number as support",
+  "regions": {
+   "frame": {
+    "du": 0.0,
+    "dv": 0.0026,
+    "peak": 0.013,
+    "ncc": 0.133
+   },
+   "upper-left": {
+    "du": -0.0011,
+    "dv": -0.0006,
+    "peak": 0.097,
+    "ncc": 0.11
+   },
+   "upper-right": {
+    "du": 0.0,
+    "dv": -0.0195,
+    "peak": 0.006,
+    "ncc": 0.222
+   },
+   "lower-left": {
+    "du": -0.0004,
+    "dv": 0.0032,
+    "peak": 0.048,
+    "ncc": 0.121
+   },
+   "lower-right": {
+    "du": 0.0007,
+    "dv": 0.0039,
+    "peak": 0.032,
+    "ncc": 0.121
+   },
+   "ceiling-band": {
+    "du": -0.0015,
+    "dv": -0.0006,
+    "peak": 0.037,
+    "ncc": null
+   },
+   "floor-band": {
+    "du": 0.0197,
+    "dv": -0.0175,
+    "peak": 0.018,
+    "ncc": 0.061
+   },
+   "fixed:hall-bench": {
+    "du": -0.0004,
+    "dv": 0.0032,
+    "peak": 0.121,
+    "ncc": 0.079
+   },
+   "G-H1 roof light": {
+    "du": -0.0015,
+    "dv": -0.0006,
+    "peak": 0.069,
+    "ncc": null
+   },
+   "hall console": {
+    "du": -0.0026,
+    "dv": 0.0039,
+    "peak": 0.018,
+    "ncc": 0.018
+   },
+   "G-H4 oak portal": {
+    "du": -0.0227,
+    "dv": 0.0045,
+    "peak": 0.033,
+    "ncc": 0.085
+   },
+   "G-C3 oak portal": {
+    "du": -0.0018,
+    "dv": -0.0006,
+    "peak": 0.013,
+    "ncc": null
+   }
+  },
+  "auto_worst_abs_shift": 0.0227,
+  "auto_worst_abs_shift_strong_peaks": 0.0227,
+  "verdict": {
+   "visual": "HELD: the corridor walls, the oak portal, the hall roof light, the hall portal, the bench, the console and every floor joint on the clay lines (|du|,|dv| <= 0.005 in all strong regions); the hall print ~1.3x its box (as in H0 v7); nothing invented; no corridor lamp",
+   "auto_strong_peaks": 0.0227
+  }
+ },
+ "sofa_width_check": null,
+ "product_check": {
+  "rule": "each product inside its clay box +-15 % of the box size (<aid>-boxes.png); read visually",
+  "overlay": "assets/renders/poses/nordic/v7/pose-s1prime-v7-boxes.png"
+ },
+ "measurements": "assets/renders/poses/nordic/v7/pose-s1prime-v7-measurements.json",
+ "self_check_verdict": "",
+ "on_sheet": true,
+ "masters_as_references": [
+  "C0vista",
+  "H0crop",
+  "M0crop"
+ ]
+}

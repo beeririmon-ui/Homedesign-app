@@ -3,7 +3,7 @@
  "date": "2026-11-02",
  "model": "gpt-image-2-5, quality sunburst, 2K, 16:9, image-to-image from the round-4 clay",
  "cap_tokens": 16000,
- "spent_tokens": 15000,
+ "spent_tokens": 15600,
  "clay": {
   "M0": {
    "local": "assets/blockout/house/framing/round4/M0.png",
@@ -172,6 +172,14 @@
    "put": "200",
    "verified": true,
    "size": 3664379
+  },
+  "MB-in": {
+   "local": "/home/user/homedesign-app/assets/blockout/house/framing/round4/poses/MB-in.png",
+   "sha256": "116870e6443a7b64bac10a7cbb35e9c2d4d040f1bec4b805be5c27368660e48a",
+   "var2_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/14d7e8b5-45db-456d-b68f-a9022ee261de.png",
+   "put": "200",
+   "verified": true,
+   "size": 5653735
   }
  },
  "jobs": [
@@ -1443,7 +1451,7 @@
    "id": "pose-s1prime-v7",
    "frame": "S1prime",
    "kind": "pose",
-   "status": "submitted",
+   "status": "done",
    "attempt": 1,
    "credits": 600,
    "credits_estimated": 600,
@@ -1469,15 +1477,21 @@
     "on": false
    },
    "placeholder_id": "d2b70254-5b76-4746-92a0-e3aef8da7e1b",
-   "task_id": "dab6e93df5dafa24c316e82b78eb1378"
+   "task_id": "dab6e93df5dafa24c316e82b78eb1378",
+   "lock": {
+    "visual": "HELD: the corridor walls, the oak portal, the hall roof light, the hall portal, the bench, the console and every floor joint on the clay lines (|du|,|dv| <= 0.005 in all strong regions); the hall print ~1.3x its box (as in H0 v7); nothing invented; no corridor lamp",
+    "auto_strong_peaks": 0.0227
+   },
+   "sheet": true,
+   "sheet_label": "attempt 1  lock held"
   },
   {
    "id": "pose-mb-in-v7",
    "frame": "MB-in",
    "kind": "pose",
-   "status": "pending",
+   "status": "done",
    "attempt": 1,
-   "credits": 0,
+   "credits": 600,
    "credits_estimated": 600,
    "date": "2026-11-02",
    "model": "gpt-image-2-5",
@@ -1501,7 +1515,15 @@
    ],
    "overscan": {
     "on": false
-   }
+   },
+   "placeholder_id": "407b9ce7-ae40-4c43-ad2f-590440731606",
+   "task_id": "1807dec9336d3ec73d1bb16fad762c79",
+   "lock": {
+    "visual": "HELD where the move needs it: the door frame, the corridor (walls, roof slot, lanterns, gallery, side doors, the hall and living room at its end), the right-hand walls and the floor joints on the clay lines; the panelling cap within ~0.01; at the left edge the nightstand and bed ~0.03-0.04 to the right and the planter pot ~0.03 narrower than the clay cylinder. Wave lamp, seagrass pot, olive tree and travertine holders match the product refs and MB0 v7",
+    "auto_strong_peaks": 0.034
+   },
+   "sheet": true,
+   "sheet_label": "attempt 1  lock held (door, corridor, floor); nightstand ~0.03 off at the left edge"
   }
  ]
 }

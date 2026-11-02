@@ -15,7 +15,7 @@ for f in order:
     p = d.get('post', {})
     c = d.get('camera', {})
     ov = d.get('overscan', {})
-    canvas = f"{ov.get('canvas_px', ['?', '?'])[0]}x{ov.get('canvas_px', ['?', '?'])[1]}" + (' (overscan 3 %)' if ov.get('on') else '')
+    canvas = (f"{ov['canvas_px'][0]}x{ov['canvas_px'][1]}" if ov.get('canvas_px') else '3840x2160 (no overscan: sent before the request)') + (' (overscan 3 %)' if ov.get('on') else '')
     ref = p.get('reference_L_final')
     refs = f"{p.get('target_L')} -> {ref}" if ref is not None else f"group {p.get('group')} (set by {p.get('exposure_group_ref')})"
     wins = ', '.join(f"{v['p99']}" for v in (p.get('window_p99') or {}).values()) or f"frame {p.get('p99_L_frame')}"

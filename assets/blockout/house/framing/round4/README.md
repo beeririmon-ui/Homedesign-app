@@ -38,6 +38,33 @@ python3 framing/round4/summarize_r4.py       # הטבלה למטה
 
 ## תוצאות
 <!-- TABLE -->
+| still | file | camera (x, y, z), yaw, u0/v0 | canvas | samples | exposure (round 3 = +0.35) | reference patch: target -> L | glass p99 | lamps lit |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| M0 | framing/round4/M0.png | (1.25, 5.55, 1.2), 25, 0.52/0.46 | 3840x2160 (no overscan: sent before the request) | 16 | +1.438 (+1.088 stop) | 86.5 -> 86.5 | frame 95.5 | living/accent-sconces, living/pendant, living/wall-sconce |
+| D1 | framing/round4/D1.png | (2.8, 3.8, 1.1), -56, 0.52/0.43 | 3840x2160 (no overscan: sent before the request) | 16 | +1.712 (+1.362 stop) | 86.5 -> 86.5 | 95.5 | kitchen-dining/dining-pendant, kitchen-dining/led-niche, kitchen-dining/led-shelves |
+| D2 | framing/round4/D2.png | (2.8, 3.8, 1.1), -91, 0.52/0.43 | 4072x2290 (overscan 3 %) | 16 | +1.712 (+1.362 stop) | group PD (set by D1) | frame 95.0 | kitchen-dining/led-niche, kitchen-dining/led-shelves |
+| H0 | framing/round4/H0.png | (2.877, 9.039, 1.2), 12, 0.52/0.46 | 3840x2160 | 16 | +0.395 (+0.045 stop) | 89.0 -> 89.0 | frame 94.7 | hall/wall-sconce, living/accent-sconces, living/pendant, living/wall-sconce |
+| C0 | framing/round4/C0.png | (2.397, 17.11, 1.2), 0, 0.5/0.46 | 3840x2160 | 16 | +0.376 (+0.026 stop) | 87.1 -> 87.1 | 73.0 | corridor/ceiling-lights, living/accent-sconces, living/pendant, living/wall-sconce |
+| MB0 | framing/round4/MB0.png | (-0.7, 21.05, 1.05), 0, 0.5/0.46 | 3840x2160 | 16 | +1.256 (+0.906 stop) | 86.5 -> 86.5 | 95.5 | master/bedside-sconces |
+| K-boy | framing/round4/K-boy.png | (1.1, 13.0, 1.0), 33, 0.52/0.44 | 4072x2290 (overscan 3 %) | 16 | +0.85 (+0.5 stop) | 86.5 -> 88.9 | 95.5 | none |
+| K-girl | framing/round4/K-girl.png | (1.1, 16.63, 1.0), 33, 0.52/0.44 | 4072x2290 (overscan 3 %) | 16 | +0.85 (+0.5 stop) | 86.5 -> 88.8 | 95.5 | none |
+| B1 | framing/round4/B1.png | (3.8, 13.2, 1.15), -22, 0.52/0.46 | 4072x2290 (overscan 3 %) | 16 | +0.885 (+0.535 stop) | 87.0 -> 87.0 | 95.5 | bath/shower-downlight, bath/vanity-sconces, bath/wall-sconce |
+| B2 | framing/round4/B2.png | (3.8, 13.2, 1.15), -57, 0.52/0.46 | 4072x2290 (overscan 3 %) | 16 | +0.885 (+0.535 stop) | group CB (set by B1) | frame 94.2 | bath/shower-downlight, bath/vanity-sconces |
+| W0 | framing/round4/W0.png | (-0.825, 9.85, 1.1), 0, 0.5/0.46 | 3840x2160 | 16 | +1.44 (+1.09 stop) | 86.5 -> 86.5 | 95.5 | none |
+| H0x | framing/round4/poses/H0x.png | (2.877, 9.039, 1.2), 25, 0.52/0.46 | 3840x2160 | 10 | +0.395 (+0.045 stop) | group H0 (set by H0) | frame 94.5 | hall/wall-sconce, living/accent-sconces, living/pendant, living/wall-sconce |
+| H0e | framing/round4/poses/H0e.png | (2.877, 9.039, 1.2), 0, 0.5/0.46 | 3840x2160 | 10 | +0.395 (+0.045 stop) | group H0 (set by H0) | frame 94.7 | hall/wall-sconce, living/accent-sconces, living/pendant, living/wall-sconce |
+| M0p | framing/round4/poses/M0p.png | (1.25, 5.55, 1.2), 0, 0.52/0.46 | 4072x2290 (overscan 3 %) | 10 | +1.438 (+1.088 stop) | group M0 (set by M0) | 95.5 | living/accent-sconces, living/pendant, living/wall-sconce |
+| M0x | framing/round4/poses/M0x.png | (1.25, 5.55, 1.2), -35, 0.52/0.46 | 4072x2290 (overscan 3 %) | 10 | +1.438 (+1.088 stop) | group M0 (set by M0) | 95.5 | kitchen-dining/dining-pendant, kitchen-dining/led-niche, kitchen-dining/led-shelves, living/accent-sconces, living/pendant, living/wall-sconce |
+| PD-35 | framing/round4/poses/PD-35.png | (2.8, 3.8, 1.1), -35, 0.52/0.46 | 4072x2290 (overscan 3 %) | 10 | +1.712 (+1.362 stop) | group PD (set by D1) | 95.5 | kitchen-dining/dining-pendant, kitchen-dining/led-niche, kitchen-dining/led-shelves |
+| W0-in | framing/round4/poses/W0-in.png | (-0.825, 8.55, 1.1), 0, 0.5/0.46 | 3840x2160 | 10 | +1.44 (+1.09 stop) | group W0 (set by W0) | frame 87.6 | none |
+| S1prime | framing/round4/poses/S1prime.png | (2.641, 13.0, 1.2), 0, 0.5/0.46 | 3840x2160 | 10 | +0.376 (+0.026 stop) | group C0 (set by C0) | frame 91.5 | corridor/ceiling-lights, living/accent-sconces, living/pendant, living/wall-sconce |
+| R2m | not rendered | | | | | | | |
+| K-boy-0 | framing/round4/poses/K-boy-0.png | (1.1, 13.0, 1.0), 0, 0.5/0.46 | 4072x2290 (overscan 3 %) | 10 | +0.85 (+0.5 stop) | group Kb (set by K-boy) | frame 85.5 | none |
+| K-girl-0 | framing/round4/poses/K-girl-0.png | (1.1, 16.63, 1.0), 0, 0.5/0.46 | 4072x2290 (overscan 3 %) | 10 | +0.85 (+0.5 stop) | group Kg (set by K-girl) | frame 85.5 | none |
+| CB-0 | framing/round4/poses/CB-0.png | (3.8, 13.2, 1.15), 0, 0.5/0.46 | 4072x2290 (overscan 3 %) | 10 | +0.885 (+0.535 stop) | group CB (set by B1) | 95.5 | bath/shower-downlight, bath/vanity-sconces, bath/wall-sconce |
+| MB-in | framing/round4/poses/MB-in.png | (2.45, 21.05, 1.2), 0, 0.5/0.46 | 3840x2160 | 10 | +1.256 (+0.906 stop) | group MB0 (set by MB0) | frame 94.1 | corridor/ceiling-lights, living/accent-sconces, living/pendant, living/wall-sconce, master/bedside-sconces |
+
+H0 balance (display-referred, as round 3 measured it): living back wall through the door L 89.0, hall wall above the console L 74.1, living - hall = 0.57 stop (round 3: 0.4; target 0.5-0.9: pass).
 <!-- /TABLE -->
 
 ## מה פתוח

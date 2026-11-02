@@ -1,0 +1,202 @@
+{
+ "asset_id": "pose-w0-in-v7",
+ "room": "work",
+ "style": "nordic",
+ "frame": "W0-in",
+ "recipe": "B (gpt-image-2-5 sunburst), v7 wow pass - transition pose, route R",
+ "stage": "Nordic walk-through test (briefs/nordic-house-render-2026-10-24.md 8); 2K, not a site asset; gate 2 applies to the finals",
+ "date": "2026-11-02",
+ "tool": "var2 MCP var2_create_image",
+ "model": "gpt-image-2-5",
+ "type": "image-to-image",
+ "resolution": "2K",
+ "quality": "sunburst",
+ "aspect_ratio": "16:9",
+ "returned_size_px": [
+  2736,
+  1536
+ ],
+ "seed": null,
+ "seed_note": "model exposes no seed; a regenerate is a new sample",
+ "input_image": {
+  "local": "assets/blockout/house/framing/round4/poses/W0-in.png",
+  "sha256": "02c3eb753ecab1354be2d321a3f94b8a46b5d41cc2efe8469ddf0d5865a1cae6",
+  "var2_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/f381d9bb-49b3-4d41-be99-7f0a2c47b62d.png",
+  "upload": "var2_request_upload + PUT (curl); downloaded back, sha256 identical"
+ },
+ "image_refs": [
+  {
+   "n": 1,
+   "var2_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/1bd5745b-2f70-4b52-9d37-1be508bf65cc.jpg"
+  },
+  {
+   "n": 2,
+   "var2_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/7c0d3462-89be-4386-967a-19fb681e3316.jpg"
+  },
+  {
+   "n": 3,
+   "var2_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/e72f0820-f41b-460f-97cf-33f0da528871.jpg"
+  },
+  {
+   "n": 4,
+   "var2_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/a6d8b5bf-265b-4613-a144-91745a0b8053.jpg"
+  },
+  {
+   "n": 5,
+   "var2_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/8c166be2-562f-4b6a-af9a-4d037b5aa6b0.jpg"
+  },
+  {
+   "n": 6,
+   "var2_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/dad391d8-7465-4c2c-baca-cddc92624896.jpg"
+  }
+ ],
+ "negative_prompt": null,
+ "negative_note": "no negative field; the prohibitions are the last paragraph of the prompt",
+ "prompt": "Use the attached clay render as the exact blueprint. Keep every wall, opening, window, cornice, skirting, floor and ceiling line, the camera height, lens and angle, and the position, size and angle of every furniture piece and built-in exactly as in the clay. Move, resize, add or remove nothing. Each placeholder shape in the clay marks one product listed below; render it there at the stated size. Only turn the clay into real materials and light. The other attached images are close-ups of the exact products: match their form, colour and texture. Positions are fractions of frame width (x) and height (y) from the top-left.\n\n1. PHOTO. A frame from a camera move through the same house: the same room, products, light and grade as the attached master photograph (reference 1), which is taken from another camera; the clay alone sets the framing, the position and the size of everything; render only what this clay shows. 24 mm shift lens at 1.1 m, level, straight verticals, all sharp.\n\n2. LIGHT. One key: soft north daylight from the window on the left wall, no sun; outside, bare birches, no snow, no buildings. No lamp is lit. Exposed for white: the desk wall by the left corner clean white, a step under the glowing reveal; the glass brightest, detailed. Light rakes across the desk wall from the left and falls off smoothly half a stop to the right corner; the right wall in soft shade. The shelf draws a soft shadow line on the wall below it; chair and desk cast long soft shadows right and toward the camera; the plant's leaves glow against the window; dense contact shadows under the baskets. Ceiling a touch darker, darkest top right. Real contrast, never milky. 4600 K: whites white, never cream, pink or grey.\n\n3. MATERIALS. Matte mineral paint #F4F1EC, faint chalky movement in the raking light. Wide oiled white-oak planks, pale honey #D6BF9E. Built-in desk with a drawer, floating shelf and chair: oiled light oak #C8A27A, satin sheen, a long soft window highlight along the desk top.\n\n4. PRODUCTS, one per line, each on its clay placeholder:\nc. BASKET under the desk, left, x 0.27-0.35, y 0.91-1.00: empty cream cotton rope basket, about the chair seat's height.\nd. BIN under the desk, right, x 0.65-0.74, y 0.94-1.00: mist-grey washable kraft-paper bin, rolled cuff, a little lower than the chair seat.\ne. PLANTER in the corner by the window, x 0.00-0.21, y 0.31-1.00: a 38 cm natural seagrass belly basket as a pot cover, an upright soft-leaved plant in it, crown below the shelf.\nf. FELT BINS at both shelf ends, x 0.27-0.73, y 0.03-0.12: two light-grey felt open bins, palm-height; the shelf centre bare.\ng. PEN CUP on the desk, left, x 0.32-0.35, y 0.58-0.67: hand-sized white speckled stone cup, 4-6 natural wood pencils; the rest of the desk bare.\n\n5. NOT IN FRAME: artwork, bookends, books, ceiling lamp, wall lamp, desk lamp, tray, magazines, laptop, papers, mirror, glass, socket, cable, text, people. No sun patches, beams, bloom, haze, halos, HDR, grain or vignette.",
+ "prompt_source": "assets/prompts/poses-v7.nordic/W0-in.txt",
+ "prompt_chars": 2996,
+ "prompt_deviation": "lines starting with # stripped as the header instructs",
+ "idempotency_key": "v7-pose-w0-in-v7-20261102-a1",
+ "var2": {
+  "placeholder_id": "7b87efa2-fa9d-45e9-8011-5477cbd12c04",
+  "task_id": "3cd6d36c34b5199671506c108af77d6c",
+  "result_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/gpt25-3cd6d36c34b5199671506c108af77d6c-0-1793658155178-fc9f8790.png",
+  "share_url": "https://www.var2.ai/image/7b87efa2-fa9d-45e9-8011-5477cbd12c04"
+ },
+ "credits_estimated": 600,
+ "credits": 600,
+ "attempt": 1,
+ "attempt_note": "first and only attempt",
+ "grade": {
+  "applied": true,
+  "script": "assets/renders/house-nordic-v7-2026-11-02/process_v7.py",
+  "params": {
+   "white_balance": {
+    "patch": [
+     0.5,
+     0.3
+    ],
+    "H_before": 30.1,
+    "H_target": 36,
+    "gains_rgb": [
+     0.9881,
+     1.005,
+     0.9881
+    ],
+    "gain_clip": "0.9-1.1"
+   },
+   "exposure": {
+    "patch": [
+     0.5,
+     0.3
+    ],
+    "target_L": 90.0,
+    "needed_stops": 0.322,
+    "applied_stops": 0.2,
+    "flag": "DARK: needs more than +0.2 stop, not lifted further"
+   },
+   "saturation": "chroma x0.90 (linear, toward luminance)",
+   "highlight_rolloff": {
+    "knee_L": 94,
+    "asymptote_L": 97.25,
+    "on": "max channel, hue kept"
+   },
+   "s_curve": {
+    "mix": 0.12,
+    "shape": "smoothstep blend"
+   },
+   "black_point": {
+    "darkest_patch_L_before": 4.4,
+    "lift_to_L": 12.5,
+    "blend": 0.0846
+   },
+   "grain": "none",
+   "vignette": "none"
+  },
+  "output": "assets/renders/poses/nordic/v7/pose-w0-in-v7-graded.png",
+  "rule": "docs/render-recipe-nordic-2026-10-24.md 2.6 (the Bible grade): WB on the hero-wall patch, exposure capped +-0.2 stop, chroma -10%, roll-off from L 94, S curve 0.12, black point to L 12.5 only if below 12, no grain, no vignette"
+ },
+ "output": "assets/renders/poses/nordic/v7/pose-w0-in-v7.png",
+ "output_raw": "assets/renders/poses/nordic/v7/raw/pose-w0-in-v7.png",
+ "image_refs_source": "assets/renders/house-nordic-v7-2026-11-02/poses.json + refs/index-v7.json",
+ "normalised_16_9": "non-uniform resize 2736x1536 -> 2736x1539 (+0.20% vertical), no crop",
+ "overscan": {
+  "on": false
+ },
+ "clay_lock": {
+  "method": "regions = whole frame, quadrants, ceiling/floor bands and the clay boxes of fixed furniture / windows / openings; peaks below ~0.03 are unreliable (weak texture), so the verdict is visual (<aid>-lock.png) with the strong-peak number as support",
+  "regions": {
+   "frame": {
+    "du": 0.0241,
+    "dv": 0.0572,
+    "peak": 0.004,
+    "ncc": null
+   },
+   "upper-left": {
+    "du": -0.0402,
+    "dv": 0.0188,
+    "peak": 0.012,
+    "ncc": null
+   },
+   "upper-right": {
+    "du": 0.0468,
+    "dv": 0.0045,
+    "peak": 0.022,
+    "ncc": null
+   },
+   "lower-left": {
+    "du": -0.0329,
+    "dv": -0.0461,
+    "peak": 0.008,
+    "ncc": null
+   },
+   "lower-right": {
+    "du": 0.0453,
+    "dv": -0.0403,
+    "peak": 0.008,
+    "ncc": null
+   },
+   "ceiling-band": {
+    "du": 0.0263,
+    "dv": -0.0286,
+    "peak": 0.017,
+    "ncc": null
+   },
+   "floor-band": {
+    "du": -0.0417,
+    "dv": -0.0195,
+    "peak": 0.007,
+    "ncc": -0.045
+   },
+   "built-in oak desk + shelf": {
+    "du": 0.0318,
+    "dv": 0.0474,
+    "peak": 0.004,
+    "ncc": null
+   },
+   "desk chair": {
+    "du": 0.0249,
+    "dv": -0.0143,
+    "peak": 0.012,
+    "ncc": -0.053
+   }
+  },
+  "auto_worst_abs_shift": 0.0572,
+  "auto_worst_abs_shift_strong_peaks": 0.0,
+  "verdict": {
+   "visual": "BROKE: the model rendered the W0 master framing (desk wall from 3.5 m) instead of the 2.2 m pose: shelf, desk and chair far smaller than the clay, the chair back not in the foreground",
+   "auto_strong_peaks": 0.0
+  }
+ },
+ "sofa_width_check": null,
+ "product_check": {
+  "rule": "each product inside its clay box +-15 % of the box size (<aid>-boxes.png); read visually",
+  "overlay": "assets/renders/poses/nordic/v7/pose-w0-in-v7-boxes.png"
+ },
+ "measurements": "assets/renders/poses/nordic/v7/pose-w0-in-v7-measurements.json",
+ "self_check_verdict": "REJECTED, no retake (budget: the remaining 3,600 tokens cover the six remaining poses only). Recommendation: retake without the master as reference 1 (the model copies its framing), or play T-HW with first/last frames only.",
+ "on_sheet": true,
+ "masters_as_references": [
+  "W0"
+ ]
+}

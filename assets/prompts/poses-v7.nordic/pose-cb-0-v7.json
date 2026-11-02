@@ -1,0 +1,253 @@
+{
+ "asset_id": "pose-cb-0-v7",
+ "room": "bath",
+ "style": "nordic",
+ "frame": "CB-0",
+ "recipe": "B (gpt-image-2-5 sunburst), v7 wow pass - transition pose, route R",
+ "stage": "Nordic walk-through test (briefs/nordic-house-render-2026-10-24.md 8); 2K, not a site asset; gate 2 applies to the finals",
+ "date": "2026-11-02",
+ "tool": "var2 MCP var2_create_image",
+ "model": "gpt-image-2-5",
+ "type": "image-to-image",
+ "resolution": "2K",
+ "quality": "sunburst",
+ "aspect_ratio": "16:9",
+ "returned_size_px": [
+  2736,
+  1536
+ ],
+ "seed": null,
+ "seed_note": "model exposes no seed; a regenerate is a new sample",
+ "input_image": {
+  "local": "assets/blockout/house/framing/round4/poses/CB-0.png",
+  "sha256": "31803b3352f27570beb41545ea80759c6d6eae9c1887acfa6a3fc86085b6fd5b",
+  "var2_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/6647b653-7c20-4717-81f9-2b66829bbb9d.png",
+  "upload": "var2_request_upload + PUT (curl); downloaded back, sha256 identical"
+ },
+ "image_refs": [
+  {
+   "n": 1,
+   "var2_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/8d3c4496-a2f1-40b7-bc95-a6ccf2f33a9e.jpg"
+  },
+  {
+   "n": 2,
+   "var2_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/084334aa-abfb-4dfb-8bf1-8e13e7de827b.jpg"
+  },
+  {
+   "n": 3,
+   "var2_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/7efec61b-6a16-4cbd-a414-f8a834ff62d8.jpg"
+  },
+  {
+   "n": 4,
+   "var2_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/af1c3f44-5fcc-4406-90a3-b3f0d4c953e2.jpg"
+  },
+  {
+   "n": 5,
+   "var2_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/f9d648b4-d1a3-489d-9f7f-438be35a125f.jpg"
+  },
+  {
+   "n": 6,
+   "var2_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/0c44b581-ea0c-4838-ac82-7b158d869ee8.jpg"
+  },
+  {
+   "n": 7,
+   "var2_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/6f707669-c889-441d-b8f7-989858c93f0d.jpg"
+  }
+ ],
+ "negative_prompt": null,
+ "negative_note": "no negative field; the prohibitions are the last paragraph of the prompt",
+ "prompt": "Use the attached clay render as the exact blueprint. Keep every wall, opening, window, cornice, skirting, floor and ceiling line, the camera height, lens and angle, and the position, size and angle of every furniture piece and built-in exactly as in the clay. Move, resize, add or remove nothing. Each placeholder shape in the clay marks one product listed below; render it there at the stated size. Only turn the clay into real materials and light. The other attached images are close-ups of the exact products: match their form, colour and texture. Positions are fractions of frame width (x) and height (y) from the top-left.\n\n1. PHOTO. A frame from a camera move through the same house: the same room, products, light and grade as the attached master photograph (reference 1), which is taken from another camera; the clay alone sets the framing, the position and the size of everything; render only what this clay shows. 24 mm shift lens at 1.15 m, level, straight verticals, all sharp.\n\n2. LIGHT. One key: soft daylight through the fluted window on the left, no sun; the fluted glass is the brightest surface, glowing, every rib readable, no view. Exposed for white: the wall beside the window clean white, a step under the glass; the room falls off smoothly to the right. The curtain's deep folds take the light on their left faces and hold soft shadow inside each fold. Every object: a lit left face, a shadow side a stop darker, dense contact shadows. Ceiling a touch darker, darkest top right. Real contrast, never milky. White balance 4000 K: walls warm white, never orange, pink or grey; the limestone keeps its pale oat tone; the clay's orange cast is not the colour. Lamps 2700 K, low, shadowless: the wall lamp between window and shower, and the lamp cut at the right edge, wash the wall in soft fans up and down; the shower downlight glows low on the limestone.\n\n3. MATERIALS. Washable matte mineral paint #F4F1EC. Floor large matte limestone-look porcelain. Shower corner, niche and the ledge over the WC: honed pale oat limestone, open pores, matte, a soft window highlight along the ledge top. Wall-hung matte white WC, matte black flush plate, rain head, mixer and ceiling track.\n\n4. PRODUCTS, one per line, each on its clay placeholder:\na. CURTAIN, the hero, x 0.93-1.00, y 0.00-1.00: one natural linen-blend panel, fine slub stripes, warm oat-white, gathered in deep soft folds on matte black hooks at the corner of the ceiling track, hem just touching the floor, clearly overlapping the corner line.\nb. WALL LAMP, x 0.66-0.69, y 0.24-0.30: a hand-sized fluted half-cylinder up-and-down lamp in matte white that reads as plaster, hardwired; the same lamp cut at the right edge.\nc. BATH MAT before the shower, x 0.71-0.86, y 0.92-1.00: cream thick tufted cotton, raised border, half as long as the WC ledge.\nd. ROLL STAND right of the ledge, against the wall, x 0.62-0.66, y 0.64-0.89: slim matte black standing toilet roll holder, one plain spare roll, top below the ledge.\ne. DIFFUSER on the ledge, x 0.55-0.57, y 0.42-0.53: milk-tea stone-look ceramic bottle, bamboo lid, 6-8 thin rattan reeds, a hand tall.\nf. CANDLE at the ledge's left end, x 0.53-0.55, y 0.50-0.54: palm-sized ribbed matte white ceramic cup, warm-white wax, unlit.\n\n5. NOT IN FRAME: stool, ladder, towels, plants, bin, toilet brush, labels, glass, socket, cable, text, people. No sun patches, beams, bloom, haze, halos, HDR, grain or vignette.",
+ "prompt_source": "assets/prompts/poses-v7.nordic/CB-0.txt",
+ "prompt_chars": 3435,
+ "prompt_deviation": "lines starting with # stripped as the header instructs",
+ "idempotency_key": "v7-pose-cb-0-v7-20261102-a1",
+ "var2": {
+  "placeholder_id": "b7c37121-4aa6-4cb5-8b73-98c6ffae5d8a",
+  "task_id": "0b7448a5a146ff45e1433cf0d2b2783a",
+  "result_url": null,
+  "share_url": "https://www.var2.ai/image/b7c37121-4aa6-4cb5-8b73-98c6ffae5d8a"
+ },
+ "credits_estimated": 600,
+ "credits": 600,
+ "attempt": 1,
+ "attempt_note": "first and only attempt",
+ "grade": {
+  "applied": true,
+  "script": "assets/renders/house-nordic-v7-2026-11-02/process_v7.py",
+  "params": {
+   "white_balance": {
+    "patch": [
+     0.8714068531990051,
+     0.18709444999694824
+    ],
+    "H_before": 35.3,
+    "H_target": 36,
+    "gains_rgb": [
+     0.9932,
+     1.0031,
+     0.9932
+    ],
+    "gain_clip": "0.9-1.1"
+   },
+   "exposure": {
+    "patch": [
+     0.8714068531990051,
+     0.18709444999694824
+    ],
+    "target_L": 86.0,
+    "needed_stops": 0.68,
+    "applied_stops": 0.2,
+    "flag": "DARK: needs more than +0.2 stop, not lifted further"
+   },
+   "saturation": "chroma x0.90 (linear, toward luminance)",
+   "highlight_rolloff": {
+    "knee_L": 94,
+    "asymptote_L": 97.25,
+    "on": "max channel, hue kept"
+   },
+   "s_curve": {
+    "mix": 0.12,
+    "shape": "smoothstep blend"
+   },
+   "black_point": {
+    "darkest_patch_L_before": 4.5,
+    "lift_to_L": 12.5,
+    "blend": 0.0839
+   },
+   "grain": "none",
+   "vignette": "none"
+  },
+  "output": "assets/renders/poses/nordic/v7/pose-cb-0-v7-graded.png",
+  "rule": "docs/render-recipe-nordic-2026-10-24.md 2.6 (the Bible grade): WB on the hero-wall patch, exposure capped +-0.2 stop, chroma -10%, roll-off from L 94, S curve 0.12, black point to L 12.5 only if below 12, no grain, no vignette"
+ },
+ "output": "assets/renders/poses/nordic/v7/pose-cb-0-v7.png",
+ "output_raw": "assets/renders/poses/nordic/v7/raw/pose-cb-0-v7.png",
+ "image_refs_source": "assets/renders/house-nordic-v7-2026-11-02/poses.json + refs/index-v7.json",
+ "normalised_16_9": "non-uniform resize 2736x1536 -> 2736x1539 (+0.20% vertical), no crop",
+ "overscan": {
+  "on": true,
+  "canvas_px": [
+   4072,
+   2290
+  ],
+  "frame_px": [
+   3840,
+   2160
+  ],
+  "crop_box_px": [
+   116,
+   65,
+   3956,
+   2225
+  ],
+  "per_side_fraction_x": 0.0302,
+  "per_side_fraction_y": 0.0301,
+  "note": "same camera and focal length in pixels; the 16:9 frame is the centre crop; uv in this selfcheck (boxes, patches) are fractions of the canvas",
+  "output_canvas_px": [
+   2736,
+   1539
+  ],
+  "output_frame_box_px": [
+   78,
+   44,
+   2658,
+   1495
+  ],
+  "output_frame_px": [
+   2580,
+   1451
+  ],
+  "output_os6_px": [
+   2580,
+   1539
+  ],
+  "files": {
+   "canvas": "assets/renders/poses/nordic/v7/pose-cb-0-v7-graded.png",
+   "frame": "assets/renders/poses/nordic/v7/pose-cb-0-v7-frame.png",
+   "os6": "assets/renders/poses/nordic/v7/pose-cb-0-v7-graded-os6.png"
+  },
+  "motion_agent": "-graded-os6.png = the 16:9 frame plus 0.0303 of its height above and below (--a-overscan / --b-overscan)"
+ },
+ "clay_lock": {
+  "method": "regions = whole frame, quadrants, ceiling/floor bands and the clay boxes of fixed furniture / windows / openings; peaks below ~0.03 are unreliable (weak texture), so the verdict is visual (<aid>-lock.png) with the strong-peak number as support",
+  "regions": {
+   "frame": {
+    "du": 0.0007,
+    "dv": 0.0247,
+    "peak": 0.022,
+    "ncc": 0.066
+   },
+   "upper-left": {
+    "du": 0.0559,
+    "dv": -0.0084,
+    "peak": 0.007,
+    "ncc": 0.131
+   },
+   "upper-right": {
+    "du": 0.0037,
+    "dv": 0.0201,
+    "peak": 0.015,
+    "ncc": 0.088
+   },
+   "lower-left": {
+    "du": 0.0007,
+    "dv": 0.0032,
+    "peak": 0.017,
+    "ncc": 0.111
+   },
+   "lower-right": {
+    "du": 0.0011,
+    "dv": 0.011,
+    "peak": 0.046,
+    "ncc": 0.039
+   },
+   "ceiling-band": {
+    "du": 0.0011,
+    "dv": -0.0006,
+    "peak": 0.024,
+    "ncc": null
+   },
+   "floor-band": {
+    "du": 0.0015,
+    "dv": 0.0058,
+    "peak": 0.088,
+    "ncc": null
+   },
+   "bath fluted glazing": {
+    "du": -0.0015,
+    "dv": 0.0058,
+    "peak": 0.059,
+    "ncc": 0.129
+   },
+   "bath WC + limestone ledge (fixed)": {
+    "du": -0.0007,
+    "dv": 0.0045,
+    "peak": 0.053,
+    "ncc": 0.265
+   },
+   "window W-bath": {
+    "du": -0.0015,
+    "dv": 0.0058,
+    "peak": 0.058,
+    "ncc": 0.14
+   }
+  },
+  "auto_worst_abs_shift": 0.0559,
+  "auto_worst_abs_shift_strong_peaks": 0.011,
+  "verdict": {
+   "visual": "HELD: window, limestone ledge and WC, flush plate, paper stand, shower panel and floor seams on the clay lines (du/dv <= 0.006); nothing invented; bath WB neutral",
+   "auto_strong_peaks": 0.011
+  }
+ },
+ "sofa_width_check": null,
+ "product_check": {
+  "rule": "each product inside its clay box +-15 % of the box size (<aid>-boxes.png); read visually",
+  "overlay": "assets/renders/poses/nordic/v7/pose-cb-0-v7-boxes.png"
+ },
+ "measurements": "assets/renders/poses/nordic/v7/pose-cb-0-v7-measurements.json",
+ "self_check_verdict": "",
+ "on_sheet": true,
+ "masters_as_references": [
+  "B1"
+ ]
+}

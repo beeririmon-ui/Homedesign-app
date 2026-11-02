@@ -141,6 +141,13 @@ def build(pose):
         l = l.replace("exactly the clay's block, arms at x 0.52 and 0.84, as reference 1, never wider", "exactly the clay's block, never wider")
         out.append(l)
     text = '\n'.join(out)
+    if pose == 'MB-in':   # one wall lamp, the planter and the nightstand seen from the door; the window and the bed are out of view
+        text = re.sub(r'^2\. LIGHT\..*$', '2. LIGHT. Soft north daylight from the bedroom window, out of frame to the left, no sun. Exposed for white: the panelled wall clean white; the corridor through the door bright and still detailed, its roof slot glowing. The bedroom wall falls off half a stop to the right; fine shadow lines in the panelling grooves; the planter lit on its left face, darker on its right. Dense contact shadows under the nightstand and the planter. Ceiling a touch darker. Real contrast, never milky. 4600 K: whites white, never cream, pink or grey. Lamps 2700 K, low, shadowless: the wall lamp glows through its fabric and lays a small warm pool on the nightstand top and a soft fan on the panelling.', text, flags=re.M)
+        text = text.replace('b. WALL LAMPS, just above the panelling cap, the pair at the two ends of x 0.08-0.13, y 0.37-0.45: two flush beige linen-look wave lamps, each half a nightstand\'s width, hardwired.',
+                            'b. WALL LAMP, just above the panelling cap, x 0.08-0.13, y 0.37-0.45: one flush beige linen-look wave lamp, half the nightstand\'s width, hardwired (its pair is out of frame).')
+        text = text.replace('e. PLANTER, cut by the right edge, x 0.19-0.36', 'e. PLANTER, standing free in front of the panelling, x 0.19-0.36')
+        text = text.replace('h. CANDLE HOLDERS, right nightstand, x 0.08-0.13', 'h. CANDLE HOLDERS, on the nightstand, x 0.08-0.13')
+        text = text.replace('rug, basket, ceiling lamp, socket,', 'rug, basket, bedroom ceiling lamp, window, socket,')
     if base == 'C0' and 'b' in dropped:   # the lanterns are out of this view: no lamp sentence, and the hall bench in the vista stays
         text = text.replace(' Lamps 2700 K, low, shadowless: the paper lanterns glow evenly; the far one lays a faint warm pool on the floor below it.', ' The corridor paper lanterns are above the frame, out of view.')
         text = text.replace('5. NOT IN FRAME: picture lights, runner or rug, stool, bench, plants,', '5. NOT IN FRAME: corridor lamps, picture lights, runner or rug, stool, plants,')
