@@ -3,7 +3,7 @@
  "date": "2026-11-02",
  "model": "gpt-image-2-5, quality sunburst, 2K, 16:9, image-to-image from the round-4 clay",
  "cap_tokens": 16000,
- "spent_tokens": 13200,
+ "spent_tokens": 13800,
  "clay": {
   "M0": {
    "local": "assets/blockout/house/framing/round4/M0.png",
@@ -1331,16 +1331,20 @@
    },
    "placeholder_id": "b7c37121-4aa6-4cb5-8b73-98c6ffae5d8a",
    "task_id": "0b7448a5a146ff45e1433cf0d2b2783a",
-   "lock": "held",
-   "verdict": "held: window, limestone ledge + WC, flush plate, paper stand, shower panel, floor seams on the clay (du/dv <= 0.006); nothing invented; bath WB neutral"
+   "lock": {
+    "visual": "HELD: window, limestone ledge and WC, flush plate, paper stand, shower panel and floor seams on the clay lines (du/dv <= 0.006); nothing invented; bath WB neutral",
+    "auto_strong_peaks": 0.011
+   },
+   "sheet": true,
+   "sheet_label": "attempt 1  lock held  overscan 3%"
   },
   {
    "id": "pose-h0x-v7",
    "frame": "H0x",
    "kind": "pose",
-   "status": "pending",
+   "status": "submitted",
    "attempt": 1,
-   "credits": 0,
+   "credits": 600,
    "credits_estimated": 600,
    "date": "2026-11-02",
    "model": "gpt-image-2-5",
@@ -1368,7 +1372,9 @@
    ],
    "overscan": {
     "on": false
-   }
+   },
+   "placeholder_id": "4663141d-7534-479d-a01b-4a6b039b3455",
+   "task_id": "86caf084e93b8ef9e1d66980b62ce953"
   }
  ]
 }
