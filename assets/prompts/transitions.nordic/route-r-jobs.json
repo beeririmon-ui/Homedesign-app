@@ -1,0 +1,70 @@
+{
+  "version": "2026-11-02",
+  "author": "motion-agent",
+  "status": "plan only: no job sent. Send only after the v7 stills and poses pass QA (the first and last frames must be the final stills).",
+  "plan": "docs/transitions-render-plan-2026-11-02.md",
+  "route": "R: every pan in code (site/tools/transitions/pan_reproject.py, 0 tokens); video only for the straight moves, one move per clip, first + last frame",
+  "defaults": {
+    "model": "kling-3-omni",
+    "type": "image-to-video",
+    "params": {"resolution": "1080p", "sound": false, "aspect_ratio": "16:9"},
+    "price_per_s": 324,
+    "prompt_rule": "from assets/prompts/transitions.nordic/<transition>.txt: strip the # lines; send the intro line, the paragraph of THIS move only (not the PAN paragraphs), CAMERA RULES and SCENE LOCK. When a clip is rendered in the opposite direction to its transition (render_direction 'reversed'), the move paragraph is rewritten for the rendered direction (a pull-back becomes a forward dolly) and the clip is played backwards.",
+    "post": "audio stripped (-an); first and last frames replaced by the stills with a residual fade; retimed to uniform path progress; interpolated to 60 fps; grade-matched to the stills (plan, section 6)"
+  },
+  "pilot": {
+    "why": "pick the model on one move before the series (studio rule א.5); T-E0 is the site's opening move",
+    "clip": "V1",
+    "arms": [
+      {"model": "kling-3-omni", "params": {"duration": 4, "resolution": "1080p", "sound": false}, "tokens": 1296},
+      {"model": "kling-4", "params": {"duration": 4, "resolution": "1080p"}, "tokens": 3120, "note": "first/last only (keyframe mode); audio always rendered, stripped"},
+      {"model": "ltx-2.3", "params": {"duration": 6}, "tokens": 1020, "note": "audio always rendered, stripped; resolution not settable through the MCP, check the output size"}
+    ],
+    "tokens": 5436
+  },
+  "clips": [
+    {"id": "V1", "move": "dolly 3.85 m, heading 25, 1.20", "first": "H0x (pose)", "last": "M0 (master)", "render_direction": "as played", "duration": 4,
+     "plays_in": [{"transition": "T-E0", "share": [0.23, 1.0], "direction": "forward"}], "prompt": "T-E0.txt: DOLLY", "tokens": "pilot"},
+    {"id": "V2", "move": "dolly 2.34 m, heading -35, oblique 6.5 deg, 1.20 -> 1.10", "first": "M0x (pose)", "last": "PD-35 (pose)", "render_direction": "as played", "duration": 3,
+     "plays_in": [{"transition": "T-LD", "share": [0.56, 0.81], "direction": "forward"}], "prompt": "T-LD.txt: DOLLY", "tokens": 972},
+    {"id": "V5", "move": "rail R1 3.97 m, yaw 0, 1.20 (forward dolly S1' -> H0e)", "first": "S1' (pose)", "last": "H0e (pose)", "render_direction": "reversed", "duration": 4,
+     "plays_in": [{"transition": "T-HC", "share": [0.11, 0.547], "direction": "backward (pull-back)"}], "prompt": "T-HC.txt: PULL-BACK, rewritten as a forward dolly", "tokens": 1296},
+    {"id": "V6", "move": "rail R2 4.12 m, yaw 0, 1.20 (forward dolly C0 -> S1')", "first": "C0 (master)", "last": "S1' (pose)", "render_direction": "as T-CBoy / T-CBath play it", "duration": 4,
+     "plays_in": [{"transition": "T-HC", "share": [0.547, 1.0], "direction": "backward (pull-back)"},
+                  {"transition": "T-CBoy", "share": [0.0, 0.48], "direction": "forward"},
+                  {"transition": "T-CBath", "share": [0.0, 0.57], "direction": "forward"}],
+     "prompt": "T-CBoy.txt: DOLLY", "tokens": 1296, "retake_rule": "if the boy or bath room seen through its door is invented, retake with kling-4 and R2m as the middle keyframe (+1,824 over kling-3-omni; R2m pose from the render agent)"},
+    {"id": "V10", "move": "corridor -> master 3.94 m, yaw 0, 1.20 (forward dolly MB-in -> C0)", "first": "MB-in (pose)", "last": "C0 (master)", "render_direction": "reversed", "duration": 4,
+     "plays_in": [{"transition": "T-CM", "share": [0.0, 0.56], "direction": "backward (pull-back)"}], "prompt": "T-CM.txt: PULL-BACK, rewritten as a forward dolly", "tokens": 1296},
+    {"id": "V11", "move": "slide 3.15 m left, heading 0, 1.20 -> 1.05", "first": "MB-in (pose)", "last": "MB0 (master)", "render_direction": "as played", "duration": 4,
+     "plays_in": [{"transition": "T-CM", "share": [0.56, 1.0], "direction": "forward"}], "prompt": "T-CM.txt: SLIDE", "tokens": 1296},
+    {"id": "V8", "move": "slide 1.38 m left and 0.48 forward, heading 0, 1.20 -> 1.00, through O-corridor-girl", "first": "C0 (master)", "last": "K-girl-0 (pose)", "render_direction": "as played", "duration": 3,
+     "plays_in": [{"transition": "T-CGirl", "share": [0.0, 0.32], "direction": "forward"}], "prompt": "T-CGirl.txt: SLIDE", "tokens": 972},
+    {"id": "V7", "move": "slide 1.54 m left, heading 0, 1.20 -> 1.00, through O-corridor-boy", "first": "S1' (pose)", "last": "K-boy-0 (pose)", "render_direction": "as played", "duration": 3,
+     "plays_in": [{"transition": "T-CBoy", "share": [0.48, 0.66], "direction": "forward"}], "prompt": "T-CBoy.txt: SLIDE", "tokens": 972},
+    {"id": "V9", "move": "slide 1.18 m right, heading 0, 1.20 -> 1.15, through O-corridor-bath", "first": "S1' (pose)", "last": "CB-0 (pose)", "render_direction": "as played", "duration": 3,
+     "plays_in": [{"transition": "T-CBath", "share": [0.57, 0.73], "direction": "forward"}], "prompt": "T-CBath.txt: SLIDE", "tokens": 972},
+    {"id": "V3", "move": "slide 3.73 m left, heading 0, 1.20 -> 1.10, through O-hall-work", "first": "H0e (pose)", "last": "W0-in (pose)", "render_direction": "as played", "duration": 4,
+     "plays_in": [{"transition": "T-HW", "share": [0.17, 0.78], "direction": "forward"}], "prompt": "T-HW.txt: SLIDE", "tokens": 1296},
+    {"id": "V4", "move": "work room 1.30 m, heading 0, 1.10 (forward dolly W0 -> W0-in)", "first": "W0 (master)", "last": "W0-in (pose)", "render_direction": "reversed", "duration": 3,
+     "plays_in": [{"transition": "T-HW", "share": [0.78, 1.0], "direction": "backward (pull-back)"}], "prompt": "T-HW.txt: PULL-BACK, rewritten as a forward dolly", "tokens": 972}
+  ],
+  "code_pans": [
+    {"transition": "T-E0", "pan": "H0 -> H0x", "deg": 13, "kind": "master + rotation pose"},
+    {"transition": "T-HW, T-HC", "pan": "H0 -> H0e", "deg": 12, "kind": "master + rotation pose (shared)"},
+    {"transition": "T-LD", "pan": "M0 -> M0p -> M0x", "deg": [25, 35], "kind": "master + rotation pose, then pose + pose"},
+    {"transition": "T-LD", "pan": "PD-35 -> D1", "deg": 21, "kind": "rotation pose + master"},
+    {"transition": "P-D", "pan": "D1 -> D2", "deg": 35, "kind": "two masters"},
+    {"transition": "T-CBoy", "pan": "K-boy-0 -> K-boy", "deg": 33, "kind": "rotation pose + master"},
+    {"transition": "T-CGirl", "pan": "K-girl-0 -> K-girl", "deg": 33, "kind": "rotation pose + master"},
+    {"transition": "T-CBath", "pan": "CB-0 -> B1", "deg": 22, "kind": "rotation pose + master"},
+    {"transition": "P-B", "pan": "B1 -> B2", "deg": 35, "kind": "two masters"}
+  ],
+  "tokens": {
+    "pilot": 5436,
+    "series_after_pilot_kling_3_omni": 11340,
+    "first_pass_total": 16776,
+    "retake_reserve": 7224,
+    "cap": 24000
+  }
+}

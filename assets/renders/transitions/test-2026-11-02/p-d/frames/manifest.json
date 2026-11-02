@@ -1,0 +1,115 @@
+{
+ "id": "P-D",
+ "from": "D1",
+ "to": "D2",
+ "style": "nordic",
+ "frames": 84,
+ "fps": 60.0,
+ "play_s": 1.4,
+ "sampling": "uniform-progress: frame i sits at progress i/(frames-1) along the path, at constant speed inside each segment and matched speed across joins; the player maps time to progress with the easing",
+ "easing": {
+  "type": "bible-ease-in-out-cubic",
+  "accel": 0.15,
+  "land": 0.3,
+  "velocity": "cubic smoothstep ramps over the first 15 % and the last 30 % of play_s, constant between",
+  "reverse": "the same frames played from last to first with the same curve in time"
+ },
+ "reverse": true,
+ "path": "{variant}/{index:04d}.{ext}",
+ "variants": {
+  "1920": {
+   "w": 1920,
+   "h": 1080,
+   "avif_quality": 55,
+   "webp_quality": 75,
+   "webp_frames": 84,
+   "webp_fps": 60.0
+  },
+  "1080": {
+   "w": 1080,
+   "h": 608,
+   "avif_quality": 50,
+   "webp_quality": 72,
+   "webp_frames": 84,
+   "webp_fps": 60.0
+  },
+  "mobile": {
+   "w": 648,
+   "h": 1080,
+   "avif_quality": 40,
+   "webp_quality": 60,
+   "webp_frames": 43,
+   "webp_fps": 30.0
+  }
+ },
+ "formats": [
+  "avif",
+  "webp"
+ ],
+ "mobile": {
+  "window_u": [
+   0.33,
+   0.5
+  ],
+  "frac": 0.3375,
+  "rule": "full-height 3:5 window, centre moves linearly in progress (eased in time)"
+ },
+ "first_frame": "D1: identical to the master at this size",
+ "last_frame": "D2: identical to the master at this size",
+ "segments": [
+  {
+   "type": "pan",
+   "p": [
+    0,
+    1
+   ],
+   "deg": 35,
+   "at": "PD",
+   "yaw": [
+    -56,
+    -91
+   ],
+   "source": "code: pan_reproject.py, masters mode (D1 recipe-v5 draft -> D2-r2 draft registered to its clay)"
+  }
+ ],
+ "swap": {
+  "blend_in_ms": 180,
+  "blend_out_ms": 180,
+  "rule": "the player cross-fades from the composed room (current variants) to frame 1, and from the last frame to the composed room; footage is rendered with the default products"
+ },
+ "bytes": {
+  "1920": {
+   "avif": 3685879,
+   "webp": 4099670
+  },
+  "1080": {
+   "avif": 1406547,
+   "webp": 1777624
+  },
+  "mobile": {
+   "avif": 826756,
+   "webp": 671112
+  }
+ },
+ "bytes_per_2s": {
+  "1920": {
+   "avif": 5265541,
+   "webp": 5856671
+  },
+  "1080": {
+   "avif": 2009353,
+   "webp": 2539463
+  },
+  "mobile": {
+   "avif": 1181080,
+   "webp": 958731
+  }
+ },
+ "mobile_budget": {
+  "limit_per_2s": 1500000.0,
+  "avif_ok": true
+ },
+ "qa": "pending",
+ "temporary": true,
+ "note": "TEST on Phase-B drafts (recipe-v5), not v7 masters; D2-r2 registered to its clay (-24 px); mobile windows are proposals (D1 0.33, D2 0.50)"
+}
