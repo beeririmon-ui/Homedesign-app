@@ -1,0 +1,238 @@
+{
+ "frame": "M0p",
+ "kind": "pose",
+ "room": "living",
+ "size": [
+  2580,
+  1451
+ ],
+ "wall_patches": {
+  "hero_wall_high": {
+   "uv": [
+    0.3939,
+    0.2144
+   ],
+   "clay_L": 88.8,
+   "graded_HSL": [
+    40.7,
+    18.7,
+    81.4
+   ],
+   "raw_HSL": [
+    32.1,
+    16.0,
+    74.8
+   ]
+  },
+  "hero_wall_mid": {
+   "uv": [
+    0.3939,
+    0.2998
+   ],
+   "clay_L": 89.7,
+   "graded_HSL": [
+    36.6,
+    24.8,
+    80.6
+   ],
+   "raw_HSL": [
+    30.5,
+    20.9,
+    74.1
+   ]
+  },
+  "ceiling": {
+   "uv": [
+    0.553,
+    0.0123
+   ],
+   "clay_L": 86.8,
+   "graded_HSL": [
+    36.3,
+    19.6,
+    74.4
+   ],
+   "raw_HSL": [
+    30.4,
+    17.5,
+    68.0
+   ]
+  },
+  "floor_centre": {
+   "uv": [
+    0.5,
+    0.9559
+   ],
+   "clay_L": 87.1,
+   "graded_HSL": [
+    38.9,
+    22.2,
+    81.3
+   ],
+   "raw_HSL": [
+    32.1,
+    18.8,
+    75.0
+   ]
+  },
+  "reference_M0": {
+   "uv": [
+    0.465,
+    0.3781
+   ],
+   "clay_L": 87.3,
+   "graded_HSL": [
+    36.2,
+    21.8,
+    77.5
+   ],
+   "raw_HSL": [
+    30.2,
+    19.0,
+    71.1
+   ]
+  }
+ },
+ "reference": {
+  "uv": [
+   0.465,
+   0.3781
+  ],
+  "graded_HSL": [
+   36.2,
+   21.8,
+   77.5
+  ],
+  "raw_HSL": [
+   30.2,
+   19.0,
+   71.1
+  ],
+  "target_bible_lo": 92.0,
+  "target_agent": 93.0,
+  "stops_needed_to_bible_from_raw": 0.798,
+  "stops_needed_to_bible_from_graded": 0.496,
+  "stops_needed_to_agent_target_from_raw": 0.834,
+  "white_H_ok_32_40": true,
+  "white_S_ok_15_28": true,
+  "white_H_under_25": false
+ },
+ "agent_grade": {
+  "target_L": 93.0,
+  "needed_stops": 0.703,
+  "applied_stops": 0.2,
+  "flag": "DARK: needs more than +0.2 stop, not lifted further",
+  "wb_H_before": 30.4,
+  "black_point": {
+   "darkest_patch_L_before": 6.9,
+   "lift_to_L": 12.5,
+   "blend": 0.06
+  },
+  "returned_size_px": [
+   2736,
+   1536
+  ],
+  "resize_16_9": "non-uniform resize 2736x1536 -> 2736x1539 (+0.20% vertical), no crop",
+  "strong_peak_lock": 0.0325
+ },
+ "saturated_px_total": 0,
+ "window": {
+  "box": "window W-dining",
+  "box_uv": [
+   0.8921,
+   0.9404,
+   0.1399,
+   0.5523
+  ],
+  "width_frac": 0.048,
+  "L_p50": 82.7,
+  "L_p99": 91.4,
+  "L_max": 96.9,
+  "saturated_inside": 0,
+  "saturated_outside": 0,
+  "outside_L_p99": 97.1,
+  "outside_L_p999": 97.3,
+  "brightest": false,
+  "p99_le_97": true,
+  "no_255": true,
+  "margins": {
+   "left": 0.892,
+   "right": 0.06,
+   "top": 0.14,
+   "bottom": 0.448
+  }
+ },
+ "black_point_L": 12.2,
+ "frame_mean_L": 74.9,
+ "whites": {
+  "share_of_frame": 0.591,
+  "H_median": 39.1,
+  "S_median": 20.0,
+  "share_H_under_25": 0.0021,
+  "share_H_over_50": 0.0802
+ },
+ "floor_median_HSL": [
+  37.9,
+  20.9,
+  79.2
+ ],
+ "floor_note": "bottom 10 % of the frame, middle 60 %: parquet in every room but the bath (limestone) and the hall / corridor (parquet, but the runner / rug may sit there)",
+ "lamps": {
+  "living/pendant": {
+   "box_uv": [
+    0.3007,
+    0.3726,
+    -0.0301,
+    0.1532
+   ],
+   "in_clay_lamps_on": true,
+   "L_p95": 90.4,
+   "L_max": 93.9,
+   "glow_H_median": 38.6,
+   "glow_S_median": 75.5,
+   "shade_L_93_97": false,
+   "shade_H_35_45": true,
+   "shade_S_25_45": false,
+   "not_brighter_than_window": true
+  },
+  "living/accent-sconces": {
+   "box_uv": [
+    0.2549,
+    0.5274,
+    0.3269,
+    0.3551
+   ],
+   "in_clay_lamps_on": true,
+   "L_p95": 90.8,
+   "L_max": 91.8,
+   "glow_H_median": 37.7,
+   "glow_S_median": 66.0,
+   "shade_L_93_97": false,
+   "shade_H_35_45": true,
+   "shade_S_25_45": false,
+   "not_brighter_than_window": true
+  }
+ },
+ "lamps_on_in_clay": [
+  "living/accent-sconces",
+  "living/pendant",
+  "living/wall-sconce"
+ ],
+ "technical": {
+  "job_id": "pose-m0p-v7",
+  "prompt_file": "assets/prompts/poses-v7.nordic/M0p.txt",
+  "prompt_file_exists": true,
+  "prompt_record_json": true,
+  "graded_size": [
+   2580,
+   1451
+  ],
+  "is_2k": true,
+  "ratio_16_9": true,
+  "overscan_canvas": true,
+  "frame_file_matches_crop": true,
+  "model": "gpt-image-2-5",
+  "quality": "sunburst",
+  "credits": 600
+ }
+}

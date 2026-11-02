@@ -161,6 +161,235 @@
    "b": 76.7
   }
  },
+ "check_note": "phase correlation between a clay and a photo-real render is reliable only where response >= 0.05; tiles_ecc below is QA's own local measure (ECC translation per tile on the same edge maps register uses)",
+ "tiles_ecc": [
+  {
+   "u": [
+    0.0,
+    0.25
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": -0.49,
+   "dy_px": 0.54,
+   "rho": 0.641,
+   "counted": true
+  },
+  {
+   "u": [
+    0.25,
+    0.5
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": -1.42,
+   "dy_px": -0.72,
+   "rho": 0.615,
+   "counted": true
+  },
+  {
+   "u": [
+    0.5,
+    0.75
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": 3.38,
+   "dy_px": 0.83,
+   "rho": 0.633,
+   "counted": true
+  },
+  {
+   "u": [
+    0.75,
+    1.0
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": 0.64,
+   "dy_px": -1.68,
+   "rho": 0.66,
+   "counted": true
+  },
+  {
+   "u": [
+    0.0,
+    0.25
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": 1.18,
+   "dy_px": -7.25,
+   "rho": 0.964,
+   "counted": true
+  },
+  {
+   "u": [
+    0.25,
+    0.5
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": 1.39,
+   "dy_px": -5.96,
+   "rho": 0.852,
+   "counted": true
+  },
+  {
+   "u": [
+    0.5,
+    0.75
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": -0.26,
+   "dy_px": -5.75,
+   "rho": 0.398,
+   "counted": true
+  },
+  {
+   "u": [
+    0.75,
+    1.0
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": -0.57,
+   "dy_px": -3.66,
+   "rho": 0.869,
+   "counted": true
+  }
+ ],
+ "tiles_ecc_registered": [
+  {
+   "u": [
+    0.0,
+    0.25
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": -0.39,
+   "dy_px": 1.37,
+   "rho": 0.649,
+   "counted": true
+  },
+  {
+   "u": [
+    0.25,
+    0.5
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": -1.18,
+   "dy_px": -0.1,
+   "rho": 0.617,
+   "counted": true
+  },
+  {
+   "u": [
+    0.5,
+    0.75
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": 4.32,
+   "dy_px": -0.05,
+   "rho": 0.634,
+   "counted": true
+  },
+  {
+   "u": [
+    0.75,
+    1.0
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": 1.04,
+   "dy_px": -0.68,
+   "rho": 0.679,
+   "counted": true
+  },
+  {
+   "u": [
+    0.0,
+    0.25
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": 0.21,
+   "dy_px": -1.25,
+   "rho": 0.963,
+   "counted": true
+  },
+  {
+   "u": [
+    0.25,
+    0.5
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": 0.46,
+   "dy_px": 0.57,
+   "rho": 0.847,
+   "counted": true
+  },
+  {
+   "u": [
+    0.5,
+    0.75
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": -0.39,
+   "dy_px": 1.09,
+   "rho": 0.401,
+   "counted": true
+  },
+  {
+   "u": [
+    0.75,
+    1.0
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": -1.24,
+   "dy_px": 0.39,
+   "rho": 0.875,
+   "counted": true
+  }
+ ],
  "fixed_edges": {
   "bath fluted glazing": {
    "box": [
@@ -233,17 +462,9 @@
      "d_px": -10,
      "clay_strength": 19.3,
      "render_strength": 34.1
-    },
-    "bottom": {
-     "clay_px": 1016,
-     "render_px": 1015,
-     "d_px": -1,
-     "clay_strength": 2.6,
-     "render_strength": 3.6
     }
    },
    "width_ratio": 0.9982,
-   "height_ratio": 1.0208,
    "worst_edge_px": 10,
    "kind": "furniture",
    "visible_pct": 88.9
@@ -340,13 +561,6 @@
      "clay_strength": 18.9,
      "render_strength": 28.5
     },
-    "top": {
-     "clay_px": 82,
-     "render_px": 78,
-     "d_px": -4,
-     "clay_strength": 2.0,
-     "render_strength": 3.3
-    },
     "bottom": {
      "clay_px": 581,
      "render_px": 573,
@@ -356,7 +570,6 @@
     }
    },
    "width_ratio": 0.954,
-   "height_ratio": 0.992,
    "worst_edge_px": 15,
    "kind": "window",
    "visible_pct": 89.8
@@ -371,8 +584,13 @@
  },
  "summary": {
   "global_shift_px": 140.31,
+  "global_shift_response": 0.0,
   "worst_band_px": 8.33,
+  "bands_reliable": 4,
   "worst_band_px_after_register": 3.0,
+  "worst_tile_ecc_px": 7.25,
+  "tiles_counted": 8,
+  "worst_tile_ecc_px_after_register": 4.32,
   "register_shift_px": [
    -0.67,
    -0.7

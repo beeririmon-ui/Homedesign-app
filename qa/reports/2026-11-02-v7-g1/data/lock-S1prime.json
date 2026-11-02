@@ -161,6 +161,235 @@
    "b": 81.3
   }
  },
+ "check_note": "phase correlation between a clay and a photo-real render is reliable only where response >= 0.05; tiles_ecc below is QA's own local measure (ECC translation per tile on the same edge maps register uses)",
+ "tiles_ecc": [
+  {
+   "u": [
+    0.0,
+    0.25
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": 0.33,
+   "dy_px": 2.13,
+   "rho": 0.135,
+   "counted": true
+  },
+  {
+   "u": [
+    0.25,
+    0.5
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": 2.96,
+   "dy_px": 0.4,
+   "rho": 0.699,
+   "counted": true
+  },
+  {
+   "u": [
+    0.5,
+    0.75
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": 0.53,
+   "dy_px": 11.7,
+   "rho": 0.561,
+   "counted": true
+  },
+  {
+   "u": [
+    0.75,
+    1.0
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": -3.59,
+   "dy_px": 0.17,
+   "rho": 0.221,
+   "counted": true
+  },
+  {
+   "u": [
+    0.0,
+    0.25
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": -0.67,
+   "dy_px": -0.29,
+   "rho": 0.808,
+   "counted": true
+  },
+  {
+   "u": [
+    0.25,
+    0.5
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": 2.41,
+   "dy_px": -1.51,
+   "rho": 0.779,
+   "counted": true
+  },
+  {
+   "u": [
+    0.5,
+    0.75
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": -0.89,
+   "dy_px": -15.07,
+   "rho": 0.697,
+   "counted": true
+  },
+  {
+   "u": [
+    0.75,
+    1.0
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": -4.28,
+   "dy_px": -0.37,
+   "rho": 0.103,
+   "counted": false
+  }
+ ],
+ "tiles_ecc_registered": [
+  {
+   "u": [
+    0.0,
+    0.25
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": -4.79,
+   "dy_px": 1.73,
+   "rho": 0.128,
+   "counted": true
+  },
+  {
+   "u": [
+    0.25,
+    0.5
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": 0.13,
+   "dy_px": -0.03,
+   "rho": 0.686,
+   "counted": true
+  },
+  {
+   "u": [
+    0.5,
+    0.75
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": 0.1,
+   "dy_px": 13.2,
+   "rho": 0.569,
+   "counted": true
+  },
+  {
+   "u": [
+    0.75,
+    1.0
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": -1.94,
+   "dy_px": 1.45,
+   "rho": 0.216,
+   "counted": true
+  },
+  {
+   "u": [
+    0.0,
+    0.25
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": -0.44,
+   "dy_px": 0.21,
+   "rho": 0.806,
+   "counted": true
+  },
+  {
+   "u": [
+    0.25,
+    0.5
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": 0.03,
+   "dy_px": 0.6,
+   "rho": 0.78,
+   "counted": true
+  },
+  {
+   "u": [
+    0.5,
+    0.75
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": -0.47,
+   "dy_px": -13.03,
+   "rho": 0.692,
+   "counted": true
+  },
+  {
+   "u": [
+    0.75,
+    1.0
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": -1.74,
+   "dy_px": 4.36,
+   "rho": 0.107,
+   "counted": false
+  }
+ ],
  "fixed_edges": {
   "fixed:hall-bench": {
    "box": [
@@ -190,18 +419,10 @@
      "d_px": -13,
      "clay_strength": 45.9,
      "render_strength": 47.7
-    },
-    "bottom": {
-     "clay_px": 778,
-     "render_px": 811,
-     "d_px": 33,
-     "clay_strength": 3.9,
-     "render_strength": 3.5
     }
    },
    "width_ratio": null,
-   "height_ratio": 1.2911,
-   "worst_edge_px": 33,
+   "worst_edge_px": 13,
    "kind": "furniture",
    "visible_pct": 30.7
   },
@@ -220,13 +441,6 @@
      "clay_strength": 18.0,
      "render_strength": 40.1
     },
-    "right": {
-     "clay_px": 759,
-     "render_px": 780,
-     "d_px": 21,
-     "clay_strength": 3.0,
-     "render_strength": 4.0
-    },
     "bottom": {
      "clay_px": 130,
      "render_px": 131,
@@ -235,8 +449,7 @@
      "render_strength": 41.6
     }
    },
-   "width_ratio": 1.2022,
-   "worst_edge_px": 21,
+   "worst_edge_px": 15,
    "kind": "architecture",
    "visible_pct": null
   },
@@ -311,17 +524,9 @@
      "d_px": 8,
      "clay_strength": 37.9,
      "render_strength": 71.0
-    },
-    "bottom": {
-     "clay_px": 722,
-     "render_px": 724,
-     "d_px": 2,
-     "clay_strength": 6.6,
-     "render_strength": 2.1
     }
    },
    "width_ratio": 1.0045,
-   "height_ratio": 0.9869,
    "worst_edge_px": 8,
    "kind": "architecture",
    "visible_pct": null
@@ -364,15 +569,19 @@
  },
  "fixed_edges_worst_px": 69,
  "fixed_width_ratios": {
-  "G-H1 roof light": 1.2022,
   "hall console": 1.6744,
   "G-H4 oak portal": 1.0045,
   "G-C3 oak portal": 1.0812
  },
  "summary": {
   "global_shift_px": 4.52,
-  "worst_band_px": 156.19,
-  "worst_band_px_after_register": 112.62,
+  "global_shift_response": 0.066,
+  "worst_band_px": 2.88,
+  "bands_reliable": 1,
+  "worst_band_px_after_register": 1.79,
+  "worst_tile_ecc_px": 15.07,
+  "tiles_counted": 7,
+  "worst_tile_ecc_px_after_register": 13.2,
   "register_shift_px": [
    6.97,
    2.18

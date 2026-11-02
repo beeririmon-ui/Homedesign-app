@@ -1,0 +1,145 @@
+{
+ "frame": "W0-in",
+ "kind": "pose",
+ "room": "work",
+ "size": [
+  2736,
+  1539
+ ],
+ "wall_patches": {
+  "ceiling": {
+   "uv": [
+    0.55,
+    0.04
+   ],
+   "clay_L": 85.7,
+   "graded_HSL": [
+    37.1,
+    18.0,
+    83.9
+   ],
+   "raw_HSL": [
+    30.2,
+    14.6,
+    76.8
+   ]
+  },
+  "floor_centre": {
+   "uv": [
+    0.5,
+    0.93
+   ],
+   "clay_L": 76.3,
+   "graded_HSL": [
+    35.5,
+    38.5,
+    86.4
+   ],
+   "raw_HSL": [
+    32.6,
+    32.3,
+    80.7
+   ]
+  },
+  "reference_W0": {
+   "uv": [
+    0.5,
+    0.1214
+   ],
+   "clay_L": 83.7,
+   "graded_HSL": [
+    34.5,
+    20.2,
+    86.4
+   ],
+   "raw_HSL": [
+    30.1,
+    15.2,
+    79.4
+   ]
+  }
+ },
+ "reference": {
+  "uv": [
+   0.5,
+   0.1214
+  ],
+  "graded_HSL": [
+   34.5,
+   20.2,
+   86.4
+  ],
+  "raw_HSL": [
+   30.1,
+   15.2,
+   79.4
+  ],
+  "target_bible_lo": 90.0,
+  "target_agent": 90.0,
+  "stops_needed_to_bible_from_raw": 0.39,
+  "stops_needed_to_bible_from_graded": 0.107,
+  "stops_needed_to_agent_target_from_raw": 0.39,
+  "white_H_ok_32_40": true,
+  "white_S_ok_15_28": true,
+  "white_H_under_25": false
+ },
+ "agent_grade": {
+  "target_L": 90.0,
+  "needed_stops": 0.322,
+  "applied_stops": 0.2,
+  "flag": "DARK: needs more than +0.2 stop, not lifted further",
+  "wb_H_before": 30.1,
+  "black_point": {
+   "darkest_patch_L_before": 4.4,
+   "lift_to_L": 12.5,
+   "blend": 0.0846
+  },
+  "returned_size_px": [
+   2736,
+   1536
+  ],
+  "resize_16_9": "non-uniform resize 2736x1536 -> 2736x1539 (+0.20% vertical), no crop",
+  "strong_peak_lock": 0.0
+ },
+ "saturated_px_total": 0,
+ "window": {
+  "box": null,
+  "note": "no window and no opening box in this frame (Bible 1.6 allows it in the second frame of a room)",
+  "frame_L_p99": 97.5,
+  "no_255": true
+ },
+ "black_point_L": 12.5,
+ "frame_mean_L": 75.1,
+ "whites": {
+  "share_of_frame": 0.544,
+  "H_median": 36.5,
+  "S_median": 17.4,
+  "share_H_under_25": 0.0057,
+  "share_H_over_50": 0.1344
+ },
+ "floor_median_HSL": [
+  34.7,
+  35.9,
+  83.9
+ ],
+ "floor_note": "bottom 10 % of the frame, middle 60 %: parquet in every room but the bath (limestone) and the hall / corridor (parquet, but the runner / rug may sit there)",
+ "lamps": {},
+ "lamps_on_in_clay": [],
+ "technical": {
+  "job_id": "pose-w0-in-v7",
+  "prompt_file": "assets/prompts/poses-v7.nordic/W0-in.txt",
+  "prompt_file_exists": true,
+  "prompt_record_json": true,
+  "graded_size": [
+   2736,
+   1539
+  ],
+  "is_2k": true,
+  "ratio_16_9": true,
+  "overscan_canvas": false,
+  "frame_file_matches_crop": null,
+  "model": "gpt-image-2-5",
+  "quality": "sunburst",
+  "credits": 600
+ }
+}

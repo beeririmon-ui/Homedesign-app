@@ -161,6 +161,235 @@
    "b": 81.1
   }
  },
+ "check_note": "phase correlation between a clay and a photo-real render is reliable only where response >= 0.05; tiles_ecc below is QA's own local measure (ECC translation per tile on the same edge maps register uses)",
+ "tiles_ecc": [
+  {
+   "u": [
+    0.0,
+    0.25
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": -0.34,
+   "dy_px": -0.04,
+   "rho": 0.991,
+   "counted": true
+  },
+  {
+   "u": [
+    0.25,
+    0.5
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": -2.98,
+   "dy_px": 0.17,
+   "rho": 0.655,
+   "counted": true
+  },
+  {
+   "u": [
+    0.5,
+    0.75
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": -1.26,
+   "dy_px": 0.11,
+   "rho": 0.69,
+   "counted": true
+  },
+  {
+   "u": [
+    0.75,
+    1.0
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": -9.19,
+   "dy_px": -49.71,
+   "rho": 0.683,
+   "counted": true
+  },
+  {
+   "u": [
+    0.0,
+    0.25
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": -0.39,
+   "dy_px": 0.02,
+   "rho": 0.986,
+   "counted": true
+  },
+  {
+   "u": [
+    0.25,
+    0.5
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": -2.2,
+   "dy_px": -6.82,
+   "rho": 0.962,
+   "counted": true
+  },
+  {
+   "u": [
+    0.5,
+    0.75
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": -1.21,
+   "dy_px": -7.06,
+   "rho": 0.866,
+   "counted": true
+  },
+  {
+   "u": [
+    0.75,
+    1.0
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": -8.21,
+   "dy_px": -6.56,
+   "rho": 0.384,
+   "counted": true
+  }
+ ],
+ "tiles_ecc_registered": [
+  {
+   "u": [
+    0.0,
+    0.25
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": -0.22,
+   "dy_px": 0.22,
+   "rho": 0.99,
+   "counted": true
+  },
+  {
+   "u": [
+    0.25,
+    0.5
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": -0.6,
+   "dy_px": 1.18,
+   "rho": 0.656,
+   "counted": true
+  },
+  {
+   "u": [
+    0.5,
+    0.75
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": 2.09,
+   "dy_px": 0.58,
+   "rho": 0.686,
+   "counted": true
+  },
+  {
+   "u": [
+    0.75,
+    1.0
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": -3.53,
+   "dy_px": -6.63,
+   "rho": 0.679,
+   "counted": true
+  },
+  {
+   "u": [
+    0.0,
+    0.25
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": -0.94,
+   "dy_px": 0.61,
+   "rho": 0.985,
+   "counted": true
+  },
+  {
+   "u": [
+    0.25,
+    0.5
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": -0.54,
+   "dy_px": -0.44,
+   "rho": 0.957,
+   "counted": true
+  },
+  {
+   "u": [
+    0.5,
+    0.75
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": 1.65,
+   "dy_px": -0.44,
+   "rho": 0.852,
+   "counted": true
+  },
+  {
+   "u": [
+    0.75,
+    1.0
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": -2.97,
+   "dy_px": -0.64,
+   "rho": 0.4,
+   "counted": true
+  }
+ ],
  "fixed_edges": {
   "bath fluted glazing": {
    "box": [
@@ -300,8 +529,13 @@
  },
  "summary": {
   "global_shift_px": 8.07,
-  "worst_band_px": 38.5,
+  "global_shift_response": 0.188,
+  "worst_band_px": 8.02,
+  "bands_reliable": 3,
   "worst_band_px_after_register": 6.1,
+  "worst_tile_ecc_px": 49.71,
+  "tiles_counted": 8,
+  "worst_tile_ecc_px_after_register": 6.63,
   "register_shift_px": [
    -0.17,
    -2.72

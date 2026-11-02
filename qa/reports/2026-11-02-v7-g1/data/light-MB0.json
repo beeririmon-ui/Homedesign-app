@@ -1,0 +1,219 @@
+{
+ "frame": "MB0",
+ "kind": "master",
+ "room": "master",
+ "size": [
+  2736,
+  1539
+ ],
+ "wall_patches": {
+  "hero_wall_mid": {
+   "uv": [
+    0.5,
+    0.1453
+   ],
+   "clay_L": 86.5,
+   "graded_HSL": [
+    36.0,
+    16.1,
+    79.4
+   ],
+   "raw_HSL": [
+    31.5,
+    13.3,
+    72.5
+   ]
+  },
+  "wainscot": {
+   "uv": [
+    0.5,
+    0.495
+   ],
+   "clay_L": 82.4,
+   "graded_HSL": [
+    36.7,
+    21.0,
+    85.5
+   ],
+   "raw_HSL": [
+    31.7,
+    16.6,
+    78.6
+   ]
+  },
+  "ceiling": {
+   "uv": [
+    0.55,
+    0.04
+   ],
+   "clay_L": 88.0,
+   "graded_HSL": [
+    34.2,
+    18.5,
+    82.9
+   ],
+   "raw_HSL": [
+    29.4,
+    15.3,
+    76.0
+   ]
+  },
+  "floor_centre": {
+   "uv": [
+    0.5,
+    0.93
+   ],
+   "clay_L": 62.6,
+   "graded_HSL": [
+    29.2,
+    27.9,
+    38.5
+   ],
+   "raw_HSL": [
+    29.6,
+    37.6,
+    31.9
+   ]
+  },
+  "reference_MB0": {
+   "uv": [
+    0.5,
+    0.1453
+   ],
+   "clay_L": 86.5,
+   "graded_HSL": [
+    36.3,
+    16.1,
+    80.2
+   ],
+   "raw_HSL": [
+    31.5,
+    13.2,
+    73.2
+   ]
+  }
+ },
+ "reference": {
+  "uv": [
+   0.5,
+   0.1453
+  ],
+  "graded_HSL": [
+   36.3,
+   16.1,
+   80.2
+  ],
+  "raw_HSL": [
+   31.5,
+   13.2,
+   73.2
+  ],
+  "target_bible_lo": 90.0,
+  "target_agent": 90.0,
+  "stops_needed_to_bible_from_raw": 0.64,
+  "stops_needed_to_bible_from_graded": 0.338,
+  "stops_needed_to_agent_target_from_raw": 0.64,
+  "white_H_ok_32_40": true,
+  "white_S_ok_15_28": true,
+  "white_H_under_25": false
+ },
+ "agent_grade": {
+  "target_L": 90.0,
+  "needed_stops": 0.673,
+  "applied_stops": 0.2,
+  "flag": "DARK: needs more than +0.2 stop, not lifted further",
+  "wb_H_before": 31.5,
+  "black_point": {
+   "darkest_patch_L_before": 6.0,
+   "lift_to_L": 12.5,
+   "blend": 0.0691
+  },
+  "returned_size_px": [
+   2736,
+   1536
+  ],
+  "resize_16_9": "non-uniform resize 2736x1536 -> 2736x1539 (+0.20% vertical), no crop",
+  "strong_peak_lock": 0.0
+ },
+ "saturated_px_total": 0,
+ "window": {
+  "box": "window W-master",
+  "box_uv": [
+   0.0,
+   0.1385,
+   0.0,
+   0.6019
+  ],
+  "width_frac": 0.139,
+  "L_p50": 95.1,
+  "L_p99": 97.5,
+  "L_max": 97.6,
+  "saturated_inside": 0,
+  "saturated_outside": 0,
+  "outside_L_p99": 93.5,
+  "outside_L_p999": 96.3,
+  "brightest": true,
+  "p99_le_97": false,
+  "no_255": true,
+  "margins": {
+   "left": 0.0,
+   "right": 0.861,
+   "top": 0.0,
+   "bottom": 0.398
+  }
+ },
+ "black_point_L": 12.4,
+ "frame_mean_L": 69.5,
+ "whites": {
+  "share_of_frame": 0.517,
+  "H_median": 35.0,
+  "S_median": 18.9,
+  "share_H_under_25": 0.0086,
+  "share_H_over_50": 0.0908
+ },
+ "floor_median_HSL": [
+  29.5,
+  25.7,
+  45.3
+ ],
+ "floor_note": "bottom 10 % of the frame, middle 60 %: parquet in every room but the bath (limestone) and the hall / corridor (parquet, but the runner / rug may sit there)",
+ "lamps": {
+  "master/bedside-sconces": {
+   "box_uv": [
+    0.2383,
+    0.7617,
+    0.3199,
+    0.3931
+   ],
+   "in_clay_lamps_on": true,
+   "L_p95": 89.2,
+   "L_max": 94.5,
+   "glow_H_median": 36.8,
+   "glow_S_median": 74.1,
+   "shade_L_93_97": false,
+   "shade_H_35_45": true,
+   "shade_S_25_45": false,
+   "not_brighter_than_window": true
+  }
+ },
+ "lamps_on_in_clay": [
+  "master/bedside-sconces"
+ ],
+ "technical": {
+  "job_id": "mb0-v7-r2",
+  "prompt_file": "assets/prompts/recipe-v5.nordic/mb0-v7.txt",
+  "prompt_file_exists": true,
+  "prompt_record_json": true,
+  "graded_size": [
+   2736,
+   1539
+  ],
+  "is_2k": true,
+  "ratio_16_9": true,
+  "overscan_canvas": false,
+  "frame_file_matches_crop": null,
+  "model": "gpt-image-2-5",
+  "quality": "sunburst",
+  "credits": 600
+ }
+}

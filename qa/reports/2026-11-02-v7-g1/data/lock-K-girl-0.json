@@ -161,6 +161,242 @@
    "b": 76.9
   }
  },
+ "check_note": "phase correlation between a clay and a photo-real render is reliable only where response >= 0.05; tiles_ecc below is QA's own local measure (ECC translation per tile on the same edge maps register uses)",
+ "tiles_ecc": [
+  {
+   "u": [
+    0.0,
+    0.25
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": -17.7,
+   "dy_px": -18.26,
+   "rho": 0.059,
+   "counted": false
+  },
+  {
+   "u": [
+    0.25,
+    0.5
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": 0.41,
+   "dy_px": 36.45,
+   "rho": 0.109,
+   "counted": false
+  },
+  {
+   "u": [
+    0.5,
+    0.75
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": null,
+   "dy_px": null,
+   "rho": null,
+   "counted": false,
+   "note": "ECC did not converge"
+  },
+  {
+   "u": [
+    0.75,
+    1.0
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": null,
+   "dy_px": null,
+   "rho": null,
+   "counted": false,
+   "note": "ECC did not converge"
+  },
+  {
+   "u": [
+    0.0,
+    0.25
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": 24.91,
+   "dy_px": 4.03,
+   "rho": 0.144,
+   "counted": true
+  },
+  {
+   "u": [
+    0.25,
+    0.5
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": -19.98,
+   "dy_px": 4.82,
+   "rho": 0.018,
+   "counted": false
+  },
+  {
+   "u": [
+    0.5,
+    0.75
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": null,
+   "dy_px": null,
+   "rho": null,
+   "counted": false,
+   "note": "ECC did not converge"
+  },
+  {
+   "u": [
+    0.75,
+    1.0
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": -2.93,
+   "dy_px": -0.28,
+   "rho": 0.027,
+   "counted": false
+  }
+ ],
+ "tiles_ecc_registered": [
+  {
+   "u": [
+    0.0,
+    0.25
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": 2.93,
+   "dy_px": -5.47,
+   "rho": 0.061,
+   "counted": false
+  },
+  {
+   "u": [
+    0.25,
+    0.5
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": 6.56,
+   "dy_px": 4.03,
+   "rho": 0.064,
+   "counted": false
+  },
+  {
+   "u": [
+    0.5,
+    0.75
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": null,
+   "dy_px": null,
+   "rho": null,
+   "counted": false,
+   "note": "ECC did not converge"
+  },
+  {
+   "u": [
+    0.75,
+    1.0
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": null,
+   "dy_px": null,
+   "rho": null,
+   "counted": false,
+   "note": "ECC did not converge"
+  },
+  {
+   "u": [
+    0.0,
+    0.25
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": 48.7,
+   "dy_px": 26.16,
+   "rho": 0.052,
+   "counted": false
+  },
+  {
+   "u": [
+    0.25,
+    0.5
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": -1.32,
+   "dy_px": -0.11,
+   "rho": 0.151,
+   "counted": true
+  },
+  {
+   "u": [
+    0.5,
+    0.75
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": null,
+   "dy_px": null,
+   "rho": null,
+   "counted": false,
+   "note": "ECC did not converge"
+  },
+  {
+   "u": [
+    0.75,
+    1.0
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": null,
+   "dy_px": null,
+   "rho": null,
+   "counted": false,
+   "note": "ECC did not converge"
+  }
+ ],
  "fixed_edges": {
   "girl bed 96x196 (fixed)": {
    "box": [
@@ -169,23 +405,8 @@
     0.6328,
     1.0301
    ],
-   "edges": {
-    "right": {
-     "clay_px": 304,
-     "render_px": 371,
-     "d_px": 67,
-     "clay_strength": 2.9,
-     "render_strength": 5.4
-    },
-    "top": {
-     "clay_px": 711,
-     "render_px": 683,
-     "d_px": -28,
-     "clay_strength": 9.7,
-     "render_strength": 0.4
-    }
-   },
-   "worst_edge_px": 67,
+   "edges": {},
+   "worst_edge_px": null,
    "kind": "furniture",
    "visible_pct": 16.5
   },
@@ -197,13 +418,6 @@
     0.9796
    ],
    "edges": {
-    "left": {
-     "clay_px": 414,
-     "render_px": 424,
-     "d_px": 10,
-     "clay_strength": 18.9,
-     "render_strength": 3.8
-    },
     "right": {
      "clay_px": 897,
      "render_px": 883,
@@ -217,30 +431,24 @@
      "d_px": -60,
      "clay_strength": 9.1,
      "render_strength": 41.3
-    },
-    "bottom": {
-     "clay_px": 1023,
-     "render_px": 1044,
-     "d_px": 21,
-     "clay_strength": 1.5,
-     "render_strength": 12.6
     }
    },
-   "width_ratio": 0.9503,
-   "height_ratio": 1.2288,
    "worst_edge_px": 60,
    "kind": "furniture",
    "visible_pct": 92.8
   }
  },
- "fixed_edges_worst_px": 67,
- "fixed_width_ratios": {
-  "girl desk 90x50 (fixed)": 0.9503
- },
+ "fixed_edges_worst_px": 60,
+ "fixed_width_ratios": {},
  "summary": {
   "global_shift_px": 247.78,
-  "worst_band_px": 272.55,
+  "global_shift_response": 0.009,
+  "worst_band_px": null,
+  "bands_reliable": 0,
   "worst_band_px_after_register": 261.71,
+  "worst_tile_ecc_px": 24.91,
+  "tiles_counted": 1,
+  "worst_tile_ecc_px_after_register": 1.32,
   "register_shift_px": [
    -10.15,
    -55.35
@@ -249,7 +457,7 @@
    1.04967,
    1.05738
   ],
-  "fixed_edges_worst_px": 67,
+  "fixed_edges_worst_px": 60,
   "frame_file_matches_crop": true
  }
 }

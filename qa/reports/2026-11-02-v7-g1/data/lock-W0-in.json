@@ -161,6 +161,241 @@
    "b": 78.7
   }
  },
+ "check_note": "phase correlation between a clay and a photo-real render is reliable only where response >= 0.05; tiles_ecc below is QA's own local measure (ECC translation per tile on the same edge maps register uses)",
+ "tiles_ecc": [
+  {
+   "u": [
+    0.0,
+    0.25
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": -5.9,
+   "dy_px": 35.7,
+   "rho": 0.118,
+   "counted": false
+  },
+  {
+   "u": [
+    0.25,
+    0.5
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": 59.27,
+   "dy_px": -2.51,
+   "rho": 0.253,
+   "counted": true
+  },
+  {
+   "u": [
+    0.5,
+    0.75
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": 1.23,
+   "dy_px": 0.61,
+   "rho": 0.524,
+   "counted": true
+  },
+  {
+   "u": [
+    0.75,
+    1.0
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": null,
+   "dy_px": null,
+   "rho": null,
+   "counted": false,
+   "note": "ECC did not converge"
+  },
+  {
+   "u": [
+    0.0,
+    0.25
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": -19.55,
+   "dy_px": -14.93,
+   "rho": 0.323,
+   "counted": true
+  },
+  {
+   "u": [
+    0.25,
+    0.5
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": null,
+   "dy_px": null,
+   "rho": null,
+   "counted": false,
+   "note": "ECC did not converge"
+  },
+  {
+   "u": [
+    0.5,
+    0.75
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": null,
+   "dy_px": null,
+   "rho": null,
+   "counted": false,
+   "note": "ECC did not converge"
+  },
+  {
+   "u": [
+    0.75,
+    1.0
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": -22.84,
+   "dy_px": -3.34,
+   "rho": 0.199,
+   "counted": true
+  }
+ ],
+ "tiles_ecc_registered": [
+  {
+   "u": [
+    0.0,
+    0.25
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": -0.28,
+   "dy_px": -2.7,
+   "rho": 0.08,
+   "counted": false
+  },
+  {
+   "u": [
+    0.25,
+    0.5
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": 77.93,
+   "dy_px": 2.79,
+   "rho": 0.304,
+   "counted": true
+  },
+  {
+   "u": [
+    0.5,
+    0.75
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": 0.2,
+   "dy_px": -3.77,
+   "rho": 0.443,
+   "counted": true
+  },
+  {
+   "u": [
+    0.75,
+    1.0
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": null,
+   "dy_px": null,
+   "rho": null,
+   "counted": false,
+   "note": "ECC did not converge"
+  },
+  {
+   "u": [
+    0.0,
+    0.25
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": -2.9,
+   "dy_px": -4.2,
+   "rho": 0.339,
+   "counted": true
+  },
+  {
+   "u": [
+    0.25,
+    0.5
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": null,
+   "dy_px": null,
+   "rho": null,
+   "counted": false,
+   "note": "ECC did not converge"
+  },
+  {
+   "u": [
+    0.5,
+    0.75
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": null,
+   "dy_px": null,
+   "rho": null,
+   "counted": false,
+   "note": "ECC did not converge"
+  },
+  {
+   "u": [
+    0.75,
+    1.0
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": 9.28,
+   "dy_px": 8.97,
+   "rho": 0.205,
+   "counted": true
+  }
+ ],
  "fixed_edges": {
   "built-in oak desk + shelf": {
    "box": [
@@ -177,13 +412,6 @@
      "clay_strength": 22.6,
      "render_strength": 24.1
     },
-    "right": {
-     "clay_px": 1599,
-     "render_px": 1599,
-     "d_px": 0,
-     "clay_strength": 2.9,
-     "render_strength": 0.8
-    },
     "top": {
      "clay_px": 151,
      "render_px": 155,
@@ -192,7 +420,6 @@
      "render_strength": 29.0
     }
    },
-   "width_ratio": 0.9906,
    "worst_edge_px": 12,
    "kind": "architecture",
    "visible_pct": null
@@ -235,13 +462,17 @@
  },
  "fixed_edges_worst_px": 50,
  "fixed_width_ratios": {
-  "built-in oak desk + shelf": 0.9906,
   "desk chair": 0.9395
  },
  "summary": {
   "global_shift_px": 415.86,
-  "worst_band_px": 372.08,
-  "worst_band_px_after_register": 359.33,
+  "global_shift_response": 0.001,
+  "worst_band_px": 130.23,
+  "bands_reliable": 2,
+  "worst_band_px_after_register": 95.21,
+  "worst_tile_ecc_px": 59.27,
+  "tiles_counted": 4,
+  "worst_tile_ecc_px_after_register": 77.93,
   "register_shift_px": [
    -2.21,
    -23.74

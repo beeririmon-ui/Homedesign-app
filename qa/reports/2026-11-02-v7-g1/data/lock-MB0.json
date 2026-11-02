@@ -161,6 +161,236 @@
    "b": 73.2
   }
  },
+ "check_note": "phase correlation between a clay and a photo-real render is reliable only where response >= 0.05; tiles_ecc below is QA's own local measure (ECC translation per tile on the same edge maps register uses)",
+ "tiles_ecc": [
+  {
+   "u": [
+    0.0,
+    0.25
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": 9.98,
+   "dy_px": -9.06,
+   "rho": 0.052,
+   "counted": false
+  },
+  {
+   "u": [
+    0.25,
+    0.5
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": -0.51,
+   "dy_px": -15.64,
+   "rho": 0.355,
+   "counted": true
+  },
+  {
+   "u": [
+    0.5,
+    0.75
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": 2.16,
+   "dy_px": -16.0,
+   "rho": 0.26,
+   "counted": true
+  },
+  {
+   "u": [
+    0.75,
+    1.0
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": null,
+   "dy_px": null,
+   "rho": null,
+   "counted": false,
+   "note": "ECC did not converge"
+  },
+  {
+   "u": [
+    0.0,
+    0.25
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": 13.59,
+   "dy_px": -0.22,
+   "rho": 0.417,
+   "counted": true
+  },
+  {
+   "u": [
+    0.25,
+    0.5
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": -8.24,
+   "dy_px": 5.95,
+   "rho": 0.193,
+   "counted": true
+  },
+  {
+   "u": [
+    0.5,
+    0.75
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": 1.34,
+   "dy_px": 7.01,
+   "rho": 0.136,
+   "counted": true
+  },
+  {
+   "u": [
+    0.75,
+    1.0
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": -3.67,
+   "dy_px": 5.68,
+   "rho": 0.259,
+   "counted": true
+  }
+ ],
+ "tiles_ecc_registered": [
+  {
+   "u": [
+    0.0,
+    0.25
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": 5.9,
+   "dy_px": -29.68,
+   "rho": 0.084,
+   "counted": false
+  },
+  {
+   "u": [
+    0.25,
+    0.5
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": -1.11,
+   "dy_px": 0.54,
+   "rho": 0.377,
+   "counted": true
+  },
+  {
+   "u": [
+    0.5,
+    0.75
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": 2.26,
+   "dy_px": 1.68,
+   "rho": 0.29,
+   "counted": true
+  },
+  {
+   "u": [
+    0.75,
+    1.0
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": 0.12,
+   "dy_px": -32.05,
+   "rho": 0.153,
+   "counted": true
+  },
+  {
+   "u": [
+    0.0,
+    0.25
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": 6.1,
+   "dy_px": -0.28,
+   "rho": 0.388,
+   "counted": true
+  },
+  {
+   "u": [
+    0.25,
+    0.5
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": -6.01,
+   "dy_px": -0.96,
+   "rho": 0.187,
+   "counted": true
+  },
+  {
+   "u": [
+    0.5,
+    0.75
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": 5.72,
+   "dy_px": -2.13,
+   "rho": 0.119,
+   "counted": false
+  },
+  {
+   "u": [
+    0.75,
+    1.0
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": -0.15,
+   "dy_px": 2.54,
+   "rho": 0.247,
+   "counted": true
+  }
+ ],
  "fixed_edges": {
   "master bed 180x200": {
    "box": [
@@ -170,13 +400,6 @@
     1.0
    ],
    "edges": {
-    "left": {
-     "clay_px": 157,
-     "render_px": 195,
-     "d_px": 38,
-     "clay_strength": 3.4,
-     "render_strength": 16.5
-    },
     "right": {
      "clay_px": 1718,
      "render_px": 1763,
@@ -192,7 +415,6 @@
      "render_strength": 26.9
     }
    },
-   "width_ratio": 1.0045,
    "worst_edge_px": 45,
    "kind": "furniture",
    "visible_pct": 20.6
@@ -225,17 +447,9 @@
      "d_px": -59,
      "clay_strength": 34.1,
      "render_strength": 23.7
-    },
-    "bottom": {
-     "clay_px": 806,
-     "render_px": 796,
-     "d_px": -10,
-     "clay_strength": 0.3,
-     "render_strength": 31.4
     }
    },
    "width_ratio": 1.0373,
-   "height_ratio": 1.5385,
    "worst_edge_px": 59,
    "kind": "furniture",
    "visible_pct": 26.8
@@ -255,13 +469,6 @@
      "clay_strength": 11.9,
      "render_strength": 17.0
     },
-    "right": {
-     "clay_px": 1892,
-     "render_px": 1763,
-     "d_px": -129,
-     "clay_strength": 2.4,
-     "render_strength": 45.6
-    },
     "top": {
      "clay_px": 419,
      "render_px": 374,
@@ -277,9 +484,8 @@
      "render_strength": 21.5
     }
    },
-   "width_ratio": 0.9458,
    "height_ratio": 1.1649,
-   "worst_edge_px": 129,
+   "worst_edge_px": 46,
    "kind": "architecture",
    "visible_pct": null
   },
@@ -297,13 +503,6 @@
      "d_px": 59,
      "clay_strength": 34.0,
      "render_strength": 11.3
-    },
-    "bottom": {
-     "clay_px": 638,
-     "render_px": 613,
-     "d_px": -25,
-     "clay_strength": 2.6,
-     "render_strength": 4.0
     }
    },
    "worst_edge_px": 59,
@@ -311,16 +510,19 @@
    "visible_pct": 10.5
   }
  },
- "fixed_edges_worst_px": 129,
+ "fixed_edges_worst_px": 59,
  "fixed_width_ratios": {
-  "master bed 180x200": 1.0045,
-  "nightstands 45": 1.0373,
-  "G-M4 wainscot": 0.9458
+  "nightstands 45": 1.0373
  },
  "summary": {
   "global_shift_px": 33.42,
-  "worst_band_px": 363.05,
-  "worst_band_px_after_register": 263.29,
+  "global_shift_response": 0.045,
+  "worst_band_px": null,
+  "bands_reliable": 0,
+  "worst_band_px_after_register": null,
+  "worst_tile_ecc_px": 16.0,
+  "tiles_counted": 6,
+  "worst_tile_ecc_px_after_register": 32.05,
   "register_shift_px": [
    5.31,
    -24.88
@@ -329,7 +531,7 @@
    0.99719,
    1.02815
   ],
-  "fixed_edges_worst_px": 129,
+  "fixed_edges_worst_px": 59,
   "frame_file_matches_crop": null
  }
 }
