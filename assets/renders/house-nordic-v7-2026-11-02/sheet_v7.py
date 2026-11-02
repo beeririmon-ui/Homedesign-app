@@ -39,7 +39,10 @@ def build(items, out, title):
         x = PAD + (k % cols) * (TW + PAD)
         y = 60 + PAD + (k // cols) * (TH + LAB + PAD)
         j = accepted(fid)
-        path = os.path.join(REPO, j['out_dir'], j['id'] + '-graded.png') if j else None
+        path = None
+        if j:
+            fp = os.path.join(REPO, j['out_dir'], j['id'] + '-frame.png')          # overscan stills: the 16:9 frame (centre crop)
+            path = fp if os.path.exists(fp) else os.path.join(REPO, j['out_dir'], j['id'] + '-graded.png')
         if path and os.path.exists(path):
             im = Image.open(path).convert("RGB")
             w, h = im.size

@@ -162,6 +162,8 @@ def main(argv):
             u, v = G["pt"][1], G["pt"][2]
         else:
             u, v = project(C, *G["pt"][1:])
+        if not isinstance(G["pt"], str) and lin.shape[1] == 4072:       # overscan canvas (framing_r4 OS_FRAMES): frame uv -> canvas uv
+            u, v = (u * 3840 + 116) / 4072, (v * 2160 + 65) / 2290
         gains = None
         if G.get("wb"):
             # grey world over the mid-tones of the whole reference frame (not the lamp-lit patch alone: that turns the

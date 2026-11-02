@@ -75,7 +75,7 @@
       "work/planter: D38 x H34 + plant to 1.30; work/bookends not listed (removed)"
     ]
   },
-  "build_s": 20,
+  "build_s": 23,
   "frames": {
     "M0": {
       "frame": "M0",
@@ -1405,8 +1405,8 @@
       },
       "image": "framing/round4/B1.png",
       "resolution": [
-        3840,
-        2160
+        4072,
+        2290
       ],
       "samples": 16,
       "placeholders_shown": [
@@ -1429,16 +1429,16 @@
       "lamps_off": [
         "bath/ceiling-light"
       ],
-      "mean_L": 201.2,
+      "mean_L": 200.9,
       "mean_L_round2": 139.2,
       "designer_notes": "round 4 (v7 clay): b1.txt: curtain gathered at (5.30, 11.15); no stool, ladder, towels, floor planter, ledge planter, bin, brush; east vanity sconce lit (cut at the right edge); shower downlight lit at low power (4 W), ceiling light off; bath window light x3 (plan 3)",
       "est_vs_measured": [
         {
           "key": "NE_corner_u (3.25, 9.95)",
           "est": 0.11,
-          "measured": 0.1098,
-          "dev": -0.0002,
-          "flag_gt_tol": false,
+          "measured": 0.132,
+          "dev": 0.022,
+          "flag_gt_tol": true,
           "tol": 0.02,
           "note": ""
         },
@@ -1449,12 +1449,12 @@
             0.353
           ],
           "measured": [
-            0.1633,
-            0.3523
+            0.1825,
+            0.3607
           ],
           "dev": [
-            0.0003,
-            -0.0007
+            0.0195,
+            0.0077
           ],
           "flag_gt_tol": false,
           "tol": 0.02,
@@ -1467,22 +1467,22 @@
             0.09
           ],
           "measured": [
-            0.0488,
-            0.0875
+            0.0744,
+            0.1109
           ],
           "dev": [
-            -0.0012,
-            -0.0025
+            0.0244,
+            0.0209
           ],
-          "flag_gt_tol": false,
+          "flag_gt_tol": true,
           "tol": 0.02,
           "note": ""
         },
         {
           "key": "window sill v (Z 1.00, centre)",
           "est": 0.52,
-          "measured": 0.5186,
-          "dev": -0.0014,
+          "measured": 0.5176,
+          "dev": -0.0024,
           "flag_gt_tol": false,
           "tol": 0.02,
           "note": ""
@@ -1494,12 +1494,12 @@
             0.33
           ],
           "measured": [
-            0.1146,
-            0.3919
+            0.1365,
+            0.3981
           ],
           "dev": [
-            -0.0954,
-            0.0619
+            -0.0735,
+            0.0681
           ],
           "flag_gt_tol": true,
           "tol": 0.02,
@@ -1512,12 +1512,12 @@
             0.27
           ],
           "measured": [
-            0.4438,
-            0.2654
+            0.447,
+            0.2788
           ],
           "dev": [
-            0.0038,
-            -0.0046
+            0.007,
+            0.0088
           ],
           "flag_gt_tol": false,
           "tol": 0.02,
@@ -1530,12 +1530,12 @@
             0.7
           ],
           "measured": [
-            0.5352,
-            0.6988
+            0.5332,
+            0.6874
           ],
           "dev": [
-            -0.0248,
-            -0.0012
+            -0.0268,
+            -0.0126
           ],
           "flag_gt_tol": true,
           "tol": 0.02,
@@ -1544,8 +1544,8 @@
         {
           "key": "SE_corner_u (6.25, 9.95)",
           "est": 0.699,
-          "measured": 0.6988,
-          "dev": -0.0002,
+          "measured": 0.6874,
+          "dev": -0.0116,
           "flag_gt_tol": false,
           "tol": 0.02,
           "note": ""
@@ -1557,14 +1557,14 @@
             0.88
           ],
           "measured": [
-            0.6988,
-            0.8757
+            0.6874,
+            0.8543
           ],
           "dev": [
-            -0.0012,
-            -0.0043
+            -0.0126,
+            -0.0257
           ],
-          "flag_gt_tol": false,
+          "flag_gt_tol": true,
           "tol": 0.02,
           "note": ""
         },
@@ -1575,12 +1575,12 @@
             0.69
           ],
           "measured": [
-            0.6654,
-            0.725
+            0.6559,
+            0.7122
           ],
           "dev": [
-            0.0254,
-            0.035
+            0.0159,
+            0.0222
           ],
           "flag_gt_tol": true,
           "tol": 0.02,
@@ -1606,86 +1606,100 @@
         }
       ],
       "est_flags": [
+        "NE_corner_u (3.25, 9.95)",
+        "window head v (Z 2.15 at the jambs)",
         "wc + ledge u (pixels)",
         "shower east wall u (X 5.20 .. corner)",
+        "shower south wall u (corner .. Y 11.15)",
         "curtain stack u (pixels)"
       ],
       "items_visible": {
         "bath/wall-sconce": {
           "kind": "proxy",
-          "frame_area_pct": 0.19,
-          "visible_pct": 100.0,
+          "frame_area_pct": 0.17,
+          "visible_pct": 88.7,
           "cut_by_edge_pct": 0.0
         },
         "bath/bath-mat": {
           "kind": "proxy",
-          "frame_area_pct": 1.01,
-          "visible_pct": 87.8,
+          "frame_area_pct": 1.02,
+          "visible_pct": 88.9,
           "cut_by_edge_pct": 12.3
         },
         "bath/candle": {
           "kind": "proxy",
-          "frame_area_pct": 0.09,
-          "visible_pct": 100.0,
+          "frame_area_pct": 0.08,
+          "visible_pct": 91.7,
           "cut_by_edge_pct": 0.0
         },
         "bath/shower-curtain": {
           "kind": "proxy",
-          "frame_area_pct": 5.96,
-          "visible_pct": 78.1,
+          "frame_area_pct": 5.52,
+          "visible_pct": 74.1,
           "cut_by_edge_pct": 21.9
         },
         "bath/reed-diffuser": {
           "kind": "proxy",
-          "frame_area_pct": 0.19,
-          "visible_pct": 100.0,
+          "frame_area_pct": 0.17,
+          "visible_pct": 93.7,
           "cut_by_edge_pct": 0.0
         },
         "bath/shower-dispensers": {
           "kind": "proxy",
-          "frame_area_pct": 0.29,
-          "visible_pct": 100.0,
+          "frame_area_pct": 0.25,
+          "visible_pct": 90.0,
           "cut_by_edge_pct": 0.0
         },
         "bath/toilet-paper-stand": {
           "kind": "proxy",
-          "frame_area_pct": 0.4,
-          "visible_pct": 99.5,
+          "frame_area_pct": 0.35,
+          "visible_pct": 95.4,
           "cut_by_edge_pct": 0.0
         },
         "bath vanity 110 (fixed)": {
           "kind": "furniture",
-          "frame_area_pct": 2.73,
-          "visible_pct": 6.2,
+          "frame_area_pct": 3.76,
+          "visible_pct": 8.7,
           "cut_by_edge_pct": 93.8
         },
         "bath/vanity-sconces": {
           "kind": "proxy",
-          "frame_area_pct": 0.41,
-          "visible_pct": 10.2,
+          "frame_area_pct": 0.42,
+          "visible_pct": 10.4,
           "cut_by_edge_pct": 89.8
         },
         "window W-bath": {
           "kind": "window",
-          "frame_area_pct": 3.5,
-          "visible_pct": 97.3,
+          "frame_area_pct": 3.11,
+          "visible_pct": 89.8,
           "cut_by_edge_pct": 0.0
         },
         "bath WC + limestone ledge (fixed)": {
           "kind": "furniture",
-          "frame_area_pct": 11.13,
-          "visible_pct": 99.9,
+          "frame_area_pct": 9.9,
+          "visible_pct": 88.9,
           "cut_by_edge_pct": 0.0
         }
       },
       "F3_tangents": {
-        "edge_tangents": [],
+        "edge_tangents": [
+          {
+            "item": "bath/shower-curtain",
+            "side": "bottom",
+            "margin": 0.0127
+          },
+          {
+            "item": "bath/bath-mat",
+            "side": "bottom",
+            "margin": 0.0013
+          }
+        ],
         "object_object_tangents": [
           {
             "a": "window W-bath",
             "b": "bath WC + limestone ledge (fixed)",
             "kind": "gap",
-            "gap": 0.0137,
+            "gap": 0.0117,
             "dist3d_m": 0.05,
             "rule": "silhouettes apart by < 0.02 (kissing contours)"
           }
@@ -1696,130 +1710,130 @@
         "bath fluted glazing": {
           "kind": "architecture",
           "box": [
-            0.1901,
-            0.3279,
-            0.1204,
-            0.4856
+            0.2078,
+            0.3377,
+            0.1419,
+            0.4865
           ],
           "px": 395410
         },
         "bath WC + limestone ledge (fixed)": {
           "kind": "furniture",
           "box": [
-            0.1146,
-            0.3919,
-            0.5333,
-            0.9755
+            0.1365,
+            0.3981,
+            0.5314,
+            0.9485
           ],
           "px": 923457
         },
         "shower fittings, matte black (shell)": {
           "kind": "architecture",
           "box": [
-            0.725,
-            0.7854,
-            0.0856,
-            0.5435
+            0.7122,
+            0.7692,
+            0.1092,
+            0.541
           ],
           "px": 13610
         },
         "bath vanity 110 (fixed)": {
           "kind": "furniture",
           "box": [
-            0.9208,
+            0.8969,
             1.0,
-            0.6032,
+            0.5948,
             1.0
           ],
-          "px": 226131
+          "px": 350671
         },
         "bath/shower-curtain": {
           "kind": "proxy",
           "box": [
-            0.6654,
-            0.725,
+            0.6559,
+            0.7122,
             0.0,
-            1.0
+            0.9873
           ],
-          "px": 494589
+          "px": 514653
         },
         "bath/shower-dispensers": {
           "kind": "proxy",
           "box": [
-            0.7599,
-            0.8115,
-            0.4361,
-            0.4972
+            0.7451,
+            0.7937,
+            0.4397,
+            0.4974
           ],
           "px": 23656
         },
         "bath/bath-mat": {
           "kind": "proxy",
           "box": [
-            0.482,
-            0.632,
-            0.8949,
-            1.0
+            0.4831,
+            0.6245,
+            0.8725,
+            0.9987
           ],
-          "px": 83403
+          "px": 95108
         },
         "bath/toilet-paper-stand": {
           "kind": "proxy",
           "box": [
-            0.3919,
-            0.4294,
-            0.6472,
-            0.9046
+            0.3981,
+            0.4334,
+            0.6389,
+            0.8817
           ],
           "px": 32969
         },
         "bath/reed-diffuser": {
           "kind": "proxy",
           "box": [
-            0.3104,
-            0.3331,
-            0.4083,
-            0.5389
+            0.3212,
+            0.3426,
+            0.4135,
+            0.5367
           ],
           "px": 15423
         },
         "bath/candle": {
           "kind": "proxy",
           "box": [
-            0.2862,
-            0.3076,
-            0.5005,
-            0.5417
+            0.2984,
+            0.3185,
+            0.5004,
+            0.5393
           ],
           "px": 7196
         },
         "bath/wall-sconce": {
           "kind": "proxy",
           "box": [
-            0.4318,
-            0.462,
-            0.2292,
-            0.2944
+            0.4357,
+            0.4641,
+            0.2445,
+            0.3061
           ],
           "px": 15404
         },
         "bath/vanity-sconces": {
           "kind": "proxy",
           "box": [
-            0.9526,
-            1.0,
-            0.1602,
-            0.2551
+            0.9268,
+            0.9789,
+            0.1795,
+            0.269
           ],
-          "px": 33905
+          "px": 39165
         },
         "window W-bath": {
           "kind": "window",
           "box": [
-            0.1633,
-            0.3523,
-            0.0486,
-            0.5218
+            0.1825,
+            0.3608,
+            0.0742,
+            0.5205
           ],
           "px": 290095
         }
@@ -1828,11 +1842,11 @@
         {
           "rule": "curtain stack vs the SE corner line (B1, info)",
           "stack_u": [
-            0.6654,
-            0.725
+            0.6559,
+            0.7122
           ],
-          "corner_u": 0.6988,
-          "gap": -0.0262,
+          "corner_u": 0.6874,
+          "gap": -0.0247,
           "ok": false
         }
       ],
@@ -1861,8 +1875,8 @@
           {
             "slot": "shower-curtain",
             "category": "textile",
-            "frame_area_pct": 5.96,
-            "visible_pct": 78.1,
+            "frame_area_pct": 5.52,
+            "visible_pct": 74.1,
             "cut_by_edge_pct": 21.9,
             "counted": true,
             "why_not": null
@@ -1870,8 +1884,8 @@
           {
             "slot": "bath-mat",
             "category": "textile",
-            "frame_area_pct": 1.01,
-            "visible_pct": 87.8,
+            "frame_area_pct": 1.02,
+            "visible_pct": 88.9,
             "cut_by_edge_pct": 12.3,
             "counted": true,
             "why_not": null
@@ -1879,8 +1893,8 @@
           {
             "slot": "vanity-sconces",
             "category": "lighting",
-            "frame_area_pct": 0.41,
-            "visible_pct": 10.2,
+            "frame_area_pct": 0.42,
+            "visible_pct": 10.4,
             "cut_by_edge_pct": 89.8,
             "counted": false,
             "why_not": "visible < 50%"
@@ -1888,8 +1902,8 @@
           {
             "slot": "toilet-paper-stand",
             "category": "storage/function",
-            "frame_area_pct": 0.4,
-            "visible_pct": 99.5,
+            "frame_area_pct": 0.35,
+            "visible_pct": 95.4,
             "cut_by_edge_pct": 0.0,
             "counted": false,
             "why_not": "area < 0.5%"
@@ -1897,8 +1911,8 @@
           {
             "slot": "shower-dispensers",
             "category": "ceramics/tableware",
-            "frame_area_pct": 0.29,
-            "visible_pct": 100.0,
+            "frame_area_pct": 0.25,
+            "visible_pct": 90.0,
             "cut_by_edge_pct": 0.0,
             "counted": false,
             "why_not": "area < 0.5%"
@@ -1906,8 +1920,8 @@
           {
             "slot": "wall-sconce",
             "category": "lighting",
-            "frame_area_pct": 0.19,
-            "visible_pct": 100.0,
+            "frame_area_pct": 0.17,
+            "visible_pct": 88.7,
             "cut_by_edge_pct": 0.0,
             "counted": false,
             "why_not": "area < 0.5%"
@@ -1915,8 +1929,8 @@
           {
             "slot": "reed-diffuser",
             "category": "ceramics/tableware",
-            "frame_area_pct": 0.19,
-            "visible_pct": 100.0,
+            "frame_area_pct": 0.17,
+            "visible_pct": 93.7,
             "cut_by_edge_pct": 0.0,
             "counted": false,
             "why_not": "area < 0.5%"
@@ -1924,8 +1938,8 @@
           {
             "slot": "candle",
             "category": "ceramics/tableware",
-            "frame_area_pct": 0.09,
-            "visible_pct": 100.0,
+            "frame_area_pct": 0.08,
+            "visible_pct": 91.7,
             "cut_by_edge_pct": 0.0,
             "counted": false,
             "why_not": "area < 0.5%"
@@ -1936,17 +1950,17 @@
       "heroes_thirds": [
         {
           "hero": "shower curtain stack (L corner 5.20, 11.15)",
-          "u": 0.6657,
+          "u": 0.6563,
           "ok": true
         },
         {
           "hero": "window centre (left third)",
-          "u": 0.2625,
+          "u": 0.276,
           "ok": false
         },
         {
           "hero": "WC centre",
-          "u": 0.2644,
+          "u": 0.2778,
           "ok": false
         }
       ],
@@ -1962,7 +1976,7 @@
           "lamp": "bath/vanity-sconces",
           "typology": "wall",
           "shell": false,
-          "glow_px": 67810,
+          "glow_px": 78330,
           "visible": true
         },
         {
@@ -2026,10 +2040,10 @@
       },
       "wall_patches": {
         "hero_wall_high": {
-          "u": 0.6205058097839355,
-          "v": 0.07897204160690308,
-          "L_hsl": 85.0,
-          "Y_lin": 0.7113,
+          "u": 0.6136400699615479,
+          "v": 0.10287326574325562,
+          "L_hsl": 85.1,
+          "Y_lin": 0.7118,
           "stops_vs_mid": 1.98,
           "xyz": [
             5.72,
@@ -2038,11 +2052,11 @@
           ]
         },
         "hero_wall_mid": {
-          "u": 0.6205058097839355,
-          "v": 0.20598137378692627,
-          "L_hsl": 83.6,
-          "Y_lin": 0.6881,
-          "stops_vs_mid": 1.93,
+          "u": 0.6136400699615479,
+          "v": 0.22267240285873413,
+          "L_hsl": 83.7,
+          "Y_lin": 0.69,
+          "stops_vs_mid": 1.94,
           "xyz": [
             5.72,
             9.95,
@@ -2050,11 +2064,11 @@
           ]
         },
         "limestone_shower": {
-          "u": 0.7152009606361389,
-          "v": 0.22559189796447754,
-          "L_hsl": 80.1,
-          "Y_lin": 0.6319,
-          "stops_vs_mid": 1.81,
+          "u": 0.7029399871826172,
+          "v": 0.24116969108581543,
+          "L_hsl": 79.9,
+          "Y_lin": 0.6284,
+          "stops_vs_mid": 1.8,
           "xyz": [
             6.25,
             10.1,
@@ -2062,10 +2076,10 @@
           ]
         },
         "wall_beside_window": {
-          "u": 0.4143461287021637,
-          "v": 0.154197096824646,
+          "u": 0.41922619938850403,
+          "v": 0.1738278865814209,
           "L_hsl": 90.1,
-          "Y_lin": 0.8056,
+          "Y_lin": 0.8053,
           "stops_vs_mid": 2.16,
           "xyz": [
             4.55,
@@ -2076,16 +2090,16 @@
         "ceiling": {
           "u": 0.55,
           "v": 0.04,
-          "L_hsl": 83.4,
-          "Y_lin": 0.6821,
-          "stops_vs_mid": 1.92
+          "L_hsl": 82.1,
+          "Y_lin": 0.6602,
+          "stops_vs_mid": 1.87
         },
         "floor_centre": {
           "u": 0.5,
           "v": 0.93,
-          "L_hsl": 76.3,
-          "Y_lin": 0.5697,
-          "stops_vs_mid": 1.66
+          "L_hsl": 75.2,
+          "Y_lin": 0.5529,
+          "stops_vs_mid": 1.62
         }
       },
       "light_balance": {},
@@ -2094,9 +2108,6884 @@
         "nearest": "leaf_corridor_bath"
       },
       "overlay": "framing/round3/overlays/B1.png",
-      "runtime_s": 557,
+      "runtime_s": 573,
+      "overscan": {
+        "on": true,
+        "canvas_px": [
+          4072,
+          2290
+        ],
+        "frame_px": [
+          3840,
+          2160
+        ],
+        "crop_box_px": [
+          116,
+          65,
+          3956,
+          2225
+        ],
+        "per_side_fraction_x": 0.0302,
+        "per_side_fraction_y": 0.0301,
+        "note": "same camera and focal length in pixels; the 16:9 frame is the centre crop; uv in this selfcheck (boxes, patches) are fractions of the canvas"
+      },
       "exr": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/r4-exr/B1.exr",
       "pose": false
+    },
+    "MB0": {
+      "frame": "MB0",
+      "room": "master",
+      "round2_id": "MB-A",
+      "camera": {
+        "id": "MB0",
+        "room": "master",
+        "loc": [
+          -0.7,
+          21.05,
+          1.05
+        ],
+        "yaw": 0,
+        "u0": 0.5,
+        "v0": 0.46,
+        "status": "1.1 (MB-A)",
+        "hero": "the bed wall as a sanctuary, dead centre: sconce pair (u 0.269 / 0.731), art, wainscot"
+      },
+      "image": "framing/round4/MB0.png",
+      "resolution": [
+        3840,
+        2160
+      ],
+      "samples": 16,
+      "placeholders_shown": [
+        "master/bedding",
+        "master/bedside-sconces",
+        "master/candle-holders",
+        "master/curtains",
+        "master/cushions",
+        "master/framed-art",
+        "master/nightstand-vase",
+        "master/pillowcases",
+        "master/planter",
+        "master/sill-vase",
+        "master/throw",
+        "master/trinket-dish"
+      ],
+      "built_generic": [],
+      "missing": [],
+      "lamps_on": [
+        "master/bedside-sconces"
+      ],
+      "lamps_off": [
+        "master/floor-lamp",
+        "master/pendant"
+      ],
+      "mean_L": 218.1,
+      "mean_L_round2": 204.1,
+      "designer_notes": "round 4 (v7 clay): mb0.txt: floor-lamp removed; 1.1.x nudges; sconce pair lit",
+      "est_vs_measured": [
+        {
+          "key": "window_visible_Y",
+          "est": [
+            18.1,
+            18.92
+          ],
+          "measured": [
+            18.1,
+            18.9166
+          ],
+          "dev": [
+            0.0,
+            -0.0034
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "window_u",
+          "est": [
+            0.0,
+            0.138
+          ],
+          "measured": [
+            0.0,
+            0.1384
+          ],
+          "dev": [
+            0.0,
+            0.0004
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "window_cut_pct",
+          "est": 45,
+          "measured": 45.6,
+          "dev": 0.6,
+          "flag_gt_tol": false,
+          "tol": 2,
+          "note": ""
+        },
+        {
+          "key": "NE_corner_u (-2.30, 17.66)",
+          "est": 0.185,
+          "measured": 0.1853,
+          "dev": 0.0003,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "bed_centre_u (-0.70, 17.66)",
+          "est": 0.5,
+          "measured": 0.5,
+          "dev": -0.0,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "sconces_u (centres X -1.875 / 0.475)",
+          "est": [
+            0.269,
+            0.731
+          ],
+          "measured": [
+            0.2689,
+            0.7311
+          ],
+          "dev": [
+            -0.0001,
+            0.0001
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "door_jamb_X2.00_u (2.00, 17.66)",
+          "est": 1.031,
+          "measured": 1.031,
+          "dev": -0.0,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "bed_foot_u (corners at Y 19.66, Z 0.50)",
+          "est": [
+            0.07,
+            0.93
+          ],
+          "measured": [
+            0.0683,
+            0.9317
+          ],
+          "dev": [
+            -0.0017,
+            0.0017
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "bed_foot_top_v (Y 19.66, Z 0.50)",
+          "est": 0.912,
+          "measured": 0.929,
+          "dev": 0.017,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "bed_head_v (headboard top Z 1.15)",
+          "est": 0.645,
+          "measured": 0.4244,
+          "dev": -0.2206,
+          "flag_gt_tol": true,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "top_edge_on_bed_wall_Z",
+          "est": 2.37,
+          "measured": 2.3657,
+          "dev": -0.0043,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "camera_to_bed_wall_m",
+          "est": 3.39,
+          "measured": 3.39,
+          "dev": 0.0,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        }
+      ],
+      "est_flags": [
+        "bed_head_v (headboard top Z 1.15)"
+      ],
+      "items_visible": {
+        "master/framed-art": {
+          "kind": "proxy",
+          "frame_area_pct": 3.53,
+          "visible_pct": 100.0,
+          "cut_by_edge_pct": 0.0
+        },
+        "master/candle-holders": {
+          "kind": "proxy",
+          "frame_area_pct": 0.14,
+          "visible_pct": 99.5,
+          "cut_by_edge_pct": 0.0
+        },
+        "master/curtains": {
+          "kind": "proxy",
+          "frame_area_pct": 3.53,
+          "visible_pct": 7.4,
+          "cut_by_edge_pct": 91.5
+        },
+        "master/cushions": {
+          "kind": "proxy",
+          "frame_area_pct": 1.57,
+          "visible_pct": 100.0,
+          "cut_by_edge_pct": 0.0
+        },
+        "master/bedding": {
+          "kind": "proxy",
+          "frame_area_pct": 10.62,
+          "visible_pct": 58.2,
+          "cut_by_edge_pct": 0.0
+        },
+        "master/pillowcases": {
+          "kind": "proxy",
+          "frame_area_pct": 1.27,
+          "visible_pct": 49.5,
+          "cut_by_edge_pct": 0.0
+        },
+        "master/planter": {
+          "kind": "proxy",
+          "frame_area_pct": 6.01,
+          "visible_pct": 44.1,
+          "cut_by_edge_pct": 55.9
+        },
+        "master/bedside-sconces": {
+          "kind": "proxy",
+          "frame_area_pct": 0.77,
+          "visible_pct": 100.0,
+          "cut_by_edge_pct": 0.0
+        },
+        "master/throw": {
+          "kind": "proxy",
+          "frame_area_pct": 8.49,
+          "visible_pct": 100.0,
+          "cut_by_edge_pct": 0.0
+        },
+        "master/nightstand-vase": {
+          "kind": "proxy",
+          "frame_area_pct": 0.23,
+          "visible_pct": 100.0,
+          "cut_by_edge_pct": 0.0
+        },
+        "master bed 180x200": {
+          "kind": "furniture",
+          "frame_area_pct": 11.27,
+          "visible_pct": 20.6,
+          "cut_by_edge_pct": 45.0
+        },
+        "nightstands 45": {
+          "kind": "furniture",
+          "frame_area_pct": 1.54,
+          "visible_pct": 26.8,
+          "cut_by_edge_pct": 0.0
+        },
+        "master/sill-vase": {
+          "kind": "proxy",
+          "frame_area_pct": 0.62,
+          "visible_pct": 100.0,
+          "cut_by_edge_pct": 0.0
+        },
+        "window W-master": {
+          "kind": "window",
+          "frame_area_pct": 4.74,
+          "visible_pct": 10.5,
+          "cut_by_edge_pct": 88.3
+        }
+      },
+      "F3_tangents": {
+        "edge_tangents": [],
+        "object_object_tangents": [
+          {
+            "a": "master/curtains",
+            "b": "nightstands 45",
+            "kind": "gap",
+            "gap": 0.002,
+            "dist3d_m": 0.08,
+            "rule": "silhouettes apart by < 0.02 (kissing contours)"
+          }
+        ],
+        "note": "edge: visible bbox margin 0 < m < 0.02; object-object as round 2 (ray-cast silhouettes, 512x288)"
+      },
+      "boxes": {
+        "master/curtains": {
+          "kind": "proxy",
+          "box": [
+            0.1404,
+            0.1872,
+            0.0,
+            0.769
+          ],
+          "px": 292610
+        },
+        "master bed 180x200": {
+          "kind": "furniture",
+          "box": [
+            0.0922,
+            0.9078,
+            0.4245,
+            1.0
+          ],
+          "px": 934666
+        },
+        "nightstands 45": {
+          "kind": "furniture",
+          "box": [
+            0.1878,
+            0.8122,
+            0.6356,
+            0.7495
+          ],
+          "px": 127653
+        },
+        "master/bedding": {
+          "kind": "proxy",
+          "box": [
+            0.081,
+            0.919,
+            0.6556,
+            0.9301
+          ],
+          "px": 880824
+        },
+        "master/pillowcases": {
+          "kind": "proxy",
+          "box": [
+            0.3154,
+            0.6846,
+            0.6019,
+            0.6556
+          ],
+          "px": 104934
+        },
+        "master/throw": {
+          "kind": "proxy",
+          "box": [
+            0.0667,
+            0.9237,
+            0.7495,
+            0.8579
+          ],
+          "px": 704507
+        },
+        "master/cushions": {
+          "kind": "proxy",
+          "box": [
+            0.4396,
+            0.5604,
+            0.5315,
+            0.662
+          ],
+          "px": 129884
+        },
+        "master/bedside-sconces": {
+          "kind": "proxy",
+          "box": [
+            0.2383,
+            0.7617,
+            0.3199,
+            0.3931
+          ],
+          "px": 64280
+        },
+        "master/framed-art": {
+          "kind": "proxy",
+          "box": [
+            0.3909,
+            0.6091,
+            0.1426,
+            0.3204
+          ],
+          "px": 292594
+        },
+        "master/nightstand-vase": {
+          "kind": "proxy",
+          "box": [
+            0.2281,
+            0.2526,
+            0.5528,
+            0.6477
+          ],
+          "px": 19067
+        },
+        "master/candle-holders": {
+          "kind": "proxy",
+          "box": [
+            0.7445,
+            0.7781,
+            0.6014,
+            0.6491
+          ],
+          "px": 11254
+        },
+        "master/planter": {
+          "kind": "proxy",
+          "box": [
+            0.9094,
+            1.0,
+            0.1444,
+            0.9106
+          ],
+          "px": 498503
+        },
+        "G-M4 wainscot": {
+          "kind": "architecture",
+          "box": [
+            0.1872,
+            0.9526,
+            0.3787,
+            0.8292
+          ],
+          "px": 1023812
+        },
+        "master/sill-vase": {
+          "kind": "proxy",
+          "box": [
+            0.0599,
+            0.0914,
+            0.394,
+            0.5921
+          ],
+          "px": 51386
+        },
+        "master/trinket-dish": {
+          "kind": "proxy",
+          "box": [
+            0.2581,
+            0.2805,
+            0.6231,
+            0.6435
+          ],
+          "px": 3551
+        },
+        "window W-master": {
+          "kind": "window",
+          "box": [
+            0.0,
+            0.1385,
+            0.0,
+            0.6019
+          ],
+          "px": 393064
+        }
+      },
+      "density_F10": {
+        "result": "fail",
+        "counted": 6,
+        "minimum": 14,
+        "target": [
+          15,
+          18
+        ],
+        "info_counted_if_area_ge_0_2pct": 7,
+        "info_counted_any_area_ge_50pct_visible": 8,
+        "frame_kind": "full",
+        "in_target": false,
+        "categories": [
+          "decor/play",
+          "lighting",
+          "other",
+          "textile"
+        ],
+        "four_categories_ok": false,
+        "missing_categories": [
+          "ceramics/tableware",
+          "storage/function"
+        ],
+        "slots": [
+          {
+            "slot": "bedding",
+            "category": "textile",
+            "frame_area_pct": 10.62,
+            "visible_pct": 58.2,
+            "cut_by_edge_pct": 0.0,
+            "counted": true,
+            "why_not": null
+          },
+          {
+            "slot": "throw",
+            "category": "textile",
+            "frame_area_pct": 8.49,
+            "visible_pct": 100.0,
+            "cut_by_edge_pct": 0.0,
+            "counted": true,
+            "why_not": null
+          },
+          {
+            "slot": "framed-art",
+            "category": "decor/play",
+            "frame_area_pct": 3.53,
+            "visible_pct": 100.0,
+            "cut_by_edge_pct": 0.0,
+            "counted": true,
+            "why_not": null
+          },
+          {
+            "slot": "cushions",
+            "category": "textile",
+            "frame_area_pct": 1.57,
+            "visible_pct": 100.0,
+            "cut_by_edge_pct": 0.0,
+            "counted": true,
+            "why_not": null
+          },
+          {
+            "slot": "bedside-sconces",
+            "category": "lighting",
+            "frame_area_pct": 0.77,
+            "visible_pct": 100.0,
+            "cut_by_edge_pct": 0.0,
+            "counted": true,
+            "why_not": null
+          },
+          {
+            "slot": "sill-vase",
+            "category": "other",
+            "frame_area_pct": 0.62,
+            "visible_pct": 100.0,
+            "cut_by_edge_pct": 0.0,
+            "counted": true,
+            "why_not": null
+          },
+          {
+            "slot": "planter",
+            "category": "ceramics/tableware",
+            "frame_area_pct": 6.01,
+            "visible_pct": 44.1,
+            "cut_by_edge_pct": 55.9,
+            "counted": false,
+            "why_not": "visible < 50%"
+          },
+          {
+            "slot": "curtains",
+            "category": "textile",
+            "frame_area_pct": 3.53,
+            "visible_pct": 7.4,
+            "cut_by_edge_pct": 91.5,
+            "counted": false,
+            "why_not": "visible < 50%"
+          },
+          {
+            "slot": "pillowcases",
+            "category": "textile",
+            "frame_area_pct": 1.27,
+            "visible_pct": 49.5,
+            "cut_by_edge_pct": 0.0,
+            "counted": false,
+            "why_not": "visible < 50%"
+          },
+          {
+            "slot": "nightstand-vase",
+            "category": "ceramics/tableware",
+            "frame_area_pct": 0.23,
+            "visible_pct": 100.0,
+            "cut_by_edge_pct": 0.0,
+            "counted": false,
+            "why_not": "area < 0.5%"
+          },
+          {
+            "slot": "candle-holders",
+            "category": "ceramics/tableware",
+            "frame_area_pct": 0.14,
+            "visible_pct": 99.5,
+            "cut_by_edge_pct": 0.0,
+            "counted": false,
+            "why_not": "area < 0.5%"
+          }
+        ],
+        "rule": "counted = own-room product proxy >= 50% visible (ray-cast silhouette incl. outside the frame) and >= 0.5% of the frame; sets once; fillers, shell, fixed furniture, neighbouring rooms not counted"
+      },
+      "heroes_thirds": [
+        {
+          "hero": "bed centre",
+          "u": 0.5,
+          "ok": false
+        }
+      ],
+      "lamps": [
+        {
+          "lamp": "master/bedside-sconces",
+          "typology": "wall",
+          "shell": false,
+          "glow_px": 128560,
+          "visible": true
+        }
+      ],
+      "wall_patches": {
+        "hero_wall_high": {
+          "u": 0.5,
+          "v": 0.006,
+          "xyz": [
+            -0.7,
+            17.66,
+            2.35
+          ],
+          "note": "outside the frame"
+        },
+        "hero_wall_mid": {
+          "u": 0.4999999403953552,
+          "v": 0.14534902572631836,
+          "L_hsl": 87.4,
+          "Y_lin": 0.746,
+          "stops_vs_mid": 2.05,
+          "xyz": [
+            -0.7,
+            17.66,
+            1.95
+          ]
+        },
+        "wainscot": {
+          "u": 0.4999999403953552,
+          "v": 0.4949612617492676,
+          "L_hsl": 83.4,
+          "Y_lin": 0.6738,
+          "stops_vs_mid": 1.9,
+          "xyz": [
+            -0.7,
+            17.66,
+            0.95
+          ]
+        },
+        "ceiling": {
+          "u": 0.55,
+          "v": 0.04,
+          "L_hsl": 88.9,
+          "Y_lin": 0.7715,
+          "stops_vs_mid": 2.1
+        },
+        "floor_centre": {
+          "u": 0.5,
+          "v": 0.93,
+          "L_hsl": 64.2,
+          "Y_lin": 0.39,
+          "stops_vs_mid": 1.12
+        }
+      },
+      "light_balance": {},
+      "camera_clearance_m": {
+        "min": 0.61,
+        "nearest": "hwall_21"
+      },
+      "overlay": "framing/round3/overlays/MB0.png",
+      "runtime_s": 446,
+      "overscan": {
+        "on": false,
+        "canvas_px": [
+          3840,
+          2160
+        ]
+      },
+      "exr": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/r4-exr/MB0.exr",
+      "pose": false
+    },
+    "K-boy": {
+      "frame": "K-boy",
+      "room": "boy",
+      "round2_id": "K2-boy",
+      "camera": {
+        "id": "K-boy",
+        "room": "boy",
+        "loc": [
+          1.1,
+          13.0,
+          1.0
+        ],
+        "yaw": 33,
+        "u0": 0.52,
+        "v0": 0.44,
+        "status": "1.1 (K2-boy, = K-A)",
+        "hero": "the bed nook in the window corner at child's-eye height: NE corner and pendant on the left third (u 0.303), the desk sconce near the right third (u 0.697)"
+      },
+      "image": "framing/round4/K-boy.png",
+      "resolution": [
+        4072,
+        2290
+      ],
+      "samples": 16,
+      "placeholders_shown": [
+        "boy/bedding",
+        "boy/bedspread",
+        "boy/bookshelf",
+        "boy/cushions",
+        "boy/rug",
+        "boy/soft-toy",
+        "boy/toy-basket",
+        "boy/toy-cars"
+      ],
+      "built_generic": [],
+      "missing": [],
+      "lamps_on": [],
+      "lamps_off": [
+        "boy/pendant",
+        "boy/wall-sconce"
+      ],
+      "mean_L": 208.7,
+      "mean_L_round2": 166.0,
+      "designer_notes": "round 4 (v7 clay): k-boy.txt: no pendant, wall lamp, prints, chair, skateboard; daylight only (both lamp slots empty)",
+      "est_vs_measured": [
+        {
+          "key": "NE_corner_u",
+          "est": 0.303,
+          "measured": 0.3142,
+          "dev": 0.0112,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "window_u (left edge .. west jamb)",
+          "est": [
+            0.0,
+            0.23
+          ],
+          "measured": [
+            0.0,
+            0.2454
+          ],
+          "dev": [
+            0.0,
+            0.0154
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "window_cut_pct",
+          "est": 23,
+          "measured": 23.1,
+          "dev": 0.1,
+          "flag_gt_tol": false,
+          "tol": 2,
+          "note": ""
+        },
+        {
+          "key": "roman-blind bottom v (Z 1.85 at the jamb)",
+          "est": 0.13,
+          "measured": 0.1893,
+          "dev": 0.0593,
+          "flag_gt_tol": true,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "bed_front_u (corners at Y front, Z 0.50)",
+          "est": [
+            0.15,
+            0.46
+          ],
+          "measured": [
+            0.171,
+            0.4635
+          ],
+          "dev": [
+            0.021,
+            0.0035
+          ],
+          "flag_gt_tol": true,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "mattress_v (bedding top 0.50 at the front: far / near corner)",
+          "est": [
+            0.64,
+            0.73
+          ],
+          "measured": [
+            0.6112,
+            0.6903
+          ],
+          "dev": [
+            -0.0288,
+            -0.0397
+          ],
+          "flag_gt_tol": true,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "pendant_u (shade rim, geometry)",
+          "est": [
+            0.28,
+            0.33
+          ],
+          "measured": [
+            0.2892,
+            0.339
+          ],
+          "dev": [
+            0.0092,
+            0.009
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "pendant_v (shade top 1.66 .. bottom 1.45, centre)",
+          "est": [
+            0.22,
+            0.3
+          ],
+          "measured": [
+            0.245,
+            0.3081
+          ],
+          "dev": [
+            0.025,
+            0.0081
+          ],
+          "flag_gt_tol": true,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "wall-sconce (plate centre) u",
+          "est": 0.7,
+          "measured": 0.6859,
+          "dev": -0.0141,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "wall-sconce (plate centre) v",
+          "est": 0.33,
+          "measured": 0.3435,
+          "dev": 0.0135,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "wall-sconce shade centre u (arm end, 0.39 out)",
+          "est": null,
+          "measured": 0.6539,
+          "dev": null,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": "no est; the shade sits at the arm end"
+        },
+        {
+          "key": "bookshelf_u (pixels)",
+          "est": [
+            0.43,
+            0.56
+          ],
+          "measured": [
+            0.4241,
+            0.5584
+          ],
+          "dev": [
+            -0.0059,
+            -0.0016
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "bookshelf_v (pixels)",
+          "est": [
+            0.15,
+            0.35
+          ],
+          "measured": [
+            0.1528,
+            0.3725
+          ],
+          "dev": [
+            0.0028,
+            0.0225
+          ],
+          "flag_gt_tol": true,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "framed-prints_u (pixels)",
+          "est": [
+            0.75,
+            0.9
+          ],
+          "measured": null,
+          "dev": null,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": "pair X 0.38-1.02 (format kept, see build notes)"
+        },
+        {
+          "key": "framed-prints top v",
+          "est": 0.055,
+          "measured": null,
+          "dev": null,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "desk-chair back centre u",
+          "est": 0.73,
+          "measured": 0.7003,
+          "dev": -0.0297,
+          "flag_gt_tol": true,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "desk-chair back top v",
+          "est": 0.62,
+          "measured": 0.6156,
+          "dev": -0.0044,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "desk_u (top front corners)",
+          "est": [
+            0.63,
+            0.91
+          ],
+          "measured": [
+            0.6189,
+            0.8885
+          ],
+          "dev": [
+            -0.0111,
+            -0.0215
+          ],
+          "flag_gt_tol": true,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "desk top v (front, centre)",
+          "est": 0.6,
+          "measured": 0.5968,
+          "dev": -0.0032,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "toy-basket_u (pixels)",
+          "est": [
+            0.27,
+            0.38
+          ],
+          "measured": [
+            0.2655,
+            0.3743
+          ],
+          "dev": [
+            -0.0045,
+            -0.0057
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "toy-basket_v (pixels)",
+          "est": [
+            0.78,
+            0.96
+          ],
+          "measured": [
+            0.7044,
+            1.0
+          ],
+          "dev": [
+            -0.0756,
+            0.04
+          ],
+          "flag_gt_tol": true,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "skateboard_u (pixels)",
+          "est": [
+            0.6,
+            0.63
+          ],
+          "measured": null,
+          "dev": null,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "paint line v (Z 1.25: corner / desk)",
+          "est": [
+            0.34,
+            0.38
+          ],
+          "measured": [
+            0.3762,
+            0.3362
+          ],
+          "dev": [
+            0.0362,
+            -0.0438
+          ],
+          "flag_gt_tol": true,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "top_edge_on_east_wall_Z (corner)",
+          "est": null,
+          "measured": 2.6493,
+          "dev": null,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": "round 1 measured 2.54"
+        }
+      ],
+      "est_flags": [
+        "roman-blind bottom v (Z 1.85 at the jamb)",
+        "bed_front_u (corners at Y front, Z 0.50)",
+        "mattress_v (bedding top 0.50 at the front: far / near corner)",
+        "pendant_v (shade top 1.66 .. bottom 1.45, centre)",
+        "bookshelf_v (pixels)",
+        "desk-chair back centre u",
+        "desk_u (top front corners)",
+        "toy-basket_v (pixels)",
+        "paint line v (Z 1.25: corner / desk)"
+      ],
+      "items_visible": {
+        "boy bed 96x196 (fixed)": {
+          "kind": "furniture",
+          "frame_area_pct": 5.35,
+          "visible_pct": 49.4,
+          "cut_by_edge_pct": 0.0
+        },
+        "boy/bookshelf": {
+          "kind": "proxy",
+          "frame_area_pct": 1.98,
+          "visible_pct": 89.1,
+          "cut_by_edge_pct": 0.0
+        },
+        "boy/toy-cars": {
+          "kind": "proxy",
+          "frame_area_pct": 0.14,
+          "visible_pct": 89.9,
+          "cut_by_edge_pct": 0.0
+        },
+        "boy/cushions": {
+          "kind": "proxy",
+          "frame_area_pct": 1.14,
+          "visible_pct": 85.3,
+          "cut_by_edge_pct": 0.0
+        },
+        "boy desk 90x50 (fixed)": {
+          "kind": "furniture",
+          "frame_area_pct": 2.62,
+          "visible_pct": 87.4,
+          "cut_by_edge_pct": 2.0
+        },
+        "boy/bedding": {
+          "kind": "proxy",
+          "frame_area_pct": 2.22,
+          "visible_pct": 42.5,
+          "cut_by_edge_pct": 0.0
+        },
+        "boy/toy-basket": {
+          "kind": "proxy",
+          "frame_area_pct": 2.89,
+          "visible_pct": 88.4,
+          "cut_by_edge_pct": 9.7
+        },
+        "boy/rug": {
+          "kind": "proxy",
+          "frame_area_pct": 5.8,
+          "visible_pct": 14.2,
+          "cut_by_edge_pct": 83.5
+        },
+        "boy/bedspread": {
+          "kind": "proxy",
+          "frame_area_pct": 1.54,
+          "visible_pct": 67.0,
+          "cut_by_edge_pct": 0.0
+        },
+        "boy/soft-toy": {
+          "kind": "proxy",
+          "frame_area_pct": 0.25,
+          "visible_pct": 69.8,
+          "cut_by_edge_pct": 0.0
+        },
+        "window W-boy": {
+          "kind": "window",
+          "frame_area_pct": 4.09,
+          "visible_pct": 38.4,
+          "cut_by_edge_pct": 59.0
+        }
+      },
+      "F3_tangents": {
+        "edge_tangents": [],
+        "object_object_tangents": [
+          {
+            "a": "boy/cushions",
+            "b": "boy/bedspread",
+            "kind": "gap",
+            "gap": 0.0156,
+            "dist3d_m": 0.52,
+            "rule": "silhouettes apart by < 0.02 (kissing contours)"
+          },
+          {
+            "a": "boy/bedding",
+            "b": "boy/toy-basket",
+            "kind": "overlap",
+            "overlap_thickness": 0.0234,
+            "cover_of_back": 0.038,
+            "behind": "boy/bedding",
+            "dist3d_m": 0.17,
+            "rule": "overlap thinner than 0.03 and < 60% of the back item"
+          },
+          {
+            "a": "boy/toy-basket",
+            "b": "boy/bedspread",
+            "kind": "overlap",
+            "overlap_thickness": 0.0117,
+            "cover_of_back": 0.01,
+            "behind": "boy/bedspread",
+            "dist3d_m": 0.155,
+            "rule": "overlap thinner than 0.03 and < 60% of the back item"
+          },
+          {
+            "a": "boy/soft-toy",
+            "b": "window W-boy",
+            "kind": "overlap",
+            "overlap_thickness": 0.0039,
+            "cover_of_back": 0.032,
+            "behind": "boy/soft-toy",
+            "dist3d_m": 0.2,
+            "rule": "overlap thinner than 0.03 and < 60% of the back item"
+          }
+        ],
+        "note": "edge: visible bbox margin 0 < m < 0.02; object-object as round 2 (ray-cast silhouettes, 512x288)"
+      },
+      "boxes": {
+        "boy bed 96x196 (fixed)": {
+          "kind": "furniture",
+          "box": [
+            0.1714,
+            0.5847,
+            0.5533,
+            0.931
+          ],
+          "px": 498628
+        },
+        "boy desk 90x50 (fixed)": {
+          "kind": "furniture",
+          "box": [
+            0.6194,
+            0.8954,
+            0.5611,
+            1.0
+          ],
+          "px": 243984
+        },
+        "boy/bedding": {
+          "kind": "proxy",
+          "box": [
+            0.1999,
+            0.4556,
+            0.5712,
+            0.7847
+          ],
+          "px": 206815
+        },
+        "boy/bedspread": {
+          "kind": "proxy",
+          "box": [
+            0.3453,
+            0.5395,
+            0.5956,
+            0.7725
+          ],
+          "px": 143837
+        },
+        "boy/cushions": {
+          "kind": "proxy",
+          "box": [
+            0.3099,
+            0.4089,
+            0.4712,
+            0.5991
+          ],
+          "px": 106426
+        },
+        "boy/soft-toy": {
+          "kind": "proxy",
+          "box": [
+            0.2161,
+            0.249,
+            0.5096,
+            0.5978
+          ],
+          "px": 23066
+        },
+        "boy/bookshelf": {
+          "kind": "proxy",
+          "box": [
+            0.4241,
+            0.5584,
+            0.1528,
+            0.3725
+          ],
+          "px": 184681
+        },
+        "boy/rug": {
+          "kind": "proxy",
+          "box": [
+            0.0,
+            0.7073,
+            0.8183,
+            1.0
+          ],
+          "px": 540544
+        },
+        "boy/toy-basket": {
+          "kind": "proxy",
+          "box": [
+            0.2655,
+            0.3743,
+            0.7044,
+            1.0
+          ],
+          "px": 269855
+        },
+        "boy/toy-cars": {
+          "kind": "proxy",
+          "box": [
+            0.6675,
+            0.7262,
+            0.548,
+            0.5773
+          ],
+          "px": 12738
+        },
+        "window W-boy": {
+          "kind": "window",
+          "box": [
+            0.0,
+            0.2453,
+            0.0,
+            0.5371
+          ],
+          "px": 381728
+        }
+      },
+      "rules_designer": [
+        {
+          "rule": "toy basket vs the bottom edge: cut, or >= 0.03 clear",
+          "bottom_v": 1.0,
+          "margin": 0.0,
+          "ok": true
+        },
+        {
+          "rule": "skateboard covers the front-left desk leg decisively",
+          "leg": "boy_desk2_leg.001",
+          "leg_silhouette_px": 753,
+          "covered_pct": 0.0,
+          "ok": false
+        }
+      ],
+      "density_F10": {
+        "result": "fail",
+        "counted": 4,
+        "minimum": 11,
+        "target": [
+          12,
+          15
+        ],
+        "info_counted_if_area_ge_0_2pct": 5,
+        "info_counted_any_area_ge_50pct_visible": 6,
+        "frame_kind": "lean",
+        "in_target": false,
+        "categories": [
+          "storage/function",
+          "textile"
+        ],
+        "four_categories_ok": false,
+        "missing_categories": [
+          "lighting",
+          "ceramics/tableware"
+        ],
+        "slots": [
+          {
+            "slot": "toy-basket",
+            "category": "storage/function",
+            "frame_area_pct": 2.89,
+            "visible_pct": 88.4,
+            "cut_by_edge_pct": 9.7,
+            "counted": true,
+            "why_not": null
+          },
+          {
+            "slot": "bookshelf",
+            "category": "storage/function",
+            "frame_area_pct": 1.98,
+            "visible_pct": 89.1,
+            "cut_by_edge_pct": 0.0,
+            "counted": true,
+            "why_not": null
+          },
+          {
+            "slot": "bedspread",
+            "category": "textile",
+            "frame_area_pct": 1.54,
+            "visible_pct": 67.0,
+            "cut_by_edge_pct": 0.0,
+            "counted": true,
+            "why_not": null
+          },
+          {
+            "slot": "cushions",
+            "category": "textile",
+            "frame_area_pct": 1.14,
+            "visible_pct": 85.3,
+            "cut_by_edge_pct": 0.0,
+            "counted": true,
+            "why_not": null
+          },
+          {
+            "slot": "rug",
+            "category": "textile",
+            "frame_area_pct": 5.8,
+            "visible_pct": 14.2,
+            "cut_by_edge_pct": 83.5,
+            "counted": false,
+            "why_not": "visible < 50%"
+          },
+          {
+            "slot": "bedding",
+            "category": "textile",
+            "frame_area_pct": 2.22,
+            "visible_pct": 42.5,
+            "cut_by_edge_pct": 0.0,
+            "counted": false,
+            "why_not": "visible < 50%"
+          },
+          {
+            "slot": "soft-toy",
+            "category": "textile",
+            "frame_area_pct": 0.25,
+            "visible_pct": 69.8,
+            "cut_by_edge_pct": 0.0,
+            "counted": false,
+            "why_not": "area < 0.5%"
+          },
+          {
+            "slot": "toy-cars",
+            "category": "decor/play",
+            "frame_area_pct": 0.14,
+            "visible_pct": 89.9,
+            "cut_by_edge_pct": 0.0,
+            "counted": false,
+            "why_not": "area < 0.5%"
+          }
+        ],
+        "rule": "counted = own-room product proxy >= 50% visible (ray-cast silhouette incl. outside the frame) and >= 0.5% of the frame; sets once; fillers, shell, fixed furniture, neighbouring rooms not counted"
+      },
+      "heroes_thirds": [
+        {
+          "hero": "NE corner + pendant (window corner)",
+          "u": 0.3142,
+          "ok": true
+        },
+        {
+          "hero": "pendant centre",
+          "u": 0.3143,
+          "ok": true
+        },
+        {
+          "hero": "desk sconce plate (right third)",
+          "u": 0.6859,
+          "ok": true
+        }
+      ],
+      "lamps": [],
+      "wall_patches": {
+        "hero_wall_high": {
+          "u": 0.40354353189468384,
+          "v": 0.037977397441864014,
+          "L_hsl": 91.7,
+          "Y_lin": 0.8243,
+          "stops_vs_mid": 2.2,
+          "xyz": [
+            -1.5,
+            10.25,
+            2.35
+          ]
+        },
+        "hero_wall_mid": {
+          "u": 0.40354353189468384,
+          "v": 0.15810441970825195,
+          "L_hsl": 92.5,
+          "Y_lin": 0.8405,
+          "stops_vs_mid": 2.22,
+          "xyz": [
+            -1.5,
+            10.25,
+            1.95
+          ]
+        },
+        "paint_block": {
+          "u": 0.5328682065010071,
+          "v": 0.460699200630188,
+          "L_hsl": 87.1,
+          "Y_lin": 0.7362,
+          "stops_vs_mid": 2.03,
+          "xyz": [
+            -0.6,
+            10.25,
+            0.95
+          ]
+        },
+        "north_wall": {
+          "u": -0.238,
+          "v": -0.17,
+          "xyz": [
+            -2.3,
+            12.6,
+            2.2
+          ],
+          "note": "outside the frame"
+        },
+        "ceiling": {
+          "u": 0.55,
+          "v": 0.04,
+          "L_hsl": 88.4,
+          "Y_lin": 0.7615,
+          "stops_vs_mid": 2.08
+        },
+        "floor_centre": {
+          "u": 0.5,
+          "v": 0.93,
+          "L_hsl": 74.0,
+          "Y_lin": 0.5225,
+          "stops_vs_mid": 1.54
+        }
+      },
+      "light_balance": {},
+      "camera_clearance_m": {
+        "min": 0.53,
+        "nearest": "leaf_corridor_boy"
+      },
+      "overlay": "framing/round3/overlays/K-boy.png",
+      "runtime_s": 501,
+      "overscan": {
+        "on": true,
+        "canvas_px": [
+          4072,
+          2290
+        ],
+        "frame_px": [
+          3840,
+          2160
+        ],
+        "crop_box_px": [
+          116,
+          65,
+          3956,
+          2225
+        ],
+        "per_side_fraction_x": 0.0302,
+        "per_side_fraction_y": 0.0301,
+        "note": "same camera and focal length in pixels; the 16:9 frame is the centre crop; uv in this selfcheck (boxes, patches) are fractions of the canvas"
+      },
+      "exr": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/r4-exr/K-boy.exr",
+      "pose": false
+    },
+    "K-girl": {
+      "frame": "K-girl",
+      "room": "girl",
+      "round2_id": "K2-girl",
+      "camera": {
+        "id": "K-girl",
+        "room": "girl",
+        "loc": [
+          1.1,
+          16.63,
+          1.0
+        ],
+        "yaw": 33,
+        "u0": 0.52,
+        "v0": 0.44,
+        "status": "1.1 (K2-girl)",
+        "hero": ""
+      },
+      "image": "framing/round4/K-girl.png",
+      "resolution": [
+        4072,
+        2290
+      ],
+      "samples": 16,
+      "placeholders_shown": [
+        "girl/bedding",
+        "girl/bedspread",
+        "girl/bookshelf",
+        "girl/cushions",
+        "girl/doll",
+        "girl/framed-prints",
+        "girl/rug",
+        "girl/soft-toy",
+        "girl/toy-basket"
+      ],
+      "built_generic": [],
+      "missing": [],
+      "lamps_on": [],
+      "lamps_off": [
+        "girl/pendant",
+        "girl/wall-sconce"
+      ],
+      "mean_L": 207.7,
+      "mean_L_round2": 172.3,
+      "designer_notes": "round 4 (v7 clay): k-girl.txt: no pendant, wall lamp, chair, pram; daylight only",
+      "est_vs_measured": [
+        {
+          "key": "NE_corner_u",
+          "est": 0.303,
+          "measured": 0.3142,
+          "dev": 0.0112,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "window_u (left edge .. west jamb)",
+          "est": [
+            0.0,
+            0.23
+          ],
+          "measured": [
+            0.0,
+            0.2454
+          ],
+          "dev": [
+            0.0,
+            0.0154
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "window_cut_pct",
+          "est": 23,
+          "measured": 23.1,
+          "dev": 0.1,
+          "flag_gt_tol": false,
+          "tol": 2,
+          "note": ""
+        },
+        {
+          "key": "roman-blind bottom v (Z 1.85 at the jamb)",
+          "est": 0.13,
+          "measured": 0.1893,
+          "dev": 0.0593,
+          "flag_gt_tol": true,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "bed_front_u (corners at Y front, Z 0.50)",
+          "est": [
+            0.15,
+            0.46
+          ],
+          "measured": [
+            0.171,
+            0.4635
+          ],
+          "dev": [
+            0.021,
+            0.0035
+          ],
+          "flag_gt_tol": true,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "mattress_v (bedding top 0.50 at the front: far / near corner)",
+          "est": [
+            0.64,
+            0.73
+          ],
+          "measured": [
+            0.6112,
+            0.6903
+          ],
+          "dev": [
+            -0.0288,
+            -0.0397
+          ],
+          "flag_gt_tol": true,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "pendant_u (shade rim, geometry)",
+          "est": [
+            0.28,
+            0.33
+          ],
+          "measured": [
+            0.2892,
+            0.339
+          ],
+          "dev": [
+            0.0092,
+            0.009
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "pendant_v (shade top 1.66 .. bottom 1.45, centre)",
+          "est": [
+            0.22,
+            0.3
+          ],
+          "measured": [
+            0.245,
+            0.3081
+          ],
+          "dev": [
+            0.025,
+            0.0081
+          ],
+          "flag_gt_tol": true,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "wall-sconce (plate centre) u",
+          "est": 0.7,
+          "measured": 0.6859,
+          "dev": -0.0141,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "wall-sconce (plate centre) v",
+          "est": 0.33,
+          "measured": 0.3435,
+          "dev": 0.0135,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "wall-sconce shade centre u (arm end, 0.39 out)",
+          "est": null,
+          "measured": 0.6539,
+          "dev": null,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": "no est; the shade sits at the arm end"
+        },
+        {
+          "key": "bookshelf_u (pixels)",
+          "est": [
+            0.43,
+            0.56
+          ],
+          "measured": [
+            0.4241,
+            0.5584
+          ],
+          "dev": [
+            -0.0059,
+            -0.0016
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "bookshelf_v (pixels)",
+          "est": [
+            0.15,
+            0.35
+          ],
+          "measured": [
+            0.1528,
+            0.3725
+          ],
+          "dev": [
+            0.0028,
+            0.0225
+          ],
+          "flag_gt_tol": true,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "framed-prints_u (pixels)",
+          "est": [
+            0.75,
+            0.9
+          ],
+          "measured": [
+            0.7254,
+            0.9015
+          ],
+          "dev": [
+            -0.0246,
+            0.0015
+          ],
+          "flag_gt_tol": true,
+          "tol": 0.02,
+          "note": "pair X 0.38-1.02 (format kept, see build notes)"
+        },
+        {
+          "key": "framed-prints top v",
+          "est": 0.055,
+          "measured": 0.0738,
+          "dev": 0.0188,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "desk-chair back centre u",
+          "est": 0.73,
+          "measured": 0.7003,
+          "dev": -0.0297,
+          "flag_gt_tol": true,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "desk-chair back top v",
+          "est": 0.62,
+          "measured": 0.6156,
+          "dev": -0.0044,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "desk_u (top front corners)",
+          "est": [
+            0.63,
+            0.91
+          ],
+          "measured": [
+            0.6189,
+            0.8885
+          ],
+          "dev": [
+            -0.0111,
+            -0.0215
+          ],
+          "flag_gt_tol": true,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "desk top v (front, centre)",
+          "est": 0.6,
+          "measured": 0.5968,
+          "dev": -0.0032,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "toy-basket_u (pixels)",
+          "est": [
+            0.27,
+            0.38
+          ],
+          "measured": [
+            0.2655,
+            0.3743
+          ],
+          "dev": [
+            -0.0045,
+            -0.0057
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "toy-basket_v (pixels)",
+          "est": [
+            0.78,
+            0.96
+          ],
+          "measured": [
+            0.6939,
+            1.0
+          ],
+          "dev": [
+            -0.0861,
+            0.04
+          ],
+          "flag_gt_tol": true,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "paint line v (Z 1.25: corner / desk)",
+          "est": [
+            0.34,
+            0.38
+          ],
+          "measured": [
+            0.3762,
+            0.3362
+          ],
+          "dev": [
+            0.0362,
+            -0.0438
+          ],
+          "flag_gt_tol": true,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "top_edge_on_east_wall_Z (corner)",
+          "est": null,
+          "measured": 2.6493,
+          "dev": null,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": "round 1 measured 2.54"
+        }
+      ],
+      "est_flags": [
+        "roman-blind bottom v (Z 1.85 at the jamb)",
+        "bed_front_u (corners at Y front, Z 0.50)",
+        "mattress_v (bedding top 0.50 at the front: far / near corner)",
+        "pendant_v (shade top 1.66 .. bottom 1.45, centre)",
+        "bookshelf_v (pixels)",
+        "framed-prints_u (pixels)",
+        "desk-chair back centre u",
+        "desk_u (top front corners)",
+        "toy-basket_v (pixels)",
+        "paint line v (Z 1.25: corner / desk)"
+      ],
+      "items_visible": {
+        "girl bed 96x196 (fixed)": {
+          "kind": "furniture",
+          "frame_area_pct": 5.32,
+          "visible_pct": 49.2,
+          "cut_by_edge_pct": 0.0
+        },
+        "girl/bookshelf": {
+          "kind": "proxy",
+          "frame_area_pct": 1.98,
+          "visible_pct": 89.1,
+          "cut_by_edge_pct": 0.0
+        },
+        "girl/cushions": {
+          "kind": "proxy",
+          "frame_area_pct": 1.14,
+          "visible_pct": 85.3,
+          "cut_by_edge_pct": 0.0
+        },
+        "girl desk 90x50 (fixed)": {
+          "kind": "furniture",
+          "frame_area_pct": 2.64,
+          "visible_pct": 88.4,
+          "cut_by_edge_pct": 2.0
+        },
+        "girl/doll": {
+          "kind": "proxy",
+          "frame_area_pct": 0.28,
+          "visible_pct": 88.4,
+          "cut_by_edge_pct": 0.0
+        },
+        "girl/bedding": {
+          "kind": "proxy",
+          "frame_area_pct": 2.19,
+          "visible_pct": 42.0,
+          "cut_by_edge_pct": 0.0
+        },
+        "girl/toy-basket": {
+          "kind": "proxy",
+          "frame_area_pct": 2.93,
+          "visible_pct": 88.4,
+          "cut_by_edge_pct": 9.6
+        },
+        "girl/framed-prints": {
+          "kind": "proxy",
+          "frame_area_pct": 3.0,
+          "visible_pct": 90.1,
+          "cut_by_edge_pct": 0.0
+        },
+        "girl/rug": {
+          "kind": "proxy",
+          "frame_area_pct": 5.8,
+          "visible_pct": 14.2,
+          "cut_by_edge_pct": 83.5
+        },
+        "girl/bedspread": {
+          "kind": "proxy",
+          "frame_area_pct": 1.55,
+          "visible_pct": 67.6,
+          "cut_by_edge_pct": 0.0
+        },
+        "girl/soft-toy": {
+          "kind": "proxy",
+          "frame_area_pct": 0.25,
+          "visible_pct": 69.8,
+          "cut_by_edge_pct": 0.0
+        },
+        "window W-girl": {
+          "kind": "window",
+          "frame_area_pct": 4.09,
+          "visible_pct": 38.4,
+          "cut_by_edge_pct": 59.0
+        }
+      },
+      "F3_tangents": {
+        "edge_tangents": [],
+        "object_object_tangents": [
+          {
+            "a": "girl/cushions",
+            "b": "girl/bedspread",
+            "kind": "gap",
+            "gap": 0.0156,
+            "dist3d_m": 0.52,
+            "rule": "silhouettes apart by < 0.02 (kissing contours)"
+          },
+          {
+            "a": "girl/bedding",
+            "b": "girl/toy-basket",
+            "kind": "overlap",
+            "overlap_thickness": 0.0273,
+            "cover_of_back": 0.041,
+            "behind": "girl/bedding",
+            "dist3d_m": 0.17,
+            "rule": "overlap thinner than 0.03 and < 60% of the back item"
+          },
+          {
+            "a": "girl/toy-basket",
+            "b": "girl/bedspread",
+            "kind": "overlap",
+            "overlap_thickness": 0.0039,
+            "cover_of_back": 0.004,
+            "behind": "girl/bedspread",
+            "dist3d_m": 0.155,
+            "rule": "overlap thinner than 0.03 and < 60% of the back item"
+          },
+          {
+            "a": "girl/soft-toy",
+            "b": "window W-girl",
+            "kind": "overlap",
+            "overlap_thickness": 0.0039,
+            "cover_of_back": 0.032,
+            "behind": "girl/soft-toy",
+            "dist3d_m": 0.2,
+            "rule": "overlap thinner than 0.03 and < 60% of the back item"
+          }
+        ],
+        "note": "edge: visible bbox margin 0 < m < 0.02; object-object as round 2 (ray-cast silhouettes, 512x288)"
+      },
+      "boxes": {
+        "girl bed 96x196 (fixed)": {
+          "kind": "furniture",
+          "box": [
+            0.1714,
+            0.5847,
+            0.5533,
+            0.931
+          ],
+          "px": 496045
+        },
+        "girl desk 90x50 (fixed)": {
+          "kind": "furniture",
+          "box": [
+            0.6194,
+            0.8954,
+            0.5611,
+            1.0
+          ],
+          "px": 246580
+        },
+        "girl/bedding": {
+          "kind": "proxy",
+          "box": [
+            0.1999,
+            0.4556,
+            0.5712,
+            0.7847
+          ],
+          "px": 204409
+        },
+        "girl/bedspread": {
+          "kind": "proxy",
+          "box": [
+            0.3453,
+            0.5395,
+            0.5956,
+            0.7725
+          ],
+          "px": 144997
+        },
+        "girl/cushions": {
+          "kind": "proxy",
+          "box": [
+            0.3099,
+            0.4089,
+            0.4712,
+            0.5991
+          ],
+          "px": 106426
+        },
+        "girl/soft-toy": {
+          "kind": "proxy",
+          "box": [
+            0.2161,
+            0.249,
+            0.5096,
+            0.5978
+          ],
+          "px": 23066
+        },
+        "girl/bookshelf": {
+          "kind": "proxy",
+          "box": [
+            0.4241,
+            0.5584,
+            0.1528,
+            0.3725
+          ],
+          "px": 184681
+        },
+        "girl/framed-prints": {
+          "kind": "proxy",
+          "box": [
+            0.7254,
+            0.9015,
+            0.0738,
+            0.29
+          ],
+          "px": 280094
+        },
+        "girl/rug": {
+          "kind": "proxy",
+          "box": [
+            0.0,
+            0.7073,
+            0.8183,
+            1.0
+          ],
+          "px": 540543
+        },
+        "girl/toy-basket": {
+          "kind": "proxy",
+          "box": [
+            0.2655,
+            0.3743,
+            0.6939,
+            1.0
+          ],
+          "px": 273684
+        },
+        "girl/doll": {
+          "kind": "proxy",
+          "box": [
+            0.6854,
+            0.7171,
+            0.462,
+            0.5742
+          ],
+          "px": 25644
+        },
+        "window W-girl": {
+          "kind": "window",
+          "box": [
+            0.0,
+            0.2453,
+            0.0,
+            0.5371
+          ],
+          "px": 381728
+        }
+      },
+      "rules_designer": [
+        {
+          "rule": "toy basket vs the bottom edge: cut, or >= 0.03 clear",
+          "bottom_v": 1.0,
+          "margin": 0.0,
+          "ok": true
+        },
+        {
+          "rule": "doll-pram covers the front-left desk leg decisively",
+          "leg": "girl_desk2_leg.001",
+          "leg_silhouette_px": 753,
+          "covered_pct": 0.0,
+          "ok": false
+        }
+      ],
+      "density_F10": {
+        "result": "fail",
+        "counted": 5,
+        "minimum": 11,
+        "target": [
+          12,
+          15
+        ],
+        "info_counted_if_area_ge_0_2pct": 7,
+        "info_counted_any_area_ge_50pct_visible": 7,
+        "frame_kind": "lean",
+        "in_target": false,
+        "categories": [
+          "decor/play",
+          "storage/function",
+          "textile"
+        ],
+        "four_categories_ok": false,
+        "missing_categories": [
+          "lighting",
+          "ceramics/tableware"
+        ],
+        "slots": [
+          {
+            "slot": "framed-prints",
+            "category": "decor/play",
+            "frame_area_pct": 3.0,
+            "visible_pct": 90.1,
+            "cut_by_edge_pct": 0.0,
+            "counted": true,
+            "why_not": null
+          },
+          {
+            "slot": "toy-basket",
+            "category": "storage/function",
+            "frame_area_pct": 2.93,
+            "visible_pct": 88.4,
+            "cut_by_edge_pct": 9.6,
+            "counted": true,
+            "why_not": null
+          },
+          {
+            "slot": "bookshelf",
+            "category": "storage/function",
+            "frame_area_pct": 1.98,
+            "visible_pct": 89.1,
+            "cut_by_edge_pct": 0.0,
+            "counted": true,
+            "why_not": null
+          },
+          {
+            "slot": "bedspread",
+            "category": "textile",
+            "frame_area_pct": 1.55,
+            "visible_pct": 67.6,
+            "cut_by_edge_pct": 0.0,
+            "counted": true,
+            "why_not": null
+          },
+          {
+            "slot": "cushions",
+            "category": "textile",
+            "frame_area_pct": 1.14,
+            "visible_pct": 85.3,
+            "cut_by_edge_pct": 0.0,
+            "counted": true,
+            "why_not": null
+          },
+          {
+            "slot": "rug",
+            "category": "textile",
+            "frame_area_pct": 5.8,
+            "visible_pct": 14.2,
+            "cut_by_edge_pct": 83.5,
+            "counted": false,
+            "why_not": "visible < 50%"
+          },
+          {
+            "slot": "bedding",
+            "category": "textile",
+            "frame_area_pct": 2.19,
+            "visible_pct": 42.0,
+            "cut_by_edge_pct": 0.0,
+            "counted": false,
+            "why_not": "visible < 50%"
+          },
+          {
+            "slot": "doll",
+            "category": "decor/play",
+            "frame_area_pct": 0.28,
+            "visible_pct": 88.4,
+            "cut_by_edge_pct": 0.0,
+            "counted": false,
+            "why_not": "area < 0.5%"
+          },
+          {
+            "slot": "soft-toy",
+            "category": "textile",
+            "frame_area_pct": 0.25,
+            "visible_pct": 69.8,
+            "cut_by_edge_pct": 0.0,
+            "counted": false,
+            "why_not": "area < 0.5%"
+          }
+        ],
+        "rule": "counted = own-room product proxy >= 50% visible (ray-cast silhouette incl. outside the frame) and >= 0.5% of the frame; sets once; fillers, shell, fixed furniture, neighbouring rooms not counted"
+      },
+      "heroes_thirds": [
+        {
+          "hero": "NE corner + pendant (window corner)",
+          "u": 0.3142,
+          "ok": true
+        },
+        {
+          "hero": "pendant centre",
+          "u": 0.3143,
+          "ok": true
+        },
+        {
+          "hero": "desk sconce plate (right third)",
+          "u": 0.6859,
+          "ok": true
+        }
+      ],
+      "lamps": [],
+      "wall_patches": {
+        "hero_wall_high": {
+          "u": 0.40354350209236145,
+          "v": 0.03797727823257446,
+          "L_hsl": 91.7,
+          "Y_lin": 0.824,
+          "stops_vs_mid": 2.19,
+          "xyz": [
+            -1.5,
+            13.88,
+            2.35
+          ]
+        },
+        "hero_wall_mid": {
+          "u": 0.40354350209236145,
+          "v": 0.1581043004989624,
+          "L_hsl": 92.5,
+          "Y_lin": 0.84,
+          "stops_vs_mid": 2.22,
+          "xyz": [
+            -1.5,
+            13.88,
+            1.95
+          ]
+        },
+        "paint_block": {
+          "u": 0.5328682065010071,
+          "v": 0.460699200630188,
+          "L_hsl": 87.1,
+          "Y_lin": 0.7367,
+          "stops_vs_mid": 2.03,
+          "xyz": [
+            -0.6,
+            13.879999999999999,
+            0.95
+          ]
+        },
+        "north_wall": {
+          "u": -0.238,
+          "v": -0.17,
+          "xyz": [
+            -2.3,
+            16.23,
+            2.2
+          ],
+          "note": "outside the frame"
+        },
+        "ceiling": {
+          "u": 0.55,
+          "v": 0.04,
+          "L_hsl": 88.4,
+          "Y_lin": 0.7615,
+          "stops_vs_mid": 2.08
+        },
+        "floor_centre": {
+          "u": 0.5,
+          "v": 0.93,
+          "L_hsl": 74.0,
+          "Y_lin": 0.5226,
+          "stops_vs_mid": 1.54
+        }
+      },
+      "light_balance": {},
+      "camera_clearance_m": {
+        "min": 0.53,
+        "nearest": "leaf_corridor_girl"
+      },
+      "overlay": "framing/round3/overlays/K-girl.png",
+      "runtime_s": 462,
+      "overscan": {
+        "on": true,
+        "canvas_px": [
+          4072,
+          2290
+        ],
+        "frame_px": [
+          3840,
+          2160
+        ],
+        "crop_box_px": [
+          116,
+          65,
+          3956,
+          2225
+        ],
+        "per_side_fraction_x": 0.0302,
+        "per_side_fraction_y": 0.0301,
+        "note": "same camera and focal length in pixels; the 16:9 frame is the centre crop; uv in this selfcheck (boxes, patches) are fractions of the canvas"
+      },
+      "exr": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/r4-exr/K-girl.exr",
+      "pose": false
+    },
+    "W0": {
+      "frame": "W0",
+      "room": "work",
+      "round2_id": "W-A",
+      "camera": {
+        "id": "W0",
+        "room": "work",
+        "loc": [
+          -0.825,
+          9.85,
+          1.1
+        ],
+        "yaw": 0,
+        "u0": 0.5,
+        "v0": 0.46,
+        "status": "1.1 (W-A)",
+        "hero": "the built-in desk wall, dead centre (one-point symmetric)"
+      },
+      "image": "framing/round4/W0.png",
+      "resolution": [
+        3840,
+        2160
+      ],
+      "samples": 16,
+      "placeholders_shown": [
+        "work/basket",
+        "work/curtains",
+        "work/desk-organizer",
+        "work/planter",
+        "work/rug",
+        "work/shelf-boxes",
+        "work/waste-basket"
+      ],
+      "built_generic": [],
+      "missing": [],
+      "lamps_on": [],
+      "lamps_off": [
+        "work/desk-lamp",
+        "work/pendant",
+        "work/wall-sconce"
+      ],
+      "mean_L": 206.7,
+      "mean_L_round2": 199.7,
+      "designer_notes": "round 4 (v7 clay): w0.txt: no pendant, wall lamp, desk lamp, art, tray, magazine holder; organizer on the desk; curtain stack per 1.1.x; daylight only",
+      "est_vs_measured": [
+        {
+          "key": "window_visible_Y",
+          "est": [
+            7.15,
+            7.88
+          ],
+          "measured": [
+            7.15,
+            7.8832
+          ],
+          "dev": [
+            0.0,
+            0.0032
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "window_u",
+          "est": [
+            0.0,
+            0.136
+          ],
+          "measured": [
+            0.0,
+            0.1358
+          ],
+          "dev": [
+            0.0,
+            -0.0002
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "window_cut_pct",
+          "est": 39,
+          "measured": 38.9,
+          "dev": -0.1,
+          "flag_gt_tol": false,
+          "tol": 2,
+          "note": ""
+        },
+        {
+          "key": "NE_corner_u (-2.30, 6.35)",
+          "est": 0.219,
+          "measured": 0.219,
+          "dev": 0.0,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "SE_corner_u (0.65, 6.35)",
+          "est": 0.781,
+          "measured": 0.781,
+          "dev": -0.0,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "desk_centre_u (pixels)",
+          "est": 0.5,
+          "measured": 0.5,
+          "dev": 0.0,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "door_jamb_Y8.10_u (0.65, 8.10)",
+          "est": 1.06,
+          "measured": 1.0619,
+          "dev": 0.0019,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "top_edge_on_east_wall_Z",
+          "est": 2.46,
+          "measured": 2.4584,
+          "dev": -0.0016,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "camera_to_east_wall_m",
+          "est": 3.5,
+          "measured": 3.5,
+          "dev": 0.0,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        }
+      ],
+      "est_flags": [],
+      "items_visible": {
+        "work/desk-organizer": {
+          "kind": "proxy",
+          "frame_area_pct": 0.08,
+          "visible_pct": 100.0,
+          "cut_by_edge_pct": 0.0
+        },
+        "window W-work": {
+          "kind": "window",
+          "frame_area_pct": 5.39,
+          "visible_pct": 13.7,
+          "cut_by_edge_pct": 84.2
+        },
+        "work/basket": {
+          "kind": "proxy",
+          "frame_area_pct": 0.84,
+          "visible_pct": 99.9,
+          "cut_by_edge_pct": 0.0
+        },
+        "work/shelf-boxes": {
+          "kind": "proxy",
+          "frame_area_pct": 0.71,
+          "visible_pct": 80.0,
+          "cut_by_edge_pct": 0.0
+        },
+        "work/curtains": {
+          "kind": "proxy",
+          "frame_area_pct": 5.07,
+          "visible_pct": 11.5,
+          "cut_by_edge_pct": 88.4
+        },
+        "work/planter": {
+          "kind": "proxy",
+          "frame_area_pct": 6.16,
+          "visible_pct": 97.2,
+          "cut_by_edge_pct": 0.0
+        },
+        "work/rug": {
+          "kind": "proxy",
+          "frame_area_pct": 3.88,
+          "visible_pct": 4.0,
+          "cut_by_edge_pct": 95.8
+        },
+        "work/waste-basket": {
+          "kind": "proxy",
+          "frame_area_pct": 0.72,
+          "visible_pct": 100.0,
+          "cut_by_edge_pct": 0.0
+        },
+        "desk chair": {
+          "kind": "furniture",
+          "frame_area_pct": 3.23,
+          "visible_pct": 98.6,
+          "cut_by_edge_pct": 1.2
+        }
+      },
+      "F3_tangents": {
+        "edge_tangents": [],
+        "object_object_tangents": [
+          {
+            "a": "work/basket",
+            "b": "work/rug",
+            "kind": "gap",
+            "gap": 0.0156,
+            "dist3d_m": 0.2,
+            "rule": "silhouettes apart by < 0.02 (kissing contours)"
+          },
+          {
+            "a": "work/basket",
+            "b": "desk chair",
+            "kind": "gap",
+            "gap": 0.0137,
+            "dist3d_m": 0.358,
+            "rule": "silhouettes apart by < 0.02 (kissing contours)"
+          },
+          {
+            "a": "work/rug",
+            "b": "work/waste-basket",
+            "kind": "gap",
+            "gap": 0.0098,
+            "dist3d_m": 0.125,
+            "rule": "silhouettes apart by < 0.02 (kissing contours)"
+          }
+        ],
+        "note": "edge: visible bbox margin 0 < m < 0.02; object-object as round 2 (ray-cast silhouettes, 512x288)"
+      },
+      "boxes": {
+        "work/curtains": {
+          "kind": "proxy",
+          "box": [
+            0.124,
+            0.1779,
+            0.0,
+            0.9537
+          ],
+          "px": 420393
+        },
+        "built-in oak desk + shelf": {
+          "kind": "architecture",
+          "box": [
+            0.3161,
+            0.6839,
+            0.2546,
+            0.9046
+          ],
+          "px": 391187
+        },
+        "desk chair": {
+          "kind": "furniture",
+          "box": [
+            0.4354,
+            0.5646,
+            0.6009,
+            1.0
+          ],
+          "px": 267786
+        },
+        "work/shelf-boxes": {
+          "kind": "proxy",
+          "box": [
+            0.3612,
+            0.6388,
+            0.2005,
+            0.2546
+          ],
+          "px": 58938
+        },
+        "work/basket": {
+          "kind": "proxy",
+          "box": [
+            0.3609,
+            0.4232,
+            0.7389,
+            0.8806
+          ],
+          "px": 69428
+        },
+        "work/planter": {
+          "kind": "proxy",
+          "box": [
+            0.1919,
+            0.3276,
+            0.3769,
+            0.9005
+          ],
+          "px": 510553
+        },
+        "work/rug": {
+          "kind": "proxy",
+          "box": [
+            0.2628,
+            0.7372,
+            0.9046,
+            1.0
+          ],
+          "px": 322218
+        },
+        "work/waste-basket": {
+          "kind": "proxy",
+          "box": [
+            0.5844,
+            0.638,
+            0.7495,
+            0.8912
+          ],
+          "px": 60069
+        },
+        "work/desk-organizer": {
+          "kind": "proxy",
+          "box": [
+            0.3914,
+            0.4086,
+            0.5343,
+            0.5838
+          ],
+          "px": 6946
+        },
+        "window W-work": {
+          "kind": "window",
+          "box": [
+            0.0,
+            0.124,
+            0.0,
+            0.637
+          ],
+          "px": 447246
+        }
+      },
+      "density_F10": {
+        "result": "fail",
+        "counted": 4,
+        "minimum": 11,
+        "target": [
+          12,
+          15
+        ],
+        "info_counted_if_area_ge_0_2pct": 4,
+        "info_counted_any_area_ge_50pct_visible": 5,
+        "frame_kind": "lean",
+        "in_target": false,
+        "categories": [
+          "ceramics/tableware",
+          "storage/function"
+        ],
+        "four_categories_ok": false,
+        "missing_categories": [
+          "textile",
+          "lighting"
+        ],
+        "slots": [
+          {
+            "slot": "planter",
+            "category": "ceramics/tableware",
+            "frame_area_pct": 6.16,
+            "visible_pct": 97.2,
+            "cut_by_edge_pct": 0.0,
+            "counted": true,
+            "why_not": null
+          },
+          {
+            "slot": "basket",
+            "category": "storage/function",
+            "frame_area_pct": 0.84,
+            "visible_pct": 99.9,
+            "cut_by_edge_pct": 0.0,
+            "counted": true,
+            "why_not": null
+          },
+          {
+            "slot": "waste-basket",
+            "category": "storage/function",
+            "frame_area_pct": 0.72,
+            "visible_pct": 100.0,
+            "cut_by_edge_pct": 0.0,
+            "counted": true,
+            "why_not": null
+          },
+          {
+            "slot": "shelf-boxes",
+            "category": "storage/function",
+            "frame_area_pct": 0.71,
+            "visible_pct": 80.0,
+            "cut_by_edge_pct": 0.0,
+            "counted": true,
+            "why_not": null
+          },
+          {
+            "slot": "curtains",
+            "category": "textile",
+            "frame_area_pct": 5.07,
+            "visible_pct": 11.5,
+            "cut_by_edge_pct": 88.4,
+            "counted": false,
+            "why_not": "visible < 50%"
+          },
+          {
+            "slot": "rug",
+            "category": "textile",
+            "frame_area_pct": 3.88,
+            "visible_pct": 4.0,
+            "cut_by_edge_pct": 95.8,
+            "counted": false,
+            "why_not": "visible < 50%"
+          },
+          {
+            "slot": "desk-organizer",
+            "category": "storage/function",
+            "frame_area_pct": 0.08,
+            "visible_pct": 100.0,
+            "cut_by_edge_pct": 0.0,
+            "counted": false,
+            "why_not": "area < 0.5%"
+          }
+        ],
+        "rule": "counted = own-room product proxy >= 50% visible (ray-cast silhouette incl. outside the frame) and >= 0.5% of the frame; sets once; fillers, shell, fixed furniture, neighbouring rooms not counted"
+      },
+      "heroes_thirds": [
+        {
+          "hero": "desk centre",
+          "u": 0.5,
+          "ok": false
+        }
+      ],
+      "lamps": [],
+      "wall_patches": {
+        "hero_wall_high": {
+          "u": 0.4999999403953552,
+          "v": 0.03671973943710327,
+          "L_hsl": 85.8,
+          "Y_lin": 0.7133,
+          "stops_vs_mid": 1.99,
+          "xyz": [
+            -0.825,
+            6.35,
+            2.35
+          ]
+        },
+        "hero_wall_mid": {
+          "u": 0.4999999403953552,
+          "v": 0.12137579917907715,
+          "L_hsl": 85.9,
+          "Y_lin": 0.7145,
+          "stops_vs_mid": 1.99,
+          "xyz": [
+            -0.825,
+            6.35,
+            2.1
+          ]
+        },
+        "ceiling": {
+          "u": 0.55,
+          "v": 0.04,
+          "L_hsl": 85.8,
+          "Y_lin": 0.7127,
+          "stops_vs_mid": 1.99
+        },
+        "floor_centre": {
+          "u": 0.5,
+          "v": 0.93,
+          "L_hsl": 80.6,
+          "Y_lin": 0.6247,
+          "stops_vs_mid": 1.8
+        }
+      },
+      "light_balance": {},
+      "camera_clearance_m": {
+        "min": 0.25,
+        "nearest": "hwall_16"
+      },
+      "overlay": "framing/round3/overlays/W0.png",
+      "runtime_s": 461,
+      "overscan": {
+        "on": false,
+        "canvas_px": [
+          3840,
+          2160
+        ]
+      },
+      "exr": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/r4-exr/W0.exr",
+      "pose": false
+    },
+    "D2": {
+      "frame": "D2",
+      "room": "kitchen-dining",
+      "round2_id": "D2",
+      "camera": {
+        "id": "D2",
+        "room": "kitchen-dining",
+        "loc": [
+          2.8,
+          3.8,
+          1.1
+        ],
+        "yaw": -91,
+        "u0": 0.52,
+        "v0": 0.43,
+        "status": "second frame (pan -35 from D1)",
+        "hero": "the plastered hood over the hob on the left third (u 0.328 at the wall line); the lit coffee niche on the right third (u 0.695)"
+      },
+      "image": "framing/round4/D2.png",
+      "resolution": [
+        4072,
+        2290
+      ],
+      "samples": 16,
+      "placeholders_shown": [
+        "kitchen-dining/bench-pad",
+        "kitchen-dining/bowl",
+        "kitchen-dining/canisters",
+        "kitchen-dining/condiment-set",
+        "kitchen-dining/dining-rug",
+        "kitchen-dining/framed-art",
+        "kitchen-dining/kitchen-runner",
+        "kitchen-dining/mug-set",
+        "kitchen-dining/paper-towel-holder",
+        "kitchen-dining/tableware-set",
+        "kitchen-dining/tea-towel"
+      ],
+      "built_generic": [],
+      "missing": [],
+      "lamps_on": [
+        "kitchen-dining/led-niche",
+        "kitchen-dining/led-shelves"
+      ],
+      "lamps_off": [
+        "kitchen-dining/dining-pendant",
+        "kitchen-dining/kitchen-sconce"
+      ],
+      "mean_L": 206.7,
+      "mean_L_round2": 184.5,
+      "designer_notes": "round 4 (v7 clay): d2.txt: same point PD as D1; sconce empty; LEDs lit; step-stool empty",
+      "est_vs_measured": [
+        {
+          "key": "SE_corner_u (7.25, 0) [out]",
+          "est": -0.07,
+          "measured": -0.0373,
+          "dev": 0.0327,
+          "flag_gt_tol": true,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "south wall visible from Y (left edge on X 7.25)",
+          "est": 0.45,
+          "measured": 0.4524,
+          "dev": 0.0024,
+          "flag_gt_tol": false,
+          "tol": 0.05,
+          "note": ""
+        },
+        {
+          "key": "sink group u (pixels)",
+          "est": [
+            0.1,
+            0.18
+          ],
+          "measured": null,
+          "dev": null,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "hood centre u (wall line 7.25, 2.60)",
+          "est": 0.328,
+          "measured": 0.3375,
+          "dev": 0.0095,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "hood centre u (front face X 6.75)",
+          "est": null,
+          "measured": 0.3158,
+          "dev": null,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": "no est"
+        },
+        {
+          "key": "hood top cut: top edge Z on the wall line (7.25, 2.60)",
+          "est": 2.71,
+          "measured": 2.8191,
+          "dev": 0.1091,
+          "flag_gt_tol": true,
+          "tol": 0.05,
+          "note": "est 'Z 2.71 at depth 4.45'"
+        },
+        {
+          "key": "hood top cut: top edge Z at the hood front X 6.75",
+          "est": null,
+          "measured": 2.625,
+          "dev": null,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": "no est; the hood box is cut where the frame top meets its front"
+        },
+        {
+          "key": "lower units u (Y 0.75 / 4.20 at the wall)",
+          "est": [
+            0.05,
+            0.57
+          ],
+          "measured": [
+            0.0716,
+            0.5643
+          ],
+          "dev": [
+            0.0216,
+            -0.0057
+          ],
+          "flag_gt_tol": true,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "tall units u (Y 4.20 / 6.20 at the wall)",
+          "est": [
+            0.57,
+            0.865
+          ],
+          "measured": [
+            0.5643,
+            0.8439
+          ],
+          "dev": [
+            -0.0057,
+            -0.0211
+          ],
+          "flag_gt_tol": true,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "coffee niche u (front Y 4.55 / 5.20)",
+          "est": [
+            0.62,
+            0.72
+          ],
+          "measured": [
+            0.6306,
+            0.7363
+          ],
+          "dev": [
+            0.0106,
+            0.0163
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "coffee niche u (wall line X 7.25)",
+          "est": [
+            0.62,
+            0.72
+          ],
+          "measured": [
+            0.6136,
+            0.7047
+          ],
+          "dev": [
+            -0.0064,
+            -0.0153
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": "the designer's u are wall-line values"
+        },
+        {
+          "key": "shelves v (bottom 1.55 at the wall, Y 1.40)",
+          "est": 0.31,
+          "measured": 0.3198,
+          "dev": 0.0098,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "counter v (0.90 at the front edge, Y 2.60)",
+          "est": 0.48,
+          "measured": 0.4931,
+          "dev": 0.0131,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "table + bench end u (pixels, right edge)",
+          "est": [
+            0.0,
+            0.2
+          ],
+          "measured": [
+            0.0,
+            0.2159
+          ],
+          "dev": [
+            0.0,
+            0.0159
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        }
+      ],
+      "est_flags": [
+        "SE_corner_u (7.25, 0) [out]",
+        "hood top cut: top edge Z on the wall line (7.25, 2.60)",
+        "lower units u (Y 0.75 / 4.20 at the wall)",
+        "tall units u (Y 4.20 / 6.20 at the wall)"
+      ],
+      "items_visible": {
+        "kitchen-dining/bench-pad": {
+          "kind": "proxy",
+          "frame_area_pct": 1.89,
+          "visible_pct": 29.1,
+          "cut_by_edge_pct": 73.2
+        },
+        "dining bench (fixed)": {
+          "kind": "furniture",
+          "frame_area_pct": 1.82,
+          "visible_pct": 10.3,
+          "cut_by_edge_pct": 80.3
+        },
+        "kitchen-dining/dining-rug": {
+          "kind": "proxy",
+          "frame_area_pct": 2.04,
+          "visible_pct": 2.2,
+          "cut_by_edge_pct": 96.7
+        },
+        "dining table 160x85 (fixed)": {
+          "kind": "furniture",
+          "frame_area_pct": 0.63,
+          "visible_pct": 2.9,
+          "cut_by_edge_pct": 95.6
+        },
+        "kitchen-dining/framed-art": {
+          "kind": "proxy",
+          "frame_area_pct": 0.44,
+          "visible_pct": 85.2,
+          "cut_by_edge_pct": 0.0
+        },
+        "kitchen-dining/bowl": {
+          "kind": "proxy",
+          "frame_area_pct": 0.09,
+          "visible_pct": 87.2,
+          "cut_by_edge_pct": 0.0
+        },
+        "kitchen-dining/canisters": {
+          "kind": "proxy",
+          "frame_area_pct": 0.27,
+          "visible_pct": 88.0,
+          "cut_by_edge_pct": 0.0
+        },
+        "kitchen run (fixed): lower units, sink, hob, plastered hood, oak shelves, tall units, coffee niche, oven": {
+          "kind": "furniture",
+          "frame_area_pct": 52.69,
+          "visible_pct": 22.5,
+          "cut_by_edge_pct": 76.0
+        },
+        "kitchen-dining/condiment-set": {
+          "kind": "proxy",
+          "frame_area_pct": 0.06,
+          "visible_pct": 68.8,
+          "cut_by_edge_pct": 0.0
+        },
+        "kitchen-dining/mug-set": {
+          "kind": "proxy",
+          "frame_area_pct": 0.08,
+          "visible_pct": 64.2,
+          "cut_by_edge_pct": 0.0
+        },
+        "kitchen-dining/tableware-set": {
+          "kind": "proxy",
+          "frame_area_pct": 0.11,
+          "visible_pct": 71.7,
+          "cut_by_edge_pct": 0.0
+        },
+        "kitchen-dining/paper-towel-holder": {
+          "kind": "proxy",
+          "frame_area_pct": 0.14,
+          "visible_pct": 83.2,
+          "cut_by_edge_pct": 0.0
+        },
+        "kitchen-dining/kitchen-runner": {
+          "kind": "proxy",
+          "frame_area_pct": 2.06,
+          "visible_pct": 55.4,
+          "cut_by_edge_pct": 7.4
+        },
+        "kitchen-dining/tea-towel": {
+          "kind": "proxy",
+          "frame_area_pct": 0.19,
+          "visible_pct": 42.0,
+          "cut_by_edge_pct": 0.0
+        }
+      },
+      "F3_tangents": {
+        "edge_tangents": [],
+        "object_object_tangents": [
+          {
+            "a": "kitchen-dining/bench-pad",
+            "b": "dining table 160x85 (fixed)",
+            "kind": "overlap",
+            "overlap_thickness": 0.0234,
+            "cover_of_back": 0.308,
+            "behind": "dining table 160x85 (fixed)",
+            "dist3d_m": 0.225,
+            "rule": "overlap thinner than 0.03 and < 60% of the back item"
+          },
+          {
+            "a": "dining bench (fixed)",
+            "b": "dining table 160x85 (fixed)",
+            "kind": "overlap",
+            "overlap_thickness": 0.0234,
+            "cover_of_back": 0.346,
+            "behind": "dining table 160x85 (fixed)",
+            "dist3d_m": 0.225,
+            "rule": "overlap thinner than 0.03 and < 60% of the back item"
+          },
+          {
+            "a": "kitchen-dining/dining-rug",
+            "b": "kitchen-dining/kitchen-runner",
+            "kind": "gap",
+            "gap": 0.0176,
+            "dist3d_m": 0.25,
+            "rule": "silhouettes apart by < 0.02 (kissing contours)"
+          },
+          {
+            "a": "dining table 160x85 (fixed)",
+            "b": "kitchen-dining/kitchen-runner",
+            "kind": "overlap",
+            "overlap_thickness": 0.0234,
+            "cover_of_back": 0.169,
+            "behind": "dining table 160x85 (fixed)",
+            "dist3d_m": 0.6,
+            "rule": "overlap thinner than 0.03 and < 60% of the back item"
+          }
+        ],
+        "note": "edge: visible bbox margin 0 < m < 0.02; object-object as round 2 (ray-cast silhouettes, 512x288)"
+      },
+      "boxes": {
+        "dining table 160x85 (fixed)": {
+          "kind": "furniture",
+          "box": [
+            0.0,
+            0.0852,
+            0.5865,
+            0.9297
+          ],
+          "px": 58700
+        },
+        "dining bench (fixed)": {
+          "kind": "furniture",
+          "box": [
+            0.0,
+            0.2159,
+            0.7275,
+            0.9742
+          ],
+          "px": 169721
+        },
+        "kitchen run (fixed): lower units, sink, hob, plastered hood, oak shelves, tall units, coffee niche, oven": {
+          "kind": "furniture",
+          "box": [
+            0.0,
+            1.0,
+            0.0,
+            0.9747
+          ],
+          "px": 4913341
+        },
+        "under-shelf LED (shell)": {
+          "kind": "architecture",
+          "box": [
+            0.0506,
+            0.5643,
+            0.3135,
+            0.3166
+          ],
+          "px": 5258
+        },
+        "niche LED (shell)": {
+          "kind": "architecture",
+          "box": [
+            0.6331,
+            0.7313,
+            0.2939,
+            0.2961
+          ],
+          "px": 1275
+        },
+        "kitchen-dining/bench-pad": {
+          "kind": "proxy",
+          "box": [
+            0.0,
+            0.2092,
+            0.7205,
+            0.941
+          ],
+          "px": 176617
+        },
+        "kitchen-dining/dining-rug": {
+          "kind": "proxy",
+          "box": [
+            0.0,
+            0.2827,
+            0.8498,
+            1.0
+          ],
+          "px": 189773
+        },
+        "kitchen-dining/framed-art": {
+          "kind": "proxy",
+          "box": [
+            0.1054,
+            0.1579,
+            0.2087,
+            0.3048
+          ],
+          "px": 40901
+        },
+        "kitchen-dining/tableware-set": {
+          "kind": "proxy",
+          "box": [
+            0.4261,
+            0.4671,
+            0.2786,
+            0.3061
+          ],
+          "px": 10127
+        },
+        "kitchen-dining/mug-set": {
+          "kind": "proxy",
+          "box": [
+            0.4727,
+            0.5138,
+            0.2843,
+            0.3061
+          ],
+          "px": 7050
+        },
+        "kitchen-dining/condiment-set": {
+          "kind": "proxy",
+          "box": [
+            0.3976,
+            0.4167,
+            0.4467,
+            0.486
+          ],
+          "px": 5399
+        },
+        "kitchen-dining/bowl": {
+          "kind": "proxy",
+          "box": [
+            0.4556,
+            0.4865,
+            0.4524,
+            0.4878
+          ],
+          "px": 8531
+        },
+        "kitchen-dining/paper-towel-holder": {
+          "kind": "proxy",
+          "box": [
+            0.5349,
+            0.5538,
+            0.4052,
+            0.4865
+          ],
+          "px": 13228
+        },
+        "kitchen-dining/canisters": {
+          "kind": "proxy",
+          "box": [
+            0.6395,
+            0.7097,
+            0.424,
+            0.486
+          ],
+          "px": 24855
+        },
+        "kitchen-dining/tea-towel": {
+          "kind": "proxy",
+          "box": [
+            0.7859,
+            0.8055,
+            0.3598,
+            0.4576
+          ],
+          "px": 17789
+        },
+        "kitchen-dining/kitchen-runner": {
+          "kind": "proxy",
+          "box": [
+            0.0,
+            0.5079,
+            0.7546,
+            0.8214
+          ],
+          "px": 191820
+        }
+      },
+      "rules_designer": [
+        {
+          "rule": "table + bench end cut by the left edge (foreground)",
+          "table_u": [
+            0.0,
+            0.0852
+          ],
+          "ok": true
+        }
+      ],
+      "density_F10": {
+        "result": "fail",
+        "counted": 1,
+        "minimum": 14,
+        "target": [
+          15,
+          18
+        ],
+        "info_counted_if_area_ge_0_2pct": 3,
+        "info_counted_any_area_ge_50pct_visible": 8,
+        "frame_kind": "full",
+        "in_target": false,
+        "categories": [
+          "textile"
+        ],
+        "four_categories_ok": false,
+        "missing_categories": [
+          "lighting",
+          "ceramics/tableware",
+          "storage/function"
+        ],
+        "slots": [
+          {
+            "slot": "kitchen-runner",
+            "category": "textile",
+            "frame_area_pct": 2.06,
+            "visible_pct": 55.4,
+            "cut_by_edge_pct": 7.4,
+            "counted": true,
+            "why_not": null
+          },
+          {
+            "slot": "dining-rug",
+            "category": "textile",
+            "frame_area_pct": 2.04,
+            "visible_pct": 2.2,
+            "cut_by_edge_pct": 96.7,
+            "counted": false,
+            "why_not": "visible < 50%"
+          },
+          {
+            "slot": "bench-pad",
+            "category": "textile",
+            "frame_area_pct": 1.89,
+            "visible_pct": 29.1,
+            "cut_by_edge_pct": 73.2,
+            "counted": false,
+            "why_not": "visible < 50%"
+          },
+          {
+            "slot": "framed-art",
+            "category": "decor/play",
+            "frame_area_pct": 0.44,
+            "visible_pct": 85.2,
+            "cut_by_edge_pct": 0.0,
+            "counted": false,
+            "why_not": "area < 0.5%"
+          },
+          {
+            "slot": "canisters",
+            "category": "ceramics/tableware",
+            "frame_area_pct": 0.27,
+            "visible_pct": 88.0,
+            "cut_by_edge_pct": 0.0,
+            "counted": false,
+            "why_not": "area < 0.5%"
+          },
+          {
+            "slot": "tea-towel",
+            "category": "textile",
+            "frame_area_pct": 0.19,
+            "visible_pct": 42.0,
+            "cut_by_edge_pct": 0.0,
+            "counted": false,
+            "why_not": "visible < 50%"
+          },
+          {
+            "slot": "paper-towel-holder",
+            "category": "storage/function",
+            "frame_area_pct": 0.14,
+            "visible_pct": 83.2,
+            "cut_by_edge_pct": 0.0,
+            "counted": false,
+            "why_not": "area < 0.5%"
+          },
+          {
+            "slot": "tableware-set",
+            "category": "ceramics/tableware",
+            "frame_area_pct": 0.11,
+            "visible_pct": 71.7,
+            "cut_by_edge_pct": 0.0,
+            "counted": false,
+            "why_not": "area < 0.5%"
+          },
+          {
+            "slot": "bowl",
+            "category": "ceramics/tableware",
+            "frame_area_pct": 0.09,
+            "visible_pct": 87.2,
+            "cut_by_edge_pct": 0.0,
+            "counted": false,
+            "why_not": "area < 0.5%"
+          },
+          {
+            "slot": "mug-set",
+            "category": "ceramics/tableware",
+            "frame_area_pct": 0.08,
+            "visible_pct": 64.2,
+            "cut_by_edge_pct": 0.0,
+            "counted": false,
+            "why_not": "area < 0.5%"
+          },
+          {
+            "slot": "condiment-set",
+            "category": "ceramics/tableware",
+            "frame_area_pct": 0.06,
+            "visible_pct": 68.8,
+            "cut_by_edge_pct": 0.0,
+            "counted": false,
+            "why_not": "area < 0.5%"
+          }
+        ],
+        "rule": "counted = own-room product proxy >= 50% visible (ray-cast silhouette incl. outside the frame) and >= 0.5% of the frame; sets once; fillers, shell, fixed furniture, neighbouring rooms not counted"
+      },
+      "heroes_thirds": [
+        {
+          "hero": "hood centre (wall line)",
+          "u": 0.3375,
+          "ok": true
+        },
+        {
+          "hero": "coffee niche centre",
+          "u": 0.6835,
+          "ok": true
+        }
+      ],
+      "lamps": [
+        {
+          "lamp": "kitchen-dining/led-niche",
+          "typology": "cabinet",
+          "shell": true,
+          "glow_px": 1275,
+          "visible": true
+        },
+        {
+          "lamp": "kitchen-dining/led-shelves",
+          "typology": "cabinet",
+          "shell": true,
+          "glow_px": 10516,
+          "visible": true
+        }
+      ],
+      "wall_patches": {
+        "hero_wall_high": {
+          "u": 0.33750051259994507,
+          "v": 0.11842286586761475,
+          "L_hsl": 86.1,
+          "Y_lin": 0.7192,
+          "stops_vs_mid": 2.0,
+          "xyz": [
+            7.25,
+            2.6,
+            2.35
+          ]
+        },
+        "hero_wall_mid": {
+          "u": 0.10779596120119095,
+          "v": 0.10371828079223633,
+          "L_hsl": 80.4,
+          "Y_lin": 0.6215,
+          "stops_vs_mid": 1.79,
+          "xyz": [
+            7.25,
+            1.0,
+            2.4
+          ]
+        },
+        "tall_units": {
+          "u": 0.7038517594337463,
+          "v": 0.1726701259613037,
+          "L_hsl": 81.2,
+          "Y_lin": 0.6327,
+          "stops_vs_mid": 1.81,
+          "xyz": [
+            6.63,
+            5.0,
+            2.0
+          ]
+        },
+        "ceiling": {
+          "u": 0.55,
+          "v": 0.04,
+          "L_hsl": 80.4,
+          "Y_lin": 0.6195,
+          "stops_vs_mid": 1.78
+        },
+        "floor_centre": {
+          "u": 0.5,
+          "v": 0.93,
+          "L_hsl": 80.3,
+          "Y_lin": 0.6199,
+          "stops_vs_mid": 1.78
+        }
+      },
+      "light_balance": {},
+      "camera_clearance_m": {
+        "min": 0.7778,
+        "nearest": "leaf_living_dining_b"
+      },
+      "overlay": "framing/round3/overlays/D2.png",
+      "runtime_s": 494,
+      "overscan": {
+        "on": true,
+        "canvas_px": [
+          4072,
+          2290
+        ],
+        "frame_px": [
+          3840,
+          2160
+        ],
+        "crop_box_px": [
+          116,
+          65,
+          3956,
+          2225
+        ],
+        "per_side_fraction_x": 0.0302,
+        "per_side_fraction_y": 0.0301,
+        "note": "same camera and focal length in pixels; the 16:9 frame is the centre crop; uv in this selfcheck (boxes, patches) are fractions of the canvas"
+      },
+      "exr": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/r4-exr/D2.exr",
+      "pose": false
+    },
+    "B2": {
+      "frame": "B2",
+      "room": "bath",
+      "round2_id": "B2",
+      "camera": {
+        "id": "B2",
+        "room": "bath",
+        "loc": [
+          3.8,
+          13.2,
+          1.15
+        ],
+        "yaw": -57,
+        "u0": 0.52,
+        "v0": 0.46,
+        "status": "second frame (pan -35 from B1)",
+        "hero": "mirror and vanity between the sconce pair, right third (mirror centre u 0.672)"
+      },
+      "image": "framing/round4/B2.png",
+      "resolution": [
+        4072,
+        2290
+      ],
+      "samples": 16,
+      "placeholders_shown": [
+        "bath/hand-towel",
+        "bath/shower-curtain",
+        "bath/shower-dispensers",
+        "bath/soap-dispenser",
+        "bath/storage-basket",
+        "bath/toothbrush-cup",
+        "bath/towel-ring",
+        "bath/vanity-sconces",
+        "bath/vanity-vase"
+      ],
+      "built_generic": [],
+      "missing": [],
+      "lamps_on": [
+        "bath/shower-downlight",
+        "bath/vanity-sconces"
+      ],
+      "lamps_off": [
+        "bath/ceiling-light",
+        "bath/wall-sconce"
+      ],
+      "mean_L": 184.3,
+      "mean_L_round2": 136.7,
+      "designer_notes": "round 4 (v7 clay): b2.txt: same point CB as B1, same products and light; F8 mirror pass from CB in selfcheck; shower downlight lit at low power",
+      "est_vs_measured": [
+        {
+          "key": "east wall visible from X (left edge on Y 9.95)",
+          "est": 4.92,
+          "measured": 4.9221,
+          "dev": 0.0021,
+          "flag_gt_tol": false,
+          "tol": 0.05,
+          "note": ""
+        },
+        {
+          "key": "SE_corner_u (6.25, 9.95)",
+          "est": 0.278,
+          "measured": 0.2902,
+          "dev": 0.0122,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "shower south wall u (corner .. Y 11.15)",
+          "est": [
+            0.28,
+            0.44
+          ],
+          "measured": [
+            0.2902,
+            0.4426
+          ],
+          "dev": [
+            0.0102,
+            0.0026
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "curtain stack u (pixels)",
+          "est": [
+            0.22,
+            0.27
+          ],
+          "measured": [
+            0.2559,
+            0.3158
+          ],
+          "dev": [
+            0.0359,
+            0.0458
+          ],
+          "flag_gt_tol": true,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "towel ladder u (pixels)",
+          "est": [
+            0.43,
+            0.52
+          ],
+          "measured": null,
+          "dev": null,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "vanity sconces u (Y 11.62 / 12.98 at the wall)",
+          "est": [
+            0.51,
+            0.87
+          ],
+          "measured": [
+            0.5209,
+            0.8513
+          ],
+          "dev": [
+            0.0109,
+            -0.0187
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "vanity u (wall line Y 11.75 / 12.85)",
+          "est": [
+            0.55,
+            0.83
+          ],
+          "measured": [
+            0.545,
+            0.8103
+          ],
+          "dev": [
+            -0.005,
+            -0.0197
+          ],
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "mirror centre u",
+          "est": 0.672,
+          "measured": 0.662,
+          "dev": -0.01,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "mirror v (top 1.95 / bottom 1.15 at the centre)",
+          "est": [
+            0.09,
+            0.46
+          ],
+          "measured": [
+            0.1109,
+            0.4623
+          ],
+          "dev": [
+            0.0209,
+            0.0023
+          ],
+          "flag_gt_tol": true,
+          "tol": 0.02,
+          "note": ""
+        },
+        {
+          "key": "towel ring u (Y 12.98)",
+          "est": 0.87,
+          "measured": 0.8513,
+          "dev": -0.0187,
+          "flag_gt_tol": false,
+          "tol": 0.02,
+          "note": ""
+        }
+      ],
+      "est_flags": [
+        "curtain stack u (pixels)",
+        "mirror v (top 1.95 / bottom 1.15 at the centre)"
+      ],
+      "items_visible": {
+        "bath/shower-curtain": {
+          "kind": "proxy",
+          "frame_area_pct": 5.95,
+          "visible_pct": 70.6,
+          "cut_by_edge_pct": 24.3
+        },
+        "bath/hand-towel": {
+          "kind": "proxy",
+          "frame_area_pct": 1.16,
+          "visible_pct": 87.3,
+          "cut_by_edge_pct": 0.0
+        },
+        "U6 mirror": {
+          "kind": "mirror",
+          "frame_area_pct": 8.02,
+          "visible_pct": 87.5,
+          "cut_by_edge_pct": 0.0
+        },
+        "bath/storage-basket": {
+          "kind": "proxy",
+          "frame_area_pct": 1.75,
+          "visible_pct": 88.4,
+          "cut_by_edge_pct": 0.2
+        },
+        "bath/shower-dispensers": {
+          "kind": "proxy",
+          "frame_area_pct": 0.22,
+          "visible_pct": 87.0,
+          "cut_by_edge_pct": 0.0
+        },
+        "bath/soap-dispenser": {
+          "kind": "proxy",
+          "frame_area_pct": 0.19,
+          "visible_pct": 86.5,
+          "cut_by_edge_pct": 0.0
+        },
+        "bath/toothbrush-cup": {
+          "kind": "proxy",
+          "frame_area_pct": 0.19,
+          "visible_pct": 84.2,
+          "cut_by_edge_pct": 0.0
+        },
+        "bath vanity 110 (fixed)": {
+          "kind": "furniture",
+          "frame_area_pct": 10.22,
+          "visible_pct": 75.8,
+          "cut_by_edge_pct": 11.2
+        },
+        "bath/vanity-sconces": {
+          "kind": "proxy",
+          "frame_area_pct": 0.66,
+          "visible_pct": 89.8,
+          "cut_by_edge_pct": 0.0
+        },
+        "bath/vanity-vase": {
+          "kind": "proxy",
+          "frame_area_pct": 0.24,
+          "visible_pct": 86.7,
+          "cut_by_edge_pct": 0.0
+        }
+      },
+      "F3_tangents": {
+        "edge_tangents": [],
+        "object_object_tangents": [],
+        "note": "edge: visible bbox margin 0 < m < 0.02; object-object as round 2 (ray-cast silhouettes, 512x288)"
+      },
+      "boxes": {
+        "shower fittings, matte black (shell)": {
+          "kind": "architecture",
+          "box": [
+            0.3158,
+            0.3703,
+            0.1083,
+            0.538
+          ],
+          "px": 12719
+        },
+        "bath vanity 110 (fixed)": {
+          "kind": "furniture",
+          "box": [
+            0.4752,
+            0.8131,
+            0.4886,
+            1.0
+          ],
+          "px": 953029
+        },
+        "U6 mirror": {
+          "kind": "mirror",
+          "box": [
+            0.556,
+            0.7895,
+            0.0755,
+            0.4563
+          ],
+          "px": 747956
+        },
+        "mirror oak frame": {
+          "kind": "architecture",
+          "box": [
+            0.5518,
+            0.7952,
+            0.0655,
+            0.4624
+          ],
+          "px": 66118
+        },
+        "bath/shower-curtain": {
+          "kind": "proxy",
+          "box": [
+            0.2559,
+            0.3158,
+            0.0,
+            1.0
+          ],
+          "px": 555099
+        },
+        "bath/shower-dispensers": {
+          "kind": "proxy",
+          "box": [
+            0.348,
+            0.3922,
+            0.441,
+            0.4952
+          ],
+          "px": 20365
+        },
+        "bath/vanity-sconces": {
+          "kind": "proxy",
+          "box": [
+            0.4966,
+            0.8725,
+            0.1476,
+            0.3022
+          ],
+          "px": 61498
+        },
+        "bath/soap-dispenser": {
+          "kind": "proxy",
+          "box": [
+            0.7087,
+            0.7308,
+            0.514,
+            0.5991
+          ],
+          "px": 17430
+        },
+        "bath/toothbrush-cup": {
+          "kind": "proxy",
+          "box": [
+            0.7402,
+            0.7642,
+            0.5017,
+            0.6
+          ],
+          "px": 17617
+        },
+        "bath/vanity-vase": {
+          "kind": "proxy",
+          "box": [
+            0.7672,
+            0.7922,
+            0.4882,
+            0.6066
+          ],
+          "px": 22226
+        },
+        "bath/towel-ring": {
+          "kind": "proxy",
+          "box": [
+            0.8217,
+            0.8789,
+            0.5598,
+            0.5803
+          ],
+          "px": 2912
+        },
+        "bath/hand-towel": {
+          "kind": "proxy",
+          "box": [
+            0.8102,
+            0.8912,
+            0.5738,
+            0.7288
+          ],
+          "px": 107958
+        },
+        "bath/storage-basket": {
+          "kind": "proxy",
+          "box": [
+            0.5479,
+            0.6837,
+            0.8057,
+            0.9751
+          ],
+          "px": 163280
+        }
+      },
+      "rules_designer": [
+        {
+          "rule": "curtain stack vs the SE corner line: overlap >= 0.03 or clear >= 0.02",
+          "stack_u": [
+            0.2559,
+            0.3158
+          ],
+          "corner_u": 0.2902,
+          "overlap": 0.0256,
+          "ok": false
+        }
+      ],
+      "density_F10": {
+        "result": "fail",
+        "counted": 4,
+        "minimum": 11,
+        "target": [
+          12,
+          15
+        ],
+        "info_counted_if_area_ge_0_2pct": 6,
+        "info_counted_any_area_ge_50pct_visible": 8,
+        "frame_kind": "lean",
+        "in_target": false,
+        "categories": [
+          "lighting",
+          "storage/function",
+          "textile"
+        ],
+        "four_categories_ok": false,
+        "missing_categories": [
+          "ceramics/tableware"
+        ],
+        "slots": [
+          {
+            "slot": "shower-curtain",
+            "category": "textile",
+            "frame_area_pct": 5.95,
+            "visible_pct": 70.6,
+            "cut_by_edge_pct": 24.3,
+            "counted": true,
+            "why_not": null
+          },
+          {
+            "slot": "storage-basket",
+            "category": "storage/function",
+            "frame_area_pct": 1.75,
+            "visible_pct": 88.4,
+            "cut_by_edge_pct": 0.2,
+            "counted": true,
+            "why_not": null
+          },
+          {
+            "slot": "hand-towel",
+            "category": "textile",
+            "frame_area_pct": 1.16,
+            "visible_pct": 87.3,
+            "cut_by_edge_pct": 0.0,
+            "counted": true,
+            "why_not": null
+          },
+          {
+            "slot": "vanity-sconces",
+            "category": "lighting",
+            "frame_area_pct": 0.66,
+            "visible_pct": 89.8,
+            "cut_by_edge_pct": 0.0,
+            "counted": true,
+            "why_not": null
+          },
+          {
+            "slot": "vanity-vase",
+            "category": "ceramics/tableware",
+            "frame_area_pct": 0.24,
+            "visible_pct": 86.7,
+            "cut_by_edge_pct": 0.0,
+            "counted": false,
+            "why_not": "area < 0.5%"
+          },
+          {
+            "slot": "shower-dispensers",
+            "category": "ceramics/tableware",
+            "frame_area_pct": 0.22,
+            "visible_pct": 87.0,
+            "cut_by_edge_pct": 0.0,
+            "counted": false,
+            "why_not": "area < 0.5%"
+          },
+          {
+            "slot": "soap-dispenser",
+            "category": "ceramics/tableware",
+            "frame_area_pct": 0.19,
+            "visible_pct": 86.5,
+            "cut_by_edge_pct": 0.0,
+            "counted": false,
+            "why_not": "area < 0.5%"
+          },
+          {
+            "slot": "toothbrush-cup",
+            "category": "ceramics/tableware",
+            "frame_area_pct": 0.19,
+            "visible_pct": 84.2,
+            "cut_by_edge_pct": 0.0,
+            "counted": false,
+            "why_not": "area < 0.5%"
+          }
+        ],
+        "rule": "counted = own-room product proxy >= 50% visible (ray-cast silhouette incl. outside the frame) and >= 0.5% of the frame; sets once; fillers, shell, fixed furniture, neighbouring rooms not counted"
+      },
+      "heroes_thirds": [
+        {
+          "hero": "mirror centre",
+          "u": 0.662,
+          "ok": true
+        },
+        {
+          "hero": "SE corner (left)",
+          "u": 0.2902,
+          "ok": false
+        }
+      ],
+      "lamps": [
+        {
+          "lamp": "bath/shower-downlight",
+          "typology": "ceiling",
+          "shell": true,
+          "glow_px": 0,
+          "visible": false
+        },
+        {
+          "lamp": "bath/vanity-sconces",
+          "typology": "wall",
+          "shell": false,
+          "glow_px": 122996,
+          "visible": true
+        }
+      ],
+      "F8_mirror": {
+        "result": "pass",
+        "samples": 2304,
+        "hits": {
+          "hwall_38": {
+            "frac": 0.875,
+            "x": [
+              3.25,
+              3.25
+            ],
+            "y": [
+              10.1398,
+              12.2538
+            ],
+            "z": [
+              1.2012,
+              2.6652
+            ]
+          },
+          "bath_ceiling": {
+            "frac": 0.125,
+            "x": [
+              3.253,
+              3.8124
+            ],
+            "y": [
+              10.1415,
+              12.352
+            ],
+            "z": [
+              2.7,
+              2.7
+            ]
+          }
+        },
+        "non_wall_objects": [],
+        "wall_Y_range": [
+          10.1398,
+          12.2538
+        ],
+        "wall_Z_range": [
+          1.2012,
+          2.6652
+        ],
+        "designer_est": "north wall Y 10.03-12.12, Z 1.15-2.70 + a ceiling strip; door 0.27 outside, window 0.08",
+        "method": "ray-cast: 48x48 grid on the whole mirror from CB, reflected camera rays; every object hit listed",
+        "inside_frame": {
+          "samples": 2304,
+          "hits": {
+            "hwall_38": {
+              "frac": 0.875,
+              "x": [
+                3.25,
+                3.25
+              ],
+              "y": [
+                10.1398,
+                12.2538
+              ],
+              "z": [
+                1.2012,
+                2.6652
+              ]
+            },
+            "bath_ceiling": {
+              "frac": 0.125,
+              "x": [
+                3.253,
+                3.8124
+              ],
+              "y": [
+                10.1415,
+                12.352
+              ],
+              "z": [
+                2.7,
+                2.7
+              ]
+            }
+          }
+        }
+      },
+      "wall_patches": {
+        "hero_wall_high": {
+          "u": 0.662,
+          "v": -0.065,
+          "xyz": [
+            6.25,
+            12.3,
+            2.35
+          ],
+          "note": "outside the frame"
+        },
+        "hero_wall_mid": {
+          "u": 0.662,
+          "v": -0.043,
+          "xyz": [
+            6.25,
+            12.3,
+            2.3
+          ],
+          "note": "outside the frame"
+        },
+        "ceiling": {
+          "u": 0.55,
+          "v": 0.04,
+          "L_hsl": 80.3,
+          "Y_lin": 0.6313,
+          "stops_vs_mid": 1.81
+        },
+        "floor_centre": {
+          "u": 0.5,
+          "v": 0.93,
+          "L_hsl": 50.1,
+          "Y_lin": 0.2612,
+          "stops_vs_mid": 0.54
+        }
+      },
+      "light_balance": {},
+      "camera_clearance_m": {
+        "min": 0.19,
+        "nearest": "leaf_corridor_bath"
+      },
+      "overlay": "framing/round3/overlays/B2.png",
+      "runtime_s": 553,
+      "overscan": {
+        "on": true,
+        "canvas_px": [
+          4072,
+          2290
+        ],
+        "frame_px": [
+          3840,
+          2160
+        ],
+        "crop_box_px": [
+          116,
+          65,
+          3956,
+          2225
+        ],
+        "per_side_fraction_x": 0.0302,
+        "per_side_fraction_y": 0.0301,
+        "note": "same camera and focal length in pixels; the 16:9 frame is the centre crop; uv in this selfcheck (boxes, patches) are fractions of the canvas"
+      },
+      "exr": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/r4-exr/B2.exr",
+      "pose": false
+    },
+    "M0p": {
+      "frame": "M0p",
+      "room": "living",
+      "round2_id": "pose",
+      "camera": {
+        "id": "M0p",
+        "room": "living",
+        "loc": [
+          1.25,
+          5.55,
+          1.2
+        ],
+        "yaw": 0,
+        "u0": 0.52,
+        "v0": 0.46,
+        "status": "transition pose (house-plan.json cameras.M0p; shift = M0)",
+        "hero": ""
+      },
+      "image": "framing/round4/poses/M0p.png",
+      "resolution": [
+        4072,
+        2290
+      ],
+      "samples": 10,
+      "placeholders_shown": [
+        "living/accent-sconces",
+        "living/basket",
+        "living/bowl",
+        "living/candle-holders",
+        "living/curtains",
+        "living/cushions",
+        "living/framed-art",
+        "living/pendant",
+        "living/rug",
+        "living/sofa-cover",
+        "living/table-runner",
+        "living/vase",
+        "living/wall-sconce"
+      ],
+      "built_generic": [],
+      "missing": [],
+      "lamps_on": [
+        "living/accent-sconces",
+        "living/pendant",
+        "living/wall-sconce"
+      ],
+      "lamps_off": [
+        "living/floor-lamp"
+      ],
+      "mean_L": 218.5,
+      "mean_L_round2": null,
+      "designer_notes": "house-plan.json cameras.M0p; shift = M0",
+      "est_vs_measured": [],
+      "est_flags": [],
+      "items_visible": {
+        "dining chairs (fixed, window side)": {
+          "kind": "furniture",
+          "frame_area_pct": 0.92,
+          "visible_pct": 40.6,
+          "cut_by_edge_pct": 42.2
+        },
+        "dining table 160x85 (fixed)": {
+          "kind": "furniture",
+          "frame_area_pct": 0.86,
+          "visible_pct": 32.4,
+          "cut_by_edge_pct": 81.7
+        },
+        "door leaves": {
+          "kind": "door",
+          "frame_area_pct": 0.96,
+          "visible_pct": 0.6,
+          "cut_by_edge_pct": 94.6
+        },
+        "living/framed-art": {
+          "kind": "proxy",
+          "frame_area_pct": 2.44,
+          "visible_pct": 89.3,
+          "cut_by_edge_pct": 0.0
+        },
+        "living/bowl": {
+          "kind": "proxy",
+          "frame_area_pct": 0.11,
+          "visible_pct": 87.3,
+          "cut_by_edge_pct": 0.0
+        },
+        "living/accent-sconces": {
+          "kind": "proxy",
+          "frame_area_pct": 0.09,
+          "visible_pct": 88.7,
+          "cut_by_edge_pct": 0.0
+        },
+        "living/pendant": {
+          "kind": "proxy",
+          "frame_area_pct": 0.48,
+          "visible_pct": 87.4,
+          "cut_by_edge_pct": 3.4
+        },
+        "living/rug": {
+          "kind": "proxy",
+          "frame_area_pct": 14.88,
+          "visible_pct": 78.1,
+          "cut_by_edge_pct": 21.8
+        },
+        "window W-dining": {
+          "kind": "window",
+          "frame_area_pct": 1.27,
+          "visible_pct": 40.1,
+          "cut_by_edge_pct": 0.0
+        }
+      },
+      "F3_tangents": {
+        "edge_tangents": [
+          {
+            "item": "door leaves",
+            "side": "bottom",
+            "margin": 0.0179
+          }
+        ],
+        "object_object_tangents": [
+          {
+            "a": "dining chairs (fixed, window side)",
+            "b": "dining table 160x85 (fixed)",
+            "kind": "overlap",
+            "overlap_thickness": 0.0156,
+            "cover_of_back": 0.173,
+            "behind": "dining chairs (fixed, window side)",
+            "dist3d_m": 0.1,
+            "rule": "overlap thinner than 0.03 and < 60% of the back item"
+          },
+          {
+            "a": "dining chairs (fixed, window side)",
+            "b": "door leaves",
+            "kind": "overlap",
+            "overlap_thickness": 0.0156,
+            "cover_of_back": 0.024,
+            "behind": "door leaves",
+            "dist3d_m": 1.045,
+            "rule": "overlap thinner than 0.03 and < 60% of the back item"
+          },
+          {
+            "a": "dining chairs (fixed, window side)",
+            "b": "window W-dining",
+            "kind": "overlap",
+            "overlap_thickness": 0.0039,
+            "cover_of_back": 0.001,
+            "behind": "window W-dining",
+            "dist3d_m": 0.675,
+            "rule": "overlap thinner than 0.03 and < 60% of the back item"
+          },
+          {
+            "a": "dining table 160x85 (fixed)",
+            "b": "window W-dining",
+            "kind": "gap",
+            "gap": 0.0195,
+            "dist3d_m": 1.225,
+            "rule": "silhouettes apart by < 0.02 (kissing contours)"
+          },
+          {
+            "a": "door leaves",
+            "b": "window W-dining",
+            "kind": "overlap",
+            "overlap_thickness": 0.0273,
+            "cover_of_back": 0.109,
+            "behind": "door leaves",
+            "dist3d_m": 2.17,
+            "rule": "overlap thinner than 0.03 and < 60% of the back item"
+          }
+        ],
+        "note": "edge: visible bbox margin 0 < m < 0.02; object-object as round 2 (ray-cast silhouettes, 512x288)"
+      },
+      "boxes": {
+        "dining table 160x85 (fixed)": {
+          "kind": "furniture",
+          "box": [
+            0.89,
+            1.0,
+            0.5786,
+            0.8419
+          ],
+          "px": 80098
+        },
+        "dining chairs (fixed, window side)": {
+          "kind": "furniture",
+          "box": [
+            0.8698,
+            1.0,
+            0.5493,
+            0.7642
+          ],
+          "px": 85360
+        },
+        "living/pendant": {
+          "kind": "proxy",
+          "box": [
+            0.3121,
+            0.3799,
+            0.0,
+            0.1729
+          ],
+          "px": 44914
+        },
+        "living/accent-sconces": {
+          "kind": "proxy",
+          "box": [
+            0.2689,
+            0.5258,
+            0.3367,
+            0.3633
+          ],
+          "px": 7929
+        },
+        "living/framed-art": {
+          "kind": "proxy",
+          "box": [
+            0.307,
+            0.4917,
+            0.3345,
+            0.4764
+          ],
+          "px": 227818
+        },
+        "living/rug": {
+          "kind": "proxy",
+          "box": [
+            0.0,
+            0.6709,
+            0.7402,
+            1.0
+          ],
+          "px": 1387980
+        },
+        "living/bowl": {
+          "kind": "proxy",
+          "box": [
+            0.4018,
+            0.4384,
+            0.6882,
+            0.7223
+          ],
+          "px": 10570
+        },
+        "window W-dining": {
+          "kind": "window",
+          "box": [
+            0.8698,
+            0.9153,
+            0.1603,
+            0.5493
+          ],
+          "px": 118648
+        },
+        "door leaves": {
+          "kind": "door",
+          "box": [
+            0.86,
+            0.8698,
+            0.0,
+            0.9821
+          ],
+          "px": 89250
+        },
+        "living/curtains": {
+          "kind": "proxy",
+          "box": [
+            0.0,
+            0.0705,
+            0.0314,
+            0.7472
+          ],
+          "px": 180797
+        },
+        "living/basket": {
+          "kind": "proxy",
+          "box": [
+            0.5425,
+            0.5877,
+            0.6341,
+            0.7389
+          ],
+          "px": 42746
+        },
+        "living/sofa-cover": {
+          "kind": "proxy",
+          "box": [
+            0.457,
+            0.5066,
+            0.6205,
+            0.6476
+          ],
+          "px": 9494
+        },
+        "living/cushions": {
+          "kind": "proxy",
+          "box": [
+            0.2753,
+            0.5029,
+            0.5275,
+            0.6336
+          ],
+          "px": 117905
+        },
+        "living/table-runner": {
+          "kind": "proxy",
+          "box": [
+            0.2478,
+            0.3414,
+            0.6803,
+            0.7258
+          ],
+          "px": 22880
+        },
+        "living/candle-holders": {
+          "kind": "proxy",
+          "box": [
+            0.3833,
+            0.3993,
+            0.6179,
+            0.714
+          ],
+          "px": 13753
+        }
+      },
+      "heroes_thirds": [],
+      "lamps": [
+        {
+          "lamp": "living/accent-sconces",
+          "typology": "wall",
+          "shell": false,
+          "glow_px": 15858,
+          "visible": true
+        },
+        {
+          "lamp": "living/pendant",
+          "typology": "ceiling",
+          "shell": false,
+          "glow_px": 44914,
+          "visible": true
+        },
+        {
+          "lamp": "living/wall-sconce",
+          "typology": "wall",
+          "shell": false,
+          "glow_px": 0,
+          "visible": false
+        }
+      ],
+      "wall_patches": {
+        "hero_wall_high": {
+          "u": 0.3999203145503998,
+          "v": 0.23063308000564575,
+          "L_hsl": 88.4,
+          "Y_lin": 0.7636,
+          "stops_vs_mid": 2.08,
+          "xyz": [
+            0.2,
+            0.0,
+            2.35
+          ]
+        },
+        "hero_wall_mid": {
+          "u": 0.3999203145503998,
+          "v": 0.3112027049064636,
+          "L_hsl": 89.5,
+          "Y_lin": 0.7842,
+          "stops_vs_mid": 2.12,
+          "xyz": [
+            0.2,
+            0.0,
+            1.95
+          ]
+        },
+        "ceiling": {
+          "u": 0.55,
+          "v": 0.04,
+          "L_hsl": 86.3,
+          "Y_lin": 0.7253,
+          "stops_vs_mid": 2.01
+        },
+        "floor_centre": {
+          "u": 0.5,
+          "v": 0.93,
+          "L_hsl": 86.6,
+          "Y_lin": 0.7338,
+          "stops_vs_mid": 2.03
+        }
+      },
+      "light_balance": {},
+      "camera_clearance_m": {
+        "min": 0.7159,
+        "nearest": "wall_front_a"
+      },
+      "overlay": "framing/round3/overlays/M0p.png",
+      "runtime_s": 381,
+      "overscan": {
+        "on": true,
+        "canvas_px": [
+          4072,
+          2290
+        ],
+        "frame_px": [
+          3840,
+          2160
+        ],
+        "crop_box_px": [
+          116,
+          65,
+          3956,
+          2225
+        ],
+        "per_side_fraction_x": 0.0302,
+        "per_side_fraction_y": 0.0301,
+        "note": "same camera and focal length in pixels; the 16:9 frame is the centre crop; uv in this selfcheck (boxes, patches) are fractions of the canvas"
+      },
+      "exr": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/r4-exr/M0p.exr",
+      "pose": true
+    },
+    "M0x": {
+      "frame": "M0x",
+      "room": "living",
+      "round2_id": "pose",
+      "camera": {
+        "id": "M0x",
+        "room": "living",
+        "loc": [
+          1.25,
+          5.55,
+          1.2
+        ],
+        "yaw": -35,
+        "u0": 0.52,
+        "v0": 0.46,
+        "status": "transition pose (house-plan.json cameras.M0x; the dining seen through the opening = the D1 placeholders)",
+        "hero": ""
+      },
+      "image": "framing/round4/poses/M0x.png",
+      "resolution": [
+        4072,
+        2290
+      ],
+      "samples": 10,
+      "placeholders_shown": [
+        "kitchen-dining/bench-pad",
+        "kitchen-dining/bowl",
+        "kitchen-dining/candle-holders",
+        "kitchen-dining/centerpiece-vase",
+        "kitchen-dining/condiment-set",
+        "kitchen-dining/curtains",
+        "kitchen-dining/dining-pendant",
+        "kitchen-dining/dining-rug",
+        "kitchen-dining/framed-art",
+        "kitchen-dining/kitchen-runner",
+        "kitchen-dining/mug-set",
+        "kitchen-dining/table-runner",
+        "kitchen-dining/tableware-set",
+        "living/accent-sconces",
+        "living/basket",
+        "living/bowl",
+        "living/candle-holders",
+        "living/curtains",
+        "living/cushions",
+        "living/framed-art",
+        "living/pendant",
+        "living/rug",
+        "living/sofa-cover",
+        "living/table-runner",
+        "living/vase",
+        "living/wall-sconce"
+      ],
+      "built_generic": [],
+      "missing": [],
+      "lamps_on": [
+        "kitchen-dining/dining-pendant",
+        "kitchen-dining/led-niche",
+        "kitchen-dining/led-shelves",
+        "living/accent-sconces",
+        "living/pendant",
+        "living/wall-sconce"
+      ],
+      "lamps_off": [
+        "living/floor-lamp"
+      ],
+      "mean_L": 217.1,
+      "mean_L_round2": null,
+      "designer_notes": "house-plan.json cameras.M0x; the dining seen through the opening = the D1 placeholders",
+      "est_vs_measured": [],
+      "est_flags": [],
+      "items_visible": {
+        "kitchen-dining/bench-pad": {
+          "kind": "proxy",
+          "frame_area_pct": 0.34,
+          "visible_pct": 82.1,
+          "cut_by_edge_pct": 0.0
+        },
+        "dining bench (fixed)": {
+          "kind": "furniture",
+          "frame_area_pct": 0.68,
+          "visible_pct": 52.0,
+          "cut_by_edge_pct": 0.0
+        },
+        "kitchen-dining/candle-holders": {
+          "kind": "proxy",
+          "frame_area_pct": 0.07,
+          "visible_pct": 90.0,
+          "cut_by_edge_pct": 0.0
+        },
+        "dining chairs (fixed, window side)": {
+          "kind": "furniture",
+          "frame_area_pct": 0.72,
+          "visible_pct": 54.3,
+          "cut_by_edge_pct": 0.0
+        },
+        "kitchen-dining/curtains": {
+          "kind": "proxy",
+          "frame_area_pct": 0.94,
+          "visible_pct": 79.9,
+          "cut_by_edge_pct": 0.0
+        },
+        "kitchen-dining/dining-pendant": {
+          "kind": "proxy",
+          "frame_area_pct": 0.35,
+          "visible_pct": 100.0,
+          "cut_by_edge_pct": 0.0
+        },
+        "kitchen-dining/dining-rug": {
+          "kind": "proxy",
+          "frame_area_pct": 2.38,
+          "visible_pct": 58.8,
+          "cut_by_edge_pct": 0.0
+        },
+        "kitchen-dining/table-runner": {
+          "kind": "proxy",
+          "frame_area_pct": 0.12,
+          "visible_pct": 69.5,
+          "cut_by_edge_pct": 0.0
+        },
+        "dining table 160x85 (fixed)": {
+          "kind": "furniture",
+          "frame_area_pct": 0.81,
+          "visible_pct": 70.5,
+          "cut_by_edge_pct": 0.0
+        },
+        "kitchen-dining/centerpiece-vase": {
+          "kind": "proxy",
+          "frame_area_pct": 0.28,
+          "visible_pct": 87.5,
+          "cut_by_edge_pct": 0.0
+        },
+        "kitchen run (fixed): lower units, sink, hob, plastered hood, oak shelves, tall units, coffee niche, oven": {
+          "kind": "furniture",
+          "frame_area_pct": 0.45,
+          "visible_pct": 0.3,
+          "cut_by_edge_pct": 93.2
+        },
+        "door leaves": {
+          "kind": "door",
+          "frame_area_pct": 0.69,
+          "visible_pct": 0.6,
+          "cut_by_edge_pct": 75.5
+        },
+        "living/framed-art": {
+          "kind": "proxy",
+          "frame_area_pct": 0.67,
+          "visible_pct": 8.4,
+          "cut_by_edge_pct": 97.7
+        },
+        "living/accent-sconces": {
+          "kind": "proxy",
+          "frame_area_pct": 0.07,
+          "visible_pct": 21.0,
+          "cut_by_edge_pct": 77.2
+        },
+        "living/rug": {
+          "kind": "proxy",
+          "frame_area_pct": 4.66,
+          "visible_pct": 8.6,
+          "cut_by_edge_pct": 92.8
+        },
+        "window W-dining": {
+          "kind": "window",
+          "frame_area_pct": 0.81,
+          "visible_pct": 31.6,
+          "cut_by_edge_pct": 0.0
+        }
+      },
+      "F3_tangents": {
+        "edge_tangents": [
+          {
+            "item": "door leaves",
+            "side": "top",
+            "margin": 0.0022
+          }
+        ],
+        "object_object_tangents": [
+          {
+            "a": "kitchen-dining/bench-pad",
+            "b": "dining chairs (fixed, window side)",
+            "kind": "overlap",
+            "overlap_thickness": 0.0078,
+            "cover_of_back": 0.007,
+            "behind": "dining chairs (fixed, window side)",
+            "dist3d_m": 1.175,
+            "rule": "overlap thinner than 0.03 and < 60% of the back item"
+          },
+          {
+            "a": "kitchen-dining/bench-pad",
+            "b": "dining table 160x85 (fixed)",
+            "kind": "overlap",
+            "overlap_thickness": 0.0078,
+            "cover_of_back": 0.041,
+            "behind": "dining table 160x85 (fixed)",
+            "dist3d_m": 0.225,
+            "rule": "overlap thinner than 0.03 and < 60% of the back item"
+          },
+          {
+            "a": "dining bench (fixed)",
+            "b": "dining table 160x85 (fixed)",
+            "kind": "overlap",
+            "overlap_thickness": 0.0078,
+            "cover_of_back": 0.047,
+            "behind": "dining table 160x85 (fixed)",
+            "dist3d_m": 0.225,
+            "rule": "overlap thinner than 0.03 and < 60% of the back item"
+          },
+          {
+            "a": "dining chairs (fixed, window side)",
+            "b": "kitchen-dining/curtains",
+            "kind": "overlap",
+            "overlap_thickness": 0.0117,
+            "cover_of_back": 0.043,
+            "behind": "kitchen-dining/curtains",
+            "dist3d_m": 0.555,
+            "rule": "overlap thinner than 0.03 and < 60% of the back item"
+          },
+          {
+            "a": "dining chairs (fixed, window side)",
+            "b": "dining table 160x85 (fixed)",
+            "kind": "overlap",
+            "overlap_thickness": 0.0234,
+            "cover_of_back": 0.208,
+            "behind": "dining chairs (fixed, window side)",
+            "dist3d_m": 0.1,
+            "rule": "overlap thinner than 0.03 and < 60% of the back item"
+          },
+          {
+            "a": "dining chairs (fixed, window side)",
+            "b": "kitchen-dining/centerpiece-vase",
+            "kind": "gap",
+            "gap": 0.0137,
+            "dist3d_m": 0.376,
+            "rule": "silhouettes apart by < 0.02 (kissing contours)"
+          },
+          {
+            "a": "dining chairs (fixed, window side)",
+            "b": "door leaves",
+            "kind": "overlap",
+            "overlap_thickness": 0.0117,
+            "cover_of_back": 0.106,
+            "behind": "dining chairs (fixed, window side)",
+            "dist3d_m": 1.045,
+            "rule": "overlap thinner than 0.03 and < 60% of the back item"
+          },
+          {
+            "a": "dining chairs (fixed, window side)",
+            "b": "window W-dining",
+            "kind": "overlap",
+            "overlap_thickness": 0.0039,
+            "cover_of_back": 0.001,
+            "behind": "window W-dining",
+            "dist3d_m": 0.675,
+            "rule": "overlap thinner than 0.03 and < 60% of the back item"
+          },
+          {
+            "a": "kitchen-dining/curtains",
+            "b": "kitchen-dining/dining-rug",
+            "kind": "gap",
+            "gap": 0.0117,
+            "dist3d_m": 0.43,
+            "rule": "silhouettes apart by < 0.02 (kissing contours)"
+          },
+          {
+            "a": "kitchen-dining/curtains",
+            "b": "dining table 160x85 (fixed)",
+            "kind": "overlap",
+            "overlap_thickness": 0.0117,
+            "cover_of_back": 0.038,
+            "behind": "kitchen-dining/curtains",
+            "dist3d_m": 1.105,
+            "rule": "overlap thinner than 0.03 and < 60% of the back item"
+          },
+          {
+            "a": "kitchen-dining/curtains",
+            "b": "door leaves",
+            "kind": "overlap",
+            "overlap_thickness": 0.0039,
+            "cover_of_back": 0.032,
+            "behind": "kitchen-dining/curtains",
+            "dist3d_m": 2.05,
+            "rule": "overlap thinner than 0.03 and < 60% of the back item"
+          },
+          {
+            "a": "dining table 160x85 (fixed)",
+            "b": "door leaves",
+            "kind": "gap",
+            "gap": 0.0176,
+            "dist3d_m": 0.095,
+            "rule": "silhouettes apart by < 0.02 (kissing contours)"
+          },
+          {
+            "a": "dining table 160x85 (fixed)",
+            "b": "window W-dining",
+            "kind": "gap",
+            "gap": 0.0149,
+            "dist3d_m": 1.225,
+            "rule": "silhouettes apart by < 0.02 (kissing contours)"
+          },
+          {
+            "a": "door leaves",
+            "b": "window W-dining",
+            "kind": "overlap",
+            "overlap_thickness": 0.0234,
+            "cover_of_back": 0.291,
+            "behind": "window W-dining",
+            "dist3d_m": 2.17,
+            "rule": "overlap thinner than 0.03 and < 60% of the back item"
+          }
+        ],
+        "note": "edge: visible bbox margin 0 < m < 0.02; object-object as round 2 (ray-cast silhouettes, 512x288)"
+      },
+      "boxes": {
+        "dining table 160x85 (fixed)": {
+          "kind": "furniture",
+          "box": [
+            0.4698,
+            0.6876,
+            0.5472,
+            0.7651
+          ],
+          "px": 75182
+        },
+        "dining chairs (fixed, window side)": {
+          "kind": "furniture",
+          "box": [
+            0.4546,
+            0.5869,
+            0.5306,
+            0.7201
+          ],
+          "px": 67007
+        },
+        "dining bench (fixed)": {
+          "kind": "furniture",
+          "box": [
+            0.5653,
+            0.71,
+            0.648,
+            0.7983
+          ],
+          "px": 63855
+        },
+        "kitchen run (fixed): lower units, sink, hob, plastered hood, oak shelves, tall units, coffee niche, oven": {
+          "kind": "furniture",
+          "box": [
+            0.6653,
+            0.71,
+            0.4017,
+            0.6323
+          ],
+          "px": 41815
+        },
+        "under-shelf LED (shell)": {
+          "kind": "architecture",
+          "box": [
+            0.6916,
+            0.71,
+            0.4066,
+            0.4087
+          ],
+          "px": 128
+        },
+        "kitchen-dining/dining-pendant": {
+          "kind": "proxy",
+          "box": [
+            0.5506,
+            0.612,
+            0.0686,
+            0.3969
+          ],
+          "px": 32755
+        },
+        "kitchen-dining/table-runner": {
+          "kind": "proxy",
+          "box": [
+            0.4956,
+            0.6591,
+            0.5502,
+            0.5729
+          ],
+          "px": 10855
+        },
+        "kitchen-dining/centerpiece-vase": {
+          "kind": "proxy",
+          "box": [
+            0.5629,
+            0.5997,
+            0.4537,
+            0.5616
+          ],
+          "px": 26193
+        },
+        "kitchen-dining/candle-holders": {
+          "kind": "proxy",
+          "box": [
+            0.529,
+            0.5619,
+            0.5227,
+            0.5651
+          ],
+          "px": 6862
+        },
+        "kitchen-dining/curtains": {
+          "kind": "proxy",
+          "box": [
+            0.4546,
+            0.512,
+            0.1598,
+            0.6672
+          ],
+          "px": 87589
+        },
+        "kitchen-dining/bench-pad": {
+          "kind": "proxy",
+          "box": [
+            0.5715,
+            0.71,
+            0.6253,
+            0.6751
+          ],
+          "px": 32103
+        },
+        "kitchen-dining/dining-rug": {
+          "kind": "proxy",
+          "box": [
+            0.4546,
+            0.71,
+            0.669,
+            0.8393
+          ],
+          "px": 221511
+        },
+        "kitchen-dining/kitchen-runner": {
+          "kind": "proxy",
+          "box": [
+            0.654,
+            0.6945,
+            0.6629,
+            0.6886
+          ],
+          "px": 3945
+        },
+        "living/accent-sconces": {
+          "kind": "proxy",
+          "box": [
+            0.0683,
+            0.0889,
+            0.3079,
+            0.3424
+          ],
+          "px": 6265
+        },
+        "living/framed-art": {
+          "kind": "proxy",
+          "box": [
+            0.0,
+            0.0368,
+            0.2974,
+            0.4808
+          ],
+          "px": 62125
+        },
+        "living/rug": {
+          "kind": "proxy",
+          "box": [
+            0.0,
+            0.265,
+            0.7742,
+            1.0
+          ],
+          "px": 434269
+        },
+        "window W-dining": {
+          "kind": "window",
+          "box": [
+            0.4546,
+            0.4885,
+            0.1969,
+            0.538
+          ],
+          "px": 75360
+        },
+        "door leaves": {
+          "kind": "door",
+          "box": [
+            0.447,
+            0.4546,
+            0.0022,
+            0.9223
+          ],
+          "px": 63944
+        },
+        "living/basket": {
+          "kind": "proxy",
+          "box": [
+            0.1132,
+            0.1739,
+            0.6603,
+            0.7852
+          ],
+          "px": 66681
+        },
+        "living/sofa-cover": {
+          "kind": "proxy",
+          "box": [
+            0.0,
+            0.0602,
+            0.6585,
+            0.7022
+          ],
+          "px": 15381
+        },
+        "living/cushions": {
+          "kind": "proxy",
+          "box": [
+            0.0,
+            0.0545,
+            0.5437,
+            0.6764
+          ],
+          "px": 63779
+        }
+      },
+      "heroes_thirds": [],
+      "lamps": [
+        {
+          "lamp": "kitchen-dining/dining-pendant",
+          "typology": "ceiling",
+          "shell": false,
+          "glow_px": 32755,
+          "visible": true
+        },
+        {
+          "lamp": "kitchen-dining/led-niche",
+          "typology": "cabinet",
+          "shell": true,
+          "glow_px": 0,
+          "visible": false
+        },
+        {
+          "lamp": "kitchen-dining/led-shelves",
+          "typology": "cabinet",
+          "shell": true,
+          "glow_px": 256,
+          "visible": true
+        },
+        {
+          "lamp": "living/accent-sconces",
+          "typology": "wall",
+          "shell": false,
+          "glow_px": 12530,
+          "visible": true
+        },
+        {
+          "lamp": "living/pendant",
+          "typology": "ceiling",
+          "shell": false,
+          "glow_px": 0,
+          "visible": false
+        },
+        {
+          "lamp": "living/wall-sconce",
+          "typology": "wall",
+          "shell": false,
+          "glow_px": 0,
+          "visible": false
+        }
+      ],
+      "wall_patches": {
+        "hero_wall_high": {
+          "u": -0.126,
+          "v": 0.136,
+          "xyz": [
+            0.2,
+            0.0,
+            2.35
+          ],
+          "note": "outside the frame"
+        },
+        "hero_wall_mid": {
+          "u": -0.126,
+          "v": 0.25,
+          "xyz": [
+            0.2,
+            0.0,
+            1.95
+          ],
+          "note": "outside the frame"
+        },
+        "ceiling": {
+          "u": 0.55,
+          "v": 0.04,
+          "L_hsl": 93.2,
+          "Y_lin": 0.8583,
+          "stops_vs_mid": 2.25
+        },
+        "floor_centre": {
+          "u": 0.5,
+          "v": 0.93,
+          "L_hsl": 87.3,
+          "Y_lin": 0.7442,
+          "stops_vs_mid": 2.05
+        }
+      },
+      "light_balance": {},
+      "camera_clearance_m": {
+        "min": 0.7159,
+        "nearest": "wall_front_a"
+      },
+      "overlay": "framing/round3/overlays/M0x.png",
+      "runtime_s": 428,
+      "overscan": {
+        "on": true,
+        "canvas_px": [
+          4072,
+          2290
+        ],
+        "frame_px": [
+          3840,
+          2160
+        ],
+        "crop_box_px": [
+          116,
+          65,
+          3956,
+          2225
+        ],
+        "per_side_fraction_x": 0.0302,
+        "per_side_fraction_y": 0.0301,
+        "note": "same camera and focal length in pixels; the 16:9 frame is the centre crop; uv in this selfcheck (boxes, patches) are fractions of the canvas"
+      },
+      "exr": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/r4-exr/M0x.exr",
+      "pose": true
+    },
+    "PD-35": {
+      "frame": "PD-35",
+      "room": "kitchen-dining",
+      "round2_id": "pose",
+      "camera": {
+        "id": "PD-35",
+        "room": "kitchen-dining",
+        "loc": [
+          2.8,
+          3.8,
+          1.1
+        ],
+        "yaw": -35,
+        "u0": 0.52,
+        "v0": 0.46,
+        "status": "transition pose (end of the T-LD dolly, heading -35 (transitions plan 3))",
+        "hero": ""
+      },
+      "image": "framing/round4/poses/PD-35.png",
+      "resolution": [
+        4072,
+        2290
+      ],
+      "samples": 10,
+      "placeholders_shown": [
+        "kitchen-dining/bench-pad",
+        "kitchen-dining/bowl",
+        "kitchen-dining/candle-holders",
+        "kitchen-dining/canisters",
+        "kitchen-dining/centerpiece-vase",
+        "kitchen-dining/condiment-set",
+        "kitchen-dining/curtains",
+        "kitchen-dining/dining-pendant",
+        "kitchen-dining/dining-rug",
+        "kitchen-dining/framed-art",
+        "kitchen-dining/kitchen-runner",
+        "kitchen-dining/mug-set",
+        "kitchen-dining/paper-towel-holder",
+        "kitchen-dining/table-runner",
+        "kitchen-dining/tableware-set",
+        "kitchen-dining/tea-towel"
+      ],
+      "built_generic": [],
+      "missing": [],
+      "lamps_on": [
+        "kitchen-dining/dining-pendant",
+        "kitchen-dining/led-niche",
+        "kitchen-dining/led-shelves"
+      ],
+      "lamps_off": [
+        "kitchen-dining/kitchen-sconce"
+      ],
+      "mean_L": 226.2,
+      "mean_L_round2": null,
+      "designer_notes": "end of the T-LD dolly, heading -35 (transitions plan 3)",
+      "est_vs_measured": [],
+      "est_flags": [],
+      "items_visible": {
+        "kitchen-dining/bench-pad": {
+          "kind": "proxy",
+          "frame_area_pct": 2.71,
+          "visible_pct": 88.9,
+          "cut_by_edge_pct": 0.0
+        },
+        "dining bench (fixed)": {
+          "kind": "furniture",
+          "frame_area_pct": 2.8,
+          "visible_pct": 37.6,
+          "cut_by_edge_pct": 26.8
+        },
+        "kitchen-dining/candle-holders": {
+          "kind": "proxy",
+          "frame_area_pct": 0.27,
+          "visible_pct": 88.2,
+          "cut_by_edge_pct": 0.0
+        },
+        "dining chairs (fixed, window side)": {
+          "kind": "furniture",
+          "frame_area_pct": 2.41,
+          "visible_pct": 62.9,
+          "cut_by_edge_pct": 0.0
+        },
+        "kitchen-dining/curtains": {
+          "kind": "proxy",
+          "frame_area_pct": 2.08,
+          "visible_pct": 65.9,
+          "cut_by_edge_pct": 16.3
+        },
+        "kitchen-dining/dining-pendant": {
+          "kind": "proxy",
+          "frame_area_pct": 1.16,
+          "visible_pct": 85.0,
+          "cut_by_edge_pct": 5.0
+        },
+        "kitchen-dining/dining-rug": {
+          "kind": "proxy",
+          "frame_area_pct": 7.62,
+          "visible_pct": 25.6,
+          "cut_by_edge_pct": 60.2
+        },
+        "kitchen-dining/table-runner": {
+          "kind": "proxy",
+          "frame_area_pct": 0.56,
+          "visible_pct": 71.2,
+          "cut_by_edge_pct": 0.0
+        },
+        "dining table 160x85 (fixed)": {
+          "kind": "furniture",
+          "frame_area_pct": 3.08,
+          "visible_pct": 63.2,
+          "cut_by_edge_pct": 4.1
+        },
+        "kitchen-dining/centerpiece-vase": {
+          "kind": "proxy",
+          "frame_area_pct": 0.95,
+          "visible_pct": 91.3,
+          "cut_by_edge_pct": 0.0
+        },
+        "kitchen-dining/framed-art": {
+          "kind": "proxy",
+          "frame_area_pct": 0.36,
+          "visible_pct": 84.5,
+          "cut_by_edge_pct": 0.0
+        },
+        "kitchen run (fixed): lower units, sink, hob, plastered hood, oak shelves, tall units, coffee niche, oven": {
+          "kind": "furniture",
+          "frame_area_pct": 10.19,
+          "visible_pct": 9.6,
+          "cut_by_edge_pct": 90.5
+        },
+        "kitchen-dining/kitchen-runner": {
+          "kind": "proxy",
+          "frame_area_pct": 1.02,
+          "visible_pct": 15.6,
+          "cut_by_edge_pct": 70.8
+        },
+        "door leaves": {
+          "kind": "door",
+          "frame_area_pct": 1.23,
+          "visible_pct": 3.0,
+          "cut_by_edge_pct": 100.0
+        },
+        "window W-dining": {
+          "kind": "window",
+          "frame_area_pct": 4.86,
+          "visible_pct": 70.2,
+          "cut_by_edge_pct": 25.2
+        }
+      },
+      "F3_tangents": {
+        "edge_tangents": [],
+        "object_object_tangents": [
+          {
+            "a": "kitchen-dining/bench-pad",
+            "b": "dining chairs (fixed, window side)",
+            "kind": "gap",
+            "gap": 0.0059,
+            "dist3d_m": 1.175,
+            "rule": "silhouettes apart by < 0.02 (kissing contours)"
+          },
+          {
+            "a": "kitchen-dining/bench-pad",
+            "b": "dining table 160x85 (fixed)",
+            "kind": "overlap",
+            "overlap_thickness": 0.0195,
+            "cover_of_back": 0.048,
+            "behind": "dining table 160x85 (fixed)",
+            "dist3d_m": 0.225,
+            "rule": "overlap thinner than 0.03 and < 60% of the back item"
+          },
+          {
+            "a": "dining bench (fixed)",
+            "b": "dining chairs (fixed, window side)",
+            "kind": "gap",
+            "gap": 0.018,
+            "dist3d_m": 1.175,
+            "rule": "silhouettes apart by < 0.02 (kissing contours)"
+          },
+          {
+            "a": "dining bench (fixed)",
+            "b": "dining table 160x85 (fixed)",
+            "kind": "overlap",
+            "overlap_thickness": 0.0195,
+            "cover_of_back": 0.049,
+            "behind": "dining table 160x85 (fixed)",
+            "dist3d_m": 0.225,
+            "rule": "overlap thinner than 0.03 and < 60% of the back item"
+          },
+          {
+            "a": "kitchen-dining/candle-holders",
+            "b": "dining chairs (fixed, window side)",
+            "kind": "overlap",
+            "overlap_thickness": 0.0195,
+            "cover_of_back": 0.068,
+            "behind": "dining chairs (fixed, window side)",
+            "dist3d_m": 0.433,
+            "rule": "overlap thinner than 0.03 and < 60% of the back item"
+          },
+          {
+            "a": "kitchen-dining/candle-holders",
+            "b": "kitchen-dining/curtains",
+            "kind": "gap",
+            "gap": 0.0098,
+            "dist3d_m": 1.438,
+            "rule": "silhouettes apart by < 0.02 (kissing contours)"
+          },
+          {
+            "a": "kitchen-dining/candle-holders",
+            "b": "kitchen-dining/centerpiece-vase",
+            "kind": "gap",
+            "gap": 0.0195,
+            "dist3d_m": 0.108,
+            "rule": "silhouettes apart by < 0.02 (kissing contours)"
+          },
+          {
+            "a": "dining chairs (fixed, window side)",
+            "b": "kitchen-dining/curtains",
+            "kind": "overlap",
+            "overlap_thickness": 0.0195,
+            "cover_of_back": 0.043,
+            "behind": "kitchen-dining/curtains",
+            "dist3d_m": 0.555,
+            "rule": "overlap thinner than 0.03 and < 60% of the back item"
+          },
+          {
+            "a": "dining chairs (fixed, window side)",
+            "b": "kitchen-dining/centerpiece-vase",
+            "kind": "gap",
+            "gap": 0.0156,
+            "dist3d_m": 0.376,
+            "rule": "silhouettes apart by < 0.02 (kissing contours)"
+          },
+          {
+            "a": "dining chairs (fixed, window side)",
+            "b": "window W-dining",
+            "kind": "gap",
+            "gap": 0.002,
+            "dist3d_m": 0.675,
+            "rule": "silhouettes apart by < 0.02 (kissing contours)"
+          },
+          {
+            "a": "kitchen-dining/dining-rug",
+            "b": "kitchen-dining/kitchen-runner",
+            "kind": "gap",
+            "gap": 0.0141,
+            "dist3d_m": 0.25,
+            "rule": "silhouettes apart by < 0.02 (kissing contours)"
+          },
+          {
+            "a": "dining table 160x85 (fixed)",
+            "b": "kitchen-dining/kitchen-runner",
+            "kind": "overlap",
+            "overlap_thickness": 0.0195,
+            "cover_of_back": 0.053,
+            "behind": "kitchen-dining/kitchen-runner",
+            "dist3d_m": 0.6,
+            "rule": "overlap thinner than 0.03 and < 60% of the back item"
+          }
+        ],
+        "note": "edge: visible bbox margin 0 < m < 0.02; object-object as round 2 (ray-cast silhouettes, 512x288)"
+      },
+      "boxes": {
+        "dining table 160x85 (fixed)": {
+          "kind": "furniture",
+          "box": [
+            0.3652,
+            0.7652,
+            0.5712,
+            1.0
+          ],
+          "px": 287184
+        },
+        "dining chairs (fixed, window side)": {
+          "kind": "furniture",
+          "box": [
+            0.3384,
+            0.5845,
+            0.5428,
+            0.8921
+          ],
+          "px": 224921
+        },
+        "dining bench (fixed)": {
+          "kind": "furniture",
+          "box": [
+            0.5332,
+            0.8858,
+            0.7659,
+            1.0
+          ],
+          "px": 261135
+        },
+        "kitchen run (fixed): lower units, sink, hob, plastered hood, oak shelves, tall units, coffee niche, oven": {
+          "kind": "furniture",
+          "box": [
+            0.7024,
+            1.0,
+            0.0,
+            0.8406
+          ],
+          "px": 950036
+        },
+        "under-shelf LED (shell)": {
+          "kind": "architecture",
+          "box": [
+            0.7392,
+            0.9177,
+            0.3323,
+            0.3607
+          ],
+          "px": 2633
+        },
+        "kitchen-dining/dining-pendant": {
+          "kind": "proxy",
+          "box": [
+            0.5172,
+            0.6299,
+            0.0,
+            0.3035
+          ],
+          "px": 107979
+        },
+        "kitchen-dining/table-runner": {
+          "kind": "proxy",
+          "box": [
+            0.4089,
+            0.7117,
+            0.5777,
+            0.638
+          ],
+          "px": 52440
+        },
+        "kitchen-dining/centerpiece-vase": {
+          "kind": "proxy",
+          "box": [
+            0.5395,
+            0.6071,
+            0.4061,
+            0.6052
+          ],
+          "px": 88227
+        },
+        "kitchen-dining/candle-holders": {
+          "kind": "proxy",
+          "box": [
+            0.4735,
+            0.5356,
+            0.5332,
+            0.6157
+          ],
+          "px": 25253
+        },
+        "kitchen-dining/curtains": {
+          "kind": "proxy",
+          "box": [
+            0.4347,
+            0.4698,
+            0.0,
+            0.7546
+          ],
+          "px": 194414
+        },
+        "kitchen-dining/bench-pad": {
+          "kind": "proxy",
+          "box": [
+            0.5474,
+            0.8787,
+            0.7266,
+            0.9122
+          ],
+          "px": 252468
+        },
+        "kitchen-dining/dining-rug": {
+          "kind": "proxy",
+          "box": [
+            0.2431,
+            0.9659,
+            0.7419,
+            1.0
+          ],
+          "px": 710687
+        },
+        "kitchen-dining/framed-art": {
+          "kind": "proxy",
+          "box": [
+            0.7814,
+            0.8274,
+            0.2454,
+            0.3454
+          ],
+          "px": 33505
+        },
+        "kitchen-dining/kitchen-runner": {
+          "kind": "proxy",
+          "box": [
+            0.6734,
+            1.0,
+            0.7349,
+            0.9236
+          ],
+          "px": 95534
+        },
+        "window W-dining": {
+          "kind": "window",
+          "box": [
+            0.1147,
+            0.4325,
+            0.0,
+            0.5847
+          ],
+          "px": 453044
+        },
+        "door leaves": {
+          "kind": "door",
+          "box": [
+            0.0,
+            0.0123,
+            0.0,
+            1.0
+          ],
+          "px": 114500
+        }
+      },
+      "heroes_thirds": [],
+      "lamps": [
+        {
+          "lamp": "kitchen-dining/dining-pendant",
+          "typology": "ceiling",
+          "shell": false,
+          "glow_px": 107979,
+          "visible": true
+        },
+        {
+          "lamp": "kitchen-dining/led-niche",
+          "typology": "cabinet",
+          "shell": true,
+          "glow_px": 0,
+          "visible": false
+        },
+        {
+          "lamp": "kitchen-dining/led-shelves",
+          "typology": "cabinet",
+          "shell": true,
+          "glow_px": 5266,
+          "visible": true
+        }
+      ],
+      "wall_patches": {
+        "hero_wall_high": {
+          "u": 0.41191908717155457,
+          "v": 0.12516415119171143,
+          "L_hsl": 96.8,
+          "Y_lin": 0.9341,
+          "stops_vs_mid": 2.38,
+          "xyz": [
+            4.6,
+            0.0,
+            2.35
+          ]
+        },
+        "hero_wall_mid": {
+          "u": 0.41191908717155457,
+          "v": 0.23303824663162231,
+          "L_hsl": 96.8,
+          "Y_lin": 0.9331,
+          "stops_vs_mid": 2.37,
+          "xyz": [
+            4.6,
+            0.0,
+            1.95
+          ]
+        },
+        "ceiling": {
+          "u": 0.55,
+          "v": 0.04,
+          "L_hsl": 82.0,
+          "Y_lin": 0.6515,
+          "stops_vs_mid": 1.86
+        },
+        "floor_centre": {
+          "u": 0.5,
+          "v": 0.93,
+          "L_hsl": 85.1,
+          "Y_lin": 0.704,
+          "stops_vs_mid": 1.97
+        }
+      },
+      "light_balance": {},
+      "camera_clearance_m": {
+        "min": 0.7778,
+        "nearest": "leaf_living_dining_b"
+      },
+      "overlay": "framing/round3/overlays/PD-35.png",
+      "runtime_s": 352,
+      "overscan": {
+        "on": true,
+        "canvas_px": [
+          4072,
+          2290
+        ],
+        "frame_px": [
+          3840,
+          2160
+        ],
+        "crop_box_px": [
+          116,
+          65,
+          3956,
+          2225
+        ],
+        "per_side_fraction_x": 0.0302,
+        "per_side_fraction_y": 0.0301,
+        "note": "same camera and focal length in pixels; the 16:9 frame is the centre crop; uv in this selfcheck (boxes, patches) are fractions of the canvas"
+      },
+      "exr": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/r4-exr/PD-35.exr",
+      "pose": true
+    },
+    "W0-in": {
+      "frame": "W0-in",
+      "room": "work",
+      "round2_id": "pose",
+      "camera": {
+        "id": "W0-in",
+        "room": "work",
+        "loc": [
+          -0.825,
+          8.55,
+          1.1
+        ],
+        "yaw": 0,
+        "u0": 0.5,
+        "v0": 0.46,
+        "status": "transition pose (end of the T-HW slide (transitions plan 3))",
+        "hero": ""
+      },
+      "image": "framing/round4/poses/W0-in.png",
+      "resolution": [
+        3840,
+        2160
+      ],
+      "samples": 10,
+      "placeholders_shown": [
+        "work/basket",
+        "work/curtains",
+        "work/desk-organizer",
+        "work/planter",
+        "work/rug",
+        "work/shelf-boxes",
+        "work/waste-basket"
+      ],
+      "built_generic": [],
+      "missing": [],
+      "lamps_on": [],
+      "lamps_off": [
+        "work/desk-lamp",
+        "work/pendant",
+        "work/wall-sconce"
+      ],
+      "mean_L": 198.7,
+      "mean_L_round2": null,
+      "designer_notes": "end of the T-HW slide (transitions plan 3)",
+      "est_vs_measured": [],
+      "est_flags": [],
+      "items_visible": {
+        "work/desk-organizer": {
+          "kind": "proxy",
+          "frame_area_pct": 0.24,
+          "visible_pct": 99.7,
+          "cut_by_edge_pct": 0.0
+        },
+        "work/basket": {
+          "kind": "proxy",
+          "frame_area_pct": 0.7,
+          "visible_pct": 25.9,
+          "cut_by_edge_pct": 68.5
+        },
+        "work/shelf-boxes": {
+          "kind": "proxy",
+          "frame_area_pct": 2.03,
+          "visible_pct": 72.0,
+          "cut_by_edge_pct": 0.0
+        },
+        "work/planter": {
+          "kind": "proxy",
+          "frame_area_pct": 13.14,
+          "visible_pct": 61.9,
+          "cut_by_edge_pct": 32.2
+        },
+        "work/waste-basket": {
+          "kind": "proxy",
+          "frame_area_pct": 0.47,
+          "visible_pct": 19.5,
+          "cut_by_edge_pct": 79.9
+        },
+        "desk chair": {
+          "kind": "furniture",
+          "frame_area_pct": 6.6,
+          "visible_pct": 39.9,
+          "cut_by_edge_pct": 60.1
+        }
+      },
+      "F3_tangents": {
+        "edge_tangents": [],
+        "object_object_tangents": [
+          {
+            "a": "work/basket",
+            "b": "desk chair",
+            "kind": "overlap",
+            "overlap_thickness": 0.0195,
+            "cover_of_back": 0.18,
+            "behind": "work/basket",
+            "dist3d_m": 0.358,
+            "rule": "overlap thinner than 0.03 and < 60% of the back item"
+          },
+          {
+            "a": "work/waste-basket",
+            "b": "desk chair",
+            "kind": "overlap",
+            "overlap_thickness": 0.0039,
+            "cover_of_back": 0.034,
+            "behind": "work/waste-basket",
+            "dist3d_m": 0.305,
+            "rule": "overlap thinner than 0.03 and < 60% of the back item"
+          }
+        ],
+        "note": "edge: visible bbox margin 0 < m < 0.02; object-object as round 2 (ray-cast silhouettes, 512x288)"
+      },
+      "boxes": {
+        "built-in oak desk + shelf": {
+          "kind": "architecture",
+          "box": [
+            0.1667,
+            0.8333,
+            0.1162,
+            1.0
+          ],
+          "px": 1304196
+        },
+        "desk chair": {
+          "kind": "furniture",
+          "box": [
+            0.3536,
+            0.6464,
+            0.7745,
+            1.0
+          ],
+          "px": 547068
+        },
+        "work/shelf-boxes": {
+          "kind": "proxy",
+          "box": [
+            0.268,
+            0.732,
+            0.0259,
+            0.1162
+          ],
+          "px": 168388
+        },
+        "work/basket": {
+          "kind": "proxy",
+          "box": [
+            0.2661,
+            0.3536,
+            0.9116,
+            1.0
+          ],
+          "px": 57750
+        },
+        "work/planter": {
+          "kind": "proxy",
+          "box": [
+            0.0,
+            0.2122,
+            0.3069,
+            1.0
+          ],
+          "px": 1090196
+        },
+        "work/waste-basket": {
+          "kind": "proxy",
+          "box": [
+            0.6464,
+            0.737,
+            0.9403,
+            1.0
+          ],
+          "px": 38846
+        },
+        "work/desk-organizer": {
+          "kind": "proxy",
+          "box": [
+            0.3203,
+            0.3495,
+            0.5819,
+            0.6657
+          ],
+          "px": 19919
+        }
+      },
+      "heroes_thirds": [],
+      "lamps": [],
+      "wall_patches": {
+        "hero_wall_high": {
+          "u": 0.5,
+          "v": -0.213,
+          "xyz": [
+            -0.825,
+            6.35,
+            2.35
+          ],
+          "note": "outside the frame"
+        },
+        "hero_wall_mid": {
+          "u": 0.5,
+          "v": 0.002,
+          "xyz": [
+            -0.825,
+            6.35,
+            1.95
+          ],
+          "note": "outside the frame"
+        },
+        "ceiling": {
+          "u": 0.55,
+          "v": 0.04,
+          "L_hsl": 85.1,
+          "Y_lin": 0.7004,
+          "stops_vs_mid": 1.96
+        },
+        "floor_centre": {
+          "u": 0.5,
+          "v": 0.93,
+          "L_hsl": 75.4,
+          "Y_lin": 0.5429,
+          "stops_vs_mid": 1.59
+        }
+      },
+      "light_balance": {},
+      "camera_clearance_m": {
+        "min": 1.355,
+        "nearest": "w_curt_b"
+      },
+      "overlay": "framing/round3/overlays/W0-in.png",
+      "runtime_s": 304,
+      "overscan": {
+        "on": false,
+        "canvas_px": [
+          3840,
+          2160
+        ]
+      },
+      "exr": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/r4-exr/W0-in.exr",
+      "pose": true
+    },
+    "K-boy-0": {
+      "frame": "K-boy-0",
+      "room": "boy",
+      "round2_id": "pose",
+      "camera": {
+        "id": "K-boy-0",
+        "room": "boy",
+        "loc": [
+          1.1,
+          13.0,
+          1.0
+        ],
+        "yaw": 0,
+        "u0": 0.5,
+        "v0": 0.46,
+        "status": "transition pose (end of the T-CBoy slide (transitions plan 3))",
+        "hero": ""
+      },
+      "image": "framing/round4/poses/K-boy-0.png",
+      "resolution": [
+        4072,
+        2290
+      ],
+      "samples": 10,
+      "placeholders_shown": [
+        "boy/bedding",
+        "boy/bedspread",
+        "boy/bookshelf",
+        "boy/cushions",
+        "boy/rug",
+        "boy/soft-toy",
+        "boy/toy-basket",
+        "boy/toy-cars"
+      ],
+      "built_generic": [],
+      "missing": [],
+      "lamps_on": [],
+      "lamps_off": [
+        "boy/pendant",
+        "boy/wall-sconce"
+      ],
+      "mean_L": 209.5,
+      "mean_L_round2": null,
+      "designer_notes": "end of the T-CBoy slide (transitions plan 3)",
+      "est_vs_measured": [],
+      "est_flags": [],
+      "items_visible": {
+        "boy bed 96x196 (fixed)": {
+          "kind": "furniture",
+          "frame_area_pct": 5.3,
+          "visible_pct": 16.5,
+          "cut_by_edge_pct": 85.0
+        },
+        "boy/bookshelf": {
+          "kind": "proxy",
+          "frame_area_pct": 2.81,
+          "visible_pct": 68.1,
+          "cut_by_edge_pct": 41.6
+        },
+        "boy/toy-cars": {
+          "kind": "proxy",
+          "frame_area_pct": 0.14,
+          "visible_pct": 98.2,
+          "cut_by_edge_pct": 0.0
+        },
+        "boy desk 90x50 (fixed)": {
+          "kind": "furniture",
+          "frame_area_pct": 2.33,
+          "visible_pct": 91.4,
+          "cut_by_edge_pct": 0.0
+        },
+        "boy/bedspread": {
+          "kind": "proxy",
+          "frame_area_pct": 0.33,
+          "visible_pct": 6.3,
+          "cut_by_edge_pct": 84.0
+        }
+      },
+      "F3_tangents": {
+        "edge_tangents": [],
+        "object_object_tangents": [],
+        "note": "edge: visible bbox margin 0 < m < 0.02; object-object as round 2 (ray-cast silhouettes, 512x288)"
+      },
+      "boxes": {
+        "boy bed 96x196 (fixed)": {
+          "kind": "furniture",
+          "box": [
+            0.0,
+            0.1795,
+            0.6253,
+            1.0
+          ],
+          "px": 494670
+        },
+        "boy desk 90x50 (fixed)": {
+          "kind": "furniture",
+          "box": [
+            0.221,
+            0.4772,
+            0.5843,
+            0.9524
+          ],
+          "px": 217082
+        },
+        "boy/bedspread": {
+          "kind": "proxy",
+          "box": [
+            0.0,
+            0.1206,
+            0.6502,
+            0.71
+          ],
+          "px": 30363
+        },
+        "boy/bookshelf": {
+          "kind": "proxy",
+          "box": [
+            0.0,
+            0.1456,
+            0.1096,
+            0.3694
+          ],
+          "px": 261687
+        },
+        "boy/toy-cars": {
+          "kind": "proxy",
+          "box": [
+            0.2748,
+            0.3345,
+            0.5672,
+            0.5961
+          ],
+          "px": 13021
+        }
+      },
+      "heroes_thirds": [],
+      "lamps": [],
+      "wall_patches": {
+        "hero_wall_high": {
+          "u": -0.094,
+          "v": -0.087,
+          "xyz": [
+            -1.5,
+            10.25,
+            2.35
+          ],
+          "note": "outside the frame"
+        },
+        "hero_wall_mid": {
+          "u": -0.094,
+          "v": 0.076,
+          "xyz": [
+            -1.5,
+            10.25,
+            1.95
+          ],
+          "note": "outside the frame"
+        },
+        "ceiling": {
+          "u": 0.55,
+          "v": 0.04,
+          "L_hsl": 82.9,
+          "Y_lin": 0.6614,
+          "stops_vs_mid": 1.88
+        },
+        "floor_centre": {
+          "u": 0.5,
+          "v": 0.93,
+          "L_hsl": 71.6,
+          "Y_lin": 0.4822,
+          "stops_vs_mid": 1.42
+        }
+      },
+      "light_balance": {},
+      "camera_clearance_m": {
+        "min": 0.53,
+        "nearest": "leaf_corridor_boy"
+      },
+      "overlay": "framing/round3/overlays/K-boy-0.png",
+      "runtime_s": 354,
+      "overscan": {
+        "on": true,
+        "canvas_px": [
+          4072,
+          2290
+        ],
+        "frame_px": [
+          3840,
+          2160
+        ],
+        "crop_box_px": [
+          116,
+          65,
+          3956,
+          2225
+        ],
+        "per_side_fraction_x": 0.0302,
+        "per_side_fraction_y": 0.0301,
+        "note": "same camera and focal length in pixels; the 16:9 frame is the centre crop; uv in this selfcheck (boxes, patches) are fractions of the canvas"
+      },
+      "exr": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/r4-exr/K-boy-0.exr",
+      "pose": true
+    },
+    "K-girl-0": {
+      "frame": "K-girl-0",
+      "room": "girl",
+      "round2_id": "pose",
+      "camera": {
+        "id": "K-girl-0",
+        "room": "girl",
+        "loc": [
+          1.1,
+          16.63,
+          1.0
+        ],
+        "yaw": 0,
+        "u0": 0.5,
+        "v0": 0.46,
+        "status": "transition pose (end of the T-CGirl slide (transitions plan 3))",
+        "hero": ""
+      },
+      "image": "framing/round4/poses/K-girl-0.png",
+      "resolution": [
+        4072,
+        2290
+      ],
+      "samples": 10,
+      "placeholders_shown": [
+        "girl/bedding",
+        "girl/bedspread",
+        "girl/bookshelf",
+        "girl/cushions",
+        "girl/doll",
+        "girl/framed-prints",
+        "girl/rug",
+        "girl/soft-toy",
+        "girl/toy-basket"
+      ],
+      "built_generic": [],
+      "missing": [],
+      "lamps_on": [],
+      "lamps_off": [
+        "girl/pendant",
+        "girl/wall-sconce"
+      ],
+      "mean_L": 208.6,
+      "mean_L_round2": null,
+      "designer_notes": "end of the T-CGirl slide (transitions plan 3)",
+      "est_vs_measured": [],
+      "est_flags": [],
+      "items_visible": {
+        "girl bed 96x196 (fixed)": {
+          "kind": "furniture",
+          "frame_area_pct": 5.3,
+          "visible_pct": 16.5,
+          "cut_by_edge_pct": 85.0
+        },
+        "girl/bookshelf": {
+          "kind": "proxy",
+          "frame_area_pct": 2.81,
+          "visible_pct": 68.1,
+          "cut_by_edge_pct": 41.6
+        },
+        "girl desk 90x50 (fixed)": {
+          "kind": "furniture",
+          "frame_area_pct": 2.36,
+          "visible_pct": 92.8,
+          "cut_by_edge_pct": 0.0
+        },
+        "girl/doll": {
+          "kind": "proxy",
+          "frame_area_pct": 0.28,
+          "visible_pct": 92.6,
+          "cut_by_edge_pct": 0.0
+        },
+        "girl/framed-prints": {
+          "kind": "proxy",
+          "frame_area_pct": 2.3,
+          "visible_pct": 89.2,
+          "cut_by_edge_pct": 0.0
+        },
+        "girl/bedspread": {
+          "kind": "proxy",
+          "frame_area_pct": 0.33,
+          "visible_pct": 6.3,
+          "cut_by_edge_pct": 84.0
+        }
+      },
+      "F3_tangents": {
+        "edge_tangents": [],
+        "object_object_tangents": [],
+        "note": "edge: visible bbox margin 0 < m < 0.02; object-object as round 2 (ray-cast silhouettes, 512x288)"
+      },
+      "boxes": {
+        "girl bed 96x196 (fixed)": {
+          "kind": "furniture",
+          "box": [
+            0.0,
+            0.1795,
+            0.6253,
+            1.0
+          ],
+          "px": 494670
+        },
+        "girl desk 90x50 (fixed)": {
+          "kind": "furniture",
+          "box": [
+            0.221,
+            0.4772,
+            0.5843,
+            0.9524
+          ],
+          "px": 219785
+        },
+        "girl/bedspread": {
+          "kind": "proxy",
+          "box": [
+            0.0,
+            0.1206,
+            0.6502,
+            0.71
+          ],
+          "px": 30363
+        },
+        "girl/bookshelf": {
+          "kind": "proxy",
+          "box": [
+            0.0,
+            0.1456,
+            0.1096,
+            0.3694
+          ],
+          "px": 261688
+        },
+        "girl/framed-prints": {
+          "kind": "proxy",
+          "box": [
+            0.334,
+            0.4816,
+            0.1463,
+            0.3118
+          ],
+          "px": 214867
+        },
+        "girl/doll": {
+          "kind": "proxy",
+          "box": [
+            0.2937,
+            0.3256,
+            0.4812,
+            0.5934
+          ],
+          "px": 25761
+        }
+      },
+      "heroes_thirds": [],
+      "lamps": [],
+      "wall_patches": {
+        "hero_wall_high": {
+          "u": -0.094,
+          "v": -0.087,
+          "xyz": [
+            -1.5,
+            13.88,
+            2.35
+          ],
+          "note": "outside the frame"
+        },
+        "hero_wall_mid": {
+          "u": -0.094,
+          "v": 0.076,
+          "xyz": [
+            -1.5,
+            13.88,
+            1.95
+          ],
+          "note": "outside the frame"
+        },
+        "ceiling": {
+          "u": 0.55,
+          "v": 0.04,
+          "L_hsl": 82.8,
+          "Y_lin": 0.6592,
+          "stops_vs_mid": 1.87
+        },
+        "floor_centre": {
+          "u": 0.5,
+          "v": 0.93,
+          "L_hsl": 69.8,
+          "Y_lin": 0.4566,
+          "stops_vs_mid": 1.34
+        }
+      },
+      "light_balance": {},
+      "camera_clearance_m": {
+        "min": 0.53,
+        "nearest": "leaf_corridor_girl"
+      },
+      "overlay": "framing/round3/overlays/K-girl-0.png",
+      "runtime_s": 354,
+      "overscan": {
+        "on": true,
+        "canvas_px": [
+          4072,
+          2290
+        ],
+        "frame_px": [
+          3840,
+          2160
+        ],
+        "crop_box_px": [
+          116,
+          65,
+          3956,
+          2225
+        ],
+        "per_side_fraction_x": 0.0302,
+        "per_side_fraction_y": 0.0301,
+        "note": "same camera and focal length in pixels; the 16:9 frame is the centre crop; uv in this selfcheck (boxes, patches) are fractions of the canvas"
+      },
+      "exr": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/r4-exr/K-girl-0.exr",
+      "pose": true
+    },
+    "CB-0": {
+      "frame": "CB-0",
+      "room": "bath",
+      "round2_id": "pose",
+      "camera": {
+        "id": "CB-0",
+        "room": "bath",
+        "loc": [
+          3.8,
+          13.2,
+          1.15
+        ],
+        "yaw": 0,
+        "u0": 0.5,
+        "v0": 0.46,
+        "status": "transition pose (end of the T-CBath slide, point CB (transitions plan 3))",
+        "hero": ""
+      },
+      "image": "framing/round4/poses/CB-0.png",
+      "resolution": [
+        4072,
+        2290
+      ],
+      "samples": 10,
+      "placeholders_shown": [
+        "bath/bath-mat",
+        "bath/candle",
+        "bath/hand-towel",
+        "bath/reed-diffuser",
+        "bath/shower-curtain",
+        "bath/shower-dispensers",
+        "bath/soap-dispenser",
+        "bath/storage-basket",
+        "bath/toilet-paper-stand",
+        "bath/toothbrush-cup",
+        "bath/towel-ring",
+        "bath/vanity-sconces",
+        "bath/vanity-vase",
+        "bath/wall-sconce"
+      ],
+      "built_generic": [],
+      "missing": [],
+      "lamps_on": [
+        "bath/shower-downlight",
+        "bath/vanity-sconces",
+        "bath/wall-sconce"
+      ],
+      "lamps_off": [
+        "bath/ceiling-light"
+      ],
+      "mean_L": 200.2,
+      "mean_L_round2": null,
+      "designer_notes": "end of the T-CBath slide, point CB (transitions plan 3)",
+      "est_vs_measured": [],
+      "est_flags": [],
+      "items_visible": {
+        "bath/wall-sconce": {
+          "kind": "proxy",
+          "frame_area_pct": 0.18,
+          "visible_pct": 84.7,
+          "cut_by_edge_pct": 0.0
+        },
+        "bath/bath-mat": {
+          "kind": "proxy",
+          "frame_area_pct": 0.84,
+          "visible_pct": 54.1,
+          "cut_by_edge_pct": 60.5
+        },
+        "bath/candle": {
+          "kind": "proxy",
+          "frame_area_pct": 0.07,
+          "visible_pct": 86.4,
+          "cut_by_edge_pct": 0.0
+        },
+        "bath/shower-curtain": {
+          "kind": "proxy",
+          "frame_area_pct": 7.12,
+          "visible_pct": 52.9,
+          "cut_by_edge_pct": 66.2
+        },
+        "bath/reed-diffuser": {
+          "kind": "proxy",
+          "frame_area_pct": 0.15,
+          "visible_pct": 90.8,
+          "cut_by_edge_pct": 0.0
+        },
+        "bath/toilet-paper-stand": {
+          "kind": "proxy",
+          "frame_area_pct": 0.37,
+          "visible_pct": 84.6,
+          "cut_by_edge_pct": 0.0
+        },
+        "window W-bath": {
+          "kind": "window",
+          "frame_area_pct": 2.5,
+          "visible_pct": 89.1,
+          "cut_by_edge_pct": 0.0
+        },
+        "bath WC + limestone ledge (fixed)": {
+          "kind": "furniture",
+          "frame_area_pct": 7.96,
+          "visible_pct": 88.9,
+          "cut_by_edge_pct": 0.0
+        }
+      },
+      "F3_tangents": {
+        "edge_tangents": [],
+        "object_object_tangents": [
+          {
+            "a": "window W-bath",
+            "b": "bath WC + limestone ledge (fixed)",
+            "kind": "gap",
+            "gap": 0.0117,
+            "dist3d_m": 0.05,
+            "rule": "silhouettes apart by < 0.02 (kissing contours)"
+          }
+        ],
+        "note": "edge: visible bbox margin 0 < m < 0.02; object-object as round 2 (ray-cast silhouettes, 512x288)"
+      },
+      "boxes": {
+        "bath fluted glazing": {
+          "kind": "architecture",
+          "box": [
+            0.4524,
+            0.5651,
+            0.1742,
+            0.4843
+          ],
+          "px": 318912
+        },
+        "bath WC + limestone ledge (fixed)": {
+          "kind": "furniture",
+          "box": [
+            0.3971,
+            0.6235,
+            0.531,
+            0.8834
+          ],
+          "px": 742643
+        },
+        "bath/shower-curtain": {
+          "kind": "proxy",
+          "box": [
+            0.9288,
+            1.0,
+            0.0,
+            1.0
+          ],
+          "px": 664100
+        },
+        "bath/bath-mat": {
+          "kind": "proxy",
+          "box": [
+            0.7134,
+            0.8585,
+            0.9166,
+            1.0
+          ],
+          "px": 78093
+        },
+        "bath/toilet-paper-stand": {
+          "kind": "proxy",
+          "box": [
+            0.6235,
+            0.6599,
+            0.6406,
+            0.8865
+          ],
+          "px": 34068
+        },
+        "bath/reed-diffuser": {
+          "kind": "proxy",
+          "box": [
+            0.5499,
+            0.5697,
+            0.4153,
+            0.5341
+          ],
+          "px": 13855
+        },
+        "bath/candle": {
+          "kind": "proxy",
+          "box": [
+            0.5292,
+            0.5474,
+            0.4983,
+            0.5354
+          ],
+          "px": 6188
+        },
+        "bath/wall-sconce": {
+          "kind": "proxy",
+          "box": [
+            0.6621,
+            0.6925,
+            0.2389,
+            0.3
+          ],
+          "px": 16940
+        },
+        "window W-bath": {
+          "kind": "window",
+          "box": [
+            0.4322,
+            0.5869,
+            0.1183,
+            0.514
+          ],
+          "px": 233285
+        }
+      },
+      "heroes_thirds": [],
+      "lamps": [
+        {
+          "lamp": "bath/shower-downlight",
+          "typology": "ceiling",
+          "shell": true,
+          "glow_px": 0,
+          "visible": false
+        },
+        {
+          "lamp": "bath/vanity-sconces",
+          "typology": "wall",
+          "shell": false,
+          "glow_px": 0,
+          "visible": false
+        },
+        {
+          "lamp": "bath/wall-sconce",
+          "typology": "wall",
+          "shell": false,
+          "glow_px": 16940,
+          "visible": true
+        }
+      ],
+      "F8_mirror": {
+        "result": "pass",
+        "samples": 2304,
+        "hits": {
+          "hwall_38": {
+            "frac": 0.875,
+            "x": [
+              3.25,
+              3.25
+            ],
+            "y": [
+              10.1398,
+              12.2538
+            ],
+            "z": [
+              1.2012,
+              2.6652
+            ]
+          },
+          "bath_ceiling": {
+            "frac": 0.125,
+            "x": [
+              3.253,
+              3.8124
+            ],
+            "y": [
+              10.1415,
+              12.352
+            ],
+            "z": [
+              2.7,
+              2.7
+            ]
+          }
+        },
+        "non_wall_objects": [],
+        "wall_Y_range": [
+          10.1398,
+          12.2538
+        ],
+        "wall_Z_range": [
+          1.2012,
+          2.6652
+        ],
+        "designer_est": "north wall Y 10.03-12.12, Z 1.15-2.70 + a ceiling strip; door 0.27 outside, window 0.08",
+        "method": "ray-cast: 48x48 grid on the whole mirror from CB, reflected camera rays; every object hit listed",
+        "inside_frame": {
+          "samples": 0,
+          "hits": {}
+        }
+      },
+      "wall_patches": {
+        "hero_wall_high": {
+          "u": 0.8714067935943604,
+          "v": 0.049506425857543945,
+          "L_hsl": 85.0,
+          "Y_lin": 0.7114,
+          "stops_vs_mid": 1.98,
+          "xyz": [
+            5.72,
+            9.95,
+            2.35
+          ]
+        },
+        "hero_wall_mid": {
+          "u": 0.8714068531990051,
+          "v": 0.18709444999694824,
+          "L_hsl": 83.6,
+          "Y_lin": 0.688,
+          "stops_vs_mid": 1.93,
+          "xyz": [
+            5.72,
+            9.95,
+            1.95
+          ]
+        },
+        "ceiling": {
+          "u": 0.55,
+          "v": 0.04,
+          "L_hsl": 78.8,
+          "Y_lin": 0.6048,
+          "stops_vs_mid": 1.75
+        },
+        "floor_centre": {
+          "u": 0.5,
+          "v": 0.93,
+          "L_hsl": 62.3,
+          "Y_lin": 0.3808,
+          "stops_vs_mid": 1.08
+        }
+      },
+      "light_balance": {},
+      "camera_clearance_m": {
+        "min": 0.19,
+        "nearest": "leaf_corridor_bath"
+      },
+      "overlay": "framing/round3/overlays/CB-0.png",
+      "runtime_s": 404,
+      "overscan": {
+        "on": true,
+        "canvas_px": [
+          4072,
+          2290
+        ],
+        "frame_px": [
+          3840,
+          2160
+        ],
+        "crop_box_px": [
+          116,
+          65,
+          3956,
+          2225
+        ],
+        "per_side_fraction_x": 0.0302,
+        "per_side_fraction_y": 0.0301,
+        "note": "same camera and focal length in pixels; the 16:9 frame is the centre crop; uv in this selfcheck (boxes, patches) are fractions of the canvas"
+      },
+      "exr": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/r4-exr/CB-0.exr",
+      "pose": true
     }
   }
 }

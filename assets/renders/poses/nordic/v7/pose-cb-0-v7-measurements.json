@@ -1,0 +1,242 @@
+{
+ "asset_id": "pose-cb-0-v7",
+ "frame": "CB-0",
+ "sofa_width_check": null,
+ "raw": "/home/user/homedesign-app/assets/renders/poses/nordic/v7/raw/pose-cb-0-v7.png",
+ "returned_size_px": [
+  2736,
+  1536
+ ],
+ "normalised_size_px": [
+  2736,
+  1539
+ ],
+ "resize_16_9": "non-uniform resize 2736x1536 -> 2736x1539 (+0.20% vertical), no crop",
+ "clay": "/home/user/homedesign-app/assets/blockout/house/framing/round4/poses/CB-0.png",
+ "clay_selfcheck": "/home/user/homedesign-app/assets/blockout/house/framing/round4/selfcheck.json",
+ "clay_lock": {
+  "frame": {
+   "du": 0.0007,
+   "dv": 0.0247,
+   "peak": 0.022,
+   "ncc": 0.066
+  },
+  "upper-left": {
+   "du": 0.0559,
+   "dv": -0.0084,
+   "peak": 0.007,
+   "ncc": 0.131
+  },
+  "upper-right": {
+   "du": 0.0037,
+   "dv": 0.0201,
+   "peak": 0.015,
+   "ncc": 0.088
+  },
+  "lower-left": {
+   "du": 0.0007,
+   "dv": 0.0032,
+   "peak": 0.017,
+   "ncc": 0.111
+  },
+  "lower-right": {
+   "du": 0.0011,
+   "dv": 0.011,
+   "peak": 0.046,
+   "ncc": 0.039
+  },
+  "ceiling-band": {
+   "du": 0.0011,
+   "dv": -0.0006,
+   "peak": 0.024,
+   "ncc": null
+  },
+  "floor-band": {
+   "du": 0.0015,
+   "dv": 0.0058,
+   "peak": 0.088,
+   "ncc": null
+  },
+  "bath fluted glazing": {
+   "du": -0.0015,
+   "dv": 0.0058,
+   "peak": 0.059,
+   "ncc": 0.129
+  },
+  "bath WC + limestone ledge (fixed)": {
+   "du": -0.0007,
+   "dv": 0.0045,
+   "peak": 0.053,
+   "ncc": 0.265
+  },
+  "window W-bath": {
+   "du": -0.0015,
+   "dv": 0.0058,
+   "peak": 0.058,
+   "ncc": 0.14
+  }
+ },
+ "clay_lock_worst_abs_shift": 0.0559,
+ "clay_lock_worst_abs_shift_strong_peaks": 0.011,
+ "clay_lock_pass_0_02_strong_peaks": true,
+ "clay_lock_note": "regions = whole frame, quadrants, ceiling/floor bands and the clay boxes of fixed furniture / windows / openings; peaks below ~0.03 are unreliable (weak texture), so the verdict is visual (<aid>-lock.png) with the strong-peak number as support",
+ "product_boxes_clay": {
+  "bath/shower-curtain": [
+   0.9288,
+   1.0,
+   0.0,
+   1.0
+  ],
+  "bath/bath-mat": [
+   0.7134,
+   0.8585,
+   0.9166,
+   1.0
+  ],
+  "bath/toilet-paper-stand": [
+   0.6235,
+   0.6599,
+   0.6406,
+   0.8865
+  ],
+  "bath/reed-diffuser": [
+   0.5499,
+   0.5697,
+   0.4153,
+   0.5341
+  ],
+  "bath/candle": [
+   0.5292,
+   0.5474,
+   0.4983,
+   0.5354
+  ],
+  "bath/wall-sconce": [
+   0.6621,
+   0.6925,
+   0.2389,
+   0.3
+  ]
+ },
+ "product_box_rule": "each product inside its clay box +-15 % of the box size (<aid>-boxes.png); read visually",
+ "grade_target_L": 86.0,
+ "measure_before": {
+  "hero_wall_high (0.871,0.050) clay L 81.2": [
+   36.1,
+   35.0,
+   67.8
+  ],
+  "hero_wall_mid (0.871,0.187) clay L 79.4": [
+   35.3,
+   36.3,
+   66.1
+  ],
+  "ceiling (0.550,0.040) clay L 74.2": [
+   37.9,
+   18.8,
+   70.5
+  ],
+  "floor_centre (0.500,0.930) clay L 56.0": [
+   35.5,
+   18.5,
+   55.0
+  ],
+  "reference_CB (0.419,0.174) clay L 70.4": [
+   39.2,
+   14.5,
+   72.3
+  ],
+  "brightest area (window / door): L p50 / p99 / max": [
+   88.6,
+   97.6,
+   100.0
+  ],
+  "pixels with a 255 channel: inside / outside that area": [
+   220,
+   244
+  ],
+  "darkest 0.5% patch L [12-15]": 4.4,
+  "frame mean L": 69.3
+ },
+ "grade": {
+  "white_balance": {
+   "patch": [
+    0.8714068531990051,
+    0.18709444999694824
+   ],
+   "H_before": 35.3,
+   "H_target": 36,
+   "gains_rgb": [
+    0.9932,
+    1.0031,
+    0.9932
+   ],
+   "gain_clip": "0.9-1.1"
+  },
+  "exposure": {
+   "patch": [
+    0.8714068531990051,
+    0.18709444999694824
+   ],
+   "target_L": 86.0,
+   "needed_stops": 0.68,
+   "applied_stops": 0.2,
+   "flag": "DARK: needs more than +0.2 stop, not lifted further"
+  },
+  "saturation": "chroma x0.90 (linear, toward luminance)",
+  "highlight_rolloff": {
+   "knee_L": 94,
+   "asymptote_L": 97.25,
+   "on": "max channel, hue kept"
+  },
+  "s_curve": {
+   "mix": 0.12,
+   "shape": "smoothstep blend"
+  },
+  "black_point": {
+   "darkest_patch_L_before": 4.5,
+   "lift_to_L": 12.5,
+   "blend": 0.0839
+  },
+  "grain": "none",
+  "vignette": "none"
+ },
+ "measure_after": {
+  "hero_wall_high (0.871,0.050) clay L 81.2": [
+   37.1,
+   40.7,
+   75.6
+  ],
+  "hero_wall_mid (0.871,0.187) clay L 79.4": [
+   36.1,
+   41.7,
+   73.9
+  ],
+  "ceiling (0.550,0.040) clay L 74.2": [
+   39.7,
+   22.3,
+   78.1
+  ],
+  "floor_centre (0.500,0.930) clay L 56.0": [
+   36.3,
+   20.3,
+   62.7
+  ],
+  "reference_CB (0.419,0.174) clay L 70.4": [
+   41.8,
+   17.4,
+   79.8
+  ],
+  "brightest area (window / door): L p50 / p99 / max": [
+   94.2,
+   97.0,
+   97.7
+  ],
+  "pixels with a 255 channel: inside / outside that area": [
+   0,
+   0
+  ],
+  "darkest 0.5% patch L [12-15]": 12.5,
+  "frame mean L": 76.6
+ }
+}

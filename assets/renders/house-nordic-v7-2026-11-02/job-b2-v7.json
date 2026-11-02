@@ -1,0 +1,34 @@
+{
+ "id": "b2-v7",
+ "frame": "B2",
+ "prompt_deviation": "lines starting with # stripped as the header instructs; the x / y positions (6 groups) converted from the 16:9 frame to the overscan canvas 4072x2290 (frame = centre crop 3840x2160): x' = 0.0285 + 0.9430 x, y' = 0.0284 + 0.9432 y, 2 decimals",
+ "prompt_chars": 3472,
+ "ascii": true,
+ "refs": 10,
+ "missing_refs": [],
+ "clay": "assets/blockout/house/framing/round4/B2.png",
+ "clay_sha256": "0e07d11b596976bed00f32483b6566769c0a6c0aef132b1e1d9c80d49c620616",
+ "clay_sha_matches_upload": true,
+ "args": {
+  "model": "gpt-image-2-5",
+  "type": "image-to-image",
+  "quality": "sunburst",
+  "resolution": "2K",
+  "aspect_ratio": "16:9",
+  "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/2f6d0afd-f689-454f-8367-258f397d1e06.png",
+  "image_refs": [
+   "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/8d3c4496-a2f1-40b7-bc95-a6ccf2f33a9e.jpg",
+   "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/7efec61b-6a16-4cbd-a414-f8a834ff62d8.jpg",
+   "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/084334aa-abfb-4dfb-8bf1-8e13e7de827b.jpg",
+   "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/5c9dfbf6-fc2a-493d-b8f3-764f4827b859.jpg",
+   "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/a93a2a96-441f-485a-960b-cddcfc8520c7.jpg",
+   "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/e0907b41-cdcd-4190-9947-a9f2ffe23300.jpg",
+   "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/5ccd049f-73b5-433d-a65e-f276f84fad6a.jpg",
+   "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/a8a8aeac-8a2f-4d95-b210-b7f0a9022c2a.jpg",
+   "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/046a7b1a-2b1f-4427-816f-b77d7971b827.jpg",
+   "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/45dd6a3b-6eae-4da2-a336-2dbb90463ed6.jpg"
+  ],
+  "prompt": "Use the attached clay render as the exact blueprint. Keep every wall, opening, window, cornice, skirting, floor and ceiling line, the camera height, lens and angle, and the position, size and angle of every furniture piece and built-in exactly as in the clay. Move, resize, add or remove nothing. Each placeholder shape in the clay marks one product listed below; render it there at the stated size. Only turn the clay into real materials and light. The other attached images are close-ups of the exact products: match their form, colour and texture. Positions are fractions of frame width (x) and height (y) from the top-left.\n\n1. PHOTO. Top Scandinavian interiors magazine: a Nordic bathroom, 3 pm mid-winter, 24 mm shift lens at 1.15 m, level, straight verticals, all sharp. Hero, right third: the oak vanity and the oak-framed mirror between a pair of glowing wall lamps; on the left the gathered linen curtain and the limestone shower. The same room, products and light as reference 1, turned 35 degrees right.\n\n2. LIGHT. The window is out of frame left, no sun: soft daylight from the left leaves a smooth gradient across the limestone shower wall. Exposed for white: the wall beside the mirror clean white. The mirror shows only the blank wall opposite and a strip of ceiling, a little darker than that wall. Every object: a lit left face, a shadow side a stop darker, dense contact shadows; the vanity casts a soft shadow right. Ceiling a touch darker. Real contrast, never milky. White balance 4000 K: walls warm white, never orange, pink or grey; the limestone keeps its pale oat tone. Lamps 2700 K, low, shadowless: the two wall lamps wash the wall in soft warm fans up and down and leave a warm sheen on the vanity top; the shower downlight glows low on the limestone.\n\n3. MATERIALS. Washable matte mineral paint #F4F1EC. Floor large matte limestone-look porcelain. Honed pale oat limestone in the shower, niche and vanity top, open pores, matte. Vanity and mirror frame: oiled oak #C8A27A, satin sheen, a long soft highlight along the vanity edge. Round basin, matte black wall tap, rain head and ceiling track.\n\n4. PRODUCTS, one per line, each on its clay placeholder:\na. WALL LAMPS, x 0.50-0.54 and 0.83-0.87, beside the mirror: two hand-sized fluted half-cylinder up-and-down lamps in matte white that reads as plaster, hardwired.\nb. CURTAIN at the left, x 0.25-0.31: natural slub-striped linen-blend curtain gathered in deep soft folds at the track corner, hem on the floor, clearly overlapping the corner line.\nc. PUMP BOTTLES in the niche: three sand ribbed ceramic bottles, matte black pumps, in a row.\nd. SOAP PUMP on the vanity top, x 0.71-0.73: one sand ribbed ceramic soap bottle, matte black pump, well below the mirror.\ne. CUP, x 0.74-0.76: an 11 cm silver-grey travertine cup, two bamboo toothbrushes.\nf. BUD VASE, x 0.76-0.79: small oat sand-glaze bud vase, one eucalyptus sprig clear of the mirror's bottom edge.\ng. BASKET on the vanity's open shelf: cream cotton rope basket with cut-out handles, filling most of the shelf, three rolled warm-white towels in it.\nh. TOWEL RING below the right lamp, x 0.82-0.88: matte black oval ring.\ni. HAND TOWEL on the ring: natural washed linen, hanging straight, half the vanity's height.\n\n5. NOT IN FRAME: stool, ladder, bath towels, plants, rug, labelled bottles, any object reflected in the mirror, glass, socket, cable, text, people. No sun patches, beams, bloom, haze, halos, HDR, grain or vignette.",
+  "idempotency_key": "v7-b2-v7-20261102-a1"
+ }
+}

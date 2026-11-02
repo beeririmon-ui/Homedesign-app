@@ -135,11 +135,12 @@ def v7_fixes(R):
         L["glow"] = [(lan, r2.GLOW)]
         L["orig"] = {lan.name: lan.data.materials[0]}
     notes.append("kitchen-dining/dining-pendant: 50 x 30 flat lantern (ellipsoid), bottom 1.50 (d1-v7.txt clay line)")
-    # W0: planter D38 x H34 + the plant to 1.30 (filler), at the plan position (-0.20, 6.62); bookends + books out (not listed)
+    # W0: planter D38 x H34 + the plant to 1.30 (filler), in the corner by the window at the data/slots/work.json position
+    # (-1.95, 6.70) as in round 3 (the build_house proxy at (-0.20, 6.62) stood in the desk: fixed 2026-11-02 21:15); bookends out
     r3.kill_group(R, "work/planter")
-    r3.reg(R, "work/planter", [r3.cyl("w_pot_r4", (-0.20, 6.62), 0.19, 0.0, 0.34, O),
-                               r3.cyl("w_plant_r4", (-0.20, 6.62), 0.30, 0.34, 1.30, M["crown"])], "work",
-           src="w0-v7.txt: planter-zendrop-seagrass-belly-38x34 (D38 x H34) + plant to about 1.30")
+    r3.reg(R, "work/planter", [r3.cyl("w_pot_r4", (-1.95, 6.70), 0.19, 0.0, 0.34, O),
+                               r3.cyl("w_plant_r4", (-1.95, 6.70), 0.30, 0.34, 1.30, M["crown"])], "work",
+           src="w0-v7.txt: planter-zendrop-seagrass-belly-38x34 (D38 x H34) + plant to about 1.30, centre (-1.95, 6.70) per data/slots/work.json")
     notes.append("work/planter: D38 x H34 + plant to 1.30; work/bookends not listed (removed)")
     return notes
 
@@ -181,6 +182,7 @@ def main(argv):
     ap.add_argument("--out", default=None)
     ap.add_argument("--exr", default=None)
     ap.add_argument("--no-overscan", action="store_true")
+    ap.add_argument("--pose-samples", type=int, default=None, help="samples for the poses (default: --samples)")
     a, _ = ap.parse_known_args(argv)
     global EXR_DIR
     out = a.out or OUT4
@@ -229,7 +231,12 @@ def main(argv):
         os_on = fid in OS_FRAMES and not a.no_overscan
         OS_STATE["on"] = os_on
         a.res = int(round(res0 * OS_K)) if os_on else res0
+        smp0 = a.samples
+        if fid in rplan["poses"] and a.pose_samples:
+            a.samples = a.pose_samples
         R_ = r3.run_frame(fid, rplan["frames"][fid], S, R, slots, cams, plan, prop, tmp, a, rep, cfg)
+        R_["samples"] = a.samples
+        a.samples = smp0
         a.res = res0
         OS_STATE["on"] = False
         hres = int(round(res0 * 9 / 16))
