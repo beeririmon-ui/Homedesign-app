@@ -1,0 +1,352 @@
+{
+ "frame": "B2",
+ "kind": "master",
+ "overscan": true,
+ "size": [
+  1920,
+  1080
+ ],
+ "check_raw": {
+  "size": [
+   1920,
+   1080
+  ],
+  "overlap_u": [
+   0.0,
+   0.999
+  ],
+  "overlap_v": [
+   0.0,
+   0.999
+  ],
+  "shift_px": {
+   "dx": -6.84,
+   "dy": -9.66,
+   "response": 0.039
+  },
+  "bands": [
+   {
+    "u": [
+     0.0,
+     0.249
+    ],
+    "dx_px": 0.09,
+    "dy_px": -23.33,
+    "response": 0.11
+   },
+   {
+    "u": [
+     0.249,
+     0.499
+    ],
+    "dx_px": -2.68,
+    "dy_px": -4.15,
+    "response": 0.136
+   },
+   {
+    "u": [
+     0.499,
+     0.749
+    ],
+    "dx_px": -7.41,
+    "dy_px": -9.54,
+    "response": 0.205
+   },
+   {
+    "u": [
+     0.749,
+     0.999
+    ],
+    "dx_px": 109.42,
+    "dy_px": -173.97,
+    "response": 0.058
+   }
+  ],
+  "deltaE": {
+   "mean": 11.6,
+   "p95": 21.37,
+   "share_over_5": 0.98
+  },
+  "L_mean": {
+   "a": 68.8,
+   "b": 71.5
+  }
+ },
+ "register": {
+  "affine": [
+   [
+    1.00068,
+    0.00054,
+    -1.1585
+   ],
+   [
+    0.00161,
+    0.98298,
+    -2.20395
+   ]
+  ],
+  "shift_px": [
+   -1.16,
+   -2.2
+  ],
+  "scale": [
+   1.00068,
+   0.98298
+  ],
+  "note": "affine maps render -> clay at 1920x1080 (register's own convention); shift = translation of the frame, scale = diagonal"
+ },
+ "check_registered": {
+  "size": [
+   1920,
+   1080
+  ],
+  "overlap_u": [
+   0.0,
+   0.999
+  ],
+  "overlap_v": [
+   0.0,
+   0.999
+  ],
+  "shift_px": {
+   "dx": -3.52,
+   "dy": -1.59,
+   "response": 0.067
+  },
+  "bands": [
+   {
+    "u": [
+     0.0,
+     0.249
+    ],
+    "dx_px": 1.07,
+    "dy_px": -4.43,
+    "response": 0.098
+   },
+   {
+    "u": [
+     0.249,
+     0.499
+    ],
+    "dx_px": 2.49,
+    "dy_px": -3.17,
+    "response": 0.164
+   },
+   {
+    "u": [
+     0.499,
+     0.749
+    ],
+    "dx_px": -7.54,
+    "dy_px": 0.54,
+    "response": 0.275
+   },
+   {
+    "u": [
+     0.749,
+     0.999
+    ],
+    "dx_px": 108.52,
+    "dy_px": -165.51,
+    "response": 0.07
+   }
+  ],
+  "deltaE": {
+   "mean": 11.28,
+   "p95": 19.96,
+   "share_over_5": 0.981
+  },
+  "L_mean": {
+   "a": 68.8,
+   "b": 71.7
+  }
+ },
+ "fixed_edges": {
+  "shower fittings, matte black (shell)": {
+   "box": [
+    0.3047,
+    0.3625,
+    0.0847,
+    0.5403
+   ],
+   "edges": {
+    "left": {
+     "clay_px": 584,
+     "render_px": 535,
+     "d_px": -49,
+     "clay_strength": 34.3,
+     "render_strength": 14.8
+    },
+    "right": {
+     "clay_px": 711,
+     "render_px": 762,
+     "d_px": 51,
+     "clay_strength": 6.8,
+     "render_strength": 11.9
+    },
+    "top": {
+     "clay_px": 119,
+     "render_px": 112,
+     "d_px": -7,
+     "clay_strength": 17.2,
+     "render_strength": 17.6
+    },
+    "bottom": {
+     "clay_px": 551,
+     "render_px": 577,
+     "d_px": 26,
+     "clay_strength": 29.3,
+     "render_strength": 21.2
+    }
+   },
+   "width_ratio": 1.7874,
+   "height_ratio": 1.0764,
+   "worst_edge_px": 51,
+   "kind": "architecture",
+   "visible_pct": null
+  },
+  "bath vanity 110 (fixed)": {
+   "box": [
+    0.4737,
+    0.832,
+    0.4879,
+    1.0301
+   ],
+   "edges": {
+    "left": {
+     "clay_px": 935,
+     "render_px": 933,
+     "d_px": -2,
+     "clay_strength": 19.7,
+     "render_strength": 33.2
+    },
+    "right": {
+     "clay_px": 1591,
+     "render_px": 1592,
+     "d_px": 1,
+     "clay_strength": 12.6,
+     "render_strength": 28.3
+    },
+    "top": {
+     "clay_px": 496,
+     "render_px": 534,
+     "d_px": 38,
+     "clay_strength": 24.8,
+     "render_strength": 6.0
+    }
+   },
+   "width_ratio": 1.0046,
+   "worst_edge_px": 38,
+   "kind": "furniture",
+   "visible_pct": 75.8
+  },
+  "U6 mirror": {
+   "box": [
+    0.5594,
+    0.807,
+    0.05,
+    0.4537
+   ],
+   "edges": {
+    "left": {
+     "clay_px": 1071,
+     "render_px": 1076,
+     "d_px": 5,
+     "clay_strength": 44.6,
+     "render_strength": 59.1
+    },
+    "right": {
+     "clay_px": 1548,
+     "render_px": 1546,
+     "d_px": -2,
+     "clay_strength": 36.3,
+     "render_strength": 18.4
+    },
+    "top": {
+     "clay_px": 72,
+     "render_px": 69,
+     "d_px": -3,
+     "clay_strength": 3.0,
+     "render_strength": 7.8
+    },
+    "bottom": {
+     "clay_px": 496,
+     "render_px": 477,
+     "d_px": -19,
+     "clay_strength": 25.5,
+     "render_strength": 30.3
+    }
+   },
+   "width_ratio": 0.9853,
+   "height_ratio": 0.9623,
+   "worst_edge_px": 19,
+   "kind": "mirror",
+   "visible_pct": 87.5
+  },
+  "mirror oak frame": {
+   "box": [
+    0.5549,
+    0.813,
+    0.0393,
+    0.4601
+   ],
+   "edges": {
+    "left": {
+     "clay_px": 1071,
+     "render_px": 1076,
+     "d_px": 5,
+     "clay_strength": 44.3,
+     "render_strength": 59.0
+    },
+    "right": {
+     "clay_px": 1548,
+     "render_px": 1546,
+     "d_px": -2,
+     "clay_strength": 36.2,
+     "render_strength": 18.1
+    },
+    "top": {
+     "clay_px": 68,
+     "render_px": 69,
+     "d_px": 1,
+     "clay_strength": 3.0,
+     "render_strength": 7.5
+    },
+    "bottom": {
+     "clay_px": 496,
+     "render_px": 477,
+     "d_px": -19,
+     "clay_strength": 25.7,
+     "render_strength": 30.2
+    }
+   },
+   "width_ratio": 0.9853,
+   "height_ratio": 0.9533,
+   "worst_edge_px": 19,
+   "kind": "architecture",
+   "visible_pct": null
+  }
+ },
+ "fixed_edges_worst_px": 51,
+ "fixed_width_ratios": {
+  "shower fittings, matte black (shell)": 1.7874,
+  "bath vanity 110 (fixed)": 1.0046,
+  "U6 mirror": 0.9853,
+  "mirror oak frame": 0.9853
+ },
+ "summary": {
+  "global_shift_px": 9.66,
+  "worst_band_px": 173.97,
+  "worst_band_px_after_register": 165.51,
+  "register_shift_px": [
+   -1.16,
+   -2.2
+  ],
+  "register_scale": [
+   1.00068,
+   0.98298
+  ],
+  "fixed_edges_worst_px": 51,
+  "frame_file_matches_crop": true
+ }
+}

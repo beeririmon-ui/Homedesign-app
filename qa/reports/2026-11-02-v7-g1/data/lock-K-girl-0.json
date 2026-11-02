@@ -1,0 +1,255 @@
+{
+ "frame": "K-girl-0",
+ "kind": "pose",
+ "overscan": true,
+ "size": [
+  1920,
+  1080
+ ],
+ "check_raw": {
+  "size": [
+   1920,
+   1080
+  ],
+  "overlap_u": [
+   0.0,
+   0.999
+  ],
+  "overlap_v": [
+   0.0,
+   0.999
+  ],
+  "shift_px": {
+   "dx": 247.78,
+   "dy": -35.67,
+   "response": 0.009
+  },
+  "bands": [
+   {
+    "u": [
+     0.0,
+     0.249
+    ],
+    "dx_px": 27.1,
+    "dy_px": -48.1,
+    "response": 0.012
+   },
+   {
+    "u": [
+     0.249,
+     0.499
+    ],
+    "dx_px": 39.73,
+    "dy_px": -31.9,
+    "response": 0.025
+   },
+   {
+    "u": [
+     0.499,
+     0.749
+    ],
+    "dx_px": 55.08,
+    "dy_px": -272.55,
+    "response": 0.034
+   },
+   {
+    "u": [
+     0.749,
+     0.999
+    ],
+    "dx_px": -5.82,
+    "dy_px": -171.22,
+    "response": 0.004
+   }
+  ],
+  "deltaE": {
+   "mean": 17.43,
+   "p95": 39.63,
+   "share_over_5": 0.91
+  },
+  "L_mean": {
+   "a": 78.4,
+   "b": 76.0
+  }
+ },
+ "register": {
+  "affine": [
+   [
+    1.04967,
+    -0.04235,
+    -10.15383
+   ],
+   [
+    -0.01376,
+    1.05738,
+    -55.35158
+   ]
+  ],
+  "shift_px": [
+   -10.15,
+   -55.35
+  ],
+  "scale": [
+   1.04967,
+   1.05738
+  ],
+  "note": "affine maps render -> clay at 1920x1080 (register's own convention); shift = translation of the frame, scale = diagonal"
+ },
+ "check_registered": {
+  "size": [
+   1920,
+   1080
+  ],
+  "overlap_u": [
+   0.0,
+   0.999
+  ],
+  "overlap_v": [
+   0.0,
+   0.999
+  ],
+  "shift_px": {
+   "dx": 1.71,
+   "dy": 1.06,
+   "response": 0.015
+  },
+  "bands": [
+   {
+    "u": [
+     0.0,
+     0.249
+    ],
+    "dx_px": 50.79,
+    "dy_px": 2.75,
+    "response": 0.022
+   },
+   {
+    "u": [
+     0.249,
+     0.499
+    ],
+    "dx_px": 88.16,
+    "dy_px": -10.43,
+    "response": 0.042
+   },
+   {
+    "u": [
+     0.499,
+     0.749
+    ],
+    "dx_px": 133.64,
+    "dy_px": -261.71,
+    "response": 0.09
+   },
+   {
+    "u": [
+     0.749,
+     0.999
+    ],
+    "dx_px": -113.08,
+    "dy_px": -180.94,
+    "response": 0.017
+   }
+  ],
+  "deltaE": {
+   "mean": 16.64,
+   "p95": 38.52,
+   "share_over_5": 0.884
+  },
+  "L_mean": {
+   "a": 78.4,
+   "b": 76.9
+  }
+ },
+ "fixed_edges": {
+  "girl bed 96x196 (fixed)": {
+   "box": [
+    -0.0302,
+    0.1601,
+    0.6328,
+    1.0301
+   ],
+   "edges": {
+    "right": {
+     "clay_px": 304,
+     "render_px": 371,
+     "d_px": 67,
+     "clay_strength": 2.9,
+     "render_strength": 5.4
+    },
+    "top": {
+     "clay_px": 711,
+     "render_px": 683,
+     "d_px": -28,
+     "clay_strength": 9.7,
+     "render_strength": 0.4
+    }
+   },
+   "worst_edge_px": 67,
+   "kind": "furniture",
+   "visible_pct": 16.5
+  },
+  "girl desk 90x50 (fixed)": {
+   "box": [
+    0.2041,
+    0.4758,
+    0.5894,
+    0.9796
+   ],
+   "edges": {
+    "left": {
+     "clay_px": 414,
+     "render_px": 424,
+     "d_px": 10,
+     "clay_strength": 18.9,
+     "render_strength": 3.8
+    },
+    "right": {
+     "clay_px": 897,
+     "render_px": 883,
+     "d_px": -14,
+     "clay_strength": 18.9,
+     "render_strength": 26.7
+    },
+    "top": {
+     "clay_px": 669,
+     "render_px": 609,
+     "d_px": -60,
+     "clay_strength": 9.1,
+     "render_strength": 41.3
+    },
+    "bottom": {
+     "clay_px": 1023,
+     "render_px": 1044,
+     "d_px": 21,
+     "clay_strength": 1.5,
+     "render_strength": 12.6
+    }
+   },
+   "width_ratio": 0.9503,
+   "height_ratio": 1.2288,
+   "worst_edge_px": 60,
+   "kind": "furniture",
+   "visible_pct": 92.8
+  }
+ },
+ "fixed_edges_worst_px": 67,
+ "fixed_width_ratios": {
+  "girl desk 90x50 (fixed)": 0.9503
+ },
+ "summary": {
+  "global_shift_px": 247.78,
+  "worst_band_px": 272.55,
+  "worst_band_px_after_register": 261.71,
+  "register_shift_px": [
+   -10.15,
+   -55.35
+  ],
+  "register_scale": [
+   1.04967,
+   1.05738
+  ],
+  "fixed_edges_worst_px": 67,
+  "frame_file_matches_crop": true
+ }
+}

@@ -1,0 +1,291 @@
+{
+ "frame": "W0",
+ "kind": "master",
+ "overscan": false,
+ "size": [
+  1920,
+  1080
+ ],
+ "check_raw": {
+  "size": [
+   1920,
+   1080
+  ],
+  "overlap_u": [
+   0.0,
+   0.999
+  ],
+  "overlap_v": [
+   0.0,
+   0.999
+  ],
+  "shift_px": {
+   "dx": -4.36,
+   "dy": -39.46,
+   "response": 0.049
+  },
+  "bands": [
+   {
+    "u": [
+     0.0,
+     0.249
+    ],
+    "dx_px": -85.21,
+    "dy_px": 2.36,
+    "response": 0.044
+   },
+   {
+    "u": [
+     0.249,
+     0.499
+    ],
+    "dx_px": -2.59,
+    "dy_px": -40.07,
+    "response": 0.128
+   },
+   {
+    "u": [
+     0.499,
+     0.749
+    ],
+    "dx_px": -0.2,
+    "dy_px": -39.02,
+    "response": 0.203
+   },
+   {
+    "u": [
+     0.749,
+     0.999
+    ],
+    "dx_px": -4.04,
+    "dy_px": -39.68,
+    "response": 0.075
+   }
+  ],
+  "deltaE": {
+   "mean": 8.42,
+   "p95": 29.66,
+   "share_over_5": 0.452
+  },
+  "L_mean": {
+   "a": 83.0,
+   "b": 80.2
+  }
+ },
+ "register": {
+  "affine": [
+   [
+    1.00367,
+    0.00069,
+    -5.28231
+   ],
+   [
+    -0.00962,
+    0.94826,
+    18.35952
+   ]
+  ],
+  "shift_px": [
+   -5.28,
+   18.36
+  ],
+  "scale": [
+   1.00367,
+   0.94826
+  ],
+  "note": "affine maps render -> clay at 1920x1080 (register's own convention); shift = translation of the frame, scale = diagonal"
+ },
+ "check_registered": {
+  "size": [
+   1920,
+   1080
+  ],
+  "overlap_u": [
+   0.0,
+   0.999
+  ],
+  "overlap_v": [
+   0.0,
+   0.999
+  ],
+  "shift_px": {
+   "dx": -332.04,
+   "dy": -426.33,
+   "response": 0.005
+  },
+  "bands": [
+   {
+    "u": [
+     0.0,
+     0.249
+    ],
+    "dx_px": -81.16,
+    "dy_px": 21.66,
+    "response": 0.046
+   },
+   {
+    "u": [
+     0.249,
+     0.499
+    ],
+    "dx_px": -0.1,
+    "dy_px": -19.75,
+    "response": 0.104
+   },
+   {
+    "u": [
+     0.499,
+     0.749
+    ],
+    "dx_px": -0.52,
+    "dy_px": -11.17,
+    "response": 0.133
+   },
+   {
+    "u": [
+     0.749,
+     0.999
+    ],
+    "dx_px": -11.74,
+    "dy_px": 2.89,
+    "response": 0.087
+   }
+  ],
+  "deltaE": {
+   "mean": 7.9,
+   "p95": 25.4,
+   "share_over_5": 0.423
+  },
+  "L_mean": {
+   "a": 83.0,
+   "b": 80.1
+  }
+ },
+ "fixed_edges": {
+  "built-in oak desk + shelf": {
+   "box": [
+    0.3161,
+    0.6839,
+    0.2546,
+    0.9046
+   ],
+   "edges": {
+    "left": {
+     "clay_px": 606,
+     "render_px": 603,
+     "d_px": -3,
+     "clay_strength": 55.7,
+     "render_strength": 46.8
+    },
+    "right": {
+     "clay_px": 1312,
+     "render_px": 1293,
+     "d_px": -19,
+     "clay_strength": 8.3,
+     "render_strength": 18.4
+    },
+    "top": {
+     "clay_px": 290,
+     "render_px": 298,
+     "d_px": 8,
+     "clay_strength": 19.0,
+     "render_strength": 44.7
+    },
+    "bottom": {
+     "clay_px": 976,
+     "render_px": 941,
+     "d_px": -35,
+     "clay_strength": 4.4,
+     "render_strength": 18.8
+    }
+   },
+   "width_ratio": 0.9773,
+   "height_ratio": 0.9373,
+   "worst_edge_px": 35,
+   "kind": "architecture",
+   "visible_pct": null
+  },
+  "desk chair": {
+   "box": [
+    0.4354,
+    0.5646,
+    0.6009,
+    1.0
+   ],
+   "edges": {
+    "left": {
+     "clay_px": 847,
+     "render_px": 846,
+     "d_px": -1,
+     "clay_strength": 18.5,
+     "render_strength": 39.2
+    },
+    "right": {
+     "clay_px": 1121,
+     "render_px": 1072,
+     "d_px": -49,
+     "clay_strength": 17.3,
+     "render_strength": 27.4
+    },
+    "top": {
+     "clay_px": 650,
+     "render_px": 638,
+     "d_px": -12,
+     "clay_strength": 21.2,
+     "render_strength": 5.3
+    }
+   },
+   "width_ratio": 0.8248,
+   "worst_edge_px": 49,
+   "kind": "furniture",
+   "visible_pct": 98.6
+  },
+  "window W-work": {
+   "box": [
+    0.0,
+    0.124,
+    0.0,
+    0.637
+   ],
+   "edges": {
+    "right": {
+     "clay_px": 293,
+     "render_px": 291,
+     "d_px": -2,
+     "clay_strength": 11.8,
+     "render_strength": 13.6
+    },
+    "bottom": {
+     "clay_px": 702,
+     "render_px": 686,
+     "d_px": -16,
+     "clay_strength": 2.0,
+     "render_strength": 4.3
+    }
+   },
+   "worst_edge_px": 16,
+   "kind": "window",
+   "visible_pct": 13.7
+  }
+ },
+ "fixed_edges_worst_px": 49,
+ "fixed_width_ratios": {
+  "built-in oak desk + shelf": 0.9773,
+  "desk chair": 0.8248
+ },
+ "summary": {
+  "global_shift_px": 39.46,
+  "worst_band_px": 85.21,
+  "worst_band_px_after_register": 81.16,
+  "register_shift_px": [
+   -5.28,
+   18.36
+  ],
+  "register_scale": [
+   1.00367,
+   0.94826
+  ],
+  "fixed_edges_worst_px": 49,
+  "frame_file_matches_crop": null
+ }
+}

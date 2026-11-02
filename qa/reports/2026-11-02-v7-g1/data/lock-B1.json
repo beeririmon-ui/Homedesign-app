@@ -1,0 +1,387 @@
+{
+ "frame": "B1",
+ "kind": "master",
+ "overscan": true,
+ "size": [
+  1920,
+  1080
+ ],
+ "check_raw": {
+  "size": [
+   1920,
+   1080
+  ],
+  "overlap_u": [
+   0.0,
+   0.999
+  ],
+  "overlap_v": [
+   0.0,
+   0.999
+  ],
+  "shift_px": {
+   "dx": -140.31,
+   "dy": -13.36,
+   "response": 0.0
+  },
+  "bands": [
+   {
+    "u": [
+     0.0,
+     0.249
+    ],
+    "dx_px": 1.4,
+    "dy_px": -7.93,
+    "response": 0.465
+   },
+   {
+    "u": [
+     0.249,
+     0.499
+    ],
+    "dx_px": 7.46,
+    "dy_px": -8.33,
+    "response": 0.112
+   },
+   {
+    "u": [
+     0.499,
+     0.749
+    ],
+    "dx_px": -1.57,
+    "dy_px": -5.8,
+    "response": 0.055
+   },
+   {
+    "u": [
+     0.749,
+     0.999
+    ],
+    "dx_px": -2.16,
+    "dy_px": -5.49,
+    "response": 0.199
+   }
+  ],
+  "deltaE": {
+   "mean": 10.68,
+   "p95": 19.79,
+   "share_over_5": 0.972
+  },
+  "L_mean": {
+   "a": 75.9,
+   "b": 76.6
+  }
+ },
+ "register": {
+  "affine": [
+   [
+    0.99974,
+    0.00217,
+    -0.67051
+   ],
+   [
+    0.00208,
+    0.99078,
+    -0.69607
+   ]
+  ],
+  "shift_px": [
+   -0.67,
+   -0.7
+  ],
+  "scale": [
+   0.99974,
+   0.99078
+  ],
+  "note": "affine maps render -> clay at 1920x1080 (register's own convention); shift = translation of the frame, scale = diagonal"
+ },
+ "check_registered": {
+  "size": [
+   1920,
+   1080
+  ],
+  "overlap_u": [
+   0.0,
+   0.999
+  ],
+  "overlap_v": [
+   0.0,
+   0.999
+  ],
+  "shift_px": {
+   "dx": 6.51,
+   "dy": -25.48,
+   "response": 0.015
+  },
+  "bands": [
+   {
+    "u": [
+     0.0,
+     0.249
+    ],
+    "dx_px": 0.69,
+    "dy_px": -2.17,
+    "response": 0.419
+   },
+   {
+    "u": [
+     0.249,
+     0.499
+    ],
+    "dx_px": 0.31,
+    "dy_px": -3.0,
+    "response": 0.172
+   },
+   {
+    "u": [
+     0.499,
+     0.749
+    ],
+    "dx_px": -1.85,
+    "dy_px": 1.76,
+    "response": 0.097
+   },
+   {
+    "u": [
+     0.749,
+     0.999
+    ],
+    "dx_px": -1.36,
+    "dy_px": -0.04,
+    "response": 0.14
+   }
+  ],
+  "deltaE": {
+   "mean": 10.59,
+   "p95": 19.54,
+   "share_over_5": 0.971
+  },
+  "L_mean": {
+   "a": 75.9,
+   "b": 76.7
+  }
+ },
+ "fixed_edges": {
+  "bath fluted glazing": {
+   "box": [
+    0.1901,
+    0.3279,
+    0.1203,
+    0.4857
+   ],
+   "edges": {
+    "left": {
+     "clay_px": 313,
+     "render_px": 314,
+     "d_px": 1,
+     "clay_strength": 19.2,
+     "render_strength": 31.4
+    },
+    "right": {
+     "clay_px": 661,
+     "render_px": 646,
+     "d_px": -15,
+     "clay_strength": 18.3,
+     "render_strength": 29.3
+    },
+    "top": {
+     "clay_px": 138,
+     "render_px": 139,
+     "d_px": 1,
+     "clay_strength": 6.6,
+     "render_strength": 16.5
+    },
+    "bottom": {
+     "clay_px": 523,
+     "render_px": 547,
+     "d_px": 24,
+     "clay_strength": 25.5,
+     "render_strength": 15.2
+    }
+   },
+   "width_ratio": 0.954,
+   "height_ratio": 1.0597,
+   "worst_edge_px": 24,
+   "kind": "architecture",
+   "visible_pct": null
+  },
+  "bath WC + limestone ledge (fixed)": {
+   "box": [
+    0.1145,
+    0.3919,
+    0.5333,
+    0.9755
+   ],
+   "edges": {
+    "left": {
+     "clay_px": 219,
+     "render_px": 221,
+     "d_px": 2,
+     "clay_strength": 54.9,
+     "render_strength": 48.0
+    },
+    "right": {
+     "clay_px": 782,
+     "render_px": 783,
+     "d_px": 1,
+     "clay_strength": 32.6,
+     "render_strength": 48.5
+    },
+    "top": {
+     "clay_px": 583,
+     "render_px": 573,
+     "d_px": -10,
+     "clay_strength": 19.3,
+     "render_strength": 34.1
+    },
+    "bottom": {
+     "clay_px": 1016,
+     "render_px": 1015,
+     "d_px": -1,
+     "clay_strength": 2.6,
+     "render_strength": 3.6
+    }
+   },
+   "width_ratio": 0.9982,
+   "height_ratio": 1.0208,
+   "worst_edge_px": 10,
+   "kind": "furniture",
+   "visible_pct": 88.9
+  },
+  "shower fittings, matte black (shell)": {
+   "box": [
+    0.725,
+    0.7855,
+    0.0857,
+    0.5435
+   ],
+   "edges": {
+    "left": {
+     "clay_px": 1348,
+     "render_px": 1353,
+     "d_px": 5,
+     "clay_strength": 15.0,
+     "render_strength": 24.2
+    },
+    "right": {
+     "clay_px": 1521,
+     "render_px": 1533,
+     "d_px": 12,
+     "clay_strength": 7.6,
+     "render_strength": 10.1
+    },
+    "top": {
+     "clay_px": 99,
+     "render_px": 110,
+     "d_px": 11,
+     "clay_strength": 19.8,
+     "render_strength": 20.9
+    },
+    "bottom": {
+     "clay_px": 553,
+     "render_px": 586,
+     "d_px": 33,
+     "clay_strength": 38.7,
+     "render_strength": 14.4
+    }
+   },
+   "width_ratio": 1.0405,
+   "height_ratio": 1.0485,
+   "worst_edge_px": 33,
+   "kind": "architecture",
+   "visible_pct": null
+  },
+  "bath vanity 110 (fixed)": {
+   "box": [
+    0.9209,
+    1.0302,
+    0.6005,
+    1.0301
+   ],
+   "edges": {
+    "left": {
+     "clay_px": 1804,
+     "render_px": 1805,
+     "d_px": 1,
+     "clay_strength": 26.3,
+     "render_strength": 24.3
+    },
+    "top": {
+     "clay_px": 654,
+     "render_px": 650,
+     "d_px": -4,
+     "clay_strength": 5.2,
+     "render_strength": 8.7
+    }
+   },
+   "worst_edge_px": 4,
+   "kind": "furniture",
+   "visible_pct": 8.7
+  },
+  "window W-bath": {
+   "box": [
+    0.1633,
+    0.3524,
+    0.0486,
+    0.5217
+   ],
+   "edges": {
+    "left": {
+     "clay_px": 313,
+     "render_px": 314,
+     "d_px": 1,
+     "clay_strength": 19.2,
+     "render_strength": 31.9
+    },
+    "right": {
+     "clay_px": 661,
+     "render_px": 646,
+     "d_px": -15,
+     "clay_strength": 18.9,
+     "render_strength": 28.5
+    },
+    "top": {
+     "clay_px": 82,
+     "render_px": 78,
+     "d_px": -4,
+     "clay_strength": 2.0,
+     "render_strength": 3.3
+    },
+    "bottom": {
+     "clay_px": 581,
+     "render_px": 573,
+     "d_px": -8,
+     "clay_strength": 22.5,
+     "render_strength": 37.3
+    }
+   },
+   "width_ratio": 0.954,
+   "height_ratio": 0.992,
+   "worst_edge_px": 15,
+   "kind": "window",
+   "visible_pct": 89.8
+  }
+ },
+ "fixed_edges_worst_px": 33,
+ "fixed_width_ratios": {
+  "bath fluted glazing": 0.954,
+  "bath WC + limestone ledge (fixed)": 0.9982,
+  "shower fittings, matte black (shell)": 1.0405,
+  "window W-bath": 0.954
+ },
+ "summary": {
+  "global_shift_px": 140.31,
+  "worst_band_px": 8.33,
+  "worst_band_px_after_register": 3.0,
+  "register_shift_px": [
+   -0.67,
+   -0.7
+  ],
+  "register_scale": [
+   0.99974,
+   0.99078
+  ],
+  "fixed_edges_worst_px": 33,
+  "frame_file_matches_crop": true
+ }
+}

@@ -1,0 +1,291 @@
+{
+ "frame": "K-boy",
+ "kind": "master",
+ "overscan": true,
+ "size": [
+  1920,
+  1080
+ ],
+ "check_raw": {
+  "size": [
+   1920,
+   1080
+  ],
+  "overlap_u": [
+   0.0,
+   0.999
+  ],
+  "overlap_v": [
+   0.0,
+   0.999
+  ],
+  "shift_px": {
+   "dx": 14.5,
+   "dy": -41.8,
+   "response": 0.022
+  },
+  "bands": [
+   {
+    "u": [
+     0.0,
+     0.249
+    ],
+    "dx_px": -2.32,
+    "dy_px": -24.35,
+    "response": 0.082
+   },
+   {
+    "u": [
+     0.249,
+     0.499
+    ],
+    "dx_px": 12.38,
+    "dy_px": -44.34,
+    "response": 0.017
+   },
+   {
+    "u": [
+     0.499,
+     0.749
+    ],
+    "dx_px": 4.97,
+    "dy_px": -32.94,
+    "response": 0.22
+   },
+   {
+    "u": [
+     0.749,
+     0.999
+    ],
+    "dx_px": 5.79,
+    "dy_px": -34.76,
+    "response": 0.129
+   }
+  ],
+  "deltaE": {
+   "mean": 12.66,
+   "p95": 32.36,
+   "share_over_5": 0.683
+  },
+  "L_mean": {
+   "a": 78.1,
+   "b": 68.5
+  }
+ },
+ "register": {
+  "affine": [
+   [
+    1.00289,
+    -0.00477,
+    5.67925
+   ],
+   [
+    -0.01418,
+    0.97584,
+    2.62782
+   ]
+  ],
+  "shift_px": [
+   5.68,
+   2.63
+  ],
+  "scale": [
+   1.00289,
+   0.97584
+  ],
+  "note": "affine maps render -> clay at 1920x1080 (register's own convention); shift = translation of the frame, scale = diagonal"
+ },
+ "check_registered": {
+  "size": [
+   1920,
+   1080
+  ],
+  "overlap_u": [
+   0.0,
+   0.999
+  ],
+  "overlap_v": [
+   0.0,
+   0.999
+  ],
+  "shift_px": {
+   "dx": 11.72,
+   "dy": -16.89,
+   "response": 0.01
+  },
+  "bands": [
+   {
+    "u": [
+     0.0,
+     0.249
+    ],
+    "dx_px": 14.45,
+    "dy_px": -16.25,
+    "response": 0.054
+   },
+   {
+    "u": [
+     0.249,
+     0.499
+    ],
+    "dx_px": 13.51,
+    "dy_px": -18.76,
+    "response": 0.042
+   },
+   {
+    "u": [
+     0.499,
+     0.749
+    ],
+    "dx_px": -1.41,
+    "dy_px": -1.79,
+    "response": 0.275
+   },
+   {
+    "u": [
+     0.749,
+     0.999
+    ],
+    "dx_px": -1.17,
+    "dy_px": 1.75,
+    "response": 0.199
+   }
+  ],
+  "deltaE": {
+   "mean": 11.7,
+   "p95": 26.54,
+   "share_over_5": 0.657
+  },
+  "L_mean": {
+   "a": 78.1,
+   "b": 68.9
+  }
+ },
+ "fixed_edges": {
+  "boy bed 96x196 (fixed)": {
+   "box": [
+    0.1515,
+    0.5898,
+    0.5565,
+    0.9569
+   ],
+   "edges": {
+    "left": {
+     "clay_px": 290,
+     "render_px": 284,
+     "d_px": -6,
+     "clay_strength": 14.5,
+     "render_strength": 11.8
+    },
+    "right": {
+     "clay_px": 1132,
+     "render_px": 1136,
+     "d_px": 4,
+     "clay_strength": 3.9,
+     "render_strength": 5.0
+    },
+    "top": {
+     "clay_px": 637,
+     "render_px": 612,
+     "d_px": -25,
+     "clay_strength": 1.7,
+     "render_strength": 17.8
+    },
+    "bottom": {
+     "clay_px": 998,
+     "render_px": 1018,
+     "d_px": 20,
+     "clay_strength": 1.6,
+     "render_strength": 22.0
+    }
+   },
+   "width_ratio": 1.0119,
+   "height_ratio": 1.1247,
+   "worst_edge_px": 25,
+   "kind": "furniture",
+   "visible_pct": 49.4
+  },
+  "boy desk 90x50 (fixed)": {
+   "box": [
+    0.6266,
+    0.9193,
+    0.5648,
+    1.0301
+   ],
+   "edges": {
+    "left": {
+     "clay_px": 1222,
+     "render_px": 1227,
+     "d_px": 5,
+     "clay_strength": 16.7,
+     "render_strength": 20.4
+    },
+    "right": {
+     "clay_px": 1743,
+     "render_px": 1704,
+     "d_px": -39,
+     "clay_strength": 19.1,
+     "render_strength": 26.6
+    },
+    "top": {
+     "clay_px": 623,
+     "render_px": 595,
+     "d_px": -28,
+     "clay_strength": 4.3,
+     "render_strength": 10.4
+    }
+   },
+   "width_ratio": 0.9155,
+   "worst_edge_px": 39,
+   "kind": "furniture",
+   "visible_pct": 87.4
+  },
+  "window W-boy": {
+   "box": [
+    -0.0302,
+    0.2299,
+    -0.0301,
+    0.5393
+   ],
+   "edges": {
+    "right": {
+     "clay_px": 440,
+     "render_px": 445,
+     "d_px": 5,
+     "clay_strength": 25.2,
+     "render_strength": 33.5
+    },
+    "bottom": {
+     "clay_px": 580,
+     "render_px": 564,
+     "d_px": -16,
+     "clay_strength": 5.1,
+     "render_strength": 8.6
+    }
+   },
+   "worst_edge_px": 16,
+   "kind": "window",
+   "visible_pct": 38.4
+  }
+ },
+ "fixed_edges_worst_px": 39,
+ "fixed_width_ratios": {
+  "boy bed 96x196 (fixed)": 1.0119,
+  "boy desk 90x50 (fixed)": 0.9155
+ },
+ "summary": {
+  "global_shift_px": 41.8,
+  "worst_band_px": 44.34,
+  "worst_band_px_after_register": 18.76,
+  "register_shift_px": [
+   5.68,
+   2.63
+  ],
+  "register_scale": [
+   1.00289,
+   0.97584
+  ],
+  "fixed_edges_worst_px": 39,
+  "frame_file_matches_crop": true
+ }
+}

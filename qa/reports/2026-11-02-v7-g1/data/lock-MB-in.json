@@ -1,0 +1,493 @@
+{
+ "frame": "MB-in",
+ "kind": "pose",
+ "overscan": false,
+ "size": [
+  1920,
+  1080
+ ],
+ "check_raw": {
+  "size": [
+   1920,
+   1080
+  ],
+  "overlap_u": [
+   0.0,
+   0.999
+  ],
+  "overlap_v": [
+   0.0,
+   0.999
+  ],
+  "shift_px": {
+   "dx": 1.39,
+   "dy": 1.43,
+   "response": 0.035
+  },
+  "bands": [
+   {
+    "u": [
+     0.0,
+     0.249
+    ],
+    "dx_px": -1.96,
+    "dy_px": -187.5,
+    "response": 0.009
+   },
+   {
+    "u": [
+     0.249,
+     0.499
+    ],
+    "dx_px": -4.89,
+    "dy_px": 3.33,
+    "response": 0.011
+   },
+   {
+    "u": [
+     0.499,
+     0.749
+    ],
+    "dx_px": 1.94,
+    "dy_px": 1.65,
+    "response": 0.5
+   },
+   {
+    "u": [
+     0.749,
+     0.999
+    ],
+    "dx_px": 1.18,
+    "dy_px": 1.56,
+    "response": 0.302
+   }
+  ],
+  "deltaE": {
+   "mean": 13.72,
+   "p95": 37.16,
+   "share_over_5": 0.888
+  },
+  "L_mean": {
+   "a": 68.1,
+   "b": 75.9
+  }
+ },
+ "register": {
+  "affine": [
+   [
+    0.99732,
+    -0.00034,
+    1.88098
+   ],
+   [
+    0.00824,
+    1.00776,
+    -11.33329
+   ]
+  ],
+  "shift_px": [
+   1.88,
+   -11.33
+  ],
+  "scale": [
+   0.99732,
+   1.00776
+  ],
+  "note": "affine maps render -> clay at 1920x1080 (register's own convention); shift = translation of the frame, scale = diagonal"
+ },
+ "check_registered": {
+  "size": [
+   1920,
+   1080
+  ],
+  "overlap_u": [
+   0.0,
+   0.999
+  ],
+  "overlap_v": [
+   0.0,
+   0.999
+  ],
+  "shift_px": {
+   "dx": 2.93,
+   "dy": 0.11,
+   "response": 0.052
+  },
+  "bands": [
+   {
+    "u": [
+     0.0,
+     0.249
+    ],
+    "dx_px": -0.83,
+    "dy_px": -185.45,
+    "response": 0.016
+   },
+   {
+    "u": [
+     0.249,
+     0.499
+    ],
+    "dx_px": -102.4,
+    "dy_px": 13.45,
+    "response": 0.029
+   },
+   {
+    "u": [
+     0.499,
+     0.749
+    ],
+    "dx_px": 3.32,
+    "dy_px": 0.14,
+    "response": 0.505
+   },
+   {
+    "u": [
+     0.749,
+     0.999
+    ],
+    "dx_px": 4.15,
+    "dy_px": -1.7,
+    "response": 0.31
+   }
+  ],
+  "deltaE": {
+   "mean": 13.76,
+   "p95": 37.23,
+   "share_over_5": 0.886
+  },
+  "L_mean": {
+   "a": 68.1,
+   "b": 76.0
+  }
+ },
+ "fixed_edges": {
+  "hall console": {
+   "box": [
+    0.5044,
+    0.5359,
+    0.4921,
+    0.5588
+   ],
+   "edges": {
+    "left": {
+     "clay_px": 931,
+     "render_px": 977,
+     "d_px": 46,
+     "clay_strength": 28.2,
+     "render_strength": 21.2
+    },
+    "right": {
+     "clay_px": 1055,
+     "render_px": 1037,
+     "d_px": -18,
+     "clay_strength": 19.1,
+     "render_strength": 21.6
+    },
+    "top": {
+     "clay_px": 534,
+     "render_px": 533,
+     "d_px": -1,
+     "clay_strength": 20.9,
+     "render_strength": 17.7
+    },
+    "bottom": {
+     "clay_px": 600,
+     "render_px": 594,
+     "d_px": -6,
+     "clay_strength": 12.0,
+     "render_strength": 16.6
+    }
+   },
+   "width_ratio": 0.4839,
+   "height_ratio": 0.9242,
+   "worst_edge_px": 46,
+   "kind": "furniture",
+   "visible_pct": null
+  },
+  "G-H4 oak portal": {
+   "box": [
+    0.4583,
+    0.4909,
+    0.3551,
+    0.5569
+   ],
+   "edges": {
+    "left": {
+     "clay_px": 931,
+     "render_px": 894,
+     "d_px": -37,
+     "clay_strength": 28.2,
+     "render_strength": 27.4
+    },
+    "right": {
+     "clay_px": 931,
+     "render_px": 894,
+     "d_px": -37,
+     "clay_strength": 28.2,
+     "render_strength": 27.4
+    },
+    "top": {
+     "clay_px": 393,
+     "render_px": 380,
+     "d_px": -13,
+     "clay_strength": 26.9,
+     "render_strength": 10.3
+    },
+    "bottom": {
+     "clay_px": 571,
+     "render_px": 598,
+     "d_px": 27,
+     "clay_strength": 15.1,
+     "render_strength": 60.5
+    }
+   },
+   "width_ratio": null,
+   "height_ratio": 1.2247,
+   "worst_edge_px": 37,
+   "kind": "architecture",
+   "visible_pct": null
+  },
+  "G-C1b roof-light slot": {
+   "box": [
+    0.4154,
+    0.4648,
+    0.0583,
+    0.2519
+   ],
+   "edges": {
+    "left": {
+     "clay_px": 796,
+     "render_px": 799,
+     "d_px": 3,
+     "clay_strength": 26.5,
+     "render_strength": 19.0
+    },
+    "right": {
+     "clay_px": 906,
+     "render_px": 832,
+     "d_px": -74,
+     "clay_strength": 2.3,
+     "render_strength": 2.1
+    },
+    "top": {
+     "clay_px": 62,
+     "render_px": 67,
+     "d_px": 5,
+     "clay_strength": 8.8,
+     "render_strength": 13.3
+    },
+    "bottom": {
+     "clay_px": 271,
+     "render_px": 246,
+     "d_px": -25,
+     "clay_strength": 1.4,
+     "render_strength": 1.4
+    }
+   },
+   "width_ratio": 0.3,
+   "height_ratio": 0.8565,
+   "worst_edge_px": 74,
+   "kind": "architecture",
+   "visible_pct": null
+  },
+  "G-C3 oak portal": {
+   "box": [
+    0.4549,
+    0.5391,
+    0.3,
+    0.588
+   ],
+   "edges": {
+    "left": {
+     "clay_px": 931,
+     "render_px": 894,
+     "d_px": -37,
+     "clay_strength": 27.9,
+     "render_strength": 24.8
+    },
+    "right": {
+     "clay_px": 1055,
+     "render_px": 1037,
+     "d_px": -18,
+     "clay_strength": 22.8,
+     "render_strength": 21.8
+    },
+    "top": {
+     "clay_px": 332,
+     "render_px": 321,
+     "d_px": -11,
+     "clay_strength": 22.1,
+     "render_strength": 26.7
+    },
+    "bottom": {
+     "clay_px": 600,
+     "render_px": 598,
+     "d_px": -2,
+     "clay_strength": 7.4,
+     "render_strength": 37.9
+    }
+   },
+   "width_ratio": 1.1532,
+   "height_ratio": 1.0336,
+   "worst_edge_px": 37,
+   "kind": "architecture",
+   "visible_pct": null
+  },
+  "master bed 180x200": {
+   "box": [
+    0.0,
+    0.0544,
+    0.4778,
+    0.9023
+   ],
+   "edges": {
+    "right": {
+     "clay_px": 40,
+     "render_px": 103,
+     "d_px": 63,
+     "clay_strength": 7.9,
+     "render_strength": 16.5
+    },
+    "top": {
+     "clay_px": 480,
+     "render_px": 506,
+     "d_px": 26,
+     "clay_strength": 10.0,
+     "render_strength": 30.6
+    },
+    "bottom": {
+     "clay_px": 1010,
+     "render_px": 1003,
+     "d_px": -7,
+     "clay_strength": 5.9,
+     "render_strength": 5.2
+    }
+   },
+   "height_ratio": 0.9377,
+   "worst_edge_px": 63,
+   "kind": "furniture",
+   "visible_pct": 2.3
+  },
+  "nightstands 45": {
+   "box": [
+    0.0094,
+    0.1539,
+    0.6884,
+    0.9356
+   ],
+   "edges": {
+    "right": {
+     "clay_px": 295,
+     "render_px": 339,
+     "d_px": 44,
+     "clay_strength": 14.1,
+     "render_strength": 24.3
+    },
+    "top": {
+     "clay_px": 774,
+     "render_px": 772,
+     "d_px": -2,
+     "clay_strength": 23.9,
+     "render_strength": 22.4
+    },
+    "bottom": {
+     "clay_px": 1038,
+     "render_px": 1006,
+     "d_px": -32,
+     "clay_strength": 14.6,
+     "render_strength": 11.4
+    }
+   },
+   "height_ratio": 0.8864,
+   "worst_edge_px": 44,
+   "kind": "furniture",
+   "visible_pct": 41.2
+  },
+  "G-M4 wainscot": {
+   "box": [
+    0.0,
+    0.5896,
+    0.4315,
+    0.8819
+   ],
+   "edges": {
+    "right": {
+     "clay_px": 1129,
+     "render_px": 1193,
+     "d_px": 64,
+     "clay_strength": 132.9,
+     "render_strength": 17.3
+    },
+    "top": {
+     "clay_px": 477,
+     "render_px": 458,
+     "d_px": -19,
+     "clay_strength": 2.9,
+     "render_strength": 10.8
+    },
+    "bottom": {
+     "clay_px": 951,
+     "render_px": 953,
+     "d_px": 2,
+     "clay_strength": 2.6,
+     "render_strength": 14.4
+    }
+   },
+   "height_ratio": 1.0443,
+   "worst_edge_px": 64,
+   "kind": "architecture",
+   "visible_pct": null
+  },
+  "door leaves": {
+   "box": [
+    0.5638,
+    0.6312,
+    0.0,
+    1.0
+   ],
+   "edges": {
+    "left": {
+     "clay_px": 1129,
+     "render_px": 1092,
+     "d_px": -37,
+     "clay_strength": 111.2,
+     "render_strength": 11.9
+    },
+    "right": {
+     "clay_px": 1211,
+     "render_px": 1214,
+     "d_px": 3,
+     "clay_strength": 136.3,
+     "render_strength": 81.9
+    }
+   },
+   "width_ratio": 1.4878,
+   "worst_edge_px": 37,
+   "kind": "door",
+   "visible_pct": 21.2
+  }
+ },
+ "fixed_edges_worst_px": 74,
+ "fixed_width_ratios": {
+  "hall console": 0.4839,
+  "G-C1b roof-light slot": 0.3,
+  "G-C3 oak portal": 1.1532,
+  "door leaves": 1.4878
+ },
+ "summary": {
+  "global_shift_px": 1.43,
+  "worst_band_px": 187.5,
+  "worst_band_px_after_register": 185.45,
+  "register_shift_px": [
+   1.88,
+   -11.33
+  ],
+  "register_scale": [
+   0.99732,
+   1.00776
+  ],
+  "fixed_edges_worst_px": 74,
+  "frame_file_matches_crop": null
+ }
+}

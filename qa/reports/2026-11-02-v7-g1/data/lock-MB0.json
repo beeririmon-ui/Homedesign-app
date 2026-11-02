@@ -1,0 +1,335 @@
+{
+ "frame": "MB0",
+ "kind": "master",
+ "overscan": false,
+ "size": [
+  1920,
+  1080
+ ],
+ "check_raw": {
+  "size": [
+   1920,
+   1080
+  ],
+  "overlap_u": [
+   0.0,
+   0.999
+  ],
+  "overlap_v": [
+   0.0,
+   0.999
+  ],
+  "shift_px": {
+   "dx": 33.42,
+   "dy": -32.58,
+   "response": 0.045
+  },
+  "bands": [
+   {
+    "u": [
+     0.0,
+     0.249
+    ],
+    "dx_px": -73.19,
+    "dy_px": -275.46,
+    "response": 0.015
+   },
+   {
+    "u": [
+     0.249,
+     0.499
+    ],
+    "dx_px": 1.65,
+    "dy_px": -41.28,
+    "response": 0.024
+   },
+   {
+    "u": [
+     0.499,
+     0.749
+    ],
+    "dx_px": -1.09,
+    "dy_px": 87.1,
+    "response": 0.032
+   },
+   {
+    "u": [
+     0.749,
+     0.999
+    ],
+    "dx_px": -0.45,
+    "dy_px": -363.05,
+    "response": 0.031
+   }
+  ],
+  "deltaE": {
+   "mean": 14.93,
+   "p95": 39.08,
+   "share_over_5": 0.79
+  },
+  "L_mean": {
+   "a": 85.6,
+   "b": 73.0
+  }
+ },
+ "register": {
+  "affine": [
+   [
+    0.99719,
+    -0.00765,
+    5.30755
+   ],
+   [
+    0.00179,
+    1.02815,
+    -24.88241
+   ]
+  ],
+  "shift_px": [
+   5.31,
+   -24.88
+  ],
+  "scale": [
+   0.99719,
+   1.02815
+  ],
+  "note": "affine maps render -> clay at 1920x1080 (register's own convention); shift = translation of the frame, scale = diagonal"
+ },
+ "check_registered": {
+  "size": [
+   1920,
+   1080
+  ],
+  "overlap_u": [
+   0.0,
+   0.999
+  ],
+  "overlap_v": [
+   0.0,
+   0.999
+  ],
+  "shift_px": {
+   "dx": -322.34,
+   "dy": -53.02,
+   "response": 0.004
+  },
+  "bands": [
+   {
+    "u": [
+     0.0,
+     0.249
+    ],
+    "dx_px": -74.98,
+    "dy_px": -263.29,
+    "response": 0.009
+   },
+   {
+    "u": [
+     0.249,
+     0.499
+    ],
+    "dx_px": 0.38,
+    "dy_px": -185.27,
+    "response": 0.025
+   },
+   {
+    "u": [
+     0.499,
+     0.749
+    ],
+    "dx_px": -0.86,
+    "dy_px": -38.52,
+    "response": 0.025
+   },
+   {
+    "u": [
+     0.749,
+     0.999
+    ],
+    "dx_px": 161.12,
+    "dy_px": -171.2,
+    "response": 0.01
+   }
+  ],
+  "deltaE": {
+   "mean": 14.79,
+   "p95": 37.77,
+   "share_over_5": 0.797
+  },
+  "L_mean": {
+   "a": 85.6,
+   "b": 73.2
+  }
+ },
+ "fixed_edges": {
+  "master bed 180x200": {
+   "box": [
+    0.0922,
+    0.9078,
+    0.4245,
+    1.0
+   ],
+   "edges": {
+    "left": {
+     "clay_px": 157,
+     "render_px": 195,
+     "d_px": 38,
+     "clay_strength": 3.4,
+     "render_strength": 16.5
+    },
+    "right": {
+     "clay_px": 1718,
+     "render_px": 1763,
+     "d_px": 45,
+     "clay_strength": 10.7,
+     "render_strength": 16.3
+    },
+    "top": {
+     "clay_px": 421,
+     "render_px": 421,
+     "d_px": 0,
+     "clay_strength": 5.5,
+     "render_strength": 26.9
+    }
+   },
+   "width_ratio": 1.0045,
+   "worst_edge_px": 45,
+   "kind": "furniture",
+   "visible_pct": 20.6
+  },
+  "nightstands 45": {
+   "box": [
+    0.1878,
+    0.8122,
+    0.6356,
+    0.7495
+   ],
+   "edges": {
+    "left": {
+     "clay_px": 360,
+     "render_px": 316,
+     "d_px": -44,
+     "clay_strength": 29.9,
+     "render_strength": 29.2
+    },
+    "right": {
+     "clay_px": 1565,
+     "render_px": 1566,
+     "d_px": 1,
+     "clay_strength": 27.8,
+     "render_strength": 15.7
+    },
+    "top": {
+     "clay_px": 715,
+     "render_px": 656,
+     "d_px": -59,
+     "clay_strength": 34.1,
+     "render_strength": 23.7
+    },
+    "bottom": {
+     "clay_px": 806,
+     "render_px": 796,
+     "d_px": -10,
+     "clay_strength": 0.3,
+     "render_strength": 31.4
+    }
+   },
+   "width_ratio": 1.0373,
+   "height_ratio": 1.5385,
+   "worst_edge_px": 59,
+   "kind": "furniture",
+   "visible_pct": 26.8
+  },
+  "G-M4 wainscot": {
+   "box": [
+    0.1872,
+    0.9526,
+    0.3787,
+    0.8292
+   ],
+   "edges": {
+    "left": {
+     "clay_px": 360,
+     "render_px": 314,
+     "d_px": -46,
+     "clay_strength": 11.9,
+     "render_strength": 17.0
+    },
+    "right": {
+     "clay_px": 1892,
+     "render_px": 1763,
+     "d_px": -129,
+     "clay_strength": 2.4,
+     "render_strength": 45.6
+    },
+    "top": {
+     "clay_px": 419,
+     "render_px": 374,
+     "d_px": -45,
+     "clay_strength": 16.8,
+     "render_strength": 37.4
+    },
+    "bottom": {
+     "clay_px": 898,
+     "render_px": 932,
+     "d_px": 34,
+     "clay_strength": 37.9,
+     "render_strength": 21.5
+    }
+   },
+   "width_ratio": 0.9458,
+   "height_ratio": 1.1649,
+   "worst_edge_px": 129,
+   "kind": "architecture",
+   "visible_pct": null
+  },
+  "window W-master": {
+   "box": [
+    0.0,
+    0.1385,
+    0.0,
+    0.6019
+   ],
+   "edges": {
+    "right": {
+     "clay_px": 267,
+     "render_px": 326,
+     "d_px": 59,
+     "clay_strength": 34.0,
+     "render_strength": 11.3
+    },
+    "bottom": {
+     "clay_px": 638,
+     "render_px": 613,
+     "d_px": -25,
+     "clay_strength": 2.6,
+     "render_strength": 4.0
+    }
+   },
+   "worst_edge_px": 59,
+   "kind": "window",
+   "visible_pct": 10.5
+  }
+ },
+ "fixed_edges_worst_px": 129,
+ "fixed_width_ratios": {
+  "master bed 180x200": 1.0045,
+  "nightstands 45": 1.0373,
+  "G-M4 wainscot": 0.9458
+ },
+ "summary": {
+  "global_shift_px": 33.42,
+  "worst_band_px": 363.05,
+  "worst_band_px_after_register": 263.29,
+  "register_shift_px": [
+   5.31,
+   -24.88
+  ],
+  "register_scale": [
+   0.99719,
+   1.02815
+  ],
+  "fixed_edges_worst_px": 129,
+  "frame_file_matches_crop": null
+ }
+}

@@ -1,0 +1,517 @@
+{
+ "frame": "H0",
+ "kind": "master",
+ "overscan": false,
+ "size": [
+  1920,
+  1080
+ ],
+ "check_raw": {
+  "size": [
+   1920,
+   1080
+  ],
+  "overlap_u": [
+   0.0,
+   0.999
+  ],
+  "overlap_v": [
+   0.0,
+   0.999
+  ],
+  "shift_px": {
+   "dx": -49.15,
+   "dy": -35.02,
+   "response": 0.077
+  },
+  "bands": [
+   {
+    "u": [
+     0.0,
+     0.249
+    ],
+    "dx_px": -0.38,
+    "dy_px": -28.97,
+    "response": 0.046
+   },
+   {
+    "u": [
+     0.249,
+     0.499
+    ],
+    "dx_px": 0.43,
+    "dy_px": -29.05,
+    "response": 0.039
+   },
+   {
+    "u": [
+     0.499,
+     0.749
+    ],
+    "dx_px": 0.8,
+    "dy_px": 7.78,
+    "response": 0.057
+   },
+   {
+    "u": [
+     0.749,
+     0.999
+    ],
+    "dx_px": 13.85,
+    "dy_px": -41.57,
+    "response": 0.106
+   }
+  ],
+  "deltaE": {
+   "mean": 8.52,
+   "p95": 24.98,
+   "share_over_5": 0.544
+  },
+  "L_mean": {
+   "a": 76.5,
+   "b": 75.7
+  }
+ },
+ "register": {
+  "affine": [
+   [
+    1.01555,
+    -0.0041,
+    -9.18941
+   ],
+   [
+    0.00178,
+    1.00243,
+    -3.94393
+   ]
+  ],
+  "shift_px": [
+   -9.19,
+   -3.94
+  ],
+  "scale": [
+   1.01555,
+   1.00243
+  ],
+  "note": "affine maps render -> clay at 1920x1080 (register's own convention); shift = translation of the frame, scale = diagonal"
+ },
+ "check_registered": {
+  "size": [
+   1920,
+   1080
+  ],
+  "overlap_u": [
+   0.0,
+   0.999
+  ],
+  "overlap_v": [
+   0.0,
+   0.999
+  ],
+  "shift_px": {
+   "dx": -50.84,
+   "dy": -37.51,
+   "response": 0.047
+  },
+  "bands": [
+   {
+    "u": [
+     0.0,
+     0.249
+    ],
+    "dx_px": -0.25,
+    "dy_px": -27.31,
+    "response": 0.05
+   },
+   {
+    "u": [
+     0.249,
+     0.499
+    ],
+    "dx_px": -0.03,
+    "dy_px": -27.38,
+    "response": 0.052
+   },
+   {
+    "u": [
+     0.499,
+     0.749
+    ],
+    "dx_px": -7.14,
+    "dy_px": 8.55,
+    "response": 0.067
+   },
+   {
+    "u": [
+     0.749,
+     0.999
+    ],
+    "dx_px": 1.81,
+    "dy_px": -42.17,
+    "response": 0.117
+   }
+  ],
+  "deltaE": {
+   "mean": 8.47,
+   "p95": 25.0,
+   "share_over_5": 0.543
+  },
+  "L_mean": {
+   "a": 76.5,
+   "b": 75.8
+  }
+ },
+ "check_note": "phase correlation between a clay and a photo-real render is reliable only where response >= 0.05; tiles_ecc below is QA's own local measure (ECC translation per tile on the same edge maps register uses)",
+ "tiles_ecc": [
+  {
+   "u": [
+    0.0,
+    0.25
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": -4.73,
+   "dy_px": -1.02,
+   "rho": 0.706,
+   "counted": true
+  },
+  {
+   "u": [
+    0.25,
+    0.5
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": 7.39,
+   "dy_px": -26.2,
+   "rho": 0.595,
+   "counted": true
+  },
+  {
+   "u": [
+    0.5,
+    0.75
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": 0.64,
+   "dy_px": 7.62,
+   "rho": 0.441,
+   "counted": true
+  },
+  {
+   "u": [
+    0.75,
+    1.0
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": -3.39,
+   "dy_px": -133.13,
+   "rho": 0.217,
+   "counted": true
+  },
+  {
+   "u": [
+    0.0,
+    0.25
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": -5.36,
+   "dy_px": 0.91,
+   "rho": 0.306,
+   "counted": true
+  },
+  {
+   "u": [
+    0.25,
+    0.5
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": 6.74,
+   "dy_px": -32.62,
+   "rho": 0.683,
+   "counted": true
+  },
+  {
+   "u": [
+    0.5,
+    0.75
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": 1.62,
+   "dy_px": -18.92,
+   "rho": 0.511,
+   "counted": true
+  },
+  {
+   "u": [
+    0.75,
+    1.0
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": 8.88,
+   "dy_px": 2.94,
+   "rho": 0.589,
+   "counted": true
+  }
+ ],
+ "tiles_ecc_registered": [
+  {
+   "u": [
+    0.0,
+    0.25
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": 0.57,
+   "dy_px": 2.15,
+   "rho": 0.694,
+   "counted": true
+  },
+  {
+   "u": [
+    0.25,
+    0.5
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": 3.46,
+   "dy_px": -4.25,
+   "rho": 0.545,
+   "counted": true
+  },
+  {
+   "u": [
+    0.5,
+    0.75
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": -8.55,
+   "dy_px": 8.14,
+   "rho": 0.435,
+   "counted": true
+  },
+  {
+   "u": [
+    0.75,
+    1.0
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": -14.26,
+   "dy_px": -23.24,
+   "rho": 0.091,
+   "counted": false
+  },
+  {
+   "u": [
+    0.0,
+    0.25
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": 0.4,
+   "dy_px": 4.93,
+   "rho": 0.32,
+   "counted": true
+  },
+  {
+   "u": [
+    0.25,
+    0.5
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": 4.65,
+   "dy_px": -31.19,
+   "rho": 0.694,
+   "counted": true
+  },
+  {
+   "u": [
+    0.5,
+    0.75
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": -2.13,
+   "dy_px": -19.01,
+   "rho": 0.518,
+   "counted": true
+  },
+  {
+   "u": [
+    0.75,
+    1.0
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": -1.86,
+   "dy_px": 2.95,
+   "rho": 0.588,
+   "counted": true
+  }
+ ],
+ "fixed_edges": {
+  "fixed:hall-bench": {
+   "box": [
+    0.0,
+    0.251,
+    0.7778,
+    1.0
+   ],
+   "edges": {
+    "right": {
+     "clay_px": 470,
+     "render_px": 471,
+     "d_px": 1,
+     "clay_strength": 22.1,
+     "render_strength": 20.8
+    },
+    "top": {
+     "clay_px": 871,
+     "render_px": 832,
+     "d_px": -39,
+     "clay_strength": 15.8,
+     "render_strength": 22.5
+    }
+   },
+   "worst_edge_px": 39,
+   "kind": "furniture",
+   "visible_pct": 18.3
+  },
+  "hall console": {
+   "box": [
+    0.5672,
+    0.8086,
+    0.6361,
+    1.0
+   ],
+   "edges": {
+    "left": {
+     "clay_px": 1139,
+     "render_px": 1106,
+     "d_px": -33,
+     "clay_strength": 28.4,
+     "render_strength": 43.5
+    },
+    "right": {
+     "clay_px": 1509,
+     "render_px": 1521,
+     "d_px": 12,
+     "clay_strength": 12.7,
+     "render_strength": 32.3
+    },
+    "top": {
+     "clay_px": 708,
+     "render_px": 670,
+     "d_px": -38,
+     "clay_strength": 7.8,
+     "render_strength": 23.5
+    }
+   },
+   "width_ratio": 1.1216,
+   "worst_edge_px": 38,
+   "kind": "furniture",
+   "visible_pct": 84.7
+  },
+  "G-H4 oak portal": {
+   "box": [
+    0.2047,
+    0.507,
+    0.0,
+    0.9806
+   ],
+   "edges": {
+    "left": {
+     "clay_px": 382,
+     "render_px": 436,
+     "d_px": 54,
+     "clay_strength": 10.0,
+     "render_strength": 24.7
+    },
+    "right": {
+     "clay_px": 919,
+     "render_px": 926,
+     "d_px": 7,
+     "clay_strength": 30.1,
+     "render_strength": 54.0
+    },
+    "bottom": {
+     "clay_px": 1037,
+     "render_px": 1053,
+     "d_px": 16,
+     "clay_strength": 5.5,
+     "render_strength": 4.6
+    }
+   },
+   "width_ratio": 0.9125,
+   "worst_edge_px": 54,
+   "kind": "architecture",
+   "visible_pct": null
+  }
+ },
+ "fixed_edges_worst_px": 54,
+ "fixed_width_ratios": {
+  "hall console": 1.1216,
+  "G-H4 oak portal": 0.9125
+ },
+ "summary": {
+  "global_shift_px": 49.15,
+  "global_shift_response": 0.077,
+  "worst_band_px": 41.57,
+  "bands_reliable": 2,
+  "worst_band_px_after_register": 42.17,
+  "worst_tile_ecc_px": 133.13,
+  "tiles_counted": 8,
+  "worst_tile_ecc_px_after_register": 31.19,
+  "register_shift_px": [
+   -9.19,
+   -3.94
+  ],
+  "register_scale": [
+   1.01555,
+   1.00243
+  ],
+  "fixed_edges_worst_px": 54,
+  "frame_file_matches_crop": null
+ }
+}

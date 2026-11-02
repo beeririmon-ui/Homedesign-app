@@ -1,0 +1,439 @@
+{
+ "frame": "M0x",
+ "kind": "pose",
+ "overscan": true,
+ "size": [
+  1920,
+  1080
+ ],
+ "check_raw": {
+  "size": [
+   1920,
+   1080
+  ],
+  "overlap_u": [
+   0.0,
+   0.999
+  ],
+  "overlap_v": [
+   0.0,
+   0.999
+  ],
+  "shift_px": {
+   "dx": -0.13,
+   "dy": -10.87,
+   "response": 0.273
+  },
+  "bands": [
+   {
+    "u": [
+     0.0,
+     0.249
+    ],
+    "dx_px": -4.27,
+    "dy_px": -127.83,
+    "response": 0.013
+   },
+   {
+    "u": [
+     0.249,
+     0.499
+    ],
+    "dx_px": -0.33,
+    "dy_px": -10.32,
+    "response": 0.141
+   },
+   {
+    "u": [
+     0.499,
+     0.749
+    ],
+    "dx_px": -0.27,
+    "dy_px": -10.59,
+    "response": 0.28
+   },
+   {
+    "u": [
+     0.749,
+     0.999
+    ],
+    "dx_px": 25.35,
+    "dy_px": 68.69,
+    "response": 0.025
+   }
+  ],
+  "deltaE": {
+   "mean": 7.73,
+   "p95": 27.76,
+   "share_over_5": 0.442
+  },
+  "L_mean": {
+   "a": 87.1,
+   "b": 81.9
+  }
+ },
+ "register": {
+  "affine": [
+   [
+    0.99689,
+    0.00057,
+    2.96948
+   ],
+   [
+    0.00744,
+    0.98451,
+    -8.60589
+   ]
+  ],
+  "shift_px": [
+   2.97,
+   -8.61
+  ],
+  "scale": [
+   0.99689,
+   0.98451
+  ],
+  "note": "affine maps render -> clay at 1920x1080 (register's own convention); shift = translation of the frame, scale = diagonal"
+ },
+ "check_registered": {
+  "size": [
+   1920,
+   1080
+  ],
+  "overlap_u": [
+   0.0,
+   0.999
+  ],
+  "overlap_v": [
+   0.0,
+   0.999
+  ],
+  "shift_px": {
+   "dx": -0.15,
+   "dy": 0.41,
+   "response": 0.27
+  },
+  "bands": [
+   {
+    "u": [
+     0.0,
+     0.249
+    ],
+    "dx_px": 1.65,
+    "dy_px": -106.09,
+    "response": 0.018
+   },
+   {
+    "u": [
+     0.249,
+     0.499
+    ],
+    "dx_px": -1.74,
+    "dy_px": 2.11,
+    "response": 0.38
+   },
+   {
+    "u": [
+     0.499,
+     0.749
+    ],
+    "dx_px": -0.16,
+    "dy_px": 0.33,
+    "response": 0.273
+   },
+   {
+    "u": [
+     0.749,
+     0.999
+    ],
+    "dx_px": 9.15,
+    "dy_px": 50.83,
+    "response": 0.01
+   }
+  ],
+  "deltaE": {
+   "mean": 7.51,
+   "p95": 27.14,
+   "share_over_5": 0.44
+  },
+  "L_mean": {
+   "a": 87.1,
+   "b": 81.9
+  }
+ },
+ "fixed_edges": {
+  "dining table 160x85 (fixed)": {
+   "box": [
+    0.468,
+    0.6989,
+    0.55,
+    0.7811
+   ],
+   "edges": {
+    "left": {
+     "clay_px": 910,
+     "render_px": 866,
+     "d_px": -44,
+     "clay_strength": 25.7,
+     "render_strength": 62.1
+    },
+    "right": {
+     "clay_px": 1386,
+     "render_px": 1386,
+     "d_px": 0,
+     "clay_strength": 23.9,
+     "render_strength": 62.6
+    },
+    "top": {
+     "clay_px": 614,
+     "render_px": 599,
+     "d_px": -15,
+     "clay_strength": 8.8,
+     "render_strength": 22.9
+    },
+    "bottom": {
+     "clay_px": 880,
+     "render_px": 867,
+     "d_px": -13,
+     "clay_strength": 2.6,
+     "render_strength": 13.4
+    }
+   },
+   "width_ratio": 1.0924,
+   "height_ratio": 1.0075,
+   "worst_edge_px": 44,
+   "kind": "furniture",
+   "visible_pct": 70.5
+  },
+  "dining chairs (fixed, window side)": {
+   "box": [
+    0.4519,
+    0.5922,
+    0.5324,
+    0.7333
+   ],
+   "edges": {
+    "left": {
+     "clay_px": 925,
+     "render_px": 847,
+     "d_px": -78,
+     "clay_strength": 22.4,
+     "render_strength": 52.8
+    },
+    "right": {
+     "clay_px": 1079,
+     "render_px": 1079,
+     "d_px": 0,
+     "clay_strength": 24.5,
+     "render_strength": 34.1
+    },
+    "top": {
+     "clay_px": 605,
+     "render_px": 603,
+     "d_px": -2,
+     "clay_strength": 4.9,
+     "render_strength": 26.5
+    },
+    "bottom": {
+     "clay_px": 767,
+     "render_px": 756,
+     "d_px": -11,
+     "clay_strength": 3.2,
+     "render_strength": 8.4
+    }
+   },
+   "width_ratio": 1.5065,
+   "height_ratio": 0.9444,
+   "worst_edge_px": 78,
+   "kind": "furniture",
+   "visible_pct": 54.3
+  },
+  "dining bench (fixed)": {
+   "box": [
+    0.5692,
+    0.7227,
+    0.6569,
+    0.8163
+   ],
+   "edges": {
+    "left": {
+     "clay_px": 1041,
+     "render_px": 1043,
+     "d_px": 2,
+     "clay_strength": 30.6,
+     "render_strength": 44.4
+    },
+    "right": {
+     "clay_px": 1386,
+     "render_px": 1386,
+     "d_px": 0,
+     "clay_strength": 16.5,
+     "render_strength": 44.7
+    },
+    "top": {
+     "clay_px": 735,
+     "render_px": 709,
+     "d_px": -26,
+     "clay_strength": 7.7,
+     "render_strength": 14.9
+    },
+    "bottom": {
+     "clay_px": 888,
+     "render_px": 849,
+     "d_px": -39,
+     "clay_strength": 2.6,
+     "render_strength": 13.6
+    }
+   },
+   "width_ratio": 0.9942,
+   "height_ratio": 0.915,
+   "worst_edge_px": 39,
+   "kind": "furniture",
+   "visible_pct": 52.0
+  },
+  "kitchen run (fixed): lower units, sink, hob, plastered hood, oak shelves, tall units, coffee niche, oven": {
+   "box": [
+    0.6753,
+    0.7227,
+    0.3958,
+    0.6403
+   ],
+   "edges": {
+    "left": {
+     "clay_px": 1303,
+     "render_px": 1299,
+     "d_px": -4,
+     "clay_strength": 8.5,
+     "render_strength": 18.3
+    },
+    "right": {
+     "clay_px": 1320,
+     "render_px": 1320,
+     "d_px": 0,
+     "clay_strength": 6.3,
+     "render_strength": 16.4
+    },
+    "top": {
+     "clay_px": 433,
+     "render_px": 417,
+     "d_px": -16,
+     "clay_strength": 12.0,
+     "render_strength": 36.7
+    },
+    "bottom": {
+     "clay_px": 714,
+     "render_px": 704,
+     "d_px": -10,
+     "clay_strength": 15.8,
+     "render_strength": 33.5
+    }
+   },
+   "width_ratio": 1.2353,
+   "height_ratio": 1.0214,
+   "worst_edge_px": 16,
+   "kind": "furniture",
+   "visible_pct": 0.3
+  },
+  "window W-dining": {
+   "box": [
+    0.4519,
+    0.4878,
+    0.1787,
+    0.5403
+   ],
+   "edges": {
+    "left": {
+     "clay_px": 866,
+     "render_px": 866,
+     "d_px": 0,
+     "clay_strength": 32.8,
+     "render_strength": 97.5
+    },
+    "right": {
+     "clay_px": 939,
+     "render_px": 985,
+     "d_px": 46,
+     "clay_strength": 19.6,
+     "render_strength": 38.1
+    },
+    "top": {
+     "clay_px": 159,
+     "render_px": 159,
+     "d_px": 0,
+     "clay_strength": 8.7,
+     "render_strength": 46.0
+    },
+    "bottom": {
+     "clay_px": 582,
+     "render_px": 599,
+     "d_px": 17,
+     "clay_strength": 5.0,
+     "render_strength": 32.5
+    }
+   },
+   "width_ratio": 1.6301,
+   "height_ratio": 1.0402,
+   "worst_edge_px": 46,
+   "kind": "window",
+   "visible_pct": 31.6
+  },
+  "door leaves": {
+   "box": [
+    0.4438,
+    0.4519,
+    -0.0278,
+    0.9477
+   ],
+   "edges": {
+    "left": {
+     "clay_px": 866,
+     "render_px": 866,
+     "d_px": 0,
+     "clay_strength": 22.2,
+     "render_strength": 79.4
+    },
+    "right": {
+     "clay_px": 866,
+     "render_px": 866,
+     "d_px": 0,
+     "clay_strength": 22.2,
+     "render_strength": 79.4
+    },
+    "bottom": {
+     "clay_px": 1020,
+     "render_px": 1011,
+     "d_px": -9,
+     "clay_strength": 18.6,
+     "render_strength": 11.2
+    }
+   },
+   "width_ratio": null,
+   "worst_edge_px": 9,
+   "kind": "door",
+   "visible_pct": 0.6
+  }
+ },
+ "fixed_edges_worst_px": 78,
+ "fixed_width_ratios": {
+  "dining table 160x85 (fixed)": 1.0924,
+  "dining chairs (fixed, window side)": 1.5065,
+  "dining bench (fixed)": 0.9942,
+  "kitchen run (fixed): lower units, sink, hob, plastered hood, oak shelves, tall units, coffee niche, oven": 1.2353,
+  "window W-dining": 1.6301
+ },
+ "summary": {
+  "global_shift_px": 10.87,
+  "worst_band_px": 127.83,
+  "worst_band_px_after_register": 106.09,
+  "register_shift_px": [
+   2.97,
+   -8.61
+  ],
+  "register_scale": [
+   0.99689,
+   0.98451
+  ],
+  "fixed_edges_worst_px": 78,
+  "frame_file_matches_crop": true
+ }
+}

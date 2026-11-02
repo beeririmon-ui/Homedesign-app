@@ -1,0 +1,276 @@
+{
+ "frame": "H0x",
+ "kind": "pose",
+ "overscan": false,
+ "size": [
+  1920,
+  1080
+ ],
+ "check_raw": {
+  "size": [
+   1920,
+   1080
+  ],
+  "overlap_u": [
+   0.0,
+   0.999
+  ],
+  "overlap_v": [
+   0.0,
+   0.999
+  ],
+  "shift_px": {
+   "dx": -56.3,
+   "dy": -15.04,
+   "response": 0.076
+  },
+  "bands": [
+   {
+    "u": [
+     0.0,
+     0.249
+    ],
+    "dx_px": -0.43,
+    "dy_px": -38.16,
+    "response": 0.158
+   },
+   {
+    "u": [
+     0.249,
+     0.499
+    ],
+    "dx_px": -0.34,
+    "dy_px": -3.53,
+    "response": 0.146
+   },
+   {
+    "u": [
+     0.499,
+     0.749
+    ],
+    "dx_px": -56.39,
+    "dy_px": -11.03,
+    "response": 0.131
+   },
+   {
+    "u": [
+     0.749,
+     0.999
+    ],
+    "dx_px": -21.31,
+    "dy_px": -43.75,
+    "response": 0.03
+   }
+  ],
+  "deltaE": {
+   "mean": 8.54,
+   "p95": 25.62,
+   "share_over_5": 0.564
+  },
+  "L_mean": {
+   "a": 77.4,
+   "b": 75.7
+  }
+ },
+ "register": {
+  "affine": [
+   [
+    0.99993,
+    -0.00015,
+    -0.28542
+   ],
+   [
+    -0.00633,
+    0.95578,
+    5.20503
+   ]
+  ],
+  "shift_px": [
+   -0.29,
+   5.21
+  ],
+  "scale": [
+   0.99993,
+   0.95578
+  ],
+  "note": "affine maps render -> clay at 1920x1080 (register's own convention); shift = translation of the frame, scale = diagonal"
+ },
+ "check_registered": {
+  "size": [
+   1920,
+   1080
+  ],
+  "overlap_u": [
+   0.0,
+   0.999
+  ],
+  "overlap_v": [
+   0.0,
+   0.999
+  ],
+  "shift_px": {
+   "dx": -55.11,
+   "dy": 21.42,
+   "response": 0.071
+  },
+  "bands": [
+   {
+    "u": [
+     0.0,
+     0.249
+    ],
+    "dx_px": -0.32,
+    "dy_px": 1.86,
+    "response": 0.162
+   },
+   {
+    "u": [
+     0.249,
+     0.499
+    ],
+    "dx_px": 0.41,
+    "dy_px": 33.44,
+    "response": 0.07
+   },
+   {
+    "u": [
+     0.499,
+     0.749
+    ],
+    "dx_px": -36.04,
+    "dy_px": 22.11,
+    "response": 0.114
+   },
+   {
+    "u": [
+     0.749,
+     0.999
+    ],
+    "dx_px": -45.96,
+    "dy_px": -285.38,
+    "response": -0.01
+   }
+  ],
+  "deltaE": {
+   "mean": 7.96,
+   "p95": 22.79,
+   "share_over_5": 0.554
+  },
+  "L_mean": {
+   "a": 77.4,
+   "b": 76.2
+  }
+ },
+ "fixed_edges": {
+  "fixed:hall-bench": {
+   "box": [
+    0.0841,
+    0.4148,
+    0.7569,
+    1.0
+   ],
+   "edges": {
+    "left": {
+     "clay_px": 161,
+     "render_px": 160,
+     "d_px": -1,
+     "clay_strength": 9.2,
+     "render_strength": 16.5
+    },
+    "right": {
+     "clay_px": 785,
+     "render_px": 796,
+     "d_px": 11,
+     "clay_strength": 17.1,
+     "render_strength": 21.3
+    },
+    "top": {
+     "clay_px": 839,
+     "render_px": 795,
+     "d_px": -44,
+     "clay_strength": 6.5,
+     "render_strength": 11.0
+    }
+   },
+   "width_ratio": 1.0192,
+   "worst_edge_px": 44,
+   "kind": "furniture",
+   "visible_pct": 38.9
+  },
+  "hall console": {
+   "box": [
+    0.7245,
+    1.0,
+    0.6444,
+    1.0
+   ],
+   "edges": {
+    "left": {
+     "clay_px": 1446,
+     "render_px": 1406,
+     "d_px": -40,
+     "clay_strength": 21.6,
+     "render_strength": 47.0
+    },
+    "top": {
+     "clay_px": 730,
+     "render_px": 659,
+     "d_px": -71,
+     "clay_strength": 6.9,
+     "render_strength": 21.9
+    }
+   },
+   "worst_edge_px": 71,
+   "kind": "furniture",
+   "visible_pct": 75.1
+  },
+  "G-H4 oak portal": {
+   "box": [
+    0.3745,
+    0.6602,
+    0.0,
+    0.9917
+   ],
+   "edges": {
+    "left": {
+     "clay_px": 709,
+     "render_px": 756,
+     "d_px": 47,
+     "clay_strength": 8.1,
+     "render_strength": 20.1
+    },
+    "right": {
+     "clay_px": 1211,
+     "render_px": 1211,
+     "d_px": 0,
+     "clay_strength": 37.3,
+     "render_strength": 43.5
+    }
+   },
+   "width_ratio": 0.9064,
+   "worst_edge_px": 47,
+   "kind": "architecture",
+   "visible_pct": null
+  }
+ },
+ "fixed_edges_worst_px": 71,
+ "fixed_width_ratios": {
+  "fixed:hall-bench": 1.0192,
+  "G-H4 oak portal": 0.9064
+ },
+ "summary": {
+  "global_shift_px": 56.3,
+  "worst_band_px": 56.39,
+  "worst_band_px_after_register": 285.38,
+  "register_shift_px": [
+   -0.29,
+   5.21
+  ],
+  "register_scale": [
+   0.99993,
+   0.95578
+  ],
+  "fixed_edges_worst_px": 71,
+  "frame_file_matches_crop": null
+ }
+}
