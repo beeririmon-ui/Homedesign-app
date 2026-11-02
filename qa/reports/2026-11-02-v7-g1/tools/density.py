@@ -17,8 +17,22 @@ src = open(os.path.join(C.REPO, "assets/blockout/house/framing_r2.py")).read()
 
 
 def grab(name):
-    m = re.search(r"^%s\s*=\s*(\{.*?^\})" % re.escape(name), src, re.S | re.M)
-    return ast.literal_eval(m.group(1)) if m else None
+    """The literal dict assigned to `name` in framing_r2.py (brace-matched; entries added later by code are not included)."""
+    i = src.find("\n%s = {" % name)
+    if i < 0:
+        return None
+    j = src.find("{", i)
+    depth, k = 0, j
+    while k < len(src):
+        depth += src[k] == "{"
+        depth -= src[k] == "}"
+        if depth == 0:
+            break
+        k += 1
+    try:
+        return ast.literal_eval(src[j:k + 1])
+    except (ValueError, SyntaxError):
+        return None
 
 
 CATEGORY = grab("CATEGORY") or {}

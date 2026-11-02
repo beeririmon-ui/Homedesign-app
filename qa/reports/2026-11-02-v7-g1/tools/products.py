@@ -21,10 +21,15 @@ POSE_KEY = {"S1'": "S1prime"}
 ROOM_OF = {"living": "M0", "kitchen-dining": "D1", "hall": "H0", "corridor": "C0", "master": "MB0", "boy": "K-boy", "girl": "K-girl", "bath": "B1", "work": "W0"}
 
 
+LIVE = set(PC["checks_summary"].get("liveness_live", []))
+
+
 def liveness(card_id):
     c = cards.get(card_id) or repl.get(card_id) or {}
-    lv = c.get("liveness") or {}
-    return lv.get("state", "not-checked"), lv.get("how") or lv.get("why_he")
+    lv = c.get("liveness") if isinstance(c, dict) else None
+    lv = lv if isinstance(lv, dict) else {}
+    state = lv.get("state") or ("live" if card_id in LIVE else "not-checked")
+    return state, lv.get("how") or lv.get("why_he") or ("docs/render-products-check-2026-11-02.json checks_summary.liveness_live" if card_id in LIVE else "in the liveness queue (no CJ_API_KEY; AliExpress in another session)")
 
 
 def master_rows(f):
