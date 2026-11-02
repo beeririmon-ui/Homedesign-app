@@ -13016,6 +13016,581 @@
     "glass_rolloff_pass": true,
     "mean_L_hsl": 72.6
    }
+  },
+  "H0x": {
+   "frame": "H0x",
+   "room": "hall",
+   "round2_id": "pose",
+   "camera": {
+    "id": "H0x",
+    "room": "hall",
+    "loc": [
+     2.877,
+     9.039,
+     1.2
+    ],
+    "yaw": 25,
+    "u0": 0.52,
+    "v0": 0.46,
+    "status": "transition pose (house-plan.json cameras.H0x; shift = H0 (plan doc 3))",
+    "hero": ""
+   },
+   "resolution": [
+    3840,
+    2160
+   ],
+   "samples": 10,
+   "placeholders_shown": [
+    "hall/basket",
+    "hall/bench-cushion",
+    "hall/bench-throw",
+    "hall/console-vessel",
+    "hall/framed-art",
+    "hall/key-tray",
+    "hall/wall-hooks",
+    "hall/wall-sconce",
+    "living/accent-sconces",
+    "living/basket",
+    "living/bowl",
+    "living/candle-holders",
+    "living/curtains",
+    "living/cushions",
+    "living/framed-art",
+    "living/pendant",
+    "living/rug",
+    "living/sofa-cover",
+    "living/table-runner",
+    "living/vase",
+    "living/wall-sconce"
+   ],
+   "built_generic": [],
+   "missing": [],
+   "lamps_on": [
+    "hall/wall-sconce",
+    "living/accent-sconces",
+    "living/pendant",
+    "living/wall-sconce"
+   ],
+   "lamps_off": [
+    "hall/ceiling-light",
+    "hall/table-lamp"
+   ],
+   "mean_L": 216.3,
+   "mean_L_round2": null,
+   "designer_notes": "house-plan.json cameras.H0x; shift = H0 (plan doc 3)",
+   "est_vs_measured": [],
+   "est_flags": [],
+   "items_visible": {
+    "fixed:hall-bench": {
+     "kind": "furniture",
+     "frame_area_pct": 2.47,
+     "visible_pct": 38.9,
+     "cut_by_edge_pct": 30.5
+    },
+    "hall console": {
+     "kind": "furniture",
+     "frame_area_pct": 2.56,
+     "visible_pct": 75.1,
+     "cut_by_edge_pct": 18.5
+    },
+    "hall/framed-art": {
+     "kind": "proxy",
+     "frame_area_pct": 3.88,
+     "visible_pct": 100.0,
+     "cut_by_edge_pct": 0.0
+    },
+    "hall/basket": {
+     "kind": "proxy",
+     "frame_area_pct": 1.08,
+     "visible_pct": 97.3,
+     "cut_by_edge_pct": 0.0
+    },
+    "hall/wall-sconce": {
+     "kind": "proxy",
+     "frame_area_pct": 0.38,
+     "visible_pct": 99.8,
+     "cut_by_edge_pct": 0.0
+    },
+    "hall/bench-cushion": {
+     "kind": "proxy",
+     "frame_area_pct": 1.63,
+     "visible_pct": 86.4,
+     "cut_by_edge_pct": 0.0
+    },
+    "hall/wall-hooks": {
+     "kind": "proxy",
+     "frame_area_pct": 0.12,
+     "visible_pct": 100.0,
+     "cut_by_edge_pct": 0.0
+    },
+    "hall/bench-throw": {
+     "kind": "proxy",
+     "frame_area_pct": 0.5,
+     "visible_pct": 99.9,
+     "cut_by_edge_pct": 0.0
+    },
+    "hall/key-tray": {
+     "kind": "proxy",
+     "frame_area_pct": 0.16,
+     "visible_pct": 100.0,
+     "cut_by_edge_pct": 0.0
+    },
+    "hall/console-vessel": {
+     "kind": "proxy",
+     "frame_area_pct": 0.99,
+     "visible_pct": 100.0,
+     "cut_by_edge_pct": 0.0
+    },
+    "living/framed-art": {
+     "kind": "proxy",
+     "frame_area_pct": 0.55,
+     "visible_pct": 58.7,
+     "cut_by_edge_pct": 0.0
+    },
+    "living/pendant": {
+     "kind": "proxy",
+     "frame_area_pct": 0.12,
+     "visible_pct": 99.5,
+     "cut_by_edge_pct": 0.0
+    },
+    "living/rug": {
+     "kind": "proxy",
+     "frame_area_pct": 1.13,
+     "visible_pct": 62.3,
+     "cut_by_edge_pct": 0.0
+    }
+   },
+   "F3_tangents": {
+    "edge_tangents": [
+     {
+      "item": "hall/console-vessel",
+      "side": "right",
+      "margin": 0.0193
+     }
+    ],
+    "object_object_tangents": [
+     {
+      "a": "hall/basket",
+      "b": "hall/bench-cushion",
+      "kind": "gap",
+      "gap": 0.0167,
+      "dist3d_m": 0.19,
+      "rule": "silhouettes apart by < 0.02 (kissing contours)"
+     }
+    ],
+    "note": "edge: visible bbox margin 0 < m < 0.02; object-object as round 2 (ray-cast silhouettes, 512x288)"
+   },
+   "boxes": {
+    "fixed:hall-bench": {
+     "kind": "furniture",
+     "box": [
+      0.0841,
+      0.4148,
+      0.7569,
+      1.0
+     ],
+     "px": 204823
+    },
+    "hall console": {
+     "kind": "furniture",
+     "box": [
+      0.7245,
+      1.0,
+      0.6444,
+      1.0
+     ],
+     "px": 212576
+    },
+    "hall/framed-art": {
+     "kind": "proxy",
+     "box": [
+      0.7857,
+      0.9268,
+      0.1227,
+      0.4125
+     ],
+     "px": 321934
+    },
+    "hall/console-vessel": {
+     "kind": "proxy",
+     "box": [
+      0.9164,
+      0.9807,
+      0.5315,
+      0.6894
+     ],
+     "px": 82036
+    },
+    "hall/key-tray": {
+     "kind": "proxy",
+     "box": [
+      0.8352,
+      0.9086,
+      0.6495,
+      0.6769
+     ],
+     "px": 13289
+    },
+    "G-H4 oak portal": {
+     "kind": "architecture",
+     "box": [
+      0.3745,
+      0.6602,
+      0.0,
+      0.9917
+     ],
+     "px": 458443
+    },
+    "hall/wall-sconce": {
+     "kind": "proxy",
+     "box": [
+      0.2672,
+      0.319,
+      0.0963,
+      0.181
+     ],
+     "px": 31733
+    },
+    "living/pendant": {
+     "kind": "proxy",
+     "box": [
+      0.5602,
+      0.5945,
+      0.1852,
+      0.3079
+     ],
+     "px": 10227
+    },
+    "living/accent-sconces": {
+     "kind": "proxy",
+     "box": [
+      0.5432,
+      0.5539,
+      0.3852,
+      0.4005
+     ],
+     "px": 1341
+    },
+    "living/framed-art": {
+     "kind": "proxy",
+     "box": [
+      0.5648,
+      0.6312,
+      0.3792,
+      0.469
+     ],
+     "px": 46000
+    },
+    "living/rug": {
+     "kind": "proxy",
+     "box": [
+      0.4125,
+      0.6312,
+      0.6111,
+      0.6926
+     ],
+     "px": 94093
+    },
+    "living/vase": {
+     "kind": "proxy",
+     "box": [
+      0.4125,
+      0.4143,
+      0.4407,
+      0.5181
+     ],
+     "px": 441
+    },
+    "living/bowl": {
+     "kind": "proxy",
+     "box": [
+      0.6023,
+      0.6216,
+      0.5796,
+      0.5935
+     ],
+     "px": 2111
+    },
+    "hall/basket": {
+     "kind": "proxy",
+     "box": [
+      0.2958,
+      0.3706,
+      0.8407,
+      1.0
+     ],
+     "px": 89491
+    },
+    "hall/wall-hooks": {
+     "kind": "proxy",
+     "box": [
+      0.1812,
+      0.318,
+      0.1963,
+      0.2639
+     ],
+     "px": 9807
+    },
+    "hall/bench-cushion": {
+     "kind": "proxy",
+     "box": [
+      0.107,
+      0.4026,
+      0.7509,
+      0.9171
+     ],
+     "px": 134797
+    },
+    "hall/bench-throw": {
+     "kind": "proxy",
+     "box": [
+      0.2875,
+      0.3977,
+      0.7176,
+      0.7838
+     ],
+     "px": 41119
+    },
+    "living/curtains": {
+     "kind": "proxy",
+     "box": [
+      0.4125,
+      0.4456,
+      0.2454,
+      0.5838
+     ],
+     "px": 31798
+    },
+    "living/cushions": {
+     "kind": "proxy",
+     "box": [
+      0.5461,
+      0.5818,
+      0.4981,
+      0.5588
+     ],
+     "px": 17498
+    },
+    "living/table-runner": {
+     "kind": "proxy",
+     "box": [
+      0.5297,
+      0.5771,
+      0.5769,
+      0.5894
+     ],
+     "px": 2695
+    },
+    "living/candle-holders": {
+     "kind": "proxy",
+     "box": [
+      0.594,
+      0.6047,
+      0.544,
+      0.5903
+     ],
+     "px": 3561
+    }
+   },
+   "heroes_thirds": [],
+   "lamps": [
+    {
+     "lamp": "hall/wall-sconce",
+     "typology": "wall",
+     "shell": false,
+     "glow_px": 31733,
+     "visible": true
+    },
+    {
+     "lamp": "living/accent-sconces",
+     "typology": "wall",
+     "shell": false,
+     "glow_px": 2682,
+     "visible": true
+    },
+    {
+     "lamp": "living/pendant",
+     "typology": "ceiling",
+     "shell": false,
+     "glow_px": 10227,
+     "visible": true
+    },
+    {
+     "lamp": "living/wall-sconce",
+     "typology": "wall",
+     "shell": false,
+     "glow_px": 0,
+     "visible": false
+    }
+   ],
+   "light_balance": {},
+   "camera_clearance_m": {
+    "min": 0.6859,
+    "nearest": "cportal_b"
+   },
+   "overlay": "framing/round3/overlays/H0x.png",
+   "runtime_s": 331,
+   "overscan": {
+    "on": false,
+    "canvas_px": [
+     3840,
+     2160
+    ]
+   },
+   "exr": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/r4-exr/H0x.exr",
+   "pose": true,
+   "image": "framing/round4/poses/H0x.png",
+   "wall_patches_render": {
+    "hero_wall_high": {
+     "u": 0.853,
+     "v": -0.106,
+     "xyz": [
+      2.95,
+      6.35,
+      2.35
+     ],
+     "note": "outside the frame"
+    },
+    "hero_wall_mid": {
+     "u": 0.8531880974769592,
+     "v": 0.09058552980422974,
+     "L_hsl": 84.3,
+     "Y_lin": 0.6901,
+     "stops_vs_mid": 1.94,
+     "xyz": [
+      2.95,
+      6.35,
+      1.95
+     ]
+    },
+    "ceiling": {
+     "u": 0.55,
+     "v": 0.04,
+     "L_hsl": 90.9,
+     "Y_lin": 0.8141,
+     "stops_vs_mid": 2.18
+    },
+    "floor_centre": {
+     "u": 0.5,
+     "v": 0.93,
+     "L_hsl": 84.8,
+     "Y_lin": 0.6975,
+     "stops_vs_mid": 1.95
+    }
+   },
+   "wall_patches": {
+    "hero_wall_mid": {
+     "u": 0.8531880974769592,
+     "v": 0.09058552980422974,
+     "xyz": [
+      2.95,
+      6.35,
+      1.95
+     ],
+     "L_render": 84.2,
+     "L_final": 74.3,
+     "L_hsl": 74.3
+    },
+    "ceiling": {
+     "u": 0.55,
+     "v": 0.04,
+     "xyz": null,
+     "L_render": 90.8,
+     "L_final": 83.3,
+     "L_hsl": 83.3
+    },
+    "floor_centre": {
+     "u": 0.5,
+     "v": 0.93,
+     "xyz": null,
+     "L_render": 84.6,
+     "L_final": 74.9,
+     "L_hsl": 74.9
+    },
+    "reference_H0": {
+     "u": 0.3505,
+     "v": 0.4115,
+     "xyz": "living_back_wall_through_door",
+     "L_render": 84.2,
+     "L_final": 74.3,
+     "L_hsl": 74.3,
+     "target": 89.0
+    }
+   },
+   "post": {
+    "group": "H0",
+    "exposure_group_ref": "H0",
+    "exposure_unclamped": 0.395,
+    "exposure_clamp": null,
+    "reference_point": "living_back_wall_through_door",
+    "reference_uv": [
+     0.3505,
+     0.4115
+    ],
+    "target_L": 89.0,
+    "why": "h0-v7: the living back wall seen through the door L 88-90, the hall about 2/3 stop under it (living boost in the render)",
+    "render_exposure": 1.35,
+    "exposure": 0.395,
+    "exposure_vs_round3_stops": 0.045,
+    "wb_gains": null,
+    "shoulder": "tanh above 0.88 to 0.965 per channel",
+    "image": "framing/round4/poses/H0x.png",
+    "pose": true,
+    "camera": {
+     "loc": [
+      2.877,
+      9.039,
+      1.2
+     ],
+     "yaw": 25,
+     "u0": 0.52,
+     "v0": 0.46
+    },
+    "wall_patches": {
+     "hero_wall_mid": {
+      "u": 0.8531880974769592,
+      "v": 0.09058552980422974,
+      "xyz": [
+       2.95,
+       6.35,
+       1.95
+      ],
+      "L_render": 84.2,
+      "L_final": 74.3,
+      "L_hsl": 74.3
+     },
+     "ceiling": {
+      "u": 0.55,
+      "v": 0.04,
+      "xyz": null,
+      "L_render": 90.8,
+      "L_final": 83.3,
+      "L_hsl": 83.3
+     },
+     "floor_centre": {
+      "u": 0.5,
+      "v": 0.93,
+      "xyz": null,
+      "L_render": 84.6,
+      "L_final": 74.9,
+      "L_hsl": 74.9
+     },
+     "reference_H0": {
+      "u": 0.3505,
+      "v": 0.4115,
+      "xyz": "living_back_wall_through_door",
+      "L_render": 84.2,
+      "L_final": 74.3,
+      "L_hsl": 74.3,
+      "target": 89.0
+     }
+    },
+    "p99_L_frame": 94.5,
+    "max_L_frame": 95.5,
+    "window_p99": {},
+    "glass_rolloff_pass": true,
+    "mean_L_hsl": 74.3
+   }
   }
  },
  "stage": "round 4 clays (v7 + transition poses), 2026-11-02",

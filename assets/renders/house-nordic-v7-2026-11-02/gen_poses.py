@@ -82,6 +82,9 @@ def box_of(sc, key):
     return b['box']
 
 
+WHOLE = ('M0', 'D1', 'B1', 'K-boy', 'K-girl', 'W0', 'MB0', 'C0', 'H0', 'D2', 'B2')
+
+
 def build(pose):
     base, masters, vista = POSES[pose]
     sc = SC[pose]
@@ -90,7 +93,10 @@ def build(pose):
     master_n = len(masters)
     for l in lines:
         if l.startswith('1. PHOTO.'):
-            if master_n == 1:
+            if any(k not in WHOLE for k in masters):   # crops of the masters (from 22:40): they carry the look, not a framing to copy
+                rest = f"; the neighbouring room{'s' if master_n > 2 else ''} as reference{'s' if master_n > 2 else ''} {', '.join(str(i) for i in range(2, master_n + 1))}" if master_n > 1 else ''
+                out.append(f"1. PHOTO. A frame from a camera move through the same house: the same room, products, light and grade as the attached crops of the master photographs (reference 1{rest}). They are cut from photographs taken from other cameras and show the look only; the clay alone sets the framing, the position and the size of everything; render only what this clay shows. 24 mm shift lens at {HEIGHT[base]} m, level, straight verticals, all sharp.")
+            elif master_n == 1:
                 out.append(f"1. PHOTO. A frame from a camera move through the same house: the same room, products, light and grade as the attached master photograph (reference 1), which is taken from another camera; the clay alone sets the framing, the position and the size of everything; render only what this clay shows. 24 mm shift lens at {HEIGHT[base]} m, level, straight verticals, all sharp.")
             else:
                 out.append(f"1. PHOTO. A frame from a camera move through the same house: the same room, products, light and grade as the attached master photographs (reference 1; the neighbouring room{'s' if master_n > 2 else ''} as reference{'s' if master_n > 2 else ''} {', '.join(str(i) for i in range(2, master_n + 1))}), taken from other cameras; the clay alone sets the framing, the position and the size of everything; render only what this clay shows. 24 mm shift lens at {HEIGHT[base]} m, level, straight verticals, all sharp.")
