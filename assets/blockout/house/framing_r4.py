@@ -78,6 +78,32 @@ def render_r4(path, tmp, res, samples, ao=0.30, passes=True, exposure=None):
 fr.setup_comp = setup_comp_r4
 fr.render = render_r4
 
+# ---------------------------------------------------------------------------------------------------------------
+# overscan (motion-agent, docs/transitions-render-plan-2026-11-02.md "pan gap", via the coordinator 2026-11-02): every still in a
+# pan of 21 deg or more gets about 3 % of the frame added on every side: same camera, same focal length in pixels, the 16:9 frame is
+# the centre crop. 3840 x 2160 -> 4072 x 2290 (crop box x 116-3956, y 65-2225; 0.0302 / 0.0301 per side). The canvas stays 16:9 so the
+# image model gets the aspect it renders; motion-agent's "16:9 + 6 % height" is the canvas cropped to the frame width.
+# ---------------------------------------------------------------------------------------------------------------
+OS_FRAMES = {"M0p", "M0x", "PD-35", "D1", "D2", "K-boy", "K-boy-0", "K-girl", "K-girl-0", "CB-0", "B1", "B2", "M0"}
+OS_RES = (4072, 2290)
+OS_K = OS_RES[0] / 3840.0
+OS_STATE = dict(on=False, base_sw=None)
+_sv0 = bh.set_view
+
+
+def set_view_r4(cam, loc, yaw, u0=0.52, v0=0.46):
+    _sv0(cam, loc, yaw, u0, v0)
+    if OS_STATE["base_sw"] is None:
+        OS_STATE["base_sw"] = cam.data.sensor_width
+    k = OS_K if OS_STATE["on"] else 1.0
+    cam.data.sensor_width = OS_STATE["base_sw"] * k
+    cam.data.shift_x = cam.data.shift_x / k
+    cam.data.shift_y = cam.data.shift_y / k
+    bpy.context.view_layer.update()
+
+
+bh.set_view = set_view_r4
+
 
 # ---------------------------------------------------------------------------------------------------------------
 # the v7 clay changes (geometry; visibility is per frame from plan.json)
@@ -154,6 +180,7 @@ def main(argv):
     ap.add_argument("--bath-window", type=float, default=4.5)
     ap.add_argument("--out", default=None)
     ap.add_argument("--exr", default=None)
+    ap.add_argument("--no-overscan", action="store_true")
     a, _ = ap.parse_known_args(argv)
     global EXR_DIR
     out = a.out or OUT4
@@ -196,9 +223,25 @@ def main(argv):
                build_notes=notes, build_s=round(time.time() - t0))
     save()
     tmp = tempfile.mkdtemp(prefix="framing-r4-")
+    res0 = a.res
     for fid in frames:
         r3.set_out(os.path.join(out, "poses") if fid in rplan["poses"] else out)
+        os_on = fid in OS_FRAMES and not a.no_overscan
+        OS_STATE["on"] = os_on
+        a.res = int(round(res0 * OS_K)) if os_on else res0
         R_ = r3.run_frame(fid, rplan["frames"][fid], S, R, slots, cams, plan, prop, tmp, a, rep, cfg)
+        a.res = res0
+        OS_STATE["on"] = False
+        hres = int(round(res0 * 9 / 16))
+        if os_on:
+            W_, H_ = int(round(res0 * OS_K)), int(round(int(round(res0 * OS_K)) * 9 / 16))
+            ox, oy = (W_ - res0) // 2, (H_ - hres) // 2
+            R_["overscan"] = dict(on=True, canvas_px=[W_, H_], frame_px=[res0, hres], crop_box_px=[ox, oy, ox + res0, oy + hres],
+                                  per_side_fraction_x=round(ox / res0, 4), per_side_fraction_y=round(oy / hres, 4),
+                                  note="same camera and focal length in pixels; the 16:9 frame is the centre crop; uv in this selfcheck "
+                                       "(boxes, patches) are fractions of the canvas")
+        else:
+            R_["overscan"] = dict(on=False, canvas_px=[res0, hres])
         R_["image"] = os.path.relpath(os.path.join(r3.OUT, f"{fid}.png"), os.path.join(HERE))
         R_["exr"] = os.path.join(EXR_DIR, f"{fid}.exr")
         R_["pose"] = fid in rplan["poses"]

@@ -1,5 +1,5 @@
 {
- "version": "1.0 (render-agent, 2026-11-02): round 4 = the round-3 plan 1.2 with the v7 clay changes of the prompt headers, plus the 12 transition poses",
+ "version": "1.0 (render-agent, 2026-11-02): round 4 = the round-3 plan 1.2 with the v7 clay changes of the prompt headers, plus the 12 transition poses | 1.1 (2026-11-02 20:35): overscan for the 21+ deg pans; PD-35 / K-boy-0 / K-girl-0 / CB-0 shifts per motion-agent",
  "source": "framing/round3/plan.json + assets/prompts/recipe-v5.nordic/*-v7.txt headers + docs/transitions-plan-2026-11-02.md section 3",
  "rules": "placeholders = the products the prompt renders (incl. stand-ins); 'Explicitly empty' slots have no proxy; lamps = the lamp slots among the placeholders + the shell LEDs of the kitchen (round-2 FRAME_LAMPS); the bath shower downlight stays off as in round 2; the living seen from H0 / C0 = the M0 v6 placeholder clay (same products as m0-v6.txt; geometry decides what the door shows); C0 also shows the H0 console vignette through the portal | round 4: no wall-decor / floor-lamp in M0 (and in every vista of it), accent pair = two 12 cm cubes, no umbrella stand, no roman blinds, no bookends; D1 lantern 50 wide flat (bottom 1.50); W0 planter D38 x H34 + plant to 1.30",
  "hall_cube_lamp": null,
@@ -521,7 +521,7 @@
    ],
    "yaw": -35,
    "u0": 0.52,
-   "v0": 0.43,
+   "v0": 0.46,
    "source": "end of the T-LD dolly, heading -35 (transitions plan 3)",
    "group": "A",
    "placeholders": [
@@ -547,7 +547,8 @@
     "kitchen-dining/led-shelves",
     "kitchen-dining/led-niche"
    ],
-   "also_visible": []
+   "also_visible": [],
+   "shift_note": "u0/v0 0.52/0.43 -> 0.52/0.46: the shift change moves into the code pan (motion-agent, docs/transitions-render-plan-2026-11-02.md section 2, via the coordinator 2026-11-02)"
   },
   "W0-in": {
    "base": "W0",
@@ -682,8 +683,8 @@
     1.0
    ],
    "yaw": 0,
-   "u0": 0.52,
-   "v0": 0.44,
+   "u0": 0.5,
+   "v0": 0.46,
    "source": "end of the T-CBoy slide (transitions plan 3)",
    "group": "A",
    "placeholders": [
@@ -697,7 +698,8 @@
     "rug"
    ],
    "lamps": [],
-   "also_visible": []
+   "also_visible": [],
+   "shift_note": "u0/v0 0.52/0.44 -> 0.5/0.46: the shift change moves into the code pan (motion-agent, docs/transitions-render-plan-2026-11-02.md section 2, via the coordinator 2026-11-02)"
   },
   "K-girl-0": {
    "base": "K-girl",
@@ -707,8 +709,8 @@
     1.0
    ],
    "yaw": 0,
-   "u0": 0.52,
-   "v0": 0.44,
+   "u0": 0.5,
+   "v0": 0.46,
    "source": "end of the T-CGirl slide (transitions plan 3)",
    "group": "A",
    "placeholders": [
@@ -723,7 +725,8 @@
     "rug"
    ],
    "lamps": [],
-   "also_visible": []
+   "also_visible": [],
+   "shift_note": "u0/v0 0.52/0.44 -> 0.5/0.46: the shift change moves into the code pan (motion-agent, docs/transitions-render-plan-2026-11-02.md section 2, via the coordinator 2026-11-02)"
   },
   "CB-0": {
    "base": "B1",
@@ -733,7 +736,7 @@
     1.15
    ],
    "yaw": 0,
-   "u0": 0.52,
+   "u0": 0.5,
    "v0": 0.46,
    "source": "end of the T-CBath slide, point CB (transitions plan 3)",
    "group": "A",
@@ -758,7 +761,8 @@
     "bath/vanity-sconces",
     "bath/shower-downlight"
    ],
-   "also_visible": []
+   "also_visible": [],
+   "shift_note": "u0/v0 0.52/0.46 -> 0.5/0.46: the shift change moves into the code pan (motion-agent, docs/transitions-render-plan-2026-11-02.md section 2, via the coordinator 2026-11-02)"
   },
   "MB-in": {
    "base": "MB0",
@@ -814,5 +818,45 @@
     "hall/key-tray"
    ]
   }
+ },
+ "overscan": {
+  "frames": [
+   "B1",
+   "B2",
+   "CB-0",
+   "D1",
+   "D2",
+   "K-boy",
+   "K-boy-0",
+   "K-girl",
+   "K-girl-0",
+   "M0",
+   "M0p",
+   "M0x",
+   "PD-35"
+  ],
+  "rule": "every still in a pan of 21 deg or more (P0, P1, P2 of T-LD, P-D, the T-CBoy / T-CGirl / T-CBath pans, P-B): about 3 % of the frame added on every side, same camera and focal length, the 16:9 frame is the centre crop",
+  "canvas_px": [
+   4072,
+   2290
+  ],
+  "frame_px": [
+   3840,
+   2160
+  ],
+  "crop_box_px": [
+   116,
+   65,
+   3956,
+   2225
+  ],
+  "per_side_fraction_x": 0.0302,
+  "per_side_fraction_y": 0.0301,
+  "motion_agent": "--a-overscan / --b-overscan 0.03: use the '-os6' files (canvas cropped to the frame width = 16:9 + 6 % height) or the canvas with x overscan 0.0302",
+  "not_applied": {
+   "M0": "the M0 clay and both M0 jobs were sent at 16:9 before the request (20:27 UTC); the pan gap at M0 stays for inpainting",
+   "D1": "the D1 clay and job were sent at 16:9 before the request; the pan gap at D1 stays for inpainting"
+  },
+  "source": "coordinator message 2026-11-02 (motion-agent's pan-gap check)"
  }
 }
