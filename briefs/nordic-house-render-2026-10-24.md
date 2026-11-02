@@ -92,3 +92,13 @@ This is a **test of the whole Nordic house as a walk-through**: all 11 master fr
 **Step 4: the test page.** frontend-dev builds a single walk-through page: the hall as the opening frame, the hotspots to the other rooms, each transition played forward and backward as frames scrubbed by scroll or click, as in `docs/skeleton-spec.md` "אנימציות". Published as a private Artifact for the owner.
 
 **Budget for this test: 40,000 var2 tokens.** The render agent estimates every step before spending and stops at the cap. The balance isn't visible through the MCP; an "insufficient credits" stops the run and is reported.
+
+### 8.1 The feel of the transitions (2026-11-02, the owner)
+"המעברים צריכים להיות ממש חלקים וסינמטיים, מפריים הטלפון של הפתיחה לפריים של התצוגה שיהיה חלק זורם נקי ומהמם עם תחושה הייטקית וחלקה".
+
+Read as: on the phone, from the opening frame (the hall H0 in its mobile crop) into the room view, every move must be smooth, flowing, clean and stunning, with a high-tech feel. Binding for the motion-agent and frontend-dev:
+1. **Continuous motion.** Constant speed inside a segment, the Bible's easing at the ends only, segments joined frame-exact at the shared still, no speed bumps at the joins (match the velocity across the join, not just the frame).
+2. **60 fps on screen.** Render at the model's rate, then interpolate to 60 fps with optical flow (RIFE or FILM, locally, 0 tokens) before the frame sequences are cut; check for interpolation artefacts at edges and on fine textures (linen, plank lines).
+3. **Clean.** No flicker or grade drift between the clip, the stills and the next clip (match the grade to the masters; deflicker if needed); no warping of straight lines; nothing appears, vanishes or changes; the audio that kling-4 and ltx render is stripped.
+4. **Phone first.** The opening frame on the phone is the hall's mobile crop (the skeleton spec's mobile rule: a full-height 3:5 window, per frame). Every transition has a mobile crop path: the window moves smoothly from the start frame's mobile window to the end frame's, with the same easing, so the phone sees a cinematic move, not a cropped desktop clip. The video resolution must leave enough pixels for the crop (state the mobile output size; upscale the clip if the crop falls under 1080 px tall).
+5. **High-tech playback (frontend-dev, step 4).** Frame sequences drawn on a GPU canvas or WebGL, preloaded ahead of the user's next likely move, scrubbed by scroll or swipe at 60 fps with inertia, reversible without a jump; a subtle depth parallax on the resting frame from a depth map; a minimal, quiet interface that stays out of the image. Measured: no dropped frames on a mid-range phone, first frame of a transition within 100 ms of the gesture.
