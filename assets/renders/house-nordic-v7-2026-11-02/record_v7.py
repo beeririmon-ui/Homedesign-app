@@ -60,7 +60,9 @@ for j in J['jobs']:
     rdir = os.path.join(REPO, 'assets', 'prompts', 'poses-v7.nordic' if pose else 'recipe-v5.nordic')
     if not DRY:
         json.dump(rec, open(os.path.join(rdir, j['id'] + '.json'), 'w'), indent=1, ensure_ascii=False)
-    status = ('v7 test still, ' + ('ON the sheet' if j.get('sheet') else 'NOT on the sheet (rejected attempt, kept for the record)') +
+    rejected = 'REJECTED' in (j.get('sheet_label') or '')
+    status = ('v7 test still, ' + ('REJECTED by the render-agent self-check (shown on the sheet as rejected)' if rejected else
+                                   'ON the sheet' if j.get('sheet') else 'NOT on the sheet (rejected attempt, kept for the record)') +
               '; self-checked by the render-agent, awaiting qa-agent / master-designer / user; not for site')
     outs = [('', od + j['id'] + '.png', 'raw-normalised'), ('-graded', od + j['id'] + '-graded.png', 'graded')]
     if (j.get('overscan') or {}).get('on') and os.path.exists(os.path.join(REPO, od, j['id'] + '-frame.png')):
