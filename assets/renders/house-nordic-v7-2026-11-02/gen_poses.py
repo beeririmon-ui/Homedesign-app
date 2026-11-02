@@ -141,6 +141,11 @@ def build(pose):
         l = l.replace("exactly the clay's block, arms at x 0.52 and 0.84, as reference 1, never wider", "exactly the clay's block, never wider")
         out.append(l)
     text = '\n'.join(out)
+    if base == 'C0' and 'b' in dropped:   # the lanterns are out of this view: no lamp sentence, and the hall bench in the vista stays
+        text = text.replace(' Lamps 2700 K, low, shadowless: the paper lanterns glow evenly; the far one lays a faint warm pool on the floor below it.', ' The corridor paper lanterns are above the frame, out of view.')
+        text = text.replace('5. NOT IN FRAME: picture lights, runner or rug, stool, bench, plants,', '5. NOT IN FRAME: corridor lamps, picture lights, runner or rug, stool, plants,')
+    if base == 'H0' and 'e' in dropped:   # the cube lamp is out of this view: no lamp sentence, or the model invents one
+        text = text.replace(' One lamp, 2700 K, shadowless: the fabric cube glows evenly and fans soft warm light on the wall around it.', '')
     text = re.sub(r'\n{3,}', '\n\n', text)
     # references: masters first, then product references of the kept lines (<= 15 in all)
     fr_refs = []
