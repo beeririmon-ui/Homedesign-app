@@ -1,0 +1,17 @@
+# P-D: D1 -> D2, the in-room pan of the kitchen-dining room. docs/house-plan.json 1.1.2 transitions P-D (U15); plan doc docs/transitions-plan-2026-11-02.md, P-D. master-designer, 2026-11-02. Strip every line starting with # before sending.
+# Plan segment: one pan at PD (2.80, 3.80, 1.10), yaw -56 -> -91, 35 deg right. No translation.
+# Keyframes: D1 v7 (first) -> D2 v7 (last). 24 mm, tilt 0, u0 0.52, v0 0.43 in both. D2 v7 must be rendered with D1 v7 as its reference (d2-v7.txt), so the overlap of the two frames matches.
+# Route R (recommended): no video. A pure rotation from one point has no parallax, so every in-between frame is an exact reprojection of D1 and D2 (motion-agent, 0 tokens); seam in the overlap along a vertical edge (the hood's left side or a cabinet joint).
+# Video fallback: kling-3 pro, first / last frame, 5 s, no audio. ltx-2.3 (6 s) as the A/B test of the cheap model on the simplest move of the house.
+# Play: retime to 1.4 s (plan 1.2-1.6), 30 fps = 42 frames; add a light directional motion blur matched to the angular speed (the reprojected frames have none). Reverse = backward.
+# QA: no parallax (near bench edge and far wall move together); horizon and verticals fixed; no object changes in the overlap; last frame = D2 v7.
+
+Precise interior camera move through a Nordic garden house at 3 pm in mid-winter. The attached keyframes are exact camera positions, first and last.
+
+PAN: the camera stays exactly in place at 1.1 m and turns 35 degrees right on a level axis, from the oak dining table under the big lantern to the front of the kitchen: the plastered hood on the left third and the lit oak coffee niche on the right third. A pure rotation: no parallax, no step, no drift.
+
+WHAT IT SHOWS: the LED wash slides along the limestone upstand, the hood crosses from the right edge to the left third, the warm niche arrives on the right.
+
+CAMERA RULES: one locked-off architectural camera on a perfect track. 24 mm lens throughout, no zoom, no focus change, everything sharp. Horizon level, verticals straight, no tilt, no roll, no handheld shake, no drone float, no orbit, no arc. The pan runs at one constant speed, with no overshoot or wobble at either end.
+
+SCENE LOCK: the house is completely still. Every wall, door, window, furniture piece and object keeps its exact place, size, shape, colour, material and count from the keyframes; nothing appears, vanishes, morphs, slides or is redesigned; no people, pets, steam, flicker, moving curtains or lit candles. Light is constant: soft daylight from the left, lamps glowing steadily, exposure and white balance locked, no auto-exposure. The final frame is identical to the last keyframe.

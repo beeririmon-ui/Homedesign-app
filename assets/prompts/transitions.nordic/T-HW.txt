@@ -1,0 +1,21 @@
+# T-HW: hall H0 -> work W0. docs/house-plan.json 1.1.2 transitions T-HW (T-HW', wall wipe); plan doc docs/transitions-plan-2026-11-02.md, T-HW. master-designer, 2026-11-02. Strip every line starting with # before sending.
+# Plan segments: (1) pan at H0, yaw 12 -> 0, 12 deg right. (2) slide, heading 0, (2.877, 9.039, 1.20) -> (-0.825, 8.55, 1.10), 3.73 m, through O-hall-work, crossing (0.725, 8.755), min jamb clearance 0.233. (3) pull-back, heading 0, (-0.825, 8.55, 1.10) -> (-0.825, 9.85, 1.10), 1.30 m.
+# Keyframes in order (time share at Bible speeds): H0 v7 (0.00) -> H0e (0.17) -> W0-in (0.79) -> W0 v7 (1.00). All 24 mm, tilt 0. H0e = (2.877, 9.039, 1.20) yaw 0, u0 0.50 v0 0.46. W0-in = (-0.825, 8.55, 1.10) yaw 0, u0 0.50 v0 0.46.
+# Model (route K): kling-4 with 4 keyframes, 7 s, if var2 allows; otherwise route R.
+# Route R (recommended): the PAN by exact reprojection H0 -> H0e (0 tokens, shared with T-HC); send intro, SLIDE, PULL-BACK, rules, lock to kling-4, first H0e, middle W0-in, last W0, 6 s.
+# Play: retime to 3.3 s (plan), 30 fps = 99 frames. Reverse = backward.
+# QA: during the slide the camera never turns (all verticals move sideways, the vanishing point fixed); the wall end crosses at (0.725, 8.755) with >= 0.15 to the jambs and sweeps left to right; the pull-back is straight back along the desk axis; last frame = W0 v7.
+
+Precise interior camera move through a Nordic garden house at 3 pm in mid-winter. The attached keyframes are exact camera positions on the path, in order; the camera passes through each of them exactly.
+
+PAN: in the entrance hall, the camera stays exactly in place at 1.2 m and turns 12 degrees right on a level axis until it faces the hall's front wall square on, the oak console near the centre and the open living-room door on the left. A pure rotation.
+
+SLIDE: keeping that exact facing, it travels sideways to the left 3.73 m, slightly forward and lowering smoothly to 1.1 m, straight through the open study door in the hall's left wall. As it passes the doorway, the 15 cm wall end sweeps across the frame from left to right like a wipe: the hall leaves on the right and the study fills the frame. It stops close to the study's desk wall, still facing it square on.
+
+PULL-BACK: it travels straight backward 1.30 m, still facing the desk wall, until the whole wall sits centred and symmetrical.
+
+WHAT IT SHOWS: the hall's soft top light gives way, in one clean wipe, to the study's side light from its north window; the pull-back reveals the built-in oak desk and shelf on a calm white wall, the window glowing in from the left.
+
+CAMERA RULES: one locked-off architectural camera on a perfect track. 24 mm lens throughout, no zoom, no focus change, everything sharp. Horizon level, verticals straight, no tilt, no roll, no handheld shake, no drone float, no orbit, no arc. Each segment runs at one constant speed; segments join with no overshoot or wobble.
+
+SCENE LOCK: the house is completely still. Every wall, door, window, furniture piece and object keeps its exact place, size, shape, colour, material and count from the keyframes; nothing appears, vanishes, morphs, slides or is redesigned; no people, pets, steam, flicker, moving curtains or lit candles. Light is constant: soft daylight from the left, lamps glowing steadily, exposure and white balance locked, no auto-exposure. The final frame is identical to the last keyframe.

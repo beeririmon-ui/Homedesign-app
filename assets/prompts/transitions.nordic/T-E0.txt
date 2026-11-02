@@ -1,0 +1,19 @@
+# T-E0: hall H0 -> living M0. docs/house-plan.json 1.1.2 transitions T-E0; the plan and the reasons: docs/transitions-plan-2026-11-02.md, T-E0. master-designer, 2026-11-02. Strip every line starting with # before sending.
+# Plan segments: (1) pan at H0 (2.877, 9.039, 1.20), yaw 12 -> 25, 13 deg left. (2) dolly (2.877, 9.039) -> (1.25, 5.55), heading = yaw 25, 3.85 m, height 1.20, through O-entry-living, min jamb clearance 0.478 (approved E0).
+# Keyframes in order (share of clip time at the Bible render speeds, 0.7 m/s and 8 deg/s): H0 master v7 (0.00) -> pose H0x (0.23) -> M0 master v7 (1.00). All 24 mm, tilt 0. H0x = (2.877, 9.039, 1.20), yaw 25, u0 0.52, v0 0.46.
+# Model (route K): kling-4, first / middle / last keyframe. Render 6 s, constant speed, no audio.
+# Route R (recommended, plan doc 2): the PAN by exact reprojection H0 -> H0x (0 tokens); send the intro, the DOLLY paragraph, CAMERA RULES and SCENE LOCK to kling-3 pro, first frame H0x, last frame M0, 5 s (ltx-2.3 6 s as the cheaper retry).
+# Play: retime in code to 2.7 s (plan 2.6-2.9, D8), 30 fps = 81 frames; easing per the Bible (entry: ease-in-out cubic, 15% in, 30% landing). Reverse = the same frames backward.
+# QA: H0x shows the door centred (u ~0.51); during the dolly the door centre stays on one point of the frame (no heading drift); door crossing at about (1.59, 6.27), >= 0.15 to the jambs; the living room seen through the door = M0 v7 throughout; last frame = M0 v7.
+
+Precise interior camera move through a Nordic garden house at 3 pm in mid-winter. The attached keyframes are exact camera positions on the path, in order; the camera passes through each of them exactly.
+
+PAN: from the entrance hall, the camera stays exactly in place at eye height 1.2 m and turns 13 degrees left on a level axis until the open double door to the living room is dead centre. A pure rotation: nothing shifts in parallax.
+
+DOLLY: from that view, the camera travels straight forward 3.85 m along its viewing direction at 1.2 m, through the middle of the open double door, and stops in the living room on the final keyframe. The heading never changes: the door centre stays on the same point of the frame until the door frame leaves past the edges.
+
+WHAT IT SHOWS: the hall is the darker room, the living room the bright one. As the doorway grows, its daylight fills the frame, the oak portal slides out past both sides, and the three prints over the sofa come forward until they settle on the right third.
+
+CAMERA RULES: one locked-off architectural camera on a perfect track. 24 mm lens throughout, no zoom, no focus change, everything sharp. Horizon level, verticals straight, no tilt, no roll, no handheld shake, no drone float, no orbit, no arc. Each segment runs at one constant speed; segments join with no overshoot or wobble.
+
+SCENE LOCK: the house is completely still. Every wall, door, window, furniture piece and object keeps its exact place, size, shape, colour, material and count from the keyframes; nothing appears, vanishes, morphs, slides or is redesigned; no people, pets, steam, flicker, moving curtains or lit candles. Light is constant: soft daylight from the left, lamps glowing steadily, exposure and white balance locked, no auto-exposure, so a brighter room looks brighter as it fills the frame. The final frame is identical to the last keyframe.

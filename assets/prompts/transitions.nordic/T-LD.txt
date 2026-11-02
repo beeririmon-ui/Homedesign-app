@@ -1,0 +1,23 @@
+# T-LD: living M0 -> kitchen-dining D1. docs/house-plan.json 1.1.2 transitions T-LD (T-LD''); plan doc docs/transitions-plan-2026-11-02.md, T-LD. master-designer, 2026-11-02. Strip every line starting with # before sending.
+# Plan segments: (1) P0 pan at M0 (1.25, 5.55, 1.20), yaw 25 -> 0. (2) P1 pan yaw 0 -> -35. (3) dolly heading -35 from (1.25, 5.55, 1.20) to (2.80, 3.80, 1.10), 2.34 m, oblique 6.5 deg (moves to the right of its facing), through O-living-dining, crossing (2.575, 4.054), min jamb clearance 0.286. (4) P2 pan at PD, yaw -35 -> -56, 21 deg.
+# Keyframes in order (time share at Bible speeds): M0 v7 (0.00) -> M0p (0.23) -> M0x (0.56) -> PD-35 (0.81) -> D1 v7 (1.00). All 24 mm, tilt 0. M0p = (1.25, 5.55, 1.20) yaw 0, u0 0.52 v0 0.46. M0x = same point, yaw -35, u0 0.52 v0 0.46. PD-35 = (2.80, 3.80, 1.10) yaw -35, u0 0.52 v0 0.43.
+# Model (route K): kling-4 with 5 keyframes in one 10 s clip if var2 allows; otherwise two kling-4 clips joined on the identical M0x frame: LD-a = M0 -> M0p -> M0x (send intro, PAN 1, PAN 2, rules, lock; 5 s) and LD-b = M0x -> PD-35 -> D1 (send intro, DOLLY, PAN 3, rules, lock; 5 s).
+# Route R (recommended): the three pans by exact reprojection (M0 -> M0p -> M0x, PD-35 -> D1; 0 tokens); send intro, DOLLY, rules, lock to kling-3 pro, first frame M0x, last frame PD-35, 5 s.
+# Play: retime to 3.4 s (plan, D8), 30 fps = 102 frames. P0 and P1 are two shots (U5, <= 35 deg each): the retime curve dips to about half speed at M0p, no stop. Reverse = the same frames backward.
+# QA: no parallax in the pans; during the dolly the focus of expansion sits about 6.5 deg right of centre and does not move; door crossing at (2.575, 4.054), >= 0.15 to the jambs; dining room seen through the door = D1 v7; last frame = D1 v7.
+
+Precise interior camera move through a Nordic garden house at 3 pm in mid-winter. The attached keyframes are exact camera positions on the path, in order; the camera passes through each of them exactly.
+
+PAN 1: in the living room, the camera stays exactly in place at 1.2 m and turns 25 degrees right on a level axis until it faces the back wall square on.
+
+PAN 2: still in place, it keeps turning 35 degrees right until the open double door to the dining room sits at the centre. Pure rotations: no parallax.
+
+DOLLY: it travels straight 2.34 m through that doorway, drifting slightly to the right of where it looks and lowering smoothly from 1.2 m to 1.1 m, passing the right door jamb with a clear gap, and stops just inside the dining room.
+
+PAN 3: in place, it turns 21 degrees right onto the final view: the oak table under the big lantern on the left third, the kitchen behind.
+
+WHAT IT SHOWS: the prints over the sofa pass the centre in full face; the doorway frames the glowing kitchen; through it the east window appears whole and bright, the lantern comes into view, and the pan settles on the table and the LED-lit kitchen run.
+
+CAMERA RULES: one locked-off architectural camera on a perfect track. 24 mm lens throughout, no zoom, no focus change, everything sharp. Horizon level, verticals straight, no tilt, no roll, no handheld shake, no drone float, no orbit, no arc. Each segment runs at one constant speed; segments join with no overshoot or wobble.
+
+SCENE LOCK: the house is completely still. Every wall, door, window, furniture piece and object keeps its exact place, size, shape, colour, material and count from the keyframes; nothing appears, vanishes, morphs, slides or is redesigned; no people, pets, steam, flicker, moving curtains or lit candles. Light is constant: soft daylight from the left, lamps glowing steadily, exposure and white balance locked, no auto-exposure, so a brighter room looks brighter as it fills the frame. The final frame is identical to the last keyframe.

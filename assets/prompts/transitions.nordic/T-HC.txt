@@ -1,0 +1,19 @@
+# T-HC: hall H0 -> corridor C0. docs/house-plan.json 1.1.2 transitions T-HC and rail; plan doc docs/transitions-plan-2026-11-02.md, T-HC and the rail. master-designer, 2026-11-02. Strip every line starting with # before sending.
+# Plan segments: (1) PH pan at H0, yaw 12 -> 0, 12 deg right. (2) pull-back on rail R1+R2, yaw 0, (2.877, 9.039) -> (2.397, 17.110), 8.09 m, height 1.20, line X(Y) = 2.877 - 0.0595 (Y - 9.039) (3.4 deg crab), through O-hall-corridor (crossing at about X 2.83, Y 9.80), min jamb clearance 0.268. S1' (2.641, 13.00) lies on the line.
+# Keyframes in order (time share at Bible speeds): H0 v7 (0.00) -> H0e (0.11) -> C0 v7 (1.00). Optional, if var2 takes more keyframes: S1' (0.55) and R2m (0.70). All 24 mm, tilt 0, u0 0.50 v0 0.46 on the rail. H0e = (2.877, 9.039, 1.20) yaw 0. S1' = (2.641, 13.00, 1.20) yaw 0. R2m = (2.558, 14.40, 1.20) yaw 0 (proposed checkpoint on the plan's rail line: both open side doors visible).
+# Model (route K): kling-4, first / middle / last (H0, H0e, C0), 10 s.
+# Route R (recommended): the PAN by reprojection H0 -> H0e (0 tokens); the rail rendered once as two clips shared with T-CBoy and T-CBath: R1 = H0e <-> S1' (kling-3 pro first/last, 5 s) and R2 = S1' <-> R2m <-> C0 (kling-4, 5 s); send intro, PULL-BACK, rules, lock. Concatenate on the identical S1' frame.
+# Play: retime to 3.0 s (plan), 30 fps = 90 frames; pull-back at entry-dolly speed (plan U10 note). Reverse = backward.
+# QA: straight line with a fixed point of convergence slightly right of centre (u ~0.54); portal crossing >= 0.15 from the jambs; the hall seen in the portal = H0 v7 and the end vista = C0 v7; side doors stay open and still; last frame = C0 v7.
+
+Precise interior camera move through a Nordic garden house at 3 pm in mid-winter. The attached keyframes are exact camera positions on the path, in order; the camera passes through each of them exactly.
+
+PAN: in the entrance hall, the camera stays exactly in place at 1.2 m and turns 12 degrees right on a level axis until it faces the hall's front wall square on. A pure rotation.
+
+PULL-BACK: keeping that exact facing, it travels straight backward 8.09 m at 1.2 m, drifting very slightly to the left, out of the hall through the open oak portal behind it and down the whole length of the corridor, and stops at the corridor's far end. The open doors on both sides pass by unchanged.
+
+WHAT IT SHOWS: the hall shrinks into a lit picture framed by the oak portal; the corridor walls enter from both edges, the frosted roof slot draws a bright line along the top left, the gallery of three prints slides in on the left, and the hall and living room become the glowing vista at the end of a tunnel of light.
+
+CAMERA RULES: one locked-off architectural camera on a perfect track. 24 mm lens throughout, no zoom, no focus change, everything sharp. Horizon level, verticals straight, no tilt, no roll, no handheld shake, no drone float, no orbit, no arc. Each segment runs at one constant speed; segments join with no overshoot or wobble.
+
+SCENE LOCK: the house is completely still. Every wall, door, window, furniture piece and object keeps its exact place, size, shape, colour, material and count from the keyframes; nothing appears, vanishes, morphs, slides or is redesigned; no people, pets, steam, flicker, moving curtains or lit candles. Light is constant: soft daylight from above, lamps glowing steadily, exposure and white balance locked, no auto-exposure. The final frame is identical to the last keyframe.

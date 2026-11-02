@@ -1,0 +1,22 @@
+# T-CBath: corridor C0 -> bath B1. docs/house-plan.json 1.1.2 transitions T-CBath (T-CBath'') and rail; plan doc docs/transitions-plan-2026-11-02.md, T-CBath. master-designer, 2026-11-02. Strip every line starting with # before sending.
+# Plan segments: (1) dolly on R2 reversed, yaw 0, (2.397, 17.110, 1.20) -> S1' (2.641, 13.00, 1.20), 4.12 m. (2) slide, heading 0, S1' -> (3.80, 13.20, 1.15), 1.18 m, through O-corridor-bath, crossing (3.175, 13.092), min jamb clearance 0.281, 0.19 to the open door leaf. (3) pan at CB (3.80, 13.20, 1.15), yaw 0 -> -22, 22 deg right.
+# Keyframes in order (time share at Bible speeds): C0 v7 (0.00) -> S1' (0.57) -> CB-0 (0.73) -> B1 v7 (1.00). Optional: R2m (0.38). All 24 mm, tilt 0. S1' = (2.641, 13.00, 1.20) yaw 0, u0 0.50 v0 0.46. CB-0 = (3.80, 13.20, 1.15) yaw 0, u0 0.52 v0 0.46.
+# Model (route K): kling-4 with 4 keyframes, 8 s, if var2 allows; otherwise route R.
+# Route R (recommended): DOLLY = the shared rail clip R2 played from C0 to S1'; send intro, SLIDE, rules, lock to kling-3 pro, first S1', last CB-0, 5 s; the PAN by reprojection CB-0 -> B1 (0 tokens).
+# White balance: corridor 4600 K, bath 4000 K (lighting_intent_bath_1_1). Grade the clip in post with one white-balance ramp timed to the frames where the door frame crosses, not a fade over the whole clip.
+# Play: retime to 3.2 s (plan), 30 fps = 96 frames. Reverse = backward.
+# QA: the slide never turns, crosses at (3.175, 13.092) with >= 0.15 to the jambs and clears the open leaf; the bathroom glimpsed through its door matches B1 v7; no parallax in the pan; last frame = B1 v7.
+
+Precise interior camera move through a Nordic garden house at 3 pm in mid-winter. The attached keyframes are exact camera positions on the path, in order; the camera passes through each of them exactly.
+
+DOLLY: from the corridor's far end, the camera travels straight forward 4.12 m at 1.2 m toward the glowing hall, drifting very slightly to the right, and stops beside the open bathroom door on its right.
+
+SLIDE: keeping that exact facing, it travels sideways to the right 1.18 m, slightly backward and a touch lower, to 1.15 m, through the middle of the open bathroom door, passing the open door leaf with a small clear gap. The door frame wipes across the frame from right to left and the bathroom fills it. It stops inside, facing the fluted window square on.
+
+PAN: it stays exactly in place and turns 22 degrees right on a level axis until the gathered linen shower curtain sits on the right third. A pure rotation.
+
+WHAT IT SHOWS: the corridor's warm white gives way at the door to the bathroom's cleaner white and the glowing fluted window centred over the limestone ledge; the pan brings in the limestone shower and the curtain.
+
+CAMERA RULES: one locked-off architectural camera on a perfect track. 24 mm lens throughout, no zoom, no focus change, everything sharp. Horizon level, verticals straight, no tilt, no roll, no handheld shake, no drone float, no orbit, no arc. Each segment runs at one constant speed; segments join with no overshoot or wobble.
+
+SCENE LOCK: the house is completely still. Every wall, door, window, furniture piece and object keeps its exact place, size, shape, colour, material and count from the keyframes; nothing appears, vanishes, morphs, slides or is redesigned; no people, pets, steam, flicker, moving curtains or lit candles. Light is constant: soft daylight, lamps glowing steadily, exposure locked, no auto-exposure; the white balance changes once, only while the door frame crosses. The final frame is identical to the last keyframe.

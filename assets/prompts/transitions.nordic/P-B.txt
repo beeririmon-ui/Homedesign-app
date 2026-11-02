@@ -1,0 +1,17 @@
+# P-B: B1 -> B2, the in-room pan of the bathroom. docs/house-plan.json 1.1.2 transitions P-B (U15); plan doc docs/transitions-plan-2026-11-02.md, P-B. master-designer, 2026-11-02. Strip every line starting with # before sending.
+# Plan segment: one pan at CB (3.80, 13.20, 1.15), yaw -22 -> -57, 35 deg right. No translation.
+# Keyframes: B1 v7 (first) -> B2 v7 (last). 24 mm, tilt 0, u0 0.52, v0 0.46 in both. B2 v7 must be rendered with B1 v7 as its reference (b2-v7.txt), so the overlap matches.
+# Route R (recommended): no video; exact reprojection of B1 and B2 (motion-agent, 0 tokens), seam in the overlap along the shower's corner line or the curtain's left edge. The mirror stays blank in every in-between frame (F8, one reflection pass per camera point).
+# Video fallback: kling-3 pro, first / last frame, 5 s, no audio (ltx-2.3 6 s only if it won the P-D A/B).
+# Play: retime to 1.4 s (plan 1.2-1.6), 30 fps = 42 frames; light directional motion blur on reprojected frames. Reverse = backward.
+# QA: no parallax; the mirror shows only blank wall throughout; 4000 K in every frame; last frame = B2 v7.
+
+Precise interior camera move through a Nordic garden house at 3 pm in mid-winter. The attached keyframes are exact camera positions, first and last.
+
+PAN: the camera stays exactly in place at 1.15 m and turns 35 degrees right on a level axis, from the fluted window and the gathered linen curtain to the oak vanity and mirror between the two glowing wall lamps. A pure rotation: no parallax, no step, no drift.
+
+WHAT IT SHOWS: the curtain travels from the right third to the left edge, the honed limestone shower crosses the frame, and the mirror arrives on the right third, showing only blank wall.
+
+CAMERA RULES: one locked-off architectural camera on a perfect track. 24 mm lens throughout, no zoom, no focus change, everything sharp. Horizon level, verticals straight, no tilt, no roll, no handheld shake, no drone float, no orbit, no arc. The pan runs at one constant speed, with no overshoot or wobble at either end.
+
+SCENE LOCK: the house is completely still. Every wall, door, window, furniture piece and object keeps its exact place, size, shape, colour, material and count from the keyframes; nothing appears, vanishes, morphs, slides or is redesigned; no people, pets, steam, flicker, moving curtains or lit candles; the mirror never reflects anything but blank wall. Light is constant: soft daylight from the left, lamps glowing steadily, exposure and white balance locked, no auto-exposure. The final frame is identical to the last keyframe.
