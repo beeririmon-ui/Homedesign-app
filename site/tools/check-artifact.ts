@@ -20,13 +20,9 @@ check(!/<!doctype|<html[\s>]|<head[\s>]|<body[\s>]|<\/body>|<\/html>/i.test(html
 check(/^<title>[^<]+<\/title>\s*<style>/.test(html), 'the page must start with <title> and then <style>');
 check(/<style>:root\{[^}]*--bg:/.test(html), 'light tokens on :root must come first');
 const css = /<style>([\s\S]*?)<\/style>/.exec(html)?.[1] ?? '';
-const iRoot = css.indexOf(':root{');
-const iDark = css.search(/@media\s*\(prefers-color-scheme:\s*dark\)\s*\{\s*:root:not\(\[data-theme=['"]?light['"]?\]\)\s*\{/);
-const iForced = css.search(/:root\[data-theme=['"]?dark['"]?\]\s*\{/);
-check(
-  iRoot === 0 && iDark > iRoot && iForced > iDark,
-  'token order: :root, then the dark media query guarded by :root:not([data-theme=light]), then :root[data-theme=dark]',
-);
+// one paper, no dark mode at launch (ART3, 2026-11-03): the tokens start the stylesheet and no dark block follows
+check(css.indexOf(':root{') === 0, 'the tokens on :root must start the stylesheet');
+check(!/prefers-color-scheme:\s*dark|data-theme/.test(css), 'no dark theme at launch (ART3)');
 check(/body\{[^}]*background:/.test(css), 'body needs an explicit background');
 
 // external resources: only Google Fonts

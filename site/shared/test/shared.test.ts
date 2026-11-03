@@ -25,7 +25,21 @@ import {
   CARD_ROOMS,
   cardRoom,
   roomFromPath,
+  isDraftCard,
+  onlyDraftIssues,
+  shipForQtyCents,
+  unitShipFromSaleCents,
+  landedAgorot,
+  noLossRetailIls,
+  breakEvenIls,
+  defaultLine,
+  resolveShipping,
+  initialPrice,
+  supplierKey,
+  ORDER_STATUS_HE,
+  orderStep,
 } from '../src';
+import { loadLeadRecords } from '../../tools/lib/leads';
 import { existsSync } from 'node:fs';
 import { generate } from '../scripts/gen-product-card-schema';
 
@@ -48,13 +62,22 @@ describe('repo data against the derived schemas', () => {
     }
   });
 
-  it('every product card outside the shared pool parses (pool cards are a known data issue)', () => {
+  it('every product card outside the shared pool parses, or is a DS-API draft whose only gaps are its unfilled draft fields', () => {
+    // pool cards are a known data issue; a draft card (shared/src/card-draft.ts) is unfinished sourcing work, listed by name
     const bad: string[] = [];
+    const drafts: string[] = [];
     for (const f of walk(resolve(REPO, 'data/products'))) {
-      const r = ProductCardSchema.safeParse(JSON.parse(readFileSync(f, 'utf8')));
-      if (!r.success && !f.includes('/data/products/pool/')) bad.push(f);
+      const raw = JSON.parse(readFileSync(f, 'utf8')) as Record<string, unknown>;
+      const r = ProductCardSchema.safeParse(raw);
+      if (r.success || f.includes('/data/products/pool/')) continue;
+      const paths = r.error.issues.map((i) => i.path.join('.'));
+      if (isDraftCard(raw) && onlyDraftIssues(paths)) drafts.push(f.replace(`${REPO}/`, ''));
+      else bad.push(`${f}: ${paths.join(', ')}`);
     }
     expect(bad).toEqual([]);
+    // the drafts are not hidden: the count is asserted so a change is a visible, deliberate one (sourcing-agent fills them)
+    console.info(`draft cards (DS API, colors / visual_weight unfilled): ${drafts.length}`);
+    expect(drafts.length).toBeLessThanOrEqual(68);
   });
 
   it('the card room enum is exactly the rooms of data/slots (schema 1.1)', () => {
@@ -119,10 +142,121 @@ describe('pricing', () => {
     expect(below.margin_rate).toBeLessThan(e.margin_rate);
   });
 
+  it("freight of a sale is the studio's combined parcel, not a parcel per piece (SITE1)", () => {
+    expect(shipForQtyCents(877, 3)).toBe(877 + 2 * (877 - 372));
+    expect(shipForQtyCents(199, 4)).toBe(199);
+    expect(unitShipFromSaleCents(shipForQtyCents(877, 3), 3)).toBe(877);
+    // landed = (cost × q + freight(q)) × fx; a quote for exactly the sale is taken as it is
+    expect(landedAgorot({ cost_usd_cents: 1000, shipping_usd_cents: 877, fx_usd_ils: 3.3, sell_qty: 3 })).toBe(Math.round((3000 + 877 + 2 * 505) * 3.3));
+    expect(landedAgorot({ cost_usd_cents: 1000, shipping_usd_cents: 2000, fx_usd_ils: 3.3, sell_qty: 3, shipping_quoted_for_sale: true })).toBe(
+      Math.round(5000 * 3.3),
+    );
+    const linear = unitEconomics({ retail_agorot: 29900, cost_usd_cents: 1000, shipping_usd_cents: 877, fx_usd_ils: 3.3, sell_qty: 3 }, DEFAULT_SETTINGS);
+    expect(linear.cogs_agorot).toBe(Math.round((3000 + 877 + 2 * 505) * 3.3));
+  });
+
+  it('the no-loss price: the lowest …9 price whose contribution is not negative (ה.13), the same as no_loss.py', () => {
+    // no_loss.py check(): break_even_for(50) = (50 + 1.2) / ((1 − 0.08) / 1.18 − 0.02)
+    expect(breakEvenIls(50, DEFAULT_SETTINGS)).toBeCloseTo((50 + 1.2) / ((1 - 0.08) / 1.18 - 0.02), 9);
+    const floor = noLossRetailIls(49.93, DEFAULT_SETTINGS); // the wabi-sabi cushion's headline landed cost: ₪69 (no_loss_room_sku_ils)
+    expect(floor).toBe(69);
+    const at = unitEconomics({ retail_agorot: floor * 100, cost_usd_cents: 0, shipping_usd_cents: 4993, fx_usd_ils: 1 }, DEFAULT_SETTINGS);
+    expect(at.contribution_agorot).toBeGreaterThanOrEqual(0);
+    const below = unitEconomics({ retail_agorot: (floor - 10) * 100, cost_usd_cents: 0, shipping_usd_cents: 4993, fx_usd_ils: 1 }, DEFAULT_SETTINGS);
+    expect(below.contribution_agorot).toBeLessThan(0);
+  });
+
   it('VAT is extracted from the consumer price, not added on top', () => {
     const e = unitEconomics({ retail_agorot: 11800, cost_usd_cents: 0, shipping_usd_cents: 0, fx_usd_ils: 3.7 }, DEFAULT_SETTINGS);
     expect(e.net_agorot).toBe(10000);
     expect(e.vat_agorot).toBe(1800);
+  });
+
+  it('the shipping line: the cheapest standard line, express only when there is nothing else (no_loss.py default_quote)', () => {
+    const cj = [
+      { usd: 14.44, name: 'CJPacket Eub', days: '12-50' },
+      { usd: 25.22, name: 'CJPacket To Door', days: '11-18' },
+      { usd: 154.26, name: 'DHL Official', days: '3-7' },
+    ];
+    expect(defaultLine(cj)).toEqual({ line: cj[0], express_only: false });
+    expect(defaultLine([cj[1]!, cj[2]!])).toEqual({ line: cj[1], express_only: true });
+    expect(defaultLine([])).toBeNull();
+    expect(supplierKey('CJ Dropshipping', 'https://cjdropshipping.com/product/x-p-1.html')).toBe('cj');
+    expect(supplierKey('AliExpress', 'https://www.aliexpress.com/item/1.html')).toBe('aliexpress');
+  });
+
+  it("the shipping line in the studio's order: manual, the supplier's file, any file, the room SKU, the cache, the final round; never a default", () => {
+    const card = {
+      supplier: { name: 'CJ Dropshipping', product_url: 'https://cjdropshipping.com/product/x-p-1.html' },
+      price: { currency: 'USD' },
+      options: null,
+    };
+    const freights = {
+      cj: { products: { a: { options: [{ name: 'CJPacket Eub', days: '12-50', usd: 14.44 }], status: 'ok' } } },
+      zendrop: { products: { b: { cheapest: { name: 'Zendrop regular', days: '14', usd: 13.38 }, status: 'ok', qty: 2 } } },
+    };
+    expect(resolveShipping({ id: 'a', card, row: { shipping_cost_usd: 9.5 }, freights, lead: null, sellQty: 1 })).toMatchObject({
+      ok: true,
+      usd_cents: 950,
+      source: 'manual',
+    });
+    expect(resolveShipping({ id: 'a', card, row: undefined, freights, lead: null, sellQty: 1 })).toMatchObject({
+      ok: true,
+      usd_cents: 1444,
+      source: 'cj',
+      express_only: false,
+      days: [12, 50],
+    });
+    // a quote for exactly the sale's pieces is taken as it is; for another count it is one piece's (as the studio does)
+    expect(resolveShipping({ id: 'b', card, row: undefined, freights, lead: null, sellQty: 2 })).toMatchObject({
+      ok: true,
+      usd_cents: 1338,
+      source: 'zendrop',
+      quoted_for_sale: true,
+      quoted_qty: 2,
+    });
+    expect(resolveShipping({ id: 'b', card, row: undefined, freights, lead: null, sellQty: 1 })).toMatchObject({ ok: true, quoted_for_sale: false });
+    const withSku = { ...card, options: { default_sku: 's1', skus: [{ id: 's1', shipping_il: { amount: 1.99, currency: 'USD', days: '6-15' } }] } };
+    expect(resolveShipping({ id: 'c', card: withSku, row: undefined, freights, lead: null, sellQty: 1 })).toMatchObject({
+      ok: true,
+      usd_cents: 199,
+      source: 'card',
+    });
+    expect(
+      resolveShipping({
+        id: 'c',
+        card,
+        row: undefined,
+        freights,
+        cache: { lines: [{ usd: 23.39, name: 'AliExpress standard shipping', days: '22-32' }], label: 'מטמון' },
+        lead: null,
+        sellQty: 1,
+      }),
+    ).toMatchObject({ ok: true, usd_cents: 2339, source: 'cache' });
+    expect(
+      resolveShipping({ id: 'c', card, row: undefined, freights, lead: { rec: { ship_usd: 4.2, qty: 2 }, file: 'f.json', date: '2026-10-13' }, sellQty: 2 }),
+    ).toMatchObject({ ok: true, usd_cents: 420, source: 'leads', quoted_for_sale: true });
+    // a pricing row without a manual figure blocks the final-round fallback, as in the studio
+    expect(
+      resolveShipping({ id: 'c', card, row: { retail_ils: 99 }, freights, lead: { rec: { ship_usd: 4.2 }, file: 'f.json', date: '' }, sellQty: 1 }),
+    ).toEqual({ ok: false, reason: 'no_line', source: null });
+    expect(resolveShipping({ id: 'd', card, row: undefined, freights: { cj: { products: { d: { status: 'no_route' } } } }, lead: null, sellQty: 1 })).toEqual({
+      ok: false,
+      reason: 'no_route',
+      source: 'cj',
+    });
+  });
+
+  it("the starting price is the studio's, the card's or the final round's: never a margin target (SITE1)", () => {
+    const card = { price: { currency: 'USD', suggested_retail: 149 } };
+    expect(initialPrice(card, { retail_ils: 189, retail_src: 'studio' }, null)).toEqual({ retail_ils: 189, source: 'owner' });
+    expect(initialPrice(card, { retail_ils: 189, retail_src: 'initial-no-loss-2026-10-20' }, null)).toEqual({ retail_ils: 189, source: 'studio' });
+    expect(initialPrice(card, undefined, null)).toEqual({ retail_ils: 149, source: 'initial-card' });
+    expect(initialPrice({ price: { currency: 'USD' } }, undefined, { rec: { price_ils: 129 }, file: 'f', date: '' })).toEqual({
+      retail_ils: 129,
+      source: 'initial-leads',
+    });
+    expect(initialPrice({ price: { currency: 'USD' } }, undefined, null)).toBeNull();
   });
 
   it('settings fall back to provisional defaults and say so', () => {
@@ -233,12 +367,53 @@ describe('set or single piece (P1)', () => {
       const s = (JSON.parse(readFileSync(f, 'utf8')) as { slots: { id: string; set_of?: number }[] }).slots.find((x) => x.id === slot);
       return s?.set_of ?? null;
     };
+    const slotOf = (key: string): { set_of?: number; alternative_form?: unknown } | null => {
+      const [room, slot] = key.split('/');
+      const f = resolve(REPO, `data/slots/${room}.json`);
+      if (!existsSync(f)) return null;
+      const s = (JSON.parse(readFileSync(f, 'utf8')) as { slots: { id: string; set_of?: number; alternative_form?: unknown }[] }).slots.find(
+        (x) => x.id === slot,
+      );
+      return s ? { set_of: s.set_of, alternative_form: s.alternative_form } : null;
+    };
+    // the real card (its options, dimensions, cost) and its final-round record, as the studio reads them
+    const cards = new Map<string, Record<string, unknown>>();
+    for (const f of walk(resolve(REPO, 'data/products'))) {
+      const c = JSON.parse(readFileSync(f, 'utf8')) as { id?: string };
+      if (c.id && !cards.has(c.id)) cards.set(c.id, c as Record<string, unknown>);
+    }
+    const leads = loadLeadRecords(REPO);
     const checked = data.products.filter((p) => p.slot_key && !p.shared_in?.length);
     expect(checked.length).toBeGreaterThan(20);
+    const mismatches: string[] = [];
     for (const p of checked) {
-      const got = sellQtyDefault(p, setOf(p.slot_key!));
-      expect({ id: p.id, qty: got.qty, sure: got.sure }).toEqual({ id: p.id, qty: p.sell_qty_default.qty, sure: p.sell_qty_default.sure });
+      const card = (cards.get(p.id) ?? { name: p.name, notes: p.notes }) as Parameters<typeof sellQtyDefault>[0];
+      const got = sellQtyDefault(card, slotOf(p.slot_key!), leads.get(p.id) ?? null);
+      if (got.qty !== p.sell_qty_default.qty || got.sure !== p.sell_qty_default.sure)
+        mismatches.push(`${p.id}: site ${got.qty}/${got.sure} (${got.reason}) vs studio ${p.sell_qty_default.qty}/${p.sell_qty_default.sure}`);
     }
+    expect(mismatches, `${mismatches.length} of ${checked.length}`).toEqual([]);
+    expect(setOf).toBeDefined();
+  });
+});
+
+describe("the order in the customer's words (ART6)", () => {
+  it('never names the supplier, and the four steps are in order', () => {
+    expect(Object.values(ORDER_STATUS_HE).some((s) => s.includes('ספק'))).toBe(false);
+    expect([ORDER_STATUS_HE.paid, ORDER_STATUS_HE.sent_to_supplier, ORDER_STATUS_HE.shipped, ORDER_STATUS_HE.delivered]).toEqual([
+      'התקבלה',
+      'בהכנה',
+      'נשלחה',
+      'נמסרה',
+    ]);
+    expect([
+      orderStep('paid'),
+      orderStep('sent_to_supplier'),
+      orderStep('supplier_error'),
+      orderStep('shipped'),
+      orderStep('delivered'),
+      orderStep('pending_payment'),
+    ]).toEqual([0, 1, 1, 2, 3, null]);
   });
 });
 

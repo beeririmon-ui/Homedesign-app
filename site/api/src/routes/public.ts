@@ -12,6 +12,8 @@ import {
   type CheckoutResponse,
   type OrderStatus,
   type OrderView,
+  ORDER_ID,
+  WaitlistRequestSchema,
 } from '@hd/shared';
 import type { AppEnv } from '../env';
 import { HttpError, clientKey, nowIso, orderId, rateLimit, readJson } from '../lib/http';
@@ -35,7 +37,7 @@ publicApi.get('/catalog/prices', async (c) => {
   if (!list.length) return c.json({ prices: [] });
   const placeholders = list.map(() => '?').join(',');
   const { results } = await c.env.DB.prepare(
-    `SELECT id, retail_agorot AS price_agorot, compare_at_agorot, price_provisional, unit_retail_agorot, unit_price_estimated, sell_qty, visible
+    `SELECT id, retail_agorot AS price_agorot, compare_at_agorot, price_provisional, unit_retail_agorot, unit_price_estimated, sell_qty, visible, availability
      FROM products WHERE id IN (${placeholders})`,
   )
     .bind(...list)
@@ -48,6 +50,7 @@ publicApi.get('/catalog/prices', async (c) => {
       unit_price_estimated: number;
       sell_qty: number;
       visible: number;
+      availability: 'available' | 'unavailable';
     }>();
   c.header('Cache-Control', 'public, max-age=60');
   return c.json({
@@ -60,9 +63,26 @@ publicApi.get('/catalog/prices', async (c) => {
       set_qty: r.unit_retail_agorot !== null ? r.sell_qty : null,
       unit_price_agorot: r.visible ? r.unit_retail_agorot : null,
       unit_price_estimated: r.unit_price_estimated === 1,
-      available: r.visible === 1 && r.price_agorot !== null,
+      available: r.visible === 1 && r.price_agorot !== null && r.availability === 'available',
     })),
   });
+});
+
+// ---------- waiting list (PRE1: "עדכנו אותי כשחוזר") ----------
+publicApi.post('/waitlist', async (c) => {
+  await rateLimit(c.env.RL_WRITE, `waitlist:${clientKey(c)}`);
+  const body = await readJson(c, WaitlistRequestSchema);
+  if (body.product_id) {
+    const p = await c.env.DB.prepare('SELECT id FROM products WHERE id = ?').bind(body.product_id).first();
+    if (!p) throw new HttpError(404, 'product_not_found');
+  } else {
+    const s = await c.env.DB.prepare('SELECT id FROM slots WHERE room_id = ? AND id = ?').bind(body.room, body.slot).first();
+    if (!s) throw new HttpError(404, 'slot_not_found');
+  }
+  await c.env.DB.prepare('INSERT INTO waitlist (id, email, product_id, room_id, slot_id, created_at) VALUES (?, ?, ?, ?, ?, ?)')
+    .bind(crypto.randomUUID(), body.email, body.product_id ?? null, body.room ?? null, body.slot ?? null, nowIso())
+    .run();
+  return c.json({ ok: true }, 201);
 });
 
 publicApi.get('/catalog/rooms/:room', async (c) => {
@@ -242,7 +262,7 @@ publicApi.post('/checkout', async (c) => {
 publicApi.get('/orders/:id', async (c) => {
   const id = c.req.param('id');
   const token = c.req.header('x-order-token') ?? '';
-  if (!/^HD-[A-Z0-9]{8}$/.test(id) || token.length < 16) throw new HttpError(404, 'order_not_found');
+  if (!ORDER_ID.test(id) || token.length < 16) throw new HttpError(404, 'order_not_found');
   const o = await c.env.DB.prepare('SELECT id, token_hash, status, created_at, total_agorot, shipping_method FROM orders WHERE id = ?')
     .bind(id)
     .first<{ id: string; token_hash: string; status: OrderStatus; created_at: string; total_agorot: number; shipping_method: 'economy' | 'express' }>();

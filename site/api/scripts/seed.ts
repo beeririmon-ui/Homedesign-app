@@ -9,7 +9,7 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import type { FullCatalog } from '@hd/shared';
+import { saleShippingCents, unitShipFromSaleCents, type FullCatalog } from '@hd/shared';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const GENERATED = resolve(here, '../../.generated');
@@ -61,7 +61,7 @@ export function buildSeedSql(cat: FullCatalog): string {
         s.returns_reserve_rate,
         Math.round(s.cac_ils * 100),
         s.target_margin_rate,
-        Math.round(s.default_shipping_usd * 100),
+        0 /* no default shipping cost since SITE1 (2026-11-03): a product without a line is not priced */,
         Math.round(s.packaging_ils * 100),
         s.items_per_order,
         s.bundle_factor,
@@ -83,6 +83,18 @@ export function buildSeedSql(cat: FullCatalog): string {
   }
 
   for (const p of cat.products) {
+    // the sale's freight (the combined parcel, or the supplier's quote for the sale) and one piece's
+    const room = p.variants_full?.find((v) => v.in_room);
+    const saleFreight = room
+      ? { shipping_usd_cents: room.shipping_usd_cents, unit_shipping_usd_cents: room.unit_shipping_usd_cents }
+      : {
+          shipping_usd_cents: saleShippingCents({
+            shipping_usd_cents: p.shipping_usd_cents,
+            sell_qty: p.sell_qty,
+            shipping_quoted_for_sale: p.shipping_quoted_for_sale,
+          }),
+          unit_shipping_usd_cents: p.shipping_quoted_for_sale ? unitShipFromSaleCents(p.shipping_usd_cents, p.sell_qty) : p.shipping_usd_cents,
+        };
     const data = {
       materials_he: p.materials_he,
       dimensions_cm: p.dimensions_cm,
@@ -94,7 +106,7 @@ export function buildSeedSql(cat: FullCatalog): string {
       nordic_score: p.nordic_score,
     };
     out.push(
-      `INSERT INTO products (id, room_id, slot_id, name_he, name_provisional, name_supplier, category, description_he, status, source_path, supplier_name, supplier_url, supplier_sku, cost_usd_cents, shipping_usd_cents, shipping_from_default, shipping_source, sell_qty, fx_usd_ils_at_import, retail_agorot, compare_at_agorot, price_provisional, unit_retail_agorot, unit_price_estimated, visible, data_json, catalog_version, updated_at) VALUES ${row(
+      `INSERT INTO products (id, room_id, slot_id, name_he, name_provisional, name_supplier, category, description_he, status, source_path, supplier_name, supplier_url, supplier_sku, cost_usd_cents, shipping_usd_cents, unit_shipping_usd_cents, shipping_source, shipping_line, sell_qty, fx_usd_ils_at_import, retail_agorot, compare_at_agorot, price_provisional, price_source, unit_retail_agorot, unit_price_estimated, landed_agorot, no_loss_agorot, availability, availability_reason, visible, data_json, catalog_version, updated_at) VALUES ${row(
         [
           p.id,
           p.room,
@@ -110,22 +122,29 @@ export function buildSeedSql(cat: FullCatalog): string {
           p.supplier.url,
           p.supplier.sku,
           p.cost_usd_cents,
-          p.shipping_usd_cents,
-          p.shipping_from_default,
+          // the sale's freight (combined parcel or the supplier's quote for the sale) and one piece's
+          saleFreight.shipping_usd_cents,
+          saleFreight.unit_shipping_usd_cents,
           p.shipping_source,
+          p.shipping_line,
           p.sell_qty,
           p.fx_usd_ils,
           p.price_agorot,
           p.compare_at_agorot,
           p.price_provisional,
+          p.price_source,
           p.pack?.unit_price_agorot ?? null,
           p.pack?.unit_price_estimated ?? false,
+          p.landed_agorot,
+          p.no_loss_agorot,
+          p.availability.status,
+          p.availability.reason,
           true,
           JSON.stringify(data),
           cat.version,
           now,
         ],
-      )} ON CONFLICT(id) DO UPDATE SET room_id = excluded.room_id, slot_id = excluded.slot_id, name_he = excluded.name_he, name_provisional = excluded.name_provisional, name_supplier = excluded.name_supplier, category = excluded.category, description_he = excluded.description_he, status = excluded.status, source_path = excluded.source_path, supplier_name = excluded.supplier_name, supplier_url = excluded.supplier_url, supplier_sku = excluded.supplier_sku, cost_usd_cents = excluded.cost_usd_cents, shipping_usd_cents = excluded.shipping_usd_cents, shipping_from_default = excluded.shipping_from_default, shipping_source = excluded.shipping_source, sell_qty = excluded.sell_qty, fx_usd_ils_at_import = excluded.fx_usd_ils_at_import, retail_agorot = excluded.retail_agorot, compare_at_agorot = excluded.compare_at_agorot, price_provisional = excluded.price_provisional, unit_retail_agorot = excluded.unit_retail_agorot, unit_price_estimated = excluded.unit_price_estimated, visible = 1, data_json = excluded.data_json, catalog_version = excluded.catalog_version, updated_at = excluded.updated_at;`,
+      )} ON CONFLICT(id) DO UPDATE SET room_id = excluded.room_id, slot_id = excluded.slot_id, name_he = excluded.name_he, name_provisional = excluded.name_provisional, name_supplier = excluded.name_supplier, category = excluded.category, description_he = excluded.description_he, status = excluded.status, source_path = excluded.source_path, supplier_name = excluded.supplier_name, supplier_url = excluded.supplier_url, supplier_sku = excluded.supplier_sku, cost_usd_cents = excluded.cost_usd_cents, shipping_usd_cents = excluded.shipping_usd_cents, unit_shipping_usd_cents = excluded.unit_shipping_usd_cents, shipping_source = excluded.shipping_source, shipping_line = excluded.shipping_line, sell_qty = excluded.sell_qty, fx_usd_ils_at_import = excluded.fx_usd_ils_at_import, retail_agorot = excluded.retail_agorot, compare_at_agorot = excluded.compare_at_agorot, price_provisional = excluded.price_provisional, price_source = excluded.price_source, unit_retail_agorot = excluded.unit_retail_agorot, unit_price_estimated = excluded.unit_price_estimated, landed_agorot = excluded.landed_agorot, no_loss_agorot = excluded.no_loss_agorot, availability = excluded.availability, availability_reason = excluded.availability_reason, visible = 1, data_json = excluded.data_json, catalog_version = excluded.catalog_version, updated_at = excluded.updated_at;`,
     );
     // supplier options (2026-10-11): one variant per SKU with its own price and cost (option_label_he set); without
     // options the product's one variant, whose price and cost columns stay NULL (= the product's)
@@ -142,9 +161,13 @@ export function buildSeedSql(cat: FullCatalog): string {
         own?.unit_price_estimated,
         own?.cost_usd_cents,
         own?.shipping_usd_cents,
+        own?.unit_shipping_usd_cents,
+        own?.landed_agorot,
+        own?.no_loss_agorot,
+        own?.price_floored ?? false,
       ];
       out.push(
-        `INSERT INTO product_variants (id, product_id, label_he, option_label_he, supplier_sku, fulfillment_source, active, in_room, retail_agorot, unit_retail_agorot, price_provisional, unit_price_estimated, cost_usd_cents, shipping_usd_cents) VALUES ${row([...cols, ...priced])} ON CONFLICT(id) DO UPDATE SET label_he = excluded.label_he, option_label_he = excluded.option_label_he, supplier_sku = excluded.supplier_sku, fulfillment_source = excluded.fulfillment_source, active = excluded.active, in_room = excluded.in_room, retail_agorot = excluded.retail_agorot, unit_retail_agorot = excluded.unit_retail_agorot, price_provisional = excluded.price_provisional, unit_price_estimated = excluded.unit_price_estimated, cost_usd_cents = excluded.cost_usd_cents, shipping_usd_cents = excluded.shipping_usd_cents;`,
+        `INSERT INTO product_variants (id, product_id, label_he, option_label_he, supplier_sku, fulfillment_source, active, in_room, retail_agorot, unit_retail_agorot, price_provisional, unit_price_estimated, cost_usd_cents, shipping_usd_cents, unit_shipping_usd_cents, landed_agorot, no_loss_agorot, price_floored) VALUES ${row([...cols, ...priced])} ON CONFLICT(id) DO UPDATE SET label_he = excluded.label_he, option_label_he = excluded.option_label_he, supplier_sku = excluded.supplier_sku, fulfillment_source = excluded.fulfillment_source, active = excluded.active, in_room = excluded.in_room, retail_agorot = excluded.retail_agorot, unit_retail_agorot = excluded.unit_retail_agorot, price_provisional = excluded.price_provisional, unit_price_estimated = excluded.unit_price_estimated, cost_usd_cents = excluded.cost_usd_cents, shipping_usd_cents = excluded.shipping_usd_cents, unit_shipping_usd_cents = excluded.unit_shipping_usd_cents, landed_agorot = excluded.landed_agorot, no_loss_agorot = excluded.no_loss_agorot, price_floored = excluded.price_floored;`,
       );
     }
   }

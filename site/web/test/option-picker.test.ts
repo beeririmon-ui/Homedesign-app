@@ -27,6 +27,7 @@ const p: PublicProduct = {
   variants: [],
   pack: null,
   safety: null,
+  availability: { status: 'available', reason: null },
   // compact, as the catalog ships it (shared/src/options.ts): beige 45×45 (the room's), beige 60×60, black 45×45
   options: {
     axes: [

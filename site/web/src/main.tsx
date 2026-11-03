@@ -7,13 +7,11 @@ import './styles/pages.css';
 import { hydrate, render } from 'preact';
 import { App } from './App';
 import { initRouter, onLinkClick } from './router';
-import { loadTheme } from './state/ui';
 import { loadCart } from './state/cart';
 
 // The artifact has no <html> tag of its own: set language and direction here (the site's index.html has them too).
 document.documentElement.lang = 'he';
 document.documentElement.dir = 'rtl';
-loadTheme();
 initRouter();
 document.addEventListener('click', onLinkClick);
 

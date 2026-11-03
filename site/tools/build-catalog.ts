@@ -20,14 +20,25 @@ import {
   SettingsFileSchema,
   ProductEconomicsFileSchema,
   FreightFileSchema,
-  resolveShippingUsd,
-  type FreightFile,
+  resolveShipping,
+  initialPrice,
+  highestComparableIls,
+  shipForQtyCents,
+  unitShipFromSaleCents,
+  landedAgorot,
+  noLossRetailIls,
+  type FreightFiles,
+  type FreightSource,
+  type ShippingResolution,
   PublicCatalogSchema,
   resolveSettings,
-  recommendedRetailIls,
   unitEconomics,
   usdToCents,
   ilsToAgorot,
+  isDraftCard,
+  onlyDraftIssues,
+  type Availability,
+  type DraftCard,
   type ProductCard,
   type Slot,
   type CatalogRoom,
@@ -54,6 +65,8 @@ import {
 } from '@hd/shared';
 import { REPO, GENERATED, repoPath, sitePath } from './lib/paths';
 import { materialsHe, colorNameHe, hasHebrew } from './lib/hebrew';
+import { loadLeadRecords } from './lib/leads';
+import { cachedFreight } from './lib/freight-cache';
 
 const STRICT = process.argv.includes('--strict-prices');
 /** Rooms with a working room engine in this phase. Others are listed as "soon". */
@@ -92,14 +105,47 @@ const tempCoords = readJson(sitePath('tools/temp/living-room.nordic.json')) as {
 
 const settingsPath = repoPath('data/economics/settings.json');
 const productsEconPath = repoPath('data/economics/products.json');
-const freightPath = repoPath('data/economics/freight-cj.json');
 const settingsInput = existsSync(settingsPath) ? SettingsFileSchema.parse(readJson(settingsPath)) : null;
-const freight: FreightFile | null = existsSync(freightPath) ? FreightFileSchema.parse(readJson(freightPath)) : null;
+/** every freight file the studio reads (build.py FREIGHT_FILES), in its order */
+const freights: FreightFiles = {};
+for (const src of ['cj', 'zendrop', 'aliexpress'] as FreightSource[]) {
+  const f = repoPath('data/economics', `freight-${src}.json`);
+  if (existsSync(f)) freights[src] = FreightFileSchema.parse(readJson(f));
+}
 const productEcon: Record<string, ProductEconomics> = existsSync(productsEconPath) ? ProductEconomicsFileSchema.parse(readJson(productsEconPath)) : {};
 const { settings, defaults_used } = resolveSettings(settingsInput);
+/** the final round's record per card (the studio's starting price and freight for a card without a pricing row) */
+const leads = loadLeadRecords(REPO);
+
+/**
+ * Slots on hold (PRE1): the owner's AU2 list (data/leads/.../round5/excluded-slots.json) and R6Q2 (status/decisions.json,
+ * its `blocks` once answered "yes"). Shown "המלאי אינו זמין כעת" with the waiting list; nothing in them is sold.
+ */
+const onHold = new Map<string, { decision: string; note_he: string }>();
+{
+  const au2 = repoPath('data/leads/final-2026-10-13/round5/excluded-slots.json');
+  if (existsSync(au2)) {
+    const d = readJson(au2) as { decision?: string; slots?: string[] };
+    for (const k of d.slots ?? []) onHold.set(k, { decision: d.decision ?? 'AU2', note_he: 'המלאי אינו זמין כעת' });
+  }
+  const decisionsPath = repoPath('status/decisions.json');
+  if (existsSync(decisionsPath)) {
+    const d = readJson(decisionsPath) as { decisions?: { id: string; status?: string; answer?: { option?: string } | null; blocks?: string[] }[] };
+    const r6q2 = d.decisions?.find((x) => x.id === 'R6Q2');
+    if (r6q2 && r6q2.status !== 'open' && r6q2.answer?.option === 'yes')
+      for (const k of r6q2.blocks ?? []) onHold.set(k, { decision: 'R6Q2', note_he: 'המלאי אינו זמין כעת' });
+  }
+}
 
 /** Cards that fail data/product-card.schema.json are reported and skipped (data/ is not ours to fix). */
 const invalidCards: { path: string; issues: string }[] = [];
+/** Cards the DS API left unfilled (shared/src/card-draft.ts): not a schema bug, listed for the sourcing-agent, not shown. */
+const draftCards: DraftCard[] = [];
+/** The studio's own prices (the owner's, the pricing file's, a per-SKU price) that lose on the site's reading: reported, never raised. */
+const studioLosing: { id: string; variant_id: string; price_agorot: number; no_loss_agorot: number }[] = [];
+/** derived prices the floor raised (SITE1): evidence for gate G8.2 */
+let flooredVariants = 0;
+let flooredUnits = 0;
 /** Cards whose `options` alone are broken: the product is shown without its options, and the problem is reported. */
 const invalidOptions: { path: string; issues: string }[] = [];
 const cards: { card: ProductCard; path: string }[] = walk(repoPath('data/products')).flatMap((p) => {
@@ -118,6 +164,11 @@ const cards: { card: ProductCard; path: string }[] = walk(repoPath('data/product
     }
   }
   if (!parsed.success) {
+    const paths = parsed.error.issues.map((i) => i.path.join('.'));
+    if (isDraftCard(raw) && onlyDraftIssues(paths)) {
+      draftCards.push({ path: relative(REPO, p), fields: [...new Set(paths)] });
+      return [];
+    }
     invalidCards.push({
       path: relative(REPO, p),
       issues: parsed.error.issues.map((i) => `${i.path.join('.')}: ${i.message}`).join('; '),
@@ -200,10 +251,22 @@ const daysOf = (d: string | null | undefined): [number, number] | null => {
 };
 type OptionsBuild = { public: PublicOptions; full: FullVariant[] } | null;
 
+/** The product's resolved shipping, in the two numbers every scenario needs: one piece's freight and the sale's. */
+type Freight = { unit_cents: number; sale_cents: number; quoted_for_sale: boolean };
+function freightOf(ship: Extract<ShippingResolution, { ok: true }>, sellQty: number): Freight {
+  if (ship.quoted_for_sale) return { unit_cents: unitShipFromSaleCents(ship.usd_cents, sellQty), sale_cents: ship.usd_cents, quoted_for_sale: true };
+  return { unit_cents: ship.usd_cents, sale_cents: shipForQtyCents(ship.usd_cents, sellQty), quoted_for_sale: false };
+}
+const landedOf = (costCents: number, shipCents: number, q: number) =>
+  landedAgorot({ cost_usd_cents: costCents, shipping_usd_cents: shipCents, fx_usd_ils: settings.fx_usd_ils, sell_qty: q, shipping_quoted_for_sale: true });
+const noLossOf = (landed: number) => ilsToAgorot(noLossRetailIls(landed / 100, settings));
+
 /**
  * Every option of the supplier (card `options`) as variants with their own price: the room's SKU is the product
  * (its price, cost and shipping), the others go through the same economics (shared/src/options.ts). The public form is
  * compact (the catalog ships in the JS bundle); variant ids are derived from the value ids (optionVariantId).
+ * No option is sold under its own no-loss price (SITE1): a derived price is floored there; a price the studio set by
+ * hand (sku_retail_ils) is never raised, it is reported.
  */
 function buildOptions(
   card: ProductCard,
@@ -213,9 +276,11 @@ function buildOptions(
     provisional: boolean;
     studioRetailIls: number | null;
     cost: number;
-    ship: number;
+    freight: Freight;
     sellQty: number;
     pack: FullProduct['pack'];
+    unitLanded: number | null;
+    unitNoLoss: number | null;
     days: [number, number] | null;
   },
   econ: ProductEconomics,
@@ -233,11 +298,19 @@ function buildOptions(
     days: [number, number] | null;
     available: boolean;
   }[] = [];
+  const n = p.sellQty;
   for (const s of o.skus) {
     const isDefault = s === dflt;
     if (s.price.currency !== 'USD') continue;
     const cost = isDefault ? p.cost : skuCostCents(p.cost, dfltCents, usdToCents(s.price.amount));
-    const ship = isDefault ? p.ship : skuShippingCents(p.ship, dflt.shipping_il, s.shipping_il);
+    // the supplier's own difference between this SKU and the room's moves both one piece's freight and the sale's
+    const unitShip = isDefault ? p.freight.unit_cents : skuShippingCents(p.freight.unit_cents, dflt.shipping_il, s.shipping_il);
+    const delta = unitShip - p.freight.unit_cents;
+    const saleShip = isDefault
+      ? p.freight.sale_cents
+      : p.freight.quoted_for_sale
+        ? Math.max(0, p.freight.sale_cents + n * delta)
+        : shipForQtyCents(unitShip, n);
     const r = skuRetail(
       {
         is_default: isDefault,
@@ -246,18 +319,61 @@ function buildOptions(
         studio_retail_ils: p.studioRetailIls,
         sku_override_ils: econ.sku_retail_ils?.[s.id] ?? null,
         cost_usd_cents: cost,
-        shipping_usd_cents: ship,
+        shipping_usd_cents: unitShip,
         default_cost_usd_cents: p.cost,
-        default_shipping_usd_cents: p.ship,
+        default_shipping_usd_cents: p.freight.unit_cents,
         fx_usd_ils: settings.fx_usd_ils,
-        sell_qty: p.sellQty,
+        sell_qty: n,
         strict: STRICT,
       },
       settings,
     );
     if (!r) continue; // strict build: an option without a studio price is not sold
-    // P1: one piece of a set, per option (the room's keeps the product's unit price)
-    const unit = p.pack ? (isDefault ? p.pack.unit_price_agorot : ilsToAgorot(unitPriceEstimateIls(r.retail_agorot / 100, p.sellQty))) : null;
+    // the floor (SITE1): the option's own landed cost in the sale's units, and the lowest price that does not lose there
+    const landed = isDefault ? landedOf(p.cost, p.freight.sale_cents, n) : landedOf(cost, saleShip, n);
+    const noLoss = noLossOf(landed);
+    const studioSet = isDefault || (typeof econ.sku_retail_ils?.[s.id] === 'number' && econ.sku_retail_ils[s.id]! > 0);
+    let retail = r.retail_agorot;
+    let floored = false;
+    if (retail < noLoss) {
+      if (studioSet) {
+        if (!isDefault)
+          studioLosing.push({
+            id: card.id,
+            variant_id: optionVariantId(
+              card.id,
+              o.axes.map((a) => s.values[a.id]!),
+            ),
+            price_agorot: retail,
+            no_loss_agorot: noLoss,
+          });
+      } else {
+        retail = noLoss;
+        floored = true;
+        flooredVariants++;
+      }
+    }
+    // P1: one piece of a set, per option (the room's keeps the product's unit price), floored at one piece's own no-loss
+    let unit: number | null = null;
+    let unitLanded: number | null = null;
+    let unitNoLoss: number | null = null;
+    let unitFloored = false;
+    if (p.pack) {
+      if (isDefault) {
+        unit = p.pack.unit_price_agorot;
+        unitLanded = p.unitLanded;
+        unitNoLoss = p.unitNoLoss;
+      } else {
+        unitLanded = landedOf(cost, unitShip, 1);
+        unitNoLoss = noLossOf(unitLanded);
+        unit = ilsToAgorot(unitPriceEstimateIls(retail / 100, n));
+        if (unit < unitNoLoss) {
+          unit = unitNoLoss;
+          unitFloored = true;
+          flooredUnits++;
+        }
+      }
+    }
     const id = optionVariantId(
       card.id,
       o.axes.map((a) => s.values[a.id]!),
@@ -270,11 +386,18 @@ function buildOptions(
       option_label_he: o.axes.map((a) => valueOf(a, s).label_he).join(', '),
       supplier_sku: s.id,
       cost_usd_cents: cost,
-      shipping_usd_cents: ship,
-      retail_agorot: r.retail_agorot,
+      shipping_usd_cents: saleShip,
+      unit_shipping_usd_cents: unitShip,
+      retail_agorot: retail,
       unit_retail_agorot: unit,
       price_provisional: r.provisional,
       unit_price_estimated: p.pack ? (isDefault ? p.pack.unit_price_estimated : true) : false,
+      price_floored: floored,
+      unit_price_floored: unitFloored,
+      landed_agorot: landed,
+      no_loss_agorot: noLoss,
+      unit_landed_agorot: unitLanded,
+      unit_no_loss_agorot: unitNoLoss,
       active: available,
       in_room: isDefault,
       supplier_image_url: s.image && /^https:\/\//.test(s.image) ? s.image : null,
@@ -282,7 +405,7 @@ function buildOptions(
     const days = daysOf(s.shipping_il?.days);
     rows.push({
       s,
-      retail: r.retail_agorot,
+      retail,
       provisional: r.provisional,
       unit,
       days: days && (!p.days || days[0] !== p.days[0] || days[1] !== p.days[1]) ? days : null,
@@ -316,28 +439,47 @@ function buildOptions(
 }
 
 function buildProduct(card: ProductCard, path: string, roomId: string, slot: Slot, fillerNames: string[]): FullProduct | HiddenProduct {
-  const econ = productEcon[card.id] ?? {};
+  const econ = productEcon[card.id];
+  const lead = leads.get(card.id) ?? null;
   // units per sale: the studio's sell_qty, else the studio's own default rule (studio/build.py sell_qty_default)
-  const qtyDefault = sellQtyDefault(card, slot.set_of);
-  const sellQty = econ.sell_qty ?? qtyDefault.qty;
+  const qtyDefault = sellQtyDefault(card, slot, lead);
+  const sellQty = econ?.sell_qty ?? qtyDefault.qty;
   // the cost of the whole sale from the pricing file (sale_cost_usd, 2026-10-18: a shade with its suspension set), per
   // unit sold; else the card's cost. The row's shipping_cost_usd is then shipping only (the studio reads it the same way)
-  const saleCost = typeof econ.sale_cost_usd === 'number' && econ.sale_cost_usd > 0 ? econ.sale_cost_usd : null;
+  const saleCost = typeof econ?.sale_cost_usd === 'number' && econ.sale_cost_usd > 0 ? econ.sale_cost_usd : null;
   const cost = usdToCents(saleCost !== null ? saleCost / sellQty : card.price.currency === 'USD' ? card.price.cost : NaN);
   if (!Number.isFinite(cost)) return { id: card.id, slot: slot.id, reason: `price.currency ${card.price.currency} is not USD` };
-  const shipping = resolveShippingUsd(card.id, econ.shipping_cost_usd, freight, settings);
-  const shippingFromDefault = shipping.source === 'default';
-  const ship = usdToCents(shipping.usd);
-  const fulfillment = econ.fulfillment_source ?? 'dropship_cj';
-  let retailIls = typeof econ.retail_ils === 'number' ? econ.retail_ils : null;
-  let provisional = false;
-  if (retailIls === null) {
-    if (STRICT) return { id: card.id, slot: slot.id, reason: 'no retail_ils in data/economics/products.json' };
-    retailIls = recommendedRetailIls({ cost_usd_cents: cost, shipping_usd_cents: ship, fx_usd_ils: settings.fx_usd_ils, sell_qty: sellQty }, settings);
-    provisional = true;
-    if (retailIls === null) return { id: card.id, slot: slot.id, reason: 'target margin unreachable with current settings' };
+  // the shipping line, in the studio's order; a product without one is not priced (no default figure, SITE1)
+  const cjEntry = freights.cj?.products[card.id] as { pid?: string; vid?: string } | undefined;
+  const ship = resolveShipping({ id: card.id, card, row: econ, freights, cache: cachedFreight(REPO, card, cjEntry), lead, sellQty });
+  if (!ship.ok)
+    return {
+      id: card.id,
+      slot: slot.id,
+      reason: ship.reason === 'no_route' ? `no shipping to Israel (${ship.source})` : 'no shipping line in the studio, the card or the final round',
+    };
+  const freight = freightOf(ship, sellQty);
+  // the price: the studio's (the owner's, the pricing file's), else the card's or the final round's starting price,
+  // marked provisional; never a margin-target price (SITE1)
+  const price0 = initialPrice(card, econ, lead);
+  if (!price0) return { id: card.id, slot: slot.id, reason: 'no price: not in data/economics/products.json, the card or the final round' };
+  if (STRICT && price0.source !== 'owner' && price0.source !== 'studio')
+    return { id: card.id, slot: slot.id, reason: 'no retail_ils in data/economics/products.json' };
+  const provisional = price0.source === 'initial-card' || price0.source === 'initial-leads';
+  let retail = ilsToAgorot(price0.retail_ils);
+  const landed = landedOf(cost, freight.sale_cents, sellQty);
+  const noLoss = noLossOf(landed);
+  if (retail < noLoss) {
+    if (provisional)
+      retail = noLoss; // a starting price that loses is floored like any derived price
+    else if (!ship.express_only) {
+      // an express-only product is not sold at all (NL2), so its headline is not a finding
+      studioLosing.push({ id: card.id, variant_id: `${card.id}:default`, price_agorot: retail, no_loss_agorot: noLoss });
+      if (STRICT)
+        return { id: card.id, slot: slot.id, reason: `the studio's price ₪${price0.retail_ils} loses on the site's reading (no-loss ₪${noLoss / 100})` };
+    }
   }
-  const retail = ilsToAgorot(retailIls);
+  const fulfillment = econ?.fulfillment_source ?? 'dropship_cj';
   const materials = materialsHe(card.materials);
   const color = colorNameHe(card.colors.dominant_hex);
   const name_he = `${slot.name_he}${materials[0] ? ` ${materials[0]}` : ''}, ${color}`;
@@ -350,16 +492,31 @@ function buildProduct(card: ProductCard, path: string, roomId: string, slot: Slo
   ]
     .filter(Boolean)
     .join(' ');
-  const compare = typeof econ.compare_at_ils === 'number' && econ.compare_at_ils > retailIls ? ilsToAgorot(econ.compare_at_ils) : null;
-  // P1: a set (sell_qty > 1) is also sold as one piece. Unit price from the studio, else an estimate (marked as such).
-  const unitIls =
-    sellQty > 1
-      ? typeof econ.unit_retail_ils === 'number' && econ.unit_retail_ils > 0
-        ? econ.unit_retail_ils
-        : unitPriceEstimateIls(retailIls, sellQty)
-      : null;
-  const pack =
-    unitIls === null ? null : { set_qty: sellQty, unit_price_agorot: ilsToAgorot(unitIls), unit_price_estimated: typeof econ.unit_retail_ils !== 'number' };
+  const retailIls = retail / 100;
+  const compare = typeof econ?.compare_at_ils === 'number' && econ.compare_at_ils > retailIls ? ilsToAgorot(econ.compare_at_ils) : null;
+  // P1: a set (sell_qty > 1) is also sold as one piece. Unit price from the studio, else an estimate (marked as such),
+  // floored at one piece's own no-loss price; the studio's unit price is never raised, only reported
+  const unitLanded = sellQty > 1 ? landedOf(cost, freight.unit_cents, 1) : null;
+  const unitNoLoss = unitLanded === null ? null : noLossOf(unitLanded);
+  let unitIls: number | null = null;
+  let unitEstimated = false;
+  let unitFloored = false;
+  if (sellQty > 1) {
+    if (typeof econ?.unit_retail_ils === 'number' && econ.unit_retail_ils > 0) {
+      unitIls = econ.unit_retail_ils;
+      if (ilsToAgorot(unitIls) < unitNoLoss!)
+        studioLosing.push({ id: card.id, variant_id: `${card.id}:default/unit`, price_agorot: ilsToAgorot(unitIls), no_loss_agorot: unitNoLoss! });
+    } else {
+      unitIls = unitPriceEstimateIls(retailIls, sellQty);
+      unitEstimated = true;
+      if (ilsToAgorot(unitIls) < unitNoLoss!) {
+        unitIls = unitNoLoss! / 100;
+        unitFloored = true;
+        flooredUnits++;
+      }
+    }
+  }
+  const pack = unitIls === null ? null : { set_qty: sellQty, unit_price_agorot: ilsToAgorot(unitIls), unit_price_estimated: unitEstimated };
   const safety = publicSafety(card.safety);
   const opts = card.options
     ? buildOptions(
@@ -368,14 +525,16 @@ function buildProduct(card: ProductCard, path: string, roomId: string, slot: Slo
         {
           retail,
           provisional,
-          studioRetailIls: typeof econ.retail_ils === 'number' ? econ.retail_ils : null,
+          studioRetailIls: price0.source === 'owner' || price0.source === 'studio' ? price0.retail_ils : null,
           cost,
-          ship,
+          freight,
           sellQty,
           pack,
+          unitLanded,
+          unitNoLoss,
           days: shippingDays(card),
         },
-        econ,
+        econ ?? {},
       )
     : null;
   const defaultVariant: FullVariant = {
@@ -384,16 +543,37 @@ function buildProduct(card: ProductCard, path: string, roomId: string, slot: Slo
     option_label_he: null,
     supplier_sku: card.supplier.sku ?? null,
     cost_usd_cents: cost,
-    shipping_usd_cents: ship,
+    shipping_usd_cents: freight.sale_cents,
+    unit_shipping_usd_cents: freight.unit_cents,
     retail_agorot: retail,
     unit_retail_agorot: pack?.unit_price_agorot ?? null,
     price_provisional: provisional,
     unit_price_estimated: pack?.unit_price_estimated ?? false,
+    price_floored: false,
+    unit_price_floored: unitFloored,
+    landed_agorot: landed,
+    no_loss_agorot: noLoss,
+    unit_landed_agorot: unitLanded,
+    unit_no_loss_agorot: unitNoLoss,
     active: true,
     in_room: true,
     supplier_image_url: null,
   };
   const variantsFull = opts ? opts.full : [defaultVariant];
+  // NL2 (2026-11-03): the no-loss price more than twice the highest Israeli comparable, or express only: not sold,
+  // shown "המלאי אינו זמין כעת" with the waiting list (PRE1); the stored price stays. A slot on hold (AU2, R6Q2) too.
+  const highest = highestComparableIls(econ);
+  const hold = onHold.get(`${roomId}/${slot.id}`);
+  const [availability, availabilityNote]: [Availability, string | null] = hold
+    ? [{ status: 'unavailable', reason: 'slot-on-hold' }, `העמדה בהמתנה (${hold.decision}): ${hold.note_he}`]
+    : ship.express_only
+      ? [{ status: 'unavailable', reason: 'nl2-express-only' }, 'הספק שולח רק באקספרס; לא נמכר עד שיש מקור זול יותר (NL2)']
+      : highest !== null && noLoss > ilsToAgorot(highest) * 2
+        ? [
+            { status: 'unavailable', reason: 'nl2-above-market' },
+            `המחיר שלא מפסיד (₪${noLoss / 100}) גבוה מפי 2 מההשוואה הגבוהה בישראל (₪${highest}); לא נמכר עד שיש מקור זול יותר (NL2)`,
+          ]
+        : [{ status: 'available', reason: null }, null];
   return {
     id: card.id,
     room: roomId,
@@ -407,13 +587,14 @@ function buildProduct(card: ProductCard, path: string, roomId: string, slot: Slo
     materials_he: materials,
     dimensions_cm: { width: d.width ?? null, depth: d.depth ?? null, height: d.height ?? null },
     color_hex: card.colors.dominant_hex,
-    shipping_days: shippingDays(card),
+    shipping_days: shippingDays(card) ?? ship.days,
     notes_he: productNotes(slot, fillerNames, { wiredInSafety: safety?.power === 'wired', packChoice: pack !== null }),
     set_of: slot.set_of ?? null,
     variants: variantsFull.map((v) => ({ id: v.id, label_he: v.label_he })),
     pack,
     safety,
     options: opts ? opts.public : null,
+    availability,
     variants_full: variantsFull,
     name_supplier: card.name,
     category: card.category ?? null,
@@ -427,16 +608,22 @@ function buildProduct(card: ProductCard, path: string, roomId: string, slot: Slo
       quality: card.images.quality,
     },
     cost_usd_cents: cost,
-    shipping_usd_cents: ship,
-    shipping_from_default: shippingFromDefault,
-    shipping_source: shipping.source,
+    shipping_usd_cents: ship.usd_cents,
+    shipping_quoted_for_sale: ship.quoted_for_sale,
+    shipping_source: ship.source,
+    shipping_line: ship.line,
+    price_source: price0.source,
+    landed_agorot: landed,
+    no_loss_agorot: noLoss,
+    highest_comparable_agorot: highest === null ? null : ilsToAgorot(highest),
+    availability_note_he: availabilityNote,
     sell_qty: sellQty,
-    sell_qty_source: typeof econ.sell_qty === 'number' ? 'studio' : 'default',
-    sell_qty_sure: typeof econ.sell_qty === 'number' || qtyDefault.sure,
-    sell_qty_reason: typeof econ.sell_qty === 'number' ? null : qtyDefault.reason,
+    sell_qty_source: typeof econ?.sell_qty === 'number' ? 'studio' : 'default',
+    sell_qty_sure: typeof econ?.sell_qty === 'number' || qtyDefault.sure,
+    sell_qty_reason: typeof econ?.sell_qty === 'number' ? null : qtyDefault.reason,
     unit_economics: pack
       ? unitEconomics(
-          { retail_agorot: pack.unit_price_agorot, cost_usd_cents: cost, shipping_usd_cents: ship, fx_usd_ils: settings.fx_usd_ils, sell_qty: 1 },
+          { retail_agorot: pack.unit_price_agorot, cost_usd_cents: cost, shipping_usd_cents: freight.unit_cents, fx_usd_ils: settings.fx_usd_ils, sell_qty: 1 },
           settings,
         )
       : null,
@@ -444,7 +631,14 @@ function buildProduct(card: ProductCard, path: string, roomId: string, slot: Slo
     fx_usd_ils: settings.fx_usd_ils,
     nordic_score: card.style_scores?.[STYLE]?.score ?? null,
     economics: unitEconomics(
-      { retail_agorot: retail, cost_usd_cents: cost, shipping_usd_cents: ship, fx_usd_ils: settings.fx_usd_ils, sell_qty: sellQty },
+      {
+        retail_agorot: retail,
+        cost_usd_cents: cost,
+        shipping_usd_cents: ship.usd_cents,
+        fx_usd_ils: settings.fx_usd_ils,
+        sell_qty: sellQty,
+        shipping_quoted_for_sale: ship.quoted_for_sale,
+      },
       settings,
     ),
   };
@@ -520,6 +714,7 @@ for (const hr of house.rooms) {
     const fromFile = hotspotFromFile(slot, frame);
     const hotspot = fromFile ? fromFile : temp ? { u: temp.hotspot[0], v: temp.hotspot[1], provisional: true, visible: temp.visible !== false } : null;
     const zoomFromFile = Array.isArray(slot.zoom_frame) && slot.zoom_frame.length === 4 ? (slot.zoom_frame as [number, number, number, number]) : null;
+    const hold = onHold.get(`${roomId}/${slot.id}`) ?? null;
     slots.push({
       id: slot.id,
       name_he: slot.name_he,
@@ -543,6 +738,7 @@ for (const hr of house.rooms) {
             )
           : null),
       options,
+      on_hold: hold,
     });
   }
   rooms.push({
@@ -612,6 +808,7 @@ const publicProducts = fullProducts.map((p) => ({
   pack: p.pack,
   safety: p.safety,
   options: p.options,
+  availability: p.availability,
 }));
 
 const base = {
@@ -633,13 +830,19 @@ const fullCatalog: FullCatalog = {
   hidden,
   invalid_cards: invalidCards,
   invalid_options: invalidOptions,
+  draft_cards: draftCards,
+  studio_prices_losing: studioLosing,
   economics: {
     settings,
     defaults_used,
     sources: {
       settings: settingsInput ? 'data/economics/settings.json' : null,
       products: Object.keys(productEcon).length ? 'data/economics/products.json' : null,
-      freight: freight ? 'data/economics/freight-cj.json' : null,
+      freight: Object.keys(freights).length
+        ? Object.keys(freights)
+            .map((s) => `data/economics/freight-${s}.json`)
+            .join(', ')
+        : null,
     },
   },
 };
@@ -656,7 +859,10 @@ console.log(
     `  products shown: ${publicProducts.length} (provisional prices: ${fullProducts.filter((p) => p.price_provisional).length})`,
     `  hidden: ${hidden.length}${hidden.length ? ' · ' + hidden.map((h) => `${h.id}: ${h.reason}`).join('; ') : ''}`,
     `  living-room slots: ${living?.slots.length ?? 0}, placeholder options: ${placeholders}`,
-    `  shipping cost source: ${['manual', 'cj', 'default'].map((k) => `${k} ${fullProducts.filter((p) => p.shipping_source === k).length}`).join(', ')}`,
+    `  shipping line source: ${['manual', 'cj', 'zendrop', 'aliexpress', 'card', 'cache', 'leads'].map((k) => `${k} ${fullProducts.filter((p) => p.shipping_source === k).length}`).join(', ')} (no default figure)`,
+    `  price source: ${['owner', 'studio', 'initial-card', 'initial-leads'].map((k) => `${k} ${fullProducts.filter((p) => p.price_source === k).length}`).join(', ')}`,
+    `  no-loss floor (SITE1): ${flooredVariants} option prices and ${flooredUnits} single-piece prices raised to their own no-loss price; studio prices that lose on the site's reading: ${studioLosing.length}${studioLosing.length ? ' · ' + studioLosing.map((x) => `${x.variant_id} ₪${x.price_agorot / 100} < ₪${x.no_loss_agorot / 100}`).join('; ') : ''}`,
+    `  not sold (PRE1): ${['nl2-above-market', 'nl2-express-only', 'slot-on-hold'].map((k) => `${k} ${fullProducts.filter((p) => p.availability.reason === k).length}`).join(', ')}; slots on hold: ${[...onHold.keys()].join(', ') || 'none'}`,
     `  economics defaults used: ${defaults_used.length ? defaults_used.join(', ') : 'none'}`,
     `  supplier images (FR-I): ${fullProducts.filter((p) => p.supplier_image.url).length} with a url · usage rights ${['confirmed', 'unclear', 'none']
       .map((r) => `${r} ${fullProducts.filter((p) => p.supplier_image.usage_rights === r).length}`)
@@ -667,5 +873,6 @@ console.log(
     }`,
     `  card room vs folder: ${roomVsFolder.length ? `${roomVsFolder.length} disagree (card room used) · ${roomVsFolder.join('; ')}` : 'all agree'}`,
     `  invalid product cards skipped: ${invalidCards.length}${invalidCards.length ? ' · ' + invalidCards.map((c) => `${c.path} (${c.issues})`).join('; ') : ''}`,
+    `  draft cards (DS API, colors and visual_weight unfilled; for the sourcing-agent, not shown): ${draftCards.length}${draftCards.length ? ' · ' + draftCards.map((c) => c.path).join('; ') : ''}`,
   ].join('\n'),
 );

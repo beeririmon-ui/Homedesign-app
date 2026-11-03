@@ -1795,7 +1795,7 @@ function effProduct(p){
   e.retailInitial = !('retail_ils' in pf) && isNum(be.retail_ils) && /^initial/.test(String(be.retail_src || ''));
   e.retailEdited = 'retail_ils' in pf;
   e.addonOnly = be.addon_only === true;
-  e.priceFlag = be.price_flag || null; e.slotAltOk = typeof be.slot_alternative_ok === 'boolean' ? be.slot_alternative_ok : null;
+  e.priceFlag = be.price_flag || null; e.priceFlagHe = be.price_flag_he || null; e.slotAltOk = typeof be.slot_alternative_ok === 'boolean' ? be.slot_alternative_ok : null;
   // a price from the card or its final-round record (no row in the pricing file, QA 2026-10-17 M4): the floor chip asks
   // the slot itself whether another product clears the target (refreshView), and premium pricing waits for the owner
   e.fromCard = be.from_card === true && !e.retailEdited;
@@ -1852,7 +1852,16 @@ const saleCostChip = e => {
   return `<span class="chip chip-initial" data-sale-cost="${esc(e.saleCostSrc)}" title="${esc(tip)}">עלות המכירה ${esc(fmtUSD(e.saleCost))}<span class="sr-only"> (${esc(what)})</span></span>`;
 };
 const premiumChip = e => e && e.premium ? `<span class="chip chip-premium" title="${esc('המעצב קבע שהמוצר נראה איכותי, והמחיר עד המחיר הטיפוסי בישראל (ה.10, 2026-10-17). מחכה לאישור המשתמש.')}">תמחור פרימיום, לאישור</span>` : '';
-const priceChips = e => [loserChip(e), isLoser(e) ? '' : floorChip(e), premiumChip(e), saleCostChip(e), addonChip(e)].filter(Boolean).join(' ');
+const priceChips = e => [loserChip(e), isLoser(e) ? '' : floorChip(e), marketChip(e), premiumChip(e), saleCostChip(e), addonChip(e)].filter(Boolean).join(' ');
+// the no-loss policy's flags (ה.13, 2026-10-20; SITE1): "יקר מהשוק" = the no-loss price is above the highest Israeli
+// comparable (sold, unless more than x2: NL2); express-only and cannot-compute = not for sale
+function marketChip(e){
+  if(!e || !e.priceFlag || !['above-market', 'express-only', 'cannot-compute'].includes(e.priceFlag)) return '';
+  const he = e.priceFlagHe || {'above-market': 'יקר מהשוק', 'express-only': 'רק אקספרס, לא למכירה', 'cannot-compute': 'אי אפשר לחשב'}[e.priceFlag];
+  const title = e.priceFlag === 'above-market' ? 'המחיר שלא מפסיד גבוה מההשוואה הגבוהה בישראל (ה.13). מעל פי 2: לא נמכר (NL2)'
+    : e.priceFlag === 'express-only' ? 'לספק אין שיטת משלוח רגילה לישראל; לא נמכר עד שיש מקור זול יותר (NL2)' : 'חסר נתון לחישוב הרווחיות';
+  return `<span class="chip ${e.priceFlag === 'above-market' ? 'chip-warn' : 'chip-exception'}" title="${esc(title)}">${esc(he)}</span>`;
+}
 function floorChip(e){
   if(!e || e._new || typeof e.slotAltOk !== 'boolean') return '';
   const T = S.ES.v.target_margin_pct;

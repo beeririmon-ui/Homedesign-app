@@ -1,6 +1,5 @@
-/* Design tokens. Light = Design Bible "טיפוגרפיה וממשק"; dark = the same palette at night.
-   Order required by the artifact contract: :root, then the dark media query guarded by
-   :root:not([data-theme=light]), then :root[data-theme=dark]. All text pairs ≥ 4.5:1 (checked). */
+/* Design tokens: the Design Bible "טיפוגרפיה וממשק", one warm paper. No dark mode at launch (ART3, 2026-11-03:
+   every asset is balanced for the light paper). All text pairs ≥ 4.5:1 (checked). */
 :root {
   --bg: #f4f1ec; /* warm white */
   --surface: #fbfaf7;
@@ -39,52 +38,6 @@
   --ease: cubic-bezier(0.77, 0, 0.18, 1);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   color-scheme: light;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
-    --bg: #1c1b19;
-    --surface: #262522;
-    --surface-2: #302e2a;
-    --ink: #ece8e1;
-    --ink-2: #b3ada3;
-    --line: #3a3835;
-    --line-strong: #57534d;
-    --accent: #b48f67;
-    --accent-ink: #d4b48c;
-    --sage: #8d967f;
-    --sage-ink: #c3cdb3;
-    --primary-bg: #ece8e1;
-    --primary-ink: #1c1b19;
-    --secondary-bg: #a7b09a;
-    --secondary-ink: #1c1b19;
-    --danger: #e9a493;
-    --focus: #ece8e1;
-    --shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-    color-scheme: dark;
-  }
-}
-
-:root[data-theme='dark'] {
-  --bg: #1c1b19;
-  --surface: #262522;
-  --surface-2: #302e2a;
-  --ink: #ece8e1;
-  --ink-2: #b3ada3;
-  --line: #3a3835;
-  --line-strong: #57534d;
-  --accent: #b48f67;
-  --accent-ink: #d4b48c;
-  --sage: #8d967f;
-  --sage-ink: #c3cdb3;
-  --primary-bg: #ece8e1;
-  --primary-ink: #1c1b19;
-  --secondary-bg: #a7b09a;
-  --secondary-ink: #1c1b19;
-  --danger: #e9a493;
-  --focus: #ece8e1;
-  --shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-  color-scheme: dark;
 }
 
 @media (min-width: 720px) {

@@ -474,20 +474,19 @@ export function RoomExperience({ room }: { room: CatalogRoom }) {
         </p>
       ) : null}
       <div class="stage-ui">
-        <div class="glass segmented" role="group" aria-label="סגנון">
-          {styles.map((s) => (
-            <button
-              key={s.id}
-              type="button"
-              aria-pressed={s.id === room.style}
-              aria-disabled={!s.available}
-              onClick={() => (s.available ? undefined : announce(`סגנון ${s.name_he} יגיע בהמשך`))}
-            >
-              {s.name_he}
-              {!s.available ? <small>בקרוב</small> : null}
-            </button>
-          ))}
-        </div>
+        {/* ART7 (2026-11-03): styles that do not exist yet are not on the room image; they appear only in the contents
+            (Home) as "בגיליונות הבאים". With one style there is nothing to switch, so the control stays off the stage. */}
+        {styles.filter((s) => s.available).length > 1 ? (
+          <div class="glass segmented" role="group" aria-label="סגנון">
+            {styles
+              .filter((s) => s.available)
+              .map((s) => (
+                <button key={s.id} type="button" aria-pressed={s.id === room.style}>
+                  {s.name_he}
+                </button>
+              ))}
+          </div>
+        ) : null}
         <div class="stage-actions">
           {canPan ? (
             <>
@@ -508,6 +507,7 @@ export function RoomExperience({ room }: { room: CatalogRoom }) {
       {open ? (
         <VariantWheel
           slot={open.slot}
+          roomId={room.id}
           initial={selection.value[open.slot.id] ?? 1}
           onPreview={(pos) => void preview(open.slot, pos)}
           onChoose={() => void close(true)}

@@ -1,5 +1,6 @@
 export * from './schema/product-card.gen';
 export * from './card-room';
+export * from './card-draft';
 export * from './schema/slots';
 export * from './schema/economics';
 export * from './catalog';

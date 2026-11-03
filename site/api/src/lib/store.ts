@@ -44,7 +44,7 @@ export const VARIANT_PRICE_SQL = `COALESCE(v.retail_agorot, p.retail_agorot) AS 
        COALESCE(v.unit_price_estimated, p.unit_price_estimated) AS unit_price_estimated,
        COALESCE(v.price_provisional, p.price_provisional) AS price_provisional`;
 
-/** Prices always come from D1. Lines whose product is no longer visible are dropped from the view. */
+/** Prices always come from D1. Lines whose product is no longer visible or sold (PRE1) are dropped from the view. */
 export async function readCart(db: D1Database, id: string): Promise<Cart> {
   const { results } = await db
     .prepare(
@@ -52,7 +52,7 @@ export async function readCart(db: D1Database, id: string): Promise<Cart> {
               ${VARIANT_PRICE_SQL}
        FROM cart_items ci
        JOIN product_variants v ON v.id = ci.variant_id AND v.active = 1
-       JOIN products p ON p.id = v.product_id AND p.visible = 1 AND p.retail_agorot IS NOT NULL
+       JOIN products p ON p.id = v.product_id AND p.visible = 1 AND p.retail_agorot IS NOT NULL AND p.availability = 'available'
        WHERE ci.cart_id = ?
        ORDER BY ci.added_at`,
     )
@@ -94,7 +94,7 @@ export async function setCartItem(db: D1Database, cartId: string, variantId: str
     const row = await db
       .prepare(
         `SELECT ${VARIANT_PRICE_SQL} FROM product_variants v JOIN products p ON p.id = v.product_id
-         WHERE v.id = ? AND v.active = 1 AND p.visible = 1 AND p.retail_agorot IS NOT NULL`,
+         WHERE v.id = ? AND v.active = 1 AND p.visible = 1 AND p.retail_agorot IS NOT NULL AND p.availability = 'available'`,
       )
       .bind(variantId)
       .first<{ unit_retail_agorot: number | null }>();

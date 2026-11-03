@@ -4,7 +4,8 @@
  * Into a room it is one continuous camera move, not a cut and not a zoom:
  *   1. a short cross-fade from what is on screen to the first frame;
  *   2. the walk: the frame sequence with a speed ramp (it accelerates and never slows down inside the footage),
- *      frame blending and a light motion trail; the room page mounts underneath and composes M0 meanwhile;
+ *      frame blending and a light motion trail, at scale 1.000 throughout (no push: Design Bible "תנועה: אסור");
+ *      the room page mounts underneath and composes M0 meanwhile;
  *   3. the end lock: while the footage still moves, the overlay dissolves into the composed room, which the engine
  *      flies the last metre as a depth-parallax dolly (RoomEngine.arrive) and lands exactly on its rest camera.
  *      The final frame is the room itself, so there is no jump in position or scale at the end.
@@ -18,7 +19,7 @@ import { signal } from '@preact/signals';
 import { useEffect, useRef } from 'preact/hooks';
 import { scene } from '../catalog';
 import { Loader } from '../engine/loader';
-import { SequencePlayer, preloadTransition, tween } from '../engine/sequence';
+import { FrameWindow, SequencePlayer, preloadTransition, tween } from '../engine/sequence';
 import { easeInOutCubic, easeOutCubic } from '../engine/camera';
 import { navigate } from '../router';
 import { arrival, stageEngine } from '../state/room';
@@ -60,18 +61,23 @@ export function TransitionOverlay() {
     const toRoom = t.to.startsWith('/rooms/');
     let cancelled = false;
     const opacity = (v: number) => (el.style.opacity = v.toFixed(3));
+    let player: SequencePlayer | null = null;
     void (async () => {
-      const frames = await preloadTransition(sharedLoader, def, 0);
+      // the compressed frames (preloaded on entering the room); decoding runs in a window around the playhead
+      const blobs = await preloadTransition(sharedLoader, def, 0);
       if (cancelled) return;
       const portrait = innerWidth / innerHeight < 1.1;
-      const player = new SequencePlayer(canvas.current!, frames, portrait ? scene.mobile_center_u : 0.5);
+      player = new SequencePlayer(canvas.current!, new FrameWindow(blobs), portrait ? scene.mobile_center_u : 0.5);
       const last = player.length - 1;
       const hand = Math.round(last * HAND_AT);
       const frameMs = 1000 / def.fps;
+      // pre-decode the first window before anything moves (gate G6.6: the first frame must not wait on a decode)
+      await player.prime(t.reverse ? last : 0, t.reverse ? -1 : 1);
+      if (cancelled) return;
 
       if (!t.reverse) {
         // 1. from the page to the first frame
-        player.draw(0);
+        player!.draw(0);
         await tween(FADE_IN, (k) => opacity(easeOutCubic(k)));
         if (toRoom) arrival.value = 'pending';
         navigate(t.to);
@@ -80,13 +86,13 @@ export function TransitionOverlay() {
         await tween(hand * frameMs * 1.05, (k) => {
           pos = (k - 0.35 * k * (1 - k)) * hand;
           const speed = 0.65 + 0.7 * k;
-          player.draw(pos, { trail: 0.22 * speed });
+          player!.draw(pos, { trail: 0.22 * speed });
         });
         // the room is still composing (slow network): keep moving, slowly, through the remaining footage
         const t0 = performance.now();
         while (toRoom && !stageEngine.value && performance.now() - t0 < ENGINE_WAIT && !cancelled) {
           pos = Math.min(last - 2, pos + 0.25);
-          player.draw(pos, { trail: 0.15 });
+          player!.draw(pos, { trail: 0.15 });
           await nextFrame();
         }
         // 3. end lock: dissolve into the composed room while the engine lands the dolly on the rest camera
@@ -96,7 +102,7 @@ export function TransitionOverlay() {
         const from = pos;
         await tween(HANDOFF, (k) => {
           const e = easeOutCubic(k);
-          player.draw(from + (last - from) * e, { trail: 0.3 * (1 - k), push: 1 + 0.06 * e });
+          player!.draw(from + (last - from) * e, { trail: 0.3 * (1 - k) });
           opacity(1 - easeInOutCubic(k));
         });
         activeTransition.value = null;
@@ -112,7 +118,7 @@ export function TransitionOverlay() {
       await tween(HANDOFF, (k) => {
         const e = k * k;
         pos = last - (last - hand) * 0.25 * e;
-        player.draw(pos, { trail: 0.3 * k, push: 1.06 - 0.06 * e });
+        player!.draw(pos, { trail: 0.3 * k, dir: -1 });
         opacity(easeInOutCubic(k));
       });
       await leaving;
@@ -121,11 +127,11 @@ export function TransitionOverlay() {
       // walk back out, decelerating into the hall
       await tween(from * frameMs * 1.05, (k) => {
         const e = easeOutCubic(k);
-        player.draw(from * (1 - e), { trail: 0.25 * (1 - k) });
+        player!.draw(from * (1 - e), { trail: 0.25 * (1 - k), dir: -1 });
       });
       await tween(420, (k) => opacity(1 - easeInOutCubic(k)));
       activeTransition.value = null;
-    })();
+    })().finally(() => player?.close());
     return () => {
       cancelled = true;
     };

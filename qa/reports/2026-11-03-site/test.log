@@ -1,0 +1,34 @@
+
+> homedesign-site@0.1.0 test
+> vitest run
+
+
+[1m[46m RUN [49m[22m [36mv4.0.8 [39m[90m/home/user/homedesign-app/site[39m
+
+(node:11190) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+ [32m✓[39m shared/test/options.test.ts [2m([22m[2m8 tests[22m[2m)[22m[33m 640[2mms[22m[39m
+     [33m[2m✓[22m[39m parses, names a SKU for the room, and passes the cross-field rules [33m 621[2mms[22m[39m
+[90mstdout[2m | shared/test/shared.test.ts[2m > [22m[2mrepo data against the derived schemas[2m > [22m[2mevery product card outside the shared pool parses, or is a DS-API draft whose only gaps are its unfilled draft fields
+[22m[39mdraft cards (DS API, colors / visual_weight unfilled): 68
+
+[90mstderr[2m | api/test/api.test.ts[2m > [22m[2mpayment webhook[2m > [22m[2mrejects bad and stale signatures
+[22m[39mpayment webhook rejected mock mismatch
+
+[90mstderr[2m | api/test/api.test.ts[2m > [22m[2mpayment webhook[2m > [22m[2mrejects bad and stale signatures
+[22m[39mpayment webhook rejected mock stale
+
+ [32m✓[39m web/test/product-bits.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 26[2mms[22m[39m
+ [32m✓[39m api/test/api.test.ts [2m([22m[2m22 tests[22m[2m)[22m[33m 1226[2mms[22m[39m
+ [32m✓[39m web/test/product-gallery.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m shared/test/shared.test.ts [2m([22m[2m28 tests[22m[2m)[22m[33m 1788[2mms[22m[39m
+     [33m[2m✓[22m[39m every product card outside the shared pool parses, or is a DS-API draft whose only gaps are its unfilled draft fields [33m 782[2mms[22m[39m
+     [33m[2m✓[22m[39m agrees with studio/build.py on the real cards [33m 699[2mms[22m[39m
+ [32m✓[39m web/test/option-picker.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m6 passed[39m[22m[90m (6)[39m
+[2m      Tests [22m [1m[32m72 passed[39m[22m[90m (72)[39m
+[2m   Start at [22m 11:49:20
+[2m   Duration [22m 3.16s[2m (transform 1.36s, setup 0ms, collect 2.74s, tests 3.70s, environment 1ms, prepare 39ms)[22m
+
+test exit 0

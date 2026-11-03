@@ -10,6 +10,7 @@ import { pendingOpen } from '../state/room';
 import { PackPicker } from '../components/PackPicker';
 import { SafetyRow } from '../components/SafetyRow';
 import { OptionPicker } from '../components/OptionPicker';
+import { Waitlist } from '../components/Waitlist';
 import { defaultVariantId, variantPackPrice, variantView } from '../variants';
 
 export function Product({ p }: { p: PublicProduct }) {
@@ -131,38 +132,48 @@ export function Product({ p }: { p: PublicProduct }) {
               ))}
             </ul>
           ) : null}
-          <div class="buy-row">
-            <div class="qty" role="group" aria-label="כמות">
-              <button type="button" onClick={() => setQty(Math.min(20, qty + 1))} aria-label="הגדלת הכמות">
-                +
-              </button>
-              <output aria-live="polite" aria-label={`כמות: ${qty}`}>
-                {qty}
-              </output>
-              <button type="button" onClick={() => setQty(Math.max(1, qty - 1))} aria-label="הקטנת הכמות" disabled={qty === 1}>
-                −
+          {p.availability.status !== 'available' ? (
+            // PRE1 (NL2, AU2, R6Q2): no cart button; the reason in the customer's words and the waiting list
+            <div class="buy-row">
+              <Waitlist product_id={p.id} id={`wl-${p.id}`} />
+              <button type="button" class="btn btn-ghost" onClick={showInRoom}>
+                הצגה בחדר
               </button>
             </div>
-            <button
-              type="button"
-              class="btn btn-primary"
-              disabled={cartBusy.value || !v.available}
-              onClick={() =>
-                void addToCart(
-                  v.variant_id,
-                  p.name_he,
-                  qty,
-                  pack,
-                  [v.option_he, p.pack ? packLabelHe(pack, p.pack.set_qty) : null].filter(Boolean).join(', ') || undefined,
-                )
-              }
-            >
-              {v.available ? 'הוספה לסל' : 'אזל אצל הספק'}
-            </button>
-            <button type="button" class="btn btn-ghost" onClick={showInRoom}>
-              הצגה בחדר
-            </button>
-          </div>
+          ) : (
+            <div class="buy-row">
+              <div class="qty" role="group" aria-label="כמות">
+                <button type="button" onClick={() => setQty(Math.min(20, qty + 1))} aria-label="הגדלת הכמות">
+                  +
+                </button>
+                <output aria-live="polite" aria-label={`כמות: ${qty}`}>
+                  {qty}
+                </output>
+                <button type="button" onClick={() => setQty(Math.max(1, qty - 1))} aria-label="הקטנת הכמות" disabled={qty === 1}>
+                  −
+                </button>
+              </div>
+              <button
+                type="button"
+                class="btn btn-primary"
+                disabled={cartBusy.value || !v.available}
+                onClick={() =>
+                  void addToCart(
+                    v.variant_id,
+                    p.name_he,
+                    qty,
+                    pack,
+                    [v.option_he, p.pack ? packLabelHe(pack, p.pack.set_qty) : null].filter(Boolean).join(', ') || undefined,
+                  )
+                }
+              >
+                {v.available ? 'הוספה לסל' : 'אזל אצל הספק'}
+              </button>
+              <button type="button" class="btn btn-ghost" onClick={showInRoom}>
+                הצגה בחדר
+              </button>
+            </div>
+          )}
           <p class="small muted">
             ביטול עסקה והחזרות לפי חוק הגנת הצרכן. <a href="/returns/">פרטים</a>
           </p>

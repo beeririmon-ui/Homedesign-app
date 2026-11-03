@@ -1,7 +1,7 @@
 {
  "version": 1,
- "updated": "2026-10-20",
- "note": "מחיר התחלתי לפי שווי בישראל (חוקי הסטודיו ה.10–13). נבנה מ-data/economics/pricing/*-2026-10-11.json. retail_ils הוא המחיר לצרכן לכל המכירה; עריכה בסטודיו גוברת עליו. flag: ok ≥40%, below-floor 0–40%, loss = מפסיד, לא למכירה. 2026-10-18 (תיקון תמחור): 15 שורות לכרטיסים שהמכירה שלהם אינה N × העלות שבכרטיס (סטים, זוגות, אהיל + סט תלייה): sale_cost_usd ו-sale_shipping_usd הם העלות והמשלוח של המכירה כולה; הסטודיו והאתר קוראים את sale_cost_usd כעלות המכירה, ו-shipping_cost_usd הוא משלוח בלבד (2026-10-18: shipping_includes_usd הוסר מ-9 שורות: 7 אהילים, הקנקן והצנצנת ושלישיית הבקבוק). 2026-10-20 (אין מוצר מפסיד, ה.13 בתיקון 2026-10-20, מדיניות ההחלה): 91 מחירים הועלו למחיר הנמוך שבו המק\"ט שבחדר, ביחידות המכירה, בשיטת ברירת המחדל, לא מפסיד (retail_src initial-no-loss-2026-10-20; המחיר הקודם ב-retail_before_no_loss_ils). flag: ok ≥40%, below-floor 0–40%, above-market = מעל ההשוואה הגבוהה, express-only = רק אקספרס (לא למכירה עד NL2), cannot-compute; flags מוסיף variant-loses-on-site (SITE1) ו-owner-set; no_loss = תרחיש הכותרת, נקודת האיזון, הוריאנטים שמפסידים באתר והיחס להשוואה (data/economics/no-loss-changes-2026-10-20.json).",
+ "updated": "2026-11-03",
+ "note": "מחיר התחלתי לפי שווי בישראל (חוקי הסטודיו ה.10–13). נבנה מ-data/economics/pricing/*-2026-10-11.json. retail_ils הוא המחיר לצרכן לכל המכירה; עריכה בסטודיו גוברת עליו. flag: ok ≥40%, below-floor 0–40%, loss = מפסיד, לא למכירה. 2026-10-18 (תיקון תמחור): 15 שורות לכרטיסים שהמכירה שלהם אינה N × העלות שבכרטיס (סטים, זוגות, אהיל + סט תלייה): sale_cost_usd ו-sale_shipping_usd הם העלות והמשלוח של המכירה כולה; הסטודיו והאתר קוראים את sale_cost_usd כעלות המכירה, ו-shipping_cost_usd הוא משלוח בלבד (2026-10-18: shipping_includes_usd הוסר מ-9 שורות: 7 אהילים, הקנקן והצנצנת ושלישיית הבקבוק). 2026-10-20 (אין מוצר מפסיד, ה.13 בתיקון 2026-10-20, מדיניות ההחלה): 91 מחירים הועלו למחיר הנמוך שבו המק\"ט שבחדר, ביחידות המכירה, בשיטת ברירת המחדל, לא מפסיד (retail_src initial-no-loss-2026-10-20; המחיר הקודם ב-retail_before_no_loss_ils). flag: ok ≥40%, below-floor 0–40%, above-market = מעל ההשוואה הגבוהה, express-only = רק אקספרס (לא למכירה עד NL2), cannot-compute; flags מוסיף variant-loses-on-site (SITE1) ו-owner-set; no_loss = תרחיש הכותרת, נקודת האיזון, הוריאנטים שמפסידים באתר והיחס להשוואה (data/economics/no-loss-changes-2026-10-20.json). 2026-11-03 (NL1, ישיבת ההחלטות): כרית הוואבי-סאבי ₪69 → ₪89 (retail_before_nl1_ils), המחיר שלא מפסיד בכל המידות; retail_src נשאר studio (החלטת המשתמש).",
  "sources": [
   "data/economics/pricing/living-room-2026-10-11.json",
   "data/economics/pricing/other-rooms-2026-10-11.json",
@@ -2504,7 +2504,7 @@
    ]
   },
   "cushions-aliexpress-fashion-modern-wabi-sabi-464203": {
-   "retail_ils": 69,
+   "retail_ils": 89,
    "retail_src": "studio",
    "price_for_qty": 1,
    "il_value": {
@@ -2550,136 +2550,48 @@
      }
     ]
    },
-   "customer_total_ils": 98,
-   "vs_typical_pct": -1,
-   "margin_pct": 2.2,
-   "contribution_ils": 1.29,
-   "contribution_with_fee_ils": 15.72,
+   "customer_total_ils": 118,
+   "vs_typical_pct": 19,
+   "margin_pct": 21.8,
+   "contribution_ils": 16.48,
+   "contribution_with_fee_ils": null,
    "flag": "below-floor",
    "slot_alternative_ok": false,
    "nordic_score": 7.0,
    "ship_estimated": false,
-   "price_note": "ציפית שניל סלאב 50×50, ללא מילוי; בזארה הום ₪149.9, ב-Terminal X ₪69.9. מתחת לרצפת 40% ואין בעמדה חלופה יפה לפחות כמוהו שעוברת 40%: החריגה חלה, המוצר נשאר. לשיפור: לא ודאי אם העלות ליחידה או לסט: אם לסט, המרווח קופץ; לבדוק מול הספק",
-   "updated_at": "2026-10-13",
+   "price_note": "ציפית שניל סלאב 50×50, ללא מילוי; בזארה הום ₪149.9, ב-Terminal X ₪69.9. מתחת לרצפת 40% ואין בעמדה חלופה יפה לפחות כמוהו שעוברת 40%: החריגה חלה, המוצר נשאר. לשיפור: לא ודאי אם העלות ליחידה או לסט: אם לסט, המרווח קופץ; לבדוק מול הספק | NL1 (2026-11-03, ישיבת ההחלטות): ₪89, המחיר שלא מפסיד בכל המידות (ה.13); במידה 30×50 ₪69 הפסיד ₪8.56",
+   "updated_at": "2026-11-03",
    "source": "studio",
    "margin_src": "studio",
    "no_loss": {
-    "date": "2026-10-20",
+    "date": "2026-11-03",
     "policy": "headline = room SKU, sale units, default method (BRIEF Apply 2026-10-20)",
     "headline_scenario": "המכירה (1 יח'), המק\"ט שבחדר",
     "method": "הסטודיו (aliexpress): AliExpress Selection Standard 6-15",
     "units": 1,
     "landed_ils": 49.93,
-    "contribution_ils": 1.29,
-    "margin_pct": 2.2,
+    "contribution_ils": 16.48,
+    "margin_pct": 21.8,
     "break_even_ils": 67.31,
     "no_loss_room_sku_ils": 69,
     "no_loss_all_scenarios_ils": 89,
-    "variants_losing_on_site": [
-     {
-      "variant": "color=1pcs-caramel, size=30x50",
-      "variant_sku": "12000047728467299",
-      "sold_at_ils": 49,
-      "landed_ils": 43.49,
-      "contribution_ils": -7.47,
-      "own_no_loss_ils": 59
-     },
-     {
-      "variant": "color=1pcs-caramel, size=40x40",
-      "variant_sku": "12000047728467302",
-      "sold_at_ils": 59,
-      "landed_ils": 46.37,
-      "contribution_ils": -2.75,
-      "own_no_loss_ils": 69
-     },
-     {
-      "variant": "color=1pcs-dark-gray, size=30x50",
-      "variant_sku": "12000047728467294",
-      "sold_at_ils": 49,
-      "landed_ils": 43.3,
-      "contribution_ils": -7.27,
-      "own_no_loss_ils": 59
-     },
-     {
-      "variant": "color=1pcs-dark-gray, size=40x40",
-      "variant_sku": "12000047728467297",
-      "sold_at_ils": 59,
-      "landed_ils": 46.37,
-      "contribution_ils": -2.75,
-      "own_no_loss_ils": 69
-     },
-     {
-      "variant": "color=1pcs-beige, size=30x50",
-      "variant_sku": "12000047728467284",
-      "sold_at_ils": 49,
-      "landed_ils": 44.58,
-      "contribution_ils": -8.56,
-      "own_no_loss_ils": 69
-     },
-     {
-      "variant": "color=1pcs-beige, size=40x40",
-      "variant_sku": "12000047728467287",
-      "sold_at_ils": 59,
-      "landed_ils": 45.7,
-      "contribution_ils": -2.08,
-      "own_no_loss_ils": 69
-     },
-     {
-      "variant": "color=1pcs-lime, size=30x50",
-      "variant_sku": "12000047728467279",
-      "sold_at_ils": 49,
-      "landed_ils": 44.25,
-      "contribution_ils": -8.23,
-      "own_no_loss_ils": 69
-     },
-     {
-      "variant": "color=1pcs-lime, size=40x40",
-      "variant_sku": "12000047728467282",
-      "sold_at_ils": 59,
-      "landed_ils": 46.37,
-      "contribution_ils": -2.75,
-      "own_no_loss_ils": 69
-     },
-     {
-      "variant": "color=1pcs-lime, size=45x45",
-      "variant_sku": "12000047728467278",
-      "sold_at_ils": 69,
-      "landed_ils": 51.74,
-      "contribution_ils": -0.53,
-      "own_no_loss_ils": 79
-     },
-     {
-      "variant": "color=1pcs-white, size=30x50",
-      "variant_sku": "12000047728467289",
-      "sold_at_ils": 49,
-      "landed_ils": 44.58,
-      "contribution_ils": -8.56,
-      "own_no_loss_ils": 69
-     },
-     {
-      "variant": "color=1pcs-white, size=40x40",
-      "variant_sku": "12000047728467292",
-      "sold_at_ils": 59,
-      "landed_ils": 45.38,
-      "contribution_ils": -1.75,
-      "own_no_loss_ils": 69
-     }
-    ],
+    "variants_losing_on_site": [],
     "highest_comp_ils": 239.0,
-    "ratio_to_highest_comp": 0.29,
+    "ratio_to_highest_comp": 0.37,
     "above_market": false,
     "estimated_inputs": [
      "freight-from-other-sku"
     ],
     "scenarios": 25,
     "variants_checked": 24,
-    "owner_set": true
+    "owner_set": true,
+    "decision": "NL1 (2026-11-03): ₪69 → ₪89 = no_loss_all_scenarios_ils"
    },
    "flags": [
     "below-floor",
-    "variant-loses-on-site",
     "owner-set"
-   ]
+   ],
+   "retail_before_nl1_ils": 69
   },
   "cushions-aliexpress-textured-boucle-throw-pillow": {
    "retail_ils": 59,

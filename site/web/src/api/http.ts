@@ -1,4 +1,4 @@
-import type { Cart, CheckoutRequest, CheckoutResponse, OrderView } from '@hd/shared';
+import type { Cart, CheckoutRequest, CheckoutResponse, OrderView, WaitlistRequest } from '@hd/shared';
 import { ApiError, type StoreApi } from './types';
 
 async function call<T>(path: string, init: RequestInit = {}): Promise<T> {
@@ -24,4 +24,7 @@ export const httpApi: StoreApi = {
     call<Cart>(`/cart/${encodeURIComponent(cartId)}/items`, { method: 'PUT', body: JSON.stringify({ variant_id, pack, qty }) }),
   checkout: (req: CheckoutRequest) => call<CheckoutResponse>('/checkout', { method: 'POST', body: JSON.stringify(req) }),
   getOrder: (id, token) => call<OrderView>(`/orders/${encodeURIComponent(id)}`, { headers: { 'x-order-token': token } }),
+  waitlist: async (req: WaitlistRequest) => {
+    await call<{ ok: true }>('/waitlist', { method: 'POST', body: JSON.stringify(req) });
+  },
 };

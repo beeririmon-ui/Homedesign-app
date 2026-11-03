@@ -60,9 +60,11 @@ export async function rateLimit(limiter: RateLimiter | undefined, key: string): 
   if (!success) throw new HttpError(429, 'rate_limited', 'יותר מדי בקשות. נסו שוב בעוד דקה.');
 }
 
-const ALPHABET = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
-/** Human-friendly order id, e.g. HD-7KQ2M9XA (no 0/O/1/I). */
+/**
+ * Order number: ten digits, the first never 0, no prefix (ART6, 2026-11-03: "HD" could be read as the rejected name).
+ * Random, not sequential, so a number says nothing about volume; the buyer's access needs the token anyway.
+ */
 export function orderId(): string {
-  const bytes = crypto.getRandomValues(new Uint8Array(8));
-  return 'HD-' + [...bytes].map((b) => ALPHABET[b % ALPHABET.length]).join('');
+  const bytes = crypto.getRandomValues(new Uint8Array(10));
+  return String(1 + (bytes[0]! % 9)) + [...bytes.slice(1)].map((b) => String(b % 10)).join('');
 }

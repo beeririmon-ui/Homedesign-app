@@ -1,6 +1,6 @@
 /**
- * Zero axe violations (WCAG 2.0/2.1 A + AA, the basis of ת"י 5568) on every page type, in light and dark,
- * including the open variant wheel, a filled cart and the checkout with errors showing.
+ * Zero axe violations (WCAG 2.0/2.1 A + AA, the basis of ת"י 5568) on every page type (one paper: no dark mode at
+ * launch, ART3), including the open variant wheel, a filled cart and the checkout with errors showing.
  */
 import { test, expect, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
@@ -32,7 +32,7 @@ async function addVase(page: Page) {
   await expect(page.locator('.cart-count')).toHaveText(/[1-9]/);
 }
 
-for (const scheme of ['light', 'dark'] as const) {
+for (const scheme of ['light'] as const) {
   test.describe(scheme, () => {
     test.use({ colorScheme: scheme });
 

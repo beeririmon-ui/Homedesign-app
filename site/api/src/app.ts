@@ -15,7 +15,7 @@ app.route('/mock-pay', mockPay);
 // Buyer order pages share one prerendered shell; the client reads the id from the URL.
 app.get('/order/*', async (c) => {
   if (!c.env.ASSETS) throw new HttpError(404, 'not_found');
-  const ok = /^\/order\/HD-[A-Z0-9]{8}\/?$/.test(new URL(c.req.url).pathname);
+  const ok = /^\/order\/[1-9]\d{9}\/?$/.test(new URL(c.req.url).pathname);
   const res = await c.env.ASSETS.fetch(new Request(new URL(ok ? '/order/' : '/404.html', c.req.url)));
   return new Response(res.body, {
     status: ok ? res.status : 404,

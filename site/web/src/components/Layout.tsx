@@ -1,11 +1,9 @@
 import type { ComponentChildren } from 'preact';
 import { useEffect, useRef } from 'preact/hooks';
 import { cartCount } from '../state/cart';
-import { announcement, cycleTheme, theme } from '../state/ui';
-import { IconBag, IconHouse, IconTheme } from './Icons';
+import { announcement } from '../state/ui';
+import { IconBag, IconHouse } from './Icons';
 import type { Route } from '../router';
-
-const THEME_LABEL = { system: 'ערכת צבע: לפי המכשיר', light: 'ערכת צבע: בהירה', dark: 'ערכת צבע: כהה' } as const;
 
 export function Layout({ route, children }: { route: Route; children: ComponentChildren }) {
   const first = useRef(true);
@@ -45,9 +43,6 @@ export function Layout({ route, children }: { route: Route; children: ComponentC
                 {count}
               </span>
             </a>
-            <button type="button" class="icon-btn" onClick={cycleTheme} aria-label={THEME_LABEL[theme.value]} title={THEME_LABEL[theme.value]}>
-              <IconTheme />
-            </button>
           </nav>
         </div>
       </header>

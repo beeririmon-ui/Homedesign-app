@@ -15,18 +15,21 @@ import { addToCart, cartBusy } from '../state/cart';
 import { prefersReducedMotion } from '../motion';
 import { PackPicker, packPrice } from './PackPicker';
 import { defaultVariantId, optionLabelHe, optionsOf } from '../variants';
+import { Waitlist } from './Waitlist';
 
 const STEP_DEG = 34;
 
 type Props = {
   slot: CatalogSlot;
+  /** the room the slot is in (the slot's waiting list, PRE1) */
+  roomId: string;
   initial: number; // 1-based position
   onPreview: (position: number) => void;
   onChoose: (position: number) => void;
   onCancel: () => void;
 };
 
-export function VariantWheel({ slot, initial, onPreview, onChoose, onCancel }: Props) {
+export function VariantWheel({ slot, roomId, initial, onPreview, onChoose, onCancel }: Props) {
   const n = slot.options.length;
   const physics = useRef(new ArcPhysics(n));
   const ring = useRef<HTMLDivElement>(null);
@@ -280,6 +283,8 @@ export function VariantWheel({ slot, initial, onPreview, onChoose, onCancel }: P
               </p>
             ) : null}
           </>
+        ) : slot.on_hold ? (
+          <Waitlist room={roomId} slot={slot.id} id={`wl-slot-${slot.id}`} onStage />
         ) : (
           <p class="specs">אין עדיין מוצר בעמדה הזו. התצוגה בחדר זמנית.</p>
         )}
@@ -295,7 +300,14 @@ export function VariantWheel({ slot, initial, onPreview, onChoose, onCancel }: P
           <button type="button" class="btn btn-primary" onClick={() => onChoose(index + 1)}>
             בחירה והצגה בחדר
           </button>
-          {p ? (
+          {p && (slot.on_hold || p.availability.status !== 'available') ? (
+            <>
+              <Waitlist product_id={p.id} id={`wl-wheel-${slot.id}`} onStage />
+              <a class="btn btn-ghost" href={`/p/${p.id}/`}>
+                לעמוד המוצר
+              </a>
+            </>
+          ) : p ? (
             <>
               <button
                 type="button"

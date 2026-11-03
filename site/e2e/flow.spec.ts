@@ -245,8 +245,10 @@ test.describe('store', () => {
 
     await expect(page).toHaveURL(/\/mock-pay\/ms_/);
     await page.getByRole('button', { name: 'אישור תשלום (מדומה)' }).click();
-    await expect(page).toHaveURL(/\/order\/HD-[A-Z0-9]{8}\/$/);
-    await expect(page.locator('.status-pill')).toHaveText(/שולמה|הועברה לספק/, { timeout: 20_000 });
+    // ART6: the order number is digits only, and the status is in the customer's words (never "הועברה לספק")
+    await expect(page).toHaveURL(/\/order\/[1-9]\d{9}\/$/);
+    await expect(page.locator('.order-steps [aria-current="step"]')).toHaveText(/התקבלה|בהכנה/, { timeout: 20_000 });
+    await expect(page.locator('body')).not.toContainText('הועברה לספק');
   });
 
   test('a declined payment returns to checkout with a clear message', async ({ page }) => {

@@ -1,4 +1,4 @@
-import type { Cart, CheckoutRequest, CheckoutResponse, OrderView, Pack } from '@hd/shared';
+import type { Cart, CheckoutRequest, CheckoutResponse, OrderView, Pack, WaitlistRequest } from '@hd/shared';
 
 export class ApiError extends Error {
   constructor(
@@ -17,6 +17,8 @@ export interface StoreApi {
   setItem(cartId: string, variant_id: string, pack: Pack, qty: number): Promise<Cart>;
   checkout(req: CheckoutRequest): Promise<CheckoutResponse>;
   getOrder(id: string, token: string): Promise<OrderView>;
+  /** "עדכנו אותי כשחוזר" (PRE1): one email for a product or a slot on hold */
+  waitlist(req: WaitlistRequest): Promise<void>;
   /** In-browser hosted-page simulator (artifact only). */
   mockPay?: {
     info(session: string): Promise<{ order_id: string; total_agorot: number }>;

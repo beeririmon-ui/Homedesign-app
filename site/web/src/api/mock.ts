@@ -3,7 +3,7 @@
  * Same contract as api/http.ts; prices come from the bundled catalog, state lives in localStorage
  * (wrapped in try/catch: storage can be unavailable), and payment is simulated by /mock-pay.
  */
-import type { Cart, CheckoutRequest, OrderView, Pack } from '@hd/shared';
+import type { Cart, CheckoutRequest, OrderView, Pack, WaitlistRequest } from '@hd/shared';
 import { ORDER_STATUS_HE, type OrderStatus } from '@hd/shared/constants';
 import { catalog } from '../catalog';
 import { validateCheckout } from '../validate';
@@ -62,7 +62,7 @@ function view(c: MockCart): Cart {
     const pack: Pack = i.pack ?? 'set';
     // a supplier option has its own price (studio rules ג, 2026-10-11); an out-of-stock option is not sold
     const v = p ? variantView(p, i.variant_id) : null;
-    if (!p || !v || !v.available || (pack === 'unit' && (!p.pack || v.unit_price_agorot === null))) return [];
+    if (!p || p.availability.status !== 'available' || !v || !v.available || (pack === 'unit' && (!p.pack || v.unit_price_agorot === null))) return [];
     const price = pack === 'unit' ? v.unit_price_agorot! : v.price_agorot;
     return [
       {
@@ -112,7 +112,7 @@ export const mockApi: StoreApi = {
     await delay();
     const c = cartOr404(cartId);
     const p = variantIndex.get(variant_id);
-    if (!p || !variantView(p, variant_id)?.available) throw new ApiError(404, 'variant_not_found', 'המוצר לא זמין.');
+    if (!p || p.availability.status !== 'available' || !variantView(p, variant_id)?.available) throw new ApiError(404, 'variant_not_found', 'המוצר לא זמין.');
     if (!Number.isInteger(qty) || qty < 0 || qty > 20 || (pack !== 'set' && pack !== 'unit')) throw new ApiError(422, 'invalid_body');
     if (pack === 'unit' && !p.pack) throw new ApiError(422, 'pack_unavailable', 'המוצר הזה נמכר רק כסט.');
     const same = (i: MockCart['items'][number]) => i.variant_id === variant_id && (i.pack ?? 'set') === pack;
@@ -130,7 +130,9 @@ export const mockApi: StoreApi = {
     const v = view(c);
     if (!v.lines.length) throw new ApiError(409, 'cart_empty', 'הסל ריק.');
     const ship = catalog.shipping.find((s) => s.id === req.shipping_method)!;
-    const id = `HD-${rid(8).toUpperCase()}`;
+    // ten digits, no prefix (ART6), like api/src/lib/http.ts orderId
+    const digits = crypto.getRandomValues(new Uint8Array(10));
+    const id = String(1 + (digits[0]! % 9)) + [...digits.slice(1)].map((b) => String(b % 10)).join('');
     const o: MockOrder = {
       id,
       token: rid(32),
@@ -166,6 +168,12 @@ export const mockApi: StoreApi = {
       lines: o.lines,
     };
     return view;
+  },
+  async waitlist(req: WaitlistRequest) {
+    await delay();
+    if (!req.email || !(req.product_id || (req.room && req.slot))) throw new ApiError(422, 'invalid_body', 'חלק מהפרטים חסרים או לא תקינים.');
+    const list = read<WaitlistRequest[]>('hd.mock.waitlist', []);
+    write('hd.mock.waitlist', [...list, req]);
   },
   mockPay: {
     async info(session) {

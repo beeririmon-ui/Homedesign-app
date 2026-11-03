@@ -21,11 +21,6 @@ export const IconBag = () => (
     <path d="M9 8V6a3 3 0 0 1 6 0v2" />
   </svg>
 );
-export const IconTheme = () => (
-  <svg {...base}>
-    <path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9z" />
-  </svg>
-);
 export const IconClose = () => (
   <svg {...base}>
     <path d="M6 6l12 12M18 6L6 18" />

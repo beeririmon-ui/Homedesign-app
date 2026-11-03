@@ -591,3 +591,70 @@ legend {
   display: grid;
   gap: 2px;
 }
+
+/* ---------- "המלאי אינו זמין כעת" with the waiting list (PRE1) ---------- */
+.waitlist {
+  display: grid;
+  gap: 10px;
+  justify-items: start;
+}
+.waitlist-status {
+  font-weight: 600;
+}
+.waitlist-form {
+  display: grid;
+  gap: 8px;
+  width: min(100%, 24rem);
+}
+.waitlist-form label {
+  font-weight: 600;
+  font-size: 15px;
+}
+.waitlist-form input {
+  min-height: 48px;
+  padding: 0 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: 2px;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+}
+.waitlist-form input:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+.waitlist-form .field-error {
+  color: var(--danger);
+}
+.waitlist.on-stage .waitlist-form input {
+  background: rgba(244, 241, 236, 0.96);
+  color: #3a3a3a;
+  border-color: rgba(58, 58, 58, 0.5);
+}
+.waitlist.on-stage .waitlist-form .field-error {
+  color: #ffd2c8;
+}
+/* order status: four steps in the customer's words (ART6) */
+.order-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 6px;
+  font-weight: 600;
+}
+.order-steps li {
+  color: var(--ink-2);
+}
+.order-steps li[aria-current='step'] {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 2px;
+}
+.order-steps li + li::before {
+  content: '·';
+  margin-inline-end: 6px;
+  color: var(--line-strong);
+}

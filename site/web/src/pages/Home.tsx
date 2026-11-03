@@ -38,6 +38,16 @@ export function Home() {
         <div class="page-head">
           <h2 id="rooms-title">החדרים בבית</h2>
           <p class="muted">מתחילים בסלון הנורדי. שאר החדרים נבנים לפי הסדר, אחרי שהסלון מושלם.</p>
+          {/* ART7: styles that do not exist yet appear only here, never on the room image */}
+          <p class="small muted" aria-label="סגנונות">
+            {catalog.styles.map((s, i) => (
+              <span key={s.id}>
+                {i ? ' · ' : ''}
+                {s.name_he}
+                {s.available ? '' : ' (בגיליונות הבאים)'}
+              </span>
+            ))}
+          </p>
         </div>
         <ul class="slot-list">
           {built.map((r) => (

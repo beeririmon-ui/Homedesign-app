@@ -1855,9 +1855,15 @@ def load_economics(eco_dir: Path, products: list[dict]) -> dict:
         if isnum(m.get("price_for_qty")) and float(m["price_for_qty"]).is_integer() and m["price_for_qty"] >= 1:
             e["price_for_qty"] = int(m["price_for_qty"])
         # VR1 (2026-10-11): the pricing team's verdict at its price (ok / below-floor / loss) and whether the slot has
-        # another product above the 40% floor; the page shows "חריג: אין חלופה בעמדה" or "מתחת לרף 40%"
-        if m.get("flag") in ("ok", "below-floor", "loss"):
+        # another product above the 40% floor; the page shows "חריג: אין חלופה בעמדה" or "מתחת לרף 40%".
+        # ה.13 (2026-10-20, SITE1 2026-11-03): the no-loss policy's flags too: above-market = "יקר מהשוק" (the no-loss
+        # price is above the highest Israeli comparable), express-only and cannot-compute (not for sale)
+        if m.get("flag") in PRICE_FLAG_HE:
             e["price_flag"] = m["flag"]
+            e["price_flag_he"] = PRICE_FLAG_HE[m["flag"]]
+            nl = m.get("no_loss") if isinstance(m.get("no_loss"), dict) else {}
+            if m["flag"] == "above-market" and isnum(nl.get("ratio_to_highest_comp")):
+                e["price_flag_he"] += f" (פי {nl['ratio_to_highest_comp']:g} מההשוואה הגבוהה)" 
         if isinstance(m.get("slot_alternative_ok"), bool):
             e["slot_alternative_ok"] = m["slot_alternative_ok"]
         if m.get("addon_only") is True:
@@ -1895,6 +1901,16 @@ def load_economics(eco_dir: Path, products: list[dict]) -> dict:
 
 
 # --------------------------------------------------------------------------- market, styles, suppliers
+
+# the pricing file's price flags (data/economics/products.json `flag`; scripts/economics/no_loss.py refresh_rows)
+PRICE_FLAG_HE = {
+    "ok": "עומד ביעד",
+    "below-floor": "מתחת לרף 40%",
+    "loss": "מפסיד, לא למכירה",
+    "above-market": "יקר מהשוק",
+    "express-only": "רק אקספרס, לא למכירה (NL2)",
+    "cannot-compute": "אי אפשר לחשב, לא למכירה",
+}
 
 FLAG_HE = {
     "shipping-estimated": "משלוח מוערך (חציון הקטגוריה)",

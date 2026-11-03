@@ -63,8 +63,18 @@ export const PublicProductSchema = z.object({
    * the product is sold as one SKU. Each option is a variant (optionVariantId); `variants` then holds the room's only.
    */
   options: PublicOptionsSchema.nullable(),
+  /**
+   * Whether the product is sold (2026-11-03). 'unavailable' is shown as "המלאי אינו זמין כעת" with the waiting list
+   * (PRE1) and is never added to a cart: NL2 (the no-loss price is more than twice the highest Israeli comparable, or
+   * the supplier ships express only), or the slot itself is on hold (AU2, R6Q2). The stored price never changes.
+   */
+  availability: z.object({
+    status: z.enum(['available', 'unavailable']),
+    reason: z.enum(['nl2-above-market', 'nl2-express-only', 'slot-on-hold']).nullable(),
+  }),
 });
 export type PublicProduct = z.infer<typeof PublicProductSchema>;
+export type Availability = PublicProduct['availability'];
 
 export const SlotOptionSchema = z.object({
   position: z.number().int().min(1),
@@ -89,6 +99,8 @@ export const CatalogSlotSchema = z.object({
   /** [u0, u1, v0, v1] */
   zoom_frame: z.tuple([Unit, Unit, Unit, Unit]).nullable(),
   options: z.array(SlotOptionSchema),
+  /** the slot is on hold (AU2, R6Q2): shown "המלאי אינו זמין כעת" with the waiting list, nothing to choose */
+  on_hold: z.object({ decision: z.string(), note_he: z.string() }).nullable(),
 });
 export type CatalogSlot = z.infer<typeof CatalogSlotSchema>;
 
@@ -136,6 +148,16 @@ export type FullVariant = {
   unit_retail_agorot: number | null;
   price_provisional: boolean;
   unit_price_estimated: boolean;
+  /** the derived price was raised to this option's own no-loss price (SITE1 floor); the studio's own prices are never raised */
+  price_floored: boolean;
+  unit_price_floored: boolean;
+  /** this option's landed cost and no-loss price (agorot), the evidence for the floor */
+  landed_agorot: number;
+  no_loss_agorot: number;
+  unit_landed_agorot: number | null;
+  unit_no_loss_agorot: number | null;
+  /** freight of ONE piece (USD cents) by the default line, for the single-piece scenario */
+  unit_shipping_usd_cents: number;
   active: boolean;
   in_room: boolean;
   /** the supplier's picture of this option (tools/supplier-images.ts serves it from our media) */
@@ -154,9 +176,20 @@ export type FullProduct = PublicProduct & {
   /** the card's first image url and its stated rights (FR-I); the public catalog never carries the supplier url */
   supplier_image: { url: string | null; usage_rights: 'confirmed' | 'unclear' | 'none'; quality: 'high' | 'medium' | 'low' };
   cost_usd_cents: number;
+  /** freight of one piece by the default line (USD cents), or of the whole sale when shipping_quoted_for_sale */
   shipping_usd_cents: number;
-  shipping_from_default: boolean;
-  shipping_source: 'manual' | 'cj' | 'default';
+  shipping_quoted_for_sale: boolean;
+  shipping_source: import('./schema/economics').ShippingSource;
+  shipping_line: string;
+  /** where the price came from (studio/build.py card_economics): the owner, the pricing file, the card, the final round */
+  price_source: 'owner' | 'studio' | 'initial-card' | 'initial-leads';
+  /** the no-loss facts of the headline (the room's SKU in its sale units): landed cost and the lowest non-losing price */
+  landed_agorot: number;
+  no_loss_agorot: number;
+  /** the highest Israeli comparable the price was set against (il_value), for NL2 */
+  highest_comparable_agorot: number | null;
+  /** why the product is not sold (studio language, never shown to the customer) */
+  availability_note_he: string | null;
   sell_qty: number;
   /** where sell_qty came from: the studio (products.json) or the studio's default rule, and how sure that is */
   sell_qty_source: 'studio' | 'default';
@@ -171,6 +204,8 @@ export type FullProduct = PublicProduct & {
 };
 
 export type HiddenProduct = { id: string; slot: string; reason: string };
+/** a card the DS API left unfilled (shared/src/card-draft.ts): not shown, listed for the sourcing-agent */
+export type DraftCard = { path: string; fields: string[] };
 
 /**
  * The supplier's first photo of a shown product (FR-I, 2026-10-10), served from our media, never hot-linked:
@@ -205,6 +240,10 @@ export type FullCatalog = Omit<PublicCatalog, 'products'> & {
   invalid_cards: { path: string; issues: string }[];
   /** cards shown without their `options` because those are broken (the rest of the card is fine) */
   invalid_options?: { path: string; issues: string }[];
+  /** cards the DS API left as drafts (colors, visual_weight unfilled): not shown, for the sourcing-agent */
+  draft_cards?: DraftCard[];
+  /** the studio's own prices that would lose on the site's reading (never raised by the site; a question for the owner) */
+  studio_prices_losing?: { id: string; variant_id: string; price_agorot: number; no_loss_agorot: number }[];
   economics: {
     settings: import('./schema/economics').EconomicsSettings;
     defaults_used: string[];

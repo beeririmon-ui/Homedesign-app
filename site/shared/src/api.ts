@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { IL_PHONE, ORDER_STATUSES } from './constants';
 import { PACKS } from './packs';
 
-export { IL_PHONE, ORDER_STATUSES, ORDER_STATUS_HE, type OrderStatus } from './constants';
+export { IL_PHONE, ORDER_ID, ORDER_STATUSES, ORDER_STATUS_HE, ORDER_STEPS_HE, orderStep, type OrderStatus } from './constants';
 
 export const CartItemInputSchema = z.object({
   variant_id: z.string().min(1).max(160),
@@ -89,3 +89,15 @@ export const OrderViewSchema = z.object({
 export type OrderView = z.infer<typeof OrderViewSchema>;
 
 export const ApiErrorSchema = z.object({ error: z.string(), message_he: z.string().optional() });
+
+/** "עדכנו אותי כשחוזר" (PRE1): one email, for one product or one slot on hold. Nothing else is collected. */
+export const WaitlistRequestSchema = z
+  .object({
+    email: z.email().max(120),
+    product_id: z.string().min(1).max(160).optional(),
+    room: z.string().min(1).max(40).optional(),
+    slot: z.string().min(1).max(60).optional(),
+  })
+  .refine((v) => v.product_id || (v.room && v.slot), { message: 'a product or a room and a slot' });
+export type WaitlistRequest = z.infer<typeof WaitlistRequestSchema>;
+export const WaitlistResponseSchema = z.object({ ok: z.literal(true) });

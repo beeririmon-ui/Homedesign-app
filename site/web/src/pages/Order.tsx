@@ -4,6 +4,7 @@
  */
 import { useEffect, useState } from 'preact/hooks';
 import type { OrderView } from '@hd/shared';
+import { ORDER_STEPS_HE, orderStep } from '@hd/shared/constants';
 import { api, ApiError } from '../api';
 import { orderToken } from '../state/cart';
 import { Price } from '../components/Media';
@@ -35,10 +36,11 @@ export function OrderPage({ id }: { id: string }) {
   }, [id]);
 
   const paid = order && order.status !== 'pending_payment' && order.status !== 'payment_failed';
+  const step = order ? orderStep(order.status) : null;
   return (
     <div class="wrap page">
       <div class="page-head">
-        <h1 tabIndex={-1}>{paid ? 'תודה, ההזמנה התקבלה' : `הזמנה ${id}`}</h1>
+        <h1 tabIndex={-1}>{paid ? 'תודה. ההזמנה התקבלה.' : `הזמנה ${id}`}</h1>
       </div>
       {error ? (
         <p class="notice error" role="alert">
@@ -51,9 +53,19 @@ export function OrderPage({ id }: { id: string }) {
           <p>
             מספר הזמנה: <strong class="num">{order.id}</strong>
           </p>
-          <p role="status">
-            סטטוס: <span class="status-pill">{order.status_he}</span>
-          </p>
+          {step !== null ? (
+            <ol class="order-steps" aria-label={`מצב ההזמנה: ${order.status_he}`}>
+              {ORDER_STEPS_HE.map((s, i) => (
+                <li key={s} aria-current={i === step ? 'step' : undefined} class={i < step ? 'done' : ''}>
+                  {s}
+                </li>
+              ))}
+            </ol>
+          ) : (
+            <p role="status">
+              סטטוס: <span class="status-pill">{order.status_he}</span>
+            </p>
+          )}
           <ul style={{ margin: 0, paddingInlineStart: 18 }}>
             {order.lines.map((l, i) => (
               <li key={i}>

@@ -5,7 +5,7 @@ import { buildSeedSql } from '../scripts/seed';
 import { createD1, migrate } from './d1-shim';
 import { processSupplierJob } from '../src/lib/fulfillment';
 import { resetAccessCache, verifyAccessJwt } from '../src/lib/access';
-import { DEFAULT_SETTINGS, signWebhook, unitEconomics, type FullCatalog, type FullProduct } from '@hd/shared';
+import { DEFAULT_SETTINGS, ORDER_ID, noLossRetailIls, signWebhook, unitEconomics, type FullCatalog, type FullProduct } from '@hd/shared';
 
 const SECRET = 'test-webhook-secret-0123456789';
 
@@ -31,7 +31,9 @@ function product(id: string, slot: string, price: number, cost: number, set?: { 
     pack: set ? { set_qty: set.n, unit_price_agorot: set.unit, unit_price_estimated: true } : null,
     safety: null,
     options: null,
+    availability: { status: 'available' as const, reason: null },
   };
+  const landed = Math.round((cost * sellQty + 1000 + (sellQty - 1) * Math.max(0, 1000 - 372)) * DEFAULT_SETTINGS.fx_usd_ils);
   return {
     ...base,
     name_supplier: 'Supplier name',
@@ -42,8 +44,14 @@ function product(id: string, slot: string, price: number, cost: number, set?: { 
     supplier_image: { url: 'https://example.invalid/p.jpg', usage_rights: 'unclear', quality: 'medium' },
     cost_usd_cents: cost,
     shipping_usd_cents: 1000,
-    shipping_from_default: false,
+    shipping_quoted_for_sale: false,
     shipping_source: 'cj',
+    shipping_line: 'CJPacket Eub 12-50',
+    price_source: 'studio',
+    landed_agorot: landed,
+    no_loss_agorot: noLossRetailIls(landed / 100, DEFAULT_SETTINGS) * 100,
+    highest_comparable_agorot: null,
+    availability_note_he: null,
     sell_qty: sellQty,
     sell_qty_source: 'default',
     sell_qty_sure: true,
@@ -76,6 +84,13 @@ function withOptions(p: FullProduct): FullProduct {
     unit_retail_agorot: null,
     price_provisional: true,
     unit_price_estimated: false,
+    price_floored: false,
+    unit_price_floored: false,
+    landed_agorot: Math.round((cost + ship) * DEFAULT_SETTINGS.fx_usd_ils),
+    no_loss_agorot: noLossRetailIls(((cost + ship) * DEFAULT_SETTINGS.fx_usd_ils) / 100, DEFAULT_SETTINGS) * 100,
+    unit_landed_agorot: null,
+    unit_no_loss_agorot: null,
+    unit_shipping_usd_cents: ship,
     active,
     in_room: inRoom,
     supplier_image_url: null,
@@ -124,6 +139,7 @@ const catalog: FullCatalog = {
             { position: 2, product_id: 'vase-b', placeholder: false, label_he: 'ב', is_default: false },
             { position: 3, product_id: null, placeholder: true, label_he: 'ג', is_default: false },
           ],
+          on_hold: null,
         },
       ],
     },
@@ -229,6 +245,32 @@ describe('public api', () => {
     expect((await req(`/api/orders/${body.order_id}`, { headers: { 'x-order-token': 'x'.repeat(32) } })).status).toBe(404);
     const view = (await (await req(`/api/orders/${body.order_id}`, { headers: { 'x-order-token': body.order_token } })).json()) as { status_he: string };
     expect(view.status_he).toBe('ממתינה לתשלום');
+    // ART6: digits only, no "HD" prefix
+    expect(body.order_id).toMatch(ORDER_ID);
+  });
+
+  it('the waiting list (PRE1) takes one email for a product or a slot, nothing else', async () => {
+    expect((await req('/api/waitlist', json({ email: 'buyer@example.com', product_id: 'vase-a' }))).status).toBe(201);
+    expect((await req('/api/waitlist', json({ email: 'buyer@example.com', room: 'living-room', slot: 'vase' }))).status).toBe(201);
+    expect((await req('/api/waitlist', json({ email: 'buyer@example.com', product_id: 'nope' }))).status).toBe(404);
+    expect((await req('/api/waitlist', json({ email: 'not-an-email', product_id: 'vase-a' }))).status).toBe(422);
+    expect((await req('/api/waitlist', json({ email: 'buyer@example.com' }))).status).toBe(422);
+    const rows = await env.DB.prepare('SELECT email, product_id, room_id, slot_id FROM waitlist ORDER BY created_at').all();
+    expect(rows.results).toEqual([
+      { email: 'buyer@example.com', product_id: 'vase-a', room_id: null, slot_id: null },
+      { email: 'buyer@example.com', product_id: null, room_id: 'living-room', slot_id: 'vase' },
+    ]);
+  });
+
+  it('a product that is not sold (PRE1: NL2 or a slot on hold) never enters a cart', async () => {
+    await env.DB.prepare("UPDATE products SET availability = 'unavailable', availability_reason = 'nl2-express-only' WHERE id = 'vase-b'").run();
+    const created = (await (await req('/api/cart', { method: 'POST' })).json()) as { id: string };
+    expect((await req(`/api/cart/${created.id}/items`, json({ variant_id: 'vase-b:default', qty: 1 }, 'PUT'))).status).toBe(404);
+    const prices = (await (await req('/api/catalog/prices?ids=vase-a,vase-b')).json()) as { prices: { id: string; available: boolean }[] };
+    expect(prices.prices.map((p) => [p.id, p.available])).toEqual([
+      ['vase-a', true],
+      ['vase-b', false],
+    ]);
   });
 });
 
@@ -345,11 +387,11 @@ describe('customer shipping fees (settings, decision E1)', () => {
 describe('payment webhook', () => {
   async function pendingOrder() {
     const id = await cartWith('vase-a:default', 1);
-    const res = (await (await req('/api/checkout', json(checkoutBody(id)))).json()) as { order_id: string };
+    const res = (await (await req('/api/checkout', json(checkoutBody(id)))).json()) as { order_id: string; order_token: string };
     const o = await env.DB.prepare('SELECT payment_session_id, total_agorot FROM orders WHERE id = ?')
       .bind(res.order_id)
       .first<{ payment_session_id: string; total_agorot: number }>();
-    return { orderId: res.order_id, session: o!.payment_session_id, total: o!.total_agorot };
+    return { orderId: res.order_id, session: o!.payment_session_id, total: o!.total_agorot, token: res.order_token };
   }
   async function post(event: object, secret = SECRET, ts = Math.floor(Date.now() / 1000)) {
     const body = JSON.stringify(event);
@@ -368,13 +410,18 @@ describe('payment webhook', () => {
   });
 
   it('marks the order paid once, enqueues the supplier job, and ignores duplicates', async () => {
-    const { orderId, session, total } = await pendingOrder();
+    const { orderId, session, total, token } = await pendingOrder();
     const ev = { id: 'evt_00000002', type: 'payment.succeeded', session_id: session, amount_agorot: total };
     expect(await (await post(ev)).json()).toMatchObject({ outcome: 'paid' });
     expect(await (await post(ev)).json()).toMatchObject({ duplicate: true });
     expect(sent).toEqual([{ kind: 'submit-order', order_id: orderId }]);
     const o = await env.DB.prepare('SELECT status FROM orders WHERE id = ?').bind(orderId).first<{ status: string }>();
     expect(o!.status).toBe('paid');
+    // ART6: the buyer reads "התקבלה", then "בהכנה" once the order went to the supplier; never "הועברה לספק"
+    const view = async () => ((await (await req(`/api/orders/${orderId}`, { headers: { 'x-order-token': token } })).json()) as { status_he: string }).status_he;
+    expect(await view()).toBe('התקבלה');
+    await processSupplierJob(env, { kind: 'submit-order', order_id: orderId }, 1);
+    expect(await view()).toBe('בהכנה');
   });
 
   it('does not mark paid when the amount differs', async () => {

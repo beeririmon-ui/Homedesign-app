@@ -49,6 +49,15 @@ final round) and is flagged.
   python3 -I scripts/economics/no_loss.py --check             # invariants of the computation; exit 1 when a product (not
                                                               # owner-set, not express-only) loses at its current price,
                                                               # exit 2 when an invariant fails
+  python3 -I scripts/economics/no_loss.py --check-derived     # SITE1 (2026-11-03): every derived scenario the site sells
+                                                              # (an option, one piece of a set) at the site's price, which is
+                                                              # floored at that scenario's own no-loss price; exit 1 when a
+                                                              # scenario the floor cannot raise (a studio-set option price)
+                                                              # still loses. --json writes the evidence (derived_check)
+  python3 -I scripts/economics/no_loss.py --check-site FILE   # gate G8.2: FILE is site/.generated/catalog.full.json; every
+                                                              # price the site shows (product, option, single piece) is checked
+                                                              # against the Studio formula on the site's own landed cost; exit 1
+                                                              # when one loses or is sold under its no-loss price
   python3 -I scripts/economics/no_loss.py --apply             # the apply brief (manager's policy, 2026-10-20): raise the headline
                                                               # prices in their source of truth and write
                                                               # data/economics/no-loss-changes-<date>.json
@@ -2044,6 +2053,94 @@ def mismatch_hand_check(res: dict) -> list[dict]:
 
 # --------------------------------------------------------------------------- CLI
 
+# --------------------------------------------------------------------------- SITE1: the derived prices (2026-11-03)
+
+def site_floor(R: float, landed_ils: float, s: dict) -> int | float:
+    """The price the site shows for a derived scenario: the derived price, never under the scenario's own no-loss price
+    (site/shared/src/pricing.ts noLossRetailIls; tools/build-catalog.ts buildOptions / buildProduct)."""
+    floor = charm_up(break_even_for(landed_ils, s))
+    return R if R >= floor - EPS else floor
+
+
+def check_derived(res: dict) -> dict:
+    """Every derived scenario (kind variant, variant-single, single) of every product the site can sell, at the site's
+    price with the floor. A scenario whose price the studio set by hand (sku_retail_ils, unit_retail_ils) is not floored
+    by the site: when it loses it is listed in `studio_set_losing` and the check fails (exit 1)."""
+    s = res["settings"]
+    ctx: Ctx = res["ctx"]
+    rows = []
+    floored, checked, studio_losing = 0, 0, []
+    raise_max = 0.0
+    for r in res["rows"]:
+        if r.get("status") in ("cannot-compute", "no-card") or r.get("current_price_ils") is None:
+            continue
+        p = ctx.by_id[r["id"]]
+        e = ctx.E.get(r["id"], {})
+        sc = product_scenarios(p, e, ctx)
+        P = r.get("current_sale_price_ils") or r["current_price_ils"]
+        row = ctx.rows.get(r["id"]) or {}
+        overrides = row.get("sku_retail_ils") if isinstance(row.get("sku_retail_ils"), dict) else {}
+        unit_set = isnum(row.get("unit_retail_ils")) and row["unit_retail_ils"] > 0
+        for x in sc["scenarios"]:
+            if x["kind"] in HEADLINE_KINDS:
+                continue
+            checked += 1
+            R0 = x["price"](P)
+            studio_set = (x["kind"] == "variant" and isnum(overrides.get(str(x.get("variant_sku"))))) or (x["kind"] == "single" and unit_set)
+            R = R0 if studio_set else site_floor(R0, x["landed_ils"], s)
+            c = contribution(R, x["landed_ils"], s)
+            out = dict(_scen_out(x, R, c, s), id=r["id"], derived_ils=R0, floored=R != R0, studio_set=studio_set,
+                       own_no_loss_ils=charm_up(break_even_for(x["landed_ils"], s)))
+            if R != R0:
+                floored += 1
+                raise_max = max(raise_max, R - R0)
+            if c < -EPS:
+                studio_losing.append(out)
+            rows.append(out)
+    return {"date": dt.date.today().isoformat(), "rule": "SITE1 (2026-11-03): every derived price the site shows is at least its own no-loss price",
+            "scenarios_checked": checked, "floored": floored, "largest_raise_ils": round(raise_max, 2),
+            "losing_at_site_price": len(studio_losing), "studio_set_losing": studio_losing, "rows": rows}
+
+
+def check_site(path: Path, s: dict) -> dict:
+    """Gate G8.2 on the site's own output: site/.generated/catalog.full.json. Every variant the site sells (active, product
+    available) at its price, and its single piece, against the Studio formula on the site's own landed cost (cost x units
+    + the sale's freight, at the site's rate). A price under its no-loss price, or a negative contribution, fails."""
+    cat = json.loads(Path(path).read_text(encoding="utf-8"))
+    fx = cat["economics"]["settings"]["fx_usd_ils"]
+    st = dict(s, usd_ils=fx)
+    checked, bad, floored, unavailable = 0, [], 0, 0
+    for p in cat["products"]:
+        n = int(p.get("sell_qty") or 1)
+        if p.get("availability", {}).get("status") != "available":
+            unavailable += 1
+            continue
+        for v in p.get("variants_full") or [p]:
+            if not v.get("active", True):
+                continue
+            checked += 1
+            landed = (v["cost_usd_cents"] * n + v["shipping_usd_cents"]) / 100 * fx
+            R = v["retail_agorot"] / 100
+            c = contribution(R, landed, st)
+            floor = charm_up(break_even_for(landed, st))
+            if v.get("price_floored"):
+                floored += 1
+            if c < -0.005 or R < floor - EPS:
+                bad.append({"id": p["id"], "variant": v.get("id"), "sold_at_ils": R, "landed_ils": round(landed, 2), "contribution_ils": round(c, 2), "no_loss_ils": floor})
+            u = v.get("unit_retail_agorot")
+            if u:
+                checked += 1
+                ul = (v["cost_usd_cents"] + (v.get("unit_shipping_usd_cents") or v["shipping_usd_cents"])) / 100 * fx
+                Ru = u / 100
+                cu = contribution(Ru, ul, st)
+                fu = charm_up(break_even_for(ul, st))
+                if cu < -0.005 or Ru < fu - EPS:
+                    bad.append({"id": p["id"], "variant": f"{v.get('id')}/unit", "sold_at_ils": Ru, "landed_ils": round(ul, 2), "contribution_ils": round(cu, 2), "no_loss_ils": fu})
+    return {"date": dt.date.today().isoformat(), "file": str(path), "catalog": cat.get("version"), "mode": cat.get("mode"), "fx_usd_ils": fx,
+            "products": len(cat["products"]), "not_sold_pre1": unavailable, "prices_checked": checked, "floored_by_site": floored,
+            "losing": bad, "studio_prices_losing_reported_by_site": cat.get("studio_prices_losing") or []}
+
+
 def summary(res: dict) -> dict:
     st = Counter(r.get("status") for r in res["rows"])
     fl = Counter(r.get("flag") for r in res["rows"])
@@ -2121,6 +2218,30 @@ def main(argv: list[str]) -> int:
             print(f"LOSS {r['id']} sale price ₪{r['current_sale_price_ils']:g} headline ₪{h['contribution_ils']:g} ({h['method']}; {h['quantity']} יח') -> ₪{r['proposed_price_ils']:g}")
         print(f"check: {len(bad)} invariant failures, {len(losing)} products lose at their current price")
         rc = 2 if bad else 1 if losing else 0
+    if "--check-derived" in argv:
+        d = check_derived(res)
+        for x in d["studio_set_losing"]:
+            print(f"DERIVED-LOSS {x['id']} {x['scenario']} sold at ₪{x['sold_at_ils']:g} (studio-set) contribution ₪{x['contribution_ils']:g}; no-loss ₪{x['own_no_loss_ils']}")
+        print(f"check-derived: {d['scenarios_checked']} derived scenarios, {d['floored']} floored by the site (largest raise ₪{d['largest_raise_ils']:g}), "
+              f"{d['losing_at_site_price']} lose at the site's price")
+        if arg("--json"):
+            jp = Path(arg("--json"))
+            data = json.loads(jp.read_text(encoding="utf-8"))
+            data["derived_check"] = d
+            jp.write_text(json.dumps(data, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+        rc = max(rc, 1 if d["losing_at_site_price"] else 0)
+    if arg("--check-site"):
+        d = check_site(Path(arg("--check-site")), res["settings"])
+        for x in d["losing"]:
+            print(f"SITE-LOSS {x['id']} {x['variant']} sold at ₪{x['sold_at_ils']:g} landed ₪{x['landed_ils']:g} contribution ₪{x['contribution_ils']:g}; no-loss ₪{x['no_loss_ils']}")
+        print(f"check-site: catalog {d['catalog']} ({d['mode']}), {d['products']} products ({d['not_sold_pre1']} not sold, PRE1), "
+              f"{d['prices_checked']} prices checked, {d['floored_by_site']} floored by the site, {len(d['losing'])} lose")
+        if arg("--json"):
+            jp = Path(arg("--json"))
+            data = json.loads(jp.read_text(encoding="utf-8")) if jp.exists() else {}
+            data["site_check"] = d
+            jp.write_text(json.dumps(data, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+        rc = max(rc, 1 if d["losing"] else 0)
     return rc
 
 

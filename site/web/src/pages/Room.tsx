@@ -35,6 +35,7 @@ export function Room({ room, slot, option }: { room: CatalogRoom; slot?: string;
                   <span class="small">{p ? <a href={`/p/${p.id}/`}>{p.name_he}</a> : <span class="muted">וריאציה {pos} · ממתינה למוצר</span>}</span>
                   <span class="row">
                     {p ? <Price agorot={p.price_agorot} provisional={p.price_provisional} /> : null}
+                    {s.on_hold || (p && p.availability.status !== 'available') ? <span class="small muted">המלאי אינו זמין כעת</span> : null}
                     <a class="link-btn" href={`/rooms/${room.id}/?slot=${s.id}`}>
                       החלפה
                       <span class="sr-only">

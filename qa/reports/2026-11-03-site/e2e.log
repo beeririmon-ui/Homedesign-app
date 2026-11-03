@@ -1,0 +1,43 @@
+
+> homedesign-site@0.1.0 e2e
+> playwright test --project=e2e
+
+[2m[WebServer] [22m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mProxy environment variables detected. We'll use your proxy for fetch requests.[0m
+[2m[WebServer] [22m
+[2m[WebServer] [22m
+[2m[WebServer] [22m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mProxy environment variables detected. We'll use your proxy for fetch requests.[0m
+[2m[WebServer] [22m
+[2m[WebServer] [22m
+[2m[WebServer] [22m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mProxy environment variables detected. We'll use your proxy for fetch requests.[0m
+[2m[WebServer] [22m
+[2m[WebServer] [22m
+
+Running 21 tests using 1 worker
+
+  ✓   1 [e2e] › e2e/flow.spec.ts:9:3 › SEO: prerendered Hebrew pages › room and product pages are complete HTML before any script runs (121ms)
+  ✓   2 [e2e] › e2e/flow.spec.ts:33:3 › room experience › hotspots are buttons; the wheel works with the keyboard and restores focus (7.0s)
+  ✓   3 [e2e] › e2e/flow.spec.ts:55:3 › room experience › product marks: 44 px targets that never overlap, no pulsing, focus lights the product outline, reduced motion respected (3.1s)
+  ✓   4 [e2e] › e2e/flow.spec.ts:91:3 › room experience › hovering the product itself lights its outline, and a click on it opens its variants (4.3s)
+  ✓   5 [e2e] › e2e/flow.spec.ts:106:3 › room experience › product marks rest hidden: a first-visit hint, then they show on pointer movement, fade ~3 s later, and stay with keyboard focus (15.4s)
+  ✓   6 [e2e] › e2e/flow.spec.ts:136:3 › room experience › product marks: a touch shows them too, and the list under the room is unchanged (1.9s)
+  ✓   7 [e2e] › e2e/flow.spec.ts:145:3 › room experience › drag with inertia moves the wheel (mouse) (10.1s)
+  ✓   8 [e2e] › e2e/flow.spec.ts:163:3 › product gallery (FR-I) › the render leads with a visible note, the supplier photo follows; buttons, keys and the live region move between them (2.3s)
+  ✓   9 [e2e] › e2e/flow.spec.ts:202:5 › product gallery (FR-I) › mobile › the strip scrolls sideways within the screen, and the buttons work (1.3s)
+  ✓  10 [e2e] › e2e/flow.spec.ts:218:3 › store › product → cart → checkout validation → mock hosted page → paid order (4.2s)
+  ✓  11 [e2e] › e2e/flow.spec.ts:254:3 › store › a declined payment returns to checkout with a clear message (3.1s)
+  ✓  12 [e2e] › e2e/flow.spec.ts:276:3 › store › set or single piece (P1): the set is the default, one piece has its own price, the cart keeps both apart (3.3s)
+  ✓  13 [e2e] › e2e/flow.spec.ts:324:3 › store › the variant wheel offers set or single piece; its arrow keys stay with the radios (4.4s)
+  ✓  14 [e2e] › e2e/hotspots.spec.ts:21:3 › marks and outlines at 1280 px (15.4s)
+  ✓  15 [e2e] › e2e/hotspots.spec.ts:21:3 › marks and outlines at 400 px (12.2s)
+  ✓  16 [e2e] › e2e/options.spec.ts:54:3 › supplier options on the product page › defaults to the room’s option; another option has its own price; the cart gets that SKU; the render stays (2.3s)
+  ✓  17 [e2e] › e2e/options.spec.ts:93:3 › supplier options on the product page › the keyboard: arrows move within an axis, the price and the legend follow; back to the room’s option (1.2s)
+  ✓  18 [e2e] › e2e/options.spec.ts:115:5 › supplier options on the product page › mobile › fits the screen (no sideways scroll), 44 px targets, screenshot (2.2s)
+poster and hotspots: 0.73 MB
+first load (mobile, until composed): 1.68 MB
+  ✓  19 [e2e] › e2e/perf.spec.ts:17:3 › mobile › first load of the living room ≤ 3 MB and only reachable transitions preload (8.5s)
+zoom: 4 frames, p95 650.0 ms · wheel: 2 frames, p95 183.4 ms
+  ✓  20 [e2e] › e2e/perf.spec.ts:43:1 › animation frame times (zoom and wheel) (4.8s)
+  ✓  21 [e2e] › e2e/swap-diff.spec.ts:266:3 › variant swap changes nothing outside the product shape › every slot, every variant, at rest and zoomed (1280 × 720) (1.1m)
+
+  21 passed (3.3m)
+e2e exit 0

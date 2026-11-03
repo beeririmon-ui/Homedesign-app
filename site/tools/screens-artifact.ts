@@ -85,7 +85,7 @@ async function run(width: number, height: number, mobile: boolean) {
   await shot('5-checkout');
   await page.getByRole('button', { name: 'מעבר לתשלום מאובטח' }).click();
   await page.getByRole('button', { name: 'אישור תשלום (מדומה)' }).click();
-  await page.getByText('הועברה לספק').waitFor();
+  await page.locator('.order-steps [aria-current="step"]').waitFor();
   await shot('6-order');
 
   const first = (await page.evaluate(() => (window as unknown as { __hdFrames?: number[] }).__hdFrames ?? [])) as number[];
