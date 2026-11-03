@@ -1,0 +1,143 @@
+
+> homedesign-site@0.1.0 test
+> vitest run
+
+
+[1m[46m RUN [49m[22m [36mv4.0.8 [39m[90m/home/user/homedesign-app/site[39m
+
+(node:2217) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+ [32m✓[39m shared/test/options.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 291[2mms[22m[39m
+[90mstderr[2m | api/test/api.test.ts[2m > [22m[2mpayment webhook[2m > [22m[2mrejects bad and stale signatures
+[22m[39mpayment webhook rejected mock mismatch
+
+[90mstderr[2m | api/test/api.test.ts[2m > [22m[2mpayment webhook[2m > [22m[2mrejects bad and stale signatures
+[22m[39mpayment webhook rejected mock stale
+
+ [31m❯[39m shared/test/shared.test.ts [2m([22m[2m22 tests[22m[2m | [22m[31m1 failed[39m[2m | [22m[33m1 skipped[39m[2m)[22m[33m 460[2mms[22m[39m
+     [32m✓[39m product-card.gen.ts is generated from data/product-card.schema.json and up to date[32m 2[2mms[22m[39m
+     [32m✓[39m every slots file parses[32m 17[2mms[22m[39m
+[31m     [31m×[31m every product card outside the shared pool parses (pool cards are a known data issue)[39m[32m 267[2mms[22m[39m
+     [32m✓[39m the card room enum is exactly the rooms of data/slots (schema 1.1)[32m 3[2mms[22m[39m
+     [32m✓[39m every card with a room folder names that room, and room + slot is one slot in data/slots[32m 89[2mms[22m[39m
+     [32m✓[39m cardRoom: the card's room first, its folder as the fallback[32m 1[2mms[22m[39m
+     [32m✓[39m rounds up to a price ending in 9[32m 0[2mms[22m[39m
+     [32m✓[39m the recommended price reaches the target margin[32m 1[2mms[22m[39m
+     [32m✓[39m VAT is extracted from the consumer price, not added on top[32m 0[2mms[22m[39m
+     [32m✓[39m settings fall back to provisional defaults and say so[32m 1[2mms[22m[39m
+     [32m✓[39m economics products file accepts a flat map or a { products } wrapper[32m 1[2mms[22m[39m
+     [32m✓[39m formats shekels as in the Design Bible[32m 44[2mms[22m[39m
+     [32m✓[39m accepts Israeli phone numbers and requires terms consent[32m 4[2mms[22m[39m
+     [32m✓[39m verifies, rejects tampering and stale timestamps[32m 16[2mms[22m[39m
+     [32m✓[39m rounds down to a price ending in 9[32m 0[2mms[22m[39m
+     [32m✓[39m estimates one piece at ceil(set / N × 1.15) rounded down to …9, never under the set per piece[32m 2[2mms[22m[39m
+     [32m✓[39m labels and the cart input default to the set[32m 1[2mms[22m[39m
+     [32m✓[39m default sell quantity follows the studio rule[32m 5[2mms[22m[39m
+     [2m[90m↓[39m[22m agrees with studio/build.py on the real cards
+     [32m✓[39m shows only what the card states, in Hebrew[32m 1[2mms[22m[39m
+     [32m✓[39m no block, nulls, false and empty lists claim nothing[32m 0[2mms[22m[39m
+     [32m✓[39m keeps the source internal and links a certificate only once it is verified[32m 1[2mms[22m[39m
+ [32m✓[39m api/test/api.test.ts [2m([22m[2m20 tests[22m[2m)[22m[33m 389[2mms[22m[39m
+ [32m✓[39m web/test/product-bits.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 38[2mms[22m[39m
+ [32m✓[39m web/test/product-gallery.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m web/test/option-picker.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m shared/test/shared.test.ts[2m > [22mrepo data against the derived schemas[2m > [22mevery product card outside the shared pool parses (pool cards are a known data issue)
+[31m[1mAssertionError[22m: expected [ …(70) ] to deeply equal [][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- [][39m
+[31m+ [[39m
+[31m+   "/home/user/homedesign-app/data/products/basket/basket-aliexpress-seaweed-wicker-basket-rattan-442162.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/basket/basket-aliexpress-seaweed-wicker-basket-rattan-977022.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/bath/bath-mat/bath-mat-aliexpress-waffle-bath-mat-rug-487304.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/bath/ceiling-light/ceiling-light-aliexpress-retro-led-bamboo-woven-086617.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/bath/soap-dispenser/soap-dispenser-aliexpress-beige-travertine-bathroom-accessorie-528496.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/bath/toilet-paper-stand/toilet-paper-stand-aliexpress-stainless-steel-toilet-paper-254527.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/bath/toilet-paper-stand/toilet-paper-stand-aliexpress-stainless-steel-toilet-paper-550975.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/bath/towel-ring/towel-ring-aliexpress-1-2pcs-bathroom-towel-842335.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/bath/towel-ring/towel-ring-aliexpress-bathroom-towel-rack-adhesive-949351.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/bath/towel-ring/towel-ring-aliexpress-bathroom-towel-ring-hook-827023.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/bath/towel-ring/towel-ring-aliexpress-stainless-steel-towel-ring-312287.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/corridor/ceiling-lights/ceiling-lights-aliexpress-retro-led-bamboo-woven-086617.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/corridor/gallery-art/gallery-art-aliexpress-antique-botanical-posters-prints-710412.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/corridor/gallery-art/gallery-art-aliexpress-japanese-wabi-sabi-tree-176323.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/corridor/gallery-art/gallery-art-aliexpress-set-3-neutral-floral-945249.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/corridor/gallery-art/gallery-art-aliexpress-simple-nordic-posters-picasso-983896.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/curtains/curtains-aliexpress-beige-linen-sheer-curtains-554205.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/curtains/curtains-aliexpress-cotton-linen-curtain-look-902882.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/cushions/cushions-aliexpress-farmhouse-floral-pillow-covers-166217.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/cushions/cushions-aliexpress-fashion-modern-wabi-sabi-464203.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/dining/centerpiece-vase/centerpiece-vase-aliexpress-20-4cm-high-ceramic-732760.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/dining/cutting-boards/cutting-boards-aliexpress-2pcs-1pc-wooden-cutting-280363.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/dining/framed-art/framed-art-aliexpress-retro-farmhouse-chicken-botanical-333603.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/dining/paper-towel-holder/paper-towel-holder-aliexpress-1pc-bamboo-paper-towel-316063.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/dining/table-runner/table-runner-aliexpress-boho-macrame-table-runners-263532-dining.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/entrance/bench-cushion/bench-cushion-aliexpress-custom-bench-cushion-chenille-743098.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/entrance/bench-cushion/bench-cushion-aliexpress-custom-chenille-bench-cushion-826372.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/entrance/ceiling-light/ceiling-light-aliexpress-semi-circular-natural-handmade-958145.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/entrance/console-vessel/console-vessel-aliexpress-ceramic-wabi-sabi-vase-906575.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/entrance/framed-art/framed-art-aliexpress-japanese-wabi-sabi-tree-176323.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/entrance/table-lamp/table-lamp-aliexpress-solid-wood-table-lamp-045552.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/entrance/wall-sconce/wall-sconce-aliexpress-handwoven-rattan-wall-lamp-915640.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/framed-art/framed-art-aliexpress-japandi-wall-art-set-969661.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/framed-art/framed-art-aliexpress-mediterranean-wabi-sabi-poster-802890.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/kids/doll/doll-aliexpress-soft-plush-toys-waldorf-664801.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/kids/pendant/pendant-aliexpress-rustic-woven-pendant-light-200914-kids.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/kids/roman-blind/roman-blind-aliexpress-customized-flat-sheer-roman-221993.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/kids/roman-blind/roman-blind-aliexpress-modern-beige-color-flat-868827.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/kids/roman-blind/roman-blind-aliexpress-modern-cotton-linen-farbic-488628.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/kids/soft-toy/soft-toy-aliexpress-handmade-crochet-bunny-baby-999497.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/kids/soft-toy/soft-toy-aliexpress-stuffed-bunny-cloth-dress-063285.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/kids/toy-basket/toy-basket-aliexpress-seagrass-wicker-woven-storage-192174.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/kids/toy-cars/toy-cars-aliexpress-4pc-wooden-baby-car-754833.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/kids/toy-cars/toy-cars-aliexpress-baby-wooden-toys-beech-975232.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/kids/toy-cars/toy-cars-aliexpress-let-s-make-wooden-192455.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/master/basket/basket-aliexpress-plant-basket-handles-wicker-464380.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/master/bedding/bedding-aliexpress-boho-3d-tufted-cut-500672.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/master/curtains/curtains-aliexpress-linen-blend-beige-curtains-122000.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/table-runner/table-runner-aliexpress-boho-macrame-table-runners-263532.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/table-runner/table-runner-aliexpress-boho-table-runner-macrame-072806.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/table-runner/table-runner-aliexpress-nordic-table-runner-kitchen-244347.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/vase/vase-aliexpress-vintage-distressed-clay-vase-589009.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/vase/vase-cj-black-matte-stoneware-jar-30.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/vase/vase-cj-matte-frosted-tapered-28.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/wall-decor/wall-decor-aliexpress-japandi-wall-art-set-969661.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/wall-decor/wall-decor-aliexpress-natural-raffia-woven-bohemian-763597.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/work/curtains/curtains-aliexpress-1pc-japanese-folk-wabi-212463.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/work/curtains/curtains-aliexpress-beige-linen-sheer-curtains-554205-work.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/work/curtains/curtains-aliexpress-cotton-linen-curtain-look-902882-work.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/work/curtains/curtains-aliexpress-natural-linen-curtains-84-784378.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/work/desk-lamp/desk-lamp-aliexpress-solid-wood-table-lamp-045552.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/work/desk-organizer/desk-organizer-aliexpress-household-rattan-organizer-chopstick-060819.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/work/desk-tray/desk-tray-aliexpress-tableware-solid-walnut-wooden-861163.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/work/framed-art/framed-art-aliexpress-frameless-minimalist-wall-art-631735.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/work/framed-art/framed-art-aliexpress-japanese-wabi-sabi-tree-176323-work.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/work/framed-art/framed-art-aliexpress-mediterranean-wabi-sabi-poster-802890-work.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/work/framed-art/framed-art-aliexpress-modern-minimalist-neutral-gallery-802995.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/work/pendant/pendant-aliexpress-rustic-woven-pendant-light-200914.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/work/planter/planter-aliexpress-nordic-style-natural-seagrass-839727.json",[39m
+[31m+   "/home/user/homedesign-app/data/products/work/wall-sconce/wall-sconce-aliexpress-rattan-bamboo-wall-lamp-671943.json",[39m
+[31m+ ][39m
+
+[36m [2m❯[22m shared/test/shared.test.ts:[2m57:17[22m[39m
+    [90m 55| [39m      if (!r.success && !f.includes('/data/products/pool/')) bad.push(…
+    [90m 56| [39m    }
+    [90m 57| [39m    [34mexpect[39m(bad)[33m.[39m[34mtoEqual[39m([])[33m;[39m
+    [90m   | [39m                [31m^[39m
+    [90m 58| [39m  })[33m;[39m
+    [90m 59| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m5 passed[39m[22m[90m (6)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m62 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (64)[39m
+[2m   Start at [22m 11:12:48
+[2m   Duration [22m 1.56s[2m (transform 1.28s, setup 0ms, collect 2.08s, tests 1.20s, environment 1ms, prepare 31ms)[22m
+
+test exit 1
