@@ -264,6 +264,8 @@ def main():
             may = "no: the pose copied the master's framing (retake)"
         elif geo_ok and objects_ok and fid_ok:
             may = "yes (geometry within 0.5 % of the clay; objects consistent)"
+        elif geo_ok and objects_ok:
+            may = "yes for geometry (shift <= 9.6 px, scale within 1 %, residual <= 9.6 px); product form to fix first: " + "; ".join(e.get("fidelity_dev", [])[:2])
         elif geo_reg and objects_ok:
             may = "with register only (global affine corrects it; residual <= 9.6 px); products / scale to fix: " + "; ".join(e.get("scale_dev", [])[:2] or e.get("fidelity_dev", [])[:2])
         else:
