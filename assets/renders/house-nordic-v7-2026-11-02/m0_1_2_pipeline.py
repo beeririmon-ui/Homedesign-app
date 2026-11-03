@@ -1,0 +1,283 @@
+#!/usr/bin/env python3
+"""
+m0_1_2_pipeline.py: the M0 1.2.1 jobs of briefs/render-m0-new-camera-2026-11-03.md (render-agent, 2026-11-03) on the v8 tools of this
+folder, without changing them. What it patches at import, in memory only:
+  - v7_frames: the three new ids in the RETAKES table (m0-v8, pose-m0p-v8, pose-m0x-v8), the clay folder = framing/round5 (the 1.2.1
+    clays, framing_r5.py), the jobs file = jobs-m0-1-2-2026-11-03.json, and the 1.1 M0 furniture boxes dropped: the round-5 clay carries
+    sofa, coffee table and armchair as 'furniture' boxes, so lock_v2 reads its fixed edges from the clay of the new camera;
+  - process_v8: the M0 grade points are the Bible 1.8 (B1) points of the 1.2 clay (canvas uv from round5/selfcheck.json: the back wall by
+    the corner (-1.75, 0, 1.60) [L 90-94, regrade-v3 target 93 (92-95) kept as the brief asks] and the window wall (-2.30, 0.30, 1.60)
+    [L 80-88]) and the 1.2 window box; M0p reads the same wall in its own clay; M0x (no wall in frame) inherits M0's stops.
+lock_v2.py and process_v8.py run unchanged (G1.4: M0 is a video endpoint, 0.5 % = 9.6 px per strip; M0p / M0x are pan endpoints, 2 px).
+
+  python3 m0_1_2_pipeline.py put <local> <upload_url> <public_url> <key> [--clay]     # record a PUT upload (sha256 verified)
+  python3 m0_1_2_pipeline.py prep <id>                                                 # job-<id>.json + the jobs row ("prepared")
+  python3 m0_1_2_pipeline.py fetch <id> <result_url>                                   # raw, normalise, lock_v2, grade v3, boxes, jobs row
+  python3 m0_1_2_pipeline.py sheet                                                     # old M0 r2 | new M0 | lock -> assets/renders/house-nordic-m0-1-2-sheet-2026-11-03.jpg
+"""
+import hashlib
+import json
+import os
+import subprocess
+import sys
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+REPO = os.path.abspath(os.path.join(HERE, "..", "..", ".."))
+sys.path.insert(0, HERE)
+import v7_frames as VF  # noqa: E402
+
+R5 = os.path.join(REPO, "assets", "blockout", "house", "framing", "round5")
+JR_PATH = os.path.join(HERE, "jobs-m0-1-2-2026-11-03.json")
+IDX_PATH = os.path.join(HERE, "refs", "index-m0-1-2-2026-11-03.json")
+IDX7 = json.load(open(os.path.join(HERE, "refs", "index-v7.json")))
+DL = "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/dl-results"
+DATE = "2026-11-03"
+
+# id -> (frame, kind, clay, pan endpoint (2 px) / video endpoint (9.6 px), overscan canvas, room)
+JOBS = {"m0-v8": ("M0", "master", "M0.png", False, True, "living-room"),
+        "pose-m0p-v8": ("M0p", "pose", "poses/M0p.png", True, True, "living-room"),
+        "pose-m0x-v8": ("M0x", "pose", "poses/M0x.png", True, True, "living-room")}
+OUT_DIR = {"m0-v8": "assets/renders/living-room/nordic/v8/", "pose-m0p-v8": "assets/renders/poses/nordic/v8/", "pose-m0x-v8": "assets/renders/poses/nordic/v8/"}
+PROMPT = {"m0-v8": "assets/prompts/recipe-v5.nordic/m0-v8.txt", "pose-m0p-v8": "assets/prompts/poses-v7.nordic/pose-m0p-v8.txt",
+          "pose-m0x-v8": "assets/prompts/poses-v7.nordic/pose-m0x-v8.txt"}
+INHERIT = {"pose-m0x-v8": ("m0-v8", "-v3")}
+# the 1.2 window opening (plan projection, frame fractions): u 0.034-0.292, v -0.077..0.673 -> the overscan canvas
+_W = (0.034, 0.292, -0.077, 0.673)
+M0_WIN_12 = (round((_W[0] * 3840 + 116) / 4072, 4), round((_W[1] * 3840 + 116) / 4072, 4), max(0.0, round((_W[2] * 2160 + 65) / 2290, 4)), round((_W[3] * 2160 + 65) / 2290, 4))
+
+VF.R4 = R5
+VF.RETAKES.update(JOBS)
+VF.RETAKES_JOBS = JR_PATH
+VF.M0_FURNITURE = {}
+
+import lock_v2 as LK  # noqa: E402
+import process_v8 as P  # noqa: E402
+import fetch_retakes as FR  # noqa: E402
+
+P.M0_PTS = {}
+P.M0_WIN = M0_WIN_12
+P.BIBLE_TARGET["M0"] = (93.0, 92.0, 95.0, "Bible 1.8 B1: the back wall by the corner (-1.75, 0, 1.60) L 90-94; the regrade-v3 target 93 [92-95] kept (briefs/render-m0-new-camera-2026-11-03.md 5)")
+_choose0 = P.choose_points
+
+
+def choose_points_12(frame, kind, sc_frame, sc_all, wb_mode, exposure):
+    pts, wb_pt, src, win_box, warn = _choose0(frame, kind, sc_frame, sc_all, wb_mode, exposure)
+    if frame in ("M0", "M0p", "M0x"):
+        wp = sc_frame.get("wall_patches") or {}
+        bw, ww = wp.get("bible18_back_wall_by_corner_L90_94"), wp.get("bible18_window_wall_L80_88")
+        if bw and "L_hsl" in bw and frame != "M0x":
+            wb_pt = (bw["u"], bw["v"])
+            src = f"Bible 1.8 B1 point: back wall by the corner (-1.75, 0, 1.60) at canvas ({bw['u']:.3f}, {bw['v']:.3f}); clay L {bw['L_hsl']} (target 93, 92-95 as regrade-v3)"
+            warn = None
+            pts[f"back wall by the corner ({bw['u']:.3f},{bw['v']:.3f}) [B1: 90-94; regrade-v3 target 93]"] = wb_pt
+        if ww and "L_hsl" in ww:
+            pts[f"window wall ({ww['u']:.3f},{ww['v']:.3f}) [B1: 80-88]"] = (ww["u"], ww["v"])
+        for k, lab in (("back_wall_behind_art_centre", "back wall behind the art centre [88-91]"), ("back_wall_right_end_L82_86", "back wall right end [82-86]"),
+                       ("hero_wall_mid", "hero wall mid (above the art)"), ("ceiling", "ceiling"), ("floor_centre", "floor centre")):
+            q = wp.get(k)
+            if q and "L_hsl" in q:
+                pts[f"{lab} ({q['u']:.3f},{q['v']:.3f})"] = (q["u"], q["v"])
+        if frame == "M0":
+            win_box = M0_WIN_12
+        if frame == "M0x":
+            warn = "no wall of the living room in frame: stops inherited from m0-v8 (one exposure per camera point, P1 pan); the default point is a reading only"
+    return pts, wb_pt, src, win_box, warn
+
+
+P.choose_points = choose_points_12
+
+
+def _jr():
+    return json.load(open(JR_PATH)) if os.path.exists(JR_PATH) else {"clay": {}, "jobs": []}
+
+
+def _save_jr(J):
+    J["stage"] = "M0 at the 1.2.1 camera (briefs/render-m0-new-camera-2026-11-03.md): m0-v8, then pose-m0p-v8 and pose-m0x-v8 with M0's cut-outs"
+    J["model"] = "gpt-image-2-5, quality sunburst, 2K, 16:9, image-to-image from the round-5 clay; recipe v8"
+    J["cap_tokens"] = 2400
+    J["budget_note"] = "1,800 for the three jobs (600 each, one attempt) + 600 reserve: a second attempt only for M0 and only on a lock_v2 scale failure"
+    J["spent_tokens"] = sum(j.get("credits") or 0 for j in J["jobs"])
+    json.dump(J, open(JR_PATH, "w"), indent=1, ensure_ascii=False)
+
+
+def put(local, up, pub, key, clay=False):
+    ct = "image/png" if local.lower().endswith(".png") else "image/jpeg"
+    sha = hashlib.sha256(open(local, "rb").read()).hexdigest()
+    r = subprocess.run(["curl", "-sS", "-X", "PUT", "--data-binary", "@" + local, "-H", "Content-Type: " + ct, "-o", "/dev/null", "-w", "%{http_code}", up], capture_output=True, text=True)
+    tmp = os.path.join(os.path.dirname(DL), "put-back-m012.bin")
+    os.makedirs(os.path.dirname(tmp), exist_ok=True)
+    r2 = subprocess.run(["curl", "-sS", "-L", "--max-time", "180", "-o", tmp, "-w", "%{http_code}", pub], capture_output=True, text=True)
+    sha2 = hashlib.sha256(open(tmp, "rb").read()).hexdigest() if os.path.exists(tmp) else None
+    ok = (r.stdout.strip() == "200" and sha == sha2)
+    rec = dict(var2_url=pub, put=r.stdout.strip(), get=r2.stdout.strip(), verified=ok, size=os.path.getsize(local), sha256=sha)
+    if clay:
+        J = _jr()
+        J.setdefault("clay", {})[key] = dict(local=os.path.relpath(local, REPO), **rec)
+        _save_jr(J)
+    else:
+        idx = json.load(open(IDX_PATH))
+        idx["refs"][key].update(rec)
+        json.dump(idx, open(IDX_PATH, "w"), indent=1, ensure_ascii=False)
+    print(key, os.path.basename(local), "PUT", r.stdout.strip(), "GET", r2.stdout.strip(), "verified", ok)
+    return ok
+
+
+def v7ref(note_part):
+    for x in IDX7["frames"]["M0"]:
+        if note_part in x["note"]:
+            return x["var2_url"]
+    raise KeyError(note_part)
+
+
+def myref(key):
+    u = json.load(open(IDX_PATH))["refs"][key].get("var2_url")
+    assert u, f"reference {key} not uploaded"
+    return u
+
+
+# the product close-ups of m0-v7 (wow pass order b, c, e, h, i, j, l, m, n, o), already on var2
+PRODUCTS_M0 = [("cube", "travertine cube"), ("pendant", "pumpkin pendant"), ("jar", "jar"), ("nyoko", "NYOKO"), ("boucle", "boucle cushion"),
+               ("sage", "sage knit"), ("throw", "muslin throw"), ("runner", "sage runner"), ("holders", "travertine holders"), ("bowl", "bowl")]
+SPEC = {
+    "m0-v8": dict(cutouts=["m012-1-sofa", "m012-2-table", "m012-3-armchair"], products=PRODUCTS_M0, clay_key="M0",
+                  refs_note="1-3 cut-outs of the old M0 r2 graded v3 (sofa, coffee table, armchair: look only); 4-13 = m0-v7 product close-ups: cube, pendant, jar, NYOKO, boucle, sage knit, throw, runner, holders, bowl"),
+    "pose-m0p-v8": dict(cutouts=["m0p-1-sofa-wall", "m0p-2-table", "m0p-3-floor-right"], products=[p for p in PRODUCTS_M0 if p[0] != "jar"], clay_key="M0p",
+                        refs_note="1-3 cut-outs of the new M0 (m0-v8 graded v3): sofa with the wall and the cubes, table group, floor and rug on the right; 4-12 = m0-v7 product close-ups (no jar: the sill is out of this pose)"),
+    "pose-m0x-v8": dict(cutouts=["m0x-1-sofa-right-end", "m0x-2-floor-rug", "d1-3-dining-through-opening"], products=[p for p in PRODUCTS_M0 if p[0] in ("cube", "nyoko", "throw")], clay_key="M0x",
+                        refs_note="1-2 cut-outs of the new M0 (sofa right end with throw and lumbar; floor and rug); 3 = cut-out of the D1 v7 master (the dining table under the lantern, the bench, the kitchen run: the view through the opening only); 4-6 = cube, NYOKO, throw"),
+}
+
+
+def prep(jid, attempt=1, attempt_note=None):
+    S = SPEC[jid]
+    frame, kind, clay_file, pan, overscan, room = JOBS[jid]
+    txt = open(os.path.join(REPO, PROMPT[jid]), encoding="utf-8").read()
+    body = [l for l in txt.split("\n") if not l.startswith("#")]
+    while body and body[0].strip() == "":
+        body.pop(0)
+    while body and body[-1].strip() == "":
+        body.pop()
+    prompt = "\n".join(body)
+    assert len(prompt) <= 4000, f"prompt {len(prompt)} > 4000"
+    refs = [myref(k) for k in S["cutouts"]] + [v7ref(n) for _, n in S["products"]]
+    assert all(refs) and len(refs) <= 15
+    J = _jr()
+    clay = J["clay"][S["clay_key"]]
+    assert clay.get("verified"), "clay upload not verified"
+    key = f"v8-m0-1-2-{jid}-20261103-a{attempt}"
+    args = dict(model="gpt-image-2-5", type="image-to-image", quality="sunburst", resolution="2K", aspect_ratio="16:9",
+                image_url=clay["var2_url"], image_refs=refs, prompt=prompt, idempotency_key=key)
+    out = dict(id=jid, frame=frame, recipe="v8", prompt_deviation="lines starting with # stripped; positions already in canvas fractions (no conversion)",
+               prompt_chars=len(prompt), ascii=prompt.isascii(), refs=len(refs), refs_note=S["refs_note"], clay=clay["local"], clay_sha256=clay["sha256"], args=args)
+    json.dump(out, open(os.path.join(HERE, f"job-{jid}.json"), "w"), indent=1, ensure_ascii=False)
+    row = dict(id=jid, frame=frame, kind=kind, room=room, recipe="v8 (docs/render-recipe-nordic-v8-2026-11-03.md)", prompt_file=PROMPT[jid], out_dir=OUT_DIR[jid],
+               model="gpt-image-2-5", quality="sunburst", resolution="2K", aspect_ratio="16:9", idempotency_key=key, attempt=attempt,
+               attempt_note=attempt_note or "first and only attempt (one attempt per prompt; the reserve is for M0 on a scale failure only)", status="prepared",
+               credits_estimated=None, credits=None, date=DATE, pan_participant=pan, lock_threshold_px=(2.0 if pan else 9.6),
+               overscan=(dict(on=True, canvas_px=[4072, 2290], frame_px=[3840, 2160], crop_box_px=[116, 65, 3956, 2225], per_side_fraction_x=0.0302, per_side_fraction_y=0.0301) if overscan else dict(on=False)),
+               clay=clay["local"], clay_var2_url=clay["var2_url"], refs=len(refs), refs_note=S["refs_note"], prompt_chars=len(prompt))
+    prev = next((j for j in J["jobs"] if j["id"] == jid), None)
+    if prev and prev.get("attempts"):
+        row["attempts"] = prev["attempts"]
+    J["jobs"] = [j for j in J["jobs"] if j["id"] != jid] + [row]
+    _save_jr(J)
+    print(json.dumps({k: v for k, v in out.items() if k != "args"}, ensure_ascii=False))
+    return out
+
+
+def fetch(jid, url):
+    from PIL import Image
+    frame, kind, clay_file, pan, overscan, room = JOBS[jid]
+    J = _jr()
+    job = next(j for j in J["jobs"] if j["id"] == jid)
+    out_dir = os.path.join(REPO, OUT_DIR[jid])
+    os.makedirs(os.path.join(out_dir, "raw"), exist_ok=True)
+    os.makedirs(DL, exist_ok=True)
+    ext = os.path.splitext(url.split("?")[0])[1].lower() or ".png"
+    dl = os.path.join(DL, jid + ext)
+    r = subprocess.run(["curl", "-sS", "-L", "--max-time", "240", "-o", dl, "-w", "%{http_code}", url], capture_output=True, text=True)
+    print("GET", r.stdout.strip(), os.path.getsize(dl))
+    raw_copy = os.path.join(out_dir, "raw", jid + ext)
+    open(raw_copy, "wb").write(open(dl, "rb").read())
+    im0 = Image.open(dl).convert("RGB")
+    W0, H0 = im0.size
+    W, H = W0, int(round(W0 * 9 / 16))
+    im = im0.resize((W, H), Image.LANCZOS) if H != H0 else im0
+    norm = os.path.join(out_dir, jid + ".png")
+    im.save(norm)
+    print("normalised", (W0, H0), "->", (W, H))
+    lock = LK.run_frame(jid, render_path=norm, out_path=os.path.join(out_dir, jid + "-lock-v2.json"), overlay_path=os.path.join(out_dir, jid + "-lock-v2.jpg"))
+    stops = None
+    if jid in INHERIT:
+        stops = FR.stops_of(*INHERIT[jid])
+    res = P.process(jid, norm, "-v3", "v2", "auto", "none", out_dir, f"{jid}: M0 1.2.1, grading v3 (Bible targets)", exposure="bible", stops=stops)
+    FR.boxes_overlay(os.path.join(out_dir, jid + "-graded-v3.png"), os.path.join(out_dir, jid + "-boxes-v3.png"), frame, jid, overscan)
+    s, v = lock["summary"], lock["verdict"]
+    job.update(status="done", result_url=url, raw_ext=ext.lstrip("."), returned_size_px=[W0, H0], normalised_px=[W, H],
+               lock_v2=dict(shift_px=s["register_shift_px"], scale_pct=s["register_scale_pct"], band_after=s["worst_band_px_after_register"],
+                            tile_after=s["worst_tile_ecc_px_after_register"], edges_worst_px=s["fixed_edges_worst_px"], ratios=s["fixed_ratios"],
+                            residual_limit=v["thresholds"]["residual_px"], global_pass=v["global_pass"], residual_pass=v["residual_pass"], edges_pass=v["edges_pass"],
+                            **{"pass": v["pass"]}, record=OUT_DIR[jid] + jid + "-lock-v2.json", overlay=OUT_DIR[jid] + jid + "-lock-v2.jpg"),
+               grade_v3=dict(stops=res["grade"]["exposure"]["applied_stops"], inherited=stops is not None, target=res["bible_v3"]["target_L"], measured=res["bible_v3"]["measured_L"],
+                             window_wall=res["bible_v3"].get("window_wall"), window_p99=res["measure_after"]["brightest area (window / door): L p50 / p99 / max"][1],
+                             black=res["measure_after"]["darkest 0.5% patch L [12-15]"], meets_bible=res["bible_v3"]["meets_bible"], checks=res["checks"],
+                             files=res["outputs"], measurements=OUT_DIR[jid] + jid + "-measurements-v3.json"),
+               boxes_overlay=OUT_DIR[jid] + jid + "-boxes-v3.png")
+    if overscan:
+        fx0, fy0, fx1, fy1 = VF.frame_box_px(W, H)
+        job["overscan"].update(output_canvas_px=[W, H], output_frame_box_px=[fx0, fy0, fx1, fy1], output_frame_px=[fx1 - fx0, fy1 - fy0],
+                               files=dict(canvas=OUT_DIR[jid] + jid + "-graded-v3.png", frame=OUT_DIR[jid] + jid + "-frame-v3.png", os6=OUT_DIR[jid] + jid + "-graded-os6-v3.png"))
+    _save_jr(J)
+    print("lock_v2", json.dumps(job["lock_v2"]))
+    print("grade_v3", json.dumps({k: v for k, v in job["grade_v3"].items() if k not in ("checks", "files")}))
+    return job
+
+
+def sheet():
+    from PIL import Image, ImageDraw, ImageFont
+    w = 900
+    th = int(w * 9 / 16)
+    try:
+        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
+        font_h = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 24)
+    except Exception:
+        font = font_h = ImageFont.load_default()
+    J = _jr()
+    job = next(j for j in J["jobs"] if j["id"] == "m0-v8")
+    lk, gr = job["lock_v2"], job["grade_v3"]
+    tiles = [(os.path.join(REPO, "assets/renders/living-room/nordic/v7/m0-v7-r2-graded-v3.png"), "OLD  M0 r2 (house plan 1.1 camera, graded v3): history since V7Q1 b",
+              "sofa 1.20x the clay, lock_v2 FAIL (edges 90 px)"),
+             (os.path.join(REPO, OUT_DIR["m0-v8"], "m0-v8-frame-v3.png"), "NEW  M0 1.2.1 (0.83, 4.64, 1.20), yaw 25, 24 mm, u0 0.47 v0 0.50: m0-v8 graded v3 (16:9 frame)",
+              f"grade v3: corner wall L {gr['measured']} (target {gr['target']}), window p99 {gr['window_p99']}, black {gr['black']}, meets Bible {gr['meets_bible']}"),
+             (os.path.join(REPO, OUT_DIR["m0-v8"], "m0-v8-lock-v2.jpg"), "LOCK  m0-v8 vs the round-5 clay: clay edges in red over the still (lock_v2, G1.4)",
+              f"shift {lk['shift_px']} px, scale {lk['scale_pct']} %, resid band {lk['band_after']} / tile {lk['tile_after']} px (limit {lk['residual_limit']}), edges {lk['edges_worst_px']} px, ratios {lk['ratios']}: {'PASS' if lk['pass'] else 'FAIL'}")]
+    pad, head, cap = 12, 70, 56
+    im = Image.new("RGB", (3 * (w + pad) + pad, head + th + cap + 2 * pad), (246, 245, 242))
+    d = ImageDraw.Draw(im)
+    d.text((pad, 14), "M0 at the new camera (house plan 1.2.1, V7Q1 b), 2026-11-03: old M0 r2 | new M0 (m0-v8) | lock_v2. 2K test, grading v3 (Bible targets, test page only). Not QA'd.", fill=(15, 15, 15), font=font_h)
+    for k, (p, t1, t2) in enumerate(tiles):
+        x = pad + k * (w + pad)
+        t = Image.open(p).convert("RGB")
+        t = t.resize((w, int(round(w * t.size[1] / t.size[0]))), Image.LANCZOS)
+        im.paste(t.crop((0, 0, w, min(th, t.size[1]))), (x, head))
+        d.text((x, head + th + 6), t1[:120], fill=(15, 15, 15), font=font)
+        d.text((x, head + th + 30), t2[:150], fill=(80, 80, 80), font=font)
+    outp = os.path.join(REPO, "assets", "renders", "house-nordic-m0-1-2-sheet-2026-11-03.jpg")
+    im.save(outp, quality=88)
+    print("sheet", outp)
+    return outp
+
+
+if __name__ == "__main__":
+    cmd = sys.argv[1]
+    if cmd == "put":
+        put(sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5], clay="--clay" in sys.argv)
+    elif cmd == "prep":
+        att = int(sys.argv[3]) if len(sys.argv) > 3 else 1
+        prep(sys.argv[2], att, sys.argv[4] if len(sys.argv) > 4 else None)
+    elif cmd == "fetch":
+        fetch(sys.argv[2], sys.argv[3])
+    elif cmd == "sheet":
+        sheet()
+    elif cmd == "winbox":
+        print("M0 1.2 window box, canvas uv:", M0_WIN_12)

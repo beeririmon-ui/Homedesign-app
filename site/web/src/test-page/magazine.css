@@ -252,10 +252,6 @@
   display: inline-flex;
   align-items: center;
 }
-.mag-test-label {
-  font: 400 var(--t-cap) var(--f-text);
-  color: var(--ink-2);
-}
 
 /* ---------- the issue: one section per screen, the stage full-bleed ---------- */
 .mag-issue {
@@ -308,7 +304,13 @@
   position: absolute;
   inset: 0 var(--margin);
   pointer-events: none;
-  background: repeating-linear-gradient(to right, rgba(154, 59, 46, 0.12) 0, rgba(154, 59, 46, 0.12) calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols)), transparent 0, transparent calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols) + var(--gap)));
+  background: repeating-linear-gradient(
+    to right,
+    rgba(154, 59, 46, 0.12) 0,
+    rgba(154, 59, 46, 0.12) calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols)),
+    transparent 0,
+    transparent calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols) + var(--gap))
+  );
 }
 
 /* ---------- the stage: the frame fills the screen; on the phone a 3:5 window of it, the sides by a swipe ---------- */
@@ -496,8 +498,12 @@
 .mag-sharp {
   /* the product and its support, sharp and lifted a quarter stop; the edge feathered (no alpha for the temp frame) */
   filter: brightness(1.08);
-  mask-image: linear-gradient(to right, transparent 0, #000 var(--fx0, 0%), #000 var(--fx1, 100%), transparent 100%), linear-gradient(to bottom, transparent 0, #000 var(--fy0, 0%), #000 var(--fy1, 100%), transparent 100%);
-  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 var(--fx0, 0%), #000 var(--fx1, 100%), transparent 100%), linear-gradient(to bottom, transparent 0, #000 var(--fy0, 0%), #000 var(--fy1, 100%), transparent 100%);
+  mask-image:
+    linear-gradient(to right, transparent 0, #000 var(--fx0, 0%), #000 var(--fx1, 100%), transparent 100%),
+    linear-gradient(to bottom, transparent 0, #000 var(--fy0, 0%), #000 var(--fy1, 100%), transparent 100%);
+  -webkit-mask-image:
+    linear-gradient(to right, transparent 0, #000 var(--fx0, 0%), #000 var(--fx1, 100%), transparent 100%),
+    linear-gradient(to bottom, transparent 0, #000 var(--fy0, 0%), #000 var(--fy1, 100%), transparent 100%);
   mask-composite: intersect;
   -webkit-mask-composite: source-in;
   opacity: 0;

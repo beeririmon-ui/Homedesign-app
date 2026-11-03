@@ -38,7 +38,16 @@ export default defineConfig(({ mode }) => {
           modulePreload: false,
           reportCompressedSize: false,
         }
-      : { outDir: r('dist'), emptyOutDir: true, target: 'es2022', sourcemap: false, reportCompressedSize: true },
+      : {
+          outDir: r('dist'),
+          emptyOutDir: true,
+          target: 'es2022',
+          sourcemap: false,
+          reportCompressedSize: true,
+          // the test page in the magazine language (tools/make-test-page.ts writes test/index.html) is its own entry:
+          // its code is not part of the room pages' first load (tools/check-budget.ts counts the entry index.html loads)
+          rollupOptions: { input: { main: r('index.html'), test: r('test/index.html') } },
+        },
     plugins: artifact ? [viteSingleFile({ removeViteModuleLoader: true })] : [],
   };
 });

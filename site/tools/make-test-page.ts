@@ -15,14 +15,24 @@
  *                                                                  with the LQIPs and the credits inlined (phone-first:
  *                                                                  the cover is there before any script runs)
  */
-import { readFileSync, writeFileSync, mkdirSync, existsSync, copyFileSync, readdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, existsSync, copyFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import sharp from 'sharp';
 import { formatIls } from '@hd/shared/money';
 import type { PublicCatalog, PublicProduct, SupplierImageManifest } from '@hd/shared';
 import { GENERATED, MEDIA_OUT, repoPath, sitePath } from './lib/paths';
 
-type Frame = { src: string; u0: number; v0: number; mobile_window_u: number; qa: boolean; note_he: string; boxes?: string; room?: string; box_room_key?: string };
+type Frame = {
+  src: string;
+  u0: number;
+  v0: number;
+  mobile_window_u: number;
+  qa: boolean;
+  note_he: string;
+  boxes?: string;
+  room?: string;
+  box_room_key?: string;
+};
 type Source = {
   style: string;
   issue_he: string;
@@ -43,7 +53,6 @@ const OUT = join(MEDIA_OUT, 'test');
 mkdirSync(OUT, { recursive: true });
 const WIDTHS = [1280, 1920, 2736];
 const PHONE_WIDTHS = [780, 1170];
-const WINDOW_W = 0.3375; // the 3:5 window of a 16:9 frame (skeleton spec, "mobile")
 
 const catalogPath = sitePath(src.catalog);
 if (!existsSync(catalogPath)) {
@@ -57,9 +66,17 @@ async function lqip(img: sharp.Sharp, w: number, h: number): Promise<string> {
   const buf = await img.clone().resize(w, h, { fit: 'fill' }).webp({ quality: 40 }).toBuffer();
   return `data:image/webp;base64,${buf.toString('base64')}`;
 }
-async function encode(img: sharp.Sharp, rel: string, width: number): Promise<void> {
+async function encode(img: sharp.Sharp, rel: string, width: number, srcMtimeMs: number): Promise<void> {
   const base = join(OUT, rel);
   mkdirSync(join(base, '..'), { recursive: true });
+  // already encoded from this very source: the page alone is rebuilt (the encoding is the slow part)
+  if (
+    existsSync(`${base}.avif`) &&
+    existsSync(`${base}.webp`) &&
+    statSync(`${base}.avif`).mtimeMs > srcMtimeMs &&
+    statSync(`${base}.webp`).mtimeMs > srcMtimeMs
+  )
+    return;
   const r = img.clone().resize({ width, withoutEnlargement: true });
   await r.clone().avif({ quality: 52, effort: 4 }).toFile(`${base}.avif`);
   await r.clone().webp({ quality: 74, effort: 4 }).toFile(`${base}.webp`);
@@ -120,19 +137,28 @@ function hotspots(frame: Frame): Hotspot[] {
   return out.sort((a, b) => a.u - b.u);
 }
 
-const resolved: Record<string, unknown> = { style: src.style, issue_he: src.issue_he, label_he: src.label_he, rooms: src.rooms, styles: src.styles, focus_phone_closeup: src.focus_phone_closeup, frames: {} };
+const resolved: Record<string, unknown> = {
+  style: src.style,
+  issue_he: src.issue_he,
+  label_he: src.label_he,
+  rooms: src.rooms,
+  styles: src.styles,
+  focus_phone_closeup: src.focus_phone_closeup,
+  frames: {},
+};
 const framesOut = resolved.frames as Record<string, unknown>;
 for (const [id, f] of Object.entries(src.frames)) {
   const img = sharp(repoPath(f.src));
+  const srcMtimeMs = statSync(repoPath(f.src)).mtimeMs;
   const meta = await img.metadata();
   const W = meta.width!;
   const H = meta.height!;
-  for (const w of WIDTHS) await encode(img, `${id}/${w}`, w);
+  for (const w of WIDTHS) await encode(img, `${id}/${w}`, w, srcMtimeMs);
   // the phone window: full height, 3:5, centred on mobile_window_u (clamped to the frame)
   const ww = Math.round(H * 0.6);
   const left = Math.round(Math.min(W - ww, Math.max(0, f.mobile_window_u * W - ww / 2)));
   const phone = img.clone().extract({ left, top: 0, width: ww, height: H });
-  for (const w of PHONE_WIDTHS) await encode(phone, `${id}/m${w}`, w);
+  for (const w of PHONE_WIDTHS) await encode(phone, `${id}/m${w}`, w, srcMtimeMs);
   framesOut[id] = {
     ...f,
     width: W,
@@ -145,7 +171,9 @@ for (const [id, f] of Object.entries(src.frames)) {
     srcset_phone: PHONE_WIDTHS.map((w) => `/media/test/${id}/m${w}`),
     hotspots: hotspots(f),
   };
-  console.log(`${id}: ${W}×${H}, window u ${(left / W).toFixed(3)}–${((left + ww) / W).toFixed(3)}, ${(framesOut[id] as { hotspots: unknown[] }).hotspots.length} hotspots`);
+  console.log(
+    `${id}: ${W}×${H}, window u ${(left / W).toFixed(3)}–${((left + ww) / W).toFixed(3)}, ${(framesOut[id] as { hotspots: unknown[] }).hotspots.length} hotspots`,
+  );
 }
 
 // the P-D pan clip, as exported by motion-agent (export_seq.py); copied, never re-encoded
@@ -166,65 +194,98 @@ for (const variant of ['1920', 'mobile']) {
   const v = panManifest.variants[variant]!;
   panOut[variant] = { w: v.w, h: v.h, avif: files.filter((f) => f.endsWith('.avif')).length, webp: files.filter((f) => f.endsWith('.webp')).length };
 }
-resolved.pan = { ...src.pan, src: '/media/test/p-d', frames: panManifest.frames, fps: panManifest.fps, play_s: panManifest.play_s, easing: panManifest.easing, variants: panOut };
-console.log(`P-D: ${panManifest.frames} frames, ${panManifest.play_s} s, variants ${Object.entries(panOut).map(([k, v]) => `${k} ${v.avif} avif / ${v.webp} webp`).join(', ')}`);
+resolved.pan = {
+  ...src.pan,
+  src: '/media/test/p-d',
+  frames: panManifest.frames,
+  fps: panManifest.fps,
+  play_s: panManifest.play_s,
+  easing: panManifest.easing,
+  variants: panOut,
+};
+console.log(
+  `P-D: ${panManifest.frames} frames, ${panManifest.play_s} s, variants ${Object.entries(panOut)
+    .map(([k, v]) => `${k} ${v.avif} avif / ${v.webp} webp`)
+    .join(', ')}`,
+);
 
 mkdirSync(GENERATED, { recursive: true });
 writeFileSync(join(GENERATED, 'test-page.nordic.json'), JSON.stringify(resolved, null, 1));
 
 // ---------- the page: the template with the data the first paint needs ----------
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-type FrameOut = Frame & { lqip: string; lqip_phone: string; srcset: string[]; srcset_phone: string[]; aspect: number; window: { u0: number; u1: number }; hotspots: Hotspot[]; width: number; height: number };
+type FrameOut = Frame & {
+  lqip: string;
+  lqip_phone: string;
+  srcset: string[];
+  srcset_phone: string[];
+  aspect: number;
+  window: { u0: number; u1: number };
+  hotspots: Hotspot[];
+  width: number;
+  height: number;
+};
 const F = framesOut as Record<string, FrameOut>;
-const picture = (id: string, alt: string, eager: boolean) => {
+/**
+ * The cover (phoneCrop) shows the 3:5 window of the frame on the phone (a crop, the Bible's mobile window); a spread
+ * keeps the whole frame at full height in a horizontal scroller, so it gets the full-frame sources at every width and
+ * `sizes` says how wide the frame is there (its aspect times the viewport height).
+ */
+const picture = (id: string, alt: string, eager: boolean, phoneCrop: boolean) => {
   const f = F[id]!;
   const set = (list: string[], ext: 'avif' | 'webp', widths: number[]) => list.map((s, i) => `${s}.${ext} ${widths[i]}w`).join(', ');
+  const sizes = phoneCrop ? '100vw' : `(max-width: 719px) ${Math.round(f.aspect * 100)}vh, 100vw`;
+  const phoneSources = phoneCrop
+    ? `  <source media="(max-width: 719px)" type="image/avif" srcset="${set(f.srcset_phone, 'avif', PHONE_WIDTHS)}" sizes="60vh" />
+  <source media="(max-width: 719px)" type="image/webp" srcset="${set(f.srcset_phone, 'webp', PHONE_WIDTHS)}" sizes="60vh" />
+`
+    : '';
   return `<picture class="mag-pic" data-frame="${id}">
-  <source media="(max-width: 719px)" type="image/avif" srcset="${set(f.srcset_phone, 'avif', PHONE_WIDTHS)}" sizes="60svh" />
-  <source media="(max-width: 719px)" type="image/webp" srcset="${set(f.srcset_phone, 'webp', PHONE_WIDTHS)}" sizes="60svh" />
-  <source type="image/avif" srcset="${set(f.srcset, 'avif', WIDTHS)}" sizes="100vw" />
-  <img src="${f.srcset[1]}.webp" srcset="${set(f.srcset, 'webp', WIDTHS)}" sizes="100vw" alt="${esc(alt)}" width="${f.width}" height="${f.height}" decoding="async" ${eager ? 'fetchpriority="high"' : 'loading="lazy"'} style="object-position: ${(f.u0 * 100).toFixed(1)}% ${(f.v0 * 100).toFixed(1)}%" />
+${phoneSources}  <source type="image/avif" srcset="${set(f.srcset, 'avif', WIDTHS)}" sizes="${sizes}" />
+  <img src="${f.srcset[1]}.webp" srcset="${set(f.srcset, 'webp', WIDTHS)}" sizes="${sizes}" alt="${esc(alt)}" width="${f.width}" height="${f.height}" decoding="async" ${eager ? 'fetchpriority="high"' : 'loading="lazy"'} style="object-position: ${(f.u0 * 100).toFixed(1)}% ${(f.v0 * 100).toFixed(1)}%" />
 </picture>`;
 };
-const lqipImg = (id: string) => {
+const lqipImg = (id: string, phoneCrop: boolean) => {
   const f = F[id]!;
-  return `<img class="mag-lqip" src="${f.lqip}" alt="" aria-hidden="true" width="${f.width}" height="${f.height}" style="object-position: ${(f.u0 * 100).toFixed(1)}% ${(f.v0 * 100).toFixed(1)}%" /><img class="mag-lqip mag-lqip-phone" src="${f.lqip_phone}" alt="" aria-hidden="true" width="24" height="40" />`;
+  const phone = phoneCrop ? `<img class="mag-lqip mag-lqip-phone" src="${f.lqip_phone}" alt="" aria-hidden="true" width="24" height="40" />` : '';
+  return `<img class="mag-lqip" src="${f.lqip}" alt="" aria-hidden="true" width="${f.width}" height="${f.height}" style="object-position: ${(f.u0 * 100).toFixed(1)}% ${(f.v0 * 100).toFixed(1)}%" />${phone}`;
 };
 const marks = (id: string) =>
-  F[id]!.hotspots
-    .map((h) => {
-      const c = h.credit;
-      const label = c ? `${h.name_he}: ${c.name_he}. ${c.detail_he}${c.unavailable ? '. המלאי אינו זמין כעת' : ''}` : `${h.name_he}: ממתינה למוצר`;
-      return `<button type="button" class="mag-mark" data-slot="${h.slot}" data-u="${h.u}" data-v="${h.v}" data-box="${h.box.join(',')}" style="--u: ${h.u}; --v: ${h.v}" aria-label="${esc(label)}. פתיחת הווריאציות"><span class="mag-dot" aria-hidden="true"></span></button>`;
-    })
-    .join('\n');
+  F[id]!.hotspots.map((h) => {
+    const c = h.credit;
+    const label = c ? `${h.name_he}: ${c.name_he}. ${c.detail_he}${c.unavailable ? '. המלאי אינו זמין כעת' : ''}` : `${h.name_he}: ממתינה למוצר`;
+    return `<button type="button" class="mag-mark" data-slot="${h.slot}" data-u="${h.u}" data-v="${h.v}" data-box="${h.box.join(',')}" style="--u: ${h.u}; --v: ${h.v}" aria-label="${esc(label)}. פתיחת הווריאציות"><span class="mag-dot" aria-hidden="true"></span></button>`;
+  }).join('\n');
 const roomsList = src.rooms
   .map((r) => {
     const live = r.frame && F[r.frame];
     return `<li class="mag-toc-row${live ? '' : ' is-next'}">${live ? `<a class="mag-toc-link" href="#room-${r.id}" data-room="${r.id}">` : '<span class="mag-toc-link">'}<span class="mag-toc-n num">${r.n}</span><span class="mag-toc-name">${esc(r.name_he)}</span><span class="mag-toc-cap">${live ? 'נורדי' : 'בגיליונות הבאים'}</span>${live ? '</a>' : '</span>'}</li>`;
   })
   .join('\n');
-const stylesLine = src.styles.map((s) => `<span class="mag-style${s.available ? ' is-on' : ''}">${esc(s.name_he)}${s.available ? '' : ' <span class="mag-cap">(בגיליונות הבאים)</span>'}</span>`).join('<span class="mag-sep" aria-hidden="true"> · </span>');
+const stylesLine = src.styles
+  .map(
+    (s) =>
+      `<span class="mag-style${s.available ? ' is-on' : ''}">${esc(s.name_he)}${s.available ? '' : ' <span class="mag-cap">(בגיליונות הבאים)</span>'}</span>`,
+  )
+  .join('<span class="mag-sep" aria-hidden="true"> · </span>');
 const creditsList = (id: string) =>
-  F[id]!.hotspots
-    .map((h, i) => {
-      const c = h.credit;
-      return `<li class="mag-credit" data-slot="${h.slot}"><span class="mag-credit-n num">${String(i + 1).padStart(2, '0')}</span><span class="mag-credit-body"><span class="mag-credit-name">${esc(c ? c.name_he : h.name_he)}</span><span class="mag-credit-detail">${esc(c ? c.detail_he : 'ממתינה למוצר')}${c?.unavailable ? ' · המלאי אינו זמין כעת' : ''}</span></span></li>`;
-    })
-    .join('\n');
+  F[id]!.hotspots.map((h, i) => {
+    const c = h.credit;
+    return `<li class="mag-credit" data-slot="${h.slot}"><span class="mag-credit-n num">${String(i + 1).padStart(2, '0')}</span><span class="mag-credit-body"><span class="mag-credit-name">${esc(c ? c.name_he : h.name_he)}</span><span class="mag-credit-detail">${esc(c ? c.detail_he : 'ממתינה למוצר')}${c?.unavailable ? ' · המלאי אינו זמין כעת' : ''}</span></span></li>`;
+  }).join('\n');
 
 let html = readFileSync(sitePath('tools/test-page/index.template.html'), 'utf8');
 const fill: Record<string, string> = {
   LABEL: esc(src.label_he),
   ISSUE: esc(src.issue_he),
-  COVER_PICTURE: picture('H0', 'הכניסה: המבט אל הסלון המואר מעבר לפתח, הקונסולה מימין', true),
-  COVER_LQIP: lqipImg('H0'),
-  M0_PICTURE: picture('M0', 'הסלון הנורדי: ספה בשיבולת שועל, שלישייה מעל הספה, אגרטל על אדן החלון', false),
-  M0_LQIP: lqipImg('M0'),
+  COVER_PICTURE: picture('H0', 'הכניסה: המבט אל הסלון המואר מעבר לפתח, הקונסולה מימין', true, true),
+  COVER_LQIP: lqipImg('H0', true),
+  M0_PICTURE: picture('M0', 'הסלון הנורדי: ספה בשיבולת שועל, שלישייה מעל הספה, אגרטל על אדן החלון', false, false),
+  M0_LQIP: lqipImg('M0', false),
   M0_MARKS: marks('M0'),
   M0_CREDITS: creditsList('M0'),
-  D1_PICTURE: picture('D1', 'המטבח ופינת האוכל: השולחן מתחת לתלויה, קו המטבח ברקע', false),
-  D1_LQIP: lqipImg('D1'),
+  D1_PICTURE: picture('D1', 'המטבח ופינת האוכל: השולחן מתחת לתלויה, קו המטבח ברקע', false, false),
+  D1_LQIP: lqipImg('D1', false),
   D1_MARKS: marks('D1'),
   D1_CREDITS: creditsList('D1'),
   ROOMS: roomsList,

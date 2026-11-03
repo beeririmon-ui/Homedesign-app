@@ -36,8 +36,14 @@ const room = catalog.rooms.find((r) => r.id === 'living-room')!;
 
 const assets = readdirSync(join(DIST, 'assets'));
 const gz = (f: string) => gzipSync(readFileSync(f)).length;
-const js = assets.filter((f) => f.endsWith('.js')).map((f) => gz(join(DIST, 'assets', f)));
-const css = assets.filter((f) => f.endsWith('.css')).map((f) => gz(join(DIST, 'assets', f)));
+// the entry: the scripts and stylesheets the room page's HTML references (its own and the chunks it preloads); another
+// entry of the build (the test page, /test/) has its own files and is reported, not budgeted here
+const entryHtml = readFileSync(join(DIST, 'index.html'), 'utf8');
+const referenced = new Set([...entryHtml.matchAll(/\/assets\/([^"' ]+\.(?:js|css))/g)].map((m) => m[1]!));
+const js = assets.filter((f) => f.endsWith('.js') && referenced.has(f)).map((f) => gz(join(DIST, 'assets', f)));
+const css = assets.filter((f) => f.endsWith('.css') && referenced.has(f)).map((f) => gz(join(DIST, 'assets', f)));
+const otherJs = assets.filter((f) => f.endsWith('.js') && !referenced.has(f)).map((f) => gz(join(DIST, 'assets', f)));
+const otherCss = assets.filter((f) => f.endsWith('.css') && !referenced.has(f)).map((f) => gz(join(DIST, 'assets', f)));
 // one woff2 per weight for the Hebrew subset and one for Latin (unicode-range: a Hebrew page needs both)
 const fonts = assets.filter((f) => /-(hebrew|latin)-\d{3}-normal-.*\.woff2$/.test(f)).reduce((s, f) => s + statSync(join(DIST, 'assets', f)).size, 0);
 const html = gz(join(DIST, 'rooms/living-room/index.html'));
@@ -77,8 +83,9 @@ const sum = (a: number[]) => a.reduce((s, x) => s + x, 0);
 const total = html + sum(js) + sum(css) + fonts + layers;
 const kb = (n: number) => `${(n / 1024).toFixed(1)} KB`;
 const rows: [string, number, number | null][] = [
-  ['JS (gzip)', sum(js), BUDGET.jsGz],
-  ['CSS (gzip)', sum(css), BUDGET.cssGz],
+  ['JS (gzip), the room page entry', sum(js), BUDGET.jsGz],
+  ['CSS (gzip), the room page entry', sum(css), BUDGET.cssGz],
+  [`other entries (the test page): JS ${otherJs.length} files, CSS ${otherCss.length}`, sum(otherJs) + sum(otherCss), null],
   ['fonts (woff2, he+latin)', fonts, null],
   [`room media (${count} files, shell @${posterW}, layers @${res})`, layers, null],
   ['first load, living room, mobile', total, BUDGET.firstLoad],

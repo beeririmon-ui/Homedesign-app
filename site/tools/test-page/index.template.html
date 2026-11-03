@@ -15,20 +15,24 @@
     <header class="mag-head" id="mag-head" data-on="stage">
       <a class="mag-brand" href="#cover" aria-label="{{ISSUE}}, לשער">{{ISSUE}}</a>
       <p class="mag-run" id="mag-run" aria-live="polite"></p>
-      <nav class="mag-nav" aria-label="ראשי"><a href="#toc">תוכן</a><span class="mag-test-label" title="{{LABEL}}">בדיקה</span></nav>
+      <nav class="mag-nav" aria-label="ראשי"><a href="#toc">תוכן</a></nav>
     </header>
     <main class="mag-issue" id="mag-issue">
       <!-- 1. the cover: H0, the brand placeholder, the designed loading (art direction §8) -->
       <section class="mag-cover" id="cover" data-head="" aria-labelledby="cover-title">
         <div class="mag-stage mag-stage-cover" data-frame="H0">
-          <div class="mag-frame mag-frame-cover">
-            {{COVER_LQIP}}
-            {{COVER_PICTURE}}
-          </div>
+          <div class="mag-frame mag-frame-cover">{{COVER_LQIP}} {{COVER_PICTURE}}</div>
         </div>
         <div class="mag-cover-text">
-          <h1 id="cover-title" class="mag-display mag-cover-title"><span class="mag-cover-line">בית אחד.</span> <span class="mag-cover-line">כל פריט בו אפשר לקנות.</span></h1>
-          <p class="mag-invite"><button type="button" class="mag-invite-btn" id="mag-enter"><span class="mag-invite-phone">החליקו להיכנס</span><span class="mag-invite-desk">גלגלו או לחצו Enter להיכנס</span><span class="mag-invite-rule" aria-hidden="true"></span></button></p>
+          <h1 id="cover-title" class="mag-display mag-cover-title">
+            <span class="mag-cover-line">בית אחד.</span> <span class="mag-cover-line">כל פריט בו אפשר לקנות.</span>
+          </h1>
+          <p class="mag-invite">
+            <button type="button" class="mag-invite-btn" id="mag-enter">
+              <span class="mag-invite-phone">החליקו להיכנס</span><span class="mag-invite-desk">גלגלו או לחצו Enter להיכנס</span
+              ><span class="mag-invite-rule" aria-hidden="true"></span>
+            </button>
+          </p>
         </div>
         <p class="mag-cap mag-cover-note" aria-hidden="true">{{LABEL}} · {{H0_NOTE}}</p>
       </section>
@@ -46,12 +50,17 @@
       </section>
 
       <!-- 3. the living-room spread: a full-bleed frame, a clean room at rest, marks, focus mode -->
-      <section class="mag-spread" id="room-living-room" data-head="02 · הסלון · נורדי" data-room="living-room" aria-label="הסלון הנורדי: ספה בשיבולת שועל מול חלון צפוני">
+      <section
+        class="mag-spread"
+        id="room-living-room"
+        data-head="02 · הסלון · נורדי"
+        data-room="living-room"
+        aria-label="הסלון הנורדי: ספה בשיבולת שועל מול חלון צפוני"
+      >
         <div class="mag-stage" data-frame="M0" data-marks="off" data-phone-closeup="cushions">
           <div class="mag-scroller">
             <div class="mag-frame">
-              {{M0_LQIP}}
-              {{M0_PICTURE}}
+              {{M0_LQIP}} {{M0_PICTURE}}
               <div class="mag-outline" aria-hidden="true"></div>
               {{M0_MARKS}}
             </div>
@@ -68,7 +77,11 @@
         <div class="mag-grid">
           <p class="mag-run-head mag-col-main">02 · הסלון · נורדי</p>
           <h2 id="story-living-title" class="mag-h2 mag-col-main">הסלון</h2>
-          <p class="mag-lead mag-col-main">שלוש אחר הצהריים באמצע החורף. האור מגיע מחלון צפוני, רך ואחיד, ונח על הקיר שמעל הספה. הקירות בלבן חם, הרצפה אלון מולבן, והספה בשיבולת שועל. מעט חפצים, וכל אחד נבחר בכוונה: אגרטל על האדן, שלישייה מעל הספה, סל ליד מנורת הרגל. כל פריט בחדר הוא מוצר שאפשר לקנות. המילוי, ענפים, נרות ועיתונים, מראה איך משתמשים במוצר ולא נמכר.</p>
+          <p class="mag-lead mag-col-main">
+            שלוש אחר הצהריים באמצע החורף. האור מגיע מחלון צפוני, רך ואחיד, ונח על הקיר שמעל הספה. הקירות בלבן חם, הרצפה אלון מולבן, והספה בשיבולת שועל. מעט
+            חפצים, וכל אחד נבחר בכוונה: אגרטל על האדן, שלישייה מעל הספה, סל ליד מנורת הרגל. כל פריט בחדר הוא מוצר שאפשר לקנות. המילוי, ענפים, נרות ועיתונים,
+            מראה איך משתמשים במוצר ולא נמכר.
+          </p>
           <h3 class="mag-h3 mag-col-main">מה יש בחדר</h3>
           <ol class="mag-credits mag-col-main">
             {{M0_CREDITS}}
@@ -86,20 +99,31 @@
               <label for="st-email">אימייל</label>
               <input id="st-email" type="email" inputmode="email" autocomplete="email" placeholder="שם@דוגמה.co.il" aria-describedby="st-email-err" />
               <p id="st-email-err" class="mag-field-error" hidden>⚠ כתובת האימייל לא תקינה.</p>
-              <div class="mag-row"><button type="submit" class="mag-btn mag-btn-secondary">בדיקה</button><button type="button" class="mag-btn mag-btn-secondary" id="st-loading">טעינה לדוגמה</button></div>
+              <div class="mag-row">
+                <button type="submit" class="mag-btn mag-btn-secondary">בדיקה</button
+                ><button type="button" class="mag-btn mag-btn-secondary" id="st-loading">טעינה לדוגמה</button>
+              </div>
             </form>
-            <p class="mag-unavailable"><span class="mag-credit-name">המלאי אינו זמין כעת</span><span class="mag-credit-detail">במקום כפתור מושבת: כיתוב שמסביר, ופעולה חלופית. <a class="mag-link" href="#toc">עדכנו אותי כשחוזר</a></span></p>
+            <p class="mag-unavailable">
+              <span class="mag-credit-name">המלאי אינו זמין כעת</span
+              ><span class="mag-credit-detail">במקום כפתור מושבת: כיתוב שמסביר, ופעולה חלופית. <a class="mag-link" href="#toc">עדכנו אותי כשחוזר</a></span>
+            </p>
           </div>
         </div>
       </section>
 
       <!-- 4. one more spread: the dining room D1; the walk from the living room is a paper transition (no clip exists) -->
-      <section class="mag-spread" id="room-dining-room" data-head="03 · המטבח ופינת האוכל · נורדי" data-room="dining-room" aria-label="המטבח ופינת האוכל: השולחן מתחת לתלויה, קו המטבח ברקע">
+      <section
+        class="mag-spread"
+        id="room-dining-room"
+        data-head="03 · המטבח ופינת האוכל · נורדי"
+        data-room="dining-room"
+        aria-label="המטבח ופינת האוכל: השולחן מתחת לתלויה, קו המטבח ברקע"
+      >
         <div class="mag-stage" data-frame="D1" data-marks="off">
           <div class="mag-scroller">
             <div class="mag-frame">
-              {{D1_LQIP}}
-              {{D1_PICTURE}}
+              {{D1_LQIP}} {{D1_PICTURE}}
               <div class="mag-outline" aria-hidden="true"></div>
               {{D1_MARKS}}
             </div>
@@ -115,10 +139,16 @@
         <div class="mag-grid">
           <p class="mag-run-head mag-col-main">03 · המטבח ופינת האוכל · נורדי</p>
           <h2 id="story-dining-title" class="mag-h2 mag-col-main">המטבח ופינת האוכל</h2>
-          <p class="mag-lead mag-col-main">השולחן עומד מתחת לתלויה הגדולה בשליש השמאלי, וקו המטבח ממלא את הרקע. מכאן המצלמה מסתובבת 35 מעלות, במקום, אל המכסה המטויח מעל הכיריים ואל הנישה המוארת של הקפה.</p>
+          <p class="mag-lead mag-col-main">
+            השולחן עומד מתחת לתלויה הגדולה בשליש השמאלי, וקו המטבח ממלא את הרקע. מכאן המצלמה מסתובבת 35 מעלות, במקום, אל המכסה המטויח מעל הכיריים ואל הנישה
+            המוארת של הקפה.
+          </p>
           <h3 class="mag-h3 mag-col-main">ה-pan בתוך החדר: D1 ← D2</h3>
           <div class="mag-pan mag-col-main" id="mag-pan">
-            <div class="mag-pan-stage"><canvas class="mag-pan-canvas" aria-label="ה-pan מפינת האוכל אל המטבח, 35 מעלות"></canvas><p class="mag-pan-progress" aria-hidden="true"><span></span></p></div>
+            <div class="mag-pan-stage">
+              <canvas class="mag-pan-canvas" aria-label="ה-pan מפינת האוכל אל המטבח, 35 מעלות"></canvas>
+              <p class="mag-pan-progress" aria-hidden="true"><span></span></p>
+            </div>
             <div class="mag-row mag-pan-ui">
               <button type="button" class="mag-btn mag-btn-primary" id="mag-pan-play">נגינה</button>
               <button type="button" class="mag-btn mag-btn-secondary" id="mag-pan-back" disabled aria-disabled="true">חזרה</button>
@@ -142,6 +172,8 @@
     </main>
     <div class="mag-veil" id="mag-veil" aria-hidden="true"></div>
     <div class="mag-live" id="mag-live" aria-live="polite" aria-atomic="true"></div>
-    <script type="application/json" id="mag-data">{{DATA}}</script>
+    <script type="application/json" id="mag-data">
+      {{DATA}}
+    </script>
   </body>
 </html>
