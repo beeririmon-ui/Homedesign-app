@@ -35,8 +35,11 @@ def grab(name):
         return None
 
 
-CATEGORY = grab("CATEGORY") or {}
-DENSITY_MIN = grab("DENSITY_MIN") or {}
+# CATEGORY is filled by loops in framing_r2.py (lines after "CATEGORY = {}" up to "CATS4 = ["): run that slice only
+_i, _j = src.find("\nCATEGORY = {}"), src.find("\nCATS4 = [")
+_ns = {}
+exec(src[_i:_j], _ns)  # noqa: S102 (studio code, a literal-only slice)
+CATEGORY = _ns["CATEGORY"]
 CATS4 = ["textile", "lighting", "ceramics/tableware", "storage/function"]
 MIN = {"M0": 14, "D1": 14, "D2": 14, "MB0": 14, "H0": 11, "W0": 11, "K-boy": 11, "K-girl": 11, "B1": 11, "B2": 11, "C0": 5}
 ROOM_PREFIX = {"M0": "living/", "D1": "kitchen-dining/", "D2": "kitchen-dining/", "H0": "hall/", "C0": "corridor/", "MB0": "master/",
@@ -64,10 +67,12 @@ for f in C.MASTERS:
         slot = nm.split("/", 1)[1]
         area = b["px"] / frame_px
         vis = iv.get(nm, {}).get("visible_pct")
-        ok = (vis is not None and vis >= 50.0) and area >= 0.005
-        rows.append(dict(slot=slot, category=CATEGORY.get(slot, "other"), area_pct=round(100 * area, 2), visible_pct=vis, stand_in=nm in STAND_IN,
+        vis_ok = True if vis is None else vis >= 50.0          # round 4 ray-cast only part of the boxes: None = assumed visible (eye check)
+        ok = vis_ok and area >= 0.005
+        rows.append(dict(slot=slot, category=CATEGORY.get(slot, "other"), area_pct=round(100 * area, 2), visible_pct=vis,
+                         visibility_assumed=vis is None, stand_in=nm in STAND_IN,
                          counted=bool(ok and nm not in STAND_IN), counted_if_stand_in_sold=bool(ok),
-                         why_not=None if ok else ("visible < 50 % or not ray-cast" if not (vis is not None and vis >= 50.0) else "area < 0.5 %")))
+                         why_not=None if ok else ("visible < 50 %" if not vis_ok else "area < 0.5 %")))
     fixed = []
     for nm in FIXED_PRODUCT[f]:
         b = sc.get("boxes", {}).get(nm)
@@ -77,8 +82,8 @@ for f in C.MASTERS:
             continue
         area = b["px"] / frame_px
         vis = iv.get(nm, {}).get("visible_pct")
-        ok = (vis is not None and vis >= 50.0) and area >= 0.005
-        fixed.append(dict(name=nm, area_pct=round(100 * area, 2), visible_pct=vis, counted=bool(ok)))
+        ok = (True if vis is None else vis >= 50.0) and area >= 0.005
+        fixed.append(dict(name=nm, area_pct=round(100 * area, 2), visible_pct=vis, visibility_assumed=vis is None, counted=bool(ok)))
     n_prod = sum(r["counted"] for r in rows)
     n_fixed = sum(x["counted"] for x in fixed)
     n_sold_standin = sum(r["counted_if_stand_in_sold"] for r in rows)

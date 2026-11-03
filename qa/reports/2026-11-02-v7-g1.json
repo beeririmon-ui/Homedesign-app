@@ -1,0 +1,6489 @@
+{
+ "report": "qa/reports/2026-11-02-v7-g1.md",
+ "by": "qa-agent",
+ "date": "2026-11-02",
+ "gate": "G1 (docs/ops/quality-gates-2026-11-02.md) on the Nordic v7 test set",
+ "tools": "site/tools/transitions/pan_reproject.py register / check; qa/reports/2026-11-02-v7-g1/tools/*.py (QA); eye at 1600 px and 100 %",
+ "thresholds_note": "binding = the principle is in a binding document; the numbers marked proposal are from the gates document (C3: 0.5 % per frame, 2 px per band in a pan)",
+ "frames": [
+  {
+   "frame": "M0",
+   "kind": "master",
+   "base": null,
+   "kept_file": "assets/renders/living-room/nordic/v7/m0-v7-r2-graded.png",
+   "criteria": [
+    {
+     "id": "G1.4",
+     "value": {
+      "register_shift_px": [
+       -37.14,
+       -35.96
+      ],
+      "register_scale": [
+       1.03806,
+       1.07044
+      ],
+      "scale_dev_pct": 7.04,
+      "worst_tile_px_after_register": 10.07,
+      "tiles_counted": 8,
+      "check_worst_band_px_reliable": 83.62,
+      "check_bands_reliable": 1
+     },
+     "threshold": "global shift <= 9.6 px (0.5 % of 1920) and scale within 0.5 %; residual per tile <= 2.0 px (pan still)",
+     "pass": false,
+     "binding": true,
+     "note": "pan_reproject.py register (ECC affine) + QA tile ECC; check's phase correlation only where response >= 0.05"
+    },
+    {
+     "id": "G1.3",
+     "value": {
+      "fixed_edges_worst_px": 90,
+      "width_ratios": {
+       "sofa (fixed-product)": 1.204,
+       "coffee table (fixed-product)": 1.1626,
+       "armchair (fixed-product)": 1.2901
+      },
+      "eye": [
+       "sofa 1.20x the clay (edges 507/848 vs 538/815 at 1920: -47 / +64 px)",
+       "armchair 1.29x (left edge -90 px)",
+       "coffee table 1.16x"
+      ]
+     },
+     "threshold": "every clear edge of a fixed piece within +-19 px (+-0.01 of 1920) of the clay; products inside their box +-15 % (eye)",
+     "pass": false,
+     "binding": false,
+     "note": "edges with clay and render strength >= 4 only; product scale by eye on the fidelity sheet (no tool, P8)"
+    },
+    {
+     "id": "G1.7",
+     "value": {
+      "reference_uv": [
+       0.467,
+       0.385
+      ],
+      "graded_HSL": [
+       36.7,
+       21.0,
+       79.6
+      ],
+      "raw_HSL": [
+       31.1,
+       18.1,
+       72.1
+      ],
+      "stops_needed_from_raw": 0.75,
+      "agent_needed_stops": 0.785,
+      "agent_applied": 0.2,
+      "agent_flag": "DARK: needs more than +0.2 stop, not lifted further"
+     },
+     "threshold": "reference wall L 92-95 (M0: Bible corner; others: G1.8 proposal, BIB1 open); post lift <= +0.2 stop",
+     "pass": false,
+     "binding": true,
+     "note": "M0 points: corner, behind the sofa, right edge in light-M0.json wall_patches"
+    },
+    {
+     "id": "G1.7b",
+     "value": {
+      "bible_corner_0.467_0.385": [
+       36.7,
+       21.0,
+       79.6
+      ],
+      "bible_behind_sofa_0.69_0.22": [
+       34.9,
+       19.2,
+       80.3
+      ],
+      "bible_right_edge_0.97_0.31": [
+       32.6,
+       18.6,
+       73.2
+      ],
+      "bible_corner (0.467,0.385) [92-95; 1.4: 90-94]": [
+       36.7,
+       21.0,
+       79.6
+      ],
+      "bible_behind_sofa (0.69,0.22) [88-91]": [
+       34.9,
+       19.2,
+       80.3
+      ],
+      "bible_right_edge (0.97,0.31) [82-86]": [
+       32.6,
+       18.6,
+       73.2
+      ]
+     },
+     "threshold": "corner 92-95, behind sofa 88-91, right edge 82-86",
+     "pass": false,
+     "binding": true,
+     "note": "all three under target: 79.6 / 80.3 / 73.3"
+    },
+    {
+     "id": "G1.9",
+     "value": {
+      "black_point_L": 12.5,
+      "wall_patch_HSL": [
+       36.7,
+       21.0,
+       79.6
+      ],
+      "wall_patch": "bible corner",
+      "whites_H_median": 34.3,
+      "whites_S_median": 20.7,
+      "share_white_H_under_25": 0.0037,
+      "floor_median_HSL": [
+       33.2,
+       24.7,
+       77.5
+      ]
+     },
+     "threshold": "black point L 12-15; back wall H 32-40 (bath: 4000 K, H informational), S 15-28; no H < 25 in white / beige; parquet H 30-40 S 30-45 L 68-78 (G1.11 proposal)",
+     "pass": true,
+     "binding": true
+    },
+    {
+     "id": "G1.10",
+     "value": {
+      "pendant": {
+       "L_p95": 91.4,
+       "H": 34.6,
+       "S": 57.8,
+       "lit_in_clay": true,
+       "not_brighter_than_window": true,
+       "note": null
+      },
+      "accent-sconces": {
+       "L_p95": 87.5,
+       "H": 35.3,
+       "S": 35.3,
+       "lit_in_clay": true,
+       "not_brighter_than_window": true,
+       "note": null
+      },
+      "wall-sconce": {
+       "L_p95": 74.7,
+       "H": 32.9,
+       "S": 30.8,
+       "lit_in_clay": true,
+       "not_brighter_than_window": true,
+       "note": "L_p95 < 85: the shade is outside its clay box (moved) or not glowing"
+      }
+     },
+     "threshold": "every lamp lit: shade L 93-97 (H 35-45, S 25-45 informational: the box includes surroundings); none brighter than the window",
+     "pass": false,
+     "binding": true,
+     "note": "measured inside the clay lamp box: top 10 % of L; a lamp drawn outside its box reads as wall"
+    },
+    {
+     "id": "G1.12",
+     "value": {
+      "findings": [],
+      "fillers_to_register": [],
+      "saturated_255_px": 0
+     },
+     "threshold": "0 violations of the closed list (Bible / recipe 2.7); fillers must be on the registered list",
+     "pass": true,
+     "binding": true,
+     "note": "eye at 1600 px and 100 % crops; the unregistered fillers show use of the product (rule C.1 spirit) and are listed for the designer to register"
+    },
+    {
+     "id": "G1.13",
+     "value": {
+      "box": "window (pilot box, no window box in the round-4 M0 selfcheck)",
+      "width_frac": 0.185,
+      "margins": {
+       "left": 0.19,
+       "right": 0.625,
+       "top": 0.025,
+       "bottom": 0.447
+      },
+      "L_p99": 97.5,
+      "L_max": 97.6,
+      "brightest": true,
+      "saturated_255": 0,
+      "view": "bare birches, no snow, no buildings"
+     },
+     "threshold": "F2: whole with >= 0.03 margins or cut >= 15 %, width <= 30 %; brightest; p99 <= 97; 0 x 255; same view (birches, no snow: proposal)",
+     "pass": false,
+     "binding": true
+    },
+    {
+     "id": "G1.14",
+     "value": {
+      "pairs": {
+       "M0->M0p (P0, 25 deg)": {
+        "worst_band_px": 35.58,
+        "shift_px": {
+         "dx": 65.97,
+         "dy": -33.18,
+         "response": 0.08
+        },
+        "dL_mean": 0.3,
+        "dE_mean": 11.26,
+        "clay_worst_band_px": 0.61
+       },
+       "M0->M0x ((M0-M0x, 60), 60 deg)": {
+        "worst_band_px": 186.45,
+        "shift_px": {
+         "dx": -49.32,
+         "dy": 2.83,
+         "response": 0.168
+        },
+        "dL_mean": 6.0,
+        "dE_mean": 10.86,
+        "clay_worst_band_px": 0.23
+       }
+      },
+      "eye": "reference for H0 / C0 vistas (checked there)"
+     },
+     "threshold": "each pair sharing a point: <= 2 px per band after reprojection and dL mean <= 1 (proposal); same objects by eye (binding)",
+     "pass": false,
+     "binding": true,
+     "note": "pan_reproject.py check on the kept renders; the clay pairs are the tool's floor (<= 0.9 px)"
+    },
+    {
+     "id": "G1.1",
+     "value": {
+      "deviations": [],
+      "ok": "triptych, cubes, pendant, curtains, vase, swing-arm sconce, basket, NYOKO stand-in, 3 cushions + throw, runner, 2 travertine holders, bowl: all the card's form"
+     },
+     "threshold": "every product is the card's SKU: silhouette, count, pattern, material: 0 deviations",
+     "pass": true,
+     "binding": true,
+     "note": "eye on overlays/fidelity-<frame>.jpg (render crop per clay box next to the frame's references); no tool (P8)"
+    },
+    {
+     "id": "G1.2",
+     "value": {
+      "eye_colour_notes": []
+     },
+     "threshold": "dh <= 5 deg, C* ratio 0.8-1.2 vs the SKU image (proposal)",
+     "pass": null,
+     "binding": false,
+     "note": "no tool (P8); eye notes only"
+    },
+    {
+     "id": "G1.5",
+     "value": {
+      "clay_F3_edge_tangents": 0,
+      "clay_F3_object_tangents": 0,
+      "clay_F8": null,
+      "heroes_thirds": []
+     },
+     "threshold": "F1-F8, F11, F12 on the clay and again on the render",
+     "pass": null,
+     "binding": true,
+     "note": "no tool on the render; the round-4 selfcheck carries F3 / F8 only"
+    },
+    {
+     "id": "G1.6",
+     "value": {
+      "minimum": 14,
+      "products_counted": 5,
+      "fixed_product_counted": 3,
+      "total": 8,
+      "with_stand_in_rugs": 9,
+      "categories": [
+       "decor/play",
+       "furniture",
+       "lighting",
+       "storage/function",
+       "textile"
+      ],
+      "categories_of_4": 3
+     },
+     "threshold": ">= 14 products (>= 50 % visible, >= 0.5 % of the frame; fixed-product furniture counts; sets once) and >= 4 of 4 categories",
+     "pass": false,
+     "binding": true,
+     "note": "counted on the round-4 clay boxes (visibility assumed where round 4 did not ray-cast); the render shows the same products by eye"
+    },
+    {
+     "id": "G1.15",
+     "value": {
+      "decision": null
+     },
+     "threshold": "user approval on the sheet (gate 2 / approval 3)",
+     "pass": null,
+     "binding": true,
+     "note": "not asked yet; the sheet is assets/renders/house-nordic-sheet-v7-2026-11-02.jpg"
+    },
+    {
+     "id": "G1.16",
+     "value": {
+      "designer_score": null
+     },
+     "threshold": ">= 8 / 10 by master-designer (proposal)",
+     "pass": null,
+     "binding": false,
+     "note": "docs/render-v7-review-2026-11-02.md not written yet at the time of this check"
+    },
+    {
+     "id": "OVS",
+     "value": {
+      "required": true,
+      "why": "P0 25 deg",
+      "applied": false,
+      "frame_file_matches_centre_crop": null
+     },
+     "threshold": "3 % overscan on every still in a pan >= 21 deg (transitions render plan 3 / 6.4, proposal)",
+     "pass": false,
+     "binding": false,
+     "note": "clay and job sent at 16:9 before the request; the pan gap at this still stays for inpainting (README round 4, 6)"
+    },
+    {
+     "id": "G1.17",
+     "value": {
+      "returned_size_px": [
+       2736,
+       1536
+      ],
+      "resize": "non-uniform resize 2736x1536 -> 2736x1539 (+0.20% vertical), no crop",
+      "graded_size": [
+       2736,
+       1539
+      ],
+      "overscan_canvas": false,
+      "model": "gpt-image-2-5",
+      "quality": "sunburst",
+      "credits": 600,
+      "prompt_file_exists": true,
+      "prompt_record_json": true
+     },
+     "threshold": "test: 2K, 16:9, what the model returned recorded; a prompt record per job",
+     "pass": true,
+     "binding": true
+    },
+    {
+     "id": "G8.6",
+     "value": {
+      "baked_cards": 14,
+      "live": [
+       "basket-zendrop-seagrass-belly-38x34"
+      ],
+      "unverified": 13
+     },
+     "threshold": "every baked card live at the supplier within 7 days (proposal: 7 days; principle binding)",
+     "pass": false,
+     "binding": true,
+     "note": "docs/render-products-check-2026-11-02.json: only the 3 Zendrop cards were checked (MCP); CJ and AliExpress in the queue"
+    }
+   ],
+   "verdict": "fail",
+   "failed_binding": [
+    "G1.4",
+    "G1.7",
+    "G1.7b",
+    "G1.10",
+    "G1.13",
+    "G1.14",
+    "G1.6",
+    "G8.6"
+   ],
+   "failed_proposal": [
+    "G1.3",
+    "OVS"
+   ],
+   "cannot_measure": [
+    "G1.2",
+    "G1.5",
+    "G1.15",
+    "G1.16"
+   ],
+   "may_reference": "no: sofa 1.20x the clay (edges 507/848 vs 538/815 at 1920: -47 / +64 px); armchair 1.29x (left edge -90 px)",
+   "serves": [
+    "T-E0 (end)",
+    "T-LD (start)",
+    "P0"
+   ],
+   "blocks_transitions": [
+    "T-E0 (end)",
+    "T-LD (start)",
+    "P0"
+   ],
+   "design_notes": null,
+   "products_unverified": [
+    "framed-art-aliexpress-minimal-geometric-triptych-prints",
+    "wall-sconce-cj-travertine-cube-updown-12",
+    "pendant-cj-silk-ribbed-pumpkin-40",
+    "curtains-aliexpress-linen-blend-s-fold-180502",
+    "vase-aliexpress-vintage-distressed-clay-vase-589009",
+    "wall-sconce-cj-black-swing-arm-fabric",
+    "cushions-cj-boucle-teddy",
+    "cushions-cj-knitted-chenille-bean-green",
+    "cushions-cj-linen-look-charcoal",
+    "sofa-cover-cj-cotton-muslin-fringe",
+    "table-runner-cj-linen-look-sage-fringe",
+    "candle-holders-cj-travertine-pedestal",
+    "bowl-cj-glutinous-white-belly-bowl-21"
+   ],
+   "products_live": [
+    "basket-zendrop-seagrass-belly-38x34"
+   ]
+  },
+  {
+   "frame": "D1",
+   "kind": "master",
+   "base": null,
+   "kept_file": "assets/renders/kitchen-dining/nordic/v7/d1-v7-graded.png",
+   "criteria": [
+    {
+     "id": "G1.4",
+     "value": {
+      "register_shift_px": [
+       -1.32,
+       8.46
+      ],
+      "register_scale": [
+       1.00154,
+       0.98898
+      ],
+      "scale_dev_pct": 1.1,
+      "worst_tile_px_after_register": 6.44,
+      "tiles_counted": 8,
+      "check_worst_band_px_reliable": 4.85,
+      "check_bands_reliable": 3
+     },
+     "threshold": "global shift <= 9.6 px (0.5 % of 1920) and scale within 0.5 %; residual per tile <= 2.0 px (pan still)",
+     "pass": false,
+     "binding": true,
+     "note": "pan_reproject.py register (ECC affine) + QA tile ECC; check's phase correlation only where response >= 0.05"
+    },
+    {
+     "id": "G1.3",
+     "value": {
+      "fixed_edges_worst_px": 31,
+      "width_ratios": {
+       "dining table 160x85 (fixed)": 1.0011,
+       "dining chairs (fixed, window side)": 1.0088,
+       "dining bench (fixed)": 0.9896
+      },
+      "eye": []
+     },
+     "threshold": "every clear edge of a fixed piece within +-19 px (+-0.01 of 1920) of the clay; products inside their box +-15 % (eye)",
+     "pass": false,
+     "binding": false,
+     "note": "edges with clay and render strength >= 4 only; product scale by eye on the fidelity sheet (no tool, P8)"
+    },
+    {
+     "id": "G1.8",
+     "value": {
+      "reference_uv": [
+       0.5412,
+       0.1368
+      ],
+      "graded_HSL": [
+       37.4,
+       25.8,
+       78.3
+      ],
+      "raw_HSL": [
+       28.2,
+       22.6,
+       72.6
+      ],
+      "stops_needed_from_raw": 0.667,
+      "agent_needed_stops": 0.617,
+      "agent_applied": 0.2,
+      "agent_flag": "DARK: needs more than +0.2 stop, not lifted further"
+     },
+     "threshold": "reference wall L 90-94 (M0: Bible corner; others: G1.8 proposal, BIB1 open); post lift <= +0.2 stop",
+     "pass": false,
+     "binding": false,
+     "note": "M0 points: corner, behind the sofa, right edge in light-M0.json wall_patches"
+    },
+    {
+     "id": "G1.9",
+     "value": {
+      "black_point_L": 12.5,
+      "wall_patch_HSL": [
+       37.4,
+       25.8,
+       78.3
+      ],
+      "wall_patch": "hero_wall_mid (clay selfcheck)",
+      "whites_H_median": 37.7,
+      "whites_S_median": 27.1,
+      "share_white_H_under_25": 0.0001,
+      "floor_median_HSL": null
+     },
+     "threshold": "black point L 12-15; back wall H 32-40 (bath: 4000 K, H informational), S 15-28; no H < 25 in white / beige; parquet H 30-40 S 30-45 L 68-78 (G1.11 proposal)",
+     "pass": true,
+     "binding": true
+    },
+    {
+     "id": "G1.10",
+     "value": {
+      "dining-pendant": {
+       "L_p95": 87.1,
+       "H": 39.0,
+       "S": 81.8,
+       "lit_in_clay": true,
+       "not_brighter_than_window": true,
+       "note": null
+      }
+     },
+     "threshold": "every lamp lit: shade L 93-97 (H 35-45, S 25-45 informational: the box includes surroundings); none brighter than the window",
+     "pass": false,
+     "binding": true,
+     "note": "measured inside the clay lamp box: top 10 % of L; a lamp drawn outside its box reads as wall"
+    },
+    {
+     "id": "G1.12",
+     "value": {
+      "findings": [],
+      "fillers_to_register": [],
+      "saturated_255_px": 0
+     },
+     "threshold": "0 violations of the closed list (Bible / recipe 2.7); fillers must be on the registered list",
+     "pass": true,
+     "binding": true,
+     "note": "eye at 1600 px and 100 % crops; the unregistered fillers show use of the product (rule C.1 spirit) and are listed for the designer to register"
+    },
+    {
+     "id": "G1.13",
+     "value": {
+      "box": "window W-dining",
+      "width_frac": 0.153,
+      "margins": {
+       "left": 0.0,
+       "right": 0.847,
+       "top": 0.0,
+       "bottom": 0.447
+      },
+      "L_p99": 96.9,
+      "L_max": 97.3,
+      "brightest": true,
+      "saturated_255": 0,
+      "view": "bare birches, no snow"
+     },
+     "threshold": "F2: whole with >= 0.03 margins or cut >= 15 %, width <= 30 %; brightest; p99 <= 97; 0 x 255; same view (birches, no snow: proposal)",
+     "pass": true,
+     "binding": true
+    },
+    {
+     "id": "G1.14",
+     "value": {
+      "pairs": {
+       "D1->PD-35 (P2, 21 deg)": {
+        "worst_band_px": 43.11,
+        "shift_px": {
+         "dx": 12.28,
+         "dy": -0.96,
+         "response": 0.158
+        },
+        "dL_mean": 3.3,
+        "dE_mean": 7.64,
+        "clay_worst_band_px": 0.12
+       },
+       "D1->D2 (P-D, 35 deg)": {
+        "worst_band_px": 18.48,
+        "shift_px": {
+         "dx": -1.14,
+         "dy": 0.01,
+         "response": 0.191
+        },
+        "dL_mean": 4.1,
+        "dE_mean": 7.66,
+        "clay_worst_band_px": 0.11
+       }
+      },
+      "eye": "shares the print, plates, mugs, mills, bowl with D2 (same objects by eye)"
+     },
+     "threshold": "each pair sharing a point: <= 2 px per band after reprojection and dL mean <= 1 (proposal); same objects by eye (binding)",
+     "pass": false,
+     "binding": true,
+     "note": "pan_reproject.py check on the kept renders; the clay pairs are the tool's floor (<= 0.9 px)"
+    },
+    {
+     "id": "G1.1",
+     "value": {
+      "deviations": [
+       "condiment-set: turned baluster mills; the card image is a straight cylinder with a domed top",
+       "mug-set: pale cream mugs; the card image is a sandy-brown glaze with a dark rim (colour)",
+       "centerpiece-vase: round belly; the card is a taller amphora 17.5 x 26.5 (form, minor)"
+      ],
+      "ok": "lantern 50, runner, iron plates + candles, curtains, bench pad, print, bowl, plates, ASKO and Medina stand-ins"
+     },
+     "threshold": "every product is the card's SKU: silhouette, count, pattern, material: 0 deviations",
+     "pass": false,
+     "binding": true,
+     "note": "eye on overlays/fidelity-<frame>.jpg (render crop per clay box next to the frame's references); no tool (P8)"
+    },
+    {
+     "id": "G1.2",
+     "value": {
+      "eye_colour_notes": [
+       "mug-set: pale cream mugs; the card image is a sandy-brown glaze with a dark rim (colour)"
+      ]
+     },
+     "threshold": "dh <= 5 deg, C* ratio 0.8-1.2 vs the SKU image (proposal)",
+     "pass": null,
+     "binding": false,
+     "note": "no tool (P8); eye notes only"
+    },
+    {
+     "id": "G1.5",
+     "value": {
+      "clay_F3_edge_tangents": 1,
+      "clay_F3_object_tangents": 11,
+      "clay_F8": null,
+      "heroes_thirds": [
+       {
+        "hero": "pendant / table centre",
+        "u": 0.328,
+        "ok": true
+       },
+       {
+        "hero": "table centre",
+        "u": 0.328,
+        "ok": true
+       }
+      ]
+     },
+     "threshold": "F1-F8, F11, F12 on the clay and again on the render",
+     "pass": null,
+     "binding": true,
+     "note": "no tool on the render; the round-4 selfcheck carries F3 / F8 only"
+    },
+    {
+     "id": "G1.6",
+     "value": {
+      "minimum": 14,
+      "products_counted": 5,
+      "fixed_product_counted": 2,
+      "total": 7,
+      "with_stand_in_rugs": 8,
+      "categories": [
+       "ceramics/tableware",
+       "furniture",
+       "lighting",
+       "textile"
+      ],
+      "categories_of_4": 3
+     },
+     "threshold": ">= 14 products (>= 50 % visible, >= 0.5 % of the frame; fixed-product furniture counts; sets once) and >= 4 of 4 categories",
+     "pass": false,
+     "binding": true,
+     "note": "counted on the round-4 clay boxes (visibility assumed where round 4 did not ray-cast); the render shows the same products by eye"
+    },
+    {
+     "id": "G1.15",
+     "value": {
+      "decision": null
+     },
+     "threshold": "user approval on the sheet (gate 2 / approval 3)",
+     "pass": null,
+     "binding": true,
+     "note": "not asked yet; the sheet is assets/renders/house-nordic-sheet-v7-2026-11-02.jpg"
+    },
+    {
+     "id": "G1.16",
+     "value": {
+      "designer_score": null
+     },
+     "threshold": ">= 8 / 10 by master-designer (proposal)",
+     "pass": null,
+     "binding": false,
+     "note": "docs/render-v7-review-2026-11-02.md not written yet at the time of this check"
+    },
+    {
+     "id": "OVS",
+     "value": {
+      "required": true,
+      "why": "P2 21 deg, P-D 35 deg",
+      "applied": false,
+      "frame_file_matches_centre_crop": null
+     },
+     "threshold": "3 % overscan on every still in a pan >= 21 deg (transitions render plan 3 / 6.4, proposal)",
+     "pass": false,
+     "binding": false,
+     "note": "clay and job sent at 16:9 before the request; the pan gap at this still stays for inpainting (README round 4, 6)"
+    },
+    {
+     "id": "G1.17",
+     "value": {
+      "returned_size_px": [
+       2736,
+       1536
+      ],
+      "resize": "non-uniform resize 2736x1536 -> 2736x1539 (+0.20% vertical), no crop",
+      "graded_size": [
+       2736,
+       1539
+      ],
+      "overscan_canvas": false,
+      "model": "gpt-image-2-5",
+      "quality": "sunburst",
+      "credits": 600,
+      "prompt_file_exists": true,
+      "prompt_record_json": true
+     },
+     "threshold": "test: 2K, 16:9, what the model returned recorded; a prompt record per job",
+     "pass": true,
+     "binding": true
+    },
+    {
+     "id": "G8.6",
+     "value": {
+      "baked_cards": 11,
+      "live": [],
+      "unverified": 11
+     },
+     "threshold": "every baked card live at the supplier within 7 days (proposal: 7 days; principle binding)",
+     "pass": false,
+     "binding": true,
+     "note": "docs/render-products-check-2026-11-02.json: only the 3 Zendrop cards were checked (MCP); CJ and AliExpress in the queue"
+    }
+   ],
+   "verdict": "fail",
+   "failed_binding": [
+    "G1.4",
+    "G1.10",
+    "G1.14",
+    "G1.1",
+    "G1.6",
+    "G8.6"
+   ],
+   "failed_proposal": [
+    "G1.3",
+    "G1.8",
+    "OVS"
+   ],
+   "cannot_measure": [
+    "G1.2",
+    "G1.5",
+    "G1.15",
+    "G1.16"
+   ],
+   "may_reference": "with register only (global affine corrects it; residual <= 9.6 px); products / scale to fix: condiment-set: turned baluster mills; the card image is a straight cylinder with a domed top; mug-set: pale cream mugs; the card image is a sandy-brown glaze with a dark rim (colour)",
+   "serves": [
+    "T-LD (end)",
+    "P-D"
+   ],
+   "blocks_transitions": [
+    "T-LD (end)",
+    "P-D"
+   ],
+   "design_notes": null,
+   "products_unverified": [
+    "pendant-cj-silk-pumpkin-lantern",
+    "table-runner-aliexpress-french-linen-stonewash-40x140",
+    "vase-cj-textured-white-stoneware",
+    "candle-holders-aliexpress-matte-black-iron-pillar-set2",
+    "curtains-aliexpress-linen-blend-s-fold-180502",
+    "bench-pad-aliexpress-linen-look-flat-cushion-130x35x3",
+    "framed-art-cj-taupe-block-black-line-30x40",
+    "condiment-set-cj-rubberwood-mill-pair-6in",
+    "bowl-cj-glutinous-white-belly-bowl-21",
+    "tableware-set-cj-grey-sand-matte-plate",
+    "mug-set-cj-sandy-stoneware-mug-glazed-rim-set3"
+   ],
+   "products_live": []
+  },
+  {
+   "frame": "D2",
+   "kind": "master",
+   "base": null,
+   "kept_file": "assets/renders/kitchen-dining/nordic/v7/d2-v7-graded.png",
+   "criteria": [
+    {
+     "id": "G1.4",
+     "value": {
+      "register_shift_px": [
+       -11.06,
+       -19.12
+      ],
+      "register_scale": [
+       1.00464,
+       1.02572
+      ],
+      "scale_dev_pct": 2.57,
+      "worst_tile_px_after_register": 8.84,
+      "tiles_counted": 8,
+      "check_worst_band_px_reliable": 14.91,
+      "check_bands_reliable": 4
+     },
+     "threshold": "global shift <= 9.6 px (0.5 % of 1920) and scale within 0.5 %; residual per tile <= 2.0 px (pan still)",
+     "pass": false,
+     "binding": true,
+     "note": "pan_reproject.py register (ECC affine) + QA tile ECC; check's phase correlation only where response >= 0.05"
+    },
+    {
+     "id": "G1.3",
+     "value": {
+      "fixed_edges_worst_px": 36,
+      "width_ratios": {},
+      "eye": []
+     },
+     "threshold": "every clear edge of a fixed piece within +-19 px (+-0.01 of 1920) of the clay; products inside their box +-15 % (eye)",
+     "pass": false,
+     "binding": false,
+     "note": "edges with clay and render strength >= 4 only; product scale by eye on the fidelity sheet (no tool, P8)"
+    },
+    {
+     "id": "G1.8",
+     "value": {
+      "reference_uv": [
+       0.5437,
+       0.1149
+      ],
+      "graded_HSL": [
+       36.0,
+       22.3,
+       81.8
+      ],
+      "raw_HSL": [
+       31.5,
+       18.2,
+       74.6
+      ],
+      "stops_needed_from_raw": 0.574,
+      "agent_needed_stops": 0.294,
+      "agent_applied": 0.2,
+      "agent_flag": "DARK: needs more than +0.2 stop, not lifted further"
+     },
+     "threshold": "reference wall L 90-94 (M0: Bible corner; others: G1.8 proposal, BIB1 open); post lift <= +0.2 stop",
+     "pass": false,
+     "binding": false,
+     "note": "M0 points: corner, behind the sofa, right edge in light-M0.json wall_patches"
+    },
+    {
+     "id": "G1.9",
+     "value": {
+      "black_point_L": 11.6,
+      "wall_patch_HSL": [
+       36.3,
+       31.0,
+       88.3
+      ],
+      "wall_patch": "hero_wall_mid (clay selfcheck)",
+      "whites_H_median": 36.5,
+      "whites_S_median": 24.1,
+      "share_white_H_under_25": 0.0005,
+      "floor_median_HSL": [
+       31.6,
+       41.8,
+       72.2
+      ]
+     },
+     "threshold": "black point L 12-15; back wall H 32-40 (bath: 4000 K, H informational), S 15-28; no H < 25 in white / beige; parquet H 30-40 S 30-45 L 68-78 (G1.11 proposal)",
+     "pass": false,
+     "binding": true,
+     "note": " HSL S inflates near L 90: S read on the frame's own mid wall"
+    },
+    {
+     "id": "G1.10",
+     "value": {
+      "lamps_in_clay": [
+       "kitchen-dining/led-niche",
+       "kitchen-dining/led-shelves"
+      ]
+     },
+     "threshold": "every lamp in the frame lit",
+     "pass": null,
+     "binding": true,
+     "note": "no lamp placeholder in this frame (F11 is a plan question, not a render one)"
+    },
+    {
+     "id": "G1.12",
+     "value": {
+      "findings": [],
+      "fillers_to_register": [
+       "pears in the bowl",
+       "paper roll on the stand (shows use)"
+      ],
+      "saturated_255_px": 0
+     },
+     "threshold": "0 violations of the closed list (Bible / recipe 2.7); fillers must be on the registered list",
+     "pass": true,
+     "binding": true,
+     "note": "eye at 1600 px and 100 % crops; the unregistered fillers show use of the product (rule C.1 spirit) and are listed for the designer to register"
+    },
+    {
+     "id": "G1.13",
+     "value": {
+      "box": null,
+      "L_p99": null,
+      "brightest": null,
+      "view": "no window (allowed, Bible 1.6)"
+     },
+     "threshold": "no window in frame: the opening / vista is the brightest area, p99 <= 97",
+     "pass": null,
+     "binding": true,
+     "note": "no window and no opening box"
+    },
+    {
+     "id": "G1.14",
+     "value": {
+      "pairs": {
+       "D1->D2 (P-D, 35 deg)": {
+        "worst_band_px": 18.48,
+        "shift_px": {
+         "dx": -1.14,
+         "dy": 0.01,
+         "response": 0.191
+        },
+        "dL_mean": 4.1,
+        "dE_mean": 7.66,
+        "clay_worst_band_px": 0.11
+       },
+       "PD-35->D2 ((PD-35-D2, 56), 56 deg)": {
+        "worst_band_px": 219.61,
+        "shift_px": {
+         "dx": 102.62,
+         "dy": 27.63,
+         "response": -0.003
+        },
+        "dL_mean": 9.5,
+        "dE_mean": 12.88,
+        "clay_worst_band_px": 0.74
+       }
+      },
+      "eye": "objects shared with D1 identical by eye"
+     },
+     "threshold": "each pair sharing a point: <= 2 px per band after reprojection and dL mean <= 1 (proposal); same objects by eye (binding)",
+     "pass": false,
+     "binding": true,
+     "note": "pan_reproject.py check on the kept renders; the clay pairs are the tool's floor (<= 0.9 px)"
+    },
+    {
+     "id": "G1.1",
+     "value": {
+      "deviations": [
+       "condiment-set: turned balusters vs the card's cylinder (as D1)",
+       "mug-set: cream vs the card's sandy-brown (colour)",
+       "canisters: three cream jars; the card image is a black-and-white set with bamboo lids (colour / set)"
+      ],
+      "ok": "print, plates, bowl, paper-towel stand (Style A), tea towel, bench pad, runner stand-ins"
+     },
+     "threshold": "every product is the card's SKU: silhouette, count, pattern, material: 0 deviations",
+     "pass": false,
+     "binding": true,
+     "note": "eye on overlays/fidelity-<frame>.jpg (render crop per clay box next to the frame's references); no tool (P8)"
+    },
+    {
+     "id": "G1.2",
+     "value": {
+      "eye_colour_notes": [
+       "mug-set: cream vs the card's sandy-brown (colour)",
+       "canisters: three cream jars; the card image is a black-and-white set with bamboo lids (colour / set)"
+      ]
+     },
+     "threshold": "dh <= 5 deg, C* ratio 0.8-1.2 vs the SKU image (proposal)",
+     "pass": null,
+     "binding": false,
+     "note": "no tool (P8); eye notes only"
+    },
+    {
+     "id": "G1.5",
+     "value": {
+      "clay_F3_edge_tangents": 0,
+      "clay_F3_object_tangents": 4,
+      "clay_F8": null,
+      "heroes_thirds": [
+       {
+        "hero": "hood centre (wall line)",
+        "u": 0.3375,
+        "ok": true
+       },
+       {
+        "hero": "coffee niche centre",
+        "u": 0.6835,
+        "ok": true
+       }
+      ]
+     },
+     "threshold": "F1-F8, F11, F12 on the clay and again on the render",
+     "pass": null,
+     "binding": true,
+     "note": "no tool on the render; the round-4 selfcheck carries F3 / F8 only"
+    },
+    {
+     "id": "G1.6",
+     "value": {
+      "minimum": 14,
+      "products_counted": 0,
+      "fixed_product_counted": 0,
+      "total": 0,
+      "with_stand_in_rugs": 1,
+      "categories": [],
+      "categories_of_4": 0
+     },
+     "threshold": ">= 14 products (>= 50 % visible, >= 0.5 % of the frame; fixed-product furniture counts; sets once) and >= 4 of 4 categories",
+     "pass": false,
+     "binding": true,
+     "note": "counted on the round-4 clay boxes (visibility assumed where round 4 did not ray-cast); the render shows the same products by eye"
+    },
+    {
+     "id": "G1.15",
+     "value": {
+      "decision": null
+     },
+     "threshold": "user approval on the sheet (gate 2 / approval 3)",
+     "pass": null,
+     "binding": true,
+     "note": "not asked yet; the sheet is assets/renders/house-nordic-sheet-v7-2026-11-02.jpg"
+    },
+    {
+     "id": "G1.16",
+     "value": {
+      "designer_score": null
+     },
+     "threshold": ">= 8 / 10 by master-designer (proposal)",
+     "pass": null,
+     "binding": false,
+     "note": "docs/render-v7-review-2026-11-02.md not written yet at the time of this check"
+    },
+    {
+     "id": "OVS",
+     "value": {
+      "required": true,
+      "why": "P-D 35 deg",
+      "applied": true,
+      "frame_file_matches_centre_crop": true
+     },
+     "threshold": "3 % overscan on every still in a pan >= 21 deg (transitions render plan 3 / 6.4, proposal)",
+     "pass": true,
+     "binding": false
+    },
+    {
+     "id": "G1.17",
+     "value": {
+      "returned_size_px": [
+       2736,
+       1536
+      ],
+      "resize": "non-uniform resize 2736x1536 -> 2736x1539 (+0.20% vertical), no crop",
+      "graded_size": [
+       2580,
+       1451
+      ],
+      "overscan_canvas": true,
+      "model": "gpt-image-2-5",
+      "quality": "sunburst",
+      "credits": 600,
+      "prompt_file_exists": true,
+      "prompt_record_json": true
+     },
+     "threshold": "test: 2K, 16:9, what the model returned recorded; a prompt record per job",
+     "pass": true,
+     "binding": true
+    },
+    {
+     "id": "G8.6",
+     "value": {
+      "baked_cards": 9,
+      "live": [
+       "canisters-zendrop-matte-ceramic-bamboo-lid-sml"
+      ],
+      "unverified": 8
+     },
+     "threshold": "every baked card live at the supplier within 7 days (proposal: 7 days; principle binding)",
+     "pass": false,
+     "binding": true,
+     "note": "docs/render-products-check-2026-11-02.json: only the 3 Zendrop cards were checked (MCP); CJ and AliExpress in the queue"
+    }
+   ],
+   "verdict": "fail",
+   "failed_binding": [
+    "G1.4",
+    "G1.9",
+    "G1.14",
+    "G1.1",
+    "G1.6",
+    "G8.6"
+   ],
+   "failed_proposal": [
+    "G1.3",
+    "G1.8"
+   ],
+   "cannot_measure": [
+    "G1.10",
+    "G1.13",
+    "G1.2",
+    "G1.5",
+    "G1.15",
+    "G1.16"
+   ],
+   "may_reference": "with register only (global affine corrects it; residual <= 9.6 px); products / scale to fix: condiment-set: turned balusters vs the card's cylinder (as D1); mug-set: cream vs the card's sandy-brown (colour)",
+   "serves": [
+    "P-D"
+   ],
+   "blocks_transitions": [
+    "P-D"
+   ],
+   "design_notes": null,
+   "products_unverified": [
+    "bench-pad-aliexpress-linen-look-flat-cushion-130x35x3",
+    "framed-art-cj-taupe-block-black-line-30x40",
+    "condiment-set-cj-rubberwood-mill-pair-6in",
+    "bowl-cj-glutinous-white-belly-bowl-21",
+    "paper-towel-holder-aliexpress-solid-wood-slotted-paper-towel-stand",
+    "tableware-set-cj-grey-sand-matte-plate",
+    "mug-set-cj-sandy-stoneware-mug-glazed-rim-set3",
+    "tea-towel-cj-waffle-cotton-beige-45x65-pair"
+   ],
+   "products_live": [
+    "canisters-zendrop-matte-ceramic-bamboo-lid-sml"
+   ]
+  },
+  {
+   "frame": "H0",
+   "kind": "master",
+   "base": null,
+   "kept_file": "assets/renders/hall/nordic/v7/h0-v7-r2-graded.png",
+   "criteria": [
+    {
+     "id": "G1.4",
+     "value": {
+      "register_shift_px": [
+       -9.19,
+       -3.94
+      ],
+      "register_scale": [
+       1.01555,
+       1.00243
+      ],
+      "scale_dev_pct": 1.55,
+      "worst_tile_px_after_register": 31.19,
+      "tiles_counted": 8,
+      "check_worst_band_px_reliable": 41.57,
+      "check_bands_reliable": 2
+     },
+     "threshold": "global shift <= 9.6 px (0.5 % of 1920) and scale within 0.5 %; residual per tile <= 2.0 px (pan still)",
+     "pass": false,
+     "binding": true,
+     "note": "pan_reproject.py register (ECC affine) + QA tile ECC; check's phase correlation only where response >= 0.05"
+    },
+    {
+     "id": "G1.3",
+     "value": {
+      "fixed_edges_worst_px": 54,
+      "width_ratios": {
+       "hall console": 1.1216,
+       "G-H4 oak portal": 0.9125
+      },
+      "eye": [
+       "hall console 1.12x the clay width (edges)",
+       "portal 0.91x"
+      ]
+     },
+     "threshold": "every clear edge of a fixed piece within +-19 px (+-0.01 of 1920) of the clay; products inside their box +-15 % (eye)",
+     "pass": false,
+     "binding": false,
+     "note": "edges with clay and render strength >= 4 only; product scale by eye on the fidelity sheet (no tool, P8)"
+    },
+    {
+     "id": "G1.8",
+     "value": {
+      "reference_uv": [
+       0.3505,
+       0.4115
+      ],
+      "graded_HSL": [
+       40.3,
+       42.7,
+       91.2
+      ],
+      "raw_HSL": [
+       33.2,
+       30.3,
+       84.8
+      ],
+      "stops_needed_from_raw": 0.156,
+      "agent_needed_stops": 0.627,
+      "agent_applied": 0.2,
+      "agent_flag": "DARK: needs more than +0.2 stop, not lifted further"
+     },
+     "threshold": "reference wall L 90-94 (M0: Bible corner; others: G1.8 proposal, BIB1 open); post lift <= +0.2 stop",
+     "pass": true,
+     "binding": false,
+     "note": "M0 points: corner, behind the sofa, right edge in light-M0.json wall_patches"
+    },
+    {
+     "id": "G1.9",
+     "value": {
+      "black_point_L": 12.5,
+      "wall_patch_HSL": [
+       36.2,
+       18.8,
+       73.9
+      ],
+      "wall_patch": "hero_wall_mid (clay selfcheck)",
+      "whites_H_median": 36.5,
+      "whites_S_median": 22.1,
+      "share_white_H_under_25": 0.0,
+      "floor_median_HSL": [
+       31.5,
+       28.0,
+       68.0
+      ]
+     },
+     "threshold": "black point L 12-15; back wall H 32-40 (bath: 4000 K, H informational), S 15-28; no H < 25 in white / beige; parquet H 30-40 S 30-45 L 68-78 (G1.11 proposal)",
+     "pass": true,
+     "binding": true
+    },
+    {
+     "id": "G1.10",
+     "value": {
+      "wall-sconce": {
+       "L_p95": 96.1,
+       "H": 60.0,
+       "S": 40.0,
+       "lit_in_clay": true,
+       "not_brighter_than_window": true,
+       "note": null
+      },
+      "pendant": {
+       "L_p95": 94.5,
+       "H": 41.5,
+       "S": 48.4,
+       "lit_in_clay": true,
+       "not_brighter_than_window": true,
+       "note": null
+      },
+      "accent-sconces": {
+       "L_p95": 88.0,
+       "H": 39.0,
+       "S": 30.2,
+       "lit_in_clay": true,
+       "not_brighter_than_window": true,
+       "note": null
+      }
+     },
+     "threshold": "every lamp lit: shade L 93-97 (H 35-45, S 25-45 informational: the box includes surroundings); none brighter than the window",
+     "pass": false,
+     "binding": true,
+     "note": "measured inside the clay lamp box: top 10 % of L; a lamp drawn outside its box reads as wall"
+    },
+    {
+     "id": "G1.12",
+     "value": {
+      "findings": [],
+      "fillers_to_register": [],
+      "saturated_255_px": 0
+     },
+     "threshold": "0 violations of the closed list (Bible / recipe 2.7); fillers must be on the registered list",
+     "pass": true,
+     "binding": true,
+     "note": "eye at 1600 px and 100 % crops; the unregistered fillers show use of the product (rule C.1 spirit) and are listed for the designer to register"
+    },
+    {
+     "id": "G1.13",
+     "value": {
+      "box": "living vista through the door (process_v7 box)",
+      "L_p99": 97.1,
+      "brightest": true,
+      "view": "no window; the living vista is the brightest area"
+     },
+     "threshold": "no window in frame: the opening / vista is the brightest area, p99 <= 97",
+     "pass": false,
+     "binding": true
+    },
+    {
+     "id": "G1.14",
+     "value": {
+      "pairs": {
+       "H0->H0x (T-E0 pan, 13 deg)": {
+        "worst_band_px": 27.23,
+        "shift_px": {
+         "dx": -7.2,
+         "dy": 26.01,
+         "response": 0.416
+        },
+        "dL_mean": 0.3,
+        "dE_mean": 6.71,
+        "clay_worst_band_px": 0.18
+       },
+       "H0->H0e (PH, 12 deg)": {
+        "worst_band_px": 8.55,
+        "shift_px": {
+         "dx": -8.52,
+         "dy": 8.71,
+         "response": 0.129
+        },
+        "dL_mean": 0.1,
+        "dE_mean": 6.88,
+        "clay_worst_band_px": 0.16
+       }
+      },
+      "eye": "the living through the door = M0 v7 object for object (triptych 2 of 3 visible, cubes, pendant, sofa, cushions, candles, bowl, runner, armchair, rug, curtains, basket)"
+     },
+     "threshold": "each pair sharing a point: <= 2 px per band after reprojection and dL mean <= 1 (proposal); same objects by eye (binding)",
+     "pass": false,
+     "binding": true,
+     "note": "pan_reproject.py check on the kept renders; the clay pairs are the tool's floor (<= 0.9 px)"
+    },
+    {
+     "id": "G1.1",
+     "value": {
+      "deviations": [
+       "console-vessel: a tall urn; the card is 19.5 wide x 20 high (squat round): proportion"
+      ],
+      "ok": "swinging-line art in black frame, black oval tray, 4 pine pegs, white cube sconce, bench cushion, waffle throw, two-tone rope basket; no umbrella stand"
+     },
+     "threshold": "every product is the card's SKU: silhouette, count, pattern, material: 0 deviations",
+     "pass": false,
+     "binding": true,
+     "note": "eye on overlays/fidelity-<frame>.jpg (render crop per clay box next to the frame's references); no tool (P8)"
+    },
+    {
+     "id": "G1.2",
+     "value": {
+      "eye_colour_notes": []
+     },
+     "threshold": "dh <= 5 deg, C* ratio 0.8-1.2 vs the SKU image (proposal)",
+     "pass": null,
+     "binding": false,
+     "note": "no tool (P8); eye notes only"
+    },
+    {
+     "id": "G1.5",
+     "value": {
+      "clay_F3_edge_tangents": 0,
+      "clay_F3_object_tangents": 1,
+      "clay_F8": null,
+      "heroes_thirds": [
+       {
+        "hero": "vista centre (living door centre)",
+        "u": 0.3505,
+        "ok": true
+       },
+       {
+        "hero": "console vignette (art centre)",
+        "u": 0.6807,
+        "ok": true
+       }
+      ]
+     },
+     "threshold": "F1-F8, F11, F12 on the clay and again on the render",
+     "pass": null,
+     "binding": true,
+     "note": "no tool on the render; the round-4 selfcheck carries F3 / F8 only"
+    },
+    {
+     "id": "G1.6",
+     "value": {
+      "minimum": 11,
+      "products_counted": 6,
+      "fixed_product_counted": 1,
+      "total": 7,
+      "with_stand_in_rugs": 7,
+      "categories": [
+       "ceramics/tableware",
+       "decor/play",
+       "furniture",
+       "lighting",
+       "other",
+       "storage/function",
+       "textile"
+      ],
+      "categories_of_4": 4
+     },
+     "threshold": ">= 11 products (>= 50 % visible, >= 0.5 % of the frame; fixed-product furniture counts; sets once) and >= 4 of 4 categories",
+     "pass": false,
+     "binding": true,
+     "note": "counted on the round-4 clay boxes (visibility assumed where round 4 did not ray-cast); the render shows the same products by eye"
+    },
+    {
+     "id": "G1.15",
+     "value": {
+      "decision": null
+     },
+     "threshold": "user approval on the sheet (gate 2 / approval 3)",
+     "pass": null,
+     "binding": true,
+     "note": "not asked yet; the sheet is assets/renders/house-nordic-sheet-v7-2026-11-02.jpg"
+    },
+    {
+     "id": "G1.16",
+     "value": {
+      "designer_score": null
+     },
+     "threshold": ">= 8 / 10 by master-designer (proposal)",
+     "pass": null,
+     "binding": false,
+     "note": "docs/render-v7-review-2026-11-02.md not written yet at the time of this check"
+    },
+    {
+     "id": "OVS",
+     "value": {
+      "required": false,
+      "why": "PH 12 / 13 deg",
+      "applied": false,
+      "frame_file_matches_centre_crop": null
+     },
+     "threshold": "3 % overscan on every still in a pan >= 21 deg (transitions render plan 3 / 6.4, proposal)",
+     "pass": true,
+     "binding": false
+    },
+    {
+     "id": "G1.17",
+     "value": {
+      "returned_size_px": [
+       2736,
+       1536
+      ],
+      "resize": "non-uniform resize 2736x1536 -> 2736x1539 (+0.20% vertical), no crop",
+      "graded_size": [
+       2736,
+       1539
+      ],
+      "overscan_canvas": false,
+      "model": "gpt-image-2-5",
+      "quality": "sunburst",
+      "credits": 600,
+      "prompt_file_exists": true,
+      "prompt_record_json": true
+     },
+     "threshold": "test: 2K, 16:9, what the model returned recorded; a prompt record per job",
+     "pass": true,
+     "binding": true
+    },
+    {
+     "id": "G8.6",
+     "value": {
+      "baked_cards": 8,
+      "live": [],
+      "unverified": 8
+     },
+     "threshold": "every baked card live at the supplier within 7 days (proposal: 7 days; principle binding)",
+     "pass": false,
+     "binding": true,
+     "note": "docs/render-products-check-2026-11-02.json: only the 3 Zendrop cards were checked (MCP); CJ and AliExpress in the queue"
+    }
+   ],
+   "verdict": "fail",
+   "failed_binding": [
+    "G1.4",
+    "G1.10",
+    "G1.13",
+    "G1.14",
+    "G1.1",
+    "G1.6",
+    "G8.6"
+   ],
+   "failed_proposal": [
+    "G1.3"
+   ],
+   "cannot_measure": [
+    "G1.2",
+    "G1.5",
+    "G1.15",
+    "G1.16"
+   ],
+   "may_reference": "no: hall console 1.12x the clay width (edges); portal 0.91x",
+   "serves": [
+    "T-E0 (start, site opening)",
+    "PH",
+    "T-HW"
+   ],
+   "blocks_transitions": [
+    "T-E0 (start, site opening)",
+    "PH",
+    "T-HW"
+   ],
+   "design_notes": null,
+   "products_unverified": [
+    "framed-art-cj-swinging-line-black-frame-mat-35x45",
+    "console-vessel-aliexpress-ceramic-wabi-sabi-vase-906575",
+    "key-tray-aliexpress-oval-metal-tray-693779",
+    "wall-hooks-aliexpress-pine-oval-pegs-4pcs",
+    "wall-sconce-cj-white-fabric-cube-15-hall",
+    "bench-cushion-aliexpress-linen-look-flat-cushion-110x35x3",
+    "bench-throw-cj-cotton-waffle-blanket-150x200",
+    "basket-cj-two-tone-rope-jute-white-30"
+   ],
+   "products_live": []
+  },
+  {
+   "frame": "C0",
+   "kind": "master",
+   "base": null,
+   "kept_file": "assets/renders/corridor/nordic/v7/c0-v7-graded.png",
+   "criteria": [
+    {
+     "id": "G1.4",
+     "value": {
+      "register_shift_px": [
+       -16.84,
+       -7.86
+      ],
+      "register_scale": [
+       1.01467,
+       0.99535
+      ],
+      "scale_dev_pct": 1.47,
+      "worst_tile_px_after_register": 6.66,
+      "tiles_counted": 6,
+      "check_worst_band_px_reliable": 25.94,
+      "check_bands_reliable": 3
+     },
+     "threshold": "global shift <= 9.6 px (0.5 % of 1920) and scale within 0.5 %; residual per tile <= 9.6 px (video endpoint)",
+     "pass": false,
+     "binding": true,
+     "note": "pan_reproject.py register (ECC affine) + QA tile ECC; check's phase correlation only where response >= 0.05"
+    },
+    {
+     "id": "G1.3",
+     "value": {
+      "fixed_edges_worst_px": 67,
+      "width_ratios": {
+       "hall console": 1.0476,
+       "G-H4 oak portal": 1.0753,
+       "G-C3 oak portal": 0.8038
+      },
+      "eye": [
+       "far portal (G-C3) 0.80x (small box, low confidence)"
+      ]
+     },
+     "threshold": "every clear edge of a fixed piece within +-19 px (+-0.01 of 1920) of the clay; products inside their box +-15 % (eye)",
+     "pass": false,
+     "binding": false,
+     "note": "edges with clay and render strength >= 4 only; product scale by eye on the fidelity sheet (no tool, P8)"
+    },
+    {
+     "id": "G1.8",
+     "value": {
+      "reference_uv": [
+       0.2798,
+       0.0387
+      ],
+      "graded_HSL": [
+       36.1,
+       31.6,
+       91.3
+      ],
+      "raw_HSL": [
+       36.0,
+       77.3,
+       95.1
+      ],
+      "stops_needed_from_raw": -0.218,
+      "agent_needed_stops": -0.521,
+      "agent_applied": -0.2,
+      "agent_flag": "bright: needs more than -0.2 stop"
+     },
+     "threshold": "reference wall L 90-94 (M0: Bible corner; others: G1.8 proposal, BIB1 open); post lift <= +0.2 stop",
+     "pass": true,
+     "binding": false,
+     "note": "M0 points: corner, behind the sofa, right edge in light-M0.json wall_patches"
+    },
+    {
+     "id": "G1.9",
+     "value": {
+      "black_point_L": 12.5,
+      "wall_patch_HSL": [
+       36.1,
+       31.6,
+       91.3
+      ],
+      "wall_patch": "hero_wall_mid (clay selfcheck)",
+      "whites_H_median": 32.1,
+      "whites_S_median": 16.7,
+      "share_white_H_under_25": 0.0132,
+      "floor_median_HSL": [
+       31.0,
+       19.7,
+       61.2
+      ]
+     },
+     "threshold": "black point L 12-15; back wall H 32-40 (bath: 4000 K, H informational), S 15-28; no H < 25 in white / beige; parquet H 30-40 S 30-45 L 68-78 (G1.11 proposal)",
+     "pass": false,
+     "binding": true,
+     "note": " HSL S inflates near L 90: S read on the frame's own mid wall"
+    },
+    {
+     "id": "G1.10",
+     "value": {
+      "accent-sconces": {
+       "L_p95": 84.5,
+       "H": 33.3,
+       "S": 16.5,
+       "lit_in_clay": true,
+       "not_brighter_than_window": false,
+       "note": "L_p95 < 85: the shade is outside its clay box (moved) or not glowing"
+      },
+      "ceiling-lights": {
+       "L_p95": 90.2,
+       "H": 51.4,
+       "S": 46.2,
+       "lit_in_clay": true,
+       "not_brighter_than_window": false,
+       "note": null
+      }
+     },
+     "threshold": "every lamp lit: shade L 93-97 (H 35-45, S 25-45 informational: the box includes surroundings); none brighter than the window",
+     "pass": false,
+     "binding": true,
+     "note": "measured inside the clay lamp box: top 10 % of L; a lamp drawn outside its box reads as wall"
+    },
+    {
+     "id": "G1.12",
+     "value": {
+      "findings": [],
+      "fillers_to_register": [],
+      "saturated_255_px": 0
+     },
+     "threshold": "0 violations of the closed list (Bible / recipe 2.7); fillers must be on the registered list",
+     "pass": true,
+     "binding": true,
+     "note": "eye at 1600 px and 100 % crops; the unregistered fillers show use of the product (rule C.1 spirit) and are listed for the designer to register"
+    },
+    {
+     "id": "G1.13",
+     "value": {
+      "box": "window W-bath",
+      "L_p99": 66.2,
+      "brightest": false,
+      "saturated_255_total": 0
+     },
+     "threshold": "the brightest area is the window / vista; p99 <= 97; 0 x 255",
+     "pass": null,
+     "binding": true,
+     "note": "the measured box is an opening or a secondary window (M0p: the living window at the left edge is not a clay box; C0 / S1' / MB-in: the door box is not the vista): no tool box for the vista"
+    },
+    {
+     "id": "G1.14",
+     "value": {
+      "eye": "vista = H0 + M0 by eye"
+     },
+     "threshold": "same objects in both frames (eye)",
+     "pass": true,
+     "binding": true,
+     "note": "no pair sharing a point; video endpoint sheets in overlays/endpoints-*.jpg"
+    },
+    {
+     "id": "G1.1",
+     "value": {
+      "deviations": [],
+      "ok": "3 black-ink prints in wide mats and thin black frames, flat oval paper lantern; the vista = H0 v7 console (art, tray, vase) and M0 beyond"
+     },
+     "threshold": "every product is the card's SKU: silhouette, count, pattern, material: 0 deviations",
+     "pass": true,
+     "binding": true,
+     "note": "eye on overlays/fidelity-<frame>.jpg (render crop per clay box next to the frame's references); no tool (P8)"
+    },
+    {
+     "id": "G1.2",
+     "value": {
+      "eye_colour_notes": []
+     },
+     "threshold": "dh <= 5 deg, C* ratio 0.8-1.2 vs the SKU image (proposal)",
+     "pass": null,
+     "binding": false,
+     "note": "no tool (P8); eye notes only"
+    },
+    {
+     "id": "G1.5",
+     "value": {
+      "clay_F3_edge_tangents": 0,
+      "clay_F3_object_tangents": 0,
+      "clay_F8": null,
+      "heroes_thirds": [
+       {
+        "hero": "enfilade axis (vanishing point)",
+        "u": 0.5,
+        "ok": false
+       }
+      ]
+     },
+     "threshold": "F1-F8, F11, F12 on the clay and again on the render",
+     "pass": null,
+     "binding": true,
+     "note": "no tool on the render; the round-4 selfcheck carries F3 / F8 only"
+    },
+    {
+     "id": "G1.6",
+     "value": {
+      "minimum": 5,
+      "products_counted": 1,
+      "fixed_product_counted": 0,
+      "total": 1,
+      "with_stand_in_rugs": 1,
+      "categories": [
+       "decor/play"
+      ],
+      "categories_of_4": 0
+     },
+     "threshold": ">= 5 products (>= 50 % visible, >= 0.5 % of the frame; fixed-product furniture counts; sets once) and >= 3 of 4 categories",
+     "pass": false,
+     "binding": true,
+     "note": "counted on the round-4 clay boxes (visibility assumed where round 4 did not ray-cast); the render shows the same products by eye"
+    },
+    {
+     "id": "G1.15",
+     "value": {
+      "decision": null
+     },
+     "threshold": "user approval on the sheet (gate 2 / approval 3)",
+     "pass": null,
+     "binding": true,
+     "note": "not asked yet; the sheet is assets/renders/house-nordic-sheet-v7-2026-11-02.jpg"
+    },
+    {
+     "id": "G1.16",
+     "value": {
+      "designer_score": null
+     },
+     "threshold": ">= 8 / 10 by master-designer (proposal)",
+     "pass": null,
+     "binding": false,
+     "note": "docs/render-v7-review-2026-11-02.md not written yet at the time of this check"
+    },
+    {
+     "id": "OVS",
+     "value": {
+      "required": false,
+      "why": "no pan",
+      "applied": false,
+      "frame_file_matches_centre_crop": null
+     },
+     "threshold": "3 % overscan on every still in a pan >= 21 deg (transitions render plan 3 / 6.4, proposal)",
+     "pass": true,
+     "binding": false
+    },
+    {
+     "id": "G1.17",
+     "value": {
+      "returned_size_px": [
+       2736,
+       1536
+      ],
+      "resize": "non-uniform resize 2736x1536 -> 2736x1539 (+0.20% vertical), no crop",
+      "graded_size": [
+       2736,
+       1539
+      ],
+      "overscan_canvas": false,
+      "model": "gpt-image-2-5",
+      "quality": "sunburst",
+      "credits": 600,
+      "prompt_file_exists": true,
+      "prompt_record_json": true
+     },
+     "threshold": "test: 2K, 16:9, what the model returned recorded; a prompt record per job",
+     "pass": true,
+     "binding": true
+    },
+    {
+     "id": "G8.6",
+     "value": {
+      "baked_cards": 3,
+      "live": [],
+      "unverified": 3
+     },
+     "threshold": "every baked card live at the supplier within 7 days (proposal: 7 days; principle binding)",
+     "pass": false,
+     "binding": true,
+     "note": "docs/render-products-check-2026-11-02.json: only the 3 Zendrop cards were checked (MCP); CJ and AliExpress in the queue"
+    }
+   ],
+   "verdict": "fail",
+   "failed_binding": [
+    "G1.4",
+    "G1.9",
+    "G1.10",
+    "G1.6",
+    "G8.6"
+   ],
+   "failed_proposal": [
+    "G1.3"
+   ],
+   "cannot_measure": [
+    "G1.13",
+    "G1.2",
+    "G1.5",
+    "G1.15",
+    "G1.16"
+   ],
+   "may_reference": "with register only (global affine corrects it; residual <= 9.6 px); products / scale to fix: far portal (G-C3) 0.80x (small box, low confidence)",
+   "serves": [
+    "T-HC (end)",
+    "T-CM",
+    "T-CGirl",
+    "V6"
+   ],
+   "blocks_transitions": [
+    "T-HC (end)",
+    "T-CM",
+    "T-CGirl",
+    "V6"
+   ],
+   "design_notes": "the right-hand doorway reads as a dark grey opening (TR3 asks for the master-bath opening lit): for master-designer",
+   "products_unverified": [
+    "gallery-art-cj-black-ink-abstract-wide-mat-40-set3",
+    "ceiling-lights-aliexpress-flat-oval-paper-lantern-shade-40-pair",
+    "ceiling-light-aliexpress-flat-oval-paper-lantern-shade-40"
+   ],
+   "products_live": []
+  },
+  {
+   "frame": "MB0",
+   "kind": "master",
+   "base": null,
+   "kept_file": "assets/renders/master/nordic/v7/mb0-v7-r2-graded.png",
+   "criteria": [
+    {
+     "id": "G1.4",
+     "value": {
+      "register_shift_px": [
+       5.31,
+       -24.88
+      ],
+      "register_scale": [
+       0.99719,
+       1.02815
+      ],
+      "scale_dev_pct": 2.81,
+      "worst_tile_px_after_register": 32.05,
+      "tiles_counted": 6,
+      "check_worst_band_px_reliable": null,
+      "check_bands_reliable": 0
+     },
+     "threshold": "global shift <= 9.6 px (0.5 % of 1920) and scale within 0.5 %; residual per tile <= 9.6 px (video endpoint)",
+     "pass": false,
+     "binding": true,
+     "note": "pan_reproject.py register (ECC affine) + QA tile ECC; check's phase correlation only where response >= 0.05"
+    },
+    {
+     "id": "G1.3",
+     "value": {
+      "fixed_edges_worst_px": 59,
+      "width_ratios": {
+       "nightstands 45": 1.0373
+      },
+      "eye": [
+       "lower half re-framed vertically (register scale 1.028, shift -25 px); nightstands 1.04x"
+      ]
+     },
+     "threshold": "every clear edge of a fixed piece within +-19 px (+-0.01 of 1920) of the clay; products inside their box +-15 % (eye)",
+     "pass": false,
+     "binding": false,
+     "note": "edges with clay and render strength >= 4 only; product scale by eye on the fidelity sheet (no tool, P8)"
+    },
+    {
+     "id": "G1.8",
+     "value": {
+      "reference_uv": [
+       0.5,
+       0.1453
+      ],
+      "graded_HSL": [
+       36.3,
+       16.1,
+       80.2
+      ],
+      "raw_HSL": [
+       31.5,
+       13.2,
+       73.2
+      ],
+      "stops_needed_from_raw": 0.64,
+      "agent_needed_stops": 0.673,
+      "agent_applied": 0.2,
+      "agent_flag": "DARK: needs more than +0.2 stop, not lifted further"
+     },
+     "threshold": "reference wall L 90-94 (M0: Bible corner; others: G1.8 proposal, BIB1 open); post lift <= +0.2 stop",
+     "pass": false,
+     "binding": false,
+     "note": "M0 points: corner, behind the sofa, right edge in light-M0.json wall_patches"
+    },
+    {
+     "id": "G1.9",
+     "value": {
+      "black_point_L": 12.4,
+      "wall_patch_HSL": [
+       36.0,
+       16.1,
+       79.4
+      ],
+      "wall_patch": "hero_wall_mid (clay selfcheck)",
+      "whites_H_median": 35.0,
+      "whites_S_median": 18.9,
+      "share_white_H_under_25": 0.0086,
+      "floor_median_HSL": null
+     },
+     "threshold": "black point L 12-15; back wall H 32-40 (bath: 4000 K, H informational), S 15-28; no H < 25 in white / beige; parquet H 30-40 S 30-45 L 68-78 (G1.11 proposal)",
+     "pass": true,
+     "binding": true
+    },
+    {
+     "id": "G1.10",
+     "value": {
+      "bedside-sconces": {
+       "L_p95": 89.2,
+       "H": 36.8,
+       "S": 74.1,
+       "lit_in_clay": true,
+       "not_brighter_than_window": true,
+       "note": null
+      }
+     },
+     "threshold": "every lamp lit: shade L 93-97 (H 35-45, S 25-45 informational: the box includes surroundings); none brighter than the window",
+     "pass": false,
+     "binding": true,
+     "note": "measured inside the clay lamp box: top 10 % of L; a lamp drawn outside its box reads as wall"
+    },
+    {
+     "id": "G1.12",
+     "value": {
+      "findings": [],
+      "fillers_to_register": [],
+      "saturated_255_px": 0
+     },
+     "threshold": "0 violations of the closed list (Bible / recipe 2.7); fillers must be on the registered list",
+     "pass": true,
+     "binding": true,
+     "note": "eye at 1600 px and 100 % crops; the unregistered fillers show use of the product (rule C.1 spirit) and are listed for the designer to register"
+    },
+    {
+     "id": "G1.13",
+     "value": {
+      "box": "window W-master",
+      "width_frac": 0.139,
+      "margins": {
+       "left": 0.0,
+       "right": 0.861,
+       "top": 0.0,
+       "bottom": 0.398
+      },
+      "L_p99": 97.5,
+      "L_max": 97.6,
+      "brightest": true,
+      "saturated_255": 0,
+      "view": "bare birches, no snow"
+     },
+     "threshold": "F2: whole with >= 0.03 margins or cut >= 15 %, width <= 30 %; brightest; p99 <= 97; 0 x 255; same view (birches, no snow: proposal)",
+     "pass": false,
+     "binding": true
+    },
+    {
+     "id": "G1.14",
+     "value": {
+      "eye": "MB-in shows the same nightstand, sconce, planter, holders"
+     },
+     "threshold": "same objects in both frames (eye)",
+     "pass": true,
+     "binding": true,
+     "note": "no pair sharing a point; video endpoint sheets in overlays/endpoints-*.jpg"
+    },
+    {
+     "id": "G1.1",
+     "value": {
+      "deviations": [
+       "cushions: the boucle cushion is rendered as a lumbar rectangle; the card is a 50 x 50 square"
+      ],
+      "ok": "black-ink pair, wave flush sconces (3 lobes), curtains, fluted column sill vase, seagrass belly planter, wabi-sabi bottle vase, dark oval dish, travertine holders, linen pillowcases and bedding, grey throw"
+     },
+     "threshold": "every product is the card's SKU: silhouette, count, pattern, material: 0 deviations",
+     "pass": false,
+     "binding": true,
+     "note": "eye on overlays/fidelity-<frame>.jpg (render crop per clay box next to the frame's references); no tool (P8)"
+    },
+    {
+     "id": "G1.2",
+     "value": {
+      "eye_colour_notes": []
+     },
+     "threshold": "dh <= 5 deg, C* ratio 0.8-1.2 vs the SKU image (proposal)",
+     "pass": null,
+     "binding": false,
+     "note": "no tool (P8); eye notes only"
+    },
+    {
+     "id": "G1.5",
+     "value": {
+      "clay_F3_edge_tangents": 0,
+      "clay_F3_object_tangents": 1,
+      "clay_F8": null,
+      "heroes_thirds": [
+       {
+        "hero": "bed centre",
+        "u": 0.5,
+        "ok": false
+       }
+      ]
+     },
+     "threshold": "F1-F8, F11, F12 on the clay and again on the render",
+     "pass": null,
+     "binding": true,
+     "note": "no tool on the render; the round-4 selfcheck carries F3 / F8 only"
+    },
+    {
+     "id": "G1.6",
+     "value": {
+      "minimum": 14,
+      "products_counted": 6,
+      "fixed_product_counted": 0,
+      "total": 6,
+      "with_stand_in_rugs": 6,
+      "categories": [
+       "decor/play",
+       "lighting",
+       "other",
+       "textile"
+      ],
+      "categories_of_4": 2
+     },
+     "threshold": ">= 14 products (>= 50 % visible, >= 0.5 % of the frame; fixed-product furniture counts; sets once) and >= 4 of 4 categories",
+     "pass": false,
+     "binding": true,
+     "note": "counted on the round-4 clay boxes (visibility assumed where round 4 did not ray-cast); the render shows the same products by eye"
+    },
+    {
+     "id": "G1.15",
+     "value": {
+      "decision": null
+     },
+     "threshold": "user approval on the sheet (gate 2 / approval 3)",
+     "pass": null,
+     "binding": true,
+     "note": "not asked yet; the sheet is assets/renders/house-nordic-sheet-v7-2026-11-02.jpg"
+    },
+    {
+     "id": "G1.16",
+     "value": {
+      "designer_score": null
+     },
+     "threshold": ">= 8 / 10 by master-designer (proposal)",
+     "pass": null,
+     "binding": false,
+     "note": "docs/render-v7-review-2026-11-02.md not written yet at the time of this check"
+    },
+    {
+     "id": "OVS",
+     "value": {
+      "required": false,
+      "why": "no pan",
+      "applied": false,
+      "frame_file_matches_centre_crop": null
+     },
+     "threshold": "3 % overscan on every still in a pan >= 21 deg (transitions render plan 3 / 6.4, proposal)",
+     "pass": true,
+     "binding": false
+    },
+    {
+     "id": "G1.17",
+     "value": {
+      "returned_size_px": [
+       2736,
+       1536
+      ],
+      "resize": "non-uniform resize 2736x1536 -> 2736x1539 (+0.20% vertical), no crop",
+      "graded_size": [
+       2736,
+       1539
+      ],
+      "overscan_canvas": false,
+      "model": "gpt-image-2-5",
+      "quality": "sunburst",
+      "credits": 600,
+      "prompt_file_exists": true,
+      "prompt_record_json": true
+     },
+     "threshold": "test: 2K, 16:9, what the model returned recorded; a prompt record per job",
+     "pass": true,
+     "binding": true
+    },
+    {
+     "id": "G8.6",
+     "value": {
+      "baked_cards": 12,
+      "live": [],
+      "unverified": 12
+     },
+     "threshold": "every baked card live at the supplier within 7 days (proposal: 7 days; principle binding)",
+     "pass": false,
+     "binding": true,
+     "note": "docs/render-products-check-2026-11-02.json: only the 3 Zendrop cards were checked (MCP); CJ and AliExpress in the queue"
+    }
+   ],
+   "verdict": "fail",
+   "failed_binding": [
+    "G1.4",
+    "G1.10",
+    "G1.13",
+    "G1.1",
+    "G1.6",
+    "G8.6"
+   ],
+   "failed_proposal": [
+    "G1.3",
+    "G1.8"
+   ],
+   "cannot_measure": [
+    "G1.2",
+    "G1.5",
+    "G1.15",
+    "G1.16"
+   ],
+   "may_reference": "no: lower half re-framed vertically (register scale 1.028, shift -25 px); nightstands 1.04x",
+   "serves": [
+    "T-CM (end)"
+   ],
+   "blocks_transitions": [
+    "T-CM (end)"
+   ],
+   "design_notes": null,
+   "products_unverified": [
+    "framed-art-cj-black-ink-abstract-wide-mat-50-pair",
+    "bedside-sconces-cj-linen-wave-flush",
+    "curtains-aliexpress-linen-blend-s-fold-180502",
+    "sill-vase-cj-cream-fluted-column-25",
+    "planter-cj-seagrass-belly",
+    "nightstand-vase-aliexpress-handmade-wabi-sabi-vase-665862",
+    "trinket-dish-cj-reactive-glaze-oval-dish-9",
+    "candle-holders-cj-travertine-pedestal",
+    "pillowcases-cj-pure-linen-envelope-pair-48x74",
+    "bedding-cj-washed-linen-natural-set",
+    "cushions-cj-boucle-teddy",
+    "throw-cj-cotton-linen-light-gray-200x230"
+   ],
+   "products_live": []
+  },
+  {
+   "frame": "K-boy",
+   "kind": "master",
+   "base": null,
+   "kept_file": "assets/renders/boy/nordic/v7/k-boy-v7-graded.png",
+   "criteria": [
+    {
+     "id": "G1.4",
+     "value": {
+      "register_shift_px": [
+       5.68,
+       2.63
+      ],
+      "register_scale": [
+       1.00289,
+       0.97584
+      ],
+      "scale_dev_pct": 2.42,
+      "worst_tile_px_after_register": 6.66,
+      "tiles_counted": 6,
+      "check_worst_band_px_reliable": 34.76,
+      "check_bands_reliable": 3
+     },
+     "threshold": "global shift <= 9.6 px (0.5 % of 1920) and scale within 0.5 %; residual per tile <= 2.0 px (pan still)",
+     "pass": false,
+     "binding": true,
+     "note": "pan_reproject.py register (ECC affine) + QA tile ECC; check's phase correlation only where response >= 0.05"
+    },
+    {
+     "id": "G1.3",
+     "value": {
+      "fixed_edges_worst_px": 39,
+      "width_ratios": {
+       "boy desk 90x50 (fixed)": 0.9155
+      },
+      "eye": [
+       "desk 0.92x (edges)",
+       "vertical scale 0.976"
+      ]
+     },
+     "threshold": "every clear edge of a fixed piece within +-19 px (+-0.01 of 1920) of the clay; products inside their box +-15 % (eye)",
+     "pass": false,
+     "binding": false,
+     "note": "edges with clay and render strength >= 4 only; product scale by eye on the fidelity sheet (no tool, P8)"
+    },
+    {
+     "id": "G1.8",
+     "value": {
+      "reference_uv": [
+       0.3977,
+       0.1375
+      ],
+      "graded_HSL": [
+       33.8,
+       10.2,
+       90.1
+      ],
+      "raw_HSL": [
+       21.0,
+       7.5,
+       83.4
+      ],
+      "stops_needed_from_raw": 0.25,
+      "agent_needed_stops": 0.249,
+      "agent_applied": 0.2,
+      "agent_flag": "DARK: needs more than +0.2 stop, not lifted further"
+     },
+     "threshold": "reference wall L 90-94 (M0: Bible corner; others: G1.8 proposal, BIB1 open); post lift <= +0.2 stop",
+     "pass": true,
+     "binding": false,
+     "note": "M0 points: corner, behind the sofa, right edge in light-M0.json wall_patches"
+    },
+    {
+     "id": "G1.9",
+     "value": {
+      "black_point_L": 12.4,
+      "wall_patch_HSL": [
+       33.8,
+       10.1,
+       90.1
+      ],
+      "wall_patch": "hero_wall_mid (clay selfcheck)",
+      "whites_H_median": 36.7,
+      "whites_S_median": 14.0,
+      "share_white_H_under_25": 0.0291,
+      "floor_median_HSL": null
+     },
+     "threshold": "black point L 12-15; back wall H 32-40 (bath: 4000 K, H informational), S 15-28; no H < 25 in white / beige; parquet H 30-40 S 30-45 L 68-78 (G1.11 proposal)",
+     "pass": false,
+     "binding": true,
+     "note": " HSL S inflates near L 90: S read on the frame's own mid wall"
+    },
+    {
+     "id": "G1.10",
+     "value": {
+      "lamps_in_clay": []
+     },
+     "threshold": "every lamp in the frame lit",
+     "pass": null,
+     "binding": true,
+     "note": "no lamp placeholder in this frame (F11 is a plan question, not a render one)"
+    },
+    {
+     "id": "G1.12",
+     "value": {
+      "findings": [],
+      "fillers_to_register": [
+       "football in the toy basket (shows use; not registered)"
+      ],
+      "saturated_255_px": 0
+     },
+     "threshold": "0 violations of the closed list (Bible / recipe 2.7); fillers must be on the registered list",
+     "pass": true,
+     "binding": true,
+     "note": "eye at 1600 px and 100 % crops; the unregistered fillers show use of the product (rule C.1 spirit) and are listed for the designer to register"
+    },
+    {
+     "id": "G1.13",
+     "value": {
+      "box": "window W-boy",
+      "width_frac": 0.26,
+      "margins": {
+       "left": -0.03,
+       "right": 0.77,
+       "top": -0.03,
+       "bottom": 0.461
+      },
+      "L_p99": 97.5,
+      "L_max": 97.6,
+      "brightest": true,
+      "saturated_255": 0,
+      "view": "FAIL: the ground outside is white, reads as snow (prompt: no snow; TR3 default)"
+     },
+     "threshold": "F2: whole with >= 0.03 margins or cut >= 15 %, width <= 30 %; brightest; p99 <= 97; 0 x 255; same view (birches, no snow: proposal)",
+     "pass": false,
+     "binding": true
+    },
+    {
+     "id": "G1.14",
+     "value": {
+      "pairs": {
+       "K-boy->K-boy-0 (T-CBoy pan, 33 deg)": {
+        "worst_band_px": 30.55,
+        "shift_px": {
+         "dx": -13.24,
+         "dy": 11.12,
+         "response": 0.176
+        },
+        "dL_mean": 8.1,
+        "dE_mean": 10.56,
+        "clay_worst_band_px": 0.14
+       }
+      },
+      "eye": "K-boy-0 shows the same desk, cars, ledges, blanket"
+     },
+     "threshold": "each pair sharing a point: <= 2 px per band after reprojection and dL mean <= 1 (proposal); same objects by eye (binding)",
+     "pass": false,
+     "binding": true,
+     "note": "pan_reproject.py check on the kept renders; the clay pairs are the tool's floor (<= 0.9 px)"
+    },
+    {
+     "id": "G1.1",
+     "value": {
+      "deviations": [
+       "bookshelf: each tier reads as one continuous ledge; the card is a pair of 42 cm ledges x2 (count unclear)",
+       "toy-cars: three unpainted beech cars; the card image shows natural + red + walnut cars (finish)"
+      ],
+      "ok": "white washed-linen bedding, muslin blanket, two corduroy cushions (milky white / dark grey SKU), cream bear with bandana, jute rope basket, YUKI stand-in"
+     },
+     "threshold": "every product is the card's SKU: silhouette, count, pattern, material: 0 deviations",
+     "pass": false,
+     "binding": true,
+     "note": "eye on overlays/fidelity-<frame>.jpg (render crop per clay box next to the frame's references); no tool (P8)"
+    },
+    {
+     "id": "G1.2",
+     "value": {
+      "eye_colour_notes": []
+     },
+     "threshold": "dh <= 5 deg, C* ratio 0.8-1.2 vs the SKU image (proposal)",
+     "pass": null,
+     "binding": false,
+     "note": "no tool (P8); eye notes only"
+    },
+    {
+     "id": "G1.5",
+     "value": {
+      "clay_F3_edge_tangents": 0,
+      "clay_F3_object_tangents": 4,
+      "clay_F8": null,
+      "heroes_thirds": [
+       {
+        "hero": "NE corner + pendant (window corner)",
+        "u": 0.3142,
+        "ok": true
+       },
+       {
+        "hero": "pendant centre",
+        "u": 0.3143,
+        "ok": true
+       },
+       {
+        "hero": "desk sconce plate (right third)",
+        "u": 0.6859,
+        "ok": true
+       }
+      ]
+     },
+     "threshold": "F1-F8, F11, F12 on the clay and again on the render",
+     "pass": null,
+     "binding": true,
+     "note": "no tool on the render; the round-4 selfcheck carries F3 / F8 only"
+    },
+    {
+     "id": "G1.6",
+     "value": {
+      "minimum": 11,
+      "products_counted": 4,
+      "fixed_product_counted": 1,
+      "total": 5,
+      "with_stand_in_rugs": 5,
+      "categories": [
+       "furniture",
+       "storage/function",
+       "textile"
+      ],
+      "categories_of_4": 2
+     },
+     "threshold": ">= 11 products (>= 50 % visible, >= 0.5 % of the frame; fixed-product furniture counts; sets once) and >= 4 of 4 categories",
+     "pass": false,
+     "binding": true,
+     "note": "counted on the round-4 clay boxes (visibility assumed where round 4 did not ray-cast); the render shows the same products by eye"
+    },
+    {
+     "id": "G1.15",
+     "value": {
+      "decision": null
+     },
+     "threshold": "user approval on the sheet (gate 2 / approval 3)",
+     "pass": null,
+     "binding": true,
+     "note": "not asked yet; the sheet is assets/renders/house-nordic-sheet-v7-2026-11-02.jpg"
+    },
+    {
+     "id": "G1.16",
+     "value": {
+      "designer_score": null
+     },
+     "threshold": ">= 8 / 10 by master-designer (proposal)",
+     "pass": null,
+     "binding": false,
+     "note": "docs/render-v7-review-2026-11-02.md not written yet at the time of this check"
+    },
+    {
+     "id": "OVS",
+     "value": {
+      "required": true,
+      "why": "33 deg",
+      "applied": true,
+      "frame_file_matches_centre_crop": true
+     },
+     "threshold": "3 % overscan on every still in a pan >= 21 deg (transitions render plan 3 / 6.4, proposal)",
+     "pass": true,
+     "binding": false
+    },
+    {
+     "id": "G1.17",
+     "value": {
+      "returned_size_px": [
+       2736,
+       1536
+      ],
+      "resize": "non-uniform resize 2736x1536 -> 2736x1539 (+0.20% vertical), no crop",
+      "graded_size": [
+       2580,
+       1451
+      ],
+      "overscan_canvas": true,
+      "model": "gpt-image-2-5",
+      "quality": "sunburst",
+      "credits": 600,
+      "prompt_file_exists": true,
+      "prompt_record_json": true
+     },
+     "threshold": "test: 2K, 16:9, what the model returned recorded; a prompt record per job",
+     "pass": true,
+     "binding": true
+    },
+    {
+     "id": "G8.6",
+     "value": {
+      "baked_cards": 7,
+      "live": [],
+      "unverified": 7
+     },
+     "threshold": "every baked card live at the supplier within 7 days (proposal: 7 days; principle binding)",
+     "pass": false,
+     "binding": true,
+     "note": "docs/render-products-check-2026-11-02.json: only the 3 Zendrop cards were checked (MCP); CJ and AliExpress in the queue"
+    }
+   ],
+   "verdict": "fail",
+   "failed_binding": [
+    "G1.4",
+    "G1.9",
+    "G1.13",
+    "G1.14",
+    "G1.1",
+    "G1.6",
+    "G8.6"
+   ],
+   "failed_proposal": [
+    "G1.3"
+   ],
+   "cannot_measure": [
+    "G1.10",
+    "G1.2",
+    "G1.5",
+    "G1.15",
+    "G1.16"
+   ],
+   "may_reference": "with register only (global affine corrects it; residual <= 9.6 px); products / scale to fix: desk 0.92x (edges); vertical scale 0.976",
+   "serves": [
+    "T-CBoy (end)"
+   ],
+   "blocks_transitions": [
+    "T-CBoy (end)"
+   ],
+   "design_notes": null,
+   "products_unverified": [
+    "bookshelf-cj-natural-wood-ledge-pair-42-x2",
+    "bedding-cj-washed-linen-natural-set",
+    "bedspread-cj-muslin-blanket-beige-150x200",
+    "cushions-cj-corduroy-windmill-patchwork-pink-40",
+    "soft-toy-aliexpress-stuffed-bunny-cloth-dress-063285",
+    "basket-cj-jute-rope-cylinder",
+    "toy-cars-aliexpress-baby-wooden-toys-beech-975232"
+   ],
+   "products_live": []
+  },
+  {
+   "frame": "K-girl",
+   "kind": "master",
+   "base": null,
+   "kept_file": "assets/renders/girl/nordic/v7/k-girl-v7-graded.png",
+   "criteria": [
+    {
+     "id": "G1.4",
+     "value": {
+      "register_shift_px": [
+       -1.35,
+       -21.23
+      ],
+      "register_scale": [
+       1.01028,
+       0.9821
+      ],
+      "scale_dev_pct": 1.79,
+      "worst_tile_px_after_register": 59.8,
+      "tiles_counted": 8,
+      "check_worst_band_px_reliable": 39.88,
+      "check_bands_reliable": 3
+     },
+     "threshold": "global shift <= 9.6 px (0.5 % of 1920) and scale within 0.5 %; residual per tile <= 2.0 px (pan still)",
+     "pass": false,
+     "binding": true,
+     "note": "pan_reproject.py register (ECC affine) + QA tile ECC; check's phase correlation only where response >= 0.05"
+    },
+    {
+     "id": "G1.3",
+     "value": {
+      "fixed_edges_worst_px": 34,
+      "width_ratios": {
+       "girl desk 90x50 (fixed)": 0.9347
+      },
+      "eye": [
+       "desk 0.93x (edges)",
+       "vertical scale 0.982, shift -21 px"
+      ]
+     },
+     "threshold": "every clear edge of a fixed piece within +-19 px (+-0.01 of 1920) of the clay; products inside their box +-15 % (eye)",
+     "pass": false,
+     "binding": false,
+     "note": "edges with clay and render strength >= 4 only; product scale by eye on the fidelity sheet (no tool, P8)"
+    },
+    {
+     "id": "G1.8",
+     "value": {
+      "reference_uv": [
+       0.3977,
+       0.1375
+      ],
+      "graded_HSL": [
+       38.9,
+       16.4,
+       91.2
+      ],
+      "raw_HSL": [
+       24.8,
+       11.8,
+       84.8
+      ],
+      "stops_needed_from_raw": 0.191,
+      "agent_needed_stops": 0.191,
+      "agent_applied": 0.191,
+      "agent_flag": "within cap"
+     },
+     "threshold": "reference wall L 90-94 (M0: Bible corner; others: G1.8 proposal, BIB1 open); post lift <= +0.2 stop",
+     "pass": true,
+     "binding": false,
+     "note": "M0 points: corner, behind the sofa, right edge in light-M0.json wall_patches"
+    },
+    {
+     "id": "G1.9",
+     "value": {
+      "black_point_L": 12.5,
+      "wall_patch_HSL": [
+       38.9,
+       16.4,
+       91.1
+      ],
+      "wall_patch": "hero_wall_mid (clay selfcheck)",
+      "whites_H_median": 30.0,
+      "whites_S_median": 21.7,
+      "share_white_H_under_25": 0.2289,
+      "floor_median_HSL": null
+     },
+     "threshold": "black point L 12-15; back wall H 32-40 (bath: 4000 K, H informational), S 15-28; no H < 25 in white / beige; parquet H 30-40 S 30-45 L 68-78 (G1.11 proposal)",
+     "pass": true,
+     "binding": true,
+     "note": "the blush band #E8D5CC is by design (prompt MATERIALS); the upper wall at the reference is H 38.9: the share is the band, not the white HSL S inflates near L 90: S read on the frame's own mid wall"
+    },
+    {
+     "id": "G1.10",
+     "value": {
+      "lamps_in_clay": []
+     },
+     "threshold": "every lamp in the frame lit",
+     "pass": null,
+     "binding": true,
+     "note": "no lamp placeholder in this frame (F11 is a plan question, not a render one)"
+    },
+    {
+     "id": "G1.12",
+     "value": {
+      "findings": [],
+      "fillers_to_register": [
+       "yarn balls in the toy basket (shows use; not registered)"
+      ],
+      "saturated_255_px": 0
+     },
+     "threshold": "0 violations of the closed list (Bible / recipe 2.7); fillers must be on the registered list",
+     "pass": true,
+     "binding": true,
+     "note": "eye at 1600 px and 100 % crops; the unregistered fillers show use of the product (rule C.1 spirit) and are listed for the designer to register"
+    },
+    {
+     "id": "G1.13",
+     "value": {
+      "box": "window W-girl",
+      "width_frac": 0.26,
+      "margins": {
+       "left": -0.03,
+       "right": 0.77,
+       "top": -0.03,
+       "bottom": 0.461
+      },
+      "L_p99": 97.5,
+      "L_max": 97.6,
+      "brightest": true,
+      "saturated_255": 0,
+      "view": "bare birches, no snow"
+     },
+     "threshold": "F2: whole with >= 0.03 margins or cut >= 15 %, width <= 30 %; brightest; p99 <= 97; 0 x 255; same view (birches, no snow: proposal)",
+     "pass": false,
+     "binding": true
+    },
+    {
+     "id": "G1.14",
+     "value": {
+      "pairs": {
+       "K-girl->K-girl-0 (T-CGirl pan, 33 deg)": {
+        "worst_band_px": 316.33,
+        "shift_px": {
+         "dx": -276.42,
+         "dy": -210.99,
+         "response": 0.025
+        },
+        "dL_mean": 10.3,
+        "dE_mean": 19.14,
+        "clay_worst_band_px": 0.09
+       }
+      },
+      "eye": "K-girl-0 is a copy of this framing (rejected pose)"
+     },
+     "threshold": "each pair sharing a point: <= 2 px per band after reprojection and dL mean <= 1 (proposal); same objects by eye (binding)",
+     "pass": false,
+     "binding": true,
+     "note": "pan_reproject.py check on the kept renders; the clay pairs are the tool's floor (<= 0.9 px)"
+    },
+    {
+     "id": "G1.1",
+     "value": {
+      "deviations": [
+       "framed-prints: two prints; the card is a set of 3 (the v7 prompt itself asks for two: designer's call, not the render's)",
+       "doll: about 1.4x its clay box (head above the +15 % band)",
+       "soft-toy (crochet bunny): head above the +15 % band"
+      ],
+      "ok": "two-tier ledges, natural linen bedding, muslin bedspread, cream + dusty-pink corduroy cushions, linen bunny doll with dress, crochet bunny, jute basket, LUMI stand-in"
+     },
+     "threshold": "every product is the card's SKU: silhouette, count, pattern, material: 0 deviations",
+     "pass": false,
+     "binding": true,
+     "note": "eye on overlays/fidelity-<frame>.jpg (render crop per clay box next to the frame's references); no tool (P8)"
+    },
+    {
+     "id": "G1.2",
+     "value": {
+      "eye_colour_notes": []
+     },
+     "threshold": "dh <= 5 deg, C* ratio 0.8-1.2 vs the SKU image (proposal)",
+     "pass": null,
+     "binding": false,
+     "note": "no tool (P8); eye notes only"
+    },
+    {
+     "id": "G1.5",
+     "value": {
+      "clay_F3_edge_tangents": 0,
+      "clay_F3_object_tangents": 4,
+      "clay_F8": null,
+      "heroes_thirds": [
+       {
+        "hero": "NE corner + pendant (window corner)",
+        "u": 0.3142,
+        "ok": true
+       },
+       {
+        "hero": "pendant centre",
+        "u": 0.3143,
+        "ok": true
+       },
+       {
+        "hero": "desk sconce plate (right third)",
+        "u": 0.6859,
+        "ok": true
+       }
+      ]
+     },
+     "threshold": "F1-F8, F11, F12 on the clay and again on the render",
+     "pass": null,
+     "binding": true,
+     "note": "no tool on the render; the round-4 selfcheck carries F3 / F8 only"
+    },
+    {
+     "id": "G1.6",
+     "value": {
+      "minimum": 11,
+      "products_counted": 5,
+      "fixed_product_counted": 1,
+      "total": 6,
+      "with_stand_in_rugs": 6,
+      "categories": [
+       "decor/play",
+       "furniture",
+       "storage/function",
+       "textile"
+      ],
+      "categories_of_4": 2
+     },
+     "threshold": ">= 11 products (>= 50 % visible, >= 0.5 % of the frame; fixed-product furniture counts; sets once) and >= 4 of 4 categories",
+     "pass": false,
+     "binding": true,
+     "note": "counted on the round-4 clay boxes (visibility assumed where round 4 did not ray-cast); the render shows the same products by eye"
+    },
+    {
+     "id": "G1.15",
+     "value": {
+      "decision": null
+     },
+     "threshold": "user approval on the sheet (gate 2 / approval 3)",
+     "pass": null,
+     "binding": true,
+     "note": "not asked yet; the sheet is assets/renders/house-nordic-sheet-v7-2026-11-02.jpg"
+    },
+    {
+     "id": "G1.16",
+     "value": {
+      "designer_score": null
+     },
+     "threshold": ">= 8 / 10 by master-designer (proposal)",
+     "pass": null,
+     "binding": false,
+     "note": "docs/render-v7-review-2026-11-02.md not written yet at the time of this check"
+    },
+    {
+     "id": "OVS",
+     "value": {
+      "required": true,
+      "why": "33 deg",
+      "applied": true,
+      "frame_file_matches_centre_crop": true
+     },
+     "threshold": "3 % overscan on every still in a pan >= 21 deg (transitions render plan 3 / 6.4, proposal)",
+     "pass": true,
+     "binding": false
+    },
+    {
+     "id": "G1.17",
+     "value": {
+      "returned_size_px": [
+       2736,
+       1536
+      ],
+      "resize": "non-uniform resize 2736x1536 -> 2736x1539 (+0.20% vertical), no crop",
+      "graded_size": [
+       2580,
+       1451
+      ],
+      "overscan_canvas": true,
+      "model": "gpt-image-2-5",
+      "quality": "sunburst",
+      "credits": 600,
+      "prompt_file_exists": true,
+      "prompt_record_json": true
+     },
+     "threshold": "test: 2K, 16:9, what the model returned recorded; a prompt record per job",
+     "pass": true,
+     "binding": true
+    },
+    {
+     "id": "G8.6",
+     "value": {
+      "baked_cards": 8,
+      "live": [],
+      "unverified": 8
+     },
+     "threshold": "every baked card live at the supplier within 7 days (proposal: 7 days; principle binding)",
+     "pass": false,
+     "binding": true,
+     "note": "docs/render-products-check-2026-11-02.json: only the 3 Zendrop cards were checked (MCP); CJ and AliExpress in the queue"
+    }
+   ],
+   "verdict": "fail",
+   "failed_binding": [
+    "G1.4",
+    "G1.13",
+    "G1.14",
+    "G1.1",
+    "G1.6",
+    "G8.6"
+   ],
+   "failed_proposal": [
+    "G1.3"
+   ],
+   "cannot_measure": [
+    "G1.10",
+    "G1.2",
+    "G1.5",
+    "G1.15",
+    "G1.16"
+   ],
+   "may_reference": "no: desk 0.93x (edges); vertical scale 0.982, shift -21 px",
+   "serves": [
+    "T-CGirl (end)"
+   ],
+   "blocks_transitions": [
+    "T-CGirl (end)"
+   ],
+   "design_notes": null,
+   "products_unverified": [
+    "framed-prints-cj-charcoal-flower-silhouette-set3-30x40-boy",
+    "bookshelf-cj-natural-wood-ledge-pair-42-x2",
+    "bedding-cj-washed-linen-natural-set",
+    "bedspread-cj-muslin-blanket-beige-150x200",
+    "cushions-cj-corduroy-windmill-patchwork-pink-40",
+    "soft-toy-aliexpress-handmade-crochet-bunny-baby-999497",
+    "doll-aliexpress-linen-bunny-doll-063285",
+    "basket-cj-jute-rope-cylinder"
+   ],
+   "products_live": []
+  },
+  {
+   "frame": "B1",
+   "kind": "master",
+   "base": null,
+   "kept_file": "assets/renders/bath/nordic/v7/b1-v7-graded.png",
+   "criteria": [
+    {
+     "id": "G1.4",
+     "value": {
+      "register_shift_px": [
+       -0.67,
+       -0.7
+      ],
+      "register_scale": [
+       0.99974,
+       0.99078
+      ],
+      "scale_dev_pct": 0.92,
+      "worst_tile_px_after_register": 4.32,
+      "tiles_counted": 8,
+      "check_worst_band_px_reliable": 8.33,
+      "check_bands_reliable": 4
+     },
+     "threshold": "global shift <= 9.6 px (0.5 % of 1920) and scale within 0.5 %; residual per tile <= 2.0 px (pan still)",
+     "pass": false,
+     "binding": true,
+     "note": "pan_reproject.py register (ECC affine) + QA tile ECC; check's phase correlation only where response >= 0.05"
+    },
+    {
+     "id": "G1.3",
+     "value": {
+      "fixed_edges_worst_px": 33,
+      "width_ratios": {
+       "bath fluted glazing": 0.954,
+       "bath WC + limestone ledge (fixed)": 0.9982,
+       "shower fittings, matte black (shell)": 1.0405,
+       "window W-bath": 0.954
+      },
+      "eye": [
+       "fluted glazing / window 0.95x (edges)"
+      ]
+     },
+     "threshold": "every clear edge of a fixed piece within +-19 px (+-0.01 of 1920) of the clay; products inside their box +-15 % (eye)",
+     "pass": false,
+     "binding": false,
+     "note": "edges with clay and render strength >= 4 only; product scale by eye on the fidelity sheet (no tool, P8)"
+    },
+    {
+     "id": "G1.8",
+     "value": {
+      "reference_uv": [
+       0.4143,
+       0.1542
+      ],
+      "graded_HSL": [
+       37.8,
+       56.6,
+       86.7
+      ],
+      "raw_HSL": [
+       30.6,
+       47.0,
+       80.2
+      ],
+      "stops_needed_from_raw": 0.308,
+      "agent_needed_stops": 0.789,
+      "agent_applied": 0.2,
+      "agent_flag": "DARK: needs more than +0.2 stop, not lifted further"
+     },
+     "threshold": "reference wall L 90-94 (M0: Bible corner; others: G1.8 proposal, BIB1 open); post lift <= +0.2 stop",
+     "pass": false,
+     "binding": false,
+     "note": "M0 points: corner, behind the sofa, right edge in light-M0.json wall_patches"
+    },
+    {
+     "id": "G1.9",
+     "value": {
+      "black_point_L": 12.4,
+      "wall_patch_HSL": [
+       35.8,
+       38.6,
+       72.3
+      ],
+      "wall_patch": "hero_wall_mid (clay selfcheck)",
+      "whites_H_median": 41.5,
+      "whites_S_median": 21.3,
+      "share_white_H_under_25": 0.0,
+      "floor_median_HSL": null
+     },
+     "threshold": "black point L 12-15; back wall H 32-40 (bath: 4000 K, H informational), S 15-28; no H < 25 in white / beige; parquet H 30-40 S 30-45 L 68-78 (G1.11 proposal)",
+     "pass": false,
+     "binding": true
+    },
+    {
+     "id": "G1.10",
+     "value": {
+      "wall-sconce": {
+       "L_p95": 96.1,
+       "H": 90.0,
+       "S": 40.0,
+       "lit_in_clay": true,
+       "not_brighter_than_window": true,
+       "note": null
+      },
+      "vanity-sconces": {
+       "L_p95": 94.7,
+       "H": 67.1,
+       "S": 57.1,
+       "lit_in_clay": true,
+       "not_brighter_than_window": true,
+       "note": null
+      }
+     },
+     "threshold": "every lamp lit: shade L 93-97 (H 35-45, S 25-45 informational: the box includes surroundings); none brighter than the window",
+     "pass": true,
+     "binding": true,
+     "note": "measured inside the clay lamp box: top 10 % of L; a lamp drawn outside its box reads as wall"
+    },
+    {
+     "id": "G1.12",
+     "value": {
+      "findings": [],
+      "fillers_to_register": [
+       "paper roll on the stand"
+      ],
+      "saturated_255_px": 0
+     },
+     "threshold": "0 violations of the closed list (Bible / recipe 2.7); fillers must be on the registered list",
+     "pass": true,
+     "binding": true,
+     "note": "eye at 1600 px and 100 % crops; the unregistered fillers show use of the product (rule C.1 spirit) and are listed for the designer to register"
+    },
+    {
+     "id": "G1.13",
+     "value": {
+      "box": "window W-bath",
+      "width_frac": 0.189,
+      "margins": {
+       "left": 0.163,
+       "right": 0.648,
+       "top": 0.049,
+       "bottom": 0.478
+      },
+      "L_p99": 96.9,
+      "L_max": 97.1,
+      "brightest": true,
+      "saturated_255": 0,
+      "view": "fluted window, no view (by design)"
+     },
+     "threshold": "F2: whole with >= 0.03 margins or cut >= 15 %, width <= 30 %; brightest; p99 <= 97; 0 x 255; same view (birches, no snow: proposal)",
+     "pass": true,
+     "binding": true
+    },
+    {
+     "id": "G1.14",
+     "value": {
+      "pairs": {
+       "B1->CB-0 (T-CBath pan, 22 deg)": {
+        "worst_band_px": 10.04,
+        "shift_px": {
+         "dx": -3.88,
+         "dy": -3.87,
+         "response": 0.339
+        },
+        "dL_mean": 2.4,
+        "dE_mean": 4.38,
+        "clay_worst_band_px": 0.89
+       },
+       "B1->B2 (P-B, 35 deg)": {
+        "worst_band_px": 18.2,
+        "shift_px": {
+         "dx": -1.41,
+         "dy": -6.63,
+         "response": 0.195
+        },
+        "dL_mean": 0.1,
+        "dE_mean": 5.31,
+        "clay_worst_band_px": 0.42
+       }
+      },
+      "eye": "B2 and CB-0 show the same curtain, niche bottles, sconces"
+     },
+     "threshold": "each pair sharing a point: <= 2 px per band after reprojection and dL mean <= 1 (proposal); same objects by eye (binding)",
+     "pass": false,
+     "binding": true,
+     "note": "pan_reproject.py check on the kept renders; the clay pairs are the tool's floor (<= 0.9 px)"
+    },
+    {
+     "id": "G1.1",
+     "value": {
+      "deviations": [
+       "reed-diffuser: a narrow-neck bottle; the card is a lidded travertine-look jar with a bamboo lid (form)"
+      ],
+      "ok": "fluted resin sconces, linen slub curtain gathered at the corner, tufted bath mat, black floor paper stand, ribbed candle cup, 3 ribbed pump bottles"
+     },
+     "threshold": "every product is the card's SKU: silhouette, count, pattern, material: 0 deviations",
+     "pass": false,
+     "binding": true,
+     "note": "eye on overlays/fidelity-<frame>.jpg (render crop per clay box next to the frame's references); no tool (P8)"
+    },
+    {
+     "id": "G1.2",
+     "value": {
+      "eye_colour_notes": []
+     },
+     "threshold": "dh <= 5 deg, C* ratio 0.8-1.2 vs the SKU image (proposal)",
+     "pass": null,
+     "binding": false,
+     "note": "no tool (P8); eye notes only"
+    },
+    {
+     "id": "G1.5",
+     "value": {
+      "clay_F3_edge_tangents": 2,
+      "clay_F3_object_tangents": 1,
+      "clay_F8": "pass",
+      "heroes_thirds": [
+       {
+        "hero": "shower curtain stack (L corner 5.20, 11.15)",
+        "u": 0.6563,
+        "ok": true
+       },
+       {
+        "hero": "window centre (left third)",
+        "u": 0.276,
+        "ok": false
+       },
+       {
+        "hero": "WC centre",
+        "u": 0.2778,
+        "ok": false
+       }
+      ]
+     },
+     "threshold": "F1-F8, F11, F12 on the clay and again on the render",
+     "pass": null,
+     "binding": true,
+     "note": "no tool on the render; the round-4 selfcheck carries F3 / F8 only"
+    },
+    {
+     "id": "G1.6",
+     "value": {
+      "minimum": 11,
+      "products_counted": 2,
+      "fixed_product_counted": 0,
+      "total": 2,
+      "with_stand_in_rugs": 2,
+      "categories": [
+       "textile"
+      ],
+      "categories_of_4": 1
+     },
+     "threshold": ">= 11 products (>= 50 % visible, >= 0.5 % of the frame; fixed-product furniture counts; sets once) and >= 4 of 4 categories",
+     "pass": false,
+     "binding": true,
+     "note": "counted on the round-4 clay boxes (visibility assumed where round 4 did not ray-cast); the render shows the same products by eye"
+    },
+    {
+     "id": "G1.15",
+     "value": {
+      "decision": null
+     },
+     "threshold": "user approval on the sheet (gate 2 / approval 3)",
+     "pass": null,
+     "binding": true,
+     "note": "not asked yet; the sheet is assets/renders/house-nordic-sheet-v7-2026-11-02.jpg"
+    },
+    {
+     "id": "G1.16",
+     "value": {
+      "designer_score": null
+     },
+     "threshold": ">= 8 / 10 by master-designer (proposal)",
+     "pass": null,
+     "binding": false,
+     "note": "docs/render-v7-review-2026-11-02.md not written yet at the time of this check"
+    },
+    {
+     "id": "OVS",
+     "value": {
+      "required": true,
+      "why": "22 deg, P-B 35 deg",
+      "applied": true,
+      "frame_file_matches_centre_crop": true
+     },
+     "threshold": "3 % overscan on every still in a pan >= 21 deg (transitions render plan 3 / 6.4, proposal)",
+     "pass": true,
+     "binding": false
+    },
+    {
+     "id": "G1.17",
+     "value": {
+      "returned_size_px": [
+       2736,
+       1536
+      ],
+      "resize": "non-uniform resize 2736x1536 -> 2736x1539 (+0.20% vertical), no crop",
+      "graded_size": [
+       2580,
+       1451
+      ],
+      "overscan_canvas": true,
+      "model": "gpt-image-2-5",
+      "quality": "sunburst",
+      "credits": 600,
+      "prompt_file_exists": true,
+      "prompt_record_json": true
+     },
+     "threshold": "test: 2K, 16:9, what the model returned recorded; a prompt record per job",
+     "pass": true,
+     "binding": true
+    },
+    {
+     "id": "G8.6",
+     "value": {
+      "baked_cards": 7,
+      "live": [],
+      "unverified": 7
+     },
+     "threshold": "every baked card live at the supplier within 7 days (proposal: 7 days; principle binding)",
+     "pass": false,
+     "binding": true,
+     "note": "docs/render-products-check-2026-11-02.json: only the 3 Zendrop cards were checked (MCP); CJ and AliExpress in the queue"
+    }
+   ],
+   "verdict": "fail",
+   "failed_binding": [
+    "G1.4",
+    "G1.9",
+    "G1.14",
+    "G1.1",
+    "G1.6",
+    "G8.6"
+   ],
+   "failed_proposal": [
+    "G1.3",
+    "G1.8"
+   ],
+   "cannot_measure": [
+    "G1.2",
+    "G1.5",
+    "G1.15",
+    "G1.16"
+   ],
+   "may_reference": "with register only (global affine corrects it; residual <= 9.6 px); products / scale to fix: fluted glazing / window 0.95x (edges)",
+   "serves": [
+    "T-CBath (end)",
+    "P-B"
+   ],
+   "blocks_transitions": [
+    "T-CBath (end)",
+    "P-B"
+   ],
+   "design_notes": null,
+   "products_unverified": [
+    "shower-curtain-aliexpress-linen-blend-slub-panel-200x270",
+    "vanity-sconces-cj-fluted-resin-updown-white",
+    "bath-mat-cj-tufted-cotton-frame-beige-40x60",
+    "toilet-paper-stand-aliexpress-floor-standing-black-763442",
+    "reed-diffuser-cj-travertine-look-bamboo-lid-milktea",
+    "candle-cj-ribbed-matte-ceramic-candle-cup-9",
+    "shower-dispensers-cj-sand-ribbed-ceramic-pump-bottle"
+   ],
+   "products_live": []
+  },
+  {
+   "frame": "B2",
+   "kind": "master",
+   "base": null,
+   "kept_file": "assets/renders/bath/nordic/v7/b2-v7-graded.png",
+   "criteria": [
+    {
+     "id": "G1.4",
+     "value": {
+      "register_shift_px": [
+       -1.16,
+       -2.2
+      ],
+      "register_scale": [
+       1.00068,
+       0.98298
+      ],
+      "scale_dev_pct": 1.7,
+      "worst_tile_px_after_register": 13.23,
+      "tiles_counted": 8,
+      "check_worst_band_px_reliable": 173.97,
+      "check_bands_reliable": 4
+     },
+     "threshold": "global shift <= 9.6 px (0.5 % of 1920) and scale within 0.5 %; residual per tile <= 2.0 px (pan still)",
+     "pass": false,
+     "binding": true,
+     "note": "pan_reproject.py register (ECC affine) + QA tile ECC; check's phase correlation only where response >= 0.05"
+    },
+    {
+     "id": "G1.3",
+     "value": {
+      "fixed_edges_worst_px": 51,
+      "width_ratios": {
+       "shower fittings, matte black (shell)": 1.7874,
+       "bath vanity 110 (fixed)": 1.0046,
+       "U6 mirror": 0.9853,
+       "mirror oak frame": 0.9853
+      },
+      "eye": [
+       "towel ring + towel about 0.04 right of the box (render-agent); shower fittings 1.79x (tiny box, low confidence)"
+      ]
+     },
+     "threshold": "every clear edge of a fixed piece within +-19 px (+-0.01 of 1920) of the clay; products inside their box +-15 % (eye)",
+     "pass": false,
+     "binding": false,
+     "note": "edges with clay and render strength >= 4 only; product scale by eye on the fidelity sheet (no tool, P8)"
+    },
+    {
+     "id": "G1.8",
+     "value": {
+      "reference_uv": [
+       0.4143,
+       0.1542
+      ],
+      "graded_HSL": [
+       32.6,
+       28.8,
+       69.2
+      ],
+      "raw_HSL": [
+       32.7,
+       33.3,
+       67.2
+      ],
+      "stops_needed_from_raw": 0.826,
+      "agent_needed_stops": -0.12,
+      "agent_applied": -0.12,
+      "agent_flag": "within cap"
+     },
+     "threshold": "reference wall L 90-94 (M0: Bible corner; others: G1.8 proposal, BIB1 open); post lift <= +0.2 stop",
+     "pass": false,
+     "binding": false,
+     "note": "M0 points: corner, behind the sofa, right edge in light-M0.json wall_patches"
+    },
+    {
+     "id": "G1.9",
+     "value": {
+      "black_point_L": 12.5,
+      "wall_patch_HSL": [
+       32.6,
+       28.8,
+       69.2
+      ],
+      "wall_patch": "hero_wall_mid (clay selfcheck)",
+      "whites_H_median": 33.1,
+      "whites_S_median": 20.0,
+      "share_white_H_under_25": 0.0006,
+      "floor_median_HSL": null
+     },
+     "threshold": "black point L 12-15; back wall H 32-40 (bath: 4000 K, H informational), S 15-28; no H < 25 in white / beige; parquet H 30-40 S 30-45 L 68-78 (G1.11 proposal)",
+     "pass": false,
+     "binding": true
+    },
+    {
+     "id": "G1.10",
+     "value": {
+      "vanity-sconces": {
+       "L_p95": 89.2,
+       "H": 38.5,
+       "S": 56.5,
+       "lit_in_clay": true,
+       "not_brighter_than_window": null,
+       "note": null
+      }
+     },
+     "threshold": "every lamp lit: shade L 93-97 (H 35-45, S 25-45 informational: the box includes surroundings); none brighter than the window",
+     "pass": false,
+     "binding": true,
+     "note": "measured inside the clay lamp box: top 10 % of L; a lamp drawn outside its box reads as wall"
+    },
+    {
+     "id": "G1.12",
+     "value": {
+      "findings": [],
+      "fillers_to_register": [
+       "toothbrushes in the cup",
+       "rolled towels in the basket"
+      ],
+      "saturated_255_px": 0
+     },
+     "threshold": "0 violations of the closed list (Bible / recipe 2.7); fillers must be on the registered list",
+     "pass": true,
+     "binding": true,
+     "note": "eye at 1600 px and 100 % crops; the unregistered fillers show use of the product (rule C.1 spirit) and are listed for the designer to register"
+    },
+    {
+     "id": "G1.13",
+     "value": {
+      "box": null,
+      "L_p99": null,
+      "brightest": null,
+      "view": "no window (allowed)"
+     },
+     "threshold": "no window in frame: the opening / vista is the brightest area, p99 <= 97",
+     "pass": null,
+     "binding": true,
+     "note": "no window and no opening box"
+    },
+    {
+     "id": "G1.14",
+     "value": {
+      "pairs": {
+       "B1->B2 (P-B, 35 deg)": {
+        "worst_band_px": 18.2,
+        "shift_px": {
+         "dx": -1.41,
+         "dy": -6.63,
+         "response": 0.195
+        },
+        "dL_mean": 0.1,
+        "dE_mean": 5.31,
+        "clay_worst_band_px": 0.42
+       },
+       "CB-0->B2 ((CB-0-B2, 57), 57 deg)": {
+        "worst_band_px": 17.87,
+        "shift_px": {
+         "dx": 2.04,
+         "dy": -11.5,
+         "response": 0.027
+        },
+        "dL_mean": 2.6,
+        "dE_mean": 4.8,
+        "clay_worst_band_px": 1.26
+       }
+      },
+      "eye": "shares curtain, bottles, sconces with B1"
+     },
+     "threshold": "each pair sharing a point: <= 2 px per band after reprojection and dL mean <= 1 (proposal); same objects by eye (binding)",
+     "pass": false,
+     "binding": true,
+     "note": "pan_reproject.py check on the kept renders; the clay pairs are the tool's floor (<= 0.9 px)"
+    },
+    {
+     "id": "G1.1",
+     "value": {
+      "deviations": [
+       "storage-basket: white cotton rope; the card image is a charcoal rope basket (colour / option to confirm)"
+      ],
+      "ok": "oak-framed mirror reflecting blank wall (F8), fluted sconce pair, curtain, 3 niche bottles, ribbed soap pump, travertine cup, bud vase, black towel ring, linen hand towel"
+     },
+     "threshold": "every product is the card's SKU: silhouette, count, pattern, material: 0 deviations",
+     "pass": false,
+     "binding": true,
+     "note": "eye on overlays/fidelity-<frame>.jpg (render crop per clay box next to the frame's references); no tool (P8)"
+    },
+    {
+     "id": "G1.2",
+     "value": {
+      "eye_colour_notes": [
+       "storage-basket: white cotton rope; the card image is a charcoal rope basket (colour / option to confirm)"
+      ]
+     },
+     "threshold": "dh <= 5 deg, C* ratio 0.8-1.2 vs the SKU image (proposal)",
+     "pass": null,
+     "binding": false,
+     "note": "no tool (P8); eye notes only"
+    },
+    {
+     "id": "G1.5",
+     "value": {
+      "clay_F3_edge_tangents": 0,
+      "clay_F3_object_tangents": 0,
+      "clay_F8": "pass",
+      "heroes_thirds": [
+       {
+        "hero": "mirror centre",
+        "u": 0.662,
+        "ok": true
+       },
+       {
+        "hero": "SE corner (left)",
+        "u": 0.2902,
+        "ok": false
+       }
+      ]
+     },
+     "threshold": "F1-F8, F11, F12 on the clay and again on the render",
+     "pass": null,
+     "binding": true,
+     "note": "no tool on the render; the round-4 selfcheck carries F3 / F8 only"
+    },
+    {
+     "id": "G1.6",
+     "value": {
+      "minimum": 11,
+      "products_counted": 4,
+      "fixed_product_counted": 1,
+      "total": 5,
+      "with_stand_in_rugs": 5,
+      "categories": [
+       "furniture",
+       "lighting",
+       "storage/function",
+       "textile"
+      ],
+      "categories_of_4": 3
+     },
+     "threshold": ">= 11 products (>= 50 % visible, >= 0.5 % of the frame; fixed-product furniture counts; sets once) and >= 4 of 4 categories",
+     "pass": false,
+     "binding": true,
+     "note": "counted on the round-4 clay boxes (visibility assumed where round 4 did not ray-cast); the render shows the same products by eye"
+    },
+    {
+     "id": "G1.15",
+     "value": {
+      "decision": null
+     },
+     "threshold": "user approval on the sheet (gate 2 / approval 3)",
+     "pass": null,
+     "binding": true,
+     "note": "not asked yet; the sheet is assets/renders/house-nordic-sheet-v7-2026-11-02.jpg"
+    },
+    {
+     "id": "G1.16",
+     "value": {
+      "designer_score": null
+     },
+     "threshold": ">= 8 / 10 by master-designer (proposal)",
+     "pass": null,
+     "binding": false,
+     "note": "docs/render-v7-review-2026-11-02.md not written yet at the time of this check"
+    },
+    {
+     "id": "OVS",
+     "value": {
+      "required": true,
+      "why": "P-B 35 deg",
+      "applied": true,
+      "frame_file_matches_centre_crop": true
+     },
+     "threshold": "3 % overscan on every still in a pan >= 21 deg (transitions render plan 3 / 6.4, proposal)",
+     "pass": true,
+     "binding": false
+    },
+    {
+     "id": "G1.17",
+     "value": {
+      "returned_size_px": [
+       2736,
+       1536
+      ],
+      "resize": "non-uniform resize 2736x1536 -> 2736x1539 (+0.20% vertical), no crop",
+      "graded_size": [
+       2580,
+       1451
+      ],
+      "overscan_canvas": true,
+      "model": "gpt-image-2-5",
+      "quality": "sunburst",
+      "credits": 600,
+      "prompt_file_exists": true,
+      "prompt_record_json": true
+     },
+     "threshold": "test: 2K, 16:9, what the model returned recorded; a prompt record per job",
+     "pass": true,
+     "binding": true
+    },
+    {
+     "id": "G8.6",
+     "value": {
+      "baked_cards": 9,
+      "live": [],
+      "unverified": 9
+     },
+     "threshold": "every baked card live at the supplier within 7 days (proposal: 7 days; principle binding)",
+     "pass": false,
+     "binding": true,
+     "note": "docs/render-products-check-2026-11-02.json: only the 3 Zendrop cards were checked (MCP); CJ and AliExpress in the queue"
+    }
+   ],
+   "verdict": "fail",
+   "failed_binding": [
+    "G1.4",
+    "G1.9",
+    "G1.10",
+    "G1.14",
+    "G1.1",
+    "G1.6",
+    "G8.6"
+   ],
+   "failed_proposal": [
+    "G1.3",
+    "G1.8"
+   ],
+   "cannot_measure": [
+    "G1.13",
+    "G1.2",
+    "G1.5",
+    "G1.15",
+    "G1.16"
+   ],
+   "may_reference": "no: towel ring + towel about 0.04 right of the box (render-agent); shower fittings 1.79x (tiny box, low confidence)",
+   "serves": [
+    "P-B"
+   ],
+   "blocks_transitions": [
+    "P-B"
+   ],
+   "design_notes": null,
+   "products_unverified": [
+    "vanity-sconces-cj-fluted-resin-updown-white",
+    "shower-curtain-aliexpress-linen-blend-slub-panel-200x270",
+    "shower-dispensers-cj-sand-ribbed-ceramic-pump-bottle",
+    "soap-dispenser-cj-sand-ribbed-ceramic-pump-bottle",
+    "toothbrush-cup-cj-silver-travertine-cup",
+    "vanity-vase-aliexpress-sand-oat-bud-vase-g-series",
+    "storage-basket-cj-cotton-rope-basket-43x33x19",
+    "towel-ring-aliexpress-minimalist-oval-towel-ring-663845",
+    "hand-towel-aliexpress-pure-linen-towel-38x55"
+   ],
+   "products_live": []
+  },
+  {
+   "frame": "W0",
+   "kind": "master",
+   "base": null,
+   "kept_file": "assets/renders/work/nordic/v7/w0-v7-graded.png",
+   "criteria": [
+    {
+     "id": "G1.4",
+     "value": {
+      "register_shift_px": [
+       -5.28,
+       18.36
+      ],
+      "register_scale": [
+       1.00367,
+       0.94826
+      ],
+      "scale_dev_pct": 5.17,
+      "worst_tile_px_after_register": 17.44,
+      "tiles_counted": 8,
+      "check_worst_band_px_reliable": 40.07,
+      "check_bands_reliable": 3
+     },
+     "threshold": "global shift <= 9.6 px (0.5 % of 1920) and scale within 0.5 %; residual per tile <= 9.6 px (video endpoint)",
+     "pass": false,
+     "binding": true,
+     "note": "pan_reproject.py register (ECC affine) + QA tile ECC; check's phase correlation only where response >= 0.05"
+    },
+    {
+     "id": "G1.3",
+     "value": {
+      "fixed_edges_worst_px": 49,
+      "width_ratios": {
+       "built-in oak desk + shelf": 0.9773,
+       "desk chair": 0.8248
+      },
+      "eye": [
+       "desk chair 0.82x (edges)",
+       "vertical scale 0.948, shift +18 px (lower half re-framed)"
+      ]
+     },
+     "threshold": "every clear edge of a fixed piece within +-19 px (+-0.01 of 1920) of the clay; products inside their box +-15 % (eye)",
+     "pass": false,
+     "binding": false,
+     "note": "edges with clay and render strength >= 4 only; product scale by eye on the fidelity sheet (no tool, P8)"
+    },
+    {
+     "id": "G1.8",
+     "value": {
+      "reference_uv": [
+       0.5,
+       0.1214
+      ],
+      "graded_HSL": [
+       35.5,
+       21.0,
+       90.5
+      ],
+      "raw_HSL": [
+       27.9,
+       15.4,
+       83.6
+      ],
+      "stops_needed_from_raw": 0.232,
+      "agent_needed_stops": 0.231,
+      "agent_applied": 0.2,
+      "agent_flag": "DARK: needs more than +0.2 stop, not lifted further"
+     },
+     "threshold": "reference wall L 90-94 (M0: Bible corner; others: G1.8 proposal, BIB1 open); post lift <= +0.2 stop",
+     "pass": true,
+     "binding": false,
+     "note": "M0 points: corner, behind the sofa, right edge in light-M0.json wall_patches"
+    },
+    {
+     "id": "G1.9",
+     "value": {
+      "black_point_L": 12.5,
+      "wall_patch_HSL": [
+       35.5,
+       21.0,
+       90.5
+      ],
+      "wall_patch": "hero_wall_mid (clay selfcheck)",
+      "whites_H_median": 36.0,
+      "whites_S_median": 17.3,
+      "share_white_H_under_25": 0.0075,
+      "floor_median_HSL": null
+     },
+     "threshold": "black point L 12-15; back wall H 32-40 (bath: 4000 K, H informational), S 15-28; no H < 25 in white / beige; parquet H 30-40 S 30-45 L 68-78 (G1.11 proposal)",
+     "pass": true,
+     "binding": true,
+     "note": " HSL S inflates near L 90: S read on the frame's own mid wall"
+    },
+    {
+     "id": "G1.10",
+     "value": {
+      "lamps_in_clay": []
+     },
+     "threshold": "every lamp in the frame lit",
+     "pass": null,
+     "binding": true,
+     "note": "no lamp placeholder in this frame (F11 is a plan question, not a render one)"
+    },
+    {
+     "id": "G1.12",
+     "value": {
+      "findings": [],
+      "fillers_to_register": [
+       "pencils in the cup"
+      ],
+      "saturated_255_px": 0
+     },
+     "threshold": "0 violations of the closed list (Bible / recipe 2.7); fillers must be on the registered list",
+     "pass": true,
+     "binding": true,
+     "note": "eye at 1600 px and 100 % crops; the unregistered fillers show use of the product (rule C.1 spirit) and are listed for the designer to register"
+    },
+    {
+     "id": "G1.13",
+     "value": {
+      "box": "window W-work",
+      "width_frac": 0.124,
+      "margins": {
+       "left": 0.0,
+       "right": 0.876,
+       "top": 0.0,
+       "bottom": 0.363
+      },
+      "L_p99": 97.6,
+      "L_max": 97.6,
+      "brightest": true,
+      "saturated_255": 0,
+      "view": "bare birches, no snow"
+     },
+     "threshold": "F2: whole with >= 0.03 margins or cut >= 15 %, width <= 30 %; brightest; p99 <= 97; 0 x 255; same view (birches, no snow: proposal)",
+     "pass": false,
+     "binding": true
+    },
+    {
+     "id": "G1.14",
+     "value": {
+      "eye": "W0-in shows the same objects"
+     },
+     "threshold": "same objects in both frames (eye)",
+     "pass": true,
+     "binding": true,
+     "note": "no pair sharing a point; video endpoint sheets in overlays/endpoints-*.jpg"
+    },
+    {
+     "id": "G1.1",
+     "value": {
+      "deviations": [],
+      "ok": "two grey felt bins, seagrass belly planter, white rope basket, grey kraft bin, stone pen cup, curtains, NYOKO stand-in; no bookends; bare wall stays bare"
+     },
+     "threshold": "every product is the card's SKU: silhouette, count, pattern, material: 0 deviations",
+     "pass": true,
+     "binding": true,
+     "note": "eye on overlays/fidelity-<frame>.jpg (render crop per clay box next to the frame's references); no tool (P8)"
+    },
+    {
+     "id": "G1.2",
+     "value": {
+      "eye_colour_notes": []
+     },
+     "threshold": "dh <= 5 deg, C* ratio 0.8-1.2 vs the SKU image (proposal)",
+     "pass": null,
+     "binding": false,
+     "note": "no tool (P8); eye notes only"
+    },
+    {
+     "id": "G1.5",
+     "value": {
+      "clay_F3_edge_tangents": 0,
+      "clay_F3_object_tangents": 3,
+      "clay_F8": null,
+      "heroes_thirds": [
+       {
+        "hero": "desk centre",
+        "u": 0.5,
+        "ok": false
+       }
+      ]
+     },
+     "threshold": "F1-F8, F11, F12 on the clay and again on the render",
+     "pass": null,
+     "binding": true,
+     "note": "no tool on the render; the round-4 selfcheck carries F3 / F8 only"
+    },
+    {
+     "id": "G1.6",
+     "value": {
+      "minimum": 11,
+      "products_counted": 4,
+      "fixed_product_counted": 2,
+      "total": 6,
+      "with_stand_in_rugs": 6,
+      "categories": [
+       "ceramics/tableware",
+       "furniture",
+       "storage/function"
+      ],
+      "categories_of_4": 2
+     },
+     "threshold": ">= 11 products (>= 50 % visible, >= 0.5 % of the frame; fixed-product furniture counts; sets once) and >= 4 of 4 categories",
+     "pass": false,
+     "binding": true,
+     "note": "counted on the round-4 clay boxes (visibility assumed where round 4 did not ray-cast); the render shows the same products by eye"
+    },
+    {
+     "id": "G1.15",
+     "value": {
+      "decision": null
+     },
+     "threshold": "user approval on the sheet (gate 2 / approval 3)",
+     "pass": null,
+     "binding": true,
+     "note": "not asked yet; the sheet is assets/renders/house-nordic-sheet-v7-2026-11-02.jpg"
+    },
+    {
+     "id": "G1.16",
+     "value": {
+      "designer_score": null
+     },
+     "threshold": ">= 8 / 10 by master-designer (proposal)",
+     "pass": null,
+     "binding": false,
+     "note": "docs/render-v7-review-2026-11-02.md not written yet at the time of this check"
+    },
+    {
+     "id": "OVS",
+     "value": {
+      "required": false,
+      "why": "no pan",
+      "applied": false,
+      "frame_file_matches_centre_crop": null
+     },
+     "threshold": "3 % overscan on every still in a pan >= 21 deg (transitions render plan 3 / 6.4, proposal)",
+     "pass": true,
+     "binding": false
+    },
+    {
+     "id": "G1.17",
+     "value": {
+      "returned_size_px": [
+       2736,
+       1536
+      ],
+      "resize": "non-uniform resize 2736x1536 -> 2736x1539 (+0.20% vertical), no crop",
+      "graded_size": [
+       2736,
+       1539
+      ],
+      "overscan_canvas": false,
+      "model": "gpt-image-2-5",
+      "quality": "sunburst",
+      "credits": 600,
+      "prompt_file_exists": true,
+      "prompt_record_json": true
+     },
+     "threshold": "test: 2K, 16:9, what the model returned recorded; a prompt record per job",
+     "pass": true,
+     "binding": true
+    },
+    {
+     "id": "G8.6",
+     "value": {
+      "baked_cards": 6,
+      "live": [
+       "planter-zendrop-seagrass-belly-38x34"
+      ],
+      "unverified": 5
+     },
+     "threshold": "every baked card live at the supplier within 7 days (proposal: 7 days; principle binding)",
+     "pass": false,
+     "binding": true,
+     "note": "docs/render-products-check-2026-11-02.json: only the 3 Zendrop cards were checked (MCP); CJ and AliExpress in the queue"
+    }
+   ],
+   "verdict": "fail",
+   "failed_binding": [
+    "G1.4",
+    "G1.13",
+    "G1.6",
+    "G8.6"
+   ],
+   "failed_proposal": [
+    "G1.3"
+   ],
+   "cannot_measure": [
+    "G1.10",
+    "G1.2",
+    "G1.5",
+    "G1.15",
+    "G1.16"
+   ],
+   "may_reference": "no: desk chair 0.82x (edges); vertical scale 0.948, shift +18 px (lower half re-framed)",
+   "serves": [
+    "T-HW (end)"
+   ],
+   "blocks_transitions": [
+    "T-HW (end)"
+   ],
+   "design_notes": null,
+   "products_unverified": [
+    "curtains-aliexpress-cotton-linen-curtain-look-902882",
+    "basket-cj-jute-cotton-rope-cylinder-30-work",
+    "waste-basket-aliexpress-washable-kraft-paper-bin-25x40",
+    "shelf-boxes-cj-felt-storage-bin-30x24-pair",
+    "desk-organizer-cj-cave-stone-pen-cup-8x11"
+   ],
+   "products_live": [
+    "planter-zendrop-seagrass-belly-38x34"
+   ]
+  },
+  {
+   "frame": "H0x",
+   "kind": "pose",
+   "base": "H0",
+   "kept_file": "assets/renders/poses/nordic/v7/pose-h0x-v7-graded.png",
+   "criteria": [
+    {
+     "id": "G1.4",
+     "value": {
+      "register_shift_px": [
+       -0.29,
+       5.21
+      ],
+      "register_scale": [
+       0.99993,
+       0.95578
+      ],
+      "scale_dev_pct": 4.42,
+      "worst_tile_px_after_register": 24.62,
+      "tiles_counted": 8,
+      "check_worst_band_px_reliable": 56.39,
+      "check_bands_reliable": 3
+     },
+     "threshold": "global shift <= 9.6 px (0.5 % of 1920) and scale within 0.5 %; residual per tile <= 2.0 px (pan still)",
+     "pass": false,
+     "binding": true,
+     "note": "pan_reproject.py register (ECC affine) + QA tile ECC; check's phase correlation only where response >= 0.05"
+    },
+    {
+     "id": "G1.3",
+     "value": {
+      "fixed_edges_worst_px": 71,
+      "width_ratios": {
+       "fixed:hall-bench": 1.0192,
+       "G-H4 oak portal": 0.9064
+      },
+      "eye": []
+     },
+     "threshold": "every clear edge of a fixed piece within +-19 px (+-0.01 of 1920) of the clay; products inside their box +-15 % (eye)",
+     "pass": false,
+     "binding": false,
+     "note": "edges with clay and render strength >= 4 only; product scale by eye on the fidelity sheet (no tool, P8)"
+    },
+    {
+     "id": "G1.8",
+     "value": {
+      "note": "the pose's reference uv is the master's point, not valid after rotation; exposure agreement is measured in G1.14 (dL in the overlap)",
+      "agent_needed_stops": 0.622,
+      "agent_flag": "DARK: needs more than +0.2 stop, not lifted further"
+     },
+     "threshold": "same exposure as the master (dL <= 1 in the overlap)",
+     "pass": null,
+     "binding": false
+    },
+    {
+     "id": "G1.9",
+     "value": {
+      "black_point_L": 12.5,
+      "wall_patch_HSL": [
+       35.2,
+       18.4,
+       73.0
+      ],
+      "wall_patch": "hero_wall_mid (clay selfcheck)",
+      "whites_H_median": 36.4,
+      "whites_S_median": 22.1,
+      "share_white_H_under_25": 0.0,
+      "floor_median_HSL": [
+       31.4,
+       30.4,
+       65.5
+      ]
+     },
+     "threshold": "black point L 12-15; back wall H 32-40 (bath: 4000 K, H informational), S 15-28; no H < 25 in white / beige; parquet H 30-40 S 30-45 L 68-78 (G1.11 proposal)",
+     "pass": true,
+     "binding": true
+    },
+    {
+     "id": "G1.10",
+     "value": {
+      "wall-sconce": {
+       "L_p95": 93.5,
+       "H": 48.0,
+       "S": 63.6,
+       "lit_in_clay": true,
+       "not_brighter_than_window": true,
+       "note": null
+      },
+      "pendant": {
+       "L_p95": 92.9,
+       "H": 44.2,
+       "S": 51.4,
+       "lit_in_clay": true,
+       "not_brighter_than_window": true,
+       "note": null
+      },
+      "accent-sconces": {
+       "L_p95": 82.4,
+       "H": 38.8,
+       "S": 31.8,
+       "lit_in_clay": true,
+       "not_brighter_than_window": true,
+       "note": "L_p95 < 85: the shade is outside its clay box (moved) or not glowing"
+      }
+     },
+     "threshold": "every lamp lit: shade L 93-97 (H 35-45, S 25-45 informational: the box includes surroundings); none brighter than the window",
+     "pass": false,
+     "binding": true,
+     "note": "measured inside the clay lamp box: top 10 % of L; a lamp drawn outside its box reads as wall"
+    },
+    {
+     "id": "G1.12",
+     "value": {
+      "saturated_255_px": 0,
+      "eye": "no sun patch, beam, bloom, cable, text or person seen"
+     },
+     "threshold": "0 violations",
+     "pass": true,
+     "binding": true,
+     "note": "eye at 1600 px"
+    },
+    {
+     "id": "G1.13",
+     "value": {
+      "box": "G-H4 oak portal (vista through the opening: the brightest area by design)",
+      "L_p99": 96.7,
+      "brightest": true,
+      "view": null
+     },
+     "threshold": "no window in frame: the opening / vista is the brightest area, p99 <= 97",
+     "pass": true,
+     "binding": true
+    },
+    {
+     "id": "G1.14",
+     "value": {
+      "pairs": {
+       "H0->H0x (T-E0 pan, 13 deg)": {
+        "worst_band_px": 27.23,
+        "shift_px": {
+         "dx": -7.2,
+         "dy": 26.01,
+         "response": 0.416
+        },
+        "dL_mean": 0.3,
+        "dE_mean": 6.71,
+        "clay_worst_band_px": 0.18
+       },
+       "H0e->H0x ((H0e-H0x, 25), 25 deg)": {
+        "worst_band_px": 38.58,
+        "shift_px": {
+         "dx": 0.62,
+         "dy": 17.29,
+         "response": 0.14
+        },
+        "dL_mean": 1.0,
+        "dE_mean": 8.62,
+        "clay_worst_band_px": 0.23
+       }
+      },
+      "eye": "same hall objects and the same living vista as H0 / M0"
+     },
+     "threshold": "each pair sharing a point: <= 2 px per band after reprojection and dL mean <= 1 (proposal); same objects by eye (binding)",
+     "pass": false,
+     "binding": true,
+     "note": "pan_reproject.py check on the kept renders; the clay pairs are the tool's floor (<= 0.9 px)"
+    },
+    {
+     "id": "OVS",
+     "value": {
+      "required": false,
+      "why": "13 deg",
+      "applied": false,
+      "frame_file_matches_centre_crop": null
+     },
+     "threshold": "3 % overscan on every still in a pan >= 21 deg (transitions render plan 3 / 6.4, proposal)",
+     "pass": true,
+     "binding": false
+    },
+    {
+     "id": "G1.17",
+     "value": {
+      "returned_size_px": [
+       2736,
+       1536
+      ],
+      "resize": "non-uniform resize 2736x1536 -> 2736x1539 (+0.20% vertical), no crop",
+      "graded_size": [
+       2736,
+       1539
+      ],
+      "overscan_canvas": false,
+      "model": "gpt-image-2-5",
+      "quality": "sunburst",
+      "credits": 600,
+      "prompt_file_exists": true,
+      "prompt_record_json": true
+     },
+     "threshold": "test: 2K, 16:9, what the model returned recorded; a prompt record per job",
+     "pass": true,
+     "binding": true
+    },
+    {
+     "id": "G8.6",
+     "value": {
+      "baked_cards": 22,
+      "live": [
+       "basket-zendrop-seagrass-belly-38x34"
+      ],
+      "unverified": 21
+     },
+     "threshold": "every baked card live at the supplier within 7 days (proposal: 7 days; principle binding)",
+     "pass": false,
+     "binding": true,
+     "note": "docs/render-products-check-2026-11-02.json: only the 3 Zendrop cards were checked (MCP); CJ and AliExpress in the queue"
+    }
+   ],
+   "verdict": "fail",
+   "failed_binding": [
+    "G1.4",
+    "G1.10",
+    "G1.14",
+    "G8.6"
+   ],
+   "failed_proposal": [
+    "G1.3"
+   ],
+   "cannot_measure": [
+    "G1.8"
+   ],
+   "may_reference": "no: lock broken",
+   "serves": [
+    "T-E0: pan / V1 start"
+   ],
+   "blocks_transitions": [
+    "T-E0: pan / V1 start"
+   ],
+   "design_notes": null,
+   "products_unverified": [
+    "basket-cj-two-tone-rope-jute-white-30",
+    "bench-cushion-aliexpress-linen-look-flat-cushion-110x35x3",
+    "bench-throw-cj-cotton-waffle-blanket-150x200",
+    "bowl-cj-glutinous-white-belly-bowl-21",
+    "candle-holders-cj-travertine-pedestal",
+    "console-vessel-aliexpress-ceramic-wabi-sabi-vase-906575",
+    "curtains-aliexpress-linen-blend-s-fold-180502",
+    "cushions-cj-boucle-teddy",
+    "cushions-cj-knitted-chenille-bean-green",
+    "cushions-cj-linen-look-charcoal",
+    "framed-art-aliexpress-minimal-geometric-triptych-prints",
+    "framed-art-cj-swinging-line-black-frame-mat-35x45",
+    "key-tray-aliexpress-oval-metal-tray-693779",
+    "pendant-cj-silk-ribbed-pumpkin-40",
+    "sofa-cover-cj-cotton-muslin-fringe",
+    "table-runner-cj-linen-look-sage-fringe",
+    "vase-aliexpress-vintage-distressed-clay-vase-589009",
+    "wall-hooks-aliexpress-pine-oval-pegs-4pcs",
+    "wall-sconce-cj-black-swing-arm-fabric",
+    "wall-sconce-cj-travertine-cube-updown-12",
+    "wall-sconce-cj-white-fabric-cube-15-hall"
+   ],
+   "products_live": [
+    "basket-zendrop-seagrass-belly-38x34"
+   ]
+  },
+  {
+   "frame": "M0p",
+   "kind": "pose",
+   "base": "M0",
+   "kept_file": "assets/renders/poses/nordic/v7/pose-m0p-v7-graded.png",
+   "criteria": [
+    {
+     "id": "G1.4",
+     "value": {
+      "register_shift_px": [
+       -21.2,
+       111.2
+      ],
+      "register_scale": [
+       0.99871,
+       0.92418
+      ],
+      "scale_dev_pct": 7.58,
+      "worst_tile_px_after_register": 29.59,
+      "tiles_counted": 6,
+      "check_worst_band_px_reliable": null,
+      "check_bands_reliable": 0
+     },
+     "threshold": "global shift <= 9.6 px (0.5 % of 1920) and scale within 0.5 %; residual per tile <= 2.0 px (pan still)",
+     "pass": false,
+     "binding": true,
+     "note": "pan_reproject.py register (ECC affine) + QA tile ECC; check's phase correlation only where response >= 0.05"
+    },
+    {
+     "id": "G1.3",
+     "value": {
+      "fixed_edges_worst_px": 93,
+      "width_ratios": {
+       "window W-dining": 1.1828
+      },
+      "eye": []
+     },
+     "threshold": "every clear edge of a fixed piece within +-19 px (+-0.01 of 1920) of the clay; products inside their box +-15 % (eye)",
+     "pass": false,
+     "binding": false,
+     "note": "edges with clay and render strength >= 4 only; product scale by eye on the fidelity sheet (no tool, P8)"
+    },
+    {
+     "id": "G1.8",
+     "value": {
+      "note": "the pose's reference uv is the master's point, not valid after rotation; exposure agreement is measured in G1.14 (dL in the overlap)",
+      "agent_needed_stops": 0.703,
+      "agent_flag": "DARK: needs more than +0.2 stop, not lifted further"
+     },
+     "threshold": "same exposure as the master (dL <= 1 in the overlap)",
+     "pass": null,
+     "binding": false
+    },
+    {
+     "id": "G1.9",
+     "value": {
+      "black_point_L": 12.2,
+      "wall_patch_HSL": [
+       36.6,
+       24.8,
+       80.6
+      ],
+      "wall_patch": "hero_wall_mid (clay selfcheck)",
+      "whites_H_median": 39.1,
+      "whites_S_median": 20.0,
+      "share_white_H_under_25": 0.0021,
+      "floor_median_HSL": null
+     },
+     "threshold": "black point L 12-15; back wall H 32-40 (bath: 4000 K, H informational), S 15-28; no H < 25 in white / beige; parquet H 30-40 S 30-45 L 68-78 (G1.11 proposal)",
+     "pass": true,
+     "binding": true
+    },
+    {
+     "id": "G1.10",
+     "value": {
+      "pendant": {
+       "L_p95": 90.4,
+       "H": 38.6,
+       "S": 75.5,
+       "lit_in_clay": true,
+       "not_brighter_than_window": true,
+       "note": null
+      },
+      "accent-sconces": {
+       "L_p95": 90.8,
+       "H": 37.7,
+       "S": 66.0,
+       "lit_in_clay": true,
+       "not_brighter_than_window": true,
+       "note": null
+      }
+     },
+     "threshold": "every lamp lit: shade L 93-97 (H 35-45, S 25-45 informational: the box includes surroundings); none brighter than the window",
+     "pass": false,
+     "binding": true,
+     "note": "measured inside the clay lamp box: top 10 % of L; a lamp drawn outside its box reads as wall"
+    },
+    {
+     "id": "G1.12",
+     "value": {
+      "saturated_255_px": 0,
+      "eye": "no sun patch, beam, bloom, cable, text or person seen"
+     },
+     "threshold": "0 violations",
+     "pass": true,
+     "binding": true,
+     "note": "eye at 1600 px"
+    },
+    {
+     "id": "G1.13",
+     "value": {
+      "box": "window W-dining",
+      "L_p99": 91.4,
+      "brightest": false,
+      "saturated_255_total": 0
+     },
+     "threshold": "the brightest area is the window / vista; p99 <= 97; 0 x 255",
+     "pass": null,
+     "binding": true,
+     "note": "the measured box is an opening or a secondary window (M0p: the living window at the left edge is not a clay box; C0 / S1' / MB-in: the door box is not the vista): no tool box for the vista"
+    },
+    {
+     "id": "G1.14",
+     "value": {
+      "pairs": {
+       "M0->M0p (P0, 25 deg)": {
+        "worst_band_px": 35.58,
+        "shift_px": {
+         "dx": 65.97,
+         "dy": -33.18,
+         "response": 0.08
+        },
+        "dL_mean": 0.3,
+        "dE_mean": 11.26,
+        "clay_worst_band_px": 0.61
+       },
+       "M0p->M0x (P1, 35 deg)": {
+        "worst_band_px": 258.96,
+        "shift_px": {
+         "dx": -200.22,
+         "dy": 36.26,
+         "response": 0.107
+        },
+        "dL_mean": 4.6,
+        "dE_mean": 10.22,
+        "clay_worst_band_px": 0.22
+       }
+      },
+      "eye": "same living objects as M0; the dining through the opening = D1 objects"
+     },
+     "threshold": "each pair sharing a point: <= 2 px per band after reprojection and dL mean <= 1 (proposal); same objects by eye (binding)",
+     "pass": false,
+     "binding": true,
+     "note": "pan_reproject.py check on the kept renders; the clay pairs are the tool's floor (<= 0.9 px)"
+    },
+    {
+     "id": "OVS",
+     "value": {
+      "required": true,
+      "why": "P0 25 / P1 35 deg",
+      "applied": true,
+      "frame_file_matches_centre_crop": true
+     },
+     "threshold": "3 % overscan on every still in a pan >= 21 deg (transitions render plan 3 / 6.4, proposal)",
+     "pass": true,
+     "binding": false
+    },
+    {
+     "id": "G1.17",
+     "value": {
+      "returned_size_px": [
+       2736,
+       1536
+      ],
+      "resize": "non-uniform resize 2736x1536 -> 2736x1539 (+0.20% vertical), no crop",
+      "graded_size": [
+       2580,
+       1451
+      ],
+      "overscan_canvas": true,
+      "model": "gpt-image-2-5",
+      "quality": "sunburst",
+      "credits": 600,
+      "prompt_file_exists": true,
+      "prompt_record_json": true
+     },
+     "threshold": "test: 2K, 16:9, what the model returned recorded; a prompt record per job",
+     "pass": true,
+     "binding": true
+    },
+    {
+     "id": "G8.6",
+     "value": {
+      "baked_cards": 14,
+      "live": [
+       "basket-zendrop-seagrass-belly-38x34"
+      ],
+      "unverified": 13
+     },
+     "threshold": "every baked card live at the supplier within 7 days (proposal: 7 days; principle binding)",
+     "pass": false,
+     "binding": true,
+     "note": "docs/render-products-check-2026-11-02.json: only the 3 Zendrop cards were checked (MCP); CJ and AliExpress in the queue"
+    }
+   ],
+   "verdict": "fail",
+   "failed_binding": [
+    "G1.4",
+    "G1.10",
+    "G1.14",
+    "G8.6"
+   ],
+   "failed_proposal": [
+    "G1.3"
+   ],
+   "cannot_measure": [
+    "G1.8",
+    "G1.13"
+   ],
+   "may_reference": "no: lock broken",
+   "serves": [
+    "T-LD: P0 / P1"
+   ],
+   "blocks_transitions": [
+    "T-LD: P0 / P1"
+   ],
+   "design_notes": null,
+   "products_unverified": [
+    "bowl-cj-glutinous-white-belly-bowl-21",
+    "candle-holders-cj-travertine-pedestal",
+    "curtains-aliexpress-linen-blend-s-fold-180502",
+    "cushions-cj-boucle-teddy",
+    "cushions-cj-knitted-chenille-bean-green",
+    "cushions-cj-linen-look-charcoal",
+    "framed-art-aliexpress-minimal-geometric-triptych-prints",
+    "pendant-cj-silk-ribbed-pumpkin-40",
+    "sofa-cover-cj-cotton-muslin-fringe",
+    "table-runner-cj-linen-look-sage-fringe",
+    "vase-aliexpress-vintage-distressed-clay-vase-589009",
+    "wall-sconce-cj-black-swing-arm-fabric",
+    "wall-sconce-cj-travertine-cube-updown-12"
+   ],
+   "products_live": [
+    "basket-zendrop-seagrass-belly-38x34"
+   ]
+  },
+  {
+   "frame": "M0x",
+   "kind": "pose",
+   "base": "M0",
+   "kept_file": "assets/renders/poses/nordic/v7/pose-m0x-v7-graded.png",
+   "criteria": [
+    {
+     "id": "G1.4",
+     "value": {
+      "register_shift_px": [
+       2.97,
+       -8.61
+      ],
+      "register_scale": [
+       0.99689,
+       0.98451
+      ],
+      "scale_dev_pct": 1.55,
+      "worst_tile_px_after_register": 4.86,
+      "tiles_counted": 6,
+      "check_worst_band_px_reliable": 10.59,
+      "check_bands_reliable": 2
+     },
+     "threshold": "global shift <= 9.6 px (0.5 % of 1920) and scale within 0.5 %; residual per tile <= 2.0 px (pan still)",
+     "pass": false,
+     "binding": true,
+     "note": "pan_reproject.py register (ECC affine) + QA tile ECC; check's phase correlation only where response >= 0.05"
+    },
+    {
+     "id": "G1.3",
+     "value": {
+      "fixed_edges_worst_px": 78,
+      "width_ratios": {
+       "dining table 160x85 (fixed)": 1.0924,
+       "dining chairs (fixed, window side)": 1.5065,
+       "dining bench (fixed)": 0.9942,
+       "kitchen run (fixed): lower units, sink, hob, plastered hood, oak shelves, tall units, coffee niche, oven": 1.2353,
+       "window W-dining": 1.6301
+      },
+      "eye": []
+     },
+     "threshold": "every clear edge of a fixed piece within +-19 px (+-0.01 of 1920) of the clay; products inside their box +-15 % (eye)",
+     "pass": false,
+     "binding": false,
+     "note": "edges with clay and render strength >= 4 only; product scale by eye on the fidelity sheet (no tool, P8)"
+    },
+    {
+     "id": "G1.8",
+     "value": {
+      "note": "the pose's reference uv is the master's point, not valid after rotation; exposure agreement is measured in G1.14 (dL in the overlap)",
+      "agent_needed_stops": 0.412,
+      "agent_flag": "DARK: needs more than +0.2 stop, not lifted further"
+     },
+     "threshold": "same exposure as the master (dL <= 1 in the overlap)",
+     "pass": null,
+     "binding": false
+    },
+    {
+     "id": "G1.9",
+     "value": {
+      "black_point_L": 12.4,
+      "wall_patch_HSL": [
+       44.8,
+       18.5,
+       94.3
+      ],
+      "wall_patch": "hero_wall_mid (clay selfcheck)",
+      "whites_H_median": 35.6,
+      "whites_S_median": 20.3,
+      "share_white_H_under_25": 0.0006,
+      "floor_median_HSL": [
+       32.4,
+       32.9,
+       76.7
+      ]
+     },
+     "threshold": "black point L 12-15; back wall H 32-40 (bath: 4000 K, H informational), S 15-28; no H < 25 in white / beige; parquet H 30-40 S 30-45 L 68-78 (G1.11 proposal)",
+     "pass": true,
+     "binding": true,
+     "note": " HSL S inflates near L 90: S read on the frame's own mid wall"
+    },
+    {
+     "id": "G1.10",
+     "value": {
+      "dining-pendant": {
+       "L_p95": 94.7,
+       "H": 45.0,
+       "S": 29.0,
+       "lit_in_clay": true,
+       "not_brighter_than_window": true,
+       "note": null
+      },
+      "accent-sconces": {
+       "L_p95": 79.2,
+       "H": 35.2,
+       "S": 28.2,
+       "lit_in_clay": true,
+       "not_brighter_than_window": true,
+       "note": "L_p95 < 85: the shade is outside its clay box (moved) or not glowing"
+      }
+     },
+     "threshold": "every lamp lit: shade L 93-97 (H 35-45, S 25-45 informational: the box includes surroundings); none brighter than the window",
+     "pass": false,
+     "binding": true,
+     "note": "measured inside the clay lamp box: top 10 % of L; a lamp drawn outside its box reads as wall"
+    },
+    {
+     "id": "G1.12",
+     "value": {
+      "saturated_255_px": 0,
+      "eye": "no sun patch, beam, bloom, cable, text or person seen"
+     },
+     "threshold": "0 violations",
+     "pass": true,
+     "binding": true,
+     "note": "eye at 1600 px"
+    },
+    {
+     "id": "G1.13",
+     "value": {
+      "box": "window W-dining",
+      "width_frac": 0.036,
+      "margins": {
+       "left": 0.452,
+       "right": 0.512,
+       "top": 0.179,
+       "bottom": 0.46
+      },
+      "L_p99": 97.5,
+      "L_max": 97.6,
+      "brightest": true,
+      "saturated_255": 0,
+      "view": null
+     },
+     "threshold": "F2: whole with >= 0.03 margins or cut >= 15 %, width <= 30 %; brightest; p99 <= 97; 0 x 255; same view (birches, no snow: proposal)",
+     "pass": false,
+     "binding": true
+    },
+    {
+     "id": "G1.14",
+     "value": {
+      "pairs": {
+       "M0p->M0x (P1, 35 deg)": {
+        "worst_band_px": 258.96,
+        "shift_px": {
+         "dx": -200.22,
+         "dy": 36.26,
+         "response": 0.107
+        },
+        "dL_mean": 4.6,
+        "dE_mean": 10.22,
+        "clay_worst_band_px": 0.22
+       },
+       "M0->M0x ((M0-M0x, 60), 60 deg)": {
+        "worst_band_px": 186.45,
+        "shift_px": {
+         "dx": -49.32,
+         "dy": 2.83,
+         "response": 0.168
+        },
+        "dL_mean": 6.0,
+        "dE_mean": 10.86,
+        "clay_worst_band_px": 0.23
+       }
+      },
+      "eye": "living corner (print, cube, sofa arm, throw, basket) + the dining = D1 (lantern 50, vase, candles, bench pad, chairs, shelf)"
+     },
+     "threshold": "each pair sharing a point: <= 2 px per band after reprojection and dL mean <= 1 (proposal); same objects by eye (binding)",
+     "pass": false,
+     "binding": true,
+     "note": "pan_reproject.py check on the kept renders; the clay pairs are the tool's floor (<= 0.9 px)"
+    },
+    {
+     "id": "OVS",
+     "value": {
+      "required": true,
+      "why": "P1 35 deg",
+      "applied": true,
+      "frame_file_matches_centre_crop": true
+     },
+     "threshold": "3 % overscan on every still in a pan >= 21 deg (transitions render plan 3 / 6.4, proposal)",
+     "pass": true,
+     "binding": false
+    },
+    {
+     "id": "G1.17",
+     "value": {
+      "returned_size_px": [
+       2736,
+       1536
+      ],
+      "resize": "non-uniform resize 2736x1536 -> 2736x1539 (+0.20% vertical), no crop",
+      "graded_size": [
+       2580,
+       1451
+      ],
+      "overscan_canvas": true,
+      "model": "gpt-image-2-5",
+      "quality": "sunburst",
+      "credits": 600,
+      "prompt_file_exists": true,
+      "prompt_record_json": true
+     },
+     "threshold": "test: 2K, 16:9, what the model returned recorded; a prompt record per job",
+     "pass": true,
+     "binding": true
+    },
+    {
+     "id": "G8.6",
+     "value": {
+      "baked_cards": 25,
+      "live": [
+       "basket-zendrop-seagrass-belly-38x34"
+      ],
+      "unverified": 22
+     },
+     "threshold": "every baked card live at the supplier within 7 days (proposal: 7 days; principle binding)",
+     "pass": false,
+     "binding": true,
+     "note": "docs/render-products-check-2026-11-02.json: only the 3 Zendrop cards were checked (MCP); CJ and AliExpress in the queue"
+    }
+   ],
+   "verdict": "fail",
+   "failed_binding": [
+    "G1.4",
+    "G1.10",
+    "G1.13",
+    "G1.14",
+    "G8.6"
+   ],
+   "failed_proposal": [
+    "G1.3"
+   ],
+   "cannot_measure": [
+    "G1.8"
+   ],
+   "may_reference": "with register only (global affine corrects it; residual <= 9.6 px); products / scale to fix: ",
+   "serves": [
+    "T-LD: P1 / V2 start"
+   ],
+   "blocks_transitions": [
+    "T-LD: P1 / V2 start"
+   ],
+   "design_notes": null,
+   "products_unverified": [
+    "bench-pad-aliexpress-linen-look-flat-cushion-130x35x3",
+    "bowl-cj-glutinous-white-belly-bowl-21",
+    "candle-holders-aliexpress-matte-black-iron-pillar-set2",
+    "candle-holders-cj-travertine-pedestal",
+    "condiment-set-cj-rubberwood-mill-pair-6in",
+    "curtains-aliexpress-linen-blend-s-fold-180502",
+    "cushions-cj-boucle-teddy",
+    "cushions-cj-knitted-chenille-bean-green",
+    "cushions-cj-linen-look-charcoal",
+    "framed-art-aliexpress-minimal-geometric-triptych-prints",
+    "framed-art-cj-taupe-block-black-line-30x40",
+    "mug-set-cj-sandy-stoneware-mug-glazed-rim-set3",
+    "pendant-cj-silk-pumpkin-lantern",
+    "pendant-cj-silk-ribbed-pumpkin-40",
+    "sofa-cover-cj-cotton-muslin-fringe",
+    "table-runner-aliexpress-french-linen-stonewash-40x140",
+    "table-runner-cj-linen-look-sage-fringe",
+    "tableware-set-cj-grey-sand-matte-plate",
+    "vase-aliexpress-vintage-distressed-clay-vase-589009",
+    "vase-cj-textured-white-stoneware",
+    "wall-sconce-cj-black-swing-arm-fabric",
+    "wall-sconce-cj-travertine-cube-updown-12"
+   ],
+   "products_live": [
+    "basket-zendrop-seagrass-belly-38x34"
+   ]
+  },
+  {
+   "frame": "PD-35",
+   "kind": "pose",
+   "base": "D1",
+   "kept_file": "assets/renders/poses/nordic/v7/pose-pd-35-v7-graded.png",
+   "criteria": [
+    {
+     "id": "G1.4",
+     "value": {
+      "register_shift_px": [
+       -0.21,
+       1.75
+      ],
+      "register_scale": [
+       0.99922,
+       0.99621
+      ],
+      "scale_dev_pct": 0.38,
+      "worst_tile_px_after_register": 8.08,
+      "tiles_counted": 6,
+      "check_worst_band_px_reliable": 6.34,
+      "check_bands_reliable": 4
+     },
+     "threshold": "global shift <= 9.6 px (0.5 % of 1920) and scale within 0.5 %; residual per tile <= 2.0 px (pan still)",
+     "pass": false,
+     "binding": true,
+     "note": "pan_reproject.py register (ECC affine) + QA tile ECC; check's phase correlation only where response >= 0.05"
+    },
+    {
+     "id": "G1.3",
+     "value": {
+      "fixed_edges_worst_px": 62,
+      "width_ratios": {
+       "dining table 160x85 (fixed)": 0.9903,
+       "dining chairs (fixed, window side)": 1.0346,
+       "dining bench (fixed)": 1.0047
+      },
+      "eye": []
+     },
+     "threshold": "every clear edge of a fixed piece within +-19 px (+-0.01 of 1920) of the clay; products inside their box +-15 % (eye)",
+     "pass": false,
+     "binding": false,
+     "note": "edges with clay and render strength >= 4 only; product scale by eye on the fidelity sheet (no tool, P8)"
+    },
+    {
+     "id": "G1.8",
+     "value": {
+      "note": "the pose's reference uv is the master's point, not valid after rotation; exposure agreement is measured in G1.14 (dL in the overlap)",
+      "agent_needed_stops": 0.131,
+      "agent_flag": "within cap"
+     },
+     "threshold": "same exposure as the master (dL <= 1 in the overlap)",
+     "pass": null,
+     "binding": false
+    },
+    {
+     "id": "G1.9",
+     "value": {
+      "black_point_L": 11.1,
+      "wall_patch_HSL": [
+       38.0,
+       14.7,
+       90.4
+      ],
+      "wall_patch": "hero_wall_mid (clay selfcheck)",
+      "whites_H_median": 30.0,
+      "whites_S_median": 25.8,
+      "share_white_H_under_25": 0.026,
+      "floor_median_HSL": [
+       28.6,
+       30.1,
+       70.4
+      ]
+     },
+     "threshold": "black point L 12-15; back wall H 32-40 (bath: 4000 K, H informational), S 15-28; no H < 25 in white / beige; parquet H 30-40 S 30-45 L 68-78 (G1.11 proposal)",
+     "pass": false,
+     "binding": true,
+     "note": " HSL S inflates near L 90: S read on the frame's own mid wall"
+    },
+    {
+     "id": "G1.10",
+     "value": {
+      "dining-pendant": {
+       "L_p95": 87.3,
+       "H": 35.8,
+       "S": 81.2,
+       "lit_in_clay": true,
+       "not_brighter_than_window": true,
+       "note": null
+      }
+     },
+     "threshold": "every lamp lit: shade L 93-97 (H 35-45, S 25-45 informational: the box includes surroundings); none brighter than the window",
+     "pass": false,
+     "binding": true,
+     "note": "measured inside the clay lamp box: top 10 % of L; a lamp drawn outside its box reads as wall"
+    },
+    {
+     "id": "G1.12",
+     "value": {
+      "saturated_255_px": 0,
+      "eye": "no sun patch, beam, bloom, cable, text or person seen"
+     },
+     "threshold": "0 violations",
+     "pass": true,
+     "binding": true,
+     "note": "eye at 1600 px"
+    },
+    {
+     "id": "G1.13",
+     "value": {
+      "box": "window W-dining",
+      "width_frac": 0.337,
+      "margins": {
+       "left": 0.091,
+       "right": 0.572,
+       "top": -0.03,
+       "bottom": 0.41
+      },
+      "L_p99": 97.6,
+      "L_max": 97.6,
+      "brightest": true,
+      "saturated_255": 0,
+      "view": null
+     },
+     "threshold": "F2: whole with >= 0.03 margins or cut >= 15 %, width <= 30 %; brightest; p99 <= 97; 0 x 255; same view (birches, no snow: proposal)",
+     "pass": false,
+     "binding": true
+    },
+    {
+     "id": "G1.14",
+     "value": {
+      "pairs": {
+       "D1->PD-35 (P2, 21 deg)": {
+        "worst_band_px": 43.11,
+        "shift_px": {
+         "dx": 12.28,
+         "dy": -0.96,
+         "response": 0.158
+        },
+        "dL_mean": 3.3,
+        "dE_mean": 7.64,
+        "clay_worst_band_px": 0.12
+       },
+       "PD-35->D2 ((PD-35-D2, 56), 56 deg)": {
+        "worst_band_px": 219.61,
+        "shift_px": {
+         "dx": 102.62,
+         "dy": 27.63,
+         "response": -0.003
+        },
+        "dL_mean": 9.5,
+        "dE_mean": 12.88,
+        "clay_worst_band_px": 0.74
+       }
+      },
+      "eye": "same lantern, vase, candle plates, runner, print, bench pad, window as D1"
+     },
+     "threshold": "each pair sharing a point: <= 2 px per band after reprojection and dL mean <= 1 (proposal); same objects by eye (binding)",
+     "pass": false,
+     "binding": true,
+     "note": "pan_reproject.py check on the kept renders; the clay pairs are the tool's floor (<= 0.9 px)"
+    },
+    {
+     "id": "OVS",
+     "value": {
+      "required": true,
+      "why": "P2 21 deg",
+      "applied": true,
+      "frame_file_matches_centre_crop": true
+     },
+     "threshold": "3 % overscan on every still in a pan >= 21 deg (transitions render plan 3 / 6.4, proposal)",
+     "pass": true,
+     "binding": false
+    },
+    {
+     "id": "G1.17",
+     "value": {
+      "returned_size_px": [
+       2736,
+       1536
+      ],
+      "resize": "non-uniform resize 2736x1536 -> 2736x1539 (+0.20% vertical), no crop",
+      "graded_size": [
+       2580,
+       1451
+      ],
+      "overscan_canvas": true,
+      "model": "gpt-image-2-5",
+      "quality": "sunburst",
+      "credits": 600,
+      "prompt_file_exists": true,
+      "prompt_record_json": true
+     },
+     "threshold": "test: 2K, 16:9, what the model returned recorded; a prompt record per job",
+     "pass": true,
+     "binding": true
+    },
+    {
+     "id": "G8.6",
+     "value": {
+      "baked_cards": 11,
+      "live": [],
+      "unverified": 11
+     },
+     "threshold": "every baked card live at the supplier within 7 days (proposal: 7 days; principle binding)",
+     "pass": false,
+     "binding": true,
+     "note": "docs/render-products-check-2026-11-02.json: only the 3 Zendrop cards were checked (MCP); CJ and AliExpress in the queue"
+    }
+   ],
+   "verdict": "fail",
+   "failed_binding": [
+    "G1.4",
+    "G1.9",
+    "G1.10",
+    "G1.13",
+    "G1.14",
+    "G8.6"
+   ],
+   "failed_proposal": [
+    "G1.3"
+   ],
+   "cannot_measure": [
+    "G1.8"
+   ],
+   "may_reference": "yes (geometry within 0.5 % of the clay; objects consistent)",
+   "serves": [
+    "T-LD: V2 end / P2"
+   ],
+   "blocks_transitions": [],
+   "design_notes": null,
+   "products_unverified": [
+    "bench-pad-aliexpress-linen-look-flat-cushion-130x35x3",
+    "bowl-cj-glutinous-white-belly-bowl-21",
+    "candle-holders-aliexpress-matte-black-iron-pillar-set2",
+    "condiment-set-cj-rubberwood-mill-pair-6in",
+    "curtains-aliexpress-linen-blend-s-fold-180502",
+    "framed-art-cj-taupe-block-black-line-30x40",
+    "mug-set-cj-sandy-stoneware-mug-glazed-rim-set3",
+    "pendant-cj-silk-pumpkin-lantern",
+    "table-runner-aliexpress-french-linen-stonewash-40x140",
+    "tableware-set-cj-grey-sand-matte-plate",
+    "vase-cj-textured-white-stoneware"
+   ],
+   "products_live": []
+  },
+  {
+   "frame": "H0e",
+   "kind": "pose",
+   "base": "H0",
+   "kept_file": "assets/renders/poses/nordic/v7/pose-h0e-v7-graded.png",
+   "criteria": [
+    {
+     "id": "G1.4",
+     "value": {
+      "register_shift_px": [
+       -1.27,
+       -26.74
+      ],
+      "register_scale": [
+       1.00197,
+       0.97859
+      ],
+      "scale_dev_pct": 2.14,
+      "worst_tile_px_after_register": 31.86,
+      "tiles_counted": 8,
+      "check_worst_band_px_reliable": 215.78,
+      "check_bands_reliable": 4
+     },
+     "threshold": "global shift <= 9.6 px (0.5 % of 1920) and scale within 0.5 %; residual per tile <= 2.0 px (pan still)",
+     "pass": false,
+     "binding": true,
+     "note": "pan_reproject.py register (ECC affine) + QA tile ECC; check's phase correlation only where response >= 0.05"
+    },
+    {
+     "id": "G1.3",
+     "value": {
+      "fixed_edges_worst_px": 51,
+      "width_ratios": {
+       "hall console": 1.1969
+      },
+      "eye": []
+     },
+     "threshold": "every clear edge of a fixed piece within +-19 px (+-0.01 of 1920) of the clay; products inside their box +-15 % (eye)",
+     "pass": false,
+     "binding": false,
+     "note": "edges with clay and render strength >= 4 only; product scale by eye on the fidelity sheet (no tool, P8)"
+    },
+    {
+     "id": "G1.8",
+     "value": {
+      "note": "the pose's reference uv is the master's point, not valid after rotation; exposure agreement is measured in G1.14 (dL in the overlap)",
+      "agent_needed_stops": 0.076,
+      "agent_flag": "within cap"
+     },
+     "threshold": "same exposure as the master (dL <= 1 in the overlap)",
+     "pass": null,
+     "binding": false
+    },
+    {
+     "id": "G1.9",
+     "value": {
+      "black_point_L": 12.5,
+      "wall_patch_HSL": [
+       36.6,
+       20.8,
+       83.1
+      ],
+      "wall_patch": "hero_wall_mid (clay selfcheck)",
+      "whites_H_median": 34.7,
+      "whites_S_median": 21.1,
+      "share_white_H_under_25": 0.0007,
+      "floor_median_HSL": [
+       31.5,
+       23.5,
+       65.3
+      ]
+     },
+     "threshold": "black point L 12-15; back wall H 32-40 (bath: 4000 K, H informational), S 15-28; no H < 25 in white / beige; parquet H 30-40 S 30-45 L 68-78 (G1.11 proposal)",
+     "pass": true,
+     "binding": true
+    },
+    {
+     "id": "G1.10",
+     "value": {
+      "pendant": {
+       "L_p95": 92.2,
+       "H": 42.9,
+       "S": 65.9,
+       "lit_in_clay": true,
+       "not_brighter_than_window": true,
+       "note": null
+      },
+      "accent-sconces": {
+       "L_p95": 90.8,
+       "H": 40.0,
+       "S": 40.4,
+       "lit_in_clay": true,
+       "not_brighter_than_window": true,
+       "note": null
+      }
+     },
+     "threshold": "every lamp lit: shade L 93-97 (H 35-45, S 25-45 informational: the box includes surroundings); none brighter than the window",
+     "pass": false,
+     "binding": true,
+     "note": "measured inside the clay lamp box: top 10 % of L; a lamp drawn outside its box reads as wall"
+    },
+    {
+     "id": "G1.12",
+     "value": {
+      "saturated_255_px": 0,
+      "eye": "no sun patch, beam, bloom, cable, text or person seen"
+     },
+     "threshold": "0 violations",
+     "pass": true,
+     "binding": true,
+     "note": "eye at 1600 px"
+    },
+    {
+     "id": "G1.13",
+     "value": {
+      "box": "G-H4 oak portal (vista through the opening: the brightest area by design)",
+      "L_p99": 97.1,
+      "brightest": true,
+      "view": null
+     },
+     "threshold": "no window in frame: the opening / vista is the brightest area, p99 <= 97",
+     "pass": false,
+     "binding": true
+    },
+    {
+     "id": "G1.14",
+     "value": {
+      "pairs": {
+       "H0->H0e (PH, 12 deg)": {
+        "worst_band_px": 8.55,
+        "shift_px": {
+         "dx": -8.52,
+         "dy": 8.71,
+         "response": 0.129
+        },
+        "dL_mean": 0.1,
+        "dE_mean": 6.88,
+        "clay_worst_band_px": 0.16
+       },
+       "H0e->H0x ((H0e-H0x, 25), 25 deg)": {
+        "worst_band_px": 38.58,
+        "shift_px": {
+         "dx": 0.62,
+         "dy": 17.29,
+         "response": 0.14
+        },
+        "dL_mean": 1.0,
+        "dE_mean": 8.62,
+        "clay_worst_band_px": 0.23
+       }
+      },
+      "eye": "same console vignette and living vista as H0"
+     },
+     "threshold": "each pair sharing a point: <= 2 px per band after reprojection and dL mean <= 1 (proposal); same objects by eye (binding)",
+     "pass": false,
+     "binding": true,
+     "note": "pan_reproject.py check on the kept renders; the clay pairs are the tool's floor (<= 0.9 px)"
+    },
+    {
+     "id": "OVS",
+     "value": {
+      "required": false,
+      "why": "12 deg",
+      "applied": false,
+      "frame_file_matches_centre_crop": null
+     },
+     "threshold": "3 % overscan on every still in a pan >= 21 deg (transitions render plan 3 / 6.4, proposal)",
+     "pass": true,
+     "binding": false
+    },
+    {
+     "id": "G1.17",
+     "value": {
+      "returned_size_px": [
+       2736,
+       1536
+      ],
+      "resize": "non-uniform resize 2736x1536 -> 2736x1539 (+0.20% vertical), no crop",
+      "graded_size": [
+       2736,
+       1539
+      ],
+      "overscan_canvas": false,
+      "model": "gpt-image-2-5",
+      "quality": "sunburst",
+      "credits": 600,
+      "prompt_file_exists": true,
+      "prompt_record_json": true
+     },
+     "threshold": "test: 2K, 16:9, what the model returned recorded; a prompt record per job",
+     "pass": true,
+     "binding": true
+    },
+    {
+     "id": "G8.6",
+     "value": {
+      "baked_cards": 22,
+      "live": [
+       "basket-zendrop-seagrass-belly-38x34"
+      ],
+      "unverified": 21
+     },
+     "threshold": "every baked card live at the supplier within 7 days (proposal: 7 days; principle binding)",
+     "pass": false,
+     "binding": true,
+     "note": "docs/render-products-check-2026-11-02.json: only the 3 Zendrop cards were checked (MCP); CJ and AliExpress in the queue"
+    }
+   ],
+   "verdict": "fail",
+   "failed_binding": [
+    "G1.4",
+    "G1.10",
+    "G1.13",
+    "G1.14",
+    "G8.6"
+   ],
+   "failed_proposal": [
+    "G1.3"
+   ],
+   "cannot_measure": [
+    "G1.8"
+   ],
+   "may_reference": "no: lock broken",
+   "serves": [
+    "T-HC / T-HW: PH end, V3 / V5"
+   ],
+   "blocks_transitions": [
+    "T-HC / T-HW: PH end, V3 / V5"
+   ],
+   "design_notes": null,
+   "products_unverified": [
+    "basket-cj-two-tone-rope-jute-white-30",
+    "bench-cushion-aliexpress-linen-look-flat-cushion-110x35x3",
+    "bench-throw-cj-cotton-waffle-blanket-150x200",
+    "bowl-cj-glutinous-white-belly-bowl-21",
+    "candle-holders-cj-travertine-pedestal",
+    "console-vessel-aliexpress-ceramic-wabi-sabi-vase-906575",
+    "curtains-aliexpress-linen-blend-s-fold-180502",
+    "cushions-cj-boucle-teddy",
+    "cushions-cj-knitted-chenille-bean-green",
+    "cushions-cj-linen-look-charcoal",
+    "framed-art-aliexpress-minimal-geometric-triptych-prints",
+    "framed-art-cj-swinging-line-black-frame-mat-35x45",
+    "key-tray-aliexpress-oval-metal-tray-693779",
+    "pendant-cj-silk-ribbed-pumpkin-40",
+    "sofa-cover-cj-cotton-muslin-fringe",
+    "table-runner-cj-linen-look-sage-fringe",
+    "vase-aliexpress-vintage-distressed-clay-vase-589009",
+    "wall-hooks-aliexpress-pine-oval-pegs-4pcs",
+    "wall-sconce-cj-black-swing-arm-fabric",
+    "wall-sconce-cj-travertine-cube-updown-12",
+    "wall-sconce-cj-white-fabric-cube-15-hall"
+   ],
+   "products_live": [
+    "basket-zendrop-seagrass-belly-38x34"
+   ]
+  },
+  {
+   "frame": "W0-in",
+   "kind": "pose",
+   "base": "W0",
+   "kept_file": "assets/renders/poses/nordic/v7/pose-w0-in-v7-graded.png",
+   "criteria": [
+    {
+     "id": "G1.4",
+     "value": {
+      "register_shift_px": [
+       -2.21,
+       -23.74
+      ],
+      "register_scale": [
+       1.04124,
+       1.00151
+      ],
+      "scale_dev_pct": 4.12,
+      "worst_tile_px_after_register": 77.93,
+      "tiles_counted": 4,
+      "check_worst_band_px_reliable": 130.23,
+      "check_bands_reliable": 2
+     },
+     "threshold": "global shift <= 9.6 px (0.5 % of 1920) and scale within 0.5 %; residual per tile <= 9.6 px (video endpoint)",
+     "pass": false,
+     "binding": true,
+     "note": "pan_reproject.py register (ECC affine) + QA tile ECC; check's phase correlation only where response >= 0.05"
+    },
+    {
+     "id": "G1.3",
+     "value": {
+      "fixed_edges_worst_px": 50,
+      "width_ratios": {
+       "desk chair": 0.9395
+      },
+      "eye": []
+     },
+     "threshold": "every clear edge of a fixed piece within +-19 px (+-0.01 of 1920) of the clay; products inside their box +-15 % (eye)",
+     "pass": false,
+     "binding": false,
+     "note": "edges with clay and render strength >= 4 only; product scale by eye on the fidelity sheet (no tool, P8)"
+    },
+    {
+     "id": "G1.8",
+     "value": {
+      "note": "the pose's reference uv is the master's point, not valid after rotation; exposure agreement is measured in G1.14 (dL in the overlap)",
+      "agent_needed_stops": 0.322,
+      "agent_flag": "DARK: needs more than +0.2 stop, not lifted further"
+     },
+     "threshold": "same exposure as the master (dL <= 1 in the overlap)",
+     "pass": null,
+     "binding": false
+    },
+    {
+     "id": "G1.9",
+     "value": {
+      "black_point_L": 12.5,
+      "wall_patch_HSL": [
+       34.5,
+       20.2,
+       86.4
+      ],
+      "wall_patch": "hero_wall_mid (clay selfcheck)",
+      "whites_H_median": 36.5,
+      "whites_S_median": 17.4,
+      "share_white_H_under_25": 0.0057,
+      "floor_median_HSL": null
+     },
+     "threshold": "black point L 12-15; back wall H 32-40 (bath: 4000 K, H informational), S 15-28; no H < 25 in white / beige; parquet H 30-40 S 30-45 L 68-78 (G1.11 proposal)",
+     "pass": true,
+     "binding": true
+    },
+    {
+     "id": "G1.10",
+     "value": {
+      "lamps_in_clay": []
+     },
+     "threshold": "every lamp in the frame lit",
+     "pass": null,
+     "binding": true,
+     "note": "no lamp placeholder in this frame (F11 is a plan question, not a render one)"
+    },
+    {
+     "id": "G1.12",
+     "value": {
+      "saturated_255_px": 0,
+      "eye": "no sun patch, beam, bloom, cable, text or person seen"
+     },
+     "threshold": "0 violations",
+     "pass": true,
+     "binding": true,
+     "note": "eye at 1600 px"
+    },
+    {
+     "id": "G1.13",
+     "value": {
+      "box": null,
+      "L_p99": null,
+      "brightest": null,
+      "view": null
+     },
+     "threshold": "no window in frame: the opening / vista is the brightest area, p99 <= 97",
+     "pass": null,
+     "binding": true,
+     "note": "no window and no opening box"
+    },
+    {
+     "id": "G1.14",
+     "value": {
+      "eye": "same objects as W0"
+     },
+     "threshold": "same objects in both frames (eye)",
+     "pass": true,
+     "binding": true,
+     "note": "no pair sharing a point; video endpoint sheets in overlays/endpoints-*.jpg"
+    },
+    {
+     "id": "OVS",
+     "value": {
+      "required": false,
+      "why": "no pan",
+      "applied": false,
+      "frame_file_matches_centre_crop": null
+     },
+     "threshold": "3 % overscan on every still in a pan >= 21 deg (transitions render plan 3 / 6.4, proposal)",
+     "pass": true,
+     "binding": false
+    },
+    {
+     "id": "G1.17",
+     "value": {
+      "returned_size_px": [
+       2736,
+       1536
+      ],
+      "resize": "non-uniform resize 2736x1536 -> 2736x1539 (+0.20% vertical), no crop",
+      "graded_size": [
+       2736,
+       1539
+      ],
+      "overscan_canvas": false,
+      "model": "gpt-image-2-5",
+      "quality": "sunburst",
+      "credits": 600,
+      "prompt_file_exists": true,
+      "prompt_record_json": true
+     },
+     "threshold": "test: 2K, 16:9, what the model returned recorded; a prompt record per job",
+     "pass": true,
+     "binding": true
+    },
+    {
+     "id": "G8.6",
+     "value": {
+      "baked_cards": 6,
+      "live": [
+       "planter-zendrop-seagrass-belly-38x34"
+      ],
+      "unverified": 5
+     },
+     "threshold": "every baked card live at the supplier within 7 days (proposal: 7 days; principle binding)",
+     "pass": false,
+     "binding": true,
+     "note": "docs/render-products-check-2026-11-02.json: only the 3 Zendrop cards were checked (MCP); CJ and AliExpress in the queue"
+    }
+   ],
+   "verdict": "fail",
+   "failed_binding": [
+    "G1.4",
+    "G8.6"
+   ],
+   "failed_proposal": [
+    "G1.3"
+   ],
+   "cannot_measure": [
+    "G1.8",
+    "G1.10",
+    "G1.13"
+   ],
+   "may_reference": "no: the pose copied the master's framing (retake)",
+   "serves": [
+    "T-HW: V3 end / V4"
+   ],
+   "blocks_transitions": [
+    "T-HW: V3 end / V4"
+   ],
+   "design_notes": null,
+   "products_unverified": [
+    "basket-cj-jute-cotton-rope-cylinder-30-work",
+    "curtains-aliexpress-cotton-linen-curtain-look-902882",
+    "desk-organizer-cj-cave-stone-pen-cup-8x11",
+    "shelf-boxes-cj-felt-storage-bin-30x24-pair",
+    "waste-basket-aliexpress-washable-kraft-paper-bin-25x40"
+   ],
+   "products_live": [
+    "planter-zendrop-seagrass-belly-38x34"
+   ]
+  },
+  {
+   "frame": "S1'",
+   "kind": "pose",
+   "base": "C0",
+   "kept_file": "assets/renders/poses/nordic/v7/pose-s1prime-v7-graded.png",
+   "criteria": [
+    {
+     "id": "G1.4",
+     "value": {
+      "register_shift_px": [
+       6.97,
+       2.18
+      ],
+      "register_scale": [
+       0.99466,
+       0.99478
+      ],
+      "scale_dev_pct": 0.53,
+      "worst_tile_px_after_register": 13.2,
+      "tiles_counted": 7,
+      "check_worst_band_px_reliable": 2.88,
+      "check_bands_reliable": 1
+     },
+     "threshold": "global shift <= 9.6 px (0.5 % of 1920) and scale within 0.5 %; residual per tile <= 9.6 px (video endpoint)",
+     "pass": false,
+     "binding": true,
+     "note": "pan_reproject.py register (ECC affine) + QA tile ECC; check's phase correlation only where response >= 0.05"
+    },
+    {
+     "id": "G1.3",
+     "value": {
+      "fixed_edges_worst_px": 69,
+      "width_ratios": {
+       "hall console": 1.6744,
+       "G-H4 oak portal": 1.0045,
+       "G-C3 oak portal": 1.0812
+      },
+      "eye": []
+     },
+     "threshold": "every clear edge of a fixed piece within +-19 px (+-0.01 of 1920) of the clay; products inside their box +-15 % (eye)",
+     "pass": false,
+     "binding": false,
+     "note": "edges with clay and render strength >= 4 only; product scale by eye on the fidelity sheet (no tool, P8)"
+    },
+    {
+     "id": "G1.8",
+     "value": {
+      "note": "the pose's reference uv is the master's point, not valid after rotation; exposure agreement is measured in G1.14 (dL in the overlap)",
+      "agent_needed_stops": 0.365,
+      "agent_flag": "DARK: needs more than +0.2 stop, not lifted further"
+     },
+     "threshold": "same exposure as the master (dL <= 1 in the overlap)",
+     "pass": null,
+     "binding": false
+    },
+    {
+     "id": "G1.9",
+     "value": {
+      "black_point_L": 12.0,
+      "wall_patch_HSL": [
+       37.0,
+       19.5,
+       77.8
+      ],
+      "wall_patch": "hero_wall_mid (clay selfcheck)",
+      "whites_H_median": 37.1,
+      "whites_S_median": 20.4,
+      "share_white_H_under_25": 0.0,
+      "floor_median_HSL": [
+       34.3,
+       26.1,
+       76.7
+      ]
+     },
+     "threshold": "black point L 12-15; back wall H 32-40 (bath: 4000 K, H informational), S 15-28; no H < 25 in white / beige; parquet H 30-40 S 30-45 L 68-78 (G1.11 proposal)",
+     "pass": true,
+     "binding": true
+    },
+    {
+     "id": "G1.10",
+     "value": {
+      "pendant": {
+       "L_p95": 93.7,
+       "H": 42.4,
+       "S": 56.2,
+       "lit_in_clay": true,
+       "not_brighter_than_window": false,
+       "note": null
+      },
+      "accent-sconces": {
+       "L_p95": 91.2,
+       "H": 42.0,
+       "S": 68.9,
+       "lit_in_clay": true,
+       "not_brighter_than_window": true,
+       "note": null
+      }
+     },
+     "threshold": "every lamp lit: shade L 93-97 (H 35-45, S 25-45 informational: the box includes surroundings); none brighter than the window",
+     "pass": false,
+     "binding": true,
+     "note": "measured inside the clay lamp box: top 10 % of L; a lamp drawn outside its box reads as wall"
+    },
+    {
+     "id": "G1.12",
+     "value": {
+      "saturated_255_px": 0,
+      "eye": "no sun patch, beam, bloom, cable, text or person seen"
+     },
+     "threshold": "0 violations",
+     "pass": true,
+     "binding": true,
+     "note": "eye at 1600 px"
+    },
+    {
+     "id": "G1.13",
+     "value": {
+      "box": "G-H4 oak portal (vista through the opening: the brightest area by design)",
+      "L_p99": 93.7,
+      "brightest": false,
+      "saturated_255_total": 0
+     },
+     "threshold": "the brightest area is the window / vista; p99 <= 97; 0 x 255",
+     "pass": null,
+     "binding": true,
+     "note": "the measured box is an opening or a secondary window (M0p: the living window at the left edge is not a clay box; C0 / S1' / MB-in: the door box is not the vista): no tool box for the vista"
+    },
+    {
+     "id": "G1.14",
+     "value": {
+      "eye": "hall console (art, tray, vase), bench, living vista as H0 / M0; roof light"
+     },
+     "threshold": "same objects in both frames (eye)",
+     "pass": true,
+     "binding": true,
+     "note": "no pair sharing a point; video endpoint sheets in overlays/endpoints-*.jpg"
+    },
+    {
+     "id": "OVS",
+     "value": {
+      "required": false,
+      "why": "no pan",
+      "applied": false,
+      "frame_file_matches_centre_crop": null
+     },
+     "threshold": "3 % overscan on every still in a pan >= 21 deg (transitions render plan 3 / 6.4, proposal)",
+     "pass": true,
+     "binding": false
+    },
+    {
+     "id": "G1.17",
+     "value": {
+      "returned_size_px": [
+       2736,
+       1536
+      ],
+      "resize": "non-uniform resize 2736x1536 -> 2736x1539 (+0.20% vertical), no crop",
+      "graded_size": [
+       2736,
+       1539
+      ],
+      "overscan_canvas": false,
+      "model": "gpt-image-2-5",
+      "quality": "sunburst",
+      "credits": 600,
+      "prompt_file_exists": true,
+      "prompt_record_json": true
+     },
+     "threshold": "test: 2K, 16:9, what the model returned recorded; a prompt record per job",
+     "pass": true,
+     "binding": true
+    },
+    {
+     "id": "G8.6",
+     "value": {
+      "baked_cards": 20,
+      "live": [
+       "basket-zendrop-seagrass-belly-38x34"
+      ],
+      "unverified": 19
+     },
+     "threshold": "every baked card live at the supplier within 7 days (proposal: 7 days; principle binding)",
+     "pass": false,
+     "binding": true,
+     "note": "docs/render-products-check-2026-11-02.json: only the 3 Zendrop cards were checked (MCP); CJ and AliExpress in the queue"
+    }
+   ],
+   "verdict": "fail",
+   "failed_binding": [
+    "G1.4",
+    "G1.10",
+    "G8.6"
+   ],
+   "failed_proposal": [
+    "G1.3"
+   ],
+   "cannot_measure": [
+    "G1.8",
+    "G1.13"
+   ],
+   "may_reference": "no: lock broken",
+   "serves": [
+    "V5 / V6 / V7 / V9 (rail station)"
+   ],
+   "blocks_transitions": [
+    "V5 / V6 / V7 / V9 (rail station)"
+   ],
+   "design_notes": null,
+   "products_unverified": [
+    "bowl-cj-glutinous-white-belly-bowl-21",
+    "candle-holders-cj-travertine-pedestal",
+    "ceiling-light-aliexpress-flat-oval-paper-lantern-shade-40",
+    "ceiling-lights-aliexpress-flat-oval-paper-lantern-shade-40-pair",
+    "console-vessel-aliexpress-ceramic-wabi-sabi-vase-906575",
+    "curtains-aliexpress-linen-blend-s-fold-180502",
+    "cushions-cj-boucle-teddy",
+    "cushions-cj-knitted-chenille-bean-green",
+    "cushions-cj-linen-look-charcoal",
+    "framed-art-aliexpress-minimal-geometric-triptych-prints",
+    "framed-art-cj-swinging-line-black-frame-mat-35x45",
+    "gallery-art-cj-black-ink-abstract-wide-mat-40-set3",
+    "key-tray-aliexpress-oval-metal-tray-693779",
+    "pendant-cj-silk-ribbed-pumpkin-40",
+    "sofa-cover-cj-cotton-muslin-fringe",
+    "table-runner-cj-linen-look-sage-fringe",
+    "vase-aliexpress-vintage-distressed-clay-vase-589009",
+    "wall-sconce-cj-black-swing-arm-fabric",
+    "wall-sconce-cj-travertine-cube-updown-12"
+   ],
+   "products_live": [
+    "basket-zendrop-seagrass-belly-38x34"
+   ]
+  },
+  {
+   "frame": "K-boy-0",
+   "kind": "pose",
+   "base": "K-boy",
+   "kept_file": "assets/renders/poses/nordic/v7/pose-k-boy-0-v7-graded.png",
+   "criteria": [
+    {
+     "id": "G1.4",
+     "value": {
+      "register_shift_px": [
+       2.68,
+       7.83
+      ],
+      "register_scale": [
+       0.99975,
+       0.95242
+      ],
+      "scale_dev_pct": 4.76,
+      "worst_tile_px_after_register": 16.4,
+      "tiles_counted": 6,
+      "check_worst_band_px_reliable": 50.34,
+      "check_bands_reliable": 3
+     },
+     "threshold": "global shift <= 9.6 px (0.5 % of 1920) and scale within 0.5 %; residual per tile <= 2.0 px (pan still)",
+     "pass": false,
+     "binding": true,
+     "note": "pan_reproject.py register (ECC affine) + QA tile ECC; check's phase correlation only where response >= 0.05"
+    },
+    {
+     "id": "G1.3",
+     "value": {
+      "fixed_edges_worst_px": 45,
+      "width_ratios": {
+       "boy desk 90x50 (fixed)": 0.9379
+      },
+      "eye": []
+     },
+     "threshold": "every clear edge of a fixed piece within +-19 px (+-0.01 of 1920) of the clay; products inside their box +-15 % (eye)",
+     "pass": false,
+     "binding": false,
+     "note": "edges with clay and render strength >= 4 only; product scale by eye on the fidelity sheet (no tool, P8)"
+    },
+    {
+     "id": "G1.8",
+     "value": {
+      "note": "the pose's reference uv is the master's point, not valid after rotation; exposure agreement is measured in G1.14 (dL in the overlap)",
+      "agent_needed_stops": 0.338,
+      "agent_flag": "DARK: needs more than +0.2 stop, not lifted further"
+     },
+     "threshold": "same exposure as the master (dL <= 1 in the overlap)",
+     "pass": null,
+     "binding": false
+    },
+    {
+     "id": "G1.9",
+     "value": {
+      "black_point_L": 14.8,
+      "wall_patch_HSL": [
+       39.7,
+       17.1,
+       88.0
+      ],
+      "wall_patch": "hero_wall_mid (clay selfcheck)",
+      "whites_H_median": 50.0,
+      "whites_S_median": 13.8,
+      "share_white_H_under_25": 0.0076,
+      "floor_median_HSL": null
+     },
+     "threshold": "black point L 12-15; back wall H 32-40 (bath: 4000 K, H informational), S 15-28; no H < 25 in white / beige; parquet H 30-40 S 30-45 L 68-78 (G1.11 proposal)",
+     "pass": true,
+     "binding": true
+    },
+    {
+     "id": "G1.10",
+     "value": {
+      "lamps_in_clay": []
+     },
+     "threshold": "every lamp in the frame lit",
+     "pass": null,
+     "binding": true,
+     "note": "no lamp placeholder in this frame (F11 is a plan question, not a render one)"
+    },
+    {
+     "id": "G1.12",
+     "value": {
+      "saturated_255_px": 0,
+      "eye": "no sun patch, beam, bloom, cable, text or person seen"
+     },
+     "threshold": "0 violations",
+     "pass": true,
+     "binding": true,
+     "note": "eye at 1600 px"
+    },
+    {
+     "id": "G1.13",
+     "value": {
+      "box": null,
+      "L_p99": null,
+      "brightest": null,
+      "view": null
+     },
+     "threshold": "no window in frame: the opening / vista is the brightest area, p99 <= 97",
+     "pass": null,
+     "binding": true,
+     "note": "no window and no opening box"
+    },
+    {
+     "id": "G1.14",
+     "value": {
+      "pairs": {
+       "K-boy->K-boy-0 (T-CBoy pan, 33 deg)": {
+        "worst_band_px": 30.55,
+        "shift_px": {
+         "dx": -13.24,
+         "dy": 11.12,
+         "response": 0.176
+        },
+        "dL_mean": 8.1,
+        "dE_mean": 10.56,
+        "clay_worst_band_px": 0.14
+       }
+      },
+      "eye": "desk with 3 cars, ledges, bed foot, blanket as K-boy"
+     },
+     "threshold": "each pair sharing a point: <= 2 px per band after reprojection and dL mean <= 1 (proposal); same objects by eye (binding)",
+     "pass": false,
+     "binding": true,
+     "note": "pan_reproject.py check on the kept renders; the clay pairs are the tool's floor (<= 0.9 px)"
+    },
+    {
+     "id": "OVS",
+     "value": {
+      "required": true,
+      "why": "33 deg",
+      "applied": true,
+      "frame_file_matches_centre_crop": true
+     },
+     "threshold": "3 % overscan on every still in a pan >= 21 deg (transitions render plan 3 / 6.4, proposal)",
+     "pass": true,
+     "binding": false
+    },
+    {
+     "id": "G1.17",
+     "value": {
+      "returned_size_px": [
+       2736,
+       1536
+      ],
+      "resize": "non-uniform resize 2736x1536 -> 2736x1539 (+0.20% vertical), no crop",
+      "graded_size": [
+       2580,
+       1451
+      ],
+      "overscan_canvas": true,
+      "model": "gpt-image-2-5",
+      "quality": "sunburst",
+      "credits": 600,
+      "prompt_file_exists": true,
+      "prompt_record_json": true
+     },
+     "threshold": "test: 2K, 16:9, what the model returned recorded; a prompt record per job",
+     "pass": true,
+     "binding": true
+    },
+    {
+     "id": "G8.6",
+     "value": {
+      "baked_cards": 7,
+      "live": [],
+      "unverified": 7
+     },
+     "threshold": "every baked card live at the supplier within 7 days (proposal: 7 days; principle binding)",
+     "pass": false,
+     "binding": true,
+     "note": "docs/render-products-check-2026-11-02.json: only the 3 Zendrop cards were checked (MCP); CJ and AliExpress in the queue"
+    }
+   ],
+   "verdict": "fail",
+   "failed_binding": [
+    "G1.4",
+    "G1.14",
+    "G8.6"
+   ],
+   "failed_proposal": [
+    "G1.3"
+   ],
+   "cannot_measure": [
+    "G1.8",
+    "G1.10",
+    "G1.13"
+   ],
+   "may_reference": "no: lock broken",
+   "serves": [
+    "T-CBoy: V7 end / pan"
+   ],
+   "blocks_transitions": [
+    "T-CBoy: V7 end / pan"
+   ],
+   "design_notes": null,
+   "products_unverified": [
+    "basket-cj-jute-rope-cylinder",
+    "bedding-cj-washed-linen-natural-set",
+    "bedspread-cj-muslin-blanket-beige-150x200",
+    "bookshelf-cj-natural-wood-ledge-pair-42-x2",
+    "cushions-cj-corduroy-windmill-patchwork-pink-40",
+    "soft-toy-aliexpress-stuffed-bunny-cloth-dress-063285",
+    "toy-cars-aliexpress-baby-wooden-toys-beech-975232"
+   ],
+   "products_live": []
+  },
+  {
+   "frame": "K-girl-0",
+   "kind": "pose",
+   "base": "K-girl",
+   "kept_file": "assets/renders/poses/nordic/v7/pose-k-girl-0-v7-graded.png",
+   "criteria": [
+    {
+     "id": "G1.4",
+     "value": {
+      "register_shift_px": [
+       -10.15,
+       -55.35
+      ],
+      "register_scale": [
+       1.04967,
+       1.05738
+      ],
+      "scale_dev_pct": 5.74,
+      "worst_tile_px_after_register": 1.32,
+      "tiles_counted": 1,
+      "check_worst_band_px_reliable": null,
+      "check_bands_reliable": 0
+     },
+     "threshold": "global shift <= 9.6 px (0.5 % of 1920) and scale within 0.5 %; residual per tile <= 2.0 px (pan still)",
+     "pass": false,
+     "binding": true,
+     "note": "pan_reproject.py register (ECC affine) + QA tile ECC; check's phase correlation only where response >= 0.05"
+    },
+    {
+     "id": "G1.3",
+     "value": {
+      "fixed_edges_worst_px": 60,
+      "width_ratios": {},
+      "eye": []
+     },
+     "threshold": "every clear edge of a fixed piece within +-19 px (+-0.01 of 1920) of the clay; products inside their box +-15 % (eye)",
+     "pass": false,
+     "binding": false,
+     "note": "edges with clay and render strength >= 4 only; product scale by eye on the fidelity sheet (no tool, P8)"
+    },
+    {
+     "id": "G1.8",
+     "value": {
+      "note": "the pose's reference uv is the master's point, not valid after rotation; exposure agreement is measured in G1.14 (dL in the overlap)",
+      "agent_needed_stops": 0.487,
+      "agent_flag": "DARK: needs more than +0.2 stop, not lifted further"
+     },
+     "threshold": "same exposure as the master (dL <= 1 in the overlap)",
+     "pass": null,
+     "binding": false
+    },
+    {
+     "id": "G1.9",
+     "value": {
+      "black_point_L": 12.2,
+      "wall_patch_HSL": [
+       67.8,
+       27.4,
+       95.6
+      ],
+      "wall_patch": "hero_wall_mid (clay selfcheck)",
+      "whites_H_median": 41.3,
+      "whites_S_median": 22.2,
+      "share_white_H_under_25": 0.0118,
+      "floor_median_HSL": null
+     },
+     "threshold": "black point L 12-15; back wall H 32-40 (bath: 4000 K, H informational), S 15-28; no H < 25 in white / beige; parquet H 30-40 S 30-45 L 68-78 (G1.11 proposal)",
+     "pass": true,
+     "binding": true,
+     "note": "the blush band #E8D5CC is by design (prompt MATERIALS); the upper wall at the reference is H 38.9: the share is the band, not the white HSL S inflates near L 90: S read on the frame's own mid wall"
+    },
+    {
+     "id": "G1.10",
+     "value": {
+      "lamps_in_clay": []
+     },
+     "threshold": "every lamp in the frame lit",
+     "pass": null,
+     "binding": true,
+     "note": "no lamp placeholder in this frame (F11 is a plan question, not a render one)"
+    },
+    {
+     "id": "G1.12",
+     "value": {
+      "saturated_255_px": 0,
+      "eye": "no sun patch, beam, bloom, cable, text or person seen"
+     },
+     "threshold": "0 violations",
+     "pass": true,
+     "binding": true,
+     "note": "eye at 1600 px"
+    },
+    {
+     "id": "G1.13",
+     "value": {
+      "box": null,
+      "L_p99": null,
+      "brightest": null,
+      "view": null
+     },
+     "threshold": "no window in frame: the opening / vista is the brightest area, p99 <= 97",
+     "pass": null,
+     "binding": true,
+     "note": "no window and no opening box"
+    },
+    {
+     "id": "G1.14",
+     "value": {
+      "pairs": {
+       "K-girl->K-girl-0 (T-CGirl pan, 33 deg)": {
+        "worst_band_px": 316.33,
+        "shift_px": {
+         "dx": -276.42,
+         "dy": -210.99,
+         "response": 0.025
+        },
+        "dL_mean": 10.3,
+        "dE_mean": 19.14,
+        "clay_worst_band_px": 0.09
+       }
+      },
+      "eye": "the same objects, but the SAME FRAMING as the K-girl master (window, bed, shelves, desk): not the yaw-0 view"
+     },
+     "threshold": "each pair sharing a point: <= 2 px per band after reprojection and dL mean <= 1 (proposal); same objects by eye (binding)",
+     "pass": false,
+     "binding": true,
+     "note": "pan_reproject.py check on the kept renders; the clay pairs are the tool's floor (<= 0.9 px)"
+    },
+    {
+     "id": "OVS",
+     "value": {
+      "required": true,
+      "why": "33 deg",
+      "applied": true,
+      "frame_file_matches_centre_crop": true
+     },
+     "threshold": "3 % overscan on every still in a pan >= 21 deg (transitions render plan 3 / 6.4, proposal)",
+     "pass": true,
+     "binding": false
+    },
+    {
+     "id": "G1.17",
+     "value": {
+      "returned_size_px": [
+       2736,
+       1536
+      ],
+      "resize": "non-uniform resize 2736x1536 -> 2736x1539 (+0.20% vertical), no crop",
+      "graded_size": [
+       2580,
+       1451
+      ],
+      "overscan_canvas": true,
+      "model": "gpt-image-2-5",
+      "quality": "sunburst",
+      "credits": 600,
+      "prompt_file_exists": true,
+      "prompt_record_json": true
+     },
+     "threshold": "test: 2K, 16:9, what the model returned recorded; a prompt record per job",
+     "pass": true,
+     "binding": true
+    },
+    {
+     "id": "G8.6",
+     "value": {
+      "baked_cards": 8,
+      "live": [],
+      "unverified": 8
+     },
+     "threshold": "every baked card live at the supplier within 7 days (proposal: 7 days; principle binding)",
+     "pass": false,
+     "binding": true,
+     "note": "docs/render-products-check-2026-11-02.json: only the 3 Zendrop cards were checked (MCP); CJ and AliExpress in the queue"
+    }
+   ],
+   "verdict": "fail",
+   "failed_binding": [
+    "G1.4",
+    "G1.14",
+    "G8.6"
+   ],
+   "failed_proposal": [
+    "G1.3"
+   ],
+   "cannot_measure": [
+    "G1.8",
+    "G1.10",
+    "G1.13"
+   ],
+   "may_reference": "no: the pose copied the master's framing (retake)",
+   "serves": [
+    "T-CGirl: V8 end / pan"
+   ],
+   "blocks_transitions": [
+    "T-CGirl: V8 end / pan"
+   ],
+   "design_notes": null,
+   "products_unverified": [
+    "basket-cj-jute-rope-cylinder",
+    "bedding-cj-washed-linen-natural-set",
+    "bedspread-cj-muslin-blanket-beige-150x200",
+    "bookshelf-cj-natural-wood-ledge-pair-42-x2",
+    "cushions-cj-corduroy-windmill-patchwork-pink-40",
+    "doll-aliexpress-linen-bunny-doll-063285",
+    "framed-prints-cj-charcoal-flower-silhouette-set3-30x40-boy",
+    "soft-toy-aliexpress-handmade-crochet-bunny-baby-999497"
+   ],
+   "products_live": []
+  },
+  {
+   "frame": "CB-0",
+   "kind": "pose",
+   "base": "B1",
+   "kept_file": "assets/renders/poses/nordic/v7/pose-cb-0-v7-graded.png",
+   "criteria": [
+    {
+     "id": "G1.4",
+     "value": {
+      "register_shift_px": [
+       -0.17,
+       -2.72
+      ],
+      "register_scale": [
+       0.99671,
+       0.98956
+      ],
+      "scale_dev_pct": 1.04,
+      "worst_tile_px_after_register": 6.63,
+      "tiles_counted": 8,
+      "check_worst_band_px_reliable": 8.02,
+      "check_bands_reliable": 3
+     },
+     "threshold": "global shift <= 9.6 px (0.5 % of 1920) and scale within 0.5 %; residual per tile <= 2.0 px (pan still)",
+     "pass": false,
+     "binding": true,
+     "note": "pan_reproject.py register (ECC affine) + QA tile ECC; check's phase correlation only where response >= 0.05"
+    },
+    {
+     "id": "G1.3",
+     "value": {
+      "fixed_edges_worst_px": 44,
+      "width_ratios": {
+       "bath fluted glazing": 1.1538,
+       "bath WC + limestone ledge (fixed)": 1.0,
+       "window W-bath": 0.9962
+      },
+      "eye": []
+     },
+     "threshold": "every clear edge of a fixed piece within +-19 px (+-0.01 of 1920) of the clay; products inside their box +-15 % (eye)",
+     "pass": false,
+     "binding": false,
+     "note": "edges with clay and render strength >= 4 only; product scale by eye on the fidelity sheet (no tool, P8)"
+    },
+    {
+     "id": "G1.8",
+     "value": {
+      "note": "the pose's reference uv is the master's point, not valid after rotation; exposure agreement is measured in G1.14 (dL in the overlap)",
+      "agent_needed_stops": 0.68,
+      "agent_flag": "DARK: needs more than +0.2 stop, not lifted further"
+     },
+     "threshold": "same exposure as the master (dL <= 1 in the overlap)",
+     "pass": null,
+     "binding": false
+    },
+    {
+     "id": "G1.9",
+     "value": {
+      "black_point_L": 13.3,
+      "wall_patch_HSL": [
+       36.0,
+       41.3,
+       73.8
+      ],
+      "wall_patch": "hero_wall_mid (clay selfcheck)",
+      "whites_H_median": 40.0,
+      "whites_S_median": 20.4,
+      "share_white_H_under_25": 0.0,
+      "floor_median_HSL": [
+       37.9,
+       21.8,
+       78.6
+      ]
+     },
+     "threshold": "black point L 12-15; back wall H 32-40 (bath: 4000 K, H informational), S 15-28; no H < 25 in white / beige; parquet H 30-40 S 30-45 L 68-78 (G1.11 proposal)",
+     "pass": true,
+     "binding": true
+    },
+    {
+     "id": "G1.10",
+     "value": {
+      "wall-sconce": {
+       "L_p95": 96.3,
+       "H": 66.7,
+       "S": 40.0,
+       "lit_in_clay": true,
+       "not_brighter_than_window": true,
+       "note": null
+      }
+     },
+     "threshold": "every lamp lit: shade L 93-97 (H 35-45, S 25-45 informational: the box includes surroundings); none brighter than the window",
+     "pass": true,
+     "binding": true,
+     "note": "measured inside the clay lamp box: top 10 % of L; a lamp drawn outside its box reads as wall"
+    },
+    {
+     "id": "G1.12",
+     "value": {
+      "saturated_255_px": 0,
+      "eye": "no sun patch, beam, bloom, cable, text or person seen"
+     },
+     "threshold": "0 violations",
+     "pass": true,
+     "binding": true,
+     "note": "eye at 1600 px"
+    },
+    {
+     "id": "G1.13",
+     "value": {
+      "box": "window W-bath",
+      "width_frac": 0.164,
+      "margins": {
+       "left": 0.428,
+       "right": 0.408,
+       "top": 0.095,
+       "bottom": 0.485
+      },
+      "L_p99": 97.1,
+      "L_max": 97.6,
+      "brightest": true,
+      "saturated_255": 0,
+      "view": null
+     },
+     "threshold": "F2: whole with >= 0.03 margins or cut >= 15 %, width <= 30 %; brightest; p99 <= 97; 0 x 255; same view (birches, no snow: proposal)",
+     "pass": false,
+     "binding": true
+    },
+    {
+     "id": "G1.14",
+     "value": {
+      "pairs": {
+       "B1->CB-0 (T-CBath pan, 22 deg)": {
+        "worst_band_px": 10.04,
+        "shift_px": {
+         "dx": -3.88,
+         "dy": -3.87,
+         "response": 0.339
+        },
+        "dL_mean": 2.4,
+        "dE_mean": 4.38,
+        "clay_worst_band_px": 0.89
+       },
+       "CB-0->B2 ((CB-0-B2, 57), 57 deg)": {
+        "worst_band_px": 17.87,
+        "shift_px": {
+         "dx": 2.04,
+         "dy": -11.5,
+         "response": 0.027
+        },
+        "dL_mean": 2.6,
+        "dE_mean": 4.8,
+        "clay_worst_band_px": 1.26
+       }
+      },
+      "eye": "window, WC, paper stand, sconce, bath mat, curtain edge, niche as B1"
+     },
+     "threshold": "each pair sharing a point: <= 2 px per band after reprojection and dL mean <= 1 (proposal); same objects by eye (binding)",
+     "pass": false,
+     "binding": true,
+     "note": "pan_reproject.py check on the kept renders; the clay pairs are the tool's floor (<= 0.9 px)"
+    },
+    {
+     "id": "OVS",
+     "value": {
+      "required": true,
+      "why": "22 deg",
+      "applied": true,
+      "frame_file_matches_centre_crop": true
+     },
+     "threshold": "3 % overscan on every still in a pan >= 21 deg (transitions render plan 3 / 6.4, proposal)",
+     "pass": true,
+     "binding": false
+    },
+    {
+     "id": "G1.17",
+     "value": {
+      "returned_size_px": [
+       2736,
+       1536
+      ],
+      "resize": "non-uniform resize 2736x1536 -> 2736x1539 (+0.20% vertical), no crop",
+      "graded_size": [
+       2580,
+       1451
+      ],
+      "overscan_canvas": true,
+      "model": "gpt-image-2-5",
+      "quality": "sunburst",
+      "credits": 600,
+      "prompt_file_exists": true,
+      "prompt_record_json": true
+     },
+     "threshold": "test: 2K, 16:9, what the model returned recorded; a prompt record per job",
+     "pass": true,
+     "binding": true
+    },
+    {
+     "id": "G8.6",
+     "value": {
+      "baked_cards": 7,
+      "live": [],
+      "unverified": 7
+     },
+     "threshold": "every baked card live at the supplier within 7 days (proposal: 7 days; principle binding)",
+     "pass": false,
+     "binding": true,
+     "note": "docs/render-products-check-2026-11-02.json: only the 3 Zendrop cards were checked (MCP); CJ and AliExpress in the queue"
+    }
+   ],
+   "verdict": "fail",
+   "failed_binding": [
+    "G1.4",
+    "G1.13",
+    "G1.14",
+    "G8.6"
+   ],
+   "failed_proposal": [
+    "G1.3"
+   ],
+   "cannot_measure": [
+    "G1.8"
+   ],
+   "may_reference": "with register only (global affine corrects it; residual <= 9.6 px); products / scale to fix: ",
+   "serves": [
+    "T-CBath: V9 end / pan"
+   ],
+   "blocks_transitions": [
+    "T-CBath: V9 end / pan"
+   ],
+   "design_notes": null,
+   "products_unverified": [
+    "bath-mat-cj-tufted-cotton-frame-beige-40x60",
+    "candle-cj-ribbed-matte-ceramic-candle-cup-9",
+    "reed-diffuser-cj-travertine-look-bamboo-lid-milktea",
+    "shower-curtain-aliexpress-linen-blend-slub-panel-200x270",
+    "shower-dispensers-cj-sand-ribbed-ceramic-pump-bottle",
+    "toilet-paper-stand-aliexpress-floor-standing-black-763442",
+    "vanity-sconces-cj-fluted-resin-updown-white"
+   ],
+   "products_live": []
+  },
+  {
+   "frame": "MB-in",
+   "kind": "pose",
+   "base": "MB0",
+   "kept_file": "assets/renders/poses/nordic/v7/pose-mb-in-v7-graded.png",
+   "criteria": [
+    {
+     "id": "G1.4",
+     "value": {
+      "register_shift_px": [
+       1.88,
+       -11.33
+      ],
+      "register_scale": [
+       0.99732,
+       1.00776
+      ],
+      "scale_dev_pct": 0.78,
+      "worst_tile_px_after_register": 6.23,
+      "tiles_counted": 7,
+      "check_worst_band_px_reliable": 1.94,
+      "check_bands_reliable": 2
+     },
+     "threshold": "global shift <= 9.6 px (0.5 % of 1920) and scale within 0.5 %; residual per tile <= 9.6 px (video endpoint)",
+     "pass": false,
+     "binding": true,
+     "note": "pan_reproject.py register (ECC affine) + QA tile ECC; check's phase correlation only where response >= 0.05"
+    },
+    {
+     "id": "G1.3",
+     "value": {
+      "fixed_edges_worst_px": 64,
+      "width_ratios": {
+       "hall console": 0.4839,
+       "G-C3 oak portal": 1.1532,
+       "door leaves": 1.4878
+      },
+      "eye": []
+     },
+     "threshold": "every clear edge of a fixed piece within +-19 px (+-0.01 of 1920) of the clay; products inside their box +-15 % (eye)",
+     "pass": false,
+     "binding": false,
+     "note": "edges with clay and render strength >= 4 only; product scale by eye on the fidelity sheet (no tool, P8)"
+    },
+    {
+     "id": "G1.8",
+     "value": {
+      "note": "the pose's reference uv is the master's point, not valid after rotation; exposure agreement is measured in G1.14 (dL in the overlap)",
+      "agent_needed_stops": 0.429,
+      "agent_flag": "DARK: needs more than +0.2 stop, not lifted further"
+     },
+     "threshold": "same exposure as the master (dL <= 1 in the overlap)",
+     "pass": null,
+     "binding": false
+    },
+    {
+     "id": "G1.9",
+     "value": {
+      "black_point_L": 12.5,
+      "wall_patch_HSL": [
+       39.5,
+       70.7,
+       89.4
+      ],
+      "wall_patch": "hero_wall_mid (clay selfcheck)",
+      "whites_H_median": 39.1,
+      "whites_S_median": 26.2,
+      "share_white_H_under_25": 0.0,
+      "floor_median_HSL": [
+       32.9,
+       30.9,
+       73.3
+      ]
+     },
+     "threshold": "black point L 12-15; back wall H 32-40 (bath: 4000 K, H informational), S 15-28; no H < 25 in white / beige; parquet H 30-40 S 30-45 L 68-78 (G1.11 proposal)",
+     "pass": true,
+     "binding": true,
+     "note": " HSL S inflates near L 90: S read on the frame's own mid wall"
+    },
+    {
+     "id": "G1.10",
+     "value": {
+      "bedside-sconces": {
+       "L_p95": 92.9,
+       "H": 46.2,
+       "S": 47.4,
+       "lit_in_clay": true,
+       "not_brighter_than_window": true,
+       "note": null
+      },
+      "accent-sconces": {
+       "L_p95": 79.8,
+       "H": 33.1,
+       "S": 48.1,
+       "lit_in_clay": true,
+       "not_brighter_than_window": true,
+       "note": "L_p95 < 85: the shade is outside its clay box (moved) or not glowing"
+      },
+      "ceiling-lights": {
+       "L_p95": 94.1,
+       "H": 52.0,
+       "S": 60.0,
+       "lit_in_clay": true,
+       "not_brighter_than_window": true,
+       "note": null
+      }
+     },
+     "threshold": "every lamp lit: shade L 93-97 (H 35-45, S 25-45 informational: the box includes surroundings); none brighter than the window",
+     "pass": false,
+     "binding": true,
+     "note": "measured inside the clay lamp box: top 10 % of L; a lamp drawn outside its box reads as wall"
+    },
+    {
+     "id": "G1.12",
+     "value": {
+      "saturated_255_px": 0,
+      "eye": "no sun patch, beam, bloom, cable, text or person seen"
+     },
+     "threshold": "0 violations",
+     "pass": true,
+     "binding": true,
+     "note": "eye at 1600 px"
+    },
+    {
+     "id": "G1.13",
+     "value": {
+      "box": "G-H4 oak portal (vista through the opening: the brightest area by design)",
+      "L_p99": 95.9,
+      "brightest": false,
+      "saturated_255_total": 0
+     },
+     "threshold": "the brightest area is the window / vista; p99 <= 97; 0 x 255",
+     "pass": null,
+     "binding": true,
+     "note": "the measured box is an opening or a secondary window (M0p: the living window at the left edge is not a clay box; C0 / S1' / MB-in: the door box is not the vista): no tool box for the vista"
+    },
+    {
+     "id": "G1.14",
+     "value": {
+      "eye": "nightstand, holders, sconce, planter as MB0; corridor lanterns, gallery prints, hall console and living vista beyond"
+     },
+     "threshold": "same objects in both frames (eye)",
+     "pass": true,
+     "binding": true,
+     "note": "no pair sharing a point; video endpoint sheets in overlays/endpoints-*.jpg"
+    },
+    {
+     "id": "OVS",
+     "value": {
+      "required": false,
+      "why": "no pan",
+      "applied": false,
+      "frame_file_matches_centre_crop": null
+     },
+     "threshold": "3 % overscan on every still in a pan >= 21 deg (transitions render plan 3 / 6.4, proposal)",
+     "pass": true,
+     "binding": false
+    },
+    {
+     "id": "G1.17",
+     "value": {
+      "returned_size_px": [
+       2736,
+       1536
+      ],
+      "resize": "non-uniform resize 2736x1536 -> 2736x1539 (+0.20% vertical), no crop",
+      "graded_size": [
+       2736,
+       1539
+      ],
+      "overscan_canvas": false,
+      "model": "gpt-image-2-5",
+      "quality": "sunburst",
+      "credits": 600,
+      "prompt_file_exists": true,
+      "prompt_record_json": true
+     },
+     "threshold": "test: 2K, 16:9, what the model returned recorded; a prompt record per job",
+     "pass": true,
+     "binding": true
+    },
+    {
+     "id": "G8.6",
+     "value": {
+      "baked_cards": 31,
+      "live": [
+       "basket-zendrop-seagrass-belly-38x34"
+      ],
+      "unverified": 27
+     },
+     "threshold": "every baked card live at the supplier within 7 days (proposal: 7 days; principle binding)",
+     "pass": false,
+     "binding": true,
+     "note": "docs/render-products-check-2026-11-02.json: only the 3 Zendrop cards were checked (MCP); CJ and AliExpress in the queue"
+    }
+   ],
+   "verdict": "fail",
+   "failed_binding": [
+    "G1.4",
+    "G1.10",
+    "G8.6"
+   ],
+   "failed_proposal": [
+    "G1.3"
+   ],
+   "cannot_measure": [
+    "G1.8",
+    "G1.13"
+   ],
+   "may_reference": "with register only (global affine corrects it; residual <= 9.6 px); products / scale to fix: ",
+   "serves": [
+    "T-CM: V10 / V11"
+   ],
+   "blocks_transitions": [
+    "T-CM: V10 / V11"
+   ],
+   "design_notes": "the doorway on the right reads dim grey, not lit (TR3)",
+   "products_unverified": [
+    "bedding-cj-washed-linen-natural-set",
+    "bedside-sconces-cj-linen-wave-flush",
+    "bowl-cj-glutinous-white-belly-bowl-21",
+    "candle-holders-cj-travertine-pedestal",
+    "ceiling-lights-aliexpress-flat-oval-paper-lantern-shade-40-pair",
+    "console-vessel-aliexpress-ceramic-wabi-sabi-vase-906575",
+    "curtains-aliexpress-linen-blend-s-fold-180502",
+    "cushions-cj-boucle-teddy",
+    "cushions-cj-knitted-chenille-bean-green",
+    "cushions-cj-linen-look-charcoal",
+    "framed-art-aliexpress-minimal-geometric-triptych-prints",
+    "framed-art-cj-black-ink-abstract-wide-mat-50-pair",
+    "framed-art-cj-swinging-line-black-frame-mat-35x45",
+    "gallery-art-cj-black-ink-abstract-wide-mat-40-set3",
+    "key-tray-aliexpress-oval-metal-tray-693779",
+    "nightstand-vase-aliexpress-handmade-wabi-sabi-vase-665862",
+    "pendant-cj-silk-ribbed-pumpkin-40",
+    "pillowcases-cj-pure-linen-envelope-pair-48x74",
+    "planter-cj-seagrass-belly",
+    "sill-vase-cj-cream-fluted-column-25",
+    "sofa-cover-cj-cotton-muslin-fringe",
+    "table-runner-cj-linen-look-sage-fringe",
+    "throw-cj-cotton-linen-light-gray-200x230",
+    "trinket-dish-cj-reactive-glaze-oval-dish-9",
+    "vase-aliexpress-vintage-distressed-clay-vase-589009",
+    "wall-sconce-cj-black-swing-arm-fabric",
+    "wall-sconce-cj-travertine-cube-updown-12"
+   ],
+   "products_live": [
+    "basket-zendrop-seagrass-belly-38x34"
+   ]
+  }
+ ]
+}

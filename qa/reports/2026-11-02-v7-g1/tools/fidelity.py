@@ -84,7 +84,7 @@ def run(fid):
         rec[nm] = dict(box_uv=[round(x, 4) for x in box], box_px=[int(bw * W), int(bh * H)], visible_pct_clay=vis, extent_estimate=e)
         sub = f"{int(bw * W)}x{int(bh * H)}px" + (f" est {e['width_ratio']}x{e['height_ratio']}" if e and e.get("found") else "")
         tiles.append(tile(cv2.cvtColor(crop, cv2.COLOR_RGB2BGR), nm.split("/", 1)[-1], sub))
-    refs = IDX["frames"].get(os.path.basename(C.FRAMES[fid][1])) or IDX["frames"].get(os.path.basename(C.FRAMES[fid][1]).replace("-r2", "")) or []
+    refs = IDX["frames"].get(fid) or []
     rtiles = []
     for i, r in enumerate(refs):
         f = r.get("file")
