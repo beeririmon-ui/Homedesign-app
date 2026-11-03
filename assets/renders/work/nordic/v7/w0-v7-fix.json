@@ -1,0 +1,153 @@
+{
+ "asset_id": "w0-v7",
+ "date": "2026-11-03",
+ "script": "assets/renders/house-nordic-v7-2026-11-02/fix_v7.py",
+ "tokens": 0,
+ "fix": "W0: the desk (slab, drawer, panels), the pencil cup, the chair, the rope basket and the paper bin moved down 0.036 of the height onto the clay lines; the shelf with its felt boxes down 0.006; the wall strips, skirting, floor and rug behind them filled; the plant and the rug not moved (review section 7 row 6, section 2.4)",
+ "method": "render-measured rectangles for the desk slab (v 0.530-0.579), drawer (0.579-0.638), panels (to 0.871), the shadowed void wall under the drawer (0.638-0.725), the chair body (u 0.434-0.564, v 0.562-0.797) and its legs as vertical oak bars (columns read on the rug rows, the rear legs as darker dips on the floor rows), the cup (u 0.378-0.412, v 0.462-0.540): one group, shifted rigidly by +0.036 H; the leaves of the plant (green, hue 60-170) excluded from the group and put back on top, the desk under them inpainted first; basket and bin matted by grabCut, moved with the group (their bottoms then sit 0.001 and 0.007 from their clay box bottoms) and scaled about their floor contact to the box height only if taller than it (neither is: 0.99 and 0.98); shelf rect (u 0.350-0.655, v 0.178-0.305, with its shadow band) shifted +0.006 H; the wall strips the move exposes filled column-wise from the lit wall above them (with the wall's high-pass texture), the chair legs' old footprints on the floor and rug from the texture 28 px beside them",
+ "measured_before": {
+  "shelf_top": 0.2482,
+  "drawer_top": 0.5789,
+  "drawer_bottom": 0.6381,
+  "panel_bottom": 0.8713,
+  "chair_top": 0.5621,
+  "chair_seat": 0.7511,
+  "skirting_line": 0.7966,
+  "rug_top": 0.862,
+  "note": "the designer's review put the shelf ~0.03 high; measured against the clay it is 0.006 high (shelf top 0.2482 vs 0.2542), so it moves 0.006"
+ },
+ "clay": {
+  "shelf_top": 0.2542,
+  "drawer_top": 0.6148,
+  "drawer_bottom": 0.6787,
+  "panel_bottom": 0.9042,
+  "chair_top": 0.6023,
+  "chair_seat": 0.7856,
+  "skirting_line": 0.8338
+ },
+ "dy_group": 0.036,
+ "dy_shelf": 0.006,
+ "chair_leg_columns_u": [
+  [
+   0.4412,
+   0.451
+  ],
+  [
+   0.5482,
+   0.5585
+  ],
+  [
+   0.428,
+   0.4408
+  ]
+ ],
+ "basket": {
+  "before": [
+   0.3509,
+   0.4236,
+   0.7057,
+   0.8454
+  ],
+  "after": [
+   0.3509,
+   0.4236,
+   0.7414,
+   0.8811
+  ],
+  "box": [
+   0.3609,
+   0.4232,
+   0.7389,
+   0.8806
+  ],
+  "scale": 1.0,
+  "dy": 0.036,
+  "height_ratio_to_box": {
+   "before": 0.986,
+   "after": 0.986
+  },
+  "width_ratio_to_box": {
+   "before": 1.167,
+   "after": 1.167
+  }
+ },
+ "bin": {
+  "before": [
+   0.5793,
+   0.6458,
+   0.7102,
+   0.8486
+  ],
+  "after": [
+   0.5793,
+   0.6458,
+   0.7459,
+   0.8843
+  ],
+  "box": [
+   0.5844,
+   0.638,
+   0.7495,
+   0.8912
+  ],
+  "scale": 1.0,
+  "dy": 0.036,
+  "height_ratio_to_box": {
+   "before": 0.977,
+   "after": 0.977
+  },
+  "width_ratio_to_box": {
+   "before": 1.241,
+   "after": 1.241
+  }
+ },
+ "lines_after": {
+  "shelf_top": {
+   "render_after_v": 0.2541,
+   "clay_v": 0.2541,
+   "clay_v_expected": 0.2542,
+   "d_v": 0.0,
+   "pass_0_01": true
+  },
+  "drawer_top": {
+   "render_after_v": 0.6147,
+   "clay_v": 0.6147,
+   "clay_v_expected": 0.6148,
+   "d_v": 0.0,
+   "pass_0_01": true
+  },
+  "drawer_bottom": {
+   "render_after_v": 0.6738,
+   "clay_v": 0.6784,
+   "clay_v_expected": 0.6787,
+   "d_v": -0.0046,
+   "pass_0_01": true
+  },
+  "panel_bottom": {
+   "render_after_v": 0.9064,
+   "clay_v": 0.9038,
+   "clay_v_expected": 0.9042,
+   "d_v": 0.0026,
+   "pass_0_01": true
+  },
+  "chair_top": {
+   "render_after_v": 0.5984,
+   "clay_v": 0.6023,
+   "clay_v_expected": 0.6023,
+   "d_v": -0.0039,
+   "pass_0_01": true
+  },
+  "chair_seat": {
+   "render_after_v": 0.7869,
+   "clay_v": 0.7856,
+   "clay_v_expected": 0.7856,
+   "d_v": 0.0013,
+   "pass_0_01": true
+  }
+ },
+ "left_as_is": "the skirting (0.797 vs clay 0.834), the rug (0.862 vs 0.904) and the plant stay where the render put them (review: the plant and the rug do not move); the desk therefore stands 0.04 into the rug",
+ "acceptance": "everything on the clay +-0.01; the plant and the rug not moved (review section 7 row 6)",
+ "outputs": {
+  "fix": "assets/renders/work/nordic/v7/w0-v7-fix.png"
+ }
+}

@@ -1,0 +1,50 @@
+{
+ "asset_id": "pose-k-boy-0-v7",
+ "date": "2026-11-03",
+ "script": "assets/renders/house-nordic-v7-2026-11-02/fix_v7.py",
+ "tokens": 0,
+ "fix": "K-boy-0: the sage band and the skirting on the near (south) wall repainted warm white; the east wall keeps its band (review section 7 row 4; Bible 'kids rooms': band on the east and north walls only)",
+ "method": "pixels right of the corner (strongest vertical edge in the white upper wall) and below the band line (fitted on the near wall), minus the oak floor (hue 15-50 deg, S >= 20 %), components >= 0.2 % of the frame; each pixel multiplied per channel by (white wall just above the band line) / (sage just below it) on the same wall, so the shading stays; 1 px feather; the 7 px band around the painted edge re-interpolated column-wise so the anti-aliased edge row does not stay as a bright line",
+ "corner_u": 0.6031,
+ "band_line": {
+  "v_at_corner": 0.3542,
+  "v_at_right_edge": 0.3358
+ },
+ "repainted_px": 1082784,
+ "repainted_pct_of_frame": 25.72,
+ "rgb_ratio": [
+  1.2432,
+  1.2128,
+  1.267
+ ],
+ "white_ref_rgb": [
+  230.0,
+  228.0,
+  223.0
+ ],
+ "sage_ref_rgb": [
+  185.0,
+  188.0,
+  176.0
+ ],
+ "hsl_before": {
+  "H_deg": 76.0,
+  "S_pct": 7.1,
+  "L_pct": 71.8
+ },
+ "hsl_after": {
+  "H_deg": 36.0,
+  "S_pct": 9.0,
+  "L_pct": 89.4
+ },
+ "hsl_white_wall_above": {
+  "H_deg": 40.0,
+  "S_pct": 11.4,
+  "L_pct": 88.2
+ },
+ "acceptance": "the near wall white all over, like K-girl-0; the band stops at a clean line at the corner (review section 7 row 4); after the grade: H 32-40, S 15-28 (Bible, G1.9)",
+ "untouched": "the east wall band, the desk, the bed, the floor, the shelves",
+ "outputs": {
+  "fix": "assets/renders/poses/nordic/v7/pose-k-boy-0-v7-fix.png"
+ }
+}

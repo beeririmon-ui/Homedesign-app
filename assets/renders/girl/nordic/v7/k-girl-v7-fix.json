@@ -1,0 +1,47 @@
+{
+ "asset_id": "k-girl-v7",
+ "date": "2026-11-03",
+ "script": "assets/renders/house-nordic-v7-2026-11-02/fix_v7.py",
+ "tokens": 0,
+ "fix": "K-girl: the doll on the desk scaled to the slot's size (review section 7 row 5: ~0.70 to the box [0.685, 0.717, 0.462, 0.574], anchored at its seat on the desk by the wall); the pink wall and the desk top filled behind it; its contact / cast shadow scaled with it",
+ "method": "grabCut matte of the doll (rect 0.655-0.740 x 0.355-0.560, 6 iterations, largest component); shadow zone = matte dilated 12 % of the width to the right on the wall rows (3 % on the desk rows), feathered 25 px except over the old doll itself; background = row-wise linear fill of the wall rows from 30 px bands left and right with the high-pass texture of a wall patch (u 0.76-0.80, v 0.38-0.46), the desk rows copied from the desk grain 11 % of the width to the right; shadow = original / background as a ratio map (0.45-1.0, blurred 2 px), scaled with the doll; doll layer scaled by 0.68 about the seat point with INTER_AREA, 0.7 px feather",
+ "scale": 0.68,
+ "anchor_seat_uv": [
+  0.6873,
+  0.5549
+ ],
+ "desk_top_v_render": 0.5491,
+ "desk_top_v_clay": 0.5729,
+ "clay_box": [
+  0.6854,
+  0.7171,
+  0.462,
+  0.5742
+ ],
+ "doll_before": [
+  0.6601,
+  0.7281,
+  0.3697,
+  0.5549
+ ],
+ "doll_after": [
+  0.6689,
+  0.7149,
+  0.4288,
+  0.5549
+ ],
+ "height_ratio_to_box": {
+  "before": 1.65,
+  "after": 1.123
+ },
+ "width_ratio_to_box": {
+  "before": 2.145,
+  "after": 1.453,
+  "note": "the clay proxy is a thin cylinder + sphere; a seated rabbit doll is wider than its proxy by construction, the height is the measure"
+ },
+ "acceptance": "the doll inside the box +-15 % (height), no seam at 100 % (review section 7 row 5)",
+ "untouched": "everything else in the frame",
+ "outputs": {
+  "fix": "assets/renders/girl/nordic/v7/k-girl-v7-fix.png"
+ }
+}

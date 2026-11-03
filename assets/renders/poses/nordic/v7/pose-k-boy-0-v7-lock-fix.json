@@ -1,0 +1,501 @@
+{
+ "frame": "K-boy-0",
+ "id": "pose-k-boy-0-v7",
+ "size": [
+  1920,
+  1080
+ ],
+ "pan_endpoint": true,
+ "method": "lock_v2 (register + bands + ECC tiles + fixed edges)",
+ "check_raw": {
+  "size": [
+   1920,
+   1080
+  ],
+  "overlap_u": [
+   0.0,
+   0.999
+  ],
+  "overlap_v": [
+   0.0,
+   0.999
+  ],
+  "shift_px": {
+   "dx": 3.84,
+   "dy": -34.92,
+   "response": 0.071
+  },
+  "bands": [
+   {
+    "u": [
+     0.0,
+     0.249
+    ],
+    "dx_px": -5.07,
+    "dy_px": -4.26,
+    "response": 0.078
+   },
+   {
+    "u": [
+     0.249,
+     0.499
+    ],
+    "dx_px": -2.8,
+    "dy_px": -50.02,
+    "response": 0.065
+   },
+   {
+    "u": [
+     0.499,
+     0.749
+    ],
+    "dx_px": -0.82,
+    "dy_px": -44.69,
+    "response": 0.189
+   },
+   {
+    "u": [
+     0.749,
+     0.999
+    ],
+    "dx_px": 19.78,
+    "dy_px": 8.77,
+    "response": -0.003
+   }
+  ],
+  "deltaE": {
+   "mean": 9.94,
+   "p95": 24.94,
+   "share_over_5": 0.637
+  },
+  "L_mean": {
+   "a": 78.8,
+   "b": 75.2
+  }
+ },
+ "register": {
+  "affine": [
+   [
+    0.99965,
+    -0.0034,
+    2.74181
+   ],
+   [
+    -0.01155,
+    0.95282,
+    7.40437
+   ]
+  ],
+  "shift_px": [
+   2.74,
+   7.4
+  ],
+  "scale": [
+   0.99965,
+   0.95282
+  ],
+  "note": "ECC affine, clay (template) -> render coordinates at 1920x1080; scale > 1 = the render drew it larger"
+ },
+ "check_registered": {
+  "size": [
+   1920,
+   1080
+  ],
+  "overlap_u": [
+   0.0,
+   0.999
+  ],
+  "overlap_v": [
+   0.0,
+   0.999
+  ],
+  "shift_px": {
+   "dx": -1.09,
+   "dy": 1.83,
+   "response": 0.11
+  },
+  "bands": [
+   {
+    "u": [
+     0.0,
+     0.249
+    ],
+    "dx_px": -6.95,
+    "dy_px": 8.29,
+    "response": 0.076
+   },
+   {
+    "u": [
+     0.249,
+     0.499
+    ],
+    "dx_px": 3.96,
+    "dy_px": 3.1,
+    "response": 0.117
+   },
+   {
+    "u": [
+     0.499,
+     0.749
+    ],
+    "dx_px": -0.5,
+    "dy_px": 4.13,
+    "response": 0.17
+   },
+   {
+    "u": [
+     0.749,
+     0.999
+    ],
+    "dx_px": -5.91,
+    "dy_px": -70.18,
+    "response": 0.005
+   }
+  ],
+  "deltaE": {
+   "mean": 9.6,
+   "p95": 23.22,
+   "share_over_5": 0.626
+  },
+  "L_mean": {
+   "a": 78.8,
+   "b": 75.4
+  }
+ },
+ "tiles_ecc": [
+  {
+   "u": [
+    0.0,
+    0.25
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": 3.23,
+   "dy_px": -4.4,
+   "rho": 0.625,
+   "counted": true
+  },
+  {
+   "u": [
+    0.25,
+    0.5
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": 4.3,
+   "dy_px": -6.76,
+   "rho": 0.95,
+   "counted": true
+  },
+  {
+   "u": [
+    0.5,
+    0.75
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": 0.24,
+   "dy_px": -7.27,
+   "rho": 0.819,
+   "counted": true
+  },
+  {
+   "u": [
+    0.75,
+    1.0
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": -23.21,
+   "dy_px": 1.12,
+   "rho": 0.038,
+   "counted": false
+  },
+  {
+   "u": [
+    0.0,
+    0.25
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": -0.67,
+   "dy_px": -31.84,
+   "rho": 0.37,
+   "counted": true
+  },
+  {
+   "u": [
+    0.25,
+    0.5
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": -0.2,
+   "dy_px": 1.49,
+   "rho": 0.242,
+   "counted": true
+  },
+  {
+   "u": [
+    0.5,
+    0.75
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": 0.47,
+   "dy_px": -40.66,
+   "rho": 0.783,
+   "counted": true
+  },
+  {
+   "u": [
+    0.75,
+    1.0
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": -17.61,
+   "dy_px": 6.32,
+   "rho": 0.032,
+   "counted": false
+  }
+ ],
+ "tiles_ecc_registered": [
+  {
+   "u": [
+    0.0,
+    0.25
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": 1.34,
+   "dy_px": 2.46,
+   "rho": 0.578,
+   "counted": true
+  },
+  {
+   "u": [
+    0.25,
+    0.5
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": null,
+   "dy_px": null,
+   "rho": null,
+   "counted": false,
+   "note": "ECC did not converge"
+  },
+  {
+   "u": [
+    0.5,
+    0.75
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": -0.87,
+   "dy_px": 16.32,
+   "rho": 0.804,
+   "counted": true
+  },
+  {
+   "u": [
+    0.75,
+    1.0
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": -32.02,
+   "dy_px": 13.43,
+   "rho": 0.027,
+   "counted": false
+  },
+  {
+   "u": [
+    0.0,
+    0.25
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": -0.37,
+   "dy_px": -1.92,
+   "rho": 0.39,
+   "counted": true
+  },
+  {
+   "u": [
+    0.25,
+    0.5
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": 1.21,
+   "dy_px": -1.13,
+   "rho": 0.692,
+   "counted": true
+  },
+  {
+   "u": [
+    0.5,
+    0.75
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": 0.4,
+   "dy_px": 9.07,
+   "rho": 0.78,
+   "counted": true
+  },
+  {
+   "u": [
+    0.75,
+    1.0
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": null,
+   "dy_px": null,
+   "rho": null,
+   "counted": false,
+   "note": "ECC did not converge"
+  }
+ ],
+ "fixed_edges": {
+  "boy bed 96x196 (fixed)": {
+   "box": [
+    -0.0302,
+    0.1601,
+    0.6328,
+    1.0301
+   ],
+   "edges": {
+    "top": {
+     "clay_px": 711,
+     "render_px": 666,
+     "d_px": -45,
+     "clay_strength": 9.6,
+     "render_strength": 15.7
+    }
+   },
+   "worst_edge_px": 45,
+   "kind": "furniture"
+  },
+  "boy desk 90x50 (fixed)": {
+   "box": [
+    0.2041,
+    0.4758,
+    0.5894,
+    0.9796
+   ],
+   "edges": {
+    "left": {
+     "clay_px": 414,
+     "render_px": 413,
+     "d_px": -1,
+     "clay_strength": 18.5,
+     "render_strength": 32.7
+    },
+    "right": {
+     "clay_px": 897,
+     "render_px": 866,
+     "d_px": -31,
+     "clay_strength": 19.7,
+     "render_strength": 52.7
+    },
+    "top": {
+     "clay_px": 669,
+     "render_px": 651,
+     "d_px": -18,
+     "clay_strength": 8.9,
+     "render_strength": 37.7
+    }
+   },
+   "width_ratio": 0.9379,
+   "worst_edge_px": 31,
+   "kind": "furniture"
+  }
+ },
+ "summary": {
+  "register_shift_px": [
+   2.74,
+   7.4
+  ],
+  "register_scale": [
+   0.99965,
+   0.95282
+  ],
+  "register_scale_pct": [
+   -0.03,
+   -4.72
+  ],
+  "worst_band_px": 50.02,
+  "bands_reliable": 3,
+  "worst_band_px_after_register": 8.29,
+  "bands_reliable_after_register": 3,
+  "worst_tile_ecc_px": 40.66,
+  "tiles_counted": 6,
+  "worst_tile_ecc_px_after_register": 16.32,
+  "tiles_counted_after_register": 5,
+  "fixed_edges_worst_px": 45,
+  "fixed_edges_measured": 2,
+  "fixed_ratios": {
+   "boy desk 90x50 (fixed) w": 0.9379
+  }
+ },
+ "verdict": {
+  "thresholds": {
+   "shift_px": 9.6,
+   "scale_tol": 0.005,
+   "residual_px": 2.0,
+   "residual_rule": "pan endpoint: <= 2 px per band / tile after register",
+   "edge_px": 19.2,
+   "ratio": [
+    0.95,
+    1.05
+   ],
+   "source": "docs/ops/quality-gates-2026-11-02.md G1.4 (+ G1.3 ratios, proposal); qa/reports/2026-11-02-v7-g1.md section 1"
+  },
+  "global_pass": false,
+  "residual_pass": false,
+  "edges_pass": false,
+  "residual_measured": true,
+  "pass": false
+ },
+ "render": "assets/renders/poses/nordic/v7/pose-k-boy-0-v7-fix.png",
+ "clay": "assets/blockout/house/framing/round4/poses/K-boy-0.png",
+ "overscan_cropped_to_frame": true,
+ "date": "2026-11-03",
+ "note": "geometry only: measured on the normalised raw still (the grade does not move edges); the old clay_lock stays in <id>-measurements.json"
+}
