@@ -454,4 +454,19 @@ describe('standards and safety (D9)', () => {
       { text: 'תעודה: EN 71-3 (לפי הספק, לא אומתה)', href: undefined },
     ]);
   });
+
+  it("a certificate without a document (schema 1.2, source: seller-claim) is the seller's claim, never verified (SCH1)", () => {
+    const s = publicSafety({ certificates: [{ name: 'CE (seller attribute)', verified: false, source: 'seller-claim' }] })!;
+    expect(s.certificates).toEqual([{ name: 'CE (seller attribute)', url: null, verified: false, seller_claim: true }]);
+    expect(safetyLinesHe(s)).toEqual([{ text: 'CE (seller attribute): טענת המוכר, אין מסמך', href: undefined }]);
+    // the flag alone never makes a document: no url, no "verified"
+    expect(publicSafety({ certificates: [{ name: 'CE', verified: true, source: 'seller-claim' }] })!.certificates[0]).toMatchObject({ verified: false, seller_claim: true });
+    // the schema: a certificate needs a url or source: seller-claim
+    const card = (certs: unknown[]) => ({ ...JSON.parse(readFileSync(resolve(REPO, 'data/products/vase/vase-cj-matte-frosted-tapered-28.json'), 'utf8')), safety: { certificates: certs } });
+    expect(ProductCardSchema.safeParse(card([{ name: 'CE', verified: false, source: 'seller-claim' }])).success).toBe(true);
+    expect(ProductCardSchema.safeParse(card([{ name: 'CE', verified: false }])).success).toBe(false);
+    expect(ProductCardSchema.safeParse(card([{ name: 'CE', verified: true, url: 'https://x.test/ce.pdf' }])).success).toBe(true);
+    // the three vases are on the sill again (SCH2)
+    expect(ProductCardSchema.parse(JSON.parse(readFileSync(resolve(REPO, 'data/products/vase/vase-cj-matte-frosted-tapered-28.json'), 'utf8'))).placement).toBe('sill');
+  });
 });

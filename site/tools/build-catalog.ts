@@ -71,6 +71,14 @@ import { cachedFreight } from './lib/freight-cache';
 const STRICT = process.argv.includes('--strict-prices');
 /** Rooms with a working room engine in this phase. Others are listed as "soon". */
 const BUILT_ROOMS = new Set(['living-room']);
+/**
+ * Rooms whose slots and products are built (the same pricing path for every room). Default: the built rooms. The test
+ * page (tools/make-test-page.ts) asks for more with --rooms living-room,dining-room and writes elsewhere with --out <name>
+ * (.generated/catalog.<name>.public.json); a room outside BUILT_ROOMS keeps built: false (no room engine, no room page).
+ */
+const argOf = (flag: string): string | undefined => process.argv.find((a) => a.startsWith(`${flag}=`))?.slice(flag.length + 1);
+const PRODUCT_ROOMS = new Set((argOf('--rooms') ?? [...BUILT_ROOMS].join(',')).split(',').filter(Boolean));
+const OUT_NAME = argOf('--out') ?? null;
 const STYLE = 'nordic';
 
 type HousePlan = {
@@ -185,7 +193,7 @@ const roomVsFolder = cards.flatMap(({ card, path }) => {
 });
 
 // ---------- rooms and slots ----------
-const SLOT_FILE_FOR: Record<string, string> = { living: 'living-room' };
+const SLOT_FILE_FOR: Record<string, string> = { living: 'living-room', 'kitchen-dining': 'dining-room' };
 const roomIdOf = (houseId: string): string => SLOT_FILE_FOR[houseId] ?? houseId;
 
 const fullProducts: FullProduct[] = [];
@@ -648,7 +656,7 @@ for (const hr of house.rooms) {
   if (!hr.slots_file) continue;
   const roomId = roomIdOf(hr.id);
   const slotsPath = repoPath('data/slots', `${roomId}.json`);
-  const built = BUILT_ROOMS.has(roomId) && existsSync(slotsPath);
+  const built = PRODUCT_ROOMS.has(roomId) && existsSync(slotsPath);
   const exits = house.transitions
     .filter((t) => t.from.startsWith(`${hr.id} `) || (t.reverse && t.to.startsWith(`${hr.id} `)))
     .map((t) => {
@@ -752,7 +760,8 @@ for (const hr of house.rooms) {
     light_slots: sf.light_layers?.slots ?? [],
     slots: slots.sort((a, b) => a.z - b.z),
     exits,
-    built: true,
+    // the room engine exists only for BUILT_ROOMS; a room built here for its products only (the test page) is not "built"
+    built: BUILT_ROOMS.has(roomId),
   });
 }
 
@@ -848,14 +857,15 @@ const fullCatalog: FullCatalog = {
 };
 
 mkdirSync(GENERATED, { recursive: true });
-writeFileSync(join(GENERATED, 'catalog.public.json'), JSON.stringify(publicCatalog, null, 1));
-writeFileSync(join(GENERATED, 'catalog.full.json'), JSON.stringify(fullCatalog, null, 1));
+const outName = OUT_NAME ? `catalog.${OUT_NAME}` : 'catalog';
+writeFileSync(join(GENERATED, `${outName}.public.json`), JSON.stringify(publicCatalog, null, 1));
+writeFileSync(join(GENERATED, `${outName}.full.json`), JSON.stringify(fullCatalog, null, 1));
 
 const living = rooms.find((r) => r.id === 'living-room');
 const placeholders = living ? living.slots.reduce((n, s) => n + s.options.filter((o) => o.placeholder).length, 0) : 0;
 console.log(
   [
-    `catalog ${version} (${base.mode})`,
+    `catalog ${version} (${base.mode}${OUT_NAME ? `, ${outName}` : ''}; rooms ${[...PRODUCT_ROOMS].join(', ')})`,
     `  products shown: ${publicProducts.length} (provisional prices: ${fullProducts.filter((p) => p.price_provisional).length})`,
     `  hidden: ${hidden.length}${hidden.length ? ' · ' + hidden.map((h) => `${h.id}: ${h.reason}`).join('; ') : ''}`,
     `  living-room slots: ${living?.slots.length ?? 0}, placeholder options: ${placeholders}`,

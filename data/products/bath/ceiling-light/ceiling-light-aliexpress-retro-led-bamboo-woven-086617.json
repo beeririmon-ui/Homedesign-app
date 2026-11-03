@@ -222,7 +222,7 @@
     "source": "api"
   },
   "status": "candidate",
-  "notes": "final-round wave-3 2026-10-14: AliExpress, qty 1, SKU Body Color Wood color Emitting Color E 27 220-240 v Wattage No light bulb. Economics at the slot price: mediterranean: price ₪149, landed ₪59.5, margin 41.6%; boho: price ₪149, landed ₪59.5, margin 41.6%. Style fit guess (not a score): nordic 2 (0 colours), warm-modern 3 (0 colours), japandi 5 (0 colours), mediterranean 7 (1 colours), modern-country 6 (1 colours), boho 8 (1 colours). Envelope: yes (30x14). כיפת במבוק קלוע 30x14 ‏220–240V – טוב לבוהו/ים תיכוני, לא לנורדי DRAFT from AliExpress DS API (2026-10-14, aliexpress-final): colors (HEX), visual_weight, product dimensions and texture are NOT filled; fill them from the photos before QA (sourcing-agent). SKU 12000044371424730 (Body Color: Wood color, Emitting Color: E27 220-240v, Wattage: No light bulb), stock 28, list price 33.43 USD. Package (not product): 22 x 21 x 20 cm, gross 0.433 kg. Shipping to IL: cheapest 1.99 USD AliExpress Selection Standard, 6-13 days (CAINIAO_FULFILLMENT_STD). Store: Stone's Store (id 1103573332, CN); ratings described 5.0 / communication 4.8 / shipping 4.8; product 4.9 stars, 157 reviews, 433 sold; AE category 39050502. standard_declared: CE (seller attribute, Certification). Owner rule S2B: enough to list as a candidate; the certificate file is requested before the first sale. | 2026-11-03 (frontend-dev, SITE1): safety.certificates had an entry without a document url (CE (seller attribute)); the schema requires a url, so the entry was removed. The claim stays as a seller attribute: ce: true (seller attribute, no document)",
+  "notes": "final-round wave-3 2026-10-14: AliExpress, qty 1, SKU Body Color Wood color Emitting Color E 27 220-240 v Wattage No light bulb. Economics at the slot price: mediterranean: price ₪149, landed ₪59.5, margin 41.6%; boho: price ₪149, landed ₪59.5, margin 41.6%. Style fit guess (not a score): nordic 2 (0 colours), warm-modern 3 (0 colours), japandi 5 (0 colours), mediterranean 7 (1 colours), modern-country 6 (1 colours), boho 8 (1 colours). Envelope: yes (30x14). כיפת במבוק קלוע 30x14 ‏220–240V – טוב לבוהו/ים תיכוני, לא לנורדי DRAFT from AliExpress DS API (2026-10-14, aliexpress-final): colors (HEX), visual_weight, product dimensions and texture are NOT filled; fill them from the photos before QA (sourcing-agent). SKU 12000044371424730 (Body Color: Wood color, Emitting Color: E27 220-240v, Wattage: No light bulb), stock 28, list price 33.43 USD. Package (not product): 22 x 21 x 20 cm, gross 0.433 kg. Shipping to IL: cheapest 1.99 USD AliExpress Selection Standard, 6-13 days (CAINIAO_FULFILLMENT_STD). Store: Stone's Store (id 1103573332, CN); ratings described 5.0 / communication 4.8 / shipping 4.8; product 4.9 stars, 157 reviews, 433 sold; AE category 39050502. standard_declared: CE (seller attribute, Certification). Owner rule S2B: enough to list as a candidate; the certificate file is requested before the first sale. | 2026-11-03 (frontend-dev, SITE1): | 2026-11-03 (frontend-dev, SCH1): safety.certificates restored as a seller claim (CE (seller attribute); source: seller-claim, no document): shown as the seller's claim, not as a verified certificate",
   "safety": {
     "ce": true,
     "ip_rating": null,
@@ -230,7 +230,13 @@
     "power": null,
     "plug_type": null,
     "voltage": "220 V",
-    "certificates": [],
+    "certificates": [
+      {
+        "name": "CE (seller attribute)",
+        "verified": false,
+        "source": "seller-claim"
+      }
+    ],
     "source": "aliexpress.ds.product.get attributes"
   }
 }

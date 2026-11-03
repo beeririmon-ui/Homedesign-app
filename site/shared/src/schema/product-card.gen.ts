@@ -9,7 +9,7 @@ export const ProductCardSchema = z.looseObject({
   "name": z.string(),
   "category": z.string().optional(),
   "rooms": z.array(z.string()).optional(),
-  "placement": z.enum(["floor","wall","window","surface","sofa","ceiling"]).optional(),
+  "placement": z.enum(["floor","wall","window","sill","surface","sofa","ceiling"]).describe("sill = אדן חלון, כמו בקובצי העמדות (SCH2, 2026-11-03)").optional(),
   "supplier": z.looseObject({
     "name": z.string(),
     "product_url": z.string(),
@@ -62,9 +62,10 @@ export const ProductCardSchema = z.looseObject({
     "voltage": z.string().nullable().describe("למשל 220-240V").optional(),
     "certificates": z.array(z.strictObject({
       "name": z.string(),
-      "url": z.string().regex(new RegExp("^https://")),
+      "url": z.string().regex(new RegExp("^https://")).optional(),
       "verified": z.boolean(),
-    })).optional(),
+      "source": z.enum(["seller-claim"]).describe("seller-claim: המוכר מצהיר, אין מסמך. חובה כשאין url").optional(),
+    }).refine((o) => (o["url"] !== undefined) || (o["source"] !== undefined), { message: "one of: url | source" })).describe("תעודה = מסמך עם קישור. בלי url רק כשהתעודה היא טענת המוכר (source: seller-claim), ואז האתר והסטודיו מציגים אותה כטענת מוכר, לא כמסמך מאומת (SCH1, 2026-11-03, החלטת המשתמש בניגוד להמלצה)").optional(),
     "source": z.string().describe("מאיפה המידע, למשל supplier listing או CJ API").optional(),
   }).describe("בטיחות ותקינה כפי שהספק מצהיר (Q2, 2026-10-10). אופציונלי. null = לא ידוע. toy_standard: מוצג בדף המוצר (D9)").optional(),
   "options": z.strictObject({

@@ -109,7 +109,7 @@ main{max-width:var(--maxw);margin:0 auto;padding-inline:var(--gut);padding-block
 .st-answered,.st-selected,.std-stated{background:var(--sage-wash);color:var(--sage-ink)}
 .st-applied,.st-candidate,.std-unknown{background:var(--sunk);color:var(--ink-2)}
 .st-rejected{background:var(--brick-wash);color:var(--brick-ink)}
-.std-unverified{background:var(--oak-wash);color:var(--oak-ink)}
+.std-unverified,.std-seller-claim{background:var(--oak-wash);color:var(--oak-ink)}
 .chip-block{background:var(--ink);color:var(--on-ink)}
 .chip-dup{background:transparent;color:var(--brick-ink);border:1px solid currentColor;padding:4px 8px}
 .pimg .chip-dup{background:var(--sheet)} /* on the white picture box the outline chip needs its own ground (dark mode) */
@@ -1424,7 +1424,7 @@ const LIGHT = {direct:'ישיר', diffuse:'מפוזר', mixed:'משולב'};
 const TAG_HE = {'living-room':'סלון','bedroom':'חדר שינה','hallway':'כניסה','dining':'פינת אוכל','kitchen-dining':'מטבח ופינת אוכל','bath':'מקלחת','work':'עבודה','master':'הורים','corridor':'מסדרון','kids':'ילדים','kids-boy':'ילד','kids-girl':'ילדה'};
 const STYLE_HE = {nordic:'נורדי', 'warm-modern':'מודרני חם', japandi:'ג\'פנדי', mediterranean:'ים-תיכוני', 'modern-country':'כפרי מודרני', boho:'בוהו'};
 const STYLE_KEYS = Object.keys(STYLE_HE);
-const STD_HE = {unknown:'לא ידוע', unverified:'לא מאומת', stated:'מוצהר בהערות'};
+const STD_HE = {unknown:'לא ידוע', unverified:'לא מאומת', stated:'מוצהר בהערות', 'seller-claim':'טענת המוכר, אין מסמך'};
 const WHO = {user:'המשתמש', manager:'המנהל', 'master-designer':'master-designer', 'sourcing-agent':'sourcing', 'motion-agent':'motion-agent', 'render-agent':'render-agent', 'qa-agent':'qa-agent', 'frontend-dev':'frontend-dev', astra:'astra', other:'אחר'};
 const FLAG_HE = {green:'עומד ביעד', red:'מתחת ליעד', orange:'חסרים נתונים'};
 const MISS_HE = {cost:'עלות', shipping:'משלוח', retail:'מחיר', fast_shipping:'משלוח מהיר (עד 20 יום)', currency:'עלות בדולר', dealer:'מחיר סוחר', no_route:'משלוח לישראל'};
@@ -3634,7 +3634,7 @@ function renderDrawer(id, keepScroll){
   const stds = p.standards || {};
   const stdChips = ['CE','IP44','EN71'].map(k => { const s = stds[k] || {state:'unknown', snippets:[]}; const m = (s.snippets || []).find(x => x.kind === 'stated'); const extra = m && m.match && m.match.replace(/\s/g,'') !== k ? ` (${m.match})` : '';
     return `<span class="std"><b>${k}</b><span class="chip std-${esc(s.state)}">${esc(STD_HE[s.state] || s.state)}${esc(extra)}</span></span>`; }).join('');
-  const snips = ['CE','IP44','EN71'].flatMap(k => ((stds[k] || {}).snippets || []).map(s => `<li><strong>${k}</strong> · ${esc(s.kind === 'stated' ? 'מוצהר' : s.kind === 'unverified' ? 'לא מאומת' : 'אזכור')}: <span dir="ltr">…${esc(s.text)}…</span></li>`));
+  const snips = ['CE','IP44','EN71'].flatMap(k => ((stds[k] || {}).snippets || []).map(s => `<li><strong>${k}</strong> · ${esc(s.kind === 'stated' ? 'מוצהר' : s.kind === 'unverified' ? 'לא מאומת' : s.kind === 'seller-claim' ? 'טענת המוכר, אין מסמך (SCH1)' : 'אזכור')}: <span dir="ltr">…${esc(s.text)}…</span></li>`));
   const scores = Object.entries(p.style_scores || {}).map(([k, v]) => `<span>${esc(STYLE_HE[k] || k)}</span><span><b>${esc(v.score)}</b>/10 <span class="muted">${esc(v.reason || '')}</span></span>`).join('');
   const dups = (p.dups || []).map(x => { const q = S.byId.get(x); return `<li><button type="button" class="linkish" data-product="${esc(x)}">${esc(x)}</button>${q ? ` <span class="faint xs">· ${esc(slotLabel(q))}</span>` : ''}</li>`; }).join('');
   const shared = (p.shared_in || []).map(k => { const s = S.slots.get(k); const r = s && S.rooms.get(s.room); return `<button type="button" class="linkish" data-goto-slot="${esc(k)}">${esc(r ? r.name_he : '')} · ${esc(s ? (s.name_he || s.id) : k)}</button>`; }).join(', ');

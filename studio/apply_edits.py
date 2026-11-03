@@ -179,6 +179,11 @@ def validate(inst, schema: dict, path="$", errs=None) -> list[str]:
     if isinstance(inst, list) and isinstance(schema.get("items"), dict):
         for i, v in enumerate(inst):
             validate(v, schema["items"], f"{path}[{i}]", errs)
+    # anyOf (schema 1.2, certificates: a url or source: seller-claim): the instance must satisfy one of the branches
+    if isinstance(schema.get("anyOf"), list) and schema["anyOf"]:
+        if not any(not validate(inst, branch, path, []) for branch in schema["anyOf"] if isinstance(branch, dict)):
+            wants = " | ".join("+".join(b.get("required", [])) or "?" for b in schema["anyOf"] if isinstance(b, dict))
+            errs.append(f"{path}: needs one of {wants}")
     return errs
 
 

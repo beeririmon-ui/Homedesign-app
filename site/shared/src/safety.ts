@@ -2,7 +2,8 @@
  * Standards and safety on the product page (decision D9, docs/studio-rules.md ד.4): the card's optional `safety` block
  * (data/product-card.schema.json) becomes a "תקנים ובטיחות" row. Only claims that have a value in the card are shown;
  * a missing block, a null and an empty list show nothing. `source` (where the supplier said it) stays internal, and a
- * certificate link is public only once it is verified.
+ * certificate link is public only once it is verified. A certificate without a document (schema 1.2, source:
+ * seller-claim; decision SCH1, 2026-11-03) is shown as the seller's claim, never as a verified certificate.
  */
 import { z } from 'zod';
 
@@ -17,7 +18,15 @@ export const PublicSafetySchema = z.object({
   power: z.enum(POWER_KINDS).nullable(),
   plug_type: z.string().nullable(),
   voltage: z.string().nullable(),
-  certificates: z.array(z.object({ name: z.string(), url: z.string().nullable(), verified: z.boolean() })),
+  certificates: z.array(
+    z.object({
+      name: z.string(),
+      url: z.string().nullable(),
+      verified: z.boolean(),
+      /** the seller's claim, no document (card schema 1.2, source: seller-claim; decision SCH1) */
+      seller_claim: z.boolean(),
+    }),
+  ),
 });
 export type PublicSafety = z.infer<typeof PublicSafetySchema>;
 
@@ -28,7 +37,7 @@ type CardSafety = {
   power?: (typeof POWER_KINDS)[number] | null;
   plug_type?: string | null;
   voltage?: string | null;
-  certificates?: { name: string; url: string; verified: boolean }[];
+  certificates?: { name: string; url?: string; verified: boolean; source?: 'seller-claim' }[];
   source?: string;
 };
 
@@ -46,7 +55,13 @@ export function publicSafety(s: CardSafety | null | undefined): PublicSafety | n
     voltage: clean(s.voltage),
     certificates: (s.certificates ?? [])
       .filter((c) => clean(c.name))
-      .map((c) => ({ name: c.name.trim(), url: c.verified ? c.url : null, verified: c.verified === true })),
+      .map((c) => ({
+        name: c.name.trim(),
+        url: c.verified && c.url ? c.url : null,
+        // a certificate without a document is never "verified", whatever the flag says
+        verified: c.verified === true && !!c.url,
+        seller_claim: !c.url || c.source === 'seller-claim',
+      })),
   };
   return safetyLinesHe(out).length ? out : null;
 }
@@ -75,6 +90,10 @@ export function safetyLinesHe(s: PublicSafety | null | undefined): SafetyLine[] 
   else if (s.power === 'battery') lines.push({ text: 'פועלת על סוללות' });
   else if (s.power === 'usb') lines.push({ text: 'הזנה בחיבור USB' });
   if (s.voltage) lines.push({ text: `מתח ${s.voltage}` });
-  for (const c of s.certificates) lines.push({ text: c.verified ? `תעודה: ${c.name}` : `תעודה: ${c.name} (לפי הספק, לא אומתה)`, href: c.url ?? undefined });
+  for (const c of s.certificates)
+    lines.push({
+      text: c.seller_claim ? `${c.name}: טענת המוכר, אין מסמך` : c.verified ? `תעודה: ${c.name}` : `תעודה: ${c.name} (לפי הספק, לא אומתה)`,
+      href: c.url ?? undefined,
+    });
   return lines;
 }

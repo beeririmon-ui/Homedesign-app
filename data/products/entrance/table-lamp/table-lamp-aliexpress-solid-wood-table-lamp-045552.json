@@ -154,7 +154,7 @@
     "source": "api"
   },
   "status": "candidate",
-  "notes": "final-round wave-3 2026-10-14: AliExpress, qty 1, SKU Body Color Small Natural Wood Color EU Plug Ships From China Mainland. Economics at the slot price: modern-country: price ₪299, landed ₪119.3, margin 42.1%. Style fit guess (not a score): nordic 6 (1 colours), warm-modern 4 (0 colours), japandi 4 (1 colours), mediterranean 5 (1 colours), modern-country 7 (2 colours), boho 5 (1 colours). Envelope: yes. בסיס עץ מחורט (בובינים) ואהיל קפלים — מתאים לכפרי; גרסת Small ככל הנראה נמוכה מ-45; ה-SKU הנבחר בתקע US — להחליף ל-EU DRAFT from AliExpress DS API (2026-10-14, aliexpress-final): colors (HEX), visual_weight, product dimensions and texture are NOT filled; fill them from the photos before QA (sourcing-agent). SKU 12000033708810446 (Body Color: Small Natural Wood, Color: EU Plug, Ships From: China Mainland), stock 999, list price 34.17 USD. Package (not product): 35 x 15 x 15 cm, gross 1.400 kg. Shipping to IL: cheapest 1.99 USD AliExpress Selection Standard, 6-15 days (CAINIAO_FULFILLMENT_STD). Store: Kakaxi Lighting Store (id 1102725393, CN); ratings described 4.8 / communication 4.9 / shipping 4.9; product 4.6 stars, 5 reviews, 25 sold; AE category 200001062. standard_declared: CE (seller attribute, Certification). Owner rule S2B: enough to list as a candidate; the certificate file is requested before the first sale. | 2026-11-03 (frontend-dev, SITE1): safety.certificates had an entry without a document url (CE (seller attribute)); the schema requires a url, so the entry was removed. The claim stays as a seller attribute: ce: true (seller attribute, no document)",
+  "notes": "final-round wave-3 2026-10-14: AliExpress, qty 1, SKU Body Color Small Natural Wood Color EU Plug Ships From China Mainland. Economics at the slot price: modern-country: price ₪299, landed ₪119.3, margin 42.1%. Style fit guess (not a score): nordic 6 (1 colours), warm-modern 4 (0 colours), japandi 4 (1 colours), mediterranean 5 (1 colours), modern-country 7 (2 colours), boho 5 (1 colours). Envelope: yes. בסיס עץ מחורט (בובינים) ואהיל קפלים — מתאים לכפרי; גרסת Small ככל הנראה נמוכה מ-45; ה-SKU הנבחר בתקע US — להחליף ל-EU DRAFT from AliExpress DS API (2026-10-14, aliexpress-final): colors (HEX), visual_weight, product dimensions and texture are NOT filled; fill them from the photos before QA (sourcing-agent). SKU 12000033708810446 (Body Color: Small Natural Wood, Color: EU Plug, Ships From: China Mainland), stock 999, list price 34.17 USD. Package (not product): 35 x 15 x 15 cm, gross 1.400 kg. Shipping to IL: cheapest 1.99 USD AliExpress Selection Standard, 6-15 days (CAINIAO_FULFILLMENT_STD). Store: Kakaxi Lighting Store (id 1102725393, CN); ratings described 4.8 / communication 4.9 / shipping 4.9; product 4.6 stars, 5 reviews, 25 sold; AE category 200001062. standard_declared: CE (seller attribute, Certification). Owner rule S2B: enough to list as a candidate; the certificate file is requested before the first sale. | 2026-11-03 (frontend-dev, SITE1): | 2026-11-03 (frontend-dev, SCH1): safety.certificates restored as a seller claim (CE (seller attribute); source: seller-claim, no document): shown as the seller's claim, not as a verified certificate",
   "safety": {
     "ce": true,
     "ip_rating": null,
@@ -162,7 +162,13 @@
     "power": null,
     "plug_type": "EU",
     "voltage": "90-260V",
-    "certificates": [],
+    "certificates": [
+      {
+        "name": "CE (seller attribute)",
+        "verified": false,
+        "source": "seller-claim"
+      }
+    ],
     "source": "aliexpress.ds.product.get attributes"
   }
 }

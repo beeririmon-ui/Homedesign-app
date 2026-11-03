@@ -818,7 +818,7 @@
     "source": "api"
   },
   "status": "candidate",
-  "notes": "final-round wave-3 2026-10-14: AliExpress, qty 1, SKU Color bunny-A 1271-25 cm. Economics at the slot price: nordic: price ₪119, landed ₪43.7, margin 45.1%. Style fit guess (not a score): nordic 8 (4 colours), warm-modern 7 (3 colours), japandi 7 (2 colours), mediterranean 6 (3 colours), modern-country 8 (5 colours), boho 7 (5 colours). Envelope: yes (25). סרוג כותנה בעבודת יד — בדיוק ההגדרה (סרוג, עיניים רקומות); בתמונה דובי, ה-SKU הנבחר ארנבת 25 ס\"מ; רוב ה-SKU 11–13 ס\"מ קטנים מדי, 7 ארנבות 25 ס\"מ בצבעים; לוודא דוח EN71 DRAFT from AliExpress DS API (2026-10-14, aliexpress-final): colors (HEX), visual_weight, product dimensions and texture are NOT filled; fill them from the photos before QA (sourcing-agent). SKU 12000032319508601 (Color: bunny-A1271-25cm), stock 1991, list price 12.76 USD. Package (not product): 15 x 10 x 10 cm, gross 0.110 kg. Shipping to IL: cheapest 4.94 USD AliExpress standard shipping, 8-19 days (CAINIAO_STANDARD); fastest 62.46 USD AliExpress Premium shipping, 11-13 days. Store: Warm Kitty Baby Store (id 5139075, CN); ratings described 4.6 / communication 4.7 / shipping 4.6; product 5.0 stars, 1 reviews, 32 sold; AE category 100001765. standard_declared: CE (seller attribute, Certification). Owner rule S2B: enough to list as a candidate; the certificate file is requested before the first sale. | 2026-11-03 (frontend-dev, SITE1): safety.certificates had an entry without a document url (CE (seller attribute)); the schema requires a url, so the entry was removed. The claim stays as a seller attribute: ce: true (seller attribute, no document)",
+  "notes": "final-round wave-3 2026-10-14: AliExpress, qty 1, SKU Color bunny-A 1271-25 cm. Economics at the slot price: nordic: price ₪119, landed ₪43.7, margin 45.1%. Style fit guess (not a score): nordic 8 (4 colours), warm-modern 7 (3 colours), japandi 7 (2 colours), mediterranean 6 (3 colours), modern-country 8 (5 colours), boho 7 (5 colours). Envelope: yes (25). סרוג כותנה בעבודת יד — בדיוק ההגדרה (סרוג, עיניים רקומות); בתמונה דובי, ה-SKU הנבחר ארנבת 25 ס\"מ; רוב ה-SKU 11–13 ס\"מ קטנים מדי, 7 ארנבות 25 ס\"מ בצבעים; לוודא דוח EN71 DRAFT from AliExpress DS API (2026-10-14, aliexpress-final): colors (HEX), visual_weight, product dimensions and texture are NOT filled; fill them from the photos before QA (sourcing-agent). SKU 12000032319508601 (Color: bunny-A1271-25cm), stock 1991, list price 12.76 USD. Package (not product): 15 x 10 x 10 cm, gross 0.110 kg. Shipping to IL: cheapest 4.94 USD AliExpress standard shipping, 8-19 days (CAINIAO_STANDARD); fastest 62.46 USD AliExpress Premium shipping, 11-13 days. Store: Warm Kitty Baby Store (id 5139075, CN); ratings described 4.6 / communication 4.7 / shipping 4.6; product 5.0 stars, 1 reviews, 32 sold; AE category 100001765. standard_declared: CE (seller attribute, Certification). Owner rule S2B: enough to list as a candidate; the certificate file is requested before the first sale. | 2026-11-03 (frontend-dev, SITE1): | 2026-11-03 (frontend-dev, SCH1): safety.certificates restored as a seller claim (CE (seller attribute); source: seller-claim, no document): shown as the seller's claim, not as a verified certificate",
   "safety": {
     "ce": true,
     "ip_rating": null,
@@ -826,7 +826,13 @@
     "power": null,
     "plug_type": null,
     "voltage": null,
-    "certificates": [],
+    "certificates": [
+      {
+        "name": "CE (seller attribute)",
+        "verified": false,
+        "source": "seller-claim"
+      }
+    ],
     "source": "aliexpress.ds.product.get attributes"
   }
 }

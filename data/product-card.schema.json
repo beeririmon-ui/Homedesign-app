@@ -1,8 +1,9 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Product card",
-  "version": "1.1",
+  "version": "1.2",
   "changelog": [
+    "1.2 · 2026-11-03: placement מקבל גם sill (אדן חלון, כמו בקובצי העמדות; SCH2). safety.certificates: תעודה בלי url מותרת רק עם source: seller-claim, ומוצגת כטענת מוכר (SCH1, המשתמש, בניגוד להמלצת המנהל). החלטות: status/decisions.json; חוקי הסטודיו ז 2026-11-03",
     "1.1 · 2026-10-13: נוסף שדה חובה room, ‏enum של מזהי החדרים (data/slots/<room>.json), ו-room + slot מצביעים על עמדה אחת בדיוק. החלטת משתמש Q2 (2026-10-09); ‏QA ‏2026-10-13, ‏N3. ‏rooms ו-category לא השתנו. הגירה: scripts/migrate_card_room.py",
     "1.0 · עד 2026-10-12, בלי מספר גרסה: safety (2026-10-10, ‏Q2) ו-options (2026-10-11) נוספו כשדות אופציונליים"
   ],
@@ -19,7 +20,7 @@
     "name": { "type": "string" },
     "category": { "type": "string" },
     "rooms": { "type": "array", "items": { "type": "string" } },
-    "placement": { "enum": ["floor", "wall", "window", "surface", "sofa", "ceiling"] },
+    "placement": { "enum": ["floor", "wall", "window", "sill", "surface", "sofa", "ceiling"], "description": "sill = אדן חלון, כמו בקובצי העמדות (SCH2, 2026-11-03)" },
     "supplier": {
       "type": "object",
       "properties": {
@@ -114,15 +115,18 @@
         "voltage": { "type": ["string", "null"], "description": "למשל 220-240V" },
         "certificates": {
           "type": "array",
+          "description": "תעודה = מסמך עם קישור. בלי url רק כשהתעודה היא טענת המוכר (source: seller-claim), ואז האתר והסטודיו מציגים אותה כטענת מוכר, לא כמסמך מאומת (SCH1, 2026-11-03, החלטת המשתמש בניגוד להמלצה)",
           "items": {
             "type": "object",
             "additionalProperties": false,
             "properties": {
               "name": { "type": "string" },
               "url": { "type": "string", "pattern": "^https://" },
-              "verified": { "type": "boolean" }
+              "verified": { "type": "boolean" },
+              "source": { "enum": ["seller-claim"], "description": "seller-claim: המוכר מצהיר, אין מסמך. חובה כשאין url" }
             },
-            "required": ["name", "url", "verified"]
+            "required": ["name", "verified"],
+            "anyOf": [{ "required": ["url"] }, { "required": ["source"] }]
           }
         },
         "source": { "type": "string", "description": "מאיפה המידע, למשל supplier listing או CJ API" }

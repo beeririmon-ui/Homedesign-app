@@ -1,0 +1,67 @@
+{
+  "style": "nordic",
+  "issue_he": "הבית",
+  "label_he": "בדיקה, תמונות זמניות",
+  "note": "The test page's assets in one place (briefs/site-test-page-2026-11-03.md, 'Images'). Every frame here is temporary and has not passed QA; the swap to QA'd assets is a change of these paths only. Frames: the current *-graded-v3.png renders (M0 r2 until the new-camera M0 of house plan 1.2 exists; D1 v7; H0 r2). Product boxes: the G1 gate's clay measurements of the same camera (qa/reports/2026-11-02-v7-g1/data/fidelity-<frame>.json).",
+  "frames": {
+    "H0": {
+      "src": "assets/renders/hall/nordic/v7/h0-v7-r2-graded-v3.png",
+      "u0": 0.52,
+      "v0": 0.46,
+      "mobile_window_u": 0.37,
+      "qa": false,
+      "note_he": "H0 v7 r2, גריידינג v3, לא עבר QA"
+    },
+    "M0": {
+      "src": "assets/renders/living-room/nordic/v7/m0-v7-r2-graded-v3.png",
+      "u0": 0.52,
+      "v0": 0.46,
+      "mobile_window_u": 0.73575,
+      "qa": false,
+      "note_he": "M0 v7 r2 (מצלמת תוכנית 1.1), גריידינג v3, לא עבר QA; M0 של המצלמה החדשה (1.2) עוד לא רונדר",
+      "boxes": "qa/reports/2026-11-02-v7-g1/data/fidelity-M0.json",
+      "room": "living-room",
+      "box_room_key": "living"
+    },
+    "D1": {
+      "src": "assets/renders/kitchen-dining/nordic/v7/d1-v7-graded-v3.png",
+      "u0": 0.52,
+      "v0": 0.43,
+      "mobile_window_u": 0.49875,
+      "qa": false,
+      "note_he": "D1 v7, גריידינג v3, לא עבר QA",
+      "boxes": "qa/reports/2026-11-02-v7-g1/data/fidelity-D1.json",
+      "room": "dining-room",
+      "box_room_key": "kitchen-dining"
+    }
+  },
+  "windows_note": "mobile_window_u is the centre u of the 3:5 window (width 0.3375 of the frame): H0 0.37 (art direction §8), M0 1.1 u 0.567–0.9045 (skeleton spec, 'mobile'; the 1.2 window is open), D1 0.33–0.6675 (the P-D export's start window)",
+  "pan": {
+    "id": "P-D",
+    "from": "D1",
+    "to": "D2",
+    "dir": "assets/renders/transitions/test-2026-11-02/p-d/frames",
+    "manifest": "assets/renders/transitions/test-2026-11-02/p-d/frames/manifest.json",
+    "qa": false,
+    "note_he": "ה-pan בקוד D1 → D2 (pan_reproject.py, סיבוב טהור, 35°): קליפ הבדיקה משלב B (d1 ו-d2-r2 אחרי register), לא עבר QA, ולא מהפריימים graded-v3. הפריים הראשון שלו אינו D1 v3, ולכן הוא מנוגן כבלוק נפרד ולא כהמשך של הכפולה"
+  },
+  "catalog": ".generated/catalog.test-page.public.json",
+  "supplier_images": ".generated/supplier-images.json",
+  "rooms": [
+    { "n": "01", "id": "hall", "name_he": "הכניסה" },
+    { "n": "02", "id": "living-room", "name_he": "הסלון", "frame": "M0" },
+    { "n": "03", "id": "dining-room", "name_he": "המטבח ופינת האוכל", "frame": "D1" },
+    { "n": "04", "id": "work", "name_he": "חדר העבודה" },
+    { "n": "05", "id": "corridor", "name_he": "המסדרון" },
+    { "n": "06", "id": "boy", "name_he": "חדר הילד" },
+    { "n": "07", "id": "girl", "name_he": "חדר הילדה" },
+    { "n": "08", "id": "bath", "name_he": "המקלחת" },
+    { "n": "09", "id": "master", "name_he": "חדר ההורים" }
+  ],
+  "styles": [
+    { "id": "nordic", "name_he": "נורדי", "available": true },
+    { "id": "boho", "name_he": "בוהו", "available": false },
+    { "id": "warm-modern", "name_he": "מודרני חם", "available": false }
+  ],
+  "focus_phone_closeup": "cushions"
+}

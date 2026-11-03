@@ -1,0 +1,967 @@
+/* The magazine language (docs/site-art-direction-2026-11-02.md §4–§8; Design Bible 1.8 "טיפוגרפיה וממשק").
+   One paper, ink and hairlines. Scoped to .mag: the shop pages keep their stylesheet until §12.7. */
+.mag {
+  /* §6.1 colour */
+  --paper: #f4f1ec;
+  --paper-2: #efeae1;
+  --ink: #3a3a3a;
+  --ink-2: #5c5852;
+  --ink-press: #2a2a2a;
+  --rule: #d9d6d0;
+  --rule-control: #8a847b;
+  --oak: #c8a27a;
+  --sage: #a7b09a;
+  --error: #9a3b2e;
+  --label: rgba(244, 241, 236, 0.94);
+  --stage: #141312;
+  /* §7.1 motion: every duration and curve on the page is one of these */
+  --d-press: 80ms;
+  --d-micro: 120ms;
+  --d-ui-out: 150ms;
+  --d-ui-in: 200ms;
+  --d-ui-wait: 100ms;
+  --d-mark-in: 250ms;
+  --d-mark-out: 600ms;
+  --t-mark-idle: 2500ms;
+  --d-swap: 300ms;
+  --d-page-out: 150ms;
+  --d-page-in: 320ms;
+  --d-paper-hold: 200ms;
+  --d-paper-in: 400ms;
+  --d-develop: 600ms;
+  --d-approach: 1600ms;
+  --d-return: 1800ms;
+  --e-standard: cubic-bezier(0.37, 0, 0.63, 1);
+  --e-approach: cubic-bezier(0.25, 1, 0.5, 1);
+  --e-land: cubic-bezier(0.45, 0, 0.15, 1);
+  --e-ui-out: cubic-bezier(0.5, 0, 0.75, 0);
+  /* §5.1 spacing (4 px base) and grid */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 24px;
+  --s-6: 32px;
+  --s-7: 48px;
+  --s-8: 64px;
+  --s-9: 96px;
+  --s-10: 128px;
+  --cols: 4;
+  --gap: 16px;
+  --margin: 24px;
+  --maxw: 1440px;
+  --head-h: 56px;
+  --win-w: 0.3375;
+  /* §4 type */
+  --f-display: 'Frank Ruhl Libre', 'Bellefair', 'David Libre', serif;
+  --f-text: 'Assistant', 'Heebo', 'Arial Hebrew', system-ui, sans-serif;
+  --t-display: 40px / 46px;
+  --t-h1: 30px / 38px;
+  --t-h2: 24px / 32px;
+  --t-h3: 18px / 26px;
+  --t-lead: 18px / 28px;
+  --t-body: 16px / 26px;
+  --t-credit: 17px / 22px;
+  --t-detail: 14px / 20px;
+  --t-cap: 13px / 18px;
+  --t-run: 13px / 16px;
+  --t-btn: 15px / 20px;
+  --t-input: 16px;
+  --t-brand: 20px / 24px;
+  color-scheme: light;
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 var(--t-body) var(--f-text);
+  text-align: start;
+  letter-spacing: 0;
+  -webkit-font-smoothing: antialiased;
+}
+@media (min-width: 720px) {
+  .mag {
+    --cols: 8;
+    --gap: 20px;
+    --margin: 32px;
+    --head-h: 64px;
+  }
+}
+@media (min-width: 1024px) {
+  .mag {
+    --cols: 12;
+    --gap: 24px;
+    --margin: clamp(32px, 4vw, 64px);
+    --t-display: 72px / 80px;
+    --t-h1: 44px / 52px;
+    --t-h2: 30px / 38px;
+    --t-h3: 20px / 28px;
+    --t-lead: 20px / 32px;
+    --t-body: 17px / 28px;
+    --t-credit: 18px / 24px;
+    --t-input: 17px;
+    --t-brand: 22px / 28px;
+  }
+}
+.mag *,
+.mag *::before,
+.mag *::after {
+  box-sizing: border-box;
+}
+.mag :focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+.mag .num {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+.mag h1,
+.mag h2,
+.mag h3,
+.mag p,
+.mag ol,
+.mag ul {
+  margin: 0;
+}
+.mag ol,
+.mag ul {
+  padding: 0;
+  list-style: none;
+}
+.mag img {
+  display: block;
+}
+.mag-skip {
+  position: absolute;
+  inset-inline-start: var(--s-4);
+  top: -100px;
+  z-index: 50;
+  background: var(--paper);
+  color: var(--ink);
+  padding: var(--s-2) var(--s-3);
+}
+.mag-skip:focus {
+  top: var(--s-4);
+}
+
+/* ---------- type ---------- */
+.mag-display {
+  font: 300 var(--t-display) var(--f-display);
+  text-wrap: balance;
+}
+.mag-h1 {
+  font: 300 var(--t-h1) var(--f-display);
+  text-wrap: balance;
+}
+.mag-h2 {
+  font: 300 var(--t-h2) var(--f-display);
+  text-wrap: balance;
+}
+.mag-h3 {
+  font: 500 var(--t-h3) var(--f-display);
+}
+.mag-lead {
+  font: 300 var(--t-lead) var(--f-text);
+  max-width: 30rem;
+}
+.mag-cap {
+  font: 400 var(--t-cap) var(--f-text);
+  color: var(--ink-2);
+  max-width: 26rem;
+}
+.mag-run-head,
+.mag-run {
+  font: 600 var(--t-run) var(--f-text);
+  color: var(--ink);
+}
+.mag-credit-name {
+  display: block;
+  font: 500 var(--t-credit) var(--f-display);
+  color: var(--ink);
+}
+.mag-credit-detail {
+  display: block;
+  font: 400 var(--t-detail) var(--f-text);
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums lining-nums;
+}
+.mag-link {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--rule-control);
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  transition: text-decoration-color var(--d-ui-out) var(--e-standard);
+}
+@media (hover: hover) {
+  .mag-link:hover {
+    text-decoration-color: currentColor;
+  }
+}
+
+/* ---------- the top band (§6.2): transparent on the stage, paper with a hairline on paper pages ---------- */
+.mag-head {
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  z-index: 20;
+  height: calc(var(--head-h) + env(safe-area-inset-top));
+  padding: env(safe-area-inset-top) var(--margin) 0;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--s-4);
+  color: var(--ink);
+  background: transparent;
+  transition:
+    opacity var(--d-ui-out) var(--e-ui-out),
+    background-color var(--d-ui-in) var(--e-standard);
+}
+.mag-head[data-on='paper'] {
+  background: var(--paper);
+  box-shadow: inset 0 -1px 0 var(--rule);
+}
+.mag-head[data-on='hidden'] {
+  opacity: 0;
+  pointer-events: none;
+}
+.mag-brand {
+  font: 300 var(--t-brand) var(--f-display);
+  color: inherit;
+  text-decoration: none;
+  opacity: 0;
+  transition: opacity var(--d-develop) var(--e-standard);
+}
+.mag.is-brand .mag-brand,
+.mag-head[data-on='paper'] .mag-brand {
+  opacity: 1;
+}
+.mag-run {
+  text-align: center;
+  min-height: 1em;
+}
+.mag-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--s-4);
+  font: 600 var(--t-btn) var(--f-text);
+}
+.mag-nav a {
+  color: inherit;
+  text-decoration: none;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+.mag-test-label {
+  font: 400 var(--t-cap) var(--f-text);
+  color: var(--ink-2);
+}
+
+/* ---------- the issue: one section per screen, the stage full-bleed ---------- */
+.mag-issue {
+  scroll-snap-type: y mandatory;
+}
+.mag-cover,
+.mag-spread {
+  position: relative;
+  height: 100svh;
+  scroll-snap-align: start;
+  background: var(--stage);
+  overflow: hidden;
+}
+.mag-paper {
+  position: relative;
+  min-height: 100svh;
+  scroll-snap-align: start;
+  background: var(--paper);
+  padding: calc(var(--head-h) + env(safe-area-inset-top) + var(--s-8)) 0 var(--s-9);
+}
+.mag-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+  column-gap: var(--gap);
+  row-gap: var(--s-4);
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding-inline: var(--margin);
+}
+.mag-col-main {
+  grid-column: 1 / -1;
+}
+@media (min-width: 1024px) {
+  .mag-col-main {
+    grid-column: 1 / span 7;
+  }
+}
+.mag-grid > .mag-h2 {
+  margin-top: var(--s-2);
+}
+.mag-grid > .mag-h3 {
+  margin-top: var(--s-7);
+}
+/* the grid overlay for the evidence screenshot (check 20) */
+.mag[data-grid] .mag-grid {
+  position: relative;
+}
+.mag[data-grid] .mag-grid::before {
+  content: '';
+  position: absolute;
+  inset: 0 var(--margin);
+  pointer-events: none;
+  background: repeating-linear-gradient(to right, rgba(154, 59, 46, 0.12) 0, rgba(154, 59, 46, 0.12) calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols)), transparent 0, transparent calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols) + var(--gap)));
+}
+
+/* ---------- the stage: the frame fills the screen; on the phone a 3:5 window of it, the sides by a swipe ---------- */
+.mag-stage {
+  position: absolute;
+  inset: 0;
+  background: var(--stage);
+}
+.mag-scroller {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.mag-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-origin: 0 0;
+  will-change: transform;
+}
+.mag-frame > .mag-pic,
+.mag-frame > .mag-pic img,
+.mag-lqip {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.mag-lqip {
+  filter: blur(24px);
+  transform: scale(1.06);
+}
+.mag-lqip-phone {
+  display: none;
+}
+.mag-frame > .mag-pic img {
+  opacity: 0;
+  transition: opacity var(--d-develop) var(--e-standard);
+}
+.mag-frame.is-developed > .mag-pic img {
+  opacity: 1;
+}
+/* the phone: the frame keeps its aspect at full height inside a horizontal scroller (art direction §5.2) */
+@media (max-width: 719px) {
+  .mag-spread .mag-scroller {
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+  }
+  .mag-spread .mag-scroller::-webkit-scrollbar {
+    display: none;
+  }
+  .mag-spread .mag-frame {
+    width: calc(100svh * var(--aspect, 1.778));
+    height: 100svh;
+  }
+  .mag-stage-cover .mag-lqip {
+    display: none;
+  }
+  .mag-stage-cover .mag-lqip-phone {
+    display: block;
+  }
+}
+/* desktop over 2:1: the frame at full height with paper at the sides, a print on a page */
+@media (min-width: 720px) and (min-aspect-ratio: 2/1) {
+  .mag-spread .mag-frame,
+  .mag-cover .mag-frame {
+    width: calc(100svh * var(--aspect, 1.778));
+    margin-inline: auto;
+  }
+  .mag-stage {
+    background: var(--paper);
+  }
+}
+
+/* ---------- the product marks (§6.4, ו.4): nothing at rest ---------- */
+.mag-mark {
+  position: absolute;
+  left: calc(var(--u) * 100%);
+  top: calc(var(--v) * 100%);
+  width: 46px;
+  height: 46px;
+  margin: -23px 0 0 -23px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  border-radius: 50%;
+}
+.mag-dot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  margin: -4px 0 0 -4px;
+  border-radius: 50%;
+  background: rgba(244, 241, 236, 0.92);
+  box-shadow: 0 0 0 1px rgba(58, 58, 58, 0.45);
+  opacity: 0;
+  transition: opacity var(--d-mark-out) var(--e-standard);
+}
+.mag-stage[data-marks='on'] .mag-dot,
+.mag-stage:focus-within .mag-dot {
+  opacity: 1;
+  transition-duration: var(--d-mark-in);
+}
+.mag-stage[data-focus] .mag-dot,
+.mag-stage[data-focus] .mag-mark {
+  opacity: 0;
+  pointer-events: none;
+}
+.mag-mark:focus-visible {
+  outline: 2px solid var(--paper);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px var(--ink);
+}
+/* the product's line and the soft halo for the one that is lit (hover, touch, keyboard focus) */
+.mag-outline {
+  position: absolute;
+  left: calc(var(--x0, 0) * 100%);
+  top: calc(var(--y0, 0) * 100%);
+  width: calc((var(--x1, 0) - var(--x0, 0)) * 100%);
+  height: calc((var(--y1, 0) - var(--y0, 0)) * 100%);
+  border: 1px solid rgba(244, 241, 236, 0.9);
+  background: rgba(244, 241, 236, 0.06);
+  box-shadow: 0 0 8px rgba(244, 241, 236, 0.45);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--d-ui-out) var(--e-standard);
+}
+.mag-outline.is-on {
+  opacity: 1;
+}
+/* the wall label (desktop): paper, ink, 12 px above the product (§6.4); on the phone the credit goes to the strip */
+.mag-label {
+  position: absolute;
+  z-index: 3;
+  max-width: 22rem;
+  padding: var(--s-2) var(--s-3);
+  border-radius: 2px;
+  background: var(--label);
+  color: var(--ink);
+  box-shadow: 0 1px 2px rgba(58, 58, 58, 0.18);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -100%);
+  transition: opacity var(--d-ui-in) var(--e-approach) var(--d-ui-out);
+}
+.mag-label.is-on {
+  opacity: 1;
+}
+@media (max-width: 719px) {
+  .mag-label {
+    display: none;
+  }
+}
+
+/* ---------- focus mode (focus spec §2–§4): the approach, the uniform softness and the dim, the strip ---------- */
+.mag-stage[data-focus] .mag-scroller {
+  overflow: hidden;
+}
+.mag-frame.is-approach {
+  transition: transform var(--d-approach) var(--e-approach);
+}
+.mag-frame.is-return {
+  transition: transform var(--d-return) var(--e-land);
+}
+.mag-soft,
+.mag-sharp {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+.mag-soft {
+  filter: blur(var(--soft, 8px)) brightness(0.79);
+  opacity: 0;
+  transition: opacity var(--d-develop) var(--e-standard);
+}
+.mag-sharp {
+  /* the product and its support, sharp and lifted a quarter stop; the edge feathered (no alpha for the temp frame) */
+  filter: brightness(1.08);
+  mask-image: linear-gradient(to right, transparent 0, #000 var(--fx0, 0%), #000 var(--fx1, 100%), transparent 100%), linear-gradient(to bottom, transparent 0, #000 var(--fy0, 0%), #000 var(--fy1, 100%), transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 var(--fx0, 0%), #000 var(--fx1, 100%), transparent 100%), linear-gradient(to bottom, transparent 0, #000 var(--fy0, 0%), #000 var(--fy1, 100%), transparent 100%);
+  mask-composite: intersect;
+  -webkit-mask-composite: source-in;
+  opacity: 0;
+  transition: opacity var(--d-develop) var(--e-standard);
+}
+.mag-stage[data-focus='on'] .mag-soft,
+.mag-stage[data-focus='on'] .mag-sharp {
+  opacity: 1;
+}
+/* the return: the softness and the dim release over the first 60% of the move, the lift fades last (§4.1) */
+.mag-stage[data-focus='return'] .mag-soft {
+  opacity: 0;
+  transition: opacity calc(var(--d-return) * 0.6) var(--e-standard);
+}
+.mag-stage[data-focus='return'] .mag-sharp {
+  opacity: 0;
+  transition: opacity calc(var(--d-return) * 0.4) var(--e-standard) calc(var(--d-return) * 0.55);
+}
+.mag-strip {
+  position: absolute;
+  z-index: 4;
+  inset-inline: 30%;
+  bottom: calc(env(safe-area-inset-bottom) + 2%);
+  height: 13%;
+  min-height: 112px;
+  padding: var(--s-2) var(--s-3);
+  border-radius: 2px;
+  background: var(--label);
+  color: var(--ink);
+  box-shadow: 0 1px 2px rgba(58, 58, 58, 0.18);
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: var(--s-2);
+  opacity: 0;
+  transition: opacity var(--d-ui-out) var(--e-ui-out);
+}
+.mag-strip.is-on {
+  opacity: 1;
+  transition: opacity var(--d-ui-in) var(--e-approach);
+}
+@media (max-width: 719px) {
+  .mag-strip {
+    inset-inline: var(--margin);
+    height: 16%;
+    min-height: 128px;
+  }
+}
+.mag-thumbs {
+  display: flex;
+  gap: var(--s-3);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.mag-thumb {
+  flex: 0 0 auto;
+  width: 52px;
+  height: 52px;
+  padding: 0 0 2px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: var(--paper-2);
+  cursor: pointer;
+  transition: border-color var(--d-micro) var(--e-standard);
+}
+.mag-thumb img {
+  width: 52px;
+  height: 50px;
+  object-fit: cover;
+}
+.mag-thumb[aria-checked='true'] {
+  border-bottom-color: var(--ink);
+}
+.mag-strip-row {
+  display: flex;
+  align-items: center;
+  gap: var(--s-4);
+  min-width: 0;
+}
+.mag-strip-credit {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.mag-strip-credit .mag-credit-name,
+.mag-strip-credit .mag-credit-detail {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mag-close {
+  position: absolute;
+  z-index: 5;
+  top: calc(var(--head-h) + env(safe-area-inset-top));
+  inset-inline-end: var(--margin);
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 2px;
+  background: var(--label);
+  color: var(--ink);
+  font: 400 24px/1 var(--f-text);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity var(--d-ui-out) var(--e-ui-out);
+}
+.mag-close.is-on {
+  opacity: 1;
+  transition: opacity var(--d-ui-in) var(--e-approach);
+}
+
+/* ---------- buttons, links, fields: the states of §6.8 ---------- */
+.mag-btn {
+  min-height: 48px;
+  padding: 0 var(--s-5);
+  border-radius: 2px;
+  font: 600 var(--t-btn) var(--f-text);
+  cursor: pointer;
+  transition:
+    background-color var(--d-ui-out) var(--e-standard),
+    color var(--d-ui-out) var(--e-standard),
+    border-color var(--d-ui-out) var(--e-standard);
+}
+.mag-btn-primary {
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+}
+.mag-btn-secondary {
+  border: 1px solid var(--ink);
+  background: transparent;
+  color: var(--ink);
+}
+@media (hover: hover) {
+  .mag-btn-primary:hover {
+    background: var(--ink-press);
+    border-color: var(--ink-press);
+  }
+  .mag-btn-secondary:hover {
+    background: rgba(58, 58, 58, 0.06);
+  }
+}
+.mag-btn-primary:active {
+  background: var(--ink-press);
+  transition-duration: var(--d-press);
+}
+.mag-btn-secondary:active {
+  background: rgba(58, 58, 58, 0.1);
+  transition-duration: var(--d-press);
+}
+.mag-btn[aria-busy='true'] {
+  position: relative;
+  cursor: progress;
+}
+.mag-btn[aria-busy='true']::after {
+  content: '';
+  position: absolute;
+  inset-inline-start: var(--s-5);
+  bottom: 10px;
+  height: 1px;
+  width: calc(100% - 2 * var(--s-5));
+  background: var(--paper);
+  transform-origin: 100% 50%;
+  transform: scaleX(var(--progress, 0.3));
+  transition: transform var(--d-page-in) var(--e-standard);
+}
+.mag-btn[aria-disabled='true'] {
+  display: none;
+}
+.mag-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-4);
+}
+.mag-form {
+  display: grid;
+  gap: var(--s-2);
+  max-width: 24rem;
+}
+.mag-form label {
+  font: 600 var(--t-btn) var(--f-text);
+}
+.mag-form input {
+  min-height: 48px;
+  padding: 0 var(--s-3);
+  border: 1px solid var(--rule-control);
+  border-radius: 2px;
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 var(--t-input) var(--f-text);
+  transition: border-color var(--d-ui-out) var(--e-standard);
+}
+.mag-form input::placeholder {
+  color: var(--ink-2);
+}
+@media (hover: hover) {
+  .mag-form input:hover {
+    border-color: var(--ink);
+  }
+}
+.mag-form input:focus-visible {
+  outline: none;
+  border: 2px solid var(--ink);
+}
+.mag-form input[aria-invalid='true'] {
+  border-color: var(--error);
+}
+.mag-field-error {
+  font: 400 var(--t-detail) var(--f-text);
+  color: var(--error);
+}
+.mag-states {
+  display: grid;
+  gap: var(--s-5);
+  margin-top: var(--s-4);
+}
+.mag-unavailable {
+  padding-top: var(--s-4);
+  border-top: 1px solid var(--rule);
+}
+
+/* ---------- the cover (§8) ---------- */
+.mag-cover-text {
+  position: absolute;
+  z-index: 2;
+  inset-inline: var(--margin);
+  top: calc(var(--head-h) + env(safe-area-inset-top) + 6svh);
+  max-width: 34rem;
+  color: var(--ink);
+  pointer-events: none;
+}
+@media (min-width: 1024px) {
+  .mag-cover-text {
+    inset-inline-start: var(--margin);
+    inset-inline-end: 50%;
+    top: 24svh;
+  }
+}
+.mag-cover-line {
+  display: block;
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity var(--d-page-in) var(--e-approach),
+    transform var(--d-page-in) var(--e-approach);
+}
+.mag-cover-line + .mag-cover-line {
+  transition-delay: 80ms;
+}
+.mag.is-title .mag-cover-line {
+  opacity: 1;
+  transform: none;
+}
+.mag-invite {
+  margin-top: var(--s-6);
+  pointer-events: auto;
+  opacity: 0;
+  transition: opacity var(--d-page-in) var(--e-approach);
+}
+.mag.is-invite .mag-invite {
+  opacity: 1;
+}
+.mag-invite-btn {
+  display: grid;
+  gap: var(--s-2);
+  justify-items: start;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: 400 var(--t-cap) var(--f-text);
+  cursor: pointer;
+  text-align: start;
+}
+.mag-invite-rule {
+  display: block;
+  width: 1px;
+  height: 24px;
+  background: var(--ink);
+}
+.mag-invite-desk {
+  display: none;
+}
+@media (min-width: 720px) {
+  .mag-invite-phone {
+    display: none;
+  }
+  .mag-invite-desk {
+    display: inline;
+  }
+}
+.mag-cover-note,
+.mag-stage-note {
+  position: absolute;
+  z-index: 2;
+  inset-inline-start: var(--margin);
+  bottom: calc(env(safe-area-inset-bottom) + var(--s-3));
+  max-width: none;
+  color: var(--ink-2);
+  opacity: 0;
+}
+.mag[data-notes] .mag-cover-note,
+.mag[data-notes] .mag-stage-note {
+  opacity: 1;
+}
+
+/* ---------- contents (§6.3) ---------- */
+.mag-toc-list {
+  display: grid;
+  margin-top: var(--s-4);
+}
+.mag-toc-row {
+  border-top: 1px solid var(--rule);
+}
+.mag-toc-row:last-child {
+  border-bottom: 1px solid var(--rule);
+}
+.mag-toc-link {
+  display: grid;
+  grid-template-columns: 3ch 1fr auto;
+  align-items: baseline;
+  gap: var(--s-4);
+  min-height: 56px;
+  padding: var(--s-3) 0;
+  color: var(--ink);
+  text-decoration: none;
+}
+a.mag-toc-link:focus-visible {
+  outline-offset: -2px;
+}
+.mag-toc-n {
+  font: 600 var(--t-run) var(--f-text);
+}
+.mag-toc-name {
+  font: 300 30px/36px var(--f-display);
+}
+@media (min-width: 1024px) {
+  .mag-toc-name {
+    font: 300 40px/44px var(--f-display);
+  }
+}
+.mag-toc-cap {
+  font: 400 var(--t-cap) var(--f-text);
+  color: var(--ink-2);
+}
+.is-next .mag-toc-name {
+  color: var(--ink-2);
+}
+.mag-styles {
+  margin-top: var(--s-5);
+  font: 600 var(--t-btn) var(--f-text);
+}
+.mag-style.is-on {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+.mag-styles .mag-cap {
+  display: inline;
+  font-weight: 400;
+}
+
+/* ---------- credits (§4.5) ---------- */
+.mag-credits {
+  display: grid;
+}
+.mag-credit {
+  display: grid;
+  grid-template-columns: 3ch 1fr;
+  gap: var(--s-4);
+  padding: var(--s-3) 0;
+  border-top: 1px solid var(--rule);
+}
+.mag-credit:last-child {
+  border-bottom: 1px solid var(--rule);
+}
+.mag-credit-n {
+  font: 600 var(--t-run) var(--f-text);
+  padding-top: 4px;
+}
+
+/* ---------- the pan block ---------- */
+.mag-pan {
+  display: grid;
+  gap: var(--s-3);
+}
+.mag-pan-stage {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: var(--stage);
+  overflow: hidden;
+}
+@media (max-width: 719px) {
+  .mag-pan-stage {
+    aspect-ratio: 3 / 5;
+  }
+}
+.mag-pan-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.mag-pan-progress {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 1px;
+  background: rgba(244, 241, 236, 0.25);
+}
+.mag-pan-progress span {
+  display: block;
+  height: 100%;
+  width: 100%;
+  background: var(--paper);
+  transform-origin: 100% 50%;
+  transform: scaleX(var(--p, 0));
+}
+
+/* ---------- the paper transition (§6.3) and the live region ---------- */
+.mag-veil {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  background: var(--paper);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--d-paper-in) var(--e-standard);
+}
+.mag-veil.is-in {
+  opacity: 1;
+  transition: opacity var(--d-page-out) var(--e-ui-out);
+}
+.mag-live {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+.mag-foot {
+  min-height: 0;
+  padding-block: var(--s-7);
+}
+
+/* ---------- reduced motion (§7.4): dissolves only, nothing moves ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .mag-frame.is-approach,
+  .mag-frame.is-return {
+    transition: none;
+  }
+  .mag-cover-line {
+    transform: none;
+    transition: opacity var(--d-swap) var(--e-standard);
+  }
+  .mag-lqip {
+    display: none;
+  }
+  .mag-frame > .mag-pic img {
+    transition: none;
+  }
+  .mag-dot {
+    transition: none;
+  }
+  .mag-stage.is-dissolve .mag-scroller {
+    transition: opacity var(--d-swap) var(--e-standard);
+  }
+}

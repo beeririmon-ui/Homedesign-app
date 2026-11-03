@@ -341,6 +341,24 @@ def detect_standards(notes: str) -> dict:
     return res
 
 
+def seller_claims(card: dict) -> None:
+    """Card schema 1.2 (SCH1, 2026-11-03): a safety.certificates entry without a document (source: seller-claim) is the
+    seller's claim, never a verified certificate. It is shown in the Studio as its own state, 'seller-claim', on the
+    standard it names (CE, IP44, EN71; other names under their own key), unless the notes already state it."""
+    res = card.get("_standards")
+    if not isinstance(res, dict):
+        return
+    for c in ((card.get("safety") or {}).get("certificates") or []):
+        if not isinstance(c, dict) or c.get("url") or c.get("source") != "seller-claim":
+            continue
+        name = str(c.get("name") or "").strip()
+        std = next((k for k, pat in STD_PATTERNS.items() if pat.search(name)), None) or re.sub(r"\s*\(.*\)$", "", name) or "?"
+        entry = res.setdefault(std, {"state": "unknown", "snippets": []})
+        entry["snippets"].append({"kind": "seller-claim", "text": f"safety.certificates: {name}, source: seller-claim, no document", "match": name})
+        if entry["state"] != "stated":
+            entry["state"] = "seller-claim"
+
+
 def pid_of(url: str) -> str | None:
     m = re.search(r"-p-([^./?#]+)\.html", url or "")
     return m.group(1) if m else None
@@ -415,6 +433,7 @@ def load_products(room_ids=None) -> list[dict]:
         card["_pool"] = pool
         card["_pid"] = pid_of(sup.get("product_url", ""))
         card["_standards"] = detect_standards(card.get("notes") or "")
+        seller_claims(card)
         card["notes"], card["_links"] = split_links(card.get("notes"))
         card["_lead"] = lead
         products.append(card)

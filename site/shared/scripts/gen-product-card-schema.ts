@@ -17,6 +17,8 @@ const OUT = resolve(here, '../src/schema/product-card.gen.ts');
 type JsonSchema = {
   type?: string | string[];
   enum?: (string | number | null)[];
+  /** only the form [{ required: [...] }, ...]: the object must satisfy one of the required sets (schema 1.2, certificates) */
+  anyOf?: { required: string[] }[];
   pattern?: string;
   minimum?: number;
   maximum?: number;
@@ -95,6 +97,12 @@ function emit(s: JsonSchema, indent: string): string {
         out = `${ctor}({\n${fields}\n${indent}})`;
         if (s.additionalProperties && typeof s.additionalProperties === 'object') {
           out = `z.object({\n${fields}\n${indent}}).catchall(${emit(s.additionalProperties, indent)})`;
+        }
+        if (s.anyOf?.length) {
+          const sets = s.anyOf.map((a) => a.required);
+          if (!sets.every((r) => Array.isArray(r) && r.every((k) => typeof k === 'string'))) throw new Error('anyOf: only [{ required: [...] }] is supported');
+          const test = sets.map((r) => `(${r.map((k) => `o[${JSON.stringify(k)}] !== undefined`).join(' && ')})`).join(' || ');
+          out += `.refine((o) => ${test}, { message: ${JSON.stringify(`one of: ${sets.map((r) => r.join('+')).join(' | ')}`)} })`;
         }
         break;
       }
