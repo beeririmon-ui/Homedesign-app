@@ -1,0 +1,1041 @@
+{
+ "code": {
+  "forbidden_hits": {
+   "spinner": 0,
+   "shimmer": 0,
+   "backdrop-filter": 0,
+   "rotate(": 0,
+   "bounce": 0,
+   "pulse": 0,
+   "parallax": 0,
+   "infinite": 0
+  },
+  "css_transitions": 32,
+  "css_transitions_without_token": [],
+  "css_literal_durations_outside_root": [],
+  "cubic_beziers": [
+   "0.37,0,0.63,1",
+   "0.25,1,0.5,1",
+   "0.45,0,0.15,1",
+   "0.5,0,0.75,0"
+  ],
+  "curves_with_y_outside_0_1": [],
+  "scale_in_hover_or_active_rules": 0,
+  "js_literal_waits_ms": [
+   800,
+   200,
+   400,
+   800
+  ],
+  "js_literal_waits_note": "the cover beats of art direction §8.1 (+200 brand, +400 cover line, +800 invitation) and the fonts ceiling (800 ms)",
+  "js_token_fallbacks_mismatching_css": [],
+  "css_tokens": [
+   "--d-press=80",
+   "--d-micro=120",
+   "--d-ui-out=150",
+   "--d-ui-in=200",
+   "--d-ui-wait=100",
+   "--d-mark-in=250",
+   "--d-mark-out=600",
+   "--t-mark-idle=2500",
+   "--d-swap=300",
+   "--d-page-out=150",
+   "--d-page-in=320",
+   "--d-paper-hold=200",
+   "--d-paper-in=400",
+   "--d-develop=600",
+   "--d-approach=1600",
+   "--d-return=1800"
+  ],
+  "css_tokens_not_in_table_71": [
+   "--d-ui-wait",
+   "--d-paper-hold",
+   "--d-paper-in"
+  ],
+  "css_tokens_not_in_table_71_note": "--d-ui-wait is the \"100 ms after the camera stops\" of the --d-ui-in row; --d-paper-hold and --d-paper-in are the paper transition of §6.3 (hold 200 ms, dissolve 400 ms), not yet rows of the 7.1 table",
+  "scale_calls_in_main_ts": 1,
+  "scale_calls_note": "focus mode only (the approach transform); the pan path draws the frames at scale 1.000 (SequencePlayer.fit once)",
+  "ui_transitions_over_200ms": [
+   "opacity var(--d-develop) var(--e-standard)",
+   "opacity var(--d-develop) var(--e-standard)",
+   "opacity var(--d-mark-out) var(--e-standard)",
+   "transform var(--d-approach) var(--e-approach)",
+   "transform var(--d-return) var(--e-land)",
+   "opacity calc(var(--d-approach) * 0.8) var(--e-standard) calc(var(--d-approach) * 0.2)",
+   "opacity calc(var(--d-approach) * 0.71) var(--e-standard) calc(var(--d-approach) * 0.29)",
+   "opacity calc(var(--d-return) * 0.32) var(--e-standard)",
+   "opacity calc(var(--d-return) * 0.4) var(--e-standard) calc(var(--d-return) * 0.55)",
+   "transform var(--d-page-in) var(--e-standard)",
+   "opacity var(--d-page-in) var(--e-approach)",
+   "opacity var(--d-page-in) var(--e-approach), transform var(--d-page-in) var(--e-approach)",
+   "opacity var(--d-page-in) var(--e-approach)",
+   "opacity var(--d-paper-in) var(--e-standard)",
+   "opacity var(--d-swap) var(--e-standard)",
+   "opacity calc(var(--d-swap) / 2) var(--e-standard)"
+  ],
+  "ui_transitions_over_200ms_note": "the picture (develop 600, approach 1600, return 1800, swap 300, paper-in 400, page-in 320) and the marks going (600) are not interface fades; every interface fade is ≤ 200 ms"
+ },
+ "pan_first_frame_vs_d1": {
+  "p50": 11.8,
+  "p95": 24.2,
+  "p99": 42,
+  "max": 87.6,
+  "over1": 99.9,
+  "n": 129600,
+  "note": "the test clip starts on its own D1 (graded v2 geometry), not on the D1 v3 frame of the spread: that is why the pan is a labelled block and not the walk between the spreads"
+ },
+ "cover_desk": {
+  "first_paint_ms": 948,
+  "first_contentful_paint_ms": 948,
+  "lcp_ms": 1680,
+  "lcp_element": "mag-cover-line",
+  "h0_sharp_ms": 154.1,
+  "fonts_ready_ms": 187.8,
+  "brand_after_fonts_ms": 200.4,
+  "title_after_brand_ms": 400.8,
+  "invite_after_title_ms": 800.2,
+  "invite_wall_ms": 1641,
+  "bytes_until_invite": 275890,
+  "files": [
+   {
+    "url": "/test/",
+    "bytes": 66924
+   },
+   {
+    "url": "/media/test/M0/1280.avif",
+    "bytes": 40190
+   },
+   {
+    "url": "/assets/test-Cjmp2DZw.css",
+    "bytes": 23437
+   },
+   {
+    "url": "/media/test/H0/1280.avif",
+    "bytes": 22856
+   },
+   {
+    "url": "/assets/test-C6eXVdcn.js",
+    "bytes": 17511
+   },
+   {
+    "url": "/assets/frank-ruhl-libre-latin-500-normal-BAzcRRUT.woff2",
+    "bytes": 15012
+   },
+   {
+    "url": "/assets/frank-ruhl-libre-latin-300-normal-DssNYltd.woff2",
+    "bytes": 14816
+   },
+   {
+    "url": "/assets/assistant-latin-400-normal-CDF-mh-3.woff2",
+    "bytes": 12352
+   }
+  ],
+  "time_origin": 1793740889420.5,
+  "paper_response_ms": 27.5,
+  "paper_out_to_in_ms": 359.6,
+  "run_head": "02 · הסלון · נורדי"
+ },
+ "cover_phone": {
+  "first_paint_ms": 196,
+  "first_contentful_paint_ms": 196,
+  "lcp_ms": 1228,
+  "lcp_element": "mag-cover-line",
+  "h0_sharp_ms": 151.2,
+  "fonts_ready_ms": 180.3,
+  "brand_after_fonts_ms": 200.2,
+  "title_after_brand_ms": 400.2,
+  "invite_after_title_ms": 800.2,
+  "invite_wall_ms": 1595,
+  "bytes_until_invite": 322280,
+  "files": [
+   {
+    "url": "/media/test/M0/1920.avif",
+    "bytes": 86463
+   },
+   {
+    "url": "/test/",
+    "bytes": 66924
+   },
+   {
+    "url": "/assets/test-Cjmp2DZw.css",
+    "bytes": 23437
+   },
+   {
+    "url": "/media/test/H0/m780.avif",
+    "bytes": 22973
+   },
+   {
+    "url": "/assets/test-C6eXVdcn.js",
+    "bytes": 17511
+   },
+   {
+    "url": "/assets/frank-ruhl-libre-latin-500-normal-BAzcRRUT.woff2",
+    "bytes": 15012
+   },
+   {
+    "url": "/assets/frank-ruhl-libre-latin-300-normal-DssNYltd.woff2",
+    "bytes": 14816
+   },
+   {
+    "url": "/assets/assistant-latin-400-normal-CDF-mh-3.woff2",
+    "bytes": 12352
+   }
+  ],
+  "time_origin": 1793740893299.8,
+  "paper_response_ms": 18.7,
+  "paper_out_to_in_ms": 351.1,
+  "run_head": "02 · הסלון · נורדי"
+ },
+ "opening_throttled_phone": {
+  "network": "Fast 4G-like: 4 Mbit/s down, 1 Mbit/s up, 150 ms RTT; CPU ×4 (CDP emulation, headless)",
+  "first_contentful_paint_ms": 712,
+  "lcp_ms": 2348,
+  "lcp_element": "mag-cover-line",
+  "h0_sharp_ms": 664.3,
+  "invite_ms": 2692.7,
+  "bytes_until_invite": 322280
+ },
+ "clean_room_rest_1280": {
+  "dots_opacity": [
+   "0"
+  ],
+  "overlay": {
+   "marks": "off",
+   "label": false,
+   "strip": true,
+   "outline": false
+  },
+  "dE00_vs_overlays_removed": {
+   "p50": 0,
+   "p95": 0,
+   "p99": 0,
+   "max": 0,
+   "over1": 0,
+   "n": 234880
+  }
+ },
+ "marks_timing_1280": {
+  "first_visible_ms_after_move": 48.9,
+  "appear_ms_after_move": 265.7,
+  "marks_on_event_ms": 16.4,
+  "marks_off_event_ms_after_on": 2516.3,
+  "fade_start_ms": 2599,
+  "gone_ms": 3132.3,
+  "opacity_direction_changes": 0,
+  "samples": 314,
+  "tokens": {
+   "mark_in": ".25s",
+   "mark_out": ".6s",
+   "idle": "2.5s"
+  }
+ },
+ "targets_1280": {
+  "marks": [
+   {
+    "slot": "wall-sconce",
+    "w": 46,
+    "h": 46,
+    "inside_box": true
+   },
+   {
+    "slot": "curtains",
+    "w": 46,
+    "h": 46,
+    "inside_box": true
+   },
+   {
+    "slot": "vase",
+    "w": 46,
+    "h": 46,
+    "inside_box": true
+   },
+   {
+    "slot": "table-runner",
+    "w": 46,
+    "h": 46,
+    "inside_box": true
+   },
+   {
+    "slot": "rug",
+    "w": 46,
+    "h": 46,
+    "inside_box": true
+   },
+   {
+    "slot": "pendant",
+    "w": 46,
+    "h": 46,
+    "inside_box": true
+   },
+   {
+    "slot": "candle-holders",
+    "w": 46,
+    "h": 46,
+    "inside_box": true
+   },
+   {
+    "slot": "cushions",
+    "w": 46,
+    "h": 46,
+    "inside_box": true
+   },
+   {
+    "slot": "framed-art",
+    "w": 46,
+    "h": 46,
+    "inside_box": true
+   },
+   {
+    "slot": "bowl",
+    "w": 46,
+    "h": 46,
+    "inside_box": true
+   },
+   {
+    "slot": "sofa-cover",
+    "w": 46,
+    "h": 46,
+    "inside_box": true
+   },
+   {
+    "slot": "accent-sconces",
+    "w": 46,
+    "h": 46,
+    "inside_box": true
+   },
+   {
+    "slot": "basket",
+    "w": 46,
+    "h": 46,
+    "inside_box": true
+   }
+  ],
+  "min_size": 46,
+  "overlaps": [],
+  "all_inside_box": true,
+  "note": "inside the G1 fidelity box of the product (the alpha of the final layer waits for the layers)"
+ },
+ "outline_1280": {
+  "outline_css": {
+   "border-width": "1px",
+   "box-shadow": "rgba(244, 241, 236, 0.45) 0px 0px 8px 0px",
+   "outline-width": "3px"
+  },
+  "halo_px_from_box_shadow": 0,
+  "label_text": "אגרטל קרמיקה, לבן חםקרמיקה · גובה ⁦32⁩ ס״מ · ⁦₪ 229⁩",
+  "dE00_outside_outline_and_label_vs_rest": {
+   "p50": 0,
+   "p95": 0,
+   "p99": 0,
+   "max": 36.5,
+   "over1": 0.1,
+   "n": 230046
+  },
+  "note": "the marks of the other products are on in this state (pointer moved), so dots of 6 px count in \"outside\"; the alpha-edge distance waits for the alpha layers"
+ },
+ "focus_1280": {
+  "response_first_frame_ms": 54.3,
+  "click_to_focus_start_ms": 46.3,
+  "approach_ms": 1603.1,
+  "ui_wait_after_camera_stop_ms": 100.2,
+  "strip_opacity_1_after_ui_in_ms": 211.8,
+  "strip_out_gone_ms": 155.9,
+  "strip_in_transitionend_ms": 271.1,
+  "strip_in_start_latency_ms": 63,
+  "strip_in_duration_ms": 208.1,
+  "strip_out_start_latency_ms": 5.9,
+  "strip_out_duration_ms": null,
+  "strip_out_transitionend_ms": null,
+  "return_ms": 1807.2,
+  "ui_out_to_return_start_ms": 150.1,
+  "look": {
+   "soft": "blur(2.05px) brightness(0.905)",
+   "sharp": "none",
+   "sharpMask": "radial-gradient(closest-side, rgb(0, 0, 0) 55%, rgba(0, 0, 0, 0) 100%)",
+   "scale": "matrix(3.118, 0, 0, 3.118, -735.65, -895.63)"
+  },
+  "variant_after_arrow": "1",
+  "strip_credit_after_arrow": "אגרטל קרמיקה, לבן חםקרמיקה · גובה ⁦30⁩ ס״מ · ⁦₪ 229⁩",
+  "focus_back_on_mark": "vase",
+  "head_after_landing": "stage",
+  "landed_transform": "",
+  "dE00_landed_vs_rest": {
+   "p50": 0,
+   "p95": 0,
+   "p99": 0,
+   "max": 1,
+   "over1": 0,
+   "n": 234880
+  },
+  "approach_frame_ms": {
+   "p50": 16.7,
+   "p95": 19.5,
+   "p99": 584.3,
+   "max": 584.3,
+   "dropped_over_25ms": 2,
+   "n": 69,
+   "note": "headless SwiftShader at 1280×800: a floor; the phone trace needs a real phone"
+  }
+ },
+ "keyboard_loop_1280": {
+  "thumb_focused_on_open": "mag-thumb",
+  "variant_after_arrows": "1",
+  "enter_chooses": {
+   "chosen": true,
+   "variant": 1
+  },
+  "focus_back_after_choose": "vase",
+  "focus_back_after_escape": "vase"
+ },
+ "price_consistency": {
+  "label": "קרמיקה · גובה ⁦32⁩ ס״מ · ⁦₪ 229⁩",
+  "story": "קרמיקה · גובה ⁦32⁩ ס״מ · ⁦₪ 229⁩",
+  "strip": "קרמיקה · גובה ⁦32⁩ ס״מ · ⁦₪ 229⁩",
+  "thumb_aria": "אגרטל קרמיקה, לבן חם, ⁦₪ 229⁩",
+  "same_price": true,
+  "ltr_isolated": true
+ },
+ "clean_room_rest_1920": {
+  "source": "/media/test/M0/1920.avif",
+  "drawn": {
+   "scale": 1,
+   "dw": 1920,
+   "dh": 1080,
+   "ox": 0,
+   "oy": 0
+  },
+  "dE00_vs_encoded_frame": {
+   "p50": 0.2,
+   "p95": 2.1,
+   "p99": 3.4,
+   "max": 9.9,
+   "over1": 25.3,
+   "n": 216320
+  },
+  "note": "the screenshot against the encoded frame decoded by sharp: decoder and colour-management differences only; the final check is against the composite of the layers (qa)"
+ },
+ "reduced_motion": {
+  "approach_ms": 303.5,
+  "return_ms": 301.3,
+  "frame_transition_duration": "0s",
+  "distinct_transform_values_during_approach": 2,
+  "note": "two values (before, after) = one cut inside the dissolve, no animated transform"
+ },
+ "pan": {
+  "play_ms": 1410.6,
+  "click_to_play_event_ms": 54,
+  "samples": 54,
+  "monotonic": true,
+  "mid_speed_frames_per_s": 76.9,
+  "nominal_frames_per_s_at_constant": 77.4,
+  "canvas": {
+   "w": 677,
+   "h": 381,
+   "cw": 677,
+   "ch": 381
+  },
+  "frame_ms": {
+   "p50": 19.5,
+   "p95": 46.4,
+   "p99": 57.9,
+   "max": 57.9,
+   "dropped_over_25ms": 25,
+   "n": 59
+  },
+  "scale": "the frames are drawn by SequencePlayer.draw at the size fixed once by fit(): scale 1.000 along the whole clip (web/src/engine/sequence.ts); no transform on the canvas"
+ },
+ "focus_rings_1280": {
+  "tab_stops": 16,
+  "rings": [
+   {
+    "el": "a.mag-link",
+    "outline": "2px solid rgb(58, 58, 58)",
+    "offset": "3px",
+    "shadow": "none",
+    "inView": true
+   },
+   {
+    "el": "button.mag-mark[curtains]",
+    "outline": "2px solid rgb(244, 241, 236)",
+    "offset": "2px",
+    "shadow": "rgb(58, 58, 58) 0px 0px 0px 4px",
+    "inView": true
+   },
+   {
+    "el": "button.mag-mark[candle-holders]",
+    "outline": "2px solid rgb(244, 241, 236)",
+    "offset": "2px",
+    "shadow": "rgb(58, 58, 58) 0px 0px 0px 4px",
+    "inView": true
+   },
+   {
+    "el": "button.mag-mark[table-runner]",
+    "outline": "2px solid rgb(244, 241, 236)",
+    "offset": "2px",
+    "shadow": "rgb(58, 58, 58) 0px 0px 0px 4px",
+    "inView": true
+   },
+   {
+    "el": "button.mag-mark[dining-pendant]",
+    "outline": "2px solid rgb(244, 241, 236)",
+    "offset": "2px",
+    "shadow": "rgb(58, 58, 58) 0px 0px 0px 4px",
+    "inView": true
+   },
+   {
+    "el": "button.mag-mark[centerpiece-vase]",
+    "outline": "2px solid rgb(244, 241, 236)",
+    "offset": "2px",
+    "shadow": "rgb(58, 58, 58) 0px 0px 0px 4px",
+    "inView": true
+   },
+   {
+    "el": "button.mag-mark[bench-pad]",
+    "outline": "2px solid rgb(244, 241, 236)",
+    "offset": "2px",
+    "shadow": "rgb(58, 58, 58) 0px 0px 0px 4px",
+    "inView": true
+   },
+   {
+    "el": "button.mag-mark[framed-art]",
+    "outline": "2px solid rgb(244, 241, 236)",
+    "offset": "2px",
+    "shadow": "rgb(58, 58, 58) 0px 0px 0px 4px",
+    "inView": true
+   },
+   {
+    "el": "button.mag-mark[kitchen-runner]",
+    "outline": "2px solid rgb(244, 241, 236)",
+    "offset": "2px",
+    "shadow": "rgb(58, 58, 58) 0px 0px 0px 4px",
+    "inView": true
+   },
+   {
+    "el": "button.mag-mark[condiment-set]",
+    "outline": "2px solid rgb(244, 241, 236)",
+    "offset": "2px",
+    "shadow": "rgb(58, 58, 58) 0px 0px 0px 4px",
+    "inView": true
+   },
+   {
+    "el": "button.mag-mark[tableware-set]",
+    "outline": "2px solid rgb(244, 241, 236)",
+    "offset": "2px",
+    "shadow": "rgb(58, 58, 58) 0px 0px 0px 4px",
+    "inView": true
+   },
+   {
+    "el": "button.mag-mark[bowl]",
+    "outline": "2px solid rgb(244, 241, 236)",
+    "offset": "2px",
+    "shadow": "rgb(58, 58, 58) 0px 0px 0px 4px",
+    "inView": true
+   },
+   {
+    "el": "canvas.mag-pan-canvas",
+    "outline": "2px solid rgb(58, 58, 58)",
+    "offset": "3px",
+    "shadow": "none",
+    "inView": true
+   },
+   {
+    "el": "#mag-pan-play",
+    "outline": "2px solid rgb(58, 58, 58)",
+    "offset": "3px",
+    "shadow": "none",
+    "inView": true
+   },
+   {
+    "el": "a.mag-link",
+    "outline": "2px solid rgb(58, 58, 58)",
+    "offset": "3px",
+    "shadow": "none",
+    "inView": true
+   },
+   {
+    "el": "a.mag-link",
+    "outline": "2px solid rgb(58, 58, 58)",
+    "offset": "3px",
+    "shadow": "none",
+    "inView": true
+   }
+  ],
+  "all_2px": true,
+  "all_in_view": true
+ },
+ "type_1280": {
+  "fonts_loaded": [
+   "Assistant 300 U+307-308, U+590",
+   "Assistant 300 U+0-FF, U+131, U",
+   "Assistant 400 U+307-308, U+590",
+   "Assistant 400 U+100-2BA, U+2BD",
+   "Assistant 400 U+0-FF, U+131, U",
+   "Assistant 600 U+307-308, U+590",
+   "Assistant 600 U+0-FF, U+131, U",
+   "Frank Ruhl Libre 300 U+307-308, U+590",
+   "Frank Ruhl Libre 300 U+0-FF, U+131, U",
+   "Frank Ruhl Libre 500 U+307-308, U+590",
+   "Frank Ruhl Libre 500 U+0-FF, U+131, U"
+  ],
+  "font_check": {
+   "frl300": true,
+   "frl500": true,
+   "as300": true,
+   "as400": true,
+   "as600": true,
+   "heb": true
+  },
+  "families_in_use": {
+   "Assistant": 98,
+   "Frank Ruhl Libre": 46
+  },
+  "computed_sizes": {
+   "22px/28px 300 Frank Ruhl Libre": 1,
+   "15px/20px 600 Assistant": 10,
+   "72px/80px 300 Frank Ruhl Libre": 2,
+   "13px/18px 400 Assistant": 19,
+   "30px/38px 300 Frank Ruhl Libre": 3,
+   "13px/16px 600 Assistant": 36,
+   "40px/44px 300 Frank Ruhl Libre": 9,
+   "20px/32px 300 Assistant": 2,
+   "20px/28px 500 Frank Ruhl Libre": 4,
+   "18px/24px 500 Frank Ruhl Libre": 27,
+   "14px/20px 400 Assistant": 28,
+   "17px/28px 400 Assistant": 1
+  },
+  "scale_tokens": [
+   "--t-display: 72px / 80px",
+   "--t-h1: 44px / 52px",
+   "--t-h2: 30px / 38px",
+   "--t-h3: 20px / 28px",
+   "--t-lead: 20px / 32px",
+   "--t-body: 17px / 28px",
+   "--t-credit: 18px / 24px",
+   "--t-detail: 14px / 20px",
+   "--t-cap: 13px / 18px",
+   "--t-run: 13px / 16px",
+   "--t-btn: 15px / 20px",
+   "--t-input: 17px",
+   "--t-brand: 22px / 28px"
+  ],
+  "line_length": [
+   {
+    "cls": "mag-lead",
+    "chars_per_line": 58,
+    "lines": 6,
+    "width": 480,
+    "align": "start",
+    "letterSpacing": "normal"
+   },
+   {
+    "cls": "mag-cap",
+    "chars_per_line": 45,
+    "lines": 2,
+    "width": 416,
+    "align": "start",
+    "letterSpacing": "normal"
+   },
+   {
+    "cls": "mag-lead",
+    "chars_per_line": 57,
+    "lines": 3,
+    "width": 480,
+    "align": "start",
+    "letterSpacing": "normal"
+   }
+  ],
+  "justify_count": 0,
+  "input_font_size": "17px",
+  "hebrew_letter_spacing": [
+   "normal"
+  ]
+ },
+ "grid_1280": {
+  "cols": 12,
+  "col_w": 76.1,
+  "gap": 24,
+  "margin": 51.2,
+  "main_left_off": 0,
+  "main_right_off": 0.1,
+  "margin_token": "clamp(32px, 4vw, 64px)"
+ },
+ "credits": {
+  "count": 25,
+  "bad_format": [],
+  "sample": [
+   "בד · ⁦₪ 519⁩",
+   "פשתן · גובה ⁦260⁩ ס״מ · ⁦₪ 229⁩",
+   "קרמיקה · גובה ⁦32⁩ ס״מ · ⁦₪ 229⁩",
+   "פשתן · ⁦33×183⁩ ס״מ · ⁦₪ 79⁩"
+  ],
+  "elements_on_picture_besides_marks": [],
+  "temporary_marks_outside_footer": []
+ },
+ "contrast_1280": {
+  "on_paper": {
+   "h2 on paper": 10.1,
+   "lead on paper": 10.1,
+   "credit detail on paper": 6.2700000000000005,
+   "caption on paper": 6.2700000000000005,
+   "link on paper": 10.1,
+   "secondary button text": 10.1,
+   "secondary button border (3:1)": 10.1,
+   "field border (3:1)": 3.29,
+   "error text": 6.13,
+   "primary button text on its ink": 10.1,
+   "focus ring on paper (3:1)": 10.1
+  },
+  "text_over_picture_p5": {
+   ".mag-cover-title": {
+    "text": "rgb(58,58,58)",
+    "region": {
+     "x": 685,
+     "y": 192,
+     "w": 544,
+     "h": 240
+    },
+    "p5": 6.65,
+    "min": 3.84,
+    "Lp5": 79.8
+   },
+   ".mag-brand": {
+    "text": "rgb(58,58,58)",
+    "region": {
+     "x": 1188,
+     "y": 18,
+     "w": 41,
+     "h": 28
+    },
+    "p5": 7.42,
+    "min": 7.340000000000001,
+    "Lp5": 83.7
+   },
+   ".mag-invite-btn": {
+    "text": "rgb(58,58,58)",
+    "region": {
+     "x": 1097,
+     "y": 432,
+     "w": 132,
+     "h": 50
+    },
+    "p5": 7.6,
+    "min": 7.029999999999999,
+    "Lp5": 84.5
+   }
+  },
+  "head_band_L_p5": {
+   "H0": {
+    "p5": 5.14,
+    "min": 1.47,
+    "Lp5": 71.2
+   },
+   "M0": {
+    "p5": 8.03,
+    "min": 1,
+    "Lp5": 86.6
+   },
+   "D1": {
+    "p5": 8.52,
+    "min": 1.17,
+    "Lp5": 88.8
+   }
+  },
+  "paper": "rgb(244,241,236)"
+ },
+ "contrast_400": {
+  "on_paper": {
+   "h2 on paper": 10.1,
+   "lead on paper": 10.1,
+   "credit detail on paper": 6.2700000000000005,
+   "caption on paper": 6.2700000000000005,
+   "link on paper": 10.1,
+   "secondary button text": 10.1,
+   "secondary button border (3:1)": 10.1,
+   "field border (3:1)": 3.29,
+   "error text": 6.13,
+   "primary button text on its ink": 10.1,
+   "focus ring on paper (3:1)": 10.1
+  },
+  "text_over_picture_p5": {
+   ".mag-cover-title": {
+    "text": "rgb(58,58,58)",
+    "region": {
+     "x": 24,
+     "y": 104,
+     "w": 352,
+     "h": 138
+    },
+    "p5": 7.659999999999999,
+    "min": 6.0200000000000005,
+    "Lp5": 84.8
+   },
+   ".mag-brand": {
+    "text": "rgb(58,58,58)",
+    "region": {
+     "x": 339,
+     "y": 16,
+     "w": 37,
+     "h": 24
+    },
+    "p5": 5.83,
+    "min": 5.1,
+    "Lp5": 75.3
+   },
+   ".mag-invite-btn": {
+    "text": "rgb(58,58,58)",
+    "region": {
+     "x": 306,
+     "y": 242,
+     "w": 70,
+     "h": 50
+    },
+    "p5": 7.08,
+    "min": 6.56,
+    "Lp5": 82
+   }
+  },
+  "head_band_L_p5": {
+   "H0": {
+    "p5": 5.15,
+    "min": 2.75,
+    "Lp5": 71.3
+   },
+   "M0": {
+    "p5": 9.2,
+    "min": 1,
+    "Lp5": 91.7
+   },
+   "D1": {
+    "p5": 9.05,
+    "min": 7.88,
+    "Lp5": 91
+   }
+  },
+  "paper": "rgb(244,241,236)"
+ },
+ "phone": {
+  "window": {
+   "scrollLeft": 807,
+   "frameW": 1422,
+   "viewW": 400,
+   "u0": 0.5675105485232067,
+   "u1": 0.8488045007032349
+  },
+  "marks_visible_in_window": [
+   "table-runner",
+   "rug",
+   "pendant",
+   "candle-holders",
+   "cushions",
+   "framed-art",
+   "bowl",
+   "sofa-cover",
+   "accent-sconces"
+  ],
+  "min_mark_size": 46,
+  "approach_ms": 1604.4,
+  "ui_wait_ms": 100.3,
+  "strip": {
+   "h": 128,
+   "thumb_min": 52
+  },
+  "scroll_restored_after_return": true,
+  "approach_frame_ms": {
+   "p50": 16.7,
+   "p95": 17.9,
+   "p99": 205.3,
+   "n": 85
+  }
+ },
+ "grid_400": {
+  "cols": 4,
+  "margin": 24,
+  "main_left": 24,
+  "main_right_gap": 24,
+  "grid_left": 0
+ },
+ "type_400": {
+  "line_length": [
+   {
+    "chars_per_line": 49,
+    "lines": 7,
+    "fontSize": "18px"
+   },
+   {
+    "chars_per_line": 43,
+    "lines": 4,
+    "fontSize": "18px"
+   }
+  ],
+  "input_font_size": "16px"
+ },
+ "problems": [],
+ "notes": [],
+ "shots": [
+  {
+   "name": "desk-cover-1-lqip",
+   "caption": "the cover at first paint: the LQIP of H0 under the paper, the type not yet printed"
+  },
+  {
+   "name": "desk-cover-2-invite",
+   "caption": "the cover developed: the brand in the band, the cover line in Display, the invitation with its 24 px hairline"
+  },
+  {
+   "name": "desk-paper-mid",
+   "caption": "the paper transition, mid-way: paper over the cover (150 ms out, 200 ms hold)"
+  },
+  {
+   "name": "desk-living-after-paper",
+   "caption": "the living room after the paper transition, the running head \"02 · הסלון · נורדי\""
+  },
+  {
+   "name": "phone-cover-1-lqip",
+   "caption": "the cover at first paint: the LQIP of H0 under the paper, the type not yet printed"
+  },
+  {
+   "name": "phone-cover-2-invite",
+   "caption": "the cover developed: the brand in the band, the cover line in Display, the invitation with its 24 px hairline"
+  },
+  {
+   "name": "phone-paper-mid",
+   "caption": "the paper transition, mid-way: paper over the cover (150 ms out, 200 ms hold)"
+  },
+  {
+   "name": "phone-living-after-paper",
+   "caption": "the living room after the paper transition, the running head \"02 · הסלון · נורדי\""
+  },
+  {
+   "name": "desk-living-rest",
+   "caption": "the living room at rest, 3 s without input: no marks, no label, nothing on the picture"
+  },
+  {
+   "name": "desk-living-marks",
+   "caption": "the marks after a pointer movement: 6 px ink dots on the products, nothing else"
+  },
+  {
+   "name": "desk-living-label",
+   "caption": "hover on the vase: the product outline and the wall label (name · material · size · price) 12 px above it"
+  },
+  {
+   "name": "desk-focus-approach",
+   "caption": "the approach to the vase, mid-way (1.6 s, --e-approach): the camera moves, the room still whole"
+  },
+  {
+   "name": "desk-focus-on",
+   "caption": "focus mode: the room uniformly soft and a third of a stop darker, the vase sharp and lifted; the variant strip with the credit, \"הוספה לסל\" and \"בחירה\""
+  },
+  {
+   "name": "desk-focus-variant-2",
+   "caption": "the second variant chosen by the arrow key: the thumb ring moves, the credit dissolves; the picture waits for the final layers"
+  },
+  {
+   "name": "desk-focus-return",
+   "caption": "the return, mid-way (1.8 s, --e-land)"
+  },
+  {
+   "name": "desk-focus-landed",
+   "caption": "after the landing: the frame at rest again, pixel for pixel"
+  },
+  {
+   "name": "desk-focus-ring-thumb",
+   "caption": "the keyboard in focus mode: the 2 px ring on the chosen thumb"
+  },
+  {
+   "name": "desk1920-living-rest",
+   "caption": "the living room at rest at 1920×1080 (the 1920 rendition 1:1)"
+  },
+  {
+   "name": "desk-reduced-focus",
+   "caption": "reduced motion: focus mode reached by a 300 ms dissolve, nothing moved"
+  },
+  {
+   "name": "desk-dining-rest",
+   "caption": "the dining room D1 at rest"
+  },
+  {
+   "name": "desk-pan-0",
+   "caption": "the P-D pan block, frame 1 (the registered test clip of 2026-11-02)"
+  },
+  {
+   "name": "desk-pan-mid",
+   "caption": "the pan mid-way, constant speed between the ramps"
+  },
+  {
+   "name": "desk-pan-end",
+   "caption": "the pan at its last frame (D2 of the test clip)"
+  },
+  {
+   "name": "desk-states-rest",
+   "caption": "the states block at rest: primary, secondary, link, the field, the unavailable product"
+  },
+  {
+   "name": "desk-states-hover",
+   "caption": "hover on the primary button (ink-press, 120 ms)"
+  },
+  {
+   "name": "desk-states-press",
+   "caption": "press on the primary button (80 ms)"
+  },
+  {
+   "name": "desk-states-added",
+   "caption": "after the press: \"נוסף לסל\" in the same button, no toast"
+  },
+  {
+   "name": "desk-states-focus-field",
+   "caption": "the field focused: the 2 px ring"
+  },
+  {
+   "name": "desk-states-error",
+   "caption": "the error state: the message under the field, the field marked"
+  },
+  {
+   "name": "desk-states-loading",
+   "caption": "the loading state: \"רגע…\" and the 1 px progress hairline, no spinner"
+  },
+  {
+   "name": "desk-ring-mark",
+   "caption": "the ring on a mark (Tab into the room)"
+  },
+  {
+   "name": "desk-grid-story",
+   "caption": "the story page with the 12-column grid overlay at 1280"
+  },
+  {
+   "name": "phone-toc",
+   "caption": "the contents on the phone: the rooms, the unavailable styles \"בגיליונות הבאים\""
+  },
+  {
+   "name": "phone-living-rest",
+   "caption": "the living room on the phone at rest: the frame at full height, the view on the Bible window (u 0.567–0.905), the sides by a swipe"
+  },
+  {
+   "name": "phone-living-marks",
+   "caption": "the marks after a touch"
+  },
+  {
+   "name": "phone-focus-cushions",
+   "caption": "the cushions close-up on the phone (FOC2): the strip at the bottom with the credit, the thumbs and \"בחירה\""
+  },
+  {
+   "name": "phone-grid-story",
+   "caption": "the story on the phone with the 4-column grid overlay, 24 px margins"
+  },
+  {
+   "name": "phone-states",
+   "caption": "the states block on the phone"
+  },
+  {
+   "name": "phone-dining-rest",
+   "caption": "the dining room on the phone, the view on its window (u 0.33–0.67)"
+  },
+  {
+   "name": "phone-pan-0",
+   "caption": "the pan block on the phone (the mobile variant of the clip)"
+  }
+ ],
+ "run": {
+  "at": "2026-11-03T21:23:14.439Z",
+  "seconds": 106,
+  "browser": "Chromium headless, SwiftShader, DPR 1"
+ }
+}

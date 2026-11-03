@@ -59,7 +59,7 @@ H0: 2736×1539, window u 0.201–0.539, 0 hotspots
 M0: 2736×1539, window u 0.567–0.905, 13 hotspots
 D1: 2736×1539, window u 0.330–0.667, 12 hotspots
 P-D: 84 frames, 1.4 s, variants 1920 84 avif / 84 webp, mobile 84 avif / 43 webp
-test page → web/test/index.html (53.2 KB with the LQIPs), manifest → .generated/test-page.nordic.json
+test page → web/test/index.html (56.4 KB with the LQIPs), manifest → .generated/test-page.nordic.json
 
 > @hd/web@0.1.0 build
 > vite build && vite build --ssr src/entry-server.tsx --outDir .ssr && tsx scripts/prerender.ts
@@ -100,19 +100,19 @@ dist/assets/assistant-latin-600-normal-CfJI0IBS.woff               15.72 kB
 dist/assets/assistant-latin-400-normal-BKD5Gqji.woff               15.74 kB
 dist/assets/frank-ruhl-libre-latin-300-normal-DWtGO9Zk.woff        18.76 kB
 dist/assets/frank-ruhl-libre-latin-500-normal-Czdveetw.woff        18.94 kB
-dist/test/index.html                                               63.45 kB │ gzip: 12.28 kB
-dist/assets/test-CzG3398m.css                                      22.48 kB │ gzip:  4.97 kB
+dist/test/index.html                                               66.92 kB │ gzip: 12.99 kB
+dist/assets/test-Cjmp2DZw.css                                      23.44 kB │ gzip:  5.19 kB
 dist/assets/main-wt73POsV.css                                      30.12 kB │ gzip:  6.79 kB
 dist/assets/sequence-DdGSolri.js                                    6.02 kB │ gzip:  2.48 kB
-dist/assets/test-DaNObDRZ.js                                       15.74 kB │ gzip:  5.72 kB
+dist/assets/test-C6eXVdcn.js                                       17.51 kB │ gzip:  6.36 kB
 dist/assets/main-blh_n-Ly.js                                      276.51 kB │ gzip: 74.64 kB
-✓ built in 1.83s
+✓ built in 1.50s
 vite v7.3.7 building ssr environment for production...
 transforming...
 ✓ 54 modules transformed.
 rendering chunks...
 .ssr/entry-server.js  269.97 kB
-✓ built in 766ms
+✓ built in 630ms
 prerendered 47 pages + order shell + 404
 
 > @hd/api@0.1.0 build
@@ -122,8 +122,8 @@ prerendered 47 pages + order shell + 404
 
 
 
- ⛅️ wrangler 4.149.0
-────────────────────
+ ⛅️ wrangler 4.149.0 (update available 4.157.0)
+───────────────────────────────────────────────
 [33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mMultiple environments are defined in the Wrangler configuration file, but no target environment was specified for the deploy command.[0m
 
   To avoid unintentional changes to the wrong environment, it is recommended to explicitly specify the target environment using the `-e|--env` flag or CLOUDFLARE_ENV env variable.
@@ -152,7 +152,7 @@ env.ACCESS_AUD ("")                               Environment Variable
 
 ok    JS (gzip), the room page entry                              75.3 KB  / 80.0 KB
 ok    CSS (gzip), the room page entry                              6.6 KB  / 15.0 KB
-ok    other entries (the test page): JS 1 files, CSS 1            10.4 KB
+ok    other entries (the test page): JS 1 files, CSS 1            11.3 KB
 ok    fonts (woff2, he+latin)                                     90.2 KB
 ok    room media (18 files, shell @2752, layers @1920)           386.8 KB
 ok    first load, living room, mobile                            567.6 KB  / 3072.0 KB

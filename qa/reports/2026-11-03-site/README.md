@@ -31,3 +31,32 @@
 - שורות המשלוח: CJ ‏33, ‏Zendrop ‏3, התשובה השמורה של הספק 2, המק"ט בכרטיס 1; ברירת מחדל 0.
 - 81 מחירי אפשרויות הועלו לרצפת "לא מפסיד" שלהן; 0 מחירים ידניים של הסטודיו מפסידים בקריאת האתר.
 - 68 כרטיסי טיוטה (DS API) מנויים בשם ולא מוצגים; 8 כרטיסי פול (בעיה ידועה).
+
+## תשובות הסכמה SCH1 ו-SCH2 (המשך, 2026-11-03)
+
+> הבעלים ענה על שתי שאלות הסכמה (`status/decisions.json` ‏SCH1, ‏SCH2; חוקי הסטודיו ז, 2026-11-03), והתשובות הן האישור לשנות את `data/product-card.schema.json`. זה השינוי היחיד במסמך מחייב.
+
+**מה השתנה**
+- **הסכמה 1.2** (`data/product-card.schema.json`): ‏`placement` כולל עכשיו `sill` (אדן חלון, כמו בקובצי ה-slots). רשומה ב-`safety.certificates` חייבת `url` או `source: "seller-claim"` (‏`anyOf`). בלי קישור, המקור חובה, וההערה המתוארכת נשארת. נוספה שורת changelog.
+- **SCH2:** שלושת כרטיסי האגרטל שהעברתי ל-`window` חזרו ל-`sill`: ‏`vase-aliexpress-vintage-distressed-clay-vase-589009`, ‏`vase-cj-black-matte-stoneware-jar-30`, ‏`vase-cj-matte-frosted-tapered-28`. ההערה בכל כרטיס עודכנה.
+- **SCH1, בניגוד להמלצה שלי:** שמונה הרשומות שהסרתי שוחזרו מההערות שהשארתי, כ-`{"name": "CE (seller attribute)", "verified": false, "source": "seller-claim"}`. הכרטיסים: bath/ceiling-light ‏086617, ‏entrance/table-lamp ‏045552, ‏entrance/wall-sconce ‏915640, ‏kids/doll ‏664801, ‏kids/pendant ‏200914-kids, ‏kids/soft-toy ‏999497, ‏kids/toy-cars ‏975232, ‏work/desk-lamp ‏045552. כולם כרטיסי טיוטה, ואף אחד מהם לא מוצג באתר היום.
+- **התצוגה, בניסוח ישר:** אצלנו תעודה בלי מסמך היא תמיד "טענת המוכר, אין מסמך", ואף פעם לא "מאומת". זה נכון גם כשבכרטיס כתוב `verified: true`.
+  - באתר (`site/shared/src/safety.ts`): ‏`verified` דורש קישור, ו-`seller_claim: true` לכל רשומה בלי קישור או עם המקור. שורת הבטיחות מציגה "CE (seller attribute): טענת המוכר, אין מסמך", בלי קישור.
+  - בסטודיו (`studio/build.py`, ‏`studio/src/index.html`): מצב התקן `seller-claim` עם השבב "טענת המוכר, אין מסמך", באותו צבע של "לא מאומת".
+- **מחולל ה-zod** (`site/shared/scripts/gen-product-card-schema.ts`) מתרגם `anyOf` ל-`.refine`. הקובץ `product-card.gen.ts` נוצר מחדש. גם המאמת של הסטודיו (`studio/apply_edits.py validate`) בודק עכשיו `anyOf`.
+
+**מה רץ, ומה יצא**
+
+| בדיקה | תוצאה | הקובץ |
+| --- | --- | --- |
+| typecheck | **עבר** (כולל `gen-product-card-schema.ts --check`) | `sch-typecheck.log` |
+| בדיקות הסכמה (vitest, ‏`-t "schema\|product card\|SCH1\|seller\|sill"`) | **עבר: 7 בדיקות.** הקובץ שנוצר מעודכן, כל קובצי ה-slots עוברים, וכל כרטיס מחוץ לפול עובר או שהוא טיוטה שחסרים לה רק שדות הטיוטה. נוספה בדיקה ל-SCH1: טענת מוכר לא מאומתת לעולם, והסכמה דוחה תעודה שאין לה לא קישור ולא מקור | `sch-schema-test.log` |
+| ‏`npm test` | **עבר: 73 בדיקות, 0 נכשלו** | `sch-test.log` |
+| כל הכרטיסים מול הסכמה, במאמת של הסטודיו | סכמה 1.2: ‏413 תקינים, **0 פגומים**, 68 טיוטות, 8 בפול (בעיה ידועה). ‏`sill` בשלושה כרטיסים, ‏`seller-claim` בשמונה | `sch-studio-validate.txt` |
+| ‏`npm run build` (כולל budget) | **עבר, יציאה 0.** ‏JS של עמוד החדר 75.3 KB מתוך 80, ‏CSS ‏6.6 מתוך 15, טעינה ראשונה של הסלון במובייל 567.6 KB מתוך 3 MB | `sch-build.log` |
+| ‏`no_loss.py --check-site` | קטלוג d72fce7a37f7: ‏39 מוצרים (3 לא נמכרים), 477 מחירים, 45 ברצפה, **0 מפסידים** | `sch-no-loss-check-site.txt` |
+| בניית הסטודיו (`studio/build.py --offline`) | יציאה 0. ‏16 רשומות `seller-claim` ב-`data.json`: מצב ומובאה לכל אחד מ-8 הכרטיסים | `sch-studio-build.txt` |
+
+**אחרי זה:**
+- ‏`npm run format:check` נכשל על `site/shared/test/shared.test.ts`, הבדיקה החדשה של SCH1. הקובץ עבר `prettier --write`, וההרצה החוזרת עוברת (`qa/reports/2026-11-03-site-test-page/format-check.log`).
+- הבנייה המלאה, ‏typecheck, ‏test, ‏lint, ‏a11y ו-e2e רצו שוב אחרי עמוד הבדיקה, וכולן עברו. הפלטים ב-`qa/reports/2026-11-03-site-test-page/`.

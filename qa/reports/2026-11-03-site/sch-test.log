@@ -5,9 +5,9 @@
 
 [1m[46m RUN [49m[22m [36mv4.0.8 [39m[90m/home/user/homedesign-app/site[39m
 
-(node:3474) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(node:2116) ExperimentalWarning: SQLite is an experimental feature and might change at any time
 (Use `node --trace-warnings ...` to show where the warning was created)
- [32m✓[39m shared/test/options.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 232[2mms[22m[39m
+ [32m✓[39m shared/test/options.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 203[2mms[22m[39m
 [90mstdout[2m | shared/test/shared.test.ts[2m > [22m[2mrepo data against the derived schemas[2m > [22m[2mevery product card outside the shared pool parses, or is a DS-API draft whose only gaps are its unfilled draft fields
 [22m[39mdraft cards (DS API, colors / visual_weight unfilled): 68
 
@@ -17,17 +17,16 @@
 [90mstderr[2m | api/test/api.test.ts[2m > [22m[2mpayment webhook[2m > [22m[2mrejects bad and stale signatures
 [22m[39mpayment webhook rejected mock stale
 
- [32m✓[39m web/test/product-bits.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 32[2mms[22m[39m
- [32m✓[39m web/test/product-gallery.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 9[2mms[22m[39m
- [32m✓[39m api/test/api.test.ts [2m([22m[2m22 tests[22m[2m)[22m[33m 898[2mms[22m[39m
-     [33m[2m✓[22m[39m verifies Access JWTs (signature, aud, iss, exp) [33m 390[2mms[22m[39m
- [32m✓[39m shared/test/shared.test.ts [2m([22m[2m29 tests[22m[2m)[22m[33m 1268[2mms[22m[39m
-     [33m[2m✓[22m[39m agrees with studio/build.py on the real cards [33m 851[2mms[22m[39m
- [32m✓[39m web/test/option-picker.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m web/test/product-bits.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 33[2mms[22m[39m
+ [32m✓[39m web/test/product-gallery.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m api/test/api.test.ts [2m([22m[2m22 tests[22m[2m)[22m[33m 746[2mms[22m[39m
+ [32m✓[39m web/test/option-picker.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m shared/test/shared.test.ts [2m([22m[2m29 tests[22m[2m)[22m[33m 1151[2mms[22m[39m
+     [33m[2m✓[22m[39m agrees with studio/build.py on the real cards [33m 694[2mms[22m[39m
 
 [2m Test Files [22m [1m[32m6 passed[39m[22m[90m (6)[39m
 [2m      Tests [22m [1m[32m73 passed[39m[22m[90m (73)[39m
-[2m   Start at [22m 14:58:41
-[2m   Duration [22m 2.85s[2m (transform 1.54s, setup 0ms, collect 4.68s, tests 2.44s, environment 1ms, prepare 42ms)[22m
+[2m   Start at [22m 20:54:58
+[2m   Duration [22m 1.75s[2m (transform 901ms, setup 0ms, collect 1.60s, tests 2.16s, environment 1ms, prepare 33ms)[22m
 
 test exit 0

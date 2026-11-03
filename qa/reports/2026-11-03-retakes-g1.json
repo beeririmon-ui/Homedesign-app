@@ -9,6 +9,8 @@
   {
    "frame": "W0-in r2",
    "kind": "retake",
+   "may_reference": "no: the desk slab and drawer sit 39-46 px above the clay lines (named edges); pen cup about 1.4x its box",
+   "may_pan_endpoint": "no: a video endpoint (V4 / T-HW), and its lock fails",
    "base": "W0",
    "kept_file": "assets/renders/poses/nordic/v7/pose-w0-in-v7-r2-graded-v3.png",
    "raw_file": "assets/renders/poses/nordic/v7/pose-w0-in-v7-r2.png",
@@ -86,7 +88,8 @@
      "threshold": "global shift <= 9.6 px and scale within 0.5 %; residual <= 9.6 px (video endpoint; render-agent applied the 2 px pan rule)",
      "passed": false,
      "binding": true,
-     "note": "principle binding (house plan frame_checks, Bible 'תנועה'); the numbers are the gates document's proposals (C3)"
+     "note": "principle binding (house plan frame_checks, Bible 'תנועה'); the numbers are the gates document's proposals (C3)",
+     "pass": false
     },
     {
      "id": "G1.3",
@@ -110,7 +113,8 @@
      },
      "threshold": "every clear edge of a fixed piece within +-19 px (+-0.01 of 1920), width / height ratios 0.95-1.05; products inside their box +-15 % (eye on the sheet)",
      "passed": false,
-     "binding": false
+     "binding": false,
+     "pass": false
     },
     {
      "id": "G1.1",
@@ -130,7 +134,8 @@
      },
      "threshold": "every product is the card's SKU: same silhouette, count, pattern, material; 0 deviations",
      "passed": false,
-     "binding": true
+     "binding": true,
+     "pass": false
     },
     {
      "id": "G1.7/G1.8",
@@ -158,7 +163,8 @@
      "threshold": "the lit wall by the window in the Bible range (bath 1.6: 86-90; others 90-94); test page: graded to the target (V7Q4)",
      "passed": true,
      "binding": true,
-     "note": null
+     "note": null,
+     "pass": true
     },
     {
      "id": "G1.9",
@@ -172,7 +178,8 @@
      },
      "threshold": "black point L 12-15 (darkest 0.5 % patch); wall H 32-40; near-white chroma C* <= 7 on the warm-white wall (B4 working value)",
      "passed": true,
-     "binding": true
+     "binding": true,
+     "pass": true
     },
     {
      "id": "G1.13",
@@ -186,7 +193,8 @@
      },
      "threshold": "window the brightest, p99 <= 97, no 255 channel; roll-off from L 94",
      "passed": true,
-     "binding": true
+     "binding": true,
+     "pass": true
     },
     {
      "id": "G1.12",
@@ -198,7 +206,8 @@
      },
      "threshold": "0 violations of the closed list (Bible 'אסור', recipe 2.7)",
      "passed": true,
-     "binding": true
+     "binding": true,
+     "pass": true
     },
     {
      "id": "OVS",
@@ -214,7 +223,8 @@
      },
      "threshold": "3 % overscan on every still in a pan of 21 deg or more; the -frame file = the centre crop",
      "passed": true,
-     "binding": false
+     "binding": false,
+     "pass": true
     },
     {
      "id": "G1.14",
@@ -231,7 +241,8 @@
      "threshold": "<= 2 px per band and mean dL <= 1 in the overlap of a pan pair; the same objects in both (eye)",
      "passed": null,
      "binding": true,
-     "note": "principle binding (Bible 'תנועה: אסור'); numbers proposal (transitions render plan 7.1); W0 -> W0-in is a dolly: no pan check, endpoints sheet by eye"
+     "note": "principle binding (Bible 'תנועה: אסור'); numbers proposal (transitions render plan 7.1); W0 -> W0-in is a dolly: no pan check, endpoints sheet by eye",
+     "pass": null
     },
     {
      "id": "G8.6",
@@ -244,7 +255,8 @@
      },
      "threshold": "every baked card live at the supplier (checked within 7 days)",
      "passed": false,
-     "binding": true
+     "binding": true,
+     "pass": false
     },
     {
      "id": "G1.17",
@@ -267,7 +279,8 @@
      },
      "threshold": "2K draft, 16:9 (centre crop of the overscan canvas), prompt record per job",
      "passed": true,
-     "binding": true
+     "binding": true,
+     "pass": true
     }
    ],
    "verdict": "fail",
@@ -303,6 +316,8 @@
   {
    "frame": "K-girl-0 r2",
    "kind": "retake",
+   "may_reference": "no: framing now follows the clay (fixed furniture within +-11 px), but the prints are 1.7x and the doll 2x their clay boxes",
+   "may_pan_endpoint": "no: K-girl -> K-girl-0 30.6 px in the reliable band (2 px)",
    "base": "K-girl",
    "kept_file": "assets/renders/poses/nordic/v7/pose-k-girl-0-v7-r2-graded-v3.png",
    "raw_file": "assets/renders/poses/nordic/v7/pose-k-girl-0-v7-r2.png",
@@ -370,7 +385,8 @@
      "threshold": "global shift <= 9.6 px and scale within 0.5 %; residual per band / tile after register <= 2 px (pan endpoint)",
      "passed": false,
      "binding": true,
-     "note": "principle binding (house plan frame_checks, Bible 'תנועה'); the numbers are the gates document's proposals (C3)"
+     "note": "principle binding (house plan frame_checks, Bible 'תנועה'); the numbers are the gates document's proposals (C3)",
+     "pass": false
     },
     {
      "id": "G1.3",
@@ -392,7 +408,8 @@
      },
      "threshold": "every clear edge of a fixed piece within +-19 px (+-0.01 of 1920), width / height ratios 0.95-1.05; products inside their box +-15 % (eye on the sheet)",
      "passed": false,
-     "binding": false
+     "binding": false,
+     "pass": false
     },
     {
      "id": "G1.1",
@@ -411,7 +428,8 @@
      },
      "threshold": "every product is the card's SKU: same silhouette, count, pattern, material; 0 deviations",
      "passed": false,
-     "binding": true
+     "binding": true,
+     "pass": false
     },
     {
      "id": "G1.7/G1.8",
@@ -439,7 +457,8 @@
      "threshold": "the lit wall by the window in the Bible range (bath 1.6: 86-90; others 90-94); test page: graded to the target (V7Q4)",
      "passed": true,
      "binding": true,
-     "note": null
+     "note": null,
+     "pass": true
     },
     {
      "id": "G1.9",
@@ -453,7 +472,8 @@
      },
      "threshold": "black point L 12-15 (darkest 0.5 % patch); wall H 32-40; near-white chroma C* <= 7 on the warm-white wall (B4 working value)",
      "passed": true,
-     "binding": true
+     "binding": true,
+     "pass": true
     },
     {
      "id": "G1.13",
@@ -467,7 +487,8 @@
      },
      "threshold": "window the brightest, p99 <= 97, no 255 channel; roll-off from L 94",
      "passed": true,
-     "binding": true
+     "binding": true,
+     "pass": true
     },
     {
      "id": "G1.12",
@@ -479,7 +500,8 @@
      },
      "threshold": "0 violations of the closed list (Bible 'אסור', recipe 2.7)",
      "passed": true,
-     "binding": true
+     "binding": true,
+     "pass": true
     },
     {
      "id": "OVS",
@@ -495,7 +517,8 @@
      },
      "threshold": "3 % overscan on every still in a pan of 21 deg or more; the -frame file = the centre crop",
      "passed": true,
-     "binding": false
+     "binding": false,
+     "pass": true
     },
     {
      "id": "G1.14",
@@ -523,7 +546,8 @@
      "threshold": "<= 2 px per band and mean dL <= 1 in the overlap of a pan pair; the same objects in both (eye)",
      "passed": false,
      "binding": true,
-     "note": "principle binding (Bible 'תנועה: אסור'); numbers proposal (transitions render plan 7.1); W0 -> W0-in is a dolly: no pan check, endpoints sheet by eye"
+     "note": "principle binding (Bible 'תנועה: אסור'); numbers proposal (transitions render plan 7.1); W0 -> W0-in is a dolly: no pan check, endpoints sheet by eye",
+     "pass": false
     },
     {
      "id": "G8.6",
@@ -534,7 +558,8 @@
      },
      "threshold": "every baked card live at the supplier (checked within 7 days)",
      "passed": false,
-     "binding": true
+     "binding": true,
+     "pass": false
     },
     {
      "id": "G1.17",
@@ -557,7 +582,8 @@
      },
      "threshold": "2K draft, 16:9 (centre crop of the overscan canvas), prompt record per job",
      "passed": true,
-     "binding": true
+     "binding": true,
+     "pass": true
     }
    ],
    "verdict": "fail",
@@ -593,6 +619,8 @@
   {
    "frame": "B1 r3",
    "kind": "retake",
+   "may_reference": "geometry only, after a code fix (plinth out, basket down to the floor, brush x0.73) and a G1 re-run: every named line within +-5 px, bands <= 0.96 px after register",
+   "may_pan_endpoint": "after the same fix and G1 re-run (T-CBath via a re-composed CB-0, P-B start); not as it is",
    "base": "B1",
    "kept_file": "assets/renders/bath/nordic/v7/b1-v7-r3-graded-v3.png",
    "raw_file": "assets/renders/bath/nordic/v7/b1-v7-r3.png",
@@ -670,7 +698,8 @@
      "threshold": "global shift <= 9.6 px and scale within 0.5 %; residual per band / tile after register <= 2 px (pan endpoint)",
      "passed": false,
      "binding": true,
-     "note": "principle binding (house plan frame_checks, Bible 'תנועה'); the numbers are the gates document's proposals (C3)"
+     "note": "principle binding (house plan frame_checks, Bible 'תנועה'); the numbers are the gates document's proposals (C3)",
+     "pass": false
     },
     {
      "id": "G1.3",
@@ -709,7 +738,8 @@
      },
      "threshold": "every clear edge of a fixed piece within +-19 px (+-0.01 of 1920), width / height ratios 0.95-1.05; products inside their box +-15 % (eye on the sheet)",
      "passed": false,
-     "binding": false
+     "binding": false,
+     "pass": false
     },
     {
      "id": "G1.1",
@@ -728,7 +758,8 @@
      },
      "threshold": "every product is the card's SKU: same silhouette, count, pattern, material; 0 deviations",
      "passed": false,
-     "binding": true
+     "binding": true,
+     "pass": false
     },
     {
      "id": "G1.7/G1.8",
@@ -756,7 +787,8 @@
      "threshold": "the lit wall by the window in the Bible range (bath 1.6: 86-90; others 90-94); test page: graded to the target (V7Q4)",
      "passed": true,
      "binding": true,
-     "note": null
+     "note": null,
+     "pass": true
     },
     {
      "id": "G1.9",
@@ -770,7 +802,8 @@
      },
      "threshold": "black point L 12-15 (darkest 0.5 % patch); wall H 32-40; near-white chroma C* <= 7 on the warm-white wall (B4 working value)",
      "passed": true,
-     "binding": true
+     "binding": true,
+     "pass": true
     },
     {
      "id": "G1.13",
@@ -784,7 +817,8 @@
      },
      "threshold": "window the brightest, p99 <= 97, no 255 channel; roll-off from L 94",
      "passed": true,
-     "binding": true
+     "binding": true,
+     "pass": true
     },
     {
      "id": "G1.12",
@@ -798,7 +832,8 @@
      },
      "threshold": "0 violations of the closed list (Bible 'אסור', recipe 2.7)",
      "passed": false,
-     "binding": true
+     "binding": true,
+     "pass": false
     },
     {
      "id": "G1.6",
@@ -840,7 +875,8 @@
      "threshold": "test frames (studio rules 2.11): every slot with an approved product filled; final assets: V7Q6 (2.13) 11 / half for the second frame, room 15, 4 of 5 categories",
      "passed": true,
      "binding": true,
-     "note": "the test rule decides for this round; the V7Q6 column is an estimate from clay boxes"
+     "note": "the test rule decides for this round; the V7Q6 column is an estimate from clay boxes",
+     "pass": true
     },
     {
      "id": "OVS",
@@ -856,7 +892,8 @@
      },
      "threshold": "3 % overscan on every still in a pan of 21 deg or more; the -frame file = the centre crop",
      "passed": true,
-     "binding": false
+     "binding": false,
+     "pass": true
     },
     {
      "id": "G1.14",
@@ -894,7 +931,8 @@
      "threshold": "<= 2 px per band and mean dL <= 1 in the overlap of a pan pair; the same objects in both (eye)",
      "passed": false,
      "binding": true,
-     "note": "principle binding (Bible 'תנועה: אסור'); numbers proposal (transitions render plan 7.1); W0 -> W0-in is a dolly: no pan check, endpoints sheet by eye"
+     "note": "principle binding (Bible 'תנועה: אסור'); numbers proposal (transitions render plan 7.1); W0 -> W0-in is a dolly: no pan check, endpoints sheet by eye",
+     "pass": false
     },
     {
      "id": "G8.6",
@@ -905,7 +943,8 @@
      },
      "threshold": "every baked card live at the supplier (checked within 7 days)",
      "passed": false,
-     "binding": true
+     "binding": true,
+     "pass": false
     },
     {
      "id": "G1.17",
@@ -928,7 +967,8 @@
      },
      "threshold": "2K draft, 16:9 (centre crop of the overscan canvas), prompt record per job",
      "passed": true,
-     "binding": true
+     "binding": true,
+     "pass": true
     }
    ],
    "verdict": "fail",
@@ -970,6 +1010,8 @@
   {
    "frame": "B2 r3",
    "kind": "retake",
+   "may_reference": "no: vanity right edge -43 px (0.954), basket 1.18x, an object reflected in the mirror",
+   "may_pan_endpoint": "no: P-B 5.7 px (2 px); the basket differs in size from B1 r3",
    "base": "B1",
    "kept_file": "assets/renders/bath/nordic/v7/b2-v7-r3-graded-v3.png",
    "raw_file": "assets/renders/bath/nordic/v7/b2-v7-r3.png",
@@ -1052,7 +1094,8 @@
      "threshold": "global shift <= 9.6 px and scale within 0.5 %; residual per band / tile after register <= 2 px (pan endpoint)",
      "passed": false,
      "binding": true,
-     "note": "principle binding (house plan frame_checks, Bible 'תנועה'); the numbers are the gates document's proposals (C3)"
+     "note": "principle binding (house plan frame_checks, Bible 'תנועה'); the numbers are the gates document's proposals (C3)",
+     "pass": false
     },
     {
      "id": "G1.3",
@@ -1089,7 +1132,8 @@
      },
      "threshold": "every clear edge of a fixed piece within +-19 px (+-0.01 of 1920), width / height ratios 0.95-1.05; products inside their box +-15 % (eye on the sheet)",
      "passed": false,
-     "binding": false
+     "binding": false,
+     "pass": false
     },
     {
      "id": "G1.1",
@@ -1109,7 +1153,8 @@
      },
      "threshold": "every product is the card's SKU: same silhouette, count, pattern, material; 0 deviations",
      "passed": false,
-     "binding": true
+     "binding": true,
+     "pass": false
     },
     {
      "id": "G1.7/G1.8",
@@ -1130,7 +1175,8 @@
      "threshold": "the lit wall by the window in the Bible range (bath 1.6: 86-90; others 90-94); test page: graded to the target (V7Q4)",
      "passed": null,
      "binding": true,
-     "note": "B2 inherits B1's stops (one exposure per camera point); its wall beside the mirror has no Bible number: 81.9 is a reading, not a verdict"
+     "note": "B2 inherits B1's stops (one exposure per camera point); its wall beside the mirror has no Bible number: 81.9 is a reading, not a verdict",
+     "pass": null
     },
     {
      "id": "G1.9",
@@ -1144,7 +1190,8 @@
      },
      "threshold": "black point L 12-15 (darkest 0.5 % patch); wall H 32-40; near-white chroma C* <= 7 on the warm-white wall (B4 working value)",
      "passed": true,
-     "binding": true
+     "binding": true,
+     "pass": true
     },
     {
      "id": "G1.13",
@@ -1158,7 +1205,8 @@
      },
      "threshold": "window the brightest, p99 <= 97, no 255 channel; roll-off from L 94",
      "passed": true,
-     "binding": true
+     "binding": true,
+     "pass": true
     },
     {
      "id": "G1.12",
@@ -1172,7 +1220,8 @@
      },
      "threshold": "0 violations of the closed list (Bible 'אסור', recipe 2.7)",
      "passed": false,
-     "binding": true
+     "binding": true,
+     "pass": false
     },
     {
      "id": "G1.6",
@@ -1214,7 +1263,8 @@
      "threshold": "test frames (studio rules 2.11): every slot with an approved product filled; final assets: V7Q6 (2.13) 11 / half for the second frame, room 15, 4 of 5 categories",
      "passed": true,
      "binding": true,
-     "note": "the test rule decides for this round; the V7Q6 column is an estimate from clay boxes"
+     "note": "the test rule decides for this round; the V7Q6 column is an estimate from clay boxes",
+     "pass": true
     },
     {
      "id": "OVS",
@@ -1230,7 +1280,8 @@
      },
      "threshold": "3 % overscan on every still in a pan of 21 deg or more; the -frame file = the centre crop",
      "passed": true,
-     "binding": false
+     "binding": false,
+     "pass": true
     },
     {
      "id": "G1.14",
@@ -1268,7 +1319,8 @@
      "threshold": "<= 2 px per band and mean dL <= 1 in the overlap of a pan pair; the same objects in both (eye)",
      "passed": false,
      "binding": true,
-     "note": "principle binding (Bible 'תנועה: אסור'); numbers proposal (transitions render plan 7.1); W0 -> W0-in is a dolly: no pan check, endpoints sheet by eye"
+     "note": "principle binding (Bible 'תנועה: אסור'); numbers proposal (transitions render plan 7.1); W0 -> W0-in is a dolly: no pan check, endpoints sheet by eye",
+     "pass": false
     },
     {
      "id": "G8.6",
@@ -1279,7 +1331,8 @@
      },
      "threshold": "every baked card live at the supplier (checked within 7 days)",
      "passed": false,
-     "binding": true
+     "binding": true,
+     "pass": false
     },
     {
      "id": "G1.17",
@@ -1302,7 +1355,8 @@
      },
      "threshold": "2K draft, 16:9 (centre crop of the overscan canvas), prompt record per job",
      "passed": true,
-     "binding": true
+     "binding": true,
+     "pass": true
     }
    ],
    "verdict": "fail",
@@ -1736,7 +1790,7 @@
    "px255": 0,
    "B5": null,
    "near_white_C_median": 10.17,
-   "qa_all_bible_checks": true,
+   "qa_all_bible_checks": null,
    "qa_failed": []
   },
   {
@@ -2053,7 +2107,7 @@
    "px255": 0,
    "B5": null,
    "near_white_C_median": 4.58,
-   "qa_all_bible_checks": true,
+   "qa_all_bible_checks": null,
    "qa_failed": []
   },
   {
@@ -2323,7 +2377,7 @@
    "px255": 0,
    "B5": null,
    "near_white_C_median": 7.72,
-   "qa_all_bible_checks": true,
+   "qa_all_bible_checks": null,
    "qa_failed": []
   },
   {
@@ -2516,7 +2570,7 @@
    "px255": 0,
    "B5": null,
    "near_white_C_median": 4.93,
-   "qa_all_bible_checks": true,
+   "qa_all_bible_checks": null,
    "qa_failed": []
   }
  ],

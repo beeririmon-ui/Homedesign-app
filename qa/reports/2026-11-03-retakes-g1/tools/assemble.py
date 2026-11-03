@@ -60,6 +60,12 @@ EYE_FORBIDDEN = {
     "B2 r3": dict(violations=["an object reflected in the U6 mirror (a small dark bracket / line in the top-left corner of the glass): F8 asks for wall only; the prompt's NOT IN FRAME lists 'any object reflected in the mirror'"],
                   notes=["0 pixels at 255; no window, no snow; no cable, text, people; nothing on the vanity beyond the three products of the surface group"]),
 }
+MAY = {
+    "W0-in r2": ("no: the desk slab and drawer sit 39-46 px above the clay lines (named edges); pen cup about 1.4x its box", "no: a video endpoint (V4 / T-HW), and its lock fails"),
+    "K-girl-0 r2": ("no: framing now follows the clay (fixed furniture within +-11 px), but the prints are 1.7x and the doll 2x their clay boxes", "no: K-girl -> K-girl-0 30.6 px in the reliable band (2 px)"),
+    "B1 r3": ("geometry only, after a code fix (plinth out, basket down to the floor, brush x0.73) and a G1 re-run: every named line within +-5 px, bands <= 0.96 px after register", "after the same fix and G1 re-run (T-CBath via a re-composed CB-0, P-B start); not as it is"),
+    "B2 r3": ("no: vanity right edge -43 px (0.954), basket 1.18x, an object reflected in the mirror", "no: P-B 5.7 px (2 px); the basket differs in size from B1 r3"),
+}
 SERVES = {"W0-in r2": ["V4 pull-back / T-HW (end)"], "K-girl-0 r2": ["T-CGirl pan (start)", "V8 slide (end)"], "B1 r3": ["T-CBath pan (end)", "P-B pan (start)", "CB-0 re-composite source"], "B2 r3": ["P-B pan (end)"]}
 
 records = []
@@ -146,7 +152,9 @@ for sid in C.RETAKES:
     failed_p = [c["id"] for c in crit if not c["binding"] and c["passed"] is False]
     cannot = ["G1.2", "G1.5", "G1.11", "G1.15", "G1.16"] + ([] if sid in ("B1 r3", "B2 r3") else ["G1.6 (pose)"])
     verdict = "fail" if failed_b else "pass"
-    records.append(dict(frame=sid, kind="retake", base=C.STILLS[sid][9], kept_file=C.STILLS[sid][2], raw_file=C.STILLS[sid][3], clay=lock[sid]["clay"], criteria=crit, verdict=verdict,
+    for c in crit:
+        c["pass"] = c["passed"]                       # the brief's field name; `passed` kept for the tools
+    records.append(dict(frame=sid, kind="retake", may_reference=MAY[sid][0], may_pan_endpoint=MAY[sid][1], base=C.STILLS[sid][9], kept_file=C.STILLS[sid][2], raw_file=C.STILLS[sid][3], clay=lock[sid]["clay"], criteria=crit, verdict=verdict,
                         failed_binding=failed_b, failed_proposal=failed_p, cannot_measure=cannot, serves=SERVES[sid],
                         products_unverified=p["unverified"], products_live=p["live"]))
 
@@ -201,7 +209,7 @@ for sid in C.V3_ROWS + C.RETAKES:
                         window_wall_L=(ww or {}).get("graded_HSL", [None, None, None])[2], window_wall_ok=ww_ok, black_frame=L["black_point_L"], black_ok=L["black_point_ok_12_15"],
                         black_agent_window=L.get("black_agent_window"), black_at_threshold=L.get("black_at_threshold"),
                         rolloff_ok=L["rolloff_ok"], frame_max=L["frame_L_max"], px255=L["px_255"], B5=b5, near_white_C_median=L.get("near_white_B4", {}).get("C_median"),
-                        qa_all_bible_checks=bool(all(all_bible)), qa_failed=[n for n, x in zip(("lit wall", "hue 32-40", "C* <= 7", "black 12-15", "roll-off", "window wall 80-88", "B5"), (lit_ok, hue_ok, c_ok, L["black_point_ok_12_15"], L["rolloff_ok"], ww_ok, b5)) if x is False]))
+                        qa_all_bible_checks=(None if (lit_ok is None and hue_ok is None and c_ok is None and sid not in ("H0", "H0x", "H0e")) else bool(all(all_bible))), qa_failed=[n for n, x in zip(("lit wall", "hue 32-40", "C* <= 7", "black 12-15", "roll-off", "window wall 80-88", "B5"), (lit_ok, hue_ok, c_ok, L["black_point_ok_12_15"], L["rolloff_ok"], ww_ok, b5)) if x is False]))
 
 out = dict(report="qa/reports/2026-11-03-retakes-g1.md", by="qa-agent", date="2026-11-03",
            gate="G1 (docs/ops/quality-gates-2026-11-02.md) on the four v8 retakes of 2026-11-03 and the grading v3 of the v7 set (26 rows)",
@@ -222,7 +230,7 @@ for g in grading:
           f"{g['window_wall_L'] if g['window_wall_L'] is not None else '-'} | {g['black_frame']} | {g['frame_max']} / {g['px255']} | {', '.join(g['qa_failed']) or 'none'} |")
 n = len(grading)
 print("agent on target:", sum(1 for g in grading[:26] if g["agent_meets_target"]), "/ 26; agent meets bible:", sum(1 for g in grading[:26] if g["agent_meets_bible"]), "/ 26")
-print("QA all Bible checks:", sum(1 for g in grading[:26] if g["qa_all_bible_checks"]), "/ 26; lit wall in range (where a target exists):", sum(1 for g in grading[:26] if g["lit_wall_ok"]), "/", sum(1 for g in grading[:26] if g["lit_wall_ok"] is not None))
+print("QA all Bible checks:", sum(1 for g in grading[:26] if g["qa_all_bible_checks"]), "/ 26; cannot judge:", [g["still"] for g in grading[:26] if g["qa_all_bible_checks"] is None], "; lit wall in range (where a target exists):", sum(1 for g in grading[:26] if g["lit_wall_ok"]), "/", sum(1 for g in grading[:26] if g["lit_wall_ok"] is not None))
 print("hue out:", [g["still"] for g in grading if g["hue_32_40"] is False], "| C* > 7:", [g["still"] for g in grading if g["labC_le_7"] is False], "| black out:", [g["still"] for g in grading if not g["black_ok"]],
       "| window wall out:", [g["still"] for g in grading if g["window_wall_ok"] is False])
 print()
