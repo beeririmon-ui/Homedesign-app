@@ -1,0 +1,297 @@
+{
+ "asset_id": "pose-w0-in-v7-r2",
+ "room": "work",
+ "style": "nordic",
+ "frame": "W0-in",
+ "recipe": "B (gpt-image-2-5 sunburst), recipe v8 retake (docs/render-recipe-nordic-v8-2026-11-03.md: cut-outs with sizes and u/v, SCALE paragraph, lock_v2 acceptance, grading v3) - transition pose, route R",
+ "stage": "Nordic walk-through test, v8 retakes after the decisions meeting of 2026-11-03 (briefs/render-v7-retakes-2026-11-03.md); 2K, not a site asset",
+ "date": "2026-11-03",
+ "tool": "var2 MCP var2_create_image",
+ "model": "gpt-image-2-5",
+ "type": "image-to-image",
+ "resolution": "2K",
+ "quality": "sunburst",
+ "aspect_ratio": "16:9",
+ "returned_size_px": [
+  2736,
+  1536
+ ],
+ "seed": null,
+ "seed_note": "model exposes no seed; a regenerate is a new sample",
+ "input_image": {
+  "local": "assets/blockout/house/framing/round4/poses/W0-in.png",
+  "sha256": "02c3eb753ecab1354be2d321a3f94b8a46b5d41cc2efe8469ddf0d5865a1cae6",
+  "var2_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/f381d9bb-49b3-4d41-be99-7f0a2c47b62d.png",
+  "upload": "var2_request_upload + PUT (curl); downloaded back, sha256 identical"
+ },
+ "image_refs": [
+  {
+   "n": 1,
+   "var2_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/5df93ac8-8b22-4949-be4e-3821c547278f.jpg"
+  },
+  {
+   "n": 2,
+   "var2_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/01c0ce82-d175-4e67-a695-616ff3ef3c0d.jpg"
+  },
+  {
+   "n": 3,
+   "var2_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/a6c39bee-9f7a-47cf-9769-a9c0c27cffff.jpg"
+  },
+  {
+   "n": 4,
+   "var2_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/b9aafa1f-83a2-4dc0-966d-7eaa27d45284.jpg"
+  },
+  {
+   "n": 5,
+   "var2_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/790dab1a-0646-441b-8f59-fdd8135adba9.jpg"
+  },
+  {
+   "n": 6,
+   "var2_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/e089eb9f-4a39-49a6-9d73-5a09bdd91acd.jpg"
+  },
+  {
+   "n": 7,
+   "var2_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/7c0d3462-89be-4386-967a-19fb681e3316.jpg"
+  },
+  {
+   "n": 8,
+   "var2_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/e72f0820-f41b-460f-97cf-33f0da528871.jpg"
+  },
+  {
+   "n": 9,
+   "var2_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/a6d8b5bf-265b-4613-a144-91745a0b8053.jpg"
+  },
+  {
+   "n": 10,
+   "var2_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/8c166be2-562f-4b6a-af9a-4d037b5aa6b0.jpg"
+  },
+  {
+   "n": 11,
+   "var2_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/dad391d8-7465-4c2c-baca-cddc92624896.jpg"
+  }
+ ],
+ "negative_prompt": null,
+ "negative_note": "no negative field; the prohibitions are the last paragraph of the prompt",
+ "prompt": "Use the attached clay render as the exact blueprint. Keep every wall, opening, cornice, skirting, floor and ceiling line, the camera height, lens and angle, and the position, size and angle of every furniture piece and built-in exactly as in the clay. Move, resize, add or remove nothing. Each placeholder shape in the clay marks one product listed below; render it there at the stated size. Only turn the clay into real materials and light. Positions are fractions of frame width (x) and height (y) from the top-left.\n\n1. PHOTO. One frame of a slow camera move into a small Nordic study, 2.2 m from the desk wall. 24 mm shift lens at 1.1 m, level, one-point symmetric, straight verticals, all sharp. Close and intimate: the shelf spans the top of the frame, the desk top's front edge runs low across the frame, the chair back fills the bottom centre, the plant fills the left edge.\n\nSCALE: the clay is also the size of everything. Every wall, skirting line and piece of fixed furniture stays exactly where the clay draws it and exactly as large: the 160 cm built-in oak desk spans x 0.17-0.83, its top's front edge at y 0.71-0.74, its side panels running to the bottom edge; the 160 cm oak shelf spans x 0.22-0.78 at y 0.12-0.18; the chair back spans x 0.36-0.64 from y 0.78 to the bottom edge. Never enlarge or shrink a piece to match a cut-out: the cut-outs were taken from a different, farther camera and show the same pieces smaller. If a piece looks wrong in size, keep the clay's size.\n\nCUT-OUTS. Images 1-6 are cut-outs of a photograph of this same room from farther back: they give materials, colours, grain and light only, never framing, position or scale. 1 desk top, drawer front and pen cup; 2 shelf with the two felt bins; 3 the plant in its seagrass belly basket; 4 under the desk: rope basket, kraft bin, skirting, planks; 5 chair back; 6 wall, skirting and planks at the right corner. Images 7-11 are close-ups of the exact products: match their form, colour and texture.\n\n2. LIGHT. As in the cut-outs: one key, soft winter daylight from the window just out of frame on the left, no sun. No lamp is lit. Exposed for white: the desk wall by the left corner clean white, falling off smoothly half a stop to the right corner. The plant's leaves backlit at the left edge, a few translucent. The shelf draws a soft shadow line on the wall below it; a long soft window highlight along the desk top; the chair back lit on its left, a stop darker on its right; dense contact shadows under the baskets. Real contrast, never milky. 4600 K: whites white, never cream or grey.\n\n3. MATERIALS. Matte mineral paint #F4F1EC, faint chalky movement in the raking light. Wide oiled white-oak planks, pale honey #D6BF9E. Built-in desk with a drawer, floating shelf and chair: oiled light oak #C8A27A, satin sheen, exactly the oak of cut-outs 1, 2 and 5.\n\n4. PRODUCTS, one per line, each on its clay placeholder and each the same object as in its cut-out:\nc. BASKET under the desk, left, x 0.27-0.35, y 0.91-1.00: the empty cream cotton rope basket of cut-out 4, cut by the bottom edge.\nd. BIN under the desk, right, x 0.65-0.74, y 0.94-1.00: the mist-grey kraft-paper bin of cut-out 4, rolled cuff, cut by the bottom edge.\ne. PLANTER at the left edge, x 0.00-0.21, from y 0.31 down: the 38 cm seagrass belly basket with the same leafy plant as cut-out 3, its crown rising to about the shelf's height, leaves crossing the left edge.\nf. FELT BINS at both shelf ends, x 0.27-0.385 and 0.615-0.73, y 0.03-0.115: the two light-grey felt bins of cut-out 2; the shelf centre bare.\ng. PEN CUP on the desk, x 0.32-0.35, y 0.58-0.66: the white speckled stone cup with 4-6 natural wood pencils of cut-out 1; the rest of the desk bare.\n\n5. NOT IN FRAME: window, curtain, rug, artwork, bookends, books, any lamp, tray, magazines, laptop, papers, mirror, socket, cable, text, people. No snow anywhere. No sun patches, beams, bloom, haze, halos, HDR, grain or vignette.",
+ "prompt_source": "assets/prompts/poses-v7.nordic/pose-w0-in-v7-r2-v8.txt",
+ "prompt_chars": 3951,
+ "prompt_deviation": "lines starting with # stripped; positions already in canvas fractions (no conversion)",
+ "idempotency_key": "v8-pose-w0-in-v7-r2-20261103-a1",
+ "var2": {
+  "placeholder_id": "f79552fc-3951-4fc9-9a17-cc8c6a9bfa3e",
+  "task_id": "9ac4f73d98c8a4e71a27fb0f50466cda",
+  "result_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/gpt25-9ac4f73d98c8a4e71a27fb0f50466cda-0-1793707224540-c368dcdf.png",
+  "share_url": "https://www.var2.ai/image/f79552fc-3951-4fc9-9a17-cc8c6a9bfa3e"
+ },
+ "credits_estimated": 600,
+ "credits": 600,
+ "attempt": 1,
+ "attempt_note": "first and only attempt (one attempt per prompt, recipe v8 2.3)",
+ "grade": {
+  "applied": true,
+  "script": "assets/renders/house-nordic-v7-2026-11-02/process_v8.py --exposure bible",
+  "params": {
+   "order": "v2",
+   "exposure_mode": "bible",
+   "white_balance": {
+    "patch": [
+     0.5,
+     0.4
+    ],
+    "H_before": 30.2,
+    "H_target": 36,
+    "gains_rgb": [
+     0.9909,
+     1.0037,
+     0.9909
+    ],
+    "gain_clip": "0.9-1.1",
+    "source": "desk wall between shelf and desk (0.50, 0.40), render-agent point: the clay's reference_W0 uv is on the shelf edge in this pose"
+   },
+   "exposure": {
+    "patch": [
+     0.5,
+     0.4
+    ],
+    "target_L": 92.0,
+    "needed_stops": 0.124,
+    "applied_stops": 0.124,
+    "flag": "to the Bible target",
+    "solver": "bisection on the HSL L of the patch after exposure, chroma, S curve and roll-off (v3)",
+    "cap": "none: the Bible target (V7Q4, test page only); sanity +-1.5 stop",
+    "source": "desk wall between shelf and desk (0.50, 0.40), render-agent point: the clay's reference_W0 uv is on the shelf edge in this pose",
+    "target_source": "Bible 'אור' 1.4: the wall by the window L 90-94",
+    "target_range": [
+     90.0,
+     94.0
+    ]
+   },
+   "saturation": "chroma x0.90 (linear, toward luminance)",
+   "s_curve": {
+    "mix": 0.12,
+    "shape": "smoothstep blend"
+   },
+   "black_point": {
+    "darkest_patch_L_before": 6.2,
+    "lift_to_L": 12.5,
+    "blend": 0.0669
+   },
+   "near_white_chroma_guard_B4": {
+    "population": "pixels with HSL L > 80 after the grade",
+    "before": {
+     "pixels": 2031209,
+     "L_lab": 86.8,
+     "C": 5.9,
+     "C_p95": 18.61,
+     "hue": 77.4
+    },
+    "after": {
+     "pixels": 2031209,
+     "L_lab": 91.2,
+     "C": 5.15,
+     "C_p95": 15.79,
+     "hue": 85.9
+    },
+    "delta_C": -0.75,
+    "limit": 1.5,
+    "applied": "none (within +1.5 C)"
+   },
+   "highlight_rolloff": {
+    "knee_L": 94,
+    "asymptote_L": 97.0,
+    "on": "max channel, hue kept",
+    "position": "last (v2): the ceiling of the chain"
+   },
+   "grain": "none",
+   "vignette": "none"
+  },
+  "bible_v3": {
+   "reference_point": [
+    0.5,
+    0.4
+   ],
+   "reference_source": "desk wall between shelf and desk (0.50, 0.40), render-agent point: the clay's reference_W0 uv is on the shelf edge in this pose",
+   "target_L": 92.0,
+   "range": [
+    90.0,
+    94.0
+   ],
+   "measured_L": 92.4,
+   "meets_target": true,
+   "target_source": "Bible 'אור' 1.4: the wall by the window L 90-94",
+   "judged_by": "own reference wall",
+   "reference_HSL": [
+    36.2,
+    28.0,
+    92.4
+   ],
+   "wall_hue_32_40_sat_15_28": true,
+   "near_white_chroma_B4": {
+    "delta_C": -0.75,
+    "ok": true
+   },
+   "meets_bible": true
+  },
+  "output": "assets/renders/poses/nordic/v7/pose-w0-in-v7-r2-graded-v3.png",
+  "rule": "grading v3 (V7Q4 yes, BIB1 all six, test page only): WB on the wall point, exposure to the Bible target of the reference wall, chroma -10 %, S curve 0.12, black point 12-15 both ways, B4 near-white chroma guard, roll-off last (ceiling L 97), no grain, no vignette"
+ },
+ "output": "assets/renders/poses/nordic/v7/pose-w0-in-v7-r2.png",
+ "output_raw": "assets/renders/poses/nordic/v7/raw/pose-w0-in-v7-r2.png",
+ "image_refs_source": "assets/renders/house-nordic-v7-2026-11-02/refs/index-retakes-2026-11-03.json (cut-outs, product images) + refs/index-v7.json and poses.json (product close-ups); 1-6 cut-outs of w0-v7-graded-fix-v3; 7-11 = W0-in.txt product refs (rope basket, kraft bin, seagrass belly, felt bins, pen cup) = w0-v7.txt refs 2-6",
+ "normalised_16_9": "non-uniform resize [2736, 1536] -> [2736, 1539], no crop",
+ "overscan": {
+  "on": false
+ },
+ "lock_v2": {
+  "method": "lock_v2 (register + bands + ECC tiles + fixed edges)",
+  "summary": {
+   "register_shift_px": [
+    -9.56,
+    -2.24
+   ],
+   "register_scale": [
+    1.00544,
+    0.99713
+   ],
+   "register_scale_pct": [
+    0.54,
+    -0.29
+   ],
+   "worst_band_px": 39.37,
+   "bands_reliable": 2,
+   "worst_band_px_after_register": 39.52,
+   "bands_reliable_after_register": 3,
+   "worst_tile_ecc_px": 21.89,
+   "tiles_counted": 7,
+   "worst_tile_ecc_px_after_register": 12.8,
+   "tiles_counted_after_register": 7,
+   "fixed_edges_worst_px": 28,
+   "fixed_edges_measured": 2,
+   "fixed_ratios": {
+    "desk chair w": 0.9893
+   }
+  },
+  "verdict": {
+   "thresholds": {
+    "shift_px": 9.6,
+    "scale_tol": 0.005,
+    "residual_px": 2.0,
+    "residual_rule": "pan endpoint: <= 2 px per band / tile after register",
+    "edge_px": 19.2,
+    "ratio": [
+     0.95,
+     1.05
+    ],
+    "source": "docs/ops/quality-gates-2026-11-02.md G1.4 (+ G1.3 ratios, proposal); qa/reports/2026-11-02-v7-g1.md section 1"
+   },
+   "global_pass": false,
+   "residual_pass": false,
+   "edges_pass": false,
+   "residual_measured": true,
+   "pass": false
+  },
+  "record": "assets/renders/poses/nordic/v7/pose-w0-in-v7-r2-lock-v2.json",
+  "overlay": "assets/renders/poses/nordic/v7/pose-w0-in-v7-r2-lock-v2.jpg",
+  "note": "acceptance check of recipe v8 2.4 at the G1.4 thresholds (every retake counted as a pan participant per the brief)"
+ },
+ "product_check": {
+  "rule": "each product inside its clay box +-15 % of the box size; read visually",
+  "overlay": "assets/renders/poses/nordic/v7/pose-w0-in-v7-r2-boxes-v3.png",
+  "boxes_clay": {
+   "work/shelf-boxes": [
+    0.268,
+    0.732,
+    0.0259,
+    0.1162
+   ],
+   "work/basket": [
+    0.2661,
+    0.3536,
+    0.9116,
+    1.0
+   ],
+   "work/planter": [
+    0.0,
+    0.2122,
+    0.3069,
+    1.0
+   ],
+   "work/waste-basket": [
+    0.6464,
+    0.737,
+    0.9403,
+    1.0
+   ],
+   "work/desk-organizer": [
+    0.3203,
+    0.3495,
+    0.5819,
+    0.6657
+   ]
+  }
+ },
+ "measurements": "assets/renders/poses/nordic/v7/pose-w0-in-v7-r2-measurements-v3.json",
+ "self_check_verdict": "",
+ "on_sheet": true,
+ "sheet": "assets/renders/house-nordic-retakes-sheet-2026-11-03.jpg"
+}

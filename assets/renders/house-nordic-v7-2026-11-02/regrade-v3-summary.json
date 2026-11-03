@@ -1,0 +1,2056 @@
+{
+ "date": "2026-11-03",
+ "script": "assets/renders/house-nordic-v7-2026-11-02/regrade_v8.py (process_v8.py --exposure bible)",
+ "rule": "Bible targets (V7Q4 yes, BIB1 all six): reference wall to its target, black point 12-15 both ways, v2 roll-off last (L <= 97, zero 255), B4 near-white chroma guard (+1.5 C max), B5 hall 2/3 stop under the living vista; B2 / M0x / K-boy-0 / K-girl-0 inherit the group stops; C0 / S1' use the G1.8 proposal (hall rule), not a Bible number",
+ "targets": {
+  "M0": {
+   "target": 93.0,
+   "lo": 92.0,
+   "hi": 95.0,
+   "source": "Bible 'אור' / 'דעיכת האור בקיר האחורי': back wall by the corner (0.467, 0.385) L 92-95"
+  },
+  "H0": {
+   "target": 93.0,
+   "lo": 92.0,
+   "hi": 95.0,
+   "source": "B5 (BIB1): the living vista through the door is the brightest, the living back wall L 92-95; hall walls 2/3 stop under it"
+  },
+  "HALL": {
+   "target": 75.7,
+   "lo": 71.2,
+   "hi": 80.6,
+   "source": "B5 (BIB1): hall walls 2/3 stop under the living back wall (93) = L 75.8, +-0.2 stop"
+  },
+  "C0": {
+   "target": 75.7,
+   "lo": 71.2,
+   "hi": 80.6,
+   "source": "G1.8 PROPOSAL (not a Bible number): entrance and corridor walls 2/3 stop under the living; the Bible 1.6 corridor has no L target"
+  },
+  "B1": {
+   "target": 88.0,
+   "lo": 86.0,
+   "hi": 90.0,
+   "source": "Bible 1.6 bath: the wall beside the fluted window L 86-90 (4000 K)"
+  },
+  "DEFAULT": {
+   "target": 92.0,
+   "lo": 90.0,
+   "hi": 94.0,
+   "source": "Bible 'אור' 1.4: the wall by the window L 90-94"
+  }
+ },
+ "frames": 26,
+ "meet_target": 25,
+ "meet_bible": 24,
+ "rows": [
+  {
+   "id": "m0-v7-r2",
+   "frame": "M0",
+   "fix": false,
+   "suffix": "-v3",
+   "target_L": 93.0,
+   "range": [
+    92.0,
+    95.0
+   ],
+   "measured_L": 93.3,
+   "meets_target": true,
+   "reference": "Bible corner point (0.467, 0.385)",
+   "target_source": "Bible 'אור' / 'דעיכת האור בקיר האחורי': back wall by the corner (0.467, 0.385) L 92-95",
+   "stops_v3": 1.007,
+   "needed_v3": 1.007,
+   "stops_v2": 0.2,
+   "delta_stops_v3_minus_v2": 0.807,
+   "flag": "to the Bible target",
+   "black": 12.5,
+   "black_point": {
+    "darkest_patch_L_before": 4.7,
+    "lift_to_L": 12.5,
+    "blend": 0.082
+   },
+   "window_p99": 96.6,
+   "frame_max": 96.6,
+   "px255": [
+    0,
+    0
+   ],
+   "wall_HSL": [
+    52.2,
+    49.6,
+    93.3
+   ],
+   "chroma_B4": {
+    "delta_C": -1.62,
+    "applied": "none (within +1.5 C)",
+    "before": {
+     "pixels": 3482539,
+     "L_lab": 74.67,
+     "C": 9.81,
+     "C_p95": 17.77,
+     "hue": 79.7
+    },
+    "after": {
+     "pixels": 3482539,
+     "L_lab": 95.47,
+     "C": 8.19,
+     "C_p95": 16.49,
+     "hue": 103.2
+    },
+    "after_guard": null
+   },
+   "window_wall": {
+    "point": "window wall (0.10,0.30)",
+    "L": 90.1,
+    "range": [
+     80.0,
+     88.0
+    ],
+    "ok": false
+   },
+   "hall_B5": null,
+   "checks": {
+    "window_p99_le_97": true,
+    "frame_L_max_le_97": true,
+    "no_255": true,
+    "black_point_12_15": true,
+    "exposure_within_cap": false,
+    "exposure_point_valid": true,
+    "bible_black_12_15": true,
+    "bible_no_clip": true,
+    "bible_chroma_B4": true,
+    "bible_target_met": true,
+    "bible_window_wall_80_88": false
+   },
+   "meets_bible": false,
+   "outputs": {
+    "graded": "assets/renders/living-room/nordic/v7/m0-v7-r2-graded-v3.png"
+   },
+   "measurements": "assets/renders/living-room/nordic/v7/m0-v7-r2-measurements-v3.json"
+  },
+  {
+   "id": "d1-v7",
+   "frame": "D1",
+   "fix": false,
+   "suffix": "-v3",
+   "target_L": 92.0,
+   "range": [
+    90.0,
+    94.0
+   ],
+   "measured_L": 92.0,
+   "meets_target": true,
+   "reference": "reference_PD (clay reference patch, clay L 86.5, target 86.5)",
+   "target_source": "Bible 'אור' 1.4: the wall by the window L 90-94",
+   "stops_v3": 0.978,
+   "needed_v3": 0.978,
+   "stops_v2": 0.2,
+   "delta_stops_v3_minus_v2": 0.778,
+   "flag": "to the Bible target",
+   "black": 12.5,
+   "black_point": {
+    "darkest_patch_L_before": 11.8,
+    "lift_to_L": 12.5,
+    "blend": 0.0079
+   },
+   "window_p99": 96.6,
+   "frame_max": 96.6,
+   "px255": [
+    0,
+    0
+   ],
+   "wall_HSL": [
+    50.3,
+    57.5,
+    92.0
+   ],
+   "chroma_B4": {
+    "delta_C": -3.34,
+    "applied": "none (within +1.5 C)",
+    "before": {
+     "pixels": 3514432,
+     "L_lab": 78.61,
+     "C": 12.68,
+     "C_p95": 25.04,
+     "hue": 76.9
+    },
+    "after": {
+     "pixels": 3514432,
+     "L_lab": 97.63,
+     "C": 9.34,
+     "C_p95": 24.23,
+     "hue": 110.4
+    },
+    "after_guard": null
+   },
+   "window_wall": null,
+   "hall_B5": null,
+   "checks": {
+    "window_p99_le_97": true,
+    "frame_L_max_le_97": true,
+    "no_255": true,
+    "black_point_12_15": true,
+    "exposure_within_cap": false,
+    "exposure_point_valid": true,
+    "bible_black_12_15": true,
+    "bible_no_clip": true,
+    "bible_chroma_B4": true,
+    "bible_target_met": true
+   },
+   "meets_bible": true,
+   "outputs": {
+    "graded": "assets/renders/kitchen-dining/nordic/v7/d1-v7-graded-v3.png"
+   },
+   "measurements": "assets/renders/kitchen-dining/nordic/v7/d1-v7-measurements-v3.json"
+  },
+  {
+   "id": "d2-v7",
+   "frame": "D2",
+   "fix": false,
+   "suffix": "-v3",
+   "target_L": 92.0,
+   "range": [
+    90.0,
+    94.0
+   ],
+   "measured_L": 92.4,
+   "meets_target": true,
+   "reference": "hero_wall_mid (clay selfcheck)",
+   "target_source": "Bible 'אור' 1.4: the wall by the window L 90-94",
+   "stops_v3": 0.435,
+   "needed_v3": 0.435,
+   "stops_v2": 0.2,
+   "delta_stops_v3_minus_v2": 0.235,
+   "flag": "to the Bible target",
+   "black": 12.5,
+   "black_point": {
+    "darkest_patch_L_before": 4.6,
+    "lift_to_L": 12.5,
+    "blend": 0.083
+   },
+   "window_p99": 94.9,
+   "frame_max": 96.6,
+   "px255": [
+    0,
+    0
+   ],
+   "wall_HSL": [
+    36.3,
+    49.0,
+    92.4
+   ],
+   "chroma_B4": {
+    "delta_C": -0.98,
+    "applied": "none (within +1.5 C)",
+    "before": {
+     "pixels": 3101325,
+     "L_lab": 81.73,
+     "C": 8.87,
+     "C_p95": 17.82,
+     "hue": 76.3
+    },
+    "after": {
+     "pixels": 3101325,
+     "L_lab": 93.12,
+     "C": 7.89,
+     "C_p95": 14.76,
+     "hue": 87.7
+    },
+    "after_guard": null
+   },
+   "window_wall": null,
+   "hall_B5": null,
+   "checks": {
+    "window_p99_le_97": true,
+    "frame_L_max_le_97": true,
+    "no_255": true,
+    "black_point_12_15": true,
+    "exposure_within_cap": false,
+    "exposure_point_valid": true,
+    "bible_black_12_15": true,
+    "bible_no_clip": true,
+    "bible_chroma_B4": true,
+    "bible_target_met": true
+   },
+   "meets_bible": true,
+   "outputs": {
+    "graded": "assets/renders/kitchen-dining/nordic/v7/d2-v7-graded-v3.png",
+    "frame": "assets/renders/kitchen-dining/nordic/v7/d2-v7-frame-v3.png",
+    "os6": "assets/renders/kitchen-dining/nordic/v7/d2-v7-graded-os6-v3.png"
+   },
+   "measurements": "assets/renders/kitchen-dining/nordic/v7/d2-v7-measurements-v3.json"
+  },
+  {
+   "id": "h0-v7-r2",
+   "frame": "H0",
+   "fix": false,
+   "suffix": "-v3",
+   "target_L": 93.0,
+   "range": [
+    92.0,
+    95.0
+   ],
+   "measured_L": 93.4,
+   "meets_target": true,
+   "reference": "living vista through the door (0.35, 0.40): B5, the brightest surface; the hall wall is measured against it",
+   "target_source": "B5 (BIB1): the living vista through the door is the brightest, the living back wall L 92-95; hall walls 2/3 stop under it",
+   "stops_v3": 0.422,
+   "needed_v3": 0.422,
+   "stops_v2": 0.2,
+   "delta_stops_v3_minus_v2": 0.222,
+   "flag": "to the Bible target",
+   "black": 12.5,
+   "black_point": {
+    "darkest_patch_L_before": 4.1,
+    "lift_to_L": 12.5,
+    "blend": 0.0873
+   },
+   "window_p99": 96.6,
+   "frame_max": 96.6,
+   "px255": [
+    0,
+    0
+   ],
+   "wall_HSL": [
+    44.5,
+    47.8,
+    93.4
+   ],
+   "chroma_B4": {
+    "delta_C": -1.23,
+    "applied": "none (within +1.5 C)",
+    "before": {
+     "pixels": 2217983,
+     "L_lab": 78.41,
+     "C": 9.64,
+     "C_p95": 16.1,
+     "hue": 76.5
+    },
+    "after": {
+     "pixels": 2217983,
+     "L_lab": 89.51,
+     "C": 8.41,
+     "C_p95": 14.22,
+     "hue": 84.9
+    },
+    "after_guard": null
+   },
+   "window_wall": null,
+   "hall_B5": {
+    "stops": 0.558,
+    "ok": true,
+    "hall_wall_L": 78.7
+   },
+   "checks": {
+    "window_p99_le_97": true,
+    "frame_L_max_le_97": true,
+    "no_255": true,
+    "black_point_12_15": true,
+    "exposure_within_cap": false,
+    "exposure_point_valid": true,
+    "bible_black_12_15": true,
+    "bible_no_clip": true,
+    "bible_chroma_B4": true,
+    "bible_target_met": true,
+    "bible_hall_2_3_stop_B5": true
+   },
+   "meets_bible": true,
+   "outputs": {
+    "graded": "assets/renders/hall/nordic/v7/h0-v7-r2-graded-v3.png"
+   },
+   "measurements": "assets/renders/hall/nordic/v7/h0-v7-r2-measurements-v3.json"
+  },
+  {
+   "id": "c0-v7",
+   "frame": "C0",
+   "fix": false,
+   "suffix": "-v3",
+   "target_L": 75.7,
+   "range": [
+    71.2,
+    80.6
+   ],
+   "measured_L": 78.1,
+   "meets_target": true,
+   "reference": "hero_wall_mid (clay selfcheck)",
+   "target_source": "G1.8 PROPOSAL (not a Bible number): entrance and corridor walls 2/3 stop under the living; the Bible 1.6 corridor has no L target",
+   "stops_v3": -0.794,
+   "needed_v3": -0.794,
+   "stops_v2": -0.2,
+   "delta_stops_v3_minus_v2": -0.594,
+   "flag": "to the Bible target",
+   "black": 12.5,
+   "black_point": {
+    "darkest_patch_L_before": 3.0,
+    "lift_to_L": 12.5,
+    "blend": 0.0982
+   },
+   "window_p99": 56.5,
+   "frame_max": 81.5,
+   "px255": [
+    0,
+    0
+   ],
+   "wall_HSL": [
+    36.1,
+    11.2,
+    78.1
+   ],
+   "chroma_B4": {
+    "delta_C": -0.09,
+    "applied": "none (within +1.5 C)",
+    "before": {
+     "pixels": 11868,
+     "L_lab": 99.53,
+     "C": 0.29,
+     "C_p95": 0.62,
+     "hue": 172.7
+    },
+    "after": {
+     "pixels": 11868,
+     "L_lab": 83.1,
+     "C": 0.2,
+     "C_p95": 0.42,
+     "hue": 166.4
+    },
+    "after_guard": null
+   },
+   "window_wall": null,
+   "hall_B5": null,
+   "checks": {
+    "window_p99_le_97": true,
+    "frame_L_max_le_97": true,
+    "no_255": true,
+    "black_point_12_15": true,
+    "exposure_within_cap": false,
+    "exposure_point_valid": true,
+    "bible_black_12_15": true,
+    "bible_no_clip": true,
+    "bible_chroma_B4": true,
+    "bible_target_met": true
+   },
+   "meets_bible": true,
+   "outputs": {
+    "graded": "assets/renders/corridor/nordic/v7/c0-v7-graded-v3.png"
+   },
+   "measurements": "assets/renders/corridor/nordic/v7/c0-v7-measurements-v3.json"
+  },
+  {
+   "id": "mb0-v7-r2",
+   "frame": "MB0",
+   "fix": false,
+   "suffix": "-v3",
+   "target_L": 92.0,
+   "range": [
+    90.0,
+    94.0
+   ],
+   "measured_L": 90.5,
+   "meets_target": true,
+   "reference": "hero_wall_mid (clay selfcheck)",
+   "target_source": "Bible 'אור' 1.4: the wall by the window L 90-94",
+   "stops_v3": 0.795,
+   "needed_v3": 0.795,
+   "stops_v2": 0.2,
+   "delta_stops_v3_minus_v2": 0.595,
+   "flag": "to the Bible target",
+   "black": 12.5,
+   "black_point": {
+    "darkest_patch_L_before": 8.1,
+    "lift_to_L": 12.5,
+    "blend": 0.0476
+   },
+   "window_p99": 96.6,
+   "frame_max": 96.6,
+   "px255": [
+    0,
+    0
+   ],
+   "wall_HSL": [
+    40.1,
+    34.0,
+    90.5
+   ],
+   "chroma_B4": {
+    "delta_C": -1.19,
+    "applied": "none (within +1.5 C)",
+    "before": {
+     "pixels": 2553096,
+     "L_lab": 77.92,
+     "C": 7.34,
+     "C_p95": 14.2,
+     "hue": 77.7
+    },
+    "after": {
+     "pixels": 2553096,
+     "L_lab": 94.86,
+     "C": 6.15,
+     "C_p95": 13.24,
+     "hue": 103.1
+    },
+    "after_guard": null
+   },
+   "window_wall": null,
+   "hall_B5": null,
+   "checks": {
+    "window_p99_le_97": true,
+    "frame_L_max_le_97": true,
+    "no_255": true,
+    "black_point_12_15": true,
+    "exposure_within_cap": false,
+    "exposure_point_valid": true,
+    "bible_black_12_15": true,
+    "bible_no_clip": true,
+    "bible_chroma_B4": true,
+    "bible_target_met": true
+   },
+   "meets_bible": true,
+   "outputs": {
+    "graded": "assets/renders/master/nordic/v7/mb0-v7-r2-graded-v3.png"
+   },
+   "measurements": "assets/renders/master/nordic/v7/mb0-v7-r2-measurements-v3.json"
+  },
+  {
+   "id": "k-boy-v7",
+   "frame": "K-boy",
+   "fix": false,
+   "suffix": "-v3",
+   "target_L": 92.0,
+   "range": [
+    90.0,
+    94.0
+   ],
+   "measured_L": 92.6,
+   "meets_target": true,
+   "reference": "hero_wall_mid (clay selfcheck)",
+   "target_source": "Bible 'אור' 1.4: the wall by the window L 90-94",
+   "stops_v3": 0.305,
+   "needed_v3": 0.305,
+   "stops_v2": 0.2,
+   "delta_stops_v3_minus_v2": 0.105,
+   "flag": "to the Bible target",
+   "black": 12.5,
+   "black_point": {
+    "darkest_patch_L_before": 5.4,
+    "lift_to_L": 12.5,
+    "blend": 0.0754
+   },
+   "window_p99": 96.6,
+   "frame_max": 96.6,
+   "px255": [
+    0,
+    0
+   ],
+   "wall_HSL": [
+    36.1,
+    14.2,
+    92.6
+   ],
+   "chroma_B4": {
+    "delta_C": -0.97,
+    "applied": "none (within +1.5 C)",
+    "before": {
+     "pixels": 1347977,
+     "L_lab": 83.51,
+     "C": 4.27,
+     "C_p95": 9.91,
+     "hue": 141.6
+    },
+    "after": {
+     "pixels": 1347977,
+     "L_lab": 91.41,
+     "C": 3.3,
+     "C_p95": 8.8,
+     "hue": 123.4
+    },
+    "after_guard": null
+   },
+   "window_wall": null,
+   "hall_B5": null,
+   "checks": {
+    "window_p99_le_97": true,
+    "frame_L_max_le_97": true,
+    "no_255": true,
+    "black_point_12_15": true,
+    "exposure_within_cap": false,
+    "exposure_point_valid": true,
+    "bible_black_12_15": true,
+    "bible_no_clip": true,
+    "bible_chroma_B4": true,
+    "bible_target_met": true
+   },
+   "meets_bible": true,
+   "outputs": {
+    "graded": "assets/renders/boy/nordic/v7/k-boy-v7-graded-v3.png",
+    "frame": "assets/renders/boy/nordic/v7/k-boy-v7-frame-v3.png",
+    "os6": "assets/renders/boy/nordic/v7/k-boy-v7-graded-os6-v3.png"
+   },
+   "measurements": "assets/renders/boy/nordic/v7/k-boy-v7-measurements-v3.json"
+  },
+  {
+   "id": "k-girl-v7",
+   "frame": "K-girl",
+   "fix": false,
+   "suffix": "-v3",
+   "target_L": 92.0,
+   "range": [
+    90.0,
+    94.0
+   ],
+   "measured_L": 92.6,
+   "meets_target": true,
+   "reference": "hero_wall_mid (clay selfcheck)",
+   "target_source": "Bible 'אור' 1.4: the wall by the window L 90-94",
+   "stops_v3": 0.252,
+   "needed_v3": 0.252,
+   "stops_v2": 0.191,
+   "delta_stops_v3_minus_v2": 0.061,
+   "flag": "to the Bible target",
+   "black": 12.5,
+   "black_point": {
+    "darkest_patch_L_before": 4.7,
+    "lift_to_L": 12.5,
+    "blend": 0.0819
+   },
+   "window_p99": 96.6,
+   "frame_max": 96.6,
+   "px255": [
+    0,
+    0
+   ],
+   "wall_HSL": [
+    36.1,
+    20.2,
+    92.6
+   ],
+   "chroma_B4": {
+    "delta_C": -1.0,
+    "applied": "none (within +1.5 C)",
+    "before": {
+     "pixels": 1646113,
+     "L_lab": 82.3,
+     "C": 6.45,
+     "C_p95": 12.1,
+     "hue": 93.5
+    },
+    "after": {
+     "pixels": 1646113,
+     "L_lab": 89.71,
+     "C": 5.45,
+     "C_p95": 10.58,
+     "hue": 95.9
+    },
+    "after_guard": null
+   },
+   "window_wall": null,
+   "hall_B5": null,
+   "checks": {
+    "window_p99_le_97": true,
+    "frame_L_max_le_97": true,
+    "no_255": true,
+    "black_point_12_15": true,
+    "exposure_within_cap": false,
+    "exposure_point_valid": true,
+    "bible_black_12_15": true,
+    "bible_no_clip": true,
+    "bible_chroma_B4": true,
+    "bible_target_met": true
+   },
+   "meets_bible": true,
+   "outputs": {
+    "graded": "assets/renders/girl/nordic/v7/k-girl-v7-graded-v3.png",
+    "frame": "assets/renders/girl/nordic/v7/k-girl-v7-frame-v3.png",
+    "os6": "assets/renders/girl/nordic/v7/k-girl-v7-graded-os6-v3.png"
+   },
+   "measurements": "assets/renders/girl/nordic/v7/k-girl-v7-measurements-v3.json"
+  },
+  {
+   "id": "b1-v7",
+   "frame": "B1",
+   "fix": false,
+   "suffix": "-v3",
+   "target_L": 88.0,
+   "range": [
+    86.0,
+    90.0
+   ],
+   "measured_L": 88.9,
+   "meets_target": true,
+   "reference": "wall beside the fluted window (0.419, 0.174) = clay wall_beside_window / reference_CB (Bible 1.6 bath: L 86-90)",
+   "target_source": "Bible 1.6 bath: the wall beside the fluted window L 86-90 (4000 K)",
+   "stops_v3": 0.396,
+   "needed_v3": 0.396,
+   "stops_v2": 0.2,
+   "delta_stops_v3_minus_v2": 0.196,
+   "flag": "to the Bible target",
+   "black": 12.5,
+   "black_point": {
+    "darkest_patch_L_before": 2.3,
+    "lift_to_L": 12.5,
+    "blend": 0.104
+   },
+   "window_p99": 96.6,
+   "frame_max": 96.6,
+   "px255": [
+    0,
+    0
+   ],
+   "wall_HSL": [
+    37.1,
+    67.6,
+    88.9
+   ],
+   "chroma_B4": {
+    "delta_C": -0.63,
+    "applied": "none (within +1.5 C)",
+    "before": {
+     "pixels": 1555866,
+     "L_lab": 79.86,
+     "C": 8.43,
+     "C_p95": 17.81,
+     "hue": 101.9
+    },
+    "after": {
+     "pixels": 1555866,
+     "L_lab": 90.19,
+     "C": 7.8,
+     "C_p95": 15.65,
+     "hue": 107.6
+    },
+    "after_guard": null
+   },
+   "window_wall": null,
+   "hall_B5": null,
+   "checks": {
+    "window_p99_le_97": true,
+    "frame_L_max_le_97": true,
+    "no_255": true,
+    "black_point_12_15": true,
+    "exposure_within_cap": false,
+    "exposure_point_valid": true,
+    "bible_black_12_15": true,
+    "bible_no_clip": true,
+    "bible_chroma_B4": true,
+    "bible_target_met": true
+   },
+   "meets_bible": true,
+   "outputs": {
+    "graded": "assets/renders/bath/nordic/v7/b1-v7-graded-v3.png",
+    "frame": "assets/renders/bath/nordic/v7/b1-v7-frame-v3.png",
+    "os6": "assets/renders/bath/nordic/v7/b1-v7-graded-os6-v3.png"
+   },
+   "measurements": "assets/renders/bath/nordic/v7/b1-v7-measurements-v3.json"
+  },
+  {
+   "id": "b2-v7",
+   "frame": "B2",
+   "fix": false,
+   "suffix": "-v3",
+   "target_L": 88.0,
+   "range": [
+    86.0,
+    90.0
+   ],
+   "measured_L": 91.6,
+   "meets_target": null,
+   "reference": "wall beside the mirror (0.53, 0.42), render-agent point: the clay reference uv is shower limestone in B2; stops inherited from B1",
+   "target_source": "Bible 1.6 bath: the wall beside the fluted window L 86-90 (4000 K)",
+   "stops_v3": 0.396,
+   "needed_v3": 0.228,
+   "stops_v2": 0.2,
+   "delta_stops_v3_minus_v2": 0.196,
+   "flag": "stops inherited from the group reference (+0.396); this frame's own need +0.228",
+   "black": 12.5,
+   "black_point": {
+    "darkest_patch_L_before": 3.9,
+    "lift_to_L": 12.5,
+    "blend": 0.0893
+   },
+   "window_p99": 93.7,
+   "frame_max": 96.6,
+   "px255": [
+    0,
+    0
+   ],
+   "wall_HSL": [
+    36.4,
+    54.1,
+    91.6
+   ],
+   "chroma_B4": {
+    "delta_C": -1.42,
+    "applied": "none (within +1.5 C)",
+    "before": {
+     "pixels": 2181195,
+     "L_lab": 78.61,
+     "C": 12.28,
+     "C_p95": 20.37,
+     "hue": 79.2
+    },
+    "after": {
+     "pixels": 2181195,
+     "L_lab": 89.43,
+     "C": 10.86,
+     "C_p95": 17.95,
+     "hue": 86.1
+    },
+    "after_guard": null
+   },
+   "window_wall": null,
+   "hall_B5": null,
+   "checks": {
+    "window_p99_le_97": true,
+    "frame_L_max_le_97": true,
+    "no_255": true,
+    "black_point_12_15": true,
+    "exposure_within_cap": false,
+    "exposure_point_valid": true,
+    "bible_black_12_15": true,
+    "bible_no_clip": true,
+    "bible_chroma_B4": true
+   },
+   "meets_bible": true,
+   "outputs": {
+    "graded": "assets/renders/bath/nordic/v7/b2-v7-graded-v3.png",
+    "frame": "assets/renders/bath/nordic/v7/b2-v7-frame-v3.png",
+    "os6": "assets/renders/bath/nordic/v7/b2-v7-graded-os6-v3.png"
+   },
+   "measurements": "assets/renders/bath/nordic/v7/b2-v7-measurements-v3.json",
+   "judged_by_reference": {
+    "frame": "B1",
+    "meets_target": true
+   }
+  },
+  {
+   "id": "w0-v7",
+   "frame": "W0",
+   "fix": false,
+   "suffix": "-v3",
+   "target_L": 92.0,
+   "range": [
+    90.0,
+    94.0
+   ],
+   "measured_L": 92.7,
+   "meets_target": true,
+   "reference": "hero_wall_mid (clay selfcheck)",
+   "target_source": "Bible 'אור' 1.4: the wall by the window L 90-94",
+   "stops_v3": 0.301,
+   "needed_v3": 0.301,
+   "stops_v2": 0.2,
+   "delta_stops_v3_minus_v2": 0.101,
+   "flag": "to the Bible target",
+   "black": 12.5,
+   "black_point": {
+    "darkest_patch_L_before": 2.1,
+    "lift_to_L": 12.5,
+    "blend": 0.1063
+   },
+   "window_p99": 96.6,
+   "frame_max": 96.6,
+   "px255": [
+    0,
+    0
+   ],
+   "wall_HSL": [
+    36.2,
+    28.3,
+    92.7
+   ],
+   "chroma_B4": {
+    "delta_C": -0.52,
+    "applied": "none (within +1.5 C)",
+    "before": {
+     "pixels": 2567713,
+     "L_lab": 83.69,
+     "C": 4.38,
+     "C_p95": 8.89,
+     "hue": 79.5
+    },
+    "after": {
+     "pixels": 2567713,
+     "L_lab": 92.12,
+     "C": 3.86,
+     "C_p95": 7.88,
+     "hue": 93.5
+    },
+    "after_guard": null
+   },
+   "window_wall": null,
+   "hall_B5": null,
+   "checks": {
+    "window_p99_le_97": true,
+    "frame_L_max_le_97": true,
+    "no_255": true,
+    "black_point_12_15": true,
+    "exposure_within_cap": false,
+    "exposure_point_valid": true,
+    "bible_black_12_15": true,
+    "bible_no_clip": true,
+    "bible_chroma_B4": true,
+    "bible_target_met": true
+   },
+   "meets_bible": true,
+   "outputs": {
+    "graded": "assets/renders/work/nordic/v7/w0-v7-graded-v3.png"
+   },
+   "measurements": "assets/renders/work/nordic/v7/w0-v7-measurements-v3.json"
+  },
+  {
+   "id": "k-boy-v7",
+   "frame": "K-boy",
+   "fix": true,
+   "suffix": "-fix-v3",
+   "target_L": 92.0,
+   "range": [
+    90.0,
+    94.0
+   ],
+   "measured_L": 92.6,
+   "meets_target": true,
+   "reference": "hero_wall_mid (clay selfcheck)",
+   "target_source": "Bible 'אור' 1.4: the wall by the window L 90-94",
+   "stops_v3": 0.305,
+   "needed_v3": 0.305,
+   "stops_v2": 0.2,
+   "delta_stops_v3_minus_v2": 0.105,
+   "flag": "to the Bible target",
+   "black": 12.5,
+   "black_point": {
+    "darkest_patch_L_before": 5.4,
+    "lift_to_L": 12.5,
+    "blend": 0.0754
+   },
+   "window_p99": 96.6,
+   "frame_max": 96.6,
+   "px255": [
+    0,
+    0
+   ],
+   "wall_HSL": [
+    36.1,
+    14.2,
+    92.6
+   ],
+   "chroma_B4": {
+    "delta_C": -0.87,
+    "applied": "none (within +1.5 C)",
+    "before": {
+     "pixels": 1305380,
+     "L_lab": 83.06,
+     "C": 4.55,
+     "C_p95": 10.37,
+     "hue": 122.7
+    },
+    "after": {
+     "pixels": 1305380,
+     "L_lab": 91.02,
+     "C": 3.68,
+     "C_p95": 9.2,
+     "hue": 112.5
+    },
+    "after_guard": null
+   },
+   "window_wall": null,
+   "hall_B5": null,
+   "checks": {
+    "window_p99_le_97": true,
+    "frame_L_max_le_97": true,
+    "no_255": true,
+    "black_point_12_15": true,
+    "exposure_within_cap": false,
+    "exposure_point_valid": true,
+    "bible_black_12_15": true,
+    "bible_no_clip": true,
+    "bible_chroma_B4": true,
+    "bible_target_met": true
+   },
+   "meets_bible": true,
+   "outputs": {
+    "graded": "assets/renders/boy/nordic/v7/k-boy-v7-graded-fix-v3.png",
+    "frame": "assets/renders/boy/nordic/v7/k-boy-v7-frame-fix-v3.png",
+    "os6": "assets/renders/boy/nordic/v7/k-boy-v7-graded-os6-fix-v3.png"
+   },
+   "measurements": "assets/renders/boy/nordic/v7/k-boy-v7-measurements-fix-v3.json"
+  },
+  {
+   "id": "k-girl-v7",
+   "frame": "K-girl",
+   "fix": true,
+   "suffix": "-fix-v3",
+   "target_L": 92.0,
+   "range": [
+    90.0,
+    94.0
+   ],
+   "measured_L": 92.6,
+   "meets_target": true,
+   "reference": "hero_wall_mid (clay selfcheck)",
+   "target_source": "Bible 'אור' 1.4: the wall by the window L 90-94",
+   "stops_v3": 0.252,
+   "needed_v3": 0.252,
+   "stops_v2": 0.191,
+   "delta_stops_v3_minus_v2": 0.061,
+   "flag": "to the Bible target",
+   "black": 12.5,
+   "black_point": {
+    "darkest_patch_L_before": 4.7,
+    "lift_to_L": 12.5,
+    "blend": 0.0819
+   },
+   "window_p99": 96.6,
+   "frame_max": 96.6,
+   "px255": [
+    0,
+    0
+   ],
+   "wall_HSL": [
+    36.1,
+    20.2,
+    92.6
+   ],
+   "chroma_B4": {
+    "delta_C": -1.0,
+    "applied": "none (within +1.5 C)",
+    "before": {
+     "pixels": 1656017,
+     "L_lab": 82.26,
+     "C": 6.47,
+     "C_p95": 12.06,
+     "hue": 93.2
+    },
+    "after": {
+     "pixels": 1656017,
+     "L_lab": 89.67,
+     "C": 5.47,
+     "C_p95": 10.52,
+     "hue": 95.7
+    },
+    "after_guard": null
+   },
+   "window_wall": null,
+   "hall_B5": null,
+   "checks": {
+    "window_p99_le_97": true,
+    "frame_L_max_le_97": true,
+    "no_255": true,
+    "black_point_12_15": true,
+    "exposure_within_cap": false,
+    "exposure_point_valid": true,
+    "bible_black_12_15": true,
+    "bible_no_clip": true,
+    "bible_chroma_B4": true,
+    "bible_target_met": true
+   },
+   "meets_bible": true,
+   "outputs": {
+    "graded": "assets/renders/girl/nordic/v7/k-girl-v7-graded-fix-v3.png",
+    "frame": "assets/renders/girl/nordic/v7/k-girl-v7-frame-fix-v3.png",
+    "os6": "assets/renders/girl/nordic/v7/k-girl-v7-graded-os6-fix-v3.png"
+   },
+   "measurements": "assets/renders/girl/nordic/v7/k-girl-v7-measurements-fix-v3.json"
+  },
+  {
+   "id": "w0-v7",
+   "frame": "W0",
+   "fix": true,
+   "suffix": "-fix-v3",
+   "target_L": 92.0,
+   "range": [
+    90.0,
+    94.0
+   ],
+   "measured_L": 92.7,
+   "meets_target": true,
+   "reference": "hero_wall_mid (clay selfcheck)",
+   "target_source": "Bible 'אור' 1.4: the wall by the window L 90-94",
+   "stops_v3": 0.301,
+   "needed_v3": 0.301,
+   "stops_v2": 0.2,
+   "delta_stops_v3_minus_v2": 0.101,
+   "flag": "to the Bible target",
+   "black": 12.5,
+   "black_point": {
+    "darkest_patch_L_before": 2.1,
+    "lift_to_L": 12.5,
+    "blend": 0.1063
+   },
+   "window_p99": 96.6,
+   "frame_max": 96.6,
+   "px255": [
+    0,
+    0
+   ],
+   "wall_HSL": [
+    36.2,
+    28.3,
+    92.7
+   ],
+   "chroma_B4": {
+    "delta_C": -0.52,
+    "applied": "none (within +1.5 C)",
+    "before": {
+     "pixels": 2610360,
+     "L_lab": 83.68,
+     "C": 4.38,
+     "C_p95": 8.87,
+     "hue": 79.2
+    },
+    "after": {
+     "pixels": 2610360,
+     "L_lab": 92.11,
+     "C": 3.86,
+     "C_p95": 7.86,
+     "hue": 93.3
+    },
+    "after_guard": null
+   },
+   "window_wall": null,
+   "hall_B5": null,
+   "checks": {
+    "window_p99_le_97": true,
+    "frame_L_max_le_97": true,
+    "no_255": true,
+    "black_point_12_15": true,
+    "exposure_within_cap": false,
+    "exposure_point_valid": true,
+    "bible_black_12_15": true,
+    "bible_no_clip": true,
+    "bible_chroma_B4": true,
+    "bible_target_met": true
+   },
+   "meets_bible": true,
+   "outputs": {
+    "graded": "assets/renders/work/nordic/v7/w0-v7-graded-fix-v3.png"
+   },
+   "measurements": "assets/renders/work/nordic/v7/w0-v7-measurements-fix-v3.json"
+  },
+  {
+   "id": "pose-h0x-v7",
+   "frame": "H0x",
+   "fix": false,
+   "suffix": "-v3",
+   "target_L": 75.7,
+   "range": [
+    71.2,
+    80.6
+   ],
+   "measured_L": 76.7,
+   "meets_target": true,
+   "reference": "hero_wall_mid (clay selfcheck)",
+   "target_source": "B5 (BIB1): hall walls 2/3 stop under the living back wall (93) = L 75.8, +-0.2 stop",
+   "stops_v3": 0.383,
+   "needed_v3": 0.383,
+   "stops_v2": 0.2,
+   "delta_stops_v3_minus_v2": 0.183,
+   "flag": "to the Bible target",
+   "black": 12.5,
+   "black_point": {
+    "darkest_patch_L_before": 8.6,
+    "lift_to_L": 12.5,
+    "blend": 0.0423
+   },
+   "window_p99": 96.6,
+   "frame_max": 96.6,
+   "px255": [
+    0,
+    0
+   ],
+   "wall_HSL": [
+    36.1,
+    22.2,
+    76.7
+   ],
+   "chroma_B4": {
+    "delta_C": -0.33,
+    "applied": "none (within +1.5 C)",
+    "before": {
+     "pixels": 2102088,
+     "L_lab": 79.96,
+     "C": 8.72,
+     "C_p95": 16.25,
+     "hue": 75.9
+    },
+    "after": {
+     "pixels": 2102088,
+     "L_lab": 89.86,
+     "C": 8.39,
+     "C_p95": 15.28,
+     "hue": 89.6
+    },
+    "after_guard": null
+   },
+   "window_wall": null,
+   "hall_B5": null,
+   "checks": {
+    "window_p99_le_97": true,
+    "frame_L_max_le_97": true,
+    "no_255": true,
+    "black_point_12_15": true,
+    "exposure_within_cap": false,
+    "exposure_point_valid": true,
+    "bible_black_12_15": true,
+    "bible_no_clip": true,
+    "bible_chroma_B4": true,
+    "bible_target_met": true
+   },
+   "meets_bible": true,
+   "outputs": {
+    "graded": "assets/renders/poses/nordic/v7/pose-h0x-v7-graded-v3.png"
+   },
+   "measurements": "assets/renders/poses/nordic/v7/pose-h0x-v7-measurements-v3.json"
+  },
+  {
+   "id": "pose-m0p-v7",
+   "frame": "M0p",
+   "fix": false,
+   "suffix": "-v3",
+   "target_L": 93.0,
+   "range": [
+    92.0,
+    95.0
+   ],
+   "measured_L": 93.1,
+   "meets_target": true,
+   "reference": "hero_wall_mid (clay selfcheck)",
+   "target_source": "Bible 'אור' / 'דעיכת האור בקיר האחורי': back wall by the corner (0.467, 0.385) L 92-95",
+   "stops_v3": 0.938,
+   "needed_v3": 0.938,
+   "stops_v2": 0.2,
+   "delta_stops_v3_minus_v2": 0.738,
+   "flag": "to the Bible target",
+   "black": 12.5,
+   "black_point": {
+    "darkest_patch_L_before": 9.8,
+    "lift_to_L": 12.5,
+    "blend": 0.0295
+   },
+   "window_p99": 96.6,
+   "frame_max": 96.6,
+   "px255": [
+    0,
+    0
+   ],
+   "wall_HSL": [
+    52.7,
+    51.0,
+    93.1
+   ],
+   "chroma_B4": {
+    "delta_C": -1.56,
+    "applied": "none (within +1.5 C)",
+    "before": {
+     "pixels": 3481863,
+     "L_lab": 76.66,
+     "C": 8.74,
+     "C_p95": 16.85,
+     "hue": 79.6
+    },
+    "after": {
+     "pixels": 3481863,
+     "L_lab": 95.71,
+     "C": 7.18,
+     "C_p95": 16.77,
+     "hue": 108.1
+    },
+    "after_guard": null
+   },
+   "window_wall": null,
+   "hall_B5": null,
+   "checks": {
+    "window_p99_le_97": true,
+    "frame_L_max_le_97": true,
+    "no_255": true,
+    "black_point_12_15": true,
+    "exposure_within_cap": false,
+    "exposure_point_valid": true,
+    "bible_black_12_15": true,
+    "bible_no_clip": true,
+    "bible_chroma_B4": true,
+    "bible_target_met": true
+   },
+   "meets_bible": true,
+   "outputs": {
+    "graded": "assets/renders/poses/nordic/v7/pose-m0p-v7-graded-v3.png",
+    "frame": "assets/renders/poses/nordic/v7/pose-m0p-v7-frame-v3.png",
+    "os6": "assets/renders/poses/nordic/v7/pose-m0p-v7-graded-os6-v3.png"
+   },
+   "measurements": "assets/renders/poses/nordic/v7/pose-m0p-v7-measurements-v3.json"
+  },
+  {
+   "id": "pose-m0x-v7",
+   "frame": "M0x",
+   "fix": false,
+   "suffix": "-v3",
+   "target_L": 93.0,
+   "range": [
+    92.0,
+    95.0
+   ],
+   "measured_L": 94.8,
+   "meets_target": null,
+   "reference": "default (0.5, 0.3): no wall patch in the clay selfcheck",
+   "target_source": "Bible 'אור' / 'דעיכת האור בקיר האחורי': back wall by the corner (0.467, 0.385) L 92-95",
+   "stops_v3": 1.007,
+   "needed_v3": 0.632,
+   "stops_v2": 0.2,
+   "delta_stops_v3_minus_v2": 0.807,
+   "flag": "stops inherited from the group reference (+1.007); this frame's own need +0.632 | no clay wall patch: stops inherited from M0 (one exposure per camera point); the default point is a reading only",
+   "black": 12.5,
+   "black_point": {
+    "darkest_patch_L_before": 8.0,
+    "lift_to_L": 12.5,
+    "blend": 0.049
+   },
+   "window_p99": 96.6,
+   "frame_max": 96.6,
+   "px255": [
+    0,
+    0
+   ],
+   "wall_HSL": [
+    53.0,
+    35.3,
+    94.8
+   ],
+   "chroma_B4": {
+    "delta_C": -2.87,
+    "applied": "none (within +1.5 C)",
+    "before": {
+     "pixels": 3827666,
+     "L_lab": 78.12,
+     "C": 9.02,
+     "C_p95": 18.61,
+     "hue": 77.3
+    },
+    "after": {
+     "pixels": 3827666,
+     "L_lab": 98.26,
+     "C": 6.15,
+     "C_p95": 17.89,
+     "hue": 115.5
+    },
+    "after_guard": null
+   },
+   "window_wall": null,
+   "hall_B5": null,
+   "checks": {
+    "window_p99_le_97": true,
+    "frame_L_max_le_97": true,
+    "no_255": true,
+    "black_point_12_15": true,
+    "exposure_within_cap": false,
+    "exposure_point_valid": false,
+    "bible_black_12_15": true,
+    "bible_no_clip": true,
+    "bible_chroma_B4": true
+   },
+   "meets_bible": true,
+   "outputs": {
+    "graded": "assets/renders/poses/nordic/v7/pose-m0x-v7-graded-v3.png",
+    "frame": "assets/renders/poses/nordic/v7/pose-m0x-v7-frame-v3.png",
+    "os6": "assets/renders/poses/nordic/v7/pose-m0x-v7-graded-os6-v3.png"
+   },
+   "measurements": "assets/renders/poses/nordic/v7/pose-m0x-v7-measurements-v3.json",
+   "judged_by_reference": {
+    "frame": "M0",
+    "meets_target": true
+   }
+  },
+  {
+   "id": "pose-pd-35-v7",
+   "frame": "PD-35",
+   "fix": false,
+   "suffix": "-v3",
+   "target_L": 92.0,
+   "range": [
+    90.0,
+    94.0
+   ],
+   "measured_L": 91.9,
+   "meets_target": true,
+   "reference": "hero_wall_mid (clay selfcheck)",
+   "target_source": "Bible 'אור' 1.4: the wall by the window L 90-94",
+   "stops_v3": 0.19,
+   "needed_v3": 0.19,
+   "stops_v2": 0.131,
+   "delta_stops_v3_minus_v2": 0.059,
+   "flag": "to the Bible target",
+   "black": 12.5,
+   "black_point": {
+    "darkest_patch_L_before": 9.3,
+    "lift_to_L": 12.5,
+    "blend": 0.0354
+   },
+   "window_p99": 96.6,
+   "frame_max": 96.6,
+   "px255": [
+    0,
+    0
+   ],
+   "wall_HSL": [
+    36.0,
+    17.1,
+    91.9
+   ],
+   "chroma_B4": {
+    "delta_C": -1.4,
+    "applied": "none (within +1.5 C)",
+    "before": {
+     "pixels": 2331136,
+     "L_lab": 85.48,
+     "C": 8.45,
+     "C_p95": 17.83,
+     "hue": 99.3
+    },
+    "after": {
+     "pixels": 2331136,
+     "L_lab": 90.71,
+     "C": 7.05,
+     "C_p95": 14.93,
+     "hue": 96.2
+    },
+    "after_guard": null
+   },
+   "window_wall": null,
+   "hall_B5": null,
+   "checks": {
+    "window_p99_le_97": true,
+    "frame_L_max_le_97": true,
+    "no_255": true,
+    "black_point_12_15": true,
+    "exposure_within_cap": true,
+    "exposure_point_valid": true,
+    "bible_black_12_15": true,
+    "bible_no_clip": true,
+    "bible_chroma_B4": true,
+    "bible_target_met": true
+   },
+   "meets_bible": true,
+   "outputs": {
+    "graded": "assets/renders/poses/nordic/v7/pose-pd-35-v7-graded-v3.png",
+    "frame": "assets/renders/poses/nordic/v7/pose-pd-35-v7-frame-v3.png",
+    "os6": "assets/renders/poses/nordic/v7/pose-pd-35-v7-graded-os6-v3.png"
+   },
+   "measurements": "assets/renders/poses/nordic/v7/pose-pd-35-v7-measurements-v3.json"
+  },
+  {
+   "id": "pose-h0e-v7",
+   "frame": "H0e",
+   "fix": false,
+   "suffix": "-v3",
+   "target_L": 75.7,
+   "range": [
+    71.2,
+    80.6
+   ],
+   "measured_L": 77.3,
+   "meets_target": true,
+   "reference": "hero_wall_mid (clay selfcheck)",
+   "target_source": "B5 (BIB1): hall walls 2/3 stop under the living back wall (93) = L 75.8, +-0.2 stop",
+   "stops_v3": -0.187,
+   "needed_v3": -0.187,
+   "stops_v2": 0.076,
+   "delta_stops_v3_minus_v2": -0.263,
+   "flag": "to the Bible target",
+   "black": 12.5,
+   "black_point": {
+    "darkest_patch_L_before": 6.5,
+    "lift_to_L": 12.5,
+    "blend": 0.0639
+   },
+   "window_p99": 91.1,
+   "frame_max": 94.9,
+   "px255": [
+    0,
+    0
+   ],
+   "wall_HSL": [
+    36.1,
+    14.5,
+    77.3
+   ],
+   "chroma_B4": {
+    "delta_C": -1.16,
+    "applied": "none (within +1.5 C)",
+    "before": {
+     "pixels": 551669,
+     "L_lab": 90.33,
+     "C": 7.53,
+     "C_p95": 15.97,
+     "hue": 83.2
+    },
+    "after": {
+     "pixels": 551669,
+     "L_lab": 87.64,
+     "C": 6.37,
+     "C_p95": 12.97,
+     "hue": 91.3
+    },
+    "after_guard": null
+   },
+   "window_wall": null,
+   "hall_B5": null,
+   "checks": {
+    "window_p99_le_97": true,
+    "frame_L_max_le_97": true,
+    "no_255": true,
+    "black_point_12_15": true,
+    "exposure_within_cap": true,
+    "exposure_point_valid": true,
+    "bible_black_12_15": true,
+    "bible_no_clip": true,
+    "bible_chroma_B4": true,
+    "bible_target_met": true
+   },
+   "meets_bible": true,
+   "outputs": {
+    "graded": "assets/renders/poses/nordic/v7/pose-h0e-v7-graded-v3.png"
+   },
+   "measurements": "assets/renders/poses/nordic/v7/pose-h0e-v7-measurements-v3.json"
+  },
+  {
+   "id": "pose-w0-in-v7",
+   "frame": "W0-in",
+   "fix": false,
+   "suffix": "-v3",
+   "target_L": 92.0,
+   "range": [
+    90.0,
+    94.0
+   ],
+   "measured_L": 92.6,
+   "meets_target": true,
+   "reference": "desk wall between shelf and desk (0.50, 0.40), render-agent point: the clay's reference_W0 uv is on the shelf edge in this pose",
+   "target_source": "Bible 'אור' 1.4: the wall by the window L 90-94",
+   "stops_v3": 0.035,
+   "needed_v3": 0.035,
+   "stops_v2": 0.2,
+   "delta_stops_v3_minus_v2": -0.165,
+   "flag": "to the Bible target",
+   "black": 12.5,
+   "black_point": {
+    "darkest_patch_L_before": 4.0,
+    "lift_to_L": 12.5,
+    "blend": 0.0885
+   },
+   "window_p99": 96.6,
+   "frame_max": 96.6,
+   "px255": [
+    0,
+    0
+   ],
+   "wall_HSL": [
+    36.2,
+    27.4,
+    92.6
+   ],
+   "chroma_B4": {
+    "delta_C": -0.69,
+    "applied": "none (within +1.5 C)",
+    "before": {
+     "pixels": 1527922,
+     "L_lab": 87.93,
+     "C": 4.61,
+     "C_p95": 10.75,
+     "hue": 87.5
+    },
+    "after": {
+     "pixels": 1527922,
+     "L_lab": 90.46,
+     "C": 3.92,
+     "C_p95": 8.84,
+     "hue": 95.0
+    },
+    "after_guard": null
+   },
+   "window_wall": null,
+   "hall_B5": null,
+   "checks": {
+    "window_p99_le_97": true,
+    "frame_L_max_le_97": true,
+    "no_255": true,
+    "black_point_12_15": true,
+    "exposure_within_cap": true,
+    "exposure_point_valid": true,
+    "bible_black_12_15": true,
+    "bible_no_clip": true,
+    "bible_chroma_B4": true,
+    "bible_target_met": true
+   },
+   "meets_bible": true,
+   "outputs": {
+    "graded": "assets/renders/poses/nordic/v7/pose-w0-in-v7-graded-v3.png"
+   },
+   "measurements": "assets/renders/poses/nordic/v7/pose-w0-in-v7-measurements-v3.json"
+  },
+  {
+   "id": "pose-s1prime-v7",
+   "frame": "S1prime",
+   "fix": false,
+   "suffix": "-v3",
+   "target_L": 75.7,
+   "range": [
+    71.2,
+    80.6
+   ],
+   "measured_L": 76.0,
+   "meets_target": true,
+   "reference": "hero_wall_mid (clay selfcheck)",
+   "target_source": "G1.8 PROPOSAL (not a Bible number): entrance and corridor walls 2/3 stop under the living; the Bible 1.6 corridor has no L target",
+   "stops_v3": 0.111,
+   "needed_v3": 0.111,
+   "stops_v2": 0.2,
+   "delta_stops_v3_minus_v2": -0.089,
+   "flag": "to the Bible target",
+   "black": 12.5,
+   "black_point": {
+    "darkest_patch_L_before": 11.6,
+    "lift_to_L": 12.5,
+    "blend": 0.0103
+   },
+   "window_p99": 92.2,
+   "frame_max": 96.6,
+   "px255": [
+    0,
+    0
+   ],
+   "wall_HSL": [
+    36.1,
+    17.4,
+    76.0
+   ],
+   "chroma_B4": {
+    "delta_C": -0.04,
+    "applied": "none (within +1.5 C)",
+    "before": {
+     "pixels": 1654076,
+     "L_lab": 83.21,
+     "C": 5.87,
+     "C_p95": 7.76,
+     "hue": 77.3
+    },
+    "after": {
+     "pixels": 1654076,
+     "L_lab": 86.89,
+     "C": 5.83,
+     "C_p95": 7.52,
+     "hue": 89.5
+    },
+    "after_guard": null
+   },
+   "window_wall": null,
+   "hall_B5": null,
+   "checks": {
+    "window_p99_le_97": true,
+    "frame_L_max_le_97": true,
+    "no_255": true,
+    "black_point_12_15": true,
+    "exposure_within_cap": true,
+    "exposure_point_valid": true,
+    "bible_black_12_15": true,
+    "bible_no_clip": true,
+    "bible_chroma_B4": true,
+    "bible_target_met": true
+   },
+   "meets_bible": true,
+   "outputs": {
+    "graded": "assets/renders/poses/nordic/v7/pose-s1prime-v7-graded-v3.png"
+   },
+   "measurements": "assets/renders/poses/nordic/v7/pose-s1prime-v7-measurements-v3.json"
+  },
+  {
+   "id": "pose-k-boy-0-v7",
+   "frame": "K-boy-0",
+   "fix": false,
+   "suffix": "-v3",
+   "target_L": 92.0,
+   "range": [
+    90.0,
+    94.0
+   ],
+   "measured_L": 89.4,
+   "meets_target": null,
+   "reference": "default (0.5, 0.3): no wall patch in the clay selfcheck",
+   "target_source": "Bible 'אור' 1.4: the wall by the window L 90-94",
+   "stops_v3": 0.305,
+   "needed_v3": 0.405,
+   "stops_v2": 0.2,
+   "delta_stops_v3_minus_v2": 0.105,
+   "flag": "stops inherited from the group reference (+0.305); this frame's own need +0.405 | no clay wall patch: stops inherited from K-boy (one exposure per camera point); the default point is a reading only",
+   "black": 13.5,
+   "black_point": {
+    "darkest_patch_L_before": 15.5,
+    "pull_to_L": 13.5,
+    "pivot_sRGB": 0.45,
+    "b": 0.0472,
+    "note": "v3: shadow-only pull (Bible black point 12-15 both ways)"
+   },
+   "window_p99": 96.6,
+   "frame_max": 96.6,
+   "px255": [
+    0,
+    0
+   ],
+   "wall_HSL": [
+    36.1,
+    19.5,
+    89.4
+   ],
+   "chroma_B4": {
+    "delta_C": -0.38,
+    "applied": "none (within +1.5 C)",
+    "before": {
+     "pixels": 2127173,
+     "L_lab": 84.31,
+     "C": 4.26,
+     "C_p95": 6.5,
+     "hue": 95.9
+    },
+    "after": {
+     "pixels": 2127173,
+     "L_lab": 92.16,
+     "C": 3.88,
+     "C_p95": 6.18,
+     "hue": 98.9
+    },
+    "after_guard": null
+   },
+   "window_wall": null,
+   "hall_B5": null,
+   "checks": {
+    "window_p99_le_97": true,
+    "frame_L_max_le_97": true,
+    "no_255": true,
+    "black_point_12_15": true,
+    "exposure_within_cap": false,
+    "exposure_point_valid": false,
+    "bible_black_12_15": true,
+    "bible_no_clip": true,
+    "bible_chroma_B4": true
+   },
+   "meets_bible": true,
+   "outputs": {
+    "graded": "assets/renders/poses/nordic/v7/pose-k-boy-0-v7-graded-v3.png",
+    "frame": "assets/renders/poses/nordic/v7/pose-k-boy-0-v7-frame-v3.png",
+    "os6": "assets/renders/poses/nordic/v7/pose-k-boy-0-v7-graded-os6-v3.png"
+   },
+   "measurements": "assets/renders/poses/nordic/v7/pose-k-boy-0-v7-measurements-v3.json",
+   "judged_by_reference": {
+    "frame": "K-boy",
+    "meets_target": true
+   }
+  },
+  {
+   "id": "pose-k-girl-0-v7",
+   "frame": "K-girl-0",
+   "fix": false,
+   "suffix": "-v3",
+   "target_L": 92.0,
+   "range": [
+    90.0,
+    94.0
+   ],
+   "measured_L": 88.7,
+   "meets_target": false,
+   "reference": "white upper wall of the desk wall, left of the prints (0.22, 0.08), render-agent point: the wall K-girl reads at hero_wall_mid",
+   "target_source": "Bible 'אור' 1.4: the wall by the window L 90-94",
+   "stops_v3": 0.381,
+   "needed_v3": 0.381,
+   "stops_v2": 0.2,
+   "delta_stops_v3_minus_v2": 0.181,
+   "flag": "to the Bible target",
+   "black": 12.5,
+   "black_point": {
+    "darkest_patch_L_before": 8.6,
+    "lift_to_L": 12.5,
+    "blend": 0.0422
+   },
+   "window_p99": 96.6,
+   "frame_max": 96.6,
+   "px255": [
+    0,
+    0
+   ],
+   "wall_HSL": [
+    33.2,
+    19.2,
+    88.7
+   ],
+   "chroma_B4": {
+    "delta_C": -1.06,
+    "applied": "none (within +1.5 C)",
+    "before": {
+     "pixels": 2337545,
+     "L_lab": 83.24,
+     "C": 7.51,
+     "C_p95": 13.87,
+     "hue": 86.0
+    },
+    "after": {
+     "pixels": 2337545,
+     "L_lab": 92.35,
+     "C": 6.45,
+     "C_p95": 12.75,
+     "hue": 92.4
+    },
+    "after_guard": null
+   },
+   "window_wall": null,
+   "hall_B5": null,
+   "checks": {
+    "window_p99_le_97": true,
+    "frame_L_max_le_97": true,
+    "no_255": true,
+    "black_point_12_15": true,
+    "exposure_within_cap": false,
+    "exposure_point_valid": true,
+    "bible_black_12_15": true,
+    "bible_no_clip": true,
+    "bible_chroma_B4": true,
+    "bible_target_met": false
+   },
+   "meets_bible": false,
+   "outputs": {
+    "graded": "assets/renders/poses/nordic/v7/pose-k-girl-0-v7-graded-v3.png",
+    "frame": "assets/renders/poses/nordic/v7/pose-k-girl-0-v7-frame-v3.png",
+    "os6": "assets/renders/poses/nordic/v7/pose-k-girl-0-v7-graded-os6-v3.png"
+   },
+   "measurements": "assets/renders/poses/nordic/v7/pose-k-girl-0-v7-measurements-v3.json"
+  },
+  {
+   "id": "pose-cb-0-v7",
+   "frame": "CB-0",
+   "fix": false,
+   "suffix": "-v3",
+   "target_L": 76.3,
+   "range": [
+    74.3,
+    78.3
+   ],
+   "measured_L": 78.2,
+   "meets_target": true,
+   "reference": "hero_wall_mid (clay selfcheck)",
+   "target_source": "override --target 76.3: the group reference's graded value on the same wall (Bible 1.6 bath: the wall beside the fluted window L 86-90 (4000 K))",
+   "stops_v3": 0.409,
+   "needed_v3": 0.409,
+   "stops_v2": 0.2,
+   "delta_stops_v3_minus_v2": 0.209,
+   "flag": "to the Bible target",
+   "black": 12.5,
+   "black_point": {
+    "darkest_patch_L_before": 5.0,
+    "lift_to_L": 12.5,
+    "blend": 0.0789
+   },
+   "window_p99": 96.6,
+   "frame_max": 96.6,
+   "px255": [
+    0,
+    0
+   ],
+   "wall_HSL": [
+    36.3,
+    52.4,
+    78.2
+   ],
+   "chroma_B4": {
+    "delta_C": -1.01,
+    "applied": "none (within +1.5 C)",
+    "before": {
+     "pixels": 2504791,
+     "L_lab": 79.68,
+     "C": 8.81,
+     "C_p95": 16.54,
+     "hue": 98.3
+    },
+    "after": {
+     "pixels": 2504791,
+     "L_lab": 90.25,
+     "C": 7.8,
+     "C_p95": 14.17,
+     "hue": 100.1
+    },
+    "after_guard": null
+   },
+   "window_wall": null,
+   "hall_B5": null,
+   "checks": {
+    "window_p99_le_97": true,
+    "frame_L_max_le_97": true,
+    "no_255": true,
+    "black_point_12_15": true,
+    "exposure_within_cap": false,
+    "exposure_point_valid": true,
+    "bible_black_12_15": true,
+    "bible_no_clip": true,
+    "bible_chroma_B4": true,
+    "bible_target_met": true
+   },
+   "meets_bible": true,
+   "outputs": {
+    "graded": "assets/renders/poses/nordic/v7/pose-cb-0-v7-graded-v3.png",
+    "frame": "assets/renders/poses/nordic/v7/pose-cb-0-v7-frame-v3.png",
+    "os6": "assets/renders/poses/nordic/v7/pose-cb-0-v7-graded-os6-v3.png"
+   },
+   "measurements": "assets/renders/poses/nordic/v7/pose-cb-0-v7-measurements-v3.json"
+  },
+  {
+   "id": "pose-mb-in-v7",
+   "frame": "MB-in",
+   "fix": false,
+   "suffix": "-v3",
+   "target_L": 92.0,
+   "range": [
+    90.0,
+    94.0
+   ],
+   "measured_L": 92.2,
+   "meets_target": true,
+   "reference": "reference_MB0 (clay reference patch, clay L 88.6, target 86.5)",
+   "target_source": "Bible 'אור' 1.4: the wall by the window L 90-94",
+   "stops_v3": 0.4,
+   "needed_v3": 0.4,
+   "stops_v2": -0.01,
+   "delta_stops_v3_minus_v2": 0.41,
+   "flag": "to the Bible target",
+   "black": 12.5,
+   "black_point": {
+    "darkest_patch_L_before": 4.4,
+    "lift_to_L": 12.5,
+    "blend": 0.0845
+   },
+   "window_p99": 95.6,
+   "frame_max": 96.6,
+   "px255": [
+    0,
+    0
+   ],
+   "wall_HSL": [
+    47.1,
+    53.6,
+    92.2
+   ],
+   "chroma_B4": {
+    "delta_C": -1.38,
+    "applied": "none (within +1.5 C)",
+    "before": {
+     "pixels": 2317059,
+     "L_lab": 82.45,
+     "C": 9.76,
+     "C_p95": 18.6,
+     "hue": 74.7
+    },
+    "after": {
+     "pixels": 2317059,
+     "L_lab": 93.04,
+     "C": 8.38,
+     "C_p95": 16.48,
+     "hue": 83.2
+    },
+    "after_guard": null
+   },
+   "window_wall": null,
+   "hall_B5": null,
+   "checks": {
+    "window_p99_le_97": true,
+    "frame_L_max_le_97": true,
+    "no_255": true,
+    "black_point_12_15": true,
+    "exposure_within_cap": false,
+    "exposure_point_valid": true,
+    "bible_black_12_15": true,
+    "bible_no_clip": true,
+    "bible_chroma_B4": true,
+    "bible_target_met": true
+   },
+   "meets_bible": true,
+   "outputs": {
+    "graded": "assets/renders/poses/nordic/v7/pose-mb-in-v7-graded-v3.png"
+   },
+   "measurements": "assets/renders/poses/nordic/v7/pose-mb-in-v7-measurements-v3.json"
+  },
+  {
+   "id": "pose-k-boy-0-v7",
+   "frame": "K-boy-0",
+   "fix": true,
+   "suffix": "-fix-v3",
+   "target_L": 92.0,
+   "range": [
+    90.0,
+    94.0
+   ],
+   "measured_L": 89.4,
+   "meets_target": null,
+   "reference": "default (0.5, 0.3): no wall patch in the clay selfcheck",
+   "target_source": "Bible 'אור' 1.4: the wall by the window L 90-94",
+   "stops_v3": 0.305,
+   "needed_v3": 0.405,
+   "stops_v2": 0.2,
+   "delta_stops_v3_minus_v2": 0.105,
+   "flag": "stops inherited from the group reference (+0.305); this frame's own need +0.405 | no clay wall patch: stops inherited from K-boy (one exposure per camera point); the default point is a reading only",
+   "black": 13.5,
+   "black_point": {
+    "darkest_patch_L_before": 15.5,
+    "pull_to_L": 13.5,
+    "pivot_sRGB": 0.45,
+    "b": 0.0472,
+    "note": "v3: shadow-only pull (Bible black point 12-15 both ways)"
+   },
+   "window_p99": 96.6,
+   "frame_max": 96.6,
+   "px255": [
+    0,
+    0
+   ],
+   "wall_HSL": [
+    36.1,
+    19.5,
+    89.4
+   ],
+   "chroma_B4": {
+    "delta_C": -0.55,
+    "applied": "none (within +1.5 C)",
+    "before": {
+     "pixels": 2627025,
+     "L_lab": 88.22,
+     "C": 3.04,
+     "C_p95": 5.63,
+     "hue": 84.2
+    },
+    "after": {
+     "pixels": 2627025,
+     "L_lab": 95.86,
+     "C": 2.49,
+     "C_p95": 5.29,
+     "hue": 99.3
+    },
+    "after_guard": null
+   },
+   "window_wall": null,
+   "hall_B5": null,
+   "checks": {
+    "window_p99_le_97": true,
+    "frame_L_max_le_97": true,
+    "no_255": true,
+    "black_point_12_15": true,
+    "exposure_within_cap": false,
+    "exposure_point_valid": false,
+    "bible_black_12_15": true,
+    "bible_no_clip": true,
+    "bible_chroma_B4": true
+   },
+   "meets_bible": true,
+   "outputs": {
+    "graded": "assets/renders/poses/nordic/v7/pose-k-boy-0-v7-graded-fix-v3.png",
+    "frame": "assets/renders/poses/nordic/v7/pose-k-boy-0-v7-frame-fix-v3.png",
+    "os6": "assets/renders/poses/nordic/v7/pose-k-boy-0-v7-graded-os6-fix-v3.png"
+   },
+   "measurements": "assets/renders/poses/nordic/v7/pose-k-boy-0-v7-measurements-fix-v3.json",
+   "judged_by_reference": {
+    "frame": "K-boy",
+    "meets_target": true
+   }
+  }
+ ]
+}

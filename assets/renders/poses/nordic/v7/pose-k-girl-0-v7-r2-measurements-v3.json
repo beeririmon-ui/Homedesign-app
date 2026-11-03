@@ -1,0 +1,256 @@
+{
+ "asset_id": "pose-k-girl-0-v7-r2",
+ "frame": "K-girl-0",
+ "kind": "pose",
+ "label": "pose-k-girl-0-v7-r2: v8 retake, grading v3 (Bible targets), own wall point",
+ "date": "2026-11-03",
+ "script": "assets/renders/house-nordic-v7-2026-11-02/process_v8.py",
+ "settings": {
+  "grade_order": "v2",
+  "wb_point": "auto",
+  "lock": "none",
+  "suffix": "-v3",
+  "exposure": "bible",
+  "stops": null,
+  "target": null
+ },
+ "bible_v3": {
+  "reference_point": [
+   0.22,
+   0.08
+  ],
+  "reference_source": "white upper wall of the desk wall, left of the prints (0.22, 0.08), render-agent point: the wall K-girl reads at hero_wall_mid",
+  "target_L": 92.0,
+  "range": [
+   90.0,
+   94.0
+  ],
+  "measured_L": 92.7,
+  "meets_target": true,
+  "target_source": "Bible 'אור' 1.4: the wall by the window L 90-94",
+  "judged_by": "own reference wall",
+  "reference_HSL": [
+   36.1,
+   16.0,
+   92.7
+  ],
+  "wall_hue_32_40_sat_15_28": true,
+  "near_white_chroma_B4": {
+   "delta_C": -0.63,
+   "ok": true
+  },
+  "meets_bible": true
+ },
+ "input": "assets/renders/poses/nordic/v7/pose-k-girl-0-v7-r2.png",
+ "size_px": [
+  2736,
+  1539
+ ],
+ "overscan": true,
+ "outputs": {
+  "graded": "assets/renders/poses/nordic/v7/pose-k-girl-0-v7-r2-graded-v3.png",
+  "frame": "assets/renders/poses/nordic/v7/pose-k-girl-0-v7-r2-frame-v3.png",
+  "os6": "assets/renders/poses/nordic/v7/pose-k-girl-0-v7-r2-graded-os6-v3.png"
+ },
+ "clay": "assets/blockout/house/framing/round4/poses/K-girl-0.png",
+ "grade_target_L": 92.0,
+ "sample_point": {
+  "uv": [
+   0.22,
+   0.08
+  ],
+  "source": "white upper wall of the desk wall, left of the prints (0.22, 0.08), render-agent point: the wall K-girl reads at hero_wall_mid",
+  "warning": null
+ },
+ "measure_before": {
+  "ceiling (0.550,0.040) clay L 77.5": [
+   13.0,
+   11.6,
+   81.2
+  ],
+  "floor_centre (0.500,0.930) clay L 62.4": [
+   27.1,
+   30.2,
+   62.6
+  ],
+  "reference_Kg (0.404,0.158) clay L 73.7": [
+   24.8,
+   24.9,
+   71.9
+  ],
+  "upper white wall left of the prints (0.220,0.080) [Kg group: L 90-94]": [
+   20.2,
+   10.1,
+   85.8
+  ],
+  "brightest area (window / door): L p50 / p99 / max": [
+   83.7,
+   88.8,
+   96.1
+  ],
+  "pixels with a 255 channel: inside / outside that area": [
+   0,
+   0
+  ],
+  "frame L p99 / max": [
+   88.8,
+   96.1
+  ],
+  "darkest 0.5% patch L [12-15]": 3.2,
+  "frame mean L": 73.4
+ },
+ "grade": {
+  "order": "v2",
+  "exposure_mode": "bible",
+  "white_balance": {
+   "patch": [
+    0.22,
+    0.08
+   ],
+   "H_before": 20.2,
+   "H_target": 36,
+   "gains_rgb": [
+    0.9859,
+    1.0058,
+    0.9859
+   ],
+   "gain_clip": "0.9-1.1",
+   "source": "white upper wall of the desk wall, left of the prints (0.22, 0.08), render-agent point: the wall K-girl reads at hero_wall_mid"
+  },
+  "exposure": {
+   "patch": [
+    0.22,
+    0.08
+   ],
+   "target_L": 92.0,
+   "needed_stops": 0.22,
+   "applied_stops": 0.22,
+   "flag": "to the Bible target",
+   "solver": "bisection on the HSL L of the patch after exposure, chroma, S curve and roll-off (v3)",
+   "cap": "none: the Bible target (V7Q4, test page only); sanity +-1.5 stop",
+   "source": "white upper wall of the desk wall, left of the prints (0.22, 0.08), render-agent point: the wall K-girl reads at hero_wall_mid",
+   "target_source": "Bible 'אור' 1.4: the wall by the window L 90-94",
+   "target_range": [
+    90.0,
+    94.0
+   ]
+  },
+  "saturation": "chroma x0.90 (linear, toward luminance)",
+  "s_curve": {
+   "mix": 0.12,
+   "shape": "smoothstep blend"
+  },
+  "black_point": {
+   "darkest_patch_L_before": 3.3,
+   "lift_to_L": 12.5,
+   "blend": 0.0948
+  },
+  "near_white_chroma_guard_B4": {
+   "population": "pixels with HSL L > 80 after the grade",
+   "before": {
+    "pixels": 2977535,
+    "L_lab": 85.69,
+    "C": 3.76,
+    "C_p95": 8.28,
+    "hue": 49.3
+   },
+   "after": {
+    "pixels": 2977535,
+    "L_lab": 92.5,
+    "C": 3.13,
+    "C_p95": 6.87,
+    "hue": 71.1
+   },
+   "delta_C": -0.63,
+   "limit": 1.5,
+   "applied": "none (within +1.5 C)"
+  },
+  "highlight_rolloff": {
+   "knee_L": 94,
+   "asymptote_L": 97.0,
+   "on": "max channel, hue kept",
+   "position": "last (v2): the ceiling of the chain"
+  },
+  "grain": "none",
+  "vignette": "none"
+ },
+ "measure_after": {
+  "ceiling (0.550,0.040) clay L 77.5": [
+   22.9,
+   15.9,
+   88.6
+  ],
+  "floor_centre (0.500,0.930) clay L 62.4": [
+   28.6,
+   34.3,
+   70.7
+  ],
+  "reference_Kg (0.404,0.158) clay L 73.7": [
+   27.5,
+   30.1,
+   79.6
+  ],
+  "upper white wall left of the prints (0.220,0.080) [Kg group: L 90-94]": [
+   36.1,
+   16.0,
+   92.7
+  ],
+  "brightest area (window / door): L p50 / p99 / max": [
+   90.9,
+   94.6,
+   96.3
+  ],
+  "pixels with a 255 channel: inside / outside that area": [
+   0,
+   0
+  ],
+  "frame L p99 / max": [
+   94.6,
+   96.3
+  ],
+  "darkest 0.5% patch L [12-15]": 12.5,
+  "frame mean L": 80.6
+ },
+ "checks": {
+  "window_p99_le_97": true,
+  "frame_L_max_le_97": true,
+  "no_255": true,
+  "black_point_12_15": true,
+  "exposure_within_cap": false,
+  "exposure_point_valid": true,
+  "bible_black_12_15": true,
+  "bible_no_clip": true,
+  "bible_chroma_B4": true,
+  "bible_target_met": true
+ },
+ "v7_for_comparison": {},
+ "lock_v2_summary": null,
+ "lock_v2_verdict": null,
+ "product_boxes_clay": {
+  "girl/bedspread": [
+   0.0,
+   0.1206,
+   0.6502,
+   0.71
+  ],
+  "girl/bookshelf": [
+   0.0,
+   0.1456,
+   0.1096,
+   0.3694
+  ],
+  "girl/framed-prints": [
+   0.334,
+   0.4816,
+   0.1463,
+   0.3118
+  ],
+  "girl/doll": [
+   0.2937,
+   0.3256,
+   0.4812,
+   0.5934
+  ]
+ },
+ "product_box_rule": "each product inside its clay box +-15 % of the box size; read visually"
+}

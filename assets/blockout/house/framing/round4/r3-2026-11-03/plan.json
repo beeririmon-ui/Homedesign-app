@@ -1,0 +1,863 @@
+{
+  "version": "1.0 (render-agent, 2026-11-02): round 4 = the round-3 plan 1.2 with the v7 clay changes of the prompt headers, plus the 12 transition poses | 1.1 (2026-11-02 20:35): overscan for the 21+ deg pans; PD-35 / K-boy-0 / K-girl-0 / CB-0 shifts per motion-agent + bath r3 (2026-11-03)",
+  "source": "framing/round3/plan.json + assets/prompts/recipe-v5.nordic/*-v7.txt headers + docs/transitions-plan-2026-11-02.md section 3",
+  "rules": "placeholders = the products the prompt renders (incl. stand-ins); 'Explicitly empty' slots have no proxy; lamps = the lamp slots among the placeholders + the shell LEDs of the kitchen (round-2 FRAME_LAMPS); the bath shower downlight stays off as in round 2; the living seen from H0 / C0 = the M0 v6 placeholder clay (same products as m0-v6.txt; geometry decides what the door shows); C0 also shows the H0 console vignette through the portal | round 4: no wall-decor / floor-lamp in M0 (and in every vista of it), accent pair = two 12 cm cubes, no umbrella stand, no roman blinds, no bookends; D1 lantern 50 wide flat (bottom 1.50); W0 planter D38 x H34 + plant to 1.30",
+  "hall_cube_lamp": null,
+  "frames": {
+    "D1": {
+      "placeholders": [
+        "dining-pendant",
+        "table-runner",
+        "centerpiece-vase",
+        "candle-holders",
+        "curtains",
+        "bench-pad",
+        "framed-art",
+        "condiment-set",
+        "bowl",
+        "tableware-set",
+        "mug-set",
+        "dining-rug",
+        "kitchen-runner"
+      ],
+      "lamps": [
+        "kitchen-dining/dining-pendant",
+        "kitchen-dining/led-shelves",
+        "kitchen-dining/led-niche"
+      ],
+      "also_visible": [],
+      "empty_per_designer": [
+        "floor-vase",
+        "kitchen-sconce",
+        "sink-set",
+        "utensil-crock",
+        "cutting-boards",
+        "open-shelf-ceramics"
+      ],
+      "prompt_file": "d1-v7.txt",
+      "notes": "round 4 (v7 clay): d1.txt: kitchen sconce empty (off); pendant + shelf/niche LEDs lit"
+    },
+    "D2": {
+      "placeholders": [
+        "bench-pad",
+        "framed-art",
+        "condiment-set",
+        "bowl",
+        "paper-towel-holder",
+        "tableware-set",
+        "mug-set",
+        "canisters",
+        "tea-towel",
+        "dining-rug",
+        "kitchen-runner"
+      ],
+      "lamps": [
+        "kitchen-dining/led-shelves",
+        "kitchen-dining/led-niche"
+      ],
+      "also_visible": [],
+      "empty_per_designer": [
+        "herb-pots",
+        "step-stool",
+        "kitchen-sconce",
+        "sink-set",
+        "utensil-crock",
+        "cutting-boards",
+        "open-shelf-ceramics"
+      ],
+      "prompt_file": "d2-v7.txt",
+      "notes": "round 4 (v7 clay): d2.txt: same point PD as D1; sconce empty; LEDs lit; step-stool empty"
+    },
+    "H0": {
+      "placeholders": [
+        "framed-art",
+        "console-vessel",
+        "key-tray",
+        "wall-hooks",
+        "wall-sconce",
+        "bench-cushion",
+        "bench-throw",
+        "basket"
+      ],
+      "lamps": [
+        "hall/wall-sconce",
+        "living/pendant",
+        "living/wall-sconce",
+        "living/accent-sconces"
+      ],
+      "also_visible": [
+        "living/framed-art",
+        "living/accent-sconces",
+        "living/pendant",
+        "living/curtains",
+        "living/vase",
+        "living/wall-sconce",
+        "living/basket",
+        "living/rug",
+        "living/cushions",
+        "living/table-runner",
+        "living/candle-holders",
+        "living/bowl",
+        "living/sofa-cover"
+      ],
+      "empty_per_designer": [
+        "ceiling-light",
+        "planter",
+        "storage-boxes",
+        "table-lamp",
+        "umbrella-stand"
+      ],
+      "prompt_file": "h0-v7.txt",
+      "notes": "round 4 (v7 clay): h0-B.txt: table-lamp, planter, storage-boxes removed; wall-sconce = 15 cm fabric cube (lit); 4 oval pegs, no rail board; hall walls ~2/3 stop under the living (hall roof light x2.0); living through the door = M0 clay + verdict 3.3 items"
+    },
+    "C0": {
+      "placeholders": [
+        "gallery-art",
+        "ceiling-lights"
+      ],
+      "lamps": [
+        "corridor/ceiling-lights",
+        "living/pendant",
+        "living/wall-sconce",
+        "living/accent-sconces"
+      ],
+      "also_visible": [
+        "living/framed-art",
+        "living/accent-sconces",
+        "living/pendant",
+        "living/curtains",
+        "living/vase",
+        "living/wall-sconce",
+        "living/basket",
+        "living/rug",
+        "living/cushions",
+        "living/table-runner",
+        "living/candle-holders",
+        "living/bowl",
+        "living/sofa-cover",
+        "hall/framed-art",
+        "hall/console-vessel",
+        "hall/key-tray"
+      ],
+      "empty_per_designer": [
+        "picture-lights",
+        "runner-rug",
+        "gallery-stool"
+      ],
+      "prompt_file": "c0-v7.txt",
+      "notes": "round 4 (v7 clay): c0.txt: picture-light bars removed, no runner, no stool; hall vista = the H0 rebuild (console vignette seen through the portal), living beyond = M0 clay + verdict 3.3 items"
+    },
+    "MB0": {
+      "placeholders": [
+        "framed-art",
+        "bedside-sconces",
+        "curtains",
+        "sill-vase",
+        "planter",
+        "nightstand-vase",
+        "trinket-dish",
+        "candle-holders",
+        "pillowcases",
+        "bedding",
+        "cushions",
+        "throw"
+      ],
+      "lamps": [
+        "master/bedside-sconces"
+      ],
+      "also_visible": [],
+      "empty_per_designer": [
+        "floor-lamp",
+        "nightstand-tray",
+        "bedside-carafe",
+        "basket",
+        "pendant"
+      ],
+      "prompt_file": "mb0-v7.txt",
+      "notes": "round 4 (v7 clay): mb0.txt: floor-lamp removed; 1.1.x nudges; sconce pair lit"
+    },
+    "K-boy": {
+      "placeholders": [
+        "bookshelf",
+        "bedding",
+        "bedspread",
+        "cushions",
+        "soft-toy",
+        "toy-basket",
+        "toy-cars",
+        "rug"
+      ],
+      "lamps": [],
+      "also_visible": [],
+      "empty_per_designer": [
+        "desk-chair",
+        "desk-organizer",
+        "framed-prints",
+        "pendant",
+        "roman-blind",
+        "skateboard",
+        "wall-sconce"
+      ],
+      "prompt_file": "k-boy-v7.txt",
+      "notes": "round 4 (v7 clay): k-boy.txt: no pendant, wall lamp, prints, chair, skateboard; daylight only (both lamp slots empty)"
+    },
+    "K-girl": {
+      "placeholders": [
+        "framed-prints",
+        "bookshelf",
+        "bedding",
+        "bedspread",
+        "cushions",
+        "soft-toy",
+        "doll",
+        "toy-basket",
+        "rug"
+      ],
+      "lamps": [],
+      "also_visible": [],
+      "empty_per_designer": [
+        "desk-chair",
+        "desk-organizer",
+        "doll-pram",
+        "pendant",
+        "roman-blind",
+        "wall-sconce"
+      ],
+      "prompt_file": "k-girl-v7.txt",
+      "notes": "round 4 (v7 clay): k-girl.txt: no pendant, wall lamp, chair, pram; daylight only"
+    },
+    "B1": {
+      "placeholders": [
+        "shower-curtain",
+        "wall-sconce",
+        "vanity-sconces",
+        "bath-mat",
+        "toilet-paper-stand",
+        "reed-diffuser",
+        "candle",
+        "shower-dispensers",
+        "floor-planter",
+        "toilet-brush"
+      ],
+      "lamps": [
+        "bath/wall-sconce",
+        "bath/vanity-sconces",
+        "bath/shower-downlight"
+      ],
+      "also_visible": [],
+      "empty_per_designer": [
+        "shower-stool",
+        "towel-ladder",
+        "bin",
+        "ledge-planter"
+      ],
+      "prompt_file": "b1-v7-r3-v8.txt",
+      "notes": "round 4 (v7 clay): b1.txt: curtain gathered at (5.30, 11.15); no stool, ladder, towels, floor planter, ledge planter, bin, brush; east vanity sconce lit (cut at the right edge); shower downlight lit at low power (4 W), ceiling light off; bath window light x3 (plan 3); r3 (2026-11-03, V7Q3): + floor planter D30 x H30 + fern at (5.05, 10.20), + toilet brush D8 x H38 at (4.70, 10.30)"
+    },
+    "B2": {
+      "placeholders": [
+        "vanity-sconces",
+        "shower-curtain",
+        "shower-dispensers",
+        "soap-dispenser",
+        "toothbrush-cup",
+        "vanity-vase",
+        "storage-basket",
+        "towel-ring",
+        "hand-towel",
+        "floor-planter"
+      ],
+      "lamps": [
+        "bath/vanity-sconces",
+        "bath/wall-sconce",
+        "bath/shower-downlight"
+      ],
+      "also_visible": [],
+      "empty_per_designer": [
+        "shower-stool",
+        "towel-ladder"
+      ],
+      "prompt_file": "b2-v7-r3-v8.txt",
+      "notes": "round 4 (v7 clay): b2.txt: same point CB as B1, same products and light; F8 mirror pass from CB in selfcheck; shower downlight lit at low power; r3 (2026-11-03, V7Q3): + the floor planter of B1 r3 at (5.05, 10.20), cut by the left edge"
+    },
+    "W0": {
+      "placeholders": [
+        "curtains",
+        "basket",
+        "waste-basket",
+        "planter",
+        "shelf-boxes",
+        "desk-organizer",
+        "rug"
+      ],
+      "lamps": [],
+      "also_visible": [],
+      "empty_per_designer": [
+        "bookends",
+        "desk-lamp",
+        "desk-tray",
+        "framed-art",
+        "magazine-holder",
+        "pendant",
+        "wall-sconce"
+      ],
+      "prompt_file": "w0-v7.txt",
+      "notes": "round 4 (v7 clay): w0.txt: no pendant, wall lamp, desk lamp, art, tray, magazine holder; organizer on the desk; curtain stack per 1.1.x; daylight only"
+    },
+    "M0": {
+      "placeholders": [
+        "framed-art",
+        "accent-sconces",
+        "pendant",
+        "curtains",
+        "vase",
+        "wall-sconce",
+        "basket",
+        "rug",
+        "cushions",
+        "table-runner",
+        "candle-holders",
+        "bowl",
+        "sofa-cover"
+      ],
+      "lamps": [
+        "living/pendant",
+        "living/wall-sconce",
+        "living/accent-sconces"
+      ],
+      "also_visible": [],
+      "empty_per_designer": [
+        "floor-lamp",
+        "magazine-holder",
+        "planter",
+        "pouf",
+        "sofa-cover",
+        "wall-decor"
+      ],
+      "prompt_file": "m0-v7.txt",
+      "notes": "round 4 (v7 clay): m0-v6.txt: a 3840x2160 M0 clay with placeholders for every product (the designer's first choice; m0-clay-4k.png without proxies is the fallback the manager named); daylight only like m0-clay-4k; pouf, planter, magazine-holder, sofa-cover: no proxy; sofa-cover = the muslin fringe throw of cushions set A (the v4 px_throw proxy over the right arm), not a slipcover"
+    }
+  },
+  "poses": {
+    "H0x": {
+      "base": "H0",
+      "loc": [
+        2.877,
+        9.039,
+        1.2
+      ],
+      "yaw": 25,
+      "u0": 0.52,
+      "v0": 0.46,
+      "source": "house-plan.json cameras.H0x; shift = H0 (plan doc 3)",
+      "group": "B",
+      "placeholders": [
+        "framed-art",
+        "console-vessel",
+        "key-tray",
+        "wall-hooks",
+        "wall-sconce",
+        "bench-cushion",
+        "bench-throw",
+        "basket"
+      ],
+      "lamps": [
+        "hall/wall-sconce",
+        "living/pendant",
+        "living/wall-sconce",
+        "living/accent-sconces"
+      ],
+      "also_visible": [
+        "living/framed-art",
+        "living/accent-sconces",
+        "living/pendant",
+        "living/curtains",
+        "living/vase",
+        "living/wall-sconce",
+        "living/basket",
+        "living/rug",
+        "living/cushions",
+        "living/table-runner",
+        "living/candle-holders",
+        "living/bowl",
+        "living/sofa-cover"
+      ]
+    },
+    "H0e": {
+      "base": "H0",
+      "loc": [
+        2.877,
+        9.039,
+        1.2
+      ],
+      "yaw": 0,
+      "u0": 0.5,
+      "v0": 0.46,
+      "source": "house-plan.json cameras.H0e; shift per the transitions plan table 3",
+      "group": "B",
+      "placeholders": [
+        "framed-art",
+        "console-vessel",
+        "key-tray",
+        "wall-hooks",
+        "wall-sconce",
+        "bench-cushion",
+        "bench-throw",
+        "basket"
+      ],
+      "lamps": [
+        "hall/wall-sconce",
+        "living/pendant",
+        "living/wall-sconce",
+        "living/accent-sconces"
+      ],
+      "also_visible": [
+        "living/framed-art",
+        "living/accent-sconces",
+        "living/pendant",
+        "living/curtains",
+        "living/vase",
+        "living/wall-sconce",
+        "living/basket",
+        "living/rug",
+        "living/cushions",
+        "living/table-runner",
+        "living/candle-holders",
+        "living/bowl",
+        "living/sofa-cover"
+      ]
+    },
+    "M0p": {
+      "base": "M0",
+      "loc": [
+        1.25,
+        5.55,
+        1.2
+      ],
+      "yaw": 0,
+      "u0": 0.52,
+      "v0": 0.46,
+      "source": "house-plan.json cameras.M0p; shift = M0",
+      "group": "A",
+      "placeholders": [
+        "framed-art",
+        "accent-sconces",
+        "pendant",
+        "curtains",
+        "vase",
+        "wall-sconce",
+        "basket",
+        "rug",
+        "cushions",
+        "table-runner",
+        "candle-holders",
+        "bowl",
+        "sofa-cover"
+      ],
+      "lamps": [
+        "living/pendant",
+        "living/wall-sconce",
+        "living/accent-sconces"
+      ],
+      "also_visible": []
+    },
+    "M0x": {
+      "base": "M0",
+      "loc": [
+        1.25,
+        5.55,
+        1.2
+      ],
+      "yaw": -35,
+      "u0": 0.52,
+      "v0": 0.46,
+      "source": "house-plan.json cameras.M0x; the dining seen through the opening = the D1 placeholders",
+      "group": "A",
+      "placeholders": [
+        "framed-art",
+        "accent-sconces",
+        "pendant",
+        "curtains",
+        "vase",
+        "wall-sconce",
+        "basket",
+        "rug",
+        "cushions",
+        "table-runner",
+        "candle-holders",
+        "bowl",
+        "sofa-cover"
+      ],
+      "lamps": [
+        "living/pendant",
+        "living/wall-sconce",
+        "living/accent-sconces",
+        "kitchen-dining/dining-pendant",
+        "kitchen-dining/led-shelves",
+        "kitchen-dining/led-niche"
+      ],
+      "also_visible": [
+        "kitchen-dining/dining-pendant",
+        "kitchen-dining/table-runner",
+        "kitchen-dining/centerpiece-vase",
+        "kitchen-dining/candle-holders",
+        "kitchen-dining/curtains",
+        "kitchen-dining/bench-pad",
+        "kitchen-dining/framed-art",
+        "kitchen-dining/condiment-set",
+        "kitchen-dining/bowl",
+        "kitchen-dining/tableware-set",
+        "kitchen-dining/mug-set",
+        "kitchen-dining/dining-rug",
+        "kitchen-dining/kitchen-runner"
+      ]
+    },
+    "PD-35": {
+      "base": "D1",
+      "loc": [
+        2.8,
+        3.8,
+        1.1
+      ],
+      "yaw": -35,
+      "u0": 0.52,
+      "v0": 0.46,
+      "source": "end of the T-LD dolly, heading -35 (transitions plan 3)",
+      "group": "A",
+      "placeholders": [
+        "dining-pendant",
+        "table-runner",
+        "centerpiece-vase",
+        "candle-holders",
+        "curtains",
+        "bench-pad",
+        "framed-art",
+        "condiment-set",
+        "bowl",
+        "tableware-set",
+        "mug-set",
+        "dining-rug",
+        "kitchen-runner",
+        "paper-towel-holder",
+        "canisters",
+        "tea-towel"
+      ],
+      "lamps": [
+        "kitchen-dining/dining-pendant",
+        "kitchen-dining/led-shelves",
+        "kitchen-dining/led-niche"
+      ],
+      "also_visible": [],
+      "shift_note": "u0/v0 0.52/0.43 -> 0.52/0.46: the shift change moves into the code pan (motion-agent, docs/transitions-render-plan-2026-11-02.md section 2, via the coordinator 2026-11-02)"
+    },
+    "W0-in": {
+      "base": "W0",
+      "loc": [
+        -0.825,
+        8.55,
+        1.1
+      ],
+      "yaw": 0,
+      "u0": 0.5,
+      "v0": 0.46,
+      "source": "end of the T-HW slide (transitions plan 3)",
+      "group": "A",
+      "placeholders": [
+        "curtains",
+        "basket",
+        "waste-basket",
+        "planter",
+        "shelf-boxes",
+        "desk-organizer",
+        "rug"
+      ],
+      "lamps": [],
+      "also_visible": []
+    },
+    "S1prime": {
+      "base": "C0",
+      "loc": [
+        2.641,
+        13.0,
+        1.2
+      ],
+      "yaw": 0,
+      "u0": 0.5,
+      "v0": 0.46,
+      "source": "house-plan.json cameras S1' (rail station); file name S1prime",
+      "group": "B",
+      "placeholders": [
+        "gallery-art",
+        "ceiling-lights"
+      ],
+      "lamps": [
+        "corridor/ceiling-lights",
+        "living/pendant",
+        "living/wall-sconce",
+        "living/accent-sconces"
+      ],
+      "also_visible": [
+        "living/framed-art",
+        "living/accent-sconces",
+        "living/pendant",
+        "living/curtains",
+        "living/vase",
+        "living/wall-sconce",
+        "living/basket",
+        "living/rug",
+        "living/cushions",
+        "living/table-runner",
+        "living/candle-holders",
+        "living/bowl",
+        "living/sofa-cover",
+        "hall/framed-art",
+        "hall/console-vessel",
+        "hall/key-tray"
+      ]
+    },
+    "R2m": {
+      "base": "C0",
+      "loc": [
+        2.558,
+        14.4,
+        1.2
+      ],
+      "yaw": 0,
+      "u0": 0.5,
+      "v0": 0.46,
+      "source": "derived checkpoint on the rail line (transitions plan 3); the boy and bath rooms seen through their open doors",
+      "group": "B",
+      "placeholders": [
+        "gallery-art",
+        "ceiling-lights"
+      ],
+      "lamps": [
+        "corridor/ceiling-lights",
+        "living/pendant",
+        "living/wall-sconce",
+        "living/accent-sconces",
+        "bath/wall-sconce",
+        "bath/vanity-sconces",
+        "bath/shower-downlight"
+      ],
+      "also_visible": [
+        "living/framed-art",
+        "living/accent-sconces",
+        "living/pendant",
+        "living/curtains",
+        "living/vase",
+        "living/wall-sconce",
+        "living/basket",
+        "living/rug",
+        "living/cushions",
+        "living/table-runner",
+        "living/candle-holders",
+        "living/bowl",
+        "living/sofa-cover",
+        "hall/framed-art",
+        "hall/console-vessel",
+        "hall/key-tray",
+        "boy/bookshelf",
+        "boy/bedding",
+        "boy/bedspread",
+        "boy/cushions",
+        "boy/soft-toy",
+        "boy/toy-basket",
+        "boy/toy-cars",
+        "boy/rug",
+        "bath/shower-curtain",
+        "bath/wall-sconce",
+        "bath/vanity-sconces",
+        "bath/bath-mat",
+        "bath/toilet-paper-stand",
+        "bath/reed-diffuser",
+        "bath/candle",
+        "bath/shower-dispensers"
+      ]
+    },
+    "K-boy-0": {
+      "base": "K-boy",
+      "loc": [
+        1.1,
+        13.0,
+        1.0
+      ],
+      "yaw": 0,
+      "u0": 0.5,
+      "v0": 0.46,
+      "source": "end of the T-CBoy slide (transitions plan 3)",
+      "group": "A",
+      "placeholders": [
+        "bookshelf",
+        "bedding",
+        "bedspread",
+        "cushions",
+        "soft-toy",
+        "toy-basket",
+        "toy-cars",
+        "rug"
+      ],
+      "lamps": [],
+      "also_visible": [],
+      "shift_note": "u0/v0 0.52/0.44 -> 0.5/0.46: the shift change moves into the code pan (motion-agent, docs/transitions-render-plan-2026-11-02.md section 2, via the coordinator 2026-11-02)"
+    },
+    "K-girl-0": {
+      "base": "K-girl",
+      "loc": [
+        1.1,
+        16.63,
+        1.0
+      ],
+      "yaw": 0,
+      "u0": 0.5,
+      "v0": 0.46,
+      "source": "end of the T-CGirl slide (transitions plan 3)",
+      "group": "A",
+      "placeholders": [
+        "framed-prints",
+        "bookshelf",
+        "bedding",
+        "bedspread",
+        "cushions",
+        "soft-toy",
+        "doll",
+        "toy-basket",
+        "rug"
+      ],
+      "lamps": [],
+      "also_visible": [],
+      "shift_note": "u0/v0 0.52/0.44 -> 0.5/0.46: the shift change moves into the code pan (motion-agent, docs/transitions-render-plan-2026-11-02.md section 2, via the coordinator 2026-11-02)"
+    },
+    "CB-0": {
+      "base": "B1",
+      "loc": [
+        3.8,
+        13.2,
+        1.15
+      ],
+      "yaw": 0,
+      "u0": 0.5,
+      "v0": 0.46,
+      "source": "end of the T-CBath slide, point CB (transitions plan 3)",
+      "group": "A",
+      "placeholders": [
+        "shower-curtain",
+        "wall-sconce",
+        "vanity-sconces",
+        "bath-mat",
+        "toilet-paper-stand",
+        "reed-diffuser",
+        "candle",
+        "shower-dispensers",
+        "soap-dispenser",
+        "toothbrush-cup",
+        "vanity-vase",
+        "storage-basket",
+        "towel-ring",
+        "hand-towel"
+      ],
+      "lamps": [
+        "bath/wall-sconce",
+        "bath/vanity-sconces",
+        "bath/shower-downlight"
+      ],
+      "also_visible": [],
+      "shift_note": "u0/v0 0.52/0.46 -> 0.5/0.46: the shift change moves into the code pan (motion-agent, docs/transitions-render-plan-2026-11-02.md section 2, via the coordinator 2026-11-02)"
+    },
+    "MB-in": {
+      "base": "MB0",
+      "loc": [
+        2.45,
+        21.05,
+        1.2
+      ],
+      "yaw": 0,
+      "u0": 0.5,
+      "v0": 0.46,
+      "source": "end of the T-CM pull-back (transitions plan 3); the corridor and hall seen through the door",
+      "group": "B",
+      "placeholders": [
+        "framed-art",
+        "bedside-sconces",
+        "curtains",
+        "sill-vase",
+        "planter",
+        "nightstand-vase",
+        "trinket-dish",
+        "candle-holders",
+        "pillowcases",
+        "bedding",
+        "cushions",
+        "throw"
+      ],
+      "lamps": [
+        "master/bedside-sconces",
+        "corridor/ceiling-lights",
+        "living/pendant",
+        "living/wall-sconce",
+        "living/accent-sconces"
+      ],
+      "also_visible": [
+        "corridor/gallery-art",
+        "corridor/ceiling-lights",
+        "living/framed-art",
+        "living/accent-sconces",
+        "living/pendant",
+        "living/curtains",
+        "living/vase",
+        "living/wall-sconce",
+        "living/basket",
+        "living/rug",
+        "living/cushions",
+        "living/table-runner",
+        "living/candle-holders",
+        "living/bowl",
+        "living/sofa-cover",
+        "hall/framed-art",
+        "hall/console-vessel",
+        "hall/key-tray"
+      ]
+    }
+  },
+  "overscan": {
+    "frames": [
+      "B1",
+      "B2",
+      "CB-0",
+      "D1",
+      "D2",
+      "K-boy",
+      "K-boy-0",
+      "K-girl",
+      "K-girl-0",
+      "M0",
+      "M0p",
+      "M0x",
+      "PD-35"
+    ],
+    "rule": "every still in a pan of 21 deg or more (P0, P1, P2 of T-LD, P-D, the T-CBoy / T-CGirl / T-CBath pans, P-B): about 3 % of the frame added on every side, same camera and focal length, the 16:9 frame is the centre crop",
+    "canvas_px": [
+      4072,
+      2290
+    ],
+    "frame_px": [
+      3840,
+      2160
+    ],
+    "crop_box_px": [
+      116,
+      65,
+      3956,
+      2225
+    ],
+    "per_side_fraction_x": 0.0302,
+    "per_side_fraction_y": 0.0301,
+    "motion_agent": "--a-overscan / --b-overscan 0.03: use the '-os6' files (canvas cropped to the frame width = 16:9 + 6 % height) or the canvas with x overscan 0.0302",
+    "not_applied": {
+      "M0": "the M0 clay and both M0 jobs were sent at 16:9 before the request (20:27 UTC); the pan gap at M0 stays for inpainting",
+      "D1": "the D1 clay and job were sent at 16:9 before the request; the pan gap at D1 stays for inpainting"
+    },
+    "source": "coordinator message 2026-11-02 (motion-agent's pan-gap check)"
+  },
+  "source_r3": "assets/blockout/house/framing_r4_bath_r3.py; briefs/render-v7-retakes-2026-11-03.md task 2; b1-v7-r3.txt / b2-v7-r3.txt clay lines"
+}

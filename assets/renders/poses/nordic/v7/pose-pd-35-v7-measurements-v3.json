@@ -1,0 +1,313 @@
+{
+ "asset_id": "pose-pd-35-v7",
+ "frame": "PD-35",
+ "kind": "pose",
+ "label": "grading v3 (Bible targets, V7Q4)",
+ "date": "2026-11-03",
+ "script": "assets/renders/house-nordic-v7-2026-11-02/process_v8.py",
+ "settings": {
+  "grade_order": "v2",
+  "wb_point": "auto",
+  "lock": "none",
+  "suffix": "-v3",
+  "exposure": "bible",
+  "stops": null,
+  "target": null
+ },
+ "bible_v3": {
+  "reference_point": [
+   0.41191908717155457,
+   0.23303824663162231
+  ],
+  "reference_source": "hero_wall_mid (clay selfcheck)",
+  "target_L": 92.0,
+  "range": [
+   90.0,
+   94.0
+  ],
+  "measured_L": 91.9,
+  "meets_target": true,
+  "target_source": "Bible 'אור' 1.4: the wall by the window L 90-94",
+  "judged_by": "own reference wall",
+  "reference_HSL": [
+   36.0,
+   17.1,
+   91.9
+  ],
+  "wall_hue_32_40_sat_15_28": true,
+  "near_white_chroma_B4": {
+   "delta_C": -1.4,
+   "ok": true
+  },
+  "meets_bible": true
+ },
+ "input": "assets/renders/poses/nordic/v7/pose-pd-35-v7.png",
+ "size_px": [
+  2736,
+  1539
+ ],
+ "overscan": true,
+ "outputs": {
+  "graded": "assets/renders/poses/nordic/v7/pose-pd-35-v7-graded-v3.png",
+  "frame": "assets/renders/poses/nordic/v7/pose-pd-35-v7-frame-v3.png",
+  "os6": "assets/renders/poses/nordic/v7/pose-pd-35-v7-graded-os6-v3.png"
+ },
+ "clay": "assets/blockout/house/framing/round4/poses/PD-35.png",
+ "grade_target_L": 92.0,
+ "sample_point": {
+  "uv": [
+   0.41191908717155457,
+   0.23303824663162231
+  ],
+  "source": "hero_wall_mid (clay selfcheck)",
+  "warning": null
+ },
+ "measure_before": {
+  "hero_wall_high (0.412,0.125) clay L 94.8": [
+   35.8,
+   10.9,
+   84.5
+  ],
+  "hero_wall_mid (0.412,0.233) clay L 94.8": [
+   37.1,
+   11.3,
+   86.0
+  ],
+  "ceiling (0.550,0.040) clay L 85.1": [
+   30.0,
+   24.1,
+   69.5
+  ],
+  "floor_centre (0.500,0.930) clay L 87.8": [
+   28.9,
+   21.9,
+   64.2
+  ],
+  "reference_PD (0.541,0.137) clay L 86.7": [
+   30.0,
+   24.5,
+   70.5
+  ],
+  "brightest area (window / door): L p50 / p99 / max": [
+   89.2,
+   99.6,
+   100.0
+  ],
+  "pixels with a 255 channel: inside / outside that area": [
+   11548,
+   2334
+  ],
+  "frame L p99 / max": [
+   98.4,
+   100.0
+  ],
+  "darkest 0.5% patch L [12-15]": 9.1,
+  "frame mean L": 73.5
+ },
+ "grade": {
+  "order": "v2",
+  "exposure_mode": "bible",
+  "white_balance": {
+   "patch": [
+    0.41191908717155457,
+    0.23303824663162231
+   ],
+   "H_before": 37.1,
+   "H_target": 36,
+   "gains_rgb": [
+    1.0011,
+    0.9995,
+    1.0011
+   ],
+   "gain_clip": "0.9-1.1",
+   "source": "hero_wall_mid (clay selfcheck)"
+  },
+  "exposure": {
+   "patch": [
+    0.41191908717155457,
+    0.23303824663162231
+   ],
+   "target_L": 92.0,
+   "needed_stops": 0.19,
+   "applied_stops": 0.19,
+   "flag": "to the Bible target",
+   "solver": "bisection on the HSL L of the patch after exposure, chroma, S curve and roll-off (v3)",
+   "cap": "none: the Bible target (V7Q4, test page only); sanity +-1.5 stop",
+   "source": "hero_wall_mid (clay selfcheck)",
+   "target_source": "Bible 'אור' 1.4: the wall by the window L 90-94",
+   "target_range": [
+    90.0,
+    94.0
+   ]
+  },
+  "saturation": "chroma x0.90 (linear, toward luminance)",
+  "s_curve": {
+   "mix": 0.12,
+   "shape": "smoothstep blend"
+  },
+  "black_point": {
+   "darkest_patch_L_before": 9.3,
+   "lift_to_L": 12.5,
+   "blend": 0.0354
+  },
+  "near_white_chroma_guard_B4": {
+   "population": "pixels with HSL L > 80 after the grade",
+   "before": {
+    "pixels": 2331136,
+    "L_lab": 85.48,
+    "C": 8.45,
+    "C_p95": 17.83,
+    "hue": 99.3
+   },
+   "after": {
+    "pixels": 2331136,
+    "L_lab": 90.71,
+    "C": 7.05,
+    "C_p95": 14.93,
+    "hue": 96.2
+   },
+   "delta_C": -1.4,
+   "limit": 1.5,
+   "applied": "none (within +1.5 C)"
+  },
+  "highlight_rolloff": {
+   "knee_L": 94,
+   "asymptote_L": 97.0,
+   "on": "max channel, hue kept",
+   "position": "last (v2): the ceiling of the chain"
+  },
+  "grain": "none",
+  "vignette": "none"
+ },
+ "measure_after": {
+  "hero_wall_high (0.412,0.125) clay L 94.8": [
+   34.8,
+   16.1,
+   90.8
+  ],
+  "hero_wall_mid (0.412,0.233) clay L 94.8": [
+   36.0,
+   17.1,
+   91.9
+  ],
+  "ceiling (0.550,0.040) clay L 85.1": [
+   29.9,
+   28.3,
+   75.8
+  ],
+  "floor_centre (0.500,0.930) clay L 87.8": [
+   28.7,
+   24.9,
+   70.2
+  ],
+  "reference_PD (0.541,0.137) clay L 86.7": [
+   29.9,
+   29.0,
+   76.9
+  ],
+  "brightest area (window / door): L p50 / p99 / max": [
+   94.2,
+   96.6,
+   96.6
+  ],
+  "pixels with a 255 channel: inside / outside that area": [
+   0,
+   0
+  ],
+  "frame L p99 / max": [
+   96.6,
+   96.6
+  ],
+  "darkest 0.5% patch L [12-15]": 12.5,
+  "frame mean L": 78.9
+ },
+ "checks": {
+  "window_p99_le_97": true,
+  "frame_L_max_le_97": true,
+  "no_255": true,
+  "black_point_12_15": true,
+  "exposure_within_cap": true,
+  "exposure_point_valid": true,
+  "bible_black_12_15": true,
+  "bible_no_clip": true,
+  "bible_chroma_B4": true,
+  "bible_target_met": true
+ },
+ "v7_for_comparison": {
+  "clay_lock_v1_worst_abs_shift_strong_peaks": 0.0333,
+  "grade_v1_exposure": {
+   "patch": [
+    0.41191908717155457,
+    0.23303824663162231
+   ],
+   "target_L": 90.0,
+   "needed_stops": 0.131,
+   "applied_stops": 0.131,
+   "flag": "within cap"
+  },
+  "measure_after_v1_window": [
+   93.6,
+   97.5,
+   97.5
+  ]
+ },
+ "lock_v2_summary": null,
+ "lock_v2_verdict": null,
+ "product_boxes_clay": {
+  "kitchen-dining/dining-pendant": [
+   0.5172,
+   0.6299,
+   0.0,
+   0.3035
+  ],
+  "kitchen-dining/table-runner": [
+   0.4089,
+   0.7117,
+   0.5777,
+   0.638
+  ],
+  "kitchen-dining/centerpiece-vase": [
+   0.5395,
+   0.6071,
+   0.4061,
+   0.6052
+  ],
+  "kitchen-dining/candle-holders": [
+   0.4735,
+   0.5356,
+   0.5332,
+   0.6157
+  ],
+  "kitchen-dining/curtains": [
+   0.4347,
+   0.4698,
+   0.0,
+   0.7546
+  ],
+  "kitchen-dining/bench-pad": [
+   0.5474,
+   0.8787,
+   0.7266,
+   0.9122
+  ],
+  "kitchen-dining/dining-rug": [
+   0.2431,
+   0.9659,
+   0.7419,
+   1.0
+  ],
+  "kitchen-dining/framed-art": [
+   0.7814,
+   0.8274,
+   0.2454,
+   0.3454
+  ],
+  "kitchen-dining/kitchen-runner": [
+   0.6734,
+   1.0,
+   0.7349,
+   0.9236
+  ]
+ },
+ "product_box_rule": "each product inside its clay box +-15 % of the box size; read visually"
+}

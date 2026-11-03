@@ -1,0 +1,323 @@
+{
+ "asset_id": "k-girl-v7",
+ "frame": "K-girl",
+ "kind": "master",
+ "label": "grading v3 (Bible targets, V7Q4) on the zero-token fix",
+ "date": "2026-11-03",
+ "script": "assets/renders/house-nordic-v7-2026-11-02/process_v8.py",
+ "settings": {
+  "grade_order": "v2",
+  "wb_point": "auto",
+  "lock": "none",
+  "suffix": "-fix-v3",
+  "exposure": "bible",
+  "stops": null,
+  "target": null
+ },
+ "bible_v3": {
+  "reference_point": [
+   0.40354350209236145,
+   0.1581043004989624
+  ],
+  "reference_source": "hero_wall_mid (clay selfcheck)",
+  "target_L": 92.0,
+  "range": [
+   90.0,
+   94.0
+  ],
+  "measured_L": 92.6,
+  "meets_target": true,
+  "target_source": "Bible 'אור' 1.4: the wall by the window L 90-94",
+  "judged_by": "own reference wall",
+  "reference_HSL": [
+   36.1,
+   20.2,
+   92.6
+  ],
+  "wall_hue_32_40_sat_15_28": true,
+  "near_white_chroma_B4": {
+   "delta_C": -1.0,
+   "ok": true
+  },
+  "meets_bible": true
+ },
+ "input": "assets/renders/girl/nordic/v7/k-girl-v7-fix.png",
+ "size_px": [
+  2736,
+  1539
+ ],
+ "overscan": true,
+ "outputs": {
+  "graded": "assets/renders/girl/nordic/v7/k-girl-v7-graded-fix-v3.png",
+  "frame": "assets/renders/girl/nordic/v7/k-girl-v7-frame-fix-v3.png",
+  "os6": "assets/renders/girl/nordic/v7/k-girl-v7-graded-os6-fix-v3.png"
+ },
+ "clay": "assets/blockout/house/framing/round4/K-girl.png",
+ "grade_target_L": 92.0,
+ "sample_point": {
+  "uv": [
+   0.40354350209236145,
+   0.1581043004989624
+  ],
+  "source": "hero_wall_mid (clay selfcheck)",
+  "warning": null
+ },
+ "measure_before": {
+  "hero_wall_high (0.404,0.038) clay L 88.0": [
+   27.3,
+   14.9,
+   82.3
+  ],
+  "hero_wall_mid (0.404,0.158) clay L 88.8": [
+   24.8,
+   11.9,
+   84.8
+  ],
+  "paint_block (0.533,0.461) clay L 82.7": [
+   21.5,
+   21.7,
+   77.4
+  ],
+  "ceiling (0.550,0.040) clay L 84.2": [
+   29.4,
+   16.0,
+   78.3
+  ],
+  "floor_centre (0.500,0.930) clay L 67.3": [
+   28.9,
+   28.7,
+   71.0
+  ],
+  "reference_Kg (0.404,0.158) clay L 88.8": [
+   24.9,
+   11.8,
+   84.8
+  ],
+  "brightest area (window / door): L p50 / p99 / max": [
+   84.7,
+   98.6,
+   100.0
+  ],
+  "pixels with a 255 channel: inside / outside that area": [
+   738,
+   3
+  ],
+  "frame L p99 / max": [
+   96.3,
+   100.0
+  ],
+  "darkest 0.5% patch L [12-15]": 4.5,
+  "frame mean L": 64.0
+ },
+ "grade": {
+  "order": "v2",
+  "exposure_mode": "bible",
+  "white_balance": {
+   "patch": [
+    0.40354350209236145,
+    0.1581043004989624
+   ],
+   "H_before": 24.8,
+   "H_target": 36,
+   "gains_rgb": [
+    0.9875,
+    1.0052,
+    0.9875
+   ],
+   "gain_clip": "0.9-1.1",
+   "source": "hero_wall_mid (clay selfcheck)"
+  },
+  "exposure": {
+   "patch": [
+    0.40354350209236145,
+    0.1581043004989624
+   ],
+   "target_L": 92.0,
+   "needed_stops": 0.252,
+   "applied_stops": 0.252,
+   "flag": "to the Bible target",
+   "solver": "bisection on the HSL L of the patch after exposure, chroma, S curve and roll-off (v3)",
+   "cap": "none: the Bible target (V7Q4, test page only); sanity +-1.5 stop",
+   "source": "hero_wall_mid (clay selfcheck)",
+   "target_source": "Bible 'אור' 1.4: the wall by the window L 90-94",
+   "target_range": [
+    90.0,
+    94.0
+   ]
+  },
+  "saturation": "chroma x0.90 (linear, toward luminance)",
+  "s_curve": {
+   "mix": 0.12,
+   "shape": "smoothstep blend"
+  },
+  "black_point": {
+   "darkest_patch_L_before": 4.7,
+   "lift_to_L": 12.5,
+   "blend": 0.0819
+  },
+  "near_white_chroma_guard_B4": {
+   "population": "pixels with HSL L > 80 after the grade",
+   "before": {
+    "pixels": 1656017,
+    "L_lab": 82.26,
+    "C": 6.47,
+    "C_p95": 12.06,
+    "hue": 93.2
+   },
+   "after": {
+    "pixels": 1656017,
+    "L_lab": 89.67,
+    "C": 5.47,
+    "C_p95": 10.52,
+    "hue": 95.7
+   },
+   "delta_C": -1.0,
+   "limit": 1.5,
+   "applied": "none (within +1.5 C)"
+  },
+  "highlight_rolloff": {
+   "knee_L": 94,
+   "asymptote_L": 97.0,
+   "on": "max channel, hue kept",
+   "position": "last (v2): the ceiling of the chain"
+  },
+  "grain": "none",
+  "vignette": "none"
+ },
+ "measure_after": {
+  "hero_wall_high (0.404,0.038) clay L 88.0": [
+   34.8,
+   22.9,
+   90.3
+  ],
+  "hero_wall_mid (0.404,0.158) clay L 88.8": [
+   36.1,
+   20.2,
+   92.6
+  ],
+  "paint_block (0.533,0.461) clay L 82.7": [
+   25.4,
+   29.5,
+   85.6
+  ],
+  "ceiling (0.550,0.040) clay L 84.2": [
+   34.9,
+   22.3,
+   86.6
+  ],
+  "floor_centre (0.500,0.930) clay L 67.3": [
+   31.1,
+   35.9,
+   79.5
+  ],
+  "reference_Kg (0.404,0.158) clay L 88.8": [
+   36.2,
+   20.2,
+   92.7
+  ],
+  "brightest area (window / door): L p50 / p99 / max": [
+   92.3,
+   96.6,
+   96.6
+  ],
+  "pixels with a 255 channel: inside / outside that area": [
+   0,
+   0
+  ],
+  "frame L p99 / max": [
+   96.6,
+   96.6
+  ],
+  "darkest 0.5% patch L [12-15]": 12.5,
+  "frame mean L": 71.8
+ },
+ "checks": {
+  "window_p99_le_97": true,
+  "frame_L_max_le_97": true,
+  "no_255": true,
+  "black_point_12_15": true,
+  "exposure_within_cap": false,
+  "exposure_point_valid": true,
+  "bible_black_12_15": true,
+  "bible_no_clip": true,
+  "bible_chroma_B4": true,
+  "bible_target_met": true
+ },
+ "v7_for_comparison": {
+  "clay_lock_v1_worst_abs_shift_strong_peaks": 0.0245,
+  "grade_v1_exposure": {
+   "patch": [
+    0.40354350209236145,
+    0.1581043004989624
+   ],
+   "target_L": 90.0,
+   "needed_stops": 0.191,
+   "applied_stops": 0.191,
+   "flag": "within cap"
+  },
+  "measure_after_v1_window": [
+   91.1,
+   97.4,
+   97.7
+  ]
+ },
+ "lock_v2_summary": null,
+ "lock_v2_verdict": null,
+ "product_boxes_clay": {
+  "girl/bedding": [
+   0.1999,
+   0.4556,
+   0.5712,
+   0.7847
+  ],
+  "girl/bedspread": [
+   0.3453,
+   0.5395,
+   0.5956,
+   0.7725
+  ],
+  "girl/cushions": [
+   0.3099,
+   0.4089,
+   0.4712,
+   0.5991
+  ],
+  "girl/soft-toy": [
+   0.2161,
+   0.249,
+   0.5096,
+   0.5978
+  ],
+  "girl/bookshelf": [
+   0.4241,
+   0.5584,
+   0.1528,
+   0.3725
+  ],
+  "girl/framed-prints": [
+   0.7254,
+   0.9015,
+   0.0738,
+   0.29
+  ],
+  "girl/rug": [
+   0.0,
+   0.7073,
+   0.8183,
+   1.0
+  ],
+  "girl/toy-basket": [
+   0.2655,
+   0.3743,
+   0.6939,
+   1.0
+  ],
+  "girl/doll": [
+   0.6854,
+   0.7171,
+   0.462,
+   0.5742
+  ]
+ },
+ "product_box_rule": "each product inside its clay box +-15 % of the box size; read visually"
+}

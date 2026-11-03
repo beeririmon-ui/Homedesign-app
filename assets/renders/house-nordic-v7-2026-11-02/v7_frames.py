@@ -47,6 +47,26 @@ FRAMES = {
     "pose-mb-in-v7":   ("MB-in",    "pose",   "poses/MB-in.png",     False, False, "master"),
 }
 
+# The v8 retakes of 2026-11-03 (briefs/render-v7-retakes-2026-11-03.md task 2): a separate table so the v7 loops above stay as
+# they are. Every retake counts as a pan participant for G1.4 (the brief: 2 px per strip after register), W0-in included. The bath
+# r3 clays live in round4/r3-2026-11-03/ (framing_r4_bath_r3.py); their wall patches are those of B1 / B2.
+RETAKES = {
+    "pose-w0-in-v7-r2":    ("W0-in",    "pose",   "poses/W0-in.png",          True, False, "work"),
+    "pose-k-girl-0-v7-r2": ("K-girl-0", "pose",   "poses/K-girl-0.png",       True, True,  "girl"),
+    "b1-v7-r3":            ("B1",       "master", "r3-2026-11-03/B1.png",     True, True,  "bath"),
+    "b2-v7-r3":            ("B2",       "master", "r3-2026-11-03/B2.png",     True, True,  "bath"),
+    # the one reserve attempt of the brief (600): a new sample of the same v8 prompt after a lock_v2 scale / position failure
+    "pose-k-girl-0-v7-r3": ("K-girl-0", "pose",   "poses/K-girl-0.png",       True, True,  "girl"),
+}
+RETAKES_JOBS = os.path.join(HERE, "jobs-retakes-2026-11-03.json")
+R3_SELFCHECK = os.path.join(R4, "r3-2026-11-03", "selfcheck.json")
+
+
+def frame(fid):
+    """(frame, kind, clay, pan, overscan, room) for a v7 still or a 2026-11-03 retake."""
+    return FRAMES[fid] if fid in FRAMES else RETAKES[fid]
+
+
 # M0's living-room furniture is not boxed in the round-4 selfcheck; these are the pilot's boxes on the same camera
 # (process_v7.py M0_REGIONS, the same QA used in qa/reports/2026-11-02-v7-g1/tools/common.py)
 M0_FURNITURE = {"sofa (fixed-product)": (0.5208, 0.8396, 0.5509, 0.7949),
@@ -59,6 +79,10 @@ def jobs():
 
 
 def job(fid):
+    if fid in RETAKES and os.path.exists(RETAKES_JOBS):
+        for j in json.load(open(RETAKES_JOBS)).get("jobs", []):
+            if j["id"] == fid:
+                return j
     return next(j for j in jobs()["jobs"] if j["id"] == fid)
 
 
@@ -91,9 +115,18 @@ def frame_box_px(w, h):
     return (int(round(x0 * sx)), int(round(y0 * sy)), int(round(x1 * sx)), int(round(y1 * sy)))
 
 
-def fixed_boxes(frame, overscan):
+def selfcheck_for(fid, frame):
+    """The clay selfcheck entry: the r3 clay's own boxes for a bath retake (planter, brush), else the round-4 entry."""
+    if fid in ("b1-v7-r3", "b2-v7-r3") and os.path.exists(R3_SELFCHECK):
+        r3 = json.load(open(R3_SELFCHECK)).get("frames", {})
+        if frame in r3 and r3[frame].get("boxes"):
+            return r3[frame]
+    return selfcheck()[frame]
+
+
+def fixed_boxes(frame, overscan, fid=None):
     """Clay boxes of the fixed furniture / architecture / windows / doors / mirrors, in 16:9-frame uv."""
-    sc = selfcheck()[frame]
+    sc = selfcheck_for(fid, frame)
     W, H = sc["resolution"]
     out = {}
     for nm, b in sc.get("boxes", {}).items():
@@ -108,6 +141,6 @@ def fixed_boxes(frame, overscan):
     return out
 
 
-def product_boxes(frame):
-    sc = selfcheck()[frame]
+def product_boxes(frame, fid=None):
+    sc = selfcheck_for(fid, frame)
     return {nm: b["box"] for nm, b in sc.get("boxes", {}).items() if b["kind"] in ("proxy", "proxy-transit")}

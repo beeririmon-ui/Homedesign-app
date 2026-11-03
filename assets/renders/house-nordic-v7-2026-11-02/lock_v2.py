@@ -206,14 +206,14 @@ def lock_v2(render, clay, frame, boxes, pan, frame_id=None, overlay_path=None):
 
 def run_frame(fid, render_path=None, out_path=None, overlay_path=None):
     """The lock of one registry still (default: its normalised raw `<id>.png`) against its round-4 clay."""
-    frame, kind, clay_file, pan, overscan, room = VF.FRAMES[fid]
+    frame, kind, clay_file, pan, overscan, room = VF.frame(fid)
     od = VF.out_dir(fid)
     render_path = render_path or os.path.join(od, fid + ".png")
     r = load_rgb(render_path)
     c = load_rgb(os.path.join(VF.R4, clay_file))
     if overscan:
         r, c = crop_frame(r), crop_frame(c)
-    rep = lock_v2(r, c, frame, VF.fixed_boxes(frame, overscan), pan, frame_id=fid, overlay_path=overlay_path)
+    rep = lock_v2(r, c, frame, VF.fixed_boxes(frame, overscan, fid), pan, frame_id=fid, overlay_path=overlay_path)
     rep.update(render=os.path.relpath(render_path, VF.REPO), clay=os.path.relpath(os.path.join(VF.R4, clay_file), VF.REPO),
                overscan_cropped_to_frame=bool(overscan), date="2026-11-03",
                note="geometry only: measured on the normalised raw still (the grade does not move edges); the old clay_lock stays in <id>-measurements.json")
