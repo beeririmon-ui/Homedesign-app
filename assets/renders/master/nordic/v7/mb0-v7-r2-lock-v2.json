@@ -1,0 +1,563 @@
+{
+ "frame": "MB0",
+ "id": "mb0-v7-r2",
+ "size": [
+  1920,
+  1080
+ ],
+ "pan_endpoint": false,
+ "method": "lock_v2 (register + bands + ECC tiles + fixed edges)",
+ "check_raw": {
+  "size": [
+   1920,
+   1080
+  ],
+  "overlap_u": [
+   0.0,
+   0.999
+  ],
+  "overlap_v": [
+   0.0,
+   0.999
+  ],
+  "shift_px": {
+   "dx": 33.53,
+   "dy": -32.62,
+   "response": 0.046
+  },
+  "bands": [
+   {
+    "u": [
+     0.0,
+     0.249
+    ],
+    "dx_px": -73.16,
+    "dy_px": -275.56,
+    "response": 0.015
+   },
+   {
+    "u": [
+     0.249,
+     0.499
+    ],
+    "dx_px": 1.45,
+    "dy_px": -41.28,
+    "response": 0.024
+   },
+   {
+    "u": [
+     0.499,
+     0.749
+    ],
+    "dx_px": -0.96,
+    "dy_px": 87.14,
+    "response": 0.03
+   },
+   {
+    "u": [
+     0.749,
+     0.999
+    ],
+    "dx_px": -0.42,
+    "dy_px": -363.02,
+    "response": 0.03
+   }
+  ],
+  "deltaE": {
+   "mean": 20.73,
+   "p95": 45.89,
+   "share_over_5": 0.933
+  },
+  "L_mean": {
+   "a": 85.6,
+   "b": 66.7
+  }
+ },
+ "register": {
+  "affine": [
+   [
+    0.99832,
+    -0.009,
+    4.37433
+   ],
+   [
+    0.0016,
+    1.02842,
+    -24.8549
+   ]
+  ],
+  "shift_px": [
+   4.37,
+   -24.85
+  ],
+  "scale": [
+   0.99832,
+   1.02842
+  ],
+  "note": "ECC affine, clay (template) -> render coordinates at 1920x1080; scale > 1 = the render drew it larger"
+ },
+ "check_registered": {
+  "size": [
+   1920,
+   1080
+  ],
+  "overlap_u": [
+   0.0,
+   0.999
+  ],
+  "overlap_v": [
+   0.0,
+   0.999
+  ],
+  "shift_px": {
+   "dx": 38.19,
+   "dy": -29.39,
+   "response": 0.027
+  },
+  "bands": [
+   {
+    "u": [
+     0.0,
+     0.249
+    ],
+    "dx_px": -71.92,
+    "dy_px": -263.1,
+    "response": 0.01
+   },
+   {
+    "u": [
+     0.249,
+     0.499
+    ],
+    "dx_px": 0.85,
+    "dy_px": -186.12,
+    "response": 0.022
+   },
+   {
+    "u": [
+     0.499,
+     0.749
+    ],
+    "dx_px": -0.37,
+    "dy_px": 85.73,
+    "response": 0.022
+   },
+   {
+    "u": [
+     0.749,
+     0.999
+    ],
+    "dx_px": 1.97,
+    "dy_px": -513.91,
+    "response": 0.013
+   }
+  ],
+  "deltaE": {
+   "mean": 20.61,
+   "p95": 44.51,
+   "share_over_5": 0.933
+  },
+  "L_mean": {
+   "a": 85.6,
+   "b": 66.8
+  }
+ },
+ "tiles_ecc": [
+  {
+   "u": [
+    0.0,
+    0.25
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": null,
+   "dy_px": null,
+   "rho": null,
+   "counted": false,
+   "note": "ECC did not converge"
+  },
+  {
+   "u": [
+    0.25,
+    0.5
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": -0.52,
+   "dy_px": -15.67,
+   "rho": 0.352,
+   "counted": true
+  },
+  {
+   "u": [
+    0.5,
+    0.75
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": 2.25,
+   "dy_px": -15.42,
+   "rho": 0.261,
+   "counted": true
+  },
+  {
+   "u": [
+    0.75,
+    1.0
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": null,
+   "dy_px": null,
+   "rho": null,
+   "counted": false,
+   "note": "ECC did not converge"
+  },
+  {
+   "u": [
+    0.0,
+    0.25
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": 1.33,
+   "dy_px": 1.46,
+   "rho": 0.366,
+   "counted": true
+  },
+  {
+   "u": [
+    0.25,
+    0.5
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": -8.55,
+   "dy_px": 5.99,
+   "rho": 0.19,
+   "counted": true
+  },
+  {
+   "u": [
+    0.5,
+    0.75
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": 1.45,
+   "dy_px": 7.0,
+   "rho": 0.14,
+   "counted": true
+  },
+  {
+   "u": [
+    0.75,
+    1.0
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": -3.73,
+   "dy_px": 5.68,
+   "rho": 0.26,
+   "counted": true
+  }
+ ],
+ "tiles_ecc_registered": [
+  {
+   "u": [
+    0.0,
+    0.25
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": null,
+   "dy_px": null,
+   "rho": null,
+   "counted": false,
+   "note": "ECC did not converge"
+  },
+  {
+   "u": [
+    0.25,
+    0.5
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": -0.88,
+   "dy_px": 0.57,
+   "rho": 0.377,
+   "counted": true
+  },
+  {
+   "u": [
+    0.5,
+    0.75
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": 2.12,
+   "dy_px": 1.64,
+   "rho": 0.287,
+   "counted": true
+  },
+  {
+   "u": [
+    0.75,
+    1.0
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": -0.17,
+   "dy_px": -36.82,
+   "rho": 0.152,
+   "counted": true
+  },
+  {
+   "u": [
+    0.0,
+    0.25
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": 20.49,
+   "dy_px": -1.35,
+   "rho": 0.417,
+   "counted": true
+  },
+  {
+   "u": [
+    0.25,
+    0.5
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": -5.26,
+   "dy_px": -1.14,
+   "rho": 0.184,
+   "counted": true
+  },
+  {
+   "u": [
+    0.5,
+    0.75
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": 6.09,
+   "dy_px": -2.11,
+   "rho": 0.121,
+   "counted": true
+  },
+  {
+   "u": [
+    0.75,
+    1.0
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": -0.24,
+   "dy_px": 2.46,
+   "rho": 0.248,
+   "counted": true
+  }
+ ],
+ "fixed_edges": {
+  "master bed 180x200": {
+   "box": [
+    0.0922,
+    0.9078,
+    0.4245,
+    1.0
+   ],
+   "edges": {
+    "right": {
+     "clay_px": 1718,
+     "render_px": 1763,
+     "d_px": 45,
+     "clay_strength": 10.7,
+     "render_strength": 15.9
+    },
+    "top": {
+     "clay_px": 421,
+     "render_px": 421,
+     "d_px": 0,
+     "clay_strength": 5.5,
+     "render_strength": 26.6
+    }
+   },
+   "worst_edge_px": 45,
+   "kind": "furniture"
+  },
+  "nightstands 45": {
+   "box": [
+    0.1878,
+    0.8122,
+    0.6356,
+    0.7495
+   ],
+   "edges": {
+    "left": {
+     "clay_px": 360,
+     "render_px": 316,
+     "d_px": -44,
+     "clay_strength": 29.9,
+     "render_strength": 28.3
+    },
+    "right": {
+     "clay_px": 1565,
+     "render_px": 1566,
+     "d_px": 1,
+     "clay_strength": 27.8,
+     "render_strength": 15.5
+    },
+    "top": {
+     "clay_px": 715,
+     "render_px": 656,
+     "d_px": -59,
+     "clay_strength": 34.1,
+     "render_strength": 23.2
+    }
+   },
+   "width_ratio": 1.0373,
+   "worst_edge_px": 59,
+   "kind": "furniture"
+  },
+  "G-M4 wainscot": {
+   "box": [
+    0.1872,
+    0.9526,
+    0.3787,
+    0.8292
+   ],
+   "edges": {
+    "left": {
+     "clay_px": 360,
+     "render_px": 314,
+     "d_px": -46,
+     "clay_strength": 11.9,
+     "render_strength": 16.6
+    },
+    "top": {
+     "clay_px": 419,
+     "render_px": 374,
+     "d_px": -45,
+     "clay_strength": 16.8,
+     "render_strength": 36.8
+    },
+    "bottom": {
+     "clay_px": 898,
+     "render_px": 932,
+     "d_px": 34,
+     "clay_strength": 37.9,
+     "render_strength": 21.5
+    }
+   },
+   "height_ratio": 1.1649,
+   "worst_edge_px": 46,
+   "kind": "architecture"
+  },
+  "window W-master": {
+   "box": [
+    0.0,
+    0.1385,
+    0.0,
+    0.6019
+   ],
+   "edges": {
+    "right": {
+     "clay_px": 267,
+     "render_px": 200,
+     "d_px": -67,
+     "clay_strength": 34.0,
+     "render_strength": 13.4
+    }
+   },
+   "worst_edge_px": 67,
+   "kind": "window"
+  }
+ },
+ "summary": {
+  "register_shift_px": [
+   4.37,
+   -24.85
+  ],
+  "register_scale": [
+   0.99832,
+   1.02842
+  ],
+  "register_scale_pct": [
+   -0.17,
+   2.84
+  ],
+  "worst_band_px": null,
+  "bands_reliable": 0,
+  "worst_band_px_after_register": null,
+  "bands_reliable_after_register": 0,
+  "worst_tile_ecc_px": 15.67,
+  "tiles_counted": 6,
+  "worst_tile_ecc_px_after_register": 36.82,
+  "tiles_counted_after_register": 7,
+  "fixed_edges_worst_px": 67,
+  "fixed_edges_measured": 4,
+  "fixed_ratios": {
+   "nightstands 45 w": 1.0373,
+   "G-M4 wainscot h": 1.1649
+  }
+ },
+ "verdict": {
+  "thresholds": {
+   "shift_px": 9.6,
+   "scale_tol": 0.005,
+   "residual_px": 9.6,
+   "residual_rule": "video endpoint: <= 0.5 % of the width after register",
+   "edge_px": 19.2,
+   "ratio": [
+    0.95,
+    1.05
+   ],
+   "source": "docs/ops/quality-gates-2026-11-02.md G1.4 (+ G1.3 ratios, proposal); qa/reports/2026-11-02-v7-g1.md section 1"
+  },
+  "global_pass": false,
+  "residual_pass": false,
+  "edges_pass": false,
+  "residual_measured": true,
+  "pass": false
+ },
+ "render": "assets/renders/master/nordic/v7/mb0-v7-r2.png",
+ "clay": "assets/blockout/house/framing/round4/MB0.png",
+ "overscan_cropped_to_frame": false,
+ "date": "2026-11-03",
+ "note": "geometry only: measured on the normalised raw still (the grade does not move edges); the old clay_lock stays in <id>-measurements.json"
+}

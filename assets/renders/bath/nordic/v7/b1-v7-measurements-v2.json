@@ -1,0 +1,314 @@
+{
+ "asset_id": "b1-v7",
+ "frame": "B1",
+ "kind": "master",
+ "label": null,
+ "date": "2026-11-03",
+ "script": "assets/renders/house-nordic-v7-2026-11-02/process_v8.py",
+ "settings": {
+  "grade_order": "v2",
+  "wb_point": "auto",
+  "lock": "v2",
+  "suffix": "-v2"
+ },
+ "input": "assets/renders/bath/nordic/v7/b1-v7.png",
+ "size_px": [
+  2736,
+  1539
+ ],
+ "overscan": true,
+ "outputs": {
+  "graded": "assets/renders/bath/nordic/v7/b1-v7-graded-v2.png",
+  "frame": "assets/renders/bath/nordic/v7/b1-v7-frame-v2.png",
+  "os6": "assets/renders/bath/nordic/v7/b1-v7-graded-os6-v2.png",
+  "lock": "assets/renders/bath/nordic/v7/b1-v7-lock-v2.json"
+ },
+ "clay": "assets/blockout/house/framing/round4/B1.png",
+ "grade_target_L": 86.0,
+ "sample_point": {
+  "uv": [
+   0.6136400699615479,
+   0.22267240285873413
+  ],
+  "source": "hero_wall_mid (clay selfcheck)",
+  "warning": null
+ },
+ "measure_before": {
+  "hero_wall_high (0.614,0.103) clay L 81.3": [
+   31.5,
+   33.8,
+   66.7
+  ],
+  "hero_wall_mid (0.614,0.223) clay L 79.6": [
+   31.7,
+   35.3,
+   64.7
+  ],
+  "limestone_shower (0.703,0.241) clay L 75.3": [
+   31.3,
+   23.6,
+   65.9
+  ],
+  "wall_beside_window (0.419,0.174) clay L 87.0": [
+   30.7,
+   47.3,
+   80.3
+  ],
+  "ceiling (0.550,0.040) clay L 77.9": [
+   31.3,
+   23.2,
+   61.8
+  ],
+  "floor_centre (0.500,0.930) clay L 70.1": [
+   30.7,
+   23.8,
+   75.3
+  ],
+  "reference_CB (0.419,0.174) clay L 87.0": [
+   30.6,
+   47.0,
+   80.2
+  ],
+  "brightest area (window / door): L p50 / p99 / max": [
+   84.1,
+   99.8,
+   100.0
+  ],
+  "pixels with a 255 channel: inside / outside that area": [
+   6955,
+   1397
+  ],
+  "frame L p99 / max": [
+   99.4,
+   100.0
+  ],
+  "darkest 0.5% patch L [12-15]": 2.1,
+  "frame mean L": 64.9
+ },
+ "grade": {
+  "order": "v2",
+  "white_balance": {
+   "patch": [
+    0.6136400699615479,
+    0.22267240285873413
+   ],
+   "H_before": 31.7,
+   "H_target": 36,
+   "gains_rgb": [
+    0.9608,
+    1.0192,
+    0.9608
+   ],
+   "gain_clip": "0.9-1.1",
+   "source": "hero_wall_mid (clay selfcheck)"
+  },
+  "exposure": {
+   "patch": [
+    0.6136400699615479,
+    0.22267240285873413
+   ],
+   "target_L": 86.0,
+   "needed_stops": 0.789,
+   "applied_stops": 0.2,
+   "flag": "DARK: needs more than +0.2 stop, not lifted further",
+   "cap": "+-0.2 stop (recipe 2.6.2; V7Q4 open)",
+   "source": "hero_wall_mid (clay selfcheck)"
+  },
+  "saturation": "chroma x0.90 (linear, toward luminance)",
+  "s_curve": {
+   "mix": 0.12,
+   "shape": "smoothstep blend"
+  },
+  "black_point": {
+   "darkest_patch_L_before": 2.0,
+   "lift_to_L": 12.5,
+   "blend": 0.1067
+  },
+  "highlight_rolloff": {
+   "knee_L": 94,
+   "asymptote_L": 97.0,
+   "on": "max channel, hue kept",
+   "position": "last (v2): the ceiling of the chain"
+  },
+  "grain": "none",
+  "vignette": "none"
+ },
+ "measure_after": {
+  "hero_wall_high (0.614,0.103) clay L 81.3": [
+   36.4,
+   37.2,
+   74.2
+  ],
+  "hero_wall_mid (0.614,0.223) clay L 79.6": [
+   36.0,
+   38.5,
+   72.3
+  ],
+  "limestone_shower (0.703,0.241) clay L 75.3": [
+   38.0,
+   25.9,
+   73.4
+  ],
+  "wall_beside_window (0.419,0.174) clay L 87.0": [
+   38.0,
+   56.5,
+   86.7
+  ],
+  "ceiling (0.550,0.040) clay L 77.9": [
+   37.0,
+   25.2,
+   69.4
+  ],
+  "floor_centre (0.500,0.930) clay L 70.1": [
+   41.1,
+   27.4,
+   82.2
+  ],
+  "reference_CB (0.419,0.174) clay L 87.0": [
+   37.9,
+   56.0,
+   86.6
+  ],
+  "brightest area (window / door): L p50 / p99 / max": [
+   90.4,
+   96.6,
+   96.6
+  ],
+  "pixels with a 255 channel: inside / outside that area": [
+   0,
+   0
+  ],
+  "frame L p99 / max": [
+   96.6,
+   96.6
+  ],
+  "darkest 0.5% patch L [12-15]": 12.5,
+  "frame mean L": 72.0
+ },
+ "checks": {
+  "window_p99_le_97": true,
+  "frame_L_max_le_97": true,
+  "no_255": true,
+  "black_point_12_15": true,
+  "exposure_within_cap": false,
+  "exposure_point_valid": true
+ },
+ "v7_for_comparison": {
+  "clay_lock_v1_worst_abs_shift_strong_peaks": 0.0069,
+  "grade_v1_exposure": {
+   "patch": [
+    0.6136400699615479,
+    0.22267240285873413
+   ],
+   "target_L": 86.0,
+   "needed_stops": 0.789,
+   "applied_stops": 0.2,
+   "flag": "DARK: needs more than +0.2 stop, not lifted further"
+  },
+  "measure_after_v1_window": [
+   90.4,
+   97.0,
+   97.1
+  ]
+ },
+ "lock_v2_summary": {
+  "register_shift_px": [
+   -1.28,
+   -0.73
+  ],
+  "register_scale": [
+   0.99973,
+   0.99068
+  ],
+  "register_scale_pct": [
+   -0.03,
+   -0.93
+  ],
+  "worst_band_px": 8.34,
+  "bands_reliable": 4,
+  "worst_band_px_after_register": 2.88,
+  "bands_reliable_after_register": 3,
+  "worst_tile_ecc_px": 7.32,
+  "tiles_counted": 8,
+  "worst_tile_ecc_px_after_register": 4.8,
+  "tiles_counted_after_register": 8,
+  "fixed_edges_worst_px": 24,
+  "fixed_edges_measured": 4,
+  "fixed_ratios": {
+   "bath fluted glazing w": 0.954,
+   "bath fluted glazing h": 1.0597,
+   "bath WC + limestone ledge (fixed) w": 0.9982,
+   "window W-bath w": 0.954
+  }
+ },
+ "lock_v2_verdict": {
+  "thresholds": {
+   "shift_px": 9.6,
+   "scale_tol": 0.005,
+   "residual_px": 2.0,
+   "residual_rule": "pan endpoint: <= 2 px per band / tile after register",
+   "edge_px": 19.2,
+   "ratio": [
+    0.95,
+    1.05
+   ],
+   "source": "docs/ops/quality-gates-2026-11-02.md G1.4 (+ G1.3 ratios, proposal); qa/reports/2026-11-02-v7-g1.md section 1"
+  },
+  "global_pass": false,
+  "residual_pass": false,
+  "edges_pass": false,
+  "residual_measured": true,
+  "pass": false
+ },
+ "product_boxes_clay": {
+  "bath/shower-curtain": [
+   0.6559,
+   0.7122,
+   0.0,
+   0.9873
+  ],
+  "bath/shower-dispensers": [
+   0.7451,
+   0.7937,
+   0.4397,
+   0.4974
+  ],
+  "bath/bath-mat": [
+   0.4831,
+   0.6245,
+   0.8725,
+   0.9987
+  ],
+  "bath/toilet-paper-stand": [
+   0.3981,
+   0.4334,
+   0.6389,
+   0.8817
+  ],
+  "bath/reed-diffuser": [
+   0.3212,
+   0.3426,
+   0.4135,
+   0.5367
+  ],
+  "bath/candle": [
+   0.2984,
+   0.3185,
+   0.5004,
+   0.5393
+  ],
+  "bath/wall-sconce": [
+   0.4357,
+   0.4641,
+   0.2445,
+   0.3061
+  ],
+  "bath/vanity-sconces": [
+   0.9268,
+   0.9789,
+   0.1795,
+   0.269
+  ]
+ },
+ "product_box_rule": "each product inside its clay box +-15 % of the box size; read visually"
+}

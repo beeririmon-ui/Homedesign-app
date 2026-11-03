@@ -1,0 +1,543 @@
+{
+ "frame": "W0",
+ "id": "w0-v7",
+ "size": [
+  1920,
+  1080
+ ],
+ "pan_endpoint": false,
+ "method": "lock_v2 (register + bands + ECC tiles + fixed edges)",
+ "check_raw": {
+  "size": [
+   1920,
+   1080
+  ],
+  "overlap_u": [
+   0.0,
+   0.999
+  ],
+  "overlap_v": [
+   0.0,
+   0.999
+  ],
+  "shift_px": {
+   "dx": -4.37,
+   "dy": -39.47,
+   "response": 0.048
+  },
+  "bands": [
+   {
+    "u": [
+     0.0,
+     0.249
+    ],
+    "dx_px": -85.19,
+    "dy_px": 2.32,
+    "response": 0.043
+   },
+   {
+    "u": [
+     0.249,
+     0.499
+    ],
+    "dx_px": -2.59,
+    "dy_px": -40.08,
+    "response": 0.129
+   },
+   {
+    "u": [
+     0.499,
+     0.749
+    ],
+    "dx_px": -0.19,
+    "dy_px": -39.03,
+    "response": 0.204
+   },
+   {
+    "u": [
+     0.749,
+     0.999
+    ],
+    "dx_px": -3.14,
+    "dy_px": -35.61,
+    "response": 0.09
+   }
+  ],
+  "deltaE": {
+   "mean": 12.57,
+   "p95": 36.15,
+   "share_over_5": 0.708
+  },
+  "L_mean": {
+   "a": 83.0,
+   "b": 73.2
+  }
+ },
+ "register": {
+  "affine": [
+   [
+    1.00357,
+    0.00058,
+    -5.1177
+   ],
+   [
+    -0.01004,
+    0.94822,
+    18.69748
+   ]
+  ],
+  "shift_px": [
+   -5.12,
+   18.7
+  ],
+  "scale": [
+   1.00357,
+   0.94822
+  ],
+  "note": "ECC affine, clay (template) -> render coordinates at 1920x1080; scale > 1 = the render drew it larger"
+ },
+ "check_registered": {
+  "size": [
+   1920,
+   1080
+  ],
+  "overlap_u": [
+   0.0,
+   0.999
+  ],
+  "overlap_v": [
+   0.0,
+   0.999
+  ],
+  "shift_px": {
+   "dx": -332.53,
+   "dy": -425.88,
+   "response": 0.005
+  },
+  "bands": [
+   {
+    "u": [
+     0.0,
+     0.249
+    ],
+    "dx_px": -82.08,
+    "dy_px": 21.67,
+    "response": 0.044
+   },
+   {
+    "u": [
+     0.249,
+     0.499
+    ],
+    "dx_px": -0.08,
+    "dy_px": -19.72,
+    "response": 0.103
+   },
+   {
+    "u": [
+     0.499,
+     0.749
+    ],
+    "dx_px": 0.78,
+    "dy_px": -11.57,
+    "response": 0.138
+   },
+   {
+    "u": [
+     0.749,
+     0.999
+    ],
+    "dx_px": -4.22,
+    "dy_px": 3.34,
+    "response": 0.081
+   }
+  ],
+  "deltaE": {
+   "mean": 12.24,
+   "p95": 32.7,
+   "share_over_5": 0.699
+  },
+  "L_mean": {
+   "a": 83.0,
+   "b": 73.0
+  }
+ },
+ "tiles_ecc": [
+  {
+   "u": [
+    0.0,
+    0.25
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": -3.08,
+   "dy_px": 13.09,
+   "rho": 0.387,
+   "counted": true
+  },
+  {
+   "u": [
+    0.25,
+    0.5
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": -10.51,
+   "dy_px": -5.81,
+   "rho": 0.452,
+   "counted": true
+  },
+  {
+   "u": [
+    0.5,
+    0.75
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": 11.01,
+   "dy_px": -5.47,
+   "rho": 0.578,
+   "counted": true
+  },
+  {
+   "u": [
+    0.75,
+    1.0
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": -2.44,
+   "dy_px": -0.25,
+   "rho": 0.914,
+   "counted": true
+  },
+  {
+   "u": [
+    0.0,
+    0.25
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": -3.8,
+   "dy_px": -16.81,
+   "rho": 0.365,
+   "counted": true
+  },
+  {
+   "u": [
+    0.25,
+    0.5
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": 3.02,
+   "dy_px": -10.46,
+   "rho": 0.121,
+   "counted": true
+  },
+  {
+   "u": [
+    0.5,
+    0.75
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": -0.26,
+   "dy_px": -11.18,
+   "rho": 0.273,
+   "counted": true
+  },
+  {
+   "u": [
+    0.75,
+    1.0
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": -6.4,
+   "dy_px": -36.26,
+   "rho": 0.804,
+   "counted": true
+  }
+ ],
+ "tiles_ecc_registered": [
+  {
+   "u": [
+    0.0,
+    0.25
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": 1.12,
+   "dy_px": 38.23,
+   "rho": 0.379,
+   "counted": true
+  },
+  {
+   "u": [
+    0.25,
+    0.5
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": -7.89,
+   "dy_px": -1.54,
+   "rho": 0.453,
+   "counted": true
+  },
+  {
+   "u": [
+    0.5,
+    0.75
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": 11.16,
+   "dy_px": 2.22,
+   "rho": 0.573,
+   "counted": true
+  },
+  {
+   "u": [
+    0.75,
+    1.0
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": -2.76,
+   "dy_px": 0.4,
+   "rho": 0.911,
+   "counted": true
+  },
+  {
+   "u": [
+    0.0,
+    0.25
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": -0.34,
+   "dy_px": 1.27,
+   "rho": 0.373,
+   "counted": true
+  },
+  {
+   "u": [
+    0.25,
+    0.5
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": -0.2,
+   "dy_px": -0.9,
+   "rho": 0.331,
+   "counted": true
+  },
+  {
+   "u": [
+    0.5,
+    0.75
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": 0.64,
+   "dy_px": -0.71,
+   "rho": 0.454,
+   "counted": true
+  },
+  {
+   "u": [
+    0.75,
+    1.0
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": -4.17,
+   "dy_px": 16.42,
+   "rho": 0.727,
+   "counted": true
+  }
+ ],
+ "fixed_edges": {
+  "built-in oak desk + shelf": {
+   "box": [
+    0.3161,
+    0.6839,
+    0.2546,
+    0.9046
+   ],
+   "edges": {
+    "left": {
+     "clay_px": 606,
+     "render_px": 603,
+     "d_px": -3,
+     "clay_strength": 55.7,
+     "render_strength": 47.6
+    },
+    "right": {
+     "clay_px": 1312,
+     "render_px": 1293,
+     "d_px": -19,
+     "clay_strength": 8.3,
+     "render_strength": 19.0
+    },
+    "top": {
+     "clay_px": 290,
+     "render_px": 298,
+     "d_px": 8,
+     "clay_strength": 19.0,
+     "render_strength": 45.7
+    },
+    "bottom": {
+     "clay_px": 976,
+     "render_px": 941,
+     "d_px": -35,
+     "clay_strength": 4.4,
+     "render_strength": 19.3
+    }
+   },
+   "width_ratio": 0.9773,
+   "height_ratio": 0.9373,
+   "worst_edge_px": 35,
+   "kind": "architecture"
+  },
+  "desk chair": {
+   "box": [
+    0.4354,
+    0.5646,
+    0.6009,
+    1.0
+   ],
+   "edges": {
+    "left": {
+     "clay_px": 847,
+     "render_px": 846,
+     "d_px": -1,
+     "clay_strength": 18.5,
+     "render_strength": 41.3
+    },
+    "right": {
+     "clay_px": 1121,
+     "render_px": 1072,
+     "d_px": -49,
+     "clay_strength": 17.3,
+     "render_strength": 27.9
+    },
+    "top": {
+     "clay_px": 650,
+     "render_px": 638,
+     "d_px": -12,
+     "clay_strength": 21.2,
+     "render_strength": 5.3
+    }
+   },
+   "width_ratio": 0.8248,
+   "worst_edge_px": 49,
+   "kind": "furniture"
+  },
+  "window W-work": {
+   "box": [
+    0.0,
+    0.124,
+    0.0,
+    0.637
+   ],
+   "edges": {
+    "right": {
+     "clay_px": 293,
+     "render_px": 209,
+     "d_px": -84,
+     "clay_strength": 11.8,
+     "render_strength": 15.5
+    }
+   },
+   "worst_edge_px": 84,
+   "kind": "window"
+  }
+ },
+ "summary": {
+  "register_shift_px": [
+   -5.12,
+   18.7
+  ],
+  "register_scale": [
+   1.00357,
+   0.94822
+  ],
+  "register_scale_pct": [
+   0.36,
+   -5.18
+  ],
+  "worst_band_px": 40.08,
+  "bands_reliable": 3,
+  "worst_band_px_after_register": 19.72,
+  "bands_reliable_after_register": 3,
+  "worst_tile_ecc_px": 36.26,
+  "tiles_counted": 8,
+  "worst_tile_ecc_px_after_register": 38.23,
+  "tiles_counted_after_register": 8,
+  "fixed_edges_worst_px": 84,
+  "fixed_edges_measured": 3,
+  "fixed_ratios": {
+   "built-in oak desk + shelf w": 0.9773,
+   "built-in oak desk + shelf h": 0.9373,
+   "desk chair w": 0.8248
+  }
+ },
+ "verdict": {
+  "thresholds": {
+   "shift_px": 9.6,
+   "scale_tol": 0.005,
+   "residual_px": 9.6,
+   "residual_rule": "video endpoint: <= 0.5 % of the width after register",
+   "edge_px": 19.2,
+   "ratio": [
+    0.95,
+    1.05
+   ],
+   "source": "docs/ops/quality-gates-2026-11-02.md G1.4 (+ G1.3 ratios, proposal); qa/reports/2026-11-02-v7-g1.md section 1"
+  },
+  "global_pass": false,
+  "residual_pass": false,
+  "edges_pass": false,
+  "residual_measured": true,
+  "pass": false
+ },
+ "render": "assets/renders/work/nordic/v7/w0-v7.png",
+ "clay": "assets/blockout/house/framing/round4/W0.png",
+ "overscan_cropped_to_frame": false,
+ "date": "2026-11-03",
+ "note": "geometry only: measured on the normalised raw still (the grade does not move edges); the old clay_lock stays in <id>-measurements.json"
+}

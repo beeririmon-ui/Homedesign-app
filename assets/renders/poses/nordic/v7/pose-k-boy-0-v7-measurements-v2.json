@@ -1,0 +1,240 @@
+{
+ "asset_id": "pose-k-boy-0-v7",
+ "frame": "K-boy-0",
+ "kind": "pose",
+ "label": null,
+ "date": "2026-11-03",
+ "script": "assets/renders/house-nordic-v7-2026-11-02/process_v8.py",
+ "settings": {
+  "grade_order": "v2",
+  "wb_point": "auto",
+  "lock": "v2",
+  "suffix": "-v2"
+ },
+ "input": "assets/renders/poses/nordic/v7/pose-k-boy-0-v7.png",
+ "size_px": [
+  2736,
+  1539
+ ],
+ "overscan": true,
+ "outputs": {
+  "graded": "assets/renders/poses/nordic/v7/pose-k-boy-0-v7-graded-v2.png",
+  "frame": "assets/renders/poses/nordic/v7/pose-k-boy-0-v7-frame-v2.png",
+  "os6": "assets/renders/poses/nordic/v7/pose-k-boy-0-v7-graded-os6-v2.png",
+  "lock": "assets/renders/poses/nordic/v7/pose-k-boy-0-v7-lock-v2.json"
+ },
+ "clay": "assets/blockout/house/framing/round4/poses/K-boy-0.png",
+ "grade_target_L": 90.0,
+ "sample_point": {
+  "uv": [
+   0.5,
+   0.3
+  ],
+  "source": "default (0.5, 0.3): no wall patch in the clay selfcheck",
+  "warning": "NOT VALID: no clay wall patch for this still; the exposure reading is not a wall reading"
+ },
+ "measure_before": {
+  "ceiling (0.550,0.040) clay L 77.7": [
+   33.0,
+   13.2,
+   75.2
+  ],
+  "floor_centre (0.500,0.930) clay L 64.5": [
+   28.7,
+   28.7,
+   60.4
+  ],
+  "reference_Kb (0.404,0.158) clay L 79.6": [
+   36.7,
+   12.5,
+   81.9
+  ],
+  "brightest area (window / door): L p50 / p99 / max": [
+   71.8,
+   93.1,
+   100.0
+  ],
+  "pixels with a 255 channel: inside / outside that area": [
+   28,
+   0
+  ],
+  "frame L p99 / max": [
+   93.1,
+   100.0
+  ],
+  "darkest 0.5% patch L [12-15]": 14.6,
+  "frame mean L": 68.3
+ },
+ "grade": {
+  "order": "v2",
+  "white_balance": {
+   "patch": [
+    0.5,
+    0.3
+   ],
+   "H_before": 35.9,
+   "H_target": 36,
+   "gains_rgb": [
+    0.9999,
+    1.0001,
+    0.9999
+   ],
+   "gain_clip": "0.9-1.1",
+   "source": "default (0.5, 0.3): no wall patch in the clay selfcheck"
+  },
+  "exposure": {
+   "patch": [
+    0.5,
+    0.3
+   ],
+   "target_L": 90.0,
+   "needed_stops": 0.338,
+   "applied_stops": 0.2,
+   "flag": "DARK: needs more than +0.2 stop, not lifted further | NOT VALID: no clay wall patch for this still; the exposure reading is not a wall reading",
+   "cap": "+-0.2 stop (recipe 2.6.2; V7Q4 open)",
+   "source": "default (0.5, 0.3): no wall patch in the clay selfcheck"
+  },
+  "saturation": "chroma x0.90 (linear, toward luminance)",
+  "s_curve": {
+   "mix": 0.12,
+   "shape": "smoothstep blend"
+  },
+  "black_point": {
+   "darkest_patch_L_before": 14.9,
+   "lift": "none (already >= 12)"
+  },
+  "highlight_rolloff": {
+   "knee_L": 94,
+   "asymptote_L": 97.0,
+   "on": "max channel, hue kept",
+   "position": "last (v2): the ceiling of the chain"
+  },
+  "grain": "none",
+  "vignette": "none"
+ },
+ "measure_after": {
+  "ceiling (0.550,0.040) clay L 77.7": [
+   33.2,
+   16.5,
+   81.2
+  ],
+  "floor_centre (0.500,0.930) clay L 64.5": [
+   28.6,
+   32.3,
+   65.3
+  ],
+  "reference_Kb (0.404,0.158) clay L 79.6": [
+   36.9,
+   17.4,
+   88.1
+  ],
+  "brightest area (window / door): L p50 / p99 / max": [
+   77.7,
+   95.8,
+   96.6
+  ],
+  "pixels with a 255 channel: inside / outside that area": [
+   0,
+   0
+  ],
+  "frame L p99 / max": [
+   95.8,
+   96.6
+  ],
+  "darkest 0.5% patch L [12-15]": 14.9,
+  "frame mean L": 73.3
+ },
+ "checks": {
+  "window_p99_le_97": true,
+  "frame_L_max_le_97": true,
+  "no_255": true,
+  "black_point_12_15": true,
+  "exposure_within_cap": false,
+  "exposure_point_valid": false
+ },
+ "v7_for_comparison": {
+  "clay_lock_v1_worst_abs_shift_strong_peaks": 0.0474,
+  "grade_v1_exposure": {
+   "patch": [
+    0.5,
+    0.3
+   ],
+   "target_L": 90.0,
+   "needed_stops": 0.338,
+   "applied_stops": 0.2,
+   "flag": "DARK: needs more than +0.2 stop, not lifted further"
+  },
+  "measure_after_v1_window": [
+   77.7,
+   96.2,
+   97.5
+  ]
+ },
+ "lock_v2_summary": {
+  "register_shift_px": [
+   2.59,
+   7.6
+  ],
+  "register_scale": [
+   0.99977,
+   0.95271
+  ],
+  "register_scale_pct": [
+   -0.02,
+   -4.73
+  ],
+  "worst_band_px": 50.02,
+  "bands_reliable": 3,
+  "worst_band_px_after_register": 8.31,
+  "bands_reliable_after_register": 3,
+  "worst_tile_ecc_px": 41.52,
+  "tiles_counted": 6,
+  "worst_tile_ecc_px_after_register": 16.45,
+  "tiles_counted_after_register": 5,
+  "fixed_edges_worst_px": 45,
+  "fixed_edges_measured": 2,
+  "fixed_ratios": {
+   "boy desk 90x50 (fixed) w": 0.9379
+  }
+ },
+ "lock_v2_verdict": {
+  "thresholds": {
+   "shift_px": 9.6,
+   "scale_tol": 0.005,
+   "residual_px": 2.0,
+   "residual_rule": "pan endpoint: <= 2 px per band / tile after register",
+   "edge_px": 19.2,
+   "ratio": [
+    0.95,
+    1.05
+   ],
+   "source": "docs/ops/quality-gates-2026-11-02.md G1.4 (+ G1.3 ratios, proposal); qa/reports/2026-11-02-v7-g1.md section 1"
+  },
+  "global_pass": false,
+  "residual_pass": false,
+  "edges_pass": false,
+  "residual_measured": true,
+  "pass": false
+ },
+ "product_boxes_clay": {
+  "boy/bedspread": [
+   0.0,
+   0.1206,
+   0.6502,
+   0.71
+  ],
+  "boy/bookshelf": [
+   0.0,
+   0.1456,
+   0.1096,
+   0.3694
+  ],
+  "boy/toy-cars": [
+   0.2748,
+   0.3345,
+   0.5672,
+   0.5961
+  ]
+ },
+ "product_box_rule": "each product inside its clay box +-15 % of the box size; read visually"
+}

@@ -1,0 +1,311 @@
+{
+ "asset_id": "pose-s1prime-v7",
+ "frame": "S1prime",
+ "kind": "pose",
+ "label": null,
+ "date": "2026-11-03",
+ "script": "assets/renders/house-nordic-v7-2026-11-02/process_v8.py",
+ "settings": {
+  "grade_order": "v2",
+  "wb_point": "auto",
+  "lock": "v2",
+  "suffix": "-v2"
+ },
+ "input": "assets/renders/poses/nordic/v7/pose-s1prime-v7.png",
+ "size_px": [
+  2736,
+  1539
+ ],
+ "overscan": false,
+ "outputs": {
+  "graded": "assets/renders/poses/nordic/v7/pose-s1prime-v7-graded-v2.png",
+  "lock": "assets/renders/poses/nordic/v7/pose-s1prime-v7-lock-v2.json"
+ },
+ "clay": "assets/blockout/house/framing/round4/poses/S1prime.png",
+ "grade_target_L": 82.0,
+ "sample_point": {
+  "uv": [
+   0.8136666417121887,
+   0.904444508254528
+  ],
+  "source": "hero_wall_mid (clay selfcheck)",
+  "warning": null
+ },
+ "measure_before": {
+  "hero_wall_mid (0.814,0.904) clay L 77.8": [
+   30.3,
+   16.4,
+   72.5
+  ],
+  "ceiling (0.550,0.040) clay L 75.7": [
+   29.7,
+   14.1,
+   61.0
+  ],
+  "floor_centre (0.500,0.930) clay L 81.0": [
+   29.9,
+   28.1,
+   66.2
+  ],
+  "reference_C0 (0.280,0.039) clay L 84.5": [
+   30.2,
+   14.8,
+   76.0
+  ],
+  "brightest area (window / door): L p50 / p99 / max": [
+   74.9,
+   89.2,
+   99.6
+  ],
+  "pixels with a 255 channel: inside / outside that area": [
+   0,
+   0
+  ],
+  "frame L p99 / max": [
+   89.2,
+   99.6
+  ],
+  "darkest 0.5% patch L [12-15]": 12.0,
+  "frame mean L": 72.9
+ },
+ "grade": {
+  "order": "v2",
+  "white_balance": {
+   "patch": [
+    0.8136666417121887,
+    0.904444508254528
+   ],
+   "H_before": 30.3,
+   "H_target": 36,
+   "gains_rgb": [
+    0.9818,
+    1.0078,
+    0.9818
+   ],
+   "gain_clip": "0.9-1.1",
+   "source": "hero_wall_mid (clay selfcheck)"
+  },
+  "exposure": {
+   "patch": [
+    0.8136666417121887,
+    0.904444508254528
+   ],
+   "target_L": 82.0,
+   "needed_stops": 0.365,
+   "applied_stops": 0.2,
+   "flag": "DARK: needs more than +0.2 stop, not lifted further",
+   "cap": "+-0.2 stop (recipe 2.6.2; V7Q4 open)",
+   "source": "hero_wall_mid (clay selfcheck)"
+  },
+  "saturation": "chroma x0.90 (linear, toward luminance)",
+  "s_curve": {
+   "mix": 0.12,
+   "shape": "smoothstep blend"
+  },
+  "black_point": {
+   "darkest_patch_L_before": 12.0,
+   "lift": "none (already >= 12)"
+  },
+  "highlight_rolloff": {
+   "knee_L": 94,
+   "asymptote_L": 97.0,
+   "on": "max channel, hue kept",
+   "position": "last (v2): the ceiling of the chain"
+  },
+  "grain": "none",
+  "vignette": "none"
+ },
+ "measure_after": {
+  "hero_wall_mid (0.814,0.904) clay L 77.8": [
+   36.1,
+   19.3,
+   77.8
+  ],
+  "ceiling (0.550,0.040) clay L 75.7": [
+   33.6,
+   15.6,
+   65.4
+  ],
+  "floor_centre (0.500,0.930) clay L 81.0": [
+   32.4,
+   31.8,
+   71.0
+  ],
+  "reference_C0 (0.280,0.039) clay L 84.5": [
+   37.8,
+   18.0,
+   81.4
+  ],
+  "brightest area (window / door): L p50 / p99 / max": [
+   80.3,
+   93.6,
+   96.6
+  ],
+  "pixels with a 255 channel: inside / outside that area": [
+   0,
+   0
+  ],
+  "frame L p99 / max": [
+   93.6,
+   96.6
+  ],
+  "darkest 0.5% patch L [12-15]": 12.0,
+  "frame mean L": 78.1
+ },
+ "checks": {
+  "window_p99_le_97": true,
+  "frame_L_max_le_97": true,
+  "no_255": true,
+  "black_point_12_15": true,
+  "exposure_within_cap": false,
+  "exposure_point_valid": true
+ },
+ "v7_for_comparison": {
+  "clay_lock_v1_worst_abs_shift_strong_peaks": 0.0227,
+  "grade_v1_exposure": {
+   "patch": [
+    0.8136666417121887,
+    0.904444508254528
+   ],
+   "target_L": 82.0,
+   "needed_stops": 0.365,
+   "applied_stops": 0.2,
+   "flag": "DARK: needs more than +0.2 stop, not lifted further"
+  },
+  "measure_after_v1_window": [
+   80.3,
+   93.8,
+   97.2
+  ]
+ },
+ "lock_v2_summary": {
+  "register_shift_px": [
+   6.87,
+   1.88
+  ],
+  "register_scale": [
+   0.99474,
+   0.99513
+  ],
+  "register_scale_pct": [
+   -0.53,
+   -0.49
+  ],
+  "worst_band_px": 4.7,
+  "bands_reliable": 1,
+  "worst_band_px_after_register": 1.79,
+  "bands_reliable_after_register": 1,
+  "worst_tile_ecc_px": 15.1,
+  "tiles_counted": 7,
+  "worst_tile_ecc_px_after_register": 13.16,
+  "tiles_counted_after_register": 8,
+  "fixed_edges_worst_px": 69,
+  "fixed_edges_measured": 5,
+  "fixed_ratios": {
+   "hall console w": 1.6744,
+   "hall console h": 1.1678,
+   "G-H4 oak portal w": 1.0045,
+   "G-C3 oak portal w": 1.0812
+  }
+ },
+ "lock_v2_verdict": {
+  "thresholds": {
+   "shift_px": 9.6,
+   "scale_tol": 0.005,
+   "residual_px": 9.6,
+   "residual_rule": "video endpoint: <= 0.5 % of the width after register",
+   "edge_px": 19.2,
+   "ratio": [
+    0.95,
+    1.05
+   ],
+   "source": "docs/ops/quality-gates-2026-11-02.md G1.4 (+ G1.3 ratios, proposal); qa/reports/2026-11-02-v7-g1.md section 1"
+  },
+  "global_pass": false,
+  "residual_pass": false,
+  "edges_pass": false,
+  "residual_measured": true,
+  "pass": false
+ },
+ "product_boxes_clay": {
+  "hall/framed-art": [
+   0.5083,
+   0.5539,
+   0.3435,
+   0.4421
+  ],
+  "hall/console-vessel": [
+   0.5505,
+   0.5685,
+   0.4843,
+   0.5338
+  ],
+  "hall/key-tray": [
+   0.5255,
+   0.5482,
+   0.5269,
+   0.5333
+  ],
+  "living/pendant": [
+   0.3438,
+   0.3677,
+   0.2708,
+   0.3551
+  ],
+  "living/accent-sconces": [
+   0.425,
+   0.4318,
+   0.4037,
+   0.4153
+  ],
+  "living/framed-art": [
+   0.3344,
+   0.4164,
+   0.4023,
+   0.4662
+  ],
+  "living/rug": [
+   0.3344,
+   0.4487,
+   0.575,
+   0.6032
+  ],
+  "living/bowl": [
+   0.3755,
+   0.3883,
+   0.5398,
+   0.5486
+  ],
+  "living/basket": [
+   0.4357,
+   0.4487,
+   0.5347,
+   0.575
+  ],
+  "living/sofa-cover": [
+   0.3979,
+   0.4182,
+   0.5292,
+   0.5347
+  ],
+  "living/cushions": [
+   0.3344,
+   0.4195,
+   0.4884,
+   0.5319
+  ],
+  "living/table-runner": [
+   0.3344,
+   0.3526,
+   0.5431,
+   0.5491
+  ],
+  "living/candle-holders": [
+   0.369,
+   0.3747,
+   0.5171,
+   0.5477
+  ]
+ },
+ "product_box_rule": "each product inside its clay box +-15 % of the box size; read visually"
+}

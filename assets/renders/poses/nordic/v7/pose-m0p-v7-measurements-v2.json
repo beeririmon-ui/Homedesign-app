@@ -1,0 +1,310 @@
+{
+ "asset_id": "pose-m0p-v7",
+ "frame": "M0p",
+ "kind": "pose",
+ "label": null,
+ "date": "2026-11-03",
+ "script": "assets/renders/house-nordic-v7-2026-11-02/process_v8.py",
+ "settings": {
+  "grade_order": "v2",
+  "wb_point": "auto",
+  "lock": "v2",
+  "suffix": "-v2"
+ },
+ "input": "assets/renders/poses/nordic/v7/pose-m0p-v7.png",
+ "size_px": [
+  2736,
+  1539
+ ],
+ "overscan": true,
+ "outputs": {
+  "graded": "assets/renders/poses/nordic/v7/pose-m0p-v7-graded-v2.png",
+  "frame": "assets/renders/poses/nordic/v7/pose-m0p-v7-frame-v2.png",
+  "os6": "assets/renders/poses/nordic/v7/pose-m0p-v7-graded-os6-v2.png",
+  "lock": "assets/renders/poses/nordic/v7/pose-m0p-v7-lock-v2.json"
+ },
+ "clay": "assets/blockout/house/framing/round4/poses/M0p.png",
+ "grade_target_L": 93.0,
+ "sample_point": {
+  "uv": [
+   0.3999203145503998,
+   0.3112027049064636
+  ],
+  "source": "hero_wall_mid (clay selfcheck)",
+  "warning": null
+ },
+ "measure_before": {
+  "hero_wall_high (0.400,0.231) clay L 88.8": [
+   32.2,
+   16.1,
+   74.8
+  ],
+  "hero_wall_mid (0.400,0.311) clay L 89.7": [
+   30.4,
+   20.8,
+   74.0
+  ],
+  "ceiling (0.550,0.040) clay L 86.8": [
+   30.4,
+   17.5,
+   68.0
+  ],
+  "floor_centre (0.500,0.930) clay L 87.1": [
+   32.1,
+   18.7,
+   74.6
+  ],
+  "reference_M0 (0.467,0.385) clay L 87.3": [
+   30.3,
+   18.9,
+   71.2
+  ],
+  "brightest area (window / door): L p50 / p99 / max": [
+   76.3,
+   90.8,
+   98.2
+  ],
+  "pixels with a 255 channel: inside / outside that area": [
+   36,
+   5597
+  ],
+  "frame L p99 / max": [
+   99.2,
+   100.0
+  ],
+  "darkest 0.5% patch L [12-15]": 6.9,
+  "frame mean L": 68.8
+ },
+ "grade": {
+  "order": "v2",
+  "white_balance": {
+   "patch": [
+    0.3999203145503998,
+    0.3112027049064636
+   ],
+   "H_before": 30.4,
+   "H_target": 36,
+   "gains_rgb": [
+    0.9789,
+    1.0091,
+    0.9789
+   ],
+   "gain_clip": "0.9-1.1",
+   "source": "hero_wall_mid (clay selfcheck)"
+  },
+  "exposure": {
+   "patch": [
+    0.3999203145503998,
+    0.3112027049064636
+   ],
+   "target_L": 93.0,
+   "needed_stops": 0.703,
+   "applied_stops": 0.2,
+   "flag": "DARK: needs more than +0.2 stop, not lifted further",
+   "cap": "+-0.2 stop (recipe 2.6.2; V7Q4 open)",
+   "source": "hero_wall_mid (clay selfcheck)"
+  },
+  "saturation": "chroma x0.90 (linear, toward luminance)",
+  "s_curve": {
+   "mix": 0.12,
+   "shape": "smoothstep blend"
+  },
+  "black_point": {
+   "darkest_patch_L_before": 6.9,
+   "lift_to_L": 12.5,
+   "blend": 0.06
+  },
+  "highlight_rolloff": {
+   "knee_L": 94,
+   "asymptote_L": 97.0,
+   "on": "max channel, hue kept",
+   "position": "last (v2): the ceiling of the chain"
+  },
+  "grain": "none",
+  "vignette": "none"
+ },
+ "measure_after": {
+  "hero_wall_high (0.400,0.231) clay L 88.8": [
+   39.9,
+   19.2,
+   81.4
+  ],
+  "hero_wall_mid (0.400,0.311) clay L 89.7": [
+   36.2,
+   24.7,
+   80.5
+  ],
+  "ceiling (0.550,0.040) clay L 86.8": [
+   35.5,
+   19.9,
+   74.5
+  ],
+  "floor_centre (0.500,0.930) clay L 87.1": [
+   38.5,
+   22.0,
+   80.9
+  ],
+  "reference_M0 (0.467,0.385) clay L 87.3": [
+   35.8,
+   21.9,
+   77.8
+  ],
+  "brightest area (window / door): L p50 / p99 / max": [
+   82.8,
+   91.8,
+   96.6
+  ],
+  "pixels with a 255 channel: inside / outside that area": [
+   0,
+   0
+  ],
+  "frame L p99 / max": [
+   96.6,
+   96.6
+  ],
+  "darkest 0.5% patch L [12-15]": 12.5,
+  "frame mean L": 74.9
+ },
+ "checks": {
+  "window_p99_le_97": true,
+  "frame_L_max_le_97": true,
+  "no_255": true,
+  "black_point_12_15": true,
+  "exposure_within_cap": false,
+  "exposure_point_valid": true
+ },
+ "v7_for_comparison": {
+  "clay_lock_v1_worst_abs_shift_strong_peaks": 0.0325,
+  "grade_v1_exposure": {
+   "patch": [
+    0.3999203145503998,
+    0.3112027049064636
+   ],
+   "target_L": 93.0,
+   "needed_stops": 0.703,
+   "applied_stops": 0.2,
+   "flag": "DARK: needs more than +0.2 stop, not lifted further"
+  },
+  "measure_after_v1_window": [
+   82.8,
+   91.4,
+   96.8
+  ]
+ },
+ "lock_v2_summary": {
+  "register_shift_px": [
+   -48.74,
+   108.74
+  ],
+  "register_scale": [
+   1.00085,
+   0.92623
+  ],
+  "register_scale_pct": [
+   0.09,
+   -7.38
+  ],
+  "worst_band_px": 45.98,
+  "bands_reliable": 1,
+  "worst_band_px_after_register": 55.08,
+  "bands_reliable_after_register": 1,
+  "worst_tile_ecc_px": 57.63,
+  "tiles_counted": 6,
+  "worst_tile_ecc_px_after_register": 31.04,
+  "tiles_counted_after_register": 5,
+  "fixed_edges_worst_px": 93,
+  "fixed_edges_measured": 4,
+  "fixed_ratios": {
+   "dining chairs (fixed, window side) h": 1.1737,
+   "window W-dining w": 1.1828
+  }
+ },
+ "lock_v2_verdict": {
+  "thresholds": {
+   "shift_px": 9.6,
+   "scale_tol": 0.005,
+   "residual_px": 2.0,
+   "residual_rule": "pan endpoint: <= 2 px per band / tile after register",
+   "edge_px": 19.2,
+   "ratio": [
+    0.95,
+    1.05
+   ],
+   "source": "docs/ops/quality-gates-2026-11-02.md G1.4 (+ G1.3 ratios, proposal); qa/reports/2026-11-02-v7-g1.md section 1"
+  },
+  "global_pass": false,
+  "residual_pass": false,
+  "edges_pass": false,
+  "residual_measured": true,
+  "pass": false
+ },
+ "product_boxes_clay": {
+  "living/pendant": [
+   0.3121,
+   0.3799,
+   0.0,
+   0.1729
+  ],
+  "living/accent-sconces": [
+   0.2689,
+   0.5258,
+   0.3367,
+   0.3633
+  ],
+  "living/framed-art": [
+   0.307,
+   0.4917,
+   0.3345,
+   0.4764
+  ],
+  "living/rug": [
+   0.0,
+   0.6709,
+   0.7402,
+   1.0
+  ],
+  "living/bowl": [
+   0.4018,
+   0.4384,
+   0.6882,
+   0.7223
+  ],
+  "living/curtains": [
+   0.0,
+   0.0705,
+   0.0314,
+   0.7472
+  ],
+  "living/basket": [
+   0.5425,
+   0.5877,
+   0.6341,
+   0.7389
+  ],
+  "living/sofa-cover": [
+   0.457,
+   0.5066,
+   0.6205,
+   0.6476
+  ],
+  "living/cushions": [
+   0.2753,
+   0.5029,
+   0.5275,
+   0.6336
+  ],
+  "living/table-runner": [
+   0.2478,
+   0.3414,
+   0.6803,
+   0.7258
+  ],
+  "living/candle-holders": [
+   0.3833,
+   0.3993,
+   0.6179,
+   0.714
+  ]
+ },
+ "product_box_rule": "each product inside its clay box +-15 % of the box size; read visually"
+}
