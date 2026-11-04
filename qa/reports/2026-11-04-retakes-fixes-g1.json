@@ -1,0 +1,4918 @@
+{
+ "report": "qa/reports/2026-11-04-retakes-fixes-g1.md",
+ "by": "qa-agent",
+ "date": "2026-11-04",
+ "gate": "G1 (docs/ops/quality-gates-2026-11-02.md) on the four code fixes of 2026-11-04 and the grading v4 (30 rows), against Bible 1.8.3",
+ "tools": "site/tools/transitions/pan_reproject.py register / check; qa/reports/2026-11-04-retakes-fixes-g1/tools/*.py (QA; the 11-03 tools imported, not edited); eye at 100-200 %",
+ "frames": [
+  {
+   "frame": "B1 r3 fix",
+   "kind": "code fix 2026-11-04",
+   "fix_file": "assets/renders/bath/nordic/v7/b1-v7-r3-fix.png",
+   "graded": "assets/renders/bath/nordic/v7/b1-v7-r3-graded-fix-v4.png",
+   "criteria": [
+    {
+     "id": "G1.4",
+     "binding": true,
+     "value": {
+      "register_shift_px": [
+       -0.08,
+       -0.02
+      ],
+      "register_scale_pct": [
+       0.0,
+       -0.01
+      ],
+      "masked_register": {
+       "shift_px": [
+        0.0,
+        -0.12
+       ],
+       "scale_pct": [
+        0.02,
+        0.03
+       ],
+       "masked_share": 0.251,
+       "worst_band_px_after": 0.77,
+       "worst_tile_px_after": 4.73
+      },
+      "residual_gated": {
+       "bands_response_ge_0_10": [
+        0.13,
+        0.11,
+        0.21
+       ],
+       "tiles_rho_ge_0_30": [
+        0.82,
+        0.58,
+        1.65,
+        0.51,
+        0.24,
+        0.52
+       ],
+       "worst": 1.65
+      },
+      "residual_ungated": {
+       "band": 0.8,
+       "tile": 4.71
+      },
+      "named_lines_px": {
+       "all 10 named lines (glazing 4, ledge, WC block 3, corner, vanity)": "0 / +-1 (cross-correlation, r 0.65-0.99)"
+      },
+      "agent_lock_fix": {
+       "register_shift_px": [
+        -0.08,
+        -0.02
+       ],
+       "register_scale_pct": [
+        0.0,
+        -0.01
+       ],
+       "worst_band_px_after_register": 0.21,
+       "bands_counted": 3,
+       "worst_tile_px_after_register": 1.65,
+       "tiles_counted": 6,
+       "box_edges_worst_px": 1,
+       "named_edges_worst_px": 1,
+       "named_edges_counted": "10/10",
+       "global_pass": true,
+       "residual_pass": true,
+       "edges_pass": true,
+       "pass": true
+      },
+      "before_fix": {
+       "shift": [
+        -5.26,
+        -3.96
+       ],
+       "scale_pct": [
+        0.54,
+        0.84
+       ]
+      }
+     },
+     "threshold": "register shift <= 9.6 px and scale within 0.5 %; residual after register <= 2.0 px per band / tile with shared structure (response >= 0.10, rho >= 0.30: QA's 11-03 recommendation, adopted by lock_v2 v3); named lines within +-19 px",
+     "pass": true
+    },
+    {
+     "id": "G1.3",
+     "binding": false,
+     "value": {
+      "xcorr_ratios": {
+       "bath fluted glazing w": 1.0,
+       "bath WC + limestone ledge (fixed) w": 1.0,
+       "window W-bath w": 1.0,
+       "bath fluted glazing h": 1.0025,
+       "bath WC + limestone ledge (fixed) h": 1.0,
+       "shower fittings, matte black (shell) h": 1.002,
+       "window W-bath h": 1.0
+      },
+      "named_lines_px": {
+       "all 10 named lines (glazing 4, ledge, WC block 3, corner, vanity)": "0 / +-1 (cross-correlation, r 0.65-0.99)"
+      }
+     },
+     "threshold": "fixed edges +-19 px, width / height 0.95-1.05; products in their box +-15 %",
+     "pass": true
+    },
+    {
+     "id": "G1.1",
+     "binding": true,
+     "value": {
+      "deviations": [
+       "toilet brush: height now 0.99 of its box and the holder 0.90 of its width, but the silhouette is still not the card's: holder 64 % of the height and handle 36 %, the card a short 14.5 cm holder and a 25 cm handle (holder 38 %)"
+      ],
+      "ok": [
+       "the seagrass basket on the floor: 0.90 x 1.10 of the clay pot, its bottom 3 px above the pot box's bottom; the plinth gone",
+       "the fern sage (H 56, S 13); its top about 0.65 m (the clay's about 1.2 m; filler, inside the slot's max 120)"
+      ]
+     },
+     "threshold": "every product the card's SKU: silhouette, count, pattern, material; 0 deviations",
+     "pass": false
+    },
+    {
+     "id": "G1.12",
+     "binding": true,
+     "value": {
+      "violations": [
+       "fill artefact on the linen curtain above and beside the fern: blocky rectangular light / dark patches from the column copy (canvas about x 1440-1640, y 660-940; u 0.53-0.60, v 0.43-0.61), visible at 100 % and at 200 %"
+      ],
+      "ok": [
+       "the wall, skirting and floor where the plinth and the old brush were: clean at 100 %",
+       "the brush's contact shadow and the basket's floor shadow read naturally"
+      ]
+     },
+     "threshold": "0 violations at 100 % (Bible 'אסור'; seams, halos, fill artefacts of the code edits)",
+     "pass": false
+    },
+    {
+     "id": "G1.7-G1.9 (grading v4)",
+     "binding": true,
+     "value": {
+      "point": "agent reference point",
+      "graded_HSL": [
+       35.9,
+       29.2,
+       89.2
+      ],
+      "lab_C": 5.42,
+      "black": 12.5,
+      "frame_max": 96.5,
+      "px_255": 0,
+      "agent": 89.2,
+      "judgeable": true,
+      "qa_checks": {
+       "lit_wall": true,
+       "hue_32_40": true,
+       "C_le_7": true,
+       "window_wall": null,
+       "black": true,
+       "rolloff": true,
+       "B5": null
+      }
+     },
+     "threshold": "lit wall in its Bible range, wall H 32-40, C* <= 7, black 12-15, max <= 97, no 255",
+     "pass": true
+    },
+    {
+     "id": "G1.14",
+     "binding": true,
+     "value": [
+      {
+       "pair": "B1 r3 fix -> B2 r3 fix",
+       "degrees": 35,
+       "worst_band_px_reliable": 14.15,
+       "bands_reliable": 2,
+       "dL": 0.7,
+       "clay_floor": 2.21
+      },
+      {
+       "pair": "B1 r3 fix -> CB-0",
+       "degrees": 22,
+       "worst_band_px_reliable": 19.39,
+       "bands_reliable": 2,
+       "dL": 14.2,
+       "clay_floor": 49.99
+      }
+     ],
+     "threshold": "<= 2 px per band and mean dL <= 1 in a pan pair's overlap; the same objects",
+     "pass": false
+    },
+    {
+     "id": "G1.6",
+     "binding": true,
+     "value": {
+      "test_rule": true,
+      "sourcing_tasks": [
+       "shower-stool",
+       "towel-ladder",
+       "bath-towels",
+       "bin",
+       "ledge-planter"
+      ]
+     },
+     "threshold": "studio rules 2.11: every slot with an approved product filled (unchanged by the fix)",
+     "pass": true
+    },
+    {
+     "id": "G8.6",
+     "binding": true,
+     "value": {
+      "baked": 9,
+      "live": [],
+      "unverified": 9
+     },
+     "threshold": "every baked card live at the supplier",
+     "pass": false
+    }
+   ],
+   "verdict": "fail",
+   "failed_binding": [
+    "G1.1",
+    "G1.12",
+    "G1.14",
+    "G8.6"
+   ],
+   "failed_in_the_frame": [
+    "G1.1",
+    "G1.12",
+    "G1.14"
+   ],
+   "failed_proposal": [],
+   "cannot_measure": [
+    "G1.2",
+    "G1.5",
+    "G1.11",
+    "G1.15",
+    "G1.16"
+   ],
+   "may_reference": "yes, for geometry: the first still of the v7/v8 set that passes G1.4 in full on QA's numbers (named lines 0/+-1, bands <= 0.8 px); as an image, after the curtain fill is redone",
+   "may_pan_endpoint": "T-CBath (as the source of a re-composed CB-0) and P-B: after the curtain fill is redone (the patch lies in both overlaps)",
+   "products_unverified": [
+    "bath-mat-cj-tufted-cotton-frame-beige-40x60",
+    "candle-cj-ribbed-matte-ceramic-candle-cup-9",
+    "floor-planter-aliexpress-seagrass-straight-planter-basket-30",
+    "reed-diffuser-cj-travertine-look-bamboo-lid-milktea",
+    "shower-curtain-aliexpress-linen-blend-slub-panel-200x270",
+    "shower-dispensers-cj-sand-ribbed-ceramic-pump-bottle",
+    "toilet-brush-aliexpress-matte-black-steel-cylinder-245996",
+    "toilet-paper-stand-aliexpress-floor-standing-black-763442",
+    "vanity-sconces-cj-fluted-resin-updown-white"
+   ],
+   "products_live": []
+  },
+  {
+   "frame": "B2 r3 fix",
+   "kind": "code fix 2026-11-04",
+   "fix_file": "assets/renders/bath/nordic/v7/b2-v7-r3-fix.png",
+   "graded": "assets/renders/bath/nordic/v7/b2-v7-r3-graded-fix-v4.png",
+   "criteria": [
+    {
+     "id": "G1.4",
+     "binding": true,
+     "value": {
+      "register_shift_px": [
+       -4.9,
+       -3.84
+      ],
+      "register_scale_pct": [
+       0.64,
+       0.74
+      ],
+      "masked_register": {
+       "shift_px": [
+        -7.26,
+        -3.81
+       ],
+       "scale_pct": [
+        1.17,
+        0.14
+       ],
+       "masked_share": 0.374,
+       "worst_band_px_after": 45.85,
+       "worst_tile_px_after": 4.62
+      },
+      "residual_gated": {
+       "bands_response_ge_0_10": [
+        0.41,
+        4.74
+       ],
+       "tiles_rho_ge_0_30": [
+        0.86,
+        2.77,
+        0.1,
+        0.93,
+        0.21,
+        0.72
+       ],
+       "worst": 4.74
+      },
+      "residual_ungated": {
+       "band": 110.14,
+       "tile": 2.77
+      },
+      "named_lines_px": {
+       "vanity top": -7,
+       "mirror bottom": -8,
+       "niche top": -7,
+       "mirror left / right": "+6 / +4",
+       "mirror head per column (x 1090-1540)": "-1 to -3",
+       "vanity right outer edge (clay 1584/1591, fix 1595)": "+4",
+       "vanity left": 0,
+       "curtain outer edge": -2
+      },
+      "agent_lock_fix": {
+       "register_shift_px": [
+        -4.9,
+        -3.84
+       ],
+       "register_scale_pct": [
+        0.64,
+        0.74
+       ],
+       "worst_band_px_after_register": 4.74,
+       "bands_counted": 2,
+       "worst_tile_px_after_register": 2.77,
+       "tiles_counted": 6,
+       "box_edges_worst_px": 8,
+       "named_edges_worst_px": 8,
+       "named_edges_counted": "8/11",
+       "global_pass": false,
+       "residual_pass": false,
+       "edges_pass": true,
+       "pass": false
+      },
+      "before_fix": {
+       "shift": [
+        -5.53,
+        -4.16
+       ],
+       "scale_pct": [
+        0.53,
+        0.71
+       ]
+      }
+     },
+     "threshold": "register shift <= 9.6 px and scale within 0.5 %; residual after register <= 2.0 px per band / tile with shared structure (response >= 0.10, rho >= 0.30: QA's 11-03 recommendation, adopted by lock_v2 v3); named lines within +-19 px",
+     "pass": false
+    },
+    {
+     "id": "G1.3",
+     "binding": false,
+     "value": {
+      "xcorr_ratios": {
+       "shower fittings, matte black (shell) w": 1.6038,
+       "bath vanity 110 (fixed) w": 1.0058,
+       "U6 mirror w": 0.9958,
+       "mirror oak frame w": 0.996,
+       "shower fittings, matte black (shell) h": 0.9695,
+       "U6 mirror h": 0.9656,
+       "mirror oak frame h": 0.967
+      },
+      "named_lines_px": {
+       "vanity top": -7,
+       "mirror bottom": -8,
+       "niche top": -7,
+       "mirror left / right": "+6 / +4",
+       "mirror head per column (x 1090-1540)": "-1 to -3",
+       "vanity right outer edge (clay 1584/1591, fix 1595)": "+4",
+       "vanity left": 0,
+       "curtain outer edge": -2
+      }
+     },
+     "threshold": "fixed edges +-19 px, width / height 0.95-1.05; products in their box +-15 %",
+     "pass": true
+    },
+    {
+     "id": "G1.1",
+     "binding": true,
+     "value": {
+      "deviations": [],
+      "ok": [
+       "the planter basket 0.98 x 1.03 of the clay pot (was 1.18)",
+       "the storage basket inside its box +-15 % (about 1.02 x 1.05, shifted right about 12 % of the box): QA's 11-03 'about 1.25x' was the extent estimate catching the towels and the shelf; do not shrink it x0.80 in the paid pass",
+       "towel ring about 1.25x the box width (G1.3 proposal, borderline; unchanged)",
+       "vanity 1.006 and mirror 0.996-1.02 wide: on the clay (the 11-03 vanity / mirror-head findings withdrawn, section 4)"
+      ]
+     },
+     "threshold": "every product the card's SKU: silhouette, count, pattern, material; 0 deviations",
+     "pass": true
+    },
+    {
+     "id": "G1.12",
+     "binding": true,
+     "value": {
+      "violations": [
+       "fill artefacts round the planter: a pale rectangle with hard edges on the white wall above-left of the fronds; blocky pale patches on the limestone panel's base right of the fronds; a pale sliver along the basket's floor contact (render-agent lists two of them as residual seams)"
+      ],
+      "ok": [
+       "the reflected curtain hook in the mirror's top-left corner removed; the mirror shows wall only at 100 %"
+      ]
+     },
+     "threshold": "0 violations at 100 % (Bible 'אסור'; seams, halos, fill artefacts of the code edits)",
+     "pass": false
+    },
+    {
+     "id": "G1.7-G1.9 (grading v4)",
+     "binding": true,
+     "value": {
+      "point": null,
+      "graded_HSL": null,
+      "lab_C": null,
+      "black": 12.6,
+      "frame_max": 96.5,
+      "px_255": 0,
+      "agent": 82.2,
+      "judgeable": false,
+      "qa_checks": {
+       "lit_wall": null,
+       "hue_32_40": true,
+       "C_le_7": false,
+       "window_wall": null,
+       "black": true,
+       "rolloff": true,
+       "B5": null
+      }
+     },
+     "threshold": "lit wall in its Bible range, wall H 32-40, C* <= 7, black 12-15, max <= 97, no 255",
+     "pass": false
+    },
+    {
+     "id": "G1.14",
+     "binding": true,
+     "value": [
+      {
+       "pair": "B1 r3 fix -> B2 r3 fix",
+       "degrees": 35,
+       "worst_band_px_reliable": 14.15,
+       "bands_reliable": 2,
+       "dL": 0.7,
+       "clay_floor": 2.21
+      }
+     ],
+     "threshold": "<= 2 px per band and mean dL <= 1 in a pan pair's overlap; the same objects",
+     "pass": false
+    },
+    {
+     "id": "G1.6",
+     "binding": true,
+     "value": {
+      "test_rule": true,
+      "sourcing_tasks": [
+       "shower-stool",
+       "towel-ladder",
+       "bath-towels"
+      ]
+     },
+     "threshold": "studio rules 2.11: every slot with an approved product filled (unchanged by the fix)",
+     "pass": true
+    },
+    {
+     "id": "G8.6",
+     "binding": true,
+     "value": {
+      "baked": 10,
+      "live": [],
+      "unverified": 10
+     },
+     "threshold": "every baked card live at the supplier",
+     "pass": false
+    }
+   ],
+   "verdict": "fail",
+   "failed_binding": [
+    "G1.4",
+    "G1.12",
+    "G1.7-G1.9 (grading v4)",
+    "G1.14",
+    "G8.6"
+   ],
+   "failed_in_the_frame": [
+    "G1.4",
+    "G1.12",
+    "G1.7-G1.9 (grading v4)",
+    "G1.14"
+   ],
+   "failed_proposal": [],
+   "cannot_measure": [
+    "G1.2",
+    "G1.5",
+    "G1.11",
+    "G1.15",
+    "G1.16"
+   ],
+   "may_reference": "no: global scale +0.64 / +0.74 % and fill artefacts round the planter",
+   "may_pan_endpoint": "no: P-B 14.2 px against B1 r3 fix (the relative scale of the two)",
+   "products_unverified": [
+    "floor-planter-aliexpress-seagrass-straight-planter-basket-30",
+    "hand-towel-aliexpress-pure-linen-towel-38x55",
+    "shower-curtain-aliexpress-linen-blend-slub-panel-200x270",
+    "shower-dispensers-cj-sand-ribbed-ceramic-pump-bottle",
+    "soap-dispenser-cj-sand-ribbed-ceramic-pump-bottle",
+    "storage-basket-cj-cotton-rope-basket-43x33x19",
+    "toothbrush-cup-cj-silver-travertine-cup",
+    "towel-ring-aliexpress-minimalist-oval-towel-ring-663845",
+    "vanity-sconces-cj-fluted-resin-updown-white",
+    "vanity-vase-aliexpress-sand-oat-bud-vase-g-series"
+   ],
+   "products_live": []
+  },
+  {
+   "frame": "K-girl-0 r2 fix",
+   "kind": "code fix 2026-11-04",
+   "fix_file": "assets/renders/poses/nordic/v7/pose-k-girl-0-v7-r2-fix.png",
+   "graded": "assets/renders/poses/nordic/v7/pose-k-girl-0-v7-r2-graded-fix-v4.png",
+   "criteria": [
+    {
+     "id": "G1.4",
+     "binding": true,
+     "value": {
+      "register_shift_px": [
+       -2.38,
+       -5.63
+      ],
+      "register_scale_pct": [
+       0.01,
+       1.72
+      ],
+      "masked_register": {
+       "shift_px": [
+        -5.79,
+        -5.59
+       ],
+       "scale_pct": [
+        0.34,
+        0.95
+       ],
+       "masked_share": 0.112,
+       "worst_band_px_after": 1.32,
+       "worst_tile_px_after": 18.58
+      },
+      "residual_gated": {
+       "bands_response_ge_0_10": [
+        1.84,
+        6.38
+       ],
+       "tiles_rho_ge_0_30": [
+        2.11,
+        17.86,
+        9.15,
+        2.91,
+        3.57,
+        6.13
+       ],
+       "worst": 17.86
+      },
+      "residual_ungated": {
+       "band": 6.38,
+       "tile": 17.86
+      },
+      "named_lines_px": {
+       "ledges (3 lines)": "-1 to -3",
+       "band top": -1,
+       "desk top": "+2",
+       "desk-wall skirting": "+4",
+       "room corner": "+2",
+       "desk legs": "-3 / -1",
+       "bed foot top": "+11",
+       "bed foot right edge": -3
+      },
+      "agent_lock_fix": {
+       "register_shift_px": [
+        -2.38,
+        -5.63
+       ],
+       "register_scale_pct": [
+        0.01,
+        1.72
+       ],
+       "worst_band_px_after_register": 6.38,
+       "bands_counted": 2,
+       "worst_tile_px_after_register": 17.86,
+       "tiles_counted": 6,
+       "box_edges_worst_px": 11,
+       "named_edges_worst_px": 11,
+       "named_edges_counted": "6/8",
+       "global_pass": false,
+       "residual_pass": false,
+       "edges_pass": true,
+       "pass": false
+      },
+      "before_fix": {
+       "shift": [
+        -6.51,
+        1.95
+       ],
+       "scale_pct": [
+        -0.89,
+        -0.19
+       ]
+      }
+     },
+     "threshold": "register shift <= 9.6 px and scale within 0.5 %; residual after register <= 2.0 px per band / tile with shared structure (response >= 0.10, rho >= 0.30: QA's 11-03 recommendation, adopted by lock_v2 v3); named lines within +-19 px",
+     "pass": false
+    },
+    {
+     "id": "G1.3",
+     "binding": false,
+     "value": {
+      "xcorr_ratios": {
+       "girl desk 90x50 (fixed) w": 1.0038
+      },
+      "named_lines_px": {
+       "ledges (3 lines)": "-1 to -3",
+       "band top": -1,
+       "desk top": "+2",
+       "desk-wall skirting": "+4",
+       "room corner": "+2",
+       "desk legs": "-3 / -1",
+       "bed foot top": "+11",
+       "bed foot right edge": -3
+      }
+     },
+     "threshold": "fixed edges +-19 px, width / height 0.95-1.05; products in their box +-15 %",
+     "pass": true
+    },
+    {
+     "id": "G1.1",
+     "binding": true,
+     "value": {
+      "deviations": [],
+      "ok": [
+       "the two framed prints 0.98 x 1.00 of their clay box (were 1.5 x 1.55)",
+       "the bunny doll 1.06-1.11 of its box height with the ears (the K-girl master's 1.12; the proxy is a thin cylinder, so the width is not the measure)"
+      ]
+     },
+     "threshold": "every product the card's SKU: silhouette, count, pattern, material; 0 deviations",
+     "pass": true
+    },
+    {
+     "id": "G1.12",
+     "binding": true,
+     "value": {
+      "violations": [],
+      "ok": [
+       "the wall behind the old prints and the doll: no seam, line or rim at 100 % (the band line continues)"
+      ]
+     },
+     "threshold": "0 violations at 100 % (Bible 'אסור'; seams, halos, fill artefacts of the code edits)",
+     "pass": true
+    },
+    {
+     "id": "G1.7-G1.9 (grading v4)",
+     "binding": true,
+     "value": {
+      "point": "agent reference point",
+      "graded_HSL": [
+       34.9,
+       16.3,
+       92.6
+      ],
+      "lab_C": 2.0,
+      "black": 12.5,
+      "frame_max": 95.9,
+      "px_255": 0,
+      "agent": 92.7,
+      "judgeable": true,
+      "qa_checks": {
+       "lit_wall": true,
+       "hue_32_40": true,
+       "C_le_7": true,
+       "window_wall": null,
+       "black": true,
+       "rolloff": true,
+       "B5": null
+      }
+     },
+     "threshold": "lit wall in its Bible range, wall H 32-40, C* <= 7, black 12-15, max <= 97, no 255",
+     "pass": true
+    },
+    {
+     "id": "G1.14",
+     "binding": true,
+     "value": [
+      {
+       "pair": "K-girl fix -> K-girl-0 r2 fix",
+       "degrees": 33,
+       "worst_band_px_reliable": 30.57,
+       "bands_reliable": 3,
+       "dL": 4.7,
+       "clay_floor": 0.09
+      }
+     ],
+     "threshold": "<= 2 px per band and mean dL <= 1 in a pan pair's overlap; the same objects",
+     "pass": false
+    },
+    {
+     "id": "G8.6",
+     "binding": true,
+     "value": {
+      "baked": 4,
+      "live": [],
+      "unverified": 4
+     },
+     "threshold": "every baked card live at the supplier",
+     "pass": false
+    }
+   ],
+   "verdict": "fail",
+   "failed_binding": [
+    "G1.4",
+    "G1.14",
+    "G8.6"
+   ],
+   "failed_in_the_frame": [
+    "G1.4",
+    "G1.14"
+   ],
+   "failed_proposal": [],
+   "cannot_measure": [
+    "G1.2",
+    "G1.5",
+    "G1.11",
+    "G1.15",
+    "G1.16"
+   ],
+   "may_reference": "after a global vertical affine (about -0.9 %, 0 tokens): every named line is within +-11 px",
+   "may_pan_endpoint": "not yet: T-CGirl also needs the K-girl master on its clay (-20.5 px, -1.9 % vertical)",
+   "products_unverified": [
+    "bedspread-cj-muslin-blanket-beige-150x200",
+    "bookshelf-cj-natural-wood-ledge-pair-42-x2",
+    "doll-aliexpress-linen-bunny-doll-063285",
+    "framed-prints-cj-charcoal-flower-silhouette-set3-30x40-boy"
+   ],
+   "products_live": []
+  },
+  {
+   "frame": "W0-in r2 fix",
+   "kind": "code fix 2026-11-04",
+   "fix_file": "assets/renders/poses/nordic/v7/pose-w0-in-v7-r2-fix.png",
+   "graded": "assets/renders/poses/nordic/v7/pose-w0-in-v7-r2-graded-fix-v4.png",
+   "criteria": [
+    {
+     "id": "G1.4",
+     "binding": true,
+     "value": {
+      "register_shift_px": [
+       0.09,
+       -0.36
+      ],
+      "register_scale_pct": [
+       -0.01,
+       0.0
+      ],
+      "masked_register": {
+       "shift_px": [
+        4.42,
+        -4.33
+       ],
+       "scale_pct": [
+        -0.32,
+        0.32
+       ],
+       "masked_share": 0.264,
+       "worst_band_px_after": 5.53,
+       "worst_tile_px_after": 8.03
+      },
+      "residual_gated": {
+       "bands_response_ge_0_10": [
+        1.62,
+        7.07,
+        4.54
+       ],
+       "tiles_rho_ge_0_30": [
+        1.24,
+        7.73,
+        1.39,
+        2.33,
+        7.1,
+        3.55
+       ],
+       "worst": 7.73
+      },
+      "residual_ungated": {
+       "band": 7.07,
+       "tile": 7.73
+      },
+      "named_lines_px": {
+       "desk front face bottom (right / left of the chair)": "-4 / -2",
+       "drawer bottom": -3,
+       "chair back top (clay 835)": -3,
+       "chair back left / right": "0 / -8",
+       "desk outer left / right": "-2 / -4",
+       "slab top-front": "-3"
+      },
+      "agent_lock_fix": {
+       "register_shift_px": [
+        0.09,
+        -0.36
+       ],
+       "register_scale_pct": [
+        -0.01,
+        0.0
+       ],
+       "worst_band_px_after_register": 7.07,
+       "bands_counted": 3,
+       "worst_tile_px_after_register": 7.73,
+       "tiles_counted": 6,
+       "box_edges_worst_px": 8,
+       "named_edges_worst_px": 8,
+       "named_edges_counted": "7/10",
+       "global_pass": true,
+       "residual_pass": true,
+       "edges_pass": true,
+       "pass": true
+      },
+      "before_fix": {
+       "shift": [
+        -9.56,
+        -2.24
+       ],
+       "scale_pct": [
+        0.54,
+        -0.29
+       ]
+      }
+     },
+     "threshold": "register shift <= 9.6 px and scale within 0.5 %; residual after register <= 9.6 px per band / tile with shared structure (response >= 0.10, rho >= 0.30: QA's 11-03 recommendation, adopted by lock_v2 v3); named lines within +-19 px",
+     "pass": true
+    },
+    {
+     "id": "G1.3",
+     "binding": false,
+     "value": {
+      "xcorr_ratios": {
+       "built-in oak desk + shelf w": 0.9719,
+       "desk chair w": 0.9858
+      },
+      "named_lines_px": {
+       "desk front face bottom (right / left of the chair)": "-4 / -2",
+       "drawer bottom": -3,
+       "chair back top (clay 835)": -3,
+       "chair back left / right": "0 / -8",
+       "desk outer left / right": "-2 / -4",
+       "slab top-front": "-3"
+      }
+     },
+     "threshold": "fixed edges +-19 px, width / height 0.95-1.05; products in their box +-15 %",
+     "pass": true
+    },
+    {
+     "id": "G1.1",
+     "binding": true,
+     "value": {
+      "deviations": [],
+      "ok": [
+       "the pen cup body about 1.10 x 0.84 of its box = about 8.8 x 11 cm, the card's 8 x 11 (the clay proxy is 13 cm tall); G1.3 height at the -15 % edge",
+       "desk, drawer, chair and the floor objects on the clay lines (section 3)"
+      ]
+     },
+     "threshold": "every product the card's SKU: silhouette, count, pattern, material; 0 deviations",
+     "pass": true
+    },
+    {
+     "id": "G1.12",
+     "binding": true,
+     "value": {
+      "violations": [
+       "fill artefacts where the plant layer was put back over the warped desk area: a band of dark / green pixel blocks in the seagrass basket's upper weave (the stems showing through), and a dark rectangle with a hard edge on the skirting / floor right of the basket's base (u 0.12-0.16, v 0.92-1.00)"
+      ],
+      "ok": [
+       "the cup, the desk, the wall above row 640 and the right corner: clean at 100 %"
+      ]
+     },
+     "threshold": "0 violations at 100 % (Bible 'אסור'; seams, halos, fill artefacts of the code edits)",
+     "pass": false
+    },
+    {
+     "id": "G1.7-G1.9 (grading v4)",
+     "binding": true,
+     "value": {
+      "point": "agent reference point",
+      "graded_HSL": [
+       35.9,
+       28.1,
+       92.3
+      ],
+      "lab_C": 3.69,
+      "black": 12.5,
+      "frame_max": 96.5,
+      "px_255": 0,
+      "agent": 92.3,
+      "judgeable": true,
+      "qa_checks": {
+       "lit_wall": true,
+       "hue_32_40": true,
+       "C_le_7": true,
+       "window_wall": null,
+       "black": true,
+       "rolloff": true,
+       "B5": null
+      }
+     },
+     "threshold": "lit wall in its Bible range, wall H 32-40, C* <= 7, black 12-15, max <= 97, no 255",
+     "pass": true
+    },
+    {
+     "id": "G1.14",
+     "binding": true,
+     "value": "W0 -> W0-in is a dolly: sheet by eye (overlays/endpoints-W0_fix-W0-in_r2_fix.jpg): the same objects",
+     "threshold": "<= 2 px per band and mean dL <= 1 in a pan pair's overlap; the same objects",
+     "pass": null
+    },
+    {
+     "id": "G8.6",
+     "binding": true,
+     "value": {
+      "baked": 5,
+      "live": [
+       "planter-zendrop-seagrass-belly-38x34"
+      ],
+      "unverified": 4
+     },
+     "threshold": "every baked card live at the supplier",
+     "pass": false
+    }
+   ],
+   "verdict": "fail",
+   "failed_binding": [
+    "G1.12",
+    "G8.6"
+   ],
+   "failed_in_the_frame": [
+    "G1.12"
+   ],
+   "failed_proposal": [],
+   "cannot_measure": [
+    "G1.2",
+    "G1.5",
+    "G1.11",
+    "G1.15",
+    "G1.16"
+   ],
+   "may_reference": "yes for geometry (video endpoint: shift 0.1 / -0.4 px, scale 0.0 %, residual <= 7.7 px, named lines <= 8 px); as an image after the basket / floor patch is cleaned",
+   "may_pan_endpoint": "V4 / T-HW video endpoint after the basket / floor patch is cleaned (no pan rule applies)",
+   "products_unverified": [
+    "basket-cj-jute-cotton-rope-cylinder-30-work",
+    "desk-organizer-cj-cave-stone-pen-cup-8x11",
+    "shelf-boxes-cj-felt-storage-bin-30x24-pair",
+    "waste-basket-aliexpress-washable-kraft-paper-bin-25x40"
+   ],
+   "products_live": [
+    "planter-zendrop-seagrass-belly-38x34"
+   ]
+  }
+ ],
+ "grading_v4": [
+  {
+   "still": "M0",
+   "agent": {
+    "L": 94.4,
+    "H": 36.4,
+    "C": 6.49,
+    "meets": false,
+    "fails": [
+     "bible_window_wall_80_88"
+    ],
+    "corrected": true,
+    "stops": 1.007
+   },
+   "qa": {
+    "point": "agent reference point",
+    "L": 94.4,
+    "H": 36.6,
+    "C": 6.43,
+    "window_wall": 90.8,
+    "black": 12.5,
+    "frame_max": 96.7,
+    "px255": 0
+   },
+   "target": {
+    "lo": 90.0,
+    "hi": 94.0,
+    "source": "Bible 1.8 B1 (1): back wall by the corner L 90-94 (1.4; 92-95 was 1.0)",
+    "binding": true
+   },
+   "checks": {
+    "lit_wall": false,
+    "hue_32_40": true,
+    "C_le_7": true,
+    "window_wall": false,
+    "black": true,
+    "rolloff": true,
+    "B5": null
+   },
+   "halo_boxes": 0,
+   "verdict": "fail",
+   "failed": [
+    "lit_wall",
+    "window_wall"
+   ]
+  },
+  {
+   "still": "D1",
+   "agent": {
+    "L": 93.8,
+    "H": 36.5,
+    "C": 6.69,
+    "meets": true,
+    "fails": [],
+    "corrected": true,
+    "stops": 0.978
+   },
+   "qa": {
+    "point": "agent reference point",
+    "L": 93.8,
+    "H": 36.1,
+    "C": 6.75,
+    "window_wall": null,
+    "black": 12.5,
+    "frame_max": 96.7,
+    "px255": 0
+   },
+   "target": {
+    "lo": 90.0,
+    "hi": 94.0,
+    "source": "Bible 'אור' 1.4 / 1.8 B1 (1): the lit wall by the window L 90-94",
+    "binding": true
+   },
+   "checks": {
+    "lit_wall": true,
+    "hue_32_40": true,
+    "C_le_7": true,
+    "window_wall": null,
+    "black": true,
+    "rolloff": true,
+    "B5": null
+   },
+   "halo_boxes": 9,
+   "verdict": "pass",
+   "failed": []
+  },
+  {
+   "still": "D2",
+   "agent": {
+    "L": 92.4,
+    "H": 36.3,
+    "C": 6.47,
+    "meets": true,
+    "fails": [],
+    "corrected": false,
+    "stops": 0.435
+   },
+   "qa": {
+    "point": "agent reference point",
+    "L": 92.4,
+    "H": 36.9,
+    "C": 6.39,
+    "window_wall": null,
+    "black": 12.5,
+    "frame_max": 96.5,
+    "px255": 0
+   },
+   "target": {
+    "lo": 90.0,
+    "hi": 94.0,
+    "source": "Bible 'אור' 1.4 / 1.8 B1 (1): the lit wall by the window L 90-94",
+    "binding": true
+   },
+   "checks": {
+    "lit_wall": true,
+    "hue_32_40": true,
+    "C_le_7": true,
+    "window_wall": null,
+    "black": true,
+    "rolloff": true,
+    "B5": null
+   },
+   "halo_boxes": null,
+   "verdict": "pass",
+   "failed": []
+  },
+  {
+   "still": "H0",
+   "agent": {
+    "L": 93.9,
+    "H": 36.4,
+    "C": 6.22,
+    "meets": true,
+    "fails": [],
+    "corrected": true,
+    "stops": 0.422
+   },
+   "qa": {
+    "point": "agent reference point",
+    "L": 93.9,
+    "H": 36.4,
+    "C": 6.13,
+    "window_wall": null,
+    "black": 12.5,
+    "frame_max": 96.7,
+    "px255": 0
+   },
+   "target": {
+    "lo": null,
+    "hi": null,
+    "source": "Bible 1.8 B5: the hall walls 2/3 stop under the living back wall; the vista the brightest",
+    "binding": true
+   },
+   "checks": {
+    "lit_wall": null,
+    "hue_32_40": true,
+    "C_le_7": true,
+    "window_wall": null,
+    "black": true,
+    "rolloff": true,
+    "B5": true
+   },
+   "halo_boxes": 0,
+   "verdict": "pass",
+   "failed": []
+  },
+  {
+   "still": "C0",
+   "agent": {
+    "L": 95.1,
+    "H": 36.2,
+    "C": 4.39,
+    "meets": true,
+    "fails": [],
+    "corrected": true,
+    "stops": 0.111
+   },
+   "qa": {
+    "point": "clay reference_C0 (clay L 87.1)",
+    "L": 95.1,
+    "H": 35.9,
+    "C": 4.29,
+    "window_wall": null,
+    "black": 12.5,
+    "frame_max": 96.7,
+    "px255": 0
+   },
+   "target": {
+    "lo": 71.2,
+    "hi": 80.6,
+    "source": "G1.8 PROPOSAL (gates doc): corridor walls 2/3 stop under the living; no Bible number",
+    "binding": false
+   },
+   "checks": {
+    "lit_wall": null,
+    "hue_32_40": true,
+    "C_le_7": true,
+    "window_wall": null,
+    "black": true,
+    "rolloff": true,
+    "B5": null
+   },
+   "halo_boxes": 0,
+   "verdict": "pass",
+   "failed": []
+  },
+  {
+   "still": "MB0",
+   "agent": {
+    "L": 90.6,
+    "H": 37.9,
+    "C": 6.06,
+    "meets": true,
+    "fails": [],
+    "corrected": true,
+    "stops": 0.795
+   },
+   "qa": {
+    "point": "agent reference point",
+    "L": 90.6,
+    "H": 38.3,
+    "C": 6.1,
+    "window_wall": 81.3,
+    "black": 12.6,
+    "frame_max": 96.7,
+    "px255": 0
+   },
+   "target": {
+    "lo": 90.0,
+    "hi": 94.0,
+    "source": "Bible 1.8 B1 (1)",
+    "binding": true
+   },
+   "checks": {
+    "lit_wall": true,
+    "hue_32_40": true,
+    "C_le_7": true,
+    "window_wall": true,
+    "black": true,
+    "rolloff": true,
+    "B5": null
+   },
+   "halo_boxes": 0,
+   "verdict": "pass",
+   "failed": []
+  },
+  {
+   "still": "K-boy",
+   "agent": {
+    "L": 92.6,
+    "H": 36.1,
+    "C": 1.82,
+    "meets": false,
+    "fails": [
+     "bible_window_wall_80_88"
+    ],
+    "corrected": false,
+    "stops": 0.305
+   },
+   "qa": {
+    "point": "agent reference point",
+    "L": 92.7,
+    "H": 36.3,
+    "C": 1.68,
+    "window_wall": 76.3,
+    "black": 12.5,
+    "frame_max": 96.5,
+    "px255": 0
+   },
+   "target": {
+    "lo": 90.0,
+    "hi": 94.0,
+    "source": "Bible 1.8 B1 (1)",
+    "binding": true
+   },
+   "checks": {
+    "lit_wall": true,
+    "hue_32_40": true,
+    "C_le_7": true,
+    "window_wall": false,
+    "black": true,
+    "rolloff": true,
+    "B5": null
+   },
+   "halo_boxes": null,
+   "verdict": "fail",
+   "failed": [
+    "window_wall"
+   ]
+  },
+  {
+   "still": "K-girl",
+   "agent": {
+    "L": 92.6,
+    "H": 36.1,
+    "C": 2.58,
+    "meets": false,
+    "fails": [
+     "bible_window_wall_80_88"
+    ],
+    "corrected": false,
+    "stops": 0.252
+   },
+   "qa": {
+    "point": "agent reference point",
+    "L": 92.7,
+    "H": 36.1,
+    "C": 2.3,
+    "window_wall": 79.1,
+    "black": 12.6,
+    "frame_max": 96.5,
+    "px255": 0
+   },
+   "target": {
+    "lo": 90.0,
+    "hi": 94.0,
+    "source": "Bible 1.8 B1 (1)",
+    "binding": true
+   },
+   "checks": {
+    "lit_wall": true,
+    "hue_32_40": true,
+    "C_le_7": true,
+    "window_wall": false,
+    "black": true,
+    "rolloff": true,
+    "B5": null
+   },
+   "halo_boxes": null,
+   "verdict": "fail",
+   "failed": [
+    "window_wall"
+   ]
+  },
+  {
+   "still": "B1",
+   "agent": {
+    "L": 88.9,
+    "H": 37.1,
+    "C": 13.32,
+    "meets": false,
+    "fails": [
+     "bible_wall_C_le_7_B4"
+    ],
+    "corrected": false,
+    "stops": 0.396
+   },
+   "qa": {
+    "point": "agent reference point",
+    "L": 88.9,
+    "H": 37.2,
+    "C": 13.45,
+    "window_wall": null,
+    "black": 12.5,
+    "frame_max": 96.5,
+    "px255": 0
+   },
+   "target": {
+    "lo": 86.0,
+    "hi": 90.0,
+    "source": "Bible 1.6 bath: the wall beside the fluted window L 86-90 (4000 K); 1.8 keeps the room exception",
+    "binding": true
+   },
+   "checks": {
+    "lit_wall": true,
+    "hue_32_40": true,
+    "C_le_7": false,
+    "window_wall": null,
+    "black": true,
+    "rolloff": true,
+    "B5": null
+   },
+   "halo_boxes": null,
+   "verdict": "fail",
+   "failed": [
+    "C_le_7"
+   ]
+  },
+  {
+   "still": "B2",
+   "agent": {
+    "L": 91.6,
+    "H": 36.4,
+    "C": 7.98,
+    "meets": false,
+    "fails": [
+     "bible_wall_C_le_7_B4"
+    ],
+    "corrected": false,
+    "stops": 0.396
+   },
+   "qa": {
+    "point": "agent reference point",
+    "L": 91.5,
+    "H": 36.6,
+    "C": 7.87,
+    "window_wall": null,
+    "black": 12.5,
+    "frame_max": 96.5,
+    "px255": 0
+   },
+   "target": {
+    "lo": 86.0,
+    "hi": 90.0,
+    "source": "Bible 1.6 bath: the wall beside the fluted window L 86-90 (4000 K); 1.8 keeps the room exception",
+    "binding": true
+   },
+   "checks": {
+    "lit_wall": null,
+    "hue_32_40": true,
+    "C_le_7": false,
+    "window_wall": null,
+    "black": true,
+    "rolloff": true,
+    "B5": null
+   },
+   "halo_boxes": null,
+   "verdict": "fail",
+   "failed": [
+    "C_le_7"
+   ]
+  },
+  {
+   "still": "W0",
+   "agent": {
+    "L": 92.7,
+    "H": 36.2,
+    "C": 3.57,
+    "meets": false,
+    "fails": [
+     "bible_window_wall_80_88"
+    ],
+    "corrected": false,
+    "stops": 0.301
+   },
+   "qa": {
+    "point": "agent reference point",
+    "L": 92.7,
+    "H": 35.6,
+    "C": 3.45,
+    "window_wall": 71.5,
+    "black": 12.5,
+    "frame_max": 96.5,
+    "px255": 0
+   },
+   "target": {
+    "lo": 90.0,
+    "hi": 94.0,
+    "source": "Bible 1.8 B1 (1)",
+    "binding": true
+   },
+   "checks": {
+    "lit_wall": true,
+    "hue_32_40": true,
+    "C_le_7": true,
+    "window_wall": false,
+    "black": true,
+    "rolloff": true,
+    "B5": null
+   },
+   "halo_boxes": null,
+   "verdict": "fail",
+   "failed": [
+    "window_wall"
+   ]
+  },
+  {
+   "still": "K-boy fix",
+   "agent": {
+    "L": 92.6,
+    "H": 36.1,
+    "C": 1.82,
+    "meets": false,
+    "fails": [
+     "bible_window_wall_80_88"
+    ],
+    "corrected": false,
+    "stops": 0.305
+   },
+   "qa": {
+    "point": "agent reference point",
+    "L": 92.7,
+    "H": 36.3,
+    "C": 1.68,
+    "window_wall": 76.3,
+    "black": 12.5,
+    "frame_max": 96.5,
+    "px255": 0
+   },
+   "target": {
+    "lo": 90.0,
+    "hi": 94.0,
+    "source": "Bible 1.8 B1 (1)",
+    "binding": true
+   },
+   "checks": {
+    "lit_wall": true,
+    "hue_32_40": true,
+    "C_le_7": true,
+    "window_wall": false,
+    "black": true,
+    "rolloff": true,
+    "B5": null
+   },
+   "halo_boxes": null,
+   "verdict": "fail",
+   "failed": [
+    "window_wall"
+   ]
+  },
+  {
+   "still": "K-girl fix",
+   "agent": {
+    "L": 92.6,
+    "H": 36.1,
+    "C": 2.58,
+    "meets": false,
+    "fails": [
+     "bible_window_wall_80_88"
+    ],
+    "corrected": false,
+    "stops": 0.252
+   },
+   "qa": {
+    "point": "agent reference point",
+    "L": 92.7,
+    "H": 36.1,
+    "C": 2.3,
+    "window_wall": 79.1,
+    "black": 12.6,
+    "frame_max": 96.5,
+    "px255": 0
+   },
+   "target": {
+    "lo": 90.0,
+    "hi": 94.0,
+    "source": "Bible 1.8 B1 (1)",
+    "binding": true
+   },
+   "checks": {
+    "lit_wall": true,
+    "hue_32_40": true,
+    "C_le_7": true,
+    "window_wall": false,
+    "black": true,
+    "rolloff": true,
+    "B5": null
+   },
+   "halo_boxes": null,
+   "verdict": "fail",
+   "failed": [
+    "window_wall"
+   ]
+  },
+  {
+   "still": "W0 fix",
+   "agent": {
+    "L": 92.7,
+    "H": 36.2,
+    "C": 3.57,
+    "meets": false,
+    "fails": [
+     "bible_window_wall_80_88"
+    ],
+    "corrected": false,
+    "stops": 0.301
+   },
+   "qa": {
+    "point": "agent reference point",
+    "L": 92.7,
+    "H": 35.6,
+    "C": 3.45,
+    "window_wall": 71.5,
+    "black": 12.5,
+    "frame_max": 96.5,
+    "px255": 0
+   },
+   "target": {
+    "lo": 90.0,
+    "hi": 94.0,
+    "source": "Bible 1.8 B1 (1)",
+    "binding": true
+   },
+   "checks": {
+    "lit_wall": true,
+    "hue_32_40": true,
+    "C_le_7": true,
+    "window_wall": false,
+    "black": true,
+    "rolloff": true,
+    "B5": null
+   },
+   "halo_boxes": null,
+   "verdict": "fail",
+   "failed": [
+    "window_wall"
+   ]
+  },
+  {
+   "still": "K-boy-0 fix",
+   "agent": {
+    "L": 89.4,
+    "H": 36.1,
+    "C": 3.6,
+    "meets": false,
+    "fails": [
+     "wall hue / C* not judged (no wall at the reference point)"
+    ],
+    "corrected": false,
+    "stops": 0.305
+   },
+   "qa": {
+    "point": "clay reference_Kb (clay L 79.6)",
+    "L": 90.7,
+    "H": 39.4,
+    "C": 3.86,
+    "window_wall": null,
+    "black": 13.4,
+    "frame_max": 96.5,
+    "px255": 0
+   },
+   "target": {
+    "lo": 90.0,
+    "hi": 94.0,
+    "source": "Bible 1.8 B1 (1)",
+    "binding": true
+   },
+   "checks": {
+    "lit_wall": null,
+    "hue_32_40": null,
+    "C_le_7": null,
+    "window_wall": null,
+    "black": true,
+    "rolloff": true,
+    "B5": null
+   },
+   "halo_boxes": null,
+   "verdict": "cannot judge",
+   "failed": []
+  },
+  {
+   "still": "H0x",
+   "agent": {
+    "L": 76.7,
+    "H": 36.1,
+    "C": 9.29,
+    "meets": false,
+    "fails": [
+     "bible_wall_C_le_7_B4"
+    ],
+    "corrected": false,
+    "stops": 0.383
+   },
+   "qa": {
+    "point": "agent reference point",
+    "L": 76.7,
+    "H": 36.1,
+    "C": 9.35,
+    "window_wall": null,
+    "black": 12.5,
+    "frame_max": 96.5,
+    "px255": 0
+   },
+   "target": {
+    "lo": null,
+    "hi": null,
+    "source": "Bible 1.8 B5: the hall walls 2/3 stop under the living back wall; the vista the brightest",
+    "binding": true
+   },
+   "checks": {
+    "lit_wall": null,
+    "hue_32_40": true,
+    "C_le_7": false,
+    "window_wall": null,
+    "black": true,
+    "rolloff": true,
+    "B5": null
+   },
+   "halo_boxes": null,
+   "verdict": "fail",
+   "failed": [
+    "C_le_7"
+   ]
+  },
+  {
+   "still": "M0p",
+   "agent": {
+    "L": 94.3,
+    "H": 38.2,
+    "C": 6.57,
+    "meets": true,
+    "fails": [],
+    "corrected": true,
+    "stops": 0.938
+   },
+   "qa": {
+    "point": "agent reference point",
+    "L": 94.2,
+    "H": 38.6,
+    "C": 6.6,
+    "window_wall": null,
+    "black": 12.5,
+    "frame_max": 96.7,
+    "px255": 0
+   },
+   "target": {
+    "lo": 90.0,
+    "hi": 94.0,
+    "source": "Bible 1.8 B1 (1): back wall by the corner L 90-94 (1.4; 92-95 was 1.0)",
+    "binding": true
+   },
+   "checks": {
+    "lit_wall": false,
+    "hue_32_40": true,
+    "C_le_7": true,
+    "window_wall": null,
+    "black": true,
+    "rolloff": true,
+    "B5": null
+   },
+   "halo_boxes": 0,
+   "verdict": "fail",
+   "failed": [
+    "lit_wall"
+   ]
+  },
+  {
+   "still": "M0x",
+   "agent": {
+    "L": 94.9,
+    "H": 49.5,
+    "C": 3.98,
+    "meets": false,
+    "fails": [
+     "wall hue / C* not judged (no wall at the reference point)"
+    ],
+    "corrected": true,
+    "stops": 1.007
+   },
+   "qa": {
+    "point": "clay reference_M0 (clay L 94.8)",
+    "L": 96.4,
+    "H": 46.5,
+    "C": 0.02,
+    "window_wall": null,
+    "black": 12.5,
+    "frame_max": 96.7,
+    "px255": 0
+   },
+   "target": {
+    "lo": 90.0,
+    "hi": 94.0,
+    "source": "Bible 1.8 B1 (1): back wall by the corner L 90-94 (1.4; 92-95 was 1.0)",
+    "binding": true
+   },
+   "checks": {
+    "lit_wall": null,
+    "hue_32_40": null,
+    "C_le_7": null,
+    "window_wall": null,
+    "black": true,
+    "rolloff": true,
+    "B5": null
+   },
+   "halo_boxes": 2,
+   "verdict": "cannot judge",
+   "failed": []
+  },
+  {
+   "still": "PD-35",
+   "agent": {
+    "L": 91.9,
+    "H": 36.0,
+    "C": 2.38,
+    "meets": true,
+    "fails": [],
+    "corrected": false,
+    "stops": 0.19
+   },
+   "qa": {
+    "point": "agent reference point",
+    "L": 92.0,
+    "H": 34.7,
+    "C": 2.39,
+    "window_wall": null,
+    "black": 12.5,
+    "frame_max": 96.5,
+    "px255": 0
+   },
+   "target": {
+    "lo": 90.0,
+    "hi": 94.0,
+    "source": "Bible 'אור' 1.4 / 1.8 B1 (1): the lit wall by the window L 90-94",
+    "binding": true
+   },
+   "checks": {
+    "lit_wall": true,
+    "hue_32_40": true,
+    "C_le_7": true,
+    "window_wall": null,
+    "black": true,
+    "rolloff": true,
+    "B5": null
+   },
+   "halo_boxes": null,
+   "verdict": "pass",
+   "failed": []
+  },
+  {
+   "still": "H0e",
+   "agent": {
+    "L": 77.3,
+    "H": 36.1,
+    "C": 5.94,
+    "meets": true,
+    "fails": [],
+    "corrected": false,
+    "stops": -0.187
+   },
+   "qa": {
+    "point": "agent reference point",
+    "L": 77.3,
+    "H": 36.2,
+    "C": 6.05,
+    "window_wall": null,
+    "black": 12.5,
+    "frame_max": 94.9,
+    "px255": 0
+   },
+   "target": {
+    "lo": null,
+    "hi": null,
+    "source": "Bible 1.8 B5: the hall walls 2/3 stop under the living back wall; the vista the brightest",
+    "binding": true
+   },
+   "checks": {
+    "lit_wall": null,
+    "hue_32_40": true,
+    "C_le_7": true,
+    "window_wall": null,
+    "black": true,
+    "rolloff": true,
+    "B5": null
+   },
+   "halo_boxes": null,
+   "verdict": "pass",
+   "failed": []
+  },
+  {
+   "still": "W0-in",
+   "agent": {
+    "L": 92.6,
+    "H": 36.2,
+    "C": 3.49,
+    "meets": true,
+    "fails": [],
+    "corrected": false,
+    "stops": 0.035
+   },
+   "qa": {
+    "point": "agent reference point",
+    "L": 92.6,
+    "H": 35.3,
+    "C": 3.37,
+    "window_wall": null,
+    "black": 12.5,
+    "frame_max": 96.5,
+    "px255": 0
+   },
+   "target": {
+    "lo": 90.0,
+    "hi": 94.0,
+    "source": "Bible 1.8 B1 (1)",
+    "binding": true
+   },
+   "checks": {
+    "lit_wall": true,
+    "hue_32_40": true,
+    "C_le_7": true,
+    "window_wall": null,
+    "black": true,
+    "rolloff": true,
+    "B5": null
+   },
+   "halo_boxes": null,
+   "verdict": "pass",
+   "failed": []
+  },
+  {
+   "still": "S1'",
+   "agent": {
+    "L": 76.0,
+    "H": 36.1,
+    "C": 7.52,
+    "meets": false,
+    "fails": [
+     "bible_wall_C_le_7_B4"
+    ],
+    "corrected": false,
+    "stops": 0.111
+   },
+   "qa": {
+    "point": "agent reference point",
+    "L": 76.0,
+    "H": 36.1,
+    "C": 7.36,
+    "window_wall": null,
+    "black": 12.6,
+    "frame_max": 96.5,
+    "px255": 0
+   },
+   "target": {
+    "lo": 71.2,
+    "hi": 80.6,
+    "source": "G1.8 PROPOSAL (gates doc): corridor walls 2/3 stop under the living; no Bible number",
+    "binding": false
+   },
+   "checks": {
+    "lit_wall": true,
+    "hue_32_40": true,
+    "C_le_7": false,
+    "window_wall": null,
+    "black": true,
+    "rolloff": true,
+    "B5": null
+   },
+   "halo_boxes": null,
+   "verdict": "fail",
+   "failed": [
+    "C_le_7"
+   ]
+  },
+  {
+   "still": "K-boy-0",
+   "agent": {
+    "L": 89.4,
+    "H": 36.1,
+    "C": 3.6,
+    "meets": false,
+    "fails": [
+     "wall hue / C* not judged (no wall at the reference point)"
+    ],
+    "corrected": false,
+    "stops": 0.305
+   },
+   "qa": {
+    "point": "clay reference_Kb (clay L 79.6)",
+    "L": 90.7,
+    "H": 39.4,
+    "C": 3.86,
+    "window_wall": null,
+    "black": 13.4,
+    "frame_max": 96.5,
+    "px255": 0
+   },
+   "target": {
+    "lo": 90.0,
+    "hi": 94.0,
+    "source": "Bible 1.8 B1 (1)",
+    "binding": true
+   },
+   "checks": {
+    "lit_wall": null,
+    "hue_32_40": null,
+    "C_le_7": null,
+    "window_wall": null,
+    "black": true,
+    "rolloff": true,
+    "B5": null
+   },
+   "halo_boxes": null,
+   "verdict": "cannot judge",
+   "failed": []
+  },
+  {
+   "still": "K-girl-0",
+   "agent": {
+    "L": 88.7,
+    "H": 33.2,
+    "C": 3.64,
+    "meets": false,
+    "fails": [
+     "bible_target_met"
+    ],
+    "corrected": false,
+    "stops": 0.381
+   },
+   "qa": {
+    "point": "agent reference point",
+    "L": 88.6,
+    "H": 33.1,
+    "C": 3.58,
+    "window_wall": null,
+    "black": 12.5,
+    "frame_max": 96.5,
+    "px255": 0
+   },
+   "target": {
+    "lo": 90.0,
+    "hi": 94.0,
+    "source": "Bible 1.8 B1 (1)",
+    "binding": true
+   },
+   "checks": {
+    "lit_wall": false,
+    "hue_32_40": true,
+    "C_le_7": true,
+    "window_wall": null,
+    "black": true,
+    "rolloff": true,
+    "B5": null
+   },
+   "halo_boxes": null,
+   "verdict": "fail",
+   "failed": [
+    "lit_wall"
+   ]
+  },
+  {
+   "still": "CB-0",
+   "agent": {
+    "L": 88.9,
+    "H": 36.2,
+    "C": 6.68,
+    "meets": true,
+    "fails": [],
+    "corrected": false,
+    "stops": 0.582
+   },
+   "qa": {
+    "point": "agent reference point",
+    "L": 89.0,
+    "H": 35.1,
+    "C": 6.68,
+    "window_wall": null,
+    "black": 12.5,
+    "frame_max": 96.5,
+    "px255": 0
+   },
+   "target": {
+    "lo": 86.0,
+    "hi": 90.0,
+    "source": "Bible 1.6 bath: the wall beside the fluted window L 86-90 (4000 K); 1.8 keeps the room exception",
+    "binding": true
+   },
+   "checks": {
+    "lit_wall": true,
+    "hue_32_40": true,
+    "C_le_7": true,
+    "window_wall": null,
+    "black": true,
+    "rolloff": true,
+    "B5": null
+   },
+   "halo_boxes": null,
+   "verdict": "pass",
+   "failed": []
+  },
+  {
+   "still": "MB-in",
+   "agent": {
+    "L": 93.0,
+    "H": 37.9,
+    "C": 7.95,
+    "meets": false,
+    "fails": [
+     "bible_wall_C_le_7_B4"
+    ],
+    "corrected": true,
+    "stops": 0.4
+   },
+   "qa": {
+    "point": "agent reference point",
+    "L": 93.0,
+    "H": 38.1,
+    "C": 8.0,
+    "window_wall": null,
+    "black": 12.5,
+    "frame_max": 96.7,
+    "px255": 0
+   },
+   "target": {
+    "lo": 90.0,
+    "hi": 94.0,
+    "source": "Bible 1.8 B1 (1)",
+    "binding": true
+   },
+   "checks": {
+    "lit_wall": true,
+    "hue_32_40": true,
+    "C_le_7": false,
+    "window_wall": null,
+    "black": true,
+    "rolloff": true,
+    "B5": null
+   },
+   "halo_boxes": 0,
+   "verdict": "fail",
+   "failed": [
+    "C_le_7"
+   ]
+  },
+  {
+   "still": "B1 r3 fix",
+   "agent": {
+    "L": 89.2,
+    "H": 36.2,
+    "C": 5.53,
+    "meets": true,
+    "fails": [],
+    "corrected": false,
+    "stops": 0.163
+   },
+   "qa": {
+    "point": "agent reference point",
+    "L": 89.2,
+    "H": 35.9,
+    "C": 5.42,
+    "window_wall": null,
+    "black": 12.5,
+    "frame_max": 96.5,
+    "px255": 0
+   },
+   "target": {
+    "lo": 86.0,
+    "hi": 90.0,
+    "source": "Bible 1.6 bath: the wall beside the fluted window L 86-90 (4000 K); 1.8 keeps the room exception",
+    "binding": true
+   },
+   "checks": {
+    "lit_wall": true,
+    "hue_32_40": true,
+    "C_le_7": true,
+    "window_wall": null,
+    "black": true,
+    "rolloff": true,
+    "B5": null
+   },
+   "halo_boxes": null,
+   "verdict": "pass",
+   "failed": []
+  },
+  {
+   "still": "B2 r3 fix",
+   "agent": {
+    "L": 82.2,
+    "H": 36.2,
+    "C": 9.33,
+    "meets": false,
+    "fails": [
+     "bible_wall_C_le_7_B4"
+    ],
+    "corrected": false,
+    "stops": 0.163
+   },
+   "qa": {
+    "point": "agent reference point",
+    "L": 82.2,
+    "H": 36.4,
+    "C": 9.46,
+    "window_wall": null,
+    "black": 12.6,
+    "frame_max": 96.5,
+    "px255": 0
+   },
+   "target": {
+    "lo": 86.0,
+    "hi": 90.0,
+    "source": "Bible 1.6 bath: the wall beside the fluted window L 86-90 (4000 K); 1.8 keeps the room exception",
+    "binding": true
+   },
+   "checks": {
+    "lit_wall": null,
+    "hue_32_40": true,
+    "C_le_7": false,
+    "window_wall": null,
+    "black": true,
+    "rolloff": true,
+    "B5": null
+   },
+   "halo_boxes": null,
+   "verdict": "fail",
+   "failed": [
+    "C_le_7"
+   ]
+  },
+  {
+   "still": "K-girl-0 r2 fix",
+   "agent": {
+    "L": 92.7,
+    "H": 36.1,
+    "C": 2.03,
+    "meets": true,
+    "fails": [],
+    "corrected": false,
+    "stops": 0.22
+   },
+   "qa": {
+    "point": "agent reference point",
+    "L": 92.6,
+    "H": 34.9,
+    "C": 2.0,
+    "window_wall": null,
+    "black": 12.5,
+    "frame_max": 95.9,
+    "px255": 0
+   },
+   "target": {
+    "lo": 90.0,
+    "hi": 94.0,
+    "source": "Bible 1.8 B1 (1)",
+    "binding": true
+   },
+   "checks": {
+    "lit_wall": true,
+    "hue_32_40": true,
+    "C_le_7": true,
+    "window_wall": null,
+    "black": true,
+    "rolloff": true,
+    "B5": null
+   },
+   "halo_boxes": null,
+   "verdict": "pass",
+   "failed": []
+  },
+  {
+   "still": "W0-in r2 fix",
+   "agent": {
+    "L": 92.3,
+    "H": 36.2,
+    "C": 3.72,
+    "meets": true,
+    "fails": [],
+    "corrected": false,
+    "stops": 0.123
+   },
+   "qa": {
+    "point": "agent reference point",
+    "L": 92.3,
+    "H": 35.9,
+    "C": 3.69,
+    "window_wall": null,
+    "black": 12.5,
+    "frame_max": 96.5,
+    "px255": 0
+   },
+   "target": {
+    "lo": 90.0,
+    "hi": 94.0,
+    "source": "Bible 1.8 B1 (1)",
+    "binding": true
+   },
+   "checks": {
+    "lit_wall": true,
+    "hue_32_40": true,
+    "C_le_7": true,
+    "window_wall": null,
+    "black": true,
+    "rolloff": true,
+    "B5": null
+   },
+   "halo_boxes": null,
+   "verdict": "pass",
+   "failed": []
+  }
+ ],
+ "grading_v4_counts": {
+  "qa_pass": 12,
+  "qa_fail": 15,
+  "qa_cannot_judge": 3,
+  "agent_pass": 13
+ },
+ "disputes": {
+  "W0-in": {
+   "chair band u 0.42-0.58 rows 700-960": {
+    "clay": [
+     [
+      800,
+      18.5
+     ],
+     [
+      835,
+      16.9
+     ],
+     [
+      846,
+      7.3
+     ]
+    ],
+    "raw": [
+     [
+      731,
+      11.4
+     ],
+     [
+      761,
+      18.1
+     ],
+     [
+      794,
+      28.0
+     ],
+     [
+      808,
+      13.0
+     ]
+    ],
+    "fix": [
+     [
+      765,
+      11.8
+     ],
+     [
+      797,
+      17.9
+     ],
+     [
+      832,
+      29.5
+     ],
+     [
+      847,
+      12.7
+     ]
+    ]
+   },
+   "desk right of the chair u 0.68-0.80 rows 640-960": {
+    "clay": [
+     [
+      800,
+      26.8
+     ]
+    ],
+    "raw": [
+     [
+      669,
+      13.0
+     ],
+     [
+      732,
+      8.9
+     ],
+     [
+      761,
+      23.5
+     ]
+    ],
+    "fix": [
+     [
+      691,
+      13.6
+     ],
+     [
+      764,
+      9.4
+     ],
+     [
+      796,
+      22.6
+     ]
+    ]
+   },
+   "desk left of the chair u 0.20-0.33 rows 640-960": {
+    "clay": [
+     [
+      800,
+      15.1
+     ],
+     [
+      923,
+      30.6
+     ]
+    ],
+    "raw": [
+     [
+      761,
+      44.9
+     ],
+     [
+      877,
+      34.2
+     ]
+    ],
+    "fix": [
+     [
+      798,
+      44.8
+     ],
+     [
+      920,
+      34.0
+     ]
+    ]
+   },
+   "chair left edge rows 0.82-0.98, cols 600-760": {
+    "clay": [
+     [
+      678,
+      21.2
+     ]
+    ],
+    "raw": [
+     [
+      679,
+      38.8
+     ]
+    ],
+    "fix": [
+     [
+      678,
+      36.3
+     ],
+     [
+      684,
+      13.1
+     ]
+    ]
+   },
+   "chair right edge rows 0.82-0.98, cols 1160-1320": {
+    "clay": [
+     [
+      1240,
+      10.0
+     ]
+    ],
+    "raw": [
+     [
+      1235,
+      8.8
+     ]
+    ],
+    "fix": [
+     [
+      1232,
+      7.6
+     ]
+    ]
+   },
+   "desk right outer edge rows 0.80-0.95, cols 1500-1660": {
+    "clay": [
+     [
+      1567,
+      3.9
+     ],
+     [
+      1599,
+      5.5
+     ]
+    ],
+    "raw": [
+     [
+      1566,
+      21.7
+     ],
+     [
+      1599,
+      10.1
+     ]
+    ],
+    "fix": [
+     [
+      1562,
+      20.6
+     ],
+     [
+      1595,
+      9.4
+     ]
+    ]
+   }
+  },
+  "B2": {
+   "vanity right side rows 0.60-0.90 cols 1480-1660": {
+    "clay": [
+     [
+      1517,
+      4.4
+     ],
+     [
+      1539,
+      4.0
+     ],
+     [
+      1584,
+      11.6
+     ],
+     [
+      1591,
+      9.2
+     ]
+    ],
+    "raw": [
+     [
+      1520,
+      5.7
+     ],
+     [
+      1541,
+      15.8
+     ],
+     [
+      1595,
+      17.0
+     ],
+     [
+      1635,
+      4.8
+     ]
+    ],
+    "fix": [
+     [
+      1520,
+      5.7
+     ],
+     [
+      1541,
+      15.8
+     ],
+     [
+      1595,
+      17.0
+     ],
+     [
+      1635,
+      4.8
+     ]
+    ]
+   },
+   "vanity right side rows 0.62-0.70 (drawer front) cols 1480-1660": {
+    "clay": [
+     [
+      1584,
+      26.1
+     ],
+     [
+      1591,
+      19.8
+     ]
+    ],
+    "raw": [
+     [
+      1541,
+      12.5
+     ],
+     [
+      1555,
+      4.5
+     ],
+     [
+      1588,
+      4.5
+     ],
+     [
+      1595,
+      15.9
+     ],
+     [
+      1628,
+      4.8
+     ],
+     [
+      1636,
+      6.1
+     ],
+     [
+      1648,
+      6.6
+     ]
+    ],
+    "fix": [
+     [
+      1541,
+      12.5
+     ],
+     [
+      1555,
+      4.5
+     ],
+     [
+      1588,
+      4.5
+     ],
+     [
+      1595,
+      15.9
+     ],
+     [
+      1628,
+      4.8
+     ],
+     [
+      1636,
+      6.1
+     ],
+     [
+      1648,
+      6.6
+     ]
+    ]
+   },
+   "vanity right side rows 0.80-0.90 (open shelf) cols 1480-1660": {
+    "clay": [
+     [
+      1517,
+      12.7
+     ],
+     [
+      1539,
+      4.2
+     ],
+     [
+      1591,
+      3.7
+     ]
+    ],
+    "raw": [
+     [
+      1520,
+      15.8
+     ],
+     [
+      1542,
+      15.9
+     ],
+     [
+      1595,
+      18.2
+     ],
+     [
+      1632,
+      4.8
+     ]
+    ],
+    "fix": [
+     [
+      1520,
+      15.8
+     ],
+     [
+      1542,
+      15.9
+     ],
+     [
+      1595,
+      18.2
+     ],
+     [
+      1632,
+      4.8
+     ]
+    ]
+   },
+   "vanity left side rows 0.60-0.90 cols 860-1000": {
+    "clay": [
+     [
+      922,
+      7.7
+     ],
+     [
+      935,
+      6.6
+     ]
+    ],
+    "raw": [
+     [
+      921,
+      11.6
+     ],
+     [
+      936,
+      5.8
+     ]
+    ],
+    "fix": [
+     [
+      921,
+      11.6
+     ],
+     [
+      936,
+      5.8
+     ]
+    ]
+   },
+   "mirror head per column (rows 20-220, peaks >= 30 % of the column's strongest)": {
+    "1090": {
+     "clay": [
+      [
+       112,
+       7.1
+      ],
+      [
+       125,
+       15.2
+      ],
+      [
+       135,
+       15.5
+      ],
+      [
+       174,
+       21.2
+      ],
+      [
+       179,
+       21.8
+      ]
+     ],
+     "raw": [
+      [
+       123,
+       16.6
+      ],
+      [
+       134,
+       31.1
+      ]
+     ],
+     "fix": [
+      [
+       123,
+       16.6
+      ],
+      [
+       134,
+       31.2
+      ]
+     ]
+    },
+    "1150": {
+     "clay": [
+      [
+       115,
+       10.8
+      ],
+      [
+       125,
+       11.5
+      ],
+      [
+       165,
+       23.2
+      ],
+      [
+       170,
+       22.4
+      ]
+     ],
+     "raw": [
+      [
+       112,
+       18.2
+      ],
+      [
+       123,
+       24.1
+      ]
+     ],
+     "fix": [
+      [
+       112,
+       18.2
+      ],
+      [
+       123,
+       24.1
+      ]
+     ]
+    },
+    "1250": {
+     "clay": [
+      [
+       97,
+       8.4
+      ],
+      [
+       150,
+       21.0
+      ],
+      [
+       154,
+       23.4
+      ]
+     ],
+     "raw": [
+      [
+       94,
+       17.3
+      ],
+      [
+       106,
+       32.8
+      ]
+     ],
+     "fix": [
+      [
+       94,
+       17.3
+      ],
+      [
+       106,
+       32.8
+      ]
+     ]
+    },
+    "1350": {
+     "clay": [
+      [
+       79,
+       8.5
+      ],
+      [
+       90,
+       7.9
+      ],
+      [
+       134,
+       22.2
+      ],
+      [
+       139,
+       23.1
+      ]
+     ],
+     "raw": [
+      [
+       76,
+       19.2
+      ],
+      [
+       88,
+       29.9
+      ]
+     ],
+     "fix": [
+      [
+       76,
+       19.2
+      ],
+      [
+       88,
+       29.9
+      ]
+     ]
+    },
+    "1450": {
+     "clay": [
+      [
+       61,
+       11.7
+      ],
+      [
+       72,
+       13.6
+      ],
+      [
+       118,
+       21.6
+      ],
+      [
+       123,
+       22.7
+      ]
+     ],
+     "raw": [
+      [
+       58,
+       19.9
+      ],
+      [
+       71,
+       23.0
+      ]
+     ],
+     "fix": [
+      [
+       58,
+       19.9
+      ],
+      [
+       71,
+       23.0
+      ]
+     ]
+    },
+    "1540": {
+     "clay": [
+      [
+       45,
+       14.5
+      ],
+      [
+       57,
+       18.5
+      ],
+      [
+       104,
+       19.7
+      ],
+      [
+       110,
+       20.9
+      ]
+     ],
+     "raw": [
+      [
+       42,
+       14.5
+      ],
+      [
+       55,
+       29.5
+      ]
+     ],
+     "fix": [
+      [
+       42,
+       14.5
+      ],
+      [
+       55,
+       29.5
+      ]
+     ]
+    }
+   }
+  }
+ },
+ "pairs": [
+  {
+   "a": "B1 r3 fix",
+   "b": "B2 r3 fix",
+   "pan": "P-B pan",
+   "degrees": 35,
+   "render": {
+    "size": [
+     1920,
+     1080
+    ],
+    "overlap_u": [
+     0.0,
+     0.38
+    ],
+    "overlap_v": [
+     0.0,
+     0.999
+    ],
+    "shift_px": {
+     "dx": -3.34,
+     "dy": -4.07,
+     "response": 0.041
+    },
+    "bands": [
+     {
+      "u": [
+       0.0,
+       0.095
+      ],
+      "dx_px": -14.15,
+      "dy_px": 9.93,
+      "response": 0.265
+     },
+     {
+      "u": [
+       0.095,
+       0.19
+      ],
+      "dx_px": -1.05,
+      "dy_px": 140.17,
+      "response": 0.017
+     },
+     {
+      "u": [
+       0.19,
+       0.284
+      ],
+      "dx_px": -39.76,
+      "dy_px": 0.13,
+      "response": 0.031
+     },
+     {
+      "u": [
+       0.284,
+       0.38
+      ],
+      "dx_px": 3.46,
+      "dy_px": 4.83,
+      "response": 0.254
+     }
+    ],
+    "deltaE": {
+     "mean": 10.13,
+     "p95": 24.46,
+     "share_over_5": 0.739
+    },
+    "L_mean": {
+     "a": 67.6,
+     "b": 68.3
+    },
+    "sheet": "/home/user/homedesign-app/qa/reports/2026-11-04-retakes-fixes-g1/overlays/pair-B1_r3_fix-B2_r3_fix.jpg",
+    "worst_band_px": 140.17,
+    "worst_band_px_reliable": 14.15,
+    "bands_reliable": 2,
+    "dL_mean": 0.7
+   },
+   "clay": {
+    "size": [
+     1920,
+     1080
+    ],
+    "overlap_u": [
+     0.0,
+     0.38
+    ],
+    "overlap_v": [
+     0.0,
+     0.999
+    ],
+    "shift_px": {
+     "dx": 0.57,
+     "dy": 0.01,
+     "response": 0.726
+    },
+    "bands": [
+     {
+      "u": [
+       0.0,
+       0.095
+      ],
+      "dx_px": 2.21,
+      "dy_px": 2.07,
+      "response": 0.274
+     },
+     {
+      "u": [
+       0.095,
+       0.19
+      ],
+      "dx_px": -0.03,
+      "dy_px": 0.02,
+      "response": 0.767
+     },
+     {
+      "u": [
+       0.19,
+       0.284
+      ],
+      "dx_px": 0.02,
+      "dy_px": 0.56,
+      "response": 0.171
+     },
+     {
+      "u": [
+       0.284,
+       0.38
+      ],
+      "dx_px": 0.05,
+      "dy_px": -0.04,
+      "response": 0.851
+     }
+    ],
+    "deltaE": {
+     "mean": 7.71,
+     "p95": 16.23,
+     "share_over_5": 0.724
+    },
+    "L_mean": {
+     "a": 73.4,
+     "b": 65.7
+    },
+    "worst_band_px": 2.21,
+    "worst_band_px_reliable": 2.21,
+    "bands_reliable": 4,
+    "dL_mean": 7.7
+   }
+  },
+  {
+   "a": "K-girl fix",
+   "b": "K-girl-0 r2 fix",
+   "pan": "T-CGirl pan (K-girl -> K-girl-0)",
+   "degrees": 33,
+   "render": {
+    "size": [
+     1920,
+     1080
+    ],
+    "overlap_u": [
+     0.0,
+     0.335
+    ],
+    "overlap_v": [
+     0.0,
+     0.999
+    ],
+    "shift_px": {
+     "dx": -0.22,
+     "dy": 26.75,
+     "response": 0.17
+    },
+    "bands": [
+     {
+      "u": [
+       0.0,
+       0.083
+      ],
+      "dx_px": -0.09,
+      "dy_px": 57.54,
+      "response": 0.047
+     },
+     {
+      "u": [
+       0.083,
+       0.167
+      ],
+      "dx_px": -8.69,
+      "dy_px": 20.61,
+      "response": 0.188
+     },
+     {
+      "u": [
+       0.167,
+       0.251
+      ],
+      "dx_px": -3.41,
+      "dy_px": 30.57,
+      "response": 0.692
+     },
+     {
+      "u": [
+       0.251,
+       0.335
+      ],
+      "dx_px": -0.3,
+      "dy_px": 27.29,
+      "response": 0.576
+     }
+    ],
+    "deltaE": {
+     "mean": 11.35,
+     "p95": 29.94,
+     "share_over_5": 0.826
+    },
+    "L_mean": {
+     "a": 71.0,
+     "b": 75.7
+    },
+    "sheet": "/home/user/homedesign-app/qa/reports/2026-11-04-retakes-fixes-g1/overlays/pair-K-girl_fix-K-girl-0_r2_fix.jpg",
+    "worst_band_px": 57.54,
+    "worst_band_px_reliable": 30.57,
+    "bands_reliable": 3,
+    "dL_mean": 4.7
+   },
+   "clay": {
+    "size": [
+     1920,
+     1080
+    ],
+    "overlap_u": [
+     0.0,
+     0.335
+    ],
+    "overlap_v": [
+     0.0,
+     0.999
+    ],
+    "shift_px": {
+     "dx": 0.03,
+     "dy": 0.03,
+     "response": 0.909
+    },
+    "bands": [
+     {
+      "u": [
+       0.0,
+       0.083
+      ],
+      "dx_px": 0.09,
+      "dy_px": 0.02,
+      "response": 0.969
+     },
+     {
+      "u": [
+       0.083,
+       0.167
+      ],
+      "dx_px": 0.04,
+      "dy_px": -0.05,
+      "response": 0.923
+     },
+     {
+      "u": [
+       0.167,
+       0.251
+      ],
+      "dx_px": -0.02,
+      "dy_px": 0.01,
+      "response": 0.947
+     },
+     {
+      "u": [
+       0.251,
+       0.335
+      ],
+      "dx_px": -0.02,
+      "dy_px": -0.01,
+      "response": 0.952
+     }
+    ],
+    "deltaE": {
+     "mean": 0.5,
+     "p95": 1.24,
+     "share_over_5": 0.002
+    },
+    "L_mean": {
+     "a": 74.3,
+     "b": 74.3
+    },
+    "worst_band_px": 0.09,
+    "worst_band_px_reliable": 0.09,
+    "bands_reliable": 4,
+    "dL_mean": 0.0
+   }
+  },
+  {
+   "a": "B1 r3 fix",
+   "b": "CB-0",
+   "pan": "T-CBath pan (CB-0 -> B1), today's CB-0 (v7 composite)",
+   "degrees": 22,
+   "render": {
+    "size": [
+     1920,
+     1080
+    ],
+    "overlap_u": [
+     0.521,
+     0.999
+    ],
+    "overlap_v": [
+     0.0,
+     0.999
+    ],
+    "shift_px": {
+     "dx": 9.78,
+     "dy": -34.7,
+     "response": -0.002
+    },
+    "bands": [
+     {
+      "u": [
+       0.521,
+       0.641
+      ],
+      "dx_px": -7.71,
+      "dy_px": -8.92,
+      "response": 0.227
+     },
+     {
+      "u": [
+       0.641,
+       0.76
+      ],
+      "dx_px": 6.2,
+      "dy_px": -19.39,
+      "response": 0.072
+     },
+     {
+      "u": [
+       0.76,
+       0.88
+      ],
+      "dx_px": -11.65,
+      "dy_px": -5.54,
+      "response": 0.025
+     },
+     {
+      "u": [
+       0.88,
+       0.999
+      ],
+      "dx_px": -42.76,
+      "dy_px": -96.82,
+      "response": 0.0
+     }
+    ],
+    "deltaE": {
+     "mean": 16.66,
+     "p95": 41.94,
+     "share_over_5": 0.936
+    },
+    "L_mean": {
+     "a": 72.5,
+     "b": 86.7
+    },
+    "sheet": "/home/user/homedesign-app/qa/reports/2026-11-04-retakes-fixes-g1/overlays/pair-B1_r3_fix-CB-0.jpg",
+    "worst_band_px": 96.82,
+    "worst_band_px_reliable": 19.39,
+    "bands_reliable": 2,
+    "dL_mean": 14.2
+   },
+   "clay": {
+    "size": [
+     1920,
+     1080
+    ],
+    "overlap_u": [
+     0.521,
+     0.999
+    ],
+    "overlap_v": [
+     0.0,
+     0.999
+    ],
+    "shift_px": {
+     "dx": 0.05,
+     "dy": 0.01,
+     "response": 0.538
+    },
+    "bands": [
+     {
+      "u": [
+       0.521,
+       0.641
+      ],
+      "dx_px": -0.05,
+      "dy_px": 0.07,
+      "response": 0.938
+     },
+     {
+      "u": [
+       0.641,
+       0.76
+      ],
+      "dx_px": -0.01,
+      "dy_px": 0.04,
+      "response": 0.546
+     },
+     {
+      "u": [
+       0.76,
+       0.88
+      ],
+      "dx_px": -49.99,
+      "dy_px": -41.33,
+      "response": 0.069
+     },
+     {
+      "u": [
+       0.88,
+       0.999
+      ],
+      "dx_px": 0.72,
+      "dy_px": 0.41,
+      "response": 0.125
+     }
+    ],
+    "deltaE": {
+     "mean": 3.23,
+     "p95": 16.49,
+     "share_over_5": 0.195
+    },
+    "L_mean": {
+     "a": 75.0,
+     "b": 77.9
+    },
+    "worst_band_px": 49.99,
+    "worst_band_px_reliable": 49.99,
+    "bands_reliable": 4,
+    "dL_mean": 2.9
+   },
+   "clay_note": "no r3 clay of CB-0 exists (round4/r3-2026-11-03/poses/ is empty): the floor here is the B1 r3 clay against the round-4 CB-0 clay, which has no planter / brush placeholders, so it is not a pure tool floor"
+  },
+  {
+   "a": "B1 r3",
+   "b": "B2 r3",
+   "pan": "P-B on 11-03 (raw retakes, graded v3)",
+   "degrees": 35,
+   "render": {
+    "size": [
+     1920,
+     1080
+    ],
+    "overlap_u": [
+     0.0,
+     0.38
+    ],
+    "overlap_v": [
+     0.0,
+     0.999
+    ],
+    "shift_px": {
+     "dx": 0.12,
+     "dy": 148.16,
+     "response": 0.015
+    },
+    "bands": [
+     {
+      "u": [
+       0.0,
+       0.095
+      ],
+      "dx_px": -1.16,
+      "dy_px": 84.22,
+      "response": 0.042
+     },
+     {
+      "u": [
+       0.095,
+       0.19
+      ],
+      "dx_px": 0.73,
+      "dy_px": 106.35,
+      "response": 0.033
+     },
+     {
+      "u": [
+       0.19,
+       0.284
+      ],
+      "dx_px": 1.99,
+      "dy_px": -61.6,
+      "response": 0.027
+     },
+     {
+      "u": [
+       0.284,
+       0.38
+      ],
+      "dx_px": 0.8,
+      "dy_px": 5.71,
+      "response": 0.275
+     }
+    ],
+    "deltaE": {
+     "mean": 11.79,
+     "p95": 28.99,
+     "share_over_5": 0.779
+    },
+    "L_mean": {
+     "a": 66.3,
+     "b": 67.5
+    },
+    "sheet": "/home/user/homedesign-app/qa/reports/2026-11-04-retakes-fixes-g1/overlays/pair-B1_r3-B2_r3.jpg",
+    "worst_band_px": 106.35,
+    "worst_band_px_reliable": 5.71,
+    "bands_reliable": 1,
+    "dL_mean": 1.2
+   },
+   "clay": {
+    "size": [
+     1920,
+     1080
+    ],
+    "overlap_u": [
+     0.0,
+     0.38
+    ],
+    "overlap_v": [
+     0.0,
+     0.999
+    ],
+    "shift_px": {
+     "dx": 0.57,
+     "dy": 0.01,
+     "response": 0.726
+    },
+    "bands": [
+     {
+      "u": [
+       0.0,
+       0.095
+      ],
+      "dx_px": 2.21,
+      "dy_px": 2.07,
+      "response": 0.274
+     },
+     {
+      "u": [
+       0.095,
+       0.19
+      ],
+      "dx_px": -0.03,
+      "dy_px": 0.02,
+      "response": 0.767
+     },
+     {
+      "u": [
+       0.19,
+       0.284
+      ],
+      "dx_px": 0.02,
+      "dy_px": 0.56,
+      "response": 0.171
+     },
+     {
+      "u": [
+       0.284,
+       0.38
+      ],
+      "dx_px": 0.05,
+      "dy_px": -0.04,
+      "response": 0.851
+     }
+    ],
+    "deltaE": {
+     "mean": 7.71,
+     "p95": 16.23,
+     "share_over_5": 0.724
+    },
+    "L_mean": {
+     "a": 73.4,
+     "b": 65.7
+    },
+    "worst_band_px": 2.21,
+    "worst_band_px_reliable": 2.21,
+    "bands_reliable": 4,
+    "dL_mean": 7.7
+   }
+  },
+  {
+   "a": "K-girl fix",
+   "b": "K-girl-0 r2",
+   "pan": "T-CGirl on 11-03",
+   "degrees": 33,
+   "render": {
+    "size": [
+     1920,
+     1080
+    ],
+    "overlap_u": [
+     0.0,
+     0.335
+    ],
+    "overlap_v": [
+     0.0,
+     0.999
+    ],
+    "shift_px": {
+     "dx": -6.83,
+     "dy": 8.68,
+     "response": 0.04
+    },
+    "bands": [
+     {
+      "u": [
+       0.0,
+       0.083
+      ],
+      "dx_px": -0.11,
+      "dy_px": 57.46,
+      "response": 0.047
+     },
+     {
+      "u": [
+       0.083,
+       0.167
+      ],
+      "dx_px": -1.27,
+      "dy_px": -483.04,
+      "response": 0.032
+     },
+     {
+      "u": [
+       0.167,
+       0.251
+      ],
+      "dx_px": -3.41,
+      "dy_px": 30.59,
+      "response": 0.7
+     },
+     {
+      "u": [
+       0.251,
+       0.335
+      ],
+      "dx_px": 33.77,
+      "dy_px": -335.14,
+      "response": 0.016
+     }
+    ],
+    "deltaE": {
+     "mean": 12.09,
+     "p95": 32.63,
+     "share_over_5": 0.836
+    },
+    "L_mean": {
+     "a": 71.0,
+     "b": 74.7
+    },
+    "sheet": "/home/user/homedesign-app/qa/reports/2026-11-04-retakes-fixes-g1/overlays/pair-K-girl_fix-K-girl-0_r2.jpg",
+    "worst_band_px": 483.04,
+    "worst_band_px_reliable": 30.59,
+    "bands_reliable": 1,
+    "dL_mean": 3.7
+   },
+   "clay": {
+    "size": [
+     1920,
+     1080
+    ],
+    "overlap_u": [
+     0.0,
+     0.335
+    ],
+    "overlap_v": [
+     0.0,
+     0.999
+    ],
+    "shift_px": {
+     "dx": 0.03,
+     "dy": 0.03,
+     "response": 0.909
+    },
+    "bands": [
+     {
+      "u": [
+       0.0,
+       0.083
+      ],
+      "dx_px": 0.09,
+      "dy_px": 0.02,
+      "response": 0.969
+     },
+     {
+      "u": [
+       0.083,
+       0.167
+      ],
+      "dx_px": 0.04,
+      "dy_px": -0.05,
+      "response": 0.923
+     },
+     {
+      "u": [
+       0.167,
+       0.251
+      ],
+      "dx_px": -0.02,
+      "dy_px": 0.01,
+      "response": 0.947
+     },
+     {
+      "u": [
+       0.251,
+       0.335
+      ],
+      "dx_px": -0.02,
+      "dy_px": -0.01,
+      "response": 0.952
+     }
+    ],
+    "deltaE": {
+     "mean": 0.5,
+     "p95": 1.24,
+     "share_over_5": 0.002
+    },
+    "L_mean": {
+     "a": 74.3,
+     "b": 74.3
+    },
+    "worst_band_px": 0.09,
+    "worst_band_px_reliable": 0.09,
+    "bands_reliable": 4,
+    "dL_mean": 0.0
+   }
+  }
+ ],
+ "c0_s1": {
+  "C0": {
+   "mean": 73.6,
+   "p99": 93.1,
+   "max": 96.7,
+   "openings": {
+    "G-H4 oak portal": {
+     "box": [
+      0.441,
+      0.491,
+      0.316,
+      0.593
+     ],
+     "mean": 76.0,
+     "p99": 93.5
+    },
+    "G-C3 oak portal": {
+     "box": [
+      0.435,
+      0.565,
+      0.212,
+      0.659
+     ],
+     "mean": 65.9,
+     "p99": 93.3
+    },
+    "door leaves": {
+     "box": [
+      0.666,
+      0.733,
+      0.0,
+      1.0
+     ],
+     "mean": 77.2,
+     "p99": 89.6
+    }
+   }
+  },
+  "S1'": {
+   "mean": 76.3,
+   "p99": 92.2,
+   "max": 96.5,
+   "openings": {
+    "G-H4 oak portal": {
+     "box": [
+      0.32,
+      0.461,
+      0.227,
+      0.675
+     ],
+     "mean": 71.1,
+     "p99": 92.4
+    },
+    "G-C3 oak portal": {
+     "box": [
+      0.294,
+      0.6,
+      0.0,
+      0.926
+     ],
+     "mean": 66.4,
+     "p99": 95.3
+    }
+   }
+  },
+  "H0": {
+   "mean": 76.1,
+   "p99": 96.5,
+   "max": 96.7,
+   "openings": {
+    "G-H4 oak portal": {
+     "box": [
+      0.205,
+      0.507,
+      0.0,
+      0.981
+     ],
+     "mean": 80.4,
+     "p99": 96.5
+    }
+   }
+  },
+  "v3_for_comparison": {
+   "C0": {
+    "mean": 57.8,
+    "p99": 75.1,
+    "max": 81.6
+   },
+   "S1'": {
+    "mean": 76.3,
+    "p99": 92.2,
+    "max": 96.5
+   }
+  }
+ },
+ "fidelity": {
+  "B1 r3 fix": {
+   "sheet": {
+    "bath/bath-mat": {
+     "box_uv": [
+      0.4821,
+      0.632,
+      0.8949,
+      1.0287
+     ],
+     "box_px": [
+      386,
+      194
+     ],
+     "extent_estimate": {
+      "found": true,
+      "extent_uv": [
+       0.407,
+       0.7066,
+       0.8277,
+       0.9993
+      ],
+      "width_ratio": 2.0,
+      "height_ratio": 1.28,
+      "centre_du": -0.0,
+      "centre_dv": -0.36,
+      "touches_expanded_box": true
+     }
+    },
+    "bath/candle": {
+     "box_uv": [
+      0.2862,
+      0.3075,
+      0.5004,
+      0.5417
+     ],
+     "box_px": [
+      54,
+      59
+     ],
+     "extent_estimate": {
+      "found": true,
+      "extent_uv": [
+       0.2752,
+       0.3174,
+       0.4797,
+       0.5431
+      ],
+      "width_ratio": 1.98,
+      "height_ratio": 1.54,
+      "centre_du": -0.03,
+      "centre_dv": -0.23,
+      "touches_expanded_box": true
+     }
+    },
+    "bath/floor-planter": {
+     "box_uv": [
+      0.4739,
+      0.5805,
+      0.4417,
+      0.8996
+     ],
+     "box_px": [
+      274,
+      664
+     ],
+     "extent_estimate": {
+      "found": true,
+      "extent_uv": [
+       0.4205,
+       0.6333,
+       0.2123,
+       0.9993
+      ],
+      "width_ratio": 2.0,
+      "height_ratio": 1.72,
+      "centre_du": -0.0,
+      "centre_dv": -0.14,
+      "touches_expanded_box": true
+     }
+    },
+    "bath/reed-diffuser": {
+     "box_uv": [
+      0.3104,
+      0.3331,
+      0.4083,
+      0.5389
+     ],
+     "box_px": [
+      58,
+      189
+     ],
+     "extent_estimate": {
+      "found": true,
+      "extent_uv": [
+       0.2988,
+       0.3438,
+       0.3425,
+       0.603
+      ],
+      "width_ratio": 1.98,
+      "height_ratio": 1.99,
+      "centre_du": -0.02,
+      "centre_dv": -0.01,
+      "touches_expanded_box": true
+     }
+    },
+    "bath/shower-curtain": {
+     "box_uv": [
+      0.6653,
+      0.725,
+      -0.0301,
+      1.0166
+     ],
+     "box_px": [
+      154,
+      1518
+     ],
+     "extent_estimate": {
+      "found": true,
+      "extent_uv": [
+       0.6353,
+       0.7543,
+       0.0,
+       0.9993
+      ],
+      "width_ratio": 1.99,
+      "height_ratio": 0.95,
+      "centre_du": -0.01,
+      "centre_dv": 0.01,
+      "touches_expanded_box": true
+     }
+    },
+    "bath/shower-dispensers": {
+     "box_uv": [
+      0.7599,
+      0.8114,
+      0.4361,
+      0.4972
+     ],
+     "box_px": [
+      132,
+      88
+     ],
+     "extent_estimate": {
+      "found": true,
+      "extent_uv": [
+       0.7341,
+       0.8368,
+       0.4052,
+       0.5265
+      ],
+      "width_ratio": 1.99,
+      "height_ratio": 1.98,
+      "centre_du": -0.0,
+      "centre_dv": -0.01,
+      "touches_expanded_box": true
+     }
+    },
+    "bath/toilet-brush": {
+     "box_uv": [
+      0.4558,
+      0.4735,
+      0.7578,
+      0.9167
+     ],
+     "box_px": [
+      45,
+      230
+     ],
+     "extent_estimate": {
+      "found": true,
+      "extent_uv": [
+       0.4469,
+       0.4818,
+       0.6782,
+       0.9952
+      ],
+      "width_ratio": 1.97,
+      "height_ratio": 2.0,
+      "centre_du": -0.02,
+      "centre_dv": -0.0,
+      "touches_expanded_box": true
+     }
+    },
+    "bath/toilet-paper-stand": {
+     "box_uv": [
+      0.3919,
+      0.4294,
+      0.6473,
+      0.9047
+     ],
+     "box_px": [
+      96,
+      373
+     ],
+     "extent_estimate": {
+      "found": true,
+      "extent_uv": [
+       0.3729,
+       0.4477,
+       0.5183,
+       0.9993
+      ],
+      "width_ratio": 2.0,
+      "height_ratio": 1.87,
+      "centre_du": -0.01,
+      "centre_dv": -0.07,
+      "touches_expanded_box": true
+     }
+    },
+    "bath/vanity-sconces": {
+     "box_uv": [
+      0.9526,
+      1.0078,
+      0.1602,
+      0.2551
+     ],
+     "box_px": [
+      142,
+      137
+     ],
+     "extent_estimate": {
+      "found": true,
+      "extent_uv": [
+       0.9248,
+       0.9996,
+       0.1213,
+       0.3012
+      ],
+      "width_ratio": 1.35,
+      "height_ratio": 1.9,
+      "centre_du": -0.33,
+      "centre_dv": 0.04,
+      "touches_expanded_box": true
+     }
+    },
+    "bath/wall-sconce": {
+     "box_uv": [
+      0.4318,
+      0.4619,
+      0.2291,
+      0.2944
+     ],
+     "box_px": [
+      77,
+      94
+     ],
+     "extent_estimate": {
+      "found": true,
+      "extent_uv": [
+       0.4167,
+       0.4764,
+       0.2192,
+       0.3115
+      ],
+      "width_ratio": 1.98,
+      "height_ratio": 1.41,
+      "centre_du": -0.01,
+      "centre_dv": 0.05,
+      "touches_expanded_box": true
+     }
+    }
+   },
+   "planter": {
+    "frame": "B1 r3 fix",
+    "pot_cols": [
+     0.49,
+     0.555
+    ],
+    "clay_pot_v": [
+     0.75,
+     0.877
+    ],
+    "clay_box_uv": [
+     0.4754,
+     0.5759,
+     0.445,
+     0.8769
+    ],
+    "rows_scanned": [
+     638,
+     1441
+    ],
+    "basket_rows": [
+     1171,
+     1346
+    ],
+    "basket_v": [
+     0.7609,
+     0.8746
+    ],
+    "pot_box_px": 195,
+    "basket_height_px": 175,
+    "basket_height_over_pot_box": 0.9,
+    "basket_bottom_minus_pot_bottom_px": -3,
+    "basket_top_minus_pot_top_px": 16,
+    "plinth_rows": [
+     1348,
+     1365
+    ],
+    "plinth_v": [
+     0.8759,
+     0.8869
+    ],
+    "plinth_height_px": 17,
+    "plinth_height_over_pot_box": 0.09,
+    "plinth_height_cm_at_pot_scale_30": 2.6,
+    "basket_plus_plinth_cm_at_pot_scale_30": 29.8,
+    "plinth_bottom_minus_pot_bottom_px": 15,
+    "basket_width_px_mid": 195,
+    "basket_width_over_pot_cols": 1.1,
+    "basket_u_mid": [
+     0.4898,
+     0.561
+    ],
+    "basket_median_HSL": [
+     26.0,
+     27.0,
+     41.0
+    ],
+    "fern_top_v": 0.6381,
+    "fern_top_minus_box_top_px": 297,
+    "fern_median_HSL": [
+     56.0,
+     13.1,
+     38.0
+    ]
+   },
+   "brush": {
+    "box_px": [
+     45,
+     230
+    ],
+    "render_px": [
+     41,
+     228
+    ],
+    "height_ratio_to_box": 0.99,
+    "holder_width_ratio_to_box": 0.9,
+    "holder_share_of_height": 0.64,
+    "handle_share_of_height": 0.36,
+    "card": "8 x 38 cm: holder 14.5 (38 %), handle 25 (66 % of the height above the holder's top)",
+    "top_minus_box_top_px": -4,
+    "bottom_minus_box_bottom_px": -7
+   }
+  },
+  "B2 r3 fix": {
+   "sheet": {
+    "bath/floor-planter": {
+     "box_uv": [
+      -0.0188,
+      0.138,
+      0.438,
+      0.9982
+     ],
+     "box_px": [
+      404,
+      812
+     ],
+     "extent_estimate": {
+      "found": true,
+      "extent_uv": [
+       0.0,
+       0.2159,
+       0.1578,
+       0.9993
+      ],
+      "width_ratio": 1.38,
+      "height_ratio": 1.5,
+      "centre_du": 0.31,
+      "centre_dv": -0.25,
+      "touches_expanded_box": true
+     }
+    },
+    "bath/hand-towel": {
+     "box_uv": [
+      0.8289,
+      0.9148,
+      0.5782,
+      0.7426
+     ],
+     "box_px": [
+      221,
+      238
+     ],
+     "extent_estimate": {
+      "found": true,
+      "extent_uv": [
+       0.7857,
+       0.9574,
+       0.4955,
+       0.8236
+      ],
+      "width_ratio": 2.0,
+      "height_ratio": 2.0,
+      "centre_du": -0.0,
+      "centre_dv": -0.01,
+      "touches_expanded_box": true
+     }
+    },
+    "bath/shower-curtain": {
+     "box_uv": [
+      0.2412,
+      0.3047,
+      -0.0301,
+      1.0301
+     ],
+     "box_px": [
+      163,
+      1538
+     ],
+     "extent_estimate": {
+      "found": true,
+      "extent_uv": [
+       0.2093,
+       0.3357,
+       0.0,
+       0.9993
+      ],
+      "width_ratio": 1.99,
+      "height_ratio": 0.94,
+      "centre_du": -0.01,
+      "centre_dv": -0.0,
+      "touches_expanded_box": true
+     }
+    },
+    "bath/shower-dispensers": {
+     "box_uv": [
+      0.3388,
+      0.3857,
+      0.4374,
+      0.4949
+     ],
+     "box_px": [
+      120,
+      83
+     ],
+     "extent_estimate": {
+      "found": true,
+      "extent_uv": [
+       0.3151,
+       0.4085,
+       0.4087,
+       0.5224
+      ],
+      "width_ratio": 1.99,
+      "height_ratio": 1.98,
+      "centre_du": -0.01,
+      "centre_dv": -0.01,
+      "touches_expanded_box": true
+     }
+    },
+    "bath/soap-dispenser": {
+     "box_uv": [
+      0.7213,
+      0.7447,
+      0.5148,
+      0.6051
+     ],
+     "box_px": [
+      60,
+      130
+     ],
+     "extent_estimate": {
+      "found": true,
+      "extent_uv": [
+       0.7093,
+       0.7558,
+       0.4866,
+       0.6492
+      ],
+      "width_ratio": 1.98,
+      "height_ratio": 1.8,
+      "centre_du": -0.02,
+      "centre_dv": 0.09,
+      "touches_expanded_box": true
+     }
+    },
+    "bath/storage-basket": {
+     "box_uv": [
+      0.5508,
+      0.6948,
+      0.8241,
+      1.0037
+     ],
+     "box_px": [
+      371,
+      260
+     ],
+     "extent_estimate": {
+      "found": true,
+      "extent_uv": [
+       0.4787,
+       0.7663,
+       0.734,
+       0.9993
+      ],
+      "width_ratio": 2.0,
+      "height_ratio": 1.48,
+      "centre_du": -0.0,
+      "centre_dv": -0.26,
+      "touches_expanded_box": true
+     }
+    },
+    "bath/toothbrush-cup": {
+     "box_uv": [
+      0.7547,
+      0.7802,
+      0.5018,
+      0.606
+     ],
+     "box_px": [
+      65,
+      151
+     ],
+     "extent_estimate": {
+      "found": true,
+      "extent_uv": [
+       0.7419,
+       0.7922,
+       0.4514,
+       0.6568
+      ],
+      "width_ratio": 1.98,
+      "height_ratio": 1.97,
+      "centre_du": -0.02,
+      "centre_dv": 0.0,
+      "touches_expanded_box": true
+     }
+    },
+    "bath/towel-ring": {
+     "box_uv": [
+      0.8411,
+      0.9018,
+      0.5634,
+      0.5851
+     ],
+     "box_px": [
+      156,
+      31
+     ],
+     "extent_estimate": {
+      "found": true,
+      "extent_uv": [
+       0.8105,
+       0.9314,
+       0.552,
+       0.5948
+      ],
+      "width_ratio": 1.99,
+      "height_ratio": 1.97,
+      "centre_du": -0.01,
+      "centre_dv": -0.04,
+      "touches_expanded_box": true
+     }
+    },
+    "bath/vanity-sconces": {
+     "box_uv": [
+      0.4964,
+      0.895,
+      0.1264,
+      0.2903
+     ],
+     "box_px": [
+      1028,
+      237
+     ],
+     "extent_estimate": {
+      "found": true,
+      "extent_uv": [
+       0.2969,
+       0.9981,
+       0.0441,
+       0.3715
+      ],
+      "width_ratio": 1.76,
+      "height_ratio": 2.0,
+      "centre_du": -0.12,
+      "centre_dv": -0.0,
+      "touches_expanded_box": true
+     }
+    },
+    "bath/vanity-vase": {
+     "box_uv": [
+      0.7833,
+      0.8099,
+      0.4875,
+      0.613
+     ],
+     "box_px": [
+      68,
+      182
+     ],
+     "extent_estimate": {
+      "found": true,
+      "extent_uv": [
+       0.7698,
+       0.8225,
+       0.4245,
+       0.6747
+      ],
+      "width_ratio": 1.99,
+      "height_ratio": 1.99,
+      "centre_du": -0.02,
+      "centre_dv": -0.01,
+      "touches_expanded_box": true
+     }
+    }
+   },
+   "planter": {
+    "frame": "B2 r3 fix",
+    "pot_cols": [
+     0.02,
+     0.12
+    ],
+    "clay_pot_v": [
+     0.827232,
+     0.9699
+    ],
+    "clay_box_uv": [
+     0.0108,
+     0.1586,
+     0.4415,
+     0.9699
+    ],
+    "rows_scanned": [
+     633,
+     1539
+    ],
+    "basket_rows": [
+     1289,
+     1505
+    ],
+    "basket_v": [
+     0.8376,
+     0.9779
+    ],
+    "pot_box_px": 219,
+    "basket_height_px": 216,
+    "basket_height_over_pot_box": 0.98,
+    "basket_bottom_minus_pot_bottom_px": 12,
+    "basket_top_minus_pot_top_px": 15,
+    "plinth_rows": null,
+    "basket_width_px_mid": 282,
+    "basket_width_over_pot_cols": 1.03,
+    "basket_u_mid": [
+     0.0238,
+     0.1268
+    ],
+    "basket_median_HSL": [
+     24.0,
+     24.9,
+     42.9
+    ],
+    "fern_top_v": 0.6511,
+    "fern_top_minus_box_top_px": 322,
+    "fern_median_HSL": [
+     62.0,
+     12.9,
+     61.0
+    ]
+   }
+  },
+  "K-girl-0 r2 fix": {
+   "sheet": {
+    "girl/bedspread": {
+     "box_uv": [
+      -0.0302,
+      0.0977,
+      0.6592,
+      0.7226
+     ],
+     "box_px": [
+      329,
+      91
+     ],
+     "extent_estimate": {
+      "found": true,
+      "extent_uv": [
+       0.0,
+       0.1609,
+       0.6272,
+       0.7533
+      ],
+      "width_ratio": 1.26,
+      "height_ratio": 1.99,
+      "centre_du": 0.37,
+      "centre_dv": -0.01,
+      "touches_expanded_box": true
+     }
+    },
+    "girl/bookshelf": {
+     "box_uv": [
+      -0.0302,
+      0.1242,
+      0.0861,
+      0.3615
+     ],
+     "box_px": [
+      398,
+      399
+     ],
+     "extent_estimate": {
+      "found": true,
+      "extent_uv": [
+       0.0,
+       0.1694,
+       0.0834,
+       0.4011
+      ],
+      "width_ratio": 1.1,
+      "height_ratio": 1.15,
+      "centre_du": 0.24,
+      "centre_dv": 0.07,
+      "touches_expanded_box": true
+     }
+    },
+    "girl/doll": {
+     "box_uv": [
+      0.2812,
+      0.3151,
+      0.4801,
+      0.599
+     ],
+     "box_px": [
+      87,
+      172
+     ],
+     "extent_estimate": {
+      "found": true,
+      "extent_uv": [
+       0.264,
+       0.3314,
+       0.4721,
+       0.6575
+      ],
+      "width_ratio": 1.99,
+      "height_ratio": 1.56,
+      "centre_du": -0.01,
+      "centre_dv": 0.21,
+      "touches_expanded_box": true
+     }
+    },
+    "girl/framed-prints": {
+     "box_uv": [
+      0.324,
+      0.4805,
+      0.125,
+      0.3005
+     ],
+     "box_px": [
+      403,
+      254
+     ],
+     "extent_estimate": {
+      "found": true,
+      "extent_uv": [
+       0.326,
+       0.5581,
+       0.1241,
+       0.3873
+      ],
+      "width_ratio": 1.48,
+      "height_ratio": 1.5,
+      "centre_du": 0.25,
+      "centre_dv": 0.24,
+      "touches_expanded_box": true
+     }
+    }
+   }
+  },
+  "W0-in r2 fix": {
+   "sheet": {
+    "work/basket": {
+     "box_uv": [
+      0.2661,
+      0.3536,
+      0.9116,
+      1.0
+     ],
+     "box_px": [
+      239,
+      136
+     ],
+     "extent_estimate": {
+      "found": true,
+      "extent_uv": [
+       0.2222,
+       0.3969,
+       0.8668,
+       0.9994
+      ],
+      "width_ratio": 2.0,
+      "height_ratio": 1.5,
+      "centre_du": -0.0,
+      "centre_dv": -0.26,
+      "touches_expanded_box": true
+     }
+    },
+    "work/desk-organizer": {
+     "box_uv": [
+      0.3203,
+      0.3495,
+      0.5819,
+      0.6657
+     ],
+     "box_px": [
+      79,
+      128
+     ],
+     "extent_estimate": {
+      "found": true,
+      "extent_uv": [
+       0.3056,
+       0.3637,
+       0.5484,
+       0.7063
+      ],
+      "width_ratio": 1.99,
+      "height_ratio": 1.88,
+      "centre_du": -0.01,
+      "centre_dv": 0.04,
+      "touches_expanded_box": true
+     }
+    },
+    "work/planter": {
+     "box_uv": [
+      0.0,
+      0.2122,
+      0.3069,
+      1.0
+     ],
+     "box_px": [
+      580,
+      1066
+     ],
+     "extent_estimate": {
+      "found": true,
+      "extent_uv": [
+       0.0,
+       0.3176,
+       0.0,
+       0.9994
+      ],
+      "width_ratio": 1.5,
+      "height_ratio": 1.44,
+      "centre_du": 0.25,
+      "centre_dv": -0.22,
+      "touches_expanded_box": true
+     }
+    },
+    "work/shelf-boxes": {
+     "box_uv": [
+      0.268,
+      0.732,
+      0.0259,
+      0.1162
+     ],
+     "box_px": [
+      1269,
+      138
+     ],
+     "extent_estimate": {
+      "found": true,
+      "extent_uv": [
+       0.0358,
+       0.9635,
+       0.0,
+       0.1605
+      ],
+      "width_ratio": 2.0,
+      "height_ratio": 1.78,
+      "centre_du": -0.0,
+      "centre_dv": 0.1,
+      "touches_expanded_box": true
+     }
+    },
+    "work/waste-basket": {
+     "box_uv": [
+      0.6464,
+      0.737,
+      0.9403,
+      1.0
+     ],
+     "box_px": [
+      247,
+      91
+     ],
+     "extent_estimate": {
+      "found": true,
+      "extent_uv": [
+       0.6009,
+       0.7763,
+       0.9103,
+       0.9994
+      ],
+      "width_ratio": 1.94,
+      "height_ratio": 1.49,
+      "centre_du": -0.03,
+      "centre_dv": -0.26,
+      "touches_expanded_box": true
+     }
+    }
+   }
+  }
+ },
+ "objects": [
+  {
+   "still": "K-girl-0 r2 fix",
+   "label": "framed prints (pair)",
+   "clay_box_uv": [
+    0.334,
+    0.4816,
+    0.1463,
+    0.3118
+   ],
+   "box_px": [
+    403,
+    254
+   ],
+   "extent_uv": [
+    0.4094,
+    0.4806,
+    0.1462,
+    0.3119
+   ],
+   "width_ratio": 0.483,
+   "height_ratio": 1.001,
+   "body_rows_uv": [
+    0.1462,
+    0.3119
+   ],
+   "body_height_ratio": 1.001,
+   "centre_du_box": 0.252,
+   "centre_dv_box": -0.0,
+   "inside_15pct": false
+  },
+  {
+   "still": "K-girl-0 r2",
+   "label": "framed prints (pair), before",
+   "clay_box_uv": [
+    0.334,
+    0.4816,
+    0.1463,
+    0.3118
+   ],
+   "box_px": [
+    403,
+    254
+   ],
+   "extent_uv": [
+    0.42,
+    0.5358,
+    0.1423,
+    0.4035
+   ],
+   "width_ratio": 0.785,
+   "height_ratio": 1.578,
+   "body_rows_uv": [
+    0.1429,
+    0.4029
+   ],
+   "body_height_ratio": 1.57,
+   "centre_du_box": 0.475,
+   "centre_dv_box": 0.265,
+   "inside_15pct": false
+  },
+  {
+   "still": "K-girl-0 r2 fix",
+   "label": "doll",
+   "clay_box_uv": [
+    0.2937,
+    0.3256,
+    0.4812,
+    0.5934
+   ],
+   "box_px": [
+    87,
+    172
+   ],
+   "extent_uv": [
+    0.2781,
+    0.3443,
+    0.4737,
+    0.5952
+   ],
+   "width_ratio": 2.074,
+   "height_ratio": 1.083,
+   "body_rows_uv": [
+    0.5179,
+    0.5952
+   ],
+   "body_height_ratio": 0.689,
+   "centre_du_box": 0.049,
+   "centre_dv_box": -0.026,
+   "inside_15pct": false
+  },
+  {
+   "still": "K-girl-0 r2",
+   "label": "doll, before",
+   "clay_box_uv": [
+    0.2937,
+    0.3256,
+    0.4812,
+    0.5934
+   ],
+   "box_px": [
+    87,
+    172
+   ],
+   "extent_uv": [
+    0.2548,
+    0.3494,
+    0.4185,
+    0.5952
+   ],
+   "width_ratio": 2.968,
+   "height_ratio": 1.575,
+   "body_rows_uv": [
+    0.4451,
+    0.5952
+   ],
+   "body_height_ratio": 1.338,
+   "centre_du_box": -0.237,
+   "centre_dv_box": -0.272,
+   "inside_15pct": false
+  },
+  {
+   "still": "W0-in r2 fix",
+   "label": "pen cup",
+   "clay_box_uv": [
+    0.3203,
+    0.3495,
+    0.5819,
+    0.6657
+   ],
+   "box_px": [
+    79,
+    128
+   ],
+   "extent_uv": [
+    0.3026,
+    0.3527,
+    0.5549,
+    0.6654
+   ],
+   "width_ratio": 1.715,
+   "height_ratio": 1.318,
+   "body_rows_uv": [
+    0.6192,
+    0.6641
+   ],
+   "body_height_ratio": 0.535,
+   "centre_du_box": -0.248,
+   "centre_dv_box": -0.163,
+   "inside_15pct": false
+  },
+  {
+   "still": "W0-in r2",
+   "label": "pen cup, before",
+   "clay_box_uv": [
+    0.3203,
+    0.3495,
+    0.5819,
+    0.6657
+   ],
+   "box_px": [
+    79,
+    128
+   ],
+   "extent_uv": [
+    0.3041,
+    0.3765,
+    0.499,
+    0.6394
+   ],
+   "width_ratio": 2.478,
+   "height_ratio": 1.675,
+   "body_rows_uv": [
+    0.6199,
+    0.6355
+   ],
+   "body_height_ratio": 0.186,
+   "centre_du_box": 0.184,
+   "centre_dv_box": -0.652,
+   "inside_15pct": false
+  },
+  {
+   "still": "B2 r3 fix",
+   "label": "storage basket",
+   "clay_box_uv": [
+    0.5479,
+    0.6837,
+    0.8057,
+    0.9751
+   ],
+   "box_px": [
+    371,
+    260
+   ],
+   "extent_uv": [
+    0.5,
+    0.7295,
+    0.7797,
+    0.989
+   ],
+   "width_ratio": 1.69,
+   "height_ratio": 1.235,
+   "body_rows_uv": [
+    0.8038,
+    0.989
+   ],
+   "body_height_ratio": 1.093,
+   "centre_du_box": -0.008,
+   "centre_dv_box": -0.036,
+   "inside_15pct": false
+  },
+  {
+   "still": "B2 r3 fix",
+   "label": "towel ring",
+   "clay_box_uv": [
+    0.8217,
+    0.8789,
+    0.5598,
+    0.5803
+   ],
+   "box_px": [
+    156,
+    31
+   ],
+   "extent_uv": [
+    0.8169,
+    0.8991,
+    0.5608,
+    0.5991
+   ],
+   "width_ratio": 1.438,
+   "height_ratio": 1.87,
+   "body_rows_uv": [
+    0.5724,
+    0.5991
+   ],
+   "body_height_ratio": 1.3,
+   "centre_du_box": 0.135,
+   "centre_dv_box": 0.482,
+   "inside_15pct": false
+  }
+ ],
+ "lock_vs_agent": {
+  "B1 r3 fix": {
+   "shift_diff_px": [
+    0.0,
+    0.0
+   ],
+   "scale_pct_diff": [
+    0.0,
+    0.0
+   ]
+  },
+  "B2 r3 fix": {
+   "shift_diff_px": [
+    0.0,
+    0.0
+   ],
+   "scale_pct_diff": [
+    0.0,
+    0.0
+   ]
+  },
+  "K-girl-0 r2 fix": {
+   "shift_diff_px": [
+    0.0,
+    0.0
+   ],
+   "scale_pct_diff": [
+    0.0,
+    0.0
+   ]
+  },
+  "W0-in r2 fix": {
+   "shift_diff_px": [
+    0.0,
+    0.0
+   ],
+   "scale_pct_diff": [
+    0.0,
+    0.0
+   ]
+  }
+ }
+}

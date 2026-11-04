@@ -34,6 +34,7 @@ for sid, t in C3.STILLS.items():
         V4[sid] = (t[0], t[1], t[2].replace("-graded-fix-v3.png", "-graded-fix-v4.png"), None, t[4], t[5], t[6], t[7], t[8], t[9])
 for sid, t in FIXES.items():
     V4[sid] = t[:10]
+# the raw retakes before the fix keep their 11-03 registry entry (graded-v3), for before / after comparisons
 V4_ROWS = [s for s in V4 if V4[s][1] in ("master", "fix", "pose")] + FIX_IDS
 AGENT_ID = dict(C3.AGENT_ID, **{s: FIXES[s][11] for s in FIXES})
 
