@@ -1,0 +1,70 @@
+{
+ "asset_id": "b1-v7-r3",
+ "date": "2026-11-04",
+ "script": "assets/renders/house-nordic-v7-2026-11-02/fix_v8.py",
+ "tokens": 0,
+ "fix": "B1 r3 (QA §11.1): the stone plinth the model invented under the seagrass basket removed and the planter (basket + fern) moved down onto the floor; the toilet brush scaled x0.73 about its base",
+ "method": "planter matte in u 0.440-0.598 (the roll holder's arm at u <= 0.433 stays out), v 0.395-0.768: sage leaves (hue 48-150, S >= 6, L <= 85: the backlit tips are light), their dark gaps (L < 38) and the brown basket (hue 10-42, S > 18), every component >= 15 px (thin fronds too), the brush's rect excluded, closed 7 px; hole = the planter and every leaf component >= 60 px closed 41 px, filled solid and dilated 40 px (its soft shadow on the wall goes with it and is carried down with the plant as a ratio map, original / clean wall, as in the K-girl doll fix), plus the plinth rect u 0.484-0.562, v 0.765-0.884; the curtain's left edge where the linen's saturation rises above the wall's (u 0.532 above the plant, 0.556 at the floor, a line); on the curtain only the pixels the leaves covered (dilated 4 px) are filled, with the curtain's own weave copied down from 40 rows above (the folds are vertical) and a low-frequency seam correction read on an 8 px ring; wall, skirting and floor columns, and the brush (L < 32 % in u 0.448-0.482, v 0.680-0.900, dilated 6 px), filled by normalised convolution of the true wall / floor pixels only (u >= 0.400, L 40-88 %, S < 30 %, no hole, no curtain), on the wall a quadratic surface per channel fitted to the intact wall within 160 px of the hole, and horizontal-first on the skirting / floor rows below v 0.775 (30 x 2 px: the bands continue), with a seam correction (the fit's own residual on a 12 px ring of intact wall, spread into the hole) and the high-pass texture of a clean wall patch (u 0.402-0.440, v 0.40-0.47); the planter layer moved down rigidly by dy px with a soft elliptical contact shadow under the basket; the brush scaled about the centre of its base (INTER_AREA) with a small contact shadow",
+ "curtain_edge_px": {
+  "above_plant": [
+   1455,
+   615
+  ],
+  "at_the_floor": [
+   1521,
+   1292
+  ],
+  "how": "the linen's saturation rises above the wall's (S 13-14 -> 17-19 %)"
+ },
+ "planter": {
+  "matte_box_uv": [
+   0.4664,
+   0.5866,
+   0.3944,
+   0.7667
+  ],
+  "basket_rows_before": [
+   1003,
+   1180
+  ],
+  "basket_rows_after": [
+   1175,
+   1352
+  ],
+  "dy_px": 172,
+  "clay_pot_box_rows": [
+   1154,
+   1350
+  ],
+  "basket_bottom_minus_clay_pot_bottom_px": 2,
+  "basket_height_over_clay_pot": 0.906,
+  "qa_reference": "QA bath-products.json: basket rows 1003-1180, plinth 1185-1357 (172 px), the plinth bottom 7 px below the clay pot bottom"
+ },
+ "brush": {
+  "scale": 0.73,
+  "base_uv": [
+   0.4646,
+   0.8915
+  ],
+  "before_uv": [
+   0.4547,
+   0.4755,
+   0.6862,
+   0.8915
+  ],
+  "after_uv": [
+   0.4572,
+   0.4726,
+   0.7414,
+   0.8915
+  ],
+  "height_over_clay_box": {
+   "before": 1.371,
+   "after": 1.002
+  }
+ },
+ "untouched": "everything else (WC block, ledge, glazing, roll stand, curtain, mat, vanity)",
+ "outputs": {
+  "fix": "assets/renders/bath/nordic/v7/b1-v7-r3-fix.png"
+ }
+}

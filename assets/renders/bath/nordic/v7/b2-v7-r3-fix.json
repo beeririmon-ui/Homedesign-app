@@ -1,0 +1,85 @@
+{
+ "asset_id": "b2-v7-r3",
+ "date": "2026-11-04",
+ "script": "assets/renders/house-nordic-v7-2026-11-02/fix_v8.py",
+ "tokens": 0,
+ "fix": "B2 r3 (QA §11.1): the planter x0.85 about its floor contact; the dark object reflected in the mirror's top-left corner removed; the mirror's head NOT lowered: measured per column it is already on the clay (-2 px), see mirror_head_check",
+ "method": "object: the shower curtain and its black hook reflected at the mirror's left inner edge (every non-wall pixel right of the oak frame in x 1526-1556, rows 226 to v 0.470), filled row by row from the reflected wall to its right; mirror: unchanged; planter (third run, 2026-11-04): the rope basket (hue 15-30, S >= 26, its largest component, filled) + the green fronds connected to it + the dark gaps inside its outline, in u 0-0.215, v 0.36-0.995, scaled x0.85 about the centre of the basket's floor contact; behind it (dilated 5 px) each surface from its own intact pixels around (normalised convolution, so its soft shadow continues) with its own texture: the white wall, the limestone panel, the floor; on the curtain only the leaf pixels, from just above; a contact shadow under the basket. Earlier runs (superseded): planter: sage leaves + brown basket in u 0-0.215, v 0.36-0.995, every component >= 15 px, scaled about the centre of the basket's floor contact; its hole (closed 41 px, filled, dilated 24 px: its soft shadow) filled by surface: the white wall by a quadratic fit of its own pale pixels, on the limestone panel and the curtain only the leaf pixels (from just above, their stains / folds continue), floor rows row by row; its shadow carried as a ratio map",
+ "mirror": {
+  "changed": false,
+  "first_run_2026_11_04": "k 0.9343 remap, withdrawn: it moved the head +22..+28 px off the clay"
+ },
+ "mirror_head_check": {
+  "x_px": [
+   1090,
+   1150,
+   1350,
+   1450,
+   1540
+  ],
+  "clay": [
+   125,
+   114,
+   79,
+   60,
+   44
+  ],
+  "raw_r3": [
+   123,
+   112,
+   76,
+   58,
+   42
+  ],
+  "first_fix_run": [
+   147,
+   137,
+   104,
+   86,
+   72
+  ],
+  "note": "QA's -35 (and the -34 of the named edge 'mirror top') averages the sloped head over u 0.60-0.76, and the clay's strongest row there (124) is the reflected ceiling line inside the glass, not the frame; per column the raw head is -2 px from the clay, and the first fix run's remap had moved it +22 to +28 px. So the head is not changed."
+ },
+ "object_removed": {
+  "px": 9087,
+  "what": "the shower curtain and its black hook reflected at the mirror's left inner edge",
+  "rect_px": [
+   1526,
+   1556,
+   226,
+   723
+  ]
+ },
+ "planter": {
+  "scale": 0.85,
+  "basket_rows_before": [
+   1248,
+   1490
+  ],
+  "anchor_uv": [
+   0.0666,
+   0.9682
+  ],
+  "after_uv": [
+   0.0099,
+   0.1564,
+   0.5861,
+   0.9909
+  ],
+  "basket_height_over_clay_pot_before": 1.18,
+  "basket_height_over_clay_pot_after": 1.003
+ },
+ "storage_basket": {
+  "scale_asked": 0.8,
+  "done": false,
+  "why": "not separable in code: the rope basket and its towels fill the vanity's opening almost from side panel to side panel, and their cream / grey colours match the shelf's back wall (L 58-72, S 13-22 %), so neither grabCut nor a colour matte isolates the basket without leaving its old outline (tried, 2026-11-04); left for the paid pass, with x0.80 written into its prompt"
+ },
+ "vanity_right": {
+  "changed": false,
+  "why": "lock v3 (cross-correlation, rows 0.60-0.90): the outer right edge is +4 px (clay 1584-1591, raw 1595); the -43 of QA's strongest peak and of lock v2 is the render's drawer-front / side boundary (1541), whose clay twin is the clay's own front / side boundary at 1539 (+2): parallel edges, not a narrow cabinet. Seen in the clay / raw crop the same way."
+ },
+ "left_for_the_paid_pass": "the storage basket x0.80 (above), and the planter's seam at the curtain hem / floor if QA reads it as visible. The vanity's right side is not a fix item any more (vanity_right). The v8 route: this -fix.png as the composite + one image-to-image pass (600)",
+ "outputs": {
+  "fix": "assets/renders/bath/nordic/v7/b2-v7-r3-fix.png"
+ }
+}

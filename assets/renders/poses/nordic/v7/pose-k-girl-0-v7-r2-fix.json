@@ -1,0 +1,79 @@
+{
+ "asset_id": "pose-k-girl-0-v7-r2",
+ "date": "2026-11-04",
+ "script": "assets/renders/house-nordic-v7-2026-11-02/fix_v8.py",
+ "tokens": 0,
+ "fix": "K-girl-0 r2 (QA §11.1): the two framed prints scaled to their clay box and moved to its centre; the bunny doll scaled about its seat on the desk, to the same size relative to its box as the K-girl master's fixed doll (T-CGirl pan endpoints)",
+ "method": "prints = the two oak-frame rectangles (hue 22-45, S >= 28: x 838-1115 and 1149-1449, y 221-615 px of 2736 x 1539), scaled by the clay box height over the pair's height about the pair's centre and moved to the box centre; the doll = grabCut on u 0.250-0.345, v 0.405-0.603 (10 iterations, ears added by their cream hue 26-55 above the head, against the pink wall (~15); eroded 1 px), scaled about the centre of its seat; zones for their soft shadows (prints dilated 28 px; the doll as in the K-girl fix: 12 % of the width to the right on the wall, 3 % on the desk); wall rows filled row by row between the nearest clean wall pixels left and right (the pink band line at v 0.3593 and the wall's gradient continue under the prints) with the wall's high-pass texture (tiled mirrored, no seams), desk rows from the desk grain 11 % of the width to the right; the fill fades into the original over ~8 px; the shadows carried as ratio maps (original / background, 0.45-1.0) with their objects",
+ "prints": {
+  "before_px": [
+   838,
+   1449,
+   221,
+   615
+  ],
+  "before_uv": [
+   0.3063,
+   0.5296,
+   0.1436,
+   0.3996
+  ],
+  "scale": 0.646,
+  "scale_note": "QA §11.1 said x0.6; x0.646 is the clay box height over the pair's height (portrait 30 x 40 prints), so the pair ends at the box size",
+  "after_uv": [
+   0.3359,
+   0.4799,
+   0.1462,
+   0.3119
+  ],
+  "clay_box": [
+   0.334,
+   0.4816,
+   0.1463,
+   0.3118
+  ],
+  "ratio_to_box_before": {
+   "w": 1.513,
+   "h": 1.547
+  },
+  "ratio_to_box_after": {
+   "w": 0.976,
+   "h": 1.001
+  }
+ },
+ "doll": {
+  "before_uv": [
+   0.2705,
+   0.3363,
+   0.4191,
+   0.5978
+  ],
+  "seat_uv": [
+   0.2963,
+   0.5978
+  ],
+  "scale": 0.7,
+  "after_uv": [
+   0.2781,
+   0.3242,
+   0.473,
+   0.5978
+  ],
+  "clay_box": [
+   0.2937,
+   0.3256,
+   0.4812,
+   0.5934
+  ],
+  "height_ratio_to_box": {
+   "before": 1.593,
+   "after": 1.112,
+   "k_girl_master_after_fix": 1.123
+  },
+  "scale_note": "QA §11.1 said x0.5-0.6; x0.70 gives the doll the same size relative to its box as the K-girl master after its fix (1.12, ears included), so the doll is one size at both ends of T-CGirl; x0.6 would make it 0.96x its box, 15 % smaller than in K-girl"
+ },
+ "untouched": "desk, bed foot, ledges and books, band, skirting, floor",
+ "outputs": {
+  "fix": "assets/renders/poses/nordic/v7/pose-k-girl-0-v7-r2-fix.png"
+ }
+}
