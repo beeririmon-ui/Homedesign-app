@@ -557,7 +557,8 @@ W0IN = dict(pairs_1080=[(640, 640), (669, 694), (732, 768), (761, 800), (794, 83
             # clay box's width and x1.05 its height (measured on the matte: 1.402 / 1.047); one uniform scale puts both inside +-15 %:
             # k in [0.812, 0.820] -> 0.816 (the pencils, fillers, scale with it), and the cup is centred on the box (it sat ~15 px right of it,
             # its right edge then outside the +15 % margin). 1.0 restores the first run
-            cup_scale=0.816, cup_box_clay=(0.3203, 0.3495, 0.5819, 0.6657))
+            cup_scale=0.816, cup_box_clay=(0.3203, 0.3495, 0.5819, 0.6657),
+            global_affine=True)   # 2026-11-04, the manager's approval (as B1 r3): the whole frame by the inverse of lock_v2's register; False = without
 
 
 def fix_w0in(preview=True):
@@ -627,6 +628,9 @@ def fix_w0in(preview=True):
                    envelope_cm=dict(d=[7, 10], h=[10, 14]))
     # --- the plant on top, unmoved
     out = F.composite(out, a, F.feather(plant, 0.6))
+    affine = None
+    if W0IN.get("global_affine"):
+        out, affine = global_affine_to_clay(fid, out)
     F.save(out, out_fix(fid))
     # --- the lines after, against the clay (QA's named-edge spans, at 1080)
     note = dict(
@@ -641,6 +645,8 @@ def fix_w0in(preview=True):
         cup_to_box=(dict(cup_fit, run="second, 2026-11-04 (approved by the manager)", how="the cup layer (body + pencils) scaled uniformly about the centre of its base, centred on the clay box and moved with the warp; a soft contact shadow under the smaller base")
                     if W0IN["cup_scale"] != 1.0 else None),
         lines_clay_1080=W0IN["lines_clay_1080"], untouched="the shelf with its felt bins, the wall above row 640, the plant and its basket",
+        global_affine=(dict(affine, why="G1.4 global scale (+0.41 / +0.70 % after the code fix, proposal 0.5 %): the manager's approval 2026-11-04 (as B1 r3); QA re-checks")
+                       if affine else None),
         outputs=dict(fix=os.path.relpath(out_fix(fid), VF.REPO)))
     save_note(fid, note)
     print(json.dumps({k_: v for k_, v in note.items() if k_ != "method"}, indent=1))

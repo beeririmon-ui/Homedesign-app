@@ -44,44 +44,44 @@
  "after": {
   "still": "assets/renders/poses/nordic/v7/pose-w0-in-v7-r2-fix.png",
   "register_shift_px": [
-   -5.98,
-   -4.36
+   0.09,
+   -0.36
   ],
   "register_scale_pct": [
-   0.41,
-   0.7
+   -0.01,
+   0.0
   ],
-  "worst_band_px_after_register": 8.54,
-  "bands_counted": 2,
-  "worst_tile_px_after_register": 7.59,
+  "worst_band_px_after_register": 7.07,
+  "bands_counted": 3,
+  "worst_tile_px_after_register": 7.73,
   "tiles_counted": 6,
-  "box_edges_worst_px": 5,
+  "box_edges_worst_px": 8,
   "box_ratios": {
-   "desk chair w": 0.9893
+   "desk chair w": 0.9858
   },
-  "named_edges_worst_px": 5,
+  "named_edges_worst_px": 8,
   "named_edges_counted": "7/10",
   "named_edges": {
-   "desk top front edge": 1,
-   "desk top front edge (left of chair)": 1,
-   "drawer bottom / apron": 1,
-   "chair back top": 0,
-   "desk left outer edge": -3,
-   "chair back left edge": 1,
-   "chair back right edge": -5
+   "desk top front edge": -3,
+   "desk top front edge (left of chair)": -2,
+   "drawer bottom / apron": -2,
+   "chair back top": -3,
+   "desk left outer edge": -2,
+   "chair back left edge": 0,
+   "chair back right edge": -8
   },
   "residual_limit_px": 9.6,
-  "global_pass": false,
+  "global_pass": true,
   "residual_pass": true,
   "edges_pass": true,
-  "pass": false
+  "pass": true
  },
  "after_lock_v2_edges_v2": {
-  "worst_band": 8.54,
-  "worst_tile": 7.59,
-  "box_edges_worst_px": 35,
+  "worst_band": 7.07,
+  "worst_tile": 7.73,
+  "box_edges_worst_px": 32,
   "box_ratios": {
-   "desk chair w": 0.9893
+   "desk chair w": 0.9858
   },
   "pass": false
  },
@@ -90,8 +90,8 @@
    "clay_px": 151,
    "before": 34,
    "before_r": 0.434,
-   "after": 34,
-   "after_r": 0.434,
+   "after": 36,
+   "after_r": 0.38,
    "counted_after": false,
    "eye_override": "QA §3 (2026-11-03): '+34' is another line (the shelf's front face against its top); by eye the shelf is within +-10"
   },
@@ -99,8 +99,8 @@
    "clay_px": 151,
    "before": 34,
    "before_r": 0.434,
-   "after": 34,
-   "after_r": 0.434,
+   "after": 36,
+   "after_r": 0.38,
    "counted_after": false,
    "eye_override": "QA §3: the same clay peak as 'shelf top' (row 151); by eye the shelf is within +-10"
   },
@@ -108,48 +108,48 @@
    "clay_px": 800,
    "before": -39,
    "before_r": 0.626,
-   "after": 1,
-   "after_r": 0.569,
+   "after": -3,
+   "after_r": 0.653,
    "counted_after": true
   },
   "desk top front edge (left of chair)": {
    "clay_px": 800,
    "before": 77,
    "before_r": 0.708,
-   "after": 1,
-   "after_r": 0.709,
+   "after": -2,
+   "after_r": 0.704,
    "counted_after": true
   },
   "drawer bottom / apron": {
    "clay_px": 923,
    "before": -45,
    "before_r": 0.854,
-   "after": 1,
-   "after_r": 0.878,
+   "after": -2,
+   "after_r": 0.874,
    "counted_after": true
   },
   "chair back top": {
    "clay_px": 800,
    "before": -6,
    "before_r": 0.548,
-   "after": 0,
-   "after_r": 0.709,
+   "after": -3,
+   "after_r": 0.667,
    "counted_after": true
   },
   "desk left outer edge": {
    "clay_px": 319,
    "before": -3,
    "before_r": 0.742,
-   "after": -3,
-   "after_r": 0.704,
+   "after": -2,
+   "after_r": 0.667,
    "counted_after": true
   },
   "desk right outer edge": {
    "clay_px": 1599,
    "before": -33,
    "before_r": 0.496,
-   "after": -33,
-   "after_r": 0.529,
+   "after": -37,
+   "after_r": 0.488,
    "counted_after": false,
    "eye_override": "QA §3: '-33' is the inner edge of the thick side panel; the outer edge is in place by eye (render-agent 2026-11-04: outer edge ~1597 vs clay 1599)"
   },
@@ -157,16 +157,16 @@
    "clay_px": 678,
    "before": 1,
    "before_r": 0.93,
-   "after": 1,
-   "after_r": 0.943,
+   "after": 0,
+   "after_r": 0.844,
    "counted_after": true
   },
   "chair back right edge": {
    "clay_px": 1240,
    "before": -5,
    "before_r": 0.832,
-   "after": -5,
-   "after_r": 0.626,
+   "after": -8,
+   "after_r": 0.751,
    "counted_after": true
   }
  },
@@ -801,9 +801,9 @@
     0.999
    ],
    "shift_px": {
-    "dx": -2.96,
-    "dy": -0.17,
-    "response": 0.101
+    "dx": -3.73,
+    "dy": -2.61,
+    "response": 0.093
    },
    "bands": [
     {
@@ -811,68 +811,68 @@
       0.0,
       0.249
      ],
-     "dx_px": -6.5,
-     "dy_px": -0.01,
-     "response": 0.028
+     "dx_px": -1.59,
+     "dy_px": -2.05,
+     "response": 0.067
     },
     {
      "u": [
       0.249,
       0.499
      ],
-     "dx_px": 3.81,
-     "dy_px": 0.81,
-     "response": 0.081
+     "dx_px": -0.09,
+     "dy_px": -1.66,
+     "response": 0.131
     },
     {
      "u": [
       0.499,
       0.749
      ],
-     "dx_px": -6.73,
-     "dy_px": 1.81,
-     "response": 0.287
+     "dx_px": -7.27,
+     "dy_px": 0.87,
+     "response": 0.258
     },
     {
      "u": [
       0.749,
       0.999
      ],
-     "dx_px": -1.8,
-     "dy_px": 0.86,
-     "response": 0.416
+     "dx_px": -4.52,
+     "dy_px": -3.45,
+     "response": 0.37
     }
    ],
    "deltaE": {
-    "mean": 13.77,
+    "mean": 13.82,
     "p95": 51.32,
-    "share_over_5": 0.539
+    "share_over_5": 0.542
    },
    "L_mean": {
     "a": 80.7,
-    "b": 72.2
+    "b": 72.1
    }
   },
   "register": {
    "affine": [
     [
-     1.00408,
-     0.00383,
-     -5.98381
+     0.99986,
+     -7e-05,
+     0.08835
     ],
     [
-     0.00186,
-     1.00695,
-     -4.356
+     0.00045,
+     1.00002,
+     -0.35888
     ]
    ],
    "shift_px": [
-    -5.98,
-    -4.36
+    0.09,
+    -0.36
    ],
    "scale": [
-    1.00408,
-    1.00695
+    0.99986,
+    1.00002
    ],
    "note": "ECC affine, clay (template) -> render coordinates at 1920x1080; scale > 1 = the render drew it larger"
   },
@@ -890,9 +890,9 @@
     0.999
    ],
    "shift_px": {
-    "dx": -3.73,
-    "dy": -2.61,
-    "response": 0.093
+    "dx": -3.66,
+    "dy": -2.55,
+    "response": 0.091
    },
    "bands": [
     {
@@ -900,41 +900,41 @@
       0.0,
       0.249
      ],
-     "dx_px": -1.65,
-     "dy_px": -2.01,
-     "response": 0.071
+     "dx_px": -1.61,
+     "dy_px": -1.81,
+     "response": 0.068
     },
     {
      "u": [
       0.249,
       0.499
      ],
-     "dx_px": 3.64,
-     "dy_px": -1.71,
-     "response": 0.091
+     "dx_px": -0.11,
+     "dy_px": -1.62,
+     "response": 0.133
     },
     {
      "u": [
       0.499,
       0.749
      ],
-     "dx_px": -8.54,
-     "dy_px": -1.42,
-     "response": 0.281
+     "dx_px": -7.07,
+     "dy_px": 0.78,
+     "response": 0.256
     },
     {
      "u": [
       0.749,
       0.999
      ],
-     "dx_px": -5.47,
-     "dy_px": -3.05,
-     "response": 0.39
+     "dx_px": -4.54,
+     "dy_px": -3.56,
+     "response": 0.359
     }
    ],
    "deltaE": {
     "mean": 13.82,
-    "p95": 51.31,
+    "p95": 51.3,
     "share_over_5": 0.542
    },
    "L_mean": {
@@ -952,9 +952,9 @@
      0.0,
      0.5
     ],
-    "dx_px": -8.59,
-    "dy_px": -2.41,
-    "rho": 0.128,
+    "dx_px": -5.36,
+    "dy_px": -0.35,
+    "rho": 0.129,
     "counted": true
    },
    {
@@ -966,9 +966,9 @@
      0.0,
      0.5
     ],
-    "dx_px": -4.27,
-    "dy_px": -2.63,
-    "rho": 0.581,
+    "dx_px": -1.24,
+    "dy_px": -0.55,
+    "rho": 0.579,
     "counted": true
    },
    {
@@ -980,9 +980,9 @@
      0.0,
      0.5
     ],
-    "dx_px": 7.55,
-    "dy_px": -4.08,
-    "rho": 0.432,
+    "dx_px": 7.58,
+    "dy_px": -2.92,
+    "rho": 0.429,
     "counted": true
    },
    {
@@ -994,9 +994,9 @@
      0.0,
      0.5
     ],
-    "dx_px": 0.71,
-    "dy_px": -1.14,
-    "rho": 0.858,
+    "dx_px": -1.57,
+    "dy_px": -0.11,
+    "rho": 0.846,
     "counted": true
    },
    {
@@ -1023,9 +1023,9 @@
      0.5,
      1.0
     ],
-    "dx_px": -0.46,
-    "dy_px": 0.47,
-    "rho": 0.745,
+    "dx_px": -0.9,
+    "dy_px": -2.36,
+    "rho": 0.748,
     "counted": true
    },
    {
@@ -1037,9 +1037,9 @@
      0.5,
      1.0
     ],
-    "dx_px": -4.35,
-    "dy_px": 0.33,
-    "rho": 0.643,
+    "dx_px": -7.22,
+    "dy_px": -3.01,
+    "rho": 0.644,
     "counted": true
    },
    {
@@ -1051,9 +1051,9 @@
      0.5,
      1.0
     ],
-    "dx_px": 0.67,
-    "dy_px": 0.31,
-    "rho": 0.677,
+    "dx_px": -3.29,
+    "dy_px": -3.24,
+    "rho": 0.676,
     "counted": true
    }
   ],
@@ -1067,8 +1067,8 @@
      0.0,
      0.5
     ],
-    "dx_px": -5.76,
-    "dy_px": -0.45,
+    "dx_px": -3.64,
+    "dy_px": 0.27,
     "rho": 0.128,
     "counted": true
    },
@@ -1081,9 +1081,9 @@
      0.0,
      0.5
     ],
-    "dx_px": -1.25,
-    "dy_px": -0.52,
-    "rho": 0.58,
+    "dx_px": -1.24,
+    "dy_px": -0.48,
+    "rho": 0.578,
     "counted": true
    },
    {
@@ -1095,9 +1095,9 @@
      0.0,
      0.5
     ],
-    "dx_px": 7.59,
-    "dy_px": -2.91,
-    "rho": 0.429,
+    "dx_px": 7.73,
+    "dy_px": -3.13,
+    "rho": 0.428,
     "counted": true
    },
    {
@@ -1109,9 +1109,9 @@
      0.0,
      0.5
     ],
-    "dx_px": -1.58,
-    "dy_px": -0.1,
-    "rho": 0.848,
+    "dx_px": -1.39,
+    "dy_px": -0.43,
+    "rho": 0.847,
     "counted": true
    },
    {
@@ -1139,8 +1139,8 @@
      1.0
     ],
     "dx_px": -0.85,
-    "dy_px": -2.35,
-    "rho": 0.748,
+    "dy_px": -2.33,
+    "rho": 0.747,
     "counted": true
    },
    {
@@ -1152,8 +1152,8 @@
      0.5,
      1.0
     ],
-    "dx_px": -7.24,
-    "dy_px": -3.01,
+    "dx_px": -7.1,
+    "dy_px": -3.19,
     "rho": 0.643,
     "counted": true
    },
@@ -1166,8 +1166,8 @@
      0.5,
      1.0
     ],
-    "dx_px": -3.3,
-    "dy_px": -3.24,
+    "dx_px": -3.09,
+    "dy_px": -3.55,
     "rho": 0.675,
     "counted": true
    }
@@ -1183,24 +1183,22 @@
     "edges": {
      "left": {
       "clay_px": 319,
-      "render_px": 316,
-      "d_px": -3,
-      "r": 0.597,
+      "render_px": 318,
+      "d_px": -1,
+      "r": 0.657,
       "clay_strength": 22.6,
       "counted": true
      },
      "top": {
       "clay_px": 151,
-      "render_px": 185,
-      "d_px": 34,
-      "r": 0.533,
-      "clay_strength": 21.2,
+      "d_px": null,
+      "r": 0.432,
       "counted": false,
       "eye_override": "QA §3: the box top is the shelf line, '+34' is its front face against its top; by eye +-10"
      }
     },
     "method": "xcorr +-60 px, r >= 0.5",
-    "worst_edge_px": 3,
+    "worst_edge_px": 1,
     "kind": "architecture"
    },
    "desk chair": {
@@ -1213,32 +1211,32 @@
     "edges": {
      "left": {
       "clay_px": 678,
-      "render_px": 679,
-      "d_px": 1,
-      "r": 0.945,
+      "render_px": 678,
+      "d_px": 0,
+      "r": 0.898,
       "clay_strength": 61.3,
       "counted": true
      },
      "right": {
       "clay_px": 1240,
-      "render_px": 1235,
-      "d_px": -5,
-      "r": 0.742,
+      "render_px": 1232,
+      "d_px": -8,
+      "r": 0.836,
       "clay_strength": 24.7,
       "counted": true
      },
      "top": {
       "clay_px": 800,
-      "render_px": 800,
-      "d_px": 0,
-      "r": 0.727,
+      "render_px": 797,
+      "d_px": -3,
+      "r": 0.676,
       "clay_strength": 39.8,
       "counted": true
      }
     },
     "method": "xcorr +-60 px, r >= 0.5",
-    "width_ratio": 0.9893,
-    "worst_edge_px": 5,
+    "width_ratio": 0.9858,
+    "worst_edge_px": 8,
     "kind": "furniture"
    }
   },
@@ -1246,114 +1244,114 @@
    "shelf top": {
     "orientation": "h",
     "clay_px": 151,
-    "d_xcorr_px": 34,
-    "r": 0.434,
+    "d_xcorr_px": 36,
+    "r": 0.38,
     "counted": false,
     "eye_override": "QA §3 (2026-11-03): '+34' is another line (the shelf's front face against its top); by eye the shelf is within +-10"
    },
    "shelf bottom (front face)": {
     "orientation": "h",
     "clay_px": 151,
-    "d_xcorr_px": 34,
-    "r": 0.434,
+    "d_xcorr_px": 36,
+    "r": 0.38,
     "counted": false,
     "eye_override": "QA §3: the same clay peak as 'shelf top' (row 151); by eye the shelf is within +-10"
    },
    "desk top front edge": {
     "orientation": "h",
     "clay_px": 800,
-    "d_xcorr_px": 1,
-    "r": 0.569,
+    "d_xcorr_px": -3,
+    "r": 0.653,
     "counted": true
    },
    "desk top front edge (left of chair)": {
     "orientation": "h",
     "clay_px": 800,
-    "d_xcorr_px": 1,
-    "r": 0.709,
+    "d_xcorr_px": -2,
+    "r": 0.704,
     "counted": true
    },
    "drawer bottom / apron": {
     "orientation": "h",
     "clay_px": 923,
-    "d_xcorr_px": 1,
-    "r": 0.878,
+    "d_xcorr_px": -2,
+    "r": 0.874,
     "counted": true
    },
    "chair back top": {
     "orientation": "h",
     "clay_px": 800,
-    "d_xcorr_px": 0,
-    "r": 0.709,
+    "d_xcorr_px": -3,
+    "r": 0.667,
     "counted": true
    },
    "desk left outer edge": {
     "orientation": "v",
     "clay_px": 319,
-    "d_xcorr_px": -3,
-    "r": 0.704,
+    "d_xcorr_px": -2,
+    "r": 0.667,
     "counted": true
    },
    "desk right outer edge": {
     "orientation": "v",
     "clay_px": 1599,
-    "d_xcorr_px": -33,
-    "r": 0.529,
+    "d_xcorr_px": -37,
+    "r": 0.488,
     "counted": false,
     "eye_override": "QA §3: '-33' is the inner edge of the thick side panel; the outer edge is in place by eye (render-agent 2026-11-04: outer edge ~1597 vs clay 1599)"
    },
    "chair back left edge": {
     "orientation": "v",
     "clay_px": 678,
-    "d_xcorr_px": 1,
-    "r": 0.943,
+    "d_xcorr_px": 0,
+    "r": 0.844,
     "counted": true
    },
    "chair back right edge": {
     "orientation": "v",
     "clay_px": 1240,
-    "d_xcorr_px": -5,
-    "r": 0.626,
+    "d_xcorr_px": -8,
+    "r": 0.751,
     "counted": true
    }
   },
   "summary": {
    "register_shift_px": [
-    -5.98,
-    -4.36
+    0.09,
+    -0.36
    ],
    "register_scale": [
-    1.00408,
-    1.00695
+    0.99986,
+    1.00002
    ],
    "register_scale_pct": [
-    0.41,
-    0.7
+    -0.01,
+    0.0
    ],
-   "worst_band_px": 6.73,
-   "bands_reliable": 2,
-   "worst_band_px_after_register": 8.54,
-   "bands_reliable_after_register": 2,
-   "worst_tile_ecc_px": 7.55,
+   "worst_band_px": 7.27,
+   "bands_reliable": 3,
+   "worst_band_px_after_register": 7.07,
+   "bands_reliable_after_register": 3,
+   "worst_tile_ecc_px": 7.58,
    "tiles_counted": 6,
-   "worst_tile_ecc_px_after_register": 7.59,
+   "worst_tile_ecc_px_after_register": 7.73,
    "tiles_counted_after_register": 6,
-   "fixed_edges_worst_px": 5,
+   "fixed_edges_worst_px": 8,
    "fixed_edges_measured": 2,
    "fixed_ratios": {
-    "desk chair w": 0.9893
+    "desk chair w": 0.9858
    },
-   "named_edges_worst_px": 5,
+   "named_edges_worst_px": 8,
    "named_edges_counted": 7,
    "named_edges_total": 10,
    "named_edges": {
-    "desk top front edge": 1,
-    "desk top front edge (left of chair)": 1,
-    "drawer bottom / apron": 1,
-    "chair back top": 0,
-    "desk left outer edge": -3,
-    "chair back left edge": 1,
-    "chair back right edge": -5
+    "desk top front edge": -3,
+    "desk top front edge (left of chair)": -2,
+    "drawer bottom / apron": -2,
+    "chair back top": -3,
+    "desk left outer edge": -2,
+    "chair back left edge": 0,
+    "chair back right edge": -8
    }
   },
   "verdict": {
@@ -1371,11 +1369,11 @@
     "counted": "bands response >= 0.10, tiles rho >= 0.30, box edges and named lines xcorr r >= 0.5",
     "source": "docs/ops/quality-gates-2026-11-02.md G1.4 (+ G1.3 ratios, proposal); qa/reports/2026-11-02-v7-g1.md section 1"
    },
-   "global_pass": false,
+   "global_pass": true,
    "residual_pass": true,
    "edges_pass": true,
    "residual_measured": true,
-   "pass": false
+   "pass": true
   },
   "render": "assets/renders/poses/nordic/v7/pose-w0-in-v7-r2-fix.png",
   "clay": "assets/blockout/house/framing/round4/poses/W0-in.png",

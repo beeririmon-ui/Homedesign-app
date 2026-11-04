@@ -95,6 +95,54 @@
   "drawer_bottom": 923
  },
  "untouched": "the shelf with its felt bins, the wall above row 640, the plant and its basket",
+ "global_affine": {
+  "why": "G1.4 global scale (+0.41 / +0.70 % after the code fix, proposal 0.5 %): the manager's approval 2026-11-04 (as B1 r3); QA re-checks",
+  "register_before": {
+   "affine": [
+    [
+     1.00408,
+     0.00383,
+     -5.98538
+    ],
+    [
+     0.00186,
+     1.00695,
+     -4.35835
+    ]
+   ],
+   "shift_px": [
+    -5.99,
+    -4.36
+   ],
+   "scale_pct": [
+    0.408,
+    0.695
+   ]
+  },
+  "canvas_affine_inverse_map": [
+   [
+    1.004078,
+    0.003834,
+    -8.529171
+   ],
+   [
+    0.001862,
+    1.006954,
+    -6.210644
+   ]
+  ],
+  "register_after": {
+   "shift_px": [
+    0.09,
+    -0.36
+   ],
+   "scale_pct": [
+    -0.014,
+    0.002
+   ]
+  },
+  "how": "cv2.warpAffine(still, A, WARP_INVERSE_MAP, Lanczos4, border replicate); A = C . M . C^-1, C = the 16:9 frame at 1920 -> the canvas"
+ },
  "outputs": {
   "fix": "assets/renders/poses/nordic/v7/pose-w0-in-v7-r2-fix.png"
  }
