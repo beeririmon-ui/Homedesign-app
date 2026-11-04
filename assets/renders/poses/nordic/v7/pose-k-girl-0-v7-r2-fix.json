@@ -72,6 +72,18 @@
   },
   "scale_note": "QA §11.1 said x0.5-0.6; x0.70 gives the doll the same size relative to its box as the K-girl master after its fix (1.12, ears included), so the doll is one size at both ends of T-CGirl; x0.6 would make it 0.96x its box, 15 % smaller than in K-girl"
  },
+ "wall_fill": {
+  "mode": "poly",
+  "run": "second, 2026-11-04",
+  "band_step_fit": {
+   "slope": -6e-05,
+   "row_at_x0": 554.0,
+   "columns": 34
+  },
+  "how": "the wall rows of the holes split at the band step (fitted as a line from the clean columns): the white field by a quadratic surface fitted to its clean pixels (|L - median21| < 4) left of the room corner, with its own seam correction; the pink field row by row between the nearest clean pixels (the doll's shadow and the darkening toward the desk vary by row); each with its field's high-pass texture (patches clear of the old prints) at full strength; the prints' shadow drawn from the new frames (offset +7 / +2 px, blur 11 px, 17 % at the edge: the raw falloff); the doll's shadow as a ratio map moved with it, the ratio under its old outline (+4 px) continued from the ring just outside (median there: doll_edge_ratio)",
+  "doll_edge_ratio": 0.958,
+  "why": "the first run (row interpolation + the prints' ratio map) left faint vertical / horizontal lines at the old zones' edges (x ~975, ~1310, ~1480, y ~645 px) and a light rim round the doll"
+ },
  "untouched": "desk, bed foot, ledges and books, band, skirting, floor",
  "outputs": {
   "fix": "assets/renders/poses/nordic/v7/pose-k-girl-0-v7-r2-fix.png"

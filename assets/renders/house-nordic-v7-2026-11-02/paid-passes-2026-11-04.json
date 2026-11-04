@@ -1,0 +1,124 @@
+{
+ "date": "2026-11-04",
+ "tokens_spent": 0,
+ "brief": "briefs/render-retakes-code-fixes-2026-11-04.md task 4",
+ "route": "v8: the -fix.png as the composite + one image-to-image pass (recipe B, 600 tokens per job); not run",
+ "frames": [
+  {
+   "id": "b2-v7-r3",
+   "paid_pass": true,
+   "cost": 600,
+   "lock_after": {
+    "named_worst_px": 8,
+    "box_worst_px": 8,
+    "band": 4.74,
+    "tile": 2.77,
+    "residual_limit": 2.0,
+    "scale_pct": [
+     0.64,
+     0.74
+    ],
+    "g_r_e": [
+     false,
+     false,
+     true
+    ]
+   },
+   "grading_v4": [
+    "bible_wall_C_le_7_B4"
+   ],
+   "reasons": [
+    "storage basket x0.80: not separable in code (its rope and towels match the shelf's back wall; grabCut leaves its old outline)",
+    "the planter's floor contact and the limestone panel base right of the fronds: code-fill seams at 100 % (soft at page size)",
+    "the wall beside the mirror C* 9.3 (> 7) and L 81.9 at B1 r3's stops (the r3 render is ~0.5 stop darker than B2 v7): to the prompt (B3)"
+   ],
+   "not_reasons": [
+    "vanity right side: lock v3 reads the outer edge +4 px; QA's -43 was the drawer-front / side boundary (parallel edges)",
+    "mirror head: -2 px per column; QA's ~-30 was the sloped line averaged against the clay's reflected ceiling line"
+   ]
+  },
+  {
+   "id": "pose-k-girl-0-v7-r2",
+   "paid_pass": "optional",
+   "cost": 600,
+   "lock_after": {
+    "named_worst_px": 11,
+    "box_worst_px": 11,
+    "band": 6.38,
+    "tile": 17.86,
+    "residual_limit": 2.0,
+    "scale_pct": [
+     0.01,
+     1.72
+    ],
+    "g_r_e": [
+     false,
+     false,
+     true
+    ]
+   },
+   "grading_v4": [],
+   "reasons": [
+    "the muslin lies spread over the bed foot, not folded (QA fidelity note): styling, not a code fix",
+    "G1.4: register scale +1.72 % vertical and the pan residual (band 6.4 / tile 17.9 px against 2 px) fail; the named lines are on the clay (bed foot +11, the rest <= 3), so an image-to-image pass that keeps the composite's geometry is not expected to move these numbers"
+   ]
+  },
+  {
+   "id": "pose-w0-in-v7-r2",
+   "paid_pass": false,
+   "cost": 0,
+   "lock_after": {
+    "named_worst_px": 5,
+    "box_worst_px": 5,
+    "band": 8.6,
+    "tile": 7.29,
+    "residual_limit": 9.6,
+    "scale_pct": [
+     0.4,
+     0.69
+    ],
+    "g_r_e": [
+     false,
+     true,
+     true
+    ]
+   },
+   "grading_v4": [],
+   "reasons": [],
+   "open": [
+    "the pen cup ~x1.4-2 its box (QA fidelity, proposal +-15 %): a 0-token code fix like the B1 brush (x0.6-0.7 about its base), not in QA §11.1; waits for the manager's word",
+    "G1.4 global: register scale +0.69 % vertical (proposal 0.5 %); residual and edges pass (video endpoint)"
+   ]
+  },
+  {
+   "id": "b1-v7-r3",
+   "paid_pass": false,
+   "cost": 0,
+   "lock_after": {
+    "named_worst_px": 5,
+    "box_worst_px": 5,
+    "band": 0.23,
+    "tile": 1.64,
+    "residual_limit": 2.0,
+    "scale_pct": [
+     0.54,
+     0.78
+    ],
+    "g_r_e": [
+     false,
+     true,
+     true
+    ]
+   },
+   "grading_v4": [],
+   "reasons": [],
+   "open": [
+    "G1.4 global: register scale +0.78 % vertical (proposal 0.5 %); every named line within +-5, residual 0.23 / 1.64 <= 2 px, edges pass; not an image-to-image matter (a whole-frame number); a whole-frame affine in code could close it, for QA / the manager to decide"
+   ]
+  }
+ ],
+ "total_tokens_if_all_run": {
+  "required": 600,
+  "with_optional": 1200
+ }
+}

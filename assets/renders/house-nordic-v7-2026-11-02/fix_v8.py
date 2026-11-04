@@ -154,6 +154,21 @@ def seam_correct(filled, orig, hole, sigma=30, ring_px=8):
     return np.where(w, filled + corr, filled)
 
 
+def despeck(out, region, protect, thr=6.0, max_area=200):
+    """Small dark flecks left on a plain wall (leaf fragments under the matte's size limit): components darker than the local
+    median (15 px) by > thr L, area < max_area, inside `region` and outside `protect`, filled from their surroundings."""
+    _, L, _ = hls(out)
+    med = cv2.medianBlur(np.clip(L, 0, 100).astype(np.uint8), 15).astype(np.float32)
+    m = (((med - L) > thr) & (region > 0.5) & (protect < 0.5)).astype(np.uint8)
+    n, lab, st, _ = cv2.connectedComponentsWithStats(m)
+    keep = np.zeros_like(m)
+    for i in range(1, n):
+        if st[i, cv2.CC_STAT_AREA] <= max_area:
+            keep[lab == i] = 1
+    hole = dil(keep.astype(np.float32), 3)
+    return nc_fill(out, hole, 1 - hole, scales=((6, 6), (15, 15), (40, 40))), int(keep.sum())
+
+
 def save_note(fid, note):
     p = os.path.join(VF.out_dir(fid), fid + "-fix.json")
     json.dump(dict(asset_id=fid, date=DATE, script=SCRIPT, tokens=0, **note), open(p, "w"), indent=1, ensure_ascii=False)
@@ -173,7 +188,8 @@ def out_fix(fid):
 # ---------------------------------------------------------------------------------------------------------------
 B1 = dict(planter_rect=(0.440, 0.598, 0.395, 0.768), plinth=(0.484, 0.562, 0.765, 0.884), dy=172,
           brush_rect=(0.448, 0.482, 0.680, 0.900), brush_scale=0.73,
-          clay_pot=(0.49, 0.555, 0.75, 0.877), clay_brush=(0.4583, 0.475, 0.7432, 0.893))
+          clay_pot=(0.49, 0.555, 0.75, 0.877), clay_brush=(0.4583, 0.475, 0.7432, 0.893),
+          narrow_fills=True, curtain_patch_px=(1560, 300, 1640, 520))   # False restores the first run (surface fill behind the brush, 40-row curtain copy)
 
 
 def edge_col(g, v0, v1, u0, u1):
@@ -236,16 +252,52 @@ def fix_b1(preview=True):
     bg = poly_fill(a, hw_up, wall_valid, pad=160, deg=2)                                # the wall: a smooth quadratic surface fitted around the hole
     bg = nc_fill(bg, hw_low, wall_valid, scales=((30, 2), (60, 60), (160, 160)))     # skirting and floor rows: the bands continue
     bg = F.add_texture(a, bg, hw, (int(0.402 * W), int(0.40 * H), int(0.440 * W), int(0.47 * H)), 0.8)   # clean wall (no sconce edge, no roll)
+    if B1.get("narrow_fills", True):
+        # second run (2026-11-04): the brush's hole is narrow (~37 px): row by row between the wall / skirting / floor pixels left and
+        # right of it, which keeps each row's light; the first run's surface fit left a lighter rectangle behind the smaller brush
+        vb = ((holes < 0.5) & (curtain < 0.5) & (L >= 40) & (U >= 0.400)).astype(np.float32)
+        bg = F.fill_rows_valid(bg, hole_b * (1 - hole_p), vb, band_px=6, max_search=60)
+        bg = add_texture_m(a, bg, hole_b * (1 - hole_p), (int(0.402 * W), int(0.40 * H), int(0.440 * W), int(0.47 * H)), 0.6)
     # the curtain part: only the pixels the leaves (and the plinth) actually covered, filled locally from just above
     hc = np.maximum(dil(pl, 4), F.rect_mask(H, W, pu0, pu1, pv0, pv1)) * curtain
     # the curtain: its own weave copied down with a period of 330 rows (the folds are vertical), then a low-frequency seam
     # correction read on a ring around the region (the copied estimate at the ring vs the curtain there)
-    est = copy_down_fill(bg, np.maximum(hc, dil(hc, 8)), 40)
-    bg = np.where((hc > 0.5)[..., None], est, bg)
-    ring = (dil(hc, 10) - (hc > 0.5)).clip(0, 1) * curtain * (1 - holes)       # intact curtain pixels around the region only
-    d = (a - est) * ring[..., None]
-    corr = cv2.GaussianBlur(d, (0, 0), 25) / np.maximum(cv2.GaussianBlur(ring, (0, 0), 25), 1e-4)[..., None]
-    bg = np.where((hc > 0.5)[..., None], bg + corr, bg)
+    if B1.get("narrow_fills", True):
+        # second run: each covered curtain column continued down from the intact linen just above its covered part (the folds
+        # are vertical), times the curtain's own vertical light profile (median of the intact columns x 1600-1650), with the
+        # linen's high-pass weave from an intact patch; the first run's copy with a 40-row period left blocky steps, and an
+        # interpolation to the linen below / between the fronds took the fern's shadow and left bars
+        hc = dil(np.maximum(blob.astype(np.float32), F.rect_mask(H, W, pu0, pu1, pv0, pv1)), 6) * curtain    # the fern's whole outline on the linen
+        linen = ((S < 25) & ((hue < 45) | (S < 8)) & (L > 55)).astype(np.float32)                           # no backlit frond tips as a reference
+        vc = curtain * (1 - holes) * (1 - dil(pl, 4)) * (1 - hc) * linen
+        prof = cv2.GaussianBlur(np.ascontiguousarray(a[:, 1600:1650].mean(1)), (0, 0), 20).reshape(H, 3)   # rows x RGB, smoothed along y
+        prof = np.maximum(prof, 1.0)
+        filled = bg.copy()
+        cols = np.nonzero((hc > 0.5).any(0))[0]
+        last_ref = None
+        for x in cols:
+            ys = np.nonzero(hc[:, x] > 0.5)[0]
+            y_t = int(ys.min())
+            r0, r1 = max(0, y_t - 70), max(1, y_t - 10)
+            sel = np.nonzero(vc[r0:r1, x] > 0.5)[0] + r0
+            if len(sel) >= 8:
+                ref = np.median(a[sel, x] / prof[sel], 0)
+                last_ref = ref
+            elif last_ref is not None:
+                ref = last_ref
+            else:
+                continue
+            wtop = np.clip((ys - y_t) / 24.0, 0, 1)[:, None]                      # the top 24 rows blend from the linen there: no steps
+            filled[ys, x] = a[ys, x] * (1 - wtop) + (ref[None, :] * prof[ys]) * wtop
+        bg = np.where((hc > 0.5)[..., None], cv2.GaussianBlur(filled, (0, 0), sigmaX=1.2, sigmaY=6), bg)
+        bg = add_texture_m(a, bg, hc, B1["curtain_patch_px"], 0.9, blur=3)
+    else:
+        est = copy_down_fill(bg, np.maximum(hc, dil(hc, 8)), 40)
+        bg = np.where((hc > 0.5)[..., None], est, bg)
+        ring = (dil(hc, 10) - (hc > 0.5)).clip(0, 1) * curtain * (1 - holes)       # intact curtain pixels around the region only
+        d = (a - est) * ring[..., None]
+        corr = cv2.GaussianBlur(d, (0, 0), 25) / np.maximum(cv2.GaussianBlur(ring, (0, 0), 25), 1e-4)[..., None]
+        bg = np.where((hc > 0.5)[..., None], bg + corr, bg)
     out = bg
     dy = B1["dy"]
     # --- the fern's shadow on the wall as a ratio map (original / clean wall) in the wall zone around it, moved with it
@@ -266,6 +318,8 @@ def fix_b1(preview=True):
     b_rgb, b_al = F.transform_layer(a, F.feather(br, 0.7), s_, (ax, float(by1)))
     out = contact_shadow(out, ax - (bx1 - bx0) * s_ / 2, ax + (bx1 - bx0) * s_ / 2, by1 - 1, depth=0.75, h_px=6, spread=1.3)
     out = F.composite(out, b_rgb, b_al)
+    wall_zone = F.rect_mask(H, W, 0.440, 0.535, 0.40, 0.745) * (1 - curtain)       # right of the roll stand (u <= 0.433)
+    out, n_speck = despeck(out, wall_zone, dil(np.maximum(p_al, b_al), 4))
     F.save(out, out_fix(fid))
     nb = F.bbox(b_al)
     pot, cb = B1["clay_pot"], B1["clay_brush"]
@@ -288,6 +342,12 @@ def fix_b1(preview=True):
         brush=dict(scale=s_, base_uv=[round(ax / W, 4), round(by1 / H, 4)], before_uv=[round(bx0 / W, 4), round(bx1 / W, 4), round(by0 / H, 4), round(by1 / H, 4)],
                    after_uv=[round(nb[0] / W, 4), round(nb[1] / W, 4), round(nb[2] / H, 4), round(nb[3] / H, 4)],
                    height_over_clay_box=dict(before=round((by1 - by0) / ((cb[3] - cb[2]) * H), 3), after=round((nb[3] - nb[2]) / ((cb[3] - cb[2]) * H), 3))),
+        second_run=(dict(date="2026-11-04", why="the first run's 40-row curtain copy left blocky steps on the linen and its surface fill a lighter rectangle behind the smaller brush",
+                         curtain=("the fern's whole outline on the linen (closed, dilated 6 px; the plinth rect too) refilled column by column from the intact linen "
+                                  "60-10 rows above each column's covered part (hue / saturation gated: no backlit frond tips), times the curtain's own vertical light "
+                                  "profile (median of the intact columns x 1600-1650), the top 24 rows blended, then the linen's weave (patch x 1560-1640, y 300-520)"),
+                         brush="its hole filled row by row between the wall / skirting / floor pixels left and right (<= 60 px), + the wall texture at 0.6",
+                         flecks_removed_px=n_speck) if B1.get("narrow_fills", True) else None),
         untouched="everything else (WC block, ledge, glazing, roll stand, curtain, mat, vanity)", outputs=dict(fix=os.path.relpath(out_fix(fid), VF.REPO)))
     save_note(fid, note)
     print(json.dumps({k: v for k, v in note.items() if k != "method"}, indent=1))
@@ -300,7 +360,13 @@ def fix_b1(preview=True):
 # ---------------------------------------------------------------------------------------------------------------
 KG0 = dict(frames_px=[(838, 1115, 221, 615), (1149, 1449, 221, 615)], band_v=0.3593, desk_v=0.6283,
            prints_box=(0.334, 0.4816, 0.1463, 0.3118), doll_box=(0.2937, 0.3256, 0.4812, 0.5934),
-           doll_rect=(0.250, 0.345, 0.405, 0.603), doll_scale=0.70, master_doll_ratio=1.123)
+           doll_rect=(0.250, 0.345, 0.405, 0.603), doll_scale=0.70, master_doll_ratio=1.123,
+           # second run (2026-11-04, after the lock v3 overlay): the wall behind the prints and the doll by a quadratic surface per
+           # paint field (white above the band step, pink below) instead of row interpolation + ratio maps, which left faint
+           # vertical / horizontal lines at the old zones' edges; the prints' shadow drawn from the new frames (the raw's falloff:
+           # L 81 -> 69 at the frame's right edge over ~35 px, ~5 % under its bottom). "rows" restores the first run.
+           wall_fill="poly", corner_x_px=1630, white_patch_px=(1500, 230, 1620, 520), pink_patch_px=(1500, 640, 1620, 940),
+           print_shadow=dict(dx=7, dy=2, sigma=11, depth=0.17))
 
 
 def fix_kgirl0(preview=True):
@@ -343,24 +409,65 @@ def fix_kgirl0(preview=True):
     # --- background: the wall rows by a horizontal normalised convolution (the band line and the wall's gradient continue
     # through the hole), the desk rows by the desk's grain 11 % of the width to the right (as in the K-girl fix)
     wall_h = holes * (1 - desk_rows)
-    bg = F.fill_rows_valid(a, wall_h, valid * (1 - desk_rows), band_px=12, max_search=900)   # row by row: the band line stays straight
-    bg = add_texture_m(a, bg, wall_h, (int(0.60 * W), int(0.12 * H), int(0.66 * W), int(0.22 * H)), 0.6)
+    if KG0["wall_fill"] == "poly":
+        # the band step's row (white above, pink below), per column outside the holes, fitted as a line
+        Lr = Lp
+        cols = [x for x in range(600, KG0["corner_x_px"] - 20, 8) if holes[:, x].max() < 0.5]
+        yb_c = []
+        for x in cols:
+            prof = Lr[int(KG0["band_v"] * H) - 40:int(KG0["band_v"] * H) + 40, x:x + 4].mean(1)
+            yb_c.append(int(KG0["band_v"] * H) - 40 + int(np.argmin(np.diff(prof))) + 1)
+        kb, cb_ = np.polyfit(cols, yb_c, 1)
+        Xc = np.arange(W)[None, :] * np.ones((H, 1), np.float32)
+        Yr = np.arange(H)[:, None] * np.ones((1, W), np.float32)
+        above = (Yr < kb * Xc + cb_).astype(np.float32)
+        on_wall = (Xc < KG0["corner_x_px"]).astype(np.float32) * (1 - desk_rows)
+        med = cv2.medianBlur(np.clip(Lr, 0, 100).astype(np.uint8), 21).astype(np.float32)
+        clean = (np.abs(Lr - med) < 4).astype(np.float32)
+        bg = a.copy()
+        # white field: a quadratic surface (it is evenly lit); pink field: row by row between the nearest clean pixels left and
+        # right (the doll's shadow and the darkening toward the desk top vary by row, which one surface does not follow)
+        hm = wall_h * above
+        bg = poly_fill(bg, hm, valid * above * on_wall * clean, pad=220, deg=2)
+        bg = add_texture_m(a, bg, hm, KG0["white_patch_px"], 1.0)
+        hm = wall_h * (1 - above)
+        bg = F.fill_rows_valid(bg, hm, valid * (1 - above) * on_wall * clean, band_px=12, max_search=900)
+        bg = add_texture_m(a, bg, hm, KG0["pink_patch_px"], 1.0)
+        band_fit = dict(slope=round(float(kb), 5), row_at_x0=round(float(cb_), 1), columns=len(cols))
+    else:
+        bg = F.fill_rows_valid(a, wall_h, valid * (1 - desk_rows), band_px=12, max_search=900)   # row by row: the band line stays straight
+        bg = add_texture_m(a, bg, wall_h, (int(0.60 * W), int(0.12 * H), int(0.66 * W), int(0.22 * H)), 0.6)
+        band_fit = None
     bg = F.shift_copy(bg, holes * desk_rows, dx=int(0.11 * W))
     fb = cv2.GaussianBlur(holes, (0, 0), 4)[..., None]                               # the fill fades into the wall over ~8 px: no edge lines
     bg = a * (1 - fb) + bg * fb
-    # --- shadows as ratio maps, transformed with their objects
+    # --- shadows: the doll's as a ratio map transformed with it; the prints' drawn from the new frames (poly) or a ratio map (rows)
     ratio = np.clip(a / np.maximum(bg, 1.0), 0.45, 1.0)
     out = bg
-    rp = np.where(((zp > 0.5) & (fr < 0.5))[..., None], ratio, 1.0)
-    rp_m, zp_m = F.transform_layer(cv2.GaussianBlur(rp, (0, 0), 2.0), F.feather(zp, 4), sc_p, (cx, cy), tx - cx, ty - cy)
-    out = out * (1 + (np.clip(rp_m, 0.45, 1.0) - 1) * zp_m[..., None])
-    rd = np.where(((zd > 0.5) & (core < 0.5) & (dil(fr, 10) < 0.5))[..., None], ratio, 1.0)   # not the old frames' edges
+    if KG0["wall_fill"] == "poly":
+        ps = KG0["print_shadow"]
+        _, p_al0 = F.transform_layer(a, fr, sc_p, (cx, cy), tx - cx + ps["dx"], ty - cy + ps["dy"])
+        shm = cv2.GaussianBlur(p_al0, (0, 0), ps["sigma"])
+        out = out * (1 - ps["depth"] * np.clip(shm / max(float(shm.max()), 1e-6), 0, 1))[..., None]
+    else:
+        rp = np.where(((zp > 0.5) & (fr < 0.5))[..., None], ratio, 1.0)
+        rp_m, zp_m = F.transform_layer(cv2.GaussianBlur(rp, (0, 0), 2.0), F.feather(zp, 4), sc_p, (cx, cy), tx - cx, ty - cy)
+        out = out * (1 + (np.clip(rp_m, 0.45, 1.0) - 1) * zp_m[..., None])
+    if KG0["wall_fill"] == "poly":
+        # under the doll's own outline (+4 px) the ratio is carried on from the ring just outside it (not 1), so the smaller doll
+        # keeps its edge shadow: the first run's ratio 1 there left a light rim round it
+        ring_d = ((dil(dl, 12) - dil(dl, 4)) > 0.5).astype(np.float32)
+        ratio_d = nc_fill(ratio, core, ring_d, scales=((6, 6), (15, 15), (40, 40)), min_den=0.01)
+        rd = np.where(((zd > 0.5) & (dil(fr, 10) < 0.5))[..., None], ratio_d, 1.0)
+    else:
+        rd = np.where(((zd > 0.5) & (core < 0.5) & (dil(fr, 10) < 0.5))[..., None], ratio, 1.0)   # not the old frames' edges
     rd_m, zd_m = F.transform_layer(cv2.GaussianBlur(rd, (0, 0), 2.0), F.feather(zd, 4), KG0["doll_scale"], (seat_x, float(dy1)))
     out = out * (1 + (np.clip(rd_m, 0.45, 1.0) - 1) * zd_m[..., None])
     # --- the objects
     p_rgb, p_al = F.transform_layer(a, F.feather(fr, 0.6), sc_p, (cx, cy), tx - cx, ty - cy)
     out = F.composite(out, p_rgb, p_al)
     d_rgb, d_al = F.transform_layer(a, F.feather(dl, 0.7), KG0["doll_scale"], (seat_x, float(dy1)))
+    doll_edge_ratio = (round(float(np.median(ratio.mean(2)[(dil(dl, 12) - dil(dl, 4)) > 0.5])), 3) if KG0["wall_fill"] == "poly" else None)
     out = F.composite(out, d_rgb, d_al)
     F.save(out, out_fix(fid))
     pb, db = F.bbox(p_al), F.bbox(d_al)
@@ -383,6 +490,16 @@ def fix_kgirl0(preview=True):
                   height_ratio_to_box=dict(before=round((dy1 - dy0) / H / (dbx[3] - dbx[2]), 3), after=round((db[3] - db[2]) / H / (dbx[3] - dbx[2]), 3),
                                            k_girl_master_after_fix=KG0["master_doll_ratio"]),
                   scale_note="QA §11.1 said x0.5-0.6; x0.70 gives the doll the same size relative to its box as the K-girl master after its fix (1.12, ears included), so the doll is one size at both ends of T-CGirl; x0.6 would make it 0.96x its box, 15 % smaller than in K-girl"),
+        wall_fill=(dict(mode="poly", run="second, 2026-11-04", band_step_fit=band_fit,
+                        how=("the wall rows of the holes split at the band step (fitted as a line from the clean columns): the white field by a quadratic "
+                             "surface fitted to its clean pixels (|L - median21| < 4) left of the room corner, with its own seam correction; the pink field "
+                             "row by row between the nearest clean pixels (the doll's shadow and the darkening toward the desk vary by row); each with "
+                             "its field's high-pass texture (patches clear of the old prints) at full strength; the prints' shadow "
+                             "drawn from the new frames (offset +7 / +2 px, blur 11 px, 17 % at the edge: the raw falloff); the doll's shadow as a ratio map "
+                             "moved with it, the ratio under its old outline (+4 px) continued from the ring just outside (median there: doll_edge_ratio)"),
+                        doll_edge_ratio=doll_edge_ratio,
+                        why="the first run (row interpolation + the prints' ratio map) left faint vertical / horizontal lines at the old zones' edges (x ~975, ~1310, ~1480, y ~645 px) and a light rim round the doll")
+                   if KG0["wall_fill"] == "poly" else dict(mode="rows")),
         untouched="desk, bed foot, ledges and books, band, skirting, floor", outputs=dict(fix=os.path.relpath(out_fix(fid), VF.REPO)))
     save_note(fid, note)
     print(json.dumps({k: v for k, v in note.items() if k != "method"}, indent=1))
@@ -580,13 +697,23 @@ def fix_b2(preview=True):
     hp_w, hp_l = np.maximum(hullD, hole_p) * wall_r, np.maximum(hullD, hole_p) * lime_r
     hp_c = hole_p * curt_r
     out = np.where((hp_c > 0.5)[..., None], copy_down_fill(out, hp_c, 40), out)
-    hp_f = hole_p * floor_r
-    fl_valid = valid * floor_r * (U < pu1 + 0.03).astype(np.float32) * (S < 14).astype(np.float32) * (L > 44).astype(np.float32)
-    out = nc_fill(out, hp_f, fl_valid, scales=((40, 3), (120, 20), (300, 60), (600, 200)))
-    out = add_texture_m(a, out, hp_f, B2["floor_patch_px"], 0.6)
-    p_rgb, p_al = F.transform_layer(a, F.feather(pl, 0.8), B2["planter_scale"], (pax, float(pb_bot)))
-    hw = (bot_cols.max() - bot_cols.min()) / 2 * B2["planter_scale"]
-    out = contact_shadow(out, pax - hw, pax + hw, pb_bot - 4, depth=0.70, h_px=12, spread=1.08)
+    # the low band (v >= 0.80: the floor, the wall / panel bases and the curtain hem around the basket): only a thin ring is
+    # revealed there (the basket keeps its floor row), so it is inpainted from its own boundary (Telea, radius 9), which keeps the
+    # grout lines and the hem's colours next to the ring; the second run's normalised convolution left pale blocks there
+    low = np.maximum(hole_p, hullD * (wall_r + lime_r).clip(0, 1)) * (Yv >= 0.80).astype(np.float32)
+    tel = cv2.inpaint(np.clip(a, 0, 255).astype(np.uint8), (dil(low, 2) > 0.5).astype(np.uint8), 9, cv2.INPAINT_TELEA).astype(np.float32)
+    out = np.where((low > 0.5)[..., None], tel, out)
+    hp_f = low
+    # the basket's outer 3 px (closed and filled: pale floor between the rope ends) are left out of the composite
+    pl_comp = np.clip(pl - (brown - cv2.erode(brown, np.ones((7, 7), np.uint8))), 0, 1)
+    p_rgb, p_al = F.transform_layer(a, F.feather(pl_comp, 0.8), B2["planter_scale"], (pax, float(pb_bot)))
+    # the basket's floor shadow follows its new (smaller) bottom outline: a band 18 px around the lower 40 % of the scaled basket,
+    # blurred, 30 % deep at the outline (the old shadow went with the inpainted ring)
+    _, b_al = F.transform_layer(a, F.feather(brown, 0.8), B2["planter_scale"], (pax, float(pb_bot)))
+    b_m = (b_al > 0.5).astype(np.uint8)
+    ring = np.clip(dil(b_m, 18) - b_m, 0, 1) * (Yv > (pb_top + 0.6 * (pb_bot - pb_top)) / H).astype(np.float32)
+    ring = cv2.GaussianBlur(ring, (0, 0), 6)
+    out = out * (1 - 0.30 * np.clip(ring / max(ring.max(), 1e-6), 0, 1))[..., None]
     out = F.composite(out, p_rgb, p_al)
     F.save(out, out_fix(fid))
     pa = F.bbox(p_al)
@@ -600,7 +727,7 @@ def fix_b2(preview=True):
                 "planter (third run, 2026-11-04): the rope basket (hue 15-30, S >= 26, its largest component, filled) + the green fronds connected to it + the dark gaps inside its outline, in u 0-0.215, "
                 "v 0.36-0.995, scaled x0.85 about the centre of the basket's floor contact; behind it (dilated 5 px) each surface from its own intact pixels around "
                 "(normalised convolution, so its soft shadow continues) with its own texture: the white wall, the limestone panel, the floor; on the curtain only the leaf "
-                "pixels, from just above; a contact shadow under the basket. Earlier runs (superseded): "
+                "pixels, from just above; the low band (v >= 0.80) inpainted from its boundary (Telea); the basket's floor shadow along its new bottom outline. Earlier runs (superseded): "
                 "planter: sage leaves + brown basket in u 0-0.215, "
                 "v 0.36-0.995, every component >= 15 px, scaled about the centre of the basket's floor contact; its hole (closed 41 px, filled, dilated 24 px: "
                 "its soft shadow) filled by surface: the white wall by a quadratic fit of its own pale pixels, on the limestone panel and the curtain only "
@@ -619,8 +746,11 @@ def fix_b2(preview=True):
         vanity_right=dict(changed=False, why=("lock v3 (cross-correlation, rows 0.60-0.90): the outer right edge is +4 px (clay 1584-1591, raw 1595); the -43 of QA's "
                                                "strongest peak and of lock v2 is the render's drawer-front / side boundary (1541), whose clay twin is the clay's own "
                                                "front / side boundary at 1539 (+2): parallel edges, not a narrow cabinet. Seen in the clay / raw crop the same way.")),
-        left_for_the_paid_pass=("the storage basket x0.80 (above), and the planter's seam at the curtain hem / floor if QA reads it as visible. The vanity's right side "
-                                "is not a fix item any more (vanity_right). The v8 route: this -fix.png as the composite + one image-to-image pass (600)"),
+        residual_seams=("at 100 %: the basket's floor contact (a thin pale sliver under the bottom rope and an even shadow band around it, also against the "
+                        "wall on its left), and the limestone panel's base right of the fronds (a paler block at v 0.77-0.87, x 400-440 px of the still); "
+                        "at the page size both read as soft. The mirror corner and the wall / panel behind the fronds are clean."),
+        left_for_the_paid_pass=("the storage basket x0.80 (above) and the planter's floor contact / panel base (residual_seams). The vanity's right side "
+                                "is not a fix item any more (vanity_right), nor the mirror head (mirror_head_check). The v8 route: this -fix.png as the composite + one image-to-image pass (600)"),
         outputs=dict(fix=os.path.relpath(out_fix(fid), VF.REPO)))
     save_note(fid, note)
     print(json.dumps({k_: v for k_, v in note.items() if k_ != "method"}, indent=1))

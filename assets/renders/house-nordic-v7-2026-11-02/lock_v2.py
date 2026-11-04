@@ -154,6 +154,23 @@ NAMED_EDGES = {
                  ("niche left", "v", (0.38, 0.48), (0.48, 0.58)), ("niche right", "v", (0.38, 0.48), (0.60, 0.70)), ("curtain outer edge", "v", (0.20, 0.70), (0.26, 0.36))],
 }
 
+# lines whose measured offset is another line, as judged by eye (each with who judged it and why): reported, not counted
+EYE_OVERRIDES = {
+    "pose-w0-in-v7-r2": {
+        "named": {"shelf top": "QA §3 (2026-11-03): '+34' is another line (the shelf's front face against its top); by eye the shelf is within +-10",
+                  "shelf bottom (front face)": "QA §3: the same clay peak as 'shelf top' (row 151); by eye the shelf is within +-10",
+                  "desk right outer edge": "QA §3: '-33' is the inner edge of the thick side panel; the outer edge is in place by eye (render-agent 2026-11-04: outer edge ~1597 vs clay 1599)"},
+        "box": {"built-in oak desk + shelf": {"top": "QA §3: the box top is the shelf line, '+34' is its front face against its top; by eye +-10"}}},
+    "b2-v7-r3": {
+        "named": {"mirror top": ("render-agent 2026-11-04, for QA to confirm: the head is sloped and the named line averages it over u 0.60-0.76, where the "
+                                 "clay's strongest row (124) is the reflected ceiling line inside the glass, not the frame; measured per column (the first "
+                                 "frame edge from the top, 6 px columns at x 1090 / 1150 / 1350 / 1450 / 1540) the raw head is -2 px from the clay at every "
+                                 "column (fix_v8.MIRROR_HEAD_CHECK)")}},
+    "pose-k-girl-0-v7-r2": {
+        "named": {"skirting top (desk wall)": ("render-agent 2026-11-04, for QA to confirm: over the span u 0.08-0.20 the skirting is behind the bed foot and "
+                                               "the muslin in the render, so the '+24' is the blanket's edge; QA's G1 list did not use this line")}},
+}
+
 
 def xcorr_offset(pc, pr_, ci, half=60):
     """Offset (px) of the render profile against the clay profile around index ci, by normalised cross-correlation within +-half
@@ -194,7 +211,10 @@ def named_edges(gc, gr, frame_id):
             lo, hi = int(search[0] * W), int(search[1] * W)
         ic = lo + int(np.argmax(pc[lo:hi]))
         o, r = xcorr_offset(pc, prr, ic, half=90)
-        out[name] = dict(orientation=orient, clay_px=ic, d_xcorr_px=o, r=r, counted=bool(o is not None and r >= XCORR_MIN_R))
+        ov = EYE_OVERRIDES.get(frame_id, {}).get("named", {}).get(name)
+        out[name] = dict(orientation=orient, clay_px=ic, d_xcorr_px=o, r=r, counted=bool(o is not None and r >= XCORR_MIN_R and not ov))
+        if ov:
+            out[name]["eye_override"] = ov
     return out
 
 
@@ -294,6 +314,16 @@ def lock_v2(render, clay, frame, boxes, pan, frame_id=None, overlay_path=None, e
     for nm, (kind, box) in boxes.items():
         e = edge_pairs_v3(gc, gr, box) if v3 else edge_pairs(gc, gr, box)
         e["kind"] = kind
+        if v3:
+            for side, why in EYE_OVERRIDES.get(frame_id, {}).get("box", {}).get(nm, {}).items():
+                if side in e["edges"]:
+                    e["edges"][side].update(counted=False, eye_override=why)
+                    ok = {k: x for k, x in e["edges"].items() if x.get("counted")}
+                    e["worst_edge_px"] = max([abs(x["d_px"]) for x in ok.values()]) if ok else None
+                    if side in ("top", "bottom"):
+                        e.pop("height_ratio", None)
+                    else:
+                        e.pop("width_ratio", None)
         edges[nm] = e
     rep["fixed_edges"] = edges
     bmin = BAND_MIN_RESPONSE_V3 if v3 else BAND_MIN_RESPONSE

@@ -43,8 +43,23 @@ v3 (render-agent, 2026-11-03; briefs/render-v7-retakes-2026-11-03.md task 1; V7Q
   --lock none        skip the lock (a re-grade does not move edges; the -lock-v2.json next to the still stays the record).
   --stops <float>    apply exactly these stops (inherit from the group reference), --target <L> override the target.
 
+v4 (render-agent, 2026-11-04; briefs/render-retakes-code-fixes-2026-11-04.md task 2; QA qa/reports/2026-11-03-retakes-g1.md §4, §11.2):
+  --grade v4         the v3 Bible grade (implies --exposure bible) plus:
+                     (a) WALL HUE: the reference wall's HSL H after the lift is reported; when it is above 40 a masked hue
+                         correction in CIELAB moves the warm-white walls toward the Bible white (HSL 36/20/93, h_ab ~85 deg) and caps
+                         their chroma at 6.5: only pixels with L* 80-97.3 (not the glass, L* > 98), a C* ramp 10-18 (not the oak, the
+                         rope, the lamp glows' cores; QA's 14-18 left a white ring round a sconce glow) and a hue yellower than the target, and outside the product boxes and the upholstered
+                         fixed furniture (sofa, armchair, beds: feathered 30 px; the oak and the plaster are gated by C* and L*). QA's qa_wall rule, m0_1_2_pipeline.py.
+                     (b) B4 ABSOLUTE: CIELAB C* <= 7 on the reference wall patch (warm white, Bible 'טווחי סבילות'), checked, next
+                         to the v3 relative guard (which stays).
+                     (c) WINDOW WALL: L 80-88 (Bible 1.8 B1 (2)) read at QA's points in M0, K-boy, K-girl, W0, MB0 (and their fixes).
+                     (d) C0 inherits S1''s stops (QA §4: G1.14 fails with C0 on its own G1.8 number; until the Bible has a corridor
+                         number). (e) CB-0 is exposed and measured on the white wall beside the fluted window (= B1's wall,
+                         0.419 / 0.174, Bible bath L 86-90), not on the limestone hero_wall_mid.
+                     Default stays v3; nothing of v3 changes.
+
   python3 process_v8.py <id> [--render <png>] [--suffix -v2] [--grade-order v1|v2] [--wb-point auto|legacy] [--lock v1|v2|none]
-                        [--exposure cap|bible] [--stops S] [--target L] [--out-dir <dir>] [--label <text>]
+                        [--exposure cap|bible] [--grade v3|v4] [--stops S] [--target L] [--out-dir <dir>] [--label <text>]
 """
 import argparse
 import colorsys
@@ -112,6 +127,15 @@ W0_IN_WALL = (0.50, 0.40)        # frame uv: the bare desk wall between the shel
 H0_VISTA = (0.35, 0.40)          # the living back wall through the door (clay patch living_vista)
 H0_HALL_WALL = (0.681, 0.12)     # the hall wall over the console (clay hero_wall_mid)
 WINDOW_WALL_RANGE = (80.0, 88.0)  # B1 of BIB1
+# --- v4 ---------------------------------------------------------------------------------------------------------------
+# QA's window-wall points (qa/reports/2026-11-03-retakes-g1/data/light-<frame>.json "window_wall"), in the graded file's uv
+# (the canvas for the overscan stills K-boy / K-girl, the frame otherwise)
+WINDOW_WALL_PTS_V4 = {"M0": (0.10, 0.30), "K-boy": (0.275, 0.30), "K-girl": (0.275, 0.30), "W0": (0.21, 0.30), "MB0": (0.17, 0.30)}
+INHERIT_STOPS_V4 = dict(INHERIT_STOPS, C0="S1prime")
+CB0_WALL_V4 = B1_WALL
+WALL_TARGET_HSL = (36.0, 20.0, 93.0)
+WALL_C_MAX = 7.0
+WALL_H_RANGE = (32.0, 40.0)
 STOPS_SANITY = 1.5
 CHROMA_GUARD_DC = 1.5            # B4: the lift may add at most +1.5 Lab chroma to the near-white population
 
@@ -163,7 +187,7 @@ class Still:
 # ---------------------------------------------------------------------------------------------------------------
 # sample points
 # ---------------------------------------------------------------------------------------------------------------
-def choose_points(frame, kind, sc_frame, sc_all, mode, exposure="cap"):
+def choose_points(frame, kind, sc_frame, sc_all, mode, exposure="cap", v4=False):
     """(pts for the readings, white-balance / exposure point, its source, window box, warning)."""
     pts = {}
     for k, v in sc_frame.get("wall_patches", {}).items():
@@ -223,6 +247,13 @@ def choose_points(frame, kind, sc_frame, sc_all, mode, exposure="cap"):
             pts["wall beside the mirror (0.530,0.420) [reading only; B2 inherits B1's stops]"] = B2_WALL
         elif frame in INHERIT_STOPS and warn:
             warn = f"no clay wall patch: stops inherited from {INHERIT_STOPS[frame]} (one exposure per camera point); the default point is a reading only"
+    if v4:
+        if frame == "CB-0":
+            wb_pt, src, warn = CB0_WALL_V4, "v4: the white wall beside the fluted window (0.419, 0.174) = B1's wall (Bible 1.6 bath L 86-90); v3 read the limestone at hero_wall_mid", None
+            pts["white wall beside the fluted window (0.419,0.174) [B1 group: L 86-90]"] = CB0_WALL_V4
+        if frame in WINDOW_WALL_PTS_V4 and frame != "M0":          # M0's (0.10, 0.30) is already in M0_PTS
+            u, v = WINDOW_WALL_PTS_V4[frame]
+            pts[f"window wall, QA point ({u:.3f},{v:.3f}) [Bible 1.8 B1 (2): 80-88]"] = (u, v)
     if win_box is None:
         win_box = (0.0, 1.0, 0.0, 1.0)
     return pts, wb_pt, src, win_box, warn
@@ -404,6 +435,85 @@ def grade(st, wb_pt, target_L, order="v2", exposure="cap", fixed_stops=None):
 
 
 # ---------------------------------------------------------------------------------------------------------------
+def lab_arr(sr):
+    lin = s2l(np.clip(sr, 0, 1))
+    M = np.array([[0.4124564, 0.3575761, 0.1804375], [0.2126729, 0.7151522, 0.0721750], [0.0193339, 0.1191920, 0.9503041]])
+    xyz = lin @ M.T / np.array([0.95047, 1.0, 1.08883])
+    f = np.where(xyz > 0.008856, np.cbrt(xyz), 7.787 * xyz + 16 / 116)
+    return np.stack([116 * f[..., 1] - 16, 500 * (f[..., 0] - f[..., 1]), 200 * (f[..., 1] - f[..., 2])], -1)
+
+
+def srgb_from_lab(lab):
+    fy = (lab[..., 0] + 16) / 116
+    fx, fz = fy + lab[..., 1] / 500, fy - lab[..., 2] / 200
+    inv = lambda t: np.where(t ** 3 > 0.008856, t ** 3, (t - 16 / 116) / 7.787)  # noqa: E731
+    xyz = np.stack([inv(fx) * 0.95047, inv(fy), inv(fz) * 1.08883], -1)
+    Mi = np.array([[3.2404542, -1.5371385, -0.4985314], [-0.9692660, 1.8760108, 0.0415560], [0.0556434, -0.2040259, 1.0572252]])
+    return np.clip(l2s(np.clip(xyz @ Mi.T, 0, 1)), 0, 1)
+
+
+def wall_reading(st, arr, uv):
+    """HSL and CIELAB (L*, C*, h_ab) of the 1 % patch at uv."""
+    p = st.patch(arr, *uv)
+    lab = lab_arr(p[None, :])[0]
+    h, s_, l_ = hsl_of(p)
+    return dict(H=h, S=s_, L=l_, L_star=round(float(lab[0]), 2), C_star=round(float(np.hypot(lab[1], lab[2])), 2),
+                h_ab=round(float(np.degrees(np.arctan2(lab[2], lab[1]))), 1))
+
+
+def protect_mask(frame, fid, H, W, overscan):
+    """The product boxes and the upholstered fixed furniture (sofa, armchair, beds) in the still's uv, feathered 30 px."""
+    m = np.zeros((H, W), np.float32)
+    boxes = [b for b in VF.product_boxes(frame, fid).values()]
+    for nm, (kind, b) in VF.fixed_boxes(frame, False, fid).items():     # overscan False: the selfcheck's own uv = the still's uv
+        if kind == "furniture" and frame != "M0" and any(w in nm.lower() for w in ("sofa", "armchair", "bed")):   # the upholstered ones;
+            boxes.append(b)                                                                                     # oak and plaster are gated by C*
+    if frame == "M0":
+        boxes += list(VF.M0_FURNITURE.values())
+    for u0, u1, v0, v1 in boxes:
+        m[max(0, int(v0 * H)):int(v1 * H), max(0, int(u0 * W)):int(u1 * W)] = 1
+    from PIL import ImageFilter as _IF
+    mi = Image.fromarray((m * 255).astype(np.uint8)).filter(_IF.GaussianBlur(30))
+    return np.asarray(mi, np.float32) / 255.0, len(boxes)
+
+
+def wall_hue_v4(st, graded, ref_uv, frame, fid, overscan, force=False):
+    """(a) of v4: the masked hue / chroma correction of the warm-white walls when the reference wall's H > 40 (QA qa_wall);
+    force: apply whatever this frame reads (it inherits its group reference's stops and correction)."""
+    before = wall_reading(st, graded, ref_uv)
+    rec = {"rule": "QA 2026-11-03 §4 / §11.2: wall H after the lift reported; corrected when H > 40 (masked, walls only)", "reference_uv": list(ref_uv),
+           "before": before, "applied": False}
+    if force:
+        rec["inherited_from_group_reference"] = True
+    if before["H"] <= WALL_H_RANGE[1] and not force:
+        rec["why_not"] = "H <= 40"
+        return graded, rec
+    ht = colorsys.hls_to_rgb(WALL_TARGET_HSL[0] / 360, WALL_TARGET_HSL[2] / 100, WALL_TARGET_HSL[1] / 100)
+    lt = lab_arr(np.array(ht)[None, :])[0]
+    h_t = np.arctan2(lt[2], lt[1])
+    lab = lab_arr(graded)
+    C = np.hypot(lab[..., 1], lab[..., 2])
+    h = np.arctan2(lab[..., 2], lab[..., 1])
+    ss = lambda x, e0, e1: np.clip((x - e0) / (e1 - e0), 0, 1) ** 2 * (3 - 2 * np.clip((x - e0) / (e1 - e0), 0, 1))  # noqa: E731
+    # C* ramp 10 -> 18 (QA's qa_wall: 14 -> 18): a lamp's glow on the wall runs from C* ~20 at the shade down to the wall's ~8, and
+    # the steep 14 -> 18 ramp turned it into a white ring round a yellow core (M0's left sconce, tried 2026-11-04); 8 -> 16 left the
+    # walls at C* 9-10 (D1, MB-in) part-corrected; 10 -> 18 corrects them fully and keeps the glow smooth
+    w = ss(lab[..., 0], 80, 84) * (1 - ss(lab[..., 0], 97.3, 98.5)) * (1 - ss(C, 10, 18))
+    dh = np.angle(np.exp(1j * (h - h_t)))
+    w = w * ss(dh, 0.0, np.radians(6))
+    prot, nbox = protect_mask(frame, fid, st.H, st.W, overscan)
+    w = w * (1 - prot)
+    out = lab.copy()
+    hn = h - dh * w
+    Cn = C - (C - np.minimum(C, 6.5)) * w
+    out[..., 1], out[..., 2] = Cn * np.cos(hn), Cn * np.sin(hn)
+    b = np.where(w[..., None] > 1e-4, srgb_from_lab(out), graded)
+    rec.update(applied=True, after=wall_reading(st, b, ref_uv), pixels_touched_pct=round(float((w > 0.05).mean() * 100), 1),
+               protected_boxes=nbox, target=dict(hsl=list(WALL_TARGET_HSL), h_ab=round(float(np.degrees(h_t)), 1), C_cap=6.5),
+               mask="L* 80-97.3, C* ramp 10-18, hue yellower than the target (0-6 deg ramp), outside the product boxes and the sofa / armchair / bed boxes (feather 30 px)")
+    return b, rec
+
+
 def bible_target(frame):
     key = BIBLE_KEY.get(frame, "DEFAULT")
     t, lo, hi, src = BIBLE_TARGET[key]
@@ -411,7 +521,13 @@ def bible_target(frame):
 
 
 def process(fid, render_path=None, suffix="-v2", grade_order="v2", wb_mode="auto", lock_mode="v2", out_dir=None, label=None,
-            exposure="cap", stops=None, target=None):
+            exposure="cap", stops=None, target=None, grade_mode="v3", hue_force=None):
+    """grade_mode "v4" (2026-11-04) implies exposure "bible" and adds the wall-hue correction, the absolute C* check, the window
+    wall points, C0 / CB-0 as in the module docstring; hue_force True / False overrides the H > 40 trigger (a frame that inherits
+    its group reference's stops inherits its correction too)."""
+    v4 = grade_mode == "v4"
+    if v4:
+        exposure = "bible"
     frame, kind, clay_file, pan, overscan, room = VF.frame(fid)
     od = out_dir or VF.out_dir(fid)
     render_path = render_path or os.path.join(od, fid + ".png")
@@ -427,9 +543,16 @@ def process(fid, render_path=None, suffix="-v2", grade_order="v2", wb_mode="auto
             target_range = (target_L - 2.0, target_L + 2.0)
     else:
         target_L, target_range, target_src = TARGET_L.get(POSE_BASE.get(frame, frame), 90.0), None, "process_v7 working value"
-    pts, wb_pt, wb_src, win_box, warn = choose_points(frame, kind, sc, sc_all, wb_mode, exposure)
+    pts, wb_pt, wb_src, win_box, warn = choose_points(frame, kind, sc, sc_all, wb_mode, exposure, v4)
     before = measure(st, a, pts, win_box, frame)
     graded, g = grade(st, wb_pt, target_L, grade_order, exposure, stops)
+    if v4:
+        g["wall_after_lift_v4"] = wall_reading(st, graded, wb_pt)
+        if hue_force is False or (hue_force is None and warn):
+            g["wall_hue_v4"] = {"applied": False, "why_not": ("the group reference was not corrected" if hue_force is False else "no wall at the reference point: " + warn),
+                                "before": g["wall_after_lift_v4"]}
+        else:
+            graded, g["wall_hue_v4"] = wall_hue_v4(st, graded, wb_pt, frame, fid, overscan, force=bool(hue_force))
     g["white_balance"]["source"] = wb_src
     g["exposure"]["source"] = wb_src
     g["exposure"]["target_source"] = target_src
@@ -484,6 +607,14 @@ def process(fid, render_path=None, suffix="-v2", grade_order="v2", wb_mode="auto
             bible["hall_under_living_stops"] = {"stops": after[hk], "ok": bool(0.47 <= after[hk] <= 0.87), "hall_wall_L": after.get("hall wall over the console (0.681,0.120) [B5: 2/3 stop under the vista]", [None, None, None])[2]}
         cg = g.get("near_white_chroma_guard_B4") or {}
         bible["near_white_chroma_B4"] = {"delta_C": cg.get("delta_C"), "ok": (cg.get("delta_C") is None) or (cg.get("after_guard") is not None) or (cg.get("delta_C") <= CHROMA_GUARD_DC)}
+        if v4:
+            wr = wall_reading(st, graded, wb_pt)
+            judged = warn is None
+            bible["wall_v4"] = dict(reading=wr, judged=judged, H_range=list(WALL_H_RANGE), C_max=WALL_C_MAX,
+                                    hue_ok=(bool(WALL_H_RANGE[0] <= wr["H"] <= WALL_H_RANGE[1]) if judged else None),
+                                    C_ok=(bool(wr["C_star"] <= WALL_C_MAX) if judged else None),
+                                    correction=g.get("wall_hue_v4", {}).get("applied"),
+                                    note=(None if judged else "the reference point is not a wall (no clay wall patch): hue and C* not judged here"))
         checks.update({"bible_black_12_15": checks["black_point_12_15"], "bible_no_clip": checks["no_255"] and checks["window_p99_le_97"],
                        "bible_chroma_B4": bible["near_white_chroma_B4"]["ok"]})
         if not inherited:
@@ -492,9 +623,13 @@ def process(fid, render_path=None, suffix="-v2", grade_order="v2", wb_mode="auto
             checks["bible_window_wall_80_88"] = bible["window_wall"]["ok"]
         if "hall_under_living_stops" in bible:
             checks["bible_hall_2_3_stop_B5"] = bible["hall_under_living_stops"]["ok"]
+        if v4 and bible["wall_v4"]["judged"]:
+            checks["bible_wall_hue_32_40"] = bible["wall_v4"]["hue_ok"]
+            checks["bible_wall_C_le_7_B4"] = bible["wall_v4"]["C_ok"]
         bible["meets_bible"] = bool(all(v for k, v in checks.items() if k.startswith("bible_")))
-    res = {"asset_id": fid, "frame": frame, "kind": kind, "label": label, "date": "2026-11-03", "script": "assets/renders/house-nordic-v7-2026-11-02/process_v8.py",
-           "settings": {"grade_order": grade_order, "wb_point": wb_mode, "lock": lock_mode, "suffix": suffix, "exposure": exposure, "stops": stops, "target": target},
+    res = {"asset_id": fid, "frame": frame, "kind": kind, "label": label, "date": ("2026-11-04" if v4 else "2026-11-03"), "script": "assets/renders/house-nordic-v7-2026-11-02/process_v8.py",
+           "settings": {"grade_order": grade_order, "wb_point": wb_mode, "lock": lock_mode, "suffix": suffix, "exposure": exposure, "stops": stops, "target": target,
+                        "grade": grade_mode, "hue_force": hue_force},
            "bible_v3": bible,
            "input": os.path.relpath(render_path, VF.REPO), "size_px": [st.W, st.H], "overscan": overscan, "outputs": files,
            "clay": os.path.relpath(os.path.join(VF.R4, clay_file), VF.REPO), "grade_target_L": target_L,
@@ -519,9 +654,10 @@ if __name__ == "__main__":
     ap.add_argument("--wb-point", default="auto", choices=["auto", "legacy"])
     ap.add_argument("--lock", default="v2", choices=["v1", "v2", "none"])
     ap.add_argument("--exposure", default="cap", choices=["cap", "bible"])
+    ap.add_argument("--grade", default="v3", choices=["v3", "v4"])
     ap.add_argument("--stops", type=float, default=None)
     ap.add_argument("--target", type=float, default=None)
     ap.add_argument("--out-dir")
     ap.add_argument("--label")
     a = ap.parse_args()
-    process(a.id, a.render, a.suffix, a.grade_order, a.wb_point, a.lock, a.out_dir, a.label, a.exposure, a.stops, a.target)
+    process(a.id, a.render, a.suffix, a.grade_order, a.wb_point, a.lock, a.out_dir, a.label, a.exposure, a.stops, a.target, grade_mode=a.grade)

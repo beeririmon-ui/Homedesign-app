@@ -8,16 +8,21 @@ Recipe v8 (docs/render-recipe-nordic-v8-2026-11-03.md 2.1-2.2): no whole master 
 with sizes and clay u/v in the prompt line; the SCALE paragraph. TR3 test defaults (no snow, no floor lamp, transition-only slots
 empty); Bible 1.8.1 light (winter daylight, the two B1 targets; the exposure asked in the prompt, B3, after QA's 2026-11-03 grading
 note); product lines in the wow pass order (m0-v7 letters kept). var2 caps the prompt at 4,000 characters: checked here.
-  python3 -I gen_m0_v8_prompts.py
+  python3 -I gen_m0_v8_prompts.py              # round 5 (2026-11-03): m0-v8.txt, pose-m0p-v8.txt, pose-m0x-v8.txt
+  python3 -I gen_m0_v8_prompts.py --round5b    # round 5b (2026-11-04, house plan 1.2.2): m0-v8b.txt, pose-m0p-v8b.txt, pose-m0x-v8b.txt
 """
 import json
 import os
+import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, "..", "..", ".."))
-R5 = os.path.join(REPO, "assets", "blockout", "house", "framing", "round5")
+# --round5b (2026-11-04): the round-5b clays (house plan 1.2.2 / slots 1.6 / Bible 1.8.3: pouf (1.45, 2.00), armchair (-1.23, 2.73), rug 330 x 240),
+# written to new files m0-v8b.txt / pose-m0p-v8b.txt / pose-m0x-v8b.txt; without the flag the round-5 behaviour and files are unchanged
+R5B = "--round5b" in sys.argv
+R5 = os.path.join(REPO, "assets", "blockout", "house", "framing", "round5b" if R5B else "round5")
 SC = json.load(open(os.path.join(R5, "selfcheck.json")))["frames"]
-CHECKS = "assets/blockout/house/framing/round5/clay-checks-2026-11-03.json"
+CHECKS = ("assets/blockout/house/framing/round5b/clay-checks-2026-11-04.json" if R5B else "assets/blockout/house/framing/round5/clay-checks-2026-11-03.json")
 
 
 def B(fid, key):
@@ -69,9 +74,10 @@ def m0():
     va, ru, cs, th = B("M0", "living/vase"), B("M0", "living/rug"), B("M0", "living/cushions"), B("M0", "living/sofa-cover")
     rn, ch, bo = B("M0", "living/table-runner"), B("M0", "living/candle-holders"), B("M0", "living/bowl")
     win = (canvas_u(0.034), canvas_u(0.292))
+    arm_cut = "cut by the left and bottom edges" if (not R5B or (a[0] * 4072 - 116) / 3840 <= 0.005) else "cut by the bottom edge only"
     scale = (f"SCALE: the clay is also the size of everything: the 220 cm sofa spans x {span(s)}, back top y {f(s[2])}, legs at y {f(s[3])}; the 140 x 70 cm "
              f"coffee table spans x {span(t)}, far edge y {f(t[2])}, legs cut by the bottom edge; the 72 cm armchair spans x {f(a[0])}-{f(a[1])} from y "
-             f"{f(a[2])} down, cut by the left and bottom edges; the window x {f(win[0])}-{f(win[1])}. " + SCALE_TAIL)
+             f"{f(a[2])} down, {arm_cut}; the window x {f(win[0])}-{f(win[1])}. " + SCALE_TAIL)
     body = [BLUEPRINT, "", scale, "",
             "1. PHOTO. Top Scandinavian interiors magazine: a Copenhagen living room, 3 pm mid-winter, 24 mm shift lens at 1.2 m, level, straight verticals, "
             "all sharp. Close and generous: the armchair the cut foreground, the low silk pendant glowing over the table.", "",
@@ -196,9 +202,22 @@ def m0x():
 
 OUT = {"m0-v8": ("assets/prompts/recipe-v5.nordic/m0-v8.txt", m0), "pose-m0p-v8": ("assets/prompts/poses-v7.nordic/pose-m0p-v8.txt", m0p),
        "pose-m0x-v8": ("assets/prompts/poses-v7.nordic/pose-m0x-v8.txt", m0x)}
+if R5B:
+    OUT = {"m0-v8b": ("assets/prompts/recipe-v5.nordic/m0-v8b.txt", m0), "pose-m0p-v8b": ("assets/prompts/poses-v7.nordic/pose-m0p-v8b.txt", m0p),
+           "pose-m0x-v8b": ("assets/prompts/poses-v7.nordic/pose-m0x-v8b.txt", m0x)}
+HEAD_5B = [("framing/round5/", "framing/round5b/"), ("framing_r5.py + tone_r5_fixed.py", "framing_r5b.py + tone_r5_fixed.py"),
+           ("house plan 1.2.1;", "house plan 1.2.1, positions 1.2.2;"), ("rug (Bible test envelope 290 x 240)", "rug 330 x 240 (house plan 1.2.2)"),
+           ("the round-5 clay boxes", "the round-5b clay boxes (house plan 1.2.2, 2026-11-04)"), ("grading v3 --exposure bible", "grading v4 (process_v8 --grade v4)"),
+           ("m0-v8 graded v3", "m0-v8b graded v4"), ("(render-agent, 2026-11-03;", "(render-agent, 2026-11-03, regenerated 2026-11-04 for round 5b;"),
+           ("Clay checks and the open F3 points (pouf margin, armchair left edge, rug corner, table / sofa sliver)",
+            "Clay checks (round 5b: the designer's 1.2.2 answers to the four round-5 F3 points; the table / sofa overlap is an accepted M0 exception)")]
 if __name__ == "__main__":
     for jid, (path, fn) in OUT.items():
         head, body = fn()
+        if R5B:
+            for a_, b_ in HEAD_5B:
+                head = [h.replace(a_, b_) for h in head]
+            head[0] = head[0].replace("m0-v8:", "m0-v8b:").replace("pose-m0p-v8:", "pose-m0p-v8b:").replace("pose-m0x-v8:", "pose-m0x-v8b:")
         text = "\n".join(body)
         assert text.isascii(), f"{jid}: non-ASCII in the prompt body"
         head.append(f"# Prompt body: {len(text)} characters (var2 limit 4,000).")
