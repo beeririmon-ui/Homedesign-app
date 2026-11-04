@@ -74,7 +74,12 @@ if R5B:
     OUT_DIR = {"m0-v8b": "assets/renders/living-room/nordic/v8/", "pose-m0p-v8b": "assets/renders/poses/nordic/v8/", "pose-m0x-v8b": "assets/renders/poses/nordic/v8/"}
     PROMPT = {"m0-v8b": "assets/prompts/recipe-v5.nordic/m0-v8b.txt", "pose-m0p-v8b": "assets/prompts/poses-v7.nordic/pose-m0p-v8b.txt",
               "pose-m0x-v8b": "assets/prompts/poses-v7.nordic/pose-m0x-v8b.txt"}
-    INHERIT = {"pose-m0x-v8b": ("m0-v8b", "-v4")}
+    # the reserve attempt of M0 (a lock_v2 scale failure of m0-v8b, 2026-11-04): its own id so attempt 1's files stay; no old-M0 cut-outs
+    JOBS["m0-v8b-r2"] = JOBS["m0-v8b"]
+    OUT_DIR["m0-v8b-r2"] = OUT_DIR["m0-v8b"]
+    PROMPT["m0-v8b-r2"] = "assets/prompts/recipe-v5.nordic/m0-v8b-r2.txt"
+    M0_SRC = os.environ.get("M0_SRC", "m0-v8b")           # the M0 that M0p / M0x take their cut-outs and stops from
+    INHERIT = {"pose-m0x-v8b": (M0_SRC, "-v4")}
     SHEET_OUT = os.path.join(REPO, "assets", "renders", "house-nordic-m0-1-2-2-sheet-2026-11-04.jpg")
     if DRY:
         DRYD = os.path.join(os.path.dirname(DL), "dry-m0-1-2-2")
@@ -205,6 +210,7 @@ SPEC = {
 
 if R5B:
     SPEC = {"m0-v8b": dict(SPEC["m0-v8"], refs_note=SPEC["m0-v8"]["refs_note"] + " (round-5b clay, house plan 1.2.2)"),
+            "m0-v8b-r2": dict(SPEC["m0-v8"], cutouts=[], refs_note="reserve attempt: 1-10 = m0-v7 product close-ups only (cube, pendant, jar, NYOKO, boucle, sage knit, throw, runner, holders, bowl); no old-M0 cut-outs"),
             "pose-m0p-v8b": dict(SPEC["pose-m0p-v8"], refs_note=SPEC["pose-m0p-v8"]["refs_note"].replace("m0-v8 graded v3", "m0-v8b graded v4")),
             "pose-m0x-v8b": dict(SPEC["pose-m0x-v8"], refs_note=SPEC["pose-m0x-v8"]["refs_note"])}
 
@@ -336,7 +342,7 @@ def sheet():
     except Exception:
         font = font_h = ImageFont.load_default()
     J = _jr()
-    m = "m0-v8b" if R5B else "m0-v8"
+    m = (M0_SRC if not DRY else "m0-v8b") if R5B else "m0-v8"
     job = next(j for j in J["jobs"] if j["id"] == m)
     lk, gr = job["lock_v2"], job["grade_" + GRADE]
     old_m0 = "m0-v7-r2-graded-v4.png" if R5B else "m0-v7-r2-graded-v3.png"
@@ -372,7 +378,8 @@ def cutouts():
     written to refs/m0-1-2-2-2026-11-04/ (dry: the scratchpad) and listed in the new index as not uploaded (put uploads them)."""
     from PIL import Image
     assert R5B, "cutouts: --r5b only"
-    src = os.path.join(REPO, OUT_DIR["m0-v8b"], "m0-v8b-frame-v4.png")
+    m0 = M0_SRC if not DRY else "m0-v8b"
+    src = os.path.join(REPO, OUT_DIR[m0], m0 + "-frame-v4.png")
     im = Image.open(src).convert("RGB")
     W, H = im.size
     d = os.path.join(os.path.dirname(IDX_NEW), "cutouts") if DRY else os.path.join(HERE, "refs", "m0-1-2-2-2026-11-04")
