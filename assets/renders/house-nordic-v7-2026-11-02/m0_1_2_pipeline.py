@@ -212,6 +212,19 @@ def fetch(jid, url):
         stops = FR.stops_of(*INHERIT[jid])
     res = P.process(jid, norm, "-v3", "v2", "auto", "none", out_dir, f"{jid}: M0 1.2.1, grading v3 (Bible targets)", exposure="bible", stops=stops)
     FR.boxes_overlay(os.path.join(out_dir, jid + "-graded-v3.png"), os.path.join(out_dir, jid + "-boxes-v3.png"), frame, jid, overscan)
+    # QA 2026-11-03 §4: wall H / C* absolute and the window wall, + the hue correction when H > 40 (-graded-v3h.png; the -v3 still is kept)
+    wp = (VF.selfcheck_for(jid, frame).get("wall_patches") or {})
+    wall = wp.get("bible18_back_wall_by_corner_L90_94") if frame != "M0x" else None
+    winw = wp.get("bible18_window_wall_L80_88")
+    qa = None
+    if wall and "u" in wall:
+        qa = qa_wall(os.path.join(out_dir, jid + "-graded-v3.png"), (wall["u"], wall["v"]), (winw["u"], winw["v"]) if winw and "u" in winw else None,
+                     os.path.join(out_dir, jid + "-graded-v3h.png"))
+        if qa.get("output") and overscan:
+            from PIL import Image as _I
+            g = _I.open(qa["output"])
+            g.crop(VF.frame_box_px(*g.size)).save(os.path.join(out_dir, jid + "-frame-v3h.png"))
+        json.dump(qa, open(os.path.join(out_dir, jid + "-qa-wall-v3.json"), "w"), indent=1)
     s, v = lock["summary"], lock["verdict"]
     job.update(status="done", result_url=url, raw_ext=ext.lstrip("."), returned_size_px=[W0, H0], normalised_px=[W, H],
                lock_v2=dict(shift_px=s["register_shift_px"], scale_pct=s["register_scale_pct"], band_after=s["worst_band_px_after_register"],
@@ -222,7 +235,7 @@ def fetch(jid, url):
                              window_wall=res["bible_v3"].get("window_wall"), window_p99=res["measure_after"]["brightest area (window / door): L p50 / p99 / max"][1],
                              black=res["measure_after"]["darkest 0.5% patch L [12-15]"], meets_bible=res["bible_v3"]["meets_bible"], checks=res["checks"],
                              files=res["outputs"], measurements=OUT_DIR[jid] + jid + "-measurements-v3.json"),
-               boxes_overlay=OUT_DIR[jid] + jid + "-boxes-v3.png")
+               boxes_overlay=OUT_DIR[jid] + jid + "-boxes-v3.png", qa_wall=qa)
     if overscan:
         fx0, fy0, fx1, fy1 = VF.frame_box_px(W, H)
         job["overscan"].update(output_canvas_px=[W, H], output_frame_box_px=[fx0, fy0, fx1, fy1], output_frame_px=[fx1 - fx0, fy1 - fy0],
@@ -281,3 +294,88 @@ if __name__ == "__main__":
         sheet()
     elif cmd == "winbox":
         print("M0 1.2 window box, canvas uv:", M0_WIN_12)
+
+
+# ---------------------------------------------------------------------------------------------------------------
+# QA 2026-11-03 (qa/reports/2026-11-03-retakes-g1.md §4, §11.2), applied after grading v3 of m0-v8 / pose-m0p-v8 / pose-m0x-v8:
+#   wall hue H (HSL) 32-40 and C* (CIELAB) <= 7 on the wall patch as absolute values, the window wall L 80-88 where the frame has one;
+#   when H > 40 a hue-selective correction on the near-white walls: pixels with L* 82-97.5 and C* < 16 whose hue is yellower than the
+#   target are turned back to the target hue (the hue of HSL H 36, S 20, L 93) and their chroma capped at 6.5, with soft weights, so
+#   the oatmeal sofa (h ~80), the oak (C* > 20), the lamp glows (C* > 12) and the window glass (L* > 96, faded out) keep their colour.
+# ---------------------------------------------------------------------------------------------------------------
+def _lab(sr):
+    import numpy as np
+    lin = np.where(sr <= 0.04045, sr / 12.92, ((sr + 0.055) / 1.055) ** 2.4)
+    M = np.array([[0.4124564, 0.3575761, 0.1804375], [0.2126729, 0.7151522, 0.0721750], [0.0193339, 0.1191920, 0.9503041]])
+    xyz = lin @ M.T / np.array([0.95047, 1.0, 1.08883])
+    fx = np.where(xyz > 0.008856, np.cbrt(xyz), 7.787 * xyz + 16 / 116)
+    return np.stack([116 * fx[..., 1] - 16, 500 * (fx[..., 0] - fx[..., 1]), 200 * (fx[..., 1] - fx[..., 2])], -1)
+
+
+def _srgb_from_lab(lab):
+    import numpy as np
+    fy = (lab[..., 0] + 16) / 116
+    fx, fz = fy + lab[..., 1] / 500, fy - lab[..., 2] / 200
+    inv = lambda t: np.where(t ** 3 > 0.008856, t ** 3, (t - 16 / 116) / 7.787)  # noqa: E731
+    xyz = np.stack([inv(fx) * 0.95047, inv(fy), inv(fz) * 1.08883], -1)
+    Mi = np.array([[3.2404542, -1.5371385, -0.4985314], [-0.9692660, 1.8760108, 0.0415560], [0.0556434, -0.2040259, 1.0572252]])
+    lin = np.clip(xyz @ Mi.T, 0, 1)
+    return np.where(lin <= 0.0031308, lin * 12.92, 1.055 * np.power(lin, 1 / 2.4) - 0.055)
+
+
+def _hsl_patch(a, u, v, w=0.012):
+    import colorsys
+    H, W = a.shape[:2]
+    p = a[max(0, int((v - w * 16 / 9) * H)):int((v + w * 16 / 9) * H), max(0, int((u - w) * W)):int((u + w) * W)].reshape(-1, 3).mean(0)
+    h, l, s = colorsys.rgb_to_hls(*p)
+    lab = _lab(p[None, :])[0]
+    return dict(H=round(h * 360, 1), S=round(s * 100, 1), L=round(l * 100, 1), C=round(float((lab[1] ** 2 + lab[2] ** 2) ** 0.5), 1),
+                h_ab=round(float(__import__("math").degrees(__import__("math").atan2(lab[2], lab[1]))), 1))
+
+
+def qa_wall(graded_png, wall_uv, window_wall_uv=None, out_png=None, fix=True):
+    """QA's wall checks on a graded still (+ the hue correction when H > 40); returns the record."""
+    import colorsys
+    import math
+    import numpy as np
+    from PIL import Image
+    a = np.asarray(Image.open(graded_png).convert("RGB"), float) / 255.0
+    rec = dict(rule="QA 2026-11-03 §4: wall H 32-40, C* <= 7 (absolute), window wall L 80-88", wall_uv=list(wall_uv), before=_hsl_patch(a, *wall_uv))
+    if window_wall_uv:
+        rec["window_wall_uv"] = list(window_wall_uv)
+        rec["window_wall_before"] = _hsl_patch(a, *window_wall_uv)
+    need = rec["before"]["H"] > 40 or rec["before"]["C"] > 7
+    rec["correction_needed"] = bool(need)
+    if need and fix:
+        ht = colorsys.hls_to_rgb(36 / 360, 0.93, 0.20)
+        lt = _lab(np.array(ht)[None, :])[0]
+        h_t = math.atan2(lt[2], lt[1])
+        lab = _lab(a)
+        C = np.hypot(lab[..., 1], lab[..., 2])
+        h = np.arctan2(lab[..., 2], lab[..., 1])
+        ss = lambda x, e0, e1: np.clip((x - e0) / (e1 - e0), 0, 1) ** 2 * (3 - 2 * np.clip((x - e0) / (e1 - e0), 0, 1))  # noqa: E731
+        w = ss(lab[..., 0], 80, 84) * (1 - ss(lab[..., 0], 97.3, 98.5)) * (1 - ss(C, 14, 18))   # walls L* 84-97 (HSL 93 ~ L* 96); glass L* > 98; lamp glows C* > 18
+        dh = np.angle(np.exp(1j * (h - h_t)))
+        w = w * ss(dh, 0.0, math.radians(6))                      # only hues yellower than the target
+        h_new = h - dh * w
+        C_new = C - (C - np.minimum(C, 6.5)) * w
+        out = lab.copy()
+        out[..., 1], out[..., 2] = C_new * np.cos(h_new), C_new * np.sin(h_new)
+        b = _srgb_from_lab(out)
+        b = np.where(w[..., None] > 0, b, a)
+        rec["after"] = _hsl_patch(b, *wall_uv)
+        if window_wall_uv:
+            rec["window_wall_after"] = _hsl_patch(b, *window_wall_uv)
+        rec["pixels_touched_pct"] = round(float((w > 0.05).mean() * 100), 1)
+        rec["target"] = dict(hsl=[36, 20, 93], h_ab=round(math.degrees(h_t), 1), C_cap=6.5)
+        if out_png:
+            Image.fromarray((np.clip(b, 0, 1) * 255 + 0.5).astype(np.uint8)).save(out_png)
+            rec["output"] = out_png
+    rec["pass"] = dict(H_32_40=bool(32 <= rec.get("after", rec["before"])["H"] <= 40), C_le_7=bool(rec.get("after", rec["before"])["C"] <= 7),
+                       window_wall_80_88=(None if not window_wall_uv else bool(80 <= rec.get("window_wall_after", rec["window_wall_before"])["L"] <= 88)))
+    return rec
+
+
+if __name__ == "__main__" and sys.argv[1] == "qa-wall":
+    print(json.dumps(qa_wall(sys.argv[2], (float(sys.argv[3]), float(sys.argv[4])), (float(sys.argv[5]), float(sys.argv[6])) if len(sys.argv) > 6 else None,
+                             sys.argv[7] if len(sys.argv) > 7 else None), indent=1))

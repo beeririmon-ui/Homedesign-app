@@ -60,6 +60,12 @@ if (!existsSync(catalogPath)) {
   process.exit(1);
 }
 const catalog = JSON.parse(readFileSync(catalogPath, 'utf8')) as PublicCatalog;
+// the products that have a page on the site (/p/<id>/, the site's built rooms): their credit name is a link (§6.5)
+const sitePages = new Set<string>(
+  existsSync(join(GENERATED, 'catalog.public.json'))
+    ? (JSON.parse(readFileSync(join(GENERATED, 'catalog.public.json'), 'utf8')) as PublicCatalog).products.map((x) => x.id)
+    : [],
+);
 const supplier = existsSync(sitePath(src.supplier_images)) ? (JSON.parse(readFileSync(sitePath(src.supplier_images), 'utf8')) as SupplierImageManifest) : null;
 
 async function lqip(img: sharp.Sharp, w: number, h: number): Promise<string> {
@@ -93,7 +99,7 @@ function sizeHe(p: PublicProduct, placement: string): string | null {
   if (w) return `רוחב ⁦${w}⁩ ס״מ`;
   return null;
 }
-type Credit = { id: string; name_he: string; detail_he: string; price_he: string; unavailable: boolean; thumb: string | null };
+type Credit = { id: string; name_he: string; detail_he: string; price_he: string; unavailable: boolean; thumb: string | null; href: string | null };
 function credit(p: PublicProduct, placement: string): Credit {
   const parts = [p.materials_he[0] ?? null, sizeHe(p, placement), formatIls(p.price_agorot)].filter((x): x is string => !!x);
   const img = supplier?.products[p.id];
@@ -104,6 +110,7 @@ function credit(p: PublicProduct, placement: string): Credit {
     price_he: formatIls(p.price_agorot),
     unavailable: p.availability.status !== 'available',
     thumb: img ? `/media/${img.src}.webp` : null,
+    href: sitePages.has(p.id) ? `/p/${p.id}/` : null,
   };
 }
 
@@ -134,7 +141,39 @@ function hotspots(frame: Frame): Hotspot[] {
       placement: slot.placement,
     });
   }
-  return out.sort((a, b) => a.u - b.u);
+  return separate(out).sort((a, b) => a.u - b.u);
+}
+
+/**
+ * No two 46 px targets may overlap (art direction §10.3). Checked on the smallest desktop frame (1066×600, the frame at
+ * 800×600); on the phone the frame is larger (full height). A mark that overlaps another moves inside its own box,
+ * horizontally first, to the side away from the other mark (12% of the box from its edge); never out of its box.
+ */
+function separate(list: Hotspot[]): Hotspot[] {
+  const FW = 1066;
+  const FH = 600;
+  const T = 48; // the target and a 2 px gap
+  const hit = (a: Hotspot, b: Hotspot) => Math.abs(a.u - b.u) * FW < T && Math.abs(a.v - b.v) * FH < T;
+  for (let pass = 0; pass < 4; pass++)
+    for (const a of list)
+      for (const b of list) {
+        if (a === b || !hit(a, b)) continue;
+        // move the one with the wider box (it has room), to the side away from the other
+        const m = a.box[1] - a.box[0] >= b.box[1] - b.box[0] ? a : b;
+        const o = m === a ? b : a;
+        const [u0, u1, v0, v1] = m.box;
+        const inset = 0.12;
+        const right = u1 - (u1 - u0) * inset;
+        const left = u0 + (u1 - u0) * inset;
+        m.u = m.u >= o.u ? right : left;
+        if (hit(a, b)) {
+          const down = v1 - (v1 - v0) * inset;
+          const up = v0 + (v1 - v0) * inset;
+          m.v = m.v >= o.v ? down : up;
+        }
+        if (hit(a, b)) console.warn(`marks ${a.slot} and ${b.slot} still overlap at ${FW}×${FH}: group them`);
+      }
+  return list;
 }
 
 const resolved: Record<string, unknown> = {
@@ -271,7 +310,7 @@ const stylesLine = src.styles
 const creditsList = (id: string) =>
   F[id]!.hotspots.map((h, i) => {
     const c = h.credit;
-    return `<li class="mag-credit" data-slot="${h.slot}"><span class="mag-credit-n num">${String(i + 1).padStart(2, '0')}</span><span class="mag-credit-body"><span class="mag-credit-name">${esc(c ? c.name_he : h.name_he)}</span><span class="mag-credit-detail">${esc(c ? c.detail_he : 'ממתינה למוצר')}${c?.unavailable ? ' · המלאי אינו זמין כעת' : ''}</span></span></li>`;
+    return `<li class="mag-credit" data-slot="${h.slot}"><span class="mag-credit-n num">${String(i + 1).padStart(2, '0')}</span><span class="mag-credit-body">${c?.href ? `<a class="mag-credit-name mag-credit-link" href="${c.href}">${esc(c.name_he)}</a>` : `<span class="mag-credit-name">${esc(c ? c.name_he : h.name_he)}</span>`}<span class="mag-credit-detail">${esc(c ? c.detail_he : 'ממתינה למוצר')}${c?.unavailable ? ' · המלאי אינו זמין כעת' : ''}</span></span></li>`;
   }).join('\n');
 
 let html = readFileSync(sitePath('tools/test-page/index.template.html'), 'utf8');

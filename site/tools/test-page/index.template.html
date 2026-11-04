@@ -100,7 +100,7 @@
               <input id="st-email" type="email" inputmode="email" autocomplete="email" placeholder="שם@דוגמה.co.il" aria-describedby="st-email-err" />
               <p id="st-email-err" class="mag-field-error" hidden>⚠ כתובת האימייל לא תקינה.</p>
               <div class="mag-row">
-                <button type="submit" class="mag-btn mag-btn-secondary">בדיקה</button
+                <button type="submit" class="mag-btn mag-btn-secondary">שליחה</button
                 ><button type="button" class="mag-btn mag-btn-secondary" id="st-loading">טעינה לדוגמה</button>
               </div>
             </form>
@@ -154,7 +154,7 @@
               <button type="button" class="mag-btn mag-btn-secondary" id="mag-pan-back" disabled aria-disabled="true">חזרה</button>
               <span class="mag-cap" id="mag-pan-status" aria-live="polite">הקליפ נטען כשהבלוק נכנס למסך</span>
             </div>
-            <p class="mag-cap">{{PAN_NOTE}}. גרירה או חיצים מדפדפים בפריימים; מהירות קבועה, רמפות של 15% ו-30%, קנה מידה 1.000.</p>
+            <p class="mag-cap">המצלמה מסתובבת 35 מעלות במקום. גרירה או חיצים מדפדפים בפריימים; מהירות קבועה, רמפות של 15% ו-30%, קנה מידה 1.000.</p>
           </div>
           <h3 class="mag-h3 mag-col-main">מה יש בחדר</h3>
           <ol class="mag-credits mag-col-main">
@@ -165,7 +165,10 @@
 
       <footer class="mag-paper mag-foot" data-head="">
         <div class="mag-grid">
-          <p class="mag-cap mag-col-main">גרסת בדיקה: התמונות, השמות והמחירים זמניים. {{LABEL}}. אף פריים כאן לא עבר QA.</p>
+          <p class="mag-cap mag-col-main">
+            גרסת בדיקה: התמונות, השמות והמחירים זמניים. {{LABEL}}; אף פריים כאן לא עבר QA. השער: {{H0_NOTE}}. הסלון: {{M0_NOTE}}. המטבח ופינת האוכל:
+            {{D1_NOTE}}. {{PAN_NOTE}}.
+          </p>
           <p class="mag-cap mag-col-main"><a class="mag-link" href="/">לאתר</a> · <a class="mag-link" href="/accessibility/">הצהרת נגישות</a></p>
         </div>
       </footer>

@@ -1,0 +1,873 @@
+{
+ "date": "2026-11-03",
+ "brief": "briefs/render-m0-new-camera-2026-11-03.md tasks 1-2",
+ "script": "assets/blockout/house/framing/round5/clay_checks_r5.py",
+ "json_tool": {
+  "house_plan": "python3 -m json.tool: OK",
+  "slots": "python3 -m json.tool: OK"
+ },
+ "camera": {
+  "plan": [
+   0.83,
+   4.64,
+   1.2,
+   25,
+   24,
+   0.47,
+   0.5
+  ],
+  "slots": [
+   0.83,
+   4.64,
+   1.2,
+   25,
+   24,
+   0.47,
+   0.5
+  ],
+  "bible": "(0.83, 4.64, 1.20), yaw 25, 24 mm, u0 0.47, v0 0.50",
+  "agree": true,
+  "poses": {
+   "M0p": "same point, yaw 0",
+   "M0x": "same point, yaw -35"
+  }
+ },
+ "slot_boxes": [
+  {
+   "slot": "sofa",
+   "item": "sofa 220 x 92 x 78 (X -0.90..1.30, Y 0.03-0.95)",
+   "slots_1_5": [
+    0.469,
+    0.891,
+    0.601,
+    0.952
+   ],
+   "projection_plan_constants": [
+    0.469,
+    0.891,
+    0.601,
+    0.952
+   ],
+   "clay_round5": [
+    0.47,
+    0.89,
+    0.611,
+    0.94
+   ],
+   "max_diff_projection": 0.0,
+   "max_diff_clay": 0.012,
+   "verdict": "agrees (<= 0.02)",
+   "note": "42% of the frame width in the clay (0.47-0.89)"
+  },
+  {
+   "slot": "coffee-table",
+   "item": "coffee table 140 x 70 h 38, centre (0.20, 1.72)",
+   "slots_1_5": [
+    0.443,
+    0.803,
+    0.836,
+    1.0
+   ],
+   "projection_plan_constants": [
+    0.442,
+    0.803,
+    0.776,
+    1.118
+   ],
+   "clay_round5": [
+    0.458,
+    0.801,
+    0.782,
+    1.03
+   ],
+   "max_diff_projection": 0.06,
+   "max_diff_clay": 0.054,
+   "verdict": "CONTRADICTION (> 0.05)",
+   "note": "the top's far edge is at v 0.78 (plan text 'top v 0.84-0.92' and the slots box v0 0.836 are 0.05-0.06 low); the clay's superellipse corners make u0 0.458"
+  },
+  {
+   "slot": "armchair",
+   "item": "armchair 72 x 78 h 70, centre (-1.27, 2.82), 25 deg",
+   "slots_1_5": [
+    0.05,
+    0.29,
+    0.72,
+    1.0
+   ],
+   "projection_plan_constants": [
+    0.037,
+    0.31,
+    0.693,
+    1.207
+   ],
+   "clay_round5": [
+    -0.013,
+    0.29,
+    0.72,
+    1.03
+   ],
+   "max_diff_projection": 0.027,
+   "max_diff_clay": 0.05,
+   "verdict": "estimate off (0.02-0.05)",
+   "note": "the v4 armchair (arms and back posts) reaches past the left edge of the 16:9 frame: its front arm end ~0.010 from the left edge and the back-left post sliced lengthwise by the edge (clay image); the plan / slots estimate 0.05"
+  },
+  {
+   "slot": "pendant",
+   "item": "pendant shade envelope 40-50 x 22-32, bottom 1.90",
+   "slots_1_5": [
+    0.565,
+    0.68,
+    0.046,
+    0.238
+   ],
+   "projection_plan_constants": [
+    0.564,
+    0.682,
+    0.046,
+    0.238
+   ],
+   "clay_round5": [
+    0.576,
+    0.669,
+    0.095,
+    0.218
+   ],
+   "max_diff_projection": 0.002,
+   "max_diff_clay": 0.049,
+   "verdict": "estimate off (0.02-0.05)",
+   "note": "clay = the 40 x 28 pumpkin proxy (ellipsoid: its rounded bottom reads 0.218, a flat drum bottom 0.233-0.238)"
+  },
+  {
+   "slot": "accent-sconces",
+   "item": "travertine pair, left plate (-0.85, 0, 1.75), 14 x 18 x 12",
+   "slots_1_5": [
+    0.52,
+    0.539,
+    0.345,
+    0.389
+   ],
+   "projection_plan_constants": [
+    0.515,
+    0.538,
+    0.341,
+    0.39
+   ],
+   "clay_round5": null,
+   "max_diff_projection": 0.005,
+   "max_diff_clay": null,
+   "verdict": "agrees (<= 0.02)",
+   "note": ""
+  },
+  {
+   "slot": "accent-sconces",
+   "item": "travertine pair, right plate (1.25, 0, 1.75), 14 x 18 x 12",
+   "slots_1_5": [
+    0.846,
+    0.87,
+    0.312,
+    0.365
+   ],
+   "projection_plan_constants": [
+    0.844,
+    0.874,
+    0.305,
+    0.366
+   ],
+   "clay_round5": null,
+   "max_diff_projection": 0.007,
+   "max_diff_clay": null,
+   "verdict": "agrees (<= 0.02)",
+   "note": "clay pair box (both cubes) [0.516, 0.871, 0.315, 0.382]"
+  },
+  {
+   "slot": "vase",
+   "item": "vase body 32, d 22, on the back sash (-2.42, 1.35, 0.75)",
+   "slots_1_5": [
+    0.21,
+    0.255,
+    0.459,
+    0.623
+   ],
+   "projection_plan_constants": [
+    0.214,
+    0.25,
+    0.535,
+    0.626
+   ],
+   "clay_round5": [
+    0.218,
+    0.246,
+    0.458,
+    0.625
+   ],
+   "max_diff_projection": 0.003,
+   "max_diff_clay": 0.009,
+   "verdict": "agrees (<= 0.02)",
+   "note": "the clay box includes the stems to Z 1.35 (v0 0.458), as the slots 'box'; body compared"
+  },
+  {
+   "slot": "rug",
+   "item": "rug, Bible plan-B test envelope X -1.25..1.65, Y 0.72-3.12 (290 x 240)",
+   "slots_1_5": [
+    0.243,
+    0.969,
+    0.821,
+    1.0
+   ],
+   "projection_plan_constants": [
+    0.103,
+    1.366,
+    0.818,
+    1.879
+   ],
+   "clay_round5": [
+    0.245,
+    0.995,
+    0.818,
+    1.0
+   ],
+   "max_diff_projection": null,
+   "max_diff_clay": 0.026,
+   "verdict": "estimate off (0.02-0.05)",
+   "note": "slots u1 0.969 is the back-right corner; the right edge X 1.65 runs on and leaves the frame through the bottom edge at u 0.993 (projection) / 0.995 (clay): 0.005-0.007 from the bottom-right corner"
+  },
+  {
+   "slot": "framed-art",
+   "item": "triptych 3 x 50 x 70, 6 cm gaps, centre (0.20, 0, 1.475)",
+   "slots_1_5": [
+    0.566,
+    0.806,
+    0.286,
+    0.557
+   ],
+   "projection_plan_constants": [
+    0.56,
+    0.813,
+    0.319,
+    0.522
+   ],
+   "clay_round5": null,
+   "max_diff_projection": 0.035,
+   "max_diff_clay": null,
+   "verdict": "estimate off (0.02-0.05)",
+   "note": "slot EMPTY in the test (RND2: card incomplete, rights unclear); the slots box is the v4.1 art envelope (Z ~1.00-1.95); art centre u 0.677 (right third, F1)"
+  },
+  {
+   "slot": "wall-decor",
+   "item": "wall decor up to 45 x 45, centre (-1.20, 0.02, 1.20)",
+   "slots_1_5": [
+    0.455,
+    0.515,
+    0.447,
+    0.553
+   ],
+   "projection_plan_constants": [
+    0.458,
+    0.514,
+    0.446,
+    0.554
+   ],
+   "clay_round5": null,
+   "max_diff_projection": 0.003,
+   "max_diff_clay": null,
+   "verdict": "agrees (<= 0.02)",
+   "note": "slot empty in the test"
+  },
+  {
+   "slot": "planter",
+   "item": "planter pot d 38 h 34, centre (-2.00, 0.47)",
+   "slots_1_5": null,
+   "projection_plan_constants": [
+    0.337,
+    0.388,
+    0.697,
+    0.797
+   ],
+   "clay_round5": null,
+   "max_diff_projection": null,
+   "max_diff_clay": null,
+   "verdict": "not comparable (see note)",
+   "note": "slot empty in the test; corner ray: corner u 0.364, pot 0.362"
+  },
+  {
+   "slot": "bowl",
+   "item": "bowl d 24 h 9, centre (0.68, 1.92) on the table",
+   "slots_1_5": [
+    0.708,
+    0.766,
+    0.852,
+    0.884
+   ],
+   "projection_plan_constants": [
+    0.704,
+    0.772,
+    0.827,
+    0.904
+   ],
+   "clay_round5": [
+    0.708,
+    0.767,
+    0.84,
+    0.901
+   ],
+   "max_diff_projection": 0.025,
+   "max_diff_clay": 0.017,
+   "verdict": "estimate off (0.02-0.05)",
+   "note": ""
+  },
+  {
+   "slot": "candle-holders",
+   "item": "candle holders X 0.42-0.65, Y 1.55-1.75, candles to Z 0.63",
+   "slots_1_5": [
+    0.673,
+    0.735,
+    0.762,
+    0.86
+   ],
+   "projection_plan_constants": [
+    0.673,
+    0.735,
+    0.727,
+    0.861
+   ],
+   "clay_round5": [
+    0.675,
+    0.702,
+    0.723,
+    0.872
+   ],
+   "max_diff_projection": 0.035,
+   "max_diff_clay": 0.039,
+   "verdict": "estimate off (0.02-0.05)",
+   "note": ""
+  },
+  {
+   "slot": "table-runner",
+   "item": "runner on the table's left third",
+   "slots_1_5": [
+    0.472,
+    0.593,
+    0.78,
+    0.9
+   ],
+   "projection_plan_constants": null,
+   "clay_round5": [
+    0.496,
+    0.611,
+    0.783,
+    0.867
+   ],
+   "max_diff_projection": null,
+   "max_diff_clay": 0.033,
+   "verdict": "estimate off (0.02-0.05)",
+   "note": ""
+  },
+  {
+   "slot": "cushions",
+   "item": "cushion set + throw on the sofa",
+   "slots_1_5": [
+    0.484,
+    0.901,
+    0.566,
+    0.898
+   ],
+   "projection_plan_constants": null,
+   "clay_round5": [
+    0.524,
+    0.839,
+    0.579,
+    0.744
+   ],
+   "max_diff_projection": null,
+   "max_diff_clay": null,
+   "verdict": "not comparable (see note)",
+   "note": "not comparable: the clay boxes the v4 cushion proxies only; the slots box (0.484-0.901, 0.566-0.898) is the set with the throw's drop"
+  },
+  {
+   "slot": "pouf",
+   "item": "pouf (1.18, 2.08) d 45 h 36 (measurement clay M0-pouf)",
+   "slots_1_5": [
+    0.825,
+    0.973,
+    0.913,
+    1.0
+   ],
+   "projection_plan_constants": [
+    0.821,
+    0.987,
+    0.915,
+    1.23
+   ],
+   "clay_round5": [
+    0.821,
+    0.987,
+    0.916,
+    1.0
+   ],
+   "max_diff_projection": 0.014,
+   "max_diff_clay": 0.014,
+   "verdict": "agrees (<= 0.02)",
+   "note": "the box agrees within 0.014, but the right margin is 0.013 (documents: 0.027), see 'pouf'; slot EMPTY in the test (no approved product: R6Q2 stock unavailable; the 7.5 candidate is a cover of unknown filled height, Bible pouf rule)"
+  },
+  {
+   "slot": "floor-lamp",
+   "item": "floor lamp base (1.52, 0.20), shade 35-38",
+   "slots_1_5": [
+    0.885,
+    0.949,
+    0.389,
+    0.881
+   ],
+   "projection_plan_constants": null,
+   "clay_round5": [
+    0.877,
+    0.959,
+    0.4,
+    0.894
+   ],
+   "max_diff_projection": null,
+   "max_diff_clay": 0.013,
+   "verdict": "agrees (<= 0.02)",
+   "note": "slot empty in the test (TR3); clay = the v4 proxy moved to (1.52, 0.20)"
+  }
+ ],
+ "pendant": {
+  "decision": "V7Q7 (b), 2026-11-03: shade bottom 1.90 (was 2.20), hang point (0.20, 1.72, 3.00); Bible 1.8.1 pendant",
+  "position_m": [
+   0.2,
+   1.72
+  ],
+  "shade_bottom_m": 1.9,
+  "proxy": "40 x 28 ribbed pumpkin (m0-v7 c), ellipsoid, bottom 1.90, top 2.18; cord to the hang point as its own group",
+  "clay_M0": {
+   "box": [
+    0.576,
+    0.669,
+    0.095,
+    0.218
+   ],
+   "centre_u": 0.623,
+   "cord_box": [
+    0.621,
+    0.623,
+    -0.03,
+    0.095
+   ],
+   "visible_pct": 88.5,
+   "frame_pct": 0.8
+  },
+  "clay_M0p": {
+   "box": [
+    0.279,
+    0.372,
+    0.096,
+    0.219
+   ]
+  },
+  "projection_envelope": {
+   "top_v": [
+    0.046,
+    0.098
+   ],
+   "bottom_v": [
+    0.233,
+    0.238
+   ],
+   "u": [
+    0.564,
+    0.682
+   ],
+   "centre_u": 0.622
+  },
+  "bible_rules": {
+   "rule1_whole_shade_3pct_below_top": {
+    "ok": true,
+    "top_v_clay": 0.095,
+    "top_v_envelope_min": 0.046
+   },
+   "rule2_gap_to_art_top_5pct": {
+    "ok": true,
+    "art_top_v_triptych": 0.319,
+    "shade_bottom_v": 0.238,
+    "gap": 0.081,
+    "note": "art empty in the test; gap for the 3 x 50 x 70 triptych"
+   },
+   "rule3_upper_third": {
+    "ok": true,
+    "bottom_v_max": 0.238
+   }
+  },
+  "cord": "exits the top edge (hang point v < 0)",
+  "hotspot": [
+   0.622,
+   0.2
+  ],
+  "hotspot_inside": true
+ },
+ "pouf": {
+  "decision": "V7Q8 (b), 2026-11-03: next to the coffee table, decisively cut; house plan 1.2.1 cameras.M0.frame_est_1_2.pouf; slots 1.5; Bible 1.8.2",
+  "position_m": [
+   1.18,
+   2.08
+  ],
+  "envelope_cm": {
+   "d": [
+    45,
+    48
+   ],
+   "h": [
+    35,
+    37
+   ]
+  },
+  "documents_say": {
+   "box": [
+    0.825,
+    0.973,
+    0.913,
+    1.0
+   ],
+   "right_margin": 0.027,
+   "visible_pct": 27,
+   "frame_pct": 1.0,
+   "lamp_base_gap": 0.032,
+   "sofa_cover_hem_gap": [
+    0.017,
+    0.03
+   ]
+  },
+  "clay_M0_pouf": {
+   "proxy": "(1.18, 2.08) d 45 h 36",
+   "box": [
+    0.821,
+    0.987,
+    0.916,
+    1.0
+   ],
+   "right_margin": 0.013,
+   "visible_pct": 24.8,
+   "frame_pct": 1.13,
+   "lamp_base_gap": 0.022,
+   "f3": [
+    {
+     "a": "living/pouf",
+     "b": "sofa 220x92x78 (fixed-product)",
+     "kind": "overlap",
+     "overlap_thickness": 0.0078,
+     "cover_of_back": 0.002,
+     "behind": "sofa 220x92x78 (fixed-product)",
+     "dist3d_m": 0.905,
+     "rule": "overlap thinner than 0.03 and < 60% of the back item"
+    },
+    {
+     "item": "living/pouf",
+     "side": "right",
+     "margin": 0.0135
+    }
+   ]
+  },
+  "clay_M0_pouf_b": {
+   "proxy": "designer's pre-authorised fix: (1.18, 2.11) d 45 h 35",
+   "box": [
+    0.822,
+    0.989,
+    0.925,
+    1.0
+   ],
+   "right_margin": 0.011,
+   "visible_pct": 21.0,
+   "frame_pct": 0.97,
+   "f3": [
+    {
+     "a": "living/pouf-b",
+     "b": "sofa 220x92x78 (fixed-product)",
+     "kind": "overlap",
+     "overlap_thickness": 0.0078,
+     "cover_of_back": 0.001,
+     "behind": "sofa 220x92x78 (fixed-product)",
+     "dist3d_m": 0.935,
+     "rule": "overlap thinner than 0.03 and < 60% of the back item"
+    },
+    {
+     "item": "living/pouf-b",
+     "side": "right",
+     "margin": 0.0109
+    }
+   ]
+  },
+  "projection_envelope": {
+   "d45 h35": {
+    "box": [
+     0.821,
+     0.987,
+     0.92,
+     1.23
+    ],
+    "right_margin": 0.013,
+    "top_rim_v": 0.92,
+    "lamp_base_gap": 0.025,
+    "sofa_cover_hem_gap": 0.025
+   },
+   "d45 h36": {
+    "box": [
+     0.821,
+     0.987,
+     0.915,
+     1.23
+    ],
+    "right_margin": 0.013,
+    "top_rim_v": 0.915,
+    "lamp_base_gap": 0.02,
+    "sofa_cover_hem_gap": 0.02
+   },
+   "d45 h37": {
+    "box": [
+     0.821,
+     0.987,
+     0.91,
+     1.23
+    ],
+    "right_margin": 0.013,
+    "top_rim_v": 0.91,
+    "lamp_base_gap": 0.016,
+    "sofa_cover_hem_gap": 0.015
+   },
+   "d48 h35": {
+    "box": [
+     0.816,
+     0.993,
+     0.918,
+     1.236
+    ],
+    "right_margin": 0.007,
+    "top_rim_v": 0.918,
+    "lamp_base_gap": 0.023,
+    "sofa_cover_hem_gap": 0.022
+   },
+   "d48 h36": {
+    "box": [
+     0.816,
+     0.993,
+     0.913,
+     1.236
+    ],
+    "right_margin": 0.007,
+    "top_rim_v": 0.913,
+    "lamp_base_gap": 0.018,
+    "sofa_cover_hem_gap": 0.017
+   },
+   "d48 h37": {
+    "box": [
+     0.816,
+     0.993,
+     0.908,
+     1.236
+    ],
+    "right_margin": 0.007,
+    "top_rim_v": 0.908,
+    "lamp_base_gap": 0.013,
+    "sofa_cover_hem_gap": 0.012
+   }
+  },
+  "finding": "The right margin is 0.007-0.013 for every diameter in the 45-48 envelope (the documents' 0.027 takes the half-width symmetric around the centre u 0.899; at 38 deg off-axis the right side widens), so the Bible's reason for d <= 48 ('the right edge is not a tangent') does not hold; the floor-lamp base clears the pouf by 0.013 (d48 h37) to 0.025 (d45 h35), under the Bible's 0.02 'no exception' at the large end; the pouf's top rim covers the foot of the sofa's front-right oak leg (a sliver overlap, F3), which the pre-authorised fix (Y +0.03, h 35) does not remove (margin 0.011). Visible ~25% and ~1.1% of the frame agree with the documents (27%, 1%). Moving the pouf left by 0.02-0.04 m (d 45-48) gives 0.02 at the right edge but brings it to 0.00-0.02 m from the coffee table.",
+  "in_test": "empty (no approved product); the slot is a sourcing task under V7Q5 (b)"
+ },
+ "f3_on_the_1_2_clay": {
+  "M0": {
+   "edge": [
+    {
+     "item": "armchair 72x78 h70 (fixed-product)",
+     "side": "left",
+     "margin": 0.0162
+    }
+   ],
+   "object_object": [
+    {
+     "a": "sofa 220x92x78 (fixed-product)",
+     "b": "coffee table 140x70 h38 (fixed-product)",
+     "kind": "overlap",
+     "overlap_thickness": 0.0234,
+     "cover_of_back": 0.128,
+     "behind": "sofa 220x92x78 (fixed-product)",
+     "dist3d_m": 0.42,
+     "rule": "overlap thinner than 0.03 and < 60% of the back item"
+    }
+   ],
+   "read": [
+    "armchair: front arm end ~0.010 from the left edge of the 16:9 frame, the back-left post sliced lengthwise by the edge (the canvas reports 0.016 from the canvas edge); the armchair is cut 18% overall (bottom edge, the planned foreground), so F3's 'cut >= 15 %' exemption applies formally, but the left edge itself is a sliver crop",
+    "coffee table / sofa: the table top's far edge slivers over the sofa base (overlap 0.023 thick, 12.8% of the sofa): an F3 object-object flag that the 1.1 clay did not have",
+    "rug (Bible test envelope 290 x 240): the right edge leaves the frame through the bottom edge 0.005 from the bottom-right corner (M0-pouf 16:9 clay); the rug is cut 85%, so the exemption applies formally; a rug of 310-340 (the Bible's 290-340, or the 230 x 330 stand-in of m0-v7) leaves through the right edge decisively"
+   ]
+  },
+  "M0p": {
+   "edge": [
+    {
+     "item": "coffee table 140x70 h38 (fixed-product)",
+     "side": "bottom",
+     "margin": 0.0017
+    }
+   ],
+   "object_object": [
+    {
+     "a": "sofa 220x92x78 (fixed-product)",
+     "b": "coffee table 140x70 h38 (fixed-product)",
+     "kind": "overlap",
+     "overlap_thickness": 0.0234,
+     "cover_of_back": 0.138,
+     "behind": "sofa 220x92x78 (fixed-product)",
+     "dist3d_m": 0.42,
+     "rule": "overlap thinner than 0.03 and < 60% of the back item"
+    }
+   ],
+   "read": [
+    "the coffee-table bottom tangent is on the canvas edge (the 16:9 frame cuts the table decisively); the sofa / table sliver as in M0"
+   ]
+  },
+  "M0x": {
+   "edge": [],
+   "object_object": [
+    {
+     "a": "kitchen-dining/bench-pad",
+     "b": "kitchen-dining/dining-rug",
+     "kind": "gap",
+     "gap": 0.0044,
+     "dist3d_m": 0.44,
+     "rule": "silhouettes apart by < 0.02 (kissing contours)"
+    },
+    {
+     "a": "kitchen-dining/bench-pad",
+     "b": "dining table 160x85 (fixed)",
+     "kind": "overlap",
+     "overlap_thickness": 0.0117,
+     "cover_of_back": 0.034,
+     "behind": "dining table 160x85 (fixed)",
+     "dist3d_m": 0.225,
+     "rule": "overlap thinner than 0.03 and < 60% of the back item"
+    },
+    {
+     "a": "dining bench (fixed)",
+     "b": "dining table 160x85 (fixed)",
+     "kind": "overlap",
+     "overlap_thickness": 0.0117,
+     "cover_of_back": 0.045,
+     "behind": "dining table 160x85 (fixed)",
+     "dist3d_m": 0.225,
+     "rule": "overlap thinner than 0.03 and < 60% of the back item"
+    },
+    {
+     "a": "dining bench (fixed)",
+     "b": "kitchen-dining/kitchen-runner",
+     "kind": "overlap",
+     "overlap_thickness": 0.0195,
+     "cover_of_back": 0.398,
+     "behind": "kitchen-dining/kitchen-runner",
+     "dist3d_m": 0.7,
+     "rule": "overlap thinner than 0.03 and < 60% of the back item"
+    },
+    {
+     "a": "kitchen-dining/dining-pendant",
+     "b": "door leaves",
+     "kind": "gap",
+     "gap": 0.0078,
+     "dist3d_m": 0.29,
+     "rule": "silhouettes apart by < 0.02 (kissing contours)"
+    },
+    {
+     "a": "kitchen-dining/dining-rug",
+     "b": "kitchen-dining/kitchen-runner",
+     "kind": "gap",
+     "gap": 0.0062,
+     "dist3d_m": 0.25,
+     "rule": "silhouettes apart by < 0.02 (kissing contours)"
+    },
+    {
+     "a": "dining table 160x85 (fixed)",
+     "b": "door leaves",
+     "kind": "overlap",
+     "overlap_thickness": 0.0234,
+     "cover_of_back": 0.282,
+     "behind": "dining table 160x85 (fixed)",
+     "dist3d_m": 0.095,
+     "rule": "overlap thinner than 0.03 and < 60% of the back item"
+    },
+    {
+     "a": "sofa 220x92x78 (fixed-product)",
+     "b": "coffee table 140x70 h38 (fixed-product)",
+     "kind": "overlap",
+     "overlap_thickness": 0.0195,
+     "cover_of_back": 0.031,
+     "behind": "sofa 220x92x78 (fixed-product)",
+     "dist3d_m": 0.42,
+     "rule": "overlap thinner than 0.03 and < 60% of the back item"
+    }
+   ],
+   "read": [
+    "dining opening's far jamb at u ~0.625 (plan 0.59), dining table u 0.625-0.79 on the right third, the near jamb outside: as the plan describes; the dining-side flags are the round-4 D1 proxies seen through the opening"
+   ]
+  }
+ },
+ "density_test_V7Q5b": {
+  "filled": [
+   "accent-sconces",
+   "pendant",
+   "curtains",
+   "vase",
+   "rug",
+   "cushions (with the throw)",
+   "table-runner",
+   "candle-holders",
+   "bowl",
+   "sofa",
+   "coffee-table",
+   "armchair"
+  ],
+  "empty_sourcing_tasks": [
+   "framed-art (RND2: card incomplete: no shipping quote, no retail price, rights unclear)",
+   "pouf (no approved product)",
+   "wall-decor",
+   "planter"
+  ],
+  "empty_by_decision": [
+   "floor-lamp (TR3)"
+  ],
+  "transition_only_empty": [
+   "wall-sconce",
+   "basket",
+   "magazine-holder"
+  ]
+ },
+ "walls_clay_L": {
+  "M0": {
+   "hero_wall_high": 88.2,
+   "hero_wall_mid": 88.4,
+   "bible18_back_wall_by_corner_L90_94": 86.8,
+   "bible18_window_wall_L80_88": 83.3,
+   "back_wall_behind_art_centre": 88.6,
+   "back_wall_right_end_L82_86": 85.7
+  },
+  "M0p": {
+   "hero_wall_high": 88.3,
+   "hero_wall_mid": 88.6,
+   "bible18_back_wall_by_corner_L90_94": 86.9,
+   "back_wall_behind_art_centre": 88.6,
+   "back_wall_right_end_L82_86": 85.7
+  },
+  "M0x": {
+   "back_wall_right_end_L82_86": 85.9
+  }
+ },
+ "walls_note": "clay toned with the round-4 M0 post (exposure 1.438): back wall by the corner L 86.8 (Bible 90-94), window wall 83.3 (80-88)",
+ "contradictions": [
+  "POUF: house plan 1.2.1 / Bible 1.8.2 / slots 1.5 give u 0.825-0.973 and 0.027 from the right edge; the plan's own projection gives 0.007-0.013 for d 45-48 (clay d 45: 0.013); lamp-base clearance 0.032 claimed, 0.013-0.025 projected (Bible: < 0.02 rejected, no exception); the top rim covers the foot of the sofa's front-right leg (sliver overlap) with and without the pre-authorised fix",
+  "ARMCHAIR: plan / slots u 0.05-0.29; clay -0.013-0.29: the arm end ~0.010 from the left edge, the back post sliced by the edge",
+  "RUG: slots u1 0.969 (the corner); the right edge reaches the bottom edge at 0.993-0.995, 0.005-0.007 from the frame corner",
+  "COFFEE TABLE: plan / slots top v 0.84; projection and clay 0.78; with it a new sofa / table sliver overlap (0.023) on the 1.2 clay"
+ ],
+ "decision": "STOP before the paid renders (brief task 1; house plan frame_checks: F1-F12 on the clay before credits). 0 var2 tokens spent. The pouf is empty in the test, but the armchair, rug and table findings change the paid M0 if the designer nudges them (<= 0.10 m is within the designer's authority, house plan frame_fixes policy), and M0p / M0x take their cut-outs from M0.",
+ "for_the_designer": [
+  "pouf: accept the 0.013 margin as the planned foreground, or d 45 + X -0.02 (0.02 from the table), or another point; the lamp-base rule at d 48 h 37",
+  "armchair: accept the left-edge crop as part of the cut foreground, or X +0.06..0.08 / a few degrees more yaw so the arm end clears 0.02",
+  "rug: keep 290 (corner tangent), or 310-340 wide so the right edge leaves through the right edge decisively",
+  "coffee table vs sofa base: accept the overlap, or Y +0.05..0.08 so the far edge clears the sofa base"
+ ]
+}

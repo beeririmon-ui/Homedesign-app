@@ -211,7 +211,7 @@ function dEStats(
     p50: r1(pct(ds, 50)),
     p95: r1(pct(ds, 95)),
     p99: r1(pct(ds, 99)),
-    max: r1(Math.max(...ds)),
+    max: r1(ds.reduce((m, d) => Math.max(m, d), 0)),
     over1: r1((100 * ds.filter((d) => d > 1).length) / ds.length),
     n: ds.length,
   };
@@ -232,7 +232,7 @@ function contrastOnRegion(
       cs.push(contrast(lt, l));
       Ls.push(lab(img.data[i]!, img.data[i + 1]!, img.data[i + 2]!)[0]);
     }
-  return { p5: r1(pct(cs, 5) * 10) / 10, min: r1(Math.min(...cs) * 10) / 10, Lp5: r1(pct(Ls, 5)) };
+  return { p5: r1(pct(cs, 5) * 10) / 10, min: r1(cs.reduce((m, c) => Math.min(m, c), Infinity) * 10) / 10, Lp5: r1(pct(Ls, 5)) };
 }
 
 // =====================================================================================================================
@@ -388,6 +388,7 @@ async function livingDesktop(): Promise<void> {
   const off = atLast(evs, 'M0:marks:off');
   const ops = samples.map(([t, v]) => [t - tMove, Number(v)] as [number, number]);
   const appear = ops.find(([, o]) => o >= 0.99)?.[0] ?? null;
+  const firstVisible = ops.find(([, o]) => o > 0.02)?.[0] ?? null;
   const fadeStart = ops.find(([t, o], i) => i > 0 && t > 1000 && o < 0.99 && ops[i - 1]![1] >= 0.99)?.[0] ?? null;
   const gone = ops.find(([t, o]) => t > 1000 && o <= 0.005)?.[0] ?? null;
   // periodic change: once at 1, the opacity must not leave 1 before the fade; count direction changes
@@ -398,6 +399,7 @@ async function livingDesktop(): Promise<void> {
     if (d1 && d2 && d1 !== d2) turns++;
   }
   evidence.marks_timing_1280 = {
+    first_visible_ms_after_move: firstVisible === null ? null : r1(firstVisible),
     appear_ms_after_move: appear === null ? null : r1(appear),
     marks_on_event_ms: on === null ? null : r1(on - tMove),
     marks_off_event_ms_after_on: on !== null && off !== null ? r1(off - on) : null,
@@ -413,7 +415,7 @@ async function livingDesktop(): Promise<void> {
   };
 
   // the targets and the marks inside their boxes (check 3)
-  const frameRect = (await page.evaluate(`window.__ev.rect('#room-living-room .mag-frame')`)) as { x: number; y: number; w: number; h: number };
+  const frameRect = (await page.evaluate(`window.__ev.rect('#room-living-room .mag-pic img')`)) as { x: number; y: number; w: number; h: number };
   const marks = (await page.evaluate(`window.__ev.rects('#room-living-room .mag-mark')`)) as {
     x: number;
     y: number;
@@ -480,6 +482,9 @@ async function livingDesktop(): Promise<void> {
   await sleep(3300);
 
   // focus mode: the approach, the look, the strip after 100 + 200 ms, a variant, the return and the landing
+  await page.evaluate(
+    `window.__te = []; for (const ev of ['transitionstart', 'transitionend']) document.querySelector('#room-living-room .mag-strip').addEventListener(ev, (e) => window.__te.push([e.type + ':' + e.propertyName, performance.now()]))`,
+  );
   const fps = page.evaluate(`window.__ev.frames(1700)`);
   const resp = page.evaluate(`window.__ev.firstChange('#room-living-room .mag-frame', 'transform', 2000)`);
   const tClick = (await page.evaluate('performance.now()')) as number;
@@ -530,8 +535,15 @@ async function livingDesktop(): Promise<void> {
   const landed = atLast(evs3, 'M0:landed')!;
   const outOp = outSamples.map(([t, v]) => [t - uiOut, Number(v)] as [number, number]);
   const outGone = outOp.find(([, o]) => o <= 0.01)?.[0] ?? null;
+  const te = (await page.evaluate('window.__te')) as [string, number][];
+  const teInStart = te.find(([p, at]) => p === 'transitionstart:opacity' && at >= uiIn - 1 && at < uiOut)?.[1] ?? null;
+  const teIn = te.find(([p, at]) => p === 'transitionend:opacity' && at > uiIn && at < uiOut)?.[1] ?? null;
+  const teOutStart = te.find(([p, at]) => p === 'transitionstart:opacity' && at >= uiOut - 1)?.[1] ?? null;
+  const teOut = te.find(([p, at]) => p === 'transitionend:opacity' && at > uiOut)?.[1] ?? null;
   const focused = await page.evaluate(`document.activeElement && document.activeElement.dataset.slot`);
-  // the landing: the marks are off again only after the idle; hide them for the pixel comparison with the rest frame
+  // the landing: the marks are off again only after the idle; the keyboard focus (back on the mark, recorded above)
+  // shows its ring and the marks (:focus-within), so it is released for the pixel comparison with the rest frame
+  await page.evaluate('document.activeElement && document.activeElement.blur()');
   await page.mouse.move(2, 2);
   await sleep(3300);
   const landedShot = await shot(page, 'desk-focus-landed', 'after the landing: the frame at rest again, pixel for pixel');
@@ -545,6 +557,12 @@ async function livingDesktop(): Promise<void> {
     ui_wait_after_camera_stop_ms: r1(uiIn - stop),
     strip_opacity_1_after_ui_in_ms: stripFull === null ? null : r1(stripFull),
     strip_out_gone_ms: outGone === null ? null : r1(outGone),
+    strip_in_transitionend_ms: teIn === null ? null : r1(teIn - uiIn),
+    strip_in_start_latency_ms: teInStart === null ? null : r1(teInStart - uiIn),
+    strip_in_duration_ms: teInStart === null || teIn === null ? null : r1(teIn - teInStart),
+    strip_out_start_latency_ms: teOutStart === null ? null : r1(teOutStart - uiOut),
+    strip_out_duration_ms: teOutStart === null || teOut === null ? null : r1(teOut - teOutStart),
+    strip_out_transitionend_ms: teOut === null ? null : r1(teOut - uiOut),
     return_ms: r1(landed - retStart),
     ui_out_to_return_start_ms: r1(retStart - uiOut),
     look,
@@ -558,7 +576,7 @@ async function livingDesktop(): Promise<void> {
       p50: r1(pct(frameTimes, 50)),
       p95: r1(pct(frameTimes, 95)),
       p99: r1(pct(frameTimes, 99)),
-      max: r1(Math.max(...frameTimes)),
+      max: r1(frameTimes.reduce((m, f) => Math.max(m, f), 0)),
       dropped_over_25ms: frameTimes.filter((t) => t > 25).length,
       n: frameTimes.length,
       note: 'headless SwiftShader at 1280×800: a floor; the phone trace needs a real phone',
@@ -605,14 +623,14 @@ async function livingDesktop(): Promise<void> {
   await sleep(400);
   const stripDetail = (await page.textContent('#room-living-room .mag-strip .mag-credit-detail'))?.trim();
   const thumbAria = await page.locator('#room-living-room .mag-thumb').first().getAttribute('aria-label');
-  const price = (s?: string) => s?.match(/⁦₪ [\d,]+(?:\.\d\d)?⁩/)?.[0] ?? null;
+  const price = (s?: string) => s?.match(/\u2066₪\u00a0[\d,]+(?:\.\d\d)?\u2069/)?.[0] ?? null;
   evidence.price_consistency = {
     label: labelDetail,
     story: storyDetail,
     strip: stripDetail,
     thumb_aria: thumbAria,
     same_price: price(labelDetail) !== null && price(labelDetail) === price(storyDetail) && price(labelDetail) === price(stripDetail),
-    ltr_isolated: /⁦₪ [\d,]+⁩/.test(storyDetail ?? ''),
+    ltr_isolated: /\u2066₪\u00a0[\d,]+\u2069/.test(storyDetail ?? ''),
   };
   await page.keyboard.press('Escape');
   await page.waitForFunction(`!document.querySelector('#room-living-room .mag-stage').dataset.focus`, null, { timeout: 8000 });
@@ -732,7 +750,7 @@ async function panAndDining(): Promise<void> {
       p50: r1(pct(frameTimes, 50)),
       p95: r1(pct(frameTimes, 95)),
       p99: r1(pct(frameTimes, 99)),
-      max: r1(Math.max(...frameTimes)),
+      max: r1(frameTimes.reduce((m, f) => Math.max(m, f), 0)),
       dropped_over_25ms: frameTimes.filter((t) => t > 25).length,
       n: frameTimes.length,
     },
@@ -844,12 +862,12 @@ async function statesAndRings(): Promise<void> {
 
   // credits (check 21): the format, nothing on the picture but the marks, "temporary" only in the footer
   const credits = (await page.evaluate(`[...document.querySelectorAll('.mag-credits .mag-credit-detail')].map((e) => e.textContent.trim())`)) as string[];
-  const format = /^(?:[^·]+ · )?(?:[^·]+ ס״מ · )?⁦₪ [\d,]+(?:\.\d\d)?⁩(?: · המלאי אינו זמין כעת)?$|^ממתינה למוצר$/;
+  const format = /^(?:[^·]+ · )?(?:[^·]+ ס״מ · )?\u2066₪\u00a0[\d,]+(?:\.\d\d)?\u2069(?: · המלאי אינו זמין כעת)?$|^ממתינה למוצר$/;
   const onPicture = (await page.evaluate(
-    `[...document.querySelectorAll('.mag-stage *')].filter((el) => { const cs = getComputedStyle(el); return cs.display !== 'none' && cs.visibility !== 'hidden' && parseFloat(cs.opacity) > 0 && !el.closest('.mag-strip') && !el.closest('.mag-mark') && !el.matches('.mag-frame, .mag-scroller, .mag-pic, img, picture, source, .mag-outline, .mag-label, .mag-close, .mag-strip'); }).map((el) => el.tagName + '.' + el.className)`,
+    `[...document.querySelectorAll('.mag-stage *')].filter((el) => { const cs = getComputedStyle(el); return cs.display !== 'none' && cs.visibility !== 'hidden' && parseFloat(cs.opacity) > 0 && !el.closest('.mag-strip') && !el.closest('.mag-mark') && !el.closest('.mag-label') && !el.matches('.mag-frame, .mag-scroller, .mag-pic, img, picture, source, .mag-outline, .mag-label, .mag-close, .mag-strip'); }).map((el) => el.tagName + '.' + el.className)`,
   )) as string[];
   const temp = (await page.evaluate(
-    `[...document.querySelectorAll('body *')].filter((el) => !el.children.length && /זמני|בדיקה/.test(el.textContent || '') && getComputedStyle(el).display !== 'none' && !el.closest('.mag-foot')).map((el) => el.tagName + '.' + el.className + ': ' + el.textContent.trim().slice(0, 50))`,
+    `[...document.querySelectorAll('body *')].filter((el) => !el.children.length && /זמני|בדיקה/.test(el.textContent || '') && el.getClientRects().length > 0 && getComputedStyle(el).opacity !== '0' && !el.closest('.mag-foot')).map((el) => el.tagName + '.' + el.className + ': ' + el.textContent.trim().slice(0, 50))`,
   )) as string[];
   evidence.credits = {
     count: credits.length,
@@ -895,10 +913,10 @@ async function contrastRun(w: number, h: number, tag: string): Promise<void> {
     ['D1', '#room-dining-room'],
   ] as const) {
     await goTo(page, sel);
-    await page.evaluate(`document.getElementById('mag-head').style.visibility = 'hidden'`);
+    await page.evaluate(`document.querySelectorAll('#mag-head > *').forEach((e) => (e.style.visibility = 'hidden'))`);
     await sleep(900);
     const png = await page.screenshot({ clip: { x: 0, y: 0, width: w, height: headH } });
-    await page.evaluate(`document.getElementById('mag-head').style.visibility = ''`);
+    await page.evaluate(`document.querySelectorAll('#mag-head > *').forEach((e) => (e.style.visibility = ''))`);
     const img = await raw(png);
     const ink = await colorOf('#mag-head');
     bandL[id] = contrastOnRegion(img, { x: 0, y: 0, w, h: headH }, [ink[0], ink[1], ink[2]]);
@@ -1021,7 +1039,9 @@ function codeChecks(): void {
       (ts.match(new RegExp(f.replace('(', '\\('), 'g')) ?? []).length +
       (html.match(new RegExp(f.replace('(', '\\('), 'g')) ?? []).length;
   // durations: every transition/animation in the CSS uses a token; literal ms outside :root
-  const root = css.slice(css.indexOf(':root'), css.indexOf('}', css.indexOf(':root')));
+  // the tokens live on .mag (the page's scope), from its opening brace to the first closing one
+  const rootStart = css.indexOf('.mag {');
+  const root = css.slice(rootStart, css.indexOf('\n}', rootStart));
   const body = css.replace(root, '');
   const literalMs = [...body.matchAll(/\b(\d+(?:\.\d+)?)m?s\b/g)].map((m) => m[0]).filter((m) => /ms$|s$/.test(m));
   const transitions = [...css.matchAll(/(?:transition|animation)\s*:\s*([^;]+);/g)].map((m) => m[1]!.replace(/\s+/g, ' ').trim());
@@ -1032,6 +1052,25 @@ function codeChecks(): void {
   const jsLiterals = [...ts.matchAll(/wait\((\d+)\)/g)].map((m) => Number(m[1]));
   const jsFallbacks = [...ts.matchAll(/ms\('(--[\w-]+)', (\d+)\)/g)].map((m) => `${m[1]}=${m[2]}`);
   const tokensCss = [...root.matchAll(/(--[dt]-[\w-]+):\s*(\d+)ms/g)].map((m) => `${m[1]}=${m[2]}`);
+  const TABLE_71 = [
+    '--d-press',
+    '--d-micro',
+    '--d-ui-out',
+    '--d-ui-in',
+    '--d-mark-in',
+    '--d-mark-out',
+    '--t-mark-idle',
+    '--d-swap',
+    '--d-page-out',
+    '--d-page-in',
+    '--d-develop',
+    '--d-style',
+    '--d-approach',
+    '--d-return',
+    '--d-walk',
+    '--d-pan',
+  ];
+  const tokensNotIn71 = tokensCss.map((x) => x.split('=')[0]!).filter((n) => !TABLE_71.includes(n));
   const fallbackMismatch = jsFallbacks.filter((f) => !tokensCss.includes(f));
   const push = (ts.match(/scale\(/g) ?? []).length;
   evidence.code = {
@@ -1045,6 +1084,10 @@ function codeChecks(): void {
     js_literal_waits_ms: jsLiterals,
     js_literal_waits_note: 'the cover beats of art direction §8.1 (+200 brand, +400 cover line, +800 invitation) and the fonts ceiling (800 ms)',
     js_token_fallbacks_mismatching_css: fallbackMismatch,
+    css_tokens: tokensCss,
+    css_tokens_not_in_table_71: tokensNotIn71,
+    css_tokens_not_in_table_71_note:
+      '--d-ui-wait is the "100 ms after the camera stops" of the --d-ui-in row; --d-paper-hold and --d-paper-in are the paper transition of §6.3 (hold 200 ms, dissolve 400 ms), not yet rows of the 7.1 table',
     scale_calls_in_main_ts: push,
     scale_calls_note: 'focus mode only (the approach transform); the pan path draws the frames at scale 1.000 (SequencePlayer.fit once)',
     ui_transitions_over_200ms: transitions.filter((t) => /--d-(develop|approach|return|swap|paper-in|page-in|mark-out)/.test(t)),

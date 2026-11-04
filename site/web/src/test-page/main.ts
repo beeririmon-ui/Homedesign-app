@@ -13,9 +13,9 @@ import { FrameWindow, SequencePlayer, tween } from '../engine/sequence';
 import { prefersReducedMotion } from '../motion';
 import { supportsAvif } from '../media';
 
-type Credit = { id: string; name_he: string; detail_he: string; price_he: string; unavailable: boolean; thumb: string | null };
+type Credit = { id: string; name_he: string; detail_he: string; price_he: string; unavailable: boolean; thumb: string | null; href: string | null };
 type Hotspot = { slot: string; name_he: string; box: [number, number, number, number]; u: number; v: number; credit: Credit | null; variants: Credit[] };
-type FrameData = { aspect: number; window: { u0: number; u1: number }; hotspots: Hotspot[]; room?: string };
+type FrameData = { aspect: number; u0: number; v0: number; srcset: string[]; window: { u0: number; u1: number }; hotspots: Hotspot[]; room?: string };
 type PanData = {
   src: string;
   frames: number;
@@ -27,6 +27,7 @@ type PanData = {
 type Data = { frames: Record<string, FrameData>; pan: PanData; focus_phone_closeup: string };
 
 const data = JSON.parse(document.getElementById('mag-data')!.textContent ?? '{}') as Data;
+if (new URLSearchParams(location.search).has('notes')) document.body.dataset.notes = '';
 const reduce = prefersReducedMotion();
 const root = document.body;
 const phone = () => innerWidth < 720;
@@ -60,6 +61,7 @@ const io = new IntersectionObserver(
       const el = e.target as HTMLElement;
       run.textContent = el.dataset.head ?? '';
       if (!headHidden) head.dataset.on = el.classList.contains('mag-paper') ? 'paper' : 'stage';
+      head.dataset.frame = el.querySelector<HTMLElement>('.mag-stage[data-frame]')?.dataset.frame ?? '';
       if (el.classList.contains('mag-spread')) firstEntry(el);
     }
   },
@@ -202,13 +204,35 @@ for (const el of document.querySelectorAll<HTMLElement>('.mag-spread .mag-stage[
   stages.set(id, st);
   st.frame.style.setProperty('--aspect', String(d.aspect));
   void developed(st.frame, st.img, `${id}:developed`);
-  // the phone: the frame at full height; the view starts on the frame's window and the sides come by a swipe
-  const placeWindow = () => {
-    if (!phone() || st.focus) return;
-    st.scroller.scrollLeft = d.window.u0 * st.frame.offsetWidth;
+  // the frame's box is exactly the picture's drawn rectangle, so a mark at (u, v) sits on the picture's (u, v):
+  //  - the phone: the frame at full height in a horizontal scroller (CSS); the view starts on the frame's window
+  //  - desktop up to 2:1: the frame covers the stage like object-fit: cover at the frame's focal point (u0, v0); the
+  //    first paint (before this runs) is the same picture through object-fit, so nothing moves
+  //  - desktop over 2:1: the frame at full height on paper (CSS)
+  const layout = () => {
+    if (st.focus) return;
+    const fs = st.frame.style;
+    if (phone() || st.el.clientWidth / Math.max(1, st.el.clientHeight) >= 2) {
+      fs.position = fs.width = fs.height = fs.left = fs.top = '';
+      if (phone()) st.scroller.scrollLeft = d.window.u0 * st.frame.offsetWidth;
+      keepMarksInView(st, 0, 1);
+      return;
+    }
+    const sw = st.el.clientWidth;
+    const sh = st.el.clientHeight;
+    const fw = Math.max(sw, sh * d.aspect);
+    const fh = fw / d.aspect;
+    fs.position = 'absolute';
+    fs.width = `${fw}px`;
+    fs.height = `${fh}px`;
+    fs.left = `${(sw - fw) * d.u0}px`;
+    fs.top = `${(sh - fh) * d.v0}px`;
+    // the part of the frame the stage shows, less half a target and its ring (29 px) on each side
+    const left = (sw - fw) * d.u0;
+    keepMarksInView(st, (29 - left) / fw, (sw - 29 - left) / fw);
   };
-  placeWindow();
-  addEventListener('resize', placeWindow);
+  layout();
+  addEventListener('resize', layout);
   // marks: on pointer movement or a touch, gone 2.5 s after the last movement (ו.4)
   const onMove = () => showMarks(st);
   el.addEventListener('pointermove', onMove);
@@ -247,6 +271,22 @@ for (const el of document.querySelectorAll<HTMLElement>('.mag-spread .mag-stage[
     { passive: true },
   );
 }
+/**
+ * A mark stays where its whole target and focus ring are on screen (art direction §10.3, §10.16): when the cover crop
+ * cuts the side of the frame, a mark near the cut moves inside its own product box; a product of which less than half
+ * is on screen gets no mark (the counting rule of the hotspots).
+ */
+function keepMarksInView(st: Stage, uMin: number, uMax: number): void {
+  for (const m of st.marks) {
+    const h = hotspotOf(st, m.dataset.slot!);
+    if (!h) continue;
+    const [x0, x1] = h.box;
+    const shown = Math.max(0, Math.min(x1, uMax) - Math.max(x0, uMin)) / Math.max(1e-6, x1 - x0);
+    m.hidden = shown < 0.5;
+    const u = Math.min(Math.max(h.u, Math.max(x0, uMin)), Math.min(x1, uMax));
+    m.style.setProperty('--u', String(u));
+  }
+}
 function showMarks(st: Stage): void {
   if (st.focus) return;
   if (st.el.dataset.marks !== 'on') {
@@ -266,6 +306,7 @@ function firstEntry(section: HTMLElement): void {
   const st = [...stages.values()].find((s) => section.contains(s.el));
   if (!st || st.hinted) return;
   st.hinted = true;
+  prefetchMaster(st);
   // the hint, once per room per visit: the marks appear and go after 1.2 s (§6.4)
   setTimeout(() => {
     if (st.focus) return;
@@ -278,6 +319,20 @@ function firstEntry(section: HTMLElement): void {
       }
     }, 1200);
   }, 400);
+}
+/** The largest rendition of the frame, for the focus layers (a camera at ×3 on the 1280 file would show its pixels). */
+const masters = new Map<string, HTMLImageElement>();
+function masterUrl(st: Stage): string {
+  const ext = (st.img.currentSrc || st.img.src).endsWith('.avif') ? 'avif' : 'webp';
+  return `${st.d.srcset[st.d.srcset.length - 1]}.${ext}`;
+}
+function prefetchMaster(st: Stage): void {
+  if (masters.has(st.id)) return;
+  const img = new Image();
+  img.decoding = 'async';
+  img.src = masterUrl(st);
+  masters.set(st.id, img);
+  img.decode().catch(() => undefined); // decoded in the background, after the room is on screen
 }
 function hotspotOf(st: Stage, slot: string): Hotspot | undefined {
   return st.d.hotspots.find((h) => h.slot === slot);
@@ -304,10 +359,11 @@ function light(st: Stage, slot: string | null): void {
   if (c) st.label.querySelector('.mag-credit-detail')!.textContent = c.unavailable ? `${c.detail_he} · המלאי אינו זמין כעת` : c.detail_he;
   const fw = st.frame.offsetWidth;
   const fh = st.frame.offsetHeight;
-  const fx = st.frame.getBoundingClientRect().left - st.el.getBoundingClientRect().left;
+  const fr = st.frame.getBoundingClientRect();
+  const sr = st.el.getBoundingClientRect();
   const headH = parseFloat(getComputedStyle(root).getPropertyValue('--head-h')) || 56;
-  const x = fx + h.u * fw;
-  const y = Math.max(headH + 8 + 60, y0 * fh - 12);
+  const x = fr.left - sr.left + h.u * fw;
+  const y = Math.max(headH + 8 + 60, fr.top - sr.top + y0 * fh - 12);
   st.label.style.left = `${Math.min(Math.max(x, 180), st.el.clientWidth - 180)}px`;
   st.label.style.top = `${y}px`;
   st.label.classList.add('is-on');
@@ -319,7 +375,7 @@ function stripHtml(h: Hotspot, index: number): string {
   const thumbs = h.variants
     .map(
       (v, i) =>
-        `<button type="button" class="mag-thumb" role="radio" aria-checked="${i === index}" aria-label="${v.name_he}, ${v.price_he}" data-i="${i}" tabindex="${i === index ? 0 : -1}">${v.thumb ? `<img src="${v.thumb}" alt="" width="52" height="50" loading="lazy" />` : ''}</button>`,
+        `<button type="button" class="mag-thumb" role="radio" aria-checked="${i === index}" aria-label="${v.name_he}, ${v.price_he}" data-i="${i}" tabindex="${i === index ? 0 : -1}">${v.thumb ? `<img src="${v.thumb}" alt="" width="52" height="50" decoding="async" />` : ''}</button>`,
     )
     .join('');
   const buy = !c
@@ -328,13 +384,16 @@ function stripHtml(h: Hotspot, index: number): string {
       ? `<span class="mag-cap">המלאי אינו זמין כעת · <a class="mag-link" href="#toc">עדכנו אותי כשחוזר</a></span>`
       : `<button type="button" class="mag-link mag-add" style="background:none;border:0;padding:0;font:inherit;cursor:pointer">הוספה לסל</button>`;
   return `<div class="mag-thumbs" role="radiogroup" aria-label="${h.name_he}: הווריאציות">${thumbs || '<span class="mag-cap">אין עדיין וריאציות בעמדה הזו</span>'}</div>
-<div class="mag-strip-row"><span class="mag-strip-credit" aria-live="polite"><span class="mag-credit-name"></span><span class="mag-credit-detail"></span></span>${buy}<button type="button" class="mag-btn mag-btn-primary mag-choose">בחירה</button></div>`;
+<div class="mag-strip-row"><span class="mag-strip-credit" aria-live="polite"><a class="mag-credit-name mag-credit-link"></a><span class="mag-credit-detail"></span></span>${buy}<button type="button" class="mag-btn mag-btn-primary mag-choose">בחירה</button></div>`;
 }
 function fillCredit(st: Stage, h: Hotspot, index: number): void {
   const c = h.variants[index] ?? h.credit;
-  const name = st.strip.querySelector('.mag-credit-name')!;
+  const name = st.strip.querySelector<HTMLAnchorElement>('.mag-credit-name')!;
   const detail = st.strip.querySelector('.mag-credit-detail')!;
   name.textContent = c ? c.name_he : h.name_he;
+  // the name is the link to the product page (§6.5), where the product has one
+  if (c?.href) name.href = c.href;
+  else name.removeAttribute('href');
   detail.textContent = c ? c.detail_he : 'ממתינה למוצר';
 }
 async function openFocus(stageId: string, slot: string): Promise<void> {
@@ -363,50 +422,83 @@ async function openFocus(stageId: string, slot: string): Promise<void> {
   const s = Math.min(6.5, Math.max(1, Math.min((0.6 * sw) / bw, (0.6 * free) / bh)));
   const cx = ((x0 + x1) / 2) * fw;
   const cy = ((y0 + y1) / 2) * fh;
-  const tx = sw / 2 + st.scroller.scrollLeft - s * cx;
-  const ty = sh * 0.42 - s * cy;
+  // the frame's own offset in the stage (the cover crop on desktop, the scroll on the phone)
+  const ox = st.frame.offsetLeft - st.scroller.scrollLeft;
+  const oy = st.frame.offsetTop;
+  const tx = sw / 2 - ox - s * cx;
+  const ty = sh * 0.42 - oy - s * cy;
   const transform = `translate(${tx.toFixed(2)}px, ${ty.toFixed(2)}px) scale(${s.toFixed(4)})`;
   const approach = ms('--d-approach', 1600);
+  // the look (display-only on the temporary frame, focus spec §2): the room uniformly soft (0.5% of the screen width,
+  // so the radius is divided by the camera's scale) and a third of a stop darker; the product's box sharp and a quarter
+  // stop lifter. Built with the move: on the approach it comes in over the deceleration (CSS, data-look='in').
+  //  - the soft room is the picture already on screen (decoded), blurred and dimmed by CSS
+  //  - the sharp product is an ellipse around its box, cut from the largest rendition (at ×3 the 1280 file would
+  //    show its pixels; an ellipse costs far less to paint than a second full frame). It is the room's own light, not
+  //    lifted: without the product's alpha a +1/4 stop lift lights the wall behind it too, a halo the spec forbids
+  //    (focus spec §2.5); the lift comes with the final focus layers
+  const soft = document.createElement('img');
+  soft.className = 'mag-soft';
+  soft.alt = '';
+  soft.setAttribute('aria-hidden', 'true');
+  soft.decoding = 'sync';
+  soft.src = st.img.currentSrc || st.img.src;
+  const master = masters.get(stageId);
+  const sharpSrc = master?.complete && master.naturalWidth ? master.src : soft.src;
+  // the pool around the box: 70% of the box on every side, so the box sits inside the (almost) opaque part of the
+  // ellipse and the falloff to the soft room is long, a pool of light and not a spot
+  const mx = (x1 - x0) * 0.7;
+  const my = (y1 - y0) * 0.7;
+  const bx0 = Math.max(0, x0 - mx);
+  const bx1 = Math.min(1, x1 + mx);
+  const by0 = Math.max(0, y0 - my);
+  const by1 = Math.min(1, y1 + my);
+  const sharp = document.createElement('div');
+  sharp.className = 'mag-sharp';
+  sharp.setAttribute('aria-hidden', 'true');
+  const ss = sharp.style;
+  ss.left = `${(bx0 * fw).toFixed(2)}px`;
+  ss.top = `${(by0 * fh).toFixed(2)}px`;
+  ss.width = `${((bx1 - bx0) * fw).toFixed(2)}px`;
+  ss.height = `${((by1 - by0) * fh).toFixed(2)}px`;
+  ss.backgroundImage = `url("${sharpSrc}")`;
+  ss.backgroundSize = `${fw}px ${fh}px`;
+  ss.backgroundPosition = `${(-bx0 * fw).toFixed(2)}px ${(-by0 * fh).toFixed(2)}px`;
+  st.frame.style.setProperty('--soft', `${((0.005 * sw) / s).toFixed(2)}px`);
+  st.img.insertAdjacentElement('afterend', soft);
+  soft.insertAdjacentElement('afterend', sharp);
+  // the strip and its thumbs are built now, inert and transparent, so their first paint is not the frame they appear
+  st.strip.innerHTML = stripHtml(h, 0);
+  fillCredit(st, h, 0);
+  st.strip.inert = true;
+  st.close.inert = true;
+  st.strip.hidden = false;
+  st.close.hidden = false;
   if (reduce) {
     // reduced motion: a 300 ms dissolve between the room and the focus state, nothing moves (§7.4)
     st.el.classList.add('is-dissolve');
     st.scroller.style.opacity = '0';
     await wait(ms('--d-swap', 300) / 2);
     st.frame.style.transform = transform;
+    st.el.dataset.look = 'in';
     st.scroller.style.opacity = '1';
     await wait(ms('--d-swap', 300) / 2);
   } else {
-    st.frame.classList.add('is-approach');
-    await nextFrame();
+    st.frame.classList.add('is-moving', 'is-approach');
+    void st.frame.offsetHeight; // the rest transform is the transition's start: the camera moves on the next frame
     st.frame.style.transform = transform;
+    st.el.dataset.look = 'in';
     await wait(approach);
+    // the camera stopped: the frame keeps its layer, rastered at this scale, so the strip's frame repaints nothing else
+    st.frame.classList.add('is-held');
   }
   mark(`${stageId}:focus:camera:stop`, { scale: s });
-  // the look: the room goes uniformly soft and a third of a stop darker, the product stays sharp and a quarter stop lifter
-  const soft = st.img.cloneNode() as HTMLImageElement;
-  soft.className = 'mag-soft';
-  soft.removeAttribute('srcset');
-  soft.removeAttribute('sizes');
-  soft.src = st.img.currentSrc || st.img.src;
-  const sharp = soft.cloneNode() as HTMLImageElement;
-  sharp.className = 'mag-sharp';
-  const feather = 0.02;
-  sharp.style.setProperty('--fx0', `${((x0 - feather) * 100).toFixed(2)}%`);
-  sharp.style.setProperty('--fx1', `${((x1 + feather) * 100).toFixed(2)}%`);
-  sharp.style.setProperty('--fy0', `${((y0 - feather) * 100).toFixed(2)}%`);
-  sharp.style.setProperty('--fy1', `${((y1 + feather) * 100).toFixed(2)}%`);
-  st.frame.style.setProperty('--soft', `${(fw * 0.005).toFixed(1)}px`);
-  st.img.insertAdjacentElement('afterend', soft);
-  soft.insertAdjacentElement('afterend', sharp);
-  await nextFrame();
   st.el.dataset.focus = 'on';
   // the interface, 100 ms after the camera stops, in 200 ms (focus spec §3.4)
   await wait(ms('--d-ui-wait', 100));
-  st.strip.innerHTML = stripHtml(h, 0);
-  fillCredit(st, h, 0);
-  st.strip.hidden = false;
-  st.close.hidden = false;
-  await nextFrame();
+  // the strip was laid out (inert, transparent) while the camera moved: showing it is one class, no layout, no decode
+  st.strip.inert = false;
+  st.close.inert = false;
   st.strip.classList.add('is-on');
   st.close.classList.add('is-on');
   mark(`${stageId}:focus:ui:in`);
@@ -477,20 +569,23 @@ async function closeFocus(stageId: string, chosen: boolean): Promise<void> {
   if (reduce) {
     st.scroller.style.opacity = '0';
     await wait(ms('--d-swap', 300) / 2);
+    st.el.dataset.look = 'out';
     st.frame.style.transform = '';
     st.scroller.style.opacity = '1';
     await wait(ms('--d-swap', 300) / 2);
   } else {
     st.frame.classList.remove('is-approach');
-    st.frame.classList.add('is-return');
+    st.frame.classList.add('is-moving', 'is-return');
+    st.el.dataset.look = 'out';
     await nextFrame();
     st.frame.style.transform = '';
     await wait(ret);
   }
   // the landing: exactly the frame at rest, no dissolve, no settling (focus spec §4.3)
-  st.frame.classList.remove('is-return');
+  st.frame.classList.remove('is-return', 'is-moving', 'is-held');
   st.frame.querySelectorAll('.mag-soft, .mag-sharp').forEach((e) => e.remove());
   delete st.el.dataset.focus;
+  delete st.el.dataset.look;
   st.el.classList.remove('is-dissolve');
   st.focus = null;
   if (phone()) st.scroller.scrollLeft = f.before;
