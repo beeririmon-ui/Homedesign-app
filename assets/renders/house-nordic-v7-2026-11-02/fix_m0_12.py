@@ -103,7 +103,7 @@ def edges_h(g, c0, c1, r0, r1):
 
 
 def save_note(jid, note):
-    note = dict(asset_id=jid + "-fix", date=DATE, tokens=0, script="assets/renders/house-nordic-v7-2026-11-02/fix_m0_12.py", **note)
+    note = dict(asset_id=jid + "-fix", date=DATE, script="assets/renders/house-nordic-v7-2026-11-02/fix_m0_12.py", **{"tokens": 0, **note})
     json.dump(note, open(os.path.join(REPO, OUT[jid], jid + "-fix.json"), "w"), indent=1, ensure_ascii=False)
 
 
@@ -127,6 +127,37 @@ M0_CLAY = dict(sofa=dict(arm_l=1290, arm_r=2373, back_top=941, foot_r=1407),
                table=dict(x0=1260, x1=2145, far=1176, foot_l=1468))
 M0_TABLE_R = dict(x0=1256, x1=2204, far=1118, foot_l=1452)
 M0_TEX = dict(wall=(2560, 620, 2720, 760), floor=(2612, 1262, 2730, 1342), rug=(2250, 1420, 2450, 1530), sofa_base=(2210, 1190, 2400, 1250))
+CFG_M0 = dict(jid="m0-v8b-r2", geom=M0, clay=M0_CLAY, table_r=M0_TABLE_R, tex=M0_TEX, skirting_cols=((1190, 1236), (2606, 2660)),
+              rug_left_edge=((1000, 1277.0), (1130, 1220.0)), foot_l_x=1324, under_cols=(2212, 2433),
+              strips=(("right strip: skirting + floor", (2370, 9999), 128, 14, 1, "upper"), ("right strip: rug edge", (2370, 9999), 86, 8, 3, "lower"),
+                      ("left strip", (0, 1305), -62, 10, 1, "below"), ("old right leg (rug)", (2075, 2160), 74, 10, 1, "below")))
+# M0p (pose-m0p-v8b): frontal; the back wall's lines are level; the throw hangs over the right arm in front, its fringe below the base
+M0P = dict(
+    sofa_render=dict(arm_l=382, arm_r=1645, back_top=820, foot_r=1283, base_l=(382, 1213), base_r=(1645, 1213), feet_l=(432, 1280), feet_r=(1602, 1283)),
+    sofa_rect=(372, 1690, 790, 1300), throw_rect=(1630, 1690, 880, 1215), leg_l=(412, 466, 1205, 1287), leg_r=(1584, 1620, 1205, 1290),
+    table_rect=(430, 1435, 1040, 1539), runner_poly=[(580, 1150), (907, 1150), (832, 1287), (832, 1430), (571, 1430), (571, 1287)],
+    bowl_rect=(1158, 1322, 1150, 1240), holders_rect=(1005, 1138, 1050, 1230),
+    table_near_line=((441, 1285.0), (1422, 1285.0)),
+    skirting_line=((0, 1148.5), (2736, 1148.5)), floor_line=((0, 1196.0), (2736, 1196.0)), rug_line=((0, 1265.0), (2736, 1265.0)))
+M0P_CLAY = dict(sofa=dict(arm_l=488.5, arm_r=1507.5, back_top=932.5, foot_r=1317),
+                table=dict(x0=453, x1=1332, far=1187, foot_l=1535.5))
+M0P_TABLE_R = dict(x0=441, x1=1422, far=1155, foot_l=1490)
+M0P_TEX = dict(wall=(1750, 600, 1900, 750), floor=(1700, 1202, 1950, 1258), rug=(1500, 1350, 1700, 1480), sofa_base=(1425, 1135, 1475, 1205))
+CFG_M0P = dict(jid="pose-m0p-v8b", geom=M0P, clay=M0P_CLAY, table_r=M0P_TABLE_R, tex=M0P_TEX, skirting_cols=((250, 330), (1700, 1780)), leg_s_min=26, leg_cols=((500, 550), (1300, 1353)),
+               rug_left_edge=None, foot_l_x=525, under_cols=(1428, 1478), fringe_below_base=(1478, 1585, 1205, 1252),
+               # (the rug's far-right corner is at x ~1740: its edge rows come from the 50 px of edge beyond the hole, 4 passes;
+               # its body from 70 px in front)
+               strips=(("right strip: skirting + floor", (1490, 9999), 190, 14, 1, "upper"), ("right strip: rug edge", (1490, 1745), 46, 4, 5, "rugedge"),
+                       ("right strip: rug body", (1490, 1745), 0, 8, 1, "rugbody", 72),
+                       ("left strip", (0, 500), -128, 14, 1, "below"),
+                       ("old table right end and leg (rug)", (1300, 1440), 100, 10, 1, "below")))
+CFG = CFG_M0
+
+
+def use(cfg):
+    """Point the module's working geometry at one frame's config."""
+    global CFG, M0, M0_CLAY, M0_TABLE_R, M0_TEX
+    CFG, M0, M0_CLAY, M0_TABLE_R, M0_TEX = cfg, cfg["geom"], cfg["clay"], cfg["table_r"], cfg["tex"]
 
 
 def sofa_matte_m0(a, table):
@@ -200,6 +231,12 @@ def sofa_matte_m0(a, table):
     # the legs (dark oak) and the dark band under the base down to the feet line (its contact shadow goes with it)
     for (lx0, lx1, ly0, ly1) in (M0["leg_l"], M0["leg_r"]):
         m[ly0:ly1, lx0:lx1] = np.maximum(m[ly0:ly1, lx0:lx1], (L[ly0:ly1, lx0:lx1] < 55).astype(np.float32))
+    if CFG.get("fringe_below_base"):          # M0p: the throw's fringe hanging below the base line in front (cream on the dark under-sofa floor)
+        fx0, fx1, fy0, fy1 = CFG["fringe_below_base"]
+        fb = np.zeros((H, W), np.float32)
+        fb[fy0:fy1, fx0:fx1] = ((L[fy0:fy1, fx0:fx1] > 55) & (S[fy0:fy1, fx0:fx1] < 26)).astype(np.float32)
+        fb = cv2.morphologyEx(fb.astype(np.uint8), cv2.MORPH_CLOSE, np.ones((7, 3), np.uint8)).astype(np.float32)
+        m = np.maximum(m, fb * (Y >= base - 6))
     m_full = fill_holes(m)
     m = m_full * (1 - (table > 0.5))
     return m, dict(base=[p["base_l"], p["base_r"]], feet=[p["feet_l"], p["feet_r"]], full=m_full)
@@ -222,12 +259,12 @@ def table_matte_m0(a):
     # runner's shadow are inside; the legs: oak pixels (S >= 26) below it, closed vertically
     Xg = np.arange(W)[None, :]
     near = line_y(Xg, *M0["table_near_line"])
-    top_rows = keep * (np.arange(H)[:, None] < near)
+    top_rows = keep * (np.arange(H)[:, None] < near) * (np.arange(H)[:, None] >= M0_TABLE_R["far"] - 6)
     ys, xs = np.nonzero(top_rows > 0.5)
     hull = cv2.convexHull(np.stack([xs, ys], 1).astype(np.int32))
     top = np.zeros((H, W), np.uint8)
     cv2.fillConvexPoly(top, hull, 1)
-    legs = ((Hh >= 18) & (Hh <= 42) & (S >= 31) & (L >= 20) & (L <= 80)).astype(np.float32) * rect * (np.arange(H)[:, None] >= near + 4)
+    legs = ((Hh >= 18) & (Hh <= 42) & (S >= CFG.get("leg_s_min", 31)) & (L >= 20) & (L <= 80)).astype(np.float32) * rect * (np.arange(H)[:, None] >= near + 4)
     legs = cv2.morphologyEx(legs.astype(np.uint8), cv2.MORPH_CLOSE, np.ones((25, 5), np.uint8))
     legs = cv2.morphologyEx(legs, cv2.MORPH_OPEN, np.ones((5, 5), np.uint8)).astype(np.float32)
     n2, lab2, st2, _ = cv2.connectedComponentsWithStats((legs > 0.5).astype(np.uint8))
@@ -235,6 +272,11 @@ def table_matte_m0(a):
     for i in range(1, n2):
         if st2[i, cv2.CC_STAT_HEIGHT] > 60 and st2[i, cv2.CC_STAT_WIDTH] < 70:
             legs_k[lab2 == i] = 1
+    if CFG.get("leg_cols"):          # M0p: the rug under the table reads as oak at S >= 26, so the legs are taken in their columns only
+        legs_k = np.zeros((H, W), np.float32)
+        for (c0, c1) in CFG["leg_cols"]:
+            legs_k[:, c0:c1] = legs[:, c0:c1]
+        legs_k = cv2.morphologyEx(legs_k.astype(np.uint8), cv2.MORPH_CLOSE, np.ones((31, 9), np.uint8)).astype(np.float32)
     keep = np.maximum(top.astype(np.float32), legs_k)
     keep = cv2.morphologyEx(keep.astype(np.uint8), cv2.MORPH_CLOSE, np.ones((21, 1), np.uint8)).astype(np.float32)
     runner = np.zeros((H, W), np.uint8)
@@ -387,7 +429,7 @@ def laplace_fill(a, hole, domain, pad=60):
     return F8.seam_correct(full, lowa, hole, sigma=12, ring_px=6)
 
 
-def shift_fill(a, hole, valid, slope, dx, search=0, gain=True, top_ramp=0, ramp_rows=None, passes=1):
+def shift_fill(a, hole, valid, slope, dx, search=0, gain=True, top_ramp=0, ramp_rows=None, passes=1, dy=None):
     """Copy into the hole from (dx, slope * dx) px away, sub-pixel (bilinear remap), along the wall's lines (dx > 0: from the
     right), where that source is valid. search > 0: dx is chosen within +-search px (and dy within +-2 px) for the least squared
     difference on the 10 px band of valid pixels beyond the hole's far edge, so the planks / knit meet it. A low-frequency seam
@@ -399,7 +441,7 @@ def shift_fill(a, hole, valid, slope, dx, search=0, gain=True, top_ramp=0, ramp_
         return a.copy(), hm, (dx, 0.0)
     Xf = np.arange(W, dtype=np.float32)[None, :].repeat(H, 0)
     Yf = np.arange(H, dtype=np.float32)[:, None].repeat(W, 1)
-    best = (dx, slope * dx)
+    best = (dx, float(round(slope * dx))) if dy is None else (dx, float(dy))
     if search:
         side = 1 if dx > 0 else -1
         band = (dil(hole, 10) > 0.5) & ~hm & (valid > 0.5)
@@ -412,18 +454,23 @@ def shift_fill(a, hole, valid, slope, dx, search=0, gain=True, top_ramp=0, ramp_
         g = gray(a)
         hp = g - cv2.GaussianBlur(g, (0, 0), 3.0)
         cost = []
-        for ddx in range(dx - search, dx + search + 1):
-            for ddy in np.arange(-2.0, 2.01, 0.5):
-                sx_, sy_ = bx + ddx, by + slope * ddx + ddy
+        if dy is None:
+            cands = [(ddx, round(slope * ddx) + k) for ddx in range(dx - search, dx + search + 1) for k in (-2, -1, 0, 1, 2)]
+        else:          # a copy across the lines (e.g. the rug's body from in front): dy searched, dx +-2
+            cands = [(ddx, dy + k) for ddx in range(dx - 2, dx + 3) for k in range(-search, search + 1)]
+        for ddx, ddy_abs in cands:
+            if True:
+                sx_, sy_ = bx + ddx, by + float(ddy_abs)
                 ok = (sx_ >= 0) & (sx_ < W - 1) & (sy_ >= 0) & (sy_ < H - 1)
                 if ok.mean() < 0.8:
                     continue
                 v = cv2.remap(hp, (sx_[ok]).astype(np.float32).reshape(1, -1), (sy_[ok]).astype(np.float32).reshape(1, -1), cv2.INTER_LINEAR).ravel()
-                cost.append((float(np.mean((v - hp[by[ok], bx[ok]]) ** 2)), ddx, float(slope * ddx + ddy)))
+                cost.append((float(np.mean((v - hp[by[ok], bx[ok]]) ** 2)), ddx, float(ddy_abs)))
         cost.sort()
         best = (cost[0][1], cost[0][2])
+    best = (int(best[0]), float(round(best[1])))
     mx, my = Xf + best[0], Yf + best[1]
-    src = cv2.remap(a, mx, my, cv2.INTER_LINEAR, borderMode=cv2.BORDER_REPLICATE)
+    src = cv2.remap(a, mx, my, cv2.INTER_NEAREST, borderMode=cv2.BORDER_REPLICATE)
     sv = cv2.remap(valid.astype(np.float32), mx, my, cv2.INTER_NEAREST, borderMode=cv2.BORDER_CONSTANT, borderValue=0) > 0.5
     okb = hm & sv
     if gain:
@@ -454,7 +501,7 @@ def shift_fill(a, hole, valid, slope, dx, search=0, gain=True, top_ramp=0, ramp_
     # stretch beyond it, e.g. the rug's edge ending at its corner)
     fillimg = np.where(okb[..., None], src, a)
     for _ in range(passes - 1):
-        src_k = cv2.remap(fillimg, mx, my, cv2.INTER_LINEAR, borderMode=cv2.BORDER_REPLICATE)
+        src_k = cv2.remap(fillimg, mx, my, cv2.INTER_NEAREST, borderMode=cv2.BORDER_REPLICATE)
         sv_k = cv2.remap(((valid > 0.5) | okb).astype(np.float32), mx, my, cv2.INTER_NEAREST, borderMode=cv2.BORDER_CONSTANT, borderValue=0) > 0.5
         new = hm & ~okb & sv_k
         if not new.any():
@@ -509,7 +556,7 @@ def map_pt(Mx, x, y):
 
 def fix_m0(preview=False):
     """M0 1.2 composite on m0-v8b-r2 (see the module docstring). Returns the note."""
-    jid = "m0-v8b-r2"
+    jid = CFG["jid"]
     a = still(jid)
     H, W = a.shape[:2]
     X = np.arange(W)[None, :]
@@ -540,7 +587,10 @@ def fix_m0(preview=False):
     skirt_z = (Y >= skt - 2) & (Y < flr + 2)
     skirt_cz = (Y >= skt - 14) & (Y < flr + 2)          # the strips' skirting copies carry 12 px of wall above the bevel
     floor_z = (Y >= flr + 2) & (Y < rug)
-    rug_z = (Y >= rug) | ((X < 1130) & (Y >= flr + 2) & (Y >= line_y(X, (1000, 1277.0), (1130, 1220.0))))
+    rug_z = (Y >= rug)
+    if CFG.get("rug_left_edge"):          # M0: the rug's left side edge, left of its far-left corner
+        (lx0, ly0), (lx1, ly1) = CFG["rug_left_edge"]
+        rug_z = rug_z | ((X < lx1) & (Y >= flr + 2) & (Y >= line_y(X, (lx0, ly0), (lx1, ly1))))
     base = line_y(X, p["base_l"], p["base_r"])
     feet = line_y(X, p["feet_l"], p["feet_r"])
     in_arms = (X >= p["arm_l"] - 4) & (X <= p["arm_r"] + 4)
@@ -549,8 +599,9 @@ def fix_m0(preview=False):
     # past the feet line, the rug under the table between its near edge and the legs' feet + 40 px
     objs = np.maximum(sofa_full, table)
     hole = dil(objs, 4)
-    fr = M0["throw_fringe_box"]
-    hole[fr[2]:fr[3], fr[0]:fr[1]] = 1          # the throw's fringe tips lying on the rug (outside the matte)
+    fr = M0.get("throw_fringe_box")
+    if fr:
+        hole[fr[2]:fr[3], fr[0]:fr[1]] = 1          # the throw's fringe tips lying on the rug (outside the matte)
     old_top = np.full(W, H)
     cols = np.nonzero((sofa_full > 0.5).any(0))[0]
     for x in cols:
@@ -558,7 +609,7 @@ def fix_m0(preview=False):
     wall_band = np.zeros((H, W), np.float32)
     for x in range(max(0, cols.min() - 40), min(W, cols.max() + 41)):
         t0 = old_top[min(max(x, cols.min()), cols.max())]
-        wall_band[max(0, t0 - 70):, x] = 1
+        wall_band[max(0, t0 - CFG.get("wall_band_px", 70)):, x] = 1
     wall_band *= wall_z * (1 - hole)
     under = ((Y > base - 2) & (Y <= feet + 30) & in_arms).astype(np.float32) * (1 - hole)
     near = line_y(X, *M0["table_near_line"])
@@ -577,7 +628,7 @@ def fix_m0(preview=False):
     bg = laplace_fill(bg, rw, wall_z.astype(np.float32) * (1 - dil(objs, 2) * (1 - region)))
     bg = add_texture_m(a, bg, rw, M0_TEX["wall"], strength=1.0, blur=2)
     rs = region * skirt_z
-    bg = skirting_fill(bg, rs, M0["skirting_line"], M0["floor_line"], (1190, 1236), (2606, 2660))
+    bg = skirting_fill(bg, rs, M0["skirting_line"], M0["floor_line"], *CFG["skirting_cols"])
     slope_f = (M0["floor_line"][1][1] - M0["floor_line"][0][1]) / (M0["floor_line"][1][0] - M0["floor_line"][0][0])
     rf = region * floor_z
     bg = sheared_rows_fill(bg, rf, valid * floor_z, slope_f, tex=(M0_TEX["floor"], 1.0, 4))
@@ -591,10 +642,22 @@ def fix_m0(preview=False):
     slope_sk = (M0["skirting_line"][1][1] - M0["skirting_line"][0][1]) / (M0["skirting_line"][1][0] - M0["skirting_line"][0][0])
     below = (Y >= skt - 14)          # skirting (with 12 px of wall above its bevel, ramped into the wall fill), floor and rug: ONE copy,
     #                                  so the skirting's bevel, the floor line and the rug's edge stay in register with each other
-    # (right: 86 px, two passes: the rug's far-right corner is at x ~2690, so a longer copy brought floor into the rug's edge)
-    for name, xr_, dx, srch, npass in (("right strip", (2370, W), 86, 8, 3), ("left strip", (0, 1305), -62, 10, 2), ("old right leg (rug)", (2075, 2160), 74, 10, 1)):
-        hz = region * below * ((X >= xr_[0]) & (X < xr_[1]))
-        bg, okb, used = shift_fill(bg, hz, valid * below, (slope_sk + slope_r) / 2, dx, search=srch, gain=True, top_ramp=10, ramp_rows=(skt - 14)[0], passes=npass)
+    # (right: the rug's edge rows from 86 px, three passes, as the rug's far-right corner is at x ~2690 and a longer copy brought
+    # floor into its edge; the skirting and floor from 128 px in one pass; the two meet 6 px above the rug's edge, ramped)
+    upper = below & (Y < rug - 6)
+    lower = (Y >= rug - 6)
+    rugedge = (Y >= rug - 6) & (Y < rug + 10)
+    rugbody = (Y >= rug + 10)
+    zones_ = dict(upper=upper, lower=lower, below=below, rugedge=rugedge, rugbody=rugbody)
+    for st_ in CFG["strips"]:
+        name, xr_, dx, srch, npass, zname = st_[:6]
+        dy_ = st_[6] if len(st_) > 6 else None
+        zone = zones_[zname]
+        xr_ = (xr_[0], min(W, xr_[1]))
+        hz = region * zone * ((X >= xr_[0]) & (X < xr_[1]))
+        bg, okb, used = shift_fill(bg, hz, valid * zone, (slope_sk + slope_r) / 2, dx, search=srch, gain=(dy_ is None),
+                                   top_ramp=(6 if zname in ("lower", "rugedge") else (0 if zname == "rugbody" else 10)),
+                                   ramp_rows=((rug - 6) if zname in ("lower", "rugedge") else (skt - 14))[0], passes=npass, dy=dy_)
         shifts[name] = dict(columns=list(xr_), shift_px=list(used), px=int(okb.sum()))
         dbg_shifts = shifts
     # ---- the ratio maps (low-pass of the known pixels / low-pass of the clean fill), and the base: the fill in the holes, the
@@ -603,21 +666,13 @@ def fix_m0(preview=False):
     la, _ = blur_n(a, known, 4.0)
     lb, _ = blur_n(bg, np.ones((H, W), np.float32), 4.0)
     R = np.clip(la / np.maximum(lb, 1.0), 0.15, 1.1)
-    # each carrier's ratio is divided by the membrane through its OUTER ring (away from the piece; the piece's side is a free
-    # edge), so it is 1 at the carrier's border and only the piece's own shadow is moved (no rectangle where the lighting of the
-    # fill differs from the photo's)
-    for cm in (wall_band, under, carrier_t):
-        ring = ((dil(cm, 4) > 0.5) & (cm < 0.5) & (hole < 0.5)).astype(np.float32)
-        if ring.sum() < 50:
-            continue
-        Rb = laplace_fill(R.astype(np.float32), cm, np.maximum(cm, ring), pad=20)
-        R = np.where((cm > 0.5)[..., None], np.clip(R / np.maximum(Rb, 0.2), 0.15, 1.05), R)
+    # (the wall band's ratio is already 1 at its outer border: the membrane fill is exact there)
     car = np.maximum(carrier_s, carrier_t)
     # (the band under the base is too dark to de-shadow (ratio ~0.2): it takes the clean fill, its shadow comes back as the profile)
     base_img = np.where((np.maximum(hole, under) > 0.5)[..., None], bg, np.where((car > 0.5)[..., None], a / np.maximum(R, 0.15), a))
     # the band under the sofa: the old one is mostly behind the old table, so its ratio is a profile in t (base -> feet) taken
     # from the visible columns right of the table, re-drawn under the new base / feet lines
-    vis_cols = np.arange(tr["x1"] + 8, p["arm_r"] - 50)
+    vis_cols = np.arange(*CFG["under_cols"])
     ts = np.linspace(-0.2, 1.6, 181)
     acc = np.zeros((len(ts), 3), np.float32)
     n_ok = 0
@@ -681,7 +736,7 @@ def fix_m0(preview=False):
         decor[k] = dict(foot_render=[round(fx, 1), round(fy, 1)], foot_new=[round(nfx, 1), round(nfy, 1)], scale=round(k_, 4))
     # the near-left leg's contact shadow at its new foot (the old one is under the moved leg)
     import fix_v8 as F8b
-    lfx, lfy = map_pt(Mt, 1324.0, float(tr["foot_l"]))
+    lfx, lfy = map_pt(Mt, float(CFG["foot_l_x"]), float(tr["foot_l"]))
     out_pre = out.copy()
     out = F8b.contact_shadow(out, lfx - 16, lfx + 16, lfy + 1, depth=0.78, h_px=5, spread=1.2)
     t_cover = cv2.warpAffine(parts["body"], Mt, (W, H), flags=cv2.INTER_LINEAR)
@@ -718,3 +773,151 @@ def fix_m0(preview=False):
         tokens=0)
     save_note(jid, note)
     return note
+
+
+# ---------------------------------------------------------------------------------------------------------------
+# lock_v2 (edges v3) against the round-5b clay and grading v4 on the -fix.png (m0_1_2_pipeline's --r5b registration; new files:
+# <id>-fix-lock-v2.json / .jpg, <id>-graded-fix-v4.png, -frame-fix-v4.png, -measurements-fix-v4.json)
+# ---------------------------------------------------------------------------------------------------------------
+def _pipeline():
+    saved = sys.argv
+    sys.argv = [saved[0], "--r5b"]
+    try:
+        import m0_1_2_pipeline as PL
+    finally:
+        sys.argv = saved
+    return PL
+
+
+def lock_and_grade(jid, inherit_from=None, suffix="-fix-v4", grade_mode="v4"):
+    PL = _pipeline()
+    od = os.path.join(REPO, OUT[jid])
+    fix_png = out_fix(jid)
+    lock = PL.LK.run_frame(jid, render_path=fix_png, out_path=os.path.join(od, jid + "-fix-lock-v2.json"),
+                           overlay_path=os.path.join(od, jid + "-fix-lock-v2.jpg"), date=DATE)
+    stops = hue_force = None
+    if inherit_from:
+        m = json.load(open(os.path.join(REPO, OUT[inherit_from], inherit_from + "-measurements" + suffix + ".json")))
+        stops = m["grade"]["exposure"]["applied_stops"]
+        hue_force = True if m["grade"].get("wall_hue_v4", {}).get("applied") else None
+    res = PL.P.process(jid, fix_png, suffix, "v2", "auto", "none", od, f"{jid}-fix: M0 1.2 composite in code, grading {grade_mode}",
+                       exposure="bible", stops=stops, grade_mode=grade_mode, hue_force=hue_force)
+    s, v = lock["summary"], lock["verdict"]
+    rec = dict(lock_v2=dict(shift_px=s["register_shift_px"], scale_pct=s["register_scale_pct"], band_after=s["worst_band_px_after_register"],
+                            tile_after=s["worst_tile_ecc_px_after_register"], fixed_edges_worst_px=s["fixed_edges_worst_px"], fixed_edges_measured=s["fixed_edges_measured"],
+                            fixed_ratios=s["fixed_ratios"], named_edges_worst_px=s.get("named_edges_worst_px"), verdict=v,
+                            record=OUT[jid] + jid + "-fix-lock-v2.json", overlay=OUT[jid] + jid + "-fix-lock-v2.jpg"),
+               edges=lock["fixed_edges"],
+               grade=dict(suffix=suffix, stops=res["grade"]["exposure"]["applied_stops"], inherited_from=inherit_from, target=res["bible_v3"]["target_L"],
+                          range=res["bible_v3"]["range"], measured=res["bible_v3"]["measured_L"], meets_bible=res["bible_v3"].get("meets_bible"),
+                          wall_v4=res["bible_v3"].get("wall_v4", {}).get("reading"), hue_correction=res["grade"].get("wall_hue_v4", {}).get("applied"),
+                          outputs=res["outputs"]))
+    p = os.path.join(od, jid + "-fix.json")
+    note = json.load(open(p))
+    note.setdefault("checks", {})[grade_mode] = rec
+    json.dump(note, open(p, "w"), indent=1, ensure_ascii=False)
+    return rec
+
+
+def fix_m0p():
+    use(CFG_M0P)
+    try:
+        note = fix_m0()
+    finally:
+        use(CFG_M0)
+    return note
+
+
+def fix_m0x():
+    """M0x (pose-m0x-v8b): one vertical affine, the vertical row of the inverse of lock_v2's ECC register against the round-5b clay
+    (measured on the 16:9 frame at 1920, carried to the canvas); x untouched (its register x scale +0.37 % is inside 0.5 %)."""
+    jid = "pose-m0x-v8b"
+    PL = _pipeline()
+    LK, VF_ = PL.LK, PL.VF
+    a = still(jid)
+    H, W = a.shape[:2]
+    clay_img = LK.load_rgb(os.path.join(R5B, CLAY[jid]))
+
+    def fit16(img):
+        return LK.pr.fit(LK.crop_frame(img), 1920, 1080)
+
+    def reg(img255):
+        _, Mx = LK.pr.register(fit16(np.clip(img255 / 255.0, 0, 1).astype(np.float32)), fit16(clay_img))
+        return Mx
+    M1 = reg(a)
+    fx0, fy0, fx1, fy1 = VF_.frame_box_px(W, H)
+    sx, sy = (fx1 - fx0) / 1920.0, (fy1 - fy0) / 1080.0
+    C = np.array([[sx, 0, fx0], [0, sy, fy0], [0, 0, 1]], float)
+    A = C @ np.vstack([M1, [0, 0, 1]]) @ np.linalg.inv(C)
+    Av = np.array([[1.0, 0.0, 0.0], A[1]], float)            # the vertical row only
+    out = cv2.warpAffine(a.astype(np.float32), Av, (W, H), flags=cv2.INTER_LANCZOS4 | cv2.WARP_INVERSE_MAP, borderMode=cv2.BORDER_REPLICATE)
+    out = np.clip(out, 0, 255)
+    M2 = reg(out)
+    F.save(out, out_fix(jid))
+    note = dict(what="M0x 1.2: one vertical affine (briefs/render-m0-composite-and-cleanup-2026-11-04.md task 1)",
+                source=OUT[jid] + jid + ".png", clay="assets/blockout/house/framing/round5b/poses/M0x.png", output=OUT[jid] + jid + "-fix.png",
+                register_before=dict(affine=np.round(M1, 5).tolist(), shift_px=[round(float(M1[0, 2]), 2), round(float(M1[1, 2]), 2)],
+                                     scale_pct=[round((float(M1[0, 0]) - 1) * 100, 3), round((float(M1[1, 1]) - 1) * 100, 3)]),
+                canvas_affine_inverse_map=np.round(Av[:2], 6).tolist(),
+                register_after=dict(affine=np.round(M2, 5).tolist(), shift_px=[round(float(M2[0, 2]), 2), round(float(M2[1, 2]), 2)],
+                                    scale_pct=[round((float(M2[0, 0]) - 1) * 100, 3), round((float(M2[1, 1]) - 1) * 100, 3)]),
+                how="cv2.warpAffine(still, [[1,0,0],[a21,a22,a23]], WARP_INVERSE_MAP, Lanczos4, border replicate): the vertical row of C . M . C^-1 "
+                    "(M = lock_v2's ECC register clay -> render at 1920, C = the 16:9 frame -> the canvas); the outer canvas rows beyond the frame replicate")
+    save_note(jid, note)
+    return note
+
+
+def grade5():
+    """Grading v5 (Bible 1.8.4) of the three M0 1.2 composites, for regrade_v5.py: M0 and M0p each to the living target L 90-94 on
+    their own Bible point, M0x on M0's stops; rows in regrade_v5's format -> regrade-v5-m0-1-2.json."""
+    PL = _pipeline()
+    P_ = PL.P
+    rows = []
+    res = {}
+    for jid, inh in (("m0-v8b-r2", None), ("pose-m0p-v8b", None), ("pose-m0x-v8b", "m0-v8b-r2")):
+        od = os.path.join(REPO, OUT[jid])
+        stops = hue_force = None
+        if inh:
+            src = res[inh]
+            stops = src["grade"]["exposure"]["applied_stops"]
+            hue_force = True if src["grade"].get("wall_hue_v4", {}).get("applied") else None
+        r = P_.process(jid, out_fix(jid), "-fix-v5", "v2", "auto", "none", od, f"{jid}-fix: M0 1.2 composite, grading v5 (Bible 1.8.4: living 90-94)",
+                       exposure="bible", stops=stops, grade_mode="v5", hue_force=hue_force)
+        res[jid] = r
+        e, b, m = r["grade"]["exposure"], r["bible_v3"], r["measure_after"]
+        wv, wh = b.get("wall_v4", {}), r["grade"].get("wall_hue_v4", {})
+        rows.append(dict(
+            id=jid, frame=FRAME[jid], fix="fix", suffix="-fix-v5", inherits=(dict(from_id=inh, stops=stops, hue_correction=hue_force) if inh else None),
+            target=b["target_L"], range=b["range"], scale="HSL L", reference=b["reference_source"], reference_uv=b["reference_point"],
+            measured=b["measured_L"], meets_target=b["meets_target"], note=("inherits M0's stops" if inh else "Bible 1.8 B1 (1): 90-94"),
+            H=wv.get("reading", {}).get("H"), C_star=wv.get("reading", {}).get("C_star"), L_star=wv.get("reading", {}).get("L_star"), wall_judged=wv.get("judged"),
+            hue_correction=dict(applied=wh.get("applied"), pixels_touched_pct=wh.get("pixels_touched_pct"), mask=wh.get("mask"), why_not=wh.get("why_not")),
+            window_wall=b.get("window_wall"), hall_B5=b.get("hall_under_living_stops"), v5=b.get("v5"),
+            black=m["darkest 0.5% patch L [12-15]"], window_p99=m["brightest area (window / door): L p50 / p99 / max"][1], frame_max=m["frame L p99 / max"][1],
+            px255=m["pixels with a 255 channel: inside / outside that area"], stops=e["applied_stops"], needed=e["needed_stops"],
+            checks={k: v for k, v in r["checks"].items() if k.startswith("bible_")}, fails=[k for k, v in r["checks"].items() if k.startswith("bible_") and v is False],
+            meets_bible_1_8_4=b["meets_bible"], outputs=r["outputs"]))
+        note_p = os.path.join(od, jid + "-fix.json")
+        note = json.load(open(note_p))
+        note.setdefault("checks", {})["v5"] = dict(grade=dict(suffix="-fix-v5", stops=e["applied_stops"], target=b["target_L"], range=b["range"], measured=b["measured_L"],
+                                                             meets_bible=b["meets_bible"], fails=rows[-1]["fails"], outputs=r["outputs"]))
+        json.dump(note, open(note_p, "w"), indent=1, ensure_ascii=False)
+    json.dump(dict(date=DATE, rows=rows), open(os.path.join(HERE, "regrade-v5-m0-1-2.json"), "w"), indent=1, ensure_ascii=False)
+    return rows
+
+
+if __name__ == "__main__":
+    what = sys.argv[1] if len(sys.argv) > 1 else "all"
+    if what in ("m0", "all"):
+        fix_m0()
+        print(json.dumps(lock_and_grade("m0-v8b-r2")["lock_v2"], indent=1))
+    if what in ("m0p", "all"):
+        fix_m0p()
+        print(json.dumps(lock_and_grade("pose-m0p-v8b")["lock_v2"], indent=1))
+    if what in ("m0x", "all"):
+        n = fix_m0x()
+        print(json.dumps({k: n[k] for k in ("register_before", "register_after")}, indent=1))
+        print(json.dumps(lock_and_grade("pose-m0x-v8b", inherit_from="m0-v8b-r2")["lock_v2"], indent=1))
+    if what == "grade5":
+        for r_ in grade5():
+            print(r_["id"], r_["measured"], r_["range"], r_["meets_bible_1_8_4"], r_["fails"])

@@ -1,0 +1,197 @@
+{
+ "date": "2026-11-04",
+ "rows": [
+  {
+   "id": "m0-v8b-r2",
+   "frame": "M0",
+   "fix": "fix",
+   "suffix": "-fix-v5",
+   "inherits": null,
+   "target": 92.0,
+   "range": [
+    90.0,
+    94.0
+   ],
+   "scale": "HSL L",
+   "reference": "Bible 1.8 B1 point: back wall by the corner (-1.75, 0, 1.60) at canvas (0.427, 0.416); clay L 86.8 (target 93, 92-95 as regrade-v3)",
+   "reference_uv": [
+    0.42691412568092346,
+    0.415560245513916
+   ],
+   "measured": 92.1,
+   "meets_target": true,
+   "note": "Bible 1.8 B1 (1): 90-94",
+   "H": 37.6,
+   "C_star": 8.01,
+   "L_star": 94.29,
+   "wall_judged": true,
+   "hue_correction": {
+    "applied": false,
+    "pixels_touched_pct": null,
+    "mask": null,
+    "why_not": "H <= 40"
+   },
+   "window_wall": {
+    "point": "window wall (0.352,0.415) [B1: 80-88]",
+    "L": 87.0,
+    "range": [
+     80.0,
+     88.0
+    ],
+    "ok": true
+   },
+   "hall_B5": null,
+   "v5": {
+    "checks": {}
+   },
+   "black": 13.5,
+   "window_p99": 96.6,
+   "frame_max": 96.6,
+   "px255": [
+    0,
+    0
+   ],
+   "stops": 0.907,
+   "needed": 0.907,
+   "checks": {
+    "bible_black_12_15": true,
+    "bible_no_clip": true,
+    "bible_chroma_B4": true,
+    "bible_target_met": true,
+    "bible_window_wall_80_88": true,
+    "bible_wall_hue_32_40": true,
+    "bible_wall_C_le_7_B4": false
+   },
+   "fails": [
+    "bible_wall_C_le_7_B4"
+   ],
+   "meets_bible_1_8_4": false,
+   "outputs": {
+    "graded": "assets/renders/living-room/nordic/v8/m0-v8b-r2-graded-fix-v5.png",
+    "frame": "assets/renders/living-room/nordic/v8/m0-v8b-r2-frame-fix-v5.png",
+    "os6": "assets/renders/living-room/nordic/v8/m0-v8b-r2-graded-os6-fix-v5.png"
+   }
+  },
+  {
+   "id": "pose-m0p-v8b",
+   "frame": "M0p",
+   "fix": "fix",
+   "suffix": "-fix-v5",
+   "inherits": null,
+   "target": 92.0,
+   "range": [
+    90.0,
+    94.0
+   ],
+   "scale": "HSL L",
+   "reference": "Bible 1.8 B1 point: back wall by the corner (-1.75, 0, 1.60) at canvas (0.122, 0.404); clay L 86.9 (target 93, 92-95 as regrade-v3)",
+   "reference_uv": [
+    0.1221393495798111,
+    0.40362900495529175
+   ],
+   "measured": 92.0,
+   "meets_target": true,
+   "note": "Bible 1.8 B1 (1): 90-94",
+   "H": 36.2,
+   "C_star": 4.63,
+   "L_star": 93.59,
+   "wall_judged": true,
+   "hue_correction": {
+    "applied": false,
+    "pixels_touched_pct": null,
+    "mask": null,
+    "why_not": "H <= 40"
+   },
+   "window_wall": null,
+   "hall_B5": null,
+   "v5": {
+    "checks": {}
+   },
+   "black": 13.5,
+   "window_p99": 95.6,
+   "frame_max": 96.6,
+   "px255": [
+    0,
+    0
+   ],
+   "stops": 0.335,
+   "needed": 0.335,
+   "checks": {
+    "bible_black_12_15": true,
+    "bible_no_clip": true,
+    "bible_chroma_B4": true,
+    "bible_target_met": true,
+    "bible_wall_hue_32_40": true,
+    "bible_wall_C_le_7_B4": true
+   },
+   "fails": [],
+   "meets_bible_1_8_4": true,
+   "outputs": {
+    "graded": "assets/renders/poses/nordic/v8/pose-m0p-v8b-graded-fix-v5.png",
+    "frame": "assets/renders/poses/nordic/v8/pose-m0p-v8b-frame-fix-v5.png",
+    "os6": "assets/renders/poses/nordic/v8/pose-m0p-v8b-graded-os6-fix-v5.png"
+   }
+  },
+  {
+   "id": "pose-m0x-v8b",
+   "frame": "M0x",
+   "fix": "fix",
+   "suffix": "-fix-v5",
+   "inherits": {
+    "from_id": "m0-v8b-r2",
+    "stops": 0.907,
+    "hue_correction": null
+   },
+   "target": 92.0,
+   "range": [
+    90.0,
+    94.0
+   ],
+   "scale": "HSL L",
+   "reference": "default (0.5, 0.3): no wall patch in the clay selfcheck",
+   "reference_uv": [
+    0.5,
+    0.3
+   ],
+   "measured": 96.6,
+   "meets_target": null,
+   "note": "inherits M0's stops",
+   "H": 0.0,
+   "C_star": 0.0,
+   "L_star": 97.02,
+   "wall_judged": false,
+   "hue_correction": {
+    "applied": false,
+    "pixels_touched_pct": null,
+    "mask": null,
+    "why_not": "no wall at the reference point: no wall of the living room in frame: stops inherited from m0-v8b (one exposure per camera point, P1 pan); the default point is a reading only"
+   },
+   "window_wall": null,
+   "hall_B5": null,
+   "v5": {
+    "checks": {}
+   },
+   "black": 12.5,
+   "window_p99": 96.6,
+   "frame_max": 96.6,
+   "px255": [
+    0,
+    0
+   ],
+   "stops": 0.907,
+   "needed": 0.295,
+   "checks": {
+    "bible_black_12_15": true,
+    "bible_no_clip": true,
+    "bible_chroma_B4": true
+   },
+   "fails": [],
+   "meets_bible_1_8_4": true,
+   "outputs": {
+    "graded": "assets/renders/poses/nordic/v8/pose-m0x-v8b-graded-fix-v5.png",
+    "frame": "assets/renders/poses/nordic/v8/pose-m0x-v8b-frame-fix-v5.png",
+    "os6": "assets/renders/poses/nordic/v8/pose-m0x-v8b-graded-os6-fix-v5.png"
+   }
+  }
+ ]
+}

@@ -137,6 +137,22 @@ WALL_TARGET_HSL = (36.0, 20.0, 93.0)
 WALL_C_MAX = 7.0
 WALL_H_RANGE = (32.0, 40.0)
 STOPS_SANITY = 1.5
+# --- v5 (2026-11-04, Bible 1.8.4; briefs/render-m0-composite-and-cleanup-2026-11-04.md task 3) ---------------------------------
+# (1) the living back wall L 90-94 (Bible 1.8 B1 (1); v3 / v4 still judged M0 / M0p / H0's vista against 1.0's 92-95)
+BIBLE_TARGET_V5 = {
+    "M0": (92.0, 90.0, 94.0, "Bible 1.8 B1 (1) / 1.8.4: the living back wall by the corner L 90-94 (1.0's 92-95 retired)"),
+    "H0": (92.0, 90.0, 94.0, "Bible 1.8.4 (3): the living back wall through the door at target (1), L 90-94; the hall walls L* 75-78"),
+}
+# (3) BIB2: the corridor walls CIELAB L* 72-75 at the right-wall points, projected with the plan cameras (C0 (2.397, 17.11, 1.20), S1' (2.641, 13.00,
+# 1.20), yaw 0, u0 0.50, v0 0.46, 24 mm) and checked on the round-4 clay (a clean wall patch, L* std 0.03, no edge within 64 px): the frame uv
+LSTAR_TARGET_V5 = {
+    "C0": (73.5, 72.0, 75.0, (0.8578, 0.3695), "Bible 1.8.4 BIB2: corridor right wall at plan (3.10, 15.80, 1.30), L* 72-75 (verified on the clay: frame (0.8578, 0.3695))"),
+    "S1prime": (73.5, 72.0, 75.0, (0.7550, 0.3612), "Bible 1.8.4 BIB2: corridor right wall at plan (3.10, 11.80, 1.30), L* 72-75 (verified on the clay: frame (0.7550, 0.3612))"),
+}
+HALL_LSTAR_V5 = (75.0, 78.0)
+# the view at the corridor's end (the living through the hall), frame uv boxes read on the clay: it must stay the brightest surface
+VISTA_BOX_V5 = {"C0": (0.435, 0.495, 0.30, 0.56), "S1prime": (0.325, 0.455, 0.24, 0.58), "H0": (0.26, 0.44, 0.05, 0.95)}
+SILHOUETTE_FRAMES_V5 = {"D1"}      # QA 2026-11-04 §4: D1's protected boxes left 1.5-2.5 dE steps on the wall at their edges
 CHROMA_GUARD_DC = 1.5            # B4: the lift may add at most +1.5 Lab chroma to the near-white population
 
 
@@ -364,6 +380,27 @@ def chain_L(patch_lin, stops):
     return float((sr2.max() + sr2.min()) / 2 * 100)
 
 
+def chain_Lstar(patch_lin, stops):
+    """CIELAB L* of one patch after the chain_L chain (v5: the corridor targets are L*, as QA measures them)."""
+    lin = patch_lin * 2 ** stops
+    lum = lin.dot(Y)
+    lin = lum + 0.90 * (lin - lum)
+    sr = np.clip(l2s(lin), 0, 1)
+    sr = s_curve(sr, 0.12)
+    lin2 = rolloff(s2l(sr)[None, None, :], 0.94, 0.97)[0, 0]
+    return float(lab_arr(np.clip(l2s(lin2), 0, 1)[None, :])[0, 0])
+
+
+def solve_stops_lstar(patch_lin, target, lo=-2.5, hi=2.5):
+    for _ in range(26):
+        m = (lo + hi) / 2
+        if chain_Lstar(patch_lin, m) < target:
+            lo = m
+        else:
+            hi = m
+    return (lo + hi) / 2
+
+
 def solve_stops(patch_lin, target_L, lo=-2.5, hi=2.5):
     """The stops that put the patch's HSL L on target after the chain (bisection; the chain is monotonic in exposure)."""
     for _ in range(26):
@@ -375,7 +412,7 @@ def solve_stops(patch_lin, target_L, lo=-2.5, hi=2.5):
     return (lo + hi) / 2
 
 
-def grade(st, wb_pt, target_L, order="v2", exposure="cap", fixed_stops=None):
+def grade(st, wb_pt, target_L, order="v2", exposure="cap", fixed_stops=None, lstar=False):
     a = st.a
     lin = s2l(a)
     g = {"order": order, "exposure_mode": exposure}
@@ -393,6 +430,8 @@ def grade(st, wb_pt, target_L, order="v2", exposure="cap", fixed_stops=None):
     if exposure == "bible":
         patch_lin = s2l(st.patch(l2s(lin), *wb_pt))
         need = solve_stops(patch_lin, target_L)          # on the chain's HSL L, not on the linear luminance (a warm white reads 1-4 L lower in HSL)
+        if lstar:                                        # v5: the corridor's target is CIELAB L*
+            need = solve_stops_lstar(patch_lin, target_L)
         if fixed_stops is not None:
             stops = float(fixed_stops)
             flag = f"stops inherited from the group reference ({stops:+.3f}); this frame's own need {need:+.3f}"
@@ -461,8 +500,50 @@ def wall_reading(st, arr, uv):
                 h_ab=round(float(np.degrees(np.arctan2(lab[2], lab[1]))), 1))
 
 
-def protect_mask(frame, fid, H, W, overscan):
-    """The product boxes and the upholstered fixed furniture (sofa, armchair, beds) in the still's uv, feathered 30 px."""
+def protect_silhouettes(graded, boxes, H, W):
+    """v5 (D1): inside each protected box only the object's silhouette, not the box: the pixels that differ from the wall around the
+    box in the chroma plane (|d(a*, b*)| > 3 from the median of a 40 px ring outside every box), or textured (high-pass std > 1.6 grey levels),
+    or dark (L* < 75); closed 9 px,
+    holes filled, components >= 150 px; feathered 3 px. The wall inside a box is corrected like the wall outside it (QA §4: no step)."""
+    import cv2
+    lab = lab_arr(graded)
+    allb = np.zeros((H, W), np.uint8)
+    for u0, u1, v0, v1 in boxes:
+        allb[max(0, int(v0 * H)):int(v1 * H), max(0, int(u0 * W)):int(u1 * W)] = 1
+    g = (graded.mean(2) * 255).astype(np.float32)
+    hp = g - cv2.GaussianBlur(g, (0, 0), 2.0)
+    en = np.sqrt(cv2.GaussianBlur(hp * hp, (0, 0), 2.0))
+    m = np.zeros((H, W), np.uint8)
+    for u0, u1, v0, v1 in boxes:
+        x0, x1, y0, y1 = max(0, int(u0 * W)), min(W, int(u1 * W)), max(0, int(v0 * H)), min(H, int(v1 * H))
+        if x1 <= x0 or y1 <= y0:
+            continue
+        rx0, rx1, ry0, ry1 = max(0, x0 - 40), min(W, x1 + 40), max(0, y0 - 40), min(H, y1 + 40)
+        ring = np.ones((ry1 - ry0, rx1 - rx0), bool) & (allb[ry0:ry1, rx0:rx1] == 0)
+        if ring.sum() < 50:
+            m[y0:y1, x0:x1] = 1
+            continue
+        ref = np.median(lab[ry0:ry1, rx0:rx1][ring], 0)
+        # the wall's light falloff changes L*, not a* / b*: the object is what differs in the chroma plane (> 3), is textured, or is dark
+        dab = np.sqrt(((lab[y0:y1, x0:x1, 1:] - ref[1:]) ** 2).sum(-1))
+        m[y0:y1, x0:x1] |= ((dab > 3.0) | (en[y0:y1, x0:x1] > 1.6) | (lab[y0:y1, x0:x1, 0] < 75.0)).astype(np.uint8)
+    m = cv2.morphologyEx(m, cv2.MORPH_CLOSE, np.ones((9, 9), np.uint8))
+    # holes: the background not reached from outside (a 1 px zero border, so the seed is always background)
+    pad = np.pad(m, 1)
+    mk = np.zeros((H + 4, W + 4), np.uint8)
+    cv2.floodFill(pad, mk, (0, 0), 2)
+    m = m | (pad[1:-1, 1:-1] == 0).astype(np.uint8)
+    n, lab_, st, _ = cv2.connectedComponentsWithStats(m)
+    keep = np.zeros_like(m)
+    for i in range(1, n):
+        if st[i, cv2.CC_STAT_AREA] >= 150:
+            keep[lab_ == i] = 1
+    return cv2.GaussianBlur(keep.astype(np.float32), (0, 0), 3.0)
+
+
+def protect_mask(frame, fid, H, W, overscan, graded=None, silhouette=False):
+    """The product boxes and the upholstered fixed furniture (sofa, armchair, beds) in the still's uv, feathered 30 px
+    (v5, D1: their silhouettes, feathered 3 px)."""
     m = np.zeros((H, W), np.float32)
     boxes = [b for b in VF.product_boxes(frame, fid).values()]
     for nm, (kind, b) in VF.fixed_boxes(frame, False, fid).items():     # overscan False: the selfcheck's own uv = the still's uv
@@ -470,6 +551,8 @@ def protect_mask(frame, fid, H, W, overscan):
             boxes.append(b)                                                                                     # oak and plaster are gated by C*
     if frame == "M0":
         boxes += list(VF.M0_FURNITURE.values())
+    if silhouette and graded is not None:
+        return protect_silhouettes(graded, boxes, H, W), len(boxes)
     for u0, u1, v0, v1 in boxes:
         m[max(0, int(v0 * H)):int(v1 * H), max(0, int(u0 * W)):int(u1 * W)] = 1
     from PIL import ImageFilter as _IF
@@ -477,7 +560,7 @@ def protect_mask(frame, fid, H, W, overscan):
     return np.asarray(mi, np.float32) / 255.0, len(boxes)
 
 
-def wall_hue_v4(st, graded, ref_uv, frame, fid, overscan, force=False):
+def wall_hue_v4(st, graded, ref_uv, frame, fid, overscan, force=False, silhouette=False):
     """(a) of v4: the masked hue / chroma correction of the warm-white walls when the reference wall's H > 40 (QA qa_wall);
     force: apply whatever this frame reads (it inherits its group reference's stops and correction)."""
     before = wall_reading(st, graded, ref_uv)
@@ -501,7 +584,7 @@ def wall_hue_v4(st, graded, ref_uv, frame, fid, overscan, force=False):
     w = ss(lab[..., 0], 80, 84) * (1 - ss(lab[..., 0], 97.3, 98.5)) * (1 - ss(C, 10, 18))
     dh = np.angle(np.exp(1j * (h - h_t)))
     w = w * ss(dh, 0.0, np.radians(6))
-    prot, nbox = protect_mask(frame, fid, st.H, st.W, overscan)
+    prot, nbox = protect_mask(frame, fid, st.H, st.W, overscan, graded=graded, silhouette=silhouette)
     w = w * (1 - prot)
     out = lab.copy()
     hn = h - dh * w
@@ -510,8 +593,45 @@ def wall_hue_v4(st, graded, ref_uv, frame, fid, overscan, force=False):
     b = np.where(w[..., None] > 1e-4, srgb_from_lab(out), graded)
     rec.update(applied=True, after=wall_reading(st, b, ref_uv), pixels_touched_pct=round(float((w > 0.05).mean() * 100), 1),
                protected_boxes=nbox, target=dict(hsl=list(WALL_TARGET_HSL), h_ab=round(float(np.degrees(h_t)), 1), C_cap=6.5),
-               mask="L* 80-97.3, C* ramp 10-18, hue yellower than the target (0-6 deg ramp), outside the product boxes and the sofa / armchair / bed boxes (feather 30 px)")
+               mask=("L* 80-97.3, C* ramp 10-18, hue yellower than the target (0-6 deg ramp), outside the product boxes and the sofa / armchair / bed boxes (feather 30 px)"
+                     if not silhouette else "L* 80-97.3, C* ramp 10-18, hue yellower than the target (0-6 deg ramp), outside the SILHOUETTES of the protected objects (v5, feather 3 px)"))
     return b, rec
+
+
+def v5_checks(st, graded, frame, overscan, lstar, pts, after):
+    """Bible 1.8.4 additions: the corridor-end view the brightest surface (C0, S1'; H0's vista too), the hall walls L* 75-78 (H0)."""
+    out = {"checks": {}}
+    lab = lab_arr(graded)
+    Ls = lab[..., 0]
+    H, W = Ls.shape
+    if frame in VISTA_BOX_V5:
+        u0, u1, v0, v1 = VISTA_BOX_V5[frame]
+        if overscan:
+            u0, u1 = (u0 * 3840 + 116) / 4072, (u1 * 3840 + 116) / 4072
+            v0, v1 = (v0 * 2160 + 65) / 2290, (v1 * 2160 + 65) / 2290
+        box = np.zeros((H, W), bool)
+        box[int(v0 * H):int(v1 * H), int(u0 * W):int(u1 * W)] = True
+        import cv2
+        Lm = cv2.medianBlur(np.clip(Ls, 0, 100).astype(np.float32), 5)
+        surf = ~box
+        surf[:int(0.12 * H)] = False                        # the ceiling band: lamps and the roof-light slot are sources, not surfaces
+        surf &= Lm < 97.0                                    # any other emitter
+        vista = float(np.percentile(Lm[box], 95))
+        rest = float(np.percentile(Lm[surf], 99.5))
+        out["vista"] = dict(box_uv=[round(x, 4) for x in (u0, u1, v0, v1)], vista_Lstar_p95=round(vista, 2), surfaces_Lstar_p99_5=round(rest, 2),
+                            rule="Bible 1.8.4: the view at the corridor's end the brightest surface (p95 of the vista box above p99.5 of every other surface; "
+                                 "the ceiling band v < 0.12 and emitters L* >= 97 left out)")
+        out["checks"]["bible_vista_brightest_1_8_4"] = bool(vista >= rest)
+    if frame == "H0":
+        hk = "hall wall over the console (0.681,0.120) [B5: 2/3 stop under the vista]"
+        if hk in pts:
+            p = st.patch(graded, *pts[hk])
+            Lh = round(float(lab_arr(p[None, :])[0, 0]), 2)
+            out["hall_wall_Lstar"] = dict(L_star=Lh, range=list(HALL_LSTAR_V5))
+            out["checks"]["bible_hall_Lstar_75_78_1_8_4"] = bool(HALL_LSTAR_V5[0] - 0.5 <= Lh <= HALL_LSTAR_V5[1] + 0.5)
+    if lstar:
+        out["scale"] = "CIELAB L* (BIB2), not HSL L"
+    return out
 
 
 def bible_target(frame):
@@ -525,7 +645,8 @@ def process(fid, render_path=None, suffix="-v2", grade_order="v2", wb_mode="auto
     """grade_mode "v4" (2026-11-04) implies exposure "bible" and adds the wall-hue correction, the absolute C* check, the window
     wall points, C0 / CB-0 as in the module docstring; hue_force True / False overrides the H > 40 trigger (a frame that inherits
     its group reference's stops inherits its correction too)."""
-    v4 = grade_mode == "v4"
+    v4 = grade_mode in ("v4", "v5")
+    v5 = grade_mode == "v5"
     if v4:
         exposure = "bible"
     frame, kind, clay_file, pan, overscan, room = VF.frame(fid)
@@ -536,23 +657,50 @@ def process(fid, render_path=None, suffix="-v2", grade_order="v2", wb_mode="auto
     im = Image.open(render_path).convert("RGB")
     a = np.asarray(im, float) / 255.0
     st = Still(a)
+    lstar = False
     if exposure == "bible":
         target_L, target_range, target_src = bible_target(frame)
+        if v5 and BIBLE_KEY.get(frame) in BIBLE_TARGET_V5:
+            t_, lo_, hi_, target_src = BIBLE_TARGET_V5[BIBLE_KEY[frame]]
+            target_L, target_range = t_, (lo_, hi_)
+        if v5 and frame in LSTAR_TARGET_V5:
+            t_, lo_, hi_, _pt, target_src = LSTAR_TARGET_V5[frame]
+            target_L, target_range, lstar = t_, (lo_, hi_), True
         if target is not None:
             target_L, target_src = float(target), f"override --target {target}: the group reference's graded value on the same wall ({target_src})"
             target_range = (target_L - 2.0, target_L + 2.0)
     else:
         target_L, target_range, target_src = TARGET_L.get(POSE_BASE.get(frame, frame), 90.0), None, "process_v7 working value"
     pts, wb_pt, wb_src, win_box, warn = choose_points(frame, kind, sc, sc_all, wb_mode, exposure, v4)
+    if lstar:
+        wb_pt = LSTAR_TARGET_V5[frame][3]
+        wb_src, warn = f"v5: corridor right wall {tuple(wb_pt)} (Bible 1.8.4 BIB2 point, projected with the plan camera and verified on the clay)", None
+        pts[f"corridor right wall {tuple(wb_pt)} [BIB2: L* 72-75]"] = wb_pt
     before = measure(st, a, pts, win_box, frame)
-    graded, g = grade(st, wb_pt, target_L, grade_order, exposure, stops)
+    graded, g = grade(st, wb_pt, target_L, grade_order, exposure, stops, lstar=lstar)
+    if lstar and stops is None:
+        # the solver's chain leaves out the black point and the guard: the full chain is iterated on the measured L* (secant in log luminance)
+        it = []
+        for _ in range(4):
+            Lm = float(lab_arr(st.patch(graded, *wb_pt)[None, :])[0, 0])
+            it.append(dict(stops=g["exposure"]["applied_stops"], L_star=round(Lm, 2)))
+            if abs(Lm - target_L) <= 0.15:
+                break
+            ylum = lambda L_: ((L_ + 16) / 116) ** 3        # noqa: E731
+            s_new = float(g["exposure"]["applied_stops"]) + float(np.log2(ylum(target_L) / ylum(Lm)))
+            need0 = g["exposure"]["needed_stops"]
+            graded, g = grade(st, wb_pt, target_L, grade_order, exposure, s_new, lstar=True)
+            g["exposure"]["needed_stops"] = need0
+            g["exposure"]["flag"] = "to the Bible target (L*, the full chain iterated)"
+        g["exposure"]["lstar_iterations"] = it
     if v4:
         g["wall_after_lift_v4"] = wall_reading(st, graded, wb_pt)
         if hue_force is False or (hue_force is None and warn):
             g["wall_hue_v4"] = {"applied": False, "why_not": ("the group reference was not corrected" if hue_force is False else "no wall at the reference point: " + warn),
                                 "before": g["wall_after_lift_v4"]}
         else:
-            graded, g["wall_hue_v4"] = wall_hue_v4(st, graded, wb_pt, frame, fid, overscan, force=bool(hue_force))
+            graded, g["wall_hue_v4"] = wall_hue_v4(st, graded, wb_pt, frame, fid, overscan, force=bool(hue_force),
+                                                   silhouette=(v5 and frame in SILHOUETTE_FRAMES_V5))
     g["white_balance"]["source"] = wb_src
     g["exposure"]["source"] = wb_src
     g["exposure"]["target_source"] = target_src
@@ -590,6 +738,8 @@ def process(fid, render_path=None, suffix="-v2", grade_order="v2", wb_mode="auto
     bible = None
     if exposure == "bible":
         L_ref = hsl_of(st.patch(graded, *wb_pt))[2]
+        if lstar:
+            L_ref = round(float(lab_arr(st.patch(graded, *wb_pt)[None, :])[0, 0]), 2)
         lo, hi = target_range
         inherited = stops is not None
         bible = {"reference_point": list(wb_pt), "reference_source": wb_src, "target_L": target_L, "range": [lo, hi], "measured_L": L_ref,
@@ -626,10 +776,14 @@ def process(fid, render_path=None, suffix="-v2", grade_order="v2", wb_mode="auto
         if v4 and bible["wall_v4"]["judged"]:
             checks["bible_wall_hue_32_40"] = bible["wall_v4"]["hue_ok"]
             checks["bible_wall_C_le_7_B4"] = bible["wall_v4"]["C_ok"]
+        if v5:
+            bible["v5"] = v5_checks(st, graded, frame, overscan, lstar, pts, after)
+            for k_, v_ in bible["v5"]["checks"].items():
+                checks[k_] = v_
         bible["meets_bible"] = bool(all(v for k, v in checks.items() if k.startswith("bible_")))
     res = {"asset_id": fid, "frame": frame, "kind": kind, "label": label, "date": ("2026-11-04" if v4 else "2026-11-03"), "script": "assets/renders/house-nordic-v7-2026-11-02/process_v8.py",
            "settings": {"grade_order": grade_order, "wb_point": wb_mode, "lock": lock_mode, "suffix": suffix, "exposure": exposure, "stops": stops, "target": target,
-                        "grade": grade_mode, "hue_force": hue_force},
+                        "grade": grade_mode, "hue_force": hue_force, "target_scale": ("CIELAB L*" if lstar else "HSL L")},
            "bible_v3": bible,
            "input": os.path.relpath(render_path, VF.REPO), "size_px": [st.W, st.H], "overscan": overscan, "outputs": files,
            "clay": os.path.relpath(os.path.join(VF.R4, clay_file), VF.REPO), "grade_target_L": target_L,
@@ -654,7 +808,7 @@ if __name__ == "__main__":
     ap.add_argument("--wb-point", default="auto", choices=["auto", "legacy"])
     ap.add_argument("--lock", default="v2", choices=["v1", "v2", "none"])
     ap.add_argument("--exposure", default="cap", choices=["cap", "bible"])
-    ap.add_argument("--grade", default="v3", choices=["v3", "v4"])
+    ap.add_argument("--grade", default="v3", choices=["v3", "v4", "v5"])
     ap.add_argument("--stops", type=float, default=None)
     ap.add_argument("--target", type=float, default=None)
     ap.add_argument("--out-dir")

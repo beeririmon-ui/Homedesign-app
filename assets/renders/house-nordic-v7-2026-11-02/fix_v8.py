@@ -22,6 +22,7 @@ import fix_v7 as F  # noqa: E402
 
 DATE = "2026-11-04"
 SCRIPT = "assets/renders/house-nordic-v7-2026-11-02/fix_v8.py"
+FIX_SUFFIX = "-fix"          # fix_v9.py (2026-11-04 cleanup) sets "-fix2": new files, the QA'd -fix stills stay
 
 
 def hls(a):
@@ -169,7 +170,7 @@ def despeck(out, region, protect, thr=6.0, max_area=200):
     return nc_fill(out, hole, 1 - hole, scales=((6, 6), (15, 15), (40, 40))), int(keep.sum())
 
 
-def global_affine_to_clay(fid, out):
+def global_affine_to_clay(fid, out, A_fixed=None):
     """One affine on the whole still (the overscan canvas): the inverse of lock_v2's ECC register of this still against its clay
     (measured on the 16:9 frame at 1920 x 1080, carried to the canvas), so the frame's global shift and scale go to ~0 (G1.4);
     Lanczos, border replicated (only the outer canvas rows / columns, outside the 16:9 frame, are affected). Returns (still, record)."""
@@ -190,6 +191,8 @@ def global_affine_to_clay(fid, out):
     sx, sy = (fx1 - fx0) / 1920.0, (fy1 - fy0) / 1080.0
     C = np.array([[sx, 0, fx0], [0, sy, fy0], [0, 0, 1]], float)
     A = C @ np.vstack([M, [0, 0, 1]]) @ np.linalg.inv(C)
+    if A_fixed is not None:          # fix_v9: the canvas affine of an earlier, QA'd run (the same geometry under a cleaned patch)
+        A = np.vstack([np.array(A_fixed, float), [0, 0, 1]])
     warped = cv2.warpAffine(out.astype(np.float32), A[:2], (Ws, Hs), flags=cv2.INTER_LANCZOS4 | cv2.WARP_INVERSE_MAP, borderMode=cv2.BORDER_REPLICATE)
     warped = np.clip(warped, 0, 255)
     M2 = reg(np.clip(warped / 255.0, 0, 1).astype(np.float32))
@@ -204,7 +207,7 @@ def global_affine_to_clay(fid, out):
 
 
 def save_note(fid, note):
-    p = os.path.join(VF.out_dir(fid), fid + "-fix.json")
+    p = os.path.join(VF.out_dir(fid), fid + FIX_SUFFIX + ".json")
     json.dump(dict(asset_id=fid, date=DATE, script=SCRIPT, tokens=0, **note), open(p, "w"), indent=1, ensure_ascii=False)
     return p
 
@@ -214,7 +217,7 @@ def still(fid):
 
 
 def out_fix(fid):
-    return os.path.join(VF.out_dir(fid), fid + "-fix.png")
+    return os.path.join(VF.out_dir(fid), fid + FIX_SUFFIX + ".png")
 
 
 # ---------------------------------------------------------------------------------------------------------------
@@ -224,7 +227,11 @@ B1 = dict(planter_rect=(0.440, 0.598, 0.395, 0.768), plinth=(0.484, 0.562, 0.765
           brush_rect=(0.448, 0.482, 0.680, 0.900), brush_scale=0.73,
           clay_pot=(0.49, 0.555, 0.75, 0.877), clay_brush=(0.4583, 0.475, 0.7432, 0.893),
           narrow_fills=True, curtain_patch_px=(1560, 300, 1640, 520),   # False restores the first run (surface fill behind the brush, 40-row curtain copy)
-          global_affine=True)   # 2026-11-04, the manager's approval: the whole frame by the inverse of lock_v2's register (G1.4 scale); False = without
+          global_affine=True,   # 2026-11-04, the manager's approval: the whole frame by the inverse of lock_v2's register (G1.4 scale); False = without
+          # 2026-11-04 cleanup (QA 2026-11-04-retakes-fixes-g1 §4, fix_v9.py): "profile" = the second run's column profile (patches), "copy_above" =
+          # the intact linen copied along its folds from above (the shift searched on the ring); holder_ratio None = the brush as scaled, 0.38 = the
+          # holder squashed about its base to 38 % of the brush's height (the card: 14.5 cm of 38 cm), the handle continued down to it
+          curtain_fill="profile", holder_ratio=None)
 
 
 def edge_col(g, v0, v1, u0, u1):
@@ -233,6 +240,92 @@ def edge_col(g, v0, v1, u0, u1):
     prof = np.abs(np.diff(g[int(v0 * H):int(v1 * H), int(u0 * W):int(u1 * W)], axis=1)).mean(0)
     prof = cv2.GaussianBlur(prof.reshape(1, -1), (1, 0), 0).ravel() if False else prof
     return int(u0 * W) + int(np.argmax(prof))
+
+
+def _curtain_copy_above(a, bg, hc, vc, prof, curtain):
+    """The covered linen (hc) from the intact linen above it, shifted along the folds: (dx, dy) searched (dy -260..-420, dx -40..40)
+    for the least high-pass difference on a 12 px ring of intact linen around hc; the copy scaled by the curtain's vertical light
+    profile (prof[y] / prof[y + dy]), a second pass for what the first source did not cover, then a low-frequency seam correction."""
+    H, W = hc.shape
+    hm = hc > 0.5
+    # the ring on the curtain's interior only (30 px clear of its edge against the wall: the edge's own line would steer dx)
+    inner = cv2.erode((curtain > 0.5).astype(np.uint8), np.ones((1, 61), np.uint8)) > 0
+    ring = (dil(hc, 12) > 0.5) & ~hm & (vc > 0.5) & inner
+    ry, rx = np.nonzero(ring)
+    g = F.gray(a)
+    hp = g - cv2.GaussianBlur(g, (0, 0), 3.0)
+    okv = vc > 0.5
+    best = None
+    for dy in range(-200, -441, -4):
+        for dx in range(-6, 7, 1):          # the folds hang vertically in the frame (their slant over 400 rows is < 6 px)
+            sy, sx = ry + dy, rx + dx
+            ok = (sy >= 0) & (sx >= 0) & (sx < W)
+            ok[ok] &= okv[sy[ok], sx[ok]]
+            if len(ok) == 0 or ok.mean() < 0.7:
+                continue
+            c = float(np.mean((hp[sy[ok], sx[ok]] - hp[ry[ok], rx[ok]]) ** 2))
+            if best is None or c < best[0]:
+                best = (c, dx, dy)
+    _, dx, dy = best
+    out = bg.copy()
+    done = np.zeros((H, W), bool)
+    for k in (1.0, 1.25, 1.5, 2.0, 0.75):
+        ys, xs = np.nonzero(hm & ~done)
+        sy, sx = ys + int(round(k * dy)), xs + int(round(k * dx))
+        ok = (sy >= 0) & (sx >= 0) & (sx < W)
+        ok[ok] &= okv[sy[ok], sx[ok]]
+        ys, xs, sy, sx = ys[ok], xs[ok], sy[ok], sx[ok]
+        out[ys, xs] = a[sy, sx] * np.clip(prof[ys] / prof[sy], 0.8, 1.25)
+        done[ys, xs] = True
+    # seam correction read on the intact linen ring only (the wall left of the curtain's edge would pull the copy lighter)
+    ring2 = ((dil(done.astype(np.float32), 5) > 0.5) & ~done & (vc > 0.5)).astype(np.float32)
+    dif = (cv2.GaussianBlur(a, (0, 0), 1.0) - out) * ring2[..., None]
+    corr = cv2.GaussianBlur(dif, (0, 0), 12) / np.maximum(cv2.GaussianBlur(ring2, (0, 0), 12), 1e-3)[..., None]
+    wgt = np.clip(cv2.GaussianBlur(ring2, (0, 0), 12) / 0.02, 0, 1)[..., None]
+    out = np.where(done[..., None], out + corr * wgt, bg)
+    # each column's top 24 rows blend from the linen there (no horizontal step where the copy starts)
+    top = np.full(W, H)
+    for x in np.nonzero(done.any(0))[0]:
+        top[x] = np.nonzero(done[:, x])[0][0]
+    wt = np.clip((np.arange(H)[:, None] - top[None, :]) / 24.0, 0, 1)
+    out = np.where(done[..., None], bg * (1 - wt[..., None]) + out * wt[..., None], out)
+    return out, dict(shift_px=[int(dx), int(dy)], ring_mse=round(best[0], 2), px=int(done.sum()), not_covered_px=int((hm & ~done).sum()),
+                     how="the intact linen (curtain, not the fern's outline / leaves / the brush, L > 30) copied along its folds from (dx, dy) above "
+                         "(dx -6..6, dy -200..-440 searched on a 12 px ring of the curtain's interior), x the curtain's vertical light profile (clipped 0.8-1.25); "
+                         "the pixels whose source is not linen from 1.25 / 1.5 / 2 / 0.75 (dx, dy); a low-frequency seam correction read on the linen ring only "
+                         "(sigma 12); each column's top 24 rows blended. Not covered (left as before): the pixels under the moved planter")
+
+
+def _holder_rebuild(b_rgb, b_al, ratio, base):
+    """The brush layer with its holder squashed about the base to `ratio` of the brush's height (the handle top stays): the holder
+    rows (matte width >= 60 % of the widest) remapped y' = base - k (base - y); the handle continued down to the new holder top by
+    repeating its own rows from 6-26 px above the old holder top."""
+    H, W = b_al.shape
+    m = b_al > 0.5
+    wid = m.sum(1)
+    rows = np.nonzero(wid > 0)[0]
+    y0 = int(rows.min())
+    body = np.nonzero(wid >= 0.6 * wid.max())[0]
+    yt = int(body.min())
+    Ht, Hh = base - y0, base - yt
+    Hn = ratio * Ht
+    k = Hn / Hh
+    new_top = int(round(base - Hn))
+    ys_out = np.arange(H, dtype=np.float32)
+    src = np.where(ys_out >= new_top, base - (base - ys_out) / k, ys_out)
+    mapy = np.repeat(src[:, None], W, 1).astype(np.float32)
+    mapx = np.repeat(np.arange(W, dtype=np.float32)[None, :], H, 0)
+    rgb2 = cv2.remap(b_rgb, mapx, mapy, cv2.INTER_AREA if k < 1 else cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)
+    al2 = cv2.remap(b_al, mapx, mapy, cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT, borderValue=0)
+    # the handle between the old holder top and the new one: its rows from just above the old top, repeated
+    ref0, ref1 = yt - 26, yt - 6
+    for y in range(yt - 6, new_top):
+        r = ref0 + (y - ref0) % (ref1 - ref0)
+        rgb2[y] = b_rgb[r]
+        al2[y] = b_al[r]
+    rec = dict(ratio=ratio, brush_height_px=int(Ht), holder_before_px=int(Hh), holder_after_px=int(round(Hn)), k=round(k, 4),
+               holder_top_before=yt, holder_top_after=new_top, base=base, holder_share_before=round(Hh / Ht, 3), holder_share_after=round(Hn / Ht, 3))
+    return rgb2, np.clip(al2, 0, 1), rec
 
 
 def fix_b1(preview=True):
@@ -307,8 +400,12 @@ def fix_b1(preview=True):
         vc = curtain * (1 - holes) * (1 - dil(pl, 4)) * (1 - hc) * linen
         prof = cv2.GaussianBlur(np.ascontiguousarray(a[:, 1600:1650].mean(1)), (0, 0), 20).reshape(H, 3)   # rows x RGB, smoothed along y
         prof = np.maximum(prof, 1.0)
+        if B1.get("curtain_fill") == "copy_above":
+            # the reference: intact linen (not the fern's outline, not its leaves, not the brush), the 40 px planter margin included
+            vc2 = curtain * (1 - hc) * (1 - dil(pl, 6)) * (1 - hole_b) * (L > 30)        # the folds' dark valleys are linen too
+            bg, curtain_copy = _curtain_copy_above(a, bg, hc, vc2, prof, curtain)
         filled = bg.copy()
-        cols = np.nonzero((hc > 0.5).any(0))[0]
+        cols = np.nonzero((hc > 0.5).any(0))[0] if B1.get("curtain_fill") != "copy_above" else np.zeros(0, int)
         last_ref = None
         for x in cols:
             ys = np.nonzero(hc[:, x] > 0.5)[0]
@@ -324,8 +421,9 @@ def fix_b1(preview=True):
                 continue
             wtop = np.clip((ys - y_t) / 24.0, 0, 1)[:, None]                      # the top 24 rows blend from the linen there: no steps
             filled[ys, x] = a[ys, x] * (1 - wtop) + (ref[None, :] * prof[ys]) * wtop
-        bg = np.where((hc > 0.5)[..., None], cv2.GaussianBlur(filled, (0, 0), sigmaX=1.2, sigmaY=6), bg)
-        bg = add_texture_m(a, bg, hc, B1["curtain_patch_px"], 0.9, blur=3)
+        if B1.get("curtain_fill") != "copy_above":
+            bg = np.where((hc > 0.5)[..., None], cv2.GaussianBlur(filled, (0, 0), sigmaX=1.2, sigmaY=6), bg)
+            bg = add_texture_m(a, bg, hc, B1["curtain_patch_px"], 0.9, blur=3)
     else:
         est = copy_down_fill(bg, np.maximum(hc, dil(hc, 8)), 40)
         bg = np.where((hc > 0.5)[..., None], est, bg)
@@ -351,6 +449,9 @@ def fix_b1(preview=True):
     ax = float(np.nonzero(br[by1 - 4:by1 + 1] > 0.5)[1].mean())
     s_ = B1["brush_scale"]
     b_rgb, b_al = F.transform_layer(a, F.feather(br, 0.7), s_, (ax, float(by1)))
+    holder = None
+    if B1.get("holder_ratio"):
+        b_rgb, b_al, holder = _holder_rebuild(b_rgb, b_al, B1["holder_ratio"], int(by1))
     out = contact_shadow(out, ax - (bx1 - bx0) * s_ / 2, ax + (bx1 - bx0) * s_ / 2, by1 - 1, depth=0.75, h_px=6, spread=1.3)
     out = F.composite(out, b_rgb, b_al)
     wall_zone = F.rect_mask(H, W, 0.440, 0.535, 0.40, 0.745) * (1 - curtain)       # right of the roll stand (u <= 0.433)
@@ -387,6 +488,8 @@ def fix_b1(preview=True):
                          brush="its hole filled row by row between the wall / skirting / floor pixels left and right (<= 60 px), + the wall texture at 0.6",
                          flecks_removed_px=n_speck) if B1.get("narrow_fills", True) else None),
         global_affine=affine,
+        cleanup_2026_11_04=(dict(curtain_fill=B1.get("curtain_fill"), curtain_copy=(curtain_copy if B1.get("curtain_fill") == "copy_above" else None),
+                                 holder=holder) if (B1.get("curtain_fill") == "copy_above" or holder) else None),
         untouched="everything else (WC block, ledge, glazing, roll stand, curtain, mat, vanity)", outputs=dict(fix=os.path.relpath(out_fix(fid), VF.REPO)))
     save_note(fid, note)
     print(json.dumps({k: v for k, v in note.items() if k != "method"}, indent=1))
@@ -558,7 +661,11 @@ W0IN = dict(pairs_1080=[(640, 640), (669, 694), (732, 768), (761, 800), (794, 83
             # k in [0.812, 0.820] -> 0.816 (the pencils, fillers, scale with it), and the cup is centred on the box (it sat ~15 px right of it,
             # its right edge then outside the +15 % margin). 1.0 restores the first run
             cup_scale=0.816, cup_box_clay=(0.3203, 0.3495, 0.5819, 0.6657),
-            global_affine=True)   # 2026-11-04, the manager's approval (as B1 r3): the whole frame by the inverse of lock_v2's register; False = without
+            global_affine=True,   # 2026-11-04, the manager's approval (as B1 r3): the whole frame by the inverse of lock_v2's register; False = without
+            # 2026-11-04 cleanup (QA §4: dark-green clumps in the basket's top rows, a dark rectangle on the skirting right of its base): the basket's
+            # matte solid (its weave's light braids and dark gaps inside), and the plant's place below row 880 cleared in the background before the
+            # warp, so no shifted copy of the stems / basket shows through or beside it. False = the r2 fix
+            solid_basket=False)
 
 
 def fix_w0in(preview=True):
@@ -574,6 +681,16 @@ def fix_w0in(preview=True):
     pot = (((hue >= 15) & (hue <= 45) & (S >= 22) & (L < 72)).astype(np.float32) * F.rect_mask(H, W, 0.0, 0.16, 0.70, 1.0))
     plant = keep_big(np.maximum(leaf, pot), 40)
     plant = cv2.morphologyEx(plant.astype(np.uint8), cv2.MORPH_CLOSE, np.ones((5, 5), np.uint8)).astype(np.float32)
+    basket_solid = None
+    if W0IN.get("solid_basket"):
+        wv = (((hue >= 10) & (hue <= 50) & (S >= 14) & (L < 88)) | (L < 30)).astype(np.float32) * F.rect_mask(H, W, 0.0, 0.20, 0.70, 1.0)
+        wv = cv2.morphologyEx(wv.astype(np.uint8), cv2.MORPH_CLOSE, np.ones((21, 21), np.uint8))
+        wv = largest(cv2.morphologyEx(wv, cv2.MORPH_OPEN, np.ones((9, 9), np.uint8)))
+        basket_solid = np.zeros((H, W), np.float32)
+        for y in np.nonzero(wv.any(1))[0]:
+            xs_ = np.nonzero(wv[y] > 0.5)[0]
+            basket_solid[y, xs_.min():xs_.max() + 1] = 1          # convex per row: the weave's gaps are inside
+        plant = np.maximum(plant, basket_solid)
     # --- the cup with its pencils: grabCut, removed before the warp and put back rigidly with the desk top under it
     cup = F.grabcut(a, W0IN["cup_rect"], iters=8, open_px=3)
     cu0, cu1, cv0, cv1 = W0IN["cup_rect"]
@@ -590,6 +707,14 @@ def fix_w0in(preview=True):
     bg = poly_fill(a, wall_part, valid * (Yv < slab_back - 2), pad=120, deg=2)
     bg = F.fill_rows_valid(bg, top_part, valid * (Yv >= slab_back - 2), band_px=12, max_search=300)     # the slab top's grain runs across
     bg = add_texture_m(a, bg, wall_part, (int(0.45 * W), int(0.40 * H), int(0.55 * W), int(0.50 * H)), 0.6)
+    plant_bg = None
+    if basket_solid is not None:
+        # the plant's place below row 880 (the warp moves rows below 912 down by up to ~65 px: whatever is left there shows as a shifted copy)
+        # cleared row by row from the wall / skirting / floor to its right, with the wall's texture
+        plant_bg = dil(np.maximum(basket_solid, plant * (Yv >= 880)), 8)
+        vpb = 1 - np.maximum(plant_bg, np.maximum(hole, dil(plant, 3)))
+        bg = F.fill_rows_valid(bg, plant_bg, vpb, band_px=16, max_search=600)
+        bg = add_texture_m(a, bg, plant_bg * (Yv < int(0.90 * H)), (int(0.45 * W), int(0.40 * H), int(0.55 * W), int(0.50 * H)), 0.6)
     # --- the warp: output row y' takes source row y with y + dy(y) = y' (dy piecewise linear between the measured pairs)
     src = np.array([p[0] for p in W0IN["pairs_1080"]] + [1080 + 200], float) * k
     dst = np.array([p[1] for p in W0IN["pairs_1080"]] + [1080 + 200 + W0IN["dy_below"]], float) * k
@@ -630,7 +755,9 @@ def fix_w0in(preview=True):
     out = F.composite(out, a, F.feather(plant, 0.6))
     affine = None
     if W0IN.get("global_affine"):
-        out, affine = global_affine_to_clay(fid, out)
+        out, affine = global_affine_to_clay(fid, out, A_fixed=W0IN.get("global_affine_A"))
+        if W0IN.get("global_affine_A") is not None:
+            affine["A_fixed_from"] = W0IN.get("global_affine_A_from")
     F.save(out, out_fix(fid))
     # --- the lines after, against the clay (QA's named-edge spans, at 1080)
     note = dict(
@@ -647,6 +774,10 @@ def fix_w0in(preview=True):
         lines_clay_1080=W0IN["lines_clay_1080"], untouched="the shelf with its felt bins, the wall above row 640, the plant and its basket",
         global_affine=(dict(affine, why="G1.4 global scale (+0.41 / +0.70 % after the code fix, proposal 0.5 %): the manager's approval 2026-11-04 (as B1 r3); QA re-checks")
                        if affine else None),
+        cleanup_2026_11_04=(dict(solid_basket_px=int(basket_solid.sum()), plant_place_cleared_px=int(plant_bg.sum()),
+                                 how="the basket's matte convex per row (hue 10-50, S >= 14, L < 88 or L < 30, closed 21, opened 9, largest, in u 0-0.20 v 0.70-1); the plant's "
+                                     "place below row 880 (dilated 8 px) cleared in the background before the warp, row by row from the right, + the wall texture")
+                            if basket_solid is not None else None),
         outputs=dict(fix=os.path.relpath(out_fix(fid), VF.REPO)))
     save_note(fid, note)
     print(json.dumps({k_: v for k_, v in note.items() if k_ != "method"}, indent=1))
@@ -662,7 +793,12 @@ def fix_w0in(preview=True):
 B2 = dict(planter_rect=(0.000, 0.215, 0.360, 0.995), planter_scale=0.85, sbasket_rect=(0.555, 0.712, 0.760, 0.965), sbasket_scale=0.80,
           obj_rect_px=(1512, 1552, 222, 280), mirror_cols_px=(1505, 2185), mirror_bottom_px=712, mirror_top_px=60,
           mirror_dtop_1080=27, frame_rows_1080=1451.4, limestone_u=(0.0975, 0.160), floor_v=0.875,
-          mirror_head=False, limestone_patch_px=(300, 300, 420, 500), floor_patch_px=(700, 1460, 900, 1530))   # 2026-11-04, after lock v3: the head is on the clay (see MIRROR_HEAD_CHECK); True restores the first run's remap
+          mirror_head=False, limestone_patch_px=(300, 300, 420, 500), floor_patch_px=(700, 1460, 900, 1530),   # 2026-11-04, after lock v3: the head is on the clay (see MIRROR_HEAD_CHECK); True restores the first run's remap
+          # 2026-11-04 cleanup (QA 2026-11-04-retakes-fixes-g1 §4, fix_v9.py): fill_mode "columns" = the third run (column fill from above: a light
+          # rectangle on the wall, lumps at the panel's base), "membrane" = each surface (wall, limestone panel, also in the low band) by a membrane
+          # through its own intact boundary (no step) + its texture, the floor ring Telea as before, a contact shadow along the basket's bottom;
+          # global_affine as B1 r3 (the inverse of lock_v2's register; the scale +0.64 / +0.74 %)
+          fill_mode="columns", global_affine=False)
 # the mirror head measured column by column (the first frame edge from the top, 6-px-wide columns, 1920x1080 of the frame): clay / raw r3 / first fix run (remap k 0.9343)
 MIRROR_HEAD_CHECK = {"x_px": [1090, 1150, 1350, 1450, 1540], "clay": [125, 114, 79, 60, 44], "raw_r3": [123, 112, 76, 58, 42], "first_fix_run": [147, 137, 104, 86, 72],
                      "note": ("QA's -35 (and the -34 of the named edge 'mirror top') averages the sloped head over u 0.60-0.76, and the clay's strongest row there "
@@ -759,9 +895,24 @@ def fix_b2(preview=True):
     # tips are outside any colour matte and read as ghost fronds once the plant is smaller) is filled column by column from the
     # intact surface above it (both are lit from the left, so their light runs vertically), smoothed across columns, + texture
     hullD = dil(hull, 10)
+    membrane = B2.get("fill_mode") == "membrane"
+    if membrane:
+        import fix_m0_12 as FM
+        # the bright glazed strip at the frame's left edge (x < 40, L 94-97) is its own surface: continued down from above, and kept out
+        # of the wall's membrane (whose boundary it would otherwise lighten into a pale block)
+        strip_r = ((U < 40.0 / W) & (Yv < fv)).astype(np.float32)
+        wall_r = wall_r * (1 - strip_r)
+        hm_s = np.maximum(hullD, hole_p) * strip_r
+        if hm_s.any():
+            out = F.fill_from_above(out, hm_s, (1 - np.maximum(hullD, hole_p)) * strip_r, band_px=10)
     for reg, patch, strength in ((wall_r, (int(0.030 * W), int(0.12 * H), int(0.070 * W), int(0.22 * H)), 0.6), (lime_r, B2["limestone_patch_px"], 0.9)):
         hm = np.maximum(hullD, hole_p) * reg
         vv = (1 - np.maximum(hullD, hole_p)) * reg
+        if membrane:
+            # the whole surface region down to the floor (the low band included), exact at its own intact boundary
+            out = FM.laplace_fill(out, hm, reg, pad=80)
+            out = add_texture_m(a, out, hm, patch, strength, blur=3)
+            continue
         colf = F.fill_rows_valid(np.ascontiguousarray(out.transpose(1, 0, 2)), np.ascontiguousarray(hm.T), np.ascontiguousarray(vv.T),
                                  band_px=24, max_search=1400).transpose(1, 0, 2)
         colf = cv2.GaussianBlur(colf, (0, 0), sigmaX=8, sigmaY=2)
@@ -774,6 +925,8 @@ def fix_b2(preview=True):
     # revealed there (the basket keeps its floor row), so it is inpainted from its own boundary (Telea, radius 9), which keeps the
     # grout lines and the hem's colours next to the ring; the second run's normalised convolution left pale blocks there
     low = np.maximum(hole_p, hullD * (wall_r + lime_r).clip(0, 1)) * (Yv >= 0.80).astype(np.float32)
+    if membrane:
+        low = low * floor_r                     # the wall and the panel's base are in the membrane above; only the floor ring is inpainted
     tel = cv2.inpaint(np.clip(a, 0, 255).astype(np.uint8), (dil(low, 2) > 0.5).astype(np.uint8), 9, cv2.INPAINT_TELEA).astype(np.float32)
     out = np.where((low > 0.5)[..., None], tel, out)
     hp_f = low
@@ -787,7 +940,14 @@ def fix_b2(preview=True):
     ring = np.clip(dil(b_m, 18) - b_m, 0, 1) * (Yv > (pb_top + 0.6 * (pb_bot - pb_top)) / H).astype(np.float32)
     ring = cv2.GaussianBlur(ring, (0, 0), 6)
     out = out * (1 - 0.30 * np.clip(ring / max(ring.max(), 1e-6), 0, 1))[..., None]
+    if membrane:
+        # the basket's floor contact: a soft dark line along its new bottom (the pale band QA saw), under the composite
+        bys, bxs = np.nonzero(b_m)
+        out = contact_shadow(out, float(bxs.min()), float(bxs.max()), float(bys.max()) - 1, depth=0.72, h_px=7, spread=1.02)
     out = F.composite(out, p_rgb, p_al)
+    g_aff = None
+    if B2.get("global_affine"):
+        out, g_aff = global_affine_to_clay(fid, out)
     F.save(out, out_fix(fid))
     pa = F.bbox(p_al)
     note = dict(
@@ -824,7 +984,10 @@ def fix_b2(preview=True):
                         "at the page size both read as soft. The mirror corner and the wall / panel behind the fronds are clean."),
         left_for_the_paid_pass=("the storage basket x0.80 (above) and the planter's floor contact / panel base (residual_seams). The vanity's right side "
                                 "is not a fix item any more (vanity_right), nor the mirror head (mirror_head_check). The v8 route: this -fix.png as the composite + one image-to-image pass (600)"),
-        outputs=dict(fix=os.path.relpath(out_fix(fid), VF.REPO)))
+        outputs=dict(fix=os.path.relpath(out_fix(fid), VF.REPO)),
+        cleanup_2026_11_04=(dict(fill_mode=B2.get("fill_mode"), global_affine=(dict(g_aff, why="QA 2026-11-04 (G1.4 +0.64 / +0.74 %): the same global affine as B1 r3") if g_aff else None),
+                                 contact_shadow="depth 0.72, 7 px, along the scaled basket's bottom" if membrane else None,
+                                 storage_basket="unchanged (QA: within +-15 %)") if (membrane or g_aff) else None))
     save_note(fid, note)
     print(json.dumps({k_: v for k_, v in note.items() if k_ != "method"}, indent=1))
     return note

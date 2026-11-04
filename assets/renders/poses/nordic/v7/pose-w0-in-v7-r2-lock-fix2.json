@@ -1,0 +1,757 @@
+{
+ "asset_id": "pose-w0-in-v7-r2",
+ "date": "2026-11-04",
+ "tokens": 0,
+ "script": "assets/renders/house-nordic-v7-2026-11-02/fix_v9.py",
+ "method": "lock_v2.py edges v3",
+ "before": {
+  "still": "assets/renders/poses/nordic/v7/pose-w0-in-v7-r2-fix.png",
+  "register_shift_px": [
+   0.09,
+   -0.36
+  ],
+  "register_scale_pct": [
+   -0.01,
+   0.0
+  ],
+  "worst_band_px_after_register": 7.07,
+  "bands_counted": 3,
+  "worst_tile_px_after_register": 7.73,
+  "tiles_counted": 6,
+  "box_edges_worst_px": 8,
+  "box_ratios": {
+   "desk chair w": 0.9858
+  },
+  "named_edges_worst_px": 8,
+  "named_edges_counted": "7/10",
+  "named_edges": {
+   "desk top front edge": -3,
+   "desk top front edge (left of chair)": -2,
+   "drawer bottom / apron": -2,
+   "chair back top": -3,
+   "desk left outer edge": -2,
+   "chair back left edge": 0,
+   "chair back right edge": -8
+  },
+  "residual_limit_px": 9.6,
+  "global_pass": true,
+  "residual_pass": true,
+  "edges_pass": true,
+  "pass": true
+ },
+ "after": {
+  "still": "assets/renders/poses/nordic/v7/pose-w0-in-v7-r2-fix2.png",
+  "register_shift_px": [
+   -0.54,
+   -0.19
+  ],
+  "register_scale_pct": [
+   0.05,
+   -0.0
+  ],
+  "worst_band_px_after_register": 8.8,
+  "bands_counted": 3,
+  "worst_tile_px_after_register": 7.88,
+  "tiles_counted": 6,
+  "box_edges_worst_px": 8,
+  "box_ratios": {
+   "desk chair w": 0.9858
+  },
+  "named_edges_worst_px": 8,
+  "named_edges_counted": "7/10",
+  "named_edges": {
+   "desk top front edge": -3,
+   "desk top front edge (left of chair)": -2,
+   "drawer bottom / apron": -2,
+   "chair back top": -3,
+   "desk left outer edge": -2,
+   "chair back left edge": 0,
+   "chair back right edge": -8
+  },
+  "residual_limit_px": 9.6,
+  "global_pass": true,
+  "residual_pass": true,
+  "edges_pass": true,
+  "pass": true
+ },
+ "named_edges": {
+  "shelf top": {
+   "clay_px": 151,
+   "fix": 36,
+   "fix2": 36,
+   "r_fix2": 0.38,
+   "counted": false,
+   "eye_override": "QA §3 (2026-11-03): '+34' is another line (the shelf's front face against its top); by eye the shelf is within +-10"
+  },
+  "shelf bottom (front face)": {
+   "clay_px": 151,
+   "fix": 36,
+   "fix2": 36,
+   "r_fix2": 0.38,
+   "counted": false,
+   "eye_override": "QA §3: the same clay peak as 'shelf top' (row 151); by eye the shelf is within +-10"
+  },
+  "desk top front edge": {
+   "clay_px": 800,
+   "fix": -3,
+   "fix2": -3,
+   "r_fix2": 0.653,
+   "counted": true
+  },
+  "desk top front edge (left of chair)": {
+   "clay_px": 800,
+   "fix": -2,
+   "fix2": -2,
+   "r_fix2": 0.705,
+   "counted": true
+  },
+  "drawer bottom / apron": {
+   "clay_px": 923,
+   "fix": -2,
+   "fix2": -2,
+   "r_fix2": 0.875,
+   "counted": true
+  },
+  "chair back top": {
+   "clay_px": 800,
+   "fix": -3,
+   "fix2": -3,
+   "r_fix2": 0.667,
+   "counted": true
+  },
+  "desk left outer edge": {
+   "clay_px": 319,
+   "fix": -2,
+   "fix2": -2,
+   "r_fix2": 0.703,
+   "counted": true
+  },
+  "desk right outer edge": {
+   "clay_px": 1599,
+   "fix": -37,
+   "fix2": -37,
+   "r_fix2": 0.488,
+   "counted": false,
+   "eye_override": "QA §3: '-33' is the inner edge of the thick side panel; the outer edge is in place by eye (render-agent 2026-11-04: outer edge ~1597 vs clay 1599)"
+  },
+  "chair back left edge": {
+   "clay_px": 678,
+   "fix": 0,
+   "fix2": 0,
+   "r_fix2": 0.844,
+   "counted": true
+  },
+  "chair back right edge": {
+   "clay_px": 1240,
+   "fix": -8,
+   "fix2": -8,
+   "r_fix2": 0.752,
+   "counted": true
+  }
+ },
+ "overlay": "assets/renders/poses/nordic/v7/pose-w0-in-v7-r2-lock-fix2.jpg",
+ "full_after": {
+  "frame": "W0-in",
+  "id": "pose-w0-in-v7-r2",
+  "size": [
+   1920,
+   1080
+  ],
+  "pan_endpoint": false,
+  "edges_mode": "v3",
+  "method": "lock_v2 edges v3 (register + bands / tiles with shared structure + box edges by cross-correlation + QA's named edges)",
+  "check_raw": {
+   "size": [
+    1920,
+    1080
+   ],
+   "overlap_u": [
+    0.0,
+    0.999
+   ],
+   "overlap_v": [
+    0.0,
+    0.999
+   ],
+   "shift_px": {
+    "dx": -3.77,
+    "dy": -2.76,
+    "response": 0.085
+   },
+   "bands": [
+    {
+     "u": [
+      0.0,
+      0.249
+     ],
+     "dx_px": -1.68,
+     "dy_px": -2.3,
+     "response": 0.03
+    },
+    {
+     "u": [
+      0.249,
+      0.499
+     ],
+     "dx_px": -0.08,
+     "dy_px": -1.67,
+     "response": 0.132
+    },
+    {
+     "u": [
+      0.499,
+      0.749
+     ],
+     "dx_px": -7.27,
+     "dy_px": 0.87,
+     "response": 0.258
+    },
+    {
+     "u": [
+      0.749,
+      0.999
+     ],
+     "dx_px": -4.52,
+     "dy_px": -3.44,
+     "response": 0.37
+    }
+   ],
+   "deltaE": {
+    "mean": 13.69,
+    "p95": 50.34,
+    "share_over_5": 0.542
+   },
+   "L_mean": {
+    "a": 80.7,
+    "b": 72.3
+   }
+  },
+  "register": {
+   "affine": [
+    [
+     1.0005,
+     0.00057,
+     -0.54241
+    ],
+    [
+     0.00051,
+     0.99997,
+     -0.18698
+    ]
+   ],
+   "shift_px": [
+    -0.54,
+    -0.19
+   ],
+   "scale": [
+    1.0005,
+    0.99997
+   ],
+   "note": "ECC affine, clay (template) -> render coordinates at 1920x1080; scale > 1 = the render drew it larger"
+  },
+  "check_registered": {
+   "size": [
+    1920,
+    1080
+   ],
+   "overlap_u": [
+    0.0,
+    0.999
+   ],
+   "overlap_v": [
+    0.0,
+    0.999
+   ],
+   "shift_px": {
+    "dx": -3.14,
+    "dy": -2.34,
+    "response": 0.085
+   },
+   "bands": [
+    {
+     "u": [
+      0.0,
+      0.249
+     ],
+     "dx_px": -1.92,
+     "dy_px": -2.38,
+     "response": 0.032
+    },
+    {
+     "u": [
+      0.249,
+      0.499
+     ],
+     "dx_px": 0.09,
+     "dy_px": -1.71,
+     "response": 0.122
+    },
+    {
+     "u": [
+      0.499,
+      0.749
+     ],
+     "dx_px": -8.8,
+     "dy_px": -1.33,
+     "response": 0.276
+    },
+    {
+     "u": [
+      0.749,
+      0.999
+     ],
+     "dx_px": -5.69,
+     "dy_px": -3.87,
+     "response": 0.383
+    }
+   ],
+   "deltaE": {
+    "mean": 13.69,
+    "p95": 50.31,
+    "share_over_5": 0.543
+   },
+   "L_mean": {
+    "a": 80.7,
+    "b": 72.3
+   }
+  },
+  "tiles_ecc": [
+   {
+    "u": [
+     0.0,
+     0.25
+    ],
+    "v": [
+     0.0,
+     0.5
+    ],
+    "dx_px": -5.82,
+    "dy_px": -0.47,
+    "rho": 0.128,
+    "counted": true
+   },
+   {
+    "u": [
+     0.25,
+     0.5
+    ],
+    "v": [
+     0.0,
+     0.5
+    ],
+    "dx_px": -1.23,
+    "dy_px": -0.55,
+    "rho": 0.577,
+    "counted": true
+   },
+   {
+    "u": [
+     0.5,
+     0.75
+    ],
+    "v": [
+     0.0,
+     0.5
+    ],
+    "dx_px": 7.58,
+    "dy_px": -2.92,
+    "rho": 0.428,
+    "counted": true
+   },
+   {
+    "u": [
+     0.75,
+     1.0
+    ],
+    "v": [
+     0.0,
+     0.5
+    ],
+    "dx_px": -1.57,
+    "dy_px": -0.11,
+    "rho": 0.846,
+    "counted": true
+   },
+   {
+    "u": [
+     0.0,
+     0.25
+    ],
+    "v": [
+     0.5,
+     1.0
+    ],
+    "dx_px": null,
+    "dy_px": null,
+    "rho": null,
+    "counted": false,
+    "note": "ECC did not converge"
+   },
+   {
+    "u": [
+     0.25,
+     0.5
+    ],
+    "v": [
+     0.5,
+     1.0
+    ],
+    "dx_px": -0.9,
+    "dy_px": -2.36,
+    "rho": 0.748,
+    "counted": true
+   },
+   {
+    "u": [
+     0.5,
+     0.75
+    ],
+    "v": [
+     0.5,
+     1.0
+    ],
+    "dx_px": -7.25,
+    "dy_px": -3.0,
+    "rho": 0.643,
+    "counted": true
+   },
+   {
+    "u": [
+     0.75,
+     1.0
+    ],
+    "v": [
+     0.5,
+     1.0
+    ],
+    "dx_px": -3.29,
+    "dy_px": -3.24,
+    "rho": 0.676,
+    "counted": true
+   }
+  ],
+  "tiles_ecc_registered": [
+   {
+    "u": [
+     0.0,
+     0.25
+    ],
+    "v": [
+     0.0,
+     0.5
+    ],
+    "dx_px": -5.32,
+    "dy_px": -0.36,
+    "rho": 0.128,
+    "counted": true
+   },
+   {
+    "u": [
+     0.25,
+     0.5
+    ],
+    "v": [
+     0.0,
+     0.5
+    ],
+    "dx_px": -1.15,
+    "dy_px": -0.71,
+    "rho": 0.578,
+    "counted": true
+   },
+   {
+    "u": [
+     0.5,
+     0.75
+    ],
+    "v": [
+     0.0,
+     0.5
+    ],
+    "dx_px": 7.36,
+    "dy_px": -3.38,
+    "rho": 0.428,
+    "counted": true
+   },
+   {
+    "u": [
+     0.75,
+     1.0
+    ],
+    "v": [
+     0.0,
+     0.5
+    ],
+    "dx_px": -2.1,
+    "dy_px": -0.6,
+    "rho": 0.844,
+    "counted": true
+   },
+   {
+    "u": [
+     0.0,
+     0.25
+    ],
+    "v": [
+     0.5,
+     1.0
+    ],
+    "dx_px": null,
+    "dy_px": null,
+    "rho": null,
+    "counted": false,
+    "note": "ECC did not converge"
+   },
+   {
+    "u": [
+     0.25,
+     0.5
+    ],
+    "v": [
+     0.5,
+     1.0
+    ],
+    "dx_px": -1.21,
+    "dy_px": -2.54,
+    "rho": 0.749,
+    "counted": true
+   },
+   {
+    "u": [
+     0.5,
+     0.75
+    ],
+    "v": [
+     0.5,
+     1.0
+    ],
+    "dx_px": -7.88,
+    "dy_px": -3.39,
+    "rho": 0.641,
+    "counted": true
+   },
+   {
+    "u": [
+     0.75,
+     1.0
+    ],
+    "v": [
+     0.5,
+     1.0
+    ],
+    "dx_px": -4.07,
+    "dy_px": -3.78,
+    "rho": 0.671,
+    "counted": true
+   }
+  ],
+  "fixed_edges": {
+   "built-in oak desk + shelf": {
+    "box": [
+     0.1667,
+     0.8333,
+     0.1162,
+     1.0
+    ],
+    "edges": {
+     "left": {
+      "clay_px": 319,
+      "render_px": 318,
+      "d_px": -1,
+      "r": 0.646,
+      "clay_strength": 22.6,
+      "counted": true
+     },
+     "top": {
+      "clay_px": 151,
+      "d_px": null,
+      "r": 0.432,
+      "counted": false,
+      "eye_override": "QA §3: the box top is the shelf line, '+34' is its front face against its top; by eye +-10"
+     }
+    },
+    "method": "xcorr +-60 px, r >= 0.5",
+    "worst_edge_px": 1,
+    "kind": "architecture"
+   },
+   "desk chair": {
+    "box": [
+     0.3536,
+     0.6464,
+     0.7745,
+     1.0
+    ],
+    "edges": {
+     "left": {
+      "clay_px": 678,
+      "render_px": 678,
+      "d_px": 0,
+      "r": 0.898,
+      "clay_strength": 61.3,
+      "counted": true
+     },
+     "right": {
+      "clay_px": 1240,
+      "render_px": 1232,
+      "d_px": -8,
+      "r": 0.837,
+      "clay_strength": 24.7,
+      "counted": true
+     },
+     "top": {
+      "clay_px": 800,
+      "render_px": 797,
+      "d_px": -3,
+      "r": 0.676,
+      "clay_strength": 39.8,
+      "counted": true
+     }
+    },
+    "method": "xcorr +-60 px, r >= 0.5",
+    "width_ratio": 0.9858,
+    "worst_edge_px": 8,
+    "kind": "furniture"
+   }
+  },
+  "named_edges": {
+   "shelf top": {
+    "orientation": "h",
+    "clay_px": 151,
+    "d_xcorr_px": 36,
+    "r": 0.38,
+    "counted": false,
+    "eye_override": "QA §3 (2026-11-03): '+34' is another line (the shelf's front face against its top); by eye the shelf is within +-10"
+   },
+   "shelf bottom (front face)": {
+    "orientation": "h",
+    "clay_px": 151,
+    "d_xcorr_px": 36,
+    "r": 0.38,
+    "counted": false,
+    "eye_override": "QA §3: the same clay peak as 'shelf top' (row 151); by eye the shelf is within +-10"
+   },
+   "desk top front edge": {
+    "orientation": "h",
+    "clay_px": 800,
+    "d_xcorr_px": -3,
+    "r": 0.653,
+    "counted": true
+   },
+   "desk top front edge (left of chair)": {
+    "orientation": "h",
+    "clay_px": 800,
+    "d_xcorr_px": -2,
+    "r": 0.705,
+    "counted": true
+   },
+   "drawer bottom / apron": {
+    "orientation": "h",
+    "clay_px": 923,
+    "d_xcorr_px": -2,
+    "r": 0.875,
+    "counted": true
+   },
+   "chair back top": {
+    "orientation": "h",
+    "clay_px": 800,
+    "d_xcorr_px": -3,
+    "r": 0.667,
+    "counted": true
+   },
+   "desk left outer edge": {
+    "orientation": "v",
+    "clay_px": 319,
+    "d_xcorr_px": -2,
+    "r": 0.703,
+    "counted": true
+   },
+   "desk right outer edge": {
+    "orientation": "v",
+    "clay_px": 1599,
+    "d_xcorr_px": -37,
+    "r": 0.488,
+    "counted": false,
+    "eye_override": "QA §3: '-33' is the inner edge of the thick side panel; the outer edge is in place by eye (render-agent 2026-11-04: outer edge ~1597 vs clay 1599)"
+   },
+   "chair back left edge": {
+    "orientation": "v",
+    "clay_px": 678,
+    "d_xcorr_px": 0,
+    "r": 0.844,
+    "counted": true
+   },
+   "chair back right edge": {
+    "orientation": "v",
+    "clay_px": 1240,
+    "d_xcorr_px": -8,
+    "r": 0.752,
+    "counted": true
+   }
+  },
+  "summary": {
+   "register_shift_px": [
+    -0.54,
+    -0.19
+   ],
+   "register_scale": [
+    1.0005,
+    0.99997
+   ],
+   "register_scale_pct": [
+    0.05,
+    -0.0
+   ],
+   "worst_band_px": 7.27,
+   "bands_reliable": 3,
+   "worst_band_px_after_register": 8.8,
+   "bands_reliable_after_register": 3,
+   "worst_tile_ecc_px": 7.58,
+   "tiles_counted": 6,
+   "worst_tile_ecc_px_after_register": 7.88,
+   "tiles_counted_after_register": 6,
+   "fixed_edges_worst_px": 8,
+   "fixed_edges_measured": 2,
+   "fixed_ratios": {
+    "desk chair w": 0.9858
+   },
+   "named_edges_worst_px": 8,
+   "named_edges_counted": 7,
+   "named_edges_total": 10,
+   "named_edges": {
+    "desk top front edge": -3,
+    "desk top front edge (left of chair)": -2,
+    "drawer bottom / apron": -2,
+    "chair back top": -3,
+    "desk left outer edge": -2,
+    "chair back left edge": 0,
+    "chair back right edge": -8
+   }
+  },
+  "verdict": {
+   "thresholds": {
+    "shift_px": 9.6,
+    "scale_tol": 0.005,
+    "residual_px": 9.6,
+    "residual_rule": "video endpoint: <= 0.5 % of the width after register",
+    "edge_px": 19.2,
+    "ratio": [
+     0.95,
+     1.05
+    ],
+    "edges_mode": "v3",
+    "counted": "bands response >= 0.10, tiles rho >= 0.30, box edges and named lines xcorr r >= 0.5",
+    "source": "docs/ops/quality-gates-2026-11-02.md G1.4 (+ G1.3 ratios, proposal); qa/reports/2026-11-02-v7-g1.md section 1"
+   },
+   "global_pass": true,
+   "residual_pass": true,
+   "edges_pass": true,
+   "residual_measured": true,
+   "pass": true
+  },
+  "render": "assets/renders/poses/nordic/v7/pose-w0-in-v7-r2-fix2.png",
+  "clay": "assets/blockout/house/framing/round4/poses/W0-in.png",
+  "overscan_cropped_to_frame": false,
+  "date": "2026-11-04",
+  "note": "geometry only: measured on the normalised raw still (the grade does not move edges); the old clay_lock stays in <id>-measurements.json"
+ }
+}

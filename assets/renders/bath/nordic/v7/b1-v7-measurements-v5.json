@@ -1,0 +1,380 @@
+{
+ "asset_id": "b1-v7",
+ "frame": "B1",
+ "kind": "master",
+ "label": "grading v5 (Bible 1.8.4: living 90-94, corridor L* 72-75, hall L* 75-78, D1 silhouettes)",
+ "date": "2026-11-04",
+ "script": "assets/renders/house-nordic-v7-2026-11-02/process_v8.py",
+ "settings": {
+  "grade_order": "v2",
+  "wb_point": "auto",
+  "lock": "none",
+  "suffix": "-v5",
+  "exposure": "bible",
+  "stops": null,
+  "target": null,
+  "grade": "v5",
+  "hue_force": null,
+  "target_scale": "HSL L"
+ },
+ "bible_v3": {
+  "reference_point": [
+   0.419,
+   0.174
+  ],
+  "reference_source": "wall beside the fluted window (0.419, 0.174) = clay wall_beside_window / reference_CB (Bible 1.6 bath: L 86-90)",
+  "target_L": 88.0,
+  "range": [
+   86.0,
+   90.0
+  ],
+  "measured_L": 88.9,
+  "meets_target": true,
+  "target_source": "Bible 1.6 bath: the wall beside the fluted window L 86-90 (4000 K)",
+  "judged_by": "own reference wall",
+  "reference_HSL": [
+   37.1,
+   67.6,
+   88.9
+  ],
+  "wall_hue_32_40_sat_15_28": false,
+  "near_white_chroma_B4": {
+   "delta_C": -0.63,
+   "ok": true
+  },
+  "wall_v4": {
+   "reading": {
+    "H": 37.1,
+    "S": 67.6,
+    "L": 88.9,
+    "L_star": 92.31,
+    "C_star": 13.32,
+    "h_ab": 85.0
+   },
+   "judged": true,
+   "H_range": [
+    32.0,
+    40.0
+   ],
+   "C_max": 7.0,
+   "hue_ok": true,
+   "C_ok": false,
+   "correction": false,
+   "note": null
+  },
+  "v5": {
+   "checks": {}
+  },
+  "meets_bible": false
+ },
+ "input": "assets/renders/bath/nordic/v7/b1-v7.png",
+ "size_px": [
+  2736,
+  1539
+ ],
+ "overscan": true,
+ "outputs": {
+  "graded": "assets/renders/bath/nordic/v7/b1-v7-graded-v5.png",
+  "frame": "assets/renders/bath/nordic/v7/b1-v7-frame-v5.png",
+  "os6": "assets/renders/bath/nordic/v7/b1-v7-graded-os6-v5.png"
+ },
+ "clay": "assets/blockout/house/framing/round4/B1.png",
+ "grade_target_L": 88.0,
+ "sample_point": {
+  "uv": [
+   0.419,
+   0.174
+  ],
+  "source": "wall beside the fluted window (0.419, 0.174) = clay wall_beside_window / reference_CB (Bible 1.6 bath: L 86-90)",
+  "warning": null
+ },
+ "measure_before": {
+  "hero_wall_high (0.614,0.103) clay L 81.3": [
+   31.5,
+   33.8,
+   66.7
+  ],
+  "hero_wall_mid (0.614,0.223) clay L 79.6": [
+   31.7,
+   35.3,
+   64.7
+  ],
+  "limestone_shower (0.703,0.241) clay L 75.3": [
+   31.3,
+   23.6,
+   65.9
+  ],
+  "wall_beside_window (0.419,0.174) clay L 87.0": [
+   30.7,
+   47.3,
+   80.3
+  ],
+  "ceiling (0.550,0.040) clay L 77.9": [
+   31.3,
+   23.2,
+   61.8
+  ],
+  "floor_centre (0.500,0.930) clay L 70.1": [
+   30.7,
+   23.8,
+   75.3
+  ],
+  "reference_CB (0.419,0.174) clay L 87.0": [
+   30.6,
+   47.0,
+   80.2
+  ],
+  "brightest area (window / door): L p50 / p99 / max": [
+   84.1,
+   99.8,
+   100.0
+  ],
+  "pixels with a 255 channel: inside / outside that area": [
+   6955,
+   1397
+  ],
+  "frame L p99 / max": [
+   99.4,
+   100.0
+  ],
+  "darkest 0.5% patch L [12-15]": 2.1,
+  "frame mean L": 64.9
+ },
+ "grade": {
+  "order": "v2",
+  "exposure_mode": "bible",
+  "white_balance": {
+   "patch": [
+    0.419,
+    0.174
+   ],
+   "H_before": 30.6,
+   "H_target": 36,
+   "gains_rgb": [
+    0.9687,
+    1.0143,
+    0.9687
+   ],
+   "gain_clip": "0.9-1.1",
+   "source": "wall beside the fluted window (0.419, 0.174) = clay wall_beside_window / reference_CB (Bible 1.6 bath: L 86-90)"
+  },
+  "exposure": {
+   "patch": [
+    0.419,
+    0.174
+   ],
+   "target_L": 88.0,
+   "needed_stops": 0.396,
+   "applied_stops": 0.396,
+   "flag": "to the Bible target",
+   "solver": "bisection on the HSL L of the patch after exposure, chroma, S curve and roll-off (v3)",
+   "cap": "none: the Bible target (V7Q4, test page only); sanity +-1.5 stop",
+   "source": "wall beside the fluted window (0.419, 0.174) = clay wall_beside_window / reference_CB (Bible 1.6 bath: L 86-90)",
+   "target_source": "Bible 1.6 bath: the wall beside the fluted window L 86-90 (4000 K)",
+   "target_range": [
+    86.0,
+    90.0
+   ]
+  },
+  "saturation": "chroma x0.90 (linear, toward luminance)",
+  "s_curve": {
+   "mix": 0.12,
+   "shape": "smoothstep blend"
+  },
+  "black_point": {
+   "darkest_patch_L_before": 2.3,
+   "lift_to_L": 12.5,
+   "blend": 0.104
+  },
+  "near_white_chroma_guard_B4": {
+   "population": "pixels with HSL L > 80 after the grade",
+   "before": {
+    "pixels": 1555866,
+    "L_lab": 79.86,
+    "C": 8.43,
+    "C_p95": 17.81,
+    "hue": 101.9
+   },
+   "after": {
+    "pixels": 1555866,
+    "L_lab": 90.19,
+    "C": 7.8,
+    "C_p95": 15.65,
+    "hue": 107.6
+   },
+   "delta_C": -0.63,
+   "limit": 1.5,
+   "applied": "none (within +1.5 C)"
+  },
+  "highlight_rolloff": {
+   "knee_L": 94,
+   "asymptote_L": 97.0,
+   "on": "max channel, hue kept",
+   "position": "last (v2): the ceiling of the chain"
+  },
+  "grain": "none",
+  "vignette": "none",
+  "wall_after_lift_v4": {
+   "H": 37.1,
+   "S": 67.6,
+   "L": 88.9,
+   "L_star": 92.31,
+   "C_star": 13.32,
+   "h_ab": 85.0
+  },
+  "wall_hue_v4": {
+   "rule": "QA 2026-11-03 §4 / §11.2: wall H after the lift reported; corrected when H > 40 (masked, walls only)",
+   "reference_uv": [
+    0.419,
+    0.174
+   ],
+   "before": {
+    "H": 37.1,
+    "S": 67.6,
+    "L": 88.9,
+    "L_star": 92.31,
+    "C_star": 13.32,
+    "h_ab": 85.0
+   },
+   "applied": false,
+   "why_not": "H <= 40"
+  }
+ },
+ "measure_after": {
+  "hero_wall_high (0.614,0.103) clay L 81.3": [
+   35.5,
+   46.5,
+   78.3
+  ],
+  "hero_wall_mid (0.614,0.223) clay L 79.6": [
+   35.2,
+   47.4,
+   76.3
+  ],
+  "limestone_shower (0.703,0.241) clay L 75.3": [
+   36.7,
+   32.2,
+   77.5
+  ],
+  "wall_beside_window (0.419,0.174) clay L 87.0": [
+   37.2,
+   67.7,
+   88.9
+  ],
+  "ceiling (0.550,0.040) clay L 77.9": [
+   35.8,
+   30.4,
+   73.3
+  ],
+  "floor_centre (0.500,0.930) clay L 70.1": [
+   38.9,
+   38.2,
+   86.7
+  ],
+  "reference_CB (0.419,0.174) clay L 87.0": [
+   37.1,
+   67.6,
+   88.9
+  ],
+  "brightest area (window / door): L p50 / p99 / max": [
+   93.7,
+   96.6,
+   96.6
+  ],
+  "pixels with a 255 channel: inside / outside that area": [
+   0,
+   0
+  ],
+  "frame L p99 / max": [
+   96.6,
+   96.6
+  ],
+  "darkest 0.5% patch L [12-15]": 12.5,
+  "frame mean L": 75.8
+ },
+ "checks": {
+  "window_p99_le_97": true,
+  "frame_L_max_le_97": true,
+  "no_255": true,
+  "black_point_12_15": true,
+  "exposure_within_cap": false,
+  "exposure_point_valid": true,
+  "bible_black_12_15": true,
+  "bible_no_clip": true,
+  "bible_chroma_B4": true,
+  "bible_target_met": true,
+  "bible_wall_hue_32_40": true,
+  "bible_wall_C_le_7_B4": false
+ },
+ "v7_for_comparison": {
+  "clay_lock_v1_worst_abs_shift_strong_peaks": 0.0069,
+  "grade_v1_exposure": {
+   "patch": [
+    0.6136400699615479,
+    0.22267240285873413
+   ],
+   "target_L": 86.0,
+   "needed_stops": 0.789,
+   "applied_stops": 0.2,
+   "flag": "DARK: needs more than +0.2 stop, not lifted further"
+  },
+  "measure_after_v1_window": [
+   90.4,
+   97.0,
+   97.1
+  ]
+ },
+ "lock_v2_summary": null,
+ "lock_v2_verdict": null,
+ "product_boxes_clay": {
+  "bath/shower-curtain": [
+   0.6559,
+   0.7122,
+   0.0,
+   0.9873
+  ],
+  "bath/shower-dispensers": [
+   0.7451,
+   0.7937,
+   0.4397,
+   0.4974
+  ],
+  "bath/bath-mat": [
+   0.4831,
+   0.6245,
+   0.8725,
+   0.9987
+  ],
+  "bath/toilet-paper-stand": [
+   0.3981,
+   0.4334,
+   0.6389,
+   0.8817
+  ],
+  "bath/reed-diffuser": [
+   0.3212,
+   0.3426,
+   0.4135,
+   0.5367
+  ],
+  "bath/candle": [
+   0.2984,
+   0.3185,
+   0.5004,
+   0.5393
+  ],
+  "bath/wall-sconce": [
+   0.4357,
+   0.4641,
+   0.2445,
+   0.3061
+  ],
+  "bath/vanity-sconces": [
+   0.9268,
+   0.9789,
+   0.1795,
+   0.269
+  ]
+ },
+ "product_box_rule": "each product inside its clay box +-15 % of the box size; read visually"
+}

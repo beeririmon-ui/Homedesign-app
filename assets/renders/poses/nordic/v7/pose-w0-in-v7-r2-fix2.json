@@ -1,0 +1,155 @@
+{
+ "asset_id": "pose-w0-in-v7-r2",
+ "date": "2026-11-04",
+ "script": "assets/renders/house-nordic-v7-2026-11-02/fix_v9.py (fix_v8 functions, cleanup flags)",
+ "tokens": 0,
+ "fix": "W0-in r2 (QA §11.1): the desk top, drawer, side panels, the chair and the floor objects down onto the clay lines; the plant unmoved; the pencil cup with the desk top",
+ "method": "measured at 1080 against the clay (horizontal edges in three column bands): slab back edge 669 -> 694, slab top-front edge 732 -> 768, front-face bottom 761 -> 800, chair back top 794 -> 835 (QA's 'chair back top 800 / -6' read the clay's desk line; the clay chair top is 835), drawer bottom 877 -> 923; the floor objects and the skirting ~40 px high too; so a monotone vertical warp of everything below row 640: dy 0 at 640, the measured pairs, +46 below 877 (piecewise linear, cubic resampling); the plant (green hue 60-170, S >= 20, in u 0-0.235) and its seagrass basket (brown, bottom-left) composited back unmoved; the pencil cup (grabCut u 0.312-0.368, v 0.480-0.648, plus the thin dark pencil tips) removed first with its whole rect (wall: quadratic fit with seam correction; slab top: row by row) and put back rigidly by the warp's offset at its base",
+ "pairs_1080": [
+  [
+   640,
+   640
+  ],
+  [
+   669,
+   694
+  ],
+  [
+   732,
+   768
+  ],
+  [
+   761,
+   800
+  ],
+  [
+   794,
+   835
+  ],
+  [
+   877,
+   923
+  ]
+ ],
+ "dy_below_1080": 46,
+ "cup": {
+  "before_px": [
+   873,
+   991,
+   765,
+   983
+  ],
+  "dy_px": 40.8
+ },
+ "cup_to_box": {
+  "scale": 0.816,
+  "anchor_px": [
+   931.0,
+   1023.8
+  ],
+  "dx_px": -14.7,
+  "clay_box_uv": [
+   0.3203,
+   0.3495,
+   0.5819,
+   0.6657
+  ],
+  "body_after_uv": [
+   0.3182,
+   0.3516,
+   0.5937,
+   0.6652
+  ],
+  "inside_box_plus_15pct": true,
+  "body_over_box_before": {
+   "w": 1.402,
+   "h": 1.047
+  },
+  "body_over_box_after": {
+   "w": 1.144,
+   "h": 0.854
+  },
+  "body_cm_after_est": {
+   "note": "from the clay proxy's 13 cm height (z 0.79-0.92) at the box's px per cm",
+   "h": 11.1,
+   "d": 9.2
+  },
+  "envelope_cm": {
+   "d": [
+    7,
+    10
+   ],
+   "h": [
+    10,
+    14
+   ]
+  },
+  "run": "second, 2026-11-04 (approved by the manager)",
+  "how": "the cup layer (body + pencils) scaled uniformly about the centre of its base, centred on the clay box and moved with the warp; a soft contact shadow under the smaller base"
+ },
+ "lines_clay_1080": {
+  "slab_back": 694,
+  "slab_top_front": 768,
+  "slab_front_face_bottom": 800,
+  "chair_top": 835,
+  "drawer_bottom": 923
+ },
+ "untouched": "the shelf with its felt bins, the wall above row 640, the plant and its basket",
+ "global_affine": {
+  "why": "G1.4 global scale (+0.41 / +0.70 % after the code fix, proposal 0.5 %): the manager's approval 2026-11-04 (as B1 r3); QA re-checks",
+  "register_before": {
+   "affine": [
+    [
+     1.00102,
+     -0.00063,
+     -3.69507
+    ],
+    [
+     -0.00365,
+     1.00096,
+     -0.82264
+    ]
+   ],
+   "shift_px": [
+    -3.7,
+    -0.82
+   ],
+   "scale_pct": [
+    0.102,
+    0.096
+   ]
+  },
+  "canvas_affine_inverse_map": [
+   [
+    1.004078,
+    0.003834,
+    -8.529171
+   ],
+   [
+    0.001862,
+    1.006954,
+    -6.210644
+   ]
+  ],
+  "register_after": {
+   "shift_px": [
+    -0.54,
+    -0.19
+   ],
+   "scale_pct": [
+    0.05,
+    -0.003
+   ]
+  },
+  "how": "cv2.warpAffine(still, A, WARP_INVERSE_MAP, Lanczos4, border replicate); A = C . M . C^-1, C = the 16:9 frame at 1920 -> the canvas",
+  "A_fixed_from": "assets/renders/poses/nordic/v7/pose-w0-in-v7-r2-fix.json (canvas_affine_inverse_map)"
+ },
+ "cleanup_2026_11_04": {
+  "solid_basket_px": 252714,
+  "plant_place_cleared_px": 348256,
+  "how": "the basket's matte convex per row (hue 10-50, S >= 14, L < 88 or L < 30, closed 21, opened 9, largest, in u 0-0.20 v 0.70-1); the plant's place below row 880 (dilated 8 px) cleared in the background before the warp, row by row from the right, + the wall texture"
+ },
+ "outputs": {
+  "fix": "assets/renders/poses/nordic/v7/pose-w0-in-v7-r2-fix2.png"
+ }
+}

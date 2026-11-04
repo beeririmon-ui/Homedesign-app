@@ -1,0 +1,393 @@
+{
+ "asset_id": "pose-m0x-v7",
+ "frame": "M0x",
+ "kind": "pose",
+ "label": "grading v5 (Bible 1.8.4: living 90-94, corridor L* 72-75, hall L* 75-78, D1 silhouettes)",
+ "date": "2026-11-04",
+ "script": "assets/renders/house-nordic-v7-2026-11-02/process_v8.py",
+ "settings": {
+  "grade_order": "v2",
+  "wb_point": "auto",
+  "lock": "none",
+  "suffix": "-v5",
+  "exposure": "bible",
+  "stops": 0.928,
+  "target": null,
+  "grade": "v5",
+  "hue_force": true,
+  "target_scale": "HSL L"
+ },
+ "bible_v3": {
+  "reference_point": [
+   0.5,
+   0.3
+  ],
+  "reference_source": "default (0.5, 0.3): no wall patch in the clay selfcheck",
+  "target_L": 92.0,
+  "range": [
+   90.0,
+   94.0
+  ],
+  "measured_L": 94.5,
+  "meets_target": null,
+  "target_source": "Bible 1.8 B1 (1) / 1.8.4: the living back wall by the corner L 90-94 (1.0's 92-95 retired)",
+  "judged_by": "the group reference M0 (stops inherited; the reading here is not the reference wall)",
+  "reference_HSL": [
+   45.5,
+   40.4,
+   94.5
+  ],
+  "wall_hue_32_40_sat_15_28": false,
+  "near_white_chroma_B4": {
+   "delta_C": -2.11,
+   "ok": true
+  },
+  "wall_v4": {
+   "reading": {
+    "H": 45.5,
+    "S": 40.4,
+    "L": 94.5,
+    "L_star": 96.14,
+    "C_star": 4.5,
+    "h_ab": 97.2
+   },
+   "judged": false,
+   "H_range": [
+    32.0,
+    40.0
+   ],
+   "C_max": 7.0,
+   "hue_ok": null,
+   "C_ok": null,
+   "correction": true,
+   "note": "the reference point is not a wall (no clay wall patch): hue and C* not judged here"
+  },
+  "v5": {
+   "checks": {}
+  },
+  "meets_bible": true
+ },
+ "input": "assets/renders/poses/nordic/v7/pose-m0x-v7.png",
+ "size_px": [
+  2736,
+  1539
+ ],
+ "overscan": true,
+ "outputs": {
+  "graded": "assets/renders/poses/nordic/v7/pose-m0x-v7-graded-v5.png",
+  "frame": "assets/renders/poses/nordic/v7/pose-m0x-v7-frame-v5.png",
+  "os6": "assets/renders/poses/nordic/v7/pose-m0x-v7-graded-os6-v5.png"
+ },
+ "clay": "assets/blockout/house/framing/round4/poses/M0x.png",
+ "grade_target_L": 92.0,
+ "sample_point": {
+  "uv": [
+   0.5,
+   0.3
+  ],
+  "source": "default (0.5, 0.3): no wall patch in the clay selfcheck",
+  "warning": "no clay wall patch: stops inherited from M0 (one exposure per camera point); the default point is a reading only"
+ },
+ "measure_before": {
+  "ceiling (0.550,0.040) clay L 92.7": [
+   33.4,
+   17.0,
+   87.7
+  ],
+  "floor_centre (0.500,0.930) clay L 87.8": [
+   29.9,
+   29.1,
+   72.4
+  ],
+  "reference_M0 (0.467,0.385) clay L 94.8": [
+   30.0,
+   16.4,
+   92.4
+  ],
+  "brightest area (window / door): L p50 / p99 / max": [
+   92.0,
+   100.0,
+   100.0
+  ],
+  "pixels with a 255 channel: inside / outside that area": [
+   1531,
+   1468
+  ],
+  "frame L p99 / max": [
+   92.7,
+   100.0
+  ],
+  "darkest 0.5% patch L [12-15]": 5.3,
+  "frame mean L": 71.9
+ },
+ "grade": {
+  "order": "v2",
+  "exposure_mode": "bible",
+  "white_balance": {
+   "patch": [
+    0.5,
+    0.3
+   ],
+   "H_before": 32.4,
+   "H_target": 36,
+   "gains_rgb": [
+    0.987,
+    1.0055,
+    0.987
+   ],
+   "gain_clip": "0.9-1.1",
+   "source": "default (0.5, 0.3): no wall patch in the clay selfcheck"
+  },
+  "exposure": {
+   "patch": [
+    0.5,
+    0.3
+   ],
+   "target_L": 92.0,
+   "needed_stops": 0.553,
+   "applied_stops": 0.928,
+   "flag": "stops inherited from the group reference (+0.928); this frame's own need +0.553 | no clay wall patch: stops inherited from M0 (one exposure per camera point); the default point is a reading only",
+   "solver": "bisection on the HSL L of the patch after exposure, chroma, S curve and roll-off (v3)",
+   "cap": "none: the Bible target (V7Q4, test page only); sanity +-1.5 stop",
+   "source": "default (0.5, 0.3): no wall patch in the clay selfcheck",
+   "target_source": "Bible 1.8 B1 (1) / 1.8.4: the living back wall by the corner L 90-94 (1.0's 92-95 retired)",
+   "target_range": [
+    90.0,
+    94.0
+   ]
+  },
+  "saturation": "chroma x0.90 (linear, toward luminance)",
+  "s_curve": {
+   "mix": 0.12,
+   "shape": "smoothstep blend"
+  },
+  "black_point": {
+   "darkest_patch_L_before": 7.7,
+   "lift_to_L": 12.5,
+   "blend": 0.0519
+  },
+  "near_white_chroma_guard_B4": {
+   "population": "pixels with HSL L > 80 after the grade",
+   "before": {
+    "pixels": 3796358,
+    "L_lab": 78.23,
+    "C": 8.94,
+    "C_p95": 18.39,
+    "hue": 77.3
+   },
+   "after": {
+    "pixels": 3796358,
+    "L_lab": 97.61,
+    "C": 6.83,
+    "C_p95": 17.79,
+    "hue": 109.6
+   },
+   "delta_C": -2.11,
+   "limit": 1.5,
+   "applied": "none (within +1.5 C)"
+  },
+  "highlight_rolloff": {
+   "knee_L": 94,
+   "asymptote_L": 97.0,
+   "on": "max channel, hue kept",
+   "position": "last (v2): the ceiling of the chain"
+  },
+  "grain": "none",
+  "vignette": "none",
+  "wall_after_lift_v4": {
+   "H": 47.7,
+   "S": 40.2,
+   "L": 94.3,
+   "L_star": 96.14,
+   "C_star": 4.79,
+   "h_ab": 99.6
+  },
+  "wall_hue_v4": {
+   "rule": "QA 2026-11-03 §4 / §11.2: wall H after the lift reported; corrected when H > 40 (masked, walls only)",
+   "reference_uv": [
+    0.5,
+    0.3
+   ],
+   "before": {
+    "H": 47.7,
+    "S": 40.2,
+    "L": 94.3,
+    "L_star": 96.14,
+    "C_star": 4.79,
+    "h_ab": 99.6
+   },
+   "applied": true,
+   "inherited_from_group_reference": true,
+   "after": {
+    "H": 45.5,
+    "S": 40.4,
+    "L": 94.5,
+    "L_star": 96.14,
+    "C_star": 4.5,
+    "h_ab": 97.2
+   },
+   "pixels_touched_pct": 60.8,
+   "protected_boxes": 14,
+   "target": {
+    "hsl": [
+     36.0,
+     20.0,
+     93.0
+    ],
+    "h_ab": 85.0,
+    "C_cap": 6.5
+   },
+   "mask": "L* 80-97.3, C* ramp 10-18, hue yellower than the target (0-6 deg ramp), outside the product boxes and the sofa / armchair / bed boxes (feather 30 px)"
+  }
+ },
+ "measure_after": {
+  "ceiling (0.550,0.040) clay L 92.7": [
+   29.6,
+   0.0,
+   96.6
+  ],
+  "floor_centre (0.500,0.930) clay L 87.8": [
+   36.6,
+   61.1,
+   92.5
+  ],
+  "reference_M0 (0.467,0.385) clay L 94.8": [
+   46.8,
+   3.3,
+   96.5
+  ],
+  "brightest area (window / door): L p50 / p99 / max": [
+   96.6,
+   96.6,
+   96.6
+  ],
+  "pixels with a 255 channel: inside / outside that area": [
+   0,
+   0
+  ],
+  "frame L p99 / max": [
+   96.6,
+   96.6
+  ],
+  "darkest 0.5% patch L [12-15]": 12.5,
+  "frame mean L": 90.1
+ },
+ "checks": {
+  "window_p99_le_97": true,
+  "frame_L_max_le_97": true,
+  "no_255": true,
+  "black_point_12_15": true,
+  "exposure_within_cap": false,
+  "exposure_point_valid": false,
+  "bible_black_12_15": true,
+  "bible_no_clip": true,
+  "bible_chroma_B4": true
+ },
+ "v7_for_comparison": {
+  "clay_lock_v1_worst_abs_shift_strong_peaks": 0.0487,
+  "grade_v1_exposure": {
+   "patch": [
+    0.5,
+    0.3
+   ],
+   "target_L": 93.0,
+   "needed_stops": 0.412,
+   "applied_stops": 0.2,
+   "flag": "DARK: needs more than +0.2 stop, not lifted further"
+  },
+  "measure_after_v1_window": [
+   96.2,
+   97.4,
+   97.6
+  ]
+ },
+ "lock_v2_summary": null,
+ "lock_v2_verdict": null,
+ "product_boxes_clay": {
+  "kitchen-dining/dining-pendant": [
+   0.5506,
+   0.612,
+   0.0686,
+   0.3969
+  ],
+  "kitchen-dining/table-runner": [
+   0.4956,
+   0.6591,
+   0.5502,
+   0.5729
+  ],
+  "kitchen-dining/centerpiece-vase": [
+   0.5629,
+   0.5997,
+   0.4537,
+   0.5616
+  ],
+  "kitchen-dining/candle-holders": [
+   0.529,
+   0.5619,
+   0.5227,
+   0.5651
+  ],
+  "kitchen-dining/curtains": [
+   0.4546,
+   0.512,
+   0.1598,
+   0.6672
+  ],
+  "kitchen-dining/bench-pad": [
+   0.5715,
+   0.71,
+   0.6253,
+   0.6751
+  ],
+  "kitchen-dining/dining-rug": [
+   0.4546,
+   0.71,
+   0.669,
+   0.8393
+  ],
+  "kitchen-dining/kitchen-runner": [
+   0.654,
+   0.6945,
+   0.6629,
+   0.6886
+  ],
+  "living/accent-sconces": [
+   0.0683,
+   0.0889,
+   0.3079,
+   0.3424
+  ],
+  "living/framed-art": [
+   0.0,
+   0.0368,
+   0.2974,
+   0.4808
+  ],
+  "living/rug": [
+   0.0,
+   0.265,
+   0.7742,
+   1.0
+  ],
+  "living/basket": [
+   0.1132,
+   0.1739,
+   0.6603,
+   0.7852
+  ],
+  "living/sofa-cover": [
+   0.0,
+   0.0602,
+   0.6585,
+   0.7022
+  ],
+  "living/cushions": [
+   0.0,
+   0.0545,
+   0.5437,
+   0.6764
+  ]
+ },
+ "product_box_rule": "each product inside its clay box +-15 % of the box size; read visually"
+}

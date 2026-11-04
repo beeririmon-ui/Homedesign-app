@@ -1,0 +1,405 @@
+{
+ "asset_id": "m0-v8b-r2-fix",
+ "date": "2026-11-04",
+ "script": "assets/renders/house-nordic-v7-2026-11-02/fix_m0_12.py",
+ "tokens": 0,
+ "what": "M0 1.2 composite in code on the reserve render m0-v8b-r2 (briefs/render-m0-composite-and-cleanup-2026-11-04.md task 1): the sofa group and the coffee-table group put on the round-5b clay; the shell, window, armchair, pendant and sconces untouched",
+ "source": "assets/renders/living-room/nordic/v8/m0-v8b-r2.png",
+ "clay": "assets/blockout/house/framing/round5b/M0.png",
+ "output": "assets/renders/living-room/nordic/v8/m0-v8b-r2-fix.png",
+ "measured_px_canvas": {
+  "sofa_render": {
+   "arm_l": 1246,
+   "arm_r": 2483,
+   "back_top": 832,
+   "foot_r": 1354
+  },
+  "sofa_clay": {
+   "arm_l": 1290,
+   "arm_r": 2373,
+   "back_top": 941,
+   "foot_r": 1407
+  },
+  "table_render": {
+   "x0": 1256,
+   "x1": 2204,
+   "far": 1118,
+   "foot_l": 1452
+  },
+  "table_clay": {
+   "x0": 1260,
+   "x1": 2145,
+   "far": 1176,
+   "foot_l": 1468
+  },
+  "lines": {
+   "skirting": [
+    [
+     1100,
+     1090.0
+    ],
+    [
+     2635,
+     1201.5
+    ]
+   ],
+   "floor": [
+    [
+     1100,
+     1130.5
+    ],
+    [
+     2635,
+     1257.0
+    ]
+   ],
+   "rug": [
+    [
+     1150,
+     1222.0
+    ],
+    [
+     2650,
+     1353.0
+    ]
+   ],
+   "table_near": [
+    [
+     1300,
+     1247.0
+    ],
+    [
+     2000,
+     1318.0
+    ]
+   ],
+   "sofa_base": [
+    [
+     1246,
+     1171
+    ],
+    [
+     2483,
+     1272
+    ]
+   ],
+   "sofa_feet": [
+    [
+     1282,
+     1203
+    ],
+    [
+     2445,
+     1356
+    ]
+   ]
+  }
+ },
+ "sofa": {
+  "matrix": [
+   [
+    0.8755099773406982,
+    0.0,
+    199.12045288085938
+   ],
+   [
+    0.0,
+    0.8927199840545654,
+    198.25669860839844
+   ]
+  ],
+  "scale_x": 0.8755,
+  "scale_y": 0.8927,
+  "how": "matte: textured fabric (local high-pass energy > 1.6) per column from its first row to the base line, the throw outside the right arm row by row (fabric run, median 31 rows), the legs; the parts behind the old table / decor completed row-wise along the base's slope (+ the base's texture) so what the smaller table uncovers is sofa"
+ },
+ "table": {
+  "matrix": [
+   [
+    0.9335399866104126,
+    0.0,
+    87.46835327148438
+   ],
+   [
+    0.0,
+    0.8742499947547913,
+    198.58682250976562
+   ]
+  ],
+  "scale_x": 0.9335,
+  "scale_y": 0.8743,
+  "how": "top (convex hull of the oak above its near edge), legs (oak S >= 31 below it), runner (polygon): x and y fitted separately (ends + far edge + near-left foot); the render's table is 1.14x the clay in height and 1.07x in width, so its height comes to the card's h38",
+  "decor": {
+   "holders": {
+    "foot_render": [
+     1881.0,
+     1244.0
+    ],
+    "foot_new": [
+     1843.5,
+     1286.2
+    ],
+    "scale": 0.9335
+   },
+   "bowl": {
+    "foot_render": [
+     2031.5,
+     1267.0
+    ],
+    "foot_new": [
+     1984.0,
+     1306.3
+    ],
+    "scale": 0.9335
+   }
+  },
+  "decor_how": "candle holders and bowl uniform (the table's x scale) about their foot, which goes where the table maps it"
+ },
+ "fills": {
+  "wall": "membrane (harmonic) fill of the low-pass, coarse-to-fine 1/16 -> 1/4, exact at the boundary + 6 px seam correction, + the wall's mirrored high-pass texture (2560, 620, 2720, 760)",
+  "strips": {
+   "right strip: skirting + floor": {
+    "columns": [
+     2370,
+     2736
+    ],
+    "shift_px": [
+     114,
+     9.0
+    ],
+    "px": 17343
+   },
+   "right strip: rug edge": {
+    "columns": [
+     2370,
+     2736
+    ],
+    "shift_px": [
+     92,
+     6.0
+    ],
+    "px": 7914
+   },
+   "left strip": {
+    "columns": [
+     0,
+     1305
+    ],
+    "shift_px": [
+     -63,
+     -5.0
+    ],
+    "px": 9308
+   },
+   "old right leg (rug)": {
+    "columns": [
+     2075,
+     2160
+    ],
+    "shift_px": [
+     72,
+     6.0
+    ],
+    "px": 10615
+   }
+  },
+  "skirting": "the skirting's own profile at t between its top line and the floor line, left (1190-1236) and right (2606-2660) blended in x",
+  "floor": "rows in the frame sheared by the floor line's slope (0.0824) + floor texture (2612, 1262, 2730, 1342)",
+  "rug": "rows in the frame sheared by the rug edge's slope (0.0873) + rug texture (2250, 1420, 2450, 1530)"
+ },
+ "shadows": {
+  "wall": "the wall 70 px above / 40 px beside the old sofa: ratio (low-pass known / low-pass clean fill), de-shadowed in place, re-applied moved with the sofa",
+  "under_base": "the band under the base: a ratio profile in t (base -> feet, to t 1.6) from the visible columns right of the table, re-drawn under the new base / feet lines (204 columns)",
+  "table": "none carried: the rug under the table reads 1.00-1.05 against the fill (no cast shadow to move); a contact shadow (depth 0.78, 5 px) at the near-left leg's new foot"
+ },
+ "checks": {
+  "v4": {
+   "lock_v2": {
+    "shift_px": [
+     -2.99,
+     -7.51
+    ],
+    "scale_pct": [
+     -1.6,
+     0.52
+    ],
+    "band_after": 12.49,
+    "tile_after": 34.45,
+    "fixed_edges_worst_px": 19,
+    "fixed_edges_measured": 2,
+    "fixed_ratios": {},
+    "named_edges_worst_px": null,
+    "verdict": {
+     "thresholds": {
+      "shift_px": 9.6,
+      "scale_tol": 0.005,
+      "residual_px": 9.6,
+      "residual_rule": "video endpoint: <= 0.5 % of the width after register",
+      "edge_px": 19.2,
+      "ratio": [
+       0.95,
+       1.05
+      ],
+      "edges_mode": "v3",
+      "counted": "bands response >= 0.10, tiles rho >= 0.30, box edges and named lines xcorr r >= 0.5",
+      "source": "docs/ops/quality-gates-2026-11-02.md G1.4 (+ G1.3 ratios, proposal); qa/reports/2026-11-02-v7-g1.md section 1"
+     },
+     "global_pass": false,
+     "residual_pass": false,
+     "edges_pass": true,
+     "residual_measured": true,
+     "pass": false
+    },
+    "record": "assets/renders/living-room/nordic/v8/m0-v8b-r2-fix-lock-v2.json",
+    "overlay": "assets/renders/living-room/nordic/v8/m0-v8b-r2-fix-lock-v2.jpg"
+   },
+   "edges": {
+    "sofa 220x92x78 (fixed-product)": {
+     "box": [
+      0.4703,
+      0.8898,
+      0.6111,
+      0.9403
+     ],
+     "edges": {
+      "left": {
+       "clay_px": 944,
+       "d_px": null,
+       "r": 0.472,
+       "counted": false
+      },
+      "right": {
+       "clay_px": 1643,
+       "d_px": null,
+       "r": 0.404,
+       "counted": false
+      },
+      "bottom": {
+       "clay_px": 981,
+       "d_px": null,
+       "r": 0.294,
+       "counted": false
+      }
+     },
+     "method": "xcorr +-60 px, r >= 0.5",
+     "worst_edge_px": null,
+     "kind": "furniture"
+    },
+    "coffee table 140x70 h38 (fixed-product)": {
+     "box": [
+      0.4583,
+      0.8013,
+      0.7824,
+      1.0301
+     ],
+     "edges": {
+      "left": {
+       "clay_px": 930,
+       "d_px": null,
+       "r": 0.453,
+       "counted": false
+      },
+      "right": {
+       "clay_px": 1537,
+       "d_px": null,
+       "r": 0.356,
+       "counted": false
+      },
+      "top": {
+       "clay_px": 842,
+       "render_px": 852,
+       "d_px": 10,
+       "r": 0.744,
+       "clay_strength": 10.2,
+       "counted": true
+      }
+     },
+     "method": "xcorr +-60 px, r >= 0.5",
+     "worst_edge_px": 10,
+     "kind": "furniture"
+    },
+    "armchair 72x78 h70 (fixed-product)": {
+     "box": [
+      0.0229,
+      0.3104,
+      0.7148,
+      1.0301
+     ],
+     "edges": {
+      "left": {
+       "clay_px": 100,
+       "d_px": null,
+       "r": 0.318,
+       "counted": false
+      },
+      "right": {
+       "clay_px": 571,
+       "render_px": 589,
+       "d_px": 18,
+       "r": 0.648,
+       "clay_strength": 17.6,
+       "counted": true
+      },
+      "top": {
+       "clay_px": 807,
+       "render_px": 788,
+       "d_px": -19,
+       "r": 0.563,
+       "clay_strength": 7.4,
+       "counted": true
+      }
+     },
+     "method": "xcorr +-60 px, r >= 0.5",
+     "worst_edge_px": 19,
+     "kind": "furniture"
+    }
+   },
+   "grade": {
+    "suffix": "-fix-v4",
+    "stops": 0.986,
+    "inherited_from": null,
+    "target": 93.0,
+    "range": [
+     92.0,
+     95.0
+    ],
+    "measured": 93.9,
+    "meets_bible": false,
+    "wall_v4": {
+     "H": 36.4,
+     "S": 61.2,
+     "L": 93.9,
+     "L_star": 95.58,
+     "C_star": 6.51,
+     "h_ab": 85.1
+    },
+    "hue_correction": true,
+    "outputs": {
+     "graded": "assets/renders/living-room/nordic/v8/m0-v8b-r2-graded-fix-v4.png",
+     "frame": "assets/renders/living-room/nordic/v8/m0-v8b-r2-frame-fix-v4.png",
+     "os6": "assets/renders/living-room/nordic/v8/m0-v8b-r2-graded-os6-fix-v4.png"
+    }
+   }
+  },
+  "v5": {
+   "grade": {
+    "suffix": "-fix-v5",
+    "stops": 0.907,
+    "target": 92.0,
+    "range": [
+     90.0,
+     94.0
+    ],
+    "measured": 92.1,
+    "meets_bible": false,
+    "fails": [
+     "bible_wall_C_le_7_B4"
+    ],
+    "outputs": {
+     "graded": "assets/renders/living-room/nordic/v8/m0-v8b-r2-graded-fix-v5.png",
+     "frame": "assets/renders/living-room/nordic/v8/m0-v8b-r2-frame-fix-v5.png",
+     "os6": "assets/renders/living-room/nordic/v8/m0-v8b-r2-graded-os6-fix-v5.png"
+    }
+   }
+  }
+ }
+}

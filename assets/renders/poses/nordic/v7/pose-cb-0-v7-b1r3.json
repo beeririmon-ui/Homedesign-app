@@ -1,0 +1,54 @@
+{
+ "asset_id": "pose-cb-0-v7-b1r3",
+ "date": "2026-11-04",
+ "tokens": 0,
+ "script": "assets/renders/house-nordic-v7-2026-11-02/recompose_cb0.py",
+ "what": "CB-0 recomposed from the B1 r3 cleanup (b1-v7-r3-fix2.png) by reprojection (same centre of projection: a pure 22 deg pan)",
+ "sources": {
+  "b1": "assets/renders/bath/nordic/v7/b1-v7-r3-fix2.png",
+  "cb0_left": "assets/renders/poses/nordic/v7/pose-cb-0-v7.png"
+ },
+ "cameras": {
+  "B1": {
+   "yaw": -22,
+   "u0": 0.52,
+   "v0": 0.46
+  },
+  "CB0": {
+   "yaw": 0,
+   "u0": 0.5,
+   "v0": 0.46
+  },
+  "lens": "24 mm (fx_rel 0.6667)",
+  "canvas_overscan_px": [
+   116,
+   65
+  ]
+ },
+ "coverage": {
+  "b1_covers_canvas_u": [
+   0.3034,
+   0.9996
+  ],
+  "share": 0.6639,
+  "seam": "smootherstep over 60 px inside B1's coverage; outside it the current CB-0 (v7 composite), matched to B1 by a per-row, per-channel gain read on the left wall 40-160 px inside the coverage (median, smoothed 40 rows)",
+  "gain_median_rgb": [
+   0.9292,
+   0.9123,
+   0.9369
+  ]
+ },
+ "output": "assets/renders/poses/nordic/v7/pose-cb-0-v7-b1r3.png",
+ "grade_v5": {
+  "stops_from": "assets/renders/bath/nordic/v7/b1-v7-r3-measurements-fix2-v5.json",
+  "stops": 0.163,
+  "hue_force": null,
+  "outputs": {
+   "graded": "assets/renders/poses/nordic/v7/pose-cb-0-v7-graded-b1r3-v5.png",
+   "frame": "assets/renders/poses/nordic/v7/pose-cb-0-v7-frame-b1r3-v5.png",
+   "os6": "assets/renders/poses/nordic/v7/pose-cb-0-v7-graded-os6-b1r3-v5.png"
+  },
+  "reading": 79.3,
+  "meets_bible": true
+ }
+}

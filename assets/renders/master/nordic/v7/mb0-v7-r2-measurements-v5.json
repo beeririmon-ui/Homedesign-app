@@ -1,0 +1,421 @@
+{
+ "asset_id": "mb0-v7-r2",
+ "frame": "MB0",
+ "kind": "master",
+ "label": "grading v5 (Bible 1.8.4: living 90-94, corridor L* 72-75, hall L* 75-78, D1 silhouettes)",
+ "date": "2026-11-04",
+ "script": "assets/renders/house-nordic-v7-2026-11-02/process_v8.py",
+ "settings": {
+  "grade_order": "v2",
+  "wb_point": "auto",
+  "lock": "none",
+  "suffix": "-v5",
+  "exposure": "bible",
+  "stops": null,
+  "target": null,
+  "grade": "v5",
+  "hue_force": null,
+  "target_scale": "HSL L"
+ },
+ "bible_v3": {
+  "reference_point": [
+   0.4999999403953552,
+   0.14534902572631836
+  ],
+  "reference_source": "hero_wall_mid (clay selfcheck)",
+  "target_L": 92.0,
+  "range": [
+   90.0,
+   94.0
+  ],
+  "measured_L": 90.6,
+  "meets_target": true,
+  "target_source": "Bible 'אור' 1.4: the wall by the window L 90-94",
+  "judged_by": "own reference wall",
+  "reference_HSL": [
+   37.9,
+   36.1,
+   90.6
+  ],
+  "wall_hue_32_40_sat_15_28": false,
+  "window_wall": {
+   "point": "window wall, QA point (0.170,0.300) [Bible 1.8 B1 (2): 80-88]",
+   "L": 81.3,
+   "range": [
+    80.0,
+    88.0
+   ],
+   "ok": true
+  },
+  "near_white_chroma_B4": {
+   "delta_C": -1.19,
+   "ok": true
+  },
+  "wall_v4": {
+   "reading": {
+    "H": 37.9,
+    "S": 36.1,
+    "L": 90.6,
+    "L_star": 92.7,
+    "C_star": 6.06,
+    "h_ab": 87.4
+   },
+   "judged": true,
+   "H_range": [
+    32.0,
+    40.0
+   ],
+   "C_max": 7.0,
+   "hue_ok": true,
+   "C_ok": true,
+   "correction": true,
+   "note": null
+  },
+  "v5": {
+   "checks": {}
+  },
+  "meets_bible": true
+ },
+ "input": "assets/renders/master/nordic/v7/mb0-v7-r2.png",
+ "size_px": [
+  2736,
+  1539
+ ],
+ "overscan": false,
+ "outputs": {
+  "graded": "assets/renders/master/nordic/v7/mb0-v7-r2-graded-v5.png"
+ },
+ "clay": "assets/blockout/house/framing/round4/MB0.png",
+ "grade_target_L": 92.0,
+ "sample_point": {
+  "uv": [
+   0.4999999403953552,
+   0.14534902572631836
+  ],
+  "source": "hero_wall_mid (clay selfcheck)",
+  "warning": null
+ },
+ "measure_before": {
+  "hero_wall_mid (0.500,0.145) clay L 86.5": [
+   31.5,
+   13.3,
+   72.5
+  ],
+  "wainscot (0.500,0.495) clay L 82.4": [
+   31.7,
+   16.6,
+   78.6
+  ],
+  "ceiling (0.550,0.040) clay L 88.0": [
+   29.4,
+   15.3,
+   76.0
+  ],
+  "floor_centre (0.500,0.930) clay L 62.6": [
+   29.6,
+   37.6,
+   31.9
+  ],
+  "reference_MB0 (0.500,0.145) clay L 86.5": [
+   31.5,
+   13.2,
+   73.2
+  ],
+  "window wall, QA point (0.170,0.300) [Bible 1.8 B1 (2): 80-88]": [
+   29.6,
+   17.9,
+   62.2
+  ],
+  "brightest area (window / door): L p50 / p99 / max": [
+   89.4,
+   99.2,
+   100.0
+  ],
+  "pixels with a 255 channel: inside / outside that area": [
+   1099,
+   1115
+  ],
+  "frame L p99 / max": [
+   96.5,
+   100.0
+  ],
+  "darkest 0.5% patch L [12-15]": 6.0,
+  "frame mean L": 63.0
+ },
+ "grade": {
+  "order": "v2",
+  "exposure_mode": "bible",
+  "white_balance": {
+   "patch": [
+    0.4999999403953552,
+    0.14534902572631836
+   ],
+   "H_before": 31.5,
+   "H_target": 36,
+   "gains_rgb": [
+    0.9882,
+    1.0049,
+    0.9882
+   ],
+   "gain_clip": "0.9-1.1",
+   "source": "hero_wall_mid (clay selfcheck)"
+  },
+  "exposure": {
+   "patch": [
+    0.4999999403953552,
+    0.14534902572631836
+   ],
+   "target_L": 92.0,
+   "needed_stops": 0.795,
+   "applied_stops": 0.795,
+   "flag": "to the Bible target",
+   "solver": "bisection on the HSL L of the patch after exposure, chroma, S curve and roll-off (v3)",
+   "cap": "none: the Bible target (V7Q4, test page only); sanity +-1.5 stop",
+   "source": "hero_wall_mid (clay selfcheck)",
+   "target_source": "Bible 'אור' 1.4: the wall by the window L 90-94",
+   "target_range": [
+    90.0,
+    94.0
+   ]
+  },
+  "saturation": "chroma x0.90 (linear, toward luminance)",
+  "s_curve": {
+   "mix": 0.12,
+   "shape": "smoothstep blend"
+  },
+  "black_point": {
+   "darkest_patch_L_before": 8.1,
+   "lift_to_L": 12.5,
+   "blend": 0.0476
+  },
+  "near_white_chroma_guard_B4": {
+   "population": "pixels with HSL L > 80 after the grade",
+   "before": {
+    "pixels": 2553096,
+    "L_lab": 77.92,
+    "C": 7.34,
+    "C_p95": 14.2,
+    "hue": 77.7
+   },
+   "after": {
+    "pixels": 2553096,
+    "L_lab": 94.86,
+    "C": 6.15,
+    "C_p95": 13.24,
+    "hue": 103.1
+   },
+   "delta_C": -1.19,
+   "limit": 1.5,
+   "applied": "none (within +1.5 C)"
+  },
+  "highlight_rolloff": {
+   "knee_L": 94,
+   "asymptote_L": 97.0,
+   "on": "max channel, hue kept",
+   "position": "last (v2): the ceiling of the chain"
+  },
+  "grain": "none",
+  "vignette": "none",
+  "wall_after_lift_v4": {
+   "H": 40.1,
+   "S": 34.0,
+   "L": 90.5,
+   "L_star": 92.7,
+   "C_star": 5.99,
+   "h_ab": 90.4
+  },
+  "wall_hue_v4": {
+   "rule": "QA 2026-11-03 §4 / §11.2: wall H after the lift reported; corrected when H > 40 (masked, walls only)",
+   "reference_uv": [
+    0.4999999403953552,
+    0.14534902572631836
+   ],
+   "before": {
+    "H": 40.1,
+    "S": 34.0,
+    "L": 90.5,
+    "L_star": 92.7,
+    "C_star": 5.99,
+    "h_ab": 90.4
+   },
+   "applied": true,
+   "after": {
+    "H": 37.9,
+    "S": 36.1,
+    "L": 90.6,
+    "L_star": 92.7,
+    "C_star": 6.06,
+    "h_ab": 87.4
+   },
+   "pixels_touched_pct": 19.9,
+   "protected_boxes": 13,
+   "target": {
+    "hsl": [
+     36.0,
+     20.0,
+     93.0
+    ],
+    "h_ab": 85.0,
+    "C_cap": 6.5
+   },
+   "mask": "L* 80-97.3, C* ramp 10-18, hue yellower than the target (0-6 deg ramp), outside the product boxes and the sofa / armchair / bed boxes (feather 30 px)"
+  }
+ },
+ "measure_after": {
+  "hero_wall_mid (0.500,0.145) clay L 86.5": [
+   37.9,
+   36.1,
+   90.6
+  ],
+  "wainscot (0.500,0.495) clay L 82.4": [
+   39.9,
+   31.5,
+   94.6
+  ],
+  "ceiling (0.550,0.040) clay L 88.0": [
+   36.4,
+   50.0,
+   93.6
+  ],
+  "floor_centre (0.500,0.930) clay L 62.6": [
+   29.2,
+   29.6,
+   44.5
+  ],
+  "reference_MB0 (0.500,0.145) clay L 86.5": [
+   38.3,
+   37.4,
+   91.4
+  ],
+  "window wall, QA point (0.170,0.300) [Bible 1.8 B1 (2): 80-88]": [
+   31.9,
+   38.4,
+   81.3
+  ],
+  "brightest area (window / door): L p50 / p99 / max": [
+   96.6,
+   96.6,
+   96.6
+  ],
+  "pixels with a 255 channel: inside / outside that area": [
+   0,
+   0
+  ],
+  "frame L p99 / max": [
+   96.6,
+   96.6
+  ],
+  "darkest 0.5% patch L [12-15]": 12.5,
+  "frame mean L": 79.0
+ },
+ "checks": {
+  "window_p99_le_97": true,
+  "frame_L_max_le_97": true,
+  "no_255": true,
+  "black_point_12_15": true,
+  "exposure_within_cap": false,
+  "exposure_point_valid": true,
+  "bible_black_12_15": true,
+  "bible_no_clip": true,
+  "bible_chroma_B4": true,
+  "bible_target_met": true,
+  "bible_window_wall_80_88": true,
+  "bible_wall_hue_32_40": true,
+  "bible_wall_C_le_7_B4": true
+ },
+ "v7_for_comparison": {
+  "clay_lock_v1_worst_abs_shift_strong_peaks": 0.0,
+  "grade_v1_exposure": {
+   "patch": [
+    0.4999999403953552,
+    0.14534902572631836
+   ],
+   "target_L": 90.0,
+   "needed_stops": 0.673,
+   "applied_stops": 0.2,
+   "flag": "DARK: needs more than +0.2 stop, not lifted further"
+  },
+  "measure_after_v1_window": [
+   95.0,
+   97.4,
+   97.6
+  ]
+ },
+ "lock_v2_summary": null,
+ "lock_v2_verdict": null,
+ "product_boxes_clay": {
+  "master/curtains": [
+   0.1404,
+   0.1872,
+   0.0,
+   0.769
+  ],
+  "master/bedding": [
+   0.081,
+   0.919,
+   0.6556,
+   0.9301
+  ],
+  "master/pillowcases": [
+   0.3154,
+   0.6846,
+   0.6019,
+   0.6556
+  ],
+  "master/throw": [
+   0.0667,
+   0.9237,
+   0.7495,
+   0.8579
+  ],
+  "master/cushions": [
+   0.4396,
+   0.5604,
+   0.5315,
+   0.662
+  ],
+  "master/bedside-sconces": [
+   0.2383,
+   0.7617,
+   0.3199,
+   0.3931
+  ],
+  "master/framed-art": [
+   0.3909,
+   0.6091,
+   0.1426,
+   0.3204
+  ],
+  "master/nightstand-vase": [
+   0.2281,
+   0.2526,
+   0.5528,
+   0.6477
+  ],
+  "master/candle-holders": [
+   0.7445,
+   0.7781,
+   0.6014,
+   0.6491
+  ],
+  "master/planter": [
+   0.9094,
+   1.0,
+   0.1444,
+   0.9106
+  ],
+  "master/sill-vase": [
+   0.0599,
+   0.0914,
+   0.394,
+   0.5921
+  ],
+  "master/trinket-dish": [
+   0.2581,
+   0.2805,
+   0.6231,
+   0.6435
+  ]
+ },
+ "product_box_rule": "each product inside its clay box +-15 % of the box size; read visually"
+}
