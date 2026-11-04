@@ -70,6 +70,54 @@
   "brush": "its hole filled row by row between the wall / skirting / floor pixels left and right (<= 60 px), + the wall texture at 0.6",
   "flecks_removed_px": 22
  },
+ "global_affine": {
+  "why": "G1.4 global scale (+0.54 / +0.78 % after the code fix, proposal 0.5 %): the manager's approval 2026-11-04; QA re-checks",
+  "register_before": {
+   "affine": [
+    [
+     1.00536,
+     0.00033,
+     -5.2136
+    ],
+    [
+     4e-05,
+     1.00781,
+     -3.82792
+    ]
+   ],
+   "shift_px": [
+    -5.21,
+    -3.83
+   ],
+   "scale_pct": [
+    0.536,
+    0.781
+   ]
+  },
+  "canvas_affine_inverse_map": [
+   [
+    1.005357,
+    0.000328,
+    -7.438041
+   ],
+   [
+    4.5e-05,
+    1.007807,
+    -5.489876
+   ]
+  ],
+  "register_after": {
+   "shift_px": [
+    -0.08,
+    -0.02
+   ],
+   "scale_pct": [
+    0.003,
+    -0.006
+   ]
+  },
+  "how": "cv2.warpAffine(still, A, WARP_INVERSE_MAP, Lanczos4, border replicate); A = C . M . C^-1, C = the 16:9 frame at 1920 -> the canvas"
+ },
  "untouched": "everything else (WC block, ledge, glazing, roll stand, curtain, mat, vanity)",
  "outputs": {
   "fix": "assets/renders/bath/nordic/v7/b1-v7-r3-fix.png"

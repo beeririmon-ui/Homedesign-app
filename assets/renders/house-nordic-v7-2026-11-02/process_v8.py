@@ -466,7 +466,7 @@ def protect_mask(frame, fid, H, W, overscan):
     m = np.zeros((H, W), np.float32)
     boxes = [b for b in VF.product_boxes(frame, fid).values()]
     for nm, (kind, b) in VF.fixed_boxes(frame, False, fid).items():     # overscan False: the selfcheck's own uv = the still's uv
-        if kind == "furniture" and frame != "M0" and any(w in nm.lower() for w in ("sofa", "armchair", "bed")):   # the upholstered ones;
+        if kind == "furniture" and any(w in nm.lower() for w in ("sofa", "armchair", "bed")):   # the upholstered ones (M0 1.2: from its clay);
             boxes.append(b)                                                                                     # oak and plaster are gated by C*
     if frame == "M0":
         boxes += list(VF.M0_FURNITURE.values())

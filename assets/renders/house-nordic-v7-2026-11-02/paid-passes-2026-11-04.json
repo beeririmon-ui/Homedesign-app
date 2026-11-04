@@ -30,7 +30,7 @@
    "reasons": [
     "storage basket x0.80: not separable in code (its rope and towels match the shelf's back wall; grabCut leaves its old outline)",
     "the planter's floor contact and the limestone panel base right of the fronds: code-fill seams at 100 % (soft at page size)",
-    "the wall beside the mirror C* 9.3 (> 7) and L 81.9 at B1 r3's stops (the r3 render is ~0.5 stop darker than B2 v7): to the prompt (B3)"
+    "the wall beside the mirror C* 9.3 (> 7) and L 82.2 at B1 r3's stops (the r3 render is ~0.5 stop darker than B2 v7): to the prompt (B3)"
    ],
    "not_reasons": [
     "vanity right side: lock v3 reads the outer edge +4 px; QA's -43 was the drawer-front / side boundary (parallel edges)",
@@ -70,12 +70,12 @@
    "lock_after": {
     "named_worst_px": 5,
     "box_worst_px": 5,
-    "band": 8.6,
-    "tile": 7.29,
+    "band": 8.54,
+    "tile": 7.59,
     "residual_limit": 9.6,
     "scale_pct": [
-     0.4,
-     0.69
+     0.41,
+     0.7
     ],
     "g_r_e": [
      false,
@@ -86,39 +86,39 @@
    "grading_v4": [],
    "reasons": [],
    "open": [
-    "the pen cup ~x1.4-2 its box (QA fidelity, proposal +-15 %): a 0-token code fix like the B1 brush (x0.6-0.7 about its base), not in QA §11.1; waits for the manager's word",
-    "G1.4 global: register scale +0.69 % vertical (proposal 0.5 %); residual and edges pass (video endpoint)"
-   ]
+    "G1.4 global: register scale +0.41 / +0.70 % vertical (proposal 0.5 %); residual and edges pass (video endpoint). The same whole-frame affine as B1 would close it: not approved for W0-in yet"
+   ],
+   "done_2026_11_04": "the pen cup x0.816 about its base, centred on its clay box: body 1.144 x 0.854 of the box (was 1.402 x 1.047), ~9.2 x 11.1 cm (envelope d 7-10, h 10-14)"
   },
   {
    "id": "b1-v7-r3",
    "paid_pass": false,
    "cost": 0,
    "lock_after": {
-    "named_worst_px": 5,
-    "box_worst_px": 5,
-    "band": 0.23,
-    "tile": 1.64,
+    "named_worst_px": 1,
+    "box_worst_px": 1,
+    "band": 0.21,
+    "tile": 1.65,
     "residual_limit": 2.0,
     "scale_pct": [
-     0.54,
-     0.78
+     0.0,
+     -0.01
     ],
     "g_r_e": [
-     false,
+     true,
      true,
      true
     ]
    },
    "grading_v4": [],
    "reasons": [],
-   "open": [
-    "G1.4 global: register scale +0.78 % vertical (proposal 0.5 %); every named line within +-5, residual 0.23 / 1.64 <= 2 px, edges pass; not an image-to-image matter (a whole-frame number); a whole-frame affine in code could close it, for QA / the manager to decide"
-   ]
+   "open": [],
+   "done_2026_11_04": "the whole frame by the inverse of lock_v2's register: shift -5.21 / -3.83 -> -0.08 / -0.02 px, scale +0.54 / +0.78 -> 0.00 / -0.01 %; lock_v2 (edges v3) PASS; every named line 0 / -1 px"
   }
  ],
  "total_tokens_if_all_run": {
   "required": 600,
   "with_optional": 1200
- }
+ },
+ "updated": "2026-11-04 (second pass: the W0-in cup and the B1 affine done, approved by the manager)"
 }

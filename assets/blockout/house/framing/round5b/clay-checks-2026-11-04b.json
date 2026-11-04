@@ -1,0 +1,779 @@
+{
+ "date": "2026-11-04",
+ "tokens": 0,
+ "script": "assets/blockout/house/framing/round5b/clay_checks_r5b.py",
+ "inputs": {
+  "plan": "1.2.2 (2026-11-04): round-5 clay F3 decisions (pouf, armchair, rug, coffee table); 1.2.1 (2026-11-03):user decisions V7Q6 (a) counting rule, V7Q7 (b) pendant bottom 1.90, V7Q8 (b) pouf by the coffee table; 1.2 (2026-11-03):user decision V7Q1 (b), living-room camera one metre closer; 1.1.2 / 1.1 approved 2026-10-08;1.1.1 2026-10-13: QA round-2 consistency fixes (no design change) + user decision D1B (2026-10-11); 1.1.2 2026-10-13: follow-ups of the QA re-check (W0 sconce 1.1.x fix, D1B wording, labels)",
+  "slots": "1.6",
+  "selfcheck": "assets/blockout/house/framing/round5b/selfcheck.json"
+ },
+ "camera": {
+  "M0": [
+   0.83,
+   4.64,
+   1.2
+  ],
+  "yaw": 25,
+  "u0": 0.47,
+  "v0": 0.5,
+  "clay": {
+   "id": "M0",
+   "room": "living",
+   "loc": [
+    0.83,
+    4.64,
+    1.2
+   ],
+   "yaw": 25,
+   "u0": 0.47,
+   "v0": 0.5,
+   "status": "1.2 (V7Q1 = b, 2026-11-03): one metre closer along the line of sight (exactly 1.00 forward, 0.00 sideways from the 1.1 point), on the T-E0 dolly line; yaw unchanged. 1.1 value in history_1_1",
+   "hero": "unchanged: the art over the sofa on the right third, framed by the travertine pair; the armchair is now the cut foreground layer the 1.1 frame lacked"
+  }
+ },
+ "slot_boxes": [
+  {
+   "slot": "sofa",
+   "item": "sofa 220 x 92 x 78 (X -0.90..1.30, Y 0.03-0.95)",
+   "slots_1_6": [
+    0.469,
+    0.891,
+    0.601,
+    0.952
+   ],
+   "projection_plan_constants": [
+    0.469,
+    0.891,
+    0.601,
+    0.952
+   ],
+   "clay_round5b": [
+    0.47,
+    0.89,
+    0.611,
+    0.94
+   ],
+   "max_diff_projection": 0.0,
+   "max_diff_clay": 0.012,
+   "verdict": "agrees (<= 0.02)",
+   "note": ""
+  },
+  {
+   "slot": "coffee-table",
+   "item": "coffee table 140 x 70 h 38, centre (0.20, 1.72)",
+   "slots_1_6": [
+    0.442,
+    0.803,
+    0.776,
+    1.0
+   ],
+   "projection_plan_constants": [
+    0.442,
+    0.803,
+    0.776,
+    1.118
+   ],
+   "clay_round5b": [
+    0.458,
+    0.801,
+    0.782,
+    1.03
+   ],
+   "max_diff_projection": 0.0,
+   "max_diff_clay": 0.016,
+   "verdict": "agrees (<= 0.02)",
+   "note": "house plan 1.2.2: the top's back edge at v 0.776; its 0.023 overlap with the sofa base accepted as a documented M0 F3 exception"
+  },
+  {
+   "slot": "armchair",
+   "item": "armchair 72 x 78 h 70, centre (-1.23, 2.73), 25 deg (house plan 1.2.2)",
+   "slots_1_6": [
+    0.023,
+    0.315,
+    0.71,
+    1.0
+   ],
+   "projection_plan_constants": [
+    0.066,
+    0.333,
+    0.689,
+    1.185
+   ],
+   "clay_round5b": [
+    0.023,
+    0.31,
+    0.715,
+    1.03
+   ],
+   "max_diff_projection": 0.043,
+   "max_diff_clay": 0.005,
+   "verdict": "estimate off (0.02-0.05)",
+   "note": ""
+  },
+  {
+   "slot": "pendant",
+   "item": "pendant shade 40 x 28, bottom 1.90",
+   "slots_1_6": [
+    0.565,
+    0.68,
+    0.046,
+    0.238
+   ],
+   "projection_plan_constants": [
+    0.575,
+    0.67,
+    0.072,
+    0.233
+   ],
+   "clay_round5b": [
+    0.576,
+    0.669,
+    0.095,
+    0.218
+   ],
+   "max_diff_projection": 0.026,
+   "max_diff_clay": 0.049,
+   "verdict": "estimate off (0.02-0.05)",
+   "note": ""
+  },
+  {
+   "slot": "accent-sconces",
+   "item": "travertine pair, left plate (-0.85, 0, 1.75)",
+   "slots_1_6": [
+    0.52,
+    0.539,
+    0.345,
+    0.389
+   ],
+   "projection_plan_constants": [
+    0.515,
+    0.538,
+    0.341,
+    0.39
+   ],
+   "clay_round5b": null,
+   "max_diff_projection": 0.005,
+   "max_diff_clay": null,
+   "verdict": "agrees (<= 0.02)",
+   "note": ""
+  },
+  {
+   "slot": "accent-sconces",
+   "item": "travertine pair, right plate (1.25, 0, 1.75)",
+   "slots_1_6": [
+    0.846,
+    0.87,
+    0.312,
+    0.365
+   ],
+   "projection_plan_constants": [
+    0.844,
+    0.874,
+    0.305,
+    0.366
+   ],
+   "clay_round5b": null,
+   "max_diff_projection": 0.007,
+   "max_diff_clay": null,
+   "verdict": "agrees (<= 0.02)",
+   "note": "clay pair box (both cubes) [0.516, 0.871, 0.315, 0.382]"
+  },
+  {
+   "slot": "vase",
+   "item": "vase body 32, d 22, on the back sash (-2.42, 1.35, 0.75)",
+   "slots_1_6": [
+    0.21,
+    0.255,
+    0.459,
+    0.623
+   ],
+   "projection_plan_constants": [
+    0.214,
+    0.25,
+    0.535,
+    0.626
+   ],
+   "clay_round5b": [
+    0.218,
+    0.246,
+    0.458,
+    0.625
+   ],
+   "max_diff_projection": 0.003,
+   "max_diff_clay": 0.009,
+   "verdict": "agrees (<= 0.02)",
+   "note": "the clay box includes the stems (slots 'box'); body compared with the projection"
+  },
+  {
+   "slot": "rug",
+   "item": "rug 330 x 240, X -1.45..1.85, Y 0.72-3.12 (house plan 1.2.2)",
+   "slots_1_6": [
+    0.191,
+    1.0,
+    0.815,
+    1.0
+   ],
+   "projection_plan_constants": [
+    0.064,
+    1.574,
+    0.812,
+    2.003
+   ],
+   "clay_round5b": [
+    0.196,
+    1.0,
+    0.812,
+    1.0
+   ],
+   "max_diff_projection": null,
+   "max_diff_clay": 0.005,
+   "verdict": "agrees (<= 0.02)",
+   "note": "clay = the 16:9 measurement clay M0-pouf for u0 / v0 / v1 (the M0 canvas box's u0 0.15 is the left edge in the 3 % overscan band below the frame) and the pouf-free M0 clay for u1 (in M0-pouf the pouf hides the rug's right end: u1 0.919); the near corners project outside the frame, so the projection box is not comparable"
+  },
+  {
+   "slot": "bowl",
+   "item": "bowl d 24 h 9, centre (0.68, 1.92)",
+   "slots_1_6": [
+    0.708,
+    0.766,
+    0.852,
+    0.884
+   ],
+   "projection_plan_constants": [
+    0.704,
+    0.772,
+    0.827,
+    0.904
+   ],
+   "clay_round5b": [
+    0.708,
+    0.767,
+    0.84,
+    0.901
+   ],
+   "max_diff_projection": 0.025,
+   "max_diff_clay": 0.017,
+   "verdict": "estimate off (0.02-0.05)",
+   "note": ""
+  },
+  {
+   "slot": "candle-holders",
+   "item": "candle holders X 0.42-0.65, Y 1.55-1.75, to Z 0.63",
+   "slots_1_6": [
+    0.673,
+    0.735,
+    0.762,
+    0.86
+   ],
+   "projection_plan_constants": [
+    0.673,
+    0.735,
+    0.727,
+    0.861
+   ],
+   "clay_round5b": [
+    0.675,
+    0.702,
+    0.723,
+    0.872
+   ],
+   "max_diff_projection": 0.035,
+   "max_diff_clay": 0.039,
+   "verdict": "estimate off (0.02-0.05)",
+   "note": ""
+  },
+  {
+   "slot": "table-runner",
+   "item": "runner on the table's left third",
+   "slots_1_6": [
+    0.472,
+    0.593,
+    0.78,
+    0.9
+   ],
+   "projection_plan_constants": null,
+   "clay_round5b": [
+    0.496,
+    0.611,
+    0.783,
+    0.867
+   ],
+   "max_diff_projection": null,
+   "max_diff_clay": 0.033,
+   "verdict": "estimate off (0.02-0.05)",
+   "note": ""
+  },
+  {
+   "slot": "cushions",
+   "item": "cushion set + throw",
+   "slots_1_6": [
+    0.484,
+    0.901,
+    0.566,
+    0.898
+   ],
+   "projection_plan_constants": null,
+   "clay_round5b": [
+    0.524,
+    0.839,
+    0.579,
+    0.744
+   ],
+   "max_diff_projection": null,
+   "max_diff_clay": null,
+   "verdict": "not comparable (see note)",
+   "note": "not comparable (the clay boxes the cushion proxies only)"
+  },
+  {
+   "slot": "pouf",
+   "item": "pouf (1.45, 2.0) d 45 h 36 (M0-pouf)",
+   "slots_1_6": [
+    0.905,
+    1.0,
+    0.915,
+    1.0
+   ],
+   "projection_plan_constants": [
+    0.911,
+    1.091,
+    0.923,
+    1.246
+   ],
+   "clay_round5b": [
+    0.91,
+    1.0,
+    0.922,
+    1.0
+   ],
+   "max_diff_projection": 0.008,
+   "max_diff_clay": 0.007,
+   "verdict": "agrees (<= 0.02)",
+   "note": "slot EMPTY in the test (no approved product); measurement clay only"
+  },
+  {
+   "slot": "floor-lamp",
+   "item": "floor lamp base (1.52, 0.20)",
+   "slots_1_6": [
+    0.885,
+    0.949,
+    0.389,
+    0.881
+   ],
+   "projection_plan_constants": null,
+   "clay_round5b": [
+    0.877,
+    0.959,
+    0.4,
+    0.894
+   ],
+   "max_diff_projection": null,
+   "max_diff_clay": 0.013,
+   "verdict": "agrees (<= 0.02)",
+   "note": "slot empty in the test (TR3)"
+  }
+ ],
+ "pouf": {
+  "decision": "house plan 1.2.2 / slots 1.6 / Bible 1.8.3 (2026-11-04): centre (1.45, 2.00), d 45-48, h 35-37, cut at the right and bottom edges; EMPTY in the test",
+  "designer_expects": {
+   "left_contour_u": [
+    0.905,
+    0.911
+   ],
+   "top_rim_v": [
+    0.915,
+    0.928
+   ],
+   "right_cut_pct": 50,
+   "lamp_base_gap": [
+    0.022,
+    0.034
+   ],
+   "frame_pct": 0.5,
+   "rug_back_edge": "passes behind the pouf top at an acute angle, 0.01-0.02 below it; if it reads as a tangent: h 37"
+  },
+  "projection_envelope": {
+   "d45 h35": {
+    "box": [
+     0.911,
+     1.091,
+     0.928,
+     1.246
+    ],
+    "left_contour_u": 0.911,
+    "right_cut_pct": 50.6,
+    "top_rim_v": 0.928,
+    "bottom_cut": true,
+    "lamp_base_gap": 0.033,
+    "rug_back_edge_vs_pouf_top": {
+     "below_the_top_point_v": 0.006,
+     "top_point_u": 0.945,
+     "goes_behind_the_rim_at_u": 0.928,
+     "left_contour_u": 0.911,
+     "reads": "the edge runs into the rim's upper-left quarter at an acute angle, 0.006 under the pouf's top point"
+    }
+   },
+   "d45 h36": {
+    "box": [
+     0.911,
+     1.091,
+     0.923,
+     1.246
+    ],
+    "left_contour_u": 0.911,
+    "right_cut_pct": 50.6,
+    "top_rim_v": 0.923,
+    "bottom_cut": true,
+    "lamp_base_gap": 0.028,
+    "rug_back_edge_vs_pouf_top": {
+     "below_the_top_point_v": 0.0111,
+     "top_point_u": 0.945,
+     "goes_behind_the_rim_at_u": 0.919,
+     "left_contour_u": 0.911,
+     "reads": "the edge runs into the rim's upper-left quarter at an acute angle, 0.0111 under the pouf's top point"
+    }
+   },
+   "d45 h37": {
+    "box": [
+     0.911,
+     1.091,
+     0.918,
+     1.246
+    ],
+    "left_contour_u": 0.911,
+    "right_cut_pct": 50.6,
+    "top_rim_v": 0.918,
+    "bottom_cut": true,
+    "lamp_base_gap": 0.023,
+    "rug_back_edge_vs_pouf_top": {
+     "below_the_top_point_v": 0.0161,
+     "top_point_u": 0.945,
+     "goes_behind_the_rim_at_u": 0.914,
+     "left_contour_u": 0.911,
+     "reads": "the edge runs into the rim's upper-left quarter at an acute angle, 0.0161 under the pouf's top point"
+    }
+   },
+   "d48 h35": {
+    "box": [
+     0.905,
+     1.098,
+     0.925,
+     1.252
+    ],
+    "left_contour_u": 0.905,
+    "right_cut_pct": 50.8,
+    "top_rim_v": 0.925,
+    "bottom_cut": true,
+    "lamp_base_gap": 0.03,
+    "rug_back_edge_vs_pouf_top": {
+     "below_the_top_point_v": 0.008,
+     "top_point_u": 0.942,
+     "goes_behind_the_rim_at_u": 0.92,
+     "left_contour_u": 0.905,
+     "reads": "the edge runs into the rim's upper-left quarter at an acute angle, 0.008 under the pouf's top point"
+    }
+   },
+   "d48 h36": {
+    "box": [
+     0.905,
+     1.098,
+     0.92,
+     1.252
+    ],
+    "left_contour_u": 0.905,
+    "right_cut_pct": 50.8,
+    "top_rim_v": 0.92,
+    "bottom_cut": true,
+    "lamp_base_gap": 0.025,
+    "rug_back_edge_vs_pouf_top": {
+     "below_the_top_point_v": 0.013,
+     "top_point_u": 0.942,
+     "goes_behind_the_rim_at_u": 0.913,
+     "left_contour_u": 0.905,
+     "reads": "the edge runs into the rim's upper-left quarter at an acute angle, 0.013 under the pouf's top point"
+    }
+   },
+   "d48 h37": {
+    "box": [
+     0.905,
+     1.098,
+     0.915,
+     1.252
+    ],
+    "left_contour_u": 0.905,
+    "right_cut_pct": 50.8,
+    "top_rim_v": 0.915,
+    "bottom_cut": true,
+    "lamp_base_gap": 0.02,
+    "rug_back_edge_vs_pouf_top": {
+     "below_the_top_point_v": 0.018,
+     "top_point_u": 0.942,
+     "goes_behind_the_rim_at_u": 0.909,
+     "left_contour_u": 0.905,
+     "reads": "the edge runs into the rim's upper-left quarter at an acute angle, 0.018 under the pouf's top point"
+    }
+   }
+  },
+  "clay_M0_pouf": {
+   "proxy": "(1.45, 2.00) d 45 h 36",
+   "box": [
+    0.91,
+    1.0,
+    0.922,
+    1.0
+   ],
+   "visible_pct": 13.1,
+   "frame_pct": 0.66,
+   "lamp_box": [
+    0.877,
+    0.959,
+    0.4,
+    0.894
+   ],
+   "f3": [],
+   "lamp_base_gap": 0.028
+  },
+  "clay_M0_pouf_b": {
+   "proxy": "(1.45, 2.00) d 48 h 37",
+   "box": [
+    0.905,
+    1.0,
+    0.915,
+    1.0
+   ],
+   "visible_pct": 14.0,
+   "frame_pct": 0.77,
+   "f3": []
+  },
+  "clay_M0_pouf_d45_h37": {
+   "proxy": "(1.45, 2.00) d 45 h 37: the designer's fix (house plan 1.2.2 pouf: 'if the rug edge reads as a tangent: h 37')",
+   "clay": "assets/blockout/house/framing/round5b/pouf-d45-h37/poses/M0-pouf.png",
+   "box": [
+    0.9104,
+    1.0,
+    0.9176,
+    1.0
+   ],
+   "left_contour_u": 0.91,
+   "top_rim_v": 0.918,
+   "lamp_base_gap": 0.023,
+   "visible_pct": 13.8,
+   "frame_pct": 0.71,
+   "f3": [],
+   "rug_edge_vs_top": {
+    "below_the_top_point_v": 0.0161,
+    "top_point_u": 0.945,
+    "goes_behind_the_rim_at_u": 0.914,
+    "left_contour_u": 0.911,
+    "reads": "the edge runs into the rim's upper-left quarter at an acute angle, 0.0161 under the pouf's top point"
+   }
+  },
+  "of_record": "d 45 h 37 (the designer's fix, 2026-11-04): the slot's product brief for sourcing; the pouf stays empty in the test render"
+ },
+ "armchair": {
+  "decision": "house plan 1.2.2: (-1.27, 2.82) -> (-1.23, 2.73), 25 deg",
+  "designer_expects": {
+   "left_margin": [
+    0.02,
+    0.025
+   ],
+   "right_u": [
+    0.31,
+    0.32
+   ],
+   "back_below_sill": 0.038
+  },
+  "projection_footprint_box": [
+   0.066,
+   0.333,
+   0.689,
+   1.185
+  ],
+  "clay_box": [
+   0.023,
+   0.31,
+   0.715,
+   1.03
+  ],
+  "visible_pct": 83.4,
+  "frame_pct": 5.46,
+  "clay_left_margin": 0.023,
+  "f3": []
+ },
+ "rug": {
+  "decision": "house plan 1.2.2: 330 x 240, X -1.45..1.85, Y 0.72-3.12",
+  "designer_expects": {
+   "back_edge_crosses_right_edge_at": {
+    "X": 1.77,
+    "v": 0.95
+   },
+   "left_edge_exits_bottom_u": 0.19,
+   "visible": "about half"
+  },
+  "projection": {
+   "back_edge_crosses_right_edge": {
+    "X": 1.771,
+    "v": 0.946
+   },
+   "left_edge_exits_bottom": {
+    "u": 0.185
+   }
+  },
+  "clay_box_M0_pouf": [
+   0.196,
+   0.919,
+   0.812,
+   1.0
+  ],
+  "clay_box_M0": [
+   0.15,
+   1.03,
+   0.812,
+   1.03
+  ],
+  "visible_pct": 13.2,
+  "frame_pct": 8.81,
+  "f3": []
+ },
+ "coffee_table": {
+  "decision": "house plan 1.2.2: the 0.023 overlap of the table top with the sofa base accepted as a documented M0 F3 exception; the top's back edge at v 0.776",
+  "clay_box": [
+   0.458,
+   0.801,
+   0.782,
+   1.03
+  ],
+  "f3": [
+   {
+    "a": "sofa 220x92x78 (fixed-product)",
+    "b": "coffee table 140x70 h38 (fixed-product)",
+    "kind": "overlap",
+    "overlap_thickness": 0.0234,
+    "cover_of_back": 0.128,
+    "behind": "sofa 220x92x78 (fixed-product)",
+    "dist3d_m": 0.42,
+    "rule": "overlap thinner than 0.03 and < 60% of the back item"
+   }
+  ]
+ },
+ "f3": {
+  "M0": {
+   "edge_tangents": [],
+   "object_object_tangents": [
+    {
+     "a": "sofa 220x92x78 (fixed-product)",
+     "b": "coffee table 140x70 h38 (fixed-product)",
+     "kind": "overlap",
+     "overlap_thickness": 0.0234,
+     "cover_of_back": 0.128,
+     "behind": "sofa 220x92x78 (fixed-product)",
+     "dist3d_m": 0.42,
+     "rule": "overlap thinner than 0.03 and < 60% of the back item"
+    }
+   ],
+   "note": "edge: visible bbox margin 0 < m < 0.02; object-object as round 2 (ray-cast silhouettes, 512x288)"
+  },
+  "M0p": {
+   "edge_tangents": [
+    {
+     "item": "coffee table 140x70 h38 (fixed-product)",
+     "side": "bottom",
+     "margin": 0.0017
+    }
+   ],
+   "object_object_tangents": [
+    {
+     "a": "sofa 220x92x78 (fixed-product)",
+     "b": "coffee table 140x70 h38 (fixed-product)",
+     "kind": "overlap",
+     "overlap_thickness": 0.0234,
+     "cover_of_back": 0.138,
+     "behind": "sofa 220x92x78 (fixed-product)",
+     "dist3d_m": 0.42,
+     "rule": "overlap thinner than 0.03 and < 60% of the back item"
+    }
+   ],
+   "note": "edge: visible bbox margin 0 < m < 0.02; object-object as round 2 (ray-cast silhouettes, 512x288)"
+  },
+  "M0x": {
+   "edge_tangents": [],
+   "object_object_tangents": [
+    {
+     "a": "kitchen-dining/bench-pad",
+     "b": "kitchen-dining/dining-rug",
+     "kind": "gap",
+     "gap": 0.0044,
+     "dist3d_m": 0.44,
+     "rule": "silhouettes apart by < 0.02 (kissing contours)"
+    },
+    {
+     "a": "kitchen-dining/bench-pad",
+     "b": "dining table 160x85 (fixed)",
+     "kind": "overlap",
+     "overlap_thickness": 0.0117,
+     "cover_of_back": 0.034,
+     "behind": "dining table 160x85 (fixed)",
+     "dist3d_m": 0.225,
+     "rule": "overlap thinner than 0.03 and < 60% of the back item"
+    },
+    {
+     "a": "dining bench (fixed)",
+     "b": "dining table 160x85 (fixed)",
+     "kind": "overlap",
+     "overlap_thickness": 0.0117,
+     "cover_of_back": 0.045,
+     "behind": "dining table 160x85 (fixed)",
+     "dist3d_m": 0.225,
+     "rule": "overlap thinner than 0.03 and < 60% of the back item"
+    },
+    {
+     "a": "dining bench (fixed)",
+     "b": "kitchen-dining/kitchen-runner",
+     "kind": "overlap",
+     "overlap_thickness": 0.0195,
+     "cover_of_back": 0.398,
+     "behind": "kitchen-dining/kitchen-runner",
+     "dist3d_m": 0.7,
+     "rule": "overlap thinner than 0.03 and < 60% of the back item"
+    },
+    {
+     "a": "kitchen-dining/dining-pendant",
+     "b": "door leaves",
+     "kind": "gap",
+     "gap": 0.0078,
+     "dist3d_m": 0.29,
+     "rule": "silhouettes apart by < 0.02 (kissing contours)"
+    },
+    {
+     "a": "kitchen-dining/dining-rug",
+     "b": "kitchen-dining/kitchen-runner",
+     "kind": "gap",
+     "gap": 0.0062,
+     "dist3d_m": 0.25,
+     "rule": "silhouettes apart by < 0.02 (kissing contours)"
+    },
+    {
+     "a": "dining table 160x85 (fixed)",
+     "b": "door leaves",
+     "kind": "overlap",
+     "overlap_thickness": 0.0234,
+     "cover_of_back": 0.282,
+     "behind": "dining table 160x85 (fixed)",
+     "dist3d_m": 0.095,
+     "rule": "overlap thinner than 0.03 and < 60% of the back item"
+    },
+    {
+     "a": "sofa 220x92x78 (fixed-product)",
+     "b": "coffee table 140x70 h38 (fixed-product)",
+     "kind": "overlap",
+     "overlap_thickness": 0.0195,
+     "cover_of_back": 0.031,
+     "behind": "sofa 220x92x78 (fixed-product)",
+     "dist3d_m": 0.42,
+     "rule": "overlap thinner than 0.03 and < 60% of the back item"
+    }
+   ],
+   "note": "edge: visible bbox margin 0 < m < 0.02; object-object as round 2 (ray-cast silhouettes, 512x288)"
+  }
+ },
+ "contradictions": []
+}

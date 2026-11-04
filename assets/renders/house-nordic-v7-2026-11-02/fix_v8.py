@@ -169,6 +169,40 @@ def despeck(out, region, protect, thr=6.0, max_area=200):
     return nc_fill(out, hole, 1 - hole, scales=((6, 6), (15, 15), (40, 40))), int(keep.sum())
 
 
+def global_affine_to_clay(fid, out):
+    """One affine on the whole still (the overscan canvas): the inverse of lock_v2's ECC register of this still against its clay
+    (measured on the 16:9 frame at 1920 x 1080, carried to the canvas), so the frame's global shift and scale go to ~0 (G1.4);
+    Lanczos, border replicated (only the outer canvas rows / columns, outside the 16:9 frame, are affected). Returns (still, record)."""
+    import lock_v2 as LK
+    frame, kind, clay_file, pan, overscan, room = VF.frame(fid)
+    Hs, Ws = out.shape[:2]
+    clay = LK.load_rgb(os.path.join(VF.R4, clay_file))
+
+    def fit16(img):
+        return LK.pr.fit(LK.crop_frame(img) if overscan else img, 1920, 1080)
+
+    def reg(img01):
+        _, M = LK.pr.register(fit16(img01), fit16(clay))
+        return M
+    a01 = np.clip(out / 255.0, 0, 1).astype(np.float32)
+    M = reg(a01)
+    fx0, fy0, fx1, fy1 = VF.frame_box_px(Ws, Hs) if overscan else (0, 0, Ws, Hs)
+    sx, sy = (fx1 - fx0) / 1920.0, (fy1 - fy0) / 1080.0
+    C = np.array([[sx, 0, fx0], [0, sy, fy0], [0, 0, 1]], float)
+    A = C @ np.vstack([M, [0, 0, 1]]) @ np.linalg.inv(C)
+    warped = cv2.warpAffine(out.astype(np.float32), A[:2], (Ws, Hs), flags=cv2.INTER_LANCZOS4 | cv2.WARP_INVERSE_MAP, borderMode=cv2.BORDER_REPLICATE)
+    warped = np.clip(warped, 0, 255)
+    M2 = reg(np.clip(warped / 255.0, 0, 1).astype(np.float32))
+    rec = dict(why="G1.4 global scale (+0.54 / +0.78 % after the code fix, proposal 0.5 %): the manager's approval 2026-11-04; QA re-checks",
+               register_before=dict(affine=np.round(M, 5).tolist(), shift_px=[round(float(M[0, 2]), 2), round(float(M[1, 2]), 2)],
+                                    scale_pct=[round((float(M[0, 0]) - 1) * 100, 3), round((float(M[1, 1]) - 1) * 100, 3)]),
+               canvas_affine_inverse_map=np.round(A[:2], 6).tolist(),
+               register_after=dict(shift_px=[round(float(M2[0, 2]), 2), round(float(M2[1, 2]), 2)],
+                                   scale_pct=[round((float(M2[0, 0]) - 1) * 100, 3), round((float(M2[1, 1]) - 1) * 100, 3)]),
+               how="cv2.warpAffine(still, A, WARP_INVERSE_MAP, Lanczos4, border replicate); A = C . M . C^-1, C = the 16:9 frame at 1920 -> the canvas")
+    return warped, rec
+
+
 def save_note(fid, note):
     p = os.path.join(VF.out_dir(fid), fid + "-fix.json")
     json.dump(dict(asset_id=fid, date=DATE, script=SCRIPT, tokens=0, **note), open(p, "w"), indent=1, ensure_ascii=False)
@@ -189,7 +223,8 @@ def out_fix(fid):
 B1 = dict(planter_rect=(0.440, 0.598, 0.395, 0.768), plinth=(0.484, 0.562, 0.765, 0.884), dy=172,
           brush_rect=(0.448, 0.482, 0.680, 0.900), brush_scale=0.73,
           clay_pot=(0.49, 0.555, 0.75, 0.877), clay_brush=(0.4583, 0.475, 0.7432, 0.893),
-          narrow_fills=True, curtain_patch_px=(1560, 300, 1640, 520))   # False restores the first run (surface fill behind the brush, 40-row curtain copy)
+          narrow_fills=True, curtain_patch_px=(1560, 300, 1640, 520),   # False restores the first run (surface fill behind the brush, 40-row curtain copy)
+          global_affine=True)   # 2026-11-04, the manager's approval: the whole frame by the inverse of lock_v2's register (G1.4 scale); False = without
 
 
 def edge_col(g, v0, v1, u0, u1):
@@ -320,6 +355,9 @@ def fix_b1(preview=True):
     out = F.composite(out, b_rgb, b_al)
     wall_zone = F.rect_mask(H, W, 0.440, 0.535, 0.40, 0.745) * (1 - curtain)       # right of the roll stand (u <= 0.433)
     out, n_speck = despeck(out, wall_zone, dil(np.maximum(p_al, b_al), 4))
+    affine = None
+    if B1.get("global_affine"):
+        out, affine = global_affine_to_clay(fid, out)
     F.save(out, out_fix(fid))
     nb = F.bbox(b_al)
     pot, cb = B1["clay_pot"], B1["clay_brush"]
@@ -348,6 +386,7 @@ def fix_b1(preview=True):
                                   "profile (median of the intact columns x 1600-1650), the top 24 rows blended, then the linen's weave (patch x 1560-1640, y 300-520)"),
                          brush="its hole filled row by row between the wall / skirting / floor pixels left and right (<= 60 px), + the wall texture at 0.6",
                          flecks_removed_px=n_speck) if B1.get("narrow_fills", True) else None),
+        global_affine=affine,
         untouched="everything else (WC block, ledge, glazing, roll stand, curtain, mat, vanity)", outputs=dict(fix=os.path.relpath(out_fix(fid), VF.REPO)))
     save_note(fid, note)
     print(json.dumps({k: v for k, v in note.items() if k != "method"}, indent=1))
@@ -513,7 +552,12 @@ def fix_kgirl0(preview=True):
 # ---------------------------------------------------------------------------------------------------------------
 W0IN = dict(pairs_1080=[(640, 640), (669, 694), (732, 768), (761, 800), (794, 835), (877, 923)], dy_below=46,
             cup_rect=(0.312, 0.368, 0.480, 0.648), plant_rect=(0.0, 0.235, 0.05, 1.0),
-            lines_clay_1080=dict(slab_back=694, slab_top_front=768, slab_front_face_bottom=800, chair_top=835, drawer_bottom=923))
+            lines_clay_1080=dict(slab_back=694, slab_top_front=768, slab_front_face_bottom=800, chair_top=835, drawer_bottom=923),
+            # 2026-11-04 second run (the manager's approval, after QA's fidelity note "the pen cup ~x1.4-2 its box"): the cup body is x1.37 the
+            # clay box's width and x1.05 its height (measured on the matte: 1.402 / 1.047); one uniform scale puts both inside +-15 %:
+            # k in [0.812, 0.820] -> 0.816 (the pencils, fillers, scale with it), and the cup is centred on the box (it sat ~15 px right of it,
+            # its right edge then outside the +15 % margin). 1.0 restores the first run
+            cup_scale=0.816, cup_box_clay=(0.3203, 0.3495, 0.5819, 0.6657))
 
 
 def fix_w0in(preview=True):
@@ -558,8 +602,29 @@ def fix_w0in(preview=True):
     # --- the cup back, moved by the warp's offset at its base row
     base = float(cy1)
     dy_cup = float(np.interp(base, src, dst) - base)
-    c_rgb, c_al = F.transform_layer(a, F.feather(cup, 0.6), 1.0, (0, 0), 0, dy_cup)
+    ks = W0IN["cup_scale"]
+    bw_rows = cup.sum(1)
+    body_rows = np.nonzero(bw_rows >= 0.6 * bw_rows.max())[0]                      # the cup body (the pencils are thin)
+    body = cup * (np.arange(H)[:, None] >= body_rows.min())
+    bx0_, bx1_, by0_, by1_ = F.bbox(body)
+    cxb = float(np.nonzero(cup[int(base) - 6:int(base) + 1] > 0.5)[1].mean())
+    cb_ = W0IN["cup_box_clay"]
+    dx_cup = ((cb_[0] + cb_[1]) / 2 * W - cxb) if ks != 1.0 else 0.0           # centred on the clay box
+    c_rgb, c_al = F.transform_layer(a, F.feather(cup, 0.6), ks, (cxb, base), dx_cup, dy_cup)
+    if ks != 1.0:
+        cxn = cxb + dx_cup
+        out = contact_shadow(out, cxn - (bx1_ - bx0_) * ks / 2, cxn + (bx1_ - bx0_) * ks / 2, base + dy_cup - 1, depth=0.80, h_px=5, spread=1.15)
     out = F.composite(out, c_rgb, c_al)
+    body_w, body_h = (bx1_ - bx0_) * ks, (by1_ - by0_) * ks
+    nx0, nx1 = cxb + dx_cup - body_w / 2, cxb + dx_cup + body_w / 2
+    cup_fit = dict(scale=ks, anchor_px=[round(cxb, 1), round(base + dy_cup, 1)], dx_px=round(dx_cup, 1), clay_box_uv=list(cb_),
+                   body_after_uv=[round(nx0 / W, 4), round(nx1 / W, 4), round((base + dy_cup - body_h) / H, 4), round((base + dy_cup) / H, 4)],
+                   inside_box_plus_15pct=bool(nx0 >= (cb_[0] - 0.15 * (cb_[1] - cb_[0])) * W and nx1 <= (cb_[1] + 0.15 * (cb_[1] - cb_[0])) * W),
+                   body_over_box_before=dict(w=round((bx1_ - bx0_) / ((cb_[1] - cb_[0]) * W), 3), h=round((by1_ - by0_) / ((cb_[3] - cb_[2]) * H), 3)),
+                   body_over_box_after=dict(w=round(body_w / ((cb_[1] - cb_[0]) * W), 3), h=round(body_h / ((cb_[3] - cb_[2]) * H), 3)),
+                   body_cm_after_est=dict(note="from the clay proxy's 13 cm height (z 0.79-0.92) at the box's px per cm",
+                                          h=round(body_h / ((cb_[3] - cb_[2]) * H) * 13.0, 1), d=round(body_w / ((cb_[3] - cb_[2]) * H) * 13.0, 1)),
+                   envelope_cm=dict(d=[7, 10], h=[10, 14]))
     # --- the plant on top, unmoved
     out = F.composite(out, a, F.feather(plant, 0.6))
     F.save(out, out_fix(fid))
@@ -573,6 +638,8 @@ def fix_w0in(preview=True):
                 "bottom-left) composited back unmoved; the pencil cup (grabCut u 0.312-0.368, v 0.480-0.648, plus the thin dark pencil tips) removed first with its whole rect (wall: quadratic fit with seam "
                 "correction; slab top: row by row) and put back rigidly by the warp's offset at its base"),
         pairs_1080=W0IN["pairs_1080"], dy_below_1080=W0IN["dy_below"], cup=dict(before_px=[cx0, cx1, cy0, cy1], dy_px=round(dy_cup, 1)),
+        cup_to_box=(dict(cup_fit, run="second, 2026-11-04 (approved by the manager)", how="the cup layer (body + pencils) scaled uniformly about the centre of its base, centred on the clay box and moved with the warp; a soft contact shadow under the smaller base")
+                    if W0IN["cup_scale"] != 1.0 else None),
         lines_clay_1080=W0IN["lines_clay_1080"], untouched="the shelf with its felt bins, the wall above row 640, the plant and its basket",
         outputs=dict(fix=os.path.relpath(out_fix(fid), VF.REPO)))
     save_note(fid, note)

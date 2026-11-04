@@ -51,7 +51,8 @@ r4.EXR_DIR = os.path.join(SCRATCH, "r5b-exr")
 r4.OUT4 = OUT5                                      # the default --plan / --out of framing_r4.main (overridden on the command line anyway)
 r4.GROUPS["A"] = r4.GROUPS["A"] + ["M0-pouf", "M0-pouf-b"]       # the measurement clay passes the --frames filter
 PENDANT = dict(hang=(0.20, 1.72, 3.00), bottom=1.90, r=0.20, h=0.28)       # m0-v7 c: ribbed pumpkin 40 (wide, low), Bible envelope 40-50 x 22-32
-POUF = dict(c=(1.45, 2.00), d=0.45, h=0.36)                                 # house plan 1.2.2 / slots 1.6 / Bible 1.8.3: d 45-48, h 35-37
+POUF = dict(c=(1.45, 2.00), d=float(os.environ.get("R5B_POUF_D", 0.45)), h=float(os.environ.get("R5B_POUF_H", 0.36)))   # house plan 1.2.2 / slots 1.6 / Bible 1.8.3: d 45-48, h 35-37
+# (R5B_POUF_D / R5B_POUF_H, 2026-11-04: the designer's fix d 45 h 37 rendered to its own --out folder; defaults = the first round-5b run)
 POUF_B = dict(c=(1.45, 2.00), d=0.48, h=0.37)                               # the other end of the envelope = the designer's tangent fix (h 37)
 ARMCHAIR_D = (-1.23 - (-1.27), 2.73 - 2.82)                                 # house plan 1.2.2: (-1.27, 2.82) -> (-1.23, 2.73)
 FLOOR_LAMP_DX = -0.08                                                       # (1.60, 0.20) -> (1.52, 0.20), slots 1.5

@@ -7,11 +7,13 @@ framing/round5b/clay-checks-2026-11-04.json: the camera agreement, every in-fram
 clay), the designer's four points (pouf, armchair, rug, coffee table / sofa), the rug back edge against the pouf top (the designer's
 check: a tangent -> pouf h 37), the F3 tangents of the clays, and whether anything still stops the paid renders.
 
-  python3 -I clay_checks_r5b.py
+  python3 -I clay_checks_r5b.py              # -> clay-checks-2026-11-04.json
+  python3 -I clay_checks_r5b.py --with-h37   # + the designer's fix d 45 h 37 (framing/round5b/pouf-d45-h37/, rendered apart) -> clay-checks-2026-11-04b.json
 """
 import json
 import math
 import os
+import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, "..", "..", "..", "..", ".."))
@@ -181,6 +183,20 @@ pouf = dict(
 cp = pouf["clay_M0_pouf"]
 if cp["box"] and cp["lamp_box"]:
     cp["lamp_base_gap"] = round(cp["box"][2] - cp["lamp_box"][3], 3)
+H37 = "--with-h37" in sys.argv
+if H37:
+    s37 = json.load(open(os.path.join(HERE, "pouf-d45-h37", "selfcheck.json")))["frames"]["M0-pouf"]
+    b37 = s37["boxes"]["living/pouf"]["box"]
+    l37 = s37["boxes"]["living/floor-lamp"]["box"]
+    it = s37.get("items_visible", {}).get("living/pouf", {})
+    f37 = [t for t in s37.get("F3_tangents", {}).get("object_object_tangents", []) if "pouf" in t["a"] or "pouf" in t["b"] or "rug" in t["a"] or "rug" in t["b"]] + \
+          [t for t in s37.get("F3_tangents", {}).get("edge_tangents", []) if "pouf" in t["item"] or "rug" in t["item"]]
+    pouf["clay_M0_pouf_d45_h37"] = dict(proxy="(1.45, 2.00) d 45 h 37: the designer's fix (house plan 1.2.2 pouf: 'if the rug edge reads as a tangent: h 37')",
+                                        clay="assets/blockout/house/framing/round5b/pouf-d45-h37/poses/M0-pouf.png", box=[round(x, 4) for x in b37],
+                                        left_contour_u=round(b37[0], 3), top_rim_v=round(b37[2], 3), lamp_base_gap=round(b37[2] - l37[3], 3),
+                                        visible_pct=it.get("visible_pct"), frame_pct=it.get("frame_area_pct"), f3=f37,
+                                        rug_edge_vs_top=pouf_env["d45 h37"]["rug_back_edge_vs_pouf_top"])
+    pouf["of_record"] = "d 45 h 37 (the designer's fix, 2026-11-04): the slot's product brief for sourcing; the pouf stays empty in the test render"
 
 # --- armchair: the left edge (the designer: the arm end and the back post ~0.02-0.025 inside the left edge)
 arm_proj = box(rrect(*ARM, 0.72, 0.78, 25, 0.0, 0.70))
@@ -211,7 +227,7 @@ out = dict(date="2026-11-04", tokens=0, script="assets/blockout/house/framing/ro
            slot_boxes=rows, pouf=pouf, armchair=armchair, rug=rug, coffee_table=table,
            f3=dict(M0=sc.get("M0", {}).get("F3_tangents"), M0p=sc.get("M0p", {}).get("F3_tangents"), M0x=sc.get("M0x", {}).get("F3_tangents")),
            contradictions=[f"{r['slot']}: {r['item']} (projection {r['max_diff_projection']}, clay {r['max_diff_clay']})" for r in stops])
-json.dump(out, open(os.path.join(HERE, "clay-checks-2026-11-04.json"), "w"), indent=1, ensure_ascii=False)
+json.dump(out, open(os.path.join(HERE, "clay-checks-2026-11-04b.json" if H37 else "clay-checks-2026-11-04.json"), "w"), indent=1, ensure_ascii=False)
 for r in rows:
     print(f"{r['slot']:15s} slots {r['slots_1_6']} proj {r['projection_plan_constants']} clay {r['clay_round5b']} -> {r['verdict']}")
 print("pouf envelope:", json.dumps(pouf_env))
@@ -221,3 +237,5 @@ print("armchair:", json.dumps(armchair)[:700])
 print("rug:", json.dumps(rug)[:700])
 print("table:", json.dumps(table)[:500])
 print("contradictions:", out["contradictions"])
+if H37:
+    print("pouf d45 h37 clay:", json.dumps(pouf["clay_M0_pouf_d45_h37"]))

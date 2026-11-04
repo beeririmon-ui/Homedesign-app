@@ -4,7 +4,7 @@ Box overlays and manifest entries for the 2026-11-04 work (briefs/render-retakes
 the four code fixes (fix_v8.py: `<id>-fix.png`), their lock v3 overlays (lock_fixes_v8.py: `<id>-lock-fix.jpg` after,
 `<id>-lock-v3.jpg` before), their grading-v4 files and product-box overlays (`<id>-boxes-fix-v4.png`), and the grading-v4 files
 of the 22 v7 stills and the 4 fixes of 2026-11-03 (regrade_v4.py). Idempotent: existing ids are kept.
-  python3 record_v8_fixes.py
+  python3 record_v8_fixes.py [--refresh]
 """
 import json
 import os
@@ -24,7 +24,15 @@ NEW = ["b1-v7-r3", "b2-v7-r3", "pose-k-girl-0-v7-r2", "pose-w0-in-v7-r2"]
 added = []
 
 
+REFRESH = "--refresh" in sys.argv          # 2026-11-04 second pass: existing entries of the four fixes get the new status / records
+
+
 def add(aid, path, room, frame, kind, status, **kw):
+    if aid in have and REFRESH and any(aid.startswith(pre) for pre in ("v8-b1-v7-r3", "v8-b2-v7-r3", "v8-pose-pose-w0-in-v7-r2", "v8-pose-pose-k-girl-0-v7-r2")):
+        e = next(a for a in man["assets"] if a["id"] == aid)
+        e.update(status=status, updated="2026-11-04", **kw)
+        added.append(aid + " (refreshed)")
+        return
     if aid in have or not os.path.exists(os.path.join(REPO, path)):
         return
     e = dict(id=aid, path=path, room=room, style="nordic", kind=kind, frame=frame, status=status, created="2026-11-04", **kw)
