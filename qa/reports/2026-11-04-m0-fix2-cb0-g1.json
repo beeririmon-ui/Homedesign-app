@@ -1,0 +1,8183 @@
+{
+ "report": "qa/reports/2026-11-04-m0-fix2-cb0-g1.md",
+ "by": "qa-agent",
+ "date": "2026-11-04",
+ "gate": "G1 (docs/ops/quality-gates-2026-11-02.md) on the M0 1.2 code composites, the four fix2 frames, CB-0 recomposed from B1 r3 fix2, and grading v5 against Bible 1.8.4",
+ "brief": "briefs/qa-m0-composite-fix2-cb0-2026-11-04.md",
+ "tools": "site/tools/transitions/pan_reproject.py register / check; qa/reports/2026-11-04-m0-fix2-cb0-g1/tools/*.py (QA; the 11-03 / 11-04 tools imported, not edited); eye at 100-200 %",
+ "inputs_sha256_16": {
+  "m0-v8b-r2-fix.png": "d48e072d39ad087a",
+  "m0-v8b-r2-graded-fix-v5.png": "29b47a2d17baa585",
+  "pose-m0p-v8b-fix.png": "595cf8450b043c0c",
+  "pose-m0p-v8b-graded-fix-v5.png": "5c48a6e2c1ee11d1",
+  "pose-m0x-v8b-fix.png": "08ea42bf16125047",
+  "pose-m0x-v8b-graded-fix-v5.png": "4634d13831299d96",
+  "b1-v7-r3-fix2.png": "0e63a76919b73719",
+  "b1-v7-r3-graded-fix2-v5.png": "baf7bbf14d2202be",
+  "b2-v7-r3-fix2.png": "872d740cfb02e708",
+  "b2-v7-r3-graded-fix2-v5.png": "5ab9a5c8770d19e9",
+  "pose-k-girl-0-v7-r2-fix2.png": "693df84c5389b73d",
+  "pose-k-girl-0-v7-r2-graded-fix2-v5.png": "662511616448cc19",
+  "pose-w0-in-v7-r2-fix2.png": "22c22a1c53ba0d3a",
+  "pose-w0-in-v7-r2-graded-fix2-v5.png": "2ee638baa684ab6d",
+  "pose-cb-0-v7-b1r3.png": "8fcca55ac9e0dc18",
+  "pose-cb-0-v7-graded-b1r3-v5.png": "24256db1d01cde7f",
+  "regrade-v5-summary.json": "5999099291a6d612"
+ },
+ "products_note": "M0 / M0p / M0x lists are the v7 frames' (2026-11-02 report); M0 1.2's card set (Bible 1.8.3: pouf, armchair, rug) is not re-verified this round",
+ "out_of_scope": "m0-v8b-r2-fix2.png / .json appeared at 22:47 during this run (render-agent's wall-art round, RND3): not checked here",
+ "frames": [
+  {
+   "frame": "M0 1.2 fix",
+   "kind": "code composite 2026-11-04 (fix_m0_12.py) on the paid reserve render m0-v8b-r2",
+   "fix_file": "assets/renders/living-room/nordic/v8/m0-v8b-r2-fix.png",
+   "graded": "assets/renders/living-room/nordic/v8/m0-v8b-r2-graded-fix-v5.png",
+   "criteria": [
+    {
+     "id": "G1.4",
+     "binding": true,
+     "value": {
+      "register_shift_px": [
+       -2.99,
+       -7.51
+      ],
+      "register_scale_pct": [
+       -1.6,
+       0.52
+      ],
+      "residual_gated": {
+       "bands": [
+        12.49
+       ],
+       "tiles": [
+        20.74,
+        20.32,
+        34.45,
+        1.06,
+        16.15,
+        11.15
+       ],
+       "worst": 34.45
+      },
+      "masked_register": {
+       "shift_px": [
+        14.37,
+        -14.91
+       ],
+       "scale_pct": [
+        1.46,
+        4.97
+       ],
+       "masked_share": 0.629,
+       "worst_band_px_after": 155.14,
+       "worst_tile_px_after": 26.79
+      },
+      "named_lines_px": null,
+      "raw_before": {
+       "register_shift_px": [
+        -7.42,
+        -6.08
+       ],
+       "register_scale_pct": [
+        0.58,
+        0.66
+       ],
+       "residual_gated": {
+        "bands": [
+         36.71
+        ],
+        "tiles": [
+         16.54,
+         6.9,
+         5.15,
+         17.36,
+         34.62
+        ],
+        "worst": 36.71
+       },
+       "masked_register": {
+        "shift_px": [
+         153.12,
+         -10.77
+        ],
+        "scale_pct": [
+         5.59,
+         3.83
+        ],
+        "masked_share": 0.629,
+        "worst_band_px_after": 125.08,
+        "worst_tile_px_after": 40.75
+       },
+       "named_lines_px": null
+      },
+      "shell": {
+       "offsets_px_1080": {
+        "back wall floor line": [
+         {
+          "at": [
+           760,
+           824
+          ],
+          "clay": 824,
+          "render": 808,
+          "d": -16
+         },
+         {
+          "at": [
+           860,
+           835
+          ],
+          "clay": 835,
+          "render": 816,
+          "d": -19
+         },
+         {
+          "at": [
+           1780,
+           936
+          ],
+          "clay": 936,
+          "render": 893,
+          "d": -43
+         },
+         {
+          "at": [
+           1880,
+           947
+          ],
+          "clay": 947,
+          "render": 901,
+          "d": -46
+         }
+        ],
+        "back wall skirting top": [
+         {
+          "at": [
+           760,
+           788
+          ],
+          "clay": 788,
+          "render": 778,
+          "d": -10
+         },
+         {
+          "at": [
+           860,
+           797
+          ],
+          "clay": 797,
+          "render": 785.5,
+          "d": -11.5
+         },
+         {
+          "at": [
+           1780,
+           885
+          ],
+          "clay": 885,
+          "render": 851,
+          "d": -34
+         },
+         {
+          "at": [
+           1880,
+           895
+          ],
+          "clay": 895,
+          "render": 859,
+          "d": -36
+         }
+        ],
+        "back wall cornice": [
+         {
+          "at": [
+           900,
+           119
+          ],
+          "clay": 119,
+          "render": 103,
+          "d": -16
+         },
+         {
+          "at": [
+           1000,
+           104
+          ],
+          "clay": 104,
+          "render": 90,
+          "d": -14
+         },
+         {
+          "at": [
+           1100,
+           89
+          ],
+          "clay": 89,
+          "render": 76,
+          "d": -13
+         },
+         {
+          "at": [
+           1450,
+           35
+          ],
+          "clay": 35,
+          "render": 30,
+          "d": -5
+         }
+        ],
+        "room corner": [
+         {
+          "at": [
+           698,
+           250
+          ],
+          "clay": 698,
+          "render": 703,
+          "d": 5
+         },
+         {
+          "at": [
+           698,
+           450
+          ],
+          "clay": 698,
+          "render": 703,
+          "d": 5
+         },
+         {
+          "at": [
+           698,
+           650
+          ],
+          "clay": 698,
+          "render": 703,
+          "d": 5
+         }
+        ],
+        "window sill top edge": [
+         {
+          "at": [
+           200,
+           711
+          ],
+          "clay": 711,
+          "render": 683,
+          "d": -28
+         },
+         {
+          "at": [
+           400,
+           684
+          ],
+          "clay": 684,
+          "render": 654,
+          "d": -30
+         },
+         {
+          "at": [
+           520,
+           669
+          ],
+          "clay": 669,
+          "render": 638,
+          "d": -31
+         }
+        ]
+       },
+       "slopes": {
+        "back wall floor line": {
+         "clay": 0.1098,
+         "render": 0.083
+        },
+        "back wall skirting top": {
+         "clay": 0.0955,
+         "render": 0.0723
+        },
+        "back wall cornice": {
+         "clay": -0.1527,
+         "render": -0.1327
+        }
+       },
+       "back_wall_vanishing_point_px": {
+        "clay": [
+         -1844.0,
+         538.0
+        ],
+        "render": [
+         -2421.0,
+         544.0
+        ]
+       },
+       "homography_all_planes_residual_px": {
+        "back wall floor line": [
+         6.5,
+         5.0,
+         6.8,
+         8.5
+        ],
+        "back wall skirting top": [
+         11.4,
+         11.2,
+         0.8,
+         1.1
+        ],
+        "back wall cornice": [
+         8.4,
+         6.0,
+         4.6,
+         5.2
+        ],
+        "room corner": [
+         9.8,
+         13.6,
+         17.7
+        ],
+        "window sill top edge": [
+         14.3,
+         14.8,
+         15.0
+        ]
+       },
+       "homography_back_wall_residual_px": {
+        "back wall floor line": [
+         5.0,
+         5.6,
+         4.4,
+         4.8
+        ],
+        "back wall skirting top": [
+         2.1,
+         3.2,
+         3.6,
+         4.5
+        ],
+        "back wall cornice": [
+         10.1,
+         6.5,
+         4.1,
+         9.9
+        ],
+        "room corner": [
+         5.6,
+         7.2,
+         8.9
+        ]
+       },
+       "back_wall_homography_on_the_window_wall_px": {
+        "window sill top edge": [
+         31.6,
+         28.7,
+         26.9
+        ]
+       },
+       "affine_all_planes_max_residual_px": 18.0,
+       "verdict": "confirmed: the room shell is drawn in another perspective (not a shift or scale): back-wall floor line -16 -> -46 px, skirting -10 -> -36, cornice -16 -> -5 (the opposite trend), sill -28..-31, corner +5 (1920 frame; x 1.425 on the canvas = render-agent's 20-66 / ~45). The back-wall vanishing point moved from x -1844 to -2421. One homography for all planes leaves 5-18 px; the back wall's own homography fits to 2-10 px but misses the window wall by 27-32 px: the planes need different homographies = parallax = a different camera position. A per-region warp cannot reach the 2 px of a pan endpoint (P0) at the plane joints, tears the window / curtains / pendant at the plane borders and re-cuts the furniture just composited: not realistic. Only a new render fixes M0's shell."
+      }
+     },
+     "threshold": "register shift <= 9.6 px and scale within 0.5 %; residual after register <= 2.0 px per band / tile with shared structure (response >= 0.10, rho >= 0.30) for pan endpoints, <= 9.6 px for video endpoints; named lines within +-19 px (G1.4, proposal C3)",
+     "pass": false
+    },
+    {
+     "id": "G1.3",
+     "binding": false,
+     "value": {
+      "by_cross_correlation": {
+       "sofa_width": 1.051,
+       "sofa_left_edge_px": -41,
+       "table_width": 0.939,
+       "table_right_edge_px": -31
+      },
+      "note": "the furniture edges the code moved; not decisive while the shell is off (proposal)"
+     },
+     "threshold": "fixed edges +-19 px, width 0.95-1.05 (proposal)",
+     "pass": null
+    },
+    {
+     "id": "G1.1",
+     "binding": true,
+     "value": "not judged this round: the products are those of the paid render m0-v8b-r2 (sofa / table groups scaled uniformly with their decor); the card check waits for the frame that passes G1.4",
+     "threshold": "every product the card's SKU",
+     "pass": null
+    },
+    {
+     "id": "G1.12",
+     "binding": true,
+     "value": {
+      "violations": [
+       "right strip (fill copied 114 px): the skirting's top profile breaks at canvas x ~2435 and ~2545 (y ~1190); rectangular plank blocks on the floor (x ~2425-2500, y ~1260-1335); the rug's border stair-stepped (x ~2435-2590, y ~1330-1350)",
+       "soft fill patches in the floor and rug around the old sofa / table footprint (render-agent reports them too)"
+      ],
+      "overlays": [
+       "overlays/g112-M0-right-strip-200.jpg",
+       "overlays/g112-M0-floor-rug.jpg",
+       "overlays/g112-M0-sofa-wall.jpg"
+      ]
+     },
+     "threshold": "0 seams, halos, fill artefacts at 100 % (Bible 'forbidden'; G1.12)",
+     "pass": false
+    },
+    {
+     "id": "G1.7-G1.9 (grading v5)",
+     "binding": true,
+     "value": {
+      "back_wall": {
+       "uv": [
+        0.4269,
+        0.4156
+       ],
+       "L": 92.0,
+       "H": 37.2,
+       "S": 56.0,
+       "Lstar": 94.09,
+       "C": 7.78
+      },
+      "window_wall_bible_point": {
+       "uv": [
+        0.352,
+        0.415
+       ],
+       "L": 87.0,
+       "H": 34.0,
+       "S": 57.8,
+       "Lstar": 89.99,
+       "C": 12.94
+      },
+      "window_wall_note": "the Bible point (0.352, 0.415) lands on the curtain's edge in this render (the shell is off); on the bare strip u 0.364-0.368: L 84.1-86.3, in 80-88",
+      "black": 13.5,
+      "max_L": 96.5,
+      "px255": 0,
+      "fails": [
+       "C* 7.78 > 7 (B4) at the back-wall point"
+      ]
+     },
+     "threshold": "Bible 1.8.4: the reference wall in range (living 90-94, bath 86-90 HSL L; corridor L* 72-75 at the BIB2 points), H 32-40, C* <= 7 (B4), window wall 80-88, black 12-15, max <= 97 and no 255; hall walls L* 75-78; the corridor-end vista the brightest",
+     "pass": false
+    },
+    {
+     "id": "G1.14",
+     "binding": true,
+     "value": {
+      "P0": {
+       "pan": "P0 pan",
+       "degrees": 25,
+       "bands": [
+        [
+         17.93,
+         24.54,
+         0.014
+        ],
+        [
+         1.12,
+         -22.48,
+         0.435
+        ],
+        [
+         -18.91,
+         -9.45,
+         0.344
+        ],
+        [
+         -17.88,
+         0.88,
+         0.05
+        ]
+       ],
+       "worst_reliable_px": 22.48,
+       "dL": 4.0,
+       "dE_mean": 7.91,
+       "clay_floor_px": 0.32
+      }
+     },
+     "threshold": "pan_reproject.check in the overlap: <= 2 px per band with response >= 0.05 and dL <= 1 (gates doc 7.1, proposal; the principle binding)",
+     "pass": false
+    }
+   ],
+   "verdict": "fail",
+   "failed_binding": [
+    "G1.4",
+    "G1.12",
+    "G1.7-G1.9 (grading v5)",
+    "G1.14"
+   ],
+   "failed_proposal": [],
+   "cannot_measure": [
+    "G1.2",
+    "G1.5",
+    "G1.11",
+    "G1.15",
+    "G1.16"
+   ],
+   "may_reference": "no: the shell is in another perspective (G1.4); fill artefacts on the right (G1.12); C* 7.8 (B4)",
+   "may_pan_endpoint": "no: P0 22.5 px, dL 4.0 against M0p 1.2 fix; T-E0 ends on M0",
+   "products_unverified": [
+    "framed-art-aliexpress-minimal-geometric-triptych-prints",
+    "wall-sconce-cj-travertine-cube-updown-12",
+    "pendant-cj-silk-ribbed-pumpkin-40",
+    "curtains-aliexpress-linen-blend-s-fold-180502",
+    "vase-aliexpress-vintage-distressed-clay-vase-589009",
+    "wall-sconce-cj-black-swing-arm-fabric",
+    "cushions-cj-boucle-teddy",
+    "cushions-cj-knitted-chenille-bean-green",
+    "cushions-cj-linen-look-charcoal",
+    "sofa-cover-cj-cotton-muslin-fringe",
+    "table-runner-cj-linen-look-sage-fringe",
+    "candle-holders-cj-travertine-pedestal",
+    "bowl-cj-glutinous-white-belly-bowl-21"
+   ],
+   "products_live": [
+    "basket-zendrop-seagrass-belly-38x34"
+   ]
+  },
+  {
+   "frame": "M0p 1.2 fix",
+   "kind": "code composite 2026-11-04 on pose-m0p-v8b",
+   "fix_file": "assets/renders/poses/nordic/v8/pose-m0p-v8b-fix.png",
+   "graded": "assets/renders/poses/nordic/v8/pose-m0p-v8b-graded-fix-v5.png",
+   "criteria": [
+    {
+     "id": "G1.4",
+     "binding": true,
+     "value": {
+      "register_shift_px": [
+       -2.09,
+       3.72
+      ],
+      "register_scale_pct": [
+       0.46,
+       0.3
+      ],
+      "residual_gated": {
+       "bands": [
+        6.13
+       ],
+       "tiles": [
+        6.04,
+        4.63,
+        2.22,
+        2.72,
+        10.58,
+        12.67,
+        16.01
+       ],
+       "worst": 16.01
+      },
+      "masked_register": {
+       "shift_px": [
+        -5.34,
+        -6.82
+       ],
+       "scale_pct": [
+        0.33,
+        0.81
+       ],
+       "masked_share": 0.255,
+       "worst_band_px_after": 24.4,
+       "worst_tile_px_after": 20.49
+      },
+      "named_lines_px": null,
+      "shell": "shell lines off by a uniform vertical error (floor line -14/-15, skirting -7/-8, cornice -4, corner 0, side wall -10..-19 px): about -1.3 % vertical, the same at every column: one vertical affine of the raw (0 tokens) before the furniture is re-composited is realistic here (unlike M0)"
+     },
+     "threshold": "register shift <= 9.6 px and scale within 0.5 %; residual after register <= 2.0 px per band / tile with shared structure (response >= 0.10, rho >= 0.30) for pan endpoints, <= 9.6 px for video endpoints; named lines within +-19 px (G1.4, proposal C3)",
+     "pass": false
+    },
+    {
+     "id": "G1.3",
+     "binding": false,
+     "value": {
+      "sofa_width_by_edges": 1.0015,
+      "sofa_width_by_xcorr": 1.125,
+      "table_width_by_xcorr": 1.049
+     },
+     "threshold": "fixed edges +-19 px, width 0.95-1.05 (proposal)",
+     "pass": null
+    },
+    {
+     "id": "G1.1",
+     "binding": true,
+     "value": {
+      "deviations": [
+       "the bowl on the table reads as two nested rims: the old bowl's rim stays visible behind the scaled one (bowl-cj-glutinous-white-belly-bowl-21: one bowl)"
+      ],
+      "overlay": "overlays/g112-M0p-bowl-200.jpg"
+     },
+     "threshold": "every product the card's SKU: silhouette, count",
+     "pass": false
+    },
+    {
+     "id": "G1.12",
+     "binding": true,
+     "value": {
+      "violations": [
+       "the doubled bowl rim (canvas ~x 1100-1300, y ~1190-1260)",
+       "right of the sofa's right leg: rectangular blocks on the rug border and a vertical seam through the floor and the rug (canvas ~x 1500-1650, y ~1180-1300)"
+      ],
+      "overlays": [
+       "overlays/g112-M0p-bowl-200.jpg",
+       "overlays/g112-M0p-floor-right-leg-200.jpg",
+       "overlays/g112-M0p-sofa.jpg"
+      ]
+     },
+     "threshold": "0 seams, halos, fill artefacts at 100 % (Bible 'forbidden'; G1.12)",
+     "pass": false
+    },
+    {
+     "id": "G1.7-G1.9 (grading v5)",
+     "binding": true,
+     "value": {
+      "reference": {
+       "uv": [
+        0.1221,
+        0.4036
+       ],
+       "L": 92.0,
+       "H": 34.5,
+       "S": 33.5,
+       "Lstar": 93.48,
+       "C": 4.54
+      },
+      "black": 13.5,
+      "max_L": 96.5,
+      "px255": 0
+     },
+     "threshold": "Bible 1.8.4: the reference wall in range (living 90-94, bath 86-90 HSL L; corridor L* 72-75 at the BIB2 points), H 32-40, C* <= 7 (B4), window wall 80-88, black 12-15, max <= 97 and no 255; hall walls L* 75-78; the corridor-end vista the brightest",
+     "pass": true
+    },
+    {
+     "id": "G1.14",
+     "binding": true,
+     "value": {
+      "P0": {
+       "pan": "P0 pan",
+       "degrees": 25,
+       "bands": [
+        [
+         17.93,
+         24.54,
+         0.014
+        ],
+        [
+         1.12,
+         -22.48,
+         0.435
+        ],
+        [
+         -18.91,
+         -9.45,
+         0.344
+        ],
+        [
+         -17.88,
+         0.88,
+         0.05
+        ]
+       ],
+       "worst_reliable_px": 22.48,
+       "dL": 4.0,
+       "dE_mean": 7.91,
+       "clay_floor_px": 0.32
+      },
+      "P1": {
+       "pan": "P1 pan",
+       "degrees": 35,
+       "bands": [
+        [
+         5.01,
+         -36.35,
+         0.105
+        ],
+        [
+         3.32,
+         -28.58,
+         0.197
+        ],
+        [
+         -0.38,
+         4.25,
+         -0.013
+        ],
+        [
+         -3.01,
+         14.26,
+         0.229
+        ]
+       ],
+       "worst_reliable_px": 36.35,
+       "dL": 7.8,
+       "dE_mean": 10.65,
+       "clay_floor_px": 0.19
+      }
+     },
+     "threshold": "pan_reproject.check in the overlap: <= 2 px per band with response >= 0.05 and dL <= 1 (gates doc 7.1, proposal; the principle binding)",
+     "pass": false
+    }
+   ],
+   "verdict": "fail",
+   "failed_binding": [
+    "G1.4",
+    "G1.1",
+    "G1.12",
+    "G1.14"
+   ],
+   "failed_proposal": [],
+   "cannot_measure": [
+    "G1.2",
+    "G1.5",
+    "G1.11",
+    "G1.15",
+    "G1.16"
+   ],
+   "may_reference": "no: shell -1.3 % vertical (G1.4), the doubled bowl (G1.1 / G1.12), rug / floor blocks",
+   "may_pan_endpoint": "no: P0 22.5 px, P1 36.4 px",
+   "products_unverified": [
+    "bowl-cj-glutinous-white-belly-bowl-21",
+    "candle-holders-cj-travertine-pedestal",
+    "curtains-aliexpress-linen-blend-s-fold-180502",
+    "cushions-cj-boucle-teddy",
+    "cushions-cj-knitted-chenille-bean-green",
+    "cushions-cj-linen-look-charcoal",
+    "framed-art-aliexpress-minimal-geometric-triptych-prints",
+    "pendant-cj-silk-ribbed-pumpkin-40",
+    "sofa-cover-cj-cotton-muslin-fringe",
+    "table-runner-cj-linen-look-sage-fringe",
+    "vase-aliexpress-vintage-distressed-clay-vase-589009",
+    "wall-sconce-cj-black-swing-arm-fabric",
+    "wall-sconce-cj-travertine-cube-updown-12"
+   ],
+   "products_live": [
+    "basket-zendrop-seagrass-belly-38x34"
+   ]
+  },
+  {
+   "frame": "M0x 1.2 fix",
+   "kind": "one vertical affine 2026-11-04 on pose-m0x-v8b",
+   "fix_file": "assets/renders/poses/nordic/v8/pose-m0x-v8b-fix.png",
+   "graded": "assets/renders/poses/nordic/v8/pose-m0x-v8b-graded-fix-v5.png",
+   "criteria": [
+    {
+     "id": "G1.4",
+     "binding": true,
+     "value": {
+      "register_shift_px": [
+       -4.61,
+       0.11
+      ],
+      "register_scale_pct": [
+       0.37,
+       -0.01
+      ],
+      "residual_gated": {
+       "bands": [
+        2.17,
+        2.08
+       ],
+       "tiles": [
+        17.1,
+        13.03,
+        6.01,
+        7.94,
+        10.0,
+        2.38,
+        5.97,
+        8.54
+       ],
+       "worst": 17.1
+      },
+      "masked_register": {
+       "shift_px": [
+        -1.03,
+        1.02
+       ],
+       "scale_pct": [
+        0.22,
+        -0.42
+       ],
+       "masked_share": 0.268,
+       "worst_band_px_after": 4.33,
+       "worst_tile_px_after": 17.35
+      },
+      "named_lines_px": null,
+      "shell": "cornice / ceiling lines within +-5 px after the vertical affine; fails the pan rule: bands 2.17 / 2.08 and tiles up to 17.1 px (u 0-0.25, v 0-0.5, rho 0.70)"
+     },
+     "threshold": "register shift <= 9.6 px and scale within 0.5 %; residual after register <= 2.0 px per band / tile with shared structure (response >= 0.10, rho >= 0.30) for pan endpoints, <= 9.6 px for video endpoints; named lines within +-19 px (G1.4, proposal C3)",
+     "pass": false
+    },
+    {
+     "id": "G1.3",
+     "binding": false,
+     "value": "door leaves 0.944 (render-agent's lock; proposal 0.95-1.05)",
+     "threshold": "width / height 0.95-1.05 (proposal)",
+     "pass": false
+    },
+    {
+     "id": "G1.12",
+     "binding": true,
+     "value": "no local edit (one global affine); by eye clean at 100 % (overlays/g112-M0x-door.jpg)",
+     "threshold": "0 seams, halos, fill artefacts at 100 % (Bible 'forbidden'; G1.12)",
+     "pass": true
+    },
+    {
+     "id": "G1.7-G1.9 (grading v5)",
+     "binding": true,
+     "value": {
+      "reference": {
+       "uv": [
+        0.5,
+        0.3
+       ],
+       "L": 96.5,
+       "H": 0.0,
+       "S": 0.0,
+       "Lstar": 96.73,
+       "C": 0.02
+      },
+      "note": "not judgeable: the agent's point (0.5, 0.3) is window glare (L 96.5, H 0); inherits M0 1.2 fix's stops (0.907)"
+     },
+     "threshold": "Bible 1.8.4: the reference wall in range (living 90-94, bath 86-90 HSL L; corridor L* 72-75 at the BIB2 points), H 32-40, C* <= 7 (B4), window wall 80-88, black 12-15, max <= 97 and no 255; hall walls L* 75-78; the corridor-end vista the brightest",
+     "pass": null
+    },
+    {
+     "id": "G1.14",
+     "binding": true,
+     "value": {
+      "P1": {
+       "pan": "P1 pan",
+       "degrees": 35,
+       "bands": [
+        [
+         5.01,
+         -36.35,
+         0.105
+        ],
+        [
+         3.32,
+         -28.58,
+         0.197
+        ],
+        [
+         -0.38,
+         4.25,
+         -0.013
+        ],
+        [
+         -3.01,
+         14.26,
+         0.229
+        ]
+       ],
+       "worst_reliable_px": 36.35,
+       "dL": 7.8,
+       "dE_mean": 10.65,
+       "clay_floor_px": 0.19
+      }
+     },
+     "threshold": "pan_reproject.check in the overlap: <= 2 px per band with response >= 0.05 and dL <= 1 (gates doc 7.1, proposal; the principle binding)",
+     "pass": false
+    }
+   ],
+   "verdict": "fail",
+   "failed_binding": [
+    "G1.4",
+    "G1.14"
+   ],
+   "failed_proposal": [
+    "G1.3"
+   ],
+   "cannot_measure": [
+    "G1.2",
+    "G1.5",
+    "G1.11",
+    "G1.15",
+    "G1.16"
+   ],
+   "may_reference": "no: residual over 2 px (pan endpoint) and P1 36.4 px",
+   "may_pan_endpoint": "no: P1 36.4 px, dL 7.8",
+   "products_unverified": [
+    "bench-pad-aliexpress-linen-look-flat-cushion-130x35x3",
+    "bowl-cj-glutinous-white-belly-bowl-21",
+    "candle-holders-aliexpress-matte-black-iron-pillar-set2",
+    "candle-holders-cj-travertine-pedestal",
+    "condiment-set-cj-rubberwood-mill-pair-6in",
+    "curtains-aliexpress-linen-blend-s-fold-180502",
+    "cushions-cj-boucle-teddy",
+    "cushions-cj-knitted-chenille-bean-green",
+    "cushions-cj-linen-look-charcoal",
+    "framed-art-aliexpress-minimal-geometric-triptych-prints",
+    "framed-art-cj-taupe-block-black-line-30x40",
+    "mug-set-cj-sandy-stoneware-mug-glazed-rim-set3",
+    "pendant-cj-silk-pumpkin-lantern",
+    "pendant-cj-silk-ribbed-pumpkin-40",
+    "sofa-cover-cj-cotton-muslin-fringe",
+    "table-runner-aliexpress-french-linen-stonewash-40x140",
+    "table-runner-cj-linen-look-sage-fringe",
+    "tableware-set-cj-grey-sand-matte-plate",
+    "vase-aliexpress-vintage-distressed-clay-vase-589009",
+    "vase-cj-textured-white-stoneware",
+    "wall-sconce-cj-black-swing-arm-fabric",
+    "wall-sconce-cj-travertine-cube-updown-12"
+   ],
+   "products_live": [
+    "basket-zendrop-seagrass-belly-38x34"
+   ]
+  },
+  {
+   "frame": "B1 r3 fix2",
+   "kind": "code cleanup 2026-11-04 (fix_v9.py)",
+   "fix_file": "assets/renders/bath/nordic/v7/b1-v7-r3-fix2.png",
+   "graded": "assets/renders/bath/nordic/v7/b1-v7-r3-graded-fix2-v5.png",
+   "criteria": [
+    {
+     "id": "G1.4",
+     "binding": true,
+     "value": {
+      "register_shift_px": [
+       -0.08,
+       -0.02
+      ],
+      "register_scale_pct": [
+       0.0,
+       -0.01
+      ],
+      "residual_gated": {
+       "bands": [
+        0.13,
+        0.1,
+        0.21
+       ],
+       "tiles": [
+        0.82,
+        0.58,
+        1.63,
+        0.52,
+        0.11,
+        0.52
+       ],
+       "worst": 1.63
+      },
+      "masked_register": {
+       "shift_px": [
+        0.04,
+        -0.12
+       ],
+       "scale_pct": [
+        0.02,
+        0.03
+       ],
+       "masked_share": 0.251,
+       "worst_band_px_after": 0.85,
+       "worst_tile_px_after": 4.86
+      },
+      "named_lines_px": {
+       "glazing top": 2,
+       "glazing bottom / sill": 0,
+       "ledge top": 1,
+       "glazing left": 0,
+       "glazing right": 14,
+       "WC block left": 0,
+       "WC block right": 0,
+       "corner / track end": -11,
+       "vanity left edge": -17
+      }
+     },
+     "threshold": "register shift <= 9.6 px and scale within 0.5 %; residual after register <= 2.0 px per band / tile with shared structure (response >= 0.10, rho >= 0.30) for pan endpoints, <= 9.6 px for video endpoints; named lines within +-19 px (G1.4, proposal C3)",
+     "pass": true
+    },
+    {
+     "id": "G1.1",
+     "binding": true,
+     "value": {
+      "ok": [
+       "toilet brush: holder 88 of 231 px = 38 % of the height (card: 14.5 cm holder, 38 %), height 1.00 of its box; the silhouette now the card's",
+       "the seagrass basket on the floor (unchanged since fix)"
+      ]
+     },
+     "threshold": "every product the card's SKU",
+     "pass": true
+    },
+    {
+     "id": "G1.12",
+     "binding": true,
+     "value": {
+      "violations": [
+       "two pale rectangular lumps with hard edges on the linen right of the fern (canvas ~x 1570-1605, y ~1050-1185): visible at 100 %",
+       "the refilled linen above the fern keeps horizontal steps across the folds (x ~1500-1600 at y ~690, ~830, ~940) and the curtain's left edge is a straight synthetic diagonal (x 1455 -> 1521 over y 615 -> 1292): visible at 200 %, soft at 100 %"
+      ],
+      "better": "the big light / dark blocks of fix (11-04) are gone",
+      "overlays": [
+       "overlays/g112-B1-lumps-200.jpg",
+       "overlays/g112-B1-curtain-left-200.jpg",
+       "overlays/g112-B1-fern-curtain.jpg"
+      ]
+     },
+     "threshold": "0 seams, halos, fill artefacts at 100 % (Bible 'forbidden'; G1.12)",
+     "pass": false
+    },
+    {
+     "id": "G1.7-G1.9 (grading v5)",
+     "binding": true,
+     "value": {
+      "reference": {
+       "uv": [
+        0.419,
+        0.174
+       ],
+       "L": 89.2,
+       "H": 35.9,
+       "S": 29.2,
+       "Lstar": 91.06,
+       "C": 5.42
+      },
+      "black": 12.5,
+      "max_L": 96.5,
+      "px255": 0
+     },
+     "threshold": "Bible 1.8.4: the reference wall in range (living 90-94, bath 86-90 HSL L; corridor L* 72-75 at the BIB2 points), H 32-40, C* <= 7 (B4), window wall 80-88, black 12-15, max <= 97 and no 255; hall walls L* 75-78; the corridor-end vista the brightest",
+     "pass": true
+    },
+    {
+     "id": "G1.14",
+     "binding": true,
+     "value": {
+      "P_B": {
+       "pan": "P-B pan",
+       "degrees": 35,
+       "bands": [
+        [
+         -9.02,
+         8.11,
+         0.192
+        ],
+        [
+         -2.52,
+         -54.88,
+         0.014
+        ],
+        [
+         -3.61,
+         6.4,
+         -0.007
+        ],
+        [
+         -0.6,
+         0.46,
+         0.299
+        ]
+       ],
+       "worst_reliable_px": 9.02,
+       "dL": 0.6,
+       "dE_mean": 10.11,
+       "clay_floor_px": 2.21
+      },
+      "T_CBath": {
+       "pan": "T-CBath pan (CB-0 -> B1)",
+       "degrees": 22,
+       "bands": [
+        [
+         0.04,
+         -0.04,
+         0.968
+        ],
+        [
+         0.01,
+         -0.01,
+         0.975
+        ],
+        [
+         -0.0,
+         0.01,
+         0.998
+        ],
+        [
+         0.06,
+         0.01,
+         0.961
+        ]
+       ],
+       "worst_reliable_px": 0.06,
+       "dL": 0.8,
+       "dE_mean": 1.23,
+       "clay_floor_px": 49.99
+      }
+     },
+     "threshold": "pan_reproject.check in the overlap: <= 2 px per band with response >= 0.05 and dL <= 1 (gates doc 7.1, proposal; the principle binding)",
+     "pass": false
+    },
+    {
+     "id": "G1.6",
+     "binding": true,
+     "value": {
+      "test_rule": true,
+      "sourcing_tasks": [
+       "shower-stool",
+       "towel-ladder",
+       "bath-towels",
+       "bin",
+       "ledge-planter"
+      ]
+     },
+     "threshold": "studio rules 2.11: every slot with an approved product filled (unchanged by the fix)",
+     "pass": true
+    },
+    {
+     "id": "G8.6",
+     "binding": true,
+     "value": {
+      "baked": 9,
+      "live": [],
+      "unverified": 9
+     },
+     "threshold": "every baked card live at the supplier",
+     "pass": false
+    }
+   ],
+   "verdict": "fail",
+   "failed_binding": [
+    "G1.12",
+    "G1.14",
+    "G8.6"
+   ],
+   "failed_proposal": [],
+   "cannot_measure": [
+    "G1.2",
+    "G1.5",
+    "G1.11",
+    "G1.15",
+    "G1.16"
+   ],
+   "may_reference": "yes for geometry and grading (G1.4 in full: named lines 0 / +-1, residual <= 1.63 px; v5 89.2 / H 35.9 / C* 5.4); as an image after the two lumps right of the fern",
+   "may_pan_endpoint": "T-CBath: yes for geometry (CB-0 is built from it, 0.06 px); the lumps travel into CB-0 and must go first. P-B: no (9.0 px against B2 r3 fix2)",
+   "products_unverified": [
+    "bath-mat-cj-tufted-cotton-frame-beige-40x60",
+    "candle-cj-ribbed-matte-ceramic-candle-cup-9",
+    "floor-planter-aliexpress-seagrass-straight-planter-basket-30",
+    "reed-diffuser-cj-travertine-look-bamboo-lid-milktea",
+    "shower-curtain-aliexpress-linen-blend-slub-panel-200x270",
+    "shower-dispensers-cj-sand-ribbed-ceramic-pump-bottle",
+    "toilet-brush-aliexpress-matte-black-steel-cylinder-245996",
+    "toilet-paper-stand-aliexpress-floor-standing-black-763442",
+    "vanity-sconces-cj-fluted-resin-updown-white"
+   ],
+   "products_live": []
+  },
+  {
+   "frame": "B2 r3 fix2",
+   "kind": "global affine + cleanup 2026-11-04 (fix_v9.py)",
+   "fix_file": "assets/renders/bath/nordic/v7/b2-v7-r3-fix2.png",
+   "graded": "assets/renders/bath/nordic/v7/b2-v7-r3-graded-fix2-v5.png",
+   "criteria": [
+    {
+     "id": "G1.4",
+     "binding": true,
+     "value": {
+      "register_shift_px": [
+       -0.04,
+       -0.04
+      ],
+      "register_scale_pct": [
+       -0.0,
+       0.01
+      ],
+      "residual_gated": {
+       "bands": [
+        0.83
+       ],
+       "tiles": [
+        0.92,
+        2.69,
+        0.15,
+        0.99,
+        0.31,
+        0.66
+       ],
+       "worst": 2.69
+      },
+      "masked_register": {
+       "shift_px": [
+        -2.55,
+        0.66
+       ],
+       "scale_pct": [
+        0.39,
+        0.58
+       ],
+       "masked_share": 0.374,
+       "worst_band_px_after": 48.32,
+       "worst_tile_px_after": 9.01
+      },
+      "named_lines_px": {
+       "vanity top": -8,
+       "mirror bottom": -8,
+       "niche top": -7,
+       "vanity left edge": -15,
+       "vanity right outer edge": 6,
+       "mirror left": 4,
+       "mirror right": -1,
+       "curtain outer edge": -13
+      },
+      "note": "global fixed (scale 0.00 / +0.01 %); a local vertical offset stays: vanity top / mirror bottom / niche top -7 / -8 / -7 px; tile 2.69 px (u 0.5-0.75, v 0-0.5, rho 0.50)"
+     },
+     "threshold": "register shift <= 9.6 px and scale within 0.5 %; residual after register <= 2.0 px per band / tile with shared structure (response >= 0.10, rho >= 0.30) for pan endpoints, <= 9.6 px for video endpoints; named lines within +-19 px (G1.4, proposal C3)",
+     "pass": false
+    },
+    {
+     "id": "G1.1",
+     "binding": true,
+     "value": {
+      "ok": [
+       "planter: basket 1.00 of the clay pot's height (x0.85, unchanged since fix)",
+       "storage basket within +-15 % (11-04), unchanged"
+      ]
+     },
+     "threshold": "every product the card's SKU",
+     "pass": true
+    },
+    {
+     "id": "G1.12",
+     "binding": true,
+     "value": {
+      "violations": [
+       "the limestone panel behind the fern refilled pale: a block with a horizontal top edge at y ~870 and a vertical edge at x ~440 (canvas x ~273-443, y ~870-1340)",
+       "a white strip with a hard edge left of the fronds (x ~0-50, y ~780-1150)",
+       "floor right of the basket: a grey smeared patch with stepped edges at the curtain's foot and the panel's base (x ~300-450, y ~1250-1400)",
+       "the basket's right outline stair-stepped at 200 %"
+      ],
+      "overlays": [
+       "overlays/g112-B2-planter-floor.jpg",
+       "overlays/g112-B2-floor-right-of-basket.jpg",
+       "overlays/g112-B2-wall-panel.jpg"
+      ]
+     },
+     "threshold": "0 seams, halos, fill artefacts at 100 % (Bible 'forbidden'; G1.12)",
+     "pass": false
+    },
+    {
+     "id": "G1.7-G1.9 (grading v5)",
+     "binding": true,
+     "value": {
+      "reference": {
+       "uv": [
+        0.53,
+        0.42
+       ],
+       "L": 82.1,
+       "H": 35.9,
+       "S": 29.4,
+       "Lstar": 85.27,
+       "C": 9.3
+      },
+      "fails": [
+       "C* 9.30 > 7 (B4)",
+       "L 82.1 under 86-90 at the inherited point (the agent judges it by B1's stops)"
+      ]
+     },
+     "threshold": "Bible 1.8.4: the reference wall in range (living 90-94, bath 86-90 HSL L; corridor L* 72-75 at the BIB2 points), H 32-40, C* <= 7 (B4), window wall 80-88, black 12-15, max <= 97 and no 255; hall walls L* 75-78; the corridor-end vista the brightest",
+     "pass": false
+    },
+    {
+     "id": "G1.14",
+     "binding": true,
+     "value": {
+      "P_B": {
+       "pan": "P-B pan",
+       "degrees": 35,
+       "bands": [
+        [
+         -9.02,
+         8.11,
+         0.192
+        ],
+        [
+         -2.52,
+         -54.88,
+         0.014
+        ],
+        [
+         -3.61,
+         6.4,
+         -0.007
+        ],
+        [
+         -0.6,
+         0.46,
+         0.299
+        ]
+       ],
+       "worst_reliable_px": 9.02,
+       "dL": 0.6,
+       "dE_mean": 10.11,
+       "clay_floor_px": 2.21
+      }
+     },
+     "threshold": "pan_reproject.check in the overlap: <= 2 px per band with response >= 0.05 and dL <= 1 (gates doc 7.1, proposal; the principle binding)",
+     "pass": false
+    },
+    {
+     "id": "G1.6",
+     "binding": true,
+     "value": {
+      "test_rule": true,
+      "sourcing_tasks": [
+       "shower-stool",
+       "towel-ladder",
+       "bath-towels"
+      ]
+     },
+     "threshold": "studio rules 2.11: every slot with an approved product filled (unchanged by the fix)",
+     "pass": true
+    },
+    {
+     "id": "G8.6",
+     "binding": true,
+     "value": {
+      "baked": 10,
+      "live": [],
+      "unverified": 10
+     },
+     "threshold": "every baked card live at the supplier",
+     "pass": false
+    }
+   ],
+   "verdict": "fail",
+   "failed_binding": [
+    "G1.4",
+    "G1.12",
+    "G1.7-G1.9 (grading v5)",
+    "G1.14",
+    "G8.6"
+   ],
+   "failed_proposal": [],
+   "cannot_measure": [
+    "G1.2",
+    "G1.5",
+    "G1.11",
+    "G1.15",
+    "G1.16"
+   ],
+   "may_reference": "no: fill artefacts round the planter (G1.12), C* 9.3 (B4), vanity line -7/-8 px",
+   "may_pan_endpoint": "no: P-B 9.0 px (was 14.2)",
+   "products_unverified": [
+    "floor-planter-aliexpress-seagrass-straight-planter-basket-30",
+    "hand-towel-aliexpress-pure-linen-towel-38x55",
+    "shower-curtain-aliexpress-linen-blend-slub-panel-200x270",
+    "shower-dispensers-cj-sand-ribbed-ceramic-pump-bottle",
+    "soap-dispenser-cj-sand-ribbed-ceramic-pump-bottle",
+    "storage-basket-cj-cotton-rope-basket-43x33x19",
+    "toothbrush-cup-cj-silver-travertine-cup",
+    "towel-ring-aliexpress-minimalist-oval-towel-ring-663845",
+    "vanity-sconces-cj-fluted-resin-updown-white",
+    "vanity-vase-aliexpress-sand-oat-bud-vase-g-series"
+   ],
+   "products_live": []
+  },
+  {
+   "frame": "K-girl-0 r2 fix2",
+   "kind": "one vertical affine 2026-11-04 (fix_v9.py)",
+   "fix_file": "assets/renders/poses/nordic/v7/pose-k-girl-0-v7-r2-fix2.png",
+   "graded": "assets/renders/poses/nordic/v7/pose-k-girl-0-v7-r2-graded-fix2-v5.png",
+   "criteria": [
+    {
+     "id": "G1.4",
+     "binding": true,
+     "value": {
+      "register_shift_px": [
+       -2.33,
+       -1.59
+      ],
+      "register_scale_pct": [
+       0.01,
+       0.89
+      ],
+      "residual_gated": {
+       "bands": [
+        1.89,
+        6.43
+       ],
+       "tiles": [
+        2.13,
+        17.88,
+        9.27,
+        2.9,
+        3.59,
+        6.21
+       ],
+       "worst": 17.88
+      },
+      "masked_register": {
+       "shift_px": [
+        -5.66,
+        -1.66
+       ],
+       "scale_pct": [
+        0.34,
+        0.13
+       ],
+       "masked_share": 0.112,
+       "worst_band_px_after": 1.47,
+       "worst_tile_px_after": 18.81
+      },
+      "named_lines_px": {
+       "upper ledge": 0,
+       "lower ledge": 4,
+       "band top (desk wall)": 4,
+       "desk top": -1,
+       "skirting top (desk wall)": 0,
+       "room corner": 2,
+       "desk left leg": -22,
+       "desk right leg": -34,
+       "bed foot right edge": -3
+      },
+      "register_by_region": {
+       "left 60 % (desk wall)": {
+        "shift_px": [
+         -9.59,
+         -0.92
+        ],
+        "scale_pct": [
+         -1.59,
+         0.47
+        ]
+       },
+       "right 40 % (near wall)": {
+        "shift_px": [
+         22.86,
+         27.27
+        ],
+        "scale_pct": [
+         -1.85,
+         0.01
+        ]
+       },
+       "middle 80 %": {
+        "shift_px": [
+         -23.21,
+         -10.02
+        ],
+        "scale_pct": [
+         -0.08,
+         1.57
+        ]
+       }
+      },
+      "register_question": "the register is not identifiable here, so +0.89 % is not a stretch: plain ECC +0.89 % (y), masked +0.13 %, and three regions give -1.59 .. +1.57 % and shifts to 27 px (the frame is plain wall and floor). The named lines settle it: the six horizontal lines are 0 / +-1 (render-agent +-0.6): the vertical stretch is fixed",
+      "still_off": "x was not touched: the vertical lines of the left quarter are -4 .. -8 px (clay 69/73/80 -> 64/69/75 and 211 -> 203 at row 300; 437/446 -> 434/443 at row 700), the corner +2, the bed foot -3; unregistered residual 5.3 px (tile u 0-0.25, v 0-0.5, rho 0.90), band 4.7",
+      "unregistered_tiles": [
+       [
+        -5.3,
+        0.36,
+        0.901
+       ],
+       [
+        15.52,
+        -18.48,
+        0.255
+       ],
+       [
+        1.32,
+        0.43,
+        0.931
+       ],
+       [
+        null,
+        null,
+        null
+       ],
+       [
+        -3.02,
+        -1.49,
+        0.312
+       ],
+       [
+        -1.08,
+        -0.36,
+        0.618
+       ],
+       [
+        1.27,
+        0.18,
+        0.804
+       ],
+       [
+        null,
+        null,
+        null
+       ]
+      ]
+     },
+     "threshold": "register shift <= 9.6 px and scale within 0.5 %; residual after register <= 2.0 px per band / tile with shared structure (response >= 0.10, rho >= 0.30) for pan endpoints, <= 9.6 px for video endpoints; named lines within +-19 px (G1.4, proposal C3)",
+     "pass": false
+    },
+    {
+     "id": "G1.1",
+     "binding": true,
+     "value": "prints 0.98 x 1.00 and the doll as on 11-04 (only the 0.84 % vertical affine since)",
+     "threshold": "every product the card's SKU",
+     "pass": true
+    },
+    {
+     "id": "G1.12",
+     "binding": true,
+     "value": "no new edit besides the affine; the replicated border rows lie in the overscan margin; by eye clean (overlays/g112-K-girl-0-*.jpg)",
+     "threshold": "0 seams, halos, fill artefacts at 100 % (Bible 'forbidden'; G1.12)",
+     "pass": true
+    },
+    {
+     "id": "G1.7-G1.9 (grading v5)",
+     "binding": true,
+     "value": {
+      "reference": {
+       "uv": [
+        0.22,
+        0.08
+       ],
+       "L": 92.6,
+       "H": 34.3,
+       "S": 16.6,
+       "Lstar": 93.7,
+       "C": 2.0
+      }
+     },
+     "threshold": "Bible 1.8.4: the reference wall in range (living 90-94, bath 86-90 HSL L; corridor L* 72-75 at the BIB2 points), H 32-40, C* <= 7 (B4), window wall 80-88, black 12-15, max <= 97 and no 255; hall walls L* 75-78; the corridor-end vista the brightest",
+     "pass": true
+    },
+    {
+     "id": "G1.14",
+     "binding": true,
+     "value": {
+      "T_CGirl": {
+       "pan": "T-CGirl pan (K-girl -> K-girl-0)",
+       "degrees": 33,
+       "bands": [
+        [
+         -0.03,
+         62.92,
+         0.028
+        ],
+        [
+         -1.18,
+         30.82,
+         0.076
+        ],
+        [
+         -3.43,
+         28.74,
+         0.703
+        ],
+        [
+         -0.26,
+         26.06,
+         0.615
+        ]
+       ],
+       "worst_reliable_px": 30.82,
+       "dL": 4.7,
+       "dE_mean": 11.26,
+       "clay_floor_px": 0.09
+      }
+     },
+     "threshold": "pan_reproject.check in the overlap: <= 2 px per band with response >= 0.05 and dL <= 1 (gates doc 7.1, proposal; the principle binding)",
+     "pass": false
+    },
+    {
+     "id": "G8.6",
+     "binding": true,
+     "value": {
+      "baked": 4,
+      "live": [],
+      "unverified": 4
+     },
+     "threshold": "every baked card live at the supplier",
+     "pass": false
+    }
+   ],
+   "verdict": "fail",
+   "failed_binding": [
+    "G1.4",
+    "G1.14",
+    "G8.6"
+   ],
+   "failed_proposal": [],
+   "cannot_measure": [
+    "G1.2",
+    "G1.5",
+    "G1.11",
+    "G1.15",
+    "G1.16"
+   ],
+   "may_reference": "yes for the vertical geometry (named lines 0 / +-1); a horizontal fix of the left quarter (about -5 px, 0 tokens) first for a pan",
+   "may_pan_endpoint": "no: T-CGirl 30.8 px (the K-girl master) and the left quarter -4..-8 px",
+   "products_unverified": [
+    "bedspread-cj-muslin-blanket-beige-150x200",
+    "bookshelf-cj-natural-wood-ledge-pair-42-x2",
+    "doll-aliexpress-linen-bunny-doll-063285",
+    "framed-prints-cj-charcoal-flower-silhouette-set3-30x40-boy"
+   ],
+   "products_live": []
+  },
+  {
+   "frame": "W0-in r2 fix2",
+   "kind": "basket cleanup 2026-11-04 (fix_v9.py)",
+   "fix_file": "assets/renders/poses/nordic/v7/pose-w0-in-v7-r2-fix2.png",
+   "graded": "assets/renders/poses/nordic/v7/pose-w0-in-v7-r2-graded-fix2-v5.png",
+   "criteria": [
+    {
+     "id": "G1.4",
+     "binding": true,
+     "value": {
+      "register_shift_px": [
+       -0.54,
+       -0.19
+      ],
+      "register_scale_pct": [
+       0.05,
+       -0.0
+      ],
+      "residual_gated": {
+       "bands": [
+        1.71,
+        8.8,
+        5.69
+       ],
+       "tiles": [
+        1.15,
+        7.36,
+        2.1,
+        2.54,
+        7.88,
+        4.07
+       ],
+       "worst": 8.8
+      },
+      "masked_register": {
+       "shift_px": [
+        4.65,
+        -4.35
+       ],
+       "scale_pct": [
+        -0.33,
+        0.32
+       ],
+       "masked_share": 0.264,
+       "worst_band_px_after": 5.56,
+       "worst_tile_px_after": 7.94
+      },
+      "named_lines_px": {
+       "desk top front edge": -3,
+       "desk front face bottom left of chair": -2,
+       "drawer bottom / apron": -3,
+       "chair back top (clay 835)": -3,
+       "desk left outer edge": -2,
+       "chair back left edge": 0,
+       "chair back right edge": -8,
+       "shelf top": 36
+      },
+      "note": "video endpoint: residual 8.8 <= 9.6. Named lines by peak lists: desk top -3, face bottom -2, drawer -2/-3, chair top -3 (the +32 cross-correlation is a mis-pair), desk left -2, chair 0 / -8, shelf front 0/+1 (the +36 is a mis-pair: peaks 151 / 151-152), shelf bottom -5..-7"
+     },
+     "threshold": "register shift <= 9.6 px and scale within 0.5 %; residual after register <= 2.0 px per band / tile with shared structure (response >= 0.10, rho >= 0.30) for pan endpoints, <= 9.6 px for video endpoints; named lines within +-19 px (G1.4, proposal C3)",
+     "pass": true
+    },
+    {
+     "id": "G1.1",
+     "binding": true,
+     "value": "pencil cup as on 11-04 (8.8 x 11 cm, the card); the desk: see G1.12",
+     "threshold": "every product the card's SKU",
+     "pass": true
+    },
+    {
+     "id": "G1.12",
+     "binding": true,
+     "value": {
+      "violations": [
+       "NEW in fix2: the desk's front-left corner is broken: the drawer front's left end is copied into the leg (three extra vertical edges at x 351 / 361 / 384 of 1920 at row 780, where the clay and fix have one edge at 318-319) and the slab's mitred corner became a square notch (canvas ~x 430-560, y ~1080-1330)",
+       "beside the basket's base a smaller darker floor block with a straight top edge remains (canvas ~x 400-450, y ~1465-1539)"
+      ],
+      "fixed": "the green / dark blocks in the basket's weave are gone",
+      "overlays": [
+       "overlays/g112-W0-in-desk-corner.jpg",
+       "overlays/g112-W0-in-desk-corner-raw-clay.jpg",
+       "overlays/g112-W0-in-basket.jpg",
+       "overlays/g112-W0-in-basket-base-200.jpg"
+      ]
+     },
+     "threshold": "0 seams, halos, fill artefacts at 100 % (Bible 'forbidden'; G1.12)",
+     "pass": false
+    },
+    {
+     "id": "G1.7-G1.9 (grading v5)",
+     "binding": true,
+     "value": {
+      "reference": {
+       "uv": [
+        0.5,
+        0.4
+       ],
+       "L": 92.5,
+       "H": 36.2,
+       "S": 27.8,
+       "Lstar": 93.78,
+       "C": 3.69
+      }
+     },
+     "threshold": "Bible 1.8.4: the reference wall in range (living 90-94, bath 86-90 HSL L; corridor L* 72-75 at the BIB2 points), H 32-40, C* <= 7 (B4), window wall 80-88, black 12-15, max <= 97 and no 255; hall walls L* 75-78; the corridor-end vista the brightest",
+     "pass": true
+    },
+    {
+     "id": "G1.14",
+     "binding": true,
+     "value": "dolly W0 fix -> W0-in r2 fix2: same objects by eye (overlays/endpoints-W0_fix-W0-in_r2_fix2.jpg); no pan rule",
+     "threshold": "pan_reproject.check in the overlap: <= 2 px per band with response >= 0.05 and dL <= 1 (gates doc 7.1, proposal; the principle binding)",
+     "pass": null
+    },
+    {
+     "id": "G8.6",
+     "binding": true,
+     "value": {
+      "baked": 5,
+      "live": [
+       "planter-zendrop-seagrass-belly-38x34"
+      ],
+      "unverified": 4
+     },
+     "threshold": "every baked card live at the supplier",
+     "pass": false
+    }
+   ],
+   "verdict": "fail",
+   "failed_binding": [
+    "G1.12",
+    "G8.6"
+   ],
+   "failed_proposal": [],
+   "cannot_measure": [
+    "G1.2",
+    "G1.5",
+    "G1.11",
+    "G1.15",
+    "G1.16"
+   ],
+   "may_reference": "yes for geometry (video endpoint); as an image after the desk corner is restored (take it from W0-in r2 fix, 0 tokens)",
+   "may_pan_endpoint": "V4 / T-HW after the desk corner (the basket is clean now)",
+   "products_unverified": [
+    "basket-cj-jute-cotton-rope-cylinder-30-work",
+    "desk-organizer-cj-cave-stone-pen-cup-8x11",
+    "shelf-boxes-cj-felt-storage-bin-30x24-pair",
+    "waste-basket-aliexpress-washable-kraft-paper-bin-25x40"
+   ],
+   "products_live": [
+    "planter-zendrop-seagrass-belly-38x34"
+   ]
+  },
+  {
+   "frame": "CB-0 b1r3",
+   "kind": "recomposed 2026-11-04 from B1 r3 fix2 by a 22 deg reprojection (recompose_cb0.py)",
+   "fix_file": "assets/renders/poses/nordic/v7/pose-cb-0-v7-b1r3.png",
+   "graded": "assets/renders/poses/nordic/v7/pose-cb-0-v7-graded-b1r3-v5.png",
+   "criteria": [
+    {
+     "id": "G1.4",
+     "binding": true,
+     "value": {
+      "register_shift_px": [
+       3.66,
+       -7.37
+      ],
+      "register_scale_pct": [
+       -0.19,
+       -0.01
+      ],
+      "residual_gated": {
+       "bands": [
+        3.18,
+        1.29
+       ],
+       "tiles": [
+        3.73,
+        2.14,
+        1.9,
+        3.71,
+        3.19,
+        1.95
+       ],
+       "worst": 3.73
+      },
+      "masked_register": {
+       "shift_px": [
+        4.25,
+        10.3
+       ],
+       "scale_pct": [
+        -0.22,
+        -0.11
+       ],
+       "masked_share": 0.124,
+       "worst_band_px_after": 4.09,
+       "worst_tile_px_after": 4.72
+      },
+      "named_lines_px": null,
+      "named_lines_px_1080": "on the round-4 CB-0 clay (no r3 clay of CB-0): window sides 822/832/862 = clay, WC block 729/750 and 1241 = clay (+-1), block top 575/581 = clay, ledge 643/685 = clay, left jamb 89 vs 90, skirting -4..0",
+      "note": "the ECC register (+3.66 / -7.37 px, a 0.5 % shear) and the tiles <= 3.73 px are biased by the plain walls; the named lines are exact. As the slide's end (video) it passes; as the pan's start the pair check is the binding one (G1.14)"
+     },
+     "threshold": "register shift <= 9.6 px and scale within 0.5 %; residual after register <= 2.0 px per band / tile with shared structure (response >= 0.10, rho >= 0.30) for pan endpoints, <= 9.6 px for video endpoints; named lines within +-19 px (G1.4, proposal C3)",
+     "pass": true
+    },
+    {
+     "id": "G1.14",
+     "binding": true,
+     "value": {
+      "T_CBath": {
+       "pan": "T-CBath pan (CB-0 -> B1)",
+       "degrees": 22,
+       "bands": [
+        [
+         0.04,
+         -0.04,
+         0.968
+        ],
+        [
+         0.01,
+         -0.01,
+         0.975
+        ],
+        [
+         -0.0,
+         0.01,
+         0.998
+        ],
+        [
+         0.06,
+         0.01,
+         0.961
+        ]
+       ],
+       "worst_reliable_px": 0.06,
+       "dL": 0.8,
+       "dE_mean": 1.23,
+       "clay_floor_px": 49.99
+      },
+      "agent": "0.06 px, dL 0.8: confirmed"
+     },
+     "threshold": "pan_reproject.check in the overlap: <= 2 px per band with response >= 0.05 and dL <= 1 (gates doc 7.1, proposal; the principle binding)",
+     "pass": true
+    },
+    {
+     "id": "G1.12",
+     "binding": true,
+     "value": {
+      "violations": [
+       "the old CB-0 is not only u < 0.30: two wedges B1's canvas does not reach are old pixels too: the top (frame rows 44-160, from the seam to u ~0.52 at the frame's top edge) and the bottom (rows ~1380-1495, u 0.31-0.58) (overlays/cb0-source-map.jpg)",
+       "at 100 % the top wedge shows as a warmer, lighter band (L* +2.2, b* +3.3, dE ~4 against the B1 wall below) whose corner sits on the seam (overlays/g112-CB-0-seam-top-100.jpg)",
+       "the vertical seam on the plain left wall: a soft tonal step dL* 1.0-1.9, dE 1.2-2.0 beyond the wall's own gradient over the 60 px blend (data/cb0-seam.json; overlays/g112-CB-0-seam-stretch.jpg)",
+       "the two lumps right of the fern come with B1 r3 fix2"
+      ],
+      "ok": "lines cross the wedge borders continuously (wall corner 1074 -> 1076, floor joints continuous); the left part's door jamb on the clay (89/90)"
+     },
+     "threshold": "0 seams, halos, fill artefacts at 100 % (Bible 'forbidden'; G1.12)",
+     "pass": false
+    },
+    {
+     "id": "G1.1",
+     "binding": true,
+     "value": "the products are B1 r3 fix2's pixels (brush 38 %, basket on the floor)",
+     "threshold": "every product the card's SKU",
+     "pass": true
+    },
+    {
+     "id": "G1.7-G1.9 (grading v5)",
+     "binding": true,
+     "value": {
+      "id": "pose-cb-0-v7-b1r3",
+      "frame": "CB-0",
+      "fix": "b1r3",
+      "graded": "assets/renders/poses/nordic/v7/pose-cb-0-v7-graded-b1r3-v5.png",
+      "agent": {
+       "reading": 79.3,
+       "meets": true,
+       "stops_from": "b1-v7-r3 fix2 (0.163)"
+      },
+      "v5_point": {
+       "uv": [
+        0.419,
+        0.174
+       ],
+       "L": 79.3,
+       "H": 36.8,
+       "S": 8.3,
+       "Lstar": 81.85,
+       "C": 3.09
+      },
+      "b1_point_carried": {
+       "uv": [
+        0.6449,
+        0.1701
+       ],
+       "L": 88.6,
+       "H": 41.0,
+       "S": 28.6,
+       "Lstar": 90.94,
+       "C": 6.25
+      },
+      "b1_fix2_at_its_point": {
+       "uv": [
+        0.419,
+        0.174
+       ],
+       "L": 89.2,
+       "H": 35.9,
+       "S": 29.2,
+       "Lstar": 91.06,
+       "C": 5.42
+      },
+      "old_cb0_v5_at_v5_point": {
+       "uv": [
+        0.419,
+        0.174
+       ],
+       "L": 89.0,
+       "H": 35.1,
+       "S": 34.6,
+       "Lstar": 91.0,
+       "C": 6.68
+      },
+      "black": 12.5,
+      "max_L": 96.5,
+      "px255": 0,
+      "checks": {
+       "target": true,
+       "hue_32_40": false,
+       "C_le_7": true,
+       "black_12_15": true,
+       "rolloff": true,
+       "v5_point_in_86_90": false
+      },
+      "note": "judged by B1 (the same pixels and stops): at B1's point carried into CB-0 (0.645, 0.170) L 88.6, C* 6.25 (B1 89.2 / 5.42 at its own point; H 41.0 there next to the sconce glow, B1 35.9). The record's 'reading 79.3, meets_bible true' is inconsistent: 79.3 is the darker wall left of the window at the old point (0.419, 0.174), outside 86-90"
+     },
+     "threshold": "Bible 1.8.4: the reference wall in range (living 90-94, bath 86-90 HSL L; corridor L* 72-75 at the BIB2 points), H 32-40, C* <= 7 (B4), window wall 80-88, black 12-15, max <= 97 and no 255; hall walls L* 75-78; the corridor-end vista the brightest",
+     "pass": true
+    }
+   ],
+   "verdict": "fail",
+   "failed_binding": [
+    "G1.12"
+   ],
+   "failed_proposal": [],
+   "cannot_measure": [
+    "G1.2",
+    "G1.5",
+    "G1.11",
+    "G1.15",
+    "G1.16"
+   ],
+   "may_reference": "yes for geometry (named lines on the clay, 0.06 px against B1); as an image after the wedges and the seam are matched",
+   "may_pan_endpoint": "T-CBath: the geometry and the overlap pass; two 0-token items first: match the top / bottom wedges to B1 (or widen and colour-match the blend) and clear the lumps in B1 r3 fix2, then re-export CB-0",
+   "products_unverified": [
+    "bath-mat-cj-tufted-cotton-frame-beige-40x60",
+    "candle-cj-ribbed-matte-ceramic-candle-cup-9",
+    "floor-planter-aliexpress-seagrass-straight-planter-basket-30",
+    "reed-diffuser-cj-travertine-look-bamboo-lid-milktea",
+    "shower-curtain-aliexpress-linen-blend-slub-panel-200x270",
+    "shower-dispensers-cj-sand-ribbed-ceramic-pump-bottle",
+    "toilet-brush-aliexpress-matte-black-steel-cylinder-245996",
+    "toilet-paper-stand-aliexpress-floor-standing-black-763442",
+    "vanity-sconces-cj-fluted-resin-updown-white"
+   ],
+   "products_live": []
+  }
+ ],
+ "m0_shell": {
+  "answer": "confirmed: another perspective; a code correction of the shell is not realistic for M0 (parallax between the planes; >= 2-10 px at the joints against the 2 px of a pan endpoint); only a new render. M0p: a uniform -1.3 % vertical, correctable by one affine of the raw (0 tokens). M0x: within +-5 after its affine.",
+  "data": "data/m0-shell.json"
+ },
+ "grading_v5": [
+  {
+   "id": "m0-v7-r2",
+   "frame": "M0",
+   "fix": null,
+   "graded": "assets/renders/living-room/nordic/v7/m0-v7-r2-graded-v5.png",
+   "inherits": null,
+   "agent": {
+    "measured": 92.9,
+    "scale": "HSL L",
+    "range": [
+     90.0,
+     94.0
+    ],
+    "H": 36.6,
+    "C": 6.99,
+    "judged": true,
+    "ww": 89.6,
+    "black": 12.5,
+    "max": 96.6,
+    "px255": [
+     0,
+     0
+    ],
+    "fails": [
+     "bible_window_wall_80_88"
+    ],
+    "meets": false
+   },
+   "ref": {
+    "uv": [
+     0.467,
+     0.385
+    ],
+    "L": 92.9,
+    "H": 36.9,
+    "S": 55.8,
+    "Lstar": 94.73,
+    "C": 6.92
+   },
+   "qa_minus_agent": 0.0,
+   "checks": {
+    "target": true,
+    "hue_32_40": true,
+    "C_le_7": true,
+    "window_wall_80_88": false,
+    "black_12_15": true,
+    "rolloff": true
+   },
+   "window_wall": {
+    "uv": [
+     0.1,
+     0.3
+    ],
+    "L": 89.5,
+    "H": 38.5,
+    "S": 66.2,
+    "Lstar": 92.8,
+    "C": 12.67
+   },
+   "black": 12.5,
+   "max_L": 96.7,
+   "px255": 0,
+   "qa_fails": [
+    "window_wall_80_88"
+   ],
+   "qa_pass": false
+  },
+  {
+   "id": "d1-v7",
+   "frame": "D1",
+   "fix": null,
+   "graded": "assets/renders/kitchen-dining/nordic/v7/d1-v7-graded-v5.png",
+   "inherits": null,
+   "agent": {
+    "measured": 93.8,
+    "scale": "HSL L",
+    "range": [
+     90.0,
+     94.0
+    ],
+    "H": 36.5,
+    "C": 6.69,
+    "judged": true,
+    "ww": null,
+    "black": 12.5,
+    "max": 96.6,
+    "px255": [
+     0,
+     0
+    ],
+    "fails": [],
+    "meets": true
+   },
+   "ref": {
+    "uv": [
+     0.5412,
+     0.1368
+    ],
+    "L": 93.8,
+    "H": 36.1,
+    "S": 62.3,
+    "Lstar": 95.48,
+    "C": 6.75
+   },
+   "qa_minus_agent": 0.0,
+   "checks": {
+    "target": true,
+    "hue_32_40": true,
+    "C_le_7": true,
+    "black_12_15": true,
+    "rolloff": true
+   },
+   "black": 12.5,
+   "max_L": 96.7,
+   "px255": 0,
+   "qa_fails": [],
+   "qa_pass": true
+  },
+  {
+   "id": "d2-v7",
+   "frame": "D2",
+   "fix": null,
+   "graded": "assets/renders/kitchen-dining/nordic/v7/d2-v7-graded-v5.png",
+   "inherits": null,
+   "agent": {
+    "measured": 92.4,
+    "scale": "HSL L",
+    "range": [
+     90.0,
+     94.0
+    ],
+    "H": 36.3,
+    "C": 6.47,
+    "judged": true,
+    "ww": null,
+    "black": 12.5,
+    "max": 96.6,
+    "px255": [
+     0,
+     0
+    ],
+    "fails": [],
+    "meets": true
+   },
+   "ref": {
+    "uv": [
+     0.1078,
+     0.1037
+    ],
+    "L": 92.4,
+    "H": 36.9,
+    "S": 48.6,
+    "Lstar": 94.2,
+    "C": 6.39
+   },
+   "qa_minus_agent": 0.0,
+   "checks": {
+    "target": true,
+    "hue_32_40": true,
+    "C_le_7": true,
+    "black_12_15": true,
+    "rolloff": true
+   },
+   "black": 12.5,
+   "max_L": 96.5,
+   "px255": 0,
+   "qa_fails": [],
+   "qa_pass": true
+  },
+  {
+   "id": "h0-v7-r2",
+   "frame": "H0",
+   "fix": null,
+   "graded": "assets/renders/hall/nordic/v7/h0-v7-r2-graded-v5.png",
+   "inherits": null,
+   "agent": {
+    "measured": 92.5,
+    "scale": "HSL L",
+    "range": [
+     90.0,
+     94.0
+    ],
+    "H": 39.2,
+    "C": 6.84,
+    "judged": true,
+    "ww": null,
+    "black": 12.5,
+    "max": 96.6,
+    "px255": [
+     0,
+     0
+    ],
+    "fails": [
+     "bible_hall_Lstar_75_78_1_8_4"
+    ],
+    "meets": false
+   },
+   "ref": {
+    "uv": [
+     0.35,
+     0.4
+    ],
+    "L": 92.5,
+    "H": 39.5,
+    "S": 49.5,
+    "Lstar": 94.48,
+    "C": 6.8
+   },
+   "qa_minus_agent": 0.0,
+   "checks": {
+    "target": true,
+    "hue_32_40": true,
+    "C_le_7": true,
+    "black_12_15": true,
+    "rolloff": true,
+    "hall_Lstar_75_78": false,
+    "B5": true,
+    "vista_brightest": true
+   },
+   "black": 12.5,
+   "max_L": 96.5,
+   "px255": 0,
+   "hall": {
+    "qa_point": {
+     "uv": [
+      0.681,
+      0.12
+     ],
+     "L": 76.6,
+     "H": 33.9,
+     "S": 22.2,
+     "Lstar": 80.0,
+     "C": 9.15
+    },
+    "second_point": {
+     "uv": [
+      0.62,
+      0.3
+     ],
+     "L": 51.9,
+     "H": 35.1,
+     "S": 8.8,
+     "Lstar": 56.36,
+     "C": 8.01
+    },
+    "agent_Lstar": 80.09
+   },
+   "B5": {
+    "vista": {
+     "uv": [
+      0.35,
+      0.4
+     ],
+     "L": 92.5,
+     "H": 39.5,
+     "S": 49.5,
+     "Lstar": 94.48,
+     "C": 6.8
+    },
+    "stops_hall_under_vista": 0.606,
+    "ok": true
+   },
+   "vista": {
+    "box": [
+     0.26,
+     0.44,
+     0.05,
+     0.95
+    ],
+    "vista_Lstar_p95": 96.73,
+    "vista_L_HSL_p50": 87.3,
+    "vista_L_HSL_p95": 96.5,
+    "rest_Lstar_p99_5": 96.68,
+    "brightest": true
+   },
+   "qa_fails": [
+    "hall_Lstar_75_78"
+   ],
+   "qa_pass": false
+  },
+  {
+   "id": "c0-v7",
+   "frame": "C0",
+   "fix": null,
+   "graded": "assets/renders/corridor/nordic/v7/c0-v7-graded-v5.png",
+   "inherits": null,
+   "agent": {
+    "measured": 73.54,
+    "scale": "CIELAB L*",
+    "range": [
+     72.0,
+     75.0
+    ],
+    "H": 36.0,
+    "C": 8.06,
+    "judged": true,
+    "ww": null,
+    "black": 12.5,
+    "max": 95.2,
+    "px255": [
+     0,
+     0
+    ],
+    "fails": [
+     "bible_wall_C_le_7_B4",
+     "bible_vista_brightest_1_8_4"
+    ],
+    "meets": false
+   },
+   "ref": {
+    "uv": [
+     0.8578,
+     0.3695
+    ],
+    "L": 69.5,
+    "H": 35.5,
+    "S": 14.3,
+    "Lstar": 73.44,
+    "C": 8.05
+   },
+   "qa_minus_agent": -0.1,
+   "checks": {
+    "target": true,
+    "hue_32_40": true,
+    "C_le_7": false,
+    "black_12_15": true,
+    "rolloff": true,
+    "vista_brightest": false
+   },
+   "black": 12.5,
+   "max_L": 95.3,
+   "px255": 0,
+   "edge_p99_5_within_64px": 5.8,
+   "clay_at_point": {
+    "uv": [
+     0.8578,
+     0.3695
+    ],
+    "L": 75.8,
+    "H": 31.2,
+    "S": 28.9,
+    "Lstar": 79.26,
+    "C": 11.8
+   },
+   "clay_edge_p99_5_within_64px": 4.5,
+   "vista": {
+    "box": [
+     0.435,
+     0.495,
+     0.3,
+     0.56
+    ],
+    "vista_Lstar_p95": 88.39,
+    "vista_L_HSL_p50": 70.8,
+    "vista_L_HSL_p95": 85.5,
+    "rest_Lstar_p99_5": 89.86,
+    "brightest": false
+   },
+   "qa_fails": [
+    "C_le_7",
+    "vista_brightest"
+   ],
+   "qa_pass": false
+  },
+  {
+   "id": "mb0-v7-r2",
+   "frame": "MB0",
+   "fix": null,
+   "graded": "assets/renders/master/nordic/v7/mb0-v7-r2-graded-v5.png",
+   "inherits": null,
+   "agent": {
+    "measured": 90.6,
+    "scale": "HSL L",
+    "range": [
+     90.0,
+     94.0
+    ],
+    "H": 37.9,
+    "C": 6.06,
+    "judged": true,
+    "ww": 81.3,
+    "black": 12.5,
+    "max": 96.6,
+    "px255": [
+     0,
+     0
+    ],
+    "fails": [],
+    "meets": true
+   },
+   "ref": {
+    "uv": [
+     0.5,
+     0.1453
+    ],
+    "L": 90.6,
+    "H": 38.3,
+    "S": 35.9,
+    "Lstar": 92.6,
+    "C": 6.1
+   },
+   "qa_minus_agent": 0.0,
+   "checks": {
+    "target": true,
+    "hue_32_40": true,
+    "C_le_7": true,
+    "window_wall_80_88": true,
+    "black_12_15": true,
+    "rolloff": true
+   },
+   "window_wall": {
+    "uv": [
+     0.17,
+     0.3
+    ],
+    "L": 81.3,
+    "H": 31.8,
+    "S": 38.5,
+    "Lstar": 84.48,
+    "C": 12.18
+   },
+   "black": 12.6,
+   "max_L": 96.7,
+   "px255": 0,
+   "qa_fails": [],
+   "qa_pass": true
+  },
+  {
+   "id": "k-boy-v7",
+   "frame": "K-boy",
+   "fix": null,
+   "graded": "assets/renders/boy/nordic/v7/k-boy-v7-graded-v5.png",
+   "inherits": null,
+   "agent": {
+    "measured": 92.6,
+    "scale": "HSL L",
+    "range": [
+     90.0,
+     94.0
+    ],
+    "H": 36.1,
+    "C": 1.82,
+    "judged": true,
+    "ww": 76.3,
+    "black": 12.5,
+    "max": 96.6,
+    "px255": [
+     0,
+     0
+    ],
+    "fails": [
+     "bible_window_wall_80_88"
+    ],
+    "meets": false
+   },
+   "ref": {
+    "uv": [
+     0.4035,
+     0.1581
+    ],
+    "L": 92.7,
+    "H": 36.3,
+    "S": 14.2,
+    "Lstar": 93.68,
+    "C": 1.68
+   },
+   "qa_minus_agent": 0.1,
+   "checks": {
+    "target": true,
+    "hue_32_40": true,
+    "C_le_7": true,
+    "window_wall_80_88": false,
+    "black_12_15": true,
+    "rolloff": true
+   },
+   "window_wall": {
+    "uv": [
+     0.275,
+     0.3
+    ],
+    "L": 76.3,
+    "H": 33.5,
+    "S": 14.7,
+    "Lstar": 79.27,
+    "C": 6.09
+   },
+   "black": 12.5,
+   "max_L": 96.5,
+   "px255": 0,
+   "qa_fails": [
+    "window_wall_80_88"
+   ],
+   "qa_pass": false
+  },
+  {
+   "id": "k-girl-v7",
+   "frame": "K-girl",
+   "fix": null,
+   "graded": "assets/renders/girl/nordic/v7/k-girl-v7-graded-v5.png",
+   "inherits": null,
+   "agent": {
+    "measured": 92.6,
+    "scale": "HSL L",
+    "range": [
+     90.0,
+     94.0
+    ],
+    "H": 36.1,
+    "C": 2.58,
+    "judged": true,
+    "ww": 79.0,
+    "black": 12.5,
+    "max": 96.6,
+    "px255": [
+     0,
+     0
+    ],
+    "fails": [
+     "bible_window_wall_80_88"
+    ],
+    "meets": false
+   },
+   "ref": {
+    "uv": [
+     0.4035,
+     0.1581
+    ],
+    "L": 92.7,
+    "H": 36.1,
+    "S": 19.4,
+    "Lstar": 93.73,
+    "C": 2.3
+   },
+   "qa_minus_agent": 0.1,
+   "checks": {
+    "target": true,
+    "hue_32_40": true,
+    "C_le_7": true,
+    "window_wall_80_88": false,
+    "black_12_15": true,
+    "rolloff": true
+   },
+   "window_wall": {
+    "uv": [
+     0.275,
+     0.3
+    ],
+    "L": 79.1,
+    "H": 27.3,
+    "S": 25.9,
+    "Lstar": 81.57,
+    "C": 8.68
+   },
+   "black": 12.6,
+   "max_L": 96.5,
+   "px255": 0,
+   "qa_fails": [
+    "window_wall_80_88"
+   ],
+   "qa_pass": false
+  },
+  {
+   "id": "b1-v7",
+   "frame": "B1",
+   "fix": null,
+   "graded": "assets/renders/bath/nordic/v7/b1-v7-graded-v5.png",
+   "inherits": null,
+   "agent": {
+    "measured": 88.9,
+    "scale": "HSL L",
+    "range": [
+     86.0,
+     90.0
+    ],
+    "H": 37.1,
+    "C": 13.32,
+    "judged": true,
+    "ww": null,
+    "black": 12.5,
+    "max": 96.6,
+    "px255": [
+     0,
+     0
+    ],
+    "fails": [
+     "bible_wall_C_le_7_B4"
+    ],
+    "meets": false
+   },
+   "ref": {
+    "uv": [
+     0.419,
+     0.174
+    ],
+    "L": 88.9,
+    "H": 37.2,
+    "S": 67.3,
+    "Lstar": 92.24,
+    "C": 13.45
+   },
+   "qa_minus_agent": 0.0,
+   "checks": {
+    "target": true,
+    "hue_32_40": true,
+    "C_le_7": false,
+    "black_12_15": true,
+    "rolloff": true
+   },
+   "black": 12.5,
+   "max_L": 96.5,
+   "px255": 0,
+   "qa_fails": [
+    "C_le_7"
+   ],
+   "qa_pass": false
+  },
+  {
+   "id": "b2-v7",
+   "frame": "B2",
+   "fix": null,
+   "graded": "assets/renders/bath/nordic/v7/b2-v7-graded-v5.png",
+   "inherits": {
+    "from_id": "b1-v7",
+    "stops": 0.396,
+    "hue_correction": null
+   },
+   "agent": {
+    "measured": 91.6,
+    "scale": "HSL L",
+    "range": [
+     86.0,
+     90.0
+    ],
+    "H": 36.4,
+    "C": 7.98,
+    "judged": true,
+    "ww": null,
+    "black": 12.5,
+    "max": 96.6,
+    "px255": [
+     0,
+     0
+    ],
+    "fails": [
+     "bible_wall_C_le_7_B4"
+    ],
+    "meets": false
+   },
+   "ref": {
+    "uv": [
+     0.53,
+     0.42
+    ],
+    "L": 91.5,
+    "H": 36.6,
+    "S": 53.8,
+    "Lstar": 93.6,
+    "C": 7.87
+   },
+   "qa_minus_agent": -0.1,
+   "checks": {
+    "target": false,
+    "hue_32_40": true,
+    "C_le_7": false,
+    "black_12_15": true,
+    "rolloff": true
+   },
+   "black": 12.5,
+   "max_L": 96.5,
+   "px255": 0,
+   "qa_fails": [
+    "target",
+    "C_le_7"
+   ],
+   "qa_pass": false
+  },
+  {
+   "id": "w0-v7",
+   "frame": "W0",
+   "fix": null,
+   "graded": "assets/renders/work/nordic/v7/w0-v7-graded-v5.png",
+   "inherits": null,
+   "agent": {
+    "measured": 92.7,
+    "scale": "HSL L",
+    "range": [
+     90.0,
+     94.0
+    ],
+    "H": 36.2,
+    "C": 3.57,
+    "judged": true,
+    "ww": 71.6,
+    "black": 12.5,
+    "max": 96.6,
+    "px255": [
+     0,
+     0
+    ],
+    "fails": [
+     "bible_window_wall_80_88"
+    ],
+    "meets": false
+   },
+   "ref": {
+    "uv": [
+     0.5,
+     0.1214
+    ],
+    "L": 92.7,
+    "H": 35.6,
+    "S": 28.4,
+    "Lstar": 93.96,
+    "C": 3.45
+   },
+   "qa_minus_agent": 0.0,
+   "checks": {
+    "target": true,
+    "hue_32_40": true,
+    "C_le_7": true,
+    "window_wall_80_88": false,
+    "black_12_15": true,
+    "rolloff": true
+   },
+   "window_wall": {
+    "uv": [
+     0.21,
+     0.3
+    ],
+    "L": 71.5,
+    "H": 35.1,
+    "S": 18.0,
+    "Lstar": 75.38,
+    "C": 9.32
+   },
+   "black": 12.5,
+   "max_L": 96.5,
+   "px255": 0,
+   "qa_fails": [
+    "window_wall_80_88"
+   ],
+   "qa_pass": false
+  },
+  {
+   "id": "k-boy-v7",
+   "frame": "K-boy",
+   "fix": "fix",
+   "graded": "assets/renders/boy/nordic/v7/k-boy-v7-graded-fix-v5.png",
+   "inherits": null,
+   "agent": {
+    "measured": 92.6,
+    "scale": "HSL L",
+    "range": [
+     90.0,
+     94.0
+    ],
+    "H": 36.1,
+    "C": 1.82,
+    "judged": true,
+    "ww": 76.3,
+    "black": 12.5,
+    "max": 96.6,
+    "px255": [
+     0,
+     0
+    ],
+    "fails": [
+     "bible_window_wall_80_88"
+    ],
+    "meets": false
+   },
+   "ref": {
+    "uv": [
+     0.4035,
+     0.1581
+    ],
+    "L": 92.7,
+    "H": 36.3,
+    "S": 14.2,
+    "Lstar": 93.68,
+    "C": 1.68
+   },
+   "qa_minus_agent": 0.1,
+   "checks": {
+    "target": true,
+    "hue_32_40": true,
+    "C_le_7": true,
+    "window_wall_80_88": false,
+    "black_12_15": true,
+    "rolloff": true
+   },
+   "window_wall": {
+    "uv": [
+     0.275,
+     0.3
+    ],
+    "L": 76.3,
+    "H": 33.5,
+    "S": 14.7,
+    "Lstar": 79.27,
+    "C": 6.09
+   },
+   "black": 12.5,
+   "max_L": 96.5,
+   "px255": 0,
+   "qa_fails": [
+    "window_wall_80_88"
+   ],
+   "qa_pass": false
+  },
+  {
+   "id": "k-girl-v7",
+   "frame": "K-girl",
+   "fix": "fix",
+   "graded": "assets/renders/girl/nordic/v7/k-girl-v7-graded-fix-v5.png",
+   "inherits": null,
+   "agent": {
+    "measured": 92.6,
+    "scale": "HSL L",
+    "range": [
+     90.0,
+     94.0
+    ],
+    "H": 36.1,
+    "C": 2.58,
+    "judged": true,
+    "ww": 79.0,
+    "black": 12.5,
+    "max": 96.6,
+    "px255": [
+     0,
+     0
+    ],
+    "fails": [
+     "bible_window_wall_80_88"
+    ],
+    "meets": false
+   },
+   "ref": {
+    "uv": [
+     0.4035,
+     0.1581
+    ],
+    "L": 92.7,
+    "H": 36.1,
+    "S": 19.4,
+    "Lstar": 93.73,
+    "C": 2.3
+   },
+   "qa_minus_agent": 0.1,
+   "checks": {
+    "target": true,
+    "hue_32_40": true,
+    "C_le_7": true,
+    "window_wall_80_88": false,
+    "black_12_15": true,
+    "rolloff": true
+   },
+   "window_wall": {
+    "uv": [
+     0.275,
+     0.3
+    ],
+    "L": 79.1,
+    "H": 27.3,
+    "S": 25.9,
+    "Lstar": 81.57,
+    "C": 8.68
+   },
+   "black": 12.6,
+   "max_L": 96.5,
+   "px255": 0,
+   "qa_fails": [
+    "window_wall_80_88"
+   ],
+   "qa_pass": false
+  },
+  {
+   "id": "w0-v7",
+   "frame": "W0",
+   "fix": "fix",
+   "graded": "assets/renders/work/nordic/v7/w0-v7-graded-fix-v5.png",
+   "inherits": null,
+   "agent": {
+    "measured": 92.7,
+    "scale": "HSL L",
+    "range": [
+     90.0,
+     94.0
+    ],
+    "H": 36.2,
+    "C": 3.57,
+    "judged": true,
+    "ww": 71.6,
+    "black": 12.5,
+    "max": 96.6,
+    "px255": [
+     0,
+     0
+    ],
+    "fails": [
+     "bible_window_wall_80_88"
+    ],
+    "meets": false
+   },
+   "ref": {
+    "uv": [
+     0.5,
+     0.1214
+    ],
+    "L": 92.7,
+    "H": 35.6,
+    "S": 28.4,
+    "Lstar": 93.96,
+    "C": 3.45
+   },
+   "qa_minus_agent": 0.0,
+   "checks": {
+    "target": true,
+    "hue_32_40": true,
+    "C_le_7": true,
+    "window_wall_80_88": false,
+    "black_12_15": true,
+    "rolloff": true
+   },
+   "window_wall": {
+    "uv": [
+     0.21,
+     0.3
+    ],
+    "L": 71.5,
+    "H": 35.1,
+    "S": 18.0,
+    "Lstar": 75.38,
+    "C": 9.32
+   },
+   "black": 12.5,
+   "max_L": 96.5,
+   "px255": 0,
+   "qa_fails": [
+    "window_wall_80_88"
+   ],
+   "qa_pass": false
+  },
+  {
+   "id": "pose-h0x-v7",
+   "frame": "H0x",
+   "fix": null,
+   "graded": "assets/renders/poses/nordic/v7/pose-h0x-v7-graded-v5.png",
+   "inherits": null,
+   "agent": {
+    "measured": 76.7,
+    "scale": "HSL L",
+    "range": [
+     71.2,
+     80.6
+    ],
+    "H": 36.1,
+    "C": 9.29,
+    "judged": true,
+    "ww": null,
+    "black": 12.5,
+    "max": 96.6,
+    "px255": [
+     0,
+     0
+    ],
+    "fails": [
+     "bible_wall_C_le_7_B4"
+    ],
+    "meets": false
+   },
+   "ref": {
+    "uv": [
+     0.8532,
+     0.0906
+    ],
+    "L": 76.7,
+    "H": 36.1,
+    "S": 22.1,
+    "Lstar": 80.4,
+    "C": 9.35
+   },
+   "qa_minus_agent": 0.0,
+   "checks": {
+    "target": true,
+    "hue_32_40": true,
+    "C_le_7": false,
+    "black_12_15": true,
+    "rolloff": true
+   },
+   "black": 12.5,
+   "max_L": 96.5,
+   "px255": 0,
+   "qa_fails": [
+    "C_le_7"
+   ],
+   "qa_pass": false
+  },
+  {
+   "id": "pose-m0p-v7",
+   "frame": "M0p",
+   "fix": null,
+   "graded": "assets/renders/poses/nordic/v7/pose-m0p-v7-graded-v5.png",
+   "inherits": null,
+   "agent": {
+    "measured": 92.8,
+    "scale": "HSL L",
+    "range": [
+     90.0,
+     94.0
+    ],
+    "H": 37.5,
+    "C": 7.34,
+    "judged": true,
+    "ww": null,
+    "black": 12.5,
+    "max": 96.6,
+    "px255": [
+     0,
+     0
+    ],
+    "fails": [
+     "bible_wall_C_le_7_B4"
+    ],
+    "meets": false
+   },
+   "ref": {
+    "uv": [
+     0.3999,
+     0.3112
+    ],
+    "L": 92.8,
+    "H": 37.6,
+    "S": 57.6,
+    "Lstar": 94.74,
+    "C": 7.47
+   },
+   "qa_minus_agent": 0.0,
+   "checks": {
+    "target": true,
+    "hue_32_40": true,
+    "C_le_7": false,
+    "black_12_15": true,
+    "rolloff": true
+   },
+   "black": 12.5,
+   "max_L": 96.7,
+   "px255": 0,
+   "qa_fails": [
+    "C_le_7"
+   ],
+   "qa_pass": false
+  },
+  {
+   "id": "pose-m0x-v7",
+   "frame": "M0x",
+   "fix": null,
+   "graded": "assets/renders/poses/nordic/v7/pose-m0x-v7-graded-v5.png",
+   "inherits": {
+    "from_id": "m0-v7-r2",
+    "stops": 0.928,
+    "hue_correction": true
+   },
+   "agent": {
+    "measured": 94.5,
+    "scale": "HSL L",
+    "range": [
+     90.0,
+     94.0
+    ],
+    "H": 45.5,
+    "C": 4.5,
+    "judged": false,
+    "ww": null,
+    "black": 12.5,
+    "max": 96.6,
+    "px255": [
+     0,
+     0
+    ],
+    "fails": [
+     "wall hue / C* not judged (no wall at the reference point)"
+    ],
+    "meets": false
+   },
+   "ref": {
+    "uv": [
+     0.5,
+     0.3
+    ],
+    "L": 94.4,
+    "H": 45.8,
+    "S": 39.8,
+    "Lstar": 96.0,
+    "C": 4.66
+   },
+   "qa_minus_agent": -0.1,
+   "checks": {
+    "target": false,
+    "black_12_15": true,
+    "rolloff": true
+   },
+   "black": 12.5,
+   "max_L": 96.7,
+   "px255": 0,
+   "qa_fails": [
+    "target",
+    "not judged (no wall at the point)"
+   ],
+   "qa_pass": false
+  },
+  {
+   "id": "pose-pd-35-v7",
+   "frame": "PD-35",
+   "fix": null,
+   "graded": "assets/renders/poses/nordic/v7/pose-pd-35-v7-graded-v5.png",
+   "inherits": null,
+   "agent": {
+    "measured": 91.9,
+    "scale": "HSL L",
+    "range": [
+     90.0,
+     94.0
+    ],
+    "H": 36.0,
+    "C": 2.38,
+    "judged": true,
+    "ww": null,
+    "black": 12.5,
+    "max": 96.6,
+    "px255": [
+     0,
+     0
+    ],
+    "fails": [],
+    "meets": true
+   },
+   "ref": {
+    "uv": [
+     0.4119,
+     0.233
+    ],
+    "L": 92.0,
+    "H": 34.7,
+    "S": 17.6,
+    "Lstar": 93.07,
+    "C": 2.39
+   },
+   "qa_minus_agent": 0.1,
+   "checks": {
+    "target": true,
+    "hue_32_40": true,
+    "C_le_7": true,
+    "black_12_15": true,
+    "rolloff": true
+   },
+   "black": 12.5,
+   "max_L": 96.5,
+   "px255": 0,
+   "qa_fails": [],
+   "qa_pass": true
+  },
+  {
+   "id": "pose-h0e-v7",
+   "frame": "H0e",
+   "fix": null,
+   "graded": "assets/renders/poses/nordic/v7/pose-h0e-v7-graded-v5.png",
+   "inherits": null,
+   "agent": {
+    "measured": 77.3,
+    "scale": "HSL L",
+    "range": [
+     71.2,
+     80.6
+    ],
+    "H": 36.1,
+    "C": 5.94,
+    "judged": true,
+    "ww": null,
+    "black": 12.5,
+    "max": 94.9,
+    "px255": [
+     0,
+     0
+    ],
+    "fails": [],
+    "meets": true
+   },
+   "ref": {
+    "uv": [
+     0.5181,
+     0.1294
+    ],
+    "L": 77.3,
+    "H": 36.2,
+    "S": 14.5,
+    "Lstar": 80.39,
+    "C": 6.05
+   },
+   "qa_minus_agent": 0.0,
+   "checks": {
+    "target": true,
+    "hue_32_40": true,
+    "C_le_7": true,
+    "black_12_15": true,
+    "rolloff": true
+   },
+   "black": 12.5,
+   "max_L": 94.9,
+   "px255": 0,
+   "qa_fails": [],
+   "qa_pass": true
+  },
+  {
+   "id": "pose-w0-in-v7",
+   "frame": "W0-in",
+   "fix": null,
+   "graded": "assets/renders/poses/nordic/v7/pose-w0-in-v7-graded-v5.png",
+   "inherits": null,
+   "agent": {
+    "measured": 92.6,
+    "scale": "HSL L",
+    "range": [
+     90.0,
+     94.0
+    ],
+    "H": 36.2,
+    "C": 3.49,
+    "judged": true,
+    "ww": null,
+    "black": 12.5,
+    "max": 96.6,
+    "px255": [
+     0,
+     0
+    ],
+    "fails": [],
+    "meets": true
+   },
+   "ref": {
+    "uv": [
+     0.5,
+     0.4
+    ],
+    "L": 92.6,
+    "H": 35.3,
+    "S": 27.4,
+    "Lstar": 93.93,
+    "C": 3.37
+   },
+   "qa_minus_agent": 0.0,
+   "checks": {
+    "target": true,
+    "hue_32_40": true,
+    "C_le_7": true,
+    "black_12_15": true,
+    "rolloff": true
+   },
+   "black": 12.5,
+   "max_L": 96.5,
+   "px255": 0,
+   "qa_fails": [],
+   "qa_pass": true
+  },
+  {
+   "id": "pose-s1prime-v7",
+   "frame": "S1prime",
+   "fix": null,
+   "graded": "assets/renders/poses/nordic/v7/pose-s1prime-v7-graded-v5.png",
+   "inherits": null,
+   "agent": {
+    "measured": 73.59,
+    "scale": "CIELAB L*",
+    "range": [
+     72.0,
+     75.0
+    ],
+    "H": 36.0,
+    "C": 5.5,
+    "judged": true,
+    "ww": null,
+    "black": 12.5,
+    "max": 87.7,
+    "px255": [
+     0,
+     0
+    ],
+    "fails": [],
+    "meets": true
+   },
+   "ref": {
+    "uv": [
+     0.755,
+     0.3612
+    ],
+    "L": 70.0,
+    "H": 36.3,
+    "S": 9.8,
+    "Lstar": 73.49,
+    "C": 5.35
+   },
+   "qa_minus_agent": -0.1,
+   "checks": {
+    "target": true,
+    "hue_32_40": true,
+    "C_le_7": true,
+    "black_12_15": true,
+    "rolloff": true,
+    "vista_brightest": true
+   },
+   "black": 12.5,
+   "max_L": 87.6,
+   "px255": 0,
+   "edge_p99_5_within_64px": 12.8,
+   "clay_at_point": {
+    "uv": [
+     0.755,
+     0.3612
+    ],
+    "L": 82.1,
+    "H": 31.2,
+    "S": 30.2,
+    "Lstar": 84.8,
+    "C": 9.11
+   },
+   "clay_edge_p99_5_within_64px": 4.5,
+   "vista": {
+    "box": [
+     0.325,
+     0.455,
+     0.24,
+     0.58
+    ],
+    "vista_Lstar_p95": 80.83,
+    "vista_L_HSL_p50": 68.4,
+    "vista_L_HSL_p95": 77.6,
+    "rest_Lstar_p99_5": 78.45,
+    "brightest": true
+   },
+   "qa_fails": [],
+   "qa_pass": true
+  },
+  {
+   "id": "pose-k-boy-0-v7",
+   "frame": "K-boy-0",
+   "fix": null,
+   "graded": "assets/renders/poses/nordic/v7/pose-k-boy-0-v7-graded-v5.png",
+   "inherits": {
+    "from_id": "k-boy-v7",
+    "stops": 0.305,
+    "hue_correction": null
+   },
+   "agent": {
+    "measured": 89.4,
+    "scale": "HSL L",
+    "range": [
+     90.0,
+     94.0
+    ],
+    "H": 36.1,
+    "C": 3.6,
+    "judged": false,
+    "ww": null,
+    "black": 13.5,
+    "max": 96.6,
+    "px255": [
+     0,
+     0
+    ],
+    "fails": [
+     "wall hue / C* not judged (no wall at the reference point)"
+    ],
+    "meets": false
+   },
+   "ref": {
+    "uv": [
+     0.5,
+     0.3
+    ],
+    "L": 89.3,
+    "H": 39.4,
+    "S": 18.8,
+    "Lstar": 91.07,
+    "C": 3.81
+   },
+   "qa_minus_agent": -0.1,
+   "checks": {
+    "target": false,
+    "black_12_15": true,
+    "rolloff": true
+   },
+   "black": 13.4,
+   "max_L": 96.5,
+   "px255": 0,
+   "qa_fails": [
+    "target",
+    "not judged (no wall at the point)"
+   ],
+   "qa_pass": false
+  },
+  {
+   "id": "pose-k-girl-0-v7",
+   "frame": "K-girl-0",
+   "fix": null,
+   "graded": "assets/renders/poses/nordic/v7/pose-k-girl-0-v7-graded-v5.png",
+   "inherits": null,
+   "agent": {
+    "measured": 88.7,
+    "scale": "HSL L",
+    "range": [
+     90.0,
+     94.0
+    ],
+    "H": 33.2,
+    "C": 3.64,
+    "judged": true,
+    "ww": null,
+    "black": 12.5,
+    "max": 96.6,
+    "px255": [
+     0,
+     0
+    ],
+    "fails": [
+     "bible_target_met"
+    ],
+    "meets": false
+   },
+   "ref": {
+    "uv": [
+     0.22,
+     0.08
+    ],
+    "L": 88.6,
+    "H": 33.1,
+    "S": 19.2,
+    "Lstar": 90.16,
+    "C": 3.58
+   },
+   "qa_minus_agent": -0.1,
+   "checks": {
+    "target": false,
+    "hue_32_40": true,
+    "C_le_7": true,
+    "black_12_15": true,
+    "rolloff": true
+   },
+   "black": 12.5,
+   "max_L": 96.5,
+   "px255": 0,
+   "qa_fails": [
+    "target"
+   ],
+   "qa_pass": false
+  },
+  {
+   "id": "pose-cb-0-v7",
+   "frame": "CB-0",
+   "fix": null,
+   "graded": "assets/renders/poses/nordic/v7/pose-cb-0-v7-graded-v5.png",
+   "inherits": null,
+   "agent": {
+    "measured": 88.9,
+    "scale": "HSL L",
+    "range": [
+     86.0,
+     90.0
+    ],
+    "H": 36.2,
+    "C": 6.68,
+    "judged": true,
+    "ww": null,
+    "black": 12.5,
+    "max": 96.6,
+    "px255": [
+     0,
+     0
+    ],
+    "fails": [],
+    "meets": true
+   },
+   "ref": {
+    "uv": [
+     0.419,
+     0.174
+    ],
+    "L": 89.0,
+    "H": 35.1,
+    "S": 34.6,
+    "Lstar": 91.0,
+    "C": 6.68
+   },
+   "qa_minus_agent": 0.1,
+   "checks": {
+    "target": true,
+    "hue_32_40": true,
+    "C_le_7": true,
+    "black_12_15": true,
+    "rolloff": true
+   },
+   "black": 12.5,
+   "max_L": 96.5,
+   "px255": 0,
+   "qa_fails": [],
+   "qa_pass": true
+  },
+  {
+   "id": "pose-mb-in-v7",
+   "frame": "MB-in",
+   "fix": null,
+   "graded": "assets/renders/poses/nordic/v7/pose-mb-in-v7-graded-v5.png",
+   "inherits": null,
+   "agent": {
+    "measured": 93.0,
+    "scale": "HSL L",
+    "range": [
+     90.0,
+     94.0
+    ],
+    "H": 37.9,
+    "C": 7.95,
+    "judged": true,
+    "ww": null,
+    "black": 12.5,
+    "max": 96.6,
+    "px255": [
+     0,
+     0
+    ],
+    "fails": [
+     "bible_wall_C_le_7_B4"
+    ],
+    "meets": false
+   },
+   "ref": {
+    "uv": [
+     0.5,
+     0.1453
+    ],
+    "L": 93.0,
+    "H": 38.1,
+    "S": 63.6,
+    "Lstar": 95.11,
+    "C": 8.0
+   },
+   "qa_minus_agent": 0.0,
+   "checks": {
+    "target": true,
+    "hue_32_40": true,
+    "C_le_7": false,
+    "black_12_15": true,
+    "rolloff": true
+   },
+   "black": 12.5,
+   "max_L": 96.7,
+   "px255": 0,
+   "qa_fails": [
+    "C_le_7"
+   ],
+   "qa_pass": false
+  },
+  {
+   "id": "pose-k-boy-0-v7",
+   "frame": "K-boy-0",
+   "fix": "fix",
+   "graded": "assets/renders/poses/nordic/v7/pose-k-boy-0-v7-graded-fix-v5.png",
+   "inherits": {
+    "from_id": "k-boy-v7",
+    "stops": 0.305,
+    "hue_correction": null
+   },
+   "agent": {
+    "measured": 89.4,
+    "scale": "HSL L",
+    "range": [
+     90.0,
+     94.0
+    ],
+    "H": 36.1,
+    "C": 3.6,
+    "judged": false,
+    "ww": null,
+    "black": 13.5,
+    "max": 96.6,
+    "px255": [
+     0,
+     0
+    ],
+    "fails": [
+     "wall hue / C* not judged (no wall at the reference point)"
+    ],
+    "meets": false
+   },
+   "ref": {
+    "uv": [
+     0.5,
+     0.3
+    ],
+    "L": 89.3,
+    "H": 39.4,
+    "S": 18.8,
+    "Lstar": 91.07,
+    "C": 3.81
+   },
+   "qa_minus_agent": -0.1,
+   "checks": {
+    "target": false,
+    "black_12_15": true,
+    "rolloff": true
+   },
+   "black": 13.4,
+   "max_L": 96.5,
+   "px255": 0,
+   "qa_fails": [
+    "target",
+    "not judged (no wall at the point)"
+   ],
+   "qa_pass": false
+  },
+  {
+   "id": "b1-v7-r3",
+   "frame": "B1",
+   "fix": "fix2",
+   "graded": "assets/renders/bath/nordic/v7/b1-v7-r3-graded-fix2-v5.png",
+   "inherits": null,
+   "agent": {
+    "measured": 89.2,
+    "scale": "HSL L",
+    "range": [
+     86.0,
+     90.0
+    ],
+    "H": 36.2,
+    "C": 5.53,
+    "judged": true,
+    "ww": null,
+    "black": 12.5,
+    "max": 96.6,
+    "px255": [
+     0,
+     0
+    ],
+    "fails": [],
+    "meets": true
+   },
+   "ref": {
+    "uv": [
+     0.419,
+     0.174
+    ],
+    "L": 89.2,
+    "H": 35.9,
+    "S": 29.2,
+    "Lstar": 91.06,
+    "C": 5.42
+   },
+   "qa_minus_agent": 0.0,
+   "checks": {
+    "target": true,
+    "hue_32_40": true,
+    "C_le_7": true,
+    "black_12_15": true,
+    "rolloff": true
+   },
+   "black": 12.5,
+   "max_L": 96.5,
+   "px255": 0,
+   "qa_fails": [],
+   "qa_pass": true
+  },
+  {
+   "id": "b2-v7-r3",
+   "frame": "B2",
+   "fix": "fix2",
+   "graded": "assets/renders/bath/nordic/v7/b2-v7-r3-graded-fix2-v5.png",
+   "inherits": {
+    "from_id": "b1-v7-r3",
+    "stops": 0.163,
+    "hue_correction": null
+   },
+   "agent": {
+    "measured": 82.1,
+    "scale": "HSL L",
+    "range": [
+     86.0,
+     90.0
+    ],
+    "H": 36.2,
+    "C": 9.36,
+    "judged": true,
+    "ww": null,
+    "black": 12.5,
+    "max": 96.6,
+    "px255": [
+     0,
+     0
+    ],
+    "fails": [
+     "bible_wall_C_le_7_B4"
+    ],
+    "meets": false
+   },
+   "ref": {
+    "uv": [
+     0.53,
+     0.42
+    ],
+    "L": 82.1,
+    "H": 35.9,
+    "S": 29.4,
+    "Lstar": 85.27,
+    "C": 9.3
+   },
+   "qa_minus_agent": 0.0,
+   "checks": {
+    "target": false,
+    "hue_32_40": true,
+    "C_le_7": false,
+    "black_12_15": true,
+    "rolloff": true
+   },
+   "black": 12.5,
+   "max_L": 96.5,
+   "px255": 0,
+   "qa_fails": [
+    "target",
+    "C_le_7"
+   ],
+   "qa_pass": false
+  },
+  {
+   "id": "pose-k-girl-0-v7-r2",
+   "frame": "K-girl-0",
+   "fix": "fix2",
+   "graded": "assets/renders/poses/nordic/v7/pose-k-girl-0-v7-r2-graded-fix2-v5.png",
+   "inherits": null,
+   "agent": {
+    "measured": 92.7,
+    "scale": "HSL L",
+    "range": [
+     90.0,
+     94.0
+    ],
+    "H": 36.1,
+    "C": 2.09,
+    "judged": true,
+    "ww": null,
+    "black": 12.5,
+    "max": 96.4,
+    "px255": [
+     0,
+     0
+    ],
+    "fails": [],
+    "meets": true
+   },
+   "ref": {
+    "uv": [
+     0.22,
+     0.08
+    ],
+    "L": 92.6,
+    "H": 34.3,
+    "S": 16.6,
+    "Lstar": 93.7,
+    "C": 2.0
+   },
+   "qa_minus_agent": -0.1,
+   "checks": {
+    "target": true,
+    "hue_32_40": true,
+    "C_le_7": true,
+    "black_12_15": true,
+    "rolloff": true
+   },
+   "black": 12.5,
+   "max_L": 96.3,
+   "px255": 0,
+   "qa_fails": [],
+   "qa_pass": true
+  },
+  {
+   "id": "pose-w0-in-v7-r2",
+   "frame": "W0-in",
+   "fix": "fix2",
+   "graded": "assets/renders/poses/nordic/v7/pose-w0-in-v7-r2-graded-fix2-v5.png",
+   "inherits": null,
+   "agent": {
+    "measured": 92.5,
+    "scale": "HSL L",
+    "range": [
+     90.0,
+     94.0
+    ],
+    "H": 36.2,
+    "C": 3.65,
+    "judged": true,
+    "ww": null,
+    "black": 12.5,
+    "max": 96.6,
+    "px255": [
+     0,
+     0
+    ],
+    "fails": [],
+    "meets": true
+   },
+   "ref": {
+    "uv": [
+     0.5,
+     0.4
+    ],
+    "L": 92.5,
+    "H": 36.2,
+    "S": 27.8,
+    "Lstar": 93.78,
+    "C": 3.69
+   },
+   "qa_minus_agent": 0.0,
+   "checks": {
+    "target": true,
+    "hue_32_40": true,
+    "C_le_7": true,
+    "black_12_15": true,
+    "rolloff": true
+   },
+   "black": 12.5,
+   "max_L": 96.5,
+   "px255": 0,
+   "qa_fails": [],
+   "qa_pass": true
+  },
+  {
+   "id": "m0-v8b-r2",
+   "frame": "M0",
+   "fix": "fix",
+   "graded": "assets/renders/living-room/nordic/v8/m0-v8b-r2-graded-fix-v5.png",
+   "inherits": null,
+   "agent": {
+    "measured": 92.1,
+    "scale": "HSL L",
+    "range": [
+     90.0,
+     94.0
+    ],
+    "H": 37.6,
+    "C": 8.01,
+    "judged": true,
+    "ww": 87.0,
+    "black": 13.5,
+    "max": 96.6,
+    "px255": [
+     0,
+     0
+    ],
+    "fails": [
+     "bible_wall_C_le_7_B4"
+    ],
+    "meets": false
+   },
+   "ref": {
+    "uv": [
+     0.4269,
+     0.4156
+    ],
+    "L": 92.0,
+    "H": 37.4,
+    "S": 55.7,
+    "Lstar": 94.09,
+    "C": 7.78
+   },
+   "qa_minus_agent": -0.1,
+   "checks": {
+    "target": true,
+    "hue_32_40": true,
+    "C_le_7": false,
+    "window_wall_80_88": true,
+    "black_12_15": true,
+    "rolloff": true
+   },
+   "window_wall": {
+    "uv": [
+     0.352,
+     0.415
+    ],
+    "L": 87.0,
+    "H": 34.0,
+    "S": 57.8,
+    "Lstar": 89.99,
+    "C": 12.94
+   },
+   "black": 13.5,
+   "max_L": 96.5,
+   "px255": 0,
+   "bible_points": {
+    "back wall by the corner (0.427,0.416)": {
+     "uv": [
+      0.4269,
+      0.4156
+     ],
+     "L": 92.0,
+     "H": 37.2,
+     "S": 56.0,
+     "Lstar": 94.09,
+     "C": 7.78
+    },
+    "window wall (0.352,0.415)": {
+     "uv": [
+      0.352,
+      0.415
+     ],
+     "L": 87.0,
+     "H": 34.0,
+     "S": 57.8,
+     "Lstar": 89.99,
+     "C": 12.94
+    }
+   },
+   "qa_fails": [
+    "C_le_7"
+   ],
+   "qa_pass": false
+  },
+  {
+   "id": "pose-m0p-v8b",
+   "frame": "M0p",
+   "fix": "fix",
+   "graded": "assets/renders/poses/nordic/v8/pose-m0p-v8b-graded-fix-v5.png",
+   "inherits": null,
+   "agent": {
+    "measured": 92.0,
+    "scale": "HSL L",
+    "range": [
+     90.0,
+     94.0
+    ],
+    "H": 36.2,
+    "C": 4.63,
+    "judged": true,
+    "ww": null,
+    "black": 13.5,
+    "max": 96.6,
+    "px255": [
+     0,
+     0
+    ],
+    "fails": [],
+    "meets": true
+   },
+   "ref": {
+    "uv": [
+     0.1221,
+     0.4036
+    ],
+    "L": 92.0,
+    "H": 34.5,
+    "S": 33.5,
+    "Lstar": 93.48,
+    "C": 4.54
+   },
+   "qa_minus_agent": 0.0,
+   "checks": {
+    "target": true,
+    "hue_32_40": true,
+    "C_le_7": true,
+    "black_12_15": true,
+    "rolloff": true
+   },
+   "black": 13.5,
+   "max_L": 96.5,
+   "px255": 0,
+   "qa_fails": [],
+   "qa_pass": true
+  },
+  {
+   "id": "pose-m0x-v8b",
+   "frame": "M0x",
+   "fix": "fix",
+   "graded": "assets/renders/poses/nordic/v8/pose-m0x-v8b-graded-fix-v5.png",
+   "inherits": {
+    "from_id": "m0-v8b-r2",
+    "stops": 0.907,
+    "hue_correction": null
+   },
+   "agent": {
+    "measured": 96.6,
+    "scale": "HSL L",
+    "range": [
+     90.0,
+     94.0
+    ],
+    "H": 0.0,
+    "C": 0.0,
+    "judged": false,
+    "ww": null,
+    "black": 12.5,
+    "max": 96.6,
+    "px255": [
+     0,
+     0
+    ],
+    "fails": [
+     "wall hue / C* not judged (no wall at the reference point)"
+    ],
+    "meets": false
+   },
+   "ref": {
+    "uv": [
+     0.5,
+     0.3
+    ],
+    "L": 96.5,
+    "H": 0.0,
+    "S": 0.0,
+    "Lstar": 96.73,
+    "C": 0.02
+   },
+   "qa_minus_agent": -0.1,
+   "checks": {
+    "target": false,
+    "black_12_15": true,
+    "rolloff": true
+   },
+   "black": 12.5,
+   "max_L": 96.5,
+   "px255": 0,
+   "qa_fails": [
+    "target",
+    "not judged (no wall at the point)"
+   ],
+   "qa_pass": false
+  }
+ ],
+ "grading_v5_cb0_b1r3": {
+  "id": "pose-cb-0-v7-b1r3",
+  "frame": "CB-0",
+  "fix": "b1r3",
+  "graded": "assets/renders/poses/nordic/v7/pose-cb-0-v7-graded-b1r3-v5.png",
+  "agent": {
+   "reading": 79.3,
+   "meets": true,
+   "stops_from": "b1-v7-r3 fix2 (0.163)"
+  },
+  "v5_point": {
+   "uv": [
+    0.419,
+    0.174
+   ],
+   "L": 79.3,
+   "H": 36.8,
+   "S": 8.3,
+   "Lstar": 81.85,
+   "C": 3.09
+  },
+  "b1_point_carried": {
+   "uv": [
+    0.6449,
+    0.1701
+   ],
+   "L": 88.6,
+   "H": 41.0,
+   "S": 28.6,
+   "Lstar": 90.94,
+   "C": 6.25
+  },
+  "b1_fix2_at_its_point": {
+   "uv": [
+    0.419,
+    0.174
+   ],
+   "L": 89.2,
+   "H": 35.9,
+   "S": 29.2,
+   "Lstar": 91.06,
+   "C": 5.42
+  },
+  "old_cb0_v5_at_v5_point": {
+   "uv": [
+    0.419,
+    0.174
+   ],
+   "L": 89.0,
+   "H": 35.1,
+   "S": 34.6,
+   "Lstar": 91.0,
+   "C": 6.68
+  },
+  "black": 12.5,
+  "max_L": 96.5,
+  "px255": 0,
+  "checks": {
+   "target": true,
+   "hue_32_40": false,
+   "C_le_7": true,
+   "black_12_15": true,
+   "rolloff": true,
+   "v5_point_in_86_90": false
+  }
+ },
+ "grading_v5_counts": {
+  "qa_pass_on_the_agent_rules": 12,
+  "agent_pass": 12,
+  "disagree": [],
+  "qa_pass_on_the_bible_text": 11,
+  "bible_text_note": "Bible 1.8.4 asks the living back wall in the corridor's vista at target (1); the agent tests only 'vista p95 above every other surface's p99.5'. S1' passes that test (80.8 > 78.4) but its living back wall in the vista reads L 67-78 / L* 71-81, the same as its corridor wall (L* 73.5), not 90-94 (H0's vista 92.5). On the Bible's text S1' fails too: 11 of 33"
+ },
+ "corridor_points": {
+  "C0": {
+   "point": [
+    0.8578,
+    0.3695
+   ],
+   "render": {
+    "uv": [
+     0.8578,
+     0.3695
+    ],
+    "L": 69.5,
+    "H": 35.5,
+    "S": 14.3,
+    "Lstar": 73.44,
+    "C": 8.05
+   },
+   "clay": {
+    "uv": [
+     0.8578,
+     0.3695
+    ],
+    "L": 75.8,
+    "H": 31.2,
+    "S": 28.9,
+    "Lstar": 79.26,
+    "C": 11.8
+   },
+   "clean_wall": true,
+   "vista": {
+    "box": [
+     0.435,
+     0.495,
+     0.3,
+     0.56
+    ],
+    "vista_Lstar_p95": 88.39,
+    "vista_L_HSL_p50": 70.8,
+    "vista_L_HSL_p95": 85.5,
+    "rest_Lstar_p99_5": 89.86,
+    "brightest": false
+   },
+   "vista_back_wall_L": [
+    77.0,
+    85.4
+   ]
+  },
+  "S1prime": {
+   "point": [
+    0.755,
+    0.3612
+   ],
+   "render": {
+    "uv": [
+     0.755,
+     0.3612
+    ],
+    "L": 70.0,
+    "H": 36.3,
+    "S": 9.8,
+    "Lstar": 73.49,
+    "C": 5.35
+   },
+   "clay": {
+    "uv": [
+     0.755,
+     0.3612
+    ],
+    "L": 82.1,
+    "H": 31.2,
+    "S": 30.2,
+    "Lstar": 84.8,
+    "C": 9.11
+   },
+   "clean_wall": true,
+   "vista": {
+    "box": [
+     0.325,
+     0.455,
+     0.24,
+     0.58
+    ],
+    "vista_Lstar_p95": 80.83,
+    "vista_L_HSL_p50": 68.4,
+    "vista_L_HSL_p95": 77.6,
+    "rest_Lstar_p99_5": 78.45,
+    "brightest": true
+   },
+   "vista_back_wall_L": [
+    66.7,
+    77.8
+   ]
+  }
+ },
+ "h0_hall": {
+  "qa_point": {
+   "uv": [
+    0.681,
+    0.12
+   ],
+   "L": 76.6,
+   "H": 33.9,
+   "S": 22.2,
+   "Lstar": 80.0,
+   "C": 9.15
+  },
+  "left_of_the_art": {
+   "uv": [
+    0.57,
+    0.3
+   ],
+   "L": 81.8,
+   "Lstar": 84.59
+  },
+  "agent_Lstar": 80.09,
+  "B5": {
+   "vista": {
+    "uv": [
+     0.35,
+     0.4
+    ],
+    "L": 92.5,
+    "H": 39.5,
+    "S": 49.5,
+    "Lstar": 94.48,
+    "C": 6.8
+   },
+   "stops_hall_under_vista": 0.606,
+   "ok": true
+  },
+  "verdict": "fails 75-78 (L* 80.0 at QA's point, 82.6-84.6 left of the art); B5 0.61 stop passes: the two rules overlap only below about L* 78.6 with the vista at 94.5"
+ },
+ "pairs": [
+  {
+   "a": "M0 1.2 fix",
+   "b": "M0p 1.2 fix",
+   "pan": "P0 pan",
+   "degrees": 25,
+   "render": {
+    "size": [
+     1920,
+     1080
+    ],
+    "overlap_u": [
+     0.0,
+     0.422
+    ],
+    "overlap_v": [
+     0.0,
+     0.999
+    ],
+    "shift_px": {
+     "dx": -18.92,
+     "dy": -9.75,
+     "response": 0.102
+    },
+    "bands": [
+     {
+      "u": [
+       0.0,
+       0.105
+      ],
+      "dx_px": 17.93,
+      "dy_px": 24.54,
+      "response": 0.014
+     },
+     {
+      "u": [
+       0.105,
+       0.211
+      ],
+      "dx_px": 1.12,
+      "dy_px": -22.48,
+      "response": 0.435
+     },
+     {
+      "u": [
+       0.211,
+       0.317
+      ],
+      "dx_px": -18.91,
+      "dy_px": -9.45,
+      "response": 0.344
+     },
+     {
+      "u": [
+       0.317,
+       0.422
+      ],
+      "dx_px": -17.88,
+      "dy_px": 0.88,
+      "response": 0.05
+     }
+    ],
+    "deltaE": {
+     "mean": 7.91,
+     "p95": 21.28,
+     "share_over_5": 0.69
+    },
+    "L_mean": {
+     "a": 90.3,
+     "b": 86.3
+    },
+    "sheet": "/home/user/homedesign-app/qa/reports/2026-11-04-m0-fix2-cb0-g1/overlays/pair-M0_1.2_fix-M0p_1.2_fix.jpg",
+    "worst_band_px": 24.54,
+    "worst_band_px_reliable": 22.48,
+    "bands_reliable": 3,
+    "dL_mean": 4.0
+   },
+   "clay": {
+    "size": [
+     1920,
+     1080
+    ],
+    "overlap_u": [
+     0.0,
+     0.422
+    ],
+    "overlap_v": [
+     0.0,
+     0.999
+    ],
+    "shift_px": {
+     "dx": 0.1,
+     "dy": -0.01,
+     "response": 0.962
+    },
+    "bands": [
+     {
+      "u": [
+       0.0,
+       0.105
+      ],
+      "dx_px": 0.04,
+      "dy_px": 0.16,
+      "response": 0.614
+     },
+     {
+      "u": [
+       0.105,
+       0.211
+      ],
+      "dx_px": 0.32,
+      "dy_px": 0.08,
+      "response": 0.962
+     },
+     {
+      "u": [
+       0.211,
+       0.317
+      ],
+      "dx_px": -0.03,
+      "dy_px": 0.09,
+      "response": 0.984
+     },
+     {
+      "u": [
+       0.317,
+       0.422
+      ],
+      "dx_px": 0.02,
+      "dy_px": -0.04,
+      "response": 0.957
+     }
+    ],
+    "deltaE": {
+     "mean": 0.33,
+     "p95": 0.75,
+     "share_over_5": 0.002
+    },
+    "L_mean": {
+     "a": 88.3,
+     "b": 88.3
+    },
+    "worst_band_px": 0.32,
+    "worst_band_px_reliable": 0.32,
+    "bands_reliable": 4,
+    "dL_mean": 0.0
+   }
+  },
+  {
+   "a": "M0p 1.2 fix",
+   "b": "M0x 1.2 fix",
+   "pan": "P1 pan",
+   "degrees": 35,
+   "render": {
+    "size": [
+     1920,
+     1080
+    ],
+    "overlap_u": [
+     0.0,
+     0.333
+    ],
+    "overlap_v": [
+     0.0,
+     0.999
+    ],
+    "shift_px": {
+     "dx": 0.12,
+     "dy": -28.02,
+     "response": 0.166
+    },
+    "bands": [
+     {
+      "u": [
+       0.0,
+       0.083
+      ],
+      "dx_px": 5.01,
+      "dy_px": -36.35,
+      "response": 0.105
+     },
+     {
+      "u": [
+       0.083,
+       0.167
+      ],
+      "dx_px": 3.32,
+      "dy_px": -28.58,
+      "response": 0.197
+     },
+     {
+      "u": [
+       0.167,
+       0.25
+      ],
+      "dx_px": -0.38,
+      "dy_px": 4.25,
+      "response": -0.013
+     },
+     {
+      "u": [
+       0.25,
+       0.333
+      ],
+      "dx_px": -3.01,
+      "dy_px": 14.26,
+      "response": 0.229
+     }
+    ],
+    "deltaE": {
+     "mean": 10.65,
+     "p95": 24.41,
+     "share_over_5": 0.954
+    },
+    "L_mean": {
+     "a": 82.4,
+     "b": 90.2
+    },
+    "sheet": "/home/user/homedesign-app/qa/reports/2026-11-04-m0-fix2-cb0-g1/overlays/pair-M0p_1.2_fix-M0x_1.2_fix.jpg",
+    "worst_band_px": 36.35,
+    "worst_band_px_reliable": 36.35,
+    "bands_reliable": 3,
+    "dL_mean": 7.8
+   },
+   "clay": {
+    "size": [
+     1920,
+     1080
+    ],
+    "overlap_u": [
+     0.0,
+     0.333
+    ],
+    "overlap_v": [
+     0.0,
+     0.999
+    ],
+    "shift_px": {
+     "dx": 0.08,
+     "dy": -0.07,
+     "response": 0.967
+    },
+    "bands": [
+     {
+      "u": [
+       0.0,
+       0.083
+      ],
+      "dx_px": 0.02,
+      "dy_px": 0.0,
+      "response": 0.924
+     },
+     {
+      "u": [
+       0.083,
+       0.167
+      ],
+      "dx_px": 0.1,
+      "dy_px": 0.08,
+      "response": 0.916
+     },
+     {
+      "u": [
+       0.167,
+       0.25
+      ],
+      "dx_px": 0.04,
+      "dy_px": 0.11,
+      "response": 0.501
+     },
+     {
+      "u": [
+       0.25,
+       0.333
+      ],
+      "dx_px": 0.19,
+      "dy_px": 0.01,
+      "response": 0.9
+     }
+    ],
+    "deltaE": {
+     "mean": 0.42,
+     "p95": 0.84,
+     "share_over_5": 0.002
+    },
+    "L_mean": {
+     "a": 85.9,
+     "b": 86.0
+    },
+    "worst_band_px": 0.19,
+    "worst_band_px_reliable": 0.19,
+    "bands_reliable": 4,
+    "dL_mean": 0.1
+   }
+  },
+  {
+   "a": "B1 r3 fix2",
+   "b": "B2 r3 fix2",
+   "pan": "P-B pan",
+   "degrees": 35,
+   "render": {
+    "size": [
+     1920,
+     1080
+    ],
+    "overlap_u": [
+     0.0,
+     0.38
+    ],
+    "overlap_v": [
+     0.0,
+     0.999
+    ],
+    "shift_px": {
+     "dx": 0.09,
+     "dy": 0.38,
+     "response": 0.099
+    },
+    "bands": [
+     {
+      "u": [
+       0.0,
+       0.095
+      ],
+      "dx_px": -9.02,
+      "dy_px": 8.11,
+      "response": 0.192
+     },
+     {
+      "u": [
+       0.095,
+       0.19
+      ],
+      "dx_px": -2.52,
+      "dy_px": -54.88,
+      "response": 0.014
+     },
+     {
+      "u": [
+       0.19,
+       0.284
+      ],
+      "dx_px": -3.61,
+      "dy_px": 6.4,
+      "response": -0.007
+     },
+     {
+      "u": [
+       0.284,
+       0.38
+      ],
+      "dx_px": -0.6,
+      "dy_px": 0.46,
+      "response": 0.299
+     }
+    ],
+    "deltaE": {
+     "mean": 10.11,
+     "p95": 24.23,
+     "share_over_5": 0.733
+    },
+    "L_mean": {
+     "a": 67.6,
+     "b": 68.2
+    },
+    "sheet": "/home/user/homedesign-app/qa/reports/2026-11-04-m0-fix2-cb0-g1/overlays/pair-B1_r3_fix2-B2_r3_fix2.jpg",
+    "worst_band_px": 54.88,
+    "worst_band_px_reliable": 9.02,
+    "bands_reliable": 2,
+    "dL_mean": 0.6
+   },
+   "clay": {
+    "size": [
+     1920,
+     1080
+    ],
+    "overlap_u": [
+     0.0,
+     0.38
+    ],
+    "overlap_v": [
+     0.0,
+     0.999
+    ],
+    "shift_px": {
+     "dx": 0.57,
+     "dy": 0.01,
+     "response": 0.726
+    },
+    "bands": [
+     {
+      "u": [
+       0.0,
+       0.095
+      ],
+      "dx_px": 2.21,
+      "dy_px": 2.07,
+      "response": 0.274
+     },
+     {
+      "u": [
+       0.095,
+       0.19
+      ],
+      "dx_px": -0.03,
+      "dy_px": 0.02,
+      "response": 0.767
+     },
+     {
+      "u": [
+       0.19,
+       0.284
+      ],
+      "dx_px": 0.02,
+      "dy_px": 0.56,
+      "response": 0.171
+     },
+     {
+      "u": [
+       0.284,
+       0.38
+      ],
+      "dx_px": 0.05,
+      "dy_px": -0.04,
+      "response": 0.851
+     }
+    ],
+    "deltaE": {
+     "mean": 7.71,
+     "p95": 16.23,
+     "share_over_5": 0.724
+    },
+    "L_mean": {
+     "a": 73.4,
+     "b": 65.7
+    },
+    "worst_band_px": 2.21,
+    "worst_band_px_reliable": 2.21,
+    "bands_reliable": 4,
+    "dL_mean": 7.7
+   }
+  },
+  {
+   "a": "K-girl fix",
+   "b": "K-girl-0 r2 fix2",
+   "pan": "T-CGirl pan (K-girl -> K-girl-0)",
+   "degrees": 33,
+   "render": {
+    "size": [
+     1920,
+     1080
+    ],
+    "overlap_u": [
+     0.0,
+     0.335
+    ],
+    "overlap_v": [
+     0.0,
+     0.999
+    ],
+    "shift_px": {
+     "dx": -2.52,
+     "dy": 28.92,
+     "response": 0.221
+    },
+    "bands": [
+     {
+      "u": [
+       0.0,
+       0.083
+      ],
+      "dx_px": -0.03,
+      "dy_px": 62.92,
+      "response": 0.028
+     },
+     {
+      "u": [
+       0.083,
+       0.167
+      ],
+      "dx_px": -1.18,
+      "dy_px": 30.82,
+      "response": 0.076
+     },
+     {
+      "u": [
+       0.167,
+       0.251
+      ],
+      "dx_px": -3.43,
+      "dy_px": 28.74,
+      "response": 0.703
+     },
+     {
+      "u": [
+       0.251,
+       0.335
+      ],
+      "dx_px": -0.26,
+      "dy_px": 26.06,
+      "response": 0.615
+     }
+    ],
+    "deltaE": {
+     "mean": 11.26,
+     "p95": 29.78,
+     "share_over_5": 0.825
+    },
+    "L_mean": {
+     "a": 71.0,
+     "b": 75.7
+    },
+    "sheet": "/home/user/homedesign-app/qa/reports/2026-11-04-m0-fix2-cb0-g1/overlays/pair-K-girl_fix-K-girl-0_r2_fix2.jpg",
+    "worst_band_px": 62.92,
+    "worst_band_px_reliable": 30.82,
+    "bands_reliable": 3,
+    "dL_mean": 4.7
+   },
+   "clay": {
+    "size": [
+     1920,
+     1080
+    ],
+    "overlap_u": [
+     0.0,
+     0.335
+    ],
+    "overlap_v": [
+     0.0,
+     0.999
+    ],
+    "shift_px": {
+     "dx": 0.03,
+     "dy": 0.03,
+     "response": 0.909
+    },
+    "bands": [
+     {
+      "u": [
+       0.0,
+       0.083
+      ],
+      "dx_px": 0.09,
+      "dy_px": 0.02,
+      "response": 0.969
+     },
+     {
+      "u": [
+       0.083,
+       0.167
+      ],
+      "dx_px": 0.04,
+      "dy_px": -0.05,
+      "response": 0.923
+     },
+     {
+      "u": [
+       0.167,
+       0.251
+      ],
+      "dx_px": -0.02,
+      "dy_px": 0.01,
+      "response": 0.947
+     },
+     {
+      "u": [
+       0.251,
+       0.335
+      ],
+      "dx_px": -0.02,
+      "dy_px": -0.01,
+      "response": 0.952
+     }
+    ],
+    "deltaE": {
+     "mean": 0.5,
+     "p95": 1.24,
+     "share_over_5": 0.002
+    },
+    "L_mean": {
+     "a": 74.3,
+     "b": 74.3
+    },
+    "worst_band_px": 0.09,
+    "worst_band_px_reliable": 0.09,
+    "bands_reliable": 4,
+    "dL_mean": 0.0
+   }
+  },
+  {
+   "a": "B1 r3 fix2",
+   "b": "CB-0 b1r3",
+   "pan": "T-CBath pan (CB-0 -> B1)",
+   "degrees": 22,
+   "render": {
+    "size": [
+     1920,
+     1080
+    ],
+    "overlap_u": [
+     0.521,
+     0.999
+    ],
+    "overlap_v": [
+     0.0,
+     0.999
+    ],
+    "shift_px": {
+     "dx": 0.02,
+     "dy": -0.0,
+     "response": 0.95
+    },
+    "bands": [
+     {
+      "u": [
+       0.521,
+       0.641
+      ],
+      "dx_px": 0.04,
+      "dy_px": -0.04,
+      "response": 0.968
+     },
+     {
+      "u": [
+       0.641,
+       0.76
+      ],
+      "dx_px": 0.01,
+      "dy_px": -0.01,
+      "response": 0.975
+     },
+     {
+      "u": [
+       0.76,
+       0.88
+      ],
+      "dx_px": -0.0,
+      "dy_px": 0.01,
+      "response": 0.998
+     },
+     {
+      "u": [
+       0.88,
+       0.999
+      ],
+      "dx_px": 0.06,
+      "dy_px": 0.01,
+      "response": 0.961
+     }
+    ],
+    "deltaE": {
+     "mean": 1.23,
+     "p95": 2.22,
+     "share_over_5": 0.004
+    },
+    "L_mean": {
+     "a": 72.6,
+     "b": 71.8
+    },
+    "sheet": "/home/user/homedesign-app/qa/reports/2026-11-04-m0-fix2-cb0-g1/overlays/pair-B1_r3_fix2-CB-0_b1r3.jpg",
+    "worst_band_px": 0.06,
+    "worst_band_px_reliable": 0.06,
+    "bands_reliable": 4,
+    "dL_mean": 0.8
+   },
+   "clay": {
+    "size": [
+     1920,
+     1080
+    ],
+    "overlap_u": [
+     0.521,
+     0.999
+    ],
+    "overlap_v": [
+     0.0,
+     0.999
+    ],
+    "shift_px": {
+     "dx": 0.05,
+     "dy": 0.01,
+     "response": 0.538
+    },
+    "bands": [
+     {
+      "u": [
+       0.521,
+       0.641
+      ],
+      "dx_px": -0.05,
+      "dy_px": 0.07,
+      "response": 0.938
+     },
+     {
+      "u": [
+       0.641,
+       0.76
+      ],
+      "dx_px": -0.01,
+      "dy_px": 0.04,
+      "response": 0.546
+     },
+     {
+      "u": [
+       0.76,
+       0.88
+      ],
+      "dx_px": -49.99,
+      "dy_px": -41.33,
+      "response": 0.069
+     },
+     {
+      "u": [
+       0.88,
+       0.999
+      ],
+      "dx_px": 0.72,
+      "dy_px": 0.41,
+      "response": 0.125
+     }
+    ],
+    "deltaE": {
+     "mean": 3.23,
+     "p95": 16.49,
+     "share_over_5": 0.195
+    },
+    "L_mean": {
+     "a": 75.0,
+     "b": 77.9
+    },
+    "worst_band_px": 49.99,
+    "worst_band_px_reliable": 49.99,
+    "bands_reliable": 4,
+    "dL_mean": 2.9
+   },
+   "clay_note": "no r3 clay of CB-0 (round4/r3-2026-11-03/poses/ is empty): the floor is the B1 r3 clay against the round-4 CB-0 clay (no planter / brush proxies)"
+  }
+ ],
+ "cb0_seam": {
+  "seam_canvas_x": 830,
+  "blend_px": [
+   830,
+   890
+  ],
+  "graded_v5": {
+   "profiles": [
+    {
+     "rows": [
+      150,
+      350
+     ],
+     "bins": [
+      [
+       -160,
+       -150
+      ],
+      [
+       -150,
+       -140
+      ],
+      [
+       -140,
+       -130
+      ],
+      [
+       -130,
+       -120
+      ],
+      [
+       -120,
+       -110
+      ],
+      [
+       -110,
+       -100
+      ],
+      [
+       -100,
+       -90
+      ],
+      [
+       -90,
+       -80
+      ],
+      [
+       -80,
+       -70
+      ],
+      [
+       -70,
+       -60
+      ],
+      [
+       -60,
+       -50
+      ],
+      [
+       -50,
+       -40
+      ],
+      [
+       -40,
+       -30
+      ],
+      [
+       -30,
+       -20
+      ],
+      [
+       -20,
+       -10
+      ],
+      [
+       -10,
+       0
+      ],
+      [
+       0,
+       10
+      ],
+      [
+       10,
+       20
+      ],
+      [
+       20,
+       30
+      ],
+      [
+       30,
+       40
+      ],
+      [
+       40,
+       50
+      ],
+      [
+       50,
+       60
+      ],
+      [
+       60,
+       70
+      ],
+      [
+       70,
+       80
+      ],
+      [
+       80,
+       90
+      ],
+      [
+       90,
+       100
+      ],
+      [
+       100,
+       110
+      ],
+      [
+       110,
+       120
+      ],
+      [
+       120,
+       130
+      ],
+      [
+       130,
+       140
+      ],
+      [
+       140,
+       150
+      ],
+      [
+       150,
+       160
+      ],
+      [
+       160,
+       170
+      ]
+     ],
+     "lab": [
+      [
+       78.91,
+       0.39,
+       6.28
+      ],
+      [
+       79.03,
+       0.4,
+       6.24
+      ],
+      [
+       79.17,
+       0.41,
+       6.22
+      ],
+      [
+       79.42,
+       0.42,
+       6.08
+      ],
+      [
+       79.75,
+       0.35,
+       5.99
+      ],
+      [
+       79.93,
+       0.34,
+       5.88
+      ],
+      [
+       80.12,
+       0.26,
+       5.83
+      ],
+      [
+       80.37,
+       0.28,
+       5.78
+      ],
+      [
+       80.65,
+       0.31,
+       5.57
+      ],
+      [
+       81.06,
+       0.26,
+       5.34
+      ],
+      [
+       81.38,
+       0.21,
+       5.17
+      ],
+      [
+       81.75,
+       0.13,
+       4.98
+      ],
+      [
+       82.03,
+       0.03,
+       4.9
+      ],
+      [
+       82.32,
+       -0.0,
+       4.84
+      ],
+      [
+       82.74,
+       -0.0,
+       4.69
+      ],
+      [
+       83.02,
+       -0.09,
+       4.61
+      ],
+      [
+       83.5,
+       -0.18,
+       4.48
+      ],
+      [
+       84.22,
+       -0.26,
+       4.16
+      ],
+      [
+       85.08,
+       -0.35,
+       3.7
+      ],
+      [
+       85.78,
+       -0.23,
+       3.2
+      ],
+      [
+       86.26,
+       -0.24,
+       2.87
+      ],
+      [
+       86.56,
+       -0.18,
+       2.75
+      ],
+      [
+       86.67,
+       -0.19,
+       2.67
+      ],
+      [
+       86.8,
+       -0.28,
+       2.58
+      ],
+      [
+       87.12,
+       -0.48,
+       2.64
+      ],
+      [
+       87.2,
+       -0.39,
+       2.43
+      ],
+      [
+       87.49,
+       -0.46,
+       2.29
+      ],
+      [
+       87.79,
+       -0.45,
+       2.16
+      ],
+      [
+       88.05,
+       -0.42,
+       1.88
+      ],
+      [
+       88.39,
+       -0.47,
+       1.63
+      ],
+      [
+       88.71,
+       -0.62,
+       1.42
+      ],
+      [
+       89.02,
+       -0.67,
+       1.23
+      ],
+      [
+       89.3,
+       -0.75,
+       0.93
+      ]
+     ]
+    },
+    {
+     "rows": [
+      350,
+      600
+     ],
+     "bins": [
+      [
+       -160,
+       -150
+      ],
+      [
+       -150,
+       -140
+      ],
+      [
+       -140,
+       -130
+      ],
+      [
+       -130,
+       -120
+      ],
+      [
+       -120,
+       -110
+      ],
+      [
+       -110,
+       -100
+      ],
+      [
+       -100,
+       -90
+      ],
+      [
+       -90,
+       -80
+      ],
+      [
+       -80,
+       -70
+      ],
+      [
+       -70,
+       -60
+      ],
+      [
+       -60,
+       -50
+      ],
+      [
+       -50,
+       -40
+      ],
+      [
+       -40,
+       -30
+      ],
+      [
+       -30,
+       -20
+      ],
+      [
+       -20,
+       -10
+      ],
+      [
+       -10,
+       0
+      ],
+      [
+       0,
+       10
+      ],
+      [
+       10,
+       20
+      ],
+      [
+       20,
+       30
+      ],
+      [
+       30,
+       40
+      ],
+      [
+       40,
+       50
+      ],
+      [
+       50,
+       60
+      ],
+      [
+       60,
+       70
+      ],
+      [
+       70,
+       80
+      ],
+      [
+       80,
+       90
+      ],
+      [
+       90,
+       100
+      ],
+      [
+       100,
+       110
+      ],
+      [
+       110,
+       120
+      ],
+      [
+       120,
+       130
+      ],
+      [
+       130,
+       140
+      ],
+      [
+       140,
+       150
+      ],
+      [
+       150,
+       160
+      ],
+      [
+       160,
+       170
+      ]
+     ],
+     "lab": [
+      [
+       78.4,
+       0.53,
+       6.14
+      ],
+      [
+       78.59,
+       0.53,
+       5.98
+      ],
+      [
+       78.7,
+       0.59,
+       5.87
+      ],
+      [
+       78.89,
+       0.61,
+       5.73
+      ],
+      [
+       79.15,
+       0.65,
+       5.48
+      ],
+      [
+       79.33,
+       0.6,
+       5.4
+      ],
+      [
+       79.52,
+       0.56,
+       5.27
+      ],
+      [
+       79.76,
+       0.5,
+       5.19
+      ],
+      [
+       80.1,
+       0.37,
+       5.12
+      ],
+      [
+       80.5,
+       0.23,
+       4.99
+      ],
+      [
+       80.9,
+       0.25,
+       4.82
+      ],
+      [
+       81.2,
+       0.22,
+       4.64
+      ],
+      [
+       81.55,
+       0.19,
+       4.59
+      ],
+      [
+       82.02,
+       0.19,
+       4.51
+      ],
+      [
+       82.42,
+       0.12,
+       4.49
+      ],
+      [
+       82.85,
+       -0.01,
+       4.49
+      ],
+      [
+       83.33,
+       -0.08,
+       4.37
+      ],
+      [
+       83.89,
+       -0.12,
+       3.96
+      ],
+      [
+       84.74,
+       -0.24,
+       3.56
+      ],
+      [
+       85.53,
+       -0.2,
+       3.12
+      ],
+      [
+       86.06,
+       -0.08,
+       2.81
+      ],
+      [
+       86.27,
+       -0.09,
+       2.7
+      ],
+      [
+       86.48,
+       -0.16,
+       2.63
+      ],
+      [
+       86.76,
+       -0.27,
+       2.62
+      ],
+      [
+       86.98,
+       -0.44,
+       2.63
+      ],
+      [
+       87.12,
+       -0.31,
+       2.24
+      ],
+      [
+       87.4,
+       -0.37,
+       1.92
+      ],
+      [
+       87.79,
+       -0.38,
+       1.68
+      ],
+      [
+       88.16,
+       -0.26,
+       1.38
+      ],
+      [
+       88.51,
+       -0.38,
+       1.3
+      ],
+      [
+       88.83,
+       -0.58,
+       1.06
+      ],
+      [
+       89.12,
+       -0.77,
+       0.86
+      ],
+      [
+       89.65,
+       -0.67,
+       0.53
+      ]
+     ]
+    },
+    {
+     "rows": [
+      600,
+      850
+     ],
+     "bins": [
+      [
+       -160,
+       -150
+      ],
+      [
+       -150,
+       -140
+      ],
+      [
+       -140,
+       -130
+      ],
+      [
+       -130,
+       -120
+      ],
+      [
+       -120,
+       -110
+      ],
+      [
+       -110,
+       -100
+      ],
+      [
+       -100,
+       -90
+      ],
+      [
+       -90,
+       -80
+      ],
+      [
+       -80,
+       -70
+      ],
+      [
+       -70,
+       -60
+      ],
+      [
+       -60,
+       -50
+      ],
+      [
+       -50,
+       -40
+      ],
+      [
+       -40,
+       -30
+      ],
+      [
+       -30,
+       -20
+      ],
+      [
+       -20,
+       -10
+      ],
+      [
+       -10,
+       0
+      ],
+      [
+       0,
+       10
+      ],
+      [
+       10,
+       20
+      ],
+      [
+       20,
+       30
+      ],
+      [
+       30,
+       40
+      ],
+      [
+       40,
+       50
+      ],
+      [
+       50,
+       60
+      ],
+      [
+       60,
+       70
+      ],
+      [
+       70,
+       80
+      ],
+      [
+       80,
+       90
+      ],
+      [
+       90,
+       100
+      ],
+      [
+       100,
+       110
+      ],
+      [
+       110,
+       120
+      ],
+      [
+       120,
+       130
+      ],
+      [
+       130,
+       140
+      ],
+      [
+       140,
+       150
+      ],
+      [
+       150,
+       160
+      ],
+      [
+       160,
+       170
+      ]
+     ],
+     "lab": [
+      [
+       78.34,
+       0.49,
+       5.79
+      ],
+      [
+       78.66,
+       0.45,
+       5.86
+      ],
+      [
+       78.64,
+       0.53,
+       5.69
+      ],
+      [
+       78.77,
+       0.52,
+       5.68
+      ],
+      [
+       78.94,
+       0.49,
+       5.64
+      ],
+      [
+       79.16,
+       0.51,
+       5.57
+      ],
+      [
+       79.29,
+       0.49,
+       5.48
+      ],
+      [
+       79.44,
+       0.52,
+       5.32
+      ],
+      [
+       79.82,
+       0.54,
+       5.06
+      ],
+      [
+       80.23,
+       0.45,
+       4.9
+      ],
+      [
+       80.64,
+       0.31,
+       4.7
+      ],
+      [
+       81.05,
+       0.19,
+       4.56
+      ],
+      [
+       81.4,
+       0.13,
+       4.48
+      ],
+      [
+       81.74,
+       0.06,
+       4.42
+      ],
+      [
+       82.07,
+       0.02,
+       4.42
+      ],
+      [
+       82.4,
+       -0.02,
+       4.37
+      ],
+      [
+       82.83,
+       -0.08,
+       4.26
+      ],
+      [
+       83.49,
+       -0.1,
+       4.0
+      ],
+      [
+       84.31,
+       -0.18,
+       3.55
+      ],
+      [
+       85.09,
+       -0.2,
+       3.09
+      ],
+      [
+       85.67,
+       -0.14,
+       2.8
+      ],
+      [
+       85.96,
+       -0.13,
+       2.58
+      ],
+      [
+       86.04,
+       -0.11,
+       2.49
+      ],
+      [
+       86.1,
+       -0.1,
+       2.41
+      ],
+      [
+       86.33,
+       -0.21,
+       2.4
+      ],
+      [
+       86.41,
+       -0.2,
+       2.29
+      ],
+      [
+       86.69,
+       -0.21,
+       1.93
+      ],
+      [
+       87.06,
+       -0.28,
+       1.68
+      ],
+      [
+       87.37,
+       -0.26,
+       1.42
+      ],
+      [
+       87.68,
+       -0.26,
+       1.15
+      ],
+      [
+       87.91,
+       -0.39,
+       1.11
+      ],
+      [
+       88.19,
+       -0.51,
+       0.85
+      ],
+      [
+       88.48,
+       -0.47,
+       0.45
+      ]
+     ]
+    },
+    {
+     "rows": [
+      850,
+      1100
+     ],
+     "bins": [
+      [
+       -160,
+       -150
+      ],
+      [
+       -150,
+       -140
+      ],
+      [
+       -140,
+       -130
+      ],
+      [
+       -130,
+       -120
+      ],
+      [
+       -120,
+       -110
+      ],
+      [
+       -110,
+       -100
+      ],
+      [
+       -100,
+       -90
+      ],
+      [
+       -90,
+       -80
+      ],
+      [
+       -80,
+       -70
+      ],
+      [
+       -70,
+       -60
+      ],
+      [
+       -60,
+       -50
+      ],
+      [
+       -50,
+       -40
+      ],
+      [
+       -40,
+       -30
+      ],
+      [
+       -30,
+       -20
+      ],
+      [
+       -20,
+       -10
+      ],
+      [
+       -10,
+       0
+      ],
+      [
+       0,
+       10
+      ],
+      [
+       10,
+       20
+      ],
+      [
+       20,
+       30
+      ],
+      [
+       30,
+       40
+      ],
+      [
+       40,
+       50
+      ],
+      [
+       50,
+       60
+      ],
+      [
+       60,
+       70
+      ],
+      [
+       70,
+       80
+      ],
+      [
+       80,
+       90
+      ],
+      [
+       90,
+       100
+      ],
+      [
+       100,
+       110
+      ],
+      [
+       110,
+       120
+      ],
+      [
+       120,
+       130
+      ],
+      [
+       130,
+       140
+      ],
+      [
+       140,
+       150
+      ],
+      [
+       150,
+       160
+      ],
+      [
+       160,
+       170
+      ]
+     ],
+     "lab": [
+      [
+       78.48,
+       0.79,
+       5.1
+      ],
+      [
+       78.58,
+       0.75,
+       5.06
+      ],
+      [
+       78.75,
+       0.8,
+       4.95
+      ],
+      [
+       79.0,
+       0.81,
+       4.89
+      ],
+      [
+       79.24,
+       0.77,
+       4.84
+      ],
+      [
+       79.41,
+       0.83,
+       4.73
+      ],
+      [
+       79.54,
+       0.76,
+       4.69
+      ],
+      [
+       79.81,
+       0.8,
+       4.57
+      ],
+      [
+       79.95,
+       0.81,
+       4.43
+      ],
+      [
+       80.2,
+       0.75,
+       4.41
+      ],
+      [
+       80.45,
+       0.77,
+       4.26
+      ],
+      [
+       80.74,
+       0.71,
+       4.24
+      ],
+      [
+       81.0,
+       0.68,
+       4.15
+      ],
+      [
+       81.33,
+       0.61,
+       4.11
+      ],
+      [
+       81.52,
+       0.51,
+       4.03
+      ],
+      [
+       81.75,
+       0.49,
+       3.95
+      ],
+      [
+       82.13,
+       0.39,
+       3.82
+      ],
+      [
+       82.59,
+       0.28,
+       3.64
+      ],
+      [
+       83.15,
+       0.3,
+       3.35
+      ],
+      [
+       83.71,
+       0.22,
+       3.12
+      ],
+      [
+       84.14,
+       0.19,
+       2.97
+      ],
+      [
+       84.36,
+       0.15,
+       2.89
+      ],
+      [
+       84.56,
+       0.08,
+       2.76
+      ],
+      [
+       84.72,
+       -0.03,
+       2.84
+      ],
+      [
+       84.81,
+       -0.08,
+       2.83
+      ],
+      [
+       84.79,
+       -0.13,
+       2.79
+      ],
+      [
+       84.86,
+       0.02,
+       2.49
+      ],
+      [
+       84.99,
+       -0.07,
+       2.51
+      ],
+      [
+       85.1,
+       -0.03,
+       2.35
+      ],
+      [
+       85.13,
+       0.04,
+       2.23
+      ],
+      [
+       85.11,
+       0.06,
+       2.1
+      ],
+      [
+       85.06,
+       0.1,
+       2.08
+      ],
+      [
+       84.89,
+       0.21,
+       2.06
+      ]
+     ]
+    },
+    {
+     "rows": [
+      1100,
+      1300
+     ],
+     "bins": [
+      [
+       -160,
+       -150
+      ],
+      [
+       -150,
+       -140
+      ],
+      [
+       -140,
+       -130
+      ],
+      [
+       -130,
+       -120
+      ],
+      [
+       -120,
+       -110
+      ],
+      [
+       -110,
+       -100
+      ],
+      [
+       -100,
+       -90
+      ],
+      [
+       -90,
+       -80
+      ],
+      [
+       -80,
+       -70
+      ],
+      [
+       -70,
+       -60
+      ],
+      [
+       -60,
+       -50
+      ],
+      [
+       -50,
+       -40
+      ],
+      [
+       -40,
+       -30
+      ],
+      [
+       -30,
+       -20
+      ],
+      [
+       -20,
+       -10
+      ],
+      [
+       -10,
+       0
+      ],
+      [
+       0,
+       10
+      ],
+      [
+       10,
+       20
+      ],
+      [
+       20,
+       30
+      ],
+      [
+       30,
+       40
+      ],
+      [
+       40,
+       50
+      ],
+      [
+       50,
+       60
+      ],
+      [
+       60,
+       70
+      ],
+      [
+       70,
+       80
+      ],
+      [
+       80,
+       90
+      ],
+      [
+       90,
+       100
+      ],
+      [
+       100,
+       110
+      ],
+      [
+       110,
+       120
+      ],
+      [
+       120,
+       130
+      ],
+      [
+       130,
+       140
+      ],
+      [
+       140,
+       150
+      ],
+      [
+       150,
+       160
+      ],
+      [
+       160,
+       170
+      ]
+     ],
+     "lab": [
+      [
+       78.16,
+       1.51,
+       3.77
+      ],
+      [
+       78.34,
+       1.49,
+       3.76
+      ],
+      [
+       78.44,
+       1.53,
+       3.71
+      ],
+      [
+       78.59,
+       1.54,
+       3.68
+      ],
+      [
+       78.78,
+       1.47,
+       3.64
+      ],
+      [
+       78.96,
+       1.46,
+       3.58
+      ],
+      [
+       79.09,
+       1.46,
+       3.58
+      ],
+      [
+       79.35,
+       1.44,
+       3.55
+      ],
+      [
+       79.57,
+       1.42,
+       3.51
+      ],
+      [
+       79.92,
+       1.43,
+       3.47
+      ],
+      [
+       80.27,
+       1.41,
+       3.44
+      ],
+      [
+       80.53,
+       1.37,
+       3.36
+      ],
+      [
+       80.64,
+       1.37,
+       3.33
+      ],
+      [
+       80.83,
+       1.37,
+       3.2
+      ],
+      [
+       80.99,
+       1.3,
+       3.14
+      ],
+      [
+       81.23,
+       1.31,
+       2.99
+      ],
+      [
+       81.55,
+       1.31,
+       2.8
+      ],
+      [
+       81.78,
+       1.29,
+       2.71
+      ],
+      [
+       81.9,
+       1.3,
+       2.66
+      ],
+      [
+       82.03,
+       1.3,
+       2.65
+      ],
+      [
+       82.19,
+       1.27,
+       2.63
+      ],
+      [
+       82.22,
+       1.26,
+       2.66
+      ],
+      [
+       82.32,
+       1.22,
+       2.66
+      ],
+      [
+       82.33,
+       1.23,
+       2.68
+      ],
+      [
+       82.3,
+       1.2,
+       2.73
+      ],
+      [
+       82.17,
+       1.24,
+       2.72
+      ],
+      [
+       82.09,
+       1.2,
+       2.79
+      ],
+      [
+       82.07,
+       1.15,
+       2.83
+      ],
+      [
+       81.95,
+       1.16,
+       2.89
+      ],
+      [
+       81.63,
+       1.26,
+       2.95
+      ],
+      [
+       81.17,
+       1.24,
+       3.2
+      ],
+      [
+       80.55,
+       1.21,
+       3.65
+      ],
+      [
+       79.66,
+       1.29,
+       4.29
+      ]
+     ]
+    }
+   ],
+   "steps_at_seam": [
+    {
+     "rows": [
+      150,
+      350
+     ],
+     "step_L": 1.53,
+     "step_a": -0.05,
+     "step_b": -0.47,
+     "step_dE": 1.6,
+     "slope_L_left_per_100px": 3.07,
+     "slope_L_right_per_100px": 2.69
+    },
+    {
+     "rows": [
+      350,
+      600
+     ],
+     "step_L": 1.48,
+     "step_a": -0.04,
+     "step_b": -0.13,
+     "step_dE": 1.49,
+     "slope_L_left_per_100px": 3.35,
+     "slope_L_right_per_100px": 3.05
+    },
+    {
+     "rows": [
+      600,
+      850
+     ],
+     "step_L": 1.3,
+     "step_a": 0.19,
+     "step_b": -0.08,
+     "step_dE": 1.32,
+     "slope_L_left_per_100px": 3.3,
+     "slope_L_right_per_100px": 2.7
+    },
+    {
+     "rows": [
+      850,
+      1100
+     ],
+     "step_L": 1.91,
+     "step_a": -0.66,
+     "step_b": -0.21,
+     "step_dE": 2.03,
+     "slope_L_left_per_100px": 2.35,
+     "slope_L_right_per_100px": 0.64
+    },
+    {
+     "rows": [
+      1100,
+      1300
+     ],
+     "step_L": 0.95,
+     "step_a": -0.07,
+     "step_b": -0.64,
+     "step_dE": 1.15,
+     "slope_L_left_per_100px": 2.39,
+     "slope_L_right_per_100px": -1.45
+    }
+   ]
+  },
+  "raw": {
+   "profiles": [
+    {
+     "rows": [
+      150,
+      350
+     ],
+     "bins": [
+      [
+       -160,
+       -150
+      ],
+      [
+       -150,
+       -140
+      ],
+      [
+       -140,
+       -130
+      ],
+      [
+       -130,
+       -120
+      ],
+      [
+       -120,
+       -110
+      ],
+      [
+       -110,
+       -100
+      ],
+      [
+       -100,
+       -90
+      ],
+      [
+       -90,
+       -80
+      ],
+      [
+       -80,
+       -70
+      ],
+      [
+       -70,
+       -60
+      ],
+      [
+       -60,
+       -50
+      ],
+      [
+       -50,
+       -40
+      ],
+      [
+       -40,
+       -30
+      ],
+      [
+       -30,
+       -20
+      ],
+      [
+       -20,
+       -10
+      ],
+      [
+       -10,
+       0
+      ],
+      [
+       0,
+       10
+      ],
+      [
+       10,
+       20
+      ],
+      [
+       20,
+       30
+      ],
+      [
+       30,
+       40
+      ],
+      [
+       40,
+       50
+      ],
+      [
+       50,
+       60
+      ],
+      [
+       60,
+       70
+      ],
+      [
+       70,
+       80
+      ],
+      [
+       80,
+       90
+      ],
+      [
+       90,
+       100
+      ],
+      [
+       100,
+       110
+      ],
+      [
+       110,
+       120
+      ],
+      [
+       120,
+       130
+      ],
+      [
+       130,
+       140
+      ],
+      [
+       140,
+       150
+      ],
+      [
+       150,
+       160
+      ],
+      [
+       160,
+       170
+      ]
+     ],
+     "lab": [
+      [
+       72.7,
+       2.22,
+       5.89
+      ],
+      [
+       72.83,
+       2.24,
+       5.85
+      ],
+      [
+       72.98,
+       2.25,
+       5.83
+      ],
+      [
+       73.23,
+       2.26,
+       5.7
+      ],
+      [
+       73.56,
+       2.18,
+       5.6
+      ],
+      [
+       73.75,
+       2.17,
+       5.49
+      ],
+      [
+       73.94,
+       2.09,
+       5.43
+      ],
+      [
+       74.19,
+       2.11,
+       5.38
+      ],
+      [
+       74.48,
+       2.14,
+       5.17
+      ],
+      [
+       74.89,
+       2.1,
+       4.95
+      ],
+      [
+       75.22,
+       2.04,
+       4.77
+      ],
+      [
+       75.59,
+       1.97,
+       4.56
+      ],
+      [
+       75.89,
+       1.88,
+       4.43
+      ],
+      [
+       76.19,
+       1.88,
+       4.31
+      ],
+      [
+       76.62,
+       1.91,
+       4.07
+      ],
+      [
+       76.91,
+       1.85,
+       3.93
+      ],
+      [
+       77.42,
+       1.82,
+       3.67
+      ],
+      [
+       78.17,
+       1.76,
+       3.3
+      ],
+      [
+       79.08,
+       1.77,
+       2.89
+      ],
+      [
+       79.87,
+       1.77,
+       2.49
+      ],
+      [
+       80.46,
+       1.55,
+       2.3
+      ],
+      [
+       80.79,
+       1.61,
+       2.18
+      ],
+      [
+       80.92,
+       1.6,
+       2.08
+      ],
+      [
+       81.06,
+       1.51,
+       1.94
+      ],
+      [
+       81.4,
+       1.3,
+       1.99
+      ],
+      [
+       81.48,
+       1.45,
+       1.67
+      ],
+      [
+       81.79,
+       1.41,
+       1.39
+      ],
+      [
+       82.1,
+       1.44,
+       1.22
+      ],
+      [
+       82.36,
+       1.47,
+       0.91
+      ],
+      [
+       82.71,
+       1.43,
+       0.64
+      ],
+      [
+       83.03,
+       1.27,
+       0.39
+      ],
+      [
+       83.35,
+       1.25,
+       0.11
+      ],
+      [
+       83.63,
+       1.2,
+       -0.29
+      ]
+     ]
+    },
+    {
+     "rows": [
+      350,
+      600
+     ],
+     "bins": [
+      [
+       -160,
+       -150
+      ],
+      [
+       -150,
+       -140
+      ],
+      [
+       -140,
+       -130
+      ],
+      [
+       -130,
+       -120
+      ],
+      [
+       -120,
+       -110
+      ],
+      [
+       -110,
+       -100
+      ],
+      [
+       -100,
+       -90
+      ],
+      [
+       -90,
+       -80
+      ],
+      [
+       -80,
+       -70
+      ],
+      [
+       -70,
+       -60
+      ],
+      [
+       -60,
+       -50
+      ],
+      [
+       -50,
+       -40
+      ],
+      [
+       -40,
+       -30
+      ],
+      [
+       -30,
+       -20
+      ],
+      [
+       -20,
+       -10
+      ],
+      [
+       -10,
+       0
+      ],
+      [
+       0,
+       10
+      ],
+      [
+       10,
+       20
+      ],
+      [
+       20,
+       30
+      ],
+      [
+       30,
+       40
+      ],
+      [
+       40,
+       50
+      ],
+      [
+       50,
+       60
+      ],
+      [
+       60,
+       70
+      ],
+      [
+       70,
+       80
+      ],
+      [
+       80,
+       90
+      ],
+      [
+       90,
+       100
+      ],
+      [
+       100,
+       110
+      ],
+      [
+       110,
+       120
+      ],
+      [
+       120,
+       130
+      ],
+      [
+       130,
+       140
+      ],
+      [
+       140,
+       150
+      ],
+      [
+       150,
+       160
+      ],
+      [
+       160,
+       170
+      ]
+     ],
+     "lab": [
+      [
+       72.18,
+       2.36,
+       5.75
+      ],
+      [
+       72.38,
+       2.36,
+       5.58
+      ],
+      [
+       72.49,
+       2.41,
+       5.47
+      ],
+      [
+       72.69,
+       2.43,
+       5.34
+      ],
+      [
+       72.95,
+       2.47,
+       5.08
+      ],
+      [
+       73.13,
+       2.42,
+       4.99
+      ],
+      [
+       73.32,
+       2.37,
+       4.86
+      ],
+      [
+       73.57,
+       2.31,
+       4.79
+      ],
+      [
+       73.91,
+       2.18,
+       4.71
+      ],
+      [
+       74.32,
+       2.03,
+       4.58
+      ],
+      [
+       74.72,
+       2.06,
+       4.39
+      ],
+      [
+       75.03,
+       2.03,
+       4.18
+      ],
+      [
+       75.39,
+       2.01,
+       4.1
+      ],
+      [
+       75.88,
+       2.04,
+       3.89
+      ],
+      [
+       76.29,
+       2.03,
+       3.75
+      ],
+      [
+       76.73,
+       1.93,
+       3.69
+      ],
+      [
+       77.22,
+       1.91,
+       3.48
+      ],
+      [
+       77.8,
+       1.88,
+       3.04
+      ],
+      [
+       78.69,
+       1.89,
+       2.68
+      ],
+      [
+       79.56,
+       1.88,
+       2.32
+      ],
+      [
+       80.21,
+       1.79,
+       2.16
+      ],
+      [
+       80.46,
+       1.74,
+       2.1
+      ],
+      [
+       80.7,
+       1.63,
+       2.01
+      ],
+      [
+       81.02,
+       1.51,
+       2.01
+      ],
+      [
+       81.26,
+       1.32,
+       2.01
+      ],
+      [
+       81.41,
+       1.53,
+       1.4
+      ],
+      [
+       81.69,
+       1.49,
+       0.98
+      ],
+      [
+       82.1,
+       1.5,
+       0.7
+      ],
+      [
+       82.47,
+       1.64,
+       0.39
+      ],
+      [
+       82.83,
+       1.51,
+       0.29
+      ],
+      [
+       83.15,
+       1.32,
+       -0.03
+      ],
+      [
+       83.45,
+       1.17,
+       -0.36
+      ],
+      [
+       84.01,
+       1.37,
+       -0.89
+      ]
+     ]
+    },
+    {
+     "rows": [
+      600,
+      850
+     ],
+     "bins": [
+      [
+       -160,
+       -150
+      ],
+      [
+       -150,
+       -140
+      ],
+      [
+       -140,
+       -130
+      ],
+      [
+       -130,
+       -120
+      ],
+      [
+       -120,
+       -110
+      ],
+      [
+       -110,
+       -100
+      ],
+      [
+       -100,
+       -90
+      ],
+      [
+       -90,
+       -80
+      ],
+      [
+       -80,
+       -70
+      ],
+      [
+       -70,
+       -60
+      ],
+      [
+       -60,
+       -50
+      ],
+      [
+       -50,
+       -40
+      ],
+      [
+       -40,
+       -30
+      ],
+      [
+       -30,
+       -20
+      ],
+      [
+       -20,
+       -10
+      ],
+      [
+       -10,
+       0
+      ],
+      [
+       0,
+       10
+      ],
+      [
+       10,
+       20
+      ],
+      [
+       20,
+       30
+      ],
+      [
+       30,
+       40
+      ],
+      [
+       40,
+       50
+      ],
+      [
+       50,
+       60
+      ],
+      [
+       60,
+       70
+      ],
+      [
+       70,
+       80
+      ],
+      [
+       80,
+       90
+      ],
+      [
+       90,
+       100
+      ],
+      [
+       100,
+       110
+      ],
+      [
+       110,
+       120
+      ],
+      [
+       120,
+       130
+      ],
+      [
+       130,
+       140
+      ],
+      [
+       140,
+       150
+      ],
+      [
+       150,
+       160
+      ],
+      [
+       160,
+       170
+      ]
+     ],
+     "lab": [
+      [
+       72.13,
+       2.32,
+       5.39
+      ],
+      [
+       72.45,
+       2.27,
+       5.47
+      ],
+      [
+       72.43,
+       2.35,
+       5.29
+      ],
+      [
+       72.57,
+       2.35,
+       5.28
+      ],
+      [
+       72.73,
+       2.32,
+       5.24
+      ],
+      [
+       72.95,
+       2.33,
+       5.17
+      ],
+      [
+       73.09,
+       2.31,
+       5.08
+      ],
+      [
+       73.25,
+       2.34,
+       4.91
+      ],
+      [
+       73.63,
+       2.35,
+       4.65
+      ],
+      [
+       74.05,
+       2.26,
+       4.47
+      ],
+      [
+       74.46,
+       2.12,
+       4.26
+      ],
+      [
+       74.88,
+       2.0,
+       4.1
+      ],
+      [
+       75.24,
+       1.96,
+       3.96
+      ],
+      [
+       75.59,
+       1.92,
+       3.81
+      ],
+      [
+       75.92,
+       1.91,
+       3.71
+      ],
+      [
+       76.27,
+       1.9,
+       3.55
+      ],
+      [
+       76.71,
+       1.87,
+       3.36
+      ],
+      [
+       77.39,
+       1.87,
+       3.07
+      ],
+      [
+       78.23,
+       1.85,
+       2.63
+      ],
+      [
+       79.05,
+       1.9,
+       2.22
+      ],
+      [
+       79.74,
+       1.83,
+       2.02
+      ],
+      [
+       80.09,
+       1.74,
+       1.83
+      ],
+      [
+       80.19,
+       1.77,
+       1.72
+      ],
+      [
+       80.26,
+       1.78,
+       1.61
+      ],
+      [
+       80.54,
+       1.62,
+       1.64
+      ],
+      [
+       80.63,
+       1.64,
+       1.47
+      ],
+      [
+       80.93,
+       1.63,
+       0.97
+      ],
+      [
+       81.33,
+       1.53,
+       0.69
+      ],
+      [
+       81.65,
+       1.56,
+       0.41
+      ],
+      [
+       81.97,
+       1.57,
+       0.12
+      ],
+      [
+       82.21,
+       1.45,
+       0.08
+      ],
+      [
+       82.49,
+       1.33,
+       -0.28
+      ],
+      [
+       82.79,
+       1.42,
+       -0.86
+      ]
+     ]
+    },
+    {
+     "rows": [
+      850,
+      1100
+     ],
+     "bins": [
+      [
+       -160,
+       -150
+      ],
+      [
+       -150,
+       -140
+      ],
+      [
+       -140,
+       -130
+      ],
+      [
+       -130,
+       -120
+      ],
+      [
+       -120,
+       -110
+      ],
+      [
+       -110,
+       -100
+      ],
+      [
+       -100,
+       -90
+      ],
+      [
+       -90,
+       -80
+      ],
+      [
+       -80,
+       -70
+      ],
+      [
+       -70,
+       -60
+      ],
+      [
+       -60,
+       -50
+      ],
+      [
+       -50,
+       -40
+      ],
+      [
+       -40,
+       -30
+      ],
+      [
+       -30,
+       -20
+      ],
+      [
+       -20,
+       -10
+      ],
+      [
+       -10,
+       0
+      ],
+      [
+       0,
+       10
+      ],
+      [
+       10,
+       20
+      ],
+      [
+       20,
+       30
+      ],
+      [
+       30,
+       40
+      ],
+      [
+       40,
+       50
+      ],
+      [
+       50,
+       60
+      ],
+      [
+       60,
+       70
+      ],
+      [
+       70,
+       80
+      ],
+      [
+       80,
+       90
+      ],
+      [
+       90,
+       100
+      ],
+      [
+       100,
+       110
+      ],
+      [
+       110,
+       120
+      ],
+      [
+       120,
+       130
+      ],
+      [
+       130,
+       140
+      ],
+      [
+       140,
+       150
+      ],
+      [
+       150,
+       160
+      ],
+      [
+       160,
+       170
+      ]
+     ],
+     "lab": [
+      [
+       72.27,
+       2.62,
+       4.69
+      ],
+      [
+       72.37,
+       2.58,
+       4.65
+      ],
+      [
+       72.54,
+       2.62,
+       4.53
+      ],
+      [
+       72.79,
+       2.63,
+       4.47
+      ],
+      [
+       73.04,
+       2.59,
+       4.42
+      ],
+      [
+       73.22,
+       2.65,
+       4.31
+      ],
+      [
+       73.35,
+       2.59,
+       4.27
+      ],
+      [
+       73.62,
+       2.63,
+       4.14
+      ],
+      [
+       73.77,
+       2.64,
+       3.98
+      ],
+      [
+       74.02,
+       2.59,
+       3.94
+      ],
+      [
+       74.28,
+       2.64,
+       3.72
+      ],
+      [
+       74.57,
+       2.59,
+       3.65
+      ],
+      [
+       74.84,
+       2.59,
+       3.46
+      ],
+      [
+       75.18,
+       2.55,
+       3.32
+      ],
+      [
+       75.38,
+       2.48,
+       3.19
+      ],
+      [
+       75.62,
+       2.48,
+       3.05
+      ],
+      [
+       76.01,
+       2.38,
+       2.89
+      ],
+      [
+       76.47,
+       2.26,
+       2.7
+      ],
+      [
+       77.04,
+       2.28,
+       2.41
+      ],
+      [
+       77.62,
+       2.26,
+       2.2
+      ],
+      [
+       78.07,
+       2.27,
+       2.07
+      ],
+      [
+       78.31,
+       2.24,
+       1.98
+      ],
+      [
+       78.51,
+       2.16,
+       1.84
+      ],
+      [
+       78.69,
+       2.01,
+       1.96
+      ],
+      [
+       78.78,
+       1.93,
+       1.95
+      ],
+      [
+       78.76,
+       1.88,
+       1.86
+      ],
+      [
+       78.83,
+       2.07,
+       1.49
+      ],
+      [
+       78.98,
+       1.95,
+       1.49
+      ],
+      [
+       79.1,
+       1.98,
+       1.3
+      ],
+      [
+       79.15,
+       2.06,
+       1.18
+      ],
+      [
+       79.13,
+       2.05,
+       1.04
+      ],
+      [
+       79.08,
+       2.07,
+       1.02
+      ],
+      [
+       78.91,
+       2.19,
+       1.0
+      ]
+     ]
+    },
+    {
+     "rows": [
+      1100,
+      1300
+     ],
+     "bins": [
+      [
+       -160,
+       -150
+      ],
+      [
+       -150,
+       -140
+      ],
+      [
+       -140,
+       -130
+      ],
+      [
+       -130,
+       -120
+      ],
+      [
+       -120,
+       -110
+      ],
+      [
+       -110,
+       -100
+      ],
+      [
+       -100,
+       -90
+      ],
+      [
+       -90,
+       -80
+      ],
+      [
+       -80,
+       -70
+      ],
+      [
+       -70,
+       -60
+      ],
+      [
+       -60,
+       -50
+      ],
+      [
+       -50,
+       -40
+      ],
+      [
+       -40,
+       -30
+      ],
+      [
+       -30,
+       -20
+      ],
+      [
+       -20,
+       -10
+      ],
+      [
+       -10,
+       0
+      ],
+      [
+       0,
+       10
+      ],
+      [
+       10,
+       20
+      ],
+      [
+       20,
+       30
+      ],
+      [
+       30,
+       40
+      ],
+      [
+       40,
+       50
+      ],
+      [
+       50,
+       60
+      ],
+      [
+       60,
+       70
+      ],
+      [
+       70,
+       80
+      ],
+      [
+       80,
+       90
+      ],
+      [
+       90,
+       100
+      ],
+      [
+       100,
+       110
+      ],
+      [
+       110,
+       120
+      ],
+      [
+       120,
+       130
+      ],
+      [
+       130,
+       140
+      ],
+      [
+       140,
+       150
+      ],
+      [
+       150,
+       160
+      ],
+      [
+       160,
+       170
+      ]
+     ],
+     "lab": [
+      [
+       71.95,
+       3.42,
+       3.11
+      ],
+      [
+       72.14,
+       3.41,
+       3.1
+      ],
+      [
+       72.24,
+       3.46,
+       3.01
+      ],
+      [
+       72.4,
+       3.48,
+       2.97
+      ],
+      [
+       72.59,
+       3.41,
+       2.91
+      ],
+      [
+       72.78,
+       3.41,
+       2.82
+      ],
+      [
+       72.91,
+       3.4,
+       2.84
+      ],
+      [
+       73.17,
+       3.41,
+       2.77
+      ],
+      [
+       73.4,
+       3.4,
+       2.69
+      ],
+      [
+       73.76,
+       3.42,
+       2.63
+      ],
+      [
+       74.12,
+       3.42,
+       2.59
+      ],
+      [
+       74.38,
+       3.38,
+       2.48
+      ],
+      [
+       74.49,
+       3.39,
+       2.43
+      ],
+      [
+       74.7,
+       3.42,
+       2.28
+      ],
+      [
+       74.86,
+       3.36,
+       2.22
+      ],
+      [
+       75.1,
+       3.35,
+       2.05
+      ],
+      [
+       75.43,
+       3.36,
+       1.87
+      ],
+      [
+       75.66,
+       3.32,
+       1.76
+      ],
+      [
+       75.78,
+       3.33,
+       1.72
+      ],
+      [
+       75.92,
+       3.36,
+       1.72
+      ],
+      [
+       76.09,
+       3.36,
+       1.71
+      ],
+      [
+       76.13,
+       3.37,
+       1.75
+      ],
+      [
+       76.23,
+       3.33,
+       1.75
+      ],
+      [
+       76.24,
+       3.36,
+       1.77
+      ],
+      [
+       76.21,
+       3.32,
+       1.82
+      ],
+      [
+       76.08,
+       3.35,
+       1.81
+      ],
+      [
+       75.99,
+       3.28,
+       1.87
+      ],
+      [
+       75.96,
+       3.21,
+       1.91
+      ],
+      [
+       75.84,
+       3.21,
+       1.97
+      ],
+      [
+       75.51,
+       3.32,
+       2.04
+      ],
+      [
+       75.03,
+       3.25,
+       2.37
+      ],
+      [
+       74.39,
+       3.18,
+       2.91
+      ],
+      [
+       73.49,
+       3.24,
+       3.64
+      ]
+     ]
+    }
+   ],
+   "steps_at_seam": [
+    {
+     "rows": [
+      150,
+      350
+     ],
+     "step_L": 1.86,
+     "step_a": -0.24,
+     "step_b": -0.24,
+     "step_dE": 1.89,
+     "slope_L_left_per_100px": 3.13,
+     "slope_L_right_per_100px": 2.77
+    },
+    {
+     "rows": [
+      350,
+      600
+     ],
+     "step_L": 1.82,
+     "step_a": -0.22,
+     "step_b": 0.26,
+     "step_dE": 1.85,
+     "slope_L_left_per_100px": 3.42,
+     "slope_L_right_per_100px": 3.14
+    },
+    {
+     "rows": [
+      600,
+      850
+     ],
+     "step_L": 1.52,
+     "step_a": 0.2,
+     "step_b": 0.05,
+     "step_dE": 1.53,
+     "slope_L_left_per_100px": 3.37,
+     "slope_L_right_per_100px": 2.89
+    },
+    {
+     "rows": [
+      850,
+      1100
+     ],
+     "step_L": 1.95,
+     "step_a": -0.62,
+     "step_b": 0.01,
+     "step_dE": 2.05,
+     "slope_L_left_per_100px": 2.4,
+     "slope_L_right_per_100px": 0.73
+    },
+    {
+     "rows": [
+      1100,
+      1300
+     ],
+     "step_L": 1.0,
+     "step_a": 0.03,
+     "step_b": -0.57,
+     "step_dE": 1.15,
+     "slope_L_left_per_100px": 2.45,
+     "slope_L_right_per_100px": -1.51
+    }
+   ]
+  }
+ },
+ "transitions": {
+  "T-CBath": "closest: geometry and overlap pass (0.06 px, dL 0.8); open after two 0-token items (B1 lumps; CB-0 wedges / seam) and a G1 re-check of those crops",
+  "V4 / T-HW": "W0-in r2 fix2 locked (video); blocked by the desk corner fix2 broke (0 tokens: restore it from fix)",
+  "P-B": "blocked: 9.0 px (was 14.2), B2's fill artefacts and C* 9.3",
+  "T-E0 / T-LD": "blocked: M0 1.2's shell needs a new render; P0 22.5 px, P1 36.4 px",
+  "T-CGirl": "blocked: the K-girl master (30.8 px) and K-girl-0's left quarter (-5 px)"
+ }
+}
