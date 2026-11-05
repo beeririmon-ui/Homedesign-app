@@ -1,0 +1,3999 @@
+{
+ "report": "qa/reports/2026-11-05-m0-seedream-fix3-g1.md",
+ "by": "qa-agent",
+ "date": "2026-11-05",
+ "gate": "G1 (docs/ops/quality-gates-2026-11-02.md) on M0 1.2 from the three-model test (seedream-5-pro, M0S1: raw and code composite) and on the fix3 round",
+ "brief": "the coordinator's task of 2026-11-05 (no brief file): board lines 2026-11-05 'render-agent (fix3, 0 טוקנים)' and 'render-agent (ניסוי שלושה מודלים ...)'",
+ "tools": "site/tools/transitions/pan_reproject.py register / check; qa/reports/2026-11-05-m0-seedream-fix3-g1/tools/*.py (QA; the 11-03 / 11-04 tools imported, not edited); eye at 100-200 %",
+ "inputs_sha256_16": {
+  "m0-shell-seedream.png": "ca2b720b7db32211",
+  "m0-1-2-shell-seedream-fix.png": "aca9366f5eca7219",
+  "m0-1-2-shell-seedream-graded-fix-v5.png": "7bade8ca8cdc0b55",
+  "m0-1-2-shell-seedream-fix.json": "4f412fe15efd91ed",
+  "m0-1-2-shell-seedream-fix-base.json": "f074797c9a4ec90a",
+  "b1-v7-r3-fix3.png": "f6068555192c473c",
+  "b1-v7-r3-graded-fix3-v5.png": "b8767fd2fa9c8823",
+  "pose-cb-0-v7-b1r3f3.png": "ac60b39f1a32afc1",
+  "pose-cb-0-v7-graded-b1r3f3-v5.png": "ba2bce0ece7f0962",
+  "pose-cb-0-v7-b1r3f3-overlap.json": "ea3cb2a0df89131a",
+  "pose-w0-in-v7-r2-fix3.png": "cc4e840fe8aa5cc0",
+  "pose-w0-in-v7-r2-graded-fix3-v5.png": "c3e5ae367d2ccaa2",
+  "pose-m0p-v8b-fix3.png": "8db8f7dac49b8536",
+  "pose-m0p-v8b-graded-fix3-v5.png": "3059628ccb841910",
+  "pose-k-girl-0-v7-r2-fix3.png": "df41b8f591685ca9",
+  "pose-k-girl-0-v7-r2-graded-fix3-v5.png": "a456831514848973"
+ },
+ "reference_images": "the listing images of prints 2 and 3 from the session scratchpad (downloaded by render-agent on 11-04; QA did not use the network): overlays/ref-triptych-listing-prints-2-3.jpg",
+ "frames": [
+  {
+   "frame": "M0 seedream raw",
+   "kind": "paid render 2026-11-05, seedream-5-pro on the round-5b clay (M0S1)",
+   "fix_file": "assets/renders/living-room/nordic/v9/m0-shell-seedream.png",
+   "graded": "assets/renders/living-room/nordic/v9/m0-shell-seedream-graded-v5.png",
+   "criteria": [
+    {
+     "id": "G1.4",
+     "binding": true,
+     "value": {
+      "register_shift_px": [
+       -0.34,
+       2.14
+      ],
+      "register_scale_pct": [
+       0.0,
+       -0.51
+      ],
+      "residual_gated": {
+       "bands": [
+        1.47,
+        0.8,
+        0.43,
+        1.19
+       ],
+       "tiles": [
+        1.35,
+        6.38,
+        1.34,
+        4.38,
+        0.42,
+        0.48,
+        0.98,
+        0.87
+       ],
+       "worst": 6.38,
+       "unregistered": {
+        "bands": [
+         2.64,
+         1.75,
+         1.79,
+         1.92
+        ],
+        "tiles": [
+         2.61,
+         6.12,
+         1.23,
+         2.57,
+         2.52,
+         2.39,
+         2.13,
+         2.34
+        ],
+        "worst": 6.12
+       }
+      },
+      "masked_register": {
+       "shift_px": [
+        4.7,
+        -9.16
+       ],
+       "scale_pct": [
+        0.31,
+        0.69
+       ],
+       "masked_share": 0.629,
+       "worst_band_px_after": 9.03,
+       "worst_tile_px_after": 10.44
+      },
+      "named_lines_px": null,
+      "xcorr_box_ratios": {
+       "sofa 220x92x78 (fixed-product) w": 1.0,
+       "coffee table 140x70 h38 (fixed-product) w": 0.9954,
+       "armchair 72x78 h70 (fixed-product) w": 1.0
+      },
+      "shell": {
+       "per_line_px": {
+        "back wall floor line": [
+         -2.92,
+         -2.6,
+         -2.35,
+         -2.02
+        ],
+        "back wall skirting top": [
+         1.31,
+         0.69,
+         0.96,
+         1.15
+        ],
+        "back wall cornice": [
+         1.61,
+         2.06,
+         1.77,
+         1.3
+        ],
+        "room corner": [
+         2.24,
+         2.97,
+         2.37,
+         2.38
+        ],
+        "window sill top edge": [
+         -2.31,
+         -2.03,
+         -2.34
+        ]
+       },
+       "max_abs_px": 2.97,
+       "fits": {
+        "homography_all_planes_max_px": 2.68,
+        "back_wall_homography_on_back_max_px": 2.52,
+        "back_wall_homography_on_window_wall_max_px": 3.07,
+        "affine_all_planes_max_px": 3.11,
+        "vertical_affine_on_horizontal_lines": {
+         "scale_pct": -0.376,
+         "shear": 0.00132,
+         "offset_px": 0.53,
+         "residual_max_px": 2.74
+        },
+        "back_wall_vanishing_point": {
+         "clay": [
+          -1860.0,
+          537.0
+         ],
+         "render": [
+          -1829.0,
+          536.0
+         ]
+        }
+       },
+       "note": "QA's peak lists (data/m0s-shell.json): every shell line within +-3 px; the skirting top is a double edge in the render (a bead 5 px above): paired with the nearest it is +0.7..+1.3, with the upper bead -4.1..-5.6 (render-agent's -4.2..-5.5). One homography fits every plane to 2.7 px and the back wall's homography meets the window wall to 3.1 px: the same camera, no parallax (gpt: 27-32 px on 11-04)"
+      }
+     },
+     "threshold": "register shift <= 9.6 px and scale within 0.5 %; residual after register <= 2.0 px per band (gate text) / tile with shared structure (QA: response >= 0.10, rho >= 0.30) for pan endpoints, <= 9.6 px for video endpoints; named lines within +-19 px (G1.4, proposal C3). Where the ECC register contradicts the named lines (it is not identifiable on plain walls), QA reads the residual unregistered and says so; global scale -0.51 % is 0.01 % over",
+     "pass": false
+    },
+    {
+     "id": "G1.3",
+     "binding": false,
+     "value": {
+      "xcorr": {
+       "sofa": 1.0,
+       "table": 0.995,
+       "armchair": 1.0
+      },
+      "wall_round": "x1.86 of the 38 cm card (corrected in the composite)"
+     },
+     "threshold": "+-15 % (proposal)",
+     "pass": false
+    }
+   ],
+   "verdict": "fail",
+   "failed_binding": [
+    "G1.4"
+   ],
+   "failed_in_the_frame": [
+    "G1.4 (scale -0.51 %, 0.01 % over)",
+    "G1.3 (the wall round x1.86)"
+   ],
+   "failed_proposal": [
+    "G1.3"
+   ],
+   "cannot_measure": [
+    "G1.2",
+    "G1.5",
+    "G1.11",
+    "G1.15",
+    "G1.16"
+   ],
+   "may_reference": "superseded by the composite (one affine, the round, the triptych)",
+   "may_pan_endpoint": "no (the composite is the candidate)",
+   "products_unverified": [
+    "framed-art-aliexpress-minimal-geometric-triptych-prints",
+    "wall-sconce-cj-travertine-cube-updown-12",
+    "pendant-cj-silk-ribbed-pumpkin-40",
+    "curtains-aliexpress-linen-blend-s-fold-180502",
+    "vase-aliexpress-vintage-distressed-clay-vase-589009",
+    "wall-sconce-cj-black-swing-arm-fabric",
+    "cushions-cj-boucle-teddy",
+    "cushions-cj-knitted-chenille-bean-green",
+    "cushions-cj-linen-look-charcoal",
+    "sofa-cover-cj-cotton-muslin-fringe",
+    "table-runner-cj-linen-look-sage-fringe",
+    "candle-holders-cj-travertine-pedestal",
+    "bowl-cj-glutinous-white-belly-bowl-21",
+    "wall-decor-cj-corn-husk-round-38"
+   ],
+   "products_live": []
+  },
+  {
+   "frame": "M0 seedream fix",
+   "kind": "code composite 2026-11-05 on the seedream render: one global affine, the wall round x0.537, the RND3 triptych (art_m0_12.py)",
+   "fix_file": "assets/renders/living-room/nordic/v9/m0-1-2-shell-seedream-fix.png",
+   "graded": "assets/renders/living-room/nordic/v9/m0-1-2-shell-seedream-graded-fix-v5.png",
+   "criteria": [
+    {
+     "id": "G1.4",
+     "binding": true,
+     "value": {
+      "register_shift_px": [
+       0.12,
+       0.02
+      ],
+      "register_scale_pct": [
+       -0.0,
+       0.0
+      ],
+      "residual_gated": {
+       "bands": [
+        1.48,
+        1.69,
+        0.53,
+        1.16
+       ],
+       "tiles": [
+        1.26,
+        6.4,
+        0.44,
+        0.49,
+        0.97,
+        0.85
+       ],
+       "worst": 6.4,
+       "unregistered": {
+        "bands": [
+         1.48,
+         1.71,
+         0.52,
+         1.16
+        ],
+        "tiles": [
+         1.35,
+         6.33,
+         0.4,
+         0.47,
+         0.98,
+         0.86
+        ],
+        "worst": 6.33
+       }
+      },
+      "masked_register": {
+       "shift_px": [
+        -7.62,
+        25.06
+       ],
+       "scale_pct": [
+        2.21,
+        7.29
+       ],
+       "masked_share": 0.629,
+       "worst_band_px_after": 87.13,
+       "worst_tile_px_after": 24.26
+      },
+      "named_lines_px": null,
+      "xcorr_box_ratios": {
+       "sofa 220x92x78 (fixed-product) w": 1.0,
+       "coffee table 140x70 h38 (fixed-product) w": 0.9954,
+       "armchair 72x78 h70 (fixed-product) w": 0.9348
+      },
+      "shell": {
+       "per_line_px": {
+        "back wall floor line": [
+         -1.35,
+         -0.89,
+         -0.82,
+         -0.44
+        ],
+        "back wall skirting top": [
+         2.65,
+         2.15,
+         2.09,
+         2.4
+        ],
+        "back wall cornice": [
+         -0.49,
+         -0.22,
+         -0.56,
+         -1.57
+        ],
+        "room corner": [
+         2.29,
+         2.83,
+         2.1,
+         2.05
+        ],
+        "window sill top edge": [
+         -1.22,
+         -1.22,
+         -1.52
+        ]
+       },
+       "max_abs_px": 2.83,
+       "fits": {
+        "homography_all_planes_max_px": 2.64,
+        "back_wall_homography_on_back_max_px": 2.33,
+        "back_wall_homography_on_window_wall_max_px": 4.65,
+        "affine_all_planes_max_px": 3.38,
+        "vertical_affine_on_horizontal_lines": {
+         "scale_pct": 0.128,
+         "shear": 0.00081,
+         "offset_px": -1.73,
+         "residual_max_px": 2.76
+        },
+        "back_wall_vanishing_point": {
+         "clay": [
+          -1860.0,
+          537.0
+         ],
+         "render": [
+          -1828.0,
+          537.0
+         ]
+        }
+       }
+      },
+      "tile_note": "the one tile over 2 px (u 0.25-0.5, v 0-0.5: 6.4 px horizontal, rho 0.58) holds the right curtain stack: the window's inner reveal, the rod, the cornice and the corner lie on the clay lines there (overlays/m0s-tile-upper-left-clay-edges.jpg); the residual is the curtain, a soft product drawn wider than the clay proxy (frame x ~555-635 against ~560-615). Carried to G1.3 and to P0",
+      "masked_register_note": "the masked register (products out) is not identifiable here (+7 % scale): not used"
+     },
+     "threshold": "register shift <= 9.6 px and scale within 0.5 %; residual after register <= 2.0 px per band (gate text) / tile with shared structure (QA: response >= 0.10, rho >= 0.30) for pan endpoints, <= 9.6 px for video endpoints; named lines within +-19 px (G1.4, proposal C3). Where the ECC register contradicts the named lines (it is not identifiable on plain walls), QA reads the residual unregistered and says so",
+     "pass": true
+    },
+    {
+     "id": "G1.3",
+     "binding": false,
+     "value": {
+      "sofa_xcorr": 1.0,
+      "table_xcorr": 0.995,
+      "armchair_by_edges": 1.0,
+      "armchair_xcorr_note": "0.935 is a mis-pair (left edge +36 at r 0.65); the direct edges are 0 / 0 / 0",
+      "wall_round_px": [
+       117.5,
+       125
+      ],
+      "wall_round_target_px": [
+       118.3,
+       129.1
+      ],
+      "right_curtain_stack": "about 1.4x the clay proxy's width (soft product)"
+     },
+     "threshold": "+-15 % (proposal)",
+     "pass": null
+    },
+    {
+     "id": "G1.1",
+     "binding": true,
+     "value": {
+      "ok": [
+       "triptych: prints 2 and 3 as in the listing images (the circle on the fold line between two light bands; three bars between two light bands); framed in oak with a white mat, as PR1 allows (sold unframed)",
+       "wall round: corn-husk coil with a braided hyacinth rim, 38 cm by projection"
+      ],
+      "deviations": [
+       "table runner: a short sage cloth lying on the table, no fringe and no overhang; the card is 33 x 183 with a tassel fringe at both ends, crossing the table (living-room.json: across its width in the left third). The 11-04 gpt render had it right"
+      ],
+      "notes": [
+       "print 1's listing image is not on disk (no network): it comes from the old M0 r2's rendered print 1, not checked against the listing",
+       "print 3's oatmeal panel reads warmer and darker than prints 1-2 at 100 % (the listing: one oatmeal for the set)",
+       "the other products (bowl, candle holders, cushions, throw, rug, pendant, sconces, curtains, vase, armchair, sofa) are not checked against their card images this round (none on disk); the bowl reads beige-speckled against the card's warm white"
+      ]
+     },
+     "threshold": "every product the card's SKU: silhouette, count, pattern, material",
+     "pass": false
+    },
+    {
+     "id": "G1.12",
+     "binding": true,
+     "value": {
+      "ok": [
+       "triptych crisp at 100 % (a faint light outline round print 1's black squares at 200 %)",
+       "the wall behind the old, larger round: clean membrane fill",
+       "no other code edit"
+      ],
+      "overlays": [
+       "overlays/g112-M0s-triptych-100.jpg",
+       "overlays/g112-M0s-triptych-left-200.jpg",
+       "overlays/g112-M0s-wall-round-raw-200.jpg"
+      ]
+     },
+     "threshold": "0 seams, halos, fill artefacts at 100 % (Bible 'forbidden'; G1.12)",
+     "pass": true
+    },
+    {
+     "id": "G1.7-G1.9 (grading v5)",
+     "binding": true,
+     "value": {
+      "bible_point": {
+       "uv": [
+        0.4269,
+        0.4156
+       ],
+       "L": 92.2,
+       "H": 36.7,
+       "S": 45.7,
+       "Lstar": 94.02,
+       "C": 6.39
+      },
+      "window_wall": {
+       "uv": [
+        0.352,
+        0.415
+       ],
+       "L": 86.4,
+       "H": 36.1,
+       "S": 36.2,
+       "Lstar": 89.1,
+       "C": 8.58
+      },
+      "fall_off": {
+       "by the corner (0.427, 0.416) [90-94]": {
+        "uv": [
+         0.4269,
+         0.4156
+        ],
+        "L": 92.2,
+        "H": 36.7,
+        "S": 45.7,
+        "Lstar": 94.02,
+        "C": 6.39,
+        "range": [
+         90,
+         94
+        ],
+        "ok": true
+       },
+       "centre, above the triptych (0.62, 0.30) [88-91]": {
+        "uv": [
+         0.62,
+         0.3
+        ],
+        "L": 96.5,
+        "H": 63.3,
+        "S": 0.4,
+        "Lstar": 96.73,
+        "C": 0.02,
+        "range": [
+         88,
+         91
+        ],
+        "ok": false
+       },
+       "centre, between triptych and sofa (0.62, 0.55) [88-91]": {
+        "uv": [
+         0.62,
+         0.55
+        ],
+        "L": 96.5,
+        "H": 60.0,
+        "S": 0.0,
+        "Lstar": 96.73,
+        "C": 0.02,
+        "range": [
+         88,
+         91
+        ],
+        "ok": false
+       },
+       "right edge of the back wall (0.97, 0.31) [82-86]": {
+        "uv": [
+         0.97,
+         0.31
+        ],
+        "L": 90.9,
+        "H": 38.1,
+        "S": 31.1,
+        "Lstar": 92.75,
+        "C": 5.01,
+        "range": [
+         82,
+         86
+        ],
+        "ok": false
+       }
+      },
+      "black": 12.5,
+      "max_L": 96.5,
+      "px255": 0,
+      "tonal_shape": {
+       "Lstar_p1": 36.0,
+       "Lstar_p5": 51.9,
+       "Lstar_p50": 94.9,
+       "Lstar_p95": 96.7,
+       "share_Lstar_over_90": 0.687,
+       "mean_C": 6.54,
+       "local_contrast_median": 1.3,
+       "regions_Lstar": {
+        "charcoal cushion": 39.6,
+        "rug / floor right of the sofa": 95.1,
+        "under the sofa right of the table (shadow)": 19.9,
+        "wood floor by the window": 70.8
+       }
+      },
+      "references": {
+       "M0 seedream raw": {
+        "fall_off": {
+         "by the corner (0.427, 0.416) [90-94]": 72.8,
+         "centre, above the triptych (0.62, 0.30) [88-91]": 81.9,
+         "centre, between triptych and sofa (0.62, 0.55) [88-91]": 84.5,
+         "right edge of the back wall (0.97, 0.31) [82-86]": 70.6
+        },
+        "shape": {
+         "Lstar_p1": 23.1,
+         "Lstar_p5": 37.3,
+         "Lstar_p50": 78.3,
+         "Lstar_p95": 95.7,
+         "share_Lstar_over_90": 0.137,
+         "mean_C": 7.91,
+         "local_contrast_median": 3.08,
+         "regions_Lstar": {
+          "charcoal cushion": 26.5,
+          "rug / floor right of the sofa": 79.4,
+          "under the sofa right of the table (shadow)": 8.0,
+          "wood floor by the window": 53.7
+         }
+        }
+       },
+       "M0 v7 r2 (v5)": {
+        "fall_off": {
+         "by the corner (0.427, 0.416) [90-94]": 84.4,
+         "centre, above the triptych (0.62, 0.30) [88-91]": 93.0,
+         "centre, between triptych and sofa (0.62, 0.55) [88-91]": 59.0,
+         "right edge of the back wall (0.97, 0.31) [82-86]": 88.9
+        },
+        "shape": {
+         "Lstar_p1": 36.3,
+         "Lstar_p5": 64.0,
+         "Lstar_p50": 91.8,
+         "Lstar_p95": 96.7,
+         "share_Lstar_over_90": 0.625,
+         "mean_C": 9.85,
+         "local_contrast_median": 1.6,
+         "regions_Lstar": {
+          "charcoal cushion": 88.3,
+          "rug / floor right of the sofa": 93.7,
+          "under the sofa right of the table (shadow)": 86.1,
+          "wood floor by the window": 96.7
+         }
+        }
+       },
+       "M0 1.2 gpt fix (v5, 11-04)": {
+        "fall_off": {
+         "by the corner (0.427, 0.416) [90-94]": 92.0,
+         "centre, above the triptych (0.62, 0.30) [88-91]": 96.0,
+         "centre, between triptych and sofa (0.62, 0.55) [88-91]": 95.9,
+         "right edge of the back wall (0.97, 0.31) [82-86]": 92.0
+        },
+        "shape": {
+         "Lstar_p1": 37.8,
+         "Lstar_p5": 59.4,
+         "Lstar_p50": 93.8,
+         "Lstar_p95": 96.7,
+         "share_Lstar_over_90": 0.696,
+         "mean_C": 8.99,
+         "local_contrast_median": 1.0,
+         "regions_Lstar": {
+          "charcoal cushion": 54.8,
+          "rug / floor right of the sofa": 91.7,
+          "under the sofa right of the table (shadow)": 27.9,
+          "wood floor by the window": 78.4
+         }
+        }
+       }
+      },
+      "milky": "the centre of the back wall sits in the roll-off: L 96.5 with S 0 and C* 0.02 at (0.62, 0.30) and (0.62, 0.55), against 88-91; the right edge 90.9 against 82-86. 68.7 % of the frame is above L* 90, the median local contrast 1.3 L*, mean C* 6.5 (m0-v7-r2: 62.5 %, 1.6, 9.9). In the raw the corner is the darker part of the back wall (72.8; centre 82-85, right edge 70.6): the +0.77 stop that puts the corner at 92 pushes the centre into the roll-off. One global grade cannot meet both; a light or Bible decision"
+     },
+     "threshold": "Bible 1.8.4: the reference wall in range (living 90-94, bath 86-90 HSL L), H 32-40, C* <= 7 (B4), window wall 80-88, black 12-15, max <= 97 and no 255; the grading chapter's light fall-off on the back wall: by the corner 90-94, centre behind the picture 88-91, the right edge 82-86, continuous",
+     "pass": false
+    },
+    {
+     "id": "G1.14",
+     "binding": true,
+     "value": {
+      "P0_against_M0p_fix3": {
+       "pan": "P0 pan (M0 seedream -> M0p from the gpt render: different renders)",
+       "degrees": 25,
+       "bands": [
+        [
+         -2.64,
+         0.67,
+         0.146
+        ],
+        [
+         -7.34,
+         2.26,
+         0.137
+        ],
+        [
+         -0.16,
+         -0.27,
+         0.265
+        ],
+        [
+         0.02,
+         -0.05,
+         0.541
+        ]
+       ],
+       "worst_reliable_px": 7.34,
+       "dL": 4.2,
+       "dE_mean": 9.13,
+       "clay_floor_px": 0.32
+      },
+      "note": "not a valid pair: M0p fix3 is the gpt render; P0 waits for the seedream M0p (paid, not pulled)"
+     },
+     "threshold": "pan_reproject.check in the overlap: <= 2 px per band with response >= 0.05 and dL <= 1 (gates doc 7.1, proposal; the principle binding)",
+     "pass": null
+    }
+   ],
+   "verdict": "fail",
+   "failed_binding": [
+    "G1.1",
+    "G1.7-G1.9 (grading v5)"
+   ],
+   "failed_in_the_frame": [
+    "G1.1 (table runner)",
+    "G1.7-G1.9 (the back wall's fall-off: milky)"
+   ],
+   "failed_proposal": [],
+   "cannot_measure": [
+    "G1.2",
+    "G1.5",
+    "G1.11",
+    "G1.15",
+    "G1.16"
+   ],
+   "may_reference": "yes for geometry: the first M0 1.2 whose shell and fixed furniture sit on the round-5b clay (19 shell lines within 2.8 px, the same perspective); as an image after the light decision and the runner",
+   "may_pan_endpoint": "not yet: P0 needs the seedream M0p (paid, not pulled) and the curtain tile settled in that pair; T-E0 ends on M0: after the light",
+   "products_unverified": [
+    "framed-art-aliexpress-minimal-geometric-triptych-prints",
+    "wall-sconce-cj-travertine-cube-updown-12",
+    "pendant-cj-silk-ribbed-pumpkin-40",
+    "curtains-aliexpress-linen-blend-s-fold-180502",
+    "vase-aliexpress-vintage-distressed-clay-vase-589009",
+    "wall-sconce-cj-black-swing-arm-fabric",
+    "cushions-cj-boucle-teddy",
+    "cushions-cj-knitted-chenille-bean-green",
+    "cushions-cj-linen-look-charcoal",
+    "sofa-cover-cj-cotton-muslin-fringe",
+    "table-runner-cj-linen-look-sage-fringe",
+    "candle-holders-cj-travertine-pedestal",
+    "bowl-cj-glutinous-white-belly-bowl-21",
+    "wall-decor-cj-corn-husk-round-38"
+   ],
+   "products_live": []
+  },
+  {
+   "frame": "M0p 1.2 fix3",
+   "kind": "code 2026-11-05 on the gpt pose (m0p_fix3.py): +1.337 % vertical on the raw, re-composite, the doubled bowl removed, the triptych",
+   "fix_file": "assets/renders/poses/nordic/v8/pose-m0p-v8b-fix3.png",
+   "graded": "assets/renders/poses/nordic/v8/pose-m0p-v8b-graded-fix3-v5.png",
+   "criteria": [
+    {
+     "id": "G1.4",
+     "binding": true,
+     "value": {
+      "register_shift_px": [
+       -5.5,
+       13.64
+      ],
+      "register_scale_pct": [
+       0.93,
+       -1.04
+      ],
+      "residual_gated": {
+       "bands": [
+        5.23,
+        308.9
+       ],
+       "tiles": [
+        12.5,
+        10.73,
+        2.68,
+        10.84,
+        10.36,
+        3.18
+       ],
+       "worst": 308.9,
+       "unregistered": {
+        "bands": [
+         7.63
+        ],
+        "tiles": [
+         1.71,
+         1.12,
+         7.2,
+         17.9,
+         4.94,
+         1.88
+        ],
+        "worst": 17.9
+       }
+      },
+      "masked_register": {
+       "shift_px": [
+        -7.19,
+        0.17
+       ],
+       "scale_pct": [
+        0.44,
+        0.14
+       ],
+       "masked_share": 0.255,
+       "worst_band_px_after": 66.45,
+       "worst_tile_px_after": 16.86
+      },
+      "named_lines_px": null,
+      "xcorr_box_ratios": {
+       "sofa 220x92x78 (fixed-product) w": 1.1253,
+       "coffee table 140x70 h38 (fixed-product) w": 0.939
+      },
+      "shell_by_peaks_1080": "floor line 871 = clay; cornice 75 = clay (+-2 at x 600); corner 1362 = clay; side wall 933 / 1011 / 1042 against 934 / 1014 / 1043; skirting top +6 (a shorter skirting than the clay's); sofa arms 305 = 305 and 1016-1018 against 1011-1026: the shell and the sofa on the clay",
+      "register_note": "the ECC register (-5.5 / +13.6 px, +0.93 / -1.04 %) contradicts the lines: not identifiable; read unregistered: tile 17.9 px (u 0.25-0.5, v 0.5-1.0, rho 0.37: the table / runner / rug), band 7.6 (u 0-0.25): over 2 px"
+     },
+     "threshold": "register shift <= 9.6 px and scale within 0.5 %; residual after register <= 2.0 px per band (gate text) / tile with shared structure (QA: response >= 0.10, rho >= 0.30) for pan endpoints, <= 9.6 px for video endpoints; named lines within +-19 px (G1.4, proposal C3). Where the ECC register contradicts the named lines (it is not identifiable on plain walls), QA reads the residual unregistered and says so",
+     "pass": false
+    },
+    {
+     "id": "G1.1",
+     "binding": true,
+     "value": "the bowl is single now; the triptych as in M0",
+     "threshold": "every product the card's SKU",
+     "pass": true
+    },
+    {
+     "id": "G1.12",
+     "binding": true,
+     "value": {
+      "violations": [
+       "a pale rectangle with hard edges on the oak table top round the bowl and the holders (the decor clean-up; canvas ~x 1085-1230, y ~1195-1285): visible at 100 %",
+       "right of the sofa's right leg: the rectangular blocks on the rug border and the vertical seam through the floor and the rug, unchanged"
+      ],
+      "overlays": [
+       "overlays/g112-M0p-bowl-200.jpg",
+       "overlays/g112-M0p-floor-right-leg-200.jpg",
+       "overlays/g112-M0p-sofa.jpg"
+      ]
+     },
+     "threshold": "0 seams, halos, fill artefacts at 100 % (Bible 'forbidden'; G1.12)",
+     "pass": false
+    },
+    {
+     "id": "G1.7-G1.9 (grading v5)",
+     "binding": true,
+     "value": {
+      "file": "assets/renders/poses/nordic/v8/pose-m0p-v8b-graded-fix3-v5.png",
+      "agent_point": [
+       0.1221393495798111,
+       0.40362900495529175
+      ],
+      "agent_L": 92.1,
+      "black": 12.5,
+      "max_L": 96.5,
+      "px255": 0,
+      "qa": {
+       "uv": [
+        0.1221,
+        0.4036
+       ],
+       "L": 92.1,
+       "H": 36.8,
+       "S": 33.6,
+       "Lstar": 93.63,
+       "C": 4.77
+      }
+     },
+     "threshold": "Bible 1.8.4: the reference wall in range (living 90-94, bath 86-90 HSL L), H 32-40, C* <= 7 (B4), window wall 80-88, black 12-15, max <= 97 and no 255; the grading chapter's light fall-off on the back wall: by the corner 90-94, centre behind the picture 88-91, the right edge 82-86, continuous",
+     "pass": true
+    },
+    {
+     "id": "G1.14",
+     "binding": true,
+     "value": {
+      "P0": {
+       "pan": "P0 pan (M0 seedream -> M0p from the gpt render: different renders)",
+       "degrees": 25,
+       "bands": [
+        [
+         -2.64,
+         0.67,
+         0.146
+        ],
+        [
+         -7.34,
+         2.26,
+         0.137
+        ],
+        [
+         -0.16,
+         -0.27,
+         0.265
+        ],
+        [
+         0.02,
+         -0.05,
+         0.541
+        ]
+       ],
+       "worst_reliable_px": 7.34,
+       "dL": 4.2,
+       "dE_mean": 9.13,
+       "clay_floor_px": 0.32
+      }
+     },
+     "threshold": "pan_reproject.check in the overlap: <= 2 px per band with response >= 0.05 and dL <= 1 (gates doc 7.1, proposal; the principle binding)",
+     "pass": false
+    }
+   ],
+   "verdict": "fail",
+   "failed_binding": [
+    "G1.4",
+    "G1.12",
+    "G1.14"
+   ],
+   "failed_in_the_frame": [
+    "G1.4 (residual)",
+    "G1.12"
+   ],
+   "failed_proposal": [],
+   "cannot_measure": [
+    "G1.2",
+    "G1.5",
+    "G1.11",
+    "G1.15",
+    "G1.16"
+   ],
+   "may_reference": "no: superseded by the seedream M0p once pulled",
+   "may_pan_endpoint": "no: P0 7.3 px, dL 4.2 against the seedream M0 (different renders)",
+   "products_unverified": [
+    "bowl-cj-glutinous-white-belly-bowl-21",
+    "candle-holders-cj-travertine-pedestal",
+    "curtains-aliexpress-linen-blend-s-fold-180502",
+    "cushions-cj-boucle-teddy",
+    "cushions-cj-knitted-chenille-bean-green",
+    "cushions-cj-linen-look-charcoal",
+    "framed-art-aliexpress-minimal-geometric-triptych-prints",
+    "pendant-cj-silk-ribbed-pumpkin-40",
+    "sofa-cover-cj-cotton-muslin-fringe",
+    "table-runner-cj-linen-look-sage-fringe",
+    "vase-aliexpress-vintage-distressed-clay-vase-589009",
+    "wall-sconce-cj-black-swing-arm-fabric",
+    "wall-sconce-cj-travertine-cube-updown-12"
+   ],
+   "products_live": []
+  },
+  {
+   "frame": "B1 r3 fix3",
+   "kind": "code 2026-11-05 (fix_v10.py): the two lumps right of the fern cleared",
+   "fix_file": "assets/renders/bath/nordic/v7/b1-v7-r3-fix3.png",
+   "graded": "assets/renders/bath/nordic/v7/b1-v7-r3-graded-fix3-v5.png",
+   "criteria": [
+    {
+     "id": "G1.4",
+     "binding": true,
+     "value": {
+      "register_shift_px": [
+       -0.08,
+       -0.02
+      ],
+      "register_scale_pct": [
+       0.0,
+       -0.01
+      ],
+      "residual_gated": {
+       "bands": [
+        0.13,
+        0.1,
+        0.21
+       ],
+       "tiles": [
+        0.82,
+        0.58,
+        1.63,
+        0.52,
+        0.11,
+        0.52
+       ],
+       "worst": 1.63,
+       "unregistered": {
+        "bands": [
+         0.16,
+         0.11,
+         0.21
+        ],
+        "tiles": [
+         0.82,
+         0.54,
+         1.63,
+         0.48,
+         0.11,
+         0.55
+        ],
+        "worst": 1.63
+       }
+      },
+      "masked_register": {
+       "shift_px": [
+        0.03,
+        -0.12
+       ],
+       "scale_pct": [
+        0.02,
+        0.03
+       ],
+       "masked_share": 0.251,
+       "worst_band_px_after": 0.83,
+       "worst_tile_px_after": 4.87
+      },
+      "named_lines_px": {
+       "glazing top": {
+        "xcorr": -1,
+        "r": 0.946,
+        "nearest_peak": 2
+       },
+       "glazing bottom / sill": {
+        "xcorr": 0,
+        "r": 0.874,
+        "nearest_peak": 0
+       },
+       "ledge top": {
+        "xcorr": 0,
+        "r": 0.835,
+        "nearest_peak": 1
+       },
+       "glazing left": {
+        "xcorr": 0,
+        "r": 0.946,
+        "nearest_peak": 0
+       },
+       "glazing right": {
+        "xcorr": 0,
+        "r": 0.732,
+        "nearest_peak": 14
+       },
+       "WC block left": {
+        "xcorr": 0,
+        "r": 0.985,
+        "nearest_peak": 0
+       },
+       "WC block right": {
+        "xcorr": 0,
+        "r": 0.92,
+        "nearest_peak": 0
+       },
+       "corner / track end": {
+        "xcorr": 0,
+        "r": 0.653,
+        "nearest_peak": -11
+       },
+       "vanity left edge": {
+        "xcorr": 0,
+        "r": 0.695,
+        "nearest_peak": -17
+       }
+      },
+      "xcorr_box_ratios": {
+       "bath fluted glazing w": 1.0,
+       "bath WC + limestone ledge (fixed) w": 1.0,
+       "window W-bath w": 1.0,
+       "bath fluted glazing h": 1.0025,
+       "bath WC + limestone ledge (fixed) h": 1.0,
+       "shower fittings, matte black (shell) h": 1.002,
+       "window W-bath h": 1.0
+      },
+      "note": "as fix2: named lines 0 / +-1 by cross-correlation (r 0.65-0.99); the +14 / -11 / -17 nearest peaks are neighbours (glazing mullion, track end, vanity front)"
+     },
+     "threshold": "register shift <= 9.6 px and scale within 0.5 %; residual after register <= 2.0 px per band (gate text) / tile with shared structure (QA: response >= 0.10, rho >= 0.30) for pan endpoints, <= 9.6 px for video endpoints; named lines within +-19 px (G1.4, proposal C3). Where the ECC register contradicts the named lines (it is not identifiable on plain walls), QA reads the residual unregistered and says so",
+     "pass": true
+    },
+    {
+     "id": "G1.1",
+     "binding": true,
+     "value": "brush 38 % holder (card), the basket on the floor: unchanged since fix2",
+     "threshold": "every product the card's SKU",
+     "pass": true
+    },
+    {
+     "id": "G1.12",
+     "binding": true,
+     "value": {
+      "fixed": "the two pale lumps right of the fern are gone; the folds continue (overlays/g112-B1-lumps-200.jpg)",
+      "minor": [
+       "the leftmost linen fold above the fern keeps faint blocky steps (canvas ~x 1455-1530, y ~620-900) and the curtain's left edge is a straight diagonal: plain at 200 %, faint at 100 % only on close inspection (overlays/g112-B1-around-fern-100.jpg); not blocking, for the final polish",
+       "soft green-grey smudges on the wall left of the fern (its old shadow): read as the plant's soft shadow"
+      ]
+     },
+     "threshold": "0 seams, halos, fill artefacts at 100 % (Bible 'forbidden'; G1.12)",
+     "pass": true
+    },
+    {
+     "id": "G1.7-G1.9 (grading v5)",
+     "binding": true,
+     "value": {
+      "file": "assets/renders/bath/nordic/v7/b1-v7-r3-graded-fix3-v5.png",
+      "agent_point": [
+       0.419,
+       0.174
+      ],
+      "agent_L": 89.2,
+      "black": 12.5,
+      "max_L": 96.5,
+      "px255": 0,
+      "qa": {
+       "uv": [
+        0.419,
+        0.174
+       ],
+       "L": 89.2,
+       "H": 35.9,
+       "S": 29.2,
+       "Lstar": 91.06,
+       "C": 5.42
+      }
+     },
+     "threshold": "Bible 1.8.4: the reference wall in range (living 90-94, bath 86-90 HSL L), H 32-40, C* <= 7 (B4), window wall 80-88, black 12-15, max <= 97 and no 255; the grading chapter's light fall-off on the back wall: by the corner 90-94, centre behind the picture 88-91, the right edge 82-86, continuous",
+     "pass": true
+    },
+    {
+     "id": "G1.14",
+     "binding": true,
+     "value": {
+      "T_CBath": {
+       "pan": "T-CBath pan (CB-0 -> B1)",
+       "degrees": 22,
+       "bands": [
+        [
+         0.04,
+         -0.04,
+         0.969
+        ],
+        [
+         0.02,
+         -0.01,
+         0.976
+        ],
+        [
+         -0.01,
+         0.01,
+         0.995
+        ],
+        [
+         0.06,
+         -0.0,
+         0.969
+        ]
+       ],
+       "worst_reliable_px": 0.06,
+       "dL": 0.8,
+       "dE_mean": 1.0,
+       "clay_floor_px": 49.99
+      },
+      "P_B": {
+       "pan": "P-B pan",
+       "degrees": 35,
+       "bands": [
+        [
+         -9.04,
+         8.11,
+         0.194
+        ],
+        [
+         -1.37,
+         -58.74,
+         0.007
+        ],
+        [
+         -3.47,
+         7.2,
+         -0.007
+        ],
+        [
+         -0.6,
+         0.46,
+         0.298
+        ]
+       ],
+       "worst_reliable_px": 9.04,
+       "dL": 0.6,
+       "dE_mean": 10.11,
+       "clay_floor_px": 2.21
+      }
+     },
+     "threshold": "pan_reproject.check in the overlap: <= 2 px per band with response >= 0.05 and dL <= 1 (gates doc 7.1, proposal; the principle binding) (P-B fails on B2's side)",
+     "pass": false
+    },
+    {
+     "id": "G1.6",
+     "binding": true,
+     "value": {
+      "test_rule": true,
+      "sourcing_tasks": [
+       "shower-stool",
+       "towel-ladder",
+       "bath-towels",
+       "bin",
+       "ledge-planter"
+      ]
+     },
+     "threshold": "studio rules 2.11: every slot with an approved product filled (unchanged by the fix)",
+     "pass": true
+    },
+    {
+     "id": "G8.6",
+     "binding": true,
+     "value": {
+      "baked": 9,
+      "live": [],
+      "unverified": 9
+     },
+     "threshold": "every baked card live at the supplier",
+     "pass": false
+    }
+   ],
+   "verdict": "pass in the frame (G1.14 P-B fails on B2's side; G8.6 is the cards' liveness, not the image)",
+   "failed_binding": [
+    "G1.14",
+    "G8.6"
+   ],
+   "failed_in_the_frame": [],
+   "failed_proposal": [],
+   "cannot_measure": [
+    "G1.2",
+    "G1.5",
+    "G1.11",
+    "G1.15",
+    "G1.16"
+   ],
+   "may_reference": "yes: geometry, products, light; the faint fold steps above the fern for the final polish",
+   "may_pan_endpoint": "T-CBath: yes (the pan's end). P-B: no (9.0 px, B2 r3 fix2)",
+   "products_unverified": [
+    "bath-mat-cj-tufted-cotton-frame-beige-40x60",
+    "candle-cj-ribbed-matte-ceramic-candle-cup-9",
+    "floor-planter-aliexpress-seagrass-straight-planter-basket-30",
+    "reed-diffuser-cj-travertine-look-bamboo-lid-milktea",
+    "shower-curtain-aliexpress-linen-blend-slub-panel-200x270",
+    "shower-dispensers-cj-sand-ribbed-ceramic-pump-bottle",
+    "toilet-brush-aliexpress-matte-black-steel-cylinder-245996",
+    "toilet-paper-stand-aliexpress-floor-standing-black-763442",
+    "vanity-sconces-cj-fluted-resin-updown-white"
+   ],
+   "products_live": []
+  },
+  {
+   "frame": "CB-0 b1r3f3",
+   "kind": "recomposed 2026-11-05 from B1 r3 fix3 (recompose_cb0_v3.py): the kept part matched by a gain field, a 150 px blend",
+   "fix_file": "assets/renders/poses/nordic/v7/pose-cb-0-v7-b1r3f3.png",
+   "graded": "assets/renders/poses/nordic/v7/pose-cb-0-v7-graded-b1r3f3-v5.png",
+   "criteria": [
+    {
+     "id": "G1.4",
+     "binding": true,
+     "value": {
+      "register_shift_px": [
+       3.4,
+       -7.51
+      ],
+      "register_scale_pct": [
+       -0.18,
+       -0.02
+      ],
+      "residual_gated": {
+       "bands": [
+        3.23,
+        1.26
+       ],
+       "tiles": [
+        3.49,
+        2.15,
+        1.85,
+        3.46,
+        3.2,
+        1.99
+       ],
+       "worst": 3.49,
+       "unregistered": {
+        "bands": [
+         0.1,
+         0.15
+        ],
+        "tiles": [
+         0.34,
+         0.54,
+         0.65,
+         0.39,
+         0.35,
+         0.21
+        ],
+        "worst": 0.65
+       }
+      },
+      "masked_register": {
+       "shift_px": [
+        -0.99,
+        -2.31
+       ],
+       "scale_pct": [
+        0.09,
+        0.01
+       ],
+       "masked_share": 0.124,
+       "worst_band_px_after": 1.02,
+       "worst_tile_px_after": 0.98
+      },
+      "named_lines_px": null,
+      "xcorr_box_ratios": {
+       "bath fluted glazing w": 1.0,
+       "bath WC + limestone ledge (fixed) w": 1.0,
+       "window W-bath w": 1.0,
+       "bath fluted glazing h": 1.0,
+       "bath WC + limestone ledge (fixed) h": 1.0,
+       "window W-bath h": 1.0
+      },
+      "named_lines_px_1080": "on the round-4 CB-0 clay: window sides 822/832/862 and head 102/132/163-167 against 103/133/166, WC block 729/750/1241, block top 575-581, ledge 643/685, left jamb 89/90: 0 / +-1 (the head +-3)",
+      "register_note": "the ECC register (+3.4 / -7.5 px, a 0.5 % shear) is biased by the plain walls; unregistered: bands 0.10 / 0.15, tiles <= 0.65 px"
+     },
+     "threshold": "register shift <= 9.6 px and scale within 0.5 %; residual after register <= 2.0 px per band (gate text) / tile with shared structure (QA: response >= 0.10, rho >= 0.30) for pan endpoints, <= 9.6 px for video endpoints; named lines within +-19 px (G1.4, proposal C3). Where the ECC register contradicts the named lines (it is not identifiable on plain walls), QA reads the residual unregistered and says so",
+     "pass": true
+    },
+    {
+     "id": "G1.14",
+     "binding": true,
+     "value": {
+      "T_CBath": {
+       "pan": "T-CBath pan (CB-0 -> B1)",
+       "degrees": 22,
+       "bands": [
+        [
+         0.04,
+         -0.04,
+         0.969
+        ],
+        [
+         0.02,
+         -0.01,
+         0.976
+        ],
+        [
+         -0.01,
+         0.01,
+         0.995
+        ],
+        [
+         0.06,
+         -0.0,
+         0.969
+        ]
+       ],
+       "worst_reliable_px": 0.06,
+       "dL": 0.8,
+       "dE_mean": 1.0,
+       "clay_floor_px": 49.99
+      },
+      "agent": "0.06 px, dL 0.8: confirmed (dE 1.0)"
+     },
+     "threshold": "pan_reproject.check in the overlap: <= 2 px per band with response >= 0.05 and dL <= 1 (gates doc 7.1, proposal; the principle binding)",
+     "pass": true
+    },
+    {
+     "id": "G1.12",
+     "binding": true,
+     "value": {
+      "fixed": [
+       "the upper wedge now matches the B1 wall: dE 1.36 (was 4.21); no light band, no rectangle at 100 % and none at x4 contrast (overlays/g112-CB-0-seam-stretch.jpg)",
+       "the vertical seam: the bump over the wall's own smooth gradient is 0.36-0.53 L* (was 0.80-0.89), rms 0.2",
+       "the lumps of B1 are gone here too"
+      ],
+      "data": {
+       "b1r3 (11-04)": {
+        "seam_residual": [
+         {
+          "rows": [
+           150,
+           350
+          ],
+          "max_abs_residual_Lstar": 0.8,
+          "at_px_from_edge": 42.5,
+          "rms": 0.38
+         },
+         {
+          "rows": [
+           350,
+           600
+          ],
+          "max_abs_residual_Lstar": 0.83,
+          "at_px_from_edge": 42.5,
+          "rms": 0.36
+         },
+         {
+          "rows": [
+           600,
+           850
+          ],
+          "max_abs_residual_Lstar": 0.89,
+          "at_px_from_edge": 47.5,
+          "rms": 0.39
+         }
+        ],
+        "wedge": {
+         "top_wedge": [
+          90.88,
+          -1.98,
+          4.58
+         ],
+         "b1_wall_below": [
+          88.71,
+          -0.58,
+          1.26
+         ],
+         "dE": 4.21
+        }
+       },
+       "b1r3f3": {
+        "seam_residual": [
+         {
+          "rows": [
+           150,
+           350
+          ],
+          "max_abs_residual_Lstar": 0.53,
+          "at_px_from_edge": 22.5,
+          "rms": 0.2
+         },
+         {
+          "rows": [
+           350,
+           600
+          ],
+          "max_abs_residual_Lstar": 0.36,
+          "at_px_from_edge": 12.5,
+          "rms": 0.18
+         },
+         {
+          "rows": [
+           600,
+           850
+          ],
+          "max_abs_residual_Lstar": 0.41,
+          "at_px_from_edge": 12.5,
+          "rms": 0.19
+         }
+        ],
+        "wedge": {
+         "top_wedge": [
+          87.49,
+          0.41,
+          1.25
+         ],
+         "b1_wall_below": [
+          88.74,
+          0.01,
+          0.89
+         ],
+         "dE": 1.36
+        }
+       },
+       "old_share": 0.2756
+      },
+      "overlays": [
+       "overlays/g112-CB-0-seam-top-100.jpg",
+       "overlays/g112-CB-0-top-wedge-100.jpg",
+       "overlays/g112-CB-0-bottom-wedge-100.jpg",
+       "overlays/cb0-source-map.jpg"
+      ]
+     },
+     "threshold": "0 seams, halos, fill artefacts at 100 % (Bible 'forbidden'; G1.12)",
+     "pass": true
+    },
+    {
+     "id": "G1.1",
+     "binding": true,
+     "value": "B1 r3 fix3's pixels (brush 38 %, basket on the floor)",
+     "threshold": "every product the card's SKU",
+     "pass": true
+    },
+    {
+     "id": "G1.7-G1.9 (grading v5)",
+     "binding": true,
+     "value": {
+      "file": "assets/renders/poses/nordic/v7/pose-cb-0-v7-graded-b1r3f3-v5.png",
+      "agent_point": [
+       0.6449,
+       0.1701
+      ],
+      "agent_L": 88.9,
+      "black": 12.5,
+      "max_L": 96.5,
+      "px255": 0,
+      "qa": {
+       "uv": [
+        0.6449,
+        0.1701
+       ],
+       "L": 88.9,
+       "H": 35.7,
+       "S": 29.1,
+       "Lstar": 90.88,
+       "C": 5.66
+      },
+      "note": "judged by B1 (the same pixels and stops) at B1's point carried into CB-0; the record is corrected (79.3 explained)"
+     },
+     "threshold": "Bible 1.8.4: the reference wall in range (living 90-94, bath 86-90 HSL L), H 32-40, C* <= 7 (B4), window wall 80-88, black 12-15, max <= 97 and no 255; the grading chapter's light fall-off on the back wall: by the corner 90-94, centre behind the picture 88-91, the right edge 82-86, continuous",
+     "pass": true
+    }
+   ],
+   "verdict": "pass in the frame (G8.6: the cards' liveness, not the image)",
+   "failed_binding": [],
+   "failed_in_the_frame": [],
+   "failed_proposal": [],
+   "cannot_measure": [
+    "G1.2",
+    "G1.5",
+    "G1.11",
+    "G1.15",
+    "G1.16"
+   ],
+   "may_reference": "yes",
+   "may_pan_endpoint": "T-CBath: yes (the slide's end and the pan's start, with B1 r3 fix3)",
+   "products_unverified": [
+    "bath-mat-cj-tufted-cotton-frame-beige-40x60",
+    "candle-cj-ribbed-matte-ceramic-candle-cup-9",
+    "floor-planter-aliexpress-seagrass-straight-planter-basket-30",
+    "reed-diffuser-cj-travertine-look-bamboo-lid-milktea",
+    "shower-curtain-aliexpress-linen-blend-slub-panel-200x270",
+    "shower-dispensers-cj-sand-ribbed-ceramic-pump-bottle",
+    "toilet-brush-aliexpress-matte-black-steel-cylinder-245996",
+    "toilet-paper-stand-aliexpress-floor-standing-black-763442",
+    "vanity-sconces-cj-fluted-resin-updown-white"
+   ],
+   "products_live": []
+  },
+  {
+   "frame": "W0-in r2 fix3",
+   "kind": "code 2026-11-05: fix2 with the desk's front-left corner taken back from fix",
+   "fix_file": "assets/renders/poses/nordic/v7/pose-w0-in-v7-r2-fix3.png",
+   "graded": "assets/renders/poses/nordic/v7/pose-w0-in-v7-r2-graded-fix3-v5.png",
+   "criteria": [
+    {
+     "id": "G1.4",
+     "binding": true,
+     "value": {
+      "register_shift_px": [
+       -0.58,
+       -0.15
+      ],
+      "register_scale_pct": [
+       0.05,
+       0.01
+      ],
+      "residual_gated": {
+       "bands": [
+        1.76,
+        9.64,
+        5.75
+       ],
+       "tiles": [
+        1.12,
+        7.32,
+        2.11,
+        2.6,
+        8.09,
+        4.27
+       ],
+       "worst": 9.64,
+       "unregistered": {
+        "bands": [
+         1.67,
+         7.27,
+         4.52
+        ],
+        "tiles": [
+         1.23,
+         7.58,
+         1.57,
+         2.36,
+         7.22,
+         3.29
+        ],
+        "worst": 7.58
+       }
+      },
+      "masked_register": {
+       "shift_px": [
+        4.43,
+        -4.34
+       ],
+       "scale_pct": [
+        -0.32,
+        0.32
+       ],
+       "masked_share": 0.264,
+       "worst_band_px_after": 5.54,
+       "worst_tile_px_after": 8.04
+      },
+      "named_lines_px": {
+       "desk top front edge": {
+        "xcorr": -3,
+        "r": 0.67,
+        "nearest_peak": -3
+       },
+       "desk front face bottom left of chair": {
+        "xcorr": -2,
+        "r": 0.726,
+        "nearest_peak": -2
+       },
+       "drawer bottom / apron": {
+        "xcorr": -2,
+        "r": 0.899,
+        "nearest_peak": -3
+       },
+       "chair back top (clay 835)": {
+        "xcorr": 32,
+        "r": 0.701,
+        "nearest_peak": -3
+       },
+       "desk left outer edge": {
+        "xcorr": -2,
+        "r": 0.691,
+        "nearest_peak": -2
+       },
+       "chair back left edge": {
+        "xcorr": 0,
+        "r": 0.844,
+        "nearest_peak": 0
+       },
+       "chair back right edge": {
+        "xcorr": -8,
+        "r": 0.757,
+        "nearest_peak": -8
+       },
+       "shelf top": {
+        "xcorr": 36,
+        "r": 0.45,
+        "nearest_peak": 36
+       }
+      },
+      "xcorr_box_ratios": {
+       "built-in oak desk + shelf w": 0.9719,
+       "desk chair w": 0.9858
+      },
+      "note": "video endpoint: after register the worst band is 9.64 px (9.6, a proposal) because the 0.58 px / 0.05 % register moves it the wrong way; unregistered the same band is 7.27 and the worst tile 7.58. Named lines <= 8 (chair right -8; the +32 / +36 cross-correlations are mis-pairs: chair top -3, shelf front 0/+1 by the peak lists). QA rules it within the measurement's precision: pass"
+     },
+     "threshold": "register shift <= 9.6 px and scale within 0.5 %; residual after register <= 2.0 px per band (gate text) / tile with shared structure (QA: response >= 0.10, rho >= 0.30) for pan endpoints, <= 9.6 px for video endpoints; named lines within +-19 px (G1.4, proposal C3). Where the ECC register contradicts the named lines (it is not identifiable on plain walls), QA reads the residual unregistered and says so",
+     "pass": true
+    },
+    {
+     "id": "G1.1",
+     "binding": true,
+     "value": "pencil cup as on 11-04; the desk corner restored",
+     "threshold": "every product the card's SKU",
+     "pass": true
+    },
+    {
+     "id": "G1.12",
+     "binding": true,
+     "value": {
+      "fixed": [
+       "the desk's front-left corner is fix's again: one outer edge, the mitred slab corner (overlays/g112-W0-in-desk-corner-vs-fix.jpg)",
+       "the basket's weave clean"
+      ],
+      "ok": "the 'dark block' beside the basket's base is the floor under the skirting in the gap between basket and leg; the skirting continues above it: not a fill artefact"
+     },
+     "threshold": "0 seams, halos, fill artefacts at 100 % (Bible 'forbidden'; G1.12)",
+     "pass": true
+    },
+    {
+     "id": "G1.7-G1.9 (grading v5)",
+     "binding": true,
+     "value": {
+      "file": "assets/renders/poses/nordic/v7/pose-w0-in-v7-r2-graded-fix3-v5.png",
+      "agent_point": [
+       0.5,
+       0.4
+      ],
+      "agent_L": 92.5,
+      "black": 12.5,
+      "max_L": 96.5,
+      "px255": 0,
+      "qa": {
+       "uv": [
+        0.5,
+        0.4
+       ],
+       "L": 92.5,
+       "H": 36.2,
+       "S": 27.8,
+       "Lstar": 93.78,
+       "C": 3.69
+      }
+     },
+     "threshold": "Bible 1.8.4: the reference wall in range (living 90-94, bath 86-90 HSL L), H 32-40, C* <= 7 (B4), window wall 80-88, black 12-15, max <= 97 and no 255; the grading chapter's light fall-off on the back wall: by the corner 90-94, centre behind the picture 88-91, the right edge 82-86, continuous",
+     "pass": true
+    },
+    {
+     "id": "G1.14",
+     "binding": true,
+     "value": "dolly W0 fix -> W0-in r2 fix3: the same objects by eye (overlays/endpoints-W0_fix-W0-in_r2_fix3.jpg); no pan rule",
+     "threshold": "pan_reproject.check in the overlap: <= 2 px per band with response >= 0.05 and dL <= 1 (gates doc 7.1, proposal; the principle binding)",
+     "pass": null
+    },
+    {
+     "id": "G8.6",
+     "binding": true,
+     "value": {
+      "baked": 5,
+      "live": [
+       "planter-zendrop-seagrass-belly-38x34"
+      ],
+      "unverified": 4
+     },
+     "threshold": "every baked card live at the supplier",
+     "pass": false
+    }
+   ],
+   "verdict": "pass in the frame (G8.6: the cards' liveness)",
+   "failed_binding": [
+    "G8.6"
+   ],
+   "failed_in_the_frame": [],
+   "failed_proposal": [],
+   "cannot_measure": [
+    "G1.2",
+    "G1.5",
+    "G1.11",
+    "G1.15",
+    "G1.16"
+   ],
+   "may_reference": "yes (video endpoint)",
+   "may_pan_endpoint": "V4 / T-HW: yes from W0-in's side; the W0 master end is outside this brief",
+   "products_unverified": [
+    "basket-cj-jute-cotton-rope-cylinder-30-work",
+    "desk-organizer-cj-cave-stone-pen-cup-8x11",
+    "shelf-boxes-cj-felt-storage-bin-30x24-pair",
+    "waste-basket-aliexpress-washable-kraft-paper-bin-25x40"
+   ],
+   "products_live": [
+    "planter-zendrop-seagrass-belly-38x34"
+   ]
+  },
+  {
+   "frame": "K-girl-0 r2 fix3",
+   "kind": "code 2026-11-05: fix2 + a local horizontal warp of the left quarter (x < 600 at 1920)",
+   "fix_file": "assets/renders/poses/nordic/v7/pose-k-girl-0-v7-r2-fix3.png",
+   "graded": "assets/renders/poses/nordic/v7/pose-k-girl-0-v7-r2-graded-fix3-v5.png",
+   "criteria": [
+    {
+     "id": "G1.4",
+     "binding": true,
+     "value": {
+      "register_shift_px": [
+       6.17,
+       -1.53
+      ],
+      "register_scale_pct": [
+       -0.17,
+       0.9
+      ],
+      "residual_gated": {
+       "bands": [
+        2.42,
+        6.71
+       ],
+       "tiles": [
+        3.46,
+        9.43,
+        3.05,
+        2.83,
+        5.42
+       ],
+       "worst": 9.43,
+       "unregistered": {
+        "bands": [
+         0.21,
+         1.24
+        ],
+        "tiles": [
+         0.38,
+         1.32,
+         1.22,
+         0.43,
+         1.27
+        ],
+        "worst": 1.32
+       }
+      },
+      "masked_register": {
+       "shift_px": [
+        -1.11,
+        -1.35
+       ],
+       "scale_pct": [
+        -0.03,
+        0.11
+       ],
+       "masked_share": 0.112,
+       "worst_band_px_after": 1.69,
+       "worst_tile_px_after": 17.41
+      },
+      "named_lines_px": {
+       "upper ledge": {
+        "xcorr": 0,
+        "r": 0.885,
+        "nearest_peak": 0
+       },
+       "lower ledge": {
+        "xcorr": 0,
+        "r": 0.769,
+        "nearest_peak": 4
+       },
+       "band top (desk wall)": {
+        "xcorr": 0,
+        "r": 0.789,
+        "nearest_peak": 4
+       },
+       "desk top": {
+        "xcorr": -1,
+        "r": 0.638,
+        "nearest_peak": -1
+       },
+       "skirting top (desk wall)": {
+        "xcorr": 0,
+        "r": 0.818,
+        "nearest_peak": 0
+       },
+       "room corner": {
+        "xcorr": 2,
+        "r": 0.941,
+        "nearest_peak": 2
+       },
+       "desk left leg": {
+        "xcorr": 0,
+        "r": 0.564,
+        "nearest_peak": -20
+       },
+       "desk right leg": {
+        "xcorr": -1,
+        "r": 0.49,
+        "nearest_peak": -34
+       },
+       "bed foot right edge": {
+        "xcorr": 0,
+        "r": 0.637,
+        "nearest_peak": 1
+       }
+      },
+      "xcorr_box_ratios": {
+       "girl desk 90x50 (fixed) w": 0.9962
+      },
+      "register_by_region": {
+       "left 60 % (desk wall)": {
+        "shift_px": [
+         5.59,
+         -1.08
+        ],
+        "scale_pct": [
+         1.11,
+         0.95
+        ]
+       },
+       "right 40 % (near wall)": {
+        "shift_px": [
+         22.83,
+         27.15
+        ],
+        "scale_pct": [
+         -1.85,
+         0.01
+        ]
+       },
+       "middle 80 %": {
+        "shift_px": [
+         8.99,
+         -8.85
+        ],
+        "scale_pct": [
+         -0.85,
+         1.54
+        ]
+       }
+      },
+      "lines_by_peaks_1080": "left quarter: row 200 clay 8 / 26 / 72 -> 12 / 22 / 73 (a pair of edges drawn 8 px closer), row 330 69 / 76 / 207 -> 71 / 77 / 203, row 650 542 -> 539 / 545, row 900 414 / 446 / 496 / 515 / 521 -> 415 / 446 / 495 / 516 / 521; horizontal lines 0 / +-1",
+      "note": "the register is still not identifiable (regions -0.85 .. +1.54 %, shifts to 27 px; plain ECC +0.90 %); unregistered: tiles <= 1.32 px (rho >= 0.30), bands <= 1.24: within 2 px"
+     },
+     "threshold": "register shift <= 9.6 px and scale within 0.5 %; residual after register <= 2.0 px per band (gate text) / tile with shared structure (QA: response >= 0.10, rho >= 0.30) for pan endpoints, <= 9.6 px for video endpoints; named lines within +-19 px (G1.4, proposal C3). Where the ECC register contradicts the named lines (it is not identifiable on plain walls), QA reads the residual unregistered and says so",
+     "pass": true
+    },
+    {
+     "id": "G1.1",
+     "binding": true,
+     "value": "prints and doll unchanged (the warp stops at x 600, the prints start at ~630)",
+     "threshold": "every product the card's SKU",
+     "pass": true
+    },
+    {
+     "id": "G1.12",
+     "binding": true,
+     "value": "the local warp leaves no bend or seam at 200 % (overlays/g112-K-girl-0-left-200.jpg)",
+     "threshold": "0 seams, halos, fill artefacts at 100 % (Bible 'forbidden'; G1.12)",
+     "pass": true
+    },
+    {
+     "id": "G1.7-G1.9 (grading v5)",
+     "binding": true,
+     "value": {
+      "file": "assets/renders/poses/nordic/v7/pose-k-girl-0-v7-r2-graded-fix3-v5.png",
+      "agent_point": [
+       0.22,
+       0.08
+      ],
+      "agent_L": 92.7,
+      "black": 12.5,
+      "max_L": 96.5,
+      "px255": 0,
+      "qa": {
+       "uv": [
+        0.22,
+        0.08
+       ],
+       "L": 92.7,
+       "H": 34.4,
+       "S": 16.4,
+       "Lstar": 93.7,
+       "C": 2.0
+      }
+     },
+     "threshold": "Bible 1.8.4: the reference wall in range (living 90-94, bath 86-90 HSL L), H 32-40, C* <= 7 (B4), window wall 80-88, black 12-15, max <= 97 and no 255; the grading chapter's light fall-off on the back wall: by the corner 90-94, centre behind the picture 88-91, the right edge 82-86, continuous",
+     "pass": true
+    },
+    {
+     "id": "G1.14",
+     "binding": true,
+     "value": {
+      "T_CGirl": {
+       "pan": "T-CGirl pan (K-girl -> K-girl-0)",
+       "degrees": 33,
+       "bands": [
+        [
+         2.02,
+         58.99,
+         0.023
+        ],
+        [
+         0.11,
+         -295.32,
+         0.024
+        ],
+        [
+         -0.2,
+         28.76,
+         0.714
+        ],
+        [
+         0.37,
+         26.42,
+         0.672
+        ]
+       ],
+       "worst_reliable_px": 28.76,
+       "dL": 4.7,
+       "dE_mean": 11.14,
+       "clay_floor_px": 0.09
+      }
+     },
+     "threshold": "pan_reproject.check in the overlap: <= 2 px per band with response >= 0.05 and dL <= 1 (gates doc 7.1, proposal; the principle binding) (fails on the K-girl master's side)",
+     "pass": false
+    },
+    {
+     "id": "G8.6",
+     "binding": true,
+     "value": {
+      "baked": 4,
+      "live": [],
+      "unverified": 4
+     },
+     "threshold": "every baked card live at the supplier",
+     "pass": false
+    }
+   ],
+   "verdict": "pass in the frame (T-CGirl fails on the master's side; G8.6 the cards' liveness)",
+   "failed_binding": [
+    "G1.14",
+    "G8.6"
+   ],
+   "failed_in_the_frame": [],
+   "failed_proposal": [],
+   "cannot_measure": [
+    "G1.2",
+    "G1.5",
+    "G1.11",
+    "G1.15",
+    "G1.16"
+   ],
+   "may_reference": "yes",
+   "may_pan_endpoint": "no: T-CGirl 28.8 px from the K-girl master (-20.5 px, -1.86 % vertical)",
+   "products_unverified": [
+    "bedspread-cj-muslin-blanket-beige-150x200",
+    "bookshelf-cj-natural-wood-ledge-pair-42-x2",
+    "doll-aliexpress-linen-bunny-doll-063285",
+    "framed-prints-cj-charcoal-flower-silhouette-set3-30x40-boy"
+   ],
+   "products_live": []
+  }
+ ],
+ "m0_shell": {
+  "M0 seedream raw": {
+   "still": "assets/renders/living-room/nordic/v9/m0-shell-seedream.png",
+   "clay": "assets/blockout/house/framing/round5b/M0.png",
+   "points": {
+    "back wall floor line": [
+     {
+      "o": "h",
+      "at": 760,
+      "clay": 824.33,
+      "render_peaks": [
+       [
+        821.41,
+        6.7
+       ]
+      ],
+      "render": 821.41,
+      "d": -2.92
+     },
+     {
+      "o": "h",
+      "at": 860,
+      "clay": 834.88,
+      "render_peaks": [
+       [
+        832.28,
+        8.5
+       ]
+      ],
+      "render": 832.28,
+      "d": -2.6
+     },
+     {
+      "o": "h",
+      "at": 1780,
+      "clay": 936.01,
+      "render_peaks": [
+       [
+        933.66,
+        9.4
+       ]
+      ],
+      "render": 933.66,
+      "d": -2.35
+     },
+     {
+      "o": "h",
+      "at": 1880,
+      "clay": 947.07,
+      "render_peaks": [
+       [
+        945.05,
+        6.7
+       ]
+      ],
+      "render": 945.05,
+      "d": -2.02
+     }
+    ],
+    "back wall skirting top": [
+     {
+      "o": "h",
+      "at": 760,
+      "clay": 787.84,
+      "render_peaks": [
+       [
+        783.71,
+        2.0
+       ],
+       [
+        789.15,
+        1.3
+       ]
+      ],
+      "render": 789.15,
+      "d": 1.31
+     },
+     {
+      "o": "h",
+      "at": 860,
+      "clay": 797.61,
+      "render_peaks": [
+       [
+        792.05,
+        1.2
+       ],
+       [
+        798.3,
+        1.0
+       ],
+       [
+        805.28,
+        0.4
+       ]
+      ],
+      "render": 798.3,
+      "d": 0.69
+     },
+     {
+      "o": "h",
+      "at": 1780,
+      "clay": 885.11,
+      "render_peaks": [
+       [
+        880.83,
+        3.3
+       ],
+       [
+        886.07,
+        4.9
+       ]
+      ],
+      "render": 886.07,
+      "d": 0.96
+     },
+     {
+      "o": "h",
+      "at": 1880,
+      "clay": 895.01,
+      "render_peaks": [
+       [
+        890.95,
+        1.9
+       ],
+       [
+        896.16,
+        3.3
+       ]
+      ],
+      "render": 896.16,
+      "d": 1.15
+     }
+    ],
+    "back wall cornice": [
+     {
+      "o": "h",
+      "at": 900,
+      "clay": 118.36,
+      "render_peaks": [
+       [
+        114.89,
+        1.1
+       ],
+       [
+        119.97,
+        3.3
+       ]
+      ],
+      "render": 119.97,
+      "d": 1.61
+     },
+     {
+      "o": "h",
+      "at": 1000,
+      "clay": 103.18,
+      "render_peaks": [
+       [
+        98.71,
+        0.8
+       ],
+       [
+        105.24,
+        2.6
+       ]
+      ],
+      "render": 105.24,
+      "d": 2.06
+     },
+     {
+      "o": "h",
+      "at": 1100,
+      "clay": 88.41,
+      "render_peaks": [
+       [
+        83.52,
+        0.9
+       ],
+       [
+        90.18,
+        2.4
+       ]
+      ],
+      "render": 90.18,
+      "d": 1.77
+     },
+     {
+      "o": "h",
+      "at": 1450,
+      "clay": 34.88,
+      "render_peaks": [
+       [
+        36.18,
+        2.9
+       ]
+      ],
+      "render": 36.18,
+      "d": 1.3
+     }
+    ],
+    "room corner": [
+     {
+      "o": "v",
+      "at": 150,
+      "clay": 697.99,
+      "render_peaks": [
+       [
+        695.23,
+        1.3
+       ],
+       [
+        700.23,
+        3.7
+       ],
+       [
+        705.65,
+        2.6
+       ]
+      ],
+      "render": 700.23,
+      "d": 2.24
+     },
+     {
+      "o": "v",
+      "at": 250,
+      "clay": 697.63,
+      "render_peaks": [
+       [
+        684.74,
+        0.7
+       ],
+       [
+        688.84,
+        1.0
+       ],
+       [
+        692.42,
+        0.9
+       ],
+       [
+        695.53,
+        0.9
+       ],
+       [
+        700.6,
+        2.3
+       ]
+      ],
+      "render": 700.6,
+      "d": 2.97
+     },
+     {
+      "o": "v",
+      "at": 350,
+      "clay": 698.08,
+      "render_peaks": [
+       [
+        679.97,
+        0.7
+       ],
+       [
+        686.28,
+        0.9
+       ],
+       [
+        688.85,
+        1.0
+       ],
+       [
+        694.15,
+        1.0
+       ],
+       [
+        700.45,
+        2.6
+       ]
+      ],
+      "render": 700.45,
+      "d": 2.37
+     },
+     {
+      "o": "v",
+      "at": 450,
+      "clay": 697.98,
+      "render_peaks": [
+       [
+        700.36,
+        3.3
+       ]
+      ],
+      "render": 700.36,
+      "d": 2.38
+     }
+    ],
+    "window sill top edge": [
+     {
+      "o": "h",
+      "at": 200,
+      "clay": 710.74,
+      "render_peaks": [
+       [
+        708.43,
+        14.0
+       ],
+       [
+        718.04,
+        7.7
+       ]
+      ],
+      "render": 708.43,
+      "d": -2.31
+     },
+     {
+      "o": "h",
+      "at": 400,
+      "clay": 684.39,
+      "render_peaks": [
+       [
+        668.25,
+        5.4
+       ],
+       [
+        682.36,
+        14.3
+       ],
+       [
+        689.76,
+        5.6
+       ]
+      ],
+      "render": 682.36,
+      "d": -2.03
+     },
+     {
+      "o": "h",
+      "at": 520,
+      "clay": 668.48,
+      "render_peaks": [
+       [
+        666.14,
+        12.2
+       ],
+       [
+        672.58,
+        8.3
+       ]
+      ],
+      "render": 666.14,
+      "d": -2.34
+     }
+    ]
+   },
+   "fits": {
+    "homography_all_planes_max_px": 2.68,
+    "back_wall_homography_on_back_max_px": 2.52,
+    "back_wall_homography_on_window_wall_max_px": 3.07,
+    "affine_all_planes_max_px": 3.11,
+    "vertical_affine_on_horizontal_lines": {
+     "scale_pct": -0.376,
+     "shear": 0.00132,
+     "offset_px": 0.53,
+     "residual_max_px": 2.74
+    },
+    "back_wall_vanishing_point": {
+     "clay": [
+      -1860.0,
+      537.0
+     ],
+     "render": [
+      -1829.0,
+      536.0
+     ]
+    }
+   },
+   "max_abs_px": 2.97,
+   "per_line_d": {
+    "back wall floor line": [
+     -2.92,
+     -2.6,
+     -2.35,
+     -2.02
+    ],
+    "back wall skirting top": [
+     1.31,
+     0.69,
+     0.96,
+     1.15
+    ],
+    "back wall cornice": [
+     1.61,
+     2.06,
+     1.77,
+     1.3
+    ],
+    "room corner": [
+     2.24,
+     2.97,
+     2.37,
+     2.38
+    ],
+    "window sill top edge": [
+     -2.31,
+     -2.03,
+     -2.34
+    ]
+   }
+  },
+  "M0 seedream fix": {
+   "still": "assets/renders/living-room/nordic/v9/m0-1-2-shell-seedream-fix.png",
+   "clay": "assets/blockout/house/framing/round5b/M0.png",
+   "points": {
+    "back wall floor line": [
+     {
+      "o": "h",
+      "at": 760,
+      "clay": 824.33,
+      "render_peaks": [
+       [
+        822.98,
+        7.3
+       ]
+      ],
+      "render": 822.98,
+      "d": -1.35
+     },
+     {
+      "o": "h",
+      "at": 860,
+      "clay": 834.88,
+      "render_peaks": [
+       [
+        833.99,
+        8.4
+       ]
+      ],
+      "render": 833.99,
+      "d": -0.89
+     },
+     {
+      "o": "h",
+      "at": 1780,
+      "clay": 936.01,
+      "render_peaks": [
+       [
+        935.19,
+        9.6
+       ]
+      ],
+      "render": 935.19,
+      "d": -0.82
+     },
+     {
+      "o": "h",
+      "at": 1880,
+      "clay": 947.07,
+      "render_peaks": [
+       [
+        946.63,
+        6.5
+       ]
+      ],
+      "render": 946.63,
+      "d": -0.44
+     }
+    ],
+    "back wall skirting top": [
+     {
+      "o": "h",
+      "at": 760,
+      "clay": 787.84,
+      "render_peaks": [
+       [
+        784.93,
+        2.1
+       ],
+       [
+        790.49,
+        1.2
+       ]
+      ],
+      "render": 790.49,
+      "d": 2.65
+     },
+     {
+      "o": "h",
+      "at": 860,
+      "clay": 797.61,
+      "render_peaks": [
+       [
+        793.49,
+        1.2
+       ],
+       [
+        799.76,
+        1.0
+       ],
+       [
+        806.03,
+        0.4
+       ],
+       [
+        808.84,
+        0.3
+       ]
+      ],
+      "render": 799.76,
+      "d": 2.15
+     },
+     {
+      "o": "h",
+      "at": 1780,
+      "clay": 885.11,
+      "render_peaks": [
+       [
+        881.9,
+        3.2
+       ],
+       [
+        887.2,
+        4.9
+       ]
+      ],
+      "render": 887.2,
+      "d": 2.09
+     },
+     {
+      "o": "h",
+      "at": 1880,
+      "clay": 895.01,
+      "render_peaks": [
+       [
+        886.15,
+        0.8
+       ],
+       [
+        892.07,
+        2.0
+       ],
+       [
+        897.41,
+        3.0
+       ]
+      ],
+      "render": 897.41,
+      "d": 2.4
+     }
+    ],
+    "back wall cornice": [
+     {
+      "o": "h",
+      "at": 900,
+      "clay": 118.36,
+      "render_peaks": [
+       [
+        112.73,
+        1.1
+       ],
+       [
+        117.87,
+        3.4
+       ]
+      ],
+      "render": 117.87,
+      "d": -0.49
+     },
+     {
+      "o": "h",
+      "at": 1000,
+      "clay": 103.18,
+      "render_peaks": [
+       [
+        96.31,
+        0.8
+       ],
+       [
+        102.96,
+        2.6
+       ]
+      ],
+      "render": 102.96,
+      "d": -0.22
+     },
+     {
+      "o": "h",
+      "at": 1100,
+      "clay": 88.41,
+      "render_peaks": [
+       [
+        81.02,
+        1.0
+       ],
+       [
+        87.85,
+        2.3
+       ]
+      ],
+      "render": 87.85,
+      "d": -0.56
+     },
+     {
+      "o": "h",
+      "at": 1450,
+      "clay": 34.88,
+      "render_peaks": [
+       [
+        33.31,
+        2.8
+       ]
+      ],
+      "render": 33.31,
+      "d": -1.57
+     }
+    ],
+    "room corner": [
+     {
+      "o": "v",
+      "at": 150,
+      "clay": 697.99,
+      "render_peaks": [
+       [
+        695.56,
+        1.3
+       ],
+       [
+        700.28,
+        3.8
+       ],
+       [
+        705.68,
+        2.5
+       ]
+      ],
+      "render": 700.28,
+      "d": 2.29
+     },
+     {
+      "o": "v",
+      "at": 250,
+      "clay": 697.63,
+      "render_peaks": [
+       [
+        684.72,
+        0.7
+       ],
+       [
+        688.9,
+        1.0
+       ],
+       [
+        692.76,
+        0.9
+       ],
+       [
+        695.21,
+        0.9
+       ],
+       [
+        700.46,
+        2.4
+       ]
+      ],
+      "render": 700.46,
+      "d": 2.83
+     },
+     {
+      "o": "v",
+      "at": 350,
+      "clay": 698.08,
+      "render_peaks": [
+       [
+        685.27,
+        0.9
+       ],
+       [
+        688.81,
+        0.9
+       ],
+       [
+        694.37,
+        0.9
+       ],
+       [
+        700.18,
+        2.8
+       ]
+      ],
+      "render": 700.18,
+      "d": 2.1
+     },
+     {
+      "o": "v",
+      "at": 450,
+      "clay": 697.98,
+      "render_peaks": [
+       [
+        700.03,
+        3.5
+       ]
+      ],
+      "render": 700.03,
+      "d": 2.05
+     }
+    ],
+    "window sill top edge": [
+     {
+      "o": "h",
+      "at": 200,
+      "clay": 710.74,
+      "render_peaks": [
+       [
+        691.23,
+        11.4
+       ],
+       [
+        709.52,
+        14.0
+       ],
+       [
+        719.27,
+        7.3
+       ]
+      ],
+      "render": 709.52,
+      "d": -1.22
+     },
+     {
+      "o": "h",
+      "at": 400,
+      "clay": 684.39,
+      "render_peaks": [
+       [
+        669.11,
+        5.3
+       ],
+       [
+        683.17,
+        14.5
+       ],
+       [
+        690.84,
+        5.6
+       ]
+      ],
+      "render": 683.17,
+      "d": -1.22
+     },
+     {
+      "o": "h",
+      "at": 520,
+      "clay": 668.48,
+      "render_peaks": [
+       [
+        666.96,
+        11.8
+       ],
+       [
+        673.39,
+        8.5
+       ]
+      ],
+      "render": 666.96,
+      "d": -1.52
+     }
+    ]
+   },
+   "fits": {
+    "homography_all_planes_max_px": 2.64,
+    "back_wall_homography_on_back_max_px": 2.33,
+    "back_wall_homography_on_window_wall_max_px": 4.65,
+    "affine_all_planes_max_px": 3.38,
+    "vertical_affine_on_horizontal_lines": {
+     "scale_pct": 0.128,
+     "shear": 0.00081,
+     "offset_px": -1.73,
+     "residual_max_px": 2.76
+    },
+    "back_wall_vanishing_point": {
+     "clay": [
+      -1860.0,
+      537.0
+     ],
+     "render": [
+      -1828.0,
+      537.0
+     ]
+    }
+   },
+   "max_abs_px": 2.83,
+   "per_line_d": {
+    "back wall floor line": [
+     -1.35,
+     -0.89,
+     -0.82,
+     -0.44
+    ],
+    "back wall skirting top": [
+     2.65,
+     2.15,
+     2.09,
+     2.4
+    ],
+    "back wall cornice": [
+     -0.49,
+     -0.22,
+     -0.56,
+     -1.57
+    ],
+    "room corner": [
+     2.29,
+     2.83,
+     2.1,
+     2.05
+    ],
+    "window sill top edge": [
+     -1.22,
+     -1.22,
+     -1.52
+    ]
+   }
+  }
+ },
+ "light_m0": {
+  "M0 seedream fix (v5)": {
+   "file": "assets/renders/living-room/nordic/v9/m0-1-2-shell-seedream-graded-fix-v5.png",
+   "back_wall": {
+    "uv": [
+     0.4269,
+     0.4156
+    ],
+    "L": 92.2,
+    "H": 36.7,
+    "S": 45.7,
+    "Lstar": 94.02,
+    "C": 6.39
+   },
+   "window_wall": {
+    "uv": [
+     0.352,
+     0.415
+    ],
+    "L": 86.4,
+    "H": 36.1,
+    "S": 36.2,
+    "Lstar": 89.1,
+    "C": 8.58
+   },
+   "fall_off": {
+    "by the corner (0.427, 0.416) [90-94]": {
+     "uv": [
+      0.4269,
+      0.4156
+     ],
+     "L": 92.2,
+     "H": 36.7,
+     "S": 45.7,
+     "Lstar": 94.02,
+     "C": 6.39,
+     "range": [
+      90,
+      94
+     ],
+     "ok": true
+    },
+    "centre, above the triptych (0.62, 0.30) [88-91]": {
+     "uv": [
+      0.62,
+      0.3
+     ],
+     "L": 96.5,
+     "H": 63.3,
+     "S": 0.4,
+     "Lstar": 96.73,
+     "C": 0.02,
+     "range": [
+      88,
+      91
+     ],
+     "ok": false
+    },
+    "centre, between triptych and sofa (0.62, 0.55) [88-91]": {
+     "uv": [
+      0.62,
+      0.55
+     ],
+     "L": 96.5,
+     "H": 60.0,
+     "S": 0.0,
+     "Lstar": 96.73,
+     "C": 0.02,
+     "range": [
+      88,
+      91
+     ],
+     "ok": false
+    },
+    "right edge of the back wall (0.97, 0.31) [82-86]": {
+     "uv": [
+      0.97,
+      0.31
+     ],
+     "L": 90.9,
+     "H": 38.1,
+     "S": 31.1,
+     "Lstar": 92.75,
+     "C": 5.01,
+     "range": [
+      82,
+      86
+     ],
+     "ok": false
+    }
+   },
+   "black": 12.5,
+   "max_L": 96.5,
+   "px255": 0,
+   "shape": {
+    "Lstar_p1": 36.0,
+    "Lstar_p5": 51.9,
+    "Lstar_p50": 94.9,
+    "Lstar_p95": 96.7,
+    "share_Lstar_over_90": 0.687,
+    "mean_C": 6.54,
+    "local_contrast_median": 1.3,
+    "regions_Lstar": {
+     "charcoal cushion": 39.6,
+     "rug / floor right of the sofa": 95.1,
+     "under the sofa right of the table (shadow)": 19.9,
+     "wood floor by the window": 70.8
+    }
+   }
+  },
+  "M0 seedream raw": {
+   "file": "assets/renders/living-room/nordic/v9/m0-1-2-shell-seedream-fix.png",
+   "back_wall": {
+    "uv": [
+     0.4269,
+     0.4156
+    ],
+    "L": 72.8,
+    "H": 32.0,
+    "S": 13.8,
+    "Lstar": 76.07,
+    "C": 6.58
+   },
+   "window_wall": {
+    "uv": [
+     0.352,
+     0.415
+    ],
+    "L": 66.4,
+    "H": 33.2,
+    "S": 14.6,
+    "Lstar": 70.32,
+    "C": 8.84
+   },
+   "fall_off": {
+    "by the corner (0.427, 0.416) [90-94]": {
+     "uv": [
+      0.4269,
+      0.4156
+     ],
+     "L": 72.8,
+     "H": 32.0,
+     "S": 13.8,
+     "Lstar": 76.07,
+     "C": 6.58,
+     "range": [
+      90,
+      94
+     ],
+     "ok": false
+    },
+    "centre, above the triptych (0.62, 0.30) [88-91]": {
+     "uv": [
+      0.62,
+      0.3
+     ],
+     "L": 81.9,
+     "H": 38.3,
+     "S": 8.8,
+     "Lstar": 84.19,
+     "C": 2.83,
+     "range": [
+      88,
+      91
+     ],
+     "ok": false
+    },
+    "centre, between triptych and sofa (0.62, 0.55) [88-91]": {
+     "uv": [
+      0.62,
+      0.55
+     ],
+     "L": 84.5,
+     "H": 34.0,
+     "S": 9.9,
+     "Lstar": 86.38,
+     "C": 2.66,
+     "range": [
+      88,
+      91
+     ],
+     "ok": false
+    },
+    "right edge of the back wall (0.97, 0.31) [82-86]": {
+     "uv": [
+      0.97,
+      0.31
+     ],
+     "L": 70.6,
+     "H": 33.6,
+     "S": 9.7,
+     "Lstar": 73.87,
+     "C": 5.1,
+     "range": [
+      82,
+      86
+     ],
+     "ok": false
+    }
+   },
+   "black": 3.3,
+   "max_L": 100.0,
+   "px255": 3222,
+   "shape": {
+    "Lstar_p1": 23.1,
+    "Lstar_p5": 37.3,
+    "Lstar_p50": 78.3,
+    "Lstar_p95": 95.7,
+    "share_Lstar_over_90": 0.137,
+    "mean_C": 7.91,
+    "local_contrast_median": 3.08,
+    "regions_Lstar": {
+     "charcoal cushion": 26.5,
+     "rug / floor right of the sofa": 79.4,
+     "under the sofa right of the table (shadow)": 8.0,
+     "wood floor by the window": 53.7
+    }
+   }
+  },
+  "M0 v7 r2 (v5)": {
+   "file": "assets/renders/living-room/nordic/v7/m0-v7-r2-graded-v5.png",
+   "back_wall": {
+    "uv": [
+     0.4269,
+     0.4156
+    ],
+    "L": 84.4,
+    "H": 34.4,
+    "S": 46.3,
+    "Lstar": 87.68,
+    "C": 12.68
+   },
+   "window_wall": {
+    "uv": [
+     0.352,
+     0.415
+    ],
+    "L": 96.5,
+    "H": 0.0,
+    "S": 0.0,
+    "Lstar": 96.73,
+    "C": 0.02
+   },
+   "fall_off": {
+    "by the corner (0.427, 0.416) [90-94]": {
+     "uv": [
+      0.4269,
+      0.4156
+     ],
+     "L": 84.4,
+     "H": 34.4,
+     "S": 46.3,
+     "Lstar": 87.68,
+     "C": 12.68,
+     "range": [
+      90,
+      94
+     ],
+     "ok": false
+    },
+    "centre, above the triptych (0.62, 0.30) [88-91]": {
+     "uv": [
+      0.62,
+      0.3
+     ],
+     "L": 93.0,
+     "H": 35.1,
+     "S": 52.0,
+     "Lstar": 94.59,
+     "C": 6.22,
+     "range": [
+      88,
+      91
+     ],
+     "ok": false
+    },
+    "centre, between triptych and sofa (0.62, 0.55) [88-91]": {
+     "uv": [
+      0.62,
+      0.55
+     ],
+     "L": 59.0,
+     "H": 42.9,
+     "S": 14.8,
+     "Lstar": 64.9,
+     "C": 12.66,
+     "range": [
+      88,
+      91
+     ],
+     "ok": false
+    },
+    "right edge of the back wall (0.97, 0.31) [82-86]": {
+     "uv": [
+      0.97,
+      0.31
+     ],
+     "L": 88.9,
+     "H": 32.5,
+     "S": 51.7,
+     "Lstar": 91.11,
+     "C": 9.62,
+     "range": [
+      82,
+      86
+     ],
+     "ok": false
+    }
+   },
+   "black": 12.5,
+   "max_L": 96.7,
+   "px255": 0,
+   "shape": {
+    "Lstar_p1": 36.3,
+    "Lstar_p5": 64.0,
+    "Lstar_p50": 91.8,
+    "Lstar_p95": 96.7,
+    "share_Lstar_over_90": 0.625,
+    "mean_C": 9.85,
+    "local_contrast_median": 1.6,
+    "regions_Lstar": {
+     "charcoal cushion": 88.3,
+     "rug / floor right of the sofa": 93.7,
+     "under the sofa right of the table (shadow)": 86.1,
+     "wood floor by the window": 96.7
+    }
+   }
+  },
+  "M0 1.2 gpt fix (v5, 11-04)": {
+   "file": "assets/renders/living-room/nordic/v8/m0-v8b-r2-graded-fix-v5.png",
+   "back_wall": {
+    "uv": [
+     0.4269,
+     0.4156
+    ],
+    "L": 92.0,
+    "H": 37.2,
+    "S": 56.0,
+    "Lstar": 94.09,
+    "C": 7.78
+   },
+   "window_wall": {
+    "uv": [
+     0.352,
+     0.415
+    ],
+    "L": 87.0,
+    "H": 34.0,
+    "S": 57.8,
+    "Lstar": 89.99,
+    "C": 12.94
+   },
+   "fall_off": {
+    "by the corner (0.427, 0.416) [90-94]": {
+     "uv": [
+      0.4269,
+      0.4156
+     ],
+     "L": 92.0,
+     "H": 37.2,
+     "S": 56.0,
+     "Lstar": 94.09,
+     "C": 7.78,
+     "range": [
+      90,
+      94
+     ],
+     "ok": true
+    },
+    "centre, above the triptych (0.62, 0.30) [88-91]": {
+     "uv": [
+      0.62,
+      0.3
+     ],
+     "L": 96.0,
+     "H": 60.0,
+     "S": 12.3,
+     "Lstar": 96.67,
+     "C": 1.27,
+     "range": [
+      88,
+      91
+     ],
+     "ok": false
+    },
+    "centre, between triptych and sofa (0.62, 0.55) [88-91]": {
+     "uv": [
+      0.62,
+      0.55
+     ],
+     "L": 95.9,
+     "H": 60.0,
+     "S": 14.5,
+     "Lstar": 96.65,
+     "C": 1.53,
+     "range": [
+      88,
+      91
+     ],
+     "ok": false
+    },
+    "right edge of the back wall (0.97, 0.31) [82-86]": {
+     "uv": [
+      0.97,
+      0.31
+     ],
+     "L": 92.0,
+     "H": 35.8,
+     "S": 55.8,
+     "Lstar": 93.96,
+     "C": 7.63,
+     "range": [
+      82,
+      86
+     ],
+     "ok": false
+    }
+   },
+   "black": 13.5,
+   "max_L": 96.5,
+   "px255": 0,
+   "shape": {
+    "Lstar_p1": 37.8,
+    "Lstar_p5": 59.4,
+    "Lstar_p50": 93.8,
+    "Lstar_p95": 96.7,
+    "share_Lstar_over_90": 0.696,
+    "mean_C": 8.99,
+    "local_contrast_median": 1.0,
+    "regions_Lstar": {
+     "charcoal cushion": 54.8,
+     "rug / floor right of the sofa": 91.7,
+     "under the sofa right of the table (shadow)": 27.9,
+     "wood floor by the window": 78.4
+    }
+   }
+  }
+ },
+ "light_fix3": {
+  "B1 r3 fix3": {
+   "file": "assets/renders/bath/nordic/v7/b1-v7-r3-graded-fix3-v5.png",
+   "agent_point": [
+    0.419,
+    0.174
+   ],
+   "agent_L": 89.2,
+   "black": 12.5,
+   "max_L": 96.5,
+   "px255": 0,
+   "qa": {
+    "uv": [
+     0.419,
+     0.174
+    ],
+    "L": 89.2,
+    "H": 35.9,
+    "S": 29.2,
+    "Lstar": 91.06,
+    "C": 5.42
+   }
+  },
+  "CB-0 b1r3f3": {
+   "file": "assets/renders/poses/nordic/v7/pose-cb-0-v7-graded-b1r3f3-v5.png",
+   "agent_point": [
+    0.6449,
+    0.1701
+   ],
+   "agent_L": 88.9,
+   "black": 12.5,
+   "max_L": 96.5,
+   "px255": 0,
+   "qa": {
+    "uv": [
+     0.6449,
+     0.1701
+    ],
+    "L": 88.9,
+    "H": 35.7,
+    "S": 29.1,
+    "Lstar": 90.88,
+    "C": 5.66
+   }
+  },
+  "W0-in r2 fix3": {
+   "file": "assets/renders/poses/nordic/v7/pose-w0-in-v7-r2-graded-fix3-v5.png",
+   "agent_point": [
+    0.5,
+    0.4
+   ],
+   "agent_L": 92.5,
+   "black": 12.5,
+   "max_L": 96.5,
+   "px255": 0,
+   "qa": {
+    "uv": [
+     0.5,
+     0.4
+    ],
+    "L": 92.5,
+    "H": 36.2,
+    "S": 27.8,
+    "Lstar": 93.78,
+    "C": 3.69
+   }
+  },
+  "M0p 1.2 fix3": {
+   "file": "assets/renders/poses/nordic/v8/pose-m0p-v8b-graded-fix3-v5.png",
+   "agent_point": [
+    0.1221393495798111,
+    0.40362900495529175
+   ],
+   "agent_L": 92.1,
+   "black": 12.5,
+   "max_L": 96.5,
+   "px255": 0,
+   "qa": {
+    "uv": [
+     0.1221,
+     0.4036
+    ],
+    "L": 92.1,
+    "H": 36.8,
+    "S": 33.6,
+    "Lstar": 93.63,
+    "C": 4.77
+   }
+  },
+  "K-girl-0 r2 fix3": {
+   "file": "assets/renders/poses/nordic/v7/pose-k-girl-0-v7-r2-graded-fix3-v5.png",
+   "agent_point": [
+    0.22,
+    0.08
+   ],
+   "agent_L": 92.7,
+   "black": 12.5,
+   "max_L": 96.5,
+   "px255": 0,
+   "qa": {
+    "uv": [
+     0.22,
+     0.08
+    ],
+    "L": 92.7,
+    "H": 34.4,
+    "S": 16.4,
+    "Lstar": 93.7,
+    "C": 2.0
+   }
+  }
+ },
+ "pairs": [
+  {
+   "a": "B1 r3 fix3",
+   "b": "CB-0 b1r3f3",
+   "pan": "T-CBath pan (CB-0 -> B1)",
+   "degrees": 22,
+   "render": {
+    "size": [
+     1920,
+     1080
+    ],
+    "overlap_u": [
+     0.521,
+     0.999
+    ],
+    "overlap_v": [
+     0.0,
+     0.999
+    ],
+    "shift_px": {
+     "dx": 0.01,
+     "dy": -0.0,
+     "response": 0.95
+    },
+    "bands": [
+     {
+      "u": [
+       0.521,
+       0.641
+      ],
+      "dx_px": 0.04,
+      "dy_px": -0.04,
+      "response": 0.969
+     },
+     {
+      "u": [
+       0.641,
+       0.76
+      ],
+      "dx_px": 0.02,
+      "dy_px": -0.01,
+      "response": 0.976
+     },
+     {
+      "u": [
+       0.76,
+       0.88
+      ],
+      "dx_px": -0.01,
+      "dy_px": 0.01,
+      "response": 0.995
+     },
+     {
+      "u": [
+       0.88,
+       0.999
+      ],
+      "dx_px": 0.06,
+      "dy_px": -0.0,
+      "response": 0.969
+     }
+    ],
+    "deltaE": {
+     "mean": 1.0,
+     "p95": 2.14,
+     "share_over_5": 0.001
+    },
+    "L_mean": {
+     "a": 72.5,
+     "b": 71.7
+    },
+    "sheet": "/home/user/homedesign-app/qa/reports/2026-11-05-m0-seedream-fix3-g1/overlays/pair-B1_r3_fix3-CB-0_b1r3f3.jpg",
+    "worst_band_px": 0.06,
+    "worst_band_px_reliable": 0.06,
+    "bands_reliable": 4,
+    "dL_mean": 0.8
+   },
+   "clay": {
+    "size": [
+     1920,
+     1080
+    ],
+    "overlap_u": [
+     0.521,
+     0.999
+    ],
+    "overlap_v": [
+     0.0,
+     0.999
+    ],
+    "shift_px": {
+     "dx": 0.05,
+     "dy": 0.01,
+     "response": 0.538
+    },
+    "bands": [
+     {
+      "u": [
+       0.521,
+       0.641
+      ],
+      "dx_px": -0.05,
+      "dy_px": 0.07,
+      "response": 0.938
+     },
+     {
+      "u": [
+       0.641,
+       0.76
+      ],
+      "dx_px": -0.01,
+      "dy_px": 0.04,
+      "response": 0.546
+     },
+     {
+      "u": [
+       0.76,
+       0.88
+      ],
+      "dx_px": -49.99,
+      "dy_px": -41.33,
+      "response": 0.069
+     },
+     {
+      "u": [
+       0.88,
+       0.999
+      ],
+      "dx_px": 0.72,
+      "dy_px": 0.41,
+      "response": 0.125
+     }
+    ],
+    "deltaE": {
+     "mean": 3.23,
+     "p95": 16.49,
+     "share_over_5": 0.195
+    },
+    "L_mean": {
+     "a": 75.0,
+     "b": 77.9
+    },
+    "worst_band_px": 49.99,
+    "worst_band_px_reliable": 49.99,
+    "bands_reliable": 4,
+    "dL_mean": 2.9
+   },
+   "clay_note": "no r3 clay of CB-0 (round4/r3-2026-11-03/poses/ is empty): the floor is the B1 r3 clay against the round-4 CB-0 clay (no planter / brush proxies)"
+  },
+  {
+   "a": "B1 r3 fix3",
+   "b": "B2 r3 fix2",
+   "pan": "P-B pan",
+   "degrees": 35,
+   "render": {
+    "size": [
+     1920,
+     1080
+    ],
+    "overlap_u": [
+     0.0,
+     0.38
+    ],
+    "overlap_v": [
+     0.0,
+     0.999
+    ],
+    "shift_px": {
+     "dx": 0.08,
+     "dy": 0.4,
+     "response": 0.104
+    },
+    "bands": [
+     {
+      "u": [
+       0.0,
+       0.095
+      ],
+      "dx_px": -9.04,
+      "dy_px": 8.11,
+      "response": 0.194
+     },
+     {
+      "u": [
+       0.095,
+       0.19
+      ],
+      "dx_px": -1.37,
+      "dy_px": -58.74,
+      "response": 0.007
+     },
+     {
+      "u": [
+       0.19,
+       0.284
+      ],
+      "dx_px": -3.47,
+      "dy_px": 7.2,
+      "response": -0.007
+     },
+     {
+      "u": [
+       0.284,
+       0.38
+      ],
+      "dx_px": -0.6,
+      "dy_px": 0.46,
+      "response": 0.298
+     }
+    ],
+    "deltaE": {
+     "mean": 10.11,
+     "p95": 24.29,
+     "share_over_5": 0.733
+    },
+    "L_mean": {
+     "a": 67.6,
+     "b": 68.2
+    },
+    "sheet": "/home/user/homedesign-app/qa/reports/2026-11-05-m0-seedream-fix3-g1/overlays/pair-B1_r3_fix3-B2_r3_fix2.jpg",
+    "worst_band_px": 58.74,
+    "worst_band_px_reliable": 9.04,
+    "bands_reliable": 2,
+    "dL_mean": 0.6
+   },
+   "clay": {
+    "size": [
+     1920,
+     1080
+    ],
+    "overlap_u": [
+     0.0,
+     0.38
+    ],
+    "overlap_v": [
+     0.0,
+     0.999
+    ],
+    "shift_px": {
+     "dx": 0.57,
+     "dy": 0.01,
+     "response": 0.726
+    },
+    "bands": [
+     {
+      "u": [
+       0.0,
+       0.095
+      ],
+      "dx_px": 2.21,
+      "dy_px": 2.07,
+      "response": 0.274
+     },
+     {
+      "u": [
+       0.095,
+       0.19
+      ],
+      "dx_px": -0.03,
+      "dy_px": 0.02,
+      "response": 0.767
+     },
+     {
+      "u": [
+       0.19,
+       0.284
+      ],
+      "dx_px": 0.02,
+      "dy_px": 0.56,
+      "response": 0.171
+     },
+     {
+      "u": [
+       0.284,
+       0.38
+      ],
+      "dx_px": 0.05,
+      "dy_px": -0.04,
+      "response": 0.851
+     }
+    ],
+    "deltaE": {
+     "mean": 7.71,
+     "p95": 16.23,
+     "share_over_5": 0.724
+    },
+    "L_mean": {
+     "a": 73.4,
+     "b": 65.7
+    },
+    "worst_band_px": 2.21,
+    "worst_band_px_reliable": 2.21,
+    "bands_reliable": 4,
+    "dL_mean": 7.7
+   }
+  },
+  {
+   "a": "K-girl fix",
+   "b": "K-girl-0 r2 fix3",
+   "pan": "T-CGirl pan (K-girl -> K-girl-0)",
+   "degrees": 33,
+   "render": {
+    "size": [
+     1920,
+     1080
+    ],
+    "overlap_u": [
+     0.0,
+     0.335
+    ],
+    "overlap_v": [
+     0.0,
+     0.999
+    ],
+    "shift_px": {
+     "dx": -0.71,
+     "dy": 28.46,
+     "response": 0.209
+    },
+    "bands": [
+     {
+      "u": [
+       0.0,
+       0.083
+      ],
+      "dx_px": 2.02,
+      "dy_px": 58.99,
+      "response": 0.023
+     },
+     {
+      "u": [
+       0.083,
+       0.167
+      ],
+      "dx_px": 0.11,
+      "dy_px": -295.32,
+      "response": 0.024
+     },
+     {
+      "u": [
+       0.167,
+       0.251
+      ],
+      "dx_px": -0.2,
+      "dy_px": 28.76,
+      "response": 0.714
+     },
+     {
+      "u": [
+       0.251,
+       0.335
+      ],
+      "dx_px": 0.37,
+      "dy_px": 26.42,
+      "response": 0.672
+     }
+    ],
+    "deltaE": {
+     "mean": 11.14,
+     "p95": 29.66,
+     "share_over_5": 0.818
+    },
+    "L_mean": {
+     "a": 71.0,
+     "b": 75.7
+    },
+    "sheet": "/home/user/homedesign-app/qa/reports/2026-11-05-m0-seedream-fix3-g1/overlays/pair-K-girl_fix-K-girl-0_r2_fix3.jpg",
+    "worst_band_px": 295.32,
+    "worst_band_px_reliable": 28.76,
+    "bands_reliable": 2,
+    "dL_mean": 4.7
+   },
+   "clay": {
+    "size": [
+     1920,
+     1080
+    ],
+    "overlap_u": [
+     0.0,
+     0.335
+    ],
+    "overlap_v": [
+     0.0,
+     0.999
+    ],
+    "shift_px": {
+     "dx": 0.03,
+     "dy": 0.03,
+     "response": 0.909
+    },
+    "bands": [
+     {
+      "u": [
+       0.0,
+       0.083
+      ],
+      "dx_px": 0.09,
+      "dy_px": 0.02,
+      "response": 0.969
+     },
+     {
+      "u": [
+       0.083,
+       0.167
+      ],
+      "dx_px": 0.04,
+      "dy_px": -0.05,
+      "response": 0.923
+     },
+     {
+      "u": [
+       0.167,
+       0.251
+      ],
+      "dx_px": -0.02,
+      "dy_px": 0.01,
+      "response": 0.947
+     },
+     {
+      "u": [
+       0.251,
+       0.335
+      ],
+      "dx_px": -0.02,
+      "dy_px": -0.01,
+      "response": 0.952
+     }
+    ],
+    "deltaE": {
+     "mean": 0.5,
+     "p95": 1.24,
+     "share_over_5": 0.002
+    },
+    "L_mean": {
+     "a": 74.3,
+     "b": 74.3
+    },
+    "worst_band_px": 0.09,
+    "worst_band_px_reliable": 0.09,
+    "bands_reliable": 4,
+    "dL_mean": 0.0
+   }
+  },
+  {
+   "a": "M0 seedream fix",
+   "b": "M0p 1.2 fix3",
+   "pan": "P0 pan (M0 seedream -> M0p from the gpt render: different renders)",
+   "degrees": 25,
+   "render": {
+    "size": [
+     1920,
+     1080
+    ],
+    "overlap_u": [
+     0.0,
+     0.422
+    ],
+    "overlap_v": [
+     0.0,
+     0.999
+    ],
+    "shift_px": {
+     "dx": -0.11,
+     "dy": -0.41,
+     "response": 0.204
+    },
+    "bands": [
+     {
+      "u": [
+       0.0,
+       0.105
+      ],
+      "dx_px": -2.64,
+      "dy_px": 0.67,
+      "response": 0.146
+     },
+     {
+      "u": [
+       0.105,
+       0.211
+      ],
+      "dx_px": -7.34,
+      "dy_px": 2.26,
+      "response": 0.137
+     },
+     {
+      "u": [
+       0.211,
+       0.317
+      ],
+      "dx_px": -0.16,
+      "dy_px": -0.27,
+      "response": 0.265
+     },
+     {
+      "u": [
+       0.317,
+       0.422
+      ],
+      "dx_px": 0.02,
+      "dy_px": -0.05,
+      "response": 0.541
+     }
+    ],
+    "deltaE": {
+     "mean": 9.13,
+     "p95": 32.79,
+     "share_over_5": 0.649
+    },
+    "L_mean": {
+     "a": 90.3,
+     "b": 86.1
+    },
+    "sheet": "/home/user/homedesign-app/qa/reports/2026-11-05-m0-seedream-fix3-g1/overlays/pair-M0_seedream_fix-M0p_1.2_fix3.jpg",
+    "worst_band_px": 7.34,
+    "worst_band_px_reliable": 7.34,
+    "bands_reliable": 4,
+    "dL_mean": 4.2
+   },
+   "clay": {
+    "size": [
+     1920,
+     1080
+    ],
+    "overlap_u": [
+     0.0,
+     0.422
+    ],
+    "overlap_v": [
+     0.0,
+     0.999
+    ],
+    "shift_px": {
+     "dx": 0.1,
+     "dy": -0.01,
+     "response": 0.962
+    },
+    "bands": [
+     {
+      "u": [
+       0.0,
+       0.105
+      ],
+      "dx_px": 0.04,
+      "dy_px": 0.16,
+      "response": 0.614
+     },
+     {
+      "u": [
+       0.105,
+       0.211
+      ],
+      "dx_px": 0.32,
+      "dy_px": 0.08,
+      "response": 0.962
+     },
+     {
+      "u": [
+       0.211,
+       0.317
+      ],
+      "dx_px": -0.03,
+      "dy_px": 0.09,
+      "response": 0.984
+     },
+     {
+      "u": [
+       0.317,
+       0.422
+      ],
+      "dx_px": 0.02,
+      "dy_px": -0.04,
+      "response": 0.957
+     }
+    ],
+    "deltaE": {
+     "mean": 0.33,
+     "p95": 0.75,
+     "share_over_5": 0.002
+    },
+    "L_mean": {
+     "a": 88.3,
+     "b": 88.3
+    },
+    "worst_band_px": 0.32,
+    "worst_band_px_reliable": 0.32,
+    "bands_reliable": 4,
+    "dL_mean": 0.0
+   }
+  }
+ ],
+ "cb0_seam": {
+  "b1r3 (11-04)": {
+   "seam_residual": [
+    {
+     "rows": [
+      150,
+      350
+     ],
+     "max_abs_residual_Lstar": 0.8,
+     "at_px_from_edge": 42.5,
+     "rms": 0.38
+    },
+    {
+     "rows": [
+      350,
+      600
+     ],
+     "max_abs_residual_Lstar": 0.83,
+     "at_px_from_edge": 42.5,
+     "rms": 0.36
+    },
+    {
+     "rows": [
+      600,
+      850
+     ],
+     "max_abs_residual_Lstar": 0.89,
+     "at_px_from_edge": 47.5,
+     "rms": 0.39
+    }
+   ],
+   "wedge": {
+    "top_wedge": [
+     90.88,
+     -1.98,
+     4.58
+    ],
+    "b1_wall_below": [
+     88.71,
+     -0.58,
+     1.26
+    ],
+    "dE": 4.21
+   }
+  },
+  "b1r3f3": {
+   "seam_residual": [
+    {
+     "rows": [
+      150,
+      350
+     ],
+     "max_abs_residual_Lstar": 0.53,
+     "at_px_from_edge": 22.5,
+     "rms": 0.2
+    },
+    {
+     "rows": [
+      350,
+      600
+     ],
+     "max_abs_residual_Lstar": 0.36,
+     "at_px_from_edge": 12.5,
+     "rms": 0.18
+    },
+    {
+     "rows": [
+      600,
+      850
+     ],
+     "max_abs_residual_Lstar": 0.41,
+     "at_px_from_edge": 12.5,
+     "rms": 0.19
+    }
+   ],
+   "wedge": {
+    "top_wedge": [
+     87.49,
+     0.41,
+     1.25
+    ],
+    "b1_wall_below": [
+     88.74,
+     0.01,
+     0.89
+    ],
+    "dE": 1.36
+   }
+  },
+  "old_share": 0.2756
+ },
+ "t_cbath": {
+  "answer": "yes: CB-0 b1r3f3 and B1 r3 fix3 may serve as the bath ends of T-CBath (the slide's end / the pan's start and the pan's end)",
+  "why": [
+   "both pass G1 in the frame (geometry on the clay, products, light, no visible seam)",
+   "the pair: 0.06 px in four bands, dL 0.8, dE 1.0"
+  ],
+  "still_open": [
+   "the rest of T-CBath runs through S1' (the R2 dolly and the slide S1' -> CB-0): S1' is outside this brief and has open items (11-02 lock, 11-04 vista)",
+   "the white-balance ramp 4600 -> 4000 K in post at the door frame (transitions plan)",
+   "the faint fold steps above the fern: final polish, not blocking"
+  ]
+ },
+ "transitions": {
+  "T-CBath": "unblocked at the bath ends (CB-0 b1r3f3 + B1 r3 fix3); the corridor side through S1' still open",
+  "V4 / T-HW": "unblocked from W0-in's side (W0-in r2 fix3); the W0 master end not re-checked here",
+  "P-B": "blocked: 9.0 px, B2 r3 fix2 unchanged (its fill artefacts, C* 9.3, vanity -7/-8)",
+  "T-CGirl": "blocked: the K-girl master (28.8 px); K-girl-0 itself passes",
+  "P0 / T-E0 / T-LD": "blocked: the seedream M0 is on the clay (geometry solved) but its light is milky (fall-off) and P0 needs the seedream M0p (paid, not pulled)"
+ }
+}
