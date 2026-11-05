@@ -1,0 +1,296 @@
+{
+ "asset_id": "pose-m0p-v8b-fix3-base",
+ "date": "2026-11-05",
+ "script": "assets/renders/house-nordic-v7-2026-11-02/fix_m0_12.py",
+ "tokens": 0,
+ "what": "M0 1.2 composite in code on the reserve render m0-v8b-r2 (briefs/render-m0-composite-and-cleanup-2026-11-04.md task 1): the sofa group and the coffee-table group put on the round-5b clay; the shell, window, armchair, pendant and sconces untouched",
+ "source": "assets/renders/poses/nordic/v8/pose-m0p-v8b-va.png",
+ "clay": "assets/blockout/house/framing/round5b/poses/M0p.png",
+ "output": "assets/renders/poses/nordic/v8/pose-m0p-v8b-fix3-base.png",
+ "measured_px_canvas": {
+  "sofa_render": {
+   "arm_l": 382,
+   "arm_r": 1645,
+   "back_top": 834.347499905199,
+   "foot_r": 1303.536400591559
+  },
+  "sofa_clay": {
+   "arm_l": 488.5,
+   "arm_r": 1507.5,
+   "back_top": 932.5,
+   "foot_r": 1317
+  },
+  "table_render": {
+   "x0": 441,
+   "x1": 1422,
+   "far": 1173.825430207425,
+   "foot_l": 1513.303360509651
+  },
+  "table_clay": {
+   "x0": 453,
+   "x1": 1332,
+   "far": 1187,
+   "foot_l": 1535.5
+  },
+  "lines": {
+   "skirting": [
+    [
+     0,
+     1167.2385449926055
+    ],
+    [
+     2736,
+     1167.2385449926055
+    ]
+   ],
+   "floor": [
+    [
+     0,
+     1215.3734754085929
+    ],
+    [
+     2736,
+     1215.3734754085929
+    ]
+   ],
+   "rug": [
+    [
+     0,
+     1285.2957953812902
+    ],
+    [
+     2736,
+     1285.2957953812902
+    ]
+   ],
+   "table_near": [
+    [
+     441,
+     1305.5631345038112
+    ],
+    [
+     1422,
+     1305.5631345038112
+    ]
+   ],
+   "sofa_base": [
+    [
+     382,
+     1232.6007136627356
+    ],
+    [
+     1645,
+     1232.6007136627356
+    ]
+   ],
+   "sofa_feet": [
+    [
+     432,
+     1300.4962997231808
+    ],
+    [
+     1602,
+     1303.536400591559
+    ]
+   ]
+  }
+ },
+ "sofa": {
+  "matrix": [
+   [
+    0.8068100214004517,
+    0.0,
+    180.2988739013672
+   ],
+   [
+    0.0,
+    0.8195000290870667,
+    248.7527618408203
+   ]
+  ],
+  "scale_x": 0.8068,
+  "scale_y": 0.8195,
+  "how": "matte: textured fabric (local high-pass energy > 1.6) per column from its first row to the base line, the throw outside the right arm row by row (fabric run, median 31 rows), the legs; the parts behind the old table / decor completed row-wise along the base's slope (+ the base's texture) so what the smaller table uncovers is sofa"
+ },
+ "table": {
+  "matrix": [
+   [
+    0.8960199952125549,
+    0.0,
+    57.85321044921875
+   ],
+   [
+    0.0,
+    1.0265799760818481,
+    -18.021379470825195
+   ]
+  ],
+  "scale_x": 0.896,
+  "scale_y": 1.0266,
+  "how": "top (convex hull of the oak above its near edge), legs (oak S >= 31 below it), runner (polygon): x and y fitted separately (ends + far edge + near-left foot); the render's table is 1.14x the clay in height and 1.07x in width, so its height comes to the card's h38",
+  "decor": {
+   "holders": {
+    "foot_render": [
+     1071.5,
+     1246.0
+    ],
+    "foot_new": [
+     1017.9,
+     1261.1
+    ],
+    "scale": 0.896
+   },
+   "bowl": {
+    "foot_render": [
+     1240.0,
+     1256.0
+    ],
+    "foot_new": [
+     1168.9,
+     1271.4
+    ],
+    "scale": 0.896
+   }
+  },
+  "decor_how": "candle holders and bowl uniform (the table's x scale) about their foot, which goes where the table maps it",
+  "decor_clean": {
+   "px": 32376,
+   "grain_shift_px": [
+    -158,
+    1.0
+   ],
+   "grain_px": 19788,
+   "how": "the bowl (its convex hull) and the holders with their soft shadow (dilated 20 px), on the table top: low frequency row by row between the clean oak left and right (>= 26 px from the decor, oak hue / saturation, not the runner; blurred along the rows only) + the grain (high-pass) of the oak further left on the same rows; the placed decor gets a contact shadow (0.72, 7 px)"
+  }
+ },
+ "fills": {
+  "wall": "membrane (harmonic) fill of the low-pass, coarse-to-fine 1/16 -> 1/4, exact at the boundary + 6 px seam correction, + the wall's mirrored high-pass texture (1750, 611, 1900, 763)",
+  "strips": {
+   "right strip: skirting + floor": {
+    "columns": [
+     1490,
+     2736
+    ],
+    "shift_px": [
+     178,
+     0.0
+    ],
+    "px": 20598
+   },
+   "right strip: rug edge": {
+    "columns": [
+     1490,
+     1745
+    ],
+    "shift_px": [
+     49,
+     0.0
+    ],
+    "px": 2464
+   },
+   "right strip: rug body": {
+    "columns": [
+     1490,
+     1745
+    ],
+    "shift_px": [
+     -2,
+     68.0
+    ],
+    "px": 6080
+   },
+   "left strip": {
+    "columns": [
+     0,
+     500
+    ],
+    "shift_px": [
+     -116,
+     0.0
+    ],
+    "px": 20102
+   },
+   "old table right end and leg (rug)": {
+    "columns": [
+     1300,
+     1440
+    ],
+    "shift_px": [
+     92,
+     0.0
+    ],
+    "px": 11573
+   }
+  },
+  "skirting": "the skirting's own profile at t between its top line and the floor line, left (1190-1236) and right (2606-2660) blended in x",
+  "floor": "rows in the frame sheared by the floor line's slope (0.0) + floor texture (1700, 1221, 1950, 1278)",
+  "rug": "rows in the frame sheared by the rug edge's slope (0.0) + rug texture (1500, 1371, 1700, 1503)"
+ },
+ "shadows": {
+  "wall": "the wall 70 px above / 40 px beside the old sofa: ratio (low-pass known / low-pass clean fill), de-shadowed in place, re-applied moved with the sofa",
+  "under_base": "the band under the base: a ratio profile in t (base -> feet, to t 1.6) from the visible columns right of the table, re-drawn under the new base / feet lines (50 columns)",
+  "table": "none carried: the rug under the table reads 1.00-1.05 against the fill (no cast shadow to move); a contact shadow (depth 0.78, 5 px) at the near-left leg's new foot"
+ },
+ "fix3": {
+  "why": "QA 2026-11-04-m0-fix2-cb0-g1 §2 / §8: the vertical affine on the raw before the composite; the bowl duplicated in fix",
+  "vertical_affine": "assets/renders/poses/nordic/v8/pose-m0p-v8b-va.json"
+ },
+ "lock_v2": {
+  "shift_px": [
+   -2.21,
+   4.62
+  ],
+  "scale_pct": [
+   0.26,
+   -0.22
+  ],
+  "band_after": 5.05,
+  "tile_after": 16.31,
+  "fixed_edges_worst_px": 8,
+  "fixed_ratios": {},
+  "verdict": {
+   "global_pass": true,
+   "residual_pass": false,
+   "edges_pass": true,
+   "pass": false
+  },
+  "bands": [
+   [
+    [
+     0.0,
+     0.249
+    ],
+    -5.05,
+    -4.06,
+    0.198
+   ],
+   [
+    [
+     0.249,
+     0.499
+    ],
+    -24.1,
+    11.23,
+    0.099
+   ],
+   [
+    [
+     0.499,
+     0.749
+    ],
+    1.02,
+    -69.46,
+    0.062
+   ],
+   [
+    [
+     0.749,
+     0.999
+    ],
+    -1.99,
+    -1.88,
+    0.088
+   ]
+  ]
+ }
+}

@@ -34,7 +34,13 @@ FRAME = {"m0-v8b-r2": "M0", "pose-m0p-v8b": "M0p", "pose-m0x-v8b": "M0x"}
 DATE = "2026-11-04"
 
 
+FIX_SUF = "-fix"          # fix3 (2026-11-05, fix_v10 / m0p3) sets "-fix3-base": new files, the -fix stills QA checked stay
+RAW_OVERRIDE = {}         # jid -> the still the composite starts from (m0p3: the raw after the vertical affine)
+
+
 def still(jid):
+    if jid in RAW_OVERRIDE:
+        return F.load(RAW_OVERRIDE[jid])
     return F.load(os.path.join(REPO, OUT[jid], jid + ".png"))
 
 
@@ -45,7 +51,7 @@ def clay(jid, W, H):
 
 
 def out_fix(jid):
-    return os.path.join(REPO, OUT[jid], jid + "-fix.png")
+    return os.path.join(REPO, OUT[jid], jid + FIX_SUF + ".png")
 
 
 def gray(a):
@@ -103,8 +109,8 @@ def edges_h(g, c0, c1, r0, r1):
 
 
 def save_note(jid, note):
-    note = dict(asset_id=jid + "-fix", date=DATE, script="assets/renders/house-nordic-v7-2026-11-02/fix_m0_12.py", **{"tokens": 0, **note})
-    json.dump(note, open(os.path.join(REPO, OUT[jid], jid + "-fix.json"), "w"), indent=1, ensure_ascii=False)
+    note = dict(asset_id=jid + FIX_SUF, date=DATE, script="assets/renders/house-nordic-v7-2026-11-02/fix_m0_12.py", **{"tokens": 0, **note})
+    json.dump(note, open(os.path.join(REPO, OUT[jid], jid + FIX_SUF + ".json"), "w"), indent=1, ensure_ascii=False)
 
 
 # ---------------------------------------------------------------------------------------------------------------
@@ -721,7 +727,46 @@ def fix_m0(preview=False):
     s_al0 = cv2.erode((sofa_full > 0.5).astype(np.uint8), np.ones((5, 5), np.uint8)).astype(np.float32)
     s_rgb, s_al = warp_layer(a_sofa, F.feather(s_al0, 1.0), Ms, W, H)
     out = F.composite(out, s_rgb, s_al)
-    t_rgb, t_al = warp_layer(a, F.feather(parts["body"], 0.8), Mt, W, H)
+    a_tab = a
+    decor_clean = None
+    if CFG.get("clean_decor"):
+        # m0p3 (QA 2026-11-04-m0-fix2-cb0-g1: 'the bowl reads as two rims'): the table layer is scaled anisotropically (its height to the
+        # card), the decor uniformly, so the old bowl / holders inside the table layer showed above the placed ones; the table top under them
+        # is filled first (rows of the oak top, + its grain), then the decor goes on top with a small contact shadow
+        # the bowl's matte as its convex hull (grabCut missed the pale lower curve at both ends, whose pixels then fed the fill as light
+        # streaks and stayed outside the placed bowl)
+        ys_b, xs_b = np.nonzero(parts["bowl"] > 0.5)
+        hb = np.zeros(parts["bowl"].shape, np.uint8)
+        cv2.fillConvexPoly(hb, cv2.convexHull(np.stack([xs_b, ys_b], 1).astype(np.int32)), 1)
+        parts["bowl"] = np.maximum(parts["bowl"], hb.astype(np.float32))
+        dec = np.maximum(parts["bowl"], parts["holders"])
+        Hh_, L_, S_ = hls(a)
+        oak_px = ((Hh_ >= 18) & (Hh_ <= 42) & (S_ >= 30) & (L_ >= 40)).astype(np.float32)
+        runner_m = np.zeros(oak_px.shape, np.uint8)
+        cv2.fillPoly(runner_m, [np.array(M0["runner_poly"], np.int32)], 1)
+        # (the decor's soft shadow on the top goes too: 20 px; the placed decor gets its own contact shadow)
+        hole_d = dil(dec, 20) * parts["body"] * (1 - dil(runner_m.astype(np.float32), 2))
+        valid_d = parts["body"] * oak_px * (1 - dil(dec, 26)) * (1 - dil(runner_m.astype(np.float32), 4))
+        # the top's grain runs along the rows (a frontal view): each row copied from the clean oak further left, same row (a shift
+        # searched on the band beyond the hole, several passes for the wide part), with a per-row gain and a low-frequency seam correction
+        # low frequency: each row between the clean oak left and right of it (so the fill meets both sides); grain: the high-pass of a copy
+        # of the clean oak further left on the same rows (the grain runs along the rows in this frontal view)
+        top_m = parts["body"] * (1 - dil(runner_m.astype(np.float32), 2))          # the oak top (the blur stays on it: no sofa mixed in)
+        def hblur(img, sig):
+            """blur along the rows only, over the oak top only (rows do not mix: the far edge's dark band stays in its rows)"""
+            num = cv2.GaussianBlur(img * top_m[..., None], (0, 0), sigmaX=sig, sigmaY=0.01)
+            den = cv2.GaussianBlur(top_m, (0, 0), sigmaX=sig, sigmaY=0.01)
+            return num / np.maximum(den, 1e-4)[..., None]
+        lo_ = F.fill_rows_valid(a, hole_d, valid_d, band_px=14, max_search=700)
+        lo_ = hblur(lo_, 4.0)
+        cp_, okb, used = shift_fill(a, hole_d, valid_d, 0.0, -CFG.get("decor_dx", 150), search=12, gain=False, passes=3)
+        hp_ = np.where(okb[..., None], cp_ - hblur(cp_, 4.0), 0.0)
+        a_tab = np.where((hole_d > 0.5)[..., None], lo_ + hp_, a)
+        decor_clean = dict(px=int(hole_d.sum()), grain_shift_px=list(used), grain_px=int(okb.sum()),
+                           how=("the bowl (its convex hull) and the holders with their soft shadow (dilated 20 px), on the table top: low frequency row by row "
+                                "between the clean oak left and right (>= 26 px from the decor, oak hue / saturation, not the runner; blurred along the rows "
+                                "only) + the grain (high-pass) of the oak further left on the same rows; the placed decor gets a contact shadow (0.72, 7 px)"))
+    t_rgb, t_al = warp_layer(a_tab, F.feather(parts["body"], 0.8), Mt, W, H)
     out = F.composite(out, t_rgb, t_al)
     decor = {}
     for k in ("holders", "bowl"):
@@ -732,6 +777,11 @@ def fix_m0(preview=False):
         k_ = float(Mt[0, 0])
         Md = np.float32([[k_, 0, nfx - k_ * fx], [0, k_, nfy - k_ * fy]])
         d_rgb, d_al = warp_layer(a, F.feather(m, 0.8), Md, W, H)
+        if CFG.get("clean_decor"):
+            import fix_v8 as F8c
+            bys_ = np.nonzero(m[int(y1_) - 4:int(y1_) + 1] > 0.5)[1]
+            wb = (bys_.max() - bys_.min()) * k_ if len(bys_) else (x1_ - x0_) * k_ * 0.8
+            out = F8c.contact_shadow(out, nfx - wb / 2, nfx + wb / 2, nfy - 1, depth=0.72, h_px=7, spread=1.15)
         out = F.composite(out, d_rgb, d_al)
         decor[k] = dict(foot_render=[round(fx, 1), round(fy, 1)], foot_new=[round(nfx, 1), round(nfy, 1)], scale=round(k_, 4))
     # the near-left leg's contact shadow at its new foot (the old one is under the moved leg)
@@ -742,7 +792,7 @@ def fix_m0(preview=False):
     t_cover = cv2.warpAffine(parts["body"], Mt, (W, H), flags=cv2.INTER_LINEAR)
     out = np.where((t_cover > 0.5)[..., None], out_pre, out)
     out = np.clip(out, 0, 255)
-    dbg = dict(shifts=shifts, hole=hole, carrier_s=carrier_s, carrier_t=carrier_t, R=R, bg=bg, R_band=R_band, Ms=Ms, Mt=Mt, sofa=sofa_full, table=table)
+    dbg = dict(a_tab=a_tab, shifts=shifts, hole=hole, carrier_s=carrier_s, carrier_t=carrier_t, R=R, bg=bg, R_band=R_band, Ms=Ms, Mt=Mt, sofa=sofa_full, table=table)
     if preview:
         return out, dbg
     F.save(out, out_fix(jid))
@@ -760,7 +810,8 @@ def fix_m0(preview=False):
         table=dict(matrix=np.round(Mt, 5).tolist(), scale_x=round(st[0], 4), scale_y=round(st[1], 4),
                    how="top (convex hull of the oak above its near edge), legs (oak S >= 31 below it), runner (polygon): x and y fitted separately "
                        "(ends + far edge + near-left foot); the render's table is 1.14x the clay in height and 1.07x in width, so its height comes to the card's h38",
-                   decor=decor, decor_how="candle holders and bowl uniform (the table's x scale) about their foot, which goes where the table maps it"),
+                   decor=decor, decor_how="candle holders and bowl uniform (the table's x scale) about their foot, which goes where the table maps it",
+                   decor_clean=decor_clean),
         fills=dict(wall="membrane (harmonic) fill of the low-pass, coarse-to-fine 1/16 -> 1/4, exact at the boundary + 6 px seam correction, + the wall's mirrored high-pass texture " + str(M0_TEX["wall"]),
                    strips=shifts,
                    skirting="the skirting's own profile at t between its top line and the floor line, left (1190-1236) and right (2606-2660) blended in x",

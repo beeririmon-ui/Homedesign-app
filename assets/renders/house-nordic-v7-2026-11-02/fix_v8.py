@@ -231,7 +231,11 @@ B1 = dict(planter_rect=(0.440, 0.598, 0.395, 0.768), plinth=(0.484, 0.562, 0.765
           # 2026-11-04 cleanup (QA 2026-11-04-retakes-fixes-g1 §4, fix_v9.py): "profile" = the second run's column profile (patches), "copy_above" =
           # the intact linen copied along its folds from above (the shift searched on the ring); holder_ratio None = the brush as scaled, 0.38 = the
           # holder squashed about its base to 38 % of the brush's height (the card: 14.5 cm of 38 cm), the handle continued down to it
-          curtain_fill="profile", holder_ratio=None)
+          curtain_fill="profile", holder_ratio=None,
+          # 2026-11-05 (QA 2026-11-04-m0-fix2-cb0-g1 §8, fix_v10.py): True = the hole on the linen excludes the raw still's own intact linen
+          # (linen colour, >= 10 px from the fern / basket matte): the closed planter blob took the linen between the frond tips and the
+          # basket, whose copies left two light lumps right of the fern; that linen is kept as rendered
+          raw_linen=False, copy_runs=False)
 
 
 def edge_col(g, v0, v1, u0, u1):
@@ -269,6 +273,25 @@ def _curtain_copy_above(a, bg, hc, vc, prof, curtain):
     _, dx, dy = best
     out = bg.copy()
     done = np.zeros((H, W), bool)
+    if B1.get("copy_runs"):
+        # 2026-11-05: each column's contiguous run of the hole takes ONE shift, the first of these (from above, then from below along the
+        # same fold) whose sources are all intact linen: no horizontal step inside a run (the fix2 passes per pixel left blocks)
+        cands = [(int(round(k * dx)), int(round(k * dy))) for k in (1.0, 1.25, 1.5, 0.75, 2.0)] + \
+                [(0, s_) for s_ in range(120, 420, 20)]
+        for x in np.nonzero(hm.any(0))[0]:
+            col = hm[:, x]
+            ys_ = np.nonzero(col)[0]
+            br_ = np.nonzero(np.diff(ys_) > 1)[0]
+            for s0, s1 in zip(np.r_[ys_[0], ys_[br_ + 1]], np.r_[ys_[br_], ys_[-1]]):
+                rr = np.arange(s0, s1 + 1)
+                for cdx, cdy in cands:
+                    sy, sx = rr + cdy, x + cdx
+                    if sy.min() < 0 or sy.max() >= H or sx < 0 or sx >= W:
+                        continue
+                    if okv[sy, sx].all():
+                        out[rr, x] = a[sy, sx] * np.clip(prof[rr] / prof[sy], 0.8, 1.25)
+                        done[rr, x] = True
+                        break
     for k in (1.0, 1.25, 1.5, 2.0, 0.75):
         ys, xs = np.nonzero(hm & ~done)
         sy, sx = ys + int(round(k * dy)), xs + int(round(k * dx))
@@ -400,6 +423,16 @@ def fix_b1(preview=True):
         vc = curtain * (1 - holes) * (1 - dil(pl, 4)) * (1 - hc) * linen
         prof = cv2.GaussianBlur(np.ascontiguousarray(a[:, 1600:1650].mean(1)), (0, 0), 20).reshape(H, 3)   # rows x RGB, smoothed along y
         prof = np.maximum(prof, 1.0)
+        raw_kept = None
+        if B1.get("raw_linen"):
+            lin_raw = ((S < 25) & ((hue < 45) | (S < 8)) & (L > 25)).astype(np.float32)          # the folds' dark valleys are linen too
+            # the plant itself: its green fronds and the rope (the planter matte also counts every L < 38 pixel as a gap in the fern, which
+            # takes the curtain's shaded folds beside the basket)
+            plant_c = (((hue >= 48) & (hue <= 150) & (S >= 6)) | ((hue >= 10) & (hue <= 42) & (S > 18))).astype(np.float32) * roi
+            ok = lin_raw * curtain * (1 - dil(plant_c, 4)) * (1 - dil(br, 6))
+            ok = cv2.morphologyEx(ok.astype(np.uint8), cv2.MORPH_OPEN, np.ones((3, 3), np.uint8)).astype(np.float32)
+            raw_kept = ok * hc
+            hc = hc * (1 - raw_kept)
         if B1.get("curtain_fill") == "copy_above":
             # the reference: intact linen (not the fern's outline, not its leaves, not the brush), the 40 px planter margin included
             vc2 = curtain * (1 - hc) * (1 - dil(pl, 6)) * (1 - hole_b) * (L > 30)        # the folds' dark valleys are linen too
@@ -432,6 +465,8 @@ def fix_b1(preview=True):
         corr = cv2.GaussianBlur(d, (0, 0), 25) / np.maximum(cv2.GaussianBlur(ring, (0, 0), 25), 1e-4)[..., None]
         bg = np.where((hc > 0.5)[..., None], bg + corr, bg)
     out = bg
+    if os.environ.get("B1_DEBUG"):
+        np.savez_compressed(os.environ["B1_DEBUG"], hc=hc, bg=bg, raw_kept=(raw_kept if B1.get("raw_linen") and raw_kept is not None else np.zeros_like(hc)), pl=pl)
     dy = B1["dy"]
     # --- the fern's shadow on the wall as a ratio map (original / clean wall) in the wall zone around it, moved with it
     zone = hole_p * (1 - curtain) * (1 - F.rect_mask(H, W, pu0, pu1, pv0, pv1)) * (1 - dil(pl, 2)) * (1 - hole_b)
@@ -490,6 +525,10 @@ def fix_b1(preview=True):
         global_affine=affine,
         cleanup_2026_11_04=(dict(curtain_fill=B1.get("curtain_fill"), curtain_copy=(curtain_copy if B1.get("curtain_fill") == "copy_above" else None),
                                  holder=holder) if (B1.get("curtain_fill") == "copy_above" or holder) else None),
+        cleanup_2026_11_05=(dict(raw_linen_kept_px=int(raw_kept.sum()),
+                                 how="the linen hole excludes the raw still's intact linen (S < 25, hue < 45 or S < 8, L > 45; >= 10 px from the fern / basket matte, "
+                                     ">= 6 px from the brush; opened 5 px): that linen stays as rendered, the copy from above fills the rest")
+                            if B1.get("raw_linen") and raw_kept is not None else None),
         untouched="everything else (WC block, ledge, glazing, roll stand, curtain, mat, vanity)", outputs=dict(fix=os.path.relpath(out_fix(fid), VF.REPO)))
     save_note(fid, note)
     print(json.dumps({k: v for k, v in note.items() if k != "method"}, indent=1))

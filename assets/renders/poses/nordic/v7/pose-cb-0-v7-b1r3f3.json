@@ -1,0 +1,141 @@
+{
+ "asset_id": "pose-cb-0-v7-b1r3f3",
+ "date": "2026-11-05",
+ "tokens": 0,
+ "script": "assets/renders/house-nordic-v7-2026-11-02/recompose_cb0_v3.py",
+ "what": "CB-0 recomposed from B1 r3 fix3 (reprojection, a pure 22 deg pan about the camera point CB), the part B1 does not see matched by a gain field",
+ "sources": {
+  "b1": "assets/renders/bath/nordic/v7/b1-v7-r3-fix3.png",
+  "cb0_kept": "assets/renders/poses/nordic/v7/pose-cb-0-v7.png"
+ },
+ "cameras": {
+  "B1": {
+   "yaw": -22,
+   "u0": 0.52,
+   "v0": 0.46
+  },
+  "CB0": {
+   "yaw": 0,
+   "u0": 0.5,
+   "v0": 0.46
+  },
+  "lens": "24 mm",
+  "canvas_overscan_px": [
+   116,
+   65
+  ]
+ },
+ "kept_part": {
+  "share_of_canvas": 0.3361,
+  "note": "the left strip (canvas u < ~0.30 at mid height) and an upper and a lower wedge (B1's canvas turned 22 deg misses the corners)"
+ },
+ "gain_field": {
+  "known_px": 447599,
+  "median_log_ratio_rgb": [
+   -0.0567,
+   -0.0766,
+   -0.0276
+  ],
+  "gain_median_in_kept_rgb": [
+   0.9653,
+   0.9549,
+   0.9775
+  ],
+  "gain_range_in_kept": [
+   0.874,
+   1.092
+  ],
+  "how": "log(low-pass B1 / low-pass old CB-0), sigma 6, on plain surfaces (high-pass energy < 2 in both) 20-260 px inside B1's coverage, within 0.12 of the median; extended over the rest by a membrane (fix_m0_12.laplace_fill), blurred 3 px, clipped 0.7-1.4"
+ },
+ "seam": "smootherstep over 150 px inside B1's coverage",
+ "output": "assets/renders/poses/nordic/v7/pose-cb-0-v7-b1r3f3.png",
+ "grade_v5": {
+  "reference_point_canvas_uv": [
+   0.6449,
+   0.1701
+  ],
+  "reference_note": "B1's reference point (B1 canvas uv 0.419, 0.174 = the wall beside the fluted window) projected into CB-0",
+  "L": 88.9,
+  "range": [
+   86.0,
+   90.0
+  ],
+  "H": 36.2,
+  "C_star": 5.68,
+  "stops": 0.163,
+  "stops_from": "b1-v7-r3 fix3 (v5)",
+  "target_by_group_reference": true,
+  "target_at_own_point": true,
+  "other_bible_checks_failed": [],
+  "meets_bible_1_8_4": true,
+  "correction_of_the_b1r3_record": "pose-cb-0-v7-b1r3.json said 'reading 79.3, meets_bible true': 79.3 was the dark wall left of the window at CB-0's own (0.419, 0.174), outside 86-90, and the pass came from the inherited stops only (meets_target None)",
+  "outputs": {
+   "graded": "assets/renders/poses/nordic/v7/pose-cb-0-v7-graded-b1r3f3-v5.png",
+   "frame": "assets/renders/poses/nordic/v7/pose-cb-0-v7-frame-b1r3f3-v5.png",
+   "os6": "assets/renders/poses/nordic/v7/pose-cb-0-v7-graded-os6-b1r3f3-v5.png"
+  }
+ },
+ "seam_check": {
+  "b1r3 (fix2 recompose)": {
+   "vertical_seam_dL_star_max": 26.28,
+   "vertical_seam_dL_star_median": 1.6,
+   "vertical_seam_dL_star_p75": 2.55,
+   "note_max": "the max comes from rows whose span crosses an edge the energy gate misses (door jamb, WC block); median / p75 are the wall",
+   "wall_gradient_across_dL_star": 7.43,
+   "rows": 92,
+   "vertical_seam_how": "rows where the span -40..+190 px across the coverage edge is plain wall: L* (blurred 2 px) minus the straight line between its ends (the wall's own gradient); the max |residual| = the step the seam adds",
+   "upper_wedge_vs_B1_wall": {
+    "dL": -0.34,
+    "da": -1.9,
+    "db": 4.33,
+    "dE": 4.74
+   }
+  },
+  "b1r3f3 (this)": {
+   "vertical_seam_dL_star_max": 26.23,
+   "vertical_seam_dL_star_median": 0.84,
+   "vertical_seam_dL_star_p75": 2.2,
+   "note_max": "the max comes from rows whose span crosses an edge the energy gate misses (door jamb, WC block); median / p75 are the wall",
+   "wall_gradient_across_dL_star": 5.46,
+   "rows": 93,
+   "vertical_seam_how": "rows where the span -40..+190 px across the coverage edge is plain wall: L* (blurred 2 px) minus the straight line between its ends (the wall's own gradient); the max |residual| = the step the seam adds",
+   "upper_wedge_vs_B1_wall": {
+    "dL": -2.13,
+    "da": -0.01,
+    "db": 0.52,
+    "dE": 2.2
+   }
+  }
+ },
+ "lock_v2": {
+  "register_shift_px": [
+   3.4,
+   -7.51
+  ],
+  "register_scale_pct": [
+   -0.18,
+   -0.02
+  ],
+  "worst_band_px_after_register": 3.23,
+  "bands_counted": 2,
+  "worst_tile_px_after_register": 3.49,
+  "tiles_counted": 6,
+  "box_edges_worst_px": 0,
+  "box_ratios": {
+   "bath fluted glazing h": 1.0,
+   "bath WC + limestone ledge (fixed) w": 1.0,
+   "bath WC + limestone ledge (fixed) h": 1.0,
+   "window W-bath h": 1.0
+  },
+  "named_edges_worst_px": null,
+  "named_edges_counted": "0/0",
+  "named_edges": null,
+  "residual_limit_px": 2.0,
+  "global_pass": true,
+  "residual_pass": false,
+  "edges_pass": true,
+  "pass": false,
+  "record": "assets/renders/poses/nordic/v7/pose-cb-0-v7-b1r3f3-lock-v2.json",
+  "note": "the round-4 CB-0 clay has no planter / brush / curtain-hem proxies (QA: no r3 clay of CB-0 exists)"
+ }
+}

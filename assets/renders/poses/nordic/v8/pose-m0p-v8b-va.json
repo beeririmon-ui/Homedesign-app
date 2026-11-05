@@ -1,0 +1,100 @@
+{
+ "asset_id": "pose-m0p-v8b-va",
+ "date": "2026-11-05",
+ "tokens": 0,
+ "script": "assets/renders/house-nordic-v7-2026-11-02/m0p_fix3.py",
+ "what": "the raw M0p still with one vertical affine onto the round-5b clay's shell lines (QA: ~-1.3 % vertical, uniform across the frame)",
+ "source": "assets/renders/poses/nordic/v8/pose-m0p-v8b.png",
+ "fit": {
+  "scale": 1.01337,
+  "scale_pct": 1.337,
+  "offset_px": 3.39,
+  "how": "y_clay = s y_render + t through the cornice's lower edge and the floor line (canvas px of the 2736 x 1539 still); the other lines reported"
+ },
+ "lines_before": [
+  {
+   "line": "cornice, upper edge",
+   "render": 126.86,
+   "clay": 132.65,
+   "d": -5.8,
+   "render_lr": [
+    127.64,
+    126.07
+   ],
+   "clay_lr": [
+    132.65,
+    132.66
+   ]
+  },
+  {
+   "line": "cornice, lower edge",
+   "render": 140.9,
+   "clay": 146.17,
+   "d": -5.28,
+   "render_lr": [
+    141.43,
+    140.36
+   ],
+   "clay_lr": [
+    146.8,
+    145.55
+   ]
+  },
+  {
+   "line": "skirting top",
+   "render": 1148.46,
+   "clay": 1158.13,
+   "d": -9.66,
+   "render_lr": [
+    1148.61,
+    1148.31
+   ],
+   "clay_lr": [
+    1158.22,
+    1158.03
+   ]
+  },
+  {
+   "line": "floor line",
+   "render": 1195.74,
+   "clay": 1215.11,
+   "d": -19.37,
+   "render_lr": [
+    1195.83,
+    1195.65
+   ],
+   "clay_lr": [
+    1215.13,
+    1215.09
+   ]
+  }
+ ],
+ "lines_after": [
+  {
+   "line": "cornice, upper edge",
+   "render": 138.38,
+   "clay": 132.65,
+   "d": 5.73
+  },
+  {
+   "line": "cornice, lower edge",
+   "render": 146.22,
+   "clay": 146.17,
+   "d": 0.05
+  },
+  {
+   "line": "skirting top",
+   "render": 1167.2,
+   "clay": 1158.13,
+   "d": 9.07
+  },
+  {
+   "line": "floor line",
+   "render": 1215.08,
+   "clay": 1215.11,
+   "d": -0.03
+  }
+ ],
+ "output": "assets/renders/poses/nordic/v8/pose-m0p-v8b-va.png",
+ "how": "cv2.remap, output row y' <- source row (y' - t) / s, Lanczos4, border replicate; x untouched"
+}

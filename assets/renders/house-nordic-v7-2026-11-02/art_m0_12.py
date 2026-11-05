@@ -48,6 +48,13 @@ CAM_OLD = dict(loc=(1.25, 5.55, 1.20), yaw=25, u0=0.52, v0=0.46)
 CAMS = {"m0-v8b-r2": dict(loc=(0.83, 4.64, 1.20), yaw=25, u0=0.47, v0=0.50), "pose-m0p-v8b": dict(loc=(0.83, 4.64, 1.20), yaw=0, u0=0.47, v0=0.50)}
 ART_C = (0.20, 1.475)                    # wall X, Z of the art centre (slot box centre)
 FRAME_W, FRAME_H, GAP = 0.50, 0.70, 0.06
+BASE_SUF, ART_SUF = "-fix", "-fix2"          # m0p3 (2026-11-05): "-fix3-base" -> "-fix3"
+
+
+def base_path(jid):
+    return os.path.join(REPO, M.OUT[jid], jid + BASE_SUF + ".png")
+
+
 FRAMES_OLD_APPROX = [(1592, 1778, 425, 693), (1802, 2001, 415, 695), (2024, 2233, 403, 696)]
 
 
@@ -250,7 +257,7 @@ def build_layer(old):
 
 
 def place(jid, old_mod, old, quads_old, recs_layer, preview=False):
-    new = M.still(jid) if False else F.load(M.out_fix(jid))
+    new = F.load(base_path(jid))
     H, W = new.shape[:2]
     Hn = C_canvas(W, H) @ H_wall(CAMS[jid])
     Ho = C_canvas(old.shape[1], old.shape[0]) @ H_wall(CAM_OLD)
@@ -371,15 +378,15 @@ def run(jid, do_lock=True):
     old_mod, quads_old, recs_layer = build_layer(old)
     out, rec, targets, tm = place(jid, old_mod, old, quads_old, recs_layer)
     od = os.path.join(REPO, M.OUT[jid])
-    p = os.path.join(od, jid + "-fix2.png")
+    p = os.path.join(od, jid + ART_SUF + ".png")
     F.save(out, p)
     W = out.shape[1]
     s1920 = 1920.0 / (3840.0 / 4072 * W)
     placed = measure_placed(out, targets, s1920)
-    note = dict(asset_id=jid + "-fix2", date=DATE, tokens=0, script="assets/renders/house-nordic-v7-2026-11-02/art_m0_12.py",
+    note = dict(asset_id=jid + ART_SUF, date=DATE, tokens=0, script="assets/renders/house-nordic-v7-2026-11-02/art_m0_12.py",
                 what=("RND3 (a): the geometric triptych (framed-art-aliexpress-minimal-geometric-triptych-prints, prints 1 / 2 / 3 of the listing, left to right) "
                       "on the wall above the sofa, in code from the old M0 r2's rendered triptych"),
-                source=dict(base=os.path.relpath(M.out_fix(jid), REPO), art_from=os.path.relpath(OLD, REPO), cameras=dict(old=CAM_OLD, new=CAMS[jid]),
+                source=dict(base=os.path.relpath(base_path(jid), REPO), art_from=os.path.relpath(OLD, REPO), cameras=dict(old=CAM_OLD, new=CAMS[jid]),
                             listing_images={str(k): v for k, v in REF_URLS.items()}),
                 wall_target=dict(centre_XZ=list(ART_C), frames_cm="3 x 50 x 70, 6 cm apart (162 x 70)", why="the slot box of living-room.json 1.6 m0_1_2 = the projection of a 154 x 95 envelope centred at (0.20, 0, 1.475) with the 1.2.3 camera; the round-5b clay has no framed-art placeholder (empty per RND2)"),
                 prints=recs_layer, placement=rec, placed_measured=placed,
@@ -388,7 +395,7 @@ def run(jid, do_lock=True):
                      "rendered ones), in the rendered charcoal colour x the oatmeal's light; each frame warped by its homography (Lanczos, 4x anti-aliased alpha) onto "
                      "its 50 x 70 place on the wall; the shadow as a ratio map (old / membrane-cleaned old wall) by the triptych's homography; light gain = low-pass new "
                      "wall / low-pass cleaned old wall (sigma 40); grain added to the new wall's high-pass std"))
-    json.dump(note, open(os.path.join(od, jid + "-fix2.json"), "w"), indent=1, ensure_ascii=False)
+    json.dump(note, open(os.path.join(od, jid + ART_SUF + ".json"), "w"), indent=1, ensure_ascii=False)
     print(jid, json.dumps(dict(camera_only=rec["camera_only_homography"], old_cm=rec["old_triptych_on_the_wall"], placed=placed,
                                prints=[(r["frame"], r["marks_centroid_offset_px"], r["print1_marks_iou_after_offset"]) for r in recs_layer]), indent=0))
     if do_lock:
@@ -399,12 +406,12 @@ def run(jid, do_lock=True):
 def lock_grade(jid):
     PL = M._pipeline()
     od = os.path.join(REPO, M.OUT[jid])
-    p = os.path.join(od, jid + "-fix2.png")
-    lock = PL.LK.run_frame(jid, render_path=p, out_path=os.path.join(od, jid + "-fix2-lock-v2.json"), overlay_path=os.path.join(od, jid + "-fix2-lock-v2.jpg"), date=DATE)
-    r = PL.P.process(jid, p, "-fix2-v5", "v2", "auto", "none", od, f"{jid}-fix2: M0 1.2 composite + the triptych, grading v5", exposure="bible",
+    p = os.path.join(od, jid + ART_SUF + ".png")
+    lock = PL.LK.run_frame(jid, render_path=p, out_path=os.path.join(od, jid + ART_SUF + "-lock-v2.json"), overlay_path=os.path.join(od, jid + ART_SUF + "-lock-v2.jpg"), date=DATE)
+    r = PL.P.process(jid, p, ART_SUF + "-v5", "v2", "auto", "none", od, f"{jid}{ART_SUF}: M0 1.2 composite + the triptych, grading v5", exposure="bible",
                      grade_mode="v5")
     s, v = lock["summary"], lock["verdict"]
-    note_p = os.path.join(od, jid + "-fix2.json")
+    note_p = os.path.join(od, jid + ART_SUF + ".json")
     note = json.load(open(note_p))
     note["checks"] = dict(lock_v2=dict(shift_px=s["register_shift_px"], scale_pct=s["register_scale_pct"], band_after=s["worst_band_px_after_register"],
                                        tile_after=s["worst_tile_ecc_px_after_register"], fixed_edges_worst_px=s["fixed_edges_worst_px"], fixed_ratios=s["fixed_ratios"],

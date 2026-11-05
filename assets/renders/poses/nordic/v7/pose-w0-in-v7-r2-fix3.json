@@ -1,0 +1,51 @@
+{
+ "asset_id": "pose-w0-in-v7-r2",
+ "date": "2026-11-05",
+ "tokens": 0,
+ "script": "assets/renders/house-nordic-v7-2026-11-02/fix_v10.py",
+ "fix": "W0-in r2 fix3 (QA 2026-11-04-m0-fix2-cb0-g1 §3 / §8): fix2 (the clean basket) with the desk's front-left corner taken back from fix; the small dark block by the basket's base filled",
+ "sources": {
+  "fix": "assets/renders/poses/nordic/v7/pose-w0-in-v7-r2-fix.png",
+  "fix2": "assets/renders/poses/nordic/v7/pose-w0-in-v7-r2-fix2.png"
+ },
+ "corner": {
+  "box_px": [
+   300,
+   600,
+   1000,
+   1539
+  ],
+  "px_from_fix": 73348,
+  "px_that_differed": 41223,
+  "basket_right_edge_px": {
+   "rows": [
+    1000,
+    1538
+   ],
+   "x_range": [
+    322,
+    543
+   ]
+  },
+  "why": "fix2's solid basket matte (hue 10-50, S >= 14 in u 0-0.20) took the oak desk corner too: the raw corner was laid over the warped desk",
+  "how": "right of the basket's right edge + 4 px (per row: the last weave pixel, high-pass energy > 5, before 8 quiet pixels; median over 21 rows) x 450-600 (the desk leg's left edge is at 452-454 in fix), rows 1050-1539, outside the green plant (dilated 3 px): fix (feathered 1.5 px); both share the same canvas affine"
+ },
+ "dark_block": {
+  "px": 0,
+  "note": "not changed: the gap between the basket and the leg (skirting at y 1380-1405, the floor below) is fix2's, which matches the raw still; a fill of 'dark blocks' there took the leg's grain (tried)"
+ },
+ "output": "assets/renders/poses/nordic/v7/pose-w0-in-v7-r2-fix3.png",
+ "grade_v5": {
+  "measured": 92.5,
+  "range": [
+   90.0,
+   94.0
+  ],
+  "meets_bible": true,
+  "fails": [],
+  "stops": 0.123,
+  "outputs": {
+   "graded": "assets/renders/poses/nordic/v7/pose-w0-in-v7-r2-graded-fix3-v5.png"
+  }
+ }
+}
