@@ -1,0 +1,36 @@
+# m0-shell-seedream: the M0 1.2 room shell test (briefs/render-m0-model-test-2026-11-05.md, owner decision M0S1; render-agent 2026-11-05).
+# Model: seedream-5-pro, image-to-image, 2K, aspect_ratio auto (keeps the input framing), 650 tokens. Built from m0-v8b-r2.txt with the shell first.
+# image_url: the round-5b clay assets/blockout/house/framing/round5b/M0.png (overscan canvas 4072 x 2290; all x, y below are fractions of it).
+# Shell lines: QA's named points (qa/reports/2026-11-04-m0-fix2-cb0-g1/tools/shell_m0.py, clay side) carried to the canvas.
+# image_refs (6): 1 travertine cube, 2 ribbed silk pendant, 3 clay jar, 4 rug (NYOKO stand-in), 5 boucle (armchair cushions), 6 the wall round
+# (wall-decor-cj-corn-husk-round-38, card image 3da36dc0). The sofa group, the coffee-table group and the triptych are composited in code
+# afterwards (fix_m0_12.py, art_m0_12.py): their look here does not matter, their place and size should still follow the clay.
+# Strip every # line before sending. Prompt body under 4,000 characters.
+
+The attached clay render IS the camera. Turn it into a real photograph without moving the camera: same position, same 24 mm lens, same horizon, same perspective, same framing. Do not widen, crop, zoom, tilt or re-frame. Every architectural line stays exactly where it is in the clay (x, y are fractions of the image from the top-left):
+- the back wall's floor line runs from (0.40, 0.75) to (0.95, 0.86); its skirting top from (0.40, 0.72) to (0.95, 0.81);
+- the cornice of the back wall runs from (0.47, 0.13) to (0.74, 0.06), rising to the right;
+- the room corner (back wall meets the window wall) is the vertical line at x 0.37;
+- the window opening spans x 0.06-0.30 in the left wall; its sill top runs from (0.13, 0.65) to (0.28, 0.61);
+- the ceiling, the floor and both walls keep the clay's exact shapes and vanishing lines.
+Keep every furniture block where and as large as the clay shows it: sofa x 0.47-0.87, back top y 0.60; coffee table x 0.46-0.78, far edge y 0.77; armchair x 0.05-0.32, cut by the bottom edge. Never enlarge furniture.
+
+PHOTO. Top Scandinavian interiors magazine: a Copenhagen living room, 3 pm mid-winter, all sharp, level, straight verticals.
+
+REFERENCES. Image 1 travertine cube lamp, 2 pendant, 3 clay jar, 4 rug, 5 boucle fabric, 6 the round woven wall plate: form, colour and texture only, never size.
+
+LIGHT. Winter daylight, no sun: soft north light from the left window; outside, bare birches and pale sky, no snow. Exposed bright: the back wall by the corner almost white; the window wall in soft shade, about half a stop darker, never grey. The glass is the brightest, with detail. Soft shadows to the right; dense contact shadows. 4600 K: walls a clean warm white, never cream, yellow, pink or grey. Lamps 2700 K: the pendant glows from inside; the two cubes wash short soft fans up and down the wall.
+
+MATERIALS. Matte mineral paint #F4F1EC. Wide oiled white-oak planks #D6BF9E. Sofa oatmeal cotton-linen #E6DCCB, tapered oak legs. Table and armchair frame oiled oak #C8A27A. Armchair cushions mist-grey wool boucle #D9D6D0.
+
+PRODUCTS, each on its clay placeholder:
+- two 12 cm honed travertine cube lamps at the two ends of x 0.52-0.85, y 0.33-0.39 (image 1);
+- a flat ribbed warm-white silk pendant, 40 cm, x 0.57-0.66, y 0.12-0.23, on a thin black cord (image 2);
+- sheer natural linen curtains, S-fold, slim black rod, hems on the floor, x 0.02-0.33;
+- a 31 cm cream clay jar with 3-4 eucalyptus stems on the sill, x 0.23-0.26 (image 3);
+- a white hand-woven flat wool rug, tone-on-tone diamond weave, x 0.17-1.00 from y 0.79 down (image 4);
+- on the sofa: a warm-white boucle cushion, a sage knit cushion, a charcoal lumbar; a cream muslin throw over the right arm;
+- on the table: a sage linen runner, two travertine candle holders, a warm-white bowl;
+- on the back wall, centred at (0.487, 0.50), x 0.465-0.509, y 0.458-0.542: one 38 cm round woven wall plate, a pale corn-husk spiral with a braided honey water-hyacinth rim, hung flat (image 6).
+
+NOT IN FRAME: no art or frame above the sofa (the wall between the cubes stays bare), no floor lamp, wall lamp, basket, plant, pouf, books, cable, text, people, snow, sun patches, beams, bloom, haze, HDR, grain or vignette.

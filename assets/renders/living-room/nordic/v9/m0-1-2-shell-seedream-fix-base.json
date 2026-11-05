@@ -1,0 +1,89 @@
+{
+ "asset_id": "m0-1-2-shell-seedream-fix-base",
+ "date": "2026-11-05",
+ "tokens": 0,
+ "script": "assets/renders/house-nordic-v7-2026-11-02/m0_shell_fix.py",
+ "source": "assets/renders/living-room/nordic/v9/m0-shell-seedream.png",
+ "clay": "assets/blockout/house/framing/round5b/M0.png",
+ "global_affine": {
+  "why": "G1.4: lock_v2's register of the raw read -0.51 % vertical (limit 0.5 %)",
+  "register_before": {
+   "affine": [
+    [
+     1.00004,
+     0.00163,
+     -0.34345
+    ],
+    [
+     0.00071,
+     0.99494,
+     2.13838
+    ]
+   ],
+   "shift_px": [
+    -0.34,
+    2.14
+   ],
+   "scale_pct": [
+    0.004,
+    -0.506
+   ]
+  },
+  "canvas_affine_inverse_map": [
+   [
+    1.000042,
+    0.001627,
+    -0.536351
+   ],
+   [
+    0.000712,
+    0.994938,
+    3.040174
+   ]
+  ],
+  "register_after": {
+   "shift_px": [
+    0.15,
+    0.05
+   ],
+   "scale_pct": [
+    -0.005,
+    -0.002
+   ]
+  },
+  "how": "cv2.warpAffine(still, A, WARP_INVERSE_MAP, Lanczos4, border replicate); A = C . M . C^-1, C = the 16:9 frame at 1920 -> the canvas"
+ },
+ "wall_round": {
+  "rendered": {
+   "centre_px": [
+    1341.0,
+    748.7
+   ],
+   "axes_px": [
+    221.7,
+    239.0
+   ]
+  },
+  "target": {
+   "centre_px": [
+    1332.7,
+    769.5
+   ],
+   "axes_px": [
+    118.3,
+    129.1
+   ],
+   "wall_point": [
+    -1.2,
+    0.02,
+    1.2
+   ],
+   "diameter_cm": 38
+  },
+  "scale": 0.5371,
+  "size_before_over_card": 1.862,
+  "how": "rope pixels (hue 15-50, S >= 22, L < 85) -> the largest component -> an ellipse fit to its outer contour (the matte, +3 px); scaled about its centre onto the projected 38 cm circle; the wall behind (the round + 30 px) by a membrane through the wall around + the wall's texture; the soft shadow (ratio original / clean wall in that ring) carried by the same scale"
+ },
+ "furniture": "kept as rendered: on the clay (lock_v2 box edges <= 3 px; width ratios sofa 1.001, table 0.995, armchair 1.002), so the gpt composite (fix_m0_12.py) is not laid on it",
+ "output": "assets/renders/living-room/nordic/v9/m0-1-2-shell-seedream-fix-base.png"
+}
