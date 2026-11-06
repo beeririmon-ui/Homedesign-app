@@ -1,0 +1,1544 @@
+{
+ "report": "qa/reports/2026-11-06-m0-products-shelf-styles.md",
+ "by": "qa-agent",
+ "date": "2026-11-06",
+ "gate": "G1 on the Nordic M0 products pass (M0S2), the M0p warp and the shelf A/B (SHF1 a); a reading of the five style previews (STY1 / STY2, test only, no pass / fail)",
+ "brief": "the coordinator's task of 2026-11-06 (no brief file): board line 2026-11-06 'render-agent (מעבר המוצרים, חמש הדמיות סגנון, A/B מדף)'",
+ "tools": "qa/reports/2026-11-06-m0-products-shelf-styles/tools/*.py (QA; the 11-03 .. 11-05 tools imported, not edited); eye at 100-200 %",
+ "inputs_sha256_16": {
+  "m0-1-2-products-fix.png": "812571b659d881c2",
+  "m0-1-2-products-frame-fix-v6.png": "2598873b43d37d25",
+  "m0-1-2-products-graded-fix-v6.png": "5760fcf2462a9bf2",
+  "m0-1-2-products-fix.json": "e020bb4051396e68",
+  "m0-1-2-products-measurements-fix-v6.json": "a5e7a2909b4474fe",
+  "pose-m0p-1-2-shell-seedream-fix-warp.png": "8ab53aaabb9c7a53",
+  "m0-1-2-products-shelf-graded-fix-v6.png": "661486569a75ca14",
+  "m0-shelf-ab-pass.json": "05916cae1c00a74a",
+  "m0-shelf-ab-ref-clay.json": "c83c7cab3efcd67a",
+  "house-nordic-m0-shelf-ab-sheet-2026-11-06.jpg": "f741fdb59468e5ca",
+  "contact-sheet.png": "00085399c9e85ea1",
+  "report.json": "57ad9bcb2633f048"
+ },
+ "frames": [
+  {
+   "frame": "M0 products fix",
+   "kind": "the products pass (seedream i2i, 650) laid in code over the locked seedream base (m0_products_pass.py), graded v6",
+   "fix_file": "assets/renders/living-room/nordic/v9/m0-1-2-products-fix.png",
+   "graded": "assets/renders/living-room/nordic/v9/m0-1-2-products-graded-fix-v6.png",
+   "frame_file": "assets/renders/living-room/nordic/v9/m0-1-2-products-frame-fix-v6.png",
+   "criteria": [
+    {
+     "id": "G1.4",
+     "binding": true,
+     "value": {
+      "register_shift_px": [
+       0.3,
+       0.17
+      ],
+      "register_scale_pct": [
+       0.0,
+       -0.01
+      ],
+      "residual_gated": {
+       "bands": [
+        3.72,
+        1.68,
+        0.62,
+        1.33
+       ],
+       "tiles": [
+        1.15,
+        6.49,
+        0.2,
+        1.02,
+        1.21,
+        1.02
+       ],
+       "worst": 6.49,
+       "unregistered": {
+        "bands": [
+         1.48,
+         0.84,
+         0.41,
+         1.46
+        ],
+        "tiles": [
+         1.34,
+         6.13,
+         0.4,
+         0.92,
+         1.32,
+         0.89
+        ],
+        "worst": 6.13
+       }
+      },
+      "tiles_registered": [
+       [
+        [
+         0.0,
+         0.25
+        ],
+        [
+         0.0,
+         0.5
+        ],
+        1.15,
+        0.32,
+        0.394
+       ],
+       [
+        [
+         0.25,
+         0.5
+        ],
+        [
+         0.0,
+         0.5
+        ],
+        -6.49,
+        -2.37,
+        0.581
+       ],
+       [
+        [
+         0.5,
+         0.75
+        ],
+        [
+         0.0,
+         0.5
+        ],
+        -0.69,
+        -3.45,
+        0.15
+       ],
+       [
+        [
+         0.75,
+         1.0
+        ],
+        [
+         0.0,
+         0.5
+        ],
+        -1.12,
+        -5.28,
+        0.146
+       ],
+       [
+        [
+         0.0,
+         0.25
+        ],
+        [
+         0.5,
+         1.0
+        ],
+        -0.2,
+        -0.08,
+        0.787
+       ],
+       [
+        [
+         0.25,
+         0.5
+        ],
+        [
+         0.5,
+         1.0
+        ],
+        0.43,
+        -1.02,
+        0.391
+       ],
+       [
+        [
+         0.5,
+         0.75
+        ],
+        [
+         0.5,
+         1.0
+        ],
+        0.68,
+        1.21,
+        0.538
+       ],
+       [
+        [
+         0.75,
+         1.0
+        ],
+        [
+         0.5,
+         1.0
+        ],
+        -0.66,
+        -1.02,
+        0.491
+       ]
+      ],
+      "xcorr_box_ratios": {
+       "sofa 220x92x78 (fixed-product) w": 0.9988,
+       "coffee table 140x70 h38 (fixed-product) w": 0.9954
+      },
+      "note": "the shell and fixed furniture as the 11-05 base (shift 0.3 / 0.17 px, scale 0.00 / -0.01 %; sofa 0.999, table 0.995); band 1 (u 0-0.25) reads 3.72 after register (1.48 unregistered): the new holder in front of the armchair; the 6.5 px tile is the curtain tile of 11-05"
+     },
+     "threshold": "register shift <= 9.6 px and scale within 0.5 %; residual after register <= 2.0 px per band / tile with shared structure for pan endpoints (M0 and M0p are the ends of P0); named lines within +-19 px (G1.4, proposal C3)",
+     "pass": true
+    },
+    {
+     "id": "nothing else moved",
+     "binding": true,
+     "value": {
+      "regions_mean_abs_delta": {
+       "walls left of the art (u 0.38-0.55, v 0.10-0.45)": 0.0,
+       "triptych (u 0.55-0.80, v 0.33-0.53)": 0.0,
+       "sofa and cushions (u 0.47-0.80, v 0.58-0.78)": 0.96,
+       "window (u 0.10-0.26, v 0.06-0.58)": 0.0,
+       "armchair (u 0.03-0.31, v 0.70-0.97)": 2.53,
+       "rug left of the runner (u 0.35-0.46, v 0.86-0.98)": 146.3,
+       "rug right of the runner (u 0.63-0.85, v 0.88-0.98)": 1.07,
+       "coffee table top right of the runner (u 0.60-0.75, v 0.78-0.86)": 1.67,
+       "ceiling (u 0.40-0.90, v 0.00-0.08)": 0.02
+      },
+      "outside": {
+       "mean_per_channel": [
+        1.01,
+        0.95,
+        0.89
+       ],
+       "without_lamp_light_zone": [
+        0.14,
+        0.14,
+        0.13
+       ],
+       "share_over_6_levels_without_lamp_zone": 0.0048,
+       "p99_without_lamp_zone": 4.0
+      },
+      "outside_components": [
+       [
+        8939,
+        [
+         0.892,
+         0.971,
+         0.215,
+         0.25
+        ]
+       ],
+       [
+        2408,
+        [
+         0.829,
+         0.866,
+         0.919,
+         0.953
+        ]
+       ],
+       [
+        607,
+        [
+         0.859,
+         0.87,
+         0.947,
+         0.971
+        ]
+       ],
+       [
+        152,
+        [
+         0.755,
+         0.76,
+         0.737,
+         0.752
+        ]
+       ],
+       [
+        79,
+        [
+         0.762,
+         0.766,
+         0.726,
+         0.734
+        ]
+       ],
+       [
+        35,
+        [
+         0.858,
+         0.86,
+         0.952,
+         0.956
+        ]
+       ],
+       [
+        30,
+        [
+         0.859,
+         0.861,
+         0.957,
+         0.96
+        ]
+       ]
+      ],
+      "note": "walls, triptych, window, ceiling 0.00-0.02 levels; outside the product zones and the lamp's light zone 0.14 levels, p99 4; the changed components outside are the lamp's glow above the shade and the pouf / lamp light on the rug. The 'armchair' region's 2.5 is the holder in front of it, the 'rug left of the runner' the holder itself (QA's region choice). Confirmed: only the products moved"
+     },
+     "threshold": "mean |delta| <= 2 levels outside the product boxes (+-15 %) and the runner area (the brief)",
+     "pass": true
+    },
+    {
+     "id": "G1.1 / G1.3",
+     "binding": true,
+     "value": {
+      "magazine-holder (magazine-holder-cj-felt-log-basket, 45 x 32 x 40, dark grey felt #45474B, wood handles, cognac tabs)": {
+       "box": [
+        0.335,
+        0.421,
+        0.848,
+        1.0
+       ],
+       "drawn_changed_extent": [
+        0.2844,
+        0.4499,
+        0.8285,
+        1.0
+       ],
+       "agent_grabcut": [
+        0.281,
+        0.44,
+        0.856,
+        1.028
+       ],
+       "width_over_box": [
+        1.85,
+        1.92
+       ],
+       "felt_L_median_graded": 20.0,
+       "card_L": 28.2,
+       "form": "right: a charcoal felt tub with round wood handle bars and cognac leather tabs, newspapers inside",
+       "verdict": "fail: about 1.85-1.9x its box's width (about 80 cm against the card's 45), its left edge (u 0.28-0.29) runs in front of the armchair's right front leg where the box keeps 0.020 clear; the felt reads L 20 (render-agent 22.6) against the card's 28: too dark",
+       "pass_": false
+      },
+      "basket (basket-cj-jute-rope-cylinder, 35 x 39 + handles)": {
+       "box": [
+        0.35,
+        0.401,
+        0.686,
+        0.822
+       ],
+       "agent_grabcut": [
+        0.343,
+        0.406,
+        0.681,
+        0.818
+       ],
+       "form": "right: a jute rope cylinder with two loop handles, in the corner by the curtain stack; rope H 27, S 38, L 42",
+       "verdict": "pass (in its box +-15 %; the handles above the box top by ~0.005)",
+       "pass_": true
+      },
+      "floor-lamp (floor-lamp-cj-black-drum-linen; test only, TR3 exception)": {
+       "box": [
+        0.885,
+        0.949,
+        0.389,
+        0.881
+       ],
+       "agent_grabcut": [
+        0.865,
+        0.975,
+        0.36,
+        0.92
+       ],
+       "form": "right: a slim straight black pole on a round black disc base, a linen-look drum shade",
+       "shade_L": 90.6,
+       "wall_left_L": 82.5,
+       "wall_right_L": 76.1,
+       "light_added_stops": {
+        "sofa right end + throw (u 0.78-0.86, v 0.60-0.75)": 0.24,
+        "wall right of the triptych (u 0.82-0.88, v 0.30-0.45)": 0.178,
+        "floor / rug under the lamp (u 0.86-0.95, v 0.86-0.93)": 0.153
+       },
+       "verdict": "shade and base within the box (the base ~0.013 lower); the glow is weak-to-moderate (shade +6..+8 over the wall left of it in QA's patches, +4.5 in render-agent's; +0.24 stop on the sofa's right end); its light on the wall is a G1.12 fail (below)",
+       "pass_": null
+      },
+      "pouf (pouf-cj-cotton-knit-ball-cover; test only)": {
+       "box": [
+        0.905,
+        1.0,
+        0.956,
+        1.0
+       ],
+       "agent_grabcut": [
+        0.888,
+        0.998,
+        0.944,
+        1.028
+       ],
+       "form": "right: a chunky cotton-knit ball, off-white (L 80, H 33, S 26)",
+       "verdict": "fail (G1.3, proposal): its left edge at u ~0.86-0.89 against the box's 0.905 and its top at ~0.94 against 0.956: drawn larger and further left than the 45-48 x 36 envelope's projection",
+       "pass_": false
+      },
+      "table-runner (table-runner-cj-linen-look-sage-fringe, 33 x 183, tassel fringe at both ends)": {
+       "box": [
+        0.472,
+        0.593,
+        0.78,
+        0.9
+       ],
+       "drawn_changed_extent": [
+        0.4748,
+        0.6151,
+        0.7498,
+        0.9591
+       ],
+       "form": "right now: a sage linen-look runner across the table's width in its left third, hanging over the front edge with a knotted fringe (11-05: a short cloth)",
+       "verdict": "pass; the front drop (~25-30 cm by eye) is shorter than a 183 cm runner across a 70 cm table implies (~56 cm each side): a note, not a fail",
+       "pass_": true
+      }
+     },
+     "threshold": "every product the card's SKU and inside its box +-15 % (G1.3 proposal)",
+     "pass": false
+    },
+    {
+     "id": "G1.12",
+     "binding": true,
+     "value": {
+      "violations": [
+       "the floor lamp's light on the wall: a bright trapezoid with hard straight edges behind the pole (a vertical edge right of the shade from the shade down to the skirting, a horizontal edge and a cut corner by the shade's right; canvas ~x 2310-2595, y ~740-1310): the light zone's boundary, visible at 100 % (overlays/g112-products-floor-lamp.jpg)"
+      ],
+      "ok": [
+       "holder, basket, pouf, runner: no seam, halo or fringe of the lay at 100 % (overlays/g112-products-*.jpg)",
+       "the old short runner gone, the oak under it clean"
+      ]
+     },
+     "threshold": "0 seams, halos, fill artefacts at 100 % (Bible 'forbidden'; G1.12)",
+     "pass": false
+    },
+    {
+     "id": "G1.7-G1.9 (grading v6)",
+     "binding": true,
+     "value": {
+      "fall_off": {
+       "by the corner (0.427, 0.416) [90-94]": {
+        "L": 91.0,
+        "C": 6.95,
+        "ok": true
+       },
+       "centre, above the triptych (0.62, 0.30) [88-91]": {
+        "L": 89.0,
+        "C": 3.14,
+        "ok": true
+       },
+       "centre, between triptych and sofa (0.62, 0.55) [88-91]": {
+        "L": 91.0,
+        "C": 2.9,
+        "ok": true
+       },
+       "right edge of the back wall (0.97, 0.31) [82-86]": {
+        "L": 85.7,
+        "C": 5.48,
+        "ok": true
+       }
+      },
+      "window_wall": {
+       "uv": [
+        0.352,
+        0.415
+       ],
+       "L": 84.1,
+       "H": 36.6,
+       "S": 32.7,
+       "Lstar": 87.16,
+       "C": 9.41
+      },
+      "black": 13.4,
+      "max_L": 96.5,
+      "px255": 0,
+      "shape": {
+       "Lstar_p1": 18.4,
+       "Lstar_p5": 31.0,
+       "Lstar_p50": 86.1,
+       "Lstar_p95": 96.7,
+       "share_Lstar_over_90": 0.357,
+       "mean_C": 8.34,
+       "local_contrast_median": 3.25,
+       "regions_Lstar": {
+        "charcoal cushion": 28.6,
+        "rug / floor right of the sofa": 86.1,
+        "under the sofa right of the table (shadow)": 18.7,
+        "wood floor by the window": 45.9
+       }
+      },
+      "note": "the milky look of 11-05 is gone: the fall-off is in range at every Bible point (91.0 / 89.0 / 91.0 / 85.7), 35.7 % of the frame above L* 90 (was 68.7 %), local contrast 3.3 (was 1.3). render-agent's own v6 misses (glass margin 2.9 against 3, frame mean, the sofa's contact shadow, the cube washes, print 3's frame) are test-page numbers outside the Bible list QA checks; the v6 local fields are test-page grading only (B3)"
+     },
+     "threshold": "Bible 1.8.4 light and the grading chapter's fall-off: corner 90-94, centre 88-91, right edge 82-86, window wall 80-88, black 12-15, max <= 97, no 255",
+     "pass": true
+    },
+    {
+     "id": "G1.14",
+     "binding": true,
+     "value": "P0: the seedream M0p composite has none of the four products and the old short runner (overlays/g112-M0p-warp-max-100.jpg); it needs the same lay before P0 can be read",
+     "threshold": "pan pair <= 2 px, the same objects",
+     "pass": false
+    }
+   ],
+   "verdict": "fail",
+   "failed_in_the_frame": [
+    "G1.1 / G1.3 (the holder ~1.9x and too dark; the pouf off its box)",
+    "G1.12 (the lamp light's hard edges)"
+   ],
+   "may_reference": "yes for the shell, the furniture, the basket, the runner and the light (v6); not for the holder, the pouf or the lamp's light",
+   "may_pan_endpoint": "not yet: P0 needs the M0p with the same products; the holder and the lamp light first",
+   "products_unverified": [
+    "framed-art-aliexpress-minimal-geometric-triptych-prints",
+    "wall-sconce-cj-travertine-cube-updown-12",
+    "pendant-cj-silk-ribbed-pumpkin-40",
+    "curtains-aliexpress-linen-blend-s-fold-180502",
+    "vase-aliexpress-vintage-distressed-clay-vase-589009",
+    "wall-sconce-cj-black-swing-arm-fabric",
+    "cushions-cj-boucle-teddy",
+    "cushions-cj-knitted-chenille-bean-green",
+    "cushions-cj-linen-look-charcoal",
+    "sofa-cover-cj-cotton-muslin-fringe",
+    "table-runner-cj-linen-look-sage-fringe",
+    "candle-holders-cj-travertine-pedestal",
+    "bowl-cj-glutinous-white-belly-bowl-21",
+    "wall-decor-cj-corn-husk-round-38",
+    "magazine-holder-cj-felt-log-basket",
+    "basket-cj-jute-rope-cylinder",
+    "floor-lamp-cj-black-drum-linen",
+    "pouf-cj-cotton-knit-ball-cover"
+   ]
+  },
+  {
+   "frame": "M0p seedream warp",
+   "kind": "a local warp in code (m0p_warp.py, dx -8.4..+7.0 px) of the seedream M0p composite",
+   "fix_file": "assets/renders/living-room/nordic/v9/pose-m0p-1-2-shell-seedream-fix-warp.png",
+   "graded": null,
+   "criteria": [
+    {
+     "id": "G1.4",
+     "binding": true,
+     "value": {
+      "register_shift_px": [
+       1.2,
+       1.43
+      ],
+      "register_scale_pct": [
+       -0.01,
+       -0.0
+      ],
+      "residual_gated": {
+       "bands": [
+        1.68,
+        1.61,
+        0.95
+       ],
+       "tiles": [
+        2.21,
+        5.5,
+        0.5,
+        0.49,
+        1.52,
+        4.63
+       ],
+       "worst": 5.5,
+       "unregistered": {
+        "bands": [
+         0.16,
+         0.76,
+         1.04
+        ],
+        "tiles": [
+         2.76,
+         4.53,
+         0.71,
+         1.45,
+         2.23,
+         4.42
+        ],
+        "worst": 4.53
+       }
+      },
+      "tiles_registered": [
+       [
+        [
+         0.0,
+         0.25
+        ],
+        [
+         0.0,
+         0.5
+        ],
+        1.62,
+        -2.21,
+        0.415
+       ],
+       [
+        [
+         0.25,
+         0.5
+        ],
+        [
+         0.0,
+         0.5
+        ],
+        0.42,
+        -3.88,
+        0.147
+       ],
+       [
+        [
+         0.5,
+         0.75
+        ],
+        [
+         0.0,
+         0.5
+        ],
+        -5.5,
+        -2.47,
+        0.751
+       ],
+       [
+        [
+         0.75,
+         1.0
+        ],
+        [
+         0.0,
+         0.5
+        ],
+        2.43,
+        14.12,
+        0.066
+       ],
+       [
+        [
+         0.0,
+         0.25
+        ],
+        [
+         0.5,
+         1.0
+        ],
+        -0.37,
+        -0.5,
+        0.807
+       ],
+       [
+        [
+         0.25,
+         0.5
+        ],
+        [
+         0.5,
+         1.0
+        ],
+        -0.41,
+        0.49,
+        0.621
+       ],
+       [
+        [
+         0.5,
+         0.75
+        ],
+        [
+         0.5,
+         1.0
+        ],
+        1.52,
+        -0.32,
+        0.724
+       ],
+       [
+        [
+         0.75,
+         1.0
+        ],
+        [
+         0.5,
+         1.0
+        ],
+        -4.63,
+        -3.06,
+        0.932
+       ]
+      ],
+      "xcorr_box_ratios": {
+       "sofa 220x92x78 (fixed-product) w": 1.0831,
+       "coffee table 140x70 h38 (fixed-product) w": 0.9604,
+       "sofa 220x92x78 (fixed-product) h": 0.8464
+      },
+      "before_warp": {
+       "register_shift_px": [
+        0.01,
+        -0.24
+       ],
+       "register_scale_pct": [
+        0.01,
+        0.02
+       ],
+       "residual_gated": {
+        "bands": [
+         1.36,
+         6.78,
+         1.68
+        ],
+        "tiles": [
+         2.76,
+         4.7,
+         1.16,
+         3.73,
+         3.36,
+         4.48
+        ],
+        "worst": 6.78,
+        "unregistered": {
+         "bands": [
+          1.38,
+          6.71,
+          1.62
+         ],
+         "tiles": [
+          2.76,
+          4.53,
+          1.16,
+          3.67,
+          3.46,
+          4.42
+         ],
+         "worst": 6.71
+        }
+       },
+       "tiles_registered": [
+        [
+         [
+          0.0,
+          0.25
+         ],
+         [
+          0.0,
+          0.5
+         ],
+         2.76,
+         -0.72,
+         0.417
+        ],
+        [
+         [
+          0.25,
+          0.5
+         ],
+         [
+          0.0,
+          0.5
+         ],
+         0.76,
+         -2.6,
+         0.141
+        ],
+        [
+         [
+          0.5,
+          0.75
+         ],
+         [
+          0.0,
+          0.5
+         ],
+         -4.7,
+         -1.59,
+         0.751
+        ],
+        [
+         [
+          0.75,
+          1.0
+         ],
+         [
+          0.0,
+          0.5
+         ],
+         2.95,
+         15.04,
+         0.068
+        ],
+        [
+         [
+          0.0,
+          0.25
+         ],
+         [
+          0.5,
+          1.0
+         ],
+         0.04,
+         -1.16,
+         0.788
+        ],
+        [
+         [
+          0.25,
+          0.5
+         ],
+         [
+          0.5,
+          1.0
+         ],
+         -3.73,
+         1.0,
+         0.594
+        ],
+        [
+         [
+          0.5,
+          0.75
+         ],
+         [
+          0.5,
+          1.0
+         ],
+         3.36,
+         -0.85,
+         0.714
+        ],
+        [
+         [
+          0.75,
+          1.0
+         ],
+         [
+          0.5,
+          1.0
+         ],
+         -4.48,
+         -2.84,
+         0.932
+        ]
+       ],
+       "xcorr_box_ratios": {
+        "sofa 220x92x78 (fixed-product) w": 1.0871,
+        "coffee table 140x70 h38 (fixed-product) w": 1.003,
+        "sofa 220x92x78 (fixed-product) h": 0.8604
+       }
+      },
+      "named_lines_1080": "floor line 870 vs clay 871; cornice 74 / 108 vs 75 / 104 (+4 at x 600); back-right corner 1357-1360 vs 1362 (-2..-5); the left corner / jamb 42-45 vs 37-38 (+5..+7); sofa left arm 307 vs 305",
+      "note": "agrees with render-agent: bands <= 1.68 (was 6.78), tiles 5.5 and 4.63 over 2 px: tile u 0.5-0.75, v 0-0.5 (rho 0.75: the back-right corner) and u 0.75-1.0, v 0.5-1.0 (rho 0.93: the right wall's skirting and floor): the right wall is drawn in a slightly different perspective; render-agent's next step (a homography for the right wall) is the right one"
+     },
+     "threshold": "register shift <= 9.6 px and scale within 0.5 %; residual after register <= 2.0 px per band / tile with shared structure for pan endpoints (M0 and M0p are the ends of P0); named lines within +-19 px (G1.4, proposal C3)",
+     "pass": false
+    },
+    {
+     "id": "G1.12",
+     "binding": true,
+     "value": "no bend or seam where the warp moved most (the table and the runner, u ~0.29, v ~0.84; overlays/g112-M0p-warp-max-100.jpg)",
+     "threshold": "0 seams, halos, fill artefacts at 100 % (Bible 'forbidden'; G1.12)",
+     "pass": true
+    }
+   ],
+   "verdict": "fail",
+   "failed_in_the_frame": [
+    "G1.4 (tiles 5.5 / 4.6 px on the corner and the right wall)"
+   ],
+   "may_reference": "no",
+   "may_pan_endpoint": "no: the right wall, then the products lay",
+   "products_unverified": []
+  }
+ ],
+ "shelf_ab": {
+  "frame": "M0 shelf A/B (B)",
+  "kind": "SHF1 (a): the shelf pass (seedream i2i, 650) laid in code in the shelf zone of the graded v6 frame",
+  "file": "assets/renders/living-room/nordic/v9/m0-1-2-products-shelf-graded-fix-v6.png",
+  "sheet": "assets/renders/house-nordic-m0-shelf-ab-sheet-2026-11-06.jpg",
+  "spec": "docs/proposals/living-room-shelf-2026-11-06.md: floating oak shelf 55 x 18, 3 thick, top at 1.00, X -1.65..-1.10 on the back wall; black matte jar 30 (30 x 15), cream fluted column, travertine tray with the reed diffuser",
+  "sizes": {
+   "how": "QA's eye on 100 % crops with the position map's boxes (m0-shelf-ab-ref-clay.json) drawn on the clay and on B (overlays/shelf-*-boxes-100.jpg)",
+   "shelf": {
+    "box_px_w": 194,
+    "drawn_px_w": 385,
+    "ratio": 1.98,
+    "thickness": "front face ~25 px against the box's ~14 (2-3x)",
+    "agent": "x1.89 (~105 cm), ~9 cm thick"
+   },
+   "jar": {
+    "box_px_wh": [
+     49,
+     100
+    ],
+    "drawn_px_wh": [
+     90,
+     140
+    ],
+    "ratio": [
+     1.84,
+     1.4
+    ],
+    "agent": "~40 x 30 against 30 x 15"
+   },
+   "column": {
+    "ratio_height": "~1.07",
+    "width": "~1.5",
+    "position": "~30 px right of its box"
+   },
+   "tray": {
+    "ratio_width": 1.14,
+    "position": "~80 px right of its box",
+    "material": "reads as white marble with grey veins, not travertine (pool-cj-travertine-organic-tray-24)"
+   },
+   "diffuser": {
+    "vessel": "~1.6x the box's width, on the tray, bamboo lid",
+    "agent_vessel_height": 1.7
+   },
+   "group": "the whole group spreads ~1.9x wider than planned, its right end under the right sconce ~40 px from the triptych"
+  },
+  "outside_zone": "identical to A outside the shelf zone: the changed pixels lie in canvas u 0.399-0.556, v 0.376-0.584 (render-agent: 0.003)",
+  "light": "the laid zone was not re-graded: 1045 pixels at 255 (canvas u 0.426-0.527, v 0.385-0.542) and the black point 7.0 (the jar; Bible 12-15)",
+  "verdict": "fail for sizes and for the grade of the laid zone; readable as a look only: what the owner sees is a shelf about twice as long and a jar about twice as wide as proposed",
+  "pass_": false
+ },
+ "style_previews": {
+  "warm-modern": {
+   "shell_max_px": 46.83,
+   "vanishing_point": {
+    "clay": [
+     -1853.0,
+     538.0
+    ],
+    "render": [
+     -1523.0,
+     491.0
+    ]
+   },
+   "lock_v2": {
+    "global_pass": true,
+    "residual_pass": true,
+    "edges_pass": true,
+    "pass": true
+   },
+   "reference_cards": [
+    "framed-art-aliexpress-frameless-minimalist-wall-art-631735",
+    "accent-sconces-aliexpress-travertine-cylinder-walnut-choice",
+    "floor-lamp-cj-pleated-walnut-stem-158",
+    "cushions-cj-boucle-teddy (White)",
+    "pendant-cj-tiered-fabric-drum"
+   ],
+   "agent_visual_notes": [
+    "hard sun patches and leaf shadows on the window wall and its reveal (the brief says no sun); plaster blotches on the reveal",
+    "magazine-holder: a leather-strapped bundle drawn on the coffee table, not on the rug in the foreground slot",
+    "basket: no jute basket in the back-left corner (the olive planter stands there); a woven basket rim shows at the bottom-right instead of the boucle pouf",
+    "wall round: plaster relief disc, in place"
+   ]
+  },
+  "boho": {
+   "shell_max_px": 19.91,
+   "vanishing_point": {
+    "clay": [
+     -1853.0,
+     538.0
+    ],
+    "render": [
+     -1913.0,
+     561.0
+    ]
+   },
+   "lock_v2": {
+    "global_pass": false,
+    "residual_pass": false,
+    "edges_pass": true,
+    "pass": false
+   },
+   "reference_cards": [
+    "wall-decor-aliexpress-natural-raffia-woven-bohemian-763597",
+    "wall-sconce-aliexpress-rattan-bamboo-wall-lamp-671943",
+    "planter-zendrop-seagrass-belly-basket-45",
+    "cushions-cj-washed-cotton-frayed (Rust Orange)",
+    "table-runner-aliexpress-boho-macrame-table-runners-263532"
+   ],
+   "agent_visual_notes": [
+    "mild sun on the window-wall reveal",
+    "magazine-holder: missing from the foreground slot",
+    "basket (wicker log basket), pouf, tasselled runner, rattan sun round: in place"
+   ]
+  },
+  "japandi": {
+   "shell_max_px": 52.29,
+   "vanishing_point": {
+    "clay": [
+     -1853.0,
+     538.0
+    ],
+    "render": [
+     -1424.0,
+     480.0
+    ]
+   },
+   "lock_v2": {
+    "global_pass": true,
+    "residual_pass": true,
+    "edges_pass": true,
+    "pass": true
+   },
+   "reference_cards": [
+    "framed-art-aliexpress-japanese-wabi-sabi-tree-176323",
+    "vase-cj-black-matte-stoneware-jar-30",
+    "pendant-cj-pleated-pumpkin-lantern-40",
+    "accent-sconces-aliexpress-travertine-cylinder-walnut-choice",
+    "candle-holders-aliexpress-matte-black-iron-pillar-set2"
+   ],
+   "agent_visual_notes": [
+    "sun streaks on the floor and a hard olive-tree shadow on the window wall",
+    "wall round: missing; a faint pale rectangle on the wall right of the right sconce",
+    "triptych drawn larger than the clay frames (top about 0.22 vs the Nordic 0.31 of the frame height)",
+    "magazine-holder: an X-frame rack in the back-left corner beside the basket, not in the foreground slot",
+    "pouf, paper lantern floor lamp: in place"
+   ]
+  },
+  "mediterranean": {
+   "shell_max_px": 12.61,
+   "vanishing_point": {
+    "clay": [
+     -1853.0,
+     538.0
+    ],
+    "render": [
+     -1713.0,
+     514.0
+    ]
+   },
+   "lock_v2": {
+    "global_pass": true,
+    "residual_pass": true,
+    "edges_pass": true,
+    "pass": true
+   },
+   "reference_cards": [
+    "framed-art-aliexpress-mediterranean-wabi-sabi-poster-802890",
+    "magazine-holder-cj-arch-iron-cane",
+    "vase-aliexpress-vintage-distressed-clay-vase-589009",
+    "cushions-cj-washed-cotton-frayed (Earthy Orange)",
+    "basket-zendrop-seagrass-belly-38x34"
+   ],
+   "agent_visual_notes": [
+    "hard sun patches on the window wall and in the corner",
+    "a new black iron rack / etagere in the back-left corner (the holder moved there), not in the clay",
+    "wall round: missing; magazine-holder: missing from the foreground slot"
+   ]
+  },
+  "modern-country": {
+   "shell_max_px": 19.38,
+   "vanishing_point": {
+    "clay": [
+     -1853.0,
+     538.0
+    ],
+    "render": [
+     -1960.0,
+     565.0
+    ]
+   },
+   "lock_v2": {
+    "global_pass": true,
+    "residual_pass": true,
+    "edges_pass": false,
+    "pass": false
+   },
+   "reference_cards": [
+    "cushions-aliexpress-farmhouse-floral-pillow-covers-166217",
+    "vase-aliexpress-vintage-distressed-clay-vase-589009",
+    "table-runner-cj-linen-look-sage-fringe (4 Light Green)",
+    "bowl-cj-speckled-ivory-wide-bowl-21",
+    "basket-zendrop-seagrass-belly-38x34"
+   ],
+   "agent_visual_notes": [
+    "hard leaf shadow on the window-wall reveal (sun)",
+    "magazine-holder: a wicker basket in the foreground slot, in place; wall round: a wicker wall basket, in place; pouf in place"
+   ]
+  }
+ },
+ "products_data": {
+  "regions_mean_abs_delta": {
+   "walls left of the art (u 0.38-0.55, v 0.10-0.45)": 0.0,
+   "triptych (u 0.55-0.80, v 0.33-0.53)": 0.0,
+   "sofa and cushions (u 0.47-0.80, v 0.58-0.78)": 0.96,
+   "window (u 0.10-0.26, v 0.06-0.58)": 0.0,
+   "armchair (u 0.03-0.31, v 0.70-0.97)": 2.53,
+   "rug left of the runner (u 0.35-0.46, v 0.86-0.98)": 146.3,
+   "rug right of the runner (u 0.63-0.85, v 0.88-0.98)": 1.07,
+   "coffee table top right of the runner (u 0.60-0.75, v 0.78-0.86)": 1.67,
+   "ceiling (u 0.40-0.90, v 0.00-0.08)": 0.02
+  },
+  "outside_product_zones": {
+   "mean_per_channel": [
+    1.01,
+    0.95,
+    0.89
+   ],
+   "without_lamp_light_zone": [
+    0.14,
+    0.14,
+    0.13
+   ],
+   "share_over_6_levels_without_lamp_zone": 0.0048,
+   "p99_without_lamp_zone": 4.0
+  },
+  "outside_changed_components_px_box": [
+   [
+    8939,
+    [
+     0.892,
+     0.971,
+     0.215,
+     0.25
+    ]
+   ],
+   [
+    2408,
+    [
+     0.829,
+     0.866,
+     0.919,
+     0.953
+    ]
+   ],
+   [
+    607,
+    [
+     0.859,
+     0.87,
+     0.947,
+     0.971
+    ]
+   ],
+   [
+    152,
+    [
+     0.755,
+     0.76,
+     0.737,
+     0.752
+    ]
+   ],
+   [
+    79,
+    [
+     0.762,
+     0.766,
+     0.726,
+     0.734
+    ]
+   ],
+   [
+    35,
+    [
+     0.858,
+     0.86,
+     0.952,
+     0.956
+    ]
+   ],
+   [
+    30,
+    [
+     0.859,
+     0.861,
+     0.957,
+     0.96
+    ]
+   ]
+  ],
+  "changed_extents": {
+   "magazine-holder": {
+    "changed_extent_uv": [
+     0.2844,
+     0.4499,
+     0.8285,
+     1.0
+    ],
+    "box_uv": [
+     0.335,
+     0.421,
+     0.848,
+     1.0
+    ],
+    "width_ratio": 1.92,
+    "height_ratio": 1.13,
+    "note": "changed pixels include the product's contact shadow and what it uncovered / covered: an upper bound"
+   },
+   "basket": {
+    "changed_extent_uv": [
+     0.3469,
+     0.4163,
+     0.6686,
+     0.8057
+    ],
+    "box_uv": [
+     0.35,
+     0.401,
+     0.686,
+     0.822
+    ],
+    "width_ratio": 1.36,
+    "height_ratio": 1.01,
+    "note": "changed pixels include the product's contact shadow and what it uncovered / covered: an upper bound"
+   },
+   "pouf": {
+    "changed_extent_uv": [
+     0.8699,
+     0.9788,
+     0.9194,
+     1.0
+    ],
+    "box_uv": [
+     0.905,
+     1.0,
+     0.956,
+     1.0
+    ],
+    "width_ratio": 1.15,
+    "height_ratio": 1.83,
+    "note": "changed pixels include the product's contact shadow and what it uncovered / covered: an upper bound"
+   },
+   "floor-lamp": {
+    "changed_extent_uv": [
+     0.8498,
+     0.9898,
+     0.3398,
+     0.9396
+    ],
+    "box_uv": [
+     0.885,
+     0.949,
+     0.389,
+     0.881
+    ],
+    "width_ratio": 2.19,
+    "height_ratio": 1.22,
+    "note": "changed pixels include the product's contact shadow and what it uncovered / covered: an upper bound"
+   },
+   "table-runner": {
+    "changed_extent_uv": [
+     0.4748,
+     0.6151,
+     0.7498,
+     0.9591
+    ],
+    "box_uv": [
+     0.472,
+     0.593,
+     0.78,
+     0.9
+    ],
+    "width_ratio": 1.16,
+    "height_ratio": 1.74,
+    "note": "changed pixels include the product's contact shadow and what it uncovered / covered: an upper bound"
+   }
+  },
+  "lamp": {
+   "shade_L": null,
+   "shade_L_graded": 89.7,
+   "wall_left_L_graded": 83.7,
+   "light added (fix / base, linear): sofa right end + throw (u 0.78-0.86, v 0.60-0.75)": 0.24,
+   "light added (fix / base, linear): wall right of the triptych (u 0.82-0.88, v 0.30-0.45)": 0.178,
+   "light added (fix / base, linear): floor / rug under the lamp (u 0.86-0.95, v 0.86-0.93)": 0.153
+  }
+ },
+ "light_v6": {
+  "M0 products v6": {
+   "file": "assets/renders/living-room/nordic/v9/m0-1-2-products-graded-fix-v6.png",
+   "window_wall": {
+    "uv": [
+     0.352,
+     0.415
+    ],
+    "L": 84.1,
+    "H": 36.6,
+    "S": 32.7,
+    "Lstar": 87.16,
+    "C": 9.41
+   },
+   "fall_off": {
+    "by the corner (0.427, 0.416) [90-94]": {
+     "uv": [
+      0.4269,
+      0.4156
+     ],
+     "L": 91.0,
+     "H": 36.3,
+     "S": 43.0,
+     "Lstar": 93.0,
+     "C": 6.95,
+     "range": [
+      90,
+      94
+     ],
+     "ok": true
+    },
+    "centre, above the triptych (0.62, 0.30) [88-91]": {
+     "uv": [
+      0.62,
+      0.3
+     ],
+     "L": 89.0,
+     "H": 48.8,
+     "S": 12.9,
+     "Lstar": 90.94,
+     "C": 3.14,
+     "range": [
+      88,
+      91
+     ],
+     "ok": true
+    },
+    "centre, between triptych and sofa (0.62, 0.55) [88-91]": {
+     "uv": [
+      0.62,
+      0.55
+     ],
+     "L": 91.0,
+     "H": 45.8,
+     "S": 15.3,
+     "Lstar": 92.57,
+     "C": 2.9,
+     "range": [
+      88,
+      91
+     ],
+     "ok": true
+    },
+    "right edge of the back wall (0.97, 0.31) [82-86]": {
+     "uv": [
+      0.97,
+      0.31
+     ],
+     "L": 85.7,
+     "H": 38.7,
+     "S": 20.2,
+     "Lstar": 88.12,
+     "C": 5.48,
+     "range": [
+      82,
+      86
+     ],
+     "ok": true
+    }
+   },
+   "black": 13.4,
+   "max_L": 96.5,
+   "px255": 0,
+   "shape": {
+    "Lstar_p1": 18.4,
+    "Lstar_p5": 31.0,
+    "Lstar_p50": 86.1,
+    "Lstar_p95": 96.7,
+    "share_Lstar_over_90": 0.357,
+    "mean_C": 8.34,
+    "local_contrast_median": 3.25,
+    "regions_Lstar": {
+     "charcoal cushion": 28.6,
+     "rug / floor right of the sofa": 86.1,
+     "under the sofa right of the table (shadow)": 18.7,
+     "wood floor by the window": 45.9
+    }
+   }
+  },
+  "M0 products + shelf v6 (B)": {
+   "file": "assets/renders/living-room/nordic/v9/m0-1-2-products-shelf-graded-fix-v6.png",
+   "window_wall": {
+    "uv": [
+     0.352,
+     0.415
+    ],
+    "L": 84.1,
+    "H": 36.6,
+    "S": 32.7,
+    "Lstar": 87.16,
+    "C": 9.41
+   },
+   "fall_off": {
+    "by the corner (0.427, 0.416) [90-94]": {
+     "uv": [
+      0.4269,
+      0.4156
+     ],
+     "L": 91.0,
+     "H": 36.3,
+     "S": 43.0,
+     "Lstar": 93.0,
+     "C": 6.95,
+     "range": [
+      90,
+      94
+     ],
+     "ok": true
+    },
+    "centre, above the triptych (0.62, 0.30) [88-91]": {
+     "uv": [
+      0.62,
+      0.3
+     ],
+     "L": 89.0,
+     "H": 48.8,
+     "S": 12.9,
+     "Lstar": 90.94,
+     "C": 3.14,
+     "range": [
+      88,
+      91
+     ],
+     "ok": true
+    },
+    "centre, between triptych and sofa (0.62, 0.55) [88-91]": {
+     "uv": [
+      0.62,
+      0.55
+     ],
+     "L": 91.0,
+     "H": 45.8,
+     "S": 15.3,
+     "Lstar": 92.57,
+     "C": 2.9,
+     "range": [
+      88,
+      91
+     ],
+     "ok": true
+    },
+    "right edge of the back wall (0.97, 0.31) [82-86]": {
+     "uv": [
+      0.97,
+      0.31
+     ],
+     "L": 85.7,
+     "H": 38.7,
+     "S": 20.2,
+     "Lstar": 88.12,
+     "C": 5.48,
+     "range": [
+      82,
+      86
+     ],
+     "ok": true
+    }
+   },
+   "black": 7.0,
+   "max_L": 100.0,
+   "px255": 1045,
+   "shape": {
+    "Lstar_p1": 17.7,
+    "Lstar_p5": 30.4,
+    "Lstar_p50": 85.8,
+    "Lstar_p95": 96.7,
+    "share_Lstar_over_90": 0.347,
+    "mean_C": 8.43,
+    "local_contrast_median": 3.45,
+    "regions_Lstar": {
+     "charcoal cushion": 28.6,
+     "rug / floor right of the sofa": 86.1,
+     "under the sofa right of the table (shadow)": 18.7,
+     "wood floor by the window": 45.9
+    }
+   }
+  },
+  "M0 seedream v5 (11-05)": {
+   "file": "assets/renders/living-room/nordic/v9/m0-1-2-shell-seedream-graded-fix-v5.png",
+   "window_wall": {
+    "uv": [
+     0.352,
+     0.415
+    ],
+    "L": 86.4,
+    "H": 36.1,
+    "S": 36.2,
+    "Lstar": 89.1,
+    "C": 8.58
+   },
+   "fall_off": {
+    "by the corner (0.427, 0.416) [90-94]": {
+     "uv": [
+      0.4269,
+      0.4156
+     ],
+     "L": 92.2,
+     "H": 36.7,
+     "S": 45.7,
+     "Lstar": 94.02,
+     "C": 6.39,
+     "range": [
+      90,
+      94
+     ],
+     "ok": true
+    },
+    "centre, above the triptych (0.62, 0.30) [88-91]": {
+     "uv": [
+      0.62,
+      0.3
+     ],
+     "L": 96.5,
+     "H": 63.3,
+     "S": 0.4,
+     "Lstar": 96.73,
+     "C": 0.02,
+     "range": [
+      88,
+      91
+     ],
+     "ok": false
+    },
+    "centre, between triptych and sofa (0.62, 0.55) [88-91]": {
+     "uv": [
+      0.62,
+      0.55
+     ],
+     "L": 96.5,
+     "H": 60.0,
+     "S": 0.0,
+     "Lstar": 96.73,
+     "C": 0.02,
+     "range": [
+      88,
+      91
+     ],
+     "ok": false
+    },
+    "right edge of the back wall (0.97, 0.31) [82-86]": {
+     "uv": [
+      0.97,
+      0.31
+     ],
+     "L": 90.9,
+     "H": 38.1,
+     "S": 31.1,
+     "Lstar": 92.75,
+     "C": 5.01,
+     "range": [
+      82,
+      86
+     ],
+     "ok": false
+    }
+   },
+   "black": 12.5,
+   "max_L": 96.5,
+   "px255": 0,
+   "shape": {
+    "Lstar_p1": 36.0,
+    "Lstar_p5": 51.9,
+    "Lstar_p50": 94.9,
+    "Lstar_p95": 96.7,
+    "share_Lstar_over_90": 0.687,
+    "mean_C": 6.54,
+    "local_contrast_median": 1.3,
+    "regions_Lstar": {
+     "charcoal cushion": 39.6,
+     "rug / floor right of the sofa": 95.1,
+     "under the sofa right of the table (shadow)": 19.9,
+     "wood floor by the window": 70.8
+    }
+   }
+  }
+ }
+}
