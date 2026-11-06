@@ -585,6 +585,8 @@ def exposure_map(P, Mk, X, prof):
         cxm = np.nonzero(labc == i)[1].mean()
         Eo[labc == i] = P["lamp_faces"][0 if cxm < W * 0.7 else 1]
     Eo[ol == -2] = E_bw[ol == -2]                                   # the triptych hangs flat on the wall: the wall's own light there
+    for lab_, st_ in P.get("obj_stops", {}).items():                 # per-object stops (2026-11-06, the products pass: the holder to its card, the lamp shade)
+        Eo[ol == int(lab_)] = st_
     Eo[I == 0] = P["glass"]
     Eo[np.isin(I, [4, 12, 14])] = P["window_arch"]
     Eo = cv2.GaussianBlur(Eo, (0, 0), 1.0)
@@ -662,7 +664,7 @@ def grade(a, Mk, P, X, prof, rec=None):
     rec["white_balance"] = dict(patch=list(WB_UV), H_before=round(h * 360, 1), H_target=36, gains_rgb=[round(float(x), 4) for x in gain], as_v5=True)
     lin = lin * gain
     E, erec = exposure_map(P, Mk, X, prof)
-    rec["exposure"] = dict(params={k: (round(v, 3) if isinstance(v, float) else [round(x, 3) for x in v]) for k, v in P.items()}, **erec)
+    rec["exposure"] = dict(params={k: (round(v, 3) if isinstance(v, float) else (v if isinstance(v, dict) else [round(x, 3) for x in v])) for k, v in P.items()}, **erec)
     lin = lin * (2.0 ** E)[..., None]
     # the lamps' glow back from the raw (screen in linear light): the raw's excess over the wall's base in the wash fans, scaled
     zs = wash_zones(Mk, H, W)

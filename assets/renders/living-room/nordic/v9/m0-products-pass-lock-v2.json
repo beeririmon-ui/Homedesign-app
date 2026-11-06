@@ -1,0 +1,564 @@
+{
+ "frame": "M0",
+ "id": "m0-products-pass",
+ "size": [
+  1920,
+  1080
+ ],
+ "pan_endpoint": false,
+ "edges_mode": "v3",
+ "method": "lock_v2 edges v3 (register + bands / tiles with shared structure + box edges by cross-correlation + QA's named edges)",
+ "check_raw": {
+  "size": [
+   1920,
+   1080
+  ],
+  "overlap_u": [
+   0.0,
+   0.999
+  ],
+  "overlap_v": [
+   0.0,
+   0.999
+  ],
+  "shift_px": {
+   "dx": 0.64,
+   "dy": -1.1,
+   "response": 0.141
+  },
+  "bands": [
+   {
+    "u": [
+     0.0,
+     0.249
+    ],
+    "dx_px": -1.46,
+    "dy_px": -1.13,
+    "response": 0.179
+   },
+   {
+    "u": [
+     0.249,
+     0.499
+    ],
+    "dx_px": 0.18,
+    "dy_px": -0.6,
+    "response": 0.113
+   },
+   {
+    "u": [
+     0.499,
+     0.749
+    ],
+    "dx_px": 1.5,
+    "dy_px": -0.99,
+    "response": 0.126
+   },
+   {
+    "u": [
+     0.749,
+     0.999
+    ],
+    "dx_px": -0.88,
+    "dy_px": -0.99,
+    "response": 0.081
+   }
+  ],
+  "deltaE": {
+   "mean": 19.09,
+   "p95": 50.36,
+   "share_over_5": 0.877
+  },
+  "L_mean": {
+   "a": 88.0,
+   "b": 70.3
+  }
+ },
+ "register": {
+  "affine": [
+   [
+    1.00084,
+    -0.00037,
+    0.07933
+   ],
+   [
+    0.00022,
+    0.99592,
+    2.6421
+   ]
+  ],
+  "shift_px": [
+   0.08,
+   2.64
+  ],
+  "scale": [
+   1.00084,
+   0.99592
+  ],
+  "note": "ECC affine, clay (template) -> render coordinates at 1920x1080; scale > 1 = the render drew it larger"
+ },
+ "check_registered": {
+  "size": [
+   1920,
+   1080
+  ],
+  "overlap_u": [
+   0.0,
+   0.999
+  ],
+  "overlap_v": [
+   0.0,
+   0.999
+  ],
+  "shift_px": {
+   "dx": 0.37,
+   "dy": -0.57,
+   "response": 0.123
+  },
+  "bands": [
+   {
+    "u": [
+     0.0,
+     0.249
+    ],
+    "dx_px": 0.08,
+    "dy_px": -0.81,
+    "response": 0.202
+   },
+   {
+    "u": [
+     0.249,
+     0.499
+    ],
+    "dx_px": 0.35,
+    "dy_px": -0.98,
+    "response": 0.105
+   },
+   {
+    "u": [
+     0.499,
+     0.749
+    ],
+    "dx_px": -0.0,
+    "dy_px": -0.55,
+    "response": 0.179
+   },
+   {
+    "u": [
+     0.749,
+     0.999
+    ],
+    "dx_px": -1.48,
+    "dy_px": -0.52,
+    "response": 0.126
+   }
+  ],
+  "deltaE": {
+   "mean": 19.05,
+   "p95": 50.0,
+   "share_over_5": 0.877
+  },
+  "L_mean": {
+   "a": 88.0,
+   "b": 70.3
+  }
+ },
+ "tiles_ecc": [
+  {
+   "u": [
+    0.0,
+    0.25
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": 1.32,
+   "dy_px": 2.81,
+   "rho": 0.376,
+   "counted": true
+  },
+  {
+   "u": [
+    0.25,
+    0.5
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": -5.57,
+   "dy_px": 0.16,
+   "rho": 0.596,
+   "counted": true
+  },
+  {
+   "u": [
+    0.5,
+    0.75
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": 0.72,
+   "dy_px": 0.73,
+   "rho": 0.131,
+   "counted": true
+  },
+  {
+   "u": [
+    0.75,
+    1.0
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": 0.9,
+   "dy_px": -5.68,
+   "rho": 0.06,
+   "counted": false
+  },
+  {
+   "u": [
+    0.0,
+    0.25
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": -0.36,
+   "dy_px": -1.21,
+   "rho": 0.763,
+   "counted": true
+  },
+  {
+   "u": [
+    0.25,
+    0.5
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": 0.74,
+   "dy_px": -1.81,
+   "rho": 0.429,
+   "counted": true
+  },
+  {
+   "u": [
+    0.5,
+    0.75
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": 1.72,
+   "dy_px": 0.17,
+   "rho": 0.525,
+   "counted": true
+  },
+  {
+   "u": [
+    0.75,
+    1.0
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": 0.28,
+   "dy_px": -1.71,
+   "rho": 0.499,
+   "counted": true
+  }
+ ],
+ "tiles_ecc_registered": [
+  {
+   "u": [
+    0.0,
+    0.25
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": 1.17,
+   "dy_px": 0.37,
+   "rho": 0.374,
+   "counted": true
+  },
+  {
+   "u": [
+    0.25,
+    0.5
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": -5.74,
+   "dy_px": -2.06,
+   "rho": 0.596,
+   "counted": true
+  },
+  {
+   "u": [
+    0.5,
+    0.75
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": -0.28,
+   "dy_px": -1.75,
+   "rho": 0.126,
+   "counted": true
+  },
+  {
+   "u": [
+    0.75,
+    1.0
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": -0.31,
+   "dy_px": -6.94,
+   "rho": 0.064,
+   "counted": false
+  },
+  {
+   "u": [
+    0.0,
+    0.25
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": -0.2,
+   "dy_px": -0.01,
+   "rho": 0.759,
+   "counted": true
+  },
+  {
+   "u": [
+    0.25,
+    0.5
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": 0.34,
+   "dy_px": -1.03,
+   "rho": 0.429,
+   "counted": true
+  },
+  {
+   "u": [
+    0.5,
+    0.75
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": 0.74,
+   "dy_px": 1.07,
+   "rho": 0.535,
+   "counted": true
+  },
+  {
+   "u": [
+    0.75,
+    1.0
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": -0.79,
+   "dy_px": -0.93,
+   "rho": 0.503,
+   "counted": true
+  }
+ ],
+ "fixed_edges": {
+  "sofa 220x92x78 (fixed-product)": {
+   "box": [
+    0.4703,
+    0.8898,
+    0.6111,
+    0.9403
+   ],
+   "edges": {
+    "left": {
+     "clay_px": 944,
+     "render_px": 945,
+     "d_px": 1,
+     "r": 0.511,
+     "clay_strength": 12.1,
+     "counted": true
+    },
+    "right": {
+     "clay_px": 1643,
+     "render_px": 1643,
+     "d_px": 0,
+     "r": 0.571,
+     "clay_strength": 41.6,
+     "counted": true
+    },
+    "bottom": {
+     "clay_px": 981,
+     "d_px": null,
+     "r": 0.437,
+     "counted": false
+    }
+   },
+   "method": "xcorr +-60 px, r >= 0.5",
+   "width_ratio": 0.9986,
+   "worst_edge_px": 1,
+   "kind": "furniture"
+  },
+  "coffee table 140x70 h38 (fixed-product)": {
+   "box": [
+    0.4583,
+    0.8013,
+    0.7824,
+    1.0301
+   ],
+   "edges": {
+    "left": {
+     "clay_px": 930,
+     "render_px": 932,
+     "d_px": 2,
+     "r": 0.662,
+     "clay_strength": 27.7,
+     "counted": true
+    },
+    "right": {
+     "clay_px": 1537,
+     "render_px": 1535,
+     "d_px": -2,
+     "r": 0.716,
+     "clay_strength": 20.6,
+     "counted": true
+    },
+    "top": {
+     "clay_px": 842,
+     "render_px": 841,
+     "d_px": -1,
+     "r": 0.859,
+     "clay_strength": 10.2,
+     "counted": true
+    }
+   },
+   "method": "xcorr +-60 px, r >= 0.5",
+   "width_ratio": 0.9934,
+   "worst_edge_px": 2,
+   "kind": "furniture"
+  },
+  "armchair 72x78 h70 (fixed-product)": {
+   "box": [
+    0.0229,
+    0.3104,
+    0.7148,
+    1.0301
+   ],
+   "edges": {
+    "left": {
+     "clay_px": 100,
+     "render_px": 99,
+     "d_px": -1,
+     "r": 0.896,
+     "clay_strength": 14.9,
+     "counted": true
+    },
+    "right": {
+     "clay_px": 571,
+     "d_px": null,
+     "r": 0.193,
+     "counted": false
+    },
+    "top": {
+     "clay_px": 807,
+     "render_px": 806,
+     "d_px": -1,
+     "r": 0.79,
+     "clay_strength": 7.4,
+     "counted": true
+    }
+   },
+   "method": "xcorr +-60 px, r >= 0.5",
+   "worst_edge_px": 1,
+   "kind": "furniture"
+  }
+ },
+ "named_edges": {},
+ "summary": {
+  "register_shift_px": [
+   0.08,
+   2.64
+  ],
+  "register_scale": [
+   1.00084,
+   0.99592
+  ],
+  "register_scale_pct": [
+   0.08,
+   -0.41
+  ],
+  "worst_band_px": 1.5,
+  "bands_reliable": 3,
+  "worst_band_px_after_register": 1.48,
+  "bands_reliable_after_register": 4,
+  "worst_tile_ecc_px": 5.57,
+  "tiles_counted": 6,
+  "worst_tile_ecc_px_after_register": 5.74,
+  "tiles_counted_after_register": 6,
+  "fixed_edges_worst_px": 2,
+  "fixed_edges_measured": 3,
+  "fixed_ratios": {
+   "sofa 220x92x78 (fixed-product) w": 0.9986,
+   "coffee table 140x70 h38 (fixed-product) w": 0.9934
+  },
+  "named_edges_worst_px": null,
+  "named_edges_counted": 0,
+  "named_edges_total": 0,
+  "named_edges": null
+ },
+ "verdict": {
+  "thresholds": {
+   "shift_px": 9.6,
+   "scale_tol": 0.005,
+   "residual_px": 9.6,
+   "residual_rule": "video endpoint: <= 0.5 % of the width after register",
+   "edge_px": 19.2,
+   "ratio": [
+    0.95,
+    1.05
+   ],
+   "edges_mode": "v3",
+   "counted": "bands response >= 0.10, tiles rho >= 0.30, box edges and named lines xcorr r >= 0.5",
+   "source": "docs/ops/quality-gates-2026-11-02.md G1.4 (+ G1.3 ratios, proposal); qa/reports/2026-11-02-v7-g1.md section 1"
+  },
+  "global_pass": true,
+  "residual_pass": true,
+  "edges_pass": true,
+  "residual_measured": true,
+  "pass": true
+ },
+ "render": "assets/renders/living-room/nordic/v9/m0-products-pass.png",
+ "clay": "assets/blockout/house/framing/round5b/M0.png",
+ "overscan_cropped_to_frame": true,
+ "date": "2026-11-06",
+ "note": "geometry only: measured on the normalised raw still (the grade does not move edges); the old clay_lock stays in <id>-measurements.json"
+}

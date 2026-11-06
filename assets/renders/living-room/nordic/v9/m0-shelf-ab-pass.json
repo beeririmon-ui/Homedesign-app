@@ -1,0 +1,97 @@
+{
+ "asset_id": "m0-shelf-ab-pass",
+ "date": "2026-11-06",
+ "tokens": 650,
+ "model": "seedream-5-pro i2i 2K auto",
+ "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-f4d7df036151296bbd9d2459c8b584a8-0-1793994423812-dc0ca66c.png",
+ "base": "assets/renders/living-room/nordic/v9/m0-1-2-products-graded-fix-v6.png",
+ "register": {
+  "ecc": 0.9954,
+  "shift_px": [
+   -3.83,
+   -0.13
+  ]
+ },
+ "nothing_else_moved_raw": {
+  "rule": "mean |delta| per channel <= 2 outside the shelf zone (ZONES), on the 16:9 frame (the pass against the graded base, registered)",
+  "outside_mean_per_channel": [
+   7.81,
+   8.85,
+   10.13
+  ],
+  "pass": false
+ },
+ "normalised": "assets/renders/living-room/nordic/v9/m0-shelf-ab-pass.png",
+ "reference": "assets/renders/living-room/nordic/v9/m0-shelf-ab-ref-clay.png",
+ "cards": {
+  "vase-cj-black-matte-stoneware-jar-30": "https://cf.cjdropshipping.com/quick/product/82e47b21-45f9-4973-b808-e93df5a70283.jpg",
+  "sill-vase-cj-cream-fluted-column-25": "https://cf.cjdropshipping.com/quick/product/87f621eb-d46f-45e7-95ab-aecfd2f1191d.jpg",
+  "pool-cj-travertine-organic-tray-24": "https://oss-cf.cjdropshipping.com/product/2025/05/30/11/cb6b4dae-a522-438d-9dce-b6d90cb638b0.jpg",
+  "reed-diffuser-cj-travertine-look-bamboo-lid-milktea": "https://cf.cjdropshipping.com/quick/product/b9b7e7e5-2dc0-4697-8090-689303451bc9.jpg"
+ },
+ "lay": {
+  "tone_gains_rgb": [
+   1.0802,
+   1.102,
+   1.0959
+  ],
+  "region_canvas_uv": [
+   0.4,
+   0.554,
+   0.376,
+   0.582
+  ],
+  "region_px": 89358,
+  "nothing_else_moved_after_lay": {
+   "outside_zone_mean_per_channel": [
+    0.002,
+    0.002,
+    0.003
+   ],
+   "max_outside_zone": 27.15
+  },
+  "how": "the graded base everywhere; the pass only inside the shelf zone where it changed it (|delta| > 0.035 after the tone gain, closed, > 400 px) and over the round's place; grown 10 px, feathered 8 px",
+  "output": "assets/renders/living-room/nordic/v9/m0-1-2-products-shelf-graded-fix-v6.png",
+  "frame": "assets/renders/living-room/nordic/v9/m0-1-2-products-shelf-frame-fix-v6.png"
+ },
+ "size_check": {
+  "how": "measured on the laid B (canvas px) against the position map's boxes (m0-shelf-ab-ref-clay.json); cm at the shelf's distance (about 5.1 m, ~3.3 px/cm)",
+  "shelf": {
+   "spec_canvas_u": [
+    0.427,
+    0.498
+   ],
+   "drawn_canvas_u": [
+    0.409,
+    0.543
+   ],
+   "length_ratio": 1.89,
+   "spec_cm": "55 x 18, 3 thick",
+   "drawn_cm_est": "about 105 long, about 9 thick"
+  },
+  "jar": {
+   "spec_canvas_px_wh": [
+    49,
+    101
+   ],
+   "drawn_px_wh": [
+    100,
+    133
+   ],
+   "spec_cm": "30 x 15",
+   "drawn_cm_est": "about 40 x 30"
+  },
+  "column": {
+   "height_ratio": 1.0
+  },
+  "tray": {
+   "width_ratio": 1.15
+  },
+  "diffuser": {
+   "vessel_height_ratio": 1.7
+  },
+  "clearance": "the shelf's right end at canvas u 0.543, about 40 px (1.5% of the width) left of the triptych's frame, under the sconce",
+  "verdict": "fail: product and shelf fidelity (the shelf about 1.9x long and 3x thick, the jar 1.3x tall and 2x wide); the look is readable for the A/B, the sizes are not",
+  "summary_en": "Size check: FAIL - the pass drew the shelf about 1.9x long (~105 cm) and ~9 cm thick, the jar ~40x30 (card 30x15); column and tray close to size."
+ }
+}

@@ -1,0 +1,1880 @@
+{
+ "asset_id": "m0-1-2-products-graded-fix-v6",
+ "date": "2026-11-05",
+ "tokens": 0,
+ "script": "assets/renders/house-nordic-v7-2026-11-02/grade_v6_m0.py",
+ "input": "assets/renders/living-room/nordic/v9/m0-1-2-products-fix.png",
+ "v5_kept": "assets/renders/living-room/nordic/v9/m0-1-2-products-graded-fix-v5.png",
+ "brief": "coordinator 2026-11-05: QA qa/reports/2026-11-05-m0-seedream-fix3-g1.md section 3 and the designer docs/render-m0-1-2-review-2026-11-05.md sections 1 and 4: apply section 4 exactly as a new grading v6, v5 kept",
+ "bible_rule": "Bible 1.8 B3: +0.2 stop global and +-0.3 local (glass, window wall) in final assets; this is the test page (V7Q4: grading up to the Bible targets, the black point and the roll-off kept). The local fields here (the walls' fall-off, the floor +1.1 stop, the rug and the table under the raw) are test-page grading only: in a final asset they belong in the source (prompt, light)",
+ "findings": [
+  "the review's 'floor median' box (u 0.42-0.98, v 0.87-0.99) is 82 % rug: the 68 -> 87.6 of the review is the rug. The oak planks themselves read 48 by the window in the composite (35 in the shade right of the sofa) and 66 in v5. v6 sets the planks by the window on the oak (72) and the rug 9 L above them, side by side",
+  "the seedream wall is darkest near the corner and brightest at X -1.0..-0.6 (the left cube's broad glow): the fall-off is put back by a field of X along the wall that undoes the raw's own profile between the three Bible points (it keeps the raw's shading into the corner itself and its vertical structure)",
+  "the triptych hangs on the wall and gets the wall's light at its place (not +0.2 below it, which would grey it against the plaster), then a per-print curve that puts the board on 83 and the printed passe-partout on 93 (marks unchanged): print 3 rendered ~0.25 stop darker than prints 1-2",
+  "the travertine cubes keep their stone (+0.2 like the products); their glow comes back as the raw's own excess light over the in-painted wall, screened back x2 (gain 1.0) in a soft ellipse; the left cube sits where the wall is 92 near the corner, so its fan can only reach +4 under the roll-off ceiling 97 (Bible: a wash adds up to 15 %, i.e. ~+4 L on a wall at 91)"
+ ],
+ "masks": {
+  "grabcut": {
+   "size": [
+    1368,
+    769
+   ],
+   "iterations": 6,
+   "definite_shell": "clay shell farther than 24 px (half size) from any clay object",
+   "definite_object": "clay object farther than 22 px from the clay shell; the triptych and the round exact",
+   "shell_px_clay": 2096530,
+   "shell_px_render": 1909163
+  },
+  "local_grabcut": [
+   {
+    "box": "right curtain",
+    "uv": [
+     0.27,
+     0.41,
+     0.02,
+     0.84
+    ],
+    "flipped_to_object_px": 12981,
+    "flipped_to_shell_px": 8158
+   },
+   {
+    "box": "sofa, cushions, throw",
+    "uv": [
+     0.44,
+     0.94,
+     0.52,
+     0.92
+    ],
+    "flipped_to_object_px": 9199,
+    "flipped_to_shell_px": 1667
+   },
+   {
+    "box": "pendant and cord",
+    "uv": [
+     0.53,
+     0.69,
+     0.0,
+     0.26
+    ],
+    "flipped_to_object_px": 15171,
+    "flipped_to_shell_px": 15
+   },
+   {
+    "box": "armchair, left curtain foot",
+    "uv": [
+     0.0,
+     0.36,
+     0.55,
+     1.0
+    ],
+    "flipped_to_object_px": 39466,
+    "flipped_to_shell_px": 16541
+   }
+  ],
+  "textiles": [
+   {
+    "box": "right curtain",
+    "uv": [
+     0.295,
+     0.365,
+     0.05,
+     0.772
+    ],
+    "to_object_px": 35136
+   },
+   {
+    "box": "left curtain",
+    "uv": [
+     0.0,
+     0.13,
+     0.0,
+     0.985
+    ],
+    "to_object_px": 28947
+   },
+   {
+    "box": "throw drape",
+    "uv": [
+     0.855,
+     0.925,
+     0.62,
+     0.86
+    ],
+    "to_object_px": 10987
+   },
+   {
+    "box": "right curtain hem on the floor",
+    "poly_px": [
+     [
+      880,
+      1100
+     ],
+     [
+      952,
+      1100
+     ],
+     [
+      955,
+      1150
+     ],
+     [
+      965,
+      1155
+     ],
+     [
+      973,
+      1168
+     ],
+     [
+      976,
+      1177
+     ],
+     [
+      968,
+      1183
+     ],
+     [
+      942,
+      1195
+     ],
+     [
+      910,
+      1194
+     ],
+     [
+      880,
+      1196
+     ]
+    ],
+    "to_object_px": 1318,
+    "to_floor_px": 275,
+    "how": "traced at 300 % on the render (the shadowed linen and the oak have the same chroma there); outside it, the clay floor is floor"
+   },
+   {
+    "box": "left curtain outer strip",
+    "uv": [
+     0,
+     0.035,
+     0,
+     0.94
+    ],
+    "to_object_px": 21940
+   }
+  ],
+  "cubes": {
+   "boxes": [
+    [
+     0.508,
+     0.548,
+     0.343,
+     0.4
+    ],
+    [
+     0.814,
+     0.858,
+     0.308,
+     0.378
+    ]
+   ],
+   "how": "the stone's pores: |L* - blur 1.5| blurred 3 px > 3x the box rim's median; closed 9, largest component, eroded 4 px, convex hull",
+   "px": 10334
+  },
+  "feather": "guided filter on the render (r 3 px, eps 2e-4)",
+  "new_products": {
+   "how": "the four products laid from the pass (m0-1-2-products-fix.json regions) set to product (+0.2 stop at most), ids 601-604",
+   "px": {
+    "magazine-holder": 87318,
+    "basket": 26911,
+    "pouf": 27377,
+    "floor-lamp": 146673,
+    "floor-lamp shade": 92590
+   },
+   "obj_stops": {
+    "601": 1.3,
+    "605": 0.6718742654529302,
+    "why": "601 the holder to its card's charcoal (#45474B, L 27; at +0.2 it read 20); 605 the floor-lamp shade as an emitter (Bible lamps: shade L 93-97), not a product colour",
+    "holder_raw_L": 9.4,
+    "shade_raw_L": 85.7
+   }
+  }
+ },
+ "wall_profile": {
+  "bins_x": 100,
+  "filled": 1093,
+  "px": 734981,
+  "profile_L_at_Zref": {
+   "-2.27": 58.0,
+   "-1.88": 69.6,
+   "-1.48": 80.6,
+   "-1.08": 85.1,
+   "-0.68": 85.3,
+   "-0.28": 83.4,
+   "+0.12": 81.8,
+   "+0.52": 79.5,
+   "+0.92": 78.8,
+   "+1.32": 79.6,
+   "+1.72": 76.2,
+   "+2.12": 73.9,
+   "+2.52": 73.8
+  }
+ },
+ "solve": {
+  "params": {
+   "wall_ctrl": [
+    0.7643633667910705,
+    0.24453912541075373,
+    0.0388533175919942
+   ],
+   "window_wall": 0.6730245973509712,
+   "ceiling": 0.3,
+   "floor": 1.3568312234179019,
+   "rug": -0.2763647970448687,
+   "table": -0.4853560489135725,
+   "products": 0.2,
+   "lamp_faces": [
+    0.2,
+    0.2
+   ],
+   "glass": 0.21112589015153224,
+   "window_arch": 0.2,
+   "glow": 1.0,
+   "s_mix": 0.27,
+   "clarity": 0.12,
+   "art_clarity": 0.1,
+   "sage_chroma": 1.2,
+   "art_board": 83.0,
+   "art_pp": 93.0,
+   "floor_chroma": 0.6643310202022539,
+   "glass_gamma": 1.7,
+   "obj_stops": {
+    "601": 1.3,
+    "605": 0.6718742654529302
+   }
+  },
+  "targets": {
+   "corner": 91.0,
+   "centre": 89.5,
+   "right": 84.0,
+   "window": 84.0,
+   "floor": 72.0,
+   "rug_minus_floor": 9.0,
+   "table": 67.5,
+   "lamp": 94.5,
+   "glass_margin": 3.3
+  },
+  "iterations": [
+   {
+    "it": 0,
+    "floor_S": 34.6,
+    "branches": 6.0,
+    "corner": 90.8,
+    "centre": 90.0,
+    "right": 91.8,
+    "window_wall": 84.7,
+    "floor": 63.1,
+    "rug": 87.7,
+    "table": 78.6,
+    "lamp": 94.2,
+    "glass": 96.0,
+    "walls_max": 96.6,
+    "mean": 77.3
+   },
+   {
+    "it": 1,
+    "floor_S": 57.5,
+    "branches": 5.5,
+    "corner": 90.9,
+    "centre": 89.6,
+    "right": 87.9,
+    "window_wall": 84.0,
+    "floor": 71.6,
+    "rug": 75.4,
+    "table": 67.4,
+    "lamp": 94.2,
+    "glass": 96.2,
+    "walls_max": 96.6,
+    "mean": 75.9
+   },
+   {
+    "it": 2,
+    "floor_S": 42.7,
+    "branches": 5.1,
+    "corner": 90.9,
+    "centre": 89.6,
+    "right": 85.0,
+    "window_wall": 84.0,
+    "floor": 74.2,
+    "rug": 80.7,
+    "table": 67.5,
+    "lamp": 94.2,
+    "glass": 96.4,
+    "walls_max": 95.4,
+    "mean": 75.8
+   },
+   {
+    "it": 3,
+    "floor_S": 36.3,
+    "branches": 4.9,
+    "corner": 91.0,
+    "centre": 89.5,
+    "right": 84.1,
+    "window_wall": 84.0,
+    "floor": 72.2,
+    "rug": 83.1,
+    "table": 67.5,
+    "lamp": 94.2,
+    "glass": 96.6,
+    "walls_max": 95.1,
+    "mean": 75.8
+   },
+   {
+    "it": 4,
+    "floor_S": 39.3,
+    "branches": 4.8,
+    "corner": 91.0,
+    "centre": 89.5,
+    "right": 84.0,
+    "window_wall": 84.0,
+    "floor": 71.6,
+    "rug": 81.3,
+    "table": 67.5,
+    "lamp": 94.2,
+    "glass": 96.6,
+    "walls_max": 95.1,
+    "mean": 75.7
+   },
+   {
+    "it": 5,
+    "floor_S": 40.7,
+    "branches": 4.7,
+    "corner": 91.0,
+    "centre": 89.5,
+    "right": 84.0,
+    "window_wall": 84.0,
+    "floor": 71.9,
+    "rug": 80.6,
+    "table": 67.5,
+    "lamp": 94.2,
+    "glass": 96.6,
+    "walls_max": 95.1,
+    "mean": 75.7
+   }
+  ]
+ },
+ "grade": {
+  "white_balance": {
+   "patch": [
+    0.4269,
+    0.4156
+   ],
+   "H_before": 32.0,
+   "H_target": 36,
+   "gains_rgb": [
+    0.9893,
+    1.0045,
+    0.9893
+   ],
+   "as_v5": true
+  },
+  "exposure": {
+   "params": {
+    "wall_ctrl": [
+     0.764,
+     0.245,
+     0.039
+    ],
+    "window_wall": 0.673,
+    "ceiling": 0.3,
+    "floor": 1.357,
+    "rug": -0.276,
+    "table": -0.485,
+    "products": 0.2,
+    "lamp_faces": [
+     0.2,
+     0.2
+    ],
+    "glass": 0.211,
+    "window_arch": 0.2,
+    "glow": 1.0,
+    "s_mix": 0.27,
+    "clarity": 0.12,
+    "art_clarity": 0.1,
+    "sage_chroma": 1.2,
+    "art_board": 83.0,
+    "art_pp": 93.0,
+    "floor_chroma": 0.664,
+    "glass_gamma": 1.7,
+    "obj_stops": {
+     "601": 1.3,
+     "605": 0.6718742654529302
+    }
+   },
+   "wall_field_stops_at": {
+    "-2.27": 0.764,
+    "-1.88": 0.757,
+    "-1.48": 0.451,
+    "-1.08": 0.232,
+    "-0.68": 0.185,
+    "-0.28": 0.213,
+    "+0.12": 0.238,
+    "+0.52": 0.233,
+    "+0.92": 0.148,
+    "+1.32": 0.018,
+    "+1.72": 0.042,
+    "+2.12": 0.039,
+    "+2.52": 0.039
+   }
+  },
+  "window_glass": {
+   "exposure": 0.211,
+   "gamma": 1.7,
+   "anchor": "the glass's p90 luminance (the sky)",
+   "how": "Y' = Y (Y / Y_sky)^(gamma - 1) on the glass only where L > 80 (sky and branches; the leaves and the frame untouched), before the roll-off: the branches come down under the sky, the sky stays the brightest"
+  },
+  "lamp_glow": {
+   "gain": 1.0,
+   "how": "the raw's own excess light over the plain wall (the wall in-painted across the fans: normalised blur sigma 45 px of the plain wall round them), in a soft ellipse round each cube (sigma 1.3 cube widths x 2.6 heights), keeping the raw's colour, times the pixel's exposure, added in linear light before the roll-off"
+  },
+  "chroma": {
+   "off_products": 0.9,
+   "products": 1.0,
+   "sage_products": 1.2,
+   "floor": 0.664,
+   "sage": "HSL hue 55-110 inside the product masks (Bible: sage S 8-22, never under 8)",
+   "floor_why": "the oak's S 30-45 after its lift"
+  },
+  "s_curve": {
+   "mix": 0.27,
+   "weight": "1 in L 40-85, ramps to 0 at L 25 and L 95 (mid-tones only)"
+  },
+  "triptych_curve": {
+   "prints": [
+    {
+     "print": 1,
+     "board_before": 87.4,
+     "pp_before": 94.0,
+     "curve_L": [
+      [
+       0.0,
+       0.0
+      ],
+      [
+       30.0,
+       30.0
+      ],
+      [
+       87.4,
+       83.0
+      ],
+      [
+       94.0,
+       93.0
+      ],
+      [
+       100.0,
+       97.5
+      ]
+     ]
+    },
+    {
+     "print": 2,
+     "board_before": 87.7,
+     "pp_before": 93.1,
+     "curve_L": [
+      [
+       0.0,
+       0.0
+      ],
+      [
+       30.0,
+       30.0
+      ],
+      [
+       87.7,
+       83.0
+      ],
+      [
+       93.1,
+       93.0
+      ],
+      [
+       100.0,
+       97.5
+      ]
+     ]
+    },
+    {
+     "print": 3,
+     "board_before": 82.5,
+     "pp_before": 88.4,
+     "curve_L": [
+      [
+       0.0,
+       0.0
+      ],
+      [
+       30.0,
+       30.0
+      ],
+      [
+       82.5,
+       83.0
+      ],
+      [
+       88.4,
+       93.0
+      ],
+      [
+       100.0,
+       97.5
+      ]
+     ]
+    }
+   ],
+   "how": "piecewise-linear in HSL L inside each print (s 0.035-0.965, t 0.03-0.97 of the 50 x 70 frame), applied as a luminance ratio; the oak profile outside it"
+  },
+  "clarity": {
+   "textiles_and_wood": {
+    "sigma_px": 20,
+    "amount": 0.12,
+    "mask": "sofa, table, armchair, curtains, throw, cushions, runner, rug, oak floor; normalised convolution inside the mask (no halo at its edge)"
+   },
+   "triptych": {
+    "sigma_px": 8,
+    "amount": 0.1
+   }
+  },
+  "black_point": {
+   "darkest_before": 0.1,
+   "to": 13.5,
+   "pivot_sRGB": 0.35,
+   "shift": 0.1347,
+   "how": "toe only: sr + shift * ((pivot - sr) / pivot)^2 below the pivot, nothing above it"
+  },
+  "near_white_chroma_guard_B4": {
+   "population": "pixels with HSL L > 80 after the grade",
+   "before": {
+    "pixels": 2451333,
+    "L_lab": 85.01,
+    "C": 5.26,
+    "C_p95": 12.82,
+    "hue": 96.0
+   },
+   "after": {
+    "pixels": 2451333,
+    "L_lab": 91.99,
+    "C": 4.99,
+    "C_p95": 11.6,
+    "hue": 102.5
+   },
+   "delta_C": -0.27,
+   "limit": 1.5,
+   "applied": "none (within +1.5 C)"
+  },
+  "highlight_rolloff": {
+   "knee_L": 94,
+   "asymptote_L": 97,
+   "position": "last"
+  }
+ },
+ "measured": {
+  "composite": {
+   "label": "composite (before grading)",
+   "walls": {
+    "back wall by the corner (0.427, 0.416) [90-94]": {
+     "L": 72.8,
+     "H": 32.0,
+     "S": 13.8,
+     "Lstar": 76.1,
+     "C": 6.6,
+     "range": [
+      90,
+      94
+     ],
+     "ok": false
+    },
+    "back wall behind the picture (0.667, 0.312) [88-91] (review)": {
+     "L": 80.8,
+     "H": 34.2,
+     "S": 9.8,
+     "Lstar": 83.2,
+     "C": 3.2,
+     "range": [
+      88,
+      91
+     ],
+     "ok": false
+    },
+    "centre above the triptych (0.62, 0.30) [88-91] (QA)": {
+     "L": 81.9,
+     "H": 38.3,
+     "S": 8.8,
+     "Lstar": 84.2,
+     "C": 2.8,
+     "range": [
+      88,
+      91
+     ],
+     "ok": false
+    },
+    "centre between triptych and sofa (0.62, 0.55) [88-91] (QA)": {
+     "L": 84.5,
+     "H": 34.0,
+     "S": 9.9,
+     "Lstar": 86.4,
+     "C": 2.7,
+     "range": [
+      88,
+      91
+     ],
+     "ok": false
+    },
+    "back wall right end (0.952, 0.382) [82-86] (review)": {
+     "L": 79.0,
+     "H": 30.4,
+     "S": 22.5,
+     "Lstar": 81.7,
+     "C": 7.8,
+     "range": [
+      82,
+      86
+     ],
+     "ok": false
+    },
+    "right edge of the back wall (0.97, 0.31) [82-86] (QA)": {
+     "L": 82.5,
+     "H": 33.6,
+     "S": 19.0,
+     "Lstar": 85.0,
+     "C": 5.7,
+     "range": [
+      82,
+      86
+     ],
+     "ok": true
+    },
+    "window wall (0.352, 0.415) [80-88]": {
+     "L": 66.4,
+     "H": 33.2,
+     "S": 14.6,
+     "Lstar": 70.3,
+     "C": 8.8,
+     "range": [
+      80,
+      88
+     ],
+     "ok": false
+    },
+    "ceiling (0.55, 0.04) [no Bible number]": {
+     "L": 82.0,
+     "H": 27.3,
+     "S": 16.1,
+     "Lstar": 84.0,
+     "C": 4.5,
+     "range": null,
+     "ok": null
+    }
+   },
+   "fall_off": {
+    "corner": 72.8,
+    "centre_mean": 82.4,
+    "right_mean": 80.8,
+    "corner_minus_centre": -9.6,
+    "centre_minus_right": 1.6,
+    "ok": false,
+    "rule": "corner >= centre + 1, centre >= right end + 3 (review 4.1)"
+   },
+   "floor_rug": {
+    "review box (u0.42-0.98, v0.87-0.99): median HSL L / S (82 % of it is the rug)": [
+     56.7,
+     21.8
+    ],
+    "floor by the window (QA box) [L 68-78, S 30-45]: median L / S": [
+     43.9,
+     26.0
+    ],
+    "floor right strip [L 68-78, S 30-45]: median L / S": [
+     39.4,
+     29.7
+    ],
+    "all visible oak planks: median L / S": [
+     45.3,
+     24.0
+    ],
+    "rug by the window floor: median L": 85.5,
+    "rug right (QA box): median L": 76.5,
+    "rug, whole: median L": 68.8,
+    "rug minus floor, side by side by the window [6-10]": 41.6
+   },
+   "window": {
+    "glass_p50": 96.1,
+    "glass_p99": 99.0,
+    "walls_p99_5": 97.3,
+    "glass_p50_minus_brightest_wall": -1.2,
+    "branches_vs_sky_upper_glass_p90_minus_p10": 7.3,
+    "ok": {
+     "glass_brightest": false,
+     "p99_le_97": false,
+     "no_wall_above_94": false,
+     "branches": true
+    },
+    "rules": "glass p50 >= the brightest wall (walls' p99.5 outside the lamp washes) + 3; glass p99 <= 97; no wall above 94; branches >= 4 L under the sky"
+   },
+   "frame": {
+    "mean_L": 70.2,
+    "mean_L_range": [
+     76,
+     80
+    ],
+    "share_Lstar_over_90": 0.149,
+    "mean_Cstar": 8.32,
+    "max_L": 100.0,
+    "px_255": 51940,
+    "local_contrast_median (QA: std of L* in 32 px)": 3.31
+   },
+   "shadows": {
+    "under the sofa (review box u0.52-0.84, v0.76-0.83): min / p1 [p1 18-22]": [
+     0.8,
+     16.9
+    ],
+    "darkest 0.5 % patch [12-15, only in the deepest crevice]": 0.9,
+    "darkest patch at (u, v)": [
+     0.904,
+     0.885
+    ]
+   },
+   "products": {
+    "charcoal cushion (QA box)": {
+     "H": 41.4,
+     "S": 3.1,
+     "L": 25.8,
+     "median_L": 24.5,
+     "range_L": [
+      25,
+      32
+     ]
+    },
+    "sage cushion": {
+     "H": 60.1,
+     "S": 7.3,
+     "L": 47.1,
+     "median_L": 47.6,
+     "range_S": [
+      8,
+      22
+     ]
+    },
+    "sage runner": {
+     "H": 66.7,
+     "S": 10.3,
+     "L": 75.7,
+     "median_L": 76.5,
+     "range_S": [
+      8,
+      22
+     ]
+    },
+    "table top oak": {
+     "H": 30.8,
+     "S": 46.2,
+     "L": 76.8,
+     "median_L": 76.9,
+     "range_L": [
+      60,
+      72
+     ]
+    }
+   },
+   "triptych": {
+    "print 1": {
+     "board": 80.2,
+     "passe-partout": 88.2,
+     "oak frame": 63.7,
+     "wall above": 83.5,
+     "marks": 11.2,
+     "passe-partout minus board [>= 6]": 8.0,
+     "wall minus oak frame [>= 15]": 19.8,
+     "ok": {
+      "board": true,
+      "passe_partout": false,
+      "marks": true,
+      "oak": true,
+      "board_vs_pp": true
+     }
+    },
+    "print 2": {
+     "board": 79.8,
+     "passe-partout": 86.5,
+     "oak frame": 65.9,
+     "wall above": 81.0,
+     "marks": 10.8,
+     "passe-partout minus board [>= 6]": 6.7,
+     "wall minus oak frame [>= 15]": 15.1,
+     "ok": {
+      "board": false,
+      "passe_partout": false,
+      "marks": true,
+      "oak": true,
+      "board_vs_pp": true
+     }
+    },
+    "print 3": {
+     "board": 75.7,
+     "passe-partout": 81.6,
+     "oak frame": 57.3,
+     "wall above": 77.8,
+     "marks": 9.4,
+     "passe-partout minus board [>= 6]": 5.9,
+     "wall minus oak frame [>= 15]": 20.5,
+     "ok": {
+      "board": false,
+      "passe_partout": false,
+      "marks": true,
+      "oak": false,
+      "board_vs_pp": false
+     }
+    },
+    "ranges": "board L 80-86; passe-partout 92-95 (>= 6 over the board); marks <= 28; oak frame 62-72, >= 15 under the wall"
+   },
+   "lamps": {
+    "left cube": {
+     "stone_face_median_L": 81.0,
+     "glowing_slot_p97_L": 94.7,
+     "wash_p90_L": 93.1,
+     "wall_beside_L": 82.5,
+     "wash_minus_wall": 10.6,
+     "ok": {
+      "glow": true,
+      "wash": true
+     },
+     "rule": "the lamp's glow (the lit slot, p97 of the cube) L 93-97; the stone keeps its colour (product +0.2 at most); wash >= 6 L over the plain wall beside (Bible fixed pool)"
+    },
+    "right cube": {
+     "stone_face_median_L": 73.5,
+     "glowing_slot_p97_L": 94.1,
+     "wash_p90_L": 91.6,
+     "wall_beside_L": 93.3,
+     "wash_minus_wall": -1.8,
+     "ok": {
+      "glow": true,
+      "wash": false
+     },
+     "rule": "the lamp's glow (the lit slot, p97 of the cube) L 93-97; the stone keeps its colour (product +0.2 at most); wash >= 6 L over the plain wall beside (Bible fixed pool)"
+    }
+   }
+  },
+  "v5": {
+   "label": "v5",
+   "walls": {
+    "back wall by the corner (0.427, 0.416) [90-94]": {
+     "L": 92.2,
+     "H": 36.7,
+     "S": 45.7,
+     "Lstar": 94.0,
+     "C": 6.4,
+     "range": [
+      90,
+      94
+     ],
+     "ok": true
+    },
+    "back wall behind the picture (0.667, 0.312) [88-91] (review)": {
+     "L": 96.3,
+     "H": 60.2,
+     "S": 4.6,
+     "Lstar": 96.7,
+     "C": 0.3,
+     "range": [
+      88,
+      91
+     ],
+     "ok": false
+    },
+    "centre above the triptych (0.62, 0.30) [88-91] (QA)": {
+     "L": 96.5,
+     "H": 63.3,
+     "S": 0.4,
+     "Lstar": 96.7,
+     "C": 0.0,
+     "range": [
+      88,
+      91
+     ],
+     "ok": false
+    },
+    "centre between triptych and sofa (0.62, 0.55) [88-91] (QA)": {
+     "L": 96.5,
+     "H": 60.0,
+     "S": 0.0,
+     "Lstar": 96.7,
+     "C": 0.0,
+     "range": [
+      88,
+      91
+     ],
+     "ok": false
+    },
+    "back wall right end (0.952, 0.382) [82-86] (review)": {
+     "L": 91.8,
+     "H": 37.2,
+     "S": 33.8,
+     "Lstar": 93.5,
+     "C": 5.0,
+     "range": [
+      82,
+      86
+     ],
+     "ok": false
+    },
+    "right edge of the back wall (0.97, 0.31) [82-86] (QA)": {
+     "L": 90.9,
+     "H": 38.1,
+     "S": 31.1,
+     "Lstar": 92.7,
+     "C": 5.0,
+     "range": [
+      82,
+      86
+     ],
+     "ok": false
+    },
+    "window wall (0.352, 0.415) [80-88]": {
+     "L": 86.4,
+     "H": 36.1,
+     "S": 36.2,
+     "Lstar": 89.1,
+     "C": 8.6,
+     "range": [
+      80,
+      88
+     ],
+     "ok": true
+    },
+    "ceiling (0.55, 0.04) [no Bible number]": {
+     "L": 96.4,
+     "H": 60.0,
+     "S": 2.7,
+     "Lstar": 96.7,
+     "C": 0.3,
+     "range": null,
+     "ok": null
+    }
+   },
+   "fall_off": {
+    "corner": 92.2,
+    "centre_mean": 96.4,
+    "right_mean": 91.3,
+    "corner_minus_centre": -4.2,
+    "centre_minus_right": 5.1,
+    "ok": false,
+    "rule": "corner >= centre + 1, centre >= right end + 3 (review 4.1)"
+   },
+   "floor_rug": {
+    "review box (u0.42-0.98, v0.87-0.99): median HSL L / S (82 % of it is the rug)": [
+     87.6,
+     25.0
+    ],
+    "floor by the window (QA box) [L 68-78, S 30-45]: median L / S": [
+     62.9,
+     31.9
+    ],
+    "floor right strip [L 68-78, S 30-45]: median L / S": [
+     53.3,
+     24.0
+    ],
+    "all visible oak planks: median L / S": [
+     60.8,
+     27.1
+    ],
+    "rug by the window floor: median L": 96.5,
+    "rug right (QA box): median L": 92.9,
+    "rug, whole: median L": 92.4,
+    "rug minus floor, side by side by the window [6-10]": 33.6
+   },
+   "window": {
+    "glass_p50": 96.5,
+    "glass_p99": 96.5,
+    "walls_p99_5": 96.5,
+    "glass_p50_minus_brightest_wall": 0.0,
+    "branches_vs_sky_upper_glass_p90_minus_p10": 0.0,
+    "ok": {
+     "glass_brightest": false,
+     "p99_le_97": true,
+     "no_wall_above_94": false,
+     "branches": false
+    },
+    "rules": "glass p50 >= the brightest wall (walls' p99.5 outside the lamp washes) + 3; glass p99 <= 97; no wall above 94; branches >= 4 L under the sky"
+   },
+   "frame": {
+    "mean_L": 85.9,
+    "mean_L_range": [
+     76,
+     80
+    ],
+    "share_Lstar_over_90": 0.687,
+    "mean_Cstar": 6.54,
+    "max_L": 96.5,
+    "px_255": 0,
+    "local_contrast_median (QA: std of L* in 32 px)": 1.3
+   },
+   "shadows": {
+    "under the sofa (review box u0.52-0.84, v0.76-0.83): min / p1 [p1 18-22]": [
+     9.4,
+     27.8
+    ],
+    "darkest 0.5 % patch [12-15, only in the deepest crevice]": 12.5,
+    "darkest patch at (u, v)": [
+     0.786,
+     0.862
+    ]
+   },
+   "products": {
+    "charcoal cushion (QA box)": {
+     "H": 48.9,
+     "S": 2.2,
+     "L": 38.2,
+     "median_L": 36.7,
+     "range_L": [
+      25,
+      32
+     ]
+    },
+    "sage cushion": {
+     "H": 62.9,
+     "S": 10.6,
+     "L": 64.0,
+     "median_L": 64.9,
+     "range_S": [
+      8,
+      22
+     ]
+    },
+    "sage runner": {
+     "H": 64.0,
+     "S": 23.6,
+     "L": 85.3,
+     "median_L": 88.8,
+     "range_S": [
+      8,
+      22
+     ]
+    },
+    "table top oak": {
+     "H": 51.7,
+     "S": 63.0,
+     "L": 90.5,
+     "median_L": 90.6,
+     "range_L": [
+      60,
+      72
+     ]
+    }
+   },
+   "triptych": {
+    "print 1": {
+     "board": 95.7,
+     "passe-partout": 96.5,
+     "oak frame": 83.3,
+     "wall above": 96.5,
+     "marks": 21.0,
+     "passe-partout minus board [>= 6]": 0.8,
+     "wall minus oak frame [>= 15]": 13.2,
+     "ok": {
+      "board": false,
+      "passe_partout": false,
+      "marks": true,
+      "oak": false,
+      "board_vs_pp": false
+     }
+    },
+    "print 2": {
+     "board": 95.5,
+     "passe-partout": 96.5,
+     "oak frame": 84.7,
+     "wall above": 96.5,
+     "marks": 20.6,
+     "passe-partout minus board [>= 6]": 1.0,
+     "wall minus oak frame [>= 15]": 11.8,
+     "ok": {
+      "board": false,
+      "passe_partout": false,
+      "marks": true,
+      "oak": false,
+      "board_vs_pp": false
+     }
+    },
+    "print 3": {
+     "board": 93.1,
+     "passe-partout": 96.5,
+     "oak frame": 76.1,
+     "wall above": 94.7,
+     "marks": 19.2,
+     "passe-partout minus board [>= 6]": 3.4,
+     "wall minus oak frame [>= 15]": 18.6,
+     "ok": {
+      "board": false,
+      "passe_partout": false,
+      "marks": true,
+      "oak": false,
+      "board_vs_pp": false
+     }
+    },
+    "ranges": "board L 80-86; passe-partout 92-95 (>= 6 over the board); marks <= 28; oak frame 62-72, >= 15 under the wall"
+   },
+   "lamps": {
+    "left cube": {
+     "stone_face_median_L": 94.5,
+     "glowing_slot_p97_L": 96.5,
+     "wash_p90_L": 96.5,
+     "wall_beside_L": 96.5,
+     "wash_minus_wall": 0.0,
+     "ok": {
+      "glow": true,
+      "wash": false
+     },
+     "rule": "the lamp's glow (the lit slot, p97 of the cube) L 93-97; the stone keeps its colour (product +0.2 at most); wash >= 6 L over the plain wall beside (Bible fixed pool)"
+    },
+    "right cube": {
+     "stone_face_median_L": 89.2,
+     "glowing_slot_p97_L": 96.5,
+     "wash_p90_L": 96.5,
+     "wall_beside_L": 90.4,
+     "wash_minus_wall": 6.1,
+     "ok": {
+      "glow": true,
+      "wash": true
+     },
+     "rule": "the lamp's glow (the lit slot, p97 of the cube) L 93-97; the stone keeps its colour (product +0.2 at most); wash >= 6 L over the plain wall beside (Bible fixed pool)"
+    }
+   }
+  },
+  "v6": {
+   "label": "v6",
+   "walls": {
+    "back wall by the corner (0.427, 0.416) [90-94]": {
+     "L": 91.0,
+     "H": 36.3,
+     "S": 43.0,
+     "Lstar": 93.0,
+     "C": 7.0,
+     "range": [
+      90,
+      94
+     ],
+     "ok": true
+    },
+    "back wall behind the picture (0.667, 0.312) [88-91] (review)": {
+     "L": 88.5,
+     "H": 43.4,
+     "S": 14.6,
+     "Lstar": 90.4,
+     "C": 3.4,
+     "range": [
+      88,
+      91
+     ],
+     "ok": true
+    },
+    "centre above the triptych (0.62, 0.30) [88-91] (QA)": {
+     "L": 89.0,
+     "H": 48.8,
+     "S": 12.9,
+     "Lstar": 90.9,
+     "C": 3.1,
+     "range": [
+      88,
+      91
+     ],
+     "ok": true
+    },
+    "centre between triptych and sofa (0.62, 0.55) [88-91] (QA)": {
+     "L": 91.0,
+     "H": 45.8,
+     "S": 15.3,
+     "Lstar": 92.6,
+     "C": 2.9,
+     "range": [
+      88,
+      91
+     ],
+     "ok": true
+    },
+    "back wall right end (0.952, 0.382) [82-86] (review)": {
+     "L": 82.3,
+     "H": 35.6,
+     "S": 24.1,
+     "Lstar": 85.2,
+     "C": 7.6,
+     "range": [
+      82,
+      86
+     ],
+     "ok": true
+    },
+    "right edge of the back wall (0.97, 0.31) [82-86] (QA)": {
+     "L": 85.7,
+     "H": 38.7,
+     "S": 20.2,
+     "Lstar": 88.1,
+     "C": 5.5,
+     "range": [
+      82,
+      86
+     ],
+     "ok": true
+    },
+    "window wall (0.352, 0.415) [80-88]": {
+     "L": 84.1,
+     "H": 36.6,
+     "S": 32.7,
+     "Lstar": 87.2,
+     "C": 9.4,
+     "range": [
+      80,
+      88
+     ],
+     "ok": true
+    },
+    "ceiling (0.55, 0.04) [no Bible number]": {
+     "L": 90.6,
+     "H": 33.3,
+     "S": 28.0,
+     "Lstar": 92.1,
+     "C": 4.4,
+     "range": null,
+     "ok": null
+    }
+   },
+   "fall_off": {
+    "corner": 91.0,
+    "centre_mean": 89.5,
+    "right_mean": 84.0,
+    "corner_minus_centre": 1.5,
+    "centre_minus_right": 5.5,
+    "ok": true,
+    "rule": "corner >= centre + 1, centre >= right end + 3 (review 4.1)"
+   },
+   "floor_rug": {
+    "review box (u0.42-0.98, v0.87-0.99): median HSL L / S (82 % of it is the rug)": [
+     57.5,
+     18.6
+    ],
+    "floor by the window (QA box) [L 68-78, S 30-45]: median L / S": [
+     72.2,
+     40.2
+    ],
+    "floor right strip [L 68-78, S 30-45]: median L / S": [
+     63.3,
+     32.5
+    ],
+    "all visible oak planks: median L / S": [
+     73.1,
+     33.3
+    ],
+    "rug by the window floor: median L": 81.0,
+    "rug right (QA box): median L": 72.4,
+    "rug, whole: median L": 64.5,
+    "rug minus floor, side by side by the window [6-10]": 8.8
+   },
+   "window": {
+    "glass_p50": 96.5,
+    "glass_p99": 96.5,
+    "walls_p99_5": 95.1,
+    "glass_p50_minus_brightest_wall": 1.4,
+    "branches_vs_sky_upper_glass_p90_minus_p10": 4.5,
+    "ok": {
+     "glass_brightest": false,
+     "p99_le_97": true,
+     "no_wall_above_94": false,
+     "branches": true
+    },
+    "rules": "glass p50 >= the brightest wall (walls' p99.5 outside the lamp washes) + 3; glass p99 <= 97; no wall above 94; branches >= 4 L under the sky"
+   },
+   "frame": {
+    "mean_L": 75.7,
+    "mean_L_range": [
+     76,
+     80
+    ],
+    "share_Lstar_over_90": 0.357,
+    "mean_Cstar": 8.34,
+    "max_L": 96.5,
+    "px_255": 0,
+    "local_contrast_median (QA: std of L* in 32 px)": 3.25
+   },
+   "shadows": {
+    "under the sofa (review box u0.52-0.84, v0.76-0.83): min / p1 [p1 18-22]": [
+     13.3,
+     17.6
+    ],
+    "darkest 0.5 % patch [12-15, only in the deepest crevice]": 13.4,
+    "darkest patch at (u, v)": [
+     0.786,
+     0.862
+    ]
+   },
+   "products": {
+    "charcoal cushion (QA box)": {
+     "H": 44.6,
+     "S": 2.7,
+     "L": 27.9,
+     "median_L": 26.3,
+     "range_L": [
+      25,
+      32
+     ]
+    },
+    "sage cushion": {
+     "H": 63.1,
+     "S": 9.3,
+     "L": 50.1,
+     "median_L": 50.2,
+     "range_S": [
+      8,
+      22
+     ]
+    },
+    "sage runner": {
+     "H": 71.3,
+     "S": 19.6,
+     "L": 82.4,
+     "median_L": 83.5,
+     "range_S": [
+      8,
+      22
+     ]
+    },
+    "table top oak": {
+     "H": 32.9,
+     "S": 31.1,
+     "L": 67.5,
+     "median_L": 67.6,
+     "range_L": [
+      60,
+      72
+     ]
+    }
+   },
+   "triptych": {
+    "print 1": {
+     "board": 82.9,
+     "passe-partout": 93.3,
+     "oak frame": 68.2,
+     "wall above": 90.0,
+     "marks": 16.1,
+     "passe-partout minus board [>= 6]": 10.4,
+     "wall minus oak frame [>= 15]": 21.8,
+     "ok": {
+      "board": true,
+      "passe_partout": true,
+      "marks": true,
+      "oak": true,
+      "board_vs_pp": true
+     }
+    },
+    "print 2": {
+     "board": 82.9,
+     "passe-partout": 93.3,
+     "oak frame": 71.4,
+     "wall above": 88.8,
+     "marks": 16.5,
+     "passe-partout minus board [>= 6]": 10.4,
+     "wall minus oak frame [>= 15]": 17.4,
+     "ok": {
+      "board": true,
+      "passe_partout": true,
+      "marks": true,
+      "oak": true,
+      "board_vs_pp": true
+     }
+    },
+    "print 3": {
+     "board": 82.9,
+     "passe-partout": 93.3,
+     "oak frame": 59.0,
+     "wall above": 84.7,
+     "marks": 15.5,
+     "passe-partout minus board [>= 6]": 10.4,
+     "wall minus oak frame [>= 15]": 25.7,
+     "ok": {
+      "board": true,
+      "passe_partout": true,
+      "marks": true,
+      "oak": false,
+      "board_vs_pp": true
+     }
+    },
+    "ranges": "board L 80-86; passe-partout 92-95 (>= 6 over the board); marks <= 28; oak frame 62-72, >= 15 under the wall"
+   },
+   "lamps": {
+    "left cube": {
+     "stone_face_median_L": 87.5,
+     "glowing_slot_p97_L": 94.7,
+     "wash_p90_L": 96.5,
+     "wall_beside_L": 92.4,
+     "wash_minus_wall": 4.1,
+     "ok": {
+      "glow": true,
+      "wash": false
+     },
+     "rule": "the lamp's glow (the lit slot, p97 of the cube) L 93-97; the stone keeps its colour (product +0.2 at most); wash >= 6 L over the plain wall beside (Bible fixed pool)"
+    },
+    "right cube": {
+     "stone_face_median_L": 79.8,
+     "glowing_slot_p97_L": 93.6,
+     "wash_p90_L": 93.3,
+     "wall_beside_L": 92.0,
+     "wash_minus_wall": 1.4,
+     "ok": {
+      "glow": true,
+      "wash": false
+     },
+     "rule": "the lamp's glow (the lit slot, p97 of the cube) L 93-97; the stone keeps its colour (product +0.2 at most); wash >= 6 L over the plain wall beside (Bible fixed pool)"
+    }
+   }
+  }
+ },
+ "table": [
+  {
+   "point": "back wall by the corner (0.427, 0.416)",
+   "target": "90-94",
+   "composite": 72.8,
+   "v5": 92.2,
+   "v6": 91.0,
+   "ok": true
+  },
+  {
+   "point": "back wall behind the picture (0.667, 0.312) (review)",
+   "target": "88-91",
+   "composite": 80.8,
+   "v5": 96.3,
+   "v6": 88.5,
+   "ok": true
+  },
+  {
+   "point": "centre above the triptych (0.62, 0.30) (QA)",
+   "target": "88-91",
+   "composite": 81.9,
+   "v5": 96.5,
+   "v6": 89.0,
+   "ok": true
+  },
+  {
+   "point": "centre between triptych and sofa (0.62, 0.55) (QA)",
+   "target": "88-91",
+   "composite": 84.5,
+   "v5": 96.5,
+   "v6": 91.0,
+   "ok": true
+  },
+  {
+   "point": "back wall right end (0.952, 0.382) (review)",
+   "target": "82-86",
+   "composite": 79.0,
+   "v5": 91.8,
+   "v6": 82.3,
+   "ok": true
+  },
+  {
+   "point": "right edge of the back wall (0.97, 0.31) (QA)",
+   "target": "82-86",
+   "composite": 82.5,
+   "v5": 90.9,
+   "v6": 85.7,
+   "ok": true
+  },
+  {
+   "point": "window wall (0.352, 0.415)",
+   "target": "80-88",
+   "composite": 66.4,
+   "v5": 86.4,
+   "v6": 84.1,
+   "ok": true
+  },
+  {
+   "point": "ceiling (0.55, 0.04)",
+   "target": "-",
+   "composite": 82.0,
+   "v5": 96.4,
+   "v6": 90.6,
+   "ok": null
+  },
+  {
+   "point": "fall-off: corner minus centre",
+   "target": ">= 1",
+   "composite": -9.6,
+   "v5": -4.2,
+   "v6": 1.5,
+   "ok": true
+  },
+  {
+   "point": "fall-off: centre minus right",
+   "target": ">= 3",
+   "composite": 1.6,
+   "v5": 5.1,
+   "v6": 5.5,
+   "ok": true
+  },
+  {
+   "point": "oak floor by the window, median L",
+   "target": "68-78",
+   "composite": 43.9,
+   "v5": 62.9,
+   "v6": 72.2,
+   "ok": true
+  },
+  {
+   "point": "oak floor by the window, S",
+   "target": "30-45",
+   "composite": 26.0,
+   "v5": 31.9,
+   "v6": 40.2,
+   "ok": true
+  },
+  {
+   "point": "oak floor right of the sofa (shade), median L",
+   "target": "-",
+   "composite": 39.4,
+   "v5": 53.3,
+   "v6": 63.3,
+   "ok": null
+  },
+  {
+   "point": "review's 'floor median' box (82 % rug), L",
+   "target": "-",
+   "composite": 56.7,
+   "v5": 87.6,
+   "v6": 57.5,
+   "ok": null
+  },
+  {
+   "point": "rug minus floor, side by side",
+   "target": "6-10",
+   "composite": 41.6,
+   "v5": 33.6,
+   "v6": 8.8,
+   "ok": true
+  },
+  {
+   "point": "window: glass p50",
+   "target": "brightest",
+   "composite": 96.1,
+   "v5": 96.5,
+   "v6": 96.5,
+   "ok": null
+  },
+  {
+   "point": "window: glass p99",
+   "target": "<= 97",
+   "composite": 99.0,
+   "v5": 96.5,
+   "v6": 96.5,
+   "ok": true
+  },
+  {
+   "point": "window: walls p99 5",
+   "target": "<= 94",
+   "composite": 97.3,
+   "v5": 96.5,
+   "v6": 95.1,
+   "ok": false
+  },
+  {
+   "point": "window: glass p50 minus brightest wall",
+   "target": ">= 3",
+   "composite": -1.2,
+   "v5": 0.0,
+   "v6": 1.4,
+   "ok": false
+  },
+  {
+   "point": "window: branches vs sky upper glass p90 minus p10",
+   "target": ">= 4",
+   "composite": 7.3,
+   "v5": 0.0,
+   "v6": 4.5,
+   "ok": true
+  },
+  {
+   "point": "frame mean L",
+   "target": "76-80",
+   "composite": 70.2,
+   "v5": 85.9,
+   "v6": 75.7,
+   "ok": false
+  },
+  {
+   "point": "share of the frame over L* 90",
+   "target": "-",
+   "composite": 0.149,
+   "v5": 0.687,
+   "v6": 0.357,
+   "ok": null
+  },
+  {
+   "point": "local contrast (QA)",
+   "target": "-",
+   "composite": 3.31,
+   "v5": 1.3,
+   "v6": 3.25,
+   "ok": null
+  },
+  {
+   "point": "contact shadow under the sofa, p1",
+   "target": "18-22",
+   "composite": 16.9,
+   "v5": 27.8,
+   "v6": 17.6,
+   "ok": false
+  },
+  {
+   "point": "darkest 0.5 % patch",
+   "target": "12-15",
+   "composite": 0.9,
+   "v5": 12.5,
+   "v6": 13.4,
+   "ok": true
+  },
+  {
+   "point": "charcoal cushion, L",
+   "target": "25-32",
+   "composite": 25.8,
+   "v5": 38.2,
+   "v6": 27.9,
+   "ok": true
+  },
+  {
+   "point": "sage cushion, S",
+   "target": "8-22",
+   "composite": 7.3,
+   "v5": 10.6,
+   "v6": 9.3,
+   "ok": true
+  },
+  {
+   "point": "sage runner, S",
+   "target": "8-22",
+   "composite": 10.3,
+   "v5": 23.6,
+   "v6": 19.6,
+   "ok": true
+  },
+  {
+   "point": "table top oak, L",
+   "target": "60-72",
+   "composite": 76.8,
+   "v5": 90.5,
+   "v6": 67.5,
+   "ok": true
+  },
+  {
+   "point": "triptych print 1: board",
+   "target": "80-86",
+   "composite": 80.2,
+   "v5": 95.7,
+   "v6": 82.9,
+   "ok": true
+  },
+  {
+   "point": "triptych print 1: passe-partout",
+   "target": "92-95",
+   "composite": 88.2,
+   "v5": 96.5,
+   "v6": 93.3,
+   "ok": true
+  },
+  {
+   "point": "triptych print 1: marks",
+   "target": "<= 28",
+   "composite": 11.2,
+   "v5": 21.0,
+   "v6": 16.1,
+   "ok": true
+  },
+  {
+   "point": "triptych print 1: oak frame",
+   "target": "62-72",
+   "composite": 63.7,
+   "v5": 83.3,
+   "v6": 68.2,
+   "ok": true
+  },
+  {
+   "point": "triptych print 1: wall minus oak frame",
+   "target": ">= 15",
+   "composite": 19.8,
+   "v5": 13.2,
+   "v6": 21.8,
+   "ok": true
+  },
+  {
+   "point": "triptych print 2: board",
+   "target": "80-86",
+   "composite": 79.8,
+   "v5": 95.5,
+   "v6": 82.9,
+   "ok": true
+  },
+  {
+   "point": "triptych print 2: passe-partout",
+   "target": "92-95",
+   "composite": 86.5,
+   "v5": 96.5,
+   "v6": 93.3,
+   "ok": true
+  },
+  {
+   "point": "triptych print 2: marks",
+   "target": "<= 28",
+   "composite": 10.8,
+   "v5": 20.6,
+   "v6": 16.5,
+   "ok": true
+  },
+  {
+   "point": "triptych print 2: oak frame",
+   "target": "62-72",
+   "composite": 65.9,
+   "v5": 84.7,
+   "v6": 71.4,
+   "ok": true
+  },
+  {
+   "point": "triptych print 2: wall minus oak frame",
+   "target": ">= 15",
+   "composite": 15.1,
+   "v5": 11.8,
+   "v6": 17.4,
+   "ok": true
+  },
+  {
+   "point": "triptych print 3: board",
+   "target": "80-86",
+   "composite": 75.7,
+   "v5": 93.1,
+   "v6": 82.9,
+   "ok": true
+  },
+  {
+   "point": "triptych print 3: passe-partout",
+   "target": "92-95",
+   "composite": 81.6,
+   "v5": 96.5,
+   "v6": 93.3,
+   "ok": true
+  },
+  {
+   "point": "triptych print 3: marks",
+   "target": "<= 28",
+   "composite": 9.4,
+   "v5": 19.2,
+   "v6": 15.5,
+   "ok": true
+  },
+  {
+   "point": "triptych print 3: oak frame",
+   "target": "62-72",
+   "composite": 57.3,
+   "v5": 76.1,
+   "v6": 59.0,
+   "ok": false
+  },
+  {
+   "point": "triptych print 3: wall minus oak frame",
+   "target": ">= 15",
+   "composite": 20.5,
+   "v5": 18.6,
+   "v6": 25.7,
+   "ok": true
+  },
+  {
+   "point": "left cube: glowing slot L",
+   "target": "93-97",
+   "composite": 94.7,
+   "v5": 96.5,
+   "v6": 94.7,
+   "ok": true
+  },
+  {
+   "point": "left cube: wash minus wall",
+   "target": ">= 6",
+   "composite": 10.6,
+   "v5": 0.0,
+   "v6": 4.1,
+   "ok": false
+  },
+  {
+   "point": "right cube: glowing slot L",
+   "target": "93-97",
+   "composite": 94.1,
+   "v5": 96.5,
+   "v6": 93.6,
+   "ok": true
+  },
+  {
+   "point": "right cube: wash minus wall",
+   "target": ">= 6",
+   "composite": -1.8,
+   "v5": 6.1,
+   "v6": 1.4,
+   "ok": false
+  },
+  {
+   "point": "max L / px at 255",
+   "target": "<= 97 / 0",
+   "composite": "100.0 / 51940",
+   "v5": "96.5 / 0",
+   "v6": "96.5 / 0",
+   "ok": true
+  }
+ ],
+ "not_met": [
+  "window: walls p99 5",
+  "window: glass p50 minus brightest wall",
+  "frame mean L",
+  "contact shadow under the sofa, p1",
+  "triptych print 3: oak frame",
+  "left cube: wash minus wall",
+  "right cube: wash minus wall"
+ ],
+ "outputs": {
+  "graded": "assets/renders/living-room/nordic/v9/m0-1-2-products-graded-fix-v6.png",
+  "frame": "assets/renders/living-room/nordic/v9/m0-1-2-products-frame-fix-v6.png",
+  "os6": "assets/renders/living-room/nordic/v9/m0-1-2-products-graded-os6-fix-v6.png",
+  "masks": "assets/renders/living-room/nordic/v9/m0-1-2-products-masks-fix-v6.jpg",
+  "sheet": "assets/renders/house-nordic-m0-products-pass-sheet-2026-11-06.jpg",
+  "clay_index": "assets/renders/living-room/nordic/v9/m0-clay-r5b-index.png"
+ },
+ "runtime_s": 160,
+ "products_pass_qa": {
+  "charcoal holder (its felt, L < 60): L [25-35]": {
+   "H": 41.5,
+   "S": 3.9,
+   "L": 22.6,
+   "ok": false
+  },
+  "jute basket: H [25-40], S [25-55]": {
+   "H": 26.9,
+   "S": 31.8,
+   "L": 42.4,
+   "ok": true
+  },
+  "floor-lamp shade: median L, the wall left of it, difference [>= 6]": {
+   "shade": 92.2,
+   "wall": 87.6,
+   "diff": 4.5,
+   "ok": false
+  },
+  "pool on the sofa's right end and the throw: L over the Nordic v6 without the lamp": {
+   "delta_L": 1.8,
+   "ok": false
+  },
+  "walls p99.5 outside the cube washes and the floor lamp's light zone [<= 94]; the glass p50 over it [>= 3]": {
+   "walls_p99_5": 93.1,
+   "glass_p50": 96.1,
+   "margin": 2.9,
+   "ok": false
+  }
+ },
+ "note_products": "the laid composite m0-1-2-products-fix.png (m0_products_pass.py lay); v5 column = the Nordic seedream composite's v5 (this composite has no v5)"
+}

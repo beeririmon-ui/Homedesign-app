@@ -1,0 +1,79 @@
+{
+ "asset_id": "pose-m0p-1-2-shell-seedream-fix-warp",
+ "date": "2026-11-06",
+ "tokens": 0,
+ "script": "assets/renders/house-nordic-v7-2026-11-02/m0p_warp.py",
+ "source": "assets/renders/living-room/nordic/v9/pose-m0p-1-2-shell-seedream-fix.png",
+ "grid": {
+  "window_px_1920": 160,
+  "step_px_1920": 48,
+  "measured_cells": 60,
+  "cells": 740
+ },
+ "field_px_1920": {
+  "dx_min": -8.41,
+  "dx_max": 6.95,
+  "dy_min": -3.21,
+  "dy_max": 1.41
+ },
+ "lock_v2": {
+  "shift_px": [
+   1.2,
+   1.43
+  ],
+  "scale_pct": [
+   -0.01,
+   -0.0
+  ],
+  "band_after": 1.68,
+  "tile_after": 5.5,
+  "fixed_edges_worst_px": 2,
+  "fixed_ratios": {
+   "sofa 220x92x78 (fixed-product) w": 0.9985
+  },
+  "verdict": {
+   "global_pass": true,
+   "residual_pass": false,
+   "edges_pass": true,
+   "pass": false
+  }
+ },
+ "shell": {
+  "raw_max_px": 7.03,
+  "per_line": {
+   "back wall floor line (y 0.789)": 1.65,
+   "back wall skirting top (y 0.752)": 3.23,
+   "back wall cornice (y 0.095)": 2.0,
+   "left corner (x 0.047)": 7.03,
+   "back-right corner (x 0.698)": 4.95
+  },
+  "verdict": {
+   "raw_pass": true,
+   "after_global_affine_pass": true,
+   "rule": "G1.4 master: every shell line within 9.6 px (0.5 % of 1920), raw or after one global affine (code)"
+  }
+ },
+ "before": {
+  "shift_px": [
+   0.01,
+   -0.24
+  ],
+  "scale_pct": [
+   0.01,
+   0.02
+  ],
+  "band_after": 6.78,
+  "tile_after": 4.7,
+  "fixed_edges_worst_px": 4,
+  "fixed_ratios": {
+   "sofa 220x92x78 (fixed-product) w": 1.003
+  },
+  "verdict": {
+   "global_pass": true,
+   "residual_pass": false,
+   "edges_pass": true,
+   "pass": false
+  }
+ },
+ "output": "assets/renders/living-room/nordic/v9/pose-m0p-1-2-shell-seedream-fix-warp.png"
+}

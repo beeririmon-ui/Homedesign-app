@@ -1,0 +1,1002 @@
+{
+ "date": "2026-11-06",
+ "brief": "briefs/render-style-previews-2026-11-06.md",
+ "decision": "STY1 / STY2",
+ "note": "TEST only: not for the site, the slot layers or QA'd assets",
+ "styles": {
+  "warm-modern": {
+   "tokens": 650,
+   "model": "seedream-5-pro i2i 2K auto",
+   "placeholder_id": "06bffa3b-40bd-4034-b89b-b66a09dd9572",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-6b52e2f39e5925d96a823f7d38d048f6-0-1793993753895-8337aa01.png",
+   "prompt": "assets/prompts/style-previews-2026-11-06/warm-modern.txt",
+   "reference_urls": [
+    "https://ae01.alicdn.com/kf/S10d0636d85e5451e9a3d169fff6378f5F.jpg",
+    "https://ae01.alicdn.com/kf/S2d1e17ab3231455d8a8f4887ab14385bL.jpg",
+    "https://oss-cf.cjdropshipping.com/product/2024/12/18/12/e4e7068f-30f1-45b6-9c55-94b11028ae7d_trans.jpeg",
+    "https://cf.cjdropshipping.com/quick/product/635be4cd-9b07-4238-bb0f-e709154b4740.jpg",
+    "https://cf.cjdropshipping.com/quick/product/558bb2f9-874e-45ce-9e69-c92b69ec061b.jpg"
+   ],
+   "reference_cards": [
+    "framed-art-aliexpress-frameless-minimalist-wall-art-631735",
+    "accent-sconces-aliexpress-travertine-cylinder-walnut-choice",
+    "floor-lamp-cj-pleated-walnut-stem-158",
+    "cushions-cj-boucle-teddy (White)",
+    "pendant-cj-tiered-fabric-drum"
+   ],
+   "base": "assets/renders/living-room/style-previews-2026-11-06/clay-17-slots.png",
+   "lock_v2": {
+    "shift_px": [
+     0.4,
+     -1.74
+    ],
+    "scale_pct": [
+     0.14,
+     0.13
+    ],
+    "band_after": 1.84,
+    "tile_after": 0.76,
+    "fixed_edges_worst_px": 16,
+    "fixed_ratios": {
+     "coffee table 140x70 h38 (fixed-product) w": 1.0016,
+     "armchair 72x78 h70 (fixed-product) w": 1.0021
+    },
+    "verdict": {
+     "global_pass": true,
+     "residual_pass": true,
+     "edges_pass": true,
+     "pass": true
+    }
+   },
+   "lock_brief": {
+    "shift_le_2": true,
+    "edges_le_9_6": false
+   },
+   "shell": {
+    "raw_max_px": 46.83,
+    "after_affine_px": 45.81,
+    "per_line": {
+     "back wall floor line": {
+      "raw_max": 27.88,
+      "after_affine_max": 26.83
+     },
+     "back wall skirting top": {
+      "raw_max": 46.02,
+      "after_affine_max": 45.03
+     },
+     "back wall cornice": {
+      "raw_max": 0.57,
+      "after_affine_max": 0.97
+     },
+     "window sill top edge": {
+      "raw_max": 46.83,
+      "after_affine_max": 45.81
+     },
+     "room corner": {
+      "raw_max": 10.1,
+      "after_affine_max": 11.05
+     }
+    },
+    "vanishing_point": {
+     "clay": [
+      -1853.0,
+      538.0
+     ],
+     "render": [
+      -1523.0,
+      491.0
+     ]
+    },
+    "verdict": {
+     "raw_pass": false,
+     "after_global_affine_pass": false,
+     "rule": "G1.4 master: every named shell line within 9.6 px (0.5 % of 1920), raw or after one global affine (code)"
+    }
+   },
+   "floor_patch": {
+    "box_canvas_uv": [
+     0.41,
+     0.46,
+     0.765,
+     0.785
+    ],
+    "lab_style": [
+     37.16,
+     6.02,
+     18.58
+    ],
+    "lab_nordic": [
+     64.29,
+     5.08,
+     15.27
+    ],
+    "dE": 27.35,
+    "ok": false,
+    "against": "assets/renders/living-room/nordic/v9/m0-1-2-products-fix.png"
+   },
+   "raw": "assets/renders/living-room/style-previews-2026-11-06/warm-modern-raw.png",
+   "lock_overlay": "assets/renders/living-room/style-previews-2026-11-06/warm-modern-lock-v2.jpg",
+   "graded": {
+    "path": "assets/renders/living-room/style-previews-2026-11-06/warm-modern-graded.png",
+    "chain": "grade_v6_m0.py (v6) adapted, test values",
+    "targets": {
+     "corner": 90.0,
+     "centre": 88.2,
+     "right": 82.7,
+     "window": 84.0,
+     "floor": 72.0
+    },
+    "white_balance": "4600 K (shared)",
+    "measured": {
+     "corner": 89.6,
+     "centre": 88.3,
+     "right": 82.7,
+     "window": 47.6,
+     "floor": 52.0
+    },
+    "wall_range": [
+     88,
+     92
+    ],
+    "corner_ok": true,
+    "frame_mean_L": 69.4,
+    "max_L": 96.5,
+    "floor_lamp": {
+     "shade_L": 90.2,
+     "wall_L": 86.3,
+     "diff": 3.9,
+     "ok": false
+    },
+    "params": {
+     "wall_ctrl": [
+      1.5566449699481062,
+      0.18929697767105497,
+      0.3579202933672371
+     ],
+     "window_wall": 7.93,
+     "ceiling": 0.3,
+     "floor": 1.5,
+     "products": 0.2
+    },
+    "iterations": [
+     {
+      "corner": 73.0,
+      "centre": 87.8,
+      "right": 86.2,
+      "window": 47.6,
+      "floor": 43.7
+     },
+     {
+      "corner": 88.0,
+      "centre": 89.7,
+      "right": 83.2,
+      "window": 47.6,
+      "floor": 52.0
+     },
+     {
+      "corner": 89.0,
+      "centre": 88.9,
+      "right": 82.8,
+      "window": 47.6,
+      "floor": 52.0
+     },
+     {
+      "corner": 89.5,
+      "centre": 88.5,
+      "right": 82.8,
+      "window": 47.6,
+      "floor": 52.0
+     }
+    ],
+    "not_applied": "the brief's black point L 11-14 for warm modern (the v6 toe 12-15 is used); per-style saturation beyond the v6 chroma rules"
+   },
+   "visual_notes": [
+    "hard sun patches and leaf shadows on the window wall and its reveal (the brief says no sun); plaster blotches on the reveal",
+    "magazine-holder: a leather-strapped bundle drawn on the coffee table, not on the rug in the foreground slot",
+    "basket: no jute basket in the back-left corner (the olive planter stands there); a woven basket rim shows at the bottom-right instead of the boucle pouf",
+    "wall round: plaster relief disc, in place"
+   ]
+  },
+  "boho": {
+   "tokens": 650,
+   "model": "seedream-5-pro i2i 2K auto",
+   "placeholder_id": "7dbd123c-334a-4766-a2f2-7431cfc13ec8",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-ec837bf43ae94651589fc4c8f86c56d7-0-1793993765825-0f886d98.png",
+   "prompt": "assets/prompts/style-previews-2026-11-06/boho.txt",
+   "reference_urls": [
+    "https://ae01.alicdn.com/kf/S03bee60876b4459faeb2167e220265833.jpg",
+    "https://ae01.alicdn.com/kf/S2d7a3e8af13b4d0cbdccb856effde73bW.jpg",
+    "https://file.zendrop.com/products/83/7e/a75cb5e948b7b3280683b19ab275_import.webp",
+    "https://cf.cjdropshipping.com/quick/product/402a7e02-8541-471e-b8f3-ff673f869a3d.jpg",
+    "https://ae01.alicdn.com/kf/S78bd15642a1148c3a52d67daadde117fR.jpg"
+   ],
+   "reference_cards": [
+    "wall-decor-aliexpress-natural-raffia-woven-bohemian-763597",
+    "wall-sconce-aliexpress-rattan-bamboo-wall-lamp-671943",
+    "planter-zendrop-seagrass-belly-basket-45",
+    "cushions-cj-washed-cotton-frayed (Rust Orange)",
+    "table-runner-aliexpress-boho-macrame-table-runners-263532"
+   ],
+   "base": "assets/renders/living-room/style-previews-2026-11-06/clay-17-slots.png",
+   "lock_v2": {
+    "shift_px": [
+     4.86,
+     3.44
+    ],
+    "scale_pct": [
+     -0.21,
+     -0.53
+    ],
+    "band_after": 7.02,
+    "tile_after": 9.66,
+    "fixed_edges_worst_px": 12,
+    "fixed_ratios": {
+     "armchair 72x78 h70 (fixed-product) w": 1.0021
+    },
+    "verdict": {
+     "global_pass": false,
+     "residual_pass": false,
+     "edges_pass": true,
+     "pass": false
+    }
+   },
+   "lock_brief": {
+    "shift_le_2": false,
+    "edges_le_9_6": false
+   },
+   "shell": {
+    "raw_max_px": 19.91,
+    "after_affine_px": 20.81,
+    "per_line": {
+     "back wall floor line": {
+      "raw_max": 19.91,
+      "after_affine_max": 20.81
+     },
+     "back wall skirting top": {
+      "raw_max": 18.43,
+      "after_affine_max": 18.27
+     },
+     "back wall cornice": {
+      "raw_max": 2.24,
+      "after_affine_max": 3.9
+     },
+     "window sill top edge": {
+      "raw_max": 0.6,
+      "after_affine_max": 2.62
+     },
+     "room corner": {
+      "raw_max": 9.23,
+      "after_affine_max": 5.81
+     }
+    },
+    "vanishing_point": {
+     "clay": [
+      -1853.0,
+      538.0
+     ],
+     "render": [
+      -1913.0,
+      561.0
+     ]
+    },
+    "verdict": {
+     "raw_pass": false,
+     "after_global_affine_pass": false,
+     "rule": "G1.4 master: every named shell line within 9.6 px (0.5 % of 1920), raw or after one global affine (code)"
+    }
+   },
+   "floor_patch": {
+    "box_canvas_uv": [
+     0.41,
+     0.46,
+     0.765,
+     0.785
+    ],
+    "lab_style": [
+     31.74,
+     8.73,
+     24.03
+    ],
+    "lab_nordic": [
+     64.29,
+     5.08,
+     15.27
+    ],
+    "dE": 33.91,
+    "ok": false,
+    "against": "assets/renders/living-room/nordic/v9/m0-1-2-products-fix.png"
+   },
+   "raw": "assets/renders/living-room/style-previews-2026-11-06/boho-raw.png",
+   "lock_overlay": "assets/renders/living-room/style-previews-2026-11-06/boho-lock-v2.jpg",
+   "graded": {
+    "path": "assets/renders/living-room/style-previews-2026-11-06/boho-graded.png",
+    "chain": "grade_v6_m0.py (v6) adapted, test values",
+    "targets": {
+     "corner": 89.5,
+     "centre": 87.7,
+     "right": 82.2,
+     "window": 84.0,
+     "floor": 72.0
+    },
+    "white_balance": "4400 K: linear gains R 1.025, G 1, B 0.96 after the 4600 K grade, roll-off again (approximate, test values)",
+    "measured": {
+     "corner": 87.8,
+     "centre": 87.5,
+     "right": 82.0,
+     "window": 68.9,
+     "floor": 37.3
+    },
+    "wall_range": [
+     87,
+     92
+    ],
+    "corner_ok": true,
+    "frame_mean_L": 70.5,
+    "max_L": 95.1,
+    "floor_lamp": {
+     "shade_L": 80.6,
+     "wall_L": 85.7,
+     "diff": -5.1,
+     "ok": false
+    },
+    "params": {
+     "wall_ctrl": [
+      0.9228014452216758,
+      0.0863260903831286,
+      0.23455951526450286
+     ],
+     "window_wall": 3.222,
+     "ceiling": 0.3,
+     "floor": 1.5,
+     "products": 0.2
+    },
+    "iterations": [
+     {
+      "corner": 87.1,
+      "centre": 90.6,
+      "right": 88.5,
+      "window": 69.1,
+      "floor": 33.9
+     },
+     {
+      "corner": 88.4,
+      "centre": 89.0,
+      "right": 83.3,
+      "window": 69.1,
+      "floor": 37.3
+     },
+     {
+      "corner": 88.8,
+      "centre": 88.2,
+      "right": 82.2,
+      "window": 69.1,
+      "floor": 37.3
+     },
+     {
+      "corner": 89.0,
+      "centre": 87.9,
+      "right": 82.2,
+      "window": 69.1,
+      "floor": 37.3
+     }
+    ],
+    "not_applied": "the brief's black point L 11-14 for warm modern (the v6 toe 12-15 is used); per-style saturation beyond the v6 chroma rules"
+   },
+   "visual_notes": [
+    "mild sun on the window-wall reveal",
+    "magazine-holder: missing from the foreground slot",
+    "basket (wicker log basket), pouf, tasselled runner, rattan sun round: in place"
+   ]
+  },
+  "japandi": {
+   "tokens": 650,
+   "model": "seedream-5-pro i2i 2K auto",
+   "placeholder_id": "a6a4e80a-478c-447e-ac29-a4c429982b3e",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-8399b48a4eb632353735b468b441cc79-0-1793993773442-ff12644a.png",
+   "prompt": "assets/prompts/style-previews-2026-11-06/japandi.txt",
+   "reference_urls": [
+    "https://ae01.alicdn.com/kf/Sb1be1732de90438e845c9c7a7c4f0e51a.jpg",
+    "https://cf.cjdropshipping.com/quick/product/82e47b21-45f9-4973-b808-e93df5a70283.jpg",
+    "https://oss-cf.cjdropshipping.com/product/2026/01/13/02/497c2dc1-c03b-4108-a49b-eb1fc2b2330a_trans.jpeg",
+    "https://ae01.alicdn.com/kf/S2d1e17ab3231455d8a8f4887ab14385bL.jpg",
+    "https://ae01.alicdn.com/kf/S933d194167a24cfa9480d1d58b8cb6252.jpg"
+   ],
+   "reference_cards": [
+    "framed-art-aliexpress-japanese-wabi-sabi-tree-176323",
+    "vase-cj-black-matte-stoneware-jar-30",
+    "pendant-cj-pleated-pumpkin-lantern-40",
+    "accent-sconces-aliexpress-travertine-cylinder-walnut-choice",
+    "candle-holders-aliexpress-matte-black-iron-pillar-set2"
+   ],
+   "base": "assets/renders/living-room/style-previews-2026-11-06/clay-17-slots-japandi.png",
+   "lock_v2": {
+    "shift_px": [
+     3.66,
+     -1.1
+    ],
+    "scale_pct": [
+     -0.37,
+     0.05
+    ],
+    "band_after": 4.79,
+    "tile_after": 1.61,
+    "fixed_edges_worst_px": 5,
+    "fixed_ratios": {
+     "sofa 220x92x78 (fixed-product) w": 1.0029,
+     "armchair 72x78 h70 (fixed-product) w": 0.9915
+    },
+    "verdict": {
+     "global_pass": true,
+     "residual_pass": true,
+     "edges_pass": true,
+     "pass": true
+    }
+   },
+   "lock_brief": {
+    "shift_le_2": false,
+    "edges_le_9_6": true
+   },
+   "shell": {
+    "raw_max_px": 52.29,
+    "after_affine_px": 50.65,
+    "per_line": {
+     "back wall floor line": {
+      "raw_max": 34.85,
+      "after_affine_max": 33.15
+     },
+     "back wall skirting top": {
+      "raw_max": 52.29,
+      "after_affine_max": 50.65
+     },
+     "back wall cornice": {
+      "raw_max": 2.64,
+      "after_affine_max": 0.96
+     },
+     "window sill top edge": {
+      "raw_max": 0.39,
+      "after_affine_max": 0.72
+     },
+     "room corner": {
+      "raw_max": 21.4,
+      "after_affine_max": 21.6
+     }
+    },
+    "vanishing_point": {
+     "clay": [
+      -1853.0,
+      538.0
+     ],
+     "render": [
+      -1424.0,
+      480.0
+     ]
+    },
+    "verdict": {
+     "raw_pass": false,
+     "after_global_affine_pass": false,
+     "rule": "G1.4 master: every named shell line within 9.6 px (0.5 % of 1920), raw or after one global affine (code)"
+    }
+   },
+   "floor_patch": {
+    "box_canvas_uv": [
+     0.41,
+     0.46,
+     0.765,
+     0.785
+    ],
+    "lab_style": [
+     32.84,
+     8.98,
+     21.61
+    ],
+    "lab_nordic": [
+     64.29,
+     5.08,
+     15.27
+    ],
+    "dE": 32.33,
+    "ok": false,
+    "against": "assets/renders/living-room/nordic/v9/m0-1-2-products-fix.png"
+   },
+   "raw": "assets/renders/living-room/style-previews-2026-11-06/japandi-raw.png",
+   "lock_overlay": "assets/renders/living-room/style-previews-2026-11-06/japandi-lock-v2.jpg",
+   "graded": {
+    "path": "assets/renders/living-room/style-previews-2026-11-06/japandi-graded.png",
+    "chain": "grade_v6_m0.py (v6) adapted, test values",
+    "targets": {
+     "corner": 90.0,
+     "centre": 88.2,
+     "right": 82.7,
+     "window": 84.0,
+     "floor": 72.0
+    },
+    "white_balance": "4600 K (shared)",
+    "measured": {
+     "corner": 90.0,
+     "centre": 87.5,
+     "right": 82.8,
+     "window": 83.1,
+     "floor": 41.2
+    },
+    "wall_range": [
+     88,
+     92
+    ],
+    "corner_ok": true,
+    "frame_mean_L": 73.5,
+    "max_L": 96.5,
+    "floor_lamp": {
+     "shade_L": 90.4,
+     "wall_L": 91.4,
+     "diff": -1.0,
+     "ok": false
+    },
+    "params": {
+     "wall_ctrl": [
+      0.6347649611019965,
+      0.7333915242508543,
+      0.44406170155268654
+     ],
+     "window_wall": 1.147,
+     "ceiling": 0.3,
+     "floor": 1.5,
+     "products": 0.2
+    },
+    "iterations": [
+     {
+      "corner": 91.8,
+      "centre": 81.7,
+      "right": 84.3,
+      "window": 78.1,
+      "floor": 35.1
+     },
+     {
+      "corner": 90.9,
+      "centre": 85.1,
+      "right": 82.9,
+      "window": 81.4,
+      "floor": 41.2
+     },
+     {
+      "corner": 90.3,
+      "centre": 86.5,
+      "right": 82.8,
+      "window": 82.4,
+      "floor": 41.2
+     },
+     {
+      "corner": 90.2,
+      "centre": 87.2,
+      "right": 82.7,
+      "window": 82.8,
+      "floor": 41.2
+     }
+    ],
+    "not_applied": "the brief's black point L 11-14 for warm modern (the v6 toe 12-15 is used); per-style saturation beyond the v6 chroma rules"
+   },
+   "visual_notes": [
+    "sun streaks on the floor and a hard olive-tree shadow on the window wall",
+    "wall round: missing; a faint pale rectangle on the wall right of the right sconce",
+    "triptych drawn larger than the clay frames (top about 0.22 vs the Nordic 0.31 of the frame height)",
+    "magazine-holder: an X-frame rack in the back-left corner beside the basket, not in the foreground slot",
+    "pouf, paper lantern floor lamp: in place"
+   ]
+  },
+  "mediterranean": {
+   "tokens": 650,
+   "model": "seedream-5-pro i2i 2K auto",
+   "placeholder_id": "11d06c8a-5bf8-470c-a59b-bdbee057f62a",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-19d6bfeeef6151b201ae150b3ce783eb-0-1793993773063-da3dae5c.png",
+   "prompt": "assets/prompts/style-previews-2026-11-06/mediterranean.txt",
+   "reference_urls": [
+    "https://ae01.alicdn.com/kf/S7b598ab9cc354d58b90c5459bf0cde21I.jpg",
+    "https://cf.cjdropshipping.com/c7ad75db-6cfb-418f-8e6f-70efac5d77c9.jpg",
+    "https://ae01.alicdn.com/kf/S55561bdb1c504f3b83d801383fcfaec73.jpg",
+    "https://cf.cjdropshipping.com/quick/product/402a7e02-8541-471e-b8f3-ff673f869a3d.jpg",
+    "https://file.zendrop.com/products/83/7e/a75cb5e948b7b3280683b19ab275_import.webp"
+   ],
+   "reference_cards": [
+    "framed-art-aliexpress-mediterranean-wabi-sabi-poster-802890",
+    "magazine-holder-cj-arch-iron-cane",
+    "vase-aliexpress-vintage-distressed-clay-vase-589009",
+    "cushions-cj-washed-cotton-frayed (Earthy Orange)",
+    "basket-zendrop-seagrass-belly-38x34"
+   ],
+   "base": "assets/renders/living-room/style-previews-2026-11-06/clay-17-slots.png",
+   "lock_v2": {
+    "shift_px": [
+     2.14,
+     -0.78
+    ],
+    "scale_pct": [
+     0.04,
+     0.12
+    ],
+    "band_after": 1.37,
+    "tile_after": 0.84,
+    "fixed_edges_worst_px": 13,
+    "fixed_ratios": {
+     "armchair 72x78 h70 (fixed-product) w": 0.9979
+    },
+    "verdict": {
+     "global_pass": true,
+     "residual_pass": true,
+     "edges_pass": true,
+     "pass": true
+    }
+   },
+   "lock_brief": {
+    "shift_le_2": false,
+    "edges_le_9_6": false
+   },
+   "shell": {
+    "raw_max_px": 12.61,
+    "after_affine_px": 12.86,
+    "per_line": {
+     "back wall floor line": {
+      "raw_max": 12.61,
+      "after_affine_max": 12.86
+     },
+     "back wall skirting top": {
+      "raw_max": 9.22,
+      "after_affine_max": 9.46
+     },
+     "back wall cornice": {
+      "raw_max": 0.9,
+      "after_affine_max": 0.73
+     },
+     "window sill top edge": {
+      "raw_max": 1.07,
+      "after_affine_max": 0.39
+     },
+     "room corner": {
+      "raw_max": 0.7,
+      "after_affine_max": 0.67
+     }
+    },
+    "vanishing_point": {
+     "clay": [
+      -1853.0,
+      538.0
+     ],
+     "render": [
+      -1713.0,
+      514.0
+     ]
+    },
+    "verdict": {
+     "raw_pass": false,
+     "after_global_affine_pass": false,
+     "rule": "G1.4 master: every named shell line within 9.6 px (0.5 % of 1920), raw or after one global affine (code)"
+    }
+   },
+   "floor_patch": {
+    "box_canvas_uv": [
+     0.41,
+     0.46,
+     0.765,
+     0.785
+    ],
+    "lab_style": [
+     25.73,
+     5.53,
+     16.3
+    ],
+    "lab_nordic": [
+     64.29,
+     5.08,
+     15.27
+    ],
+    "dE": 38.58,
+    "ok": false,
+    "against": "assets/renders/living-room/nordic/v9/m0-1-2-products-fix.png"
+   },
+   "raw": "assets/renders/living-room/style-previews-2026-11-06/mediterranean-raw.png",
+   "lock_overlay": "assets/renders/living-room/style-previews-2026-11-06/mediterranean-lock-v2.jpg",
+   "graded": {
+    "path": "assets/renders/living-room/style-previews-2026-11-06/mediterranean-graded.png",
+    "chain": "grade_v6_m0.py (v6) adapted, test values",
+    "targets": {
+     "corner": 91.0,
+     "centre": 89.2,
+     "right": 83.7,
+     "window": 84.0,
+     "floor": 72.0
+    },
+    "white_balance": "4400 K: linear gains R 1.025, G 1, B 0.96 after the 4600 K grade, roll-off again (approximate, test values)",
+    "measured": {
+     "corner": 88.9,
+     "centre": 88.6,
+     "right": 83.5,
+     "window": 57.2,
+     "floor": 32.7
+    },
+    "wall_range": [
+     89,
+     93
+    ],
+    "corner_ok": false,
+    "frame_mean_L": 69.1,
+    "max_L": 95.1,
+    "floor_lamp": {
+     "shade_L": 82.4,
+     "wall_L": 88.4,
+     "diff": -6.0,
+     "ok": false
+    },
+    "params": {
+     "wall_ctrl": [
+      1.3703864989349992,
+      0.4711300424537907,
+      0.8760582893304518
+     ],
+     "window_wall": 5.607,
+     "ceiling": 0.3,
+     "floor": 1.5,
+     "products": 0.2
+    },
+    "iterations": [
+     {
+      "corner": 78.7,
+      "centre": 84.3,
+      "right": 75.3,
+      "window": 57.3,
+      "floor": 28.7
+     },
+     {
+      "corner": 89.0,
+      "centre": 88.7,
+      "right": 83.4,
+      "window": 57.3,
+      "floor": 32.7
+     },
+     {
+      "corner": 89.8,
+      "centre": 89.2,
+      "right": 83.7,
+      "window": 57.3,
+      "floor": 32.7
+     },
+     {
+      "corner": 90.1,
+      "centre": 89.3,
+      "right": 83.7,
+      "window": 57.3,
+      "floor": 32.7
+     }
+    ],
+    "not_applied": "the brief's black point L 11-14 for warm modern (the v6 toe 12-15 is used); per-style saturation beyond the v6 chroma rules"
+   },
+   "visual_notes": [
+    "hard sun patches on the window wall and in the corner",
+    "a new black iron rack / etagere in the back-left corner (the holder moved there), not in the clay",
+    "wall round: missing; magazine-holder: missing from the foreground slot"
+   ]
+  },
+  "modern-country": {
+   "tokens": 650,
+   "model": "seedream-5-pro i2i 2K auto",
+   "placeholder_id": "926b8deb-bdc2-414b-aa15-6fcf239cb51e",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-f659367a34ce3032332223148a227238-0-1793993781281-f1f4f931.png",
+   "prompt": "assets/prompts/style-previews-2026-11-06/modern-country.txt",
+   "reference_urls": [
+    "https://ae01.alicdn.com/kf/S41cc0edc5846434bb204687ac3813130K.jpg",
+    "https://ae01.alicdn.com/kf/S55561bdb1c504f3b83d801383fcfaec73.jpg",
+    "https://cf.cjdropshipping.com/quick/product/2736eed6-7f8e-49d7-8652-d9e719a72430.jpg",
+    "https://cf.cjdropshipping.com/quick/product/7b0ee726-ee08-48bc-bc82-1e04156ec05a.jpg",
+    "https://file.zendrop.com/products/83/7e/a75cb5e948b7b3280683b19ab275_import.webp"
+   ],
+   "reference_cards": [
+    "cushions-aliexpress-farmhouse-floral-pillow-covers-166217",
+    "vase-aliexpress-vintage-distressed-clay-vase-589009",
+    "table-runner-cj-linen-look-sage-fringe (4 Light Green)",
+    "bowl-cj-speckled-ivory-wide-bowl-21",
+    "basket-zendrop-seagrass-belly-38x34"
+   ],
+   "base": "assets/renders/living-room/style-previews-2026-11-06/clay-17-slots.png",
+   "lock_v2": {
+    "shift_px": [
+     2.13,
+     -1.12
+    ],
+    "scale_pct": [
+     -0.09,
+     0.03
+    ],
+    "band_after": 0.59,
+    "tile_after": 2.95,
+    "fixed_edges_worst_px": 32,
+    "fixed_ratios": {
+     "armchair 72x78 h70 (fixed-product) w": 1.0021
+    },
+    "verdict": {
+     "global_pass": true,
+     "residual_pass": true,
+     "edges_pass": false,
+     "pass": false
+    }
+   },
+   "lock_brief": {
+    "shift_le_2": false,
+    "edges_le_9_6": false
+   },
+   "shell": {
+    "raw_max_px": 19.38,
+    "after_affine_px": 22.43,
+    "per_line": {
+     "back wall floor line": {
+      "raw_max": 19.38,
+      "after_affine_max": 22.43
+     },
+     "back wall skirting top": {
+      "raw_max": 8.24,
+      "after_affine_max": 5.83
+     },
+     "back wall cornice": {
+      "raw_max": 1.09,
+      "after_affine_max": 1.91
+     },
+     "window sill top edge": {
+      "raw_max": 0.96,
+      "after_affine_max": 1.54
+     },
+     "room corner": {
+      "raw_max": 4.52,
+      "after_affine_max": 3.61
+     }
+    },
+    "vanishing_point": {
+     "clay": [
+      -1853.0,
+      538.0
+     ],
+     "render": [
+      -1960.0,
+      565.0
+     ]
+    },
+    "verdict": {
+     "raw_pass": false,
+     "after_global_affine_pass": false,
+     "rule": "G1.4 master: every named shell line within 9.6 px (0.5 % of 1920), raw or after one global affine (code)"
+    }
+   },
+   "floor_patch": {
+    "box_canvas_uv": [
+     0.41,
+     0.46,
+     0.765,
+     0.785
+    ],
+    "lab_style": [
+     57.04,
+     4.98,
+     17.03
+    ],
+    "lab_nordic": [
+     64.29,
+     5.08,
+     15.27
+    ],
+    "dE": 7.47,
+    "ok": false,
+    "against": "assets/renders/living-room/nordic/v9/m0-1-2-products-fix.png"
+   },
+   "raw": "assets/renders/living-room/style-previews-2026-11-06/modern-country-raw.png",
+   "lock_overlay": "assets/renders/living-room/style-previews-2026-11-06/modern-country-lock-v2.jpg",
+   "graded": {
+    "path": "assets/renders/living-room/style-previews-2026-11-06/modern-country-graded.png",
+    "chain": "grade_v6_m0.py (v6) adapted, test values",
+    "targets": {
+     "corner": 91.0,
+     "centre": 89.2,
+     "right": 83.7,
+     "window": 84.0,
+     "floor": 72.0
+    },
+    "white_balance": "4400 K: linear gains R 1.025, G 1, B 0.96 after the 4600 K grade, roll-off again (approximate, test values)",
+    "measured": {
+     "corner": 90.0,
+     "centre": 88.9,
+     "right": 83.5,
+     "window": 69.1,
+     "floor": 72.0
+    },
+    "wall_range": [
+     89,
+     93
+    ],
+    "corner_ok": true,
+    "frame_mean_L": 72.8,
+    "max_L": 95.1,
+    "floor_lamp": {
+     "shade_L": 83.5,
+     "wall_L": 86.3,
+     "diff": -2.8,
+     "ok": false
+    },
+    "params": {
+     "wall_ctrl": [
+      0.8438563837980659,
+      0.34853810740493596,
+      0.523883868156119
+     ],
+     "window_wall": 3.414,
+     "ceiling": 0.3,
+     "floor": 0.943,
+     "products": 0.2
+    },
+    "iterations": [
+     {
+      "corner": 89.4,
+      "centre": 87.6,
+      "right": 83.6,
+      "window": 67.2,
+      "floor": 73.3
+     },
+     {
+      "corner": 90.4,
+      "centre": 88.8,
+      "right": 83.7,
+      "window": 67.8,
+      "floor": 72.0
+     },
+     {
+      "corner": 90.7,
+      "centre": 89.1,
+      "right": 83.7,
+      "window": 68.4,
+      "floor": 72.0
+     },
+     {
+      "corner": 90.9,
+      "centre": 89.2,
+      "right": 83.7,
+      "window": 68.9,
+      "floor": 72.0
+     }
+    ],
+    "not_applied": "the brief's black point L 11-14 for warm modern (the v6 toe 12-15 is used); per-style saturation beyond the v6 chroma rules"
+   },
+   "visual_notes": [
+    "hard leaf shadow on the window-wall reveal (sun)",
+    "magazine-holder: a wicker basket in the foreground slot, in place; wall round: a wicker wall basket, in place; pouf in place"
+   ]
+  }
+ },
+ "contact_sheet": "assets/renders/living-room/style-previews-2026-11-06/contact-sheet.png",
+ "common_visual_note": "All five passes put sun-like hard light on the window wall (the brief asks for no sun); grading cannot remove it. Slot drift: the holder leaves its foreground slot in four of five; the wall round is missing in two.",
+ "floor_check_note": "The fixed floor patch (canvas uv 0.41-0.46 x 0.765-0.785, frame px 518-586 x 562-578 at 1280) is free floor in the Nordic frame, but in the style passes it falls on objects the passes moved into the back-left corner (boho: the seagrass baskets; japandi: the magazine rack and basket; mediterranean: the basket and the iron rack) or their shadows, and the raws are 25-40 L darker than the ungraded Nordic. So the dE numbers (7.5-38.6) are not a floor reading. By eye: warm modern, japandi and modern country keep a pale oak; mediterranean reads warmer and darker; boho whitened. A per-style free-floor patch was not measured (the free floor differs per pass and is partly sunlit).",
+ "floor_patch_graded_lab_1280": {
+  "nordic-v6-graded": [
+   89.0,
+   1.0,
+   10.5
+  ],
+  "warm-modern": [
+   58.5,
+   7.5,
+   22.0
+  ],
+  "boho": [
+   46.4,
+   10.6,
+   24.3
+  ],
+  "japandi": [
+   50.9,
+   8.7,
+   20.6
+  ],
+  "mediterranean": [
+   40.0,
+   6.8,
+   17.2
+  ],
+  "modern-country": [
+   75.5,
+   5.8,
+   19.3
+  ]
+ }
+}
