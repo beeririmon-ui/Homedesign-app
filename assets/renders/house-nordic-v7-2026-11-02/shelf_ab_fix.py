@@ -208,7 +208,7 @@ def build():
     excl_r = np.zeros((H, W), bool)
     for k in ("jar", "column", "tray"):
         excl_r |= cv2.dilate(sp[k].astype(np.uint8), np.ones((5, 5), np.uint8)).astype(bool)
-    reeds = main_strokes(thin_dark(pt, LINES["reeds"], excl_r | sp["diffuser"], close=(9, 1)), reach=4)
+    reeds = main_strokes(thin_dark(pt, LINES["reeds"], excl_r | sp["diffuser"], close=(9, 1)), reach=14)
     # 3. the board: its three faces, projected, filled from the pass's faces
     q = board_quads(W, H)
     rec["board_quads_canvas_px"] = {k: [[round(x, 1), round(y, 1)] for x, y in v] for k, v in q.items()}
@@ -229,9 +229,12 @@ def build():
     for k in ("jar", "tray"):
         c_, a_, _ = place(pt, sp[k], bbox(sp[k]), tbox[k], H, W)
         objs[k] = (c_, a_)
-    dm = sp["diffuser"] | reeds
+    # the diffuser: its vessel onto the vessel's own box (7 x 10.2 cm on the tray), the reeds riding the same transform
     tb = tbox["diffuser"]
-    c_, a_, _ = place(pt, dm, bbox(dm), (tb[0], tb[1], tb[2], tb[3] + 2), H, W)             # 2 px into the tray (it stands on it)
+    vh = int(round((1.12 - 1.018) * (tb[3] - tb[2]) / (1.22 - 1.018)))
+    c_, a_, Ad, ra = place(pt, sp["diffuser"], bbox(sp["diffuser"]), (tb[0], tb[1], tb[3] + 2 - vh, tb[3] + 2), H, W, extra=reeds)
+    rc = cv2.warpAffine(pt, Ad, (W, H), flags=cv2.INTER_AREA)
+    objs["reeds"] = (rc, ra)
     objs["diffuser"] = (c_, a_)
     # the tray to travertine: warm beige, the veins softened, fine pits
     tc, ta = objs["tray"]
@@ -269,7 +272,7 @@ def build():
             contact[ys.max() - 1:ys.max() + 3, xs.min():xs.max() + 1] = 1
     contact = cv2.GaussianBlur(contact, (0, 0), 1.5) * ba
     B = np.clip(l2s(s2l(B) * (1 - 0.3 * contact)[..., None]), 0, 1)
-    for k in ("branch", "jar", "column", "tray", "diffuser"):
+    for k in ("branch", "jar", "column", "tray", "reeds", "diffuser"):
         c_, a_ = objs[k]
         B = B * (1 - a_[..., None]) + c_ * a_[..., None]
     # 6. re-grade the shelf area: black >= L 12 (the jar's darks compressed into L 12-20), highlights below 255 (a soft knee from 0.94)
