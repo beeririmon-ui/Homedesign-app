@@ -219,7 +219,148 @@
 - **רגע הגיבור:** להב שמש מהתריס חוצה סיד וטרקוטה.
 - **מה מבדיל:** קשתות, סיד, טרקוטה וצהריים לוהטים. ההפך הגמור מהנורדי, ובלי שלג.
 
+### 3.7 המוצרים שמככבים בכל סגנון (מהקטלוג שאספנו)
+- **ציונים:** ציון על הכרטיס, או "(ק)" לציון זמני מהקטלוג של 2026-10-12. הבחירות לחמשת הסגנונות לקוחות מ-`docs/style-previews-2026-11-06.md`.
+- **גנרי:** ממלא את הסצנה בלבד, ולא מקבל נקודת "קנה".
+
+**נורדי: הקטלוג הכי עמוק, כמעט הכול ≥7.5.**
+- **הוויניטה של הספה:**
+  - `cushions-cj-boucle-teddy` (8.5);
+  - `cushions-cj-knitted-chenille-bean-green` (8.0);
+  - `cushions-cj-linen-look-charcoal` (7.5);
+  - השמיכה `sofa-cover-cj-cotton-muslin-fringe` (8.0).
+- **השולחן:**
+  - `candle-holders-cj-travertine-pedestal` (8.5) עם נרות;
+  - `bowl-cj-glutinous-white-belly-bowl-21` (8.0);
+  - `table-runner-cj-linen-look-sage-fringe` (7.0).
+- **הקיר:**
+  - `framed-art-aliexpress-minimal-geometric-triptych-prints` (8.0);
+  - `accent-sconces-cj-travertine-block-updown-8x16` (7.5);
+  - `wall-decor-cj-corn-husk-round-38` (8.5).
+- **האדן והחלון:** `vase-aliexpress-vintage-distressed-clay-vase-589009` (8.5), ‏`curtains-aliexpress-linen-blend-s-fold-180502` (8.0).
+- **הרצפה והפינה:**
+  - `rug-cj-braided-wool-natural` (8.0);
+  - `basket-cj-jute-rope-cylinder` (8.5);
+  - `planter-cj-seagrass-belly` (7.0) עם עץ זית;
+  - `magazine-holder-cj-felt-log-basket` (7.0), בפריים השני.
+- **התקרה:** `pendant-cj-silk-ribbed-pumpkin-40` (7.5).
+- **לתקריבים ולפריים השני:**
+  - כד האבנית השחור `vase-cj-black-matte-stoneware-jar-30` (8.0);
+  - מגש הטרוורטין `pool-cj-travertine-organic-tray-24` (7.5);
+  - הפוף `pouf-cj-cotton-knit-ball-cover` (7.5, בבדיקה בלבד).
+
+**מודרני חם:**
+- **הוויניטה:**
+  - סט הכריות A: `cushions-cj-boucle-teddy` בלבן ובתה חלב, ‏`cushions-cj-knitted-chenille-bean-green` בקאמל, והשמיכה `sofa-cover-cj-cotton-muslin-fringe` ב-Flax (8.5 (ק));
+  - `candle-holders-cj-travertine-pedestal` (9.0);
+  - `bowl-cj-matte-black-bowl-20` (7.5 (ק)).
+- **הקיר:** `accent-sconces-aliexpress-travertine-cylinder-walnut-choice` (8.5 (ק)), ‏`framed-art-aliexpress-frameless-minimalist-wall-art-631735` (8.5 (ק)).
+- **הגיבורים הגדולים:**
+  - `floor-lamp-cj-pleated-walnut-stem-158` (9.0 (ק));
+  - `rug-cj-braided-wool-natural` (8.5);
+  - `vase-cj-textured-white-stoneware` (8.5);
+  - `vase-cj-coarse-sand-white-tall` (8.5), בתקריב.
+- **פריים שני:**
+  - `magazine-holder-cj-gunmetal-leather-strap` (8.0 (ק));
+  - `basket-cj-jute-rope-cylinder` (8.0);
+  - `planter-cj-cement-ribbed-belly` (7.5).
+
+**בוהו:**
+- **הוויניטה:**
+  - `cushions-cj-washed-cotton-frayed` בחלודה (8.0);
+  - `cushions-cj-sandstone-chenille-flange` (7.5);
+  - `sofa-cover-cj-washed-hemp-throw` (8.0);
+  - `table-runner-aliexpress-boho-macrame-table-runners-263532` (8.0).
+- **הפינה:**
+  - `planter-zendrop-seagrass-belly-basket-45` (8.0 (ק));
+  - `basket-cj-seagrass-belly-xl` (8.5 (ק));
+  - `pouf-cj-cotton-knit-ball-cover` (8.0).
+- **הקיר והאור:** `wall-decor-aliexpress-natural-raffia-woven-bohemian-763597` (8.5), ‏`wall-sconce-aliexpress-rattan-bamboo-wall-lamp-671943` (7.0 (ק)).
+- **פריים שני:**
+  - `basket-cj-water-hyacinth-tub` (8.5);
+  - `vase-cj-white-textured-jar` (7.5);
+  - `curtains-cj-japanese-linen-half-shade` (7.5).
+
+**כפרי מודרני:** הכי דליל.
+- **מככבים:**
+  - `cushions-aliexpress-farmhouse-floral-pillow-covers-166217` (8.5): הגיבור, בתקריב חובה;
+  - `vase-aliexpress-vintage-distressed-clay-vase-589009` (8.0);
+  - `sill-vase-cj-cream-fluted-column-25` (7.5 (ק));
+  - `table-runner-cj-linen-look-sage-fringe` (7.5 (ק));
+  - `bowl-cj-speckled-ivory-wide-bowl-21` (7.0 (ק)).
+- **הפשתן:** `curtains-aliexpress-linen-blend-s-fold-180502` (7.5 (ק)).
+- **כל השאר גנרי.** לכן בכפרי הסיפור יהיה **פריים אחד, ולא שניים**, עד סבב sourcing.
+
+**ג'אפנדי:**
+- `vase-cj-black-matte-stoneware-jar-30` (8.5 (ק));
+- `pendant-cj-pleated-pumpkin-lantern-40` (8.5 (ק));
+- `framed-art-aliexpress-japanese-wabi-sabi-tree-176323` (8.0 (ק));
+- `accent-sconces-aliexpress-travertine-cylinder-walnut-choice` (8.0 (ק));
+- `bowl-cj-matte-black-bowl-20` (8.0 (ק));
+- `bedspread-cj-six-layer-gauze-quilt` (8.0 (ק));
+- `candle-holders-aliexpress-matte-black-iron-pillar-set2` (7.5 (ק));
+- `cushions-aliexpress-fashion-modern-wabi-sabi-464203` (8.0), בתקריב.
+- **הערה:** בג'אפנדי הצפיפות **מכוונת להיות נמוכה בפריים הרחב** (זה הסגנון), והקטלוג מוצג בתקריבים.
+
+**ים תיכוני:**
+- `framed-art-aliexpress-mediterranean-wabi-sabi-poster-802890` (8.0 (ק));
+- `magazine-holder-cj-arch-iron-cane` (8.0 (ק)): גיבור הפריים השני;
+- `vase-aliexpress-vintage-distressed-clay-vase-589009` (8.5 (ק));
+- `cushions-cj-washed-cotton-frayed` בטרקוטה, בלבן ובטחב (8.0 (ק));
+- `bowl-cj-speckled-ivory-wide-bowl-21` (8.0 (ק));
+- `candle-holders-cj-travertine-pedestal` (8.0 (ק));
+- `basket-zendrop-seagrass-belly-38x34` (8.0 (ק));
+- `planter-zendrop-seagrass-belly-basket-45` (8.0 בכרטיס).
+
 ## 4. תוכנית בדיקה קטנה (לפני כל הוצאה אחרת)
+
+### 4.0 צעד ראשון, מוכן להרצה מיד: הסלון הנורדי בעריכה מגזינית
+**מה מרנדרים:** 2 פריימים. פריים סיפור רחב (A), ופריים שני (B) שהוא ויניטה של פינת החלון.
+
+**מודל:** **nano-banana-2**, ‏image-to-image עם ייחוסים מרובים, ב-2K ‏(16:9, כ-2752×1548).
+- **למה:** זה המודל של הפריים הכי טוב שלנו (תקריב השמיכה). הוא מחזיק כמה ייחוסים בלי לאבד את הצורה, ובלי clay הוא חופשי באור ובקומפוזיציה.
+- **gpt-image-2-5** נשמר לשלב א כמודל המתחרה.
+- **seedream-5-pro** משמש רק לתיקון נאמנות ממוקד, אם צריך.
+
+**ייחוסים, עד 6 בכל פריים.** כולם עולים ל-var2 דרך `var2_upload_asset`, וכתובות ה-URL שחוזרות הן מה שמועבר למודל.
+1. **ייחוס 1:** `assets/renders/living-room/nordic/v9/m0-1-2-products-frame-fix-v6.png`, ייחוס לרהיטים ולמוצרים בלבד. בפרומפט כתוב במפורש: "use only for the exact furniture and products; ignore its camera, walls, window and light". הוא נותן את הספה, השולחן, הכורסה והכריות כפי שאושרו.
+2. **ייחוסים 2–6, מהמוצרים** (`images.urls[0]` של הכרטיס, צפייה בלבד):
+
+| | פריים A, הרחב | פריים B, הוויניטה |
+| --- | --- | --- |
+| ייחוס 2 | `framed-art-aliexpress-minimal-geometric-triptych-prints` | `vase-aliexpress-vintage-distressed-clay-vase-589009` |
+| ייחוס 3 | `pendant-cj-silk-ribbed-pumpkin-40` | `basket-cj-jute-rope-cylinder` |
+| ייחוס 4 | `accent-sconces-cj-travertine-block-updown-8x16` | `magazine-holder-cj-felt-log-basket` |
+| ייחוס 5 | `candle-holders-cj-travertine-pedestal` | `wall-decor-cj-corn-husk-round-38` |
+| ייחוס 6 | `sofa-cover-cj-cotton-muslin-fringe` | `rug-cj-braided-wool-natural` |
+
+**פרומפט, פריים A (באנגלית למודל):**
+> Editorial interior photograph for a high-end design magazine, Scandinavian living room in an old apartment with 3.1 m ceilings, a tall white-painted double casement window with a 30 cm deep reveal and a cushioned window seat, wide whitened-oak floorboards, warm mineral-white walls with subtle hand movement, a simple cornice, a panelled door ajar to the next room.
+> Light: a clear February afternoon, 14:00, low sun from the window on the left raking across the room, crisp stripes of window-frame shadow falling diagonally over the floor, the rug and the sofa; deep soft shade in the far corner; melting snow and birches outside. Only the pendant glows faintly. Natural, not HDR.
+> Camera: 35 mm at 1.0 m, three-quarter view from the doorway toward the sofa wall; foreground: the oak arm of the lounge armchair and the edge of a wool throw, out of focus at the left/bottom edge; aperture f/4, the sofa vignette tack-sharp.
+> Styling with life: on the sofa, the bouclé, sage chenille and charcoal linen cushions (as in reference 1), the muslin throw from reference 6 half unfolded across the seat; on the oak coffee table the travertine candle holders from reference 5 with lit pillar candles, the white belly bowl, the sage linen runner with short fringe, an open magazine and a cup of tea, overlapping naturally; the triptych from reference 2 with the travertine wall lights from reference 4 beside it; the pendant from reference 3 above the table; the braided cream wool rug; a jute rope basket and an olive tree in a seagrass belly basket in the corner.
+> Keep every product exactly as in its reference: shape, proportions, colour, material, number of pieces. Do not invent other furniture. No people, no text, no logos, no mirrors.
+
+**פרומפט, פריים B (באנגלית):**
+> Same apartment, same afternoon, 50 mm at 1.0 m, a vignette of the window corner: the deep window reveal with the cream clay vase from reference 2 holding a few eucalyptus stems on the sill, low sun slanting through the linen curtain, the lounge armchair from reference 1 turned slightly toward the window with a folded throw, the charcoal felt log basket from reference 4 beside it holding folded plain magazines, the jute rope basket from reference 3, the corn-husk round from reference 5 on the wall, the braided wool rug from reference 6 underfoot. Shallow depth of field, the vase and the felt basket sharp. Same rules on fidelity, no people, no text.
+
+**מה המודל מחליט:**
+- האדריכלות, בגבולות הטקסט;
+- פרטי האור והצל;
+- החיתוך המדויק;
+- מילוי ועקבות חיים (תה, מגזין, ענפים).
+
+**קבלה:**
+- **(1) העין של הבעלים:** A ו-B מוצגים לצד v6 ולצד תקריב השמיכה.
+- **(2) בדיקת נאמנות של qa-agent לכל מוצר מהייחוסים:** צללית, גוון בטווח הכרטיס, חומר, מספר החלקים (שלישייה = 3 הדפסים שונים), ופרופורציה ±15% מול השכנים.
+- **מוצר שנכשל:** מעבר תיקון ממוקד אחד ב-seedream-5-pro עם הייחוס שלו.
+- **אין** lock_v2, ‏יעדי L או תיבות.
+
+**עלות:**
+- 2 × 650 = **1,300**;
+- רזרבה של 650 לתיקון נאמנות אחד, באישור.
+
+**לפי הכללים:** זה פריים בדיקה. לא לאתר ולא לשכבות.
 **המטרה:** להוכיח ששכבה 1 מגיעה ל"וואו" בלי לאבד נאמנות. שני שלבים, ועצירה ביניהם לעין של הבעלים.
 
 **שלב א: נורדי ומודרני חם, שני מודלים לכל סגנון.**
@@ -251,7 +392,9 @@
 **שלב ב: ארבעת הסגנונות האחרים, רק במודל שניצח.**
 - 4 × 650 = **2,600**, ועוד רזרבה של 1,300.
 
-**סך הכול:** 6,100, ועוד עד 2,600 רזרבה. זה פחות מהמחיר של סבב תיקונים אחד בשיטה הנוכחית על כל הבית.
+**סך הכול:**
+- צעד 4.0: ‏1,300, ועוד רזרבה של 650. אם הוא מצליח, הנורדי בשלב א יורד לפריים gpt-image-2-5 אחד, לשם השוואה.
+- שלבים א–ב: ‏6,100, ועוד עד 2,600 רזרבה. זה פחות מהמחיר של סבב תיקונים אחד בשיטה הנוכחית על כל הבית.
 
 **לא עושים עד ההכרעה:**
 - מעבר המוצרים על פריים הכלי;
