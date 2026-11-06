@@ -1,0 +1,92 @@
+{
+ "asset_id": "pose-m0p-1-2-shell-seedream-fix-base",
+ "date": "2026-11-06",
+ "tokens": 0,
+ "script": "assets/renders/house-nordic-v7-2026-11-02/m0p_seedream.py",
+ "source": "assets/renders/living-room/nordic/v9/pose-m0p-shell-seedream.png",
+ "clay": "assets/blockout/house/framing/round5b/poses/M0p.png",
+ "global_affine": {
+  "why": "G1.4: lock_v2's register of the raw read -0.91 % vertical (limit 0.5 %); the M0p shell lines pass raw (6.6 px)",
+  "register_before": {
+   "affine": [
+    [
+     1.0043,
+     -0.00818,
+     3.71043
+    ],
+    [
+     0.00165,
+     0.99089,
+     2.76366
+    ]
+   ],
+   "shift_px": [
+    3.71,
+    2.76
+   ],
+   "scale_pct": [
+    0.43,
+    -0.911
+   ]
+  },
+  "canvas_affine_inverse_map": [
+   [
+    1.004303,
+    -0.008177,
+    5.01004
+   ],
+   [
+    0.001648,
+    0.990888,
+    3.985408
+   ]
+  ],
+  "register_after": {
+   "shift_px": [
+    0.03,
+    -0.14
+   ],
+   "scale_pct": [
+    -0.001,
+    0.016
+   ]
+  },
+  "how": "cv2.warpAffine(still, A, WARP_INVERSE_MAP, Lanczos4, border replicate); A = C . M . C^-1, C = the 16:9 frame at 1920 -> the canvas"
+ },
+ "wall_round": {
+  "rendered": {
+   "centre_px": [
+    534.4,
+    779.5
+   ],
+   "axes_px": [
+    136.0,
+    141.2
+   ]
+  },
+  "target": {
+   "centre_px": [
+    538.0,
+    769.5
+   ],
+   "axes_px": [
+    140.9,
+    140.9
+   ],
+   "wall_point": [
+    -1.2,
+    0.02,
+    1.2
+   ],
+   "diameter_cm": 38
+  },
+  "size_over_target": 0.983,
+  "centre_offset_px": [
+   -3.7,
+   10.0
+  ],
+  "action": "none: within 2 % of the projected 38 cm circle and 8 px of its centre (M0's seedream round was 1.86x and was scaled)"
+ },
+ "furniture": "kept as rendered (lock_v2 edges and ratios), the M0 rule",
+ "output": "assets/renders/living-room/nordic/v9/pose-m0p-1-2-shell-seedream-fix-base.png"
+}

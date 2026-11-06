@@ -17,11 +17,12 @@ import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, "..", "..", ".."))
-SP = "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/m0-pass"
-OUT_PNG = os.path.join(REPO, "assets/renders/living-room/nordic/v9/m0-clay-r5b-index.png")
+FRAME = os.environ.get("CLAY_FRAME", "M0")                           # M0 (default) or M0p (2026-11-06)
+SP = "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/" + ("m0-pass" if FRAME == "M0" else FRAME.lower() + "-pass")
+OUT_PNG = os.path.join(REPO, "assets/renders/living-room/nordic/v9/" + FRAME.lower() + "-clay-r5b-index.png")
 # the shell's pass indices are unnamed in the registry; identified by their normals and extents in the pass (2026-11-05)
 SHELL = {0: ("glass / sky (no surface)", "glass"), 4: ("window frame and sashes", "window"), 5: ("back wall (normal +Y)", "back_wall"),
-         6: ("window wall (normal +X)", "window_wall"), 8: ("floor (normal +Z)", "floor"), 9: ("ceiling (normal -Z)", "ceiling"),
+         6: ("window wall (normal +X)", "window_wall"), 7: ("right wall (normal -X; M0p)", "right_wall"), 8: ("floor (normal +Z)", "floor"), 9: ("ceiling (normal -Z)", "ceiling"),
          11: ("skirting", "skirting"), 12: ("window sill", "window"), 13: ("cornice", "cornice"), 14: ("window reveal", "window"),
          34: ("curtains", "product"), 41: ("throw (sofa-cover)", "product"), 42: ("cushions", "product"), 43: ("table runner", "product"),
          45: ("candle holders", "product")}
@@ -56,7 +57,8 @@ def render():
         return _run(fid, fplan, S, *a, **k)
 
     fr.render, r3.run_frame = render_w, run_w
-    R5.main(["--frames", "M0", "--res", "1920", "--samples", "1", "--out", os.path.join(SP, "out"), "--exr", os.path.join(SP, "exr")])
+    os.makedirs(SP, exist_ok=True)
+    R5.main(["--frames", FRAME, "--res", "1920", "--samples", "1", "--pose-samples", "1", "--out", os.path.join(SP, "out"), "--exr", os.path.join(SP, "exr")])
 
 
 def write():
@@ -74,8 +76,8 @@ def write():
             names[k] = dict(name=SHELL[k][0], kind=SHELL[k][1], registry="unnamed (identified by normal and extent)")
         else:
             names[k] = dict(name="unknown", kind="product", registry="unnamed")
-    json.dump(dict(what="round-5b M0 clay object index on the 2736 x 1539 canvas (nearest), from framing_r5b at 2036 x 1145, 1 sample; "
-                        "m0_clay_passes.py, render-agent 2026-11-05", clay="assets/blockout/house/framing/round5b/M0.png", classes=names),
+    json.dump(dict(what=f"round-5b {FRAME} clay object index on the 2736 x 1539 canvas (nearest), from framing_r5b at 2036 x 1145, 1 sample; "
+                        "m0_clay_passes.py, render-agent 2026-11-05", clay="assets/blockout/house/framing/round5b/" + ("M0.png" if FRAME == "M0" else f"poses/{FRAME}.png"), classes=names),
               open(OUT_PNG.replace(".png", ".json"), "w"), indent=1, ensure_ascii=False)
     print(OUT_PNG, sorted(names))
 

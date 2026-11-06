@@ -60,7 +60,8 @@ SHEET = os.path.join(REPO, "assets/renders/house-nordic-m0-grade-v6-sheet-2026-1
 GPT_REF = os.path.join(REPO, "assets/renders/house-nordic-v7-2026-11-02/refs/m0-v7-r2-graded-ref.jpg")
 CAM = A.CAMS["m0-v8b-r2"]
 Y = np.array([0.2126, 0.7152, 0.0722])
-SHELL_KINDS = ("back_wall", "window_wall", "ceiling", "cornice", "skirting", "floor")
+SHELL_KINDS = ("back_wall", "window_wall", "ceiling", "cornice", "skirting", "floor", "right_wall")      # right_wall: M0p only (2026-11-06)
+WB_UV = (0.4269, 0.4156)              # the white-balance patch (M0: the Bible corner point; grade_v6_m0p.py sets the M0p one)
 # canvas uv boxes of the second, local grabCut (name, (u0, u1, v0, v1), shell definite only farther than this from the clay's object, px)
 LOCAL_BOXES = [("right curtain", (0.27, 0.41, 0.02, 0.84), 80), ("sofa, cushions, throw", (0.44, 0.94, 0.52, 0.92), 40),
                ("pendant and cord", (0.53, 0.69, 0.0, 0.26), 40), ("armchair, left curtain foot", (0.0, 0.36, 0.55, 1.0), 60)]
@@ -281,7 +282,7 @@ def masks(a, write=True):
                feather="guided filter on the render (r 3 px, eps 2e-4)")
     M = dict(shell=sh_soft, shell_kind=sk, obj_label=ok, K=K, I=I, art=art, rnd=rnd, cubes=cubes)
     if write:
-        kinds = np.array(["", "back_wall", "window_wall", "ceiling", "cornice", "skirting", "floor"])
+        kinds = np.array(["", "back_wall", "window_wall", "ceiling", "cornice", "skirting", "floor", "right_wall"])
         skc = np.zeros((H, W), np.uint8)
         for i, k in enumerate(kinds[1:], 1):
             skc[sk == k] = i
@@ -299,7 +300,7 @@ def masks(a, write=True):
 
 def load_masks():
     d = np.load(SP + "masks.npz")
-    kinds = np.array(["", "back_wall", "window_wall", "ceiling", "cornice", "skirting", "floor"])
+    kinds = np.array(["", "back_wall", "window_wall", "ceiling", "cornice", "skirting", "floor", "right_wall"])
     return dict(shell=d["shell"], shell_kind=kinds[d["shell_kind"]], obj_label=d["obj_label"], I=d["I"], art=d["art"], rnd=d["rnd"],
                 cubes=d["cubes"]), json.load(open(SP + "masks.json"))
 
@@ -572,6 +573,8 @@ def exposure_map(P, Mk, X, prof):
     Es[bw] = E_bw[bw]
     Es[sk == "window_wall"] = P["window_wall"]
     Es[sk == "floor"] = P["floor"]
+    if "right_wall" in P:
+        Es[sk == "right_wall"] = P["right_wall"]
     Es = cv2.GaussianBlur(Es, (0, 0), 1.5)
     ol, I = Mk["obj_label"], Mk["I"]
     Eo = np.full((H, W), P["products"], np.float32)
@@ -652,11 +655,11 @@ def grade(a, Mk, P, X, prof, rec=None):
     H, W = a.shape[:2]
     rec = {} if rec is None else rec
     lin = s2l(a)
-    cur = patch(a, 0.4269, 0.4156)
+    cur = patch(a, *WB_UV)
     h, l, s = colorsys.rgb_to_hls(*cur)
     tgt = np.array(colorsys.hls_to_rgb(36 / 360, l, s))
     gain = np.clip((s2l(tgt) / s2l(tgt).dot(Y)) / (s2l(cur) / s2l(cur).dot(Y)), 0.9, 1.1)
-    rec["white_balance"] = dict(patch=[0.4269, 0.4156], H_before=round(h * 360, 1), H_target=36, gains_rgb=[round(float(x), 4) for x in gain], as_v5=True)
+    rec["white_balance"] = dict(patch=list(WB_UV), H_before=round(h * 360, 1), H_target=36, gains_rgb=[round(float(x), 4) for x in gain], as_v5=True)
     lin = lin * gain
     E, erec = exposure_map(P, Mk, X, prof)
     rec["exposure"] = dict(params={k: (round(v, 3) if isinstance(v, float) else [round(x, 3) for x in v]) for k, v in P.items()}, **erec)
@@ -681,7 +684,7 @@ def grade(a, Mk, P, X, prof, rec=None):
     lin = lin + P["glow"] * glow_tot
     glass = cv2.GaussianBlur((Mk["I"] == 0).astype(np.float32), (0, 0), 1.5)
     Yg = (lin * Y).sum(2)
-    ysky = float(np.percentile(Yg[Mk["I"] == 0], 90))
+    ysky = float(np.percentile(Yg[Mk["I"] == 0], 90)) if (Mk["I"] == 0).any() else 1.0
     Lg = l2s(np.clip(Yg, 0, None)) * 100
     wgl = glass * np.clip((Lg - 80) / 8, 0, 1)
     fac = np.where(Yg > 0, (np.clip(Yg / ysky, 1e-4, None) ** (P["glass_gamma"] - 1)), 1.0)
