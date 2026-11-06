@@ -1,0 +1,527 @@
+{
+ "frame": "M0p",
+ "id": "pose-m0p-1-2-shell-seedream-fix-rwh",
+ "size": [
+  1920,
+  1080
+ ],
+ "pan_endpoint": true,
+ "edges_mode": "v3",
+ "method": "lock_v2 edges v3 (register + bands / tiles with shared structure + box edges by cross-correlation + QA's named edges)",
+ "check_raw": {
+  "size": [
+   1920,
+   1080
+  ],
+  "overlap_u": [
+   0.0,
+   0.999
+  ],
+  "overlap_v": [
+   0.0,
+   0.999
+  ],
+  "shift_px": {
+   "dx": -0.76,
+   "dy": -0.71,
+   "response": 0.128
+  },
+  "bands": [
+   {
+    "u": [
+     0.0,
+     0.249
+    ],
+    "dx_px": -0.11,
+    "dy_px": -0.52,
+    "response": 0.324
+   },
+   {
+    "u": [
+     0.249,
+     0.499
+    ],
+    "dx_px": -0.54,
+    "dy_px": -0.64,
+    "response": 0.171
+   },
+   {
+    "u": [
+     0.499,
+     0.749
+    ],
+    "dx_px": -1.86,
+    "dy_px": -0.22,
+    "response": 0.184
+   },
+   {
+    "u": [
+     0.749,
+     0.999
+    ],
+    "dx_px": -3.57,
+    "dy_px": -0.71,
+    "response": 0.07
+   }
+  ],
+  "deltaE": {
+   "mean": 8.46,
+   "p95": 31.83,
+   "share_over_5": 0.384
+  },
+  "L_mean": {
+   "a": 88.0,
+   "b": 82.6
+  }
+ },
+ "register": {
+  "affine": [
+   [
+    0.99984,
+    0.00093,
+    -0.56755
+   ],
+   [
+    3e-05,
+    0.99964,
+    1.07736
+   ]
+  ],
+  "shift_px": [
+   -0.57,
+   1.08
+  ],
+  "scale": [
+   0.99984,
+   0.99964
+  ],
+  "note": "ECC affine, clay (template) -> render coordinates at 1920x1080; scale > 1 = the render drew it larger"
+ },
+ "check_registered": {
+  "size": [
+   1920,
+   1080
+  ],
+  "overlap_u": [
+   0.0,
+   0.999
+  ],
+  "overlap_v": [
+   0.0,
+   0.999
+  ],
+  "shift_px": {
+   "dx": -0.79,
+   "dy": -1.53,
+   "response": 0.135
+  },
+  "bands": [
+   {
+    "u": [
+     0.0,
+     0.249
+    ],
+    "dx_px": -0.28,
+    "dy_px": -1.32,
+    "response": 0.336
+   },
+   {
+    "u": [
+     0.249,
+     0.499
+    ],
+    "dx_px": -0.53,
+    "dy_px": -1.48,
+    "response": 0.179
+   },
+   {
+    "u": [
+     0.499,
+     0.749
+    ],
+    "dx_px": -1.86,
+    "dy_px": -1.05,
+    "response": 0.18
+   },
+   {
+    "u": [
+     0.749,
+     0.999
+    ],
+    "dx_px": -3.76,
+    "dy_px": -1.93,
+    "response": 0.092
+   }
+  ],
+  "deltaE": {
+   "mean": 8.48,
+   "p95": 31.89,
+   "share_over_5": 0.384
+  },
+  "L_mean": {
+   "a": 88.0,
+   "b": 82.6
+  }
+ },
+ "tiles_ecc": [
+  {
+   "u": [
+    0.0,
+    0.25
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": -0.09,
+   "dy_px": -1.51,
+   "rho": 0.412,
+   "counted": true
+  },
+  {
+   "u": [
+    0.25,
+    0.5
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": -0.11,
+   "dy_px": -4.9,
+   "rho": 0.149,
+   "counted": true
+  },
+  {
+   "u": [
+    0.5,
+    0.75
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": -1.08,
+   "dy_px": -0.42,
+   "rho": 0.746,
+   "counted": true
+  },
+  {
+   "u": [
+    0.75,
+    1.0
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": -34.81,
+   "dy_px": -24.83,
+   "rho": 0.061,
+   "counted": false
+  },
+  {
+   "u": [
+    0.0,
+    0.25
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": 0.13,
+   "dy_px": 0.34,
+   "rho": 0.812,
+   "counted": true
+  },
+  {
+   "u": [
+    0.25,
+    0.5
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": 0.17,
+   "dy_px": 1.16,
+   "rho": 0.622,
+   "counted": true
+  },
+  {
+   "u": [
+    0.5,
+    0.75
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": 0.13,
+   "dy_px": 0.35,
+   "rho": 0.728,
+   "counted": true
+  },
+  {
+   "u": [
+    0.75,
+    1.0
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": -4.47,
+   "dy_px": -2.36,
+   "rho": 0.938,
+   "counted": true
+  }
+ ],
+ "tiles_ecc_registered": [
+  {
+   "u": [
+    0.0,
+    0.25
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": 0.38,
+   "dy_px": -2.56,
+   "rho": 0.412,
+   "counted": true
+  },
+  {
+   "u": [
+    0.25,
+    0.5
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": -2.48,
+   "dy_px": -5.39,
+   "rho": 0.115,
+   "counted": false
+  },
+  {
+   "u": [
+    0.5,
+    0.75
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": -0.54,
+   "dy_px": -1.43,
+   "rho": 0.741,
+   "counted": true
+  },
+  {
+   "u": [
+    0.75,
+    1.0
+   ],
+   "v": [
+    0.0,
+    0.5
+   ],
+   "dx_px": -56.61,
+   "dy_px": 15.35,
+   "rho": 0.091,
+   "counted": false
+  },
+  {
+   "u": [
+    0.0,
+    0.25
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": -0.19,
+   "dy_px": -0.42,
+   "rho": 0.813,
+   "counted": true
+  },
+  {
+   "u": [
+    0.25,
+    0.5
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": 0.02,
+   "dy_px": 0.4,
+   "rho": 0.621,
+   "counted": true
+  },
+  {
+   "u": [
+    0.5,
+    0.75
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": 0.05,
+   "dy_px": -0.44,
+   "rho": 0.728,
+   "counted": true
+  },
+  {
+   "u": [
+    0.75,
+    1.0
+   ],
+   "v": [
+    0.5,
+    1.0
+   ],
+   "dx_px": -4.27,
+   "dy_px": -2.86,
+   "rho": 0.938,
+   "counted": true
+  }
+ ],
+ "fixed_edges": {
+  "sofa 220x92x78 (fixed-product)": {
+   "box": [
+    0.1594,
+    0.5542,
+    0.6125,
+    0.8777
+   ],
+   "edges": {
+    "left": {
+     "clay_px": 356,
+     "render_px": 358,
+     "d_px": 2,
+     "r": 0.52,
+     "clay_strength": 14.4,
+     "counted": true
+    },
+    "right": {
+     "clay_px": 1015,
+     "render_px": 1014,
+     "d_px": -1,
+     "r": 0.614,
+     "clay_strength": 55.7,
+     "counted": true
+    },
+    "bottom": {
+     "clay_px": 961,
+     "render_px": 962,
+     "d_px": 1,
+     "r": 0.773,
+     "clay_strength": 20.1,
+     "counted": true
+    }
+   },
+   "method": "xcorr +-60 px, r >= 0.5",
+   "width_ratio": 0.9954,
+   "worst_edge_px": 2,
+   "kind": "furniture"
+  },
+  "coffee table 140x70 h38 (fixed-product)": {
+   "box": [
+    0.1448,
+    0.4864,
+    0.7977,
+    1.0283
+   ],
+   "edges": {
+    "left": {
+     "clay_px": 338,
+     "render_px": 338,
+     "d_px": 0,
+     "r": 0.946,
+     "clay_strength": 32.0,
+     "counted": true
+    },
+    "right": {
+     "clay_px": 866,
+     "d_px": null,
+     "r": 0.388,
+     "counted": false
+    },
+    "top": {
+     "clay_px": 848,
+     "render_px": 847,
+     "d_px": -1,
+     "r": 0.894,
+     "clay_strength": 75.3,
+     "counted": true
+    }
+   },
+   "method": "xcorr +-60 px, r >= 0.5",
+   "worst_edge_px": 1,
+   "kind": "furniture"
+  }
+ },
+ "named_edges": {},
+ "summary": {
+  "register_shift_px": [
+   -0.57,
+   1.08
+  ],
+  "register_scale": [
+   0.99984,
+   0.99964
+  ],
+  "register_scale_pct": [
+   -0.02,
+   -0.04
+  ],
+  "worst_band_px": 1.86,
+  "bands_reliable": 3,
+  "worst_band_px_after_register": 1.86,
+  "bands_reliable_after_register": 3,
+  "worst_tile_ecc_px": 4.47,
+  "tiles_counted": 6,
+  "worst_tile_ecc_px_after_register": 4.27,
+  "tiles_counted_after_register": 6,
+  "fixed_edges_worst_px": 2,
+  "fixed_edges_measured": 2,
+  "fixed_ratios": {
+   "sofa 220x92x78 (fixed-product) w": 0.9954
+  },
+  "named_edges_worst_px": null,
+  "named_edges_counted": 0,
+  "named_edges_total": 0,
+  "named_edges": null
+ },
+ "verdict": {
+  "thresholds": {
+   "shift_px": 9.6,
+   "scale_tol": 0.005,
+   "residual_px": 2.0,
+   "residual_rule": "pan endpoint: <= 2 px per band / tile after register",
+   "edge_px": 19.2,
+   "ratio": [
+    0.95,
+    1.05
+   ],
+   "edges_mode": "v3",
+   "counted": "bands response >= 0.10, tiles rho >= 0.30, box edges and named lines xcorr r >= 0.5",
+   "source": "docs/ops/quality-gates-2026-11-02.md G1.4 (+ G1.3 ratios, proposal); qa/reports/2026-11-02-v7-g1.md section 1"
+  },
+  "global_pass": true,
+  "residual_pass": false,
+  "edges_pass": true,
+  "residual_measured": true,
+  "pass": false
+ },
+ "render": "assets/renders/living-room/nordic/v9/pose-m0p-1-2-shell-seedream-fix-rwh.png",
+ "clay": "assets/blockout/house/framing/round5b/poses/M0p.png",
+ "overscan_cropped_to_frame": true,
+ "date": "2026-11-06",
+ "note": "geometry only: measured on the normalised raw still (the grade does not move edges); the old clay_lock stays in <id>-measurements.json"
+}

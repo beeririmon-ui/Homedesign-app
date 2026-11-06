@@ -1,0 +1,112 @@
+{
+ "asset_id": "pose-m0p-1-2-shell-seedream-fix-rwh",
+ "date": "2026-11-06",
+ "tokens": 0,
+ "script": "assets/renders/house-nordic-v7-2026-11-02/m0p_products_fix2.py dense2",
+ "source": "assets/renders/living-room/nordic/v9/pose-m0p-1-2-shell-seedream-fix-warp.png",
+ "tried": {
+  "homography": "ECC homography on the right wall's lines: it drifted along them (median 34 px, max 108) and left a step at the skirting's end; tiles 4.62 (top, u 0.5-0.75) / 1.56 (bottom-right)",
+  "affine": "ECC affine on the same: median 7 px; tiles 3.9 / 3.69",
+  "phase_field": "m0p_warp's phase-correlation field with the shell unprotected: no change (the lines are too thin for 160 px windows)",
+  "finding": "the 5.5 tile is the back-right corner and the right wall's cornice (render 4.6 / 5.0 px left of the clay) and the cornice's dy (2 px), not the right wall's plane alone; the top-left tiles are the left corner / cornice (3-4 px right)"
+ },
+ "method": "windowed ECC translations (gradient magnitude, render against clay; 240 px every 80 px at 1920; ECC > 0.6), smoothed (median 3 x 3, Gaussian 30 px), the triptych and the round protected; two passes",
+ "iterations": [
+  {
+   "it": 0,
+   "windows": 242,
+   "measured": 34,
+   "dx": [
+    -4.34,
+    8.54
+   ],
+   "dy": [
+    -2.76,
+    2.49
+   ]
+  },
+  {
+   "it": 1,
+   "windows": 242,
+   "measured": 34,
+   "dx": [
+    -0.57,
+    4.18
+   ],
+   "dy": [
+    -0.54,
+    2.27
+   ]
+  }
+ ],
+ "field_canvas_px": {
+  "dx": [
+   -5.84,
+   15.04
+  ],
+  "dy": [
+   -4.15,
+   6.39
+  ]
+ },
+ "lock_v2": {
+  "shift_px": [
+   -0.57,
+   1.08
+  ],
+  "scale_pct": [
+   -0.02,
+   -0.04
+  ],
+  "band_after": 1.86,
+  "tile_after": 4.27,
+  "fixed_edges_worst_px": 2,
+  "fixed_ratios": {
+   "sofa 220x92x78 (fixed-product) w": 0.9954
+  },
+  "verdict": {
+   "global_pass": true,
+   "residual_pass": false,
+   "edges_pass": true,
+   "pass": false
+  }
+ },
+ "shell": {
+  "raw_max_px": 5.28,
+  "per_line": {
+   "back wall floor line (y 0.789)": 0.77,
+   "back wall skirting top (y 0.752)": 1.99,
+   "back wall cornice (y 0.095)": 5.28,
+   "left corner (x 0.047)": 3.94,
+   "back-right corner (x 0.698)": 2.88
+  },
+  "verdict": {
+   "raw_pass": true,
+   "after_global_affine_pass": true,
+   "rule": "G1.4 master: every shell line within 9.6 px (0.5 % of 1920), raw or after one global affine (code)"
+  }
+ },
+ "before": {
+  "shift_px": [
+   1.2,
+   1.43
+  ],
+  "scale_pct": [
+   -0.01,
+   -0.0
+  ],
+  "band_after": 1.68,
+  "tile_after": 5.5,
+  "fixed_edges_worst_px": 2,
+  "fixed_ratios": {
+   "sofa 220x92x78 (fixed-product) w": 0.9985
+  },
+  "verdict": {
+   "global_pass": true,
+   "residual_pass": false,
+   "edges_pass": true,
+   "pass": false
+  }
+ },
+ "output": "assets/renders/living-room/nordic/v9/pose-m0p-1-2-shell-seedream-fix-rwh.png"
+}

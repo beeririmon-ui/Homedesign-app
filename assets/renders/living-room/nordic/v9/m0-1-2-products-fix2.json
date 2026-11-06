@@ -1,0 +1,403 @@
+{
+ "asset_id": "m0-1-2-products-fix2",
+ "date": "2026-11-06",
+ "tokens": 0,
+ "script": "assets/renders/house-nordic-v7-2026-11-02/m0_products_fix2.py",
+ "qa": "qa/reports/2026-11-06-m0-products-shelf-styles.md (G1)",
+ "base": "assets/renders/living-room/nordic/v9/m0-1-2-shell-seedream-fix.png",
+ "products_from": "assets/renders/living-room/nordic/v9/m0-products-pass-reg.png",
+ "tone_gains_rgb": [
+  1.135,
+  1.1434,
+  1.1278
+ ],
+ "lamp_light": {
+  "shade_canvas_px": [
+   2361,
+   2595,
+   583,
+   812
+  ],
+  "peak_stops": {
+   "down": 0.32,
+   "up": 0.14,
+   "pool": 0.26,
+   "wash": 0.45
+  },
+  "tint_rgb": [
+   1.08,
+   1.0,
+   0.8
+  ],
+  "pool_centre_frame_uv": [
+   0.845,
+   0.66
+  ],
+  "pool_sigma_px": [
+   150,
+   120
+  ],
+  "how": "multiplier in linear light on the base: two Gaussian lobes on the wall (down: 0.9 x shade width, 2.0 x shade height, opening under the rim; up: 0.9 x / 1.0 x, 0.2 w to the right (the corner), opening above the top; a wash on the wall's right end, right of the shade (0.6 w x 1.6 h, fading out across the shade by a logistic of 0.18 w); nothing left of the shade, so it stays 6-8 over the wall) and a Gaussian pool on the sofa's right end and the throw; 2700 K tint; no zone, no edge (it replaces the pass's low-pass ratio, whose zone edge drew the trapezoid of G1.12)"
+ },
+ "magazine_holder": {
+  "felt_px": 57780,
+  "felt_L_before": 8.3,
+  "felt_gain_linear": 5.907,
+  "tint_rgb": [
+   0.972,
+   0.996,
+   1.144
+  ],
+  "felt_gamma": 0.6,
+  "felt_L_after": 27.9,
+  "scale": 0.5755,
+  "sprite_top_px": 1273,
+  "true_top_px": 1275,
+  "sprite_rim_centre_x": 1006.0,
+  "true_centre_x": 1054.0,
+  "width_sprite_px": 417.0,
+  "width_true_px": 240.0,
+  "scaled_sprite_bottom_px": 1427,
+  "body_from_px": 1369,
+  "felt_grain_std_L": 5.93,
+  "pocket_columns_scaled": [
+   1045,
+   1108
+  ],
+  "body_edges_slope_px_per_row": [
+   0.007,
+   0.106
+  ],
+  "how": "the pass's holder (grabCut core) scaled uniformly onto the projected 45 x 32 x 40 holder (width at its rim rows), the rim at the box's top; below KEEP_FRAC of the scaled sprite (under the front rim) the body is felt: the sprite's clean felt per column (the pass's front pocket bridged: not on the card), fine felt grain of the measured std, the side edges continued, 10 % darker to the canvas edge",
+  "rendered_frame_uv": [
+   0.33,
+   0.431,
+   0.849,
+   1.029
+  ],
+  "projected_frame_uv": [
+   0.322,
+   0.425,
+   0.848,
+   1.029
+  ],
+  "brief_box": [
+   0.335,
+   0.421,
+   0.848,
+   1.0
+  ],
+  "armchair_clay_right_px_below_v0_85": 877,
+  "gap_to_armchair_frame_u": 0.021
+ },
+ "pouf": {
+  "scale": 1.3352,
+  "sprite_top_px": 1408,
+  "sprite_crown_x": 2452.4,
+  "true_top_px": 1432,
+  "true_crown_x": 2587.4,
+  "width_60px_below_top": {
+   "sprite": 214.8,
+   "true": 286.8
+  },
+  "visible_frame_uv": null,
+  "how": "the pass's pouf (its lay region round the grabCut core, rug left out by L < 60, convex) scaled and moved onto the projected 45 / 36 ball (crown onto crown, the width 60 px under the crown matched); it leaves through the right and bottom edges",
+  "rendered_frame_uv": [
+   0.917,
+   1.03,
+   0.957,
+   1.029
+  ],
+  "projected_frame_uv": [
+   0.911,
+   1.03,
+   0.956,
+   1.029
+  ],
+  "brief_box": [
+   0.905,
+   1.0,
+   0.956,
+   1.0
+  ]
+ },
+ "nothing_else_moved_after_lay": {
+  "rule": "mean |delta| per channel <= 2 outside the four product boxes (+-15 %) and the runner area (the brief), on the 16:9 frame",
+  "outside_mean_per_channel": [
+   3.52,
+   3.0,
+   2.52
+  ],
+  "outside_without_the_lamp_light_zone": [
+   1.26,
+   1.18,
+   1.1
+  ],
+  "outside_p99": 55.5,
+  "walls left of the art (u 0.38-0.55, v 0.10-0.45)": 0.0,
+  "triptych (u 0.55-0.80, v 0.33-0.53)": 0.21,
+  "sofa and cushions (u 0.47-0.80, v 0.58-0.78)": 2.44,
+  "window (u 0.10-0.26, v 0.06-0.58)": 0.0,
+  "armchair (u 0.03-0.31, v 0.70-0.97)": 0.0,
+  "rug centre (u 0.45-0.85, v 0.88-0.97)": 15.36,
+  "pass": false
+ },
+ "placement": {
+  "targets_px": [
+   [
+    [
+     1525.0,
+     546.1
+    ],
+    [
+     1705.1,
+     535.9
+    ],
+    [
+     1705.1,
+     797.5
+    ],
+    [
+     1525.0,
+     796.3
+    ]
+   ],
+   [
+    [
+     1727.8,
+     534.6
+    ],
+    [
+     1927.5,
+     523.2
+    ],
+    [
+     1927.5,
+     799.1
+    ],
+    [
+     1727.8,
+     797.7
+    ]
+   ],
+   [
+    [
+     1952.8,
+     521.8
+    ],
+    [
+     2175.5,
+     509.1
+    ],
+    [
+     2175.5,
+     800.7
+    ],
+    [
+     1952.8,
+     799.2
+    ]
+   ]
+  ],
+  "camera_only_homography": {
+   "matrix": [
+    [
+     1.04795,
+     0.0,
+     -288.690413
+    ],
+    [
+     -0.037962,
+     1.111953,
+     -21.581916
+    ],
+    [
+     -4.9e-05,
+     0.0,
+     1.0
+    ]
+   ],
+   "width_ratio": 1.2413,
+   "height_ratio": 1.2572,
+   "corner_error_px_1920": 95.9,
+   "centre_offset_px_1920": [
+    39.0,
+    -63.5
+   ]
+  },
+  "old_triptych_on_the_wall": {
+   "width": 197.0,
+   "height": 90.7,
+   "centre": [
+    0.316,
+    1.691
+   ]
+  },
+  "light_gain_median_rgb": [
+   1.134,
+   1.199,
+   1.274
+  ],
+  "grain": {
+   "new_wall_hp_std": 2.18,
+   "layer_hp_std": 5.37,
+   "added_std": 0.0
+  }
+ },
+ "prints": [
+  {
+   "frame": 1,
+   "quad_px": [
+    [
+     1591.7,
+     431.0
+    ],
+    [
+     1780.0,
+     422.0
+    ],
+    [
+     1779.2,
+     694.5
+    ],
+    [
+     1592.2,
+     694.4
+    ]
+   ],
+   "edge_fit": {
+    "rms_px": [
+     0.03,
+     0.46,
+     0.09,
+     0.05
+    ],
+    "oak_band_px": 7.07
+   },
+   "print": 1,
+   "marks_centroid_offset_px": [
+    0.04,
+    -0.89
+   ],
+   "print1_marks_iou_after_offset": 0.472
+  },
+  {
+   "frame": 2,
+   "quad_px": [
+    [
+     1802.2,
+     421.0
+    ],
+    [
+     2000.1,
+     412.4
+    ],
+    [
+     2000.5,
+     694.8
+    ],
+    [
+     1802.8,
+     694.8
+    ]
+   ],
+   "edge_fit": {
+    "rms_px": [
+     0.05,
+     0.21,
+     0.07,
+     0.05
+    ],
+    "oak_band_px": 7.28
+   },
+   "print": 2,
+   "marks_centroid_offset_px": [
+    0.02,
+    0.34
+   ],
+   "print1_marks_iou_after_offset": 0.471,
+   "marks_removed_px": 745,
+   "marks_added_px": 500,
+   "charcoal_rgb": [
+    29.0,
+    23.0,
+    19.0
+   ],
+   "listing_image": "https://ae01.alicdn.com/kf/S210e02a3b02f4ed5b97114be268d1ddaW.jpg"
+  },
+  {
+   "frame": 3,
+   "quad_px": [
+    [
+     2024.8,
+     409.4
+    ],
+    [
+     2232.1,
+     402.1
+    ],
+    [
+     2232.2,
+     695.4
+    ],
+    [
+     2025.1,
+     695.4
+    ]
+   ],
+   "edge_fit": {
+    "rms_px": [
+     0.05,
+     0.06,
+     0.21,
+     0.05
+    ],
+    "oak_band_px": 7.87
+   },
+   "print": 3,
+   "marks_centroid_offset_px": [
+    -0.81,
+    2.47
+   ],
+   "print1_marks_iou_after_offset": 0.506,
+   "marks_removed_px": 821,
+   "marks_added_px": 1226,
+   "charcoal_rgb": [
+    26.0,
+    20.0,
+    16.0
+   ],
+   "listing_image": "https://ae01.alicdn.com/kf/S26d83984104f47f1a00c7d5adaa4e2ceR.jpg"
+  }
+ ],
+ "output": "assets/renders/living-room/nordic/v9/m0-1-2-products-fix2.png",
+ "lock_v2": {
+  "shift_px": [
+   0.16,
+   0.07
+  ],
+  "scale_pct": [
+   -0.0,
+   0.01
+  ],
+  "band_after": 3.69,
+  "tile_after": 6.41,
+  "fixed_edges_worst_px": 2,
+  "fixed_ratios": {
+   "sofa 220x92x78 (fixed-product) w": 0.9971,
+   "coffee table 140x70 h38 (fixed-product) w": 0.9951,
+   "armchair 72x78 h70 (fixed-product) w": 1.0021
+  },
+  "verdict": {
+   "global_pass": true,
+   "residual_pass": true,
+   "edges_pass": true,
+   "pass": true
+  }
+ },
+ "against_products_fix": {
+  "rule": "the fix2 frame against m0-1-2-products-fix.png: max |delta| outside the three fix areas",
+  "mean_outside": 0.326,
+  "p999_outside": 18.0
+ }
+}
