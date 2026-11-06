@@ -1,0 +1,156 @@
+{
+ "date": "2026-11-06",
+ "by": "render-agent",
+ "qa": "qa/reports/2026-11-06-editorial-phase-b-fidelity.md",
+ "tokens": 0,
+ "note": "TEST, not for the site; new files only",
+ "nordic-A-fin2": {
+  "right_wall_light": {
+   "body_px": [
+    2048,
+    332,
+    2146,
+    563
+   ],
+   "scale": 0.36,
+   "centre": [
+    2097.0,
+    447.5
+   ],
+   "rebuilt_px": [
+    1989,
+    205,
+    2296,
+    662
+   ],
+   "sun_stripe_under_lamp": "top y = 586 + 0.38 (x - 2150), left edge x 2100 (cut only; the lobe was the old downlight)",
+   "how": "harmonic clean wall from the plain wall round it (x 1942-2322, y 168-668); the lamp's light and shading (seedream wall / clean wall) scaled x0.36 about its centre; the wall's own fine grain (a 16 px band round the old body takes it from 150 px right); sun stripes kept with the ambient change added; small body pasted back"
+  },
+  "pendant_zone": {
+   "hole": "the first fix's hole (ellipse (1362, 200) axes (216, 106) grown 7 + 15 px) and x 1110-1250 y 235-336, and x 1240-1660 y 280-346, minus the x0.70 pendant, cable and the art (top edges per column)",
+   "how": "replaced by a harmonic field from its rim times the fill's own fine grain (ratio to its sigma-2.5 blur)"
+  },
+  "nothing_else_moved": {
+   "px_changed_outside_zones": 0,
+   "px_changed_inside": 139708
+  }
+ },
+ "warm-modern-A-fin2": {
+  "brass_px": 11590,
+  "boxes": [
+   [
+    2528,
+    420,
+    2556,
+    600
+   ],
+   [
+    2522,
+    760,
+    2560,
+    790
+   ],
+   [
+    2522,
+    880,
+    2562,
+    905
+   ],
+   [
+    2578,
+    425,
+    2604,
+    560
+   ],
+   [
+    2462,
+    1070,
+    2632,
+    1145
+   ]
+  ],
+  "luminance_p99_before": 0.337,
+  "luminance_p99_after": 0.272,
+  "how": "brass parts only (hue 12-32, S > 0.68 in the lamp's boxes): reflections smoothed along the part (sigma 7), luminance above 0.18 (linear) x0.55, chroma 30 % toward the card's #B8924E",
+  "nothing_else_moved": {
+   "px_changed_outside": 0,
+   "px_changed_inside": 11403
+  }
+ },
+ "boho-A-fin2": {
+  "centre_px": [
+   587.0,
+   369.0
+  ],
+  "scale": 0.42,
+  "diameter_px_before": 394.4,
+  "diameter_px_after": 165.6,
+  "card_cm": 30,
+  "plaster": "the real wall's texture quilted from x 800-1440 y 70-160",
+  "plaster_rows": [
+   {
+    "y": 142,
+    "donor_x": 808,
+    "mirrored": true
+   },
+   {
+    "y": 214,
+    "donor_x": 902,
+    "mirrored": true
+   },
+   {
+    "y": 286,
+    "donor_x": 863,
+    "mirrored": false
+   },
+   {
+    "y": 358,
+    "donor_x": 946,
+    "mirrored": false
+   },
+   {
+    "y": 430,
+    "donor_x": 829,
+    "mirrored": true
+   },
+   {
+    "y": 502,
+    "donor_x": 959,
+    "mirrored": true
+   },
+   {
+    "y": 574,
+    "donor_x": 905,
+    "mirrored": false
+   }
+  ],
+  "note": "the frames are generic (no card size): at 70 cm for their 403 px height the sun read ~71 cm (x2.4) and now ~30 cm; QA's estimate was 'about x2'",
+  "nothing_else_moved": {
+   "px_changed_outside": 0,
+   "px_changed_inside": 148854
+  }
+ },
+ "finishing": {
+  "nordic-A-fin2": {
+   "raw": "raw/nordic-A-fin2-codefix.png",
+   "px_at_255": 0,
+   "how": "a soft knee per channel 0.90 -> 0.985 only, as the -fin files"
+  },
+  "warm-modern-A-fin2": {
+   "raw": "raw/warm-modern-A-fin2-codefix.png",
+   "px_at_255": 0,
+   "how": "a soft knee per channel 0.90 -> 0.985 only, as the -fin files"
+  },
+  "boho-A-fin2": {
+   "raw": "raw/boho-A-fin2-codefix.png",
+   "px_at_255": 0,
+   "how": "a soft knee per channel 0.90 -> 0.985 only, as the -fin files"
+  }
+ },
+ "crops": [
+  "fin2-before-after/nordicA-right-light.jpg",
+  "fin2-before-after/nordicA-pendant.jpg",
+  "fin2-before-after/warm-modern-floor-lamp.jpg",
+  "fin2-before-after/boho-raffia-sun.jpg"
+ ]
+}

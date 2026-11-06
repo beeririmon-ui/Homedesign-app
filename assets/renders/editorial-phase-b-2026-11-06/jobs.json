@@ -117,7 +117,8 @@
    "task_id": "698f8d4eab6e3290a29f13192a078991",
    "prompt": "assets/prompts/editorial-phase-b-2026-11-06/modern-country-A.txt",
    "raw": "raw/modern-country-A-gpt-image-2-5.png",
-   "status": "submitted and paid (600); last poll: waiting; then var2 asked for sign-in, so not fetched. The raw file and modern-country-A.png do not exist yet. Fetch later with var2_get_image_result(placeholder_id) and run finish_phaseb.py finish + sheet."
+   "status": "fetched 2026-11-06 at 0 tokens after the sign-in cleared (paid 600 earlier)",
+   "output_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/gpt25-698f8d4eab6e3290a29f13192a078991-0-1794003797356-fe0ebe72.png"
   },
   {
    "id": "japandi-A",
@@ -185,11 +186,15 @@
    "OK: beige gauze quilt (on the arm, not folded straight)"
   ],
   "modern-country-A": [
-   "Not fetched: var2 asked for sign-in (job paid, 600)",
-   "Fetch by placeholder c7b3d6d4-c007-49db-b177-61a03e5b7773, then finish + sheet"
+   "OK: block-print floral pair (sage + clay rose), cream tone-on-tone check cushion",
+   "OK: sage runner with tassel fringe, speckled ivory bowl, one seagrass basket",
+   "OK: fluted column vase (tulips) + cream distressed clay vase on the sill, linen curtains",
+   "Look-alike risk: three speckled cups (prompt said two) read like the bowl's family",
+   "Generic: pleated pendant, brass floor lamp, two pleated wall lights, landscape triptych",
+   "Note: the 'cardigan' on the armchair reads as a knit throw"
   ]
  },
- "stopped": "2026-11-06: var2 asked for sign-in after all 7 jobs were submitted; stopped as instructed. No var2 call after that.",
+ "stopped": "2026-11-06: var2 asked for sign-in after all 7 jobs were submitted; stopped as instructed. No var2 call after that. | later the same day var2 answered again: modern-country fetched at 0 tokens.",
  "finishing": {
   "nordic-A-fin": {
    "raw": "raw/nordic-A-fin-codefix.png",
@@ -218,6 +223,12 @@
   "mediterranean-A": {
    "raw": "raw/mediterranean-A-gpt-image-2-5.png",
    "clipped_pct_before": 0.058,
+   "px_at_255_after": 0,
+   "how": "a soft knee per channel 0.90 -> 0.985 only"
+  },
+  "modern-country-A": {
+   "raw": "raw/modern-country-A-gpt-image-2-5.png",
+   "clipped_pct_before": 0.265,
    "px_at_255_after": 0,
    "how": "a soft knee per channel 0.90 -> 0.985 only"
   },
