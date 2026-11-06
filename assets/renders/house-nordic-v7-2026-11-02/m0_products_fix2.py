@@ -444,7 +444,14 @@ def grade():
     rec["new_products"] = dict(how="the four products set to product (+0.2 stop; the holder's felt lifted in the composite instead, see " + JID2 + ".json), "
                                    "ids 601-604; 605 the floor-lamp shade as an emitter", px={k: int(npd[k].sum()) for k in ids}, obj_stops=G.P0["obj_stops"])
     json.dump(rec, open(G.SP + "masks.json", "w"), indent=1)
+    # the wall's own fall-off is read on the composite without the lamp's light (the light is the lamp's, not the room's fall-off: read with it,
+    # the profile's right end rose 8 L and the grade lifted the wall beside the shade by ~3 L, eating the shade's contrast)
+    Ly = np.load(SPD + "layer-fix2.npz")
+    lin_nl = G.s2l(a) / np.maximum(Ly["mult"].astype(np.float32), 1e-3)
+    orig_wp = G.wall_profile
+    G.wall_profile = lambda lin, Mk_, X_, Z_: orig_wp(lin_nl, Mk_, X_, Z_)
     G.run()
+    G.wall_profile = orig_wp
     qa()
 
 
@@ -470,13 +477,18 @@ def qa():
     h_, s_, l_ = G.hsl(g[npd["basket"]].mean(0))
     qa_["jute basket: H [25-40], S [25-55]"] = dict(H=h_, S=s_, L=l_, ok=bool(25 <= h_ <= 40 and 25 <= s_ <= 55))
     shade = npd["floor-lamp"] & (L > 70)
+    shade[int(frame_to_canvas(0, 0.53, W, H)[1]):] = False
     ys, xs = np.nonzero(shade)
     shade_L = float(np.median(L[shade]))
+    ym = int(0.5 * (ys.min() + ys.max()))
     wall = np.zeros((H, W), bool)
-    wall[int(0.36 * H):int(0.42 * H), max(0, xs.min() - 140):xs.min() - 40] = True
+    wall[ym:ys.max(), max(0, xs.min() - 140):xs.min() - 40] = True          # beside the shade's lower half: clear of the right cube's wash above
     wall &= ~npd["floor-lamp"]
     wL = float(np.median(L[wall]))
-    qa_["floor-lamp shade over the wall left of it [>= 6; QA: 6-8 is fine]"] = dict(shade=round(shade_L, 1), wall=round(wL, 1), diff=round(shade_L - wL, 1), ok=bool(shade_L - wL >= 6))
+    old = G.Lmap(G.load(os.path.join(OD, PP.JID + "-graded-fix-v6.png")))
+    qa_["floor-lamp shade (above v 0.53) over the wall beside its lower half [>= 6; QA: 6-8 is fine]"] = dict(
+        shade=round(shade_L, 1), wall=round(wL, 1), diff=round(shade_L - wL, 1), ok=bool(shade_L - wL >= 6),
+        products_fix_v6_same_measure=dict(shade=round(float(np.median(old[shade])), 1), wall=round(float(np.median(old[wall])), 1)))
     b0 = G.load(os.path.join(OD, "m0-1-2-shell-seedream-graded-fix-v6.png"))
     sofa_end = np.zeros((H, W), bool)
     sofa_end[int(0.62 * H):int(0.80 * H), int(0.80 * W):int(0.88 * W)] = True
