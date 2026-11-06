@@ -32,11 +32,12 @@ OD = os.path.join(REPO, OD_REL)
 BASE = os.path.join(OD, "m0-1-2-shell-seedream-fix.png")
 CLAY = os.path.join(REPO, "assets/blockout/house/framing/round5b/M0.png")
 DEPTH = "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/m0-pass/depth.npy"   # m0_clay_passes.py render
-REF2 = os.path.join(OD, "m0-products-pass-ref2-clay.png")
+REF2 = os.path.join(OD, "m0-products-pass-ref2-clay-r2.png")     # r2 (2026-11-06): the holder at house plan 1.2.5 (r1 had it on the basket)
+HOLDER_XY = (-0.54, 2.52)                                           # house plan 1.2.5 / slots 1.8 (1.2.4: (-0.95, 1.90))
 CAM = A.CAMS["m0-v8b-r2"]
 # the brief's boxes, 16:9 frame uv [u0, u1, v0, v1]
-BOX_FRAME = {"magazine-holder": (0.345, 0.411, 0.774, 1.0), "basket": (0.350, 0.401, 0.686, 0.822), "floor-lamp shade": (0.885, 0.949, 0.389, 0.484),
-             "floor-lamp (pole and base)": (0.905, 0.930, 0.484, 0.895), "pouf": (0.905, 1.0, 0.915, 1.0), "runner (clay box, + the front overhang)": (0.496, 0.604, 0.767, 0.90)}
+BOX_FRAME = {"magazine-holder": (0.335, 0.421, 0.848, 1.0), "basket": (0.350, 0.401, 0.686, 0.822), "floor-lamp shade": (0.885, 0.949, 0.389, 0.484),
+             "floor-lamp (pole and base)": (0.905, 0.930, 0.484, 0.895), "pouf": (0.905, 1.0, 0.956, 1.0), "runner (clay box, + the front overhang)": (0.496, 0.604, 0.767, 0.90)}
 CARDS = {"magazine-holder": ("magazine-holder-cj-felt-log-basket", "https://oss-cf.cjdropshipping.com/product/2026/02/11/05/4f328aff-7577-4c86-91b2-87c83bc0c692_fine.jpeg"),
          "basket": ("basket-cj-jute-rope-cylinder", "https://cf.cjdropshipping.com/16d626dd-b2ac-4e75-895b-bedd311c32a7_trans.jpeg"),
          "floor-lamp": ("floor-lamp-cj-black-drum-linen", "https://oss-cf.cjdropshipping.com/product/2025/08/05/06/fbdc89df-9c40-4528-9989-0eb259135e9c.jpg"),
@@ -111,7 +112,7 @@ def proxies():
     s, c = math.sin(math.radians(CAM["yaw"])), math.cos(math.radians(CAM["yaw"]))
     view = (-s, -c)                                                     # the camera's forward direction on the floor
     P = {}
-    P["magazine-holder"] = box_faces((-0.95, 1.90), view, 0.45, 0.32, 0.40, 0.012, 0.32)                  # long side along the line of sight
+    P["magazine-holder"] = box_faces(HOLDER_XY, view, 0.45, 0.32, 0.40, 0.012, 0.32)                     # long side along the line of sight
     bas = cyl_faces((-1.70, 0.75), 0.175, 0.0, 0.39, 0.62)
     for k in (-1, 1):                                                   # two rope loop handles, +9 cm, on the sides seen from the camera
         hx, hy = -1.70 + k * 0.175 * c, 0.75 - k * 0.175 * s
@@ -132,6 +133,7 @@ def ref2():
     Ldir /= np.linalg.norm(Ldir)
     rec = {}
     zall = dep.astype(np.float32).copy()                                   # one depth buffer: the clay, then every proxy face (nearest wins)
+    sil = {}
     order = sorted(proxies().items(), key=lambda kv: -np.mean([proj(p)[2] for poly, _ in kv[1] for p in poly]))
     for name, faces in order:
         layer = np.zeros((H, W, 3), np.float32)
@@ -165,10 +167,21 @@ def ref2():
         rec[name] = dict(projected_frame_uv=[round(fu[0], 3), round(fu[1], 3), round(fv[0], 3), round(fv[1], 3)],
                          visible_canvas_px=[int(vis[1].min()), int(vis[1].max()), int(vis[0].min()), int(vis[0].max())] if cov.any() else None,
                          visible_px=int(cov.sum()))
+        sil[name] = cov
+    names = list(sil)
+    ov = {}
+    for i in range(len(names)):
+        for j in range(i + 1, len(names)):
+            a_, b_ = rec[names[i]]["projected_frame_uv"], rec[names[j]]["projected_frame_uv"]
+            du = min(a_[1], b_[1]) - max(a_[0], b_[0])
+            dv = min(a_[3], b_[3]) - max(a_[2], b_[2])
+            ov[f"{names[i]} / {names[j]}"] = dict(box_overlap=bool(du > 0 and dv > 0), gap_u=round(-du, 3), gap_v=round(-dv, 3),
+                                                   silhouette_overlap_px=int((sil[names[i]] & sil[names[j]]).sum()))
+    rec["_pairs"] = ov
     Image.fromarray(np.clip(out + 0.5, 0, 255).astype(np.uint8)).save(REF2)
     json.dump(dict(what="reference 2 of the M0 1.2 products pass: the round-5b M0 clay with the four product proxies at their plan points (house plan 1.2.4, "
                         "slots 1.7), drawn by the 1.2.3 camera, occluded by the clay's own depth pass", date=DATE, clay=os.path.relpath(CLAY, REPO),
-                   proxies=dict(holder="box 45 x 32 x 40 at (-0.95, 1.90), long side along the 25 deg line of sight, grey 0.32",
+                   proxies=dict(holder=f"box 45 x 32 x 40 at {HOLDER_XY} (house plan 1.2.5), long side along the 25 deg line of sight, grey 0.32",
                                 basket="cylinder d 35 h 39 at (-1.70, 0.75) + two 9 cm loop handles, grey 0.62",
                                 floor_lamp="base d 26, pole d 2.5 to 1.25, drum shade d 36 from 1.25 to 1.55 at (1.52, 0.20), black / near-white",
                                 pouf="ball d 45 h 36 at (1.45, 2.00), grey 0.80"),
