@@ -552,3 +552,28 @@
     opacity: 1;
   }
 }
+/* no cached photo of the card yet: a short band with the card's colour, not an empty square */
+.st .st-photo .st-photo-none {
+  aspect-ratio: 2 / 1;
+}
+.st .st-photo-none .st-swatch-lg {
+  width: 56px;
+  height: 56px;
+}
+/* the sheet's column is the sheet's width: no child (the aspect-ratio placeholder, a long name) may widen it */
+.st .st-sheet-in {
+  grid-template-columns: minmax(0, 1fr);
+}
+.st .st-sheet {
+  overflow-x: hidden;
+}
+.st .st-photo,
+.st .st-photo-none {
+  min-width: 0;
+  max-width: 100%;
+}
+.st-step[aria-disabled='true'] {
+  color: var(--ink-2);
+  text-decoration: none;
+  cursor: default;
+}

@@ -1,0 +1,150 @@
+{
+ "version": "warm modern r1 (render-agent, 2026-11-07): round 5b's plan with the warm-modern living room of house plan 1.3.1 section 0א / slots 1.9 by_style.warm-modern / Bible warm-modern 1.0: placeholders = the slots filled in warm modern (no runner, no wall decor, no sofa cover, no pouf; basket, magazine holder and planter in M0 per slots 1.8-1.9); same lamps (ARC2)",
+ "source": "framing/round5b/plan.json + docs/house-plan.json 1.3.1 + data/slots/living-room.json 1.9 + docs/design-bible/warm-modern.md 1.0",
+ "rules": "placeholders = the products the prompt renders (incl. stand-ins); 'Explicitly empty' slots have no proxy; lamps = the lamp slots among the placeholders + the shell LEDs of the kitchen (round-2 FRAME_LAMPS); the bath shower downlight stays off as in round 2; the living seen from H0 / C0 = the M0 v6 placeholder clay (same products as m0-v6.txt; geometry decides what the door shows); C0 also shows the H0 console vignette through the portal | round 4: no wall-decor / floor-lamp in M0 (and in every vista of it), accent pair = two 12 cm cubes, no umbrella stand, no roman blinds, no bookends; D1 lantern 50 wide flat (bottom 1.50); W0 planter D38 x H34 + plant to 1.30 | round 5: M0 1.2.1 placeholders = the test set (V7Q5 b: filled slots only; empty slots are sourcing tasks): accent pair, pendant 1.90, curtains, vase, rug, cushions, runner, candle holders, bowl, throw (sofa-cover proxy); framed-art empty (RND2 card incomplete); no floor lamp (TR3); wall-sconce / basket / magazine-holder transition-only (TR3); M0-pouf = measurement clay only (pouf d 45 h 36 + floor-lamp proxy at (1.52, 0.20)), never sent to var2 | pendant-cord = the pendant's cord as its own group so the pendant box is the shade alone; M0-pouf-b = the pouf fix variant (Y +0.03, h 35) | round 5b (2026-11-04, house plan 1.2.2): M0-pouf = pouf (1.45, 2.00) d 45 h 36 + floor-lamp proxy at (1.52, 0.20); M0-pouf-b = pouf (1.45, 2.00) d 48 h 37 (the envelope's other end, the designer's tangent fix); armchair (-1.23, 2.73); rug 330 x 240",
+ "hall_cube_lamp": null,
+ "frames": {
+  "M0": {
+   "placeholders": [
+    "accent-sconces",
+    "pendant",
+    "pendant-cord",
+    "curtains",
+    "vase",
+    "rug",
+    "cushions",
+    "candle-holders",
+    "bowl",
+    "basket",
+    "magazine-holder",
+    "planter"
+   ],
+   "lamps": [
+    "living/pendant",
+    "living/accent-sconces"
+   ],
+   "also_visible": [],
+   "empty_per_designer": [
+    "framed-art (RND2)",
+    "floor-lamp (TR3)",
+    "wall-decor (warm modern: no product)",
+    "pouf (warm modern: no product)",
+    "table-runner (WM-R1: none in warm modern)",
+    "sofa-cover (R5Q1: no card)",
+    "wall-sconce (transition-only)"
+   ],
+   "prompt_file": "m0-v8.txt",
+   "notes": "warm modern r1: the round-5b M0 with the warm-modern shell (window 210 on a limestone bench, rounded corner, shadow gaps, track band)"
+  }
+ },
+ "poses": {
+  "M0p": {
+   "base": "M0",
+   "loc": [
+    0.83,
+    4.64,
+    1.2
+   ],
+   "yaw": 0,
+   "u0": 0.47,
+   "v0": 0.5,
+   "source": "house-plan.json 1.2.1 cameras.M0p; shift = M0 (constant through the pans)",
+   "group": "A",
+   "placeholders": [
+    "accent-sconces",
+    "pendant",
+    "pendant-cord",
+    "curtains",
+    "vase",
+    "rug",
+    "cushions",
+    "candle-holders",
+    "bowl",
+    "basket",
+    "magazine-holder",
+    "planter"
+   ],
+   "lamps": [
+    "living/pendant",
+    "living/accent-sconces"
+   ],
+   "also_visible": []
+  },
+  "M0x": {
+   "base": "M0",
+   "loc": [
+    0.83,
+    4.64,
+    1.2
+   ],
+   "yaw": -35,
+   "u0": 0.47,
+   "v0": 0.5,
+   "source": "house-plan.json 1.2.1 cameras.M0x; the dining seen through the opening = the D1 placeholders (round 4)",
+   "group": "A",
+   "placeholders": [
+    "accent-sconces",
+    "pendant",
+    "pendant-cord",
+    "curtains",
+    "vase",
+    "rug",
+    "cushions",
+    "candle-holders",
+    "bowl",
+    "basket",
+    "magazine-holder",
+    "planter"
+   ],
+   "lamps": [
+    "living/pendant",
+    "living/accent-sconces",
+    "kitchen-dining/dining-pendant",
+    "kitchen-dining/led-shelves",
+    "kitchen-dining/led-niche"
+   ],
+   "also_visible": [
+    "kitchen-dining/dining-pendant",
+    "kitchen-dining/table-runner",
+    "kitchen-dining/centerpiece-vase",
+    "kitchen-dining/candle-holders",
+    "kitchen-dining/curtains",
+    "kitchen-dining/bench-pad",
+    "kitchen-dining/framed-art",
+    "kitchen-dining/condiment-set",
+    "kitchen-dining/bowl",
+    "kitchen-dining/tableware-set",
+    "kitchen-dining/mug-set",
+    "kitchen-dining/dining-rug",
+    "kitchen-dining/kitchen-runner"
+   ]
+  }
+ },
+ "overscan": {
+  "frames": [
+   "M0",
+   "M0p",
+   "M0x"
+  ],
+  "rule": "every still in a pan of 21 deg or more (P0, P1, P2 of T-LD, P-D, the T-CBoy / T-CGirl / T-CBath pans, P-B): about 3 % of the frame added on every side, same camera and focal length, the 16:9 frame is the centre crop",
+  "canvas_px": [
+   4072,
+   2290
+  ],
+  "frame_px": [
+   3840,
+   2160
+  ],
+  "crop_box_px": [
+   116,
+   65,
+   3956,
+   2225
+  ],
+  "per_side_fraction_x": 0.0302,
+  "per_side_fraction_y": 0.0301,
+  "motion_agent": "--a-overscan / --b-overscan 0.03: use the '-os6' files (canvas cropped to the frame width = 16:9 + 6 % height) or the canvas with x overscan 0.0302",
+  "source": "coordinator message 2026-11-02 (motion-agent's pan-gap check)",
+  "note_round5": "M0 is the start of P0 (25 deg) and M0p / M0x the ends of P0 / P1: all three get the 3 % canvas; M0-pouf (measurement) is plain 16:9"
+ }
+}

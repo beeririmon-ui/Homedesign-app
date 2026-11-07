@@ -144,28 +144,6 @@ BASKET_HANDLES = [[(2058, 834), (2048, 815), (2043, 800), (2047, 793), (2056, 79
                   [(2213, 834), (2222, 820), (2233, 807), (2245, 799), (2254, 800), (2256, 808), (2251, 822), (2244, 838)]]
 
 
-def best_offset(img, hole, region, valid_src, cands):
-    """the one shift (dx, dy) whose source best continues the known pixels round the region's part of the hole (median abs difference
-    on a 6 px ring), among the candidates whose sources are all valid"""
-    H, W = hole.shape
-    tgt = hole & region
-    ys, xs = np.nonzero(tgt)
-    ring = cv2.dilate(tgt.astype(np.uint8), np.ones((13, 13), np.uint8)).astype(bool) & ~hole & region
-    ry, rx = np.nonzero(ring)
-    best = None
-    for dx, dy in cands:
-        sy, sx = ys + dy, xs + dx
-        if sy.min() < 0 or sx.min() < 0 or sy.max() >= H or sx.max() >= W:
-            continue
-        if not valid_src[sy, sx].all():
-            continue
-        qy, qx = np.clip(ry + dy, 0, H - 1), np.clip(rx + dx, 0, W - 1)
-        sc_ = float(np.median(np.abs(img[ry, rx] - img[qy, qx]).mean(1))) + 0.0002 * (abs(dx) + abs(dy))
-        if best is None or sc_ < best[0]:
-            best = (sc_, dx, dy)
-    return best
-
-
 def quilt(img, need, valid_src, care, cands, tile=20, margin=6, seed=0):
     """block fill (image quilting with structured shifts): tiles of the needed area, nearest the known pixels first; for each tile the
     shift whose source patch best matches the known or already filled pixels in the tile's margin (sum of squared differences), among
@@ -173,6 +151,7 @@ def quilt(img, need, valid_src, care, cands, tile=20, margin=6, seed=0):
     H, W = need.shape
     out = img.copy()
     filled = ~need
+    done = np.zeros_like(need)
     dist = cv2.distanceTransform(need.astype(np.uint8), cv2.DIST_L2, 5)
     ys, xs = np.nonzero(need)
     tiles = {}
@@ -182,6 +161,7 @@ def quilt(img, need, valid_src, care, cands, tile=20, margin=6, seed=0):
     order = sorted(tiles, key=lambda k: tiles[k])
     C = np.array(cands, np.int32)
     picks = []
+    offs = np.zeros((H, W, 2), np.int32)
     for ty, tx in order:
         y0, x0 = ty * tile, tx * tile
         Y0, X0, Y1, X1 = max(y0 - margin, 0), max(x0 - margin, 0), min(y0 + tile + margin, H), min(x0 + tile + margin, W)
@@ -194,7 +174,7 @@ def quilt(img, need, valid_src, care, cands, tile=20, margin=6, seed=0):
         sx = gx[None] + C[:, 0, None, None]
         okb = (sy >= 0) & (sy < H) & (sx >= 0) & (sx < W)
         syc, sxc = np.clip(sy, 0, H - 1), np.clip(sx, 0, W - 1)
-        vs = (valid_src | (filled & ~need))[syc, sxc] & okb
+        vs = (valid_src | done)[syc, sxc] & okb
         good = (vs | ~inner[None]).reshape(len(C), -1).all(1)
         if not good.any():
             continue
@@ -218,8 +198,54 @@ def quilt(img, need, valid_src, care, cands, tile=20, margin=6, seed=0):
         reg = out[Y0:Y1, X0:X1]
         out[Y0:Y1, X0:X1] = reg * (1 - wgt[..., None]) + patch * wgt[..., None]
         filled[Y0:Y1, X0:X1] |= inner
+        done[Y0:Y1, X0:X1] |= inner
+        offs[Y0:Y1, X0:X1][inner] = Cg[b]
         picks.append((int(Cg[b][0]), int(Cg[b][1])))
-    return out, picks
+    return out, picks, offs, done
+
+
+def poisson_refine(img, region, offs, known, src_ok, iters=1500):
+    """gradient-domain blend of a quilted fill: inside the region each pixel follows the gradients of its own source (so the tiles'
+    seams and the steps at the hole's edge vanish); neighbours that are known pixels are a fixed boundary, any other neighbour (e.g. what
+    the new basket will cover) is left out (a free edge); a weak pull to the mosaic (screened Poisson, lambda 0.03) keeps parts with no
+    known neighbour from drifting. Jacobi iterations started from the mosaic."""
+    H, W = region.shape
+    ys, xs = np.nonzero(region)
+    y0, y1, x0, x1 = max(ys.min() - 2, 1), min(ys.max() + 3, H - 1), max(xs.min() - 2, 1), min(xs.max() + 3, W - 1)
+    R = region[y0:y1, x0:x1]
+    Kn = known[y0:y1, x0:x1] & ~R
+    f = img[y0:y1, x0:x1].copy()
+    B = img[y0:y1, x0:x1]
+    gy, gx = np.mgrid[y0:y1, x0:x1]
+    sy = np.clip(gy + offs[y0:y1, x0:x1, 1], 1, H - 2)
+    sx = np.clip(gx + offs[y0:y1, x0:x1, 0], 1, W - 2)
+    Isrc = img[sy, sx]
+    num_c = np.zeros_like(f)
+    cnt = np.zeros(R.shape, np.float32)
+    shifts = ((-1, 0), (1, 0), (0, -1), (0, 1))
+    def nbr(arr, dy, dx):
+        p = np.pad(arr, ((1, 1), (1, 1)) + ((0, 0),) * (arr.ndim - 2), mode="edge")
+        return p[1 + dy:1 + dy + arr.shape[0], 1 + dx:1 + dx + arr.shape[1]]
+    for dy, dx in shifts:
+        use = nbr(R, dy, dx) | nbr(Kn, dy, dx)
+        qy, qx = np.clip(sy + dy, 0, H - 1), np.clip(sx + dx, 0, W - 1)
+        g = Isrc - img[qy, qx]
+        g = np.where((src_ok[sy, sx] & src_ok[qy, qx])[..., None], g, 0)      # only gradients read on valid source pixels
+        num_c += np.where(use[..., None], g, 0)
+        num_c += np.where(nbr(Kn, dy, dx)[..., None], nbr(B, dy, dx), 0)
+        cnt += use
+    LAM = 0.03                                                             # screened: a weak pull to the mosaic (no drift where no
+    M0 = f.copy()                                                          # known pixel bounds a part; seams diffuse over ~6 px)
+    for _ in range(iters):
+        acc = num_c + LAM * M0
+        for dy, dx in shifts:
+            acc += np.where(nbr(R, dy, dx)[..., None], nbr(f, dy, dx), 0)
+        f = np.clip(np.where(R[..., None], acc / (cnt + LAM)[..., None], B), 0, 1)
+    # the correction kept moderate (it is meant to remove seams, not to repaint): at most +-0.10 (linear) from the mosaic
+    f = np.where(R[..., None], M0 + np.clip(f - M0, -0.10, 0.10), B)
+    out = img.copy()
+    out[y0:y1, x0:x1] = np.where(R[..., None], np.clip(f, 0, 1), B)
+    return out
 
 
 def basket():
@@ -233,7 +259,7 @@ def basket():
     body = poly_mask(a.shape, BASKET_BODY)
     hand = np.zeros((H, W), np.uint8)
     for pts in BASKET_HANDLES:
-        cv2.polylines(hand, [np.array(pts, np.int32)], False, 1, thickness=6, lineType=cv2.LINE_AA)
+        cv2.polylines(hand, [np.array(pts, np.int32)], False, 1, thickness=8)
     sprite = body | hand.astype(bool)
     alpha = cv2.GaussianBlur(sprite.astype(np.float32), (0, 0), 0.8)
     lin = s2l(a)
@@ -243,6 +269,7 @@ def basket():
     # the hole: the old basket grown 4 px, not the table's corner in front (x < 2046, y > 1050)
     table = (xx < 2046) & (yy > 1050)
     hole = cv2.dilate(sprite.astype(np.uint8), np.ones((9, 9), np.uint8)).astype(bool) & ~table
+    hole |= cv2.dilate(hand, np.ones((15, 15), np.uint8)).astype(bool)          # the handles' thin shadows on the wall and the door
     # what lies behind, by structure (read on the frame): the plaster wall (x < 2157), the door's shadowed jamb (2157-2185), its lit
     # stile (2185-2222), the panel (x >= 2222, above its bottom rail at y 985), the bottom rail (985-1038), the floor (y >= 1038)
     planter = poly_mask(a.shape, [(1960, 820), (2026, 820), (2030, 925), (2026, 1036), (1960, 1036)])
@@ -269,10 +296,25 @@ def basket():
     used = {"wall": "harmonic + grain (sd %.3f)" % sd}
     # the door (jamb, stile, panel, bottom rail) and the floor: quilted from the door and the floor round them with structured shifts
     rest = need & ~wallr
-    cands = [(dx, dy) for dx in range(-96, 100, 4) for dy in range(-140, 60, 4) if (dx, dy) != (0, 0)]
+    # shifts: along the planks (dx -4..4, from above), or across them from the right by whole planks (dx 40-72), or along the rows for
+    # the bottom rail and the floor (dy -8..8)
+    cands = ([(dx, dy) for dx in range(-4, 5, 2) for dy in range(-200, -30, 2)] +
+             [(dx, dy) for dx in range(40, 73, 2) for dy in range(-120, 41, 4)] +
+             [(dx, dy) for dx in list(range(-240, -100, 4)) + list(range(100, 240, 4)) for dy in range(-8, 9, 2)])
     care = ~hole | wallr
-    fill, picks = quilt(fill, rest, valid & (xx >= 2150), care, cands, tile=16, margin=6)
-    used["door_floor"] = dict(tiles=len(picks), shifts_used=sorted(set(picks))[:40])
+    # the jamb, the open leaf's edge and the stile (x < 2222, above the bottom rail) are vertical: only shifts along them (dx 0, from
+    # above, below the latch); the rest (the panel, the bottom rail, the floor) with all the shifts
+    restA = rest & (xx < 2222) & (yy < 985)
+    restB = rest & ~restA
+    candsA = [(0, dy) for dy in range(-90, -24, 1)]                          # from above, below the door's latch (y < 690)
+    fill, picksA, offsA, doneA = quilt(fill, restA, valid & (xx >= 2150) & (yy >= 692), care, candsA, tile=24, margin=8)
+    fill, picksB, offsB, doneB = quilt(fill, restB, (valid | doneA) & (xx >= 2150), care | doneA, cands, tile=24, margin=8)
+    picks = picksA + picksB
+    offs = np.where(doneA[..., None], offsA, offsB)
+    done = doneA | doneB
+    # the blend: the known pixels and the wall fill are the boundary; the quilted pixels follow their sources' gradients
+    fill = poisson_refine(fill, done, offs, (~hole) | wallr, valid, iters=1500)
+    used["door_floor"] = dict(tiles=len(picks), need_px=int(rest.sum()), quilted_px=int(done.sum()), shifts_used=sorted(set(picks))[:40])
     hole_fill = need
     # seams between regions inside the hole softened (2 px), the hole's edge feathered (1.5 px)
     oa = cv2.GaussianBlur(hole.astype(np.float32), (0, 0), 1.5)[..., None] * cv2.dilate(hole.astype(np.uint8), np.ones((5, 5), np.uint8))[..., None]
@@ -300,7 +342,8 @@ def basket():
                fills=used,
                method="the basket's body and three handles traced by hand; x0.75 about its floor contact; behind it, where the new basket "
                       "does not cover: the plaster wall harmonic + its grain, the door (jamb, stile, panel, rail) and the floor quilted in 16 px "
-                      "tiles from the door and floor round them (structured shifts scored on the tiles' margins); a contact shadow for the new "
+                      "tiles from the door and floor round them (structured shifts scored on the tiles' margins), then blended in the gradient "
+                      "domain (each pixel follows its source's gradients, the known pixels round it fixed); a contact shadow for the new "
                       "base; the planter, the plant and the table untouched")
     return rec
 
@@ -309,7 +352,7 @@ def basket():
 CROP_SETS = [
     ("mc-rug", "modern-country-A-fix1.png", "modern-country-A-fix2.png", [((300, 1390, 2736, 1536), 1), ((1950, 1420, 2150, 1536), 4),
                                                                         ((500, 1420, 700, 1536), 4)]),
-    ("boho-basket", "boho-A-fin3.png", "boho-A-fin4.png", [((1780, 700, 2420, 1120), 1), ((2010, 760, 2300, 1080), 2)]),
+    ("boho-basket", "boho-A-fin3.png", "boho-A-fin4.png", [((1780, 700, 2420, 1120), 1), ((2140, 760, 2300, 1080), 4)]),
 ]
 
 

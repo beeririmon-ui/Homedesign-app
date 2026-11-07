@@ -21,25 +21,27 @@ npm run dev        # בונה קטלוג ומדיה זמנית, מאפס D1 מק
 
 ## סקריפטים
 
-| פקודה                             | מה עושה                                                                                                    |
-| --------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| `npm run dev`                     | פיתוח: ‏Vite ו-wrangler dev עם D1 מקומי                                                                    |
-| `npm run build`                   | קטלוג ← מדיה זמנית ← תמונות ספק ← build של האתר ו-prerender ← dry-run של ה-Worker ← בדיקת תקציב (`budget`) |
-| `npm run assets:supplier`         | תמונת הספק הראשונה של כל מוצר מוצג (FR-I): הורדה למטמון, WebP ברוחב 800 ב-`web/public/media/products/`     |
-| `npm run preview`                 | הבנייה המקומית "כמו בפרודקשן": Worker אחד מגיש את `web/dist` ואת ה-API ‏(http://127.0.0.1:8788)            |
-| `npm run typecheck`               | ‏tsc בכל ה-workspaces ובדיקה שהסכמה שנוצרה מעודכנת                                                         |
-| `npm run lint`                    | ESLint עם typescript-eslint ו-jsx-a11y (strict)                                                            |
-| `npm run format` / `format:check` | Prettier                                                                                                   |
-| `npm test`                        | Vitest: תמחור, סכמות, routes של ה-API מול SQLite, webhook חתום, תור ו-Access JWT                           |
-| `npm run e2e`                     | Playwright: זרימת קנייה מלאה, מקלדת וגרירה בגלגל, SEO, תקציב 3MB, preload                                  |
-| `npm run a11y`                    | axe בכל סוגי העמודים (נייר אחד; אין מצב כהה בהשקה, ART3), עם אפס הפרות                                     |
-| `npm run lighthouse`              | Lighthouse במובייל (צריך `npm run preview` רץ). הדוחות נשמרים ב-`.lighthouse/`                             |
-| `npm run budget`                  | תקציב JS, ‏CSS וטעינה ראשונה של החדר                                                                       |
-| `npm run catalog:strict`          | קטלוג בכלל של פרודקשן: מוצר בלי `retail_ils` לא מוצג                                                       |
-| `npm run preview:artifact`        | בונה את `dist-artifact/` (ה-API מדומה בדפדפן) ובודק את חוזה ה-Artifact                                     |
-| `npm run screens:artifact`        | פותח את `dist-artifact` ב-Chromium ברוחב 1280 וברוחב 400, ושומר צילומים ב-`screens/`                       |
-| `npm run test:page`               | עמוד הבדיקה בשפת המגזין: קטלוג הסלון ופינת האוכל, קידוד הפריימים הזמניים, וכתיבת `web/test/index.html`     |
-| `npm run screens:test-page`       | ראיות לעמוד הבדיקה (אחרי `npm run build`): צילומים ב-1280 וב-400, זמנים, ניגודיות ובדיקות קוד              |
+| פקודה                             | מה עושה                                                                                                              |
+| --------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `npm run dev`                     | פיתוח: ‏Vite ו-wrangler dev עם D1 מקומי                                                                              |
+| `npm run build`                   | קטלוג ← מדיה זמנית ← תמונות ספק ← build של האתר ו-prerender ← dry-run של ה-Worker ← בדיקת תקציב (`budget`)           |
+| `npm run assets:supplier`         | תמונת הספק הראשונה של כל מוצר מוצג (FR-I): הורדה למטמון, WebP ברוחב 800 ב-`web/public/media/products/`               |
+| `npm run preview`                 | הבנייה המקומית "כמו בפרודקשן": Worker אחד מגיש את `web/dist` ואת ה-API ‏(http://127.0.0.1:8788)                      |
+| `npm run typecheck`               | ‏tsc בכל ה-workspaces ובדיקה שהסכמה שנוצרה מעודכנת                                                                   |
+| `npm run lint`                    | ESLint עם typescript-eslint ו-jsx-a11y (strict)                                                                      |
+| `npm run format` / `format:check` | Prettier                                                                                                             |
+| `npm test`                        | Vitest: תמחור, סכמות, routes של ה-API מול SQLite, webhook חתום, תור ו-Access JWT                                     |
+| `npm run e2e`                     | Playwright: זרימת קנייה מלאה, מקלדת וגרירה בגלגל, SEO, תקציב 3MB, preload                                            |
+| `npm run a11y`                    | axe בכל סוגי העמודים (נייר אחד; אין מצב כהה בהשקה, ART3), עם אפס הפרות                                               |
+| `npm run lighthouse`              | Lighthouse במובייל (צריך `npm run preview` רץ). הדוחות נשמרים ב-`.lighthouse/`                                       |
+| `npm run budget`                  | תקציב JS, ‏CSS וטעינה ראשונה של החדר                                                                                 |
+| `npm run catalog:strict`          | קטלוג בכלל של פרודקשן: מוצר בלי `retail_ils` לא מוצג                                                                 |
+| `npm run preview:artifact`        | בונה את `dist-artifact/` (ה-API מדומה בדפדפן) ובודק את חוזה ה-Artifact                                               |
+| `npm run screens:artifact`        | פותח את `dist-artifact` ב-Chromium ברוחב 1280 וברוחב 400, ושומר צילומים ב-`screens/`                                 |
+| `npm run test:page`               | עמוד הבדיקה בשפת המגזין: קטלוג הסלון ופינת האוכל, קידוד הפריימים הזמניים, וכתיבת `web/test/index.html`               |
+| `npm run screens:test-page`       | ראיות לעמוד הבדיקה (אחרי `npm run build`): צילומים ב-1280 וב-400, זמנים, ניגודיות ובדיקות קוד                        |
+| `npm run test:story`              | אב-טיפוס הסיפור (`/test/story/`): תמחור מוצרי הפריימים בקוד האתר, קידוד הפריימים, וכתיבת `web/test/story/index.html` |
+| `npm run screens:story`           | ראיות לאב-טיפוס הסיפור (אחרי `npm run build`): צילומים ב-1280 וב-400, זמנים, ניגודיות, axe ומשקל טעינה ראשונה        |
 
 **Playwright:**
 
@@ -135,6 +137,16 @@ npm run dev        # בונה קטלוג ומדיה זמנית, מאפס D1 מק
   - ‏T-E0 על הפריימים החדשים.
   - פריימי תקריב. בהתקרבות של פי 3 על הפריים הזמני מוצגים פיקסלים של מאסטר ברוחב 2736, פחות מ-1.0 לכל פיקסל במסך.
 - **`?notes`** מציג על כל פריים את הערת המקור שלו (לבדיקה). בעמוד עצמו הסימון "זמני" מופיע רק בשורת הפוטר (§10.21).
+
+## אב-טיפוס הסיפור (`/test/story/`, 2026-11-07)
+
+הבריף: `briefs/site-story-prototype-2026-11-07.md` (DIR1). הראיות: `qa/reports/2026-11-07-site-story-prototype/`.
+
+- **בדיקה בלבד:** פריימי המבחן (נורדי A ו-B, מודרני חם A) מופיעים רק ב-`/test/story/`, עם סימון "טיוטה / בדיקה". `tools/make-story-page.ts` מכניס רק פריים ש-QA קבע לו "מבחן סופי" או "כמעט" (`final_test` ברשומת ה-QA).
+- **המניפסטים:** `tools/test-page/story.json` (פריימים, שורות סיפור, חיתוכים) ו-`tools/test-page/story-hotspots.json` (נקודות ותיבות, זמניות ובעין; qa-agent מאמת, G-ED.17).
+- **נקודות:** רק על מוצר ש-QA קבע "נאמן" (G-ED.5). בטלפון חיתוך 4:5 ברוחב מלא, ונקודה רק למוצר שהחלק הנראה שלו לפחות 44×24 CSS.
+- **"קנה את המראה":** דיאלוג מודאלי עם תמונת הכרטיס (מהמטמון של `assets:supplier`, בלי הורדה), קרדיט ומחיר. המחיר לפי `build-catalog.ts --products=…`, אותו מסלול תמחור כמו האתר. ההוספה לסל עוברת ל-mock בדפדפן (`web/src/test-page/story-cart.ts`, חוזה הסל של ה-API).
+- **הקוד:** `web/src/test-page/story.ts` ו-`story.css`, כניסה נפרדת של Vite. עמוד החדר לא טוען ממנו דבר.
 
 ## הנגן (G3.18, G6.9, 2026-11-03)
 

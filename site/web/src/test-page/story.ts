@@ -51,7 +51,6 @@ const ms = (name: string, fallback: number): number => {
   return Number.isFinite(n) ? (v.endsWith('ms') ? n : n * 1000) : fallback;
 };
 const wait = (t: number) => new Promise<void>((r) => setTimeout(r, t));
-const nextFrame = () => new Promise<void>((r) => requestAnimationFrame(() => r()));
 
 // ---------- the timeline (evidence) and the live region ----------
 const events: { t: number; name: string; detail?: unknown }[] = [];
@@ -357,7 +356,11 @@ function fill(it: Item): void {
   if (it.try_href) tryLink.href = it.try_href;
   sepEl.hidden = !it.href || !it.try_href;
   const list = fr.items;
-  posEl.textContent = `${list.indexOf(it.id) + 1} מתוך ${list.length}`;
+  const at = list.indexOf(it.id);
+  posEl.textContent = `${at + 1} מתוך ${list.length}`;
+  // the ends stay focusable and say so (no loop; like the product gallery's buttons)
+  $('st-prev').setAttribute('aria-disabled', String(at === 0));
+  $('st-next').setAttribute('aria-disabled', String(at === list.length - 1));
   showInCart();
 }
 async function openSheet(id: string, from: HTMLElement): Promise<void> {
@@ -368,7 +371,8 @@ async function openSheet(id: string, from: HTMLElement): Promise<void> {
   mark('sheet:open:start', id);
   if (!sheet.open) {
     sheet.showModal();
-    await nextFrame();
+    // the closed style is resolved now, so the fade starts in this very frame (response ≤ 100 ms, art direction §10.7)
+    void getComputedStyle(sheet).opacity;
     sheet.classList.add('is-on');
   }
   nameEl.focus({ preventScroll: true });
@@ -467,7 +471,7 @@ function renderCart(): void {
 $('st-cart-open').addEventListener('click', async () => {
   renderCart();
   cartDlg.showModal();
-  await nextFrame();
+  void getComputedStyle(cartDlg).opacity;
   cartDlg.classList.add('is-on');
   $('st-cart-title').focus({ preventScroll: true });
 });

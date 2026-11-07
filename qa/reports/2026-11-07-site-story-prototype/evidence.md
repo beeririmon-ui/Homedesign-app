@@ -1,6 +1,6 @@
 # Evidence of the story prototype (measured headless, Chromium + SwiftShader)
 
-Run 2026-11-07T01:36:39.481Z; 28 screenshots under screens/. The figures are in evidence.json; README.md reads them.
+Run 2026-11-07T01:59:02.944Z; 28 screenshots under screens/. The figures are in evidence.json; README.md reads them.
 
 ## Screenshots
 - `screens/desk-1-opening.png`: 1280: the opening, Nordic A at rest (no dot), the title and the story line, the test mark

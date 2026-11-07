@@ -282,8 +282,9 @@ async function run(w: number, h: number, tag: 'desk' | 'phone'): Promise<void> {
   // the sheet: a dot opens "קנה את המראה"
   const target = phone ? '#frame-nordic-A .st-mark[data-item="nordic-A-5"]' : '#frame-nordic-A .st-mark[data-item="nordic-A-6"]';
   const trans = page.evaluate(`window.__ev.transitions('#st-sheet', 900)`);
+  // from the click's own time stamp to the first frame where the sheet is drawn (not Playwright's action overhead)
   const resp = page.evaluate(
-    `new Promise((res) => { const t0 = performance.now(); const f = () => { const d = document.querySelector('#st-sheet'); if (d.open && parseFloat(getComputedStyle(d).opacity) > 0) res(performance.now() - t0); else requestAnimationFrame(f); }; requestAnimationFrame(f); })`,
+    `new Promise((res) => { addEventListener('click', (e) => { const t0 = e.timeStamp; const f = () => { const d = document.querySelector('#st-sheet'); if (d.open && parseFloat(getComputedStyle(d).opacity) > 0) res(performance.now() - t0); else requestAnimationFrame(f); }; requestAnimationFrame(f); }, { capture: true, once: true }); })`,
   );
   if (phone) await page.locator(target).tap();
   else await page.locator(target).click();
