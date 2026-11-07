@@ -39,7 +39,7 @@
 | `framed-art-aliexpress-minimal-geometric-triptych-prints` | שלישיית הדפסים גאומטריים, שיבולת שועל ופחם | — |
 | `accent-sconces-cj-travertine-block-updown-8x16` | זוג מנורות קיר, בלוק טרוורטין, אור למעלה ולמטה | — |
 | `cushions-cj-linen-look-charcoal` | ציפית כרית במראה פשתן, פחם | — |
-| `cushions-cj-knitted-chenille-bean-green` | ציפית כרית שניל סרוגה, מרווה | מודרני חם: "…, קאמל" |
+| `cushions-cj-knitted-chenille-bean-green` | ציפית כרית שניל סרוגה, מרווה | מודרני חם: "…, טאופ" (2026-11-07, §7; קודם "…, קאמל". האפשרות "21 Camel Color" היא טאופ-אפרפר בצילום ה-SKU) |
 | `cushions-cj-boucle-teddy` | ציפית כרית בוקלה, לבן חם | מודרני חם: "…, לבן", ו"כרית מותן בוקלה, תה חלב" לאפשרות 30×50 |
 | `sofa-cover-cj-cotton-muslin-fringe` | שמיכת מוסלין כותנה עם פרנזים, לבן שנהב | מודרני חם: "…, חום פשתן" |
 | `planter-cj-seagrass-belly` | סל-עציץ בטן מקש ים | — |

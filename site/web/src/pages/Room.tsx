@@ -1,4 +1,4 @@
-import { useEffect } from 'preact/hooks';
+import { useEffect, useState } from 'preact/hooks';
 import type { CatalogRoom } from '@hd/shared';
 import { product } from '../catalog';
 import { RoomExperience } from '../components/RoomExperience';
@@ -9,12 +9,25 @@ export function Room({ room, slot, option }: { room: CatalogRoom; slot?: string;
   useEffect(() => {
     if (slot) pendingOpen.value = { slot, option: option ?? selection.value[slot] ?? 1 };
   }, [slot, option]);
+  // S3: entered from a story page (?from=/story/…/), the way back to it; read after the first paint (prerendered HTML)
+  const [from, setFrom] = useState<string | null>(null);
+  useEffect(() => {
+    const f = new URLSearchParams(location.search).get('from');
+    setFrom(f && /^\/story\/[a-z0-9/-]+\/$/.test(f) ? f : null);
+  }, []);
 
   return (
     <>
       <RoomExperience room={room} />
       <section class="wrap page" aria-labelledby="items-title">
         <div class="room-intro">
+          {from ? (
+            <p>
+              <a class="link-btn" href={from} id="back-to-story">
+                חזרה לסיפור
+              </a>
+            </p>
+          ) : null}
           <h2 id="items-title">מה יש בחדר</h2>
           <p class="muted">
             כל פריט בחדר הוא מוצר שאפשר לקנות. לכל פריט שלוש גרסאות: געו בנקודה על התמונה, או בחרו מהרשימה. המילוי (ענפים, נרות, עיתונים ועץ הזית) מראה איך
