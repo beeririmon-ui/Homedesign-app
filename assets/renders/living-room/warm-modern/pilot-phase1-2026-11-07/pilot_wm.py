@@ -358,9 +358,18 @@ def cush_prompt(s):
     return send, refs
 
 
-def cush_fetch(s, url, pid, tid):
+def cush_fetch(s, url, pid, tid, refetch=True):
+    """v2 (after set A: seedream re-renders the whole frame, ~1 % zoom, a few L of exposure drift and a fresh boucle texture on the sofa,
+    so a raw difference marks half the sofa): (1) ECC affine onto the input; (2) a local tone match of the render to the base
+    (per-channel linear gain field, normalised blur 60 px of base / render outside the product zone); (3) the product mask by GrabCut on
+    the tone-matched render, seeded by the low-frequency Lab difference to the base (sigma 3 px: the boucle grain averages out) inside
+    the slot zone (the clay proxies dilated + the right arm and the floor beside it for the throw), components kept only where they touch
+    a proxy or the throw zone; (4) the shadow: darkening of the tone-matched render against the base in a 36 px band round the product.
+    The layer keeps the tone-matched product pixels; outside alpha and shadow the base is untouched (swap-diff)."""
     size = work_size()
-    p = fetch_raw(url, f"wm-pilot-cushions-{s}-seedream.png")
+    p = os.path.join(RAW, f"wm-pilot-cushions-{s}-seedream.png")
+    if refetch or not os.path.exists(p):
+        p = fetch_raw(url, f"wm-pilot-cushions-{s}-seedream.png")
     out = load(p)
     if out.shape[1::-1] != size:
         out = to_work(out, size, cv2.INTER_LANCZOS4)
@@ -368,61 +377,87 @@ def cush_fetch(s, url, pid, tid):
     inp = load(os.path.join(HERE, "cushions-input.png"))
     reg, M = register(out, inp)
     W, H = size
-    mfull = idx_masks(IDX_FURN, size, {"sofa": 1})["sofa"]
-    mc = idx_masks(IDX_FULL, size, {"c": CUSH_IDX})["c"]
-    # the zone: the sofa and the proxies, widened (cushions lean out of the clay blocks; the throw hangs down the right arm)
-    ys, xs = np.nonzero((mfull > 0.5) | (mc > 0.5))
-    x0, x1, y0, y1 = xs.min(), xs.max(), ys.min(), ys.max()
-    zone = np.zeros((H, W), bool)
-    zone[max(0, y0 - int(0.06 * H)):min(H, y1 + int(0.02 * H)), max(0, x0 - int(0.01 * W)):min(W, x1 + int(0.04 * W))] = True
-    # difference against the base (no proxies): Lab distance, smoothed; product = strong difference, shadow = darkening with little chroma
-    lab_o = cv2.cvtColor(reg, cv2.COLOR_RGB2LAB)
-    lab_b = cv2.cvtColor(base, cv2.COLOR_RGB2LAB)
-    dE = np.sqrt(((lab_o - lab_b) ** 2).sum(2))
-    dE = cv2.GaussianBlur(dE, (0, 0), 1.5)
-    dC = np.sqrt(((lab_o[..., 1:] - lab_b[..., 1:]) ** 2).sum(2))
-    ratio = (lum(reg) + 1e-4) / (lum(base) + 1e-4)
-    seed = (dE > 14) & zone
-    seed = cv2.morphologyEx(seed.astype(np.uint8), cv2.MORPH_OPEN, np.ones((5, 5), np.uint8))
-    n, lab, st, _ = cv2.connectedComponentsWithStats(seed)
-    keep = np.zeros_like(seed, bool)
+    msofa = idx_masks(IDX_FURN, size, {"sofa": 1})["sofa"] > 0.5
+    mc = idx_masks(IDX_FULL, size, {"c": CUSH_IDX})["c"] > 0.5
+    ys, xs = np.nonzero(msofa)
+    sx0, sx1, sy0, sy1 = xs.min(), xs.max(), ys.min(), ys.max()
+    prox = cv2.dilate(mc.astype(np.uint8), cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (int(0.05 * W) | 1, int(0.05 * W) | 1))).astype(bool)
+    throw = np.zeros((H, W), bool)                               # the right arm, the right seat and the floor right of / under the arm
+    throw[int(sy0 + 0.25 * (sy1 - sy0)):min(H, int(sy1 + 0.06 * H)), int(sx0 + 0.62 * (sx1 - sx0)):min(W, int(sx1 + 0.035 * W))] = True
+    zone = prox | throw
+    # (2) local tone match
+    k = (~cv2.dilate(zone.astype(np.uint8), np.ones((31, 31), np.uint8)).astype(bool)).astype(np.float32)
+    lb, lr = s2l(base), s2l(reg)
+    G = np.ones_like(lb)
+    for c in range(3):
+        nb = cv2.GaussianBlur(lb[..., c] * k, (0, 0), 60) / np.maximum(cv2.GaussianBlur(k, (0, 0), 60), 1e-4)
+        nr = cv2.GaussianBlur(lr[..., c] * k, (0, 0), 60) / np.maximum(cv2.GaussianBlur(k, (0, 0), 60), 1e-4)
+        G[..., c] = np.clip(nb / np.maximum(nr, 1e-4), 0.6, 1.6)
+    regt = np.clip(l2s(lr * G), 0, 1).astype(np.float32)
+    # (3) mask
+    bl = lambda a_: cv2.GaussianBlur(a_, (0, 0), 3.0)
+    dE = np.sqrt(((cv2.cvtColor(bl(regt), cv2.COLOR_RGB2LAB) - cv2.cvtColor(bl(base), cv2.COLOR_RGB2LAB)) ** 2).sum(2))
+    gc = np.full((H, W), cv2.GC_BGD, np.uint8)
+    gc[zone] = cv2.GC_PR_BGD
+    gc[zone & (dE > 7)] = cv2.GC_PR_FGD
+    gc[zone & (dE > 16)] = cv2.GC_FGD
+    y0, y1 = max(0, sy0 - int(0.08 * H)), min(H, sy1 + int(0.08 * H))
+    x0, x1 = max(0, sx0 - int(0.02 * W)), min(W, sx1 + int(0.05 * W))
+    sc = 0.5
+    sub = cv2.resize((regt[y0:y1, x0:x1] * 255).astype(np.uint8), None, fx=sc, fy=sc, interpolation=cv2.INTER_AREA)
+    gsub = cv2.resize(gc[y0:y1, x0:x1], (sub.shape[1], sub.shape[0]), interpolation=cv2.INTER_NEAREST)
+    bgd, fgd = np.zeros((1, 65), np.float64), np.zeros((1, 65), np.float64)
+    if (gsub == cv2.GC_FGD).sum() + (gsub == cv2.GC_PR_FGD).sum() > 50:
+        cv2.grabCut(sub, gsub, None, bgd, fgd, 6, cv2.GC_INIT_WITH_MASK)
+    fg = np.isin(gsub, (cv2.GC_FGD, cv2.GC_PR_FGD)).astype(np.uint8)
+    fg = cv2.resize(fg, (x1 - x0, y1 - y0), interpolation=cv2.INTER_NEAREST)
+    m = np.zeros((H, W), np.uint8)
+    m[y0:y1, x0:x1] = fg
+    m = cv2.morphologyEx(m, cv2.MORPH_OPEN, np.ones((7, 7), np.uint8))
+    n, lab, st, _ = cv2.connectedComponentsWithStats(m)
+    keepm = np.zeros((H, W), bool)
     for i in range(1, n):
-        if st[i, 4] >= 0.0004 * W * H:
-            keep |= lab == i
-    keep = cv2.morphologyEx(keep.astype(np.uint8), cv2.MORPH_CLOSE, np.ones((15, 15), np.uint8)).astype(bool)
-    # holes inside the product filled; then a soft edge from a GrabCut-free guided filter on the render
-    cnts, _ = cv2.findContours(keep.astype(np.uint8), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+        comp = lab == i
+        if st[i, 4] >= 0.0006 * W * H and ((comp & mc).any() or (comp & throw).sum() > 0.5 * st[i, 4]):
+            keepm |= comp
+    cnts, _ = cv2.findContours(keepm.astype(np.uint8), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
     fill = np.zeros((H, W), np.uint8)
     cv2.drawContours(fill, cnts, -1, 1, -1)
-    g = cv2.cvtColor((reg * 255).astype(np.uint8), cv2.COLOR_RGB2GRAY).astype(np.float32) / 255
-    a = np.clip(guided(g, fill.astype(np.float32), 5, 2e-3), 0, 1) * zone
-    a = np.where(cv2.erode(fill, np.ones((5, 5), np.uint8)).astype(bool), 1.0, a).astype(np.float32)
-    # leftover clay proxy (model kept a block): reported, not hidden
-    proxy_left = float(((mc > 0.5) & (a < 0.5) & (dE > 6)).sum()) / max(1.0, float((mc > 0.5).sum()))
-    # shadow: darkening outside the product, inside the zone, low chroma change
-    sh = np.where(zone & (a < 0.5) & (dC < 6), np.clip(ratio, 0.35, 1.0), 1.0).astype(np.float32)
-    sh = cv2.GaussianBlur(sh, (0, 0), 2.0)
-    sh = np.where(sh > 0.985, 1.0, sh)
-    sh = sh * (1 - a) + a                                      # under the product the product decides
-    comp = base * sh[..., None] * (1 - a[..., None]) + reg * a[..., None]
+    g = cv2.cvtColor((regt * 255).astype(np.uint8), cv2.COLOR_RGB2GRAY).astype(np.float32) / 255
+    a = np.clip(guided(g, fill.astype(np.float32), 4, 2e-3), 0, 1)
+    a = np.where(cv2.erode(fill, np.ones((5, 5), np.uint8)).astype(bool), 1.0, a)
+    a = np.where(cv2.dilate(fill, np.ones((5, 5), np.uint8)).astype(bool), a, 0.0).astype(np.float32)
+    proxy_left = float((mc & (a < 0.5)).sum()) / max(1.0, float(mc.sum()))
+    # (4) shadow
+    band = cv2.dilate((a > 0.02).astype(np.uint8), cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (73, 73))).astype(bool) & (a < 0.5)
+    ratio = (cv2.GaussianBlur(lum(regt).astype(np.float32), (0, 0), 4) + 1e-4) / (cv2.GaussianBlur(lum(base).astype(np.float32), (0, 0), 4) + 1e-4)
+    d = 1 - np.clip(ratio, 0.35, 1.0)
+    d = d * np.clip((d - 0.02) / 0.04, 0, 1) ** 2
+    d = np.where(band, d, 0.0).astype(np.float32)
+    sh = 1 - cv2.GaussianBlur(d, (0, 0), 3.0)
+    sh = sh * (1 - a) + a
+    comp = base * sh[..., None] * (1 - a[..., None]) + regt * a[..., None]
     os.makedirs(os.path.join(HERE, "layers/cushions"), exist_ok=True)
     os.makedirs(os.path.join(HERE, "shadows/cushions"), exist_ok=True)
-    save(os.path.join(HERE, f"layers/cushions/set-{s}.png"), reg, alpha=a)
+    save(os.path.join(HERE, f"layers/cushions/set-{s}.png"), regt, alpha=a)
     save(os.path.join(HERE, f"shadows/cushions/set-{s}.png"), np.repeat(sh[..., None], 3, 2))
     save(os.path.join(HERE, f"composite-set-{s}.png"), comp)
-    drift = np.abs(Lstar(reg) - Lstar(base))[~cv2.dilate(zone.astype(np.uint8), np.ones((41, 41), np.uint8)).astype(bool)]
-    # product colour per item region is read by eye from the crops (sheet); the layer's own numbers:
+    far = ~cv2.dilate(zone.astype(np.uint8), np.ones((41, 41), np.uint8)).astype(bool)
+    drift = np.abs(Lstar(reg) - Lstar(base))[far]
+    drift_t = np.abs(Lstar(regt) - Lstar(base))[far]
     rec = dict(id=f"wm-pilot-cushions-{s}", step=4, slot="cushions", set=s,
                items=[dict(size=z, card=c, colour=col, ref=REFS.get(r, {}).get("public_url")) for z, c, col, r, _ in CUSHION_SETS[s]],
                model="seedream-5-pro i2i 2K", aspect_ratio="auto", tokens=650, estimate=650, placeholder_id=pid, task_id=tid, url=url,
                returned_px=list(Image.open(p).size), raw=os.path.relpath(p, REPO), image_url_local="cushions-input.png",
                prompt=os.path.relpath(os.path.join(PROMPTS, f"cushions-{s}.txt"), REPO), image_refs=4, register_to_input=np.round(M, 4).tolist(),
+               extraction="v2: ECC + local tone match (gain field) + GrabCut seeded by low-frequency dE inside the slot zone",
                layer=dict(file=f"layers/cushions/set-{s}.png", alpha_px=int((a > 0.5).sum()), box_frame_uv=frame_uv_box(a, size),
-                          slot_box_frame_uv=[0.484, 0.901, 0.566, 0.898], proxy_area_left_uncovered_and_changed=round(proxy_left, 4)),
+                          slot_box_frame_uv=[0.484, 0.901, 0.566, 0.898], proxy_area_not_covered=round(proxy_left, 4)),
                shadow=dict(file=f"shadows/cushions/set-{s}.png", px_below_0_97=int((sh < 0.97).sum()), min=round(float(sh.min()), 3)),
                composite=f"composite-set-{s}.png",
-               model_drift_outside_zone_L=dict(median=round(float(np.median(drift)), 2), p95=round(float(np.percentile(drift, 95)), 2),
-                                               note="discarded: the base stays the step-3 pixels"),
+               model_drift_outside_zone_L=dict(raw_median=round(float(np.median(drift)), 2), raw_p95=round(float(np.percentile(drift, 95)), 2),
+                                               after_tone_match_median=round(float(np.median(drift_t)), 2),
+                                               note="the render's redraw outside the slot; discarded: the base stays the step-3 pixels"),
                status="fetched")
     job_put(rec)
     print(json.dumps(rec["layer"]), json.dumps(rec["shadow"]), json.dumps(rec["model_drift_outside_zone_L"]))
@@ -545,5 +580,5 @@ def sheet():
 if __name__ == "__main__":
     cmd, args = sys.argv[1], sys.argv[2:]
     {"shell-fetch": lambda: shell_fetch(*args), "furn-input": furn_input, "furn-fetch": lambda: furn_fetch(*args),
-     "cush-input": cush_input, "cush-prompt": lambda: cush_prompt(*args), "cush-fetch": lambda: cush_fetch(*args),
+     "cush-input": cush_input, "cush-prompt": lambda: cush_prompt(*args), "cush-fetch": lambda: cush_fetch(*args[:4], refetch=(len(args) < 5)),
      "swap": swap, "grade": grade, "sheet": sheet}[cmd]()
