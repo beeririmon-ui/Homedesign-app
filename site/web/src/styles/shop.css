@@ -237,6 +237,12 @@
 @media (max-width: 719px) {
   .product-media {
     margin-inline: calc(var(--gutter) * -1);
+    /* the gallery's scroll track never widens the page (WCAG 1.4.10) */
+    overflow: hidden;
+  }
+  .product-media .gallery-track {
+    border: 0;
+    border-radius: var(--r-surface);
   }
 }
 @media (min-width: 720px) {
@@ -496,4 +502,22 @@
 .arc-card .oos-tag {
   background: var(--label);
   color: var(--ink);
+}
+@media (max-width: 719px) {
+  /* the picture runs edge to edge; its caption, counter and buttons keep the page's margins (G5.20) */
+  .product-media .gallery-caption,
+  .product-media .gallery-nav,
+  .product-media .gallery-thumbs {
+    margin-inline: var(--gutter);
+  }
+}
+/* §4.5: the caption under a picture is one line of text that starts with what the picture is ("הדמיה: …") */
+.gallery-caption {
+  display: block;
+  min-height: 0;
+  font: 400 var(--t-cap) var(--f-text);
+  color: var(--ink-2);
+}
+.gallery-caption .badge::after {
+  content: ': ';
 }

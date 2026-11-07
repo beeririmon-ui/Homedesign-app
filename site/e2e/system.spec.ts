@@ -87,7 +87,9 @@ async function measure(page: Page) {
         const lines = Math.max(1, tops.size);
         const len = (p.textContent ?? '').trim().length;
         const cap = parseFloat(getComputedStyle(p).fontSize) <= 14;
-        return { at: name(p), cap, lines, len, cpl: Math.round(lines > 1 ? len / (lines - 0.5) : len) };
+        // a lead (פתיח, §4.6): at most 56, no floor; the story line (.st-line) is running text
+        const lead = p.matches('.mag-lead, .lede, .hero p');
+        return { at: name(p), cap, lead, lines, len, cpl: Math.round(lines > 1 ? len / (lines - 0.5) : len) };
       })
       .filter((x) => x.lines > 1);
     // G5.20 (the phone): text off the stage keeps 24 px from both edges
@@ -137,6 +139,13 @@ async function measure(page: Page) {
       small: small.slice(0, 16),
       loose: loose.slice(0, 10),
       scroll: document.scrollingElement!.scrollWidth - document.documentElement.clientWidth,
+      // what sticks out sideways (the stage and its pictures excepted)
+      wide: Array.from(document.querySelectorAll('body *'))
+        .filter((el) => visible(el) && !onStage(el))
+        .map((el) => ({ el, r: el.getBoundingClientRect() }))
+        .filter(({ r }) => r.left < -0.5 || r.right > vw + 0.5)
+        .slice(0, 6)
+        .map(({ el, r }) => `${name(el)} ${Math.round(r.left)}–${Math.round(r.right)}`),
     };
   });
 }
@@ -186,7 +195,17 @@ function record(url: string, width: number, m: Awaited<ReturnType<typeof measure
   add('G5.19 inputs ≥ 16 px', !m.smallInputs.length, m.smallInputs.length, m.smallInputs);
   // design notes §10: the measured Hebrew targets. The estimate (length over lines less half a line) is good to ±3
   const [lo, hi] = width < 720 ? [50, 60] : [52, 68];
-  const body = m.cpl.filter((x) => !x.cap && x.lines >= 3);
+  const leads = m.cpl.filter((x) => x.lead);
+  const offLead = leads.filter((x) => x.cpl > 56 + 3);
+  // §4.6's 56 for a lead is the Latin figure (as §10 found for the story line): recorded for the designer, not held
+  add(
+    'G5.19 lead ≤ 56 a line (§4.6, to the designer)',
+    !offLead.length,
+    leads,
+    offLead.map((x) => `${x.at} ${x.cpl}`),
+    false,
+  );
+  const body = m.cpl.filter((x) => !x.cap && !x.lead && x.lines >= 3);
   const offBody = body.filter((x) => x.cpl < lo - 3 || x.cpl > hi + 3);
   add(
     `G5.19 running text ${lo}–${hi} a line`,
@@ -277,8 +296,16 @@ test.describe('the design system, measured (S5)', () => {
       await open(page, url);
       const m = await measure(page);
       const hard = true;
-      rows.push({ gate: 'G7.8 reflow at 320 px', page: url, width: 320, ok: m.scroll <= 0, hard, value: m.scroll });
-      expect(m.scroll, url).toBeLessThanOrEqual(0);
+      rows.push({
+        gate: 'G7.8 reflow at 320 px',
+        page: url,
+        width: 320,
+        ok: m.scroll <= 0,
+        hard,
+        value: m.scroll,
+        ...(m.wide.length ? { where: m.wide } : {}),
+      });
+      expect(m.scroll, `${url} ${m.wide.join(', ')}`).toBeLessThanOrEqual(0);
     }
   });
 });

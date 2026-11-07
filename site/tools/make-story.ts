@@ -1064,7 +1064,8 @@ function toolSection(pg: PageOut): string {
 }
 const footer = (notes: string) => `<footer class="mag-paper mag-foot st-foot" data-head="">
   <div class="mag-grid">
-    <p class="mag-cap mag-col-main">${esc(story.marks_he.final_test!)}: הפריימים הם פריימי מבחן ולא נכסי האתר, והם מופיעים רק בגרסת הבדיקה של האתר. הנקודות זמניות, ממוקמות בעין. המחירים לפי קוד התמחור של האתר, והסל הוא סל בדיקה בדפדפן.${notes ? ` ${esc(notes)}` : ''}</p>
+    <p class="mag-cap mag-col-main">${esc(story.marks_he.final_test!)}: פריימי מבחן, רק בגרסת הבדיקה של האתר. הנקודות בעין, המחירים מקוד התמחור, והסל סל בדיקה.</p>
+    ${notes ? `<p class="mag-cap mag-col-main">${esc(notes)}</p>` : ''}
     <p class="mag-cap mag-col-main"><a class="mag-link" href="/story/">תוכן הגיליון</a> · <a class="mag-link" href="/">לאתר</a> · <a class="mag-link" href="/accessibility/">הצהרת נגישות</a></p>
   </div>
 </footer>`;

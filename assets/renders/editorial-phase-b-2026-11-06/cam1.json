@@ -1,0 +1,171 @@
+{
+ "date": "2026-11-07",
+ "by": "render-agent",
+ "decision": "CAM1 (owner, 2026-11-07): set B camel corduroy replaces the '21 Camel' chenille in the story frame; about 650",
+ "base": "warm-modern-A-ed7.png",
+ "out": "warm-modern-A-ed8.png",
+ "note": "TEST, not for the site until QA; new files only",
+ "product": {
+  "card": "cushions-cj-wide-stripe-corduroy-light-green",
+  "option": "Camel (card hex #B8915F)",
+  "size_card": "50 x 50 (the only listed size)",
+  "ref": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/58594f22-7ae3-45cd-83d6-a983aee8b480.png (the Camel option photo crop, uploaded in pilot phase 1; viewed only, not in the repo)"
+ },
+ "job": {
+  "model": "seedream-5-pro i2i 2K, aspect auto",
+  "estimate": 650,
+  "tokens": 650,
+  "idempotency_key": "cam1-warm-modern-A-ed7-seedream-20261107-a1",
+  "placeholder_id": "02b1acf4-eb99-4e84-b743-9a2d729a7b5f",
+  "task_id": "713e9c587d47efb85334268d7f1d8324",
+  "crop_box": [
+   840,
+   560,
+   1520,
+   1070
+  ],
+  "crop_input": "raw/cam1-crop-input.png",
+  "crop_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/83397972-7a98-4ead-b86f-ea2d19ea1b5e.png",
+  "prompt": "assets/prompts/editorial-phase-b-2026-11-06/cam1-warm-modern-A.txt",
+  "status": "completed; fetched",
+  "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-713e9c587d47efb85334268d7f1d8324-0-1794089537880-38d826af.png",
+  "raw": "raw/cam1-seedream.png",
+  "returned_px": [
+   2304,
+   1728
+  ]
+ },
+ "composite": {
+  "result": "raw/cam1-seedream.png",
+  "result_px": [
+   2304,
+   1728
+  ],
+  "ecc_affine": [
+   [
+    0.9932000041007996,
+    -0.0,
+    2.1356000900268555
+   ],
+   [
+    0.00039999998989515007,
+    0.9941999912261963,
+    1.2690000534057617
+   ]
+  ],
+  "colour_gain_linear": [
+   1.1717000007629395,
+   1.0343999862670898,
+   0.8783000111579895
+  ],
+  "grow_px": 3,
+  "region_px": 48822,
+  "px_changed": 48821,
+  "px_changed_outside_region": 0,
+  "px_changed_in_protected": 0,
+  "neighbours": {
+   "white_cushion": {
+    "box": [
+     880,
+     650,
+     1060,
+     920
+    ],
+    "px_changed_outside_cushion_region": 0,
+    "px_changed_in_box": 3542
+   },
+   "milk_tea_cushion": {
+    "box": [
+     1958,
+     684,
+     2250,
+     931
+    ],
+    "px_changed_outside_cushion_region": 0,
+    "px_changed_in_box": 0
+   },
+   "throw": {
+    "box": [
+     640,
+     740,
+     1010,
+     1260
+    ],
+    "px_changed_outside_cushion_region": 0,
+    "px_changed_in_box": 0
+   }
+  },
+  "cushion_Lab_C_h_median": {
+   "before_21_camel": [
+    29.06,
+    10.97,
+    19.48,
+    22.36,
+    60.6
+   ],
+   "after_camel_corduroy": [
+    33.8,
+    12.5,
+    22.22,
+    25.49,
+    60.6
+   ]
+  }
+ },
+ "crops": [
+  "cam1-before-after/cushion-100.jpg",
+  "cam1-before-after/ribs-x4.jpg",
+  "cam1-before-after/edge-white-cushion-x4.jpg",
+  "cam1-before-after/candle-x4.jpg",
+  "cam1-before-after/context-50.jpg"
+ ],
+ "masks": {
+  "cushion": "raw/cam1-mask-cushion.png (the old cushion: hand outline refined by GrabCut, 45,977 px)",
+  "protect": "raw/cam1-mask-protect.png (the two candles and flames, +2 px; 8,774 px)",
+  "region": "cushion grown by 3 px, minus protect; feather inward only; bytes outside the region copied from ed7"
+ },
+ "checks": {
+  "px_changed_outside_region": 0,
+  "px_changed_in_protected": 0,
+  "neighbours_unchanged": "white cushion, milk-tea cushion and throw: 0 px changed outside the cushion region (the white-cushion box overlaps the old cushion's own left edge only)",
+  "ribs_counted_across": [
+   20,
+   21
+  ],
+  "ribs_card_photo": "about 19",
+  "colour_vs_sku_photo": {
+   "method": "the frame's light removed with the set-A white boucle cushion as the white reference (von Kries, linear RGB), the SKU photo's white backdrop put back, then exposure matched to the photo's L*",
+   "sku_photo_Lab": [
+    47.86,
+    8.83,
+    22.31
+   ],
+   "render_Lab_balanced": [
+    47.82,
+    7.53,
+    19.7
+   ],
+   "dE76": 2.91,
+   "dh_deg": 0.7,
+   "C": [
+    21.1,
+    24.0
+   ],
+   "tolerance": "dE 5 / 8 deg (as for set C)"
+  },
+  "raw_in_frame_Lab": {
+   "before_21_camel": [
+    29.06,
+    10.97,
+    19.48
+   ],
+   "after": [
+    33.8,
+    12.5,
+    22.22
+   ]
+  },
+  "size_note": "the card lists 50 x 50 only (the chenille was 45 x 45); drawn inside the old cushion's outline so the neighbours stay untouched, i.e. about 10 % small against the card; QA to judge"
+ },
+ "verdict_render_agent": "done, pending QA: camel corduroy with wide vertical ribs (20-21 across), same outline and lean, the warm light and the sofa shadow kept; colour within tolerance once the frame's light is discounted; the ribs read as wide-wale corduroy and the short plush blocks of the photo are only hinted at in the frame; edges clean at x4; the candles untouched"
+}

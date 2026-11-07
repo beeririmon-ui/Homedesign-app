@@ -12,7 +12,7 @@ import { describe, expect, it } from 'vitest';
 import { sitePath } from '../lib/paths';
 
 type Decl = { file: string; selector: string; prop: string; value: string; media: string };
-const MAGAZINE = ['web/src/styles/system.css', 'web/src/test-page/magazine.css', 'web/src/story/story.css'];
+const MAGAZINE = ['web/src/styles/system.css', 'web/src/test-page/magazine.css', 'web/src/story/story.css', 'web/src/styles/shop.css'];
 const SHOP = ['web/src/styles/tokens.css', 'web/src/styles/base.css', 'web/src/styles/room.css', 'web/src/styles/wheel.css', 'web/src/styles/pages.css'];
 
 /** a small CSS reader: rules (with their @media) and declarations; enough for these stylesheets */
