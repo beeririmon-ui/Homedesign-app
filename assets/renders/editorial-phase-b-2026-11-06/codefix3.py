@@ -405,6 +405,103 @@ def wm():
     return rec
 
 
+# ----------------------------------------------------------------------------------------------------------------------------------
+JAR_SCALE_X = 0.76
+
+
+def jar():
+    """Japandi A: the jar narrowed x0.76 about its axis (as ED4) redone from the original frame with a clean fill. Its outline: the
+    right edge (a strong gradient on every row) mirrored about the axis x 666, the rim (x 621-711, y 922-937) as measured, the base
+    rounded (y 1117-1129). The strips it leaves: the background shifted in along each structure's own slope, measured on its edges:
+    the top rail and glass horizontally (34 px), the garden and the upper rails at 0.41 / 0.44 px per px (34 px), the lower rails and
+    the sill's front edge at 0.53-0.55 (22-40 px). The branch stems in front of the rim are the original's. The old contact shadow is
+    taken out with the old base and a new one laid under the narrower base."""
+    base = load01(os.path.join(HERE, "japandi-A.png"))
+    ed4 = load01(os.path.join(HERE, "japandi-A-ed4.png"))
+    H, W = base.shape[:2]
+    L, A_, B_ = lab_of(base)
+    gx = cv2.Sobel(cv2.GaussianBlur(L, (0, 0), 1.2), cv2.CV_32F, 1, 0, ksize=3)
+    AX = 666.0
+    ytop, ybot = 922, 1130
+    hw = np.zeros(H)
+    for y in range(938, 1118):
+        hw[y] = 680 + int(np.argmax(gx[y, 680:760])) - AX
+    hw[938:1118] = np.convolve(np.r_[[hw[938]] * 4, hw[938:1118], [hw[1117]] * 4], np.ones(9) / 9, mode="same")[4:-4]
+    hw[ytop:938] = 46.0                                                   # the rim, x 621-711
+    for y in range(1118, ybot):
+        hw[y] = hw[1117] * np.sqrt(max(1 - ((y - 1117) / 12.5) ** 2, 0))  # the base's rounded front
+    xx = np.arange(W, dtype=np.float32)[None, :]
+    yy = np.arange(H)[:, None]
+    rows = (yy >= ytop) & (yy < ybot)
+    old = rows & (np.abs(xx - AX) <= hw[:, None] + 3)
+    new_a = np.clip(hw[:, None] * JAR_SCALE_X + 0.5 - np.abs(xx - AX), 0, 1) * rows
+    # the old contact shadow (under the base and to its right, on the sill top above the sill's front edge)
+    sill_edge = 1100 + (770 - xx) * 0.55
+    oldsh = (yy >= 1112) & (yy <= 1137) & (xx >= 612) & (xx <= 738) & (yy < sill_edge - 1)
+    old = old | oldsh
+    # the new jar: each row of the old one sampled narrower about the axis
+    jar_px = base.copy()
+    for y in range(ytop, ybot):
+        xs = np.arange(int(AX - hw[y] - 3), int(AX + hw[y] + 4))
+        src = AX + (xs - AX) / JAR_SCALE_X
+        for c in range(3):
+            jar_px[y, xs, c] = np.interp(src, np.arange(W), base[y, :, c])
+    # the strips: background shifted in from beside the jar along each structure's slope (per row band, cross-faded over 8 rows)
+    def sh(dx, dy):
+        return cv2.warpAffine(base, np.float32([[1, 0, dx], [0, 1, dy]]), (W, H), flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_REFLECT)
+    yv = np.arange(H, dtype=np.float32)
+    def band(y0, y1):
+        return (np.clip((yv - y0 + 4) / 8.0, 0, 1) * np.clip((y1 - yv + 4) / 8.0, 0, 1))[:, None, None]
+    bands_L = [(0, 945, 34, 0.0), (945, 1030, 34, 0.41), (1030, 9999, 22, 0.41)]
+    bands_R = [(0, 945, 34, 0.0), (945, 1030, 34, 0.44), (1030, 1078, 22, 0.44), (1078, 1110, 22, 0.53), (1110, 9999, 40, 0.55)]
+    bgL = np.zeros_like(base)
+    wl = np.zeros((H, 1, 1), np.float32)
+    for y0, y1, sx, sl in bands_L:
+        w_ = band(y0, y1)
+        bgL += sh(sx, -sl * sx) * w_                                     # out(x, y) = base(x - sx, y + sl * sx)
+        wl += w_
+    bgL /= np.maximum(wl, 1e-6)
+    bgR = np.zeros_like(base)
+    wr = np.zeros((H, 1, 1), np.float32)
+    for y0, y1, sx, sl in bands_R:
+        w_ = band(y0, y1)
+        bgR += sh(-sx, sl * sx) * w_                                     # out(x, y) = base(x + sx, y - sl * sx)
+        wr += w_
+    bgR /= np.maximum(wr, 1e-6)
+    bg = np.where((xx < AX)[..., None], bgL, bgR)
+    oa = cv2.GaussianBlur(old.astype(np.float32), (0, 0), 1.5)[..., None] * cv2.dilate(old.astype(np.uint8), np.ones((5, 5), np.uint8))[..., None]
+    out = base * (1 - oa) + bg * oa
+    # a new contact shadow under the narrower base: a tight core and a soft spread, a little to the right (the lantern is on the left)
+    fp = np.zeros((H, W), np.uint8)
+    cv2.ellipse(fp, (int(AX) + 2, 1127), (int(hw[1117] * JAR_SCALE_X) + 1, 4), 0, 0, 360, 1, -1)
+    core = cv2.GaussianBlur(fp.astype(np.float32), (0, 0), 2.0)
+    spread = cv2.GaussianBlur(cv2.warpAffine(fp.astype(np.float32), np.float32([[1, 0, 7], [0, 1, -1]]), (W, H)), (0, 0), 6.0)
+    shadow = np.clip(0.55 * core + 0.30 * spread, 0, 0.7) * (yy >= 1112) * (yy < sill_edge)
+    out = out * (1 - shadow[..., None] * (1 - new_a[..., None]))
+    na = new_a[..., None].astype(np.float32)
+    out = out * (1 - na) + jar_px * na
+    # the branch stems in front of the rim (rows 918-937): the original's
+    stems = np.zeros((H, W), bool)
+    stems[918:938, 660:706] = (L[918:938, 660:706] > 45)
+    stems = cv2.dilate(stems.astype(np.uint8), np.ones((3, 3), np.uint8)).astype(np.float32)
+    stems = cv2.GaussianBlur(stems, (0, 0), 0.5)[..., None]
+    out = out * (1 - stems) + base * stems
+    o8 = save8(out, os.path.join(HERE, "japandi-A-ed5.png"))
+    e8 = (ed4 * 255 + 0.5).astype(np.uint8)
+    b8 = (base * 255 + 0.5).astype(np.uint8)
+    zone = cv2.dilate((old | (new_a > 0) | (shadow > 0.002)).astype(np.uint8), np.ones((9, 9), np.uint8))
+    rec = check(o8, e8, zone, "japandi-A-ed5.png")
+    mv0 = np.abs(o8.astype(np.int16) - b8.astype(np.int16)).max(2) > 0
+    rows_ = [y for y in range(938, 1118)]
+    wmax = 2 * float(hw[938:1118].max())
+    rec.update(base="japandi-A.png (the original; ED4's jar redone)", compared_with="japandi-A-ed4.png", scale_x=JAR_SCALE_X, axis_x=AX,
+               size_px_before=[round(wmax, 1), ybot - ytop], size_px_after=[round(wmax * JAR_SCALE_X, 1), ybot - ytop],
+               h_over_w_after=round((ybot - ytop) / (wmax * JAR_SCALE_X), 2), px_changed_vs_original=int(mv0.sum()),
+               px_changed_vs_original_outside_zone=int((mv0 & ~zone.astype(bool)).sum()),
+               strips={"left": bands_L, "right": bands_R}, method=jar.__doc__.strip().replace("\n", " "))
+    return rec
+
+
 if __name__ == "__main__":
     R = json.load(open(REC)) if os.path.exists(REC) else dict(date="2026-11-07", by="render-agent", qa="qa/reports/2026-11-07-editorial-fin2-ed4-country.md",
                                                               tokens=0, var2="none", note="TEST, not for the site; new files only")
