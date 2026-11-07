@@ -518,7 +518,7 @@ def swap():
         L = np.asarray(Image.open(os.path.join(HERE, f"layers/cushions/set-{s}.png"))).astype(np.float32) / 255
         S = np.asarray(Image.open(os.path.join(HERE, f"shadows/cushions/set-{s}.png")).convert("L")).astype(np.float32) / 255
         a = L[..., 3:4]
-        return base * S[..., None] * (1 - a) + L[..., :3] * a, (a[..., 0] > 1 / 255) | (S < 254 / 255)
+        return base * S[..., None] * (1 - a) + L[..., :3] * a, (a[..., 0] > 0) | (S < 1.0)          # any non-zero alpha, any shadow below 255
     C = {s: comp(s) for s in sets}
     for i, s in enumerate(sets):
         for t in sets[i + 1:]:

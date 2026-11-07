@@ -1,0 +1,21 @@
+
+> homedesign-site@0.1.0 typecheck
+> tsx shared/scripts/gen-product-card-schema.ts --check && npm run typecheck --workspaces --if-present
+
+product-card.gen.ts is up to date
+
+> @hd/shared@0.1.0 typecheck
+> tsc -p tsconfig.json --noEmit
+
+
+> @hd/api@0.1.0 typecheck
+> tsc -p tsconfig.json --noEmit
+
+
+> @hd/web@0.1.0 typecheck
+> tsc -p tsconfig.json --noEmit
+
+
+> @hd/tools@0.1.0 typecheck
+> tsc -p ../tsconfig.tools.json --noEmit
+

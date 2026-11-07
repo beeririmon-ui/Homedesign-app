@@ -1,0 +1,143 @@
+{
+ "date": "2026-11-07",
+ "by": "render-agent",
+ "tokens": 0,
+ "base": "shell.png (step 2, kept)",
+ "out": "shell-v2.png",
+ "source": "docs/proposals/clay-r2-and-ged-verdicts-2026-11-07.md section 11 (master-designer)",
+ "wedge": {
+  "before": {
+   "max_excess_L": 40.2,
+   "p99_excess_L": 15.41,
+   "max_deficit_L": -9.13
+  },
+  "after": {
+   "max_excess_L": 28.57,
+   "p99_excess_L": 7.92
+  },
+  "px_changed": 777007,
+  "max_gain_stops": -1.169,
+  "rule": "delta L* <= 2 against the separable wall field f(X) + g(row)",
+  "L_points_before": {
+   "back_wall_by_corner(-1.75,0,1.60)": 83.3,
+   "window_wall(-2.30,0.30,1.60)": 72.0,
+   "window_wall(-2.30,0.55,1.60)": 76.0,
+   "back_wall_centre(0.20,0,1.95)": 88.9,
+   "back_wall_right(1.85,0,1.60)": 80.9
+  },
+  "L_points_after": {
+   "back_wall_by_corner(-1.75,0,1.60)": 82.2,
+   "window_wall(-2.30,0.30,1.60)": 72.0,
+   "window_wall(-2.30,0.55,1.60)": 76.0,
+   "back_wall_centre(0.20,0,1.95)": 88.9,
+   "back_wall_right(1.85,0,1.60)": 80.9
+  }
+ },
+ "bench": {
+  "stone_px": 90173,
+  "pores_px": 10936,
+  "grain_sd": 0.0161,
+  "pores_left_px": 407,
+  "ab_before": [
+   0.48,
+   3.84
+  ],
+  "ab_target": [
+   1.41,
+   14.98
+  ],
+  "ab_after": [
+   1.14,
+   14.88
+  ],
+  "L_median": 93.8,
+  "target": "#D8C8AE",
+  "method": "pores > 3.5 L* under the 7 px local median, grown 1 px, filled from a 7+5 median plus the stone's grain; a*, b* median shift to the target, L kept"
+ },
+ "px_changed_total": 820651,
+ "px_changed_outside_wall_and_stone": 5225,
+ "lock_v2_shell": {
+  "summary": {
+   "named_worst_p90_raw_px": 11.0,
+   "named_worst_p90_after_affine_px": 1.0,
+   "named_not_measured": [],
+   "shift_px": [
+    0.4,
+    0.94
+   ],
+   "scale": [
+    0.99865,
+    0.99738
+   ]
+  },
+  "verdict": {
+   "named_raw_pass": false,
+   "named_after_affine_pass": true,
+   "shift_le_9_6": true,
+   "scale_within_0_5pct": true,
+   "rule": "G1.4 master (M0S1): every named line within 9.6 px (p90 of its samples) raw or after one global affine (code)",
+   "pass": true
+  },
+  "named": {
+   "glazing back jamb (X -2.30, Y 0.75)": {
+    "median": 0.0,
+    "p90": 0.0,
+    "n": 47
+   },
+   "glazing head (Z 2.70)": {
+    "median": 0.0,
+    "p90": 1.0,
+    "n": 18
+   },
+   "bench front top edge (X -1.98, Z 0.45)": {
+    "median": -1.0,
+    "p90": 1.0,
+    "n": 35
+   },
+   "bench back-end front corner (X -1.98, Y 1.00)": {
+    "median": 0.0,
+    "p90": 1.0,
+    "n": 8
+   },
+   "bench back-end top edge (Y 1.00, Z 0.45)": {
+    "median": 0.0,
+    "p90": 0.0,
+    "n": 5
+   },
+   "back wall ceiling line (Y 0, Z 3.00)": {
+    "median": 0.0,
+    "p90": 1.0,
+    "n": 26
+   },
+   "back wall floor line (Y 0, Z 0; WMC10)": {
+    "median": -1.0,
+    "p90": 1.0,
+    "n": 88
+   },
+   "ceiling band bottom edge (X -2.05, Z 2.82)": {
+    "median": 0.0,
+    "p90": 0.0,
+    "n": 11
+   },
+   "mullion (Y 1.45, frame plane X -2.65)": {
+    "median": 0.0,
+    "p90": 11.0,
+    "n": 52
+   },
+   "mullion (Y 2.15, frame plane X -2.65)": {
+    "median": 1.0,
+    "p90": 2.0,
+    "n": 61
+   }
+  }
+ },
+ "composites_v2": {
+  "base": "shell-furniture-v2.png",
+  "sets": {
+   "A": "composite-set-A-v2.png",
+   "B": "composite-set-B-v2.png",
+   "C": "composite-set-C-v2.png"
+  },
+  "note": "the same layers and shadows; only the shell behind them is v2"
+ }
+}

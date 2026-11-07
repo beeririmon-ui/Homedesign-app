@@ -13,6 +13,9 @@
  *  - zero axe violations (WCAG 2.0/2.1 A + AA) on each kind of page, with the sheet open and with the cart open
  * Exact timings are in the evidence tool (tools/screens-story.ts).
  */
+import { readFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { test, expect, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
@@ -38,11 +41,19 @@ async function audit(page: Page, label: string) {
   expect(summary, `${label}\n${summary.join('\n')}`).toEqual([]);
 }
 const sheet = (page: Page) => page.locator('#st-sheet');
+/** QA's register decides a frame's state (it moves round by round): the tests read what the build resolved */
+const resolved = JSON.parse(readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), '../.generated/story.json'), 'utf8')) as Record<
+  string,
+  { states?: [string, string, string][]; held?: { state: string; why_he: string }[] }
+>;
+const stateOf = (href: string) => resolved[href]?.states?.[0]?.[2] ?? null;
+const MARK: Record<string, string> = { final_test: 'טיוטה / בדיקה', almost: 'טיוטה / בדיקה · כמעט מוכן', approved_for_site: 'בדיקה · מאושר לאתר' };
 const NORDIC = '/story/living-room/nordic/';
 const COUNTRY = '/story/living-room/modern-country/';
 const WARM = '/story/living-room/warm-modern/';
 const BOHO = '/story/living-room/boho/';
 const MED = '/story/living-room/mediterranean/';
+const JAPANDI = '/story/living-room/japandi/';
 
 test.describe('the story contents', () => {
   test('every room, every house: a picture only where QA let a frame in, type for the rest, and links to each page', async ({ page }) => {
@@ -53,11 +64,17 @@ test.describe('the story contents', () => {
     await expect(page.locator('.st-room.is-next')).toHaveCount(8);
     const living = page.locator('#room-living-room .st-tile');
     await expect(living).toHaveCount(6);
-    await expect(page.locator('#room-living-room .st-tile-pic')).toHaveCount(4);
+    await expect(page.locator('#room-living-room .st-tile-pic')).toHaveCount(
+      Object.entries(resolved).filter(([h, r]) => /^\/story\/living-room\/[^/]+\/$/.test(h) && r.states?.length).length,
+    );
     await expect(page.locator('#room-living-room .st-tile-link')).toHaveCount(6);
     // every picture on the contents is a frame QA let in: the three typographic houses have none
     const srcs = await page.locator('img').evaluateAll((els) => els.map((e) => (e as HTMLImageElement).currentSrc || (e as HTMLImageElement).src));
-    for (const s of srcs) expect(s, s).not.toMatch(/\/(mediterranean|japandi)\//);
+    // a house whose frame is held (QA, or the points still to come) shows no picture of it
+    const held = Object.entries(resolved)
+      .filter(([h, r]) => /^\/story\/[^/]+\/[^/]+\/$/.test(h) && !r.states?.length)
+      .map(([h]) => h.split('/')[3]);
+    for (const s of srcs) for (const h of held) expect(s, s).not.toContain(`/${h}/`);
     await page.locator('#room-living-room .st-tile-link', { hasText: 'כפרי מודרני' }).click();
     await expect(page).toHaveURL(new RegExp(`${COUNTRY}$`));
     await expect(page.locator('h1')).toHaveText('קוטג׳ בבוקר גשום');
@@ -221,11 +238,10 @@ test.describe('the Nordic living room', () => {
 });
 
 test.describe('the other houses', () => {
-  test('modern country: an "almost" frame says so; a product QA did not call faithful is listed without a dot', async ({ page }) => {
+  test("modern country: the mark says the register's state; every product QA called faithful has its dot", async ({ page }) => {
     await page.goto(COUNTRY);
     await expect(page.locator('#frame-A')).toHaveClass(/is-title/, { timeout: 15_000 });
-    await expect(page.locator('#frame-A .st-draft')).toHaveClass(/is-almost/);
-    await expect(page.locator('#frame-A .st-draft')).toHaveText('טיוטה / בדיקה · כמעט מוכן');
+    await expect(page.locator('#frame-A .st-draft')).toHaveText(MARK[stateOf(COUNTRY)!]!);
     await expect(page.locator('#list-A .st-credit')).toHaveCount(7);
     // fix4: QA's register calls all seven faithful, so all seven have a dot
     await expect(page.locator('#frame-A .st-mark')).toHaveCount(7);
@@ -241,25 +257,25 @@ test.describe('the other houses', () => {
     await audit(page, 'modern country at rest');
   });
 
-  test('the Mediterranean: QA has not let its frame in, so the page is type only, with no frame and no picture', async ({ page }) => {
-    await page.goto(MED);
-    await expect(page.locator('h1')).toHaveText('בית מסויד, צהרי יוני');
+  test('japandi: QA has not let its frame in, so the page is type only, with no frame and no picture', async ({ page }) => {
+    await page.goto(JAPANDI);
+    await expect(page.locator('h1')).toHaveText('שעה כחולה, בית שקט');
     await expect(page.locator('.mag-stage')).toHaveCount(0);
     await expect(page.locator('.st-mark')).toHaveCount(0);
     await expect(page.locator('.st-type-status')).toContainText('הפריים עוד בבדיקה');
     const srcs = await page.locator('img').evaluateAll((els) => els.map((e) => (e as HTMLImageElement).src));
-    for (const s of srcs) expect(s, s).not.toMatch(/\/mediterranean\//);
+    for (const s of srcs) expect(s, s).not.toMatch(/\/japandi\//);
     // and the frame is not on the server at all
-    expect((await page.request.get('/media/story/living-room/mediterranean/A/1920.webp')).status()).toBe(404);
+    expect((await page.request.get('/media/story/living-room/japandi/A/1920.webp')).status()).toBe(404);
     await page.waitForTimeout(800);
-    await audit(page, 'the Mediterranean, typographic');
+    await audit(page, 'japandi, typographic');
   });
 
   test('boho fin6 (QA register: final test): its frame, nine dots, the test mark', async ({ page }) => {
     await page.goto(BOHO);
     await expect(page.locator('h1')).toHaveText('בית אבן ישן בנמל, 16:00');
     await expect(page.locator('#frame-A')).toHaveClass(/is-title/, { timeout: 15_000 });
-    await expect(page.locator('#frame-A .st-draft')).toHaveText('טיוטה / בדיקה');
+    await expect(page.locator('#frame-A .st-draft')).toHaveText(MARK[stateOf(BOHO)!]!);
     await expect(page.locator('#frame-A .st-mark')).toHaveCount(9);
     await expect(page.locator('#list-A .st-credit')).toHaveCount(9);
   });

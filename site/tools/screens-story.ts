@@ -30,7 +30,7 @@ mkdirSync(SHOTS, { recursive: true });
 const NORDIC = '/story/living-room/nordic/';
 const WARM = '/story/living-room/warm-modern/';
 const COUNTRY = '/story/living-room/modern-country/';
-const BOHO = '/story/living-room/mediterranean/'; // the typographic page (QA has not let its frame in)
+const BOHO = '/story/living-room/japandi/'; // the typographic page (QA has not let its frame in)
 const BOHO_FRAME = '/story/living-room/boho/';
 /** every frame the gate lets in, by page */
 const FRAMES = [
@@ -428,7 +428,7 @@ async function run(w: number, h: number, tag: 'desk' | 'phone'): Promise<void> {
   await shot(
     page,
     `${tag}-8e-typographic`,
-    `${w}: the Mediterranean: QA has not let its frame in, so the page is type only: the concept, the story line, why there is no frame`,
+    `${w}: japandi: QA has not let its frame in, so the page is type only: the concept, the story line, why there is no frame`,
   );
   await scrolled(page);
   await shot(page, `${tag}-8f-typographic-full`, `${w}: the whole typographic page: the cover in type, the tool (the Nordic one, said so), the other houses`, {
@@ -896,6 +896,7 @@ async function axeDetail(): Promise<void> {
       BOHO_FRAME,
       '/story/checkout/',
       '/story/order/',
+      TOOL_DRAFT,
     ]) {
       await page.goto(`${ORIGIN}${path}`, { waitUntil: 'load' });
       await sleep(900);
@@ -996,10 +997,50 @@ async function wheelPre1(): Promise<void> {
   await ctx.close();
 }
 
+// ---------- S3: from the story into the tool, and the house's own tool (a draft) with the soft switch ----------
+const TOOL_DRAFT = '/story/living-room/warm-modern/tool/';
+async function toolRun(w: number, h: number, tag: 'desk' | 'phone'): Promise<void> {
+  const ctx = await ctxOf(w, h);
+  const page = await open(ctx, '#tool', WARM);
+  await sleep(700);
+  await shot(page, `${tag}-t1-story-tool`, `${w}: the warm-modern story's way into the tool: the Nordic tool for now, and the house's own draft`);
+  await page.locator('#st-tool-draft').click();
+  await page.waitForFunction(`(window.__story?.events ?? []).some((e) => e.name === 'tool:ready')`, null, { timeout: 15_000 });
+  await page.waitForFunction(`[...document.querySelectorAll('.st-td-house.is-on img')].every((i) => i.complete && i.naturalWidth)`, null, { timeout: 20_000 });
+  await sleep(500);
+  await shot(
+    page,
+    `${tag}-t2-house`,
+    `${w}: the warm-modern house's tool (a draft from render pilot phase 1: the shell, the fixed furniture and its shadow, multiplied)`,
+  );
+  const t = (await page.evaluate(
+    `new Promise((res) => { const to = document.querySelector('.st-td-house[data-house="nordic"]'); const t0 = performance.now(); to.addEventListener('transitionend', () => res(Math.round(performance.now() - t0)), { once: true }); document.querySelector('.st-td-btn[data-house="nordic"]').click(); })`,
+  )) as number;
+  await sleep(300);
+  await shot(
+    page,
+    `${tag}-t3-nordic`,
+    `${w}: after the soft switch: the Nordic house at the tool's camera (its base is still the temporary styled preview of M0 1.1)`,
+  );
+  const half = (await page.evaluate(
+    `new Promise((res) => { document.querySelector('.st-td-btn[data-house="warm-modern"]').click(); setTimeout(() => res([...document.querySelectorAll('.st-td-house')].map((h) => getComputedStyle(h).opacity)), 500); })`,
+  )) as string[];
+  await sleep(200);
+  await shot(page, `${tag}-t4-mid-switch`, `${w}: the switch half way (~0.5 s after the press): both houses in the same frame, dissolving`);
+  evidence[`tool_${tag}`] = { switch_ms: t, opacities_half_way: half };
+  await ctx.close();
+}
+
 const PART = process.argv.find((a) => a.startsWith('--part='))?.slice(7) ?? 'all';
 const t0 = Date.now();
 realRoutes();
 publicBuild();
+if (PART === 'tool' || PART === 'all') {
+  await firstLoad(400, 800, 1, 'tool_draft_phone_400_dpr1', TOOL_DRAFT);
+  await firstLoad(1280, 800, 1, 'tool_draft_desk_1280_dpr1', TOOL_DRAFT);
+  await toolRun(1280, 800, 'desk');
+  await toolRun(400, 800, 'phone');
+}
 if (PART === 'shop' || PART === 'all') {
   await firstLoad(400, 800, 1, 'checkout_phone_400_dpr1', '/story/checkout/');
   await shopRun(1280, 800, 'desk');
