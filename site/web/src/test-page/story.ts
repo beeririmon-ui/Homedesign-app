@@ -296,6 +296,14 @@ const tryLink = $<HTMLAnchorElement>('st-try');
 const sepEl = sheet.querySelector<HTMLElement>('.st-sep')!;
 const posEl = $('st-pos');
 const kickerEl = $('st-sheet-kicker');
+const inCartEl = $('st-in-cart');
+const items = (n: number) => (n === 1 ? 'פריט אחד' : `${n} פריטים`);
+/** what the test cart holds, under the action: on desktop the sheet covers the top band's count */
+function showInCart(): void {
+  const c = cart.current();
+  inCartEl.hidden = !c?.count;
+  inCartEl.textContent = c?.count ? `בסל: ${items(c.count)} · ${priceHe(c.subtotal_agorot)}` : '';
+}
 let current: Item | null = null;
 let opener: HTMLElement | null = null;
 let addTimer: ReturnType<typeof setTimeout> | undefined;
@@ -349,7 +357,8 @@ function fill(it: Item): void {
   if (it.try_href) tryLink.href = it.try_href;
   sepEl.hidden = !it.href || !it.try_href;
   const list = fr.items;
-  posEl.textContent = `${list.indexOf(it.id) + 1} / ${list.length}`;
+  posEl.textContent = `${list.indexOf(it.id) + 1} מתוך ${list.length}`;
+  showInCart();
 }
 async function openSheet(id: string, from: HTMLElement): Promise<void> {
   const it = data.items[id];
@@ -406,11 +415,12 @@ addBtn.addEventListener('click', async () => {
     const c = await cart.add(it.variant_id);
     mark('cart:add', it.variant_id);
     showCount(true);
+    showInCart();
     // the confirmation is in the button itself, 2.5 s, and said aloud; no toast (art direction §7.2)
     addBtn.textContent = 'נוסף לסל';
     clearTimeout(addTimer);
     addTimer = setTimeout(() => (addBtn.textContent = 'הוספה לסל'), 2500);
-    announce(`נוסף לסל: ${it.name_he}. בסל ${c.count} פריטים, ${priceHe(c.subtotal_agorot)}.`);
+    announce(`נוסף לסל: ${it.name_he}. בסל ${items(c.count)}, ${priceHe(c.subtotal_agorot)}.`);
   } catch {
     announce('לא הצלחנו להוסיף לסל.');
   }
@@ -452,7 +462,7 @@ function renderCart(): void {
     }),
   );
   $('st-cart-empty').hidden = lines.length > 0;
-  $('st-cart-total').textContent = lines.length ? `סכום ביניים: ${priceHe(c!.subtotal_agorot)} · ${c!.count} פריטים` : '';
+  $('st-cart-total').textContent = lines.length ? `סכום ביניים: ${priceHe(c!.subtotal_agorot)} · ${items(c!.count)}` : '';
 }
 $('st-cart-open').addEventListener('click', async () => {
   renderCart();

@@ -59,11 +59,12 @@ test.describe('the story prototype', () => {
     await page.mouse.move(640, 420);
     await page.mouse.move(660, 430);
     await expect(dot).toHaveCSS('opacity', '1', { timeout: 2_000 });
-    const bowl = page.locator('#frame-nordic-A .st-mark[aria-label^="קערה"]');
-    await bowl.click();
+    // the charcoal cushion: priced, for sale, and its card photo is cached
+    const cushion = page.locator('#frame-nordic-A .st-mark[data-item="nordic-A-5"]');
+    await cushion.click();
     await expect(sheet(page)).toHaveAttribute('open', '');
     await expect(sheet(page)).toHaveClass(/is-on/);
-    await expect(page.locator('#st-sheet-name')).toHaveText(/^קערה/);
+    await expect(page.locator('#st-sheet-name')).toHaveText(/פשתן, פחם$/);
     await expect(page.locator('#st-sheet-name')).toBeFocused();
     await expect(page.locator('#st-sheet-detail')).toContainText('₪');
     await expect(page.locator('#st-sheet-img')).toBeVisible();
@@ -73,7 +74,7 @@ test.describe('the story prototype', () => {
     await expect(page.locator('#mag-live')).toContainText('נוסף לסל');
     await page.keyboard.press('Escape');
     await expect(sheet(page)).not.toHaveAttribute('open', '');
-    await expect(bowl).toBeFocused();
+    await expect(cushion).toBeFocused();
   });
 
   test('the keyboard: Tab to a dot shows the dots, Enter opens the sheet, the page behind is inert, Esc back', async ({ page }) => {
@@ -94,7 +95,7 @@ test.describe('the story prototype', () => {
       ).toBe(true);
     }
     await page.locator('#st-next').click();
-    await expect(page.locator('#st-pos')).toHaveText(/^2 \//);
+    await expect(page.locator('#st-pos')).toHaveText(/^2 מתוך/);
     await page.keyboard.press('Escape');
     await expect(sheet(page)).not.toHaveAttribute('open', '');
     expect(await page.evaluate(() => (document.activeElement as HTMLElement | null)?.dataset.item)).toBe('nordic-A-2');
@@ -171,6 +172,7 @@ test.describe('the story prototype on a phone (400)', () => {
     await audit(page, 'phone at rest');
     await page.locator('#frame-nordic-A .st-mark:visible').first().tap();
     await expect(sheet(page)).toHaveClass(/is-on/);
+    await page.waitForTimeout(300); // the 8 px rise has landed
     const s = (await sheet(page).boundingBox())!;
     expect(Math.round(s.y + s.height)).toBe(800);
     await page.waitForTimeout(300);
