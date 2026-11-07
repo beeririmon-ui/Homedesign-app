@@ -322,7 +322,7 @@
   }
  },
  "display_grade_note": "one gain for all (the corner to L* 90, +0.30 stop): on the display the centre reads 93.8 and the right 91.3; the designer's targets are met on the shell itself (82.9 / 89.6 / 85.0). The slab's b* capped at 12 on the display (its shaded front edge carried b* ~29: p95 30.5 -> 12.1); channels over 1 are now desaturated toward Y instead of clipped",
- "lock_note": "all 10 named lines within +-1 px by median (raw); p90 <= 2 px except the Y 1.45 mullion (11 px: the profile's other edge, as in v1 / v2) and, after the affine only, the 5-sample bench back-end top edge (14.2 px, one sample); lines and bench untouched since v2 (0 px changed outside the back wall)",
+ "lock_note": "superseded by lock_F3 (nearest-peak, >= 20 samples a line, one verdict); the xcorr record in 'lock' kept for history",
  "grade_v3b": {
   "source": "docs/proposals/clay-r2-and-ged-verdicts-2026-11-07.md section 13.3 (the back-wall targets are display targets)",
   "exposure": {
@@ -454,5 +454,409 @@
    "clipped_254_pct": 0.0
   },
   "note": "the solved gain is 1.0008 (+0.001 stop): the shell v3 already shows the centre at 89.5, so the display adds no lift; the corner lands at 82.8 (not ~86) and the window wall at 72.0 / 75.9, under the Bible's 80-88"
+ },
+ "lock_F3": {
+  "source": "qa/reports/2026-11-07-pilot-phase1-g1.md section 1 (F3): the earlier pass:false was a measurement artefact (xcorr on a two-edge mullion profile; a 5-sample line after the affine)",
+  "results": {
+   "shell-v3.png": {
+    "method": "nearest-peak pairing (QA, section 1): canvas at 1920 x 1080, raw, no affine; clay peak within +-18 px of the projected line, the render's nearest peak within +-10 px of it; 48 samples a line",
+    "lines": {
+     "glazing back jamb (X -2.30, Y 0.75)": {
+      "samples": 48,
+      "paired": 48,
+      "median_px": 0.0,
+      "p90_abs_px": 0.0,
+      "max_abs_px": 0.0
+     },
+     "glazing head (Z 2.70)": {
+      "samples": 39,
+      "paired": 39,
+      "median_px": 0.0,
+      "p90_abs_px": 0.0,
+      "max_abs_px": 0.0
+     },
+     "bench front top edge (X -1.98, Z 0.45)": {
+      "samples": 48,
+      "paired": 48,
+      "median_px": 1.0,
+      "p90_abs_px": 1.0,
+      "max_abs_px": 2.0
+     },
+     "bench back-end front corner (X -1.98, Y 1.00)": {
+      "samples": 40,
+      "paired": 40,
+      "median_px": -1.0,
+      "p90_abs_px": 1.0,
+      "max_abs_px": 1.0
+     },
+     "bench back-end top edge (Y 1.00, Z 0.45)": {
+      "samples": 48,
+      "paired": 48,
+      "median_px": 0.0,
+      "p90_abs_px": 1.0,
+      "max_abs_px": 1.0
+     },
+     "back wall ceiling line (Y 0, Z 3.00)": {
+      "samples": 35,
+      "paired": 35,
+      "median_px": 0.0,
+      "p90_abs_px": 0.0,
+      "max_abs_px": 4.0
+     },
+     "back wall floor line (Y 0, Z 0; WMC10)": {
+      "samples": 48,
+      "paired": 48,
+      "median_px": 0.0,
+      "p90_abs_px": 1.0,
+      "max_abs_px": 1.0
+     },
+     "ceiling band bottom edge (X -2.05, Z 2.82)": {
+      "samples": 21,
+      "paired": 21,
+      "median_px": 0.0,
+      "p90_abs_px": 1.0,
+      "max_abs_px": 1.0
+     },
+     "mullion (Y 1.45, frame plane X -2.65)": {
+      "samples": 48,
+      "paired": 48,
+      "median_px": 1.0,
+      "p90_abs_px": 1.0,
+      "max_abs_px": 1.0
+     },
+     "mullion (Y 2.15, frame plane X -2.65)": {
+      "samples": 48,
+      "paired": 48,
+      "median_px": 2.0,
+      "p90_abs_px": 2.0,
+      "max_abs_px": 2.0
+     }
+    },
+    "verdict": {
+     "pass_": true,
+     "rule": "every named line p90 <= 9.6 px with >= 20 paired samples, one verdict for the set"
+    }
+   },
+   "shell-v3-graded-v3c.png": {
+    "method": "nearest-peak pairing (QA, section 1): canvas at 1920 x 1080, raw, no affine; clay peak within +-18 px of the projected line, the render's nearest peak within +-10 px of it; 48 samples a line",
+    "lines": {
+     "glazing back jamb (X -2.30, Y 0.75)": {
+      "samples": 48,
+      "paired": 48,
+      "median_px": 0.0,
+      "p90_abs_px": 0.0,
+      "max_abs_px": 0.0
+     },
+     "glazing head (Z 2.70)": {
+      "samples": 39,
+      "paired": 39,
+      "median_px": 0.0,
+      "p90_abs_px": 0.0,
+      "max_abs_px": 0.0
+     },
+     "bench front top edge (X -1.98, Z 0.45)": {
+      "samples": 48,
+      "paired": 48,
+      "median_px": 1.0,
+      "p90_abs_px": 1.0,
+      "max_abs_px": 1.0
+     },
+     "bench back-end front corner (X -1.98, Y 1.00)": {
+      "samples": 40,
+      "paired": 40,
+      "median_px": -1.0,
+      "p90_abs_px": 1.0,
+      "max_abs_px": 1.0
+     },
+     "bench back-end top edge (Y 1.00, Z 0.45)": {
+      "samples": 48,
+      "paired": 47,
+      "median_px": 0.0,
+      "p90_abs_px": 1.0,
+      "max_abs_px": 1.0
+     },
+     "back wall ceiling line (Y 0, Z 3.00)": {
+      "samples": 35,
+      "paired": 35,
+      "median_px": 0.0,
+      "p90_abs_px": 0.0,
+      "max_abs_px": 4.0
+     },
+     "back wall floor line (Y 0, Z 0; WMC10)": {
+      "samples": 48,
+      "paired": 48,
+      "median_px": 0.0,
+      "p90_abs_px": 1.0,
+      "max_abs_px": 1.0
+     },
+     "ceiling band bottom edge (X -2.05, Z 2.82)": {
+      "samples": 21,
+      "paired": 21,
+      "median_px": 0.0,
+      "p90_abs_px": 1.0,
+      "max_abs_px": 1.0
+     },
+     "mullion (Y 1.45, frame plane X -2.65)": {
+      "samples": 48,
+      "paired": 48,
+      "median_px": 1.0,
+      "p90_abs_px": 1.0,
+      "max_abs_px": 1.0
+     },
+     "mullion (Y 2.15, frame plane X -2.65)": {
+      "samples": 48,
+      "paired": 48,
+      "median_px": 2.0,
+      "p90_abs_px": 2.0,
+      "max_abs_px": 2.0
+     }
+    },
+    "verdict": {
+     "pass_": true,
+     "rule": "every named line p90 <= 9.6 px with >= 20 paired samples, one verdict for the set"
+    }
+   },
+   "shell-furniture-v3.png": {
+    "method": "nearest-peak pairing (QA, section 1): canvas at 1920 x 1080, raw, no affine; clay peak within +-18 px of the projected line, the render's nearest peak within +-10 px of it; 48 samples a line",
+    "lines": {
+     "glazing back jamb (X -2.30, Y 0.75)": {
+      "samples": 48,
+      "paired": 48,
+      "median_px": 0.0,
+      "p90_abs_px": 0.0,
+      "max_abs_px": 0.0
+     },
+     "glazing head (Z 2.70)": {
+      "samples": 39,
+      "paired": 39,
+      "median_px": 0.0,
+      "p90_abs_px": 0.0,
+      "max_abs_px": 0.0
+     },
+     "bench front top edge (X -1.98, Z 0.45)": {
+      "samples": 48,
+      "paired": 47,
+      "median_px": 1.0,
+      "p90_abs_px": 4.399999999999999,
+      "max_abs_px": 7.0
+     },
+     "bench back-end front corner (X -1.98, Y 1.00)": {
+      "samples": 40,
+      "paired": 40,
+      "median_px": -1.0,
+      "p90_abs_px": 1.0,
+      "max_abs_px": 1.0
+     },
+     "bench back-end top edge (Y 1.00, Z 0.45)": {
+      "samples": 48,
+      "paired": 48,
+      "median_px": 0.0,
+      "p90_abs_px": 1.0,
+      "max_abs_px": 1.0
+     },
+     "back wall ceiling line (Y 0, Z 3.00)": {
+      "samples": 35,
+      "paired": 35,
+      "median_px": 0.0,
+      "p90_abs_px": 0.0,
+      "max_abs_px": 4.0
+     },
+     "back wall floor line (Y 0, Z 0; WMC10)": {
+      "samples": 48,
+      "paired": 43,
+      "median_px": -4.0,
+      "p90_abs_px": 9.0,
+      "max_abs_px": 10.0
+     },
+     "ceiling band bottom edge (X -2.05, Z 2.82)": {
+      "samples": 21,
+      "paired": 21,
+      "median_px": 0.0,
+      "p90_abs_px": 1.0,
+      "max_abs_px": 1.0
+     },
+     "mullion (Y 1.45, frame plane X -2.65)": {
+      "samples": 48,
+      "paired": 48,
+      "median_px": 1.0,
+      "p90_abs_px": 1.0,
+      "max_abs_px": 1.0
+     },
+     "mullion (Y 2.15, frame plane X -2.65)": {
+      "samples": 48,
+      "paired": 48,
+      "median_px": 2.0,
+      "p90_abs_px": 2.0,
+      "max_abs_px": 2.0
+     }
+    },
+    "verdict": {
+     "pass_": true,
+     "rule": "every named line p90 <= 9.6 px with >= 20 paired samples, one verdict for the set"
+    }
+   }
+  },
+  "verdict": {
+   "pass_": true,
+   "file": "shell-v3.png"
+  }
+ },
+ "grade_v3c": {
+  "source": "qa/reports/2026-11-07-pilot-phase1-g1.md F1 + F2",
+  "grade": {
+   "gain": 1.0008,
+   "toe": {
+    "black_point_base_p005": 6.14,
+    "target": 12.5,
+    "fade_to_L": 25.0,
+    "computed_on": "shell-furniture-v3.png"
+   },
+   "slab": {
+    "mask": "masks/stone-wide.png",
+    "h_top_deg": 87.62,
+    "chroma_max": 12.01
+   }
+  },
+  "swap_diff_display": {
+   "base->A": {
+    "changed_outside": 0
+   },
+   "A->B": {
+    "changed_px": 258189,
+    "changed_outside_products_and_shadows": 0
+   },
+   "A->C": {
+    "changed_px": 270524,
+    "changed_outside_products_and_shadows": 0
+   },
+   "base->B": {
+    "changed_outside": 0
+   },
+   "B->C": {
+    "changed_px": 259409,
+    "changed_outside_products_and_shadows": 0
+   },
+   "base->C": {
+    "changed_outside": 0
+   }
+  },
+  "files": {
+   "shell-v3.png": {
+    "black_point_p005": 16.91,
+    "clipped_254_pct": 0.0,
+    "slab": {
+     "b_p95": 12.14,
+     "b_max": 12.28,
+     "front_face_Lab_median": [
+      58.06,
+      0.52,
+      12.02
+     ],
+     "front_face_HSV_H_median": 40.0,
+     "px_H_below_25": 0
+    },
+    "L_points": {
+     "back_wall_by_corner(-1.75,0,1.60)": 82.8,
+     "window_wall(-2.30,0.30,1.60)": 72.0,
+     "window_wall(-2.30,0.55,1.60)": 75.9,
+     "back_wall_centre(0.20,0,1.95)": 89.5,
+     "back_wall_right(1.85,0,1.60)": 84.9
+    },
+    "out": "shell-v3-graded-v3c.png"
+   },
+   "shell-furniture-v3.png": {
+    "black_point_p005": 12.38,
+    "clipped_254_pct": 0.0,
+    "slab": {
+     "b_p95": 12.12,
+     "b_max": 12.28,
+     "front_face_Lab_median": [
+      65.87,
+      0.52,
+      12.0
+     ],
+     "front_face_HSV_H_median": 38.0,
+     "px_H_below_25": 0
+    },
+    "L_points": {
+     "back_wall_by_corner(-1.75,0,1.60)": 82.8,
+     "window_wall(-2.30,0.30,1.60)": 72.0,
+     "window_wall(-2.30,0.55,1.60)": 75.9,
+     "back_wall_centre(0.20,0,1.95)": 89.5,
+     "back_wall_right(1.85,0,1.60)": 84.9
+    },
+    "out": "shell-furniture-v3-graded-v3c.png"
+   },
+   "composite-set-A-v3.png": {
+    "black_point_p005": 12.01,
+    "clipped_254_pct": 0.0,
+    "slab": {
+     "b_p95": 12.12,
+     "b_max": 12.28,
+     "front_face_Lab_median": [
+      65.87,
+      0.52,
+      12.0
+     ],
+     "front_face_HSV_H_median": 38.0,
+     "px_H_below_25": 0
+    },
+    "L_points": {
+     "back_wall_by_corner(-1.75,0,1.60)": 82.8,
+     "window_wall(-2.30,0.30,1.60)": 72.0,
+     "window_wall(-2.30,0.55,1.60)": 75.9,
+     "back_wall_centre(0.20,0,1.95)": 89.5,
+     "back_wall_right(1.85,0,1.60)": 84.9
+    },
+    "out": "composite-set-A-v3-graded-v3c.png"
+   },
+   "composite-set-B-v3.png": {
+    "black_point_p005": 11.29,
+    "clipped_254_pct": 0.0,
+    "slab": {
+     "b_p95": 12.12,
+     "b_max": 12.28,
+     "front_face_Lab_median": [
+      65.87,
+      0.52,
+      12.0
+     ],
+     "front_face_HSV_H_median": 38.0,
+     "px_H_below_25": 0
+    },
+    "L_points": {
+     "back_wall_by_corner(-1.75,0,1.60)": 82.8,
+     "window_wall(-2.30,0.30,1.60)": 72.0,
+     "window_wall(-2.30,0.55,1.60)": 75.9,
+     "back_wall_centre(0.20,0,1.95)": 89.5,
+     "back_wall_right(1.85,0,1.60)": 84.9
+    },
+    "out": "composite-set-B-v3-graded-v3c.png"
+   },
+   "composite-set-C-v3.png": {
+    "black_point_p005": 9.96,
+    "clipped_254_pct": 0.0,
+    "slab": {
+     "b_p95": 12.12,
+     "b_max": 12.28,
+     "front_face_Lab_median": [
+      65.87,
+      0.52,
+      12.0
+     ],
+     "front_face_HSV_H_median": 38.0,
+     "px_H_below_25": 0
+    },
+    "L_points": {
+     "back_wall_by_corner(-1.75,0,1.60)": 82.8,
+     "window_wall(-2.30,0.30,1.60)": 72.0,
+     "window_wall(-2.30,0.55,1.60)": 75.9,
+     "back_wall_centre(0.20,0,1.95)": 89.5,
+     "back_wall_right(1.85,0,1.60)": 84.9
+    },
+    "out": "composite-set-C-v3-graded-v3c.png"
+   }
+  },
+  "note": "one curve for every display file (gain 1.0008, the toe from the base's p0.5 6.14 -> 12.5); the measured p0.5 then differs by content: base 12.4, A 12.0, B 11.3, C 10.0 (set C's dark coffee cushion and clay throw are the darkest pixels), the shell alone 16.9. The slab takes the lit top's hue (87.6 deg) at chroma <= 12.0: front face Lab 65.9 / 0.5 / 12.0, HSV H 38, no pixel under H 25, b* max 12.3; the mask grown over the strip at its left end (masks/stone-wide.png, +6,742 px; the ring outside it keeps 15 bench px over b* 20)"
  }
 }

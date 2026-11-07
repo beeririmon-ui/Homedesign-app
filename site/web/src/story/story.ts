@@ -601,13 +601,13 @@ for (const b of document.querySelectorAll<HTMLButtonElement>('.st-look-btn'))
   b.addEventListener('click', async () => {
     const ids = (b.dataset.variants ?? '').split(' ').filter(Boolean);
     const r = await cart.addLook(ids);
-    mark('cart:look', { frame: b.dataset.frame, added: r.added.length, skipped: r.skipped.length });
+    mark('cart:look', { frame: b.dataset.frame, added: r.added.length, units: r.units, skipped: r.skipped.length });
     showCount(true);
     const text = b.innerHTML;
-    b.textContent = r.added.length ? `המראה בסל · ${items(r.added.length)}` : r.already.length ? 'המראה כבר בסל' : 'לא נוסף דבר';
+    b.textContent = r.added.length ? `המראה בסל · ${items(r.units)}` : r.already.length ? 'המראה כבר בסל' : 'לא נוסף דבר';
     setTimeout(() => (b.innerHTML = text), 2500);
     announce(
-      `${r.added.length ? `נוספו לסל ${items(r.added.length)} מהמראה` : r.already.length ? 'המראה כבר בסל, לא נוסף דבר' : 'לא נוסף דבר לסל'}${r.already.length && r.added.length ? `, ${items(r.already.length)} כבר היו בסל` : ''}${r.skipped.length ? `, ${items(r.skipped.length)} לא במכירה` : ''}. בסל ${items(r.cart?.count ?? 0)}, ${priceHe(r.cart?.subtotal_agorot ?? 0)}.`,
+      `${r.added.length ? `נוספו לסל ${items(r.units)} מהמראה` : r.already.length ? 'המראה כבר בסל, לא נוסף דבר' : 'לא נוסף דבר לסל'}${r.already.length && r.added.length ? `, ${items(r.already.length)} כבר היו בסל` : ''}${r.skipped.length ? `, ${items(r.skipped.length)} לא במכירה` : ''}. בסל ${items(r.cart?.count ?? 0)}, ${priceHe(r.cart?.subtotal_agorot ?? 0)}.`,
     );
   });
 $('st-cart-open').addEventListener('click', async () => {

@@ -111,7 +111,8 @@ export type StoryCart = Pick<StoreApi, 'kind' | 'createCart' | 'getCart' | 'setI
   add(variantId: string, qty?: number, pack?: Pack): Promise<Cart>;
   /** the whole look: every variant once, in order; one already in the cart stays as it is (pressing twice adds
    *  nothing: QA on S4), one that is not for sale is skipped and named */
-  addLook(variantIds: string[]): Promise<{ cart: Cart | null; added: string[]; skipped: string[]; already: string[] }>;
+  /** each entry is a variant id, or "id*n" when the frame shows n units of it (register v4, G-ED.6) */
+  addLook(entries: string[]): Promise<{ cart: Cart | null; added: string[]; skipped: string[]; already: string[]; units: number }>;
   /** a line's quantity (0 removes it) */
   setQty(variantId: string, pack: Pack, qty: number): Promise<Cart>;
   /** the cart as it stands, or null before the first add */
@@ -225,22 +226,28 @@ export function storyCart(variants: StoryVariant[], store: KeyValue = browserSto
       const now = load()?.items.find((i) => i.variant_id === variantId && i.pack === pack)?.qty ?? 0;
       return api.setItem(id, variantId, pack, Math.min(MAX_QTY, now + qty));
     },
-    async addLook(variantIds) {
+    async addLook(entries) {
       const added: string[] = [];
       const skipped: string[] = [];
       const already: string[] = [];
+      let units = 0;
       let cart: Cart | null = null;
       const inCart = new Set((api.current()?.lines ?? []).filter((l) => l.pack === 'set').map((l) => l.variant_id));
-      for (const id of variantIds)
+      for (const entry of entries) {
+        const [id = '', n] = entry.split('*');
+        const qty = n && /^\d+$/.test(n) ? Math.max(1, Math.min(MAX_QTY, Number(n))) : 1;
+        // a product already in the cart stays as it is (QA on S4: the look twice adds nothing)
         if (inCart.has(id)) already.push(id);
         else
           try {
-            cart = await api.add(id);
+            cart = await api.add(id, qty);
             added.push(id);
+            units += qty;
           } catch {
             skipped.push(id);
           }
-      return { cart: cart ?? api.current(), added, skipped, already };
+      }
+      return { cart: cart ?? api.current(), added, skipped, already, units };
     },
     async setQty(variantId, pack, qty) {
       const id = load()?.id ?? (await api.createCart()).id;

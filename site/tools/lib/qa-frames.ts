@@ -30,6 +30,8 @@ export type QaRow = {
   /** the register's option (value ids, a text label, or null for the card's default) and its dot rule */
   option?: Record<string, string> | string | null;
   dot?: 'yes' | 'no' | 'closeup_only';
+  /** register v4 (G-ED.6): how many units of this product and option the frame shows, when more than one */
+  units?: number;
 };
 export type QaFrame = { state: QaState; rows: QaRow[]; record: string };
 
@@ -70,7 +72,10 @@ export function qaReader(records: string[]): (key: string) => QaFrame | null {
   return (key) => find(key);
 }
 
-type RegisterFrame = { state: QaState; rows: { card_id: string; option: QaRow['option']; verdict: string; note?: string; dot: QaRow['dot'] }[] };
+type RegisterFrame = {
+  state: QaState;
+  rows: { card_id: string; option: QaRow['option']; verdict: string; note?: string; dot: QaRow['dot']; units_in_frame?: number }[];
+};
 type Register = {
   version: number;
   frames: Record<string, RegisterFrame>;
@@ -96,7 +101,13 @@ function checkRegister(path: string, d: Register): void {
       if (!STATES.has(f?.state)) bad.push(`${part}.${key}.state`);
       if (!Array.isArray(f?.rows) || (f.state !== 'not_yet' && !f.rows.length)) bad.push(`${part}.${key}.rows`);
       for (const [i, r] of (f?.rows ?? []).entries())
-        if (typeof r?.card_id !== 'string' || typeof r?.verdict !== 'string' || !DOTS.has(r?.dot as string)) bad.push(`${part}.${key}.rows[${i}]`);
+        if (
+          typeof r?.card_id !== 'string' ||
+          typeof r?.verdict !== 'string' ||
+          !DOTS.has(r?.dot as string) ||
+          (r.units_in_frame !== undefined && !(Number.isInteger(r.units_in_frame) && r.units_in_frame >= 1 && r.units_in_frame <= 12))
+        )
+          bad.push(`${part}.${key}.rows[${i}]`);
     }
   }
   if (bad.length) throw new Error(`${path}: QA's register cannot be read (${bad.slice(0, 8).join(', ')}${bad.length > 8 ? ', …' : ''})`);
@@ -121,7 +132,15 @@ export function registerReader(dir = 'qa/reports'): RegisterReader {
     read: (key) => {
       const f = top.d.frames[key] ?? top.d.closeups?.[key];
       if (!f) return null;
-      const rows = f.rows.map((r) => ({ card: r.card_id, present: true, faithful: r.verdict, why: r.note, option: r.option, dot: r.dot }));
+      const rows = f.rows.map((r) => ({
+        card: r.card_id,
+        present: true,
+        faithful: r.verdict,
+        why: r.note,
+        option: r.option,
+        dot: r.dot,
+        ...(r.units_in_frame ? { units: r.units_in_frame } : {}),
+      }));
       return { state: f.state, rows, record: top.path };
     },
     supersededBy: (key) => top.d.superseded_by?.[key] ?? null,

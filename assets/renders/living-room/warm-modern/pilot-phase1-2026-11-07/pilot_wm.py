@@ -662,6 +662,82 @@ def grade(mode="corner"):
     return out
 
 
+def grade_v3c():
+    """grade-v3c (QA qa/reports/2026-11-07-pilot-phase1-g1.md F1 + F2, on master-designer's v3b exposure): ONE display grade for every
+    pilot display file:
+      exposure  the v3b gain (the back-wall centre to L* 89.5), shoulder L 88-97, channels desaturated toward Y instead of clipped;
+      toe       computed ONCE, on the base (shell-furniture-v3 after exposure), and applied as the same curve to every file (F2: a
+                per-file toe changed pixels outside the product on a swap);
+      slab      the bench stone (masks/stone-wide.png: the v3 mask grown over the strip at its left end / lower edge, b* > 12 inside the
+                bench index) has its chroma clamped ALONG the stone's hue (F1): every slab pixel takes the lit top's hue angle (median of
+                the slab's pixels above L* 85) and a chroma of at most 12 / sin(h_top), so b* <= 12 and a* falls with it (no mauve)
+    Written as *-graded-v3c.png; the v3b files stay."""
+    size = work_size()
+    g = centre_gain(size)
+    base_e = _expose(load(os.path.join(HERE, "shell-furniture-v3.png")), g)
+    Lb = cv2.cvtColor(base_e, cv2.COLOR_RGB2LAB)[..., 0]
+    bp = float(np.percentile(Lb, 0.5))
+    tgt = 12.5
+    stone = np.asarray(Image.open(os.path.join(HERE, "masks/stone-wide.png"))) > 127
+    fur_a = np.asarray(Image.open(os.path.join(HERE, "fixed-furniture.png")))[..., 3] > 0
+    sh_e = cv2.cvtColor(_expose(load(os.path.join(HERE, "shell-v3.png")), g), cv2.COLOR_RGB2LAB)
+    toplit = stone & (sh_e[..., 0] > 85)
+    h_top = float(np.degrees(np.arctan2(np.median(sh_e[..., 2][toplit]), np.median(sh_e[..., 1][toplit]))))
+    cmax = 12.0 / np.sin(np.radians(h_top))
+    out = dict(_grade=dict(gain=round(g, 4), toe=dict(black_point_base_p005=round(bp, 2), target=tgt, fade_to_L=25.0, computed_on="shell-furniture-v3.png"),
+                           slab=dict(mask="masks/stone-wide.png", h_top_deg=round(h_top, 2), chroma_max=round(float(cmax), 2))))
+    names = ["shell-v3.png", "shell-furniture-v3.png"] + [f"composite-set-{s_}-v3.png" for s_ in "ABC"]
+    for name in names:
+        e = _expose(load(os.path.join(HERE, name)), g)
+        lab = cv2.cvtColor(e, cv2.COLOR_RGB2LAB)
+        L = lab[..., 0]
+        if not 11.0 <= bp <= 14.0:
+            k = np.clip(1 - (L - bp) / max(25.0 - bp, 1e-3), 0, 1) ** 2
+            lab[..., 0] = np.where(L < 25.0, L + (tgt - bp) * k, L)
+        sm_ = stone & ~(fur_a if name != "shell-v3.png" else np.zeros_like(stone))
+        C = np.hypot(lab[..., 1], lab[..., 2])
+        Cn = np.minimum(C, cmax)
+        ca, sa = np.cos(np.radians(h_top)), np.sin(np.radians(h_top))
+        lab[..., 1] = np.where(sm_, Cn * ca, lab[..., 1])
+        lab[..., 2] = np.where(sm_, Cn * sa, lab[..., 2])
+        e = np.clip(cv2.cvtColor(lab, cv2.COLOR_LAB2RGB), 0, 1).astype(np.float32)
+        lo = cv2.cvtColor(e, cv2.COLOR_RGB2LAB)
+        hsv = cv2.cvtColor((e * 255).astype(np.uint8), cv2.COLOR_RGB2HSV).astype(np.float32)
+        Hdeg = hsv[..., 0] * 2.0
+        face = sm_ & (lo[..., 0] < 80)                     # the shaded front face
+        rec = dict(black_point_p005=round(float(np.percentile(lo[..., 0], 0.5)), 2), clipped_254_pct=round(float(((e * 255) >= 254).any(2).mean() * 100), 3),
+                   slab=dict(b_p95=round(float(np.percentile(lo[..., 2][sm_], 95)), 2), b_max=round(float(lo[..., 2][sm_].max()), 2),
+                             front_face_Lab_median=[round(float(v), 2) for v in np.median(lo[face], 0)] if face.any() else None,
+                             front_face_HSV_H_median=round(float(np.median(Hdeg[face])), 1) if face.any() else None,
+                             px_H_below_25=int((sm_ & (Hdeg < 25) & (hsv[..., 1] > 8)).sum())),
+                   L_points=points_L(e, size))
+        q = os.path.join(HERE, name.replace(".png", "-graded-v3c.png"))
+        save(q, e)
+        rec["out"] = os.path.basename(q)
+        out[name] = rec
+    # F2: the swap-diff on the display files themselves
+    base = np.asarray(Image.open(os.path.join(HERE, "shell-furniture-v3-graded-v3c.png")).convert("RGB")).astype(np.int16)
+    comps, masks = {}, {}
+    for s_ in "ABC":
+        comps[s_] = np.asarray(Image.open(os.path.join(HERE, f"composite-set-{s_}-v3-graded-v3c.png")).convert("RGB")).astype(np.int16)
+        La = np.asarray(Image.open(os.path.join(HERE, f"layers/cushions/set-{s_}.png")))[..., 3] > 0
+        Sh = np.asarray(Image.open(os.path.join(HERE, f"shadows/cushions/set-{s_}.png")).convert("L")) < 255
+        masks[s_] = La | Sh
+    sw = {}
+    for i, a_ in enumerate("ABC"):
+        d0 = np.abs(comps[a_] - base).max(2) > 0
+        sw[f"base->{a_}"] = dict(changed_outside=int((d0 & ~masks[a_]).sum()))
+        for b_ in "ABC"[i + 1:]:
+            d = np.abs(comps[a_] - comps[b_]).max(2) > 0
+            sw[f"{a_}->{b_}"] = dict(changed_px=int(d.sum()), changed_outside_products_and_shadows=int((d & ~(masks[a_] | masks[b_])).sum()))
+    out["_swap_diff_display"] = sw
+    J = jobs()
+    J["grade_v3c"] = dict(rule="one display grade for all pilot files (F2): v3b gain, one toe from the base, slab chroma along the stone hue (F1)", files=out)
+    json.dump(J, open(JOBS, "w"), indent=1, ensure_ascii=False)
+    print(json.dumps(out, indent=1))
+    return out
+
+
 def sheet(variant=""):
     from PIL import ImageDraw, ImageFont
     f = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 22)
@@ -669,8 +745,8 @@ def sheet(variant=""):
     tiles = [("clay r4, shell layer", CLAY_SHELL), ("step 2: shell (seedream raw)", os.path.join(HERE, "shell.png")),
              ("step 2: shell v3 (code: wedge out, wall 83 / 89.5 / 85 + movement)", os.path.join(HERE, "shell-v3.png")),
              ("step 3: shell v3 + furniture + code shadow", os.path.join(HERE, "shell-furniture-v3.png"))]
-    gsuf = "-graded-v3b.png" if variant == "v3b" else "-graded.png"
-    gname = "display grade v3b (centre 89.5)" if variant == "v3b" else "display grade"
+    gsuf = {"v3b": "-graded-v3b.png", "v3c": "-graded-v3c.png"}.get(variant, "-graded.png")
+    gname = {"v3b": "display grade v3b (centre 89.5)", "v3c": "display grade v3c (one grade for all)"}.get(variant, "display grade")
     tiles += [(f"step 4: cushions set {s} (on shell v3), {gname}", os.path.join(HERE, f"composite-set-{s}-v3{gsuf}")) for s in "ABC"]
     tiles += [("shell v3 lock overlay (red = clay line, green = render edge)", os.path.join(HERE, "shell-v3-lock.jpg"))]
     tiles = [t for t in tiles if os.path.exists(t[1])]
@@ -698,4 +774,4 @@ if __name__ == "__main__":
     cmd, args = sys.argv[1], sys.argv[2:]
     {"shell-fetch": lambda: shell_fetch(*args), "furn-input": furn_input, "furn-fetch": lambda: furn_fetch(*args),
      "cush-input": cush_input, "cush-prompt": lambda: cush_prompt(*args), "cush-fetch": lambda: cush_fetch(*args[:4], refetch=(len(args) < 5)),
-     "swap": swap, "grade": lambda: grade(*(args[:1] or ["corner"])), "sheet": lambda: sheet(*(args[:1] or [""]))}[cmd]()
+     "swap": swap, "grade": lambda: grade(*(args[:1] or ["corner"])), "grade-v3c": grade_v3c, "sheet": lambda: sheet(*(args[:1] or [""]))}[cmd]()

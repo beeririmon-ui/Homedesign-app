@@ -209,3 +209,55 @@ if __name__ == "__main__":
     for k, v in o["named_lines"].items():
         print(f"  {k:48s} raw med {v['raw'].get('median_px')} p90 {v['raw'].get('p90_abs_px')} n {v['raw'].get('counted')}/{v['raw'].get('samples')}"
               f" | aff med {v['after_affine'].get('median_px')} p90 {v['after_affine'].get('p90_abs_px')}")
+
+
+# ------------------------------------------------------------------------------------------------------------------------------------
+# F3 (QA qa/reports/2026-11-07-pilot-phase1-g1.md section 1): the named lines by nearest-peak pairing, raw, no affine, >= 20 samples a line
+def _peaks(prof, rel=0.25):
+    thr = rel * prof.max()
+    return [i for i in range(1, len(prof) - 1) if prof[i] >= prof[i - 1] and prof[i] >= prof[i + 1] and prof[i] >= thr]
+
+
+def nearest_peak_lines(render_path, clay_path, n=48, half=18, pair=10, lines=None):
+    """the whole canvas at 1920 x 1080 (as QA): per sample on each named line (48 along it), the clay's strongest gradient peak within
+    +-half px of the projected line (across it), then the render's NEAREST peak within +-pair px of that; offset render - clay.
+    Per line: median, p90, max |offset|, paired / samples. One verdict for the set: every line p90 <= 9.6 px with >= 20 paired samples."""
+    def g(p):
+        return cv2.GaussianBlur(np.asarray(Image.open(p).convert("L").resize((1920, 1080), Image.LANCZOS)).astype(np.float32), (0, 0), 1.0)
+    gc, gr = g(clay_path), g(render_path)
+    Wc, Hc = 1920, 1080
+    out = {}
+    for nm, (A, B) in (lines or LINES).items():
+        offs = []
+        for k in range(n):
+            t = (k + 0.5) / n
+            P0 = [A[i] + (B[i] - A[i]) * t for i in range(3)]
+            P1 = [A[i] + (B[i] - A[i]) * min(1, t + 0.01) for i in range(3)]
+            u0, v0, d0 = r1.project(CAM, *P0)
+            u1, v1, _ = r1.project(CAM, *P1)
+            u0, v0 = (116 + u0 * 3840) / 4072, (65 + v0 * 2160) / 2290
+            u1, v1 = (116 + u1 * 3840) / 4072, (65 + v1 * 2160) / 2290
+            if d0 <= 0.1 or not (0.02 < u0 < 0.98 and 0.02 < v0 < 0.98):
+                continue
+            x0, y0, x1, y1 = u0 * Wc, v0 * Hc, u1 * Wc, v1 * Hc
+            Ln = float(np.hypot(x1 - x0, y1 - y0)) or 1.0
+            nx, ny = -(y1 - y0) / Ln, (x1 - x0) / Ln
+            s_ = np.arange(-half - pair, half + pair + 1, dtype=np.float32)
+            xs, ys = (x0 + nx * s_).reshape(1, -1).astype(np.float32), (y0 + ny * s_).reshape(1, -1).astype(np.float32)
+            pc = np.abs(np.gradient(cv2.remap(gc, xs, ys, cv2.INTER_LINEAR)[0]))
+            pr = np.abs(np.gradient(cv2.remap(gr, xs, ys, cv2.INTER_LINEAR)[0]))
+            core = pc[pair:pair + 2 * half + 1]
+            if core.max() < 3 * max(float(np.median(pc)), 0.3):
+                continue
+            ic = pair + int(np.argmax(core))
+            cand = [i for i in _peaks(pr) if abs(i - ic) <= pair and pr[i] > 2 * max(float(np.median(pr)), 0.3)]
+            offs.append(min(cand, key=lambda i: abs(i - ic)) - ic if cand else None)
+        got = [o for o in offs if o is not None]
+        if not got:
+            out[nm] = dict(samples=len(offs), paired=0)
+            continue
+        a_ = np.abs(np.array(got, float))
+        out[nm] = dict(samples=len(offs), paired=len(got), median_px=float(np.median(got)), p90_abs_px=float(np.percentile(a_, 90)), max_abs_px=float(a_.max()))
+    ok = all(v.get("paired", 0) >= 20 and v.get("p90_abs_px", 99) <= LIMIT for v in out.values())
+    return dict(method="nearest-peak pairing (QA, section 1): canvas at 1920 x 1080, raw, no affine; clay peak within +-18 px of the projected line, the render's nearest peak within +-10 px of it; 48 samples a line",
+                lines=out, verdict=dict(pass_=bool(ok), rule="every named line p90 <= 9.6 px with >= 20 paired samples, one verdict for the set"))

@@ -137,6 +137,8 @@ type Item = {
   /** the values of the SKU the frame shows (the card's default with the point's option), or null without options */
   values: Record<string, string> | null;
   in_frame_he: string | null;
+  /** register v4 (G-ED.6): the units of this product and option the frame shows; "המראה כולו לסל" adds that many */
+  units: number;
   /** the product's part of the frame, as a small 4:5 crop: "בחדר הזה" on the detail page */
   crop_image: Image | null;
   /** the product alone, centred, at least half the crop's width, never enlarged: stands in for a missing photo (§6) */
@@ -320,6 +322,9 @@ const readingOrder = (a: Point, b: Point) => Math.floor(a.v / 0.25) - Math.floor
 /** QA's verdict, and whether it lets a dot on: "yes", or "yes, as the listing's … option" (the point names the option) */
 const faithfulOf = (q: QaFrame, product: string, values: Record<string, string> | null): string => rowOf(q, product, values)?.faithful ?? 'not checked';
 const isFaithful = (verdict: string) => /^yes\b/.test(verdict);
+/** "שתי יחידות", "שלוש יחידות": the units a frame shows, in words (G-ED.6) */
+const UNITS_HE = ['', 'יחידה אחת', 'שתי יחידות', 'שלוש יחידות', 'ארבע יחידות', 'חמש יחידות', 'שש יחידות'];
+const unitsHe = (n: number) => UNITS_HE[n] ?? `${n} יחידות`;
 
 /**
  * The phone's dot (G-ED.17): the crop [c0, c1] of the frame's width is shown 390 CSS wide. The product's part inside the
@@ -407,11 +412,20 @@ async function itemOf(
     .filter((x): x is string => !!x)
     .join(' · ');
   const img = await photo(card, skuImage);
-  // the catalog's notes describe the room engine's frame ("בתמונה: …"): the story frame brings its own caption
-  const notes = [...(pt.in_frame_he ? [pt.in_frame_he] : []), ...(styleNote ? [styleNote] : []), ...(p?.notes_he.filter((x) => !x.startsWith('בתמונה')) ?? [])];
-  if (p?.pack) notes.push(`נמכר כסט של ${p.pack.set_qty}.`);
   const values = card.options ? { ...(cardSku?.values ?? {}), ...(pt.option ?? {}) } : null;
   const row = rowOf(q, pt.product, values);
+  // register v4 (G-ED.6): a second unit QA called our product is said at the point, and the look adds that many
+  const units = row?.units && row.units > 1 ? row.units : 1;
+  let inFrame = pt.in_frame_he ?? null;
+  if (units > 1 && !inFrame?.includes(unitsHe(units))) {
+    console.warn(`${frame}: ${pt.product}: the register shows ${units} units; the point's credit did not say it, so it says "${unitsHe(units)}"`);
+    inFrame = [`בתמונה: ${unitsHe(units)}.`, inFrame?.replace(/^בתמונה: /, '')].filter(Boolean).join(' ');
+  }
+  if (units === 1 && /יחידות/.test(inFrame ?? ''))
+    console.warn(`${frame}: ${pt.product}: the credit says "${inFrame}" but the register has no units_in_frame, so the look adds one`);
+  // the catalog's notes describe the room engine's frame ("בתמונה: …"): the story frame brings its own caption
+  const notes = [...(inFrame ? [inFrame] : []), ...(styleNote ? [styleNote] : []), ...(p?.notes_he.filter((x) => !x.startsWith('בתמונה')) ?? [])];
+  if (p?.pack) notes.push(`נמכר כסט של ${p.pack.set_qty}.`);
   const faithful = row?.faithful ?? 'not checked';
   // G-ED.5: "partly" in the frame gets its dot when the product's close-up in this house passed G-ED as "yes"
   // QA on S2 (2026-11-07): a close-up lights a "partly" dot only when it is at least final test (almost is not enough),
@@ -453,7 +467,8 @@ async function itemOf(
     href: null,
     try_href: tryHref(tool, roomId, pt.product),
     values,
-    in_frame_he: pt.in_frame_he ?? null,
+    in_frame_he: inFrame,
+    units,
     crop_image: null,
     product_crop: null,
   };
@@ -937,7 +952,10 @@ function lookHtml(f: FrameOut): string {
   // QA on S4: only a product with a dot (QA called it faithful here); a "partly" one is never added with the look
   const sold = [...new Map(f.items.filter((x) => x.status === 'available' && x.variant_id && x.dot).map((x) => [x.variant_id!, x])).values()];
   if (!sold.length) return '';
-  const total = sold.reduce((n, x) => n + (x.price_agorot ?? 0), 0);
+  // register v4 (G-ED.6): a product the frame shows twice goes in twice ("vid*2"; a variant id has no "*")
+  const total = sold.reduce((n, x) => n + (x.price_agorot ?? 0) * x.units, 0);
+  const many = sold.filter((x) => x.units > 1);
+  const look = sold.map((x) => (x.units > 1 ? `${x.variant_id}*${x.units}` : x.variant_id)).join(' ');
   const unpriced = f.items.filter((x) => x.status === 'unpriced').length;
   const out = f.items.filter((x) => x.status === 'unavailable').length;
   const left = [
@@ -947,7 +965,8 @@ function lookHtml(f: FrameOut): string {
     .filter(Boolean)
     .join(', ');
   return `<div class="st-look mag-col-main">
-      <button type="button" class="mag-btn mag-btn-secondary st-look-btn" id="look-${f.id}" data-frame="${f.id}" data-variants="${esc(sold.map((x) => x.variant_id).join(' '))}">המראה כולו לסל · <span class="num">${sold.length}</span> מוצרים · ${formatIls(total)}</button>
+      <button type="button" class="mag-btn mag-btn-secondary st-look-btn" id="look-${f.id}" data-frame="${f.id}" data-variants="${esc(look)}">המראה כולו לסל · <span class="num">${sold.length}</span> מוצרים · ${formatIls(total)}</button>
+      ${many.length ? `<p class="mag-cap st-look-units">כמו בתמונה: ${esc(many.map((x) => `${x.name_he}, ${unitsHe(x.units)}`).join('; '))}.</p>` : ''}
       ${left ? `<p class="mag-cap st-look-left">לא נכללים: ${esc(left)}.</p>` : ''}
     </div>`;
 }
