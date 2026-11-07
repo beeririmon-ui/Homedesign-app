@@ -26,7 +26,7 @@ The plan is master-designer's `docs/proposals/warm-modern-living-room-slots-2026
 | | Reserve: one shell retake and one furniture retake, only with my approval | | up to 1,300 |
 
 ## Acceptance
-- **The shell** passes the lock against clay r2. The windows, bench, ceiling band and floor follow Bible 1.0's tool chapter, and the light is the tool's fixed light (ARC2), with the black point L 11–14 in grading (WM-G1).
+- **The shell** passes the lock against clay r3 (all named lines except the back-wall floor line). The windows, bench, ceiling band and floor follow Bible 1.0's tool chapter, and the light is the tool's fixed light (ARC2), with the black point L 11–14 in grading (WM-G1).
 - **The furniture** keeps the footprints. The armchair has the Nordic geometry in walnut and bone bouclé (WM-F1).
 - **The three cushion sets** are faithful to their cards. The layers swap with no change outside the product: per studio rule ו.5, the swap-diff check is what applies in the tool.
 - Keep the raw files, the job records with prices, and a sheet: clay r3 | shell | shell + furniture | the three cushion variants.
