@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-11-06",
+  "updated": "2026-11-07",
   "note": "תור ההחלטות הפתוחות למשתמש. המנהל מתחזק את הקובץ; הסטודיו מציג אותו ושומר את תשובות המשתמש. status: open | answered | applied.",
   "decisions": [
     {
@@ -5252,6 +5252,158 @@
         "via": "chat"
       },
       "answered": "2026-11-06"
+    },
+    {
+      "id": "DIR1",
+      "group": "כיוון",
+      "title": "מה הלקוח רואה ראשון באתר",
+      "question": "פריים מגזין לכל חדר וסגנון ואז 'עצב בעצמך', או הבית שמסתובבים בו קודם, או משולב?",
+      "context": "docs/creative-review-2026-11-06.md §2 ו-§6 שאלה 2. נוגע למטרה ב-CLAUDE.md.",
+      "options": [
+        {
+          "id": "story",
+          "label": "פריים מגזין קודם",
+          "desc": "הסיפור, ואז 'עצב בעצמך'; ההליכה בבית עוברת לכלי",
+          "recommended": true
+        },
+        {
+          "id": "house",
+          "label": "הבית קודם",
+          "desc": "פריימי המגזין כשכבה בתוך כל חדר",
+          "recommended": false
+        },
+        {
+          "id": "mixed",
+          "label": "משולב",
+          "desc": "דף פתיחה של פריימי מגזין ואז הבית",
+          "recommended": false
+        }
+      ],
+      "blocks": [],
+      "source": "docs/creative-review-2026-11-06.md",
+      "asked": "2026-11-07",
+      "status": "answered",
+      "answer": {
+        "option": "story",
+        "note": "2026-11-07, המשתמש: פריים מגזין קודם. נגיעה במוצר פותחת 'קנה את המראה', ומשם נכנסים לכלי 'עצב בעצמך' (גלגל הווריאציות וההליכה בבית).",
+        "at": "2026-11-07T00:50Z",
+        "via": "chat"
+      },
+      "answered": "2026-11-07"
+    },
+    {
+      "id": "DIR2",
+      "group": "כיוון",
+      "title": "האם כל סגנון הוא בית אחר",
+      "question": "אדריכלות משלו לכל סגנון: בסיפור בלבד, בכל מקום (גם בכלי), או בית אחד?",
+      "context": "docs/creative-review-2026-11-06.md §3 ו-§6 שאלה 3, ‏CR3 ו-CR3b.",
+      "options": [
+        {
+          "id": "story",
+          "label": "כן בסיפור, הכלי אחר כך",
+          "desc": "",
+          "recommended": true
+        },
+        {
+          "id": "everywhere",
+          "label": "כן בכל מקום",
+          "desc": "גם הכלי מקבל מעטפת לכל סגנון כבר עכשיו",
+          "recommended": false
+        },
+        {
+          "id": "one",
+          "label": "לא, בית אחד",
+          "desc": "",
+          "recommended": false
+        }
+      ],
+      "blocks": [],
+      "source": "docs/creative-review-2026-11-06.md",
+      "asked": "2026-11-07",
+      "status": "answered",
+      "answer": {
+        "option": "everywhere",
+        "note": "2026-11-07, המשתמש: כן בכל מקום. לכל סגנון אדריכלות משלו גם בפריימי הסיפור וגם בכלי 'עצב בעצמך' (CR3 + CR3b עכשיו, ולא אחרי שלב ב).",
+        "at": "2026-11-07T00:50Z",
+        "via": "chat"
+      },
+      "answered": "2026-11-07"
+    },
+    {
+      "id": "CR",
+      "group": "כיוון",
+      "title": "אימוץ CR1–CR9 במסמכים המחייבים",
+      "question": "תשעת השינויים של המעצב (שכבות, ו.5 בכלי בלבד, אדריכלות לכל סגנון, מצלמות 24–50, סיפור אור, צפיפות בכלי בלבד, ספרים כמילוי, מתכון 'סיפור v1', שער G-ED).",
+      "context": "docs/creative-review-2026-11-06.md §5.",
+      "options": [
+        {
+          "id": "all",
+          "label": "לאמץ את כולם",
+          "desc": "",
+          "recommended": true
+        },
+        {
+          "id": "structure",
+          "label": "רק המבנה והשער (CR1, CR2, CR7–CR9)",
+          "desc": "",
+          "recommended": false
+        },
+        {
+          "id": "later",
+          "label": "עוד לא",
+          "desc": "",
+          "recommended": false
+        }
+      ],
+      "blocks": [],
+      "source": "docs/creative-review-2026-11-06.md",
+      "asked": "2026-11-07",
+      "status": "answered",
+      "answer": {
+        "option": "all",
+        "note": "2026-11-07, המשתמש: לאמץ את כולם. CR3b מוכרע ב-DIR2: גם הכלי מקבל אדריכלות לכל סגנון.",
+        "at": "2026-11-07T00:50Z",
+        "via": "chat"
+      },
+      "answered": "2026-11-07"
+    },
+    {
+      "id": "MC1",
+      "group": "כיוון",
+      "title": "שני מעברים ממוקדים בכפרי המודרני",
+      "question": "השולחן (הקערה ל'כובע', הראנר ל-33 ס\"מ) ואדן החלון (אגרטל החימר מחיתוך הכרטיס), ~1,300.",
+      "context": "qa/reports/2026-11-07-editorial-fin2-ed4-country.md §5. תקציב ED4 נוצל.",
+      "options": [
+        {
+          "id": "both",
+          "label": "שני המעברים, ~1,300",
+          "desc": "",
+          "recommended": true
+        },
+        {
+          "id": "sill",
+          "label": "רק האדן, ~650",
+          "desc": "",
+          "recommended": false
+        },
+        {
+          "id": "later",
+          "label": "לא עכשיו",
+          "desc": "",
+          "recommended": false
+        }
+      ],
+      "blocks": [],
+      "source": "qa/reports/2026-11-07-editorial-fin2-ed4-country.md",
+      "asked": "2026-11-07",
+      "status": "answered",
+      "answer": {
+        "option": "both",
+        "note": "2026-11-07, המשתמש: שני המעברים, עד 1,300 (seedream-5-pro על חיתוכים עם מסכות, אחרי תיקוני הקוד).",
+        "at": "2026-11-07T00:50Z",
+        "via": "chat"
+      },
+      "answered": "2026-11-07"
     }
   ]
 }
