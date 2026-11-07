@@ -10,7 +10,7 @@
 }
 
 /* ---------- the top band: the brand, the running head, "עצב בעצמך" and the test cart ---------- */
-.st-nav {
+.st .st-nav {
   gap: var(--s-5);
 }
 .st-cart-btn {
@@ -40,74 +40,86 @@
   }
 }
 
-/* ---------- the story frame: the text over the frame, ink on its light wall with the cover's soft paper screen ---------- */
-.st-text {
-  position: absolute;
-  z-index: 2;
-  inset-inline: var(--margin);
-  top: calc(var(--head-h) + env(safe-area-inset-top) + var(--s-5));
-  max-width: 22rem;
-  color: var(--ink);
-  pointer-events: none;
+/* ---------- the story frame: the picture edge to edge, its title on a paper band under it ----------
+   The frames were composed as rooms, not as covers: no quiet wall carries a title without covering a product or the
+   art. So the type sits on paper, never on the picture (art direction §3 principle 1), on the phone and on desktop.
+   magazine.css comes after this file in the build: the overrides carry the body's .st for their weight. */
+.st .st-spread {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  height: 100svh;
+  overflow: hidden;
+  background: var(--paper);
 }
-@media (min-width: 1024px) {
-  .st-text {
-    inset-inline-end: auto;
-    /* five of the twelve columns, from the start (the right) */
-    width: calc((min(100vw, var(--maxw)) - 2 * var(--margin) - 11 * var(--gap)) / 12 * 5 + 4 * var(--gap));
-    max-width: none;
-    top: calc(var(--head-h) + 7svh);
+.st .st-spread .mag-stage {
+  position: relative;
+  inset: auto;
+  min-height: 0;
+}
+.st-text {
+  display: grid;
+  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+  column-gap: var(--gap);
+  row-gap: var(--s-2);
+  align-items: start;
+  width: 100%;
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding: var(--s-5) var(--margin) var(--s-5);
+  color: var(--ink);
+}
+.st-kicker,
+.st-title,
+.st-line,
+.st-to-list {
+  grid-column: 1 / -1;
+}
+@media (min-width: 720px) {
+  .st-title {
+    grid-column: 1 / span 4;
+    grid-row: 2 / span 2;
+  }
+  .st-line {
+    grid-column: 5 / -1;
+    grid-row: 2;
+  }
+  .st-to-list {
+    grid-column: 5 / -1;
+    grid-row: 3;
   }
 }
-.st-text::before {
-  content: '';
-  position: absolute;
-  z-index: -1;
-  inset: calc(var(--s-5) * -1);
-  background: rgba(244, 241, 236, 0.66);
-  border-radius: 2px;
-  filter: blur(18px);
-  opacity: 0;
-  transition: opacity var(--d-page-in) var(--e-approach);
-}
-.st-spread.is-title .st-text::before {
-  opacity: 1;
+@media (min-width: 1024px) {
+  .st-title {
+    grid-column: 1 / span 6;
+  }
+  .st-line,
+  .st-to-list {
+    grid-column: 7 / span 5;
+  }
 }
 .st-kicker {
   font: 600 var(--t-run) var(--f-text);
 }
-.st-title {
-  margin-top: var(--s-3);
-  font: 300 var(--t-display) var(--f-display);
+.st .st-title {
+  font: 300 var(--t-h1) var(--f-display);
   text-wrap: balance;
 }
-h2.st-title {
-  font: 300 var(--t-h1) var(--f-display);
-}
 .st-line {
-  margin-top: var(--s-4);
-  font: 400 var(--t-detail) var(--f-text);
-  max-width: 26rem;
-}
-@media (min-width: 1024px) {
-  .st-line {
-    font: 400 var(--t-body) var(--f-text);
-  }
-}
-.st-to-list {
-  margin-top: var(--s-2);
-  pointer-events: auto;
+  font: 400 var(--t-body) var(--f-text);
+  max-width: 34rem;
 }
 .st-title-line,
 .st-kicker,
 .st-line,
 .st-to-list {
-  display: block;
   opacity: 0;
   transform: translateY(8px);
   transition:
     opacity var(--d-page-in) var(--e-approach),
     transform var(--d-page-in) var(--e-approach);
+}
+.st-title-line {
+  display: block;
 }
 .st-spread.is-title .st-title-line,
 .st-spread.is-title .st-kicker,
@@ -148,7 +160,7 @@ h2.st-title {
   position: absolute;
   z-index: 2;
   inset-inline-end: var(--margin);
-  bottom: calc(env(safe-area-inset-bottom) + var(--s-4));
+  bottom: var(--s-4);
   padding: var(--s-1) var(--s-2);
   border-radius: 2px;
   background: var(--label);
@@ -160,64 +172,51 @@ h2.st-title {
 .st-draft.is-almost {
   border-inline-start: 2px solid var(--error);
 }
-.st-spread .st-text {
-  z-index: 3;
-}
 .st-lqip-phone {
   display: none;
 }
 
-/* ---------- the phone: the 4:5 crop at full width under the top band, the text on paper below it (Bible 1.9; G-ED.17) ---------- */
+/* ---------- the phone: the 4:5 crop at full width under the top band (Bible 1.9; G-ED.17), the text on paper below ---------- */
 @media (max-width: 719px) {
-  .st-head[data-on='stage'] {
+  .st .st-head[data-on='stage'] {
     background: var(--paper);
     box-shadow: inset 0 -1px 0 var(--rule);
   }
-  .st-spread {
+  .st .st-spread {
+    display: block;
     height: auto;
     overflow: visible;
-    background: var(--paper);
     padding-top: calc(var(--head-h) + env(safe-area-inset-top));
   }
-  .st-spread .mag-stage {
-    position: relative;
-    inset: auto;
+  .st .st-spread .mag-stage {
     width: 100%;
     aspect-ratio: 4 / 5;
   }
-  .st-spread .mag-scroller {
+  .st .st-spread .mag-scroller {
     overflow: hidden;
   }
-  .st-spread .mag-frame {
+  .st .st-spread .mag-frame {
     width: 100%;
     height: 100%;
   }
-  .st-spread .st-lqip-desk {
+  .st .st-spread .st-lqip-desk {
     display: none;
   }
-  .st-spread .st-lqip-phone {
+  .st .st-spread .st-lqip-phone {
     display: block;
   }
-  .st-spread .st-mark {
+  .st .st-spread .st-mark {
     left: calc(var(--pu) * 100%);
     top: calc(var(--pv) * 100%);
   }
-  .st-spread .st-no-phone {
+  .st .st-spread .st-no-phone {
     display: none;
   }
   .st-draft {
     bottom: var(--s-3);
   }
   .st-text {
-    position: static;
-    max-width: none;
     padding: var(--s-5) var(--margin) var(--s-6);
-  }
-  .st-text::before {
-    display: none;
-  }
-  .st-line {
-    max-width: 30rem;
   }
 }
 
@@ -436,7 +435,7 @@ h2.st-title {
   outline: 2px solid var(--ink);
   outline-offset: 3px;
 }
-.st-detail {
+.st .st-detail {
   margin-top: calc(var(--s-3) * -1);
   font-size: 15px;
 }
@@ -460,7 +459,7 @@ h2.st-title {
 .st-links [hidden] {
   display: none;
 }
-.st-why {
+.st .st-why {
   max-width: none;
   color: var(--ink);
 }
@@ -500,7 +499,7 @@ h2.st-title {
 .st-cart-lines:empty {
   display: none;
 }
-.st-cart-line {
+.st .st-cart-line {
   grid-template-columns: 1fr;
 }
 .st-cart-empty[hidden] {
@@ -523,5 +522,27 @@ h2.st-title {
   }
   .st-cart-count {
     transition: none;
+  }
+}
+/* a stage wider than 2.4:1: the frame at full height, paper at its sides */
+.st .st-spread .mag-stage.is-print {
+  background: var(--paper);
+}
+/* the top band over a frame (desktop): the soft paper screen of art direction §6.2, because ink alone fails over the
+   corn-husk disc, the dark window and the doorway of these frames (measured: tools/screens-story.ts, contrast) */
+@media (min-width: 720px) {
+  .st .st-head::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    inset: 0 0 auto;
+    height: calc(var(--head-h) + env(safe-area-inset-top) + 32px);
+    background: linear-gradient(to bottom, rgba(244, 241, 236, 0.84) 0, rgba(244, 241, 236, 0.78) 56%, rgba(244, 241, 236, 0) 100%);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--d-ui-in) var(--e-standard);
+  }
+  .st .st-head[data-on='stage']::before {
+    opacity: 1;
   }
 }

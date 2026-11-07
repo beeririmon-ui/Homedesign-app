@@ -138,7 +138,8 @@ for (const d of data.frames) {
     mark(`${d.id}:title`);
   });
   layout(st);
-  addEventListener('resize', () => layout(st));
+  // the stage is the frame's row above the paper band: its height settles with the fonts and follows the window
+  new ResizeObserver(() => layout(st)).observe(el);
   const onMove = () => showMarks(st);
   el.addEventListener('pointermove', onMove);
   el.addEventListener('pointerdown', onMove);
@@ -156,35 +157,39 @@ for (const d of data.frames) {
  * The frame's box is the picture's drawn rectangle, so a dot at (u, v) sits on the picture's (u, v):
  *  - phone: the 4:5 crop at full width (CSS; the dots use the crop's own --pu, --pv, and a product the crop does not
  *    carry has no dot there, G-ED.17)
- *  - desktop up to 2:1: the frame covers the stage at its focal point (u0, v0), like object-fit: cover
- *  - desktop over 2:1: the frame at full height on paper (CSS)
+ *  - desktop up to 2.4:1: the frame covers the stage at its focal point (u0, v0), like object-fit: cover
+ *  - desktop wider: the frame at the stage's full height with paper at the sides, a print on a page
  */
 function layout(st: Stage): void {
   const fs = st.frame.style;
   const { d } = st;
-  if (phone() || st.el.clientWidth / Math.max(1, st.el.clientHeight) >= 2) {
+  if (phone()) {
     fs.position = fs.width = fs.height = fs.left = fs.top = '';
-    keepMarksInView(st, 0, 1);
+    for (const m of st.marks) m.hidden = false;
     return;
   }
   const sw = st.el.clientWidth;
   const sh = st.el.clientHeight;
-  const fw = Math.max(sw, sh * d.aspect);
+  if (!sw || !sh) return;
+  const cover = sw / sh <= 2.4;
+  const fw = cover ? Math.max(sw, sh * d.aspect) : sh * d.aspect;
   const fh = fw / d.aspect;
-  const left = (sw - fw) * d.u0;
+  const left = cover ? (sw - fw) * d.u0 : (sw - fw) / 2;
+  const top = cover ? (sh - fh) * d.v0 : 0;
   fs.position = 'absolute';
   fs.width = `${fw}px`;
   fs.height = `${fh}px`;
   fs.left = `${left}px`;
-  fs.top = `${(sh - fh) * d.v0}px`;
+  fs.top = `${top}px`;
+  st.el.classList.toggle('is-print', !cover);
   // the part of the frame on screen, less half a target and its ring (29 px) on each side
-  keepMarksInView(st, (29 - left) / fw, (sw - 29 - left) / fw);
+  keepMarksInView(st, [(29 - left) / fw, (sw - 29 - left) / fw], [(29 - top) / fh, (sh - 29 - top) / fh]);
 }
-/** A dot whose target would leave the screen (the cover crop cuts the frame's sides) is not offered there; the list has it. */
-function keepMarksInView(st: Stage, uMin: number, uMax: number): void {
+/** A dot whose target would leave the screen (the cover crop cuts the frame) is not offered there; the list has it. */
+function keepMarksInView(st: Stage, [uMin, uMax]: [number, number], [vMin, vMax]: [number, number]): void {
   for (const m of st.marks) {
     const it = data.items[m.dataset.item!];
-    if (it) m.hidden = it.u < uMin || it.u > uMax;
+    if (it) m.hidden = it.u < uMin || it.u > uMax || it.v < vMin || it.v > vMax;
   }
 }
 function showMarks(st: Stage): void {

@@ -134,6 +134,7 @@ test.describe('the story prototype', () => {
   test('zero axe violations: at rest, with the sheet open, with the cart open (1280)', async ({ page }) => {
     await page.goto('/test/story/');
     await expect(page.locator('#frame-nordic-A')).toHaveClass(/is-title/, { timeout: 15_000 });
+    await page.waitForTimeout(1200); // the title lines and the brand have finished fading in
     await audit(page, 'story at rest');
     await page.evaluate(() => window.__story!.openSheet('nordic-A-5'));
     await expect(sheet(page)).toHaveClass(/is-on/);
@@ -165,6 +166,8 @@ test.describe('the story prototype on a phone (400)', () => {
       expect(b.x + b.width).toBeLessThanOrEqual(box.x + box.width + 1);
     }
     await expect(page.locator('#frame-nordic-A .st-no-phone')).toHaveCount(3);
+    await expect(page.locator('#frame-nordic-A')).toHaveClass(/is-title/, { timeout: 15_000 });
+    await page.waitForTimeout(1200);
     await audit(page, 'phone at rest');
     await page.locator('#frame-nordic-A .st-mark:visible').first().tap();
     await expect(sheet(page)).toHaveClass(/is-on/);

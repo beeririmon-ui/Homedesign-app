@@ -141,10 +141,13 @@ async function textOnPicture(page: Page, sel: string): Promise<{ p5: number; min
   if (!has) return null;
   const rect = (await page.evaluate(`window.__ev.rect('${sel}')`)) as { x: number; y: number; w: number; h: number };
   const col = rgb((await page.evaluate(`getComputedStyle(document.querySelector('${sel}')).color`)) as string);
-  await page.evaluate(`document.querySelector('${sel}').style.visibility = 'hidden'`);
+  // the text alone is hidden (its colour and underline), so a label's own paper stays under it
+  const hide = `document.querySelectorAll('${sel}, ${sel} *').forEach((e) => { e.style.setProperty('color', 'transparent', 'important'); e.style.setProperty('text-decoration-color', 'transparent', 'important'); })`;
+  const show = `document.querySelectorAll('${sel}, ${sel} *').forEach((e) => { e.style.removeProperty('color'); e.style.removeProperty('text-decoration-color'); })`;
+  await page.evaluate(hide);
   await sleep(60);
   const png = await page.screenshot();
-  await page.evaluate(`document.querySelector('${sel}').style.visibility = ''`);
+  await page.evaluate(show);
   const { data, info } = await sharp(png).removeAlpha().raw().toBuffer({ resolveWithObject: true });
   const lt = lum(...col);
   const cs: number[] = [];
@@ -497,6 +500,7 @@ async function axe(): Promise<void> {
     const ctx = await ctxOf(w, h);
     const page = await open(ctx);
     await settled(page);
+    await sleep(1200); // the title lines and the brand have finished fading in
     const a = async (label: string) => {
       const r = await new AxeBuilder({ page } as unknown as ConstructorParameters<typeof AxeBuilder>[0])
         .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
