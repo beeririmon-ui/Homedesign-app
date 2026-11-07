@@ -268,6 +268,11 @@
 }
 
 /* ---------- the tool ---------- */
+/* the tool and the houses are short pages of paper: their own height, not a screen each */
+.st .st-tool,
+.st .st-houses {
+  min-height: 0;
+}
 .st-tool-row {
   margin-top: var(--s-4);
 }
@@ -331,9 +336,10 @@
   padding: var(--s-3);
   background: var(--paper-2);
   border: 1px solid var(--rule);
-  font: 300 20px/26px var(--f-display);
   color: var(--ink);
-  text-wrap: balance;
+}
+.st .st-tile-type .st-tile-title {
+  font: 300 20px/26px var(--f-display);
 }
 .st-tile.is-next .st-tile-type {
   background: none;
@@ -401,6 +407,10 @@
 }
 
 /* ---------- a pair without a frame on its page: type, its concept and why the frame is not here ---------- */
+.st .st-cover-type .mag-grid {
+  min-height: calc(100svh - var(--head-h) - env(safe-area-inset-top) - var(--s-8) - var(--s-9));
+  align-content: center;
+}
 .st .st-type-title {
   margin: var(--s-2) 0 var(--s-4);
   max-width: 14em;

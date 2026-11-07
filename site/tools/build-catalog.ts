@@ -778,7 +778,8 @@ if (EXTRA_PRODUCTS) {
     if (Array.isArray(x)) x.forEach(collect);
     else if (x && typeof x === 'object')
       for (const [k, v] of Object.entries(x)) {
-        if (k === 'points' && Array.isArray(v)) for (const p of v) if (typeof (p as { product?: unknown })?.product === 'string') found.push((p as { product: string }).product);
+        if (k === 'points' && Array.isArray(v))
+          for (const p of v) if (typeof (p as { product?: unknown })?.product === 'string') found.push((p as { product: string }).product);
         collect(v);
       }
   };

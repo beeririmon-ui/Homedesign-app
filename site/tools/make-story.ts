@@ -79,7 +79,11 @@ type Card = {
   dimensions_cm?: { width?: number | null; depth?: number | null; height?: number | null };
   colors: { dominant_hex: string };
   images: { urls: string[] };
-  options?: { default_sku: string; skus: { id: string; values: Record<string, string>; image?: string }[] };
+  options?: {
+    default_sku: string;
+    axes: { id: string; values: { id: string; label_he: string }[] }[];
+    skus: { id: string; values: Record<string, string>; image?: string }[];
+  };
 };
 type Image = { src: string; srcset: string; w: number; h: number };
 type Item = {
@@ -243,11 +247,13 @@ function phoneDot(pt: Point, c0: number, c1: number, fw: number, fh: number): { 
   if (b <= a) return { at: null, note: 'מחוץ לחיתוך הטלפון' };
   const w = (b - a) * fw * css;
   const h = (y1 - y0) * fh * css;
-  if (Math.max(w, h) < MIN_LONG || Math.min(w, h) < MIN_SHORT) return { at: null, note: `בטלפון ${Math.round(w)}×${Math.round(h)} CSS, פחות מ-${MIN_LONG}×${MIN_SHORT}` };
+  if (Math.max(w, h) < MIN_LONG || Math.min(w, h) < MIN_SHORT)
+    return { at: null, note: `בטלפון ${Math.round(w)}×${Math.round(h)} CSS, פחות מ-${MIN_LONG}×${MIN_SHORT}` };
   const margin = 23 / PHONE_CSS;
   if (pt.phone_at) {
     const cu = (pt.phone_at[0] - c0) / (c1 - c0);
-    if (cu < margin || cu > 1 - margin) throw new Error(`${pt.product}: the phone dot u ${pt.phone_at[0]} is not inside the crop ${c0.toFixed(3)}–${c1.toFixed(3)}`);
+    if (cu < margin || cu > 1 - margin)
+      throw new Error(`${pt.product}: the phone dot u ${pt.phone_at[0]} is not inside the crop ${c0.toFixed(3)}–${c1.toFixed(3)}`);
     return { at: { u: Math.round(cu * 10000) / 10000, v: pt.phone_at[1] }, note: null };
   }
   const cu = (pt.u - c0) / (c1 - c0);
@@ -255,7 +261,17 @@ function phoneDot(pt: Point, c0: number, c1: number, fw: number, fh: number): { 
   return { at: { u: Math.round(Math.min(1 - margin, Math.max(margin, u)) * 10000) / 10000, v: pt.v }, note: null };
 }
 
-async function itemOf(roomId: string, tool: string | null, frame: string, q: QaFrame, n: number, pt: Point, crop: [number, number], fw: number, fh: number): Promise<Item> {
+async function itemOf(
+  roomId: string,
+  tool: string | null,
+  frame: string,
+  q: QaFrame,
+  n: number,
+  pt: Point,
+  crop: [number, number],
+  fw: number,
+  fh: number,
+): Promise<Item> {
   const card = cards.get(pt.product);
   if (!card) throw new Error(`${frame}: no product card ${pt.product}`);
   const p = catalog.products.find((x) => x.id === pt.product) ?? null;
@@ -273,14 +289,16 @@ async function itemOf(roomId: string, tool: string | null, frame: string, q: QaF
     const want = { ...(cardSku?.values ?? {}), ...pt.option };
     const sku = o?.skus.find((s) => Object.entries(want).every(([k, v]) => s.values[k] === v));
     if (p && o && !sku) throw new Error(`${frame}: ${pt.product} has no option ${JSON.stringify(want)}`);
-    if (p && !o) console.warn(`${frame}: ${pt.product}: the card's options did not reach the catalog (see build-catalog's warnings); the product's own price is used`);
+    if (p && !o)
+      console.warn(`${frame}: ${pt.product}: the card's options did not reach the catalog (see build-catalog's warnings); the product's own price is used`);
     if (sku) {
       price = sku.price_agorot;
       variant = sku.variant_id;
       available &&= sku.available;
     }
-    // the colour or the style of the option names it; a size goes to the credit
-    const labelOf = (axis: string) => o?.axes.find((a) => a.id === axis)?.values.find((v) => v.id === pt.option![axis])?.label_he ?? null;
+    // the colour or the style of the option names it; a size goes to the credit (a product not priced yet: the card's own labels)
+    const axes = o?.axes ?? card.options?.axes ?? [];
+    const labelOf = (axis: string) => axes.find((a) => a.id === axis)?.values.find((v) => v.id === pt.option![axis])?.label_he ?? null;
     const named = Object.keys(pt.option).find((a) => a !== 'size');
     optionHe = pt.option_label_he ?? (named ? labelOf(named) : null);
     const size = pt.option.size ? labelOf('size') : null;
@@ -302,11 +320,7 @@ async function itemOf(roomId: string, tool: string | null, frame: string, q: QaF
     .join(' · ');
   const img = await photo(card, skuImage);
   // the catalog's notes describe the room engine's frame ("בתמונה: …"): the story frame brings its own caption
-  const notes = [
-    ...(pt.in_frame_he ? [pt.in_frame_he] : []),
-    ...(styleNote ? [styleNote] : []),
-    ...(p?.notes_he.filter((x) => !x.startsWith('בתמונה')) ?? []),
-  ];
+  const notes = [...(pt.in_frame_he ? [pt.in_frame_he] : []), ...(styleNote ? [styleNote] : []), ...(p?.notes_he.filter((x) => !x.startsWith('בתמונה')) ?? [])];
   if (p?.pack) notes.push(`נמכר כסט של ${p.pack.set_qty}.`);
   const faithful = faithfulOf(q, pt.product);
   const dot = isFaithful(faithful);
@@ -537,9 +551,13 @@ function placeholderCover(pg: PageOut): string {
 const tile = (room: string, style: string, here: boolean): string => {
   const pg = pages.find((p) => p.room === room && p.style === style);
   const name = styleOf(style).name_he;
-  if (!pg) return `<li class="st-tile is-next"><span class="st-tile-type" aria-hidden="true"></span><span class="st-tile-style">${esc(name)}</span><span class="mag-cap">בגיליונות הבאים</span></li>`;
+  if (!pg)
+    return `<li class="st-tile is-next"><span class="st-tile-type" aria-hidden="true"></span><span class="st-tile-style">${esc(name)}</span><span class="mag-cap">בגיליונות הבאים</span></li>`;
   const f = pg.frames[0];
-  const inner = `${f ? thumb(f, `${roomOf(room).name_he} ב${name}: ${f.title_he}`) : `<span class="st-tile-type" aria-hidden="true"><span>${esc(pg.pair.concept_he)}</span></span>`}<span class="st-tile-style">${esc(name)}</span><span class="st-tile-title">${esc(pg.pair.concept_he)}</span><span class="mag-cap">${esc(f ? markOf(f.state) : 'בהכנה')}</span>`;
+  // a typographic tile carries its concept in the box (said once: the box is the tile's title for every reader)
+  const inner = f
+    ? `${thumb(f, `${roomOf(room).name_he} ב${name}: ${f.title_he}`)}<span class="st-tile-style">${esc(name)}</span><span class="st-tile-title">${esc(pg.pair.concept_he)}</span><span class="mag-cap">${esc(markOf(f.state))}</span>`
+    : `<span class="st-tile-type"><span class="st-tile-title">${esc(pg.pair.concept_he)}</span></span><span class="st-tile-style">${esc(name)}</span><span class="mag-cap">בהכנה: הפריים עוד בבדיקה</span>`;
   return here
     ? `<li class="st-tile is-here" aria-current="page">${inner}</li>`
     : `<li class="st-tile"><a class="st-tile-link" href="${pg.href}">${inner}</a></li>`;
@@ -641,7 +659,9 @@ for (const pg of pages) {
     BODY: body,
     DATA: JSON.stringify(data).replace(/</g, '\\u003c'),
   });
-  console.log(`${pg.href} → web${pg.href}index.html (${(html.length / 1024).toFixed(1)} KB): ${pg.frames.length ? pg.frames.map((f) => `${f.id} ${f.state}`).join(', ') : 'typographic'}`);
+  console.log(
+    `${pg.href} → web${pg.href}index.html (${(html.length / 1024).toFixed(1)} KB): ${pg.frames.length ? pg.frames.map((f) => `${f.id} ${f.state}`).join(', ') : 'typographic'}`,
+  );
 }
 const indexHtml = render('web/story/index.html', {
   TITLE: esc(`${story.issue_he} · תוכן הגיליון`),
@@ -657,7 +677,9 @@ const indexHtml = render('web/story/index.html', {
   BODY: [indexBody(), footer('')].join('\n'),
   DATA: JSON.stringify({ page: { room: null, style: null, href: '/story/', tool: story.tool_fallback }, items: {}, frames: [] }),
 });
-console.log(`/story/ → web/story/index.html (${(indexHtml.length / 1024).toFixed(1)} KB): ${story.rooms.length} rooms × ${story.styles.length} styles, ${pages.length} pages`);
+console.log(
+  `/story/ → web/story/index.html (${(indexHtml.length / 1024).toFixed(1)} KB): ${story.rooms.length} rooms × ${story.styles.length} styles, ${pages.length} pages`,
+);
 // the prototype's address goes on to its real page
 mkdirSync(sitePath('web/test/story'), { recursive: true });
 const to = pageHref('living-room', 'nordic');

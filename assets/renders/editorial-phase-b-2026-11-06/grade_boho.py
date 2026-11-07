@@ -73,12 +73,56 @@ def box_mask(shape, boxes):
     return m
 
 
-# products and objects on the wall (full-size boxes, read on the frame): kept out of the plaster step
-WALL_OBJECTS = [(800, 170, 1050, 590), (1064, 204, 1278, 590), (1288, 230, 1472, 592),     # the three framed prints
-                (210, 230, 402, 470), (1524, 334, 1686, 510),                               # the two rattan sconces
-                (500, 276, 672, 462),                                                       # the macrame disc
-                (1580, 0, 1990, 262),                                                       # the pendant
-                (1730, 380, 2160, 850)]                                                     # the plant on the right
+# products and objects on the wall, by their shapes (read on the frame at x2): kept out of the plaster step. The lamps' warm glow on the
+# plaster round them is plaster and takes the step (it also tames the glow's bloom into the wall the designer noted)
+ART_BOXES = [(806, 176, 1046, 584), (1068, 208, 1274, 586), (1292, 234, 1468, 588)]          # the three framed prints
+ELLIPSES = [((255, 300), (37, 47)), ((317, 397), (78, 70)),                                   # the left sconce: its disc, its rattan ball
+            ((1555, 387), (23, 40)), ((1625, 465), (55, 50)),                                 # the right sconce
+            ((587, 370), (81, 83))]                                                           # the macrame disc with its fringe
+RECTS = [(262, 278, 300, 302), (292, 255, 348, 328), (1566, 373, 1605, 390), (1608, 353, 1646, 406)]   # the sconces' arms and cylinders
+PENDANT = [(1620, 0), (1945, 0), (1965, 120), (1977, 215), (1974, 244), (1591, 244), (1588, 215), (1597, 120)]
+
+
+def objects_mask(shape, img=None):
+    """the frames as their boxes; the sconces, the disc and the pendant from their hand shapes refined with GrabCut (the shape eroded
+    4 px = object, grown 7 px = wall, in between decided by the colour models), so no ring of untouched plaster is left round them"""
+    H, W = shape[:2]
+    m = np.zeros((H, W), np.uint8)
+    for x0, y0, x1, y1 in ART_BOXES:
+        m[y0:y1, x0:x1] = 1
+    groups = [[("e", ELLIPSES[0]), ("e", ELLIPSES[1]), ("r", RECTS[0]), ("r", RECTS[1])],
+              [("e", ELLIPSES[2]), ("e", ELLIPSES[3]), ("r", RECTS[2]), ("r", RECTS[3])],
+              [("e", ELLIPSES[4])], [("p", PENDANT)]]
+    for grp in groups:
+        g = np.zeros((H, W), np.uint8)
+        for kind, v in grp:
+            if kind == "e":
+                (cx, cy), (rx, ry) = v
+                cv2.ellipse(g, (cx, cy), (rx, ry), 0, 0, 360, 1, -1)
+            elif kind == "r":
+                x0, y0, x1, y1 = v
+                g[y0:y1, x0:x1] = 1
+            else:
+                cv2.fillPoly(g, [np.array(v, np.int32)], 1)
+        if img is None:
+            m |= g
+            continue
+        ys, xs = np.nonzero(g)
+        x0, y0, x1, y1 = max(xs.min() - 16, 0), max(ys.min() - 16, 0), min(xs.max() + 17, W), min(ys.max() + 17, H)
+        sub = (np.clip(img[y0:y1, x0:x1], 0, 1) * 255).astype(np.uint8)[..., ::-1].copy()
+        gm = np.full(sub.shape[:2], cv2.GC_PR_BGD, np.uint8)
+        gs = g[y0:y1, x0:x1].astype(bool)
+        gm[gs] = cv2.GC_PR_FGD
+        gm[cv2.erode(g, np.ones((9, 9), np.uint8))[y0:y1, x0:x1].astype(bool)] = cv2.GC_FGD
+        gm[~cv2.dilate(g, np.ones((15, 15), np.uint8))[y0:y1, x0:x1].astype(bool)] = cv2.GC_BGD
+        bg, fg = np.zeros((1, 65), np.float64), np.zeros((1, 65), np.float64)
+        cv2.grabCut(sub, gm, None, bg, fg, 5, cv2.GC_INIT_WITH_MASK)
+        r_ = np.isin(gm, (cv2.GC_FGD, cv2.GC_PR_FGD)).astype(np.uint8)
+        r_ = cv2.morphologyEx(r_, cv2.MORPH_CLOSE, np.ones((5, 5), np.uint8))
+        m[y0:y1, x0:x1] |= r_
+    return cv2.dilate(m, np.ones((3, 3), np.uint8)).astype(bool)
+
+
 WALL_ZONE = (0, 0, 2160, 690)
 RUG_ZONE = [(60, 1180), (2060, 1180), (2060, 1536), (60, 1536)]
 RUG_OUT = [(780, 1020, 2045, 1450), (2080, 1090, 2690, 1510)]                               # the coffee table + runner, the pouf
@@ -111,9 +155,11 @@ def main(stripes=True):
     C = np.hypot(A_, B_)
     h = np.degrees(np.arctan2(B_, A_)) % 360
     # 5. the plaster (before the global desaturation, so its two factors combine): wall zone, plaster hue and chroma, soft mask
-    wz = box_mask(a.shape, [WALL_ZONE]) & ~box_mask(a.shape, WALL_OBJECTS)
-    plaster = wz & (h > 50) & (h < 80) & (C > 8) & (L > 25) & (L < 88)
-    pm = cv2.GaussianBlur(plaster.astype(np.float32), (0, 0), 2.0) * cv2.GaussianBlur(wz.astype(np.float32), (0, 0), 6.0)
+    obj = objects_mask(a.shape, a)
+    wz = box_mask(a.shape, [WALL_ZONE])
+    plaster = wz & ~obj & (h > 50) & (h < 80) & (C > 8) & (L > 25) & (L < 88)
+    pm = (cv2.GaussianBlur(plaster.astype(np.float32), (0, 0), 2.0) * cv2.GaussianBlur(wz.astype(np.float32), (0, 0), 6.0)
+          * (1 - cv2.GaussianBlur(obj.astype(np.float32), (0, 0), 0.8)))
     h_t = h + (82.0 - h) * 0.6 * pm
     C_t = C * (1 - 0.22 * pm)
     # 2. saturation -15 % (chroma), terracotta / rust held at S >= 0.45

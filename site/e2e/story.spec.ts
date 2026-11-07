@@ -226,8 +226,8 @@ test.describe('the other houses', () => {
     await expect(page.locator('#frame-A .st-mark')).toHaveCount(5);
     await expect(page.locator('#list-A .st-no-dot')).toHaveCount(2);
     // the curtain is sold as the option the frame shows, and the credit says which
-    await page.evaluate(() => window.__story!.openSheet('A-1'));
-    await expect(page.locator('#st-sheet-notes')).toContainText('בתמונה: האפשרות');
+    await page.locator('#list-A .st-open', { hasText: 'סרט קפלים' }).click();
+    await expect(page.locator('#st-sheet-notes')).toContainText('בתמונה: האפשרות "סרט קפלים"');
     await page.keyboard.press('Escape');
     // this house has no tool of its own yet: the way in goes to the Nordic living room, and says so
     await expect(page.locator('#st-tool')).toHaveText('לסלון בבית הנורדי');

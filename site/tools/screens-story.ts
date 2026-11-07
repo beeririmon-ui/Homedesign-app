@@ -1,17 +1,20 @@
 /**
- * Evidence for the story-first prototype (/test/story/, briefs/site-story-prototype-2026-11-07.md), on web/dist
- * (Chromium headless + SwiftShader, so frame times are a floor, not a phone's):
- *   screens/       400×800 (touch) and 1280×800: the opening, the dots, the hotspot sheet, after "הוספה לסל", the
- *                  product list, the second frame, the tool entry, "בסגנונות אחרים", the cart, keyboard focus, reduced motion
+ * Evidence for layer 1, the story (/story/, /story/<room>/<style>/; briefs/site-interface-track-2026-11-07.md S1), on
+ * web/dist (Chromium headless + SwiftShader, so frame times are a floor, not a phone's):
+ *   screens/       400×800 (touch) and 1280×800: the contents; the Nordic living room (the opening, the dots, the sheet,
+ *                  after "הוספה לסל", the list, the second frame, the tool entry, the other houses, the cart); warm
+ *                  modern; modern country ("almost"); boho (typographic); keyboard focus; reduced motion
  *   evidence.json  timings (the opening, the dots, the sheet), contrast (text on the frames and on paper), the first-load
- *                  weight (DPR 1 measured, DPR 3 measured), axe (WCAG 2.0/2.1 A + AA), and the real-routes check
+ *                  weight (the contents and the Nordic page; DPR 1 and 3), axe (WCAG 2.0/2.1 A + AA) on every kind of
+ *                  page, the real-routes check, and the public build (HD_PUBLIC=1) carrying no story and no test page
  *   evidence.md    the list of screenshots and problems
  *
- *   npm run screens:story          (after npm run build; serves web/dist itself)
+ *   npm run screens:story [-- --out=qa/reports/…]     (after npm run build; serves web/dist itself)
  */
+import { execFileSync } from 'node:child_process';
 import { createServer } from 'node:http';
-import { createReadStream, existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
-import { extname, join, relative } from 'node:path';
+import { createReadStream, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs';
+import { dirname, extname, join, relative } from 'node:path';
 import { gzipSync } from 'node:zlib';
 import { chromium, type Browser, type BrowserContext, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
@@ -21,11 +24,22 @@ import { repoPath, sitePath } from './lib/paths';
 const PORT = 5198;
 const ORIGIN = `http://127.0.0.1:${PORT}`;
 const DIST = sitePath('web/dist');
-const OUT = repoPath('qa/reports/2026-11-07-site-story-prototype');
+const OUT = repoPath(process.argv.find((a) => a.startsWith('--out='))?.slice(6) ?? 'qa/reports/2026-11-07-site-track/s1');
 const SHOTS = join(OUT, 'screens');
 mkdirSync(SHOTS, { recursive: true });
-if (!existsSync(join(DIST, 'test/story/index.html'))) {
-  console.error('web/dist/test/story/index.html is missing: run npm run build first.');
+const NORDIC = '/story/living-room/nordic/';
+const WARM = '/story/living-room/warm-modern/';
+const COUNTRY = '/story/living-room/modern-country/';
+const BOHO = '/story/living-room/boho/';
+/** every frame the gate lets in, by page */
+const FRAMES = [
+  [NORDIC, 'A'],
+  [NORDIC, 'B'],
+  [WARM, 'A'],
+  [COUNTRY, 'A'],
+] as const;
+if (!existsSync(join(DIST, 'story/index.html')) || !existsSync(join(DIST, NORDIC, 'index.html'))) {
+  console.error('web/dist/story/ is missing: run npm run build first.');
   process.exit(1);
 }
 
@@ -99,13 +113,13 @@ async function ctxOf(w: number, h: number, o: { reduced?: boolean; dpr?: number 
   await ctx.addInitScript(HELPERS);
   return ctx;
 }
-async function open(ctx: BrowserContext, hash = ''): Promise<Page> {
+async function open(ctx: BrowserContext, hash = '', path = NORDIC): Promise<Page> {
   const page = await ctx.newPage();
   page.on('pageerror', (e) => problems.push(`pageerror: ${e.message}`));
   page.on('console', (m) => {
     if (m.type() === 'error') problems.push(`console: ${m.text()}`);
   });
-  await page.goto(`${ORIGIN}/test/story/${hash}`, { waitUntil: 'load' });
+  await page.goto(`${ORIGIN}${path}${hash}`, { waitUntil: 'load' });
   return page;
 }
 async function shot(
@@ -120,7 +134,16 @@ async function shot(
   return png;
 }
 const goTo = (page: Page, sel: string) => page.evaluate(`document.querySelector('${sel}').scrollIntoView({ behavior: 'instant', block: 'start' })`);
-const settled = (page: Page) => page.waitForFunction(`document.querySelector('#frame-nordic-A').classList.contains('is-title')`, null, { timeout: 20_000 });
+const settled = (page: Page, f = 'A') =>
+  page.waitForFunction(`document.querySelector('#frame-${f}').classList.contains('is-title')`, null, { timeout: 20_000 });
+/** a full-page screenshot loads every lazy picture first: a scroll to the end and back */
+async function scrolled(page: Page): Promise<void> {
+  await page.evaluate(
+    `(async () => { for (let y = 0; y < document.body.scrollHeight; y += innerHeight / 2) { scrollTo(0, y); await new Promise((r) => setTimeout(r, 60)); } scrollTo(0, 0); })()`,
+  );
+  await page.waitForFunction(`[...document.images].every((i) => i.complete)`, null, { timeout: 15_000 });
+  await sleep(300);
+}
 
 // ---------- colour maths: WCAG contrast of a text colour on the pixels under it ----------
 const lum = (r: number, g: number, b: number): number => {
@@ -169,7 +192,7 @@ async function onPaper(page: Page, sel: string, prop = 'color', bgSel?: string):
 }
 
 // ---------- the first load: the bytes the opening needs, as served (text gzip-compressed, media as is) ----------
-async function firstLoad(w: number, h: number, dpr: number, tag: string): Promise<void> {
+async function firstLoad(w: number, h: number, dpr: number, tag: string, path = NORDIC): Promise<void> {
   const ctx = await ctxOf(w, h, { dpr });
   const page = await ctx.newPage();
   const got: { url: string; type: string; bytes: number; gz: number }[] = [];
@@ -185,8 +208,8 @@ async function firstLoad(w: number, h: number, dpr: number, tag: string): Promis
     got.push({ url: p, type: extname(f).slice(1), bytes, gz: text ? gzipSync(readFileSync(f)).length : bytes });
   });
   const t0 = Date.now();
-  await page.goto(`${ORIGIN}/test/story/`, { waitUntil: 'load' });
-  await settled(page);
+  await page.goto(`${ORIGIN}${path}`, { waitUntil: 'load' });
+  if (path === NORDIC) await settled(page);
   await sleep(1500); // idle on the opening: what loads without a scroll
   const evs = await events(page);
   const paint = (await page.evaluate('window.__ev.paint')) as Record<string, number>;
@@ -194,23 +217,24 @@ async function firstLoad(w: number, h: number, dpr: number, tag: string): Promis
   const sum = (xs: typeof got) => xs.reduce((s, x) => s + x.gz, 0);
   const by = (re: RegExp) => got.filter((x) => re.test(x.url));
   evidence[`first_load_${tag}`] = {
+    page: path,
     viewport: `${w}×${h} @${dpr}x`,
     total_kb: r1(sum(got) / 1024),
     html_kb: r1(sum(by(/\.html$/)) / 1024),
     js_kb: r1(sum(by(/\.js$/)) / 1024),
     css_kb: r1(sum(by(/\.css$/)) / 1024),
     fonts_kb: r1(sum(by(/\.woff2?$/)) / 1024),
-    frames_kb: r1(sum(by(/\/media\/test\/story\/[^/]+\/m?\d+\.(avif|webp)$/)) / 1024),
-    frame_files: by(/\/media\/test\/story\/[^/]+\/m?\d+\.(avif|webp)$/).map((x) => `${x.url} ${r1(x.bytes / 1024)} KB`),
-    product_photos_kb: r1(sum(by(/\/media\/test\/story\/products\//)) / 1024),
-    product_photos: by(/\/media\/test\/story\/products\//).length,
+    frames_kb: r1(sum(by(/\/media\/story\/(?!products\/).+\/m?\d+\.(avif|webp)$/)) / 1024),
+    frame_files: by(/\/media\/story\/(?!products\/).+\/m?\d+\.(avif|webp)$/).map((x) => `${x.url} ${r1(x.bytes / 1024)} KB`),
+    product_photos_kb: r1(sum(by(/\/media\/story\/products\//)) / 1024),
+    product_photos: by(/\/media\/story\/products\//).length,
     requests: got.length,
     budget_kb: 3072,
     fcp_ms: Math.round(paint['first-contentful-paint'] ?? 0),
     lcp_ms: Math.round(lcp.at(-1)?.t ?? 0),
     lcp_el: lcp.at(-1)?.el ?? '',
-    developed_ms: Math.round(at(evs, 'nordic-A:developed') ?? 0),
-    title_ms: Math.round(at(evs, 'nordic-A:title') ?? 0),
+    developed_ms: Math.round(at(evs, 'A:developed') ?? 0),
+    title_ms: Math.round(at(evs, 'A:title') ?? 0),
     wall_ms: Date.now() - t0,
   };
   await ctx.close();
@@ -229,7 +253,7 @@ async function throttledOpening(): Promise<void> {
     uploadThroughput: (3 * 1024 * 1024) / 8,
   });
   await cdp.send('Emulation.setCPUThrottlingRate', { rate: 4 });
-  await page.goto(`${ORIGIN}/test/story/`, { waitUntil: 'load' });
+  await page.goto(`${ORIGIN}${NORDIC}`, { waitUntil: 'load' });
   await settled(page);
   await sleep(1000);
   const evs = await events(page);
@@ -240,9 +264,9 @@ async function throttledOpening(): Promise<void> {
     fcp_ms: Math.round(paint['first-contentful-paint'] ?? 0),
     lcp_ms: Math.round(lcp.at(-1)?.t ?? 0),
     lcp_el: lcp.at(-1)?.el ?? '',
-    lqip_ms: Math.round(at(evs, 'nordic-A:lqip') ?? 0),
-    developed_ms: Math.round(at(evs, 'nordic-A:developed') ?? 0),
-    title_ms: Math.round(at(evs, 'nordic-A:title') ?? 0),
+    lqip_ms: Math.round(at(evs, 'A:lqip') ?? 0),
+    developed_ms: Math.round(at(evs, 'A:developed') ?? 0),
+    title_ms: Math.round(at(evs, 'A:title') ?? 0),
     thresholds: 'art direction §8.1 / §10.9: LQIP ≤ 1.0 s, the frame sharp ≤ 2.0 s, LCP ≤ 2.5 s',
   };
   await ctx.close();
@@ -252,15 +276,25 @@ async function throttledOpening(): Promise<void> {
 async function run(w: number, h: number, tag: 'desk' | 'phone'): Promise<void> {
   const phone = tag === 'phone';
   const ctx = await ctxOf(w, h);
+  // the contents
+  const index = await open(ctx, '', '/story/');
+  await sleep(900);
+  await shot(index, `${tag}-0-contents`, `${w}: the contents (/story/): the living room's six houses, a frame only where QA let one in, type for the rest`);
+  await scrolled(index);
+  await shot(index, `${tag}-0b-contents-full`, `${w}: the whole contents, every room (the eight rooms without a pair: "בגיליונות הבאים")`, { full: true });
+  const indexTiles = (await index.evaluate(
+    `({ rooms: document.querySelectorAll('.st-room').length, next: document.querySelectorAll('.st-room.is-next').length, pictures: document.querySelectorAll('.st-tile-pic').length, typographic: document.querySelectorAll('.st-tile-type').length })`,
+  )) as unknown;
+  await index.close();
   const page = await open(ctx);
   await settled(page);
   await sleep(2400); // the first-entry hint has come and gone: the frame at rest
-  await shot(page, `${tag}-1-opening`, `${w}: the opening, Nordic A at rest (no dot), the title and the story line, the test mark`);
+  await shot(page, `${tag}-1-opening`, `${w}: the Nordic living room, frame A at rest (no dot), the title and the story line, the test mark`);
   const restDots = (await page.evaluate(
-    `[...document.querySelectorAll('#frame-nordic-A .mag-dot')].filter((d) => getComputedStyle(d).opacity !== '0').length`,
+    `[...document.querySelectorAll('#frame-A .mag-dot')].filter((d) => getComputedStyle(d).opacity !== '0').length`,
   )) as number;
   // the dots on movement (desktop) or on a touch (phone)
-  const sel = '#frame-nordic-A .st-mark:not([hidden]) .mag-dot';
+  const sel = '#frame-A .st-mark:not([hidden]) .mag-dot';
   const appear = page.evaluate(`window.__ev.firstChange('${sel}', 'opacity', 2000)`);
   const t0 = Date.now();
   if (phone) await page.touchscreen.tap(200, 200);
@@ -276,13 +310,13 @@ async function run(w: number, h: number, tag: 'desk' | 'phone'): Promise<void> {
     `${w}: the dots after ${phone ? 'a touch' : 'the pointer moves'} (one per faithful product the ${phone ? '4:5 crop carries' : 'screen shows'})`,
   );
   const shown = (await page.evaluate(
-    `[...document.querySelectorAll('#frame-nordic-A .st-mark')].filter((m) => m.offsetParent !== null && !m.hidden).map((m) => m.dataset.item)`,
+    `[...document.querySelectorAll('#frame-A .st-mark')].filter((m) => m.offsetParent !== null && !m.hidden).map((m) => m.dataset.item)`,
   )) as string[];
   // gone 2.5 s after the last movement
-  await page.waitForFunction(`document.querySelector('#frame-nordic-A .mag-stage').dataset.marks === 'off'`, null, { timeout: 8000 });
+  await page.waitForFunction(`document.querySelector('#frame-A .mag-stage').dataset.marks === 'off'`, null, { timeout: 8000 });
   const goneAfter = Date.now() - t0;
   // the sheet: a dot opens "קנה את המראה"
-  const target = phone ? '#frame-nordic-A .st-mark[data-item="nordic-A-5"]' : '#frame-nordic-A .st-mark[data-item="nordic-A-6"]';
+  const target = phone ? '#frame-A .st-mark[data-item="A-5"]' : '#frame-A .st-mark[data-item="A-6"]';
   const trans = page.evaluate(`window.__ev.transitions('#st-sheet', 900)`);
   // from the click's own time stamp to the first frame where the sheet is drawn (not Playwright's action overhead)
   const resp = page.evaluate(
@@ -320,37 +354,38 @@ async function run(w: number, h: number, tag: 'desk' | 'phone'): Promise<void> {
   const closeT = (await closeTrans) as [string, string, number][];
   const backTo = (await page.evaluate(`document.activeElement && document.activeElement.dataset.item`)) as string;
   // an unpriced product (the pendant): a caption instead of the button
-  await page.evaluate(`window.__story.openSheet('nordic-A-1')`);
+  await page.evaluate(`window.__story.openSheet('A-1')`);
   await sleep(350);
   await shot(page, `${tag}-3c-sheet-no-price`, `${w}: a product without a price yet (the pendant): the caption says so, no add button, no disabled button`);
   const why = (await page.evaluate(`document.querySelector('#st-why').textContent`)) as string;
   await page.evaluate(`window.__story.closeSheet()`);
   await sleep(300);
   // the list
-  await goTo(page, '#list-nordic-A');
+  await goTo(page, '#list-A');
   await sleep(500);
   await shot(
     page,
     `${tag}-4-list`,
     `${w}: "כל המוצרים בתמונה" for Nordic A: the card photo or the colour swatch, the name (opens the sheet), the credit; the rug without a dot (QA: partly)`,
   );
-  await shot(page, `${tag}-4b-list-full`, `${w}: the whole list section`, { full: true, clip: await sectionClip(page, '#list-nordic-A') });
-  // the second frame and the tool entry
-  await goTo(page, '#frame-nordic-B');
-  await page.waitForFunction(`document.querySelector('#frame-nordic-B').classList.contains('is-title')`, null, { timeout: 20_000 });
+  await scrolled(page);
+  await shot(page, `${tag}-4b-list-full`, `${w}: the whole list section`, { full: true, clip: await sectionClip(page, '#list-A') });
+  // the second frame, the tool entry and the other houses
+  await goTo(page, '#frame-B');
+  await page.waitForFunction(`document.querySelector('#frame-B').classList.contains('is-title')`, null, { timeout: 20_000 });
   await sleep(2200);
   await shot(page, `${tag}-5-second-frame`, `${w}: the story scroll, Nordic B (the window corner), at rest`);
   await goTo(page, '#tool');
   await sleep(500);
   await shot(page, `${tag}-6-tool`, `${w}: the way into the tool: "עצב בעצמך" opens the room engine (/rooms/living-room/)`);
   const toolHref = (await page.evaluate(`document.querySelector('#st-tool').getAttribute('href')`)) as string;
-  await goTo(page, '#others');
-  await sleep(400);
-  await shot(page, `${tag}-7-other-styles`, `${w}: "בסגנונות אחרים": warm modern marked "טיוטה · כמעט מוכן", the next styles only as "בגיליונות הבאים"`);
-  await goTo(page, '#frame-warm-modern-A');
-  await page.waitForFunction(`document.querySelector('#frame-warm-modern-A').classList.contains('is-title')`, null, { timeout: 20_000 });
-  await sleep(2200);
-  await shot(page, `${tag}-8-warm-modern`, `${w}: warm modern A (QA: almost), the draft mark`);
+  await goTo(page, '#houses');
+  await sleep(900);
+  await shot(
+    page,
+    `${tag}-7-houses`,
+    `${w}: "הסלון, בבתים אחרים": this house marked, three frames QA let in, three houses in type (their frames are still with QA)`,
+  );
   // the cart dialog
   await page.locator('#st-cart-open').click();
   await sleep(350);
@@ -358,12 +393,55 @@ async function run(w: number, h: number, tag: 'desk' | 'phone'): Promise<void> {
   await page.keyboard.press('Escape');
   await sleep(250);
   const evs = await events(page);
+  // the other houses: a cut to their own page
+  const houses: Record<string, unknown> = {};
+  for (const [path, name, caption] of [
+    [WARM, `${tag}-8-warm-modern`, `${w}: warm modern, frame A (ED5, QA: final test), the draft mark`],
+    [COUNTRY, `${tag}-8c-modern-country`, `${w}: modern country, frame A (MC1, QA: almost): the mark says "כמעט מוכן"`],
+  ] as const) {
+    await page.goto(`${ORIGIN}${path}`, { waitUntil: 'load' });
+    await settled(page);
+    await sleep(2400);
+    await shot(page, name, caption);
+    houses[path] = {
+      mark: await page.evaluate(`document.querySelector('#frame-A .st-draft').textContent`),
+      dots: await page.evaluate(`document.querySelectorAll('#frame-A .st-mark').length`),
+      rows: await page.evaluate(`document.querySelectorAll('#list-A .st-credit').length`),
+      no_dot_rows: await page.evaluate(`document.querySelectorAll('#list-A .st-no-dot').length`),
+      cart_count_here: await page.evaluate(`document.querySelector('#st-cart-count').textContent`),
+    };
+    if (path === COUNTRY) {
+      await goTo(page, '#list-A');
+      await sleep(500);
+      await shot(
+        page,
+        `${tag}-8d-modern-country-list`,
+        `${w}: modern country's list: the clay vase and the bowl without a dot (QA: partly), the curtain as the option the frame shows`,
+      );
+    }
+  }
+  await page.goto(`${ORIGIN}${BOHO}`, { waitUntil: 'load' });
+  await sleep(900);
+  await shot(
+    page,
+    `${tag}-8e-boho-typographic`,
+    `${w}: boho: QA has not let its frame in, so the page is type only: the concept, the story line, why there is no frame`,
+  );
+  await scrolled(page);
+  await shot(page, `${tag}-8f-boho-full`, `${w}: the whole typographic page: the cover in type, the tool (the Nordic one, said so), the other houses`, {
+    full: true,
+  });
+  houses[BOHO] = {
+    stages: await page.evaluate(`document.querySelectorAll('.mag-stage').length`),
+    images: await page.evaluate(`[...document.images].map((i) => i.currentSrc || i.src)`),
+  };
   evidence[`run_${tag}`] = {
+    contents: indexTiles,
     dots_visible_at_rest: restDots,
     dots_appear_ms: appearMs === null ? null : Math.round(appearMs),
     dots_shown: shown,
     dots_gone_after_ms: goneAfter,
-    dots_hint: { on: at(evs, 'nordic-A:hint:on') !== null, off: at(evs, 'nordic-A:hint:off') !== null },
+    dots_hint: { on: at(evs, 'A:hint:on') !== null, off: at(evs, 'A:hint:off') !== null },
     sheet_response_ms: Math.round(respMs),
     sheet_in: sheetTrans,
     sheet_out: closeT,
@@ -375,6 +453,7 @@ async function run(w: number, h: number, tag: 'desk' | 'phone'): Promise<void> {
     tool_href: toolHref,
     sheet_contrast_on_paper: sheetContrast,
     open_to_close_ms: Math.round((atLast(evs, 'sheet:close') ?? 0) - (at(evs, 'sheet:open:start') ?? 0)),
+    other_houses: houses,
   };
   await ctx.close();
 }
@@ -403,7 +482,7 @@ async function keyboard(): Promise<void> {
       `(() => { const a = document.activeElement; return a ? (a.dataset.item || a.id || a.textContent.trim().slice(0, 24)) : ''; })()`,
     )) as string;
     stops.push(d);
-    if (d.startsWith('nordic-A-')) break;
+    if (/^A-\d+$/.test(d)) break;
   }
   await sleep(300);
   await shot(page, 'desk-k1-dot-focus', '1280: a dot in keyboard focus: every dot shows, the focused one has the double ring, the wall label says its credit');
@@ -440,7 +519,11 @@ async function hitTest(): Promise<void> {
     const ctx = await ctxOf(w, h);
     const page = await open(ctx);
     await settled(page);
-    for (const f of ['nordic-A', 'nordic-B', 'warm-modern-A']) {
+    for (const [path, f] of FRAMES) {
+      if (!page.url().endsWith(path)) {
+        await page.goto(`${ORIGIN}${path}`, { waitUntil: 'load' });
+        await settled(page);
+      }
       await goTo(page, `#frame-${f}`);
       await sleep(700);
       await page.evaluate(`window.__story.showMarks('${f}')`);
@@ -451,30 +534,41 @@ async function hitTest(): Promise<void> {
       const hidden = (await page.evaluate(
         `[...document.querySelectorAll('#frame-${f} .st-mark')].filter((m) => m.hidden).map((m) => m.dataset.item)`,
       )) as string[];
-      out[`${w} ${f}`] = {
+      out[`${w} ${path} ${f}`] = {
         shown: hits.length,
         missed: hits.filter((x) => x.hit !== x.item),
         hidden_by_crop_or_band: hidden,
         pendant: hits.find((x) => /-(1|2)$/.test(x.item) && x.y < 140) ?? null,
       };
       if (hits.some((x) => x.hit !== x.item))
-        problems.push(`${w} ${f}: a dot does not take its click: ${JSON.stringify(hits.filter((x) => x.hit !== x.item))}`);
+        problems.push(`${w} ${path} ${f}: a dot does not take its click: ${JSON.stringify(hits.filter((x) => x.hit !== x.item))}`);
     }
     if (w === 1280) {
-      await goTo(page, '#frame-nordic-A');
+      await page.goto(`${ORIGIN}${NORDIC}`, { waitUntil: 'load' });
+      await settled(page);
       await sleep(600);
-      await page.evaluate(`window.__story.showMarks('nordic-A')`);
+      await page.evaluate(`window.__story.showMarks('A')`);
       await sleep(350);
       await shot(
         page,
         'desk-2b-pendant-dot',
         "1280: Nordic A, v0 0.10: the pendant's dot at the bottom of the shade, clear of the top band; the band's words on the label paper, the 0.35 scrim",
       );
-      await goTo(page, '#frame-warm-modern-A');
-      await sleep(700);
-      await page.evaluate(`window.__story.showMarks('warm-modern-A')`);
-      await sleep(350);
-      await shot(page, 'desk-8b-warm-modern-dots', '1280: warm modern A ed5 (QA: final test): the pendant, now faithful, has its dot under the band');
+      for (const [path, name, caption] of [
+        [
+          WARM,
+          'desk-8b-warm-modern-dots',
+          '1280: warm modern A ed5 (QA: final test), the dots: the right bouclé cushion now sells the square 50×50 milk-tea option (QA round 2, G-ED.4)',
+        ],
+        [COUNTRY, 'desk-8g-modern-country-dots', '1280: modern country A mc1 (QA: almost), the dots: five, none on the clay vase and the bowl (QA: partly)'],
+      ] as const) {
+        await page.goto(`${ORIGIN}${path}`, { waitUntil: 'load' });
+        await settled(page);
+        await sleep(700);
+        await page.evaluate(`window.__story.showMarks('A')`);
+        await sleep(350);
+        await shot(page, name, caption);
+      }
     }
     await ctx.close();
   }
@@ -482,14 +576,25 @@ async function hitTest(): Promise<void> {
   const ctx = await ctxOf(400, 800);
   const page = await open(ctx);
   await settled(page);
-  for (const [f, name, caption] of [
+  for (const [path, f, name, caption] of [
     [
-      'nordic-B',
+      NORDIC,
+      'B',
       'phone-5b-nordic-B-dots',
       "400: Nordic B in the 4:5 crop at 0.62, the dots shown: the throw's dot on the fold (placed by hand), the vase, the holder, the rug",
     ],
-    ['warm-modern-A', 'phone-8b-warm-modern-dots', '400: warm modern A ed5 in the 4:5 crop at 0.56, the dots shown: the pendant now has one'],
+    [WARM, 'A', 'phone-8b-warm-modern-dots', '400: warm modern A ed5 in the 4:5 crop at 0.56, the dots shown'],
+    [
+      COUNTRY,
+      'A',
+      'phone-8g-modern-country-dots',
+      '400: modern country A mc1 in the 4:5 crop at 0.52, the dots shown (the fluted vase is outside the crop: listed only)',
+    ],
   ] as const) {
+    if (!page.url().endsWith(path)) {
+      await page.goto(`${ORIGIN}${path}`, { waitUntil: 'load' });
+      await settled(page);
+    }
     await goTo(page, `#frame-${f}`);
     await sleep(700);
     await page.evaluate(`window.__story.showMarks('${f}')`);
@@ -510,15 +615,15 @@ async function reduced(): Promise<void> {
     const page = await open(ctx);
     await settled(page);
     const trans = page.evaluate(`window.__ev.transitions('#st-sheet', 700)`);
-    await page.evaluate(`window.__story.openSheet('nordic-A-9')`);
+    await page.evaluate(`window.__story.openSheet('A-9')`);
     const t = (await trans) as [string, string, number][];
     await sleep(100);
     await shot(page, `${tag}-r1-reduced-sheet`, `${w}: reduced motion, the sheet open (a fade only)`);
     evidence[`reduced_${tag}`] = {
       sheet_transitions: t,
       sheet_transform: await page.evaluate(`getComputedStyle(document.querySelector('#st-sheet')).transform`),
-      title_transform: await page.evaluate(`getComputedStyle(document.querySelector('#frame-nordic-A .st-title-line')).transform`),
-      lqip_display: await page.evaluate(`getComputedStyle(document.querySelector('#frame-nordic-A .mag-lqip')).display`),
+      title_transform: await page.evaluate(`getComputedStyle(document.querySelector('#frame-A .st-title-line')).transform`),
+      lqip_display: await page.evaluate(`getComputedStyle(document.querySelector('#frame-A .mag-lqip')).display`),
     };
     await ctx.close();
   }
@@ -531,32 +636,55 @@ async function contrastRun(w: number, h: number, tag: string): Promise<void> {
   await settled(page);
   await sleep(2400);
   const over: Record<string, unknown> = {};
-  for (const f of ['nordic-A', 'nordic-B', 'warm-modern-A']) {
+  for (const [path, f] of FRAMES) {
+    if (!page.url().endsWith(path)) {
+      await page.goto(`${ORIGIN}${path}`, { waitUntil: 'load' });
+      await settled(page);
+    }
     await goTo(page, `#frame-${f}`);
     await page.waitForFunction(`document.querySelector('#frame-${f}').classList.contains('is-title')`, null, { timeout: 20_000 });
     await sleep(2300);
+    const k = `${path.split('/')[3]} ${f}`;
     for (const part of ['.st-kicker', '.st-title', '.st-line', '.st-link', '.st-draft'])
-      over[`${f} ${part}`] = await textOnPicture(page, `#frame-${f} ${part}`);
-    over[`${f} top band (brand)`] = await textOnPicture(page, '#mag-head .mag-brand', 30);
-    over[`${f} top band (nav: עצב בעצמך)`] = await textOnPicture(page, '#mag-head .st-nav > a', 30);
-    over[`${f} top band (nav: סל)`] = await textOnPicture(page, '#st-cart-open', 30);
+      over[`${k} ${part}`] = await textOnPicture(page, `#frame-${f} ${part}`);
+    over[`${k} top band (brand)`] = await textOnPicture(page, '#mag-head .mag-brand', 30);
+    over[`${k} top band (nav: תוכן)`] = await textOnPicture(page, '#mag-head .st-nav > a', 30);
+    over[`${k} top band (nav: עצב בעצמך)`] = await textOnPicture(page, '#mag-head .st-nav > a:nth-of-type(2)', 30);
+    over[`${k} top band (nav: סל)`] = await textOnPicture(page, '#st-cart-open', 30);
   }
-  await goTo(page, '#list-nordic-A');
-  await sleep(300);
+  await page.goto(`${ORIGIN}${NORDIC}#list-A`, { waitUntil: 'load' });
+  await sleep(600);
   const paper = {
-    'list h2': await onPaper(page, '#list-title-nordic-A', 'color', '#list-nordic-A'),
-    'list name': await onPaper(page, '#list-nordic-A .mag-credit-name', 'color', '#list-nordic-A'),
-    'list detail': await onPaper(page, '#list-nordic-A .mag-credit-detail', 'color', '#list-nordic-A'),
-    'list caption': await onPaper(page, '#list-nordic-A .mag-cap', 'color', '#list-nordic-A'),
-    'no-dot caption': await onPaper(page, '#list-nordic-A .st-no-dot', 'color', '#list-nordic-A'),
-    'list name underline (3:1)': await onPaper(page, '#list-nordic-A .st-open .mag-credit-name', 'textDecorationColor', '#list-nordic-A'),
+    'list h2': await onPaper(page, '#list-title-A', 'color', '#list-A'),
+    'list name': await onPaper(page, '#list-A .mag-credit-name', 'color', '#list-A'),
+    'list detail': await onPaper(page, '#list-A .mag-credit-detail', 'color', '#list-A'),
+    'list caption': await onPaper(page, '#list-A .mag-cap', 'color', '#list-A'),
+    'no-dot caption': await onPaper(page, '#list-A .st-no-dot', 'color', '#list-A'),
+    'list name underline (3:1)': await onPaper(page, '#list-A .st-open .mag-credit-name', 'textDecorationColor', '#list-A'),
     'tool button text on its ink': await (async () => {
       const fg = rgb((await page.evaluate(`getComputedStyle(document.querySelector('#st-tool')).color`)) as string);
       const bg = rgb((await page.evaluate(`getComputedStyle(document.querySelector('#st-tool')).backgroundColor`)) as string);
       return r1(contrast(lum(...fg), lum(...bg)) * 10) / 10;
     })(),
-    'other styles caption': await onPaper(page, '#others .mag-cap', 'color', '#others'),
+    'houses caption': await onPaper(page, '#houses .st-tile .mag-cap', 'color', '#houses'),
+    'houses style': await onPaper(page, '#houses .st-tile-style', 'color', '#houses'),
+    'houses typographic tile title (on the second paper)': await onPaper(page, '#houses .st-tile-type .st-tile-title', 'color', '#houses .st-tile-type'),
   };
+  await page.goto(`${ORIGIN}/story/`, { waitUntil: 'load' });
+  await sleep(600);
+  Object.assign(paper, {
+    'contents room name': await onPaper(page, '#room-living-room .st-room-name', 'color', '#contents'),
+    'contents room number': await onPaper(page, '#room-living-room .st-room-n', 'color', '#contents'),
+    'contents next room (ink-2)': await onPaper(page, '.st-room.is-next .st-room-name', 'color', '#contents'),
+    'contents next caption': await onPaper(page, '.st-room.is-next .mag-cap', 'color', '#contents'),
+  });
+  await page.goto(`${ORIGIN}${BOHO}`, { waitUntil: 'load' });
+  await sleep(600);
+  Object.assign(paper, {
+    'typographic title': await onPaper(page, '#cover-title', 'color', '#cover'),
+    'typographic status': await onPaper(page, '.st-type-status', 'color', '#cover'),
+    'secondary button text': await onPaper(page, '#st-tool', 'color', '#tool'),
+  });
   evidence[`contrast_${tag}`] = {
     text_over_frames_p5: over,
     on_paper: paper,
@@ -565,7 +693,8 @@ async function contrastRun(w: number, h: number, tag: string): Promise<void> {
   await ctx.close();
 }
 
-// axe (WCAG 2.0/2.1 A + AA): at rest, the sheet open, the cart open; 1280 and 400
+// axe (WCAG 2.0/2.1 A + AA): the Nordic page at rest, the sheet open, the cart open; every other kind of page at rest;
+// 1280 and 400
 async function axe(): Promise<void> {
   const out: Record<string, string[]> = {};
   for (const [w, h] of [
@@ -574,51 +703,98 @@ async function axe(): Promise<void> {
   ] as const) {
     const ctx = await ctxOf(w, h);
     const page = await open(ctx);
-    await settled(page);
-    await sleep(1200); // the title lines and the brand have finished fading in
     const a = async (label: string) => {
       const r = await new AxeBuilder({ page } as unknown as ConstructorParameters<typeof AxeBuilder>[0])
         .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
         .analyze();
       out[`${w} ${label}`] = r.violations.map((v) => `${v.id} (${v.impact}): ${v.nodes.length} × ${v.nodes[0]?.target.join(' ')}`);
+      if (r.violations.length) problems.push(`axe ${w} ${label}: ${out[`${w} ${label}`]!.join('; ')}`);
     };
-    await a('at rest');
-    await page.evaluate(`window.__story.openSheet('nordic-A-5')`);
+    await settled(page);
+    await sleep(1200); // the title lines and the brand have finished fading in
+    await a(`${NORDIC} at rest`);
+    await page.evaluate(`window.__story.openSheet('A-5')`);
     await sleep(400);
-    await a('sheet open');
+    await a(`${NORDIC} sheet open`);
     await page.evaluate(`window.__story.closeSheet()`);
     await sleep(300);
     await page.locator('#st-cart-open').click();
     await sleep(400);
-    await a('cart open');
+    await a(`${NORDIC} cart open`);
+    for (const path of ['/story/', WARM, COUNTRY, BOHO]) {
+      await page.goto(`${ORIGIN}${path}`, { waitUntil: 'load' });
+      if (path === WARM || path === COUNTRY) await settled(page);
+      await sleep(1200);
+      await a(`${path} at rest`);
+    }
     await ctx.close();
   }
   evidence.axe = out;
 }
 
-// the real routes never carry the story frames: no file of dist outside test/story references them
+// the real routes never carry the story frames: no file of dist outside story/ and test/ references them, and only the
+// story pages load the story's own code
 function realRoutes(): void {
   const walk = (d: string): string[] => readdirSync(d).flatMap((n) => (statSync(join(d, n)).isDirectory() ? walk(join(d, n)) : [join(d, n)]));
-  const files = walk(DIST).filter((f) => /\.(html|js|css|json|xml|txt)$/.test(f) && !relative(DIST, f).startsWith('test/story/'));
+  const storyPage = (f: string) => /^(story|test)\//.test(relative(DIST, f));
+  const files = walk(DIST).filter((f) => /\.(html|js|css|json|xml|txt)$/.test(f) && !storyPage(f) && !relative(DIST, f).startsWith('assets/story-'));
   const hits = files
-    .filter((f) => /media\/test\/story|editorial-phase-b|nordic-A-ed4|warm-modern-A-ed4|nordic-B-fin/.test(readFileSync(f, 'utf8')))
+    .filter((f) =>
+      /media\/story|media\/test\/story|editorial-phase-b|nordic-A-ed4|warm-modern-A-ed[45]|nordic-B-fin|modern-country-A-mc1/.test(readFileSync(f, 'utf8')),
+    )
     .map((f) => relative(DIST, f));
-  // the story entry's own assets are referenced only by its page
+  // the story entry's own assets are referenced only by the story pages
   const storyAssets = readdirSync(join(DIST, 'assets')).filter((f) => f.startsWith('story-'));
   const pagesRefStory = walk(DIST)
-    .filter((f) => f.endsWith('.html') && !relative(DIST, f).startsWith('test/story/'))
+    .filter((f) => f.endsWith('.html') && !storyPage(f))
     .filter((f) => storyAssets.some((a) => readFileSync(f, 'utf8').includes(a)))
     .map((f) => relative(DIST, f));
   const sitemap = existsSync(join(DIST, 'sitemap.xml')) ? readFileSync(join(DIST, 'sitemap.xml'), 'utf8') : '';
-  evidence.real_routes = { files_referencing_story_media: hits, pages_loading_story_assets: pagesRefStory, sitemap_lists_test: /\/test\//.test(sitemap) };
+  const storyPages = walk(join(DIST, 'story')).filter((f) => f.endsWith('index.html'));
+  evidence.real_routes = {
+    story_pages_in_this_build: storyPages.map((f) => `/${relative(DIST, dirname(f))}/`),
+    files_referencing_story_media: hits,
+    pages_loading_story_assets: pagesRefStory,
+    sitemap_lists_story_or_test: /\/(story|test)\//.test(sitemap),
+    every_story_page_noindex: storyPages.every((f) => /<meta name="robots" content="noindex, nofollow"/.test(readFileSync(f, 'utf8'))),
+  };
   if (hits.length || pagesRefStory.length) problems.push(`the story leaks into real routes: ${[...hits, ...pagesRefStory].join(', ')}`);
+}
+
+// the public build (HD_PUBLIC=1): the client bundle into a scratch folder; it must hold no story, no test page and none
+// of their media, and no file of it may name them
+function publicBuild(): void {
+  const dir = sitePath('.generated/public-check');
+  rmSync(dir, { recursive: true, force: true });
+  const t = Date.now();
+  execFileSync('npx', ['vite', 'build', '--outDir', dir, '--emptyOutDir'], { cwd: sitePath('web'), env: { ...process.env, HD_PUBLIC: '1' }, stdio: 'pipe' });
+  const walk = (d: string): string[] => readdirSync(d).flatMap((n) => (statSync(join(d, n)).isDirectory() ? walk(join(d, n)) : [join(d, n)]));
+  const all = walk(dir).map((f) => relative(dir, f));
+  const leftovers = all.filter((f) => /^(story|test|media\/story|media\/test)\//.test(f) || /^assets\/(story|test)-/.test(f));
+  const naming = all
+    .filter((f) => /\.(html|js|css|json|xml|txt)$/.test(f))
+    .filter((f) => /\/story\/|media\/story|media\/test|test\/story/.test(readFileSync(join(dir, f), 'utf8')))
+    .slice(0, 20);
+  evidence.public_build = {
+    command: 'HD_PUBLIC=1 vite build --outDir .generated/public-check (the client bundle; the prerender adds only the real routes)',
+    seconds: Math.round((Date.now() - t) / 1000),
+    files: all.length,
+    story_or_test_files: leftovers,
+    files_naming_story_or_test: naming,
+  };
+  if (leftovers.length || naming.length) problems.push(`the public build carries the story or the test page: ${[...leftovers, ...naming].join(', ')}`);
+  rmSync(dir, { recursive: true, force: true });
 }
 
 const t0 = Date.now();
 realRoutes();
+publicBuild();
 await firstLoad(400, 800, 1, 'phone_400_dpr1');
 await firstLoad(400, 800, 3, 'phone_400_dpr3');
 await firstLoad(1280, 800, 1, 'desk_1280_dpr1');
+await firstLoad(400, 800, 1, 'contents_phone_400_dpr1', '/story/');
+await firstLoad(1280, 800, 1, 'contents_desk_1280_dpr1', '/story/');
+await firstLoad(400, 800, 1, 'typographic_phone_400_dpr1', BOHO);
 await throttledOpening();
 await run(1280, 800, 'desk');
 await run(400, 800, 'phone');
@@ -638,7 +814,7 @@ writeFileSync(join(OUT, 'evidence.json'), JSON.stringify(evidence, null, 1));
 writeFileSync(
   join(OUT, 'evidence.md'),
   [
-    '# Evidence of the story prototype (measured headless, Chromium + SwiftShader)',
+    '# Evidence of layer 1, the story (measured headless, Chromium + SwiftShader)',
     '',
     `Run ${(evidence.run as { at: string }).at}; ${shots.length} screenshots under screens/. The figures are in evidence.json; README.md reads them.`,
     '',
