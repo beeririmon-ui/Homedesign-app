@@ -96,7 +96,7 @@
 | המיטה | `sofa-cover-cj-cotton-muslin-fringe` Pecan, שמיכה בכף המיטה | 8.5 (ק) |
 | השידה | `wall-sconce-cj-travertine-cone-walnut`, זוג קונוסים ליד המיטה | 8.5 (ק). **CE לבדיקה** |
 | השידה | `candle-holders-cj-travertine-pedestal` | 9.0 (כ) |
-| השידה | `nightstand-vase-aliexpress-handmade-wabi-sabi-vase-665862` (Color E) | 8.5 (ק) |
+| השידה | `nightstand-vase-aliexpress-handmade-wabi-sabi-vase-665862` (Color D; ‏2026-11-07: תוקן מ-E, שהוא כד בצל אדום כהה 16×20) | 8.5 (ק) |
 | השידה | `nightstand-tray-cj-black-walnut-rect-tray` | 7.5 (ס). לאשר במבט |
 | הפינה | `floor-lamp-aliexpress-pleated-walnut-37x158-062736-master` | 8.5 (כ, 2026-11-07) |
 | הפינה | `planter-cj-cement-ribbed-belly` (Beige, Large) | 8.0 (ק) |
