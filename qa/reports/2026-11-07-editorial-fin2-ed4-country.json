@@ -1,0 +1,1082 @@
+{
+ "report": "qa/reports/2026-11-07-editorial-fin2-ed4-country.md",
+ "by": "qa-agent",
+ "date": "2026-11-07",
+ "scope": "product fidelity only (same method as the phase B report): the fin2 code fixes (Nordic A, warm modern, boho), the four ED4 passes (Nordic A, warm modern, mediterranean, japandi) and the new modern-country-A. No lock, grading targets or density",
+ "inputs": "assets/renders/editorial-phase-b-2026-11-06/ (fin2-codefix.json, fin2-before-after/, ed4.json, ed4_regions.json, ed4-sheet.jpg, jobs.json, the frames); briefs/render-editorial-phase-b-2026-11-06.md; data/products cards; docs/design-bible/modern-country-brief-draft.md; supplier crops in the session scratchpad (ed2-crops/, ed-crops/, viewed only)",
+ "method": {
+  "nothing_else_moved": "independent diff of every pair: |after - before| > 2 levels on any channel, components on a 15 px dilation, boxes against the recorded zones (data/diffs.json)",
+  "traces": "crops at 100% and x3-x4, plus a x4 contrast stretch; a trace counts only if it shows at 100%",
+  "proportions": "against card dimensions and known neighbours on the same plane (bowl vs runner vs cups at the same table row; vase vs vase on the sill; cushion vs cushion)"
+ },
+ "diffs": {
+  "nordic-A fin -> fin2": {
+   "changed_px": 139705,
+   "changed_px_over_1": 157246,
+   "components": [
+    {
+     "px": 113291,
+     "box": [
+      1982,
+      190,
+      2297,
+      668
+     ]
+    },
+    {
+     "px": 67223,
+     "box": [
+      1098,
+      179,
+      1668,
+      352
+     ]
+    },
+    {
+     "px": 560,
+     "box": [
+      2267,
+      505,
+      2293,
+      533
+     ]
+    },
+    {
+     "px": 281,
+     "box": [
+      2247,
+      257,
+      2264,
+      274
+     ]
+    },
+    {
+     "px": 225,
+     "box": [
+      1582,
+      161,
+      1597,
+      176
+     ]
+    },
+    {
+     "px": 225,
+     "box": [
+      2286,
+      194,
+      2301,
+      209
+     ]
+    }
+   ],
+   "max_delta": 94
+  },
+  "warm-modern-A fin -> fin2": {
+   "changed_px": 11403,
+   "changed_px_over_1": 12383,
+   "components": [
+    {
+     "px": 15107,
+     "box": [
+      2458,
+      1065,
+      2639,
+      1153
+     ]
+    },
+    {
+     "px": 4609,
+     "box": [
+      2527,
+      421,
+      2559,
+      608
+     ]
+    },
+    {
+     "px": 936,
+     "box": [
+      2527,
+      763,
+      2560,
+      797
+     ]
+    },
+    {
+     "px": 862,
+     "box": [
+      2578,
+      520,
+      2606,
+      554
+     ]
+    },
+    {
+     "px": 721,
+     "box": [
+      2528,
+      891,
+      2561,
+      914
+     ]
+    }
+   ],
+   "max_delta": 103
+  },
+  "boho-A -> fin2": {
+   "changed_px": 148854,
+   "changed_px_over_1": 153088,
+   "components": [
+    {
+     "px": 166424,
+     "box": [
+      392,
+      135,
+      815,
+      611
+     ]
+    }
+   ],
+   "max_delta": 155
+  },
+  "nordic-A fin2 -> ed4": {
+   "changed_px": 176530,
+   "changed_px_over_1": 180155,
+   "components": [
+    {
+     "px": 113399,
+     "box": [
+      1651,
+      687,
+      2165,
+      962
+     ]
+    },
+    {
+     "px": 68014,
+     "box": [
+      1233,
+      713,
+      1557,
+      947
+     ]
+    },
+    {
+     "px": 26480,
+     "box": [
+      1794,
+      1023,
+      2030,
+      1160
+     ]
+    }
+   ],
+   "max_delta": 232
+  },
+  "warm-modern-A fin2 -> ed4": {
+   "changed_px": 145192,
+   "changed_px_over_1": 147670,
+   "components": [
+    {
+     "px": 158893,
+     "box": [
+      1100,
+      0,
+      1827,
+      262
+     ]
+    }
+   ],
+   "max_delta": 204
+  },
+  "mediterranean-A -> ed4": {
+   "changed_px": 81414,
+   "changed_px_over_1": 84292,
+   "components": [
+    {
+     "px": 94586,
+     "box": [
+      1012,
+      1119,
+      1501,
+      1350
+     ]
+    }
+   ],
+   "max_delta": 217
+  },
+  "japandi-A -> ed4": {
+   "changed_px": 20757,
+   "changed_px_over_1": 24081,
+   "components": [
+    {
+     "px": 32119,
+     "box": [
+      586,
+      911,
+      746,
+      1140
+     ]
+    }
+   ],
+   "max_delta": 189
+  }
+ },
+ "frames": {
+  "nordic-A-ed4": {
+   "file": "assets/renders/editorial-phase-b-2026-11-06/nordic-A-ed4.png",
+   "base": "nordic-A-fin -> fin2 (code, 0 tokens) -> ED4 (seedream on crop [1180,650,2220,1235], 3 masked regions)",
+   "rows": [
+    {
+     "card": "fixed furniture: sofa, coffee table, armchair (board)",
+     "present": true,
+     "faithful": "yes",
+     "why": "as the board",
+     "fix": null,
+     "phase_b": "yes"
+    },
+    {
+     "card": "cushions-cj-boucle-teddy",
+     "present": true,
+     "faithful": "yes",
+     "why": "white boucle",
+     "fix": null,
+     "phase_b": "yes"
+    },
+    {
+     "card": "cushions-cj-knitted-chenille-bean-green",
+     "present": true,
+     "faithful": "yes",
+     "why": "ED4: sage chenille with the raised bubble grid, as p1-chenille-green; a lighter mint-sage, inside the card's family",
+     "fix": null,
+     "phase_b": "partly"
+    },
+    {
+     "card": "cushions-cj-linen-look-charcoal",
+     "present": true,
+     "faithful": "yes",
+     "why": "ED4: a square heathered slub-linen cushion (reads 50 x 50 at the same lean as the 45 x 45 sage one; width ratio 1.26 vs 1.11, inside +-15%); the back cushion behind it is continuous",
+     "fix": null,
+     "phase_b": "partly"
+    },
+    {
+     "card": "sofa-cover-cj-cotton-muslin-fringe",
+     "present": true,
+     "faithful": "yes",
+     "why": "crinkled muslin, fringe",
+     "fix": null,
+     "phase_b": "yes"
+    },
+    {
+     "card": "table-runner-cj-linen-look-sage-fringe",
+     "present": true,
+     "faithful": "yes",
+     "why": "sage, fringe, across and hanging",
+     "fix": null,
+     "phase_b": "yes"
+    },
+    {
+     "card": "candle-holders-cj-travertine-pedestal",
+     "present": true,
+     "faithful": "yes",
+     "why": "the pedestal pair",
+     "fix": null,
+     "phase_b": "yes"
+    },
+    {
+     "card": "bowl-cj-glutinous-white-belly-bowl-21",
+     "present": true,
+     "faithful": "yes",
+     "why": "ED4: wider and shallower with a flared lip, H/D ~0.33 (card 0.30); warm white",
+     "fix": null,
+     "phase_b": "partly"
+    },
+    {
+     "card": "framed-art-aliexpress-minimal-geometric-triptych-prints",
+     "present": true,
+     "faithful": "yes",
+     "why": "three different prints, black frames, mats",
+     "fix": null,
+     "phase_b": "yes"
+    },
+    {
+     "card": "accent-sconces-cj-travertine-block-updown-8x16",
+     "present": true,
+     "faithful": "yes",
+     "why": "the flat block, now about 7.3 x 18 cm against the nearest 50 cm frame (code x0.36): within +-15 %",
+     "fix": null,
+     "phase_b": "yes"
+    },
+    {
+     "card": "pendant-cj-silk-ribbed-pumpkin-40",
+     "present": true,
+     "faithful": "yes",
+     "why": "form right; about 0.7x the ED1 size, now plausibly ~40 cm",
+     "fix": null,
+     "phase_b": "yes"
+    },
+    {
+     "card": "rug-cj-braided-wool-natural",
+     "present": true,
+     "faithful": "partly",
+     "why": "cream with fine parallel tonal lines, but still a looped pile, not the flat braid",
+     "fix": "own pass, or accepted as a direction",
+     "phase_b": "partly"
+    },
+    {
+     "card": "basket-cj-jute-rope-cylinder",
+     "present": true,
+     "faithful": "yes",
+     "why": "jute rope cylinder with loop handles, in the corner",
+     "fix": null,
+     "phase_b": "yes"
+    },
+    {
+     "card": "planter-cj-seagrass-belly",
+     "present": true,
+     "faithful": "yes",
+     "why": "exactly one, with the olive tree",
+     "fix": null,
+     "phase_b": "yes"
+    }
+   ],
+   "counts": {
+    "rows": 14,
+    "yes": 13,
+    "partly": 1,
+    "no": 0
+   },
+   "fin2_traces": {
+    "right_wall_light": "gone: no pale rectangle, no notch. New, minor: the sun patch under the light now starts at a straight vertical edge at x~2100 (a ~55-level step over ~6 px, y 586-660); it reads as a window-frame edge, not as a trace. A small bright tick under the light body. Faint diagonal strokes above the light only in the x4 stretch. Not blocking",
+    "pendant_zone": "gone: no dark smudge, no pale blotch, clean even in the x4 stretch",
+    "outside_zones": "two single pixels (1589,168) and (2293,201), 4-5 levels: immaterial"
+   },
+   "ed4_mask_check": {
+    "changed_px": 176530,
+    "components": [
+     {
+      "px": 113399,
+      "box": [
+       1651,
+       687,
+       2165,
+       962
+      ]
+     },
+     {
+      "px": 68014,
+      "box": [
+       1233,
+       713,
+       1557,
+       947
+      ]
+     },
+     {
+      "px": 26480,
+      "box": [
+       1794,
+       1023,
+       2030,
+       1160
+      ]
+     }
+    ],
+    "verdict": "every change inside the three regions of crop_box [1180,650,2220,1235]; nothing outside moved; no seam at the mask edges at 100%"
+   },
+   "final_test": "ready"
+  },
+  "nordic-B-fin": {
+   "file": "assets/renders/editorial-phase-b-2026-11-06/nordic-B-fin.png",
+   "base": "unchanged since phase B",
+   "rows": [
+    {
+     "card": "fixed furniture: armchair (board)",
+     "present": true,
+     "faithful": "yes",
+     "why": "unchanged",
+     "fix": null,
+     "phase_b": "yes"
+    },
+    {
+     "card": "vase-aliexpress-vintage-distressed-clay-vase-589009",
+     "present": true,
+     "faithful": "yes",
+     "why": "unchanged",
+     "fix": null,
+     "phase_b": "yes"
+    },
+    {
+     "card": "basket-cj-jute-rope-cylinder",
+     "present": true,
+     "faithful": "yes",
+     "why": "unchanged",
+     "fix": null,
+     "phase_b": "yes"
+    },
+    {
+     "card": "magazine-holder-cj-felt-log-basket",
+     "present": true,
+     "faithful": "yes",
+     "why": "unchanged",
+     "fix": null,
+     "phase_b": "yes"
+    },
+    {
+     "card": "wall-decor-cj-corn-husk-round-38",
+     "present": true,
+     "faithful": "yes",
+     "why": "unchanged; the rim still darker and wider than 'a thin honey rim' (a note)",
+     "fix": null,
+     "phase_b": "yes"
+    },
+    {
+     "card": "rug-cj-braided-wool-natural",
+     "present": true,
+     "faithful": "yes",
+     "why": "now a flat weave in fine tone-on-tone cream lines",
+     "fix": null,
+     "phase_b": "yes"
+    },
+    {
+     "card": "sofa-cover-cj-cotton-muslin-fringe",
+     "present": true,
+     "faithful": "yes",
+     "why": "new: ivory muslin waffle with a short fringe over the armchair's arm, replacing the generic taupe throw",
+     "fix": null,
+     "phase_b": "yes"
+    },
+    {
+     "card": "curtains-aliexpress-linen-blend-s-fold-180502",
+     "present": true,
+     "faithful": "partly",
+     "why": "natural linen sheers, plausible; the heading out of frame",
+     "fix": null,
+     "phase_b": "partly"
+    }
+   ],
+   "counts": {
+    "rows": 8,
+    "yes": 7,
+    "partly": 1,
+    "no": 0
+   },
+   "final_test": "ready (unchanged; the curtains' 'partly' is only that the S-fold heading is out of frame)"
+  },
+  "warm-modern-A-ed4": {
+   "file": "assets/renders/editorial-phase-b-2026-11-06/warm-modern-A-ed4.png",
+   "base": "warm-modern-A-fin -> fin2 (brass, code) -> ED4 (seedream on crop [1000,0,1910,512], 1 masked region)",
+   "rows": [
+    {
+     "card": "framed-art-aliexpress-frameless-minimalist-wall-art-631735",
+     "present": true,
+     "faithful": "yes",
+     "why": "unchanged",
+     "fix": null,
+     "phase_b": "yes"
+    },
+    {
+     "card": "accent-sconces-aliexpress-travertine-cylinder-walnut-choice",
+     "present": true,
+     "faithful": "yes",
+     "why": "straight cylinder on walnut",
+     "fix": null,
+     "phase_b": "yes"
+    },
+    {
+     "card": "floor-lamp-cj-pleated-walnut-stem-158",
+     "present": true,
+     "faithful": "yes",
+     "why": "fin2: the brass now reads satin/brushed (p99 luminance 0.337 -> 0.272), no artefact at 100%",
+     "fix": null,
+     "phase_b": "yes"
+    },
+    {
+     "card": "pendant-cj-tiered-fabric-drum",
+     "present": true,
+     "faithful": "partly",
+     "why": "ED4: now a stacked white fabric drum, widest ring third from the top, glow between the tiers, smaller, no longer crowds the art. But 6 rings with 3 below the widest; the card photo shows 2 below the widest (5 in all)",
+     "fix": "code, 0 tokens: take out one lower ring and close the gap (plain wall behind); or show it with the note",
+     "phase_b": "partly"
+    },
+    {
+     "card": "cushions-cj-boucle-teddy (White, Milk tea)",
+     "present": true,
+     "faithful": "yes",
+     "why": "two white boucle and, new, a light milk-tea boucle on the right",
+     "fix": null,
+     "phase_b": "yes"
+    },
+    {
+     "card": "cushions-cj-knitted-chenille-bean-green (Camel)",
+     "present": true,
+     "faithful": "yes",
+     "why": "camel, textured",
+     "fix": null,
+     "phase_b": "yes"
+    },
+    {
+     "card": "sofa-cover-cj-cotton-muslin-fringe (Flax)",
+     "present": true,
+     "faithful": "yes",
+     "why": "flax muslin over the left arm",
+     "fix": null,
+     "phase_b": "yes"
+    },
+    {
+     "card": "candle-holders-cj-travertine-pedestal",
+     "present": true,
+     "faithful": "yes",
+     "why": "the pedestal pair",
+     "fix": null,
+     "phase_b": "yes"
+    },
+    {
+     "card": "bowl-cj-matte-black-bowl-20",
+     "present": true,
+     "faithful": "yes",
+     "why": "exactly one now",
+     "fix": null,
+     "phase_b": "yes"
+    },
+    {
+     "card": "vase-cj-textured-white-stoneware",
+     "present": true,
+     "faithful": "yes",
+     "why": "new: tall, crinkle-relief white, as the card photo",
+     "fix": null,
+     "phase_b": "yes"
+    },
+    {
+     "card": "rug-cj-braided-wool-natural",
+     "present": true,
+     "faithful": "partly",
+     "why": "tonal cream ribs now, still chunky",
+     "fix": "own pass or accept",
+     "phase_b": "partly"
+    }
+   ],
+   "counts": {
+    "rows": 11,
+    "yes": 9,
+    "partly": 2,
+    "no": 0
+   },
+   "fin2_traces": {
+    "brass": "clean: 5 boxes only, 11403 px, no halo or banding"
+   },
+   "ed4_mask_check": {
+    "changed_px": 145192,
+    "components": [
+     {
+      "px": 158893,
+      "box": [
+       1100,
+       0,
+       1827,
+       262
+      ]
+     }
+    ],
+    "verdict": "one component [1100,0,1827,262], inside region [1100,0,1820,255] (+ the 7 px dilation); nothing outside moved"
+   },
+   "final_test": "almost: the pendant has 6 rings, the card 5 (code fix, 0 tokens, or show with the note); the rug's chunky ribs stay as in phase B"
+  },
+  "boho-A-fin2": {
+   "file": "assets/renders/editorial-phase-b-2026-11-06/boho-A-fin2.png",
+   "base": "boho-A (gpt-image-2-5) -> fin2 (code: raffia x0.42 about its centre, plaster quilted from x 800-1440, y 70-160)",
+   "rows": [
+    {
+     "card": "wall-decor-aliexpress-natural-raffia-woven-bohemian-763597",
+     "present": true,
+     "faithful": "yes",
+     "why": "fin2: ~166 px = the card's 30 cm against the frames; cowrie ring and coiled centre unchanged",
+     "fix": null,
+     "phase_b": "partly"
+    },
+    {
+     "card": "wall-sconce-aliexpress-rattan-bamboo-wall-lamp-671943 (x2)",
+     "present": true,
+     "faithful": "yes",
+     "why": "woven bamboo ball on a wooden arm and round wood plate, glowing from inside, as the card photo",
+     "fix": null,
+     "phase_b": "yes"
+    },
+    {
+     "card": "table-runner-aliexpress-boho-macrame-table-runners-263532",
+     "present": true,
+     "faithful": "yes",
+     "why": "macrame with a jute centre stripe and a long fringe",
+     "fix": null,
+     "phase_b": "yes"
+    },
+    {
+     "card": "cushions-cj-washed-cotton-frayed (Rust Orange) x2",
+     "present": true,
+     "faithful": "yes",
+     "why": "rust, frayed edge",
+     "fix": null,
+     "phase_b": "yes"
+    },
+    {
+     "card": "cushions-cj-sandstone-chenille-flange (olive)",
+     "present": true,
+     "faithful": "yes",
+     "why": "olive nubby chenille with a flat flange",
+     "fix": null,
+     "phase_b": "yes"
+    },
+    {
+     "card": "sofa-cover-cj-washed-hemp-throw (Raw Jute)",
+     "present": true,
+     "faithful": "yes",
+     "why": "washed hemp in raw jute, draped",
+     "fix": null,
+     "phase_b": "yes"
+    },
+    {
+     "card": "planter-zendrop-seagrass-belly-basket-45",
+     "present": true,
+     "faithful": "partly",
+     "why": "seagrass belly with the black base and a bird-of-paradise; but drawn smaller than the XL basket beside it, while the cards say 45 x 36 against 38 x 33 (the prompt itself asked for 'one larger basket')",
+     "fix": "accept, or fix the prompt",
+     "phase_b": "partly"
+    },
+    {
+     "card": "basket-cj-seagrass-belly-xl",
+     "present": true,
+     "faithful": "partly",
+     "why": "natural seagrass belly with handles; drawn the larger of the two (cards: the smaller)",
+     "fix": null,
+     "phase_b": "partly"
+    },
+    {
+     "card": "pouf-cj-cotton-knit-ball-cover (natural)",
+     "present": true,
+     "faithful": "yes",
+     "why": "chunky natural knit ball",
+     "fix": null,
+     "phase_b": "yes"
+    }
+   ],
+   "counts": {
+    "rows": 9,
+    "yes": 7,
+    "partly": 2,
+    "no": 0
+   },
+   "fin2_traces": {
+    "seam": "a straight vertical edge at x~398-400, y~250-460, where the zone cuts the bamboo light's glow: a 10-14 level step in 2 px; faint at 100%, plain in the stretch",
+    "ring": "the old fringe's shadow: a darker ring at r 185-210 px from (587,369), 3-5 levels, mostly upper left (at y 200, x 420-450); visible only in the stretch",
+    "tick": "a small grey dash at the raffia's lower right (~(650,440)); faint",
+    "verdict": "the big trace (the oversized sun) is gone; the seam should be feathered (code, 0 tokens) before 'final test'"
+   },
+   "diff_check": {
+    "changed_px": 148854,
+    "components": [
+     {
+      "px": 166424,
+      "box": [
+       392,
+       135,
+       815,
+       611
+      ]
+     }
+    ],
+    "verdict": "one component inside the rebuilt zone; nothing outside moved"
+   },
+   "final_test": "not yet: feather the seam (code); the planter/basket sizes are still inverted (the prompt asked for it: accept or fix); the golden near-HDR look from phase B is unchanged"
+  },
+  "mediterranean-A-ed4": {
+   "file": "assets/renders/editorial-phase-b-2026-11-06/mediterranean-A-ed4.png",
+   "base": "mediterranean-A (gpt-image-2-5) -> ED4 (seedream on crop [900,1000,1620,1405], ellipse region)",
+   "rows": [
+    {
+     "card": "framed-art-aliexpress-mediterranean-wabi-sabi-poster-802890 (3 of 6)",
+     "present": true,
+     "faithful": "yes",
+     "why": "olive tree, vases with an arch, arched stairs with a palm, in thin oak frames, as the card photo",
+     "fix": null,
+     "phase_b": "yes"
+    },
+    {
+     "card": "magazine-holder-cj-arch-iron-cane",
+     "present": true,
+     "faithful": "yes",
+     "why": "arched black iron frame with a cane sling, X stretcher; magazines without readable text",
+     "fix": null,
+     "phase_b": "yes"
+    },
+    {
+     "card": "candle-holders-cj-travertine-pedestal",
+     "present": true,
+     "faithful": "yes",
+     "why": "the pedestal pair (no candles)",
+     "fix": null,
+     "phase_b": "yes"
+    },
+    {
+     "card": "bowl-cj-speckled-ivory-wide-bowl-21",
+     "present": true,
+     "faithful": "yes",
+     "why": "ED4: a wide open cone with a thin flared rim and a thin tan clay line, H/D ~0.24 (card 21.3 x 5.2 = 0.244), sparse fine speckle as in the card photo; a little greyer in the shade (interior b* 17 vs 22 before). Trace: see ed4_traces",
+     "fix": "code, 0 tokens: clean the ghost arc",
+     "phase_b": "partly"
+    },
+    {
+     "card": "basket-zendrop-seagrass-belly-38x34",
+     "present": true,
+     "faithful": "yes",
+     "why": "exactly one, folded collar, loop handles (with a plant)",
+     "fix": null,
+     "phase_b": "yes"
+    },
+    {
+     "card": "cushions-cj-washed-cotton-frayed (Earthy Orange)",
+     "present": true,
+     "faithful": "yes",
+     "why": "terracotta, frayed",
+     "fix": null,
+     "phase_b": "yes"
+    },
+    {
+     "card": "cushions-cj-washed-cotton-frayed (Moss Green 30x50)",
+     "present": true,
+     "faithful": "yes",
+     "why": "moss lumbar, frayed",
+     "fix": null,
+     "phase_b": "yes"
+    },
+    {
+     "card": "cushions-cj-washed-cotton-frayed (White)",
+     "present": true,
+     "faithful": "partly",
+     "why": "white frayed squares are there, but they cannot be told from the bench's generic ivory back cushions beside them: a look-alike risk",
+     "fix": "targeted pass (bench cushions plain, no fringe)",
+     "phase_b": "partly"
+    },
+    {
+     "card": "sofa-cover-cj-cotton-muslin-fringe",
+     "present": true,
+     "faithful": "yes",
+     "why": "crinkled muslin, fringe",
+     "fix": null,
+     "phase_b": "yes"
+    },
+    {
+     "card": "vase-aliexpress-vintage-distressed-clay-vase-589009",
+     "present": true,
+     "faithful": "yes",
+     "why": "the cream ribbed clay vase on the sill with olive branches",
+     "fix": null,
+     "phase_b": "yes"
+    }
+   ],
+   "counts": {
+    "rows": 10,
+    "yes": 9,
+    "partly": 1,
+    "no": 0
+   },
+   "ed4_traces": {
+    "ghost_arc": "an echo of the old, deeper bowl's rim on the wall to the right of the new rim: a thin bright/dark doublet, +10-18 / -10 levels, from ~(1410,1150) to ~(1475,1200). Inside the mask (seedream drew it). Faint at 100%, plain at x4"
+   },
+   "ed4_mask_check": {
+    "changed_px": 81414,
+    "components": [
+     {
+      "px": 94586,
+      "box": [
+       1012,
+       1119,
+       1501,
+       1350
+      ]
+     }
+    ],
+    "verdict": "one component inside the ellipse region (canvas [1008,1118,1504,1350]); nothing outside moved"
+   },
+   "final_test": "not yet: the white frayed cushion still cannot be told from the bench's generic ivory cushions (look-alike, from phase B); and the bowl's ghost arc (code)"
+  },
+  "japandi-A-ed4": {
+   "file": "assets/renders/editorial-phase-b-2026-11-06/japandi-A-ed4.png",
+   "base": "japandi-A (nano-banana-2) -> ED4 (code: the jar x0.76; the seedream result unused)",
+   "rows": [
+    {
+     "card": "framed-art-aliexpress-japanese-wabi-sabi-tree-176323 (3 of the series)",
+     "present": true,
+     "faithful": "yes",
+     "why": "bare-tree prints and a dark panel, in thin black frames",
+     "fix": null,
+     "phase_b": "yes"
+    },
+    {
+     "card": "pendant-cj-pleated-pumpkin-lantern-40",
+     "present": true,
+     "faithful": "partly",
+     "why": "a tall pleated paper egg (H/W ~1.3), as the reference crop render-agent sent; the card says a 40 x 25 pumpkin, 'closed rounded lantern form'. Either the crop is another variant of the listing or the card's dimensions are wrong: to settle on the card's own images (sourcing)",
+     "fix": "sourcing first, then a pass if needed",
+     "phase_b": "partly"
+    },
+    {
+     "card": "vase-cj-black-matte-stoneware-jar-30",
+     "present": true,
+     "faithful": "yes",
+     "why": "ED4 (code, x0.76 about x 666): H/W 1.57 -> 2.06 (card 30 x 15 = 2.0); matte sandy black, short neck, the branch untouched. But the code left traces (ed4_traces)",
+     "fix": "code, 0 tokens: redo the fill round the narrowed jar",
+     "phase_b": "partly"
+    },
+    {
+     "card": "candle-holders-aliexpress-matte-black-iron-pillar-set2",
+     "present": true,
+     "faithful": "yes",
+     "why": "exactly two low black plates on small feet, with pillar candles",
+     "fix": null,
+     "phase_b": "yes"
+    },
+    {
+     "card": "bowl-cj-matte-black-bowl-20",
+     "present": true,
+     "faithful": "yes",
+     "why": "matte black deep bowl",
+     "fix": null,
+     "phase_b": "yes"
+    },
+    {
+     "card": "accent-sconces-aliexpress-travertine-cylinder-walnut-choice (x2)",
+     "present": true,
+     "faithful": "partly",
+     "why": "travertine cylinders on walnut plates, right; they look large next to the frames (about half a frame's width); not measurable (the art has no card dimensions)",
+     "fix": "code if confirmed",
+     "phase_b": "partly"
+    },
+    {
+     "card": "cushions-cj-washed-cotton-frayed (moss)",
+     "present": true,
+     "faithful": "yes",
+     "why": "moss, frayed",
+     "fix": null,
+     "phase_b": "yes"
+    },
+    {
+     "card": "cushions-cj-linen-look-charcoal (ink)",
+     "present": true,
+     "faithful": "yes",
+     "why": "ink, linen look, square",
+     "fix": null,
+     "phase_b": "yes"
+    },
+    {
+     "card": "cushions-aliexpress-fashion-modern-wabi-sabi-464203",
+     "present": true,
+     "faithful": "partly",
+     "why": "brown nubby weave, close to the card photo's family; reads boucle-like (the card has no colour or texture text)",
+     "fix": null,
+     "phase_b": "partly"
+    },
+    {
+     "card": "bedspread-cj-six-layer-gauze-quilt (Beige Khaki)",
+     "present": true,
+     "faithful": "yes",
+     "why": "puckered gauze with crinkle lines, beige-khaki; folded on the arm, not in a straight line",
+     "fix": null,
+     "phase_b": "yes"
+    }
+   ],
+   "counts": {
+    "rows": 10,
+    "yes": 7,
+    "partly": 3,
+    "no": 0
+   },
+   "ed4_traces": {
+    "rim_wings": "the old, wider rim still shows on both sides of the new one, dark against the bright window: x~622-632 and x~700-710, y~929-934. Visible at 100%",
+    "notches": "dark notches where the old outline met the window frame: x~621 and x~710-715, y~1057-1070",
+    "base": "the right bottom edge is a straight vertical cut, the contact shadow there is gone, a light sliver under the base (x~666-680, y~1129-1131) and a grey smudge to its right (x~715-730, y~1117-1127)",
+    "window_fill": "the landscape refilled beside the jar is smeared but reads as out-of-focus glass; acceptable"
+   },
+   "ed4_mask_check": {
+    "changed_px": 20757,
+    "components": [
+     {
+      "px": 32119,
+      "box": [
+       586,
+       911,
+       746,
+       1140
+      ]
+     }
+    ],
+    "verdict": "one component round the jar [586,911,746,1140]; nothing outside moved (the traces are inside it)"
+   },
+   "final_test": "not yet: the jar's code traces (0 tokens); the pendant still waits for the sourcing answer (egg vs the card's 40 x 25 pumpkin); the sconces and the wabi-sabi cushion stay 'partly'"
+  },
+  "modern-country-A": {
+   "file": "assets/renders/editorial-phase-b-2026-11-06/modern-country-A.png",
+   "base": "gpt-image-2-5 sunburst 2K, new (fetched at 0 tokens; soft knee on the highlights only)",
+   "rows": [
+    {
+     "card": "cushions-aliexpress-farmhouse-floral-pillow-covers-166217 (pair)",
+     "present": true,
+     "faithful": "yes",
+     "why": "exactly two, square; cream ground, clay-rose flower heads on sage stems in offset rows, ~6-7 motifs across, as the card photo. Trace: a small invented insect-like glyph between motifs on the right cushion (~(1594-1608, 864-879)), reads as a fly at 100%",
+     "phase_b": null,
+     "fix": "code, 0 tokens: clone the ground over the glyph"
+    },
+    {
+     "card": "cushions-cj-chenille-check-milky-white",
+     "present": true,
+     "faithful": "yes",
+     "why": "one, square, milky white tone-on-tone raised check, ~22 checks across (card ~2 cm squares)",
+     "phase_b": null,
+     "fix": null
+    },
+    {
+     "card": "vase-aliexpress-vintage-distressed-clay-vase-589009",
+     "present": true,
+     "faithful": "no",
+     "why": "a different vase: an amphora with a short neck and rolled lip, a small lug on the left shoulder and brown pits; squat, H/W ~1.55. The card (room SKU L, 31 x 15, H/W ~2.1) is a tall neckless ovoid with fine horizontal combed lines, no lug, no pits",
+     "phase_b": null,
+     "fix": "one targeted pass on the sill with the card crop, masked to the vase"
+    },
+    {
+     "card": "sill-vase-cj-cream-fluted-column-25",
+     "present": true,
+     "faithful": "yes",
+     "why": "fluted column, smooth knop, flared turned foot, cream glaze; a little stockier (H/W ~2.4 to the foot vs 2.9); height 0.72 of the clay vase (cards 0.80)",
+     "phase_b": null,
+     "fix": null
+    },
+    {
+     "card": "table-runner-cj-linen-look-sage-fringe (4 Light Green)",
+     "present": true,
+     "faithful": "partly",
+     "why": "slub linen-look in grey-sage with brown flecks, short knotted tassels (13 across, card ~12), as the card photo. But too wide: ~457 px at the bowl's contact row against the bowl's 195 px and the cups' ~100 px, i.e. ~45-48 cm against the card's 33 (x1.4)",
+     "phase_b": null,
+     "fix": "the table pass (with the bowl), or accept with a note"
+    },
+    {
+     "card": "bowl-cj-speckled-ivory-wide-bowl-21",
+     "present": true,
+     "faithful": "partly",
+     "why": "speckled ivory with the tan rim, ~20 cm wide (right); but a deep rounded bowl, H/D ~0.45, not the wide 'rain-hat' cone (21.3 x 5.2 = 0.24). The same miss as mediterranean in phase B, fixed there by ED4",
+     "phase_b": null,
+     "fix": "the table pass (as mediterranean ED4)"
+    },
+    {
+     "card": "curtains-aliexpress-linen-blend-s-fold-180502 (pair)",
+     "present": true,
+     "faithful": "partly",
+     "why": "a pair, floor length, slub linen texture; but oatmeal/flax ~16 L* darker than the plaster beside it, where the card's #EDE7DB is close to a milk wall; a gathered pinch heading on a pole instead of the room SKU's S-fold; the sheerness cannot be seen (they hang beside the glass)",
+     "phase_b": null,
+     "fix": "code, 0 tokens: lift the two panels toward #EDE7DB; the heading: accept as a variant of the listing or a pass"
+    }
+   ],
+   "counts": {
+    "rows": 7,
+    "yes": 3,
+    "partly": 3,
+    "no": 1
+   },
+   "count_checks": {
+    "floral_pair": "2",
+    "check_cushion": "1",
+    "vases_on_sill": "2",
+    "runner": "1",
+    "bowls": "1",
+    "seagrass_basket": "exactly 1 (generic; at 100% it has three handles, a generation slip)",
+    "cups": "3 (the prompt asked for 2)"
+   },
+   "look_alikes": [
+    {
+     "item": "three cups on the table",
+     "verdict": "fail until fixed",
+     "why": "the same speckled ivory glaze and tan rim as our bowl: they read as the bowl's set, which we do not sell (render-agent flagged it too)",
+     "fix": "code, 0 tokens: plain glaze on the cups (take out the speckle and the tan rim), or a sage glaze (the draft allows cream and sage ceramics)"
+    }
+   ],
+   "notes": [
+    "the cardigan: at 100% a cardigan (button placket, ribbed cuffs); at frame size it reads as a cream knit throw. This style's throw is not chosen yet ('gauze or smooth knit in milk or sage'), so it can be read as a product. Generic in the brief: the designer's call",
+    "the rug: a faded vintage-wash pattern is a third patterned textile beside the floral and the check (the draft allows two per frame); the prompt asked for it. Designer's call",
+    "brass (candlesticks, lamps, sconces, the door knob): aged, soft highlights, not mirror-polished or champagne: inside the draft",
+    "text, logos, brands: none"
+   ],
+   "final_test": "not yet: the clay vase is 'no' (a different vase), the cups are a look-alike of the bowl, the bowl is deep and the runner x1.4; the curtains' tone and the glyph are code"
+  }
+ },
+ "summary_counts": {
+  "nordic-A-ed4": {
+   "rows": 14,
+   "yes": 13,
+   "partly": 1,
+   "no": 0
+  },
+  "nordic-B-fin": {
+   "rows": 8,
+   "yes": 7,
+   "partly": 1,
+   "no": 0
+  },
+  "warm-modern-A-ed4": {
+   "rows": 11,
+   "yes": 9,
+   "partly": 2,
+   "no": 0
+  },
+  "boho-A-fin2": {
+   "rows": 9,
+   "yes": 7,
+   "partly": 2,
+   "no": 0
+  },
+  "mediterranean-A-ed4": {
+   "rows": 10,
+   "yes": 9,
+   "partly": 1,
+   "no": 0
+  },
+  "japandi-A-ed4": {
+   "rows": 10,
+   "yes": 7,
+   "partly": 3,
+   "no": 0
+  },
+  "modern-country-A": {
+   "rows": 7,
+   "yes": 3,
+   "partly": 3,
+   "no": 1
+  }
+ },
+ "final_test": {
+  "nordic-A-ed4": "ready",
+  "nordic-B-fin": "ready (unchanged; the curtains' 'partly' is only that the S-fold heading is out of frame)",
+  "warm-modern-A-ed4": "almost: the pendant has 6 rings, the card 5 (code fix, 0 tokens, or show with the note); the rug's chunky ribs stay as in phase B",
+  "boho-A-fin2": "not yet: feather the seam (code); the planter/basket sizes are still inverted (the prompt asked for it: accept or fix); the golden near-HDR look from phase B is unchanged",
+  "mediterranean-A-ed4": "not yet: the white frayed cushion still cannot be told from the bench's generic ivory cushions (look-alike, from phase B); and the bowl's ghost arc (code)",
+  "japandi-A-ed4": "not yet: the jar's code traces (0 tokens); the pendant still waits for the sourcing answer (egg vs the card's 40 x 25 pumpkin); the sconces and the wabi-sabi cushion stay 'partly'",
+  "modern-country-A": "not yet: the clay vase is 'no' (a different vase), the cups are a look-alike of the bowl, the bowl is deep and the runner x1.4; the curtains' tone and the glyph are code"
+ },
+ "fixes": {
+  "code_0_tokens": [
+   "boho: feather the vertical seam at x~400 (y 250-460) over ~40 px; optionally lift the faint ring",
+   "mediterranean: clean the ghost arc right of the bowl's rim (wall from the rows above)",
+   "mediterranean: tint the bench's generic back cushions to the sand linen the prompt asked for, so the white frayed cushion stands apart",
+   "japandi: redo the fill round the narrowed jar (rim wings, the two notches, the base: put back a contact shadow)",
+   "warm modern: take one lower ring out of the pendant (card: 5 rings, 2 below the widest), or show it with the note",
+   "modern country: plain glaze on the three cups; clone out the glyph on the right floral cushion; lift the curtains toward #EDE7DB"
+  ],
+  "one_targeted_pass": [
+   "modern country, the table (one masked crop): the bowl to the rain-hat (as mediterranean ED4) and the runner to 33 cm",
+   "modern country, the sill: the clay vase from the card crop (tall neckless ovoid, combed lines, no lug, no pits)"
+  ],
+  "decisions": [
+   "boho planter/basket sizes (the prompt asked for the inversion): accept or fix",
+   "japandi pendant: the sourcing answer first",
+   "modern country: the cardigan and the patterned rug (designer)",
+   "the rug pile in Nordic A and warm modern: accept as the direction or an own pass (from phase B)"
+  ]
+ }
+}
