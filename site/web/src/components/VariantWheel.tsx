@@ -36,7 +36,13 @@ export function VariantWheel({ slot, roomId, initial, onPreview, onChoose, onCan
   const arc = useRef<HTMLDivElement>(null);
   const dialog = useRef<HTMLDivElement>(null);
   const cards = useRef<(HTMLButtonElement | null)[]>([]);
-  const [index, setIndex] = useState(initial - 1);
+  const [index, setIndexState] = useState(initial - 1);
+  // the current option for callbacks that outlive a render (the spring's last frame): never a stale closure
+  const indexRef = useRef(initial - 1);
+  const setIndex = (i: number) => {
+    indexRef.current = i;
+    setIndexState(i);
+  };
   const [cw, setCw] = useState(150);
   const raf = useRef(0);
   const reduce = prefersReducedMotion();
@@ -58,6 +64,8 @@ export function VariantWheel({ slot, roomId, initial, onPreview, onChoose, onCan
     return () => ro.disconnect();
   }, []);
 
+  // the spring stops with the wheel: a frame after closing must not preview an option (a cancel restores the room)
+  useEffect(() => () => cancelAnimationFrame(raf.current), []);
   // focus the current option when the dialog opens; trap Tab inside
   useEffect(() => {
     cards.current[initial - 1]?.focus({ preventScroll: true });
@@ -96,7 +104,7 @@ export function VariantWheel({ slot, roomId, initial, onPreview, onChoose, onCan
 
   function settle() {
     const i = physics.current.clampIndex(physics.current.pos);
-    if (i !== index) {
+    if (i !== indexRef.current) {
       setIndex(i);
       onPreview(i + 1);
     }
@@ -147,7 +155,7 @@ export function VariantWheel({ slot, roomId, initial, onPreview, onChoose, onCan
     if (d.moved <= 6) return; // a tap: the card's click handler decides
     // the option is chosen at release (where the inertia will land), not when the spring settles (QA on S4)
     const t = physics.current.release();
-    if (t !== index) {
+    if (t !== indexRef.current) {
       setIndex(t);
       onPreview(t + 1);
     }

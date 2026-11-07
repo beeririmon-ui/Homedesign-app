@@ -87,6 +87,8 @@ type Story = {
   option_names_he?: Record<string, Record<string, string>>;
   /** the designer's colour word for an option's value, before the supplier's label: product → "axis:value" → word */
   colours_he?: Record<string, Record<string, string>>;
+  /** a set made of one SKU per value of an axis (a triptych's three prints): sold as the set only, the axis not offered */
+  set_axes?: Record<string, { axis: string; note_he: string }>;
   pairs: Record<string, Pair>;
 };
 type Card = {
@@ -679,7 +681,9 @@ async function detailOf(pg: PageOut, product: string, items: Item[]): Promise<De
     axes.some((a) => a.id === 'size')
       ? sizeLabel(axes.find((a) => a.id === 'size')!.values.find((v) => v.id === values.size)?.label_he)
       : sizeHe(p ? p.dimensions_cm : card.dimensions_cm, place);
-  const unitOk = !!p?.pack && p.pack.set_qty > 1;
+  // QA on S4: a set of distinct SKUs (one per value of an axis) is sold as the set only; the axis is not a choice
+  const setAxis = story.set_axes?.[product] ?? null;
+  const unitOk = !!p?.pack && p.pack.set_qty > 1 && !setAxis;
   const unitOf = (u: number | null | undefined) => ({
     unit_price_agorot: unitOk && u != null ? u : null,
     unit_price_he: unitOk && u != null ? formatIls(u) : null,
@@ -744,7 +748,19 @@ async function detailOf(pg: PageOut, product: string, items: Item[]): Promise<De
               ...unitOf(null),
             },
           ];
-  const story_key = keyOf(axes, first.values);
+  if (setAxis) {
+    const at = axes.findIndex((a) => a.id === setAxis.axis);
+    if (at < 0) throw new Error(`${product}: set_axes names ${setAxis.axis}, which the card does not have`);
+    const keep = first.values?.[setAxis.axis];
+    for (let i = raw.length - 1; i >= 0; i--) if (raw[i]!.values[setAxis.axis] !== keep) raw.splice(i, 1);
+    axes.splice(at, 1);
+    for (const k of raw) {
+      k.values = Object.fromEntries(Object.entries(k.values).filter(([a]) => a !== setAxis.axis));
+      k.key = keyOf(axes, k.values);
+      k.label_he = labelOf(k.values);
+    }
+  }
+  const story_key = keyOf(axes, setAxis ? Object.fromEntries(Object.entries(first.values ?? {}).filter(([a]) => a !== setAxis.axis)) : first.values);
   if (!raw.some((k) => k.key === story_key)) throw new Error(`${pg.href}: ${product}: the frame's option ${story_key} is not one of its SKUs`);
   // the close-ups this house declares for the product: on their option, else on the option the story shows
   const declared = (pg.pair.closeups ?? []).filter((c) => c.product === product);
@@ -808,7 +824,10 @@ async function detailOf(pg: PageOut, product: string, items: Item[]): Promise<De
     set_qty: first.set_qty,
     swatch: first.swatch,
     // the product's own notes (the frame's own captions go with "בחדר הזה")
-    notes_he: [...new Set(items.flatMap((x) => x.notes_he.filter((n) => n !== x.in_frame_he && !n.startsWith('בתמונה'))))],
+    notes_he: [
+      ...(setAxis ? [setAxis.note_he] : []),
+      ...new Set(items.flatMap((x) => x.notes_he.filter((n) => n !== x.in_frame_he && !n.startsWith('בתמונה')))),
+    ],
     axes,
     skus,
     story_key,
@@ -915,7 +934,8 @@ const rows = (f: FrameOut) =>
  * not for sale is named, never added (no price yet, PRE1)
  */
 function lookHtml(f: FrameOut): string {
-  const sold = [...new Map(f.items.filter((x) => x.status === 'available' && x.variant_id).map((x) => [x.variant_id!, x])).values()];
+  // QA on S4: only a product with a dot (QA called it faithful here); a "partly" one is never added with the look
+  const sold = [...new Map(f.items.filter((x) => x.status === 'available' && x.variant_id && x.dot).map((x) => [x.variant_id!, x])).values()];
   if (!sold.length) return '';
   const total = sold.reduce((n, x) => n + (x.price_agorot ?? 0), 0);
   const unpriced = f.items.filter((x) => x.status === 'unpriced').length;
@@ -1196,7 +1216,7 @@ ${elsewhere}
 const template = readFileSync(sitePath('tools/story/page.template.html'), 'utf8');
 function render(file: string, fill: Record<string, string>): string {
   let html = template;
-  for (const [k, v] of Object.entries(fill)) html = html.split(`{{${k}}}`).join(v);
+  for (const [k, v] of Object.entries({ ...fill, REGISTER: `${register.version}` })) html = html.split(`{{${k}}}`).join(v);
   const left = html.match(/\{\{[A-Z0-9_]+\}\}/g);
   if (left) throw new Error(`${file}: template placeholders left: ${left.join(', ')}`);
   mkdirSync(dirname(sitePath(file)), { recursive: true });
@@ -1396,7 +1416,7 @@ const checkoutBody = `<section class="mag-paper st-co" id="checkout" data-head="
         <div id="co-errors" class="st-co-errors" role="alert" tabindex="-1" hidden></div>
         <fieldset class="st-co-set"><legend class="mag-h3">פרטים</legend>
           ${field('full_name', 'שם מלא', 'autocomplete="name" required')}
-          ${field('email', 'אימייל', 'type="email" autocomplete="email" inputmode="email" dir="ltr" required')}
+          ${field('email', 'אימייל', 'type="email" autocomplete="email" inputmode="email" dir="ltr" required', 'לשם נשלחים אישור ההזמנה והחשבונית.')}
           ${field('phone', 'טלפון', 'type="tel" autocomplete="tel" inputmode="tel" dir="ltr" required', 'לשליח, למשל 050-1234567.')}
         </fieldset>
         <fieldset class="st-co-set"><legend class="mag-h3">כתובת למשלוח</legend>
@@ -1416,6 +1436,7 @@ const checkoutBody = `<section class="mag-paper st-co" id="checkout" data-head="
             .join('\n          ')}
         </fieldset>
         <div class="st-co-field"><label class="st-co-check"><input type="checkbox" id="f-terms" name="terms" aria-describedby="err-terms" /> <span>קראתי ואני מאשר/ת את <a class="mag-link" href="/terms/">התקנון</a> ואת <a class="mag-link" href="/returns/">מדיניות הביטולים</a></span></label><p class="st-co-err" id="err-terms" hidden></p></div>
+        <div class="st-co-field"><label class="st-co-check"><input type="checkbox" id="f-marketing" name="marketing" /> <span>אשמח לקבל עדכונים על מוצרים חדשים במייל (רשות, אפשר להסיר בכל עת).</span></label></div>
         <p><button type="submit" class="mag-btn mag-btn-primary" id="co-pay">לתשלום (בדיקה)</button></p>
       </form>
     </div>
@@ -1449,6 +1470,12 @@ const orderBody = `<section class="mag-paper st-co" id="order" data-head="הזמ
     </div>
   </div>
 </section>`;
+const sellTable: Record<string, [number, number | null, 0 | 1, number]> = {};
+for (const x of pages.flatMap((pg) => pg.frames.flatMap((f) => f.items)))
+  if (x.variant_id && x.price_agorot !== null) sellTable[x.variant_id] = [x.price_agorot, null, x.status === 'available' ? 1 : 0, x.set_qty];
+for (const d of details)
+  for (const k of d.skus)
+    if (k.variant_id && k.price_agorot !== null) sellTable[k.variant_id] = [k.price_agorot, k.unit_price_agorot, k.sellable ? 1 : 0, d.set_qty];
 for (const [kind, href, title, body, skip] of [
   ['checkout', '/story/checkout/', 'תשלום', checkoutBody, '#co-form'],
   ['order', '/story/order/', 'הזמנת בדיקה', orderBody, '#order'],
@@ -1465,7 +1492,9 @@ for (const [kind, href, title, body, skip] of [
     SKIP_HE: 'דילוג לתוכן העמוד',
     TOOL_HREF: esc(story.tool_fallback),
     BODY: [body, footer('')].join('\n'),
-    DATA: JSON.stringify({ page: { room: null, style: null, href, tool: story.tool_fallback, kind }, items: {}, frames: [], shipping }).replace(
+    // QA on S4: the checkout re-checks every line against the story as built now (price, sold or not), never the
+    // snapshot a line kept from the page it was added on: variant → [price, single-piece price, for sale, set size]
+    DATA: JSON.stringify({ page: { room: null, style: null, href, tool: story.tool_fallback, kind }, items: {}, frames: [], shipping, v: sellTable }).replace(
       /</g,
       '\\u003c',
     ),

@@ -1,8 +1,6 @@
 """
 qa-agent 2026-11-07: the pilot's shell fixes (shell-fix.json) measured by QA. Usage: ~/.venvs/motion/bin/python -I shellfix.py <version>
-(1) the light wedge on the back wall: its edge located on the step-2 shell (shell.png: the steepest low-frequency step per row, sigma 8,
-    inside the designer's box x 850-1350 / y 250-700 of a 2000-wide frame); on the fixed shell the low-frequency L* step across that edge
-    (the mean of 40 px on each side, 10 px off the edge), per row: median, p90, max.
+(1) the wedge: moved to wedge_area.py (see the note in the code).
 (2) L* at the plan's grading points (QA's projection, 7 x 7 px median) on the ungraded and the graded shell.
 (3) the bench slab: a*, b* of the lit slab and the share of pore pixels (> 3.5 L* under the 7 px local median) inside the slab.
 Writes data/shellfix-<version>.json.
@@ -41,26 +39,8 @@ def L_of(name):
 
 before, after = L_of("shell.png"), L_of(FIXED)
 W, H = 2720, 1530
-k = W / 2000
-x0, x1, y0, y1 = int(850 * k), int(1350 * k), int(250 * k), int(700 * k)
-lb = cv2.GaussianBlur(before[..., 0].astype(np.float32), (0, 0), 8)
-la = cv2.GaussianBlur(after[..., 0].astype(np.float32), (0, 0), 8)
-steps, edges = [], []
-for y in range(y0, y1, 4):
-    gx = np.abs(np.diff(lb[y, x0:x1]))
-    e = x0 + int(np.argmax(gx))
-    if gx.max() < 0.15:          # no wedge edge on this row
-        continue
-    l_ = la[y, max(0, e - 50):e - 10].mean()
-    r_ = la[y, e + 10:e + 50].mean()
-    lb_ = lb[y, max(0, e - 50):e - 10].mean()
-    rb_ = lb[y, e + 10:e + 50].mean()
-    steps.append(abs(l_ - r_))
-    edges.append(dict(y=y, x=e, before=round(float(abs(lb_ - rb_)), 2), after=round(float(abs(l_ - r_)), 2)))
-st = np.array(steps)
-wedge = dict(rows=len(st), after_median=round(float(np.median(st)), 2), after_p90=round(float(np.percentile(st, 90)), 2), after_max=round(float(st.max()), 2),
-             before_median=round(float(np.median([e["before"] for e in edges])), 2), before_max=round(float(max(e["before"] for e in edges)), 2),
-             rows_over_2=int((st > 2).sum()), rows_over_2_5=int((st > 2.5).sum()))
+# (1) the wedge: see wedge_area.py (the designer's area condition). A first per-row measure here locked onto the corner's falloff at the
+# box's left edge, not the wedge, and was dropped (QA, 2026-11-07).
 
 
 def point(Lmap, X, Y, Z):
@@ -91,6 +71,6 @@ for name, Lm in (("step-2 shell", before), (FIXED, after), (GRADED, graded)):
                       pores_pct=round(float(pores[m].mean() * 100), 2))
 slab["target #D8C8AE"] = [round(float(v), 2) for v in lab(np.array([[0xD8, 0xC8, 0xAE]], float))[0]]
 slab["polygon_px"] = poly
-out = dict(version=V, wedge=wedge, wedge_rows=edges[::6], grading_points=points, bench_slab=slab)
+out = dict(version=V, grading_points=points, bench_slab=slab)
 json.dump(out, open(os.path.join(OUT, "data", f"shellfix-{V}.json"), "w"), indent=1)
-print(json.dumps({k_: v for k_, v in out.items() if k_ != "wedge_rows"}, indent=1))
+print(json.dumps(out, indent=1))

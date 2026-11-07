@@ -109,8 +109,9 @@ export type HeldLine = { variant_id: string; pack: Pack; qty: number; name_he: s
 export type StoryCart = Pick<StoreApi, 'kind' | 'createCart' | 'getCart' | 'setItem'> & {
   /** adds one more of the variant (a new cart when there is none); the line is capped at MAX_QTY */
   add(variantId: string, qty?: number, pack?: Pack): Promise<Cart>;
-  /** the whole look: every variant once more, in order; one that is not for sale is skipped and named */
-  addLook(variantIds: string[]): Promise<{ cart: Cart | null; added: string[]; skipped: string[] }>;
+  /** the whole look: every variant once, in order; one already in the cart stays as it is (pressing twice adds
+   *  nothing: QA on S4), one that is not for sale is skipped and named */
+  addLook(variantIds: string[]): Promise<{ cart: Cart | null; added: string[]; skipped: string[]; already: string[] }>;
   /** a line's quantity (0 removes it) */
   setQty(variantId: string, pack: Pack, qty: number): Promise<Cart>;
   /** the cart as it stands, or null before the first add */
@@ -121,28 +122,49 @@ export type StoryCart = Pick<StoreApi, 'kind' | 'createCart' | 'getCart' | 'setI
   clear(): void;
 };
 
-export function storyCart(variants: StoryVariant[], store: KeyValue = browserStore(), key = 'hd.story.cart'): StoryCart {
+/**
+ * `strict` (the checkout, QA on S4): the page's own table is the truth for every line. A line whose variant the table
+ * does not list, or lists as not for sale, is held and never charged; a line's snapshot only lends it its name.
+ */
+export function storyCart(variants: StoryVariant[], store: KeyValue = browserStore(), key = 'hd.story.cart', opts: { strict?: boolean } = {}): StoryCart {
   const byId = new Map(variants.map((v) => [v.variant_id, v]));
-  // the cart as this page last saved it: the store can drop a write (a private window), and the page keeps working
+  // the cart as this page last saved it: the store can drop a write (a private window), and the page keeps working.
+  // Only then: when the store works, it has the last word (another tab may have ordered and emptied it: QA on S4).
   let mine: Saved | null = null;
+  let dropped = false;
   const load = (): Saved | null => {
     try {
       const s = JSON.parse(store.get(key) ?? 'null') as Saved | null;
-      return s && typeof s.id === 'string' && Array.isArray(s.items) ? s : mine && structuredClone(mine);
+      if (s && typeof s.id === 'string' && Array.isArray(s.items)) return s;
+      return dropped ? mine && structuredClone(mine) : null;
     } catch {
       return mine && structuredClone(mine);
     }
   };
   const save = (s: Saved) => {
     mine = structuredClone(s);
+    const text = JSON.stringify(s);
     try {
-      store.set(key, JSON.stringify(s));
+      store.set(key, text);
+      // a store can also drop a write without a word (a private window): read it back
+      dropped = store.get(key) !== text;
     } catch {
-      /* kept for this page only */
+      dropped = true; // kept for this page only
     }
   };
   // this page's own variant first; else the line's snapshot (a product of another story page)
-  const variantOf = (i: Line): StoryVariant | undefined => byId.get(i.variant_id) ?? (isVariant(i.v) && i.v.variant_id === i.variant_id ? i.v : undefined);
+  const variantOf = (i: Line): StoryVariant | undefined => {
+    const own = byId.get(i.variant_id);
+    const snap = isVariant(i.v) && i.v.variant_id === i.variant_id ? i.v : undefined;
+    if (own)
+      return {
+        ...own,
+        name_he: own.name_he || snap?.name_he || '',
+        option_he: own.option_he ?? snap?.option_he ?? null,
+        product_id: own.product_id || snap?.product_id || '',
+      };
+    return opts.strict ? undefined : snap;
+  };
   const view = (s: Saved): Cart => {
     const lines = s.items.flatMap((i) => {
       // this page's own variant first; else the line's snapshot (a product of another story page)
@@ -206,15 +228,19 @@ export function storyCart(variants: StoryVariant[], store: KeyValue = browserSto
     async addLook(variantIds) {
       const added: string[] = [];
       const skipped: string[] = [];
+      const already: string[] = [];
       let cart: Cart | null = null;
+      const inCart = new Set((api.current()?.lines ?? []).filter((l) => l.pack === 'set').map((l) => l.variant_id));
       for (const id of variantIds)
-        try {
-          cart = await api.add(id);
-          added.push(id);
-        } catch {
-          skipped.push(id);
-        }
-      return { cart: cart ?? api.current(), added, skipped };
+        if (inCart.has(id)) already.push(id);
+        else
+          try {
+            cart = await api.add(id);
+            added.push(id);
+          } catch {
+            skipped.push(id);
+          }
+      return { cart: cart ?? api.current(), added, skipped, already };
     },
     async setQty(variantId, pack, qty) {
       const id = load()?.id ?? (await api.createCart()).id;
@@ -229,7 +255,7 @@ export function storyCart(variants: StoryVariant[], store: KeyValue = browserSto
       return (s?.items ?? []).flatMap((i) => {
         const v = variantOf(i);
         if (v && v.available && (i.pack === 'set' || v.unit_price_agorot != null)) return [];
-        const name = v?.name_he ?? (typeof i.v?.name_he === 'string' ? i.v.name_he : null);
+        const name = v?.name_he || (typeof i.v?.name_he === 'string' ? i.v.name_he : null);
         return name ? [{ variant_id: i.variant_id, pack: i.pack, qty: i.qty, name_he: name, option_he: v?.option_he ?? null }] : [];
       });
     },

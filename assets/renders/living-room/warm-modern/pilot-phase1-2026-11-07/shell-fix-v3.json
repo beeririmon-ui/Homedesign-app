@@ -1,0 +1,326 @@
+{
+ "date": "2026-11-07",
+ "by": "render-agent",
+ "tokens": 0,
+ "base": "shell-v2.png (bench) + shell.png (the back wall)",
+ "out": "shell-v3.png",
+ "source": "docs/proposals/clay-r2-and-ged-verdicts-2026-11-07.md section 13 (master-designer)",
+ "back_wall": {
+  "targets": {
+   "back_wall_by_corner(-1.75,0,1.60)": 83.0,
+   "back_wall_centre(0.20,0,1.95)": 89.5,
+   "back_wall_right(1.85,0,1.60)": 85.0
+  },
+  "L_points": {
+   "raw": {
+    "back_wall_by_corner(-1.75,0,1.60)": 83.3,
+    "window_wall(-2.30,0.30,1.60)": 72.0,
+    "window_wall(-2.30,0.55,1.60)": 76.0,
+    "back_wall_centre(0.20,0,1.95)": 88.9,
+    "back_wall_right(1.85,0,1.60)": 80.9
+   },
+   "v2": {
+    "back_wall_by_corner(-1.75,0,1.60)": 82.8,
+    "window_wall(-2.30,0.30,1.60)": 72.0,
+    "window_wall(-2.30,0.55,1.60)": 76.0,
+    "back_wall_centre(0.20,0,1.95)": 93.3,
+    "back_wall_right(1.85,0,1.60)": 85.3
+   },
+   "v3": {
+    "back_wall_by_corner(-1.75,0,1.60)": 82.9,
+    "window_wall(-2.30,0.30,1.60)": 72.0,
+    "window_wall(-2.30,0.55,1.60)": 76.0,
+    "back_wall_centre(0.20,0,1.95)": 89.6,
+    "back_wall_right(1.85,0,1.60)": 85.0
+   }
+  },
+  "movement_mid_freq_p2_p98": {
+   "raw": [
+    -2.5,
+    1.44
+   ],
+   "squeeze": 1.0,
+   "v3": [
+    -2.36,
+    1.45
+   ],
+   "rule": "Bible: soft movement up to 3 L*"
+  },
+  "v2_movement_mid_freq_p2_p98": [
+   -2.24,
+   1.12
+  ],
+  "method": "low frequencies (50 px) to T = plateau shape + a smooth x-correction through the targets; finer movement and grain from the raw; L* only, a*/b* follow where lifted"
+ },
+ "art_sconce_area": {
+  "frame_uv": [
+   0.45,
+   0.85,
+   0.15,
+   0.45
+  ],
+  "max_dL_over_120px": {
+   "raw": 9.51,
+   "v3": 2.36,
+   "where_v3": [
+    "column",
+    1255,
+    288
+   ],
+   "limit": 2.5,
+   "passes": true
+  },
+  "slope_limit_in_area": "2.2 L* per 120 px on the target's x-profile",
+  "extra_flatten_applied": true
+ },
+ "stone_mask": "masks/stone.png (for the display grade's b* cap 12)",
+ "px_changed_vs_v2": 1744418,
+ "px_changed_vs_v2_outside_wall": 0,
+ "lock": {
+  "summary": {
+   "named_worst_p90_raw_px": 11.0,
+   "named_worst_p90_after_affine_px": 14.2,
+   "named_not_measured": [],
+   "shift_px": [
+    0.23,
+    1.07
+   ],
+   "scale": [
+    0.99988,
+    0.99703
+   ]
+  },
+  "verdict": {
+   "named_raw_pass": false,
+   "named_after_affine_pass": false,
+   "shift_le_9_6": true,
+   "scale_within_0_5pct": true,
+   "rule": "G1.4 master (M0S1): every named line within 9.6 px (p90 of its samples) raw or after one global affine (code)",
+   "pass": false
+  },
+  "named": {
+   "glazing back jamb (X -2.30, Y 0.75)": {
+    "median": 0.0,
+    "p90": 0.0,
+    "n": 47
+   },
+   "glazing head (Z 2.70)": {
+    "median": 0.0,
+    "p90": 1.0,
+    "n": 18
+   },
+   "bench front top edge (X -1.98, Z 0.45)": {
+    "median": -1.0,
+    "p90": 1.0,
+    "n": 35
+   },
+   "bench back-end front corner (X -1.98, Y 1.00)": {
+    "median": 0.0,
+    "p90": 1.0,
+    "n": 8
+   },
+   "bench back-end top edge (Y 1.00, Z 0.45)": {
+    "median": 0.0,
+    "p90": 0.0,
+    "n": 5
+   },
+   "back wall ceiling line (Y 0, Z 3.00)": {
+    "median": 1.0,
+    "p90": 1.0,
+    "n": 26
+   },
+   "back wall floor line (Y 0, Z 0; WMC10)": {
+    "median": -1.0,
+    "p90": 1.0,
+    "n": 88
+   },
+   "ceiling band bottom edge (X -2.05, Z 2.82)": {
+    "median": 0.0,
+    "p90": 0.0,
+    "n": 11
+   },
+   "mullion (Y 1.45, frame plane X -2.65)": {
+    "median": 0.0,
+    "p90": 11.0,
+    "n": 52
+   },
+   "mullion (Y 2.15, frame plane X -2.65)": {
+    "median": 1.0,
+    "p90": 2.0,
+    "n": 61
+   }
+  }
+ },
+ "composites_v3": {
+  "base": "shell-furniture-v3.png",
+  "sets": {
+   "A": "composite-set-A-v3.png",
+   "B": "composite-set-B-v3.png",
+   "C": "composite-set-C-v3.png"
+  },
+  "note": "the same layers and shadows; only the shell behind them is v3"
+ },
+ "set_C_corduroy_vs_sku_photo": {
+  "item": "cushions-cj-corduroy-patchwork, Dark Coffee 45 x 45 (set C, left)",
+  "render_layer_Lab_median": [
+   15.9,
+   13.1,
+   13.1
+  ],
+  "sku_photo_Lab_median": [
+   26.3,
+   18.4,
+   16.6
+  ],
+  "raw": {
+   "dE2000": 8.14,
+   "dE76": 12.18,
+   "hue_diff_deg": 3.1
+  },
+  "exposure_normalised": {
+   "factor": 2.33,
+   "render_Lab": [
+    26.2,
+    17.5,
+    17.4
+   ],
+   "dE76": 1.22,
+   "hue_diff_deg": 2.8,
+   "chroma": [
+    24.7,
+    24.8
+   ]
+  },
+  "verdict": "left as it is: the raw dE is the cushion's place in the room's light (L* 15.9 against 26.3 in the studio photo); at the same exposure the colour is dE76 1.2 and 2.8 deg off, inside dE 5 / 8 deg",
+  "method": "median Lab of the layer's alpha inside the cushion's outline (eroded 7 px) against the SKU crop's cushion pixels (L < 55, b* > 8); exposure normalisation = one linear gain matching the photo's luminance"
+ },
+ "swap_diff": {
+  "rule": "studio rule ו.5 (tool): a swap changes nothing outside the products and their shadows",
+  "base": "shell-furniture-v3.png",
+  "pairs": {
+   "A->B": {
+    "changed_px": 257630,
+    "changed_outside_products_and_shadows": 0,
+    "union_px": 262490
+   },
+   "A->C": {
+    "changed_px": 269986,
+    "changed_outside_products_and_shadows": 0,
+    "union_px": 275302
+   },
+   "base->A": {
+    "changed_outside": 0
+   },
+   "B->C": {
+    "changed_px": 258724,
+    "changed_outside_products_and_shadows": 0,
+    "union_px": 266972
+   },
+   "base->B": {
+    "changed_outside": 0
+   },
+   "base->C": {
+    "changed_outside": 0
+   }
+  }
+ },
+ "display_grade_v3": {
+  "shell-v3.png": {
+   "black_point_p005_after_exposure": 17.51,
+   "stone_b_cap": {
+    "px_capped": 32222,
+    "b_p95_before": 30.89,
+    "b_p95_after": 12.11,
+    "cap": 12.0
+   },
+   "black_point_p005_final": 12.47,
+   "clipped_254_pct": 0.001,
+   "L_points_final": {
+    "back_wall_by_corner(-1.75,0,1.60)": 89.8,
+    "window_wall(-2.30,0.30,1.60)": 78.2,
+    "window_wall(-2.30,0.55,1.60)": 82.5,
+    "back_wall_centre(0.20,0,1.95)": 93.8,
+    "back_wall_right(1.85,0,1.60)": 91.3
+   },
+   "out": "shell-v3-graded.png"
+  },
+  "shell-furniture-v3.png": {
+   "black_point_p005_after_exposure": 7.45,
+   "stone_b_cap": {
+    "px_capped": 13494,
+    "b_p95_before": 30.47,
+    "b_p95_after": 12.09,
+    "cap": 12.0
+   },
+   "black_point_p005_final": 12.35,
+   "clipped_254_pct": 0.001,
+   "L_points_final": {
+    "back_wall_by_corner(-1.75,0,1.60)": 89.8,
+    "window_wall(-2.30,0.30,1.60)": 78.2,
+    "window_wall(-2.30,0.55,1.60)": 82.5,
+    "back_wall_centre(0.20,0,1.95)": 93.8,
+    "back_wall_right(1.85,0,1.60)": 91.3
+   },
+   "out": "shell-furniture-v3-graded.png"
+  },
+  "composite-set-A-v3.png": {
+   "black_point_p005_after_exposure": 7.01,
+   "stone_b_cap": {
+    "px_capped": 13494,
+    "b_p95_before": 30.47,
+    "b_p95_after": 12.09,
+    "cap": 12.0
+   },
+   "black_point_p005_final": 12.37,
+   "clipped_254_pct": 0.029,
+   "L_points_final": {
+    "back_wall_by_corner(-1.75,0,1.60)": 89.8,
+    "window_wall(-2.30,0.30,1.60)": 78.2,
+    "window_wall(-2.30,0.55,1.60)": 82.5,
+    "back_wall_centre(0.20,0,1.95)": 93.8,
+    "back_wall_right(1.85,0,1.60)": 91.3
+   },
+   "out": "composite-set-A-v3-graded.png"
+  },
+  "composite-set-B-v3.png": {
+   "black_point_p005_after_exposure": 6.12,
+   "stone_b_cap": {
+    "px_capped": 13494,
+    "b_p95_before": 30.47,
+    "b_p95_after": 12.09,
+    "cap": 12.0
+   },
+   "black_point_p005_final": 12.38,
+   "clipped_254_pct": 0.032,
+   "L_points_final": {
+    "back_wall_by_corner(-1.75,0,1.60)": 89.8,
+    "window_wall(-2.30,0.30,1.60)": 78.2,
+    "window_wall(-2.30,0.55,1.60)": 82.5,
+    "back_wall_centre(0.20,0,1.95)": 93.8,
+    "back_wall_right(1.85,0,1.60)": 91.3
+   },
+   "out": "composite-set-B-v3-graded.png"
+  },
+  "composite-set-C-v3.png": {
+   "black_point_p005_after_exposure": 4.43,
+   "stone_b_cap": {
+    "px_capped": 13494,
+    "b_p95_before": 30.47,
+    "b_p95_after": 12.09,
+    "cap": 12.0
+   },
+   "black_point_p005_final": 12.38,
+   "clipped_254_pct": 0.004,
+   "L_points_final": {
+    "back_wall_by_corner(-1.75,0,1.60)": 89.8,
+    "window_wall(-2.30,0.30,1.60)": 78.2,
+    "window_wall(-2.30,0.55,1.60)": 82.5,
+    "back_wall_centre(0.20,0,1.95)": 93.8,
+    "back_wall_right(1.85,0,1.60)": 91.3
+   },
+   "out": "composite-set-C-v3-graded.png"
+  }
+ },
+ "display_grade_note": "one gain for all (the corner to L* 90, +0.30 stop): on the display the centre reads 93.8 and the right 91.3; the designer's targets are met on the shell itself (82.9 / 89.6 / 85.0). The slab's b* capped at 12 on the display (its shaded front edge carried b* ~29: p95 30.5 -> 12.1); channels over 1 are now desaturated toward Y instead of clipped",
+ "lock_note": "all 10 named lines within +-1 px by median (raw); p90 <= 2 px except the Y 1.45 mullion (11 px: the profile's other edge, as in v1 / v2) and, after the affine only, the 5-sample bench back-end top edge (14.2 px, one sample); lines and bench untouched since v2 (0 px changed outside the back wall)"
+}

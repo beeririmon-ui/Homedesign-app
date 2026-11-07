@@ -8,6 +8,7 @@ Writes data/swapdiff.json and overlays/swap-edges-x4.jpg. Usage: ~/.venvs/motion
 import itertools
 import json
 import os
+import sys
 
 import cv2
 import numpy as np
@@ -16,10 +17,12 @@ from PIL import Image
 REPO = "/home/user/homedesign-app"
 P = os.path.join(REPO, "assets/renders/living-room/warm-modern/pilot-phase1-2026-11-07")
 OUT = os.path.join(REPO, "qa/reports/2026-11-07-pilot-phase1-g1")
-img = {"base": np.asarray(Image.open(os.path.join(P, "shell-furniture-v2.png")).convert("RGB")).astype(int)}
+V = sys.argv[1] if len(sys.argv) > 1 else "v2"          # v2 | v3 | v2-graded | v3-graded
+SFX = "" if V == "v2" else "-" + V
+img = {"base": np.asarray(Image.open(os.path.join(P, f"shell-furniture-{V}.png")).convert("RGB")).astype(int)}
 alpha, shadow = {"base": None}, {"base": None}
 for S in "ABC":
-    img[S] = np.asarray(Image.open(os.path.join(P, f"composite-set-{S}-v2.png")).convert("RGB")).astype(int)
+    img[S] = np.asarray(Image.open(os.path.join(P, f"composite-set-{S}-{V}.png")).convert("RGB")).astype(int)
     alpha[S] = np.asarray(Image.open(os.path.join(P, "layers/cushions", f"set-{S}.png")))[..., 3]
     shadow[S] = np.asarray(Image.open(os.path.join(P, "shadows/cushions", f"set-{S}.png")).convert("RGB")).min(2) < 255
 out = {}
@@ -51,13 +54,13 @@ for S in "ABC":
     halo[S] = dict(ring_px=int(sel.sum()), ring_above_both_p95=round(float(np.percentile(above, 95)), 2), ring_below_both_p95=round(float(np.percentile(below, 95)), 2),
                    share_above_both_by_5=round(float((above > 5).mean() * 100), 2), share_below_both_by_5=round(float((below > 5).mean() * 100), 2))
 out["halo_band"] = halo
-json.dump(out, open(os.path.join(OUT, "data", "swapdiff.json"), "w"), indent=1)
+json.dump(out, open(os.path.join(OUT, "data", f"swapdiff{SFX}.json"), "w"), indent=1)
 print(json.dumps(out, indent=1))
 tiles = []
-c = Image.open(os.path.join(P, "composite-set-A-v2.png")).convert("RGB")
+c = Image.open(os.path.join(P, f"composite-set-A-{V}.png")).convert("RGB")
 for box in ((1420, 860, 1500, 940), (2000, 880, 2080, 960), (1880, 1000, 1960, 1080), (2330, 1020, 2410, 1100)):
     tiles.append(c.crop(box).resize((320, 320), Image.NEAREST))
 o = Image.new("RGB", (4 * 320 + 30, 320), (40, 40, 40))
 for i, t in enumerate(tiles):
     o.paste(t, (i * 330, 0))
-o.save(os.path.join(OUT, "overlays", "swap-edges-x4.jpg"), quality=90)
+o.save(os.path.join(OUT, "overlays", f"swap-edges-x4{SFX}.jpg"), quality=90)

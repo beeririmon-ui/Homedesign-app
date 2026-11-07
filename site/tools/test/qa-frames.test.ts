@@ -31,6 +31,8 @@ describe('the QA register', () => {
     expect(rowOf(f, 'cushion', { color: 'white', size: '50x50' })!.dot).toBe('closeup_only');
     expect(rowOf(f, 'cushion', { color: 'tea', size: '50x50' })!.faithful).toBe('yes');
     expect(r.read('cu-1')!.rows[0]!.faithful).toBe('yes');
+    // an option without its own row is "not checked", never the first row of another option (QA on S4)
+    expect(rowOf(f, 'cushion', { color: 'green', size: '50x50' })).toBeNull();
     expect(r.supersededBy('old')).toBe('f');
     expect(r.read('nope')).toBeNull();
   });

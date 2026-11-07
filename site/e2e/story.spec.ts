@@ -13,7 +13,7 @@
  *  - zero axe violations (WCAG 2.0/2.1 A + AA) on each kind of page, with the sheet open and with the cart open
  * Exact timings are in the evidence tool (tools/screens-story.ts).
  */
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { test, expect, type Page } from '@playwright/test';
@@ -482,6 +482,92 @@ test.describe('the shop (S4)', () => {
     await expect(card).toHaveAttribute('aria-label', /המלאי אינו זמין כעת$/);
     await expect(dialog.getByText('המלאי אינו זמין כעת', { exact: true })).toBeVisible();
     await expect(dialog.getByRole('button', { name: 'הוספה לסל' })).toHaveCount(0);
+  });
+});
+
+test.describe('the shop after QA on S4', () => {
+  test('PRE1 at the checkout: a line kept from when the rug was sold is held, never charged, never ordered', async ({ page }) => {
+    await page.goto('/story/');
+    const rug = {
+      variant_id: 'rug-cj-braided-wool-natural:200x300+square',
+      product_id: 'rug-cj-braided-wool-natural',
+      name_he: 'שטיח צמר קלוע, טבעי',
+      option_he: null,
+      price_agorot: 129900,
+      set_qty: 1,
+      available: true,
+    };
+    await page.evaluate((v) => {
+      localStorage.setItem('hd.story.cart', JSON.stringify({ id: 'qa-s4', items: [{ variant_id: v.variant_id, pack: 'set', qty: 1, v }] }));
+    }, rug);
+    await page.goto(`${NORDIC}#list-A`);
+    await page.locator('#look-A').click();
+    await page.goto('/story/checkout/');
+    await expect(page.locator('#co-lines')).not.toContainText('שטיח');
+    await expect(page.locator('#co-held')).toContainText('שטיח צמר קלוע');
+    await expect(page.locator('#co-total')).not.toContainText('1,299');
+    for (const [k, v] of [
+      ['full_name', 'נועה כהן'],
+      ['email', 'noa@example.com'],
+      ['phone', '050-1234567'],
+      ['city', 'חיפה'],
+      ['street', 'הנמל'],
+      ['house', '12'],
+    ])
+      await page.locator(`#f-${k}`).fill(v!);
+    await expect(page.locator('#hint-email')).toContainText('אישור ההזמנה');
+    await expect(page.locator('#f-marketing')).not.toBeChecked();
+    await page.locator('#f-terms').check();
+    await page.locator('#co-pay').click();
+    await expect(page.locator('#or-lines')).not.toContainText('שטיח');
+  });
+
+  test("the whole look twice adds nothing the second time; another tab's order empties this one", async ({ page, context }) => {
+    await page.goto(`${NORDIC}#list-A`);
+    await page.locator('#look-A').click();
+    await expect(page.locator('#st-cart-count')).not.toHaveText('0');
+    const n = await page.locator('#st-cart-count').textContent();
+    await page.waitForTimeout(2700); // the button's confirmation has gone back to its label
+    await page.locator('#look-A').click();
+    await expect(page.locator('#look-A')).toHaveText('המראה כבר בסל');
+    await expect(page.locator('#st-cart-count')).toHaveText(n!);
+    // another tab places the order: this tab's count follows, and its next add starts a new cart
+    const other = await context.newPage();
+    await other.goto('/story/checkout/');
+    for (const [k, v] of [
+      ['full_name', 'נועה כהן'],
+      ['email', 'noa@example.com'],
+      ['phone', '050-1234567'],
+      ['city', 'חיפה'],
+      ['street', 'הנמל'],
+      ['house', '12'],
+    ])
+      await other.locator(`#f-${k}`).fill(v!);
+    await other.locator('#f-terms').check();
+    await other.locator('#co-pay').click();
+    await expect(other).toHaveURL(/\/story\/order\//);
+    await expect(page.locator('#st-cart-count')).toHaveText('0');
+    await page.evaluate(() => window.__story!.openSheet('A-5'));
+    await page.locator('#st-add').click();
+    await expect(page.locator('#st-cart-count')).toHaveText('1');
+  });
+
+  test('the triptych sells as its set of three different prints only: no print to choose, no single print', async ({ page }) => {
+    await page.goto(DETAIL('nordic', 'framed-art-aliexpress-minimal-geometric-triptych-prints'));
+    await expect(page.locator('.st-pd-axis[data-axis="color"]')).toHaveCount(0);
+    await expect(page.locator('#st-pd-pack')).toHaveCount(0);
+    await expect(page.locator('#detail .st-notes')).toContainText('שלושה הדפסים שונים');
+  });
+
+  test('the build read the highest QA register version (rebuild when a new one lands)', async ({ page }) => {
+    const dir = resolve(dirname(fileURLToPath(import.meta.url)), '../../qa/reports');
+    const top = Math.max(
+      ...readdirSync(dir)
+        .filter((n) => /^ged-register-.*\.json$/.test(n))
+        .map((n) => (JSON.parse(readFileSync(resolve(dir, n), 'utf8')) as { version: number }).version),
+    );
+    await page.goto('/story/');
+    await expect(page.locator('meta[name="hd-qa-register"]')).toHaveAttribute('content', String(top));
   });
 });
 

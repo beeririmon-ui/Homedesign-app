@@ -47,6 +47,8 @@ type Data = {
   page: { room: string | null; style: string | null; href: string; tool: string; kind?: 'checkout' | 'order' | 'tool-draft' };
   /** the site's shipping methods (the checkout page) */
   shipping?: ShippingMethod[];
+  /** the checkout's own table of every story variant: [price, single-piece price, for sale, set size] (QA on S4) */
+  v?: Record<string, [number, number | null, 0 | 1, number]>;
   items: Record<string, Item>;
   frames: FrameData[];
   /** a detail page (layer 2): the product's SKUs in this house */
@@ -289,7 +291,24 @@ const variants: StoryVariant[] = Object.values(data.items).flatMap((it) =>
       ]
     : [],
 );
-const cart = storyCart([...new Map([...variants, ...detailVariants].map((v) => [v.variant_id, v])).values()]);
+// the checkout (QA on S4): its own table is the truth for every line, never the snapshot a line kept
+const tableVariants: StoryVariant[] = Object.entries(data.v ?? {}).map(([variant_id, [price, unit, sold, set]]) => ({
+  variant_id,
+  product_id: '',
+  name_he: '',
+  option_he: null,
+  price_agorot: price,
+  set_qty: set,
+  available: sold === 1,
+  unit_price_agorot: unit,
+}));
+const cart = data.v
+  ? storyCart(tableVariants, undefined, undefined, { strict: true })
+  : storyCart([...new Map([...variants, ...detailVariants].map((v) => [v.variant_id, v])).values()]);
+// another tab may change the cart (an order empties it): the count follows
+addEventListener('storage', (e) => {
+  if (e.key === 'hd.story.cart' || e.key === null) showCount(false);
+});
 const countEl = document.getElementById('st-cart-count')!;
 function showCount(animate: boolean): void {
   const n = cart.current()?.count ?? 0;
@@ -585,10 +604,10 @@ for (const b of document.querySelectorAll<HTMLButtonElement>('.st-look-btn'))
     mark('cart:look', { frame: b.dataset.frame, added: r.added.length, skipped: r.skipped.length });
     showCount(true);
     const text = b.innerHTML;
-    b.textContent = r.added.length ? `המראה בסל · ${items(r.added.length)}` : 'לא נוסף דבר';
+    b.textContent = r.added.length ? `המראה בסל · ${items(r.added.length)}` : r.already.length ? 'המראה כבר בסל' : 'לא נוסף דבר';
     setTimeout(() => (b.innerHTML = text), 2500);
     announce(
-      `${r.added.length ? `נוספו לסל ${items(r.added.length)} מהמראה` : 'לא נוסף דבר לסל'}${r.skipped.length ? `, ${items(r.skipped.length)} לא במכירה` : ''}. בסל ${items(r.cart?.count ?? 0)}, ${priceHe(r.cart?.subtotal_agorot ?? 0)}.`,
+      `${r.added.length ? `נוספו לסל ${items(r.added.length)} מהמראה` : r.already.length ? 'המראה כבר בסל, לא נוסף דבר' : 'לא נוסף דבר לסל'}${r.already.length && r.added.length ? `, ${items(r.already.length)} כבר היו בסל` : ''}${r.skipped.length ? `, ${items(r.skipped.length)} לא במכירה` : ''}. בסל ${items(r.cart?.count ?? 0)}, ${priceHe(r.cart?.subtotal_agorot ?? 0)}.`,
     );
   });
 $('st-cart-open').addEventListener('click', async () => {

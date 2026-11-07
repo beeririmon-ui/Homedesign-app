@@ -511,7 +511,8 @@ def cush_fetch(s, url, pid, tid, refetch=True):
 
 def swap():
     """studio rule ו.5 in the tool: swapping set X for set Y changes nothing outside the two products and their shadows."""
-    base = load(os.path.join(HERE, "shell-furniture.png"))
+    bname = next(n for n in ("shell-furniture-v3.png", "shell-furniture-v2.png", "shell-furniture.png") if os.path.exists(os.path.join(HERE, n)))
+    base = load(os.path.join(HERE, bname))
     sets = [s for s in "ABC" if os.path.exists(os.path.join(HERE, f"layers/cushions/set-{s}.png"))]
     out = {}
     def comp(s):
@@ -531,7 +532,7 @@ def swap():
         d0 = np.abs(cs - base).max(2) * 255
         out[f"base->{s}"] = dict(changed_outside=int((d0[~ms] > 0.5).sum()))
     J = jobs()
-    J["swap_diff"] = dict(rule="studio rule ו.5 (tool): a swap changes nothing outside the products and their shadows", pairs=out)
+    J["swap_diff"] = dict(rule="studio rule ו.5 (tool): a swap changes nothing outside the products and their shadows", base=bname, pairs=out)
     json.dump(J, open(JOBS, "w"), indent=1, ensure_ascii=False)
     print(json.dumps(out, indent=1))
 
@@ -539,7 +540,7 @@ def swap():
 def corner_gain(size):
     """one global exposure for the whole pilot (every layer composite shares it): the back wall by the corner (-1.75, 0, 1.60) of the
     step-2 shell to L 90 (Bible 1.8 B1 (1): 90-94; ARC2 = the Nordic light)."""
-    sp = os.path.join(HERE, "shell-v2.png") if os.path.exists(os.path.join(HERE, "shell-v2.png")) else os.path.join(HERE, "shell.png")
+    sp = next(os.path.join(HERE, n) for n in ("shell-v3.png", "shell-v2.png", "shell.png") if os.path.exists(os.path.join(HERE, n)))
     a = load(sp)
     W, H = size
     u, v, _ = lock_wm.r1.project(lock_wm.CAM, -1.75, 0.0, 1.60)
@@ -553,7 +554,8 @@ def corner_gain(size):
 def grade():
     """The pilot's display grade (the layers themselves stay ungraded; the tool applies one chain to the stack):
     (1) exposure: one global linear gain for every composite, from the shell's back wall by the corner to L 90 (corner_gain), with a
-        highlight shoulder above L 88 (the glass and the bright wash keep detail; nothing above L 97);
+        highlight shoulder above L 88 (the glass and the bright wash keep detail; nothing above L 97); a channel that would pass 1 is
+        desaturated toward its luminance instead of clipped (no hue shift: the lit slab no longer goes mustard);
     (2) WM-G1, the black point L 11-14 (Nordic 12-15): a toe on L* only (hue and chroma kept); the darkest 0.5 % is moved to 12.5 when
         it is outside 11-14, fading out by L 25.
     Written as *-graded.png next to each composite; the ungraded composite stays. The Nordic v6 fall-off table (a low-frequency
@@ -563,7 +565,10 @@ def grade():
     knee, top = ((88.0 + 16) / 116) ** 3, ((97.0 + 16) / 116) ** 3
     out = dict(_exposure=dict(gain=round(g, 4), stops=round(float(np.log2(g)), 3), corner_Y_before=round(Y0, 4), knee_L=88, shoulder_max_L=97))
     names = ["shell.png", "shell-furniture.png"] + [f"composite-set-{s}.png" for s in "ABC"]
-    names += [n.replace(".png", "-v2.png") for n in names]
+    names = names + [n.replace(".png", "-v2.png") for n in names] + [n.replace(".png", "-v3.png") for n in names]
+    stone_p = os.path.join(HERE, "masks/stone.png")
+    stone = (np.asarray(Image.open(stone_p)) > 127) if os.path.exists(stone_p) else None
+    fur_a = np.asarray(Image.open(os.path.join(HERE, "fixed-furniture.png")))[..., 3] > 127
     for name in names:
         p = os.path.join(HERE, name)
         if not os.path.exists(p):
@@ -573,6 +578,10 @@ def grade():
         Y = (lin * [0.2126, 0.7152, 0.0722]).sum(2)
         Yc = np.where(Y > knee, knee + (top - knee) * (1 - np.exp(-(Y - knee) / (top - knee))), Y)
         lin = lin * (Yc / np.maximum(Y, 1e-6))[..., None]
+        # a channel over 1 would clip and shift the hue (the warm slab went mustard): desaturate toward Y instead, Y kept
+        mx = lin.max(2)
+        t_ = np.where(mx > 1.0, np.clip((1.0 - Yc) / np.maximum(mx - Yc, 1e-6), 0, 1), 1.0)
+        lin = Yc[..., None] + (lin - Yc[..., None]) * t_[..., None]
         e = np.clip(l2s(np.clip(lin, 0, 1)), 0, 1).astype(np.float32)
         lab = cv2.cvtColor(e, cv2.COLOR_RGB2LAB)
         L = lab[..., 0]
@@ -583,6 +592,16 @@ def grade():
             k = np.clip(1 - (L - bp) / max(25.0 - bp, 1e-3), 0, 1) ** 2
             lab[..., 0] = np.where(L < 25.0, L + (tgt - bp) * k, L)
             e = np.clip(cv2.cvtColor(lab, cv2.COLOR_LAB2RGB), 0, 1)
+        if stone is not None and name.endswith("-v3.png"):
+            # section 13 (3): the bench slab never reads yellow in the display grade: b* capped at 12 on the visible slab
+            sm_ = stone & ~(fur_a if "furniture" in name or "composite" in name else np.zeros_like(stone))
+            le = cv2.cvtColor(e.astype(np.float32), cv2.COLOR_RGB2LAB)
+            b_before = float(np.percentile(le[..., 2][sm_], 95))
+            capped = sm_ & (le[..., 2] > 12.0)
+            le[..., 2] = np.where(sm_, np.minimum(le[..., 2], 12.0), le[..., 2])
+            e = np.where(sm_[..., None], np.clip(cv2.cvtColor(le, cv2.COLOR_LAB2RGB), 0, 1), e).astype(np.float32)
+            rec["stone_b_cap"] = dict(px_capped=int(capped.sum()), b_p95_before=round(b_before, 2),
+                                      b_p95_after=round(float(np.percentile(cv2.cvtColor(e, cv2.COLOR_RGB2LAB)[..., 2][sm_], 95)), 2), cap=12.0)
         rec["black_point_p005_final"] = round(float(np.percentile(cv2.cvtColor(e, cv2.COLOR_RGB2LAB)[..., 0], 0.5)), 2)
         rec["clipped_254_pct"] = round(float(((e * 255) >= 254).any(2).mean() * 100), 3)
         rec["L_points_final"] = points_L(e, size)
@@ -602,10 +621,10 @@ def sheet():
     f = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 22)
     fb = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 26)
     tiles = [("clay r4, shell layer", CLAY_SHELL), ("step 2: shell (seedream raw)", os.path.join(HERE, "shell.png")),
-             ("step 2: shell v2 (code: wedge flattened, limestone bench)", os.path.join(HERE, "shell-v2.png")),
-             ("step 3: shell v2 + furniture + code shadow", os.path.join(HERE, "shell-furniture-v2.png"))]
-    tiles += [(f"step 4: cushions set {s} (on shell v2), display grade", os.path.join(HERE, f"composite-set-{s}-v2-graded.png")) for s in "ABC"]
-    tiles += [("shell lock overlay (red = clay line, green = render edge)", os.path.join(HERE, "shell-lock.jpg"))]
+             ("step 2: shell v3 (code: wedge out, wall 83 / 89.5 / 85 + movement)", os.path.join(HERE, "shell-v3.png")),
+             ("step 3: shell v3 + furniture + code shadow", os.path.join(HERE, "shell-furniture-v3.png"))]
+    tiles += [(f"step 4: cushions set {s} (on shell v3), display grade", os.path.join(HERE, f"composite-set-{s}-v3-graded.png")) for s in "ABC"]
+    tiles += [("shell v3 lock overlay (red = clay line, green = render edge)", os.path.join(HERE, "shell-v3-lock.jpg"))]
     tiles = [t for t in tiles if os.path.exists(t[1])]
     tw, th = 960, 540
     cols = 2

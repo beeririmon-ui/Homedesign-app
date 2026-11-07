@@ -134,5 +134,9 @@ export function registerReader(dir = 'qa/reports'): RegisterReader {
 export function rowOf(q: QaFrame, card: string, values: Record<string, string> | null): QaRow | null {
   const rows = q.rows.filter((r) => cardOf(r) === card);
   const exact = rows.find((r) => r.option && typeof r.option === 'object' && Object.entries(r.option).every(([k, v]) => values?.[k] === v));
-  return exact ?? rows.find((r) => !r.option || typeof r.option !== 'object') ?? rows[0] ?? null;
+  if (exact) return exact;
+  // QA on S4: never the first row of another option. A card with rows per option and none for this one is "not
+  // checked" (null); a card with one row that names no option ids is that row
+  if (rows.some((r) => r.option && typeof r.option === 'object')) return null;
+  return rows.length === 1 ? rows[0]! : null;
 }

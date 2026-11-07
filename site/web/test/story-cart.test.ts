@@ -147,6 +147,37 @@ describe('the story test cart', () => {
     expect(later.held()).toEqual([]);
   });
 
+  it('the whole look twice adds nothing the second time (QA on S4)', async () => {
+    const cart = storyCart(V, memoryStore());
+    await cart.addLook(['bowl:default', 'candles:70x110mm']);
+    const again = await cart.addLook(['bowl:default', 'candles:70x110mm']);
+    expect(again.added).toEqual([]);
+    expect(again.already).toEqual(['bowl:default', 'candles:70x110mm']);
+    expect(cart.current()!.count).toBe(2);
+  });
+
+  it('another tab that ordered and emptied the cart has the last word: the next add starts a new cart (QA on S4)', async () => {
+    const store = memoryStore();
+    const tabA = storyCart(V, store);
+    const tabB = storyCart(V, store);
+    await tabB.add('bowl:default');
+    tabA.clear(); // tab A placed the order
+    const c = await tabB.add('candles:70x110mm');
+    expect(c.lines.map((l) => l.variant_id)).toEqual(['candles:70x110mm']);
+  });
+
+  it('strict (the checkout): a line the page does not list, or lists as not sold, is held and never charged (QA on S4)', async () => {
+    const store = memoryStore();
+    await storyCart(V, store).add('bowl:default');
+    await storyCart(V, store).add('candles:70x110mm');
+    // the checkout knows the candles only, by price and sale, with no names: the bowl (a snapshot) is held
+    const table: StoryVariant[] = [{ ...V[1]!, name_he: '', product_id: '' }];
+    const co = storyCart(table, store, 'hd.story.cart', { strict: true });
+    expect(co.current()!.lines.map((l) => [l.variant_id, l.name_he])).toEqual([['candles:70x110mm', 'פמוטים']]);
+    expect(co.current()!.subtotal_agorot).toBe(19900);
+    expect(co.held().map((h) => h.variant_id)).toEqual(['bowl:default']);
+  });
+
   it('formats prices exactly as the site does', () => {
     for (const a of [100, 4900, 7900, 19900, 129900, 1234567, 12345, 99]) expect(priceHe(a), String(a)).toBe(formatIls(a));
   });
