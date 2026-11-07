@@ -18,6 +18,12 @@ export type DSku = {
   variant_id: string | null;
   price_agorot: number | null;
   price_he: string | null;
+  /** the single piece of a set (SET1), where the supplier offers one */
+  unit_price_agorot: number | null;
+  unit_price_he: string | null;
+  unit_estimated: boolean;
+  /** the page's title for this option: the base name and its colour, never its size (design notes §6) */
+  title_he: string;
   available: boolean;
   sellable: boolean;
   size_he: string | null;
@@ -39,10 +45,13 @@ export type DetailData = {
   skus: DSku[];
   images: DImage[];
   story_key: string;
+  /** the product alone from the story frame: stands in for a missing photo on the story's option only (§6) */
   crop: DImage | null;
-  crop_title_he: string | null;
+  crop_caption_he: string | null;
+  swatch: string;
   marks_he: Record<string, string>;
 };
+export type Pack = 'set' | 'unit';
 
 /** the picker's rules see a SKU by its key (a product without a price has no variant id yet) */
 const pool = (d: DetailData): (PickerSku & { sku: DSku })[] => d.skus.map((k) => ({ variant_id: k.key, values: k.values, available: k.available, sku: k }));
@@ -72,8 +81,15 @@ export function toQuery(d: DetailData, sku: DSku): string {
   return `?${q.toString()}`;
 }
 
-export type Shown = { image: DImage | null; alt: string; caption: string; kind: 'supplier' | 'frame' | 'none' };
-/** the main picture for a SKU (the close-up has its own figure) */
+export type Shown = { image: DImage | null; alt: string; caption: string; kind: 'supplier' | 'frame' | 'none'; swatch: string };
+/** the option's colour, for the empty picture (else the product's) */
+const swatchOf = (d: DetailData, sku: DSku): string =>
+  d.axes.find((a) => a.id === 'color')?.values.find((v) => v.id === sku.values.color)?.hex ?? d.swatch;
+/**
+ * The main picture for a SKU (the close-up has its own figure): the supplier's photo of the option; for the story's
+ * option without one, the product's crop from the frame, which says it is not a product photo; for another option
+ * without one, nothing but its colour, never the story's option shown as if chosen (design notes §6, Q3).
+ */
 export function photoOf(d: DetailData, sku: DSku): Shown {
   const im = sku.image !== null ? (d.images[sku.image] ?? null) : null;
   if (im)
@@ -82,12 +98,27 @@ export function photoOf(d: DetailData, sku: DSku): Shown {
       alt: `צילום הספק: ${d.name_he}${sku.label_he && sku.key !== d.story_key ? `, ${sku.label_he}` : ''}`,
       caption: sku.label_he && d.axes.length && sku.image_of_option ? `צילום הספק, באפשרות ${sku.label_he}.` : 'צילום הספק.',
       kind: 'supplier',
+      swatch: swatchOf(d, sku),
     };
-  if (sku.key === d.story_key && d.crop)
-    return { image: d.crop, alt: `${d.name_he}, בפריים`, caption: `בפריים "${d.crop_title_he ?? ''}". צילום הספק עוד לא הורד לגרסת הבדיקה.`, kind: 'frame' };
-  return { image: null, alt: '', caption: 'צילום הספק עוד לא הורד לגרסת הבדיקה.', kind: 'none' };
+  if (sku.key === d.story_key && d.crop && !sku.closeup)
+    return { image: d.crop, alt: `${d.name_he}, מתוך הסיפור`, caption: d.crop_caption_he ?? '', kind: 'frame', swatch: swatchOf(d, sku) };
+  return {
+    image: null,
+    alt: '',
+    caption: sku.key === d.story_key ? 'צילום הספק עוד לא הורד לגרסת הבדיקה.' : 'אין עדיין צילום לאפשרות הזו.',
+    kind: 'none',
+    swatch: swatchOf(d, sku),
+  };
 }
-export const creditOf = (d: DetailData, sku: DSku): string => [d.material_he, sku.size_he, sku.price_he ?? 'המחיר עוד לא נקבע'].filter(Boolean).join(' · ');
+/** the price of the choice: the set, or the single piece where the supplier offers one (SET1) */
+export function priceOf(sku: DSku, pack: Pack): { agorot: number | null; he: string | null; estimated: boolean } {
+  if (pack === 'unit' && sku.unit_price_agorot !== null) return { agorot: sku.unit_price_agorot, he: sku.unit_price_he, estimated: sku.unit_estimated };
+  return { agorot: sku.price_agorot, he: sku.price_he, estimated: false };
+}
+export const creditOf = (d: DetailData, sku: DSku, pack: Pack = 'set'): string =>
+  [d.material_he, sku.size_he, priceOf(sku, pack).he ?? 'המחיר עוד לא נקבע', pack === 'unit' && sku.unit_price_agorot !== null ? 'יחידה בודדת' : null]
+    .filter(Boolean)
+    .join(' · ');
 /** why there is no add button: never a disabled one (art direction §6.8) */
 export function whyOf(d: DetailData, sku: DSku): string {
   if (d.status === 'unpriced') return 'המחיר עוד לא נקבע, ולכן המוצר עוד לא במכירה.';
