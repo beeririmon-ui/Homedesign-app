@@ -88,11 +88,18 @@
    "tokens": 600,
    "estimate": 600,
    "prompt": "assets/renders/master/editorial-2026-11-07/warm-modern/prompt-warm-modern-MB-A.txt",
-   "status": "submitted (paid 600)",
+   "status": "completed; fetched",
    "idempotency_key": "mb-warm-modern-A-gpt-image-2-5-20261107-a1",
    "placeholder_id": "f31bcdbd-f69a-4fff-807b-939699b9ed13",
    "task_id": "c1dcf1b8225020385d30f14ab9673f24",
-   "batch_id": "a50159aa-0892-47b0-a40b-a555dc0262a8"
+   "batch_id": "a50159aa-0892-47b0-a40b-a555dc0262a8",
+   "output": "warm-modern/warm-modern-MB-A.png",
+   "raw": "warm-modern/raw/gpt25-c1dcf1b8225020385d30f14ab9673f24-0-1794088525944-3176abde.png",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/gpt25-c1dcf1b8225020385d30f14ab9673f24-0-1794088525944-3176abde.png",
+   "size": [
+    2736,
+    1536
+   ]
   }
  ],
  "tokens_total": 1200,
@@ -100,5 +107,72 @@
   "date": "2026-11-07",
   "reason": "var2 MCP server requires authentication (OAuth); per the rule, stopped and reported. No sheet or manifest entries written (no frames on disk yet)",
   "resolved": "2026-11-07: var2 answering again; resumed per coordinator"
+ },
+ "sheet": {
+  "path": "assets/renders/master/editorial-2026-11-07/sheet.jpg",
+  "script": "assets/renders/master/editorial-2026-11-07/mb1_sheet.py",
+  "tiles": [
+   "nordic-MB-A",
+   "warm-modern-MB-A",
+   "MB0 v7 (assets/renders/master/nordic/v7/mb0-v7-r2-graded-v5.png)",
+   "living-room Nordic A fin2 (the latest of the Nordic A line)",
+   "living-room warm-modern A ed7 (the latest of the ed5 line; the brief names ed5)"
+  ]
+ },
+ "render_agent_read": {
+  "note": "first look by render-agent, by eye at 100 % against the reference crops, plus Lab medians; NOT QA. Scale from card sizes against the 48 x 74 pillowcase or the 24.5 cm bottle",
+  "nordic": {
+   "faithful": [
+    "wave-flush sconce: three linen cylinders, rims (shape)",
+    "bouclé lumbar 30 x 50, warm white",
+    "jute rope cylinder basket (handles a little low)",
+    "S-fold linen curtains (colour a touch beige)",
+    "bedding: washed linen, reads beige in the sun"
+   ],
+   "partial": [
+    "sconces about 1.4-1.5x too big (about 35 cm wide against the card's 24) and both look lit (brief: one, faintly)",
+    "candle holders: a thin dish top instead of the thick cup, and about 1.6x too big against the 24.5 cm bottle",
+    "nightstand bottle: tall taupe bottle, but the body tapers instead of the bell shape of option D",
+    "pillowcases: two, natural linen colour, but drawn with a flange border; the product is a plain envelope"
+   ],
+   "fails": [
+    "throw: a fuzzy, chunky warm taupe-grey blanket (L* 41, C* 11, h 66) against the flat light-grey cotton-linen (L* 77, C* 6, h 97)",
+    "sill vase: a round shouldered ovoid; the product is a tall slender tapered column with fine horizontal texture",
+    "seagrass planter: golden-brown rope weave (h 67) against pale green-yellow seagrass (h 95), the same miss we fixed in boho fin7"
+   ],
+   "imitation_risk": [
+    "the linen piece over the chair reads as a second throw rather than a robe, in a colour close to the products"
+   ],
+   "concept": "strong: late-February sun stripes across the bed, birches and snow, panelling with an oak cap, the dressing-room door ajar, an asymmetric three-quarter view; the floor reads natural oak more than white-oiled; the book and the reading glasses are missing"
+  },
+  "warm_modern": {
+   "faithful": [
+    "travertine cone sconce on a round walnut plate (shape, about 1.2x big: about 18 cm against 15)",
+    "floor lamp: walnut stem, brass, pleated cone shade, pull chain",
+    "candle holders: shape (cup top, cone body)",
+    "pecan muslin throw with fringe (h 57 against 56)",
+    "ribbed concrete belly planter",
+    "cream fluted column vase with its foot",
+    "jute rope cylinder basket",
+    "sheer beige curtain",
+    "two caramel pillowcases (h 57.5 against 54)"
+   ],
+   "partial": [
+    "candle holders about 2x too big against the bottle and the nightstand",
+    "nightstand bottle: shouldered milk-bottle shape with a short neck instead of the bell with a long thin neck",
+    "pillowcases drawn with a flange border (plain envelope in the photo)",
+    "the lumbar reads oatmeal; QA to measure milk tea against the SKU photo under the amber light"
+   ],
+   "fails": [],
+   "concept": "strong and on the living-room line: the pill niche, the amber slice and the olive shadow on limewash, smoked oak, walnut with rounded edges; the book on the bed shows no readable text"
+  },
+  "next_0_token": [
+   "scale fixes in code: sconces (Nordic about x0.7, warm modern about x0.85), candle holders (Nordic about x0.6, warm modern about x0.5)",
+   "the flange on the pillowcases (both frames) and the bottle shape are shape changes: code may not be enough"
+  ],
+  "next_paid_candidates_under_SPEND1": [
+   "Nordic: throw, sill vase, seagrass planter (seedream-5-pro on masked crops, about 650 each)",
+   "both: the nightstand bottle (bell shape) if code cannot do it"
+  ]
  }
 }
