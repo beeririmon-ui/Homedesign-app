@@ -1,0 +1,1231 @@
+{
+ "id": "quality-gate-g-ed-2026-11-07",
+ "title": "שער G-ED: פריימי סיפור",
+ "version": "1.0",
+ "date": "2026-11-07",
+ "author": "qa-agent",
+ "mode": "קבצים חדשים בלבד. לא שונה שום קובץ קיים, אין commit, אין var2, אין רשת.",
+ "brief": "briefs/qa-gate-g-ed-2026-11-07.md",
+ "rules": "CR9 ו-CR5, CR7 (docs/creative-review-2026-11-06.md §5), מאומצים 2026-11-07 (status/decisions.json: CR; חוקי הסטודיו ז, \"הכיוון החדש מאומץ\"); DIR1; CLAUDE.md (נאמנות למוצר קודמת ליופי; נכס שלא עבר QA לא נכנס לאתר)",
+ "companion_md": "docs/ops/quality-gate-g-ed-2026-11-07.md",
+ "scope": "שכבה 1 (פריימי סיפור: הפריים הרחב והפריים השני של כל חדר וסגנון). G1 נשאר לכלי \"עצב בעצמך\" (שכבה 3). תקריבי שכבה 2: G-ED.1–G-ED.16 על אותו מוצר, ועוד G4.16 (מסגור התקריב)",
+ "read": [
+  "briefs/qa-gate-g-ed-2026-11-07.md",
+  "docs/creative-review-2026-11-06.md (§2, §2א, §3, §3.7, §5)",
+  "docs/studio-rules.md (ז: ED1–ED4, הכיוון החדש מאומץ, MC1)",
+  "status/decisions.json (DIR1, CR)",
+  "docs/ops/quality-gates-2026-11-02.md ו-.json (המבנה; G1, G2.3, G5.3, G7.7)",
+  "qa/reports/2026-11-06-editorial-test-fidelity.md",
+  "qa/reports/2026-11-06-editorial-phase-b-fidelity.md",
+  "qa/reports/2026-11-07-editorial-fin2-ed4-country.md",
+  "assets/renders/editorial-phase-b-2026-11-06/jobs.json (finishing: clipped_pct_before, px_at_255_after)",
+  "docs/design-bible/nordic.md, docs/design-bible/modern-country-brief-draft.md"
+ ],
+ "source_policy": {
+  "binding": "מחייב = CLAUDE.md, חוקי הסטודיו, ושינויי CR שהבעלים אימץ ב-2026-11-07 בנוסח של docs/creative-review-2026-11-06.md",
+  "proposal": "הצעה = כל סף שאין לו מספר במקור מחייב. נכנס לשער באישור המנהל; שינוי במסמך מחייב באישור הבעלים",
+  "mixed": "העיקרון מחייב והמספר הצעה; החלק המספרי מסומן \"הצעה:\""
+ },
+ "verdicts": {
+  "עבר": "הבדיקה נמדדה, יש קובץ ראיה, והתוצאה בתוך הסף",
+  "נכשל": "נמדד מחוץ לסף",
+  "חסר ראיה": "נטען שנבדק ואין קובץ; נחשב \"לא עבר\"",
+  "לא נבדק": "אף אחד לא מדד"
+ },
+ "common_rules": [
+  "פריים עובר מצב רק אם לכל בדיקה של המצב יש מדידה או פסק בקובץ. \"חסר ראיה\" הוא \"לא עבר\".",
+  "הראיה: qa/reports/<date>-<scope>.md ו-.json, ולצידם תיקייה עם overlays/, tools/, data/.",
+  "בדיקה עצמית של render-agent (למשל \"OK\" ב-product_notes_render_agent, או px_at_255_after) היא מידע, לא QA.",
+  "פסק עין (\"נאמן\", \"אין HDR\", \"סיפור האור נקרא\") נרשם: מי, מתי, על איזה קובץ ומה ראה.",
+  "כל תיקון (קוד או מעבר) נבדק שוב לפני שהפריים עולה מצב."
+ ],
+ "gate": {
+  "id": "G-ED",
+  "deliverable": "פריים סיפור (שכבה 1) לחדר בסגנון: הפריים הרחב והפריים השני",
+  "when": "אחרי פריים הבסיס, אחרי כל סבב תיקונים, ולפני שהפריים מוצג לבעלים או נכנס לאתר",
+  "checker": {
+   "measures": "qa-agent",
+   "judges": "master-designer (G-ED.10, G-ED.13, ספק ב-G-ED.15, חריגים ב-G-ED.16)",
+   "approves": "הבעלים: \"מבחן סופי\" ו\"מאושר לאתר\", וכל חריג \"חלקית\""
+  },
+  "evidence": {
+   "report": "qa/reports/<date>-<scope>.md ו-.json",
+   "files": [
+    "overlays/ (חיתוכים ב-100%, ×3–×4, מתיחה ×4, מפות הפרש)",
+    "data/diffs.json (diffs.py)",
+    "data/guardrails-raw.json ו-guardrails-finished.json (guardrails.py)",
+    "הרשומות של render-agent: jobs.json, קובצי האזורים של כל תיקון (fin2-codefix.json, ed4.json)"
+   ]
+  },
+  "criteria": [
+   {
+    "id": "G-ED.1",
+    "name": "טבלת כיסוי: אילו מוצרים בפריים",
+    "measures": "כל מוצר נראה בפריים, עם מזהה הכרטיס; מוצרי הכוכב של הסגנון (creative review §3.7 והבריף של הפריים); אילו מוצרים יקבלו נקודת \"קנה את המראה\"; הרהיטים הקבועים הם מוצרים אם מוכרים אותם",
+    "method": "מעבר על הפריים ב-100% באריחים, מול לוח המוצרים ורשימת הכוכבים בבריף. כל פריט שנראה כמו מוצר שאנחנו מוכרים נרשם, גם אם הוא גנרי",
+    "tool": "חיתוכים ב-100% (qa/reports/<date>-<scope>/overlays/); טבלה ב-JSON (frames.<id>.rows)",
+    "threshold": "כל מוצר נראה מזוהה בכרטיס או מסומן \"גנרי\"; כל מוצר כוכב של הפריים נוכח, או שהבריף קבע במפורש שהוא בפריים אחר",
+    "source": "CR9 (מאומץ 2026-11-07); docs/creative-review-2026-11-06.md §2, §3.7; CLAUDE.md",
+    "binding": "מחייב"
+   },
+   {
+    "id": "G-ED.2",
+    "name": "נאמנות: צללית ומספר חלקים",
+    "measures": "צללית, ומספר החלקים שאפשר לספור: טבעות, קומות, רגליים, ידיות, פריטים בסט, גדילים, שורות מוטיב",
+    "method": "החיתוך מהפריים ליד חיתוך תמונת הספק של המק\"ט בחדר, באותו גודל. ספירה ידנית בהגדלה ×3–×4",
+    "tool": "חיתוך ×3–×4 (NEAREST); חיתוכי הספק (מבחר המוצרים, לא נשמרים בריפו)",
+    "threshold": "אותה צללית. ספירה זהה בטבעות, קומות, רגליים, ידיות ופריטים בסט. הצעה: גדילים ופרנזים ±1 לכל 10, כשהספירה בתמונת הספק ברורה",
+    "source": "CLAUDE.md (\"נאמנות למוצר קודמת ליופי\"); CR9; creative review §2 (\"צללית\"); בריף ED2 (\"number of pieces\")",
+    "binding": "מעורב"
+   },
+   {
+    "id": "G-ED.3",
+    "name": "נאמנות: צבע, חומר ודוגמה תחת אור הסצנה",
+    "measures": "משפחת הגוון ביחס לשכן ניטרלי באותו אור; החומר והגימור (מט, סאטן, מבריק; פליז מוברש מול מלוטש); הדוגמה: המוטיב, הצבעים וגודל החזרה",
+    "method": "Lab ממוצע בתוך המוצר מול משטח ניטרלי סמוך באותו אור (קיר, ספה), מול אותו יחס בין hex הכרטיס לשכן. דוגמה: ספירת חזרות לרוחב מול מידת המוצר",
+    "tool": "סקריפט Lab קצר (כמו בדוחות 2026-11-07); חיתוך ×2",
+    "threshold": "אותה משפחת גוון וגימור; הצעה: הפרש L* מהשכן הניטרלי בתוך ±10 מהיחס שבכרטיס; חזרת הדוגמה ±15%. פריט שאור הסצנה שרף אותו (G-ED.12) לא עובר כאן",
+    "source": "CLAUDE.md; CR9; creative review §2 (\"צבע תחת אור הסצנה, חומר\")",
+    "binding": "מעורב"
+   },
+   {
+    "id": "G-ED.4",
+    "name": "נאמנות: פרופורציה וקנה מידה",
+    "measures": "גובה/רוחב (או גובה/קוטר) מול מידות הכרטיס; גודל מול שכנים באותו מישור ובאותו עומק שיש להם מידה ידועה",
+    "method": "מדידה בפיקסלים על החיתוך. שכנים: מוצר אחר עם מידה בכרטיס באותה שורת עומק (קערה, ראנר וכוסות על אותו שולחן; אגרטל ואגרטל על אותו אדן; כרית מול כרית)",
+    "tool": "רשת מדידה על החיתוך (mc-table-grid.jpg לדוגמה); הסקריפט של הדוח",
+    "threshold": "±15% ביחס ובגודל. כשאין שכן עם מידה או שאין מידה בכרטיס: נרשם \"לא מדיד\", וזה לא \"עבר\"",
+    "source": "creative review §2 (\"ופרופורציה מול שכנים ומול המידות בכרטיס (±15%)\"), מאומץ ב-CR",
+    "binding": "מחייב"
+   },
+   {
+    "id": "G-ED.5",
+    "name": "פסק לכל מוצר, וכלל המעבר של הפריים",
+    "measures": "טבלה: כרטיס | נוכח | נאמן (כן / חלקית / לא) | למה | התיקון (קוד 0 טוקנים / מעבר ממוקד / מעבר משלו / החלטה)",
+    "method": "סיכום G-ED.2–G-ED.4 לכל מוצר",
+    "tool": "JSON: frames.<id>.rows ו-counts",
+    "threshold": "הפריים עובר רק אם כל מוצר כוכב וכל מוצר עם נקודת \"קנה\" הוא \"כן\". \"לא\" אף פעם. \"חלקית\" מותר רק כחריג בשם, שהבעלים אישר בכתב (status/decisions.json), עם ההערה שתוצג",
+    "source": "CLAUDE.md; CR9; הבריף (2026-11-07). החריג הכתוב: הצעה",
+    "binding": "מעורב"
+   },
+   {
+    "id": "G-ED.6",
+    "name": "אין מוצר נמכר מומצא",
+    "measures": "פריט שנראה כמו מוצר שלנו ואינו הוא: כפיל של מוצר (קערה שנייה, סל שני), או פריט גנרי מקטגוריה שאנחנו מוכרים בסגנון שאי אפשר להבדיל ממוצר שלנו. ספירות \"exactly one\" מהבריף",
+    "method": "מעבר על כל הפריטים הגנריים בפריים מול מוצרי הסגנון בקטלוג. ספירה לכל קטגוריה",
+    "tool": "חיתוכים ב-100%",
+    "threshold": "0 פריטים כאלה. ספירות הבריף מתקיימות",
+    "source": "בריף ED2 (\"any invented look-alike is a fail\"); CLAUDE.md; חוקי הסטודיו ג (\"החדר מציג אפשרות אחת שקיימת אצל הספק\")",
+    "binding": "מחייב"
+   },
+   {
+    "id": "G-ED.7",
+    "name": "כלל \"הסט המדומה\"",
+    "measures": "פריט שלא נמכר ונקרא כחלק מסט של מוצר שלנו: אותו זיגוג, דוגמה, אריג או חומר, ועוד הפרט המזהה (נימור, שפה, גדיל), ליד המוצר",
+    "method": "לכל מוצר: הפריטים הגנריים שלידו, וההשוואה של גימור ופרט מזהה. בדוגמה: שלוש הכוסות בכפרי, באותו שנהב מנומר עם שפה שזופה כמו הקערה",
+    "tool": "חיתוך ×2–×3 של המוצר עם השכנים שלו",
+    "threshold": "0. התיקון: גימור אחר לפריט הגנרי (זיגוג חלק או צבע אחר), בקוד ב-0 טוקנים כשאפשר",
+    "source": "הבריף (2026-11-07); CLAUDE.md (נאמנות). הניסוח: הצעה",
+    "binding": "מעורב"
+   },
+   {
+    "id": "G-ED.8",
+    "name": "מסכות: שום דבר מחוץ להן לא זז",
+    "measures": "אחרי מעבר ממוקד או תיקון בקוד: כל פיקסל ששינה ערך, מול האזורים שנרשמו (crop_box, אזורים, קופסאות)",
+    "method": "הפרש עצמאי לכל זוג לפני/אחרי: |אחרי − לפני| > 2 רמות בערוץ כלשהו; רכיבים מחוברים על הרחבה של 15 פיקסלים; התיבה של כל רכיב מול האזורים",
+    "tool": "qa/reports/2026-11-07-editorial-fin2-ed4-country/tools/diffs.py (data/diffs.json, overlays/diff-*.jpg)",
+    "threshold": "0 רכיבים מחוץ לאזורים. פיקסל בודד עד 5 רמות נרשם כ\"זניח\". תיקון בלי קובץ אזורים (כמו fin2-codefix.json, ed4.json): \"חסר ראיה\"",
+    "source": "חוקי הסטודיו ז (2026-10-24, \"אפס הפרש מחוץ למסכה\"); המספרים: הצעה",
+    "binding": "מעורב"
+   },
+   {
+    "id": "G-ED.9",
+    "name": "תפרים, הילות, רוחות ומילוי שטוח",
+    "measures": "בתוך המסכה ובשוליה: תפר (קפיצה ישרה), הילה, \"רוח\" של הצורה הישנה, מילוי בלי גרעין, צל מגע שנעלם",
+    "method": "חיתוך ב-100%, הגדלה ×3–×4 (NEAREST), ומתיחת ניגודיות ×4 (אחוזונים 1–60) של כל אזור ששונה",
+    "tool": "overlays/<pair>-before-after.jpg, <pair>-stretch.jpg, וחיתוכי רשת",
+    "threshold": "שום דבר לא נראה ב-100%. מה שנראה רק במתיחה נרשם כהערה. דוגמאות מ-2026-11-07: כנפי השפה סביב הכד בג'אפנדי, הד השפה בים התיכוני, התפר בבוהו",
+    "source": "חוקי הסטודיו ז (2026-10-24: הכתמים שהמשתמש ראה); G2.3 (רצועת הילה)",
+    "binding": "מעורב"
+   },
+   {
+    "id": "G-ED.10",
+    "name": "מעקה: בלי מראה HDR",
+    "measures": "הילות זוהר סביב קצוות בניגוד גבוה, ניגוד מקומי \"פריך\", צללים מורמים ושמיים או חלון \"מצוירים\", זהוב-על-הכול",
+    "method": "עין, בגודל מלא וב-100%, של qa-agent ושל master-designer, עם פסק כתוב",
+    "tool": "אין כלי מספרי. פסק עין בקובץ (מי, מתי, על איזה קובץ, מה ראה)",
+    "threshold": "שניהם כותבים \"אין מראה HDR\"",
+    "source": "CR5 (מאומץ 2026-11-07)",
+    "binding": "מחייב"
+   },
+   {
+    "id": "G-ED.11",
+    "name": "מעקה: בלי כתום-טיל",
+    "measures": "פיצול גוונים גלובלי: צללים לכחול-טורקיז וגווני עור/עץ לכתום, שלא מגיע ממקורות האור בסצנה",
+    "method": "עין, ועזר מספרי: a*, b* של 10% הכהים ו-10% הבהירים. דגל כשהצללים b* < −4 והבהירים b* > +15. חפץ ניטרלי באותו אור צריך להיקרא ניטרלי",
+    "tool": "qa/reports/2026-11-07-gate-g-ed/tools/guardrails.py (split_flag)",
+    "threshold": "אין פיצול גלובלי. פיצול חם-קר מותר רק כשסיפור האור כולל שני מקורות (שעה כחולה ופנסים, גשם ומנורות)",
+    "source": "CR5",
+    "binding": "מחייב"
+   },
+   {
+    "id": "G-ED.12",
+    "name": "מעקה: הבהקים שרופים עד 1%, חוץ מהחלון",
+    "measures": "החלק של הפריים שבו ערוץ כלשהו ≥254, בלי קופסאות החלון",
+    "method": "על הפלט הגולמי של המודל, לפני כל ברך. ברך רכה מורידה פיקסלים שרופים מתחת ל-254 ולא מחזירה להם פרט. גם על הפריים הגמור, כבקרה",
+    "tool": "guardrails.py --window x0,y0,x1,y1 על raw/ ועל הגמור (clipped_254_pct, clipped_top_components_px_box)",
+    "threshold": "עד 1.0% מחוץ לחלון. גוף תאורה שהוא מוצר לא יכול להיות שרוף עד שהחומר שלו לא נקרא (ראו G-ED.3)",
+    "source": "CR5 (\"הבהקים שרופים עד 1% מהפריים חוץ מהחלון\"); המדידה על הגולמי ו-254: הצעה",
+    "binding": "מעורב"
+   },
+   {
+    "id": "G-ED.13",
+    "name": "מעקה: סיפור האור נקרא",
+    "measures": "השעה, מזג האוויר ו\"רגע הגיבור\" של הסגנון (creative review §3.1–§3.6)",
+    "method": "עין של master-designer מול הקונספט, עם פסק כתוב",
+    "tool": "פסק עין בקובץ",
+    "threshold": "master-designer כותב שסיפור האור של הסגנון נקרא, ואיפה רגע הגיבור",
+    "source": "CR5 (\"לכל סגנון יש סיפור אור\")",
+    "binding": "מחייב"
+   },
+   {
+    "id": "G-ED.14",
+    "name": "בלי טקסט קריא",
+    "measures": "אותיות ומספרים: מגזינים, ספרים, תוויות, שלטים, אריזות, שעונים",
+    "method": "סריקה ב-100% של כל משטח מודפס",
+    "tool": "חיתוכים ב-100%",
+    "threshold": "0 טקסט קריא. ספרים ומגזינים מותרים כמילוי, בלי טקסט קריא (CR7)",
+    "source": "CR7; חוקי הסטודיו (\"בלי טקסט קריא\" לא משתנה)",
+    "binding": "מחייב"
+   },
+   {
+    "id": "G-ED.15",
+    "name": "בלי מותגים ובלי העתקי עיצוב",
+    "measures": "לוגו, סימן מסחרי, ופריט מעוצב מוכר (למשל Akari, ‏Moragas), במוצרים ובפריטים הגנריים",
+    "method": "עין מול רשימות ההעתקים בטיוטות הסגנון וב-Bible; ספק עובר ל-master-designer",
+    "tool": "חיתוכים ב-100%",
+    "threshold": "0. ספק נרשם עם פסק של master-designer",
+    "source": "CLAUDE.md וחוקי הסטודיו (\"בלי העתקת עיצובים ומותגים\" לא משתנה); הטיוטות לכל סגנון",
+    "binding": "מחייב"
+   },
+   {
+    "id": "G-ED.16",
+    "name": "רשימת \"אסור\" של הסגנון",
+    "measures": "חומרים, גימורים וצבעים אסורים (למשל לבן קר, זהב מלוטש ו\"שמפניה\" בכפרי, שחור כמשטח גדול)",
+    "method": "מעבר על המוצרים ועל הפריטים הגנריים מול סעיף \"אסור\" של ה-Bible (נורדי) או של טיוטת הסגנון",
+    "tool": "חיתוכים; Lab לגוונים כשצריך",
+    "threshold": "0 על המוצרים שלנו. בפריטים גנריים: 0, או חריג כתוב של master-designer",
+    "source": "docs/design-bible/nordic.md \"אסור\" (מחייב); docs/design-bible/*-brief-draft.md (טיוטות: הצעה עד שהמעצב מעדכן את המסמכים לפי CR)",
+    "binding": "מעורב"
+   },
+   {
+    "id": "G-ED.17",
+    "name": "נקודת \"קנה\": אפשר לגעת במוצר בטלפון",
+    "measures": "לכל מוצר שיקבל נקודה: החלק הנראה והלא מוסתר שלו, החדות שלו, והמרחק מנקודות אחרות, בהצגה בטלפון",
+    "method": "תצוגת ייחוס (הצעה): טלפון 390×844 CSS לאורך, הפריים ממלא את הגובה (cover). קנה המידה: 844 / גובה הפריים בפיקסלים, ‏0.55 CSS לפיקסל בפריים של 1536. נוסחה לכל הצגה אחרת: פיקסלים בפריים = יעד ב-CSS × פיקסלי הפריים / פיקסלי CSS המוצגים",
+    "tool": "תיבות המוצרים בפריים (מפת הנקודות של frontend-dev או תיבות של qa-agent); אחרי הבנייה: G5.3 על צילום מסך",
+    "threshold": "הצעה: החלק הנראה ≥44 CSS בצד הארוך ו-≥24 CSS בצד הקצר (WCAG 2.5.8), כלומר ≥80 ו-≥44 פיקסלים בפריים של 1536; המוצר חד מספיק לזיהוי (לא חזית מטושטשת); יעדי 44×44 CSS של שתי נקודות לא חופפים (מרכזים ≥80 פיקסלים זה מזה), אחרת מקבצים לנקודה אחת (G5.3); הנקודה בתוך החלק שנראה בחיתוך הטלפון או בדרך ה-pan. מוצר שלא עומד בזה לא מקבל נקודה בפריים הזה, ומופיע בפריים השני או בתקריב (G-ED.18)",
+    "source": "DIR1 (\"נגיעה במוצר פותחת 'קנה את המראה'\"); G5.3 ו-G7.7 (44, הצעה); WCAG 2.5.8 (24). הספים: הצעה",
+    "binding": "מעורב"
+   },
+   {
+    "id": "G-ED.18",
+    "name": "כיסוי בסיפור כולו (ברמת הסגנון)",
+    "measures": "כל מוצר בחדר מופיע לפחות פעם אחת שלם, חד, ובגודל של לפחות 1.5% מהפריים: בפריים הרחב, בפריים השני או בתקריב",
+    "method": "טבלת \"מוצר × פריים\" על כל פריימי הסיפור של החדר בסגנון",
+    "tool": "JSON: story.<style>.coverage",
+    "threshold": "כל מוצר עם נקודה עומד בזה פעם אחת לפחות. רץ על הסט, לא על פריים בודד, לפני שהסיפור של הסגנון עולה לאתר",
+    "source": "creative review §2א.5 (\"הכלל המוצע\"). הצעה",
+    "binding": "הצעה"
+   }
+  ],
+  "counts": {
+   "total": 18,
+   "binding": 8,
+   "mixed": 9,
+   "proposal": 1
+  }
+ },
+ "states": [
+  {
+   "id": "not_yet",
+   "label": "עוד לא",
+   "entry": "לפחות אחד: מוצר כוכב או מוצר עם נקודה ב\"לא\"; פריט מומצא או סט מדומה (G-ED.6, G-ED.7); \"חלקית\" שצריך מעבר או החלטה; עקב שנראה ב-100% שאינו תיקון קוד קטן; כשל במעקה (G-ED.10–G-ED.13); טקסט, מותג או \"אסור\" על מוצר",
+   "shown_to_owner": false,
+   "on_site": false
+  },
+  {
+   "id": "almost",
+   "label": "כמעט",
+   "entry": "כל מה שפתוח הוא תיקון קוד ב-0 טוקנים (בשם ובמקום) או הערה שהבעלים יכול לקבל. אין \"לא\", אין חיקוי, אין כשל במעקה, אין טקסט",
+   "shown_to_owner": false,
+   "on_site": false
+  },
+  {
+   "id": "final_test",
+   "label": "מבחן סופי",
+   "entry": "G-ED.1–G-ED.16 עוברים. \"חלקית\" רק כהערה כתובה שהבעלים רואה (כיוון שלא נפתר במעבר אחד, למשל ערימת השטיח). master-designer הסתכל וכתב פסק. המנהל מציג לבעלים",
+   "shown_to_owner": true,
+   "on_site": false
+  },
+  {
+   "id": "approved_for_site",
+   "label": "מאושר לאתר",
+   "entry": "כל G-ED עובר, כולל G-ED.17, ו-G-ED.18 ברמת הסגנון. כל \"חלקית\" שנשאר הוא חריג בשם שהבעלים אישר ב-status/decisions.json. יש אישור מפורש של הבעלים לפריים הזה ב-status/decisions.json, ודוח QA שכתוב בו \"עבר\". בלי QA שום נכס לא נכנס לאתר (CLAUDE.md)",
+   "shown_to_owner": true,
+   "on_site": true
+  }
+ ],
+ "process": [
+  {
+   "step": 1,
+   "what": "פריים בסיס: מודל לפי הסגנון, טקסט ו-5 ייחוסים (מתכון \"סיפור v1\", CR8). jobs.json עם הייחוסים, הפרומפט, המודל והטוקנים",
+   "who": "render-agent; המודל: master-designer",
+   "checks": []
+  },
+  {
+   "step": 2,
+   "what": "QA סבב 1 על הפריים כולו",
+   "who": "qa-agent מודד; master-designer שופט את העין",
+   "checks": [
+    "G-ED.1–G-ED.7",
+    "G-ED.10–G-ED.16"
+   ],
+   "out": "qa/reports/<date>-<scope>.md ו-.json, עם רשימת תיקונים לפי סוג"
+  },
+  {
+   "step": 3,
+   "what": "תיקוני קוד ב-0 טוקנים, כל אחד עם קובץ אזורים (קופסאות, איך, פיקסלים בפנים ובחוץ)",
+   "who": "render-agent",
+   "checks": []
+  },
+  {
+   "step": 4,
+   "what": "מעברים ממוקדים על חיתוך עם מסכה (crop_box, אזורים, ecc, הגברים), רק בטוקנים שהמנהל או הבעלים אישרו (כמו ED4, ‏MC1)",
+   "who": "render-agent",
+   "checks": []
+  },
+  {
+   "step": 5,
+   "what": "QA סבב 2: כל זוג לפני/אחרי, ונאמנות מחדש של המוצרים ששונו. אם מעבר שינה יותר מ-10% מהפריים, השער כולו מחדש (הצעה)",
+   "who": "qa-agent",
+   "checks": [
+    "G-ED.8",
+    "G-ED.9",
+    "G-ED.2–G-ED.7 למוצרים ששונו",
+    "G-ED.12 על הגולמי החדש"
+   ]
+  },
+  {
+   "step": 6,
+   "what": "ביקורת עיצוב ופסק עין כתוב",
+   "who": "master-designer",
+   "checks": [
+    "G-ED.10",
+    "G-ED.13",
+    "G-ED.15 (ספק)",
+    "G-ED.16 (חריגים)"
+   ]
+  },
+  {
+   "step": 7,
+   "what": "\"מבחן סופי\": המנהל מציג לבעלים רק פריימים במצב הזה, עם ההערות",
+   "who": "המנהל → הבעלים",
+   "checks": []
+  },
+  {
+   "step": 8,
+   "what": "לפני האתר: מפת נקודות, ואז G-ED.17; G-ED.18 על סט הסגנון",
+   "who": "frontend-dev (המפה); qa-agent (הבדיקה)",
+   "checks": [
+    "G-ED.17",
+    "G-ED.18"
+   ]
+  },
+  {
+   "step": 9,
+   "what": "אישור מפורש של הבעלים ב-status/decisions.json → \"מאושר לאתר\"; אחרי הבנייה G5.3 על צילום מסך, ושערי האתר (G5–G7)",
+   "who": "הבעלים; frontend-dev; qa-agent",
+   "checks": [
+    "G5.3",
+    "G6",
+    "G7"
+   ]
+  }
+ ],
+ "mapping": {
+  "date": "2026-11-07",
+  "basis": "qa/reports/2026-11-07-editorial-fin2-ed4-country.md; G-ED.12 נמדד היום (guardrails.py); G-ED.17 ו-G-ED.18 לא הורצו על אף פריים",
+  "frames": [
+   {
+    "frame": "nordic-A-ed4",
+    "file": "assets/renders/editorial-phase-b-2026-11-06/nordic-A-ed4.png",
+    "state": "final_test",
+    "counts": {
+     "yes": 13,
+     "partly": 1,
+     "no": 0
+    },
+    "guardrails": {
+     "raw": "nordic-A-fin-seedream.png",
+     "raw_clipped_254_pct": 0.069,
+     "raw_top_clipped_boxes": [
+      [
+       2353,
+       [
+        126,
+        202,
+        171,
+        334
+       ]
+      ],
+      [
+       1005,
+       [
+        1315,
+        886,
+        1356,
+        928
+       ]
+      ],
+      [
+       971,
+       [
+        329,
+        19,
+        351,
+        80
+       ]
+      ]
+     ],
+     "finished_clipped_254_pct": 0.0,
+     "split_flag": false
+    },
+    "line": "מבחן סופי (הוצג 2026-11-07). לאתר חסרים: השטיח \"חלקית\" (לתקן או חריג בכתב), G-ED.17, ואישור הבעלים"
+   },
+   {
+    "frame": "nordic-B-fin",
+    "file": "assets/renders/editorial-phase-b-2026-11-06/nordic-B-fin.png",
+    "state": "final_test",
+    "counts": {
+     "yes": 7,
+     "partly": 1,
+     "no": 0
+    },
+    "guardrails": {
+     "raw": "nordic-B-fin-seedream.png",
+     "raw_clipped_254_pct": 0.274,
+     "raw_top_clipped_boxes": [
+      [
+       29466,
+       [
+        1045,
+        389,
+        1242,
+        723
+       ]
+      ],
+      [
+       10897,
+       [
+        1138,
+        44,
+        1239,
+        396
+       ]
+      ],
+      [
+       8144,
+       [
+        1523,
+        104,
+        1584,
+        399
+       ]
+      ]
+     ],
+     "finished_clipped_254_pct": 0.0,
+     "split_flag": false
+    },
+    "line": "מבחן סופי (הוצג 2026-11-07). לאתר חסרים: הווילון \"חלקית\" רק כי הקפל מחוץ לפריים (חריג בכתב), G-ED.17, ואישור הבעלים"
+   },
+   {
+    "frame": "warm-modern-A-ed4",
+    "file": "assets/renders/editorial-phase-b-2026-11-06/warm-modern-A-ed4.png",
+    "state": "almost",
+    "counts": {
+     "yes": 9,
+     "partly": 2,
+     "no": 0
+    },
+    "guardrails": {
+     "raw": "warm-modern-A-fin-seedream.png",
+     "raw_clipped_254_pct": 0.137,
+     "raw_top_clipped_boxes": [
+      [
+       5674,
+       [
+        0,
+        569,
+        108,
+        677
+       ]
+      ],
+      [
+       5135,
+       [
+        150,
+        470,
+        284,
+        574
+       ]
+      ],
+      [
+       4673,
+       [
+        0,
+        494,
+        107,
+        601
+       ]
+      ]
+     ],
+     "finished_clipped_254_pct": 0.0,
+     "split_flag": false
+    },
+    "line": "כמעט: בתלויה 6 טבעות ובכרטיס 5 (G-ED.2, קוד ב-0 טוקנים); השטיח העבה \"חלקית\" כמו בנורדי A"
+   },
+   {
+    "frame": "boho-A-fin2",
+    "file": "assets/renders/editorial-phase-b-2026-11-06/boho-A-fin2.png",
+    "state": "not_yet",
+    "counts": {
+     "yes": 7,
+     "partly": 2,
+     "no": 0
+    },
+    "guardrails": {
+     "raw": "boho-A-gpt-image-2-5.png",
+     "raw_clipped_254_pct": 0.153,
+     "raw_top_clipped_boxes": [
+      [
+       16588,
+       [
+        2444,
+        54,
+        2685,
+        236
+       ]
+      ],
+      [
+       6891,
+       [
+        246,
+        340,
+        393,
+        440
+       ]
+      ],
+      [
+       4774,
+       [
+        1571,
+        422,
+        1680,
+        498
+       ]
+      ]
+     ],
+     "finished_clipped_254_pct": 0.0,
+     "split_flag": false
+    },
+    "line": "עוד לא: התפר ב-x≈400 (G-ED.9, קוד); העציץ והסל בגדלים הפוכים (G-ED.4, החלטה); המראה הזהוב הקרוב ל-HDR (G-ED.10)"
+   },
+   {
+    "frame": "mediterranean-A-ed4",
+    "file": "assets/renders/editorial-phase-b-2026-11-06/mediterranean-A-ed4.png",
+    "state": "not_yet",
+    "counts": {
+     "yes": 9,
+     "partly": 1,
+     "no": 0
+    },
+    "guardrails": {
+     "raw": "mediterranean-A-gpt-image-2-5.png",
+     "raw_clipped_254_pct": 0.143,
+     "raw_top_clipped_boxes": [
+      [
+       12313,
+       [
+        2398,
+        435,
+        2606,
+        589
+       ]
+      ],
+      [
+       6398,
+       [
+        2126,
+        1355,
+        2299,
+        1452
+       ]
+      ],
+      [
+       2731,
+       [
+        2407,
+        394,
+        2498,
+        450
+       ]
+      ]
+     ],
+     "finished_clipped_254_pct": 0.0,
+     "split_flag": false
+    },
+    "line": "עוד לא: כרית הפרנזים הלבנה לא נבדלת מכריות הספסל (G-ED.6); הד השפה ליד הקערה (G-ED.9, קוד)"
+   },
+   {
+    "frame": "japandi-A-ed4",
+    "file": "assets/renders/editorial-phase-b-2026-11-06/japandi-A-ed4.png",
+    "state": "not_yet",
+    "counts": {
+     "yes": 7,
+     "partly": 3,
+     "no": 0
+    },
+    "guardrails": {
+     "raw": "japandi-A-nano-banana-2.png",
+     "raw_clipped_254_pct": 2.091,
+     "raw_top_clipped_boxes": [
+      [
+       188469,
+       [
+        148,
+        304,
+        596,
+        859
+       ]
+      ],
+      [
+       12518,
+       [
+        1891,
+        644,
+        1971,
+        829
+       ]
+      ],
+      [
+       2717,
+       [
+        0,
+        129,
+        63,
+        201
+       ]
+      ]
+     ],
+     "finished_clipped_254_pct": 0.0,
+     "split_flag": false
+    },
+    "line": "עוד לא: עקבות הקוד סביב הכד (G-ED.9); בגולמי 2.09% שרוף, רובו התלויה עצמה (G-ED.12; הברך לא נחשבת); התלויה מחכה ל-sourcing (G-ED.2); מנורות הקיר וכרית הוואבי-סאבי \"חלקית\""
+   },
+   {
+    "frame": "modern-country-A",
+    "file": "assets/renders/editorial-phase-b-2026-11-06/modern-country-A.png",
+    "state": "not_yet",
+    "counts": {
+     "yes": 3,
+     "partly": 3,
+     "no": 1
+    },
+    "guardrails": {
+     "raw": "modern-country-A-gpt-image-2-5.png",
+     "raw_clipped_254_pct": 0.388,
+     "raw_top_clipped_boxes": [
+      [
+       18463,
+       [
+        950,
+        35,
+        1325,
+        237
+       ]
+      ],
+      [
+       14447,
+       [
+        957,
+        35,
+        1210,
+        192
+       ]
+      ],
+      [
+       12796,
+       [
+        304,
+        367,
+        532,
+        479
+       ]
+      ]
+     ],
+     "finished_clipped_254_pct": 0.0,
+     "split_flag": false
+    },
+    "line": "עוד לא: אגרטל החימר \"לא\" (G-ED.2, ‏G-ED.4); הכוסות סט מדומה (G-ED.7); הקערה עמוקה והראנר פי 1.4 (G-ED.4; ‏MC1 אושר); גוון הווילונות והסימן על הכרית (קוד)"
+   }
+  ]
+ },
+ "measurements": {
+  "tool": "qa/reports/2026-11-07-gate-g-ed/tools/guardrails.py",
+  "raw": [
+   {
+    "file": "assets/renders/editorial-phase-b-2026-11-06/raw/nordic-A-fin-seedream.png",
+    "size": [
+     2720,
+     1530
+    ],
+    "window_boxes": [],
+    "clipped_254_pct": 0.069,
+    "near_clip_250_pct": 0.705,
+    "clipped_top_components_px_box": [
+     [
+      2353,
+      [
+       126,
+       202,
+       171,
+       334
+      ]
+     ],
+     [
+      1005,
+      [
+       1315,
+       886,
+       1356,
+       928
+      ]
+     ],
+     [
+      971,
+      [
+       329,
+       19,
+       351,
+       80
+      ]
+     ]
+    ],
+    "shadows_10pct_Lab": [
+     24.6,
+     4.5,
+     12.0
+    ],
+    "highlights_10pct_Lab": [
+     90.9,
+     2.0,
+     5.8
+    ],
+    "split_flag": false
+   },
+   {
+    "file": "assets/renders/editorial-phase-b-2026-11-06/raw/nordic-B-fin-seedream.png",
+    "size": [
+     2720,
+     1530
+    ],
+    "window_boxes": [],
+    "clipped_254_pct": 0.274,
+    "near_clip_250_pct": 4.936,
+    "clipped_top_components_px_box": [
+     [
+      29466,
+      [
+       1045,
+       389,
+       1242,
+       723
+      ]
+     ],
+     [
+      10897,
+      [
+       1138,
+       44,
+       1239,
+       396
+      ]
+     ],
+     [
+      8144,
+      [
+       1523,
+       104,
+       1584,
+       399
+      ]
+     ]
+    ],
+    "shadows_10pct_Lab": [
+     23.4,
+     5.5,
+     10.7
+    ],
+    "highlights_10pct_Lab": [
+     96.5,
+     0.3,
+     0.8
+    ],
+    "split_flag": false
+   },
+   {
+    "file": "assets/renders/editorial-phase-b-2026-11-06/raw/warm-modern-A-fin-seedream.png",
+    "size": [
+     2720,
+     1530
+    ],
+    "window_boxes": [],
+    "clipped_254_pct": 0.137,
+    "near_clip_250_pct": 1.617,
+    "clipped_top_components_px_box": [
+     [
+      5674,
+      [
+       0,
+       569,
+       108,
+       677
+      ]
+     ],
+     [
+      5135,
+      [
+       150,
+       470,
+       284,
+       574
+      ]
+     ],
+     [
+      4673,
+      [
+       0,
+       494,
+       107,
+       601
+      ]
+     ]
+    ],
+    "shadows_10pct_Lab": [
+     10.9,
+     5.3,
+     9.6
+    ],
+    "highlights_10pct_Lab": [
+     85.0,
+     4.3,
+     17.3
+    ],
+    "split_flag": false
+   },
+   {
+    "file": "assets/renders/editorial-phase-b-2026-11-06/raw/boho-A-gpt-image-2-5.png",
+    "size": [
+     2736,
+     1536
+    ],
+    "window_boxes": [],
+    "clipped_254_pct": 0.153,
+    "near_clip_250_pct": 0.859,
+    "clipped_top_components_px_box": [
+     [
+      16588,
+      [
+       2444,
+       54,
+       2685,
+       236
+      ]
+     ],
+     [
+      6891,
+      [
+       246,
+       340,
+       393,
+       440
+      ]
+     ],
+     [
+      4774,
+      [
+       1571,
+       422,
+       1680,
+       498
+      ]
+     ]
+    ],
+    "shadows_10pct_Lab": [
+     17.1,
+     4.5,
+     19.9
+    ],
+    "highlights_10pct_Lab": [
+     81.1,
+     4.9,
+     17.4
+    ],
+    "split_flag": false
+   },
+   {
+    "file": "assets/renders/editorial-phase-b-2026-11-06/raw/mediterranean-A-gpt-image-2-5.png",
+    "size": [
+     2736,
+     1536
+    ],
+    "window_boxes": [],
+    "clipped_254_pct": 0.143,
+    "near_clip_250_pct": 3.161,
+    "clipped_top_components_px_box": [
+     [
+      12313,
+      [
+       2398,
+       435,
+       2606,
+       589
+      ]
+     ],
+     [
+      6398,
+      [
+       2126,
+       1355,
+       2299,
+       1452
+      ]
+     ],
+     [
+      2731,
+      [
+       2407,
+       394,
+       2498,
+       450
+      ]
+     ]
+    ],
+    "shadows_10pct_Lab": [
+     24.2,
+     7.8,
+     19.1
+    ],
+    "highlights_10pct_Lab": [
+     88.6,
+     1.4,
+     8.2
+    ],
+    "split_flag": false
+   },
+   {
+    "file": "assets/renders/editorial-phase-b-2026-11-06/raw/japandi-A-nano-banana-2.png",
+    "size": [
+     2752,
+     1536
+    ],
+    "window_boxes": [],
+    "clipped_254_pct": 2.091,
+    "near_clip_250_pct": 3.241,
+    "clipped_top_components_px_box": [
+     [
+      188469,
+      [
+       148,
+       304,
+       596,
+       859
+      ]
+     ],
+     [
+      12518,
+      [
+       1891,
+       644,
+       1971,
+       829
+      ]
+     ],
+     [
+      2717,
+      [
+       0,
+       129,
+       63,
+       201
+      ]
+     ]
+    ],
+    "shadows_10pct_Lab": [
+     2.5,
+     0.8,
+     0.5
+    ],
+    "highlights_10pct_Lab": [
+     74.4,
+     3.8,
+     6.8
+    ],
+    "split_flag": false
+   },
+   {
+    "file": "assets/renders/editorial-phase-b-2026-11-06/raw/modern-country-A-gpt-image-2-5.png",
+    "size": [
+     2736,
+     1536
+    ],
+    "window_boxes": [],
+    "clipped_254_pct": 0.388,
+    "near_clip_250_pct": 0.908,
+    "clipped_top_components_px_box": [
+     [
+      18463,
+      [
+       950,
+       35,
+       1325,
+       237
+      ]
+     ],
+     [
+      14447,
+      [
+       957,
+       35,
+       1210,
+       192
+      ]
+     ],
+     [
+      12796,
+      [
+       304,
+       367,
+       532,
+       479
+      ]
+     ]
+    ],
+    "shadows_10pct_Lab": [
+     32.0,
+     9.3,
+     25.5
+    ],
+    "highlights_10pct_Lab": [
+     82.7,
+     2.1,
+     12.5
+    ],
+    "split_flag": false
+   }
+  ],
+  "finished": [
+   {
+    "file": "assets/renders/editorial-phase-b-2026-11-06/nordic-A-ed4.png",
+    "size": [
+     2720,
+     1530
+    ],
+    "window_boxes": [],
+    "clipped_254_pct": 0.0,
+    "near_clip_250_pct": 0.0,
+    "clipped_top_components_px_box": [],
+    "shadows_10pct_Lab": [
+     24.3,
+     4.5,
+     11.8
+    ],
+    "highlights_10pct_Lab": [
+     90.7,
+     1.7,
+     5.8
+    ],
+    "split_flag": false
+   },
+   {
+    "file": "assets/renders/editorial-phase-b-2026-11-06/nordic-B-fin.png",
+    "size": [
+     2720,
+     1530
+    ],
+    "window_boxes": [],
+    "clipped_254_pct": 0.0,
+    "near_clip_250_pct": 0.0,
+    "clipped_top_components_px_box": [],
+    "shadows_10pct_Lab": [
+     23.4,
+     5.5,
+     10.7
+    ],
+    "highlights_10pct_Lab": [
+     95.4,
+     0.2,
+     0.6
+    ],
+    "split_flag": false
+   },
+   {
+    "file": "assets/renders/editorial-phase-b-2026-11-06/warm-modern-A-ed4.png",
+    "size": [
+     2720,
+     1530
+    ],
+    "window_boxes": [],
+    "clipped_254_pct": 0.0,
+    "near_clip_250_pct": 0.0,
+    "clipped_top_components_px_box": [],
+    "shadows_10pct_Lab": [
+     10.9,
+     5.3,
+     9.6
+    ],
+    "highlights_10pct_Lab": [
+     84.9,
+     3.8,
+     17.6
+    ],
+    "split_flag": false
+   },
+   {
+    "file": "assets/renders/editorial-phase-b-2026-11-06/boho-A-fin2.png",
+    "size": [
+     2736,
+     1536
+    ],
+    "window_boxes": [],
+    "clipped_254_pct": 0.0,
+    "near_clip_250_pct": 0.0,
+    "clipped_top_components_px_box": [],
+    "shadows_10pct_Lab": [
+     17.1,
+     4.5,
+     19.9
+    ],
+    "highlights_10pct_Lab": [
+     80.9,
+     4.7,
+     17.3
+    ],
+    "split_flag": false
+   },
+   {
+    "file": "assets/renders/editorial-phase-b-2026-11-06/mediterranean-A-ed4.png",
+    "size": [
+     2736,
+     1536
+    ],
+    "window_boxes": [],
+    "clipped_254_pct": 0.0,
+    "near_clip_250_pct": 0.0,
+    "clipped_top_components_px_box": [],
+    "shadows_10pct_Lab": [
+     23.8,
+     7.7,
+     18.8
+    ],
+    "highlights_10pct_Lab": [
+     88.1,
+     1.4,
+     8.4
+    ],
+    "split_flag": false
+   },
+   {
+    "file": "assets/renders/editorial-phase-b-2026-11-06/japandi-A-ed4.png",
+    "size": [
+     2752,
+     1536
+    ],
+    "window_boxes": [],
+    "clipped_254_pct": 0.0,
+    "near_clip_250_pct": 0.0,
+    "clipped_top_components_px_box": [],
+    "shadows_10pct_Lab": [
+     2.5,
+     0.8,
+     0.5
+    ],
+    "highlights_10pct_Lab": [
+     74.2,
+     2.9,
+     6.4
+    ],
+    "split_flag": false
+   },
+   {
+    "file": "assets/renders/editorial-phase-b-2026-11-06/modern-country-A.png",
+    "size": [
+     2736,
+     1536
+    ],
+    "window_boxes": [],
+    "clipped_254_pct": 0.0,
+    "near_clip_250_pct": 0.0,
+    "clipped_top_components_px_box": [],
+    "shadows_10pct_Lab": [
+     32.0,
+     9.3,
+     25.5
+    ],
+    "highlights_10pct_Lab": [
+     82.6,
+     1.9,
+     12.4
+    ],
+    "split_flag": false
+   }
+  ],
+  "reading": "בגמור 0% שרוף בכל השבעה, כי הברך של render-agent (0.90 → 0.985) מורידה הכול מתחת ל-254. בגולמי: ג'אפנדי 2.09% (רובו פנס הנייר שהוא מוצר, [148,304,596,859]), ושאר הששה 0.07–0.39%. דגל הפיצול כבוי בכולם."
+ },
+ "open_items": [
+  {
+   "id": "Q-ED1",
+   "what": "G-ED.12 על הגולמי מול הגמר של render-agent: px_at_255_after = 0 נרשם כעמידה במעקה, אבל הברך לא מחזירה פרט",
+   "gate_uses": "הגולמי",
+   "owner": "המנהל; render-agent"
+  },
+  {
+   "id": "Q-ED2",
+   "what": "תצוגת הייחוס בטלפון ל-G-ED.17 עוד לא נקבעה (DIR1 חדש, האתר לא נבנה)",
+   "gate_uses": "390×844 לאורך, cover בגובה; הנוסחה לכל הצגה אחרת",
+   "owner": "frontend-dev ו-master-designer → הבעלים"
+  },
+  {
+   "id": "Q-ED3",
+   "what": "רשימות \"אסור\" של חמשת הסגנונות הן טיוטות",
+   "gate_uses": "הטיוטות כהצעה עד שהמעצב מעדכן את המסמכים לפי CR",
+   "owner": "master-designer"
+  },
+  {
+   "id": "Q-ED4",
+   "what": "חריגי \"חלקית\" לערימת השטיח (נורדי A, מודרני חם) ולקפל הווילון (נורדי B)",
+   "gate_uses": "נדרש חריג בשם ב-decisions.json לפני \"מאושר לאתר\"",
+   "owner": "המנהל → הבעלים"
+  },
+  {
+   "id": "Q-ED5",
+   "what": "צורת התלויה בג'אפנדי (ביצה מול דלעת 40×25 בכרטיס)",
+   "gate_uses": "G-ED.2 לא יעבור עד תשובה",
+   "owner": "sourcing-agent"
+  }
+ ],
+ "changelog": [
+  "1.0 (2026-11-07): השער, 18 בדיקות, ארבעה מצבים, הסדר, והמיפוי של שבעת הפריימים."
+ ]
+}
