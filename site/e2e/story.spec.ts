@@ -330,7 +330,7 @@ test.describe('the detail page (layer 2, "הפרט")', () => {
     await page.locator('.st-pd-axis[data-axis="size"] label', { hasText: '30×50' }).click();
     await expect(page.locator('#st-pd-price')).toHaveText(/49/);
     // the title follows the choice (design notes §6): the 30×50 has its own shape name, and never a size
-    await expect(page.locator('h1')).toHaveText('כרית מותן בוקלה, לבן חם');
+    await expect(page.locator('h1')).toHaveText('ציפית כרית מותן בוקלה, לבן חם');
     await expect(page).toHaveURL(/size=30x50/);
     await expect(page.locator('#st-pd-story-note')).toContainText('בסיפור מוצגת האפשרות');
     await expect(page.locator('[data-spec="מידות"]')).toContainText('30×50');
