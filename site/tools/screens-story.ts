@@ -1032,10 +1032,93 @@ async function toolRun(w: number, h: number, tag: 'desk' | 'phone'): Promise<voi
   await ctx.close();
 }
 
+// S5: the design system on the pages that changed: boho's two units, the Mediterranean's approved names, the neutral
+// detail address, the way back to the story on the tool's stage with its paper controls, and a frame that did not load
+async function s5Run(w: number, h: number, tag: 'desk' | 'phone'): Promise<void> {
+  const ctx = await ctxOf(w, h);
+  const boho = await open(ctx, '', BOHO_FRAME);
+  await settled(boho);
+  await sleep(600);
+  await shot(boho, `${tag}-s5-1-boho-fin7`, `${w}: boho fin7 (register v4, final test): its frame and the mark of its state`);
+  await goTo(boho, '#list-A');
+  await sleep(500);
+  await shot(
+    boho,
+    `${tag}-s5-2-boho-two-units`,
+    `${w}: boho's list: the rust cushion says "בתמונה: שתי יחידות.", and the whole look adds two (said under the button)`,
+    {
+      full: true,
+      clip: await sectionClip(boho, '#list-A'),
+    },
+  );
+  const med = await open(ctx, '', '/story/living-room/mediterranean/');
+  await settled(med);
+  await goTo(med, '#list-A');
+  await sleep(500);
+  await shot(
+    med,
+    `${tag}-s5-3-mediterranean-names`,
+    `${w}: the Mediterranean list with the designer's §9 names (the magazine stand, the cover-only lumbar cushion, the basket's plant)`,
+    {
+      full: true,
+      clip: await sectionClip(med, '#list-A'),
+    },
+  );
+  const slug = productSlug('cushions-cj-boucle-teddy');
+  const det = await open(ctx, '', `/story/living-room/nordic/p/${slug}/`);
+  await sleep(700);
+  await shot(
+    det,
+    `${tag}-s5-4-detail-neutral`,
+    `${w}: a detail page at its neutral address /story/living-room/nordic/p/${slug}/ (the price in Assistant, tabular: §4.2, §4.4)`,
+  );
+  const room = await open(ctx, '', `/rooms/living-room/?from=${encodeURIComponent(NORDIC)}`);
+  await room.waitForSelector('#back-to-story', { timeout: 20_000 });
+  await room.waitForSelector('button.hotspot:not([hidden])', { timeout: 20_000 }).catch(() => {});
+  await sleep(1200);
+  await shot(
+    room,
+    `${tag}-s5-5-tool-back`,
+    `${w}: the tool entered from the story: "חזרה לסיפור" on the stage, the controls as paper labels (no blur, no dark gradient)`,
+  );
+  if (tag === 'desk') {
+    const spot = room.locator('button.hotspot:not([hidden])').first();
+    if (await spot.count()) {
+      await spot.hover();
+      await sleep(500);
+      await shot(room, `${tag}-s5-6-wall-label`, `${w}: a product under the pointer: its outline and the paper wall label (§6.4), the dot does not grow`);
+    }
+  }
+  evidence[`s5_${tag}`] = { detail_url: det.url().replace(ORIGIN, ''), back_to_story: await room.locator('#back-to-story').getAttribute('href') };
+  const failCtx = await ctxOf(w, h);
+  await failCtx.route(/\/media\/story\/living-room\/nordic\/A\/[^/?]*\.(webp|avif|jpg)(\?|$)/, (r) => r.abort());
+  const failed = await failCtx.newPage();
+  await failed.goto(`${ORIGIN}${NORDIC}`, { waitUntil: 'load' });
+  await failed.waitForSelector('#frame-A .st-img-error', { timeout: 15_000 });
+  await sleep(700);
+  await shot(
+    failed,
+    `${tag}-s5-7-frame-failed`,
+    `${w}: a frame that did not load: said on paper at the stage's foot, the blurred preview under it, no dots; the list below is whole`,
+  );
+  await failCtx.close();
+  await ctx.close();
+}
+
 const PART = process.argv.find((a) => a.startsWith('--part='))?.slice(7) ?? 'all';
 const t0 = Date.now();
 realRoutes();
 publicBuild();
+if (PART === 's5') {
+  await firstLoad(400, 800, 1, 'boho_phone_400_dpr1', BOHO_FRAME);
+  await firstLoad(1280, 800, 1, 'boho_desk_1280_dpr1', BOHO_FRAME);
+  await firstLoad(400, 800, 1, 'detail_neutral_phone_400_dpr1', `/story/living-room/nordic/p/${productSlug('cushions-cj-boucle-teddy')}/`);
+  await s5Run(1280, 800, 'desk');
+  await s5Run(400, 800, 'phone');
+  // the design system measured in the browser (e2e/system.spec.ts writes it, untracked; the evidence keeps a copy)
+  const table = sitePath('.generated/system/system-checklist.json');
+  if (existsSync(table)) writeFileSync(join(OUT, 'system-checklist.json'), readFileSync(table));
+}
 if (PART === 'tool' || PART === 'all') {
   await firstLoad(400, 800, 1, 'tool_draft_phone_400_dpr1', TOOL_DRAFT);
   await firstLoad(1280, 800, 1, 'tool_draft_desk_1280_dpr1', TOOL_DRAFT);

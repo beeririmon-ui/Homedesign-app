@@ -5,6 +5,8 @@
  *   first load of the living room on mobile ≤ 3 MB: HTML + JS + CSS + Hebrew/Latin fonts + the poster and every layer
  *   of the default composition at the width the engine picks on a 412×915 @2x phone, plus the depth map.
  *   JS entry ≤ 80 KB gzip, CSS ≤ 15 KB gzip.
+ *   S5, the story (when built): a page's JS ≤ 40 KB gzip and CSS ≤ 15 KB gzip; its first view on a phone ≤ 1.2 MB, a
+ *   detail page's ≤ 0.9 MB.
  */
 import { readFileSync, readdirSync, existsSync, statSync } from 'node:fs';
 import { gzipSync } from 'node:zlib';
@@ -90,6 +92,36 @@ const rows: [string, number, number | null][] = [
   [`room media (${count} files, shell @${posterW}, layers @${res})`, layers, null],
   ['first load, living room, mobile', total, BUDGET.firstLoad],
 ];
+// S5: the story's pages (behind the flag; absent from the public build). A story page's own scripts and styles, and its
+// first view on the phone: HTML, scripts, styles, fonts and the first frame's phone picture at 412 @2x (AVIF, which
+// every browser the site supports reads). A detail page the same way, with its first picture.
+const storyPage = join(DIST, 'story/living-room/nordic/index.html');
+if (existsSync(storyPage)) {
+  const STORY = { jsGz: 40 * 1024, cssGz: 15 * 1024, firstView: 1.2 * MB, detailView: 0.9 * MB };
+  const refs = (page: string) => [...readFileSync(page, 'utf8').matchAll(/\/assets\/([^"' ]+\.(?:js|css))/g)].map((m) => m[1]!);
+  const own = (page: string, ext: string) => [...new Set(refs(page).filter((f) => f.endsWith(ext)))].map((f) => gz(join(DIST, 'assets', f)));
+  /** the smallest picture of the first srcset that covers 824 px (412 @2x), from the media folder */
+  const firstPicture = (page: string): number => {
+    const set = /srcset="([^"]+)"/.exec(readFileSync(page, 'utf8'))?.[1] ?? '';
+    const cands = set.split(', ').map((c) => {
+      const [url = '', w = '0w'] = c.trim().split(' ');
+      return { url: url.replace(/\?.*$/, ''), w: parseInt(w) };
+    });
+    const pick = cands.find((c) => c.w >= 824) ?? cands[cands.length - 1];
+    if (!pick) return 0;
+    const f = join(DIST, pick.url);
+    return existsSync(f) ? statSync(f).size : 0;
+  };
+  const view = (page: string) => gz(page) + sum(own(page, '.js')) + sum(own(page, '.css')) + fonts + firstPicture(page);
+  const detailDir = join(DIST, 'story/living-room/nordic/p');
+  const detail = existsSync(detailDir) ? join(detailDir, readdirSync(detailDir).sort()[0]!, 'index.html') : null;
+  rows.push(
+    ['JS (gzip), a story page', sum(own(storyPage, '.js')), STORY.jsGz],
+    ['CSS (gzip), a story page', sum(own(storyPage, '.css')), STORY.cssGz],
+    ['first view, a story page, mobile (the Nordic living room)', view(storyPage), STORY.firstView],
+    ...(detail ? ([['first view, a detail page, mobile', view(detail), STORY.detailView]] as [string, number, number][]) : []),
+  );
+}
 let failed = false;
 for (const [name, v, max] of rows) {
   const over = max !== null && v > max;

@@ -15,6 +15,8 @@
 }
 .st-cart-btn {
   min-height: 44px;
+  min-width: 44px;
+  justify-content: center;
   padding: 0;
   border: 0;
   background: none;
@@ -339,7 +341,7 @@
   color: var(--ink);
 }
 .st .st-tile-type .st-tile-title {
-  font: 300 20px/26px var(--f-display);
+  font: 300 var(--t-h3) var(--f-display);
 }
 .st-tile.is-next .st-tile-type {
   background: none;
@@ -351,7 +353,7 @@
   color: var(--ink);
 }
 .st-tile-title {
-  font: 300 18px/24px var(--f-display);
+  font: 300 var(--t-credit) var(--f-display);
   text-wrap: balance;
 }
 .st-tile .mag-cap {
@@ -417,8 +419,7 @@
 }
 @media (min-width: 1024px) {
   .st .st-type-title {
-    font-size: 64px;
-    line-height: 70px;
+    font: 300 var(--t-display) var(--f-display);
   }
 }
 .st-type-status {
@@ -510,7 +511,7 @@
   border-radius: 2px;
   background: none;
   color: var(--ink);
-  font: 400 24px/1 var(--f-text);
+  font: 400 var(--t-glyph) var(--f-text);
   cursor: pointer;
 }
 @media (hover: hover) {
@@ -571,7 +572,7 @@
 }
 .st .st-detail {
   margin-top: calc(var(--s-3) * -1);
-  font-size: 15px;
+  font: 400 var(--t-detail) var(--f-text);
 }
 .st-notes {
   display: grid;
@@ -854,7 +855,7 @@
   display: none;
 }
 .st-pd-empty-title {
-  font: 300 20px/26px var(--f-display);
+  font: 300 var(--t-h3) var(--f-display);
 }
 .st .st-pd-empty .mag-cap {
   margin: 0;
@@ -868,8 +869,10 @@
   margin: 0;
 }
 .st-pd-price {
-  min-height: 36px;
-  font: 300 30px/36px var(--f-display);
+  /* §4.2 and §4.4: the price is Assistant 400 with tabular figures, part of the credit; never in serif */
+  min-height: 28px;
+  font: 400 var(--t-price) var(--f-text);
+  font-variant-numeric: tabular-nums lining-nums;
 }
 .st-pd-options {
   display: grid;
@@ -1041,7 +1044,7 @@
   border-radius: 2px;
   background: var(--paper);
   color: var(--ink);
-  font: 400 20px/1 var(--f-text);
+  font: 400 var(--t-glyph-s) var(--f-text);
   cursor: pointer;
 }
 .st-qty-btn:focus-visible,
@@ -1189,7 +1192,7 @@
   inset: 0;
   isolation: isolate;
   opacity: 0;
-  transition: opacity var(--d-style, 1000ms) var(--e-standard);
+  transition: opacity var(--d-style) var(--e-standard);
 }
 .st-td-house.is-on {
   opacity: 1;
@@ -1260,6 +1263,31 @@
 @media (prefers-reduced-motion: reduce) {
   /* a dissolve, shorter: nothing moves */
   .st-td-house {
-    transition-duration: 200ms;
+    transition-duration: var(--d-swap);
   }
+}
+
+/* ---------- S5: a link that stands alone is a 44 px target (G7.7); a link inside a sentence is WCAG 2.5.8's inline
+   exception and keeps the line's height ---------- */
+.st-crumbs a,
+.st-alone {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* ---------- S5, the error state of a frame: said on paper at the stage's foot, the preview under it; no broken image,
+   no grey box, nothing in the middle of the picture (§6.8, §7.3) ---------- */
+.st-img-error {
+  position: absolute;
+  z-index: 3;
+  inset-inline: var(--margin);
+  bottom: calc(env(safe-area-inset-bottom) + var(--s-5));
+  max-width: 26rem;
+  padding: var(--s-2) var(--s-3);
+  border-radius: var(--r-control);
+  background: var(--label);
+  color: var(--ink);
+  box-shadow: var(--sh-label);
 }

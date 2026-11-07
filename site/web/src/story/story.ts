@@ -119,10 +119,26 @@ function developed(st: Stage): Promise<void> {
       mark(`${st.id}:developed`);
       resolve();
     };
+    // S5, the error state: a frame that did not load says so on paper, and the list below it is whole; never a broken
+    // image or a grey box (§6.8). The blurred preview stays under it.
+    const failed = () => {
+      st.el.dataset.failed = 'true';
+      for (const m of st.marks) m.hidden = true;
+      if (!st.el.querySelector('.st-img-error')) {
+        const p = document.createElement('p');
+        p.className = 'st-img-error mag-cap';
+        p.setAttribute('role', 'status');
+        p.textContent = 'התמונה לא נטענה. אפשר לרענן את הדף; כל המוצרים שבה ברשימה שמתחת.';
+        st.el.append(p);
+      }
+      mark(`${st.id}:failed`);
+      resolve();
+    };
     if (st.img.complete && st.img.naturalWidth) done();
+    else if (st.img.complete && st.img.currentSrc) failed();
     else {
       st.img.addEventListener('load', done, { once: true });
-      st.img.addEventListener('error', done, { once: true });
+      st.img.addEventListener('error', failed, { once: true });
     }
   });
 }
@@ -178,7 +194,8 @@ function layout(st: Stage): void {
   const { d } = st;
   if (phone()) {
     fs.position = fs.width = fs.height = fs.left = fs.top = '';
-    for (const m of st.marks) m.hidden = false;
+    // a frame that did not load offers no dots: the list has every product (S5)
+    for (const m of st.marks) m.hidden = st.el.dataset.failed === 'true';
     return;
   }
   const sw = st.el.clientWidth;
@@ -204,7 +221,7 @@ function layout(st: Stage): void {
 function keepMarksInView(st: Stage, [uMin, uMax]: [number, number], [vMin, vMax]: [number, number]): void {
   for (const m of st.marks) {
     const it = data.items[m.dataset.item!];
-    if (it) m.hidden = it.u < uMin || it.u > uMax || it.v < vMin || it.v > vMax;
+    if (it) m.hidden = st.el.dataset.failed === 'true' || it.u < uMin || it.u > uMax || it.v < vMin || it.v > vMax;
   }
 }
 function showMarks(st: Stage): void {

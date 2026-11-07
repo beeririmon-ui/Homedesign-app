@@ -19,16 +19,10 @@ export function Room({ room, slot, option }: { room: CatalogRoom; slot?: string;
 
   return (
     <>
-      <RoomExperience room={room} />
+      {/* S5: the way back to the story sits on the stage (it was below it in S3) */}
+      <RoomExperience room={room} backTo={from} />
       <section class="wrap page" aria-labelledby="items-title">
         <div class="room-intro">
-          {from ? (
-            <p>
-              <a class="link-btn" href={from} id="back-to-story">
-                חזרה לסיפור
-              </a>
-            </p>
-          ) : null}
           <h2 id="items-title">מה יש בחדר</h2>
           <p class="muted">
             כל פריט בחדר הוא מוצר שאפשר לקנות. לכל פריט שלוש גרסאות: געו בנקודה על התמונה, או בחרו מהרשימה. המילוי (ענפים, נרות, עיתונים ועץ הזית) מראה איך

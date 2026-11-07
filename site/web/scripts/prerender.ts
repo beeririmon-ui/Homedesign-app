@@ -55,7 +55,9 @@ const storyRedirects = (() => {
 })();
 writeFileSync(
   resolve(dist, '_redirects'),
-  [...catalog.products.map((p) => `/p/${p.id}/ ${productPath(p.id)} 301`), ...(storyRedirects && process.env.HD_PUBLIC !== '1' ? [storyRedirects] : [])].join('\n') + '\n',
+  [...catalog.products.map((p) => `/p/${p.id}/ ${productPath(p.id)} 301`), ...(storyRedirects && process.env.HD_PUBLIC !== '1' ? [storyRedirects] : [])].join(
+    '\n',
+  ) + '\n',
 );
 // robots.txt and sitemap.xml (absolute URLs; ORIGIN changes when the domain is chosen)
 const indexable = routes.filter((u) => !['/cart/', '/checkout/'].includes(u));

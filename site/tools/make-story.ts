@@ -1488,7 +1488,7 @@ const orderBody = `<section class="mag-paper st-co" id="order" data-head="הזמ
       </div>
       <p class="mag-lead" id="or-missing" hidden>לא מצאנו את ההזמנה בדפדפן הזה. הזמנות הבדיקה נשמרות רק בדפדפן שבו הן נעשו.</p>
       <p class="mag-cap">זו הזמנת בדיקה: לא נגבה כסף, ושום דבר לא נשלח לספק.</p>
-      <p><a class="mag-link" href="/story/">חזרה לתוכן הגיליון</a></p>
+      <p><a class="mag-link st-alone" href="/story/">חזרה לתוכן הגיליון</a></p>
     </div>
   </div>
 </section>`;
@@ -1562,10 +1562,7 @@ mkdirSync(GENERATED, { recursive: true });
 writeFileSync(join(GENERATED, 'story.json'), JSON.stringify(resolved, null, 1));
 // S5: two products never share an address (fails here, before a page does); the old addresses move to the neutral ones
 slugIndex(new Set(details.map((d) => d.product)));
-writeFileSync(
-  join(GENERATED, 'story-redirects.txt'),
-  details.map((d) => `${oldDetailHref(d.room, d.style, d.product)} ${d.href} 301`).join('\n') + '\n',
-);
+writeFileSync(join(GENERATED, 'story-redirects.txt'), details.map((d) => `${oldDetailHref(d.room, d.style, d.product)} ${d.href} 301`).join('\n') + '\n');
 const all = pages.flatMap((p) => p.frames.flatMap((f) => f.items));
 console.log(
   `story: ${pages.length} pages (${pages.filter((p) => p.frames.length).length} with frames, ${pages.filter((p) => !p.frames.length).length} typographic); ${all.length} points, ${all.filter((x) => x.status === 'available').length} for sale, ${all.filter((x) => x.status === 'unavailable').length} not sold now, ${all.filter((x) => x.status === 'unpriced').length} without a price; ${all.filter((x) => !x.image).length} without a cached card photo`,

@@ -45,7 +45,11 @@ const sheet = (page: Page) => page.locator('#st-sheet');
 /** QA's register decides a frame's state (it moves round by round): the tests read what the build resolved */
 const resolved = JSON.parse(readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), '../.generated/story.json'), 'utf8')) as Record<
   string,
-  { states?: [string, string, string][]; held?: { state: string; why_he: string }[]; items?: Record<string, { dot: boolean; status?: string; variant_id?: string | null; units?: number }> }
+  {
+    states?: [string, string, string][];
+    held?: { state: string; why_he: string }[];
+    items?: Record<string, { dot: boolean; status?: string; variant_id?: string | null; units?: number }>;
+  }
 >;
 const stateOf = (href: string) => resolved[href]?.states?.[0]?.[2] ?? null;
 const MARK: Record<string, string> = { final_test: 'טיוטה / בדיקה', almost: 'טיוטה / בדיקה · כמעט מוכן', approved_for_site: 'בדיקה · מאושר לאתר' };
@@ -417,7 +421,10 @@ test.describe('the detail page, after the designer (§6)', () => {
   test("QA on S2: a dot of another option opens the detail page on that option (the Mediterranean's terracotta cushion)", async ({ page }) => {
     await page.goto(MED);
     await page.evaluate(() => window.__story!.openSheet('A-7'));
-    await expect(page.locator('#st-page')).toHaveAttribute('href', new RegExp(`/p/${productSlug('cushions-cj-washed-cotton-frayed')}/\\?size=50x50&other=earthy-orange$`));
+    await expect(page.locator('#st-page')).toHaveAttribute(
+      'href',
+      new RegExp(`/p/${productSlug('cushions-cj-washed-cotton-frayed')}/\\?size=50x50&other=earthy-orange$`),
+    );
     await page.locator('#st-page').click();
     await expect(page.locator('h1')).toHaveText('ציפית כרית כותנה רחוצה עם שוליים פרומים, טרקוטה');
     await expect(page.locator('#st-pd-story-note')).toContainText('לבן');
@@ -595,6 +602,12 @@ test.describe('from the story into the tool (S3)', () => {
     await page.locator('#st-tool').click();
     await expect(page.locator('button.hotspot').first()).toBeAttached({ timeout: 20_000 });
     await expect(page.locator('#back-to-story')).toHaveAttribute('href', NORDIC);
+    // S5: it sits on the stage, inside the frame, a 44 px target at the top end
+    const stage = (await page.locator('section.stage').boundingBox())!;
+    const back = (await page.locator('#back-to-story').boundingBox())!;
+    expect(back.y - stage.y).toBeLessThan(40);
+    expect(back.height).toBeGreaterThanOrEqual(44);
+    expect(back.x).toBeLessThan(stage.x + stage.width / 2); // the end is the left in RTL
     // a "from" that is not a story page is ignored
     await page.goto('/rooms/living-room/?from=https%3A%2F%2Fexample.com%2F');
     await expect(page.locator('button.hotspot').first()).toBeAttached({ timeout: 20_000 });
@@ -631,7 +644,7 @@ test.describe('from the story into the tool (S3)', () => {
         .locator('.st-td-house')
         .first()
         .evaluate((el) => getComputedStyle(el).transitionDuration),
-    ).toBe('0.2s');
+    ).toBe('0.3s');
   });
 });
 
@@ -673,5 +686,36 @@ test.describe('the story on a phone (400)', () => {
       expect(await page.evaluate(() => document.documentElement.scrollWidth), path).toBeLessThanOrEqual(400);
       await audit(page, `phone ${path}`);
     }
+  });
+});
+
+test.describe('the magazine design system (S5)', () => {
+  test('neutral addresses: no supplier in a product address; the old address moves to the new one', async ({ page }) => {
+    const slug = productSlug('vase-aliexpress-vintage-distressed-clay-vase-589009');
+    expect(slug).not.toMatch(/aliexpress|cj|zendrop|589009/);
+    // the story's detail page, by its old address (the card id)
+    await page.goto('/story/living-room/nordic/p/vase-aliexpress-vintage-distressed-clay-vase-589009/');
+    await expect(page).toHaveURL(new RegExp(`/story/living-room/nordic/p/${slug}/$`));
+    await expect(page.locator('h1')).toContainText('כד');
+    // every link on a story page names products by the neutral address
+    await page.goto(NORDIC);
+    const hrefs = [...(await page.content()).matchAll(/\/story\/[a-z-]+\/[a-z-]+\/p\/[^/"?]+\//g)].map((m) => m[0]);
+    expect(hrefs.length).toBeGreaterThan(5);
+    expect(hrefs.filter((h) => /-(cj|aliexpress|zendrop)-|\d{6}/.test(h))).toEqual([]);
+    // the shop: the old address by card id moves too
+    await page.goto('/p/vase-cj-textured-white-stoneware/');
+    await expect(page).toHaveURL(/\/p\/vase-textured-white-stoneware-[0-9a-z]{5}\/$/);
+    await expect(page.locator('h1')).toBeVisible();
+  });
+
+  test('a frame that does not load says so on paper; the list under it is whole', async ({ page }) => {
+    await page.route(/\/media\/story\/living-room\/nordic\/A\/[^/?]*\.(webp|avif|jpg)(\?|$)/, (r) => r.abort());
+    await page.goto(NORDIC);
+    await expect(page.locator('#frame-A .st-img-error')).toContainText('התמונה לא נטענה');
+    await page.setViewportSize({ width: 1200, height: 800 }); // a layout after the failure keeps the dots off
+    await expect(page.locator('#frame-A .st-mark:visible')).toHaveCount(0);
+    await expect(page.locator('#list-A .st-credit').first()).toBeVisible();
+    await page.waitForTimeout(800); // the title's develop transition has settled
+    await audit(page, 'a frame that did not load');
   });
 });

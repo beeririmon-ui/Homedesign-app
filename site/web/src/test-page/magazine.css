@@ -142,6 +142,11 @@
   pointer-events: none;
 }
 .mag-brand {
+  /* G7.7: the wordmark is a link, a 44 px target */
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  min-width: 44px;
   font: 300 var(--t-brand) var(--f-display);
   color: inherit;
   text-decoration: none;
@@ -163,6 +168,8 @@
   font: 600 var(--t-btn) var(--f-text);
 }
 .mag-nav a {
+  min-width: 44px;
+  justify-content: center;
   color: inherit;
   text-decoration: none;
   min-height: 44px;
@@ -564,7 +571,7 @@
   border-radius: 2px;
   background: var(--label);
   color: var(--ink);
-  font: 400 24px/1 var(--f-text);
+  font: 400 var(--t-glyph) var(--f-text);
   cursor: pointer;
   opacity: 0;
   transition: opacity var(--d-ui-out) var(--e-ui-out);
@@ -821,12 +828,7 @@ a.mag-toc-link:focus-visible {
   font: 600 var(--t-run) var(--f-text);
 }
 .mag-toc-name {
-  font: 300 30px/36px var(--f-display);
-}
-@media (min-width: 1024px) {
-  .mag-toc-name {
-    font: 300 40px/44px var(--f-display);
-  }
+  font: 300 var(--t-toc) var(--f-display);
 }
 .mag-toc-cap {
   font: 400 var(--t-cap) var(--f-text);

@@ -36,7 +36,7 @@ const HINT_MS = 2000;
 /** the first-visit hint shows once per page session */
 let hinted = false;
 
-export function RoomExperience({ room }: { room: CatalogRoom }) {
+export function RoomExperience({ room, backTo = null }: { room: CatalogRoom; backTo?: string | null }) {
   const stage = useRef<HTMLDivElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
   const poster = useRef<HTMLImageElement>(null);
@@ -466,12 +466,16 @@ export function RoomExperience({ room }: { room: CatalogRoom }) {
           );
         })}
       </div>
+      {/* §7.3: no "loading" in the middle of the stage; the poster is the loading state, and the status is said aloud */}
       {!placed ? (
-        <p class="stage-loading" role="status">
-          <span class="glass" style={{ padding: '8px 14px' }}>
-            טוען את החדר…
-          </span>
+        <p class="sr-only" role="status">
+          טוען את החדר…
         </p>
+      ) : null}
+      {backTo ? (
+        <a class="glass stage-back" href={backTo} id="back-to-story">
+          חזרה לסיפור
+        </a>
       ) : null}
       <div class="stage-ui">
         {/* ART7 (2026-11-03): styles that do not exist yet are not on the room image; they appear only in the contents
