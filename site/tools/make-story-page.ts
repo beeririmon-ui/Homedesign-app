@@ -347,6 +347,8 @@ type FrameOut = FrameSpec & {
   srcset: string[];
   srcset_phone: string[];
   crop: [number, number];
+  /** the encodes' version (source and crop), as a query on their URLs: a new frame is never served from a cache */
+  ver: string;
   items: StoryItem[];
 };
 const frames: FrameOut[] = [];
@@ -357,24 +359,25 @@ for (const [id, f] of Object.entries(hot.frames)) {
   const img = sharp(src);
   const meta = await img.metadata();
   mkdirSync(join(OUT, id), { recursive: true });
-  for (const w of WIDTHS) {
-    const base = join(OUT, id, String(w));
-    if (fresh(`${base}.avif`, mtime) && fresh(`${base}.webp`, mtime)) continue;
-    const r = img.clone().resize({ width: w, withoutEnlargement: true });
-    await r.clone().avif({ quality: 52, effort: 4 }).toFile(`${base}.avif`);
-    await r.clone().webp({ quality: 74, effort: 4 }).toFile(`${base}.webp`);
-  }
   // the phone: the 4:5 crop at full height, centred on phone_crop_u (clamped to the frame)
   const cw = Math.round(meta.height! * 0.8);
   const cl = Math.round(Math.min(meta.width! - cw, Math.max(0, spec.phone_crop_u * meta.width! - cw / 2)));
   const phone = img.clone().extract({ left: cl, top: 0, width: cw, height: meta.height! });
-  for (const w of PHONE_WIDTHS) {
-    const base = join(OUT, id, `m${w}`);
-    if (fresh(`${base}.avif`, mtime) && fresh(`${base}.webp`, mtime)) continue;
-    const r = phone.clone().resize({ width: w, withoutEnlargement: true });
+  // the encodes are reused only for the same source file and the same crop (a new frame, ed4 → ed5, or a moved crop
+  // re-encodes, whatever the files' dates)
+  const stampFile = join(OUT, id, 'stamp.json');
+  const stamp = JSON.stringify({ src: f.src, mtime, crop_left: cl });
+  const same = existsSync(stampFile) && readFileSync(stampFile, 'utf8') === stamp;
+  for (const [w, base, source] of [
+    ...WIDTHS.map((w) => [w, join(OUT, id, String(w)), img] as const),
+    ...PHONE_WIDTHS.map((w) => [w, join(OUT, id, `m${w}`), phone] as const),
+  ]) {
+    if (same && existsSync(`${base}.avif`) && existsSync(`${base}.webp`)) continue;
+    const r = source.clone().resize({ width: w, withoutEnlargement: true });
     await r.clone().avif({ quality: 52, effort: 4 }).toFile(`${base}.avif`);
     await r.clone().webp({ quality: 74, effort: 4 }).toFile(`${base}.webp`);
   }
+  writeFileSync(stampFile, stamp);
   const crop: [number, number] = [cl / meta.width!, (cl + cw) / meta.width!];
   const points = [...f.points].sort(readingOrder);
   const items: StoryItem[] = [];
@@ -399,6 +402,7 @@ for (const [id, f] of Object.entries(hot.frames)) {
     srcset: WIDTHS.map((w) => `${URL_BASE}/${id}/${w}`),
     srcset_phone: PHONE_WIDTHS.map((w) => `${URL_BASE}/${id}/m${w}`),
     crop,
+    ver: createHash('sha256').update(stamp).digest('hex').slice(0, 8),
     items,
   });
   const priced = items.filter((x) => x.status !== 'unpriced').length;
@@ -422,9 +426,9 @@ const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replac
 const F = (id: string) => frames.find((f) => f.id === id)!;
 const head = (f: FrameOut) => `${f.n} · ${f.room_he} · ${f.style_he}`;
 function picture(f: FrameOut, eager: boolean): string {
-  const set = (ext: string) => f.srcset.map((s, i) => `${s}.${ext} ${Math.min(WIDTHS[i]!, f.width)}w`).join(', ');
+  const set = (ext: string) => f.srcset.map((s, i) => `${s}.${ext}?v=${f.ver} ${Math.min(WIDTHS[i]!, f.width)}w`).join(', ');
   const cw = Math.round(f.height * 0.8);
-  const pset = (ext: string) => f.srcset_phone.map((s, i) => `${s}.${ext} ${Math.min(PHONE_WIDTHS[i]!, cw)}w`).join(', ');
+  const pset = (ext: string) => f.srcset_phone.map((s, i) => `${s}.${ext}?v=${f.ver} ${Math.min(PHONE_WIDTHS[i]!, cw)}w`).join(', ');
   // the phone shows the 4:5 crop at full width (Bible 1.9; G-ED.17); the desktop covers the screen with the whole frame
   const sizes = '100vw';
   return `<img class="mag-lqip st-lqip-desk" src="${f.lqip}" alt="" aria-hidden="true" width="${f.width}" height="${f.height}" style="object-position: ${(f.u0 * 100).toFixed(1)}% ${(f.v0 * 100).toFixed(1)}%" />
@@ -433,7 +437,7 @@ function picture(f: FrameOut, eager: boolean): string {
   <source media="(max-width: 719px)" type="image/avif" srcset="${pset('avif')}" sizes="100vw" />
   <source media="(max-width: 719px)" type="image/webp" srcset="${pset('webp')}" sizes="100vw" />
   <source type="image/avif" srcset="${set('avif')}" sizes="${sizes}" />
-  <img src="${f.srcset[1]}.webp" srcset="${set('webp')}" sizes="${sizes}" alt="${esc(f.alt_he)}" width="${f.width}" height="${f.height}" decoding="async" ${eager ? 'fetchpriority="high"' : 'loading="lazy"'} style="object-position: ${(f.u0 * 100).toFixed(1)}% ${(f.v0 * 100).toFixed(1)}%" />
+  <img src="${f.srcset[1]}.webp?v=${f.ver}" srcset="${set('webp')}" sizes="${sizes}" alt="${esc(f.alt_he)}" width="${f.width}" height="${f.height}" decoding="async" ${eager ? 'fetchpriority="high"' : 'loading="lazy"'} style="object-position: ${(f.u0 * 100).toFixed(1)}% ${(f.v0 * 100).toFixed(1)}%" />
 </picture>`;
 }
 const status = (x: StoryItem) => (x.status === 'unavailable' ? '. המלאי אינו זמין כעת' : '');
