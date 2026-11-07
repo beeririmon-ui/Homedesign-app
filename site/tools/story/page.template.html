@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#F4F1EC" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>{{TITLE}}</title>
+    <meta name="description" content="{{DESCRIPTION}}" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script type="module" src="/src/story/story.ts"></script>
+  </head>
+  <body class="mag st" data-issue="{{ISSUE}}" data-kind="{{KIND}}">
+    <a class="mag-skip" href="{{SKIP}}">{{SKIP_HE}}</a>
+    <header class="mag-head st-head" id="mag-head" data-on="{{HEAD_ON}}">
+      <a class="mag-brand" href="/story/" aria-label="{{ISSUE}}, תוכן הגיליון">{{ISSUE}}</a>
+      <p class="mag-run" id="mag-run" aria-hidden="true"></p>
+      <nav class="mag-nav st-nav" aria-label="ראשי">
+        <a href="/story/"{{CONTENTS_CURRENT}}>תוכן</a>
+        <a href="{{NAV_TOOL}}">עצב בעצמך</a>
+        <button type="button" class="st-cart-btn" id="st-cart-open" aria-haspopup="dialog">
+          סל <span class="st-cart-count num" id="st-cart-count">0</span><span class="st-sr"> פריטים</span>
+        </button>
+      </nav>
+    </header>
+    <main class="mag-issue st-issue" id="top">
+{{BODY}}
+    </main>
+
+    <!-- "קנה את המראה": one sheet, filled from the data block for the dot or the row that opened it -->
+    <dialog class="st-sheet" id="st-sheet" aria-labelledby="st-sheet-name" aria-describedby="st-sheet-detail">
+      <div class="st-sheet-in">
+        <div class="st-sheet-top">
+          <p class="st-sheet-kicker" id="st-sheet-kicker">קנה את המראה</p>
+          <button type="button" class="st-close" id="st-sheet-close" aria-label="סגירה">×</button>
+        </div>
+        <figure class="st-photo" id="st-sheet-photo">
+          <img id="st-sheet-img" alt="" decoding="async" hidden />
+          <span class="st-photo-none" id="st-sheet-none" hidden
+            ><span class="st-swatch-lg" aria-hidden="true"></span><span>צילום הספק עוד לא הורד לגרסת הבדיקה.</span></span
+          >
+          <figcaption class="mag-cap" id="st-sheet-cap">צילום הספק.</figcaption>
+        </figure>
+        <h2 class="st-name" id="st-sheet-name" tabindex="-1"></h2>
+        <p class="mag-credit-detail st-detail" id="st-sheet-detail"></p>
+        <ul class="st-notes" id="st-sheet-notes"></ul>
+        <div class="st-actions" id="st-sheet-actions">
+          <button type="button" class="mag-btn mag-btn-primary" id="st-add">הוספה לסל</button>
+          <p class="mag-cap st-why" id="st-why" hidden></p>
+          <p class="mag-cap st-in-cart num" id="st-in-cart" hidden></p>
+        </div>
+        <p class="st-links" id="st-sheet-links">
+          <a class="mag-link" id="st-page" href="/">לדף המוצר</a><span class="st-sep" aria-hidden="true"> · </span
+          ><a class="mag-link" id="st-try" href="{{TOOL_HREF}}">לנסות בחדר: עצב בעצמך</a>
+        </p>
+        <nav class="st-browse" aria-label="עוד במראה הזה">
+          <button type="button" class="st-step" id="st-prev">הקודם</button>
+          <span class="mag-cap num" id="st-pos" aria-hidden="true"></span>
+          <button type="button" class="st-step" id="st-next">הבא</button>
+        </nav>
+      </div>
+    </dialog>
+
+    <!-- the test cart (an in-browser mock of the store API: createCart, getCart, setItem), the same on every story page -->
+    <dialog class="st-sheet st-cart" id="st-cart" aria-labelledby="st-cart-title">
+      <div class="st-sheet-in">
+        <div class="st-sheet-top">
+          <h2 class="st-name" id="st-cart-title" tabindex="-1">סל הבדיקה</h2>
+          <button type="button" class="st-close" id="st-cart-close" aria-label="סגירה">×</button>
+        </div>
+        <ol class="mag-credits st-cart-lines" id="st-cart-lines"></ol>
+        <p class="st-cart-empty mag-cap" id="st-cart-empty">הסל ריק.</p>
+        <p class="st-total" id="st-cart-total"></p>
+        <p class="mag-cap">סל בדיקה בדפדפן: התשלום לא פעיל בגרסת הבדיקה.</p>
+        <p><button type="button" class="mag-btn mag-btn-secondary" id="st-cart-clear">ריקון הסל</button></p>
+      </div>
+    </dialog>
+
+    <div class="mag-live" id="mag-live" aria-live="polite" aria-atomic="true"></div>
+    <script type="application/json" id="st-data">
+      {{DATA}}
+    </script>
+  </body>
+</html>

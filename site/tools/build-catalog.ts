@@ -80,9 +80,10 @@ const argOf = (flag: string): string | undefined => process.argv.find((a) => a.s
 const PRODUCT_ROOMS = new Set((argOf('--rooms') ?? [...BUILT_ROOMS].join(',')).split(',').filter(Boolean));
 const OUT_NAME = argOf('--out') ?? null;
 /**
- * --products=<manifest>: also build every card a story frame shows (the story test page, tools/make-story-page.ts reads
- * tools/test-page/story-hotspots.json), through the same pricing path, outside the rooms' slot options. A card's slot is
- * the living room's slot of the same id when there is one (the story frames are living rooms), else its own room's.
+ * --products=<manifest>: also build every card a story frame shows (the story layer, tools/make-story.ts reads
+ * data/story/story.json; the path is from the site folder), through the same pricing path, outside the rooms' slot options:
+ * every { product } of every points array, wherever the manifest holds it. A card's slot is the living room's slot of the
+ * same id when there is one (the story frames are living rooms so far), else its own room's.
  */
 const EXTRA_PRODUCTS = argOf('--products') ?? null;
 const STYLE = 'nordic';
@@ -772,8 +773,17 @@ for (const hr of house.rooms) {
 }
 
 if (EXTRA_PRODUCTS) {
-  const manifest = readJson(sitePath(EXTRA_PRODUCTS)) as { frames: Record<string, { points: { product: string }[] }> };
-  const wanted = [...new Set(Object.values(manifest.frames).flatMap((f) => f.points.map((p) => p.product)))];
+  const found: string[] = [];
+  const collect = (x: unknown): void => {
+    if (Array.isArray(x)) x.forEach(collect);
+    else if (x && typeof x === 'object')
+      for (const [k, v] of Object.entries(x)) {
+        if (k === 'points' && Array.isArray(v)) for (const p of v) if (typeof (p as { product?: unknown })?.product === 'string') found.push((p as { product: string }).product);
+        collect(v);
+      }
+  };
+  collect(readJson(sitePath(EXTRA_PRODUCTS)));
+  const wanted = [...new Set(found)];
   const built = new Set([...fullProducts.map((p) => p.id), ...hidden.map((h) => h.id)]);
   const slotsOf = (room: string) => {
     const f = repoPath('data/slots', `${room}.json`);

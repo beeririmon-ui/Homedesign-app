@@ -1,6 +1,7 @@
 /**
- * The story-first prototype (/test/story/, briefs/site-story-prototype-2026-11-07.md). Static HTML first: the frames,
- * their LQIPs, the dots and the product lists are in the page before this runs (tools/make-story-page.ts). This module
+ * Layer 1, the story (/story/, /story/<room>/<style>/; briefs/site-interface-track-2026-11-07.md S1, after the
+ * prototype of briefs/site-story-prototype-2026-11-07.md). Static HTML first: the frames, their LQIPs, the dots, the
+ * product lists and the contents are in the page before this runs (tools/make-story.ts). On a page with frames this module
  * adds the frame layout (the cover crop on desktop, the 4:5 crop at full width on the phone), the frames
  * developing from their LQIP, the dots (nothing at rest; on movement, touch or keyboard focus; gone 2.5 s later; a
  * hint once per frame, ו.4), the wall label, the "קנה את המראה" sheet (a modal dialog: Esc, the backdrop and × close it,
@@ -8,8 +9,8 @@
  * Every duration and curve is a token of magazine.css (§7.1). `window.__story` exposes the timeline for the evidence
  * tool (tools/screens-story.ts) and the e2e suite.
  */
-import './fonts.css';
-import './magazine.css';
+import '../test-page/fonts.css';
+import '../test-page/magazine.css';
 import './story.css';
 import { prefersReducedMotion } from '../motion';
 import { priceHe, storyCart, type StoryVariant } from './story-cart';
@@ -39,7 +40,8 @@ type Item = {
   try_href: string | null;
 };
 type FrameData = { id: string; u0: number; v0: number; aspect: number; crop: [number, number]; title_he: string; items: string[] };
-type Data = { mark_he: string; items: Record<string, Item>; frames: FrameData[] };
+/** the index and a typographic page have no frames and no items: the cart and the header still work there */
+type Data = { page: { room: string | null; style: string | null; href: string; tool: string }; items: Record<string, Item>; frames: FrameData[] };
 
 const data = JSON.parse(document.getElementById('st-data')!.textContent ?? '{}') as Data;
 const root = document.body;

@@ -1,10 +1,11 @@
 /**
- * The story prototype's test cart (web/src/test-page/story-cart.ts): the store API's cart contract (createCart, getCart,
- * setItem) with the site mock's rules, storage that can fail, and the price format held equal to the site's.
+ * The story layer's test cart (web/src/story/story-cart.ts): the store API's cart contract (createCart, getCart,
+ * setItem) with the site mock's rules, one cart across the story pages, storage that can fail, and the price format held
+ * equal to the site's.
  */
 import { describe, expect, it } from 'vitest';
 import { formatIls } from '@hd/shared/money';
-import { MAX_QTY, StoryCartError, memoryStore, priceHe, storyCart, type KeyValue, type StoryVariant } from '../src/test-page/story-cart';
+import { MAX_QTY, StoryCartError, memoryStore, priceHe, storyCart, type KeyValue, type StoryVariant } from '../src/story/story-cart';
 
 const V: StoryVariant[] = [
   { variant_id: 'bowl:default', product_id: 'bowl', name_he: 'קערה', option_he: null, price_agorot: 7900, set_qty: 1, available: true },
@@ -48,6 +49,26 @@ describe('the story test cart', () => {
     expect(again.current()!.count).toBe(1);
     again.clear();
     expect(again.current()).toBeNull();
+  });
+
+  it('keeps a line across story pages: another page lists it by its snapshot, and the page that shows it has the last word', async () => {
+    const store = memoryStore();
+    await storyCart(V, store).add('bowl:default');
+    // another page, without the bowl: the line stays, and its quantity can change there
+    const other = storyCart([V[1]!], store);
+    await other.add('candles:70x110mm');
+    expect(other.current()!.lines.map((l) => [l.variant_id, l.qty])).toEqual([
+      ['bowl:default', 1],
+      ['candles:70x110mm', 1],
+    ]);
+    const { id } = other.current()!;
+    expect((await other.setItem(id, 'bowl:default', 'set', 3)).subtotal_agorot).toBe(3 * 7900 + 19900);
+    // a page where the bowl is no longer sold: it drops out there
+    const sold = storyCart([{ ...V[0]!, available: false }, V[1]!], store);
+    expect(sold.current()!.lines.map((l) => l.variant_id)).toEqual(['candles:70x110mm']);
+    // a snapshot that is not a variant's shape (storage edited by hand) is not trusted
+    store.set('hd.story.cart', JSON.stringify({ id, items: [{ variant_id: 'x', pack: 'set', qty: 1, v: { variant_id: 'x', price_agorot: 'free' } }] }));
+    expect(storyCart([], store).current()!.lines).toEqual([]);
   });
 
   it('works when the storage throws or drops writes (a private window): the cart lives for this page', async () => {

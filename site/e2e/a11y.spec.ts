@@ -36,7 +36,7 @@ for (const scheme of ['light'] as const) {
   test.describe(scheme, () => {
     test.use({ colorScheme: scheme });
 
-    for (const path of ['/', '/accessibility/', '/terms/', '/returns/', '/privacy/', '/cart/', '/no-such-page/', '/test/']) {
+    for (const path of ['/', '/accessibility/', '/terms/', '/returns/', '/privacy/', '/cart/', '/no-such-page/', '/test/', '/story/', '/story/living-room/boho/']) {
       test(`page ${path}`, async ({ page }) => {
         await page.goto(path);
         await page.locator('h1').first().waitFor();

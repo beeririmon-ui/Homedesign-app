@@ -1,18 +1,35 @@
 import { defineConfig } from 'vite';
 import { viteSingleFile } from 'vite-plugin-singlefile';
 import { fileURLToPath } from 'node:url';
-import { rmSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { existsSync, readdirSync, rmSync } from 'node:fs';
+import { join, relative, resolve } from 'node:path';
 import type { Plugin } from 'vite';
 
 const r = (p: string) => fileURLToPath(new URL(p, import.meta.url));
 
 /**
- * TODO(deploy): the test pages (/test/ and /test/story/) and their test frames (media/test/) are built into dist for
- * review. A public deploy builds with HD_PUBLIC=1: their entries are left out, and dist/test and dist/media/test are
- * removed once the bundle is written (studio rules ו.7: an asset that did not pass QA never reaches the site).
+ * TODO(deploy): the test page (/test/), the story layer (/story/, tools/make-story.ts; /test/story/ redirects to it) and
+ * their test frames (media/test/, media/story/) are built into dist for review. A public deploy builds with
+ * HD_PUBLIC=1: their entries are left out, and dist/test, dist/story, dist/media/test and dist/media/story are removed
+ * once the bundle is written (studio rules ו.7: an asset that did not pass QA never reaches the site). The story comes
+ * out from behind the flag when its frames pass "approved for the site" (G-ED).
  */
 const PUBLIC = process.env.HD_PUBLIC === '1';
+/** every generated story page (web/story/**\/index.html) is an entry; none yet is not an error */
+function storyPages(): Record<string, string> {
+  const root = r('story');
+  if (!existsSync(root)) return {};
+  const out: Record<string, string> = {};
+  const walk = (dir: string): void => {
+    for (const e of readdirSync(dir, { withFileTypes: true })) {
+      const p = join(dir, e.name);
+      if (e.isDirectory()) walk(p);
+      else if (e.name === 'index.html') out[`story/${relative(root, dir).split('\\').join('/')}`.replace(/\/$/, '')] = p;
+    }
+  };
+  walk(root);
+  return out;
+}
 function withoutTestPages(): Plugin {
   let outDir = '';
   return {
@@ -22,7 +39,7 @@ function withoutTestPages(): Plugin {
       outDir = resolve(c.root, c.build.outDir);
     },
     closeBundle() {
-      for (const d of ['test', 'media/test']) rmSync(resolve(outDir, d), { recursive: true, force: true });
+      for (const d of ['test', 'story', 'media/test', 'media/story']) rmSync(resolve(outDir, d), { recursive: true, force: true });
     },
   };
 }
@@ -69,12 +86,16 @@ export default defineConfig(({ mode }) => {
           reportCompressedSize: true,
           // the test page in the magazine language (tools/make-test-page.ts writes test/index.html) is its own entry:
           // its code is not part of the room pages' first load (tools/check-budget.ts counts the entry index.html loads);
-          // so is the story prototype (tools/make-story-page.ts writes test/story/index.html)
+          // so is every story page (tools/make-story.ts writes story/**/index.html, and test/story/ as a redirect)
           rollupOptions: {
-            input: (PUBLIC ? { main: r('index.html') } : { main: r('index.html'), test: r('test/index.html'), story: r('test/story/index.html') }) as Record<
-              string,
-              string
-            >,
+            input: (PUBLIC
+              ? { main: r('index.html') }
+              : {
+                  main: r('index.html'),
+                  test: r('test/index.html'),
+                  'test/story': r('test/story/index.html'),
+                  ...storyPages(),
+                }) as Record<string, string>,
           },
         },
     plugins: artifact ? [viteSingleFile({ removeViteModuleLoader: true })] : PUBLIC ? [withoutTestPages()] : [],

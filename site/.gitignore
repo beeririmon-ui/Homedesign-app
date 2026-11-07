@@ -15,5 +15,7 @@ playwright-report/
 *.tsbuildinfo
 # the test page is generated from tools/test-page/index.template.html (tools/make-test-page.ts)
 web/test/index.html
-# the story prototype is generated from tools/test-page/story.template.html (tools/make-story-page.ts)
+# the story layer is generated from data/story/story.json and tools/story/page.template.html (tools/make-story.ts),
+# with /test/story/ as a redirect to it
+web/story/
 web/test/story/index.html

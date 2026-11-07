@@ -1,0 +1,743 @@
+{
+  "version": "1.0",
+  "date": "2026-11-07",
+  "note": "Layer 1, the story (skeleton spec 2.0, 'שלוש שכבות וזרימת האתר'; DIR1). One data file for every story page: rooms, styles, and per room/style pair its concept and its frames, each frame with its crops, title, story line and hotspot points. Built by site/tools/make-story.ts into /story/ and /story/<room>/<style>/, only without HD_PUBLIC=1 (site/web/vite.config.ts), until the frames pass 'approved for the site' (G-ED). THE QA GATE: a frame shows only when its state in qa_records (read by site/tools/lib/qa-frames.ts; a newer record wins) is one of allowed_states, and it has points; otherwise its pair is a typographic page. A dot goes only on a product QA called faithful ('yes'), G-ED.5; on the phone only when the 4:5 crop carries it at >= 44 x 24 CSS, G-ED.17 (proposal). POINTS AND BOXES ARE TEMPORARY, PLACED BY EYE (frontend-dev, 2026-11-07); qa-agent verifies them. u, v and box [u0, u1, v0, v1] are 0-1 of the whole frame, left to right and top to bottom; the box is the product's visible extent (for a pair, the one the point is on). option: the supplier option the frame shows when not the card's default (value ids); name_he: that option's own name; phone_at: a dot placed by hand for the phone's crop; in_frame_he: what the frame adds that is not sold. Story lines: docs/creative-review-2026-11-06.md §3. Crops and names: docs/proposals/story-page-design-notes-2026-11-07.md; names marked in names_he_proposed are frontend-dev's proposals in the designer's rule, waiting for master-designer.",
+  "issue_he": "הבית",
+  "qa_records": [
+    "qa/reports/2026-11-07-editorial-fin2-ed4-country.json",
+    "qa/reports/2026-11-07-ged-codefix-mc1-clay.json"
+  ],
+  "allowed_states": [
+    "final_test",
+    "almost"
+  ],
+  "marks_he": {
+    "final_test": "טיוטה / בדיקה",
+    "almost": "טיוטה / בדיקה · כמעט מוכן"
+  },
+  "tool_fallback": "/rooms/living-room/",
+  "rooms": [
+    {
+      "id": "hall",
+      "n": "01",
+      "name_he": "הכניסה"
+    },
+    {
+      "id": "living-room",
+      "n": "02",
+      "name_he": "הסלון"
+    },
+    {
+      "id": "dining-room",
+      "n": "03",
+      "name_he": "המטבח ופינת האוכל"
+    },
+    {
+      "id": "work",
+      "n": "04",
+      "name_he": "חדר העבודה"
+    },
+    {
+      "id": "corridor",
+      "n": "05",
+      "name_he": "המסדרון"
+    },
+    {
+      "id": "boy",
+      "n": "06",
+      "name_he": "חדר הילד"
+    },
+    {
+      "id": "girl",
+      "n": "07",
+      "name_he": "חדר הילדה"
+    },
+    {
+      "id": "bath",
+      "n": "08",
+      "name_he": "המקלחת"
+    },
+    {
+      "id": "master",
+      "n": "09",
+      "name_he": "חדר ההורים"
+    }
+  ],
+  "styles": [
+    {
+      "id": "nordic",
+      "name_he": "נורדי"
+    },
+    {
+      "id": "warm-modern",
+      "name_he": "מודרני חם"
+    },
+    {
+      "id": "modern-country",
+      "name_he": "כפרי מודרני"
+    },
+    {
+      "id": "boho",
+      "name_he": "בוהו"
+    },
+    {
+      "id": "mediterranean",
+      "name_he": "ים תיכוני"
+    },
+    {
+      "id": "japandi",
+      "name_he": "ג׳אפנדי"
+    }
+  ],
+  "names_he": {
+    "pendant-cj-silk-ribbed-pumpkin-40": "מנורת תלייה דלעת מבד מצולע",
+    "framed-art-aliexpress-minimal-geometric-triptych-prints": "שלישיית הדפסים גאומטריים, שיבולת שועל ופחם",
+    "accent-sconces-cj-travertine-block-updown-8x16": "זוג מנורות קיר, בלוק טרוורטין, אור למעלה ולמטה",
+    "cushions-cj-linen-look-charcoal": "ציפית כרית במראה פשתן, פחם",
+    "cushions-cj-knitted-chenille-bean-green": "ציפית כרית שניל סרוגה, מרווה",
+    "cushions-cj-boucle-teddy": "ציפית כרית בוקלה, לבן חם",
+    "sofa-cover-cj-cotton-muslin-fringe": "שמיכת מוסלין כותנה עם פרנזים, לבן שנהב",
+    "planter-cj-seagrass-belly": "סל-עציץ בטן מקש ים",
+    "basket-cj-jute-rope-cylinder": "סל גליל מחבל יוטה עם ידיות",
+    "candle-holders-cj-travertine-pedestal": "זוג פמוטי טרוורטין על רגל",
+    "bowl-cj-glutinous-white-belly-bowl-21": "קערת בטן קרמיקה, לבן חם",
+    "table-runner-cj-linen-look-sage-fringe": "ראנר במראה פשתן עם פרנזים קשורים, מרווה",
+    "rug-cj-braided-wool-natural": "שטיח צמר קלוע, טבעי",
+    "wall-decor-cj-corn-husk-round-38": "קישוט קיר עגול מקליעת תירס ויקינטון מים",
+    "vase-aliexpress-vintage-distressed-clay-vase-589009": "כד חמר מחורץ, שמנת",
+    "curtains-aliexpress-linen-blend-s-fold-180502": "זוג וילונות שקופים במראה פשתן, קפלי S",
+    "magazine-holder-cj-felt-log-basket": "סל לבד לעיתונים ולעצים, ידיות עץ",
+    "pendant-cj-tiered-fabric-drum": "מנורת תלייה תוף בד בטבעות",
+    "floor-lamp-cj-pleated-walnut-stem-158": "מנורת עמידה, עמוד אגוז ואהיל קפלים",
+    "framed-art-aliexpress-frameless-minimalist-wall-art-631735": "שלישיית הדפסים מופשטים, חום ושמנת",
+    "accent-sconces-aliexpress-travertine-cylinder-walnut-choice": "זוג מנורות קיר, גליל טרוורטין על לוחית אגוז",
+    "vase-cj-textured-white-stoneware": "אגרטל אבנית מקומט, לבן שבור",
+    "bowl-cj-matte-black-bowl-20": "קערה שחורה מט",
+    "cushions-aliexpress-farmhouse-floral-pillow-covers-166217": "זוג ציפיות כרית בהדפס פרחים, ורוד חימר ומרווה",
+    "cushions-cj-chenille-check-milky-white": "ציפית כרית שניל במשבצות, לבן חלבי",
+    "sill-vase-cj-cream-fluted-column-25": "אגרטל עמוד מחורץ, שמנת",
+    "bowl-cj-speckled-ivory-wide-bowl-21": "קערה רחבה מנומרת, שנהב"
+  },
+  "names_he_proposed": [
+    "bowl-cj-speckled-ivory-wide-bowl-21",
+    "cushions-aliexpress-farmhouse-floral-pillow-covers-166217",
+    "cushions-cj-chenille-check-milky-white",
+    "sill-vase-cj-cream-fluted-column-25"
+  ],
+  "pairs": {
+    "living-room/nordic": {
+      "tool": "/rooms/living-room/",
+      "frames": [
+        {
+          "id": "A",
+          "src": "assets/renders/editorial-phase-b-2026-11-06/nordic-A-ed4.png",
+          "qa_key": "nordic-A-ed4",
+          "role": "wide",
+          "u0": 0.56,
+          "v0": 0.1,
+          "phone_crop_u": 0.6,
+          "title_he": "דירה ישנה, שמש של פברואר",
+          "line_he": "שתיים בצהריים, אמצע פברואר. שמש חורף נמוכה נכנסת בחלון הכפול ומניחה את פסי המסגרת על הקיר ועל הספה. בחוץ שלג נמס; בפנים רק התלויה דולקת, חלש.",
+          "alt_he": "הסלון הנורדי באור חורף: ספה בשמנת עם כרית בוקלה, כרית שניל במרווה וכרית פשתן בפחם, שמיכת מוסלין על המסעד, פמוטי טרוורטין וקערה לבנה על השולחן, ראנר במרווה, שלישיית הדפסים מעל הספה ועץ זית בסל קש-ים ליד החלון",
+          "points": [
+            {
+              "product": "pendant-cj-silk-ribbed-pumpkin-40",
+              "u": 0.5,
+              "v": 0.12,
+              "box": [
+                0.447,
+                0.555,
+                0.02,
+                0.14
+              ],
+              "by_eye": true
+            },
+            {
+              "product": "framed-art-aliexpress-minimal-geometric-triptych-prints",
+              "u": 0.58,
+              "v": 0.355,
+              "box": [
+                0.46,
+                0.71,
+                0.21,
+                0.4
+              ],
+              "by_eye": true
+            },
+            {
+              "product": "accent-sconces-cj-travertine-block-updown-8x16",
+              "u": 0.411,
+              "v": 0.305,
+              "box": [
+                0.404,
+                0.418,
+                0.28,
+                0.33
+              ],
+              "by_eye": true
+            },
+            {
+              "product": "cushions-cj-linen-look-charcoal",
+              "u": 0.725,
+              "v": 0.525,
+              "box": [
+                0.665,
+                0.79,
+                0.46,
+                0.6
+              ],
+              "by_eye": true
+            },
+            {
+              "product": "cushions-cj-knitted-chenille-bean-green",
+              "u": 0.515,
+              "v": 0.545,
+              "box": [
+                0.465,
+                0.56,
+                0.485,
+                0.6
+              ],
+              "by_eye": true
+            },
+            {
+              "product": "cushions-cj-boucle-teddy",
+              "u": 0.425,
+              "v": 0.53,
+              "box": [
+                0.39,
+                0.495,
+                0.465,
+                0.59
+              ],
+              "by_eye": true
+            },
+            {
+              "product": "planter-cj-seagrass-belly",
+              "u": 0.3,
+              "v": 0.585,
+              "box": [
+                0.265,
+                0.322,
+                0.515,
+                0.665
+              ],
+              "by_eye": true,
+              "in_frame_he": "בתמונה: עץ זית. לא כלול במוצר."
+            },
+            {
+              "product": "sofa-cover-cj-cotton-muslin-fringe",
+              "u": 0.765,
+              "v": 0.66,
+              "box": [
+                0.64,
+                0.87,
+                0.54,
+                0.77
+              ],
+              "by_eye": true
+            },
+            {
+              "product": "basket-cj-jute-rope-cylinder",
+              "u": 0.24,
+              "v": 0.635,
+              "box": [
+                0.213,
+                0.278,
+                0.55,
+                0.685
+              ],
+              "by_eye": true
+            },
+            {
+              "product": "candle-holders-cj-travertine-pedestal",
+              "u": 0.457,
+              "v": 0.66,
+              "box": [
+                0.44,
+                0.505,
+                0.58,
+                0.71
+              ],
+              "by_eye": true,
+              "in_frame_he": "בתמונה: נרות עמוד. לא כלולים במוצר."
+            },
+            {
+              "product": "bowl-cj-glutinous-white-belly-bowl-21",
+              "u": 0.703,
+              "v": 0.712,
+              "box": [
+                0.668,
+                0.74,
+                0.685,
+                0.745
+              ],
+              "by_eye": true
+            },
+            {
+              "product": "table-runner-cj-linen-look-sage-fringe",
+              "u": 0.455,
+              "v": 0.77,
+              "box": [
+                0.395,
+                0.56,
+                0.67,
+                0.9
+              ],
+              "by_eye": true
+            },
+            {
+              "product": "rug-cj-braided-wool-natural",
+              "u": 0.86,
+              "v": 0.88,
+              "box": [
+                0.13,
+                1.0,
+                0.73,
+                1.0
+              ],
+              "by_eye": true
+            }
+          ]
+        },
+        {
+          "id": "B",
+          "src": "assets/renders/editorial-phase-b-2026-11-06/nordic-B-fin.png",
+          "qa_key": "nordic-B-fin",
+          "role": "second",
+          "u0": 0.5,
+          "v0": 0.4,
+          "phone_crop_u": 0.62,
+          "title_he": "פינת החלון",
+          "line_he": "באותה דירה, ליד החלון. האור עובר בווילון הפשתן ונח על הכורסה; על האדן כד חמר עם ענפי אקליפטוס, ולמטה מחזיק לבד לעיתונים וסל חבל יוטה.",
+          "alt_he": "פינת החלון הנורדית: וילונות פשתן, כד חמר עם אקליפטוס על האדן, כורסה עם שמיכת מוסלין, מחזיק עיתונים מלבד, סל חבל יוטה וקישוט קיר עגול מקליפות תירס",
+          "points": [
+            {
+              "product": "wall-decor-cj-corn-husk-round-38",
+              "u": 0.118,
+              "v": 0.17,
+              "box": [
+                0.05,
+                0.188,
+                0.05,
+                0.28
+              ],
+              "by_eye": true
+            },
+            {
+              "product": "vase-aliexpress-vintage-distressed-clay-vase-589009",
+              "u": 0.572,
+              "v": 0.44,
+              "box": [
+                0.55,
+                0.592,
+                0.355,
+                0.5
+              ],
+              "by_eye": true,
+              "in_frame_he": "בתמונה: ענפי אקליפטוס. לא כלולים במוצר."
+            },
+            {
+              "product": "curtains-aliexpress-linen-blend-s-fold-180502",
+              "u": 0.31,
+              "v": 0.47,
+              "box": [
+                0.245,
+                0.39,
+                0.0,
+                0.89
+              ],
+              "by_eye": true
+            },
+            {
+              "product": "sofa-cover-cj-cotton-muslin-fringe",
+              "u": 0.845,
+              "v": 0.7,
+              "phone_at": [
+                0.765,
+                0.677
+              ],
+              "box": [
+                0.72,
+                0.885,
+                0.57,
+                0.92
+              ],
+              "by_eye": true
+            },
+            {
+              "product": "magazine-holder-cj-felt-log-basket",
+              "u": 0.505,
+              "v": 0.8,
+              "box": [
+                0.437,
+                0.585,
+                0.65,
+                0.895
+              ],
+              "by_eye": true,
+              "in_frame_he": "בתמונה: עיתונים. לא כלולים במוצר."
+            },
+            {
+              "product": "basket-cj-jute-rope-cylinder",
+              "u": 0.16,
+              "v": 0.84,
+              "box": [
+                0.098,
+                0.222,
+                0.68,
+                0.97
+              ],
+              "by_eye": true
+            },
+            {
+              "product": "rug-cj-braided-wool-natural",
+              "u": 0.64,
+              "v": 0.955,
+              "box": [
+                0.22,
+                1.0,
+                0.83,
+                1.0
+              ],
+              "by_eye": true
+            }
+          ]
+        }
+      ],
+      "concept_he": "דירה ישנה, שמש של פברואר"
+    },
+    "living-room/warm-modern": {
+      "tool": null,
+      "frames": [
+        {
+          "id": "A",
+          "src": "assets/renders/editorial-phase-b-2026-11-06/warm-modern-A-ed5.png",
+          "qa_key": "warm-modern-A-ed5",
+          "role": "wide",
+          "u0": 0.55,
+          "v0": 0.05,
+          "phone_crop_u": 0.56,
+          "title_he": "דירת אדריכלית, 17:40 באוגוסט",
+          "line_he": "שעת זהב. שמש ענברית נמוכה ממערב גולשת על הטיח ומגלה את המרקם, ומנורות הטרוורטין רק נדלקו. על שולחן האגוז: קערה שחורה, פמוטי טרוורטין ומגזין פתוח.",
+          "alt_he": "הסלון במודרני חם בשעת זהב: ספת בוקלה מעוגלת עם כריות בלבן, בקאמל ובתה חלב, שמיכת מוסלין על המסעד, אגרטל אבנית לבן, קערה שחורה ופמוטי טרוורטין על שולחן אגוז, מנורות קיר מטרוורטין, מנורת אהיל מקופלת ותלויה בקומות",
+          "points": [
+            {
+              "product": "pendant-cj-tiered-fabric-drum",
+              "u": 0.535,
+              "v": 0.12,
+              "box": [
+                0.475,
+                0.595,
+                0.0,
+                0.155
+              ],
+              "by_eye": true
+            },
+            {
+              "product": "floor-lamp-cj-pleated-walnut-stem-158",
+              "u": 0.925,
+              "v": 0.245,
+              "box": [
+                0.885,
+                0.965,
+                0.19,
+                0.74
+              ],
+              "by_eye": true
+            },
+            {
+              "product": "framed-art-aliexpress-frameless-minimalist-wall-art-631735",
+              "u": 0.55,
+              "v": 0.3,
+              "box": [
+                0.39,
+                0.72,
+                0.17,
+                0.415
+              ],
+              "by_eye": true
+            },
+            {
+              "product": "accent-sconces-aliexpress-travertine-cylinder-walnut-choice",
+              "u": 0.765,
+              "v": 0.275,
+              "box": [
+                0.748,
+                0.786,
+                0.23,
+                0.33
+              ],
+              "by_eye": true
+            },
+            {
+              "product": "cushions-cj-boucle-teddy",
+              "option": {
+                "color": "milk-tea-color",
+                "size": "30x50"
+              },
+              "name_he": "כרית מותן בוקלה, תה חלב",
+              "u": 0.775,
+              "v": 0.53,
+              "box": [
+                0.72,
+                0.835,
+                0.445,
+                0.61
+              ],
+              "by_eye": true
+            },
+            {
+              "product": "cushions-cj-knitted-chenille-bean-green",
+              "option": {
+                "color": "21-camel-color"
+              },
+              "name_he": "ציפית כרית שניל סרוגה, קאמל",
+              "u": 0.43,
+              "v": 0.53,
+              "box": [
+                0.378,
+                0.485,
+                0.455,
+                0.6
+              ],
+              "by_eye": true
+            },
+            {
+              "product": "cushions-cj-boucle-teddy",
+              "name_he": "ציפית כרית בוקלה, לבן",
+              "u": 0.345,
+              "v": 0.535,
+              "box": [
+                0.305,
+                0.395,
+                0.445,
+                0.6
+              ],
+              "by_eye": true
+            },
+            {
+              "product": "sofa-cover-cj-cotton-muslin-fringe",
+              "option": {
+                "other": "flax-brown"
+              },
+              "option_label_he": "חום פשתן",
+              "name_he": "שמיכת מוסלין כותנה עם פרנזים, חום פשתן",
+              "u": 0.3,
+              "v": 0.66,
+              "box": [
+                0.235,
+                0.37,
+                0.5,
+                0.82
+              ],
+              "by_eye": true
+            },
+            {
+              "product": "vase-cj-textured-white-stoneware",
+              "u": 0.69,
+              "v": 0.64,
+              "box": [
+                0.665,
+                0.72,
+                0.55,
+                0.72
+              ],
+              "by_eye": true,
+              "in_frame_he": "בתמונה: ענפי זית. לא כלולים במוצר."
+            },
+            {
+              "product": "bowl-cj-matte-black-bowl-20",
+              "u": 0.55,
+              "v": 0.675,
+              "box": [
+                0.502,
+                0.602,
+                0.65,
+                0.73
+              ],
+              "by_eye": true
+            },
+            {
+              "product": "candle-holders-cj-travertine-pedestal",
+              "u": 0.43,
+              "v": 0.7,
+              "box": [
+                0.405,
+                0.485,
+                0.565,
+                0.755
+              ],
+              "by_eye": true,
+              "in_frame_he": "בתמונה: נרות עמוד. לא כלולים במוצר."
+            },
+            {
+              "product": "rug-cj-braided-wool-natural",
+              "u": 0.86,
+              "v": 0.9,
+              "box": [
+                0.15,
+                1.0,
+                0.79,
+                1.0
+              ],
+              "by_eye": true
+            }
+          ]
+        }
+      ],
+      "concept_he": "דירת אדריכלית, 17:40 באוגוסט"
+    },
+    "living-room/modern-country": {
+      "tool": null,
+      "frames": [
+        {
+          "id": "A",
+          "src": "assets/renders/editorial-phase-b-2026-11-06/modern-country-A-mc1.png",
+          "qa_key": "modern-country-A-mc1",
+          "role": "wide",
+          "u0": 0.5,
+          "v0": 0.1,
+          "phone_crop_u": 0.52,
+          "title_he": "קוטג׳ בבוקר גשום",
+          "line_he": "עשר בבוקר, יום של גשם. אור אפור-כחלחל מהחלון בשמשות הקטנות, טיפות על הזכוכית, וכל מנורות הקפלים דולקות. על האדן כד חמר ואגרטל עמוד עם צבעונים.",
+          "alt_he": "הסלון בכפרי מודרני ביום גשום: ספה עם כיסוי לבן, שתי כריות בהדפס פרחים וכרית משבצות לבנה, ראנר מרווה עם פרנזים על שולחן עץ, קערה לבנה, וילונות פשתן, כד חמר ואגרטל עמוד עם צבעונים על אדן החלון, וחיפוי עץ במרווה",
+          "points": [
+            {
+              "product": "curtains-aliexpress-linen-blend-s-fold-180502",
+              "option": {
+                "style": "pull-pleated-tape"
+              },
+              "u": 0.61,
+              "v": 0.27,
+              "box": [
+                0.582,
+                0.65,
+                0.05,
+                0.47
+              ],
+              "by_eye": true
+            },
+            {
+              "product": "vase-aliexpress-vintage-distressed-clay-vase-589009",
+              "u": 0.712,
+              "v": 0.43,
+              "box": [
+                0.69,
+                0.737,
+                0.35,
+                0.492
+              ],
+              "by_eye": true,
+              "in_frame_he": "בתמונה: גיבסנית. לא כלולה במוצר."
+            },
+            {
+              "product": "sill-vase-cj-cream-fluted-column-25",
+              "u": 0.789,
+              "v": 0.455,
+              "box": [
+                0.776,
+                0.802,
+                0.385,
+                0.493
+              ],
+              "by_eye": true,
+              "in_frame_he": "בתמונה: צבעונים. לא כלולים במוצר."
+            },
+            {
+              "product": "cushions-aliexpress-farmhouse-floral-pillow-covers-166217",
+              "u": 0.3,
+              "v": 0.58,
+              "box": [
+                0.226,
+                0.385,
+                0.465,
+                0.695
+              ],
+              "by_eye": true
+            },
+            {
+              "product": "cushions-cj-chenille-check-milky-white",
+              "u": 0.44,
+              "v": 0.585,
+              "box": [
+                0.373,
+                0.502,
+                0.47,
+                0.68
+              ],
+              "by_eye": true
+            },
+            {
+              "product": "bowl-cj-speckled-ivory-wide-bowl-21",
+              "u": 0.417,
+              "v": 0.75,
+              "box": [
+                0.377,
+                0.457,
+                0.72,
+                0.775
+              ],
+              "by_eye": true
+            },
+            {
+              "product": "table-runner-cj-linen-look-sage-fringe",
+              "u": 0.505,
+              "v": 0.84,
+              "box": [
+                0.445,
+                0.567,
+                0.745,
+                0.985
+              ],
+              "by_eye": true
+            }
+          ]
+        }
+      ],
+      "concept_he": "קוטג׳ בבוקר גשום"
+    },
+    "living-room/boho": {
+      "tool": null,
+      "concept_he": "בית אבן ישן בנמל, 16:00",
+      "line_he": "שמש של אחר הצהריים מסוננת בווילון קנים מגולגל למחצה ומטילה פסים על השטיח ועל הכריות. רצפת אריחים מצוירים בגווני אדמה, ודלתות עץ פתוחות למרפסת.",
+      "frames": [
+        {
+          "id": "A",
+          "src": "assets/renders/editorial-phase-b-2026-11-06/boho-A-fin4.png",
+          "qa_key": "boho-A-fin4",
+          "role": "wide",
+          "points": []
+        }
+      ]
+    },
+    "living-room/mediterranean": {
+      "tool": null,
+      "concept_he": "בית מסויד, צהרי יוני",
+      "line_he": "אחת בצהריים. שמש קשה וגבוהה, והתריס מטיל להב אור חד על הסיד ועל הטרקוטה. כל השאר בצל קריר, ובחוץ זית וקטע של ים.",
+      "frames": [
+        {
+          "id": "A",
+          "src": "assets/renders/editorial-phase-b-2026-11-06/mediterranean-A-ed5.png",
+          "qa_key": "mediterranean-A-ed5",
+          "role": "wide",
+          "points": []
+        }
+      ]
+    },
+    "living-room/japandi": {
+      "tool": null,
+      "concept_he": "שעה כחולה, בית שקט",
+      "line_he": "רבע אחרי חמש בחורף. בחוץ השמיים כחולים-כהים, ובפנים רק פנסי נייר נמוכים זוהרים. ענף יחיד, מגש תה נמוך, והרבה מרחב ריק.",
+      "frames": [
+        {
+          "id": "A",
+          "src": "assets/renders/editorial-phase-b-2026-11-06/japandi-A-ed5.png",
+          "qa_key": "japandi-A-ed5",
+          "role": "wide",
+          "points": []
+        }
+      ]
+    }
+  }
+}

@@ -1,9 +1,11 @@
 /**
- * The test cart of the story prototype (/test/story/): an in-browser mock of the store API's cart (StoreApi in
- * ../api/types: createCart, getCart, setItem), with the rules of the site's mock (../api/mock.ts): a line per variant,
- * the set by default, 0–20, only what is for sale. Its prices come from the page's data block (the site's pricing code,
- * tools/make-story-page.ts) and not from the bundled site catalog: most products of the story frames are not in the
- * site's room yet. State lives under one key, read and written in try/catch with an in-memory fallback.
+ * The test cart of the story layer (/story/…): an in-browser mock of the store API's cart (StoreApi in ../api/types:
+ * createCart, getCart, setItem), with the rules of the site's mock (../api/mock.ts): a line per variant, the set by
+ * default, 0–20, only what is for sale. Its prices come from the page's data block (the site's pricing code,
+ * tools/make-story.ts) and not from the bundled site catalog: most products of the story frames are not in the site's
+ * room yet. Every story page shares the cart: a line keeps a snapshot of its variant, so a page that does not show the
+ * product still lists it, and a page that does show it has the last word (a variant no longer sold drops out). State
+ * lives under one key, read and written in try/catch with an in-memory fallback.
  */
 import type { Cart, Pack } from '@hd/shared';
 import type { StoreApi } from '../api/types';
@@ -29,7 +31,21 @@ export type StoryVariant = {
   available: boolean;
 };
 export type KeyValue = { get(k: string): string | null; set(k: string, v: string): void; remove(k: string): void };
-type Saved = { id: string; items: { variant_id: string; pack: Pack; qty: number }[] };
+type Line = { variant_id: string; pack: Pack; qty: number; v?: StoryVariant };
+type Saved = { id: string; items: Line[] };
+/** a snapshot read back from storage is trusted only in its shape */
+const isVariant = (v: unknown): v is StoryVariant => {
+  const x = v as StoryVariant | null;
+  return (
+    !!x &&
+    typeof x.variant_id === 'string' &&
+    typeof x.product_id === 'string' &&
+    typeof x.name_he === 'string' &&
+    Number.isInteger(x.price_agorot) &&
+    Number.isInteger(x.set_qty) &&
+    typeof x.available === 'boolean'
+  );
+};
 
 export function memoryStore(): KeyValue {
   const m = new Map<string, string>();
@@ -75,7 +91,7 @@ export function browserStore(): KeyValue {
 
 /**
  * The site's price format (@hd/shared/money formatIls: "₪ 1,290" in an LTR isolate, no agorot when whole), repeated here
- * so the test page shares no chunk with the room page; web/test/story-cart.test.ts holds the two equal.
+ * so the story pages share no chunk with the room page; web/test/story-cart.test.ts holds the two equal.
  */
 export function priceHe(agorot: number): string {
   const whole = agorot % 100 === 0;
@@ -116,8 +132,9 @@ export function storyCart(variants: StoryVariant[], store: KeyValue = browserSto
   };
   const view = (s: Saved): Cart => {
     const lines = s.items.flatMap((i) => {
-      const v = byId.get(i.variant_id);
-      if (!v || !v.available) return []; // a variant that left the page or stopped being sold drops out, as on the site
+      // this page's own variant first; else the line's snapshot (a product of another story page)
+      const v = byId.get(i.variant_id) ?? (isVariant(i.v) && i.v.variant_id === i.variant_id ? i.v : undefined);
+      if (!v || !v.available) return []; // a variant unknown everywhere, or no longer sold, drops out, as on the site
       return [
         {
           variant_id: v.variant_id,
@@ -152,14 +169,15 @@ export function storyCart(variants: StoryVariant[], store: KeyValue = browserSto
     },
     async setItem(cartId, variantId, pack, qty) {
       const s = open(cartId);
-      const v = byId.get(variantId);
+      // a line of another page can change its quantity here too, by its snapshot
+      const v = byId.get(variantId) ?? s.items.map((i) => i.v).find((x): x is StoryVariant => isVariant(x) && x.variant_id === variantId);
       if (!v || !v.available) throw new StoryCartError(404, 'variant_not_found', 'המוצר לא זמין.');
       if (pack !== 'set') throw new StoryCartError(422, 'pack_unavailable', 'בעמוד הבדיקה המוצר נמכר כפי שהוא בתמונה.');
       if (!Number.isInteger(qty) || qty < 0 || qty > MAX_QTY) throw new StoryCartError(422, 'invalid_body');
       const at = s.items.findIndex((i) => i.variant_id === variantId && i.pack === pack);
       if (qty === 0) s.items = s.items.filter((_, i) => i !== at);
-      else if (at >= 0) s.items[at] = { variant_id: variantId, pack, qty };
-      else s.items.push({ variant_id: variantId, pack, qty });
+      else if (at >= 0) s.items[at] = { variant_id: variantId, pack, qty, v };
+      else s.items.push({ variant_id: variantId, pack, qty, v });
       save(s);
       return view(s);
     },

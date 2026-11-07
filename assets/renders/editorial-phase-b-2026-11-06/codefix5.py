@@ -677,11 +677,27 @@ def mc_vase(a):
                 d_ = 0.0
             out_.append(lo + k + float(np.clip(d_, -0.5, 0.5)))
         return np.array(out_)
+    # the base: the vase ends on its dark contact line (L < 45 on the axis, the lowest rows); below it is the sill
+    ax_i = int(axis0)
+    for yb in range(y1v, y1v - 15, -1):
+        if L[yb, ax_i - 20:ax_i + 20].min() < 45:
+            break
+    keep_rows = ys <= yb
+    ys, xl0 = ys[keep_rows], xl0[keep_rows]
+    y1v = int(ys.max())
     xl = refine(xl0, -1)
     axis1 = axis0
     xr = refine(2 * axis1 - xl, 1)
     axis1 = float(np.median((xl + xr) / 2))
     xr = refine(2 * axis1 - xl, 1)
+    # the last 12 rows (the shadowed base ring, where the colour seed is narrow): searched from the reliable row above, inward-biased
+    ref_i = max(len(ys) - 13, 0)
+    for i in range(ref_i + 1, len(ys)):
+        y = ys[i]
+        lo, hi = int(round(xl[i - 1])) - 2, int(round(xl[i - 1])) + 6
+        xl[i] = lo + int(np.argmax(gx[y, lo:hi]))
+        lo, hi = int(round(xr[i - 1])) - 6, int(round(xr[i - 1])) + 2
+        xr[i] = lo + int(np.argmax(gx[y, lo:hi]))
     # smooth edges (the egg is smooth): a running median (7) then mean (9) along y
     def smooth(v):
         pad = np.r_[[v[0]] * 6, v, [v[-1]] * 6]
@@ -712,8 +728,9 @@ def mc_vase(a):
     # the background: the strips old - new (grown 2 px) and the old base's contact band (its shadow line goes with the old width)
     oldm = old_a > 0.01
     hole = cv2.dilate(oldm.astype(np.uint8), np.ones((5, 5), np.uint8)).astype(bool) & (yy >= y0v + 2) & (yy <= y1v + 4)
-    bl, br_ = float(el[-6:].min()), float(er[-6:].max())
-    hole |= (yy >= y1v - 8) & (yy <= y1v + 5) & (xx >= bl - 7) & (xx <= br_ + 7)
+    bl, br_ = float(el[-14:].min()), float(er[-14:].max())
+    BB = (y1v - 12, y1v + 8, int(bl) - 14, int(br_) + 14)
+    hole |= (yy >= BB[0]) & (yy <= BB[1]) & (xx >= BB[2]) & (xx <= BB[3])
     need = hole & ~(new_a > 0.98)
     # the mullion: the columns where the white bar is (most of the rows 470-535 bright and grey); its colour per column = the median of
     # the brighter half there (the gypsophila's stems cross it); filled straight down to the window's bottom rail
@@ -724,18 +741,45 @@ def mc_vase(a):
     mcols = 1960 + np.nonzero(frac > 0.45)[0]
     mx0, mx1 = (int(mcols.min()), int(mcols.max())) if mcols.size else (1988, 2010)
     fill = lin.copy()
-    mcol = need & (xx >= mx0) & (xx <= mx1) & (yy < rail_y) & (yy > 548)
-    for x in range(mx0, mx1 + 1):
-        v = lin[470:536, x]
-        lv = L[470:536, x]
-        sel = lv >= np.percentile(lv, 50)
-        fill[mcol[:, x], x] = np.median(v[sel], 0)
+    mcol = need & (xx >= mx0) & (xx <= mx1) & (yy < rail_y)
+    # the mullion's colour per row: the median of its own visible pixels in that row (beside the old vase), the rows with none take the
+    # nearest row that has some; smoothed along y (9 rows). The muntin band (rows < 549) right of the axis: per row, the white bar just
+    # beyond the old edge
+    mrow = np.full((H, 3), np.nan)
+    for y in range(y0v, rail_y):
+        sel = ~hole[y, mx0:mx1 + 1] & ~(A_[y, mx0:mx1 + 1] < -2.5) & (L[y, mx0:mx1 + 1] > 70)
+        if sel.sum() >= 3:
+            mrow[y] = np.median(lin[y, mx0:mx1 + 1][sel], 0)
+    have = ~np.isnan(mrow[:, 0])
+    hy = np.nonzero(have)[0]
+    if hy.size:
+        for y in range(y0v, rail_y):
+            if not have[y]:
+                mrow[y] = mrow[hy[np.argmin(np.abs(hy - y))]]
+        seg = mrow[y0v:rail_y]
+        k_ = np.ones(9) / 9
+        mrow[y0v:rail_y] = np.stack([np.convolve(np.r_[[seg[0, c]] * 4, seg[:, c], [seg[-1, c]] * 4], k_, mode="valid") for c in range(3)], 1)
+    for y in range(y0v, rail_y):
+        xs_m = np.nonzero(mcol[y])[0]
+        if xs_m.size and not np.isnan(mrow[y, 0]):
+            fill[y, xs_m] = mrow[y]
+    munt = need & (xx >= axis) & (yy < 549) & ~mcol
+    for y in range(y0v, 549):
+        xs_m = np.nonzero(munt[y])[0]
+        if xs_m.size == 0:
+            continue
+        xo = int(xs_m.max()) + 2
+        fill[y, xs_m] = np.median(lin[y, xo:xo + 6], 0)
+    mcol = mcol | munt
     # the rest: one coherent shift per part, rows kept (dy 0) so the muntin, the rail and the sill run on straight
     valid = ~hole & (xx >= 1780) & (xx <= 2140) & (yy >= 520) & (yy <= 775)
     parts = [("left", need & ~mcol & (xx < axis), list(range(-70, -13))),
              ("right glass", need & ~mcol & (xx > mx1) & (yy < rail_y), list(range(14, 70))),
              ("right below the rail", need & ~mcol & (xx >= axis) & (yy >= rail_y), list(range(14, 70))),
-             ("right of the axis, left of the mullion", need & ~mcol & (xx >= axis) & (xx < mx0) & (yy < rail_y), list(range(-180, -110)))]
+             ("right of the axis, left of the mullion", need & ~mcol & (xx >= axis) & (xx < mx0) & (yy < rail_y), list(range(-140, -94)))]
+    base_band = need & (yy >= BB[0]) & (yy <= BB[1]) & (xx >= BB[2]) & (xx <= BB[3])
+    parts = [(n_, p_ & ~base_band, c_) for n_, p_, c_ in parts]
+    nobar = ~cv2.dilate((bar & (yy > 548) & (yy < rail_y)).astype(np.uint8), np.ones((1, 9), np.uint8)).astype(bool)
     offs = np.zeros((H, W, 2), np.int32)
     done = np.zeros((H, W), bool)
     picks = {}
@@ -744,11 +788,16 @@ def mc_vase(a):
             continue
         py, px = np.nonzero(part)
         ring = cv2.dilate(part.astype(np.uint8), np.ones((7, 7), np.uint8)).astype(bool) & valid
+        if name == "right of the axis, left of the mullion":
+            ring &= (yy >= 549) & nobar                                         # scored on the glass only (not the muntin above it)
         ry, rx = np.nonzero(ring)
         best = None
         for dx in cds:
             sx = px + dx
-            if (sx < 0).any() or (sx >= W).any() or not valid[py, sx].all():
+            if (sx < 0).any() or (sx >= W).any():
+                continue
+            okf = valid[py, sx].mean() if name != "right of the axis, left of the mullion" else (valid & nobar)[py, sx].mean()
+            if okf < 0.97:
                 continue
             e = ((lin[ry, np.clip(rx + dx, 0, W - 1)] - lin[ry, rx]) ** 2).sum(-1).mean() if ry.size else 0.0
             if best is None or e < best[0]:
@@ -759,7 +808,20 @@ def mc_vase(a):
         offs[part] = (best[1], 0)
         done |= part
         picks[name] = int(best[1])
-    fill = poisson_refine(fill, done, offs, (~hole) | mcol, valid | done, iters=1500)
+    # the base band (the old base's contact line and the sill beside it): per row, a straight interpolation between the sill just
+    # outside the band on the left and on the right (the painted sill is smooth there)
+    for y in range(BB[0], BB[1] + 1):
+        xsb = np.nonzero(base_band[y])[0]
+        if xsb.size == 0:
+            continue
+        xa, xb = BB[2], BB[3]
+        xsb = xsb[(xsb >= xa) & (xsb <= xb)]
+        lv_ = lin[y, xa - 6:xa - 2].mean(0)
+        rv_ = lin[y, xb + 3:xb + 7].mean(0)
+        t = ((xsb - xa) / max(xb - xa, 1))[:, None]
+        fill[y, xsb] = lv_ * (1 - t) + rv_ * t
+    fill = poisson_refine(fill, done, offs, (~hole) | mcol | base_band, valid | done, iters=1500)
+    unfilled = need & ~(done | mcol | base_band)
     pL, pR = picks, {}
     edge = mx1
     # the contact shadow: the old one is in the original base row band (it goes with the old width); the band under the new base gets
@@ -779,7 +841,8 @@ def mc_vase(a):
     info = dict(vase_rows=[y0v, y1v], height_px=int(y1v - y0v + 1), width_px_before=round(float((er - el).max()), 1),
                 width_px_after=round(float((er - el).max() * K), 1), h_over_w_before=round((y1v - y0v + 1) / float((er - el).max()), 2),
                 h_over_w_after=round((y1v - y0v + 1) / float((er - el).max() * K), 2), axis_x=round(axis, 1), mullion_edge_x=edge,
-                strips_px=int(need.sum()), shifts=pL, mullion_cols=[mx0, mx1], contact_shadow_depth=round(sh_old, 3))
+                strips_px=int(need.sum()), unfilled_px=int(unfilled.sum()), shifts=pL, mullion_cols=[mx0, mx1],
+                contact_shadow_depth=round(sh_old, 3))
     return l2s(out), zone, info
 
 
@@ -798,6 +861,76 @@ def mc():
     r.update(base="modern-country-A-mc1.png", seams=i1, bowl=i2, vase=i3,
              zones=dict(seams_px=int(z1.sum()), bowl_px=int(z2.sum()), vase_px=int(z3.sum())))
     return r
+
+
+# ==================================================================================================================================
+CROP_SETS = [
+    ("boho-door", "boho-A-fin4.png", "boho-A-fin5.png", [((1990, 700, 2360, 1100), 1), ((2150, 760, 2300, 1060), 3)]),
+    ("boho-handle", "boho-A-fin4.png", "boho-A-fin5.png", [((2050, 760, 2250, 930), 4)]),
+    ("mc-seams", "modern-country-A-mc1.png", "modern-country-A-fix3.png", [((980, 1060, 1720, 1536), 1), ((1090, 1220, 1170, 1520), 4),
+                                                                         ((1580, 1140, 1660, 1440), 4)]),
+    ("mc-bowl", "modern-country-A-mc1.png", "modern-country-A-fix3.png", [((1000, 1075, 1270, 1215), 1), ((1015, 1085, 1265, 1205), 3)]),
+    ("mc-vase", "modern-country-A-mc1.png", "modern-country-A-fix3.png", [((1840, 460, 2080, 780), 1), ((1960, 520, 2035, 720), 4),
+                                                                         ((1880, 720, 2030, 772), 4)]),
+]
+
+
+def crops():
+    os.makedirs(CROPS, exist_ok=True)
+    f = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
+    outl = []
+    for name, b, a_, boxes in CROP_SETS:
+        Bm = Image.open(os.path.join(HERE, b)).convert("RGB")
+        Am = Image.open(os.path.join(HERE, a_)).convert("RGB")
+        panels = []
+        for box, sc in boxes:
+            w, h = box[2] - box[0], box[3] - box[1]
+            rs = Image.NEAREST if sc > 1 else Image.LANCZOS
+            panels.append((Bm.crop(box).resize((w * sc, h * sc), rs), Am.crop(box).resize((w * sc, h * sc), rs), sc, box))
+        Wd = max(max(p[0].width for p in panels) * 2 + 30, 700)
+        Ht = sum(p[0].height + 34 for p in panels) + 40
+        im = Image.new("RGB", (Wd, Ht), (250, 249, 247))
+        d = ImageDraw.Draw(im)
+        d.text((10, 5), f"{name}: {b} -> {a_}", fill=(0, 0, 0), font=f)
+        y = 35
+        for pb, pa, sc, box in panels:
+            tag = "100 %" if sc == 1 else f"x{sc}"
+            d.text((10, y), f"before {tag} {box}", fill=(0, 0, 0), font=f)
+            d.text((20 + pb.width, y), f"after {tag}", fill=(0, 0, 0), font=f)
+            im.paste(pb, (10, y + 24))
+            im.paste(pa, (20 + pb.width, y + 24))
+            y += pb.height + 34
+        pth = os.path.join(CROPS, name + ".jpg")
+        im.save(pth, quality=92)
+        outl.append(os.path.relpath(pth, HERE))
+    return outl
+
+
+def sheet():
+    fb = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 26)
+    f = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 20)
+    rows = [("boho: the door rebuilt, the middle handle out", "boho-A-fin4.png", "boho-A-fin5.png", (1900, 640, 2420, 1120)),
+            ("modern country: seams matched, bowl lowered, vase slimmed", "modern-country-A-mc1.png", "modern-country-A-fix3.png", (960, 440, 2120, 1536))]
+    TH = 560
+    tiles = []
+    for title, b, a_, box in rows:
+        B = Image.open(os.path.join(HERE, b)).convert("RGB").crop(box)
+        A = Image.open(os.path.join(HERE, a_)).convert("RGB").crop(box)
+        sc = TH / B.height
+        tiles.append((title, B.resize((int(B.width * sc), TH), Image.LANCZOS), A.resize((int(A.width * sc), TH), Image.LANCZOS)))
+    W_ = max(t[1].width for t in tiles) * 2 + 60
+    out = Image.new("RGB", (W_, 70 + len(tiles) * (TH + 60)), (250, 249, 247))
+    d = ImageDraw.Draw(out)
+    d.text((20, 18), "codefix5 (2026-11-07): five code fixes from QA, 0 tokens. Before | after. TEST, not for the site.", fill=(0, 0, 0), font=fb)
+    y = 70
+    for title, B, A in tiles:
+        d.text((20, y), title, fill=(0, 0, 0), font=f)
+        out.paste(B, (20, y + 30))
+        out.paste(A, (40 + B.width, y + 30))
+        y += TH + 60
+    pth = os.path.join(HERE, "codefix5-sheet.jpg")
+    out.save(pth, quality=90)
+    return os.path.relpath(pth, HERE)
 
 
 # ==================================================================================================================================

@@ -1,15 +1,21 @@
 /**
- * The story-first prototype (/test/story/, briefs/site-story-prototype-2026-11-07.md): the opening frame develops and
- * carries its title and story line with the visible test mark; no dot at rest, dots on movement; a dot or a list row
- * opens "קנה את המראה" (a modal dialog, keyboard and screen reader), add to the test cart, Esc returns the focus; the
- * tool entry opens the room engine; reduced motion; the phone's 4:5 crop; and zero axe violations (WCAG 2.0/2.1 A + AA)
- * at rest, with the sheet open and with the cart open. Exact timings are in the evidence tool (tools/screens-story.ts).
+ * Layer 1, the story, as real routes (briefs/site-interface-track-2026-11-07.md S1; built only without HD_PUBLIC=1):
+ *  - /story/: the contents, every room × style; a picture only for a pair QA let in, type for the others
+ *  - /story/living-room/nordic/: the opening frame develops and carries its title and story line with the visible test
+ *    mark; no dot at rest, dots on movement; a dot or a list row opens "קנה את המראה" (a modal dialog, keyboard and
+ *    screen reader), add to the test cart, Esc returns the focus; the tool entry opens the room engine; reduced motion;
+ *    the phone's 4:5 crop
+ *  - /story/living-room/modern-country/: an "almost" frame, marked so; a product QA did not call faithful has no dot
+ *  - /story/living-room/boho/: a pair whose frame QA has not let in is a typographic page, with no frame at all
+ *  - the test cart is one across the story pages; /test/story/ goes on to the Nordic living room
+ *  - zero axe violations (WCAG 2.0/2.1 A + AA) on each kind of page, with the sheet open and with the cart open
+ * Exact timings are in the evidence tool (tools/screens-story.ts).
  */
 import { test, expect, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
 type Ev = { t: number; name: string; detail?: unknown };
-/** the hooks web/src/test-page/story.ts exposes */
+/** the hooks web/src/story/story.ts exposes */
 declare global {
   interface Window {
     __story?: {
@@ -30,37 +36,71 @@ async function audit(page: Page, label: string) {
   expect(summary, `${label}\n${summary.join('\n')}`).toEqual([]);
 }
 const sheet = (page: Page) => page.locator('#st-sheet');
+const NORDIC = '/story/living-room/nordic/';
+const COUNTRY = '/story/living-room/modern-country/';
+const BOHO = '/story/living-room/boho/';
 
-test.describe('the story prototype', () => {
+test.describe('the story contents', () => {
+  test('every room, every house: a picture only where QA let a frame in, type for the rest, and links to each page', async ({ page }) => {
+    await page.goto('/story/');
+    await expect(page.locator('h1')).toHaveText('הבית');
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
+    await expect(page.locator('.st-room')).toHaveCount(9);
+    await expect(page.locator('.st-room.is-next')).toHaveCount(8);
+    const living = page.locator('#room-living-room .st-tile');
+    await expect(living).toHaveCount(6);
+    await expect(page.locator('#room-living-room .st-tile-pic')).toHaveCount(3);
+    await expect(page.locator('#room-living-room .st-tile-link')).toHaveCount(6);
+    // every picture on the contents is a frame QA let in: the three typographic houses have none
+    const srcs = await page.locator('img').evaluateAll((els) => els.map((e) => (e as HTMLImageElement).currentSrc || (e as HTMLImageElement).src));
+    for (const s of srcs) expect(s, s).not.toMatch(/\/(boho|mediterranean|japandi)\//);
+    await page.locator('#room-living-room .st-tile-link', { hasText: 'כפרי מודרני' }).click();
+    await expect(page).toHaveURL(new RegExp(`${COUNTRY}$`));
+    await expect(page.locator('h1')).toHaveText('קוטג׳ בבוקר גשום');
+    await page.getByRole('link', { name: 'תוכן', exact: true }).click();
+    await expect(page).toHaveURL(/\/story\/$/);
+  });
+
+  test('zero axe violations on the contents (1280)', async ({ page }) => {
+    await page.goto('/story/');
+    await page.waitForTimeout(800);
+    await audit(page, 'contents');
+  });
+});
+
+test.describe('the Nordic living room', () => {
   test('the opening develops, then the title; every frame carries the visible test mark', async ({ page }) => {
-    await page.goto('/test/story/');
+    await page.goto(NORDIC);
     await expect(page.locator('h1')).toHaveText('דירה ישנה, שמש של פברואר');
-    await expect(page.locator('#frame-nordic-A')).toHaveClass(/is-title/, { timeout: 15_000 });
+    await expect(page.locator('#frame-A')).toHaveClass(/is-title/, { timeout: 15_000 });
     const evs = await events(page);
-    for (const n of ['nordic-A:lqip', 'nordic-A:developed', 'nordic-A:title'])
+    for (const n of ['A:lqip', 'A:developed', 'A:title'])
       expect(
         evs.some((e) => e.name === n),
         n,
       ).toBe(true);
-    await expect(page.locator('#frame-nordic-A .st-line')).toContainText('פברואר');
-    await expect(page.locator('.st-draft')).toHaveCount(3);
-    await expect(page.locator('#frame-nordic-A .st-draft')).toBeVisible();
-    await expect(page.locator('#frame-nordic-A .st-draft')).toHaveText('טיוטה / בדיקה');
-    await expect(page.locator('#frame-warm-modern-A .st-draft')).toContainText('טיוטה');
+    await expect(page.locator('#frame-A .st-line')).toContainText('פברואר');
+    await expect(page.locator('.st-draft')).toHaveCount(2);
+    await expect(page.locator('#frame-A .st-draft')).toBeVisible();
+    await expect(page.locator('#frame-A .st-draft')).toHaveText('טיוטה / בדיקה');
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
+    // the same room in the other houses: this one is marked, the others are links
+    await expect(page.locator('#houses .st-tile')).toHaveCount(6);
+    await expect(page.locator('#houses .st-tile[aria-current="page"]')).toContainText('נורדי');
+    await expect(page.locator('#houses .st-tile-link')).toHaveCount(5);
   });
 
   test('a clean frame at rest; dots on movement; a dot opens the sheet with the card, adds to the test cart, Esc returns', async ({ page }) => {
-    await page.goto('/test/story/');
-    await expect(page.locator('#frame-nordic-A')).toHaveClass(/is-title/, { timeout: 15_000 });
+    await page.goto(NORDIC);
+    await expect(page.locator('#frame-A')).toHaveClass(/is-title/, { timeout: 15_000 });
     await page.waitForTimeout(2200); // the first-entry hint has gone
-    const dot = page.locator('#frame-nordic-A .st-mark').first().locator('.mag-dot');
+    const dot = page.locator('#frame-A .st-mark').first().locator('.mag-dot');
     await expect(dot).toHaveCSS('opacity', '0');
     await page.mouse.move(640, 420);
     await page.mouse.move(660, 430);
     await expect(dot).toHaveCSS('opacity', '1', { timeout: 2_000 });
     // the charcoal cushion: priced, for sale, and its card photo is cached
-    const cushion = page.locator('#frame-nordic-A .st-mark[data-item="nordic-A-5"]');
+    const cushion = page.locator('#frame-A .st-mark[data-item="A-5"]');
     await cushion.click();
     await expect(sheet(page)).toHaveAttribute('open', '');
     await expect(sheet(page)).toHaveClass(/is-on/);
@@ -78,10 +118,10 @@ test.describe('the story prototype', () => {
   });
 
   test('the keyboard: Tab to a dot shows the dots, Enter opens the sheet, the page behind is inert, Esc back', async ({ page }) => {
-    await page.goto('/test/story/');
-    await expect(page.locator('#frame-nordic-A')).toHaveClass(/is-title/, { timeout: 15_000 });
+    await page.goto(NORDIC);
+    await expect(page.locator('#frame-A')).toHaveClass(/is-title/, { timeout: 15_000 });
     // the first dot shown (at 1280 × 720 the pendant's would sit under the top band, so it is not offered there)
-    const first = page.locator('#frame-nordic-A .st-mark:visible').first();
+    const first = page.locator('#frame-A .st-mark:visible').first();
     const n = Number((await first.getAttribute('data-item'))!.split('-').pop());
     await first.focus();
     await expect(first.locator('.mag-dot')).toHaveCSS('opacity', '1');
@@ -100,26 +140,26 @@ test.describe('the story prototype', () => {
     await expect(page.locator('#st-pos')).toHaveText(new RegExp(`^${n + 1} מתוך`));
     await page.keyboard.press('Escape');
     await expect(sheet(page)).not.toHaveAttribute('open', '');
-    expect(await page.evaluate(() => (document.activeElement as HTMLElement | null)?.dataset.item)).toBe(`nordic-A-${n + 1}`);
+    expect(await page.evaluate(() => (document.activeElement as HTMLElement | null)?.dataset.item)).toBe(`A-${n + 1}`);
   });
 
   test('the list opens the same sheet; a product without a price says so, with no add button', async ({ page }) => {
-    await page.goto('/test/story/#list-nordic-A');
-    const rows = page.locator('#list-nordic-A .st-credit');
+    await page.goto(`${NORDIC}#list-A`);
+    const rows = page.locator('#list-A .st-credit');
     await expect(rows).toHaveCount(13);
-    await page.locator('#list-nordic-A .st-open', { hasText: /^מנורת תלייה דלעת/ }).click();
+    await page.locator('#list-A .st-open', { hasText: /^מנורת תלייה דלעת/ }).click();
     await expect(sheet(page)).toHaveAttribute('open', '');
     await expect(page.locator('#st-add')).toBeHidden();
     await expect(page.locator('#st-why')).toContainText('המחיר עוד לא נקבע');
     await page.locator('#st-sheet-close').click();
     await expect(sheet(page)).not.toHaveAttribute('open', '');
-    await expect(page.locator('#list-nordic-A .st-open', { hasText: /^מנורת תלייה דלעת/ })).toBeFocused();
+    await expect(page.locator('#list-A .st-open', { hasText: /^מנורת תלייה דלעת/ })).toBeFocused();
     // the rug: QA "partly" in this frame, so no dot; listed, with the reason
-    await expect(page.locator('#list-nordic-A .st-no-dot')).toHaveCount(1);
+    await expect(page.locator('#list-A .st-no-dot')).toHaveCount(1);
   });
 
   test('"עצב בעצמך" opens the room engine', async ({ page }) => {
-    await page.goto('/test/story/#tool');
+    await page.goto(`${NORDIC}#tool`);
     await page.getByRole('link', { name: 'לעיצוב הסלון' }).click();
     await expect(page).toHaveURL(/\/rooms\/living-room\/$/);
     await expect(page.locator('button.hotspot').first()).toBeAttached({ timeout: 20_000 });
@@ -131,12 +171,12 @@ test.describe('the story prototype', () => {
   ] as const)
     test(`every dot shown on the opening takes its own click at ${w}, the pendant's too (clear of the top band)`, async ({ page }) => {
       await page.setViewportSize({ width: w, height: h });
-      await page.goto('/test/story/');
-      await expect(page.locator('#frame-nordic-A')).toHaveClass(/is-title/, { timeout: 15_000 });
-      await page.evaluate(() => window.__story!.showMarks('nordic-A'));
-      await expect(page.locator('#frame-nordic-A .st-mark[data-item="nordic-A-1"]')).toBeVisible();
+      await page.goto(NORDIC);
+      await expect(page.locator('#frame-A')).toHaveClass(/is-title/, { timeout: 15_000 });
+      await page.evaluate(() => window.__story!.showMarks('A'));
+      await expect(page.locator('#frame-A .st-mark[data-item="A-1"]')).toBeVisible();
       const hits = await page.evaluate(() =>
-        Array.from(document.querySelectorAll<HTMLElement>('#frame-nordic-A .st-mark'))
+        Array.from(document.querySelectorAll<HTMLElement>('#frame-A .st-mark'))
           .filter((m) => !m.hidden)
           .map((m) => {
             const r = m.getBoundingClientRect();
@@ -150,19 +190,19 @@ test.describe('the story prototype', () => {
 
   test('reduced motion: the sheet only fades, nothing rises', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
-    await page.goto('/test/story/');
-    await page.evaluate(() => window.__story!.openSheet('nordic-A-1'));
+    await page.goto(NORDIC);
+    await page.evaluate(() => window.__story!.openSheet('A-1'));
     await expect(sheet(page)).toHaveClass(/is-on/);
     expect(await sheet(page).evaluate((el) => getComputedStyle(el).transform)).toBe('none');
-    expect(await page.locator('#frame-nordic-A .st-title-line').evaluate((el) => getComputedStyle(el).transform)).toBe('none');
+    expect(await page.locator('#frame-A .st-title-line').evaluate((el) => getComputedStyle(el).transform)).toBe('none');
   });
 
   test('zero axe violations: at rest, with the sheet open, with the cart open (1280)', async ({ page }) => {
-    await page.goto('/test/story/');
-    await expect(page.locator('#frame-nordic-A')).toHaveClass(/is-title/, { timeout: 15_000 });
+    await page.goto(NORDIC);
+    await expect(page.locator('#frame-A')).toHaveClass(/is-title/, { timeout: 15_000 });
     await page.waitForTimeout(1200); // the title lines and the brand have finished fading in
     await audit(page, 'story at rest');
-    await page.evaluate(() => window.__story!.openSheet('nordic-A-5'));
+    await page.evaluate(() => window.__story!.openSheet('A-5'));
     await expect(sheet(page)).toHaveClass(/is-on/);
     await page.waitForTimeout(300);
     await audit(page, 'story, the sheet open');
@@ -176,34 +216,94 @@ test.describe('the story prototype', () => {
   });
 });
 
-test.describe('the story prototype on a phone (400)', () => {
+test.describe('the other houses', () => {
+  test('modern country: an "almost" frame says so; a product QA did not call faithful is listed without a dot', async ({ page }) => {
+    await page.goto(COUNTRY);
+    await expect(page.locator('#frame-A')).toHaveClass(/is-title/, { timeout: 15_000 });
+    await expect(page.locator('#frame-A .st-draft')).toHaveClass(/is-almost/);
+    await expect(page.locator('#frame-A .st-draft')).toHaveText('טיוטה / בדיקה · כמעט מוכן');
+    await expect(page.locator('#list-A .st-credit')).toHaveCount(7);
+    await expect(page.locator('#frame-A .st-mark')).toHaveCount(5);
+    await expect(page.locator('#list-A .st-no-dot')).toHaveCount(2);
+    // the curtain is sold as the option the frame shows, and the credit says which
+    await page.evaluate(() => window.__story!.openSheet('A-1'));
+    await expect(page.locator('#st-sheet-notes')).toContainText('בתמונה: האפשרות');
+    await page.keyboard.press('Escape');
+    // this house has no tool of its own yet: the way in goes to the Nordic living room, and says so
+    await expect(page.locator('#st-tool')).toHaveText('לסלון בבית הנורדי');
+    await expect(page.locator('#houses .st-tile[aria-current="page"]')).toContainText('כפרי מודרני');
+    await page.waitForTimeout(800);
+    await audit(page, 'modern country at rest');
+  });
+
+  test('boho: QA has not let its frame in, so the page is type only, with no frame and no picture', async ({ page }) => {
+    await page.goto(BOHO);
+    await expect(page.locator('h1')).toHaveText('בית אבן ישן בנמל, 16:00');
+    await expect(page.locator('.mag-stage')).toHaveCount(0);
+    await expect(page.locator('.st-mark')).toHaveCount(0);
+    await expect(page.locator('.st-type-status')).toContainText('הפריים עוד בבדיקת QA');
+    const srcs = await page.locator('img').evaluateAll((els) => els.map((e) => (e as HTMLImageElement).src));
+    for (const s of srcs) expect(s, s).not.toMatch(/\/boho\//);
+    // and the frame is not on the server at all
+    expect((await page.request.get('/media/story/living-room/boho/A/1920.webp')).status()).toBe(404);
+    await page.waitForTimeout(800);
+    await audit(page, 'boho, typographic');
+  });
+
+  test('one test cart across the story pages, and the old prototype address goes on to the Nordic living room', async ({ page }) => {
+    await page.goto('/test/story/');
+    await expect(page).toHaveURL(new RegExp(`${NORDIC}$`));
+    await page.evaluate(() => window.__story!.openSheet('A-5'));
+    await page.getByRole('button', { name: 'הוספה לסל' }).click();
+    await expect(page.locator('#st-cart-count')).toHaveText('1');
+    await page.goto(COUNTRY);
+    await expect(page.locator('#st-cart-count')).toHaveText('1');
+    await page.locator('#st-cart-open').click();
+    await expect(page.locator('#st-cart-lines li')).toHaveCount(1);
+    await expect(page.locator('#st-cart-lines')).toContainText('פחם');
+    await page.keyboard.press('Escape');
+    await page.goto('/story/');
+    await expect(page.locator('#st-cart-count')).toHaveText('1');
+  });
+});
+
+test.describe('the story on a phone (400)', () => {
   test.use({ viewport: { width: 400, height: 800 }, hasTouch: true, isMobile: true });
 
   test('the 4:5 crop at full width, dots inside it, the sheet from the bottom, zero axe violations', async ({ page }) => {
-    await page.goto('/test/story/');
-    const stage = page.locator('#frame-nordic-A .mag-stage');
+    await page.goto(NORDIC);
+    const stage = page.locator('#frame-A .mag-stage');
     const box = (await stage.boundingBox())!;
     expect(Math.round(box.width)).toBe(400);
     expect(Math.round(box.height)).toBe(500);
     // every dot shown on the phone sits inside the crop; a dot the crop does not carry is not offered
-    for (const m of await page.locator('#frame-nordic-A .st-mark:visible').all()) {
+    for (const m of await page.locator('#frame-A .st-mark:visible').all()) {
       const b = (await m.boundingBox())!;
       expect(b.x).toBeGreaterThanOrEqual(box.x - 1);
       expect(b.x + b.width).toBeLessThanOrEqual(box.x + box.width + 1);
     }
-    await expect(page.locator('#frame-nordic-A .st-no-phone')).toHaveCount(3);
+    await expect(page.locator('#frame-A .st-no-phone')).toHaveCount(3);
     // Nordic B's throw: the dot placed by hand on the fold (frame u 0.765, v 0.677), not on the armchair's seat
-    const throwDot = page.locator('#frame-nordic-B .st-mark[data-item="nordic-B-4"]');
+    const throwDot = page.locator('#frame-B .st-mark[data-item="B-4"]');
     expect(await throwDot.evaluate((el) => [el.style.getPropertyValue('--pu'), el.style.getPropertyValue('--pv')])).toEqual(['0.8225', '0.677']);
-    await expect(page.locator('#frame-nordic-A')).toHaveClass(/is-title/, { timeout: 15_000 });
+    await expect(page.locator('#frame-A')).toHaveClass(/is-title/, { timeout: 15_000 });
     await page.waitForTimeout(1200);
     await audit(page, 'phone at rest');
-    await page.locator('#frame-nordic-A .st-mark:visible').first().tap();
+    await page.locator('#frame-A .st-mark:visible').first().tap();
     await expect(sheet(page)).toHaveClass(/is-on/);
     await page.waitForTimeout(300); // the 8 px rise has landed
     const s = (await sheet(page).boundingBox())!;
     expect(Math.round(s.y + s.height)).toBe(800);
     await page.waitForTimeout(300);
     await audit(page, 'phone, the sheet open');
+  });
+
+  test('the contents and a typographic page fit the phone: no sideways scroll, zero axe violations', async ({ page }) => {
+    for (const path of ['/story/', BOHO]) {
+      await page.goto(path);
+      await page.waitForTimeout(800);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth), path).toBeLessThanOrEqual(400);
+      await audit(page, `phone ${path}`);
+    }
   });
 });
