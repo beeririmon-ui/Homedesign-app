@@ -341,43 +341,50 @@ def mc():
 
 # ----------------------------------------------------------------------------------------------------------------------------------
 def wm():
-    """the pendant 6 -> 5 rings. Seen from below, the bottom ring shows its open bottom (the glowing ellipse), and the rings above show
-    their side bands. So the bottom ring (6) is taken out and ring 5 becomes the bottom one: ring 6's open bottom, scaled to ring 5's width
-    (x1.25 about the pendant's axis, also in height, as an ellipse seen from the same angle), is set under ring 5's rim line; where the old
-    ring 6 showed and the new bottom does not, plain wall (harmonic from the wall round it, grain matched to the wall beside the pendant)"""
+    """the pendant 6 -> 5 rings. Rings 5 and 6 are replaced by ring 6 (the bottom ring: its side band and its open, glowing bottom)
+    scaled to ring 5's size (x1.25 about the pendant's axis, also in height) and hung right under ring 4's rim, as ring 5 hung; so ring 6
+    keeps its look and the stack steps 4 -> 5 as the card does. The pendant ends ~20 px higher; that gap is plain wall (a harmonic field
+    from the wall round the pendant, with grain matched to the plain wall beside it)."""
     src = os.path.join(HERE, "warm-modern-A-ed4.png")
     a = load01(src)
     H, W = a.shape[:2]
     lin = s2l(a)
-    # rim lines read per column on the frame (dark lines in L*): c5 = ring 5's bottom rim (where ring 6 starts), yb = the old bottom
-    xs_m = np.array([1372, 1380, 1390, 1400, 1410, 1420, 1430, 1440, 1450, 1460, 1470, 1480, 1490, 1500, 1510, 1520, 1530, 1540, 1548])
-    c5_m = np.array([223, 219, 216, 214, 213, 212, 211, 210, 210, 210, 210, 210, 210, 211, 211, 213, 215, 218, 222])
-    yb_m = np.array([227, 230, 232, 234, 235, 236, 237, 237, 238, 238, 237, 237, 236, 235, 234, 232, 230, 228, 225])
-    AXc, K = 1460.0, 1.25
-    xs = np.arange(W, dtype=np.float32)
-    c5s = lambda x: np.interp(x, xs_m, c5_m)
-    ybs = lambda x: np.interp(x, xs_m, yb_m)
-    # the new bottom: target (x, y) <- source (x', y'), x' = axis + (x - axis) / K, y' = c5(x') + (y - c5(x')) / K
+    # rim lines read per column on the frame (dark lines in L*): c4 = ring 4's bottom rim, c5 = ring 5's (where ring 6 starts),
+    # yb = the bottom; widths read on rows: ring 5 x 1347-1566, ring 6 x 1368-1548
+    x4 = np.array([1344, 1350, 1360, 1370, 1380, 1390, 1400, 1410, 1420, 1430, 1440, 1450, 1460, 1470, 1480, 1490, 1500, 1510, 1520,
+                   1530, 1540, 1550, 1560, 1570, 1577])
+    c4_m = np.array([200, 198, 195, 192, 193, 189, 188, 186, 185, 185, 184, 183, 183, 183, 183, 183, 184, 185, 186, 187, 189, 191, 194,
+                     197, 199])
+    x6 = np.array([1368, 1380, 1390, 1400, 1410, 1420, 1430, 1440, 1450, 1460, 1470, 1480, 1490, 1500, 1510, 1520, 1530, 1540, 1548])
+    c5_m = np.array([224, 219, 216, 214, 213, 212, 211, 210, 210, 210, 210, 210, 210, 211, 211, 213, 215, 218, 223])
+    yb_m = np.array([226, 230, 232, 234, 235, 236, 237, 237, 238, 238, 237, 237, 236, 235, 234, 232, 230, 228, 225])
+    AXc, K = 1458.0, 1.25
+    # the rim lines as smooth curves (quadratic fits; the reads are whole pixels)
+    p4 = np.polyfit(x4, c4_m, 2)
+    p5 = np.polyfit(x6, c5_m, 2)
+    pb = np.polyfit(x6, yb_m, 2)
     Y, X = np.mgrid[0:H, 0:W].astype(np.float32)
-    Xs = AXc + (X - AXc) / K
-    top = c5s(Xs)
-    Ys = top + (Y - top) / K
-    valid = (Xs >= 1372) & (Xs <= 1548) & (Ys >= top) & (Ys <= ybs(Xs) + 2.5)
+    c4t = np.polyval(p4, X).astype(np.float32)
+    Xs = (AXc + (X - AXc) / K).astype(np.float32)
+    c5s = (np.polyval(p5, Xs) - 2.0).astype(np.float32)                 # from 2 px above ring 5's rim line (its shadow comes along)
+    ybs = np.polyval(pb, Xs).astype(np.float32)
+    Ys = (c5s + (Y - c4t) / K).astype(np.float32)
+    inzone_x = (X >= 1344) & (X <= 1577)
+    below4 = Y > c4t + 0.5
+    valid = (Xs >= 1368) & (Xs <= 1548) & (Ys >= c5s - 0.5) & (Ys <= ybs + 2.0) & below4 & inzone_x
     spr = cv2.remap(lin, Xs, Ys, cv2.INTER_LINEAR, borderMode=cv2.BORDER_REFLECT)
-    # it shows only below ring 5's own rim line at each target column (ring 5 and everything above are kept)
-    c5t = np.interp(X, xs_m, c5_m, left=208, right=208)
-    # ring 5's span is x 1348-1568; its rim at the far sides (outside ring 6's span) read on the frame: 208 at 1350, 206 at 1560
-    c5t = np.where(X < 1372, np.interp(X, [1344, 1350, 1372], [205, 208, 223]), c5t)
-    c5t = np.where(X > 1548, np.interp(X, [1548, 1560, 1577], [222, 206, 200]), c5t)
-    below = Y > c5t + 1
-    show = valid & below
-    sa = cv2.GaussianBlur(show.astype(np.float32), (0, 0), 0.7) * below
-    # the old ring 6 (to be gone where the new bottom does not cover it): below ring 5's rim, down to the old bottom + 3
-    old6 = (X >= 1368) & (X <= 1552) & (Y > c5t + 1) & (Y <= ybs(X) + 3)
-    # plain wall: harmonic from the wall round the pendant (not the pendant, not the art below y 252)
+    # the old rings 5-6 area (to wall where the new bottom ring does not cover it): below ring 4's rim, down to the old bottom + 3
+    ybo = np.interp(X, x6, yb_m, left=0, right=0)
+    old56 = inzone_x & below4 & (Y <= np.maximum(ybo, np.interp(X, [1344, 1350, 1360, 1368, 1548, 1560, 1570, 1577], [205, 208, 212, 226, 225, 210, 206, 201])) + 3)
+    # plain wall: harmonic from the wall round the pendant (the pendant and the art below y 252 kept out)
     pend = np.zeros((H, W), bool)
     for x in range(1290, 1630):
-        pend[:int(max(ybs(x) if 1372 <= x <= 1548 else 0, 205 if 1344 <= x <= 1577 else 0, 175 if 1295 <= x <= 1620 else 0)) + 4, x] = True
+        ylim = 175 if 1295 <= x <= 1620 else 0
+        if 1344 <= x <= 1577:
+            ylim = max(ylim, int(np.interp(x, [1344, 1350, 1360, 1368, 1548, 1560, 1570, 1577], [205, 208, 212, 226, 225, 210, 206, 201])))
+        if 1368 <= x <= 1548:
+            ylim = max(ylim, int(np.interp(x, x6, yb_m)))
+        pend[:ylim + 4, x] = True
     wallk = ~pend
     box = (slice(150, 252), slice(1300, 1620))
     wl, den = nblur(lin, wallk.astype(np.float32), 4)
@@ -391,17 +398,19 @@ def wm():
     nz = cv2.GaussianBlur(rng.standard_normal((H, W)).astype(np.float32), (0, 0), 0.8)
     nz *= sd / max(float(nz.std()), 1e-6)
     wall = low * (1 + nz)[..., None]
-    wf = cv2.GaussianBlur(old6.astype(np.float32), (0, 0), 0.7) * old6
+    wf = cv2.GaussianBlur(old56.astype(np.float32), (0, 0), 0.7) * old56
     out = lin * (1 - wf[..., None]) + wall * wf[..., None]
+    sa = cv2.GaussianBlur(valid.astype(np.float32), (0, 0), 0.7) * below4 * inzone_x
     out = out * (1 - sa[..., None]) + spr * sa[..., None]
     o8 = save8(l2s(out), os.path.join(HERE, "warm-modern-A-ed5.png"))
     a8 = (a * 255 + 0.5).astype(np.uint8)
-    m = cv2.dilate((old6 | (sa > 0)).astype(np.uint8), np.ones((3, 3), np.uint8))
+    m = cv2.dilate((old56 | (sa > 0)).astype(np.uint8), np.ones((3, 3), np.uint8))
     rec = check(o8, a8, m, "warm-modern-A-ed5.png")
     rec.update(base="warm-modern-A-ed4.png", rings_before=6, rings_after=5, scale=K, axis_x=AXc,
-               rim_lines={"x": xs_m.tolist(), "ring5_bottom": c5_m.tolist(), "old_bottom": yb_m.tolist()},
-               method="the bottom ring (6) taken out; its open bottom scaled x1.25 (ring 5's width over ring 6's) about the axis and from "
-                      "ring 5's rim line down, so ring 5 is the bottom ring; leftover old ring-6 pixels plain wall (harmonic + matched grain)")
+               rim_lines={"x_ring4": x4.tolist(), "ring4_bottom": c4_m.tolist(), "x_ring6": x6.tolist(), "ring5_bottom": c5_m.tolist(),
+                          "old_bottom": yb_m.tolist()},
+               method="rings 5 and 6 replaced by ring 6 (side band and open bottom) scaled x1.25 about the axis to ring 5's size and hung "
+                      "under ring 4's rim; the ~20 px gap below and the leftover old ring pixels plain wall (harmonic + matched grain)")
     return rec
 
 
@@ -422,14 +431,24 @@ def jar():
     L, A_, B_ = lab_of(base)
     gx = cv2.Sobel(cv2.GaussianBlur(L, (0, 0), 1.2), cv2.CV_32F, 1, 0, ksize=3)
     AX = 666.0
-    ytop, ybot = 922, 1130
+    ytop, ybot = 922, 1128
+    # the right edge tracked row by row (within 3 px of the row before; a free search caught the window rail's edge at y ~1060),
+    # from y 1000 up and down, then a smooth 4th-degree fit over the body
     hw = np.zeros(H)
-    for y in range(938, 1118):
-        hw[y] = 680 + int(np.argmax(gx[y, 680:760])) - AX
-    hw[938:1118] = np.convolve(np.r_[[hw[938]] * 4, hw[938:1118], [hw[1117]] * 4], np.ones(9) / 9, mode="same")[4:-4]
+    r0 = 680 + int(np.argmax(gx[1000, 680:760]))
+    edge = {1000: r0}
+    for rng_ in (range(1001, 1117), range(999, 937, -1)):
+        prev = r0
+        for y in rng_:
+            lo_, hi_ = prev - 3, prev + 4
+            prev = lo_ + int(np.argmax(gx[y, lo_:hi_]))
+            edge[y] = prev
+    ys_ = np.array(sorted(edge))
+    pf = np.polyfit(ys_, np.array([edge[y] for y in ys_]) - AX, 4)
+    hw[938:1117] = np.polyval(pf, np.arange(938, 1117))
     hw[ytop:938] = 46.0                                                   # the rim, x 621-711
-    for y in range(1118, ybot):
-        hw[y] = hw[1117] * np.sqrt(max(1 - ((y - 1117) / 12.5) ** 2, 0))  # the base's rounded front
+    for y in range(1117, ybot):
+        hw[y] = hw[1116] * np.sqrt(max(1 - ((y - 1116) / 11.5) ** 2, 0))  # the base's rounded front
     xx = np.arange(W, dtype=np.float32)[None, :]
     yy = np.arange(H)[:, None]
     rows = (yy >= ytop) & (yy < ybot)
@@ -471,12 +490,33 @@ def jar():
     bg = np.where((xx < AX)[..., None], bgL, bgR)
     oa = cv2.GaussianBlur(old.astype(np.float32), (0, 0), 1.5)[..., None] * cv2.dilate(old.astype(np.uint8), np.ones((5, 5), np.uint8))[..., None]
     out = base * (1 - oa) + bg * oa
+    # under and right of the base (y 1118 on, x 628-745, grown 3 px; left of it the shifted rails are right) the shifted sources would reach into the old jar: there the sill top is a
+    # smooth field, solved on the composite so far (the strip fill round it is its boundary; the new jar, the rails and the sill's
+    # front face left out), with the sill's own grain (sd 0.10), feathered 3 px
+    U = old & (yy >= 1118) & (xx >= 628) & (xx <= 745) & (yy < sill_edge - 1)
+    U = cv2.dilate(U.astype(np.uint8), np.ones((7, 7), np.uint8)).astype(bool) & (yy < sill_edge - 1) & (new_a <= 0) & (yy >= 1116) & (xx >= 625)
+    Lo, _, _ = lab_of(out)
+    lin_o = s2l(out)
+    sb = (slice(1096, 1152), slice(590, 772))
+    newj = new_a > 0
+    kn = (~U & ~newj & (Lo > 40) & (yy < sill_edge - 2))[sb]
+    wl_, den_ = nblur(lin_o[sb], kn.astype(np.float32), 2)
+    kn &= den_ > 0.3
+    hl = harmonic(np.where(kn[..., None], wl_, 0), kn, f=1, iters=4000)
+    rng = np.random.default_rng(29)
+    nz = cv2.GaussianBlur(rng.standard_normal(hl.shape[:2]).astype(np.float32), (0, 0), 0.7)
+    nz *= 0.10 / max(float(nz.std()), 1e-6)
+    sill = out.copy()
+    sill[sb] = l2s(np.clip(hl * (1 + nz)[..., None], 0, 1))
+    Ui = cv2.erode(U.astype(np.uint8), np.ones((5, 5), np.uint8)).astype(np.float32)
+    ua = np.maximum(cv2.GaussianBlur(Ui, (0, 0), 1.5), (old & U).astype(np.float32))[..., None] * U[..., None]
+    out = out * (1 - ua) + sill * ua
     # a new contact shadow under the narrower base: a tight core and a soft spread, a little to the right (the lantern is on the left)
     fp = np.zeros((H, W), np.uint8)
-    cv2.ellipse(fp, (int(AX) + 2, 1127), (int(hw[1117] * JAR_SCALE_X) + 1, 4), 0, 0, 360, 1, -1)
-    core = cv2.GaussianBlur(fp.astype(np.float32), (0, 0), 2.0)
-    spread = cv2.GaussianBlur(cv2.warpAffine(fp.astype(np.float32), np.float32([[1, 0, 7], [0, 1, -1]]), (W, H)), (0, 0), 6.0)
-    shadow = np.clip(0.55 * core + 0.30 * spread, 0, 0.7) * (yy >= 1112) * (yy < sill_edge)
+    cv2.ellipse(fp, (int(AX) + 1, 1125), (int(hw[1116] * JAR_SCALE_X) + 1, 3), 0, 0, 360, 1, -1)
+    core = cv2.GaussianBlur(fp.astype(np.float32), (0, 0), 1.8)
+    spread = cv2.GaussianBlur(cv2.warpAffine(fp.astype(np.float32), np.float32([[1, 0, 6], [0, 1, -1]]), (W, H)), (0, 0), 5.0)
+    shadow = np.clip(0.6 * core + 0.25 * spread, 0, 0.7) * (yy >= 1110) * (yy < sill_edge)
     out = out * (1 - shadow[..., None] * (1 - new_a[..., None]))
     na = new_a[..., None].astype(np.float32)
     out = out * (1 - na) + jar_px * na
@@ -490,7 +530,8 @@ def jar():
     e8 = (ed4 * 255 + 0.5).astype(np.uint8)
     b8 = (base * 255 + 0.5).astype(np.uint8)
     zone = cv2.dilate((old | (new_a > 0) | (shadow > 0.002)).astype(np.uint8), np.ones((9, 9), np.uint8))
-    rec = check(o8, e8, zone, "japandi-A-ed5.png")
+    ed4_changed = np.abs(e8.astype(np.int16) - b8.astype(np.int16)).max(2) > 0
+    rec = check(o8, e8, zone.astype(bool) | ed4_changed, "japandi-A-ed5.png")
     mv0 = np.abs(o8.astype(np.int16) - b8.astype(np.int16)).max(2) > 0
     rows_ = [y for y in range(938, 1118)]
     wmax = 2 * float(hw[938:1118].max())
@@ -502,11 +543,100 @@ def jar():
     return rec
 
 
+# ----------------------------------------------------------------------------------------------------------------------------------
+CROP_SETS = [
+    ("boho-seam", "boho-A-fin2.png", "boho-A-fin3.png", [((330, 220, 470, 500), 1), ((370, 300, 430, 420), 4)]),
+    ("med-rim-echo", "mediterranean-A-ed4.png", "mediterranean-A-ed5.png", [((1340, 1090, 1540, 1240), 1), ((1380, 1110, 1510, 1225), 4)]),
+    ("med-bench-cushions", "mediterranean-A-ed4.png", "mediterranean-A-ed5.png", [((150, 650, 1650, 1060), 1), ((190, 690, 330, 800), 4),
+                                                                                  ((900, 690, 1060, 770), 4)]),
+    ("japandi-jar", "japandi-A-ed4.png", "japandi-A-ed5.png", [((540, 880, 800, 1160), 1), ((600, 905, 735, 960), 4), ((595, 1040, 735, 1100), 4),
+                                                              ((600, 1095, 760, 1150), 4)]),
+    ("warm-modern-pendant", "warm-modern-A-ed4.png", "warm-modern-A-ed5.png", [((1230, 0, 1700, 330), 1), ((1330, 165, 1600, 250), 4)]),
+    ("mc-cups", "modern-country-A.png", "modern-country-A-fix1.png", [((1540, 1080, 1840, 1215), 1), ((1550, 1090, 1700, 1205), 4)]),
+    ("mc-fly", "modern-country-A.png", "modern-country-A-fix1.png", [((1540, 820, 1660, 920), 1), ((1585, 855, 1620, 890), 4)]),
+    ("mc-curtains", "modern-country-A.png", "modern-country-A-fix1.png", [((1500, 40, 2700, 1000), 1), ((1585, 60, 1645, 200), 4),
+                                                                          ((2520, 50, 2600, 220), 4)]),
+]
+
+
+def crops():
+    os.makedirs(CROPS, exist_ok=True)
+    f = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
+    outl = []
+    for name, b, a_, boxes in CROP_SETS:
+        B = Image.open(os.path.join(HERE, b)).convert("RGB")
+        A = Image.open(os.path.join(HERE, a_)).convert("RGB")
+        panels = []
+        for box, sc in boxes:
+            w, h = box[2] - box[0], box[3] - box[1]
+            rs = Image.NEAREST if sc > 1 else Image.LANCZOS
+            pb = B.crop(box).resize((w * sc, h * sc), rs)
+            pa = A.crop(box).resize((w * sc, h * sc), rs)
+            panels.append((pb, pa, sc, box))
+        Wd = max(max(p[0].width for p in panels) * 2 + 30, 700)
+        Ht = sum(p[0].height + 30 for p in panels) + 40
+        im = Image.new("RGB", (Wd, Ht), (250, 249, 247))
+        d = ImageDraw.Draw(im)
+        d.text((10, 5), f"{name}: {b} -> {a_}", fill=(0, 0, 0), font=f)
+        y = 35
+        for pb, pa, sc, box in panels:
+            tag = "100 %" if sc == 1 else f"x{sc}"
+            d.text((10, y), f"before {tag}", fill=(0, 0, 0), font=f)
+            d.text((20 + pb.width, y), f"after {tag}", fill=(0, 0, 0), font=f)
+            im.paste(pb, (10, y + 24))
+            im.paste(pa, (20 + pb.width, y + 24))
+            y += pb.height + 30
+        p = os.path.join(CROPS, name + ".jpg")
+        im.save(p, quality=92)
+        outl.append(os.path.relpath(p, HERE))
+    return outl
+
+
+def sheet():
+    fb = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 28)
+    f = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 20)
+    R = json.load(open(REC))
+    rows = [("Boho: the seam at x~400 softened", "boho-A-fin2.png", "boho-A-fin3.png", (250, 150, 700, 560)),
+            ("Mediterranean: rim echo cleaned; bench back cushions to sand (the right one, ours, stays white)", "mediterranean-A-ed4.png",
+             "mediterranean-A-ed5.png", (150, 640, 1650, 1240)),
+            ("Japandi: the fill round the narrowed jar rebuilt (rim wings, notches, base and contact shadow)", "japandi-A-ed4.png",
+             "japandi-A-ed5.png", (500, 820, 840, 1180)),
+            ("Warm modern: the pendant 6 -> 5 rings, the gap closed with plain wall", "warm-modern-A-ed4.png", "warm-modern-A-ed5.png",
+             (1200, 0, 1730, 340)),
+            ("Modern country: plain cups, the fly mark gone, both curtains lighter toward #EDE7DB", "modern-country-A.png",
+             "modern-country-A-fix1.png", (1450, 30, 2730, 1230))]
+    TH = 520
+    tiles = []
+    for title, b, a_, box in rows:
+        B = Image.open(os.path.join(HERE, b)).convert("RGB").crop(box)
+        A = Image.open(os.path.join(HERE, a_)).convert("RGB").crop(box)
+        sc = TH / B.height
+        tiles.append((title, B.resize((int(B.width * sc), TH), Image.LANCZOS), A.resize((int(A.width * sc), TH), Image.LANCZOS)))
+    W = max(t[1].width for t in tiles) * 2 + 60
+    H = 70 + len(tiles) * (TH + 60)
+    out = Image.new("RGB", (W, H), (250, 249, 247))
+    d = ImageDraw.Draw(out)
+    d.text((20, 18), "Code fixes, round 3 (2026-11-07): 0 tokens, no var2. TEST, not for the site. Before (left) / after (right).", fill=(0, 0, 0), font=fb)
+    y = 70
+    for title, B, A in tiles:
+        d.text((20, y), title, fill=(0, 0, 0), font=f)
+        out.paste(B, (20, y + 30))
+        out.paste(A, (40 + B.width, y + 30))
+        y += TH + 60
+    p = os.path.join(HERE, "codefix3-sheet.jpg")
+    out.save(p, quality=90)
+    return os.path.relpath(p, HERE)
+
+
 if __name__ == "__main__":
     R = json.load(open(REC)) if os.path.exists(REC) else dict(date="2026-11-07", by="render-agent", qa="qa/reports/2026-11-07-editorial-fin2-ed4-country.md",
                                                               tokens=0, var2="none", note="TEST, not for the site; new files only")
     for k in sys.argv[1:]:
         fn = globals()[k]
+        if k in ("crops", "sheet"):
+            R[k] = fn()
+            print(k, R[k])
+            continue
         r = fn()
         if r is not None:
             R[k] = r

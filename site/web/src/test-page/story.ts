@@ -11,9 +11,8 @@
 import './fonts.css';
 import './magazine.css';
 import './story.css';
-import { formatIls } from '@hd/shared/money';
 import { prefersReducedMotion } from '../motion';
-import { storyCart, type StoryVariant } from './story-cart';
+import { priceHe, storyCart, type StoryVariant } from './story-cart';
 
 type Item = {
   id: string;
@@ -266,10 +265,13 @@ function showCount(animate: boolean): void {
   }
   // the figure changes in a 120 ms dissolve (art direction §7.2)
   countEl.classList.add('is-changing');
-  setTimeout(() => {
-    countEl.textContent = String(n);
-    countEl.classList.remove('is-changing');
-  }, ms('--d-micro', 120));
+  setTimeout(
+    () => {
+      countEl.textContent = String(n);
+      countEl.classList.remove('is-changing');
+    },
+    ms('--d-micro', 120),
+  );
 }
 showCount(false);
 
@@ -403,7 +405,7 @@ addBtn.addEventListener('click', async () => {
     addBtn.textContent = 'נוסף לסל';
     clearTimeout(addTimer);
     addTimer = setTimeout(() => (addBtn.textContent = 'הוספה לסל'), 2500);
-    announce(`נוסף לסל: ${it.name_he}. בסל ${c.count} פריטים, ${formatIls(c.subtotal_agorot)}.`);
+    announce(`נוסף לסל: ${it.name_he}. בסל ${c.count} פריטים, ${priceHe(c.subtotal_agorot)}.`);
   } catch {
     announce('לא הצלחנו להוסיף לסל.');
   }
@@ -436,7 +438,7 @@ function renderCart(): void {
       name.textContent = l.name_he;
       const detail = document.createElement('span');
       detail.className = 'mag-credit-detail';
-      detail.textContent = `${l.qty} × ${formatIls(l.unit_price_agorot)} · ${formatIls(l.line_total_agorot)}`;
+      detail.textContent = `${l.qty} × ${priceHe(l.unit_price_agorot)} · ${priceHe(l.line_total_agorot)}`;
       const body = document.createElement('span');
       body.className = 'mag-credit-body';
       body.append(name, detail);
@@ -445,7 +447,7 @@ function renderCart(): void {
     }),
   );
   $('st-cart-empty').hidden = lines.length > 0;
-  $('st-cart-total').textContent = lines.length ? `סכום ביניים: ${formatIls(c!.subtotal_agorot)} · ${c!.count} פריטים` : '';
+  $('st-cart-total').textContent = lines.length ? `סכום ביניים: ${priceHe(c!.subtotal_agorot)} · ${c!.count} פריטים` : '';
 }
 $('st-cart-open').addEventListener('click', async () => {
   renderCart();

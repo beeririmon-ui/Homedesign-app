@@ -6,7 +6,18 @@
  * site's room yet. State lives under one key, read and written in try/catch with an in-memory fallback.
  */
 import type { Cart, Pack } from '@hd/shared';
-import { ApiError, type StoreApi } from '../api/types';
+import type { StoreApi } from '../api/types';
+
+/** The same shape as the site's ApiError (../api/types), kept here so the test page shares no chunk with the room page. */
+export class StoryCartError extends Error {
+  constructor(
+    public status: number,
+    public code: string,
+    public messageHe?: string,
+  ) {
+    super(code);
+  }
+}
 
 export type StoryVariant = {
   variant_id: string;
@@ -62,6 +73,16 @@ export function browserStore(): KeyValue {
   };
 }
 
+/**
+ * The site's price format (@hd/shared/money formatIls: "₪ 1,290" in an LTR isolate, no agorot when whole), repeated here
+ * so the test page shares no chunk with the room page; web/test/story-cart.test.ts holds the two equal.
+ */
+export function priceHe(agorot: number): string {
+  const whole = agorot % 100 === 0;
+  const n = (agorot / 100).toLocaleString('en-US', { minimumFractionDigits: whole ? 0 : 2, maximumFractionDigits: 2 });
+  return `\u2066₪\u00a0${n}\u2069`;
+}
+
 export const MAX_QTY = 20;
 const rid = () => [...crypto.getRandomValues(new Uint8Array(16))].map((b) => b.toString(16).padStart(2, '0')).join('');
 
@@ -75,15 +96,24 @@ export type StoryCart = Pick<StoreApi, 'kind' | 'createCart' | 'getCart' | 'setI
 
 export function storyCart(variants: StoryVariant[], store: KeyValue = browserStore(), key = 'hd.story.cart'): StoryCart {
   const byId = new Map(variants.map((v) => [v.variant_id, v]));
+  // the cart as this page last saved it: the store can drop a write (a private window), and the page keeps working
+  let mine: Saved | null = null;
   const load = (): Saved | null => {
     try {
       const s = JSON.parse(store.get(key) ?? 'null') as Saved | null;
-      return s && typeof s.id === 'string' && Array.isArray(s.items) ? s : null;
+      return s && typeof s.id === 'string' && Array.isArray(s.items) ? s : mine && structuredClone(mine);
     } catch {
-      return null;
+      return mine && structuredClone(mine);
     }
   };
-  const save = (s: Saved) => store.set(key, JSON.stringify(s));
+  const save = (s: Saved) => {
+    mine = structuredClone(s);
+    try {
+      store.set(key, JSON.stringify(s));
+    } catch {
+      /* kept for this page only */
+    }
+  };
   const view = (s: Saved): Cart => {
     const lines = s.items.flatMap((i) => {
       const v = byId.get(i.variant_id);
@@ -107,7 +137,7 @@ export function storyCart(variants: StoryVariant[], store: KeyValue = browserSto
   };
   const open = (id: string): Saved => {
     const s = load();
-    if (!s || s.id !== id) throw new ApiError(404, 'cart_not_found');
+    if (!s || s.id !== id) throw new StoryCartError(404, 'cart_not_found');
     return s;
   };
   const api: StoryCart = {
@@ -123,9 +153,9 @@ export function storyCart(variants: StoryVariant[], store: KeyValue = browserSto
     async setItem(cartId, variantId, pack, qty) {
       const s = open(cartId);
       const v = byId.get(variantId);
-      if (!v || !v.available) throw new ApiError(404, 'variant_not_found', 'המוצר לא זמין.');
-      if (pack !== 'set') throw new ApiError(422, 'pack_unavailable', 'בעמוד הבדיקה המוצר נמכר כפי שהוא בתמונה.');
-      if (!Number.isInteger(qty) || qty < 0 || qty > MAX_QTY) throw new ApiError(422, 'invalid_body');
+      if (!v || !v.available) throw new StoryCartError(404, 'variant_not_found', 'המוצר לא זמין.');
+      if (pack !== 'set') throw new StoryCartError(422, 'pack_unavailable', 'בעמוד הבדיקה המוצר נמכר כפי שהוא בתמונה.');
+      if (!Number.isInteger(qty) || qty < 0 || qty > MAX_QTY) throw new StoryCartError(422, 'invalid_body');
       const at = s.items.findIndex((i) => i.variant_id === variantId && i.pack === pack);
       if (qty === 0) s.items = s.items.filter((_, i) => i !== at);
       else if (at >= 0) s.items[at] = { variant_id: variantId, pack, qty };
@@ -135,7 +165,7 @@ export function storyCart(variants: StoryVariant[], store: KeyValue = browserSto
     },
     async add(variantId, qty = 1) {
       const id = load()?.id ?? (await api.createCart()).id;
-      const now = load()!.items.find((i) => i.variant_id === variantId && i.pack === 'set')?.qty ?? 0;
+      const now = load()?.items.find((i) => i.variant_id === variantId && i.pack === 'set')?.qty ?? 0;
       return api.setItem(id, variantId, 'set', Math.min(MAX_QTY, now + qty));
     },
     current() {
@@ -143,7 +173,12 @@ export function storyCart(variants: StoryVariant[], store: KeyValue = browserSto
       return s ? view(s) : null;
     },
     clear() {
-      store.remove(key);
+      mine = null;
+      try {
+        store.remove(key);
+      } catch {
+        /* storage unavailable */
+      }
     },
   };
   return api;

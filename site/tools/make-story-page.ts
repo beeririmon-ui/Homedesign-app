@@ -26,6 +26,7 @@ import { join } from 'node:path';
 import sharp from 'sharp';
 import { formatIls } from '@hd/shared/money';
 import { expandOptions, type FullCatalog, type FullProduct, type PublicCatalog } from '@hd/shared';
+import { colorNameHe, materialsHe } from './lib/hebrew';
 import { GENERATED, MEDIA_OUT, repoPath, sitePath } from './lib/paths';
 
 type FrameSpec = {
@@ -70,6 +71,8 @@ type QaRecord = { final_test: Record<string, string>; frames: Record<string, { r
 type Card = {
   id: string;
   slot: string;
+  materials?: string[];
+  dimensions_cm?: { width?: number | null; depth?: number | null; height?: number | null };
   colors: { dominant_hex: string };
   images: { urls: string[] };
   options?: { default_sku: string; skus: { id: string; values: Record<string, string>; image?: string }[] };
@@ -139,8 +142,7 @@ for (const [id, f] of Object.entries(hot.frames)) {
 }
 
 /** QA's verdict per card per frame ("cushions-cj-boucle-teddy (White, Milk tea)" is the card's row) */
-const faithfulOf = (qaKey: string, product: string): string =>
-  qa.frames[qaKey]!.rows.find((r) => r.card.split(' ')[0] === product)?.faithful ?? 'not checked';
+const faithfulOf = (qaKey: string, product: string): string => qa.frames[qaKey]!.rows.find((r) => r.card.split(' ')[0] === product)?.faithful ?? 'not checked';
 
 // ---------- the cards (photos, options) and the slots' placement (the credit's defining size) ----------
 function walk(dir: string): string[] {
@@ -155,9 +157,16 @@ for (const p of walk(repoPath('data/products'))) {
   const c = read<Card>(p);
   if (wanted.has(c.id)) cards.set(c.id, c);
 }
-const placement = new Map<string, string>(
-  read<{ slots: { id: string; placement: string }[] }>(repoPath('data/slots/living-room.json')).slots.map((s) => [s.id, s.placement]),
-);
+const livingSlots = read<{ slots: { id: string; placement: string; name_he: string }[] }>(repoPath('data/slots/living-room.json')).slots;
+const placement = new Map<string, string>(livingSlots.map((s) => [s.id, s.placement]));
+const hexOf = (card: Card): string | null => (/^#[0-9a-f]{6}$/i.test(card.colors?.dominant_hex ?? '') ? card.colors.dominant_hex : null);
+/** a product the catalog does not show (no price yet, a draft card): named the way the catalog names (build-catalog.ts) */
+function nameFromCard(card: Card): string {
+  const m = materialsHe(card.materials ?? [])[0];
+  const hex = hexOf(card);
+  const slot = livingSlots.find((s) => s.id === card.slot)?.name_he ?? card.slot;
+  return `${slot}${m && !slot.includes(m) ? ` ${m}` : ''}${hex ? `, ${colorNameHe(hex)}` : ''}`;
+}
 
 // ---------- images ----------
 const cacheOf = (url: string) => sitePath('.cache/supplier-images', `${createHash('sha256').update(url).digest('hex').slice(0, 24)}.bin`);
@@ -187,10 +196,11 @@ async function photo(card: Card, skuImage: string | null): Promise<Image | null>
 }
 
 // ---------- the credit (art direction §4.4–§4.5): material · the defining size · price ----------
-function sizeHe(p: FullProduct, place: string): string | null {
-  const { width: w, depth: d, height: h } = p.dimensions_cm;
+function sizeHe(dims: FullProduct['dimensions_cm'] | Card['dimensions_cm'], place: string): string | null {
+  const { width: w, depth: d, height: h } = dims ?? {};
   const x = (a: number, b: number) => `⁦${a}×${b}⁩ ס״מ`;
-  if ((place === 'floor' || place === 'sofa') && w && d) return x(w, d);
+  // a textile or a floor piece is its two flat sides (a throw, a cushion, a rug); a wall piece its width and height
+  if ((place === 'floor' || place === 'sofa') && w && (d || h)) return x(w, (d || h)!);
   if (place === 'wall' && w && h) return x(w, h);
   if (h) return `גובה ⁦${h}⁩ ס״מ`;
   if (w && d) return x(w, d);
@@ -260,13 +270,16 @@ async function itemOf(frame: string, qaKey: string, n: number, pt: Point, crop: 
     skuImage = card.options?.skus.find((s) => Object.entries(want).every(([k, v]) => s.values[k] === v))?.image ?? null;
   } else if (card.options) skuImage = card.options.skus.find((s) => s.id === card.options!.default_sku)?.image ?? null;
   // the name: the option the frame shows replaces the colour in the name, or follows it (art direction §4.5)
-  let name = p?.name_he ?? pt.product;
-  if (optionHe) name = pt.option?.color && name.includes(', ') ? `${name.slice(0, name.lastIndexOf(', '))}, ${optionHe}` : `${name} — ${optionHe}`;
+  let name = p?.name_he ?? nameFromCard(card);
+  // a colour (the colour axis, or a colour the point names in Hebrew) takes the colour's place in the name
+  const isColour = !!pt.option?.color || !!pt.option_label_he;
+  if (optionHe) name = isColour && name.includes(', ') ? `${name.slice(0, name.lastIndexOf(', '))}, ${optionHe}` : `${name} — ${optionHe}`;
   const place = placement.get(card.slot) ?? 'surface';
   const priceHe = price !== null ? formatIls(price) : null;
-  const detail = p
-    ? [p.materials_he[0] ?? null, sizeHe(p, place), priceHe].filter((x): x is string => !!x).join(' · ')
-    : 'המחיר עוד לא נקבע';
+  const material = p ? (p.materials_he[0] ?? null) : (materialsHe(card.materials ?? [])[0] ?? null);
+  const detail = [material, sizeHe(p ? p.dimensions_cm : card.dimensions_cm, place), priceHe ?? 'המחיר עוד לא נקבע']
+    .filter((x): x is string => !!x)
+    .join(' · ');
   const img = await photo(card, skuImage);
   // the catalog's notes describe the room engine's frame ("בתמונה: ..."): the story frame brings its own caption
   const notes = [...(pt.in_frame_he ? [pt.in_frame_he] : []), ...(p?.notes_he.filter((x) => !x.startsWith('בתמונה')) ?? [])];
@@ -298,7 +311,7 @@ async function itemOf(frame: string, qaKey: string, n: number, pt: Point, crop: 
     image: img,
     thumb: img ? img.srcset.split(', ')[0]!.split(' ')[0]! : null,
     // a draft card (DS API) has no colour yet: the rule's hairline grey
-    swatch: /^#[0-9a-f]{6}$/i.test(card.colors?.dominant_hex ?? '') ? card.colors.dominant_hex : '#d9d6d0',
+    swatch: hexOf(card) ?? '#d9d6d0',
     href: sitePages.has(pt.product) ? `/p/${pt.product}/` : null,
     try_href: tryHref(pt.product),
   };
@@ -371,7 +384,17 @@ for (const [id, f] of Object.entries(hot.frames)) {
   });
   const priced = items.filter((x) => x.status !== 'unpriced').length;
   console.log(
-    `${id}: ${meta.width}×${meta.height}, phone crop u ${crop[0].toFixed(3)}–${crop[1].toFixed(3)}; ${items.length} products (${priced} priced, ${items.filter((x) => x.image).length} with the card photo); dots ${items.filter((x) => x.dot).length} (not faithful: ${items.filter((x) => !x.dot).map((x) => `${x.product} ${x.faithful}`).join(', ') || 'none'}); on the phone ${items.filter((x) => x.phone).length} (${items.filter((x) => x.dot && !x.phone).map((x) => `${x.product}: ${x.phone_note}`).join('; ') || 'all'})`,
+    `${id}: ${meta.width}×${meta.height}, phone crop u ${crop[0].toFixed(3)}–${crop[1].toFixed(3)}; ${items.length} products (${priced} priced, ${items.filter((x) => x.image).length} with the card photo); dots ${items.filter((x) => x.dot).length} (not faithful: ${
+      items
+        .filter((x) => !x.dot)
+        .map((x) => `${x.product} ${x.faithful}`)
+        .join(', ') || 'none'
+    }); on the phone ${items.filter((x) => x.phone).length} (${
+      items
+        .filter((x) => x.dot && !x.phone)
+        .map((x) => `${x.product}: ${x.phone_note}`)
+        .join('; ') || 'all'
+    })`,
   );
 }
 
@@ -450,7 +473,11 @@ const others = `<ul class="st-styles mag-col-main">
 ${man.next_styles_he.map((s) => `  <li class="st-style is-next"><span>${esc(s)}</span> <span class="mag-cap">בגיליונות הבאים</span></li>`).join('\n')}
 </ul>`;
 
-const data = { mark_he: man.mark_he, items: Object.fromEntries(frames.flatMap((f) => f.items.map((x) => [x.id, x]))), frames: frames.map((f) => ({ id: f.id, u0: f.u0, v0: f.v0, aspect: f.aspect, crop: f.crop, title_he: f.title_he, items: f.items.map((x) => x.id) })) };
+const data = {
+  mark_he: man.mark_he,
+  items: Object.fromEntries(frames.flatMap((f) => f.items.map((x) => [x.id, x]))),
+  frames: frames.map((f) => ({ id: f.id, u0: f.u0, v0: f.v0, aspect: f.aspect, crop: f.crop, title_he: f.title_he, items: f.items.map((x) => x.id) })),
+};
 mkdirSync(GENERATED, { recursive: true });
 writeFileSync(join(GENERATED, 'test-page.story.json'), JSON.stringify(data, null, 1));
 
