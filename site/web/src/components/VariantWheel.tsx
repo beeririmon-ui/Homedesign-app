@@ -145,7 +145,12 @@ export function VariantWheel({ slot, roomId, initial, onPreview, onChoose, onCan
     drag.current = null;
     if (!d || d.id !== e.pointerId) return;
     if (d.moved <= 6) return; // a tap: the card's click handler decides
-    physics.current.release();
+    // the option is chosen at release (where the inertia will land), not when the spring settles (QA on S4)
+    const t = physics.current.release();
+    if (t !== index) {
+      setIndex(t);
+      onPreview(t + 1);
+    }
     run();
   }
 

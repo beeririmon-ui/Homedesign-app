@@ -52,15 +52,21 @@ export class ArcPhysics {
     this.target = this.clampIndex(i);
   }
 
-  /** Critically damped spring toward the target. Returns true while moving. */
+  /**
+   * Critically damped spring toward the target, stepped by real time (QA on S4: capping a frame at 1/30 s made the
+   * spring take 3–5 s at 11–17 fps); small fixed sub-steps keep it stable, and a long pause counts as at most 0.25 s.
+   * Returns true while moving.
+   */
   step(dtSec: number): boolean {
     if (this.target === null) return false;
     const k = 90;
     const c = 2 * Math.sqrt(k);
-    const dt = Math.min(dtSec, 1 / 30);
-    const a = -k * (this.pos - this.target) - c * this.vel;
-    this.vel += a * dt;
-    this.pos += this.vel * dt;
+    for (let left = Math.min(Math.max(dtSec, 0), 0.25); left > 0; left -= 1 / 120) {
+      const dt = Math.min(left, 1 / 120);
+      const a = -k * (this.pos - this.target) - c * this.vel;
+      this.vel += a * dt;
+      this.pos += this.vel * dt;
+    }
     if (Math.abs(this.pos - this.target) < 0.001 && Math.abs(this.vel) < 0.01) {
       this.pos = this.target;
       this.vel = 0;
