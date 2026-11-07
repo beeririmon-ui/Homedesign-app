@@ -125,3 +125,77 @@
 2. **הכיתוב:** "מתוך הסיפור. בתמונה: האפשרות "…". זו לא תמונת מוצר." (בנוסח של frontend-dev, אבל שלושת החלקים חובה.)
 3. **באפשרות אחרת:** החיתוך יורד. במקומו בא מקום ריק בנייר השני, עם עיגול הגוון והשורה "אין עדיין צילום לאפשרות הזו". אסור להציג את האפשרות שבסיפור כאילו היא האפשרות שנבחרה.
 - **כשתקריב של G-ED.18 עובר,** הוא מחליף את החיתוך. החיתוך לא נשאר כתמונה שנייה.
+
+## (7) תשובות לשאלות של S4 · 2026-11-07
+> **הקלט:**
+> - `qa/reports/2026-11-07-site-track/s4/README.md`;
+> - `s4/colour-dictionary.md`;
+> - `data/story/story.json` (‏`names_he`, ‏`names_he_proposed`, הנקודות);
+> - הפריים `boho-A-fin6.png`.
+
+### ש1א, תשעת השמות של הבוהו: שישה מאושרים ושלושה משתנים
+| card_id | ההחלטה |
+| --- | --- |
+| `wall-decor-aliexpress-natural-raffia-woven-bohemian-763597` | **מאושר:** "קישוט קיר עגול מרפיה קלועה, טבעי" |
+| `wall-sconce-aliexpress-rattan-bamboo-wall-lamp-671943` | **מאושר:** "מנורת קיר, כדור במבוק קלוע על זרוע עץ". המוצר נמכר כיחידה, ובפריים יש שתיים. הקרדיט: "בתמונה: שתי יחידות." |
+| `cushions-cj-washed-cotton-frayed` | **מאושר:** "ציפית כרית כותנה רחוצה עם שוליים פרומים, חלודה" |
+| `cushions-cj-sandstone-chenille-flange` | **מאושר:** "ציפית כרית שניל עם שוליים שטוחים, זית" |
+| `sofa-cover-cj-washed-hemp-throw` | **משתנה ל"שמיכת קנבוס רחוצה, חום יוטה".** ב"יוטה טבעית" כגוון של שמיכת קנבוס, הלקוח קורא חומר שני |
+| `planter-zendrop-seagrass-belly-basket-45` | **משתנה ל"סל-עציץ בטן מקש ים".** "גדול" היא מידה, והמידה הולכת לקרדיט (§4): "קוטר 45, גובה 36". **לבדיקה של frontend-dev:** בתיקייה יש כרטיס `planter-zendrop-seagrass-belly-38x34`, ולא `…-basket-45`. צריך לוודא שהמזהה בנקודה מצביע על כרטיס קיים, באפשרות d45-h36. **ל-QA:** בפריים לכלי יש בסיס כהה. צריך לוודא מול צילום ה-SKU של d45-h36 שהבסיס הזה קיים במוצר |
+| `basket-cj-seagrass-belly-xl` | **מאושר:** "סל בטן מקש ים עם ידיות" |
+| `table-runner-aliexpress-boho-macrame-table-runners-263532` | **מאושר:** "ראנר מקרמה עם פס יוטה ופרנזים" |
+| `pouf-cj-cotton-knit-ball-cover` | **מאושר כשם:** "כיסוי פוף כדור סרוג מכותנה, טבעי". **חובה בקרדיט:** "בתמונה: עם מילוי. המילוי לא כלול." הפוף בפריים מלא, והמוצר הוא כיסוי בלבד |
+
+- **אחרי ההחלה** הרשימה `names_he_proposed` מתרוקנת.
+
+### ש1ב, חיתוך הטלפון של הבוהו, 0.42: מאושר
+- **מה בפנים:** ברוחב 0.45, החיתוך הוא u ‏0.195–0.645. בפנים האי של הספה: הכריות, השלישייה, מנורת הקיר הימנית, השולחן עם הראנר והקערה, ופסי האור על השטיח במרכז. זה רגע הגיבור (§3.3), והוא נשאר.
+- **מה בחוץ:** הדלתות, וילון הקנים, הפוף, הסל והעציץ. הם הקשר, ומופיעים ברשימה.
+- **למה לא ימינה:** הזזה ימינה מכניסה את הדלתות, אבל חותכת את הכרית השמאלית ואת קישוט הקיר. הספה נשברת.
+- **ל-QA, ב-G-ED.17:** קישוט הקיר (u כ-0.215) ומנורת הקיר הימנית קרובים לשפות החיתוך. אם הנקודה של אחד מהם לא עוברת 44×24 בטלפון, היא מוצגת בדסקטופ בלבד. החיתוך לא זז בגללה.
+
+### ש2, מילון הגוונים
+**הכלל:**
+- מילה ב-`colours_he` גוברת על התווית של הספק.
+- ערך בלי מילה לא נכנס לכותרת, וזו ברירת המחדל של frontend-dev, מאושרת.
+- **מידה, צורה וקודים לא הופכים לגוון.** למשל Small/Large, ‏Type A, ‏Indoor, ‏2style ו-C-3.
+- **הדפס ממוספר** (הדפסים, כריות פרחוניות): מקבל מילה רק באפשרות שבסיפור, כי את השאר לא ראיתי.
+- **"Large" או "Small" לפני גוון** יורדים, ונשאר הגוון.
+
+**המילים: חובה לכל אפשרות שמופיעה בפריים של היום, ולערכים שמשפיעים על כותרת בקרוב.**
+
+| card_id | ערך הספק | `colours_he` | הערה |
+| --- | --- | --- | --- |
+| `cushions-cj-knitted-chenille-bean-green` | 21 Camel Color | **טאופ** | **מבטל את "קאמל".** בצילום ה-SKU זה טאופ-אפרפר, ו-render-agent מרנדר לפי הצילום. גם `name_he` של הנקודה במודרני החם (story.json, ‏"…, קאמל") הופך ל"…, טאופ", וגם ה-alt ("בקאמל") הופך ל"בטאופ" |
+| `framed-art-aliexpress-minimal-geometric-triptych-prints` | הערך של `default_sku` | שיבולת שועל ופחם | 2 ו-3: בלי מילה |
+| `framed-art-aliexpress-frameless-minimalist-wall-art-631735` | הערך של `default_sku` | חום ושמנת | השאר: בלי מילה |
+| `cushions-aliexpress-farmhouse-floral-pillow-covers-166217` | 1 | ורוד חימר ומרווה | 2–8: בלי מילה |
+| `wall-decor-aliexpress-natural-raffia-woven-bohemian-763597` | הערך של `default_sku` | טבעי | |
+| `sofa-cover-cj-cotton-muslin-fringe` | Flax brown | חום פשתן | בפריים של המודרני החם |
+| `sofa-cover-cj-cotton-muslin-fringe` | Pecan | פקאן | סט B של המודרני החם |
+| `sofa-cover-cj-cotton-muslin-fringe` | Clay | חימר | |
+| `sofa-cover-cj-cotton-muslin-fringe` | Dark chestnut brown | חום ערמון | |
+| `sofa-cover-cj-cotton-muslin-fringe` | Curry | קארי | |
+| `sofa-cover-cj-cotton-muslin-fringe` | Cardamom, ‏Black Diamond | בלי מילה | לא ראיתי את הגוון |
+| `sofa-cover-cj-washed-hemp-throw` | Raw Jute Color | חום יוטה | בפריים של הבוהו |
+| `sofa-cover-cj-washed-hemp-throw` | Tea Green | ירוק תה | |
+| `sofa-cover-cj-washed-hemp-throw` | Dark German Gray | אפור כהה | |
+| `cushions-cj-washed-cotton-frayed` | rust-orange | חלודה | בבוהו נשארת המילה של הסיפור |
+| `cushions-cj-washed-cotton-frayed` | Ultimate Dark Gray | אפור כהה | |
+| `cushions-cj-washed-cotton-frayed` | Apricot Ice Cream | משמש | |
+| `cushions-cj-washed-cotton-frayed` | Waxing Yellow | צהוב דבש | |
+| `cushions-cj-washed-cotton-frayed` | Silt Green Fringe | ירוק טין | המילה Fringe יורדת, כי השוליים כבר בשם |
+| `cushions-cj-washed-cotton-frayed` | Dark Blue Fringe / Phantom Blue Fringe / Rose Red Fringe | כחול כהה / כחול אפרפר / אדום ורד | |
+| `cushions-cj-washed-cotton-frayed` | Rice Soup Jiao Fringe | בלי מילה | |
+| `cushions-cj-sandstone-chenille-flange` | Sandstone Chenille Green | זית | בפריים של הבוהו |
+| `cushions-cj-sandstone-chenille-flange` | Mimosa, ‏Senman, ‏Athena | בלי מילה | |
+| `bowl-cj-speckled-ivory-wide-bowl-21` | Large Natural Color / Small Size Natural Color | שנהב | המילה של הסיפור (בכפרי). בתנאי שזה ה-`default_sku`. אם לא, המילה הולכת לערך של ה-`default_sku` |
+| `bowl-cj-speckled-ivory-wide-bowl-21` | Large White / Small White | לבן | |
+| `bowl-cj-speckled-ivory-wide-bowl-21` | Palegreen | ירוק חיוור | |
+| `bowl-cj-speckled-ivory-wide-bowl-21` | Ginger Yellow | צהוב ג׳ינג׳ר | |
+| `bowl-cj-speckled-ivory-wide-bowl-21` | Rust Glaze | זיגוג חלודה | |
+| `bowl-cj-speckled-ivory-wide-bowl-21` | Lemon Yellow | צהוב לימון | |
+| `basket-cj-jute-rope-cylinder` | White Small / Medium / Large | לבן | ‏Small, ‏Medium ו-Large הם מידה, ונשארים בלי מילה. ‏"3 pieces" הוא סט (SET1), לא גוון |
+| `sill-vase-cj-cream-fluted-column-25` | הערך של `default_sku` | שמנת | השאר: בלי מילה |
+
+- **מה לא מקבל מילה:** כל השאר ברשימה של 125 נשאר בלי מילה בכוונה, כי אלה מידות, צורות, קודים או גוונים שלא ראיתי. כשאפשרות כזו תיכנס לפריים, היא מקבלת מילה לפני שהיא עולה.
