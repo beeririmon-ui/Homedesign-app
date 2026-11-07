@@ -386,9 +386,14 @@ def wm():
     kn = (wallk & (den > 0.3))[box]
     low = lin.copy()
     low[box] = harmonic(np.where(kn[..., None], wl[box], 0), kn, f=2, iters=3000)
-    # grain: the wall's own, from 40 rows below
-    G = np.clip(lin / np.maximum(nblur(lin, wallk.astype(np.float32), 2.0)[0], 1e-5), 0.85, 1.15)
-    wall = low * np.roll(G, -40, axis=0)
+    # grain: synthetic, matched to the plain wall beside the pendant (x 1180-1290, y 200-250; below lie the art frames)
+    ref = lin[200:250, 1180:1290]
+    hp = (ref / np.maximum(cv2.GaussianBlur(ref, (0, 0), 2.0), 1e-5)).mean(2)
+    sd = float(np.std(hp))
+    rng = np.random.default_rng(17)
+    nz = cv2.GaussianBlur(rng.standard_normal((H, W)).astype(np.float32), (0, 0), 0.8)
+    nz *= sd / max(float(nz.std()), 1e-6)
+    wall = low * (1 + nz)[..., None]
     out = lin.copy()
     zf = cv2.GaussianBlur(zone.astype(np.float32), (0, 0), 0.7) * zone
     out = out * (1 - zf[..., None]) + wall * zf[..., None]
@@ -401,7 +406,7 @@ def wm():
     rec.update(base="warm-modern-A-ed4.png", ring_pitch_px=D, rings_before=6, rings_after=5,
                rim_lines={"x": xs_m.tolist(), "ring4_bottom": c4_m.tolist(), "pendant_bottom": yb_m.tolist()},
                method="ring 5 taken out; ring 6 (from ring 5's rim line to the bottom) lifted 27 px behind ring 4's rim; the rest of the old "
-                      "rings 5-6 area plain wall (harmonic from the wall round the pendant, grain from 40 rows below)")
+                      "rings 5-6 area plain wall (harmonic from the wall round the pendant, grain matched to the plain wall beside it)")
     return rec
 
 
