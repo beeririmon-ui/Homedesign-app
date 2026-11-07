@@ -147,6 +147,8 @@ npm run dev        # בונה קטלוג ומדיה זמנית, מאפס D1 מק
 - **נקודות:** רק על מוצר ש-QA קבע "נאמן" (G-ED.5). בטלפון חיתוך 4:5 ברוחב מלא, ונקודה רק למוצר שהחלק הנראה שלו לפחות 44×24 CSS.
 - **"קנה את המראה":** דיאלוג מודאלי עם תמונת הכרטיס (מהמטמון של `assets:supplier`, בלי הורדה), קרדיט ומחיר. המחיר לפי `build-catalog.ts --products=…`, אותו מסלול תמחור כמו האתר. ההוספה לסל עוברת ל-mock בדפדפן (`web/src/test-page/story-cart.ts`, חוזה הסל של ה-API).
 - **הקוד:** `web/src/test-page/story.ts` ו-`story.css`, כניסה נפרדת של Vite. עמוד החדר לא טוען ממנו דבר.
+- **רשומות ה-QA:** `tools/lib/qa-frames.ts` קורא את שני המבנים (`final_test` ו-`frames.<key>.rows`; ‏`part1.frames.<key>` עם `state`, ‏`against` ו-`rows_changed`), ורשומה חדשה גוברת. רשימת הרשומות: `qa_records` ב-`story.json`.
+- **פריסה ציבורית:** `HD_PUBLIC=1 npm run build` משאיר בחוץ את `/test/` ו-`/test/story/`, ומוחק את `dist/test` ואת `dist/media/test` (TODO ב-`web/vite.config.ts`). בלי הדגל הם נבנים, לבדיקה.
 
 ## הנגן (G3.18, G6.9, 2026-11-03)
 

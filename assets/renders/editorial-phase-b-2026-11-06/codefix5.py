@@ -440,7 +440,7 @@ def mc_seams(a):
     lo_out, d_out = nblur(lin, outer.astype(np.float32), 4)
     ok = bnd & (d_in > 0.08) & (d_out > 0.15)
     ratio = np.ones_like(lin)
-    ratio[ok] = np.clip(lo_out[ok] / np.maximum(lo_in[ok], 1e-4), 0.8, 1.3)
+    ratio[ok] = np.clip(lo_out[ok] / np.maximum(lo_in[ok], 1e-4), 0.7, 1.6)
     rs, dr = nblur(ratio, ok.astype(np.float32), 6)
     _, labels = cv2.distanceTransformWithLabels((~ok).astype(np.uint8), cv2.DIST_L2, 5, labelType=cv2.DIST_LABEL_PIXEL)
     lab_y = np.zeros(labels.max() + 1, np.int32)
@@ -449,12 +449,32 @@ def mc_seams(a):
     lab_y[labels[zpos]] = zpos[0]
     lab_x[labels[zpos]] = zpos[1]
     ny, nx = lab_y[labels], lab_x[labels]
-    gain = np.where((dr[ny, nx] > 0.05)[..., None], rs[ny, nx], 1.0)
-    dnear = cv2.distanceTransform((~ok).astype(np.uint8), cv2.DIST_L2, 5)     # distance to the nearest usable boundary point
-    w = np.clip(1 - (dist - 1) / 48.0, 0, 1) * (dnear < 60)
+    gain0 = np.where((dr[ny, nx] > 0.05)[..., None], rs[ny, nx], 1.0)
+    # the gain field: a membrane (Laplace) of the log-ratio, fixed on the usable boundary points, fixed to 0 (gain 1) on the band's inner
+    # limit (48 px in), on the products and the protected areas; free elsewhere in the band (Jacobi at full size, from the nearest-point
+    # field). No polygon-shaped ramps where two edges meet.
+    band = mk & ~prod & ~prot & (dist <= 48)
+    Y0, Y1, X0, X1 = 1060, 1536, 990, 1680
+    Bd = band[Y0:Y1, X0:X1]
+    fixed1 = ok[Y0:Y1, X0:X1]
+    fixed0 = (mk & (dist > 48))[Y0:Y1, X0:X1] | ((prod | prot) & mk)[Y0:Y1, X0:X1]
+    u = np.log(np.clip(gain0[Y0:Y1, X0:X1], 0.5, 2.0)) * Bd[..., None]
+    vfix = np.log(np.clip(rs[Y0:Y1, X0:X1], 0.5, 2.0))
+    u = np.where(fixed1[..., None], vfix, u)
+    free = Bd & ~fixed1 & ~fixed0
+    nbm = (Bd | fixed1 | fixed0).astype(np.float32)
+    for _ in range(1500):
+        up = np.pad(u, ((1, 1), (1, 1), (0, 0)))
+        mp = np.pad(nbm, ((1, 1), (1, 1)))
+        num = (up[:-2, 1:-1] * mp[:-2, 1:-1, None] + up[2:, 1:-1] * mp[2:, 1:-1, None] + up[1:-1, :-2] * mp[1:-1, :-2, None]
+               + up[1:-1, 2:] * mp[1:-1, 2:, None])
+        den_ = (mp[:-2, 1:-1] + mp[2:, 1:-1] + mp[1:-1, :-2] + mp[1:-1, 2:])[..., None]
+        u = np.where(free[..., None], num / np.maximum(den_, 1), u)
+        u = np.where(fixed0[..., None], 0.0, u)
+    gain = np.ones_like(lin)
+    gain[Y0:Y1, X0:X1] = np.where(Bd[..., None] | fixed1[..., None], np.exp(u), 1.0)
     alpha_c = np.clip(0.5 + (dist - 0.5) / 5.0, 0, 1)
-    band = mk & ~prod & ~prot & (dist <= 49) & (dnear < 60)
-    g = 1 + (gain - 1) * (w * alpha_c * band)[..., None]
+    g = 1 + (gain - 1) * (alpha_c * band)[..., None]
     out = lin * g
     zone = band
     return l2s(out), zone, dict(boundary_px=int(ok.sum()), band_px=int(band.sum()), runner_x=[rx0, rx1],
@@ -567,8 +587,37 @@ def mc_bowl(a, prev_zone):
     valid = ~hole & ~prot & (yy < 1141) & (yy > 1040) & (xx > 940) & (xx < 1260)
     cands = [(dx, dy_) for dx in range(-20, 21, 4) for dy_ in range(-64, -17, 2)] + [(dx, dy_) for dx in range(-250, -79, 6) for dy_ in range(-6, 7, 2)]
     sofa_need = need & (yy < 1141)
-    fill, picks, offs, done = quilt(lin, sofa_need, valid, ~hole, cands, tile=16, margin=6)
-    fill = poisson_refine(fill, done, offs, ~hole, valid, iters=1200)
+    # three coherent patches (left, middle, right thirds), one shift each (the sofa just above or to the left, scored on the ring of
+    # known sofa round the part), then the gradient-domain blend: no 16 px tiles on the slub texture
+    fill = lin.copy()
+    offs = np.zeros((H, W, 2), np.int32)
+    ys_, xs_ = np.nonzero(sofa_need)
+    picks = []
+    cuts = np.linspace(xs_.min(), xs_.max() + 1, 4)
+    for k in range(3):
+        part = sofa_need & (xx >= cuts[k]) & (xx < cuts[k + 1])
+        if not part.any():
+            continue
+        py, px = np.nonzero(part)
+        ring = cv2.dilate(part.astype(np.uint8), np.ones((9, 9), np.uint8)).astype(bool) & valid
+        ry, rx = np.nonzero(ring)
+        best = None
+        for dx in range(-40, 41, 2):
+            for dy_ in range(-48, -15):
+                sy, sx = py + dy_, px + dx
+                if not valid[sy, sx].all():
+                    continue
+                e = ((lin[ry + dy_, rx + dx] - lin[ry, rx]) ** 2).sum(-1).mean()
+                if best is None or e < best[0]:
+                    best = (e, dx, dy_)
+        if best is None:
+            continue
+        _, dx, dy_ = best
+        fill[py, px] = lin[py + dy_, px + dx]
+        offs[part] = (dx, dy_)
+        picks.append((int(dx), int(dy_)))
+    done = sofa_need.copy()
+    fill = poisson_refine(fill, done, offs, ~hole, valid | sofa_need, iters=1500)
     table_need = need & (yy >= 1141)
     if table_need.any():
         tvalid = ~hole & ~prot & (yy >= 1141) & (yy < 1215) & (xx > 940) & (xx < 1222)
@@ -660,35 +709,59 @@ def mc_vase(a):
         wx = (src_x - sx0)[:, None]
         newc[y, 1870:2040] = lin[y, sx0] * (1 - wx) + lin[y, sx0 + 1] * wx
     # the top rows (the mouth, where the gypsophila stands in it) fade back to the original over 4 rows so the stems stay in the mouth
-    # the background: the strips old - new (grown 2 px), plus the base's shadow zone
+    # the background: the strips old - new (grown 2 px) and the old base's contact band (its shadow line goes with the old width)
     oldm = old_a > 0.01
     hole = cv2.dilate(oldm.astype(np.uint8), np.ones((5, 5), np.uint8)).astype(bool) & (yy >= y0v + 2) & (yy <= y1v + 4)
+    bl, br_ = float(el[-6:].min()), float(er[-6:].max())
+    hole |= (yy >= y1v - 8) & (yy <= y1v + 5) & (xx >= bl - 7) & (xx <= br_ + 7)
     need = hole & ~(new_a > 0.98)
-    # the mullion's right edge (white bar into the glass) read on the rows 522-538 just above the vase
-    mu = lin[522:538, 1990:2030].mean((0, 2))
-    edge = 1990 + int(np.argmax(-np.diff(cv2.GaussianBlur(mu.reshape(1, -1).astype(np.float32), (0, 0), 1.0)[0])))
-    fill = lin.copy()
-    # the mullion's edge columns (axis .. edge): straight down from rows 522-538 (mirror-tiled), above the window's bottom rail
+    # the mullion: the columns where the white bar is (most of the rows 470-535 bright and grey); its colour per column = the median of
+    # the brighter half there (the gypsophila's stems cross it); filled straight down to the window's bottom rail
     rail_y = 699
-    mcol = need & (xx > axis) & (xx <= edge + 1) & (yy < rail_y)
-    for x in range(int(axis), edge + 2):
-        yl = np.nonzero(mcol[:, x])[0]
-        if yl.size:
-            k = (yl - 538) % 32
-            ysrc = np.where(k < 16, 537 - k, 522 + (k - 16))
-            fill[yl, x] = lin[ysrc, x]
-    rest = need & ~mcol
-    valid = ~hole & box.copy()
-    valid = ~hole & (xx >= 1800) & (xx <= 2110) & (yy >= 520) & (yy <= 775)
-    left = rest & (xx < axis)
-    right = rest & (xx >= axis)
-    candL = [(dx, dy) for dx in range(-60, -13, 1) for dy in (-1, 0, 1)]
-    candR = [(dx, dy) for dx in range(14, 61, 1) for dy in (-1, 0, 1)]
-    fill, pL, oL, dL = quilt(fill, left, valid & (xx < axis), ~hole, candL, tile=12, margin=5)
-    fill, pR, oR, dR = quilt(fill, right, (valid & (xx > edge + 1)) | (valid & (yy >= rail_y)), ~hole | mcol, candR, tile=12, margin=5)
-    offs = np.where(dL[..., None], oL, oR)
-    done = dL | dR
-    fill = poisson_refine(fill, done, offs, (~hole) | mcol, valid, iters=1200)
+    ch_ = np.sqrt(A_ ** 2 + B_ ** 2)
+    bar = (L > 86) & (ch_ < 9)
+    frac = bar[470:536, 1960:2030].mean(0)
+    mcols = 1960 + np.nonzero(frac > 0.45)[0]
+    mx0, mx1 = (int(mcols.min()), int(mcols.max())) if mcols.size else (1988, 2010)
+    fill = lin.copy()
+    mcol = need & (xx >= mx0) & (xx <= mx1) & (yy < rail_y) & (yy > 548)
+    for x in range(mx0, mx1 + 1):
+        v = lin[470:536, x]
+        lv = L[470:536, x]
+        sel = lv >= np.percentile(lv, 50)
+        fill[mcol[:, x], x] = np.median(v[sel], 0)
+    # the rest: one coherent shift per part, rows kept (dy 0) so the muntin, the rail and the sill run on straight
+    valid = ~hole & (xx >= 1780) & (xx <= 2140) & (yy >= 520) & (yy <= 775)
+    parts = [("left", need & ~mcol & (xx < axis), list(range(-70, -13))),
+             ("right glass", need & ~mcol & (xx > mx1) & (yy < rail_y), list(range(14, 70))),
+             ("right below the rail", need & ~mcol & (xx >= axis) & (yy >= rail_y), list(range(14, 70))),
+             ("right of the axis, left of the mullion", need & ~mcol & (xx >= axis) & (xx < mx0) & (yy < rail_y), list(range(-180, -110)))]
+    offs = np.zeros((H, W, 2), np.int32)
+    done = np.zeros((H, W), bool)
+    picks = {}
+    for name, part, cds in parts:
+        if not part.any():
+            continue
+        py, px = np.nonzero(part)
+        ring = cv2.dilate(part.astype(np.uint8), np.ones((7, 7), np.uint8)).astype(bool) & valid
+        ry, rx = np.nonzero(ring)
+        best = None
+        for dx in cds:
+            sx = px + dx
+            if (sx < 0).any() or (sx >= W).any() or not valid[py, sx].all():
+                continue
+            e = ((lin[ry, np.clip(rx + dx, 0, W - 1)] - lin[ry, rx]) ** 2).sum(-1).mean() if ry.size else 0.0
+            if best is None or e < best[0]:
+                best = (e, dx)
+        if best is None:
+            continue
+        fill[py, px] = lin[py, px + best[1]]
+        offs[part] = (best[1], 0)
+        done |= part
+        picks[name] = int(best[1])
+    fill = poisson_refine(fill, done, offs, (~hole) | mcol, valid | done, iters=1500)
+    pL, pR = picks, {}
+    edge = mx1
     # the contact shadow: the old one is in the original base row band (it goes with the old width); the band under the new base gets
     # a shadow measured on the old one (its depth at the base's centre), the strips beside it are sill (copied above)
     base_row = y1v
@@ -706,7 +779,7 @@ def mc_vase(a):
     info = dict(vase_rows=[y0v, y1v], height_px=int(y1v - y0v + 1), width_px_before=round(float((er - el).max()), 1),
                 width_px_after=round(float((er - el).max() * K), 1), h_over_w_before=round((y1v - y0v + 1) / float((er - el).max()), 2),
                 h_over_w_after=round((y1v - y0v + 1) / float((er - el).max() * K), 2), axis_x=round(axis, 1), mullion_edge_x=edge,
-                strips_px=int(need.sum()), tiles=len(pL) + len(pR), contact_shadow_depth=round(sh_old, 3))
+                strips_px=int(need.sum()), shifts=pL, mullion_cols=[mx0, mx1], contact_shadow_depth=round(sh_old, 3))
     return l2s(out), zone, info
 
 
