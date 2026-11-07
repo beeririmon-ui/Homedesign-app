@@ -1,0 +1,2608 @@
+{
+ "report": "qa-agent: QA of the story-first prototype /test/story/",
+ "date": "2026-11-07",
+ "by": "qa-agent",
+ "brief": "briefs/qa-story-prototype-2026-11-07.md",
+ "rules": "new files only; no commit; no var2; no network beyond the local build (supplier images built --offline)",
+ "inputs": {
+  "gate": "docs/ops/quality-gate-g-ed-2026-11-07.md (+ .json)",
+  "fidelity": "qa/reports/2026-11-07-editorial-fin2-ed4-country.json (the record the page reads)",
+  "newer_fidelity": "qa/reports/2026-11-07-ged-codefix-mc1-clay.json (warm-modern-A-ed5 = final_test, pendant 5 rings = yes)",
+  "evidence": "qa/reports/2026-11-07-site-story-prototype/",
+  "hotspots": "site/tools/test-page/story-hotspots.json",
+  "frames": [
+   "assets/renders/editorial-phase-b-2026-11-06/nordic-A-ed4.png",
+   "assets/renders/editorial-phase-b-2026-11-06/nordic-B-fin.png",
+   "assets/renders/editorial-phase-b-2026-11-06/warm-modern-A-ed4.png"
+  ],
+  "designer_notes": "docs/proposals/story-page-design-notes-2026-11-07.md"
+ },
+ "verdict": {
+  "show_to_owner_as_prototype": "yes, after two small code fixes (0 tokens, frontend-dev)",
+  "must_before_showing": [
+   "Nordic A, desktop: the pendant's dot sits under the top band (1280 and 1440): elementFromPoint returns the header (p#mag-run at 1280), the dot is drawn on the running head and cannot be clicked. Fix: v0 0.20 -> 0.10 (designer note 2) AND the pendant point to v ~0.12 (the lower shade), or keep dots out of the band in keepMarksInView; re-run the hit test",
+   "Nordic B, phone: the throw's phone dot (built u 0.7725, v 0.70 = frame x 2101, y 1071) sits on the lower edge of the fold, on the armchair's boucle seat in the phone view. Set a manual phone point on the fold (frame u 0.765, v 0.677). With the designer's crop 0.62 the page's own rule would put it on the oak arm post (x 2128): a manual point is needed either way"
+  ],
+  "recommended_before_showing": [
+   "warm modern: swap ed4 ('almost') for ed5, now 'final test' in qa/reports/2026-11-07-ged-codefix-mc1-clay (5 rings, the pendant gets a dot; only the ring region changed, so the points hold). make-story-page reads only the older record's shape (final_test, frames.rows): it needs the newer record merged. G-ED section 3 says an 'almost' frame is not shown to the owner; the prototype brief allowed it with a draft mark: manager's call. master-designer's written G-ED.10/13 verdict on ed5 is still open",
+   "product names from the designer's table (e.g. 'כריות ושמיכה (סט) בוקלה' on a single cushion, 'ראנר פשתן, טבעי' on the sage runner); the runner's SKU 33x183 vs 33x122 (designer)",
+   "warm modern, phone: put the sconce dot on the right sconce (almost whole in the crop: x ~2037-2139 vs the crop edge 2135, ~31x49 CSS) rather than the half-cut left one (28.7x48.8)",
+   "Nordic A throw, desktop: the dot is 19 px under the throw's top edge; v 0.62 -> ~0.66"
+  ],
+  "not_blocking_for_the_prototype_but_blocking_for_the_site": [
+   "G-ED.18 fails at style level: Nordic 8 of 16 dotted products are below 1.5% in every frame (pendant, sconces, bowl, chenille, candle holders, boucle, planter, vase); warm modern 3 of 9 (sconces, vase, bowl). They need layer-2 close-ups",
+   "phone coverage across the Nordic story: sconces (too small), planter, basket (out of the crop in both frames) and the corn-husk round have no phone dot anywhere; desktop: the pendant (under the band) and the rug (B hidden by the cover crop; A 'partly') have no usable dot",
+   "the rug: 'whole' needs a master-designer ruling or the close-up (EDR2 already says close-up)",
+   "/test/ ships in web/dist: exclude it from any public deploy",
+   "hotspots.spec writes review screenshots into the tracked assets/qa/hotspots/ (the failing 01:42 run's PNGs went into WIP commit 780e3803)"
+  ]
+ },
+ "criteria": {
+  "1_ged17_ged18_every_hotspot": "done: 32 points (13 + 7 + 12); data/ged17-18.json",
+  "2_only_yes_carry_a_dot": "pass: 28 dots in the built HTML, all on 'yes' rows; the 4 'partly' (rug A, curtain B, WM pendant, WM rug) are listed without a dot, with the caption",
+  "3_draft_and_test_route_only": "pass: 3 chips 'טיוטה / בדיקה' (WM '· כמעט מוכן') visible at 390 and 1280; noindex,nofollow; no page in web/dist links to /test/story/ or loads /media/test/story/; sitemap has no /test; no source outside web/src/test-page references the frames",
+  "4_numbers_spot_checked": "pass: weight, LCP, contrast, axe confirmed (commands below)",
+  "5_e2e_failure_cause": "confirmed, with a correction: it starts at slots 1.7 (665e4521, 2026-11-05), not 1.8",
+  "6_verdict": "yes as a prototype after the two fixes"
+ },
+ "ged17": {
+  "frames": {
+   "nordic-A": {
+    "crop_px": [
+     938,
+     2162
+    ],
+    "proposed_crop_px": [
+     1020,
+     2244
+    ],
+    "phone_390_min_pair_css": 57.8,
+    "desk_1280_min_pair_css": 85.0,
+    "rows": [
+     {
+      "item": "nordic-A-1",
+      "product": "pendant-cj-silk-ribbed-pumpkin-40",
+      "fidelity": "yes",
+      "dot_on_page": true,
+      "box_frontend": [
+       0.447,
+       0.555,
+       0.02,
+       0.14
+      ],
+      "box_qa": [
+       0.447,
+       0.555,
+       0.04,
+       0.137
+      ],
+      "box_note": "the shade only (the cord is not the product to touch): y 62-209",
+      "frontend_box_covers_qa_box": 1.0,
+      "desktop_dot_on_product": "yes",
+      "desktop_1280": {
+       "shown": true,
+       "hit_own_button": false,
+       "under_top_band": true,
+       "hit": "p#mag-run.mag-run"
+      },
+      "desktop_1440": {
+       "shown": true,
+       "hit_own_button": false,
+       "under_top_band": true,
+       "hit": "header#mag-head.mag-head.st-head"
+      },
+      "phone": {
+       "crop_u": [
+        0.3449,
+        0.7949
+       ],
+       "in_crop": true,
+       "visible_part_css": [
+        93.6,
+        47.3
+       ],
+       "visible_part_note": null,
+       "size_ok": true,
+       "second_of_pair_css": null,
+       "sharp": true,
+       "dot_built": {
+        "u": 0.3448,
+        "v": 0.085
+       },
+       "dot_on_product": "yes",
+       "hit_own_button_390": true,
+       "G-ED.17": "pass",
+       "with_proposed_crop": {
+        "crop_u": [
+         0.375,
+         0.825
+        ],
+        "visible_part_css": [
+         93.6,
+         47.3
+        ],
+        "size_ok": true,
+        "phone_dot_uv": [
+         0.5,
+         0.085
+        ]
+       }
+      }
+     },
+     {
+      "item": "nordic-A-2",
+      "product": "framed-art-aliexpress-minimal-geometric-triptych-prints",
+      "fidelity": "yes",
+      "dot_on_page": true,
+      "box_frontend": [
+       0.46,
+       0.71,
+       0.21,
+       0.4
+      ],
+      "box_qa": [
+       0.46,
+       0.71,
+       0.21,
+       0.4
+      ],
+      "box_note": "agrees with frontend-dev at 100%",
+      "frontend_box_covers_qa_box": 1.0,
+      "desktop_dot_on_product": "yes",
+      "desktop_1280": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": false,
+       "hit": null
+      },
+      "desktop_1440": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": false,
+       "hit": null
+      },
+      "phone": {
+       "crop_u": [
+        0.3449,
+        0.7949
+       ],
+       "in_crop": true,
+       "visible_part_css": [
+        216.7,
+        92.6
+       ],
+       "visible_part_note": null,
+       "size_ok": true,
+       "second_of_pair_css": null,
+       "sharp": true,
+       "dot_built": {
+        "u": 0.5225,
+        "v": 0.355
+       },
+       "dot_on_product": "yes",
+       "hit_own_button_390": true,
+       "G-ED.17": "pass",
+       "with_proposed_crop": {
+        "crop_u": [
+         0.375,
+         0.825
+        ],
+        "visible_part_css": [
+         216.7,
+         92.6
+        ],
+        "size_ok": true,
+        "phone_dot_uv": [
+         0.58,
+         0.355
+        ]
+       }
+      }
+     },
+     {
+      "item": "nordic-A-3",
+      "product": "accent-sconces-cj-travertine-block-updown-8x16",
+      "fidelity": "yes",
+      "dot_on_page": true,
+      "box_frontend": [
+       0.404,
+       0.418,
+       0.28,
+       0.33
+      ],
+      "box_qa": [
+       0.404,
+       0.418,
+       0.28,
+       0.33
+      ],
+      "box_note": "agrees with frontend-dev at 100%",
+      "frontend_box_covers_qa_box": 1.0,
+      "desktop_dot_on_product": "yes",
+      "desktop_1280": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": false,
+       "hit": null
+      },
+      "desktop_1440": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": false,
+       "hit": null
+      },
+      "phone": {
+       "crop_u": [
+        0.3449,
+        0.7949
+       ],
+       "in_crop": true,
+       "visible_part_css": [
+        12.1,
+        24.4
+       ],
+       "visible_part_note": null,
+       "size_ok": false,
+       "second_of_pair_css": [
+        13.1,
+        27.1
+       ],
+       "sharp": true,
+       "dot_built": null,
+       "dot_on_product": null,
+       "hit_own_button_390": null,
+       "G-ED.17": "no dot: below 44x24",
+       "with_proposed_crop": {
+        "crop_u": [
+         0.375,
+         0.825
+        ],
+        "visible_part_css": [
+         12.1,
+         24.4
+        ],
+        "size_ok": false,
+        "phone_dot_uv": [
+         0.411,
+         0.305
+        ]
+       }
+      }
+     },
+     {
+      "item": "nordic-A-4",
+      "product": "sofa-cover-cj-cotton-muslin-fringe",
+      "fidelity": "yes",
+      "dot_on_page": true,
+      "box_frontend": [
+       0.64,
+       0.87,
+       0.54,
+       0.77
+      ],
+      "box_qa": [
+       0.6415,
+       0.875,
+       0.546,
+       0.794
+      ],
+      "box_note": "the fringe reaches y ~1215 and the arm drape x ~2380: frontend-dev box cuts ~37 px of fringe",
+      "frontend_box_covers_qa_box": 0.884,
+      "desktop_dot_on_product": "yes, near the top edge of the throw (19 px below it, the charcoal cushion just above)",
+      "desktop_1280": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": false,
+       "hit": null
+      },
+      "desktop_1440": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": false,
+       "hit": null
+      },
+      "phone": {
+       "crop_u": [
+        0.3449,
+        0.7949
+       ],
+       "in_crop": true,
+       "visible_part_css": [
+        132.9,
+        120.9
+       ],
+       "visible_part_note": null,
+       "size_ok": true,
+       "second_of_pair_css": null,
+       "sharp": true,
+       "dot_built": {
+        "u": 0.9337,
+        "v": 0.62
+       },
+       "dot_on_product": "yes, same point",
+       "hit_own_button_390": true,
+       "G-ED.17": "pass",
+       "with_proposed_crop": {
+        "crop_u": [
+         0.375,
+         0.825
+        ],
+        "visible_part_css": [
+         159.0,
+         120.9
+        ],
+        "size_ok": true,
+        "phone_dot_uv": [
+         0.765,
+         0.62
+        ]
+       }
+      }
+     },
+     {
+      "item": "nordic-A-5",
+      "product": "cushions-cj-linen-look-charcoal",
+      "fidelity": "yes",
+      "dot_on_page": true,
+      "box_frontend": [
+       0.665,
+       0.79,
+       0.46,
+       0.6
+      ],
+      "box_qa": [
+       0.665,
+       0.79,
+       0.46,
+       0.6
+      ],
+      "box_note": "agrees with frontend-dev at 100%",
+      "frontend_box_covers_qa_box": 1.0,
+      "desktop_dot_on_product": "yes",
+      "desktop_1280": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": false,
+       "hit": null
+      },
+      "desktop_1440": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": false,
+       "hit": null
+      },
+      "phone": {
+       "crop_u": [
+        0.3449,
+        0.7949
+       ],
+       "in_crop": true,
+       "visible_part_css": [
+        108.3,
+        68.2
+       ],
+       "visible_part_note": null,
+       "size_ok": true,
+       "second_of_pair_css": null,
+       "sharp": true,
+       "dot_built": {
+        "u": 0.8448,
+        "v": 0.525
+       },
+       "dot_on_product": "yes",
+       "hit_own_button_390": true,
+       "G-ED.17": "pass",
+       "with_proposed_crop": {
+        "crop_u": [
+         0.375,
+         0.825
+        ],
+        "visible_part_css": [
+         108.3,
+         68.2
+        ],
+        "size_ok": true,
+        "phone_dot_uv": [
+         0.725,
+         0.525
+        ]
+       }
+      }
+     },
+     {
+      "item": "nordic-A-6",
+      "product": "bowl-cj-glutinous-white-belly-bowl-21",
+      "fidelity": "yes",
+      "dot_on_page": true,
+      "box_frontend": [
+       0.668,
+       0.74,
+       0.685,
+       0.745
+      ],
+      "box_qa": [
+       0.668,
+       0.74,
+       0.685,
+       0.745
+      ],
+      "box_note": "agrees with frontend-dev at 100%",
+      "frontend_box_covers_qa_box": 1.0,
+      "desktop_dot_on_product": "yes",
+      "desktop_1280": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": false,
+       "hit": null
+      },
+      "desktop_1440": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": false,
+       "hit": null
+      },
+      "phone": {
+       "crop_u": [
+        0.3449,
+        0.7949
+       ],
+       "in_crop": true,
+       "visible_part_css": [
+        62.4,
+        29.2
+       ],
+       "visible_part_note": null,
+       "size_ok": true,
+       "second_of_pair_css": null,
+       "sharp": true,
+       "dot_built": {
+        "u": 0.7959,
+        "v": 0.712
+       },
+       "dot_on_product": "yes",
+       "hit_own_button_390": true,
+       "G-ED.17": "pass",
+       "with_proposed_crop": {
+        "crop_u": [
+         0.375,
+         0.825
+        ],
+        "visible_part_css": [
+         62.4,
+         29.2
+        ],
+        "size_ok": true,
+        "phone_dot_uv": [
+         0.703,
+         0.712
+        ]
+       }
+      }
+     },
+     {
+      "item": "nordic-A-7",
+      "product": "cushions-cj-knitted-chenille-bean-green",
+      "fidelity": "yes",
+      "dot_on_page": true,
+      "box_frontend": [
+       0.465,
+       0.56,
+       0.485,
+       0.6
+      ],
+      "box_qa": [
+       0.465,
+       0.56,
+       0.485,
+       0.6
+      ],
+      "box_note": "agrees with frontend-dev at 100%",
+      "frontend_box_covers_qa_box": 1.0,
+      "desktop_dot_on_product": "yes",
+      "desktop_1280": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": false,
+       "hit": null
+      },
+      "desktop_1440": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": false,
+       "hit": null
+      },
+      "phone": {
+       "crop_u": [
+        0.3449,
+        0.7949
+       ],
+       "in_crop": true,
+       "visible_part_css": [
+        82.3,
+        56.1
+       ],
+       "visible_part_note": null,
+       "size_ok": true,
+       "second_of_pair_css": null,
+       "sharp": true,
+       "dot_built": {
+        "u": 0.3781,
+        "v": 0.545
+       },
+       "dot_on_product": "yes",
+       "hit_own_button_390": true,
+       "G-ED.17": "pass",
+       "with_proposed_crop": {
+        "crop_u": [
+         0.375,
+         0.825
+        ],
+        "visible_part_css": [
+         82.3,
+         56.1
+        ],
+        "size_ok": true,
+        "phone_dot_uv": [
+         0.515,
+         0.545
+        ]
+       }
+      }
+     },
+     {
+      "item": "nordic-A-8",
+      "product": "candle-holders-cj-travertine-pedestal",
+      "fidelity": "yes",
+      "dot_on_page": true,
+      "box_frontend": [
+       0.44,
+       0.505,
+       0.58,
+       0.71
+      ],
+      "box_qa": [
+       0.44,
+       0.505,
+       0.58,
+       0.71
+      ],
+      "box_note": "agrees with frontend-dev at 100%",
+      "frontend_box_covers_qa_box": 1.0,
+      "desktop_dot_on_product": "yes",
+      "desktop_1280": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": false,
+       "hit": null
+      },
+      "desktop_1440": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": false,
+       "hit": null
+      },
+      "phone": {
+       "crop_u": [
+        0.3449,
+        0.7949
+       ],
+       "in_crop": true,
+       "visible_part_css": [
+        56.3,
+        63.4
+       ],
+       "visible_part_note": null,
+       "size_ok": true,
+       "second_of_pair_css": null,
+       "sharp": true,
+       "dot_built": {
+        "u": 0.2492,
+        "v": 0.66
+       },
+       "dot_on_product": "yes",
+       "hit_own_button_390": true,
+       "G-ED.17": "pass",
+       "with_proposed_crop": {
+        "crop_u": [
+         0.375,
+         0.825
+        ],
+        "visible_part_css": [
+         56.3,
+         63.4
+        ],
+        "size_ok": true,
+        "phone_dot_uv": [
+         0.457,
+         0.66
+        ]
+       }
+      }
+     },
+     {
+      "item": "nordic-A-9",
+      "product": "cushions-cj-boucle-teddy",
+      "fidelity": "yes",
+      "dot_on_page": true,
+      "box_frontend": [
+       0.39,
+       0.495,
+       0.465,
+       0.59
+      ],
+      "box_qa": [
+       0.39,
+       0.495,
+       0.465,
+       0.59
+      ],
+      "box_note": "agrees with frontend-dev at 100%",
+      "frontend_box_covers_qa_box": 1.0,
+      "desktop_dot_on_product": "yes",
+      "desktop_1280": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": false,
+       "hit": null
+      },
+      "desktop_1440": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": false,
+       "hit": null
+      },
+      "phone": {
+       "crop_u": [
+        0.3449,
+        0.7949
+       ],
+       "in_crop": true,
+       "visible_part_css": [
+        91.0,
+        60.9
+       ],
+       "visible_part_note": null,
+       "size_ok": true,
+       "second_of_pair_css": null,
+       "sharp": true,
+       "dot_built": {
+        "u": 0.1781,
+        "v": 0.53
+       },
+       "dot_on_product": "yes",
+       "hit_own_button_390": true,
+       "G-ED.17": "pass",
+       "with_proposed_crop": {
+        "crop_u": [
+         0.375,
+         0.825
+        ],
+        "visible_part_css": [
+         91.0,
+         60.9
+        ],
+        "size_ok": true,
+        "phone_dot_uv": [
+         0.425,
+         0.53
+        ]
+       }
+      }
+     },
+     {
+      "item": "nordic-A-10",
+      "product": "planter-cj-seagrass-belly",
+      "fidelity": "yes",
+      "dot_on_page": true,
+      "box_frontend": [
+       0.265,
+       0.322,
+       0.515,
+       0.665
+      ],
+      "box_qa": [
+       0.265,
+       0.322,
+       0.515,
+       0.665
+      ],
+      "box_note": "agrees with frontend-dev at 100%",
+      "frontend_box_covers_qa_box": 1.0,
+      "desktop_dot_on_product": "yes",
+      "desktop_1280": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": false,
+       "hit": null
+      },
+      "desktop_1440": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": false,
+       "hit": null
+      },
+      "phone": {
+       "crop_u": [
+        0.3449,
+        0.7949
+       ],
+       "in_crop": false,
+       "visible_part_css": null,
+       "visible_part_note": null,
+       "size_ok": false,
+       "second_of_pair_css": null,
+       "sharp": true,
+       "dot_built": null,
+       "dot_on_product": null,
+       "hit_own_button_390": null,
+       "G-ED.17": "no dot: outside the 4:5 crop",
+       "with_proposed_crop": {
+        "crop_u": [
+         0.375,
+         0.825
+        ],
+        "visible_part_css": null,
+        "size_ok": false,
+        "phone_dot_uv": null
+       }
+      }
+     },
+     {
+      "item": "nordic-A-11",
+      "product": "basket-cj-jute-rope-cylinder",
+      "fidelity": "yes",
+      "dot_on_page": true,
+      "box_frontend": [
+       0.213,
+       0.278,
+       0.55,
+       0.685
+      ],
+      "box_qa": [
+       0.213,
+       0.278,
+       0.55,
+       0.685
+      ],
+      "box_note": "agrees with frontend-dev at 100%",
+      "frontend_box_covers_qa_box": 1.0,
+      "desktop_dot_on_product": "yes",
+      "desktop_1280": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": false,
+       "hit": null
+      },
+      "desktop_1440": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": false,
+       "hit": null
+      },
+      "phone": {
+       "crop_u": [
+        0.3449,
+        0.7949
+       ],
+       "in_crop": false,
+       "visible_part_css": null,
+       "visible_part_note": null,
+       "size_ok": false,
+       "second_of_pair_css": null,
+       "sharp": true,
+       "dot_built": null,
+       "dot_on_product": null,
+       "hit_own_button_390": null,
+       "G-ED.17": "no dot: outside the 4:5 crop",
+       "with_proposed_crop": {
+        "crop_u": [
+         0.375,
+         0.825
+        ],
+        "visible_part_css": null,
+        "size_ok": false,
+        "phone_dot_uv": null
+       }
+      }
+     },
+     {
+      "item": "nordic-A-12",
+      "product": "rug-cj-braided-wool-natural",
+      "fidelity": "partly",
+      "dot_on_page": false,
+      "box_frontend": [
+       0.13,
+       1,
+       0.73,
+       1
+      ],
+      "box_qa": [
+       0.13,
+       1,
+       0.73,
+       1
+      ],
+      "box_note": "agrees with frontend-dev at 100%",
+      "frontend_box_covers_qa_box": 1.0,
+      "desktop_dot_on_product": null,
+      "desktop_1280": null,
+      "desktop_1440": null,
+      "phone": null
+     },
+     {
+      "item": "nordic-A-13",
+      "product": "table-runner-cj-linen-look-sage-fringe",
+      "fidelity": "yes",
+      "dot_on_page": true,
+      "box_frontend": [
+       0.395,
+       0.56,
+       0.67,
+       0.9
+      ],
+      "box_qa": [
+       0.395,
+       0.56,
+       0.67,
+       0.9
+      ],
+      "box_note": "agrees with frontend-dev at 100%",
+      "frontend_box_covers_qa_box": 1.0,
+      "desktop_dot_on_product": "yes",
+      "desktop_1280": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": false,
+       "hit": null
+      },
+      "desktop_1440": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": false,
+       "hit": null
+      },
+      "phone": {
+       "crop_u": [
+        0.3449,
+        0.7949
+       ],
+       "in_crop": true,
+       "visible_part_css": [
+        143.0,
+        112.1
+       ],
+       "visible_part_note": null,
+       "size_ok": true,
+       "second_of_pair_css": null,
+       "sharp": true,
+       "dot_built": {
+        "u": 0.2448,
+        "v": 0.8
+       },
+       "dot_on_product": "yes",
+       "hit_own_button_390": true,
+       "G-ED.17": "pass",
+       "with_proposed_crop": {
+        "crop_u": [
+         0.375,
+         0.825
+        ],
+        "visible_part_css": [
+         143.0,
+         112.1
+        ],
+        "size_ok": true,
+        "phone_dot_uv": [
+         0.455,
+         0.8
+        ]
+       }
+      }
+     }
+    ]
+   },
+   "nordic-B": {
+    "crop_px": [
+     1020,
+     2244
+    ],
+    "proposed_crop_px": [
+     1074,
+     2298
+    ],
+    "phone_390_min_pair_css": 139.0,
+    "desk_1280_min_pair_css": 272.9,
+    "rows": [
+     {
+      "item": "nordic-B-1",
+      "product": "wall-decor-cj-corn-husk-round-38",
+      "fidelity": "yes",
+      "dot_on_page": true,
+      "box_frontend": [
+       0.05,
+       0.188,
+       0.05,
+       0.28
+      ],
+      "box_qa": [
+       0.05,
+       0.188,
+       0.05,
+       0.28
+      ],
+      "box_note": "agrees with frontend-dev at 100%",
+      "frontend_box_covers_qa_box": 1.0,
+      "desktop_dot_on_product": "yes",
+      "desktop_1280": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": true,
+       "hit": null
+      },
+      "desktop_1440": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": false,
+       "hit": null
+      },
+      "phone": {
+       "crop_u": [
+        0.375,
+        0.825
+       ],
+       "in_crop": false,
+       "visible_part_css": null,
+       "visible_part_note": null,
+       "size_ok": false,
+       "second_of_pair_css": null,
+       "sharp": true,
+       "dot_built": null,
+       "dot_on_product": null,
+       "hit_own_button_390": null,
+       "G-ED.17": "no dot: outside the 4:5 crop",
+       "with_proposed_crop": {
+        "crop_u": [
+         0.3949,
+         0.8449
+        ],
+        "visible_part_css": null,
+        "size_ok": false,
+        "phone_dot_uv": null
+       }
+      }
+     },
+     {
+      "item": "nordic-B-2",
+      "product": "vase-aliexpress-vintage-distressed-clay-vase-589009",
+      "fidelity": "yes",
+      "dot_on_page": true,
+      "box_frontend": [
+       0.55,
+       0.592,
+       0.355,
+       0.5
+      ],
+      "box_qa": [
+       0.55,
+       0.592,
+       0.355,
+       0.5
+      ],
+      "box_note": "agrees with frontend-dev at 100%",
+      "frontend_box_covers_qa_box": 1.0,
+      "desktop_dot_on_product": "yes",
+      "desktop_1280": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": false,
+       "hit": null
+      },
+      "desktop_1440": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": false,
+       "hit": null
+      },
+      "phone": {
+       "crop_u": [
+        0.375,
+        0.825
+       ],
+       "in_crop": true,
+       "visible_part_css": [
+        36.4,
+        70.7
+       ],
+       "visible_part_note": null,
+       "size_ok": true,
+       "second_of_pair_css": null,
+       "sharp": true,
+       "dot_built": {
+        "u": 0.4378,
+        "v": 0.44
+       },
+       "dot_on_product": "yes",
+       "hit_own_button_390": true,
+       "G-ED.17": "pass",
+       "with_proposed_crop": {
+        "crop_u": [
+         0.3949,
+         0.8449
+        ],
+        "visible_part_css": [
+         36.4,
+         70.7
+        ],
+        "size_ok": true,
+        "phone_dot_uv": [
+         0.572,
+         0.44
+        ]
+       }
+      }
+     },
+     {
+      "item": "nordic-B-3",
+      "product": "curtains-aliexpress-linen-blend-s-fold-180502",
+      "fidelity": "partly",
+      "dot_on_page": false,
+      "box_frontend": [
+       0.245,
+       0.39,
+       0,
+       0.89
+      ],
+      "box_qa": [
+       0.245,
+       0.39,
+       0,
+       0.89
+      ],
+      "box_note": "agrees with frontend-dev at 100%",
+      "frontend_box_covers_qa_box": 1.0,
+      "desktop_dot_on_product": null,
+      "desktop_1280": null,
+      "desktop_1440": null,
+      "phone": null
+     },
+     {
+      "item": "nordic-B-4",
+      "product": "sofa-cover-cj-cotton-muslin-fringe",
+      "fidelity": "yes",
+      "dot_on_page": true,
+      "box_frontend": [
+       0.72,
+       0.885,
+       0.57,
+       0.92
+      ],
+      "box_qa": [
+       0.717,
+       0.877,
+       0.569,
+       0.918
+      ],
+      "box_note": "agrees",
+      "frontend_box_covers_qa_box": 0.978,
+      "desktop_dot_on_product": "yes, on the drape over the arm",
+      "desktop_1280": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": false,
+       "hit": null
+      },
+      "desktop_1440": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": false,
+       "hit": null
+      },
+      "phone": {
+       "crop_u": [
+        0.375,
+        0.825
+       ],
+       "in_crop": true,
+       "visible_part_css": [
+        93.7,
+        170.5
+       ],
+       "visible_part_note": "the fold on the seat (x 1950-2125, y 1000-1075) and the drape over the arm up to the crop edge (x 2125-2244)",
+       "size_ok": true,
+       "second_of_pair_css": null,
+       "sharp": true,
+       "dot_built": {
+        "u": 0.8833,
+        "v": 0.7
+       },
+       "dot_on_product": "EDGE: on the lower edge of the fold, where it meets the boucle seat (x 2101, y 1071); move to the middle of the fold (u 0.765, v 0.677) or onto the drape",
+       "hit_own_button_390": true,
+       "G-ED.17": "pass, dot on the edge",
+       "with_proposed_crop": {
+        "crop_u": [
+         0.3949,
+         0.8449
+        ],
+        "visible_part_css": [
+         110.9,
+         170.5
+        ],
+        "size_ok": true,
+        "phone_dot_uv": [
+         0.7824,
+         0.7
+        ]
+       }
+      }
+     },
+     {
+      "item": "nordic-B-5",
+      "product": "rug-cj-braided-wool-natural",
+      "fidelity": "yes",
+      "dot_on_page": true,
+      "box_frontend": [
+       0.22,
+       1,
+       0.83,
+       1
+      ],
+      "box_qa": [
+       0.22,
+       1,
+       0.83,
+       1
+      ],
+      "box_note": "agrees with frontend-dev at 100%",
+      "frontend_box_covers_qa_box": 1.0,
+      "desktop_dot_on_product": "yes (on desktop the cover crop hides it)",
+      "desktop_1280": {
+       "shown": false
+      },
+      "desktop_1440": {
+       "shown": false
+      },
+      "phone": {
+       "crop_u": [
+        0.375,
+        0.825
+       ],
+       "in_crop": true,
+       "visible_part_css": [
+        390.0,
+        82.9
+       ],
+       "visible_part_note": null,
+       "size_ok": true,
+       "second_of_pair_css": null,
+       "sharp": true,
+       "dot_built": {
+        "u": 0.5889,
+        "v": 0.955
+       },
+       "dot_on_product": "yes",
+       "hit_own_button_390": true,
+       "G-ED.17": "pass",
+       "with_proposed_crop": {
+        "crop_u": [
+         0.3949,
+         0.8449
+        ],
+        "visible_part_css": [
+         390.0,
+         82.9
+        ],
+        "size_ok": true,
+        "phone_dot_uv": [
+         0.64,
+         0.955
+        ]
+       }
+      }
+     },
+     {
+      "item": "nordic-B-6",
+      "product": "magazine-holder-cj-felt-log-basket",
+      "fidelity": "yes",
+      "dot_on_page": true,
+      "box_frontend": [
+       0.437,
+       0.585,
+       0.65,
+       0.895
+      ],
+      "box_qa": [
+       0.437,
+       0.585,
+       0.65,
+       0.895
+      ],
+      "box_note": "agrees with frontend-dev at 100%",
+      "frontend_box_covers_qa_box": 1.0,
+      "desktop_dot_on_product": "yes",
+      "desktop_1280": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": false,
+       "hit": null
+      },
+      "desktop_1440": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": false,
+       "hit": null
+      },
+      "phone": {
+       "crop_u": [
+        0.375,
+        0.825
+       ],
+       "in_crop": true,
+       "visible_part_css": [
+        128.3,
+        119.4
+       ],
+       "visible_part_note": null,
+       "size_ok": true,
+       "second_of_pair_css": null,
+       "sharp": true,
+       "dot_built": {
+        "u": 0.2889,
+        "v": 0.8
+       },
+       "dot_on_product": "yes",
+       "hit_own_button_390": true,
+       "G-ED.17": "pass",
+       "with_proposed_crop": {
+        "crop_u": [
+         0.3949,
+         0.8449
+        ],
+        "visible_part_css": [
+         128.3,
+         119.4
+        ],
+        "size_ok": true,
+        "phone_dot_uv": [
+         0.505,
+         0.8
+        ]
+       }
+      }
+     },
+     {
+      "item": "nordic-B-7",
+      "product": "basket-cj-jute-rope-cylinder",
+      "fidelity": "yes",
+      "dot_on_page": true,
+      "box_frontend": [
+       0.098,
+       0.222,
+       0.68,
+       0.97
+      ],
+      "box_qa": [
+       0.098,
+       0.222,
+       0.68,
+       0.97
+      ],
+      "box_note": "agrees with frontend-dev at 100%",
+      "frontend_box_covers_qa_box": 1.0,
+      "desktop_dot_on_product": "yes",
+      "desktop_1280": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": false,
+       "hit": null
+      },
+      "desktop_1440": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": false,
+       "hit": null
+      },
+      "phone": {
+       "crop_u": [
+        0.375,
+        0.825
+       ],
+       "in_crop": false,
+       "visible_part_css": null,
+       "visible_part_note": null,
+       "size_ok": false,
+       "second_of_pair_css": null,
+       "sharp": true,
+       "dot_built": null,
+       "dot_on_product": null,
+       "hit_own_button_390": null,
+       "G-ED.17": "no dot: outside the 4:5 crop",
+       "with_proposed_crop": {
+        "crop_u": [
+         0.3949,
+         0.8449
+        ],
+        "visible_part_css": null,
+        "size_ok": false,
+        "phone_dot_uv": null
+       }
+      }
+     }
+    ]
+   },
+   "warm-modern-A": {
+    "crop_px": [
+     911,
+     2135
+    ],
+    "proposed_crop_px": [
+     911,
+     2135
+    ],
+    "phone_390_min_pair_css": 56.1,
+    "desk_1280_min_pair_css": 107.1,
+    "rows": [
+     {
+      "item": "warm-modern-A-1",
+      "product": "floor-lamp-cj-pleated-walnut-stem-158",
+      "fidelity": "yes",
+      "dot_on_page": true,
+      "box_frontend": [
+       0.885,
+       0.965,
+       0.19,
+       0.74
+      ],
+      "box_qa": [
+       0.885,
+       0.982,
+       0.19,
+       0.742
+      ],
+      "box_note": "the shade reaches x ~2671: frontend-dev box cuts ~45 px (~17%) of the shade on the right",
+      "frontend_box_covers_qa_box": 0.822,
+      "desktop_dot_on_product": "yes",
+      "desktop_1280": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": false,
+       "hit": null
+      },
+      "desktop_1440": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": false,
+       "hit": null
+      },
+      "phone": {
+       "crop_u": [
+        0.3349,
+        0.7849
+       ],
+       "in_crop": false,
+       "visible_part_css": null,
+       "visible_part_note": null,
+       "size_ok": false,
+       "second_of_pair_css": null,
+       "sharp": true,
+       "dot_built": null,
+       "dot_on_product": null,
+       "hit_own_button_390": null,
+       "G-ED.17": "no dot: outside the 4:5 crop",
+       "with_proposed_crop": {
+        "crop_u": [
+         0.3349,
+         0.7849
+        ],
+        "visible_part_css": null,
+        "size_ok": false,
+        "phone_dot_uv": null
+       }
+      }
+     },
+     {
+      "item": "warm-modern-A-2",
+      "product": "pendant-cj-tiered-fabric-drum",
+      "fidelity": "partly",
+      "dot_on_page": false,
+      "box_frontend": [
+       0.475,
+       0.595,
+       0,
+       0.155
+      ],
+      "box_qa": [
+       0.475,
+       0.595,
+       0,
+       0.155
+      ],
+      "box_note": "agrees with frontend-dev at 100%",
+      "frontend_box_covers_qa_box": 1.0,
+      "desktop_dot_on_product": null,
+      "desktop_1280": null,
+      "desktop_1440": null,
+      "phone": null
+     },
+     {
+      "item": "warm-modern-A-3",
+      "product": "framed-art-aliexpress-frameless-minimalist-wall-art-631735",
+      "fidelity": "yes",
+      "dot_on_page": true,
+      "box_frontend": [
+       0.39,
+       0.72,
+       0.17,
+       0.415
+      ],
+      "box_qa": [
+       0.39,
+       0.72,
+       0.17,
+       0.415
+      ],
+      "box_note": "agrees with frontend-dev at 100%",
+      "frontend_box_covers_qa_box": 1.0,
+      "desktop_dot_on_product": "yes",
+      "desktop_1280": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": false,
+       "hit": null
+      },
+      "desktop_1440": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": false,
+       "hit": null
+      },
+      "phone": {
+       "crop_u": [
+        0.3349,
+        0.7849
+       ],
+       "in_crop": true,
+       "visible_part_css": [
+        286.0,
+        119.4
+       ],
+       "visible_part_note": null,
+       "size_ok": true,
+       "second_of_pair_css": null,
+       "sharp": true,
+       "dot_built": {
+        "u": 0.4779,
+        "v": 0.3
+       },
+       "dot_on_product": "yes",
+       "hit_own_button_390": true,
+       "G-ED.17": "pass",
+       "with_proposed_crop": {
+        "crop_u": [
+         0.3349,
+         0.7849
+        ],
+        "visible_part_css": [
+         286.0,
+         119.4
+        ],
+        "size_ok": true,
+        "phone_dot_uv": [
+         0.55,
+         0.3
+        ]
+       }
+      }
+     },
+     {
+      "item": "warm-modern-A-4",
+      "product": "accent-sconces-aliexpress-travertine-cylinder-walnut-choice",
+      "fidelity": "yes",
+      "dot_on_page": true,
+      "box_frontend": [
+       0.332,
+       0.368,
+       0.23,
+       0.33
+      ],
+      "box_qa": [
+       0.332,
+       0.368,
+       0.23,
+       0.33
+      ],
+      "box_note": "agrees with frontend-dev at 100%",
+      "frontend_box_covers_qa_box": 1.0,
+      "desktop_dot_on_product": "yes, on the travertine cylinder",
+      "desktop_1280": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": false,
+       "hit": null
+      },
+      "desktop_1440": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": false,
+       "hit": null
+      },
+      "phone": {
+       "crop_u": [
+        0.3349,
+        0.7849
+       ],
+       "in_crop": true,
+       "visible_part_css": [
+        28.7,
+        48.8
+       ],
+       "visible_part_note": null,
+       "size_ok": true,
+       "second_of_pair_css": null,
+       "sharp": true,
+       "dot_built": {
+        "u": 0.059,
+        "v": 0.275
+       },
+       "dot_on_product": "yes, on the walnut plate right of the cylinder",
+       "hit_own_button_390": true,
+       "G-ED.17": "pass",
+       "with_proposed_crop": {
+        "crop_u": [
+         0.3349,
+         0.7849
+        ],
+        "visible_part_css": [
+         28.7,
+         48.8
+        ],
+        "size_ok": true,
+        "phone_dot_uv": [
+         0.3615,
+         0.275
+        ]
+       }
+      }
+     },
+     {
+      "item": "warm-modern-A-5",
+      "product": "cushions-cj-boucle-teddy",
+      "fidelity": "yes",
+      "dot_on_page": true,
+      "box_frontend": [
+       0.72,
+       0.835,
+       0.445,
+       0.61
+      ],
+      "box_qa": [
+       0.72,
+       0.835,
+       0.445,
+       0.61
+      ],
+      "box_note": "agrees with frontend-dev at 100%",
+      "frontend_box_covers_qa_box": 1.0,
+      "desktop_dot_on_product": "yes",
+      "desktop_1280": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": false,
+       "hit": null
+      },
+      "desktop_1440": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": false,
+       "hit": null
+      },
+      "phone": {
+       "crop_u": [
+        0.3349,
+        0.7849
+       ],
+       "in_crop": true,
+       "visible_part_css": [
+        56.3,
+        80.4
+       ],
+       "visible_part_note": null,
+       "size_ok": true,
+       "second_of_pair_css": null,
+       "sharp": true,
+       "dot_built": {
+        "u": 0.9279,
+        "v": 0.53
+       },
+       "dot_on_product": "yes",
+       "hit_own_button_390": true,
+       "G-ED.17": "pass",
+       "with_proposed_crop": {
+        "crop_u": [
+         0.3349,
+         0.7849
+        ],
+        "visible_part_css": [
+         56.3,
+         80.4
+        ],
+        "size_ok": true,
+        "phone_dot_uv": [
+         0.7525,
+         0.53
+        ]
+       }
+      }
+     },
+     {
+      "item": "warm-modern-A-6",
+      "product": "vase-cj-textured-white-stoneware",
+      "fidelity": "yes",
+      "dot_on_page": true,
+      "box_frontend": [
+       0.665,
+       0.72,
+       0.55,
+       0.72
+      ],
+      "box_qa": [
+       0.665,
+       0.72,
+       0.55,
+       0.72
+      ],
+      "box_note": "agrees with frontend-dev at 100%",
+      "frontend_box_covers_qa_box": 1.0,
+      "desktop_dot_on_product": "yes",
+      "desktop_1280": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": false,
+       "hit": null
+      },
+      "desktop_1440": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": false,
+       "hit": null
+      },
+      "phone": {
+       "crop_u": [
+        0.3349,
+        0.7849
+       ],
+       "in_crop": true,
+       "visible_part_css": [
+        47.7,
+        82.9
+       ],
+       "visible_part_note": null,
+       "size_ok": true,
+       "second_of_pair_css": null,
+       "sharp": true,
+       "dot_built": {
+        "u": 0.7891,
+        "v": 0.64
+       },
+       "dot_on_product": "yes",
+       "hit_own_button_390": true,
+       "G-ED.17": "pass",
+       "with_proposed_crop": {
+        "crop_u": [
+         0.3349,
+         0.7849
+        ],
+        "visible_part_css": [
+         47.7,
+         82.9
+        ],
+        "size_ok": true,
+        "phone_dot_uv": [
+         0.69,
+         0.64
+        ]
+       }
+      }
+     },
+     {
+      "item": "warm-modern-A-7",
+      "product": "bowl-cj-matte-black-bowl-20",
+      "fidelity": "yes",
+      "dot_on_page": true,
+      "box_frontend": [
+       0.502,
+       0.602,
+       0.65,
+       0.73
+      ],
+      "box_qa": [
+       0.502,
+       0.602,
+       0.65,
+       0.73
+      ],
+      "box_note": "agrees with frontend-dev at 100%",
+      "frontend_box_covers_qa_box": 1.0,
+      "desktop_dot_on_product": "yes",
+      "desktop_1280": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": false,
+       "hit": null
+      },
+      "desktop_1440": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": false,
+       "hit": null
+      },
+      "phone": {
+       "crop_u": [
+        0.3349,
+        0.7849
+       ],
+       "in_crop": true,
+       "visible_part_css": [
+        86.7,
+        39.0
+       ],
+       "visible_part_note": null,
+       "size_ok": true,
+       "second_of_pair_css": null,
+       "sharp": true,
+       "dot_built": {
+        "u": 0.4779,
+        "v": 0.675
+       },
+       "dot_on_product": "yes",
+       "hit_own_button_390": true,
+       "G-ED.17": "pass",
+       "with_proposed_crop": {
+        "crop_u": [
+         0.3349,
+         0.7849
+        ],
+        "visible_part_css": [
+         86.7,
+         39.0
+        ],
+        "size_ok": true,
+        "phone_dot_uv": [
+         0.55,
+         0.675
+        ]
+       }
+      }
+     },
+     {
+      "item": "warm-modern-A-8",
+      "product": "cushions-cj-knitted-chenille-bean-green",
+      "fidelity": "yes",
+      "dot_on_page": true,
+      "box_frontend": [
+       0.378,
+       0.485,
+       0.455,
+       0.6
+      ],
+      "box_qa": [
+       0.378,
+       0.485,
+       0.455,
+       0.6
+      ],
+      "box_note": "agrees with frontend-dev at 100%",
+      "frontend_box_covers_qa_box": 1.0,
+      "desktop_dot_on_product": "yes",
+      "desktop_1280": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": false,
+       "hit": null
+      },
+      "desktop_1440": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": false,
+       "hit": null
+      },
+      "phone": {
+       "crop_u": [
+        0.3349,
+        0.7849
+       ],
+       "in_crop": true,
+       "visible_part_css": [
+        92.7,
+        70.7
+       ],
+       "visible_part_note": null,
+       "size_ok": true,
+       "second_of_pair_css": null,
+       "sharp": true,
+       "dot_built": {
+        "u": 0.2113,
+        "v": 0.53
+       },
+       "dot_on_product": "yes",
+       "hit_own_button_390": true,
+       "G-ED.17": "pass",
+       "with_proposed_crop": {
+        "crop_u": [
+         0.3349,
+         0.7849
+        ],
+        "visible_part_css": [
+         92.7,
+         70.7
+        ],
+        "size_ok": true,
+        "phone_dot_uv": [
+         0.43,
+         0.53
+        ]
+       }
+      }
+     },
+     {
+      "item": "warm-modern-A-9",
+      "product": "candle-holders-cj-travertine-pedestal",
+      "fidelity": "yes",
+      "dot_on_page": true,
+      "box_frontend": [
+       0.405,
+       0.485,
+       0.565,
+       0.755
+      ],
+      "box_qa": [
+       0.405,
+       0.485,
+       0.565,
+       0.755
+      ],
+      "box_note": "agrees with frontend-dev at 100%",
+      "frontend_box_covers_qa_box": 1.0,
+      "desktop_dot_on_product": "yes",
+      "desktop_1280": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": false,
+       "hit": null
+      },
+      "desktop_1440": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": false,
+       "hit": null
+      },
+      "phone": {
+       "crop_u": [
+        0.3349,
+        0.7849
+       ],
+       "in_crop": true,
+       "visible_part_css": [
+        69.3,
+        92.6
+       ],
+       "visible_part_note": null,
+       "size_ok": true,
+       "second_of_pair_css": null,
+       "sharp": true,
+       "dot_built": {
+        "u": 0.2113,
+        "v": 0.7
+       },
+       "dot_on_product": "yes",
+       "hit_own_button_390": true,
+       "G-ED.17": "pass",
+       "with_proposed_crop": {
+        "crop_u": [
+         0.3349,
+         0.7849
+        ],
+        "visible_part_css": [
+         69.3,
+         92.6
+        ],
+        "size_ok": true,
+        "phone_dot_uv": [
+         0.43,
+         0.7
+        ]
+       }
+      }
+     },
+     {
+      "item": "warm-modern-A-10",
+      "product": "cushions-cj-boucle-teddy",
+      "fidelity": "yes",
+      "dot_on_page": true,
+      "box_frontend": [
+       0.305,
+       0.395,
+       0.445,
+       0.6
+      ],
+      "box_qa": [
+       0.305,
+       0.395,
+       0.445,
+       0.6
+      ],
+      "box_note": "agrees with frontend-dev at 100%",
+      "frontend_box_covers_qa_box": 1.0,
+      "desktop_dot_on_product": "yes",
+      "desktop_1280": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": false,
+       "hit": null
+      },
+      "desktop_1440": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": false,
+       "hit": null
+      },
+      "phone": {
+       "crop_u": [
+        0.3349,
+        0.7849
+       ],
+       "in_crop": true,
+       "visible_part_css": [
+        52.1,
+        75.6
+       ],
+       "visible_part_note": null,
+       "size_ok": true,
+       "second_of_pair_css": null,
+       "sharp": true,
+       "dot_built": {
+        "u": 0.0667,
+        "v": 0.535
+       },
+       "dot_on_product": "yes",
+       "hit_own_button_390": true,
+       "G-ED.17": "pass",
+       "with_proposed_crop": {
+        "crop_u": [
+         0.3349,
+         0.7849
+        ],
+        "visible_part_css": [
+         52.1,
+         75.6
+        ],
+        "size_ok": true,
+        "phone_dot_uv": [
+         0.365,
+         0.535
+        ]
+       }
+      }
+     },
+     {
+      "item": "warm-modern-A-11",
+      "product": "sofa-cover-cj-cotton-muslin-fringe",
+      "fidelity": "yes",
+      "dot_on_page": true,
+      "box_frontend": [
+       0.235,
+       0.37,
+       0.5,
+       0.82
+      ],
+      "box_qa": [
+       0.235,
+       0.37,
+       0.5,
+       0.82
+      ],
+      "box_note": "agrees with frontend-dev at 100%",
+      "frontend_box_covers_qa_box": 1.0,
+      "desktop_dot_on_product": "yes",
+      "desktop_1280": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": false,
+       "hit": null
+      },
+      "desktop_1440": {
+       "shown": true,
+       "hit_own_button": true,
+       "under_top_band": false,
+       "hit": null
+      },
+      "phone": {
+       "crop_u": [
+        0.3349,
+        0.7849
+       ],
+       "in_crop": true,
+       "visible_part_css": [
+        29.3,
+        89.2
+       ],
+       "visible_part_note": "only the right edge of the drape is in the crop",
+       "size_ok": true,
+       "second_of_pair_css": null,
+       "sharp": true,
+       "dot_built": {
+        "u": 0.059,
+        "v": 0.66
+       },
+       "dot_on_product": "yes, ~20 px inside the right edge of the drape",
+       "hit_own_button_390": true,
+       "G-ED.17": "pass",
+       "with_proposed_crop": {
+        "crop_u": [
+         0.3349,
+         0.7849
+        ],
+        "visible_part_css": [
+         30.4,
+         89.2
+        ],
+        "size_ok": true,
+        "phone_dot_uv": [
+         0.3615,
+         0.66
+        ]
+       }
+      }
+     },
+     {
+      "item": "warm-modern-A-12",
+      "product": "rug-cj-braided-wool-natural",
+      "fidelity": "partly",
+      "dot_on_page": false,
+      "box_frontend": [
+       0.15,
+       1,
+       0.79,
+       1
+      ],
+      "box_qa": [
+       0.15,
+       1,
+       0.79,
+       1
+      ],
+      "box_note": "agrees with frontend-dev at 100%",
+      "frontend_box_covers_qa_box": 1.0,
+      "desktop_dot_on_product": null,
+      "desktop_1280": null,
+      "desktop_1440": null,
+      "phone": null
+     }
+    ]
+   }
+  },
+  "sconce_nordic_A": "confirmed: the left sconce (the point) 12.1 x 24.4 CSS; the right one of the pair 13.1 x 27.1 CSS; both below 44 x 24. No other in-crop dotted product is below. Narrowest that pass: WM sconce 28.7 x 48.8, WM throw in-crop 29 x 89, Nordic A bowl 62 x 29, Nordic B vase 36 x 71",
+  "overlap": "none: phone 390 closest pair 56 CSS (WM chenille / white boucle), 58 CSS (Nordic A throw / charcoal); desktop 1280 closest 85 CSS; no 46x46 targets overlap",
+  "frame_size_note": "frames are 2720x1530 (not 2736x1536): the 4:5 crop is 1224 px, 0.3186 CSS per frame px; 44 CSS = 138 px, 24 CSS = 75 px"
+ },
+ "ged18": {
+  "nordic": {
+   "products_with_dot": 16,
+   "pass": 7,
+   "rows": {
+    "pendant-cj-silk-ribbed-pumpkin-40": {
+     "appearances": [
+      {
+       "frame": "nordic-A",
+       "area_pct_bbox": 1.05,
+       "sharp": true
+      }
+     ],
+     "best_pct_bbox": 1.05,
+     "status": "fail: below 1.5% in every frame of the set, needs a layer-2 close-up",
+     "pass": false,
+     "note": ""
+    },
+    "framed-art-aliexpress-minimal-geometric-triptych-prints": {
+     "appearances": [
+      {
+       "frame": "nordic-A",
+       "area_pct_bbox": 4.75,
+       "sharp": true
+      }
+     ],
+     "best_pct_bbox": 4.75,
+     "status": "pass",
+     "pass": true,
+     "note": ""
+    },
+    "accent-sconces-cj-travertine-block-updown-8x16": {
+     "appearances": [
+      {
+       "frame": "nordic-A",
+       "area_pct_bbox": 0.07,
+       "sharp": true
+      }
+     ],
+     "best_pct_bbox": 0.07,
+     "status": "fail: below 1.5% in every frame of the set, needs a layer-2 close-up",
+     "pass": false,
+     "note": ""
+    },
+    "sofa-cover-cj-cotton-muslin-fringe": {
+     "appearances": [
+      {
+       "frame": "nordic-A",
+       "area_pct_bbox": 5.79,
+       "sharp": true
+      },
+      {
+       "frame": "nordic-B",
+       "area_pct_bbox": 5.58,
+       "sharp": true
+      }
+     ],
+     "best_pct_bbox": 5.79,
+     "status": "pass",
+     "pass": true,
+     "note": ""
+    },
+    "cushions-cj-linen-look-charcoal": {
+     "appearances": [
+      {
+       "frame": "nordic-A",
+       "area_pct_bbox": 1.75,
+       "sharp": true
+      }
+     ],
+     "best_pct_bbox": 1.75,
+     "status": "pass",
+     "pass": true,
+     "note": ""
+    },
+    "bowl-cj-glutinous-white-belly-bowl-21": {
+     "appearances": [
+      {
+       "frame": "nordic-A",
+       "area_pct_bbox": 0.43,
+       "sharp": true
+      }
+     ],
+     "best_pct_bbox": 0.43,
+     "status": "fail: below 1.5% in every frame of the set, needs a layer-2 close-up",
+     "pass": false,
+     "note": ""
+    },
+    "cushions-cj-knitted-chenille-bean-green": {
+     "appearances": [
+      {
+       "frame": "nordic-A",
+       "area_pct_bbox": 1.09,
+       "sharp": true
+      }
+     ],
+     "best_pct_bbox": 1.09,
+     "status": "fail: below 1.5% in every frame of the set, needs a layer-2 close-up",
+     "pass": false,
+     "note": ""
+    },
+    "candle-holders-cj-travertine-pedestal": {
+     "appearances": [
+      {
+       "frame": "nordic-A",
+       "area_pct_bbox": 0.84,
+       "sharp": true
+      }
+     ],
+     "best_pct_bbox": 0.84,
+     "status": "fail: below 1.5% in every frame of the set, needs a layer-2 close-up",
+     "pass": false,
+     "note": ""
+    },
+    "cushions-cj-boucle-teddy": {
+     "appearances": [
+      {
+       "frame": "nordic-A",
+       "area_pct_bbox": 1.31,
+       "sharp": true
+      }
+     ],
+     "best_pct_bbox": 1.31,
+     "status": "fail: below 1.5% in every frame of the set, needs a layer-2 close-up",
+     "pass": false,
+     "note": ""
+    },
+    "planter-cj-seagrass-belly": {
+     "appearances": [
+      {
+       "frame": "nordic-A",
+       "area_pct_bbox": 0.85,
+       "sharp": true
+      }
+     ],
+     "best_pct_bbox": 0.85,
+     "status": "fail: below 1.5% in every frame of the set, needs a layer-2 close-up",
+     "pass": false,
+     "note": "not whole: the jute basket covers its left side and the sofa arm its right"
+    },
+    "basket-cj-jute-rope-cylinder": {
+     "appearances": [
+      {
+       "frame": "nordic-A",
+       "area_pct_bbox": 0.88,
+       "sharp": true
+      },
+      {
+       "frame": "nordic-B",
+       "area_pct_bbox": 3.6,
+       "sharp": true
+      }
+     ],
+     "best_pct_bbox": 3.6,
+     "status": "pass",
+     "pass": true,
+     "note": ""
+    },
+    "table-runner-cj-linen-look-sage-fringe": {
+     "appearances": [
+      {
+       "frame": "nordic-A",
+       "area_pct_bbox": 3.79,
+       "sharp": true
+      }
+     ],
+     "best_pct_bbox": 3.79,
+     "status": "pass",
+     "pass": true,
+     "note": ""
+    },
+    "wall-decor-cj-corn-husk-round-38": {
+     "appearances": [
+      {
+       "frame": "nordic-B",
+       "area_pct_bbox": 3.17,
+       "sharp": true
+      }
+     ],
+     "best_pct_bbox": 3.17,
+     "status": "pass",
+     "pass": true,
+     "note": ""
+    },
+    "vase-aliexpress-vintage-distressed-clay-vase-589009": {
+     "appearances": [
+      {
+       "frame": "nordic-B",
+       "area_pct_bbox": 0.61,
+       "sharp": true
+      }
+     ],
+     "best_pct_bbox": 0.61,
+     "status": "fail: below 1.5% in every frame of the set, needs a layer-2 close-up",
+     "pass": false,
+     "note": ""
+    },
+    "rug-cj-braided-wool-natural": {
+     "appearances": [
+      {
+       "frame": "nordic-B",
+       "area_pct_bbox": 13.26,
+       "sharp": true
+      }
+     ],
+     "best_pct_bbox": 13.26,
+     "status": "open: size and sharpness pass, \"whole\" needs a master-designer ruling or a close-up",
+     "pass": false,
+     "note": "not whole: cut by the frame edges (as any rug in a wide frame)"
+    },
+    "magazine-holder-cj-felt-log-basket": {
+     "appearances": [
+      {
+       "frame": "nordic-B",
+       "area_pct_bbox": 3.63,
+       "sharp": true
+      }
+     ],
+     "best_pct_bbox": 3.63,
+     "status": "pass",
+     "pass": true,
+     "note": ""
+    }
+   }
+  },
+  "warm-modern": {
+   "products_with_dot": 9,
+   "pass": 6,
+   "rows": {
+    "floor-lamp-cj-pleated-walnut-stem-158": {
+     "appearances": [
+      {
+       "frame": "warm-modern-A",
+       "area_pct_bbox": 5.35,
+       "sharp": true
+      }
+     ],
+     "best_pct_bbox": 5.35,
+     "status": "pass",
+     "pass": true,
+     "note": ""
+    },
+    "framed-art-aliexpress-frameless-minimalist-wall-art-631735": {
+     "appearances": [
+      {
+       "frame": "warm-modern-A",
+       "area_pct_bbox": 8.08,
+       "sharp": true
+      }
+     ],
+     "best_pct_bbox": 8.08,
+     "status": "pass",
+     "pass": true,
+     "note": ""
+    },
+    "accent-sconces-aliexpress-travertine-cylinder-walnut-choice": {
+     "appearances": [
+      {
+       "frame": "warm-modern-A",
+       "area_pct_bbox": 0.36,
+       "sharp": true
+      }
+     ],
+     "best_pct_bbox": 0.36,
+     "status": "fail: below 1.5% in every frame of the set, needs a layer-2 close-up",
+     "pass": false,
+     "note": ""
+    },
+    "cushions-cj-boucle-teddy": {
+     "appearances": [
+      {
+       "frame": "warm-modern-A",
+       "area_pct_bbox": 1.9,
+       "sharp": true
+      },
+      {
+       "frame": "warm-modern-A",
+       "area_pct_bbox": 1.4,
+       "sharp": true
+      }
+     ],
+     "best_pct_bbox": 1.9,
+     "status": "pass",
+     "pass": true,
+     "note": ""
+    },
+    "vase-cj-textured-white-stoneware": {
+     "appearances": [
+      {
+       "frame": "warm-modern-A",
+       "area_pct_bbox": 0.93,
+       "sharp": true
+      }
+     ],
+     "best_pct_bbox": 0.93,
+     "status": "fail: below 1.5% in every frame of the set, needs a layer-2 close-up",
+     "pass": false,
+     "note": ""
+    },
+    "bowl-cj-matte-black-bowl-20": {
+     "appearances": [
+      {
+       "frame": "warm-modern-A",
+       "area_pct_bbox": 0.8,
+       "sharp": true
+      }
+     ],
+     "best_pct_bbox": 0.8,
+     "status": "fail: below 1.5% in every frame of the set, needs a layer-2 close-up",
+     "pass": false,
+     "note": ""
+    },
+    "cushions-cj-knitted-chenille-bean-green": {
+     "appearances": [
+      {
+       "frame": "warm-modern-A",
+       "area_pct_bbox": 1.55,
+       "sharp": true
+      }
+     ],
+     "best_pct_bbox": 1.55,
+     "status": "pass",
+     "pass": true,
+     "note": ""
+    },
+    "candle-holders-cj-travertine-pedestal": {
+     "appearances": [
+      {
+       "frame": "warm-modern-A",
+       "area_pct_bbox": 1.52,
+       "sharp": true
+      }
+     ],
+     "best_pct_bbox": 1.52,
+     "status": "pass",
+     "pass": true,
+     "note": ""
+    },
+    "sofa-cover-cj-cotton-muslin-fringe": {
+     "appearances": [
+      {
+       "frame": "warm-modern-A",
+       "area_pct_bbox": 4.32,
+       "sharp": true
+      }
+     ],
+     "best_pct_bbox": 4.32,
+     "status": "pass",
+     "pass": true,
+     "note": ""
+    }
+   }
+  }
+ },
+ "spot_checks": {
+  "first_load_kb": {
+   "claimed": {
+    "phone_400_dpr1": 168.5,
+    "phone_400_dpr3": 275.5,
+    "desk_1280_dpr1": 212.0
+   },
+   "measured_bodies_text_gzip": {
+    "phone_400_dpr1": 168.3,
+    "phone_400_dpr3": 275.3,
+    "phone_390_dpr3": 276.4,
+    "desk_1280_dpr1": 211.9
+   },
+   "measured_on_wire_with_headers": {
+    "phone_400_dpr1": 187.6,
+    "phone_400_dpr3": 294.6,
+    "phone_390_dpr3": 296.4,
+    "desk_1280_dpr1": 231.1
+   },
+   "verdict": "pass (within 0.2 KB; ~19 KB of response headers on the wire); far below 3 MB"
+  },
+  "lcp_throttled_ms": {
+   "claimed": 1136,
+   "phone_400_dpr1": {
+    "median": 1136,
+    "max": 1668,
+    "runs": [
+     1136,
+     1668,
+     848,
+     1668,
+     1056
+    ]
+   },
+   "phone_390_dpr3": {
+    "median": 1256,
+    "max": 1648,
+    "runs": [
+     1648,
+     1328,
+     1132,
+     1184,
+     1256
+    ]
+   },
+   "conditions": "latency 150 ms, 4 Mbit/s, CPU x4, cache off; Chromium headless + SwiftShader (a floor, not a phone)",
+   "verdict": "pass (all 10 runs <= 1.67 s, threshold 2.5 s)"
+  },
+  "contrast": {
+   "claimed_min": 6.27,
+   "on_paper_min": 6.27,
+   "draft_chip_glyph_box": {
+    "min": 8.9
+   },
+   "desktop_top_band_nordic_A_min": 7.19,
+   "verdict": "pass"
+  },
+  "axe": {
+   "claimed": "0 violations, 6 states",
+   "measured": {
+    "phone_390": {
+     "rest": [],
+     "sheet_open": [],
+     "cart_open": []
+    },
+    "desk_1280": {
+     "rest": [],
+     "sheet_open": [],
+     "cart_open": []
+    }
+   },
+   "incomplete": {
+    "phone_390": [
+     "color-contrast x3"
+    ],
+    "desk_1280": [
+     "color-contrast x8"
+    ]
+   },
+   "wcag22aa_info": {
+    "phone_390": {
+     "violations": []
+    },
+    "desk_1280": {
+     "violations": []
+    }
+   },
+   "specs": "e2e/story.spec.ts 8/8 (axe at 1280 and 400 inside); a11y project 12/12",
+   "verdict": "pass"
+  }
+ },
+ "e2e_failure": {
+  "test": "e2e/hotspots.spec.ts 'marks and outlines at 1280 px': magazine-holder mark is off its product (reproduced; 400 passes)",
+  "cause": "The room engine places a mark at the scene anchor of the temporary M0 1.1 lines (site/tools/temp/living-room.nordic.json -> .generated/scene.living-room.nordic.json), else at the slot's own hotspot (web/src/components/RoomExperience.tsx anchorOf). The holder is 'not present in the temporary image' (no anchor, no outline). Since slots 1.7 (665e4521, 2026-11-05, M0S2) the slot has a visible M0 1.2 point; 1.8 (31db44ce) moved it to (0.378, 0.92). So at 1280 a mark shows at (456, 658) over a 1.1 image with no holder, and the spec finds no polygon. At 400 the mark is off-screen and hidden. The temporary lines were last changed 2026-10-19 (39cf3152).",
+  "frontend_dev_said": "slots 1.8, temporary M0 lines not updated: right in substance; the failure starts at 1.7",
+  "story_related": false,
+  "fix": "frontend-dev: show a room-engine mark only when the temporary scene has the product (anchor/outline, temp visible != false), or move the engine to the M0 1.2 lines; also a visible bug today: a 'magazine holder' mark floats over the rug at 1280"
+ },
+ "commands_run": [
+  "cd /home/user/homedesign-app/site; export WRANGLER_SEND_METRICS=false",
+  "npm run catalog  # exit 0",
+  "npm run assets:temp  # exit 0, 'temp media up to date'",
+  "npx tsx tools/supplier-images.ts --offline  # exit 0; instead of npm run assets:supplier, which would download the 11 missing supplier photos",
+  "npm run test:page  # exit 0",
+  "npm run test:story  # exit 0; same summary as frontend-dev: 32 points, 22 for sale, 3 not sold now, 7 unpriced, 11 without a card photo; no overlap warning",
+  "npm run build -w @hd/web  # exit 0",
+  "npm run build -w @hd/api  # exit 0 (wrangler --dry-run)",
+  "npm run budget  # exit 0, all ok (room JS 75.4 / 80 KB, room first load 567.8 KB)",
+  "npm run preview  # background, wrangler dev --local, 127.0.0.1:8788; stopped at the end",
+  "npx playwright test --project=e2e e2e/story.spec.ts  # 8 passed",
+  "npx playwright test --project=a11y  # 12 passed",
+  "site/node_modules/.bin/playwright test -c <scratchpad>/hs/playwright.config.ts  # a copy of e2e/hotspots.spec.ts run from the scratchpad so its screenshots do not overwrite the tracked assets/qa/hotspots/*.png: 1 failed (1280), 1 passed (400)",
+  "node qa/reports/2026-11-07-site-story-prototype-qa/tools/measure-story.mjs data/measure-story.json",
+  "node qa/reports/2026-11-07-site-story-prototype-qa/tools/measure-weight-bodies.mjs data/weight-bodies.json",
+  "node qa/reports/2026-11-07-site-story-prototype-qa/tools/hit-test-dots.mjs data/hit-test-dots.json",
+  "node qa/reports/2026-11-07-site-story-prototype-qa/tools/shots.mjs",
+  "python3 qa/reports/2026-11-07-site-story-prototype-qa/tools/ged17_18.py",
+  "node <scratchpad>/room-marks.mjs  # the holder's mark in /rooms/living-room/ at 1280 (shown at 456,658) and 400 (hidden, off-screen)"
+ ],
+ "not_run": "the full e2e suite (34) was not re-run: only story.spec and hotspots.spec, plus the a11y project",
+ "notes": [
+  "the manager's WIP commits (23a6b13f, 91c8f021) swept some of this folder's logs into git while QA ran; qa-agent made no commit",
+  "the build used the working tree with slots 1.9.1 (another agent's warm-modern by_style edit, 'no Nordic value changed')"
+ ],
+ "outputs": {
+  "report_md": "qa/reports/2026-11-07-site-story-prototype-qa.md",
+  "overlays": [
+   "qa/reports/2026-11-07-site-story-prototype-qa/overlays/nordic-A-dots-boxes.jpg",
+   "qa/reports/2026-11-07-site-story-prototype-qa/overlays/nordic-B-dots-boxes.jpg",
+   "qa/reports/2026-11-07-site-story-prototype-qa/overlays/warm-modern-A-dots-boxes.jpg",
+   "qa/reports/2026-11-07-site-story-prototype-qa/overlays/nordic-A-phone-390.jpg",
+   "qa/reports/2026-11-07-site-story-prototype-qa/overlays/nordic-B-phone-390.jpg",
+   "qa/reports/2026-11-07-site-story-prototype-qa/overlays/warm-modern-A-phone-390.jpg",
+   "qa/reports/2026-11-07-site-story-prototype-qa/overlays/screen-phone-390-nordic-A-dots.png",
+   "qa/reports/2026-11-07-site-story-prototype-qa/overlays/screen-phone-390-nordic-B-dots.png",
+   "qa/reports/2026-11-07-site-story-prototype-qa/overlays/screen-desk-1280-nordic-A-dots.png",
+   "qa/reports/2026-11-07-site-story-prototype-qa/overlays/screen-desk-1280-nordic-B-dots.png"
+  ],
+  "data": "qa/reports/2026-11-07-site-story-prototype-qa/data/",
+  "tools": "qa/reports/2026-11-07-site-story-prototype-qa/tools/"
+ },
+ "owners": {
+  "frontend-dev": [
+   "pendant dot under the desktop band",
+   "Nordic B throw phone point",
+   "WM ed5 swap (reader for the newer QA record)",
+   "names",
+   "WM sconce phone point",
+   "room-engine holder mark (hotspots.spec)",
+   "hotspots.spec output folder",
+   "exclude /test/ from a public deploy"
+  ],
+  "master-designer": [
+   "the phone crops (0.60 / 0.62) with the manual throw point",
+   "the rug 'whole' ruling",
+   "the close-up list for G-ED.18",
+   "G-ED.10/13 verdict on WM ed5",
+   "runner SKU"
+  ],
+  "manager": [
+   "show WM ed4 'almost' or ed5",
+   "when to commission close-ups (layer 2)"
+  ],
+  "qa-agent": [
+   "re-run hit-test-dots.mjs and ged17_18.py after the fixes"
+  ]
+ }
+}

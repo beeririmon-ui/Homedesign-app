@@ -1,0 +1,1509 @@
+{
+ "date": "2026-11-07",
+ "tokens": 0,
+ "script": "assets/blockout/house/framing/warm-modern-r2/clay_checks_wm_r2.py",
+ "inputs": {
+  "plan": "1.3.2 (2026-11-07): designer decisions WMC1-WMC5 on the warm",
+  "slots": "1.9.1",
+  "selfcheck": "assets/blockout/house/framing/warm-modern-r2/selfcheck-render-A.json",
+  "r1": "assets/blockout/house/framing/warm-modern-r1/clay-checks-2026-11-07.json"
+ },
+ "decisions": "WMC1-WMC5 (house plan 1.3.2 section 0א; slots 1.9.1)",
+ "cameras": {
+  "M0": {
+   "loc": [
+    0.83,
+    4.64,
+    1.2
+   ],
+   "yaw": 25,
+   "u0": 0.47,
+   "v0": 0.5
+  },
+  "M0p": {
+   "loc": [
+    0.83,
+    4.64,
+    1.2
+   ],
+   "yaw": 0,
+   "u0": 0.47,
+   "v0": 0.5
+  },
+  "M0x": {
+   "loc": [
+    0.83,
+    4.64,
+    1.2
+   ],
+   "yaw": -35,
+   "u0": 0.47,
+   "v0": 0.5
+  }
+ },
+ "findings": {
+  "a_planter_vs_curtain_stack": {
+   "r1": {
+    "M0": {
+     "pot_to_back_stack_px": 9.0,
+     "crown_and_back_stack_touch": true
+    },
+    "M0p": {
+     "pot_to_curtains_px": 14.0
+    }
+   },
+   "r2": {
+    "M0": {
+     "curtain_px": 655852,
+     "planter_px": 129805,
+     "pot_to_curtains_px": 1115.0,
+     "crown_to_curtains_px": 1079.0,
+     "planter_to_curtains_px": 1079.0,
+     "planter_to_curtains_frame_u": 0.281
+    },
+    "M0p": {
+     "curtain_px": 0,
+     "planter_px": 216903,
+     "note": "the planter and the curtains are not both in this frame"
+    },
+    "M0x": {
+     "curtain_px": 0,
+     "planter_px": 0,
+     "note": "the planter and the curtains are not both in this frame"
+    }
+   },
+   "plan": {
+    "back_stack": "none (WMC1, one-way draw)",
+    "front_stack_y": [
+     2.7,
+     3.0
+    ],
+    "planter_y_max_pot": 0.63,
+    "planter_to_front_stack_y_m": 2.0
+   },
+   "resolved": true
+  },
+  "b_crown": {
+   "r1": {
+    "plan": "envelope r 0.40 at (-2.00, 0.47): Y to 0.87 (0.12 past the back jamb), X to -2.40 (0.10 through the wall), contained the back stack",
+    "M0": {
+     "crown_to_visible_glazing_px": 7.0,
+     "crown_left_edge_minus_back_stack_left_edge_px": {
+      "rows": 492,
+      "min": -1,
+      "median": 40.0,
+      "max": 205,
+      "rows_within_4px": 62
+     }
+    }
+   },
+   "r2": {
+    "plan": {
+     "centre": [
+      -1.95,
+      0.42
+     ],
+     "r": 0.28,
+     "z": [
+      0.7,
+      1.65
+     ],
+     "x_min": -2.23,
+     "y_max": 0.7,
+     "clearances_m": {
+      "left_wall": 0.07,
+      "back_wall": 0.14,
+      "rounded_corner": 0.09,
+      "back_jamb_Y0.75": 0.05
+     },
+     "pot_clearances_m": {
+      "left_wall": 0.14,
+      "back_wall": 0.21,
+      "rounded_corner": 0.16,
+      "back_jamb_Y0.75": 0.12
+     }
+    },
+    "frames": {
+     "M0": {
+      "crown_bbox_frame": [
+       0.3339,
+       0.4091,
+       0.3935,
+       0.6185
+      ],
+      "over_the_opening_px": 0,
+      "crown_to_visible_glazing_px": 108.0,
+      "pot_to_visible_glazing_px": 151.9,
+      "back_jamb_line_u": 0.306,
+      "crown_left_u_minus_back_jamb_u": 0.0279,
+      "crown_left_minus_back_jamb_px": 107,
+      "crown_to_corner_silhouette_px": 1.0
+     },
+     "M0p": {
+      "crown_bbox_frame": [
+       -0.024,
+       0.0818,
+       0.3736,
+       0.6403
+      ],
+      "over_the_opening_px": 0,
+      "crown_to_visible_glazing_px": null,
+      "pot_to_visible_glazing_px": null,
+      "crown_to_corner_silhouette_px": 1.0
+     }
+    }
+   },
+   "resolved": true
+  },
+  "c_M0p_left_edge": {
+   "r1": {
+    "corner_tangent_line": {
+     "xy": [
+      -2.3,
+      0.15
+     ],
+     "u": 0.0052,
+     "px_from_left_edge": 20.0,
+     "reads": "along the left edge (F3: within 0.01)"
+    },
+    "bench_back_end_line": {
+     "xy": [
+      -1.9,
+      0.75
+     ],
+     "u": 0.0021,
+     "px_from_left_edge": 8.1,
+     "reads": "along the left edge (F3: within 0.01)"
+    },
+    "corner_arc_u_span": [
+     0.0052,
+     0.0418
+    ],
+    "bench_pixels": {
+     "px_in_frame": 2380,
+     "u_span_in_frame": [
+      0.0,
+      0.0021
+     ]
+    },
+    "corner_pixels": {
+     "px_in_frame": 97710,
+     "u_span_in_frame": [
+      0.0052,
+      0.0419
+     ]
+    }
+   },
+   "r2": {
+    "corner_tangent_line": {
+     "xy": [
+      -2.3,
+      0.3
+     ],
+     "u": -0.0108,
+     "px_from_left_edge": -41.5,
+     "reads": "outside the frame"
+    },
+    "bench_back_end_line": {
+     "xy": [
+      -1.98,
+      0.75
+     ],
+     "u": -0.0116,
+     "px_from_left_edge": -44.5,
+     "reads": "outside the frame"
+    },
+    "corner_arc_u_span": [
+     -0.0108,
+     0.0634
+    ],
+    "bench_pixels": {
+     "px_in_frame": 0,
+     "u_span_in_frame": null
+    },
+    "corner_pixels": {
+     "px_in_frame": 207218,
+     "u_span_in_frame": [
+      0.0,
+      0.0633
+     ]
+    }
+   },
+   "f3_lines_M0p_r1": [
+    {
+     "line": "bench_end_back_Y0.75",
+     "length": 0.1371,
+     "edge": "left"
+    },
+    {
+     "line": "rounded_corner_tangent_left_wall_Y0.15",
+     "length": 0.7919,
+     "edge": "left"
+    }
+   ],
+   "f3_lines_M0p_r2": [],
+   "resolved": true
+  },
+  "d_planter_vs_basket": {
+   "M0": {
+    "r1_clay": {
+     "basket_top_v": 0.7037,
+     "pot_rim_top_v": 0.6708,
+     "basket_top_minus_pot_rim_px": 71,
+     "basket_top_minus_pot_rim_frame_pct": 3.29,
+     "pot_rim_visible_above_basket_rows": 71,
+     "basket_covers_pot_width": 0.597,
+     "pot_visible_px": 15826,
+     "shared_columns": 118,
+     "pot_u_span": [
+      0.3365,
+      0.3881
+     ],
+     "basket_u_span": [
+      0.3573,
+      0.4091
+     ],
+     "reads": "two lines (>= 1 % apart)"
+    },
+    "r2_clay": {
+     "basket_top_v": 0.7037,
+     "pot_rim_top_v": 0.6907,
+     "basket_top_minus_pot_rim_px": 28,
+     "basket_top_minus_pot_rim_frame_pct": 1.3,
+     "pot_rim_visible_above_basket_rows": 28,
+     "basket_covers_pot_width": 0.754,
+     "pot_visible_px": 15671,
+     "shared_columns": 164,
+     "pot_u_span": [
+      0.3433,
+      0.4
+     ],
+     "basket_u_span": [
+      0.3573,
+      0.4091
+     ],
+     "reads": "two lines (>= 1 % apart)"
+    },
+    "r2_projection": {
+     "basket_top_v": 0.7039,
+     "pot_rim_top_v": 0.6922,
+     "basket_top_minus_pot_rim_px": 25.1,
+     "basket_u_span": [
+      0.3573,
+      0.4092
+     ],
+     "pot_u_span": [
+      0.3433,
+      0.4
+     ],
+     "basket_covers_pot_width": 0.754,
+     "reads": "two lines (>= 1 % apart)"
+    },
+    "lever_basket_minus155_080_projection_not_applied": {
+     "basket_top_v": 0.706,
+     "pot_rim_top_v": 0.6922,
+     "basket_top_minus_pot_rim_px": 29.6,
+     "basket_u_span": [
+      0.3643,
+      0.4167
+     ],
+     "pot_u_span": [
+      0.3433,
+      0.4
+     ],
+     "basket_covers_pot_width": 0.63,
+     "reads": "two lines (>= 1 % apart)"
+    }
+   },
+   "M0p": {
+    "r2_clay": {
+     "basket_top_v": 0.738,
+     "pot_rim_top_v": 0.7245,
+     "basket_top_minus_pot_rim_px": 29,
+     "basket_top_minus_pot_rim_frame_pct": 1.34,
+     "pot_rim_visible_above_basket_rows": 29,
+     "basket_covers_pot_width": 0.746,
+     "pot_visible_px": 26974,
+     "shared_columns": 228,
+     "pot_u_span": [
+      -0.0101,
+      0.0695
+     ],
+     "basket_u_span": [
+      0.0102,
+      0.0818
+     ],
+     "reads": "two lines (>= 1 % apart)"
+    },
+    "r2_projection": {
+     "basket_top_v": 0.7379,
+     "pot_rim_top_v": 0.7261,
+     "basket_top_minus_pot_rim_px": 25.6,
+     "basket_u_span": [
+      0.0101,
+      0.0818
+     ],
+     "pot_u_span": [
+      -0.0101,
+      0.0695
+     ],
+     "basket_covers_pot_width": 0.746,
+     "reads": "two lines (>= 1 % apart)"
+    },
+    "lever_projection_not_applied": {
+     "basket_top_v": 0.7391,
+     "pot_rim_top_v": 0.7261,
+     "basket_top_minus_pot_rim_px": 28.2,
+     "basket_u_span": [
+      0.0201,
+      0.0917
+     ],
+     "pot_u_span": [
+      -0.0101,
+      0.0695
+     ],
+     "basket_covers_pot_width": 0.62,
+     "reads": "two lines (>= 1 % apart)"
+    }
+   },
+   "lever_plan": {
+    "basket": [
+     -1.55,
+     0.8
+    ],
+    "to_bench_front_x_m": 0.255,
+    "to_pot_m": 0.167,
+    "to_armchair_note": "the armchair's nearest corner is near X -1.72, Y ~2.2-3.2: far in Y"
+   },
+   "note": "the lever is projected only (render-agent does not apply it); the projection's error is r2_projection against r2_clay",
+   "reads_as_one_line_in_M0": false
+  },
+  "e_new_pot_vs_bench_end": {
+   "M0": {
+    "r1": {
+     "bench_end_edge": {
+      "xy": [
+       -1.9,
+       0.75
+      ],
+      "u": 0.3517
+     },
+     "pot_left_u_projection": 0.3365,
+     "pot_left_minus_bench_edge_px_projection": -58.4,
+     "clay_rows": 258,
+     "clay_pot_left_minus_bench_right_px": {
+      "min": 0,
+      "median": 0.0,
+      "max": 266
+     },
+     "reads": "thin overlap (the bench hides < 0.03 of the frame of the pot)"
+    },
+    "r2": {
+     "bench_end_edge": {
+      "xy": [
+       -1.98,
+       0.75
+      ],
+      "u": 0.3423
+     },
+     "pot_left_u_projection": 0.3433,
+     "pot_left_minus_bench_edge_px_projection": 4.0,
+     "clay_rows": 227,
+     "clay_pot_left_minus_bench_right_px": {
+      "min": 4,
+      "median": 4.0,
+      "max": 101
+     },
+     "reads": "kissing contours (< 0.02 apart)"
+    },
+    "third_line": {
+     "rounded_corner_left_tangent_u": 0.3428,
+     "note": "the start of the R 0.30 curve on the window wall (Y 0.30) projects onto the same vertical as the bench end's edge and the pot's left side (all within ~0.001 u, ~4 px): three edges on one line in M0 (the curve's start is a soft shading edge in the clay)"
+    }
+   },
+   "levers_for_the_designer_not_applied": {
+    "pot_plus_x_for_a_0_02_gap_m": 0.169,
+    "pot_minus_x_for_one_third_hidden_by_the_bench_m": -0.181,
+    "note": "WMC4 (bench to -1.98) and WMC2 (pot to -1.95, 0.42) together put the pot's left silhouette on the bench end's edge in M0; the basket in front hides the pot's right part, so the visible pot is the sliver between the bench end and the basket",
+    "best_pot_move_within_0_10": {
+     "dx": 0.08,
+     "dy": -0.06,
+     "gap_px": 56.3,
+     "hidden": -0.26,
+     "reads": "does not reach a 0.02 gap or a third hidden"
+    },
+    "bench_edge_alone": {
+     "x_for_a_0_02_gap": -2.15,
+     "x_for_a_third_hidden": -1.81
+    }
+   }
+  },
+  "f_new_armchair_vs_front_stack": {
+   "M0": {
+    "render_selfcheck": [
+     {
+      "a": "armchair 72x78 h70 (fixed-product)",
+      "b": "living/curtains",
+      "kind": "overlap",
+      "overlap_thickness": 0.0273,
+      "cover_of_back": 0.05,
+      "behind": "armchair 72x78 h70 (fixed-product)",
+      "dist3d_m": 0.374,
+      "rule": "overlap thinner than 0.03 and < 60% of the back item"
+     }
+    ],
+    "overlap_px": [
+     104.8
+    ],
+    "note": "new in r2: WMC1 widens the front stack from 0.15 to 0.30 (its edge u 0.019 -> 0.053), so the armchair's left contour now overlaps the stack thinly (< 0.03, 5 % of the stack); in r1 the stack's edge was at u 0.019 against the armchair's left 0.023"
+   }
+  }
+ },
+ "glazing_and_stack": {
+  "M0": {
+   "opening_polygon_px": 1824375,
+   "front_stack_over_the_opening_px": 369034,
+   "front_stack_over_the_opening_pct": 20.23,
+   "r1_front_stack_over_the_opening_pct": 7.45,
+   "back_jamb_line_u": 0.306
+  },
+  "M0p": {
+   "note": "the glazing is outside this frame"
+  },
+  "M0x": {
+   "note": "the glazing is outside this frame"
+  }
+ },
+ "plan_clearances": {
+  "sconce_plate_to_stack_m": 0.17,
+  "sconce_plate_to_glazing_edge_m": 0.32,
+  "rule": ">= 0.10",
+  "armchair_to_bench_m": 0.259,
+  "pot_to_bench_end_y_m": 0.12,
+  "basket_to_bench_front_x_m": 0.185,
+  "vase_on_bench": {
+   "base": [
+    -2.42,
+    1.35,
+    0.45
+   ],
+   "bench_x": [
+    -2.3,
+    -1.98
+   ],
+   "note": "the vase stands on the slab in the reveal (X -2.50..-2.34); unaffected"
+  }
+ },
+ "vase_vs_armchair_M0": {
+  "min_euclidean_gap_px": 89.0,
+  "min_euclidean_gap_frame_pct": 4.12,
+  "min_vertical_gap_px": 88,
+  "reads": "clear (>= 1 % of the frame)",
+  "r1": {
+   "min_euclidean_gap_px": 89.0
+  }
+ },
+ "slot_boxes": [
+  {
+   "slot": "sofa",
+   "item": "sofa 220 x 92 x 78",
+   "slots_1_9_1": [
+    0.469,
+    0.891,
+    0.601,
+    0.952
+   ],
+   "projection": [
+    0.469,
+    0.891,
+    0.601,
+    0.952
+   ],
+   "clay": [
+    0.4703,
+    0.8898,
+    0.6111,
+    0.9403
+   ],
+   "max_diff_projection": 0.0,
+   "max_diff_clay": 0.012,
+   "verdict": "agrees (<= 0.02)",
+   "note": ""
+  },
+  {
+   "slot": "coffee-table",
+   "item": "coffee table 140 x 70 h 38",
+   "slots_1_9_1": [
+    0.442,
+    0.803,
+    0.776,
+    1.0
+   ],
+   "projection": [
+    0.442,
+    0.803,
+    0.776,
+    1.118
+   ],
+   "clay": [
+    0.4583,
+    0.8013,
+    0.7824,
+    1.0301
+   ],
+   "max_diff_projection": 0.0,
+   "max_diff_clay": 0.016,
+   "verdict": "agrees (<= 0.02)",
+   "note": ""
+  },
+  {
+   "slot": "armchair",
+   "item": "armchair 72 x 78 h 70 (-1.23, 2.73) 25 deg, Nordic geometry (WM-F1)",
+   "slots_1_9_1": [
+    0.023,
+    0.315,
+    0.71,
+    1.0
+   ],
+   "projection": [
+    0.066,
+    0.333,
+    0.689,
+    1.185
+   ],
+   "clay": [
+    0.0229,
+    0.3104,
+    0.7148,
+    1.0301
+   ],
+   "max_diff_projection": 0.043,
+   "max_diff_clay": 0.005,
+   "verdict": "estimate off (0.02-0.05)",
+   "note": ""
+  },
+  {
+   "slot": "pendant",
+   "item": "pendant shade 40 x 28, bottom 1.90",
+   "slots_1_9_1": [
+    0.565,
+    0.68,
+    0.046,
+    0.238
+   ],
+   "projection": [
+    0.575,
+    0.67,
+    0.072,
+    0.233
+   ],
+   "clay": [
+    0.5758,
+    0.6692,
+    0.0949,
+    0.2181
+   ],
+   "max_diff_projection": 0.026,
+   "max_diff_clay": 0.049,
+   "verdict": "estimate off (0.02-0.05)",
+   "note": ""
+  },
+  {
+   "slot": "vase",
+   "item": "vase on the bench, base (-2.42, 1.35, 0.45), body to 0.76, branches to 1.05",
+   "slots_1_9_1": [
+    0.21,
+    0.255,
+    0.541,
+    0.704
+   ],
+   "projection": [
+    0.219,
+    0.245,
+    0.54,
+    0.708
+   ],
+   "clay": [
+    0.2177,
+    0.2461,
+    0.5399,
+    0.7079
+   ],
+   "max_diff_projection": 0.01,
+   "max_diff_clay": 0.009,
+   "verdict": "agrees (<= 0.02)",
+   "note": ""
+  },
+  {
+   "slot": "basket",
+   "item": "basket (-1.62, 0.78) d 35 h 39 (unchanged; lever not applied)",
+   "slots_1_9_1": [
+    0.357,
+    0.41,
+    0.686,
+    0.822
+   ],
+   "projection": [
+    0.357,
+    0.409,
+    0.704,
+    0.826
+   ],
+   "clay": [
+    0.3573,
+    0.4091,
+    0.7037,
+    0.8264
+   ],
+   "max_diff_projection": 0.018,
+   "max_diff_clay": 0.018,
+   "verdict": "agrees (<= 0.02)",
+   "note": ""
+  },
+  {
+   "slot": "magazine-holder",
+   "item": "magazine holder (-0.54, 2.52) 32 x 22 x 40",
+   "slots_1_9_1": [
+    0.335,
+    0.421,
+    0.848,
+    1.0
+   ],
+   "projection": [
+    0.325,
+    0.429,
+    0.855,
+    1.11
+   ],
+   "clay": [
+    0.325,
+    0.4294,
+    0.8556,
+    1.0301
+   ],
+   "max_diff_projection": 0.01,
+   "max_diff_clay": 0.01,
+   "verdict": "agrees (<= 0.02)",
+   "note": ""
+  },
+  {
+   "slot": "planter",
+   "item": "planter (-1.95, 0.42): pot d 42 x 35.5 + olive crown r 0.28 Z 0.70-1.65 (WMC2)",
+   "slots_1_9_1": [
+    0.335,
+    0.409,
+    0.38,
+    0.8
+   ],
+   "projection": [
+    0.334,
+    0.409,
+    0.393,
+    0.797
+   ],
+   "clay": [
+    0.3339,
+    0.4091,
+    0.3935,
+    0.7958
+   ],
+   "max_diff_projection": 0.013,
+   "max_diff_clay": 0.014,
+   "verdict": "agrees (<= 0.02)",
+   "note": "clay = the index pass (pot + trunk pidx 35, crown pidx 60)"
+  },
+  {
+   "slot": "planter (pot)",
+   "item": "the pot alone, d 42 x 35.5",
+   "slots_1_9_1": [
+    0.344,
+    0.4,
+    0.7,
+    0.8
+   ],
+   "projection": [
+    0.343,
+    0.4,
+    0.692,
+    0.797
+   ],
+   "clay": [
+    0.3432,
+    0.4,
+    0.6907,
+    0.7958
+   ],
+   "max_diff_projection": 0.008,
+   "max_diff_clay": 0.009,
+   "verdict": "agrees (<= 0.02)",
+   "note": "clay = the visible pot (the basket in front hides most of it, so its left / right are the visible part)"
+  },
+  {
+   "slot": "curtains (front_stack)",
+   "item": "one front stack Y 2.70-3.00 (WMC1)",
+   "slots_1_9_1": [
+    0.0,
+    0.06,
+    0.0,
+    0.99
+   ],
+   "projection": [
+    -0.036,
+    0.053,
+    -0.215,
+    1.015
+   ],
+   "clay": [
+    -0.0302,
+    0.0531,
+    -0.0301,
+    1.0148
+   ],
+   "max_diff_projection": 0.01,
+   "max_diff_clay": 0.01,
+   "verdict": "agrees (<= 0.02)",
+   "note": "clay = the index pass; the stack runs off the frame's left edge"
+  },
+  {
+   "slot": "rug",
+   "item": "rug 330 x 240",
+   "slots_1_9_1": [
+    0.191,
+    1.0,
+    0.815,
+    1.0
+   ],
+   "projection": null,
+   "clay": [
+    0.1497,
+    1.0302,
+    0.8116,
+    1.0301
+   ],
+   "max_diff_projection": null,
+   "max_diff_clay": 0.041,
+   "verdict": "estimate off (0.02-0.05)",
+   "note": ""
+  },
+  {
+   "slot": "bowl",
+   "item": "bowl d 24 h 9 (0.68, 1.92)",
+   "slots_1_9_1": [
+    0.708,
+    0.766,
+    0.852,
+    0.884
+   ],
+   "projection": [
+    0.704,
+    0.772,
+    0.827,
+    0.904
+   ],
+   "clay": [
+    0.7078,
+    0.7674,
+    0.8398,
+    0.901
+   ],
+   "max_diff_projection": 0.025,
+   "max_diff_clay": 0.017,
+   "verdict": "estimate off (0.02-0.05)",
+   "note": ""
+  },
+  {
+   "slot": "candle-holders",
+   "item": "candle holders",
+   "slots_1_9_1": [
+    0.673,
+    0.735,
+    0.762,
+    0.86
+   ],
+   "projection": [
+    0.673,
+    0.735,
+    0.727,
+    0.861
+   ],
+   "clay": [
+    0.6753,
+    0.7016,
+    0.7232,
+    0.8718
+   ],
+   "max_diff_projection": 0.035,
+   "max_diff_clay": 0.039,
+   "verdict": "estimate off (0.02-0.05)",
+   "note": ""
+  }
+ ],
+ "named_lines": {
+  "M0": {
+   "glazing_head": {
+    "in_frame": true,
+    "start_uv": [
+     0.306,
+     0.1333
+    ],
+    "end_uv": [
+     -0.0009,
+     -0.1036
+    ],
+    "longest_run_within_0_01_of_an_edge": {
+     "length": 0.0161,
+     "edge": "top"
+    },
+    "runs_along_an_edge": false
+   },
+   "glazing_sill_line": {
+    "in_frame": true,
+    "start_uv": [
+     0.306,
+     0.6833
+    ],
+    "end_uv": [
+     -0.0009,
+     0.8018
+    ],
+    "longest_run_within_0_01_of_an_edge": {
+     "length": 0.0104,
+     "edge": "left"
+    },
+    "runs_along_an_edge": false
+   },
+   "glazing_jamb_back_Y0.75": {
+    "in_frame": true,
+    "start_uv": [
+     0.306,
+     0.6833
+    ],
+    "end_uv": [
+     0.306,
+     0.1333
+    ],
+    "longest_run_within_0_01_of_an_edge": {
+     "length": 0.0,
+     "edge": null
+    },
+    "runs_along_an_edge": false
+   },
+   "glazing_jamb_front_Y2.85": {
+    "in_frame": false,
+    "start_uv": [
+     -0.0009,
+     0.8018
+    ],
+    "end_uv": [
+     -0.0009,
+     -0.1036
+    ]
+   },
+   "mullion_Y1.45_frame_plane": {
+    "in_frame": true,
+    "start_uv": [
+     0.194,
+     0.7038
+    ],
+    "end_uv": [
+     0.194,
+     0.0924
+    ],
+    "longest_run_within_0_01_of_an_edge": {
+     "length": 0.0,
+     "edge": null
+    },
+    "runs_along_an_edge": false
+   },
+   "mullion_Y2.15_frame_plane": {
+    "in_frame": true,
+    "start_uv": [
+     0.0941,
+     0.7385
+    ],
+    "end_uv": [
+     0.0941,
+     0.023
+    ],
+    "longest_run_within_0_01_of_an_edge": {
+     "length": 0.0,
+     "edge": null
+    },
+    "runs_along_an_edge": false
+   },
+   "bench_front_top_edge_X-1.98": {
+    "in_frame": true,
+    "start_uv": [
+     0.3423,
+     0.6886
+    ],
+    "end_uv": [
+     0.0452,
+     0.8164
+    ],
+    "longest_run_within_0_01_of_an_edge": {
+     "length": 0.0,
+     "edge": null
+    },
+    "runs_along_an_edge": false
+   },
+   "bench_end_front_Y2.85": {
+    "in_frame": true,
+    "start_uv": [
+     0.0452,
+     1.0062
+    ],
+    "end_uv": [
+     0.0452,
+     0.8164
+    ],
+    "longest_run_within_0_01_of_an_edge": {
+     "length": 0.01,
+     "edge": "bottom"
+    },
+    "runs_along_an_edge": false
+   },
+   "bench_end_back_Y0.75": {
+    "in_frame": true,
+    "start_uv": [
+     0.3423,
+     0.8018
+    ],
+    "end_uv": [
+     0.3423,
+     0.6886
+    ],
+    "longest_run_within_0_01_of_an_edge": {
+     "length": 0.0,
+     "edge": null
+    },
+    "runs_along_an_edge": false
+   },
+   "rounded_corner_tangent_left_wall_Y0.30": {
+    "in_frame": true,
+    "start_uv": [
+     0.3428,
+     0.7706
+    ],
+    "end_uv": [
+     0.3428,
+     0.1347
+    ],
+    "longest_run_within_0_01_of_an_edge": {
+     "length": 0.0,
+     "edge": null
+    },
+    "runs_along_an_edge": false
+   },
+   "rounded_corner_tangent_back_wall_X-2.00": {
+    "in_frame": true,
+    "start_uv": [
+     0.3955,
+     0.7633
+    ],
+    "end_uv": [
+     0.3955,
+     0.105
+    ],
+    "longest_run_within_0_01_of_an_edge": {
+     "length": 0.0,
+     "edge": null
+    },
+    "runs_along_an_edge": false
+   },
+   "curtain_band_edge_X-2.05_Z2.82": {
+    "in_frame": true,
+    "start_uv": [
+     0.3902,
+     0.1459
+    ],
+    "end_uv": [
+     0.0091,
+     -0.1995
+    ],
+    "longest_run_within_0_01_of_an_edge": {
+     "length": 0.0144,
+     "edge": "top"
+    },
+    "runs_along_an_edge": false
+   },
+   "curtain_slot_edge_X-2.26_Z2.82": {
+    "in_frame": true,
+    "start_uv": [
+     0.358,
+     0.1428
+    ],
+    "end_uv": [
+     -0.0477,
+     -0.1999
+    ],
+    "longest_run_within_0_01_of_an_edge": {
+     "length": 0.0146,
+     "edge": "top"
+    },
+    "runs_along_an_edge": false
+   },
+   "curtain_slot_edge_X-2.18_Z2.82": {
+    "in_frame": true,
+    "start_uv": [
+     0.3726,
+     0.1459
+    ],
+    "end_uv": [
+     -0.0262,
+     -0.1998
+    ],
+    "longest_run_within_0_01_of_an_edge": {
+     "length": 0.0146,
+     "edge": "top"
+    },
+    "runs_along_an_edge": false
+   },
+   "curtain_track_X-2.22_Z2.86": {
+    "in_frame": true,
+    "start_uv": [
+     0.3192,
+     0.0952
+    ],
+    "end_uv": [
+     -0.0173,
+     -0.2
+    ],
+    "longest_run_within_0_01_of_an_edge": {
+     "length": 0.015,
+     "edge": "top"
+    },
+    "runs_along_an_edge": false
+   },
+   "curtain_stack_back_edge_Y2.70": {
+    "in_frame": true,
+    "start_uv": [
+     0.053,
+     0.9687
+    ],
+    "end_uv": [
+     0.053,
+     -0.1354
+    ],
+    "longest_run_within_0_01_of_an_edge": {
+     "length": 0.0094,
+     "edge": "top"
+    },
+    "runs_along_an_edge": false
+   }
+  },
+  "M0p": {
+   "glazing_head": {
+    "in_frame": false,
+    "start_uv": [
+     -0.0664,
+     0.043
+    ],
+    "end_uv": [
+     -0.1999,
+     -0.0707
+    ]
+   },
+   "glazing_sill_line": {
+    "in_frame": false,
+    "start_uv": [
+     -0.0664,
+     0.7285
+    ],
+    "end_uv": [
+     -0.1999,
+     0.7854
+    ]
+   },
+   "glazing_jamb_back_Y0.75": {
+    "in_frame": false,
+    "start_uv": [
+     -0.0664,
+     0.7285
+    ],
+    "end_uv": [
+     -0.0664,
+     0.043
+    ]
+   },
+   "glazing_jamb_front_Y2.85": {
+    "in_frame": false
+   },
+   "mullion_Y1.45_frame_plane": {
+    "in_frame": false
+   },
+   "mullion_Y2.15_frame_plane": {
+    "in_frame": false
+   },
+   "bench_front_top_edge_X-1.98": {
+    "in_frame": false,
+    "start_uv": [
+     -0.0116,
+     0.7285
+    ],
+    "end_uv": [
+     -0.1998,
+     0.8178
+    ]
+   },
+   "bench_end_front_Y2.85": {
+    "in_frame": false
+   },
+   "bench_end_back_Y0.75": {
+    "in_frame": false,
+    "start_uv": [
+     -0.0116,
+     0.8656
+    ],
+    "end_uv": [
+     -0.0116,
+     0.7285
+    ]
+   },
+   "rounded_corner_tangent_left_wall_Y0.30": {
+    "in_frame": false,
+    "start_uv": [
+     -0.0108,
+     0.8277
+    ],
+    "end_uv": [
+     -0.0108,
+     0.0576
+    ]
+   },
+   "rounded_corner_tangent_back_wall_X-2.00": {
+    "in_frame": true,
+    "start_uv": [
+     0.0634,
+     0.8065
+    ],
+    "end_uv": [
+     0.0634,
+     0.0402
+    ],
+    "longest_run_within_0_01_of_an_edge": {
+     "length": 0.0,
+     "edge": null
+    },
+    "runs_along_an_edge": false
+   },
+   "curtain_band_edge_X-2.05_Z2.82": {
+    "in_frame": true,
+    "start_uv": [
+     0.0562,
+     0.0862
+    ],
+    "end_uv": [
+     -0.1998,
+     -0.1697
+    ],
+    "longest_run_within_0_01_of_an_edge": {
+     "length": 0.0133,
+     "edge": "left"
+    },
+    "runs_along_an_edge": false
+   },
+   "curtain_slot_edge_X-2.26_Z2.82": {
+    "in_frame": true,
+    "start_uv": [
+     0.0112,
+     0.0724
+    ],
+    "end_uv": [
+     -0.1994,
+     -0.1239
+    ],
+    "longest_run_within_0_01_of_an_edge": {
+     "length": 0.0135,
+     "edge": "left"
+    },
+    "runs_along_an_edge": false
+   },
+   "curtain_slot_edge_X-2.18_Z2.82": {
+    "in_frame": true,
+    "start_uv": [
+     0.0318,
+     0.0808
+    ],
+    "end_uv": [
+     -0.1998,
+     -0.1409
+    ],
+    "longest_run_within_0_01_of_an_edge": {
+     "length": 0.0137,
+     "edge": "left"
+    },
+    "runs_along_an_edge": false
+   },
+   "curtain_track_X-2.22_Z2.86": {
+    "in_frame": false,
+    "start_uv": [
+     -0.0461,
+     0.0007
+    ],
+    "end_uv": [
+     -0.1998,
+     -0.148
+    ]
+   },
+   "curtain_stack_back_edge_Y2.70": {
+    "in_frame": false
+   }
+  },
+  "M0x": {
+   "glazing_head": {
+    "in_frame": false
+   },
+   "glazing_sill_line": {
+    "in_frame": false
+   },
+   "glazing_jamb_back_Y0.75": {
+    "in_frame": false
+   },
+   "glazing_jamb_front_Y2.85": {
+    "in_frame": false
+   },
+   "mullion_Y1.45_frame_plane": {
+    "in_frame": false
+   },
+   "mullion_Y2.15_frame_plane": {
+    "in_frame": false
+   },
+   "bench_front_top_edge_X-1.98": {
+    "in_frame": false
+   },
+   "bench_end_front_Y2.85": {
+    "in_frame": false
+   },
+   "bench_end_back_Y0.75": {
+    "in_frame": false
+   },
+   "rounded_corner_tangent_left_wall_Y0.30": {
+    "in_frame": false
+   },
+   "rounded_corner_tangent_back_wall_X-2.00": {
+    "in_frame": false
+   },
+   "curtain_band_edge_X-2.05_Z2.82": {
+    "in_frame": false
+   },
+   "curtain_slot_edge_X-2.26_Z2.82": {
+    "in_frame": false
+   },
+   "curtain_slot_edge_X-2.18_Z2.82": {
+    "in_frame": false
+   },
+   "curtain_track_X-2.22_Z2.86": {
+    "in_frame": false
+   },
+   "curtain_stack_back_edge_Y2.70": {
+    "in_frame": false
+   }
+  }
+ },
+ "architecture_clay_boxes": {
+  "M0": {
+   "living/window-bench": [
+    0.0169,
+    0.3422,
+    0.6778,
+    1.006
+   ],
+   "living/rounded-corner": [
+    0.3427,
+    0.3955,
+    0.1055,
+    0.7365
+   ],
+   "living/curtain-track": [
+    0.1456,
+    0.3898,
+    -0.0301,
+    0.1463
+   ]
+  },
+  "M0p": {
+   "living/window-bench": [
+    -0.0302,
+    -0.0114,
+    0.7287,
+    0.8797
+   ],
+   "living/rounded-corner": [
+    -0.0107,
+    0.0633,
+    0.0398,
+    0.7866
+   ],
+   "living/curtain-track": [
+    -0.0302,
+    0.0557,
+    -0.0301,
+    0.0857
+   ]
+  },
+  "M0x": {
+   "living/window-bench": null,
+   "living/rounded-corner": null,
+   "living/curtain-track": null
+  }
+ },
+ "f3_lines_near_edges": {
+  "M0": [],
+  "M0p": [],
+  "M0x": []
+ },
+ "f3_tangents": {
+  "M0": {
+   "edge_tangents": [
+    {
+     "item": "living/curtains",
+     "side": "bottom",
+     "margin": 0.0144
+    }
+   ],
+   "object_object_tangents": [
+    {
+     "a": "armchair 72x78 h70 (fixed-product)",
+     "b": "living/curtains",
+     "kind": "overlap",
+     "overlap_thickness": 0.0273,
+     "cover_of_back": 0.05,
+     "behind": "armchair 72x78 h70 (fixed-product)",
+     "dist3d_m": 0.374,
+     "rule": "overlap thinner than 0.03 and < 60% of the back item"
+    },
+    {
+     "a": "armchair 72x78 h70 (fixed-product)",
+     "b": "living/magazine-holder",
+     "kind": "gap",
+     "gap": 0.0176,
+     "dist3d_m": 0.058,
+     "rule": "silhouettes apart by < 0.02 (kissing contours)"
+    },
+    {
+     "a": "sofa 220x92x78 (fixed-product)",
+     "b": "coffee table 140x70 h38 (fixed-product)",
+     "kind": "overlap",
+     "overlap_thickness": 0.0234,
+     "cover_of_back": 0.128,
+     "behind": "sofa 220x92x78 (fixed-product)",
+     "dist3d_m": 0.42,
+     "rule": "overlap thinner than 0.03 and < 60% of the back item"
+    },
+    {
+     "a": "living/basket",
+     "b": "living/magazine-holder",
+     "kind": "gap",
+     "gap": 0.0177,
+     "dist3d_m": 1.635,
+     "rule": "silhouettes apart by < 0.02 (kissing contours)"
+    }
+   ],
+   "note": "edge: visible bbox margin 0 < m < 0.02; object-object as round 2 (ray-cast silhouettes, 512x288)"
+  },
+  "M0p": {
+   "edge_tangents": [
+    {
+     "item": "coffee table 140x70 h38 (fixed-product)",
+     "side": "bottom",
+     "margin": 0.0017
+    }
+   ],
+   "object_object_tangents": [
+    {
+     "a": "sofa 220x92x78 (fixed-product)",
+     "b": "coffee table 140x70 h38 (fixed-product)",
+     "kind": "overlap",
+     "overlap_thickness": 0.0234,
+     "cover_of_back": 0.138,
+     "behind": "sofa 220x92x78 (fixed-product)",
+     "dist3d_m": 0.42,
+     "rule": "overlap thinner than 0.03 and < 60% of the back item"
+    }
+   ],
+   "note": "edge: visible bbox margin 0 < m < 0.02; object-object as round 2 (ray-cast silhouettes, 512x288)"
+  },
+  "M0x": {
+   "edge_tangents": [],
+   "object_object_tangents": [
+    {
+     "a": "kitchen-dining/bench-pad",
+     "b": "kitchen-dining/dining-rug",
+     "kind": "gap",
+     "gap": 0.0044,
+     "dist3d_m": 0.44,
+     "rule": "silhouettes apart by < 0.02 (kissing contours)"
+    },
+    {
+     "a": "kitchen-dining/bench-pad",
+     "b": "dining table 160x85 (fixed)",
+     "kind": "overlap",
+     "overlap_thickness": 0.0117,
+     "cover_of_back": 0.034,
+     "behind": "dining table 160x85 (fixed)",
+     "dist3d_m": 0.225,
+     "rule": "overlap thinner than 0.03 and < 60% of the back item"
+    },
+    {
+     "a": "dining bench (fixed)",
+     "b": "dining table 160x85 (fixed)",
+     "kind": "overlap",
+     "overlap_thickness": 0.0117,
+     "cover_of_back": 0.045,
+     "behind": "dining table 160x85 (fixed)",
+     "dist3d_m": 0.225,
+     "rule": "overlap thinner than 0.03 and < 60% of the back item"
+    },
+    {
+     "a": "dining bench (fixed)",
+     "b": "kitchen-dining/kitchen-runner",
+     "kind": "overlap",
+     "overlap_thickness": 0.0195,
+     "cover_of_back": 0.398,
+     "behind": "kitchen-dining/kitchen-runner",
+     "dist3d_m": 0.7,
+     "rule": "overlap thinner than 0.03 and < 60% of the back item"
+    },
+    {
+     "a": "kitchen-dining/dining-pendant",
+     "b": "door leaves",
+     "kind": "gap",
+     "gap": 0.0078,
+     "dist3d_m": 0.29,
+     "rule": "silhouettes apart by < 0.02 (kissing contours)"
+    },
+    {
+     "a": "kitchen-dining/dining-rug",
+     "b": "kitchen-dining/kitchen-runner",
+     "kind": "gap",
+     "gap": 0.0062,
+     "dist3d_m": 0.25,
+     "rule": "silhouettes apart by < 0.02 (kissing contours)"
+    },
+    {
+     "a": "dining table 160x85 (fixed)",
+     "b": "door leaves",
+     "kind": "overlap",
+     "overlap_thickness": 0.0234,
+     "cover_of_back": 0.282,
+     "behind": "dining table 160x85 (fixed)",
+     "dist3d_m": 0.095,
+     "rule": "overlap thinner than 0.03 and < 60% of the back item"
+    },
+    {
+     "a": "sofa 220x92x78 (fixed-product)",
+     "b": "coffee table 140x70 h38 (fixed-product)",
+     "kind": "overlap",
+     "overlap_thickness": 0.0195,
+     "cover_of_back": 0.031,
+     "behind": "sofa 220x92x78 (fixed-product)",
+     "dist3d_m": 0.42,
+     "rule": "overlap thinner than 0.03 and < 60% of the back item"
+    }
+   ],
+   "note": "edge: visible bbox margin 0 < m < 0.02; object-object as round 2 (ray-cast silhouettes, 512x288)"
+  }
+ },
+ "contradictions": []
+}
