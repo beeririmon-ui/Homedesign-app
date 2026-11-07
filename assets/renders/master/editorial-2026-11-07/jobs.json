@@ -72,22 +72,33 @@
    "task_id": "23161f7588b29e9ee6f6edf25c52a438",
    "idempotency_key": "mb-nordic-A-gpt-image-2-5-20261107-a1",
    "prompt": "assets/renders/master/editorial-2026-11-07/nordic/prompt-nordic-MB-A.txt",
-   "status": "submitted and paid (600); NOT fetched: var2 required authentication before the poll. Fetch at 0 tokens by placeholder_id; do not resubmit (same idempotency_key dedupes)"
+   "status": "completed; fetched at 0 tokens after var2 auth returned (no resubmit)",
+   "output": "nordic/nordic-MB-A.png",
+   "raw": "nordic/raw/gpt25-23161f7588b29e9ee6f6edf25c52a438-0-1794087337912-cae855d2.png",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/gpt25-23161f7588b29e9ee6f6edf25c52a438-0-1794087337912-cae855d2.png",
+   "size": [
+    2736,
+    1536
+   ]
   },
   {
    "id": "mb-warm-modern-A",
    "style": "warm-modern",
    "model": "gpt-image-2-5 i2i sunburst 2K 16:9",
-   "tokens": 0,
-   "estimate": null,
-   "idempotency_key_planned": "mb-warm-modern-A-gpt-image-2-5-20261107-a1",
+   "tokens": 600,
+   "estimate": 600,
    "prompt": "assets/renders/master/editorial-2026-11-07/warm-modern/prompt-warm-modern-MB-A.txt",
-   "status": "NOT submitted: var2 required authentication before the estimate; nothing spent. Prompt, board and 5 refs are ready (see references.warm_modern)"
+   "status": "submitted (paid 600)",
+   "idempotency_key": "mb-warm-modern-A-gpt-image-2-5-20261107-a1",
+   "placeholder_id": "f31bcdbd-f69a-4fff-807b-939699b9ed13",
+   "task_id": "c1dcf1b8225020385d30f14ab9673f24",
+   "batch_id": "a50159aa-0892-47b0-a40b-a555dc0262a8"
   }
  ],
- "tokens_total": 600,
+ "tokens_total": 1200,
  "blocked": {
   "date": "2026-11-07",
-  "reason": "var2 MCP server requires authentication (OAuth); per the rule, stopped and reported. No sheet or manifest entries written (no frames on disk yet)"
+  "reason": "var2 MCP server requires authentication (OAuth); per the rule, stopped and reported. No sheet or manifest entries written (no frames on disk yet)",
+  "resolved": "2026-11-07: var2 answering again; resumed per coordinator"
  }
 }
