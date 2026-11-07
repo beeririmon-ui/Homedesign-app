@@ -365,7 +365,8 @@ for (const [id, f] of Object.entries(hot.frames)) {
   const phone = img.clone().extract({ left: cl, top: 0, width: cw, height: meta.height! });
   // the encodes are reused only for the same source file and the same crop (a new frame, ed4 → ed5, or a moved crop
   // re-encodes, whatever the files' dates)
-  const stampFile = join(OUT, id, 'stamp.json');
+  // the stamp lives with the build's own state, not in the served media
+  const stampFile = join(GENERATED, `story-stamp.${id}.json`);
   const stamp = JSON.stringify({ src: f.src, mtime, crop_left: cl });
   const same = existsSync(stampFile) && readFileSync(stampFile, 'utf8') === stamp;
   for (const [w, base, source] of [

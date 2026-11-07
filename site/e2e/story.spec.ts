@@ -105,13 +105,13 @@ test.describe('the story prototype', () => {
     await page.goto('/test/story/#list-nordic-A');
     const rows = page.locator('#list-nordic-A .st-credit');
     await expect(rows).toHaveCount(13);
-    await page.locator('#list-nordic-A .st-open', { hasText: /^מנורת תקרה/ }).click();
+    await page.locator('#list-nordic-A .st-open', { hasText: /^מנורת תלייה דלעת/ }).click();
     await expect(sheet(page)).toHaveAttribute('open', '');
     await expect(page.locator('#st-add')).toBeHidden();
     await expect(page.locator('#st-why')).toContainText('המחיר עוד לא נקבע');
     await page.locator('#st-sheet-close').click();
     await expect(sheet(page)).not.toHaveAttribute('open', '');
-    await expect(page.locator('#list-nordic-A .st-open', { hasText: /^מנורת תקרה/ })).toBeFocused();
+    await expect(page.locator('#list-nordic-A .st-open', { hasText: /^מנורת תלייה דלעת/ })).toBeFocused();
     // the rug: QA "partly" in this frame, so no dot; listed, with the reason
     await expect(page.locator('#list-nordic-A .st-no-dot')).toHaveCount(1);
   });
@@ -122,6 +122,29 @@ test.describe('the story prototype', () => {
     await expect(page).toHaveURL(/\/rooms\/living-room\/$/);
     await expect(page.locator('button.hotspot').first()).toBeAttached({ timeout: 20_000 });
   });
+
+  for (const [w, h] of [
+    [1280, 800],
+    [1440, 900],
+  ] as const)
+    test(`every dot shown on the opening takes its own click at ${w}, the pendant's too (clear of the top band)`, async ({ page }) => {
+      await page.setViewportSize({ width: w, height: h });
+      await page.goto('/test/story/');
+      await expect(page.locator('#frame-nordic-A')).toHaveClass(/is-title/, { timeout: 15_000 });
+      await page.evaluate(() => window.__story!.showMarks('nordic-A'));
+      await expect(page.locator('#frame-nordic-A .st-mark[data-item="nordic-A-1"]')).toBeVisible();
+      const hits = await page.evaluate(() =>
+        Array.from(document.querySelectorAll<HTMLElement>('#frame-nordic-A .st-mark'))
+          .filter((m) => !m.hidden)
+          .map((m) => {
+            const r = m.getBoundingClientRect();
+            const at = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2);
+            return { item: m.dataset.item, hit: (at?.closest('.st-mark') as HTMLElement | null)?.dataset.item ?? at?.tagName ?? null };
+          }),
+      );
+      expect(hits.length).toBeGreaterThanOrEqual(11);
+      for (const x of hits) expect(x.hit, x.item).toBe(x.item);
+    });
 
   test('reduced motion: the sheet only fades, nothing rises', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
@@ -167,6 +190,9 @@ test.describe('the story prototype on a phone (400)', () => {
       expect(b.x + b.width).toBeLessThanOrEqual(box.x + box.width + 1);
     }
     await expect(page.locator('#frame-nordic-A .st-no-phone')).toHaveCount(3);
+    // Nordic B's throw: the dot placed by hand on the fold (frame u 0.765, v 0.677), not on the armchair's seat
+    const throwDot = page.locator('#frame-nordic-B .st-mark[data-item="nordic-B-4"]');
+    expect(await throwDot.evaluate((el) => [el.style.getPropertyValue('--pu'), el.style.getPropertyValue('--pv')])).toEqual(['0.8225', '0.677']);
     await expect(page.locator('#frame-nordic-A')).toHaveClass(/is-title/, { timeout: 15_000 });
     await page.waitForTimeout(1200);
     await audit(page, 'phone at rest');

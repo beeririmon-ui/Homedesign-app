@@ -136,10 +136,12 @@ const rgb = (s: string): [number, number, number] => {
   return m ? [Number(m[1]), Number(m[2]), Number(m[3])] : [0, 0, 0];
 };
 const pct = (xs: number[], p: number) => [...xs].sort((a, b) => a - b)[Math.min(xs.length - 1, Math.floor((p / 100) * xs.length))] ?? 0;
-async function textOnPicture(page: Page, sel: string): Promise<{ p5: number; min: number; text: string } | null> {
+async function textOnPicture(page: Page, sel: string, band?: number): Promise<{ p5: number; min: number; text: string } | null> {
   const has = await page.evaluate(`!!document.querySelector('${sel}')`);
   if (!has) return null;
-  const rect = (await page.evaluate(`window.__ev.rect('${sel}')`)) as { x: number; y: number; w: number; h: number };
+  const r0 = (await page.evaluate(`window.__ev.rect('${sel}')`)) as { x: number; y: number; w: number; h: number };
+  // a label whose paper is a band of `band` px centred in its (taller) target: the text sits on that band
+  const rect = band && r0.h > band ? { ...r0, y: r0.y + (r0.h - band) / 2, h: band } : r0;
   const col = rgb((await page.evaluate(`getComputedStyle(document.querySelector('${sel}')).color`)) as string);
   // the text alone is hidden (its colour and underline), so a label's own paper stays under it
   const hide = `document.querySelectorAll('${sel}, ${sel} *').forEach((e) => { e.style.setProperty('color', 'transparent', 'important'); e.style.setProperty('text-decoration-color', 'transparent', 'important'); })`;
@@ -427,6 +429,58 @@ async function keyboard(): Promise<void> {
   await ctx.close();
 }
 
+// every dot on screen takes its own click (elementFromPoint at its centre), each frame at its start, 1280 and 1440;
+// a dot under the top band would hand the click to the band (QA 2026-11-07, Nordic A's pendant)
+async function hitTest(): Promise<void> {
+  const out: Record<string, unknown> = {};
+  for (const [w, h] of [
+    [1280, 800],
+    [1440, 900],
+  ] as const) {
+    const ctx = await ctxOf(w, h);
+    const page = await open(ctx);
+    await settled(page);
+    for (const f of ['nordic-A', 'nordic-B', 'warm-modern-A']) {
+      await goTo(page, `#frame-${f}`);
+      await sleep(700);
+      await page.evaluate(`window.__story.showMarks('${f}')`);
+      await sleep(350);
+      const hits = (await page.evaluate(
+        `[...document.querySelectorAll('#frame-${f} .st-mark')].filter((m) => !m.hidden).map((m) => { const r = m.getBoundingClientRect(); const x = r.x + r.width / 2; const y = r.y + r.height / 2; const at = document.elementFromPoint(x, y); const d = at && at.closest('.st-mark'); return { item: m.dataset.item, y: Math.round(y), hit: d ? d.dataset.item : (at ? at.tagName + (at.id ? '#' + at.id : '') : null) }; })`,
+      )) as { item: string; y: number; hit: string }[];
+      const hidden = (await page.evaluate(
+        `[...document.querySelectorAll('#frame-${f} .st-mark')].filter((m) => m.hidden).map((m) => m.dataset.item)`,
+      )) as string[];
+      out[`${w} ${f}`] = {
+        shown: hits.length,
+        missed: hits.filter((x) => x.hit !== x.item),
+        hidden_by_crop_or_band: hidden,
+        pendant: hits.find((x) => /-(1|2)$/.test(x.item) && x.y < 140) ?? null,
+      };
+      if (hits.some((x) => x.hit !== x.item))
+        problems.push(`${w} ${f}: a dot does not take its click: ${JSON.stringify(hits.filter((x) => x.hit !== x.item))}`);
+    }
+    if (w === 1280) {
+      await goTo(page, '#frame-nordic-A');
+      await sleep(600);
+      await page.evaluate(`window.__story.showMarks('nordic-A')`);
+      await sleep(350);
+      await shot(
+        page,
+        'desk-2b-pendant-dot',
+        "1280: Nordic A, v0 0.10: the pendant's dot at the bottom of the shade, clear of the top band; the band's words on the label paper, the 0.35 scrim",
+      );
+      await goTo(page, '#frame-warm-modern-A');
+      await sleep(700);
+      await page.evaluate(`window.__story.showMarks('warm-modern-A')`);
+      await sleep(350);
+      await shot(page, 'desk-8b-warm-modern-dots', '1280: warm modern A ed5 (QA: final test): the pendant, now faithful, has its dot under the band');
+    }
+    await ctx.close();
+  }
+  evidence.hit_test = out;
+}
+
 // reduced motion: the sheet fades, nothing rises; the title lines do not move
 async function reduced(): Promise<void> {
   for (const [w, h, tag] of [
@@ -464,8 +518,9 @@ async function contrastRun(w: number, h: number, tag: string): Promise<void> {
     await sleep(2300);
     for (const part of ['.st-kicker', '.st-title', '.st-line', '.st-link', '.st-draft'])
       over[`${f} ${part}`] = await textOnPicture(page, `#frame-${f} ${part}`);
-    over[`${f} top band (brand)`] = await textOnPicture(page, '#mag-head .mag-brand');
-    over[`${f} top band (nav)`] = await textOnPicture(page, '#mag-head .st-nav');
+    over[`${f} top band (brand)`] = await textOnPicture(page, '#mag-head .mag-brand', 30);
+    over[`${f} top band (nav: עצב בעצמך)`] = await textOnPicture(page, '#mag-head .st-nav > a', 30);
+    over[`${f} top band (nav: סל)`] = await textOnPicture(page, '#st-cart-open', 30);
   }
   await goTo(page, '#list-nordic-A');
   await sleep(300);
@@ -550,6 +605,7 @@ await run(1280, 800, 'desk');
 await run(400, 800, 'phone');
 await keyboard();
 await reduced();
+await hitTest();
 await contrastRun(1280, 800, '1280');
 await contrastRun(400, 800, '400');
 await axe();
