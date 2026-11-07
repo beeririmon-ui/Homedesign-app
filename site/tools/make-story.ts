@@ -33,7 +33,7 @@ import { expandOptions, type FullCatalog, type FullProduct, type PublicCatalog }
 import { availableValues, selectionOf } from '@hd/shared/picker';
 import { colorNameHe, materialsHe } from './lib/hebrew';
 import { GENERATED, MEDIA_OUT, repoPath, sitePath } from './lib/paths';
-import { cardOf, qaReader, type QaFrame, type QaState } from './lib/qa-frames';
+import { cardOf, registerReader, rowOf, type QaFrame, type QaState } from './lib/qa-frames';
 
 type Box = [number, number, number, number];
 type Point = {
@@ -66,13 +66,16 @@ type CloseupSpec = { product: string; option?: Record<string, string>; src: stri
 type Pair = { concept_he: string; line_he?: string; tool: string | null; frames: FrameSpec[]; closeups?: CloseupSpec[] };
 type Story = {
   issue_he: string;
-  qa_records: string[];
+  /** QA's register: the highest version of qa/reports/ged-register-*.json (tools/lib/qa-frames.ts) */
+  qa_register: string;
   allowed_states: QaState[];
   marks_he: Record<string, string>;
   tool_fallback: string;
   rooms: { id: string; n: string; name_he: string }[];
   styles: { id: string; name_he: string }[];
   names_he: Record<string, string>;
+  /** a shape that an option gives the product its own name for (design notes §6): product → "axis:value" → base name */
+  option_names_he?: Record<string, Record<string, string>>;
   pairs: Record<string, Pair>;
 };
 type Card = {
@@ -123,6 +126,8 @@ type Item = {
   in_frame_he: string | null;
   /** the product's part of the frame, as a small 4:5 crop: "בחדר הזה" on the detail page */
   crop_image: Image | null;
+  /** the product alone, centred, at least half the crop's width, never enlarged: stands in for a missing photo (§6) */
+  product_crop: Image | null;
 };
 type FrameOut = Required<Omit<FrameSpec, 'points'>> & {
   state: QaState;
@@ -144,7 +149,14 @@ type PageOut = { room: string; style: string; href: string; pair: Pair; frames: 
 const read = <T>(p: string): T => JSON.parse(readFileSync(p, 'utf8')) as T;
 const DATA = 'data/story/story.json';
 const story = read<Story>(repoPath(DATA));
-const qaOf = qaReader(story.qa_records);
+const register = registerReader();
+const qaOf = register.read;
+console.log(`QA register ${register.path}, version ${register.version}`);
+for (const [key, pair] of Object.entries(story.pairs))
+  for (const f of pair.frames) {
+    const by = register.supersededBy(f.qa_key);
+    if (by) console.warn(`${key} ${f.id}: ${f.qa_key} is superseded by ${by} in the register: the frame stays out until the data names ${by}`);
+  }
 for (const p of ['.generated/catalog.story.full.json', '.generated/catalog.public.json'])
   if (!existsSync(sitePath(p))) {
     console.error(`${p} is missing: run npm run catalog, then npm run story (it builds the story catalog first)`);
@@ -164,6 +176,25 @@ const MIN_SHORT = 24;
 const roomOf = (id: string) => story.rooms.find((r) => r.id === id)!;
 const styleOf = (id: string) => story.styles.find((s) => s.id === id)!;
 const pageHref = (room: string, style: string) => `/story/${room}/${style}/`;
+/**
+ * The product alone, for a detail page without a supplier photo (design notes §6, Q3): centred on its box, the product
+ * at least half the crop's width (0.62 of it), 4:5; a tall product shows its part around the point. One file at the
+ * crop's own size up to 640, shown at that size or smaller, never enlarged.
+ */
+async function productCrop(img: sharp.Sharp, W: number, H: number, box: Box, v: number, dir: string, url: string): Promise<Image> {
+  const [x0, x1, y0, y1] = box;
+  const w = Math.round(Math.min(W, Math.max(64, ((x1 - x0) * W) / 0.62)));
+  const h = Math.round(Math.min(H, w / 0.8));
+  const left = Math.round(Math.min(W - w, Math.max(0, ((x0 + x1) / 2) * W - w / 2)));
+  const cy = (y1 - y0) * H <= h ? ((y0 + y1) / 2) * H : v * H;
+  const top = Math.round(Math.min(H - h, Math.max(0, cy - h / 2)));
+  const key = createHash('sha256').update(JSON.stringify(['product', box, v, W, H])).digest('hex').slice(0, 10);
+  mkdirSync(dir, { recursive: true });
+  const ow = Math.min(640, w);
+  const out = join(dir, `${key}.p${ow}.webp`);
+  if (!existsSync(out)) await img.clone().extract({ left, top, width: w, height: h }).resize({ width: ow }).webp({ quality: 80 }).toFile(out);
+  return { src: `${url}/${key}.p${ow}.webp`, srcset: '', w: ow, h: Math.round((ow * h) / w) };
+}
 /** layer 2, "הפרט": a product's page in one house (its close-ups are in that house's light) */
 const detailHref = (room: string, style: string, product: string) => `/story/${room}/${style}/p/${product}/`;
 /**
@@ -271,7 +302,7 @@ function tryHref(tool: string | null, roomId: string, productId: string): string
 /** reading order in a right-to-left page: top to bottom in bands, right to left inside a band */
 const readingOrder = (a: Point, b: Point) => Math.floor(a.v / 0.25) - Math.floor(b.v / 0.25) || b.u - a.u;
 /** QA's verdict, and whether it lets a dot on: "yes", or "yes, as the listing's … option" (the point names the option) */
-const faithfulOf = (q: QaFrame, product: string): string => q.rows.find((r) => cardOf(r) === product)?.faithful ?? 'not checked';
+const faithfulOf = (q: QaFrame, product: string, values: Record<string, string> | null): string => rowOf(q, product, values)?.faithful ?? 'not checked';
 const isFaithful = (verdict: string) => /^yes\b/.test(verdict);
 
 /**
@@ -363,13 +394,16 @@ async function itemOf(
   // the catalog's notes describe the room engine's frame ("בתמונה: …"): the story frame brings its own caption
   const notes = [...(pt.in_frame_he ? [pt.in_frame_he] : []), ...(styleNote ? [styleNote] : []), ...(p?.notes_he.filter((x) => !x.startsWith('בתמונה')) ?? [])];
   if (p?.pack) notes.push(`נמכר כסט של ${p.pack.set_qty}.`);
-  const faithful = faithfulOf(q, pt.product);
+  const values = card.options ? { ...(cardSku?.values ?? {}), ...(pt.option ?? {}) } : null;
+  const row = rowOf(q, pt.product, values);
+  const faithful = row?.faithful ?? 'not checked';
   // G-ED.5: "partly" in the frame gets its dot when the product's close-up in this house passed G-ED as "yes"
   const closeupYes = closeups.some((c) => {
     const cq = c.product === pt.product ? qaOf(c.qa_key) : null;
-    return !!cq && story.allowed_states.includes(cq.state) && isFaithful(faithfulOf(cq, pt.product));
+    return !!cq && story.allowed_states.includes(cq.state) && isFaithful(faithfulOf(cq, pt.product, values));
   });
-  const dot = isFaithful(faithful) || (/^partly\b/.test(faithful) && closeupYes);
+  // the register says where a dot goes (yes | no | closeup_only); an older record only gives the verdict
+  const dot = row?.dot ? row.dot === 'yes' || (row.dot === 'closeup_only' && closeupYes) : isFaithful(faithful) || (/^partly\b/.test(faithful) && closeupYes);
   const ph = dot ? phoneDot(pt, crop[0], crop[1], fw, fh) : { at: null, note: null };
   return {
     id: `${frame}-${n}`,
@@ -398,9 +432,10 @@ async function itemOf(
     swatch: hexOf(card) ?? '#d9d6d0',
     href: null,
     try_href: tryHref(tool, roomId, pt.product),
-    values: card.options ? { ...(cardSku?.values ?? {}), ...(pt.option ?? {}) } : null,
+    values,
     in_frame_he: pt.in_frame_he ?? null,
     crop_image: null,
+    product_crop: null,
   };
 }
 
@@ -460,6 +495,7 @@ for (const [key, pair] of Object.entries(story.pairs)) {
     for (const x of items) {
       x.href = detailHref(room, style, x.product);
       x.crop_image = await itemCrop(img, W, H, x.box, join(dir, 'items'), `${URL_BASE}/${room}/${style}/${f.id}/items`);
+      x.product_crop = await productCrop(img, W, H, x.box, x.v, join(dir, 'items'), `${URL_BASE}/${room}/${style}/${f.id}/items`);
     }
     // no two phone targets of 44 CSS may overlap (G-ED.17 (4)); a pair that does is reported, to be grouped
     const css = PHONE_CSS / ((crop[1] - crop[0]) * W);
@@ -520,6 +556,12 @@ type DetailSku = {
   variant_id: string | null;
   price_agorot: number | null;
   price_he: string | null;
+  /** the single piece of a product sold as a set (SET1), where the supplier offers one; an estimate when marked */
+  unit_price_agorot: number | null;
+  unit_price_he: string | null;
+  unit_estimated: boolean;
+  /** the page's title for this option (design notes §6): the base name and the option's colour, never its size */
+  title_he: string;
   /** offered in the picker (a product without a price yet still shows its options) */
   available: boolean;
   /** for sale: priced, in stock, the product sold */
@@ -553,6 +595,9 @@ type DetailOut = {
   try_href: string | null;
   /** close-ups declared for this product in this house that QA has not let in yet */
   closeups_held: number;
+  /** the product's crop from the story frame and its caption: stands in for a missing photo, on the story's option only */
+  crop: Image | null;
+  crop_caption_he: string | null;
 };
 const keyOf = (axes: { id: string }[], values: Record<string, string> | null): string =>
   axes.length && values ? axes.map((a) => values[a.id] ?? '').join('+') : 'default';
@@ -614,7 +659,13 @@ async function detailOf(pg: PageOut, product: string, items: Item[]): Promise<De
     axes.some((a) => a.id === 'size')
       ? sizeLabel(axes.find((a) => a.id === 'size')!.values.find((v) => v.id === values.size)?.label_he)
       : sizeHe(p ? p.dimensions_cm : card.dimensions_cm, place);
-  const raw: Omit<DetailSku, 'image' | 'image_of_option' | 'closeup'>[] = o
+  const unitOk = !!p?.pack && p.pack.set_qty > 1;
+  const unitOf = (u: number | null | undefined) => ({
+    unit_price_agorot: unitOk && u != null ? u : null,
+    unit_price_he: unitOk && u != null ? formatIls(u) : null,
+    unit_estimated: unitOk && !!p?.pack?.unit_price_estimated,
+  });
+  const raw: Omit<DetailSku, 'image' | 'image_of_option' | 'closeup' | 'title_he'>[] = o
     ? o.skus.map((k) => ({
         key: keyOf(axes, k.values),
         values: k.values,
@@ -626,6 +677,7 @@ async function detailOf(pg: PageOut, product: string, items: Item[]): Promise<De
         sellable: k.available && productOk,
         size_he: sizeOf(k.values),
         days: k.shipping_days ?? p!.shipping_days ?? null,
+        ...unitOf(k.unit_price_agorot ?? p!.pack?.unit_price_agorot),
       }))
     : p
       ? [
@@ -640,6 +692,7 @@ async function detailOf(pg: PageOut, product: string, items: Item[]): Promise<De
             sellable: productOk && !!p.variants[0],
             size_he: sizeOf({}),
             days: p.shipping_days ?? null,
+            ...unitOf(p.pack?.unit_price_agorot),
           },
         ]
       : axes.length
@@ -654,6 +707,7 @@ async function detailOf(pg: PageOut, product: string, items: Item[]): Promise<De
             sellable: false,
             size_he: sizeOf(k.values as Record<string, string>),
             days: null,
+            ...unitOf(null),
           }))
         : [
             {
@@ -667,6 +721,7 @@ async function detailOf(pg: PageOut, product: string, items: Item[]): Promise<De
               sellable: false,
               size_he: sizeOf({}),
               days: null,
+              ...unitOf(null),
             },
           ];
   const story_key = keyOf(axes, first.values);
@@ -680,12 +735,32 @@ async function detailOf(pg: PageOut, product: string, items: Item[]): Promise<De
     if (!cu) held++;
     else closeups.set(c.option ? keyOf(axes, { ...(first.values ?? {}), ...c.option }) : story_key, cu);
   }
+  // the title (design notes §6): the story's name on the story's option; else the base name (or the option's own shape
+  // name) and the colour of the option, readable colours only (a supplier's "2" or "c-3" names nothing), never a size
+  const NAMING = new Set(['color', 'style', 'pattern', 'finish', 'other']);
+  const naming = axes.filter((a) => NAMING.has(a.id));
+  const readable = (l: string) => !/^[\d\s.×x()-]+$/i.test(l) && !/^[a-z]-?\d+$/i.test(l);
+  const shapeOf = (values: Record<string, string>) =>
+    Object.entries(values)
+      .map(([a, v]) => story.option_names_he?.[product]?.[`${a}:${v}`])
+      .find(Boolean) ?? null;
+  const storyValues = first.values ?? {};
+  const base = naming.length && first.name_he.includes(', ') ? first.name_he.slice(0, first.name_he.lastIndexOf(', ')) : first.name_he;
+  const titleOf = (values: Record<string, string>): string => {
+    const shape = shapeOf(values);
+    if (naming.every((a) => values[a.id] === storyValues[a.id]) && shape === shapeOf(storyValues)) return first.name_he;
+    const colour = naming
+      .map((a) => a.values.find((v) => v.id === values[a.id])?.label_he ?? '')
+      .filter((l) => l && readable(l))
+      .join(', ');
+    return colour ? `${shape ?? base}, ${colour}` : (shape ?? base);
+  };
   const skus: DetailSku[] = [];
   for (const k of raw) {
     // the option's own photo; an option the card lists no photo for shows the listing's main photo, for the story's option only
     const own = imageOf(k.values);
     const image = await photoOf(card, own ?? (k.key === story_key ? card.images.urls[0] : null));
-    skus.push({ ...k, image, image_of_option: !!image && !!own, closeup: closeups.get(k.key) ?? null });
+    skus.push({ ...k, title_he: titleOf(k.values), image, image_of_option: !!image && !!own, closeup: closeups.get(k.key) ?? null });
   }
   const elsewhere = pages
     .filter((x) => x !== pg && x.frames.some((f) => f.items.some((it) => it.product === product)))
@@ -733,6 +808,14 @@ async function detailOf(pg: PageOut, product: string, items: Item[]): Promise<De
     elsewhere,
     try_href: first.try_href,
     closeups_held: held,
+    crop: first.product_crop,
+    crop_caption_he: (() => {
+      const named = naming.map((a) => a.values.find((v) => v.id === storyValues[a.id])?.label_he ?? '').filter((l) => l && readable(l));
+      const title = pg.frames.find((f) => f.id === first.frame)!.title_he;
+      return named.length
+        ? `מתוך הסיפור, בפריים "${title}". בתמונה: האפשרות "${named.join(', ')}". זו לא תמונת מוצר.`
+        : `מתוך הסיפור, בפריים "${title}". זו לא תמונת מוצר.`;
+    })(),
   };
 }
 const details: DetailOut[] = [];
@@ -949,15 +1032,28 @@ const whyHe = (d: DetailOut, sku: DetailSku): string =>
 function detailBody(d: DetailOut, pg: PageOut): string {
   const sku = d.skus.find((k) => k.key === d.story_key)!;
   const head = headOf(pg);
-  const crop = d.here[0]?.image ?? null;
+  const crop = d.crop;
   const photo = sku.image ?? crop;
   const photoCap = sku.image
     ? sku.label_he && d.axes.length && sku.image_of_option
       ? `צילום הספק, באפשרות ${sku.label_he}.`
       : 'צילום הספק.'
     : crop
-      ? `בפריים "${d.here[0]!.title_he}". צילום הספק עוד לא הורד לגרסת הבדיקה.`
+      ? d.crop_caption_he!
       : 'צילום הספק עוד לא הורד לגרסת הבדיקה.';
+  // the crop is shown at its own size, never enlarged (§6); a close-up replaces it (the crop is not a second picture)
+  const photoTag = sku.image
+    ? imgTag(sku.image, `צילום הספק: ${d.name_he}`, '(max-width: 719px) calc(100vw - 48px), 36rem', 'st-pd-img', true)
+    : crop
+      ? `<img id="st-pd-img" class="is-frame" src="${crop.src}" alt="${esc(`${d.name_he}, מתוך הסיפור`)}" width="${crop.w}" height="${crop.h}" decoding="async" fetchpriority="high" />`
+      : '<img id="st-pd-img" alt="" hidden />';
+  const units = d.skus.some((k) => k.unit_price_agorot !== null);
+  const packHtml =
+    units && d.set_qty > 1
+      ? `<fieldset class="st-pd-axis st-pd-pack" id="st-pd-pack"><legend class="st-pd-legend">איך לקנות</legend>
+<div class="st-pd-values"><label class="st-pd-value"><input type="radio" name="st-pack" value="set" checked /><span class="st-pd-text">סט של ${d.set_qty} · <span class="num" data-pack-price="set">${sku.price_he ?? ''}</span></span></label>
+<label class="st-pd-value"><input type="radio" name="st-pack" value="unit" /><span class="st-pd-text">יחידה בודדת · <span class="num" data-pack-price="unit">${sku.unit_price_he ?? ''}</span>${sku.unit_estimated ? ' (מחיר משוער)' : ''}</span></label></div></fieldset>`
+      : '';
   const credit = [d.material_he, sku.size_he, sku.price_he ?? 'המחיר עוד לא נקבע'].filter(Boolean).join(' · ');
   const why = whyHe(d, sku);
   const specs = [
@@ -987,7 +1083,7 @@ function detailBody(d: DetailOut, pg: PageOut): string {
   <div class="mag-grid">
     <div class="st-pd-media${sku.closeup ? ' has-closeup' : ''}" id="st-pd-media">
       <figure class="st-pd-photo" id="st-pd-photo">
-        ${photo ? imgTag(photo, sku.image ? `צילום הספק: ${d.name_he}` : `${d.name_he}, בפריים`, '(max-width: 719px) calc(100vw - 48px), 36rem', 'st-pd-img', true) : '<img id="st-pd-img" alt="" hidden />'}
+        ${photoTag}
         <span class="st-pd-none" id="st-pd-none"${photo ? ' hidden' : ''} style="--swatch: ${d.swatch}"><span class="st-swatch-lg" aria-hidden="true"></span><span>צילום הספק עוד לא הורד לגרסת הבדיקה.</span></span>
         <figcaption class="mag-cap" id="st-pd-photo-cap">${esc(photoCap)}</figcaption>
       </figure>
@@ -999,10 +1095,11 @@ function detailBody(d: DetailOut, pg: PageOut): string {
     </div>
     <div class="st-pd-info">
       <p class="st-kicker">${esc(head)}</p>
-      <h1 id="st-pd-title" class="mag-h1 st-pd-title" tabindex="-1">${esc(d.name_he)}</h1>
+      <h1 id="st-pd-title" class="mag-h1 st-pd-title" tabindex="-1">${esc(sku.title_he)}</h1>
       <p class="mag-credit-detail st-pd-credit" id="st-pd-credit">${esc(credit)}</p>
       <p class="st-pd-price num" id="st-pd-price" aria-live="polite"${sku.price_he ? '' : ' hidden'}>${sku.price_he ?? ''}</p>
       ${pickerHtml(d, sku)}
+      ${packHtml}
       <p class="mag-cap st-pd-story-note" id="st-pd-story-note" hidden><span id="st-pd-story-text"></span> <button type="button" class="st-link-btn" id="st-pd-back">חזרה לאפשרות שבסיפור</button></p>
       <div class="st-actions">
         <button type="button" class="mag-btn mag-btn-primary" id="st-pd-add"${sku.sellable ? '' : ' hidden'}>הוספה לסל</button>
@@ -1109,8 +1206,9 @@ for (const d of details) {
       skus,
       images,
       story_key: d.story_key,
-      crop: d.here[0]?.image ?? null,
-      crop_title_he: d.here[0]?.title_he ?? null,
+      crop: d.crop,
+      crop_caption_he: d.crop_caption_he,
+      swatch: d.swatch,
       marks_he: story.marks_he,
     },
   };

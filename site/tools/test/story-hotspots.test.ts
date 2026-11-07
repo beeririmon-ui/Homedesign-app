@@ -8,7 +8,7 @@ import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { repoPath } from '../lib/paths';
-import { cardOf, qaReader, type QaState } from '../lib/qa-frames';
+import { cardOf, registerReader, type QaState } from '../lib/qa-frames';
 
 type Point = {
   product: string;
@@ -21,7 +21,6 @@ type Point = {
 };
 type Frame = { id: string; src: string; qa_key: string; title_he?: string; alt_he?: string; phone_crop_u?: number; points: Point[] };
 const story = JSON.parse(readFileSync(repoPath('data/story/story.json'), 'utf8')) as {
-  qa_records: string[];
   allowed_states: QaState[];
   rooms: { id: string }[];
   styles: { id: string }[];
@@ -29,16 +28,17 @@ const story = JSON.parse(readFileSync(repoPath('data/story/story.json'), 'utf8')
   names_he_proposed: string[];
   pairs: Record<string, { concept_he: string; tool: string | null; frames: Frame[] }>;
 };
-const qaOf = qaReader(story.qa_records);
+const qaOf = registerReader().read;
 /** every frame of every pair, by "room/style frame" */
 const frames = Object.entries(story.pairs).flatMap(([key, p]) => p.frames.map((f) => [`${key} ${f.id}`, f] as const));
 /** the frames with a hotspot map: the ones the pages show when QA lets them in */
 const mapped = frames.filter(([, f]) => f.points.length > 0);
-const walk = (d: string): string[] => readdirSync(d).flatMap((n) => (statSync(join(d, n)).isDirectory() ? walk(join(d, n)) : [n]));
+const walkPaths = (d: string): string[] => readdirSync(d).flatMap((n) => (statSync(join(d, n)).isDirectory() ? walkPaths(join(d, n)) : [join(d, n)]));
+// a card is known by its id (a file may be named otherwise, e.g. planter/zendrop-2784524.json)
 const cards = new Set(
-  walk(repoPath('data/products'))
+  walkPaths(repoPath('data/products'))
     .filter((n) => n.endsWith('.json'))
-    .map((n) => n.slice(0, -5)),
+    .map((n) => (JSON.parse(readFileSync(n, 'utf8')) as { id?: string }).id ?? ''),
 );
 
 describe('the story data file', () => {
@@ -58,7 +58,7 @@ describe('the story data file', () => {
     for (const [id, f] of mapped) for (const p of f.points) expect(p.by_eye, `${id}: ${p.product}`).toBe(true);
   });
 
-  it('maps only frames QA called final test or almost, each with its title and alt text', () => {
+  it('maps only frames the QA register lets in, each with its title and alt text', () => {
     expect(mapped.length).toBeGreaterThan(0);
     for (const [id, f] of mapped) {
       const q = qaOf(f.qa_key);

@@ -3,7 +3,7 @@
  * web/dist (Chromium headless + SwiftShader, so frame times are a floor, not a phone's):
  *   screens/       400×800 (touch) and 1280×800: the contents; the Nordic living room (the opening, the dots, the sheet,
  *                  after "הוספה לסל", the list, the second frame, the tool entry, the other houses, the cart); warm
- *                  modern; modern country ("almost"); boho (typographic); keyboard focus; reduced motion
+ *                  modern; modern country ("almost"); boho; the Mediterranean (typographic); keyboard focus; reduced motion
  *   evidence.json  timings (the opening, the dots, the sheet), contrast (text on the frames and on paper), the first-load
  *                  weight (the contents and the Nordic page; DPR 1 and 3), axe (WCAG 2.0/2.1 A + AA) on every kind of
  *                  page, the real-routes check, and the public build (HD_PUBLIC=1) carrying no story and no test page
@@ -30,13 +30,15 @@ mkdirSync(SHOTS, { recursive: true });
 const NORDIC = '/story/living-room/nordic/';
 const WARM = '/story/living-room/warm-modern/';
 const COUNTRY = '/story/living-room/modern-country/';
-const BOHO = '/story/living-room/boho/';
+const BOHO = '/story/living-room/mediterranean/'; // the typographic page (QA has not let its frame in)
+const BOHO_FRAME = '/story/living-room/boho/';
 /** every frame the gate lets in, by page */
 const FRAMES = [
   [NORDIC, 'A'],
   [NORDIC, 'B'],
   [WARM, 'A'],
   [COUNTRY, 'A'],
+  [BOHO_FRAME, 'A'],
 ] as const;
 if (!existsSync(join(DIST, 'story/index.html')) || !existsSync(join(DIST, NORDIC, 'index.html'))) {
   console.error('web/dist/story/ is missing: run npm run build first.');
@@ -425,11 +427,11 @@ async function run(w: number, h: number, tag: 'desk' | 'phone'): Promise<void> {
   await sleep(900);
   await shot(
     page,
-    `${tag}-8e-boho-typographic`,
-    `${w}: boho: QA has not let its frame in, so the page is type only: the concept, the story line, why there is no frame`,
+    `${tag}-8e-typographic`,
+    `${w}: the Mediterranean: QA has not let its frame in, so the page is type only: the concept, the story line, why there is no frame`,
   );
   await scrolled(page);
-  await shot(page, `${tag}-8f-boho-full`, `${w}: the whole typographic page: the cover in type, the tool (the Nordic one, said so), the other houses`, {
+  await shot(page, `${tag}-8f-typographic-full`, `${w}: the whole typographic page: the cover in type, the tool (the Nordic one, said so), the other houses`, {
     full: true,
   });
   houses[BOHO] = {

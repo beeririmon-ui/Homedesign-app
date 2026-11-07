@@ -5,8 +5,8 @@
  *    mark; no dot at rest, dots on movement; a dot or a list row opens "קנה את המראה" (a modal dialog, keyboard and
  *    screen reader), add to the test cart, Esc returns the focus; the tool entry opens the room engine; reduced motion;
  *    the phone's 4:5 crop
- *  - /story/living-room/modern-country/: an "almost" frame, marked so; a product QA did not call faithful has no dot
- *  - /story/living-room/boho/: a pair whose frame QA has not let in is a typographic page, with no frame at all
+ *  - /story/living-room/modern-country/: an "almost" frame, marked so; boho: a frame QA's register let in
+ *  - /story/living-room/mediterranean/: a pair whose frame QA has not let in is a typographic page, with no frame at all
  *  - /story/<room>/<style>/p/<product>/, layer 2: the card, the options (price, picture and address follow the
  *    choice), the empty close-up slot (G-ED.18), the frames that show it, the way into the tool at its slot
  *  - the test cart is one across the story pages; /test/story/ goes on to the Nordic living room
@@ -41,6 +41,7 @@ const sheet = (page: Page) => page.locator('#st-sheet');
 const NORDIC = '/story/living-room/nordic/';
 const COUNTRY = '/story/living-room/modern-country/';
 const BOHO = '/story/living-room/boho/';
+const MED = '/story/living-room/mediterranean/';
 
 test.describe('the story contents', () => {
   test('every room, every house: a picture only where QA let a frame in, type for the rest, and links to each page', async ({ page }) => {
@@ -51,11 +52,11 @@ test.describe('the story contents', () => {
     await expect(page.locator('.st-room.is-next')).toHaveCount(8);
     const living = page.locator('#room-living-room .st-tile');
     await expect(living).toHaveCount(6);
-    await expect(page.locator('#room-living-room .st-tile-pic')).toHaveCount(3);
+    await expect(page.locator('#room-living-room .st-tile-pic')).toHaveCount(4);
     await expect(page.locator('#room-living-room .st-tile-link')).toHaveCount(6);
     // every picture on the contents is a frame QA let in: the three typographic houses have none
     const srcs = await page.locator('img').evaluateAll((els) => els.map((e) => (e as HTMLImageElement).currentSrc || (e as HTMLImageElement).src));
-    for (const s of srcs) expect(s, s).not.toMatch(/\/(boho|mediterranean|japandi)\//);
+    for (const s of srcs) expect(s, s).not.toMatch(/\/(mediterranean|japandi)\//);
     await page.locator('#room-living-room .st-tile-link', { hasText: 'כפרי מודרני' }).click();
     await expect(page).toHaveURL(new RegExp(`${COUNTRY}$`));
     await expect(page.locator('h1')).toHaveText('קוטג׳ בבוקר גשום');
@@ -225,8 +226,9 @@ test.describe('the other houses', () => {
     await expect(page.locator('#frame-A .st-draft')).toHaveClass(/is-almost/);
     await expect(page.locator('#frame-A .st-draft')).toHaveText('טיוטה / בדיקה · כמעט מוכן');
     await expect(page.locator('#list-A .st-credit')).toHaveCount(7);
-    await expect(page.locator('#frame-A .st-mark')).toHaveCount(5);
-    await expect(page.locator('#list-A .st-no-dot')).toHaveCount(2);
+    // fix4: QA's register calls all seven faithful, so all seven have a dot
+    await expect(page.locator('#frame-A .st-mark')).toHaveCount(7);
+    await expect(page.locator('#list-A .st-no-dot')).toHaveCount(0);
     // the curtain is sold as the option the frame shows, and the credit says which
     await page.locator('#list-A .st-open', { hasText: 'סרט קפלים' }).click();
     await expect(page.locator('#st-sheet-notes')).toContainText('בתמונה: האפשרות "סרט קפלים"');
@@ -238,18 +240,27 @@ test.describe('the other houses', () => {
     await audit(page, 'modern country at rest');
   });
 
-  test('boho: QA has not let its frame in, so the page is type only, with no frame and no picture', async ({ page }) => {
-    await page.goto(BOHO);
-    await expect(page.locator('h1')).toHaveText('בית אבן ישן בנמל, 16:00');
+  test('the Mediterranean: QA has not let its frame in, so the page is type only, with no frame and no picture', async ({ page }) => {
+    await page.goto(MED);
+    await expect(page.locator('h1')).toHaveText('בית מסויד, צהרי יוני');
     await expect(page.locator('.mag-stage')).toHaveCount(0);
     await expect(page.locator('.st-mark')).toHaveCount(0);
     await expect(page.locator('.st-type-status')).toContainText('הפריים עוד בבדיקה');
     const srcs = await page.locator('img').evaluateAll((els) => els.map((e) => (e as HTMLImageElement).src));
-    for (const s of srcs) expect(s, s).not.toMatch(/\/boho\//);
+    for (const s of srcs) expect(s, s).not.toMatch(/\/mediterranean\//);
     // and the frame is not on the server at all
-    expect((await page.request.get('/media/story/living-room/boho/A/1920.webp')).status()).toBe(404);
+    expect((await page.request.get('/media/story/living-room/mediterranean/A/1920.webp')).status()).toBe(404);
     await page.waitForTimeout(800);
-    await audit(page, 'boho, typographic');
+    await audit(page, 'the Mediterranean, typographic');
+  });
+
+  test('boho fin6 (QA register: final test): its frame, nine dots, the test mark', async ({ page }) => {
+    await page.goto(BOHO);
+    await expect(page.locator('h1')).toHaveText('בית אבן ישן בנמל, 16:00');
+    await expect(page.locator('#frame-A')).toHaveClass(/is-title/, { timeout: 15_000 });
+    await expect(page.locator('#frame-A .st-draft')).toHaveText('טיוטה / בדיקה');
+    await expect(page.locator('#frame-A .st-mark')).toHaveCount(9);
+    await expect(page.locator('#list-A .st-credit')).toHaveCount(9);
   });
 
   test('one test cart across the story pages, and the old prototype address goes on to the Nordic living room', async ({ page }) => {
@@ -381,7 +392,7 @@ test.describe('the story on a phone (400)', () => {
   });
 
   test('the contents, a typographic page and a detail page fit the phone: no sideways scroll, zero axe violations', async ({ page }) => {
-    for (const path of ['/story/', BOHO, DETAIL('modern-country', 'curtains-aliexpress-linen-blend-s-fold-180502')]) {
+    for (const path of ['/story/', MED, DETAIL('modern-country', 'curtains-aliexpress-linen-blend-s-fold-180502')]) {
       await page.goto(path);
       await page.waitForTimeout(800);
       expect(await page.evaluate(() => document.documentElement.scrollWidth), path).toBeLessThanOrEqual(400);

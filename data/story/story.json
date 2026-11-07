@@ -1,19 +1,18 @@
 {
   "version": "1.0",
   "date": "2026-11-07",
-  "note": "Layer 1, the story (skeleton spec 2.0, 'שלוש שכבות וזרימת האתר'; DIR1). One data file for every story page: rooms, styles, and per room/style pair its concept and its frames, each frame with its crops, title, story line and hotspot points. Built by site/tools/make-story.ts into /story/ and /story/<room>/<style>/, only without HD_PUBLIC=1 (site/web/vite.config.ts), until the frames pass 'approved for the site' (G-ED). THE QA GATE: a frame shows only when its state in qa_records (read by site/tools/lib/qa-frames.ts; a newer record wins) is one of allowed_states, and it has points; otherwise its pair is a typographic page. A dot goes only on a product QA called faithful ('yes'), G-ED.5; on the phone only when the 4:5 crop carries it at >= 44 x 24 CSS, G-ED.17 (proposal). POINTS AND BOXES ARE TEMPORARY, PLACED BY EYE (frontend-dev, 2026-11-07); qa-agent verifies them. u, v and box [u0, u1, v0, v1] are 0-1 of the whole frame, left to right and top to bottom; the box is the product's visible extent (for a pair, the one the point is on). option: the supplier option the frame shows when not the card's default (value ids); name_he: that option's own name; phone_at: a dot placed by hand for the phone's crop; in_frame_he: what the frame adds that is not sold. Story lines: docs/creative-review-2026-11-06.md §3. Crops and names: docs/proposals/story-page-design-notes-2026-11-07.md; names marked in names_he_proposed are frontend-dev's proposals in the designer's rule, waiting for master-designer. CLOSE-UPS (layer 2, 'הפרט', G-ED.18): a pair may list closeups: [{product, option?, src, qa_key, alt_he}]; the same QA gate lets each one in, and it shows on the product's detail page in that house (/story/<room>/<style>/p/<product>/), on its option (else on the option the story shows). None yet: the page shows the empty slot.",
+  "note": "Layer 1, the story (skeleton spec 2.0, 'שלוש שכבות וזרימת האתר'; DIR1). One data file for every story page: rooms, styles, and per room/style pair its concept and its frames, each frame with its crops, title, story line and hotspot points. Built by site/tools/make-story.ts into /story/ and /story/<room>/<style>/, only without HD_PUBLIC=1 (site/web/vite.config.ts), until the frames pass 'approved for the site' (G-ED). THE QA GATE: a frame shows only when its state in QA's register (qa_register: the highest version of qa/reports/ged-register-*.json, read by site/tools/lib/qa-frames.ts) is one of allowed_states, and it has points; otherwise its pair is a typographic page. A dot goes where the register's row says dot 'yes' (or 'closeup_only' with a faithful close-up), G-ED.5; on the phone only when the 4:5 crop carries it at >= 44 x 24 CSS, G-ED.17 (proposal). POINTS AND BOXES ARE TEMPORARY, PLACED BY EYE (frontend-dev, 2026-11-07); qa-agent verifies them. u, v and box [u0, u1, v0, v1] are 0-1 of the whole frame, left to right and top to bottom; the box is the product's visible extent (for a pair, the one the point is on). option: the supplier option the frame shows when not the card's default (value ids); name_he: that option's own name; phone_at: a dot placed by hand for the phone's crop; in_frame_he: what the frame adds that is not sold. Story lines: docs/creative-review-2026-11-06.md §3. Crops and names: docs/proposals/story-page-design-notes-2026-11-07.md; names marked in names_he_proposed are frontend-dev's proposals in the designer's rule, waiting for master-designer. CLOSE-UPS (layer 2, 'הפרט', G-ED.18): a pair may list closeups: [{product, option?, src, qa_key, alt_he}]; the same QA gate lets each one in, and it shows on the product's detail page in that house (/story/<room>/<style>/p/<product>/), on its option (else on the option the story shows). None yet: the page shows the empty slot.",
   "issue_he": "הבית",
-  "qa_records": [
-    "qa/reports/2026-11-07-editorial-fin2-ed4-country.json",
-    "qa/reports/2026-11-07-ged-codefix-mc1-clay.json"
-  ],
+  "qa_register": "qa/reports/ged-register-*.json, the highest version (site/tools/lib/qa-frames.ts registerReader)",
   "allowed_states": [
     "final_test",
-    "almost"
+    "almost",
+    "approved_for_site"
   ],
   "marks_he": {
     "final_test": "טיוטה / בדיקה",
-    "almost": "טיוטה / בדיקה · כמעט מוכן"
+    "almost": "טיוטה / בדיקה · כמעט מוכן",
+    "approved_for_site": "בדיקה · מאושר לאתר"
   },
   "tool_fallback": "/rooms/living-room/",
   "rooms": [
@@ -116,9 +115,28 @@
     "cushions-aliexpress-farmhouse-floral-pillow-covers-166217": "זוג ציפיות כרית בהדפס פרחים, ורוד חימר ומרווה",
     "cushions-cj-chenille-check-milky-white": "ציפית כרית שניל במשבצות, לבן חלבי",
     "sill-vase-cj-cream-fluted-column-25": "אגרטל עמוד מחורץ, שמנת",
-    "bowl-cj-speckled-ivory-wide-bowl-21": "קערה רחבה מנוקדת, שנהב"
+    "bowl-cj-speckled-ivory-wide-bowl-21": "קערה רחבה מנוקדת, שנהב",
+    "wall-decor-aliexpress-natural-raffia-woven-bohemian-763597": "קישוט קיר עגול מרפיה קלועה, טבעי",
+    "wall-sconce-aliexpress-rattan-bamboo-wall-lamp-671943": "מנורת קיר, כדור במבוק קלוע על זרוע עץ",
+    "cushions-cj-washed-cotton-frayed": "ציפית כרית כותנה רחוצה עם שוליים פרומים, חלודה",
+    "cushions-cj-sandstone-chenille-flange": "ציפית כרית שניל עם שוליים שטוחים, זית",
+    "sofa-cover-cj-washed-hemp-throw": "שמיכת קנבוס רחוצה, יוטה טבעית",
+    "planter-zendrop-seagrass-belly-basket-45": "סל-עציץ בטן מקש ים, גדול",
+    "basket-cj-seagrass-belly-xl": "סל בטן מקש ים עם ידיות",
+    "table-runner-aliexpress-boho-macrame-table-runners-263532": "ראנר מקרמה עם פס יוטה ופרנזים",
+    "pouf-cj-cotton-knit-ball-cover": "כיסוי פוף כדור סרוג מכותנה, טבעי"
   },
-  "names_he_proposed": [],
+  "names_he_proposed": [
+    "basket-cj-seagrass-belly-xl",
+    "cushions-cj-sandstone-chenille-flange",
+    "cushions-cj-washed-cotton-frayed",
+    "planter-zendrop-seagrass-belly-basket-45",
+    "pouf-cj-cotton-knit-ball-cover",
+    "sofa-cover-cj-washed-hemp-throw",
+    "table-runner-aliexpress-boho-macrame-table-runners-263532",
+    "wall-decor-aliexpress-natural-raffia-woven-bohemian-763597",
+    "wall-sconce-aliexpress-rattan-bamboo-wall-lamp-671943"
+  ],
   "pairs": {
     "living-room/nordic": {
       "tool": "/rooms/living-room/",
@@ -588,8 +606,8 @@
       "frames": [
         {
           "id": "A",
-          "src": "assets/renders/editorial-phase-b-2026-11-06/modern-country-A-mc1.png",
-          "qa_key": "modern-country-A-mc1",
+          "src": "assets/renders/editorial-phase-b-2026-11-06/modern-country-A-fix4.png",
+          "qa_key": "modern-country-A-fix4",
           "role": "wide",
           "u0": 0.5,
           "v0": 0.1,
@@ -700,10 +718,131 @@
       "frames": [
         {
           "id": "A",
-          "src": "assets/renders/editorial-phase-b-2026-11-06/boho-A-fin4.png",
-          "qa_key": "boho-A-fin4",
+          "src": "assets/renders/editorial-phase-b-2026-11-06/boho-A-fin6.png",
+          "qa_key": "boho-A-fin6",
           "role": "wide",
-          "points": []
+          "points": [
+            {
+              "product": "wall-decor-aliexpress-natural-raffia-woven-bohemian-763597",
+              "u": 0.215,
+              "v": 0.24,
+              "box": [
+                0.186,
+                0.243,
+                0.188,
+                0.295
+              ],
+              "by_eye": true
+            },
+            {
+              "product": "wall-sconce-aliexpress-rattan-bamboo-wall-lamp-671943",
+              "u": 0.592,
+              "v": 0.275,
+              "box": [
+                0.561,
+                0.614,
+                0.22,
+                0.33
+              ],
+              "by_eye": true
+            },
+            {
+              "product": "cushions-cj-washed-cotton-frayed",
+              "option": {
+                "other": "rust-orange"
+              },
+              "u": 0.497,
+              "v": 0.53,
+              "box": [
+                0.45,
+                0.537,
+                0.458,
+                0.596
+              ],
+              "by_eye": true
+            },
+            {
+              "product": "cushions-cj-sandstone-chenille-flange",
+              "u": 0.41,
+              "v": 0.53,
+              "box": [
+                0.349,
+                0.471,
+                0.462,
+                0.612
+              ],
+              "by_eye": true
+            },
+            {
+              "product": "sofa-cover-cj-washed-hemp-throw",
+              "option": {
+                "other": "raw-jute-color"
+              },
+              "u": 0.215,
+              "v": 0.7,
+              "box": [
+                0.044,
+                0.33,
+                0.508,
+                0.865
+              ],
+              "by_eye": true
+            },
+            {
+              "product": "planter-zendrop-seagrass-belly-basket-45",
+              "u": 0.7,
+              "v": 0.575,
+              "box": [
+                0.667,
+                0.737,
+                0.535,
+                0.68
+              ],
+              "by_eye": true
+            },
+            {
+              "product": "basket-cj-seagrass-belly-xl",
+              "u": 0.787,
+              "v": 0.63,
+              "box": [
+                0.753,
+                0.82,
+                0.562,
+                0.697
+              ],
+              "by_eye": true
+            },
+            {
+              "product": "table-runner-aliexpress-boho-macrame-table-runners-263532",
+              "u": 0.5,
+              "v": 0.8,
+              "box": [
+                0.335,
+                0.574,
+                0.695,
+                0.94
+              ],
+              "by_eye": true
+            },
+            {
+              "product": "pouf-cj-cotton-knit-ball-cover",
+              "u": 0.87,
+              "v": 0.85,
+              "box": [
+                0.764,
+                0.98,
+                0.723,
+                0.977
+              ],
+              "by_eye": true
+            }
+          ],
+          "u0": 0.5,
+          "v0": 0.5,
+          "phone_crop_u": 0.42,
+          "title_he": "בית אבן ישן בנמל, 16:00",
+          "line_he": "שמש של אחר הצהריים מסוננת בווילון קנים מגולגל למחצה ומטילה פסים על השטיח ועל הכריות. רצפת אריחים מצוירים בגווני אדמה, ודלתות עץ פתוחות למרפסת.",
+          "alt_he": "סלון בבית אבן ישן: ספה מכוסה בשמיכת קנבוס, כריות בחלודה ובזית, שולחן עץ גס עם ראנר מקרמה, פוף סרוג, ודלתות עץ פתוחות למרפסת מול הנמל. שמש של אחר הצהריים מסוננת בווילון קנים."
         }
       ]
     },
@@ -714,8 +853,8 @@
       "frames": [
         {
           "id": "A",
-          "src": "assets/renders/editorial-phase-b-2026-11-06/mediterranean-A-ed5.png",
-          "qa_key": "mediterranean-A-ed5",
+          "src": "assets/renders/editorial-phase-b-2026-11-06/mediterranean-A-ed6.png",
+          "qa_key": "mediterranean-A-ed6",
           "role": "wide",
           "points": []
         }
