@@ -81,14 +81,15 @@
   border: 1px solid var(--line-strong);
   background: var(--surface);
   color: var(--ink);
-  transition: transform 0.2s var(--ease-out);
+  transition: background-color var(--d-ui-out) var(--e-standard);
 }
 .gallery-btn svg {
   width: 20px;
   height: 20px;
 }
 .gallery-btn:active {
-  transform: scale(0.94);
+  background: var(--paper-2);
+  transition-duration: var(--d-press);
 }
 .gallery-btn[aria-disabled='true'] {
   opacity: 0.4;

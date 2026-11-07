@@ -1,43 +1,43 @@
-/* Design tokens: the Design Bible "טיפוגרפיה וממשק", one warm paper. No dark mode at launch (ART3, 2026-11-03:
-   every asset is balanced for the light paper). All text pairs ≥ 4.5:1 (checked). */
+/* The shop and the room engine read the magazine system's tokens (styles/system.css, the one source; S5, 2026-11-07).
+   The names below are the shop's older names, kept as aliases so its stylesheets read the system's values: one paper,
+   ink, hairlines, radius 2, the motion table's curves. No dark mode at launch (ART3, 2026-11-03). */
+@import './system.css';
+
 :root {
-  --bg: #f4f1ec; /* warm white */
+  --bg: var(--paper);
   --surface: #fbfaf7;
   --surface-2: #e9e4db;
-  --ink: #3a3a3a; /* charcoal, 10.1:1 on --bg */
-  --ink-2: #5c5852; /* 6.3:1 */
-  --line: #d9d6d0; /* mist */
-  --line-strong: #b9b3a9;
-  --accent: #c8a27a; /* oak: decoration only, never text */
+  --line: var(--rule);
+  --line-strong: var(--rule-control);
+  --accent: var(--oak); /* decoration only, never text */
   --accent-ink: #6f5a3f; /* 5.8:1 */
-  --sage: #a7b09a;
   --sage-ink: #4a5a3c;
-  --primary-bg: #3a3a3a;
-  --primary-ink: #f4f1ec;
-  --secondary-bg: #a7b09a;
-  --secondary-ink: #3a3a3a;
-  --danger: #9a3b2e;
-  --focus: #3a3a3a;
-  --stage: #141312;
-  --on-stage: #f4f1ec;
-  --glass: rgba(28, 27, 25, 0.56);
-  --glass-line: rgba(244, 241, 236, 0.2);
-  --shadow: 0 10px 40px rgba(20, 19, 18, 0.18);
+  --primary-bg: var(--ink);
+  --primary-ink: var(--paper);
+  --secondary-bg: var(--sage);
+  --secondary-ink: var(--ink);
+  --danger: var(--error);
+  --focus: var(--ink);
+  --on-stage: var(--paper);
+  /* §6.4: a paper label on the room, never dark glass; ink on it stays 8.9:1 over any part of the frame */
+  --glass: var(--label);
+  --glass-line: rgba(58, 58, 58, 0.14);
+  --shadow: var(--sh-label);
 
-  --f-display: 'Frank Ruhl Libre', 'David Libre', Georgia, serif;
-  --f-body: 'Assistant', 'Heebo', 'Arial Hebrew', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --f-body: var(--f-text);
   --fs-h1: clamp(30px, 4.2vw, 44px);
   --fs-h2: clamp(24px, 3vw, 30px);
   --fs-body: 17px;
   --lh-body: 1.65;
-  --radius: 14px;
-  --radius-pill: 999px;
+  --radius: var(--r-control);
+  --radius-pill: var(--r-control);
   --gutter: 24px;
-  --maxw: 1180px;
+  /* the shop's column keeps its width until its pages move to the magazine grid (§9) */
+  --shop-maxw: 1180px;
   --header-h: 60px;
-  --ease: cubic-bezier(0.77, 0, 0.18, 1);
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  color-scheme: light;
+  /* §7.1: the shop's two old curves are the table's standard and approach curves */
+  --ease: var(--e-standard);
+  --ease-out: var(--e-approach);
 }
 
 @media (min-width: 720px) {

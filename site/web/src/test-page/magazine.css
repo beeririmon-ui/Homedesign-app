@@ -1,73 +1,8 @@
 /* The magazine language (docs/site-art-direction-2026-11-02.md §4–§8; Design Bible 1.8 "טיפוגרפיה וממשק").
    One paper, ink and hairlines. Scoped to .mag: the shop pages keep their stylesheet until §12.7. */
+@import '../styles/system.css';
+
 .mag {
-  /* §6.1 colour */
-  --paper: #f4f1ec;
-  --paper-2: #efeae1;
-  --ink: #3a3a3a;
-  --ink-2: #5c5852;
-  --ink-press: #2a2a2a;
-  --rule: #d9d6d0;
-  --rule-control: #8a847b;
-  --oak: #c8a27a;
-  --sage: #a7b09a;
-  --error: #9a3b2e;
-  --label: rgba(244, 241, 236, 0.94);
-  --stage: #141312;
-  /* §7.1 motion: every duration and curve on the page is one of these */
-  --d-press: 80ms;
-  --d-micro: 120ms;
-  --d-ui-out: 150ms;
-  --d-ui-in: 200ms;
-  --d-ui-wait: 100ms;
-  --d-mark-in: 250ms;
-  --d-mark-out: 600ms;
-  --t-mark-idle: 2500ms;
-  --d-swap: 300ms;
-  --d-page-out: 150ms;
-  --d-page-in: 320ms;
-  --d-paper-hold: 200ms;
-  --d-paper-in: 400ms;
-  --d-develop: 600ms;
-  --d-approach: 1600ms;
-  --d-return: 1800ms;
-  --e-standard: cubic-bezier(0.37, 0, 0.63, 1);
-  --e-approach: cubic-bezier(0.25, 1, 0.5, 1);
-  --e-land: cubic-bezier(0.45, 0, 0.15, 1);
-  --e-ui-out: cubic-bezier(0.5, 0, 0.75, 0);
-  /* §5.1 spacing (4 px base) and grid */
-  --s-1: 4px;
-  --s-2: 8px;
-  --s-3: 12px;
-  --s-4: 16px;
-  --s-5: 24px;
-  --s-6: 32px;
-  --s-7: 48px;
-  --s-8: 64px;
-  --s-9: 96px;
-  --s-10: 128px;
-  --cols: 4;
-  --gap: 16px;
-  --margin: 24px;
-  --maxw: 1440px;
-  --head-h: 56px;
-  --win-w: 0.3375;
-  /* §4 type */
-  --f-display: 'Frank Ruhl Libre', 'Bellefair', 'David Libre', serif;
-  --f-text: 'Assistant', 'Heebo', 'Arial Hebrew', system-ui, sans-serif;
-  --t-display: 40px / 46px;
-  --t-h1: 30px / 38px;
-  --t-h2: 24px / 32px;
-  --t-h3: 18px / 26px;
-  --t-lead: 18px / 28px;
-  --t-body: 16px / 26px;
-  --t-credit: 17px / 22px;
-  --t-detail: 14px / 20px;
-  --t-cap: 13px / 18px;
-  --t-run: 13px / 16px;
-  --t-btn: 15px / 20px;
-  --t-input: 16px;
-  --t-brand: 20px / 24px;
   color-scheme: light;
   margin: 0;
   background: var(--paper);
@@ -76,30 +11,6 @@
   text-align: start;
   letter-spacing: 0;
   -webkit-font-smoothing: antialiased;
-}
-@media (min-width: 720px) {
-  .mag {
-    --cols: 8;
-    --gap: 20px;
-    --margin: 32px;
-    --head-h: 64px;
-  }
-}
-@media (min-width: 1024px) {
-  .mag {
-    --cols: 12;
-    --gap: 24px;
-    --margin: clamp(32px, 4vw, 64px);
-    --t-display: 72px / 80px;
-    --t-h1: 44px / 52px;
-    --t-h2: 30px / 38px;
-    --t-h3: 20px / 28px;
-    --t-lead: 20px / 32px;
-    --t-body: 17px / 28px;
-    --t-credit: 18px / 24px;
-    --t-input: 17px;
-    --t-brand: 22px / 28px;
-  }
 }
 .mag *,
 .mag *::before,
