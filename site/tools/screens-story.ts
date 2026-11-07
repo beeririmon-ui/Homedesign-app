@@ -478,6 +478,25 @@ async function hitTest(): Promise<void> {
     }
     await ctx.close();
   }
+  // the phone: Nordic B's throw on its hand-placed dot (the fold, not the armchair's seat), and warm modern ed5
+  const ctx = await ctxOf(400, 800);
+  const page = await open(ctx);
+  await settled(page);
+  for (const [f, name, caption] of [
+    [
+      'nordic-B',
+      'phone-5b-nordic-B-dots',
+      "400: Nordic B in the 4:5 crop at 0.62, the dots shown: the throw's dot on the fold (placed by hand), the vase, the holder, the rug",
+    ],
+    ['warm-modern-A', 'phone-8b-warm-modern-dots', '400: warm modern A ed5 in the 4:5 crop at 0.56, the dots shown: the pendant now has one'],
+  ] as const) {
+    await goTo(page, `#frame-${f}`);
+    await sleep(700);
+    await page.evaluate(`window.__story.showMarks('${f}')`);
+    await sleep(350);
+    await shot(page, name, caption);
+  }
+  await ctx.close();
   evidence.hit_test = out;
 }
 

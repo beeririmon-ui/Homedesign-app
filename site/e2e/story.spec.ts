@@ -80,7 +80,9 @@ test.describe('the story prototype', () => {
   test('the keyboard: Tab to a dot shows the dots, Enter opens the sheet, the page behind is inert, Esc back', async ({ page }) => {
     await page.goto('/test/story/');
     await expect(page.locator('#frame-nordic-A')).toHaveClass(/is-title/, { timeout: 15_000 });
-    const first = page.locator('#frame-nordic-A .st-mark').first();
+    // the first dot shown (at 1280 × 720 the pendant's would sit under the top band, so it is not offered there)
+    const first = page.locator('#frame-nordic-A .st-mark:visible').first();
+    const n = Number((await first.getAttribute('data-item'))!.split('-').pop());
     await first.focus();
     await expect(first.locator('.mag-dot')).toHaveCSS('opacity', '1');
     await page.keyboard.press('Enter');
@@ -95,10 +97,10 @@ test.describe('the story prototype', () => {
       ).toBe(true);
     }
     await page.locator('#st-next').click();
-    await expect(page.locator('#st-pos')).toHaveText(/^2 מתוך/);
+    await expect(page.locator('#st-pos')).toHaveText(new RegExp(`^${n + 1} מתוך`));
     await page.keyboard.press('Escape');
     await expect(sheet(page)).not.toHaveAttribute('open', '');
-    expect(await page.evaluate(() => (document.activeElement as HTMLElement | null)?.dataset.item)).toBe('nordic-A-2');
+    expect(await page.evaluate(() => (document.activeElement as HTMLElement | null)?.dataset.item)).toBe(`nordic-A-${n + 1}`);
   });
 
   test('the list opens the same sheet; a product without a price says so, with no add button', async ({ page }) => {

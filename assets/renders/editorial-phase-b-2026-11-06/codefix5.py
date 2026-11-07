@@ -403,6 +403,331 @@ def boho():
 
 
 # ==================================================================================================================================
+# modern country
+# ==================================================================================================================================
+def mc_seams(a):
+    """1. the MC1 table pass's mask met the frame with a low-frequency tone step (seedream's table front, table top and rug ~4-14 levels
+    darker): along the mask's boundary, where background meets background (the runner, its tassels and the bowl kept out), the ratio
+    of the low frequencies outside / inside is read (per channel, linear light, sigma 4 normalised blurs), smoothed along the boundary,
+    and applied inside the mask with a ramp to 1 at 48 px from the boundary. Nothing outside the MC1 mask changes."""
+    lin = s2l(a)
+    H, W = lin.shape[:2]
+    yy, xx = np.mgrid[0:H, 0:W]
+    mk = np.asarray(Image.open(os.path.join(HERE, "raw", "modern-country-A-mc1-table-mask.png"))) > 0
+    L, A_, B_ = lab_of(a)
+    # the products inside the pass (kept out of the correction): the runner (sage) with its tassels, the bowl
+    runner = mk & (A_ < -0.5) & (L > 25) & (xx >= 1200) & (xx <= 1575)
+    runner = cv2.morphologyEx(runner.astype(np.uint8), cv2.MORPH_CLOSE, np.ones((9, 9), np.uint8)).astype(bool)
+    runner |= (xx >= 1218) & (xx <= 1560) & (yy >= 1440) & (yy <= 1536) & mk           # the tassels' band
+    cols = np.nonzero(runner[1250:1440].sum(0) > 20)[0]
+    rx0, rx1 = (int(cols.min()), int(cols.max())) if cols.size else (1222, 1553)
+    runner |= (xx >= rx0) & (xx <= rx1) & (yy >= 1132) & mk
+    bowl = poly_mask(a.shape, BOWL_HULL)
+    J = json.load(open(os.path.join(HERE, "mc1_regions.json")))["mc1-table"]
+    prot = np.zeros((H, W), bool)
+    for pp in J.get("protect", []):
+        prot |= poly_mask(a.shape, pp)
+    prot_near = cv2.dilate(prot.astype(np.uint8), np.ones((15, 15), np.uint8)).astype(bool)
+    prod = cv2.dilate((runner | bowl).astype(np.uint8), np.ones((9, 9), np.uint8)).astype(bool)
+    dist = cv2.distanceTransform(mk.astype(np.uint8), cv2.DIST_L2, 5)
+    # MC1's composite: its alpha was a 2.5 px Gaussian of the mask cut at the region's border, ~0.5 on the border and ~1 from ~5 px in;
+    # the inside is read on the fully composited pixels (>= 5 px in), the correction weighted by that alpha
+    inner_full = mk & ~prod & ~prot_near & (dist >= 5)
+    outer = ~mk & ~prot_near
+    ring_in = mk & (dist <= 1.5)
+    bnd = ring_in & ~prod & ~prot_near
+    lo_in, d_in = nblur(lin, inner_full.astype(np.float32), 4)
+    lo_out, d_out = nblur(lin, outer.astype(np.float32), 4)
+    ok = bnd & (d_in > 0.08) & (d_out > 0.15)
+    ratio = np.ones_like(lin)
+    ratio[ok] = np.clip(lo_out[ok] / np.maximum(lo_in[ok], 1e-4), 0.8, 1.3)
+    rs, dr = nblur(ratio, ok.astype(np.float32), 6)
+    _, labels = cv2.distanceTransformWithLabels((~ok).astype(np.uint8), cv2.DIST_L2, 5, labelType=cv2.DIST_LABEL_PIXEL)
+    lab_y = np.zeros(labels.max() + 1, np.int32)
+    lab_x = np.zeros(labels.max() + 1, np.int32)
+    zpos = np.nonzero(ok)
+    lab_y[labels[zpos]] = zpos[0]
+    lab_x[labels[zpos]] = zpos[1]
+    ny, nx = lab_y[labels], lab_x[labels]
+    gain = np.where((dr[ny, nx] > 0.05)[..., None], rs[ny, nx], 1.0)
+    dnear = cv2.distanceTransform((~ok).astype(np.uint8), cv2.DIST_L2, 5)     # distance to the nearest usable boundary point
+    w = np.clip(1 - (dist - 1) / 48.0, 0, 1) * (dnear < 60)
+    alpha_c = np.clip(0.5 + (dist - 0.5) / 5.0, 0, 1)
+    band = mk & ~prod & ~prot & (dist <= 49) & (dnear < 60)
+    g = 1 + (gain - 1) * (w * alpha_c * band)[..., None]
+    out = lin * g
+    zone = band
+    return l2s(out), zone, dict(boundary_px=int(ok.sum()), band_px=int(band.sum()), runner_x=[rx0, rx1],
+                                gain_median=np.round(np.median(rs[ok], 0), 3).tolist() if ok.any() else None,
+                                gain_p10_p90=[np.round(np.percentile(rs[ok], 10, 0), 3).tolist(), np.round(np.percentile(rs[ok], 90, 0), 3).tolist()])
+
+
+BOWL_HULL = [(1026, 1098), (1258, 1098), (1258, 1124), (1200, 1186), (1192, 1200), (1094, 1200), (1084, 1186), (1026, 1124)]
+
+
+BOWL_OUTLINE_R = [(1252, 1121), (1249, 1128), (1245, 1135), (1242, 1140), (1236, 1150), (1228, 1160), (1218, 1170), (1206, 1180),
+                  (1192, 1183), (1187, 1186), (1185, 1192), (1180, 1195)]
+BOWL_OUTLINE_L = [(1103, 1195), (1099, 1190), (1097, 1185), (1094, 1182), (1086, 1180), (1072, 1170), (1061, 1160), (1052, 1150),
+                  (1044, 1140), (1038, 1130), (1034, 1124), (1032, 1120)]
+
+
+def bowl_masks(a):
+    """the bowl, traced by hand (its shaded left side is the table's own tan in shadow, (135, 110, 80): no colour rule separates them)
+    and refined with GrabCut in a +-6 px band; the rim's ellipse fitted to the orange rim line (a* > 9, b* > 22) above the table's
+    back edge (rows 1100-1139), outliers > 2 px dropped and refitted"""
+    H, W = a.shape[:2]
+    L, A_, B_ = lab_of(a)
+    rimline = (A_ > 9) & (B_ > 22) & (L < 78)
+    pts = []
+    for x in range(1030, 1256):
+        c = np.nonzero(rimline[1100:1140, x])[0]
+        if c.size:
+            pts.append((x, 1100 + c.min()))
+            if c.max() - c.min() > 6:
+                pts.append((x, 1100 + c.max()))
+    pts = np.array(pts, np.float32)
+    def fit(P):
+        return cv2.fitEllipse(P)
+    e = fit(pts)
+    for _ in range(3):
+        (cx, cy), (w_, h_), ang = e
+        th = np.radians(ang)
+        dx, dy = pts[:, 0] - cx, pts[:, 1] - cy
+        u = dx * np.cos(th) + dy * np.sin(th)
+        v = -dx * np.sin(th) + dy * np.cos(th)
+        r = np.sqrt((u / (w_ / 2)) ** 2 + (v / (h_ / 2)) ** 2)
+        res = np.abs(r - 1) * min(w_, h_) / 2
+        keep = res < 2.0
+        if keep.sum() < 20:
+            break
+        e = fit(pts[keep])
+    (ecx, ecy), (ew, eh), ang = e
+    # the hand outline: the rim's far half (from the ellipse), the right profile, the foot, the left profile
+    th = np.radians(ang)
+    semi_a, semi_b = max(ew, eh) / 2 + 0.8, min(ew, eh) / 2 + 0.8
+    top = [(ecx + semi_a * np.cos(t), ecy - semi_b * np.sin(t)) for t in np.linspace(np.pi, 0, 60)]
+    poly = np.array(top + BOWL_OUTLINE_R + BOWL_OUTLINE_L, np.float32)
+    m0 = np.zeros((H, W), np.uint8)
+    cv2.fillPoly(m0, [np.round(poly).astype(np.int32)], 1)
+    x0, y0, x1, y1 = 1005, 1085, 1280, 1215
+    sub = (np.clip(a[y0:y1, x0:x1], 0, 1) * 255).astype(np.uint8)[..., ::-1].copy()
+    gm = np.full(sub.shape[:2], cv2.GC_PR_BGD, np.uint8)
+    inner = cv2.erode(m0, np.ones((13, 13), np.uint8))[y0:y1, x0:x1].astype(bool)
+    outer = ~cv2.dilate(m0, np.ones((13, 13), np.uint8))[y0:y1, x0:x1].astype(bool)
+    gm[m0[y0:y1, x0:x1].astype(bool)] = cv2.GC_PR_FGD
+    gm[inner] = cv2.GC_FGD
+    gm[outer] = cv2.GC_BGD
+    bg, fg = np.zeros((1, 65), np.float64), np.zeros((1, 65), np.float64)
+    cv2.grabCut(sub, gm, None, bg, fg, 6, cv2.GC_INIT_WITH_MASK)
+    gc = np.isin(gm, (cv2.GC_FGD, cv2.GC_PR_FGD))
+    gc = cv2.morphologyEx(gc.astype(np.uint8), cv2.MORPH_OPEN, np.ones((3, 3), np.uint8))
+    gc = cv2.morphologyEx(gc, cv2.MORPH_CLOSE, np.ones((5, 5), np.uint8)).astype(bool)
+    bowl = np.zeros((H, W), bool)
+    bowl[y0:y1, x0:x1] = gc
+    n, lab, st, _ = cv2.connectedComponentsWithStats(bowl.astype(np.uint8))
+    bowl = lab == (1 + int(np.argmax(st[1:, cv2.CC_STAT_AREA])))
+    em = np.zeros((H, W), np.uint8)
+    cv2.ellipse(em, ((ecx, ecy), (ew + 1.6, eh + 1.6), ang), 1, -1)
+    rim = em.astype(bool)
+    bowl |= rim
+    hand_vs_gc = int((bowl ^ m0.astype(bool)).sum())
+    return dict(ellipse=((ecx, ecy), (ew, eh), ang), bowl=bowl, rim=rim, hand_vs_grabcut_px=hand_vs_gc, rim_points=int(len(pts)))
+
+
+def mc_bowl(a, prev_zone):
+    """2. the bowl lowered: its height x0.78 about its base (the foot's bottom stays on the table), the rim's ellipse moved down rigidly
+    (kept), the body below it compressed; the sofa behind the band the bowl gives up rebuilt (quilted from the sofa above and to the
+    left, gradient-domain blended)"""
+    lin = s2l(a)
+    H, W = lin.shape[:2]
+    yy, xx = np.mgrid[0:H, 0:W]
+    bm = bowl_masks(a)
+    (ecx, ecy), (ew, eh), ang = bm["ellipse"]
+    rim, bowlm = bm["rim"], bm["bowl"]
+    body = bowlm & ~rim
+    old = bowlm
+    base = float(np.nonzero(bowlm.any(1))[0].max()) + 0.5
+    dia = float(max(ew, eh))
+    K = 0.78
+    # the new bowl: the rim down by dy, the body compressed about the base
+    dy = (1 - K) * (base - ecy)
+    Mr = np.float32([[1, 0, 0], [0, 1, dy]])
+    Mb = np.float32([[1, 0, 0], [0, K, base * (1 - K)]])
+    a_rim = cv2.GaussianBlur(rim.astype(np.float32), (0, 0), 0.6)
+    a_body = cv2.GaussianBlur(body.astype(np.float32), (0, 0), 0.6) * (yy > ecy - 4)
+    rim_c = cv2.warpAffine(lin * a_rim[..., None], Mr, (W, H), flags=cv2.INTER_LINEAR)
+    rim_a = cv2.warpAffine(a_rim, Mr, (W, H), flags=cv2.INTER_LINEAR)
+    body_c = cv2.warpAffine(lin * a_body[..., None], Mb, (W, H), flags=cv2.INTER_AREA)
+    body_a = cv2.warpAffine(a_body, Mb, (W, H), flags=cv2.INTER_AREA)
+    new_a = np.clip(rim_a + body_a * (1 - rim_a), 0, 1)
+    # the background the bowl gives up: the sofa (above the table's back edge) - quilted, then blended
+    need = cv2.dilate(old.astype(np.uint8), np.ones((5, 5), np.uint8)).astype(bool) & ~(new_a > 0.98)
+    hole = cv2.dilate(old.astype(np.uint8), np.ones((5, 5), np.uint8)).astype(bool)
+    prot = poly_mask(a.shape, [(1262, 1030), (1468, 1030), (1468, 1184), (1262, 1184)])
+    valid = ~hole & ~prot & (yy < 1141) & (yy > 1040) & (xx > 940) & (xx < 1260)
+    cands = [(dx, dy_) for dx in range(-20, 21, 4) for dy_ in range(-64, -17, 2)] + [(dx, dy_) for dx in range(-250, -79, 6) for dy_ in range(-6, 7, 2)]
+    sofa_need = need & (yy < 1141)
+    fill, picks, offs, done = quilt(lin, sofa_need, valid, ~hole, cands, tile=16, margin=6)
+    fill = poisson_refine(fill, done, offs, ~hole, valid, iters=1200)
+    table_need = need & (yy >= 1141)
+    if table_need.any():
+        tvalid = ~hole & ~prot & (yy >= 1141) & (yy < 1215) & (xx > 940) & (xx < 1222)
+        tc = [(dx, dy_) for dx in list(range(-120, -20, 3)) + list(range(20, 121, 3)) for dy_ in range(-3, 4)]
+        fill, pt, ot, dt = quilt(fill, table_need, tvalid, ~hole, tc, tile=12, margin=5)
+        fill = poisson_refine(fill, dt, ot, ~hole, tvalid, iters=800)
+    info = dict(rim_ellipse=dict(centre=[round(ecx, 1), round(ecy, 1)], axes=[round(ew, 1), round(eh, 1)], angle=round(ang, 1)),
+                base_y=base, diameter_px=round(dia, 1), rim_down_px=round(dy, 2),
+                height_over_diameter_before=round((base - ecy) / dia, 3), height_over_diameter_after=round(K * (base - ecy) / dia, 3),
+                note_ratio="height = the base to the rim's plane (the ellipse's centre row); QA read 0.31 to its own rim line, card 0.244",
+                sofa_px=int(sofa_need.sum()), sofa_tiles=len(picks), table_px_filled=int(table_need.sum()),
+                hand_vs_grabcut_px=bm["hand_vs_grabcut_px"], rim_points=bm["rim_points"])
+    oa = cv2.GaussianBlur(hole.astype(np.float32), (0, 0), 1.0)[..., None] * hole[..., None]
+    plate = lin * (1 - oa) + fill * oa
+    out = plate * (1 - new_a[..., None]) + np.clip((rim_c + body_c * (1 - rim_a[..., None])) / np.maximum(new_a[..., None], 1e-4), 0, 1) * new_a[..., None]
+    zone = cv2.dilate((hole | (new_a > 0.002)).astype(np.uint8), np.ones((3, 3), np.uint8)).astype(bool)
+    return l2s(out), zone, info
+
+
+def mc_vase(a):
+    """3. the clay vase slimmed: width x0.78 about its axis (height, the grooves and the shading kept); behind the two strips it gives
+    up: the glass, the muntin, the window's bottom rail and the sill copied along their rows from beside (the left pane from the left,
+    the right pane from the right), the mullion's edge continued down its columns; gradient-domain blended; the contact shadow made for
+    the narrower base"""
+    lin = s2l(a)
+    H, W = lin.shape[:2]
+    yy, xx = np.mgrid[0:H, 0:W]
+    L, A_, B_ = lab_of(a)
+    box = (xx >= 1880) & (xx <= 2030) & (yy >= 538) & (yy <= 760)
+    # a first silhouette from the colour (the vase's cream, b* > 8.5) - its lit right side is near white (b* 3-8), so the right edge
+    # is taken as the left edge mirrored about the axis; both then refined per row on the strongest edge of L + 2 b* within +-6 px
+    cr = box & (B_ > 8.5) & (L > 50) & (A_ < 6)
+    cr = cv2.morphologyEx(cr.astype(np.uint8), cv2.MORPH_OPEN, np.ones((3, 3), np.uint8))
+    n, lab, st, _ = cv2.connectedComponentsWithStats(cr)
+    big = 1 + int(np.argmax(st[1:, cv2.CC_STAT_AREA]))
+    vm = lab == big
+    rows = {}
+    for y in range(538, 761):
+        c = np.nonzero(vm[y])[0]
+        if c.size > 8:
+            rows[y] = (c.min(), c.max())
+    ys = np.array(sorted(rows))
+    y0v, y1v = int(ys.min()), int(ys.max())
+    xl0 = np.array([rows[y][0] for y in ys], float)
+    axis0 = 1955.0
+    feat = cv2.GaussianBlur((L + 2 * B_).astype(np.float32), (0, 0), 0.8)
+    gx = np.abs(np.gradient(feat, axis=1))
+    def refine(est, sign):
+        out_ = []
+        for y, e0 in zip(ys, est):
+            lo, hi = int(round(e0)) - 6, int(round(e0)) + 7
+            g = gx[y, lo:hi]
+            k = int(np.argmax(g))
+            if 0 < k < len(g) - 1:
+                d_ = (g[k - 1] - g[k + 1]) / (2 * (g[k - 1] - 2 * g[k] + g[k + 1]) + 1e-9)
+            else:
+                d_ = 0.0
+            out_.append(lo + k + float(np.clip(d_, -0.5, 0.5)))
+        return np.array(out_)
+    xl = refine(xl0, -1)
+    axis1 = axis0
+    xr = refine(2 * axis1 - xl, 1)
+    axis1 = float(np.median((xl + xr) / 2))
+    xr = refine(2 * axis1 - xl, 1)
+    # smooth edges (the egg is smooth): a running median (7) then mean (9) along y
+    def smooth(v):
+        pad = np.r_[[v[0]] * 6, v, [v[-1]] * 6]
+        med = np.array([np.median(pad[i:i + 7]) for i in range(len(pad) - 6)])
+        pad2 = np.r_[[med[0]] * 4, med, [med[-1]] * 4]
+        return np.convolve(pad2, np.ones(9) / 9, mode="valid")
+    el = smooth(xl)[3:-3] if len(smooth(xl)) > len(xl) else smooth(xl)
+    er = smooth(xr)[3:-3] if len(smooth(xr)) > len(xr) else smooth(xr)
+    el, er = el[:len(ys)], er[:len(ys)]
+    el = el - 0.6
+    er = er + 0.6
+    axis = float(np.median((el + er) / 2))
+    K = 0.78
+    # the old and the new alpha (sub-pixel edges)
+    old_a = np.zeros((H, W), np.float32)
+    new_a = np.zeros((H, W), np.float32)
+    newc = np.zeros_like(lin)
+    for i, y in enumerate(ys):
+        xs_ = np.arange(1870, 2040)
+        old_a[y, 1870:2040] = np.clip(np.minimum(xs_ - el[i] + 0.5, er[i] - xs_ + 0.5), 0, 1)
+        nl, nr = axis + (el[i] - axis) * K, axis + (er[i] - axis) * K
+        new_a[y, 1870:2040] = np.clip(np.minimum(xs_ - nl + 0.5, nr - xs_ + 0.5), 0, 1)
+        src_x = axis + (xs_ - axis) / K
+        sx0 = np.clip(np.floor(src_x).astype(int), 0, W - 2)
+        wx = (src_x - sx0)[:, None]
+        newc[y, 1870:2040] = lin[y, sx0] * (1 - wx) + lin[y, sx0 + 1] * wx
+    # the top rows (the mouth, where the gypsophila stands in it) fade back to the original over 4 rows so the stems stay in the mouth
+    # the background: the strips old - new (grown 2 px), plus the base's shadow zone
+    oldm = old_a > 0.01
+    hole = cv2.dilate(oldm.astype(np.uint8), np.ones((5, 5), np.uint8)).astype(bool) & (yy >= y0v + 2) & (yy <= y1v + 4)
+    need = hole & ~(new_a > 0.98)
+    # the mullion's right edge (white bar into the glass) read on the rows 522-538 just above the vase
+    mu = lin[522:538, 1990:2030].mean((0, 2))
+    edge = 1990 + int(np.argmax(-np.diff(cv2.GaussianBlur(mu.reshape(1, -1).astype(np.float32), (0, 0), 1.0)[0])))
+    fill = lin.copy()
+    # the mullion's edge columns (axis .. edge): straight down from rows 522-538 (mirror-tiled), above the window's bottom rail
+    rail_y = 699
+    mcol = need & (xx > axis) & (xx <= edge + 1) & (yy < rail_y)
+    for x in range(int(axis), edge + 2):
+        yl = np.nonzero(mcol[:, x])[0]
+        if yl.size:
+            k = (yl - 538) % 32
+            ysrc = np.where(k < 16, 537 - k, 522 + (k - 16))
+            fill[yl, x] = lin[ysrc, x]
+    rest = need & ~mcol
+    valid = ~hole & box.copy()
+    valid = ~hole & (xx >= 1800) & (xx <= 2110) & (yy >= 520) & (yy <= 775)
+    left = rest & (xx < axis)
+    right = rest & (xx >= axis)
+    candL = [(dx, dy) for dx in range(-60, -13, 1) for dy in (-1, 0, 1)]
+    candR = [(dx, dy) for dx in range(14, 61, 1) for dy in (-1, 0, 1)]
+    fill, pL, oL, dL = quilt(fill, left, valid & (xx < axis), ~hole, candL, tile=12, margin=5)
+    fill, pR, oR, dR = quilt(fill, right, (valid & (xx > edge + 1)) | (valid & (yy >= rail_y)), ~hole | mcol, candR, tile=12, margin=5)
+    offs = np.where(dL[..., None], oL, oR)
+    done = dL | dR
+    fill = poisson_refine(fill, done, offs, (~hole) | mcol, valid, iters=1200)
+    # the contact shadow: the old one is in the original base row band (it goes with the old width); the band under the new base gets
+    # a shadow measured on the old one (its depth at the base's centre), the strips beside it are sill (copied above)
+    base_row = y1v
+    sh_old = float(1 - lin[base_row + 1:base_row + 3, int(axis) - 10:int(axis) + 10].mean() /
+                   max(lin[base_row + 1:base_row + 3, 1840:1870].mean(), 1e-4))
+    half_new = max(float(np.median((er[-8:-2] - el[-8:-2]))) / 2 * K, 5.0)
+    fp = np.zeros((H, W), np.float32)
+    cv2.ellipse(fp, (int(round(axis)), base_row + 1), (int(round(half_new + 3)), 3), 0, 0, 360, 1.0, -1)
+    shadow = np.clip(cv2.GaussianBlur(fp, (0, 0), 1.6) * max(min(sh_old, 0.45), 0.0), 0, 0.45) * (yy > base_row - 2)
+    oa = cv2.GaussianBlur(hole.astype(np.float32), (0, 0), 1.0)[..., None] * hole[..., None]
+    plate = lin * (1 - oa) + fill * oa
+    plate = np.where(hole[..., None], plate * (1 - shadow[..., None]), plate)
+    out = plate * (1 - new_a[..., None]) + newc * new_a[..., None]
+    zone = cv2.dilate((hole | (new_a > 0.002)).astype(np.uint8), np.ones((3, 3), np.uint8)).astype(bool)
+    info = dict(vase_rows=[y0v, y1v], height_px=int(y1v - y0v + 1), width_px_before=round(float((er - el).max()), 1),
+                width_px_after=round(float((er - el).max() * K), 1), h_over_w_before=round((y1v - y0v + 1) / float((er - el).max()), 2),
+                h_over_w_after=round((y1v - y0v + 1) / float((er - el).max() * K), 2), axis_x=round(axis, 1), mullion_edge_x=edge,
+                strips_px=int(need.sum()), tiles=len(pL) + len(pR), contact_shadow_depth=round(sh_old, 3))
+    return l2s(out), zone, info
+
+
+def mc():
+    base = os.path.join(HERE, "modern-country-A-mc1.png")
+    a = load01(base)
+    a8 = (a * 255 + 0.5).astype(np.uint8)
+    s1, z1, i1 = mc_seams(a)
+    s2, z2, i2 = mc_bowl(np.clip(s1, 0, 1), z1)
+    s3, z3, i3 = mc_vase(np.clip(s2, 0, 1))
+    zone = z1 | z2 | z3
+    o8 = (np.clip(s3, 0, 1) * 255 + 0.5).astype(np.uint8)
+    o8 = np.where(zone[..., None], o8, a8)
+    Image.fromarray(o8).save(os.path.join(HERE, "modern-country-A-fix3.png"))
+    r = check(o8, a8, zone, "modern-country-A-fix3.png")
+    r.update(base="modern-country-A-mc1.png", seams=i1, bowl=i2, vase=i3,
+             zones=dict(seams_px=int(z1.sum()), bowl_px=int(z2.sum()), vase_px=int(z3.sum())))
+    return r
+
+
+# ==================================================================================================================================
 if __name__ == "__main__":
     for k in sys.argv[1:]:
         r = globals()[k]()

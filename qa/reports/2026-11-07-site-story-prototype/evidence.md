@@ -1,6 +1,6 @@
 # Evidence of the story prototype (measured headless, Chromium + SwiftShader)
 
-Run 2026-11-07T11:16:33.049Z; 30 screenshots under screens/. The figures are in evidence.json; README.md reads them.
+Run 2026-11-07T11:23:01.087Z; 32 screenshots under screens/. The figures are in evidence.json; README.md reads them.
 
 ## Screenshots
 - `screens/desk-1-opening.png`: 1280: the opening, Nordic A at rest (no dot), the title and the story line, the test mark
@@ -33,6 +33,8 @@ Run 2026-11-07T11:16:33.049Z; 30 screenshots under screens/. The figures are in 
 - `screens/phone-r1-reduced-sheet.png`: 400: reduced motion, the sheet open (a fade only)
 - `screens/desk-2b-pendant-dot.png`: 1280: Nordic A, v0 0.10: the pendant's dot at the bottom of the shade, clear of the top band; the band's words on the label paper, the 0.35 scrim
 - `screens/desk-8b-warm-modern-dots.png`: 1280: warm modern A ed5 (QA: final test): the pendant, now faithful, has its dot under the band
+- `screens/phone-5b-nordic-B-dots.png`: 400: Nordic B in the 4:5 crop at 0.62, the dots shown: the throw's dot on the fold (placed by hand), the vase, the holder, the rug
+- `screens/phone-8b-warm-modern-dots.png`: 400: warm modern A ed5 in the 4:5 crop at 0.56, the dots shown: the pendant now has one
 
 ## Problems
-- the story leaks into real routes: media/test/story/nordic-A/stamp.json, media/test/story/nordic-B/stamp.json, media/test/story/warm-modern-A/stamp.json
+- none (no page errors, no console errors)
