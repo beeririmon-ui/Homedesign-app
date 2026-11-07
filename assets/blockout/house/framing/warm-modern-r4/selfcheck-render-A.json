@@ -1,0 +1,90 @@
+{
+  "stage": "round 4 (v7 clays + transition poses; docs/render-wow-pass-2026-11-02.md 4.1, docs/transitions-plan-2026-11-02.md 3)",
+  "date": "2026-11-07",
+  "group": "A",
+  "plan_version": "1.3.4 (2026-11-07): designer decision WMC9 on the warm-modern-r3 clay, warm-modern magazine holder (-0.47, 2.57) at the real size 35 x 19 x 27.5 (r3_decisions_1_3_4). Previous: 1.3.3 (2026-11-07): designer decisions WMC6-WMC8 on the warm-modern-r2 clay, two tangencies accepted (r2_decisions_1_3_3); 1.3.2 (2026-11-07): designer decisions WMC1-WMC5 on the warm-modern-r1 clay (style_shells_1_3_1.warm-modern.living.r1_decisions_1_3_2); 1.3.1 (2026-11-07): owner decisions ARC1 (openings and sills may change per style in the tool), ARC2 (no: tool light identical), TS1 (warm-modern living-room tool pilot); style_shells_1_3_1.warm-modern.living; 1.3 (2026-11-07): owner decisions CR3, CR3b, DIR2: the plan binds only the tool ('עצב בעצמך') and only the plan base; each style has its own architecture (style_architecture_1_3); story frames are not bound; 1.2.5 (2026-11-06): designer decision within M0S2 (a): magazine holder moved forward to (-0.54, 2.52) so it no longer covers the basket; 1.2.4 (2026-11-05): user decision M0S2 (a): magazine holder and basket back into M0, floor lamp and pouf on in the test only; 1.2.3 (2026-11-04):user decision V7Q9 (a), the pendant / art tangent in H0's door view accepted as an H0-only exception; 1.2.2 (2026-11-04):round-5 clay F3 decisions (pouf, armchair, rug, coffee table); 1.2.1 (2026-11-03):user decisions V7Q6 (a) counting rule, V7Q7 (b) pendant bottom 1.90, V7Q8 (b) pouf by the coffee table; 1.2 (2026-11-03):user decision V7Q1 (b), living-room camera one metre closer; 1.1.2 / 1.1 approved 2026-10-08;1.1.1 2026-10-13: QA round-2 consistency fixes (no design change) + user decision D1B (2026-10-11); 1.1.2 2026-10-13: follow-ups of the QA re-check (W0 sconce 1.1.x fix, D1B wording, labels)",
+  "render_plan": "assets/blockout/house/framing/warm-modern-r4/plan.json",
+  "render": "3840x2160, 16 samples, Cycles CPU seed 7, OIDN, AgX Medium High Contrast, render exposure +1.35 (round 3: +0.35); final exposure set in post by tone_r4.py from the EXR",
+  "light": "round-3 light; living window x1.0; hall roof x1.6; bath window x4.5",
+  "build_notes": {
+    "H-B": [
+      "G-H4: reveal lining 2 cm on the hall half of the reveal (Y 6.27-6.35) + 10 cm casing on the hall face; assumed profile"
+    ],
+    "C-B": [
+      "G-C3: 4 cm oak lining Y 9.70-9.95 (lintel drops to 2.62) + 10 cm casing on the hall face; assumed profile"
+    ],
+    "W-A": [
+      "G-W1: built-in desk X -1.625..-0.025 x 0.60 deep, top 0.76; shelf at 1.62; art 60x50 between; chair at Y 7.30; door leaf folded on the south wall X 0.61-0.65 Y 9.00-9.90"
+    ],
+    "MB-A": [
+      "G-M3: tall planter (option 'tall planter or lounge chair') at (1.45, 18.15), crown to 1.75; basket and pendant of the plan kept"
+    ],
+    "boy": [
+      "G-K4: paint #A7B09A as a 1 mm layer 1 mm in front of the east (Y 10.25) and north (X -2.30) walls, Z 0.149-1.25 (under the window only to 0.724, below the sill board); skirting of those two walls in the paint colour",
+      "framed-prints: two 30x40 portrait frames (the slot format) do not fit the plan range X 0.45-0.95 (0.50 m); kept the format and centred the pair on X 0.70 with a 4 cm gap: X 0.38-0.68 / 0.72-1.02, Z 1.42-1.82 (top matches the est v 0.055)",
+      "skateboard: deck centred on X 0.22 so that, seen from K2, it sits over the desk's front-left leg (X 0.13-0.17): the rule 'covers the leg decisively' wins over the est u 0.60-0.63 (a deck at X 0.02-0.22 projects beside the leg, covering ~50%: tested)",
+      "boy: bed boards to 0.60, mattress top 0.42 (+ duvet to 0.50); kid chair seat 0.43 / back 0.72 (the est back_top_v 0.62 implies ~0.72); slot proxies each in their own warm grey, the paint is the only colour"
+    ],
+    "girl": [
+      "G-K4: paint #E8D5CC as a 1 mm layer 1 mm in front of the east (Y 13.88) and north (X -2.30) walls, Z 0.149-1.25 (under the window only to 0.724, below the sill board); skirting of those two walls in the paint colour",
+      "framed-prints: two 30x40 portrait frames (the slot format) do not fit the plan range X 0.45-0.95 (0.50 m); kept the format and centred the pair on X 0.70 with a 4 cm gap: X 0.38-0.68 / 0.72-1.02, Z 1.42-1.82 (top matches the est v 0.055)",
+      "girl: bed boards to 0.60, mattress top 0.42 (+ duvet to 0.50); kid chair seat 0.43 / back 0.72 (the est back_top_v 0.62 implies ~0.72); slot proxies each in their own warm grey, the paint is the only colour"
+    ],
+    "bath": [
+      "shower niche: boolean cut 0.12 deep into the south wall (X 6.25-6.37, Y 10.30-10.90, Z 1.05-1.40) on 1 wall solid(s); niche faces take the limestone material",
+      "bath ceiling light (S12 'flush light, product, seen only in transit') placed at the room centre (4.75, 11.80); not a B1/B2 slot, not counted",
+      "bath proxies: vase sprig kept below the mirror bottom (top 1.12 < 1.165) and the tooth-brushes at 1.07, so the vanity group cannot reflect; towel ladder rails 0.035 x 0.022, rungs at 0.38 / 0.74 / 1.10"
+    ],
+    "kitchen-dining": [
+      "kitchen: worktop top 0.90 (est counter v 0.48); hood X 6.75-7.25 x Y 2.15-3.05, Z 1.55-3.00; shelves X 7.00-7.25 Z 1.55-1.58; tall units Y 4.20-6.20 to Z 2.40 (plan height) with the niche lining 1.5 cm oak; upper wall units of the plan removed (shelves + hood replace them); plan west-wall tall run kept (X 3.95-6.63, Y 5.58-6.20): round 2 does not mention it, so the approved plan stands",
+      "kitchen proxies from the round-2 slot text; heights assumed (jug 24, plates 10+7, crock 18 + utensils, boards 46/38 leaning); D1 dining rug 2.60 x 2.40 (X 3.30-5.90, Y 0.45-2.85): size not given"
+    ],
+    "additions": [
+      "hall: sconce on the left wall at Y 6.95 (centre of the bench strip that H-B shows: the bench centre Y 7.15 is u 0.04, too close to the edge), Z 1.85-2.03 because the plan's hook bar sits at 1.65-1.72; umbrella stand (3.42, 6.88) by the right wall; planter (2.37, 6.58) between the portal casing and the console",
+      "work: pendant hook (-0.825, 6.82): over the desk front, 3 cm clear of the 1.62 shelf in plan, shade 1.50-1.72; sconce on the north wall at Y 6.75 (the only part of the wall 'by the window' that W-A shows: Y 6.35-7.15); bookends + books on the shelf X -1.03..-0.69; waste basket under the desk (-0.35, 6.70)",
+      "master: floor lamp at (0.95, 18.25), shade d 38 at 1.30-1.58, next to (in front of) the tall planter: at X 1.40 it would sit on the right frame edge (u ~1.0) like the planter; tray under the left nightstand vase"
+    ],
+    "round3": [
+      "189 placeholder meshes moved from the round-2 warm greys to the M0 palette (textile #D9D2C7, shade #E4DFD7, object #C3BCB1, decor #C8C2B9); hardware (#8E8A84) kept",
+      "kids' colour block (G-K4) on 12 meshes as neutral grey #CFCAC3 (a readable step below the wall), no hue",
+      "living slot proxies hidden by default (= M0 clay); the m0-v6 products (pendant 40, sun 30, travertine pair, triptych, sill jar, bowl + the v4 proxies of curtains, wall-sconce, floor-lamp, basket, rug, cushions, runner, candles) shown only where plan.json lists them",
+      "hall/table-lamp: proxy and both light sources removed (verdict 3.1)",
+      "hall/wall-sconce rebuilt as a 15 cm fabric cube (lit); hall/framed-art 45 x 55 centred on X 2.95",
+      "corridor/runner-rug narrowed to 60 (X 2.10-2.70) for the gallery stool (frame_fixes_1_1_x.C0)",
+      "work/pendant: d 28, h 18, bottom Z 1.58 (frame_fixes_1_1_x.W0; was d 34, bottom 1.50)",
+      "work/wall-sconce: plate Y 6.75 -> 6.65, arm sconce (projection 0.135 to the shade centre, shade d 13) per 1.1.2 N2",
+      "work/curtains: east stack Y 6.93-7.15 -> 7.03-7.25, rod Y 6.90 -> 7.00 (to 8.60), rod Z 2.82 (work.json 1.0.2)",
+      "kids: toy basket to (-0.62, 11.58) (+girl dy), desk chair to (0.66, 11.00), prints lowered 0.05, boy skateboard steeper (foot Y 10.95), girl pram rotated along Y (frame_fixes_1_1_x)",
+      "master: candle holders +0.08 X, nightstand vase to (-1.95, 17.84) (master.json 1.0.2)",
+      "bath: curtain gathered at (5.30, 11.15); floor group stand (4.50, 10.08), bin (4.64, 10.10), brush in front (4.70, 10.30)",
+      "kitchen-dining: rug 230 x 220 (X 3.45-5.75), runner 60 x 280 (X 6.00-6.60); pendant 50 x 36, runner 40 x 140, vase 26.5, candle plates + candles, bench pad 130 x 35 x 3, mills 15, bowl 21 x 6.4, plate stack 28, mugs 9, towel holder 13 x 31, canisters, tea towel 22 x 33",
+      "hall: vessel 26.5, cushion 110 x 35 x 3, throw 33 x 33 at the corner end, bucket 19 x 49 moved to X 3.47",
+      "corridor: gallery 3 x 40 x 40 at Z 1.25-1.65; lanterns 40 x 22, bottom 2.45, lit",
+      "master: art 2 x 50 x 50, sconces 24 x 20 (lit), pot cover 35 x 37, vase on the top, holders 7 x 11, lumbar 30 x 50; sill vase 8.5 x 24.7, dish 9.5 x 3 generic",
+      "kids: ledges 2 x 41.9 per tier, two 40 cushions (third removed), toy 28, basket 35 x 39 at (-0.62, 11.58), cars 9 x 5",
+      "bath: B1 lamp and vanity pair 13 x 16 (lit), mat 40 x 60, stand 65, candle 9 x 9.8, bottles 7.5 x 16.5, cup 8 x 11, bud vase 7.6 x 12.8, basket 43 x 33 x 19, hand towel 38 x 55; shower downlight at low power (4 W) for the lit set",
+      "work: rug 170 wide, basket 30, bin 25 x 30, felt bins 30 x 24.5 x 15, bookends 10.5 x 13; pen cup 8 x 11 generic on the desk",
+      "living window area light x1.0 (= 246 W)",
+      "bath area light outside the fluted window x4.5 (= 290 W): plan 3 B1, the wall beside it toward L 86-90, not global exposure",
+      "hall roof-light emission x1.6 (opal0, own material copy)"
+    ],
+    "round4": [
+      "living/accent-sconces: two 12 cm cubes (was 8 x 16 blocks), lit (m0-v7.txt b)",
+      "living/floor-lamp: light sources removed (m0-v7.txt: no floor-lamp light); living/wall-decor not listed anywhere",
+      "kitchen-dining/dining-pendant: 50 x 30 flat lantern (ellipsoid), bottom 1.50 (d1-v7.txt clay line)",
+      "work/planter: D38 x H34 + plant to 1.30; work/bookends not listed (removed)",
+      "living/pendant: shade bottom 1.9 (as round 5b)",
+      "armchair: root -> (-1.23, 2.73, 0.0) (house plan 1.2.2 (-1.23, 2.73); WM-F1: the Nordic geometry)",
+      "living/rug: 330 x 240 (as round 5b)",
+      "W-living: Y 0.75-2.85, sill 0.45, head 2.7; mullions at Y (1.45, 2.15) (3 bays of 0.70), sight lines 0.045; 9 sash / sill-board objects removed",
+      "window bench X (-2.3, -1.98), Y (1.0, 2.85), plaster base to 0.37, limestone slab #D8C8AE to 0.45; slab into the reveal",
+      "corner (-2.3, 0.0) rounded, r 0.3, plaster, floor to ceiling",
+      "ceiling 3.0 with a 1 cm shadow gap on the four walls; no cornice",
+      "WMC5: the band X (-2.3, -2.05) underside 2.82 to the ceiling, Y 0.0-6.2 (through the rounded corner to the front wall); the slot recess X (-2.26, -2.18) up to 2.88 from Y 0.02; the track X (-2.235, -2.205) at 2.86, Y (0.7, 3.0)",
+      "WMC1 curtains: one stack Y ((2.65, 2.95),) X (-2.28, -2.16) Z (0.005, 2.86) (drop 286 cm)",
+      "living/vase: 2 objects moved -0.3 in Z: base (-2.42, 1.35, 0.45), body to 0.76, branches to 1.05",
+      "basket ((-1.62, 0.78)) d 0.35 h 0.39; magazine holder ((-0.47, 2.57)) 0.35 x 0.19 x 0.275"
+    ]
+  },
+  "build_s": 32
+}

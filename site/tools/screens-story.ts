@@ -758,7 +758,14 @@ function realRoutes(): void {
     pages_loading_story_assets: pagesRefStory,
     sitemap_lists_story_or_test: /\/(story|test)\//.test(sitemap),
     every_story_page_noindex: storyPages.every((f) => /<meta name="robots" content="noindex, nofollow"/.test(readFileSync(f, 'utf8'))),
+    detail_pages: storyPages.filter((f) => /\/p\/[^/]+\/index\.html$/.test(f)).length,
+    // a page carries the customer's facts only: no cost, margin or supplier address (the catalog's internal fields)
+    story_pages_carrying_internal_fields: storyPages
+      .filter((f) => /cjdropshipping|alicdn|aliexpress\.com|cost_usd|landed_agorot|no_loss|"economics"|supplier_sku|net_agorot/.test(readFileSync(f, 'utf8')))
+      .map((f) => relative(DIST, f)),
   };
+  if ((evidence.real_routes as { story_pages_carrying_internal_fields: string[] }).story_pages_carrying_internal_fields.length)
+    problems.push('a story page carries internal catalog fields');
   if (hits.length || pagesRefStory.length) problems.push(`the story leaks into real routes: ${[...hits, ...pagesRefStory].join(', ')}`);
 }
 
