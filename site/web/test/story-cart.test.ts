@@ -156,6 +156,21 @@ describe('the story test cart', () => {
     expect(cart.current()!.count).toBe(2);
   });
 
+  it('a product the frame shows twice goes into the look twice (register v4, G-ED.6)', async () => {
+    const cart = storyCart(V, memoryStore());
+    const look = await cart.addLook(['bowl:default*2', 'candles:70x110mm']);
+    expect(look.added).toEqual(['bowl:default', 'candles:70x110mm']);
+    expect(look.units).toBe(3);
+    expect(cart.current()!.lines.map((l) => [l.variant_id, l.qty])).toEqual([
+      ['bowl:default', 2],
+      ['candles:70x110mm', 1],
+    ]);
+    // a count it cannot read is one; the cap holds
+    const other = storyCart(V, memoryStore());
+    await other.addLook(['bowl:default*x', 'candles:70x110mm*999']);
+    expect(other.current()!.lines.map((l) => l.qty)).toEqual([1, MAX_QTY]);
+  });
+
   it('another tab that ordered and emptied the cart has the last word: the next add starts a new cart (QA on S4)', async () => {
     const store = memoryStore();
     const tabA = storyCart(V, store);

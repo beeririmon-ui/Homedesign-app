@@ -49,6 +49,16 @@ describe('the QA register', () => {
     rmSync(repoPath(DIR, 'ged-register-c.json'));
   });
 
+  it('reads units_in_frame (register v4, G-ED.6), and fails loudly on a count it cannot use', () => {
+    put('ged-register-d.json', { version: 4, frames: { f: { state: 'final_test', rows: [{ ...row('cushion', 'yes', 'yes'), units_in_frame: 2 }] } } });
+    expect(rowOf(registerReader(DIR).read('f')!, 'cushion', null)!.units).toBe(2);
+    for (const units_in_frame of [0, 1.5, '2', 99]) {
+      put('ged-register-d.json', { version: 4, frames: { f: { state: 'final_test', rows: [{ ...row('cushion', 'yes', 'yes'), units_in_frame }] } } });
+      expect(() => registerReader(DIR)).toThrow(/cannot be read/);
+    }
+    rmSync(repoPath(DIR, 'ged-register-d.json'));
+  });
+
   it('fails loudly on the older records the site cannot read: part1 without "against", frames without rows', () => {
     put('old-part1.json', { part1: { frames: { f: { state: 'almost', rows_changed: [] } } } });
     expect(() => qaReader([`${DIR}/old-part1.json`])('f')).toThrow(/against/);

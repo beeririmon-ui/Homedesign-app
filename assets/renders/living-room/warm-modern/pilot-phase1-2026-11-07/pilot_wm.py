@@ -679,7 +679,7 @@ def grade_v3c():
     bp = float(np.percentile(Lb, 0.5))
     tgt = 12.5
     stone = np.asarray(Image.open(os.path.join(HERE, "masks/stone-wide.png"))) > 127
-    fur_a = np.asarray(Image.open(os.path.join(HERE, "fixed-furniture.png")))[..., 3] > 0
+    fur_w = np.asarray(Image.open(os.path.join(HERE, "fixed-furniture.png")))[..., 3].astype(np.float32) / 255
     sh_e = cv2.cvtColor(_expose(load(os.path.join(HERE, "shell-v3.png")), g), cv2.COLOR_RGB2LAB)
     toplit = stone & (sh_e[..., 0] > 85)
     h_top = float(np.degrees(np.arctan2(np.median(sh_e[..., 2][toplit]), np.median(sh_e[..., 1][toplit]))))
@@ -694,12 +694,13 @@ def grade_v3c():
         if not 11.0 <= bp <= 14.0:
             k = np.clip(1 - (L - bp) / max(25.0 - bp, 1e-3), 0, 1) ** 2
             lab[..., 0] = np.where(L < 25.0, L + (tgt - bp) * k, L)
-        sm_ = stone & ~(fur_a if name != "shell-v3.png" else np.zeros_like(stone))
+        wgt = np.where(stone, 1.0 - (fur_w if name != "shell-v3.png" else 0.0), 0.0).astype(np.float32)   # the slab's share of each pixel
+        sm_ = wgt > 0.5
         C = np.hypot(lab[..., 1], lab[..., 2])
         Cn = np.minimum(C, cmax)
         ca, sa = np.cos(np.radians(h_top)), np.sin(np.radians(h_top))
-        lab[..., 1] = np.where(sm_, Cn * ca, lab[..., 1])
-        lab[..., 2] = np.where(sm_, Cn * sa, lab[..., 2])
+        lab[..., 1] = lab[..., 1] + (Cn * ca - lab[..., 1]) * wgt          # furniture edge pixels: corrected by their slab share only
+        lab[..., 2] = lab[..., 2] + (Cn * sa - lab[..., 2]) * wgt
         e = np.clip(cv2.cvtColor(lab, cv2.COLOR_LAB2RGB), 0, 1).astype(np.float32)
         lo = cv2.cvtColor(e, cv2.COLOR_RGB2LAB)
         hsv = cv2.cvtColor((e * 255).astype(np.uint8), cv2.COLOR_RGB2HSV).astype(np.float32)

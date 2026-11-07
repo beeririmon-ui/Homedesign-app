@@ -44,7 +44,7 @@ const sheet = (page: Page) => page.locator('#st-sheet');
 /** QA's register decides a frame's state (it moves round by round): the tests read what the build resolved */
 const resolved = JSON.parse(readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), '../.generated/story.json'), 'utf8')) as Record<
   string,
-  { states?: [string, string, string][]; held?: { state: string; why_he: string }[]; items?: Record<string, { dot: boolean }> }
+  { states?: [string, string, string][]; held?: { state: string; why_he: string }[]; items?: Record<string, { dot: boolean; status?: string; variant_id?: string | null; units?: number }> }
 >;
 const stateOf = (href: string) => resolved[href]?.states?.[0]?.[2] ?? null;
 const MARK: Record<string, string> = { final_test: 'טיוטה / בדיקה', almost: 'טיוטה / בדיקה · כמעט מוכן', approved_for_site: 'בדיקה · מאושר לאתר' };
@@ -271,14 +271,26 @@ test.describe('the other houses', () => {
     await audit(page, 'japandi, typographic');
   });
 
-  test('boho fin6: its frame, a dot where the register puts one, the mark of its state', async ({ page }) => {
+  test('boho fin7: its frame, a dot where the register puts one, the mark of its state, two rust cushions', async ({ page }) => {
     await page.goto(BOHO);
     await expect(page.locator('h1')).toHaveText('בית אבן ישן בנמל, 16:00');
     await expect(page.locator('#frame-A')).toHaveClass(/is-title/, { timeout: 15_000 });
+    await expect(page.locator('#frame-A img').first()).toHaveAttribute('src', /boho-A-fin7/);
     await expect(page.locator('#frame-A .st-draft')).toHaveText(MARK[stateOf(BOHO)!]!);
-    // the register says which products have a dot (v3: the planter's base is "partly", so it has none)
+    // the register says which products have a dot (v4: the planter's base is natural now, so all nine)
     await expect(page.locator('#frame-A .st-mark')).toHaveCount(Object.values(resolved[BOHO]!.items!).filter((x) => x.dot).length);
     await expect(page.locator('#list-A .st-credit')).toHaveCount(9);
+    // register v4 (G-ED.6): the second rust cushion is a second unit of ours: the credit says so, and the look adds two
+    const rust = page.locator('#list-A .st-credit', { hasText: 'חלודה' });
+    await expect(rust).toContainText('בתמונה: שתי יחידות.');
+    await expect(page.locator('#list-A .st-look-units')).toContainText('שתי יחידות');
+    await page.locator('#look-A').click();
+    const want = Object.values(resolved[BOHO]!.items!).filter((x) => x.dot && x.status === 'available' && x.variant_id);
+    const units = want.reduce((n, x) => n + (x.units ?? 1), 0);
+    expect(units).toBe(want.length + 1);
+    await expect(page.locator('#st-cart-count')).toHaveText(String(units));
+    await page.locator('#st-cart-open').click();
+    await expect(page.locator('#st-cart-lines li', { hasText: 'חלודה' })).toContainText('2');
   });
 
   test('one test cart across the story pages, and the old prototype address goes on to the Nordic living room', async ({ page }) => {
