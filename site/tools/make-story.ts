@@ -366,7 +366,7 @@ for (const [key, pair] of Object.entries(story.pairs)) {
   for (const f of pair.frames) {
     const q = qaOf(f.qa_key);
     if (!q || !story.allowed_states.includes(q.state)) {
-      held.push({ id: f.id, qa_key: f.qa_key, state: q?.state ?? 'not_in_qa', why_he: 'הפריים עוד בבדיקת QA' });
+      held.push({ id: f.id, qa_key: f.qa_key, state: q?.state ?? 'not_in_qa', why_he: 'הפריים עוד בבדיקה' });
       continue;
     }
     const listed = q.rows.filter((r) => r.present && !r.card.startsWith('fixed furniture')).map(cardOf);

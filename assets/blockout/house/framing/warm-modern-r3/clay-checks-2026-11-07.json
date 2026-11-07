@@ -125,7 +125,8 @@
      "pot_left_minus_bench_corner_projection": {
       "px": 132.8,
       "frame_u": 0.0346
-     }
+     },
+     "bench_px_in_frame": 0
     }
    },
    "expected": {
@@ -1177,8 +1178,18 @@
   },
   "M0p": {
    "living/window-bench": null,
-   "living/rounded-corner": null,
-   "living/curtain-track": null
+   "living/rounded-corner": [
+    -0.0107,
+    0.0633,
+    0.0398,
+    0.7866
+   ],
+   "living/curtain-track": [
+    -0.0302,
+    0.0557,
+    -0.0301,
+    0.0857
+   ]
   },
   "M0x": {
    "living/window-bench": null,
@@ -1222,8 +1233,108 @@
    ],
    "note": "edge: visible bbox margin 0 < m < 0.02; object-object as round 2 (ray-cast silhouettes, 512x288)"
   },
-  "M0p": null,
-  "M0x": null
+  "M0p": {
+   "edge_tangents": [
+    {
+     "item": "coffee table 140x70 h38 (fixed-product)",
+     "side": "bottom",
+     "margin": 0.0017
+    }
+   ],
+   "object_object_tangents": [
+    {
+     "a": "sofa 220x92x78 (fixed-product)",
+     "b": "coffee table 140x70 h38 (fixed-product)",
+     "kind": "overlap",
+     "overlap_thickness": 0.0234,
+     "cover_of_back": 0.138,
+     "behind": "sofa 220x92x78 (fixed-product)",
+     "dist3d_m": 0.42,
+     "rule": "overlap thinner than 0.03 and < 60% of the back item"
+    }
+   ],
+   "note": "edge: visible bbox margin 0 < m < 0.02; object-object as round 2 (ray-cast silhouettes, 512x288)"
+  },
+  "M0x": {
+   "edge_tangents": [],
+   "object_object_tangents": [
+    {
+     "a": "kitchen-dining/bench-pad",
+     "b": "kitchen-dining/dining-rug",
+     "kind": "gap",
+     "gap": 0.0044,
+     "dist3d_m": 0.44,
+     "rule": "silhouettes apart by < 0.02 (kissing contours)"
+    },
+    {
+     "a": "kitchen-dining/bench-pad",
+     "b": "dining table 160x85 (fixed)",
+     "kind": "overlap",
+     "overlap_thickness": 0.0117,
+     "cover_of_back": 0.034,
+     "behind": "dining table 160x85 (fixed)",
+     "dist3d_m": 0.225,
+     "rule": "overlap thinner than 0.03 and < 60% of the back item"
+    },
+    {
+     "a": "dining bench (fixed)",
+     "b": "dining table 160x85 (fixed)",
+     "kind": "overlap",
+     "overlap_thickness": 0.0117,
+     "cover_of_back": 0.045,
+     "behind": "dining table 160x85 (fixed)",
+     "dist3d_m": 0.225,
+     "rule": "overlap thinner than 0.03 and < 60% of the back item"
+    },
+    {
+     "a": "dining bench (fixed)",
+     "b": "kitchen-dining/kitchen-runner",
+     "kind": "overlap",
+     "overlap_thickness": 0.0195,
+     "cover_of_back": 0.398,
+     "behind": "kitchen-dining/kitchen-runner",
+     "dist3d_m": 0.7,
+     "rule": "overlap thinner than 0.03 and < 60% of the back item"
+    },
+    {
+     "a": "kitchen-dining/dining-pendant",
+     "b": "door leaves",
+     "kind": "gap",
+     "gap": 0.0078,
+     "dist3d_m": 0.29,
+     "rule": "silhouettes apart by < 0.02 (kissing contours)"
+    },
+    {
+     "a": "kitchen-dining/dining-rug",
+     "b": "kitchen-dining/kitchen-runner",
+     "kind": "gap",
+     "gap": 0.0062,
+     "dist3d_m": 0.25,
+     "rule": "silhouettes apart by < 0.02 (kissing contours)"
+    },
+    {
+     "a": "dining table 160x85 (fixed)",
+     "b": "door leaves",
+     "kind": "overlap",
+     "overlap_thickness": 0.0234,
+     "cover_of_back": 0.282,
+     "behind": "dining table 160x85 (fixed)",
+     "dist3d_m": 0.095,
+     "rule": "overlap thinner than 0.03 and < 60% of the back item"
+    },
+    {
+     "a": "sofa 220x92x78 (fixed-product)",
+     "b": "coffee table 140x70 h38 (fixed-product)",
+     "kind": "overlap",
+     "overlap_thickness": 0.0195,
+     "cover_of_back": 0.031,
+     "behind": "sofa 220x92x78 (fixed-product)",
+     "dist3d_m": 0.42,
+     "rule": "overlap thinner than 0.03 and < 60% of the back item"
+    }
+   ],
+   "note": "edge: visible bbox margin 0 < m < 0.02; object-object as round 2 (ray-cast silhouettes, 512x288)"
+  }
  },
  "contradictions": [
   "magazine-holder: magazine holder (-0.47, 2.59) 35 x 19 x 27.5 (gunmetal leather strap, WMC8)"

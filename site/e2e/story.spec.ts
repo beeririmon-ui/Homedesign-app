@@ -241,7 +241,7 @@ test.describe('the other houses', () => {
     await expect(page.locator('h1')).toHaveText('בית אבן ישן בנמל, 16:00');
     await expect(page.locator('.mag-stage')).toHaveCount(0);
     await expect(page.locator('.st-mark')).toHaveCount(0);
-    await expect(page.locator('.st-type-status')).toContainText('הפריים עוד בבדיקת QA');
+    await expect(page.locator('.st-type-status')).toContainText('הפריים עוד בבדיקה');
     const srcs = await page.locator('img').evaluateAll((els) => els.map((e) => (e as HTMLImageElement).src));
     for (const s of srcs) expect(s, s).not.toMatch(/\/boho\//);
     // and the frame is not on the server at all
