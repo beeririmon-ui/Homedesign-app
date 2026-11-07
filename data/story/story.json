@@ -124,9 +124,16 @@
     "planter-zendrop-seagrass-belly-basket-45": "סל-עציץ בטן מקש ים",
     "basket-cj-seagrass-belly-xl": "סל בטן מקש ים עם ידיות",
     "table-runner-aliexpress-boho-macrame-table-runners-263532": "ראנר מקרמה עם פס יוטה ופרנזים",
-    "pouf-cj-cotton-knit-ball-cover": "כיסוי פוף כדור סרוג מכותנה, טבעי"
+    "pouf-cj-cotton-knit-ball-cover": "כיסוי פוף כדור סרוג מכותנה, טבעי",
+    "framed-art-aliexpress-mediterranean-wabi-sabi-poster-802890": "שלישיית הדפסים ים תיכוניים: זית, כדים וקשת",
+    "magazine-holder-cj-arch-iron-cane": "מעמד עיתונים קשת מברזל עם קלעת קנה",
+    "basket-zendrop-seagrass-belly-38x34": "סל בטן מקש ים עם ידיות לולאה"
   },
-  "names_he_proposed": [],
+  "names_he_proposed": [
+    "basket-zendrop-seagrass-belly-38x34",
+    "framed-art-aliexpress-mediterranean-wabi-sabi-poster-802890",
+    "magazine-holder-cj-arch-iron-cane"
+  ],
   "option_names_he": {
     "cushions-cj-boucle-teddy": {
       "size:30x50": "כרית מותן בוקלה"
@@ -134,6 +141,9 @@
     "cushions-cj-linen-look-charcoal": {
       "style:pillow-core-and-pillowcase": "כרית במראה פשתן",
       "style:pillowcase": "ציפית כרית במראה פשתן"
+    },
+    "cushions-cj-washed-cotton-frayed": {
+      "size:30x50": "כרית מותן כותנה רחוצה עם שוליים פרומים"
     }
   },
   "colours_he": {
@@ -172,7 +182,10 @@
       "other:silt-green-fringe": "ירוק טין",
       "other:dark-blue-fringe": "כחול כהה",
       "other:phantom-blue-fringe": "כחול אפרפר",
-      "other:rose-red-fringe": "אדום ורד"
+      "other:rose-red-fringe": "אדום ורד",
+      "other:earthy-orange": "טרקוטה",
+      "other:moss-green": "ירוק טחב",
+      "other:white": "לבן"
     },
     "cushions-cj-sandstone-chenille-flange": {
       "other:sandstone-chenille-green": "זית"
@@ -685,13 +698,15 @@
         "status_he": "פיילוט רינדור, שלב 1: המעטפת של הבית, הרהיטים הקבועים והצל שלהם. הכריות ברינדור עכשיו. עוד לא עבר QA ולא את אישור 3.",
         "compare": {
           "house": "nordic",
-          "src": "rooms/living-room/nordic/M0/base/shell",
-          "widths": [
-            1280,
-            1920,
-            2752
+          "layers": [
+            {
+              "id": "shell",
+              "src": "assets/renders/living-room/nordic/v9/m0-1-2-shell-seedream-fix.png",
+              "blend": "normal"
+            }
           ],
-          "alt_he": "הסלון בבית הנורדי, מאותה מצלמה"
+          "alt_he": "הסלון בבית הנורדי, אותה מצלמה: המעטפת בלבד",
+          "note": "the Nordic M0 1.2 shell of the locked pipeline (passed the G1.4 lock, qa/reports/2026-11-05-m0-seedream-fix3-g1.md; other checks open, not approved for the site): the same camera as the warm-modern pilot, a draft here only"
         }
       }
     },
@@ -952,7 +967,152 @@
           "src": "assets/renders/editorial-phase-b-2026-11-06/mediterranean-A-ed7.png",
           "qa_key": "mediterranean-A-ed7",
           "role": "wide",
-          "points": []
+          "points": [
+            {
+              "product": "framed-art-aliexpress-mediterranean-wabi-sabi-poster-802890",
+              "u": 0.335,
+              "v": 0.27,
+              "box": [
+                0.105,
+                0.531,
+                0.09,
+                0.434
+              ],
+              "by_eye": true
+            },
+            {
+              "product": "cushions-cj-washed-cotton-frayed",
+              "option": {
+                "other": "earthy-orange"
+              },
+              "name_he": "ציפית כרית כותנה רחוצה עם שוליים פרומים, טרקוטה",
+              "u": 0.27,
+              "v": 0.53,
+              "box": [
+                0.202,
+                0.34,
+                0.471,
+                0.651
+              ],
+              "by_eye": true
+            },
+            {
+              "product": "cushions-cj-washed-cotton-frayed",
+              "option": {
+                "other": "white"
+              },
+              "name_he": "ציפית כרית כותנה רחוצה עם שוליים פרומים, לבן",
+              "in_frame_he": "בתמונה: שלוש כריות גב לבנות.",
+              "u": 0.52,
+              "v": 0.53,
+              "box": [
+                0.444,
+                0.578,
+                0.462,
+                0.638
+              ],
+              "by_eye": true
+            },
+            {
+              "product": "cushions-cj-washed-cotton-frayed",
+              "option": {
+                "size": "30x50",
+                "other": "moss-green"
+              },
+              "name_he": "כרית מותן כותנה רחוצה עם שוליים פרומים, ירוק טחב",
+              "u": 0.37,
+              "v": 0.595,
+              "box": [
+                0.287,
+                0.447,
+                0.534,
+                0.654
+              ],
+              "by_eye": true
+            },
+            {
+              "product": "vase-aliexpress-vintage-distressed-clay-vase-589009",
+              "in_frame_he": "בתמונה: ענפי זית. לא כלולים במוצר.",
+              "u": 0.848,
+              "v": 0.53,
+              "box": [
+                0.819,
+                0.877,
+                0.443,
+                0.599
+              ],
+              "by_eye": true
+            },
+            {
+              "product": "magazine-holder-cj-arch-iron-cane",
+              "in_frame_he": "בתמונה: עיתונים. לא כלולים במוצר.",
+              "u": 0.675,
+              "v": 0.68,
+              "box": [
+                0.635,
+                0.726,
+                0.553,
+                0.797
+              ],
+              "by_eye": true
+            },
+            {
+              "product": "candle-holders-cj-travertine-pedestal",
+              "u": 0.569,
+              "v": 0.73,
+              "box": [
+                0.548,
+                0.63,
+                0.648,
+                0.846
+              ],
+              "by_eye": true
+            },
+            {
+              "product": "basket-zendrop-seagrass-belly-38x34",
+              "in_frame_he": "בתמונה: עם צמח. הצמח לא כלול.",
+              "u": 0.77,
+              "v": 0.75,
+              "box": [
+                0.729,
+                0.811,
+                0.674,
+                0.818
+              ],
+              "by_eye": true
+            },
+            {
+              "product": "sofa-cover-cj-cotton-muslin-fringe",
+              "u": 0.25,
+              "v": 0.75,
+              "box": [
+                0.157,
+                0.363,
+                0.651,
+                0.944
+              ],
+              "by_eye": true
+            },
+            {
+              "product": "bowl-cj-speckled-ivory-wide-bowl-21",
+              "in_frame_he": "בתמונה: תאנים. לא כלולות במוצר.",
+              "u": 0.46,
+              "v": 0.8,
+              "box": [
+                0.382,
+                0.539,
+                0.753,
+                0.857
+              ],
+              "by_eye": true
+            }
+          ],
+          "u0": 0.5,
+          "v0": 0.5,
+          "phone_crop_u": 0.5,
+          "title_he": "בית מסויד, צהרי יוני",
+          "line_he": "אחת בצהריים. שמש קשה וגבוהה, והתריס מטיל להב אור חד על הסיד ועל הטרקוטה. כל השאר בצל קריר, ובחוץ זית וקטע של ים.",
+          "alt_he": "סלון בבית מסויד בצהרי יוני: ספסל בנוי עם כריות לבנות, טרקוטה וזית, שמיכת מוסלין, שולחן עץ עם קערת תאנים ופמוטי טרוורטין, שלישיית הדפסים, וחלון קשת פתוח אל עצי זית ואל הים."
         }
       ]
     },

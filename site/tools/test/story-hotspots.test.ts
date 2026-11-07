@@ -58,11 +58,11 @@ describe('the story data file', () => {
     for (const [id, f] of mapped) for (const p of f.points) expect(p.by_eye, `${id}: ${p.product}`).toBe(true);
   });
 
-  it('maps only frames the QA register lets in, each with its title and alt text', () => {
+  it('maps only frames the QA register knows (the gate holds the ones it does not let in), each with its title and alt text', () => {
     expect(mapped.length).toBeGreaterThan(0);
     for (const [id, f] of mapped) {
       const q = qaOf(f.qa_key);
-      expect(q && story.allowed_states.includes(q.state), `${id}: ${q?.state ?? 'not in the QA records'}`).toBe(true);
+      expect(q, `${id}: ${f.qa_key} is not in the register`).toBeTruthy();
       expect(f.title_he && f.alt_he, `${id}: title and alt`).toBeTruthy();
     }
   });

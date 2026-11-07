@@ -1,0 +1,161 @@
+
+Running 10 tests using 1 worker
+
+  ✓   1 [e2e] › e2e/flow.spec.ts:181:3 › room experience › drag with inertia moves the wheel (mouse) (12.9s)
+  ✘   2 [e2e] › e2e/flow.spec.ts:181:3 › room experience › drag with inertia moves the wheel (mouse) (15.9s)
+  ✓   3 [e2e] › e2e/flow.spec.ts:181:3 › room experience › drag with inertia moves the wheel (mouse) (11.9s)
+  ✓   4 [e2e] › e2e/flow.spec.ts:181:3 › room experience › drag with inertia moves the wheel (mouse) (11.4s)
+  ✓   5 [e2e] › e2e/flow.spec.ts:181:3 › room experience › drag with inertia moves the wheel (mouse) (11.7s)
+  ✓   6 [e2e] › e2e/flow.spec.ts:181:3 › room experience › drag with inertia moves the wheel (mouse) (11.4s)
+  ✓   7 [e2e] › e2e/flow.spec.ts:181:3 › room experience › drag with inertia moves the wheel (mouse) (13.5s)
+  ✘   8 [e2e] › e2e/flow.spec.ts:181:3 › room experience › drag with inertia moves the wheel (mouse) (13.7s)
+  ✘   9 [e2e] › e2e/flow.spec.ts:181:3 › room experience › drag with inertia moves the wheel (mouse) (17.8s)
+  ✘  10 [e2e] › e2e/flow.spec.ts:181:3 › room experience › drag with inertia moves the wheel (mouse) (16.0s)
+
+
+  1) [e2e] › e2e/flow.spec.ts:181:3 › room experience › drag with inertia moves the wheel (mouse) ──
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).not.[22mtoHaveAccessibleName[2m([22m[32mexpected[39m[2m)[22m failed
+
+    Locator: getByRole('radio', { checked: true })
+    Expected pattern: not [32m/^1 מתוך/[39m
+    Received string: [31m"[7m1 מתוך[27m 3: אגרטל קרמיקה, לבן חם, ⁦₪ 229⁩"[39m
+    Timeout: 5000ms
+
+    Call log:
+    [2m  - Expect "not toHaveAccessibleName" with timeout 5000ms[22m
+    [2m  - waiting for getByRole('radio', { checked: true })[22m
+    [2m    9 × locator resolved to <button role="radio" tabindex="0" type="button" class="arc-card" aria-checked="true" aria-label="1 מתוך 3: אגרטל קרמיקה, לבן חם, ⁦₪ 229⁩">…</button>[22m
+    [2m      - unexpected value "1 מתוך 3: אגרטל קרמיקה, לבן חם, ⁦₪ 229⁩"[22m
+
+
+      154 |     for (let i = 1; i <= 8; i++) await page.mouse.move(box.x + box.width * (0.3 + i * 0.05), y);
+      155 |     await page.mouse.up();
+    > 156 |     await expect(page.getByRole('radio', { checked: true })).not.toHaveAccessibleName(/^1 מתוך/, { timeout: 5000 });
+          |                                                                  ^
+      157 |   });
+      158 | });
+      159 |
+        at /tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/qa/e2e-s4/site/e2e/flow.spec.ts:156:66
+
+    Error Context: test-results/flow-room-experience-drag--a8529-rtia-moves-the-wheel-mouse--e2e-repeat1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/flow-room-experience-drag--a8529-rtia-moves-the-wheel-mouse--e2e-repeat1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/flow-room-experience-drag--a8529-rtia-moves-the-wheel-mouse--e2e-repeat1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [e2e] › e2e/flow.spec.ts:181:3 › room experience › drag with inertia moves the wheel (mouse) ──
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).not.[22mtoHaveAccessibleName[2m([22m[32mexpected[39m[2m)[22m failed
+
+    Locator: getByRole('radio', { checked: true })
+    Expected pattern: not [32m/^1 מתוך/[39m
+    Received string: [31m"[7m1 מתוך[27m 3: אגרטל קרמיקה, לבן חם, ⁦₪ 229⁩"[39m
+    Timeout: 5000ms
+
+    Call log:
+    [2m  - Expect "not toHaveAccessibleName" with timeout 5000ms[22m
+    [2m  - waiting for getByRole('radio', { checked: true })[22m
+    [2m    8 × locator resolved to <button role="radio" tabindex="0" type="button" class="arc-card" aria-checked="true" aria-label="1 מתוך 3: אגרטל קרמיקה, לבן חם, ⁦₪ 229⁩">…</button>[22m
+    [2m      - unexpected value "1 מתוך 3: אגרטל קרמיקה, לבן חם, ⁦₪ 229⁩"[22m
+
+
+      154 |     for (let i = 1; i <= 8; i++) await page.mouse.move(box.x + box.width * (0.3 + i * 0.05), y);
+      155 |     await page.mouse.up();
+    > 156 |     await expect(page.getByRole('radio', { checked: true })).not.toHaveAccessibleName(/^1 מתוך/, { timeout: 5000 });
+          |                                                                  ^
+      157 |   });
+      158 | });
+      159 |
+        at /tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/qa/e2e-s4/site/e2e/flow.spec.ts:156:66
+
+    Error Context: test-results/flow-room-experience-drag--a8529-rtia-moves-the-wheel-mouse--e2e-repeat7/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/flow-room-experience-drag--a8529-rtia-moves-the-wheel-mouse--e2e-repeat7/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/flow-room-experience-drag--a8529-rtia-moves-the-wheel-mouse--e2e-repeat7/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [e2e] › e2e/flow.spec.ts:181:3 › room experience › drag with inertia moves the wheel (mouse) ──
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).not.[22mtoHaveAccessibleName[2m([22m[32mexpected[39m[2m)[22m failed
+
+    Locator: getByRole('radio', { checked: true })
+    Expected pattern: not [32m/^1 מתוך/[39m
+    Received string: [31m"[7m1 מתוך[27m 3: אגרטל קרמיקה, לבן חם, ⁦₪ 229⁩"[39m
+    Timeout: 5000ms
+
+    Call log:
+    [2m  - Expect "not toHaveAccessibleName" with timeout 5000ms[22m
+    [2m  - waiting for getByRole('radio', { checked: true })[22m
+    [2m    8 × locator resolved to <button role="radio" tabindex="0" type="button" class="arc-card" aria-checked="true" aria-label="1 מתוך 3: אגרטל קרמיקה, לבן חם, ⁦₪ 229⁩">…</button>[22m
+    [2m      - unexpected value "1 מתוך 3: אגרטל קרמיקה, לבן חם, ⁦₪ 229⁩"[22m
+
+
+      154 |     for (let i = 1; i <= 8; i++) await page.mouse.move(box.x + box.width * (0.3 + i * 0.05), y);
+      155 |     await page.mouse.up();
+    > 156 |     await expect(page.getByRole('radio', { checked: true })).not.toHaveAccessibleName(/^1 מתוך/, { timeout: 5000 });
+          |                                                                  ^
+      157 |   });
+      158 | });
+      159 |
+        at /tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/qa/e2e-s4/site/e2e/flow.spec.ts:156:66
+
+    Error Context: test-results/flow-room-experience-drag--a8529-rtia-moves-the-wheel-mouse--e2e-repeat8/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/flow-room-experience-drag--a8529-rtia-moves-the-wheel-mouse--e2e-repeat8/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/flow-room-experience-drag--a8529-rtia-moves-the-wheel-mouse--e2e-repeat8/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [e2e] › e2e/flow.spec.ts:181:3 › room experience › drag with inertia moves the wheel (mouse) ──
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).not.[22mtoHaveAccessibleName[2m([22m[32mexpected[39m[2m)[22m failed
+
+    Locator: getByRole('radio', { checked: true })
+    Expected pattern: not [32m/^1 מתוך/[39m
+    Received string: [31m"[7m1 מתוך[27m 3: אגרטל קרמיקה, לבן חם, ⁦₪ 229⁩"[39m
+    Timeout: 5000ms
+
+    Call log:
+    [2m  - Expect "not toHaveAccessibleName" with timeout 5000ms[22m
+    [2m  - waiting for getByRole('radio', { checked: true })[22m
+    [2m    8 × locator resolved to <button role="radio" tabindex="0" type="button" class="arc-card" aria-checked="true" aria-label="1 מתוך 3: אגרטל קרמיקה, לבן חם, ⁦₪ 229⁩">…</button>[22m
+    [2m      - unexpected value "1 מתוך 3: אגרטל קרמיקה, לבן חם, ⁦₪ 229⁩"[22m
+
+
+      154 |     for (let i = 1; i <= 8; i++) await page.mouse.move(box.x + box.width * (0.3 + i * 0.05), y);
+      155 |     await page.mouse.up();
+    > 156 |     await expect(page.getByRole('radio', { checked: true })).not.toHaveAccessibleName(/^1 מתוך/, { timeout: 5000 });
+          |                                                                  ^
+      157 |   });
+      158 | });
+      159 |
+        at /tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/qa/e2e-s4/site/e2e/flow.spec.ts:156:66
+
+    Error Context: test-results/flow-room-experience-drag--a8529-rtia-moves-the-wheel-mouse--e2e-repeat9/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/flow-room-experience-drag--a8529-rtia-moves-the-wheel-mouse--e2e-repeat9/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/flow-room-experience-drag--a8529-rtia-moves-the-wheel-mouse--e2e-repeat9/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4 failed
+    [e2e] › e2e/flow.spec.ts:181:3 › room experience › drag with inertia moves the wheel (mouse) ───
+    [e2e] › e2e/flow.spec.ts:181:3 › room experience › drag with inertia moves the wheel (mouse) ───
+    [e2e] › e2e/flow.spec.ts:181:3 › room experience › drag with inertia moves the wheel (mouse) ───
+    [e2e] › e2e/flow.spec.ts:181:3 › room experience › drag with inertia moves the wheel (mouse) ───
+  6 passed (2.7m)

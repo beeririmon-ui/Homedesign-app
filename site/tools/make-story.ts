@@ -69,7 +69,8 @@ type ToolDraft = {
   mobile_center_u: number;
   layers: { id: string; src: string; blend: 'normal' | 'multiply' | 'screen' }[];
   status_he: string;
-  compare: { house: string; src: string; widths: number[]; alt_he: string };
+  /** the other house at the same camera (a draft too): its layers, encoded the same way */
+  compare: { house: string; layers: ToolDraft['layers']; alt_he: string };
 };
 type Pair = { concept_he: string; line_he?: string; tool: string | null; tool_draft?: ToolDraft; frames: FrameSpec[]; closeups?: CloseupSpec[] };
 type Story = {
@@ -1300,12 +1301,12 @@ console.log(
 );
 // ---------- S3: the house's own tool, a draft (DIR2), with the soft switch between two houses ----------
 const TOOL_WIDTHS = [1280, 1920, 2720];
-async function toolDraftPage(pg: PageOut, t: ToolDraft): Promise<void> {
-  const dir = join(OUT, 'tool', pg.room, pg.style, t.frame);
-  const url = `${URL_BASE}/tool/${pg.room}/${pg.style}/${t.frame}`;
+async function toolLayers(room: string, house: string, frame: string, list: ToolDraft['layers']) {
+  const dir = join(OUT, 'tool', room, house, frame);
+  const url = `${URL_BASE}/tool/${room}/${house}/${frame}`;
   mkdirSync(dir, { recursive: true });
   const layers: { id: string; blend: string; base: string; w: number; h: number }[] = [];
-  for (const l of t.layers) {
+  for (const l of list) {
     const src = repoPath(l.src);
     // named by the source's content time: a new render makes new files
     const key = createHash('sha256')
@@ -1323,6 +1324,11 @@ async function toolDraftPage(pg: PageOut, t: ToolDraft): Promise<void> {
     }
     layers.push({ id: l.id, blend: l.blend, base: `${url}/${l.id}.${key}`, w: meta.width!, h: meta.height! });
   }
+  return layers;
+}
+async function toolDraftPage(pg: PageOut, t: ToolDraft): Promise<void> {
+  const layers = await toolLayers(pg.room, pg.style, t.frame, t.layers);
+  const others = await toolLayers(pg.room, t.compare.house, t.frame, t.compare.layers);
   const sizes = '(max-width: 719px) 160vw, 100vw';
   const pic = (base: string, widths: number[], w: number, h: number, cls: string, eager: boolean) =>
     `<picture class="st-td-layer ${cls}"><source type="image/avif" srcset="${widths.map((x) => `${base}.${x}.avif ${Math.min(x, w)}w`).join(', ')}" sizes="${sizes}" /><img src="${base}.${widths[1]}.webp" srcset="${widths.map((x) => `${base}.${x}.webp ${Math.min(x, w)}w`).join(', ')}" sizes="${sizes}" alt="" width="${w}" height="${h}" decoding="async"${eager ? ' fetchpriority="high"' : ' loading="lazy"'} /></picture>`;
@@ -1335,7 +1341,7 @@ async function toolDraftPage(pg: PageOut, t: ToolDraft): Promise<void> {
       ${layers.map((l, i) => pic(l.base, TOOL_WIDTHS, l.w, l.h, `is-${l.blend}`, i === 0)).join('\n      ')}
     </div>
     <div class="st-td-house" data-house="${t.compare.house}" role="img" aria-label="${esc(t.compare.alt_he)}" aria-hidden="true">
-      ${pic(`/media/${t.compare.src}`, t.compare.widths, 2752, 1548, 'is-normal', false)}
+      ${others.map((l) => pic(l.base, TOOL_WIDTHS, l.w, l.h, `is-${l.blend}`, false)).join('\n      ')}
     </div>
     <p class="st-draft is-almost">טיוטה / בדיקה · הכלי בבנייה</p>
     <div class="st-td-switch" role="group" aria-label="הבית">
@@ -1349,6 +1355,7 @@ async function toolDraftPage(pg: PageOut, t: ToolDraft): Promise<void> {
       <h1 id="td-title" class="mag-h1 mag-col-main">עצב בעצמך, בבית ה${esc(house)}</h1>
       <p class="mag-lead mag-col-main">אותה מצלמה ואותן עמדות כמו בבית ה${esc(other)}, אדריכלות אחרת. מעבר בין הבתים בכלי הוא מעבר רך של כל השכבות באותו פריים, כשנייה.</p>
       <p class="st-type-status mag-col-main"><span class="st-type-rule" aria-hidden="true"></span>${esc(t.status_he)}</p>
+      <p class="mag-cap mag-col-main">הבית ה${esc(other)} במתג: המעטפת בלבד, מאותה מצלמה (M0 1.2), מהצינור הנעול של הבית הנורדי. גם היא טיוטה, ועוד לא אושרה לאתר.</p>
       <p class="mag-col-main st-tool-row"><a class="mag-btn mag-btn-secondary st-btn-link" href="${esc(`${story.tool_fallback}?from=${encodeURIComponent(pg.href)}`)}">לכלי הפעיל: הסלון בבית הנורדי</a> <a class="mag-link" href="${pg.href}">חזרה לסיפור של הבית</a></p>
     </div>
   </div>
@@ -1368,7 +1375,9 @@ async function toolDraftPage(pg: PageOut, t: ToolDraft): Promise<void> {
     BODY: [body, footer('הכלי של הבית הוא טיוטה מפיילוט הרינדור, שעוד לא עבר QA.')].join('\n'),
     DATA: JSON.stringify({ page: { room: pg.room, style: pg.style, href, tool: story.tool_fallback, kind: 'tool-draft' }, items: {}, frames: [] }),
   });
-  console.log(`${href} → the house's draft tool: ${layers.map((l) => `${l.id} (${l.blend})`).join(', ')}; the soft switch to the ${t.compare.house} house`);
+  console.log(
+    `${href} → the house's draft tool: ${layers.map((l) => `${l.id} (${l.blend})`).join(', ')}; the soft switch to the ${t.compare.house} house: ${others.map((l) => l.id).join(', ')}`,
+  );
 }
 for (const pg of pages) if (pg.pair.tool_draft) await toolDraftPage(pg, pg.pair.tool_draft);
 

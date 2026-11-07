@@ -44,7 +44,7 @@ const sheet = (page: Page) => page.locator('#st-sheet');
 /** QA's register decides a frame's state (it moves round by round): the tests read what the build resolved */
 const resolved = JSON.parse(readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), '../.generated/story.json'), 'utf8')) as Record<
   string,
-  { states?: [string, string, string][]; held?: { state: string; why_he: string }[] }
+  { states?: [string, string, string][]; held?: { state: string; why_he: string }[]; items?: Record<string, { dot: boolean }> }
 >;
 const stateOf = (href: string) => resolved[href]?.states?.[0]?.[2] ?? null;
 const MARK: Record<string, string> = { final_test: 'טיוטה / בדיקה', almost: 'טיוטה / בדיקה · כמעט מוכן', approved_for_site: 'בדיקה · מאושר לאתר' };
@@ -271,12 +271,13 @@ test.describe('the other houses', () => {
     await audit(page, 'japandi, typographic');
   });
 
-  test('boho fin6 (QA register: final test): its frame, nine dots, the test mark', async ({ page }) => {
+  test('boho fin6: its frame, a dot where the register puts one, the mark of its state', async ({ page }) => {
     await page.goto(BOHO);
     await expect(page.locator('h1')).toHaveText('בית אבן ישן בנמל, 16:00');
     await expect(page.locator('#frame-A')).toHaveClass(/is-title/, { timeout: 15_000 });
     await expect(page.locator('#frame-A .st-draft')).toHaveText(MARK[stateOf(BOHO)!]!);
-    await expect(page.locator('#frame-A .st-mark')).toHaveCount(9);
+    // the register says which products have a dot (v3: the planter's base is "partly", so it has none)
+    await expect(page.locator('#frame-A .st-mark')).toHaveCount(Object.values(resolved[BOHO]!.items!).filter((x) => x.dot).length);
     await expect(page.locator('#list-A .st-credit')).toHaveCount(9);
   });
 
@@ -321,15 +322,15 @@ test.describe('the detail page (layer 2, "הפרט")', () => {
   });
 
   test('options: the choice moves the price, the picture and the address; the story option is one step back', async ({ page }) => {
-    const href = DETAIL('warm-modern', 'cushions-cj-boucle-teddy');
+    const href = DETAIL('nordic', 'cushions-cj-boucle-teddy');
     await page.goto(href);
-    await expect(page.locator('h1')).toHaveText('ציפית כרית בוקלה, תה חלב');
+    await expect(page.locator('h1')).toHaveText('ציפית כרית בוקלה, לבן חם');
     await expect(page.locator('#st-pd-price')).toHaveText(/59/);
     await expect(page.locator('#st-pd-story-note')).toBeHidden();
     await page.locator('.st-pd-axis[data-axis="size"] label', { hasText: '30×50' }).click();
     await expect(page.locator('#st-pd-price')).toHaveText(/49/);
     // the title follows the choice (design notes §6): the 30×50 has its own shape name, and never a size
-    await expect(page.locator('h1')).toHaveText('כרית מותן בוקלה, תה חלב');
+    await expect(page.locator('h1')).toHaveText('כרית מותן בוקלה, לבן חם');
     await expect(page).toHaveURL(/size=30x50/);
     await expect(page.locator('#st-pd-story-note')).toContainText('בסיפור מוצגת האפשרות');
     await expect(page.locator('[data-spec="מידות"]')).toContainText('30×50');
@@ -343,10 +344,11 @@ test.describe('the detail page (layer 2, "הפרט")', () => {
     await page.keyboard.press('Escape');
     await page.locator('#st-pd-back').click();
     await expect(page.locator('#st-pd-price')).toHaveText(/59/);
-    await expect(page.locator('h1')).toHaveText('ציפית כרית בוקלה, תה חלב');
+    await expect(page.locator('h1')).toHaveText('ציפית כרית בוקלה, לבן חם');
     await expect(page).toHaveURL(new RegExp(`${href}$`));
     // the same product in another house
-    await expect(page.locator('#elsewhere .st-tile-link')).toHaveAttribute('href', DETAIL('nordic', 'cushions-cj-boucle-teddy'));
+    await page.goto(DETAIL('nordic', 'table-runner-cj-linen-look-sage-fringe'));
+    await expect(page.locator('#elsewhere .st-tile-link')).toHaveAttribute('href', DETAIL('modern-country', 'table-runner-cj-linen-look-sage-fringe'));
   });
 
   test('a product without a price, and one not sold now: no add button, the reason instead', async ({ page }) => {
@@ -366,12 +368,12 @@ test.describe('the detail page (layer 2, "הפרט")', () => {
     await expect(page).toHaveURL(/\/rooms\/living-room\/\?slot=cushions&option=1$/);
     await expect(page.getByRole('dialog').first()).toBeVisible({ timeout: 20_000 });
     // a house whose tool is still being built says so
-    await page.goto(DETAIL('warm-modern', 'cushions-cj-boucle-teddy'));
+    await page.goto(DETAIL('boho', 'cushions-cj-washed-cotton-frayed'));
     await expect(page.locator('#st-pd-try-none')).toContainText('בבנייה');
   });
 
   test('zero axe violations on a detail page with options (1280), and after a choice', async ({ page }) => {
-    await page.goto(DETAIL('warm-modern', 'cushions-cj-boucle-teddy'));
+    await page.goto(DETAIL('nordic', 'cushions-cj-boucle-teddy'));
     await page.waitForTimeout(800);
     await audit(page, 'detail at rest');
     await page.locator('.st-pd-axis[data-axis="color"] label').first().click();
@@ -395,13 +397,13 @@ test.describe('the detail page, after the designer (§6)', () => {
     await expect(page.locator('h1')).toHaveText('זוג וילונות שקופים במראה פשתן, ווים');
   });
 
-  test("QA on S2: a dot of another option opens the detail page on that option (warm modern's white bouclé)", async ({ page }) => {
-    await page.goto(WARM);
-    await page.evaluate(() => window.__story!.openSheet('A-10'));
-    await expect(page.locator('#st-page')).toHaveAttribute('href', /\/p\/cushions-cj-boucle-teddy\/\?color=white&size=50x50$/);
+  test("QA on S2: a dot of another option opens the detail page on that option (the Mediterranean's terracotta cushion)", async ({ page }) => {
+    await page.goto(MED);
+    await page.evaluate(() => window.__story!.openSheet('A-7'));
+    await expect(page.locator('#st-page')).toHaveAttribute('href', /\/p\/cushions-cj-washed-cotton-frayed\/\?size=50x50&other=earthy-orange$/);
     await page.locator('#st-page').click();
-    await expect(page.locator('h1')).toHaveText('ציפית כרית בוקלה, לבן');
-    await expect(page.locator('#st-pd-story-note')).toContainText('תה חלב');
+    await expect(page.locator('h1')).toHaveText('ציפית כרית כותנה רחוצה עם שוליים פרומים, טרקוטה');
+    await expect(page.locator('#st-pd-story-note')).toContainText('לבן');
   });
 
   test('a set sells as a set by default, and as a single piece where the supplier offers one (SET1)', async ({ page }) => {

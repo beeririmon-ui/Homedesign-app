@@ -539,7 +539,8 @@ def swap():
 def corner_gain(size):
     """one global exposure for the whole pilot (every layer composite shares it): the back wall by the corner (-1.75, 0, 1.60) of the
     step-2 shell to L 90 (Bible 1.8 B1 (1): 90-94; ARC2 = the Nordic light)."""
-    a = load(os.path.join(HERE, "shell.png"))
+    sp = os.path.join(HERE, "shell-v2.png") if os.path.exists(os.path.join(HERE, "shell-v2.png")) else os.path.join(HERE, "shell.png")
+    a = load(sp)
     W, H = size
     u, v, _ = lock_wm.r1.project(lock_wm.CAM, -1.75, 0.0, 1.60)
     x, y = int((116 + u * 3840) / CANVAS[0] * W), int((65 + v * 2160) / CANVAS[1] * H)
@@ -561,7 +562,9 @@ def grade():
     g, Y0 = corner_gain(size)
     knee, top = ((88.0 + 16) / 116) ** 3, ((97.0 + 16) / 116) ** 3
     out = dict(_exposure=dict(gain=round(g, 4), stops=round(float(np.log2(g)), 3), corner_Y_before=round(Y0, 4), knee_L=88, shoulder_max_L=97))
-    for name in ["shell.png", "shell-furniture.png"] + [f"composite-set-{s}.png" for s in "ABC"]:
+    names = ["shell.png", "shell-furniture.png"] + [f"composite-set-{s}.png" for s in "ABC"]
+    names += [n.replace(".png", "-v2.png") for n in names]
+    for name in names:
         p = os.path.join(HERE, name)
         if not os.path.exists(p):
             continue
@@ -598,9 +601,10 @@ def sheet():
     from PIL import ImageDraw, ImageFont
     f = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 22)
     fb = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 26)
-    tiles = [("clay r4, shell layer", CLAY_SHELL), ("clay r4, furniture layer", CLAY_FURN), ("step 2: shell (seedream)", os.path.join(HERE, "shell.png")),
-             ("step 3: shell + furniture + code shadow", os.path.join(HERE, "shell-furniture.png"))]
-    tiles += [(f"step 4: cushions set {s}", os.path.join(HERE, f"composite-set-{s}.png")) for s in "ABC"]
+    tiles = [("clay r4, shell layer", CLAY_SHELL), ("step 2: shell (seedream raw)", os.path.join(HERE, "shell.png")),
+             ("step 2: shell v2 (code: wedge flattened, limestone bench)", os.path.join(HERE, "shell-v2.png")),
+             ("step 3: shell v2 + furniture + code shadow", os.path.join(HERE, "shell-furniture-v2.png"))]
+    tiles += [(f"step 4: cushions set {s} (on shell v2), display grade", os.path.join(HERE, f"composite-set-{s}-v2-graded.png")) for s in "ABC"]
     tiles += [("shell lock overlay (red = clay line, green = render edge)", os.path.join(HERE, "shell-lock.jpg"))]
     tiles = [t for t in tiles if os.path.exists(t[1])]
     tw, th = 960, 540

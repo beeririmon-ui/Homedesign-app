@@ -7,17 +7,21 @@
  "source": "docs/proposals/clay-r2-and-ged-verdicts-2026-11-07.md section 11 (master-designer)",
  "wedge": {
   "before": {
-   "max_excess_L": 40.2,
-   "p99_excess_L": 15.41,
-   "max_deficit_L": -9.13
+   "step_across_edge_max_L": 8.07,
+   "step_across_edge_median_L": 4.07,
+   "abs_dev_from_target_p99_L": 13.99
   },
   "after": {
-   "max_excess_L": 28.57,
-   "p99_excess_L": 7.92
+   "step_across_edge_max_L": 3.23,
+   "step_across_edge_median_L": 2.28,
+   "abs_dev_from_target_p99_L": 1.38
   },
-  "px_changed": 777007,
-  "max_gain_stops": -1.169,
-  "rule": "delta L* <= 2 against the separable wall field f(X) + g(row)",
+  "px_changed": 1497707,
+  "dL_range": [
+   -2.51,
+   14.0
+  ],
+  "rule": "delta L* <= 2: the step across the wedge's edge (120 px across the steepest point of each column) and the low frequencies against the target field",
   "L_points_before": {
    "back_wall_by_corner(-1.75,0,1.60)": 83.3,
    "window_wall(-2.30,0.30,1.60)": 72.0,
@@ -26,48 +30,49 @@
    "back_wall_right(1.85,0,1.60)": 80.9
   },
   "L_points_after": {
-   "back_wall_by_corner(-1.75,0,1.60)": 82.2,
+   "back_wall_by_corner(-1.75,0,1.60)": 82.9,
    "window_wall(-2.30,0.30,1.60)": 72.0,
    "window_wall(-2.30,0.55,1.60)": 76.0,
-   "back_wall_centre(0.20,0,1.95)": 88.9,
-   "back_wall_right(1.85,0,1.60)": 80.9
+   "back_wall_centre(0.20,0,1.95)": 93.3,
+   "back_wall_right(1.85,0,1.60)": 85.3
   }
  },
  "bench": {
-  "stone_px": 90173,
-  "pores_px": 10936,
-  "grain_sd": 0.0161,
-  "pores_left_px": 407,
+  "stone_px": 82799,
+  "pores_px": 10095,
+  "grain_sd": 0.017,
+  "pores_left_px": 411,
   "ab_before": [
-   0.48,
-   3.84
+   0.17,
+   3.25
   ],
   "ab_target": [
    1.41,
    14.98
   ],
   "ab_after": [
-   1.14,
-   14.88
+   0.81,
+   9.17
   ],
-  "L_median": 93.8,
+  "L_median": 94.7,
   "target": "#D8C8AE",
-  "method": "pores > 3.5 L* under the 7 px local median, grown 1 px, filled from a 7+5 median plus the stone's grain; a*, b* median shift to the target, L kept"
+  "chroma_move": 0.5,
+  "method": "pores > 3.5 L* under the 7 px local median, grown 1 px, filled from a 7+5 median plus the stone's grain; a*, b* median moved half way to the target (lit slab), L kept"
  },
- "px_changed_total": 820651,
- "px_changed_outside_wall_and_stone": 5225,
+ "px_changed_total": 1659395,
+ "px_changed_outside_wall_and_stone": 0,
  "lock_v2_shell": {
   "summary": {
    "named_worst_p90_raw_px": 11.0,
-   "named_worst_p90_after_affine_px": 1.0,
+   "named_worst_p90_after_affine_px": 2.0,
    "named_not_measured": [],
    "shift_px": [
-    0.4,
-    0.94
+    0.27,
+    1.15
    ],
    "scale": [
-    0.99865,
-    0.99738
+    1.00013,
+    0.99681
    ]
   },
   "verdict": {
@@ -105,7 +110,7 @@
     "n": 5
    },
    "back wall ceiling line (Y 0, Z 3.00)": {
-    "median": 0.0,
+    "median": 1.0,
     "p90": 1.0,
     "n": 26
    },

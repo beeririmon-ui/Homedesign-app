@@ -4,15 +4,12 @@ shell_fix.py: master-designer's two code fixes of the pilot shell (docs/proposal
 render-agent, 2026-11-07. 0 var2 tokens. shell.png (step 2, kept as it is) -> shell-v2.png; then the step-3 / step-4 composites are
 rebuilt on it with the SAME layers (fixed-furniture.png + its shadow, layers/cushions/set-X.png + their shadows): only what is behind
 the layers changes.
-  (a) the window-light wedge on the back wall to delta L* <= 2: the back wall's low-frequency L* (normalised blur 40 px inside the wall
-      mask of the r4 shell clay, index 5) is modelled as a separable field f(X) + g(Z-row) (robust alternating medians: the falloff along
-      the wall and the vertical gradient stay); the diagonal wedge is what the separable model cannot hold. A luminance-only gain (one
-      factor for R, G, B: hue kept) brings the low frequencies to the model where they are brighter than it, ramped in over the wall
-      mask's edge (skirting, ceiling line, corner kept). The plaster texture (high frequencies) is untouched.
+  (a) the window-light wedge on the back wall to delta L* <= 2: see the comment in main() (target field f(x) + g(v), the low
+      frequencies brought to it by a luminance-only gain inside the wall mask of the r4 shell clay, index 5; the plaster texture kept).
   (b) the bench stone: the porous travertine look out and the tone toward #D8C8AE (limestone, Bible 1.0): the slab's top and its 8 cm
       front edge (projected from the plan: X -2.65..-1.98, Y 1.00..3.60, Z 0.45 / X -1.98, Z 0.37..0.45, inside the r4 index 520), pores =
       pixels darker than the local median (7 px) by > 3.5 L* (grown 1 px), filled from the median plus the stone's own fine grain;
-      then the slab's a*, b* moved to #D8C8AE's (1.4, 15.0) by the median shift, L kept (the light on the slab stays).
+      then the slab's a*, b* moved half way to #D8C8AE's (1.4, 15.0) by the median shift, L kept (the light on the slab stays; the full move reads yellow on the lit slab).
   python3 shell_fix.py
 """
 import json
@@ -54,53 +51,89 @@ def main():
                source="docs/proposals/clay-r2-and-ged-verdicts-2026-11-07.md section 11 (master-designer)")
     out = a.copy()
     # ---------------- (a) the wedge
+    # The back wall's low frequencies (normalised blur 12 px inside the wall mask) show a lit plateau (L* ~94-96) under a soft diagonal
+    # edge (the window head's shadow line, ~8-10 L over 150-200 px, running down to the right): the "wedge". Target field
+    # T(x, y) = f(x) + g(v): f = the plateau level of each column (80th percentile of the column's lower 60 %, smoothed 30 px: the falloff
+    # along the wall and the bright strip by the corner stay), g = a gentle fall toward the ceiling, -4 L at the top of the wall
+    # (quadratic in the wall's height fraction v). The low frequencies are brought to T (both ways, clamped +-14 L); a luminance-only
+    # shift on L* only: a*, b* and the plaster's fine texture kept.
     wall = lab_idx(5)
-    k = cv2.erode(wall.astype(np.uint8), np.ones((9, 9), np.uint8)).astype(np.float32)
+    k = cv2.erode(wall.astype(np.uint8), np.ones((15, 15), np.uint8)).astype(np.float32)
     L = P.Lstar(a).astype(np.float32)
-    nb = lambda x, s: cv2.GaussianBlur(x * k, (0, 0), s) / np.maximum(cv2.GaussianBlur(k, (0, 0), s), 1e-4)
-    LF = nb(L, 40)
+    nb = lambda x, sg: cv2.GaussianBlur(x * k, (0, 0), sg) / np.maximum(cv2.GaussianBlur(k, (0, 0), sg), 1e-4)
+    LF = nb(L, 12)
     sel = k > 0
-    ys, xs = np.nonzero(sel)
+    cols = np.nonzero(sel.any(0))[0]
     f = np.zeros(W, np.float32)
-    g = np.zeros(H, np.float32)
-    for _ in range(6):
-        r = LF - g[:, None]
-        for x in range(xs.min(), xs.max() + 1):
-            col = sel[:, x]
-            if col.sum() > 20:
-                f[x] = np.median(r[col, x])
-        r = LF - f[None, :]
-        for y in range(ys.min(), ys.max() + 1):
-            row = sel[y]
-            if row.sum() > 20:
-                g[y] = np.median(r[y, row])
-    f = cv2.GaussianBlur(f.reshape(1, -1), (0, 0), 25).ravel()
-    g = cv2.GaussianBlur(g.reshape(-1, 1), (0, 0), 25).ravel()
-    model = f[None, :] + g[:, None]
-    excess = np.where(sel, LF - model, 0.0)
-    before = dict(max_excess_L=round(float(excess[sel].max()), 2), p99_excess_L=round(float(np.percentile(excess[sel], 99)), 2),
-                  max_deficit_L=round(float(excess[sel].min()), 2))
-    # gain on the low frequencies where the wall is brighter than the model (the wedge); ramp in over 30 px of the wall's edge
-    ramp = cv2.GaussianBlur(cv2.erode(wall.astype(np.uint8), np.ones((15, 15), np.uint8)).astype(np.float32), (0, 0), 10)
-    exc = np.clip(excess, 0, None) * ramp
-    Lt = np.clip(LF - exc, 0, 100)
-    Y_of = lambda Ls: np.where(Ls > 8, ((Ls + 16) / 116) ** 3, Ls / 903.3)
-    gain = np.where(wall, Y_of(Lt) / np.maximum(Y_of(LF), 1e-5), 1.0).astype(np.float32)
-    lin = P.s2l(out) * gain[..., None]
-    out = np.clip(P.l2s(lin), 0, 1).astype(np.float32)
-    LF2 = nb(P.Lstar(out).astype(np.float32), 40)
-    ex2 = np.where(sel, LF2 - model, 0.0)
-    rec["wedge"] = dict(before=before, after=dict(max_excess_L=round(float(ex2[sel].max()), 2), p99_excess_L=round(float(np.percentile(ex2[sel], 99)), 2)),
-                        px_changed=int((np.abs(gain - 1) > 0.002).sum()), max_gain_stops=round(float(np.log2(gain[wall].min())), 3),
-                        rule="delta L* <= 2 against the separable wall field f(X) + g(row)",
+    ytop = np.zeros(W, np.float32)
+    ybot = np.zeros(W, np.float32)
+    for x in cols:
+        rr = np.nonzero(sel[:, x])[0]
+        ytop[x], ybot[x] = rr.min(), rr.max()
+        lower = rr[rr >= ytop[x] + 0.4 * (ybot[x] - ytop[x])]
+        f[x] = np.percentile(LF[lower, x], 80) if len(lower) > 10 else 0
+    for arr in (ytop, ybot):
+        arr[: cols.min()] = arr[cols.min()]
+        arr[cols.max() + 1:] = arr[cols.max()]
+    f[: cols.min()] = f[cols.min()]
+    f[cols.max() + 1:] = f[cols.max()]
+    f = cv2.GaussianBlur(f.reshape(1, -1), (0, 0), 30).ravel()
+    yy = np.arange(H, dtype=np.float32)[:, None]
+    v = np.clip((yy - ytop[None, :]) / np.maximum(ybot - ytop, 1)[None, :], 0, 1)
+    T = f[None, :] - 4.0 * (1 - v) ** 2
+    dL = np.where(sel, np.clip(T - LF, -14, 14), 0.0).astype(np.float32)
+    # the step across the old edge, before: LF on both sides of the diagonal (60 px above / below the steepest point of each column)
+    def step_across(LFm):
+        out_ = []
+        for x in range(int(cols.min()) + 40, int(cols.max()) - 40, 40):
+            rr = np.nonzero(sel[:, x])[0]
+            if len(rr) < 200:
+                continue
+            prof = cv2.GaussianBlur(LFm[rr, x].reshape(-1, 1), (0, 0), 6).ravel()
+            gy = np.gradient(prof)
+            i = int(np.argmax(np.abs(gy[20:-20]))) + 20
+            lo, hi = max(0, i - 60), min(len(rr) - 1, i + 60)
+            out_.append(abs(float(prof[hi] - prof[lo])))
+        return round(float(np.max(out_)), 2), round(float(np.median(out_)), 2)
+    st_before = step_across(LF)
+    ramp = cv2.GaussianBlur(cv2.erode(wall.astype(np.uint8), np.ones((9, 9), np.uint8)).astype(np.float32), (0, 0), 6)
+    dLs = cv2.GaussianBlur(dL, (0, 0), 6) * ramp
+    # applied on L* only (a*, b* kept): an RGB gain would raise the plaster's chroma with its lightness (peach at the lifted top)
+    labw = cv2.cvtColor(out, cv2.COLOR_RGB2LAB)
+    labw[..., 0] = np.clip(labw[..., 0] + dLs, 0, 100)
+    # where the wall is lifted, its low-frequency a*, b* follow to the lit plaster's (the shaded top carried b* ~10, which reads peach
+    # once it is light): the plateau's median a*, b* of the column, weighted by the lift (full from +8 L)
+    for c in (1, 2):
+        cf = nb(labw[..., c].astype(np.float32), 12)
+        plate = np.zeros(W, np.float32)
+        for x in cols:
+            rr = np.nonzero(sel[:, x])[0]
+            lower = rr[rr >= ytop[x] + 0.4 * (ybot[x] - ytop[x])]
+            plate[x] = np.median(cf[lower, x]) if len(lower) > 10 else 0
+        plate[: cols.min()] = plate[cols.min()]
+        plate[cols.max() + 1:] = plate[cols.max()]
+        plate = cv2.GaussianBlur(plate.reshape(1, -1), (0, 0), 30).ravel()
+        wgt = np.clip(dLs / 8.0, 0, 1)
+        labw[..., c] = labw[..., c] + (plate[None, :] - cf) * wgt * ramp
+    out = np.where(wall[..., None], np.clip(cv2.cvtColor(labw, cv2.COLOR_LAB2RGB), 0, 1), out).astype(np.float32)
+    gain = np.where(wall, 1.0 + dLs / 100.0, 1.0).astype(np.float32)          # for the record only (px changed)
+    LF2 = nb(P.Lstar(out).astype(np.float32), 12)
+    res2 = np.abs(LF2 - T)[k > 0.5]
+    st_after = step_across(LF2)
+    rec["wedge"] = dict(before=dict(step_across_edge_max_L=st_before[0], step_across_edge_median_L=st_before[1],
+                                    abs_dev_from_target_p99_L=round(float(np.percentile(np.abs(LF - T)[k > 0.5], 99)), 2)),
+                        after=dict(step_across_edge_max_L=st_after[0], step_across_edge_median_L=st_after[1],
+                                   abs_dev_from_target_p99_L=round(float(np.percentile(res2, 99)), 2)),
+                        px_changed=int((np.abs(dLs) > 0.2).sum()), dL_range=[round(float(dLs[wall].min()), 2), round(float(dLs[wall].max()), 2)],
+                        rule="delta L* <= 2: the step across the wedge's edge (120 px across the steepest point of each column) and the low frequencies against the target field",
                         L_points_before=P.points_L(a, size), L_points_after=P.points_L(out, size))
     # ---------------- (b) the bench stone
-    top = poly([(-2.65, 1.00, 0.45), (-1.98, 1.00, 0.45), (-1.98, 3.60, 0.45), (-2.65, 3.60, 0.45)], size)
-    front = poly([(-1.98, 1.00, 0.45), (-1.98, 3.60, 0.45), (-1.98, 3.60, 0.37), (-1.98, 1.00, 0.37)], size)
+    top = poly([(-2.65, 0.75, 0.45), (-2.30, 0.75, 0.45), (-2.30, 1.00, 0.45), (-1.98, 1.00, 0.45), (-1.98, 2.85, 0.45), (-2.65, 2.85, 0.45)], size)
+    front = poly([(-1.98, 1.00, 0.45), (-1.98, 2.85, 0.45), (-1.98, 2.85, 0.37), (-1.98, 1.00, 0.37)], size)
     sm = np.zeros((H, W), np.uint8)
     cv2.fillPoly(sm, [np.round(top).astype(np.int32)], 1)
     cv2.fillPoly(sm, [np.round(front).astype(np.int32)], 1)
-    stone = sm.astype(bool) & (lab_idx(520) | cv2.dilate(lab_idx(520).astype(np.uint8), np.ones((5, 5), np.uint8)).astype(bool))
+    stone = sm.astype(bool) & (lab_idx(520) | lab_idx(12) | lab_idx(14))      # the slab, and its run into the reveal (Y 0.75-1.00)
     stone &= ~lab_idx(4)                                         # never the glazing
     Ls = P.Lstar(out).astype(np.float32)
     loc = cv2.medianBlur(np.clip(Ls * 2.55, 0, 255).astype(np.uint8), 7).astype(np.float32) / 2.55
@@ -120,11 +153,12 @@ def main():
     tgt = cv2.cvtColor(np.float32([[[int(TARGET_HEX[1:3], 16) / 255, int(TARGET_HEX[3:5], 16) / 255, int(TARGET_HEX[5:7], 16) / 255]]]),
                        cv2.COLOR_RGB2LAB)[0, 0]
     m_ab = np.median(lab[stone][:, 1:], 0)
-    soft = cv2.GaussianBlur(stone.astype(np.float32), (0, 0), 1.0)
+    soft = cv2.GaussianBlur(stone.astype(np.float32), (0, 0), 1.0) * stone        # never outside the stone
+    MOVE = 0.5                                                   # half way: the slab is lit (L* ~90), the full chroma of #D8C8AE (L 81) reads yellow there
     lab2 = lab.copy()
-    lab2[..., 1] += (tgt[1] - m_ab[0]) * soft
-    lab2[..., 2] += (tgt[2] - m_ab[1]) * soft
-    out = np.clip(cv2.cvtColor(lab2, cv2.COLOR_LAB2RGB), 0, 1).astype(np.float32)
+    lab2[..., 1] += (tgt[1] - m_ab[0]) * soft * MOVE
+    lab2[..., 2] += (tgt[2] - m_ab[1]) * soft * MOVE
+    out = np.where(stone[..., None], np.clip(cv2.cvtColor(lab2, cv2.COLOR_LAB2RGB), 0, 1), out).astype(np.float32)   # the Lab round trip only on the stone
     Ls2 = P.Lstar(out).astype(np.float32)
     loc2 = cv2.medianBlur(np.clip(Ls2 * 2.55, 0, 255).astype(np.uint8), 7).astype(np.float32) / 2.55
     rec["bench"] = dict(stone_px=int(stone.sum()), pores_px=int(pores.sum()), grain_sd=round(sd, 4),
@@ -132,11 +166,12 @@ def main():
                         ab_before=[round(float(v), 2) for v in m_ab], ab_target=[round(float(tgt[1]), 2), round(float(tgt[2]), 2)],
                         ab_after=[round(float(v), 2) for v in np.median(cv2.cvtColor(out, cv2.COLOR_RGB2LAB)[stone][:, 1:], 0)],
                         L_median=round(float(np.median(Ls2[stone])), 1), target=TARGET_HEX,
-                        method="pores > 3.5 L* under the 7 px local median, grown 1 px, filled from a 7+5 median plus the stone's grain; a*, b* median shift to the target, L kept")
+                        chroma_move=0.5,
+                        method="pores > 3.5 L* under the 7 px local median, grown 1 px, filled from a 7+5 median plus the stone's grain; a*, b* median moved half way to the target (lit slab), L kept")
     P.save(os.path.join(HERE, "shell-v2.png"), out)
     d = np.abs(out - a).max(2) * 255
     rec["px_changed_total"] = int((d > 0.5).sum())
-    rec["px_changed_outside_wall_and_stone"] = int((d[~(wall | stone)] > 0.5).sum())
+    rec["px_changed_outside_wall_and_stone"] = int((d[~(wall | stone)] > 0.5).sum())  # must be 0
     # ---------------- the lock again, then the composites on shell-v2 with the same layers
     lk = lock_wm.run(os.path.join(HERE, "shell-v2.png"), P.CLAY_SHELL, os.path.join(HERE, "shell-v2-lock.json"), os.path.join(HERE, "shell-v2-lock.jpg"), "shell")
     rec["lock_v2_shell"] = dict(summary=lk["summary"], verdict=lk["verdict"],

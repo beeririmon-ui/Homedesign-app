@@ -798,7 +798,7 @@ function publicBuild(): void {
 
 // ---------- layer 2, "הפרט": the detail page ----------
 const DETAIL = (style: string, product: string) => `/story/living-room/${style}/p/${product}/`;
-const BOUCLE_WM = DETAIL('warm-modern', 'cushions-cj-boucle-teddy');
+const BOUCLE_WM = DETAIL('nordic', 'cushions-cj-boucle-teddy');
 async function detailRun(w: number, h: number, tag: 'desk' | 'phone'): Promise<void> {
   const ctx = await ctxOf(w, h);
   const page = await open(ctx);
@@ -821,11 +821,11 @@ async function detailRun(w: number, h: number, tag: 'desk' | 'phone'): Promise<v
   await page.locator('#st-pd-add').click();
   await sleep(250);
   const count = (await page.evaluate(`document.querySelector('#st-cart-count').textContent`)) as string;
-  // the options: the warm-modern bouclé (the story shows milk tea 50×50)
+  // the options: the Nordic bouclé (the story shows white 50×50)
   await page.goto(`${ORIGIN}${BOUCLE_WM}`, { waitUntil: 'load' });
   await page.waitForFunction(`(window.__story?.events ?? []).some((e) => e.name === 'detail:ready')`, null, { timeout: 15_000 });
   await sleep(500);
-  await shot(page, `${tag}-d2-options`, `${w}: warm modern's bouclé: the option the story shows (milk tea, 50×50), its price and its photo`);
+  await shot(page, `${tag}-d2-options`, `${w}: the Nordic bouclé: the option the story shows (white, 50×50), its price and its photo`);
   const before = (await page.evaluate(`document.querySelector('#st-pd-price').textContent`)) as string;
   const resp = page.evaluate(
     `new Promise((res) => { const el = document.querySelector('#st-pd-price'); const v0 = el.textContent; addEventListener('click', (e) => { const t0 = e.timeStamp; const f = () => { if (el.textContent !== v0) res(performance.now() - t0); else requestAnimationFrame(f); }; requestAnimationFrame(f); }, { capture: true, once: true }); })`,
@@ -971,7 +971,7 @@ async function shopRun(w: number, h: number, tag: 'desk' | 'phone'): Promise<voi
   await sleep(700);
   await page.evaluate(`window.__story.showMarks('A')`);
   await sleep(350);
-  await shot(page, `${tag}-s9-boho`, `${w}: boho fin6 (QA register: final test): nine dots, placed by eye`);
+  await shot(page, `${tag}-s9-boho`, `${w}: boho fin6: the dots the register lets on, placed by eye`);
   evidence[`shop_${tag}`] = { look_ms: lookMs, cart_count_after_look: count, errors_focus: focus, order, title_after_choice: title };
   await ctx.close();
 }
