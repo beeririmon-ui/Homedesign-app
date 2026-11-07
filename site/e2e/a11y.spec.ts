@@ -47,6 +47,7 @@ for (const scheme of ['light'] as const) {
       '/test/',
       '/story/',
       '/story/living-room/boho/',
+      '/story/living-room/warm-modern/p/cushions-cj-boucle-teddy/',
     ]) {
       test(`page ${path}`, async ({ page }) => {
         await page.goto(path);

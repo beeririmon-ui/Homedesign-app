@@ -7,6 +7,8 @@
  *    the phone's 4:5 crop
  *  - /story/living-room/modern-country/: an "almost" frame, marked so; a product QA did not call faithful has no dot
  *  - /story/living-room/boho/: a pair whose frame QA has not let in is a typographic page, with no frame at all
+ *  - /story/<room>/<style>/p/<product>/, layer 2: the card, the options (price, picture and address follow the
+ *    choice), the empty close-up slot (G-ED.18), the frames that show it, the way into the tool at its slot
  *  - the test cart is one across the story pages; /test/story/ goes on to the Nordic living room
  *  - zero axe violations (WCAG 2.0/2.1 A + AA) on each kind of page, with the sheet open and with the cart open
  * Exact timings are in the evidence tool (tools/screens-story.ts).
@@ -267,6 +269,86 @@ test.describe('the other houses', () => {
   });
 });
 
+const DETAIL = (style: string, product: string) => `/story/living-room/${style}/p/${product}/`;
+test.describe('the detail page (layer 2, "הפרט")', () => {
+  test('the sheet leads to it: the card, the price, the empty close-up slot, the frame it came from, and the test cart', async ({ page }) => {
+    await page.goto(NORDIC);
+    await page.evaluate(() => window.__story!.openSheet('A-5'));
+    await page.locator('#st-page').click();
+    await expect(page).toHaveURL(new RegExp(`${DETAIL('nordic', 'cushions-cj-linen-look-charcoal')}$`));
+    await expect(page.locator('h1')).toHaveText('ציפית כרית במראה פשתן, פחם');
+    await expect(page.locator('#st-pd-price')).toContainText('₪');
+    await expect(page.locator('#st-pd-img')).toBeVisible();
+    // G-ED.18: the close-up of the house has its slot, honest while QA has let none in
+    await expect(page.locator('#st-pd-cu-empty')).toBeVisible();
+    await expect(page.locator('#st-pd-cu-empty')).toContainText('תקריב באור של הבית');
+    await expect(page.locator('#here .st-tile-link').first()).toHaveAttribute('href', `${NORDIC}#frame-A`);
+    await expect(page.locator('nav[aria-label="פירורי לחם"] [aria-current="page"]')).toHaveText('ציפית כרית במראה פשתן, פחם');
+    await page.locator('#st-pd-add').click();
+    await expect(page.locator('#st-pd-add')).toHaveText('נוסף לסל');
+    await expect(page.locator('#st-cart-count')).toHaveText('1');
+    await page.locator('#here .st-tile-link').first().click();
+    await expect(page).toHaveURL(new RegExp(`${NORDIC}#frame-A$`));
+    await expect(page.locator('#st-cart-count')).toHaveText('1');
+  });
+
+  test('options: the choice moves the price, the picture and the address; the story option is one step back', async ({ page }) => {
+    const href = DETAIL('warm-modern', 'cushions-cj-boucle-teddy');
+    await page.goto(href);
+    await expect(page.locator('h1')).toHaveText('ציפית כרית בוקלה, תה חלב');
+    await expect(page.locator('#st-pd-price')).toHaveText(/59/);
+    await expect(page.locator('#st-pd-story-note')).toBeHidden();
+    await page.locator('.st-pd-axis[data-axis="size"] label', { hasText: '30×50' }).click();
+    await expect(page.locator('#st-pd-price')).toHaveText(/49/);
+    await expect(page).toHaveURL(/size=30x50/);
+    await expect(page.locator('#st-pd-story-note')).toContainText('בסיפור מוצגת האפשרות');
+    await expect(page.locator('[data-spec="מידות"]')).toContainText('30×50');
+    // the address names the option: a reload keeps it
+    await page.reload();
+    await expect(page.locator('#st-pd-price')).toHaveText(/49/);
+    await expect(page.locator('.st-pd-axis[data-axis="size"] input:checked')).toHaveValue('30x50');
+    await page.locator('#st-pd-add').click();
+    await page.locator('#st-cart-open').click();
+    await expect(page.locator('#st-cart-lines')).toContainText('30×50');
+    await page.keyboard.press('Escape');
+    await page.locator('#st-pd-back').click();
+    await expect(page.locator('#st-pd-price')).toHaveText(/59/);
+    await expect(page).toHaveURL(new RegExp(`${href}$`));
+    // the same product in another house
+    await expect(page.locator('#elsewhere .st-tile-link')).toHaveAttribute('href', DETAIL('nordic', 'cushions-cj-boucle-teddy'));
+  });
+
+  test('a product without a price, and one not sold now: no add button, the reason instead', async ({ page }) => {
+    await page.goto(DETAIL('nordic', 'pendant-cj-silk-ribbed-pumpkin-40'));
+    await expect(page.locator('#st-pd-add')).toBeHidden();
+    await expect(page.locator('#st-pd-why')).toContainText('המחיר עוד לא נקבע');
+    await expect(page.locator('#st-pd-price')).toBeHidden();
+    await page.goto(DETAIL('nordic', 'rug-cj-braided-wool-natural'));
+    await expect(page.locator('#st-pd-add')).toBeHidden();
+    await expect(page.locator('#st-pd-why')).toHaveText('המלאי אינו זמין כעת.');
+  });
+
+  test('"לנסות בחדר" opens the room engine on the product\'s slot', async ({ page }) => {
+    await page.goto(DETAIL('nordic', 'cushions-cj-boucle-teddy'));
+    await expect(page.locator('#st-pd-try')).toHaveAttribute('href', '/rooms/living-room/?slot=cushions&option=1');
+    await page.locator('#st-pd-try').click();
+    await expect(page).toHaveURL(/\/rooms\/living-room\/\?slot=cushions&option=1$/);
+    await expect(page.getByRole('dialog').first()).toBeVisible({ timeout: 20_000 });
+    // a house whose tool is still being built says so
+    await page.goto(DETAIL('warm-modern', 'cushions-cj-boucle-teddy'));
+    await expect(page.locator('#st-pd-try-none')).toContainText('בבנייה');
+  });
+
+  test('zero axe violations on a detail page with options (1280), and after a choice', async ({ page }) => {
+    await page.goto(DETAIL('warm-modern', 'cushions-cj-boucle-teddy'));
+    await page.waitForTimeout(800);
+    await audit(page, 'detail at rest');
+    await page.locator('.st-pd-axis[data-axis="color"] label').first().click();
+    await page.waitForTimeout(300);
+    await audit(page, 'detail after a choice');
+  });
+});
+
 test.describe('the story on a phone (400)', () => {
   test.use({ viewport: { width: 400, height: 800 }, hasTouch: true, isMobile: true });
 
@@ -298,8 +380,8 @@ test.describe('the story on a phone (400)', () => {
     await audit(page, 'phone, the sheet open');
   });
 
-  test('the contents and a typographic page fit the phone: no sideways scroll, zero axe violations', async ({ page }) => {
-    for (const path of ['/story/', BOHO]) {
+  test('the contents, a typographic page and a detail page fit the phone: no sideways scroll, zero axe violations', async ({ page }) => {
+    for (const path of ['/story/', BOHO, DETAIL('modern-country', 'curtains-aliexpress-linen-blend-s-fold-180502')]) {
       await page.goto(path);
       await page.waitForTimeout(800);
       expect(await page.evaluate(() => document.documentElement.scrollWidth), path).toBeLessThanOrEqual(400);

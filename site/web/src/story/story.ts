@@ -14,6 +14,7 @@ import '../test-page/magazine.css';
 import './story.css';
 import { prefersReducedMotion } from '../motion';
 import { priceHe, storyCart, type StoryVariant } from './story-cart';
+import type { DetailData, DSku } from './detail-model';
 
 type Item = {
   id: string;
@@ -41,7 +42,13 @@ type Item = {
 };
 type FrameData = { id: string; u0: number; v0: number; aspect: number; crop: [number, number]; title_he: string; items: string[] };
 /** the index and a typographic page have no frames and no items: the cart and the header still work there */
-type Data = { page: { room: string | null; style: string | null; href: string; tool: string }; items: Record<string, Item>; frames: FrameData[] };
+type Data = {
+  page: { room: string | null; style: string | null; href: string; tool: string };
+  items: Record<string, Item>;
+  frames: FrameData[];
+  /** a detail page (layer 2): the product's SKUs in this house */
+  detail?: DetailData;
+};
 
 const data = JSON.parse(document.getElementById('st-data')!.textContent ?? '{}') as Data;
 const root = document.body;
@@ -248,6 +255,21 @@ function wallLabel(st: Stage, id: string | null): void {
 }
 
 // ---------- the test cart ----------
+const detailVariants: StoryVariant[] = (data.detail?.skus ?? []).flatMap((k) =>
+  k.sellable && k.variant_id && k.price_agorot !== null
+    ? [
+        {
+          variant_id: k.variant_id,
+          product_id: data.detail!.product,
+          name_he: data.detail!.name_he,
+          option_he: k.key === data.detail!.story_key ? null : k.label_he,
+          price_agorot: k.price_agorot,
+          set_qty: data.detail!.set_qty,
+          available: true,
+        },
+      ]
+    : [],
+);
 const variants: StoryVariant[] = Object.values(data.items).flatMap((it) =>
   it.variant_id && it.price_agorot !== null
     ? [
@@ -263,7 +285,7 @@ const variants: StoryVariant[] = Object.values(data.items).flatMap((it) =>
       ]
     : [],
 );
-const cart = storyCart([...new Map(variants.map((v) => [v.variant_id, v])).values()]);
+const cart = storyCart([...new Map([...variants, ...detailVariants].map((v) => [v.variant_id, v])).values()]);
 const countEl = document.getElementById('st-cart-count')!;
 function showCount(animate: boolean): void {
   const n = cart.current()?.count ?? 0;
@@ -282,6 +304,12 @@ function showCount(animate: boolean): void {
   );
 }
 showCount(false);
+// a detail page: its own module, loaded only there
+let detail: { current: () => DSku; choose: (key: string) => void } | null = null;
+if (data.detail)
+  void import('./detail').then((m) => {
+    detail = m.initDetail({ d: data.detail!, cart, announce, mark, counted: () => showCount(true) });
+  });
 
 // ---------- the sheet: "קנה את המראה" ----------
 const sheet = document.getElementById('st-sheet') as HTMLDialogElement;
@@ -458,7 +486,8 @@ function renderCart(): void {
       li.className = 'mag-credit st-cart-line';
       const name = document.createElement('span');
       name.className = 'mag-credit-name';
-      name.textContent = l.name_he;
+      // the option is said when the name does not already say it (a detail page's other option)
+      name.textContent = l.option_he && !l.name_he.includes(l.option_he) ? `${l.name_he} · ${l.option_he}` : l.name_he;
       const detail = document.createElement('span');
       detail.className = 'mag-credit-detail';
       detail.textContent = `${l.qty} × ${priceHe(l.unit_price_agorot)} · ${priceHe(l.line_total_agorot)}`;
@@ -509,6 +538,7 @@ declare global {
       closeSheet: typeof closeSheet;
       showMarks: (frame: string) => void;
       cartCount: () => number;
+      detail: () => { current: () => DSku; choose: (key: string) => void } | null;
     };
   }
 }
@@ -522,5 +552,6 @@ window.__story = {
     if (st) showMarks(st);
   },
   cartCount: () => cart.current()?.count ?? 0,
+  detail: () => detail,
 };
 mark('ready');

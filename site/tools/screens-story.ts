@@ -228,6 +228,7 @@ async function firstLoad(w: number, h: number, dpr: number, tag: string, path = 
     frame_files: by(/\/media\/story\/(?!products\/).+\/m?\d+\.(avif|webp)$/).map((x) => `${x.url} ${r1(x.bytes / 1024)} KB`),
     product_photos_kb: r1(sum(by(/\/media\/story\/products\//)) / 1024),
     product_photos: by(/\/media\/story\/products\//).length,
+    frame_crops_kb: r1(sum(by(/\/items\/[0-9a-f]+\.\d+\.webp$/)) / 1024),
     requests: got.length,
     budget_kb: 3072,
     fcp_ms: Math.round(paint['first-contentful-paint'] ?? 0),
@@ -786,24 +787,144 @@ function publicBuild(): void {
   rmSync(dir, { recursive: true, force: true });
 }
 
+// ---------- layer 2, "הפרט": the detail page ----------
+const DETAIL = (style: string, product: string) => `/story/living-room/${style}/p/${product}/`;
+const BOUCLE_WM = DETAIL('warm-modern', 'cushions-cj-boucle-teddy');
+async function detailRun(w: number, h: number, tag: 'desk' | 'phone'): Promise<void> {
+  const ctx = await ctxOf(w, h);
+  const page = await open(ctx);
+  await settled(page);
+  await page.evaluate(`window.__story.openSheet('A-5')`);
+  await sleep(400);
+  await shot(page, `${tag}-d0-sheet-link`, `${w}: the sheet of the charcoal cushion: "לדף המוצר" leads to the detail page in this house`);
+  const t = Date.now();
+  await page.locator('#st-page').click();
+  await page.waitForFunction(`(window.__story?.events ?? []).some((e) => e.name === 'detail:ready')`, null, { timeout: 15_000 });
+  const navMs = Date.now() - t;
+  await sleep(600);
+  await shot(
+    page,
+    `${tag}-d1-detail`,
+    `${w}: the detail page: the supplier photo, the empty close-up slot (G-ED.18), the name, the credit, the price, the options, the action`,
+  );
+  await scrolled(page);
+  await shot(page, `${tag}-d1b-detail-full`, `${w}: the whole detail page: "בחדר הזה" (the product's part of the frame, back to the story)`, { full: true });
+  await page.locator('#st-pd-add').click();
+  await sleep(250);
+  const count = (await page.evaluate(`document.querySelector('#st-cart-count').textContent`)) as string;
+  // the options: the warm-modern bouclé (the story shows milk tea 50×50)
+  await page.goto(`${ORIGIN}${BOUCLE_WM}`, { waitUntil: 'load' });
+  await page.waitForFunction(`(window.__story?.events ?? []).some((e) => e.name === 'detail:ready')`, null, { timeout: 15_000 });
+  await sleep(500);
+  await shot(page, `${tag}-d2-options`, `${w}: warm modern's bouclé: the option the story shows (milk tea, 50×50), its price and its photo`);
+  const before = (await page.evaluate(`document.querySelector('#st-pd-price').textContent`)) as string;
+  const resp = page.evaluate(
+    `new Promise((res) => { const el = document.querySelector('#st-pd-price'); const v0 = el.textContent; addEventListener('click', (e) => { const t0 = e.timeStamp; const f = () => { if (el.textContent !== v0) res(performance.now() - t0); else requestAnimationFrame(f); }; requestAnimationFrame(f); }, { capture: true, once: true }); })`,
+  );
+  await page.locator('.st-pd-axis[data-axis="size"] label', { hasText: '30×50' }).click();
+  const respMs = (await resp) as number;
+  await sleep(400);
+  await shot(
+    page,
+    `${tag}-d2b-other-option`,
+    `${w}: another option (30×50): the price, the credit and the address follow; the line names the story's option, one step back`,
+  );
+  const after = (await page.evaluate(`document.querySelector('#st-pd-price').textContent`)) as string;
+  const url = page.url();
+  const shots2: [string, string, string][] = [
+    [
+      DETAIL('nordic', 'pendant-cj-silk-ribbed-pumpkin-40'),
+      `${tag}-d3-no-price`,
+      `${w}: a product without a price yet (the pendant): its options, the reason, no add button`,
+    ],
+    [
+      DETAIL('nordic', 'rug-cj-braided-wool-natural'),
+      `${tag}-d4-not-sold`,
+      `${w}: a product not sold now (the rug, PRE1): "המלאי אינו זמין כעת", no add button`,
+    ],
+    [
+      DETAIL('modern-country', 'curtains-aliexpress-linen-blend-s-fold-180502'),
+      `${tag}-d5-frame-crop`,
+      `${w}: no cached supplier photo (the mc1 curtain): the product's part of the frame stands in, and says so; the long size axis is a select`,
+    ],
+  ];
+  const states: Record<string, unknown> = {};
+  for (const [path, name, caption] of shots2) {
+    await page.goto(`${ORIGIN}${path}`, { waitUntil: 'load' });
+    await page.waitForFunction(`(window.__story?.events ?? []).some((e) => e.name === 'detail:ready')`, null, { timeout: 15_000 });
+    await sleep(500);
+    await shot(page, name, caption);
+    states[path] = {
+      add_shown: await page.evaluate(`!document.querySelector('#st-pd-add').hidden`),
+      why: await page.evaluate(`document.querySelector('#st-pd-why').textContent`),
+      photo_caption: await page.evaluate(`document.querySelector('#st-pd-photo-cap').textContent`),
+      closeup_empty: await page.evaluate(`!document.querySelector('#st-pd-cu-empty').hidden`),
+    };
+  }
+  evidence[`detail_${tag}`] = {
+    from_sheet_to_detail_ms: navMs,
+    cart_count_after_add: count,
+    option_change: { before, after, response_ms: Math.round(respMs), url },
+    states,
+  };
+  await ctx.close();
+}
+async function axeDetail(): Promise<void> {
+  const out: Record<string, string[]> = {};
+  for (const [w, h] of [
+    [1280, 800],
+    [400, 800],
+  ] as const) {
+    const ctx = await ctxOf(w, h);
+    const page = await ctx.newPage();
+    for (const path of [
+      DETAIL('nordic', 'cushions-cj-linen-look-charcoal'),
+      BOUCLE_WM,
+      DETAIL('nordic', 'pendant-cj-silk-ribbed-pumpkin-40'),
+      DETAIL('nordic', 'rug-cj-braided-wool-natural'),
+      DETAIL('modern-country', 'curtains-aliexpress-linen-blend-s-fold-180502'),
+    ]) {
+      await page.goto(`${ORIGIN}${path}`, { waitUntil: 'load' });
+      await sleep(900);
+      const r = await new AxeBuilder({ page } as unknown as ConstructorParameters<typeof AxeBuilder>[0])
+        .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+        .analyze();
+      out[`${w} ${path}`] = r.violations.map((v) => `${v.id} (${v.impact}): ${v.nodes.length} × ${v.nodes[0]?.target.join(' ')}`);
+      if (r.violations.length) problems.push(`axe ${w} ${path}: ${out[`${w} ${path}`]!.join('; ')}`);
+      const wide = (await page.evaluate('document.documentElement.scrollWidth')) as number;
+      if (wide > w) problems.push(`${w} ${path}: the page scrolls sideways (${wide})`);
+    }
+    await ctx.close();
+  }
+  evidence.axe_detail = out;
+}
+
+const PART = process.argv.find((a) => a.startsWith('--part='))?.slice(7) ?? 'all';
 const t0 = Date.now();
 realRoutes();
 publicBuild();
-await firstLoad(400, 800, 1, 'phone_400_dpr1');
-await firstLoad(400, 800, 3, 'phone_400_dpr3');
-await firstLoad(1280, 800, 1, 'desk_1280_dpr1');
-await firstLoad(400, 800, 1, 'contents_phone_400_dpr1', '/story/');
-await firstLoad(1280, 800, 1, 'contents_desk_1280_dpr1', '/story/');
-await firstLoad(400, 800, 1, 'typographic_phone_400_dpr1', BOHO);
-await throttledOpening();
-await run(1280, 800, 'desk');
-await run(400, 800, 'phone');
-await keyboard();
-await reduced();
-await hitTest();
-await contrastRun(1280, 800, '1280');
-await contrastRun(400, 800, '400');
-await axe();
+await firstLoad(400, 800, 1, 'detail_phone_400_dpr1', BOUCLE_WM);
+await firstLoad(1280, 800, 1, 'detail_desk_1280_dpr1', BOUCLE_WM);
+await detailRun(1280, 800, 'desk');
+await detailRun(400, 800, 'phone');
+await axeDetail();
+if (PART === 'all') {
+  await firstLoad(400, 800, 1, 'phone_400_dpr1');
+  await firstLoad(400, 800, 3, 'phone_400_dpr3');
+  await firstLoad(1280, 800, 1, 'desk_1280_dpr1');
+  await firstLoad(400, 800, 1, 'contents_phone_400_dpr1', '/story/');
+  await firstLoad(1280, 800, 1, 'contents_desk_1280_dpr1', '/story/');
+  await firstLoad(400, 800, 1, 'typographic_phone_400_dpr1', BOHO);
+  await throttledOpening();
+  await run(1280, 800, 'desk');
+  await run(400, 800, 'phone');
+  await keyboard();
+  await reduced();
+  await hitTest();
+  await contrastRun(1280, 800, '1280');
+  await contrastRun(400, 800, '400');
+  await axe();
+}
 await browser.close();
 server.close();
 

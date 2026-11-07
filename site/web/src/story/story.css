@@ -733,3 +733,260 @@
   text-decoration: none;
   cursor: default;
 }
+
+/* ---------- layer 2, "הפרט": the detail page (a product in one house) ----------
+   The picture on the start side, the words, the options and the action on the other; on the phone one column, the
+   picture first. The close-up of the house (G-ED.18) has its own figure: while QA has not let one in, it is an honest
+   empty slot under the supplier's photo; when it is in, it leads and the photo follows. */
+.st .st-crumbs {
+  min-height: 0;
+  padding: calc(var(--head-h) + env(safe-area-inset-top) + var(--s-4)) 0 0;
+}
+.st-crumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--s-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font: 400 var(--t-cap) var(--f-text);
+  color: var(--ink-2);
+}
+.st-crumbs li {
+  display: inline-flex;
+  align-items: center;
+}
+.st-crumbs li + li::before {
+  content: '·' / '';
+  margin-inline-end: var(--s-2);
+}
+.st-crumbs [aria-current='page'] {
+  color: var(--ink);
+}
+.st .st-pd {
+  min-height: 0;
+  padding: var(--s-5) 0 var(--s-8);
+}
+.st .st-pd-media,
+.st .st-pd-info {
+  grid-column: 1 / -1;
+}
+@media (min-width: 1024px) {
+  .st .st-pd-media {
+    grid-column: 1 / span 7;
+  }
+  .st .st-pd-info {
+    grid-column: 8 / -1;
+    align-self: start;
+    position: sticky;
+    top: calc(var(--head-h) + var(--s-5));
+  }
+}
+.st-pd-media {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--s-4) var(--gap);
+  align-content: start;
+}
+.st-pd-media figure {
+  display: grid;
+  gap: var(--s-2);
+  margin: 0;
+}
+.st-pd-photo {
+  grid-column: 1 / -1;
+}
+.st-pd-media.has-closeup .st-pd-closeup {
+  grid-column: 1 / -1;
+  order: -1;
+}
+.st-pd-media.has-closeup .st-pd-photo {
+  grid-column: auto;
+}
+.st-pd-media img {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: var(--paper-2);
+}
+.st-pd-media img[hidden],
+.st-pd-media [hidden] {
+  display: none;
+}
+.st-pd-none {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: var(--s-4);
+  aspect-ratio: 1 / 1;
+  padding: var(--s-5);
+  background: var(--paper-2);
+  font: 400 var(--t-detail) var(--f-text);
+  color: var(--ink-2);
+  text-align: center;
+}
+.st-pd-empty {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: var(--s-2);
+  aspect-ratio: 4 / 5;
+  padding: var(--s-4);
+  border: 1px dashed var(--rule-control);
+}
+@media (max-width: 719px) {
+  .st-pd-media .st-pd-closeup {
+    grid-column: 1 / -1;
+  }
+  .st-pd-empty {
+    aspect-ratio: auto;
+    min-height: 168px;
+  }
+}
+.st .st-pd-price[hidden] {
+  display: none;
+}
+.st-pd-empty-title {
+  font: 300 20px/26px var(--f-display);
+}
+.st .st-pd-empty .mag-cap {
+  margin: 0;
+}
+.st-pd-info {
+  display: grid;
+  gap: var(--s-3);
+  align-content: start;
+}
+.st .st-pd-title {
+  margin: 0;
+}
+.st-pd-price {
+  min-height: 36px;
+  font: 300 30px/36px var(--f-display);
+}
+.st-pd-options {
+  display: grid;
+  gap: var(--s-4);
+  margin: var(--s-2) 0;
+}
+.st-pd-axis {
+  display: grid;
+  gap: var(--s-2);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+.st-pd-legend {
+  padding: 0;
+  font: 600 var(--t-run) var(--f-text);
+}
+.st-pd-current {
+  font-weight: 400;
+}
+.st-pd-values {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+}
+.st-pd-value {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  min-height: 44px;
+  padding: 0 var(--s-3);
+  border: 1px solid var(--rule-control);
+  border-radius: 2px;
+  font: 400 var(--t-btn) var(--f-text);
+  cursor: pointer;
+}
+.st-pd-value input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.st-pd-value:has(input:checked) {
+  border-color: var(--ink);
+  box-shadow: inset 0 0 0 1px var(--ink);
+}
+.st-pd-value:has(input:focus-visible) {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+.st-pd-value.is-off {
+  opacity: 0.45;
+  cursor: default;
+}
+.st-pd-value.is-off .st-pd-text {
+  text-decoration: line-through;
+}
+.st-pd-values.is-swatches .st-pd-value {
+  width: 44px;
+  padding: 0;
+  justify-content: center;
+  border-radius: 50%;
+}
+.st-pd-swatch {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--swatch);
+  box-shadow: 0 0 0 1px var(--rule);
+}
+.st-pd-select {
+  min-height: 44px;
+  max-width: 100%;
+  padding: 0 var(--s-3);
+  border: 1px solid var(--rule-control);
+  border-radius: 2px;
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 var(--t-btn) var(--f-text);
+}
+.st-pd-select:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+.st .st-pd-story-note[hidden] {
+  display: none;
+}
+.st-link-btn {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.st-pd-specs {
+  display: grid;
+  margin: var(--s-2) 0 0;
+}
+.st-pd-specs > div {
+  display: grid;
+  grid-template-columns: 7rem minmax(0, 1fr);
+  gap: var(--gap);
+  padding: var(--s-2) 0;
+  border-top: 1px solid var(--rule);
+  font: 400 var(--t-detail) var(--f-text);
+}
+.st-pd-specs > div:last-child {
+  border-bottom: 1px solid var(--rule);
+}
+.st-pd-specs dt {
+  font-weight: 600;
+}
+.st-pd-specs dd {
+  margin: 0;
+  color: var(--ink-2);
+}
+.st .st-pd-here,
+.st .st-pd-elsewhere {
+  padding-top: var(--s-7);
+}

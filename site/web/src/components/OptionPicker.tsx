@@ -9,7 +9,7 @@
  * cascade: the first axis is free, so every SKU stays reachable); an out-of-stock option is disabled too.
  */
 import type { PublicProduct } from '@hd/shared';
-import { availableValues, pickSku, selectionOf } from '@hd/shared/options';
+import { availableValues, pickSku, selectionOf } from '@hd/shared/picker';
 import { optionLabelHe, optionsOf } from '../variants';
 
 const CHIPS_MAX = 8;
