@@ -104,7 +104,7 @@ export function RoomExperience({ room }: { room: CatalogRoom }) {
     const pts: { el: HTMLButtonElement; x: number; y: number }[] = [];
     for (const s of room.slots) {
       const el = spots.current.get(s.id);
-      if (!el || !s.hotspot || !s.hotspot.visible) continue;
+      if (!el || !hasMark(s)) continue;
       const [u, v] = anchorOf(s);
       pts.push({ el, ...frameToScreen(u, v, cam, vp, scene.aspect) });
     }
@@ -310,7 +310,7 @@ export function RoomExperience({ room }: { room: CatalogRoom }) {
     const { u, v } = screenToFrame(clientX - r.left, clientY - r.top, cam, vp, scene.aspect);
     for (let i = room.slots.length - 1; i >= 0; i--) {
       const s = room.slots[i]!;
-      if (!s.hotspot?.visible) continue;
+      if (!hasMark(s)) continue;
       if ((scene.slots[s.id]?.outline ?? []).some((poly) => inPolygon(u, v, poly))) return s;
     }
     return null;
@@ -444,7 +444,7 @@ export function RoomExperience({ room }: { room: CatalogRoom }) {
               class="hotspot"
               data-slot={s.id}
               data-temp={String(s.hotspot.provisional)}
-              hidden={!placed || !s.hotspot.visible}
+              hidden={!placed || !hasMark(s)}
               ref={(el) => {
                 if (el) spots.current.set(s.id, el);
               }}
@@ -516,6 +516,16 @@ export function RoomExperience({ room }: { room: CatalogRoom }) {
       ) : null}
     </section>
   );
+}
+
+/**
+ * Whether the product gets a mark on the stage: its hotspot is visible, and the picture on screen carries it. A scene
+ * slot with `ring: null` is a product the picture does not show (the temporary M0 1.1 frame has no magazine holder,
+ * which came back to the room in slots 1.7 with an M0 1.2 point): its slot-file point would float over the rug, so it
+ * gets no mark; it stays in the list below the room. A scene without rings keeps the slot's hotspot.
+ */
+function hasMark(s: CatalogSlot): boolean {
+  return !!s.hotspot?.visible && scene.slots[s.id]?.ring !== null;
 }
 
 /** Where a product's mark rests: the deepest point inside its silhouette (scene anchor), else the slot's hotspot. */
