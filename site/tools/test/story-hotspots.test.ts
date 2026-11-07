@@ -8,21 +8,28 @@ import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { repoPath, sitePath } from '../lib/paths';
+import { cardOf, qaReader, type QaState } from '../lib/qa-frames';
 
-type Point = { product: string; u: number; v: number; box: [number, number, number, number]; by_eye: boolean; option?: Record<string, string> };
+type Point = {
+  product: string;
+  u: number;
+  v: number;
+  box: [number, number, number, number];
+  by_eye: boolean;
+  option?: Record<string, string>;
+  phone_at?: [number, number];
+};
 const hot = JSON.parse(readFileSync(sitePath('tools/test-page/story-hotspots.json'), 'utf8')) as {
   status: string;
   frames: Record<string, { src: string; qa_key: string; points: Point[] }>;
 };
 const story = JSON.parse(readFileSync(sitePath('tools/test-page/story.json'), 'utf8')) as {
-  qa_record: string;
-  allowed_verdicts: string[];
+  qa_records: string[];
+  allowed_states: QaState[];
+  names_he: Record<string, string>;
   frames: Record<string, { phone_crop_u: number; u0: number; v0: number }>;
 };
-const qa = JSON.parse(readFileSync(repoPath(story.qa_record), 'utf8')) as {
-  final_test: Record<string, string>;
-  frames: Record<string, { rows: { card: string; present: boolean }[] }>;
-};
+const qaOf = qaReader(story.qa_records);
 const walk = (d: string): string[] => readdirSync(d).flatMap((n) => (statSync(join(d, n)).isDirectory() ? walk(join(d, n)) : [n]));
 const cards = new Set(
   walk(repoPath('data/products'))
@@ -40,17 +47,16 @@ describe('the story hotspot map', () => {
     expect(Object.keys(hot.frames).sort()).toEqual(Object.keys(story.frames).sort());
     for (const [id, f] of Object.entries(hot.frames)) {
       expect(existsSync(repoPath(f.src)), f.src).toBe(true);
-      const verdict = qa.final_test[f.qa_key] ?? '';
-      expect(
-        story.allowed_verdicts.some((v) => verdict.startsWith(v)),
-        `${id}: ${verdict}`,
-      ).toBe(true);
+      const q = qaOf(f.qa_key);
+      expect(q && story.allowed_states.includes(q.state), `${id}: ${q?.state ?? 'not in the QA records'}`).toBe(true);
     }
   });
 
   it('has a point for every starring product QA lists in the frame, and every point is a product card', () => {
     for (const [id, f] of Object.entries(hot.frames)) {
-      const listed = qa.frames[f.qa_key]!.rows.filter((r) => r.present && !r.card.startsWith('fixed furniture')).map((r) => r.card.split(' ')[0]!);
+      const listed = qaOf(f.qa_key)!
+        .rows.filter((r) => r.present && !r.card.startsWith('fixed furniture'))
+        .map(cardOf);
       for (const c of listed)
         expect(
           f.points.some((p) => p.product === c),
@@ -69,6 +75,8 @@ describe('the story hotspot map', () => {
         const [u0, u1, v0, v1] = p.box;
         expect(0 <= u0 && u0 < u1 && u1 <= 1 && 0 <= v0 && v0 < v1 && v1 <= 1, `${id}: ${p.product} box`).toBe(true);
         expect(u0 <= p.u && p.u <= u1 && v0 <= p.v && p.v <= v1, `${id}: ${p.product} point outside its box`).toBe(true);
+        if (p.phone_at)
+          expect(u0 <= p.phone_at[0] && p.phone_at[0] <= u1 && v0 <= p.phone_at[1] && p.phone_at[1] <= v1, `${id}: ${p.product} phone dot`).toBe(true);
       }
   });
 
@@ -80,5 +88,9 @@ describe('the story hotspot map', () => {
           const apart = Math.abs(a.u - b.u) * 1280 >= 48 || Math.abs(a.v - b.v) * 720 >= 48;
           expect(apart, `${id}: ${a.product} and ${b.product}`).toBe(true);
         }
+  });
+
+  it('names every product with the designer name (story-page design notes §4)', () => {
+    for (const f of Object.values(hot.frames)) for (const p of f.points) expect(story.names_he[p.product], p.product).toBeTruthy();
   });
 });

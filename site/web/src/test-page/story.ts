@@ -181,8 +181,10 @@ function layout(st: Stage): void {
   fs.left = `${left}px`;
   fs.top = `${top}px`;
   st.el.classList.toggle('is-print', !cover);
-  // the part of the frame on screen, less half a target and its ring (29 px) on each side
-  keepMarksInView(st, [(29 - left) / fw, (sw - 29 - left) / fw], [(29 - top) / fh, (sh - 29 - top) / fh]);
+  // the part of the frame on screen, less half a target and its ring (29 px) on each side; at the top, a dot's centre
+  // stays clear of the top band (which lies over the frame), or a click there would land on the band (QA 2026-11-07)
+  const band = (parseFloat(getComputedStyle(root).getPropertyValue('--head-h')) || 64) + 4;
+  keepMarksInView(st, [(29 - left) / fw, (sw - 29 - left) / fw], [(Math.max(29, band) - top) / fh, (sh - 29 - top) / fh]);
 }
 /** A dot whose target would leave the screen (the cover crop cuts the frame) is not offered there; the list has it. */
 function keepMarksInView(st: Stage, [uMin, uMax]: [number, number], [vMin, vMax]: [number, number]): void {

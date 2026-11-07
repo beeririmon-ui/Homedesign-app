@@ -10,7 +10,8 @@
  * Reads
  *   tools/test-page/story.json            the frames, their story lines and crops, the QA gate
  *   tools/test-page/story-hotspots.json   the temporary points (by eye), one per starring product
- *   qa/reports/2026-11-07-editorial-fin2-ed4-country.json   the gate: a frame goes in only when QA called it ready or almost
+ *   qa_records (story.json)               the gate: a frame goes in only when QA called it final test or almost; QA's
+ *                                         records in both shapes so far (tools/lib/qa-frames.ts)
  *   .generated/catalog.story.full.json    every product of the frames, priced by the site's pricing code
  *   .generated/catalog.public.json        the site's own catalog: a product page link, and the slot in the room engine
  *   .cache/supplier-images/               the card photos already downloaded by tools/supplier-images.ts (no network here)
@@ -28,6 +29,7 @@ import { formatIls } from '@hd/shared/money';
 import { expandOptions, type FullCatalog, type FullProduct, type PublicCatalog } from '@hd/shared';
 import { colorNameHe, materialsHe } from './lib/hebrew';
 import { GENERATED, MEDIA_OUT, repoPath, sitePath } from './lib/paths';
+import { cardOf, qaReader, type QaState } from './lib/qa-frames';
 
 type FrameSpec = {
   role: 'opening' | 'story' | 'other-style';
@@ -46,8 +48,10 @@ type FrameSpec = {
 type Manifest = {
   issue_he: string;
   mark_he: string;
-  qa_record: string;
-  allowed_verdicts: string[];
+  qa_records: string[];
+  allowed_states: QaState[];
+  /** the product's own name per card (master-designer, docs/proposals/story-page-design-notes-2026-11-07.md §4) */
+  names_he: Record<string, string>;
   hotspots: string;
   catalog: string;
   site_catalog: string;
@@ -64,10 +68,13 @@ type Point = {
   by_eye: boolean;
   option?: Record<string, string>;
   option_label_he?: string;
+  /** the name of the option the frame shows, when it is not the card's default name with another colour */
+  name_he?: string;
+  /** a dot placed by hand for the phone's crop (frame u, v), where the automatic one would sit off the product */
+  phone_at?: [number, number];
   in_frame_he?: string;
 };
 type Hotspots = { status: string; frames: Record<string, { src: string; qa_key: string; points: Point[] }> };
-type QaRecord = { final_test: Record<string, string>; frames: Record<string, { rows: { card: string; present: boolean; faithful: string }[] }> };
 type Card = {
   id: string;
   slot: string;
@@ -111,7 +118,7 @@ type StoryItem = {
 const read = <T>(p: string): T => JSON.parse(readFileSync(p, 'utf8')) as T;
 const man = read<Manifest>(sitePath('tools/test-page/story.json'));
 const hot = read<Hotspots>(sitePath(man.hotspots));
-const qa = read<QaRecord>(repoPath(man.qa_record));
+const qaOf = qaReader(man.qa_records);
 for (const p of [man.catalog, man.site_catalog])
   if (!existsSync(sitePath(p))) {
     console.error(`${p} is missing: run npm run catalog, then tsx tools/build-catalog.ts --rooms=living-room --products=${man.hotspots} --out=story`);
@@ -131,18 +138,18 @@ const MIN_SHORT = 24;
 
 // ---------- the gate: only the frames QA called "final test" or "almost" (QA report 2026-11-07 §4) ----------
 for (const [id, f] of Object.entries(hot.frames)) {
-  const verdict = qa.final_test[f.qa_key];
-  if (!verdict || !man.allowed_verdicts.some((v) => verdict.startsWith(v)))
-    throw new Error(`${id} (${f.qa_key}): QA verdict "${verdict ?? 'none'}" is not ${man.allowed_verdicts.join(' / ')}; it does not go on the page`);
+  const q = qaOf(f.qa_key);
+  if (!q || !man.allowed_states.includes(q.state))
+    throw new Error(`${id} (${f.qa_key}): QA state "${q?.state ?? 'none'}" is not ${man.allowed_states.join(' / ')}; it does not go on the page`);
   if (!man.frames[id]) throw new Error(`${id}: no entry in story.json`);
   // every card QA listed in the frame has a point (the fixed furniture has no card)
-  const listed = qa.frames[f.qa_key]!.rows.filter((r) => r.present && !r.card.startsWith('fixed furniture')).map((r) => r.card.split(' ')[0]!);
+  const listed = q.rows.filter((r) => r.present && !r.card.startsWith('fixed furniture')).map(cardOf);
   const missing = listed.filter((c) => !f.points.some((p) => p.product === c));
   if (missing.length) throw new Error(`${id}: QA lists ${missing.join(', ')} in the frame, and it has no point`);
 }
 
 /** QA's verdict per card per frame ("cushions-cj-boucle-teddy (White, Milk tea)" is the card's row) */
-const faithfulOf = (qaKey: string, product: string): string => qa.frames[qaKey]!.rows.find((r) => r.card.split(' ')[0] === product)?.faithful ?? 'not checked';
+const faithfulOf = (qaKey: string, product: string): string => qaOf(qaKey)?.rows.find((r) => cardOf(r) === product)?.faithful ?? 'not checked';
 
 // ---------- the cards (photos, options) and the slots' placement (the credit's defining size) ----------
 function walk(dir: string): string[] {
@@ -236,6 +243,12 @@ function phoneDot(pt: Point, c0: number, c1: number, fw: number, fh: number): { 
   if (Math.max(w, h) < MIN_LONG || Math.min(w, h) < MIN_SHORT)
     return { at: null, note: `בטלפון ${Math.round(w)}×${Math.round(h)} CSS, פחות מ-${MIN_LONG}×${MIN_SHORT}` };
   const margin = 23 / PHONE_CSS; // half a target, in crop units
+  if (pt.phone_at) {
+    const [pu, pv] = pt.phone_at;
+    const cu = (pu - c0) / (c1 - c0);
+    if (cu < margin || cu > 1 - margin) throw new Error(`${pt.product}: the phone dot u ${pu} is not inside the crop ${c0.toFixed(3)}–${c1.toFixed(3)}`);
+    return { at: { u: Math.round(cu * 10000) / 10000, v: pv }, note: null };
+  }
   const cu = (pt.u - c0) / (c1 - c0);
   const inside = cu >= margin && cu <= 1 - margin;
   const u = inside ? cu : ((a + b) / 2 - c0) / (c1 - c0);
@@ -250,6 +263,7 @@ async function itemOf(frame: string, qaKey: string, n: number, pt: Point, crop: 
   if (!p && !why) throw new Error(`${pt.product} is not in ${man.catalog}: build it with --products=${man.hotspots}`);
   // the option the frame shows: the room's SKU with the point's values instead
   let optionHe: string | null = null;
+  let optionSize: string | null = null;
   let skuImage: string | null = null;
   let price = p?.price_agorot ?? null;
   let variant = p?.variants[0]?.id ?? null;
@@ -265,19 +279,24 @@ async function itemOf(frame: string, qaKey: string, n: number, pt: Point, crop: 
       variant = sku.variant_id;
       available &&= sku.available;
     }
-    const axis = Object.keys(pt.option)[0]!;
-    optionHe = pt.option_label_he ?? o?.axes.find((a) => a.id === axis)?.values.find((v) => v.id === pt.option![axis])?.label_he ?? null;
+    const labelOf = (axis: string) => o?.axes.find((a) => a.id === axis)?.values.find((v) => v.id === pt.option![axis])?.label_he ?? null;
+    // the colour of the option (the colour axis, or a colour on the "other" axis) names it; a size goes to the credit
+    const colourAxis = Object.keys(pt.option).find((a) => a !== 'size');
+    optionHe = pt.option_label_he ?? (colourAxis ? labelOf(colourAxis) : null);
+    const size = pt.option.size ? labelOf('size') : null;
+    const m = size?.match(/^([\d.]+)×([\d.]+) ס["״]מ$/);
+    optionSize = m ? `⁦${m[1]}×${m[2]}⁩ ס״מ` : size;
     skuImage = card.options?.skus.find((s) => Object.entries(want).every(([k, v]) => s.values[k] === v))?.image ?? null;
   } else if (card.options) skuImage = card.options.skus.find((s) => s.id === card.options!.default_sku)?.image ?? null;
-  // the name: the option the frame shows replaces the colour in the name, or follows it (art direction §4.5)
-  let name = p?.name_he ?? nameFromCard(card);
-  // a colour (the colour axis, or a colour the point names in Hebrew) takes the colour's place in the name
-  const isColour = !!pt.option?.color || !!pt.option_label_he;
-  if (optionHe) name = isColour && name.includes(', ') ? `${name.slice(0, name.lastIndexOf(', '))}, ${optionHe}` : `${name} — ${optionHe}`;
+  // the name: the product's own (the designer's table), or the option's own when the frame shows another option; a
+  // card without one is named the way the catalog names (art direction §4.5: the option's colour replaces the colour)
+  const own = pt.name_he ?? man.names_he[pt.product] ?? null;
+  let name = own ?? p?.name_he ?? nameFromCard(card);
+  if (!own && optionHe) name = name.includes(', ') ? `${name.slice(0, name.lastIndexOf(', '))}, ${optionHe}` : `${name} — ${optionHe}`;
   const place = placement.get(card.slot) ?? 'surface';
   const priceHe = price !== null ? formatIls(price) : null;
   const material = p ? (p.materials_he[0] ?? null) : (materialsHe(card.materials ?? [])[0] ?? null);
-  const detail = [material, sizeHe(p ? p.dimensions_cm : card.dimensions_cm, place), priceHe ?? 'המחיר עוד לא נקבע']
+  const detail = [material, optionSize ?? sizeHe(p ? p.dimensions_cm : card.dimensions_cm, place), priceHe ?? 'המחיר עוד לא נקבע']
     .filter((x): x is string => !!x)
     .join(' · ');
   const img = await photo(card, skuImage);
@@ -469,7 +488,7 @@ ${rows(f)}
 </section>`;
 }
 const others = `<ul class="st-styles mag-col-main">
-  <li class="st-style"><a class="st-link" href="#frame-warm-modern-A">מודרני חם</a> <span class="mag-cap">טיוטה · כמעט מוכן</span></li>
+  <li class="st-style"><a class="st-link" href="#frame-warm-modern-A">מודרני חם</a> <span class="mag-cap">טיוטה / בדיקה</span></li>
 ${man.next_styles_he.map((s) => `  <li class="st-style is-next"><span>${esc(s)}</span> <span class="mag-cap">בגיליונות הבאים</span></li>`).join('\n')}
 </ul>`;
 

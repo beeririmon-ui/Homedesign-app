@@ -534,22 +534,44 @@
 .st .st-spread .mag-stage.is-print {
   background: var(--paper);
 }
-/* the top band over a frame (desktop): the soft paper screen of art direction §6.2, because ink alone fails over the
-   corn-husk disc, the dark window and the doorway of these frames (measured: tools/screens-story.ts, contrast) */
+/* the top band over a frame (desktop), per the designer's notes (story-page design notes §2): a paper scrim of at
+   most 0.35 under the type, gone by 120 px, no blur; past 69 px it is under 0.15, so no dot sits under its denser
+   part (the pendants' dots are at the bottom of the shade). A scrim that light does not carry ink over the dark
+   window or the corn-husk disc, so over a frame the band's words sit on the wall label's paper (§6.4), and the
+   running head steps aside (the frame's own title is right under it, on paper) */
 @media (min-width: 720px) {
   .st .st-head::before {
     content: '';
     position: absolute;
     z-index: -1;
     inset: 0 0 auto;
-    height: calc(var(--head-h) + env(safe-area-inset-top) + 32px);
-    background: linear-gradient(to bottom, rgba(244, 241, 236, 0.84) 0, rgba(244, 241, 236, 0.78) 56%, rgba(244, 241, 236, 0) 100%);
+    height: 120px;
+    background: linear-gradient(to bottom, rgba(244, 241, 236, 0.35) 0, rgba(244, 241, 236, 0) 120px);
     opacity: 0;
     pointer-events: none;
     transition: opacity var(--d-ui-in) var(--e-standard);
   }
   .st .st-head[data-on='stage']::before {
     opacity: 1;
+  }
+  .st .st-head .mag-brand,
+  .st .st-head .st-nav > a,
+  .st .st-head .st-cart-btn {
+    padding-inline: var(--s-2);
+    border-radius: 2px;
+    background: linear-gradient(var(--label), var(--label)) center / 100% 30px no-repeat;
+    background-size: 100% 0;
+    transition:
+      opacity var(--d-develop) var(--e-standard),
+      background-size var(--d-ui-in) var(--e-standard);
+  }
+  .st .st-head[data-on='stage'] .mag-brand,
+  .st .st-head[data-on='stage'] .st-nav > a,
+  .st .st-head[data-on='stage'] .st-cart-btn {
+    background-size: 100% 30px;
+  }
+  .st .st-head[data-on='stage'] .mag-run {
+    visibility: hidden;
   }
 }
 /* no cached photo of the card yet: a short band with the card's colour, not an empty square */
