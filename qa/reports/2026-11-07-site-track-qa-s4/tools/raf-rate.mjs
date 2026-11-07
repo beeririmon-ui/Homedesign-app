@@ -1,0 +1,15 @@
+import { createRequire } from 'node:module';
+const require = createRequire('/home/user/homedesign-app/site/package.json');
+const { chromium, devices } = require('playwright-core');
+const b = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium', args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
+const ctx = await b.newContext({ ...devices['Desktop Chrome'], locale: 'he-IL' });
+const p = await ctx.newPage();
+await p.goto('http://127.0.0.1:8799/rooms/living-room/');
+await p.locator('button.hotspot').first().waitFor({ state: 'attached', timeout: 30000 });
+await p.locator('.stage').dispatchEvent('pointerdown');
+await p.waitForFunction(() => window.__hdEngine?.ready === true, undefined, { timeout: 30000 });
+await p.locator('button.hotspot[data-slot="vase"]').click();
+await p.locator('.arc').waitFor({ state: 'visible' });
+const fps = await p.evaluate(() => new Promise((res) => { let n = 0; const t0 = performance.now(); const f = (t) => { n++; if (t - t0 < 2000) requestAnimationFrame(f); else res(Math.round((n / (t - t0)) * 1000 * 10) / 10); }; requestAnimationFrame(f); }));
+console.log(JSON.stringify({ load: process.env.QA_LOAD === '1', raf_per_second_with_the_wheel_open: fps }));
+await b.close();

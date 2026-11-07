@@ -1,6 +1,6 @@
 # Evidence of layer 1, the story (measured headless, Chromium + SwiftShader)
 
-Run 2026-11-07T17:47:11.697Z; 8 screenshots under screens/. The figures are in evidence.json; README.md reads them.
+Run 2026-11-07T18:03:28.337Z; 8 screenshots under screens/. The figures are in evidence.json; README.md reads them.
 
 ## Screenshots
 - `screens/desk-t1-story-tool.png`: 1280: the warm-modern story's way into the tool: the Nordic tool for now, and the house's own draft

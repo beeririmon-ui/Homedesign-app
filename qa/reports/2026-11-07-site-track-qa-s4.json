@@ -1,0 +1,844 @@
+{
+ "report": "qa-agent: interface sprint S4, the shop",
+ "date": "2026-11-07",
+ "by": "qa-agent",
+ "brief": "coordinator's message (S4 QA); evidence qa/reports/2026-11-07-site-track/s4/",
+ "rules": "new files only; no commit; no var2; no playwright install; local only; every e2e from a copy in the scratchpad",
+ "measured_state": {
+  "commit": "65f95d32 (site and data; dbbfc96c on top touched no site file)",
+  "build": "qa-agent, 17:33:07-17:33:55, npm run catalog/assets:temp/supplier-images --offline/test:page/story/web/api/budget: all 0",
+  "register_read_by_the_build": "qa/reports/ged-register-2026-11-07.json, version 1 (the highest at 17:33)",
+  "served": "a copy of web/dist in the scratchpad through npx wrangler dev --port 8799 --assets <copy> with its own local D1 (migrated and seeded from .generated/seed.sql); a marker file confirmed the copy was served",
+  "later": "register v2 (17:35) and v3 (17:43) appeared after the build; the gate is checked against v1 (what the build read) and the effect of v3 is listed"
+ },
+ "verdict": {
+  "S4": "not yet: two fixes first",
+  "must_fix": [
+   "PRE1 is charged at the test checkout: a line kept from when the rug was for sale is held and out of the sum on a story page, but /story/checkout/ has no product data and trusts the line's snapshot, so the rug (₪1,299) is in the lines, the total and the test order (data/check-pre1-checkout.json, overlays/pre1-in-checkout-1280.png). The checkout needs every story product's current availability, or the cart must re-check snapshots against it",
+   "SET1 on the triptych: the 'set of 3' is one SKU (print '1', 50x70) x 3, while the frame and the card are three different prints (1+2+3, $7.69+7.75+7.85 in the card's notes); the order would be three copies of print 1. The single piece ('יחידה בודדת · ₪69 (מחיר משוער)') does not say which print, and the colour axis reads '1 / 2 / 3'. Model the triptych as a bundle of the three prints at one size, and the single piece as a choice of print"
+  ],
+  "should_fix": [
+   "the cart in a second tab comes back after a test order: storyCart keeps an in-memory copy (`mine`) and falls back to it when storage is empty, so tab 1's next add revives the lines tab 2 just ordered (data/check-pre1-checkout.json B)",
+   "'המראה כולו לסל' pressed twice doubles every quantity (it adds 'once more'); the button reverts after 2.5 s. Either say it, or skip what is already in the cart",
+   "the look's list does not look at the dot: a sellable product QA calls 'partly' would be sold in the look. No such product today",
+   "the test checkout has no marketing opt-in (the real /checkout/ has one) and no hint under the e-mail field ('לשם נשלחים אישור ההזמנה והחשבונית.'); the error messages, the summary and the shipping rules are the same",
+   "the built pages go stale when QA publishes a new register: built at 17:33 with v1, the pages still show warm modern ed5 (not_yet in v3) and dots v3 turns off (warm-modern milk tea and camel, boho planter). Add a check that the build read the highest register version, or rebuild after each register",
+   "rowOf falls back to rows[0] when no row matches the point's option: a row of another option can decide a dot. Prefer 'not checked' and fail loudly",
+   "the detail page of the white bouclé says 'בסיפור מוצגת האפשרות תה חלב' although the story shows both",
+   "review screenshots in site/test-results/qa-shots/ are wiped by Playwright at the start of every run (test-results is its outputDir); keep them elsewhere if they are for review by eye",
+   "boho fin6: a second rust frayed cushion of the same look sits at the left (x ~430-880, half inside the phone crop) with no row in the register; G-ED.6 question for the register (a second unit, or a look-alike)"
+  ]
+ },
+ "checks": {
+  "1_whole_look": {
+   "frames": [
+    {
+     "page": "nordic",
+     "frame": "A",
+     "button": "המראה כולו לסל · 10 מוצרים · ⁦₪ 1,050⁩",
+     "left": "לא נכללים: 2 מוצרים בלי מחיר עדיין, מוצר אחד שהמלאי שלהם אינו זמין כעת.",
+     "each_once": true,
+     "same_set": true,
+     "left_counts_ok": true,
+     "second_press_quantities": [
+      2
+     ]
+    },
+    {
+     "page": "nordic",
+     "frame": "B",
+     "button": "המראה כולו לסל · 4 מוצרים · ⁦₪ 406⁩",
+     "left": "לא נכללים: 2 מוצרים בלי מחיר עדיין, מוצר אחד שהמלאי שלהם אינו זמין כעת.",
+     "each_once": false,
+     "same_set": false,
+     "left_counts_ok": true,
+     "second_press_quantities": [
+      2,
+      4
+     ]
+    },
+    {
+     "page": "warm-modern",
+     "frame": "A",
+     "button": "המראה כולו לסל · 8 מוצרים · ⁦₪ 1,912⁩",
+     "left": "לא נכללים: 3 מוצרים בלי מחיר עדיין, מוצר אחד שהמלאי שלהם אינו זמין כעת.",
+     "each_once": true,
+     "same_set": true,
+     "left_counts_ok": true,
+     "second_press_quantities": [
+      2
+     ]
+    },
+    {
+     "page": "modern-country",
+     "frame": "A",
+     "button": "המראה כולו לסל · 3 מוצרים · ⁦₪ 217⁩",
+     "left": "לא נכללים: 4 מוצרים בלי מחיר עדיין.",
+     "each_once": true,
+     "same_set": true,
+     "left_counts_ok": true,
+     "second_press_quantities": [
+      2
+     ]
+    },
+    {
+     "page": "boho",
+     "frame": "A",
+     "button": "המראה כולו לסל · 5 מוצרים · ⁦₪ 515⁩",
+     "left": "לא נכללים: 3 מוצרים בלי מחיר עדיין, מוצר אחד שהמלאי שלהם אינו זמין כעת.",
+     "each_once": true,
+     "same_set": true,
+     "left_counts_ok": true,
+     "second_press_quantities": [
+      2
+     ]
+    }
+   ],
+   "note": "Nordic B re-checked on a fresh page: same set, each once (data/look-nordic-B-fresh.log); the first run's B row is a test artefact of the in-memory cart"
+  },
+  "2_cart": {
+   "quantity_focus": {
+    "opened": {
+     "total": "סכום ביניים: ⁦₪ 1,050⁩ · 10 פריטים",
+     "focus": "h2#st-cart-title[] "
+    },
+    "after_plus": {
+     "total": "סכום ביניים: ⁦₪ 1,249⁩ · 11 פריטים",
+     "focus": "button#[more] הגדלת הכמות: שלישיית הדפסים גאומטריים, שיבולת שועל ופחם"
+    },
+    "after_minus": {
+     "total": "סכום ביניים: ⁦₪ 1,050⁩ · 10 פריטים",
+     "focus": "button#[less] הקטנת הכמות: שלישיית הדפסים גאומטריים, שיבולת שועל ופחם"
+    },
+    "after_22_plus": {
+     "total": "סכום ביניים: ⁦₪ 4,831⁩ · 29 פריטים",
+     "focus": "button#[more] הגדלת הכמות: שלישיית הדפסים גאומטריים, שיבולת שועל ופחם"
+    },
+    "after_remove": {
+     "total": "סכום ביניים: ⁦₪ 851⁩ · 9 פריטים",
+     "focus": "h2#st-cart-title[] "
+    },
+    "after_minus_at_1_by_keyboard": {
+     "total": "סכום ביניים: ⁦₪ 722⁩ · 8 פריטים",
+     "focus": "h2#st-cart-title[] "
+    }
+   },
+   "cap": "20 (22 presses)",
+   "pre1_on_the_story_page": "שטיח צמר קלוע, טבעי: המלאי אינו זמין כעת, ולכן הוא לא בהזמנה ולא ייגבה. הסרה",
+   "pre1_at_checkout": {
+    "lines": [
+     "ציפית כרית במראה פשתן, פחם1 × ⁦₪ 49⁩ · ⁦₪ 49⁩",
+     "שטיח צמר קלוע, טבעי1 × ⁦₪ 1,299⁩ · ⁦₪ 1,299⁩"
+    ],
+    "subtotal": "⁦₪ 1,348⁩",
+    "total": "⁦₪ 1,348⁩",
+    "held": null
+   },
+   "pre1_in_the_order": {
+    "sum": "2 פריטים · ⁦₪ 1,348⁩, משלוח חסכוני חינם · סה״כ ⁦₪ 1,348⁩",
+    "lines": [
+     "ציפית כרית במראה פשתן, פחם1 · ⁦₪ 49⁩",
+     "שטיח צמר קלוע, טבעי1 · ⁦₪ 1,299⁩"
+    ]
+   }
+  },
+  "3_checkout": {
+   "field_diff": {
+    "only_real": [
+     "=on",
+     "=on"
+    ],
+    "only_story": [
+     "terms=on"
+    ],
+    "attr_diff": [
+     {
+      "story": {
+       "name": "shipping",
+       "type": "radio",
+       "id": "",
+       "label": "משלוח חסכוני · חינם לפי המוצר, בדרך כלל 12–30 ימים. חינם מעל ⁦₪ 299⁩",
+       "autocomplete": null,
+       "inputmode": null,
+       "required": false,
+       "maxlength": null,
+       "value": "economy"
+      },
+      "real": {
+       "name": "shipping",
+       "type": "radio",
+       "id": "",
+       "label": "משלוח חסכונילפי המוצר, בדרך כלל 12–30 ימים⁦₪ 29⁩",
+       "autocomplete": null,
+       "inputmode": null,
+       "required": false,
+       "maxlength": null,
+       "value": "economy"
+      }
+     },
+     {
+      "story": {
+       "name": "shipping",
+       "type": "radio",
+       "id": "",
+       "label": "משלוח מהיר · ⁦₪ 59⁩ בדרך כלל 7–14 ימים",
+       "autocomplete": null,
+       "inputmode": null,
+       "required": false,
+       "maxlength": null,
+       "value": "express"
+      },
+      "real": {
+       "name": "shipping",
+       "type": "radio",
+       "id": "",
+       "label": "משלוח מהירבדרך כלל 7–14 ימים⁦₪ 59⁩",
+       "autocomplete": null,
+       "inputmode": null,
+       "required": false,
+       "maxlength": null,
+       "value": "express"
+      }
+     }
+    ]
+   },
+   "real_errors": {
+    "fields": {
+     "full_name": {
+      "described": [
+       "נא למלא שם מלא."
+      ],
+      "next": "נא למלא שם מלא."
+     },
+     "email": {
+      "described": [
+       "לשם נשלחים אישור ההזמנה והחשבונית.",
+       "נא למלא כתובת אימייל תקינה, למשל name@example.com."
+      ],
+      "next": "נא למלא כתובת אימייל תקינה, למשל name@example.com."
+     },
+     "phone": {
+      "described": [
+       "לשליח, למשל 050-1234567.",
+       "נא למלא מספר טלפון ישראלי, למשל 050-1234567."
+      ],
+      "next": "נא למלא מספר טלפון ישראלי, למשל 050-1234567."
+     },
+     "city": {
+      "described": [
+       "נא למלא עיר."
+      ],
+      "next": "נא למלא עיר."
+     },
+     "street": {
+      "described": [
+       "נא למלא רחוב."
+      ],
+      "next": "נא למלא רחוב."
+     },
+     "house": {
+      "described": [
+       "נא למלא מספר בית."
+      ],
+      "next": "נא למלא מספר בית."
+     },
+     "": {
+      "described": [
+       "כדי להמשיך יש לאשר את התקנון ואת מדיניות הביטולים."
+      ],
+      "next": "כדי להמשיך יש לאשר את התקנון ואת מדיניות הביטולים."
+     }
+    },
+    "focus": "div#.",
+    "summary_text": "יש לתקן 7 שדותשם מלא: נא למלא שם מלא.אימייל: נא למלא כתובת אימייל תקינה, למשל name@example.com.טלפון: נא למלא מספר טלפון ישראלי, למשל 050-1234567.עיר: נא למלא עיר.רחוב: נא למלא רחוב.מספר בית: נא למלא מספר בית.אישור התקנון: כדי להמשיך יש לאשר את התקנון ואת מדיניות הביטולים.",
+    "summary_links": [
+     "#f-full_name",
+     "#f-email",
+     "#f-phone",
+     "#f-city",
+     "#f-street",
+     "#f-house",
+     "#f-terms"
+    ],
+    "summary_role": "alert"
+   },
+   "story_errors": {
+    "fields": {
+     "full_name": {
+      "described": [
+       "נא למלא שם מלא."
+      ],
+      "next": "נא למלא שם מלא."
+     },
+     "email": {
+      "described": [
+       "נא למלא כתובת אימייל תקינה, למשל name@example.com."
+      ],
+      "next": "נא למלא כתובת אימייל תקינה, למשל name@example.com."
+     },
+     "phone": {
+      "described": [
+       "נא למלא מספר טלפון ישראלי, למשל 050-1234567.",
+       "לשליח, למשל 050-1234567."
+      ],
+      "next": "נא למלא מספר טלפון ישראלי, למשל 050-1234567."
+     },
+     "city": {
+      "described": [
+       "נא למלא עיר."
+      ],
+      "next": "נא למלא עיר."
+     },
+     "street": {
+      "described": [
+       "נא למלא רחוב."
+      ],
+      "next": "נא למלא רחוב."
+     },
+     "house": {
+      "described": [
+       "נא למלא מספר בית."
+      ],
+      "next": "נא למלא מספר בית."
+     },
+     "terms": {
+      "described": [
+       "כדי להמשיך יש לאשר את התקנון ואת מדיניות הביטולים."
+      ],
+      "next": "כדי להמשיך יש לאשר את התקנון ואת מדיניות הביטולים."
+     }
+    },
+    "focus": "div#co-errors.st-co-errors",
+    "summary_text": "יש לתקן 7 שדות:שם מלא: נא למלא שם מלא.אימייל: נא למלא כתובת אימייל תקינה, למשל name@example.com.טלפון: נא למלא מספר טלפון ישראלי, למשל 050-1234567.עיר: נא למלא עיר.רחוב: נא למלא רחוב.מספר בית: נא למלא מספר בית.אישור התקנון: כדי להמשיך יש לאשר את התקנון ואת מדיניות הביטולים.",
+    "summary_links": [
+     "#f-full_name",
+     "#f-email",
+     "#f-phone",
+     "#f-city",
+     "#f-street",
+     "#f-house",
+     "#f-terms"
+    ],
+    "summary_role": "alert"
+   },
+   "shipping_below": {
+    "subtotal": "⁦₪ 49⁩",
+    "shipping": "⁦₪ 29⁩",
+    "free": "עוד ⁦₪ 250⁩ למשלוח חסכוני חינם.",
+    "ship_labels": [
+     "משלוח חסכוני · ⁦₪ 29⁩ לפי המוצר, בדרך כלל 12–30 ימים. חינם מעל ⁦₪ 299⁩",
+     "משלוח מהיר · ⁦₪ 59⁩ בדרך כלל 7–14 ימים"
+    ]
+   },
+   "shipping_over": {
+    "subtotal": "⁦₪ 1,099⁩",
+    "shipping": "חינם",
+    "free": ""
+   },
+   "shipping_over_express": {
+    "shipping": "⁦₪ 59⁩",
+    "total": "⁦₪ 1,158⁩"
+   },
+   "order_page": {
+    "url": "/story/order/?id=T2795808",
+    "number": "T2795808",
+    "greeting": "תודה, דנה.",
+    "lines": 10,
+    "sum": "11 פריטים · ⁦₪ 1,099⁩, משלוח חסכוני חינם · סה״כ ⁦₪ 1,099⁩",
+    "city": "למשלוח לחיפה.",
+    "focus": "or-title",
+    "cart_after": null,
+    "count_badge": "0",
+    "storage": [
+     "hd.cart",
+     "hd.story.orders"
+    ],
+    "session": [],
+    "cookies": ""
+   },
+   "stored_order": {
+    "id": "T2795808",
+    "at": "2026-11-07T17:47:07.438Z",
+    "first_name": "דנה",
+    "city": "חיפה",
+    "shipping_he": "משלוח חסכוני",
+    "lines": [
+     {
+      "name_he": "ציפית כרית במראה פשתן, פחם",
+      "option_he": null,
+      "qty": 2,
+      "line_total_agorot": 9800
+     },
+     {
+      "name_he": "שלישיית הדפסים גאומטריים, שיבולת שועל ופחם",
+      "option_he": null,
+      "qty": 1,
+      "line_total_agorot": 19900
+     },
+     {
+      "name_he": "שמיכת מוסלין כותנה עם פרנזים, לבן שנהב",
+      "option_he": null,
+      "qty": 1,
+      "line_total_agorot": 12900
+     },
+     {
+      "name_he": "קערת בטן קרמיקה, לבן חם",
+      "option_he": null,
+      "qty": 1,
+      "line_total_agorot": 7900
+     },
+     {
+      "name_he": "ציפית כרית שניל סרוגה, מרווה",
+      "option_he": null,
+      "qty": 1,
+      "line_total_agorot": 4900
+     },
+     {
+      "name_he": "זוג פמוטי טרוורטין על רגל",
+      "option_he": null,
+      "qty": 1,
+      "line_total_agorot": 19900
+     },
+     {
+      "name_he": "ציפית כרית בוקלה, לבן חם",
+      "option_he": null,
+      "qty": 1,
+      "line_total_agorot": 5900
+     },
+     {
+      "name_he": "סל-עציץ בטן מקש ים",
+      "option_he": null,
+      "qty": 1,
+      "line_total_agorot": 9900
+     },
+     {
+      "name_he": "סל גליל מחבל יוטה עם ידיות",
+      "option_he": null,
+      "qty": 1,
+      "line_total_agorot": 10900
+     },
+     {
+      "name_he": "ראנר במראה פשתן עם פרנזים קשורים, מרווה",
+      "option_he": null,
+      "qty": 1,
+      "line_total_agorot": 7900
+     }
+    ],
+    "subtotal_agorot": 109900,
+    "shipping_agorot": 0,
+    "total_agorot": 109900
+   },
+   "personal_data_in_storage": {
+    "full_name": false,
+    "email": false,
+    "phone": false,
+    "street": false,
+    "zip": false
+   },
+   "requests_on_submit": "GET only, no /api/ (20 requests)"
+  },
+  "4_set1": {
+   "pages": [
+    {
+     "page": "/story/living-room/nordic/p/framed-art-aliexpress-minimal-geometric-triptych-prints/",
+     "product": "framed-art-aliexpress-minimal-geometric-triptych-prints",
+     "set_qty": 3,
+     "skus": 12,
+     "skus_with_unit": 12,
+     "unit_estimated": true,
+     "how_to_buy": true,
+     "radios": [
+      {
+       "value": "set",
+       "checked": true,
+       "label": "סט של 3 · ⁦₪ 199⁩"
+      },
+      {
+       "value": "unit",
+       "checked": false,
+       "label": "יחידה בודדת · ⁦₪ 69⁩ (מחיר משוער)"
+      }
+     ],
+     "estimated_mark": true,
+     "status": "available"
+    },
+    {
+     "page": "/story/living-room/nordic/p/candle-holders-cj-travertine-pedestal/",
+     "product": "candle-holders-cj-travertine-pedestal",
+     "set_qty": 2,
+     "skus": 2,
+     "skus_with_unit": 2,
+     "unit_estimated": true,
+     "how_to_buy": true,
+     "radios": [
+      {
+       "value": "set",
+       "checked": true,
+       "label": "סט של 2 · ⁦₪ 199⁩"
+      },
+      {
+       "value": "unit",
+       "checked": false,
+       "label": "יחידה בודדת · ⁦₪ 109⁩ (מחיר משוער)"
+      }
+     ],
+     "estimated_mark": true,
+     "status": "available"
+    },
+    {
+     "page": "/story/living-room/warm-modern/p/candle-holders-cj-travertine-pedestal/",
+     "product": "candle-holders-cj-travertine-pedestal",
+     "set_qty": 2,
+     "skus": 2,
+     "skus_with_unit": 2,
+     "unit_estimated": true,
+     "how_to_buy": true,
+     "radios": [
+      {
+       "value": "set",
+       "checked": true,
+       "label": "סט של 2 · ⁦₪ 199⁩"
+      },
+      {
+       "value": "unit",
+       "checked": false,
+       "label": "יחידה בודדת · ⁦₪ 109⁩ (מחיר משוער)"
+      }
+     ],
+     "estimated_mark": true,
+     "status": "available"
+    }
+   ],
+   "cart_line": {
+    "page": "/story/living-room/nordic/p/framed-art-aliexpress-minimal-geometric-triptych-prints/",
+    "price_shown": "⁦₪ 69⁩ (משוער)",
+    "line": "שלישיית הדפסים גאומטריים, שיבולת שועל ופחם · יחידה בודדת",
+    "detail": "1 × ⁦₪ 69⁩ · ⁦₪ 69⁩"
+   }
+  },
+  "5_wheel_pre1": {
+   "options": [
+    {
+     "text": "אינו במלאי1",
+     "aria": "1 מתוך 3: שטיח צמר, שיבולת שועל, ⁦₪ 1,299⁩. המלאי אינו זמין כעת",
+     "checked": "true"
+    },
+    {
+     "text": "ממתינה למוצר2",
+     "aria": "2 מתוך 3: וריאציה 2 · ממתינה למוצר",
+     "checked": "false"
+    },
+    {
+     "text": "ממתינה למוצר3",
+     "aria": "3 מתוך 3: וריאציה 3 · ממתינה למוצר",
+     "checked": "false"
+    }
+   ],
+   "tag_present": true,
+   "unavailable_text": true,
+   "waitlist": true,
+   "add_buttons": []
+  },
+  "6_gate": {
+   "against_the_register_the_build_read_v1": {
+    "mismatches": []
+   },
+   "against_v3_now": {
+    "mismatches": [
+     [
+      "living-room/warm-modern",
+      "A",
+      "frame gate"
+     ],
+     [
+      "living-room/warm-modern",
+      "A-5",
+      "cushions-cj-boucle-teddy",
+      "no",
+      true
+     ],
+     [
+      "living-room/warm-modern",
+      "A-8",
+      "cushions-cj-knitted-chenille-bean-green",
+      "no",
+      true
+     ],
+     [
+      "living-room/boho",
+      "A-4",
+      "planter-zendrop-seagrass-belly-basket-45",
+      "no",
+      true
+     ]
+    ]
+   },
+   "register_reader_test": "data/gate-register-test.log: highest version read; close-up final_test same option -> dot; almost -> no; other option -> no; close-up row 'partly' -> no; a register row without dot, an unknown state, a final_test entry without rows -> throw; part1 without against -> throw; the flat codefix5 shape -> throw",
+   "white_boucle": {
+    "item": "A-10",
+    "sheet_link": "/story/living-room/warm-modern/p/cushions-cj-boucle-teddy/?color=white&size=50x50",
+    "opens_on": "white+50x50",
+    "title": "ציפית כרית בוקלה, לבן",
+    "story_note": "בסיפור מוצגת האפשרות תה חלב, 50×50 ס\"מ. חזרה לאפשרות שבסיפור"
+   },
+   "screenshots": "hotspots/options/swap-diff specs write to site/test-results/qa-shots/ unless HD_QA_SHOTS=1; the full run from the copy left the tracked folders untouched"
+  },
+  "7_boho_ged17": {
+   "rows": [
+    {
+     "item": "A-1",
+     "product": "wall-decor-aliexpress-natural-raffia-woven-bohemian-763597",
+     "G-ED.17": "pass",
+     "phone_visible_css": [
+      41.2,
+      52.2
+     ],
+     "phone_390_hit_own": true,
+     "desk_1280_hit_own": true,
+     "note": "box right (x ~509-665); the crop edge (x 535) cuts the left sixth; the phone dot (frame u 0.222) on the coiled centre"
+    },
+    {
+     "item": "A-2",
+     "product": "wall-sconce-aliexpress-rattan-bamboo-wall-lamp-671943",
+     "G-ED.17": "pass",
+     "phone_visible_css": [
+      46.0,
+      53.6
+     ],
+     "phone_390_hit_own": true,
+     "desk_1280_hit_own": true,
+     "note": ""
+    },
+    {
+     "item": "A-3",
+     "product": "basket-cj-seagrass-belly-xl",
+     "G-ED.17": "no phone dot: outside the crop (page agrees)",
+     "phone_visible_css": null,
+     "phone_390_hit_own": null,
+     "desk_1280_hit_own": true,
+     "note": ""
+    },
+    {
+     "item": "A-4",
+     "product": "planter-zendrop-seagrass-belly-basket-45",
+     "G-ED.17": "no phone dot: outside the crop (page agrees)",
+     "phone_visible_css": null,
+     "phone_390_hit_own": null,
+     "desk_1280_hit_own": true,
+     "note": ""
+    },
+    {
+     "item": "A-5",
+     "product": "cushions-cj-washed-cotton-frayed",
+     "G-ED.17": "pass",
+     "phone_visible_css": [
+      75.5,
+      67.3
+     ],
+     "phone_390_hit_own": true,
+     "desk_1280_hit_own": true,
+     "note": "the dot on the right rust cushion; a second rust frayed cushion of the same look sits at the left (x ~430-880, half in the phone crop) with no row in the register"
+    },
+    {
+     "item": "A-6",
+     "product": "cushions-cj-sandstone-chenille-flange",
+     "G-ED.17": "pass",
+     "phone_visible_css": [
+      105.9,
+      73.1
+     ],
+     "phone_390_hit_own": true,
+     "desk_1280_hit_own": true,
+     "note": "box right (x ~950-1290); the dot on the olive chenille"
+    },
+    {
+     "item": "A-7",
+     "product": "sofa-cover-cj-washed-hemp-throw",
+     "G-ED.17": "pass",
+     "phone_visible_css": [
+      116.7,
+      174.0
+     ],
+     "phone_390_hit_own": true,
+     "desk_1280_hit_own": true,
+     "note": "the phone dot moves to u 0.263 (x 719, y 1075): on the throw draped over the seat"
+    },
+    {
+     "item": "A-8",
+     "product": "pouf-cj-cotton-knit-ball-cover",
+     "G-ED.17": "no phone dot: outside the crop (page agrees)",
+     "phone_visible_css": null,
+     "phone_390_hit_own": null,
+     "desk_1280_hit_own": true,
+     "note": ""
+    },
+    {
+     "item": "A-9",
+     "product": "table-runner-aliexpress-boho-macrame-table-runners-263532",
+     "G-ED.17": "pass",
+     "phone_visible_css": [
+      207.5,
+      119.4
+     ],
+     "phone_390_hit_own": true,
+     "desk_1280_hit_own": true,
+     "note": ""
+    }
+   ],
+   "crop": "u 0.196-0.645 (0.42)",
+   "closest_phone_css": 76,
+   "closest_desktop_css": 111,
+   "ged18_boho": 4,
+   "ged18_boho_of": 9
+  },
+  "8_flaky_drag": {
+   "reproduced": "idle 10/10 pass; with four CPU busy-loops 4/10 fail (data/flaky-drag-repeat10-*.log)",
+   "cause": "the wheel commits the option (aria-checked, onPreview) only in settle(), when the snap spring has come to rest, and the spring's step() clamps dt to 1/30 s, so it runs on frames, not on time. With the wheel open the room page draws 16.9 frames/s idle and 11.5 under load (SwiftShader), so the snap that takes ~1 s at 30 fps takes 3-5 s; the spec waits 5 s after mouse.up for the checked option to change. Instrumented: aria-checked turned to option 3 at 3.2-5.1 s after pointerup under load (data/diag-drag-loaded-fast.json), with every pointer event received and the drag captured",
+   "fix": "commit the target at release (physics.release() already picks it): setIndex and onPreview then, animate after; integrate the spring by real time (fixed sub-steps over the real dt, no 1/30 clamp). Then the spec's 5 s holds on a slow machine, and a slow phone does not show the new option seconds late"
+  },
+  "e2e": {
+   "run": "65f95d32's site/e2e from a copy, HD_BASE_URL=http://127.0.0.1:8799: e2e 54/54, a11y 15/15 (17:3x)"
+  },
+  "axe_shop": [
+   {
+    "state": "cart open (the look of Nordic A)",
+    "viewport": "390",
+    "violations": [],
+    "wcag22aa": []
+   },
+   {
+    "state": "checkout",
+    "viewport": "390",
+    "violations": [],
+    "wcag22aa": []
+   },
+   {
+    "state": "checkout with the errors",
+    "viewport": "390",
+    "violations": [],
+    "wcag22aa": [
+     "target-size x5"
+    ]
+   },
+   {
+    "state": "order",
+    "viewport": "390",
+    "violations": [],
+    "wcag22aa": []
+   },
+   {
+    "state": "detail, a single piece chosen",
+    "viewport": "390",
+    "violations": [],
+    "wcag22aa": []
+   },
+   {
+    "state": "cart open (the look of Nordic A)",
+    "viewport": "1280",
+    "violations": [],
+    "wcag22aa": []
+   },
+   {
+    "state": "checkout",
+    "viewport": "1280",
+    "violations": [],
+    "wcag22aa": []
+   },
+   {
+    "state": "checkout with the errors",
+    "viewport": "1280",
+    "violations": [],
+    "wcag22aa": [
+     "target-size x6"
+    ]
+   },
+   {
+    "state": "order",
+    "viewport": "1280",
+    "violations": [],
+    "wcag22aa": []
+   },
+   {
+    "state": "detail, a single piece chosen",
+    "viewport": "1280",
+    "violations": [],
+    "wcag22aa": []
+   }
+  ]
+ },
+ "ged18": {
+  "nordic": {
+   "pass": 7,
+   "of": 16,
+   "fail": {
+    "pendant-cj-silk-ribbed-pumpkin-40": 1.05,
+    "accent-sconces-cj-travertine-block-updown-8x16": 0.07,
+    "bowl-cj-glutinous-white-belly-bowl-21": 0.43,
+    "cushions-cj-knitted-chenille-bean-green": 1.09,
+    "candle-holders-cj-travertine-pedestal": 0.85,
+    "cushions-cj-boucle-teddy": 1.31,
+    "planter-cj-seagrass-belly": 0.85,
+    "vase-aliexpress-vintage-distressed-clay-vase-589009": 0.61,
+    "rug-cj-braided-wool-natural": 13.26
+   }
+  },
+  "warm-modern": {
+   "pass": 7,
+   "of": 10,
+   "fail": {
+    "accent-sconces-aliexpress-travertine-cylinder-walnut-choice": 0.38,
+    "vase-cj-textured-white-stoneware": 0.93,
+    "bowl-cj-matte-black-bowl-20": 0.8
+   }
+  },
+  "modern-country": {
+   "pass": 4,
+   "of": 7,
+   "fail": {
+    "sill-vase-cj-cream-fluted-column-25": 0.28,
+    "vase-aliexpress-vintage-distressed-clay-vase-589009": 0.67,
+    "bowl-cj-speckled-ivory-wide-bowl-21": 0.44
+   }
+  },
+  "boho": {
+   "pass": 4,
+   "of": 9,
+   "fail": {
+    "wall-decor-aliexpress-natural-raffia-woven-bohemian-763597": 0.61,
+    "wall-sconce-aliexpress-rattan-bamboo-wall-lamp-671943": 0.58,
+    "basket-cj-seagrass-belly-xl": 0.9,
+    "planter-zendrop-seagrass-belly-basket-45": 1.01,
+    "cushions-cj-washed-cotton-frayed": 1.2
+   }
+  }
+ },
+ "owners": {
+  "frontend-dev": [
+   "PRE1 at the test checkout",
+   "the in-memory cart after an order in another tab",
+   "the look: second press, dots",
+   "marketing opt-in and the e-mail hint on the test checkout",
+   "a register-version check on the build",
+   "rowOf fallback",
+   "the wheel: commit at release, time-based spring"
+  ],
+  "frontend-dev with sourcing / master-designer": [
+   "the triptych as a bundle of three prints, and its single piece"
+  ],
+  "qa-agent (register)": [
+   "boho fin6: the left rust cushion (G-ED.6)"
+  ],
+  "master-designer / render-agent": [
+   "close-ups for G-ED.18"
+  ]
+ },
+ "commands_run": [
+  "cd site; npm run catalog; npm run assets:temp; npx tsx tools/supplier-images.ts --offline; npm run test:page; npm run story; npm run build -w @hd/web; npm run build -w @hd/api; npm run budget (all 0, 17:33)",
+  "cp -a site/web/dist <scratchpad>/dist-s4; cd site/api; npx wrangler d1 migrations apply DB --local --persist-to <scratchpad>/wrangler-s4; npx wrangler d1 execute DB --local --persist-to <scratchpad>/wrangler-s4 --file <copy of .generated/seed.sql>; npx wrangler dev --port 8799 --local --persist-to <scratchpad>/wrangler-s4 --assets <scratchpad>/dist-s4",
+  "git archive 65f95d32 site/e2e site/playwright.config.ts into <scratchpad>/e2e-s4 (+ copies of .generated, web/public/media, shared); HD_BASE_URL=http://127.0.0.1:8799 playwright test -c <copy> --project=e2e; --project=a11y; flow.spec -g 'drag with inertia' --repeat-each=10 (idle, then with 4 x node busy-loops for <=300 s)",
+  "node tools/hit-test-story-s4.mjs; QA_DIST=<copy> STORY_JSON=<git show 65f95d32:data/story/story.json> python3 tools/ged17_18_story_s4.py; python3 tools/gate_check_s4.py (REGISTER=v1, and the highest now = v3)",
+  "npx tsx tools/gate-register-test.ts (scratch registers)",
+  "node tools/check-shop.mjs; node tools/check-pre1-checkout.mjs; node tools/check-s4-misc.mjs; node tools/look-fresh-page.mjs",
+  "node tools/diag-drag.mjs (idle, loaded, QA_FAST=1 loaded); node tools/raf-rate.mjs (idle, loaded)"
+ ]
+}
