@@ -54,29 +54,10 @@
  },
  "mc": {
   "a_cups": {
-   "boxes": [
-    [
-     1556,
-     1094,
-     1667,
-     1202
-    ],
-    [
-     1665,
-     1111,
-     1760,
-     1203
-    ],
-    [
-     1747,
-     1138,
-     1822,
-     1210
-    ]
-   ],
-   "px": 21989,
-   "glaze": "plain off-white (Lab a 0.8, b 5.5), the bowl stays ivory with its speckle",
-   "method": "cup outlines by lightness and low chroma per box; dots and the tanned rim lifted to a 7 px closing of L; a/b set to the glaze, L shading kept"
+   "outlines": "three hand outlines (see cup_polys in the script), 2 px inside",
+   "px": 18123,
+   "glaze": "plain off-white: the cups' own a/b median, 3 b* cooler; the bowl keeps its speckle and tanned rim",
+   "method": "dots and the tanned rim line lifted to a 7 px closing of L*; a/b replaced by their 11 px median over the cup, b* -3; the form's shading kept"
   },
   "b_fly": {
    "box": [
@@ -89,23 +70,111 @@
    "method": "the dark glyph (L 6 below the cushion ground, grown 2 px) inpainted from the ground round it (Telea r 4) with its grain"
   },
   "c_curtains": {
-   "px": 315312,
+   "px": 282895,
    "mean_Lab_before": [
-    58.2,
-    6.0,
-    20.3
+    57.8,
+    6.3,
+    20.6
    ],
    "target": "#EDE7DB (91.8, 0.6, 5.6)",
    "share_of_the_way": 0.6,
-   "method": "curtain pixels by colour in each curtain's box (largest part, holes filled); Lab shift of the mean 60 % toward the card, the folds' own L variation kept"
+   "method": "both curtains traced by hand (the plaster is the same colour as the linen); Lab shift of the mean 60 % toward the card, the folds' own L variation kept"
   },
-  "px_changed": 336531,
+  "px_changed": 300129,
   "px_changed_outside_mask": 0,
-  "mask_px": 344513,
+  "mask_px": 306451,
   "file": "modern-country-A-fix1.png",
-  "px_changed_a": 20953,
+  "px_changed_a": 16964,
   "px_changed_b": 270,
-  "px_changed_c": 315308,
+  "px_changed_c": 282895,
   "base": "modern-country-A.png"
+ },
+ "wm": {
+  "px_changed": 10027,
+  "px_changed_outside_mask": 0,
+  "mask_px": 11131,
+  "file": "warm-modern-A-ed5.png",
+  "base": "warm-modern-A-ed4.png",
+  "ring_pitch_px": 27,
+  "rings_before": 6,
+  "rings_after": 5,
+  "rim_lines": {
+   "x": [
+    1350,
+    1360,
+    1370,
+    1380,
+    1390,
+    1400,
+    1410,
+    1420,
+    1430,
+    1440,
+    1450,
+    1460,
+    1470,
+    1480,
+    1490,
+    1500,
+    1510,
+    1520,
+    1530,
+    1540,
+    1550,
+    1560,
+    1570
+   ],
+   "ring4_bottom": [
+    198,
+    195,
+    192,
+    193,
+    189,
+    188,
+    186,
+    185,
+    185,
+    184,
+    183,
+    183,
+    183,
+    183,
+    183,
+    184,
+    185,
+    186,
+    187,
+    189,
+    191,
+    194,
+    197
+   ],
+   "pendant_bottom": [
+    208,
+    212,
+    226,
+    230,
+    232,
+    234,
+    235,
+    236,
+    237,
+    237,
+    238,
+    238,
+    237,
+    237,
+    236,
+    235,
+    234,
+    232,
+    230,
+    228,
+    213,
+    209,
+    200
+   ]
+  },
+  "method": "ring 5 taken out; ring 6 (from ring 5's rim line to the bottom) lifted 27 px behind ring 4's rim; the rest of the old rings 5-6 area plain wall (harmonic from the wall round the pendant, grain from 40 rows below)"
  }
 }

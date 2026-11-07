@@ -239,40 +239,56 @@ def mc():
     rec = {}
     L, A_, B_ = lab_of(a)
     yy, xx = np.mgrid[0:H, 0:W]
-    # (a) the three cups: plain off-white glaze, no speckle, no tanned rim; shading and form kept
-    boxes = [(1556, 1094, 1667, 1202), (1665, 1111, 1760, 1203), (1747, 1138, 1822, 1210)]
+    # (a) the three cups: a plain glaze, no speckle and no tanned rim. Outlines by hand (the sofa behind is the same cream), 2 px inside.
+    # Lightness: the dots and the rim's dark tan line lifted to a 7 px closing of L* (the form's shading kept). Colour: a/b replaced by their
+    # own 11 px median (spatter and the tan rim gone), then 3 b* cooler, so the glaze reads plain off-white next to the ivory bowl
+    cup_polys = [
+        [(1561, 1104), (1575, 1099), (1612, 1097), (1648, 1099), (1663, 1105), (1662, 1115), (1658, 1140), (1654, 1160), (1647, 1180),
+         (1640, 1193), (1630, 1196), (1600, 1197), (1588, 1194), (1581, 1182), (1572, 1160), (1566, 1135), (1562, 1115)],
+        [(1668, 1121), (1690, 1115), (1730, 1116), (1757, 1122), (1756, 1132), (1752, 1153), (1745, 1175), (1737, 1190), (1727, 1197),
+         (1690, 1197), (1683, 1190), (1675, 1170), (1671, 1150), (1669, 1133)],
+        [(1756, 1146), (1770, 1142), (1800, 1142), (1818, 1146), (1818, 1160), (1815, 1180), (1808, 1197), (1801, 1204), (1765, 1205),
+         (1758, 1199), (1754, 1180), (1755, 1160)]]
     cups = np.zeros((H, W), bool)
-    for x0, y0, x1, y1 in boxes:
-        sub = np.zeros((H, W), bool)
-        sub[y0:y1, x0:x1] = True
-        c = sub & (L > 52) & (np.hypot(A_, B_) < 26)
-        c = cv2.morphologyEx(c.astype(np.uint8), cv2.MORPH_CLOSE, np.ones((7, 7), np.uint8))
-        n, lab_, st, _ = cv2.connectedComponentsWithStats(c)
-        if n > 1:
-            k = 1 + int(np.argmax(st[1:, cv2.CC_STAT_AREA]))
-            c = (lab_ == k).astype(np.uint8)
-        ff = c.copy()
-        cv2.floodFill(ff, np.zeros((H + 2, W + 2), np.uint8), (0, 0), 1)
-        cups |= (c | (1 - ff)).astype(bool) & sub
-    cups = cv2.erode(cups.astype(np.uint8), np.ones((3, 3), np.uint8)).astype(bool)
+    for pts in cup_polys:
+        cups |= poly_mask(a.shape, pts)
+    cups_raw = cups.copy()
+    cups = cv2.erode(cups.astype(np.uint8), np.ones((5, 5), np.uint8)).astype(bool)
+    # the rims' outer lip (the tanned line runs along each cup's top contour, partly outside the inset outline): in a band of the top
+    # 16 rows of each cup grown 4 px, the tan pixels (b* > 16) join the cup; and the orange dot at cup 2's right edge
+    lip = np.zeros((H, W), bool)
+    for pts in cup_polys:
+        top = min(p_[1] for p_ in pts)
+        pm = poly_mask(a.shape, pts)
+        pm[top + 16:] = False
+        lip |= cv2.dilate(pm.astype(np.uint8), np.ones((9, 9), np.uint8)).astype(bool)
+    dot = np.zeros((H, W), bool)
+    dot[1138:1162, 1745:1762] = True
+    lip = (lip & (B_ > 16)) | (dot & ((A_ > 8) | (B_ > 22)))
+    lip = cv2.dilate(lip.astype(np.uint8), np.ones((3, 3), np.uint8)).astype(bool) & (cv2.dilate(cups_raw.astype(np.uint8), np.ones((9, 9), np.uint8)).astype(bool) | dot)
+    cups = cups | lip
     lab = lab_f(out)
     Lc = lab[..., 0]
-    # speckle: small dark dots; the tanned rim: a thin darker, warmer line. Both are below a closing of L; replace L by the closing where
-    # it is darker by > 1.5, then smooth only those pixels; colour to a plain off-white (a 0.8, b 5.5), the original L shading kept
     clo = cv2.morphologyEx(Lc, cv2.MORPH_CLOSE, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (7, 7)))
     clo = cv2.GaussianBlur(clo, (0, 0), 0.8)
-    dark = (clo - Lc) > 1.5
-    newL = np.where(dark, clo, Lc)
-    newL = np.where(cups, newL, Lc)
+    newL = np.where(cups & ((clo - Lc) > 1.5), clo, Lc)
+    def cmed(ch):
+        v = np.where(cups, ch, np.nan)
+        # an 11 px median of a/b over the cup only (via a normalized blur of the median-filtered, cup-filled channel)
+        fill_v = np.where(cups, ch, float(np.nanmedian(v)))
+        q = cv2.medianBlur(np.clip((fill_v + 128), 0, 255).astype(np.uint8), 11).astype(np.float32) - 128
+        return cv2.GaussianBlur(q, (0, 0), 2.0)
+    sa, sb = cmed(lab[..., 1]), cmed(lab[..., 2])
     newlab = lab.copy()
     newlab[..., 0] = newL
-    newlab[..., 1] = np.where(cups, 0.8, lab[..., 1])
-    newlab[..., 2] = np.where(cups, 5.5, lab[..., 2])
-    cw = cv2.GaussianBlur(cups.astype(np.float32), (0, 0), 1.0) * cv2.dilate(cups.astype(np.uint8), np.ones((3, 3), np.uint8))
+    newlab[..., 1] = np.where(cups, sa - 0.5, lab[..., 1])
+    newlab[..., 2] = np.where(cups, sb - 3.0, lab[..., 2])
+    cw = cv2.GaussianBlur(cups.astype(np.float32), (0, 0), 1.2) * cv2.dilate(cups.astype(np.uint8), np.ones((3, 3), np.uint8))
     out = out * (1 - cw[..., None]) + rgb_f(newlab) * cw[..., None]
-    rec["a_cups"] = dict(boxes=boxes, px=int((cw > 0).sum()), glaze="plain off-white (Lab a 0.8, b 5.5), the bowl stays ivory with its speckle",
-                         method="cup outlines by lightness and low chroma per box; dots and the tanned rim lifted to a 7 px closing of L; "
-                                "a/b set to the glaze, L shading kept")
+    rec["a_cups"] = dict(outlines="three hand outlines (see cup_polys in the script), 2 px inside", px=int((cw > 0).sum()),
+                         glaze="plain off-white: the cups' own a/b median, 3 b* cooler; the bowl keeps its speckle and tanned rim",
+                         method="dots and the tanned rim line lifted to a 7 px closing of L*; a/b replaced by their 11 px median over the cup, "
+                                "b* -3; the form's shading kept")
     # (b) the fly-like mark on the right floral cushion
     fm = np.zeros((H, W), bool)
     fm[861:882, 1591:1611] = True
@@ -292,20 +308,13 @@ def mc():
                                                                                   "inpainted from the ground round it (Telea r 4) with its grain")
     # (c) both curtains lighter toward #EDE7DB (L 91.8 a 0.6 b 5.6): the curtain pixels in each curtain's box by colour (oat linen: warmer
     # and darker than the plaster and the window), then L lifted and a/b eased toward the card, the folds' shading kept
-    curt = np.zeros((H, W), bool)
-    for x0, y0, x1, y1 in [(1590, 66, 1782, 760), (2340, 60, 2580, 990)]:
-        sub = np.zeros((H, W), bool)
-        sub[y0:y1, x0:x1] = True
-        c = sub & (B_ > 12) & (L > 38) & (L < 84) & (A_ > -2) & (A_ < 10)
-        c = cv2.morphologyEx(c.astype(np.uint8), cv2.MORPH_OPEN, np.ones((3, 3), np.uint8))
-        c = cv2.morphologyEx(c, cv2.MORPH_CLOSE, np.ones((9, 9), np.uint8))
-        n, lab_, st, _ = cv2.connectedComponentsWithStats(c)
-        if n > 1:
-            k = 1 + int(np.argmax(st[1:, cv2.CC_STAT_AREA]))
-            c = (lab_ == k).astype(np.uint8)
-        ff = c.copy()
-        cv2.floodFill(ff, np.zeros((H + 2, W + 2), np.uint8), (0, 0), 1)
-        curt |= (c | (1 - ff)).astype(bool) & sub
+    # the plaster has the same colour as the oat linen and the window frames carry texture too: both curtains traced by hand on the frame
+    # (their outer edges hang nearly straight; the floral cushion and the armchair's throw cut their bottoms)
+    left_c = poly_mask(a.shape, [(1610, 79), (1771, 77), (1771, 706), (1745, 711), (1700, 724), (1660, 736), (1640, 745), (1599, 758),
+                                 (1599, 650), (1602, 450), (1604, 300), (1607, 200), (1609, 160), (1611, 100)])
+    right_c = poly_mask(a.shape, [(2362, 69), (2540, 69), (2545, 108), (2549, 400), (2555, 520), (2559, 600), (2559, 928), (2540, 927),
+                                  (2480, 931), (2403, 944), (2380, 956), (2351, 959), (2351, 600), (2356, 500), (2360, 300)])
+    curt = (left_c | right_c)
     lab = lab_f(out)
     cm = curt
     Lm, am, bm = [float(lab[..., i][cm].mean()) for i in range(3)]
@@ -318,7 +327,7 @@ def mc():
     cw2 = cv2.GaussianBlur(cv2.erode(cm.astype(np.uint8), np.ones((3, 3), np.uint8)).astype(np.float32), (0, 0), 1.2) * cm
     out = out * (1 - cw2[..., None]) + rgb_f(newlab) * cw2[..., None]
     rec["c_curtains"] = dict(px=int((cw2 > 0).sum()), mean_Lab_before=[round(Lm, 1), round(am, 1), round(bm, 1)], target="#EDE7DB (91.8, 0.6, 5.6)",
-                             share_of_the_way=kL, method="curtain pixels by colour in each curtain's box (largest part, holes filled); Lab "
+                             share_of_the_way=kL, method="both curtains traced by hand (the plaster is the same colour as the linen); Lab "
                                                          "shift of the mean 60 % toward the card, the folds' own L variation kept")
     o8 = save8(out, os.path.join(HERE, "modern-country-A-fix1.png"))
     a8 = (a * 255 + 0.5).astype(np.uint8)
@@ -327,6 +336,72 @@ def mc():
     mv = np.abs(o8.astype(np.int16) - a8.astype(np.int16)).max(2) > 0
     rec["px_changed_a"], rec["px_changed_b"], rec["px_changed_c"] = int(mv[cw > 0].sum()), int(mv[fw > 0].sum()), int(mv[cw2 > 0].sum())
     rec["base"] = "modern-country-A.png"
+    return rec
+
+
+# ----------------------------------------------------------------------------------------------------------------------------------
+def wm():
+    """the pendant 6 -> 5 rings: ring 5 (the second from the bottom) taken out and ring 6 lifted by the ring pitch (27 px, the same at
+    every column: 26-29) so it hangs right behind ring 4's rim, as ring 5 did; where ring 5 and the old ring 6 showed and the lifted one
+    does not, plain wall: a harmonic field from the wall round the pendant with the wall's own grain from below"""
+    src = os.path.join(HERE, "warm-modern-A-ed4.png")
+    a = load01(src)
+    H, W = a.shape[:2]
+    lin = s2l(a)
+    # rim lines read per column on the frame (dark lines in L*): c4 = ring 4's bottom rim, c5 = ring 5's bottom rim, yb = the pendant's
+    # bottom (ring 6's lower edge); outside ring 6 (x < 1372 or > 1548) only ring 5 hung below ring 4
+    xs_m = np.array([1350, 1360, 1370, 1380, 1390, 1400, 1410, 1420, 1430, 1440, 1450, 1460, 1470, 1480, 1490, 1500, 1510, 1520, 1530, 1540, 1550, 1560, 1570])
+    c4_m = np.array([198, 195, 192, 193, 189, 188, 186, 185, 185, 184, 183, 183, 183, 183, 183, 184, 185, 186, 187, 189, 191, 194, 197])
+    yb_m = np.array([208, 212, 226, 230, 232, 234, 235, 236, 237, 237, 238, 238, 237, 237, 236, 235, 234, 232, 230, 228, 213, 209, 200])
+    D = 27
+    xs = np.arange(W)
+    c4 = np.interp(xs, xs_m, c4_m)
+    yb = np.interp(xs, xs_m, yb_m)
+    X0, X1 = 1344, 1577
+    yy = np.arange(H)[:, None]
+    # the zone that changes: below ring 4's rim (+2, its dark rim line kept) down to the old bottom (+3 for its soft edge)
+    zone = (yy > c4[None, :] + 2) & (yy <= yb[None, :] + 3)
+    zone[:, :X0] = False
+    zone[:, X1:] = False
+    # the lifted ring 6: the pixels from c5 (= c4 + 27) to its bottom, moved up by 27, for x in ring 6's span
+    r6 = np.zeros((H, W), bool)
+    for x in range(1372, 1549):
+        r6[int(c4[x]) + 2:int(yb[x]) + 2 - D, x] = True
+    lifted = np.roll(lin, -D, axis=0)
+    # its soft bottom edge: the last 3 rows fade into the wall
+    r6f = cv2.GaussianBlur(r6.astype(np.float32), (0, 0), 0.9)
+    # the plain wall behind: harmonic from the wall round the pendant (not the pendant, not the art below y 255)
+    box = (slice(150, 262), slice(1300, 1620))
+    pend = np.zeros((H, W), bool)
+    for x in range(X0 - 2, X1 + 2):
+        pend[:int(yb[x]) + 4, x] = True
+    pend[:, :X0 - 2] = False
+    pend[:, X1 + 2:] = False
+    # the upper rings (ring 4 and above) are wider than the zone: keep them out of the wall estimate too (above c4 + 2 within x 1295-1625)
+    upper = np.zeros((H, W), bool)
+    for x in range(1295, 1625):
+        upper[:int(np.interp(x, xs_m, c4_m)) + 3 if 1344 <= x <= 1577 else 200, x] = True
+    wallk = ~(pend | upper)
+    wl, den = nblur(lin, wallk.astype(np.float32), 4)
+    kn = (wallk & (den > 0.3))[box]
+    low = lin.copy()
+    low[box] = harmonic(np.where(kn[..., None], wl[box], 0), kn, f=2, iters=3000)
+    # grain: the wall's own, from 40 rows below
+    G = np.clip(lin / np.maximum(nblur(lin, wallk.astype(np.float32), 2.0)[0], 1e-5), 0.85, 1.15)
+    wall = low * np.roll(G, -40, axis=0)
+    out = lin.copy()
+    zf = cv2.GaussianBlur(zone.astype(np.float32), (0, 0), 0.7) * zone
+    out = out * (1 - zf[..., None]) + wall * zf[..., None]
+    out = out * (1 - r6f[..., None]) + lifted * r6f[..., None]
+    out = np.where(zone[..., None] | (r6f[..., None] > 0), out, lin)
+    o8 = save8(l2s(out), os.path.join(HERE, "warm-modern-A-ed5.png"))
+    a8 = (a * 255 + 0.5).astype(np.uint8)
+    m = cv2.dilate((zone | (r6f > 0)).astype(np.uint8), np.ones((3, 3), np.uint8))
+    rec = check(o8, a8, m, "warm-modern-A-ed5.png")
+    rec.update(base="warm-modern-A-ed4.png", ring_pitch_px=D, rings_before=6, rings_after=5,
+               rim_lines={"x": xs_m.tolist(), "ring4_bottom": c4_m.tolist(), "pendant_bottom": yb_m.tolist()},
+               method="ring 5 taken out; ring 6 (from ring 5's rim line to the bottom) lifted 27 px behind ring 4's rim; the rest of the old "
+                      "rings 5-6 area plain wall (harmonic from the wall round the pendant, grain from 40 rows below)")
     return rec
 
 

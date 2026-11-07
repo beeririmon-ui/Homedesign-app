@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#F4F1EC" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>{{ISSUE}} · הסלון · גיליון בדיקה</title>
+    <meta
+      name="description"
+      content="אב-טיפוס של שכבת הסיפור: פריים מגזין מלא לכל חדר וסגנון, קנה את המראה, וכניסה לכלי עצב בעצמך. טיוטה ובדיקה, לא האתר."
+    />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script type="module" src="/src/test-page/story.ts"></script>
+  </head>
+  <body class="mag st" data-issue="{{ISSUE}}">
+    <a class="mag-skip" href="#list-nordic-A">דילוג לרשימת המוצרים</a>
+    <header class="mag-head st-head" id="mag-head" data-on="stage">
+      <a class="mag-brand" href="#frame-nordic-A" aria-label="{{ISSUE}}, לפתיחה">{{ISSUE}}</a>
+      <p class="mag-run" id="mag-run" aria-hidden="true"></p>
+      <nav class="mag-nav st-nav" aria-label="ראשי">
+        <a href="#tool">עצב בעצמך</a>
+        <button type="button" class="st-cart-btn" id="st-cart-open" aria-haspopup="dialog">
+          סל <span class="st-cart-count num" id="st-cart-count">0</span><span class="st-sr"> פריטים</span>
+        </button>
+      </nav>
+    </header>
+    <main class="mag-issue st-issue" id="top">
+      <!-- 1. the opening: Nordic A, a full story frame (DIR1); the story line of the creative review §3.1 -->
+      {{OPENING}}
+
+      <!-- 2. the story scroll: Nordic B, the window corner (the second frame of §2א.3) -->
+      {{SECOND}}
+
+      <!-- 3. the way into the tool: "עצב בעצמך", the room engine as it is today -->
+      <section class="mag-paper st-tool" id="tool" data-head="עצב בעצמך" aria-labelledby="tool-title">
+        <div class="mag-grid">
+          <p class="mag-run-head mag-col-main" aria-hidden="true">הכלי</p>
+          <h2 id="tool-title" class="mag-h1 mag-col-main">עצב בעצמך</h2>
+          <p class="mag-lead mag-col-main">
+            רוצים לראות את הספה עם כיסוי אחר, או כרית בגוון אחר? בסלון הנורדי כל פריט מתחלף במקום, והחדר מתעדכן איתו. משם ממשיכים בהליכה אל שאר הבית.
+          </p>
+          <p class="mag-col-main st-tool-row">
+            <a class="mag-btn mag-btn-primary st-btn-link" id="st-tool" href="{{TOOL_HREF}}">לעיצוב הסלון</a>
+          </p>
+          <p class="mag-cap mag-col-main">בגרסת הבדיקה הכלי פותח את הסלון הנורדי של היום, בבית המשותף.</p>
+        </div>
+      </section>
+
+      <!-- 4. "בסגנונות אחרים": warm modern, a draft (QA: almost); the other styles only as "בגיליונות הבאים" (ART7) -->
+      <section class="mag-paper st-others" id="others" data-head="בסגנונות אחרים" aria-labelledby="others-title">
+        <div class="mag-grid">
+          <h2 id="others-title" class="mag-h2 mag-col-main">בסגנונות אחרים</h2>
+          <p class="mag-lead mag-col-main">אותו סלון, בית אחר: לכל סגנון אדריכלות, אור ושעה משלו.</p>
+          {{OTHERS}}
+        </div>
+      </section>
+      {{OTHER_FRAME}}
+
+      <footer class="mag-paper mag-foot st-foot" data-head="">
+        <div class="mag-grid">
+          <p class="mag-cap mag-col-main">
+            {{MARK}}: הפריימים הם פריימי מבחן ולא נכסי האתר, והם מופיעים רק בעמוד הזה. הנקודות זמניות, ממוקמות בעין. המחירים לפי קוד התמחור של האתר, והסל
+            הוא סל בדיקה בדפדפן. {{NOTES}}.
+          </p>
+          <p class="mag-cap mag-col-main">
+            <a class="mag-link" href="/test/">לעמוד הבדיקה הקודם</a> · <a class="mag-link" href="/">לאתר</a> ·
+            <a class="mag-link" href="/accessibility/">הצהרת נגישות</a>
+          </p>
+        </div>
+      </footer>
+    </main>
+
+    <!-- "קנה את המראה": one sheet, filled from the data block for the dot or the row that opened it -->
+    <dialog class="st-sheet" id="st-sheet" aria-labelledby="st-sheet-name" aria-describedby="st-sheet-detail">
+      <div class="st-sheet-in">
+        <div class="st-sheet-top">
+          <p class="st-kicker" id="st-sheet-kicker">קנה את המראה</p>
+          <button type="button" class="st-close" id="st-sheet-close" aria-label="סגירה">×</button>
+        </div>
+        <figure class="st-photo" id="st-sheet-photo">
+          <img id="st-sheet-img" alt="" decoding="async" hidden />
+          <span class="st-photo-none" id="st-sheet-none" hidden><span class="st-swatch-lg" aria-hidden="true"></span><span>צילום הספק עוד לא הורד לעמוד הבדיקה.</span></span>
+          <figcaption class="mag-cap" id="st-sheet-cap">צילום הספק.</figcaption>
+        </figure>
+        <h2 class="st-name" id="st-sheet-name" tabindex="-1"></h2>
+        <p class="mag-credit-detail st-detail" id="st-sheet-detail"></p>
+        <ul class="st-notes" id="st-sheet-notes"></ul>
+        <div class="st-actions" id="st-sheet-actions">
+          <button type="button" class="mag-btn mag-btn-primary" id="st-add">הוספה לסל</button>
+          <p class="mag-cap st-why" id="st-why" hidden></p>
+        </div>
+        <p class="st-links" id="st-sheet-links">
+          <a class="mag-link" id="st-page" href="/">לדף המוצר</a><span class="st-sep" aria-hidden="true"> · </span
+          ><a class="mag-link" id="st-try" href="{{TOOL_HREF}}">לנסות בחדר: עצב בעצמך</a>
+        </p>
+        <nav class="st-browse" aria-label="עוד במראה הזה">
+          <button type="button" class="st-step" id="st-prev">הקודם</button>
+          <span class="mag-cap num" id="st-pos" aria-hidden="true"></span>
+          <button type="button" class="st-step" id="st-next">הבא</button>
+        </nav>
+      </div>
+    </dialog>
+
+    <!-- the test cart (an in-browser mock of the store API: createCart, getCart, setItem) -->
+    <dialog class="st-sheet st-cart" id="st-cart" aria-labelledby="st-cart-title">
+      <div class="st-sheet-in">
+        <div class="st-sheet-top">
+          <h2 class="st-name" id="st-cart-title" tabindex="-1">סל הבדיקה</h2>
+          <button type="button" class="st-close" id="st-cart-close" aria-label="סגירה">×</button>
+        </div>
+        <ol class="mag-credits st-cart-lines" id="st-cart-lines"></ol>
+        <p class="st-cart-empty mag-cap" id="st-cart-empty">הסל ריק.</p>
+        <p class="st-total" id="st-cart-total"></p>
+        <p class="mag-cap">סל בדיקה בדפדפן: התשלום לא פעיל בעמוד הזה.</p>
+        <p><button type="button" class="mag-btn mag-btn-secondary" id="st-cart-clear">ריקון הסל</button></p>
+      </div>
+    </dialog>
+
+    <div class="mag-live" id="mag-live" aria-live="polite" aria-atomic="true"></div>
+    <script type="application/json" id="st-data">
+      {{DATA}}
+    </script>
+  </body>
+</html>
