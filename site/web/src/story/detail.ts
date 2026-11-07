@@ -6,7 +6,7 @@
  */
 import type { StoryCart } from './story-cart';
 import { priceHe } from './story-cart';
-import { choose, creditOf, fromQuery, photoOf, selection, storyNote, storySku, toQuery, whyOf, type DetailData, type DSku } from './detail-model';
+import { choose, creditOf, fromQuery, photoOf, priceOf, selection, storyNote, storySku, toQuery, whyOf, type DetailData, type DSku, type Pack } from './detail-model';
 import { availableValues } from '@hd/shared/picker';
 
 type Ctx = {
@@ -38,6 +38,10 @@ export function initDetail({ d, cart, announce, mark, counted }: Ctx): { current
   const pool = d.skus.map((k) => ({ variant_id: k.key, values: k.values, available: k.available }));
   let sku = fromQuery(d, location.search);
   let timer: ReturnType<typeof setTimeout> | undefined;
+  // SET1: the set by default; the single piece where the supplier offers one
+  let pack: Pack = 'set';
+  const title = $('st-pd-title')!;
+  const photoFig = $('st-pd-photo')!;
 
   const items = (n: number) => (n === 1 ? 'פריט אחד' : `${n} פריטים`);
   function showInCart(): void {
@@ -54,7 +58,9 @@ export function initDetail({ d, cart, announce, mark, counted }: Ctx): { current
       return;
     }
     if (el.getAttribute('src') !== im.src) {
-      el.srcset = im.srcset;
+      // the frame's crop has no srcset: it is shown at its own size, never enlarged (design notes §6)
+      if (im.srcset) el.srcset = im.srcset;
+      else el.removeAttribute('srcset');
       el.src = im.src;
       el.width = im.w;
       el.height = im.h;
@@ -78,13 +84,31 @@ export function initDetail({ d, cart, announce, mark, counted }: Ctx): { current
       const cur = document.querySelector<HTMLElement>(`.st-pd-axis[data-axis="${a.id}"] .st-pd-current`);
       if (cur) cur.textContent = a.values.find((v) => v.id === sel[a.id])?.label_he ?? '';
     });
-    price.textContent = sku.price_he ?? '';
-    price.hidden = !sku.price_he;
-    credit.textContent = creditOf(d, sku);
+    if (pack === 'unit' && sku.unit_price_agorot === null) pack = 'set';
+    const pr = priceOf(sku, pack);
+    price.textContent = pr.he ? `${pr.he}${pr.estimated ? ' (משוער)' : ''}` : '';
+    price.hidden = !pr.he;
+    credit.textContent = creditOf(d, sku, pack);
+    for (const el of document.querySelectorAll<HTMLElement>('[data-pack-price]'))
+      el.textContent = (el.dataset.packPrice === 'unit' ? sku.unit_price_he : sku.price_he) ?? '';
+    const unitInput = document.querySelector<HTMLInputElement>('input[name="st-pack"][value="unit"]');
+    if (unitInput) {
+      unitInput.disabled = sku.unit_price_agorot === null;
+      unitInput.closest('label')?.classList.toggle('is-off', unitInput.disabled);
+    }
+    for (const r of document.querySelectorAll<HTMLInputElement>('input[name="st-pack"]')) r.checked = r.value === pack;
+    // the title follows the colour of the choice, never its size (design notes §6)
+    title.textContent = sku.title_he;
+    document.title = `${sku.title_he} · ${document.title.split(' · ').slice(1).join(' · ')}`;
     const shown = photoOf(d, sku);
     setImage(img, shown.image, shown.alt);
+    img.classList.toggle('is-frame', shown.kind === 'frame');
     none.hidden = !!shown.image;
+    none.style.setProperty('--swatch', shown.swatch);
+    none.querySelector('span:last-child')!.textContent = shown.caption;
     photoCap.textContent = shown.caption;
+    // a close-up replaces the frame's crop: the crop is not a second picture
+    photoFig.hidden = !!sku.closeup && shown.kind !== 'supplier';
     media.classList.toggle('has-closeup', !!sku.closeup);
     setImage(cu, sku.closeup, sku.closeup?.alt_he ?? '');
     cuEmpty.hidden = !!sku.closeup;
@@ -116,6 +140,12 @@ export function initDetail({ d, cart, announce, mark, counted }: Ctx): { current
       .querySelector<HTMLSelectElement>(`select[data-axis="${a.id}"]`)
       ?.addEventListener('change', (e) => pick(i, (e.currentTarget as HTMLSelectElement).value));
   });
+  for (const r of document.querySelectorAll<HTMLInputElement>('input[name="st-pack"]'))
+    r.addEventListener('change', () => {
+      if (!r.checked) return;
+      pack = r.value as Pack;
+      render(true);
+    });
   $('st-pd-back')?.addEventListener('click', () => {
     sku = storySku(d);
     render(true);
@@ -124,7 +154,7 @@ export function initDetail({ d, cart, announce, mark, counted }: Ctx): { current
   add.addEventListener('click', async () => {
     if (!sku.sellable || !sku.variant_id) return;
     try {
-      const c = await cart.add(sku.variant_id);
+      const c = await cart.add(sku.variant_id, 1, pack);
       mark('cart:add', sku.variant_id);
       counted();
       showInCart();
