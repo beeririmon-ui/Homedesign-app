@@ -1,0 +1,1321 @@
+{
+ "id": "ged-register-2026-11-07-r4",
+ "version": 4,
+ "date": "2026-11-07",
+ "by": "qa-agent",
+ "supersedes": "qa/reports/ged-register-2026-11-07-r3.json",
+ "schema": {
+  "frames": "frames.<key>: key = the frame file's name without .png (the qa_key)",
+  "state": "one of not_yet | almost | final_test | approved_for_site (docs/ops/quality-gate-g-ed-2026-11-07.md §3); master-designer's eye verdicts are folded in: a pending eye verdict keeps a frame at 'almost' at most, a failed one makes it 'not_yet'",
+  "rows": "frames.<key>.rows: one row per product (and per option when the frame shows two options of one card). card_id = the card's id; option = an object of the card's option value ids (from data/story/story.json or the card's axes), a label as text when no id matched, or null for the card's default; verdict = yes | partly | no ('partly' is 'partial'); note = why; dot = yes | no | closeup_only (G-ED.5 and recipe §6: a dot only on 'yes', or on 'partly' through a faithful close-up)",
+  "compat": "every row also carries the fields site/tools/lib/qa-frames.ts reads today: card (card_id plus the label), present, faithful (= verdict), why (= note)",
+  "fixed_furniture": "frames.<key>.fixed_furniture: the board furniture without a card (no dot); kept out of rows",
+  "superseded_by": "older frame keys that the site may still name, mapped to the frame that replaces them",
+  "pending_qa": "frames that landed after this version and are not checked yet",
+  "closeups": "closeups.<qa_key>: layer 2's close-ups, keyed by their qa_key, in the same shape as frames.<key> (file, state of the four, rows with card_id, option, verdict, note, dot); site/tools/lib/qa-frames.ts reads frames.<key> ?? closeups.<key>",
+  "units_in_frame": "optional on a row: how many units of that product and option the frame shows, when more than one (G-ED.6: a second unit the brief asks for is our product, not an imitation; the story point says it and 'buy the look' adds that many)",
+  "tool": "tool.<room/style/phase>: G1/G2 results of tool assets, kept apart from the editorial frames; the site does not read it"
+ },
+ "versioning": "a new dated file per QA round, never an edit: qa/reports/ged-register-<date>.json, and qa/reports/ged-register-<date>-r<N>.json for a second round the same day; each has version (+1) and supersedes (the previous file). The site reads the file with the highest version",
+ "frames": {
+  "nordic-A-ed4": {
+   "file": "assets/renders/editorial-phase-b-2026-11-06/nordic-A-ed4.png",
+   "state": "final_test",
+   "state_source": "qa/reports/2026-11-07-editorial-fin2-ed4-country.md (shown to the owner 2026-11-07)",
+   "designer_eye": "shown as final test before the gate; no open eye item",
+   "rows": [
+    {
+     "card_id": "cushions-cj-boucle-teddy",
+     "option": null,
+     "verdict": "yes",
+     "note": "white boucle",
+     "dot": "yes",
+     "card": "cushions-cj-boucle-teddy",
+     "present": true,
+     "faithful": "yes",
+     "why": "white boucle"
+    },
+    {
+     "card_id": "cushions-cj-knitted-chenille-bean-green",
+     "option": null,
+     "verdict": "yes",
+     "note": "ED4: sage chenille with the raised bubble grid, as p1-chenille-green; a lighter mint-sage, inside the card's family",
+     "dot": "yes",
+     "card": "cushions-cj-knitted-chenille-bean-green",
+     "present": true,
+     "faithful": "yes",
+     "why": "ED4: sage chenille with the raised bubble grid, as p1-chenille-green; a lighter mint-sage, inside the card's family"
+    },
+    {
+     "card_id": "cushions-cj-linen-look-charcoal",
+     "option": null,
+     "verdict": "yes",
+     "note": "ED4: a square heathered slub-linen cushion (reads 50 x 50 at the same lean as the 45 x 45 sage one; width ratio 1.26 vs 1.11, inside +-15%); the back cushion behind it is continuous",
+     "dot": "yes",
+     "card": "cushions-cj-linen-look-charcoal",
+     "present": true,
+     "faithful": "yes",
+     "why": "ED4: a square heathered slub-linen cushion (reads 50 x 50 at the same lean as the 45 x 45 sage one; width ratio 1.26 vs 1.11, inside +-15%); the back cushion behind it is continuous"
+    },
+    {
+     "card_id": "sofa-cover-cj-cotton-muslin-fringe",
+     "option": null,
+     "verdict": "yes",
+     "note": "crinkled muslin, fringe",
+     "dot": "yes",
+     "card": "sofa-cover-cj-cotton-muslin-fringe",
+     "present": true,
+     "faithful": "yes",
+     "why": "crinkled muslin, fringe"
+    },
+    {
+     "card_id": "table-runner-cj-linen-look-sage-fringe",
+     "option": null,
+     "verdict": "yes",
+     "note": "sage, fringe, across and hanging",
+     "dot": "yes",
+     "card": "table-runner-cj-linen-look-sage-fringe",
+     "present": true,
+     "faithful": "yes",
+     "why": "sage, fringe, across and hanging"
+    },
+    {
+     "card_id": "candle-holders-cj-travertine-pedestal",
+     "option": null,
+     "verdict": "yes",
+     "note": "the pedestal pair",
+     "dot": "yes",
+     "card": "candle-holders-cj-travertine-pedestal",
+     "present": true,
+     "faithful": "yes",
+     "why": "the pedestal pair"
+    },
+    {
+     "card_id": "bowl-cj-glutinous-white-belly-bowl-21",
+     "option": null,
+     "verdict": "yes",
+     "note": "ED4: wider and shallower with a flared lip, H/D ~0.33 (card 0.30); warm white",
+     "dot": "yes",
+     "card": "bowl-cj-glutinous-white-belly-bowl-21",
+     "present": true,
+     "faithful": "yes",
+     "why": "ED4: wider and shallower with a flared lip, H/D ~0.33 (card 0.30); warm white"
+    },
+    {
+     "card_id": "framed-art-aliexpress-minimal-geometric-triptych-prints",
+     "option": null,
+     "verdict": "yes",
+     "note": "three different prints, black frames, mats",
+     "dot": "yes",
+     "card": "framed-art-aliexpress-minimal-geometric-triptych-prints",
+     "present": true,
+     "faithful": "yes",
+     "why": "three different prints, black frames, mats"
+    },
+    {
+     "card_id": "accent-sconces-cj-travertine-block-updown-8x16",
+     "option": null,
+     "verdict": "yes",
+     "note": "the flat block, now about 7.3 x 18 cm against the nearest 50 cm frame (code x0.36): within +-15 %",
+     "dot": "yes",
+     "card": "accent-sconces-cj-travertine-block-updown-8x16",
+     "present": true,
+     "faithful": "yes",
+     "why": "the flat block, now about 7.3 x 18 cm against the nearest 50 cm frame (code x0.36): within +-15 %"
+    },
+    {
+     "card_id": "pendant-cj-silk-ribbed-pumpkin-40",
+     "option": null,
+     "verdict": "yes",
+     "note": "form right; about 0.7x the ED1 size, now plausibly ~40 cm",
+     "dot": "yes",
+     "card": "pendant-cj-silk-ribbed-pumpkin-40",
+     "present": true,
+     "faithful": "yes",
+     "why": "form right; about 0.7x the ED1 size, now plausibly ~40 cm"
+    },
+    {
+     "card_id": "rug-cj-braided-wool-natural",
+     "option": null,
+     "verdict": "partly",
+     "note": "pile, not the card's flat braid; accepted as the direction with a note (designer); EDR1 failed (mc1.json, rugs)",
+     "dot": "closeup_only",
+     "card": "rug-cj-braided-wool-natural",
+     "present": true,
+     "faithful": "partly",
+     "why": "pile, not the card's flat braid; accepted as the direction with a note (designer); EDR1 failed (mc1.json, rugs)"
+    },
+    {
+     "card_id": "basket-cj-jute-rope-cylinder",
+     "option": null,
+     "verdict": "yes",
+     "note": "jute rope cylinder with loop handles, in the corner",
+     "dot": "yes",
+     "card": "basket-cj-jute-rope-cylinder",
+     "present": true,
+     "faithful": "yes",
+     "why": "jute rope cylinder with loop handles, in the corner"
+    },
+    {
+     "card_id": "planter-cj-seagrass-belly",
+     "option": null,
+     "verdict": "yes",
+     "note": "exactly one, with the olive tree",
+     "dot": "yes",
+     "card": "planter-cj-seagrass-belly",
+     "present": true,
+     "faithful": "yes",
+     "why": "exactly one, with the olive tree"
+    }
+   ],
+   "fixed_furniture": [
+    {
+     "what": "fixed furniture: sofa, coffee table, armchair (board)",
+     "verdict": "yes",
+     "note": "no card: no dot"
+    }
+   ]
+  },
+  "nordic-B-fin": {
+   "file": "assets/renders/editorial-phase-b-2026-11-06/nordic-B-fin.png",
+   "state": "final_test",
+   "state_source": "qa/reports/2026-11-07-editorial-fin2-ed4-country.md",
+   "designer_eye": "as nordic-A",
+   "rows": [
+    {
+     "card_id": "vase-aliexpress-vintage-distressed-clay-vase-589009",
+     "option": null,
+     "verdict": "yes",
+     "note": "unchanged",
+     "dot": "yes",
+     "card": "vase-aliexpress-vintage-distressed-clay-vase-589009",
+     "present": true,
+     "faithful": "yes",
+     "why": "unchanged"
+    },
+    {
+     "card_id": "basket-cj-jute-rope-cylinder",
+     "option": null,
+     "verdict": "yes",
+     "note": "unchanged",
+     "dot": "yes",
+     "card": "basket-cj-jute-rope-cylinder",
+     "present": true,
+     "faithful": "yes",
+     "why": "unchanged"
+    },
+    {
+     "card_id": "magazine-holder-cj-felt-log-basket",
+     "option": null,
+     "verdict": "yes",
+     "note": "unchanged",
+     "dot": "yes",
+     "card": "magazine-holder-cj-felt-log-basket",
+     "present": true,
+     "faithful": "yes",
+     "why": "unchanged"
+    },
+    {
+     "card_id": "wall-decor-cj-corn-husk-round-38",
+     "option": null,
+     "verdict": "yes",
+     "note": "unchanged; the rim still darker and wider than 'a thin honey rim' (a note)",
+     "dot": "yes",
+     "card": "wall-decor-cj-corn-husk-round-38",
+     "present": true,
+     "faithful": "yes",
+     "why": "unchanged; the rim still darker and wider than 'a thin honey rim' (a note)"
+    },
+    {
+     "card_id": "rug-cj-braided-wool-natural",
+     "option": null,
+     "verdict": "yes",
+     "note": "now a flat weave in fine tone-on-tone cream lines",
+     "dot": "yes",
+     "card": "rug-cj-braided-wool-natural",
+     "present": true,
+     "faithful": "yes",
+     "why": "now a flat weave in fine tone-on-tone cream lines"
+    },
+    {
+     "card_id": "sofa-cover-cj-cotton-muslin-fringe",
+     "option": null,
+     "verdict": "yes",
+     "note": "new: ivory muslin waffle with a short fringe over the armchair's arm, replacing the generic taupe throw",
+     "dot": "yes",
+     "card": "sofa-cover-cj-cotton-muslin-fringe",
+     "present": true,
+     "faithful": "yes",
+     "why": "new: ivory muslin waffle with a short fringe over the armchair's arm, replacing the generic taupe throw"
+    },
+    {
+     "card_id": "curtains-aliexpress-linen-blend-s-fold-180502",
+     "option": null,
+     "verdict": "partly",
+     "note": "reasonable; the S-fold heading is outside the frame",
+     "dot": "closeup_only",
+     "card": "curtains-aliexpress-linen-blend-s-fold-180502",
+     "present": true,
+     "faithful": "partly",
+     "why": "reasonable; the S-fold heading is outside the frame"
+    }
+   ],
+   "fixed_furniture": [
+    {
+     "what": "fixed furniture: armchair (board)",
+     "verdict": "yes",
+     "note": "no card: no dot"
+    }
+   ]
+  },
+  "warm-modern-A-ed5": {
+   "file": "assets/renders/editorial-phase-b-2026-11-06/warm-modern-A-ed5.png",
+   "state": "not_yet",
+   "state_source": "QA: qa/reports/ged-register-2026-11-07-r3.md (set A against the SKU photos); G-ED.5: a starring product at 'no' blocks final_test. Eye: G-ED.10 / G-ED.13 pass (unchanged). Note: proposals §12 reads 'stays final test with one dot fewer'; that conflicts with G-ED.5 ('no' never) and needs the manager / owner",
+   "designer_eye": {
+    "G-ED.10": "pass",
+    "G-ED.13": "pass"
+   },
+   "rows": [
+    {
+     "card_id": "framed-art-aliexpress-frameless-minimalist-wall-art-631735",
+     "option": null,
+     "verdict": "yes",
+     "note": "unchanged",
+     "dot": "yes",
+     "card": "framed-art-aliexpress-frameless-minimalist-wall-art-631735",
+     "present": true,
+     "faithful": "yes",
+     "why": "unchanged"
+    },
+    {
+     "card_id": "accent-sconces-aliexpress-travertine-cylinder-walnut-choice",
+     "option": null,
+     "verdict": "yes",
+     "note": "straight cylinder on walnut",
+     "dot": "yes",
+     "card": "accent-sconces-aliexpress-travertine-cylinder-walnut-choice",
+     "present": true,
+     "faithful": "yes",
+     "why": "straight cylinder on walnut"
+    },
+    {
+     "card_id": "floor-lamp-cj-pleated-walnut-stem-158",
+     "option": null,
+     "verdict": "yes",
+     "note": "fin2: the brass now reads satin/brushed (p99 luminance 0.337 -> 0.272), no artefact at 100%",
+     "dot": "yes",
+     "card": "floor-lamp-cj-pleated-walnut-stem-158",
+     "present": true,
+     "faithful": "yes",
+     "why": "fin2: the brass now reads satin/brushed (p99 luminance 0.337 -> 0.272), no artefact at 100%"
+    },
+    {
+     "card_id": "pendant-cj-tiered-fabric-drum",
+     "option": null,
+     "verdict": "yes",
+     "note": "ed5: 5 rings, the widest third, 2 below it, as the card",
+     "dot": "yes",
+     "card": "pendant-cj-tiered-fabric-drum",
+     "present": true,
+     "faithful": "yes",
+     "why": "ed5: 5 rings, the widest third, 2 below it, as the card"
+    },
+    {
+     "card_id": "cushions-cj-boucle-teddy",
+     "option": null,
+     "verdict": "yes",
+     "note": "white boucle, two in the frame",
+     "dot": "yes",
+     "card": "cushions-cj-boucle-teddy (White)",
+     "present": true,
+     "faithful": "yes",
+     "why": "white boucle, two in the frame"
+    },
+    {
+     "card_id": "cushions-cj-boucle-teddy",
+     "option": {
+      "color": "milk-tea-color",
+      "size": "50x50"
+     },
+     "verdict": "partly",
+     "note": "against the SKU photo ('milk tea color', view only): a pale cream boucle, barely off its White SKU in the same photo setup (L* +1.1, a* +0.9, b* +1.6); in the frame it is a light tan, against the white stoneware vase in the same sun L* -7.9, a* +4.4, b* +8.5. Boucle and size right. Fix, 0 tokens: shift it in code toward the photo's relation to white (a G-ED.3 fix of the same SKU), then QA",
+     "dot": "no",
+     "card": "cushions-cj-boucle-teddy (Milk tea)",
+     "present": true,
+     "faithful": "partly",
+     "why": "against the SKU photo ('milk tea color', view only): a pale cream boucle, barely off its White SKU in the same photo setup (L* +1.1, a* +0.9, b* +1.6); in the frame it is a light tan, against the white stoneware vase in the same sun L* -7.9, a* +4.4, b* +8.5. Boucle and size right. Fix, 0 tokens: shift it in code toward the photo's relation to white (a G-ED.3 fix of the same SKU), then QA"
+    },
+    {
+     "card_id": "cushions-cj-knitted-chenille-bean-green",
+     "option": {
+      "color": "21-camel-color"
+     },
+     "verdict": "no",
+     "note": "against the SKU photo (CJYD282217003CX, '21 Camel Color', view only), not the card's HEX: the photo is a taupe-grey heathered chenille with a woven grid (relative to its white throw a* +2.2, b* +5.8); the frame shows a caramel crinkled cushion (relative to the white boucle in its light a* +5.7, b* +7.4), neither the colour nor the grid. The earlier 'yes' (phase B) was read against the card's name and HEX, with no SKU photo. Fix: a verified option of this card (proposals §12.4) and a local pass, not a recolour",
+     "dot": "no",
+     "card": "cushions-cj-knitted-chenille-bean-green (Camel)",
+     "present": true,
+     "faithful": "no",
+     "why": "against the SKU photo (CJYD282217003CX, '21 Camel Color', view only), not the card's HEX: the photo is a taupe-grey heathered chenille with a woven grid (relative to its white throw a* +2.2, b* +5.8); the frame shows a caramel crinkled cushion (relative to the white boucle in its light a* +5.7, b* +7.4), neither the colour nor the grid. The earlier 'yes' (phase B) was read against the card's name and HEX, with no SKU photo. Fix: a verified option of this card (proposals §12.4) and a local pass, not a recolour"
+    },
+    {
+     "card_id": "sofa-cover-cj-cotton-muslin-fringe",
+     "option": {
+      "other": "flax-brown"
+     },
+     "verdict": "yes",
+     "note": "against the SKU photo (flax brown, view only): a greige crinkled muslin with a short fringe; the frame's is warmer in the golden light, same family: yes",
+     "dot": "yes",
+     "card": "sofa-cover-cj-cotton-muslin-fringe (Flax)",
+     "present": true,
+     "faithful": "yes",
+     "why": "against the SKU photo (flax brown, view only): a greige crinkled muslin with a short fringe; the frame's is warmer in the golden light, same family: yes"
+    },
+    {
+     "card_id": "candle-holders-cj-travertine-pedestal",
+     "option": null,
+     "verdict": "yes",
+     "note": "the pedestal pair",
+     "dot": "yes",
+     "card": "candle-holders-cj-travertine-pedestal",
+     "present": true,
+     "faithful": "yes",
+     "why": "the pedestal pair"
+    },
+    {
+     "card_id": "bowl-cj-matte-black-bowl-20",
+     "option": null,
+     "verdict": "yes",
+     "note": "exactly one now",
+     "dot": "yes",
+     "card": "bowl-cj-matte-black-bowl-20",
+     "present": true,
+     "faithful": "yes",
+     "why": "exactly one now"
+    },
+    {
+     "card_id": "vase-cj-textured-white-stoneware",
+     "option": null,
+     "verdict": "yes",
+     "note": "new: tall, crinkle-relief white, as the card photo",
+     "dot": "yes",
+     "card": "vase-cj-textured-white-stoneware",
+     "present": true,
+     "faithful": "yes",
+     "why": "new: tall, crinkle-relief white, as the card photo"
+    },
+    {
+     "card_id": "rug-cj-braided-wool-natural",
+     "option": null,
+     "verdict": "partly",
+     "note": "pile, not the card's flat braid; accepted as the direction with a note (designer); EDR1 failed (mc1.json, rugs)",
+     "dot": "closeup_only",
+     "card": "rug-cj-braided-wool-natural",
+     "present": true,
+     "faithful": "partly",
+     "why": "pile, not the card's flat braid; accepted as the direction with a note (designer); EDR1 failed (mc1.json, rugs)"
+    }
+   ],
+   "fixed_furniture": [],
+   "open": [
+    "the camel chenille: sourcing verifies a caramel option of this card by photo (6 Brown, 7 Earthy Yellow), then a local pass of the cushion (~650, owner's choice, proposals §12.4)",
+    "the milk-tea boucle: a 0-token recolour toward its SKU photo, then QA"
+   ]
+  },
+  "boho-A-fin6": {
+   "file": "assets/renders/editorial-phase-b-2026-11-06/boho-A-fin6.png",
+   "state": "almost",
+   "state_source": "QA: qa/reports/ged-register-2026-11-07-r3.md (the planter's base against the card's photos); eye: proposals §5, §7 (pass)",
+   "designer_eye": {
+    "G-ED.10": "pass",
+    "G-ED.13": "pass",
+    "G-ED.16": "the clear-glass kettle and glass: written exception for this frame only (§7), no dot"
+   },
+   "rows": [
+    {
+     "card_id": "wall-decor-aliexpress-natural-raffia-woven-bohemian-763597",
+     "option": null,
+     "verdict": "yes",
+     "note": "fin2: ~166 px = the card's 30 cm against the frames; cowrie ring and coiled centre unchanged",
+     "dot": "yes",
+     "card": "wall-decor-aliexpress-natural-raffia-woven-bohemian-763597",
+     "present": true,
+     "faithful": "yes",
+     "why": "fin2: ~166 px = the card's 30 cm against the frames; cowrie ring and coiled centre unchanged"
+    },
+    {
+     "card_id": "wall-sconce-aliexpress-rattan-bamboo-wall-lamp-671943",
+     "option": null,
+     "verdict": "yes",
+     "note": "woven bamboo ball on a wooden arm and round wood plate, glowing from inside, as the card photo",
+     "dot": "yes",
+     "card": "wall-sconce-aliexpress-rattan-bamboo-wall-lamp-671943 (x2)",
+     "present": true,
+     "faithful": "yes",
+     "why": "woven bamboo ball on a wooden arm and round wood plate, glowing from inside, as the card photo"
+    },
+    {
+     "card_id": "table-runner-aliexpress-boho-macrame-table-runners-263532",
+     "option": null,
+     "verdict": "yes",
+     "note": "macrame with a jute centre stripe and a long fringe",
+     "dot": "yes",
+     "card": "table-runner-aliexpress-boho-macrame-table-runners-263532",
+     "present": true,
+     "faithful": "yes",
+     "why": "macrame with a jute centre stripe and a long fringe"
+    },
+    {
+     "card_id": "cushions-cj-washed-cotton-frayed",
+     "option": {
+      "other": "rust-orange"
+     },
+     "verdict": "yes",
+     "note": "rust, frayed edge. Two units in the frame (G-ED.6, register v4): the left one, without a story point, is the same product and option as the pointed one (face dE76 1.5, hue +0.5 deg, the same washed weave and frayed edge at x3), and the brief asks for 'Rust Orange x2' (briefs/render-editorial-phase-b-2026-11-06.md, the products table and the boho prompt): a second unit of our product, not an imitation",
+     "dot": "yes",
+     "card": "cushions-cj-washed-cotton-frayed (Rust Orange) x2",
+     "present": true,
+     "faithful": "yes",
+     "why": "rust, frayed edge. Two units in the frame (G-ED.6, register v4): the left one, without a story point, is the same product and option as the pointed one (face dE76 1.5, hue +0.5 deg, the same washed weave and frayed edge at x3), and the brief asks for 'Rust Orange x2' (briefs/render-editorial-phase-b-2026-11-06.md, the products table and the boho prompt): a second unit of our product, not an imitation",
+     "units_in_frame": 2,
+     "ged6": "second unit of our product (brief: x2), not an imitation"
+    },
+    {
+     "card_id": "cushions-cj-sandstone-chenille-flange",
+     "option": "olive",
+     "verdict": "yes",
+     "note": "olive nubby chenille with a flat flange",
+     "dot": "yes",
+     "card": "cushions-cj-sandstone-chenille-flange (olive)",
+     "present": true,
+     "faithful": "yes",
+     "why": "olive nubby chenille with a flat flange"
+    },
+    {
+     "card_id": "sofa-cover-cj-washed-hemp-throw",
+     "option": {
+      "other": "raw-jute-color"
+     },
+     "verdict": "yes",
+     "note": "washed hemp in raw jute, draped",
+     "dot": "yes",
+     "card": "sofa-cover-cj-washed-hemp-throw (Raw Jute)",
+     "present": true,
+     "faithful": "yes",
+     "why": "washed hemp in raw jute, draped"
+    },
+    {
+     "card_id": "planter-zendrop-seagrass-belly-basket-45",
+     "option": null,
+     "verdict": "partly",
+     "note": "the frame's planter has a black-dipped base. The card's cached gallery photo (urls[0], assets/renders/house-nordic-2026-10-25/refs/...a75cb5e9...jpg) shows natural and black-dipped two-tone baskets side by side, and render-agent's reference crop (ed2-crops/bo-planter) picked a dipped one. But the card is 'natural' and its SKUs are size-only (the card's own note: 'confirm the natural colour before ordering'): the base exists in the listing, not as a chosen option. Fix: sourcing confirms which colour the 45 x 36 SKU ships; if natural, a 0-token recolour of the base",
+     "dot": "no",
+     "card": "planter-zendrop-seagrass-belly-basket-45",
+     "present": true,
+     "faithful": "partly",
+     "why": "the frame's planter has a black-dipped base. The card's cached gallery photo (urls[0], assets/renders/house-nordic-2026-10-25/refs/...a75cb5e9...jpg) shows natural and black-dipped two-tone baskets side by side, and render-agent's reference crop (ed2-crops/bo-planter) picked a dipped one. But the card is 'natural' and its SKUs are size-only (the card's own note: 'confirm the natural colour before ordering'): the base exists in the listing, not as a chosen option. Fix: sourcing confirms which colour the 45 x 36 SKU ships; if natural, a 0-token recolour of the base"
+    },
+    {
+     "card_id": "basket-cj-seagrass-belly-xl",
+     "option": null,
+     "verdict": "yes",
+     "note": "fin4 x0.75 (inside +-15% of the cards' ratio); fin5: two handles",
+     "dot": "yes",
+     "card": "basket-cj-seagrass-belly-xl",
+     "present": true,
+     "faithful": "yes",
+     "why": "fin4 x0.75 (inside +-15% of the cards' ratio); fin5: two handles"
+    },
+    {
+     "card_id": "pouf-cj-cotton-knit-ball-cover",
+     "option": "natural",
+     "verdict": "yes",
+     "note": "chunky natural knit ball",
+     "dot": "yes",
+     "card": "pouf-cj-cotton-knit-ball-cover (natural)",
+     "present": true,
+     "faithful": "yes",
+     "why": "chunky natural knit ball"
+    }
+   ],
+   "fixed_furniture": [],
+   "open": [
+    "sourcing-agent: the colour the planter's 45 x 36 SKU ships (natural or black-dipped); then 'yes' as is, or a 0-token recolour of the base"
+   ]
+  },
+  "japandi-A-ed5": {
+   "file": "assets/renders/editorial-phase-b-2026-11-06/japandi-A-ed5.png",
+   "state": "not_yet",
+   "state_source": "qa/reports/2026-11-07-ged-codefix-mc1-clay.md; the designer holds it until sourcing (docs/proposals/tool-shells-and-qa-items-2026-11-07.md)",
+   "open": [
+    "the pendant (sourcing, then a pass; JP1)",
+    "the tripod column lantern (reads as a copy, G-ED.15)",
+    "G-ED.12: raw 2.09 % clipped, mostly the pendant"
+   ],
+   "rows": [
+    {
+     "card_id": "framed-art-aliexpress-japanese-wabi-sabi-tree-176323",
+     "option": null,
+     "verdict": "yes",
+     "note": "bare-tree prints and a dark panel, in thin black frames",
+     "dot": "yes",
+     "card": "framed-art-aliexpress-japanese-wabi-sabi-tree-176323 (3 of the series)",
+     "present": true,
+     "faithful": "yes",
+     "why": "bare-tree prints and a dark panel, in thin black frames"
+    },
+    {
+     "card_id": "pendant-cj-pleated-pumpkin-lantern-40",
+     "option": null,
+     "verdict": "partly",
+     "note": "a tall pleated paper egg (H/W ~1.3), as the reference crop render-agent sent; the card says a 40 x 25 pumpkin, 'closed rounded lantern form'. Either the crop is another variant of the listing or the card's dimensions are wrong: to settle on the card's own images (sourcing)",
+     "dot": "no",
+     "card": "pendant-cj-pleated-pumpkin-lantern-40",
+     "present": true,
+     "faithful": "partly",
+     "why": "a tall pleated paper egg (H/W ~1.3), as the reference crop render-agent sent; the card says a 40 x 25 pumpkin, 'closed rounded lantern form'. Either the crop is another variant of the listing or the card's dimensions are wrong: to settle on the card's own images (sourcing)"
+    },
+    {
+     "card_id": "vase-cj-black-matte-stoneware-jar-30",
+     "option": null,
+     "verdict": "yes",
+     "note": "ed5: H/W 2.05, clean",
+     "dot": "yes",
+     "card": "vase-cj-black-matte-stoneware-jar-30",
+     "present": true,
+     "faithful": "yes",
+     "why": "ed5: H/W 2.05, clean"
+    },
+    {
+     "card_id": "candle-holders-aliexpress-matte-black-iron-pillar-set2",
+     "option": null,
+     "verdict": "yes",
+     "note": "exactly two low black plates on small feet, with pillar candles",
+     "dot": "yes",
+     "card": "candle-holders-aliexpress-matte-black-iron-pillar-set2",
+     "present": true,
+     "faithful": "yes",
+     "why": "exactly two low black plates on small feet, with pillar candles"
+    },
+    {
+     "card_id": "bowl-cj-matte-black-bowl-20",
+     "option": null,
+     "verdict": "yes",
+     "note": "matte black deep bowl",
+     "dot": "yes",
+     "card": "bowl-cj-matte-black-bowl-20",
+     "present": true,
+     "faithful": "yes",
+     "why": "matte black deep bowl"
+    },
+    {
+     "card_id": "accent-sconces-aliexpress-travertine-cylinder-walnut-choice",
+     "option": null,
+     "verdict": "partly",
+     "note": "travertine cylinders on walnut plates, right; they look large next to the frames (about half a frame's width); not measurable (the art has no card dimensions)",
+     "dot": "no",
+     "card": "accent-sconces-aliexpress-travertine-cylinder-walnut-choice (x2)",
+     "present": true,
+     "faithful": "partly",
+     "why": "travertine cylinders on walnut plates, right; they look large next to the frames (about half a frame's width); not measurable (the art has no card dimensions)"
+    },
+    {
+     "card_id": "cushions-cj-washed-cotton-frayed",
+     "option": {
+      "other": "moss-green"
+     },
+     "verdict": "yes",
+     "note": "moss, frayed",
+     "dot": "yes",
+     "card": "cushions-cj-washed-cotton-frayed (moss)",
+     "present": true,
+     "faithful": "yes",
+     "why": "moss, frayed"
+    },
+    {
+     "card_id": "cushions-cj-linen-look-charcoal",
+     "option": "ink",
+     "verdict": "yes",
+     "note": "ink, linen look, square",
+     "dot": "yes",
+     "card": "cushions-cj-linen-look-charcoal (ink)",
+     "present": true,
+     "faithful": "yes",
+     "why": "ink, linen look, square"
+    },
+    {
+     "card_id": "cushions-aliexpress-fashion-modern-wabi-sabi-464203",
+     "option": null,
+     "verdict": "partly",
+     "note": "brown nubby weave, close to the card photo's family; reads boucle-like (the card has no colour or texture text)",
+     "dot": "no",
+     "card": "cushions-aliexpress-fashion-modern-wabi-sabi-464203",
+     "present": true,
+     "faithful": "partly",
+     "why": "brown nubby weave, close to the card photo's family; reads boucle-like (the card has no colour or texture text)"
+    },
+    {
+     "card_id": "bedspread-cj-six-layer-gauze-quilt",
+     "option": {
+      "other": "04-beige-khaki"
+     },
+     "verdict": "yes",
+     "note": "puckered gauze with crinkle lines, beige-khaki; folded on the arm, not in a straight line",
+     "dot": "yes",
+     "card": "bedspread-cj-six-layer-gauze-quilt (Beige Khaki)",
+     "present": true,
+     "faithful": "yes",
+     "why": "puckered gauze with crinkle lines, beige-khaki; folded on the arm, not in a straight line"
+    }
+   ],
+   "fixed_furniture": []
+  },
+  "modern-country-A-fix4": {
+   "file": "assets/renders/editorial-phase-b-2026-11-06/modern-country-A-fix4.png",
+   "state": "final_test",
+   "state_source": "QA: qa/reports/ged-register-2026-11-07-r2.md (fix3 -> fix4, codefix6); eye: docs/proposals/clay-r2-and-ged-verdicts-2026-11-07.md §9 (G-ED.10, G-ED.13 pass)",
+   "designer_eye": {
+    "G-ED.10": "pass",
+    "G-ED.13": "pass",
+    "note": "optional: a cooler window (b* -4 to -6 inside the glass box), a note for the owner, not a condition"
+   },
+   "fix4_check": {
+    "g_ed_8": "three components only, at the sofa spot, the strip left of the vase (rows 585-700) and the mullion (840 px); 0 px elsewhere (render-agent's 0 outside the masks confirmed)",
+    "sofa_spot": "gone: darkest pixel 111 -> 168 against the sofa's median 198 (its grain); clean at x5",
+    "vase_left_line": "still a faint light line along the old outline (max |dx| 24 at y 610, as in fix3): clear at x2-x3, faint at 100%: a note",
+    "mullion": "no longer flat (longest flat run 2 px)",
+    "data": "qa/reports/ged-register-2026-11-07/data/fix4.json"
+   },
+   "rows": [
+    {
+     "card_id": "cushions-aliexpress-farmhouse-floral-pillow-covers-166217",
+     "option": null,
+     "verdict": "yes",
+     "note": "exactly two, square, the card's block print; the glyph on the right cushion was removed in fix1",
+     "dot": "yes",
+     "card": "cushions-aliexpress-farmhouse-floral-pillow-covers-166217 (pair)",
+     "present": true,
+     "faithful": "yes",
+     "why": "exactly two, square, the card's block print; the glyph on the right cushion was removed in fix1"
+    },
+    {
+     "card_id": "cushions-cj-chenille-check-milky-white",
+     "option": null,
+     "verdict": "yes",
+     "note": "one, square, milky white tone-on-tone raised check, ~22 checks across (card ~2 cm squares)",
+     "dot": "yes",
+     "card": "cushions-cj-chenille-check-milky-white",
+     "present": true,
+     "faithful": "yes",
+     "why": "one, square, milky white tone-on-tone raised check, ~22 checks across (card ~2 cm squares)"
+    },
+    {
+     "card_id": "vase-aliexpress-vintage-distressed-clay-vase-589009",
+     "option": null,
+     "verdict": "yes",
+     "note": "fix3: H/W 2.05 (line >= 1.85), neckless, grooves; note: widest at the middle",
+     "dot": "yes",
+     "card": "vase-aliexpress-vintage-distressed-clay-vase-589009",
+     "present": true,
+     "faithful": "yes",
+     "why": "fix3: H/W 2.05 (line >= 1.85), neckless, grooves; note: widest at the middle"
+    },
+    {
+     "card_id": "sill-vase-cj-cream-fluted-column-25",
+     "option": null,
+     "verdict": "yes",
+     "note": "fluted column, smooth knop, flared turned foot, cream glaze; a little stockier (H/W ~2.4 to the foot vs 2.9); height 0.72 of the clay vase (cards 0.80)",
+     "dot": "yes",
+     "card": "sill-vase-cj-cream-fluted-column-25",
+     "present": true,
+     "faithful": "yes",
+     "why": "fluted column, smooth knop, flared turned foot, cream glaze; a little stockier (H/W ~2.4 to the foot vs 2.9); height 0.72 of the clay vase (cards 0.80)"
+    },
+    {
+     "card_id": "table-runner-cj-linen-look-sage-fringe",
+     "option": {
+      "color": "4-light-green"
+     },
+     "verdict": "yes",
+     "note": "mc1: ~33 cm (1.49 x the bowl, cards 1.55)",
+     "dot": "yes",
+     "card": "table-runner-cj-linen-look-sage-fringe (4 Light Green)",
+     "present": true,
+     "faithful": "yes",
+     "why": "mc1: ~33 cm (1.49 x the bowl, cards 1.55)"
+    },
+    {
+     "card_id": "bowl-cj-speckled-ivory-wide-bowl-21",
+     "option": null,
+     "verdict": "yes",
+     "note": "fix3: H/D 0.272 (render-agent) / ~0.24 (QA), line <= 0.28, card 0.244",
+     "dot": "yes",
+     "card": "bowl-cj-speckled-ivory-wide-bowl-21",
+     "present": true,
+     "faithful": "yes",
+     "why": "fix3: H/D 0.272 (render-agent) / ~0.24 (QA), line <= 0.28, card 0.244"
+    },
+    {
+     "card_id": "curtains-aliexpress-linen-blend-s-fold-180502",
+     "option": {
+      "style": "pull-pleated-tape"
+     },
+     "verdict": "yes",
+     "note": "fix1: the card's tone; the gathered heading is the listing's 'Pull Pleated Tape' option, so the dot names it",
+     "dot": "yes",
+     "card": "curtains-aliexpress-linen-blend-s-fold-180502 (pair, Pull Pleated Tape)",
+     "present": true,
+     "faithful": "yes",
+     "why": "fix1: the card's tone; the gathered heading is the listing's 'Pull Pleated Tape' option, so the dot names it"
+    }
+   ],
+   "fixed_furniture": []
+  },
+  "mediterranean-A-ed7": {
+   "file": "assets/renders/editorial-phase-b-2026-11-06/mediterranean-A-ed7.png",
+   "state": "final_test",
+   "state_source": "QA: qa/reports/ged-register-2026-11-07-r2.md (G-ED.8-G-ED.12); eye: docs/proposals/clay-r2-and-ged-verdicts-2026-11-07.md §10 (G-ED.10, G-ED.13 pass)",
+   "designer_eye": {
+    "G-ED.10": "pass",
+    "G-ED.13": "pass",
+    "G-ED.16": "pass"
+   },
+   "rows": [
+    {
+     "card_id": "framed-art-aliexpress-mediterranean-wabi-sabi-poster-802890",
+     "option": null,
+     "verdict": "yes",
+     "note": "olive tree, vases with an arch, arched stairs with a palm, in thin oak frames, as the card photo",
+     "dot": "yes",
+     "card": "framed-art-aliexpress-mediterranean-wabi-sabi-poster-802890 (3 of 6)",
+     "present": true,
+     "faithful": "yes",
+     "why": "olive tree, vases with an arch, arched stairs with a palm, in thin oak frames, as the card photo"
+    },
+    {
+     "card_id": "magazine-holder-cj-arch-iron-cane",
+     "option": null,
+     "verdict": "yes",
+     "note": "arched black iron frame with a cane sling, X stretcher; magazines without readable text",
+     "dot": "yes",
+     "card": "magazine-holder-cj-arch-iron-cane",
+     "present": true,
+     "faithful": "yes",
+     "why": "arched black iron frame with a cane sling, X stretcher; magazines without readable text"
+    },
+    {
+     "card_id": "candle-holders-cj-travertine-pedestal",
+     "option": null,
+     "verdict": "yes",
+     "note": "the pedestal pair (no candles)",
+     "dot": "yes",
+     "card": "candle-holders-cj-travertine-pedestal",
+     "present": true,
+     "faithful": "yes",
+     "why": "the pedestal pair (no candles)"
+    },
+    {
+     "card_id": "bowl-cj-speckled-ivory-wide-bowl-21",
+     "option": null,
+     "verdict": "yes",
+     "note": "ED4: a wide open cone with a thin flared rim and a thin tan clay line, H/D ~0.24 (card 21.3 x 5.2 = 0.244), sparse fine speckle as in the card photo; a little greyer in the shade (interior b* 17 vs 22 before). Trace: see ed4_traces",
+     "dot": "yes",
+     "card": "bowl-cj-speckled-ivory-wide-bowl-21",
+     "present": true,
+     "faithful": "yes",
+     "why": "ED4: a wide open cone with a thin flared rim and a thin tan clay line, H/D ~0.24 (card 21.3 x 5.2 = 0.244), sparse fine speckle as in the card photo; a little greyer in the shade (interior b* 17 vs 22 before). Trace: see ed4_traces"
+    },
+    {
+     "card_id": "basket-zendrop-seagrass-belly-38x34",
+     "option": null,
+     "verdict": "yes",
+     "note": "exactly one, folded collar, loop handles (with a plant)",
+     "dot": "yes",
+     "card": "basket-zendrop-seagrass-belly-38x34",
+     "present": true,
+     "faithful": "yes",
+     "why": "exactly one, folded collar, loop handles (with a plant)"
+    },
+    {
+     "card_id": "cushions-cj-washed-cotton-frayed",
+     "option": {
+      "other": "earthy-orange"
+     },
+     "verdict": "yes",
+     "note": "terracotta, frayed",
+     "dot": "yes",
+     "card": "cushions-cj-washed-cotton-frayed (Earthy Orange)",
+     "present": true,
+     "faithful": "yes",
+     "why": "terracotta, frayed"
+    },
+    {
+     "card_id": "cushions-cj-washed-cotton-frayed",
+     "option": {
+      "size": "30x50",
+      "other": "moss-green"
+     },
+     "verdict": "yes",
+     "note": "moss lumbar, frayed",
+     "dot": "yes",
+     "card": "cushions-cj-washed-cotton-frayed (Moss Green 30x50)",
+     "present": true,
+     "faithful": "yes",
+     "why": "moss lumbar, frayed"
+    },
+    {
+     "card_id": "cushions-cj-washed-cotton-frayed",
+     "option": {
+      "other": "white"
+     },
+     "verdict": "yes",
+     "note": "ed6: the three bench back cushions are this card's White 50 x 50 (x3); ed7: still white under the cooler shade",
+     "dot": "yes",
+     "card": "cushions-cj-washed-cotton-frayed (White x3, bench back)",
+     "present": true,
+     "faithful": "yes",
+     "why": "ed6: the three bench back cushions are this card's White 50 x 50 (x3); ed7: still white under the cooler shade"
+    },
+    {
+     "card_id": "sofa-cover-cj-cotton-muslin-fringe",
+     "option": null,
+     "verdict": "yes",
+     "note": "crinkled muslin, fringe",
+     "dot": "yes",
+     "card": "sofa-cover-cj-cotton-muslin-fringe",
+     "present": true,
+     "faithful": "yes",
+     "why": "crinkled muslin, fringe"
+    },
+    {
+     "card_id": "vase-aliexpress-vintage-distressed-clay-vase-589009",
+     "option": null,
+     "verdict": "yes",
+     "note": "the cream ribbed clay vase on the sill with olive branches",
+     "dot": "yes",
+     "card": "vase-aliexpress-vintage-distressed-clay-vase-589009",
+     "present": true,
+     "faithful": "yes",
+     "why": "the cream ribbed clay vase on the sill with olive branches"
+    }
+   ],
+   "fixed_furniture": [],
+   "ed7_check": {
+    "sun_patches": "untouched: QA's own sun mask from ed6 (L* > 78, b* > 18, window out) 29702 px; its core (eroded 2 px) changed in 1 px; the changes sit on the threshold edge, inside the grade's soft edge. The floor blade's core: 0 px changed",
+    "shade": "90.7 % of the frame changed (the grade); far shade L* -2.4, the ring 4-24 px round the sun -1.72: no bright halo",
+    "products": "every product keeps its colour family under the cooler shade (b* -5 to -7, L* -2 to -4): our White cushion (53.1, 4.0, 9.9), terracotta (31.9, 14.6, 19.6), moss (35.1, 2.4, 14.0); data/ed7.json",
+    "g_ed_9": "pass: no halo at the sun mask's edge; at the floor blade's fringe the terracotta reads a little mottled where warm flecks meet the cooler shade, but its fine chroma variation fell (hf sd b* 3.93 -> 3.05): the tile's own texture. The window box changed only along its edges (max 14 levels)",
+    "g_ed_11": "pass: no split (darkest 10 % b* 14.9, rule >= -4, target >= +3); deepest shadow L* p1 11.6",
+    "g_ed_12": "pass: raw 0.066 % clipped outside the window box; ed7 0.0 %",
+    "data": [
+     "qa/reports/ged-register-2026-11-07-r2/data/ed7.json",
+     "qa/reports/ged-register-2026-11-07-r2/data/guardrails-med.json"
+    ]
+   },
+   "before_site": [
+    "the White SKU's stock (B22)",
+    "the bench-back-cushions slot",
+    "dots for the three bench cushions"
+   ]
+  },
+  "warm-modern-A-ed6": {
+   "file": "assets/renders/editorial-phase-b-2026-11-06/warm-modern-A-ed6.png",
+   "state": "not_yet",
+   "state_source": "QA: qa/reports/ged-register-2026-11-07-r4.md §1 (ed6 against ed5 and the SKU photos); G-ED.5: the 21 Camel (a product with a dot) is 'no', so final_test is out until CAM1. Eye: G-ED.10 / G-ED.13 pass (unchanged from ed5)",
+   "designer_eye": {
+    "G-ED.10": "pass",
+    "G-ED.13": "pass"
+   },
+   "rows": [
+    {
+     "card_id": "framed-art-aliexpress-frameless-minimalist-wall-art-631735",
+     "option": null,
+     "verdict": "yes",
+     "note": "unchanged",
+     "dot": "yes",
+     "card": "framed-art-aliexpress-frameless-minimalist-wall-art-631735",
+     "present": true,
+     "faithful": "yes",
+     "why": "unchanged"
+    },
+    {
+     "card_id": "accent-sconces-aliexpress-travertine-cylinder-walnut-choice",
+     "option": null,
+     "verdict": "yes",
+     "note": "straight cylinder on walnut",
+     "dot": "yes",
+     "card": "accent-sconces-aliexpress-travertine-cylinder-walnut-choice",
+     "present": true,
+     "faithful": "yes",
+     "why": "straight cylinder on walnut"
+    },
+    {
+     "card_id": "floor-lamp-cj-pleated-walnut-stem-158",
+     "option": null,
+     "verdict": "yes",
+     "note": "fin2: the brass now reads satin/brushed (p99 luminance 0.337 -> 0.272), no artefact at 100%",
+     "dot": "yes",
+     "card": "floor-lamp-cj-pleated-walnut-stem-158",
+     "present": true,
+     "faithful": "yes",
+     "why": "fin2: the brass now reads satin/brushed (p99 luminance 0.337 -> 0.272), no artefact at 100%"
+    },
+    {
+     "card_id": "pendant-cj-tiered-fabric-drum",
+     "option": null,
+     "verdict": "yes",
+     "note": "ed5: 5 rings, the widest third, 2 below it, as the card",
+     "dot": "yes",
+     "card": "pendant-cj-tiered-fabric-drum",
+     "present": true,
+     "faithful": "yes",
+     "why": "ed5: 5 rings, the widest third, 2 below it, as the card"
+    },
+    {
+     "card_id": "cushions-cj-boucle-teddy",
+     "option": null,
+     "verdict": "yes",
+     "note": "white boucle, two in the frame",
+     "dot": "yes",
+     "card": "cushions-cj-boucle-teddy (White)",
+     "present": true,
+     "faithful": "yes",
+     "why": "white boucle, two in the frame"
+    },
+    {
+     "card_id": "cushions-cj-boucle-teddy",
+     "option": {
+      "color": "milk-tea-color",
+      "size": "50x50"
+     },
+     "verdict": "partly",
+     "note": "ed6 (render-agent's 0-token recolour, 22258 px, all inside the cushion): the colour now sits on the SKU photos' relation to White (against the White boucle of the same SKU in this frame a* -0.7, b* +3.0; the photos a* +0.9, b* +1.6), no clipped pixel, the olive leaves intact. But the boucle reads two-tone, cream peaks and tan valleys: C* of its darkest fifth over its lightest +14.2 (the SKU photo +1.6, the White boucle here +4.6); inherited from ed5 (+13.7), more visible now that it is light. Fix, 0 tokens: inside the mask, bring each pixel's a*, b* to the cushion's median hue and a chroma that follows L* (the photo's flat cream), L* and the loops kept; then QA",
+     "dot": "no",
+     "card": "cushions-cj-boucle-teddy (Milk tea)",
+     "present": true,
+     "faithful": "partly",
+     "why": "ed6 (render-agent's 0-token recolour, 22258 px, all inside the cushion): the colour now sits on the SKU photos' relation to White (against the White boucle of the same SKU in this frame a* -0.7, b* +3.0; the photos a* +0.9, b* +1.6), no clipped pixel, the olive leaves intact. But the boucle reads two-tone, cream peaks and tan valleys: C* of its darkest fifth over its lightest +14.2 (the SKU photo +1.6, the White boucle here +4.6); inherited from ed5 (+13.7), more visible now that it is light. Fix, 0 tokens: inside the mask, bring each pixel's a*, b* to the cushion's median hue and a chroma that follows L* (the photo's flat cream), L* and the loops kept; then QA"
+    },
+    {
+     "card_id": "cushions-cj-knitted-chenille-bean-green",
+     "option": {
+      "color": "21-camel-color"
+     },
+     "verdict": "no",
+     "note": "against the SKU photo (CJYD282217003CX, '21 Camel Color', view only), not the card's HEX: the photo is a taupe-grey heathered chenille with a woven grid (relative to its white throw a* +2.2, b* +5.8); the frame shows a caramel crinkled cushion (relative to the white boucle in its light a* +5.7, b* +7.4), neither the colour nor the grid. The earlier 'yes' (phase B) was read against the card's name and HEX, with no SKU photo. Fix: a verified option of this card (proposals §12.4) and a local pass, not a recolour ed6: untouched; the dot stays off until the owner's CAM1 (proposals §13.2)",
+     "dot": "no",
+     "card": "cushions-cj-knitted-chenille-bean-green (Camel)",
+     "present": true,
+     "faithful": "no",
+     "why": "against the SKU photo (CJYD282217003CX, '21 Camel Color', view only), not the card's HEX: the photo is a taupe-grey heathered chenille with a woven grid (relative to its white throw a* +2.2, b* +5.8); the frame shows a caramel crinkled cushion (relative to the white boucle in its light a* +5.7, b* +7.4), neither the colour nor the grid. The earlier 'yes' (phase B) was read against the card's name and HEX, with no SKU photo. Fix: a verified option of this card (proposals §12.4) and a local pass, not a recolour ed6: untouched; the dot stays off until the owner's CAM1 (proposals §13.2)"
+    },
+    {
+     "card_id": "sofa-cover-cj-cotton-muslin-fringe",
+     "option": {
+      "other": "flax-brown"
+     },
+     "verdict": "yes",
+     "note": "against the SKU photo (flax brown, view only): a greige crinkled muslin with a short fringe; the frame's is warmer in the golden light, same family: yes",
+     "dot": "yes",
+     "card": "sofa-cover-cj-cotton-muslin-fringe (Flax)",
+     "present": true,
+     "faithful": "yes",
+     "why": "against the SKU photo (flax brown, view only): a greige crinkled muslin with a short fringe; the frame's is warmer in the golden light, same family: yes"
+    },
+    {
+     "card_id": "candle-holders-cj-travertine-pedestal",
+     "option": null,
+     "verdict": "yes",
+     "note": "the pedestal pair",
+     "dot": "yes",
+     "card": "candle-holders-cj-travertine-pedestal",
+     "present": true,
+     "faithful": "yes",
+     "why": "the pedestal pair"
+    },
+    {
+     "card_id": "bowl-cj-matte-black-bowl-20",
+     "option": null,
+     "verdict": "yes",
+     "note": "exactly one now",
+     "dot": "yes",
+     "card": "bowl-cj-matte-black-bowl-20",
+     "present": true,
+     "faithful": "yes",
+     "why": "exactly one now"
+    },
+    {
+     "card_id": "vase-cj-textured-white-stoneware",
+     "option": null,
+     "verdict": "yes",
+     "note": "new: tall, crinkle-relief white, as the card photo",
+     "dot": "yes",
+     "card": "vase-cj-textured-white-stoneware",
+     "present": true,
+     "faithful": "yes",
+     "why": "new: tall, crinkle-relief white, as the card photo"
+    },
+    {
+     "card_id": "rug-cj-braided-wool-natural",
+     "option": null,
+     "verdict": "partly",
+     "note": "pile, not the card's flat braid; accepted as the direction with a note (designer); EDR1 failed (mc1.json, rugs)",
+     "dot": "closeup_only",
+     "card": "rug-cj-braided-wool-natural",
+     "present": true,
+     "faithful": "partly",
+     "why": "pile, not the card's flat braid; accepted as the direction with a note (designer); EDR1 failed (mc1.json, rugs)"
+    }
+   ],
+   "fixed_furniture": [],
+   "open": [
+    "the 21 Camel chenille: the owner's CAM1 (proposals §13.2), then a verified caramel or the documented exception",
+    "the milk-tea boucle: a 0-token flattening of its two-tone chroma, then QA"
+   ]
+  },
+  "boho-A-fin7": {
+   "file": "assets/renders/editorial-phase-b-2026-11-06/boho-A-fin7.png",
+   "state": "final_test",
+   "state_source": "QA: qa/reports/ged-register-2026-11-07-r4.md §2 (the planter's base; G-ED.6 on the second rust cushion). Eye: proposals §5, §7 (G-ED.10, G-ED.13 pass), carried over: fin7 changes only the planter's base (21,034 px, 0 outside it)",
+   "designer_eye": {
+    "G-ED.10": "pass",
+    "G-ED.13": "pass",
+    "G-ED.16": "the clear-glass kettle and glass: written exception for this frame only (§7), no dot"
+   },
+   "rows": [
+    {
+     "card_id": "wall-decor-aliexpress-natural-raffia-woven-bohemian-763597",
+     "option": null,
+     "verdict": "yes",
+     "note": "fin2: ~166 px = the card's 30 cm against the frames; cowrie ring and coiled centre unchanged",
+     "dot": "yes",
+     "card": "wall-decor-aliexpress-natural-raffia-woven-bohemian-763597",
+     "present": true,
+     "faithful": "yes",
+     "why": "fin2: ~166 px = the card's 30 cm against the frames; cowrie ring and coiled centre unchanged"
+    },
+    {
+     "card_id": "wall-sconce-aliexpress-rattan-bamboo-wall-lamp-671943",
+     "option": null,
+     "verdict": "yes",
+     "note": "woven bamboo ball on a wooden arm and round wood plate, glowing from inside, as the card photo",
+     "dot": "yes",
+     "card": "wall-sconce-aliexpress-rattan-bamboo-wall-lamp-671943 (x2)",
+     "present": true,
+     "faithful": "yes",
+     "why": "woven bamboo ball on a wooden arm and round wood plate, glowing from inside, as the card photo"
+    },
+    {
+     "card_id": "table-runner-aliexpress-boho-macrame-table-runners-263532",
+     "option": null,
+     "verdict": "yes",
+     "note": "macrame with a jute centre stripe and a long fringe",
+     "dot": "yes",
+     "card": "table-runner-aliexpress-boho-macrame-table-runners-263532",
+     "present": true,
+     "faithful": "yes",
+     "why": "macrame with a jute centre stripe and a long fringe"
+    },
+    {
+     "card_id": "cushions-cj-washed-cotton-frayed",
+     "option": {
+      "other": "rust-orange"
+     },
+     "verdict": "yes",
+     "note": "rust, frayed edge. Two units in the frame (G-ED.6, register v4): the left one, without a story point, is the same product and option as the pointed one (face dE76 1.5, hue +0.5 deg, the same washed weave and frayed edge at x3), and the brief asks for 'Rust Orange x2' (briefs/render-editorial-phase-b-2026-11-06.md, the products table and the boho prompt): a second unit of our product, not an imitation",
+     "dot": "yes",
+     "card": "cushions-cj-washed-cotton-frayed (Rust Orange) x2",
+     "present": true,
+     "faithful": "yes",
+     "why": "rust, frayed edge. Two units in the frame (G-ED.6, register v4): the left one, without a story point, is the same product and option as the pointed one (face dE76 1.5, hue +0.5 deg, the same washed weave and frayed edge at x3), and the brief asks for 'Rust Orange x2' (briefs/render-editorial-phase-b-2026-11-06.md, the products table and the boho prompt): a second unit of our product, not an imitation",
+     "units_in_frame": 2,
+     "ged6": "second unit of our product (brief: x2), not an imitation"
+    },
+    {
+     "card_id": "cushions-cj-sandstone-chenille-flange",
+     "option": "olive",
+     "verdict": "yes",
+     "note": "olive nubby chenille with a flat flange",
+     "dot": "yes",
+     "card": "cushions-cj-sandstone-chenille-flange (olive)",
+     "present": true,
+     "faithful": "yes",
+     "why": "olive nubby chenille with a flat flange"
+    },
+    {
+     "card_id": "sofa-cover-cj-washed-hemp-throw",
+     "option": {
+      "other": "raw-jute-color"
+     },
+     "verdict": "yes",
+     "note": "washed hemp in raw jute, draped",
+     "dot": "yes",
+     "card": "sofa-cover-cj-washed-hemp-throw (Raw Jute)",
+     "present": true,
+     "faithful": "yes",
+     "why": "washed hemp in raw jute, draped"
+    },
+    {
+     "card_id": "planter-zendrop-seagrass-belly-basket-45",
+     "option": null,
+     "verdict": "yes",
+     "note": "fin7 (render-agent's 0-token recolour, 21034 px, all inside the base): the black-dipped base is natural seagrass now, as the card's 'natural' and the natural baskets in its cached gallery photo. Base Lab [31.9, 9.2, 21.1] against the body band above [41.5, 9.0, 24.7] (L ratio 0.77, the belly turning from the light; hue 66.4 vs 69.9 deg); the weave carried down (texture sd 3.06 in the shade vs 6.58 in the sun above); the old dip line reads as the belly's fold (median L* step -0.45), the base's bottom edge clean at x4. The shipping colour: natural, per the coordinator (no sourcing file seen by QA)",
+     "dot": "yes",
+     "card": "planter-zendrop-seagrass-belly-basket-45",
+     "present": true,
+     "faithful": "yes",
+     "why": "fin7 (render-agent's 0-token recolour, 21034 px, all inside the base): the black-dipped base is natural seagrass now, as the card's 'natural' and the natural baskets in its cached gallery photo. Base Lab [31.9, 9.2, 21.1] against the body band above [41.5, 9.0, 24.7] (L ratio 0.77, the belly turning from the light; hue 66.4 vs 69.9 deg); the weave carried down (texture sd 3.06 in the shade vs 6.58 in the sun above); the old dip line reads as the belly's fold (median L* step -0.45), the base's bottom edge clean at x4. The shipping colour: natural, per the coordinator (no sourcing file seen by QA)"
+    },
+    {
+     "card_id": "basket-cj-seagrass-belly-xl",
+     "option": null,
+     "verdict": "yes",
+     "note": "fin4 x0.75 (inside +-15% of the cards' ratio); fin5: two handles",
+     "dot": "yes",
+     "card": "basket-cj-seagrass-belly-xl",
+     "present": true,
+     "faithful": "yes",
+     "why": "fin4 x0.75 (inside +-15% of the cards' ratio); fin5: two handles"
+    },
+    {
+     "card_id": "pouf-cj-cotton-knit-ball-cover",
+     "option": "natural",
+     "verdict": "yes",
+     "note": "chunky natural knit ball",
+     "dot": "yes",
+     "card": "pouf-cj-cotton-knit-ball-cover (natural)",
+     "present": true,
+     "faithful": "yes",
+     "why": "chunky natural knit ball"
+    }
+   ],
+   "fixed_furniture": [],
+   "before_site": [
+    "the story point of the rust cushion says 'in the frame: two units' (as the sconces' does), and 'buy the look' adds 2",
+    "data/story/story.json moves to boho-A-fin7.png (qa_key boho-A-fin7)"
+   ]
+  }
+ },
+ "superseded_by": {
+  "modern-country-A-mc1": "modern-country-A-fix4",
+  "modern-country-A-fix3": "modern-country-A-fix4",
+  "boho-A-fin4": "boho-A-fin7",
+  "boho-A-fin5": "boho-A-fin7",
+  "mediterranean-A-ed5": "mediterranean-A-ed7",
+  "warm-modern-A-ed4": "warm-modern-A-ed6",
+  "japandi-A-ed4": "japandi-A-ed5",
+  "nordic-A-fin2": "nordic-A-ed4",
+  "mediterranean-A-ed6": "mediterranean-A-ed7",
+  "warm-modern-A-ed5": "warm-modern-A-ed6",
+  "boho-A-fin6": "boho-A-fin7"
+ },
+ "pending_qa": [],
+ "closeups": {},
+ "tool": {
+  "note": "tool assets (the 'design it yourself' layers): G1 and G2 from docs/ops/quality-gates-2026-11-02.md, not G-ED; not read by site/tools/lib/qa-frames.ts",
+  "living-room/warm-modern/pilot-phase1": {
+   "record": "qa/reports/2026-11-07-pilot-phase1-g1.json",
+   "folder": "assets/renders/living-room/warm-modern/pilot-phase1-2026-11-07",
+   "version_checked": "v3 with display grade v3b",
+   "approval_3": {
+    "verdict": "conditional_yes",
+    "summary": "v3 with grade v3b may go to the owner after one 0-token fix to the bench's front edge (the b*-only cap turned it mauve). The one-grade fix (the toe computed per file) is required before anything goes to the site; it does not change what the owner sees. The darker v3b (corner 82.6 against the ~86 the designer expected) goes to the designer's eye.",
+    "conditions_before_owner": [
+     "F1 bench front edge (render-agent)"
+    ],
+    "conditions_before_site": [
+     "F2 one display grade for every file (render-agent)",
+     "F3 render-agent's lock record corrected (render-agent)"
+    ],
+    "for_the_designer": [
+     "D1 v3b reads 0.3 stop darker than v3: corner 82.6 (expected ~86), window wall flat 75-76"
+    ]
+   },
+   "assets": [
+    {
+     "asset": "shell-v3.png",
+     "checks": "G1.4 lock vs clay r4 (all named lines, WMC10 in): worst p90 2 px at 1920; the wedge in the art/sconce area 2.36 (v3) / 1.86 (v3b)",
+     "verdict": "pass"
+    },
+    {
+     "asset": "shell-v3-graded-v3b.png (the bench slab)",
+     "checks": "the lit top b* 8.2 (no longer yellow); the front face mauve (HSV H 23.4 / 27.0 in the composites), a yellow sliver at the left end",
+     "verdict": "fail",
+     "fix": "F1",
+     "owner": "render-agent"
+    },
+    {
+     "asset": "the back wall on display (v3b)",
+     "checks": "centre 89.8, right 85.1 (targets met); corner 82.6 against the expected ~86; window wall 72-76",
+     "verdict": "pass; D1 to the designer"
+    },
+    {
+     "asset": "fixed-furniture.png + fixed-furniture-shadow.png",
+     "checks": "IoU 0.996 / 0.994 / 0.987; outline p90 <= 1 px at 1920; soft shadow",
+     "verdict": "pass"
+    },
+    {
+     "asset": "layers/cushions/set-A, set-B, set-C (+ shadows)",
+     "checks": "G1.1 all 12 items; set C Dark Coffee dE00 1.4, +2.8 deg against its SKU photo (left as is); no halo at x4",
+     "verdict": "pass"
+    },
+    {
+     "asset": "composite-set-A/B/C-v3.png (ungraded)",
+     "checks": "swap-diff: 0 px outside the products and shadows, all 6 pairs",
+     "verdict": "pass"
+    },
+    {
+     "asset": "composite-set-A/B/C-v3-graded-v3b.png + shell-furniture-v3-graded-v3b.png",
+     "checks": "swap-diff on display: up to 14,726 px over 2 levels outside (deep darks), the toe computed per file",
+     "verdict": "fail",
+     "fix": "F2",
+     "owner": "render-agent"
+    },
+    {
+     "asset": "shell-fix-v3.json lock record (pass:false)",
+     "checks": "a measurement artefact: the mullion's other face, and one outlier of 5 samples after an affine",
+     "verdict": "record to correct",
+     "fix": "F3",
+     "owner": "render-agent"
+    }
+   ],
+   "fixes": [
+    {
+     "id": "F1",
+     "what": "bench front edge: chroma cap along the slab's hue, and the mask's left end",
+     "owner": "render-agent",
+     "tokens": 0,
+     "before": "owner approval 3"
+    },
+    {
+     "id": "F2",
+     "what": "one display grade: the toe computed once, applied to every file; then swap-diff on the display files",
+     "owner": "render-agent",
+     "tokens": 0,
+     "before": "site"
+    },
+    {
+     "id": "F3",
+     "what": "the lock record in shell-fix-v3.json: nearest-peak pairing, >= 20 samples a line, one mode for the set; or carry QA's verdict",
+     "owner": "render-agent",
+     "tokens": 0,
+     "before": "site"
+    },
+    {
+     "id": "D1",
+     "what": "v3b's darker room: corner 82.6, window wall 72-76: accept, or a gain between 1.0 and 1.23",
+     "owner": "master-designer",
+     "tokens": 0,
+     "before": "owner approval 3 (eye)"
+    }
+   ]
+  }
+ },
+ "changes_from_v3": [
+  "warm-modern-A-ed6 added (supersedes ed5): the milk-tea boucle partly (colour right, the boucle two-tone); the 21 Camel no, its dot off until CAM1; not_yet",
+  "boho-A-fin7 added (supersedes fin6): the planter yes (natural base); the rust cushion x2 = a second unit of our product (G-ED.6), not an imitation; final_test",
+  "boho-A-fin6: the rust cushion's row notes the two units (the same decision)",
+  "tool: a new section, the warm-modern pilot phase 1 (G1/G2): conditional yes for approval 3 after F1"
+ ]
+}

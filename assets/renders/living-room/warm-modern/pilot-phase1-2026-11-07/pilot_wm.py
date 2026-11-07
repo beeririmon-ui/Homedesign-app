@@ -551,21 +551,73 @@ def corner_gain(size):
     return Yt / Y, Y
 
 
-def grade():
-    """The pilot's display grade (the layers themselves stay ungraded; the tool applies one chain to the stack):
-    (1) exposure: one global linear gain for every composite, from the shell's back wall by the corner to L 90 (corner_gain), with a
-        highlight shoulder above L 88 (the glass and the bright wash keep detail; nothing above L 97); a channel that would pass 1 is
-        desaturated toward its luminance instead of clipped (no hue shift: the lit slab no longer goes mustard);
-    (2) WM-G1, the black point L 11-14 (Nordic 12-15): a toe on L* only (hue and chroma kept); the darkest 0.5 % is moved to 12.5 when
-        it is outside 11-14, fading out by L 25.
-    Written as *-graded.png next to each composite; the ungraded composite stays. The Nordic v6 fall-off table (a low-frequency
-    exposure map along the back wall) is NOT applied: reported for the designer."""
-    size = work_size()
-    g, Y0 = corner_gain(size)
+def _expose(a, g):
     knee, top = ((88.0 + 16) / 116) ** 3, ((97.0 + 16) / 116) ** 3
-    out = dict(_exposure=dict(gain=round(g, 4), stops=round(float(np.log2(g)), 3), corner_Y_before=round(Y0, 4), knee_L=88, shoulder_max_L=97))
-    names = ["shell.png", "shell-furniture.png"] + [f"composite-set-{s}.png" for s in "ABC"]
-    names = names + [n.replace(".png", "-v2.png") for n in names] + [n.replace(".png", "-v3.png") for n in names]
+    lin = s2l(a) * g
+    Y = (lin * [0.2126, 0.7152, 0.0722]).sum(2)
+    Yc = np.where(Y > knee, knee + (top - knee) * (1 - np.exp(-(Y - knee) / (top - knee))), Y)
+    lin = lin * (Yc / np.maximum(Y, 1e-6))[..., None]
+    # a channel over 1 would clip and shift the hue (the warm slab went mustard): desaturate toward Y instead, Y kept
+    mx = lin.max(2)
+    t_ = np.where(mx > 1.0, np.clip((1.0 - Yc) / np.maximum(mx - Yc, 1e-6), 0, 1), 1.0)
+    lin = Yc[..., None] + (lin - Yc[..., None]) * t_[..., None]
+    return np.clip(l2s(np.clip(lin, 0, 1)), 0, 1).astype(np.float32)
+
+
+def centre_gain(size, target=89.5):
+    """grade-v3b (master-designer section 13.3: the back-wall targets are display targets): the one gain for all composites solved so
+    that the back-wall centre (0.20, 0, 1.95) shows L* 89.5 on the display (bisection through the whole exposure step, shoulder included)."""
+    sp = next(os.path.join(HERE, n) for n in ("shell-v3.png", "shell-v2.png", "shell.png") if os.path.exists(os.path.join(HERE, n)))
+    a = load(sp)
+    W, H = size
+    u, v, _ = lock_wm.r1.project(lock_wm.CAM, 0.20, 0.0, 1.95)
+    x, y = int((116 + u * 3840) / CANVAS[0] * W), int((65 + v * 2160) / CANVAS[1] * H)
+    r = max(4, int(0.006 * W))
+    patch = a[y - r:y + r, x - r:x + r]
+    lo, hi = 0.6, 1.6
+    for _ in range(30):
+        g = 0.5 * (lo + hi)
+        Lm = float(np.median(Lstar(_expose(patch, g))))
+        lo, hi = (g, hi) if Lm < target else (lo, g)
+    return 0.5 * (lo + hi)
+
+
+def corner_gain(size):
+    """one global exposure for the whole pilot (every layer composite shares it): the back wall by the corner (-1.75, 0, 1.60) of the
+    shell to L 90 (Bible 1.8 B1 (1): 90-94; ARC2 = the Nordic light). Superseded for v3 by centre_gain (grade-v3b)."""
+    sp = next(os.path.join(HERE, n) for n in ("shell-v3.png", "shell-v2.png", "shell.png") if os.path.exists(os.path.join(HERE, n)))
+    a = load(sp)
+    W, H = size
+    u, v, _ = lock_wm.r1.project(lock_wm.CAM, -1.75, 0.0, 1.60)
+    x, y = int((116 + u * 3840) / CANVAS[0] * W), int((65 + v * 2160) / CANVAS[1] * H)
+    r = max(4, int(0.006 * W))
+    Y = float(np.median(lum(a[y - r:y + r, x - r:x + r])))
+    Yt = ((90.0 + 16) / 116) ** 3
+    return Yt / Y, Y
+
+
+def grade(mode="corner"):
+    """The pilot's display grade (the layers themselves stay ungraded; the tool applies one chain to the stack):
+    (1) exposure: one global linear gain for every composite, with a highlight shoulder above L 88 (nothing above L 97); a channel that
+        would pass 1 is desaturated toward its luminance instead of clipped. mode "corner": the corner to L 90 (as before);
+        mode "centre" (grade-v3b, master-designer section 13.3): the back-wall centre to L 89.5 on the display, v3 files only;
+    (2) WM-G1, the black point L 11-14 (Nordic 12-15): a toe on L* only (hue and chroma kept); the darkest 0.5 % is moved to 12.5 when
+        it is outside 11-14, fading out by L 25;
+    (3) on v3 files: the bench slab's b* capped at 12 (section 13 (3)).
+    Written as *-graded.png (mode corner) or *-graded-v3b.png (mode centre) next to each composite; the ungraded composite stays."""
+    size = work_size()
+    if mode == "centre":
+        g = centre_gain(size)
+        out = dict(_exposure=dict(mode="centre: the back-wall centre (0.20, 0, 1.95) to L* 89.5 on the display (grade-v3b)", gain=round(g, 4),
+                                  stops=round(float(np.log2(g)), 3), knee_L=88, shoulder_max_L=97))
+        names = ["shell-v3.png", "shell-furniture-v3.png"] + [f"composite-set-{s}-v3.png" for s in "ABC"]
+        suffix = "-graded-v3b.png"
+    else:
+        g, Y0 = corner_gain(size)
+        out = dict(_exposure=dict(mode="corner to L* 90", gain=round(g, 4), stops=round(float(np.log2(g)), 3), corner_Y_before=round(Y0, 4), knee_L=88, shoulder_max_L=97))
+        names = ["shell.png", "shell-furniture.png"] + [f"composite-set-{s}.png" for s in "ABC"]
+        names = names + [n.replace(".png", "-v2.png") for n in names] + [n.replace(".png", "-v3.png") for n in names]
+        suffix = "-graded.png"
     stone_p = os.path.join(HERE, "masks/stone.png")
     stone = (np.asarray(Image.open(stone_p)) > 127) if os.path.exists(stone_p) else None
     fur_a = np.asarray(Image.open(os.path.join(HERE, "fixed-furniture.png")))[..., 3] > 127
@@ -573,16 +625,7 @@ def grade():
         p = os.path.join(HERE, name)
         if not os.path.exists(p):
             continue
-        a = load(p)
-        lin = s2l(a) * g
-        Y = (lin * [0.2126, 0.7152, 0.0722]).sum(2)
-        Yc = np.where(Y > knee, knee + (top - knee) * (1 - np.exp(-(Y - knee) / (top - knee))), Y)
-        lin = lin * (Yc / np.maximum(Y, 1e-6))[..., None]
-        # a channel over 1 would clip and shift the hue (the warm slab went mustard): desaturate toward Y instead, Y kept
-        mx = lin.max(2)
-        t_ = np.where(mx > 1.0, np.clip((1.0 - Yc) / np.maximum(mx - Yc, 1e-6), 0, 1), 1.0)
-        lin = Yc[..., None] + (lin - Yc[..., None]) * t_[..., None]
-        e = np.clip(l2s(np.clip(lin, 0, 1)), 0, 1).astype(np.float32)
+        e = _expose(load(p), g)
         lab = cv2.cvtColor(e, cv2.COLOR_RGB2LAB)
         L = lab[..., 0]
         bp = float(np.percentile(L, 0.5))
@@ -600,30 +643,35 @@ def grade():
             capped = sm_ & (le[..., 2] > 12.0)
             le[..., 2] = np.where(sm_, np.minimum(le[..., 2], 12.0), le[..., 2])
             e = np.where(sm_[..., None], np.clip(cv2.cvtColor(le, cv2.COLOR_LAB2RGB), 0, 1), e).astype(np.float32)
-            rec["stone_b_cap"] = dict(px_capped=int(capped.sum()), b_p95_before=round(b_before, 2),
-                                      b_p95_after=round(float(np.percentile(cv2.cvtColor(e, cv2.COLOR_RGB2LAB)[..., 2][sm_], 95)), 2), cap=12.0)
+            lb = cv2.cvtColor(e, cv2.COLOR_RGB2LAB)[..., 2][sm_]
+            rec["stone_b_cap"] = dict(px_capped=int(capped.sum()), b_p95_before=round(b_before, 2), b_p50_after=round(float(np.percentile(lb, 50)), 2),
+                                      b_p95_after=round(float(np.percentile(lb, 95)), 2), cap=12.0)
         rec["black_point_p005_final"] = round(float(np.percentile(cv2.cvtColor(e, cv2.COLOR_RGB2LAB)[..., 0], 0.5)), 2)
         rec["clipped_254_pct"] = round(float(((e * 255) >= 254).any(2).mean() * 100), 3)
         rec["L_points_final"] = points_L(e, size)
-        q = p.replace(".png", "-graded.png")
+        q = p.replace(".png", suffix)
         save(q, e)
         rec["out"] = os.path.basename(q)
         out[name] = rec
     J = jobs()
-    J["grade_pilot"] = dict(rule="exposure: the corner to L 90, one gain for all, shoulder L 88-97; WM-G1 black point L 11-14 (toe on L* only)",
-                            files=out)
+    key = "grade_v3b" if mode == "centre" else "grade_pilot"
+    J[key] = dict(rule=out["_exposure"]["mode"] + "; shoulder L 88-97, channels desaturated not clipped; WM-G1 black point L 11-14 (toe on L* only); slab b* <= 12 on v3",
+                  files=out)
     json.dump(J, open(JOBS, "w"), indent=1, ensure_ascii=False)
     print(json.dumps(out, indent=1))
+    return out
 
 
-def sheet():
+def sheet(variant=""):
     from PIL import ImageDraw, ImageFont
     f = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 22)
     fb = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 26)
     tiles = [("clay r4, shell layer", CLAY_SHELL), ("step 2: shell (seedream raw)", os.path.join(HERE, "shell.png")),
              ("step 2: shell v3 (code: wedge out, wall 83 / 89.5 / 85 + movement)", os.path.join(HERE, "shell-v3.png")),
              ("step 3: shell v3 + furniture + code shadow", os.path.join(HERE, "shell-furniture-v3.png"))]
-    tiles += [(f"step 4: cushions set {s} (on shell v3), display grade", os.path.join(HERE, f"composite-set-{s}-v3-graded.png")) for s in "ABC"]
+    gsuf = "-graded-v3b.png" if variant == "v3b" else "-graded.png"
+    gname = "display grade v3b (centre 89.5)" if variant == "v3b" else "display grade"
+    tiles += [(f"step 4: cushions set {s} (on shell v3), {gname}", os.path.join(HERE, f"composite-set-{s}-v3{gsuf}")) for s in "ABC"]
     tiles += [("shell v3 lock overlay (red = clay line, green = render edge)", os.path.join(HERE, "shell-v3-lock.jpg"))]
     tiles = [t for t in tiles if os.path.exists(t[1])]
     tw, th = 960, 540
@@ -650,4 +698,4 @@ if __name__ == "__main__":
     cmd, args = sys.argv[1], sys.argv[2:]
     {"shell-fetch": lambda: shell_fetch(*args), "furn-input": furn_input, "furn-fetch": lambda: furn_fetch(*args),
      "cush-input": cush_input, "cush-prompt": lambda: cush_prompt(*args), "cush-fetch": lambda: cush_fetch(*args[:4], refetch=(len(args) < 5)),
-     "swap": swap, "grade": grade, "sheet": sheet}[cmd]()
+     "swap": swap, "grade": lambda: grade(*(args[:1] or ["corner"])), "sheet": lambda: sheet(*(args[:1] or [""]))}[cmd]()

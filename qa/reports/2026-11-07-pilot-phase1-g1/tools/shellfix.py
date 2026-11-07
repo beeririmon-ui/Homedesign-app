@@ -1,5 +1,5 @@
 """
-qa-agent 2026-11-07: the pilot's shell fixes (shell-fix.json) measured by QA. Usage: ~/.venvs/motion/bin/python -I shellfix.py <version>
+qa-agent 2026-11-07: the pilot's shell fixes (shell-fix.json) measured by QA. Usage: ~/.venvs/motion/bin/python -I shellfix.py <version> [<graded suffix, default graded>]
 (1) the wedge: moved to wedge_area.py (see the note in the code).
 (2) L* at the plan's grading points (QA's projection, 7 x 7 px median) on the ungraded and the graded shell.
 (3) the bench slab: a*, b* of the lit slab and the share of pore pixels (> 3.5 L* under the 7 px local median) inside the slab.
@@ -21,7 +21,8 @@ spec.loader.exec_module(r1)
 P = os.path.join(REPO, "assets/renders/living-room/warm-modern/pilot-phase1-2026-11-07")
 OUT = os.path.join(REPO, "qa/reports/2026-11-07-pilot-phase1-g1")
 V = sys.argv[1] if len(sys.argv) > 1 else "v2"
-FIXED, GRADED = f"shell-{V}.png", f"shell-{V}-graded.png"
+GSUF = sys.argv[2] if len(sys.argv) > 2 else "graded"        # e.g. graded-v3b (render-agent's grade v3b, designer 13.3)
+FIXED, GRADED = f"shell-{V}.png", f"shell-{V}-{GSUF}.png"
 
 
 def lab(rgb):
@@ -72,5 +73,5 @@ for name, Lm in (("step-2 shell", before), (FIXED, after), (GRADED, graded)):
 slab["target #D8C8AE"] = [round(float(v), 2) for v in lab(np.array([[0xD8, 0xC8, 0xAE]], float))[0]]
 slab["polygon_px"] = poly
 out = dict(version=V, grading_points=points, bench_slab=slab)
-json.dump(out, open(os.path.join(OUT, "data", f"shellfix-{V}.json"), "w"), indent=1)
+json.dump(out, open(os.path.join(OUT, "data", f"shellfix-{V}{'' if GSUF == 'graded' else '-' + GSUF}.json"), "w"), indent=1)
 print(json.dumps(out, indent=1))

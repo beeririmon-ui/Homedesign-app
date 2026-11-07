@@ -322,5 +322,137 @@
   }
  },
  "display_grade_note": "one gain for all (the corner to L* 90, +0.30 stop): on the display the centre reads 93.8 and the right 91.3; the designer's targets are met on the shell itself (82.9 / 89.6 / 85.0). The slab's b* capped at 12 on the display (its shaded front edge carried b* ~29: p95 30.5 -> 12.1); channels over 1 are now desaturated toward Y instead of clipped",
- "lock_note": "all 10 named lines within +-1 px by median (raw); p90 <= 2 px except the Y 1.45 mullion (11 px: the profile's other edge, as in v1 / v2) and, after the affine only, the 5-sample bench back-end top edge (14.2 px, one sample); lines and bench untouched since v2 (0 px changed outside the back wall)"
+ "lock_note": "all 10 named lines within +-1 px by median (raw); p90 <= 2 px except the Y 1.45 mullion (11 px: the profile's other edge, as in v1 / v2) and, after the affine only, the 5-sample bench back-end top edge (14.2 px, one sample); lines and bench untouched since v2 (0 px changed outside the back wall)",
+ "grade_v3b": {
+  "source": "docs/proposals/clay-r2-and-ged-verdicts-2026-11-07.md section 13.3 (the back-wall targets are display targets)",
+  "exposure": {
+   "mode": "centre: the back-wall centre (0.20, 0, 1.95) to L* 89.5 on the display (grade-v3b)",
+   "gain": 1.0008,
+   "stops": 0.001,
+   "knee_L": 88,
+   "shoulder_max_L": 97
+  },
+  "files": {
+   "shell-v3.png": {
+    "black_point_p005_after_exposure": 15.32,
+    "stone_b_cap": {
+     "px_capped": 31911,
+     "b_p95_before": 28.94,
+     "b_p50_after": 9.34,
+     "b_p95_after": 12.09,
+     "cap": 12.0
+    },
+    "black_point_p005_final": 12.4,
+    "clipped_254_pct": 0.0,
+    "L_points_final": {
+     "back_wall_by_corner(-1.75,0,1.60)": 82.8,
+     "window_wall(-2.30,0.30,1.60)": 72.0,
+     "window_wall(-2.30,0.55,1.60)": 75.9,
+     "back_wall_centre(0.20,0,1.95)": 89.5,
+     "back_wall_right(1.85,0,1.60)": 84.9
+    },
+    "out": "shell-v3-graded-v3b.png"
+   },
+   "shell-furniture-v3.png": {
+    "black_point_p005_after_exposure": 6.14,
+    "stone_b_cap": {
+     "px_capped": 13233,
+     "b_p95_before": 28.55,
+     "b_p50_after": 9.05,
+     "b_p95_after": 12.08,
+     "cap": 12.0
+    },
+    "black_point_p005_final": 12.38,
+    "clipped_254_pct": 0.0,
+    "L_points_final": {
+     "back_wall_by_corner(-1.75,0,1.60)": 82.8,
+     "window_wall(-2.30,0.30,1.60)": 72.0,
+     "window_wall(-2.30,0.55,1.60)": 75.9,
+     "back_wall_centre(0.20,0,1.95)": 89.5,
+     "back_wall_right(1.85,0,1.60)": 84.9
+    },
+    "out": "shell-furniture-v3-graded-v3b.png"
+   },
+   "composite-set-A-v3.png": {
+    "black_point_p005_after_exposure": 5.77,
+    "stone_b_cap": {
+     "px_capped": 13233,
+     "b_p95_before": 28.55,
+     "b_p50_after": 9.05,
+     "b_p95_after": 12.08,
+     "cap": 12.0
+    },
+    "black_point_p005_final": 12.38,
+    "clipped_254_pct": 0.0,
+    "L_points_final": {
+     "back_wall_by_corner(-1.75,0,1.60)": 82.8,
+     "window_wall(-2.30,0.30,1.60)": 72.0,
+     "window_wall(-2.30,0.55,1.60)": 75.9,
+     "back_wall_centre(0.20,0,1.95)": 89.5,
+     "back_wall_right(1.85,0,1.60)": 84.9
+    },
+    "out": "composite-set-A-v3-graded-v3b.png"
+   },
+   "composite-set-B-v3.png": {
+    "black_point_p005_after_exposure": 5.02,
+    "stone_b_cap": {
+     "px_capped": 13233,
+     "b_p95_before": 28.55,
+     "b_p50_after": 9.05,
+     "b_p95_after": 12.08,
+     "cap": 12.0
+    },
+    "black_point_p005_final": 12.38,
+    "clipped_254_pct": 0.0,
+    "L_points_final": {
+     "back_wall_by_corner(-1.75,0,1.60)": 82.8,
+     "window_wall(-2.30,0.30,1.60)": 72.0,
+     "window_wall(-2.30,0.55,1.60)": 75.9,
+     "back_wall_centre(0.20,0,1.95)": 89.5,
+     "back_wall_right(1.85,0,1.60)": 84.9
+    },
+    "out": "composite-set-B-v3-graded-v3b.png"
+   },
+   "composite-set-C-v3.png": {
+    "black_point_p005_after_exposure": 3.69,
+    "stone_b_cap": {
+     "px_capped": 13233,
+     "b_p95_before": 28.55,
+     "b_p50_after": 9.05,
+     "b_p95_after": 12.08,
+     "cap": 12.0
+    },
+    "black_point_p005_final": 12.38,
+    "clipped_254_pct": 0.0,
+    "L_points_final": {
+     "back_wall_by_corner(-1.75,0,1.60)": 82.8,
+     "window_wall(-2.30,0.30,1.60)": 72.0,
+     "window_wall(-2.30,0.55,1.60)": 75.9,
+     "back_wall_centre(0.20,0,1.95)": 89.5,
+     "back_wall_right(1.85,0,1.60)": 84.9
+    },
+    "out": "composite-set-C-v3-graded-v3b.png"
+   }
+  },
+  "summary": {
+   "back_wall_display": {
+    "corner": 82.8,
+    "centre": 89.5,
+    "right": 84.9
+   },
+   "window_wall_display": {
+    "Y0_30": 72.0,
+    "Y0_55": 75.9,
+    "bible": "80-88"
+   },
+   "bench_b_display": {
+    "p50": 9.05,
+    "p95": 12.08,
+    "cap": 12.0
+   },
+   "black_point_p005": 12.38,
+   "clipped_254_pct": 0.0
+  },
+  "note": "the solved gain is 1.0008 (+0.001 stop): the shell v3 already shows the centre at 89.5, so the display adds no lift; the corner lands at 82.8 (not ~86) and the window wall at 72.0 / 75.9, under the Bible's 80-88"
+ }
 }

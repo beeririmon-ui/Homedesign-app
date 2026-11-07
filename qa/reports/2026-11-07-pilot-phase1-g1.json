@@ -1,0 +1,517 @@
+{
+ "id": "2026-11-07-pilot-phase1-g1",
+ "date": "2026-11-07",
+ "by": "qa-agent",
+ "scope": "warm-modern living-room tool pilot, phase 1 (shell, fixed furniture and shadow, the cushions slot A/B/C), before owner approval 3",
+ "gate": "G1 + G2 (tool assets; G-ED does not apply), docs/ops/quality-gates-2026-11-02.md; brief briefs/render-warm-modern-pilot-phase1-2026-11-07.md; designer docs/proposals/clay-r2-and-ged-verdicts-2026-11-07.md §11, §13.1, §13.3",
+ "versions": {
+  "v2": "shell-v2.png, shell-furniture-v2.png, composite-set-*-v2.png; display grade 1 (corner to L* 90, gain 1.2295), files *-v2-graded.png re-written 18:12 with the same numbers",
+  "v3": "shell-v3.png (back wall only; the bench from v2), shell-furniture-v3.png, composite-set-*-v3.png; display grade 2 (gain 1.2295 + the slab's b* cap 12) in *-v3-graded.png",
+  "v3b": "grade v3b (designer §13.3: the centre to L* 89.5 on display, gain 1.0008): *-v3-graded-v3b.png. The approval-3 verdict is on v3 + v3b"
+ },
+ "approval_3": {
+  "verdict": "conditional_yes",
+  "summary": "v3 with grade v3b may go to the owner after one 0-token fix to the bench's front edge (the b*-only cap turned it mauve). The one-grade fix (the toe computed per file) is required before anything goes to the site; it does not change what the owner sees. The darker v3b (corner 82.6 against the ~86 the designer expected) goes to the designer's eye.",
+  "conditions_before_owner": [
+   "F1 bench front edge (render-agent)"
+  ],
+  "conditions_before_site": [
+   "F2 one display grade for every file (render-agent)",
+   "F3 render-agent's lock record corrected (render-agent)"
+  ],
+  "for_the_designer": [
+   "D1 v3b reads 0.3 stop darker than v3: corner 82.6 (expected ~86), window wall flat 75-76"
+  ]
+ },
+ "lock_flag": {
+  "verdict": "measurement artefact, not a lock failure",
+  "qa_measure": {
+   "v2": {
+    "glazing back jamb (X -2.30, Y 0.75)": 0.0,
+    "glazing head (Z 2.70)": 0.0,
+    "bench front top edge (X -1.98, Z 0.45)": 1.0,
+    "bench back-end front corner (X -1.98, Y 1.00)": 1.0,
+    "bench back-end top edge (Y 1.00, Z 0.45)": 1.0,
+    "back wall ceiling line (Y 0, Z 3.00)": 0.0,
+    "back wall floor line (Y 0.015, Z 0; WMC10)": 0.0,
+    "ceiling band bottom edge (X -2.05, Z 2.82)": 1.0,
+    "mullion (Y 1.45, frame plane X -2.65)": 1.0,
+    "mullion (Y 2.15, frame plane X -2.65)": 2.0
+   },
+   "v3": {
+    "glazing back jamb (X -2.30, Y 0.75)": 0.0,
+    "glazing head (Z 2.70)": 0.0,
+    "bench front top edge (X -1.98, Z 0.45)": 1.0,
+    "bench back-end front corner (X -1.98, Y 1.00)": 1.0,
+    "bench back-end top edge (Y 1.00, Z 0.45)": 1.0,
+    "back wall ceiling line (Y 0, Z 3.00)": 0.0,
+    "back wall floor line (Y 0.015, Z 0; WMC10)": 0.0,
+    "ceiling band bottom edge (X -2.05, Z 2.82)": 1.0,
+    "mullion (Y 1.45, frame plane X -2.65)": 1.0,
+    "mullion (Y 2.15, frame plane X -2.65)": 2.0
+   },
+   "v3_graded": {
+    "glazing back jamb (X -2.30, Y 0.75)": 0.0,
+    "glazing head (Z 2.70)": 0.0,
+    "bench front top edge (X -1.98, Z 0.45)": 1.0,
+    "bench back-end front corner (X -1.98, Y 1.00)": 1.0,
+    "bench back-end top edge (Y 1.00, Z 0.45)": 1.0,
+    "back wall ceiling line (Y 0, Z 3.00)": 0.0,
+    "back wall floor line (Y 0.015, Z 0; WMC10)": 0.0,
+    "ceiling band bottom edge (X -2.05, Z 2.82)": 1.0,
+    "mullion (Y 1.45, frame plane X -2.65)": 1.0,
+    "mullion (Y 2.15, frame plane X -2.65)": 2.0
+   },
+   "worst_p90_px_1920": {
+    "v2": 2.0,
+    "v3": 2.0
+   },
+   "limit_px_1920": 9.6,
+   "method": "render vs clay r4 shell layer (all named lines, the back-wall floor line WMC10 included), QA's projection (house plan 1.3.5), nearest-peak pairing, raw, no affine; 21-48 samples per line"
+  },
+  "render_agent_flag": {
+   "mullion Y 1.45": "raw p90 11 with IQR [0, 11]: bimodal, pairs the profile's other face; after its affine 0. QA: p90 1 px, 48/48 paired",
+   "bench back-end top edge": "raw p90 0 (5 samples); after its affine 14.2 from one sample at 23 px. QA: p90 1 px raw on 48 samples",
+   "why_false": "its verdict needs every line to pass in one mode (all raw or all after the affine); each of the two lines fails in the other mode"
+  },
+  "v3_changes_only_the_back_wall": {
+   "shell-v3.png": {
+    "changed": 1744418,
+    "inside_wall": 1744418,
+    "outside_wall": 0,
+    "outside_wall_dilated_2px": 0
+   },
+   "shell-furniture-v3.png": {
+    "changed": 1521730,
+    "inside_wall": 1519528,
+    "outside_wall": 2202,
+    "outside_wall_dilated_2px": 2202
+   },
+   "composite-set-A-v3.png": {
+    "changed": 1503885,
+    "inside_wall": 1501683,
+    "outside_wall": 2202,
+    "outside_wall_dilated_2px": 2202
+   },
+   "composite-set-B-v3.png": {
+    "changed": 1492696,
+    "inside_wall": 1490494,
+    "outside_wall": 2202,
+    "outside_wall_dilated_2px": 2202
+   },
+   "composite-set-C-v3.png": {
+    "changed": 1492320,
+    "inside_wall": 1490118,
+    "outside_wall": 2202,
+    "outside_wall_dilated_2px": 2202
+   }
+  }
+ },
+ "checks": {
+  "G1.4_lock": {
+   "verdict": "pass",
+   "v2_worst_p90": 2.0,
+   "v3_worst_p90": 2.0,
+   "file": "data/shell-lock.json, data/shell-lock-v3.json"
+  },
+  "furniture_on_clay": {
+   "verdict": "pass",
+   "iou": {
+    "sofa": 0.9962,
+    "coffee table": 0.9938,
+    "armchair": 0.9872
+   },
+   "outline_p90_px_1920": {
+    "sofa": 0.7,
+    "coffee table": 0.7,
+    "armchair": 1.0
+   },
+   "shadow_layer": {
+    "min": 56.0,
+    "p1": 96.0,
+    "share_below_250": 10.22,
+    "share_below_250_outside_furniture_band": 3.517
+   },
+   "file": "data/furniture.json"
+  },
+  "wedge_designer_13_1_1": {
+   "verdict": "pass on v3 / v3b (fail on v2 ungraded)",
+   "rule": "art and sconce area (frame u 0.45-0.85, v 0.15-0.45), max dL* over 120 px <= 2.5, both ends in the area",
+   "values": {
+    "shell.png": 9.55,
+    "shell-v2.png": 3.79,
+    "shell-v2-graded.png": 1.27,
+    "shell-v3.png": 2.36,
+    "shell-v3-graded.png": 1.05,
+    "shell-v3-graded-v3b.png": 1.86
+   },
+   "corner_falloff_note": "a 120 px span centred at the area's left edge reaches the corner's falloff (x 1090-1290 at 2720: the wall darkens toward the inside corner, architecture): {\"shell.png\": 12.46, \"shell-v2.png\": 9.74, \"shell-v2-graded.png\": 5.32, \"shell-v3.png\": 7.63, \"shell-v3-graded.png\": 4.51, \"shell-v3-graded-v3b.png\": 7.17}",
+   "file": "data/wedge-area.json"
+  },
+  "grading_points_qa_projection": {
+   "v2_graded": {
+    "back_wall_by_corner(-1.75,0,1.60)": 89.4,
+    "window_wall(-2.30,0.30,1.60)": 78.2,
+    "window_wall(-2.30,0.45,1.60)": 81.9,
+    "window_wall(-2.30,0.55,1.60)": 82.6,
+    "window_wall(-2.30,0.65,1.60)": 82.4,
+    "back_wall_centre(0.20,0,1.95)": 95.2,
+    "back_wall_right(1.85,0,1.60)": 91.5
+   },
+   "v3_ungraded": {
+    "back_wall_by_corner(-1.75,0,1.60)": 82.6,
+    "window_wall(-2.30,0.30,1.60)": 71.9,
+    "window_wall(-2.30,0.45,1.60)": 75.3,
+    "window_wall(-2.30,0.55,1.60)": 76.1,
+    "window_wall(-2.30,0.65,1.60)": 75.9,
+    "back_wall_centre(0.20,0,1.95)": 90.0,
+    "back_wall_right(1.85,0,1.60)": 85.1
+   },
+   "v3_graded": {
+    "back_wall_by_corner(-1.75,0,1.60)": 89.5,
+    "window_wall(-2.30,0.30,1.60)": 78.2,
+    "window_wall(-2.30,0.45,1.60)": 81.9,
+    "window_wall(-2.30,0.55,1.60)": 82.6,
+    "window_wall(-2.30,0.65,1.60)": 82.4,
+    "back_wall_centre(0.20,0,1.95)": 94.0,
+    "back_wall_right(1.85,0,1.60)": 91.5
+   },
+   "v3b_display": {
+    "back_wall_by_corner(-1.75,0,1.60)": 82.6,
+    "window_wall(-2.30,0.30,1.60)": 71.9,
+    "window_wall(-2.30,0.45,1.60)": 75.3,
+    "window_wall(-2.30,0.55,1.60)": 76.1,
+    "window_wall(-2.30,0.65,1.60)": 75.9,
+    "back_wall_centre(0.20,0,1.95)": 89.8,
+    "back_wall_right(1.85,0,1.60)": 85.1
+   },
+   "verdict": "v3b: the back-wall display targets met (centre 89.8, right 85.1); the corner 82.6 against the designer's expected ~86 (D1); the window wall Y 0.30 accepted by the designer (§13.1 (5), §13.3); the whole flat Y 0.30-0.65 now 72-76 (G1.8's 80-88 is a proposal): D1",
+   "file": "data/shellfix-*.json"
+  },
+  "bench_slab": {
+   "verdict": "fail (F1)",
+   "lit_top_b": {
+    "shell-v2.png": 8.31,
+    "shell-v2-graded.png": 8.31,
+    "shell-v3.png": 8.31,
+    "shell-v3-graded.png": 8.31,
+    "shell-furniture-v3-graded.png": 8.31,
+    "composite-set-B-v3-graded.png": 8.31,
+    "shell-v3-graded-v3b.png": 8.23,
+    "shell-furniture-v3-graded-v3b.png": 8.11,
+    "composite-set-A-v3-graded-v3b.png": 8.11,
+    "composite-set-B-v3-graded-v3b.png": 8.11,
+    "composite-set-C-v3-graded-v3b.png": 8.11
+   },
+   "front_face": {
+    "shell-v2.png": {
+     "lab": [
+      56.2,
+      7.3,
+      27.6
+     ],
+     "hsv_h": 33.2
+    },
+    "shell-v2-graded.png": {
+     "lab": [
+      61.1,
+      7.8,
+      29.4
+     ],
+     "hsv_h": 32.5
+    },
+    "shell-v3.png": {
+     "lab": [
+      56.2,
+      7.3,
+      27.6
+     ],
+     "hsv_h": 33.2
+    },
+    "shell-v3-graded.png": {
+     "lab": [
+      61.1,
+      7.8,
+      12.0
+     ],
+     "hsv_h": 20.9
+    },
+    "shell-furniture-v3-graded.png": {
+     "lab": [
+      68.3,
+      6.3,
+      12.1
+     ],
+     "hsv_h": 25.7
+    },
+    "composite-set-B-v3-graded.png": {
+     "lab": [
+      68.3,
+      6.2,
+      12.1
+     ],
+     "hsv_h": 25.7
+    },
+    "shell-v3-graded-v3b.png": {
+     "lab": [
+      56.2,
+      7.1,
+      12.0
+     ],
+     "hsv_h": 23.4
+    },
+    "shell-furniture-v3-graded-v3b.png": {
+     "lab": [
+      62.8,
+      5.7,
+      12.1
+     ],
+     "hsv_h": 27.0
+    },
+    "composite-set-A-v3-graded-v3b.png": {
+     "lab": [
+      62.8,
+      5.7,
+      12.1
+     ],
+     "hsv_h": 27.0
+    },
+    "composite-set-B-v3-graded-v3b.png": {
+     "lab": [
+      62.8,
+      5.7,
+      12.1
+     ],
+     "hsv_h": 27.0
+    },
+    "composite-set-C-v3-graded-v3b.png": {
+     "lab": [
+      62.8,
+      5.7,
+      12.1
+     ],
+     "hsv_h": 27.0
+    }
+   },
+   "b_p95": {
+    "shell-v2.png": 28.85,
+    "shell-v2-graded.png": 30.84,
+    "shell-v3.png": 28.85,
+    "shell-v3-graded.png": 12.19,
+    "shell-furniture-v3-graded.png": 14.97,
+    "composite-set-B-v3-graded.png": 14.97,
+    "shell-v3-graded-v3b.png": 12.26,
+    "shell-furniture-v3-graded-v3b.png": 13.95,
+    "composite-set-A-v3-graded-v3b.png": 13.95,
+    "composite-set-B-v3-graded-v3b.png": 13.96,
+    "composite-set-C-v3-graded-v3b.png": 13.96
+   },
+   "finding": "the lit top is no longer yellow (b* ~8); the cap clamps b* only and keeps a*, so the 8 cm front face went from ochre (h_ab 75) to mauve-taupe (Lab ~62.8/5.7/12.1, h_ab 65, HSV H 23.4 on the shell and 27.0 in the composites against G1.9's 'never H < 25 in white or beige'); at 100 % it reads lilac-grey next to the cream top. The mask also misses the front face's last ~40 px at the left end (303 px with b* > 20 in the 4 px ring)",
+   "fix": "0 tokens: cap the chroma along the slab's own hue (scale a* with b*, the face's a*:b* to the top's), and grow the mask to the left end; QA re-measures (no H < 25, b* <= 12, no yellow sliver)",
+   "owner": "render-agent",
+   "file": "data/bench-cap.json, overlays/bench-v2-v3-v3b-100.jpg"
+  },
+  "swap_diff_ungraded": {
+   "verdict": "pass",
+   "v2": {
+    "base->A": 0,
+    "base->B": 0,
+    "base->C": 0,
+    "A->B": 0,
+    "A->C": 0,
+    "B->C": 0
+   },
+   "v3": {
+    "base->A": 0,
+    "base->B": 0,
+    "base->C": 0,
+    "A->B": 0,
+    "A->C": 0,
+    "B->C": 0
+   },
+   "file": "data/swapdiff.json, data/swapdiff-v3.json"
+  },
+  "swap_diff_display_graded": {
+   "verdict": "fail (F2)",
+   "v3": {
+    "base->A": [
+     0,
+     0.96
+    ],
+    "base->B": [
+     13298,
+     1.67
+    ],
+    "base->C": [
+     17083,
+     3.54
+    ],
+    "A->B": [
+     0,
+     1.25
+    ],
+    "A->C": [
+     12735,
+     3.07
+    ],
+    "B->C": [
+     6439,
+     2.13
+    ]
+   },
+   "v3b": {
+    "base->A": [
+     0,
+     0.99
+    ],
+    "base->B": [
+     7034,
+     1.72
+    ],
+    "base->C": [
+     14726,
+     2.71
+    ],
+    "A->B": [
+     0,
+     1.26
+    ],
+    "A->C": [
+     10073,
+     2.54
+    ],
+    "B->C": [
+     4066,
+     1.67
+    ]
+   },
+   "finding": "outside the products and shadows the display files differ per set: up to 14,726 px over 2 levels (base->C, v3b), dE76 up to 2.7, all in the deep darks (L* 7-14). Cause: the black-point toe is computed per file (p0.5 after exposure: base 6.14, A 5.77, B 5.02, C 3.69 in v3b)",
+   "fix": "0 tokens: one grade, its toe computed once (on the base) and applied unchanged to every file",
+   "owner": "render-agent",
+   "file": "data/graded-split-*.json"
+  },
+  "halo_G2.3": {
+   "verdict": "pass",
+   "finding": "the ring statistic flags lit fabric ribs, fringes and cushion edges; each hotspot at x4 (and x8 on B) is the product's own texture, no light or dark band",
+   "file": "data/halo-hotspots-*.json, overlays/halo-hotspots-*-x4.jpg"
+  },
+  "cushions_G1.1": {
+   "verdict": "pass",
+   "finding": "all 12 items: the right silhouette, count, pattern and material against their SKU photos (overlays/cushions-set-*.jpg)"
+  },
+  "cushions_colour_G1.2": {
+   "verdict": "pass with notes",
+   "set_C_dark_coffee": {
+    "frame_norm_lab": [
+     32.7,
+     19.0,
+     16.7
+    ],
+    "photo_norm_lab": [
+     32.7,
+     21.2,
+     17.0
+    ],
+    "d_hue_deg": 2.8,
+    "dE2000": 1.4
+   },
+   "set_C_rule": "designer §13.1 (4): rotate only if dE > 5 or > 8 deg off the SKU photo; inside both, and yellower (+2.8 deg), not redder: left as it is (#603326 on the card is a label hex)",
+   "light_items_note": "white-normalised medians run warmer than the SKU photos (b* +7 to +15 on White, Milk Tea, Oatmeal, the linen lumbars, Light Brown); on the lit faces the gap is b* +2 to +4: the shaded half carries the room's warm bounce (bone sofa, oak, walnut). Not a failure; the Milk Tea lumbar is the closest to the line (lit face 5 L* darker and +3.9 b*)",
+   "file": "data/sku-colour-*.json, data/cushions.json"
+  },
+  "black_point_clipping": {
+   "verdict": "pass",
+   "black_point_final": 12.4,
+   "clipped_254_pct": 0.0
+  },
+  "format": {
+   "verdict": "pass for phase 1",
+   "note": "2720 x 1530 test (G1.17: test 2K; the 6K masters come after approval 3)"
+  },
+  "combinations": {
+   "verdict": "pass (ungraded)",
+   "note": "one slot with three variants: the 6 pairs base/A/B/C are every combination there is"
+  }
+ },
+ "fixes": [
+  {
+   "id": "F1",
+   "what": "bench front edge: chroma cap along the slab's hue, and the mask's left end",
+   "owner": "render-agent",
+   "tokens": 0,
+   "before": "owner approval 3"
+  },
+  {
+   "id": "F2",
+   "what": "one display grade: the toe computed once, applied to every file; then swap-diff on the display files",
+   "owner": "render-agent",
+   "tokens": 0,
+   "before": "site"
+  },
+  {
+   "id": "F3",
+   "what": "the lock record in shell-fix-v3.json: nearest-peak pairing, >= 20 samples a line, one mode for the set; or carry QA's verdict",
+   "owner": "render-agent",
+   "tokens": 0,
+   "before": "site"
+  },
+  {
+   "id": "D1",
+   "what": "v3b's darker room: corner 82.6, window wall 72-76: accept, or a gain between 1.0 and 1.23",
+   "owner": "master-designer",
+   "tokens": 0,
+   "before": "owner approval 3 (eye)"
+  }
+ ],
+ "tools": [
+  "__pycache__",
+  "assemble.py",
+  "bench_cap.py",
+  "cushions.py",
+  "furniture.py",
+  "graded_split.py",
+  "halo_hotspots.py",
+  "shell_lock.py",
+  "shell_lock_v3.py",
+  "shellfix.py",
+  "sku_colour.py",
+  "swapdiff.py",
+  "v3_vs_v2.py",
+  "wedge_area.py",
+  "wedge_map.py"
+ ],
+ "overlays": [
+  "bench-edge-v3b-x4.jpg",
+  "bench-v2-v3-v3b-100.jpg",
+  "cushions-set-A.jpg",
+  "cushions-set-B.jpg",
+  "cushions-set-C.jpg",
+  "furn-armchair-x3.jpg",
+  "furn-sofa-left-x3.jpg",
+  "furn-sofa-right-x3.jpg",
+  "furn-table-x3.jpg",
+  "furniture-edges-x3.jpg",
+  "furniture-outlines.jpg",
+  "furniture-shadow-layer.jpg",
+  "graded-split-v2.jpg",
+  "graded-split-v3-graded-v3b.jpg",
+  "graded-split-v3.jpg",
+  "halo-hotspots-A-v2-x4.jpg",
+  "halo-hotspots-A-v3-graded-v3b-x4.jpg",
+  "halo-hotspots-B-v2-x4.jpg",
+  "halo-hotspots-B-v3-graded-v3b-x4.jpg",
+  "halo-hotspots-C-v2-x4.jpg",
+  "halo-hotspots-C-v3-graded-v3b-x4.jpg",
+  "shell-furniture-v2-small.jpg",
+  "shell-v2-named-lines.jpg",
+  "shell-v3-named-lines.jpg",
+  "swap-edges-x4-v3-graded-v3b.jpg",
+  "swap-edges-x4-v3-graded.jpg",
+  "swap-edges-x4-v3.jpg",
+  "swap-edges-x4.jpg",
+  "wedge-map-shell-v2.jpg",
+  "wedge-map-shell-v3.jpg",
+  "wedge-map-shell.jpg"
+ ],
+ "pilot_folder": "assets/renders/living-room/warm-modern/pilot-phase1-2026-11-07"
+}
