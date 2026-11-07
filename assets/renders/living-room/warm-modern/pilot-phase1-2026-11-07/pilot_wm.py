@@ -364,7 +364,7 @@ def cush_fetch(s, url, pid, tid, refetch=True):
     (per-channel linear gain field, normalised blur 60 px of base / render outside the product zone); (3) the product mask by GrabCut on
     the tone-matched render, seeded by the low-frequency Lab difference to the base (sigma 3 px: the boucle grain averages out) inside
     the slot zone (the clay proxies dilated + the right arm and the floor beside it for the throw), components kept only where they touch
-    a proxy or the throw zone; (4) the shadow: darkening of the tone-matched render against the base in a 36 px band round the product.
+    a proxy or the throw zone; (4) the shadow: darkening of the tone-matched render against the base in a 36 px band round the product, on the sofa and the floor only (not the wall: the render's own sofa sits a few px off there).
     The layer keeps the tone-matched product pixels; outside alpha and shadow the base is untouched (swap-diff)."""
     size = work_size()
     p = os.path.join(RAW, f"wm-pilot-cushions-{s}-seedream.png")
@@ -395,41 +395,87 @@ def cush_fetch(s, url, pid, tid, refetch=True):
         G[..., c] = np.clip(nb / np.maximum(nr, 1e-4), 0.6, 1.6)
     regt = np.clip(l2s(lr * G), 0, 1).astype(np.float32)
     # (3) mask
-    bl = lambda a_: cv2.GaussianBlur(a_, (0, 0), 3.0)
-    dE = np.sqrt(((cv2.cvtColor(bl(regt), cv2.COLOR_RGB2LAB) - cv2.cvtColor(bl(base), cv2.COLOR_RGB2LAB)) ** 2).sum(2))
-    gc = np.full((H, W), cv2.GC_BGD, np.uint8)
-    gc[zone] = cv2.GC_PR_BGD
-    gc[zone & (dE > 7)] = cv2.GC_PR_FGD
-    gc[zone & (dE > 16)] = cv2.GC_FGD
-    y0, y1 = max(0, sy0 - int(0.08 * H)), min(H, sy1 + int(0.08 * H))
-    x0, x1 = max(0, sx0 - int(0.02 * W)), min(W, sx1 + int(0.05 * W))
-    sc = 0.5
-    sub = cv2.resize((regt[y0:y1, x0:x1] * 255).astype(np.uint8), None, fx=sc, fy=sc, interpolation=cv2.INTER_AREA)
-    gsub = cv2.resize(gc[y0:y1, x0:x1], (sub.shape[1], sub.shape[0]), interpolation=cv2.INTER_NEAREST)
-    bgd, fgd = np.zeros((1, 65), np.float64), np.zeros((1, 65), np.float64)
-    if (gsub == cv2.GC_FGD).sum() + (gsub == cv2.GC_PR_FGD).sum() > 50:
-        cv2.grabCut(sub, gsub, None, bgd, fgd, 6, cv2.GC_INIT_WITH_MASK)
-    fg = np.isin(gsub, (cv2.GC_FGD, cv2.GC_PR_FGD)).astype(np.uint8)
-    fg = cv2.resize(fg, (x1 - x0, y1 - y0), interpolation=cv2.INTER_NEAREST)
-    m = np.zeros((H, W), np.uint8)
-    m[y0:y1, x0:x1] = fg
-    m = cv2.morphologyEx(m, cv2.MORPH_OPEN, np.ones((7, 7), np.uint8))
-    n, lab, st, _ = cv2.connectedComponentsWithStats(m)
-    keepm = np.zeros((H, W), bool)
-    for i in range(1, n):
-        comp = lab == i
-        if st[i, 4] >= 0.0006 * W * H and ((comp & mc).any() or (comp & throw).sum() > 0.5 * st[i, 4]):
-            keepm |= comp
-    cnts, _ = cv2.findContours(keepm.astype(np.uint8), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
-    fill = np.zeros((H, W), np.uint8)
-    cv2.drawContours(fill, cnts, -1, 1, -1)
+    mtable = cv2.dilate((idx_masks(IDX_FURN, size, {"t": 2})["t"] > 0.5).astype(np.uint8), np.ones((3, 3), np.uint8)).astype(bool)
+    rects = json.load(open(os.path.join(HERE, "cushion-rects.json"))).get(s) if os.path.exists(os.path.join(HERE, "cushion-rects.json")) else None
     g = cv2.cvtColor((regt * 255).astype(np.uint8), cv2.COLOR_RGB2GRAY).astype(np.float32) / 255
-    a = np.clip(guided(g, fill.astype(np.float32), 4, 2e-3), 0, 1)
+    polys = json.load(open(os.path.join(HERE, "cushion-polys.json"))).get(s) if os.path.exists(os.path.join(HERE, "cushion-polys.json")) else None
+    if polys:
+        method = "hand outline per product (cushion-polys.json) refined by GrabCut in a +-12 px band, table mask subtracted"
+        ox, oy = polys["origin"]
+        fill = np.zeros((H, W), np.uint8)
+        img8 = (regt * 255).astype(np.uint8)
+        for nm, pts in polys.items():
+            if nm == "origin":
+                continue
+            P_ = np.array([[x + ox, y + oy] for x, y in pts], np.int32)
+            pm = np.zeros((H, W), np.uint8)
+            cv2.fillPoly(pm, [P_], 1)
+            x0_, y0_, w_, h_ = cv2.boundingRect(P_)
+            pad = 60
+            cx0, cy0, cx1, cy1 = max(0, x0_ - pad), max(0, y0_ - pad), min(W, x0_ + w_ + pad), min(H, y0_ + h_ + pad)
+            sub = pm[cy0:cy1, cx0:cx1]
+            gm = np.full(sub.shape, cv2.GC_BGD, np.uint8)
+            dil = cv2.dilate(sub, np.ones((25, 25), np.uint8))
+            ero = cv2.erode(sub, np.ones((21, 21), np.uint8))
+            gm[dil > 0] = cv2.GC_PR_BGD
+            gm[sub > 0] = cv2.GC_PR_FGD
+            gm[ero > 0] = cv2.GC_FGD
+            bgd, fgd = np.zeros((1, 65), np.float64), np.zeros((1, 65), np.float64)
+            cv2.grabCut(img8[cy0:cy1, cx0:cx1].copy(), gm, None, bgd, fgd, 6, cv2.GC_INIT_WITH_MASK)
+            f = np.isin(gm, (cv2.GC_FGD, cv2.GC_PR_FGD)).astype(np.uint8)
+            f = cv2.morphologyEx(f, cv2.MORPH_OPEN, np.ones((3, 3), np.uint8))
+            fill[cy0:cy1, cx0:cx1] |= f
+        cnts, _ = cv2.findContours(fill, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+        fill2 = np.zeros_like(fill)
+        cv2.drawContours(fill2, [c_ for c_ in cnts if cv2.contourArea(c_) > 400], -1, 1, -1)
+        fill = (fill2.astype(bool) & ~mtable).astype(np.uint8)
+    elif rects:
+        method = "GrabCut per product in render-agent's boxes (cushion-rects.json), 8 iterations at full size, table mask subtracted"
+        fill = np.zeros((H, W), np.uint8)
+        img8 = (regt * 255).astype(np.uint8)
+        for nm, (bx0, by0, bx1, by1) in rects.items():
+            pad = 80
+            cx0, cy0, cx1, cy1 = max(0, bx0 - pad), max(0, by0 - pad), min(W, bx1 + pad), min(H, by1 + pad)
+            gm = np.zeros((cy1 - cy0, cx1 - cx0), np.uint8)
+            bgd, fgd = np.zeros((1, 65), np.float64), np.zeros((1, 65), np.float64)
+            cv2.grabCut(img8[cy0:cy1, cx0:cx1].copy(), gm, (bx0 - cx0, by0 - cy0, bx1 - bx0, by1 - by0), bgd, fgd, 8, cv2.GC_INIT_WITH_RECT)
+            f = np.isin(gm, (cv2.GC_FGD, cv2.GC_PR_FGD)).astype(np.uint8)
+            f = cv2.morphologyEx(f, cv2.MORPH_OPEN, np.ones((5, 5), np.uint8))
+            n, lab, st, _ = cv2.connectedComponentsWithStats(f)
+            if n > 1:
+                big = 1 + int(np.argmax(st[1:, 4]))
+                f = (lab == big).astype(np.uint8)
+            cnts, _ = cv2.findContours(f, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+            ff = np.zeros_like(f)
+            cv2.drawContours(ff, cnts, -1, 1, -1)
+            fill[cy0:cy1, cx0:cx1] |= ff
+        fill = (fill.astype(bool) & ~mtable).astype(np.uint8)
+    else:
+        method = "auto: GrabCut seeded by the low-frequency dE inside the slot zone"
+        bl = lambda a_: cv2.GaussianBlur(a_, (0, 0), 3.0)
+        dE = np.sqrt(((cv2.cvtColor(bl(regt), cv2.COLOR_RGB2LAB) - cv2.cvtColor(bl(base), cv2.COLOR_RGB2LAB)) ** 2).sum(2))
+        gc = np.full((H, W), cv2.GC_BGD, np.uint8)
+        gc[zone] = cv2.GC_PR_BGD
+        gc[zone & (dE > 7)] = cv2.GC_PR_FGD
+        gc[zone & (dE > 16)] = cv2.GC_FGD
+        y0, y1 = max(0, sy0 - int(0.08 * H)), min(H, sy1 + int(0.08 * H))
+        x0, x1 = max(0, sx0 - int(0.02 * W)), min(W, sx1 + int(0.05 * W))
+        sub = cv2.resize((regt[y0:y1, x0:x1] * 255).astype(np.uint8), None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
+        gsub = cv2.resize(gc[y0:y1, x0:x1], (sub.shape[1], sub.shape[0]), interpolation=cv2.INTER_NEAREST)
+        bgd, fgd = np.zeros((1, 65), np.float64), np.zeros((1, 65), np.float64)
+        cv2.grabCut(sub, gsub, None, bgd, fgd, 6, cv2.GC_INIT_WITH_MASK)
+        fg = cv2.resize(np.isin(gsub, (cv2.GC_FGD, cv2.GC_PR_FGD)).astype(np.uint8), (x1 - x0, y1 - y0), interpolation=cv2.INTER_NEAREST)
+        fill = np.zeros((H, W), np.uint8)
+        fill[y0:y1, x0:x1] = fg
+        fill = (fill.astype(bool) & ~mtable).astype(np.uint8)
+    a = np.clip(guided(g, fill.astype(np.float32), 3, 1e-3), 0, 1)
     a = np.where(cv2.erode(fill, np.ones((5, 5), np.uint8)).astype(bool), 1.0, a)
-    a = np.where(cv2.dilate(fill, np.ones((5, 5), np.uint8)).astype(bool), a, 0.0).astype(np.float32)
+    a = np.where(cv2.dilate(fill, np.ones((5, 5), np.uint8)).astype(bool) & ~mtable, a, 0.0).astype(np.float32)
     proxy_left = float((mc & (a < 0.5)).sum()) / max(1.0, float(mc.sum()))
     # (4) shadow
-    band = cv2.dilate((a > 0.02).astype(np.uint8), cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (73, 73))).astype(bool) & (a < 0.5)
+    yy_ = np.arange(H)[:, None] * np.ones((1, W))
+    onto = cv2.dilate(msofa.astype(np.uint8), np.ones((9, 9), np.uint8)).astype(bool) | (yy_ > sy1 - 0.01 * H)   # the sofa and the floor only
+    band = cv2.dilate((a > 0.02).astype(np.uint8), cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (73, 73))).astype(bool) & (a < 0.5) & ~mtable & onto
     ratio = (cv2.GaussianBlur(lum(regt).astype(np.float32), (0, 0), 4) + 1e-4) / (cv2.GaussianBlur(lum(base).astype(np.float32), (0, 0), 4) + 1e-4)
     d = 1 - np.clip(ratio, 0.35, 1.0)
     d = d * np.clip((d - 0.02) / 0.04, 0, 1) ** 2
@@ -450,7 +496,7 @@ def cush_fetch(s, url, pid, tid, refetch=True):
                model="seedream-5-pro i2i 2K", aspect_ratio="auto", tokens=650, estimate=650, placeholder_id=pid, task_id=tid, url=url,
                returned_px=list(Image.open(p).size), raw=os.path.relpath(p, REPO), image_url_local="cushions-input.png",
                prompt=os.path.relpath(os.path.join(PROMPTS, f"cushions-{s}.txt"), REPO), image_refs=4, register_to_input=np.round(M, 4).tolist(),
-               extraction="v2: ECC + local tone match (gain field) + GrabCut seeded by low-frequency dE inside the slot zone",
+               extraction="v2: ECC + local tone match (gain field, 60 px) + " + method,
                layer=dict(file=f"layers/cushions/set-{s}.png", alpha_px=int((a > 0.5).sum()), box_frame_uv=frame_uv_box(a, size),
                           slot_box_frame_uv=[0.484, 0.901, 0.566, 0.898], proxy_area_not_covered=round(proxy_left, 4)),
                shadow=dict(file=f"shadows/cushions/set-{s}.png", px_below_0_97=int((sh < 0.97).sum()), min=round(float(sh.min()), 3)),

@@ -165,7 +165,7 @@ test.describe('the Nordic living room', () => {
   test('"עצב בעצמך" opens the room engine', async ({ page }) => {
     await page.goto(`${NORDIC}#tool`);
     await page.getByRole('link', { name: 'לעיצוב הסלון' }).click();
-    await expect(page).toHaveURL(/\/rooms\/living-room\/$/);
+    await expect(page).toHaveURL(/\/rooms\/living-room\/\?from=%2Fstory%2Fliving-room%2Fnordic%2F$/);
     await expect(page.locator('button.hotspot').first()).toBeAttached({ timeout: 20_000 });
   });
 
@@ -464,6 +464,53 @@ test.describe('the shop (S4)', () => {
     await expect(card).toHaveAttribute('aria-label', /המלאי אינו זמין כעת$/);
     await expect(dialog.getByText('המלאי אינו זמין כעת', { exact: true })).toBeVisible();
     await expect(dialog.getByRole('button', { name: 'הוספה לסל' })).toHaveCount(0);
+  });
+});
+
+test.describe('from the story into the tool (S3)', () => {
+  test('the Nordic house: the tool opens with the way back to the story', async ({ page }) => {
+    await page.goto(`${NORDIC}#tool`);
+    await expect(page.locator('#st-tool')).toHaveAttribute('href', '/rooms/living-room/?from=%2Fstory%2Fliving-room%2Fnordic%2F');
+    await page.locator('#st-tool').click();
+    await expect(page.locator('button.hotspot').first()).toBeAttached({ timeout: 20_000 });
+    await expect(page.locator('#back-to-story')).toHaveAttribute('href', NORDIC);
+    // a "from" that is not a story page is ignored
+    await page.goto('/rooms/living-room/?from=https%3A%2F%2Fexample.com%2F');
+    await expect(page.locator('button.hotspot').first()).toBeAttached({ timeout: 20_000 });
+    await expect(page.locator('#back-to-story')).toHaveCount(0);
+  });
+
+  test("warm modern: the house's own tool, a draft, and the soft switch between two houses at one camera", async ({ page }) => {
+    await page.goto(`${WARM}#tool`);
+    await page.locator('#st-tool-draft').click();
+    await expect(page).toHaveURL(/\/story\/living-room\/warm-modern\/tool\/$/);
+    await expect(page.locator('.st-td .st-draft')).toHaveText('טיוטה / בדיקה · הכלי בבנייה');
+    const warm = page.locator('.st-td-house[data-house="warm-modern"]');
+    await expect(warm.locator('.st-td-layer')).toHaveCount(3);
+    expect(await warm.locator('.st-td-layer.is-multiply').evaluate((el) => getComputedStyle(el).mixBlendMode)).toBe('multiply');
+    // every layer of both houses in the same frame: one box
+    const boxes = await page.locator('.st-td-layer img').evaluateAll((els) => els.map((e) => JSON.stringify(e.getBoundingClientRect())));
+    expect(new Set(boxes).size).toBe(1);
+    expect(await warm.evaluate((el) => getComputedStyle(el).transitionDuration)).toBe('1s');
+    await page.locator('.st-td-btn[data-house="nordic"]').click();
+    await expect(page.locator('.st-td-btn[data-house="nordic"]')).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.locator('.st-td-house[data-house="nordic"]')).toHaveClass(/is-on/);
+    await expect(warm).toHaveAttribute('aria-hidden', 'true');
+    await expect(page).toHaveURL(/\?house=nordic$/);
+    await page.waitForTimeout(1200);
+    await audit(page, 'the draft tool, the Nordic house shown');
+  });
+
+  test('reduced motion: the switch is a short dissolve, nothing moves', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/story/living-room/warm-modern/tool/?house=nordic');
+    await expect(page.locator('.st-td-house[data-house="nordic"]')).toHaveClass(/is-on/);
+    expect(
+      await page
+        .locator('.st-td-house')
+        .first()
+        .evaluate((el) => getComputedStyle(el).transitionDuration),
+    ).toBe('0.2s');
   });
 });
 
