@@ -143,50 +143,62 @@ def med():
     rec = {}
     # (a) the echo of the old bowl rim on the bench front, right of / above the new bowl: a faint light + dark double line ~4-16 px above
     # the new bowl's tanned rim. Per column (x 1398-1482): the rim = the first row below y 1145 that is tan (b* >= 19.5, L* < 55); the band
-    # rim-16 .. rim-4 (the bowl's own lip highlight right above its rim is kept) is rebuilt as the bench front: a straight fit in y on the
+    # rim-20 .. rim-4 (the bowl's own lip highlight right above its rim is kept) is rebuilt as the bench front: a straight fit in y on the
     # clean rows above it (y 1146 .. rim-17), plus those rows' own grain
     lin = s2l(a)
     mask_a = np.zeros((H, W), bool)
     fill_a = lin.copy()
-    for x in range(1398, 1483):
+    cols = {}
+    for x in range(1392, 1483):
         rim = None
         for y in range(1146, 1215):
             if B_[y, x] >= 19.5 and L[y, x] < 55:
                 rim = y
                 break
+        if (rim is None or rim > 1200) and 1460 <= x <= 1482:
+            rim = 1190                                                    # where the bowl's rim turns down (x 1460-1482): above its lip
         if rim is None:
             continue
-        b0, b1 = max(rim - 16, 1150), rim - 4
-        if b1 <= b0:
-            continue
+        b0, b1 = max(rim - 20, 1150), rim - 4
         c0, c1 = 1146, max(b0 - 1, 1150)
         ys = np.arange(c0, c1)
-        vals = lin[c0:c1, x]
-        if ys.size >= 4:
-            A2 = np.stack([ys, np.ones_like(ys)], 1).astype(np.float32)
-            coef = np.linalg.lstsq(A2, vals, rcond=None)[0]
-            yb = np.arange(b0, b1 + 1)
-            model = (np.stack([yb, np.ones_like(yb)], 1).astype(np.float32) @ coef)
-            # grain from the clean rows, ratio to their own fit
-            cfit = A2 @ coef
-            gr = vals / np.maximum(cfit, 1e-5)
-            gsel = gr[np.arange(yb.size) % ys.size]
-            fill_a[b0:b1 + 1, x] = model * gsel
-            mask_a[b0:b1 + 1, x] = True
+        if b1 <= b0 or ys.size < 3:
+            continue
+        A2 = np.stack([ys, np.ones_like(ys)], 1).astype(np.float32)
+        coef = np.linalg.lstsq(A2, lin[c0:c1, x], rcond=None)[0]          # (2, 3): slope and offset per channel
+        cols[x] = (rim, b0, b1, c0, c1, coef)
+    xs_ = sorted(cols)
+    # the fits smoothed across columns (sigma 4 columns), so the band has no column-to-column streaks
+    C = np.stack([cols[x][5] for x in xs_])                               # (n, 2, 3)
+    Cs = cv2.GaussianBlur(C.reshape(len(xs_), 6).astype(np.float32), (1, 0), sigmaX=0.1, sigmaY=4).reshape(len(xs_), 2, 3)
+    for n, x in enumerate(xs_):
+        rim, b0, b1, c0, c1, coef = cols[x]
+        ys = np.arange(c0, c1)
+        A2 = np.stack([ys, np.ones_like(ys)], 1).astype(np.float32)
+        yb = np.arange(b0, b1 + 1)
+        model = np.stack([yb, np.ones_like(yb)], 1).astype(np.float32) @ Cs[n]
+        gr = lin[c0:c1, x] / np.maximum(A2 @ Cs[n], 1e-5)
+        wx = float(np.clip((x - 1392) / 6.0, 0, 1) * np.clip((1482 - x) / 4.0, 0, 1))
+        new_ = model * gr[np.arange(yb.size) % ys.size]
+        fill_a[b0:b1 + 1, x] = lin[b0:b1 + 1, x] * (1 - wx) + new_ * wx
+        mask_a[b0:b1 + 1, x] = True
     ma = cv2.GaussianBlur(mask_a.astype(np.float32), (0, 0), 0.8) * cv2.dilate(mask_a.astype(np.uint8), np.ones((3, 3), np.uint8))
     out = l2s(lin * (1 - ma[..., None]) + fill_a * ma[..., None])
     mask_a = ma > 0
-    rec["a_rim_echo"] = dict(columns=[1398, 1482], px=int(mask_a.sum()),
-                             method="per column, the band 4-16 px above the new bowl's tanned rim (the bowl and its lip highlight kept) rebuilt "
-                                    "as a straight fit in y of the clean bench front above it (from y 1146), with those rows' own grain")
+    rec["a_rim_echo"] = dict(columns=[1392, 1482], px=int(mask_a.sum()),
+                             method="per column, the band 4-20 px above the new bowl's tanned rim (the bowl and its lip highlight kept) rebuilt "
+                                    "as a straight fit in y of the clean bench front above it (from y 1146; fits smoothed over 4 columns), "
+                                    "with those rows' own grain")
     # (b) the two generic back cushions (left, middle) to sand linen; the right one stays white (our cushions-cj-washed-cotton-frayed White)
-    left = poly_mask(a.shape, [(214, 718), (265, 729), (340, 739), (440, 741), (530, 733), (604, 722), (604, 1000), (470, 1000), (420, 1012),
-                               (264, 1012), (262, 960), (258, 900), (245, 834), (229, 784)])
-    mid = poly_mask(a.shape, [(906, 729), (1000, 727), (1100, 724), (1203, 721), (1209, 765), (1212, 815), (1216, 890), (1223, 966),
+    left = poly_mask(a.shape, [(208, 713), (232, 716), (256, 725), (290, 730), (340, 736), (390, 739), (440, 738), (490, 734), (540, 727),
+                               (604, 722), (604, 1000), (470, 1000), (420, 1012), (264, 1012), (258, 960), (252, 900), (240, 834),
+                               (232, 786), (226, 772), (217, 752), (209, 717)])
+    mid = poly_mask(a.shape, [(906, 726), (922, 725), (967, 732), (1033, 740), (1067, 742), (1100, 739), (1133, 737), (1167, 734), (1200, 727),
+                              (1208, 724), (1209, 765), (1212, 815), (1216, 890), (1223, 966),
                               (1206, 966), (1192, 895), (1182, 826), (1140, 828), (1000, 834), (906, 842)])
     L2, A2, B2 = lab_of(out)
     excl = (A2 > 9.5) | (B2 > 21.5) | (L2 < 22)                         # terracotta, straw hat (and its band), deep gaps
-    olive = (A2 < 3.5) & (B2 > 16) & (L2 < 56)                            # the moss lumbar and its ruffle
+    olive = (L2 < 38) & (B2 > 17) & (A2 < 7)                              # the moss lumbar (L 26-33, b 20) and its dark ruffle
     excl = cv2.dilate((excl | olive).astype(np.uint8), np.ones((5, 5), np.uint8)).astype(bool)
     cm = (left | mid) & ~excl
     cm = cv2.morphologyEx(cm.astype(np.uint8), cv2.MORPH_OPEN, np.ones((3, 3), np.uint8)).astype(bool)
@@ -196,17 +208,17 @@ def med():
     lab = lab_f(out)
     # sand linen: a little darker and warmer, the texture and shading kept (L scaled about the cushion's own mean, a/b shifted)
     Lm = float(lab[..., 0][cm].mean())
-    tgt = dict(dL=-7.0, da=2.0, db=9.0)
+    tgt = dict(dL=-6.0, da=1.5, db=6.0)
     newlab = lab.copy()
     newlab[..., 0] = lab[..., 0] + tgt["dL"]
     newlab[..., 1] = lab[..., 1] + tgt["da"]
     newlab[..., 2] = lab[..., 2] + tgt["db"]
     rec_rgb = rgb_f(newlab)
     out = out * (1 - wgt[..., None]) + rec_rgb * wgt[..., None]
-    rec["b_bench_cushions"] = dict(cushions="left (x 214-604, y 718-1012) and middle (x 906-1223, y 721-966); the right one stays white (ours)",
+    rec["b_bench_cushions"] = dict(cushions="left (x 208-604, y 713-1012) and middle (x 906-1223, y 724-966), outlines along their frayed tops; the right one stays white (ours)",
                                    px=int((wgt > 0).sum()), mean_L_before=round(Lm, 1), shift_Lab=tgt,
-                                   target="sand linen ~ L 60 a 7 b 22 against the white cushion's L 71 a 4 b 12",
-                                   method="hand outlines kept 2 px inside, terracotta / hat / moss / gaps cut out by colour; Lab shift only, "
+                                   target="sand linen ~ L 61 a 6 b 19 against the white cushion's L 71 a 4 b 12",
+                                   method="hand outlines along the frayed flange (feathered 2 px), terracotta / hat / moss / gaps cut out by colour; Lab shift only, "
                                           "so the crinkle texture and the shading stay")
     o8 = save8(out, os.path.join(HERE, "mediterranean-A-ed5.png"))
     a8 = (a * 255 + 0.5).astype(np.uint8)

@@ -79,6 +79,12 @@ const BUILT_ROOMS = new Set(['living-room']);
 const argOf = (flag: string): string | undefined => process.argv.find((a) => a.startsWith(`${flag}=`))?.slice(flag.length + 1);
 const PRODUCT_ROOMS = new Set((argOf('--rooms') ?? [...BUILT_ROOMS].join(',')).split(',').filter(Boolean));
 const OUT_NAME = argOf('--out') ?? null;
+/**
+ * --products=<manifest>: also build every card a story frame shows (the story test page, tools/make-story-page.ts reads
+ * tools/test-page/story-hotspots.json), through the same pricing path, outside the rooms' slot options. A card's slot is
+ * the living room's slot of the same id when there is one (the story frames are living rooms), else its own room's.
+ */
+const EXTRA_PRODUCTS = argOf('--products') ?? null;
 const STYLE = 'nordic';
 
 type HousePlan = {
@@ -763,6 +769,30 @@ for (const hr of house.rooms) {
     // the room engine exists only for BUILT_ROOMS; a room built here for its products only (the test page) is not "built"
     built: BUILT_ROOMS.has(roomId),
   });
+}
+
+if (EXTRA_PRODUCTS) {
+  const manifest = readJson(sitePath(EXTRA_PRODUCTS)) as { frames: Record<string, { points: { product: string }[] }> };
+  const wanted = [...new Set(Object.values(manifest.frames).flatMap((f) => f.points.map((p) => p.product)))];
+  const built = new Set(fullProducts.map((p) => p.id));
+  const slotsOf = (room: string) => {
+    const f = repoPath('data/slots', `${room}.json`);
+    return existsSync(f) ? SlotsFileSchema.parse(readJson(f)).slots : [];
+  };
+  const living = slotsOf('living-room');
+  for (const id of wanted) {
+    if (built.has(id)) continue;
+    const c = cards.find((x) => x.card.id === id);
+    const slot = c ? (living.find((s) => s.id === c.card.slot) ?? slotsOf(cardRoom(c.card, c.path) ?? '').find((s) => s.id === c.card.slot)) : undefined;
+    if (!c || !slot) {
+      hidden.push({ id, slot: c?.card.slot ?? '', reason: c ? `no slot ${c.card.slot} in the living room or the card's room` : 'no valid product card' });
+      continue;
+    }
+    const p = buildProduct(c.card, c.path, 'living-room', slot, []);
+    if ('reason' in p) hidden.push(p);
+    else fullProducts.push(p);
+    built.add(id);
+  }
 }
 
 // Customer shipping fees come from settings (storefront); provisional until decision E1 is made.

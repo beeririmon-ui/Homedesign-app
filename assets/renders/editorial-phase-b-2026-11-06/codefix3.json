@@ -26,30 +26,86 @@
  "med": {
   "a_rim_echo": {
    "columns": [
-    1398,
+    1392,
     1482
    ],
-   "px": 1292,
-   "method": "per column, the band 4-16 px above the new bowl's tanned rim (the bowl and its lip highlight kept) rebuilt as a straight fit in y of the clean bench front above it (from y 1146), with those rows' own grain"
+   "px": 1620,
+   "method": "per column, the band 4-20 px above the new bowl's tanned rim (the bowl and its lip highlight kept) rebuilt as a straight fit in y of the clean bench front above it (from y 1146; fits smoothed over 4 columns), with those rows' own grain"
   },
   "b_bench_cushions": {
-   "cushions": "left (x 214-604, y 718-1012) and middle (x 906-1223, y 721-966); the right one stays white (ours)",
-   "px": 107440,
-   "mean_L_before": 63.6,
+   "cushions": "left (x 208-604, y 713-1012) and middle (x 906-1223, y 724-966), outlines along their frayed tops; the right one stays white (ours)",
+   "px": 105701,
+   "mean_L_before": 63.5,
    "shift_Lab": {
-    "dL": -7.0,
-    "da": 2.0,
-    "db": 9.0
+    "dL": -6.0,
+    "da": 1.5,
+    "db": 6.0
    },
-   "target": "sand linen ~ L 60 a 7 b 22 against the white cushion's L 71 a 4 b 12",
-   "method": "hand outlines kept 2 px inside, terracotta / hat / moss / gaps cut out by colour; Lab shift only, so the crinkle texture and the shading stay"
+   "target": "sand linen ~ L 61 a 6 b 19 against the white cushion's L 71 a 4 b 12",
+   "method": "hand outlines along the frayed flange (feathered 2 px), terracotta / hat / moss / gaps cut out by colour; Lab shift only, so the crinkle texture and the shading stay"
   },
-  "px_changed": 108423,
+  "px_changed": 106975,
   "px_changed_outside_mask": 0,
-  "mask_px": 112141,
+  "mask_px": 110892,
   "file": "mediterranean-A-ed5.png",
-  "px_changed_a": 983,
-  "px_changed_b": 107440,
+  "px_changed_a": 1274,
+  "px_changed_b": 105701,
   "base": "mediterranean-A-ed4.png"
+ },
+ "mc": {
+  "a_cups": {
+   "boxes": [
+    [
+     1556,
+     1094,
+     1667,
+     1202
+    ],
+    [
+     1665,
+     1111,
+     1760,
+     1203
+    ],
+    [
+     1747,
+     1138,
+     1822,
+     1210
+    ]
+   ],
+   "px": 21989,
+   "glaze": "plain off-white (Lab a 0.8, b 5.5), the bowl stays ivory with its speckle",
+   "method": "cup outlines by lightness and low chroma per box; dots and the tanned rim lifted to a 7 px closing of L; a/b set to the glaze, L shading kept"
+  },
+  "b_fly": {
+   "box": [
+    1591,
+    861,
+    1611,
+    882
+   ],
+   "px": 332,
+   "method": "the dark glyph (L 6 below the cushion ground, grown 2 px) inpainted from the ground round it (Telea r 4) with its grain"
+  },
+  "c_curtains": {
+   "px": 315312,
+   "mean_Lab_before": [
+    58.2,
+    6.0,
+    20.3
+   ],
+   "target": "#EDE7DB (91.8, 0.6, 5.6)",
+   "share_of_the_way": 0.6,
+   "method": "curtain pixels by colour in each curtain's box (largest part, holes filled); Lab shift of the mean 60 % toward the card, the folds' own L variation kept"
+  },
+  "px_changed": 336531,
+  "px_changed_outside_mask": 0,
+  "mask_px": 344513,
+  "file": "modern-country-A-fix1.png",
+  "px_changed_a": 20953,
+  "px_changed_b": 270,
+  "px_changed_c": 315308,
+  "base": "modern-country-A.png"
  }
 }

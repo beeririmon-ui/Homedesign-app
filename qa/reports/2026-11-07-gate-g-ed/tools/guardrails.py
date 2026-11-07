@@ -3,6 +3,8 @@
 G-ED.12 clipped highlights: share of pixels with any channel >= 254 (clipped) and >= 250 (near clip),
 whole frame; when a frame is over 1 %, pass a window mask (x0,y0,x1,y1 boxes) to exclude the window.
 G-ED.11 orange-teal aid: mean a*, b* (CIELAB, D65) of the darkest and the brightest 10 % of pixels by L*.
+G-ED.11 shadow floor (Bible 1.9, Nordic: the deepest shadow L* >= 8): L* at the 0.5th and 1st percentile
+on a quarter-size copy (so single dark pixels do not decide).
 A split grade shows as shadows b* < -4 together with highlights b* > +15; the light story can explain it
 (japandi blue hour, country rain against lamps), so it is a prompt to look, not a fail.
 
@@ -53,6 +55,8 @@ def measure(path, windows):
     out["shadows_10pct_Lab"] = [round(float(v), 1) for v in dark.mean(0)]
     out["highlights_10pct_Lab"] = [round(float(v), 1) for v in bright.mean(0)]
     out["split_flag"] = bool(dark[:, 2].mean() < -4 and bright[:, 2].mean() > 15)
+    out["shadow_floor_L_p0_5"] = round(float(np.percentile(L[:, 0], 0.5)), 1)
+    out["shadow_floor_L_p1"] = round(float(np.percentile(L[:, 0], 1)), 1)
     return out
 
 

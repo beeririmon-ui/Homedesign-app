@@ -1,4 +1,4 @@
-# Brief: two targeted passes in modern country (render-agent, 2026-11-07)
+# Brief: the paid round after the code fixes: two passes in modern country, two rug passes (render-agent, 2026-11-07)
 
 **The owner (2026-11-07, MC1):** "שני המעברים, ~1,300". These run after your zero-token code fixes. The base is `assets/renders/editorial-phase-b-2026-11-06/modern-country-A-fix1.png`, or whatever name your code-fix round gave it.
 
@@ -24,6 +24,23 @@ The source of both passes is QA, `qa/reports/2026-11-07-editorial-fin2-ed4-count
 - `mc1.json` with the jobs, prices, masks and px changed.
 - Before/after crops in `mc1-before-after/`.
 - Add the frame to the ED4 sheet, or make a small `mc1-sheet.jpg`.
+
+## Part 2: the rug passes (EDR1, the owner, 2026-11-07: "מעבר לכל אחד, ~1,300")
+This part was added after the owner's answer. QA (2026-11-06 phase B and 2026-11-07) found the same rug drawn wrong in two frames. The card is `rug-cj-braided-wool-natural`: a flat braided wool rug in natural colour. Its braid rows must be readable, it must have no pile, and it must lie flat and low.
+
+| # | Frame (base) | What is wrong | Model | ≈ tokens |
+|---|---|---|---|---|
+| 3 | Nordic A, `nordic-A-ed4.png` | The rug has a pile with fine tonal lines; it is not a flat braid | seedream-5-pro 2K on the rug crop, with a mask | 650 |
+| 4 | Warm modern, `warm-modern-A-ed5.png` (your code-fix output; else `-ed4`) | The rug has tonal cream ribs and is too thick | seedream-5-pro 2K on the rug crop, with a mask | 650 |
+
+Same route as above:
+- Use the card crop as the reference.
+- The furniture legs and anything standing on the rug stay as they are. Mask around them, or rebuild their contact shadows in code.
+- Outside the masks, 0 px change.
+
+Outputs: `nordic-A-ed5.png` and `warm-modern-A-ed6.png` (or the next suffix), recorded in the same `mc1.json` under a "rugs" key, with crops in `mc1-before-after/`.
+
+**The cap for the whole round (parts 1 and 2): 2,600.**
 
 ## Fixed rules
 - If var2 requires authentication, stop and report; never ask for codes or tokens.
