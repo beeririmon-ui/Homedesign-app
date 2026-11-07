@@ -5,30 +5,32 @@
 
 [1m[46m RUN [49m[22m [36mv4.0.8 [39m[90m/home/user/homedesign-app/site[39m
 
-(node:7487) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(node:17177) ExperimentalWarning: SQLite is an experimental feature and might change at any time
 (Use `node --trace-warnings ...` to show where the warning was created)
- [32m✓[39m shared/test/options.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 174[2mms[22m[39m
+ [32m✓[39m shared/test/options.test.ts [2m([22m[2m8 tests[22m[2m)[22m[33m 371[2mms[22m[39m
+     [33m[2m✓[22m[39m parses, names a SKU for the room, and passes the cross-field rules [33m 360[2mms[22m[39m
 [90mstdout[2m | shared/test/shared.test.ts[2m > [22m[2mrepo data against the derived schemas[2m > [22m[2mevery product card outside the shared pool parses, or is a DS-API draft whose only gaps are its unfilled draft fields
 [22m[39mdraft cards (DS API, colors / visual_weight unfilled): 68
 
- [32m✓[39m web/test/story-cart.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 28[2mms[22m[39m
+ [32m✓[39m web/test/story-cart.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 80[2mms[22m[39m
 [90mstderr[2m | api/test/api.test.ts[2m > [22m[2mpayment webhook[2m > [22m[2mrejects bad and stale signatures
 [22m[39mpayment webhook rejected mock mismatch
 
 [90mstderr[2m | api/test/api.test.ts[2m > [22m[2mpayment webhook[2m > [22m[2mrejects bad and stale signatures
 [22m[39mpayment webhook rejected mock stale
 
- [32m✓[39m web/test/product-bits.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 23[2mms[22m[39m
- [32m✓[39m api/test/api.test.ts [2m([22m[2m22 tests[22m[2m)[22m[33m 494[2mms[22m[39m
- [32m✓[39m shared/test/shared.test.ts [2m([22m[2m29 tests[22m[2m)[22m[33m 657[2mms[22m[39m
-     [33m[2m✓[22m[39m agrees with studio/build.py on the real cards [33m 332[2mms[22m[39m
- [32m✓[39m tools/test/story-hotspots.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 19[2mms[22m[39m
- [32m✓[39m web/test/product-gallery.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m api/test/api.test.ts [2m([22m[2m22 tests[22m[2m)[22m[33m 865[2mms[22m[39m
+ [32m✓[39m web/test/product-bits.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 55[2mms[22m[39m
+ [32m✓[39m tools/test/story-hotspots.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 25[2mms[22m[39m
+ [32m✓[39m shared/test/shared.test.ts [2m([22m[2m29 tests[22m[2m)[22m[33m 1490[2mms[22m[39m
+     [33m[2m✓[22m[39m every product card outside the shared pool parses, or is a DS-API draft whose only gaps are its unfilled draft fields [33m 367[2mms[22m[39m
+     [33m[2m✓[22m[39m agrees with studio/build.py on the real cards [33m 809[2mms[22m[39m
  [32m✓[39m web/test/option-picker.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 8[2mms[22m[39m
- [32m✓[39m web/test/story-detail.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m web/test/product-gallery.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m web/test/story-detail.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 7[2mms[22m[39m
 
 [2m Test Files [22m [1m[32m9 passed[39m[22m[90m (9)[39m
 [2m      Tests [22m [1m[32m91 passed[39m[22m[90m (91)[39m
-[2m   Start at [22m 13:03:47
-[2m   Duration [22m 1.56s[2m (transform 1.06s, setup 0ms, collect 1.72s, tests 1.42s, environment 1ms, prepare 43ms)[22m
+[2m   Start at [22m 13:13:33
+[2m   Duration [22m 2.92s[2m (transform 1.74s, setup 0ms, collect 3.17s, tests 2.91s, environment 1ms, prepare 77ms)[22m
 

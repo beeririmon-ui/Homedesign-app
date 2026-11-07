@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
 Clay checks of the warm-modern living-room clay r4 (house plan 1.3.4 WMC9, slots 1.9.3 by_style.warm-modern; render-agent, 2026-11-07;
-0 var2 tokens). The same shape as r3 (clay_checks_wm_r3.py); the change is WMC9: the magazine holder at (-0.47, 2.57), 35 x 19 x 27.5.
+0 var2 tokens). The same shape as r3 (clay_checks_wm_r3.py); the changes: WMC9, the magazine holder at (-0.47, 2.57), 35 x 19 x 27.5, and
+WMC10 (house plan 1.3.5), the skirting in the wall's colour, no floor shadow gap: the back wall's floor line measured against Z 0 (QA: < 1 px).
 Its gaps r3 -> r4 in px (expected: armchair ~0.021 / 82 px, the coffee table's front-left corner ~0.032, basket ~0.06; the slot box
 [0.331, 0.442, 0.925, 1.0], point (0.387, 0.96)); if the armchair gap is still < 0.02, the designer's next lever X +0.02 is projected only.
 Reads framing/warm-modern-r4/selfcheck-render-A.json and the index passes in the scratchpad (wm-r4-idx/, and wm-r3-idx/ for r3);
@@ -414,6 +415,51 @@ if _hb:
     wmc8["hotspot_point_inside_clay_box"] = bool(_hb[0] <= 0.387 <= _hb[1] and _hb[2] <= 0.96 <= _hb[3])
 
 
+# WMC10: the back wall's floor line against Z 0 (at the skirting's foot, Y 0.015) and the skirting's top (Z 0.15), on the index pass,
+# only where the wall's base is visible (skirting above, floor below the projected row); offsets in px of the 3840 frame (and of 1920)
+def floor_line(run):
+    m = MK[(run, "M0")]
+    if not m:
+        return None
+    idx_ = m["idx"]
+    offs, tops, occl = [], [], 0
+    for X in np.arange(-1.90, 2.46, 0.05):
+        u, v, d = P(M0, X, 0.015, 0.0)
+        if not (0 <= u <= 1):
+            continue
+        col = int(round(px_u(u)))
+        r0 = px_v(v)
+        lo, hi = int(r0) - 30, int(r0) + 30
+        c = idx_[lo:hi, col]
+        k = np.nonzero((c[:-1] == 11) & (c[1:] == 8))[0]
+        if k.size == 0:
+            occl += 1
+            continue
+        offs.append(float(lo + k[np.argmin(np.abs(lo + k + 0.5 - r0))] + 0.5 - r0))
+        ut, vt, _ = P(M0, X, 0.015, 0.15)
+        rt = px_v(vt)
+        lo2 = int(rt) - 30
+        c2 = idx_[lo2:int(rt) + 30, int(round(px_u(ut)))]
+        k2 = np.nonzero((c2[:-1] == 5) & (c2[1:] == 11))[0]
+        if k2.size:
+            tops.append(float(lo2 + k2[np.argmin(np.abs(lo2 + k2 + 0.5 - rt))] + 0.5 - rt))
+    if not offs:
+        return dict(samples=0, occluded=occl)
+    o = np.array(offs)
+    t = np.array(tops) if tops else np.array([np.nan])
+    return dict(samples=len(offs), occluded_samples=occl, floor_line_offset_px_3840=dict(median=round(float(np.median(o)), 2),
+                iqr=[round(float(np.percentile(o, 25)), 2), round(float(np.percentile(o, 75)), 2)], max_abs=round(float(np.abs(o).max()), 2)),
+                floor_line_offset_px_1920_median=round(float(np.median(o)) / 2, 2),
+                skirting_top_Z0_15_offset_px_3840=dict(median=round(float(np.nanmedian(t)), 2), samples=int(np.isfinite(t).sum())),
+                note="the visible floor line = the skirting's front foot (Y 0.015, Z 0); samples behind the sofa / table / holder are left out")
+
+
+wmc10 = dict(r3=floor_line("r3"), r4=floor_line("r4"), expected="under 1 px (QA)", skirting="15 cm in the wall's colour (#ECE5DA; the clay's wall material), "
+             "1.5 cm proud, top corner r 3 mm, no floor shadow gap")
+_f = (wmc10["r4"] or {}).get("floor_line_offset_px_3840", {})
+wmc10["resolved"] = bool(_f and abs(_f["median"]) < 1.0)
+
+
 accepted = dict(arc_start_next_to_pot=dict(arc_left_tangent_u=round(vline_u(M0, -2.30, G["corner_r"]), 4),
                                            pot_left_u=round(min(P(M0, *q)[0] for q in circ(*G["pot_c"], G["pot_r"], 0.2)), 4),
                                            px=round((min(P(M0, *q)[0] for q in circ(*G["pot_c"], G["pot_r"], 0.2)) - vline_u(M0, -2.30, G["corner_r"])) * CW, 1),
@@ -431,7 +477,7 @@ out = dict(date="2026-11-07", tokens=0, script="assets/blockout/house/framing/wa
                        r3="assets/blockout/house/framing/warm-modern-r3/clay-checks-2026-11-07.json"),
            decisions="WMC9 on WMC1-WMC8 (house plan 1.3.4; slots 1.9.3)",
            cameras={k: dict(loc=v["loc"], yaw=v["yaw_deg_left"], u0=v["u0"], v0=v["v0"]) for k, v in CAMS.items()},
-           findings=dict(WMC9_magazine_holder=wmc8, WMC6_bench_vs_pot=wmc6, WMC7_stack_vs_armchair=wmc7, accepted=accepted),
+           findings=dict(WMC9_magazine_holder=wmc8, WMC10_floor_line=wmc10, WMC6_bench_vs_pot=wmc6, WMC7_stack_vs_armchair=wmc7, accepted=accepted),
            plan_clearances=plan_clear, vase_vs_armchair_M0=check_vase,
            slot_boxes=rows, named_lines=lines, architecture_clay_boxes=arch_clay, f3_lines_near_edges=f3_lines, f3_tangents=f3,
            contradictions=[f"{r['slot']}: {r['item']}" for r in rows if r["verdict"].startswith("CONTRADICTION")])

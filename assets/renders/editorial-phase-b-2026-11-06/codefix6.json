@@ -1,0 +1,55 @@
+{
+ "spot": {
+  "box": [
+   1195,
+   1099,
+   1208,
+   1113
+  ],
+  "px": 88,
+  "sofa_median_L": 198.3,
+  "grain_sd": 6.65,
+  "method": "pixels > 22 levels from the local median (9 px), grown 1 px, inside the box; membrane fill + the sofa's grain"
+ },
+ "vase_line": {
+  "rows": [
+   585,
+   700
+  ],
+  "px": 2421,
+  "max_lowered_levels": 18.9,
+  "column_bump_levels": {
+   "before": 4.6,
+   "after": -1.4
+  },
+  "method": "the strip's low frequencies brought down to the glass left of it (light excess only), texture kept"
+ },
+ "mullion_grain": {
+  "box": [
+   1988,
+   541,
+   2010,
+   698
+  ],
+  "px": 840,
+  "grain_sd": 3.0,
+  "method": "the flat pixels of the per-row fill (local variation < 0.35 levels) given the visible mullion's grain"
+ },
+ "px_changed": 1859,
+ "px_changed_outside_mask": 0,
+ "mask_px": 3349,
+ "file": "modern-country-A-fix4.png",
+ "date": "2026-11-07",
+ "by": "render-agent",
+ "tokens": 0,
+ "base": "modern-country-A-fix3.png",
+ "out": "modern-country-A-fix4.png",
+ "source": "qa/reports/2026-11-07-ged-codefix5-clay-r3.md section 1.1",
+ "note": "TEST, not for the site; new files only",
+ "crops": [
+  "codefix6-before-after/sofa-spot-x8.jpg",
+  "codefix6-before-after/sofa-spot-100.jpg",
+  "codefix6-before-after/vase-left-x4.jpg",
+  "codefix6-before-after/mullion-x4.jpg"
+ ]
+}

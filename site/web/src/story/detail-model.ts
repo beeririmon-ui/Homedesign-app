@@ -24,6 +24,8 @@ export type DSku = {
   days: [number, number] | null;
   /** an index into DetailData.images */
   image: number | null;
+  /** the photo is this option's own (else the listing's main photo, shown for the story's option) */
+  image_of_option: boolean;
   closeup: DCloseup | null;
 };
 export type DetailData = {
@@ -78,7 +80,7 @@ export function photoOf(d: DetailData, sku: DSku): Shown {
     return {
       image: im,
       alt: `צילום הספק: ${d.name_he}${sku.label_he && sku.key !== d.story_key ? `, ${sku.label_he}` : ''}`,
-      caption: sku.label_he && d.axes.length ? `צילום הספק, באפשרות ${sku.label_he}.` : 'צילום הספק.',
+      caption: sku.label_he && d.axes.length && sku.image_of_option ? `צילום הספק, באפשרות ${sku.label_he}.` : 'צילום הספק.',
       kind: 'supplier',
     };
   if (sku.key === d.story_key && d.crop)

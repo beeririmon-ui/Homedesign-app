@@ -311,6 +311,7 @@ async function itemOf(
   crop: [number, number],
   fw: number,
   fh: number,
+  closeups: CloseupSpec[] = [],
 ): Promise<Item> {
   const card = cards.get(pt.product);
   if (!card) throw new Error(`${frame}: no product card ${pt.product}`);
@@ -363,7 +364,12 @@ async function itemOf(
   const notes = [...(pt.in_frame_he ? [pt.in_frame_he] : []), ...(styleNote ? [styleNote] : []), ...(p?.notes_he.filter((x) => !x.startsWith('בתמונה')) ?? [])];
   if (p?.pack) notes.push(`נמכר כסט של ${p.pack.set_qty}.`);
   const faithful = faithfulOf(q, pt.product);
-  const dot = isFaithful(faithful);
+  // G-ED.5: "partly" in the frame gets its dot when the product's close-up in this house passed G-ED as "yes"
+  const closeupYes = closeups.some((c) => {
+    const cq = c.product === pt.product ? qaOf(c.qa_key) : null;
+    return !!cq && story.allowed_states.includes(cq.state) && isFaithful(faithfulOf(cq, pt.product));
+  });
+  const dot = isFaithful(faithful) || (/^partly\b/.test(faithful) && closeupYes);
   const ph = dot ? phoneDot(pt, crop[0], crop[1], fw, fh) : { at: null, note: null };
   return {
     id: `${frame}-${n}`,
@@ -450,7 +456,7 @@ for (const [key, pair] of Object.entries(story.pairs)) {
     const crop: [number, number] = [cl / W, (cl + cw) / W];
     const points = [...f.points].sort(readingOrder);
     const items: Item[] = [];
-    for (const [i, pt] of points.entries()) items.push(await itemOf(room, pair.tool, f.id, q, i + 1, pt, crop, W, H));
+    for (const [i, pt] of points.entries()) items.push(await itemOf(room, pair.tool, f.id, q, i + 1, pt, crop, W, H, pair.closeups));
     for (const x of items) {
       x.href = detailHref(room, style, x.product);
       x.crop_image = await itemCrop(img, W, H, x.box, join(dir, 'items'), `${URL_BASE}/${room}/${style}/${f.id}/items`);
@@ -521,6 +527,8 @@ type DetailSku = {
   size_he: string | null;
   days: [number, number] | null;
   image: Image | null;
+  /** the photo is this option's own (else the listing's main photo, for the option the story shows) */
+  image_of_option: boolean;
   closeup: Closeup | null;
 };
 type DetailAxis = { id: string; name_he: string; values: { id: string; label_he: string; hex: string | null }[] };
@@ -606,7 +614,7 @@ async function detailOf(pg: PageOut, product: string, items: Item[]): Promise<De
     axes.some((a) => a.id === 'size')
       ? sizeLabel(axes.find((a) => a.id === 'size')!.values.find((v) => v.id === values.size)?.label_he)
       : sizeHe(p ? p.dimensions_cm : card.dimensions_cm, place);
-  const raw: Omit<DetailSku, 'image' | 'closeup'>[] = o
+  const raw: Omit<DetailSku, 'image' | 'image_of_option' | 'closeup'>[] = o
     ? o.skus.map((k) => ({
         key: keyOf(axes, k.values),
         values: k.values,
@@ -673,12 +681,12 @@ async function detailOf(pg: PageOut, product: string, items: Item[]): Promise<De
     else closeups.set(c.option ? keyOf(axes, { ...(first.values ?? {}), ...c.option }) : story_key, cu);
   }
   const skus: DetailSku[] = [];
-  for (const k of raw)
-    skus.push({
-      ...k,
-      image: await photoOf(card, imageOf(k.values) ?? (k.key === story_key ? card.images.urls[0] : null)),
-      closeup: closeups.get(k.key) ?? null,
-    });
+  for (const k of raw) {
+    // the option's own photo; an option the card lists no photo for shows the listing's main photo, for the story's option only
+    const own = imageOf(k.values);
+    const image = await photoOf(card, own ?? (k.key === story_key ? card.images.urls[0] : null));
+    skus.push({ ...k, image, image_of_option: !!image && !!own, closeup: closeups.get(k.key) ?? null });
+  }
   const elsewhere = pages
     .filter((x) => x !== pg && x.frames.some((f) => f.items.some((it) => it.product === product)))
     .map((x) => ({
@@ -944,7 +952,7 @@ function detailBody(d: DetailOut, pg: PageOut): string {
   const crop = d.here[0]?.image ?? null;
   const photo = sku.image ?? crop;
   const photoCap = sku.image
-    ? sku.label_he && d.axes.length
+    ? sku.label_he && d.axes.length && sku.image_of_option
       ? `צילום הספק, באפשרות ${sku.label_he}.`
       : 'צילום הספק.'
     : crop

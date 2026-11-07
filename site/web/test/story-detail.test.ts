@@ -19,6 +19,7 @@ const sku = (color: string, size: string, o: Partial<DSku> = {}): DSku => ({
   size_he: size,
   days: [9, 23],
   image: null,
+  image_of_option: true,
   closeup: null,
   ...o,
 });
@@ -87,6 +88,9 @@ describe('the detail page model', () => {
     expect(photoOf(noPhoto, storySku(noPhoto))).toMatchObject({ kind: 'frame', image: img('crop') });
     expect(photoOf(noPhoto, noPhoto.skus[0]!)).toMatchObject({ kind: 'none', image: null });
     expect(photoOf(base, base.skus[1]!).caption).toContain('צילום הספק עוד לא הורד');
+    // the listing's main photo (the card names none for the option) does not claim to be the option
+    const main = { ...base, skus: base.skus.map((k) => (k.key === 'tea+50x50' ? { ...k, image_of_option: false } : k)) };
+    expect(photoOf(main, storySku(main)).caption).toBe('צילום הספק.');
   });
 
   it('says why there is no add button, and names the story option when the choice is another', () => {

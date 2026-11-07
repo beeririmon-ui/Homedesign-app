@@ -6,6 +6,9 @@ r3_decisions_1_3_4; data/slots/living-room.json 1.9.3 by_style.warm-modern; rend
 A copy of framing_wm_r3.py (r3 stays as it is, read only; this one writes only to framing/warm-modern-r4/), with one change:
   - WMC9: the magazine holder at (-0.47, 2.57) (r3: -0.47, 2.59), at the real size of magazine-holder-cj-gunmetal-leather-strap small,
     35 x 19 x 27.5 (its envelope box, long side to the camera);
+  - WMC10 (house plan 1.3.5): the skirting 15 cm in the wall's colour (#ECE5DA; the clay's wall material), 1.5 cm proud, its top corner
+    rounded 3 mm, no shadow gap in the floor: the floor line at Z 0 at the skirting's foot (the r3 board was in the moulding material;
+    there was no floor gap object in the living room);
   - everything else as r3 (WMC1-WMC8, the round-5b positions and light, ARC2).
 
   python3 framing_wm_r4.py --frames M0,M0p,M0x --res 3840 --samples 16 --pose-samples 10
@@ -217,6 +220,17 @@ def wm_fixes(R):
     r3.reg(R, "living/magazine-holder", [hd], "living", src=f"WMC9: ({Hd['c']}) {Hd['w']} x {Hd['d']} x {Hd['h']} (gunmetal leather strap, small)")
     r3.set_hidden([hd], True)
     notes.append(f"basket ({Bk['c']}) d {Bk['d']} h {Bk['h']}; magazine holder ({Hd['c']}) {Hd['w']} x {Hd['d']} x {Hd['h']}")
+    # WMC10: the skirting in the wall's material, the top corner rounded 3 mm; no floor shadow gap (none is built in the living room)
+    sk = [o for o in bpy.data.objects if o.name.startswith("skirt_") and o.type == "MESH"]
+    for o in sk:
+        o.data.materials.clear()
+        o.data.materials.append(M["wall"])
+        bv = o.modifiers.new("wmc10_bevel", "BEVEL")
+        bv.width = 0.003
+        bv.segments = 2
+        bv.limit_method = "ANGLE"
+    gaps = [o.name for o in bpy.data.objects if "floor" in o.name.lower() and ("gap" in o.name.lower() or "sgap" in o.name.lower())]
+    notes.append(f"WMC10: {len(sk)} skirting boards ({[o.name for o in sk][:8]}) in the wall material, bevel 3 mm; floor shadow-gap objects: {gaps}")
     return notes
 
 
@@ -301,7 +315,7 @@ def main(argv):
     out = argv[argv.index("--out") + 1]
     sc_path = os.path.join(out, "selfcheck-render-A.json")
     rep = json.load(open(sc_path))
-    rep["stage"] = ("warm modern r4 (house plan 1.3.4 WMC9 on WMC1-WMC8, slots 1.9.3 by_style.warm-modern, Bible warm-modern 1.0; "
+    rep["stage"] = ("warm modern r4 (house plan 1.3.4-1.3.5 WMC9 + WMC10 on WMC1-WMC8, slots 1.9.3 by_style.warm-modern, Bible warm-modern 1.0; "
                     "M0 1.2 camera; framing_wm_r4.py on framing_r4; 0 var2 tokens)")
     rep["warm_modern_r4"] = dict(WM, pendant=PENDANT, armchair_delta=ARMCHAIR_D, rug=RUG, living_furniture=LIVING_FURNITURE)
     json.dump(rep, open(sc_path, "w"), indent=2, ensure_ascii=False)

@@ -1,0 +1,210 @@
+{
+ "date": "2026-11-07",
+ "by": "render-agent",
+ "tokens": 0,
+ "base": "mediterranean-A-ed6.png",
+ "out": "mediterranean-A-ed7.png",
+ "raw_kept": "raw/mediterranean-A-gpt-image-2-5.png",
+ "spec": "docs/proposals/clay-r2-and-ged-verdicts-2026-11-07.md section 6 + the manager's brief",
+ "masks": {
+  "sun_px": 33985,
+  "sun_soft_px": 189742,
+  "shade_mean": 0.926,
+  "window_box": [
+   2392,
+   170,
+   2730,
+   915
+  ],
+  "limewash_px": 1185806,
+  "product_boxes": [
+   [
+    288,
+    136,
+    692,
+    664
+   ],
+   [
+    732,
+    182,
+    1102,
+    672
+   ],
+   [
+    1138,
+    226,
+    1462,
+    678
+   ],
+   [
+    1172,
+    0,
+    1694,
+    252
+   ],
+   [
+    200,
+    700,
+    1772,
+    1240
+   ],
+   [
+    428,
+    980,
+    1004,
+    1446
+   ],
+   [
+    708,
+    1000,
+    2132,
+    1536
+   ],
+   [
+    1728,
+    838,
+    2002,
+    1232
+   ],
+   [
+    1948,
+    918,
+    2272,
+    1272
+   ],
+   [
+    2088,
+    378,
+    2652,
+    930
+   ],
+   [
+    276,
+    1356,
+    2684,
+    1536
+   ]
+  ]
+ },
+ "steps": {
+  "white_balance": {
+   "from_K": 5000,
+   "to_K": 4500,
+   "linear_gains": [
+    0.9239,
+    1.0067,
+    1.1572
+   ],
+   "note": "cooler by ~500 K, shade only"
+  },
+  "chroma_factor_shade": 0.9,
+  "terracotta_floor_floor_S": 0.4,
+  "terracotta_held_px": 13947,
+  "limewash": {
+   "b_median_before": 11.42,
+   "b_target": 8.0,
+   "a_cap": 3.0
+  },
+  "L_bump": "L* 30-70 down by up to 4 (sin), shade only"
+ },
+ "patches_Lab": {
+  "limewash back wall (shade)": {
+   "before": [
+    62.1,
+    5.8,
+    18.5
+   ],
+   "after": [
+    59.5,
+    3.0,
+    8.8
+   ]
+  },
+  "limewash arch left (shade)": {
+   "before": [
+    46.7,
+    4.3,
+    12.3
+   ],
+   "after": [
+    42.6,
+    2.6,
+    6.7
+   ]
+  },
+  "limewash right wall (shade)": {
+   "before": [
+    60.7,
+    5.6,
+    18.2
+   ],
+   "after": [
+    57.6,
+    3.1,
+    8.7
+   ]
+  },
+  "bench front (shade)": {
+   "before": [
+    53.9,
+    6.7,
+    15.3
+   ],
+   "after": [
+    49.7,
+    3.7,
+    8.2
+   ]
+  },
+  "terracotta floor (shade)": {
+   "before": [
+    51.4,
+    12.4,
+    19.3
+   ],
+   "after": [
+    48.0,
+    8.9,
+    13.0
+   ]
+  }
+ },
+ "blade": {
+  "floor": {
+   "px": 13791,
+   "L_contrast_to_shade_before": 19.7,
+   "after": 21.9
+  },
+  "sill": {
+   "px": 295,
+   "L_contrast_to_shade_before": 6.3,
+   "after": 6.5
+  }
+ },
+ "sun_px_changed": 0,
+ "guardrails": {
+  "G_ED_11_dark10_b": {
+   "ed6": 18.47,
+   "ed7": 14.76,
+   "rule": ">= -4 (target >= +3)"
+  },
+  "G_ED_12": {
+   "raw": {
+    "file": "assets/renders/editorial-phase-b-2026-11-06/raw/mediterranean-A-gpt-image-2-5.png",
+    "clipped_254_pct": 0.143,
+    "near_clip_250_pct": 3.161
+   },
+   "ed6": {
+    "file": "assets/renders/editorial-phase-b-2026-11-06/mediterranean-A-ed6.png",
+    "clipped_254_pct": 0.0,
+    "near_clip_250_pct": 0.0
+   },
+   "ed7": {
+    "file": "assets/renders/editorial-phase-b-2026-11-06/mediterranean-A-ed7.png",
+    "clipped_254_pct": 0.0,
+    "near_clip_250_pct": 0.0
+   }
+  }
+ },
+ "note": "TEST, not for the site; new files only"
+}
