@@ -10,7 +10,8 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const SITE = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const OUT = resolve(SITE, '../assets/qa/hotspots');
+// the review screenshots go to an untracked folder; HD_QA_SHOTS=1 writes the tracked ones for review by eye
+const OUT = resolve(SITE, process.env.HD_QA_SHOTS === '1' ? '../assets/qa/hotspots' : 'test-results/qa-shots/hotspots');
 type Scene = { slots: Record<string, { outline?: [number, number][][] | null }> };
 const scene = JSON.parse(readFileSync(resolve(SITE, '.generated/scene.living-room.nordic.json'), 'utf8')) as Scene;
 

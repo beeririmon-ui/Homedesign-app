@@ -120,7 +120,7 @@ def measure_line(gc, gr, P0, P1, keep=None):
             pc = np.abs(np.diff(gc[yi - band:yi + band + 1, xi - span:xi + span + 1], axis=1)).mean(0)
             pr = np.abs(np.diff(gr[yi - band:yi + band + 1, xi - span:xi + span + 1], axis=1)).mean(0)
         c = len(pc) // 2
-        if pc[c - 6:c + 7].max() < 1.5:            # no clay edge at this sample (hidden or too soft)
+        if pc[c - 6:c + 7].max() < 1.0:            # no clay edge at this sample (hidden or too soft)
             continue
         o, r = xcorr(pc, pr, half)
         if o is None or r < 0.5:

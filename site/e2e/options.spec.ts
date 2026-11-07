@@ -12,7 +12,8 @@ import type { PublicCatalog, PublicProduct } from '../shared/src/catalog';
 import { availableValues, expandOptions, pickSku, selectionOf } from '../shared/src/options';
 
 const SITE = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const OUT = resolve(SITE, 'screens');
+// the review screenshots go to an untracked folder; HD_QA_SHOTS=1 writes the tracked ones for review by eye
+const OUT = resolve(SITE, process.env.HD_QA_SHOTS === '1' ? 'screens' : 'test-results/qa-shots/options');
 const catalog = JSON.parse(readFileSync(resolve(SITE, '.generated/catalog.public.json'), 'utf8')) as PublicCatalog;
 
 // colour swatches first, at least two axes, and options that differ in price; a cushion when there is one

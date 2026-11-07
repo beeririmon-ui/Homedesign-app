@@ -151,6 +151,8 @@ npm run dev        # בונה קטלוג ומדיה זמנית, מאפס D1 מק
 - **הקוד:** `web/src/story/` (`story.ts`, ‏`story.css`, ‏`story-cart.ts`), כניסה נפרדת של Vite לכל עמוד. התבנית: `tools/story/page.template.html`. עמוד החדר לא טוען ממנו דבר.
 - **רשומות ה-QA:** `tools/lib/qa-frames.ts` קורא את שני המבנים (`final_test` ו-`frames.<key>.rows`; ‏`part1.frames.<key>` עם `state`, ‏`against` ו-`rows_changed`), ורשומה חדשה גוברת.
 - **שכבה 2, "הפרט" (S2):** `/story/<חדר>/<סגנון>/p/<מוצר>/` לכל מוצר בפריימים של הבית. תמונת הספק של האפשרות (מהמטמון; בלי צילום, החלק של המוצר בפריים, עם כיתוב), כל האפשרויות של הספק עם המחיר של כל אחת (כללי הבחירה של `@hd/shared/picker`, כמו בדף המוצר של האתר), הכתובת שמציינת אפשרות (`?color=…&size=…`), "בחדר הזה" (חיתוך של המוצר מהפריים, וקישור חזרה), "גם בבתים אחרים", וקישור לכלי בעמדה של המוצר. **מקום לתקריב** (G-ED.18): `closeups` בזוג שב-`data/story/story.json`, באותו שער QA. עד שיש תקריב, המקום ריק ואומר זאת. הקוד: `web/src/story/detail.ts` ו-`detail-model.ts`.
+- **החנות (S4):** "המראה כולו לסל" מתחת לרשימה של כל פריים; סל עם כמות והסרה, ושורה של מוצר שהפסיק להימכר נשמרת בלי להיגבות (PRE1); סט או יחידה בודדת (SET1); תשלום בדיקה ב-`/story/checkout/` (השדות והכללים של `/checkout/`, בלי חיוב ובלי שליחה) והזמנת בדיקה ב-`/story/order/`. הקוד: `web/src/story/checkout.ts` ו-`checkout-model.ts`. בכלי, אפשרות שאזלה מסומנת "אינו במלאי" על הגלגל ולא נמכרת (PRE1, ‏MED1).
+- **שער ה-QA:** הגרסה הגבוהה של `qa/reports/ged-register-*.json` (`registerReader` ב-`tools/lib/qa-frames.ts`); רשומה שאי אפשר לקרוא נכשלת בקול.
 - **פריסה ציבורית:** `HD_PUBLIC=1 npm run build` משאיר בחוץ את `/test/`, ‏`/story/` ו-`/test/story/`, ומוחק את `dist/test`, ‏`dist/story`, ‏`dist/media/test` ו-`dist/media/story` (TODO ב-`web/vite.config.ts`). בלי הדגל הם נבנים, לבדיקה. `screens:story` בונה גם בנייה ציבורית ובודק שאין בה דבר מהם.
 
 ## הנגן (G3.18, G6.9, 2026-11-03)
@@ -193,7 +195,7 @@ npm run screens:artifact     # צילומים ב-screens/artifact-{1280,400}-*.p
 - הסימנים לא חופפים: מרחק של 48px לפחות בין מרכזים. ה-`<button>` הוא יעד של 46px.
 - בריחוף, במגע ובפוקוס: קו המתאר של המוצר עצמו (`outline` בסצנה, מתוך האלפא) בקו בהיר עדין, עם הילה חמה. גם ריחוף ולחיצה על המוצר עצמו פותחים אותו. הכפתור נשאר הפקד הנגיש.
 - אין פעימה. עם `prefers-reduced-motion` אין מעברים.
-- צילומים: `e2e/hotspots.spec.ts` → `assets/qa/hotspots/` (‏`room-<w>-rest.png` נקי, ‏`room-<w>-after-move.png` אחרי תזוזת עכבר, ‏`room-<w>-focus-sofa.png` בפוקוס מקלדת, ‏`room-<w>-hover-vase.png` בריחוף). הבדיקות של המצבים האלה: `e2e/flow.spec.ts`, "product marks rest hidden".
+- צילומים: `e2e/hotspots.spec.ts` → `test-results/qa-shots/hotspots/` (לא במאגר). רק עם `HD_QA_SHOTS=1` הם נכתבים ל-`assets/qa/hotspots/` שבמאגר; כך גם `swap-diff` ו-`options`. הצילומים עצמם: (‏`room-<w>-rest.png` נקי, ‏`room-<w>-after-move.png` אחרי תזוזת עכבר, ‏`room-<w>-focus-sofa.png` בפוקוס מקלדת, ‏`room-<w>-hover-vase.png` בריחוף). הבדיקות של המצבים האלה: `e2e/flow.spec.ts`, "product marks rest hidden".
 
 ### סט או יחידה (P1) ותקנים (D9)
 

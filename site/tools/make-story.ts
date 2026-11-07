@@ -403,9 +403,13 @@ async function itemOf(
   const row = rowOf(q, pt.product, values);
   const faithful = row?.faithful ?? 'not checked';
   // G-ED.5: "partly" in the frame gets its dot when the product's close-up in this house passed G-ED as "yes"
+  // QA on S2 (2026-11-07): a close-up lights a "partly" dot only when it is at least final test (almost is not enough),
+  // shows the same option as the frame, and its own row for the product says "yes"
   const closeupYes = closeups.some((c) => {
-    const cq = c.product === pt.product ? qaOf(c.qa_key) : null;
-    return !!cq && story.allowed_states.includes(cq.state) && isFaithful(faithfulOf(cq, pt.product, values));
+    if (c.product !== pt.product) return false;
+    const sameOption = Object.entries(c.option ?? {}).every(([k, v]) => values?.[k] === v) && (!!c.option || !pt.option);
+    const cq = sameOption ? qaOf(c.qa_key) : null;
+    return !!cq && FINAL.has(cq.state) && isFaithful(faithfulOf(cq, pt.product, values));
   });
   // the register says where a dot goes (yes | no | closeup_only); an older record only gives the verdict
   const dot = row?.dot ? row.dot === 'yes' || (row.dot === 'closeup_only' && closeupYes) : isFaithful(faithful) || (/^partly\b/.test(faithful) && closeupYes);
@@ -611,6 +615,8 @@ const sizeLabel = (label: string | null | undefined): string | null => {
   return m ? `⁦${m[1]}×${m[2]}⁩ ס״מ` : (label ?? null);
 };
 const closeupsSeen = new Map<string, Closeup>();
+/** the states that let a close-up light a "partly" dot (QA on S2: almost is not enough) */
+const FINAL = new Set<QaState>(['final_test', 'approved_for_site']);
 async function closeupOf(room: string, style: string, c: CloseupSpec): Promise<Closeup | null> {
   const q = qaOf(c.qa_key);
   if (!q || !story.allowed_states.includes(q.state)) return null;
@@ -836,6 +842,13 @@ for (const pg of pages) {
   for (const it of pg.frames.flatMap((f) => f.items)) byProduct.set(it.product, [...(byProduct.get(it.product) ?? []), it]);
   for (const [product, items] of byProduct) details.push(await detailOf(pg, product, items));
 }
+// QA on S2: a dot's link opens the detail page on the option that dot shows (the second bouclé of warm modern is white)
+for (const pg of pages)
+  for (const x of pg.frames.flatMap((f) => f.items)) {
+    const d = details.find((y) => y.room === pg.room && y.style === pg.style && y.product === x.product)!;
+    const k = keyOf(d.axes, x.values);
+    if (k !== d.story_key) x.href = `${d.href}?${new URLSearchParams(d.axes.map((a) => [a.id, x.values?.[a.id] ?? ''])).toString()}`;
+  }
 for (const d of details)
   if (!d.skus.some((k) => k.image) && !d.skus.some((k) => k.closeup))
     console.log(`${d.href}: no cached card photo and no close-up: the frame's crop stands in`);

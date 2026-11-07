@@ -5,34 +5,34 @@
 
 [1m[46m RUN [49m[22m [36mv4.0.8 [39m[90m/home/user/homedesign-app/site[39m
 
-(node:12624) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(node:26347) ExperimentalWarning: SQLite is an experimental feature and might change at any time
 (Use `node --trace-warnings ...` to show where the warning was created)
- [32m✓[39m shared/test/options.test.ts [2m([22m[2m8 tests[22m[2m)[22m[33m 389[2mms[22m[39m
-     [33m[2m✓[22m[39m parses, names a SKU for the room, and passes the cross-field rules [33m 374[2mms[22m[39m
+ [32m✓[39m shared/test/options.test.ts [2m([22m[2m8 tests[22m[2m)[22m[33m 331[2mms[22m[39m
+     [33m[2m✓[22m[39m parses, names a SKU for the room, and passes the cross-field rules [33m 316[2mms[22m[39m
+[90mstdout[2m | shared/test/shared.test.ts[2m > [22m[2mrepo data against the derived schemas[2m > [22m[2mevery product card outside the shared pool parses, or is a DS-API draft whose only gaps are its unfilled draft fields
+[22m[39mdraft cards (DS API, colors / visual_weight unfilled): 68
+
 [90mstderr[2m | api/test/api.test.ts[2m > [22m[2mpayment webhook[2m > [22m[2mrejects bad and stale signatures
 [22m[39mpayment webhook rejected mock mismatch
 
 [90mstderr[2m | api/test/api.test.ts[2m > [22m[2mpayment webhook[2m > [22m[2mrejects bad and stale signatures
 [22m[39mpayment webhook rejected mock stale
 
-[90mstdout[2m | shared/test/shared.test.ts[2m > [22m[2mrepo data against the derived schemas[2m > [22m[2mevery product card outside the shared pool parses, or is a DS-API draft whose only gaps are its unfilled draft fields
-[22m[39mdraft cards (DS API, colors / visual_weight unfilled): 68
+ [32m✓[39m web/test/story-cart.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 51[2mms[22m[39m
+ [32m✓[39m api/test/api.test.ts [2m([22m[2m22 tests[22m[2m)[22m[33m 721[2mms[22m[39m
+ [32m✓[39m shared/test/shared.test.ts [2m([22m[2m29 tests[22m[2m)[22m[33m 1037[2mms[22m[39m
+     [33m[2m✓[22m[39m every product card outside the shared pool parses, or is a DS-API draft whose only gaps are its unfilled draft fields [33m 360[2mms[22m[39m
+     [33m[2m✓[22m[39m agrees with studio/build.py on the real cards [33m 515[2mms[22m[39m
+ [32m✓[39m web/test/product-bits.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 47[2mms[22m[39m
+ [32m✓[39m web/test/story-checkout.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m tools/test/story-hotspots.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 43[2mms[22m[39m
+ [32m✓[39m web/test/product-gallery.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m tools/test/qa-frames.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m web/test/option-picker.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m web/test/story-detail.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 8[2mms[22m[39m
 
- [32m✓[39m web/test/product-bits.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 42[2mms[22m[39m
- [32m✓[39m api/test/api.test.ts [2m([22m[2m22 tests[22m[2m)[22m[33m 1168[2mms[22m[39m
-     [33m[2m✓[22m[39m verifies Access JWTs (signature, aud, iss, exp) [33m 564[2mms[22m[39m
- [32m✓[39m web/test/story-cart.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 112[2mms[22m[39m
- [32m✓[39m tools/test/story-hotspots.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 23[2mms[22m[39m
- [32m✓[39m shared/test/shared.test.ts [2m([22m[2m29 tests[22m[2m)[22m[33m 2048[2mms[22m[39m
-     [33m[2m✓[22m[39m every product card outside the shared pool parses, or is a DS-API draft whose only gaps are its unfilled draft fields [33m 585[2mms[22m[39m
-     [33m[2m✓[22m[39m agrees with studio/build.py on the real cards [33m 1091[2mms[22m[39m
- [32m✓[39m web/test/story-detail.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 7[2mms[22m[39m
- [32m✓[39m web/test/story-checkout.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 16[2mms[22m[39m
- [32m✓[39m web/test/product-gallery.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 15[2mms[22m[39m
- [32m✓[39m web/test/option-picker.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 12[2mms[22m[39m
-
-[2m Test Files [22m [1m[32m10 passed[39m[22m[90m (10)[39m
-[2m      Tests [22m [1m[32m98 passed[39m[22m[90m (98)[39m
-[2m   Start at [22m 15:37:54
-[2m   Duration [22m 3.84s[2m (transform 1.49s, setup 0ms, collect 3.00s, tests 3.83s, environment 14ms, prepare 100ms)[22m
+[2m Test Files [22m [1m[32m11 passed[39m[22m[90m (11)[39m
+[2m      Tests [22m [1m[32m101 passed[39m[22m[90m (101)[39m
+[2m   Start at [22m 15:50:45
+[2m   Duration [22m 2.68s[2m (transform 1.28s, setup 0ms, collect 2.37s, tests 2.28s, environment 2ms, prepare 87ms)[22m
 

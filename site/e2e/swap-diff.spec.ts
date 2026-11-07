@@ -15,11 +15,12 @@
 import { test, expect, type Page } from '@playwright/test';
 import sharp from 'sharp';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { dirname, resolve } from 'node:path';
+import { dirname, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const SITE = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const OUT = resolve(SITE, '../assets/qa/swap-diff');
+// the review screenshots go to an untracked folder; HD_QA_SHOTS=1 writes the tracked ones for review by eye
+const OUT = resolve(SITE, process.env.HD_QA_SHOTS === '1' ? '../assets/qa/swap-diff' : 'test-results/qa-shots/swap-diff');
 const MEDIA = resolve(SITE, 'web/public/media');
 const LAYER_PX = 3;
 const MAX_DE = 1;
@@ -280,7 +281,7 @@ test.describe('variant swap changes nothing outside the product shape', () => {
           const mask = await silhouette(v, layer.rect, [layer.src[0]!, layer.src[n - 1] ?? layer.src[0]!], before.w, before.h);
           const name = `${slot.id}.${n}.${zoomed ? 'zoom' : 'rest'}`;
           const r = await compare(before, after, mask, name);
-          results.push({ slot: slot.id, option: n, view: zoomed ? 'zoom' : 'rest', ...r, map: `assets/qa/swap-diff/${name}.diff.png` });
+          results.push({ slot: slot.id, option: n, view: zoomed ? 'zoom' : 'rest', ...r, map: `${relative(resolve(SITE, '..'), OUT)}/${name}.diff.png` });
         }
       }
     }

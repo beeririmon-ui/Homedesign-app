@@ -40,6 +40,7 @@ async function audit(page: Page, label: string) {
 const sheet = (page: Page) => page.locator('#st-sheet');
 const NORDIC = '/story/living-room/nordic/';
 const COUNTRY = '/story/living-room/modern-country/';
+const WARM = '/story/living-room/warm-modern/';
 const BOHO = '/story/living-room/boho/';
 const MED = '/story/living-room/mediterranean/';
 
@@ -376,6 +377,15 @@ test.describe('the detail page, after the designer (§6)', () => {
     await expect(page.locator('#st-pd-img')).toBeHidden();
     await expect(page.locator('#st-pd-none')).toContainText('אין עדיין צילום לאפשרות הזו');
     await expect(page.locator('h1')).toHaveText('זוג וילונות שקופים במראה פשתן, ווים');
+  });
+
+  test("QA on S2: a dot of another option opens the detail page on that option (warm modern's white bouclé)", async ({ page }) => {
+    await page.goto(WARM);
+    await page.evaluate(() => window.__story!.openSheet('A-10'));
+    await expect(page.locator('#st-page')).toHaveAttribute('href', /\/p\/cushions-cj-boucle-teddy\/\?color=white&size=50x50$/);
+    await page.locator('#st-page').click();
+    await expect(page.locator('h1')).toHaveText('ציפית כרית בוקלה, לבן');
+    await expect(page.locator('#st-pd-story-note')).toContainText('תה חלב');
   });
 
   test('a set sells as a set by default, and as a single piece where the supplier offers one (SET1)', async ({ page }) => {

@@ -50,7 +50,9 @@ export function qaReader(records: string[]): (key: string) => QaFrame | null {
     for (const r of [...recs].reverse()) {
       const f = r.d.part1?.frames?.[key];
       if (f) {
-        const base = f.against ? find(basename(f.against, '.png'), depth + 1) : null;
+        if (!f.against) throw new Error(`${r.path}: part1.frames.${key} has no "against", so its rows cannot be read`);
+        const base = find(basename(f.against, '.png'), depth + 1);
+        if (!base) throw new Error(`${r.path}: part1.frames.${key} is against ${f.against}, which no record lists`);
         const rows = (base?.rows ?? []).map((row) => {
           const ch = f.rows_changed?.find((c) => cardOf(c) === cardOf(row));
           return ch ? { ...row, faithful: ch.faithful, ...(ch.why ? { why: ch.why } : {}) } : row;
@@ -59,6 +61,8 @@ export function qaReader(records: string[]): (key: string) => QaFrame | null {
       }
       const text = r.d.final_test?.[key];
       const rows = r.d.frames?.[key]?.rows;
+      // a record that lists the frame in a shape without its rows (the flat codefix5 shape) is not read as no rows
+      if (r.d.frames?.[key] && !Array.isArray(rows)) throw new Error(`${r.path}: frames.${key} has no rows, so its verdicts cannot be read`);
       if (text !== undefined && rows) return { state: stateOf(text), rows, record: r.path };
     }
     return null;
@@ -66,11 +70,37 @@ export function qaReader(records: string[]): (key: string) => QaFrame | null {
   return (key) => find(key);
 }
 
+type RegisterFrame = { state: QaState; rows: { card_id: string; option: QaRow['option']; verdict: string; note?: string; dot: QaRow['dot'] }[] };
 type Register = {
   version: number;
-  frames: Record<string, { state: QaState; rows: { card_id: string; option: QaRow['option']; verdict: string; note?: string; dot: QaRow['dot'] }[] }>;
+  frames: Record<string, RegisterFrame>;
+  /** layer 2's close-ups, keyed by their qa_key, with the same four states and full rows */
+  closeups?: Record<string, RegisterFrame>;
   superseded_by?: Record<string, string>;
 };
+const STATES = new Set<QaState>(['not_yet', 'almost', 'final_test', 'approved_for_site']);
+const DOTS = new Set(['yes', 'no', 'closeup_only']);
+/** QA on S2: a record the site cannot read fails loudly, never as a frame with no rows */
+function checkRegister(path: string, d: Register): void {
+  const bad: string[] = [];
+  if (!Number.isInteger(d.version)) bad.push('version');
+  for (const [part, frames] of [
+    ['frames', d.frames],
+    ['closeups', d.closeups ?? {}],
+  ] as const) {
+    if (!frames || typeof frames !== 'object') {
+      bad.push(part);
+      continue;
+    }
+    for (const [key, f] of Object.entries(frames)) {
+      if (!STATES.has(f?.state)) bad.push(`${part}.${key}.state`);
+      if (!Array.isArray(f?.rows) || (f.state !== 'not_yet' && !f.rows.length)) bad.push(`${part}.${key}.rows`);
+      for (const [i, r] of (f?.rows ?? []).entries())
+        if (typeof r?.card_id !== 'string' || typeof r?.verdict !== 'string' || !DOTS.has(r?.dot as string)) bad.push(`${part}.${key}.rows[${i}]`);
+    }
+  }
+  if (bad.length) throw new Error(`${path}: QA's register cannot be read (${bad.slice(0, 8).join(', ')}${bad.length > 8 ? ', …' : ''})`);
+}
 export type RegisterReader = {
   path: string;
   version: number;
@@ -84,11 +114,12 @@ export function registerReader(dir = 'qa/reports'): RegisterReader {
   const all = files.map((n) => ({ path: join(dir, n), d: JSON.parse(readFileSync(repoPath(dir, n), 'utf8')) as Register }));
   const top = all.sort((a, b) => b.d.version - a.d.version)[0];
   if (!top) throw new Error(`no QA register (${dir}/ged-register-*.json)`);
+  checkRegister(top.path, top.d);
   return {
     path: top.path,
     version: top.d.version,
     read: (key) => {
-      const f = top.d.frames[key];
+      const f = top.d.frames[key] ?? top.d.closeups?.[key];
       if (!f) return null;
       const rows = f.rows.map((r) => ({ card: r.card_id, present: true, faithful: r.verdict, why: r.note, option: r.option, dot: r.dot }));
       return { state: f.state, rows, record: top.path };
