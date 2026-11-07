@@ -1,5 +1,7 @@
 # Brief: master bedroom, two story base frames (render-agent, 2026-11-07)
 
+**Status: FINAL (2026-11-07).** MB-Q1 and MB-Q2 were decided by the manager. The brief runs as soon as MB1 is answered.
+
 **Owner decision needed first:** MB1 (render spend). Run only after MB1 is answered.
 **Cap:** 1,300 for the two base frames.
 **Rules:**
@@ -30,12 +32,24 @@
 
 | Frame | Products board (all starring products) | 5 single references (shape-critical) |
 | --- | --- | --- |
-| Nordic | `bedding-cj-washed-linen-natural-set`, ‏`pillowcases-cj-pure-linen-envelope-pair-48x74` (natural), ‏`cushions-cj-boucle-teddy` (30×50, warm white), ‏`throw-cj-cotton-linen-light-gray-200x230`, ‏`nightstand-vase-aliexpress-handmade-wabi-sabi-vase-665862`, ‏`candle-holders-cj-travertine-pedestal`, ‏`bedside-sconces-cj-linen-wave-flush`, ‏`framed-art-cj-black-ink-abstract-wide-mat-50-pair`, ‏`curtains-aliexpress-linen-blend-s-fold-180502`, ‏`vase-aliexpress-vintage-distressed-clay-vase-589009`, ‏`planter-zendrop-seagrass-belly-38x34`, ‏`basket-cj-jute-rope-cylinder` | sconce (wave-flush), candle holders, nightstand vase, art pair, basket |
-| Warm modern | `bedding-cj-washed-linen-natural-set` (Natural Linen), ‏`pillowcases-cj-pure-linen-envelope-pair-48x74` (Caramel), ‏`cushions-cj-boucle-teddy` (Milk Tea 30×50), ‏`sofa-cover-cj-cotton-muslin-fringe` (Pecan), ‏`wall-sconce-cj-travertine-cone-walnut`, ‏`candle-holders-cj-travertine-pedestal`, ‏`nightstand-vase-aliexpress-handmade-wabi-sabi-vase-665862` (Color E), ‏`nightstand-tray-cj-black-walnut-rect-tray`, ‏`floor-lamp-aliexpress-pleated-walnut-37x158-062736-master`, ‏`planter-cj-cement-ribbed-belly` (Beige, Large), ‏`curtains-aliexpress-beige-linen-sheer-curtains-554205`, ‏`sill-vase-cj-cream-fluted-column-25`, ‏`basket-cj-jute-rope-cylinder` | travertine cone sconce, floor lamp, candle holders, walnut tray, nightstand bottle |
+| Nordic | `bedding-cj-washed-linen-natural-set`, ‏`pillowcases-cj-pure-linen-envelope-pair-48x74` (natural), ‏`cushions-cj-boucle-teddy` (30×50, warm white), ‏`throw-cj-cotton-linen-light-gray-200x230`, ‏`nightstand-vase-aliexpress-handmade-wabi-sabi-vase-665862`, ‏`candle-holders-cj-travertine-pedestal`, ‏`bedside-sconces-cj-linen-wave-flush`, ‏`curtains-aliexpress-linen-blend-s-fold-180502`, ‏`vase-aliexpress-vintage-distressed-clay-vase-589009`, ‏`planter-zendrop-seagrass-belly-38x34`, ‏`basket-cj-jute-rope-cylinder` (11) | sconce (wave-flush), candle holders, nightstand vase, bedding, basket |
+| Warm modern | `bedding-cj-washed-linen-natural-set` (Natural Linen), ‏`pillowcases-cj-pure-linen-envelope-pair-48x74` (Caramel), ‏`cushions-cj-boucle-teddy` (Milk Tea 30×50), ‏`sofa-cover-cj-cotton-muslin-fringe` (Pecan), ‏`wall-sconce-cj-travertine-cone-walnut`, ‏`candle-holders-cj-travertine-pedestal`, ‏`nightstand-vase-aliexpress-handmade-wabi-sabi-vase-665862` (Color E), ‏`floor-lamp-cj-pleated-walnut-stem-158`, ‏`planter-cj-cement-ribbed-belly` (Beige, Large), ‏`curtains-aliexpress-beige-linen-sheer-curtains-554205`, ‏`sill-vase-cj-cream-fluted-column-25`, ‏`basket-cj-jute-rope-cylinder` (12) | travertine cone sconce, floor lamp (reuse the ED1 crop in the earlier `jobs.json`), candle holders, nightstand bottle, pillowcase (Caramel) |
 
-- **Hold:** `framed-art-cj-black-ink-abstract-wide-mat-50-pair` (Nordic) and `nightstand-tray-cj-black-walnut-rect-tray` (warm modern) carry sourcing guesses, not designer scores (MB-Q1). If the designer's look has not happened before the run, leave them out of the board and the prompt:
-  - **Nordic:** the wall shows no art; the line on the art is then deleted.
-  - **Warm modern:** the nightstand has no tray.
+**MB-Q1, final (manager, 2026-11-07): only products I could check by eye go in.**
+- **What I checked:** the site's supplier-image cache (`site/.generated/supplier-images.json`, ‏`site/.cache/supplier-images/`) and the repo hold only the living-room products. None of the four sourcing-guess products is there.
+
+| Product | Status | Consequence |
+| --- | --- | --- |
+| `framed-art-cj-black-ink-abstract-wide-mat-50-pair` (Nordic) | not cached | **Out.** The wall above the bed carries no art: the panelling, the sconces and the window light make the wall |
+| `nightstand-tray-cj-black-walnut-rect-tray` (warm modern) | not cached | **Out.** The candle holders stand on the nightstand itself |
+| `trinket-dish-cj-travertine-rough-edge-10x10` | not cached | **Out** (was not in the prompt) |
+| `rug-cj-cream-embossed-arc-plush-200x300` | not cached | **Out** (was not in the prompt) |
+| `floor-lamp-aliexpress-pleated-walnut-37x158-062736-master` (warm modern) | not cached; its 8.5 is from card data | **Out.** It is replaced by `floor-lamp-cj-pleated-walnut-stem-158` (warm modern 9.0, catalog), which was rendered faithfully in warm-modern ed5, and whose crop is already uploaded |
+
+- **In:** every other product in the table carries a designer score that was given from its photos: on the card, in the Nordic assembly of 2026-10-11, or in the warm-modern catalog of 2026-10-12. Six of them were also already rendered faithfully in the living-room frames: the candle holders, the bouclé cushion, the muslin throw, the jute basket, the seagrass planter and the floor lamp. None of them was scored from card data alone.
+- **Counts:** 11 products in the Nordic frame, 12 in the warm-modern frame. Both are inside the 10–14 rule.
+
+**MB-Q2, final (manager, 2026-11-07):** a generic Nordic armchair by the window, with no dot. Its material and colour differ from the living-room armchair (that one is a light-oak frame with mist-grey bouclé).
 
 ## What the model decides, and what we fix
 **The model decides:**
@@ -51,7 +65,7 @@
 
 ## The prompts (English, as sent)
 **The fidelity block, appended to both prompts:**
-> Every listed product must match its reference exactly: shape, proportions, colour, material, pattern and number of pieces. Cushions are as stated (30 × 50 lumbar). Do not add any other baskets, bowls, vases, throws, cushions, lamps, rugs, trays or wall decorations beyond those listed. Generic props must differ clearly in material and colour from every listed product. No people, no readable text, no logos, no mirrors, no clear glass, no copied designer pieces.
+> Every listed product must match its reference exactly: shape, proportions, colour, material, pattern and number of pieces. Cushions are as stated (30 × 50 lumbar). Do not add any other baskets, bowls, vases, throws, cushions, lamps, rugs, trays, pictures or wall decorations beyond those listed. Generic props must differ clearly in material and colour from every listed product. No people, no readable text, no logos, no mirrors, no clear glass, no copied designer pieces.
 
 ### Nordic master: "Sunday morning, late February, 08:30"
 > Editorial interior photograph for a high-end design magazine. The master bedroom of an old Scandinavian apartment: a tall white-painted double casement window with a deep 30 cm reveal, white-painted vertical board panelling to 1.10 m with a thin oak cap rail, warm mineral-white walls above, a plain cornice, a panelled door ajar to a dressing room, wide white-oiled oak floorboards.
@@ -64,12 +78,12 @@
 > - the light-grey cotton-linen throw pushed to the foot of the bed;
 > - on the bedside table, the taupe wabi-sabi bottle vase with one dry stem, and the pair of travertine pedestal candle holders with pillar candles;
 > - the pair of cream ribbed linen wall lights, one on each side of the bed;
-> - above the bed, the pair of black-ink abstract prints in thin black frames with wide white mats;
+> - no picture above the bed: the panelling, the wall lights and the morning light make that wall;
 > - natural linen S-fold curtains;
 > - the cream clay vase with eucalyptus on the deep window sill;
 > - in the corner, exactly one seagrass belly basket planter with a small olive tree and exactly one jute rope cylinder basket.
 >
-> Generic life, not products: a ceramic tea cup in a colour unlike the vase, a book lying open face-down, reading glasses, a linen robe over a simple wooden chair by the window (not bouclé, not light oak).
+> Generic life, not products: a ceramic tea cup in a colour unlike the vase, a book lying open face-down, reading glasses, a linen robe over a generic lounge chair by the window, in a dark-stained ash frame with an undyed natural linen seat (not bouclé, not light oak, not mist grey).
 > The bed and the bedside tables are simple light-oak pieces.
 
 ### Warm-modern master: "August siesta, 18:30"
@@ -82,8 +96,8 @@
 > - one milk-tea bouclé lumbar cushion 30 × 50;
 > - the pecan cotton muslin throw with short fringe folded across the foot of the bed;
 > - the pair of travertine cone wall lights on walnut plates, one each side;
-> - on the walnut bedside table, the black walnut rectangular tray holding the pair of travertine pedestal candle holders, and the tall sand-toned wabi-sabi bottle with an olive sprig;
-> - in the corner, the floor lamp with a dark walnut stem and a cream pleated cone shade, lit, and the warm-grey ribbed concrete planter with an olive tree;
+> - on the walnut bedside table, the pair of travertine pedestal candle holders and the tall sand-toned wabi-sabi bottle with an olive sprig, with no tray;
+> - in the corner, the floor lamp with a walnut stem, brass details and a cream pleated cone shade (as in the reference), lit, and the warm-grey ribbed concrete planter with an olive tree;
 > - on the window ledge, the cream fluted column vase;
 > - one natural jute rope cylinder basket by the bed.
 >

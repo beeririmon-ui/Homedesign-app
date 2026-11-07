@@ -16,7 +16,7 @@
  },
  "public_build": {
   "command": "HD_PUBLIC=1 vite build --outDir .generated/public-check (the client bundle; the prerender adds only the real routes)",
-  "seconds": 4,
+  "seconds": 2,
   "files": 430,
   "story_or_test_files": [],
   "files_naming_story_or_test": []
@@ -37,12 +37,12 @@
   "product_photos": 7,
   "requests": 25,
   "budget_kb": 3072,
-  "fcp_ms": 992,
-  "lcp_ms": 992,
+  "fcp_ms": 924,
+  "lcp_ms": 924,
   "lcp_el": "IMG",
-  "developed_ms": 231,
-  "title_ms": 560,
-  "wall_ms": 2121
+  "developed_ms": 50,
+  "title_ms": 313,
+  "wall_ms": 1966
  },
  "first_load_phone_400_dpr3": {
   "page": "/story/living-room/nordic/",
@@ -60,12 +60,12 @@
   "product_photos": 7,
   "requests": 25,
   "budget_kb": 3072,
-  "fcp_ms": 352,
-  "lcp_ms": 656,
+  "fcp_ms": 256,
+  "lcp_ms": 256,
   "lcp_el": "IMG",
-  "developed_ms": 254,
-  "title_ms": 460,
-  "wall_ms": 2095
+  "developed_ms": 48,
+  "title_ms": 318,
+  "wall_ms": 1871
  },
  "first_load_desk_1280_dpr1": {
   "page": "/story/living-room/nordic/",
@@ -83,12 +83,12 @@
   "product_photos": 7,
   "requests": 25,
   "budget_kb": 3072,
-  "fcp_ms": 564,
-  "lcp_ms": 1444,
+  "fcp_ms": 452,
+  "lcp_ms": 852,
   "lcp_el": "IMG",
-  "developed_ms": 157,
-  "title_ms": 365,
-  "wall_ms": 2080
+  "developed_ms": 131,
+  "title_ms": 336,
+  "wall_ms": 1978
  },
  "first_load_contents_phone_400_dpr1": {
   "page": "/story/",
@@ -108,12 +108,12 @@
   "product_photos": 0,
   "requests": 17,
   "budget_kb": 3072,
-  "fcp_ms": 248,
-  "lcp_ms": 336,
+  "fcp_ms": 144,
+  "lcp_ms": 228,
   "lcp_el": "IMG",
   "developed_ms": 0,
   "title_ms": 0,
-  "wall_ms": 1820
+  "wall_ms": 1647
  },
  "first_load_contents_desk_1280_dpr1": {
   "page": "/story/",
@@ -133,12 +133,12 @@
   "product_photos": 0,
   "requests": 17,
   "budget_kb": 3072,
-  "fcp_ms": 316,
-  "lcp_ms": 316,
+  "fcp_ms": 168,
+  "lcp_ms": 168,
   "lcp_el": "mag-lead mag-col-main",
   "developed_ms": 0,
   "title_ms": 0,
-  "wall_ms": 1845
+  "wall_ms": 1645
  },
  "first_load_typographic_phone_400_dpr1": {
   "page": "/story/living-room/boho/",
@@ -158,21 +158,21 @@
   "product_photos": 0,
   "requests": 17,
   "budget_kb": 3072,
-  "fcp_ms": 156,
-  "lcp_ms": 156,
+  "fcp_ms": 116,
+  "lcp_ms": 116,
   "lcp_el": "mag-lead mag-col-main",
   "developed_ms": 0,
   "title_ms": 0,
-  "wall_ms": 1703
+  "wall_ms": 1654
  },
  "opening_throttled_phone": {
   "conditions": "latency 150 ms, 4 Mbit/s down, CPU ×4, 400×800 @1x",
-  "fcp_ms": 728,
-  "lcp_ms": 1272,
+  "fcp_ms": 712,
+  "lcp_ms": 1152,
   "lcp_el": "IMG",
-  "lqip_ms": 699,
-  "developed_ms": 699,
-  "title_ms": 910,
+  "lqip_ms": 695,
+  "developed_ms": 695,
+  "title_ms": 911,
   "thresholds": "art direction §8.1 / §10.9: LQIP ≤ 1.0 s, the frame sharp ≤ 2.0 s, LCP ≤ 2.5 s"
  },
  "run_desk": {
@@ -183,7 +183,7 @@
    "typographic": 3
   },
   "dots_visible_at_rest": 0,
-  "dots_appear_ms": 19,
+  "dots_appear_ms": 24,
   "dots_shown": [
    "A-1",
    "A-2",
@@ -198,35 +198,56 @@
    "A-11",
    "A-13"
   ],
-  "dots_gone_after_ms": 2522,
+  "dots_gone_after_ms": 2538,
   "dots_hint": {
    "on": true,
    "off": true
   },
-  "sheet_response_ms": 78,
+  "sheet_response_ms": 27,
   "sheet_in": [
    [
     "transitionstart",
     "opacity",
-    175
+    87
    ],
    [
     "transitionstart",
     "transform",
-    175
+    87
    ],
    [
     "transitionend",
     "opacity",
-    545
+    295
    ],
    [
     "transitionend",
     "transform",
-    545
+    295
    ]
   ],
-  "sheet_out": [],
+  "sheet_out": [
+   [
+    "transitionstart",
+    "opacity",
+    2
+   ],
+   [
+    "transitionstart",
+    "transform",
+    2
+   ],
+   [
+    "transitionend",
+    "opacity",
+    144
+   ],
+   [
+    "transitionend",
+    "transform",
+    144
+   ]
+  ],
   "sheet_focus_on_open": "st-sheet-name",
   "focus_back_to": "A-6",
   "cart_count_after_add": "1",
@@ -242,7 +263,7 @@
    "link": 10.1,
    "step": 10.1
   },
-  "open_to_close_ms": 3144,
+  "open_to_close_ms": 2935,
   "other_houses": {
    "/story/living-room/warm-modern/": {
     "mark": "טיוטה / בדיקה",
@@ -277,7 +298,7 @@
    "typographic": 3
   },
   "dots_visible_at_rest": 0,
-  "dots_appear_ms": 48,
+  "dots_appear_ms": 42,
   "dots_shown": [
    "A-1",
    "A-2",
@@ -289,44 +310,44 @@
    "A-9",
    "A-13"
   ],
-  "dots_gone_after_ms": 2534,
+  "dots_gone_after_ms": 2527,
   "dots_hint": {
    "on": true,
    "off": true
   },
-  "sheet_response_ms": 44,
+  "sheet_response_ms": 41,
   "sheet_in": [
    [
     "transitionstart",
     "opacity",
-    110
+    81
    ],
    [
     "transitionstart",
     "transform",
-    110
+    81
    ],
    [
     "transitionend",
     "opacity",
-    377
+    281
    ],
    [
     "transitionend",
     "transform",
-    377
+    281
    ]
   ],
   "sheet_out": [
    [
     "transitionstart",
     "opacity",
-    13
+    7
    ],
    [
     "transitionstart",
     "transform",
-    13
+    7
    ]
   ],
   "sheet_focus_on_open": "st-sheet-name",
@@ -344,7 +365,7 @@
    "link": 10.1,
    "step": 10.1
   },
-  "open_to_close_ms": 2555,
+  "open_to_close_ms": 2572,
   "other_houses": {
    "/story/living-room/warm-modern/": {
     "mark": "טיוטה / בדיקה",
@@ -392,12 +413,12 @@
    [
     "transitionstart",
     "opacity",
-    156
+    114
    ],
    [
     "transitionend",
     "opacity",
-    600
+    456
    ]
   ],
   "sheet_transform": "none",
@@ -409,12 +430,12 @@
    [
     "transitionstart",
     "opacity",
-    18
+    7
    ],
    [
     "transitionend",
     "opacity",
-    309
+    254
    ]
   ],
   "sheet_transform": "none",
@@ -518,7 +539,7 @@
    },
    "nordic A .st-link": {
     "p5": 10.1,
-    "min": 5.32,
+    "min": 6.57,
     "text": "rgb(58,58,58)"
    },
    "nordic A .st-draft": {
@@ -563,7 +584,7 @@
    },
    "nordic B .st-link": {
     "p5": 10.1,
-    "min": 5.32,
+    "min": 6.57,
     "text": "rgb(58,58,58)"
    },
    "nordic B .st-draft": {
@@ -653,7 +674,7 @@
    },
    "modern-country A .st-link": {
     "p5": 10.1,
-    "min": 5.32,
+    "min": 6.57,
     "text": "rgb(58,58,58)"
    },
    "modern-country A .st-draft": {
@@ -722,7 +743,7 @@
    },
    "nordic A .st-link": {
     "p5": 10.1,
-    "min": 5.32,
+    "min": 4.32,
     "text": "rgb(58,58,58)"
    },
    "nordic A .st-draft": {
@@ -1111,8 +1132,8 @@
   }
  ],
  "run": {
-  "at": "2026-11-07T12:13:41.604Z",
-  "seconds": 184,
+  "at": "2026-11-07T12:18:34.128Z",
+  "seconds": 169,
   "browser": "Chromium headless, SwiftShader"
  }
 }
