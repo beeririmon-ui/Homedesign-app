@@ -72,7 +72,7 @@ def door_fill(lin, hole, need, xx, yy):
     R = door_zone & (xx >= 2222) & (ell >= 976.5) & (ell < 1038.5)        # the moulding, the rail and the shadow line under the leaf
     F = door_zone & (ell >= 1038.5)
     known = ~hole & door_zone
-    tgt = need & door_zone
+    tgt = (need & door_zone).copy()
     out = lin.copy()
     Lum = (0.2126 * lin[..., 0] + 0.7152 * lin[..., 1] + 0.0722 * lin[..., 2])
     info = {}
@@ -80,10 +80,15 @@ def door_fill(lin, hole, need, xx, yy):
     Lsm = cv2.GaussianBlur(np.log(Lum + 1e-3), (0, 0), 1.0)
     jwin = {}
     for x in range(2157, 2200):
-        col = tgt[:, x] & J[:, x]
-        if not col.any():
+        hc = np.nonzero(hole[:, x] & J[:, x])[0]
+        if hc.size == 0:
             continue
-        top = int(np.nonzero(hole[:, x] & J[:, x])[0].min())
+        top = int(hc.min())
+        # the whole column from the hole's top down (the old handle's loop inside included, so the jamb's lines run on unbroken),
+        # where the new basket does not cover it
+        col = J[:, x] & (yy[:, x] >= top) & ~(np.arange(H) > hc.max()) & (need[:, x] | ~hole[:, x])
+        col &= ~((yy[:, x] > hc.max()))
+        tgt[:, x] |= col
         # the window: the rows just above the hole, up to the nearest strong change in the column (the hinge gap's lit sliver, the
         # hardware above it), so that only the part that runs on into the hole is tiled
         ref = Lsm[top - 4:top - 1, x].mean()
@@ -220,7 +225,7 @@ def door_fill(lin, hole, need, xx, yy):
         out = poisson_refine(out, fneed, offs, ~hole, fsrc | fneed, iters=800)
         info["F_px"] = int(fneed.sum())
         info["F_shift"] = [int(dx), int(dy)]
-    return out, info, dict(J=J, S=S, P=P, R=R, F=F)
+    return out, info, dict(J=J, S=S, P=P, R=R, F=F, J_loop=tgt & J & ~hole)
 
 
 def leg_repair(lin, body, leg):
@@ -320,38 +325,47 @@ def boho():
     fill = np.where(wallr[..., None], tmp, lin)
     # ---- 4: the door, rebuilt along its structure
     fill_d, dinfo, doms = door_fill(lin, hole, need, xx, yy)
+    door_jamb_loop = doms["J_loop"]
     door_need = need & (xx >= 2157)
     fill = np.where(door_need[..., None], fill_d, fill)
     # ---- composite as codefix4: the hole's edge feathered, the contact shadow, the basket
     oa = cv2.GaussianBlur(hole.astype(np.float32), (0, 0), 1.5)[..., None] * cv2.dilate(hole.astype(np.uint8), np.ones((5, 5), np.uint8))[..., None]
     out = lin * (1 - oa) + fill * oa
-    # ---- the wall strip beside the jamb (x 2118-2157): its faint light band (+8-12 levels, fin3) and the old middle handle's loose
-    # fibre and inner strand (left inside its loop in fin4) - continued straight down from the clean rows above the old handle, blended
-    # into the wall fill over its first 8 columns
+    out = np.where(door_jamb_loop[..., None], fill_d, out)                 # the jamb seen through the old handle's loop, re-run too
+    # ---- the wall strip beside the jamb (x 2118-2157): its faint light band (fin3: +8-12 levels at x 2140-2157) and the old middle
+    # handle's loose fibre and inner strand (left inside its loop in fin4). The band is a vertical structure: factored out as a gain
+    # per column (read on the clean rows 720-760 above the old handle), the wall filled harmonically under it (the loop's inside now
+    # unknown too), the band put back, the wall's grain as before; blended into the fin4 wall fill over x 2118-2126
     Wv = np.zeros((H, W), bool)
     for x in range(2118, 2157):
         hc = np.nonzero(hole[:, x] & (yy[:, x] < 900))[0]
-        if hc.size == 0:
-            continue
-        top = int(hc.min())
-        Wv[top:1000, x] = True
-    Wv &= ~(sa > 0.98) & (yy < 1000)
-    wv = out.copy()
+        if hc.size:
+            Wv[int(hc.min()):1000, x] = True
+    Wv &= ~(sa > 0.98)
+    Lw = (0.2126 * lin[..., 0] + 0.7152 * lin[..., 1] + 0.0722 * lin[..., 2])
+    prof = np.array([np.median(Lw[720:760, x]) for x in range(2100, 2160)])
+    trend = float(np.median(prof[12:36]))                                  # x 2112-2135: the plain wall
+    G = np.ones(W, np.float32)
+    g_ = np.clip(prof / trend, 0.9, 1.35)
+    g_[:38] = 1.0                                                          # x < 2138: no band
+    G[2100:2160] = np.convolve(np.r_[[g_[0]] * 2, g_, [g_[-1]] * 2], np.ones(5) / 5, mode="same")[2:-2]
+    linn = lin / G[None, :, None]
+    known2 = known & ~Wv
+    wl2, den2 = nblur(linn, known2.astype(np.float32), 3)
+    kn2 = (known2 & (den2 > 0.3))[sl]
+    hw2 = harmonic(np.where(kn2[..., None], wl2[sl], 0), kn2, f=2, iters=3000)
+    tmp2 = lin.copy()
+    tmp2[sl] = hw2 * (1 + nz)[..., None] * G[None, sl[1], None]
+    wr = np.clip((xx - 2118) / 8.0, 0, 1)[..., None]
+    out = np.where(Wv[..., None], out * (1 - wr) + tmp2 * wr, out)
+    Wtop = np.zeros((H, W), np.float32)
     for x in range(2118, 2157):
         ys_ = np.nonzero(Wv[:, x])[0]
-        if ys_.size == 0:
-            continue
-        top = int(ys_.min())
-        Ms = 40
-        k = (ys_ - top) % (2 * Ms)
-        ysrc = np.where(k < Ms, top - 1 - k, top - Ms + (k - Ms))
-        wv[ys_, x] = lin[ysrc, x]
-    # the strip's level follows the wall fill's low frequencies (so its top-to-bottom light matches the wall round it)
-    lo_out = nblur(out, (~Wv).astype(np.float32) * 0 + 1, 6)[0]
-    lo_wv = cv2.GaussianBlur(wv, (0, 0), 6)
-    wr = np.clip((xx - 2118) / 8.0, 0, 1)[..., None]                      # blend into the wall fill over x 2118-2126
-    wv_adj = np.where(Wv[..., None], wv * np.clip(lo_out / np.maximum(lo_wv, 1e-4), 0.85, 1.15), wv)
-    out = np.where(Wv[..., None], out * (1 - wr) + wv_adj * wr, out)
+        if ys_.size:
+            t0 = int(ys_.min())
+            Wtop[t0 - 8:t0, x] = (np.arange(8) + 1) / 9.0
+    Wtop = Wtop[..., None] * wr
+    out = out * (1 - Wtop) + tmp2 * Wtop
     fp = np.zeros((H, W), np.uint8)
     nb = np.nonzero(sa4[1060:1072] > 0.5)
     half = int((nb[1].max() - nb[1].min()) / 2) if nb[1].size else 55
@@ -369,7 +383,8 @@ def boho():
     mid_new = cv2.dilate(((sa4 > 0.002) & ~(sa > 0.98)).astype(np.uint8), np.ones((5, 5), np.uint8)).astype(bool)
     mid_new &= (xx > 2100) & (xx < 2200) & (yy > 820) & (yy < 915)
     leg_new = cv2.warpAffine(cv2.dilate(leg.astype(np.uint8), np.ones((5, 5), np.uint8)).astype(np.float32), Am, (W, H)) > 0.01
-    zone = zone_door | mid_new | leg_new | cv2.dilate(Wv.astype(np.uint8), np.ones((3, 3), np.uint8)).astype(bool)
+    zone = zone_door | mid_new | leg_new | cv2.dilate(Wv.astype(np.uint8), np.ones((3, 3), np.uint8)).astype(bool) | (Wtop[..., 0] > 0)
+    zone |= door_jamb_loop
     o8 = np.where(zone[..., None], o8, f48)
     Image.fromarray(o8).save(os.path.join(HERE, "boho-A-fin5.png"))
     # what the re-run alone would have changed outside the zones (should be ~0: the pipeline reproduces fin4)
@@ -379,8 +394,9 @@ def boho():
     r.update(base="boho-A-fin4.png (codefix4's fin4 pipeline re-run from boho-A-fin3.png)",
              fixes=dict(door=dict(px_zone=int(zone_door.sum()), **dinfo, streak_deg=STREAK_DEG, leaf_vp=[VPX, VPY]),
                         middle_handle=dict(px_zone=int((mid_new | leg_new).sum()), feet_repaired_px=int(leg.sum()), feet_shifts=leg_picks),
-                        wall_strip=dict(px=int(Wv.sum()), note="x 2118-2157: the faint light band beside the jamb continued down; the old "
-                                                                  "middle handle's loose fibre and inner strand (left in fin4) gone")),
+                        wall_strip=dict(px=int(Wv.sum()), band_gain_max=round(float(G[2100:2160].max()), 3),
+                                       note="x 2118-2157: the faint light band beside the jamb continued down (a gain per column over the "
+                                            "harmonic wall); the old middle handle's loose fibre and inner strand (left in fin4) gone")),
              rerun_drift_outside_zones=dict(px_over_0=int(((drift > 0) & ~zone).sum()), max_levels=int(drift[~zone].max())),
              method="see the docstring; fin4's pixels kept outside the door zone and the middle handle's zone")
     return r
