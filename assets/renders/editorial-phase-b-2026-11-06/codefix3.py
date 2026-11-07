@@ -341,52 +341,49 @@ def mc():
 
 # ----------------------------------------------------------------------------------------------------------------------------------
 def wm():
-    """the pendant 6 -> 5 rings: ring 5 (the second from the bottom) taken out and ring 6 lifted by the ring pitch (27 px, the same at
-    every column: 26-29) so it hangs right behind ring 4's rim, as ring 5 did; where ring 5 and the old ring 6 showed and the lifted one
-    does not, plain wall: a harmonic field from the wall round the pendant with the wall's own grain from below"""
+    """the pendant 6 -> 5 rings. Seen from below, the bottom ring shows its open bottom (the glowing ellipse), and the rings above show
+    their side bands. So the bottom ring (6) is taken out and ring 5 becomes the bottom one: ring 6's open bottom, scaled to ring 5's width
+    (x1.25 about the pendant's axis, also in height, as an ellipse seen from the same angle), is set under ring 5's rim line; where the old
+    ring 6 showed and the new bottom does not, plain wall (harmonic from the wall round it, grain matched to the wall beside the pendant)"""
     src = os.path.join(HERE, "warm-modern-A-ed4.png")
     a = load01(src)
     H, W = a.shape[:2]
     lin = s2l(a)
-    # rim lines read per column on the frame (dark lines in L*): c4 = ring 4's bottom rim, c5 = ring 5's bottom rim, yb = the pendant's
-    # bottom (ring 6's lower edge); outside ring 6 (x < 1372 or > 1548) only ring 5 hung below ring 4
-    xs_m = np.array([1350, 1360, 1370, 1380, 1390, 1400, 1410, 1420, 1430, 1440, 1450, 1460, 1470, 1480, 1490, 1500, 1510, 1520, 1530, 1540, 1550, 1560, 1570])
-    c4_m = np.array([198, 195, 192, 193, 189, 188, 186, 185, 185, 184, 183, 183, 183, 183, 183, 184, 185, 186, 187, 189, 191, 194, 197])
-    yb_m = np.array([208, 212, 226, 230, 232, 234, 235, 236, 237, 237, 238, 238, 237, 237, 236, 235, 234, 232, 230, 228, 213, 209, 200])
-    D = 27
-    xs = np.arange(W)
-    c4 = np.interp(xs, xs_m, c4_m)
-    yb = np.interp(xs, xs_m, yb_m)
-    X0, X1 = 1344, 1577
-    yy = np.arange(H)[:, None]
-    # the zone that changes: below ring 4's rim (+2, its dark rim line kept) down to the old bottom (+3 for its soft edge)
-    zone = (yy > c4[None, :] + 2) & (yy <= yb[None, :] + 3)
-    zone[:, :X0] = False
-    zone[:, X1:] = False
-    # the lifted ring 6: the pixels from c5 (= c4 + 27) to its bottom, moved up by 27, for x in ring 6's span
-    r6 = np.zeros((H, W), bool)
-    for x in range(1372, 1549):
-        r6[int(c4[x]) + 2:int(yb[x]) + 2 - D, x] = True
-    lifted = np.roll(lin, -D, axis=0)
-    # its soft bottom edge: the last 3 rows fade into the wall
-    r6f = cv2.GaussianBlur(r6.astype(np.float32), (0, 0), 0.9)
-    # the plain wall behind: harmonic from the wall round the pendant (not the pendant, not the art below y 255)
-    box = (slice(150, 262), slice(1300, 1620))
+    # rim lines read per column on the frame (dark lines in L*): c5 = ring 5's bottom rim (where ring 6 starts), yb = the old bottom
+    xs_m = np.array([1372, 1380, 1390, 1400, 1410, 1420, 1430, 1440, 1450, 1460, 1470, 1480, 1490, 1500, 1510, 1520, 1530, 1540, 1548])
+    c5_m = np.array([223, 219, 216, 214, 213, 212, 211, 210, 210, 210, 210, 210, 210, 211, 211, 213, 215, 218, 222])
+    yb_m = np.array([227, 230, 232, 234, 235, 236, 237, 237, 238, 238, 237, 237, 236, 235, 234, 232, 230, 228, 225])
+    AXc, K = 1460.0, 1.25
+    xs = np.arange(W, dtype=np.float32)
+    c5s = lambda x: np.interp(x, xs_m, c5_m)
+    ybs = lambda x: np.interp(x, xs_m, yb_m)
+    # the new bottom: target (x, y) <- source (x', y'), x' = axis + (x - axis) / K, y' = c5(x') + (y - c5(x')) / K
+    Y, X = np.mgrid[0:H, 0:W].astype(np.float32)
+    Xs = AXc + (X - AXc) / K
+    top = c5s(Xs)
+    Ys = top + (Y - top) / K
+    valid = (Xs >= 1372) & (Xs <= 1548) & (Ys >= top) & (Ys <= ybs(Xs) + 2.5)
+    spr = cv2.remap(lin, Xs, Ys, cv2.INTER_LINEAR, borderMode=cv2.BORDER_REFLECT)
+    # it shows only below ring 5's own rim line at each target column (ring 5 and everything above are kept)
+    c5t = np.interp(X, xs_m, c5_m, left=208, right=208)
+    # ring 5's span is x 1348-1568; its rim at the far sides (outside ring 6's span) read on the frame: 208 at 1350, 206 at 1560
+    c5t = np.where(X < 1372, np.interp(X, [1344, 1350, 1372], [205, 208, 223]), c5t)
+    c5t = np.where(X > 1548, np.interp(X, [1548, 1560, 1577], [222, 206, 200]), c5t)
+    below = Y > c5t + 1
+    show = valid & below
+    sa = cv2.GaussianBlur(show.astype(np.float32), (0, 0), 0.7) * below
+    # the old ring 6 (to be gone where the new bottom does not cover it): below ring 5's rim, down to the old bottom + 3
+    old6 = (X >= 1368) & (X <= 1552) & (Y > c5t + 1) & (Y <= ybs(X) + 3)
+    # plain wall: harmonic from the wall round the pendant (not the pendant, not the art below y 252)
     pend = np.zeros((H, W), bool)
-    for x in range(X0 - 2, X1 + 2):
-        pend[:int(yb[x]) + 4, x] = True
-    pend[:, :X0 - 2] = False
-    pend[:, X1 + 2:] = False
-    # the upper rings (ring 4 and above) are wider than the zone: keep them out of the wall estimate too (above c4 + 2 within x 1295-1625)
-    upper = np.zeros((H, W), bool)
-    for x in range(1295, 1625):
-        upper[:int(np.interp(x, xs_m, c4_m)) + 3 if 1344 <= x <= 1577 else 200, x] = True
-    wallk = ~(pend | upper)
+    for x in range(1290, 1630):
+        pend[:int(max(ybs(x) if 1372 <= x <= 1548 else 0, 205 if 1344 <= x <= 1577 else 0, 175 if 1295 <= x <= 1620 else 0)) + 4, x] = True
+    wallk = ~pend
+    box = (slice(150, 252), slice(1300, 1620))
     wl, den = nblur(lin, wallk.astype(np.float32), 4)
     kn = (wallk & (den > 0.3))[box]
     low = lin.copy()
     low[box] = harmonic(np.where(kn[..., None], wl[box], 0), kn, f=2, iters=3000)
-    # grain: synthetic, matched to the plain wall beside the pendant (x 1180-1290, y 200-250; below lie the art frames)
     ref = lin[200:250, 1180:1290]
     hp = (ref / np.maximum(cv2.GaussianBlur(ref, (0, 0), 2.0), 1e-5)).mean(2)
     sd = float(np.std(hp))
@@ -394,19 +391,17 @@ def wm():
     nz = cv2.GaussianBlur(rng.standard_normal((H, W)).astype(np.float32), (0, 0), 0.8)
     nz *= sd / max(float(nz.std()), 1e-6)
     wall = low * (1 + nz)[..., None]
-    out = lin.copy()
-    zf = cv2.GaussianBlur(zone.astype(np.float32), (0, 0), 0.7) * zone
-    out = out * (1 - zf[..., None]) + wall * zf[..., None]
-    out = out * (1 - r6f[..., None]) + lifted * r6f[..., None]
-    out = np.where(zone[..., None] | (r6f[..., None] > 0), out, lin)
+    wf = cv2.GaussianBlur(old6.astype(np.float32), (0, 0), 0.7) * old6
+    out = lin * (1 - wf[..., None]) + wall * wf[..., None]
+    out = out * (1 - sa[..., None]) + spr * sa[..., None]
     o8 = save8(l2s(out), os.path.join(HERE, "warm-modern-A-ed5.png"))
     a8 = (a * 255 + 0.5).astype(np.uint8)
-    m = cv2.dilate((zone | (r6f > 0)).astype(np.uint8), np.ones((3, 3), np.uint8))
+    m = cv2.dilate((old6 | (sa > 0)).astype(np.uint8), np.ones((3, 3), np.uint8))
     rec = check(o8, a8, m, "warm-modern-A-ed5.png")
-    rec.update(base="warm-modern-A-ed4.png", ring_pitch_px=D, rings_before=6, rings_after=5,
-               rim_lines={"x": xs_m.tolist(), "ring4_bottom": c4_m.tolist(), "pendant_bottom": yb_m.tolist()},
-               method="ring 5 taken out; ring 6 (from ring 5's rim line to the bottom) lifted 27 px behind ring 4's rim; the rest of the old "
-                      "rings 5-6 area plain wall (harmonic from the wall round the pendant, grain matched to the plain wall beside it)")
+    rec.update(base="warm-modern-A-ed4.png", rings_before=6, rings_after=5, scale=K, axis_x=AXc,
+               rim_lines={"x": xs_m.tolist(), "ring5_bottom": c5_m.tolist(), "old_bottom": yb_m.tolist()},
+               method="the bottom ring (6) taken out; its open bottom scaled x1.25 (ring 5's width over ring 6's) about the axis and from "
+                      "ring 5's rim line down, so ring 5 is the bottom ring; leftover old ring-6 pixels plain wall (harmonic + matched grain)")
     return rec
 
 

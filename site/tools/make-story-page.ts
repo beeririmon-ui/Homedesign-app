@@ -35,7 +35,7 @@ type FrameSpec = {
   style_he: string;
   u0: number;
   v0: number;
-  mobile_window_u: number;
+  phone_crop_u: number;
   title_he: string;
   line_he: string;
   alt_he: string;
@@ -54,9 +54,19 @@ type Manifest = {
   frames: Record<string, FrameSpec>;
   next_styles_he: string[];
 };
-type Point = { product: string; u: number; v: number; by_eye: boolean; option?: Record<string, string>; option_label_he?: string; in_frame_he?: string };
+type Box = [number, number, number, number];
+type Point = {
+  product: string;
+  u: number;
+  v: number;
+  box: Box;
+  by_eye: boolean;
+  option?: Record<string, string>;
+  option_label_he?: string;
+  in_frame_he?: string;
+};
 type Hotspots = { status: string; frames: Record<string, { src: string; qa_key: string; points: Point[] }> };
-type QaRecord = { final_test: Record<string, string>; frames: Record<string, { rows: { card: string; present: boolean }[] }> };
+type QaRecord = { final_test: Record<string, string>; frames: Record<string, { rows: { card: string; present: boolean; faithful: string }[] }> };
 type Card = {
   id: string;
   slot: string;
@@ -72,6 +82,13 @@ type StoryItem = {
   product: string;
   u: number;
   v: number;
+  box: Box;
+  /** QA's verdict on the product in this frame (G-ED.5): a dot only on 'yes' */
+  faithful: string;
+  dot: boolean;
+  /** the dot in the phone's 4:5 crop (u, v of the crop), or why there is none there (G-ED.17) */
+  phone: { u: number; v: number } | null;
+  phone_note: string | null;
   name_he: string;
   detail_he: string;
   price_he: string | null;
@@ -103,6 +120,11 @@ const OUT = join(MEDIA_OUT, 'test', 'story');
 const URL_BASE = '/media/test/story';
 const WIDTHS = [1280, 1920, 2720];
 const PHOTO_WIDTHS = [160, 480, 800];
+const PHONE_WIDTHS = [480, 800, 1224];
+/** G-ED.17 (proposal): the 4:5 crop at the full width of a 390 CSS phone; a product's visible part ≥ 44 × 24 CSS */
+const PHONE_CSS = 390;
+const MIN_LONG = 44;
+const MIN_SHORT = 24;
 
 // ---------- the gate: only the frames QA called "final test" or "almost" (QA report 2026-11-07 §4) ----------
 for (const [id, f] of Object.entries(hot.frames)) {
@@ -115,6 +137,10 @@ for (const [id, f] of Object.entries(hot.frames)) {
   const missing = listed.filter((c) => !f.points.some((p) => p.product === c));
   if (missing.length) throw new Error(`${id}: QA lists ${missing.join(', ')} in the frame, and it has no point`);
 }
+
+/** QA's verdict per card per frame ("cushions-cj-boucle-teddy (White, Milk tea)" is the card's row) */
+const faithfulOf = (qaKey: string, product: string): string =>
+  qa.frames[qaKey]!.rows.find((r) => r.card.split(' ')[0] === product)?.faithful ?? 'not checked';
 
 // ---------- the cards (photos, options) and the slots' placement (the credit's defining size) ----------
 function walk(dir: string): string[] {
@@ -184,7 +210,29 @@ function tryHref(productId: string): string | null {
 /** reading order in a right-to-left page: top to bottom in bands, right to left inside a band */
 const readingOrder = (a: Point, b: Point) => Math.floor(a.v / 0.25) - Math.floor(b.v / 0.25) || b.u - a.u;
 
-async function itemOf(frame: string, n: number, pt: Point): Promise<StoryItem> {
+/**
+ * The phone's dot (G-ED.17): the crop [c0, c1] of the frame's width is shown 390 CSS wide. The product's part inside the
+ * crop must be ≥ 44 CSS on its long side and ≥ 24 on its short side; the dot is the point when its whole target is in the
+ * crop, else the middle of the visible part, at the point's height.
+ */
+function phoneDot(pt: Point, c0: number, c1: number, fw: number, fh: number): { at: { u: number; v: number } | null; note: string | null } {
+  const css = PHONE_CSS / ((c1 - c0) * fw); // CSS px per frame px
+  const [x0, x1, y0, y1] = pt.box;
+  const a = Math.max(x0, c0);
+  const b = Math.min(x1, c1);
+  if (b <= a) return { at: null, note: 'מחוץ לחיתוך הטלפון' };
+  const w = (b - a) * fw * css;
+  const h = (y1 - y0) * fh * css;
+  if (Math.max(w, h) < MIN_LONG || Math.min(w, h) < MIN_SHORT)
+    return { at: null, note: `בטלפון ${Math.round(w)}×${Math.round(h)} CSS, פחות מ-${MIN_LONG}×${MIN_SHORT}` };
+  const margin = 23 / PHONE_CSS; // half a target, in crop units
+  const cu = (pt.u - c0) / (c1 - c0);
+  const inside = cu >= margin && cu <= 1 - margin;
+  const u = inside ? cu : ((a + b) / 2 - c0) / (c1 - c0);
+  return { at: { u: Math.round(Math.min(1 - margin, Math.max(margin, u)) * 10000) / 10000, v: pt.v }, note: null };
+}
+
+async function itemOf(frame: string, qaKey: string, n: number, pt: Point, crop: [number, number], fw: number, fh: number): Promise<StoryItem> {
   const card = cards.get(pt.product);
   if (!card) throw new Error(`${frame}: no product card ${pt.product}`);
   const p = story.products.find((x) => x.id === pt.product) ?? null;
@@ -223,6 +271,9 @@ async function itemOf(frame: string, n: number, pt: Point): Promise<StoryItem> {
   // the catalog's notes describe the room engine's frame ("בתמונה: ..."): the story frame brings its own caption
   const notes = [...(pt.in_frame_he ? [pt.in_frame_he] : []), ...(p?.notes_he.filter((x) => !x.startsWith('בתמונה')) ?? [])];
   if (p?.pack) notes.push(`נמכר כסט של ${p.pack.set_qty}.`);
+  const faithful = faithfulOf(qaKey, pt.product);
+  const dot = faithful === 'yes';
+  const ph = dot ? phoneDot(pt, crop[0], crop[1], fw, fh) : { at: null, note: null };
   return {
     id: `${frame}-${n}`,
     frame,
@@ -230,6 +281,11 @@ async function itemOf(frame: string, n: number, pt: Point): Promise<StoryItem> {
     product: pt.product,
     u: pt.u,
     v: pt.v,
+    box: pt.box,
+    faithful,
+    dot,
+    phone: ph.at,
+    phone_note: ph.note,
     name_he: name,
     detail_he: detail,
     price_he: priceHe,
@@ -241,14 +297,26 @@ async function itemOf(frame: string, n: number, pt: Point): Promise<StoryItem> {
     notes_he: notes,
     image: img,
     thumb: img ? img.srcset.split(', ')[0]!.split(' ')[0]! : null,
-    swatch: card.colors.dominant_hex,
+    // a draft card (DS API) has no colour yet: the rule's hairline grey
+    swatch: /^#[0-9a-f]{6}$/i.test(card.colors?.dominant_hex ?? '') ? card.colors.dominant_hex : '#d9d6d0',
     href: sitePages.has(pt.product) ? `/p/${pt.product}/` : null,
     try_href: tryHref(pt.product),
   };
 }
 
 // ---------- the frames ----------
-type FrameOut = FrameSpec & { id: string; width: number; height: number; aspect: number; lqip: string; srcset: string[]; items: StoryItem[] };
+type FrameOut = FrameSpec & {
+  id: string;
+  width: number;
+  height: number;
+  aspect: number;
+  lqip: string;
+  lqip_phone: string;
+  srcset: string[];
+  srcset_phone: string[];
+  crop: [number, number];
+  items: StoryItem[];
+};
 const frames: FrameOut[] = [];
 for (const [id, f] of Object.entries(hot.frames)) {
   const spec = man.frames[id]!;
@@ -264,9 +332,30 @@ for (const [id, f] of Object.entries(hot.frames)) {
     await r.clone().avif({ quality: 52, effort: 4 }).toFile(`${base}.avif`);
     await r.clone().webp({ quality: 74, effort: 4 }).toFile(`${base}.webp`);
   }
+  // the phone: the 4:5 crop at full height, centred on phone_crop_u (clamped to the frame)
+  const cw = Math.round(meta.height! * 0.8);
+  const cl = Math.round(Math.min(meta.width! - cw, Math.max(0, spec.phone_crop_u * meta.width! - cw / 2)));
+  const phone = img.clone().extract({ left: cl, top: 0, width: cw, height: meta.height! });
+  for (const w of PHONE_WIDTHS) {
+    const base = join(OUT, id, `m${w}`);
+    if (fresh(`${base}.avif`, mtime) && fresh(`${base}.webp`, mtime)) continue;
+    const r = phone.clone().resize({ width: w, withoutEnlargement: true });
+    await r.clone().avif({ quality: 52, effort: 4 }).toFile(`${base}.avif`);
+    await r.clone().webp({ quality: 74, effort: 4 }).toFile(`${base}.webp`);
+  }
+  const crop: [number, number] = [cl / meta.width!, (cl + cw) / meta.width!];
   const points = [...f.points].sort(readingOrder);
   const items: StoryItem[] = [];
-  for (const [i, pt] of points.entries()) items.push(await itemOf(id, i + 1, pt));
+  for (const [i, pt] of points.entries()) items.push(await itemOf(id, f.qa_key, i + 1, pt, crop, meta.width!, meta.height!));
+  // no two phone targets of 44 CSS may overlap (G-ED.17 (4)); a pair that does is reported, to be grouped
+  const css = PHONE_CSS / ((crop[1] - crop[0]) * meta.width!);
+  for (const a of items)
+    for (const b of items)
+      if (a.n < b.n && a.phone && b.phone) {
+        const dx = (a.phone.u - b.phone.u) * PHONE_CSS;
+        const dy = (a.phone.v - b.phone.v) * meta.height! * css;
+        if (Math.hypot(dx, dy) < 44) console.warn(`${id}: the phone dots of ${a.product} and ${b.product} are ${Math.round(Math.hypot(dx, dy))} CSS apart`);
+      }
   frames.push({
     ...spec,
     id,
@@ -274,11 +363,16 @@ for (const [id, f] of Object.entries(hot.frames)) {
     height: meta.height!,
     aspect: meta.width! / meta.height!,
     lqip: await lqip(img),
+    lqip_phone: `data:image/webp;base64,${(await phone.clone().resize(16, 20, { fit: 'fill' }).webp({ quality: 40 }).toBuffer()).toString('base64')}`,
     srcset: WIDTHS.map((w) => `${URL_BASE}/${id}/${w}`),
+    srcset_phone: PHONE_WIDTHS.map((w) => `${URL_BASE}/${id}/m${w}`),
+    crop,
     items,
   });
   const priced = items.filter((x) => x.status !== 'unpriced').length;
-  console.log(`${id}: ${meta.width}×${meta.height}, ${items.length} products (${priced} priced, ${items.filter((x) => x.image).length} with the card photo)`);
+  console.log(
+    `${id}: ${meta.width}×${meta.height}, phone crop u ${crop[0].toFixed(3)}–${crop[1].toFixed(3)}; ${items.length} products (${priced} priced, ${items.filter((x) => x.image).length} with the card photo); dots ${items.filter((x) => x.dot).length} (not faithful: ${items.filter((x) => !x.dot).map((x) => `${x.product} ${x.faithful}`).join(', ') || 'none'}); on the phone ${items.filter((x) => x.phone).length} (${items.filter((x) => x.dot && !x.phone).map((x) => `${x.product}: ${x.phone_note}`).join('; ') || 'all'})`,
+  );
 }
 
 // ---------- the page ----------
@@ -287,10 +381,15 @@ const F = (id: string) => frames.find((f) => f.id === id)!;
 const head = (f: FrameOut) => `${f.n} · ${f.room_he} · ${f.style_he}`;
 function picture(f: FrameOut, eager: boolean): string {
   const set = (ext: string) => f.srcset.map((s, i) => `${s}.${ext} ${Math.min(WIDTHS[i]!, f.width)}w`).join(', ');
-  // the phone shows the frame at full height in a horizontal scroller (its aspect × the viewport height wide)
-  const sizes = `(max-width: 719px) ${Math.round(f.aspect * 100)}svh, 100vw`;
-  return `<img class="mag-lqip" src="${f.lqip}" alt="" aria-hidden="true" width="${f.width}" height="${f.height}" style="object-position: ${(f.u0 * 100).toFixed(1)}% ${(f.v0 * 100).toFixed(1)}%" />
+  const cw = Math.round(f.height * 0.8);
+  const pset = (ext: string) => f.srcset_phone.map((s, i) => `${s}.${ext} ${Math.min(PHONE_WIDTHS[i]!, cw)}w`).join(', ');
+  // the phone shows the 4:5 crop at full width (Bible 1.9; G-ED.17); the desktop covers the screen with the whole frame
+  const sizes = '100vw';
+  return `<img class="mag-lqip st-lqip-desk" src="${f.lqip}" alt="" aria-hidden="true" width="${f.width}" height="${f.height}" style="object-position: ${(f.u0 * 100).toFixed(1)}% ${(f.v0 * 100).toFixed(1)}%" />
+<img class="mag-lqip st-lqip-phone" src="${f.lqip_phone}" alt="" aria-hidden="true" width="${cw}" height="${f.height}" />
 <picture class="mag-pic">
+  <source media="(max-width: 719px)" type="image/avif" srcset="${pset('avif')}" sizes="100vw" />
+  <source media="(max-width: 719px)" type="image/webp" srcset="${pset('webp')}" sizes="100vw" />
   <source type="image/avif" srcset="${set('avif')}" sizes="${sizes}" />
   <img src="${f.srcset[1]}.webp" srcset="${set('webp')}" sizes="${sizes}" alt="${esc(f.alt_he)}" width="${f.width}" height="${f.height}" decoding="async" ${eager ? 'fetchpriority="high"' : 'loading="lazy"'} style="object-position: ${(f.u0 * 100).toFixed(1)}% ${(f.v0 * 100).toFixed(1)}%" />
 </picture>`;
@@ -298,9 +397,10 @@ function picture(f: FrameOut, eager: boolean): string {
 const status = (x: StoryItem) => (x.status === 'unavailable' ? '. המלאי אינו זמין כעת' : '');
 const marks = (f: FrameOut) =>
   f.items
+    .filter((x) => x.dot)
     .map(
       (x) =>
-        `<button type="button" class="mag-mark st-mark" data-item="${x.id}" style="--u: ${x.u}; --v: ${x.v}" aria-haspopup="dialog" aria-label="${esc(`${x.name_he}. ${x.detail_he}${status(x)}. קנה את המראה`)}"><span class="mag-dot" aria-hidden="true"></span></button>`,
+        `<button type="button" class="mag-mark st-mark${x.phone ? '' : ' st-no-phone'}" data-item="${x.id}" style="--u: ${x.u}; --v: ${x.v}${x.phone ? `; --pu: ${x.phone.u}; --pv: ${x.phone.v}` : ''}" aria-haspopup="dialog" aria-label="${esc(`${x.name_he}. ${x.detail_he}${status(x)}. קנה את המראה`)}"><span class="mag-dot" aria-hidden="true"></span></button>`,
     )
     .join('\n');
 const swatch = (x: StoryItem) =>
@@ -311,13 +411,13 @@ const rows = (f: FrameOut) =>
   f.items
     .map(
       (x) =>
-        `<li class="mag-credit st-credit" data-item="${x.id}"><span class="mag-credit-n num">${String(x.n).padStart(2, '0')}</span>${swatch(x)}<span class="mag-credit-body"><button type="button" class="st-open" data-item="${x.id}" aria-haspopup="dialog"><span class="mag-credit-name">${esc(x.name_he)}</span></button><span class="mag-credit-detail">${esc(x.detail_he)}${x.status === 'unavailable' ? ' · המלאי אינו זמין כעת' : ''}</span></span></li>`,
+        `<li class="mag-credit st-credit" data-item="${x.id}"><span class="mag-credit-n num">${String(x.n).padStart(2, '0')}</span>${swatch(x)}<span class="mag-credit-body"><button type="button" class="st-open" data-item="${x.id}" aria-haspopup="dialog"><span class="mag-credit-name">${esc(x.name_he)}</span></button><span class="mag-credit-detail">${esc(x.detail_he)}${x.status === 'unavailable' ? ' · המלאי אינו זמין כעת' : ''}</span>${x.dot ? '' : '<span class="mag-credit-detail st-no-dot">בלי נקודה בתמונה: כאן הוא עוד לא נאמן לכרטיס במלואו.</span>'}</span></li>`,
     )
     .join('\n');
 function spread(f: FrameOut, eager: boolean): string {
   const h = f.role === 'opening' ? 'h1' : 'h2';
   return `<section class="mag-spread st-spread" id="frame-${f.id}" data-head="${esc(head(f))}" data-role="${f.role}" aria-labelledby="title-${f.id}">
-  <div class="mag-stage" data-frame="${f.id}" data-marks="off" role="group" aria-label="${esc(`${f.title_he}: ${f.items.length} מוצרים בתמונה`)}">
+  <div class="mag-stage" data-frame="${f.id}" data-marks="off" role="group" aria-label="${esc(`${f.title_he}: ${f.items.length} מוצרים בתמונה, ${f.items.filter((x) => x.dot).length} עם נקודה`)}">
     <div class="mag-scroller">
       <div class="mag-frame" style="--aspect: ${f.aspect.toFixed(4)}">
         ${picture(f, eager)}
@@ -325,6 +425,7 @@ function spread(f: FrameOut, eager: boolean): string {
       </div>
     </div>
     <div class="mag-label" aria-hidden="true"></div>
+    <p class="st-draft${f.draft_he ? ' is-almost' : ''}">${esc(f.draft_he ? `${man.mark_he} · ${f.draft_he}` : man.mark_he)}</p>
   </div>
   <div class="st-text">
     <p class="st-kicker">${esc(f.role === 'other-style' ? `בסגנונות אחרים · ${f.style_he}` : head(f))}</p>
@@ -332,7 +433,6 @@ function spread(f: FrameOut, eager: boolean): string {
     <p class="st-line">${esc(f.line_he)}</p>
     <p class="st-to-list"><a class="st-link" href="#list-${f.id}">כל המוצרים בתמונה · <span class="num">${f.items.length}</span></a></p>
   </div>
-  <p class="st-mark${f.draft_he ? ' is-draft' : ''}">${esc(f.draft_he ? `${man.mark_he} · ${f.draft_he}` : man.mark_he)}</p>
 </section>
 <section class="mag-paper st-list" id="list-${f.id}" data-head="${esc(head(f))}" aria-labelledby="list-title-${f.id}">
   <div class="mag-grid">
@@ -350,7 +450,7 @@ const others = `<ul class="st-styles mag-col-main">
 ${man.next_styles_he.map((s) => `  <li class="st-style is-next"><span>${esc(s)}</span> <span class="mag-cap">בגיליונות הבאים</span></li>`).join('\n')}
 </ul>`;
 
-const data = { mark_he: man.mark_he, items: Object.fromEntries(frames.flatMap((f) => f.items.map((x) => [x.id, x]))), frames: frames.map((f) => ({ id: f.id, u0: f.u0, v0: f.v0, aspect: f.aspect, window_u: f.mobile_window_u, title_he: f.title_he, items: f.items.map((x) => x.id) })) };
+const data = { mark_he: man.mark_he, items: Object.fromEntries(frames.flatMap((f) => f.items.map((x) => [x.id, x]))), frames: frames.map((f) => ({ id: f.id, u0: f.u0, v0: f.v0, aspect: f.aspect, crop: f.crop, title_he: f.title_he, items: f.items.map((x) => x.id) })) };
 mkdirSync(GENERATED, { recursive: true });
 writeFileSync(join(GENERATED, 'test-page.story.json'), JSON.stringify(data, null, 1));
 

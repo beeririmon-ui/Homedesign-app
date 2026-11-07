@@ -1,0 +1,527 @@
+/* The story-first prototype (/test/story/): only what the magazine language (magazine.css) does not have yet. Same
+   paper, ink and hairlines; every duration and curve is a token of magazine.css (art direction §7.1). */
+.st-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ---------- the top band: the brand, the running head, "עצב בעצמך" and the test cart ---------- */
+.st-nav {
+  gap: var(--s-5);
+}
+.st-cart-btn {
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-1);
+}
+.st-cart-count {
+  display: inline-block;
+  min-width: 1.2em;
+  text-align: center;
+  transition: opacity var(--d-micro) var(--e-standard);
+}
+.st-cart-count.is-changing {
+  opacity: 0;
+}
+@media (max-width: 719px) {
+  .st-head .mag-run {
+    visibility: hidden;
+  }
+}
+
+/* ---------- the story frame: the text over the frame, ink on its light wall with the cover's soft paper screen ---------- */
+.st-text {
+  position: absolute;
+  z-index: 2;
+  inset-inline: var(--margin);
+  top: calc(var(--head-h) + env(safe-area-inset-top) + var(--s-5));
+  max-width: 22rem;
+  color: var(--ink);
+  pointer-events: none;
+}
+@media (min-width: 1024px) {
+  .st-text {
+    inset-inline-end: auto;
+    /* five of the twelve columns, from the start (the right) */
+    width: calc((min(100vw, var(--maxw)) - 2 * var(--margin) - 11 * var(--gap)) / 12 * 5 + 4 * var(--gap));
+    max-width: none;
+    top: calc(var(--head-h) + 7svh);
+  }
+}
+.st-text::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: calc(var(--s-5) * -1);
+  background: rgba(244, 241, 236, 0.66);
+  border-radius: 2px;
+  filter: blur(18px);
+  opacity: 0;
+  transition: opacity var(--d-page-in) var(--e-approach);
+}
+.st-spread.is-title .st-text::before {
+  opacity: 1;
+}
+.st-kicker {
+  font: 600 var(--t-run) var(--f-text);
+}
+.st-title {
+  margin-top: var(--s-3);
+  font: 300 var(--t-display) var(--f-display);
+  text-wrap: balance;
+}
+h2.st-title {
+  font: 300 var(--t-h1) var(--f-display);
+}
+.st-line {
+  margin-top: var(--s-4);
+  font: 400 var(--t-detail) var(--f-text);
+  max-width: 26rem;
+}
+@media (min-width: 1024px) {
+  .st-line {
+    font: 400 var(--t-body) var(--f-text);
+  }
+}
+.st-to-list {
+  margin-top: var(--s-2);
+  pointer-events: auto;
+}
+.st-title-line,
+.st-kicker,
+.st-line,
+.st-to-list {
+  display: block;
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity var(--d-page-in) var(--e-approach),
+    transform var(--d-page-in) var(--e-approach);
+}
+.st-spread.is-title .st-title-line,
+.st-spread.is-title .st-kicker,
+.st-spread.is-title .st-line,
+.st-spread.is-title .st-to-list {
+  opacity: 1;
+  transform: none;
+}
+/* 80 ms between the lines (§8.1) */
+.st-spread .st-title-line {
+  transition-delay: var(--d-press);
+}
+.st-spread .st-line {
+  transition-delay: calc(var(--d-press) * 2);
+}
+.st-spread .st-to-list {
+  transition-delay: calc(var(--d-press) * 3);
+}
+.st-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--ink);
+  font: 600 var(--t-btn) var(--f-text);
+  text-decoration: underline;
+  text-decoration-color: var(--rule-control);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  transition: text-decoration-color var(--d-ui-out) var(--e-standard);
+}
+@media (hover: hover) {
+  .st-link:hover {
+    text-decoration-color: currentColor;
+  }
+}
+/* the visible test mark on every frame: paper and ink, like the wall label; never on the real routes */
+.st-draft {
+  position: absolute;
+  z-index: 2;
+  inset-inline-end: var(--margin);
+  bottom: calc(env(safe-area-inset-bottom) + var(--s-4));
+  padding: var(--s-1) var(--s-2);
+  border-radius: 2px;
+  background: var(--label);
+  color: var(--ink);
+  font: 600 var(--t-cap) var(--f-text);
+  box-shadow: 0 1px 2px rgba(58, 58, 58, 0.18);
+  pointer-events: none;
+}
+.st-draft.is-almost {
+  border-inline-start: 2px solid var(--error);
+}
+.st-spread .st-text {
+  z-index: 3;
+}
+.st-lqip-phone {
+  display: none;
+}
+
+/* ---------- the phone: the 4:5 crop at full width under the top band, the text on paper below it (Bible 1.9; G-ED.17) ---------- */
+@media (max-width: 719px) {
+  .st-head[data-on='stage'] {
+    background: var(--paper);
+    box-shadow: inset 0 -1px 0 var(--rule);
+  }
+  .st-spread {
+    height: auto;
+    overflow: visible;
+    background: var(--paper);
+    padding-top: calc(var(--head-h) + env(safe-area-inset-top));
+  }
+  .st-spread .mag-stage {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+  }
+  .st-spread .mag-scroller {
+    overflow: hidden;
+  }
+  .st-spread .mag-frame {
+    width: 100%;
+    height: 100%;
+  }
+  .st-spread .st-lqip-desk {
+    display: none;
+  }
+  .st-spread .st-lqip-phone {
+    display: block;
+  }
+  .st-spread .st-mark {
+    left: calc(var(--pu) * 100%);
+    top: calc(var(--pv) * 100%);
+  }
+  .st-spread .st-no-phone {
+    display: none;
+  }
+  .st-draft {
+    bottom: var(--s-3);
+  }
+  .st-text {
+    position: static;
+    max-width: none;
+    padding: var(--s-5) var(--margin) var(--s-6);
+  }
+  .st-text::before {
+    display: none;
+  }
+  .st-line {
+    max-width: 30rem;
+  }
+}
+
+/* ---------- the list: "כל המוצרים בתמונה" ---------- */
+.st-credits .st-credit {
+  grid-template-columns: 3ch 64px 1fr;
+  align-items: center;
+}
+.st-thumb {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  background: var(--paper-2);
+}
+.st-swatch {
+  display: block;
+  position: relative;
+  background: var(--paper-2);
+}
+.st-swatch::after {
+  content: '';
+  position: absolute;
+  inset: 18px;
+  border-radius: 50%;
+  background: var(--swatch, var(--paper-2));
+  box-shadow: 0 0 0 1px var(--rule);
+}
+.st-open {
+  display: block;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+.st-open .mag-credit-name {
+  text-decoration: underline;
+  text-decoration-color: var(--rule-control);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  transition: text-decoration-color var(--d-ui-out) var(--e-standard);
+}
+@media (hover: hover) {
+  .st-open:hover .mag-credit-name {
+    text-decoration-color: currentColor;
+  }
+}
+
+/* ---------- the tool and the other styles ---------- */
+.st-tool-row {
+  margin-top: var(--s-4);
+}
+.st-btn-link {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+.st-styles {
+  display: grid;
+  margin-top: var(--s-4);
+}
+.st-style {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-4);
+  min-height: 56px;
+  padding: var(--s-2) 0;
+  border-top: 1px solid var(--rule);
+  font: 300 30px/36px var(--f-display);
+}
+.st-style:last-child {
+  border-bottom: 1px solid var(--rule);
+}
+.st-style .st-link {
+  font: inherit;
+}
+.st-style.is-next > span:first-child {
+  color: var(--ink-2);
+}
+.st-style .mag-cap {
+  font: 400 var(--t-cap) var(--f-text);
+}
+
+/* ---------- the sheet: "קנה את המראה" (a modal dialog; on the phone from the bottom, on desktop at the end side) ---------- */
+.st-sheet {
+  position: fixed;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  max-width: none;
+  max-height: none;
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: 0 1px 2px rgba(58, 58, 58, 0.18);
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity var(--d-ui-out) var(--e-ui-out),
+    transform var(--d-ui-out) var(--e-ui-out);
+  overscroll-behavior: contain;
+}
+.st-sheet.is-on {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity var(--d-ui-in) var(--e-approach),
+    transform var(--d-ui-in) var(--e-approach);
+}
+.st-sheet::backdrop {
+  background: rgba(20, 19, 18, 0.24);
+}
+@media (max-width: 719px) {
+  .st-sheet {
+    inset: auto 0 0 0;
+    width: 100%;
+    max-height: 88svh;
+    border-radius: 2px 2px 0 0;
+    overflow-y: auto;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+@media (min-width: 720px) {
+  .st-sheet {
+    inset-block: 0;
+    inset-inline-end: 0;
+    inset-inline-start: auto;
+    width: min(30rem, 44vw);
+    height: 100svh;
+    overflow-y: auto;
+    box-shadow: inset 1px 0 0 var(--rule);
+  }
+}
+.st-sheet-in {
+  display: grid;
+  gap: var(--s-4);
+  padding: var(--s-4) var(--margin) var(--s-6);
+}
+@media (min-width: 720px) {
+  .st-sheet-in {
+    padding: var(--s-5) var(--s-6) var(--s-7);
+  }
+}
+.st-sheet-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-4);
+}
+.st-close {
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  margin-inline-end: calc(var(--s-3) * -1);
+  border: 0;
+  border-radius: 2px;
+  background: none;
+  color: var(--ink);
+  font: 400 24px/1 var(--f-text);
+  cursor: pointer;
+}
+@media (hover: hover) {
+  .st-close:hover {
+    background: rgba(58, 58, 58, 0.06);
+  }
+}
+.st-photo {
+  margin: 0;
+  display: grid;
+  gap: var(--s-2);
+}
+.st-photo img,
+.st-photo-none {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  background: var(--paper-2);
+}
+@media (max-width: 719px) {
+  .st-photo img,
+  .st-photo-none {
+    max-height: 34svh;
+  }
+}
+.st-photo-none {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: var(--s-4);
+  padding: var(--s-5);
+  font: 400 var(--t-detail) var(--f-text);
+  color: var(--ink-2);
+  text-align: center;
+}
+.st-photo-none[hidden],
+.st-photo img[hidden] {
+  display: none;
+}
+.st-swatch-lg {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background: var(--swatch, var(--paper));
+  box-shadow: 0 0 0 1px var(--rule);
+}
+.st-name {
+  font: 500 var(--t-h2) var(--f-display);
+  text-wrap: balance;
+}
+.st-name:focus {
+  outline: none;
+}
+.st-name:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+.st-detail {
+  margin-top: calc(var(--s-3) * -1);
+  font-size: 15px;
+}
+.st-notes {
+  display: grid;
+  gap: var(--s-1);
+  font: 400 var(--t-cap) var(--f-text);
+  color: var(--ink-2);
+}
+.st-notes:empty {
+  display: none;
+}
+.st-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-4);
+}
+.st-actions .mag-btn[hidden],
+.st-why[hidden],
+.st-links [hidden] {
+  display: none;
+}
+.st-why {
+  max-width: none;
+  color: var(--ink);
+}
+.st-links {
+  font: 400 var(--t-detail) var(--f-text);
+}
+.st-links .mag-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+.st-browse {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-4);
+  padding-top: var(--s-3);
+  border-top: 1px solid var(--rule);
+}
+.st-step {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0 var(--s-2);
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font: 600 var(--t-btn) var(--f-text);
+  text-decoration: underline;
+  text-decoration-color: var(--rule-control);
+  text-underline-offset: 4px;
+  cursor: pointer;
+}
+.st-total {
+  font: 600 var(--t-btn) var(--f-text);
+  font-variant-numeric: tabular-nums lining-nums;
+}
+.st-cart-lines:empty {
+  display: none;
+}
+.st-cart-line {
+  grid-template-columns: 1fr;
+}
+.st-cart-empty[hidden] {
+  display: none;
+}
+
+/* ---------- reduced motion (§7.4): dissolves only, nothing rises ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .st-sheet,
+  .st-sheet.is-on {
+    transform: none;
+    transition: opacity var(--d-ui-in) var(--e-standard);
+  }
+  .st-title-line,
+  .st-kicker,
+  .st-line,
+  .st-to-list {
+    transform: none;
+    transition: opacity var(--d-swap) var(--e-standard);
+  }
+  .st-cart-count {
+    transition: none;
+  }
+}

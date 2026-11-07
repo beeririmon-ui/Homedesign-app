@@ -1,0 +1,78 @@
+{
+  "room": "living-room",
+  "style": "warm-modern",
+  "date": "2026-11-07",
+  "author": "master-designer",
+  "status": "proposed for owner approval 2 (with docs/design-bible/warm-modern.md 1.0 = approval 1); card statuses NOT changed until approval",
+  "bible": "docs/design-bible/warm-modern.md 1.0",
+  "camera": "M0 1.2 (tool), 17 slots in frame; wall-sconce transition-only",
+  "scores": "warm-modern score: card style_scores where present, else 'cat' = provisional catalog score (data/catalog/warm-modern-2026-10-12.json). Price: card price.cost (USD, supplier); price_ils = the catalog's proposed retail where it exists (not approved, rule ה.10)",
+  "rule_variants": "every variant combines with every variant of every other slot; the first is the default and the defaults together are the strongest scene",
+  "slots": {
+    "curtains": {"picks": [
+      {"card_id": "curtains-aliexpress-beige-linen-sheer-curtains-554205", "score": 8.0, "score_src": "cat", "cost_usd": 13.44, "price_ils": 349, "why": "default: beige linen with strong slub, matte, wave/pinch heading on the recessed track; differs from the Nordic default"},
+      {"card_id": "curtains-aliexpress-linen-blend-s-fold-180502", "score": 8.0, "score_src": "cat", "cost_usd": 17.69, "price_ils": 299, "why": "the house linen in a lighter natural: the light variant"},
+      {"card_id": "curtains-cj-japanese-linen-half-shade", "score": 8.0, "score_src": "card", "cost_usd": 16.58, "price_ils": null, "why": "semi-sheer natural linen; texture variant (finer weave)"}
+    ], "gap": "all three are light; a taupe / mushroom heavy linen (L 60-72) 140 x 280 is missing for a real colour axis"},
+    "framed-art": {"picks": [
+      {"card_id": "framed-art-aliexpress-frameless-minimalist-wall-art-631735", "score": 8.5, "score_src": "cat", "cost_usd": 5.93, "price_ils": 379, "why": "default: cream-brown-espresso abstracts, the espresso carrier; walnut frames, bone mat (framing PR1)"},
+      {"card_id": "framed-art-aliexpress-modern-minimalist-neutral-gallery-802995", "score": 8.0, "score_src": "cat", "cost_usd": 9.82, "price_ils": 379, "why": "organic shapes in black-taupe on beige: the contrast variant"}
+    ], "gap": "1 missing: a quiet cream-taupe triptych; framing still depends on PR1"},
+    "wall-decor": {"picks": [], "gap": "none: raffia/macramé are forbidden here; target a plaster relief disc 35-45 or a walnut plate. Slot stays EMPTY in the tool (TR3)"},
+    "accent-sconces": {"picks": [
+      {"card_id": "accent-sconces-aliexpress-travertine-cylinder-walnut-choice", "score": 8.5, "score_src": "cat", "cost_usd": 40.76, "price_ils": 599, "why": "default: travertine cylinder on a walnut plate, the style's signature (as in the story frame)"},
+      {"card_id": "accent-sconces-cj-travertine-block-updown-8x16", "score": 8.0, "score_src": "cat", "cost_usd": 14.97, "price_ils": 599, "why": "travertine block up-down: shape variant, no wood (the Nordic default)"},
+      {"card_id": "accent-sconces-cj-ribbed-travertine-half-cylinder-wood-bracket", "score": 8.0, "score_src": "cat", "cost_usd": 23.72, "price_ils": 599, "why": "ribbed half cylinder: texture variant (fluting is the style's language)"}
+    ], "gap": "electrical gate (CE, 220-240 V, hardwired) open on all three"},
+    "vase": {"picks": [
+      {"card_id": "vase-cj-textured-white-stoneware", "score": 8.5, "score_src": "card", "cost_usd": 10.24, "price_ils": 229, "why": "default: crinkled off-white stoneware, tall (Large 32 x 16), sculptural on the limestone bench; dry olive branch"},
+      {"card_id": "vase-cj-charcoal-carved", "score": 8.5, "score_src": "card", "cost_usd": 26.53, "price_ils": null, "why": "dark carved ceramic: the espresso variant against the glazing"},
+      {"card_id": "vase-cj-white-plum-hand-thrown", "score": 8.0, "score_src": "card", "cost_usd": 24.05, "price_ils": null, "why": "white meiping: shape variant (shoulder and neck)"}
+    ], "gap": "a caramel or taupe vessel would give an accent-colour axis"},
+    "rug": {"picks": [
+      {"card_id": "rug-cj-braided-wool-natural", "score": 8.5, "score_src": "card", "cost_usd": 267.54, "price_ils": null, "why": "default: natural braided wool, tonal stripes, reads strongly on the smoked-oak floor. Loses money from China (IL1)"}
+    ], "gap": "2 missing: looped wool or tonal bouclé rug in griege 240 x 340, Israeli supplier (IL1)"},
+    "floor-lamp": {"picks": [
+      {"card_id": "floor-lamp-cj-pleated-walnut-stem-158", "score": 9.0, "score_src": "cat", "cost_usd": 31.18, "price_ils": null, "why": "default: walnut stem, pleated 37 shade, brushed brass detail; loses money in a 74 cm carton (find flat-pack / local)"}
+    ], "gap": "2 missing; three walnut/pleated lamps in data/products/master/floor-lamp/ are unscored in warm modern and need a designer look"},
+    "planter": {"picks": [
+      {"card_id": "planter-cj-cement-ribbed-belly", "score": 7.5, "score_src": "card", "cost_usd": 31.16, "price_ils": null, "why": "default: warm ribbed concrete; 42 x 35.5, 9.5 under the 45 envelope (the olive tree stands taller)"}
+    ], "gap": "2 missing: fluted or sand-textured vessel 35 x 45-50, heavy -> local stock (LK1)"},
+    "sofa-cover": {"picks": [], "conditional": [{"card_id": "sofa-cover-cj-washed-hemp-throw", "score": 7.0, "score_src": "card", "cost_usd": 37.98, "why": "White washed hemp would pass R5Q1 only with real product photos; not selected"}], "gap": "slot EMPTY in the tool: the sofa shows its own griege bouclé (R5Q1 addendum in the draft)"},
+    "cushions": {"picks": [
+      {"set_id": "A", "items": ["cushions-cj-boucle-teddy White 50x50", "cushions-cj-knitted-chenille-bean-green 21 Camel 45x45", "cushions-cj-boucle-teddy Milk Tea 30x50", "sofa-cover-cj-cotton-muslin-fringe Flax throw 150x200"], "score": 8.5, "score_src": "cat", "cost_usd": "3.61 + 1.71 + 3.61 + 11.64", "price_ils": 296, "why": "default: tonal bone, milk tea and camel on griege; camel = the caramel carrier"},
+      {"set_id": "B", "items": ["cushions-aliexpress-textured-boucle-throw-pillow Oatmeal 50x50", "cushions-cj-wide-stripe-corduroy-light-green Camel", "cushions-cj-linen-look-charcoal Beige 30x50", "sofa-cover-cj-cotton-muslin-fringe Pecan"], "score": 8.0, "score_src": "cat", "cost_usd": "11.17 + card + card + 11.64", "price_ils": 286, "why": "texture axis: taupe bouclé, camel corduroy ribs, beige linen, Pecan throw"},
+      {"set_id": "C", "items": ["cushions-cj-boucle-teddy Light Brown 50x50", "cushions-cj-corduroy-patchwork Dark Coffee 45x45", "cushions-cj-linen-look-ivory Light Beige Gray 30x50", "sofa-cover-cj-cotton-muslin-fringe Clay"], "score": 7.5, "score_src": "cat", "cost_usd": "3.61 + 1.78 + card + 11.64", "price_ils": 296, "why": "the dark variant: lowers the sofa's centre of gravity on purpose (reason written), so not the default"}
+    ], "gap": "margins under 40% per item shipped alone (catalog note)"},
+    "basket": {"picks": [
+      {"card_id": "basket-cj-jute-rope-cylinder", "score": 8.0, "score_src": "card", "cost_usd": 5.17, "price_ils": 119, "why": "default: tight natural rope cylinder, clean form"}
+    ], "gap": "2 missing: cognac leather, taupe felt or espresso rope basket 35-38 x 35-42"},
+    "magazine-holder": {"picks": [
+      {"card_id": "magazine-holder-cj-gunmetal-leather-strap", "score": 8.0, "score_src": "cat", "cost_usd": 31.08, "price_ils": null, "why": "default: dark metal with cognac leather straps, the second caramel point; loses money (find cheaper seller)"},
+      {"card_id": "magazine-holder-cj-felt-log-basket", "score": 7.0, "score_src": "card", "cost_usd": 1.72, "price_ils": null, "why": "charcoal felt, light wood, cognac tabs: the soft variant (same card as the Nordic default)"}
+    ], "gap": "1 missing: walnut magazine stand"},
+    "table-runner": {"picks": [], "gap": "none fits (all fringed or too long); the draft allows a bare walnut table. Proposal: the slot is unused in warm modern (owner question WM-R1)"},
+    "bowl": {"picks": [
+      {"card_id": "bowl-cj-matte-black-bowl-20", "score": 7.5, "score_src": "cat", "cost_usd": 4.75, "price_ils": 79, "why": "default despite 7.5: the second espresso carrier next to the travertine candle holders"},
+      {"card_id": "bowl-cj-glutinous-white-belly-bowl-21", "score": 8.0, "score_src": "card", "cost_usd": 6.68, "price_ils": 79, "why": "white belly bowl: the light variant"},
+      {"card_id": "bowl-cj-speckled-ivory-wide-bowl-21", "score": 7.5, "score_src": "cat", "cost_usd": 3.5, "price_ils": 79, "why": "speckled ivory with a clay rim, wide and low: shape variant"}
+    ], "gap": "a walnut or travertine bowl would be on-style"},
+    "candle-holders": {"picks": [
+      {"card_id": "candle-holders-cj-travertine-pedestal", "score": 9.0, "score_src": "card", "cost_usd": 9.12, "price_ils": 199, "why": "default: travertine pedestals, the second travertine point"},
+      {"card_id": "candle-holders-cj-ceramic-pedestal-tray", "score": 7.5, "score_src": "card", "cost_usd": 4.86, "price_ils": 149, "why": "ceramic on a walnut foot: material variant"},
+      {"card_id": "candle-holders-aliexpress-matte-black-iron-pillar-set2", "score": 7.0, "score_src": "cat", "cost_usd": 10.46, "price_ils": 79, "why": "low blackened-iron plates: the low, dark variant (within the 3% dark-metal allowance)"}
+    ], "gap": "a brushed-brass pair (the allowed jewel) is missing"},
+    "pouf": {"picks": [], "gap": "none: bouclé round or cognac leather 42-45 x 35-36, heavy -> Israeli supplier. Slot EMPTY in the tool (TR3)"},
+    "pendant": {"picks": [
+      {"card_id": "pendant-cj-tiered-fabric-drum", "score": 7.5, "score_src": "card", "cost_usd": 43.28, "price_ils": null, "why": "default: stacked fabric drum, 5 rings widening at the middle (as fixed in the story frame); bottom diffuser required"},
+      {"card_id": "pendant-cj-pleated-pumpkin-lantern-40", "score": 8.0, "score_src": "card", "cost_usd": 46.1, "price_ils": null, "why": "pleated paper pumpkin 40: soft rounded variant"},
+      {"card_id": "pendant-cj-oak-stem-fabric-drum", "score": 7.5, "score_src": "card", "cost_usd": 17.2, "price_ils": null, "why": "fabric drum on a wooden stem: the simple variant"}
+    ], "gap": "a warm-modern-only hero (ribbed silk or opal sphere 45-50, plaster drum) is still missing; CE open"}
+  },
+  "fixed_furniture": {
+    "sofa": "as shown (not for sale yet): Nordic footprint 220 x 92 x 78, seat 44, griege bouclé #CDC2B3, track arms 14 with radius-6 corners, recessed walnut plinth 6. Sale candidate: TRACE (Tollman's DOT, 222 x 92 x 79, cat 7.5): contacting the supplier needs the owner (ד.8)",
+    "coffee-table": "as shown: same super-ellipse 140 x 70 x 38, walnut oil #6B4A33, 5 cm top, two recessed oval drum bases. No catalog piece matches (Olia is oak, 7.5)",
+    "armchair": "as shown: Nordic armchair geometry 72 x 78 x 70, walnut frame, bone bouclé cushions. Alternative: Nina (KADO, cat 8.5) -> owner question WM-F1"
+  },
+  "tool_counts": "13 of 17 in-frame slots filled; 4 empty in warm modern (wall-decor, sofa-cover, table-runner, pouf); 6 filled slots have fewer than 3 (framed-art 2, rug 1, floor-lamp 1, planter 1, basket 1, magazine-holder 2). Sourcing blocked without keys (B22)"
+}

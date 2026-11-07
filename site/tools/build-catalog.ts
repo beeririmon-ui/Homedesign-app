@@ -774,7 +774,7 @@ for (const hr of house.rooms) {
 if (EXTRA_PRODUCTS) {
   const manifest = readJson(sitePath(EXTRA_PRODUCTS)) as { frames: Record<string, { points: { product: string }[] }> };
   const wanted = [...new Set(Object.values(manifest.frames).flatMap((f) => f.points.map((p) => p.product)))];
-  const built = new Set(fullProducts.map((p) => p.id));
+  const built = new Set([...fullProducts.map((p) => p.id), ...hidden.map((h) => h.id)]);
   const slotsOf = (room: string) => {
     const f = repoPath('data/slots', `${room}.json`);
     return existsSync(f) ? SlotsFileSchema.parse(readJson(f)).slots : [];
@@ -785,7 +785,13 @@ if (EXTRA_PRODUCTS) {
     const c = cards.find((x) => x.card.id === id);
     const slot = c ? (living.find((s) => s.id === c.card.slot) ?? slotsOf(cardRoom(c.card, c.path) ?? '').find((s) => s.id === c.card.slot)) : undefined;
     if (!c || !slot) {
-      hidden.push({ id, slot: c?.card.slot ?? '', reason: c ? `no slot ${c.card.slot} in the living room or the card's room` : 'no valid product card' });
+      const draft = draftCards.some((d) => d.path.endsWith(`/${id}.json`));
+      const reason = c
+        ? `no slot ${c.card.slot} in the living room or the card's room`
+        : draft
+          ? 'draft card (DS API: colors and visual_weight unfilled)'
+          : 'no valid product card';
+      hidden.push({ id, slot: c?.card.slot ?? '', reason });
       continue;
     }
     const p = buildProduct(c.card, c.path, 'living-room', slot, []);
