@@ -109,6 +109,44 @@ describe('the story test cart', () => {
     }
   });
 
+  it('sells a single piece only where the supplier offers one (SET1), at its own price', async () => {
+    const sets: StoryVariant[] = [{ ...V[1]!, unit_price_agorot: 10900 }, V[0]!];
+    const cart = storyCart(sets, memoryStore());
+    await cart.add('candles:70x110mm');
+    const c = await cart.add('candles:70x110mm', 1, 'unit');
+    expect(c.lines.map((l) => [l.pack, l.pack_qty, l.unit_price_agorot])).toEqual([
+      ['set', 2, 19900],
+      ['unit', 1, 10900],
+    ]);
+    expect(c.subtotal_agorot).toBe(30800);
+    // the bowl is one piece: no single-piece line
+    await expect(cart.add('bowl:default', 1, 'unit')).rejects.toMatchObject({ status: 422, code: 'pack_unavailable' });
+  });
+
+  it('changes a quantity, removes a line, and adds the whole look: what is not for sale is skipped and named', async () => {
+    const cart = storyCart(V, memoryStore());
+    const look = await cart.addLook(['bowl:default', 'rug:200x300+square', 'candles:70x110mm', 'nope']);
+    expect(look.added).toEqual(['bowl:default', 'candles:70x110mm']);
+    expect(look.skipped).toEqual(['rug:200x300+square', 'nope']);
+    expect(look.cart!.count).toBe(2);
+    expect((await cart.setQty('bowl:default', 'set', 3)).count).toBe(4);
+    expect((await cart.setQty('bowl:default', 'set', 99)).lines[0]!.qty).toBe(MAX_QTY);
+    cart.remove('bowl:default', 'set');
+    expect(cart.current()!.lines.map((l) => l.variant_id)).toEqual(['candles:70x110mm']);
+  });
+
+  it('holds a line whose product stopped being sold (PRE1): named, out of the sum, never charged', async () => {
+    const store = memoryStore();
+    await storyCart(V, store).add('bowl:default');
+    await storyCart(V, store).add('candles:70x110mm');
+    const later = storyCart([{ ...V[0]!, available: false }, V[1]!], store);
+    expect(later.current()!.lines.map((l) => l.variant_id)).toEqual(['candles:70x110mm']);
+    expect(later.current()!.subtotal_agorot).toBe(19900);
+    expect(later.held()).toEqual([{ variant_id: 'bowl:default', pack: 'set', qty: 1, name_he: 'קערה', option_he: null }]);
+    later.remove('bowl:default', 'set');
+    expect(later.held()).toEqual([]);
+  });
+
   it('formats prices exactly as the site does', () => {
     for (const a of [100, 4900, 7900, 19900, 129900, 1234567, 12345, 99]) expect(priceHe(a), String(a)).toBe(formatIls(a));
   });

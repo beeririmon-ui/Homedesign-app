@@ -29,6 +29,8 @@ export type StoryVariant = {
   price_agorot: number;
   set_qty: number;
   available: boolean;
+  /** a product sold as a set may also be sold as a single piece (SET1, the supplier offers it): its price, else none */
+  unit_price_agorot?: number | null;
 };
 export type KeyValue = { get(k: string): string | null; set(k: string, v: string): void; remove(k: string): void };
 type Line = { variant_id: string; pack: Pack; qty: number; v?: StoryVariant };
@@ -102,11 +104,20 @@ export function priceHe(agorot: number): string {
 export const MAX_QTY = 20;
 const rid = () => [...crypto.getRandomValues(new Uint8Array(16))].map((b) => b.toString(16).padStart(2, '0')).join('');
 
+/** a line the cart keeps but does not sell: its variant is no longer for sale (PRE1), said, never charged */
+export type HeldLine = { variant_id: string; pack: Pack; qty: number; name_he: string; option_he: string | null };
 export type StoryCart = Pick<StoreApi, 'kind' | 'createCart' | 'getCart' | 'setItem'> & {
   /** adds one more of the variant (a new cart when there is none); the line is capped at MAX_QTY */
-  add(variantId: string, qty?: number): Promise<Cart>;
+  add(variantId: string, qty?: number, pack?: Pack): Promise<Cart>;
+  /** the whole look: every variant once more, in order; one that is not for sale is skipped and named */
+  addLook(variantIds: string[]): Promise<{ cart: Cart | null; added: string[]; skipped: string[] }>;
+  /** a line's quantity (0 removes it) */
+  setQty(variantId: string, pack: Pack, qty: number): Promise<Cart>;
   /** the cart as it stands, or null before the first add */
   current(): Cart | null;
+  /** the lines kept but not sold */
+  held(): HeldLine[];
+  remove(variantId: string, pack: Pack): void;
   clear(): void;
 };
 
@@ -130,11 +141,16 @@ export function storyCart(variants: StoryVariant[], store: KeyValue = browserSto
       /* kept for this page only */
     }
   };
+  // this page's own variant first; else the line's snapshot (a product of another story page)
+  const variantOf = (i: Line): StoryVariant | undefined => byId.get(i.variant_id) ?? (isVariant(i.v) && i.v.variant_id === i.variant_id ? i.v : undefined);
   const view = (s: Saved): Cart => {
     const lines = s.items.flatMap((i) => {
       // this page's own variant first; else the line's snapshot (a product of another story page)
-      const v = byId.get(i.variant_id) ?? (isVariant(i.v) && i.v.variant_id === i.variant_id ? i.v : undefined);
-      if (!v || !v.available) return []; // a variant unknown everywhere, or no longer sold, drops out, as on the site
+      const v = variantOf(i);
+      // a variant unknown everywhere, or no longer sold, is not in the cart's sum (held() names it), as on the site
+      if (!v || !v.available) return [];
+      const unit = i.pack === 'unit' ? (v.unit_price_agorot ?? null) : v.price_agorot;
+      if (unit === null) return [];
       return [
         {
           variant_id: v.variant_id,
@@ -142,10 +158,10 @@ export function storyCart(variants: StoryVariant[], store: KeyValue = browserSto
           name_he: v.name_he,
           option_he: v.option_he,
           pack: i.pack,
-          pack_qty: v.set_qty,
+          pack_qty: i.pack === 'unit' ? 1 : v.set_qty,
           qty: i.qty,
-          unit_price_agorot: v.price_agorot,
-          line_total_agorot: v.price_agorot * i.qty,
+          unit_price_agorot: unit,
+          line_total_agorot: unit * i.qty,
           price_provisional: true,
         },
       ];
@@ -172,7 +188,8 @@ export function storyCart(variants: StoryVariant[], store: KeyValue = browserSto
       // a line of another page can change its quantity here too, by its snapshot
       const v = byId.get(variantId) ?? s.items.map((i) => i.v).find((x): x is StoryVariant => isVariant(x) && x.variant_id === variantId);
       if (!v || !v.available) throw new StoryCartError(404, 'variant_not_found', 'המוצר לא זמין.');
-      if (pack !== 'set') throw new StoryCartError(422, 'pack_unavailable', 'בעמוד הבדיקה המוצר נמכר כפי שהוא בתמונה.');
+      if (pack !== 'set' && (pack !== 'unit' || v.set_qty < 2 || v.unit_price_agorot == null))
+        throw new StoryCartError(422, 'pack_unavailable', 'המוצר הזה נמכר רק כסט.');
       if (!Number.isInteger(qty) || qty < 0 || qty > MAX_QTY) throw new StoryCartError(422, 'invalid_body');
       const at = s.items.findIndex((i) => i.variant_id === variantId && i.pack === pack);
       if (qty === 0) s.items = s.items.filter((_, i) => i !== at);
@@ -181,14 +198,46 @@ export function storyCart(variants: StoryVariant[], store: KeyValue = browserSto
       save(s);
       return view(s);
     },
-    async add(variantId, qty = 1) {
+    async add(variantId, qty = 1, pack = 'set') {
       const id = load()?.id ?? (await api.createCart()).id;
-      const now = load()?.items.find((i) => i.variant_id === variantId && i.pack === 'set')?.qty ?? 0;
-      return api.setItem(id, variantId, 'set', Math.min(MAX_QTY, now + qty));
+      const now = load()?.items.find((i) => i.variant_id === variantId && i.pack === pack)?.qty ?? 0;
+      return api.setItem(id, variantId, pack, Math.min(MAX_QTY, now + qty));
+    },
+    async addLook(variantIds) {
+      const added: string[] = [];
+      const skipped: string[] = [];
+      let cart: Cart | null = null;
+      for (const id of variantIds)
+        try {
+          cart = await api.add(id);
+          added.push(id);
+        } catch {
+          skipped.push(id);
+        }
+      return { cart: cart ?? api.current(), added, skipped };
+    },
+    async setQty(variantId, pack, qty) {
+      const id = load()?.id ?? (await api.createCart()).id;
+      return api.setItem(id, variantId, pack, Math.max(0, Math.min(MAX_QTY, qty)));
     },
     current() {
       const s = load();
       return s ? view(s) : null;
+    },
+    held() {
+      const s = load();
+      return (s?.items ?? []).flatMap((i) => {
+        const v = variantOf(i);
+        if (v && v.available && (i.pack === 'set' || v.unit_price_agorot != null)) return [];
+        const name = v?.name_he ?? (typeof i.v?.name_he === 'string' ? i.v.name_he : null);
+        return name ? [{ variant_id: i.variant_id, pack: i.pack, qty: i.qty, name_he: name, option_he: v?.option_he ?? null }] : [];
+      });
+    },
+    remove(variantId, pack) {
+      const s = load();
+      if (!s) return;
+      s.items = s.items.filter((i) => !(i.variant_id === variantId && i.pack === pack));
+      save(s);
     },
     clear() {
       mine = null;

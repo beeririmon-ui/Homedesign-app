@@ -620,6 +620,428 @@
       },
       "exr": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/wm-r4-exr/M0.exr",
       "pose": false
+    },
+    "M0p": {
+      "frame": "M0p",
+      "room": "living",
+      "round2_id": "pose",
+      "camera": {
+        "id": "M0p",
+        "room": "living",
+        "loc": [
+          0.83,
+          4.64,
+          1.2
+        ],
+        "yaw": 0,
+        "u0": 0.47,
+        "v0": 0.5,
+        "status": "transition pose (house-plan.json 1.2.1 cameras.M0p; shift = M0 (constant through the pans))",
+        "hero": ""
+      },
+      "image": "framing/warm-modern-r4/poses/M0p.png",
+      "resolution": [
+        4072,
+        2290
+      ],
+      "samples": 10,
+      "placeholders_shown": [
+        "living/accent-sconces",
+        "living/basket",
+        "living/bowl",
+        "living/candle-holders",
+        "living/curtains",
+        "living/cushions",
+        "living/magazine-holder",
+        "living/pendant",
+        "living/pendant-cord",
+        "living/planter",
+        "living/rug",
+        "living/vase"
+      ],
+      "built_generic": [],
+      "missing": [],
+      "lamps_on": [
+        "living/accent-sconces",
+        "living/pendant"
+      ],
+      "lamps_off": [
+        "living/floor-lamp",
+        "living/wall-sconce"
+      ],
+      "mean_L": 224.1,
+      "mean_L_round2": null,
+      "designer_notes": "house-plan.json 1.2.1 cameras.M0p; shift = M0 (constant through the pans)",
+      "est_vs_measured": [],
+      "est_flags": [],
+      "items_visible": {
+        "living/bowl": {
+          "kind": "proxy",
+          "frame_area_pct": 0.23,
+          "visible_pct": 89.5,
+          "cut_by_edge_pct": 0.0
+        },
+        "living/accent-sconces": {
+          "kind": "proxy",
+          "frame_area_pct": 0.13,
+          "visible_pct": 82.8,
+          "cut_by_edge_pct": 0.0
+        },
+        "living/pendant": {
+          "kind": "proxy",
+          "frame_area_pct": 0.8,
+          "visible_pct": 89.6,
+          "cut_by_edge_pct": 0.0
+        },
+        "living/rug": {
+          "kind": "proxy",
+          "frame_area_pct": 8.79,
+          "visible_pct": 15.1,
+          "cut_by_edge_pct": 84.0
+        },
+        "sofa 220x92x78 (fixed-product)": {
+          "kind": "furniture",
+          "frame_area_pct": 4.68,
+          "visible_pct": 56.0,
+          "cut_by_edge_pct": 0.0
+        },
+        "coffee table 140x70 h38 (fixed-product)": {
+          "kind": "furniture",
+          "frame_area_pct": 2.63,
+          "visible_pct": 78.8,
+          "cut_by_edge_pct": 2.5
+        },
+        "living/basket": {
+          "kind": "proxy",
+          "frame_area_pct": 0.88,
+          "visible_pct": 88.9,
+          "cut_by_edge_pct": 0.0
+        },
+        "living/magazine-holder": {
+          "kind": "proxy",
+          "frame_area_pct": 0.25,
+          "visible_pct": 7.8,
+          "cut_by_edge_pct": 100.0
+        }
+      },
+      "F3_tangents": {
+        "edge_tangents": [
+          {
+            "item": "coffee table 140x70 h38 (fixed-product)",
+            "side": "bottom",
+            "margin": 0.0017
+          }
+        ],
+        "object_object_tangents": [
+          {
+            "a": "sofa 220x92x78 (fixed-product)",
+            "b": "coffee table 140x70 h38 (fixed-product)",
+            "kind": "overlap",
+            "overlap_thickness": 0.0234,
+            "cover_of_back": 0.138,
+            "behind": "sofa 220x92x78 (fixed-product)",
+            "dist3d_m": 0.42,
+            "rule": "overlap thinner than 0.03 and < 60% of the back item"
+          }
+        ],
+        "note": "edge: visible bbox margin 0 < m < 0.02; object-object as round 2 (ray-cast silhouettes, 512x288)"
+      },
+      "boxes": {
+        "living/pendant": {
+          "kind": "proxy",
+          "box": [
+            0.2915,
+            0.3794,
+            0.1192,
+            0.2349
+          ],
+          "px": 74185
+        },
+        "living/accent-sconces": {
+          "kind": "proxy",
+          "box": [
+            0.2299,
+            0.5383,
+            0.3493,
+            0.3817
+          ],
+          "px": 11747
+        },
+        "living/rug": {
+          "kind": "proxy",
+          "box": [
+            0.0,
+            0.7129,
+            0.8389,
+            1.0
+          ],
+          "px": 819712
+        },
+        "living/bowl": {
+          "kind": "proxy",
+          "box": [
+            0.4126,
+            0.4612,
+            0.7987,
+            0.8507
+          ],
+          "px": 21018
+        },
+        "living/pendant-cord": {
+          "kind": "proxy",
+          "box": [
+            0.3352,
+            0.3369,
+            0.0,
+            0.1192
+          ],
+          "px": 1911
+        },
+        "living/rounded-corner": {
+          "kind": "architecture",
+          "box": [
+            0.0184,
+            0.0882,
+            0.0659,
+            0.7703
+          ],
+          "px": 249516
+        },
+        "living/curtain-track": {
+          "kind": "architecture",
+          "box": [
+            0.0,
+            0.081,
+            0.0,
+            0.1092
+          ],
+          "px": 51755
+        },
+        "living/basket": {
+          "kind": "proxy",
+          "box": [
+            0.0381,
+            0.1056,
+            0.7245,
+            0.8642
+          ],
+          "px": 81845
+        },
+        "living/magazine-holder": {
+          "kind": "proxy",
+          "box": [
+            0.0236,
+            0.1451,
+            0.9777,
+            1.0
+          ],
+          "px": 23222
+        },
+        "sofa 220x92x78 (fixed-product)": {
+          "kind": "furniture",
+          "box": [
+            0.1788,
+            0.5511,
+            0.6061,
+            0.8563
+          ],
+          "px": 436857
+        },
+        "coffee table 140x70 h38 (fixed-product)": {
+          "kind": "furniture",
+          "box": [
+            0.165,
+            0.4872,
+            0.7808,
+            0.9983
+          ],
+          "px": 245399
+        },
+        "living/planter": {
+          "kind": "proxy",
+          "box": [
+            0.0189,
+            0.0941,
+            0.6314,
+            0.8345
+          ],
+          "px": 33541
+        },
+        "living/cushions": {
+          "kind": "proxy",
+          "box": [
+            0.2382,
+            0.5152,
+            0.579,
+            0.7096
+          ],
+          "px": 178159
+        },
+        "living/candle-holders": {
+          "kind": "proxy",
+          "box": [
+            0.3846,
+            0.4074,
+            0.7017,
+            0.8354
+          ],
+          "px": 25911
+        }
+      },
+      "heroes_thirds": [],
+      "lamps": [
+        {
+          "lamp": "living/accent-sconces",
+          "typology": "wall",
+          "shell": false,
+          "glow_px": 23494,
+          "visible": true
+        },
+        {
+          "lamp": "living/pendant",
+          "typology": "ceiling",
+          "shell": false,
+          "glow_px": 74185,
+          "visible": true
+        }
+      ],
+      "wall_patches": {
+        "hero_wall_high": {
+          "u": 0.3863491117954254,
+          "v": 0.2229333519935608,
+          "L_hsl": 89.9,
+          "Y_lin": 0.7921,
+          "stops_vs_mid": 2.14,
+          "xyz": [
+            0.2,
+            0.0,
+            2.35
+          ]
+        },
+        "hero_wall_mid": {
+          "u": 0.3863491117954254,
+          "v": 0.31930434703826904,
+          "L_hsl": 90.2,
+          "Y_lin": 0.7975,
+          "stops_vs_mid": 2.15,
+          "xyz": [
+            0.2,
+            0.0,
+            1.95
+          ]
+        },
+        "ceiling": {
+          "u": 0.55,
+          "v": 0.04,
+          "L_hsl": 86.7,
+          "Y_lin": 0.7331,
+          "stops_vs_mid": 2.03
+        },
+        "floor_centre": {
+          "u": 0.5,
+          "v": 0.93,
+          "L_hsl": 77.9,
+          "Y_lin": 0.5828,
+          "stops_vs_mid": 1.69
+        },
+        "bible18_back_wall_by_corner_L90_94": {
+          "u": 0.1221393495798111,
+          "v": 0.40362900495529175,
+          "L_hsl": 86.6,
+          "Y_lin": 0.7297,
+          "stops_vs_mid": 2.02,
+          "xyz": [
+            -1.75,
+            0.0,
+            1.6
+          ]
+        },
+        "bible18_window_wall_L80_88": {
+          "u": 0.018,
+          "v": 0.397,
+          "xyz": [
+            -2.3,
+            0.3,
+            1.6
+          ],
+          "note": "outside the frame"
+        },
+        "back_wall_behind_art_centre": {
+          "u": 0.3863491117954254,
+          "v": 0.31930434703826904,
+          "L_hsl": 90.2,
+          "Y_lin": 0.7975,
+          "stops_vs_mid": 2.15,
+          "xyz": [
+            0.2,
+            0.0,
+            1.95
+          ]
+        },
+        "back_wall_right_end_L82_86": {
+          "u": 0.6099112033843994,
+          "v": 0.40362900495529175,
+          "L_hsl": 86.8,
+          "Y_lin": 0.7344,
+          "stops_vs_mid": 2.03,
+          "xyz": [
+            1.85,
+            0.0,
+            1.6
+          ]
+        },
+        "corner_line_top": {
+          "u": 0.04761865735054016,
+          "v": 0.07837677001953125,
+          "L_hsl": 82.6,
+          "Y_lin": 0.663,
+          "stops_vs_mid": 1.88,
+          "xyz": [
+            -2.3,
+            0.0,
+            2.95
+          ]
+        },
+        "bench_slab_mid": {
+          "u": -0.21,
+          "v": 0.806,
+          "xyz": [
+            -2.14,
+            1.9,
+            0.45
+          ],
+          "note": "outside the frame"
+        }
+      },
+      "light_balance": {},
+      "camera_clearance_m": {
+        "min": 1.56,
+        "nearest": "wall_front_a"
+      },
+      "overlay": "framing/round3/overlays/M0p.png",
+      "runtime_s": 452,
+      "overscan": {
+        "on": true,
+        "canvas_px": [
+          4072,
+          2290
+        ],
+        "frame_px": [
+          3840,
+          2160
+        ],
+        "crop_box_px": [
+          116,
+          65,
+          3956,
+          2225
+        ],
+        "per_side_fraction_x": 0.0302,
+        "per_side_fraction_y": 0.0301,
+        "note": "same camera and focal length in pixels; the 16:9 frame is the centre crop; uv in this selfcheck (boxes, patches) are fractions of the canvas"
+      },
+      "exr": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/wm-r4-exr/M0p.exr",
+      "pose": true
     }
   },
   "warm_modern_r4": {
