@@ -1,6 +1,6 @@
 # Evidence of layer 1, the story (measured headless, Chromium + SwiftShader)
 
-Run 2026-11-07T12:02:31.679Z; 46 screenshots under screens/. The figures are in evidence.json; README.md reads them.
+Run 2026-11-07T12:13:41.604Z; 46 screenshots under screens/. The figures are in evidence.json; README.md reads them.
 
 ## Screenshots
 - `screens/desk-0-contents.png`: 1280: the contents (/story/): the living room's six houses, a frame only where QA let one in, type for the rest
