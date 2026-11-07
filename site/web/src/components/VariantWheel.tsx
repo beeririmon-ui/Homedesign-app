@@ -216,9 +216,11 @@ export function VariantWheel({ slot, roomId, initial, onPreview, onChoose, onCan
           {slot.options.map((o, i) => {
             const prod = product(o.product_id);
             const img = optionImage(slot.id, o.position);
+            // PRE1 / MED1: an option out of stock stays on the wheel, said on its card and in its name, and is never sold
+            const oos = !!prod && (slot.on_hold || prod.availability.status !== 'available');
             const label = `${i + 1} מתוך ${n}: ${
               prod ? `${prod.name_he}, ${prod.pack ? `${packLabelHe('set', prod.pack.set_qty)} ` : ''}${formatIls(prod.price_agorot)}` : o.label_he
-            }`;
+            }${oos ? '. המלאי אינו זמין כעת' : ''}`;
             return (
               <button
                 key={o.position}
@@ -241,6 +243,11 @@ export function VariantWheel({ slot, roomId, initial, onPreview, onChoose, onCan
                       <i style={{ background: prod?.color_hex ?? 'rgba(244,241,236,.5)' }} />
                       {o.placeholder ? 'ממתינה למוצר' : ''}
                     </span>
+                  </span>
+                ) : null}
+                {oos ? (
+                  <span class="oos-tag" aria-hidden="true">
+                    אינו במלאי
                   </span>
                 ) : null}
                 <span class="num-tag" aria-hidden="true">

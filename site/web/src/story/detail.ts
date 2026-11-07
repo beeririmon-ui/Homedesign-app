@@ -6,7 +6,21 @@
  */
 import type { StoryCart } from './story-cart';
 import { priceHe } from './story-cart';
-import { choose, creditOf, fromQuery, photoOf, priceOf, selection, storyNote, storySku, toQuery, whyOf, type DetailData, type DSku, type Pack } from './detail-model';
+import {
+  choose,
+  creditOf,
+  fromQuery,
+  photoOf,
+  priceOf,
+  selection,
+  storyNote,
+  storySku,
+  toQuery,
+  whyOf,
+  type DetailData,
+  type DSku,
+  type Pack,
+} from './detail-model';
 import { availableValues } from '@hd/shared/picker';
 
 type Ctx = {
@@ -106,7 +120,7 @@ export function initDetail({ d, cart, announce, mark, counted }: Ctx): { current
     none.hidden = !!shown.image;
     none.style.setProperty('--swatch', shown.swatch);
     none.querySelector('span:last-child')!.textContent = shown.caption;
-    photoCap.textContent = shown.caption;
+    photoCap.textContent = shown.kind === 'none' ? '' : shown.caption;
     // a close-up replaces the frame's crop: the crop is not a second picture
     photoFig.hidden = !!sku.closeup && shown.kind !== 'supplier';
     media.classList.toggle('has-closeup', !!sku.closeup);

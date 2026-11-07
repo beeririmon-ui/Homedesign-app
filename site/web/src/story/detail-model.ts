@@ -83,8 +83,7 @@ export function toQuery(d: DetailData, sku: DSku): string {
 
 export type Shown = { image: DImage | null; alt: string; caption: string; kind: 'supplier' | 'frame' | 'none'; swatch: string };
 /** the option's colour, for the empty picture (else the product's) */
-const swatchOf = (d: DetailData, sku: DSku): string =>
-  d.axes.find((a) => a.id === 'color')?.values.find((v) => v.id === sku.values.color)?.hex ?? d.swatch;
+const swatchOf = (d: DetailData, sku: DSku): string => d.axes.find((a) => a.id === 'color')?.values.find((v) => v.id === sku.values.color)?.hex ?? d.swatch;
 /**
  * The main picture for a SKU (the close-up has its own figure): the supplier's photo of the option; for the story's
  * option without one, the product's crop from the frame, which says it is not a product photo; for another option

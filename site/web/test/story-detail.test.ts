@@ -4,7 +4,7 @@
  * there is no add button.
  */
 import { describe, expect, it } from 'vitest';
-import { choose, creditOf, fromQuery, photoOf, storyNote, storySku, toQuery, whyOf, type DetailData, type DSku } from '../src/story/detail-model';
+import { choose, creditOf, fromQuery, photoOf, priceOf, storyNote, storySku, toQuery, whyOf, type DetailData, type DSku } from '../src/story/detail-model';
 
 const img = (n: string) => ({ src: `/m/${n}.480.webp`, srcset: `/m/${n}.480.webp 480w`, w: 480, h: 480 });
 const sku = (color: string, size: string, o: Partial<DSku> = {}): DSku => ({
@@ -14,6 +14,10 @@ const sku = (color: string, size: string, o: Partial<DSku> = {}): DSku => ({
   variant_id: `p:${color}+${size}`,
   price_agorot: size === '50x50' ? 5900 : 4900,
   price_he: size === '50x50' ? '₪ 59' : '₪ 49',
+  unit_price_agorot: null,
+  unit_price_he: null,
+  unit_estimated: false,
+  title_he: color === 'tea' ? 'ציפית כרית בוקלה, תה חלב' : 'ציפית כרית בוקלה, לבן',
   available: true,
   sellable: true,
   size_he: size,
@@ -57,7 +61,8 @@ const base: DetailData = {
   images: [img('white'), img('tea')],
   story_key: 'tea+50x50',
   crop: img('crop'),
-  crop_title_he: 'דירת אדריכלית',
+  crop_caption_he: 'מתוך הסיפור, בפריים "דירת אדריכלית". בתמונה: האפשרות "תה חלב". זו לא תמונת מוצר.',
+  swatch: '#d9d6d0',
   marks_he: { final_test: 'טיוטה / בדיקה' },
 };
 
@@ -85,9 +90,18 @@ describe('the detail page model', () => {
   it('shows the supplier photo of the option, else the frame crop for the story option, else nothing', () => {
     expect(photoOf(base, storySku(base))).toMatchObject({ kind: 'supplier', image: img('tea') });
     const noPhoto = { ...base, skus: base.skus.map((k) => ({ ...k, image: null })) };
+    // the frame's crop stands in for the story's option only, and says it is not a product photo (design notes §6)
     expect(photoOf(noPhoto, storySku(noPhoto))).toMatchObject({ kind: 'frame', image: img('crop') });
-    expect(photoOf(noPhoto, noPhoto.skus[0]!)).toMatchObject({ kind: 'none', image: null });
-    expect(photoOf(base, base.skus[1]!).caption).toContain('צילום הספק עוד לא הורד');
+    expect(photoOf(noPhoto, storySku(noPhoto)).caption).toContain('זו לא תמונת מוצר');
+    // another option without a photo: its colour and the line, never the story's option shown as if chosen
+    expect(photoOf(noPhoto, noPhoto.skus[0]!)).toMatchObject({ kind: 'none', image: null, swatch: '#fff', caption: 'אין עדיין צילום לאפשרות הזו.' });
+    expect(photoOf(base, base.skus[1]!).caption).toBe('אין עדיין צילום לאפשרות הזו.');
+    // a close-up replaces the crop
+    const withCu = {
+      ...noPhoto,
+      skus: noPhoto.skus.map((k) => (k.key === 'tea+50x50' ? { ...k, closeup: { ...img('cu'), alt_he: 'x', state: 'final_test', qa_key: 'q' } } : k)),
+    };
+    expect(photoOf(withCu, storySku(withCu)).kind).toBe('none');
     // the listing's main photo (the card names none for the option) does not claim to be the option
     const main = { ...base, skus: base.skus.map((k) => (k.key === 'tea+50x50' ? { ...k, image_of_option: false } : k)) };
     expect(photoOf(main, storySku(main)).caption).toBe('צילום הספק.');
@@ -101,6 +115,14 @@ describe('the detail page model', () => {
     expect(storyNote(base, base.skus[0]!)).toBe('בסיפור מוצגת האפשרות tea, 50x50.');
     expect(creditOf(base, base.skus[1]!)).toBe('בוקלה · 30x50 · ₪ 49');
     expect(creditOf({ ...base, status: 'unpriced' }, { ...storySku(base), price_he: null })).toBe('בוקלה · 50x50 · המחיר עוד לא נקבע');
+  });
+
+  it('prices the single piece of a set where the supplier offers one (SET1), the set otherwise', () => {
+    const k = { ...storySku(base), unit_price_agorot: 1900, unit_price_he: '₪ 19', unit_estimated: true };
+    expect(priceOf(k, 'unit')).toEqual({ agorot: 1900, he: '₪ 19', estimated: true });
+    expect(priceOf(k, 'set').agorot).toBe(5900);
+    expect(priceOf(storySku(base), 'unit').agorot).toBe(5900);
+    expect(creditOf(base, k, 'unit')).toBe('בוקלה · 50x50 · ₪ 19 · יחידה בודדת');
   });
 
   it('a product without options has one SKU and no address', () => {

@@ -44,14 +44,17 @@ export function initCheckout({ cart, methods, announce, mark, counted }: Ctx): v
     const c = cart.current();
     const method = (form.querySelector<HTMLInputElement>('input[name="shipping"]:checked')?.value ?? 'economy') as ShippingMethod['id'];
     const t = totals(methods, method, c);
-    $('co-lines')!.replaceChildren(...(c?.lines ?? []).map((l) => lineEl(l.name_he, l.option_he, `${l.qty} × ${priceHe(l.unit_price_agorot)} · ${priceHe(l.line_total_agorot)}`)));
+    $('co-lines')!.replaceChildren(
+      ...(c?.lines ?? []).map((l) => lineEl(l.name_he, l.option_he, `${l.qty} × ${priceHe(l.unit_price_agorot)} · ${priceHe(l.line_total_agorot)}`)),
+    );
     $('co-subtotal')!.textContent = priceHe(t.subtotal);
     $('co-shipping')!.textContent = t.shipping ? priceHe(t.shipping) : 'חינם';
     $('co-total')!.textContent = priceHe(t.total);
     $('co-free')!.textContent = t.toFree ? `עוד ${priceHe(t.toFree)} למשלוח חסכוני חינם.` : '';
     for (const m of methods) {
       const out = document.querySelector<HTMLElement>(`[data-ship-price="${m.id}"]`);
-      if (out) out.textContent = c?.subtotal_agorot && m.free_over_agorot !== null && c.subtotal_agorot >= m.free_over_agorot ? 'חינם' : priceHe(m.price_agorot);
+      if (out)
+        out.textContent = c?.subtotal_agorot && m.free_over_agorot !== null && c.subtotal_agorot >= m.free_over_agorot ? 'חינם' : priceHe(m.price_agorot);
     }
     const empty = !c?.lines.length;
     $('co-empty')!.hidden = !empty;
@@ -134,7 +137,8 @@ export function initOrder(): void {
   $('or-number')!.textContent = order.id;
   $('or-greeting')!.textContent = order.first_name ? `תודה, ${order.first_name}.` : 'תודה.';
   $('or-lines')!.replaceChildren(...order.lines.map((l) => lineEl(l.name_he, l.option_he, `${l.qty} · ${priceHe(l.line_total_agorot)}`)));
-  $('or-sum')!.textContent = `${items(order.lines.reduce((n, l) => n + l.qty, 0))} · ${priceHe(order.subtotal_agorot)}, ${order.shipping_he} ${order.shipping_agorot ? priceHe(order.shipping_agorot) : 'חינם'} · סה״כ ${priceHe(order.total_agorot)}`;
+  $('or-sum')!.textContent =
+    `${items(order.lines.reduce((n, l) => n + l.qty, 0))} · ${priceHe(order.subtotal_agorot)}, ${order.shipping_he} ${order.shipping_agorot ? priceHe(order.shipping_agorot) : 'חינם'} · סה״כ ${priceHe(order.total_agorot)}`;
   $('or-city')!.textContent = order.city ? `למשלוח ל${order.city}.` : '';
   $<HTMLElement>('or-title')?.focus({ preventScroll: true });
 }

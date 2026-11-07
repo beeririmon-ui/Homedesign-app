@@ -311,6 +311,8 @@ test.describe('the detail page (layer 2, "הפרט")', () => {
     await expect(page.locator('#st-pd-story-note')).toBeHidden();
     await page.locator('.st-pd-axis[data-axis="size"] label', { hasText: '30×50' }).click();
     await expect(page.locator('#st-pd-price')).toHaveText(/49/);
+    // the title follows the choice (design notes §6): the 30×50 has its own shape name, and never a size
+    await expect(page.locator('h1')).toHaveText('כרית מותן בוקלה, תה חלב');
     await expect(page).toHaveURL(/size=30x50/);
     await expect(page.locator('#st-pd-story-note')).toContainText('בסיפור מוצגת האפשרות');
     await expect(page.locator('[data-spec="מידות"]')).toContainText('30×50');
@@ -324,6 +326,7 @@ test.describe('the detail page (layer 2, "הפרט")', () => {
     await page.keyboard.press('Escape');
     await page.locator('#st-pd-back').click();
     await expect(page.locator('#st-pd-price')).toHaveText(/59/);
+    await expect(page.locator('h1')).toHaveText('ציפית כרית בוקלה, תה חלב');
     await expect(page).toHaveURL(new RegExp(`${href}$`));
     // the same product in another house
     await expect(page.locator('#elsewhere .st-tile-link')).toHaveAttribute('href', DETAIL('nordic', 'cushions-cj-boucle-teddy'));
@@ -357,6 +360,100 @@ test.describe('the detail page (layer 2, "הפרט")', () => {
     await page.locator('.st-pd-axis[data-axis="color"] label').first().click();
     await page.waitForTimeout(300);
     await audit(page, 'detail after a choice');
+  });
+});
+
+test.describe('the detail page, after the designer (§6)', () => {
+  test("no supplier photo: the product's crop from the frame says so; another option shows its colour, never the crop", async ({ page }) => {
+    await page.goto(DETAIL('modern-country', 'curtains-aliexpress-linen-blend-s-fold-180502'));
+    await expect(page.locator('#st-pd-img')).toHaveClass(/is-frame/);
+    await expect(page.locator('#st-pd-photo-cap')).toContainText('זו לא תמונת מוצר');
+    await expect(page.locator('#st-pd-photo-cap')).toContainText('סרט קפלים');
+    // never enlarged: drawn no wider than its own pixels
+    const [drawn, own] = await page.locator('#st-pd-img').evaluate((el: HTMLImageElement) => [el.getBoundingClientRect().width, el.naturalWidth]);
+    expect(drawn).toBeLessThanOrEqual(own + 0.5);
+    await page.locator('.st-pd-axis[data-axis="style"] label', { hasText: 'ווים' }).click();
+    await expect(page.locator('#st-pd-img')).toBeHidden();
+    await expect(page.locator('#st-pd-none')).toContainText('אין עדיין צילום לאפשרות הזו');
+    await expect(page.locator('h1')).toHaveText('זוג וילונות שקופים במראה פשתן, ווים');
+  });
+
+  test('a set sells as a set by default, and as a single piece where the supplier offers one (SET1)', async ({ page }) => {
+    await page.goto(DETAIL('nordic', 'candle-holders-cj-travertine-pedestal'));
+    await expect(page.locator('input[name="st-pack"][value="set"]')).toBeChecked();
+    await page.locator('label', { has: page.locator('input[name="st-pack"][value="unit"]') }).click();
+    await expect(page.locator('#st-pd-price')).toContainText('משוער');
+    await expect(page.locator('#st-pd-credit')).toContainText('יחידה בודדת');
+    await page.locator('#st-pd-add').click();
+    await page.locator('#st-cart-open').click();
+    await expect(page.locator('#st-cart-lines')).toContainText('יחידה בודדת');
+  });
+});
+
+test.describe('the shop (S4)', () => {
+  test('"קנה את המראה" whole: every product for sale, once; the cart edits a line; the rest is named', async ({ page }) => {
+    await page.goto(`${NORDIC}#list-A`);
+    await expect(page.locator('#list-A .st-look-left')).toContainText('בלי מחיר');
+    await page.locator('#look-A').click();
+    await expect(page.locator('#st-cart-count')).toHaveText('10');
+    await expect(page.locator('#mag-live')).toContainText('נוספו לסל 10 פריטים');
+    await page.locator('#st-cart-open').click();
+    const lines = page.locator('#st-cart-lines .st-cart-line');
+    await expect(lines).toHaveCount(10);
+    const first = lines.first();
+    await first.getByRole('button', { name: /^הגדלת הכמות/ }).click();
+    await expect(page.locator('#st-cart-count')).toHaveText('11');
+    await expect(lines.first().locator('output')).toHaveText('2');
+    // the focus stays on the control that was used
+    await expect(lines.first().getByRole('button', { name: /^הגדלת הכמות/ })).toBeFocused();
+    await lines
+      .first()
+      .getByRole('button', { name: /^הסרה מהסל/ })
+      .click();
+    await expect(lines).toHaveCount(9);
+    await expect(page.locator('#st-cart-count')).toHaveText('9');
+    await audit(page, 'the cart, edited');
+  });
+
+  test("the test checkout: the site's fields and rules, errors said and focused, then a test order and an empty cart", async ({ page }) => {
+    await page.goto(BOHO);
+    await page.evaluate(() => window.__story!.openSheet('A-4'));
+    await page.locator('#st-add').click();
+    await page.keyboard.press('Escape');
+    await page.locator('#st-cart-open').click();
+    await page.locator('#st-cart-pay').click();
+    await expect(page).toHaveURL(/\/story\/checkout\/$/);
+    await expect(page.locator('#co-lines li')).toHaveCount(1);
+    await expect(page.locator('#co-total')).toContainText('₪');
+    await page.locator('#co-pay').click();
+    await expect(page.locator('#co-errors')).toBeFocused();
+    await expect(page.locator('#co-errors li')).toHaveCount(7);
+    await expect(page.locator('#f-phone')).toHaveAttribute('aria-invalid', 'true');
+    await audit(page, 'checkout with errors');
+    await page.locator('#f-full_name').fill('נועה כהן');
+    await page.locator('#f-email').fill('noa@example.com');
+    await page.locator('#f-phone').fill('050-1234567');
+    await page.locator('#f-city').fill('חיפה');
+    await page.locator('#f-street').fill('הנמל');
+    await page.locator('#f-house').fill('12');
+    await page.locator('#f-terms').check();
+    await page.locator('#co-pay').click();
+    await expect(page).toHaveURL(/\/story\/order\/\?id=T\d{7}$/);
+    await expect(page.locator('#or-number')).toHaveText(/^T\d{7}$/);
+    await expect(page.locator('#or-greeting')).toHaveText('תודה, נועה.');
+    await expect(page.locator('#st-cart-count')).toHaveText('0');
+    await audit(page, 'the test order');
+  });
+
+  test('PRE1 / MED1 in the tool: an option out of stock stays on the wheel, said, and never sold', async ({ page }) => {
+    await page.goto('/rooms/living-room/?slot=rug&option=1');
+    const dialog = page.getByRole('dialog').first();
+    await expect(dialog).toBeVisible({ timeout: 20_000 });
+    const card = dialog.locator('.arc-card').first();
+    await expect(card.locator('.oos-tag')).toHaveText('אינו במלאי');
+    await expect(card).toHaveAttribute('aria-label', /המלאי אינו זמין כעת$/);
+    await expect(dialog.getByText('המלאי אינו זמין כעת', { exact: true })).toBeVisible();
+    await expect(dialog.getByRole('button', { name: 'הוספה לסל' })).toHaveCount(0);
   });
 });
 

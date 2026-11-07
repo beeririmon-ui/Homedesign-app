@@ -76,6 +76,8 @@ type Story = {
   names_he: Record<string, string>;
   /** a shape that an option gives the product its own name for (design notes §6): product → "axis:value" → base name */
   option_names_he?: Record<string, Record<string, string>>;
+  /** the designer's colour word for an option's value, before the supplier's label: product → "axis:value" → word */
+  colours_he?: Record<string, Record<string, string>>;
   pairs: Record<string, Pair>;
 };
 type Card = {
@@ -188,7 +190,10 @@ async function productCrop(img: sharp.Sharp, W: number, H: number, box: Box, v: 
   const left = Math.round(Math.min(W - w, Math.max(0, ((x0 + x1) / 2) * W - w / 2)));
   const cy = (y1 - y0) * H <= h ? ((y0 + y1) / 2) * H : v * H;
   const top = Math.round(Math.min(H - h, Math.max(0, cy - h / 2)));
-  const key = createHash('sha256').update(JSON.stringify(['product', box, v, W, H])).digest('hex').slice(0, 10);
+  const key = createHash('sha256')
+    .update(JSON.stringify(['product', box, v, W, H]))
+    .digest('hex')
+    .slice(0, 10);
   mkdirSync(dir, { recursive: true });
   const ow = Math.min(640, w);
   const out = join(dir, `${key}.p${ow}.webp`);
@@ -738,8 +743,11 @@ async function detailOf(pg: PageOut, product: string, items: Item[]): Promise<De
   // the title (design notes §6): the story's name on the story's option; else the base name (or the option's own shape
   // name) and the colour of the option, readable colours only (a supplier's "2" or "c-3" names nothing), never a size
   const NAMING = new Set(['color', 'style', 'pattern', 'finish', 'other']);
-  const naming = axes.filter((a) => NAMING.has(a.id));
-  const readable = (l: string) => !/^[\d\s.×x()-]+$/i.test(l) && !/^[a-z]-?\d+$/i.test(l);
+  // an axis whose values carry their own shape name (option_names_he) names the shape, not the colour
+  const shapeAxes = new Set(axes.filter((a) => a.values.some((v) => story.option_names_he?.[product]?.[`${a.id}:${v.id}`])).map((a) => a.id));
+  const naming = axes.filter((a) => NAMING.has(a.id) && !shapeAxes.has(a.id));
+  // a readable colour is a Hebrew word that is not a size: a supplier's "2", "c-3", "Curry" or "35x37 cm" names nothing here
+  const readable = (l: string) => /[\u0590-\u05FF]/.test(l) && !/\d+\s*[×x]\s*\d+/.test(l);
   const shapeOf = (values: Record<string, string>) =>
     Object.entries(values)
       .map(([a, v]) => story.option_names_he?.[product]?.[`${a}:${v}`])
@@ -748,9 +756,13 @@ async function detailOf(pg: PageOut, product: string, items: Item[]): Promise<De
   const base = naming.length && first.name_he.includes(', ') ? first.name_he.slice(0, first.name_he.lastIndexOf(', ')) : first.name_he;
   const titleOf = (values: Record<string, string>): string => {
     const shape = shapeOf(values);
-    if (naming.every((a) => values[a.id] === storyValues[a.id]) && shape === shapeOf(storyValues)) return first.name_he;
+    const sameColour = naming.every((a) => values[a.id] === storyValues[a.id]);
+    if (sameColour && shape === shapeOf(storyValues)) return first.name_he;
+    // the story's own colour word when the colour is the story's ("פחם", not the supplier's "אפור כהה")
+    if (sameColour && naming.length && first.name_he.includes(', ')) return `${shape ?? base}, ${first.name_he.slice(first.name_he.lastIndexOf(', ') + 2)}`;
+    // the designer's colour word for a value (colours_he, the §4 table) before the supplier's label
     const colour = naming
-      .map((a) => a.values.find((v) => v.id === values[a.id])?.label_he ?? '')
+      .map((a) => story.colours_he?.[product]?.[`${a.id}:${values[a.id]}`] ?? a.values.find((v) => v.id === values[a.id])?.label_he ?? '')
       .filter((l) => l && readable(l))
       .join(', ');
     return colour ? `${shape ?? base}, ${colour}` : (shape ?? base);
@@ -876,6 +888,27 @@ const rows = (f: FrameOut) =>
         `<li class="mag-credit st-credit" data-item="${x.id}"><span class="mag-credit-n num">${String(x.n).padStart(2, '0')}</span>${swatch(x)}<span class="mag-credit-body"><button type="button" class="st-open" data-item="${x.id}" aria-haspopup="dialog"><span class="mag-credit-name">${esc(x.name_he)}</span></button><span class="mag-credit-detail">${esc(x.detail_he)}${x.status === 'unavailable' ? ' · המלאי אינו זמין כעת' : ''}</span>${x.dot ? '' : '<span class="mag-credit-detail st-no-dot">בלי נקודה בתמונה: כאן הוא עוד לא נאמן לכרטיס במלואו.</span>'}</span></li>`,
     )
     .join('\n');
+/**
+ * "קנה את המראה" whole (S4): every product of the frame that is for sale, once, in the option the frame shows; what is
+ * not for sale is named, never added (no price yet, PRE1)
+ */
+function lookHtml(f: FrameOut): string {
+  const sold = [...new Map(f.items.filter((x) => x.status === 'available' && x.variant_id).map((x) => [x.variant_id!, x])).values()];
+  if (!sold.length) return '';
+  const total = sold.reduce((n, x) => n + (x.price_agorot ?? 0), 0);
+  const unpriced = f.items.filter((x) => x.status === 'unpriced').length;
+  const out = f.items.filter((x) => x.status === 'unavailable').length;
+  const left = [
+    unpriced ? `${unpriced === 1 ? 'מוצר אחד' : `${unpriced} מוצרים`} בלי מחיר עדיין` : null,
+    out ? `${out === 1 ? 'מוצר אחד' : `${out} מוצרים`} שהמלאי שלהם אינו זמין כעת` : null,
+  ]
+    .filter(Boolean)
+    .join(', ');
+  return `<div class="st-look mag-col-main">
+      <button type="button" class="mag-btn mag-btn-secondary st-look-btn" id="look-${f.id}" data-frame="${f.id}" data-variants="${esc(sold.map((x) => x.variant_id).join(' '))}">המראה כולו לסל · <span class="num">${sold.length}</span> מוצרים · ${formatIls(total)}</button>
+      ${left ? `<p class="mag-cap st-look-left">לא נכללים: ${esc(left)}.</p>` : ''}
+    </div>`;
+}
 function spread(pg: PageOut, f: FrameOut, first: boolean): string {
   const h = first ? 'h1' : 'h2';
   const head = headOf(pg);
@@ -902,6 +935,7 @@ function spread(pg: PageOut, f: FrameOut, first: boolean): string {
     <p class="mag-run-head mag-col-main" aria-hidden="true">${esc(head)}</p>
     <h2 id="list-title-${f.id}" class="mag-h2 mag-col-main">כל המוצרים בתמונה</h2>
     <p class="mag-cap mag-col-main">${esc(f.title_he)} · <span class="num">${f.items.length}</span> מוצרים. נגיעה בשם פותחת את "קנה את המראה".</p>
+    ${lookHtml(f)}
     <ol class="mag-credits st-credits mag-col-main">
 ${rows(f)}
     </ol>
@@ -1085,7 +1119,7 @@ function detailBody(d: DetailOut, pg: PageOut): string {
       <figure class="st-pd-photo" id="st-pd-photo">
         ${photoTag}
         <span class="st-pd-none" id="st-pd-none"${photo ? ' hidden' : ''} style="--swatch: ${d.swatch}"><span class="st-swatch-lg" aria-hidden="true"></span><span>צילום הספק עוד לא הורד לגרסת הבדיקה.</span></span>
-        <figcaption class="mag-cap" id="st-pd-photo-cap">${esc(photoCap)}</figcaption>
+        <figcaption class="mag-cap" id="st-pd-photo-cap">${photo ? esc(photoCap) : ''}</figcaption>
       </figure>
       <figure class="st-pd-closeup" id="st-pd-closeup">
         ${sku.closeup ? imgTag(sku.closeup, sku.closeup.alt_he, '(max-width: 719px) calc(100vw - 48px), 36rem', 'st-pd-cu', true) : '<img id="st-pd-cu" alt="" hidden />'}
@@ -1241,6 +1275,95 @@ for (const d of details) {
 console.log(
   `layer 2: ${details.length} detail pages (${details.filter((d) => d.status === 'available').length} for sale, ${details.filter((d) => d.status === 'unpriced').length} without a price, ${details.filter((d) => d.status === 'unavailable').length} not sold now); ${details.filter((d) => d.skus.some((k) => k.image)).length} with a card photo; close-ups shown ${details.reduce((n, d) => n + d.skus.filter((k) => k.closeup).length, 0)}, held ${details.reduce((n, d) => n + d.closeups_held, 0)}`,
 );
+// ---------- the test checkout (S4): the site's fields and rules, nothing charged, nothing sent ----------
+const field = (k: string, label: string, attrs: string, hint = '') =>
+  `<div class="st-co-field"><label for="f-${k}">${label}</label><input id="f-${k}" name="${k}" ${attrs} aria-describedby="err-${k}${hint ? ` hint-${k}` : ''}" />${hint ? `<p class="mag-cap" id="hint-${k}">${hint}</p>` : ''}<p class="st-co-err" id="err-${k}" hidden></p></div>`;
+const shipping = site.shipping;
+const checkoutBody = `<section class="mag-paper st-co" id="checkout" data-head="תשלום" aria-labelledby="co-title">
+  <div class="mag-grid">
+    <div class="st-co-main">
+      <p class="st-kicker">סל הבדיקה</p>
+      <h1 id="co-title" class="mag-h1">תשלום</h1>
+      <p class="mag-cap">תשלום בדיקה: לא ייגבה כסף, וההזמנה לא תישלח לספק.</p>
+      <p class="mag-lead" id="co-empty" hidden>הסל ריק. <a class="mag-link" href="/story/">לתוכן הגיליון</a></p>
+      <form id="co-form" class="st-co-form" novalidate>
+        <div id="co-errors" class="st-co-errors" role="alert" tabindex="-1" hidden></div>
+        <fieldset class="st-co-set"><legend class="mag-h3">פרטים</legend>
+          ${field('full_name', 'שם מלא', 'autocomplete="name" required')}
+          ${field('email', 'אימייל', 'type="email" autocomplete="email" inputmode="email" dir="ltr" required')}
+          ${field('phone', 'טלפון', 'type="tel" autocomplete="tel" inputmode="tel" dir="ltr" required', 'לשליח, למשל 050-1234567.')}
+        </fieldset>
+        <fieldset class="st-co-set"><legend class="mag-h3">כתובת למשלוח</legend>
+          ${field('city', 'עיר', 'autocomplete="address-level2" required')}
+          ${field('street', 'רחוב', 'autocomplete="address-line1" required')}
+          ${field('house', 'מספר בית', 'inputmode="numeric" required')}
+          <div class="st-co-field"><label for="f-apartment">דירה (רשות)</label><input id="f-apartment" name="apartment" autocomplete="address-line2" /></div>
+          ${field('zip', 'מיקוד (רשות)', 'inputmode="numeric" autocomplete="postal-code" dir="ltr"')}
+          <div class="st-co-field"><label for="f-notes">הערות לשליח (רשות)</label><textarea id="f-notes" name="notes" rows="2" maxlength="200"></textarea></div>
+        </fieldset>
+        <fieldset class="st-co-set"><legend class="mag-h3">משלוח</legend>
+          ${shipping
+            .map(
+              (m) =>
+                `<label class="st-co-choice"><input type="radio" name="shipping" value="${m.id}"${m.is_default ? ' checked' : ''} /><span><strong>${esc(m.label_he)}</strong> · <span class="num" data-ship-price="${m.id}">${formatIls(m.price_agorot)}</span><span class="mag-cap"> ${esc(m.days_he)}${m.free_over_agorot !== null ? `. חינם מעל ${formatIls(m.free_over_agorot)}` : ''}</span></span></label>`,
+            )
+            .join('\n          ')}
+        </fieldset>
+        <div class="st-co-field"><label class="st-co-check"><input type="checkbox" id="f-terms" name="terms" aria-describedby="err-terms" /> <span>קראתי ואני מאשר/ת את <a class="mag-link" href="/terms/">התקנון</a> ואת <a class="mag-link" href="/returns/">מדיניות הביטולים</a></span></label><p class="st-co-err" id="err-terms" hidden></p></div>
+        <p><button type="submit" class="mag-btn mag-btn-primary" id="co-pay">לתשלום (בדיקה)</button></p>
+      </form>
+    </div>
+    <aside class="st-co-summary" aria-labelledby="co-sum-title">
+      <h2 id="co-sum-title" class="mag-h2">ההזמנה</h2>
+      <ol class="mag-credits" id="co-lines"></ol>
+      <p class="mag-cap" id="co-held" hidden></p>
+      <dl class="st-pd-specs st-co-totals">
+        <div><dt>סכום ביניים</dt><dd id="co-subtotal" class="num"></dd></div>
+        <div><dt>משלוח</dt><dd id="co-shipping" class="num"></dd></div>
+        <div><dt>סה״כ לתשלום</dt><dd id="co-total" class="num"></dd></div>
+      </dl>
+      <p class="mag-cap" id="co-free"></p>
+      <p class="mag-cap">המחירים כוללים מע״מ.</p>
+    </aside>
+  </div>
+</section>`;
+const orderBody = `<section class="mag-paper st-co" id="order" data-head="הזמנת בדיקה" aria-labelledby="or-title">
+  <div class="mag-grid">
+    <div class="st-co-main">
+      <p class="st-kicker">הזמנת בדיקה</p>
+      <h1 id="or-title" class="mag-h1" tabindex="-1">ההזמנה התקבלה</h1>
+      <div id="or-found" hidden>
+        <p class="mag-lead"><span id="or-greeting"></span> מספר ההזמנה: <strong class="num" id="or-number"></strong>. <span id="or-city"></span></p>
+        <ol class="mag-credits" id="or-lines"></ol>
+        <p class="st-total" id="or-sum"></p>
+      </div>
+      <p class="mag-lead" id="or-missing" hidden>לא מצאנו את ההזמנה בדפדפן הזה. הזמנות הבדיקה נשמרות רק בדפדפן שבו הן נעשו.</p>
+      <p class="mag-cap">זו הזמנת בדיקה: לא נגבה כסף, ושום דבר לא נשלח לספק.</p>
+      <p><a class="mag-link" href="/story/">חזרה לתוכן הגיליון</a></p>
+    </div>
+  </div>
+</section>`;
+for (const [kind, href, title, body, skip] of [
+  ['checkout', '/story/checkout/', 'תשלום', checkoutBody, '#co-form'],
+  ['order', '/story/order/', 'הזמנת בדיקה', orderBody, '#order'],
+] as const)
+  render(`web${href}index.html`, {
+    TITLE: esc(`${title} · ${story.issue_he}`),
+    DESCRIPTION: esc(`${title} בסל הבדיקה של הגיליון. גרסת בדיקה: לא נגבה כסף.`),
+    ISSUE: esc(story.issue_he),
+    KIND: kind,
+    HEAD_ON: 'paper',
+    CONTENTS_CURRENT: '',
+    NAV_TOOL: esc(story.tool_fallback),
+    SKIP: skip,
+    SKIP_HE: 'דילוג לתוכן העמוד',
+    TOOL_HREF: esc(story.tool_fallback),
+    BODY: [body, footer('')].join('\n'),
+    DATA: JSON.stringify({ page: { room: null, style: null, href, tool: story.tool_fallback, kind }, items: {}, frames: [], shipping }).replace(
+      /</g,
+      '\\u003c',
+    ),
+  });
 const indexHtml = render('web/story/index.html', {
   TITLE: esc(`${story.issue_he} · תוכן הגיליון`),
   DESCRIPTION: esc('תוכן הגיליון: כל חדר בכל בית, פריים סיפור לכל חדר וסגנון. גרסת בדיקה.'),

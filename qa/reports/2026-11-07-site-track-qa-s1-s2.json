@@ -1,0 +1,1312 @@
+{
+ "report": "qa-agent: interface track, sprints S1 (story routes) and S2 (detail pages)",
+ "date": "2026-11-07",
+ "by": "qa-agent",
+ "brief": "coordinator's message (S1-S2 QA); briefs/site-interface-track-2026-11-07.md",
+ "rules": "new files only; no commit; no var2; no playwright install; local network only (supplier images --offline)",
+ "measured_state": {
+  "data_and_sources": "commit 0db47449 (13:35): data/story/story.json with 2 QA records, mc1, boho fin4, Mediterranean ed5, japandi ed5; S2 sources (b32d8a3e 13:29)",
+  "build": "site/web/dist built by qa-agent at 13:30 (npm run catalog, assets:temp, supplier-images --offline, test:page, story, web, api, budget: all exit 0)",
+  "on_the_13_30_build": [
+   "G-ED.17 / G-ED.18 and hit test (6 viewports)",
+   "the frame gate and yes-only dots",
+   "the detail pages (784 SKUs)",
+   "the internal-fields scan",
+   "e2e tests 1-42 of 47"
+  ],
+  "after_the_tree_moved": "frontend-dev rebuilt web/dist for S4 at 15:33:07 and 15:34:43 (tree 72e26ee1 / 021009f1 + uncommitted S4 edits). The e2e run's last tests, the test-page rerun, and the weights / LCP / axe spot-check ran on the 15:34:43 build; said so per line",
+  "hd_public": "HD_PUBLIC=1 vite build at ~13:45 into the scratchpad"
+ },
+ "verdict": {
+  "S1": "pass, with notes",
+  "S2": "pass after one fix",
+  "must_fix": [
+   "S2: a product shown twice in one house in two options (warm modern: boucle milk tea A-5 and white A-10): the white dot's 'לדף המוצר' and its list row lead to /story/living-room/warm-modern/p/cushions-cj-boucle-teddy/ with no option, which opens on milk tea, titled 'ציפית כרית בוקלה, תה חלב'. The link should carry the point's option (?color=white&size=50x50) and the page should know the story shows both. frontend-dev, 0 tokens"
+  ],
+  "close_up_route_fixes_before_any_close_up_lands": [
+   "only a close-up at final_test (or approved_for_site) may turn a 'partly' frame product's dot on; today 'almost' does (allowed_states is shared with frames). G-ED.5: the close-up has to have passed",
+   "the close-up must show the frame's option (CloseupSpec.option vs the point's option); today any close-up of the card counts",
+   "a close-up record in the part1 shape without 'against' is read with 0 rows, so it never unlocks a dot, silently; with 'against' it inherits all the frame's rows. A record in the flat shape frames.<key>.state + rows (the shape of qa/reports/2026-11-07-ged-codefix5-clay-r3.json) is not read at all. Fail loudly when a listed record has a key that cannot be read"
+  ],
+  "notes": [
+   "product slugs in public URLs name the source (27 of 35 detail URLs: -aliexpress-, -cj-) and 4 end in a 6-digit listing number (…-589009, …-166217, …-631735, …-180502); the main site's /p/ uses the same ids. Decide a public slug scheme before launch (manager / frontend-dev)",
+   "the top of the 46-CSS target sits under the band for the Nordic pendant (1280), the corn-husk round (1280) and the warm-modern pendant (1280); the centre gets the click",
+   "G-ED.18 for the site: Nordic 7/16, warm modern 7/10, modern country 4/5 (the fluted column vase 0.28%); close-ups needed",
+   "mc1 is superseded by fix4 in qa/reports/ged-register-2026-11-07.json; mc1 -> fix4 changes 0 px inside the floral, check, curtain and column boxes, so the floral result carries over; the clay vase and the bowl were reshaped and get dots in fix4: their boxes need G-ED.17 on fix4",
+   "typographic pages carry the other houses' tiles only; no media folder exists for an unapproved frame",
+   "frontend-dev's e2e runs at 15:39-15:40 rewrote tracked assets/qa/hotspots/*.png (room-400-focus-sofa.png shows as modified); qa-agent ran every e2e from a scratch copy"
+  ]
+ },
+ "ged17": {
+  "mc1_floral": {
+   "box_data": [
+    0.5,
+    0.652,
+    0.465,
+    0.693
+   ],
+   "phone_visible_css": [
+    132.0,
+    111.1
+   ],
+   "phone_size_ok": true,
+   "phone_dot": {
+    "u": 0.6226,
+    "v": 0.58
+   },
+   "phone_390_hit_own": true,
+   "desk_1280_hit_own": true,
+   "area_pct_bbox": 3.47,
+   "note": "box re-read at 100%: the right floral cushion x ~1380-1784, y ~714-1064 (box 1368-1784, 714-1064); the dot on the pattern; the left one of the pair has no dot (one per product)",
+   "G-ED.17": "pass"
+  },
+  "pages": {
+   "living-room/nordic": [
+    {
+     "item": "A-1",
+     "product": "pendant-cj-silk-ribbed-pumpkin-40",
+     "verdict": "yes",
+     "dot": true,
+     "phone_visible_css": [
+      93.6,
+      47.3
+     ],
+     "phone_dot": {
+      "u": 0.2778,
+      "v": 0.12
+     },
+     "phone_390_hit_own": true,
+     "desk_1280_shown": true,
+     "desk_1280_hit_own": true,
+     "G-ED.17": "pass"
+    },
+    {
+     "item": "A-2",
+     "product": "framed-art-aliexpress-minimal-geometric-triptych-prints",
+     "verdict": "yes",
+     "dot": true,
+     "phone_visible_css": [
+      216.7,
+      92.6
+     ],
+     "phone_dot": {
+      "u": 0.4556,
+      "v": 0.355
+     },
+     "phone_390_hit_own": true,
+     "desk_1280_shown": true,
+     "desk_1280_hit_own": true,
+     "G-ED.17": "pass"
+    },
+    {
+     "item": "A-3",
+     "product": "accent-sconces-cj-travertine-block-updown-8x16",
+     "verdict": "yes",
+     "dot": true,
+     "phone_visible_css": [
+      12.1,
+      24.4
+     ],
+     "phone_dot": null,
+     "phone_390_hit_own": null,
+     "desk_1280_shown": true,
+     "desk_1280_hit_own": true,
+     "G-ED.17": "no phone dot: below 44x24 (page agrees)"
+    },
+    {
+     "item": "A-4",
+     "product": "sofa-cover-cj-cotton-muslin-fringe",
+     "verdict": "yes",
+     "dot": true,
+     "phone_visible_css": [
+      159.0,
+      120.9
+     ],
+     "phone_dot": {
+      "u": 0.8667,
+      "v": 0.66
+     },
+     "phone_390_hit_own": true,
+     "desk_1280_shown": true,
+     "desk_1280_hit_own": true,
+     "G-ED.17": "pass"
+    },
+    {
+     "item": "A-5",
+     "product": "cushions-cj-linen-look-charcoal",
+     "verdict": "yes",
+     "dot": true,
+     "phone_visible_css": [
+      108.3,
+      68.2
+     ],
+     "phone_dot": {
+      "u": 0.7778,
+      "v": 0.525
+     },
+     "phone_390_hit_own": true,
+     "desk_1280_shown": true,
+     "desk_1280_hit_own": true,
+     "G-ED.17": "pass"
+    },
+    {
+     "item": "A-6",
+     "product": "bowl-cj-glutinous-white-belly-bowl-21",
+     "verdict": "yes",
+     "dot": true,
+     "phone_visible_css": [
+      62.4,
+      29.2
+     ],
+     "phone_dot": {
+      "u": 0.7289,
+      "v": 0.712
+     },
+     "phone_390_hit_own": true,
+     "desk_1280_shown": true,
+     "desk_1280_hit_own": true,
+     "G-ED.17": "pass"
+    },
+    {
+     "item": "A-7",
+     "product": "cushions-cj-knitted-chenille-bean-green",
+     "verdict": "yes",
+     "dot": true,
+     "phone_visible_css": [
+      82.3,
+      56.1
+     ],
+     "phone_dot": {
+      "u": 0.3111,
+      "v": 0.545
+     },
+     "phone_390_hit_own": true,
+     "desk_1280_shown": true,
+     "desk_1280_hit_own": true,
+     "G-ED.17": "pass"
+    },
+    {
+     "item": "A-8",
+     "product": "candle-holders-cj-travertine-pedestal",
+     "verdict": "yes",
+     "dot": true,
+     "phone_visible_css": [
+      56.3,
+      63.4
+     ],
+     "phone_dot": {
+      "u": 0.1822,
+      "v": 0.66
+     },
+     "phone_390_hit_own": true,
+     "desk_1280_shown": true,
+     "desk_1280_hit_own": true,
+     "G-ED.17": "pass"
+    },
+    {
+     "item": "A-9",
+     "product": "cushions-cj-boucle-teddy",
+     "verdict": "yes",
+     "dot": true,
+     "phone_visible_css": [
+      91.0,
+      60.9
+     ],
+     "phone_dot": {
+      "u": 0.1111,
+      "v": 0.53
+     },
+     "phone_390_hit_own": true,
+     "desk_1280_shown": true,
+     "desk_1280_hit_own": true,
+     "G-ED.17": "pass"
+    },
+    {
+     "item": "A-10",
+     "product": "planter-cj-seagrass-belly",
+     "verdict": "yes",
+     "dot": true,
+     "phone_visible_css": null,
+     "phone_dot": null,
+     "phone_390_hit_own": null,
+     "desk_1280_shown": true,
+     "desk_1280_hit_own": true,
+     "G-ED.17": "no phone dot: outside the crop (page agrees)"
+    },
+    {
+     "item": "A-11",
+     "product": "basket-cj-jute-rope-cylinder",
+     "verdict": "yes",
+     "dot": true,
+     "phone_visible_css": null,
+     "phone_dot": null,
+     "phone_390_hit_own": null,
+     "desk_1280_shown": true,
+     "desk_1280_hit_own": true,
+     "G-ED.17": "no phone dot: outside the crop (page agrees)"
+    },
+    {
+     "item": "A-12",
+     "product": "rug-cj-braided-wool-natural",
+     "verdict": "partly",
+     "dot": false,
+     "phone_visible_css": [
+      390.0,
+      131.6
+     ],
+     "phone_dot": null,
+     "phone_390_hit_own": null,
+     "desk_1280_shown": false,
+     "desk_1280_hit_own": null,
+     "G-ED.17": null
+    },
+    {
+     "item": "A-13",
+     "product": "table-runner-cj-linen-look-sage-fringe",
+     "verdict": "yes",
+     "dot": true,
+     "phone_visible_css": [
+      143.0,
+      112.1
+     ],
+     "phone_dot": {
+      "u": 0.1778,
+      "v": 0.77
+     },
+     "phone_390_hit_own": true,
+     "desk_1280_shown": true,
+     "desk_1280_hit_own": true,
+     "G-ED.17": "pass"
+    },
+    {
+     "item": "B-1",
+     "product": "wall-decor-cj-corn-husk-round-38",
+     "verdict": "yes",
+     "dot": true,
+     "phone_visible_css": null,
+     "phone_dot": null,
+     "phone_390_hit_own": null,
+     "desk_1280_shown": true,
+     "desk_1280_hit_own": true,
+     "G-ED.17": "no phone dot: outside the crop (page agrees)"
+    },
+    {
+     "item": "B-2",
+     "product": "vase-aliexpress-vintage-distressed-clay-vase-589009",
+     "verdict": "yes",
+     "dot": true,
+     "phone_visible_css": [
+      36.4,
+      70.7
+     ],
+     "phone_dot": {
+      "u": 0.3937,
+      "v": 0.44
+     },
+     "phone_390_hit_own": true,
+     "desk_1280_shown": true,
+     "desk_1280_hit_own": true,
+     "G-ED.17": "pass"
+    },
+    {
+     "item": "B-3",
+     "product": "curtains-aliexpress-linen-blend-s-fold-180502",
+     "verdict": "partly",
+     "dot": false,
+     "phone_visible_css": null,
+     "phone_dot": null,
+     "phone_390_hit_own": null,
+     "desk_1280_shown": false,
+     "desk_1280_hit_own": null,
+     "G-ED.17": null
+    },
+    {
+     "item": "B-4",
+     "product": "sofa-cover-cj-cotton-muslin-fringe",
+     "verdict": "yes",
+     "dot": true,
+     "phone_visible_css": [
+      110.9,
+      170.5
+     ],
+     "phone_dot": {
+      "u": 0.8225,
+      "v": 0.677
+     },
+     "phone_390_hit_own": true,
+     "desk_1280_shown": true,
+     "desk_1280_hit_own": true,
+     "G-ED.17": "pass"
+    },
+    {
+     "item": "B-5",
+     "product": "rug-cj-braided-wool-natural",
+     "verdict": "yes",
+     "dot": true,
+     "phone_visible_css": [
+      390.0,
+      82.9
+     ],
+     "phone_dot": {
+      "u": 0.5448,
+      "v": 0.955
+     },
+     "phone_390_hit_own": true,
+     "desk_1280_shown": false,
+     "desk_1280_hit_own": null,
+     "G-ED.17": "pass"
+    },
+    {
+     "item": "B-6",
+     "product": "magazine-holder-cj-felt-log-basket",
+     "verdict": "yes",
+     "dot": true,
+     "phone_visible_css": [
+      128.3,
+      119.4
+     ],
+     "phone_dot": {
+      "u": 0.2448,
+      "v": 0.8
+     },
+     "phone_390_hit_own": true,
+     "desk_1280_shown": true,
+     "desk_1280_hit_own": true,
+     "G-ED.17": "pass"
+    },
+    {
+     "item": "B-7",
+     "product": "basket-cj-jute-rope-cylinder",
+     "verdict": "yes",
+     "dot": true,
+     "phone_visible_css": null,
+     "phone_dot": null,
+     "phone_390_hit_own": null,
+     "desk_1280_shown": true,
+     "desk_1280_hit_own": true,
+     "G-ED.17": "no phone dot: outside the crop (page agrees)"
+    }
+   ],
+   "living-room/warm-modern": [
+    {
+     "item": "A-1",
+     "product": "floor-lamp-cj-pleated-walnut-stem-158",
+     "verdict": "yes",
+     "dot": true,
+     "phone_visible_css": null,
+     "phone_dot": null,
+     "phone_390_hit_own": null,
+     "desk_1280_shown": true,
+     "desk_1280_hit_own": true,
+     "G-ED.17": "no phone dot: outside the crop (page agrees)"
+    },
+    {
+     "item": "A-2",
+     "product": "pendant-cj-tiered-fabric-drum",
+     "verdict": "yes",
+     "dot": true,
+     "phone_visible_css": [
+      104.0,
+      70.7
+     ],
+     "phone_dot": {
+      "u": 0.4446,
+      "v": 0.12
+     },
+     "phone_390_hit_own": true,
+     "desk_1280_shown": true,
+     "desk_1280_hit_own": true,
+     "G-ED.17": "pass"
+    },
+    {
+     "item": "A-3",
+     "product": "accent-sconces-aliexpress-travertine-cylinder-walnut-choice",
+     "verdict": "yes",
+     "dot": true,
+     "phone_visible_css": [
+      31.8,
+      47.8
+     ],
+     "phone_dot": {
+      "u": 0.941,
+      "v": 0.275
+     },
+     "phone_390_hit_own": true,
+     "desk_1280_shown": true,
+     "desk_1280_hit_own": true,
+     "G-ED.17": "pass"
+    },
+    {
+     "item": "A-4",
+     "product": "framed-art-aliexpress-frameless-minimalist-wall-art-631735",
+     "verdict": "yes",
+     "dot": true,
+     "phone_visible_css": [
+      286.0,
+      119.4
+     ],
+     "phone_dot": {
+      "u": 0.4779,
+      "v": 0.3
+     },
+     "phone_390_hit_own": true,
+     "desk_1280_shown": true,
+     "desk_1280_hit_own": true,
+     "G-ED.17": "pass"
+    },
+    {
+     "item": "A-5",
+     "product": "cushions-cj-boucle-teddy",
+     "verdict": "yes",
+     "dot": true,
+     "phone_visible_css": [
+      56.3,
+      80.4
+     ],
+     "phone_dot": {
+      "u": 0.9279,
+      "v": 0.53
+     },
+     "phone_390_hit_own": true,
+     "desk_1280_shown": true,
+     "desk_1280_hit_own": true,
+     "G-ED.17": "pass"
+    },
+    {
+     "item": "A-6",
+     "product": "vase-cj-textured-white-stoneware",
+     "verdict": "yes",
+     "dot": true,
+     "phone_visible_css": [
+      47.7,
+      82.9
+     ],
+     "phone_dot": {
+      "u": 0.7891,
+      "v": 0.64
+     },
+     "phone_390_hit_own": true,
+     "desk_1280_shown": true,
+     "desk_1280_hit_own": true,
+     "G-ED.17": "pass"
+    },
+    {
+     "item": "A-7",
+     "product": "bowl-cj-matte-black-bowl-20",
+     "verdict": "yes",
+     "dot": true,
+     "phone_visible_css": [
+      86.7,
+      39.0
+     ],
+     "phone_dot": {
+      "u": 0.4779,
+      "v": 0.675
+     },
+     "phone_390_hit_own": true,
+     "desk_1280_shown": true,
+     "desk_1280_hit_own": true,
+     "G-ED.17": "pass"
+    },
+    {
+     "item": "A-8",
+     "product": "cushions-cj-knitted-chenille-bean-green",
+     "verdict": "yes",
+     "dot": true,
+     "phone_visible_css": [
+      92.7,
+      70.7
+     ],
+     "phone_dot": {
+      "u": 0.2113,
+      "v": 0.53
+     },
+     "phone_390_hit_own": true,
+     "desk_1280_shown": true,
+     "desk_1280_hit_own": true,
+     "G-ED.17": "pass"
+    },
+    {
+     "item": "A-9",
+     "product": "candle-holders-cj-travertine-pedestal",
+     "verdict": "yes",
+     "dot": true,
+     "phone_visible_css": [
+      69.3,
+      92.6
+     ],
+     "phone_dot": {
+      "u": 0.2113,
+      "v": 0.7
+     },
+     "phone_390_hit_own": true,
+     "desk_1280_shown": true,
+     "desk_1280_hit_own": true,
+     "G-ED.17": "pass"
+    },
+    {
+     "item": "A-10",
+     "product": "cushions-cj-boucle-teddy",
+     "verdict": "yes",
+     "dot": true,
+     "phone_visible_css": [
+      52.1,
+      75.6
+     ],
+     "phone_dot": {
+      "u": 0.0667,
+      "v": 0.535
+     },
+     "phone_390_hit_own": true,
+     "desk_1280_shown": true,
+     "desk_1280_hit_own": true,
+     "G-ED.17": "pass"
+    },
+    {
+     "item": "A-11",
+     "product": "sofa-cover-cj-cotton-muslin-fringe",
+     "verdict": "yes",
+     "dot": true,
+     "phone_visible_css": [
+      29.3,
+      89.2
+     ],
+     "phone_dot": {
+      "u": 0.059,
+      "v": 0.66
+     },
+     "phone_390_hit_own": true,
+     "desk_1280_shown": true,
+     "desk_1280_hit_own": true,
+     "G-ED.17": "pass"
+    },
+    {
+     "item": "A-12",
+     "product": "rug-cj-braided-wool-natural",
+     "verdict": "partly",
+     "dot": false,
+     "phone_visible_css": [
+      390.0,
+      102.4
+     ],
+     "phone_dot": null,
+     "phone_390_hit_own": null,
+     "desk_1280_shown": false,
+     "desk_1280_hit_own": null,
+     "G-ED.17": null
+    }
+   ],
+   "living-room/modern-country": [
+    {
+     "item": "A-1",
+     "product": "sill-vase-cj-cream-fluted-column-25",
+     "verdict": "yes",
+     "dot": true,
+     "phone_visible_css": null,
+     "phone_dot": null,
+     "phone_390_hit_own": null,
+     "desk_1280_shown": true,
+     "desk_1280_hit_own": true,
+     "G-ED.17": "no phone dot: outside the crop (page agrees)"
+    },
+    {
+     "item": "A-2",
+     "product": "vase-aliexpress-vintage-distressed-clay-vase-589009",
+     "verdict": "partly",
+     "dot": false,
+     "phone_visible_css": [
+      40.8,
+      69.2
+     ],
+     "phone_dot": null,
+     "phone_390_hit_own": null,
+     "desk_1280_shown": false,
+     "desk_1280_hit_own": null,
+     "G-ED.17": null
+    },
+    {
+     "item": "A-3",
+     "product": "curtains-aliexpress-linen-blend-s-fold-180502",
+     "verdict": "yes, as the listing's 'Pull Pleated Tape' option",
+     "dot": true,
+     "phone_visible_css": [
+      59.0,
+      204.7
+     ],
+     "phone_dot": {
+      "u": 0.7005,
+      "v": 0.27
+     },
+     "phone_390_hit_own": true,
+     "desk_1280_shown": true,
+     "desk_1280_hit_own": true,
+     "G-ED.17": "pass"
+    },
+    {
+     "item": "A-4",
+     "product": "cushions-aliexpress-farmhouse-floral-pillow-covers-166217",
+     "verdict": "yes",
+     "dot": true,
+     "phone_visible_css": [
+      132.0,
+      111.1
+     ],
+     "phone_dot": {
+      "u": 0.6226,
+      "v": 0.58
+     },
+     "phone_390_hit_own": true,
+     "desk_1280_shown": true,
+     "desk_1280_hit_own": true,
+     "G-ED.17": "pass"
+    },
+    {
+     "item": "A-5",
+     "product": "cushions-cj-chenille-check-milky-white",
+     "verdict": "yes",
+     "dot": true,
+     "phone_visible_css": [
+      112.0,
+      102.4
+     ],
+     "phone_dot": {
+      "u": 0.3221,
+      "v": 0.585
+     },
+     "phone_390_hit_own": true,
+     "desk_1280_shown": true,
+     "desk_1280_hit_own": true,
+     "G-ED.17": "pass"
+    },
+    {
+     "item": "A-6",
+     "product": "table-runner-cj-linen-look-sage-fringe",
+     "verdict": "yes",
+     "dot": true,
+     "phone_visible_css": [
+      105.9,
+      117.0
+     ],
+     "phone_dot": {
+      "u": 0.4668,
+      "v": 0.775
+     },
+     "phone_390_hit_own": true,
+     "desk_1280_shown": true,
+     "desk_1280_hit_own": true,
+     "G-ED.17": "pass"
+    },
+    {
+     "item": "A-7",
+     "product": "bowl-cj-speckled-ivory-wide-bowl-21",
+     "verdict": "partly",
+     "dot": false,
+     "phone_visible_css": [
+      69.5,
+      26.8
+     ],
+     "phone_dot": null,
+     "phone_390_hit_own": null,
+     "desk_1280_shown": false,
+     "desk_1280_hit_own": null,
+     "G-ED.17": null
+    }
+   ],
+   "living-room/boho": [],
+   "living-room/mediterranean": [],
+   "living-room/japandi": []
+  },
+  "hit_test": {
+   "phone_390": {
+    "/story/living-room/nordic/#A": {
+     "shown": 9,
+     "listed": 12,
+     "all_hit_own": true,
+     "closest_css": 53,
+     "overlaps": 0,
+     "target_top_under_band": [],
+     "draft": "טיוטה / בדיקה"
+    },
+    "/story/living-room/nordic/#B": {
+     "shown": 4,
+     "listed": 6,
+     "all_hit_own": true,
+     "closest_css": 139,
+     "overlaps": 0,
+     "target_top_under_band": [],
+     "draft": "טיוטה / בדיקה"
+    },
+    "/story/living-room/warm-modern/#A": {
+     "shown": 10,
+     "listed": 11,
+     "all_hit_own": true,
+     "closest_css": 56.1,
+     "overlaps": 0,
+     "target_top_under_band": [],
+     "draft": "טיוטה / בדיקה"
+    },
+    "/story/living-room/modern-country/#A": {
+     "shown": 4,
+     "listed": 5,
+     "all_hit_own": true,
+     "closest_css": 108.6,
+     "overlaps": 0,
+     "target_top_under_band": [],
+     "draft": "טיוטה / בדיקה · כמעט מוכן"
+    }
+   },
+   "phone_360": {
+    "/story/living-room/nordic/#A": {
+     "shown": 9,
+     "listed": 12,
+     "all_hit_own": true,
+     "closest_css": 50,
+     "overlaps": 0,
+     "target_top_under_band": [],
+     "draft": "טיוטה / בדיקה"
+    },
+    "/story/living-room/nordic/#B": {
+     "shown": 4,
+     "listed": 6,
+     "all_hit_own": true,
+     "closest_css": 128.7,
+     "overlaps": 0,
+     "target_top_under_band": [],
+     "draft": "טיוטה / בדיקה"
+    },
+    "/story/living-room/warm-modern/#A": {
+     "shown": 10,
+     "listed": 11,
+     "all_hit_own": true,
+     "closest_css": 52,
+     "overlaps": 0,
+     "target_top_under_band": [],
+     "draft": "טיוטה / בדיקה"
+    },
+    "/story/living-room/modern-country/#A": {
+     "shown": 4,
+     "listed": 5,
+     "all_hit_own": true,
+     "closest_css": 100.5,
+     "overlaps": 0,
+     "target_top_under_band": [],
+     "draft": "טיוטה / בדיקה · כמעט מוכן"
+    }
+   },
+   "desk_1280": {
+    "/story/living-room/nordic/#A": {
+     "shown": 12,
+     "listed": 12,
+     "all_hit_own": true,
+     "closest_css": 80.1,
+     "overlaps": 0,
+     "target_top_under_band": [
+      "A-1"
+     ],
+     "draft": "טיוטה / בדיקה"
+    },
+    "/story/living-room/nordic/#B": {
+     "shown": 5,
+     "listed": 6,
+     "all_hit_own": true,
+     "closest_css": 272.9,
+     "overlaps": 0,
+     "target_top_under_band": [
+      "B-1"
+     ],
+     "draft": "טיוטה / בדיקה"
+    },
+    "/story/living-room/warm-modern/#A": {
+     "shown": 11,
+     "listed": 11,
+     "all_hit_own": true,
+     "closest_css": 107.1,
+     "overlaps": 0,
+     "target_top_under_band": [
+      "A-2"
+     ],
+     "draft": "טיוטה / בדיקה"
+    },
+    "/story/living-room/modern-country/#A": {
+     "shown": 5,
+     "listed": 5,
+     "all_hit_own": true,
+     "closest_css": 159.3,
+     "overlaps": 0,
+     "target_top_under_band": [],
+     "draft": "טיוטה / בדיקה · כמעט מוכן"
+    }
+   },
+   "desk_1280x720": {
+    "/story/living-room/nordic/#A": {
+     "shown": 11,
+     "listed": 12,
+     "all_hit_own": true,
+     "closest_css": 56,
+     "overlaps": 0,
+     "target_top_under_band": [],
+     "draft": "טיוטה / בדיקה"
+    },
+    "/story/living-room/nordic/#B": {
+     "shown": 3,
+     "listed": 6,
+     "all_hit_own": true,
+     "closest_css": 272.9,
+     "overlaps": 0,
+     "target_top_under_band": [],
+     "draft": "טיוטה / בדיקה"
+    },
+    "/story/living-room/warm-modern/#A": {
+     "shown": 10,
+     "listed": 11,
+     "all_hit_own": true,
+     "closest_css": 76,
+     "overlaps": 0,
+     "target_top_under_band": [],
+     "draft": "טיוטה / בדיקה"
+    },
+    "/story/living-room/modern-country/#A": {
+     "shown": 5,
+     "listed": 5,
+     "all_hit_own": true,
+     "closest_css": 114.1,
+     "overlaps": 0,
+     "target_top_under_band": [],
+     "draft": "טיוטה / בדיקה · כמעט מוכן"
+    }
+   },
+   "desk_1440": {
+    "/story/living-room/nordic/#A": {
+     "shown": 12,
+     "listed": 12,
+     "all_hit_own": true,
+     "closest_css": 89.1,
+     "overlaps": 0,
+     "target_top_under_band": [],
+     "draft": "טיוטה / בדיקה"
+    },
+    "/story/living-room/nordic/#B": {
+     "shown": 5,
+     "listed": 6,
+     "all_hit_own": true,
+     "closest_css": 307.7,
+     "overlaps": 0,
+     "target_top_under_band": [],
+     "draft": "טיוטה / בדיקה"
+    },
+    "/story/living-room/warm-modern/#A": {
+     "shown": 11,
+     "listed": 11,
+     "all_hit_own": true,
+     "closest_css": 120.1,
+     "overlaps": 0,
+     "target_top_under_band": [],
+     "draft": "טיוטה / בדיקה"
+    },
+    "/story/living-room/modern-country/#A": {
+     "shown": 5,
+     "listed": 5,
+     "all_hit_own": true,
+     "closest_css": 179.9,
+     "overlaps": 0,
+     "target_top_under_band": [],
+     "draft": "טיוטה / בדיקה · כמעט מוכן"
+    }
+   },
+   "desk_1920": {
+    "/story/living-room/nordic/#A": {
+     "shown": 12,
+     "listed": 12,
+     "all_hit_own": true,
+     "closest_css": 119,
+     "overlaps": 0,
+     "target_top_under_band": [],
+     "draft": "טיוטה / בדיקה"
+    },
+    "/story/living-room/nordic/#B": {
+     "shown": 5,
+     "listed": 6,
+     "all_hit_own": true,
+     "closest_css": 409.5,
+     "overlaps": 0,
+     "target_top_under_band": [],
+     "draft": "טיוטה / בדיקה"
+    },
+    "/story/living-room/warm-modern/#A": {
+     "shown": 11,
+     "listed": 11,
+     "all_hit_own": true,
+     "closest_css": 160.1,
+     "overlaps": 0,
+     "target_top_under_band": [],
+     "draft": "טיוטה / בדיקה"
+    },
+    "/story/living-room/modern-country/#A": {
+     "shown": 5,
+     "listed": 5,
+     "all_hit_own": true,
+     "closest_css": 240.1,
+     "overlaps": 0,
+     "target_top_under_band": [],
+     "draft": "טיוטה / בדיקה · כמעט מוכן"
+    }
+   }
+  }
+ },
+ "ged18": {
+  "nordic": {
+   "pass": 7,
+   "products_with_dot": 16,
+   "rows": {
+    "pendant-cj-silk-ribbed-pumpkin-40": {
+     "best_pct_bbox": 1.05,
+     "status": "fail: needs a layer-2 close-up"
+    },
+    "framed-art-aliexpress-minimal-geometric-triptych-prints": {
+     "best_pct_bbox": 4.75,
+     "status": "pass"
+    },
+    "accent-sconces-cj-travertine-block-updown-8x16": {
+     "best_pct_bbox": 0.07,
+     "status": "fail: needs a layer-2 close-up"
+    },
+    "sofa-cover-cj-cotton-muslin-fringe": {
+     "best_pct_bbox": 5.79,
+     "status": "pass"
+    },
+    "cushions-cj-linen-look-charcoal": {
+     "best_pct_bbox": 1.75,
+     "status": "pass"
+    },
+    "bowl-cj-glutinous-white-belly-bowl-21": {
+     "best_pct_bbox": 0.43,
+     "status": "fail: needs a layer-2 close-up"
+    },
+    "cushions-cj-knitted-chenille-bean-green": {
+     "best_pct_bbox": 1.09,
+     "status": "fail: needs a layer-2 close-up"
+    },
+    "candle-holders-cj-travertine-pedestal": {
+     "best_pct_bbox": 0.85,
+     "status": "fail: needs a layer-2 close-up"
+    },
+    "cushions-cj-boucle-teddy": {
+     "best_pct_bbox": 1.31,
+     "status": "fail: needs a layer-2 close-up"
+    },
+    "planter-cj-seagrass-belly": {
+     "best_pct_bbox": 0.85,
+     "status": "fail: needs a layer-2 close-up"
+    },
+    "basket-cj-jute-rope-cylinder": {
+     "best_pct_bbox": 3.6,
+     "status": "pass"
+    },
+    "table-runner-cj-linen-look-sage-fringe": {
+     "best_pct_bbox": 3.8,
+     "status": "pass"
+    },
+    "wall-decor-cj-corn-husk-round-38": {
+     "best_pct_bbox": 3.17,
+     "status": "pass"
+    },
+    "vase-aliexpress-vintage-distressed-clay-vase-589009": {
+     "best_pct_bbox": 0.61,
+     "status": "fail: needs a layer-2 close-up"
+    },
+    "rug-cj-braided-wool-natural": {
+     "best_pct_bbox": 13.26,
+     "status": "open: \"whole\" needs a ruling or a close-up"
+    },
+    "magazine-holder-cj-felt-log-basket": {
+     "best_pct_bbox": 3.63,
+     "status": "pass"
+    }
+   }
+  },
+  "warm-modern": {
+   "pass": 7,
+   "products_with_dot": 10,
+   "rows": {
+    "floor-lamp-cj-pleated-walnut-stem-158": {
+     "best_pct_bbox": 5.35,
+     "status": "pass"
+    },
+    "pendant-cj-tiered-fabric-drum": {
+     "best_pct_bbox": 1.74,
+     "status": "pass"
+    },
+    "accent-sconces-aliexpress-travertine-cylinder-walnut-choice": {
+     "best_pct_bbox": 0.38,
+     "status": "fail: needs a layer-2 close-up"
+    },
+    "framed-art-aliexpress-frameless-minimalist-wall-art-631735": {
+     "best_pct_bbox": 8.08,
+     "status": "pass"
+    },
+    "cushions-cj-boucle-teddy": {
+     "best_pct_bbox": 1.9,
+     "status": "pass"
+    },
+    "vase-cj-textured-white-stoneware": {
+     "best_pct_bbox": 0.93,
+     "status": "fail: needs a layer-2 close-up"
+    },
+    "bowl-cj-matte-black-bowl-20": {
+     "best_pct_bbox": 0.8,
+     "status": "fail: needs a layer-2 close-up"
+    },
+    "cushions-cj-knitted-chenille-bean-green": {
+     "best_pct_bbox": 1.55,
+     "status": "pass"
+    },
+    "candle-holders-cj-travertine-pedestal": {
+     "best_pct_bbox": 1.52,
+     "status": "pass"
+    },
+    "sofa-cover-cj-cotton-muslin-fringe": {
+     "best_pct_bbox": 4.32,
+     "status": "pass"
+    }
+   }
+  },
+  "modern-country": {
+   "pass": 4,
+   "products_with_dot": 5,
+   "rows": {
+    "sill-vase-cj-cream-fluted-column-25": {
+     "best_pct_bbox": 0.28,
+     "status": "fail: needs a layer-2 close-up"
+    },
+    "curtains-aliexpress-linen-blend-s-fold-180502": {
+     "best_pct_bbox": 2.86,
+     "status": "pass"
+    },
+    "cushions-aliexpress-farmhouse-floral-pillow-covers-166217": {
+     "best_pct_bbox": 3.47,
+     "status": "pass"
+    },
+    "cushions-cj-chenille-check-milky-white": {
+     "best_pct_bbox": 2.71,
+     "status": "pass"
+    },
+    "table-runner-cj-linen-look-sage-fringe": {
+     "best_pct_bbox": 2.93,
+     "status": "pass"
+    }
+   }
+  }
+ },
+ "gate": {
+  "frames": {
+   "living-room/nordic": [
+    {
+     "id": "A",
+     "qa_key": "nordic-A-ed4",
+     "state": "final_test",
+     "on_page": true,
+     "expected": true
+    },
+    {
+     "id": "B",
+     "qa_key": "nordic-B-fin",
+     "state": "final_test",
+     "on_page": true,
+     "expected": true
+    }
+   ],
+   "living-room/warm-modern": [
+    {
+     "id": "A",
+     "qa_key": "warm-modern-A-ed5",
+     "state": "final_test",
+     "on_page": true,
+     "expected": true
+    }
+   ],
+   "living-room/modern-country": [
+    {
+     "id": "A",
+     "qa_key": "modern-country-A-mc1",
+     "state": "almost",
+     "on_page": true,
+     "expected": true
+    }
+   ],
+   "living-room/boho": [
+    {
+     "id": "A",
+     "qa_key": "boho-A-fin4",
+     "state": "not_yet",
+     "on_page": false,
+     "expected": false
+    }
+   ],
+   "living-room/mediterranean": [
+    {
+     "id": "A",
+     "qa_key": "mediterranean-A-ed5",
+     "state": "not_yet",
+     "on_page": false,
+     "expected": false
+    }
+   ],
+   "living-room/japandi": [
+    {
+     "id": "A",
+     "qa_key": "japandi-A-ed5",
+     "state": "not_yet",
+     "on_page": false,
+     "expected": false
+    }
+   ]
+  },
+  "dots": 34,
+  "mismatches": [],
+  "closeup_record_test": "data/closeup-record-test.log (tools/closeup-record-test.ts, samples in data/closeup-record-samples/): old shape final_test -> dot; part1 without against -> 0 rows, no dot; part1 with against -> dot (inherits 14 frame rows); almost -> dot; flat frames.<key>.state -> not read",
+  "record_format_fit": "fits with changes: QA proposes close-ups as their own entries in the dated G-ED register (qa/reports/ged-register-<date>.json): closeups.<qa_key> = {file, card_id, option, state (not_yet | almost | final_test | approved_for_site), rows: full rows, no deltas}; the site unlocks a 'partly' dot when a close-up of the same card and option is final_test or approved_for_site. QA's tools then read one register for frames and close-ups"
+ },
+ "detail_pages": {
+  "pages": 35,
+  "skus_checked": 784,
+  "by_status": {
+   "available": 22,
+   "unpriced": 11,
+   "unavailable": 2
+  },
+  "problems": "none (the two rug pages have no sellable option to switch to: PRE1, expected)",
+  "shared_photo_across_colours": [],
+  "controls_tested": 33,
+  "internal_fields": {
+   "files_scanned": 47,
+   "counts": {
+    "cost/margin words (field names)": 0,
+    "supplier field": 0,
+    "supplier hosts / listing URLs": 0,
+    "any external https URL": 0,
+    "supplier SKU codes": 0,
+    "USD amounts": 0
+   },
+   "slugs_naming_the_source": 27,
+   "slugs_ending_in_a_listing_number": [
+    "curtains-aliexpress-linen-blend-s-fold-180502",
+    "cushions-aliexpress-farmhouse-floral-pillow-covers-166217",
+    "framed-art-aliexpress-frameless-minimalist-wall-art-631735",
+    "vase-aliexpress-vintage-distressed-clay-vase-589009"
+   ]
+  },
+  "two_options_one_house": [
+   {
+    "id": "A-5",
+    "name_he": "ציפית כרית בוקלה, תה חלב",
+    "values": {
+     "color": "milk-tea-color",
+     "size": "50x50"
+    },
+    "href": "/story/living-room/warm-modern/p/cushions-cj-boucle-teddy/",
+    "sheet_link": "/story/living-room/warm-modern/p/cushions-cj-boucle-teddy/",
+    "detail_opens_on": "milk-tea-color+50x50",
+    "detail_title": "ציפית כרית בוקלה, תה חלב",
+    "matches_the_dot": true
+   },
+   {
+    "id": "A-10",
+    "name_he": "ציפית כרית בוקלה, לבן",
+    "values": {
+     "color": "white",
+     "size": "50x50"
+    },
+    "href": "/story/living-room/warm-modern/p/cushions-cj-boucle-teddy/",
+    "sheet_link": "/story/living-room/warm-modern/p/cushions-cj-boucle-teddy/",
+    "detail_opens_on": "milk-tea-color+50x50",
+    "detail_title": "ציפית כרית בוקלה, תה חלב",
+    "matches_the_dot": false
+   }
+  ]
+ },
+ "hd_public": {
+  "result": "pass: 430 files, no story/, test/, media/story/, media/test/, and no file mentions /story/, media/story or /test/",
+  "log": "data/hd-public-build.log"
+ },
+ "spot_checks": {
+  "note": "on the 15:34:43 build (S4 WIP); S2 claims in brackets",
+  "weights_kb": {
+   "/story/living-room/nordic/ 400x800 @1": 175.7,
+   "/story/living-room/nordic/ 400x800 @3": 284.3,
+   "/story/living-room/nordic/ 1280x800 @1": 219.1,
+   "/story/ 400x800 @1": 206.4,
+   "/story/ 1280x800 @1": 206.4,
+   "/story/living-room/boho/ 400x800 @1": 168.4,
+   "/story/living-room/warm-modern/p/cushions-cj-boucle-teddy/ 400x800 @1": 193.5,
+   "/story/living-room/warm-modern/p/cushions-cj-boucle-teddy/ 1280x800 @1": 275.5
+  },
+  "claimed_kb": {
+   "nordic 400@1": 166.8,
+   "nordic 400@3": 275.4,
+   "nordic 1280": 210.2,
+   "/story/": 172.4,
+   "typographic 400": 172.5,
+   "detail 400@1": 191.2,
+   "detail 1280": 273.2
+  },
+  "lcp_throttled_ms": {
+   "/story/living-room/nordic/": {
+    "median": 1204,
+    "max": 1712,
+    "runs": [
+     1200,
+     1712,
+     1160,
+     1204,
+     1252
+    ]
+   },
+   "/story/living-room/warm-modern/p/cushions-cj-boucle-teddy/": {
+    "median": 892,
+    "max": 1292,
+    "runs": [
+     680,
+     1292,
+     892,
+     732,
+     1004
+    ]
+   }
+  },
+  "axe": {
+   "states": 26,
+   "violations": 0,
+   "wcag22aa": 0,
+   "max_sideways_scroll_px": 0
+  },
+  "e2e": "47 run from a scratch copy of commit 0db47449's site/e2e: 46 passed; test-page.spec 'the cover develops' failed at test 43 while frontend-dev's S4 build replaced web/dist (15:33:07); the spec re-run on the next build: 5/5. a11y 15/15"
+ },
+ "commands_run": [
+  "cd site; export WRANGLER_SEND_METRICS=false",
+  "npm run catalog; npm run assets:temp; npx tsx tools/supplier-images.ts --offline; npm run test:page; npm run story; npm run build -w @hd/web; npm run build -w @hd/api; npm run budget (all 0)",
+  "npm run preview (8788) until it went down at the limit; later npx wrangler dev --port 8799 --local --persist-to <scratchpad> (private, serving web/dist)",
+  "node tools/hit-test-story.mjs; python3 tools/ged17_18_story.py (STORY_JSON = git show 0db47449:data/story/story.json); python3 tools/gate_check.py (same)",
+  "python3 tools/scan_internal.py; node tools/check-detail.mjs; npx tsx tools/closeup-record-test.ts (scratch records)",
+  "cd site/web; HD_PUBLIC=1 npx vite build --outDir <scratchpad>/pub-dist-s12 --emptyOutDir",
+  "playwright test -c <scratchpad>/e2e-s2/site/playwright.config.ts --project=e2e, then --project=a11y, then e2e/test-page.spec.ts again (copies of 0db47449's specs; outputs in the scratchpad)",
+  "QA_BASE=http://127.0.0.1:8799 node tools/measure-story-s12.mjs"
+ ],
+ "owners": {
+  "frontend-dev": [
+   "the option in the link of a product shown twice in a house",
+   "the close-up gate (final_test, same option, records that cannot be read fail loudly)",
+   "read the dated G-ED register with close-ups",
+   "G-ED.17 boxes for the clay vase and bowl on fix4"
+  ],
+  "qa-agent": [
+   "add closeups to the next register version",
+   "re-run hit-test-story and ged17_18_story when the page moves to the register (fix4, boho fin6)"
+  ],
+  "manager": [
+   "public slug scheme before launch"
+  ],
+  "master-designer / render-agent": [
+   "close-ups for G-ED.18"
+  ]
+ }
+}

@@ -15,6 +15,7 @@ import './story.css';
 import { prefersReducedMotion } from '../motion';
 import { priceHe, storyCart, type StoryVariant } from './story-cart';
 import type { DetailData, DSku } from './detail-model';
+import type { ShippingMethod } from './checkout-model';
 
 type Item = {
   id: string;
@@ -43,7 +44,9 @@ type Item = {
 type FrameData = { id: string; u0: number; v0: number; aspect: number; crop: [number, number]; title_he: string; items: string[] };
 /** the index and a typographic page have no frames and no items: the cart and the header still work there */
 type Data = {
-  page: { room: string | null; style: string | null; href: string; tool: string };
+  page: { room: string | null; style: string | null; href: string; tool: string; kind?: 'checkout' | 'order' };
+  /** the site's shipping methods (the checkout page) */
+  shipping?: ShippingMethod[];
   items: Record<string, Item>;
   frames: FrameData[];
   /** a detail page (layer 2): the product's SKUs in this house */
@@ -266,6 +269,7 @@ const detailVariants: StoryVariant[] = (data.detail?.skus ?? []).flatMap((k) =>
           price_agorot: k.price_agorot,
           set_qty: data.detail!.set_qty,
           available: true,
+          unit_price_agorot: k.unit_price_agorot,
         },
       ]
     : [],
@@ -304,6 +308,10 @@ function showCount(animate: boolean): void {
   );
 }
 showCount(false);
+// the test checkout and its confirmation: their own module, loaded only there
+if (data.page.kind === 'checkout' && data.shipping)
+  void import('./checkout').then((m) => m.initCheckout({ cart, methods: data.shipping!, announce, mark, counted: () => showCount(false) }));
+if (data.page.kind === 'order') void import('./checkout').then((m) => m.initOrder());
 // a detail page: its own module, loaded only there
 let detail: { current: () => DSku; choose: (key: string) => void } | null = null;
 if (data.detail)
@@ -477,6 +485,17 @@ sheet.addEventListener(
 
 // ---------- the cart dialog ----------
 const cartDlg = $<HTMLDialogElement>('st-cart');
+const btn = (text: string, label: string, act: string, data: Record<string, string>): HTMLButtonElement => {
+  const b = document.createElement('button');
+  b.type = 'button';
+  b.className = 'st-qty-btn';
+  b.textContent = text;
+  b.setAttribute('aria-label', label);
+  b.dataset.act = act;
+  Object.assign(b.dataset, data);
+  return b;
+};
+/** the cart: a line per variant and pack, its quantity (− and +), its removal; lines kept but not sold, said (PRE1) */
 function renderCart(): void {
   const c = cart.current();
   const lines = c?.lines ?? [];
@@ -486,21 +505,91 @@ function renderCart(): void {
       li.className = 'mag-credit st-cart-line';
       const name = document.createElement('span');
       name.className = 'mag-credit-name';
-      // the option is said when the name does not already say it (a detail page's other option)
-      name.textContent = l.option_he && !l.name_he.includes(l.option_he) ? `${l.name_he} · ${l.option_he}` : l.name_he;
+      // the option is said when the name does not already say it (a detail page's other option); a single piece too
+      const label = [l.option_he && !l.name_he.includes(l.option_he) ? l.option_he : null, l.pack === 'unit' ? 'יחידה בודדת' : null].filter(Boolean).join(', ');
+      name.textContent = label ? `${l.name_he} · ${label}` : l.name_he;
       const detail = document.createElement('span');
       detail.className = 'mag-credit-detail';
       detail.textContent = `${l.qty} × ${priceHe(l.unit_price_agorot)} · ${priceHe(l.line_total_agorot)}`;
       const body = document.createElement('span');
       body.className = 'mag-credit-body';
-      body.append(name, detail);
+      const qty = document.createElement('span');
+      qty.className = 'st-qty';
+      qty.setAttribute('role', 'group');
+      qty.setAttribute('aria-label', `כמות: ${l.name_he}`);
+      const out = document.createElement('output');
+      out.className = 'num';
+      out.textContent = String(l.qty);
+      const data = { variant: l.variant_id, pack: l.pack, qty: String(l.qty) };
+      qty.append(btn('+', `הגדלת הכמות: ${l.name_he}`, 'more', data), out, btn('−', `הקטנת הכמות: ${l.name_he}`, 'less', data));
+      const remove = btn('הסרה', `הסרה מהסל: ${l.name_he}`, 'remove', data);
+      remove.className = 'st-link-btn st-remove';
+      const actions = document.createElement('span');
+      actions.className = 'st-line-actions';
+      actions.append(qty, remove);
+      body.append(name, detail, actions);
       li.append(body);
       return li;
     }),
   );
+  const held = cart.held();
+  const heldEl = $('st-cart-held');
+  heldEl.hidden = !held.length;
+  heldEl.replaceChildren(
+    ...held.map((h) => {
+      const p = document.createElement('p');
+      p.className = 'mag-cap';
+      p.textContent = `${h.name_he}: המלאי אינו זמין כעת, ולכן הוא לא בהזמנה ולא ייגבה. `;
+      const remove = btn('הסרה', `הסרה מהסל: ${h.name_he}`, 'remove', { variant: h.variant_id, pack: h.pack, qty: String(h.qty) });
+      remove.className = 'st-link-btn st-remove';
+      p.append(remove);
+      return p;
+    }),
+  );
   $('st-cart-empty').hidden = lines.length > 0;
   $('st-cart-total').textContent = lines.length ? `סכום ביניים: ${priceHe(c!.subtotal_agorot)} · ${items(c!.count)}` : '';
+  $('st-cart-pay').hidden = !lines.length;
 }
+$('st-cart-lines').addEventListener('click', (e) => void cartAction(e));
+$('st-cart-held').addEventListener('click', (e) => void cartAction(e));
+async function cartAction(e: Event): Promise<void> {
+  const b = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-act]');
+  if (!b) return;
+  const { act, variant, pack, qty } = b.dataset as { act: string; variant: string; pack: 'set' | 'unit'; qty: string };
+  const n = Number(qty);
+  try {
+    if (act === 'remove') cart.remove(variant, pack);
+    else await cart.setQty(variant, pack, act === 'more' ? n + 1 : n - 1);
+  } catch {
+    announce('לא הצלחנו לעדכן את הסל.');
+    return;
+  }
+  renderCart();
+  showCount(true);
+  const c = cart.current();
+  announce(
+    act === 'remove' || (act === 'less' && n === 1)
+      ? `הוסר מהסל. בסל ${items(c?.count ?? 0)}.`
+      : `הכמות עודכנה. בסל ${items(c?.count ?? 0)}, ${priceHe(c?.subtotal_agorot ?? 0)}.`,
+  );
+  // the focus stays in the cart: on the same control when it is still there, else on the title
+  const same = document.querySelector<HTMLElement>(`#st-cart button[data-act="${act}"][data-variant="${CSS.escape(variant)}"][data-pack="${pack}"]`);
+  (same ?? $('st-cart-title')).focus();
+}
+// "קנה את המראה" whole: every product of the frame that is for sale, once, in the frame's option
+for (const b of document.querySelectorAll<HTMLButtonElement>('.st-look-btn'))
+  b.addEventListener('click', async () => {
+    const ids = (b.dataset.variants ?? '').split(' ').filter(Boolean);
+    const r = await cart.addLook(ids);
+    mark('cart:look', { frame: b.dataset.frame, added: r.added.length, skipped: r.skipped.length });
+    showCount(true);
+    const text = b.innerHTML;
+    b.textContent = r.added.length ? `המראה בסל · ${items(r.added.length)}` : 'לא נוסף דבר';
+    setTimeout(() => (b.innerHTML = text), 2500);
+    announce(
+      `${r.added.length ? `נוספו לסל ${items(r.added.length)} מהמראה` : 'לא נוסף דבר לסל'}${r.skipped.length ? `, ${items(r.skipped.length)} לא במכירה` : ''}. בסל ${items(r.cart?.count ?? 0)}, ${priceHe(r.cart?.subtotal_agorot ?? 0)}.`,
+    );
+  });
 $('st-cart-open').addEventListener('click', async () => {
   renderCart();
   cartDlg.showModal();

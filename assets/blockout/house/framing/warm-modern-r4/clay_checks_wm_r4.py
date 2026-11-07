@@ -530,7 +530,7 @@ if tiles:
     th = tiles[0][1].height
     sheet = Image.new("RGB", (2 * TW + 60, 80 + len(tiles) * (th + 60)), (250, 249, 247))
     d = ImageDraw.Draw(sheet)
-    d.text((20, 20), "Warm-modern living-room clay per camera: r3 (left) against r4 with WMC9 (right). 0 tokens, clay only.", fill=(0, 0, 0), font=fbold)
+    d.text((20, 20), "Warm-modern living-room clay per camera: r3 (left) against r4 with WMC9 + WMC10 (right). 0 tokens, clay only.", fill=(0, 0, 0), font=fbold)
     y = 80
     for fid, A, B in tiles:
         d.text((20, y), f"{fid}  warm modern r3", fill=(0, 0, 0), font=font)

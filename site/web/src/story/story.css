@@ -639,8 +639,15 @@
 .st-cart-lines:empty {
   display: none;
 }
-.st .st-cart-line {
+.st .st-cart-line,
+.st .st-co-line {
   grid-template-columns: 1fr;
+}
+.st-line-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-4);
 }
 .st-cart-empty[hidden] {
   display: none;
@@ -989,4 +996,176 @@
 .st .st-pd-here,
 .st .st-pd-elsewhere {
   padding-top: var(--s-7);
+}
+
+/* the frame's crop on a detail page: at its own size, never enlarged (design notes §6) */
+.st .st-pd-media img.is-frame {
+  width: auto;
+  max-width: 100%;
+  margin-inline: auto;
+}
+.st .st-pd-media figure[hidden] {
+  display: none;
+}
+
+/* ---------- S4: the shop ---------- */
+/* "קנה את המראה" whole, under a frame's list */
+.st-look {
+  display: grid;
+  justify-items: start;
+  gap: var(--s-2);
+  margin: var(--s-2) 0 var(--s-4);
+}
+.st .st-look-left {
+  margin: 0;
+}
+/* the cart: a quantity per line (− and +), its removal, the lines kept but not sold */
+.st .st-cart-line .mag-credit-body {
+  display: grid;
+  gap: var(--s-1);
+}
+.st-qty {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+}
+.st-qty output {
+  min-width: 2ch;
+  text-align: center;
+  font: 600 var(--t-btn) var(--f-text);
+}
+.st-qty-btn {
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--rule-control);
+  border-radius: 2px;
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 20px/1 var(--f-text);
+  cursor: pointer;
+}
+.st-qty-btn:focus-visible,
+.st-link-btn:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+.st .st-remove {
+  min-height: 44px;
+  font: 400 var(--t-cap) var(--f-text);
+}
+.st-cart-held {
+  display: grid;
+  gap: var(--s-1);
+  padding: var(--s-3) 0;
+  border-top: 1px solid var(--rule);
+}
+.st .st-cart-held[hidden],
+.st .st-cart-actions [hidden] {
+  display: none;
+}
+.st-cart-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+}
+/* the test checkout and its confirmation */
+.st .st-co {
+  min-height: 0;
+}
+.st .st-co-main,
+.st .st-co-summary {
+  grid-column: 1 / -1;
+}
+@media (min-width: 1024px) {
+  .st .st-co-main {
+    grid-column: 1 / span 7;
+  }
+  .st .st-co-summary {
+    grid-column: 9 / -1;
+    align-self: start;
+    position: sticky;
+    top: calc(var(--head-h) + var(--s-5));
+  }
+}
+.st-co-main,
+.st-co-form,
+.st-co-summary {
+  display: grid;
+  gap: var(--s-4);
+  align-content: start;
+}
+.st .st-co-form[hidden],
+.st .st-co-errors[hidden],
+.st .st-co-err[hidden],
+.st [id='co-empty'][hidden] {
+  display: none;
+}
+.st-co-set {
+  display: grid;
+  gap: var(--s-3);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+.st-co-set legend {
+  margin-bottom: var(--s-2);
+  padding: 0;
+}
+.st-co-field {
+  display: grid;
+  gap: var(--s-1);
+}
+.st-co-field label {
+  font: 600 var(--t-run) var(--f-text);
+}
+.st-co-field input,
+.st-co-field textarea {
+  min-height: 44px;
+  padding: var(--s-2) var(--s-3);
+  border: 1px solid var(--rule-control);
+  border-radius: 2px;
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 var(--t-input) var(--f-text);
+}
+.st-co-field input:focus-visible,
+.st-co-field textarea:focus-visible,
+.st-co-choice input:focus-visible,
+.st-co-check input:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+.st-co-field input[aria-invalid='true'] {
+  border-color: var(--error);
+}
+.st-co-err {
+  font: 400 var(--t-cap) var(--f-text);
+  color: var(--error);
+}
+.st-co-errors {
+  padding: var(--s-3) var(--s-4);
+  border: 1px solid var(--error);
+  border-radius: 2px;
+  font: 400 var(--t-detail) var(--f-text);
+}
+.st-co-errors ul {
+  margin: var(--s-2) 0 0;
+  padding-inline-start: var(--s-5);
+}
+.st-co-choice,
+.st .st-co-field .st-co-check {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  min-height: 44px;
+  font: 400 var(--t-body) var(--f-text);
+  cursor: pointer;
+}
+.st-co-choice input,
+.st-co-check input {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  accent-color: var(--ink);
 }
