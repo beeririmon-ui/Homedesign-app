@@ -28,6 +28,14 @@ for (let r = 0; r < RUNS; r++) {
       window.__qaEv.push({ type: e.type, t: Math.round(performance.now()), x: Math.round(e.clientX), id: e.pointerId, target: `${t.tagName?.toLowerCase()}.${[...(t.classList ?? [])].join('.')}`, buttons: e.buttons });
     };
     for (const ty of ['pointerdown', 'pointermove', 'pointerup', 'pointercancel', 'lostpointercapture', 'gotpointercapture', 'click']) document.addEventListener(ty, log, true);
+    // every change of the checked option, and every mount of the wheel, with its time
+    new MutationObserver((ms) => {
+      for (const m of ms) {
+        if (m.type === 'attributes' && m.attributeName === 'aria-checked' && m.target.getAttribute('aria-checked') === 'true')
+          window.__qaEv.push({ type: 'checked', t: Math.round(performance.now()), target: (m.target.getAttribute('aria-label') ?? '').slice(0, 8) });
+        if (m.type === 'childList') for (const n of m.addedNodes) if (n.nodeType === 1 && (n.matches?.('.picker') || n.querySelector?.('.picker'))) window.__qaEv.push({ type: 'wheel-mounted', t: Math.round(performance.now()), target: '' });
+      }
+    }).observe(document.body, { subtree: true, attributes: true, attributeFilter: ['aria-checked'], childList: true });
   });
   const t0 = Date.now();
   await page.locator('button.hotspot[data-slot="vase"]').click();
@@ -76,7 +84,7 @@ for (let r = 0; r < RUNS; r++) {
     box: [Math.round(box.x), Math.round(box.y), Math.round(box.width), Math.round(box.height)],
     at_measure: atMeasure,
     under_press: under,
-    events: ev.filter((e) => e.type !== 'pointermove').map((e) => `${e.type}@${e.t}:${e.target}`).slice(-12),
+    events: ev.filter((e) => e.type !== 'pointermove').map((e) => `${e.type}@${e.t}:${e.target}`).slice(-14),
     moves_received: moves.length,
     move_span_ms: moves.length ? moves.at(-1).t - moves[0].t : null,
     up_after_last_move_ms: (() => { const up = ev.find((e) => e.type === 'pointerup' && firstDown && e.t >= firstDown.t); return up && moves.length ? up.t - moves.at(-1).t : null; })(),

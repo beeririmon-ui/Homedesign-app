@@ -1217,15 +1217,15 @@
 .st-td-layer.is-screen {
   mix-blend-mode: screen;
 }
-.st-td-switch {
-  position: absolute;
-  inset-block-end: var(--s-4);
-  inset-inline-start: 50%;
-  transform: translateX(50%);
+/* design notes §8: the switch on the paper right under the stage, at the start of the line (it covered the table) */
+.st .st-td-switch {
+  justify-self: start;
   display: inline-flex;
+  margin-bottom: var(--s-4);
   padding: var(--s-1);
+  border: 1px solid var(--rule);
   border-radius: 2px;
-  background: var(--label);
+  background: var(--paper);
 }
 .st-td-btn {
   min-height: 44px;
@@ -1245,14 +1245,17 @@
   outline: 2px solid var(--ink);
   outline-offset: 2px;
 }
+/* design notes §8: the draft mark in the stage's top-right corner, under the brand (empty of slots in every variant) */
 .st .st-td .st-draft {
   opacity: 1;
   top: calc(var(--head-h) + env(safe-area-inset-top) + var(--s-3));
   bottom: auto;
+  inset-inline-start: var(--margin);
+  inset-inline-end: auto;
 }
 .st .st-td-text {
   min-height: 0;
-  padding-top: var(--s-7);
+  padding-top: var(--s-4);
 }
 @media (prefers-reduced-motion: reduce) {
   /* a dissolve, shorter: nothing moves */

@@ -10,7 +10,8 @@ export function initToolDraft({ announce, mark }: Ctx): void {
   const stage = document.getElementById('td-stage');
   if (!stage) return;
   const houses = [...stage.querySelectorAll<HTMLElement>('.st-td-house')];
-  const buttons = [...stage.querySelectorAll<HTMLButtonElement>('.st-td-btn')];
+  // the switch sits on the paper under the stage (design notes §8)
+  const buttons = [...document.querySelectorAll<HTMLButtonElement>('.st-td-btn')];
   const show = (id: string, say: boolean) => {
     const to = houses.find((h) => h.dataset.house === id);
     if (!to) return;

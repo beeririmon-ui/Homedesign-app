@@ -1344,13 +1344,13 @@ async function toolDraftPage(pg: PageOut, t: ToolDraft): Promise<void> {
       ${others.map((l) => pic(l.base, TOOL_WIDTHS, l.w, l.h, `is-${l.blend}`, false)).join('\n      ')}
     </div>
     <p class="st-draft is-almost">טיוטה / בדיקה · הכלי בבנייה</p>
-    <div class="st-td-switch" role="group" aria-label="הבית">
-      <button type="button" class="st-td-btn" aria-pressed="true" data-house="${pg.style}">${esc(house)}</button>
-      <button type="button" class="st-td-btn" aria-pressed="false" data-house="${t.compare.house}">${esc(other)}</button>
-    </div>
   </div>
   <div class="mag-paper st-td-text">
     <div class="mag-grid">
+      <div class="st-td-switch mag-col-main" role="group" aria-label="הבית">
+        <button type="button" class="st-td-btn" aria-pressed="true" data-house="${pg.style}">${esc(house)}</button>
+        <button type="button" class="st-td-btn" aria-pressed="false" data-house="${t.compare.house}">${esc(other)}</button>
+      </div>
       <p class="st-kicker mag-col-main">${esc(head)}</p>
       <h1 id="td-title" class="mag-h1 mag-col-main">עצב בעצמך, בבית ה${esc(house)}</h1>
       <p class="mag-lead mag-col-main">אותה מצלמה ואותן עמדות כמו בבית ה${esc(other)}, אדריכלות אחרת. מעבר בין הבתים בכלי הוא מעבר רך של כל השכבות באותו פריים, כשנייה.</p>
