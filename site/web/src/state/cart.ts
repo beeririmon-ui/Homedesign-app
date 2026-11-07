@@ -8,6 +8,9 @@ export const cart = signal<Cart | null>(null);
 export const cartBusy = signal(false);
 export const cartError = signal<string | null>(null);
 export const cartCount = computed(() => cart.value?.count ?? 0);
+/** S6, §7.2: the line just added ("variant:pack"), for 2.5 s: the button that added it says "נוסף לסל" */
+export const justAdded = signal<string | null>(null);
+let addedTimer: ReturnType<typeof setTimeout> | undefined;
 
 function savedId(): string | null {
   try {
@@ -69,7 +72,13 @@ export async function setQty(variantId: string, pack: Pack, qty: number, label?:
 /** Adds to the cart: `pack` is the set (default) or one piece (P1); each is its own line. */
 export async function addToCart(variantId: string, name: string, qty = 1, pack: Pack = 'set', packLabel?: string): Promise<boolean> {
   const current = cart.value?.lines.find((l) => l.variant_id === variantId && l.pack === pack)?.qty ?? 0;
-  return setQty(variantId, pack, Math.min(20, current + qty), `נוסף לסל: ${name}${packLabel ? `, ${packLabel}` : ''}`);
+  const ok = await setQty(variantId, pack, Math.min(20, current + qty), `נוסף לסל: ${name}${packLabel ? `, ${packLabel}` : ''}`);
+  if (ok) {
+    justAdded.value = `${variantId}:${pack}`;
+    clearTimeout(addedTimer);
+    addedTimer = setTimeout(() => (justAdded.value = null), 2500);
+  }
+  return ok;
 }
 
 export function forgetCart(): void {

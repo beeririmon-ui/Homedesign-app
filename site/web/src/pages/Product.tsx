@@ -1,11 +1,11 @@
 import { productPath } from '@hd/shared/product-url';
-import { useEffect, useState } from 'preact/hooks';
+import { useEffect, useRef, useState } from 'preact/hooks';
 import type { Pack, PublicProduct } from '@hd/shared';
 import { packLabelHe } from '@hd/shared/packs';
-import { product, slotOf } from '../catalog';
-import { Price, galleryImages } from '../components/Media';
+import { catalog, product, slotOf } from '../catalog';
+import { Price, galleryImages, optionImage } from '../components/Media';
 import { ProductGallery } from '../components/ProductGallery';
-import { addToCart, cartBusy } from '../state/cart';
+import { addToCart, cartBusy, justAdded } from '../state/cart';
 import { navigate } from '../router';
 import { pendingOpen } from '../state/room';
 import { PackPicker } from '../components/PackPicker';
@@ -29,6 +29,26 @@ export function Product({ p }: { p: PublicProduct }) {
   const where = slotOf(p)!;
   const images = galleryImages(p, v.variant_id);
   const dims = [p.dimensions_cm.width, p.dimensions_cm.depth, p.dimensions_cm.height].filter((x): x is number => typeof x === 'number');
+  // §9.1, the phone: the paper band with "הוספה לסל" appears once the page's own button has left the screen
+  const buy = useRef<HTMLDivElement>(null);
+  const [barOn, setBarOn] = useState(false);
+  useEffect(() => {
+    const el = buy.current;
+    if (!el || typeof IntersectionObserver === 'undefined') return;
+    const io = new IntersectionObserver(([e]) => setBarOn(!!e && !e.isIntersecting && e.boundingClientRect.top < 0));
+    io.observe(el);
+    return () => io.disconnect();
+  }, [p.id]);
+  const roomN = String(catalog.rooms.findIndex((r) => r.id === where.room.id) + 1).padStart(2, '0');
+  const added = justAdded.value === `${v.variant_id}:${pack}`;
+  const add = () =>
+    void addToCart(
+      v.variant_id,
+      p.name_he,
+      qty,
+      pack,
+      [v.option_he, p.pack ? packLabelHe(pack, p.pack.set_qty) : null].filter(Boolean).join(', ') || undefined,
+    );
   const showInRoom = () => {
     pendingOpen.value = { slot: where.slot.id, option: where.option.position };
     navigate(`/rooms/${where.room.id}/`);
@@ -50,19 +70,17 @@ export function Product({ p }: { p: PublicProduct }) {
         <div class="product-media">{images.length ? <ProductGallery images={images} id={`p-${p.id}`} /> : null}</div>
         <div class="product-info">
           <div class="page-head" style={{ marginBottom: 0 }}>
-            <p class="eyebrow">{where.slot.name_he}</p>
+            {/* §9.1: the running head, "02 · הסלון · אגרטל"; the temporary names are said once, in the footer (§6.6) */}
+            <p class="run-head">
+              <span class="num">{roomN}</span> · {where.room.name_he} · {where.slot.name_he}
+            </p>
             <h1 id="product-title" tabIndex={-1}>
               {p.name_he}
             </h1>
-            {p.name_provisional ? (
-              <p>
-                <span class="badge badge-temp">שם ותיאור זמניים</span>
-              </p>
-            ) : null}
           </div>
           <div class="price-row" aria-live="polite">
             <Price class="price-big" agorot={price} provisional={v.price_provisional && !estimated} />
-            {estimated ? <span class="badge badge-temp">מחיר משוער</span> : null}
+            {estimated ? <span class="small">מחיר משוער</span> : null}
             {p.pack ? <span class="small">{packLabelHe(pack, p.pack.set_qty)}</span> : null}
             {p.compare_at_agorot && pack === 'set' && v.in_room ? (
               <span class="price-old">
@@ -70,9 +88,9 @@ export function Product({ p }: { p: PublicProduct }) {
                 <Price agorot={p.compare_at_agorot} />
               </span>
             ) : null}
-            <span class="small muted">כולל מע"מ</span>
+            <span class="small muted">כולל מע״מ</span>
           </div>
-          <p>{p.description_he}</p>
+          <p class="lede">{p.description_he}</p>
           <OptionPicker p={p} value={v.variant_id} onChange={setVariantId} id={`opt-${p.id}`} />
           <PackPicker
             p={p}
@@ -81,26 +99,37 @@ export function Product({ p }: { p: PublicProduct }) {
             id={`pack-${p.id}`}
             prices={{ set: v.price_agorot, unit: v.unit_price_agorot, unitEstimated: v.unit_price_estimated }}
           />
-          <div>
-            <h2 class="small" style={{ fontFamily: 'var(--f-body)', fontWeight: 600, marginBottom: 8 }}>
-              וריאציות בעמדה
-            </h2>
-            <div class="options-row">
+          {/* §9.1: the other variations of this place in the room, as small credits with their studio picture */}
+          <section class="slot-more" aria-labelledby={`more-${p.id}`}>
+            <h2 id={`more-${p.id}`}>עוד בעמדה הזו</h2>
+            <ol>
               {where.slot.options.map((o) => {
                 const op = product(o.product_id);
-                return op ? (
-                  <a key={o.position} class="option-chip" href={productPath(op.id)} aria-current={op.id === p.id ? 'true' : undefined}>
-                    <span class="swatch" style={{ background: op.color_hex }} aria-hidden="true" />
-                    {o.position}. {op.materials_he[0] ?? op.name_he}
-                  </a>
-                ) : (
-                  <span key={o.position} class="option-chip muted" aria-disabled="true">
-                    {o.position}. ממתינה למוצר
-                  </span>
+                const img = optionImage(where.slot.id, o.position);
+                return (
+                  <li key={o.position}>
+                    {img ? <img class="thumb" src={img} alt="" width={64} height={80} loading="lazy" /> : <span class="thumb" aria-hidden="true" />}
+                    {op ? (
+                      <span>
+                        {op.id === p.id ? (
+                          <span class="title" aria-current="true">
+                            {op.name_he}
+                          </span>
+                        ) : (
+                          <a href={productPath(op.id)}>{op.name_he}</a>
+                        )}
+                        <span class="detail">
+                          {[op.materials_he[0], op.id === p.id ? 'הדף הזה' : null].filter(Boolean).join(' · ')} · <Price agorot={op.price_agorot} />
+                        </span>
+                      </span>
+                    ) : (
+                      <span class="detail">וריאציה {o.position}: ממתינה למוצר</span>
+                    )}
+                  </li>
                 );
               })}
-            </div>
-          </div>
+            </ol>
+          </section>
           <dl class="specs-list">
             {p.materials_he.length ? (
               <>
@@ -142,7 +171,7 @@ export function Product({ p }: { p: PublicProduct }) {
               </button>
             </div>
           ) : (
-            <div class="buy-row">
+            <div class="buy-row" ref={buy}>
               <div class="qty" role="group" aria-label="כמות">
                 <button type="button" onClick={() => setQty(Math.min(20, qty + 1))} aria-label="הגדלת הכמות">
                   +
@@ -154,21 +183,8 @@ export function Product({ p }: { p: PublicProduct }) {
                   −
                 </button>
               </div>
-              <button
-                type="button"
-                class="btn btn-primary"
-                disabled={cartBusy.value || !v.available}
-                onClick={() =>
-                  void addToCart(
-                    v.variant_id,
-                    p.name_he,
-                    qty,
-                    pack,
-                    [v.option_he, p.pack ? packLabelHe(pack, p.pack.set_qty) : null].filter(Boolean).join(', ') || undefined,
-                  )
-                }
-              >
-                {v.available ? 'הוספה לסל' : 'אזל אצל הספק'}
+              <button type="button" class="btn btn-primary" disabled={cartBusy.value || !v.available} onClick={add}>
+                {!v.available ? 'אזל אצל הספק' : added ? 'נוסף לסל' : 'הוספה לסל'}
               </button>
               <button type="button" class="btn btn-ghost" onClick={showInRoom}>
                 הצגה בחדר
@@ -180,6 +196,14 @@ export function Product({ p }: { p: PublicProduct }) {
           </p>
         </div>
       </article>
+      {p.availability.status === 'available' && v.available ? (
+        <div class="buy-bar" hidden={!barOn}>
+          <Price class="price-big" agorot={price} />
+          <button type="button" class="btn btn-primary" disabled={cartBusy.value} onClick={add} tabIndex={barOn ? 0 : -1}>
+            {added ? 'נוסף לסל' : 'הוספה לסל'}
+          </button>
+        </div>
+      ) : null}
     </div>
   );
 }

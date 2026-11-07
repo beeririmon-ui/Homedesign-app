@@ -4,6 +4,7 @@ import './styles/base.css';
 import './styles/room.css';
 import './styles/wheel.css';
 import './styles/pages.css';
+import './styles/shop.css';
 import { hydrate, render } from 'preact';
 import { App } from './App';
 import { initRouter, onLinkClick } from './router';

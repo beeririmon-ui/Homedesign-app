@@ -158,7 +158,9 @@ export function Checkout({ failed }: { failed: boolean }) {
               כל השדות חובה, חוץ מדירה, מיקוד והערות.
             </p>
             <fieldset>
-              <legend>פרטי קשר</legend>
+              <legend>
+                <span class="num">1</span> פרטי קשר
+              </legend>
               {field('full_name', 'שם מלא', { autocomplete: 'name', required: true })}
               <div class="fields-2">
                 {field(
@@ -171,7 +173,9 @@ export function Checkout({ failed }: { failed: boolean }) {
               </div>
             </fieldset>
             <fieldset>
-              <legend>כתובת למשלוח</legend>
+              <legend>
+                <span class="num">2</span> כתובת למשלוח
+              </legend>
               <div class="fields-2">
                 {field('city', 'עיר', { autocomplete: 'address-level2', required: true })}
                 {field('street', 'רחוב', { autocomplete: 'address-line1', required: true })}
@@ -190,7 +194,9 @@ export function Checkout({ failed }: { failed: boolean }) {
               </div>
             </fieldset>
             <fieldset>
-              <legend>משלוח</legend>
+              <legend>
+                <span class="num">3</span> משלוח
+              </legend>
               {catalog.shipping.map((s) => {
                 const price = shippingFor(s.id, subtotal);
                 return (
@@ -239,7 +245,7 @@ export function Checkout({ failed }: { failed: boolean }) {
               {busy ? 'יוצרים את ההזמנה…' : 'מעבר לתשלום מאובטח'}
             </button>
           </form>
-          <aside class="card summary" aria-labelledby="sum-title">
+          <aside class="summary" aria-labelledby="sum-title">
             <h2 id="sum-title">ההזמנה</h2>
             <ul class="small" style={{ margin: 0, paddingInlineStart: 18 }}>
               {lines.map((l) => (

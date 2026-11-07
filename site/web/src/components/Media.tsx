@@ -106,12 +106,8 @@ export function Price({ agorot, provisional, class: cls }: { agorot: number; pro
   return (
     <span class={cls}>
       <span class="num">{formatIls(agorot)}</span>
-      {provisional ? (
-        <>
-          {' '}
-          <span class="badge badge-temp">מחיר זמני</span>
-        </>
-      ) : null}
+      {/* §6.6: "מחיר זמני" is not in the credit; the footer says once that the prices are temporary */}
+      {provisional ? <span class="sr-only"> (מחיר זמני)</span> : null}
     </span>
   );
 }

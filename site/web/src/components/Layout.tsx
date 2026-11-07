@@ -2,7 +2,6 @@ import type { ComponentChildren } from 'preact';
 import { useEffect, useRef } from 'preact/hooks';
 import { cartCount } from '../state/cart';
 import { announcement } from '../state/ui';
-import { IconBag, IconHouse } from './Icons';
 import type { Route } from '../router';
 
 export function Layout({ route, children }: { route: Route; children: ComponentChildren }) {
@@ -26,21 +25,17 @@ export function Layout({ route, children }: { route: Route; children: ComponentC
       </a>
       <header class="site-header">
         <div class="wrap">
+          {/* §6.2: the wordmark's place, words only ("הבית" until a name is chosen, ART5) */}
           <a class="brand" href="/" aria-label="דף הבית">
-            <IconHouse />
-            <span>הבית</span>
+            הבית
           </a>
           <nav class="nav" aria-label="ראשי">
             <a href="/rooms/living-room/" aria-current={route.name === 'room' ? 'page' : undefined}>
               סלון
             </a>
             <a href="/cart/" aria-current={route.name === 'cart' ? 'page' : undefined} aria-label={`סל הקניות, ${count} פריטים`}>
-              <IconBag />
-              <span class="hide-sm" aria-hidden="true">
-                סל
-              </span>
-              <span class="cart-count num" aria-hidden="true">
-                {count}
+              <span aria-hidden="true">
+                סל (<span class="cart-count num">{count}</span>)
               </span>
             </a>
           </nav>

@@ -1,6 +1,6 @@
 import { signal } from '@preact/signals';
 
-/** One polite live region for the whole app: announcements are also shown as a short toast. */
+/** One polite live region for the whole app: announcements are said, never shown (S6, §7.2: no toast). */
 export const announcement = signal<{ id: number; text: string } | null>(null);
 let n = 0;
 let timer: ReturnType<typeof setTimeout> | undefined;

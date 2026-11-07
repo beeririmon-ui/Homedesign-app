@@ -49,9 +49,10 @@ export function OrderPage({ id }: { id: string }) {
       ) : !order ? (
         <p role="status">טוען את ההזמנה…</p>
       ) : (
-        <div class="card summary" style={{ maxWidth: 560 }}>
+        // §9.5: lines, not a card; the order number in figures only, without a prefix (ART6)
+        <div class="order-sheet">
           <p>
-            מספר הזמנה: <strong class="num">{order.id}</strong>
+            מספר הזמנה: <strong class="num">{order.id.replace(/^\D+/, '')}</strong>
           </p>
           {step !== null ? (
             <ol class="order-steps" aria-label={`מצב ההזמנה: ${order.status_he}`}>

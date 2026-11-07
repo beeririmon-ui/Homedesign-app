@@ -1,0 +1,499 @@
+/* S6 (2026-11-07): the shop in the magazine language. docs/site-art-direction-2026-11-02.md §9 (the product page as a
+   spread, the cart, the checkout, the order), §6.2 (the head), §6.6–§6.8 (credits, lines not cards, states), §7.2–§7.3
+   (no toast, no dark scrim). Loaded after the shop's older sheets; every value is a token of styles/system.css. */
+
+/* ---------- one paper, lines not cards (§6.7) ---------- */
+.card {
+  background: none;
+  border: 0;
+  border-radius: var(--r-surface);
+  box-shadow: none;
+}
+/* a mark is a caption, never a capsule on a picture or a credit (§6.6, G5.21) */
+.badge,
+.badge-temp {
+  display: inline;
+  padding: 0;
+  border: 0;
+  border-radius: var(--r-surface);
+  background: none;
+  color: var(--ink-2);
+  font: 600 var(--t-cap) var(--f-text);
+}
+.eyebrow,
+.run-head {
+  font: 600 var(--t-run) var(--f-text);
+  color: var(--ink);
+}
+.page-head h1,
+.product-info h1 {
+  font: 300 var(--t-h1) var(--f-display);
+  text-wrap: balance;
+}
+.page-head h2,
+.cart-empty h2 {
+  font: 300 var(--t-h2) var(--f-display);
+}
+
+/* ---------- the head: words, no icons; "סל (1)" (§6.2) ---------- */
+.brand {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  min-width: 44px;
+  font: 300 var(--t-brand) var(--f-display);
+  color: var(--ink);
+  text-decoration: none;
+}
+.nav a {
+  min-height: 44px;
+  min-width: 44px;
+  justify-content: center;
+  font: 600 var(--t-btn) var(--f-text);
+  color: var(--ink);
+  text-decoration: none;
+}
+.nav a[aria-current='page'] {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+.nav .cart-count {
+  min-width: 0;
+  padding: 0;
+  border-radius: var(--r-surface);
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+/* §7.2: the confirmation is in the button itself and said aloud; nothing pops up */
+.live-region .toast {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+.site-footer a,
+.crumbs a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* ---------- buttons and controls (§6.8) ---------- */
+.btn {
+  border-radius: var(--r-control);
+  font: 600 var(--t-btn) var(--f-text);
+}
+.btn-secondary,
+.btn-ghost {
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--ink);
+}
+@media (hover: hover) {
+  .btn-secondary:hover,
+  .btn-ghost:hover {
+    background: rgba(58, 58, 58, 0.06);
+  }
+  .btn-primary:hover {
+    background: var(--ink-press);
+  }
+}
+.qty button {
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--rule-control);
+  border-radius: var(--r-control);
+  background: transparent;
+  color: var(--ink);
+  font: 400 var(--t-glyph-s) var(--f-text);
+}
+.qty output {
+  min-width: 2.5ch;
+  text-align: center;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+.link-btn {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* ---------- the shop's grid (§5.1): 4 / 8 / 12 columns ---------- */
+.product,
+.cart-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+  column-gap: var(--gap);
+  row-gap: var(--s-6);
+  align-items: start;
+}
+.product > *,
+.cart-grid > * {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+
+/* ---------- the product page as a spread (§9.1) ---------- */
+.product-info {
+  display: grid;
+  gap: var(--s-4);
+  align-content: start;
+}
+.price-row .price-big {
+  font: 400 var(--t-price) var(--f-text);
+  font-variant-numeric: tabular-nums lining-nums;
+}
+.price-row .small {
+  font: 400 var(--t-cap) var(--f-text);
+  color: var(--ink-2);
+}
+.product-info .lede {
+  font: 300 var(--t-lead) var(--f-text);
+  max-width: 30rem;
+}
+.slot-more {
+  display: grid;
+  gap: var(--s-2);
+}
+.slot-more h2 {
+  font: 600 var(--t-run) var(--f-text);
+}
+.slot-more ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-bottom: 1px solid var(--rule);
+}
+.slot-more li {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: var(--s-4);
+  align-items: center;
+  padding: var(--s-2) 0;
+  border-top: 1px solid var(--rule);
+}
+.slot-more .thumb,
+.line-thumb {
+  width: 64px;
+  height: 80px;
+  object-fit: contain;
+  background: var(--paper-2);
+}
+.slot-more a,
+.cart-line .title {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  font: 500 var(--t-credit) var(--f-display);
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--rule-control);
+  text-underline-offset: 3px;
+}
+.slot-more [aria-current='true'] {
+  text-decoration: none;
+}
+.slot-more .detail,
+.cart-line .detail {
+  font: 400 var(--t-detail) var(--f-text);
+  color: var(--ink-2);
+}
+.specs-list {
+  border-top: 1px solid var(--rule);
+  padding-top: var(--s-4);
+}
+.specs-list dt {
+  color: var(--ink-2);
+}
+.buy-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+  align-items: center;
+}
+/* §9.1, the phone: "הוספה לסל" stays at hand on a paper band once the button has left the screen */
+.buy-bar {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-4);
+  padding: var(--s-3) var(--gutter) calc(env(safe-area-inset-bottom, 0px) + var(--s-3));
+  background: var(--paper);
+  border-top: 1px solid var(--rule);
+}
+.buy-bar[hidden] {
+  display: none;
+}
+@media (max-width: 719px) {
+  .product-media {
+    margin-inline: calc(var(--gutter) * -1);
+  }
+}
+@media (min-width: 720px) {
+  .buy-bar {
+    display: none;
+  }
+}
+@media (min-width: 1024px) {
+  .product-media {
+    grid-column: 1 / span 7;
+  }
+  .product-info {
+    grid-column: 9 / span 4;
+    position: sticky;
+    top: calc(var(--header-h) + var(--s-5));
+  }
+}
+
+/* ---------- the cart (§9.3) ---------- */
+.cart-lines {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-bottom: 1px solid var(--rule);
+}
+.cart-line {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr) auto;
+  gap: var(--s-4);
+  align-items: start;
+  padding: var(--s-4) 0;
+  border-top: 1px solid var(--rule);
+}
+.cart-line .controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+  align-items: center;
+  margin-top: var(--s-2);
+}
+.cart-line .line-total {
+  font: 400 var(--t-detail) var(--f-text);
+  font-variant-numeric: tabular-nums lining-nums;
+}
+.summary {
+  display: grid;
+  gap: var(--s-3);
+  padding: 0;
+}
+.summary h2 {
+  font: 600 var(--t-run) var(--f-text);
+}
+.summary .btn-primary {
+  width: 100%;
+}
+.cart-empty {
+  display: grid;
+  gap: var(--s-4);
+}
+.cart-empty img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+.cart-empty a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+@media (max-width: 719px) {
+  /* the phone: the sum first, the button at hand at the foot (§9.3) */
+  .cart-grid > .summary {
+    order: -1;
+  }
+  .cart-grid .summary .btn-primary {
+    position: sticky;
+    bottom: calc(env(safe-area-inset-bottom, 0px) + var(--s-3));
+  }
+}
+@media (min-width: 1024px) {
+  .cart-grid > .cart-lines,
+  .cart-grid > .form {
+    grid-column: 1 / span 7;
+  }
+  .cart-grid > .summary {
+    grid-column: 9 / span 4;
+    position: sticky;
+    top: calc(var(--header-h) + var(--s-5));
+  }
+}
+
+/* ---------- the checkout (§9.4): one column, numbered parts, lines between choices ---------- */
+.form {
+  max-width: 40rem;
+}
+.form legend {
+  font: 500 var(--t-h3) var(--f-display);
+}
+.field input,
+.field select,
+.field textarea {
+  min-height: 48px;
+  border: 1px solid var(--rule-control);
+  border-radius: var(--r-control);
+  font: 400 var(--t-input) var(--f-text);
+}
+.choice {
+  border: 0;
+  border-top: 1px solid var(--rule);
+  border-radius: var(--r-surface);
+  background: none;
+  min-height: 56px;
+}
+.choice:last-of-type {
+  border-bottom: 1px solid var(--rule);
+}
+.check {
+  min-height: 44px;
+  align-items: center;
+}
+.check input {
+  width: 24px;
+  height: 24px;
+}
+.error-summary {
+  border: 0;
+  border-inline-start: 2px solid var(--error);
+  border-radius: var(--r-surface);
+  background: none;
+  padding-inline-start: var(--s-4);
+}
+.field .err::before,
+.error-summary h2::before {
+  content: '⚠ ';
+}
+@media (max-width: 719px) {
+  .form .btn-primary {
+    width: 100%;
+  }
+}
+
+/* ---------- the order (§9.5): the status as words, an ink line of progress; the number in figures ---------- */
+.order-sheet {
+  display: grid;
+  gap: var(--s-4);
+  max-width: 40rem;
+}
+.order-steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2) var(--s-4);
+  list-style: none;
+  margin: 0;
+  padding: var(--s-3) 0 0;
+  border-top: 1px solid var(--rule);
+  font: 600 var(--t-btn) var(--f-text);
+  color: var(--ink-2);
+}
+.order-steps li {
+  padding-top: var(--s-2);
+  border-top: 2px solid transparent;
+}
+.order-steps li.done,
+.order-steps li[aria-current='step'] {
+  color: var(--ink);
+  border-top-color: var(--ink);
+}
+.status-pill {
+  padding: 0;
+  border-radius: var(--r-surface);
+  background: none;
+  color: var(--ink);
+  font: 600 var(--t-btn) var(--f-text);
+}
+
+/* ---------- lists of rooms and products under a stage: credits on hairlines ---------- */
+.slot-list .slot-item {
+  border-top: 1px solid var(--rule);
+  padding: var(--s-3) 0;
+}
+.slot-item .thumb {
+  border-radius: var(--r-surface);
+}
+.slot-item .meta a,
+.slot-item .small a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+.slot-item .meta strong {
+  font: 500 var(--t-credit) var(--f-display);
+}
+
+/* ---------- the opening (home): no dark veil; the words on a soft paper ground (§7.3, §8) ---------- */
+.hero .veil {
+  display: none;
+}
+.hero .content {
+  margin: 0 var(--gutter) calc(env(safe-area-inset-bottom, 0px) + var(--s-7));
+  padding: var(--s-5);
+  background: var(--label);
+  box-shadow: var(--sh-label);
+  color: var(--ink);
+}
+.hero h1 {
+  font: 300 var(--t-display) var(--f-display);
+}
+.hero p {
+  color: var(--ink-2);
+  font: 300 var(--t-lead) var(--f-text);
+}
+.hero .eyebrow {
+  color: var(--ink);
+}
+.hero .btn-primary {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+/* ---------- the wheel: no dark scrim over the room; its words sit on paper (§6.5, §7.3) ---------- */
+.picker {
+  background: none;
+  color: var(--ink);
+}
+.picker-head,
+.picker-info,
+.picker-actions {
+  justify-self: center;
+  padding: var(--s-2) var(--s-4);
+  border-radius: var(--r-control);
+  background: var(--label);
+  box-shadow: var(--sh-label);
+  color: var(--ink);
+}
+.picker-head .eyebrow {
+  color: var(--ink-2);
+}
+.picker-info .specs {
+  color: var(--ink-2);
+}
+.pips i {
+  background: var(--rule-control);
+}
+.pips i.on {
+  background: var(--ink);
+}
+.picker-actions .btn-primary {
+  background: var(--ink);
+  color: var(--paper);
+}
+.picker-actions .btn-ghost,
+.picker-actions a.btn-ghost {
+  color: var(--ink);
+  border-color: var(--ink);
+  background: transparent;
+}
+.arc-card .oos-tag {
+  background: var(--label);
+  color: var(--ink);
+}

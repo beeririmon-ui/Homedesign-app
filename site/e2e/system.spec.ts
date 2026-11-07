@@ -3,7 +3,8 @@
  * that a page can be measured against, on every page type, at 400 and 1280.
  *
  *  - G5.18 fonts: only Frank Ruhl Libre and Assistant are loaded and named first on text
- *  - G5.19 type: letter-spacing 0, inputs at least 16 px, nothing justified; line length (a proposal: recorded)
+ *  - G5.19 type: letter-spacing 0, inputs at least 16 px, nothing justified; line length in Hebrew (design notes §10,
+ *    2026-11-07): running text 50–60 characters on the phone and 52–68 on the desktop, a caption at most 75 and 3 lines
  *  - G5.20 grid: at least 24 px margins on the phone (the stage and full-bleed pictures excepted)
  *  - G7.7 targets: every control at least 44 × 44 (an inline link in running text is WCAG 2.5.8's exception)
  *  - G5.16 focus: every stop of the Tab order shows a ring
@@ -11,7 +12,7 @@
  *  - G7.8 reflow: 320 px wide without a sideways scroll
  *
  * The magazine pages (the story, the detail pages, the story's shop) must pass; the shop and the room engine are
- * measured and recorded, and move to the magazine grid with §9. The table goes to .generated/system/ (untracked; Playwright clears test-results/ on every run);
+ * held to the same since S6 (§9: the shop in the magazine language). The table goes to .generated/system/ (untracked; Playwright clears test-results/ on every run);
  * the evidence step copies it to qa/reports/…/s5/.
  */
 import { mkdirSync, writeFileSync } from 'node:fs';
@@ -33,7 +34,8 @@ const MAGAZINE = [
   '/story/order/',
   '/story/living-room/warm-modern/tool/',
 ];
-const SHOP = ['/rooms/living-room/', productPath('vase-cj-textured-white-stoneware'), '/cart/', '/checkout/'];
+// S6: the shop's pages are held to the same gates; the cart and the checkout are measured with a line in the cart
+const SHOP = ['/', '/rooms/living-room/', productPath('vase-cj-textured-white-stoneware'), '/cart/', '/checkout/'];
 
 /** what one page measures as, in the page itself */
 async function measure(page: Page) {
@@ -75,16 +77,19 @@ async function measure(page: Page) {
       visible,
     );
     const smallInputs = inputs.filter((el) => parseFloat(getComputedStyle(el).fontSize) < 16);
+    // a caption (13 px: .mag-cap, .small, a hint) or running text; a paragraph of one line says nothing about its measure
     const cpl = Array.from(document.querySelectorAll('p'))
-      .filter((p) => visible(p) && (p.textContent ?? '').trim().length >= 140 && !onStage(p))
+      .filter((p) => visible(p) && !onStage(p) && (p.textContent ?? '').trim().length >= 60)
       .map((p) => {
         const range = document.createRange();
         range.selectNodeContents(p);
         const tops = new Set(Array.from(range.getClientRects()).map((r) => Math.round(r.top)));
         const lines = Math.max(1, tops.size);
         const len = (p.textContent ?? '').trim().length;
-        return { at: name(p), cpl: Math.round(lines > 1 ? len / (lines - 0.5) : len) };
-      });
+        const cap = parseFloat(getComputedStyle(p).fontSize) <= 14;
+        return { at: name(p), cap, lines, len, cpl: Math.round(lines > 1 ? len / (lines - 0.5) : len) };
+      })
+      .filter((x) => x.lines > 1);
     // G5.20 (the phone): text off the stage keeps 24 px from both edges
     const margins = texts
       .filter((el) => !onStage(el) && !el.closest('.mag-head, .site-header, .mag-live, .sr-only, .live-region, .mag-skip, .skip-link'))
@@ -179,14 +184,23 @@ function record(url: string, width: number, m: Awaited<ReturnType<typeof measure
   add('G5.19 letter-spacing 0', !m.spaced.length, m.spaced.length, m.spaced);
   add('G5.19 not justified', !m.justified.length, m.justified.length, m.justified);
   add('G5.19 inputs ≥ 16 px', !m.smallInputs.length, m.smallInputs.length, m.smallInputs);
-  const [lo, hi] = width < 720 ? [38, 46] : [52, 68];
-  const off = m.cpl.filter((x) => x.cpl < lo - 6 || x.cpl > hi + 4);
+  // design notes §10: the measured Hebrew targets. The estimate (length over lines less half a line) is good to ±3
+  const [lo, hi] = width < 720 ? [50, 60] : [52, 68];
+  const body = m.cpl.filter((x) => !x.cap && x.lines >= 3);
+  const offBody = body.filter((x) => x.cpl < lo - 3 || x.cpl > hi + 3);
   add(
-    `G5.19 line length ${lo}–${hi} (proposal)`,
-    !off.length,
-    m.cpl,
-    off.map((x) => `${x.at} ${x.cpl}`),
-    false,
+    `G5.19 running text ${lo}–${hi} a line`,
+    !offBody.length,
+    body,
+    offBody.map((x) => `${x.at} ${x.cpl}`),
+  );
+  const caps = m.cpl.filter((x) => x.cap);
+  const offCap = caps.filter((x) => x.cpl > 75 + 3 || x.lines > 3);
+  add(
+    'G5.19 caption ≤ 75 a line, ≤ 3 lines',
+    !offCap.length,
+    caps,
+    offCap.map((x) => `${x.at} ${x.cpl}×${x.lines}`),
   );
   if (width < 720) add('G5.20 margins ≥ 24 px', !m.margins.length, m.margins.length, m.margins);
   add('G7.7 targets ≥ 44 × 44', !m.small.length, m.small.length, m.small);
@@ -205,7 +219,7 @@ test.describe('the design system, measured (S5)', () => {
           date: new Date().toISOString().slice(0, 10),
           by: 'frontend-dev, e2e/system.spec.ts',
           gates: 'docs/ops/quality-gates-2026-11-02.md (G5.16, G5.18, G5.19, G5.20, G5.23, G7.7, G7.8)',
-          pages: { magazine: MAGAZINE, shop_recorded: SHOP },
+          pages: { magazine: MAGAZINE, shop: SHOP },
           summary: {
             rows: rows.length,
             passed: rows.length - failed.length,
@@ -236,16 +250,23 @@ test.describe('the design system, measured (S5)', () => {
         const ring = await focusRing(page);
         record(url, width, m, ring, true);
       }
-      const bad = rows.filter((r) => r.width === width && r.hard && !r.ok);
+      const bad = rows.filter((r) => r.width === width && r.hard && !r.ok && MAGAZINE.includes(r.page));
       expect(bad.map((r) => `${r.page} ${r.gate}: ${JSON.stringify(r.where ?? r.value)}`)).toEqual([]);
     });
-    test(`the shop and the room engine at ${width}, recorded`, async ({ page }) => {
+    test(`the shop and the room engine at ${width}`, async ({ page }) => {
       test.setTimeout(240_000);
       await page.setViewportSize({ width, height: width < 720 ? 860 : 800 });
       for (const url of SHOP) {
+        if (url === '/cart/') {
+          // the cart and the checkout with a line in the cart (the product page before them adds it)
+          await page.getByRole('button', { name: 'הוספה לסל' }).first().click();
+          await expect(page.locator('.cart-count')).not.toHaveText('0');
+        }
         await open(page, url);
-        record(url, width, await measure(page), await focusRing(page, 20), false);
+        record(url, width, await measure(page), await focusRing(page, 20), true);
       }
+      const bad = rows.filter((r) => r.width === width && r.hard && !r.ok && SHOP.includes(r.page));
+      expect(bad.map((r) => `${r.page} ${r.gate}: ${JSON.stringify(r.where ?? r.value)}`)).toEqual([]);
     });
   }
 
@@ -255,9 +276,9 @@ test.describe('the design system, measured (S5)', () => {
     for (const url of [...MAGAZINE, ...SHOP]) {
       await open(page, url);
       const m = await measure(page);
-      const hard = MAGAZINE.includes(url);
+      const hard = true;
       rows.push({ gate: 'G7.8 reflow at 320 px', page: url, width: 320, ok: m.scroll <= 0, hard, value: m.scroll });
-      if (hard) expect(m.scroll, url).toBeLessThanOrEqual(0);
+      expect(m.scroll, url).toBeLessThanOrEqual(0);
     }
   });
 });

@@ -1,7 +1,7 @@
 import { productPath } from '@hd/shared/product-url';
 import { useEffect } from 'preact/hooks';
-import { catalog } from '../catalog';
-import { Price } from '../components/Media';
+import { catalog, livingRoom, scene } from '../catalog';
+import { Picture, Price, productImage } from '../components/Media';
 import { shippingFor } from './Checkout';
 import { cart, cartBusy, cartError, loadCart, setQty } from '../state/cart';
 import { lineLabelHe } from './lineLabel';
@@ -25,60 +25,67 @@ export function CartPage() {
         </p>
       ) : null}
       {!lines.length ? (
-        <div class="notice">
-          <p>הסל ריק.</p>
+        // §9.3: the empty cart says so, and shows the room to go back to
+        <div class="cart-empty">
+          <h2>הסל ריק.</h2>
+          <Picture src={scene.base[0]!.src} widths={scene.base[0]!.widths} sizes="(min-width: 1024px) 58vw, 100vw" alt="" loading="lazy" />
           <p>
-            <a href="/rooms/living-room/">חזרה לסלון</a>
+            <a href={`/rooms/${livingRoom.id}/`}>חזרה ל{livingRoom.name_he}</a>
           </p>
         </div>
       ) : (
         <div class="cart-grid">
           <ul class="cart-lines" aria-label="פריטים בסל">
             {lines.map((l) => (
-              <li key={`${l.variant_id}:${l.pack}`} class="card cart-line">
+              <li key={`${l.variant_id}:${l.pack}`} class="cart-line">
+                {productImage(l.product_id) ? (
+                  <img class="line-thumb" src={productImage(l.product_id)!} alt="" width={64} height={80} loading="lazy" />
+                ) : (
+                  <span class="line-thumb" aria-hidden="true" />
+                )}
                 <div>
                   <a class="title" href={productPath(l.product_id)}>
                     {l.name_he}
                   </a>
-                  {lineLabelHe(l) ? <p class="small pack-line">{lineLabelHe(l)}</p> : null}
-                  <p class="small muted">
+                  {lineLabelHe(l) ? <p class="detail pack-line">{lineLabelHe(l)}</p> : null}
+                  <p class="detail">
                     <Price agorot={l.unit_price_agorot} provisional={l.price_provisional} /> {l.pack === 'set' && l.pack_qty > 1 ? 'לסט' : 'ליחידה'}
                   </p>
-                </div>
-                <Price agorot={l.line_total_agorot} class="num" />
-                <div class="controls">
-                  <div class="qty" role="group" aria-label={`כמות של ${l.name_he}${lineLabelHe(l) ? `, ${lineLabelHe(l)}` : ''}`}>
-                    <button
-                      type="button"
-                      disabled={cartBusy.value || l.qty >= 20}
-                      onClick={() => void setQty(l.variant_id, l.pack, l.qty + 1, `כמות עודכנה: ${l.qty + 1}`)}
-                      aria-label="הגדלת הכמות"
-                    >
-                      +
-                    </button>
-                    <output aria-label={`כמות: ${l.qty}`}>{l.qty}</output>
-                    <button
-                      type="button"
-                      disabled={cartBusy.value || l.qty <= 1}
-                      onClick={() => void setQty(l.variant_id, l.pack, l.qty - 1, `כמות עודכנה: ${l.qty - 1}`)}
-                      aria-label="הקטנת הכמות"
-                    >
-                      −
+                  <div class="controls">
+                    <div class="qty" role="group" aria-label={`כמות של ${l.name_he}${lineLabelHe(l) ? `, ${lineLabelHe(l)}` : ''}`}>
+                      <button
+                        type="button"
+                        disabled={cartBusy.value || l.qty >= 20}
+                        onClick={() => void setQty(l.variant_id, l.pack, l.qty + 1, `כמות עודכנה: ${l.qty + 1}`)}
+                        aria-label="הגדלת הכמות"
+                      >
+                        +
+                      </button>
+                      <output aria-label={`כמות: ${l.qty}`}>{l.qty}</output>
+                      <button
+                        type="button"
+                        disabled={cartBusy.value || l.qty <= 1}
+                        onClick={() => void setQty(l.variant_id, l.pack, l.qty - 1, `כמות עודכנה: ${l.qty - 1}`)}
+                        aria-label="הקטנת הכמות"
+                      >
+                        −
+                      </button>
+                    </div>
+                    <button type="button" class="link-btn" disabled={cartBusy.value} onClick={() => void setQty(l.variant_id, l.pack, 0, 'הוסר מהסל')}>
+                      הסרה
+                      <span class="sr-only">
+                        {' '}
+                        של {l.name_he}
+                        {lineLabelHe(l) ? `, ${lineLabelHe(l)}` : ''}
+                      </span>
                     </button>
                   </div>
-                  <button type="button" class="link-btn" disabled={cartBusy.value} onClick={() => void setQty(l.variant_id, l.pack, 0, 'הוסר מהסל')}>
-                    הסרה
-                    <span class="sr-only">
-                      {' '}
-                      של {l.name_he}
-                      {lineLabelHe(l) ? `, ${lineLabelHe(l)}` : ''}
-                    </span>
-                  </button>
                 </div>
+                <Price agorot={l.line_total_agorot} class="line-total" />
               </li>
             ))}
           </ul>
-          <aside class="card summary" aria-labelledby="summary-title">
+          <aside class="summary" aria-labelledby="summary-title">
             <h2 id="summary-title">סיכום</h2>
             <dl>
               <dt>סכום ביניים</dt>
