@@ -18,6 +18,7 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { test, expect, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+import { productSlug } from '@hd/shared/product-url';
 
 type Ev = { t: number; name: string; detail?: unknown };
 /** the hooks web/src/story/story.ts exposes */
@@ -275,7 +276,7 @@ test.describe('the other houses', () => {
     await page.goto(BOHO);
     await expect(page.locator('h1')).toHaveText('בית אבן ישן בנמל, 16:00');
     await expect(page.locator('#frame-A')).toHaveClass(/is-title/, { timeout: 15_000 });
-    await expect(page.locator('#frame-A img').first()).toHaveAttribute('src', /boho-A-fin7/);
+    expect(resolved[BOHO]!.states![0]![1]).toBe('boho-A-fin7');
     await expect(page.locator('#frame-A .st-draft')).toHaveText(MARK[stateOf(BOHO)!]!);
     // the register says which products have a dot (v4: the planter's base is natural now, so all nine)
     await expect(page.locator('#frame-A .st-mark')).toHaveCount(Object.values(resolved[BOHO]!.items!).filter((x) => x.dot).length);
@@ -283,6 +284,10 @@ test.describe('the other houses', () => {
     // register v4 (G-ED.6): the second rust cushion is a second unit of ours: the credit says so, and the look adds two
     const rust = page.locator('#list-A .st-credit', { hasText: 'חלודה' });
     await expect(rust).toContainText('בתמונה: שתי יחידות.');
+    await page.evaluate((id) => window.__story!.openSheet(id), (await rust.getAttribute('data-item'))!);
+    await expect(page.getByRole('dialog')).toContainText('בתמונה: שתי יחידות.');
+    await page.keyboard.press('Escape');
+    await expect(page.getByRole('dialog')).toBeHidden();
     await expect(page.locator('#list-A .st-look-units')).toContainText('שתי יחידות');
     await page.locator('#look-A').click();
     const want = Object.values(resolved[BOHO]!.items!).filter((x) => x.dot && x.status === 'available' && x.variant_id);
@@ -310,7 +315,7 @@ test.describe('the other houses', () => {
   });
 });
 
-const DETAIL = (style: string, product: string) => `/story/living-room/${style}/p/${product}/`;
+const DETAIL = (style: string, product: string) => `/story/living-room/${style}/p/${productSlug(product)}/`;
 test.describe('the detail page (layer 2, "הפרט")', () => {
   test('the sheet leads to it: the card, the price, the empty close-up slot, the frame it came from, and the test cart', async ({ page }) => {
     await page.goto(NORDIC);
@@ -412,7 +417,7 @@ test.describe('the detail page, after the designer (§6)', () => {
   test("QA on S2: a dot of another option opens the detail page on that option (the Mediterranean's terracotta cushion)", async ({ page }) => {
     await page.goto(MED);
     await page.evaluate(() => window.__story!.openSheet('A-7'));
-    await expect(page.locator('#st-page')).toHaveAttribute('href', /\/p\/cushions-cj-washed-cotton-frayed\/\?size=50x50&other=earthy-orange$/);
+    await expect(page.locator('#st-page')).toHaveAttribute('href', new RegExp(`/p/${productSlug('cushions-cj-washed-cotton-frayed')}/\\?size=50x50&other=earthy-orange$`));
     await page.locator('#st-page').click();
     await expect(page.locator('h1')).toHaveText('ציפית כרית כותנה רחוצה עם שוליים פרומים, טרקוטה');
     await expect(page.locator('#st-pd-story-note')).toContainText('לבן');

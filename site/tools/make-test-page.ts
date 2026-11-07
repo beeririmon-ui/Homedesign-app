@@ -21,6 +21,7 @@ import sharp from 'sharp';
 import { formatIls } from '@hd/shared/money';
 import type { PublicCatalog, PublicProduct, SupplierImageManifest } from '@hd/shared';
 import { GENERATED, MEDIA_OUT, repoPath, sitePath } from './lib/paths';
+import { productPath } from '@hd/shared/product-url';
 
 type Frame = {
   src: string;
@@ -60,7 +61,7 @@ if (!existsSync(catalogPath)) {
   process.exit(1);
 }
 const catalog = JSON.parse(readFileSync(catalogPath, 'utf8')) as PublicCatalog;
-// the products that have a page on the site (/p/<id>/, the site's built rooms): their credit name is a link (§6.5)
+// the products that have a page on the site (/p/<slug>/, the site's built rooms): their credit name is a link (§6.5)
 const sitePages = new Set<string>(
   existsSync(join(GENERATED, 'catalog.public.json'))
     ? (JSON.parse(readFileSync(join(GENERATED, 'catalog.public.json'), 'utf8')) as PublicCatalog).products.map((x) => x.id)
@@ -110,7 +111,7 @@ function credit(p: PublicProduct, placement: string): Credit {
     price_he: formatIls(p.price_agorot),
     unavailable: p.availability.status !== 'available',
     thumb: img ? `/media/${img.src}.webp` : null,
-    href: sitePages.has(p.id) ? `/p/${p.id}/` : null,
+    href: sitePages.has(p.id) ? productPath(p.id) : null,
   };
 }
 

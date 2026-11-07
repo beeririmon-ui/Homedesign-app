@@ -5,6 +5,7 @@
 import { readFileSync, writeFileSync, mkdirSync, rmSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { productPath } from '@hd/shared/product-url';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const dist = resolve(here, '../dist');
@@ -19,7 +20,8 @@ const template = readFileSync(resolve(dist, 'index.html'), 'utf8');
 const routes = [
   '/',
   ...catalog.rooms.filter((r) => r.built).map((r) => `/rooms/${r.id}/`),
-  ...catalog.products.map((p) => `/p/${p.id}/`),
+  // S5: the neutral address (@hd/shared/product-url); the old one by card id moves there (_redirects below)
+  ...catalog.products.map((p) => productPath(p.id)),
   '/accessibility/',
   '/terms/',
   '/privacy/',
@@ -42,6 +44,19 @@ for (const url of routes) {
 mkdirSync(resolve(dist, 'order'), { recursive: true });
 writeFileSync(resolve(dist, 'order/index.html'), page('/order/HD-00000000/').replace(/HD-00000000/g, ''));
 writeFileSync(resolve(dist, '404.html'), page('/404'));
+// the old product addresses (by card id) move to the neutral ones, permanently; the story's own lines are appended by
+// tools/make-story.ts's list (.generated/story-redirects.txt) when it exists
+const storyRedirects = (() => {
+  try {
+    return readFileSync(resolve(here, '../../.generated/story-redirects.txt'), 'utf8').trim();
+  } catch {
+    return '';
+  }
+})();
+writeFileSync(
+  resolve(dist, '_redirects'),
+  [...catalog.products.map((p) => `/p/${p.id}/ ${productPath(p.id)} 301`), ...(storyRedirects && process.env.HD_PUBLIC !== '1' ? [storyRedirects] : [])].join('\n') + '\n',
+);
 // robots.txt and sitemap.xml (absolute URLs; ORIGIN changes when the domain is chosen)
 const indexable = routes.filter((u) => !['/cart/', '/checkout/'].includes(u));
 writeFileSync(

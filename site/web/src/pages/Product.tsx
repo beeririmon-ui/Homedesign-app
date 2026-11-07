@@ -1,3 +1,4 @@
+import { productPath } from '@hd/shared/product-url';
 import { useEffect, useState } from 'preact/hooks';
 import type { Pack, PublicProduct } from '@hd/shared';
 import { packLabelHe } from '@hd/shared/packs';
@@ -88,7 +89,7 @@ export function Product({ p }: { p: PublicProduct }) {
               {where.slot.options.map((o) => {
                 const op = product(o.product_id);
                 return op ? (
-                  <a key={o.position} class="option-chip" href={`/p/${op.id}/`} aria-current={op.id === p.id ? 'true' : undefined}>
+                  <a key={o.position} class="option-chip" href={productPath(op.id)} aria-current={op.id === p.id ? 'true' : undefined}>
                     <span class="swatch" style={{ background: op.color_hex }} aria-hidden="true" />
                     {o.position}. {op.materials_he[0] ?? op.name_he}
                   </a>

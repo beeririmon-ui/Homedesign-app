@@ -3,6 +3,7 @@
  * arrow keys, and visible previous/next buttons. Semantics: a modal dialog with a radio group; moving between
  * options previews them live in the room behind, Enter or "בחירה" confirms, Escape cancels.
  */
+import { productPath } from '@hd/shared/product-url';
 import { useEffect, useLayoutEffect, useRef, useState } from 'preact/hooks';
 import type { CatalogSlot, Pack } from '@hd/shared';
 import { packLabelHe } from '@hd/shared/packs';
@@ -323,7 +324,7 @@ export function VariantWheel({ slot, roomId, initial, onPreview, onChoose, onCan
           {p && (slot.on_hold || p.availability.status !== 'available') ? (
             <>
               <Waitlist product_id={p.id} id={`wl-wheel-${slot.id}`} onStage />
-              <a class="btn btn-ghost" href={`/p/${p.id}/`}>
+              <a class="btn btn-ghost" href={productPath(p.id)}>
                 לעמוד המוצר
               </a>
             </>
@@ -342,7 +343,7 @@ export function VariantWheel({ slot, roomId, initial, onPreview, onChoose, onCan
               >
                 הוספה לסל
               </button>
-              <a class="btn btn-ghost" href={`/p/${p.id}/`}>
+              <a class="btn btn-ghost" href={productPath(p.id)}>
                 לעמוד המוצר
               </a>
             </>

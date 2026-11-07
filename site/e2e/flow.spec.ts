@@ -1,4 +1,5 @@
 import { test, expect, devices, type Page } from '@playwright/test';
+import { productPath } from '@hd/shared/product-url';
 
 async function roomReady(page: Page) {
   await page.goto('/rooms/living-room/');
@@ -158,7 +159,7 @@ test.describe('room experience', () => {
 });
 
 test.describe('product gallery (FR-I)', () => {
-  const PRODUCT = '/p/vase-cj-textured-white-stoneware/';
+  const PRODUCT = productPath('vase-cj-textured-white-stoneware');
 
   test('the render leads with a visible note, the supplier photo follows; buttons, keys and the live region move between them', async ({ page }) => {
     await page.goto(PRODUCT);
@@ -274,7 +275,7 @@ test.describe('store', () => {
   });
 
   test('set or single piece (P1): the set is the default, one piece has its own price, the cart keeps both apart', async ({ page }) => {
-    const SET = '/p/candle-holders-cj-travertine-pedestal/';
+    const SET = productPath('candle-holders-cj-travertine-pedestal');
     await page.goto(SET);
     const group = page.getByRole('radiogroup', { name: 'איך לקנות' });
     await expect(group).toBeVisible();

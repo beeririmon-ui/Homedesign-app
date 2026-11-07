@@ -8,6 +8,7 @@ import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { PublicCatalog } from '../shared/src/catalog';
+import { productPath, productSlug } from '@hd/shared/product-url';
 
 // a product with supplier options (2026-10-11), the most axes first: swatches, chips and a list on one page
 const catalog = JSON.parse(readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), '../.generated/catalog.public.json'), 'utf8')) as PublicCatalog;
@@ -47,7 +48,7 @@ for (const scheme of ['light'] as const) {
       '/test/',
       '/story/',
       '/story/living-room/japandi/',
-      '/story/living-room/nordic/p/cushions-cj-boucle-teddy/',
+      `/story/living-room/nordic/p/${productSlug('cushions-cj-boucle-teddy')}/`,
     ]) {
       test(`page ${path}`, async ({ page }) => {
         await page.goto(path);
@@ -68,7 +69,7 @@ for (const scheme of ['light'] as const) {
 
     test('a product with supplier options: swatches, chips or a list, another option chosen', async ({ page }) => {
       test.skip(!WITH_OPTIONS, 'no product with options in the catalog');
-      await page.goto(`/p/${WITH_OPTIONS!.id}/`);
+      await page.goto(productPath(WITH_OPTIONS!.id));
       const picker = page.locator('.opt-picker');
       await expect(picker).toBeVisible();
       await audit(page, `${scheme} options, the room's option`);
@@ -78,7 +79,7 @@ for (const scheme of ['light'] as const) {
     });
 
     test('a set product (set or single piece), and its wheel', async ({ page }) => {
-      await page.goto('/p/candle-holders-cj-travertine-pedestal/');
+      await page.goto(productPath('candle-holders-cj-travertine-pedestal'));
       await expect(page.getByRole('radiogroup', { name: 'איך לקנות' })).toBeVisible();
       await page.getByRole('radio', { name: /^יחידה אחת/ }).check();
       await audit(page, `${scheme} set product`);

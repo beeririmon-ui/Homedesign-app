@@ -31,6 +31,7 @@ import sharp from 'sharp';
 import { formatIls } from '@hd/shared/money';
 import { expandOptions, type FullCatalog, type FullProduct, type PublicCatalog } from '@hd/shared';
 import { availableValues, selectionOf } from '@hd/shared/picker';
+import { productSlug, slugIndex } from '@hd/shared/product-url';
 import { colorNameHe, materialsHe } from './lib/hebrew';
 import { GENERATED, MEDIA_OUT, repoPath, sitePath } from './lib/paths';
 import { cardOf, registerReader, rowOf, type QaFrame, type QaState } from './lib/qa-frames';
@@ -214,7 +215,9 @@ async function productCrop(img: sharp.Sharp, W: number, H: number, box: Box, v: 
   return { src: `${url}/${key}.p${ow}.webp`, srcset: '', w: ow, h: Math.round((ow * h) / w) };
 }
 /** layer 2, "הפרט": a product's page in one house (its close-ups are in that house's light) */
-const detailHref = (room: string, style: string, product: string) => `/story/${room}/${style}/p/${product}/`;
+// S5: the neutral address (@hd/shared/product-url: no supplier, no product number); the old one moves there
+const detailHref = (room: string, style: string, product: string) => `/story/${room}/${style}/p/${productSlug(product)}/`;
+const oldDetailHref = (room: string, style: string, product: string) => `/story/${room}/${style}/p/${product}/`;
 /**
  * The product's part of the frame as a 4:5 crop around its box (at least 0.3 of the frame's height, so a small product
  * keeps its surroundings), at 320 and 640 wide, never enlarged: "בחדר הזה" on the detail page. Named by the box, so a
@@ -941,7 +944,7 @@ const rows = (f: FrameOut) =>
   f.items
     .map(
       (x) =>
-        `<li class="mag-credit st-credit" data-item="${x.id}"><span class="mag-credit-n num">${String(x.n).padStart(2, '0')}</span>${swatch(x)}<span class="mag-credit-body"><button type="button" class="st-open" data-item="${x.id}" aria-haspopup="dialog"><span class="mag-credit-name">${esc(x.name_he)}</span></button><span class="mag-credit-detail">${esc(x.detail_he)}${x.status === 'unavailable' ? ' · המלאי אינו זמין כעת' : ''}</span>${x.dot ? '' : '<span class="mag-credit-detail st-no-dot">בלי נקודה בתמונה: כאן הוא עוד לא נאמן לכרטיס במלואו.</span>'}</span></li>`,
+        `<li class="mag-credit st-credit" data-item="${x.id}"><span class="mag-credit-n num">${String(x.n).padStart(2, '0')}</span>${swatch(x)}<span class="mag-credit-body"><button type="button" class="st-open" data-item="${x.id}" aria-haspopup="dialog"><span class="mag-credit-name">${esc(x.name_he)}</span></button><span class="mag-credit-detail">${esc(x.detail_he)}${x.status === 'unavailable' ? ' · המלאי אינו זמין כעת' : ''}</span>${x.in_frame_he ? `<span class="mag-credit-detail st-in-frame">${esc(x.in_frame_he)}</span>` : ''}${x.dot ? '' : '<span class="mag-credit-detail st-no-dot">בלי נקודה בתמונה: כאן הוא עוד לא נאמן לכרטיס במלואו.</span>'}</span></li>`,
     )
     .join('\n');
 /**
@@ -1557,6 +1560,12 @@ writeFileSync(
 );
 mkdirSync(GENERATED, { recursive: true });
 writeFileSync(join(GENERATED, 'story.json'), JSON.stringify(resolved, null, 1));
+// S5: two products never share an address (fails here, before a page does); the old addresses move to the neutral ones
+slugIndex(new Set(details.map((d) => d.product)));
+writeFileSync(
+  join(GENERATED, 'story-redirects.txt'),
+  details.map((d) => `${oldDetailHref(d.room, d.style, d.product)} ${d.href} 301`).join('\n') + '\n',
+);
 const all = pages.flatMap((p) => p.frames.flatMap((f) => f.items));
 console.log(
   `story: ${pages.length} pages (${pages.filter((p) => p.frames.length).length} with frames, ${pages.filter((p) => !p.frames.length).length} typographic); ${all.length} points, ${all.filter((x) => x.status === 'available').length} for sale, ${all.filter((x) => x.status === 'unavailable').length} not sold now, ${all.filter((x) => x.status === 'unpriced').length} without a price; ${all.filter((x) => !x.image).length} without a cached card photo`,

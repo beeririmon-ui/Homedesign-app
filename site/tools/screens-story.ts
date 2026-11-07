@@ -20,6 +20,7 @@ import { chromium, type Browser, type BrowserContext, type Page } from '@playwri
 import AxeBuilder from '@axe-core/playwright';
 import sharp from 'sharp';
 import { repoPath, sitePath } from './lib/paths';
+import { productSlug } from '@hd/shared/product-url';
 
 const PORT = 5198;
 const ORIGIN = `http://127.0.0.1:${PORT}`;
@@ -797,7 +798,7 @@ function publicBuild(): void {
 }
 
 // ---------- layer 2, "הפרט": the detail page ----------
-const DETAIL = (style: string, product: string) => `/story/living-room/${style}/p/${product}/`;
+const DETAIL = (style: string, product: string) => `/story/living-room/${style}/p/${productSlug(product)}/`;
 const BOUCLE_WM = DETAIL('nordic', 'cushions-cj-boucle-teddy');
 async function detailRun(w: number, h: number, tag: 'desk' | 'phone'): Promise<void> {
   const ctx = await ctxOf(w, h);

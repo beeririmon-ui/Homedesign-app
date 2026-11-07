@@ -1,3 +1,4 @@
+import { productPath } from '@hd/shared/product-url';
 import { useEffect } from 'preact/hooks';
 import { catalog } from '../catalog';
 import { Price } from '../components/Media';
@@ -36,7 +37,7 @@ export function CartPage() {
             {lines.map((l) => (
               <li key={`${l.variant_id}:${l.pack}`} class="card cart-line">
                 <div>
-                  <a class="title" href={`/p/${l.product_id}/`}>
+                  <a class="title" href={productPath(l.product_id)}>
                     {l.name_he}
                   </a>
                   {lineLabelHe(l) ? <p class="small pack-line">{lineLabelHe(l)}</p> : null}

@@ -1,0 +1,182 @@
+{
+ "id": "2026-11-07-pilot-phase1-v3c-verify",
+ "date": "2026-11-07",
+ "by": "qa-agent",
+ "follows": "qa/reports/2026-11-07-pilot-phase1-g1.json (F1-F3, D1)",
+ "checked": "assets/renders/living-room/warm-modern/pilot-phase1-2026-11-07/*-v3-graded-v3c.png, masks/stone-wide.png, shell-fix-v3.json (grade_v3c, lock_F3), pilot-phase1-sheet.jpg",
+ "F1_bench": {
+  "verdict": "pass",
+  "visible_slab": {
+   "px": 44455,
+   "H_below_25_C_gt3": 0,
+   "b_over_15": 0,
+   "b_over_12_5": 2,
+   "b_max": 12.55,
+   "b_median": 9.32
+  },
+  "armchair_edge_over_slab": {
+   "px": 6335,
+   "H_below_25_C_gt3": 258,
+   "b_over_15": 585,
+   "b_over_12_5": 1936,
+   "b_max": 23.97,
+   "b_median": 7.64
+  },
+  "front_face_lab": [
+   59.8,
+   2.0,
+   12.0
+  ],
+  "front_face_hsv_h": 36.6,
+  "top_lab": [
+   93.3,
+   0.4,
+   7.9
+  ],
+  "note": "on the visible slab no pixel under H 25 and b* max 12.55; the b* > 15 / H < 25 pixels in the wide mask are the armchair's walnut and its antialiased edge (alpha > 0), not stone; no ochre line along the armchair at x4; the left end's strip is in the mask now (overlays/bench-v3c-100.jpg, bench-v3c-x4.jpg)"
+ },
+ "F2_one_grade": {
+  "verdict": "pass",
+  "graded_split": {
+   "base->A": [
+    0,
+    0,
+    0.0
+   ],
+   "base->B": [
+    0,
+    0,
+    0.0
+   ],
+   "base->C": [
+    0,
+    0,
+    0.0
+   ],
+   "A->B": [
+    0,
+    0,
+    0.0
+   ],
+   "A->C": [
+    0,
+    0,
+    0.0
+   ],
+   "B->C": [
+    0,
+    0,
+    0.0
+   ]
+  },
+  "swap_diff_display": {
+   "base->A": 0,
+   "base->B": 0,
+   "base->C": 0,
+   "A->B": 0,
+   "A->C": 0,
+   "B->C": 0
+  }
+ },
+ "F3_lock": {
+  "verdict": "pass",
+  "qa_worst_p90_px_1920": 2.0,
+  "qa_min_paired": 21,
+  "render_agent_lock_F3_matches": true
+ },
+ "black_point_set_C": {
+  "verdict": "acceptable",
+  "values": {
+   "base_p005": 12.42,
+   "base_crevice_L_median": 9.68,
+   "A": {
+    "p005": 12.03,
+    "layer_p005": 10.55,
+    "layer_share_below_11_pct": 0.66,
+    "furniture_p005": 9.74,
+    "shell_p005": 14.47,
+    "crevice_L_median": 9.68,
+    "shadow_on_shell_px": 7304,
+    "shadow_on_shell_p1": 12.1,
+    "shadow_on_shell_min": 9.45
+   },
+   "B": {
+    "p005": 11.35,
+    "layer_p005": 7.43,
+    "layer_share_below_11_pct": 4.57,
+    "furniture_p005": 9.89,
+    "shell_p005": 14.67,
+    "crevice_L_median": 9.68,
+    "shadow_on_shell_px": 4511,
+    "shadow_on_shell_p1": 12.56,
+    "shadow_on_shell_min": 8.83
+   },
+   "C": {
+    "p005": 10.03,
+    "layer_p005": 6.87,
+    "layer_share_below_11_pct": 12.71,
+    "furniture_p005": 9.89,
+    "shell_p005": 14.67,
+    "crevice_L_median": 9.68,
+    "shadow_on_shell_px": 4661,
+    "shadow_on_shell_p1": 12.67,
+    "shadow_on_shell_min": 11.06
+   }
+  },
+  "why": "one grade for every file (F2) fixes the toe on the base (p0.5 12.4, WM-G1 11-14); the deep crevice is the same pixels and level in every set; set C's p0.5 10.0 comes from its own products (12.7 % of the layer under L* 11: the Dark Coffee corduroy and the Clay throw's folds), which keep their texture (9 px sd median 2.1, 1.7 % flat, min L* 6.3, nothing crushed); lifting set C alone would split the grade again (F2). Their colour against the SKU photos holds on v3c: Dark Coffee dE00 2.4 / +6.3 deg, Clay dE00 1.4",
+  "dark_coffee_v3c": {
+   "sku_photo": "C-cushions-cj-corduroy-patchwork-dark-coffee-crop.png",
+   "frame_norm_lab": [
+    32.7,
+    18.7,
+    18.6
+   ],
+   "photo_norm_lab": [
+    32.7,
+    21.2,
+    17.0
+   ],
+   "hue_frame": 44.9,
+   "hue_photo": 38.7,
+   "d_hue_deg": 6.3,
+   "chroma_ratio": 0.97,
+   "dE2000": 2.4,
+   "rule_C": "dE <= 5 and |dh| <= 8 (designer 13.1 (4))",
+   "within": true
+  },
+  "clay_v3c": {
+   "sku_photo": "C-sofa-cover-cj-cotton-muslin-fringe-clay-crop.png",
+   "frame_norm_lab": [
+    25.0,
+    9.1,
+    9.2
+   ],
+   "photo_norm_lab": [
+    25.0,
+    8.1,
+    7.5
+   ],
+   "hue_frame": 45.5,
+   "hue_photo": 42.9,
+   "d_hue_deg": 2.6,
+   "chroma_ratio": 1.17,
+   "dE2000": 1.4,
+   "rule_C": "dE <= 5 and |dh| <= 8 (designer 13.1 (4))",
+   "within": true
+  }
+ },
+ "D1": {
+  "verdict": "closed by master-designer (proposals §13.4: v3b accepted for the approval-3 sheet); v3c keeps the v3b gain (1.0008)"
+ },
+ "sheet": {
+  "verdict": "fix before sending (0 tokens, minutes)",
+  "finding": "pilot-phase1-sheet.jpg: the step 2 'shell v3' and step 3 'shell v3 + furniture' tiles are the ungraded files: the bench's front face reads ochre there (sampled on the sheet: Lab 60.8 / 6.7 / 27.0; shell-v3.png 55.2 / 7.2 / 27.3; v3c display 55.1 / 0.5 / 12.0), the yellow the designer rejected (§13.1 (3)), while the step 4 tiles are v3c",
+  "fix": "the step 2 and 3 tiles from shell-v3-graded-v3c.png and shell-furniture-v3-graded-v3c.png (or labelled 'before the display grade')",
+  "owner": "render-agent"
+ },
+ "approval_3": {
+  "verdict": "yes",
+  "condition": "after the sheet's step 2-3 tiles are swapped to the v3c display files",
+  "before_site": "6K masters and the remaining G1/G2 on them (G1.17), not part of phase 1"
+ }
+}

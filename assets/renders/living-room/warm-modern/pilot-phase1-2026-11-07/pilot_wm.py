@@ -739,6 +739,45 @@ def grade_v3c():
     return out
 
 
+def _rtl(t):
+    """visual order for a right-to-left label drawn left to right (no bidi library here): Hebrew runs reversed, Latin / digit runs kept"""
+    import re
+    runs = re.findall(r"[A-Za-z0-9.]+|[^A-Za-z0-9.]+", t)
+    return "".join(r if re.match(r"[A-Za-z0-9.]", r) else r[::-1] for r in reversed(runs))
+
+
+def sheet_owner():
+    """the owner's sheet for approval 3 (QA qa/reports/2026-11-07-pilot-phase1-v3c-verify.md): every tile from the one display grade v3c,
+    Hebrew labels; written over pilot-phase1-sheet.jpg (the working sheet with the clay and the raw shell is pilot-phase1-sheet-work.jpg)"""
+    from PIL import ImageDraw, ImageFont
+    fb = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 30)
+    f = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 26)
+    tiles = [("מעטפת", "shell-v3-graded-v3c.png"), ("רהיטים קבועים", "shell-furniture-v3-graded-v3c.png"),
+             ("סט A", "composite-set-A-v3-graded-v3c.png"), ("סט B", "composite-set-B-v3-graded-v3c.png"), ("סט C", "composite-set-C-v3-graded-v3c.png")]
+    tw, th = 960, 540
+    W_, rows = 2 * tw + 30, 3
+    im = Image.new("RGB", (W_, rows * (th + 50) + 80), (250, 249, 247))
+    d = ImageDraw.Draw(im)
+    rtl = (lambda t: t) if __import__("PIL.features", fromlist=["check"]).check("raqm") else _rtl   # with raqm PIL lays out RTL itself
+    title = rtl("הסלון במודרני חם, הכלי: שלב 1, לאישור 3")
+    d.text((W_ - 15 - d.textlength(title, font=fb), 18), title, fill=(0, 0, 0), font=fb)
+    for i, (t, n) in enumerate(tiles):
+        r, c = divmod(i, 2)
+        x = W_ - 10 - (c + 1) * tw - c * 10                      # right to left: the first tile on the right
+        if i == 4:
+            x = (W_ - tw) // 2
+        y = 80 + r * (th + 50)
+        a = Image.open(os.path.join(HERE, n)).convert("RGB")
+        w0, h0 = a.size
+        a = a.crop((round(116 / 4072 * w0), round(65 / 2290 * h0), round(3956 / 4072 * w0), round(2225 / 2290 * h0)))
+        im.paste(a.resize((tw, th), Image.LANCZOS), (x, y + 40))
+        lab = rtl(t)
+        d.text((x + tw - d.textlength(lab, font=f), y + 6), lab, fill=(0, 0, 0), font=f)
+    p = os.path.join(HERE, "pilot-phase1-sheet.jpg")
+    im.save(p, quality=92)
+    print(p)
+
+
 def sheet(variant=""):
     from PIL import ImageDraw, ImageFont
     f = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 22)
@@ -766,7 +805,7 @@ def sheet(variant=""):
             a = a.crop((round(116 / 4072 * w0), round(65 / 2290 * h0), round(3956 / 4072 * w0), round(2225 / 2290 * h0)))
         im.paste(a.resize((tw, th), Image.LANCZOS), (x, y + 30))
         d.text((x, y + 4), t, fill=(0, 0, 0), font=f)
-    p = os.path.join(HERE, "pilot-phase1-sheet.jpg")
+    p = os.path.join(HERE, "pilot-phase1-sheet-work.jpg" if variant == "v3c" else "pilot-phase1-sheet.jpg")
     im.save(p, quality=90)
     print(p)
 
@@ -775,4 +814,4 @@ if __name__ == "__main__":
     cmd, args = sys.argv[1], sys.argv[2:]
     {"shell-fetch": lambda: shell_fetch(*args), "furn-input": furn_input, "furn-fetch": lambda: furn_fetch(*args),
      "cush-input": cush_input, "cush-prompt": lambda: cush_prompt(*args), "cush-fetch": lambda: cush_fetch(*args[:4], refetch=(len(args) < 5)),
-     "swap": swap, "grade": lambda: grade(*(args[:1] or ["corner"])), "grade-v3c": grade_v3c, "sheet": lambda: sheet(*(args[:1] or [""]))}[cmd]()
+     "swap": swap, "grade": lambda: grade(*(args[:1] or ["corner"])), "grade-v3c": grade_v3c, "sheet": lambda: sheet(*(args[:1] or [""])), "sheet-owner": sheet_owner}[cmd]()
