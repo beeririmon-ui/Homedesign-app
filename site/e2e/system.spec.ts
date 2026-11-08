@@ -83,18 +83,24 @@ async function measure(page: Page) {
       .map((p) => {
         const range = document.createRange();
         range.selectNodeContents(p);
-        const tops = new Set(Array.from(range.getClientRects()).map((r) => Math.round(r.top)));
-        const lines = Math.max(1, tops.size);
+        // characters a line: the paragraph's characters spread over its lines by their measured widths, so a short last
+        // line does not pull the figure down (the widest line's share of all the width)
+        const byLine = new Map<number, number>();
+        for (const r of Array.from(range.getClientRects())) byLine.set(Math.round(r.top), (byLine.get(Math.round(r.top)) ?? 0) + r.width);
+        const lines = Math.max(1, byLine.size);
         const len = (p.textContent ?? '').trim().length;
+        const widths = [...byLine.values()];
+        const total = widths.reduce((a, b) => a + b, 0) || 1;
         const cap = parseFloat(getComputedStyle(p).fontSize) <= 14;
-        // a lead (פתיח, §4.6): at most 56, no floor; the story line (.st-line) is running text
-        const lead = p.matches('.mag-lead, .lede, .hero p');
-        return { at: name(p), cap, lead, lines, len, cpl: Math.round(lines > 1 ? len / (lines - 0.5) : len) };
+        // a lead at 30rem (§11); the product page's lede sits in the spread's narrower text column (§9.1, cols 9–12)
+        const lead = p.matches('.mag-lead, .hero p');
+        const lede = p.matches('.lede');
+        return { at: name(p), cap, lead, lede, lines, len, cpl: Math.round((len * Math.max(...widths, 0)) / total) };
       })
       .filter((x) => x.lines > 1);
     // G5.20 (the phone): text off the stage keeps 24 px from both edges
     const margins = texts
-      .filter((el) => !onStage(el) && !el.closest('.mag-head, .site-header, .mag-live, .sr-only, .live-region, .mag-skip, .skip-link'))
+      .filter((el) => !onStage(el) && !el.closest('.mag-head, .site-header, .mag-live, .sr-only, .live-region, .mag-skip, .skip-link, .st-close, .mag-close'))
       .map((el) => ({ el, r: el.getBoundingClientRect() }))
       .filter(({ r }) => r.left < 23.5 || r.right > vw - 23.5)
       .map(({ el, r }) => `${name(el)} ${Math.round(r.left)}–${Math.round(r.right)}`);
@@ -193,19 +199,24 @@ function record(url: string, width: number, m: Awaited<ReturnType<typeof measure
   add('G5.19 letter-spacing 0', !m.spaced.length, m.spaced.length, m.spaced);
   add('G5.19 not justified', !m.justified.length, m.justified.length, m.justified);
   add('G5.19 inputs ≥ 16 px', !m.smallInputs.length, m.smallInputs.length, m.smallInputs);
-  // design notes §10: the measured Hebrew targets. The estimate (length over lines less half a line) is good to ±3
+  // design notes §10: the measured Hebrew targets (characters a line from the measured line widths, good to ±3)
   const [lo, hi] = width < 720 ? [50, 60] : [52, 68];
   const leads = m.cpl.filter((x) => x.lead);
-  const offLead = leads.filter((x) => x.cpl > 56 + 3);
-  // §4.6's 56 for a lead is the Latin figure (as §10 found for the story line): recorded for the designer, not held
-  add(
-    'G5.19 lead ≤ 56 a line (§4.6, to the designer)',
-    !offLead.length,
-    leads,
-    offLead.map((x) => `${x.at} ${x.cpl}`),
-    false,
-  );
-  const body = m.cpl.filter((x) => !x.cap && !x.lead && x.lines >= 3);
+  // design notes §11: a lead (Assistant 300) is 65–78 Hebrew characters at the unchanged 30rem; 79 is accepted, over 80
+  // the text is shortened, never the column (the estimate is good to ±3)
+  // at 30rem, that is from the tablet up; on the phone the screen is narrower than 30rem, and the lead is recorded
+  const offLead = leads.filter((x) => x.lines >= 2 && (x.cpl < 65 - 3 || x.cpl > 80));
+  if (width >= 720)
+    add(
+      'G5.19 lead 65–78 a line (§11)',
+      !offLead.length,
+      leads,
+      offLead.map((x) => `${x.at} ${x.cpl}`),
+    );
+  else add('G5.19 lead on the phone (recorded)', true, leads, undefined, false);
+  const ledes = m.cpl.filter((x) => x.lede);
+  add('G5.19 product lede in the text column (recorded, §9.1)', true, ledes, undefined, false);
+  const body = m.cpl.filter((x) => !x.cap && !x.lead && !x.lede && x.lines >= 3);
   const offBody = body.filter((x) => x.cpl < lo - 3 || x.cpl > hi + 3);
   add(
     `G5.19 running text ${lo}–${hi} a line`,
@@ -268,8 +279,20 @@ test.describe('the design system, measured (S5)', () => {
         const m = await measure(page);
         const ring = await focusRing(page);
         record(url, width, m, ring, true);
+        // QA on S3–S5 (ת1): the open states too: the cart open with a line, and the checkout after an empty submit
+        if (url === '/story/checkout/') {
+          await page.locator('#co-pay').click();
+          await expect(page.locator('#co-errors')).toBeVisible();
+          record(`${url} (errors)`, width, await measure(page), [], true);
+          await open(page, '/story/living-room/nordic/');
+          await page.locator('#st-cart-open').click();
+          await expect(page.locator('#st-cart')).toBeVisible();
+          await page.waitForTimeout(400);
+          record('/story/living-room/nordic/ (cart open)', width, await measure(page), [], true);
+          await page.keyboard.press('Escape');
+        }
       }
-      const bad = rows.filter((r) => r.width === width && r.hard && !r.ok && MAGAZINE.includes(r.page));
+      const bad = rows.filter((r) => r.width === width && r.hard && !r.ok && r.page.startsWith('/story/'));
       expect(bad.map((r) => `${r.page} ${r.gate}: ${JSON.stringify(r.where ?? r.value)}`)).toEqual([]);
     });
     test(`the shop and the room engine at ${width}`, async ({ page }) => {
@@ -283,8 +306,13 @@ test.describe('the design system, measured (S5)', () => {
         }
         await open(page, url);
         record(url, width, await measure(page), await focusRing(page, 20), true);
+        if (url === '/checkout/') {
+          await page.getByRole('button', { name: 'מעבר לתשלום מאובטח' }).click();
+          await expect(page.locator('.error-summary')).toBeVisible();
+          record('/checkout/ (errors)', width, await measure(page), [], true);
+        }
       }
-      const bad = rows.filter((r) => r.width === width && r.hard && !r.ok && SHOP.includes(r.page));
+      const bad = rows.filter((r) => r.width === width && r.hard && !r.ok && !r.page.startsWith('/story/'));
       expect(bad.map((r) => `${r.page} ${r.gate}: ${JSON.stringify(r.where ?? r.value)}`)).toEqual([]);
     });
   }

@@ -1,0 +1,523 @@
+{
+ "id": "2026-11-08-ged-master-fix1",
+ "date": "2026-11-08",
+ "by": "qa-agent",
+ "follows": "qa/reports/2026-11-07-ged-master-mb1.json",
+ "inputs": {
+  "frames": [
+   "assets/renders/master/editorial-2026-11-07/nordic/nordic-MB-A-fix1.png",
+   "assets/renders/master/editorial-2026-11-07/warm-modern/warm-modern-MB-A-fix1.png"
+  ],
+  "record": "assets/renders/master/editorial-2026-11-07/mb1-fix.json"
+ },
+ "G-ED.8": {
+  "nordic": {
+   "changed_px": 899859,
+   "areas": [
+    [
+     900,
+     1074,
+     2551,
+     1536
+    ],
+    [
+     2433,
+     302,
+     2736,
+     1008
+    ],
+    [
+     0,
+     679,
+     307,
+     1153
+    ],
+    [
+     1364,
+     394,
+     1575,
+     574
+    ],
+    [
+     748,
+     722,
+     939,
+     968
+    ],
+    [
+     299,
+     567,
+     442,
+     742
+    ],
+    [
+     0,
+     988,
+     63,
+     1097
+    ],
+    [
+     0,
+     828,
+     60,
+     912
+    ],
+    [
+     1139,
+     1127,
+     1207,
+     1170
+    ]
+   ],
+   "verdict": "pass: every changed area is a declared one (the throw, the right sconce with the nightstand, the chair cloth and its fringe at the frame's left edge, the left sconce, the planter, the sill)"
+  },
+  "warm-modern": {
+   "changed_px": 137341,
+   "areas": [
+    [
+     1066,
+     385,
+     1368,
+     955
+    ],
+    [
+     2563,
+     396,
+     2736,
+     609
+    ]
+   ],
+   "verdict": "pass: the left sconce with the nightstand, the right sconce"
+  }
+ },
+ "G-ED.9": {
+  "nordic": "pass, with two notes: the chair cloth's fringe tips at its lower right keep a warm pink-orange (the old colour in the feather; extend the mask 2 px); the left sconce's shadow is the original's, scaled, and reads plausible",
+  "warm-modern": "fail: two leaf fragments of the old sprig float to the right of the new one (overlays/w-sprig-ghost-x4.jpg); code fix, 0 tokens"
+ },
+ "G-ED.6": {
+  "nordic": "pass, provisional: the chair cloth (sage-grey linen) now differs from our throw (dE76 12.7, L* -12.5, hue +9.2 deg) and has a fringe where the throw has a plain hem. For the designer's final pick: not this sage, which is the colour family of our Nordic sage linen-look runner with its fringe",
+  "warm-modern": "pass"
+ },
+ "scale": {
+  "method": "Nordic: the headboard wall's board pitch (equal boards) on MB-A's clean boards, Theil-Sen fit of pitch against x (data/boards2.json): the px/cm at each object's x relative to QA's pillowcase basis (6.08 px/cm at x 2165) on the same wall. Warm modern: the pill niche's height at both ends (data/measure.json): equal, so the wall is frontal and the pillowcase basis (7.16 px/cm) holds at the nightstand. Objects stand about 20-30 cm in front of the wall: about 5-10 % larger again; tolerance +-15 %",
+  "nordic": {
+   "px_cm_bottle": 6.86,
+   "px_cm_holders": 7.14,
+   "px_cm_sconce_right": 7.0,
+   "px_cm_sconce_left": 4.43,
+   "bottle_px": 257,
+   "holder_left_px": 123,
+   "holder_right_px": 108,
+   "cup_left_px": 72,
+   "cup_right_px": 69,
+   "mug_h_px": 85,
+   "sconce_right_w_px": 145,
+   "sconce_right_h_px": 123,
+   "sconce_left_w_px": 80,
+   "sconce_left_h_px": 75,
+   "bottle_x": 1.53,
+   "holder_left_x": 1.58,
+   "holder_right_x": 1.35,
+   "cup_x": 1.44,
+   "mug_height_cm": 12.4,
+   "sconce_right_x": [
+    0.86,
+    0.88
+   ],
+   "sconce_left_x": [
+    0.75,
+    0.85
+   ]
+  },
+  "warm_modern": {
+   "px_cm": 7.16,
+   "niche_ratio_right_left": 0.999,
+   "bottle_px": 215,
+   "bottle_w_px": 105,
+   "holder_left_px": 100,
+   "holder_right_px": 92,
+   "cup_px": 50,
+   "sconce_rim_px": 106,
+   "bottle_x": 1.23,
+   "holder_x": [
+    1.27,
+    1.17
+   ],
+   "holder_HW": [
+    2.0,
+    1.84
+   ],
+   "cup_x": 1.0,
+   "sconce_x": 0.99
+  },
+  "answer_a": "yes, a scale pass for each nightstand: Nordic, the bottle and holders read x1.4-1.6 even in the nightstand's own plane (x1.35-1.45 allowing for their depth), and the generic mug about 12 cm tall reads the same way; warm modern, the bottle x1.2 and the holders' bodies x1.15-1.25 too tall (H/W 1.84-2.0 against 1.57)",
+  "answer_b": "the input crop must already carry the right sizes: render-agent shrinks the objects in code about their base points to the targets (Nordic at about 7.3 px/cm on the table: bottle 24.5 cm = ~180 px, holders 11 cm = ~80 px with cups ~51 px, candles 10 / 15 cm, the mug x0.8 so the still life stays coherent; warm modern at about 7.5 px/cm: bottle ~184 px, holders ~83 px tall on the same ~50 px cups, i.e. shorter cones), fills the wall behind roughly (boards / plaster; streaks are fine), and the pass gets a mask over the old footprint plus the new objects, the two reference crops, and the prompt 'keep every object's size and place exactly as in the input; repair the wall behind; re-light'. The model is not asked to choose a size"
+ },
+ "frames": {
+  "nordic-MB-A-fix1": {
+   "state": "not_yet",
+   "rows": [
+    {
+     "card_id": "bedding-cj-washed-linen-natural-set",
+     "option": {
+      "color": "natural-linen"
+     },
+     "verdict": "yes",
+     "dot": "yes",
+     "note": "washed natural linen, rumpled, the sun's window stripes across it (the hero moment); duvet [64.4, 4.5, 12.2] against the white panelling [70.6, 3.3, 11.0] in the same warm morning light",
+     "card": "bedding-cj-washed-linen-natural-set (natural-linen)",
+     "present": true,
+     "faithful": "yes",
+     "why": "washed natural linen, rumpled, the sun's window stripes across it (the hero moment); duvet [64.4, 4.5, 12.2] against the white panelling [70.6, 3.3, 11.0] in the same warm morning light"
+    },
+    {
+     "card_id": "pillowcases-cj-pure-linen-envelope-pair-48x74",
+     "option": {
+      "other": "a-pair-of-rain-and-dew-hemp"
+     },
+     "verdict": "partly",
+     "dot": "no",
+     "note": "two, natural linen in the card's tone, but drawn with a flange (oxford) border all round; the product is a plain envelope (G-ED.2)",
+     "card": "pillowcases-cj-pure-linen-envelope-pair-48x74 (a-pair-of-rain-and-dew-hemp)",
+     "present": true,
+     "faithful": "partly",
+     "why": "two, natural linen in the card's tone, but drawn with a flange (oxford) border all round; the product is a plain envelope (G-ED.2)",
+     "fix": "targeted pass P5 'bed head' (with the lumbar) (seedream-5-pro masked crop, ~650, SPEND1)",
+     "units_in_frame": 1,
+     "sale_unit": "a pair in one SKU ('A Pair')"
+    },
+    {
+     "card_id": "cushions-cj-boucle-teddy",
+     "option": {
+      "color": "white",
+      "size": "30x50"
+     },
+     "verdict": "partly",
+     "dot": "no",
+     "note": "warm-white bouclé lumbar, lit face [85.7, 1.2, 8.9] (white in the warm sun), but as wide as a 74 cm pillowcase: x1.48 against the card's 50/74 (G-ED.4)",
+     "card": "cushions-cj-boucle-teddy (white, 30x50)",
+     "present": true,
+     "faithful": "partly",
+     "why": "warm-white bouclé lumbar, lit face [85.7, 1.2, 8.9] (white in the warm sun), but as wide as a 74 cm pillowcase: x1.48 against the card's 50/74 (G-ED.4)",
+     "fix": "targeted pass P5 'bed head' (seedream-5-pro masked crop, ~650, SPEND1)"
+    },
+    {
+     "card_id": "throw-cj-cotton-linen-light-gray-200x230",
+     "option": null,
+     "verdict": "yes",
+     "dot": "yes",
+     "note": "P1: a flat light-grey cotton-linen throw with a plain hem, no pile; its lit face [67.5, 1.0, 7.7] sits at the white panelling's level in shade ([72.3, 3.1, 10.4]) and less yellow, as the photo's light grey sits under its white",
+     "why": "P1: a flat light-grey cotton-linen throw with a plain hem, no pile; its lit face [67.5, 1.0, 7.7] sits at the white panelling's level in shade ([72.3, 3.1, 10.4]) and less yellow, as the photo's light grey sits under its white",
+     "faithful": "yes",
+     "present": true,
+     "card": "throw-cj-cotton-linen-light-gray-200x230"
+    },
+    {
+     "card_id": "nightstand-vase-aliexpress-handmade-wabi-sabi-vase-665862",
+     "option": {
+      "color": "D"
+     },
+     "verdict": "partly",
+     "dot": "no",
+     "note": "P2: option D's bell with the long thin neck, H/W 2.38 against 2.23; but still x1.53 high in the nightstand's own plane (the wall's board pitch, 6.86 px/cm at its x), about x1.4 allowing for its place in front of the wall (G-ED.4); the colour a warm tan in the sun (lit [53.3, 8.4, 22.5]), L* -17 against the panelling, inside the card's relation",
+     "why": "P2: option D's bell with the long thin neck, H/W 2.38 against 2.23; but still x1.53 high in the nightstand's own plane (the wall's board pitch, 6.86 px/cm at its x), about x1.4 allowing for its place in front of the wall (G-ED.4); the colour a warm tan in the sun (lit [53.3, 8.4, 22.5]), L* -17 against the panelling, inside the card's relation",
+     "faithful": "partly",
+     "present": true,
+     "card": "nightstand-vase-aliexpress-handmade-wabi-sabi-vase-665862 (D)",
+     "fix": "targeted pass P7 (scale; the input with the objects already shrunk)"
+    },
+    {
+     "card_id": "candle-holders-cj-travertine-pedestal",
+     "option": null,
+     "verdict": "partly",
+     "dot": "no",
+     "note": "P2: thick cups on cones, H/W 1.71 and 1.57 against 1.57, two pillar candles; but x1.58 and x1.35 high, cups x1.44 wide, in the nightstand's plane (G-ED.4)",
+     "why": "P2: thick cups on cones, H/W 1.71 and 1.57 against 1.57, two pillar candles; but x1.58 and x1.35 high, cups x1.44 wide, in the nightstand's plane (G-ED.4)",
+     "faithful": "partly",
+     "present": true,
+     "card": "candle-holders-cj-travertine-pedestal",
+     "fix": "targeted pass P7",
+     "units_in_frame": 1,
+     "sale_unit": "a set of 2 (the site's pack)"
+    },
+    {
+     "card_id": "bedside-sconces-cj-linen-wave-flush",
+     "option": {
+      "size": "beige-fabric"
+     },
+     "verdict": "partly",
+     "dot": "no",
+     "note": "code x0.68 on both from the pillowcase basis; on the wall's own scale the right one is now x0.86 wide / x0.88 high (inside +-15 %), the left one x0.75 / x0.85 (too small: the wall is farther there); no ghost of the old shapes, boards continuous, the left one dimmed. No dot until CE is verified",
+     "why": "code x0.68 on both from the pillowcase basis; on the wall's own scale the right one is now x0.86 wide / x0.88 high (inside +-15 %), the left one x0.75 / x0.85 (too small: the wall is farther there); no ghost of the old shapes, boards continuous, the left one dimmed. No dot until CE is verified",
+     "faithful": "partly",
+     "present": true,
+     "card": "bedside-sconces-cj-linen-wave-flush (beige-fabric)",
+     "fix": "code, 0 tokens: both rescaled from the originals, x0.80 (right) and x0.82 (left)",
+     "units_in_frame": 2,
+     "sale_unit": "single lamps (a pair is 2 units)"
+    },
+    {
+     "card_id": "curtains-aliexpress-linen-blend-s-fold-180502",
+     "option": {
+      "style": "s-fold"
+     },
+     "verdict": "yes",
+     "dot": "yes",
+     "note": "natural linen S-fold, two panels, a touch beige in the sun",
+     "card": "curtains-aliexpress-linen-blend-s-fold-180502 (s-fold)",
+     "present": true,
+     "faithful": "yes",
+     "why": "natural linen S-fold, two panels, a touch beige in the sun",
+     "units_in_frame": 2,
+     "sale_unit": "single panels ('1PC')"
+    },
+    {
+     "card_id": "vase-aliexpress-vintage-distressed-clay-vase-589009",
+     "option": null,
+     "verdict": "yes",
+     "dot": "yes",
+     "note": "P3: a slim cream column with fine horizontal ribbing, H/W about 2.1 (line 1.85), the colour as the photo ([56.4, 4.9, 19.7] against [58.2, 4.9, 21.9]); clean against the glazing at x4",
+     "why": "P3: a slim cream column with fine horizontal ribbing, H/W about 2.1 (line 1.85), the colour as the photo ([56.4, 4.9, 19.7] against [58.2, 4.9, 21.9]); clean against the glazing at x4",
+     "faithful": "yes",
+     "present": true,
+     "card": "vase-aliexpress-vintage-distressed-clay-vase-589009"
+    },
+    {
+     "card_id": "planter-zendrop-seagrass-belly-38x34",
+     "option": null,
+     "verdict": "yes",
+     "dot": "yes",
+     "note": "code: pale yellow-green seagrass now (lit [68.9, 0.6, 21.5], h 88.5 against the photo's 89.8), clearly apart from the jute basket (h 68.3); the weave kept",
+     "why": "code: pale yellow-green seagrass now (lit [68.9, 0.6, 21.5], h 88.5 against the photo's 89.8), clearly apart from the jute basket (h 68.3); the weave kept",
+     "faithful": "yes",
+     "present": true,
+     "card": "planter-zendrop-seagrass-belly-38x34"
+    },
+    {
+     "card_id": "basket-cj-jute-rope-cylinder",
+     "option": null,
+     "verdict": "yes",
+     "dot": "yes",
+     "note": "jute rope cylinder with loop handles (a little low), h 64.5 against the photo's 69.3",
+     "card": "basket-cj-jute-rope-cylinder",
+     "present": true,
+     "faithful": "yes",
+     "why": "jute rope cylinder with loop handles (a little low), h 64.5 against the photo's 69.3"
+    }
+   ],
+   "counts": {
+    "yes": 6,
+    "partly": 5,
+    "no": 0
+   }
+  },
+  "warm-modern-MB-A-fix1": {
+   "state": "not_yet",
+   "rows": [
+    {
+     "card_id": "bedding-cj-washed-linen-natural-set",
+     "option": {
+      "color": "natural-linen"
+     },
+     "verdict": "yes",
+     "dot": "yes",
+     "note": "washed natural linen, softly rumpled; the two cream pillows behind are the set's own pillowcases (duvet cover + flat sheet + pillowcases), not an extra product",
+     "card": "bedding-cj-washed-linen-natural-set (natural-linen)",
+     "present": true,
+     "faithful": "yes",
+     "why": "washed natural linen, softly rumpled; the two cream pillows behind are the set's own pillowcases (duvet cover + flat sheet + pillowcases), not an extra product"
+    },
+    {
+     "card_id": "pillowcases-cj-pure-linen-envelope-pair-48x74",
+     "option": {
+      "other": "caramel-pairs"
+     },
+     "verdict": "partly",
+     "dot": "no",
+     "note": "two, caramel in the card's tone (Lab [35.4, 18.6, 28.8], h 57.1 against the photo's h 53.1), but with a flange border; the product is a plain envelope (G-ED.2)",
+     "card": "pillowcases-cj-pure-linen-envelope-pair-48x74 (caramel-pairs)",
+     "present": true,
+     "faithful": "partly",
+     "why": "two, caramel in the card's tone (Lab [35.4, 18.6, 28.8], h 57.1 against the photo's h 53.1), but with a flange border; the product is a plain envelope (G-ED.2)",
+     "fix": "targeted pass P6 'bed head' (with the lumbar) (seedream-5-pro masked crop, ~650, SPEND1)",
+     "units_in_frame": 1,
+     "sale_unit": "a pair in one SKU ('Caramel Pairs')"
+    },
+    {
+     "card_id": "cushions-cj-boucle-teddy",
+     "option": {
+      "color": "milk-tea-color",
+      "size": "30x50"
+     },
+     "verdict": "partly",
+     "dot": "no",
+     "note": "bouclé lumbar, but it reads oatmeal: its lit face [72.3, 5.4, 17.2] is -3.2 L* and b* +2.1 against the natural-linen duvet in the same light, while milk tea is a near-white cream well above natural linen (the SKU photo; register ed7); and x1.35 wide against the pillowcase (G-ED.3, G-ED.4)",
+     "card": "cushions-cj-boucle-teddy (milk-tea-color, 30x50)",
+     "present": true,
+     "faithful": "partly",
+     "why": "bouclé lumbar, but it reads oatmeal: its lit face [72.3, 5.4, 17.2] is -3.2 L* and b* +2.1 against the natural-linen duvet in the same light, while milk tea is a near-white cream well above natural linen (the SKU photo; register ed7); and x1.35 wide against the pillowcase (G-ED.3, G-ED.4)",
+     "fix": "targeted pass P6 'bed head' (size and colour together) (seedream-5-pro masked crop, ~650, SPEND1)"
+    },
+    {
+     "card_id": "sofa-cover-cj-cotton-muslin-fringe",
+     "option": {
+      "other": "pecan"
+     },
+     "verdict": "yes",
+     "dot": "yes",
+     "note": "pecan crinkled muslin with the short fringe, h 57.0 against the photo's 53.6, folded across the foot",
+     "card": "sofa-cover-cj-cotton-muslin-fringe (pecan)",
+     "present": true,
+     "faithful": "yes",
+     "why": "pecan crinkled muslin with the short fringe, h 57.0 against the photo's 53.6, folded across the foot"
+    },
+    {
+     "card_id": "wall-sconce-cj-travertine-cone-walnut",
+     "option": null,
+     "verdict": "yes",
+     "dot": "no",
+     "note": "code x0.8: rim about 106 px = x0.99 of D15 on the wall's scale (the pill niche is the same height at both ends: right/left 0.999, so the wall is frontal and the pillowcase basis holds there); no ghost. Dot off until CE is checked (the designer's table)",
+     "why": "code x0.8: rim about 106 px = x0.99 of D15 on the wall's scale (the pill niche is the same height at both ends: right/left 0.999, so the wall is frontal and the pillowcase basis holds there); no ghost. Dot off until CE is checked (the designer's table)",
+     "faithful": "yes",
+     "present": true,
+     "card": "wall-sconce-cj-travertine-cone-walnut",
+     "units_in_frame": 2,
+     "sale_unit": "single lamps (a pair is 2 units)"
+    },
+    {
+     "card_id": "candle-holders-cj-travertine-pedestal",
+     "option": null,
+     "verdict": "partly",
+     "dot": "no",
+     "note": "P4: two of about the same height, cup on cone, cups x1.0 of 7 cm wide; but the bodies too tall: x1.27 / x1.17 high, H/W 2.0 / 1.84 against 1.57 (G-ED.4)",
+     "why": "P4: two of about the same height, cup on cone, cups x1.0 of 7 cm wide; but the bodies too tall: x1.27 / x1.17 high, H/W 2.0 / 1.84 against 1.57 (G-ED.4)",
+     "faithful": "partly",
+     "present": true,
+     "card": "candle-holders-cj-travertine-pedestal",
+     "fix": "targeted pass P8 (shorter bodies, the input already corrected)",
+     "units_in_frame": 1,
+     "sale_unit": "a set of 2 (the site's pack)"
+    },
+    {
+     "card_id": "nightstand-vase-aliexpress-handmade-wabi-sabi-vase-665862",
+     "option": {
+      "color": "D"
+     },
+     "verdict": "partly",
+     "dot": "no",
+     "note": "P4: option D's bell with a long neck in light sand (lit [75.1, 8.4, 29.4], above the plaster as the photo's sand), H/W 2.05 against 2.23; but x1.23 high (G-ED.4). The old sprig left two leaf fragments floating right of the new sprig (x 1332-1350, y 651-685): a ghost (G-ED.9)",
+     "why": "P4: option D's bell with a long neck in light sand (lit [75.1, 8.4, 29.4], above the plaster as the photo's sand), H/W 2.05 against 2.23; but x1.23 high (G-ED.4). The old sprig left two leaf fragments floating right of the new sprig (x 1332-1350, y 651-685): a ghost (G-ED.9)",
+     "faithful": "partly",
+     "present": true,
+     "card": "nightstand-vase-aliexpress-handmade-wabi-sabi-vase-665862 (D)",
+     "fix": "targeted pass P8 (scale); code, 0 tokens: remove the two leaf fragments"
+    },
+    {
+     "card_id": "floor-lamp-cj-pleated-walnut-stem-158",
+     "option": null,
+     "verdict": "yes",
+     "dot": "yes",
+     "note": "walnut stem, brass base and details, cream pleated cone shade, pull chain, lit; shade width to height about 0.26 against the card's 37/158 = 0.23 (x1.12)",
+     "card": "floor-lamp-cj-pleated-walnut-stem-158",
+     "present": true,
+     "faithful": "yes",
+     "why": "walnut stem, brass base and details, cream pleated cone shade, pull chain, lit; shade width to height about 0.26 against the card's 37/158 = 0.23 (x1.12)"
+    },
+    {
+     "card_id": "planter-cj-cement-ribbed-belly",
+     "option": {
+      "color": "beige",
+      "size": "large"
+     },
+     "verdict": "yes",
+     "dot": "yes",
+     "note": "ribbed upper half and smooth lower band on the diagonal, as the photo; warm grey-beige in the amber light (Lab [37.9, 8.8, 21.2] against the wall [55.9, 7.4, 17.9])",
+     "card": "planter-cj-cement-ribbed-belly (beige, large)",
+     "present": true,
+     "faithful": "yes",
+     "why": "ribbed upper half and smooth lower band on the diagonal, as the photo; warm grey-beige in the amber light (Lab [37.9, 8.8, 21.2] against the wall [55.9, 7.4, 17.9])"
+    },
+    {
+     "card_id": "curtains-aliexpress-beige-linen-sheer-curtains-554205",
+     "option": null,
+     "verdict": "yes",
+     "dot": "yes",
+     "note": "sheer beige linen, two panels",
+     "card": "curtains-aliexpress-beige-linen-sheer-curtains-554205",
+     "present": true,
+     "faithful": "yes",
+     "why": "sheer beige linen, two panels",
+     "units_in_frame": 2,
+     "sale_unit": "single panels (the slot sells a pair = 2)"
+    },
+    {
+     "card_id": "sill-vase-cj-cream-fluted-column-25",
+     "option": null,
+     "verdict": "yes",
+     "dot": "yes",
+     "note": "cream fluted column on a turned foot, as the photo",
+     "card": "sill-vase-cj-cream-fluted-column-25",
+     "present": true,
+     "faithful": "yes",
+     "why": "cream fluted column on a turned foot, as the photo"
+    },
+    {
+     "card_id": "basket-cj-jute-rope-cylinder",
+     "option": null,
+     "verdict": "yes",
+     "dot": "yes",
+     "note": "jute rope cylinder with loop handles",
+     "card": "basket-cj-jute-rope-cylinder",
+     "present": true,
+     "faithful": "yes",
+     "why": "jute rope cylinder with loop handles"
+    }
+   ],
+   "counts": {
+    "yes": 8,
+    "partly": 4,
+    "no": 0
+   }
+  }
+ },
+ "this_week_2600": {
+  "rule": "SPEND1, the week from Sunday 2026-11-08: up to 2,600, 650 at most each; in this order",
+  "passes": [
+   {
+    "n": 1,
+    "id": "P5",
+    "frame": "nordic-MB-A-fix1",
+    "what": "the bed head: plain envelope pillowcases (no flange), the lumbar at 50/74 of their width",
+    "tokens": 650
+   },
+   {
+    "n": 2,
+    "id": "P7",
+    "frame": "nordic-MB-A-fix1",
+    "what": "the nightstand at scale: the input with the bottle, holders and mug already shrunk (answer_b)",
+    "tokens": 650
+   },
+   {
+    "n": 3,
+    "id": "P6",
+    "frame": "warm-modern-MB-A-fix1",
+    "what": "the bed head: plain envelope pillowcases, the lumbar at 50/74 of their width, in milk tea above the natural linen",
+    "tokens": 650
+   },
+   {
+    "n": 4,
+    "id": "P8",
+    "frame": "warm-modern-MB-A-fix1",
+    "what": "the nightstand at scale: the bottle x0.83, the holders' cones shortened to H/W 1.57 in the input; the sprig ghost gone",
+    "tokens": 650
+   }
+  ],
+  "total": 2600,
+  "why_this_order": "Nordic first (more open products); in each frame the bed head first (two starring products on the hero bed), then the nightstand",
+  "code_0_tokens_first": [
+   "Nordic: both sconces rescaled from the originals (x0.80 right, x0.82 left); the chair cloth's fringe tips; its final colour once the designer picks",
+   "warm modern: the two floating leaf fragments"
+  ]
+ },
+ "not_a_defect": "the two houses' tool shells differ in geometry: expected under ARC1 (owner, 2026-11-07: each style may change openings in the tool; the house switch is a cross-fade between different houses); not logged"
+}

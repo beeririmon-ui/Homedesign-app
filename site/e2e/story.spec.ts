@@ -384,10 +384,12 @@ test.describe('the detail page (layer 2, "הפרט")', () => {
 
   test('"לנסות בחדר" opens the room engine on the product\'s slot', async ({ page }) => {
     await page.goto(DETAIL('nordic', 'cushions-cj-boucle-teddy'));
-    await expect(page.locator('#st-pd-try')).toHaveAttribute('href', '/rooms/living-room/?slot=cushions&option=1');
+    // QA on S3–S5 (ה3): the way in carries the way back
+    await expect(page.locator('#st-pd-try')).toHaveAttribute('href', '/rooms/living-room/?slot=cushions&option=1&from=%2Fstory%2Fliving-room%2Fnordic%2F');
     await page.locator('#st-pd-try').click();
-    await expect(page).toHaveURL(/\/rooms\/living-room\/\?slot=cushions&option=1$/);
+    await expect(page).toHaveURL(/\/rooms\/living-room\/\?slot=cushions&option=1&from=/);
     await expect(page.getByRole('dialog').first()).toBeVisible({ timeout: 20_000 });
+    await expect(page.locator('#back-to-story')).toHaveAttribute('href', '/story/living-room/nordic/');
     // a house whose tool is still being built says so
     await page.goto(DETAIL('boho', 'cushions-cj-washed-cotton-frayed'));
     await expect(page.locator('#st-pd-try-none')).toContainText('בבנייה');
@@ -621,6 +623,13 @@ test.describe('from the story into the tool (S3)', () => {
     await expect(page.locator('.st-td .st-draft')).toHaveText('טיוטה / בדיקה · הכלי בבנייה');
     const warm = page.locator('.st-td-house[data-house="warm-modern"]');
     await expect(warm.locator('.st-td-layer')).toHaveCount(3);
+    // QA on S3–S5 (ת5): the other house is not fetched until it is asked for
+    const nordicSrc = () =>
+      page
+        .locator('.st-td-house[data-house="nordic"] img')
+        .first()
+        .evaluate((i: HTMLImageElement) => i.getAttribute('src'));
+    expect(await nordicSrc()).toBeNull();
     expect(await warm.locator('.st-td-layer.is-multiply').evaluate((el) => getComputedStyle(el).mixBlendMode)).toBe('multiply');
     // every layer of both houses in the same frame: one box
     const boxes = await page.locator('.st-td-layer img').evaluateAll((els) => els.map((e) => JSON.stringify(e.getBoundingClientRect())));

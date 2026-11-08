@@ -416,9 +416,17 @@ async function itemOf(
     .join(' · ');
   const img = await photo(card, skuImage);
   const values = card.options ? { ...(cardSku?.values ?? {}), ...(pt.option ?? {}) } : null;
-  const row = rowOf(q, pt.product, values);
+  const isDefault = !pt.option || Object.entries(pt.option).every(([k, v]) => cardSku?.values[k] === v);
+  const row = rowOf(q, pt.product, values, isDefault);
+  // QA on S3–S5 (ה5): a point the register has no row for (a typo in an option id, say) loses its dot loudly
+  if (!row && q.rows.length) console.warn(`${frame}: ${pt.product} ${JSON.stringify(pt.option ?? {})}: no row for this option in ${q.record}, so no dot`);
   // register v4 (G-ED.6): a second unit QA called our product is said at the point, and the look adds that many
-  const units = row?.units && row.units > 1 ? row.units : 1;
+  let units = row?.units && row.units > 1 ? row.units : 1;
+  // a product sold as a set counts its sets, not its pieces: two lamps of a pair are one unit of the product
+  if (units > 1 && p?.pack && p.pack.set_qty > 1 && units % p.pack.set_qty === 0) {
+    console.warn(`${frame}: ${pt.product}: the register's ${units} units are pieces of a set of ${p.pack.set_qty}; the look adds ${units / p.pack.set_qty}`);
+    units /= p.pack.set_qty;
+  }
   let inFrame = pt.in_frame_he ?? null;
   if (units > 1 && !inFrame?.includes(unitsHe(units))) {
     console.warn(`${frame}: ${pt.product}: the register shows ${units} units; the point's credit did not say it, so it says "${unitsHe(units)}"`);
@@ -532,6 +540,8 @@ for (const [key, pair] of Object.entries(story.pairs)) {
     for (const [i, pt] of points.entries()) items.push(await itemOf(room, pair.tool, f.id, q, i + 1, pt, crop, W, H, pair.closeups));
     for (const x of items) {
       x.href = detailHref(room, style, x.product);
+      // QA on S3–S5 (ה3): every way into the tool carries the way back to this story page
+      if (x.try_href) x.try_href += `&from=${encodeURIComponent(pageHref(room, style))}`;
       x.crop_image = await itemCrop(img, W, H, x.box, join(dir, 'items'), `${URL_BASE}/${room}/${style}/${f.id}/items`);
       x.product_crop = await productCrop(img, W, H, x.box, x.v, join(dir, 'items'), `${URL_BASE}/${room}/${style}/${f.id}/items`);
     }
@@ -1373,8 +1383,12 @@ async function toolDraftPage(pg: PageOut, t: ToolDraft): Promise<void> {
   const layers = await toolLayers(pg.room, pg.style, t.frame, t.layers);
   const others = await toolLayers(pg.room, t.compare.house, t.frame, t.compare.layers);
   const sizes = '(max-width: 719px) 160vw, 100vw';
-  const pic = (base: string, widths: number[], w: number, h: number, cls: string, eager: boolean) =>
-    `<picture class="st-td-layer ${cls}"><source type="image/avif" srcset="${widths.map((x) => `${base}.${x}.avif ${Math.min(x, w)}w`).join(', ')}" sizes="${sizes}" /><img src="${base}.${widths[1]}.webp" srcset="${widths.map((x) => `${base}.${x}.webp ${Math.min(x, w)}w`).join(', ')}" sizes="${sizes}" alt="" width="${w}" height="${h}" decoding="async"${eager ? ' fetchpriority="high"' : ' loading="lazy"'} /></picture>`;
+  // QA on S3–S5 (ת5): the other house's layers carry their addresses in data- attributes and load only when it is
+  // asked for (a hover, a focus or a press on its switch, or ?house=); "lazy" does not hold back a picture on screen
+  const pic = (base: string, widths: number[], w: number, h: number, cls: string, eager: boolean, deferred = false) => {
+    const a = deferred ? 'data-' : '';
+    return `<picture class="st-td-layer ${cls}"><source type="image/avif" ${a}srcset="${widths.map((x) => `${base}.${x}.avif ${Math.min(x, w)}w`).join(', ')}" sizes="${sizes}" /><img ${a}src="${base}.${widths[1]}.webp" ${a}srcset="${widths.map((x) => `${base}.${x}.webp ${Math.min(x, w)}w`).join(', ')}" sizes="${sizes}" alt="" width="${w}" height="${h}" decoding="async"${eager ? ' fetchpriority="high"' : ''} /></picture>`;
+  };
   const house = styleOf(pg.style).name_he;
   const other = styleOf(t.compare.house).name_he;
   const head = `${roomOf(pg.room).n} · ${roomOf(pg.room).name_he} · ${house} · הכלי`;
@@ -1384,7 +1398,7 @@ async function toolDraftPage(pg: PageOut, t: ToolDraft): Promise<void> {
       ${layers.map((l, i) => pic(l.base, TOOL_WIDTHS, l.w, l.h, `is-${l.blend}`, i === 0)).join('\n      ')}
     </div>
     <div class="st-td-house" data-house="${t.compare.house}" role="img" aria-label="${esc(t.compare.alt_he)}" aria-hidden="true">
-      ${others.map((l) => pic(l.base, TOOL_WIDTHS, l.w, l.h, `is-${l.blend}`, false)).join('\n      ')}
+      ${others.map((l) => pic(l.base, TOOL_WIDTHS, l.w, l.h, `is-${l.blend}`, false, true)).join('\n      ')}
     </div>
     <p class="st-draft is-almost">טיוטה / בדיקה · הכלי בבנייה</p>
   </div>
@@ -1510,7 +1524,7 @@ for (const [kind, href, title, body, skip] of [
     KIND: kind,
     HEAD_ON: 'paper',
     CONTENTS_CURRENT: '',
-    NAV_TOOL: esc(story.tool_fallback),
+    NAV_TOOL: esc(`${story.tool_fallback}?from=${encodeURIComponent('/story/')}`),
     SKIP: skip,
     SKIP_HE: 'דילוג לתוכן העמוד',
     TOOL_HREF: esc(story.tool_fallback),
@@ -1529,7 +1543,7 @@ const indexHtml = render('web/story/index.html', {
   KIND: 'index',
   HEAD_ON: 'paper',
   CONTENTS_CURRENT: ' aria-current="page"',
-  NAV_TOOL: esc(story.tool_fallback),
+  NAV_TOOL: esc(`${story.tool_fallback}?from=${encodeURIComponent('/story/')}`),
   SKIP: '#contents',
   SKIP_HE: 'דילוג לתוכן',
   TOOL_HREF: esc(story.tool_fallback),

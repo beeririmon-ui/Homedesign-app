@@ -28,12 +28,13 @@ export function shortId(cardId: string): string {
   return fnv1a(cardId).toString(36).padStart(7, '0').slice(-5);
 }
 
-/** the words of a card id that say what the product is: no supplier, no product number of 4 digits or more */
+/** the words of a card id that say what the product is: no supplier, no word with 4 digits or more (a product number,
+ * or a model code such as "g4483a", QA on S3–S5) */
 export function slugWords(cardId: string): string[] {
   return cardId
     .toLowerCase()
     .split(/[^a-z0-9]+/)
-    .filter((w) => w && !SUPPLIERS.has(w) && !/^\d{4,}$/.test(w))
+    .filter((w) => w && !SUPPLIERS.has(w) && !/\d{4,}/.test(w))
     .slice(0, MAX_WORDS);
 }
 

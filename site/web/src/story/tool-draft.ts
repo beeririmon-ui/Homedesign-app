@@ -12,7 +12,18 @@ export function initToolDraft({ announce, mark }: Ctx): void {
   const houses = [...stage.querySelectorAll<HTMLElement>('.st-td-house')];
   // the switch sits on the paper under the stage (design notes §8)
   const buttons = [...document.querySelectorAll<HTMLButtonElement>('.st-td-btn')];
+  // ת5: a house's layers load when it is asked for (data-src → src), once
+  const load = (id: string) => {
+    const h = houses.find((x) => x.dataset.house === id);
+    for (const el of h?.querySelectorAll<HTMLImageElement | HTMLSourceElement>('[data-srcset], [data-src]') ?? []) {
+      if (el.dataset.srcset) el.srcset = el.dataset.srcset;
+      if (el instanceof HTMLImageElement && el.dataset.src) el.src = el.dataset.src;
+      delete el.dataset.srcset;
+      delete el.dataset.src;
+    }
+  };
   const show = (id: string, say: boolean) => {
+    load(id);
     const to = houses.find((h) => h.dataset.house === id);
     if (!to) return;
     mark('tool:switch:start', id);
@@ -20,8 +31,6 @@ export function initToolDraft({ announce, mark }: Ctx): void {
       const on = h === to;
       h.classList.toggle('is-on', on);
       h.setAttribute('aria-hidden', String(!on));
-      // the incoming house's layers load now (lazy until shown)
-      if (on) for (const img of h.querySelectorAll('img')) img.loading = 'eager';
     }
     for (const b of buttons) b.setAttribute('aria-pressed', String(b.dataset.house === id));
     to.addEventListener('transitionend', () => mark('tool:switch:end', id), { once: true });
@@ -31,7 +40,11 @@ export function initToolDraft({ announce, mark }: Ctx): void {
     history.replaceState(history.state, '', `${location.pathname}${q.size ? `?${q.toString()}` : ''}`);
     if (say) announce(`${buttons.find((b) => b.dataset.house === id)?.textContent ?? ''}: ${to.getAttribute('aria-label') ?? ''}`);
   };
-  for (const b of buttons) b.addEventListener('click', () => show(b.dataset.house!, true));
+  for (const b of buttons) {
+    b.addEventListener('click', () => show(b.dataset.house!, true));
+    // a hand on the way to the switch: the house is fetched before the press
+    for (const ev of ['pointerenter', 'focus', 'touchstart']) b.addEventListener(ev, () => load(b.dataset.house!), { once: true, passive: true });
+  }
   const asked = new URLSearchParams(location.search).get('house');
   if (asked && asked !== houses[0]!.dataset.house) show(asked, false);
   mark('tool:ready');

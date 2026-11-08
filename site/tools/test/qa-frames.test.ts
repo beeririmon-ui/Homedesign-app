@@ -33,6 +33,10 @@ describe('the QA register', () => {
     expect(r.read('cu-1')!.rows[0]!.faithful).toBe('yes');
     // an option without its own row is "not checked", never the first row of another option (QA on S4)
     expect(rowOf(f, 'cushion', { color: 'green', size: '50x50' })).toBeNull();
+    // a point at the card's default reads the row without an option, even beside rows for other options
+    const g = { ...f, rows: [...f.rows, { card: 'cushion', present: true, faithful: 'yes', option: null, dot: 'yes' as const }] };
+    expect(rowOf(g, 'cushion', { color: 'ivory', size: '50x50' }, true)!.option).toBeNull();
+    expect(rowOf(g, 'cushion', { color: 'green', size: '50x50' }, false)).toBeNull();
     expect(r.supersededBy('old')).toBe('f');
     expect(r.read('nope')).toBeNull();
   });

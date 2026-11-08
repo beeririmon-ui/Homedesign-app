@@ -150,10 +150,14 @@ export function registerReader(dir = 'qa/reports'): RegisterReader {
  * The row of one product in a frame, for the option the frame shows: a row whose option names value ids matches when
  * every one of them is the point's; a row without an option (or a text label) is the product's row otherwise.
  */
-export function rowOf(q: QaFrame, card: string, values: Record<string, string> | null): QaRow | null {
+export function rowOf(q: QaFrame, card: string, values: Record<string, string> | null, isDefault = false): QaRow | null {
   const rows = q.rows.filter((r) => cardOf(r) === card);
   const exact = rows.find((r) => r.option && typeof r.option === 'object' && Object.entries(r.option).every(([k, v]) => values?.[k] === v));
   if (exact) return exact;
+  // the register's null option is the card's default (its schema): a point that shows the default reads that row,
+  // also when the card has rows for other options (warm modern ed8: the white bouclé beside the milk-tea one)
+  const plain = rows.filter((r) => r.option === null || r.option === undefined);
+  if (isDefault && plain.length === 1) return plain[0]!;
   // QA on S4: never the first row of another option. A card with rows per option and none for this one is "not
   // checked" (null); a card with one row that names no option ids is that row
   if (rows.some((r) => r.option && typeof r.option === 'object')) return null;

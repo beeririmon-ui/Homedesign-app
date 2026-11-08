@@ -114,6 +114,13 @@ function walk(dir: string): string[] {
 
 // ---------- inputs ----------
 const house = readJson(repoPath('docs/house-plan.json')) as HousePlan;
+// design notes §11.4 (2026-11-08): the designer's names win over the name composed from slot, material and colour;
+// the story's names table (§4) the same. A composed name is the fallback, and stays marked provisional
+const namesPath = repoPath('data/catalog/names-he.json');
+const designerNames: Record<string, string> = {
+  ...((readJson(repoPath('data/story/story.json')) as { names_he?: Record<string, string> }).names_he ?? {}),
+  ...(existsSync(namesPath) ? ((readJson(namesPath) as { names_he?: Record<string, string> }).names_he ?? {}) : {}),
+};
 const tempCoords = readJson(sitePath('tools/temp/living-room.nordic.json')) as {
   slots: Record<string, { boxes: number[][]; hotspot: [number, number]; visible?: boolean; zoom?: number[] }>;
 };
@@ -497,7 +504,8 @@ function buildProduct(card: ProductCard, path: string, roomId: string, slot: Slo
   const fulfillment = econ?.fulfillment_source ?? 'dropship_cj';
   const materials = materialsHe(card.materials);
   const color = colorNameHe(card.colors.dominant_hex);
-  const name_he = `${slot.name_he}${materials[0] ? ` ${materials[0]}` : ''}, ${color}`;
+  const named = designerNames[card.id];
+  const name_he = named ?? `${slot.name_he}${materials[0] ? ` ${materials[0]}` : ''}, ${color}`;
   const d = card.dimensions_cm ?? {};
   const dims = [d.width, d.depth, d.height].filter((x): x is number => typeof x === 'number');
   const description = [
@@ -594,7 +602,7 @@ function buildProduct(card: ProductCard, path: string, roomId: string, slot: Slo
     room: roomId,
     slot: slot.id,
     name_he,
-    name_provisional: true,
+    name_provisional: !named,
     description_he: description || `${slot.name_he}.`,
     price_agorot: retail,
     compare_at_agorot: compare,
