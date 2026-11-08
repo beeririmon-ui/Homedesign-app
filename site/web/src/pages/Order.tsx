@@ -67,7 +67,7 @@ export function OrderPage({ id }: { id: string }) {
               סטטוס: <span class="status-pill">{order.status_he}</span>
             </p>
           )}
-          <ul style={{ margin: 0, paddingInlineStart: 18 }}>
+          <ul class="order-lines">
             {order.lines.map((l, i) => (
               <li key={i}>
                 {l.name_he}

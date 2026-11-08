@@ -14,6 +14,8 @@ import { OptionPicker } from '../components/OptionPicker';
 import { Waitlist } from '../components/Waitlist';
 import { defaultVariantId, variantPackPrice, variantView } from '../variants';
 
+const WALK = ['hall', 'living-room', 'dining-room', 'work', 'corridor', 'boy', 'girl', 'bath', 'master'];
+
 export function Product({ p }: { p: PublicProduct }) {
   const [qty, setQty] = useState(1);
   // P1: the set is the default; a single piece is the other choice (only for products sold as a set)
@@ -39,7 +41,8 @@ export function Product({ p }: { p: PublicProduct }) {
     io.observe(el);
     return () => io.disconnect();
   }, [p.id]);
-  const roomN = String(catalog.rooms.findIndex((r) => r.id === where.room.id) + 1).padStart(2, '0');
+  // the room's number in the walk through the house (art direction §6.3: 01 the entrance, 02 the living room, …)
+  const roomN = String(WALK.indexOf(where.room.id) + 1 || catalog.rooms.findIndex((r) => r.id === where.room.id) + 1).padStart(2, '0');
   const added = justAdded.value === `${v.variant_id}:${pack}`;
   const add = () =>
     void addToCart(

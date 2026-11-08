@@ -1,0 +1,405 @@
+{
+ "date": "2026-11-07",
+ "by": "render-agent",
+ "source": "qa/reports/2026-11-07-ged-master-mb1.md (+ .json)",
+ "note": "TEST, not for the site; new files only",
+ "code": {
+  "nordic": {
+   "sconce_left": {
+    "ring": [
+     1366,
+     396,
+     1572,
+     572
+    ],
+    "centre": [
+     1447,
+     467
+    ],
+    "scale": 0.68,
+    "fill": "boards",
+    "dim": true,
+    "body_px": 13268,
+    "body_bbox": [
+     1387,
+     407,
+     1506,
+     521
+    ]
+   },
+   "sconce_right": {
+    "ring": [
+     2436,
+     304,
+     2730,
+     566
+    ],
+    "centre": [
+     2566,
+     407
+    ],
+    "scale": 0.68,
+    "fill": "boards",
+    "dim": false,
+    "body_px": 38224,
+    "body_bbox": [
+     2458,
+     314,
+     2673,
+     500
+    ]
+   },
+   "planter": {
+    "mask_px": 23954,
+    "Lab_C_h_before": [
+     32.62,
+     9.91,
+     24.08,
+     26.04,
+     67.6
+    ],
+    "Lab_C_h_after": [
+     49.62,
+     1.66,
+     20.95,
+     21.02,
+     85.5
+    ],
+    "target": {
+     "L": 50.0,
+     "C": 21.0,
+     "h": 86.0,
+     "method": "linear-light gain to L* 50 (the weave's light ratios kept), hue rotated, chroma to 21 (texture chroma x0.6)",
+     "why": "QA: hue toward 90 (photo 91.6), L* up about 15; the frame's warm light alone would give h ~81 (von Kries on the white panelling), so 86 sits between"
+    }
+   },
+   "chair_cloth": {
+    "mask_px": 58000,
+    "Lab_C_h_before": [
+     42.96,
+     6.2,
+     15.94,
+     17.1,
+     68.7
+    ],
+    "Lab_C_h_after": [
+     45.77,
+     -1.19,
+     9.48,
+     9.56,
+     97.1
+    ],
+    "target": "muted sage-grey linen: the hue of the Bible accent #A7B09A in the frame's morning light (h 98 by von Kries on the white panelling; full chroma 14 read as mint, so C 9.5), L* 46; PROVISIONAL: the designer picks the colour (QA G-ED.6); one parameter (CLOTH_TARGET)"
+   },
+   "out": "nordic/raw/nordic-MB-A-code.png",
+   "px_changed": 190331,
+   "px_changed_outside_regions": 0
+  },
+  "warm_modern": {
+   "sconce_left": {
+    "method": "lamp + its wall scaled about the plate centre, blended (core = outline + 10 px, falloff 22 px)",
+    "centre": [
+     1267,
+     468
+    ],
+    "scale": 0.8,
+    "region_bbox": [
+     1159,
+     387,
+     1364,
+     603
+    ],
+    "region_px": 39280
+   },
+   "sconce_right": {
+    "method": "lamp + its wall scaled about the plate centre, blended (core = outline + 10 px, falloff 22 px)",
+    "centre": [
+     2643,
+     477
+    ],
+    "scale": 0.8,
+    "region_bbox": [
+     2561,
+     395,
+     2735,
+     604
+    ],
+    "region_px": 34538
+   },
+   "out": "warm-modern/raw/warm-modern-MB-A-code.png",
+   "px_changed": 67588,
+   "px_changed_outside_regions": 0,
+   "protected_sprig_px": 624
+  }
+ },
+ "passes": {
+  "P1": {
+   "frame": "nordic",
+   "what": "the throw: flat light-grey cotton-linen",
+   "placeholder_id": "184d603f-f2b0-4f6a-90af-933bcdca3299",
+   "task_id": "a9ad9ee5fe15f6d2585fd2abee29627d",
+   "idempotency_key": "mb1-fix-P1-nordic-throw-seedream-20261107-a1",
+   "crop_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/b43d2440-cc9b-49e4-ac7a-6f27cfef80ef.png",
+   "refs": [
+    "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/f58577f2-530c-486a-948e-20d35276f87c.png (throw-cj-cotton-linen-light-gray-200x230, Light Gray)"
+   ],
+   "model": "seedream-5-pro i2i 2K, aspect auto",
+   "estimate": 650,
+   "tokens": 650,
+   "status": "completed; fetched; composited",
+   "prompt": "assets/prompts/master-editorial-2026-11-07/P1-nordic-throw.txt",
+   "input": "nordic/raw/P1-input.png",
+   "crop": [
+    870,
+    580,
+    2570,
+    1536
+   ],
+   "result_px": [
+    2720,
+    1530
+   ],
+   "ecc_affine": [
+    [
+     0.9940999746322632,
+     -0.0003000000142492354,
+     5.174600124359131
+    ],
+    [
+     -0.0,
+     0.9872000217437744,
+     7.16949987411499
+    ]
+   ],
+   "colour_gain_linear": [
+    1.0707999467849731,
+    0.954800009727478,
+    0.8427000045776367
+   ],
+   "mask_px": 622482,
+   "px_changed": 607940,
+   "px_changed_outside_region": 0,
+   "local_gain_field_median": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "tone": "global",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-a9ad9ee5fe15f6d2585fd2abee29627d-0-1794091020451-7ea0476f.png",
+   "raw": "nordic/raw/P1-seedream.png",
+   "mask": "nordic/raw/P1-mask.png",
+   "read": "a flat light warm-grey towel-weave throw with a plain hem, no pile, no fringe, folded at the foot in soft flat folds; reads cooler and much lighter than before; slightly greenish-grey in the morning light (QA to measure against L* 80 / h 103)"
+  },
+  "P2": {
+   "frame": "nordic",
+   "what": "the nightstand: bottle D as the bell, the candle holders as two Small thick-cup pieces (7 x 11, the same height), pillar candles 10 and 15 cm",
+   "placeholder_id": "7224e0b2-52d1-4847-ac55-dedb5dbce712",
+   "task_id": "ec667cb5aa8bfb9d380a74e41d6c5e78",
+   "idempotency_key": "mb1-fix-P2-nordic-nightstand-seedream-20261107-a1",
+   "crop_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/53abe1a8-67aa-4bfd-80d8-803cef3ec102.png",
+   "refs": [
+    "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/7fadcfbf-e76b-4e03-9522-b80962156bbc.png (nightstand vase, option D photo)",
+    "https://cf.cjdropshipping.com/quick/product/d4def2f1-fdf6-44bc-a65c-9a90ad47f840.jpg (candle-holders-cj-travertine-pedestal)"
+   ],
+   "model": "seedream-5-pro i2i 2K, aspect auto",
+   "estimate": 650,
+   "tokens": 650,
+   "status": "completed; fetched; composited",
+   "prompt": "assets/prompts/master-editorial-2026-11-07/P2-nordic-nightstand.txt",
+   "input": "nordic/raw/P2-input.png",
+   "crop": [
+    2316,
+    500,
+    2736,
+    1060
+   ],
+   "result_px": [
+    1728,
+    2304
+   ],
+   "ecc_affine": [
+    [
+     0.989799976348877,
+     -0.0008999999845400453,
+     2.5855000019073486
+    ],
+    [
+     0.0031999999191612005,
+     0.9940999746322632,
+     1.5348999500274658
+    ]
+   ],
+   "colour_gain_linear": [
+    0.9006999731063843,
+    0.800000011920929,
+    0.800000011920929
+   ],
+   "mask_px": 124787,
+   "px_changed": 122553,
+   "px_changed_outside_region": 0,
+   "local_gain_field_median": [
+    0.7846999764442444,
+    0.6255000233650208,
+    0.4196999967098236
+   ],
+   "tone": "two_field",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-ec667cb5aa8bfb9d380a74e41d6c5e78-0-1794091048969-fbbe5da2.png",
+   "raw": "nordic/raw/P2-seedream.png",
+   "mask": "nordic/raw/P2-mask.png",
+   "read": "shapes fixed: the bottle is option D's bell with a long thin neck; the holders are thick cups on cones, two of nearly the same height (about 124 and 107 px), pillar candles; SCALE NOT FIXED: on QA's headboard-plane basis (6.08 px/cm) the bottle is about 256 px (x1.7 of 24.5 cm) and the holders about x1.8 / x1.6 of 11 cm; the generic mug is about 86 px tall, so everything on the table reads about 1.5x; a code shrink (inpainted boards + scaled objects) was tried at 0 tokens and rejected: streaks behind the bottle, stretched candles (not in fix1)"
+  },
+  "P3": {
+   "frame": "nordic",
+   "what": "the sill vase: the slender tapered column (H/W >= 1.85)",
+   "placeholder_id": "fe0040b6-fd3e-45e0-b1f0-cfb42e45f877",
+   "task_id": "bdb20fb69fd05ecfecda65076558c0e8",
+   "idempotency_key": "mb1-fix-P3-nordic-sill-vase-seedream-20261107-a1",
+   "crop_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/5deea148-cc2b-4040-b774-9671b6483383.png",
+   "refs": [
+    "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/cf0a6f46-0bf6-4920-926c-5b357adb7ea0.png (vase-aliexpress-vintage-distressed-clay-vase-589009)"
+   ],
+   "model": "seedream-5-pro i2i 2K, aspect auto",
+   "estimate": 650,
+   "tokens": 650,
+   "status": "completed; fetched; composited",
+   "prompt": "assets/prompts/master-editorial-2026-11-07/P3-nordic-sill-vase.txt",
+   "input": "nordic/raw/P3-input.png",
+   "crop": [
+    140,
+    330,
+    600,
+    790
+   ],
+   "result_px": [
+    2048,
+    2048
+   ],
+   "ecc_affine": [
+    [
+     0.9991999864578247,
+     -9.999999747378752e-05,
+     0.23309999704360962
+    ],
+    [
+     -0.0003000000142492354,
+     1.0003000497817993,
+     -0.14329999685287476
+    ]
+   ],
+   "colour_gain_linear": [
+    1.2208000421524048,
+    1.1859999895095825,
+    1.1601999998092651
+   ],
+   "mask_px": 21456,
+   "px_changed": 20478,
+   "px_changed_outside_region": 0,
+   "local_gain_field_median": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "tone": "global",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-bdb20fb69fd05ecfecda65076558c0e8-0-1794091039930-fbe38973.png",
+   "raw": "nordic/raw/P3-seedream.png",
+   "mask": "nordic/raw/P3-mask.png",
+   "read": "the slender cream clay vase with fine horizontal ribbing, a rounded shoulder and a taper to a narrower base, about H/W 2.1, the same height; the eucalyptus unchanged"
+  },
+  "P4": {
+   "frame": "warm_modern",
+   "what": "the nightstand: bottle D as the bell, the candle holders as two Small (7 x 11, the same height), no candles",
+   "placeholder_id": "efbc1430-63d1-4ce7-a967-3b25aa478545",
+   "task_id": "2cd9fe2e4c55a264e9f876ad373950f2",
+   "idempotency_key": "mb1-fix-P4-wm-nightstand-seedream-20261107-a1",
+   "crop_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/103a3e9a-dce6-4339-b2f6-2539ca65f7e8.png",
+   "refs": [
+    "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/7fadcfbf-e76b-4e03-9522-b80962156bbc.png (nightstand vase, option D photo)",
+    "https://cf.cjdropshipping.com/quick/product/d4def2f1-fdf6-44bc-a65c-9a90ad47f840.jpg (candle-holders-cj-travertine-pedestal)"
+   ],
+   "model": "seedream-5-pro i2i 2K, aspect auto",
+   "estimate": 650,
+   "tokens": 650,
+   "status": "completed; fetched; composited",
+   "prompt": "assets/prompts/master-editorial-2026-11-07/P4-wm-nightstand.txt",
+   "input": "warm-modern/raw/P4-input.png",
+   "crop": [
+    1000,
+    500,
+    1420,
+    1060
+   ],
+   "result_px": [
+    1728,
+    2304
+   ],
+   "ecc_affine": [
+    [
+     0.9923999905586243,
+     0.000699999975040555,
+     1.1771999597549438
+    ],
+    [
+     0.0010999999940395355,
+     0.9947999715805054,
+     1.051200032234192
+    ]
+   ],
+   "colour_gain_linear": [
+    1.0533000230789185,
+    0.9199000000953674,
+    0.800000011920929
+   ],
+   "local_gain_field_median": [
+    0.932200014591217,
+    0.913100004196167,
+    0.8230000138282776
+   ],
+   "tone": "two_field",
+   "mask_px": 95277,
+   "px_changed": 91980,
+   "px_changed_outside_region": 0,
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-2cd9fe2e4c55a264e9f876ad373950f2-0-1794091083751-85e85ed0.png",
+   "raw": "warm-modern/raw/P4-seedream.png",
+   "mask": "warm-modern/raw/P4-mask.png",
+   "read": "shapes fixed: option D's bell in light sand with a long neck and an olive sprig; two holders of nearly the same height (about 100 and 95 px), no candles; scale on QA's basis (7.16 px/cm): holders about x1.27 / x1.21 of 11 cm, the bottle about 215 px (x1.23 of 24.5 cm); the ratio holder/bottle 0.46 (card 0.45)"
+  }
+ },
+ "spend": {
+  "rule": "SPEND1 (owner): QA-requested targeted passes up to 2,600 a week, 650 max each",
+  "this_round": 2600,
+  "passes": 4,
+  "next_week_not_run": "P5, P6 (the bed heads, 1,300)"
+ },
+ "candle_holder_heights": "card note (candle-holders-cj-travertine-pedestal): the set is 2 x Small 70 x 110 mm; the height difference comes from the candles (10 and 15 cm); so both holders were asked at the same 11 cm (QA open item: sourcing / designer to confirm the set)",
+ "final": {
+  "nordic": {
+   "file": "nordic/nordic-MB-A-fix1.png",
+   "px_changed_vs_MB_A": 941302,
+   "px_changed_outside_code_and_pass_regions": 0,
+   "code_px_changed_outside_code_regions": 0
+  },
+  "warm_modern": {
+   "file": "warm-modern/warm-modern-MB-A-fix1.png",
+   "px_changed_vs_MB_A": 159541,
+   "px_changed_outside_code_and_pass_regions": 0,
+   "code_px_changed_outside_code_regions": 0
+  }
+ },
+ "crops": [
+  "fix1-before-after/nordic-sconce-left-x2.jpg",
+  "fix1-before-after/nordic-sconce-right-x2.jpg",
+  "fix1-before-after/nordic-planter-x2.jpg",
+  "fix1-before-after/nordic-chair-cloth-100.jpg",
+  "fix1-before-after/nordic-throw-50.jpg",
+  "fix1-before-after/nordic-nightstand-x2.jpg",
+  "fix1-before-after/nordic-nightstand-x4.jpg",
+  "fix1-before-after/nordic-sill-vase-x2.jpg",
+  "fix1-before-after/nordic-sill-vase-x4.jpg",
+  "fix1-before-after/warm-modern-sconce-left-x2.jpg",
+  "fix1-before-after/warm-modern-sconce-right-x2.jpg",
+  "fix1-before-after/warm-modern-nightstand-x2.jpg",
+  "fix1-before-after/warm-modern-nightstand-x4.jpg"
+ ],
+ "sheet": "sheet-fix1.jpg",
+ "tone_match": "P1, P3: one per-channel gain on a ring round the region; P2, P4 (re-lit crops): a quadratic gain field fitted on the wall pixels outside the hand-set object boxes plus a constant table gain, and the whole region replaced (feathered 14 px inward at its edge)"
+}

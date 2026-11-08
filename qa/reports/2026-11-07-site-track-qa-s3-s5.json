@@ -1,0 +1,314 @@
+{
+  "id": "qa-site-track-s3-s5-2026-11-07",
+  "date": "2026-11-07",
+  "by": "qa-agent",
+  "scope": "site interface track: QA's S4 must-fix and worth-fixing items, S3 (story to tool, tool draft, soft house switch), S5 (neutral URLs and 301s, design-system table, error state, 44 px targets, story budgets), boho fin7 G-ED.17",
+  "inputs": [
+    "qa/reports/2026-11-07-site-track/s4-fix/README.md",
+    "qa/reports/2026-11-07-site-track/s3/README.md",
+    "qa/reports/2026-11-07-site-track/s5/README.md",
+    "qa/reports/2026-11-07-site-track/s5/system-checklist.json",
+    "qa/reports/ged-register-2026-11-07-r5.json"
+  ],
+  "measured_state": {
+    "build": "offline, in place, 22:04:18-22:04:39 UTC, tree at HEAD 4b4bd39e (S5 code = a6d03175; 4b4bd39e touches status/board.md only)",
+    "register_read": 5,
+    "served": "copy of site/web/dist on 127.0.0.1:8799 (wrangler dev, own D1, marker qa-marker-s35.txt)",
+    "e2e_a11y_from": "git archive 4b4bd39e in the scratchpad",
+    "vitest_from": "git archive 4b4bd39e site in the scratchpad",
+    "story_json_for_gate": "git show 4b4bd39e:data/story/story.json",
+    "tree_moved_during_round": "registers v6 (22:06), v7 (22:14), v8 (22:20) landed; site/web/dist rebuilt by others (reads v8); HEAD now abe9d131. v5 -> v8 on the measured frames: no state, verdict or dot change; units_in_frame added; warm-modern-A-ed8 new final_test (not measured)",
+    "tracked_files_touched_by_qa": 0,
+    "wip_commit_note": "commit ea79ac9e ('WIP: agents' in-progress files', not QA's) swept some of this folder's in-progress files into git; check-shop.mjs, ged17_18_story_s4.py, hit-test-story-s4.mjs, look-fresh-page.mjs and raf-rate.mjs are S4 copies not used this round (the _s35 tools ran)"
+  },
+  "verdict": {
+    "s4_must_fix": "pass",
+    "s4_worth_fixing": "pass",
+    "s3": "pass, with notes T5 and T6",
+    "s5": "mostly pass; fail on 44 px targets in opened states (T1) and on supplier names in image URLs (T2)",
+    "boho_fin7_ged17": "pass, 9/9",
+    "new_finding": "T3: the test checkout takes a stored quantity as is (an order of -69 ILS was placed)",
+    "may_continue_on_test_route": true,
+    "before_public_launch": [
+      "T1",
+      "T2"
+    ],
+    "before_real_payment": [
+      "T3"
+    ]
+  },
+  "items": [
+    {
+      "id": "1.1",
+      "check": "PRE1 strict at checkout (injected rug line, available:true, 1,299 ILS)",
+      "verdict": "pass",
+      "evidence": "data/check-pre1-checkout.json",
+      "note": "cart: held, not charged; checkout: 'לא בהזמנה'; order: the cushion only, 78 ILS"
+    },
+    {
+      "id": "1.1b",
+      "check": "checkout against a hand-edited cart",
+      "verdict": "partial",
+      "evidence": "data/check-checkout-tamper.json, data/check-negative-order.json",
+      "note": "forged price: the table wins; unknown variant: held; quantity not validated (T3)"
+    },
+    {
+      "id": "1.2",
+      "check": "SET1, triptych sold as the set only",
+      "verdict": "pass",
+      "evidence": "data/check-s4fix.json, overlays/triptych-detail-cart-1280.png",
+      "note": "no pack choice, size axis only, the set note; cart pack:set x1 199 ILS; a hand-edited unit line is held"
+    },
+    {
+      "id": "2.1",
+      "check": "wheel commits on release under CPU load",
+      "verdict": "pass",
+      "evidence": "data/diag-drag-loaded-fast.json, data/flaky-drag-repeat10-loaded.log",
+      "note": "aria-checked 3-9 ms after pointerup (S4: 3.0-5.1 s); flow.spec drag x10 under load 10/10 (S4: 6/10)"
+    },
+    {
+      "id": "2.1b",
+      "check": "real-time spring",
+      "verdict": "pass",
+      "evidence": "data/wheel-settle-loaded.json, data/wheel-settle-ambient.json",
+      "note": "settles in 1.0-1.46 s at 4-8 fps loaded, 0.97-1.10 s ambient"
+    },
+    {
+      "id": "2.1c",
+      "check": "close / cancel race",
+      "verdict": "pass",
+      "evidence": "data/wheel-close-race.json",
+      "note": "confirm 0/50/150 ms after release keeps option 3; Escape cancels to 1 by design"
+    },
+    {
+      "id": "2.2",
+      "check": "the whole look is idempotent",
+      "verdict": "pass",
+      "evidence": "data/check-s4fix.json",
+      "note": "all 5 frames: second press and after reload unchanged; 'המראה כבר בסל, לא נוסף דבר'"
+    },
+    {
+      "id": "2.3",
+      "check": "two-tab sync",
+      "verdict": "pass",
+      "evidence": "data/check-s4fix.json, data/check-pre1-checkout.json, data/check-storage-fails.json",
+      "note": "tab 1 count follows 0/6/0, 5 lines; an order in tab 2 does not bring lines back; storage write failures: works in-page, no errors"
+    },
+    {
+      "id": "2.4",
+      "check": "only dotted products in the look",
+      "verdict": "pass",
+      "evidence": "site/tools/make-story.ts lookHtml (x.dot), data/check-s4fix.json",
+      "note": "no sellable undotted product in the current data, so the filter is not exercised in the browser"
+    },
+    {
+      "id": "2.5",
+      "check": "rowOf",
+      "verdict": "pass",
+      "evidence": "tools/rowof-test.ts, data/rowof-test.log",
+      "note": "6/6; silent in the build log (note N5)"
+    },
+    {
+      "id": "2.6",
+      "check": "register freshness meta and its e2e test",
+      "verdict": "pass",
+      "evidence": "data/register-meta-both-ways.log, data/e2e-full.log",
+      "note": "51/51 story pages carry 5; the test failed on the real v6 that landed after the build and passes with registers up to v5"
+    },
+    {
+      "id": "3.1",
+      "check": "from= return link; external URLs ignored",
+      "verdict": "pass",
+      "evidence": "data/check-s3.json, data/back-link-overlap.json, overlays/tool-back-to-story-*.png",
+      "note": "#st-tool on 6 pages carries from; 12 hostile values get no link; 103x44 on the stage, paper, no blur, covers no hotspot; the sheet's #st-try and the contents link carry no from (N3)"
+    },
+    {
+      "id": "3.2",
+      "check": "warm-modern tool draft and Nordic base behind the flag, marked as drafts",
+      "verdict": "pass",
+      "evidence": "data/check-draft-mark.json, data/hd-public-build.log, overlays/tool-draft-mark-*.png",
+      "note": "noindex; 'טיוטה / בדיקה · הכלי בבנייה' top corner; caption says the Nordic shell is a draft too; multiply applied; public build has no story/ and no media/story/"
+    },
+    {
+      "id": "3.3",
+      "check": "soft house switch: 1.0 s, reduced motion, identical boxes",
+      "verdict": "pass with notes",
+      "evidence": "data/check-s3.json, overlays/tool-draft-after-switch-*.png, overlays/tool-shells-*.jpg",
+      "note": "one box for all layers, no transform; opacity 1s --e-standard; mid 0.50/0.50 at 400; ?house=nordic; reduced motion 0.3 s not 0.2 (T6); Nordic layer preloaded (T5); shells not yet the same geometry (N2, render)"
+    },
+    {
+      "id": "4.1",
+      "check": "neutral product URLs and 301s (39 shop + 41 story), no collisions, no supplier or listing number in any URL",
+      "verdict": "pass for page URLs; fail for image URLs (T2)",
+      "evidence": "data/scan-urls.json, data/redirects-live.json",
+      "note": "489 cards -> 489 slugs; 80 rows, all 301, no duplicates or chains, each target = productSlug(source); live 80/80 301 -> 200, query kept; canonical and sitemap neutral; 1 latent slug with a model code (N4)"
+    },
+    {
+      "id": "4.2",
+      "check": "design-system table: 220 rows and the 16 logged rows",
+      "verdict": "pass (reproduced)",
+      "evidence": "data/system-checklist-qa-run.json, data/check-focus.json",
+      "note": "identical to frontend-dev's table on all 220 rows: 204 pass, 0 hard fail, 16 logged (8 shop G7.7, 8 line length); stricter focus check: every Tab stop changes look on 7 pages at 1280 and 400"
+    },
+    {
+      "id": "4.3",
+      "check": "error state, frame not loaded",
+      "verdict": "pass with T4",
+      "evidence": "data/check-frame-failed.json, data/frame-failed-collide.json, data/axe-after-sheet.json, overlays/frame-failed-*.png",
+      "note": "message on paper, role=status; 0 dots also after resize; list whole; blurred preview stays; sheet opens from the list; axe clean (contrast hits only during the sheet fade-out); on the phone the message covers 54% of the draft mark"
+    },
+    {
+      "id": "4.4",
+      "check": "44 px targets",
+      "verdict": "fail (T1)",
+      "evidence": "data/check-targets.json",
+      "note": "initial states pass; opened states: cart 'הסרה' 28x44, checkout error-summary links 18 px high"
+    },
+    {
+      "id": "4.5",
+      "check": "story budgets",
+      "verdict": "pass",
+      "evidence": "data/measure-story-budgets.json, data/build-web-api-budget.log",
+      "note": "phone 412@2x first load 191-307 KB (cap 1.2 MB); detail 160-250 KB (cap 0.9 MB); JS 9.6 KB, CSS 11 KB on the wire; LCP <= 0.86 s phone, <= 0.98 s desktop; room JS 76.5/80 KB"
+    },
+    {
+      "id": "5",
+      "check": "boho fin7, G-ED.17 on 9 dots (planter, rust cushion x2)",
+      "verdict": "pass",
+      "evidence": "overlays/boho-A-dots-boxes.jpg, overlays/boho-A-phone-390.jpg, data/ged17-18-story.json, data/hit-test-story.log, data/check-s4fix.json",
+      "note": "phone 390: 6 pass (raffia 41x52, sconce 46x54, rust 76x67, olive 106x73, throw 117x174, runner 208x119 CSS); planter, XL basket, pouf outside the 4:5 crop (page agrees); desktop 9/9 at 1280, 1280x720, 1440, 1920, own-button hits, no overlap, closest 79 px; every dot on its product by eye; look adds the rust cushion x2 with 'בתמונה: שתי יחידות.' and 'כמו בתמונה'"
+    }
+  ],
+  "findings": [
+    {
+      "id": "T1",
+      "severity": "must before public launch (G7.7)",
+      "what": "targets under 44 px in opened states: cart 'הסרה' 28x44; checkout error-summary links 18 px high (each link is its whole line, so the inline exception does not apply); system.spec measures initial states only",
+      "fix": "min-width 44 for 'הסרה'; min-height 44 for the summary links; add the sheet, open cart and checkout-after-empty-submit states to system.spec",
+      "owner": "frontend-dev"
+    },
+    {
+      "id": "T2",
+      "severity": "must before public launch (manager decision, board line 1081)",
+      "what": "supplier names still reach the customer outside page URLs: 39 /media/products/<card-id>/ folders (e.g. /media/products/vase-cj-textured-white-stoneware/supplier.800.webp, the file name 'supplier' too); story product images under /media/story/products/<card-id>/ (13 on the Nordic page); card ids in every page's data block and 228 times in main.js",
+      "fix": "media paths by slug or hash with a neutral file name; a public id (slug or shortId) in data sent to the browser",
+      "owner": "frontend-dev"
+    },
+    {
+      "id": "T3",
+      "severity": "must before real payment (test route only today)",
+      "what": "the test checkout takes the stored quantity as is: qty -2 -> -98 ILS and a placed order of -69 ILS (T1200639); 999 accepted (cap 20); 2.5 -> 122.50 ILS; '3' as a string accepted",
+      "fix": "in load(): keep a line only with an integer qty 1-20 and pack in {set, unit}; hold or clamp otherwise",
+      "owner": "frontend-dev"
+    },
+    {
+      "id": "T4",
+      "severity": "minor",
+      "what": "phone error state: the message covers 54% of the draft mark (360, 390, 400 px)",
+      "fix": "stack the message above the mark on the phone",
+      "owner": "frontend-dev"
+    },
+    {
+      "id": "T5",
+      "severity": "minor",
+      "what": "the Nordic house layer loads with the draft page (+50 KB, 199 KB not 149), though the S3 README says only on choice; loading=lazy does not defer an in-viewport image at opacity 0",
+      "fix": "set src on choose, or on hover/focus of the switch",
+      "owner": "frontend-dev"
+    },
+    {
+      "id": "T6",
+      "severity": "minor (documentation)",
+      "what": "reduced-motion house switch is 0.3 s (--d-swap), not 0.2 s as in the README and the request; 0.3 matches the dissolves of art direction 7.4",
+      "fix": "decide and align code or text",
+      "owner": "master-designer / frontend-dev"
+    }
+  ],
+  "notes": [
+    {
+      "id": "N1",
+      "what": "the build trails the registers: dist now reads v8; v8 adds units (Nordic A travertine sconces x2 at 299 ILS per unit, Mediterranean white cushions x3, country curtains x2) and warm-modern-A-ed8 final_test",
+      "need": "rebuild; G-ED.17 on warm-modern ed8; check the new look quantities",
+      "owner": "frontend-dev, qa-agent"
+    },
+    {
+      "id": "N2",
+      "what": "the two houses' shells do not share geometry yet (corner ~25 px at 1280, ceiling line, wider warm-modern window opening); the skeleton asks for identical openings; the site side is clean",
+      "owner": "render-agent"
+    },
+    {
+      "id": "N3",
+      "what": "the sheet's 'לנסות בחדר: עצב בעצמך' (#st-try) and the contents link enter the tool without from=",
+      "owner": "frontend-dev"
+    },
+    {
+      "id": "N4",
+      "what": "slug of paper-towel-holder-aliexpress-wood-upright-g4483a-078038 keeps the supplier model code g4483a (not on the site yet)",
+      "owner": "frontend-dev"
+    },
+    {
+      "id": "N5",
+      "what": "rowOf is right but silent: a story point whose option has no row loses its dot without a build warning",
+      "owner": "frontend-dev"
+    },
+    {
+      "id": "N6",
+      "what": "design notes 10 (after S5): of the 8 logged line-length rows only one still fails (Nordic 1280 caption, 77 > 75); spec update is frontend-dev's uncommitted WIP",
+      "owner": "frontend-dev"
+    },
+    {
+      "id": "N7",
+      "what": "shop toast-in moves 10 px (translateY); art direction 7: interface is fade only",
+      "owner": "frontend-dev"
+    },
+    {
+      "id": "N8",
+      "what": "outside scope: 7 slots of the shop's room tool have variations with identical Hebrew names (the 3 vases are all 'אגרטל קרמיקה, לבן חם'); the hotspot label cannot tell them apart",
+      "owner": "sourcing-agent / master-designer"
+    },
+    {
+      "id": "N9",
+      "what": "the triptych line still carries print 1's SKU id; a set SKU from the supplier before real sale (known since S4)",
+      "owner": "sourcing-agent"
+    },
+    {
+      "id": "N10",
+      "what": "G-ED.18 boho (not asked): 4/9 by the dotted box; the rust cushion passes through its second unit (~2.5% by eye) if accepted; raffia, sconce, XL basket, planter need layer-2 close-ups (none yet)",
+      "owner": "master-designer / render-agent"
+    },
+    {
+      "id": "N11",
+      "what": "boho sconce credit says two units, v5 had none (v6 sets 2; the build warned); no effect while it has no price",
+      "owner": "none"
+    }
+  ],
+  "tests": {
+    "e2e": {
+      "result": "67/68",
+      "note": "the one failure is the register freshness test catching v6, which landed 1.5 min after the build; it passes with registers up to v5",
+      "log": "data/e2e-full.log"
+    },
+    "a11y": {
+      "result": "15/15",
+      "log": "data/a11y.log"
+    },
+    "vitest": {
+      "result": "118 passed, 1 skipped",
+      "note": "the skipped test needs studio/dist, not in the copy",
+      "log": "data/vitest.log"
+    },
+    "budget": {
+      "result": "pass",
+      "log": "data/build-web-api-budget.log"
+    },
+    "drag_under_load": {
+      "result": "10/10",
+      "log": "data/flaky-drag-repeat10-loaded.log"
+    }
+  },
+  "files": {
+    "report": "qa/reports/2026-11-07-site-track-qa-s3-s5.md",
+    "tools": "qa/reports/2026-11-07-site-track-qa-s3-s5/tools/",
+    "data": "qa/reports/2026-11-07-site-track-qa-s3-s5/data/",
+    "overlays": "qa/reports/2026-11-07-site-track-qa-s3-s5/overlays/"
+  }
+}

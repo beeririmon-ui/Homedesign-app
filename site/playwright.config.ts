@@ -24,5 +24,7 @@ export default defineConfig({
   projects: [
     { name: 'e2e', testMatch: /(flow|perf|swap-diff|hotspots|options|test-page|story|system)\.spec\.ts/, use: { ...devices['Desktop Chrome'], launchOptions } },
     { name: 'a11y', testMatch: /a11y\.spec\.ts/, use: { ...devices['Desktop Chrome'], launchOptions } },
+    // the evidence screenshots of a sprint (e2e/shots-*.spec.ts): only when asked for, with HD_SHOTS_DIR
+    { name: 'evidence', testMatch: /shots-.*\.spec\.ts/, use: { ...devices['Desktop Chrome'], launchOptions } },
   ],
 });
