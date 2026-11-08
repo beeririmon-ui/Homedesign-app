@@ -135,6 +135,25 @@ describe('the story test cart', () => {
     expect(cart.current()!.lines.map((l) => l.variant_id)).toEqual(['candles:70x110mm']);
   });
 
+  it('reads a line from storage, never trusts it: 1–20 whole units, else no line (QA on S3–S5, ת3)', async () => {
+    const store = memoryStore();
+    await storyCart(V, store).add('bowl:default');
+    const saved = JSON.parse(store.get('hd.story.cart')!) as { id: string; items: Record<string, unknown>[] };
+    const line = saved.items[0]!;
+    saved.items = [
+      { ...line, qty: -2 },
+      { ...line, qty: 2.5 },
+      { ...line, qty: '3' },
+      { ...line, qty: 0 },
+      { ...line, pack: 'crate' },
+      { ...line, variant_id: 'candles:70x110mm', qty: 999 },
+    ];
+    store.set('hd.story.cart', JSON.stringify(saved));
+    const c = storyCart(V, store).current()!;
+    expect(c.lines.map((l) => [l.variant_id, l.qty])).toEqual([['candles:70x110mm', MAX_QTY]]);
+    expect(c.subtotal_agorot).toBe(19900 * MAX_QTY);
+  });
+
   it('holds a line whose product stopped being sold (PRE1): named, out of the sum, never charged', async () => {
     const store = memoryStore();
     await storyCart(V, store).add('bowl:default');

@@ -133,10 +133,19 @@ export function storyCart(variants: StoryVariant[], store: KeyValue = browserSto
   // Only then: when the store works, it has the last word (another tab may have ordered and emptied it: QA on S4).
   let mine: Saved | null = null;
   let dropped = false;
+  /**
+   * QA on S3–S5 (ת3): storage is the customer's to edit, so a line is read, never trusted. A whole number of units is
+   * held to 1–20; anything else (a negative, a fraction, a string, an unknown pack) is not a line at all.
+   */
+  const sane = (i: Line): Line[] => {
+    if (!i || typeof i.variant_id !== 'string' || (i.pack !== 'set' && i.pack !== 'unit')) return [];
+    if (typeof i.qty !== 'number' || !Number.isInteger(i.qty) || i.qty < 1) return [];
+    return [{ ...i, qty: Math.min(MAX_QTY, i.qty) }];
+  };
   const load = (): Saved | null => {
     try {
       const s = JSON.parse(store.get(key) ?? 'null') as Saved | null;
-      if (s && typeof s.id === 'string' && Array.isArray(s.items)) return s;
+      if (s && typeof s.id === 'string' && Array.isArray(s.items)) return { ...s, items: s.items.flatMap(sane) };
       return dropped ? mine && structuredClone(mine) : null;
     } catch {
       return mine && structuredClone(mine);
