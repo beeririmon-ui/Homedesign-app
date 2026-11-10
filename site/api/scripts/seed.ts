@@ -207,8 +207,15 @@ if (isMain) {
   const storyFile = resolve(GENERATED, 'catalog.story.full.json');
   if (existsSync(storyFile)) {
     const story = JSON.parse(readFileSync(storyFile, 'utf8')) as FullCatalog;
-    const have = new Set(cat.products.map((p) => p.id));
+    const have = new Map(cat.products.map((p) => [p.id, p]));
     const extra = story.products.filter((p) => !have.has(p.id));
+    // a product in both: the shop's record, with every option the story sells too (a story page may show another one)
+    for (const s of story.products) {
+      const p = have.get(s.id);
+      if (!p || !s.variants_full) continue;
+      const known = new Set((p.variants_full ?? []).map((v) => v.id));
+      p.variants_full = [...(p.variants_full ?? []), ...s.variants_full.filter((v) => !known.has(v.id))];
+    }
     cat.products = [...cat.products, ...extra];
     console.log(`seed.sql: + ${extra.length} story products (catalog.story ${story.version})`);
   }

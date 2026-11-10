@@ -1,5 +1,5 @@
 import { test, expect, devices, type Page } from '@playwright/test';
-import { productPath } from '@hd/shared/product-url';
+import { productPath, productSlug } from '@hd/shared/product-url';
 
 async function roomReady(page: Page) {
   await page.goto('/rooms/living-room/');
@@ -22,7 +22,7 @@ test.describe('SEO: prerendered Hebrew pages', () => {
     const image = /"image":\["([^"]+)","([^"]+)"\]/.exec(product);
     expect(image, 'Product.image: render, then supplier photo').toBeTruthy();
     expect(image![1]).toMatch(/^https:\/\/[^/]+\/media\/rooms\/living-room\/.*\.product\.\d+\.webp$/);
-    expect(image![2]).toMatch(/^https:\/\/[^/]+\/media\/products\/[a-z0-9-]+\/supplier\.800\.webp$/);
+    expect(image![2]).toMatch(/^https:\/\/[^/]+\/media\/products\/[a-z0-9-]+\/photo\.800\.webp$/);
     expect(product).toContain('המוצר מרונדר');
     expect(product.indexOf('data-kind="render"')).toBeLessThan(product.indexOf('data-kind="supplier"'));
     expect(product).toMatch(/alt="תמונת הספק: [^"]+"/);
@@ -193,7 +193,8 @@ test.describe('product gallery (FR-I)', () => {
     await expect(prev).toHaveAttribute('aria-disabled', 'true');
     // the supplier photo is served from our media, never from the supplier
     const src = await slides.nth(1).getByRole('img').getAttribute('src');
-    expect(src).toMatch(/^\/media\/products\/vase-cj-textured-white-stoneware\/supplier\.800\.webp$/);
+    // S7: the folder is the public id, the file a neutral name (no supplier in a media path)
+    expect(src).toBe(`/media/products/${productSlug('vase-cj-textured-white-stoneware')}/photo.800.webp`);
     expect((await page.request.get(src!)).headers()['content-type']).toContain('image/webp');
   });
 

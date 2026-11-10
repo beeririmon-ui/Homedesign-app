@@ -374,6 +374,8 @@ test.describe('the detail page (layer 2, "הפרט")', () => {
     await expect(page.locator('#st-pd-price')).toHaveText(/49/);
     await expect(page.locator('.st-pd-axis[data-axis="size"] input:checked')).toHaveValue('30x50');
     await page.locator('#st-pd-add').click();
+    // S7: the cart is the server's: the count follows its answer
+    await expect(page.locator('#st-cart-count')).toHaveText('1');
     await page.locator('#st-cart-open').click();
     await expect(page.locator('#st-cart-lines')).toContainText('30×50');
     await page.keyboard.press('Escape');
@@ -521,7 +523,7 @@ test.describe('the shop after QA on S4', () => {
     const cart = (await (await page.request.post('/api/cart')).json()) as { id: string };
     const put = (variant_id: string, qty: unknown) => page.request.put(`/api/cart/${cart.id}/items`, { data: { variant_id, pack: 'set', qty } });
     if (rug) expect((await put(rug.variant_id!, 1)).ok()).toBe(false);
-    for (const qty of [-2, 2.5, '3', 21, 999]) expect((await put(sold.variant_id!, qty)).status(), String(qty)).toBe(400);
+    for (const qty of [-2, 2.5, '3', 21, 999]) expect((await put(sold.variant_id!, qty)).status(), String(qty)).toBe(422);
     const ok = (await (await put(sold.variant_id!, 20)).json()) as { lines: { qty: number }[]; subtotal_agorot: number };
     expect(ok.lines[0]!.qty).toBe(20);
     expect(ok.subtotal_agorot).toBeGreaterThan(0);

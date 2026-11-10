@@ -22,7 +22,11 @@ export default defineConfig({
     ? undefined
     : { command: 'npm run preview', url: `${BASE}/api/health`, reuseExistingServer: true, timeout: 120_000, stdout: 'ignore' },
   projects: [
-    { name: 'e2e', testMatch: /(flow|perf|swap-diff|hotspots|options|test-page|story|system|public-scan)\.spec\.ts/, use: { ...devices['Desktop Chrome'], launchOptions } },
+    {
+      name: 'e2e',
+      testMatch: /(flow|perf|swap-diff|hotspots|options|test-page|story|system|public-scan)\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'], launchOptions },
+    },
     { name: 'a11y', testMatch: /a11y\.spec\.ts/, use: { ...devices['Desktop Chrome'], launchOptions } },
     // the evidence screenshots of a sprint (e2e/shots-*.spec.ts): only when asked for, with HD_SHOTS_DIR
     { name: 'evidence', testMatch: /shots-.*\.spec\.ts/, use: { ...devices['Desktop Chrome'], launchOptions } },
