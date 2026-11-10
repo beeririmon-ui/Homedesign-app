@@ -1,0 +1,288 @@
+{
+ "date": "2026-11-10",
+ "by": "render-agent",
+ "pass_id": "P6b",
+ "frame": "warm_modern",
+ "source": "briefs/render-master-P6b-2026-11-10.md; qa/reports/2026-11-10-ged-master-fix4.md (register v10)",
+ "spend": "SPEND2 (owner 2026-11-10): targeted QA passes up to 650 each, var2_estimate_cost before each job; this pass's cap 900",
+ "note": "TEST, not for the site; new files only; awaiting qa-agent round 4 (G-ED.8, G-ED.9) and the designer's eye",
+ "segments": {
+  "found": {
+   "3": {
+    "offset": [
+     106,
+     169
+    ],
+    "size": [
+     527,
+     267
+    ],
+    "px": 94638,
+    "rms": 0.0
+   },
+   "4": {
+    "offset": [
+     631,
+     164
+    ],
+    "size": [
+     625,
+     241
+    ],
+    "px": 105358,
+    "rms": 0.0
+   }
+  },
+  "union_px": 199996,
+  "hand_mask_px": 211983,
+  "iou_with_hand_mask": 0.912,
+  "file": "warm-modern/raw/P6b-seg-mask.png"
+ },
+ "P6b": {
+  "base": "warm-modern/warm-modern-MB-A-fix4.png",
+  "out": "warm-modern/warm-modern-MB-A-fix5.png",
+  "crop": [
+   1380,
+   520,
+   2700,
+   1086
+  ],
+  "crop_px": [
+   1320,
+   566
+  ],
+  "result_px": [
+   3122,
+   1338
+  ],
+  "placed_as": {
+   "scale": 0.42281,
+   "offset": [
+    0.0,
+    0.14
+   ]
+  },
+  "ecc_affine": [
+   [
+    0.9954000115394592,
+    -0.0006000000284984708,
+    3.344399929046631
+   ],
+   [
+    0.0,
+    1.0008000135421753,
+    -0.16349999606609344
+   ]
+  ],
+  "tone_field_coef": [
+   [
+    0.03680000081658363,
+    0.07419999688863754,
+    -0.0729999989271164,
+    0.3646000027656555,
+    0.22499999403953552,
+    -0.5544000267982483
+   ],
+   [
+    -0.04010000079870224,
+    0.07519999891519547,
+    -0.030700000002980232,
+    0.334199994802475,
+    0.2799000144004822,
+    -0.5022000074386597
+   ],
+   [
+    -0.1860000044107437,
+    0.03180000185966492,
+    0.014299999922513962,
+    0.2953000068664551,
+    0.47429999709129333,
+    -0.2011999934911728
+   ]
+  ],
+  "tone_field_median": [
+   1.0511000156402588,
+   0.9721999764442444,
+   0.8424000144004822
+  ],
+  "region": "v2: ((segments 3 | 4) grown 12 px | the gap band) minus the lumbar (+3 px) and the duvet (raw/P6b-protect-v2.png); feather 4.0 px inward, linear light",
+  "region_v1_rejected": "(segments 3 | 4) grown 3 px minus P6b-protect.png, feather 2 px: the old flange stayed in the protected gap band (a doubled edge) and as contact-shadow lines on the back pillows",
+  "comp_mask": "warm-modern/raw/P6b-comp-mask.png",
+  "comp_mask_px": 225379,
+  "comp_mask_px_outside_hand_mask": 18392,
+  "hand_mask_px_not_written": 4996,
+  "px_changed": 224508,
+  "px_changed_outside_mask": 0,
+  "px_changed_in_protect_v2": 0,
+  "px_changed_in_prepared_protect": {
+   "total": 16187,
+   "note": "the gap band and the back pillows' ring (12 px) round the old pillowcases; the lumbar and the duvet: 0"
+  },
+  "px_changed_outside_crop": 0,
+  "max_abs_change_8bit": 170,
+  "ring_L_median_abs_err": 2.62,
+  "colour": {
+   "left (QA's patch)": {
+    "box": [
+     1520,
+     720,
+     1780,
+     900
+    ],
+    "before": [
+     35.4,
+     18.6,
+     28.8
+    ],
+    "after": [
+     38.2,
+     19.2,
+     29.0
+    ],
+    "dE00_after_vs_swatch": 4.36,
+    "dE00_before_vs_swatch": 3.16,
+    "dE00_after_vs_before": 2.39,
+    "hue_after": 56.5,
+    "chroma_after": 34.8
+   },
+   "right": {
+    "box": [
+     2300,
+     720,
+     2560,
+     900
+    ],
+    "before": [
+     23.5,
+     16.8,
+     25.0
+    ],
+    "after": [
+     22.5,
+     15.9,
+     23.6
+    ],
+    "dE00_after_vs_swatch": 9.95,
+    "dE00_before_vs_swatch": 9.01,
+    "dE00_after_vs_before": 1.02,
+    "hue_after": 56.0,
+    "chroma_after": 28.5
+   }
+  },
+  "swatch": [
+   34.0,
+   24.1,
+   32.1
+  ],
+  "swatch_src": "qa/reports/2026-11-07-ged-master-mb1/data/measure.json refs['pillow caramel'].product"
+ },
+ "crops": [
+  "fix7-before-after/wm-bed-head-100.jpg",
+  "fix7-before-after/wm-pillow-left-x2.jpg",
+  "fix7-before-after/wm-pillow-right-x2.jpg",
+  "fix7-before-after/wm-gap-x4.jpg",
+  "fix7-before-after/wm-lumbar-edge-right-x4.jpg",
+  "fix7-before-after/wm-left-end-x4.jpg",
+  "fix7-before-after/wm-right-end-x4.jpg"
+ ],
+ "sheet": "sheet-fix7.jpg",
+ "tokens": 900,
+ "jobs": [
+  {
+   "step": 1,
+   "model": "grok-imagine-image-2",
+   "type": "segment-map",
+   "tokens": 0,
+   "estimate": 0,
+   "segment_map_id": "0b31387d-5208-4817-8bf7-a73fd85fd75a",
+   "idempotency_key": "mb1-fix7-P6b-segment-map-20261110-a1",
+   "input_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/6758eb1a-1bd1-4bb8-b4bb-65d1bd18abd0.png (raw/P6b-input.png, 1,047,252 bytes, verified)",
+   "segments": "16: 0 headboard, 1 wall, 2 lamp, 3 + 4 'brown pillow' (the two caramel pillowcases, flanges included), 5-9 'white pillow', 10-12 'cream boucle pillow' (duplicates of 5-7), 13 duvet, 14 mug, 15 'text'",
+   "verdict": "clean: 3 and 4 are exact pixel cut-outs of the two pillowcases (rms 0), IoU 0.912 with the hand mask (which also took strips of the back pillow and headboard)"
+  },
+  {
+   "step": 2,
+   "model": "grok-imagine-image-2",
+   "type": "segment-edit",
+   "mask_indexes": [
+    3,
+    4
+   ],
+   "tokens": 250,
+   "estimate": 250,
+   "placeholder_id": "8b0152d1-2046-4690-be47-bb2e36d8bb1c",
+   "task_id": "48510c5f7d458d2e86b4038d51587759",
+   "idempotency_key": "mb1-fix7-P6b-grok-segment-edit-20261110-a1",
+   "refs": [
+    "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/7b3e9c2b-1261-4386-8edc-4428e34b6858.png (pillowcases, Caramel; reference only)"
+   ],
+   "prompt": "assets/prompts/master-editorial-2026-11-07/P6b-wm-caramel-pillowcases-grok-segment-edit.txt",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/grok2-48510c5f7d458d2e86b4038d51587759-0-1794352424526-6a5e69a1.jpg",
+   "raw": "warm-modern/raw/P6b-grok.jpg",
+   "result_px": [
+    1320,
+    566
+   ],
+   "seed": null,
+   "verdict": "FAILED: the pillows redrawn almost unchanged, both flanges still there (the left one's flat border and stitch line, the right one's doubled edge); JPEG; not used"
+  },
+  {
+   "step": 3,
+   "model": "seedream-5-pro",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "21:9",
+   "tokens": 650,
+   "estimate": 650,
+   "placeholder_id": "58da3d4f-b269-4d6b-849c-75bbbca33aef",
+   "task_id": "a48b3005c12a718fd7e1a2ddd9d9390c",
+   "idempotency_key": "mb1-fix7-P6b-seedream-20261110-a1",
+   "refs": [
+    "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/7b3e9c2b-1261-4386-8edc-4428e34b6858.png (pillowcases, Caramel; reference only)"
+   ],
+   "prompt": "assets/prompts/master-editorial-2026-11-07/P6b-wm-caramel-pillowcases.txt (sent verbatim)",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-a48b3005c12a718fd7e1a2ddd9d9390c-0-1794352580572-402ccd80.png",
+   "raw": "warm-modern/raw/P6b-seedream.png",
+   "result_px": [
+    3122,
+    1338
+   ],
+   "seed": null,
+   "verdict": "flanges gone on both; plain envelopes with the seam on the edge; framing kept (the crop's own 21:9, ECC: x scale 0.9954, shift +3.3 px); composited"
+  }
+ ],
+ "seed_note": "var2 exposes no seed for grok-imagine-image-2 or seedream-5-pro; reproduce from the stored result URLs",
+ "cap": {
+  "cap": 900,
+  "spent": 900,
+  "by_job": {
+   "segment-map": 0,
+   "segment-edit": 250,
+   "seedream": 650
+  }
+ },
+ "gap": {
+  "spot_box": [
+   2030,
+   770,
+   2060,
+   812
+  ],
+  "L_median": {
+   "fix4": 16.2,
+   "fix5": 12.0
+  },
+  "grain_sd": {
+   "fix4": 1.35,
+   "fix5": 1.64
+  },
+  "read": "the gap is seedream's: the left pillowcase's plain edge, the dark slit, the cream back pillow's band (lit at the top, shaded lower) and the right pillowcase's new plain edge, continuous from the pillows' tops down to the lumbar's top; no blob, no doubled edge at x4 (fix7-before-after/wm-gap-x4.jpg). The spot QA flagged on fix3 had already been rebuilt in code in fix4 (mb1-fix5.json); that rebuild could not be kept because the band's right side was the old flange"
+ },
+ "kept": {
+  "lumbar": "0 px changed (protected, +3 px)",
+  "duvet": "0 px changed (protected)",
+  "cream_back_pillows": "changed only in the 12 px ring round the old pillowcases (the flange's contact shadows) and where removing the flange reveals them; the rest 0 px",
+  "lumbar_cast_shadow": "seedream's: wider in its lower half (row 880: 94 px at L*<14 against 53), the box mean about the same (L* 18.1 against 18.8); for QA and the designer"
+ },
+ "read": "Both caramel pillowcases are now plain envelopes: no flange, border, flat strip or stitch line; the seams sit on the edge, the corners soft. Colour kept: QA's left patch Lab [38.2, 19.2, 29.0], dE00 4.36 against the card swatch [34.0, 24.1, 32.1] (fix4: 3.16) and 2.39 against fix4; the right pillowcase, in the lamp's shadow, dE00 1.02 from fix4 (its dE00 against the swatch, 9.95, is the light: 9.01 before). Where the flanges were, the cream back pillows now show (the second back pillow down the right pillowcase's end, the left back pillow at the left end), as they would. Open points for QA / the designer: the lumbar's cast shadow (above); the new linen is a touch softer at x2 than fix4's; the region's lower edge on the duvet follows the duvet's colour mask, so it is ragged on the mask outline (no visible seam at 100 % or x4)"
+}
