@@ -7,7 +7,10 @@ describe('product addresses', () => {
     const s = productSlug('vase-aliexpress-vintage-distressed-clay-vase-589009');
     expect(s).toMatch(/^vase-vintage-distressed-clay-vase-[0-9a-z]{5}$/);
     expect(productSlug('cushions-cj-boucle-teddy')).toMatch(/^cushions-boucle-teddy-[0-9a-z]{5}$/);
-    expect(productSlug('planter-zendrop-seagrass-belly-basket-45')).toMatch(/^planter-seagrass-belly-basket-45-/);
+    expect(productSlug('planter-zendrop-seagrass-belly-basket-45')).toMatch(/^planter-seagrass-belly-basket-[0-9a-z]{5}$/);
+    // S8: no size in a slug
+    expect(productSlug('planter-zendrop-seagrass-belly-38x34')).not.toMatch(/38x34/);
+    expect(productSlug('pendant-cj-silk-ribbed-pumpkin-40')).toMatch(/^pendant-silk-ribbed-pumpkin-[0-9a-z]{5}$/);
     // the same card, the same address, every time and in every runtime
     expect(productSlug('cushions-cj-boucle-teddy')).toBe(productSlug('cushions-cj-boucle-teddy'));
     expect(shortIdOf(s)).toBe(shortId('vase-aliexpress-vintage-distressed-clay-vase-589009'));

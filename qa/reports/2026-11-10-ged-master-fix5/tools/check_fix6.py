@@ -15,7 +15,7 @@ from PIL import Image
 REPO = "/home/user/homedesign-app"
 B = os.path.join(REPO, "assets/renders/master/editorial-2026-11-07/nordic")
 OUT = os.path.join(REPO, "qa/reports/2026-11-10-ged-master-fix5")
-BOXES = [(2560, 740, 2640, 910), (2640, 820, 2720, 915)]
+BOXES = [(2575, 745, 2630, 910), (2652, 800, 2706, 912)]                  # render-agent's flame and wax boxes (mb1-fix6.json) grown about 8 px
 
 
 def lin(a):
