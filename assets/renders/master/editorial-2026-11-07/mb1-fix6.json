@@ -1,0 +1,109 @@
+{
+ "date": "2026-11-10",
+ "by": "render-agent",
+ "tokens": 0,
+ "base": "nordic/nordic-MB-A-fix5.png",
+ "out": "nordic/nordic-MB-A-fix6.png",
+ "source": "docs/master-bedroom-comparison-2026-11-07.md section 5 (master-designer: G-ED.13, the candles; DL1); coordinator 2026-11-10",
+ "note": "TEST, not for the site; new files only; awaiting qa-agent (G-ED.8, G-ED.9)",
+ "candles": {
+  "left": {
+   "box": [
+    2583,
+    756,
+    2610,
+    797
+   ],
+   "flame_halo_px": 690,
+   "max_dL_over_boards_before": 33.6
+  },
+  "right": {
+   "box": [
+    2665,
+    808,
+    2692,
+    846
+   ],
+   "flame_halo_px": 708,
+   "max_dL_over_boards_before": 24.4
+  },
+  "left_wax": {
+   "box": [
+    2580,
+    797,
+    2622,
+    902
+   ],
+   "C_left_half": 25.5,
+   "C_right_half_before": 41.2,
+   "C_right_half_after": 22.2,
+   "L_right_half": 64.7
+  },
+  "right_wax": {
+   "box": [
+    2659,
+    846,
+    2698,
+    905
+   ],
+   "C_left_half": 25.0,
+   "C_right_half_before": 35.1,
+   "C_right_half_after": 21.0,
+   "L_right_half": 62.5
+  }
+ },
+ "candles_px_changed": 5484,
+ "candles_px_changed_outside_boxes": 0,
+ "DL1": {
+  "measure": "L* of the wall above the panelling (master, x 1360-2700 above the oak rail, the right sconce excluded) against the Nordic living room's back wall (fin2, x 1200-2380, y 80-680, the art, sconces and pendant excluded; ed4 is the same there)",
+  "living_fin2": {
+   "p10": 55.5,
+   "p50": 60.5,
+   "p80": 64.3,
+   "p90": 67.6,
+   "p98": 86.7,
+   "n": 420600
+  },
+  "master_before": {
+   "p10": 62.5,
+   "p50": 66.7,
+   "p80": 69.8,
+   "p90": 71.5,
+   "p98": 89.1,
+   "n": 371424
+  },
+  "master_after": {
+   "p10": 56.6,
+   "p50": 60.5,
+   "p80": 63.4,
+   "p90": 65.0,
+   "p98": 85.8,
+   "n": 371424
+  },
+  "stop_applied": -0.333,
+  "gain_midtones": 0.7937,
+  "shoulder": "gain eases to 1.0 from L* 80 to 97 (the sun stripes' highlights kept); toe: gain eases to 0.88 from L* 20 to 9 (the Nordic shadow floor, G-ED.11)",
+  "frame_L_p1": {
+   "before": 9.2,
+   "after": 8.2,
+   "nordic_floor": 8
+  },
+  "frame_L_p50": {
+   "before": 62.4,
+   "after": 56.6,
+   "living_fin2": 57.3
+  },
+  "clipped_254_pct": {
+   "before": 0.049,
+   "after": 0.049
+  },
+  "verdict": "the bedroom was brighter than the living room; lowered"
+ },
+ "px_changed_vs_fix5": 4137039,
+ "crops": [
+  "fix6-before-after/candles-x4.jpg",
+  "fix6-before-after/nightstand-100.jpg",
+  "fix6-before-after/frame-33.jpg",
+  "fix6-before-after/dl1-master-vs-living.jpg"
+ ]
+}
