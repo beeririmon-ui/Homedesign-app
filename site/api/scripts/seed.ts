@@ -6,7 +6,7 @@
  *   tsx api/scripts/seed.ts            → ../.generated/seed.sql
  *   wrangler d1 execute DB --local --file ../.generated/seed.sql
  */
-import { readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { saleShippingCents, unitShipFromSaleCents, type FullCatalog } from '@hd/shared';
@@ -202,6 +202,16 @@ export function buildSeedSql(cat: FullCatalog): string {
 const isMain = process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 if (isMain) {
   const cat = JSON.parse(readFileSync(resolve(GENERATED, 'catalog.full.json'), 'utf8')) as FullCatalog;
+  // S7: the story's products are the shop's too (same pricing path, `npm run story`): the cart and the checkout sell
+  // them; they are not on a room's wheel (no slot option), so the shop's pages do not list them
+  const storyFile = resolve(GENERATED, 'catalog.story.full.json');
+  if (existsSync(storyFile)) {
+    const story = JSON.parse(readFileSync(storyFile, 'utf8')) as FullCatalog;
+    const have = new Set(cat.products.map((p) => p.id));
+    const extra = story.products.filter((p) => !have.has(p.id));
+    cat.products = [...cat.products, ...extra];
+    console.log(`seed.sql: + ${extra.length} story products (catalog.story ${story.version})`);
+  }
   const text = buildSeedSql(cat);
   writeFileSync(resolve(GENERATED, 'seed.sql'), text);
   console.log(`seed.sql: ${cat.products.length} products, ${cat.rooms.length} rooms (catalog ${cat.version})`);
