@@ -1373,91 +1373,6 @@ for (const d of details) {
 console.log(
   `layer 2: ${details.length} detail pages (${details.filter((d) => d.status === 'available').length} for sale, ${details.filter((d) => d.status === 'unpriced').length} without a price, ${details.filter((d) => d.status === 'unavailable').length} not sold now); ${details.filter((d) => d.skus.some((k) => k.image)).length} with a card photo; close-ups shown ${details.reduce((n, d) => n + d.skus.filter((k) => k.closeup).length, 0)}, held ${details.reduce((n, d) => n + d.closeups_held, 0)}`,
 );
-// ---------- S3: the house's own tool, a draft (DIR2), with the soft switch between two houses ----------
-const TOOL_WIDTHS = [1280, 1920, 2720];
-async function toolLayers(room: string, house: string, frame: string, list: ToolDraft['layers']) {
-  const dir = join(OUT, 'tool', room, house, frame);
-  const url = `${URL_BASE}/tool/${room}/${house}/${frame}`;
-  mkdirSync(dir, { recursive: true });
-  const layers: { id: string; blend: string; base: string; w: number; h: number }[] = [];
-  for (const l of list) {
-    const src = repoPath(l.src);
-    // named by the source's content time: a new render makes new files
-    const key = createHash('sha256')
-      .update(`${l.src}:${statSync(src).mtimeMs}`)
-      .digest('hex')
-      .slice(0, 8);
-    const img = sharp(src);
-    const meta = await img.metadata();
-    for (const w of TOOL_WIDTHS) {
-      const b = join(dir, `${l.id}.${key}.${w}`);
-      if (existsSync(`${b}.webp`) && existsSync(`${b}.avif`)) continue;
-      const r = img.clone().resize({ width: w, withoutEnlargement: true });
-      await r.clone().avif({ quality: 55, effort: 4 }).toFile(`${b}.avif`);
-      await r.clone().webp({ quality: 78, effort: 4 }).toFile(`${b}.webp`);
-    }
-    layers.push({ id: l.id, blend: l.blend, base: `${url}/${l.id}.${key}`, w: meta.width!, h: meta.height! });
-  }
-  return layers;
-}
-async function toolDraftPage(pg: PageOut, t: ToolDraft): Promise<void> {
-  const layers = await toolLayers(pg.room, pg.style, t.frame, t.layers);
-  const others = await toolLayers(pg.room, t.compare.house, t.frame, t.compare.layers);
-  const sizes = '(max-width: 719px) 160vw, 100vw';
-  // QA on S3–S5 (ת5): the other house's layers carry their addresses in data- attributes and load only when it is
-  // asked for (a hover, a focus or a press on its switch, or ?house=); "lazy" does not hold back a picture on screen
-  const pic = (base: string, widths: number[], w: number, h: number, cls: string, eager: boolean, deferred = false) => {
-    const a = deferred ? 'data-' : '';
-    return `<picture class="st-td-layer ${cls}"><source type="image/avif" ${a}srcset="${widths.map((x) => `${base}.${x}.avif ${Math.min(x, w)}w`).join(', ')}" sizes="${sizes}" /><img ${a}src="${base}.${widths[1]}.webp" ${a}srcset="${widths.map((x) => `${base}.${x}.webp ${Math.min(x, w)}w`).join(', ')}" sizes="${sizes}" alt="" width="${w}" height="${h}" decoding="async"${eager ? ' fetchpriority="high"' : ''} /></picture>`;
-  };
-  const house = styleOf(pg.style).name_he;
-  const other = styleOf(t.compare.house).name_he;
-  const head = `${roomOf(pg.room).n} · ${roomOf(pg.room).name_he} · ${house} · הכלי`;
-  const body = `<section class="st-td" id="tool-draft" data-head="${esc(head)}" aria-labelledby="td-title" style="--td-cu: ${t.mobile_center_u}">
-  <div class="st-td-stage" id="td-stage">
-    <div class="st-td-house is-on" data-house="${pg.style}" role="img" aria-label="${esc(`${roomOf(pg.room).name_he} בבית ה${house}, במצלמה של הכלי: טיוטה מהפיילוט`)}">
-      ${layers.map((l, i) => pic(l.base, TOOL_WIDTHS, l.w, l.h, `is-${l.blend}`, i === 0)).join('\n      ')}
-    </div>
-    <div class="st-td-house" data-house="${t.compare.house}" role="img" aria-label="${esc(t.compare.alt_he)}" aria-hidden="true">
-      ${others.map((l) => pic(l.base, TOOL_WIDTHS, l.w, l.h, `is-${l.blend}`, false, true)).join('\n      ')}
-    </div>
-    <p class="st-draft">הבית המודרני החם, שלב 1: אושר. עוד לא באתר הציבורי</p>
-  </div>
-  <div class="mag-paper st-td-text">
-    <div class="mag-grid">
-      <div class="st-td-switch mag-col-main" role="group" aria-label="הבית">
-        <button type="button" class="st-td-btn" aria-pressed="true" data-house="${pg.style}">${esc(house)}</button>
-        <button type="button" class="st-td-btn" aria-pressed="false" data-house="${t.compare.house}">${esc(other)}</button>
-      </div>
-      <p class="st-kicker mag-col-main">${esc(head)}</p>
-      <h1 id="td-title" class="mag-h1 mag-col-main">עצב בעצמך, בבית ה${esc(house)}</h1>
-      <p class="mag-lead mag-col-main">אותה מצלמה ואותן עמדות כמו בבית ה${esc(other)}, אדריכלות אחרת. מעבר בין הבתים בכלי הוא מעבר רך של כל השכבות באותו פריים, כשנייה.</p>
-      <p class="st-type-status mag-col-main"><span class="st-type-rule" aria-hidden="true"></span>${esc(t.status_he)}</p>
-      <p class="mag-cap mag-col-main">הבית ה${esc(other)} במתג: המעטפת בלבד, מאותה מצלמה (M0 1.2), מהצינור הנעול של הבית הנורדי. גם היא טיוטה, ועוד לא אושרה לאתר.</p>
-      <p class="mag-col-main st-tool-row"><a class="mag-btn mag-btn-secondary st-btn-link" href="${esc(`${story.tool_fallback}?from=${encodeURIComponent(pg.href)}`)}">לכלי הפעיל: הסלון בבית הנורדי</a> <a class="mag-link" href="${pg.href}">חזרה לסיפור של הבית</a></p>
-    </div>
-  </div>
-</section>`;
-  const href = `${pg.href}tool/`;
-  render(`web${href}index.html`, {
-    TITLE: esc(`עצב בעצמך · ${roomOf(pg.room).name_he} · ${house} · טיוטה`),
-    DESCRIPTION: esc(`טיוטת הכלי של ${roomOf(pg.room).name_he} בבית ה${house}. גרסת בדיקה.`),
-    ISSUE: esc(story.issue_he),
-    KIND: 'tool-draft',
-    HEAD_ON: 'stage',
-    CONTENTS_CURRENT: '',
-    NAV_TOOL: '#tool-draft',
-    SKIP: '#td-title',
-    SKIP_HE: 'דילוג להסבר',
-    TOOL_HREF: esc(story.tool_fallback),
-    BODY: [body, footer('הכלי של הבית הוא טיוטה מפיילוט הרינדור, שעוד לא עבר QA.')].join('\n'),
-    DATA: JSON.stringify({ page: { room: pg.room, style: pg.style, href, tool: story.tool_fallback, kind: 'tool-draft' }, items: {}, frames: [] }),
-  });
-  console.log(
-    `${href} → the house's draft tool: ${layers.map((l) => `${l.id} (${l.blend})`).join(', ')}; the soft switch to the ${t.compare.house} house: ${others.map((l) => l.id).join(', ')}`,
-  );
-}
-for (const pg of pages) if (pg.pair.tool_draft) await toolDraftPage(pg, pg.pair.tool_draft);
 
 // ---------- S7: the story sells through the shop: its cart is the API's, its checkout the real /checkout/ ----------
 // the old addresses of the test checkout and the test order go on to the real ones (a page here, and _redirects)
@@ -1481,6 +1396,13 @@ for (const [href, to, title] of [
 ] as const) {
   mkdirSync(sitePath(`web${href}`), { recursive: true });
   writeFileSync(sitePath(`web${href}index.html`), moved(to, title));
+}
+// S10: the house's draft tool (S3, /story/<room>/<style>/tool/) is the room engine now, at the house's address (DIR2)
+const toolMoves = pages.filter((pg) => pg.pair.tool_draft).map((pg) => [`${pg.href}tool/`, houseTool(pg.style)!] as const);
+for (const [href, to] of toolMoves) {
+  mkdirSync(sitePath(`web${href}`), { recursive: true });
+  writeFileSync(sitePath(`web${href}index.html`), moved(to, 'הכלי של הבית עבר לחדר'));
+  console.log(`${href} → ${to} (301): the house's tool is in the room engine`);
 }
 const indexHtml = render('web/story/index.html', {
   TITLE: esc(`${story.issue_he} · תוכן הגיליון`),
@@ -1525,7 +1447,12 @@ writeFileSync(join(GENERATED, 'story.json'), JSON.stringify(resolved, null, 1));
 slugIndex(new Set(details.map((d) => d.product)));
 writeFileSync(
   join(GENERATED, 'story-redirects.txt'),
-  [...details.map((d) => `${oldDetailHref(d.room, d.style, d.product)} ${d.href} 301`), '/story/checkout/ /checkout/ 302', '/story/order/ /cart/ 302'].join(
+  [
+    ...details.map((d) => `${oldDetailHref(d.room, d.style, d.product)} ${d.href} 301`),
+    ...toolMoves.map(([href, to]) => `${href} ${to} 301`),
+    '/story/checkout/ /checkout/ 302',
+    '/story/order/ /cart/ 302',
+  ].join(
     '\n',
   ) + '\n',
 );
