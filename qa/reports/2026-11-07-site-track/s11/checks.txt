@@ -1,0 +1,35 @@
+# npm run test:all, 2026-11-10 (after the WIP commit 1a6699f8, with the story-cart fix)
+All matched files use Prettier code style!
+ Test Files  16 passed (16)
+  lines (ת8): base names 65, Hebrew labels 69 cards; not offered (sale-exclusions): 21 variants; parts of a set (not sold alone): 0 variants; Latin in public labels: 0
+  lines (ת8): base names 65, Hebrew labels 69 cards; not offered (sale-exclusions): 21 variants; parts of a set (not sold alone): 0 variants; Latin in public labels: 0
+  lines (ת8): base names 65, Hebrew labels 69 cards; not offered (sale-exclusions): 24 variants; parts of a set (not sold alone): 8 variants; Latin in public labels: 0
+prerendered 47 pages + 1 house page(s) + order shell + 404
+ok    JS (gzip), the room page entry                              77.4 KB  / 80.0 KB
+ok    CSS (gzip), the room page entry                              8.7 KB  / 15.0 KB
+ok    other entries (the test page): JS 5 files, CSS 2            34.5 KB
+ok    fonts (woff2, he+latin)                                     90.2 KB
+ok    room media (18 files, shell @2752, layers @1920)           386.8 KB
+ok    first load, living room, mobile                            572.6 KB  / 3072.0 KB
+ok    JS (gzip), a story page                                      7.6 KB  / 40.0 KB
+ok    CSS (gzip), a story page                                     9.2 KB  / 15.0 KB
+ok    first view, a story page, mobile (the Nordic living room)   254.0 KB  / 1228.8 KB
+ok    first view, a detail page, mobile                          117.7 KB  / 921.6 KB
+  ✓   1 [e2e] › e2e/flow.spec.ts:10:3 › SEO: prerendered Hebrew pages › room and product pages are complete HTML before any script runs (101ms)
+  84 passed (6.0m)
+  15 passed (41.1s)
+EXIT 0
+
+# the new and changed e2e
+  ✓  12 [e2e] › e2e/flow.spec.ts:281:3 › store › set or single piece (P1): the set is the default, one piece has its own price, the cart keeps both apart (2.5s)
+  ✓  16 [e2e] › e2e/house.spec.ts:60:3 › a house's own address (S10 question 7, S11) › ?style=warm-modern is served that house’s own page: no Nordic poster in it, the page CSP; the Nordic ad
+  ✓  23 [e2e] › e2e/lines.spec.ts:51:3 › ת8: the line names what was bought (base name · Hebrew labels) › the nine variants: the API cart, the cart page, the checkout and the order read as t
+  ✓  52 [e2e] › e2e/story.spec.ts:451:3 › the detail page, after the designer (§6) › a set sells as a set by default, and as a single piece where the supplier offers one (SET1) (667ms)
+  ✓  61 [e2e] › e2e/story.spec.ts:590:3 › from the story into the tool (S3) › QA S6–S7 ת14: from the contents (/story/) the tool shows the way back to the contents; nothing else outside the
+  ✓  78 [e2e] › e2e/wheel.spec.ts:104:7 › ת7: the wheel on a phone after a sideways scroll, nordic › 390: pan the room, try the stage's own scroll, tap the mark: the wheel is on screen (6.4s)
+  ✓  79 [e2e] › e2e/wheel.spec.ts:104:7 › ת7: the wheel on a phone after a sideways scroll, nordic › 400: pan the room, try the stage's own scroll, tap the mark: the wheel is on screen (6.3s)
+  ✓  80 [e2e] › e2e/wheel.spec.ts:104:7 › ת7: the wheel on a phone after a sideways scroll, nordic › 720: pan the room, try the stage's own scroll, tap the mark: the wheel is on screen (6.4s)
+  ✓  81 [e2e] › e2e/wheel.spec.ts:104:7 › ת7: the wheel on a phone after a sideways scroll, warm-modern › 390: pan the room, try the stage's own scroll, tap the mark: the wheel is on screen (
+  ✓  82 [e2e] › e2e/wheel.spec.ts:104:7 › ת7: the wheel on a phone after a sideways scroll, warm-modern › 400: pan the room, try the stage's own scroll, tap the mark: the wheel is on screen (
+  ✓  83 [e2e] › e2e/wheel.spec.ts:104:7 › ת7: the wheel on a phone after a sideways scroll, warm-modern › 720: pan the room, try the stage's own scroll, tap the mark: the wheel is on screen (
+  ✓  84 [e2e] › e2e/wheel.spec.ts:131:3 › ת7: the other ways in › a mark off screen activated from code (assistive tech), and a page scrolled past the stage: the wheel is on screen (9.8s)

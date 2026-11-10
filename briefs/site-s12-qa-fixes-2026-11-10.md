@@ -52,3 +52,12 @@ This continues the interface track, `briefs/site-interface-track-2026-11-07.md`,
 - No commits, no var2, no keys, no network beyond npm.
 - If your context runs low, stop where the checks are green and write a "where I stopped" section.
 - Return a short Hebrew summary.
+
+## Addendum, after S11 (2026-11-10)
+S11 is done; see `qa/reports/2026-11-07-site-track/s11/README.md`. Two of its points belong to S12:
+- **Before launch, S11 question 2:** the triptych is sold as a set, but the supplier order goes out as 3 × print 1. The fix:
+  - **The set's composition in data:** which supplier SKUs make up each set. The Nordic triptych and the Mediterranean print take their three SKUs from the card.
+  - **The supplier order:** a set line expands into its component SKUs.
+  - **When the card has no separate SKUs for the three prints:** the set is refused at checkout, as with `pack_unavailable`, and goes on a list for sourcing. Never 3 × the same print.
+  - **The vitest:** on the supplier order lines.
+- **ת23:** S11 already built a prebuilt page per house. Check whether the 1.4 MB of the Nordic house is gone. If it is, close ת23 in the evidence.
