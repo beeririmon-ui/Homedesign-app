@@ -1421,7 +1421,7 @@ async function toolDraftPage(pg: PageOut, t: ToolDraft): Promise<void> {
     <div class="st-td-house" data-house="${t.compare.house}" role="img" aria-label="${esc(t.compare.alt_he)}" aria-hidden="true">
       ${others.map((l) => pic(l.base, TOOL_WIDTHS, l.w, l.h, `is-${l.blend}`, false, true)).join('\n      ')}
     </div>
-    <p class="st-draft is-almost">טיוטה / בדיקה · הכלי בבנייה</p>
+    <p class="st-draft">הבית המודרני החם, שלב 1: אושר. עוד לא באתר הציבורי</p>
   </div>
   <div class="mag-paper st-td-text">
     <div class="mag-grid">

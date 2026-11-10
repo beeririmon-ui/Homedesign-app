@@ -91,8 +91,10 @@ for key, pair in story['pairs'].items():
         for iid in bf['items']:
             it = data['items'][iid]
             # the card id: the data file's point in the same place (the built page names the public id)
-            pts = f.get('points', [])
-            p = pts[it['n'] - 1]['product'] if 0 < it.get('n', 0) <= len(pts) else CARD.get(it['product'], it['product'])
+            pts = [q for q in f.get('points', []) if abs(q['u'] - it['u']) < 1e-4 and abs(q['v'] - it['v']) < 1e-4]
+            if len(pts) != 1:
+                raise SystemExit(f'{style} {iid}: {len(pts)} data-file points at u {it["u"]} v {it["v"]}')
+            p = pts[0]['product']
             if it['product'] in CARD and CARD[it['product']] != p and p not in MERGED.get(CARD[it['product']], ()):
                 raise SystemExit(f'{style} {iid}: point {p} vs public id {it["product"]} -> {CARD[it["product"]]}')
             k3 = (style, f['id'], p)

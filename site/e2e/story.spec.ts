@@ -591,7 +591,7 @@ test.describe('from the story into the tool (S3)', () => {
     await page.goto(`${WARM}#tool`);
     await page.locator('#st-tool-draft').click();
     await expect(page).toHaveURL(/\/story\/living-room\/warm-modern\/tool\/$/);
-    await expect(page.locator('.st-td .st-draft')).toHaveText('טיוטה / בדיקה · הכלי בבנייה');
+    await expect(page.locator('.st-td .st-draft')).toHaveText('הבית המודרני החם, שלב 1: אושר. עוד לא באתר הציבורי');
     const warm = page.locator('.st-td-house[data-house="warm-modern"]');
     await expect(warm.locator('.st-td-layer')).toHaveCount(3);
     // QA on S3–S5 (ת5): the other house is not fetched until it is asked for
