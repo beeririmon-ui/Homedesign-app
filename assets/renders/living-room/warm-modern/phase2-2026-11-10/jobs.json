@@ -10,6 +10,240 @@
  "references_policy": "supplier images are references only: cropped in the scratchpad and uploaded to var2, never stored in the repo",
  "jobs": [
   {
+   "id": "wm-ph2-step2-window-floor",
+   "step": 2,
+   "tokens": 650,
+   "estimate": 650,
+   "idempotency_key": "wm-ph2-step2-window-floor-20261110",
+   "prompt_chars": 2760,
+   "estimate_call": {
+    "tool": "var2_estimate_cost",
+    "model_id": "seedream-5-pro",
+    "type": "image-to-image",
+    "params": {
+     "resolution": "2K",
+     "aspect_ratio": "auto",
+     "image_refs": 8
+    },
+    "total_tokens": 650,
+    "deviation_pct": 0.0
+   },
+   "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/cace0428-a037-4947-bc46-3e1537bc452d.png",
+   "placeholder_id": "89e74c94-8224-4d3c-a91f-f1cf8a59a066",
+   "task_id": "ea758e2dc6e668b79f1162a0f6b98592",
+   "refs": [
+    {
+     "n": 1,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/40bac1aa-b4c9-4bdf-8c68-ace8f2b18d05.png",
+     "card": "curtains-aliexpress-beige-linen-sheer-curtains-554205",
+     "option": "style hooks-top, size 150x270 (length 'Customized')",
+     "what": "the sheer linen panels",
+     "source_image": "curtains/img5.jpg",
+     "crop": [
+      0.0,
+      0.05,
+      1.0,
+      1.0
+     ]
+    },
+    {
+     "n": 2,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/7359e810-e18d-451a-8631-1ced90229631.png",
+     "card": "curtains-aliexpress-beige-linen-sheer-curtains-554205",
+     "option": "the same",
+     "what": "linen slub texture (text cropped out)",
+     "source_image": "curtains/img1.jpg",
+     "crop": [
+      0.0,
+      0.0,
+      1.0,
+      0.82
+     ]
+    },
+    {
+     "n": 3,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/b01f4824-09f9-42ea-ac0d-98a0902bccc7.png",
+     "card": "vase-cj-textured-white-stoneware",
+     "option": "CJJT312391803CX large",
+     "what": "SKU Large 16 x 32",
+     "source_image": "vase/sku.jpeg",
+     "crop": [
+      0.22,
+      0.05,
+      0.75,
+      0.84
+     ]
+    },
+    {
+     "n": 4,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/61eb456a-1b6b-4843-afff-2dba3d9f6418.png",
+     "card": "planter-cj-cement-ribbed-belly",
+     "option": "CJJT154204209IR beige large",
+     "what": "SKU beige large 42 x 35.5 (dimension lines cropped out)",
+     "source_image": "planter/sku.jpg",
+     "crop": [
+      0.13,
+      0.18,
+      0.8,
+      0.8
+     ]
+    },
+    {
+     "n": 5,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/84e63b11-5684-47b7-ae14-73310c28926b.png",
+     "card": "basket-cj-jute-rope-cylinder",
+     "option": "CJYD186026903CX large",
+     "what": "SKU large 35 x 39 (dimensions cropped out)",
+     "source_image": "basket/sku.jpeg",
+     "crop": [
+      0.28,
+      0.06,
+      0.82,
+      0.74
+     ]
+    },
+    {
+     "n": 6,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/95b556a1-5ea2-4548-8133-747bd6a3470b.png",
+     "card": "magazine-holder-cj-gunmetal-leather-strap",
+     "option": "CJYD201631004DW orange small (cognac straps)",
+     "what": "SKU orange (cognac straps) small 35 x 19 x 27.5",
+     "source_image": "magazine-holder/sku-orange.jpg",
+     "crop": [
+      0.15,
+      0.15,
+      0.88,
+      0.8
+     ]
+    },
+    {
+     "n": 7,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/6143ae6e-11ab-495a-a71c-e4d1ba79fb70.png",
+     "card": "floor-lamp-cj-pleated-walnut-stem-158",
+     "option": "CJYD224754407GT 3color-floor-lamp",
+     "what": "SKU 3color floor lamp (spec photo; text cropped out)",
+     "source_image": "floor-lamp/sku.jpeg",
+     "crop": [
+      0.63,
+      0.12,
+      0.86,
+      0.9
+     ]
+    },
+    {
+     "n": 8,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/45c679a1-8b8c-4b55-81d7-50ffb8cfa568.png",
+     "card": "floor-lamp-cj-pleated-walnut-stem-158",
+     "option": "the same",
+     "what": "the same lamp in a room (shade, stem, base)",
+     "source_image": "floor-lamp/img2.jpeg",
+     "crop": [
+      0.4,
+      0.0,
+      1.0,
+      1.0
+     ]
+    }
+   ],
+   "status": "queued"
+  },
+  {
+   "id": "wm-ph2-step3-wall-table",
+   "step": 3,
+   "tokens": 650,
+   "estimate": 650,
+   "idempotency_key": "wm-ph2-step3-wall-table-20261110",
+   "prompt_chars": 2590,
+   "estimate_call": {
+    "tool": "var2_estimate_cost",
+    "model_id": "seedream-5-pro",
+    "type": "image-to-image",
+    "params": {
+     "resolution": "2K",
+     "aspect_ratio": "auto",
+     "image_refs": 5
+    },
+    "total_tokens": 650,
+    "deviation_pct": 0.0
+   },
+   "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/936f42d3-ff4d-4f69-a6de-6379e1b7b1fe.png",
+   "placeholder_id": "8dc86802-110e-469b-925b-047c30ba2e13",
+   "task_id": "277263d366679796552f9b78234a32b8",
+   "refs": [
+    {
+     "n": 1,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/3d2dce3c-436a-4e4c-997b-69a6e8e1e4f8.png",
+     "card": "framed-art-aliexpress-frameless-minimalist-wall-art-631735",
+     "option": "12000052586400026 tl2356-3pcs 50x70-no-frame",
+     "what": "SKU TL2356 3pcs: the three prints",
+     "source_image": "framed-art/img2.jpg",
+     "crop": [
+      0.04,
+      0.085,
+      0.71,
+      0.49
+     ]
+    },
+    {
+     "n": 2,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/ed640b91-66f0-4e31-a3b0-6ec1a2e1591b.png",
+     "card": "accent-sconces-aliexpress-travertine-cylinder-walnut-choice",
+     "option": "12000047535430431 round-walnut",
+     "what": "SKU round + walnut base",
+     "source_image": "accent-sconces/sku.jpg",
+     "crop": [
+      0.28,
+      0.04,
+      0.68,
+      0.7
+     ]
+    },
+    {
+     "n": 3,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/6a438baf-2b43-4b68-8613-ecb23bd98464.png",
+     "card": "pendant-cj-tiered-fabric-drum",
+     "option": "CJYD247032902BY Beige-50cm (single variant)",
+     "what": "the tiered fabric drum, beige 50",
+     "source_image": "pendant/img2.jpg",
+     "crop": [
+      0.02,
+      0.25,
+      0.92,
+      0.85
+     ]
+    },
+    {
+     "n": 4,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/50ffe4e5-ba93-4cd3-a7cf-b427dc329c83.png",
+     "card": "bowl-cj-matte-black-bowl-20",
+     "option": "CJJT131449012LO 12style",
+     "what": "SKU style 12, 8 inch matte black bowl",
+     "source_image": "bowl/sku.jpg",
+     "crop": [
+      0.27,
+      0.04,
+      0.82,
+      0.86
+     ]
+    },
+    {
+     "n": 5,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/1f930839-c4a9-44ee-af01-2ecaade334ce.png",
+     "card": "candle-holders-cj-travertine-pedestal",
+     "option": "CJYD201648001AZ 70x110mm (x2)",
+     "what": "SKU Small 70 x 110 travertine pedestal",
+     "source_image": "candle-holders/sku.jpg",
+     "crop": [
+      0.25,
+      0.23,
+      0.8,
+      0.97
+     ]
+    }
+   ],
+   "status": "queued"
+  },
+  {
    "id": "wm-ph2-step1-rug",
    "step": 1,
    "slots": [
@@ -42,9 +276,9 @@
     ]
    ],
    "tone_gain_median": [
-    1.206,
-    1.1735,
-    1.1319
+    1.1303,
+    1.1248,
+    1.099
    ],
    "model_drift_outside_zones_L": {
     "raw_median": 3.2,
@@ -54,19 +288,19 @@
    },
    "products": {
     "rug": {
-     "alpha_px": 268144,
-     "soft_px": 11932,
+     "alpha_px": 297289,
+     "soft_px": 23285,
      "box_px": [
-      760,
-      1223,
+      468,
+      1220,
       2720,
       1530
      ],
      "placeholder_px": 297762,
-     "placeholder_covered": 0.901,
-     "outside_placeholder_px": 0,
-     "shadow_px_below_0_97": 2136,
-     "shadow_min": 0.553
+     "placeholder_covered": 0.998,
+     "outside_placeholder_px": 1,
+     "shadow_px_below_0_97": 8177,
+     "shadow_min": 0.787
     }
    },
    "composite": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work/composite-step1.png",
@@ -117,5 +351,5 @@
    "idempotency_key": "wm-ph2-step1-rug-20261110"
   }
  ],
- "tokens_total": 650
+ "tokens_total": 1950
 }

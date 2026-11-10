@@ -200,7 +200,7 @@ def fetch(step, url, pid, tid):
     depth = json.load(open(os.path.join(W.STEP0, "f3-checks.json")))["placeholders"]
     order = sorted(slots, key=lambda k: depth[k]["depth_m"]) if step != 1 else slots
     taken = np.zeros(Z.shape, bool)
-    cuts, alphas = {}, {}
+    cuts, alphas, free = {}, {}, {}
     for k in order:
         front = taken.copy()
         if k in W.BEHIND_FURNITURE:
@@ -209,6 +209,7 @@ def fetch(step, url, pid, tid):
             fill, a = cut_rug(regt, below, V[k], zones[k], fa, dE)
         else:
             fill, a = cut_one(k, regt, below, V[k], zones[k], front, dE)
+        free[k] = a
         if k in W.BEHIND_FURNITURE:
             a = a * (1 - fa)
         cuts[k], alphas[k] = fill, a
@@ -217,15 +218,15 @@ def fetch(step, url, pid, tid):
     for k in slots:
         others = {j: alphas[j] for j in slots if j != k}
         shadows[k] = shadow_one(k, alphas[k], regt, below, surf, others)
-    # the ungraded composite, slot z order
-    comp = below.copy()
+    # the per-product files (alpha in the picture; for items behind the furniture also the free alpha), then the step's composite
     os.makedirs(os.path.join(W.WORK, "layers"), exist_ok=True)
     os.makedirs(os.path.join(W.WORK, "shadows"), exist_ok=True)
     recs = {}
-    for k in sorted(slots, key=lambda k: SPEC[k]["z"]):
+    for k in slots:
         a, sh = alphas[k], shadows[k]
-        comp = comp * sh[..., None] * (1 - a[..., None]) + regt * a[..., None]
         PW.save(os.path.join(W.WORK, "layers", f"{k}.png"), regt, alpha=a)
+        if k in W.BEHIND_FURNITURE:
+            Image.fromarray((np.clip(free[k], 0, 1) * 255 + 0.5).astype(np.uint8), "L").save(os.path.join(W.WORK, "layers", f"{k}-free-alpha.png"))
         PW.save(os.path.join(W.WORK, "shadows", f"{k}.png"), np.repeat(sh[..., None], 3, 2))
         ph = V[k] > 0.5
         ys, xs = np.nonzero(a > 0.5)
@@ -234,6 +235,8 @@ def fetch(step, url, pid, tid):
                        placeholder_px=int(ph.sum()), placeholder_covered=round(float((ph & (a > 0.5)).sum() / max(1, ph.sum())), 3),
                        outside_placeholder_px=int(((a > 0.5) & ~dil(ph, 2)).sum()),
                        shadow_px_below_0_97=int((sh < 0.97).sum()), shadow_min=round(float(sh.min()), 3))
+    import stack
+    comp = stack.compose(set(["rug"] + slots))
     PW.save(os.path.join(W.WORK, f"composite-step{step}.png"), comp)
     far = ~dil(Z, 40)
     drift = np.abs(PW.Lstar(reg) - PW.Lstar(below))[far]

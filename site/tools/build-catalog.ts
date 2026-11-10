@@ -446,7 +446,15 @@ function buildOptions(
             n,
           )
         : null;
-    if (comp?.incomplete) setsNeedSkus.push({ card: card.id, variant: optionVariantId(card.id, o.axes.map((a) => s.values[a.id]!)), reason: comp.incomplete });
+    if (comp?.incomplete)
+      setsNeedSkus.push({
+        card: card.id,
+        variant: optionVariantId(
+          card.id,
+          o.axes.map((a) => s.values[a.id]!),
+        ),
+        reason: comp.incomplete,
+      });
     full.push({
       id,
       label_he: o.axes.map((a) => `${a.name_he}: ${labelOf(a, valueOf(a, s))}`).join(', '),

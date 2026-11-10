@@ -137,7 +137,10 @@ export function Checkout({ failed }: { failed: boolean }) {
         <div class="notice">
           <p>הסל ריק, אין מה לשלם.</p>
           <p>
-            <a href="/rooms/living-room/">חזרה לסלון</a>
+            {/* S12, ת25: a 44 px target (G7.7), in the button's style */}
+            <a class="btn btn-ghost" href="/rooms/living-room/">
+              חזרה לסלון
+            </a>
           </p>
         </div>
       ) : (

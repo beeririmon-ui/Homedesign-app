@@ -1,13 +1,18 @@
 # Copy to .dev.vars for local development (.dev.vars is gitignored). Names only; values are never committed.
 # Preview / Production: `npx wrangler secret put <NAME> --env preview|production`.
+# The providers themselves are vars in wrangler.jsonc (PAYMENT_PROVIDER, INVOICE_PROVIDER, SUPPLIER_PROVIDER), exact ids
+# from a closed list (api/src/lib/config.ts); `mock` runs only outside production. A local override goes here too.
 
-# HMAC secret for payment webhooks (mock provider locally; the real provider's secret later)
+# HMAC secret for the mock payment's webhook (locally any long random string: `openssl rand -hex 24`)
 PAYMENT_WEBHOOK_SECRET=
-# Payment provider API key (Grow / Cardcom / PayPlus, after the user decides)
-PAYMENT_API_KEY=
+# Grow (W1): the account values; GROW_DOCS_CONFIRMED=1 only once its documentation is in the repo and the adapter is done
+GROW_USER_ID=
+GROW_PAGE_CODE=
+GROW_API_KEY=
+GROW_DOCS_CONFIRMED=
+# Invoices (W2: Grow's module, else Morning): its key, and the provider once it is built
+INVOICE_API_KEY=
 # CJ Dropshipping API key (supplier orders)
 CJ_API_KEY=
-# Invoicing service API key (Morning / iCount, after the user decides)
-INVOICE_API_KEY=
-# Local only: 1 lets /api/admin/* through without Cloudflare Access. Ignored outside ENVIRONMENT=development.
+# Local only: 1 lets /api/admin/* through without Cloudflare Access. Ignored outside ENVIRONMENT=development or test.
 ADMIN_DEV_BYPASS=

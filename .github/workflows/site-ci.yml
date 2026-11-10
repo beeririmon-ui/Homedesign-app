@@ -48,6 +48,10 @@ jobs:
         run: npx playwright install --with-deps chromium
       - name: Point the tests at the installed Chromium
         run: echo "PW_CHROMIUM=$(node -e "console.log(require('@playwright/test').chromium.executablePath())")" >> "$GITHUB_ENV"
+      # S12 (QA ת24): the mock payment signs its webhook; a throwaway secret made here, for this run only (never a real key,
+      # never committed: .dev.vars is gitignored), so the e2e payment tests do not stop at 503 payment_not_configured
+      - name: A throwaway webhook secret for the local preview
+        run: echo "PAYMENT_WEBHOOK_SECRET=$(openssl rand -hex 24)" > api/.dev.vars
       - name: e2e (flow, first-load budget, preload rules)
         run: npm run e2e
       - name: Accessibility (axe, zero violations, light and dark)

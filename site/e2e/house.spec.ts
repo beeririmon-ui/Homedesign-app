@@ -134,6 +134,10 @@ test.describe('the warm-modern house in the room engine (S10)', () => {
     page.on('request', (r) => void (r.url().includes('/media/house/') && asked.push(r.url())));
     // S10 question 7 (S11): a direct entry downloads no Nordic poster for nothing
     page.on('request', (r) => void (r.url().includes('/media/rooms/living-room/nordic/M0/base/shell.') && nordicPoster.push(r.url())));
+    // S12, QA ת23: nothing of the Nordic house at all: its layers, its hall, the T-E0 frames (1.4 MB at S10)
+    const nordicAny: string[] = [];
+    page.on('request', (r) => void (/\/media\/(rooms\/(living-room|hall)\/nordic|transitions)\//.test(r.url()) && nordicAny.push(r.url())));
+    const wheelChunk = page.waitForRequest(/\/VariantWheel-[^/]*\.js$/, { timeout: 30_000 });
     await houseReady(page);
     await expect(page.locator('.stage-status')).toHaveText(LABEL);
     await expect(page.locator('#room-title')).toContainText('מודרני חם');
@@ -144,6 +148,10 @@ test.describe('the warm-modern house in the room engine (S10)', () => {
     await expect(page.locator('.slot-list > li')).toHaveCount(1);
     await expect(page.locator('.segmented button[data-house="warm-modern"]')).toHaveAttribute('aria-pressed', 'true');
     expect(nordicPoster, 'the Nordic poster is not downloaded on a direct entry to another house').toEqual([]);
+    // the page's idle work (the wheel's chunk, the shown house's variants) has run: still nothing Nordic
+    await wheelChunk;
+    await expect.poll(() => asked.some((u) => /slots\/[a-z-]+\/[23]\.product\./.test(u)), { timeout: 15_000 }).toBe(true);
+    expect(nordicAny, 'ת23: no Nordic layer, hall or T-E0 frame on a direct entry to the warm-modern house').toEqual([]);
     await engineReady(page);
     expect(await page.evaluate(() => (window as unknown as { __hdEngine?: { getSelection(): Record<string, number> } }).__hdEngine?.getSelection())).toEqual({
       [SLOT.id]: 1,
@@ -204,6 +212,52 @@ test.describe('the warm-modern house in the room engine (S10)', () => {
     await expect(dialog).toBeHidden();
   });
 
+  /**
+   * S12, QA ת22: the set's pieces, the fourth (the throw, the dearest) too, are all there to read at every width: the list
+   * has no scroller hiding a piece, and every piece can be seen whole in the dialog (on a phone the dialog itself scrolls).
+   */
+  for (const v of [
+    { width: 1280, height: 720, dpr: 1 },
+    { width: 1440, height: 900, dpr: 1 },
+    { width: 1920, height: 1080, dpr: 1 },
+    { width: 400, height: 800, dpr: 1 },
+    { width: 390, height: 844, dpr: 3 },
+  ])
+    test(`ת22: every piece of every set shows whole, the throw too (${v.width}×${v.height}@${v.dpr})`, async ({ browser }) => {
+      const ctx = await browser.newContext({
+        locale: 'he-IL',
+        viewport: { width: v.width, height: v.height },
+        deviceScaleFactor: v.dpr,
+        isMobile: v.dpr > 1,
+        hasTouch: v.dpr > 1,
+      });
+      const page = await ctx.newPage();
+      await houseReady(page);
+      await page.locator(`button.hotspot[data-slot="${SLOT.id}"]`).focus();
+      await page.keyboard.press('Enter');
+      const dialog = page.getByRole('dialog', { name: SLOT.name_he });
+      await expect(dialog).toBeVisible({ timeout: 15_000 });
+      for (const [i, set] of house.sets.entries()) {
+        if (i > 0) await page.keyboard.press('ArrowLeft');
+        await expect(dialog.getByRole('radio').nth(i)).toHaveAttribute('aria-checked', 'true');
+        const items = dialog.locator('.set-item');
+        await expect(items).toHaveCount(set.items.length);
+        const list = dialog.locator('.set-items');
+        const fit = await list.evaluate((el) => ({ scroll: el.scrollHeight, client: el.clientHeight }));
+        expect(fit.scroll, `set ${set.id}: the list hides nothing behind a scroller`).toBeLessThanOrEqual(fit.client + 1);
+        for (const [n, el] of (await items.all()).entries()) {
+          await el.evaluate((e) => e.scrollIntoView({ block: 'nearest' }));
+          const b = (await el.boundingBox())!;
+          const d = (await dialog.boundingBox())!;
+          const where = `set ${set.id}, piece ${n + 1}`;
+          expect(b.y, where).toBeGreaterThanOrEqual(Math.max(0, d.y) - 1);
+          expect(b.y + b.height, where).toBeLessThanOrEqual(Math.min(v.height, d.y + d.height) + 1);
+        }
+        await dialog.evaluate((e) => (e.matches('.picker') ? e : e.querySelector('.picker'))?.scrollTo(0, 0));
+      }
+      await ctx.close();
+    });
+
   test('a deep link opens the wheel on its set (the story’s "לנסות בחדר")', async ({ page }) => {
     await page.goto(`${HOUSE}&slot=${SLOT.id}&option=2`);
     const dialog = page.getByRole('dialog', { name: SLOT.name_he });
@@ -263,7 +317,9 @@ test.describe('the warm-modern house in the room engine (S10)', () => {
     const fw = Math.max(e.vp.w, e.vp.h * house.scene.aspect) * e.cam.z;
     const fh = fw / house.scene.aspect;
     const areas = [await area(1), await area(2), await area(3)];
-    const DIL = Math.ceil(3 * k);
+    // S12, QA ת26: the area grows by one pixel of the layer files it is read from (lo: 1920 across the frame), in screen
+    // pixels; no wider (3 CSS px were 9 screen px at dpr 3, more than the codec's edge)
+    const DIL = Math.max(1, Math.ceil((fw / house.scene.widths.lo) * k));
     const results: string[] = [];
     for (const [i, j] of [
       [0, 1],

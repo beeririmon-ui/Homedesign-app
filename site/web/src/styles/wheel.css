@@ -238,6 +238,8 @@
   display: grid;
   min-width: 0;
   flex: 1 1 12em;
+  /* S12, ת22: a row is its name and option on two tight lines beside the 44 px button: four rows fit the list */
+  line-height: 1.3;
 }
 .set-name {
   font-weight: 600;
@@ -253,4 +255,17 @@
 }
 .set-item .pack-picker {
   flex-basis: 100%;
+}
+/* S12, QA ת22: on a phone the dialog scrolls as a whole and the set's list shows every piece (no scroller inside it,
+   where the fourth piece hid); the wheel keeps its own height above the list */
+@media (max-width: 600px) {
+  .picker {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    grid-template-rows: auto minmax(min(44svh, 300px), 1fr) auto;
+  }
+  .set-items {
+    max-height: none;
+    overflow: visible;
+  }
 }

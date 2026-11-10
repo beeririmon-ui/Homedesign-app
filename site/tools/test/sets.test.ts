@@ -9,7 +9,10 @@ import { join } from 'node:path';
 import { loadLineData, setComposition } from '../lib/lines';
 import { repoPath } from '../lib/paths';
 
-type Card = { id: string; options: { default_sku: string; axes: { id: string; values: { id: string }[] }[]; skus: { id: string; values: Record<string, string> }[] } };
+type Card = {
+  id: string;
+  options: { default_sku: string; axes: { id: string; values: { id: string }[] }[]; skus: { id: string; values: Record<string, string> }[] };
+};
 const walk = (d: string): string[] =>
   readdirSync(d).flatMap((f) => (statSync(join(d, f)).isDirectory() ? walk(join(d, f)) : f.endsWith('.json') ? [join(d, f)] : []));
 const cards = new Map<string, Card>();
@@ -53,11 +56,23 @@ describe('the sets of distinct SKUs (S12)', () => {
     const c = cards.get(MEDITERRANEAN)!;
     const set = sets[MEDITERRANEAN]!;
     const room = c.options.skus.find((s) => s.id === c.options.default_sku)!;
-    const r = setComposition(set, c.options.axes.find((a) => a.id === set.axis), c.options.skus, room, 3);
+    const r = setComposition(
+      set,
+      c.options.axes.find((a) => a.id === set.axis),
+      c.options.skus,
+      room,
+      3,
+    );
     expect(r.skus).toBeNull();
     expect(r.incomplete).toMatch(/8 values on "color".*which 3 make the set is not named/);
     // once sourcing names the three (story.json set_axes `parts`), the set is their SKUs at the size chosen
-    const named = setComposition({ ...set, parts: ['03', '05', '08'] }, c.options.axes.find((a) => a.id === set.axis), c.options.skus, room, 3);
+    const named = setComposition(
+      { ...set, parts: ['03', '05', '08'] },
+      c.options.axes.find((a) => a.id === set.axis),
+      c.options.skus,
+      room,
+      3,
+    );
     expect(named.incomplete).toBeNull();
     expect(new Set(named.skus).size).toBe(3);
   });

@@ -60,8 +60,22 @@ export function RoomExperience({
   pending?: boolean;
 }) {
   // the house on screen, for the engine's callbacks (they outlive a render); S10
-  const cur = useRef({ house, room });
-  cur.current = { house, room };
+  const cur = useRef({ house, room, waiting });
+  cur.current = { house, room, waiting };
+  /**
+   * S12, QA ת23: the background bytes belong to the house on screen only. T-E0 (the way back to the hall) is the Nordic
+   * house's; the variant layers are the shown house's; a page still waiting for its house fetches them once it is there.
+   */
+  const idled = useRef(false);
+  function background() {
+    const c = cur.current;
+    if (c.waiting) return;
+    if (c.house.style === NORDIC) preload('T-E0');
+    prefetchVariants(c.room, c.house.scene);
+  }
+  useEffect(() => {
+    if (!waiting && idled.current) background();
+  }, [waiting]);
   const scene = house.scene;
   const stage = useRef<HTMLDivElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
@@ -218,9 +232,9 @@ export function RoomExperience({
     let idle = 0;
     const later = () => {
       idle = requestIdleCallbackSafe(() => {
-        preload('T-E0');
+        idled.current = true;
         void loadWheel();
-        prefetchVariants(cur.current.room, cur.current.house.scene);
+        background();
       });
     };
     // only after the page has fully loaded, so background bytes never compete with the first paint

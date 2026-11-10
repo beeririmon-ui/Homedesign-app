@@ -44,6 +44,7 @@ function SetPanel({ set }: { set: HouseSet }) {
         1,
         r.pack,
         [r.piece.option_he, r.p!.pack ? packLabelHe(r.pack, r.p!.pack.set_qty) : null].filter(Boolean).join(', ') || undefined,
+        h.style,
       );
   };
   return (
@@ -114,4 +115,6 @@ export const house: House = {
     const s = h.sets[position - 1];
     return s ? <SetPanel key={s.id} set={s} /> : null;
   },
+  // a set's layer draws every piece of it, each in the SKU the render shows
+  drawn: (slotId, position) => (slotId === h.room.slots[0]?.id ? (h.sets[position - 1]?.items ?? []).flatMap((i) => (i.variant_id ? [i.variant_id] : [])) : []),
 };

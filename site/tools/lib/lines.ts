@@ -142,7 +142,8 @@ export function setComposition(set: SetAxis, axis: { values: { id: string }[] } 
       incomplete: `the card has ${values.length} values on "${set.axis}" (${values.join(', ')}) for a set of ${size}: which ${size} make the set is not named`,
     };
   if (parts.length !== size) return { skus: null, incomplete: `${parts.length} parts named for a set of ${size}` };
-  if (!parts.includes(sku.values[set.axis] ?? '')) return { skus: null, incomplete: `the set's own SKU ${sku.id} is not one of its parts (${parts.join(', ')})` };
+  if (!parts.includes(sku.values[set.axis] ?? ''))
+    return { skus: null, incomplete: `the set's own SKU ${sku.id} is not one of its parts (${parts.join(', ')})` };
   const out: string[] = [];
   for (const part of parts) {
     const match = skus.filter((s) => s.values[set.axis] === part && Object.entries(sku.values).every(([a, v]) => a === set.axis || s.values[a] === v));

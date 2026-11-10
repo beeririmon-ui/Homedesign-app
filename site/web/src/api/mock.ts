@@ -110,6 +110,7 @@ export const mockApi: StoreApi = {
     return view(cartOr404(id));
   },
   async setItem(cartId, variant_id, pack, qty) {
+    // the preview's mock does not draw "החדר שלך" (its order lines carry no ids), so the house is not kept
     await delay();
     const c = cartOr404(cartId);
     const p = variantIndex.get(variant_id);

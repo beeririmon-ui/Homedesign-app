@@ -17,7 +17,7 @@ import { prefersReducedMotion } from '../motion';
 import { PackPicker, packPrice } from './PackPicker';
 import { defaultVariantId, optionLabelHe, optionsOf } from '../variants';
 import { Waitlist } from './Waitlist';
-import type { House } from '../house';
+import { NORDIC, type House } from '../house';
 import { frameStyle, visibleFrame } from './viewport-frame';
 
 const STEP_DEG = 34;
@@ -369,7 +369,7 @@ export function VariantWheel({ house, slot, roomId, initial, onPreview, onChoose
                   // the option the room shows (default_sku), never another one
                   const room = optionsOf(p)?.skus.find((s) => s.in_room);
                   const label = [room ? optionLabelHe(p, room.values) : null, p.pack ? packLabelHe(pack, p.pack.set_qty) : null].filter(Boolean).join(', ');
-                  void addToCart(defaultVariantId(p), p.name_he, 1, pack, label || undefined);
+                  void addToCart(defaultVariantId(p), p.name_he, 1, pack, label || undefined, house?.style ?? NORDIC);
                 }}
               >
                 הוספה לסל

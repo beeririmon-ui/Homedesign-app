@@ -9,30 +9,103 @@ import { lineName } from '@hd/shared/lines';
 import { api, ApiError } from '../api';
 import { orderToken } from '../state/cart';
 import { Picture, Price } from '../components/Media';
-import { livingRoom, scene } from '../catalog';
+import { optionImage as optionPhoto, product as catalogProduct, supplierImage } from '../catalog';
 import { mediaUrl } from '../media';
+import { HOUSES, NORDIC, loadHouse, nordic, type House } from '../house';
+import { optionsOf } from '../variants';
 import type { SceneLayerSet } from '../engine/types';
 
+type Line = OrderView['lines'][number];
+type Placed = { slot: string; position: number; z: number; layer: NonNullable<House['scene']['slots'][string]> };
+
+/** Where a house draws exactly this variant: the slot and the option whose layer renders it; null when none does. */
+function placeOf(h: House, l: Line): Placed | null {
+  if (!l.variant_id) return null;
+  for (const s of h.room.slots) {
+    const layer = h.scene.slots[s.id];
+    if (!layer?.product) continue;
+    for (const o of s.options) if (h.drawn(s.id, o.position).includes(l.variant_id)) return { slot: s.id, position: o.position, z: s.z, layer };
+  }
+  return null;
+}
+
+/** The card's picture of the variant bought (the supplier's photo of that option); null when there is none of it. */
+function cardImage(h: House | null | undefined, l: Line): string | null {
+  const p = h?.product(l.product_id) ?? catalogProduct(l.product_id);
+  if (!p) return null;
+  const o = optionsOf(p);
+  const i = o ? o.skus.findIndex((s) => s.variant_id === l.variant_id) : -1;
+  // another option than the room's: its own photo or none, never the room option's photo in another colour
+  const img = o && i >= 0 && !o.skus[i]!.in_room ? optionPhoto(p.id, i) : o && i < 0 ? null : supplierImage(p.id);
+  return img ? mediaUrl(img.src, undefined, 'webp') : null;
+}
+
 /**
- * S8, §9.5 "החדר שלך": the room's composite with the variations the customer ordered, made from the room's own layers
- * (the same rects the engine draws), so it shows only products that exist. A shadow multiplies, a light screens. No
- * ordered product on the room's wheel: nothing is drawn.
+ * S8, §9.5 "החדר שלך"; S12, QA ת21 (fidelity first): each line is drawn in the house it was bought in (a line bought off
+ * the room engine: the first house that renders it), and only where that house has a layer of the very variant bought.
+ * A variant without a layer is never drawn in another colour: the card's picture of it, and a line that it is not in the
+ * room yet. A shadow multiplies, a light screens, as the engine draws them.
  */
-function YourRoom({ lines }: { lines: OrderView['lines'] }) {
-  const picks = livingRoom.slots.flatMap((s) => {
-    const o = s.options.find((x) => !!x.product_id && lines.some((l) => l.product_id === x.product_id));
-    const layer = scene.slots[s.id];
-    return o && layer?.product ? [{ id: s.id, pos: o.position, layer }] : [];
-  });
-  if (!picks.length) return null;
-  const base = scene.base[0]!;
+function YourRoom({ lines }: { lines: Line[] }) {
+  const [houses, setHouses] = useState<Record<string, House | null>>({ [NORDIC]: nordic });
+  const want = [...new Set([...lines.flatMap((l) => (l.house ? [l.house] : [])), ...(lines.some((l) => !l.house) ? HOUSES.map((x) => x.style) : [])])];
+  useEffect(() => {
+    for (const style of want) if (!(style in houses)) void loadHouse(style).then((h) => setHouses((was) => ({ ...was, [style]: h })));
+  }, [want.join()]);
+  if (want.some((style) => !(style in houses))) return null;
+  const rooms = new Map<string, { house: House; picks: Placed[] }>();
+  const missing: { line: Line; img: string | null }[] = [];
+  for (const l of lines) {
+    const candidates = l.house ? [houses[l.house]] : HOUSES.map((x) => houses[x.style]);
+    let at: { house: House; place: Placed } | null = null;
+    for (const h of candidates) {
+      const place = h ? placeOf(h, l) : null;
+      if (h && place) {
+        at = { house: h, place };
+        break;
+      }
+    }
+    if (!at) {
+      missing.push({ line: l, img: cardImage(l.house ? houses[l.house] : null, l) });
+      continue;
+    }
+    const r = rooms.get(at.house.style) ?? { house: at.house, picks: [] };
+    if (!r.picks.some((p) => p.slot === at.place.slot)) r.picks.push(at.place);
+    rooms.set(at.house.style, r);
+  }
+  if (!rooms.size && !missing.length) return null;
+  return (
+    <div class="your-rooms">
+      {[...rooms.values()].map(({ house, picks }) => (
+        <RoomFigure key={house.style} house={house} picks={picks} />
+      ))}
+      {missing.length ? (
+        <ul class="your-room-missing" aria-label="פריטים שעוד לא בהדמיה">
+          {missing.map(({ line, img }, i) => (
+            <li key={i} data-variant={line.variant_id}>
+              {img ? <img src={img} alt="" width={64} height={64} loading="lazy" decoding="async" /> : <span class="your-room-noimg" aria-hidden="true" />}
+              <span>
+                {lineName(line.name_he, lineLabelHe(line))}
+                <span class="small muted"> · עוד לא מופיע בהדמיה של החדר.</span>
+              </span>
+            </li>
+          ))}
+        </ul>
+      ) : null}
+    </div>
+  );
+}
+
+function RoomFigure({ house, picks }: { house: House; picks: Placed[] }) {
+  const sc = house.scene;
+  const base = sc.base[0]!;
   const at = (set: SceneLayerSet, pos: number, cls: string) => {
     const [x0, x1, y0, y1] = set.rect;
-    const src = set.src[pos - 1] ?? set.src[0];
+    const src = set.src[pos - 1];
     return src ? (
       <img
         class={`your-room-layer ${cls}`}
-        src={mediaUrl(src, scene.widths.lo, 'webp')}
+        src={mediaUrl(src, sc.widths.lo, 'webp')}
         alt=""
         loading="lazy"
         decoding="async"
@@ -40,22 +113,23 @@ function YourRoom({ lines }: { lines: OrderView['lines'] }) {
       />
     ) : null;
   };
+  const cap = `your-room-cap-${house.style}`;
   return (
-    <figure class="your-room" aria-labelledby="your-room-cap">
+    <figure class="your-room" aria-labelledby={cap} data-house={house.style}>
       <div class="your-room-frame">
         <Picture src={base.src} widths={base.widths} sizes="(min-width: 1024px) 58vw, 100vw" alt="" loading="lazy" />
         {[...picks]
-          .sort((a, b) => a.layer.z - b.layer.z)
+          .sort((a, b) => a.z - b.z)
           .map((p) => (
-            <span key={p.id}>
-              {p.layer.shadow ? at(p.layer.shadow, p.pos, 'is-multiply') : null}
-              {at(p.layer.product!, p.pos, '')}
-              {p.layer.light ? at(p.layer.light, p.pos, 'is-screen') : null}
+            <span key={p.slot} data-slot={p.slot} data-position={p.position}>
+              {p.layer.shadow ? at(p.layer.shadow, p.position, 'is-multiply') : null}
+              {at(p.layer.product!, p.position, '')}
+              {p.layer.light ? at(p.layer.light, p.position, 'is-screen') : null}
             </span>
           ))}
       </div>
-      <figcaption id="your-room-cap" class="small muted">
-        הדמיה: {livingRoom.name_he}, כפי שהרכבת אותו.
+      <figcaption id={cap} class="small muted">
+        הדמיה: {house.room.name_he} · {house.name_he}. מה שהזמנת, בגוון שהזמנת.
       </figcaption>
     </figure>
   );

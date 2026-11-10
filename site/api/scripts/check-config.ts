@@ -12,7 +12,10 @@ import { parseJsonc } from './jsonc';
 
 const file = process.argv[2] ?? resolve(dirname(fileURLToPath(import.meta.url)), '../wrangler.jsonc');
 const cfg = parseJsonc(readFileSync(file, 'utf8')) as { vars?: Record<string, unknown>; env?: Record<string, { vars?: Record<string, unknown> }> };
-const envs: [string, Record<string, unknown>][] = [['(top level)', cfg.vars ?? {}], ...Object.entries(cfg.env ?? {}).map(([k, v]) => [k, v.vars ?? {}] as [string, Record<string, unknown>])];
+const envs: [string, Record<string, unknown>][] = [
+  ['(top level)', cfg.vars ?? {}],
+  ...Object.entries(cfg.env ?? {}).map(([k, v]) => [k, v.vars ?? {}] as [string, Record<string, unknown>]),
+];
 const bad = envs.flatMap(([name, vars]) => configIssues(vars).map((i) => `${name}: ${i}`));
 if (bad.length) {
   console.error(`check-config: ${bad.length} provider settings would not run:\n${bad.map((b) => `  ${b}`).join('\n')}`);

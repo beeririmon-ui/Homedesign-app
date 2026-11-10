@@ -34,7 +34,9 @@ export function providerOf(env: Partial<Record<ProviderVar, string>> & { ENVIRON
   if (raw === undefined || raw === '') return { ok: false, reason: `${name} is not set` };
   if (real.includes(raw)) return { ok: true, id: raw, mock: false };
   if (raw === 'mock')
-    return isProduction(env) ? { ok: false, reason: `${name}=mock is refused in production (ENVIRONMENT=${env.ENVIRONMENT ?? 'unset'})` } : { ok: true, id: 'mock', mock: true };
+    return isProduction(env)
+      ? { ok: false, reason: `${name}=mock is refused in production (ENVIRONMENT=${env.ENVIRONMENT ?? 'unset'})` }
+      : { ok: true, id: 'mock', mock: true };
   if (raw === UNDECIDED) return { ok: false, reason: `${name} is ${UNDECIDED}: no provider is chosen yet` };
   return { ok: false, reason: `${name}="${raw.slice(0, 40)}" is not a provider (${[...real, 'mock'].join(', ')})` };
 }

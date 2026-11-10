@@ -596,3 +596,28 @@
 .your-room-layer.is-screen {
   mix-blend-mode: screen;
 }
+/* S12, ת21: a room per house the order was bought in; a variant the room has no layer of: its card picture, and a line */
+.your-rooms {
+  display: grid;
+  gap: var(--s-3);
+}
+.your-room-missing {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--s-2);
+}
+.your-room-missing li {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+}
+.your-room-missing img,
+.your-room-noimg {
+  flex: none;
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  background: var(--stage);
+}

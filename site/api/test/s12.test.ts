@@ -76,7 +76,10 @@ async function paidOrder(items?: { variant_id: string; qty: number; house?: stri
   expect(r.outcome).toBe('paid');
   return o;
 }
-const one = async <T>(sql: string, ...b: unknown[]) => (await env.DB.prepare(sql).bind(...b).first<T>())!;
+const one = async <T>(sql: string, ...b: unknown[]) =>
+  (await env.DB.prepare(sql)
+    .bind(...b)
+    .first<T>())!;
 const n = async (sql: string, ...b: unknown[]) => (await one<{ n: number }>(sql, ...b)).n;
 const invoiceRows = (id: string) => n("SELECT COUNT(*) AS n FROM audit_log WHERE action = 'order.invoiced' AND subject = ?", id);
 
@@ -128,9 +131,15 @@ describe('ת16: one invoice per order, claimed in D1 before the provider is call
     expect(r.sort()).toEqual(['invoiced', 'retry', 'retry']);
     expect(p.issued).toEqual([{ order: orderId, key: orderId }]);
     expect(await invoiceRows(orderId)).toBe(1);
-    expect(await one(`SELECT state, provider_invoice_id FROM invoices WHERE order_id = ?`, orderId)).toEqual({ state: 'issued', provider_invoice_id: `INV-${orderId}-1` });
+    expect(await one(`SELECT state, provider_invoice_id FROM invoices WHERE order_id = ?`, orderId)).toEqual({
+      state: 'issued',
+      provider_invoice_id: `INV-${orderId}-1`,
+    });
     // the order carries the number; the retried runs now skip
-    expect(await one('SELECT invoice_provider, invoice_number FROM orders WHERE id = ?', orderId)).toEqual({ invoice_provider: 'counting', invoice_number: `INV-${orderId}-1` });
+    expect(await one('SELECT invoice_provider, invoice_number FROM orders WHERE id = ?', orderId)).toEqual({
+      invoice_provider: 'counting',
+      invoice_number: `INV-${orderId}-1`,
+    });
     expect(await processInvoiceJob(env, orderId, p)).toBe('skipped');
     expect(p.issued).toHaveLength(1);
   });
@@ -221,7 +230,9 @@ describe('ת16: one invoice per order, claimed in D1 before the provider is call
     const { orderId } = await paidOrder();
     const raw = (env.DB as unknown as { _raw: { exec(sql: string): void } })._raw;
     raw.exec('DELETE FROM invoices');
-    raw.exec(`INSERT INTO audit_log (at, actor, action, subject, detail) VALUES ('2026-11-09T10:00:00Z', 'invoice:mock', 'order.invoiced', '${orderId}', '{"invoice_id":"MOCK-INV-${orderId}","url":null}')`);
+    raw.exec(
+      `INSERT INTO audit_log (at, actor, action, subject, detail) VALUES ('2026-11-09T10:00:00Z', 'invoice:mock', 'order.invoiced', '${orderId}', '{"invoice_id":"MOCK-INV-${orderId}","url":null}')`,
+    );
     const sql = readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), '../migrations/0005_invoices_set_parts_house.sql'), 'utf8');
     raw.exec(sql.split('\nALTER TABLE')[0]!.replace(/CREATE TABLE invoices \([\s\S]*?\);\n/, ''));
     expect(await one('SELECT state, provider, provider_invoice_id FROM invoices WHERE order_id = ?', orderId)).toEqual({
@@ -332,7 +343,10 @@ describe('ת17: production fails closed on every provider variable', () => {
       expect((await one<{ status: string }>('SELECT status FROM orders WHERE id = ?', orderId)).status).toBe('paid');
       expect(await n("SELECT COUNT(*) AS n FROM supplier_shipments WHERE order_id = ? AND status = 'submitted'", orderId)).toBe(0);
       expect(await n("SELECT COUNT(*) AS n FROM audit_log WHERE action = 'supplier.submitted' AND subject = ?", orderId)).toBe(0);
-      const row = await one<{ last_error: string }>("SELECT last_error FROM supplier_shipments WHERE order_id = ? AND fulfillment_source = 'dropship_cj'", orderId);
+      const row = await one<{ last_error: string }>(
+        "SELECT last_error FROM supplier_shipments WHERE order_id = ? AND fulfillment_source = 'dropship_cj'",
+        orderId,
+      );
       expect(row.last_error).toMatch(/^config: SUPPLIER_PROVIDER/);
     }
     expect(fetchSpy).not.toHaveBeenCalled();
@@ -429,7 +443,9 @@ describe('the triptych (S11 question 2): the supplier order carries its three SK
       { supplier_sku: 'TRIP3-40x60', qty: 1 },
     ]);
     expect(await processSupplierJob(env, { kind: 'submit-order', order_id: orderId }, 1)).toBe('submitted');
-    const sent = JSON.parse((await one<{ request_json: string }>('SELECT request_json FROM supplier_shipments WHERE order_id = ? AND supplier = ?', orderId, 'mock')).request_json) as {
+    const sent = JSON.parse(
+      (await one<{ request_json: string }>('SELECT request_json FROM supplier_shipments WHERE order_id = ? AND supplier = ?', orderId, 'mock')).request_json,
+    ) as {
       lines: [string, number][];
     };
     // the pair of candle holders is 2 × its one SKU (a pack of one SKU); the triptych is its three different prints

@@ -120,11 +120,17 @@ def make_input(step):
         if k == "rug":
             clay = CLAY[None, None, :] * (0.92 * sh[..., None])
         else:
-            # a plain matte clay with a gentle light from the left window (lighter left, darker right edge of each shape)
-            ys, xs = np.nonzero(m > 0.5)
-            x0, x1 = xs.min(), xs.max() + 1
-            g = np.clip(1.06 - 0.16 * (np.arange(W_, dtype=np.float32) - x0) / max(1, x1 - x0), 0.85, 1.06)[None, :]
-            clay = CLAY[None, None, :] * np.clip(0.55 + 0.45 * sh, 0.5, 1.1)[..., None] * g[..., None]
+            # a plain matte clay with a gentle light from the left window (lighter left, darker right edge of each separate shape);
+            # wall pieces a shade darker so they read against the pale plaster
+            tone = {"accent-sconces": 0.66, "framed-art": 0.74}.get(k, 1.0)
+            n, lab = cv2.connectedComponents((m > 0.02).astype(np.uint8))
+            g = np.ones(m.shape, np.float32)
+            for i in range(1, n):
+                ys, xs = np.nonzero(lab == i)
+                x0, x1 = xs.min(), xs.max() + 1
+                gx = np.clip(1.06 - 0.16 * (np.arange(W_, dtype=np.float32) - x0) / max(1, x1 - x0), 0.85, 1.06)
+                g[lab == i] = np.broadcast_to(gx[None, :], m.shape)[lab == i]
+            clay = (CLAY * tone)[None, None, :] * np.clip(0.55 + 0.45 * sh, 0.5, 1.1)[..., None] * g[..., None]
         out = out * (1 - m[..., None]) + np.clip(clay, 0, 1) * m[..., None]
         ys, xs = np.nonzero(m > 0.5)
         rep[k] = dict(px=int((m > 0.5).sum()), box_px=[int(xs.min()), int(ys.min()), int(xs.max()) + 1, int(ys.max()) + 1])

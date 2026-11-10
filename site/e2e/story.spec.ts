@@ -35,6 +35,8 @@ declare global {
   }
 }
 const events = (page: Page) => page.evaluate(() => window.__story?.events ?? []) as Promise<Ev[]>;
+/** S12, QA ת26: the page's script defines window.__story when it runs; a test calls into it only once it is there */
+const storyReady = (page: Page) => page.waitForFunction(() => !!window.__story, undefined, { timeout: 20_000 });
 const TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'];
 async function audit(page: Page, label: string) {
   const r = await new AxeBuilder({ page } as unknown as ConstructorParameters<typeof AxeBuilder>[0]).withTags(TAGS).analyze();
@@ -199,6 +201,7 @@ test.describe('the Nordic living room', () => {
       await page.setViewportSize({ width: w, height: h });
       await page.goto(NORDIC);
       await expect(page.locator('#frame-A')).toHaveClass(/is-title/, { timeout: 15_000 });
+      await storyReady(page);
       await page.evaluate(() => window.__story!.showMarks('A'));
       await expect(page.locator('#frame-A .st-mark[data-item="A-1"]')).toBeVisible();
       const hits = await page.evaluate(() =>
@@ -217,6 +220,7 @@ test.describe('the Nordic living room', () => {
   test('reduced motion: the sheet only fades, nothing rises', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto(NORDIC);
+    await storyReady(page);
     await page.evaluate(() => window.__story!.openSheet('A-1'));
     await expect(sheet(page)).toHaveClass(/is-on/);
     expect(await sheet(page).evaluate((el) => getComputedStyle(el).transform)).toBe('none');
@@ -228,6 +232,7 @@ test.describe('the Nordic living room', () => {
     await expect(page.locator('#frame-A')).toHaveClass(/is-title/, { timeout: 15_000 });
     await page.waitForTimeout(1200); // the title lines and the brand have finished fading in
     await audit(page, 'story at rest');
+    await storyReady(page);
     await page.evaluate(() => window.__story!.openSheet('A-5'));
     await expect(sheet(page)).toHaveClass(/is-on/);
     await page.waitForTimeout(300);
@@ -288,6 +293,7 @@ test.describe('the other houses', () => {
     // register v4 (G-ED.6): the second rust cushion is a second unit of ours: the credit says so, and the look adds two
     const rust = page.locator('#list-A .st-credit', { hasText: 'חלודה' });
     await expect(rust).toContainText('בתמונה: שתי יחידות.');
+    await storyReady(page);
     await page.evaluate((id) => window.__story!.openSheet(id), (await rust.getAttribute('data-item'))!);
     await expect(page.getByRole('dialog')).toContainText('בתמונה: שתי יחידות.');
     await page.keyboard.press('Escape');
@@ -305,6 +311,7 @@ test.describe('the other houses', () => {
   test('one test cart across the story pages, and the old prototype address goes on to the Nordic living room', async ({ page }) => {
     await page.goto('/test/story/');
     await expect(page).toHaveURL(new RegExp(`${NORDIC}$`));
+    await storyReady(page);
     await page.evaluate(() => window.__story!.openSheet('A-5'));
     await page.getByRole('button', { name: 'הוספה לסל' }).click();
     await expect(page.locator('#st-cart-count')).toHaveText('1');
@@ -337,6 +344,7 @@ const DETAIL = (style: string, product: string) => `/story/living-room/${style}/
 test.describe('the detail page (layer 2, "הפרט")', () => {
   test('the sheet leads to it: the card, the price, the empty close-up slot, the frame it came from, and the test cart', async ({ page }) => {
     await page.goto(NORDIC);
+    await storyReady(page);
     await page.evaluate(() => window.__story!.openSheet('A-5'));
     await page.locator('#st-page').click();
     await expect(page).toHaveURL(new RegExp(`${DETAIL('nordic', 'cushions-cj-linen-look-charcoal')}$`));
@@ -438,6 +446,7 @@ test.describe('the detail page, after the designer (§6)', () => {
 
   test("QA on S2: a dot of another option opens the detail page on that option (the Mediterranean's terracotta cushion)", async ({ page }) => {
     await page.goto(MED);
+    await storyReady(page);
     await page.evaluate(() => window.__story!.openSheet('A-7'));
     await expect(page.locator('#st-page')).toHaveAttribute(
       'href',
@@ -544,6 +553,7 @@ test.describe('the shop after QA on S4', () => {
     await orderOnSite(other);
     await expect(other.locator('.order-steps')).toBeVisible({ timeout: 20_000 });
     await expect(page.locator('#st-cart-count')).toHaveText('0');
+    await storyReady(page);
     await page.evaluate(() => window.__story!.openSheet('A-5'));
     await page.locator('#st-add').click();
     await expect(page.locator('#st-cart-count')).toHaveText('1');

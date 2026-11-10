@@ -8,6 +8,7 @@ import type { ComponentChildren } from 'preact';
 import type { CatalogRoom, PublicProduct } from '@hd/shared';
 import type { Scene } from './engine/types';
 import { catalog, livingRoom, product, scene } from './catalog';
+import { defaultVariantId } from './variants';
 
 export type House = {
   style: string;
@@ -25,6 +26,8 @@ export type House = {
   thumb?: (position: number) => string | null;
   /** the wheel's panel for an option sold as a set of pieces, in place of the one product's */
   info?: (position: number) => ComponentChildren;
+  /** S12, ת21: the variants the layer of a slot's option draws (a set: every piece of it), as rendered; [] for none */
+  drawn: (slotId: string, position: number) => string[];
 };
 
 export const NORDIC = 'nordic';
@@ -36,6 +39,11 @@ export const nordic: House = {
   scene,
   room: livingRoom,
   product,
+  // the room's layer of an option is its product in the option the room shows (default_sku), never another colour
+  drawn: (slotId, position) => {
+    const p = product(livingRoom.slots.find((s) => s.id === slotId)?.options.find((o) => o.position === position)?.product_id);
+    return p ? [defaultVariantId(p)] : [];
+  },
 };
 /** the switch on the stage: the Nordic house, and the others behind the flag */
 export const HOUSES: { style: string; name_he: string }[] = [

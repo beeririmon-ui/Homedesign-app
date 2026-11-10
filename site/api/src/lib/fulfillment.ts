@@ -75,7 +75,8 @@ export async function processSupplierJob(env: Env, job: SupplierJob, attempt: nu
     )
       .bind(`config: ${choice.reason}`.slice(0, 500), attempt, now, order.id)
       .run();
-    if (attempt >= 5) await env.DB.prepare("UPDATE orders SET status = 'supplier_error', updated_at = ? WHERE id = ? AND status = 'paid'").bind(now, order.id).run();
+    if (attempt >= 5)
+      await env.DB.prepare("UPDATE orders SET status = 'supplier_error', updated_at = ? WHERE id = ? AND status = 'paid'").bind(now, order.id).run();
     return 'retry';
   }
   const client = choice.client;

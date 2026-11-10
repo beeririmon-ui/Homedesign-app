@@ -14,7 +14,8 @@ export interface StoreApi {
   readonly kind: 'http' | 'mock';
   createCart(): Promise<Cart>;
   getCart(id: string): Promise<Cart>;
-  setItem(cartId: string, variant_id: string, pack: Pack, qty: number): Promise<Cart>;
+  /** `house`: the room engine's house the line is added in (S12, ת21: "החדר שלך" draws that house) */
+  setItem(cartId: string, variant_id: string, pack: Pack, qty: number, house?: string): Promise<Cart>;
   checkout(req: CheckoutRequest): Promise<CheckoutResponse>;
   getOrder(id: string, token: string): Promise<OrderView>;
   /** "עדכנו אותי כשחוזר" (PRE1): one email for a product or a slot on hold */
