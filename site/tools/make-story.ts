@@ -299,7 +299,12 @@ async function photoOf(card: Card, url: string | null | undefined): Promise<Imag
     srcs.push(`${URL_BASE}/products/${publicId(card.id)}/${key}.${w}.webp ${Math.min(w, meta.width ?? w)}w`);
   }
   const w = Math.min(800, meta.width ?? 800);
-  return { src: `${URL_BASE}/products/${publicId(card.id)}/${key}.480.webp`, srcset: srcs.join(', '), w, h: Math.round((w * (meta.height ?? w)) / (meta.width ?? w)) };
+  return {
+    src: `${URL_BASE}/products/${publicId(card.id)}/${key}.480.webp`,
+    srcset: srcs.join(', '),
+    w,
+    h: Math.round((w * (meta.height ?? w)) / (meta.width ?? w)),
+  };
 }
 
 // ---------- the credit (art direction §4.4–§4.5): material · the defining size · price ----------
@@ -1443,104 +1448,29 @@ async function toolDraftPage(pg: PageOut, t: ToolDraft): Promise<void> {
 }
 for (const pg of pages) if (pg.pair.tool_draft) await toolDraftPage(pg, pg.pair.tool_draft);
 
-// ---------- the test checkout (S4): the site's fields and rules, nothing charged, nothing sent ----------
-const field = (k: string, label: string, attrs: string, hint = '') =>
-  `<div class="st-co-field"><label for="f-${k}">${label}</label><input id="f-${k}" name="${k}" ${attrs} aria-describedby="err-${k}${hint ? ` hint-${k}` : ''}" />${hint ? `<p class="mag-cap" id="hint-${k}">${hint}</p>` : ''}<p class="st-co-err" id="err-${k}" hidden></p></div>`;
-const shipping = site.shipping;
-const checkoutBody = `<section class="mag-paper st-co" id="checkout" data-head="תשלום" aria-labelledby="co-title">
-  <div class="mag-grid">
-    <div class="st-co-main">
-      <p class="st-kicker">סל הבדיקה</p>
-      <h1 id="co-title" class="mag-h1">תשלום</h1>
-      <p class="mag-cap">תשלום בדיקה: לא ייגבה כסף, וההזמנה לא תישלח לספק.</p>
-      <p class="mag-lead" id="co-empty" hidden>הסל ריק. <a class="mag-link" href="/story/">לתוכן הגיליון</a></p>
-      <form id="co-form" class="st-co-form" novalidate>
-        <div id="co-errors" class="st-co-errors" role="alert" tabindex="-1" hidden></div>
-        <fieldset class="st-co-set"><legend class="mag-h3">פרטים</legend>
-          ${field('full_name', 'שם מלא', 'autocomplete="name" required')}
-          ${field('email', 'אימייל', 'type="email" autocomplete="email" inputmode="email" dir="ltr" required', 'לשם נשלחים אישור ההזמנה והחשבונית.')}
-          ${field('phone', 'טלפון', 'type="tel" autocomplete="tel" inputmode="tel" dir="ltr" required', 'לשליח, למשל 050-1234567.')}
-        </fieldset>
-        <fieldset class="st-co-set"><legend class="mag-h3">כתובת למשלוח</legend>
-          ${field('city', 'עיר', 'autocomplete="address-level2" required')}
-          ${field('street', 'רחוב', 'autocomplete="address-line1" required')}
-          ${field('house', 'מספר בית', 'inputmode="numeric" required')}
-          <div class="st-co-field"><label for="f-apartment">דירה (רשות)</label><input id="f-apartment" name="apartment" autocomplete="address-line2" /></div>
-          ${field('zip', 'מיקוד (רשות)', 'inputmode="numeric" autocomplete="postal-code" dir="ltr"')}
-          <div class="st-co-field"><label for="f-notes">הערות לשליח (רשות)</label><textarea id="f-notes" name="notes" rows="2" maxlength="200"></textarea></div>
-        </fieldset>
-        <fieldset class="st-co-set"><legend class="mag-h3">משלוח</legend>
-          ${shipping
-            .map(
-              (m) =>
-                `<label class="st-co-choice"><input type="radio" name="shipping" value="${m.id}"${m.is_default ? ' checked' : ''} /><span><strong>${esc(m.label_he)}</strong> · <span class="num" data-ship-price="${m.id}">${formatIls(m.price_agorot)}</span><span class="mag-cap"> ${esc(m.days_he)}${m.free_over_agorot !== null ? `. חינם מעל ${formatIls(m.free_over_agorot)}` : ''}</span></span></label>`,
-            )
-            .join('\n          ')}
-        </fieldset>
-        <div class="st-co-field"><label class="st-co-check"><input type="checkbox" id="f-terms" name="terms" aria-describedby="err-terms" /> <span>קראתי ואני מאשר/ת את <a class="mag-link" href="/terms/">התקנון</a> ואת <a class="mag-link" href="/returns/">מדיניות הביטולים</a></span></label><p class="st-co-err" id="err-terms" hidden></p></div>
-        <div class="st-co-field"><label class="st-co-check"><input type="checkbox" id="f-marketing" name="marketing" /> <span>אשמח לקבל עדכונים על מוצרים חדשים במייל (רשות, אפשר להסיר בכל עת).</span></label></div>
-        <p><button type="submit" class="mag-btn mag-btn-primary" id="co-pay">לתשלום (בדיקה)</button></p>
-      </form>
-    </div>
-    <aside class="st-co-summary" aria-labelledby="co-sum-title">
-      <h2 id="co-sum-title" class="mag-h2">ההזמנה</h2>
-      <ol class="mag-credits" id="co-lines"></ol>
-      <p class="mag-cap" id="co-held" hidden></p>
-      <dl class="st-pd-specs st-co-totals">
-        <div><dt>סכום ביניים</dt><dd id="co-subtotal" class="num"></dd></div>
-        <div><dt>משלוח</dt><dd id="co-shipping" class="num"></dd></div>
-        <div><dt>סה״כ לתשלום</dt><dd id="co-total" class="num"></dd></div>
-      </dl>
-      <p class="mag-cap" id="co-free"></p>
-      <p class="mag-cap">המחירים כוללים מע״מ.</p>
-    </aside>
-  </div>
-</section>`;
-const orderBody = `<section class="mag-paper st-co" id="order" data-head="הזמנת בדיקה" aria-labelledby="or-title">
-  <div class="mag-grid">
-    <div class="st-co-main">
-      <p class="st-kicker">הזמנת בדיקה</p>
-      <h1 id="or-title" class="mag-h1" tabindex="-1">ההזמנה התקבלה</h1>
-      <div id="or-found" hidden>
-        <p class="mag-lead"><span id="or-greeting"></span> מספר ההזמנה: <strong class="num" id="or-number"></strong>. <span id="or-city"></span></p>
-        <ol class="mag-credits" id="or-lines"></ol>
-        <p class="st-total" id="or-sum"></p>
-      </div>
-      <p class="mag-lead" id="or-missing" hidden>לא מצאנו את ההזמנה בדפדפן הזה. הזמנות הבדיקה נשמרות רק בדפדפן שבו הן נעשו.</p>
-      <p class="mag-cap">זו הזמנת בדיקה: לא נגבה כסף, ושום דבר לא נשלח לספק.</p>
-      <p><a class="mag-link st-alone" href="/story/">חזרה לתוכן הגיליון</a></p>
-    </div>
-  </div>
-</section>`;
-const sellTable: Record<string, [number, number | null, 0 | 1, number]> = {};
-for (const x of pages.flatMap((pg) => pg.frames.flatMap((f) => f.items)))
-  if (x.variant_id && x.price_agorot !== null) sellTable[x.variant_id] = [x.price_agorot, null, x.status === 'available' ? 1 : 0, x.set_qty];
-for (const d of details)
-  for (const k of d.skus)
-    if (k.variant_id && k.price_agorot !== null) sellTable[k.variant_id] = [k.price_agorot, k.unit_price_agorot, k.sellable ? 1 : 0, d.set_qty];
-for (const [kind, href, title, body, skip] of [
-  ['checkout', '/story/checkout/', 'תשלום', checkoutBody, '#co-form'],
-  ['order', '/story/order/', 'הזמנת בדיקה', orderBody, '#order'],
-] as const)
-  render(`web${href}index.html`, {
-    TITLE: esc(`${title} · ${story.issue_he}`),
-    DESCRIPTION: esc(`${title} בסל הבדיקה של הגיליון. גרסת בדיקה: לא נגבה כסף.`),
-    ISSUE: esc(story.issue_he),
-    KIND: kind,
-    HEAD_ON: 'paper',
-    CONTENTS_CURRENT: '',
-    NAV_TOOL: esc(`${story.tool_fallback}?from=${encodeURIComponent('/story/')}`),
-    SKIP: skip,
-    SKIP_HE: 'דילוג לתוכן העמוד',
-    TOOL_HREF: esc(story.tool_fallback),
-    BODY: [body, footer('')].join('\n'),
-    // QA on S4: the checkout re-checks every line against the story as built now (price, sold or not), never the
-    // snapshot a line kept from the page it was added on: variant → [price, single-piece price, for sale, set size]
-    DATA: JSON.stringify({ page: { room: null, style: null, href, tool: story.tool_fallback, kind }, items: {}, frames: [], shipping, v: sellTable }).replace(
-      /</g,
-      '\\u003c',
-    ),
-  });
+// ---------- S7: the story sells through the shop: its cart is the API's, its checkout the real /checkout/ ----------
+// the old addresses of the test checkout and the test order go on to the real ones (a page here, and _redirects)
+const moved = (to: string, title: string) => `<!doctype html>
+<html lang="he" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta http-equiv="refresh" content="0; url=${to}" />
+    <title>${title}</title>
+  </head>
+  <body>
+    <p><a href="${to}">${title}</a></p>
+  </body>
+</html>
+`;
+for (const [href, to, title] of [
+  ['/story/checkout/', '/checkout/', 'התשלום עבר לקופה של האתר'],
+  ['/story/order/', '/cart/', 'ההזמנות נמצאות באתר'],
+] as const) {
+  mkdirSync(sitePath(`web${href}`), { recursive: true });
+  writeFileSync(sitePath(`web${href}index.html`), moved(to, title));
+}
 const indexHtml = render('web/story/index.html', {
   TITLE: esc(`${story.issue_he} · תוכן הגיליון`),
   DESCRIPTION: esc('תוכן הגיליון: כל חדר בכל בית, פריים סיפור לכל חדר וסגנון. גרסת בדיקה.'),
@@ -1582,7 +1512,12 @@ mkdirSync(GENERATED, { recursive: true });
 writeFileSync(join(GENERATED, 'story.json'), JSON.stringify(resolved, null, 1));
 // S5: two products never share an address (fails here, before a page does); the old addresses move to the neutral ones
 slugIndex(new Set(details.map((d) => d.product)));
-writeFileSync(join(GENERATED, 'story-redirects.txt'), details.map((d) => `${oldDetailHref(d.room, d.style, d.product)} ${d.href} 301`).join('\n') + '\n');
+writeFileSync(
+  join(GENERATED, 'story-redirects.txt'),
+  [...details.map((d) => `${oldDetailHref(d.room, d.style, d.product)} ${d.href} 301`), '/story/checkout/ /checkout/ 302', '/story/order/ /cart/ 302'].join(
+    '\n',
+  ) + '\n',
+);
 const all = pages.flatMap((p) => p.frames.flatMap((f) => f.items));
 console.log(
   `story: ${pages.length} pages (${pages.filter((p) => p.frames.length).length} with frames, ${pages.filter((p) => !p.frames.length).length} typographic); ${all.length} points, ${all.filter((x) => x.status === 'available').length} for sale, ${all.filter((x) => x.status === 'unavailable').length} not sold now, ${all.filter((x) => x.status === 'unpriced').length} without a price; ${all.filter((x) => !x.image).length} without a cached card photo`,

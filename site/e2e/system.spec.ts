@@ -30,8 +30,6 @@ const MAGAZINE = [
   '/story/living-room/nordic/',
   '/story/living-room/japandi/',
   `/story/living-room/nordic/p/${productSlug('cushions-cj-boucle-teddy')}/`,
-  '/story/checkout/',
-  '/story/order/',
   '/story/living-room/warm-modern/tool/',
 ];
 // S6: the shop's pages are held to the same gates; the cart and the checkout are measured with a line in the cart
@@ -267,22 +265,16 @@ test.describe('the design system, measured (S5)', () => {
       test.setTimeout(240_000);
       await page.setViewportSize({ width, height: width < 720 ? 860 : 800 });
       for (const url of MAGAZINE) {
-        if (url === '/story/checkout/') {
-          // the checkout with one line in its cart (the empty one is the order page's neighbour)
-          await open(page, '/story/living-room/nordic/');
-          await page.evaluate(() => window.__story!.openSheet('A-5'));
-          await page.getByRole('button', { name: 'הוספה לסל' }).click();
-        }
         await open(page, url);
         const m = await measure(page);
         const ring = await focusRing(page);
         record(url, width, m, ring, true);
         // QA on S3–S5 (ת1): the open states too: the cart open with a line, and the checkout after an empty submit
-        if (url === '/story/checkout/') {
-          await page.locator('#co-pay').click();
-          await expect(page.locator('#co-errors')).toBeVisible();
-          record(`${url} (errors)`, width, await measure(page), [], true);
-          await open(page, '/story/living-room/nordic/');
+        // QA on S3–S5 (ת1): the open states too: the cart open with a line (the checkout's errors: the shop's test)
+        if (url === '/story/living-room/nordic/') {
+          await page.evaluate(() => window.__story!.openSheet('A-5'));
+          await page.getByRole('button', { name: 'הוספה לסל' }).click();
+          await page.keyboard.press('Escape');
           await page.locator('#st-cart-open').click();
           await expect(page.locator('#st-cart')).toBeVisible();
           await page.waitForTimeout(400);

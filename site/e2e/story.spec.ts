@@ -319,6 +319,20 @@ test.describe('the other houses', () => {
   });
 });
 
+/** S7: the site's real checkout, filled and paid with the mock payment, to its order page */
+async function orderOnSite(page: Page): Promise<void> {
+  await page.getByLabel('שם מלא').fill('נועה כהן');
+  await page.getByLabel('אימייל').fill('noa@example.com');
+  await page.getByLabel('טלפון').fill('050-1234567');
+  await page.getByLabel('עיר').fill('חיפה');
+  await page.getByLabel('רחוב').fill('הנמל');
+  await page.getByLabel('מספר בית').fill('12');
+  await page.getByRole('checkbox', { name: /קראתי ואני מסכים/ }).check();
+  await page.getByRole('button', { name: 'מעבר לתשלום מאובטח' }).click();
+  await expect(page).toHaveURL(/\/mock-pay\/ms_/);
+  await page.getByRole('button', { name: 'אישור תשלום (מדומה)' }).click();
+  await expect(page).toHaveURL(/\/order\/\d+\/$/);
+}
 const DETAIL = (style: string, product: string) => `/story/living-room/${style}/p/${productSlug(product)}/`;
 test.describe('the detail page (layer 2, "הפרט")', () => {
   test('the sheet leads to it: the card, the price, the empty close-up slot, the frame it came from, and the test cart', async ({ page }) => {
@@ -469,34 +483,23 @@ test.describe('the shop (S4)', () => {
     await audit(page, 'the cart, edited');
   });
 
-  test("the test checkout: the site's fields and rules, errors said and focused, then a test order and an empty cart", async ({ page }) => {
-    await page.goto(BOHO);
-    await page.evaluate(() => window.__story!.openSheet('A-4'));
-    await page.locator('#st-add').click();
-    await page.keyboard.press('Escape');
+  test('S7: from the whole look to the order, through the shop’s own cart and its real checkout', async ({ page }) => {
+    await page.goto(`${BOHO}#list-A`);
+    await page.locator('#look-A').click();
+    await expect(page.locator('#st-cart-count')).not.toHaveText('0');
+    const n = Number(await page.locator('#st-cart-count').textContent());
     await page.locator('#st-cart-open').click();
     await page.locator('#st-cart-pay').click();
-    await expect(page).toHaveURL(/\/story\/checkout\/$/);
-    await expect(page.locator('#co-lines li')).toHaveCount(1);
-    await expect(page.locator('#co-total')).toContainText('₪');
-    await page.locator('#co-pay').click();
-    await expect(page.locator('#co-errors')).toBeFocused();
-    await expect(page.locator('#co-errors li')).toHaveCount(7);
-    await expect(page.locator('#f-phone')).toHaveAttribute('aria-invalid', 'true');
-    await audit(page, 'checkout with errors');
-    await page.locator('#f-full_name').fill('נועה כהן');
-    await page.locator('#f-email').fill('noa@example.com');
-    await page.locator('#f-phone').fill('050-1234567');
-    await page.locator('#f-city').fill('חיפה');
-    await page.locator('#f-street').fill('הנמל');
-    await page.locator('#f-house').fill('12');
-    await page.locator('#f-terms').check();
-    await page.locator('#co-pay').click();
-    await expect(page).toHaveURL(/\/story\/order\/\?id=T\d{7}$/);
-    await expect(page.locator('#or-number')).toHaveText(/^T\d{7}$/);
-    await expect(page.locator('#or-greeting')).toHaveText('תודה, נועה.');
+    // the real checkout of the site, with the same cart (the API's, by the id in 'hd.cart')
+    await expect(page).toHaveURL(/\/checkout\/$/);
+    await expect(page.locator('.cart-count')).toHaveText(String(n));
+    await expect(page.locator('.summary')).toContainText('חלודה');
+    await orderOnSite(page);
+    await expect(page.locator('.order-steps [aria-current="step"]')).toHaveText(/התקבלה|בהכנה/, { timeout: 20_000 });
+    await expect(page.locator('body')).toContainText('חלודה');
+    // back in the story the cart starts again: the ordered one is closed on the server
+    await page.goto(BOHO);
     await expect(page.locator('#st-cart-count')).toHaveText('0');
-    await audit(page, 'the test order');
   });
 
   test('PRE1 / MED1 in the tool: an option out of stock stays on the wheel, said, and never sold', async ({ page }) => {
@@ -512,40 +515,16 @@ test.describe('the shop (S4)', () => {
 });
 
 test.describe('the shop after QA on S4', () => {
-  test('PRE1 at the checkout: a line kept from when the rug was sold is held, never charged, never ordered', async ({ page }) => {
-    await page.goto('/story/');
-    const rug = {
-      variant_id: 'rug-cj-braided-wool-natural:200x300+square',
-      product_id: 'rug-cj-braided-wool-natural',
-      name_he: 'שטיח צמר קלוע, טבעי',
-      option_he: null,
-      price_agorot: 129900,
-      set_qty: 1,
-      available: true,
-    };
-    await page.evaluate((v) => {
-      localStorage.setItem('hd.story.cart', JSON.stringify({ id: 'qa-s4', items: [{ variant_id: v.variant_id, pack: 'set', qty: 1, v }] }));
-    }, rug);
-    await page.goto(`${NORDIC}#list-A`);
-    await page.locator('#look-A').click();
-    await page.goto('/story/checkout/');
-    await expect(page.locator('#co-lines')).not.toContainText('שטיח');
-    await expect(page.locator('#co-held')).toContainText('שטיח צמר קלוע');
-    await expect(page.locator('#co-total')).not.toContainText('1,299');
-    for (const [k, v] of [
-      ['full_name', 'נועה כהן'],
-      ['email', 'noa@example.com'],
-      ['phone', '050-1234567'],
-      ['city', 'חיפה'],
-      ['street', 'הנמל'],
-      ['house', '12'],
-    ])
-      await page.locator(`#f-${k}`).fill(v!);
-    await expect(page.locator('#hint-email')).toContainText('אישור ההזמנה');
-    await expect(page.locator('#f-marketing')).not.toBeChecked();
-    await page.locator('#f-terms').check();
-    await page.locator('#co-pay').click();
-    await expect(page.locator('#or-lines')).not.toContainText('שטיח');
+  test('S7: the server sells only what is for sale, in 1–20 whole units (PRE1; QA on S3–S5, ת3)', async ({ page }) => {
+    const rug = Object.values(resolved[NORDIC]!.items!).find((x) => x.status === 'unavailable' && x.variant_id);
+    const sold = Object.values(resolved[NORDIC]!.items!).find((x) => x.status === 'available' && x.variant_id)!;
+    const cart = (await (await page.request.post('/api/cart')).json()) as { id: string };
+    const put = (variant_id: string, qty: unknown) => page.request.put(`/api/cart/${cart.id}/items`, { data: { variant_id, pack: 'set', qty } });
+    if (rug) expect((await put(rug.variant_id!, 1)).ok()).toBe(false);
+    for (const qty of [-2, 2.5, '3', 21, 999]) expect((await put(sold.variant_id!, qty)).status(), String(qty)).toBe(400);
+    const ok = (await (await put(sold.variant_id!, 20)).json()) as { lines: { qty: number }[]; subtotal_agorot: number };
+    expect(ok.lines[0]!.qty).toBe(20);
+    expect(ok.subtotal_agorot).toBeGreaterThan(0);
   });
 
   test("the whole look twice adds nothing the second time; another tab's order empties this one", async ({ page, context }) => {
@@ -557,21 +536,11 @@ test.describe('the shop after QA on S4', () => {
     await page.locator('#look-A').click();
     await expect(page.locator('#look-A')).toHaveText('המראה כבר בסל');
     await expect(page.locator('#st-cart-count')).toHaveText(n!);
-    // another tab places the order: this tab's count follows, and its next add starts a new cart
+    // another tab orders on the site: this tab's count follows, and its next add starts a new cart
     const other = await context.newPage();
-    await other.goto('/story/checkout/');
-    for (const [k, v] of [
-      ['full_name', 'נועה כהן'],
-      ['email', 'noa@example.com'],
-      ['phone', '050-1234567'],
-      ['city', 'חיפה'],
-      ['street', 'הנמל'],
-      ['house', '12'],
-    ])
-      await other.locator(`#f-${k}`).fill(v!);
-    await other.locator('#f-terms').check();
-    await other.locator('#co-pay').click();
-    await expect(other).toHaveURL(/\/story\/order\//);
+    await other.goto('/checkout/');
+    await orderOnSite(other);
+    await expect(other.locator('.order-steps')).toBeVisible({ timeout: 20_000 });
     await expect(page.locator('#st-cart-count')).toHaveText('0');
     await page.evaluate(() => window.__story!.openSheet('A-5'));
     await page.locator('#st-add').click();

@@ -13,9 +13,9 @@ import '../test-page/fonts.css';
 import '../test-page/magazine.css';
 import './story.css';
 import { prefersReducedMotion } from '../motion';
-import { priceHe, storyCart, type StoryVariant } from './story-cart';
+import { priceHe } from './story-cart';
+import { apiStoryCart, CART_KEY } from './api-cart';
 import type { DetailData, DSku } from './detail-model';
-import type { ShippingMethod } from './checkout-model';
 
 type Item = {
   id: string;
@@ -45,10 +45,6 @@ type FrameData = { id: string; u0: number; v0: number; aspect: number; crop: [nu
 /** the index and a typographic page have no frames and no items: the cart and the header still work there */
 type Data = {
   page: { room: string | null; style: string | null; href: string; tool: string; kind?: 'checkout' | 'order' | 'tool-draft' };
-  /** the site's shipping methods (the checkout page) */
-  shipping?: ShippingMethod[];
-  /** the checkout's own table of every story variant: [price, single-piece price, for sale, set size] (QA on S4) */
-  v?: Record<string, [number, number | null, 0 | 1, number]>;
   items: Record<string, Item>;
   frames: FrameData[];
   /** a detail page (layer 2): the product's SKUs in this house */
@@ -277,54 +273,15 @@ function wallLabel(st: Stage, id: string | null): void {
 }
 
 // ---------- the test cart ----------
-const detailVariants: StoryVariant[] = (data.detail?.skus ?? []).flatMap((k) =>
-  k.sellable && k.variant_id && k.price_agorot !== null
-    ? [
-        {
-          variant_id: k.variant_id,
-          product_id: data.detail!.product,
-          name_he: data.detail!.name_he,
-          option_he: k.key === data.detail!.story_key ? null : k.label_he,
-          price_agorot: k.price_agorot,
-          set_qty: data.detail!.set_qty,
-          available: true,
-          unit_price_agorot: k.unit_price_agorot,
-        },
-      ]
-    : [],
-);
-const variants: StoryVariant[] = Object.values(data.items).flatMap((it) =>
-  it.variant_id && it.price_agorot !== null
-    ? [
-        {
-          variant_id: it.variant_id,
-          product_id: it.product,
-          name_he: it.name_he,
-          option_he: it.option_he,
-          price_agorot: it.price_agorot,
-          set_qty: it.set_qty,
-          available: it.status === 'available',
-        },
-      ]
-    : [],
-);
-// the checkout (QA on S4): its own table is the truth for every line, never the snapshot a line kept
-const tableVariants: StoryVariant[] = Object.entries(data.v ?? {}).map(([variant_id, [price, unit, sold, set]]) => ({
-  variant_id,
-  product_id: '',
-  name_he: '',
-  option_he: null,
-  price_agorot: price,
-  set_qty: set,
-  available: sold === 1,
-  unit_price_agorot: unit,
-}));
-const cart = data.v
-  ? storyCart(tableVariants, undefined, undefined, { strict: true })
-  : storyCart([...new Map([...variants, ...detailVariants].map((v) => [v.variant_id, v])).values()]);
+// S7: the story's cart is the shop's (the API, the cart id 'hd.cart'): the server prices and sells, the real /checkout/
+const cart = apiStoryCart();
+void cart.load().then(() => {
+  showCount(false);
+  mark('cart:loaded');
+});
 // another tab may change the cart (an order empties it): the count follows
 addEventListener('storage', (e) => {
-  if (e.key === 'hd.story.cart' || e.key === null) showCount(false);
+  if (e.key === CART_KEY || e.key === null) void cart.load().then(() => showCount(false));
 });
 const countEl = document.getElementById('st-cart-count')!;
 function showCount(animate: boolean): void {
@@ -345,9 +302,6 @@ function showCount(animate: boolean): void {
 }
 showCount(false);
 // the test checkout and its confirmation: their own module, loaded only there
-if (data.page.kind === 'checkout' && data.shipping)
-  void import('./checkout').then((m) => m.initCheckout({ cart, methods: data.shipping!, announce, mark, counted: () => showCount(false) }));
-if (data.page.kind === 'order') void import('./checkout').then((m) => m.initOrder());
 if (data.page.kind === 'tool-draft') void import('./tool-draft').then((m) => m.initToolDraft({ announce, mark }));
 // a detail page: its own module, loaded only there
 let detail: { current: () => DSku; choose: (key: string) => void } | null = null;
@@ -595,8 +549,7 @@ async function cartAction(e: Event): Promise<void> {
   const { act, variant, pack, qty } = b.dataset as { act: string; variant: string; pack: 'set' | 'unit'; qty: string };
   const n = Number(qty);
   try {
-    if (act === 'remove') cart.remove(variant, pack);
-    else await cart.setQty(variant, pack, act === 'more' ? n + 1 : n - 1);
+    await cart.setQty(variant, pack, act === 'remove' ? 0 : act === 'more' ? n + 1 : n - 1);
   } catch {
     announce('לא הצלחנו לעדכן את הסל.');
     return;
