@@ -86,6 +86,8 @@ type Story = {
   names_he: Record<string, string>;
   /** a shape that an option gives the product its own name for (design notes §6): product → "axis:value" → base name */
   option_names_he?: Record<string, Record<string, string>>;
+  /** a card merged into another one's option axis (design notes §11.4): the register's rows follow it there */
+  merged_cards?: Record<string, { into: string; option: Record<string, string>; why?: string }>;
   /** the designer's colour word for an option's value, before the supplier's label: product → "axis:value" → word */
   colours_he?: Record<string, Record<string, string>>;
   /** a set made of one SKU per value of an axis (a triptych's three prints): sold as the set only, the axis not offered */
@@ -166,7 +168,16 @@ const read = <T>(p: string): T => JSON.parse(readFileSync(p, 'utf8')) as T;
 const DATA = 'data/story/story.json';
 const story = read<Story>(repoPath(DATA));
 const register = registerReader();
-const qaOf = register.read;
+// design notes §11.4 (S7): a card merged into another one's option axis; the register's rows for it are that option's
+const qaOf = (key: string): QaFrame | null => {
+  const q = register.read(key);
+  if (!q) return q;
+  const rows = q.rows.map((r) => {
+    const m = story.merged_cards?.[cardOf(r)];
+    return m ? { ...r, card: m.into, option: m.option } : r;
+  });
+  return { ...q, rows };
+};
 console.log(`QA register ${register.path}, version ${register.version}`);
 for (const [key, pair] of Object.entries(story.pairs))
   for (const f of pair.frames) {
