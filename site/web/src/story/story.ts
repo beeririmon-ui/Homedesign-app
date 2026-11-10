@@ -287,6 +287,8 @@ addEventListener('storage', (e) => {
 const countEl = document.getElementById('st-cart-count')!;
 function showCount(animate: boolean): void {
   const n = cart.current()?.count ?? 0;
+  // an open cart follows a change that lands after it opened (an add still on its way to the server, another tab)
+  if (document.querySelector<HTMLDialogElement>('#st-cart')?.open) renderCart();
   if (!animate || reduce) {
     countEl.textContent = String(n);
     return;
