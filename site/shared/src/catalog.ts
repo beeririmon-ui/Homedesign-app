@@ -148,6 +148,13 @@ export type FullVariant = {
   line_name_he: string;
   /** ת9: a part of a set of distinct SKUs (a print of a triptych other than the set's own): never sold on its own */
   set_part: boolean;
+  /**
+   * S12 (S11 question 2): a set of distinct SKUs (the triptych) is these supplier SKUs, one of each per set: what the
+   * supplier order carries for it, never N × the set's own SKU. Null for anything that is not such a set.
+   */
+  set_skus?: string[] | null;
+  /** why such a set cannot be sold: the card does not name the SKUs of its parts (a list for sourcing); null when it can */
+  set_incomplete?: string | null;
   /** the manager's sale decisions (data/catalog/sale-exclusions.json): why this variant is not offered; null when it is */
   sale_excluded: string | null;
   supplier_sku: string | null;

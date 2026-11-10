@@ -12,6 +12,8 @@ declare global {
       setSelection(slot: string, position: number, durationMs?: number): Promise<void>;
     };
     __hdFrames?: number[];
+    /** S12 ת15: e2e/house.spec.ts reads what the display pass draws (installProbe) */
+    __hdProbe?: { grab(mix: number): number[]; record(on: boolean): { mix: number; mean: number }[]; restore(): void };
   }
 }
 

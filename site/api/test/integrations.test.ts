@@ -62,10 +62,11 @@ describe('the tax invoice (W2)', () => {
   };
   it('issues one invoice per order, again the same one, and refuses a total that does not add up', async () => {
     const p = mockInvoices();
-    const a = await p.issue(input);
+    const key = { idempotency_key: input.order_id };
+    const a = await p.issue(input, key);
     expect(a.invoice_id).toBeTruthy();
-    expect(await p.issue(input)).toEqual(a);
-    await expect(p.issue({ ...input, order_id: '2', total_agorot: 1 })).rejects.toThrow(/mismatch/);
+    expect(await p.issue(input, key)).toEqual(a);
+    await expect(p.issue({ ...input, order_id: '2', total_agorot: 1 }, { idempotency_key: '2' })).rejects.toThrow(/mismatch/);
   });
 });
 

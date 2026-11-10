@@ -170,6 +170,9 @@ export function buildSeedSql(cat: FullCatalog): string {
         v.option_label_he,
         v.line_name_he ?? null,
         v.set_part ?? false,
+        // S12: a set of distinct SKUs carries its parts' SKUs, or why it cannot be sold
+        'set_skus' in v && v.set_skus ? JSON.stringify(v.set_skus) : null,
+        'set_incomplete' in v ? (v.set_incomplete ?? null) : null,
         v.supplier_sku,
         p.fulfillment_source,
         v.active,
@@ -188,7 +191,7 @@ export function buildSeedSql(cat: FullCatalog): string {
         own?.price_floored ?? false,
       ];
       out.push(
-        `INSERT INTO product_variants (id, product_id, label_he, option_label_he, line_name_he, set_part, supplier_sku, fulfillment_source, active, in_room, retail_agorot, unit_retail_agorot, price_provisional, unit_price_estimated, cost_usd_cents, shipping_usd_cents, unit_shipping_usd_cents, landed_agorot, no_loss_agorot, price_floored) VALUES ${row([...cols, ...priced])} ON CONFLICT(id) DO UPDATE SET label_he = excluded.label_he, option_label_he = excluded.option_label_he, line_name_he = excluded.line_name_he, set_part = excluded.set_part, supplier_sku = excluded.supplier_sku, fulfillment_source = excluded.fulfillment_source, active = excluded.active, in_room = excluded.in_room, retail_agorot = excluded.retail_agorot, unit_retail_agorot = excluded.unit_retail_agorot, price_provisional = excluded.price_provisional, unit_price_estimated = excluded.unit_price_estimated, cost_usd_cents = excluded.cost_usd_cents, shipping_usd_cents = excluded.shipping_usd_cents, unit_shipping_usd_cents = excluded.unit_shipping_usd_cents, landed_agorot = excluded.landed_agorot, no_loss_agorot = excluded.no_loss_agorot, price_floored = excluded.price_floored;`,
+        `INSERT INTO product_variants (id, product_id, label_he, option_label_he, line_name_he, set_part, set_skus_json, set_incomplete, supplier_sku, fulfillment_source, active, in_room, retail_agorot, unit_retail_agorot, price_provisional, unit_price_estimated, cost_usd_cents, shipping_usd_cents, unit_shipping_usd_cents, landed_agorot, no_loss_agorot, price_floored) VALUES ${row([...cols, ...priced])} ON CONFLICT(id) DO UPDATE SET label_he = excluded.label_he, option_label_he = excluded.option_label_he, line_name_he = excluded.line_name_he, set_part = excluded.set_part, set_skus_json = excluded.set_skus_json, set_incomplete = excluded.set_incomplete, supplier_sku = excluded.supplier_sku, fulfillment_source = excluded.fulfillment_source, active = excluded.active, in_room = excluded.in_room, retail_agorot = excluded.retail_agorot, unit_retail_agorot = excluded.unit_retail_agorot, price_provisional = excluded.price_provisional, unit_price_estimated = excluded.unit_price_estimated, cost_usd_cents = excluded.cost_usd_cents, shipping_usd_cents = excluded.shipping_usd_cents, unit_shipping_usd_cents = excluded.unit_shipping_usd_cents, landed_agorot = excluded.landed_agorot, no_loss_agorot = excluded.no_loss_agorot, price_floored = excluded.price_floored;`,
       );
     }
   }

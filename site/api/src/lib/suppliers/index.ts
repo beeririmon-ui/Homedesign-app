@@ -1,4 +1,5 @@
 import type { Env } from '../../env';
+import { providerOf } from '../config';
 import type { SupplierClient, SupplierOrderInput } from './types';
 
 /** Development and preview: records the order without calling a supplier. */
@@ -50,6 +51,15 @@ export function cjSupplier(apiKey: string | undefined, fetcher: Fetch = (u, i) =
   return self;
 }
 
-export function supplierClient(env: Env): SupplierClient {
-  return env.SUPPLIER_PROVIDER === 'cj' ? cjSupplier(env.CJ_API_KEY) : mockSupplier;
+export type SupplierChoice = { ok: true; client: SupplierClient } | { ok: false; reason: string };
+
+/**
+ * The supplier SUPPLIER_PROVIDER names, exactly (lib/config.ts, S12 ת17): `cj`, or `mock` outside production only. A
+ * missing value, `mock` in production or a typo (`CJ`) runs nothing: the job fails loudly and is retried, and the order
+ * is never marked as sent to the supplier.
+ */
+export function supplierClient(env: Pick<Env, 'ENVIRONMENT' | 'SUPPLIER_PROVIDER' | 'CJ_API_KEY'>): SupplierChoice {
+  const c = providerOf(env, 'SUPPLIER_PROVIDER');
+  if (!c.ok) return c;
+  return { ok: true, client: c.mock ? mockSupplier : cjSupplier(env.CJ_API_KEY) };
 }

@@ -173,6 +173,9 @@ async function swapRect(): Promise<{ rect: [number, number, number, number]; out
 const REL = `house/${m.room}/${m.style}/M0`;
 const OUT = join(MEDIA_OUT, REL);
 const BASE_WIDTHS = [1280, 1920, W];
+/** the base's encoding (S12): the threshold of a tool layer on the public site (tools/lib/encoding.ts) */
+const BASE_AVIF_Q = 70;
+const BASE_WEBP_Q = 90;
 const WIDTHS = { lo: 1920, hi: W };
 const THUMB = 360;
 const stamp = createHash('sha256')
@@ -193,13 +196,15 @@ if (cached?.stamp !== stamp) {
   const base = sharp(files.base).removeAlpha();
   for (const w of BASE_WIDTHS) {
     const r = base.clone().resize({ width: w });
+    // S12 (QA S8–S10 §4): AVIF q70 meets the tool-layer threshold in every view QA measured; q52 did not. The WebP
+    // fallback meets the same threshold (e2e/encoding.spec.ts measures both, as the browser draws them)
     await r
       .clone()
-      .avif({ quality: 52, effort: 4 })
+      .avif({ quality: BASE_AVIF_Q, effort: 4 })
       .toFile(out(`base/shell.${w}.avif`));
     await r
       .clone()
-      .webp({ quality: 80, effort: 5 })
+      .webp({ quality: BASE_WEBP_Q, effort: 5 })
       .toFile(out(`base/shell.${w}.webp`));
   }
   const [x0, x1, y0, y1] = rect;

@@ -39,6 +39,57 @@ const engineOf = (page: Page) =>
     return e ? { ready: e.ready, cam: { ...e.cam }, vp: { ...e.vp } } : null;
   });
 
+/**
+ * Runs in the page: reads the canvas right after the display pass draws it, on a 64 × 36 grid (the luma of each point).
+ * `grab(mix)` draws the dissolve's state `mix` with the engine's own camera (no parallax, no drift) and reads it;
+ * `record(on)` reads every frame the engine draws while on, and returns them when turned off.
+ */
+function installProbe() {
+  type DisplayState = { mix: number } & Record<string, unknown>;
+  type Comp = { gl: WebGL2RenderingContext; display(s: DisplayState): void };
+  const e = (window as unknown as { __hdEngine: { comp: Comp; cam: object; vp: object; aspect: number; requestRender(): void } }).__hdEngine;
+  const comp = e.comp;
+  const gl = comp.gl;
+  const read = (): number[] => {
+    const W = gl.drawingBufferWidth;
+    const H = gl.drawingBufferHeight;
+    const buf = new Uint8Array(W * H * 4);
+    gl.readPixels(0, 0, W, H, gl.RGBA, gl.UNSIGNED_BYTE, buf);
+    const out: number[] = [];
+    for (let j = 0; j < 36; j++)
+      for (let i = 0; i < 64; i++) {
+        const x = Math.floor(((i + 0.5) / 64) * W);
+        const y = Math.floor(((j + 0.5) / 36) * H);
+        const k = (y * W + x) * 4;
+        out.push(0.2126 * buf[k]! + 0.7152 * buf[k + 1]! + 0.0722 * buf[k + 2]!);
+      }
+    return out;
+  };
+  const display = comp.display.bind(comp);
+  let frames: { mix: number; mean: number }[] | null = null;
+  comp.display = (s: DisplayState) => {
+    display(s);
+    if (frames) {
+      const g = read();
+      frames.push({ mix: s.mix, mean: g.reduce((a, b) => a + b, 0) / g.length });
+    }
+  };
+  window.__hdProbe = {
+    grab(mix: number) {
+      display({ cam: e.cam, vp: e.vp, aspect: e.aspect, mix, parallax: 0, focus: 0.3, drift: [0, 0], blur: 0 });
+      return read();
+    },
+    record(on: boolean) {
+      const was = frames ?? [];
+      frames = on ? [] : null;
+      return was;
+    },
+    restore() {
+      e.requestRender();
+    },
+  };
+}
+
 async function audit(page: Page, label: string) {
   const r = await new AxeBuilder({ page } as unknown as ConstructorParameters<typeof AxeBuilder>[0]).withTags(TAGS).analyze();
   const summary = r.violations.map((v) => `${v.id} (${v.impact}): ${v.nodes.length} × ${v.nodes[0]?.target.join(' ')} — ${v.help}`);
@@ -298,6 +349,57 @@ test.describe('the soft switch between houses, in the engine (S10)', () => {
     await expect(page.locator('.stage-status')).toHaveCount(0);
     expect((await page.locator('button.hotspot').count()) > 1).toBe(true);
   });
+
+  /**
+   * S12, QA ת15 (and ת26): what the display pass draws, read back from the canvas in the same task as the draw (so it
+   * needs no preserveDrawingBuffer). Two readings:
+   *  - **every frame of the dissolve** the engine draws while it runs: none darker than the darker house;
+   *  - **the dissolve's own states** once it is over (both compositions are still held): at 0 the previous house exactly as
+   *    it was shown before the press, at 1 the new one, and at the midpoint both, half each. A cut to black (QA S8–S10:
+   *    the previous composition thrown away when the width changes, 1920 Nordic → 2720 warm-modern) fails both.
+   * Deterministic: the midpoint does not depend on how many frames a loaded machine manages to draw.
+   */
+  for (const vp of [
+    { width: 1280, height: 720 },
+    { width: 400, height: 800 },
+  ])
+    test(`ת15: the dissolve draws both houses mixed, never black, both ways (${vp.width}×${vp.height})`, async ({ page }) => {
+      await page.setViewportSize(vp);
+      await page.goto('/rooms/living-room/');
+      await expect(page.locator('button.hotspot').first()).toBeAttached({ timeout: 20_000 });
+      await engineReady(page);
+      expect(await page.evaluate(() => (window as unknown as { __hdEngine: { kind: string } }).__hdEngine.kind)).toBe('webgl2');
+      await page.evaluate(installProbe);
+      const group = page.getByRole('group', { name: 'הבית' });
+      for (const [to, from] of [
+        ['warm-modern', 'nordic'],
+        ['nordic', 'warm-modern'],
+      ] as const) {
+        const before = await page.evaluate(() => window.__hdProbe!.grab(1));
+        await page.evaluate(() => window.__hdProbe!.record(true));
+        await group.locator(`button[data-house="${to}"]`).click();
+        await expect.poll(async () => (await switchTimes(page))?.to, { timeout: 20_000 }).toBe(to);
+        const frames = await page.evaluate(() => window.__hdProbe!.record(false));
+        const [at0, mid, at1] = await page.evaluate(() => [window.__hdProbe!.grab(0), window.__hdProbe!.grab(0.5), window.__hdProbe!.grab(1)]);
+        const mean = (g: number[]) => g.reduce((a, b) => a + b, 0) / g.length;
+        const dist = (a: number[], b: number[]) => mean(a.map((x, i) => Math.abs(x - b[i]!)));
+        const blend = at0.map((x, i) => (x + at1[i]!) / 2);
+        const lumaFloor = Math.min(mean(at0), mean(at1));
+        const report = `${from} → ${to}: before ${mean(before).toFixed(1)}, at 0 ${mean(at0).toFixed(1)}, mid ${mean(mid).toFixed(1)}, at 1 ${mean(at1).toFixed(1)}; |0 − before| ${dist(at0, before).toFixed(2)}, |mid − half each| ${dist(mid, blend).toFixed(2)}, |0 − 1| ${dist(at0, at1).toFixed(1)}; frames drawn in the dissolve ${frames.filter((f) => f.mix > 0 && f.mix < 1).length}, darkest ${Math.min(...frames.map((f) => f.mean)).toFixed(1)}`;
+        console.log(`ת15 ${vp.width}: ${report}`);
+        // the two houses differ (else nothing is measured), and the dissolve starts from the house that was on screen
+        expect(dist(at0, at1), report).toBeGreaterThan(8);
+        expect(dist(at0, before), report).toBeLessThan(1.5);
+        expect(mean(at0), report).toBeGreaterThan(0.9 * mean(before));
+        // the midpoint: half of each, so far from either end
+        expect(dist(mid, blend), report).toBeLessThan(2.5);
+        expect(dist(mid, at0), report).toBeGreaterThan(0.35 * dist(at0, at1));
+        expect(dist(mid, at1), report).toBeGreaterThan(0.35 * dist(at0, at1));
+        // and what was drawn while it ran: no frame darker than the darker house (a black frame is ~20)
+        for (const f of frames) expect(f.mean, `${report}; frame at mix ${f.mix.toFixed(2)}`).toBeGreaterThan(0.9 * lumaFloor);
+        await page.evaluate(() => window.__hdProbe!.restore());
+      }
+    });
 
   test('reduced motion: a short dissolve, 0.3 s, nothing moves', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });

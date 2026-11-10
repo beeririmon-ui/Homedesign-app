@@ -16,7 +16,11 @@ import { lineName } from '@hd/shared/lines';
 export type LabelsFile = { labels: Record<string, Record<string, Record<string, string>>> };
 export type NamesFile = { base_name_he?: Record<string, string>; frame_names_he?: Record<string, Record<string, string>> };
 export type Exclusion = { card_id: string; axis: string; sell_only: string[]; why: string };
-export type SetAxis = { axis: string; note_he: string };
+/**
+ * A set of distinct SKUs (story.json `set_axes`). `parts`, when given, names the values of the axis that make the set
+ * (sourcing names them when the card has more prints than the set); without it every value of the axis is a part.
+ */
+export type SetAxis = { axis: string; note_he: string; parts?: string[] };
 export type LineData = {
   /** labels[card][axis][value], or null before the designer's file exists (the fallback is the card's own label) */
   labels: LabelsFile['labels'] | null;
@@ -120,4 +124,37 @@ export function latinLabels(pub: PublicLike, full?: FullLike): { product: string
       add(p.id, `label ${v.id}`, v.label_he);
     }
   return out;
+}
+
+export type SetComposition = { skus: string[]; incomplete: null } | { skus: null; incomplete: string };
+type SkuLike = { id: string; values: Record<string, string> };
+/**
+ * S12 (S11 question 2): the supplier SKUs a set is made of, one of each: for the set's SKU `sku`, the SKU of every part
+ * (a value of the set's axis) with the same values on the other axes (the size chosen). The set is sold only when the
+ * card names exactly `size` distinct SKUs for it; otherwise `incomplete` says what sourcing has to name. Never N × one SKU.
+ */
+export function setComposition(set: SetAxis, axis: { values: { id: string }[] } | undefined, skus: SkuLike[], sku: SkuLike, size: number): SetComposition {
+  const values = axis?.values.map((v) => v.id) ?? [];
+  const parts = set.parts ?? (values.length === size ? values : null);
+  if (!parts)
+    return {
+      skus: null,
+      incomplete: `the card has ${values.length} values on "${set.axis}" (${values.join(', ')}) for a set of ${size}: which ${size} make the set is not named`,
+    };
+  if (parts.length !== size) return { skus: null, incomplete: `${parts.length} parts named for a set of ${size}` };
+  if (!parts.includes(sku.values[set.axis] ?? '')) return { skus: null, incomplete: `the set's own SKU ${sku.id} is not one of its parts (${parts.join(', ')})` };
+  const out: string[] = [];
+  for (const part of parts) {
+    const match = skus.filter((s) => s.values[set.axis] === part && Object.entries(sku.values).every(([a, v]) => a === set.axis || s.values[a] === v));
+    if (match.length !== 1) {
+      const other = Object.entries(sku.values)
+        .filter(([a]) => a !== set.axis)
+        .map(([a, v]) => `${a}=${v}`)
+        .join(', ');
+      return { skus: null, incomplete: `${match.length ? 'more than one SKU' : 'no SKU'} for ${set.axis}=${part}${other ? ` at ${other}` : ''}` };
+    }
+    out.push(match[0]!.id);
+  }
+  if (new Set(out).size !== out.length) return { skus: null, incomplete: `the parts share a SKU (${out.join(', ')})` };
+  return { skus: out, incomplete: null };
 }

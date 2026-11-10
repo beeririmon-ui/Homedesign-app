@@ -8,10 +8,17 @@ import { formatIls, randomToken, sha256Hex } from '@hd/shared';
 import type { AppEnv, Env } from '../env';
 import { HttpError, nowIso } from '../lib/http';
 import { paymentProvider } from '../lib/payments';
+import { isProduction, providerOf } from '../lib/config';
 import { MOCK_SIGNATURE_HEADER, signMockEvent } from '../lib/payments/mock';
 import type { PaymentEvent } from '../lib/payments/types';
 
 export const webhooks = new Hono<AppEnv>();
+
+/** the dropship row's supplier: the configured one, exactly (S12 ת17); the job refuses and retries until there is one */
+const supplierRowId = (env: Env): string => {
+  const c = providerOf(env, 'SUPPLIER_PROVIDER');
+  return c.ok ? c.id : 'unconfigured';
+};
 
 export async function handlePaymentEvent(env: Env, providerId: string, event: PaymentEvent, bodySha: string): Promise<{ outcome: string; duplicate: boolean }> {
   const now = nowIso();
@@ -45,7 +52,7 @@ export async function handlePaymentEvent(env: Env, providerId: string, event: Pa
          SELECT lower(hex(randomblob(16))), ?, CASE fulfillment_source WHEN 'il_3pl' THEN '3pl' ELSE ? END, fulfillment_source, 'queued', ?, ?
          FROM (SELECT DISTINCT fulfillment_source FROM order_items WHERE order_id = ?) WHERE true
          ON CONFLICT(order_id, supplier) DO NOTHING`,
-      ).bind(order.id, env.SUPPLIER_PROVIDER, now, now, order.id),
+      ).bind(order.id, supplierRowId(env), now, now, order.id),
       env.DB.prepare('INSERT INTO audit_log (at, actor, action, subject, detail) VALUES (?, ?, ?, ?, ?)').bind(
         now,
         `webhook:${providerId}`,
@@ -83,7 +90,8 @@ webhooks.post('/payment/:provider', async (c) => {
 export const mockPay = new Hono<AppEnv>();
 
 mockPay.use('*', async (c, next) => {
-  if (c.env.PAYMENT_PROVIDER !== 'mock' || c.env.ENVIRONMENT === 'production') throw new HttpError(404, 'not_found');
+  // S12 ת17: an ENVIRONMENT that is not a named non-production one is production (lib/config.ts)
+  if (c.env.PAYMENT_PROVIDER !== 'mock' || isProduction(c.env)) throw new HttpError(404, 'not_found');
   await next();
 });
 

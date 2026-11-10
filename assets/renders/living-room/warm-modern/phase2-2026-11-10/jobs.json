@@ -1,0 +1,121 @@
+{
+ "date": "2026-11-10",
+ "brief": "briefs/render-wm-tool-phase2-2026-11-10.md",
+ "decision": "PH2-WM (owner, 2026-11-10, up to 9,740)",
+ "plan": "docs/proposals/warm-modern-tool-phase2-2026-11-07.md sections 2-3",
+ "budget": {
+  "this_brief": 1950,
+  "reserve_with_manager_approval": 1300
+ },
+ "references_policy": "supplier images are references only: cropped in the scratchpad and uploaded to var2, never stored in the repo",
+ "jobs": [
+  {
+   "id": "wm-ph2-step1-rug",
+   "step": 1,
+   "slots": [
+    "rug"
+   ],
+   "model": "seedream-5-pro i2i 2K",
+   "aspect_ratio": "auto",
+   "tokens": 650,
+   "estimate": 650,
+   "placeholder_id": "21feb975-6cf1-412f-b34e-5100cadb4e93",
+   "task_id": "01a99d5f2e01c3307d9451d0fe37a514",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-01a99d5f2e01c3307d9451d0fe37a514-0-1794354176475-a6fd1621.png",
+   "returned_px": [
+    2720,
+    1530
+   ],
+   "raw": "assets/renders/living-room/warm-modern/phase2-2026-11-10/raw/step1-seedream.png",
+   "image_url_local": "assets/renders/living-room/warm-modern/phase2-2026-11-10/inputs/step1-input.png",
+   "prompt": "assets/prompts/warm-modern-phase2-2026-11-10/step1-rug.txt",
+   "register_to_input": [
+    [
+     0.9954000115394592,
+     0.00019999999494757503,
+     6.807600021362305
+    ],
+    [
+     -0.00019999999494757503,
+     0.9853000044822693,
+     10.645999908447266
+    ]
+   ],
+   "tone_gain_median": [
+    1.206,
+    1.1735,
+    1.1319
+   ],
+   "model_drift_outside_zones_L": {
+    "raw_median": 3.2,
+    "raw_p95": 8.85,
+    "after_tone_match_median": 0.79,
+    "note": "the model's redraw outside the products; discarded (the scene below is kept)"
+   },
+   "products": {
+    "rug": {
+     "alpha_px": 268144,
+     "soft_px": 11932,
+     "box_px": [
+      760,
+      1223,
+      2720,
+      1530
+     ],
+     "placeholder_px": 297762,
+     "placeholder_covered": 0.901,
+     "outside_placeholder_px": 0,
+     "shadow_px_below_0_97": 2136,
+     "shadow_min": 0.553
+    }
+   },
+   "composite": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work/composite-step1.png",
+   "status": "fetched",
+   "refs": [
+    {
+     "n": 1,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/570649f3-193a-42bc-9864-e29ea0a7fef3.png",
+     "card": "rug-cj-braided-wool-natural",
+     "sku": "CJJT211801818RI",
+     "what": "SKU Square 230x330 photo (square, no tassels)",
+     "source_image": "rug/sku.jpeg",
+     "crop": [
+      0.06,
+      0.06,
+      0.92,
+      0.75
+     ]
+    },
+    {
+     "n": 2,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/cd8d73bb-aeea-4d55-aa6e-7a98b72f43f3.png",
+     "card": "rug-cj-braided-wool-natural",
+     "sku": "CJJT211801818RI",
+     "what": "close-up of the braided weave (fringe cropped out)",
+     "source_image": "rug/img4.jpg",
+     "crop": [
+      0.0,
+      0.6,
+      0.42,
+      1.0
+     ]
+    }
+   ],
+   "estimate_call": {
+    "tool": "var2_estimate_cost",
+    "model_id": "seedream-5-pro",
+    "type": "image-to-image",
+    "params": {
+     "resolution": "2K",
+     "aspect_ratio": "auto",
+     "image_refs": 2
+    },
+    "total_tokens": 650,
+    "deviation_pct": 0.0
+   },
+   "prompt_chars": 2227,
+   "idempotency_key": "wm-ph2-step1-rug-20261110"
+  }
+ ],
+ "tokens_total": 650
+}

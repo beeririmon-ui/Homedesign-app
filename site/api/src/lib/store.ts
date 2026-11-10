@@ -57,8 +57,8 @@ export async function readCart(db: D1Database, id: string, opts: { prune?: boole
       `SELECT ci.variant_id, ci.pack, ci.qty, p.id AS product_id, COALESCE(v.line_name_he, p.name_he) AS name_he,
               v.option_label_he AS option_he, p.sell_qty,
               ${VARIANT_PRICE_SQL},
-              CASE WHEN v.id IS NOT NULL AND v.active = 1 AND v.set_part = 0 AND p.visible = 1 AND p.retail_agorot IS NOT NULL
-                        AND p.availability = 'available' THEN 1 ELSE 0 END AS sold
+              CASE WHEN v.id IS NOT NULL AND v.active = 1 AND v.set_part = 0 AND v.set_incomplete IS NULL AND p.visible = 1
+                        AND p.retail_agorot IS NOT NULL AND p.availability = 'available' THEN 1 ELSE 0 END AS sold
        FROM cart_items ci
        LEFT JOIN product_variants v ON v.id = ci.variant_id
        LEFT JOIN products p ON p.id = v.product_id
@@ -106,29 +106,31 @@ export async function readCart(db: D1Database, id: string, opts: { prune?: boole
   };
 }
 
-export async function setCartItem(db: D1Database, cartId: string, variantId: string, pack: Pack, qty: number): Promise<void> {
+export async function setCartItem(db: D1Database, cartId: string, variantId: string, pack: Pack, qty: number, house: string | null = null): Promise<void> {
   const now = nowIso();
   if (qty === 0) {
     await db.prepare('DELETE FROM cart_items WHERE cart_id = ? AND variant_id = ? AND pack = ?').bind(cartId, variantId, pack).run();
   } else {
     const row = await db
       .prepare(
-        `SELECT ${VARIANT_PRICE_SQL}, v.set_part FROM product_variants v JOIN products p ON p.id = v.product_id
+        `SELECT ${VARIANT_PRICE_SQL}, v.set_part, v.set_incomplete FROM product_variants v JOIN products p ON p.id = v.product_id
          WHERE v.id = ? AND v.active = 1 AND p.visible = 1 AND p.retail_agorot IS NOT NULL AND p.availability = 'available'`,
       )
       .bind(variantId)
-      .first<{ unit_retail_agorot: number | null; set_part: number }>();
+      .first<{ unit_retail_agorot: number | null; set_part: number; set_incomplete: string | null }>();
     if (!row) throw new HttpError(404, 'variant_not_found', 'המוצר לא זמין.');
     // ת9: a part of a set of distinct SKUs (one print of a triptych) is not sold on its own
     if (row.set_part === 1) throw new HttpError(422, 'set_part', 'הפריט הזה נמכר רק כחלק מהסט.');
+    // S12 (S11 question 2): a set whose card does not name the SKUs of its parts is not sold: never N × one of them
+    if (row.set_incomplete !== null) throw new HttpError(422, 'set_unavailable', 'הסט הזה עוד לא זמין להזמנה.');
     // only a set (sell_qty > 1) has a single-piece option, and a set of distinct SKUs has none (ת9, SET1)
     if (pack === 'unit' && row.unit_retail_agorot === null) throw new HttpError(422, 'pack_unavailable', 'המוצר הזה נמכר רק כסט.');
     await db
       .prepare(
-        `INSERT INTO cart_items (cart_id, variant_id, pack, qty, added_at) VALUES (?, ?, ?, ?, ?)
-         ON CONFLICT(cart_id, variant_id, pack) DO UPDATE SET qty = excluded.qty`,
+        `INSERT INTO cart_items (cart_id, variant_id, pack, qty, added_at, house) VALUES (?, ?, ?, ?, ?, ?)
+         ON CONFLICT(cart_id, variant_id, pack) DO UPDATE SET qty = excluded.qty, house = COALESCE(excluded.house, cart_items.house)`,
       )
-      .bind(cartId, variantId, pack, qty, now)
+      .bind(cartId, variantId, pack, qty, now, house)
       .run();
   }
   await db.prepare('UPDATE carts SET updated_at = ? WHERE id = ?').bind(now, cartId).run();

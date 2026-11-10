@@ -37,10 +37,9 @@ export class Canvas2DCompositor implements Compositor {
   compose(layers: DrawLayer[], width: number): void {
     const w = Math.min(width, 2752);
     const h = Math.round(w / (16 / 9));
-    if (!this.next || this.next.width !== w) {
-      this.prev = surface(w, h);
-      this.next = surface(w, h);
-    }
+    // S12 ת15: only the surface composed into follows the width; `prev` (what is on screen) is kept for the dissolve
+    if (!this.next || this.next.width !== w) this.next = surface(w, h);
+    this.prev ??= surface(w, h);
     const ctx = this.next.getContext('2d')!;
     ctx.globalCompositeOperation = 'source-over';
     ctx.globalAlpha = 1;

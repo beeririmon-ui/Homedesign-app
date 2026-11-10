@@ -133,7 +133,7 @@ publicApi.put('/cart/:id/items', async (c) => {
   const id = c.req.param('id');
   await openCartOr404(c.env.DB, id);
   const body = await readJson(c, CartItemInputSchema);
-  await setCartItem(c.env.DB, id, body.variant_id, body.pack, body.qty);
+  await setCartItem(c.env.DB, id, body.variant_id, body.pack, body.qty, body.house ?? null);
   return c.json(view(await readCart(c.env.DB, id, { prune: true })));
 });
 
@@ -167,7 +167,8 @@ publicApi.post('/checkout', async (c) => {
   // cost snapshots for real per-order margin
   const { results: costs } = await c.env.DB.prepare(
     `SELECT v.id AS variant_id, COALESCE(v.cost_usd_cents, p.cost_usd_cents) AS cost_usd_cents,
-            COALESCE(v.shipping_usd_cents, p.shipping_usd_cents) AS shipping_usd_cents, p.sell_qty, v.fulfillment_source, v.supplier_sku
+            COALESCE(v.shipping_usd_cents, p.shipping_usd_cents) AS shipping_usd_cents, p.sell_qty, v.fulfillment_source, v.supplier_sku,
+            v.set_skus_json, v.set_incomplete
      FROM product_variants v JOIN products p ON p.id = v.product_id
      WHERE v.id IN (${cart.lines.map(() => '?').join(',')})`,
   )
@@ -179,8 +180,23 @@ publicApi.post('/checkout', async (c) => {
       sell_qty: number;
       fulfillment_source: string;
       supplier_sku: string | null;
+      set_skus_json: string | null;
+      set_incomplete: string | null;
     }>();
   const costOf = new Map(costs.map((r) => [r.variant_id, r]));
+  // S12 (S11 question 2): a set of distinct SKUs is snapshotted as its parts, one of each per set; one without them is
+  // never ordered (readCart already leaves it out; this is the last guard before the payment)
+  if (cart.lines.some((l) => l.pack === 'set' && costOf.get(l.variant_id)?.set_incomplete))
+    throw new HttpError(422, 'set_unavailable', 'הסט הזה עוד לא זמין להזמנה.');
+  const supplierLinesOf = (l: (typeof cart.lines)[number]): string | null => {
+    const skus = l.pack === 'set' ? costOf.get(l.variant_id)?.set_skus_json : null;
+    return skus ? JSON.stringify((JSON.parse(skus) as string[]).map((supplier_sku) => ({ supplier_sku, qty: 1 }))) : null;
+  };
+  // ת21: the house each line was added in (the cart keeps it; the order line snapshots it)
+  const { results: houses } = await c.env.DB.prepare('SELECT variant_id, pack, house FROM cart_items WHERE cart_id = ?')
+    .bind(req.cart_id)
+    .all<{ variant_id: string; pack: string; house: string | null }>();
+  const houseOf = (l: (typeof cart.lines)[number]) => houses.find((h) => h.variant_id === l.variant_id && h.pack === l.pack)?.house ?? null;
 
   const provider = paymentProvider(c.env, new URL(c.req.url).origin);
   const origin = new URL(c.req.url).origin;
@@ -231,8 +247,8 @@ publicApi.post('/checkout', async (c) => {
     ...cart.lines.map((l, i) => {
       const cost = costOf.get(l.variant_id);
       return c.env.DB.prepare(
-        `INSERT INTO order_items (order_id, line, product_id, variant_id, name_he, qty, unit_price_agorot, unit_cost_usd_cents, unit_shipping_usd_cents, pack, unit_sell_qty, fulfillment_source, supplier_sku)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        `INSERT INTO order_items (order_id, line, product_id, variant_id, name_he, qty, unit_price_agorot, unit_cost_usd_cents, unit_shipping_usd_cents, pack, unit_sell_qty, fulfillment_source, supplier_sku, supplier_lines_json, house)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       ).bind(
         id,
         i + 1,
@@ -248,6 +264,8 @@ publicApi.post('/checkout', async (c) => {
         l.pack === 'unit' ? 1 : (cost?.sell_qty ?? 1),
         cost?.fulfillment_source ?? 'dropship_cj',
         cost?.supplier_sku ?? null,
+        supplierLinesOf(l),
+        houseOf(l),
       );
     }),
     c.env.DB.prepare("UPDATE carts SET status = 'converted', updated_at = ? WHERE id = ?").bind(now, req.cart_id),
@@ -275,10 +293,19 @@ publicApi.get('/orders/:id', async (c) => {
     .first<{ id: string; token_hash: string; status: OrderStatus; created_at: string; total_agorot: number; shipping_method: 'economy' | 'express' }>();
   if (!o || !timingSafeEqualHex(o.token_hash, await sha256Hex(token))) throw new HttpError(404, 'order_not_found');
   const { results } = await c.env.DB.prepare(
-    'SELECT name_he, product_id, variant_id, pack, unit_sell_qty, qty, unit_price_agorot FROM order_items WHERE order_id = ? ORDER BY line',
+    'SELECT name_he, product_id, variant_id, house, pack, unit_sell_qty, qty, unit_price_agorot FROM order_items WHERE order_id = ? ORDER BY line',
   )
     .bind(id)
-    .all<{ name_he: string; product_id: string; variant_id: string; pack: 'set' | 'unit'; unit_sell_qty: number; qty: number; unit_price_agorot: number }>();
+    .all<{
+      name_he: string;
+      product_id: string;
+      variant_id: string;
+      house: string | null;
+      pack: 'set' | 'unit';
+      unit_sell_qty: number;
+      qty: number;
+      unit_price_agorot: number;
+    }>();
   const view: OrderView = {
     id: o.id,
     status: o.status,
@@ -290,6 +317,7 @@ publicApi.get('/orders/:id', async (c) => {
       name_he: r.name_he,
       product_id: r.product_id,
       variant_id: r.variant_id,
+      house: r.house,
       pack: r.pack,
       pack_qty: r.pack === 'unit' ? 1 : r.unit_sell_qty,
       qty: r.qty,

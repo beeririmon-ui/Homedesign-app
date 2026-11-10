@@ -190,13 +190,21 @@ export class GLCompositor implements Compositor {
     return { fb, tex, w, h };
   }
 
+  /**
+   * S12, QA S8–S10 ת15: only the target about to be composed into follows the width. `prev` holds what is on screen
+   * (swap() put it there), so it is kept at its own width through the dissolve: the display pass samples both in frame
+   * UVs, whatever their sizes. A house composed at another width (1920 Nordic, 2720 warm-modern) dissolves from the
+   * previous house, never from an empty texture (the cut to black). The old-width target is dropped the next time it
+   * comes round to be composed into, after the dissolve.
+   */
   private ensureTargets(w: number): void {
     const width = Math.min(w, this.maxTex);
     const height = Math.round(width / (16 / 9));
-    if (this.next && this.next.w === width) return;
-    for (const t of [this.prev, this.next]) if (t) this.drop(t);
-    this.prev = this.target(width, height);
-    this.next = this.target(width, height);
+    if (!this.next || this.next.w !== width) {
+      if (this.next) this.drop(this.next);
+      this.next = this.target(width, height);
+    }
+    this.prev ??= this.target(width, height);
   }
 
   private drop(t: Target): void {

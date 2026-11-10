@@ -67,7 +67,7 @@ import { REPO, GENERATED, repoPath, sitePath } from './lib/paths';
 import { materialsHe, colorNameHe, hasHebrew } from './lib/hebrew';
 import { loadLeadRecords } from './lib/leads';
 import { cachedFreight } from './lib/freight-cache';
-import { latinLabels, lineName, lineOf, loadLineData, optionLabel, saleOf } from './lib/lines';
+import { latinLabels, lineName, lineOf, loadLineData, optionLabel, saleOf, setComposition } from './lib/lines';
 import { publicId, publicVariantId, slugIndex } from '@hd/shared/product-url';
 
 const STRICT = process.argv.includes('--strict-prices');
@@ -136,6 +136,8 @@ const lineData = loadLineData({
 });
 let excludedVariants = 0;
 let setParts = 0;
+/** S12: the sets whose card does not name the SKUs of their parts: not sold, and a list for sourcing */
+const setsNeedSkus: { card: string; variant: string; reason: string }[] = [];
 const tempCoords = readJson(sitePath('tools/temp/living-room.nordic.json')) as {
   slots: Record<string, { boxes: number[][]; hotspot: [number, number]; visible?: boolean; zoom?: number[] }>;
 };
@@ -433,12 +435,26 @@ function buildOptions(
     if (sale.set_part) setParts++;
     // ת8: the line names what was bought (a set's own axis, which print, is not a choice, so it is not in the line)
     const line = lineOf(lineData, card, s.values, p.name);
+    // S12 (S11 question 2): the set's parts at the supplier, one of each (the supplier order expands the set into them)
+    const comp =
+      set && !sale.set_part
+        ? setComposition(
+            set,
+            o.axes.find((a) => a.id === set.axis),
+            o.skus as { id: string; values: Record<string, string> }[],
+            s as { id: string; values: Record<string, string> },
+            n,
+          )
+        : null;
+    if (comp?.incomplete) setsNeedSkus.push({ card: card.id, variant: optionVariantId(card.id, o.axes.map((a) => s.values[a.id]!)), reason: comp.incomplete });
     full.push({
       id,
       label_he: o.axes.map((a) => `${a.name_he}: ${labelOf(a, valueOf(a, s))}`).join(', '),
       option_label_he: line.label,
       line_name_he: line.base,
       set_part: sale.set_part,
+      set_skus: comp?.skus ?? null,
+      set_incomplete: comp?.incomplete ?? null,
       sale_excluded: sale.excluded,
       supplier_sku: s.id,
       cost_usd_cents: cost,
@@ -1018,3 +1034,40 @@ if (latin.length && existsSync(LABELS_FILE)) {
   );
   process.exit(1);
 }
+
+// S12 (S11 question 2): every set of distinct SKUs, sold or not (a hidden draft card too): its parts' SKUs at each size,
+// or what sourcing has to name. A set without them is refused by the server (set_unavailable), never sent as N × one SKU.
+const setsReport = Object.entries(lineData.sets).map(([cardId, set]) => {
+  // a draft or invalid card is not in `cards`: the report reads it from its file (it is listed, not sold)
+  const c =
+    cards.find((x) => x.card.id === cardId)?.card ??
+    (walk(repoPath('data/products'))
+      .map((f) => {
+        try {
+          return readJson(f) as { id?: string; options?: unknown };
+        } catch {
+          return null;
+        }
+      })
+      .find((x) => x?.id === cardId) as ProductCard | undefined);
+  const o = c?.options as CardOptions | undefined;
+  if (!c || !o) return { card: cardId, axis: set.axis, sold_here: false, sets: [], need: 'the card or its options are missing' };
+  const axis = o.axes.find((a) => a.id === set.axis);
+  const others = o.skus.filter((s) => {
+    const own = set.parts?.[0] ?? (o.skus.find((x) => x.id === o.default_sku)?.values as Record<string, string> | undefined)?.[set.axis];
+    return (s.values as Record<string, string>)[set.axis] === own;
+  });
+  const size = (productEcon[cardId]?.sell_qty as number | undefined) ?? fullProducts.find((p) => p.source_path.endsWith(`/${cardId}.json`))?.sell_qty ?? 3;
+  const sets = others.map((s) => {
+    const r = setComposition(set, axis, o.skus as { id: string; values: Record<string, string> }[], s as { id: string; values: Record<string, string> }, size);
+    return { sku: s.id, values: s.values, parts: r.skus, incomplete: r.incomplete };
+  });
+  const need = sets.find((x) => x.incomplete)?.incomplete ?? null;
+  return { card: cardId, axis: set.axis, size, sold_here: fullProducts.some((p) => p.source_path.endsWith(`/${cardId}.json`)), sets, need };
+});
+writeFileSync(join(GENERATED, 'sets-composition.json'), JSON.stringify({ built_at: new Date().toISOString(), sets: setsReport }, null, 1));
+console.log(
+  `  sets of distinct SKUs (S12): ${setsReport.map((r) => `${r.card}: ${r.need ? `NOT SOLD, sourcing to name the parts (${r.need})` : `${r.sets.length} sizes, ${r.size} SKUs each`}`).join('; ')}${
+    setsNeedSkus.length ? ` · refused in this catalog: ${setsNeedSkus.length} set variants` : ''
+  }`,
+);

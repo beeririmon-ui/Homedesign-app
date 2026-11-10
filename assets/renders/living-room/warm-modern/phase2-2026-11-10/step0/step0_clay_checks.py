@@ -122,13 +122,18 @@ DEFAULTS = {
                           "(~25-30 from photos): 28 used",
                     parts=[cyl(0.20, 1.72, 0.25, 1.90, 2.18), cyl(0.20, 1.72, 0.004, 2.18, 3.00, 12)], r4_pidx=[517, 518]),
     "bowl": dict(card="bowl-cj-matte-black-bowl-20", option={"other": "12style"}, step=3, z=65,
-                 where="slots: coffee table, centre (0.68, 1.92); card style 12 (the only identified variant): D20 x H8",
-                 parts=[cyl(0.68, 1.92, 0.10, TABLE_TOP, TABLE_TOP + 0.08)], r4_pidx=[446]),
+                 where="slots: coffee table, centre 'about (0.68, 1.92)'; placed at (0.72, 1.94) by step 0's F3 scan (0.045 from the slot's "
+                       "approximate centre, ~8 cm inside the top's edge): at (0.68, 1.92) it kisses candle B (0.0107); card style 12 (the only "
+                       "identified variant, addendum 1): D20 x H8",
+                 parts=[cyl(0.72, 1.94, 0.10, TABLE_TOP, TABLE_TOP + 0.08)], r4_pidx=[446]),
     "candle-holders": dict(card="candle-holders-cj-travertine-pedestal", option={"size": "70x110mm"}, step=3, z=65,
-                           where="the r4 / Nordic candle places on the coffee table (0.46, 1.64) and (0.50, 1.86), next to the bowl; card: "
-                                 "Small 7 x 11, a set of 2 units; pillar candles (filler) 10 and 7.5 tall",
-                           parts=[cyl(0.46, 1.64, 0.035, TABLE_TOP, TABLE_TOP + 0.11, 48), cyl(0.46, 1.64, 0.03, TABLE_TOP + 0.11, TABLE_TOP + 0.21, 48),
-                                  cyl(0.50, 1.86, 0.035, TABLE_TOP, TABLE_TOP + 0.11, 48), cyl(0.50, 1.86, 0.03, TABLE_TOP + 0.11, TABLE_TOP + 0.185, 48)],
+                           where="coffee table, grouped with the bowl: two Small pedestals 7 x 11 (the set of 2 units) at (0.33, 1.74) and "
+                                 "(0.48, 1.68), pillar candles (filler) 7.5 and 6 tall. Placed by step 0's F3 scan: the r4 / Nordic places "
+                                 "(0.46, 1.64) and (0.50, 1.86) stack the two in one column and kiss the cushions (0.010-0.014); this pair "
+                                 "passes against each other, the bowl and all three cushion sets. Candle A is 0.09 left of the Nordic X "
+                                 "range 0.42-0.65 (designer to confirm)",
+                           parts=[cyl(0.33, 1.74, 0.035, TABLE_TOP, TABLE_TOP + 0.11, 48), cyl(0.33, 1.74, 0.03, TABLE_TOP + 0.11, TABLE_TOP + 0.185, 48),
+                                  cyl(0.48, 1.68, 0.035, TABLE_TOP, TABLE_TOP + 0.11, 48), cyl(0.48, 1.68, 0.03, TABLE_TOP + 0.11, TABLE_TOP + 0.17, 48)],
                            r4_pidx=[45]),
 }
 ORDER = list(DEFAULTS)
@@ -261,50 +266,104 @@ def main():
                                   note="r4 proxy at its own size; the placeholder is the default's card size")
         items[k] = rec
 
-    # F3
-    W_ = CW
-    neigh = {**{k: dict(sil=sil[k], vis=vis[k], box=box3[k], dep=dep[k], kind="default") for k in ORDER},
-             **{f"fixed:{k}": dict(sil=m, vis=m, box=fbox[k], dep=fdep[k], kind="fixed") for k, m in furn_vis.items()},
-             **{f"cushions-set-{s}": dict(sil=m, vis=m, box=(np.array([-0.95, 0.30, 0.44]), np.array([1.35, 0.97, 0.95])), dep=fdep["sofa"] - 0.3,
-                                          kind="cushions") for s, m in cush.items()}}
-    pairs = []
-    pad = int(0.03 * W_)
-    for k in ORDER:
-        for j, N in neigh.items():
-            if j == k or (j in ORDER and ORDER.index(j) < ORDER.index(k)):
-                continue
-            A, B = neigh[k], N
-            d3 = aabb_dist(A["box"], B["box"])
-            ya, xa = np.nonzero(A["vis"])
-            yb, xb = np.nonzero(B["vis"])
-            if not len(xa) or not len(xb):
-                continue
-            if xa.min() > xb.max() + pad or xb.min() > xa.max() + pad or ya.min() > yb.max() + pad or yb.min() > ya.max() + pad:
-                continue
-            rec = dict(a=k, b=j, dist3d_m=round(d3, 3))
-            if d3 < 0.03:
-                rec.update(kind="contact", verdict="skip (physical contact / resting, not a compositional tangent)")
-                pairs.append(rec)
-                continue
-            inter = A["sil"] & B["sil"]
-            if not inter.any():
-                g = min_dist(A["vis"], B["vis"])
-                rec.update(kind="gap", gap_px=round(g, 1), gap_frame=round(g / W_, 4), verdict="FAIL (kissing, < 0.02)" if g / W_ < 0.02 else "clear (>= 0.02)")
-            else:
-                front, back = (A, B) if A["dep"] < B["dep"] else (B, A)
+    # F3 (per cushion set: the cushions stand in front of the sofa and of the floor lamp)
+    fbox = {"sofa": [(np.array([-0.90, 0.03, 0.0]), np.array([1.30, 0.95, 0.78]))],
+            "coffee-table": [(np.array([-0.50, 1.37, 0.0]), np.array([0.90, 2.07, 0.38]))],
+            "armchair": [(np.array([-1.62, 2.34, 0.0]), np.array([-0.84, 3.12, 0.70]))]}
+    cbox = [(np.array([-0.95, 0.25, 0.44]), np.array([1.15, 0.65, 0.95])),       # cushions on the seat
+            (np.array([1.08, 0.35, 0.02]), np.array([1.36, 0.97, 0.66]))]        # the throw over the right arm, down to the floor
+    sofa_full = furn_vis["sofa"] | (raster([box(-0.90, 1.30, 0.03, 0.95, 0.0, 0.78)]) & furn_vis["coffee-table"])
+    pboxes = {k: [aabb([p]) for p in DEFAULTS[k]["parts"]] for k in ORDER}
+    near_ = lambda A, B: min(aabb_dist(x, y) for x in A for y in B)  # noqa: E731
+
+    def f3_for(s):
+        cm = cush[s]
+        N = {}
+        for k in ORDER:
+            v = vis[k] & ~cm if k in ("floor-lamp", "rug") else vis[k]
+            N[k] = dict(sil=sil[k], vis=v, boxes=pboxes[k], dep=dep[k])
+        N["fixed:sofa"] = dict(sil=sofa_full, vis=furn_vis["sofa"] & ~cm, boxes=fbox["sofa"], dep=fdep["sofa"])
+        N["fixed:coffee-table"] = dict(sil=furn_vis["coffee-table"], vis=furn_vis["coffee-table"], boxes=fbox["coffee-table"], dep=fdep["coffee-table"])
+        N["fixed:armchair"] = dict(sil=furn_vis["armchair"], vis=furn_vis["armchair"], boxes=fbox["armchair"], dep=fdep["armchair"])
+        N[f"cushions-set-{s}"] = dict(sil=cm, vis=cm, boxes=cbox, dep=fdep["sofa"] - 0.3)
+        names = list(N)
+        out = []
+        pad = int(0.03 * CW)
+        for i, k in enumerate(names):
+            for j in names[i + 1:]:
+                if k not in ORDER and j not in ORDER:
+                    continue                                      # furniture / cushions among themselves: phase 1, approved
+                A, B = N[k], N[j]
+                ya, xa = np.nonzero(A["vis"])
+                yb, xb = np.nonzero(B["vis"])
+                if not len(xa) or not len(xb):
+                    continue
+                if xa.min() > xb.max() + pad or xb.min() > xa.max() + pad or ya.min() > yb.max() + pad or yb.min() > ya.max() + pad:
+                    continue
+                d3 = near_(A["boxes"], B["boxes"])
+                rec = dict(a=k, b=j, dist3d_m=round(d3, 3))
+                if d3 < 0.03:
+                    rec.update(kind="contact", verdict="skip (physical contact / resting)")
+                    out.append(rec)
+                    continue
+                inter = A["sil"] & B["sil"]
+                if not inter.any():
+                    g = min_dist(A["vis"], B["vis"])
+                    rec.update(kind="gap", gap_px=round(g, 1), gap_frame=round(g / CW, 4),
+                               verdict="FAIL (kissing, < 0.02)" if g / CW < 0.02 else "clear (>= 0.02)")
+                    out.append(rec)
+                    continue
+                touching = (cv2.dilate(A["vis"].astype(np.uint8), np.ones((3, 3), np.uint8)).astype(bool) & B["vis"]).any()
+                if not touching:
+                    rec.update(kind="overlap-hidden", verdict="skip (the silhouettes overlap only where a third item hides both)")
+                    out.append(rec)
+                    continue
+                front, back, fn = (A, B, k) if A["dep"] < B["dep"] else (B, A, j)
                 inside = float((front["sil"] & back["sil"]).sum()) / max(1, front["sil"].sum())
-                th = thickness(inter) / W_
+                th = thickness(inter) / CW
                 cover = float(inter.sum()) / max(1, back["sil"].sum())
-                rec.update(front=k if front is A else j, overlap_thickness=round(th, 4), cover_of_back=round(cover, 3),
-                           front_inside_back_pct=round(100 * inside, 1))
+                rec.update(front=fn, overlap_thickness=round(th, 4), cover_of_back=round(cover, 3), front_inside_back_pct=round(100 * inside, 1))
                 if inside >= 0.99:
-                    cg = contour_gap(front["vis"], back["sil"])
+                    seen = boundary(back["sil"]) & cv2.dilate(back["vis"].astype(np.uint8), np.ones((5, 5), np.uint8)).astype(bool)
+                    dtb = cv2.distanceTransform((~seen).astype(np.uint8), cv2.DIST_L2, 5) if seen.any() else None
+                    cg = None if dtb is None else float(dtb[boundary(front["vis"])].min())
                     rec.update(kind="contained", contour_gap_px=None if cg is None else round(cg, 1),
-                               contour_gap_frame=None if cg is None else round(cg / W_, 4),
-                               verdict="FAIL (contour < 0.02 from the back item's contour)" if cg is not None and cg / W_ < 0.02 else "clear (contained, contours >= 0.02 apart)")
+                               contour_gap_frame=None if cg is None else round(cg / CW, 4),
+                               verdict="FAIL (contour < 0.02 from the visible contour behind)" if cg is not None and cg / CW < 0.02
+                               else "clear (contained, contours >= 0.02 apart)")
                 else:
-                    rec.update(kind="overlap", verdict="FAIL (overlap < 0.03 and < 60 % of the back item)" if th < 0.03 and cover < 0.6 else "decisive overlap")
-            pairs.append(rec)
+                    rec.update(kind="overlap", verdict="FAIL (overlap < 0.03 and < 60 % of the back item)" if th < 0.03 and cover < 0.6
+                               else "decisive overlap")
+                out.append(rec)
+        return out
+
+    per_set = {s: f3_for(s) for s in "ABC"}
+    pairs = []
+    keyed = {}
+    for s, lst in per_set.items():
+        for p in lst:
+            keyed.setdefault((p["a"].replace(f"cushions-set-{s}", "cushions-set-X"), p["b"].replace(f"cushions-set-{s}", "cushions-set-X")), {})[s] = p
+    for (ka, kb), by in keyed.items():
+        worst = next((by[s] for s in "BAC" if s in by and str(by[s]["verdict"]).startswith("FAIL")), by.get("B") or next(iter(by.values())))
+        rec = dict(worst)
+        rec["a"], rec["b"] = ka, kb
+        rec["by_set"] = {s: {kk: vv for kk, vv in p.items() if kk not in ("a", "b")} for s, p in by.items()}
+        rec["sets_failing"] = [s for s in "ABC" if s in by and str(by[s]["verdict"]).startswith("FAIL")]
+        pairs.append(rec)
+
+    # the floor lamp's levers (house plan authority of the designer: <= 0.10), projected only; nothing is moved here
+    def lamp_at(c):
+        L = raster([cyl(*c, 0.13, 0.0, 0.025), cyl(*c, 0.0125, 0.025, 1.35, 16), cone(*c, 0.185, 0.12, 1.35, 1.58)])
+        S_ = raster([box(1.21, 1.29, 0.0, 0.025, 1.67, 1.83), cyl(1.25, 0.0575, 0.0325, 1.67, 1.83, 32)])
+        bx_ = frame_box(L)
+        r = dict(position=list(c), right_margin=round(1 - bx_[1], 4), sconce_gap=round(min_dist(L, S_) / CW, 4))
+        for s in "ABC":
+            Lc, Sc = L & ~furn_vis["sofa"] & ~cush[s], furn_vis["sofa"] & ~cush[s]
+            touch = (cv2.dilate(Lc.astype(np.uint8), np.ones((3, 3), np.uint8)).astype(bool) & Sc).any()
+            r[f"set_{s}"] = dict(sofa=("touching, overlap %.4f" % (thickness(L & Sc) / CW)) if touch else "gap %.4f" % (min_dist(Lc, Sc) / CW),
+                                 throw_overlap=round(thickness(L & cush[s]) / CW, 4))
+        return r
+    levers = [lamp_at(c) for c in [(1.52, 0.20), (1.56, 0.20), (1.60, 0.20), (1.58, 0.14), (1.52, 0.28), (1.47, 0.20), (1.42, 0.25)]]
     edges = {}
     for k in ORDER:
         b = items[k]["frame_box"]
@@ -316,7 +375,7 @@ def main():
         edges[k] = dict(margins={s: round(v, 4) for s, v in m.items()}, cropped_by=cut,
                         verdict=("FAIL (edge tangent) " + json.dumps(bad)) if bad else "ok")
 
-    fails = [p for p in pairs if str(p.get("verdict", "")).startswith("FAIL")] + [dict(edge=k, **v) for k, v in edges.items() if v["verdict"] != "ok"]
+    fails = [p for p in pairs if p.get("sets_failing")] + [dict(edge=k, **v) for k, v in edges.items() if v["verdict"] != "ok"]
     out = dict(
         date="2026-11-10", step=0, tokens=0, author="render-agent", script=os.path.relpath(__file__, REPO),
         brief="briefs/render-wm-tool-phase2-2026-11-10.md", plan="docs/proposals/warm-modern-tool-phase2-2026-11-07.md section 3 row 0",
@@ -331,7 +390,10 @@ def main():
         f3=dict(rule="framing_r2.py frame_selfcheck: gap < 0.02 of the frame width fails; overlap thinner than 0.03 covering < 60 % of the back "
                      "item fails; 3D boxes < 0.03 apart are contact (skipped); + 'contained' (front item wholly inside the back item's silhouette: "
                      "the two contours must be >= 0.02 apart); edges: a visible margin 0 < m < 0.02 fails",
-                pairs=pairs, edges=edges, fails=fails, pass_=not fails),
+                pairs=pairs, edges=edges, fails=fails, pass_=not fails,
+                floor_lamp_levers=dict(note="projected only, nothing moved: the plan position (1.52, 0.20) is binding; a nudge <= 0.10 is the "
+                                            "designer's (house plan). The throw of every set covers the lamp's base by a thin overlap at all of them",
+                                       positions=levers)),
         files=dict(placeholders="placeholders.npz (canvas 4072 x 2290 and work 2720 x 1530 label maps; full silhouettes sil_<slot>)",
                    overlay="f3-overlay.jpg"),
     )
@@ -363,7 +425,9 @@ def main():
     for k in ORDER:
         print(f"{k:16s} box {items[k]['frame_box']} vis {items[k]['visible_pct_of_silhouette']}% iou_r4 {items[k].get('r4_clay', {}).get('iou_with_placeholder')}")
     for p in pairs:
-        print(json.dumps(p))
+        print(json.dumps({k: v for k, v in p.items() if k != "by_set"}))
+    for l_ in levers:
+        print(json.dumps(l_))
     print(json.dumps(edges))
     print("F3 fails:", len(fails))
 

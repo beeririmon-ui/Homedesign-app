@@ -5,11 +5,16 @@ import { PACKS } from './packs';
 
 export { IL_PHONE, ORDER_ID, ORDER_STATUSES, ORDER_STATUS_HE, ORDER_STEPS_HE, orderStep, type OrderStatus } from './constants';
 
+/** a house of the room engine: a style id (S12, ת21) */
+export const HOUSE_ID = z.string().regex(/^[a-z][a-z-]{0,39}$/);
+
 export const CartItemInputSchema = z.object({
   variant_id: z.string().min(1).max(160),
   /** set or single piece (P1); a product without a unit option accepts only 'set' */
   pack: z.enum(PACKS).default('set'),
   qty: z.number().int().min(0).max(20),
+  /** S12, ת21: the house the line was added in (the room engine's style), for "החדר שלך"; absent off the engine */
+  house: HOUSE_ID.optional(),
 });
 
 export const CartLineSchema = z.object({
@@ -93,6 +98,8 @@ export const OrderViewSchema = z.object({
       /** S8: the public ids (the order page draws "החדר שלך" from them) */
       product_id: z.string().optional(),
       variant_id: z.string().optional(),
+      /** S12, ת21: the house the line was bought in; null when it was bought off the room engine (a product page, a story) */
+      house: z.string().nullable().optional(),
       pack: z.enum(PACKS),
       pack_qty: z.number().int().min(1),
       qty: z.number().int(),
