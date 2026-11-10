@@ -26,6 +26,7 @@ const story = JSON.parse(readFileSync(repoPath('data/story/story.json'), 'utf8')
   styles: { id: string }[];
   names_he: Record<string, string>;
   names_he_proposed: string[];
+  merged_cards?: Record<string, { into: string }>;
   pairs: Record<string, { concept_he: string; tool: string | null; frames: Frame[] }>;
 };
 const qaOf = registerReader().read;
@@ -69,9 +70,11 @@ describe('the story data file', () => {
 
   it('has a point for every starring product QA lists in the frame, and every point is a product card', () => {
     for (const [id, f] of mapped) {
+      // a card merged into another one's option axis (design notes §11.4) is listed as the card it went into
       const listed = qaOf(f.qa_key)!
         .rows.filter((r) => r.present && !r.card.startsWith('fixed furniture'))
-        .map(cardOf);
+        .map(cardOf)
+        .map((c) => story.merged_cards?.[c]?.into ?? c);
       for (const c of listed)
         expect(
           f.points.some((p) => p.product === c),
