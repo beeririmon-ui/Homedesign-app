@@ -15,6 +15,7 @@ import {
   ORDER_ID,
   WaitlistRequestSchema,
 } from '@hd/shared';
+import { lineName, removedHe } from '@hd/shared/lines';
 import type { AppEnv } from '../env';
 import { HttpError, clientKey, nowIso, orderId, rateLimit, readJson } from '../lib/http';
 import { createCart, economics, openCartOr404, readCart, setCartItem, shippingOptions } from '../lib/store';
@@ -110,17 +111,21 @@ publicApi.get('/catalog/rooms/:room', async (c) => {
 });
 
 // ---------- cart ----------
+/** the cart as the client sees it (`pruned` is this request's own bookkeeping) */
+const view = ({ pruned: _pruned, ...cart }: Awaited<ReturnType<typeof readCart>>) => cart;
+
 publicApi.post('/cart', async (c) => {
   await rateLimit(c.env.RL_WRITE, `cart:${clientKey(c)}`);
   const id = randomToken(24);
   await createCart(c.env.DB, id);
-  return c.json(await readCart(c.env.DB, id), 201);
+  return c.json(view(await readCart(c.env.DB, id)), 201);
 });
 
 publicApi.get('/cart/:id', async (c) => {
   const id = c.req.param('id');
   await openCartOr404(c.env.DB, id);
-  return c.json(await readCart(c.env.DB, id));
+  // ת11: a line no longer sold leaves the cart here, and the cart says so (`removed`)
+  return c.json(view(await readCart(c.env.DB, id, { prune: true })));
 });
 
 publicApi.put('/cart/:id/items', async (c) => {
@@ -129,7 +134,7 @@ publicApi.put('/cart/:id/items', async (c) => {
   await openCartOr404(c.env.DB, id);
   const body = await readJson(c, CartItemInputSchema);
   await setCartItem(c.env.DB, id, body.variant_id, body.pack, body.qty);
-  return c.json(await readCart(c.env.DB, id));
+  return c.json(view(await readCart(c.env.DB, id, { prune: true })));
 });
 
 // ---------- checkout ----------
@@ -137,7 +142,9 @@ publicApi.post('/checkout', async (c) => {
   await rateLimit(c.env.RL_CHECKOUT, `checkout:${clientKey(c)}`);
   const req = await readJson(c, CheckoutRequestSchema);
   await openCartOr404(c.env.DB, req.cart_id);
-  const cart = await readCart(c.env.DB, req.cart_id);
+  const cart = await readCart(c.env.DB, req.cart_id, { prune: true });
+  // ת11: a line stopped being sold since the buyer last saw the cart: never an order other than the one they saw
+  if (cart.pruned) throw new HttpError(409, 'cart_changed', `${removedHe(cart.pruned)} בדקו את ההזמנה ושלחו שוב.`);
   if (!cart.lines.length) throw new HttpError(409, 'cart_empty', 'הסל ריק.');
 
   const ship = (await shippingOptions(c.env.DB)).find((s) => s.id === req.shipping_method);
@@ -231,8 +238,8 @@ publicApi.post('/checkout', async (c) => {
         i + 1,
         l.product_id,
         l.variant_id,
-        // the snapshot names the supplier option the buyer chose
-        l.option_he ? `${l.name_he} (${l.option_he})` : l.name_he,
+        // the snapshot names what the buyer chose: the base name without a colour · the option's Hebrew labels (ת8)
+        lineName(l.name_he, l.option_he),
         l.qty,
         l.unit_price_agorot,
         cost?.cost_usd_cents ?? 0,

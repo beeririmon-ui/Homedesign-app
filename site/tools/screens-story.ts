@@ -895,7 +895,6 @@ async function axeDetail(): Promise<void> {
       DETAIL('modern-country', 'curtains-aliexpress-linen-blend-s-fold-180502'),
       DETAIL('nordic', 'candle-holders-cj-travertine-pedestal'),
       BOHO_FRAME,
-      TOOL_DRAFT,
     ]) {
       await page.goto(`${ORIGIN}${path}`, { waitUntil: 'load' });
       await sleep(900);
@@ -934,40 +933,6 @@ async function wheelPre1(): Promise<void> {
   } catch (e) {
     problems.push(`the wheel did not open on this static server: ${(e as Error).message.split('\n')[0]}`);
   }
-  await ctx.close();
-}
-
-// ---------- S3: from the story into the tool, and the house's own tool (a draft) with the soft switch ----------
-const TOOL_DRAFT = '/story/living-room/warm-modern/tool/';
-async function toolRun(w: number, h: number, tag: 'desk' | 'phone'): Promise<void> {
-  const ctx = await ctxOf(w, h);
-  const page = await open(ctx, '#tool', WARM);
-  await sleep(700);
-  await shot(page, `${tag}-t1-story-tool`, `${w}: the warm-modern story's way into the tool: the Nordic tool for now, and the house's own draft`);
-  await page.locator('#st-tool-draft').click();
-  await page.waitForFunction(`(window.__story?.events ?? []).some((e) => e.name === 'tool:ready')`, null, { timeout: 15_000 });
-  await page.waitForFunction(`[...document.querySelectorAll('.st-td-house.is-on img')].every((i) => i.complete && i.naturalWidth)`, null, { timeout: 20_000 });
-  await sleep(500);
-  await shot(
-    page,
-    `${tag}-t2-house`,
-    `${w}: the warm-modern house's tool (a draft from render pilot phase 1: the shell, the fixed furniture and its shadow, multiplied)`,
-  );
-  const t = (await page.evaluate(
-    `new Promise((res) => { const to = document.querySelector('.st-td-house[data-house="nordic"]'); const t0 = performance.now(); to.addEventListener('transitionend', () => res(Math.round(performance.now() - t0)), { once: true }); document.querySelector('.st-td-btn[data-house="nordic"]').click(); })`,
-  )) as number;
-  await sleep(300);
-  await shot(
-    page,
-    `${tag}-t3-nordic`,
-    `${w}: after the soft switch: the Nordic house at the tool's camera (its base is still the temporary styled preview of M0 1.1)`,
-  );
-  const half = (await page.evaluate(
-    `new Promise((res) => { document.querySelector('.st-td-btn[data-house="warm-modern"]').click(); setTimeout(() => res([...document.querySelectorAll('.st-td-house')].map((h) => getComputedStyle(h).opacity)), 500); })`,
-  )) as string[];
-  await sleep(200);
-  await shot(page, `${tag}-t4-mid-switch`, `${w}: the switch half way (~0.5 s after the press): both houses in the same frame, dissolving`);
-  evidence[`tool_${tag}`] = { switch_ms: t, opacities_half_way: half };
   await ctx.close();
 }
 
@@ -1057,12 +1022,6 @@ if (PART === 's5') {
   // the design system measured in the browser (e2e/system.spec.ts writes it, untracked; the evidence keeps a copy)
   const table = sitePath('.generated/system/system-checklist.json');
   if (existsSync(table)) writeFileSync(join(OUT, 'system-checklist.json'), readFileSync(table));
-}
-if (PART === 'tool' || PART === 'all') {
-  await firstLoad(400, 800, 1, 'tool_draft_phone_400_dpr1', TOOL_DRAFT);
-  await firstLoad(1280, 800, 1, 'tool_draft_desk_1280_dpr1', TOOL_DRAFT);
-  await toolRun(1280, 800, 'desk');
-  await toolRun(400, 800, 'phone');
 }
 if (PART === 'shop' || PART === 'all') {
   await wheelPre1();

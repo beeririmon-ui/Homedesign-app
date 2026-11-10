@@ -56,12 +56,33 @@ async function engineReady(page: Page) {
   await expect.poll(async () => (await engineOf(page))?.ready, { timeout: 20_000 }).toBe(true);
 }
 
+test.describe("a house's own address (S10 question 7, S11)", () => {
+  test('?style=warm-modern is served that house’s own page: no Nordic poster in it, the page CSP; the Nordic address is unchanged', async ({ request }) => {
+    const house = await request.get(HOUSE);
+    expect(house.status()).toBe(200);
+    const html = await house.text();
+    expect(html).not.toContain('class="poster"');
+    expect(html).not.toContain('/media/rooms/living-room/nordic/M0/base/shell.');
+    expect(html).toContain('house-pending');
+    expect(house.headers()['content-security-policy']).toContain("default-src 'self'");
+    const nordic = await request.get('/rooms/living-room/');
+    expect(nordic.status()).toBe(200);
+    expect(await nordic.text()).toContain('/media/rooms/living-room/nordic/M0/base/shell.');
+    expect(nordic.headers()['content-security-policy']).toContain("default-src 'self'");
+    // a style without a house is the Nordic page, as before
+    expect(await (await request.get('/rooms/living-room/?style=no-such-house')).text()).toContain('class="poster"');
+  });
+});
+
 test.describe('the warm-modern house in the room engine (S10)', () => {
   test('entering at its address: its own picture, the status label, one slot with a mark, B the default', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.setViewportSize({ width: 400, height: 800 });
     const asked: string[] = [];
+    const nordicPoster: string[] = [];
     page.on('request', (r) => void (r.url().includes('/media/house/') && asked.push(r.url())));
+    // S10 question 7 (S11): a direct entry downloads no Nordic poster for nothing
+    page.on('request', (r) => void (r.url().includes('/media/rooms/living-room/nordic/M0/base/shell.') && nordicPoster.push(r.url())));
     await houseReady(page);
     await expect(page.locator('.stage-status')).toHaveText(LABEL);
     await expect(page.locator('#room-title')).toContainText('מודרני חם');
@@ -71,6 +92,7 @@ test.describe('the warm-modern house in the room engine (S10)', () => {
     await expect(page.locator('button.hotspot')).toHaveCount(1);
     await expect(page.locator('.slot-list > li')).toHaveCount(1);
     await expect(page.locator('.segmented button[data-house="warm-modern"]')).toHaveAttribute('aria-pressed', 'true');
+    expect(nordicPoster, 'the Nordic poster is not downloaded on a direct entry to another house').toEqual([]);
     await engineReady(page);
     expect(await page.evaluate(() => (window as unknown as { __hdEngine?: { getSelection(): Record<string, number> } }).__hdEngine?.getSelection())).toEqual({
       [SLOT.id]: 1,

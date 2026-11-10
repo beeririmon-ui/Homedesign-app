@@ -33,6 +33,11 @@ export const CartSchema = z.object({
   lines: z.array(CartLineSchema),
   subtotal_agorot: z.number().int(),
   count: z.number().int(),
+  /**
+   * S11, QA ת11: lines whose product stopped being sold after they were added (PRE1, a variant no longer offered): the
+   * server removed them, never charged them, and the cart says so ("פריט אחד כבר לא זמין והוסר"). Absent: none.
+   */
+  removed: z.number().int().min(0).optional(),
 });
 export type Cart = z.infer<typeof CartSchema>;
 

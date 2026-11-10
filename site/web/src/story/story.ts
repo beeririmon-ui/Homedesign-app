@@ -14,6 +14,7 @@ import '../test-page/magazine.css';
 import './story.css';
 import { prefersReducedMotion } from '../motion';
 import { priceHe } from './story-cart';
+import { removedNoteHe } from '@hd/shared/lines';
 import { apiStoryCart, CART_KEY } from './api-cart';
 import type { DetailData, DSku } from './detail-model';
 
@@ -524,8 +525,15 @@ function renderCart(): void {
   );
   const held = cart.held();
   const heldEl = $('st-cart-held');
-  heldEl.hidden = !held.length;
+  // ת11: the server removed a line no longer sold (never charged): a quiet line says so
+  const removed = c?.removed ?? 0;
+  heldEl.hidden = !held.length && !removed;
+  const note = document.createElement('p');
+  note.className = 'mag-cap st-removed';
+  note.setAttribute('role', 'status');
+  note.textContent = removedNoteHe(removed);
   heldEl.replaceChildren(
+    ...(removed ? [note] : []),
     ...held.map((h) => {
       const p = document.createElement('p');
       p.className = 'mag-cap';

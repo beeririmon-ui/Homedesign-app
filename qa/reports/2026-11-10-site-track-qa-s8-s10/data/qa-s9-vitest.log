@@ -1,0 +1,16 @@
+(Use `node --trace-warnings ...` to show where the warning was created)
+ ✓ api/test/qa-s9.test.ts > QA S9: Grow, PAYMENT_PROVIDER=grow > checkout fails closed with 503 and leaves no order behind: without keys, with keys, and with GROW_DOCS_CONFIRMED=1 87ms
+ ✓ api/test/qa-s9.test.ts > QA S9: Grow, PAYMENT_PROVIDER=grow > Grow's webhook is never believed: 401, nothing recorded, whatever the body (a well-formed success event too) 18ms
+ ✓ api/test/qa-s9.test.ts > QA S9: Grow, PAYMENT_PROVIDER=grow > today: with PAYMENT_PROVIDER=grow outside production, the mock webhook route is still live and pays a pending mock order 18ms
+ ✓ api/test/qa-s9.test.ts > QA S9: the invoice job > sequential retries issue one invoice (the S9 claim holds when the runs do not overlap) 17ms
+ ✓ api/test/qa-s9.test.ts > QA S9: the invoice job > today: two runs at the same time (a queue redelivery, two consumers) issue two invoices for one order 23ms
+ ✓ api/test/qa-s9.test.ts > QA S9: the invoice job > today: a failure between the provider call and the audit row makes the retry issue a second invoice 22ms
+ ✓ api/test/qa-s9.test.ts > QA S9: the invoice job > never for pending_payment or payment_failed; today: an order canceled (or refunded) that was never paid is invoiced 13ms
+ ✓ api/test/qa-s9.test.ts > QA S9: the invoice job > today: in production with INVOICE_PROVIDER unset (or "mock") the mock "issues" a MOCK-INV and marks the order invoiced 14ms
+ ✓ api/test/qa-s9.test.ts > QA S9: the invoice job > today: with INVOICE_PROVIDER=UNDECIDED (production config) the queue handler throws on the invoice message and the batch after it is not processed 12ms
+ ✓ api/test/qa-s9.test.ts > QA S9: the supplier > CJ: no request leaves without a key, and with a key the order call is refused before any request (cj_order_api_docs_needed) 16ms
+ ✓ api/test/qa-s9.test.ts > QA S9: the supplier > today: in production with SUPPLIER_PROVIDER unset, "mock" or a typo, the mock supplier marks a paid order sent_to_supplier 19ms
+ Test Files  1 passed (1)
+      Tests  11 passed (11)
+   Start at  20:02:25
+   Duration  1.35s (transform 653ms, setup 0ms, collect 897ms, tests 264ms, environment 0ms, prepare 5ms)

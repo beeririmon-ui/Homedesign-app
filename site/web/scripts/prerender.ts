@@ -10,7 +10,7 @@ import { shopPath } from '@hd/shared/product-url';
 const here = dirname(fileURLToPath(import.meta.url));
 const dist = resolve(here, '../dist');
 const ssrDir = resolve(here, '../.ssr');
-const { render, ORIGIN } = (await import(pathToFileURL(resolve(ssrDir, 'entry-server.js')).href)) as typeof import('../src/entry-server');
+const { render, ORIGIN, HOUSES, NORDIC } = (await import(pathToFileURL(resolve(ssrDir, 'entry-server.js')).href)) as typeof import('../src/entry-server');
 const catalog = JSON.parse(readFileSync(resolve(here, '../../.generated/catalog.public.json'), 'utf8')) as {
   rooms: { id: string; built: boolean }[];
   products: { id: string }[];
@@ -44,6 +44,16 @@ for (const url of routes) {
   mkdirSync(dirname(file), { recursive: true });
   writeFileSync(file, page(url));
 }
+// S10 question 7 (S11): a page per house of the room engine besides the Nordic one, rendered at its own address
+// (/rooms/<room>/?style=<id>): it waits for that house and carries no Nordic poster. The Worker serves it for that address
+// (api/src/app.ts); a public build lists no other house, so writes none
+const houses = HOUSES.filter((h) => h.style !== NORDIC);
+for (const h of houses)
+  for (const r of catalog.rooms.filter((x) => x.built)) {
+    const file = resolve(dist, `house/${r.id}/${h.style}/index.html`);
+    mkdirSync(dirname(file), { recursive: true });
+    writeFileSync(file, page(`/rooms/${r.id}/?style=${h.style}`));
+  }
 // /order/<id>/ is served by the Worker from this shell (client-rendered: the id and token live in the browser)
 mkdirSync(resolve(dist, 'order'), { recursive: true });
 writeFileSync(resolve(dist, 'order/index.html'), page('/order/HD-00000000/').replace(/HD-00000000/g, ''));
@@ -83,4 +93,4 @@ writeFileSync(
   ].join('\n'),
 );
 rmSync(ssrDir, { recursive: true, force: true });
-console.log(`prerendered ${routes.length} pages + order shell + 404`);
+console.log(`prerendered ${routes.length} pages + ${houses.length} house page(s) + order shell + 404`);

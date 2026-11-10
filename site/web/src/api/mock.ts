@@ -5,6 +5,7 @@
  */
 import type { Cart, CheckoutRequest, OrderView, Pack, WaitlistRequest } from '@hd/shared';
 import { ORDER_STATUS_HE, type OrderStatus } from '@hd/shared/constants';
+import { lineName } from '@hd/shared/lines';
 import { catalog } from '../catalog';
 import { validateCheckout } from '../validate';
 import { optionsOf, variantView } from '../variants';
@@ -142,7 +143,8 @@ export const mockApi: StoreApi = {
       total_agorot: v.subtotal_agorot + (ship.free_over_agorot !== null && v.subtotal_agorot >= ship.free_over_agorot ? 0 : ship.price_agorot),
       shipping_method: req.shipping_method,
       lines: v.lines.map((l) => ({
-        name_he: l.option_he ? `${l.name_he} (${l.option_he})` : l.name_he,
+        // the order's snapshot by the line rule (ת8, as the Worker writes it)
+        name_he: lineName(l.name_he, l.option_he),
         pack: l.pack,
         pack_qty: l.pack_qty,
         qty: l.qty,

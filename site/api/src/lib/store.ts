@@ -44,45 +44,65 @@ export const VARIANT_PRICE_SQL = `COALESCE(v.retail_agorot, p.retail_agorot) AS 
        COALESCE(v.unit_price_estimated, p.unit_price_estimated) AS unit_price_estimated,
        COALESCE(v.price_provisional, p.price_provisional) AS price_provisional`;
 
-/** Prices always come from D1. Lines whose product is no longer visible or sold (PRE1) are dropped from the view. */
-export async function readCart(db: D1Database, id: string): Promise<Cart> {
+/**
+ * Prices always come from D1. A line is sold when its variant is active and not a part of a set (ת9), and its product
+ * is visible, priced and available (PRE1); a single piece needs a unit price. ת8: the line's name is the variant's base
+ * name (without a colour) and its option is the Hebrew labels, so nothing in the line contradicts what was bought.
+ * ת11: with `prune`, a line no longer sold is removed from the cart and counted on it (the cart says so, never charges
+ * it); `pruned` is how many this read removed.
+ */
+export async function readCart(db: D1Database, id: string, opts: { prune?: boolean } = {}): Promise<Cart & { pruned: number }> {
   const { results } = await db
     .prepare(
-      `SELECT ci.variant_id, p.id AS product_id, p.name_he, v.option_label_he AS option_he, ci.pack, ci.qty, p.sell_qty,
-              ${VARIANT_PRICE_SQL}
+      `SELECT ci.variant_id, ci.pack, ci.qty, p.id AS product_id, COALESCE(v.line_name_he, p.name_he) AS name_he,
+              v.option_label_he AS option_he, p.sell_qty,
+              ${VARIANT_PRICE_SQL},
+              CASE WHEN v.id IS NOT NULL AND v.active = 1 AND v.set_part = 0 AND p.visible = 1 AND p.retail_agorot IS NOT NULL
+                        AND p.availability = 'available' THEN 1 ELSE 0 END AS sold
        FROM cart_items ci
-       JOIN product_variants v ON v.id = ci.variant_id AND v.active = 1
-       JOIN products p ON p.id = v.product_id AND p.visible = 1 AND p.retail_agorot IS NOT NULL AND p.availability = 'available'
+       LEFT JOIN product_variants v ON v.id = ci.variant_id
+       LEFT JOIN products p ON p.id = v.product_id
        WHERE ci.cart_id = ?
        ORDER BY ci.added_at`,
     )
     .bind(id)
-    .all<LineRow>();
-  // a single-piece line whose product no longer has a unit option is dropped, like an unavailable product
-  const lines: CartLine[] = results.flatMap((r) => {
+    .all<LineRow & { sold: number }>();
+  const lines: CartLine[] = [];
+  const dead: { variant_id: string; pack: Pack }[] = [];
+  for (const r of results) {
     const unit = r.pack === 'unit';
     const price = unit ? r.unit_retail_agorot : r.retail_agorot;
-    if (price === null) return [];
-    return [
-      {
-        variant_id: r.variant_id,
-        product_id: r.product_id,
-        name_he: r.name_he,
-        option_he: r.option_he,
-        pack: r.pack,
-        pack_qty: unit ? 1 : r.sell_qty,
-        qty: r.qty,
-        unit_price_agorot: price,
-        line_total_agorot: price * r.qty,
-        price_provisional: r.price_provisional === 1 || (unit && r.unit_price_estimated === 1),
-      },
-    ];
-  });
+    // a single-piece line whose product no longer has a unit option is dropped, like an unavailable product
+    if (!r.sold || price === null) {
+      dead.push({ variant_id: r.variant_id, pack: r.pack });
+      continue;
+    }
+    lines.push({
+      variant_id: r.variant_id,
+      product_id: r.product_id,
+      name_he: r.name_he,
+      option_he: r.option_he,
+      pack: r.pack,
+      pack_qty: unit ? 1 : r.sell_qty,
+      qty: r.qty,
+      unit_price_agorot: price,
+      line_total_agorot: price * r.qty,
+      price_provisional: r.price_provisional === 1 || (unit && r.unit_price_estimated === 1),
+    });
+  }
+  if (opts.prune && dead.length)
+    await db.batch([
+      ...dead.map((d) => db.prepare('DELETE FROM cart_items WHERE cart_id = ? AND variant_id = ? AND pack = ?').bind(id, d.variant_id, d.pack)),
+      db.prepare('UPDATE carts SET removed_lines = removed_lines + ?, updated_at = ? WHERE id = ?').bind(dead.length, nowIso(), id),
+    ]);
+  const removed = (await db.prepare('SELECT removed_lines FROM carts WHERE id = ?').bind(id).first<{ removed_lines: number }>())?.removed_lines ?? 0;
   return {
     id,
     lines,
     subtotal_agorot: lines.reduce((s, l) => s + l.line_total_agorot, 0),
     count: lines.reduce((s, l) => s + l.qty, 0),
+    ...(removed ? { removed } : {}),
+    pruned: opts.prune ? dead.length : 0,
   };
 }
 
@@ -93,13 +113,15 @@ export async function setCartItem(db: D1Database, cartId: string, variantId: str
   } else {
     const row = await db
       .prepare(
-        `SELECT ${VARIANT_PRICE_SQL} FROM product_variants v JOIN products p ON p.id = v.product_id
+        `SELECT ${VARIANT_PRICE_SQL}, v.set_part FROM product_variants v JOIN products p ON p.id = v.product_id
          WHERE v.id = ? AND v.active = 1 AND p.visible = 1 AND p.retail_agorot IS NOT NULL AND p.availability = 'available'`,
       )
       .bind(variantId)
-      .first<{ unit_retail_agorot: number | null }>();
+      .first<{ unit_retail_agorot: number | null; set_part: number }>();
     if (!row) throw new HttpError(404, 'variant_not_found', 'המוצר לא זמין.');
-    // only a set (sell_qty > 1) has a single-piece option
+    // ת9: a part of a set of distinct SKUs (one print of a triptych) is not sold on its own
+    if (row.set_part === 1) throw new HttpError(422, 'set_part', 'הפריט הזה נמכר רק כחלק מהסט.');
+    // only a set (sell_qty > 1) has a single-piece option, and a set of distinct SKUs has none (ת9, SET1)
     if (pack === 'unit' && row.unit_retail_agorot === null) throw new HttpError(422, 'pack_unavailable', 'המוצר הזה נמכר רק כסט.');
     await db
       .prepare(

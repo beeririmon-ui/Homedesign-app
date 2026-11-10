@@ -150,10 +150,31 @@ export function buildSeedSql(cat: FullCatalog): string {
     // options the product's one variant, whose price and cost columns stay NULL (= the product's)
     const variants =
       p.variants_full ??
-      p.variants.map((v) => ({ id: v.id, label_he: v.label_he, option_label_he: null, supplier_sku: p.supplier.sku, active: true, in_room: true }));
+      p.variants.map((v) => ({
+        id: v.id,
+        label_he: v.label_he,
+        option_label_he: null,
+        line_name_he: null,
+        set_part: false,
+        supplier_sku: p.supplier.sku,
+        active: true,
+        in_room: true,
+      }));
     for (const v of variants) {
       const own = v.option_label_he !== null && 'retail_agorot' in v ? v : null;
-      const cols = [v.id, p.id, v.label_he, v.option_label_he, v.supplier_sku, p.fulfillment_source, v.active, v.in_room];
+      // S11: the line's base name (ת8) and whether the variant is a part of a set, never sold alone (ת9)
+      const cols = [
+        v.id,
+        p.id,
+        v.label_he,
+        v.option_label_he,
+        v.line_name_he ?? null,
+        v.set_part ?? false,
+        v.supplier_sku,
+        p.fulfillment_source,
+        v.active,
+        v.in_room,
+      ];
       const priced = [
         own?.retail_agorot,
         own?.unit_retail_agorot,
@@ -167,7 +188,7 @@ export function buildSeedSql(cat: FullCatalog): string {
         own?.price_floored ?? false,
       ];
       out.push(
-        `INSERT INTO product_variants (id, product_id, label_he, option_label_he, supplier_sku, fulfillment_source, active, in_room, retail_agorot, unit_retail_agorot, price_provisional, unit_price_estimated, cost_usd_cents, shipping_usd_cents, unit_shipping_usd_cents, landed_agorot, no_loss_agorot, price_floored) VALUES ${row([...cols, ...priced])} ON CONFLICT(id) DO UPDATE SET label_he = excluded.label_he, option_label_he = excluded.option_label_he, supplier_sku = excluded.supplier_sku, fulfillment_source = excluded.fulfillment_source, active = excluded.active, in_room = excluded.in_room, retail_agorot = excluded.retail_agorot, unit_retail_agorot = excluded.unit_retail_agorot, price_provisional = excluded.price_provisional, unit_price_estimated = excluded.unit_price_estimated, cost_usd_cents = excluded.cost_usd_cents, shipping_usd_cents = excluded.shipping_usd_cents, unit_shipping_usd_cents = excluded.unit_shipping_usd_cents, landed_agorot = excluded.landed_agorot, no_loss_agorot = excluded.no_loss_agorot, price_floored = excluded.price_floored;`,
+        `INSERT INTO product_variants (id, product_id, label_he, option_label_he, line_name_he, set_part, supplier_sku, fulfillment_source, active, in_room, retail_agorot, unit_retail_agorot, price_provisional, unit_price_estimated, cost_usd_cents, shipping_usd_cents, unit_shipping_usd_cents, landed_agorot, no_loss_agorot, price_floored) VALUES ${row([...cols, ...priced])} ON CONFLICT(id) DO UPDATE SET label_he = excluded.label_he, option_label_he = excluded.option_label_he, line_name_he = excluded.line_name_he, set_part = excluded.set_part, supplier_sku = excluded.supplier_sku, fulfillment_source = excluded.fulfillment_source, active = excluded.active, in_room = excluded.in_room, retail_agorot = excluded.retail_agorot, unit_retail_agorot = excluded.unit_retail_agorot, price_provisional = excluded.price_provisional, unit_price_estimated = excluded.unit_price_estimated, cost_usd_cents = excluded.cost_usd_cents, shipping_usd_cents = excluded.shipping_usd_cents, unit_shipping_usd_cents = excluded.unit_shipping_usd_cents, landed_agorot = excluded.landed_agorot, no_loss_agorot = excluded.no_loss_agorot, price_floored = excluded.price_floored;`,
       );
     }
   }

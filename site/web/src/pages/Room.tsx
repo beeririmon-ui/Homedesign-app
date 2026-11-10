@@ -9,8 +9,10 @@ import { HOUSES, loadHouse, nordic, type House } from '../house';
 export function Room({ room: nordicRoom, slot, option, style }: { room: CatalogRoom; slot?: string; option?: number; style?: string }) {
   // S10: the house the address names (DIR2), once its chunk is here; the first render is the prerendered Nordic one
   const [house, setHouse] = useState<House>(nordic);
-  const [pending, setPending] = useState(false);
   const want = style && HOUSES.some((h) => h.style === style) ? style : nordic.style;
+  // S10 question 7 (S11): an address naming another house starts waiting for it, from the first (prerendered) render,
+  // so its page never carries the Nordic poster (the Worker serves that house's own prerendered page)
+  const [pending, setPending] = useState(want !== nordic.style);
   // entering at a house's address, the stage waits for the house; a switch on the stage dissolves instead
   const entry = useRef(true);
   useEffect(() => {
@@ -36,7 +38,8 @@ export function Room({ room: nordicRoom, slot, option, style }: { room: CatalogR
   const [from, setFrom] = useState<string | null>(null);
   useEffect(() => {
     const f = new URLSearchParams(location.search).get('from');
-    setFrom(f && /^\/story\/[a-z0-9/-]+\/$/.test(f) ? f : null);
+    // a story page, or the story's index (QA S6–S7 ת14: the contents' "עצב בעצמך" carries from=/story/); a path only
+    setFrom(f && /^\/story\/(?:[a-z0-9-]+\/)*$/.test(f) ? f : null);
   }, []);
 
   return (

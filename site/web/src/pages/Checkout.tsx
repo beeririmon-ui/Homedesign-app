@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from 'preact/hooks';
 import type { CheckoutRequest } from '@hd/shared';
 import { catalog } from '../catalog';
 import { Price } from '../components/Media';
+import { lineName, removedNoteHe } from '@hd/shared/lines';
 import { lineLabelHe } from './lineLabel';
 import { api, ApiError } from '../api';
 import { cart, forgetCart, loadCart, saveOrderToken } from '../state/cart';
@@ -81,6 +82,8 @@ export function Checkout({ failed }: { failed: boolean }) {
       else location.assign(res.redirect_url); // the PSP's hosted page (another origin in production)
     } catch (err) {
       setSubmitError(err instanceof ApiError ? (err.messageHe ?? 'לא הצלחנו ליצור את ההזמנה. נסו שוב.') : 'לא הצלחנו ליצור את ההזמנה. נסו שוב.');
+      // ת11: a line stopped being sold since the summary was drawn: the summary is redrawn from the server
+      if (err instanceof ApiError && err.code === 'cart_changed') void loadCart();
       requestAnimationFrame(() => summary.current?.focus());
     } finally {
       setBusy(false);
@@ -122,6 +125,12 @@ export function Checkout({ failed }: { failed: boolean }) {
       {failed ? (
         <p class="notice error" role="alert">
           התשלום לא הושלם ולא חויבתם. אפשר לנסות שוב.
+        </p>
+      ) : null}
+      {c?.removed ? (
+        // ת11: a quiet notice, never an alarm: the line left the cart and is not charged
+        <p class="notice removed-note" role="status">
+          {removedNoteHe(c.removed)}
         </p>
       ) : null}
       {!lines.length ? (
@@ -250,8 +259,7 @@ export function Checkout({ failed }: { failed: boolean }) {
             <ul class="small" style={{ margin: 0, paddingInlineStart: 18 }}>
               {lines.map((l) => (
                 <li key={`${l.variant_id}:${l.pack}`}>
-                  {l.name_he}
-                  {lineLabelHe(l) ? ` (${lineLabelHe(l)})` : ''} × {l.qty}
+                  {lineName(l.name_he, lineLabelHe(l))} × {l.qty}
                 </li>
               ))}
             </ul>

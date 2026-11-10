@@ -141,6 +141,15 @@ export type FullVariant = {
   label_he: string;
   /** the option's label on the product page and in the cart, null for a product without options */
   option_label_he: string | null;
+  /**
+   * S11, QA ת8: the line's base name for this variant (the base name without a colour, or the option's own name). The
+   * line in the cart, the checkout, the order and the invoice is `line_name_he · option_label_he`.
+   */
+  line_name_he: string;
+  /** ת9: a part of a set of distinct SKUs (a print of a triptych other than the set's own): never sold on its own */
+  set_part: boolean;
+  /** the manager's sale decisions (data/catalog/sale-exclusions.json): why this variant is not offered; null when it is */
+  sale_excluded: string | null;
   supplier_sku: string | null;
   cost_usd_cents: number;
   shipping_usd_cents: number;

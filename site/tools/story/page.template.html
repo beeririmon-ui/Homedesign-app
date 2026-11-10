@@ -60,18 +60,18 @@
       </div>
     </dialog>
 
-    <!-- the test cart (an in-browser mock of the store API: createCart, getCart, setItem), the same on every story page -->
+    <!-- the site's cart (S7: the shop's API cart, hd.cart), the same on every story page; QA S6–S7 ת13: its own name, not a test cart -->
     <dialog class="st-sheet st-cart" id="st-cart" aria-labelledby="st-cart-title">
       <div class="st-sheet-in">
         <div class="st-sheet-top">
-          <h2 class="st-name" id="st-cart-title" tabindex="-1">סל הבדיקה</h2>
+          <h2 class="st-name" id="st-cart-title" tabindex="-1">סל הקניות</h2>
           <button type="button" class="st-close" id="st-cart-close" aria-label="סגירה">×</button>
         </div>
         <ol class="mag-credits st-cart-lines" id="st-cart-lines"></ol>
         <p class="st-cart-empty mag-cap" id="st-cart-empty">הסל ריק.</p>
         <div class="st-cart-held" id="st-cart-held" hidden></div>
         <p class="st-total" id="st-cart-total"></p>
-        <p class="mag-cap">סל בדיקה בדפדפן. המשלוח מחושב בתשלום, ולא נגבה כסף.</p>
+        <p class="mag-cap">המחירים כוללים מע"מ. המשלוח נבחר בשלב הבא, לפני התשלום.</p>
         <p class="st-cart-actions">
           <a class="mag-btn mag-btn-primary st-btn-link" id="st-cart-pay" href="/checkout/">לתשלום</a>
           <button type="button" class="mag-btn mag-btn-secondary" id="st-cart-clear">ריקון הסל</button>

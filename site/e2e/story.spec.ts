@@ -587,6 +587,24 @@ test.describe('from the story into the tool (S3)', () => {
     await expect(page.locator('#back-to-story')).toHaveCount(0);
   });
 
+  test('QA S6–S7 ת14: from the contents (/story/) the tool shows the way back to the contents; nothing else outside the story', async ({ page }) => {
+    await page.goto('/story/');
+    const link = page.locator('a[href^="/rooms/"][href*="from=%2Fstory%2F"]').first();
+    await expect(link).toHaveAttribute('href', /from=%2Fstory%2F$/);
+    await link.click();
+    await expect(page.locator('button.hotspot').first()).toBeAttached({ timeout: 20_000 });
+    await expect(page.locator('#back-to-story')).toHaveAttribute('href', '/story/');
+    await expect(page.locator('#back-to-story')).toHaveText('חזרה לסיפור');
+    await page.locator('#back-to-story').click();
+    await expect(page).toHaveURL(/\/story\/$/);
+    // an origin that is not a path inside the story is ignored (another site, a protocol-relative one, a climb out)
+    for (const bad of ['//example.com/story/', '/story/../cart/', '/story', '/storyx/', 'javascript:alert(1)']) {
+      await page.goto(`/rooms/living-room/?from=${encodeURIComponent(bad)}`);
+      await expect(page.locator('button.hotspot').first()).toBeAttached({ timeout: 20_000 });
+      await expect(page.locator('#back-to-story'), bad).toHaveCount(0);
+    }
+  });
+
   test("warm modern: every way into the tool goes to the house in the room engine (S10); the draft's address moved, 301", async ({ page, request }) => {
     await page.goto(`${WARM}#tool`);
     const from = encodeURIComponent(WARM);

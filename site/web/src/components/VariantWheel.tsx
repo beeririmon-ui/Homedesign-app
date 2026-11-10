@@ -18,6 +18,7 @@ import { PackPicker, packPrice } from './PackPicker';
 import { defaultVariantId, optionLabelHe, optionsOf } from '../variants';
 import { Waitlist } from './Waitlist';
 import type { House } from '../house';
+import { frameStyle, visibleFrame } from './viewport-frame';
 
 const STEP_DEG = 34;
 
@@ -67,6 +68,30 @@ export function VariantWheel({ house, slot, roomId, initial, onPreview, onChoose
     physics.current.setIndex(initial - 1);
     paint();
     return () => ro.disconnect();
+  }, []);
+
+  // QA S6–S7 ת7: the wheel sits in the part of the stage that is on the glass (the visual viewport), whatever the page's
+  // scroll or a pinch zoom; it follows them while it is open
+  useLayoutEffect(() => {
+    const el = dialog.current;
+    const st = el?.closest<HTMLElement>('.stage');
+    if (!el || !st) return;
+    const vv = window.visualViewport ?? null;
+    const place = () => {
+      const r = st.getBoundingClientRect();
+      Object.assign(el.style, frameStyle(visibleFrame(r, vv, { width: innerWidth, height: innerHeight })));
+    };
+    place();
+    vv?.addEventListener('resize', place);
+    vv?.addEventListener('scroll', place);
+    addEventListener('resize', place);
+    addEventListener('scroll', place, { passive: true });
+    return () => {
+      vv?.removeEventListener('resize', place);
+      vv?.removeEventListener('scroll', place);
+      removeEventListener('resize', place);
+      removeEventListener('scroll', place);
+    };
   }, []);
 
   // the spring stops with the wheel: a frame after closing must not preview an option (a cancel restores the room)

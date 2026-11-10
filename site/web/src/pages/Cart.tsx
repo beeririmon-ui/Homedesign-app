@@ -4,6 +4,7 @@ import { catalog, livingRoom, scene } from '../catalog';
 import { Picture, Price, productImage } from '../components/Media';
 import { shippingFor } from './Checkout';
 import { cart, cartBusy, cartError, loadCart, setQty } from '../state/cart';
+import { removedNoteHe } from '@hd/shared/lines';
 import { lineLabelHe } from './lineLabel';
 
 export function CartPage() {
@@ -22,6 +23,12 @@ export function CartPage() {
       {cartError.value ? (
         <p class="notice error" role="alert">
           {cartError.value}
+        </p>
+      ) : null}
+      {c?.removed ? (
+        // ת11: a product stopped being sold after it was added: it left the cart, quietly said, never charged
+        <p class="notice removed-note" role="status">
+          {removedNoteHe(c.removed)}
         </p>
       ) : null}
       {!lines.length ? (

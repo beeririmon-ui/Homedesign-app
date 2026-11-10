@@ -22,7 +22,7 @@ import sharp from 'sharp';
 import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
-import { expandOptions, type CatalogRoom, type CatalogSlot, type PublicCatalog, type PublicProduct } from '@hd/shared';
+import { expandOptions, type CatalogRoom, type CatalogSlot, type FullCatalog, type PublicCatalog, type PublicProduct } from '@hd/shared';
 import { publicId } from '@hd/shared/product-url';
 import { GENERATED, MEDIA_OUT, repoPath, sitePath } from './lib/paths';
 
@@ -65,6 +65,13 @@ for (const [i, s] of m.sets.entries()) {
 const storyCatalog = read<PublicCatalog>(join(GENERATED, 'catalog.story.public.json'));
 const site = read<PublicCatalog>(join(GENERATED, 'catalog.public.json'));
 const byId = new Map(storyCatalog.products.map((p) => [p.id, p]));
+// S11 (QA S6–S7 ת8; S10 question 2): a piece is named by its line, the base name without a colour · the Hebrew labels of
+// the SKU in the set, so no name contradicts the shade ("מרווה" on a camel cushion, "לבן שנהב" on a Pecan throw)
+const lines = new Map(
+  read<FullCatalog>(join(GENERATED, 'catalog.story.full.json')).products.flatMap((p) =>
+    (p.variants_full ?? []).map((v) => [v.id, { base: v.line_name_he ?? p.name_he, label: v.option_label_he }] as const),
+  ),
+);
 const names = read<{ names_he?: Record<string, string> }>(repoPath('data/story/story.json')).names_he ?? {};
 const used = new Map<string, PublicProduct>();
 type Piece = { product_id: string | null; variant_id: string | null; name_he: string; option_he: string | null };
@@ -73,7 +80,10 @@ const sets = m.sets.map((s, i) => {
     const p = byId.get(publicId(pt.product));
     if (!p) return { product_id: null, variant_id: null, name_he: names[pt.product] ?? 'פריט בסט', option_he: null };
     used.set(p.id, p);
-    if (!p.options) return { product_id: p.id, variant_id: p.variants[0]!.id, name_he: p.name_he, option_he: null };
+    if (!p.options) {
+      const l = lines.get(p.variants[0]!.id);
+      return { product_id: p.id, variant_id: p.variants[0]!.id, name_he: l?.base ?? p.name_he, option_he: l?.label ?? null };
+    }
     const o = expandOptions(p.id, p.options);
     const room = o.skus.find((x) => x.in_room)!;
     const want = { ...room.values, ...pt.option };
@@ -81,8 +91,9 @@ const sets = m.sets.map((s, i) => {
       if (!o.axes.find((a) => a.id === k)?.values.some((x) => x.id === v)) fail(`set ${s.id}: ${pt.product} has no ${k}=${v}`);
     const sku = o.skus.find((x) => o.axes.every((a) => x.values[a.id] === want[a.id]));
     if (!sku) return fail(`set ${s.id}: ${pt.product} sells no SKU ${JSON.stringify(want)}`);
-    const option_he = o.axes.map((a) => a.values.find((v) => v.id === sku.values[a.id])!.label_he).join(', ');
-    return { product_id: p.id, variant_id: sku.variant_id, name_he: p.name_he, option_he };
+    const l = lines.get(sku.variant_id);
+    const option_he = l?.label ?? o.axes.map((a) => a.values.find((v) => v.id === sku.values[a.id])!.label_he).join(', ');
+    return { product_id: p.id, variant_id: sku.variant_id, name_he: l?.base ?? p.name_he, option_he };
   });
   return { position: i + 1, id: s.id, label_he: s.label_he, items };
 });

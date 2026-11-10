@@ -5,6 +5,7 @@
 import { useEffect, useState } from 'preact/hooks';
 import type { OrderView } from '@hd/shared';
 import { ORDER_STEPS_HE, orderStep } from '@hd/shared/constants';
+import { lineName } from '@hd/shared/lines';
 import { api, ApiError } from '../api';
 import { orderToken } from '../state/cart';
 import { Picture, Price } from '../components/Media';
@@ -122,8 +123,7 @@ export function OrderPage({ id }: { id: string }) {
           <ul class="order-lines">
             {order.lines.map((l, i) => (
               <li key={i}>
-                {l.name_he}
-                {lineLabelHe(l) ? ` (${lineLabelHe(l)})` : ''} × {l.qty} · <Price agorot={l.line_total_agorot} />
+                {lineName(l.name_he, lineLabelHe(l))} × {l.qty} · <Price agorot={l.line_total_agorot} />
               </li>
             ))}
           </ul>

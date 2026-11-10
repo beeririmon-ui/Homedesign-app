@@ -240,6 +240,28 @@ export function RoomExperience({
     };
   }, [room.id]);
 
+  // QA S6–S7 ת7: the stage never scrolls (CSS `overflow: clip`); where `clip` is missing, a scroll the browser makes
+  // from code (a focus, a click that brings a mark into view) is put back at once, so the room and the wheel stay on screen
+  useEffect(() => {
+    const st = stage.current;
+    if (!st) return;
+    const pin = () => {
+      if (st.scrollLeft !== 0 || st.scrollTop !== 0) st.scrollTo({ left: 0, top: 0, behavior: 'instant' });
+    };
+    pin();
+    st.addEventListener('scroll', pin, { passive: true });
+    return () => st.removeEventListener('scroll', pin);
+  }, []);
+  /** The wheel opens over the whole stage: a page scrolled past the stage's top first brings it under the header. */
+  function revealStage() {
+    const st = stage.current;
+    if (!st) return;
+    const r = st.getBoundingClientRect();
+    const head = document.querySelector('.site-header')?.getBoundingClientRect().bottom ?? 0;
+    const view = window.visualViewport?.height ?? innerHeight;
+    if (r.top < head - 1 || (r.bottom > view + 1 && r.top > head + 1)) window.scrollBy({ top: r.top - head, behavior: 'instant' });
+  }
+
   // rings and controls wait until the arrival has landed
   const arriving = arrival.value !== null;
   useEffect(() => {
@@ -308,6 +330,7 @@ export function RoomExperience({
     if (busy || open) return;
     setBusy(true);
     opener.current = document.activeElement as HTMLElement | null;
+    revealStage();
     const wheel = loadWheel();
     const e = await ensureEngine();
     if (!e) return setBusy(false);
@@ -469,16 +492,19 @@ export function RoomExperience({
       onFocusIn={onFocusIn}
       onFocusOut={onFocusOut}
     >
-      <Picture
-        src={scene.base[0]!.src}
-        widths={scene.base[0]!.widths}
-        sizes="(max-aspect-ratio: 1/1) min(calc((100svh - 60px) * 1.78), 1080px), 100vw"
-        alt=""
-        class="poster"
-        loading="eager"
-        fetchpriority="high"
-        imgRef={poster}
-      />
+      {/* S10 question 7 (S11): while the address's house is on its way, no poster: never the Nordic one downloaded for nothing */}
+      {waiting ? null : (
+        <Picture
+          src={scene.base[0]!.src}
+          widths={scene.base[0]!.widths}
+          sizes="(max-aspect-ratio: 1/1) min(calc((100svh - 60px) * 1.78), 1080px), 100vw"
+          alt=""
+          class="poster"
+          loading="eager"
+          fetchpriority="high"
+          imgRef={poster}
+        />
+      )}
       {/* the composed room is a picture, not a control: the hotspot buttons and the list below are the interactive parts */}
       <canvas
         ref={canvas}

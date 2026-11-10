@@ -1,0 +1,231 @@
+// ---------------------------------------------------------------------------------------------------------------------
+// qa-agent, 2026-11-10 (S9, a security review of the integrations). Appended to the fixture of api/test/api.test.ts at
+// b0a71cd2 (its first 164 lines: the catalog), run in the isolated copy only, never in the live tree:
+//   cat qa-s9.fixture-from-api.test.ts.txt qa-s9.tests.ts.txt > <copy>/site/api/test/qa-s9.test.ts
+//   cd <copy>/site && npx vitest run api/test/qa-s9.test.ts --reporter=verbose
+// Every `it` records what the code does today (expectations written as the observed behaviour, named "today:"), so the
+// file passes and its output is the evidence; a finding is where "today" differs from what S9 promises.
+// ---------------------------------------------------------------------------------------------------------------------
+import { processInvoiceJob, invoiceProvider, type InvoiceProvider } from '../src/lib/invoices';
+import worker from '../src/index';
+
+let env: Env;
+let sent: SupplierJob[];
+const QA_SECRET = 'qa-dummy-webhook-secret-not-a-key-0000';
+beforeEach(() => {
+  const DB = createD1();
+  migrate(DB, buildSeedSql(catalog));
+  sent = [];
+  env = {
+    DB,
+    SUPPLIER_QUEUE: { send: vi.fn(async (m: SupplierJob) => void sent.push(m)), sendBatch: vi.fn() } as unknown as Queue<SupplierJob>,
+    ENVIRONMENT: 'test',
+    PAYMENT_PROVIDER: 'mock',
+    SUPPLIER_PROVIDER: 'mock',
+    ACCESS_TEAM_DOMAIN: '',
+    ACCESS_AUD: '',
+    PAYMENT_WEBHOOK_SECRET: QA_SECRET,
+  };
+});
+const req = (path: string, init?: RequestInit) => app.request(`http://localhost${path}`, init, env);
+const json = (body: unknown, method = 'POST'): RequestInit => ({ method, headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
+const checkoutBody = (cart_id: string) => ({
+  cart_id,
+  customer: { full_name: 'בדיקת איכות', email: 'qa@example.com', phone: '050-1234567' },
+  address: { city: 'חיפה', street: 'הרצל', house: '12' },
+  shipping_method: 'express',
+  consents: { terms: true, marketing: false },
+});
+async function cart() {
+  const { id } = (await (await req('/api/cart', { method: 'POST' })).json()) as { id: string };
+  await req(`/api/cart/${id}/items`, json({ variant_id: 'vase-a:default', qty: 1 }, 'PUT'));
+  return id;
+}
+async function pendingOrder() {
+  const res = (await (await req('/api/checkout', json(checkoutBody(await cart())))).json()) as { order_id: string };
+  const o = await env.DB.prepare('SELECT payment_session_id, total_agorot FROM orders WHERE id = ?').bind(res.order_id).first<{ payment_session_id: string; total_agorot: number }>();
+  return { orderId: res.order_id, session: o!.payment_session_id, total: o!.total_agorot };
+}
+async function postMock(event: object, provider = 'mock') {
+  const body = JSON.stringify(event);
+  return req(`/api/webhooks/payment/${provider}`, { method: 'POST', headers: { 'content-type': 'application/json', 'x-mock-signature': await signWebhook(QA_SECRET, body, Math.floor(Date.now() / 1000)) }, body });
+}
+async function paidOrder() {
+  const { orderId, session, total } = await pendingOrder();
+  const r = await postMock({ id: `evt_${orderId}`, type: 'payment.succeeded', session_id: session, amount_agorot: total });
+  expect(((await r.json()) as { outcome: string }).outcome).toBe('paid');
+  return orderId;
+}
+const count = async (sql: string, ...b: unknown[]) => (await env.DB.prepare(sql).bind(...b).first<{ n: number }>())!.n;
+const invoicedRows = (id: string) => count("SELECT COUNT(*) AS n FROM audit_log WHERE action = 'order.invoiced' AND subject = ?", id);
+/** a provider that counts the invoices it issues, slow like a network call */
+function countingProvider(delayMs = 5): InvoiceProvider & { issued: string[] } {
+  const issued: string[] = [];
+  return {
+    id: 'qa-counting',
+    issued,
+    async issue(input) {
+      await new Promise((r) => setTimeout(r, delayMs));
+      issued.push(input.order_id);
+      return { invoice_id: `QA-${input.order_id}-${issued.length}`, url: null };
+    },
+  };
+}
+
+describe('QA S9: Grow, PAYMENT_PROVIDER=grow', () => {
+  it('checkout fails closed with 503 and leaves no order behind: without keys, with keys, and with GROW_DOCS_CONFIRMED=1', async () => {
+    const before = await count('SELECT COUNT(*) AS n FROM orders');
+    const cases: [Partial<Env>, string][] = [
+      [{ PAYMENT_PROVIDER: 'grow' }, 'payment_not_configured'],
+      [{ PAYMENT_PROVIDER: 'grow', GROW_USER_ID: 'u', GROW_PAGE_CODE: 'p', GROW_API_KEY: 'k' }, 'payment_provider_docs_needed'],
+      [{ PAYMENT_PROVIDER: 'grow', GROW_USER_ID: 'u', GROW_PAGE_CODE: 'p', GROW_API_KEY: 'k', GROW_DOCS_CONFIRMED: '1' }, 'payment_provider_docs_needed'],
+      [{ PAYMENT_PROVIDER: 'grow', ENVIRONMENT: 'production' }, 'payment_not_configured'],
+    ];
+    const fetchSpy = vi.spyOn(globalThis, 'fetch');
+    const base = env;
+    for (const [over, err] of cases) {
+      env = { ...base, ...over } as Env;
+      const r = await req('/api/checkout', json(checkoutBody(await cart())));
+      expect(r.status).toBe(503);
+      expect(((await r.json()) as { error: string }).error).toBe(err);
+    }
+    expect(fetchSpy).not.toHaveBeenCalled();
+    fetchSpy.mockRestore();
+    expect(await count('SELECT COUNT(*) AS n FROM orders')).toBe(before);
+  });
+
+  it("Grow's webhook is never believed: 401, nothing recorded, whatever the body (a well-formed success event too)", async () => {
+    const { session, total } = await pendingOrder();
+    env = { ...env, PAYMENT_PROVIDER: 'grow', GROW_USER_ID: 'u', GROW_PAGE_CODE: 'p', GROW_API_KEY: 'k', GROW_DOCS_CONFIRMED: '1' };
+    for (const body of ['{}', JSON.stringify({ id: 'evt_grow_0001', type: 'payment.succeeded', session_id: session, amount_agorot: total }), 'not json']) {
+      const r = await req('/api/webhooks/payment/grow', { method: 'POST', headers: { 'content-type': 'application/json', 'x-mock-signature': 'whatever' }, body });
+      expect(r.status).toBe(401);
+    }
+    expect(await count('SELECT COUNT(*) AS n FROM payment_events')).toBe(0);
+  });
+
+  it('today: with PAYMENT_PROVIDER=grow outside production, the mock webhook route is still live and pays a pending mock order', async () => {
+    const { orderId, session, total } = await pendingOrder(); // created while the provider was mock
+    env = { ...env, PAYMENT_PROVIDER: 'grow', ENVIRONMENT: 'preview' };
+    const r = await postMock({ id: 'evt_after_switch', type: 'payment.succeeded', session_id: session, amount_agorot: total });
+    expect(r.status).toBe(200);
+    expect(((await r.json()) as { outcome: string }).outcome).toBe('paid');
+    expect((await env.DB.prepare('SELECT status FROM orders WHERE id = ?').bind(orderId).first<{ status: string }>())!.status).toBe('paid');
+    // in production the same call is refused (the mock is off there)
+    env = { ...env, ENVIRONMENT: 'production' };
+    expect((await postMock({ id: 'evt_after_switch2', type: 'payment.succeeded', session_id: session, amount_agorot: total })).status).toBe(503);
+  });
+});
+
+describe('QA S9: the invoice job', () => {
+  it('sequential retries issue one invoice (the S9 claim holds when the runs do not overlap)', async () => {
+    const id = await paidOrder();
+    const p = countingProvider();
+    expect(await processInvoiceJob(env, id, p)).toBe('invoiced');
+    expect(await processInvoiceJob(env, id, p)).toBe('skipped');
+    expect(p.issued).toEqual([id]);
+    expect(await invoicedRows(id)).toBe(1);
+  });
+
+  it('today: two runs at the same time (a queue redelivery, two consumers) issue two invoices for one order', async () => {
+    const id = await paidOrder();
+    const p = countingProvider();
+    const r = await Promise.all([processInvoiceJob(env, id, p), processInvoiceJob(env, id, p)]);
+    expect(r).toEqual(['invoiced', 'invoiced']);
+    expect(p.issued).toEqual([id, id]);
+    expect(await invoicedRows(id)).toBe(2);
+  });
+
+  it('today: a failure between the provider call and the audit row makes the retry issue a second invoice', async () => {
+    const id = await paidOrder();
+    const p = countingProvider(0);
+    const realPrepare = env.DB.prepare.bind(env.DB);
+    let fail = true;
+    const flaky = {
+      ...env,
+      DB: {
+        ...env.DB,
+        prepare: (sql: string) => {
+          const s = realPrepare(sql);
+          if (fail && sql.startsWith('INSERT INTO audit_log')) {
+            fail = false;
+            return { bind: () => ({ run: async () => Promise.reject(new Error('D1 unavailable')) }) } as unknown as ReturnType<typeof realPrepare>;
+          }
+          return s;
+        },
+      } as unknown as D1Database,
+    };
+    await expect(processInvoiceJob(flaky, id, p)).rejects.toThrow('D1 unavailable');
+    expect(await processInvoiceJob(flaky, id, p)).toBe('invoiced');
+    expect(p.issued).toEqual([id, id]);
+  });
+
+  it('never for pending_payment or payment_failed; today: an order canceled (or refunded) that was never paid is invoiced', async () => {
+    const { orderId } = await pendingOrder();
+    const p = countingProvider(0);
+    expect(await processInvoiceJob(env, orderId, p)).toBe('skipped');
+    await env.DB.prepare("UPDATE orders SET status = 'payment_failed' WHERE id = ?").bind(orderId).run();
+    expect(await processInvoiceJob(env, orderId, p)).toBe('skipped');
+    const paidAt = await env.DB.prepare('SELECT paid_at FROM orders WHERE id = ?').bind(orderId).first<{ paid_at: string | null }>();
+    expect(paidAt!.paid_at).toBeNull();
+    await env.DB.prepare("UPDATE orders SET status = 'canceled' WHERE id = ?").bind(orderId).run();
+    expect(await processInvoiceJob(env, orderId, p)).toBe('invoiced');
+    expect(p.issued).toEqual([orderId]);
+  });
+
+  it('today: in production with INVOICE_PROVIDER unset (or "mock") the mock "issues" a MOCK-INV and marks the order invoiced', async () => {
+    const id = await paidOrder();
+    const prod = { ...env, ENVIRONMENT: 'production' as const, INVOICE_PROVIDER: undefined };
+    expect(await processInvoiceJob(prod, id)).toBe('invoiced');
+    const row = await env.DB.prepare("SELECT actor, detail FROM audit_log WHERE action = 'order.invoiced' AND subject = ?").bind(id).first<{ actor: string; detail: string }>();
+    expect(row!.actor).toBe('invoice:mock');
+    expect(row!.detail).toContain('MOCK-INV-');
+    // a real provider configured later skips it: the order counts as invoiced
+    expect(await processInvoiceJob(prod, id, countingProvider(0))).toBe('skipped');
+    // the production config in wrangler.jsonc says UNDECIDED: the job throws (it is not built)
+    expect(() => invoiceProvider('UNDECIDED')).toThrow(/not built yet/);
+  });
+
+  it('today: with INVOICE_PROVIDER=UNDECIDED (production config) the queue handler throws on the invoice message and the batch after it is not processed', async () => {
+    const id = await paidOrder();
+    const prod = { ...env, ENVIRONMENT: 'production' as const, INVOICE_PROVIDER: 'UNDECIDED' };
+    const msg = (body: SupplierJob) => ({ body, attempts: 1, ack: vi.fn(), retry: vi.fn() });
+    const m1 = msg({ kind: 'issue-invoice', order_id: id });
+    const m2 = msg({ kind: 'submit-order', order_id: id });
+    await expect(worker.queue!({ messages: [m1, m2] } as unknown as MessageBatch<SupplierJob>, prod, {} as ExecutionContext)).rejects.toThrow(/not built yet/);
+    expect(m1.ack).not.toHaveBeenCalled();
+    expect(m1.retry).not.toHaveBeenCalled();
+    expect(m2.ack).not.toHaveBeenCalled();
+    expect(m2.retry).not.toHaveBeenCalled();
+  });
+});
+
+describe('QA S9: the supplier', () => {
+  it('CJ: no request leaves without a key, and with a key the order call is refused before any request (cj_order_api_docs_needed)', async () => {
+    const fetchSpy = vi.spyOn(globalThis, 'fetch');
+    for (const key of [undefined, 'qa-dummy-cj-key-not-real']) {
+      const id = await paidOrder();
+      const e = { ...env, SUPPLIER_PROVIDER: 'cj', CJ_API_KEY: key, ENVIRONMENT: 'production' as const };
+      expect(await processSupplierJob(e, { kind: 'submit-order', order_id: id }, 1)).toBe('retry');
+      const s = await env.DB.prepare('SELECT supplier, status, last_error FROM supplier_shipments WHERE order_id = ? AND supplier = ?').bind(id, 'cj').first<{ supplier: string; status: string; last_error: string }>();
+      expect(s).toMatchObject({ supplier: 'cj', status: 'failed', last_error: key ? 'cj_order_api_docs_needed' : 'CJ_API_KEY is not set' });
+      // after the last attempt the order is supplier_error, never sent_to_supplier
+      expect(await processSupplierJob(e, { kind: 'submit-order', order_id: id }, 5)).toBe('retry');
+      expect((await env.DB.prepare('SELECT status FROM orders WHERE id = ?').bind(id).first<{ status: string }>())!.status).toBe('supplier_error');
+    }
+    expect(fetchSpy).not.toHaveBeenCalled();
+    fetchSpy.mockRestore();
+  });
+
+  it('today: in production with SUPPLIER_PROVIDER unset, "mock" or a typo, the mock supplier marks a paid order sent_to_supplier', async () => {
+    for (const sp of [undefined, 'mock', 'CJ']) {
+      const id = await paidOrder();
+      const e = { ...env, SUPPLIER_PROVIDER: sp as string, ENVIRONMENT: 'production' as const };
+      expect(await processSupplierJob(e, { kind: 'submit-order', order_id: id }, 1)).toBe('submitted');
+      const o = await env.DB.prepare('SELECT status FROM orders WHERE id = ?').bind(id).first<{ status: string }>();
+      expect(o!.status).toBe('sent_to_supplier');
+      const s = await env.DB.prepare('SELECT supplier, supplier_order_id FROM supplier_shipments WHERE order_id = ? AND status = ?').bind(id, 'submitted').first<{ supplier: string; supplier_order_id: string }>();
+      expect(s).toMatchObject({ supplier: 'mock', supplier_order_id: `MOCK-${id}` });
+    }
+  });
+});

@@ -77,6 +77,10 @@ function withOptions(p: FullProduct): FullProduct {
     id: `${p.id}:${id}`,
     label_he: label,
     option_label_he: label,
+    // ת8: the line's base name, without the colour the product's name may carry
+    line_name_he: 'ציפית כרית פשתן',
+    set_part: false,
+    sale_excluded: null,
     supplier_sku: sku,
     cost_usd_cents: cost,
     shipping_usd_cents: ship,
@@ -101,6 +105,27 @@ function withOptions(p: FullProduct): FullProduct {
     v('o-green50', 'ירוק, 50×50 ס"מ', '12000059524978177', 9900, 1250, 1000, false, false),
   ];
   return { ...p, variants: variants_full.map(({ id, label_he }) => ({ id, label_he })), variants_full };
+}
+
+/** ת9: a set of distinct SKUs (a triptych): print 1 is the set's own; prints 2 and 3 are its parts, never sold alone */
+function triptych(p: FullProduct): FullProduct {
+  const v = withOptions(p).variants_full![0]!;
+  const print = (n: number, part: boolean) => ({
+    ...v,
+    id: `${p.id}:${n}+40x60`,
+    label_he: `הדפס: הדפס ${n}, מידה: 40×60 ס"מ`,
+    option_label_he: '40×60 ס"מ',
+    line_name_he: 'שלישיית הדפסים גאומטריים',
+    set_part: part,
+    in_room: n === 1,
+    retail_agorot: 21900,
+    // the set's own economics: the product's cost, and the combined parcel of 3 (unit + 2 × (unit − $3.72))
+    cost_usd_cents: p.cost_usd_cents,
+    shipping_usd_cents: 1000 + 2 * (1000 - 372),
+    unit_shipping_usd_cents: 1000,
+  });
+  const variants_full = [print(1, false), print(2, true), print(3, true)];
+  return { ...p, pack: null, variants: [{ id: variants_full[0]!.id, label_he: variants_full[0]!.label_he }], variants_full };
 }
 
 const catalog: FullCatalog = {
@@ -151,6 +176,8 @@ const catalog: FullCatalog = {
     product('candles-a', 'candle-holders', 34900, 907, { n: 2, unit: 19900 }),
     // supplier options (2026-10-11): the room's option, a dearer one, and one out of stock
     withOptions(product('cushion-a', 'cushions', 8900, 1117)),
+    // ת9: three different prints sold as the set of 3 only (no single piece)
+    triptych(product('prints-a', 'framed-art', 21900, 1200, { n: 3, unit: 6900 })),
   ],
   shipping: [
     { id: 'economy', label_he: 'חסכוני', price_agorot: 2900, free_over_agorot: 29900, days_he: '', provisional: true, is_default: true },
@@ -275,12 +302,14 @@ describe('public api', () => {
 });
 
 describe('supplier options (2026-10-11)', () => {
-  type CartBody = { subtotal_agorot: number; lines: { variant_id: string; option_he: string | null; unit_price_agorot: number }[] };
+  type CartBody = { subtotal_agorot: number; lines: { variant_id: string; name_he: string; option_he: string | null; unit_price_agorot: number }[] };
 
   it('each option is its own variant with its own price; the cart names the option; out of stock is refused', async () => {
     const id = await cartWith('cushion-a:o-black60', 2);
     const cart = (await (await req(`/api/cart/${id}`)).json()) as CartBody;
-    expect(cart.lines).toEqual([expect.objectContaining({ variant_id: 'cushion-a:o-black60', option_he: 'שחור, 60×60 ס"מ', unit_price_agorot: 11900 })]);
+    expect(cart.lines).toEqual([
+      expect.objectContaining({ variant_id: 'cushion-a:o-black60', name_he: 'ציפית כרית פשתן', option_he: 'שחור, 60×60 ס"מ', unit_price_agorot: 11900 }),
+    ]);
     expect(cart.subtotal_agorot).toBe(23800);
     const oos = await req(`/api/cart/${id}/items`, json({ variant_id: 'cushion-a:o-green50', qty: 1 }, 'PUT'));
     expect(oos.status).toBe(404);
@@ -298,7 +327,8 @@ describe('supplier options (2026-10-11)', () => {
       .bind(body.order_id)
       .first<Record<string, string | number>>();
     expect(item).toEqual({
-      name_he: 'מוצר cushion-a (שחור, 60×60 ס"מ)',
+      // ת8: the base name without a colour · the option's Hebrew labels (manager's rule), never the product's colour
+      name_he: 'ציפית כרית פשתן · שחור, 60×60 ס"מ',
       unit_price_agorot: 11900,
       unit_cost_usd_cents: 1599,
       unit_shipping_usd_cents: 1100,
@@ -366,6 +396,97 @@ describe('set or single piece (P1)', () => {
       unit_price_estimated: true,
     });
     expect(res.prices.find((p) => p.id === 'vase-a')).toMatchObject({ set_qty: null, unit_price_agorot: null });
+  });
+});
+
+describe('S11: the line, the sets and a line no longer sold (QA S6–S7 ת8, ת9, ת11)', () => {
+  type CartBody = { lines: { variant_id: string; name_he: string; option_he: string | null; pack: string }[]; subtotal_agorot: number; removed?: number };
+  const put = async (id: string, body: object) => req(`/api/cart/${id}/items`, json(body, 'PUT'));
+
+  it('ת8: the order snapshot and the invoice carry "base · labels", never the colour of the product name', async () => {
+    const id = await cartWith('cushion-a:o-beige45', 1);
+    const r = (await (await req('/api/checkout', json(checkoutBody(id)))).json()) as { order_id: string; order_token: string };
+    const view = (await (await req(`/api/orders/${r.order_id}`, { headers: { 'x-order-token': r.order_token } })).json()) as { lines: { name_he: string }[] };
+    expect(view.lines.map((l) => l.name_he)).toEqual(['ציפית כרית פשתן · בז\', 45×45 ס"מ']);
+    // the invoice reads the same snapshot (paid first: the job issues only for a paid order)
+    await env.DB.prepare("UPDATE orders SET status = 'paid' WHERE id = ?").bind(r.order_id).run();
+    const issued: { lines: { name_he: string }[] }[] = [];
+    const { processInvoiceJob } = await import('../src/lib/invoices');
+    await processInvoiceJob(env, r.order_id, { id: 'spy', issue: async (inv) => (issued.push(inv), { invoice_id: 'INV-1', url: null }) });
+    expect(issued[0]!.lines.map((l) => l.name_he)).toEqual(['ציפית כרית פשתן · בז\', 45×45 ס"מ']);
+  });
+
+  it('ת9: a triptych sells as the set only: a single print (pack unit) and another print of the set are refused with 422', async () => {
+    const id = await cartWith('prints-a:1+40x60', 1);
+    let cart = (await (await req(`/api/cart/${id}`)).json()) as CartBody;
+    expect(cart.lines).toEqual([
+      expect.objectContaining({ variant_id: 'prints-a:1+40x60', pack: 'set', name_he: 'שלישיית הדפסים גאומטריים', option_he: '40×60 ס"מ' }),
+    ]);
+    const unit = await put(id, { variant_id: 'prints-a:1+40x60', pack: 'unit', qty: 1 });
+    expect(unit.status).toBe(422);
+    expect(await unit.json()).toMatchObject({ error: 'pack_unavailable' });
+    for (const part of ['prints-a:2+40x60', 'prints-a:3+40x60'])
+      for (const pack of ['set', 'unit'] as const) {
+        const res = await put(id, { variant_id: part, pack, qty: 1 });
+        expect(res.status, `${part} ${pack}`).toBe(422);
+        expect(await res.json()).toMatchObject({ error: 'set_part' });
+      }
+    cart = (await (await req(`/api/cart/${id}`)).json()) as CartBody;
+    expect(cart.lines.map((l) => `${l.variant_id}/${l.pack}`)).toEqual(['prints-a:1+40x60/set']);
+    // and the order is the set: three pieces to the supplier
+    const r = (await (await req('/api/checkout', json(checkoutBody(id)))).json()) as { order_id: string };
+    const item = await env.DB.prepare('SELECT pack, unit_sell_qty, qty FROM order_items WHERE order_id = ?').bind(r.order_id).first();
+    expect(item).toEqual({ pack: 'set', unit_sell_qty: 3, qty: 1 });
+  });
+
+  it('ת9: a part of a set already in a cart (before the rule) is removed, never charged', async () => {
+    const id = await cartWith('prints-a:1+40x60', 1);
+    await env.DB.prepare("INSERT INTO cart_items (cart_id, variant_id, pack, qty, added_at) VALUES (?, 'prints-a:2+40x60', 'set', 1, '2026-11-01T00:00:00Z')")
+      .bind(id)
+      .run();
+    await env.DB.prepare("INSERT INTO cart_items (cart_id, variant_id, pack, qty, added_at) VALUES (?, 'prints-a:1+40x60', 'unit', 2, '2026-11-01T00:00:01Z')")
+      .bind(id)
+      .run();
+    const cart = (await (await req(`/api/cart/${id}`)).json()) as CartBody;
+    expect(cart.lines.map((l) => `${l.variant_id}/${l.pack}`)).toEqual(['prints-a:1+40x60/set']);
+    expect(cart.removed).toBe(2);
+    expect(cart.subtotal_agorot).toBe(21900);
+  });
+
+  it('ת11: a line that stops being sold leaves the cart with a notice, and is never charged', async () => {
+    const id = await cartWith('vase-a:default', 1);
+    await put(id, { variant_id: 'cushion-a:o-beige45', qty: 2 });
+    let cart = (await (await req(`/api/cart/${id}`)).json()) as CartBody;
+    expect(cart.lines).toHaveLength(2);
+    expect(cart.removed).toBeUndefined();
+    // PRE1 after the add: the cushion is no longer sold
+    await env.DB.prepare("UPDATE products SET availability = 'unavailable', availability_reason = 'nl2-above-market' WHERE id = 'cushion-a'").run();
+    cart = (await (await req(`/api/cart/${id}`)).json()) as CartBody;
+    expect(cart.lines.map((l) => l.variant_id)).toEqual(['vase-a:default']);
+    expect(cart.removed).toBe(1);
+    expect(cart.subtotal_agorot).toBe(15900);
+    // removed for good (it does not come back if the product does), and the cart keeps saying so
+    expect((await env.DB.prepare('SELECT COUNT(*) AS n FROM cart_items WHERE cart_id = ?').bind(id).first<{ n: number }>())!.n).toBe(1);
+    cart = (await (await put(id, { variant_id: 'vase-a:default', qty: 2 })).json()) as CartBody;
+    expect(cart.removed).toBe(1);
+    const r = await req('/api/checkout', json(checkoutBody(id)));
+    expect(r.status).toBe(201);
+    const order = (await r.json()) as { order_id: string };
+    const items = await env.DB.prepare('SELECT variant_id FROM order_items WHERE order_id = ?').bind(order.order_id).all();
+    expect(items.results).toEqual([{ variant_id: 'vase-a:default' }]);
+  });
+
+  it('ת11: a line that stops being sold between the cart and the payment stops the checkout (409), so the order is the one seen', async () => {
+    const id = await cartWith('vase-a:default', 1);
+    await put(id, { variant_id: 'cushion-a:o-beige45', qty: 1 });
+    await env.DB.prepare("UPDATE product_variants SET active = 0 WHERE id = 'cushion-a:o-beige45'").run();
+    const r = await req('/api/checkout', json(checkoutBody(id)));
+    expect(r.status).toBe(409);
+    expect(await r.json()).toMatchObject({ error: 'cart_changed', message_he: expect.stringContaining('פריט אחד כבר לא זמין והוסר') });
+    // the buyer sees the cart again (one line, the notice), and the next attempt is the order they saw
+    const cart = (await (await req(`/api/cart/${id}`)).json()) as CartBody;
+    expect(cart).toMatchObject({ removed: 1, lines: [expect.objectContaining({ variant_id: 'vase-a:default' })] });
+    expect((await req('/api/checkout', json(checkoutBody(id)))).status).toBe(201);
   });
 });
 

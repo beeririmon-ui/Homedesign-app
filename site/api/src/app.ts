@@ -27,6 +27,26 @@ app.get('/order/*', async (c) => {
     },
   });
 });
+/**
+ * S10 question 7 (S11): a room's address naming another house of the engine (?style=<id>) is served that house's own
+ * prerendered page (web/dist/house/<room>/<style>/, scripts/prerender.ts): it waits for the house and carries no Nordic
+ * poster, so a direct entry downloads nothing for nothing. Every other room address is the static page, as it was.
+ */
+app.get('/rooms/:room/', async (c) => {
+  if (!c.env.ASSETS) throw new HttpError(404, 'not_found');
+  const room = c.req.param('room');
+  const style = new URL(c.req.url).searchParams.get('style');
+  let res: Response | null = null;
+  if (style && /^[a-z][a-z-]{0,39}$/.test(style) && /^[a-z0-9-]{1,40}$/.test(room)) {
+    const own = await c.env.ASSETS.fetch(new Request(new URL(`/house/${room}/${style}/`, c.req.url)));
+    if (own.ok) res = own;
+  }
+  res ??= await c.env.ASSETS.fetch(c.req.raw);
+  const out = new Response(res.body, res);
+  // the page's own CSP (the static assets get theirs from _headers; a response through the Worker sets it here)
+  if ((out.headers.get('content-type') ?? '').includes('text/html')) out.headers.set('Content-Security-Policy', SITE_CSP);
+  return out;
+});
 app.all('/api/*', () => {
   throw new HttpError(404, 'not_found');
 });

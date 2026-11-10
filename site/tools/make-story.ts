@@ -33,6 +33,7 @@ import { expandOptions, type FullCatalog, type FullProduct, type PublicCatalog }
 import { availableValues, selectionOf } from '@hd/shared/picker';
 import { productSlug, publicId, slugIndex } from '@hd/shared/product-url';
 import { colorNameHe, materialsHe } from './lib/hebrew';
+import { hasLatin } from './lib/lines';
 import { GENERATED, MEDIA_OUT, repoPath, sitePath } from './lib/paths';
 import { cardOf, registerReader, rowOf, type QaFrame, type QaState } from './lib/qa-frames';
 
@@ -167,6 +168,22 @@ type PageOut = { room: string; style: string; href: string; pair: Pair; frames: 
 const read = <T>(p: string): T => JSON.parse(readFileSync(p, 'utf8')) as T;
 const DATA = 'data/story/story.json';
 const story = read<Story>(repoPath(DATA));
+// QA S6–S7 ת10: the full name a dot shows when its frame shows another option of the card (the designer's §4 rule:
+// the base name and the colour of the frame's option), keyed '<axis>:<value>' as colours_he
+const NAMES_FILE = repoPath('data/catalog/names-he.json');
+// QA S6–S7 ת12: a product not priced yet reads its card, so the designer's Hebrew labels stand in for the card's own
+const LABELS_FILE = repoPath('data/catalog/option-labels-he.json');
+const heLabels: Record<string, Record<string, Record<string, string>>> = existsSync(LABELS_FILE)
+  ? (read<{ labels?: Record<string, Record<string, Record<string, string>>> }>(LABELS_FILE).labels ?? {})
+  : {};
+/** the card's axes with the designer's Hebrew labels (the catalog's already carry them) */
+/** every option label a story page shows, for the build check of ת12 at the end */
+const storyLabels: { product: string; text: string }[] = [];
+const heAxes = <A extends { id: string; values: { id: string; label_he: string }[] }>(product: string, axes: A[]): A[] =>
+  axes.map((a) => ({ ...a, values: a.values.map((v) => ({ ...v, label_he: heLabels[product]?.[a.id]?.[v.id] ?? v.label_he })) }));
+const frameNames: Record<string, Record<string, string>> = existsSync(NAMES_FILE)
+  ? (read<{ frame_names_he?: Record<string, Record<string, string>> }>(NAMES_FILE).frame_names_he ?? {})
+  : {};
 const register = registerReader();
 // design notes §11.4 (S7): a card merged into another one's option axis; the register's rows for it are that option's
 const qaOf = (key: string): QaFrame | null => {
@@ -435,7 +452,7 @@ async function itemOf(
       available &&= sku.available;
     }
     // the colour or the style of the option names it; a size goes to the credit (a product not priced yet: the card's own labels)
-    const axes = o?.axes ?? card.options?.axes ?? [];
+    const axes = o?.axes ?? heAxes(pt.product, card.options?.axes ?? []);
     const labelOf = (axis: string) => axes.find((a) => a.id === axis)?.values.find((v) => v.id === pt.option![axis])?.label_he ?? null;
     const named = Object.keys(pt.option).find((a) => a !== 'size');
     optionHe = pt.option_label_he ?? (named ? labelOf(named) : null);
@@ -445,7 +462,10 @@ async function itemOf(
     skuImage = card.options?.skus.find((s) => Object.entries(want).every(([k, v]) => s.values[k] === v))?.image ?? null;
   } else skuImage = cardSku?.image ?? null;
   // the name: the option's own, else the product's (the designer's table), else the catalog's with the option's colour
-  const own = pt.name_he ?? story.names_he[pt.product] ?? null;
+  const framed = Object.entries(pt.option ?? {})
+    .map(([a, v]) => frameNames[pt.product]?.[`${a}:${v}`])
+    .find(Boolean);
+  const own = pt.name_he ?? framed ?? story.names_he[pt.product] ?? null;
   let name = own ?? p?.name_he ?? nameFromCard(card);
   if (!own && optionHe) name = name.includes(', ') ? `${name.slice(0, name.lastIndexOf(', '))}, ${optionHe}` : `${name} — ${optionHe}`;
   // an option that is a style (a curtain's heading) is said in the credit: the frame shows that one
@@ -744,8 +764,9 @@ async function detailOf(pg: PageOut, product: string, items: Item[]): Promise<De
       : (card.options?.axes.map((a) => ({
           id: a.id,
           name_he: (a as { name_he?: string }).name_he ?? a.id,
-          values: a.values.map((v) => ({ id: v.id, label_he: v.label_he, hex: (v as { hex?: string }).hex ?? null })),
+          values: a.values.map((v) => ({ id: v.id, label_he: heLabels[product]?.[a.id]?.[v.id] ?? v.label_he, hex: (v as { hex?: string }).hex ?? null })),
         })) ?? []);
+  for (const a of axes) for (const v of a.values) storyLabels.push({ product, text: v.label_he });
   const labelOf = (values: Record<string, string>) => axes.map((a) => a.values.find((v) => v.id === values[a.id])?.label_he ?? values[a.id]).join(', ') || null;
   const sizeOf = (values: Record<string, string>) =>
     axes.some((a) => a.id === 'size')
@@ -1488,3 +1509,12 @@ const all = pages.flatMap((p) => p.frames.flatMap((f) => f.items));
 console.log(
   `story: ${pages.length} pages (${pages.filter((p) => p.frames.length).length} with frames, ${pages.filter((p) => !p.frames.length).length} typographic); ${all.length} points, ${all.filter((x) => x.status === 'available').length} for sale, ${all.filter((x) => x.status === 'unavailable').length} not sold now, ${all.filter((x) => x.status === 'unpriced').length} without a price; ${all.filter((x) => !x.image).length} without a cached card photo`,
 );
+// QA S6–S7 ת12: no option label on a story page is in the supplier's English (a unit after a number, 3000K, aside);
+// on once the designer's labels exist
+const latin = storyLabels.filter((l) => hasLatin(l.text));
+if (latin.length && existsSync(LABELS_FILE)) {
+  console.error(
+    `make-story: ${latin.length} option labels carry Latin letters (ת12):\n${[...new Set(latin.map((l) => `  ${l.product}: ${l.text}`))].join('\n')}`,
+  );
+  process.exit(1);
+}

@@ -6,7 +6,12 @@
   min-height: 420px;
   background: var(--stage);
   color: var(--on-stage);
+  /* QA S6–S7 ת7: the stage never scrolls. `hidden` still lets the browser scroll it from code (a click or a focus that
+     brings an off-screen mark into view): the canvas and the wheel then sat 362 px off screen. `clip` forbids any
+     scroll; the pan is the engine's camera. Browsers without `clip` keep `hidden`, and a guard in RoomExperience puts
+     the scroll back to 0 */
   overflow: hidden;
+  overflow: clip;
   touch-action: pan-y;
   user-select: none;
   -webkit-user-select: none;

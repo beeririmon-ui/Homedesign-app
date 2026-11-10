@@ -4,6 +4,8 @@ import { App } from './App';
 import { headFor } from './head';
 
 export { ORIGIN } from './head';
+// S10 question 7 (S11): the houses of the room engine, for a prerendered page per house (scripts/prerender.ts)
+export { HOUSES, NORDIC } from './house';
 import { match } from './router';
 
 const esc = (s: string) => s.replace(/[&<>"]/g, (c) => `&#${c.charCodeAt(0)};`);

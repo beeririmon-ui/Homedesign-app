@@ -67,6 +67,7 @@ import { REPO, GENERATED, repoPath, sitePath } from './lib/paths';
 import { materialsHe, colorNameHe, hasHebrew } from './lib/hebrew';
 import { loadLeadRecords } from './lib/leads';
 import { cachedFreight } from './lib/freight-cache';
+import { latinLabels, lineName, lineOf, loadLineData, optionLabel, saleOf } from './lib/lines';
 import { publicId, publicVariantId, slugIndex } from '@hd/shared/product-url';
 
 const STRICT = process.argv.includes('--strict-prices');
@@ -123,6 +124,18 @@ const designerNames: Record<string, string> = {
   ...((readJson(repoPath('data/story/story.json')) as { names_he?: Record<string, string> }).names_he ?? {}),
   ...(existsSync(namesPath) ? ((readJson(namesPath) as { names_he?: Record<string, string> }).names_he ?? {}) : {}),
 };
+// S11 (QA S6–S7 ת8, ת12, ת9; the manager's sale decisions): the line's base name and the Hebrew option labels
+// (master-designer's), the sale exclusions (data/catalog/sale-exclusions.json) and the sets of distinct SKUs (story.json
+// set_axes). Each file is optional: without it the card's own label and the product's name stand (tools/lib/lines.ts)
+const LABELS_FILE = repoPath('data/catalog/option-labels-he.json');
+const lineData = loadLineData({
+  labels: LABELS_FILE,
+  names: namesPath,
+  story: repoPath('data/story/story.json'),
+  exclusions: repoPath('data/catalog/sale-exclusions.json'),
+});
+let excludedVariants = 0;
+let setParts = 0;
 const tempCoords = readJson(sitePath('tools/temp/living-room.nordic.json')) as {
   slots: Record<string, { boxes: number[][]; hotspot: [number, number]; visible?: boolean; zoom?: number[] }>;
 };
@@ -306,6 +319,8 @@ function buildOptions(
     unitLanded: number | null;
     unitNoLoss: number | null;
     days: [number, number] | null;
+    /** the product's name: the line's base when the designer has none (ת8 fallback) */
+    name: string;
   },
   econ: ProductEconomics,
 ): OptionsBuild {
@@ -313,6 +328,13 @@ function buildOptions(
   if (!dflt || dflt.price.currency !== 'USD') return null;
   const dfltCents = usdToCents(dflt.price.amount);
   const valueOf = (axis: CardOptions['axes'][number], s: CardOptions['skus'][number]) => axis.values.find((v) => v.id === s.values[axis.id])!;
+  // ת12: the designer's Hebrew label of a value, else the card's
+  const labelOf = (axis: CardOptions['axes'][number], v: CardOptions['axes'][number]['values'][number]) =>
+    optionLabel(lineData, card.id, axis.id, v.id, v.label_he);
+  // ת9: a set of distinct SKUs (a triptych) is the default SKU's value on its axis; the other values are its parts
+  const set = lineData.sets[card.id] ?? null;
+  const setValue = set ? ((dflt.values as Record<string, string>)[set.axis] ?? null) : null;
+
   const full: FullVariant[] = [];
   const rows: {
     s: CardOptions['skus'][number];
@@ -404,10 +426,20 @@ function buildOptions(
     );
     if (id.length > 160) throw new Error(`${card.id}: variant id longer than the cart accepts: ${id}`);
     const available = isDefault || s.stock === undefined || s.stock === null || s.stock > 0;
+    // the manager's decisions: an excluded value is not offered; a print of a triptych other than the set's is part of it
+    const sale = saleOf(lineData, card.id, s.values, setValue);
+    if (sale.excluded && isDefault) throw new Error(`${card.id}: the room's SKU ${s.id} is excluded from sale (data/catalog/sale-exclusions.json)`);
+    if (sale.excluded) excludedVariants++;
+    if (sale.set_part) setParts++;
+    // ת8: the line names what was bought (a set's own axis, which print, is not a choice, so it is not in the line)
+    const line = lineOf(lineData, card, s.values, p.name);
     full.push({
       id,
-      label_he: o.axes.map((a) => `${a.name_he}: ${valueOf(a, s).label_he}`).join(', '),
-      option_label_he: o.axes.map((a) => valueOf(a, s).label_he).join(', '),
+      label_he: o.axes.map((a) => `${a.name_he}: ${labelOf(a, valueOf(a, s))}`).join(', '),
+      option_label_he: line.label,
+      line_name_he: line.base,
+      set_part: sale.set_part,
+      sale_excluded: sale.excluded,
       supplier_sku: s.id,
       cost_usd_cents: cost,
       shipping_usd_cents: saleShip,
@@ -422,10 +454,12 @@ function buildOptions(
       no_loss_agorot: noLoss,
       unit_landed_agorot: unitLanded,
       unit_no_loss_agorot: unitNoLoss,
-      active: available,
+      active: available && !sale.excluded,
       in_room: isDefault,
       supplier_image_url: s.image && /^https:\/\//.test(s.image) ? s.image : null,
     });
+    // not offered: neither on the product page nor on a story page (the server refuses it too: inactive, or a set part)
+    if (sale.excluded || sale.set_part) continue;
     const days = daysOf(s.shipping_il?.days);
     rows.push({
       s,
@@ -447,7 +481,7 @@ function buildOptions(
       axes: axes.map(({ a, values }) => ({
         id: a.id,
         name_he: a.name_he,
-        values: values.map((v) => [v.id, v.label_he, v.hex ?? null] as [string, string, string | null]),
+        values: values.map((v) => [v.id, labelOf(a, v), v.hex ?? null] as [string, string, string | null]),
       })),
       v: rows.map((r) => axes.map(({ a, values }) => values.findIndex((v) => v.id === r.s.values[a.id]))),
       p: rows.map((r) => r.retail),
@@ -507,7 +541,14 @@ function buildProduct(card: ProductCard, path: string, roomId: string, slot: Slo
   const materials = materialsHe(card.materials);
   const color = colorNameHe(card.colors.dominant_hex);
   const named = designerNames[card.id];
-  const name_he = named ?? `${slot.name_he}${materials[0] ? ` ${materials[0]}` : ''}, ${color}`;
+  // ת8: the line names the default SKU by its Hebrew labels (a set's own axis aside); a product the designer has not
+  // named takes its base name and that label (the line rule), else the name composed from slot, material and colour
+  const set = lineData.sets[card.id] ?? null;
+  const dfltSku = card.options?.skus.find((k) => k.id === card.options!.default_sku) ?? null;
+  const dfltLine = lineOf(lineData, card, (dfltSku?.values ?? {}) as Record<string, string>, '');
+  const dfltLabel = dfltSku ? (dfltLine.label ?? '') : '';
+  const base = lineData.base[card.id] ?? null;
+  const name_he = named ?? (base ? lineName(base, dfltLabel) : `${slot.name_he}${materials[0] ? ` ${materials[0]}` : ''}, ${color}`);
   const d = card.dimensions_cm ?? {};
   const dims = [d.width, d.depth, d.height].filter((x): x is number => typeof x === 'number');
   const description = [
@@ -526,7 +567,8 @@ function buildProduct(card: ProductCard, path: string, roomId: string, slot: Slo
   let unitIls: number | null = null;
   let unitEstimated = false;
   let unitFloored = false;
-  if (sellQty > 1) {
+  // ת9 (SET1): a set of distinct SKUs (a triptych) has no single piece: one print is not sold on its own
+  if (sellQty > 1 && !set) {
     if (typeof econ?.unit_retail_ils === 'number' && econ.unit_retail_ils > 0) {
       unitIls = econ.unit_retail_ils;
       if (ilsToAgorot(unitIls) < unitNoLoss!)
@@ -558,6 +600,7 @@ function buildProduct(card: ProductCard, path: string, roomId: string, slot: Slo
           unitLanded,
           unitNoLoss,
           days: shippingDays(card),
+          name: name_he,
         },
         econ ?? {},
       )
@@ -566,6 +609,10 @@ function buildProduct(card: ProductCard, path: string, roomId: string, slot: Slo
     id: `${card.id}:default`,
     label_he: 'ברירת מחדל',
     option_label_he: null,
+    // one SKU sold (no options, or the others excluded): the line still names it, by the default SKU's labels
+    line_name_he: lineOf(lineData, card, (dfltSku?.values ?? {}) as Record<string, string>, name_he).line,
+    set_part: false,
+    sale_excluded: null,
     supplier_sku: card.supplier.sku ?? null,
     cost_usd_cents: cost,
     shipping_usd_cents: freight.sale_cents,
@@ -604,7 +651,7 @@ function buildProduct(card: ProductCard, path: string, roomId: string, slot: Slo
     room: roomId,
     slot: slot.id,
     name_he,
-    name_provisional: !named,
+    name_provisional: !named && !base,
     description_he: description || `${slot.name_he}.`,
     price_agorot: retail,
     compare_at_agorot: compare,
@@ -958,3 +1005,16 @@ console.log(
     `  draft cards (DS API, colors and visual_weight unfilled; for the sourcing-agent, not shown): ${draftCards.length}${draftCards.length ? ' · ' + draftCards.map((c) => c.path).join('; ') : ''}`,
   ].join('\n'),
 );
+
+// S11, QA S6–S7 ת12: no public label is in the supplier's English. Once the designer's labels exist, a label (an option,
+// an axis, a line) with Latin letters fails the build; a unit after a number (3000K) is the one exception
+const latin = latinLabels(publicCatalog, fullCatalog);
+console.log(
+  `  lines (ת8): base names ${Object.keys(lineData.base).length}, Hebrew labels ${lineData.labels ? Object.keys(lineData.labels).length : 0} cards; not offered (sale-exclusions): ${excludedVariants} variants; parts of a set (not sold alone): ${setParts} variants; Latin in public labels: ${latin.length}`,
+);
+if (latin.length && existsSync(LABELS_FILE)) {
+  console.error(
+    `build-catalog: ${latin.length} public labels carry Latin letters (ת12):\n${latin.map((x) => `  ${x.product} · ${x.where}: ${x.text}`).join('\n')}`,
+  );
+  process.exit(1);
+}
