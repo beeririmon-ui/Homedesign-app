@@ -254,6 +254,8 @@ const scene = {
   aspect: W / H,
   mobile_center_u: m.mobile_center_u,
   widths: WIDTHS,
+  // QA on the layers (2026-11-10, finding 1): composed at the files' own width, resampled once on display
+  native: W,
   formats: ['avif', 'webp'],
   base: [{ id: 'shell', z: 0, blend: 'normal', src: `${REL}/base/shell`, widths: BASE_WIDTHS, temporary: false }],
   slots: {

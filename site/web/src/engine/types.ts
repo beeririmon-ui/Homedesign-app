@@ -14,6 +14,11 @@ export type Scene = {
   aspect: number;
   mobile_center_u: number;
   widths: { lo: number; hi: number };
+  /**
+   * S10 (QA on the warm-modern layers, finding 1): compose at this width, the layers' own, on every screen, and resample
+   * the composed room once on display; a layer resized on its own before the blend pulls the base into its soft edge
+   */
+  native?: number;
   formats: ('avif' | 'webp')[];
   base: { id: string; z: number; blend: Blend; src: string; widths: number[]; temporary: boolean }[];
   slots: Record<

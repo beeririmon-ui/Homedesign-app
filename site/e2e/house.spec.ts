@@ -58,6 +58,10 @@ async function engineReady(page: Page) {
 
 test.describe('the warm-modern house in the room engine (S10)', () => {
   test('entering at its address: its own picture, the status label, one slot with a mark, B the default', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.setViewportSize({ width: 400, height: 800 });
+    const asked: string[] = [];
+    page.on('request', (r) => void (r.url().includes('/media/house/') && asked.push(r.url())));
     await houseReady(page);
     await expect(page.locator('.stage-status')).toHaveText(LABEL);
     await expect(page.locator('#room-title')).toContainText('מודרני חם');
@@ -71,6 +75,13 @@ test.describe('the warm-modern house in the room engine (S10)', () => {
     expect(await page.evaluate(() => (window as unknown as { __hdEngine?: { getSelection(): Record<string, number> } }).__hdEngine?.getSelection())).toEqual({
       [SLOT.id]: 1,
     });
+    // QA on the layers (finding 1): composed at the files' own width, on a phone too, from its own files (one resample)
+    for (const f of ['base/shell.2720.', `slots/${SLOT.id}/1.product.2720.webp`, `slots/${SLOT.id}/1.shadow.2720.webp`])
+      expect(
+        asked.some((u) => u.includes(f)),
+        f,
+      ).toBe(true);
+    expect(asked.filter((u) => /\.(product|shadow)\.1920\.webp/.test(u))).toEqual([]);
     await audit(page, 'the warm-modern house at rest');
   });
 

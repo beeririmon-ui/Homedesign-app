@@ -42,3 +42,23 @@ This continues the interface track, `briefs/site-interface-track-2026-11-07.md`,
 - No commits, no var2, no keys, no network beyond npm.
 - If your context runs low, stop where the checks are green and write a "where I stopped" section.
 - Return a short Hebrew summary.
+
+## Addendum, 2026-11-10: the names data is ready
+master-designer's files are ready: `docs/proposals/names-labels-he-2026-11-10.md`. The manager checked them with a parser: they're valid, every key exists in the cards, and no label has Latin letters apart from "3000K".
+- **The data:**
+  - **`data/catalog/option-labels-he.json`:** `labels[card_id][axis id][value id]`, 629 labels across 69 cards. These are the same keys the SKU carries.
+  - **`data/catalog/names-he.json`:**
+    - **`base_name_he`:** a new top-level map, 65 names.
+    - **`frame_names_he`:** the corduroy name.
+    - **`t10`:** the location of the dot.
+- **The line rule:** base name · the option labels in the order of the axes in the card.
+- **14 products with a name the build composes itself:** compose it from the base name plus the default option's label.
+- **ת10, two parts:**
+  - remove `name_he` from the dot (points[5] of frame A in the warm-modern pair);
+  - in that frame's `alt_he`, replace "בטאופ" with "בקאמל".
+- **The white bouclé:** "לבן חם" everywhere, including the dot in warm modern and the set A label.
+- **Manager's decisions, about what's sold:**
+  - **The floor lamp with the walnut pole:** the two smart variants work only with a Chinese voice assistant, so they're not sold. The table variant is another product, so it's not sold either. Only the regular floor-lamp variant is sold.
+  - **CJ's travertine lamp and the black bowl:** only identified variants are sold. Unidentified variants, the ones labelled "דגם א׳…ר׳", aren't offered until sourcing describes them.
+  - **The Mediterranean print:** every SKU is a single print, but the product is shown as a triptych. Give it a set mechanism like the Nordic triptych, inside ת9: it isn't sold as a single print.
+  - **Implementation:** these come from data (an exclusion list or a flag in the selection, your choice). They're checked in vitest, and nothing is hard-coded in components.

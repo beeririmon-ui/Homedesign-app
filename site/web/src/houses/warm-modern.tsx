@@ -78,6 +78,16 @@ function SetPanel({ set }: { set: HouseSet }) {
           </li>
         ))}
       </ul>
+      {forSale.length < rows.length ? (
+        <p class="specs set-note">
+          {rows.length - forSale.length === 1 ? 'פריט אחד בסט אינו במלאי כעת' : `${rows.length - forSale.length} פריטים בסט אינם במלאי כעת`}:{' '}
+          {rows
+            .filter((r) => !r.sellable)
+            .map((r) => r.piece.name_he)
+            .join(', ')}
+          . לסל נכנס רק מה שבמלאי.
+        </p>
+      ) : null}
       {forSale.length ? (
         <button type="button" class="btn btn-ghost set-all" id="add-set" disabled={cartBusy.value} onClick={() => void add(forSale)}>
           {forSale.length === rows.length ? 'הסט כולו לסל' : `${forSale.length} הפריטים שבמלאי לסל`} · <span class="num">{formatIls(total)}</span>

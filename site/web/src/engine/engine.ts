@@ -97,6 +97,7 @@ export class RoomEngine {
     // phones: compose at the lo width (half the pixels to blend; the shell texture stays the poster's)
     if (this.vp.w <= 900) this.compWidth = Math.min(this.compWidth, this.o.scene.widths.lo);
     this.res = this.compWidth > this.o.scene.widths.lo ? 'hi' : 'lo';
+    this.atNative();
 
     const layers = buildLayers(this.o.room, this.o.scene, this.selection);
     // the depth map (a few KB) comes with the first composition: the arrival dolly needs it from its first frame
@@ -112,6 +113,15 @@ export class RoomEngine {
     // after the room is shown: every other variant in the background
     for (const slot of this.o.room.slots)
       for (const src of slotSources(this.o.scene, slot.id)) void this.ensure(src, this.srcUrl(src), 1).catch(() => undefined);
+  }
+
+  /** a scene with a native width composes there, from its own files (the poster is not adopted), and only there */
+  private atNative(): void {
+    const n = this.o.scene.native;
+    if (!n) return;
+    this.compWidth = n;
+    this.res = 'hi';
+    this.shellUrl = '';
   }
 
   private async ensure(key: string, url: string, priority: number): Promise<void> {
@@ -169,6 +179,7 @@ export class RoomEngine {
     this.compWidth = widths.find((w) => w >= this.compWidth) ?? widths[widths.length - 1]!;
     if (this.vp.w <= 900) this.compWidth = Math.min(this.compWidth, scene.widths.lo);
     this.res = this.compWidth > scene.widths.lo ? 'hi' : 'lo';
+    this.atNative();
     if (!scene.formats.includes(this.ext)) this.ext = 'webp';
     void this.loader
       .load(mediaUrl(scene.depth.src, undefined, 'webp'), 0)

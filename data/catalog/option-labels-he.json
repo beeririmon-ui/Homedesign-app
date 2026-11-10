@@ -1,0 +1,1052 @@
+{
+  "version": "1.0",
+  "date": "2026-11-10",
+  "source": "master-designer, for QA ת8/ת10/ת12 (qa/reports/2026-11-10-site-track-qa-s6-s7.md). Hebrew colour words from story.json colours_he and the design notes §7/§9/§11/§13 (docs/proposals/story-page-design-notes-2026-11-07.md); the rest per the studio's palette language. Summary: docs/proposals/names-labels-he-2026-11-10.md",
+  "keys": "labels[card_id][axis id][value id]: the card's options.axes[].id and options.axes[].values[].id, i.e. the same keys a SKU's `values` carries (build-catalog.ts: valueOf(a, s) = a.values.find(v => v.id === s.values[a.id])). The Hebrew replaces that value's label_he.",
+  "rule": "a cart / checkout / order / invoice line = base_name_he (data/catalog/names-he.json) + ' · ' + the option labels in the card's axis order, joined with ', ' (the build's option_label_he). Example: 'ציפית כרית כותנה רחוצה עם שוליים פרומים · 50×50 ס\"מ, לבן'. Where story.json option_names_he names an option (lumbar 30x50, pillow with or without insert), that name is the base for that option's line.",
+  "conventions": {
+    "copied": "a label that was already correct Hebrew is copied verbatim, including its quote marks (ס\"מ or ס״מ as in the card)",
+    "sizes": "centimetres with ×; inches and millimetres converted to cm",
+    "codes": "supplier letter codes become Hebrew letters in order (A=א׳ … I=ט׳, J=י׳, K=כ׳, L=ל׳, M=מ׳, N=נ׳, O=ס׳, P=ע׳, Q=פ׳, R=צ׳, S=ק׳, T=ר׳); plain index numbers stay digits ('הדפס 2', 'דגם 7'); supplier model numbers (TL2356, 2345, 2437, 2443) and brand names are dropped",
+    "units": "3000K / 4000K / 6000K kept as a neutral light unit, like ס\"מ"
+  },
+  "scope": {
+    "sold": "the 51 products of the last build (site/.generated/catalog.full.json + catalog.story.full.json, the D1 seed): 44 of them have options",
+    "story_pending": "13 products the story frames show that were hidden at the last build (no price, or a draft card) and have options: labelled now so they need no second pass",
+    "test_page": "12 dining-room products of the test page (catalog.test-page, not sold) that have options",
+    "no_options": "wall-decor-cj-macrame-dowel-50x70, wall-decor-zendrop-macrame-diamond-dowel-small, wall-sconce-cj-black-swing-arm-fabric, magazine-holder-cj-arch-iron-cane, table-runner-zendrop-ben-white-linen-look-33x183, pendant-cj-tiered-fabric-drum, bowl-cj-glutinous-white-belly-bowl-21, wall-sconce-aliexpress-rattan-bamboo-wall-lamp-671943 and the test page's condiment sets, cream cup, canisters and tea towel: no labels, the line is the base name",
+    "counts": {
+      "cards": 69,
+      "values": 629,
+      "copied_hebrew": 306,
+      "corrected_hebrew": 38,
+      "translated_from_english_or_code": 285,
+      "sold_only": { "cards": 44, "values": 418, "copied_hebrew": 211, "corrected_hebrew": 35, "translated_from_english_or_code": 172 }
+    }
+  },
+  "uncertain": [
+    { "card_id": "curtains-cj-japanese-linen-half-shade", "option": "size", "values": ["100x200-4hook", "200x260-4-hook", "250x260-4-hook"], "label": "…, ווים", "why": "'4 Hook' read as a hook heading (4-prong pleat hooks), like 'Hook' on the other curtain; 'Punch' as grommets (טבעות), 'Wear Rod' as a rod pocket (מנהרה למוט). Confirm with the SKU photo" },
+    { "card_id": "accent-sconces-aliexpress-indoor-stone-wall-lamp", "option": "length, other", "values": ["16", "23", "28", "32", "3000k", "4000k", "6000k"], "label": "גובה … ס\"מ / אור לבן חם 3000K …", "why": "the supplier's own property names are swapped (its 'Lampshade Color' is the height, its 'Size' S/M/L is the light colour); the labels follow the card's reading" },
+    { "card_id": "accent-sconces-cj-ribbed-travertine-half-cylinder-wood-bracket", "option": "other", "values": ["type-a", "type-c", "type-d", "e-style", "type-f", "g-style", "h-style", "i-style-small-size", "i-style-large", "j-type", "k-style", "l-style", "m-style", "n-style", "o-style", "p-style", "q-style", "r-style", "s-style", "t-style", "wall-lamp"], "label": "דגם א׳ … דגם ר׳, דגם בסיסי", "why": "only Type B (the room's: ribbed half-cylinder on a wood arm) is known; 20 shapes not seen, so they carry a Hebrew letter only; 'Wall Lamp' as an option is unexplained ('דגם בסיסי' is a guess). Recommendation: sourcing names each shape from its SKU photo, or the shop sells only Type B" },
+    { "card_id": "wall-sconce-cj-travertine-dome-15-alt", "option": "style", "values": ["15cm"], "label": "קוטר 15 ס\"מ, בלי מתג משיכה", "why": "read as 'without' because the other option is 'With Pull Switch'" },
+    { "card_id": "floor-lamp-cj-black-drum-linen", "option": "style", "values": ["triangle"], "label": "בסיס משולש", "why": "probably a tripod base; not seen" },
+    { "card_id": "rug-cj-braided-wool-natural", "option": "other", "values": ["around-tassel-style"], "label": "עם פרנזים מסביב", "why": "next to 'Round Tassel Style' and 'Square Tassel Style', read as fringe on all sides; not seen" },
+    { "card_id": "planter-cj-seagrass-belly", "option": "color, other", "values": ["yellow", "original", "a", "b", "c", "d"], "label": "דבש / טבעי / מידה א׳–ד׳", "why": "the 'Yellow' SKU photo (assets/renders/house-nordic-2026-10-25/refs/cf-cjdropshipping-com-1614673413923-jpg.jpg) is natural golden seagrass, not dyed yellow, hence 'דבש'; the 'original' photo was not seen. A–D are sizes without dimensions in the card (cheaper than 35×37): sourcing should add them in cm" },
+    { "card_id": "basket-cj-seagrass-belly", "option": "color, other", "values": ["yellow", "original", "a", "b", "c", "d"], "label": "דבש / טבעי / מידה א׳–ד׳", "why": "the same SKUs as planter-cj-seagrass-belly; same reading" },
+    { "card_id": "sofa-cover-cj-cotton-muslin-fringe", "option": "other", "values": ["cardamom", "black-diamond"], "label": "ירוק הל / פחם", "why": "§7 left both without a word (not seen); best guess from the names" },
+    { "card_id": "cushions-cj-boucle-teddy", "option": "color", "values": ["white-1"], "label": "לבן שבור", "why": "the card says the difference from 'White' is not explained and both photos read off-white" },
+    { "card_id": "cushions-cj-knitted-chenille-bean-green", "option": "color", "values": ["212-fruit-green", "17-water-blue"], "label": "ירוק תפוח / כחול מים", "why": "not seen; the card's hex for 212 is the generic green" },
+    { "card_id": "basket-cj-jute-rope-cylinder", "option": "other", "values": ["small", "medium", "large", "yellow-3-pieces"], "label": "טבעי, …", "why": "the sizes without a colour and 'Yellow 3 pieces' read as the natural jute next to the 'White' ones" },
+    { "card_id": "basket-cj-cotton-rope-white", "option": "other", "values": ["mat", "s-and-l"], "label": "תחתית קלועה / זוג: קטן וגדול", "why": "'Mat' as an option of a basket is read as a woven mat; not seen" },
+    { "card_id": "magazine-holder-cj-felt-snap-bucket", "option": "color", "values": ["black", "light-gray"], "label": "פחם / אפור בהיר", "why": "next to 'Without Lining' / 'Unlined', the plain ones are assumed lined" },
+    { "card_id": "bowl-cj-speckled-ivory-wide-bowl-21", "option": "other", "values": ["large-natural-color", "small-size-natural-color", "small-white"], "label": "טבעי, … / שנהב, קטן", "why": "'Natural Color' not seen. 'White' is one glaze in two sizes, so both are 'שנהב' (the story's word for the default); story.json colours_he still gives small-white 'לבן': align it" },
+    { "card_id": "bowl-cj-reactive-white-rimmed-plate-21", "option": "other", "values": ["set"], "label": "סט", "why": "what the 'Set' option holds is not in the card" },
+    { "card_id": "floor-lamp-cj-pleated-walnut-stem-158", "option": "other", "values": ["3-colortable-lamp", "floor-lamp-tmall-genie", "floor-lamp-xiaoai"], "label": "גרסת שולחן … / גרסה חכמה לעוזר קולי סיני א׳/ב׳", "why": "the two smart versions work with Chinese voice assistants (brand names dropped) and are useless in Israel: recommend not selling them. The table-lamp version is another product under a floor-lamp name: recommend not selling it here either" },
+    { "card_id": "sill-vase-cj-cream-fluted-column-25", "option": "other", "values": ["qiqing-style", "evening-snow-arrives", "wanshi-style"], "label": "עמוד מחורץ על רגל / דגם ב׳ / דגם ג׳", "why": "three shapes (column 24.7, bud vase 20, fluted bulb 20); the card says which name is which shape is not stated: sourcing confirms from the SKU photos" },
+    { "card_id": "cushions-cj-washed-cotton-frayed", "option": "other", "values": ["rice-soup-jiao-fringe"], "label": "לבן שמנת", "why": "§7 left it without a word; 'rice soup' read as a creamy off-white" },
+    { "card_id": "cushions-cj-sandstone-chenille-flange", "option": "other", "values": ["mimosa", "senman", "athena"], "label": "הדפס פרחי מימוזה / הדפס יער / הדפס בוטני", "why": "the card says these are botanical prints; the motif names are guesses" },
+    { "card_id": "basket-cj-seagrass-belly-xl", "option": "other", "values": ["default"], "label": "רגיל", "why": "a size called 'Default' next to S, M, L, XL: copied, size unknown" },
+    { "card_id": "cushions-cj-corduroy-patchwork", "option": "color", "values": ["tender-yellow", "christmas-red", "christmas-green", "reindeer-brown", "middle-coffee-color"], "label": "צהוב רך / אדום עמוק / ירוק אשוח / חום / קפה", "why": "fancy supplier names rendered by meaning; not seen" },
+    { "card_id": "cushions-cj-linen-look-ivory", "option": "color", "values": ["glacier-gray", "elegant-gray", "yashi-gray", "fumigating-purple", "agate-red", "red-golden", "xanthium-brown", "gentleman-coffee"], "label": "אפור קרחון / אפור חם / אפור עדין / סגול מעושן / אדום עמוק / אדום זהוב / חום / קפה", "why": "three greys and several reds whose difference was not seen; the names keep them apart, they are not verified" },
+    { "card_id": "accent-sconces-cj-travertine-block-updown-8x16", "option": "style", "values": ["type-a"], "label": "דגם א׳", "why": "only Type B (block 8×16, up and down light) is known" },
+    { "card_id": "bowl-cj-matte-black-bowl-20", "option": "other", "values": ["2style", "3style", "4style", "5style", "6style", "7style", "8style", "9style", "10style", "11style", "13style", "14style"], "label": "דגם 2 … דגם 14", "why": "only 12style (black matte, 20 cm) is known; the card says the others are white and grey bowls of 4.5–8 inch. Recommendation: sourcing names them, or the shop sells only 12style" },
+    { "card_id": "framed-art-aliexpress-mediterranean-wabi-sabi-poster-802890", "option": "color", "values": ["01", "02", "03", "04", "05", "06", "07", "08"], "label": "הדפס 1 … הדפס 8", "why": "each SKU is one print, but the product is named and shown as a triptych: it needs set_axes like the Nordic triptych (manager / frontend-dev), or a single-print name" },
+    { "card_id": "framed-art-aliexpress-frameless-minimalist-wall-art-631735", "option": "color", "values": ["tl2356-1", "tl2356-2", "tl2356-3"], "label": "הדפס 1 בודד …", "why": "single prints of the set; the model number TL2356 is dropped" },
+    { "card_id": "wall-decor-aliexpress-natural-raffia-woven-bohemian-763597", "option": "color", "values": ["1", "3"], "label": "דגם 1 / דגם 3", "why": "only 2 (the room's, natural) is known" },
+    { "card_id": "table-runner-aliexpress-boho-macrame-table-runners-263532", "option": "color", "values": ["a-1", "a-2", "a-3", "a-5", "a-6", "b-1", "b-2", "b-3", "b-4", "c-1", "c-2", "c-3", "d-1", "d-2", "e-1", "e-2", "f-1", "f-2", "f-3", "f-4", "f-5", "g"], "label": "דגם א-1 …", "why": "supplier pattern codes; only A-4 (the room's) was seen" },
+    { "card_id": "curtains-aliexpress-linen-blend-s-fold-180502", "option": "size", "values": [], "label": "the 25 sizes are copied as they are", "why": "the supplier's sizes are one panel ('1PC') while the name says 'זוג': check that the studio sells it as two (sell_qty 2)" },
+    { "card_id": "centerpiece-vase-cj-sandy-white-bead-band-25", "option": "other", "values": ["2345-white", "2345-black", "2443-white", "2443-black", "twist-large-size", "twist-small-size"], "label": "דגם א׳ / דגם ב׳ / מפותל", "why": "test page only. Shapes 2345 and 2443 and the twist's colour not seen; model numbers dropped" },
+    { "card_id": "bench-pad-cj-tufted-long-cushion-khaki-120", "option": "color", "values": ["hawaiian-style", "flower-of-tomorrow"], "label": "הדפס טרופי / הדפס פרחים", "why": "test page only; prints not seen" },
+    { "card_id": "mug-set-cj-oat-speckled-round-mug-wood-saucer", "option": "color", "values": ["cup-and-plate-spoon"], "label": "ספל, תחתית עץ וכפית", "why": "test page only; 'plate' read as the wood saucer" }
+  ],
+  "labels": {
+    "curtains-cj-japanese-linen-half-shade": {
+      "color": {
+        "brown": "חום",
+        "dark-gray": "אפור כהה",
+        "light-beige": "בז' בהיר",
+        "light-gray": "אפור בהיר",
+        "linen": "טבעי",
+        "red": "אדום"
+      },
+      "size": {
+        "100x200-4hook": "100×200 ס\"מ, ווים",
+        "100x200-punch": "100×200 ס\"מ, טבעות",
+        "100x200-wear-rod": "100×200 ס\"מ, מנהרה למוט",
+        "150x260-wear-rod": "150×260 ס\"מ, מנהרה למוט",
+        "200x240-punch": "200×240 ס\"מ, טבעות",
+        "200x240-wear-rod": "200×240 ס\"מ, מנהרה למוט",
+        "200x260-4-hook": "200×260 ס\"מ, ווים",
+        "200x260-punch": "200×260 ס\"מ, טבעות",
+        "200x260-wear-rod": "200×260 ס\"מ, מנהרה למוט",
+        "250x260-4-hook": "250×260 ס\"מ, ווים",
+        "250x260-punch": "250×260 ס\"מ, טבעות",
+        "250x260-wear-rod": "250×260 ס\"מ, מנהרה למוט"
+      }
+    },
+    "framed-art-cj-morandi-triptych-sage": {
+      "style": {
+        "a": "דגם א׳",
+        "b": "דגם ב׳",
+        "c": "דגם ג׳",
+        "d": "דגם ד׳, מרווה ובז'",
+        "e": "דגם ה׳"
+      },
+      "size": {
+        "40x60": "40×60 ס\"מ",
+        "50x70": "50×70 ס\"מ",
+        "60x80": "60×80 ס\"מ",
+        "70x90": "70×90 ס\"מ"
+      }
+    },
+    "accent-sconces-aliexpress-indoor-stone-wall-lamp": {
+      "length": {
+        "16": "גובה 16 ס\"מ",
+        "23": "גובה 23 ס\"מ",
+        "28": "גובה 28 ס\"מ",
+        "32": "גובה 32 ס\"מ"
+      },
+      "other": {
+        "3000k": "אור לבן חם 3000K",
+        "4000k": "אור לבן ניטרלי 4000K",
+        "6000k": "אור לבן קר 6000K"
+      }
+    },
+    "accent-sconces-cj-ribbed-travertine-half-cylinder-wood-bracket": {
+      "other": {
+        "type-a": "דגם א׳",
+        "type-b": "דגם ב׳, חצי גליל מחורץ על זרוע עץ",
+        "type-c": "דגם ג׳",
+        "type-d": "דגם ד׳",
+        "e-style": "דגם ה׳",
+        "type-f": "דגם ו׳",
+        "g-style": "דגם ז׳",
+        "h-style": "דגם ח׳",
+        "j-type": "דגם י׳",
+        "k-style": "דגם כ׳",
+        "l-style": "דגם ל׳",
+        "m-style": "דגם מ׳",
+        "n-style": "דגם נ׳",
+        "o-style": "דגם ס׳",
+        "p-style": "דגם ע׳",
+        "q-style": "דגם פ׳",
+        "r-style": "דגם צ׳",
+        "s-style": "דגם ק׳",
+        "t-style": "דגם ר׳",
+        "i-style-small-size": "דגם ט׳, קטן",
+        "i-style-large": "דגם ט׳, גדול",
+        "wall-lamp": "דגם בסיסי"
+      }
+    },
+    "wall-sconce-cj-travertine-dome-15-alt": {
+      "style": {
+        "15cm": "קוטר 15 ס\"מ, בלי מתג משיכה",
+        "15cm-with-pull-switch": "קוטר 15 ס\"מ, עם מתג משיכה"
+      },
+      "other": {
+        "warm-light": "אור חם",
+        "neutral-light": "אור ניטרלי",
+        "white-light": "אור לבן"
+      }
+    },
+    "wall-sconce-cj-travertine-dome-15-pull": {
+      "style": {
+        "15cm-without-pull-switch": "קוטר 15 ס\"מ, בלי מתג משיכה",
+        "15cm-with-pull-switch": "קוטר 15 ס\"מ, עם מתג משיכה"
+      },
+      "other": {
+        "light-source-not-included": "בלי נורה",
+        "tricolor-light": "אור בשלושה גוונים",
+        "full-spectrum-tricolor-light": "אור ספקטרום מלא בשלושה גוונים"
+      }
+    },
+    "vase-cj-textured-white-stoneware": {
+      "size": {
+        "small": "קטן",
+        "medium": "בינוני",
+        "large": "גדול"
+      }
+    },
+    "vase-cj-coarse-sand-white-tall": {
+      "color": {
+        "tall-style": "דגם גבוה",
+        "short-style": "דגם נמוך"
+      }
+    },
+    "vase-cj-white-plum-hand-thrown": {
+      "size": {
+        "s": "קטן",
+        "m": "בינוני",
+        "l": "גדול"
+      }
+    },
+    "rug-cj-braided-wool-natural": {
+      "size": {
+        "90x150": "90×150 ס\"מ",
+        "100": "קוטר 100 ס\"מ",
+        "120": "קוטר 120 ס\"מ",
+        "120x180": "120×180 ס\"מ",
+        "150": "קוטר 150 ס\"מ",
+        "150x200": "150×200 ס\"מ",
+        "160x230": "160×230 ס\"מ",
+        "180": "קוטר 180 ס\"מ",
+        "200": "קוטר 200 ס\"מ",
+        "200x300": "200×300 ס\"מ",
+        "230x330": "230×330 ס\"מ",
+        "240": "קוטר 240 ס\"מ"
+      },
+      "other": {
+        "around-tassel-style": "עם פרנזים מסביב",
+        "square-tassel-style": "מרובע, עם פרנזים",
+        "square": "מרובע",
+        "round-tassel-style": "עגול, עם פרנזים",
+        "round": "עגול"
+      }
+    },
+    "floor-lamp-cj-black-drum-linen": {
+      "style": {
+        "triangle": "בסיס משולש",
+        "black": "שחור",
+        "black-gold": "שחור-זהב"
+      },
+      "other": {
+        "white-light": "אור לבן",
+        "warm-light": "אור חם",
+        "3color-lamp": "אור בשלושה גוונים",
+        "3color-remote-control": "אור בשלושה גוונים, עם שלט"
+      }
+    },
+    "planter-cj-seagrass-belly": {
+      "color": {
+        "original": "טבעי",
+        "yellow": "דבש"
+      },
+      "other": {
+        "a": "מידה א׳",
+        "b": "מידה ב׳",
+        "c": "מידה ג׳",
+        "d": "מידה ד׳",
+        "35x37-cm": "35×37 ס\"מ"
+      }
+    },
+    "planter-zendrop-seagrass-belly-38x34": {
+      "size": {
+        "d20-h20": "קוטר 20, גובה 20",
+        "d22-h20": "קוטר 22, גובה 20",
+        "d27-h24": "קוטר 27, גובה 24",
+        "d32-h28": "קוטר 32, גובה 28",
+        "d36-h32": "קוטר 36, גובה 32",
+        "d38-h34": "קוטר 38, גובה 34",
+        "d45-h36": "קוטר 45, גובה 36"
+      }
+    },
+    "planter-cj-cement-ribbed-belly": {
+      "color": {
+        "grey": "אפור",
+        "red": "אדום",
+        "beige": "בז'"
+      },
+      "size": {
+        "small": "קטן",
+        "medium": "בינוני",
+        "large": "גדול"
+      }
+    },
+    "sofa-cover-cj-cotton-muslin-fringe": {
+      "size": {
+        "80x130": "80×130 ס\"מ",
+        "100x150": "100×150 ס\"מ",
+        "130x170": "130×170 ס\"מ",
+        "150x200": "150×200 ס\"מ"
+      },
+      "other": {
+        "curry": "קארי",
+        "cardamom": "ירוק הל",
+        "black-diamond": "פחם",
+        "pecan": "פקאן",
+        "clay": "חימר",
+        "green": "ירוק",
+        "white": "לבן שנהב",
+        "pink": "ורוד",
+        "dark-chestnut-brown": "חום ערמון",
+        "flax-brown": "חום פשתן"
+      }
+    },
+    "sofa-cover-cj-washed-hemp-throw": {
+      "size": {
+        "100x150": "100×150 ס\"מ",
+        "150x200": "150×200 ס\"מ",
+        "200x230": "200×230 ס\"מ"
+      },
+      "other": {
+        "mustard-yellow": "צהוב חרדל",
+        "olive-green": "ירוק זית",
+        "pure-black": "שחור",
+        "raw-jute-color": "חום יוטה",
+        "tea-green": "ירוק תה",
+        "white": "לבן",
+        "caramel": "קרמל",
+        "dark-german-gray": "אפור כהה",
+        "purple-gray": "סגול אפור"
+      }
+    },
+    "sofa-cover-cj-linen-feel-chenille-slipcover": {
+      "color": {
+        "beige": "בז'",
+        "light-gray": "אפור בהיר",
+        "dark-gray": "אפור כהה",
+        "green": "ירוק",
+        "orange": "כתום"
+      },
+      "style": {
+        "single-seat": "מושב אחד",
+        "double-seat": "שני מושבים",
+        "three-seat": "שלושה מושבים",
+        "four-seat": "ארבעה מושבים",
+        "five-seat": "חמישה מושבים"
+      }
+    },
+    "cushions-cj-boucle-teddy": {
+      "color": {
+        "white": "לבן חם",
+        "gray": "אפור",
+        "wine-red": "אדום יין",
+        "orange": "כתום",
+        "dark-green": "ירוק כהה",
+        "moss-green": "ירוק טחב",
+        "white-1": "לבן שבור",
+        "khaki": "חאקי",
+        "milk-tea-color": "תה חלב",
+        "light-gray": "אפור בהיר",
+        "light-brown": "חום בהיר"
+      },
+      "size": {
+        "30x50": "30×50 ס\"מ",
+        "45x45": "45×45 ס\"מ",
+        "50x50": "50×50 ס\"מ"
+      }
+    },
+    "cushions-cj-knitted-chenille-bean-green": {
+      "color": {
+        "19-grayish-white": "לבן אפרפר",
+        "1-beige": "בז'",
+        "21-camel-color": "טאופ",
+        "22-gray": "אפור",
+        "6-brown": "חום",
+        "7-earthy-yellow": "צהוב אדמה",
+        "8-wine-red": "אדום יין",
+        "9-coral-red": "אדום אלמוג",
+        "1-bean-green": "מרווה",
+        "11-white": "לבן",
+        "13-forest-green": "ירוק יער",
+        "14-green": "ירוק",
+        "15-light-gray": "אפור בהיר",
+        "16-gray-blue": "כחול אפרפר",
+        "17-water-blue": "כחול מים",
+        "18-navy-blue": "כחול נייבי",
+        "24-black": "שחור",
+        "142-bright-red": "אדום עז",
+        "132-tangerine-orange": "כתום מנדרינה",
+        "212-fruit-green": "ירוק תפוח"
+      }
+    },
+    "cushions-aliexpress-textured-boucle-throw-pillow": {
+      "size": {
+        "30x50": "30×50 ס״מ (מותן)",
+        "45x45": "45×45 ס״מ",
+        "50x50": "50×50 ס״מ",
+        "60x60": "60×60 ס״מ"
+      },
+      "color": {
+        "beige": "שמנת",
+        "white": "לבן שנהב",
+        "oatmeal": "טאופ",
+        "light_gray": "אפור בהיר",
+        "grey_green": "ירוק אפור כהה",
+        "green": "ירוק יער",
+        "charcoal": "פחם",
+        "black": "שחור",
+        "dark_brown": "חום כהה",
+        "light_camel": "קאמל בהיר",
+        "orange_rust": "חלודה",
+        "brick_red": "אדום לבנים"
+      }
+    },
+    "basket-cj-jute-rope-cylinder": {
+      "other": {
+        "small": "טבעי, קטן",
+        "medium": "טבעי, בינוני",
+        "large": "טבעי, גדול",
+        "white-small": "לבן, קטן",
+        "white-medium": "לבן, בינוני",
+        "white-large": "לבן, גדול",
+        "white-3-pieces": "לבן, סט של 3 מידות",
+        "yellow-3-pieces": "טבעי, סט של 3 מידות"
+      }
+    },
+    "basket-cj-cotton-rope-white": {
+      "color": {
+        "white": "לבן",
+        "pink": "ורוד",
+        "yellow": "צהוב"
+      },
+      "other": {
+        "l": "גדול",
+        "s": "קטן",
+        "mat": "תחתית קלועה",
+        "s-and-l": "זוג: קטן וגדול"
+      }
+    },
+    "basket-cj-seagrass-belly": {
+      "color": {
+        "original": "טבעי",
+        "yellow": "דבש"
+      },
+      "other": {
+        "a": "מידה א׳",
+        "b": "מידה ב׳",
+        "c": "מידה ג׳",
+        "d": "מידה ד׳",
+        "35x37-cm": "35×37 ס\"מ"
+      }
+    },
+    "magazine-holder-cj-felt-log-basket": {
+      "color": {
+        "light-gray": "אפור בהיר",
+        "dark-gray": "אפור כהה"
+      }
+    },
+    "magazine-holder-cj-felt-snap-bucket": {
+      "color": {
+        "black-without-lining": "פחם, בלי בטנה",
+        "black": "פחם",
+        "light-gray-unlined": "אפור בהיר, בלי בטנה",
+        "light-gray": "אפור בהיר"
+      },
+      "size": {
+        "24x32-small": "24×32 ס\"מ",
+        "30x42-medium": "30×42 ס\"מ",
+        "32x50-large": "32×50 ס\"מ"
+      }
+    },
+    "table-runner-cj-linen-look-sage-fringe": {
+      "color": {
+        "1-beige": "בז'",
+        "4-light-green": "מרווה",
+        "2-brown": "חום"
+      },
+      "size": {
+        "33x92": "33×92 ס\"מ",
+        "33x122": "33×122 ס\"מ",
+        "33x143": "33×143 ס\"מ",
+        "33x153": "33×153 ס\"מ",
+        "33x183": "33×183 ס\"מ",
+        "33x228": "33×228 ס\"מ",
+        "33x275": "33×275 ס\"מ"
+      }
+    },
+    "table-runner-cj-linen-look-triangle-end": {
+      "color": {
+        "silver-gray": "אפור כסוף",
+        "dark-gray": "אפור כהה",
+        "khaki": "חאקי",
+        "coffee": "קפה",
+        "wine-red": "אדום יין",
+        "golden-yellow": "צהוב זהוב",
+        "green": "ירוק",
+        "blue": "כחול",
+        "black": "שחור",
+        "beige-white": "לבן שמנת",
+        "orange": "כתום"
+      },
+      "size": {
+        "30x160": "30×160 ס\"מ",
+        "30x180": "30×180 ס\"מ",
+        "30x210": "30×210 ס\"מ",
+        "30x240": "30×240 ס\"מ"
+      }
+    },
+    "bowl-cj-speckled-ivory-wide-bowl-21": {
+      "other": {
+        "large-size-palegreen": "ירוק חיוור, גדול",
+        "large-natural-color": "טבעי, גדול",
+        "large-ginger-yellow": "צהוב ג׳ינג׳ר, גדול",
+        "large-rust-glaze": "זיגוג חלודה, גדול",
+        "large-white": "שנהב, גדול",
+        "large-lemon-yellow": "צהוב לימון, גדול",
+        "small-size-palegreen": "ירוק חיוור, קטן",
+        "small-size-natural-color": "טבעי, קטן",
+        "small-size-ginger-yellow": "צהוב ג׳ינג׳ר, קטן",
+        "small-size-rust-glaze": "זיגוג חלודה, קטן",
+        "small-white": "שנהב, קטן",
+        "small-size-lemon-yellow": "צהוב לימון, קטן"
+      }
+    },
+    "bowl-cj-reactive-white-rimmed-plate-21": {
+      "set": {
+        "1pc": "יחידה אחת",
+        "2pc": "2 יחידות"
+      },
+      "other": {
+        "7.7-inches": "קוטר 19.5 ס\"מ",
+        "8.1-inches": "קוטר 20.7 ס\"מ",
+        "set": "סט"
+      }
+    },
+    "candle-holders-cj-travertine-pedestal": {
+      "size": {
+        "70x110mm": "7×11 ס\"מ",
+        "70x140mm": "7×14 ס\"מ"
+      }
+    },
+    "pouf-cj-cotton-knit-ball-cover": {
+      "color": {
+        "original-cotton-color": "טבעי",
+        "light-gray": "אפור בהיר",
+        "yellow": "צהוב",
+        "grass-green": "ירוק דשא",
+        "brown": "חום"
+      }
+    },
+    "pendant-cj-pleated-pumpkin-lantern-40": {
+      "size": {
+        "28": "28 ס\"מ",
+        "40": "40 ס\"מ"
+      }
+    },
+    "pendant-cj-silk-pumpkin-lantern": {
+      "size": {
+        "30": "קוטר 30 ס\"מ",
+        "40": "קוטר 40 ס\"מ",
+        "50": "קוטר 50 ס\"מ"
+      },
+      "other": {
+        "tri-color-dimming": "אור בשלושה גוונים, עם עמעום",
+        "warm-light": "אור חם"
+      }
+    },
+
+    "framed-art-aliexpress-minimal-geometric-triptych-prints": {
+      "color": {
+        "1": "הדפס 1",
+        "2": "הדפס 2",
+        "3": "הדפס 3"
+      },
+      "size": {
+        "20x30-unframed": "20×30 ס\"מ, בלי מסגרת",
+        "30x42-unframed": "30×42 ס\"מ, בלי מסגרת",
+        "40x60-unframed": "40×60 ס\"מ, בלי מסגרת",
+        "50x70-unframed": "50×70 ס\"מ, בלי מסגרת"
+      }
+    },
+    "cushions-cj-linen-look-charcoal": {
+      "color": {
+        "blue": "כחול",
+        "light-blue": "כחול בהיר",
+        "navy-blue": "כחול נייבי",
+        "sky-blue": "תכלת",
+        "green": "ירוק",
+        "orange": "כתום",
+        "grey": "אפור",
+        "light-grey": "אפור בהיר",
+        "dark-grey": "פחם",
+        "beige": "בז'",
+        "grey-4pcs": "אפור, סט של 4"
+      },
+      "style": {
+        "pillow-core-and-pillowcase": "כרית עם מילוי",
+        "pillowcase": "ציפית"
+      },
+      "size": {
+        "30x50": "30×50 ס\"מ",
+        "40x40": "40×40 ס\"מ",
+        "45x45": "45×45 ס\"מ",
+        "50x50": "50×50 ס\"מ"
+      }
+    },
+    "wall-decor-cj-corn-husk-round-38": {
+      "other": {
+        "18cm": "קוטר 18 ס\"מ",
+        "24cm": "קוטר 24 ס\"מ",
+        "30cm": "קוטר 30 ס\"מ",
+        "36cm": "קוטר 36 ס\"מ",
+        "38cm": "קוטר 38 ס\"מ",
+        "fringed-38cm": "קוטר 38 ס\"מ, עם פרנזים"
+      }
+    },
+    "floor-lamp-cj-pleated-walnut-stem-158": {
+      "other": {
+        "3-colortable-lamp": "גרסת שולחן, אור בשלושה גוונים",
+        "3color-floor-lamp": "אור בשלושה גוונים",
+        "floor-lamp-tmall-genie": "גרסה חכמה לעוזר קולי סיני א׳",
+        "floor-lamp-xiaoai": "גרסה חכמה לעוזר קולי סיני ב׳"
+      }
+    },
+    "cushions-cj-wide-stripe-corduroy-light-green": {
+      "color": {
+        "apricot-pink": "ורוד משמש",
+        "black": "שחור",
+        "blue": "כחול",
+        "blue-gray": "כחול אפרפר",
+        "brown": "חום",
+        "camel": "קאמל",
+        "dark-gray": "אפור כהה",
+        "dark-green": "ירוק כהה",
+        "emerald-green": "ירוק אזמרגד",
+        "khaki": "חאקי",
+        "light-blue": "כחול בהיר",
+        "light-gray": "אפור בהיר",
+        "light-green": "ירוק בהיר",
+        "light-pink": "ורוד בהיר",
+        "navy-blue": "כחול נייבי",
+        "olive": "זית",
+        "pink": "ורוד",
+        "reddish-brown": "חום אדמדם",
+        "yellow": "צהוב",
+        "orange": "כתום",
+        "orange-2pcs": "כתום, זוג"
+      }
+    },
+    "sill-vase-cj-cream-fluted-column-25": {
+      "other": {
+        "qiqing-style": "עמוד מחורץ על רגל, גובה 24.7 ס\"מ",
+        "evening-snow-arrives": "דגם ב׳, גובה 20 ס\"מ",
+        "wanshi-style": "דגם ג׳, גובה 20 ס\"מ"
+      }
+    },
+    "cushions-cj-washed-cotton-frayed": {
+      "size": {
+        "30x50": "30×50 ס\"מ",
+        "45x45": "45×45 ס\"מ",
+        "50x50": "50×50 ס\"מ"
+      },
+      "other": {
+        "white": "לבן",
+        "waxing-yellow": "צהוב דבש",
+        "ultimate-dark-gray": "אפור כהה",
+        "truffle-brown": "חום כמהין",
+        "moss-green": "ירוק טחב",
+        "earthy-orange": "טרקוטה",
+        "apricot-ice-cream": "משמש",
+        "rust-orange": "חלודה",
+        "dark-blue-fringe": "כחול כהה",
+        "rose-red-fringe": "אדום ורד",
+        "phantom-blue-fringe": "כחול אפרפר",
+        "rice-soup-jiao-fringe": "לבן שמנת",
+        "silt-green-fringe": "ירוק טין"
+      }
+    },
+    "cushions-cj-sandstone-chenille-flange": {
+      "size": {
+        "45x45-pillow": "45×45 ס\"מ, עם מילוי",
+        "45x45-pillowcase": "45×45 ס\"מ, ציפית בלבד"
+      },
+      "other": {
+        "mimosa": "הדפס פרחי מימוזה",
+        "senman": "הדפס יער",
+        "sandstone-chenille-green": "זית",
+        "athena": "הדפס בוטני"
+      }
+    },
+    "basket-cj-seagrass-belly-xl": {
+      "color": {
+        "wood-color": "בגוון עץ",
+        "white": "לבן",
+        "green": "ירוק"
+      },
+      "other": {
+        "xl": "גדול מאוד",
+        "m": "בינוני",
+        "default": "רגיל",
+        "l": "גדול",
+        "s": "קטן"
+      }
+    },
+    "cushions-cj-corduroy-patchwork": {
+      "color": {
+        "pure-white": "לבן",
+        "pink": "ורוד",
+        "milky-white": "לבן חלבי",
+        "tender-yellow": "צהוב רך",
+        "light-gray": "אפור בהיר",
+        "light-green": "ירוק בהיר",
+        "christmas-red": "אדום עמוק",
+        "christmas-green": "ירוק אשוח",
+        "beige": "בז'",
+        "dark-coffee": "קפה כהה",
+        "reindeer-brown": "חום",
+        "middle-coffee-color": "קפה",
+        "orange": "כתום",
+        "light-blue": "כחול בהיר"
+      },
+      "size": {
+        "45x45": "45×45 ס\"מ",
+        "60x60": "60×60 ס\"מ"
+      }
+    },
+    "cushions-cj-linen-look-ivory": {
+      "color": {
+        "gentleman-coffee": "קפה",
+        "glacier-gray": "אפור קרחון",
+        "xanthium-brown": "חום",
+        "elegant-gray": "אפור חם",
+        "rose-red": "אדום ורד",
+        "fumigating-purple": "סגול מעושן",
+        "khaki-camel": "קאמל",
+        "olive-green": "ירוק זית",
+        "yashi-gray": "אפור עדין",
+        "light-beige-gray": "אפור-בז' בהיר",
+        "ivory-white": "לבן שנהב",
+        "matcha-green": "ירוק מאצ'ה",
+        "pretty-orange": "כתום",
+        "sapphire-blue": "כחול ספיר",
+        "agate-red": "אדום עמוק",
+        "red-golden": "אדום זהוב",
+        "plaid-blue-and-gray": "משובץ, כחול ואפור",
+        "plaid-beige": "משובץ, בז'",
+        "brown-with-plaid": "משובץ, חום",
+        "plaid-green": "משובץ, ירוק",
+        "wine-red-plaid": "משובץ, אדום יין",
+        "plaid-light-gray": "משובץ, אפור בהיר",
+        "plaid-light-coffee": "משובץ, קפה בהיר"
+      }
+    },
+
+    "pendant-cj-silk-ribbed-pumpkin-40": {
+      "size": {
+        "30": "30 ס\"מ",
+        "40": "40 ס\"מ",
+        "50": "50 ס\"מ"
+      },
+      "other": {
+        "warm-light": "אור חם",
+        "white-light": "אור לבן"
+      }
+    },
+    "accent-sconces-cj-travertine-block-updown-8x16": {
+      "style": {
+        "type-a": "דגם א׳",
+        "type-b": "דגם ב׳"
+      },
+      "other": {
+        "outdoor": "לשימוש בחוץ",
+        "indoor": "לשימוש בפנים"
+      }
+    },
+    "curtains-aliexpress-linen-blend-s-fold-180502": {
+      "style": {
+        "rod-pocket": "מנהרה למוט",
+        "pull-pleated-tape": "סרט קפלים",
+        "hook": "ווים",
+        "grommet-top-rings": "טבעות",
+        "s-fold": "קפלי גל"
+      },
+      "size": {
+        "100x130": "100×130 ס\"מ",
+        "100x220": "100×220 ס\"מ",
+        "100x250": "100×250 ס\"מ",
+        "100x270": "100×270 ס\"מ",
+        "132x220": "132×220 ס\"מ",
+        "132x250": "132×250 ס\"מ",
+        "132x270": "132×270 ס\"מ",
+        "150x220": "150×220 ס\"מ",
+        "150x250": "150×250 ס\"מ",
+        "150x270": "150×270 ס\"מ",
+        "180x220": "180×220 ס\"מ",
+        "180x250": "180×250 ס\"מ",
+        "180x270": "180×270 ס\"מ",
+        "200x220": "200×220 ס\"מ",
+        "200x250": "200×250 ס\"מ",
+        "200x270": "200×270 ס\"מ",
+        "250x220": "250×220 ס\"מ",
+        "250x250": "250×250 ס\"מ",
+        "250x270": "250×270 ס\"מ",
+        "280x220": "280×220 ס\"מ",
+        "280x250": "280×250 ס\"מ",
+        "280x270": "280×270 ס\"מ",
+        "300x220": "300×220 ס\"מ",
+        "300x250": "300×250 ס\"מ",
+        "300x270": "300×270 ס\"מ"
+      }
+    },
+    "accent-sconces-aliexpress-travertine-cylinder-walnut-choice": {
+      "style": {
+        "round-walnut": "גליל עגול, בסיס אגוז",
+        "square-walnut": "מנסרה מרובעת, בסיס אגוז",
+        "square-white": "מנסרה מרובעת, בסיס לבן"
+      }
+    },
+    "bowl-cj-matte-black-bowl-20": {
+      "other": {
+        "2style": "דגם 2",
+        "3style": "דגם 3",
+        "4style": "דגם 4",
+        "5style": "דגם 5",
+        "6style": "דגם 6",
+        "7style": "דגם 7",
+        "8style": "דגם 8",
+        "9style": "דגם 9",
+        "10style": "דגם 10",
+        "11style": "דגם 11",
+        "12style": "שחור מט, קוטר 20 ס\"מ",
+        "13style": "דגם 13",
+        "14style": "דגם 14"
+      }
+    },
+    "cushions-cj-chenille-check-milky-white": {
+      "color": {
+        "small-plaid-blue": "כחול",
+        "small-plaid-yellow": "צהוב",
+        "small-plaid-coffee-color": "קפה",
+        "small-plaid-dark-gray": "אפור כהה",
+        "small-plaid-milky-white": "לבן חלבי",
+        "small-plaid-grass-green": "ירוק דשא",
+        "small-plaid-orange": "כתום",
+        "small-plaid-light-gray": "אפור בהיר"
+      },
+      "size": {
+        "30x50-pillowcase": "30×50 ס\"מ (ציפית)",
+        "40x40-pillowcase": "40×40 ס\"מ (ציפית)",
+        "45x45-pillowcase": "45×45 ס\"מ (ציפית)",
+        "50x50-pillowcase": "50×50 ס\"מ (ציפית)",
+        "60x60-pillowcase": "60×60 ס\"מ (ציפית)"
+      }
+    },
+    "basket-zendrop-seagrass-belly-38x34": {
+      "size": {
+        "d20-h20": "קוטר 20, גובה 20",
+        "d22-h20": "קוטר 22, גובה 20",
+        "d27-h24": "קוטר 27, גובה 24",
+        "d32-h28": "קוטר 32, גובה 28",
+        "d36-h32": "קוטר 36, גובה 32",
+        "d38-h34": "קוטר 38, גובה 34",
+        "d45-h36": "קוטר 45, גובה 36"
+      }
+    },
+    "vase-aliexpress-vintage-distressed-clay-vase-589009": {
+      "size": {
+        "s": "קטן",
+        "m": "בינוני",
+        "l": "גדול"
+      }
+    },
+    "framed-art-aliexpress-frameless-minimalist-wall-art-631735": {
+      "color": {
+        "tl2356-1": "הדפס 1 בודד",
+        "tl2356-2": "הדפס 2 בודד",
+        "tl2356-3": "הדפס 3 בודד",
+        "tl2356-3pcs": "סט של שלושה הדפסים"
+      },
+      "size": {
+        "20x30-no-frame": "20×30 ס\"מ, בלי מסגרת",
+        "30x40-no-frame": "30×40 ס\"מ, בלי מסגרת",
+        "30x45-no-frame": "30×45 ס\"מ, בלי מסגרת",
+        "40x60-no-frame": "40×60 ס\"מ, בלי מסגרת",
+        "50x70-no-frame": "50×70 ס\"מ, בלי מסגרת",
+        "50x75-no-frame": "50×75 ס\"מ, בלי מסגרת"
+      }
+    },
+    "cushions-aliexpress-farmhouse-floral-pillow-covers-166217": {
+      "color": {
+        "1": "הדפס 1, ורוד חימר ומרווה",
+        "2": "הדפס 2",
+        "3": "הדפס 3",
+        "4": "הדפס 4",
+        "5": "הדפס 5",
+        "6": "הדפס 6",
+        "7": "הדפס 7",
+        "8": "הדפס 8"
+      },
+      "size": {
+        "40x40": "40×40 ס\"מ",
+        "45x45": "45×45 ס\"מ",
+        "50x50": "50×50 ס\"מ"
+      }
+    },
+    "wall-decor-aliexpress-natural-raffia-woven-bohemian-763597": {
+      "color": {
+        "1": "דגם 1",
+        "2": "טבעי",
+        "3": "דגם 3"
+      }
+    },
+    "table-runner-aliexpress-boho-macrame-table-runners-263532": {
+      "color": {
+        "a-1": "דגם א-1",
+        "a-2": "דגם א-2",
+        "a-3": "דגם א-3",
+        "a-4": "דגם א-4",
+        "a-5": "דגם א-5",
+        "a-6": "דגם א-6",
+        "b-1": "דגם ב-1",
+        "b-2": "דגם ב-2",
+        "b-3": "דגם ב-3",
+        "b-4": "דגם ב-4",
+        "c-1": "דגם ג-1",
+        "c-2": "דגם ג-2",
+        "c-3": "דגם ג-3",
+        "d-1": "דגם ד-1",
+        "d-2": "דגם ד-2",
+        "e-1": "דגם ה-1",
+        "e-2": "דגם ה-2",
+        "f-1": "דגם ו-1",
+        "f-2": "דגם ו-2",
+        "f-3": "דגם ו-3",
+        "f-4": "דגם ו-4",
+        "f-5": "דגם ו-5",
+        "g": "דגם ז"
+      },
+      "size": {
+        "30x120": "30×120 ס\"מ",
+        "30x140": "30×140 ס\"מ",
+        "30x160": "30×160 ס\"מ",
+        "30x180": "30×180 ס\"מ",
+        "30x200": "30×200 ס\"מ",
+        "30x220": "30×220 ס\"מ",
+        "30x240": "30×240 ס\"מ",
+        "30x275": "30×275 ס\"מ",
+        "30x300": "30×300 ס\"מ"
+      }
+    },
+    "framed-art-aliexpress-mediterranean-wabi-sabi-poster-802890": {
+      "color": {
+        "01": "הדפס 1",
+        "02": "הדפס 2",
+        "03": "הדפס 3",
+        "04": "הדפס 4",
+        "05": "הדפס 5",
+        "06": "הדפס 6",
+        "07": "הדפס 7",
+        "08": "הדפס 8"
+      },
+      "size": {
+        "21x30-no-frame": "21×30 ס\"מ, בלי מסגרת",
+        "30x40-no-frame": "30×40 ס\"מ, בלי מסגרת",
+        "40x50-no-frame": "40×50 ס\"מ, בלי מסגרת",
+        "40x60-no-frame": "40×60 ס\"מ, בלי מסגרת",
+        "50x70-no-frame": "50×70 ס\"מ, בלי מסגרת"
+      }
+    },
+
+    "dining-pendant-cj-black-ring-cloth-lantern-50": {
+      "size": {
+        "40": "40 ס\"מ",
+        "50": "50 ס\"מ",
+        "60": "60 ס\"מ",
+        "80": "80 ס\"מ"
+      }
+    },
+    "centerpiece-vase-cj-sandy-white-bead-band-25": {
+      "other": {
+        "2345-white": "דגם א׳, לבן",
+        "2345-black": "דגם א׳, שחור",
+        "2437-large-size-white": "פס חרוזים, גדול, לבן",
+        "2437-size-small-white": "פס חרוזים, קטן, לבן",
+        "2443-white": "דגם ב׳, לבן",
+        "2443-black": "דגם ב׳, שחור",
+        "twist-large-size": "מפותל, גדול",
+        "twist-small-size": "מפותל, קטן"
+      }
+    },
+    "candle-holders-aliexpress-matte-black-iron-pillar-set2": {
+      "set": {
+        "2pc": "סט של 2"
+      }
+    },
+    "candle-holders-aliexpress-cutelife-black-ceramic-candelabra": {
+      "color": {
+        "yellow": "צהוב (בלי נר)",
+        "black": "שחור (בלי נר)",
+        "green": "ירוק (בלי נר)",
+        "white": "לבן (בלי נר)"
+      },
+      "set": {
+        "1pc": "יחידה אחת"
+      }
+    },
+    "floor-vase-aliexpress-capiron-zen-ceramic": {
+      "style": {
+        "a": "כדור לבן, גובה 17, רוחב 14 ס״מ",
+        "b": "טיפה לבנה, גובה 25, רוחב 8 ס״מ",
+        "c": "בקבוק לבן דק, גובה 38, רוחב 8 ס״מ",
+        "d": "טיפה אפורה, גובה 32, רוחב 12 ס״מ",
+        "e": "בקבוק אפור כהה, גובה 46, רוחב 9 ס״מ"
+      }
+    },
+    "bench-pad-cj-tufted-long-cushion-khaki-120": {
+      "color": {
+        "light-gray": "אפור בהיר",
+        "dark-gray": "אפור כהה",
+        "black": "שחור",
+        "red": "אדום",
+        "wine-red": "אדום יין",
+        "dark-green": "ירוק כהה",
+        "navy-blue": "כחול נייבי",
+        "peacock-blue": "כחול טווס",
+        "khaki": "חאקי",
+        "light-coffee": "קפה בהיר",
+        "deep-coffee": "קפה עמוק",
+        "hawaiian-style": "הדפס טרופי",
+        "flower-of-tomorrow": "הדפס פרחים"
+      },
+      "size": {
+        "100x50x8": "100×50×8 ס\"מ",
+        "120x50x8": "120×50×8 ס\"מ",
+        "130x50x8": "130×50×8 ס\"מ",
+        "150x50x8": "150×50×8 ס\"מ"
+      }
+    },
+    "framed-art-cj-swinging-line-black-frame-mat-35x45": {
+      "style": {
+        "a": "דגם א׳",
+        "b": "דגם ב׳",
+        "c": "דגם ג׳"
+      },
+      "size": {
+        "35x45": "35×45 ס\"מ",
+        "45x55": "45×55 ס\"מ"
+      }
+    },
+    "framed-art-cj-taupe-block-black-line-30x40": {
+      "color": {
+        "black-aluminum-alloy-frame": "מסגרת אלומיניום שחורה",
+        "golden-aluminum-alloy-frame": "מסגרת אלומיניום זהובה",
+        "frameless-painting": "בלי מסגרת"
+      },
+      "size": {
+        "30x40": "30×40 ס\"מ",
+        "40x60": "40×60 ס\"מ"
+      }
+    },
+    "open-shelf-ceramics-cj-morandi-matte-bottle-set": {
+      "size": {
+        "set": "סט של 3: כדור, ביצה ובקבוק",
+        "m": "בינוני, ביצה באפור ערפל, 10×15.5 ס\"מ",
+        "l": "גדול, בקבוק בפחם, 7×19 ס\"מ",
+        "s": "קטן, כדור בוורוד עתיק, 9.5×11 ס\"מ"
+      }
+    },
+    "tableware-set-cj-grey-sand-matte-plate": {
+      "size": {
+        "10inch": "קוטר 25 ס\"מ",
+        "11inch": "קוטר 28 ס\"מ",
+        "12.5inch": "קוטר 32 ס\"מ"
+      }
+    },
+    "tableware-set-cj-speckled-oat-stoneware-bowl-13": {
+      "set": {
+        "1pc": "יחידה אחת",
+        "2pc": "2 יחידות",
+        "4pc": "4 יחידות",
+        "6pc": "6 יחידות",
+        "10pc": "10 יחידות"
+      }
+    },
+    "mug-set-cj-oat-speckled-round-mug-wood-saucer": {
+      "color": {
+        "cup-and-saucer": "ספל עם תחתית עץ",
+        "cup-and-plate-spoon": "ספל, תחתית עץ וכפית"
+      }
+    }
+  }
+}

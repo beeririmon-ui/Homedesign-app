@@ -654,7 +654,7 @@ function cancelIdle(id: number): void {
 
 /** Warms the HTTP cache with every variant layer (fetch only: decoding and GPU upload happen when the engine needs them). */
 function prefetchVariants(room: CatalogRoom, scene: Scene): void {
-  const w = innerWidth <= 900 ? scene.widths.lo : scene.widths.hi;
+  const w = scene.native ?? (innerWidth <= 900 ? scene.widths.lo : scene.widths.hi);
   // layers are WebP only (lossless alpha)
   for (const s of room.slots)
     for (const src of slotSources(scene, s.id)) void fetch(mediaUrl(src, w, 'webp'), { priority: 'low' } as RequestInit).catch(() => undefined);
