@@ -1,0 +1,6 @@
+measured commit: b0a71cd2 (Interface S10 done), built in an isolated copy outside the live tree (git archive of site/ and data/ at b0a71cd2; assets, docs, qa and studio linked read-only; no tracked file under them differs from b0a71cd2)
+build: 19:33:43-19:42:11 UTC, offline (supplier-images.ts --offline: cached supplier images only); catalog version 853f6e7970cd
+public build: a second copy, HD_PUBLIC=1 npm run build -w @hd/web (data/public-build.log)
+served: wrangler dev from the copy on 127.0.0.1:8799, own D1 seeded from the copy, ENVIRONMENT=preview-local, PAYMENT_WEBHOOK_SECRET a dummy --var on the command line (no .dev.vars, nothing written to a file)
+server stopped from outside twice (every wrangler process in the container ended); restarted from the same copy and D1 state, the second time with a neutral launcher name; the container restarted once (usage limit): the e2e suite ran again on the quiet machine (data/e2e-rerun.log)
+live tree: untouched apart from new files in this folder; the manager's WIP commits 1a6699f8 and 1af8d393 picked them up
