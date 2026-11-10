@@ -1,0 +1,78 @@
+{
+ "date": "2026-11-10",
+ "by": "render-agent",
+ "tokens": 0,
+ "source": "qa/reports/2026-11-10-ged-master-fix4.md (register v10); coordinator 2026-11-10",
+ "note": "TEST, not for the site; new files only; awaiting qa-agent round 4",
+ "nordic": {
+  "base": "nordic/nordic-MB-A-fix4.png",
+  "out": "nordic/nordic-MB-A-fix5.png",
+  "mask_px": 2700,
+  "px_changed": 2613,
+  "px_changed_outside_mask": 0,
+  "wedge_L_median": {
+   "before": 93.4,
+   "after": 69.9,
+   "pillowcase_ring": 72.1
+  },
+  "method": "per-column profile interpolated between the pillowcase columns 1566-1573 and 1645-1651 (linen + the contact line), linear light; the linen grain (high-pass, sigma 1.6) from 48 px higher on the same pillowcase"
+ },
+ "warm_modern": {
+  "base": "warm-modern/warm-modern-MB-A-fix3.png",
+  "out": "warm-modern/warm-modern-MB-A-fix4.png",
+  "region": [
+   2014,
+   765,
+   2080,
+   818
+  ],
+  "mask_px": 3212,
+  "px_changed": 3186,
+  "px_changed_outside_mask": 0,
+  "spot_box_L_median": {
+   "before": 15.7,
+   "after": 16.2
+  },
+  "spot_box_grain_sd": {
+   "before": 0.85,
+   "after": 1.35,
+   "clean_gap_rows_736_762": 1.46
+  },
+  "method": "the gap continued row by row: band edges extrapolated (0.2 / 0.45 px per row), the band resampled from rows 760-764, the caramel folds copied from 34 px right on the same row, fine grain; the lumbar protected"
+ },
+ "P6b": {
+  "base": "warm-modern-MB-A-fix4.png",
+  "crop": [
+   1380,
+   520,
+   2700,
+   1086
+  ],
+  "crop_px": [
+   1320,
+   566
+  ],
+  "aspect": 2.332,
+  "seedream_native": "3122 x 1338 (2.333)",
+  "input": "warm-modern/raw/P6b-input.png",
+  "mask": "warm-modern/raw/P6b-mask.png",
+  "protect": "warm-modern/raw/P6b-protect.png",
+  "overlay": "warm-modern/raw/P6b-mask-overlay.jpg",
+  "mask_px": 211983,
+  "protect_px": 268838,
+  "prompt": "assets/prompts/master-editorial-2026-11-07/P6b-wm-caramel-pillowcases.txt",
+  "refs": [
+   "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/7b3e9c2b-1261-4386-8edc-4428e34b6858.png (pillowcases, Caramel)"
+  ],
+  "status": "PREPARED, NOT SENT: SPEND1 week 3 starts Sun 2026-11-15 (650; estimate first)",
+  "composite_plan": "mb1_fix4.apply-style: the result placed at scale min(w/Wr, h/Hr) (native aspect: no centre crop), ECC on the pixels outside the mask, the quadratic + local tone field, the mask feathered inward; the protect mask never written",
+  "mask_note": "mask = the two caramel pillowcases (hand outlines, frame px) minus protect; protect = the lumbar (+3 px), the cream back pillows, the gap band rebuilt in fix4, the duvet; neither mask is sent (seedream-5-pro i2i takes no mask): the mask is applied in the composite",
+  "prompt_text_chars": 896
+ },
+ "crops": [
+  "fix5-before-after/nordic-wedge-x4.jpg",
+  "fix5-before-after/nordic-bed-head-100.jpg",
+  "fix5-before-after/wm-gap-x5.jpg",
+  "fix5-before-after/wm-bed-head-100.jpg"
+ ]
+}
