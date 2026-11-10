@@ -41,6 +41,7 @@
   "vars": {
     "ENVIRONMENT": "development",
     "PAYMENT_PROVIDER": "mock",
+    "INVOICE_PROVIDER": "mock",
     "SUPPLIER_PROVIDER": "mock",
     "ACCESS_TEAM_DOMAIN": "",
     "ACCESS_AUD": "",
@@ -75,6 +76,7 @@
       "vars": {
         "ENVIRONMENT": "preview",
         "PAYMENT_PROVIDER": "mock",
+        "INVOICE_PROVIDER": "mock",
         "SUPPLIER_PROVIDER": "mock",
         "ACCESS_TEAM_DOMAIN": "REPLACE_WITH_TEAM.cloudflareaccess.com",
         "ACCESS_AUD": "REPLACE_WITH_ACCESS_APP_AUD",
@@ -108,7 +110,9 @@
       ],
       "vars": {
         "ENVIRONMENT": "production",
+        // S9: "grow" once its keys and documentation are in (docs/ops/deploy-runbook.md)
         "PAYMENT_PROVIDER": "UNDECIDED",
+        "INVOICE_PROVIDER": "UNDECIDED",
         "SUPPLIER_PROVIDER": "cj",
         "ACCESS_TEAM_DOMAIN": "REPLACE_WITH_TEAM.cloudflareaccess.com",
         "ACCESS_AUD": "REPLACE_WITH_ACCESS_APP_AUD",

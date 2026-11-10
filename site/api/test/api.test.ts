@@ -414,7 +414,11 @@ describe('payment webhook', () => {
     const ev = { id: 'evt_00000002', type: 'payment.succeeded', session_id: session, amount_agorot: total };
     expect(await (await post(ev)).json()).toMatchObject({ outcome: 'paid' });
     expect(await (await post(ev)).json()).toMatchObject({ duplicate: true });
-    expect(sent).toEqual([{ kind: 'submit-order', order_id: orderId }]);
+    // S9: the supplier job and the tax invoice job (a job after "paid")
+    expect(sent).toEqual([
+      { kind: 'submit-order', order_id: orderId },
+      { kind: 'issue-invoice', order_id: orderId },
+    ]);
     const o = await env.DB.prepare('SELECT status FROM orders WHERE id = ?').bind(orderId).first<{ status: string }>();
     expect(o!.status).toBe('paid');
     // ART6: the buyer reads "התקבלה", then "בהכנה" once the order went to the supplier; never "הועברה לספק"
@@ -422,6 +426,9 @@ describe('payment webhook', () => {
     expect(await view()).toBe('התקבלה');
     await processSupplierJob(env, { kind: 'submit-order', order_id: orderId }, 1);
     expect(await view()).toBe('בהכנה');
+    // S9: the invoice job issues once (the mock provider), and a retry of the job issues nothing more
+    expect(await processSupplierJob(env, { kind: 'issue-invoice', order_id: orderId }, 1)).toBe('submitted');
+    expect(await processSupplierJob(env, { kind: 'issue-invoice', order_id: orderId }, 2)).toBe('skipped');
   });
 
   it('does not mark paid when the amount differs', async () => {
