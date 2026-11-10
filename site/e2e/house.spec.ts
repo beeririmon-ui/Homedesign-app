@@ -49,10 +49,10 @@ async function houseReady(page: Page, url = HOUSE) {
   await expect(page.locator('section.stage[data-house="warm-modern"]')).toBeVisible({ timeout: 20_000 });
   await expect(page.locator(`button.hotspot[data-slot="${SLOT.id}"]`)).toBeAttached({ timeout: 20_000 });
 }
-/** the engine starts on the first sign of intent: a pointer over the stage */
+/** the engine starts on the first sign of intent: a press on the stage (here on the wall, away from the sofa) */
 async function engineReady(page: Page) {
   const box = (await page.locator('section.stage').boundingBox())!;
-  await page.mouse.move(box.x + 30, box.y + box.height / 2);
+  await page.mouse.click(box.x + 30, box.y + box.height / 2);
   await expect.poll(async () => (await engineOf(page))?.ready, { timeout: 20_000 }).toBe(true);
 }
 
@@ -103,12 +103,18 @@ test.describe('the warm-modern house in the room engine (S10)', () => {
     // back to B, the set as a set
     await page.keyboard.press('Home');
     await expect.poll(sel).toBe(1);
-    const before = Number(await page.locator('.cart-count').first().innerText());
+    // PRE1 / MED1: a piece out of stock says so and has no button; the set's button takes the pieces that are sold
+    const items = dialog.locator('.set-item');
+    const sold = await dialog.locator('.set-item .set-add').count();
+    const out = await items.filter({ hasText: 'המלאי אינו זמין כעת' }).count();
+    expect(sold + out).toBeLessThanOrEqual(house.sets[0]!.items.length);
+    for (const el of await items.filter({ hasText: 'המלאי אינו זמין כעת' }).all()) await expect(el.locator('button')).toHaveCount(0);
+    await expect(dialog.locator('#add-set')).toContainText(sold === house.sets[0]!.items.length ? 'הסט כולו לסל' : `${sold} הפריטים שבמלאי לסל`);
+    const count = async () => Number(await page.locator('.cart-count').first().innerText());
+    const before = await count();
     await dialog.locator('#add-set').click();
-    await expect
-      .poll(async () => Number(await page.locator('.cart-count').first().innerText()), { timeout: 15_000 })
-      .toBe(before + house.sets[0]!.items.length);
-    await page.keyboard.press('Escape');
+    await expect.poll(count, { timeout: 15_000 }).toBe(before + sold);
+    await dialog.getByRole('button', { name: 'סגירה וחזרה לחדר בלי שינוי' }).click();
     await expect(dialog).toBeHidden();
   });
 
@@ -124,7 +130,12 @@ test.describe('the warm-modern house in the room engine (S10)', () => {
     await page.setViewportSize({ width: 1280, height: 720 });
     await houseReady(page);
     await engineReady(page);
-    await page.addStyleTag({ content: '.stage-ui, .hotspots, .stage-temp-note, .outlines, .stage-back { visibility: hidden !important; }' });
+    // the page's CSP allows no style element: the controls on the stage are hidden through their style attribute
+    await page.evaluate(() => {
+      document
+        .querySelectorAll<HTMLElement>('.stage-ui, .hotspots, .stage-temp-note, .outlines, .stage-back')
+        .forEach((el) => (el.style.visibility = 'hidden'));
+    });
     await page.mouse.move(0, 0);
     const canvas = page.locator('canvas.room-canvas');
     const shot = async (pos: number) => {
@@ -193,15 +204,27 @@ test.describe('the warm-modern house in the room engine (S10)', () => {
       }
       let worst = 0;
       let changed = 0;
+      let inside = 0;
+      let masked = 0;
       const p = shots[i]!.data;
       const q = shots[j]!.data;
       for (let n = 0; n < W * H; n++) {
-        if (mask[n]) continue;
         const d = Math.max(Math.abs(p[n * 4]! - q[n * 4]!), Math.abs(p[n * 4 + 1]! - q[n * 4 + 1]!), Math.abs(p[n * 4 + 2]! - q[n * 4 + 2]!));
+        if (mask[n]) {
+          masked++;
+          if (d > 2) inside++;
+          continue;
+        }
         if (d > worst) worst = d;
         if (d > 2) changed++;
       }
-      results.push(`${house.sets[i]!.id}↔${house.sets[j]!.id}: ${changed} px changed outside, worst ${worst} levels`);
+      // the measure means something: the area is the sofa's part of the frame, and the sets do differ inside it
+      expect(masked / (W * H)).toBeGreaterThan(0.01);
+      expect(masked / (W * H)).toBeLessThan(0.3);
+      expect(inside).toBeGreaterThan(1000);
+      results.push(
+        `${house.sets[i]!.id}↔${house.sets[j]!.id}: ${changed} px changed outside (worst ${worst} levels), ${inside} inside an area of ${((100 * masked) / (W * H)).toFixed(1)}%`,
+      );
       expect(changed, results.join('; ')).toBe(0);
     }
     console.log(`swap-diff (warm modern, 1280×720): ${results.join('; ')}`);

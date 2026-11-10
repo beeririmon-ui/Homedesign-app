@@ -1,0 +1,858 @@
+{
+ "id": "qa-2026-11-10-wm-tool-layers-v3c",
+ "author": "qa-agent",
+ "date": "2026-11-10",
+ "scope": "assets/renders/living-room/warm-modern/pilot-phase1-2026-11-07/layers-v3c/ (base, cushions-set-A/B/C + shadows, manifest.json, verify_layers_v3c.py)",
+ "brief": "briefs/render-wm-tool-layers-v3c-2026-11-10.md",
+ "previous": "qa/reports/2026-11-07-pilot-phase1-v3c-verify.md",
+ "verdict": {
+  "tool_behind_HD_PUBLIC_0": "yes",
+  "public_site": "not yet: see conditions_before_public",
+  "summary": "all brief acceptance gates pass in QA's own code on 5 compositing paths; swap-diff 0 outside the regions in all 6 pairs; base byte-identical; approved files unchanged in git; the 3-4 level residual is invisible; keep the current method, do not fold the residual into the product alpha"
+ },
+ "gates": {
+  "recomposite": {
+   "tolerance": {
+    "p99_9_region": 2,
+    "max": 6
+   },
+   "pass_": true,
+   "per_set_per_path": {
+    "A": {
+     "P1_straight_exact": {
+      "p99_9_region": 1.0,
+      "p99_9_canvas": 0.0,
+      "max": 3,
+      "px_gt2": 13,
+      "px_gt6": 0,
+      "px_gt0_outside_region": 4
+     },
+     "P2_straight_8bit": {
+      "p99_9_region": 1.0,
+      "p99_9_canvas": 0.0,
+      "max": 3,
+      "px_gt2": 13,
+      "px_gt6": 0,
+      "px_gt0_outside_region": 4
+     },
+     "P3_pillow": {
+      "p99_9_region": 1.0,
+      "p99_9_canvas": 1.0,
+      "max": 3,
+      "px_gt2": 13,
+      "px_gt6": 0,
+      "px_gt0_outside_region": 4
+     },
+     "P4_browser_premultiplied": {
+      "p99_9_region": 1.0,
+      "p99_9_canvas": 1.0,
+      "max": 3,
+      "px_gt2": 13,
+      "px_gt6": 0,
+      "px_gt0_outside_region": 4
+     },
+     "P5_premultiplied_truncate": {
+      "p99_9_region": 2.0,
+      "p99_9_canvas": 2.0,
+      "max": 3,
+      "px_gt2": 13,
+      "px_gt6": 0,
+      "px_gt0_outside_region": 4
+     }
+    },
+    "B": {
+     "P1_straight_exact": {
+      "p99_9_region": 1.0,
+      "p99_9_canvas": 0.0,
+      "max": 4,
+      "px_gt2": 24,
+      "px_gt6": 0,
+      "px_gt0_outside_region": 3
+     },
+     "P2_straight_8bit": {
+      "p99_9_region": 1.0,
+      "p99_9_canvas": 0.0,
+      "max": 4,
+      "px_gt2": 24,
+      "px_gt6": 0,
+      "px_gt0_outside_region": 3
+     },
+     "P3_pillow": {
+      "p99_9_region": 1.0,
+      "p99_9_canvas": 1.0,
+      "max": 4,
+      "px_gt2": 24,
+      "px_gt6": 0,
+      "px_gt0_outside_region": 3
+     },
+     "P4_browser_premultiplied": {
+      "p99_9_region": 1.0,
+      "p99_9_canvas": 1.0,
+      "max": 4,
+      "px_gt2": 24,
+      "px_gt6": 0,
+      "px_gt0_outside_region": 3
+     },
+     "P5_premultiplied_truncate": {
+      "p99_9_region": 2.0,
+      "p99_9_canvas": 2.0,
+      "max": 4,
+      "px_gt2": 24,
+      "px_gt6": 0,
+      "px_gt0_outside_region": 3
+     }
+    },
+    "C": {
+     "P1_straight_exact": {
+      "p99_9_region": 1.0,
+      "p99_9_canvas": 0.0,
+      "max": 4,
+      "px_gt2": 25,
+      "px_gt6": 0,
+      "px_gt0_outside_region": 1
+     },
+     "P2_straight_8bit": {
+      "p99_9_region": 1.0,
+      "p99_9_canvas": 0.0,
+      "max": 4,
+      "px_gt2": 25,
+      "px_gt6": 0,
+      "px_gt0_outside_region": 1
+     },
+     "P3_pillow": {
+      "p99_9_region": 1.0,
+      "p99_9_canvas": 1.0,
+      "max": 4,
+      "px_gt2": 25,
+      "px_gt6": 0,
+      "px_gt0_outside_region": 1
+     },
+     "P4_browser_premultiplied": {
+      "p99_9_region": 1.0,
+      "p99_9_canvas": 1.0,
+      "max": 4,
+      "px_gt2": 25,
+      "px_gt6": 0,
+      "px_gt0_outside_region": 1
+     },
+     "P5_premultiplied_truncate": {
+      "p99_9_region": 2.0,
+      "p99_9_canvas": 2.0,
+      "max": 4,
+      "px_gt2": 25,
+      "px_gt6": 0,
+      "px_gt0_outside_region": 1
+     }
+    }
+   }
+  },
+  "swap_diff": {
+   "pass_": true,
+   "detail": {
+    "base->A": {
+     "P1": {
+      "changed_px": 234123,
+      "changed_outside_region_px": 0,
+      "region_px": 236086
+     },
+     "P4": {
+      "changed_px": 234148,
+      "changed_outside_region_px": 0,
+      "region_px": 236086
+     },
+     "approved": {
+      "changed_outside_region_px": 4,
+      "max_level_outside_region": 1
+     }
+    },
+    "base->B": {
+     "P1": {
+      "changed_px": 228213,
+      "changed_outside_region_px": 0,
+      "region_px": 230174
+     },
+     "P4": {
+      "changed_px": 228225,
+      "changed_outside_region_px": 0,
+      "region_px": 230174
+     },
+     "approved": {
+      "changed_outside_region_px": 3,
+      "max_level_outside_region": 1
+     }
+    },
+    "base->C": {
+     "P1": {
+      "changed_px": 253616,
+      "changed_outside_region_px": 0,
+      "region_px": 256238
+     },
+     "P4": {
+      "changed_px": 253619,
+      "changed_outside_region_px": 0,
+      "region_px": 256238
+     },
+     "approved": {
+      "changed_outside_region_px": 1,
+      "max_level_outside_region": 1
+     }
+    },
+    "A<->B": {
+     "P1": {
+      "changed_px": 258170,
+      "changed_outside_union_px": 0,
+      "union_px": 262416
+     },
+     "P4": {
+      "changed_px": 258188,
+      "changed_outside_union_px": 0,
+      "union_px": 262416
+     },
+     "approved": {
+      "changed_px": 258189,
+      "changed_outside_union_px": 3,
+      "max_level_outside_union": 1
+     }
+    },
+    "A<->C": {
+     "P1": {
+      "changed_px": 270504,
+      "changed_outside_union_px": 0,
+      "union_px": 275243
+     },
+     "P4": {
+      "changed_px": 270513,
+      "changed_outside_union_px": 0,
+      "union_px": 275243
+     },
+     "approved": {
+      "changed_px": 270524,
+      "changed_outside_union_px": 2,
+      "max_level_outside_union": 1
+     }
+    },
+    "B<->C": {
+     "P1": {
+      "changed_px": 259382,
+      "changed_outside_union_px": 0,
+      "union_px": 266903
+     },
+     "P4": {
+      "changed_px": 259390,
+      "changed_outside_union_px": 0,
+      "union_px": 266903
+     },
+     "approved": {
+      "changed_px": 259409,
+      "changed_outside_union_px": 1,
+      "max_level_outside_union": 1
+     }
+    }
+   }
+  },
+  "base_identity": {
+   "pass_": true,
+   "sha256": "75200f46361dfd62dd03363ef46e21cce119fce04990d914a771383b551aba39",
+   "byte_identical": true
+  },
+  "approved_unchanged_in_git": {
+   "pass_": true,
+   "reference_commit": "64238485 (2026-11-07 21:16), last writer of the four v3c display files; HEAD blob identical; no commit since 2026-11-08 touches them"
+  },
+  "card_ids": {
+   "pass_": true,
+   "detail": "12/12 items: card_id is the selection item's prefix, selection_item verbatim, the card file has that id, every SKU is in the card's options.skus with the manifest's option values; default B and order B, A, C as in the selection"
+  },
+  "verify_script_rerun": {
+   "pass_": true,
+   "exit": 0,
+   "identical_json_to_render_agent": true,
+   "run_in": "a scratch mirror, so the repo file was not rewritten"
+  }
+ },
+ "residual_judgement": {
+  "visible_at_100": false,
+  "visible_at_x4": false,
+  "facts": {
+   "A": {
+    "px_ge3": 13,
+    "zone": "shadow band only (alpha 0), blue channel only, approved bluer by ~2.2 levels on average",
+    "target_Lstar_at_ge3": [
+     9.0,
+     10.8,
+     12.1
+    ],
+    "dE00_max": 2.063,
+    "largest_cluster_ge3_px": 4,
+    "alpha_raised": {
+     "raised_px": 294,
+     "lowered_px": 0,
+     "raised_from_zero_px": 0,
+     "raise_median": 2.0,
+     "raise_max": 34
+    }
+   },
+   "B": {
+    "px_ge3": 24,
+    "zone": "shadow band only (alpha 0), blue channel only, approved bluer by ~2.2 levels on average",
+    "target_Lstar_at_ge3": [
+     9.0,
+     11.2,
+     13.0
+    ],
+    "dE00_max": 2.626,
+    "largest_cluster_ge3_px": 10,
+    "alpha_raised": {
+     "raised_px": 211,
+     "lowered_px": 0,
+     "raised_from_zero_px": 0,
+     "raise_median": 2.0,
+     "raise_max": 16
+    }
+   },
+   "C": {
+    "px_ge3": 25,
+    "zone": "shadow band only (alpha 0), blue channel only, approved bluer by ~2.2 levels on average",
+    "target_Lstar_at_ge3": [
+     9.0,
+     11.9,
+     13.5
+    ],
+    "dE00_max": 2.497,
+    "largest_cluster_ge3_px": 13,
+    "alpha_raised": {
+     "raised_px": 330,
+     "lowered_px": 0,
+     "raised_from_zero_px": 0,
+     "raise_median": 2.0,
+     "raise_max": 41
+    }
+   }
+  },
+  "crops": [
+   "crops/resample-1920-set-B-spot1-x4.png",
+   "crops/resample-1920-set-B-spot2-x4.png",
+   "crops/set-A-blink-x4.png",
+   "crops/set-A-maxpx-x4.png",
+   "crops/set-A-residual-map.png",
+   "crops/set-A-worst-100.png",
+   "crops/set-A-worst-x4.png",
+   "crops/set-B-blink-x4.png",
+   "crops/set-B-maxpx-x4.png",
+   "crops/set-B-residual-map.png",
+   "crops/set-B-worst-100.png",
+   "crops/set-B-worst-x4.png",
+   "crops/set-C-blink-x4.png",
+   "crops/set-C-residual-map.png",
+   "crops/set-C-worst-100.png",
+   "crops/set-C-worst-x4.png",
+   "crops/sets-recomposite-sheet.jpg"
+  ]
+ },
+ "alternative_fold_into_alpha": {
+  "recommendation": "do not adopt; keep the current layers",
+  "simulation": {
+   "A": {
+    "residual_band_px": 330,
+    "folded_px": 330,
+    "alpha_levels": {
+     "min": 1,
+     "median": 1.0,
+     "max": 2,
+     "hist": {
+      "1": 317,
+      "2": 13
+     }
+    },
+    "P1_max_before": 3,
+    "P1_max_after": 1,
+    "P1_px_ge3_before": 13,
+    "P1_px_ge3_after": 0,
+    "P4_max_before": 3,
+    "P4_max_after": 1,
+    "P4_px_ge3_before": 13,
+    "P4_px_ge3_after": 0,
+    "new_alpha_px_distance_from_silhouette_px": {
+     "min": 1.0,
+     "median": 27.5,
+     "p90": 40.1,
+     "max": 43.4,
+     "farther_than_2px": 315,
+     "farther_than_8px": 280
+    },
+    "new_alpha_islands": {
+     "n": 93,
+     "px": 312
+    },
+    "alpha_bbox_before": [
+     1413,
+     868,
+     2422,
+     1417
+    ],
+    "alpha_bbox_after": [
+     1413,
+     868,
+     2429,
+     1417
+    ],
+    "folded_rgb_Lstar": [
+     32.3,
+     50.8,
+     91.1
+    ]
+   },
+   "B": {
+    "residual_band_px": 375,
+    "folded_px": 375,
+    "alpha_levels": {
+     "min": 1,
+     "median": 1.0,
+     "max": 3,
+     "hist": {
+      "1": 351,
+      "2": 19,
+      "3": 5
+     }
+    },
+    "P1_max_before": 4,
+    "P1_max_after": 1,
+    "P1_px_ge3_before": 24,
+    "P1_px_ge3_after": 0,
+    "P4_max_before": 4,
+    "P4_max_after": 1,
+    "P4_px_ge3_before": 24,
+    "P4_px_ge3_after": 0,
+    "new_alpha_px_distance_from_silhouette_px": {
+     "min": 1.0,
+     "median": 30.0,
+     "p90": 40.2,
+     "max": 43.4,
+     "farther_than_2px": 351,
+     "farther_than_8px": 296
+    },
+    "new_alpha_islands": {
+     "n": 73,
+     "px": 298
+    },
+    "alpha_bbox_before": [
+     1401,
+     859,
+     2434,
+     1387
+    ],
+    "alpha_bbox_after": [
+     1398,
+     859,
+     2434,
+     1408
+    ],
+    "folded_rgb_Lstar": [
+     32.3,
+     50.9,
+     97.4
+    ]
+   },
+   "C": {
+    "residual_band_px": 409,
+    "folded_px": 409,
+    "alpha_levels": {
+     "min": 1,
+     "median": 1.0,
+     "max": 3,
+     "hist": {
+      "1": 384,
+      "2": 24,
+      "3": 1
+     }
+    },
+    "P1_max_before": 4,
+    "P1_max_after": 1,
+    "P1_px_ge3_before": 25,
+    "P1_px_ge3_after": 0,
+    "P4_max_before": 4,
+    "P4_max_after": 1,
+    "P4_px_ge3_before": 25,
+    "P4_px_ge3_after": 0,
+    "new_alpha_px_distance_from_silhouette_px": {
+     "min": 1.0,
+     "median": 28.0,
+     "p90": 40.8,
+     "max": 43.4,
+     "farther_than_2px": 392,
+     "farther_than_8px": 304
+    },
+    "new_alpha_islands": {
+     "n": 99,
+     "px": 280
+    },
+    "alpha_bbox_before": [
+     1394,
+     863,
+     2426,
+     1418
+    ],
+    "alpha_bbox_after": [
+     1394,
+     863,
+     2426,
+     1422
+    ],
+    "folded_rgb_Lstar": [
+     32.3,
+     50.9,
+     93.0
+    ]
+   }
+  }
+ },
+ "informational": {
+  "resample_at_web_widths": {
+   "owner": "frontend-dev",
+   "blocking_for_HD_PUBLIC_0": false,
+   "blocking_for_public": true,
+   "finding": "the engine resizes each layer on its own and then blends (compWidth 1920, lo on phones); the hidden base under the cushions leaks into the 1-px silhouette edge: vs the approved composite resized as one picture, p99.9 6-13 and max 10-18 levels in the region at 800-1920 px, 0 outside the region. Not visible at x4 in QA's crops, but outside the brief's tolerance and must be measured in the browser",
+   "numbers": {
+    "A": {
+     "gl_bilinear": {
+      "2720": {
+       "p99_9_region": 1.0,
+       "max": 3,
+       "px_ge3": 13,
+       "px_ge5": 0,
+       "px_gt6": 0,
+       "max_outside_region_plus_1px": 0
+      },
+      "1920": {
+       "p99_9_region": 7.0,
+       "max": 16,
+       "px_ge3": 589,
+       "px_ge5": 265,
+       "px_gt6": 135,
+       "max_outside_region_plus_1px": 0
+      },
+      "1440": {
+       "p99_9_region": 6.0,
+       "max": 16,
+       "px_ge3": 321,
+       "px_ge5": 141,
+       "px_gt6": 63,
+       "max_outside_region_plus_1px": 0
+      },
+      "1280": {
+       "p99_9_region": 6.0,
+       "max": 17,
+       "px_ge3": 258,
+       "px_ge5": 120,
+       "px_gt6": 46,
+       "max_outside_region_plus_1px": 0
+      },
+      "960": {
+       "p99_9_region": 6.0,
+       "max": 13,
+       "px_ge3": 122,
+       "px_ge5": 60,
+       "px_gt6": 19,
+       "max_outside_region_plus_1px": 0
+      },
+      "800": {
+       "p99_9_region": 7.0,
+       "max": 12,
+       "px_ge3": 102,
+       "px_ge5": 54,
+       "px_gt6": 25,
+       "max_outside_region_plus_1px": 0
+      }
+     },
+     "encoder_area": {
+      "2720": {
+       "p99_9_region": 1.0,
+       "max": 3,
+       "px_ge3": 13,
+       "px_ge5": 0,
+       "px_gt6": 0,
+       "max_outside_region_plus_1px": 0
+      },
+      "1920": {
+       "p99_9_region": 7.0,
+       "max": 16,
+       "px_ge3": 889,
+       "px_ge5": 390,
+       "px_gt6": 179,
+       "max_outside_region_plus_1px": 2
+      },
+      "1440": {
+       "p99_9_region": 8.0,
+       "max": 15,
+       "px_ge3": 671,
+       "px_ge5": 287,
+       "px_gt6": 131,
+       "max_outside_region_plus_1px": 1
+      },
+      "1280": {
+       "p99_9_region": 8.79,
+       "max": 17,
+       "px_ge3": 622,
+       "px_ge5": 298,
+       "px_gt6": 131,
+       "max_outside_region_plus_1px": 1
+      },
+      "960": {
+       "p99_9_region": 11.62,
+       "max": 18,
+       "px_ge3": 502,
+       "px_ge5": 262,
+       "px_gt6": 157,
+       "max_outside_region_plus_1px": 0
+      },
+      "800": {
+       "p99_9_region": 13.0,
+       "max": 18,
+       "px_ge3": 413,
+       "px_ge5": 237,
+       "px_gt6": 141,
+       "max_outside_region_plus_1px": 0
+      }
+     }
+    },
+    "B": {
+     "gl_bilinear": {
+      "2720": {
+       "p99_9_region": 1.0,
+       "max": 4,
+       "px_ge3": 24,
+       "px_ge5": 0,
+       "px_gt6": 0,
+       "max_outside_region_plus_1px": 0
+      },
+      "1920": {
+       "p99_9_region": 6.0,
+       "max": 18,
+       "px_ge3": 572,
+       "px_ge5": 251,
+       "px_gt6": 84,
+       "max_outside_region_plus_1px": 0
+      },
+      "1440": {
+       "p99_9_region": 7.0,
+       "max": 16,
+       "px_ge3": 320,
+       "px_ge5": 135,
+       "px_gt6": 71,
+       "max_outside_region_plus_1px": 0
+      },
+      "1280": {
+       "p99_9_region": 7.0,
+       "max": 13,
+       "px_ge3": 250,
+       "px_ge5": 120,
+       "px_gt6": 61,
+       "max_outside_region_plus_1px": 0
+      },
+      "960": {
+       "p99_9_region": 6.0,
+       "max": 10,
+       "px_ge3": 141,
+       "px_ge5": 45,
+       "px_gt6": 20,
+       "max_outside_region_plus_1px": 0
+      },
+      "800": {
+       "p99_9_region": 6.0,
+       "max": 10,
+       "px_ge3": 104,
+       "px_ge5": 44,
+       "px_gt6": 11,
+       "max_outside_region_plus_1px": 0
+      }
+     },
+     "encoder_area": {
+      "2720": {
+       "p99_9_region": 1.0,
+       "max": 4,
+       "px_ge3": 24,
+       "px_ge5": 0,
+       "px_gt6": 0,
+       "max_outside_region_plus_1px": 0
+      },
+      "1920": {
+       "p99_9_region": 7.0,
+       "max": 17,
+       "px_ge3": 834,
+       "px_ge5": 342,
+       "px_gt6": 141,
+       "max_outside_region_plus_1px": 0
+      },
+      "1440": {
+       "p99_9_region": 8.0,
+       "max": 16,
+       "px_ge3": 708,
+       "px_ge5": 288,
+       "px_gt6": 135,
+       "max_outside_region_plus_1px": 0
+      },
+      "1280": {
+       "p99_9_region": 9.0,
+       "max": 16,
+       "px_ge3": 647,
+       "px_ge5": 271,
+       "px_gt6": 137,
+       "max_outside_region_plus_1px": 0
+      },
+      "960": {
+       "p99_9_region": 10.0,
+       "max": 15,
+       "px_ge3": 517,
+       "px_ge5": 274,
+       "px_gt6": 147,
+       "max_outside_region_plus_1px": 0
+      },
+      "800": {
+       "p99_9_region": 11.0,
+       "max": 17,
+       "px_ge3": 453,
+       "px_ge5": 238,
+       "px_gt6": 137,
+       "max_outside_region_plus_1px": 0
+      }
+     }
+    },
+    "C": {
+     "gl_bilinear": {
+      "2720": {
+       "p99_9_region": 1.0,
+       "max": 4,
+       "px_ge3": 25,
+       "px_ge5": 0,
+       "px_gt6": 0,
+       "max_outside_region_plus_1px": 0
+      },
+      "1920": {
+       "p99_9_region": 7.0,
+       "max": 14,
+       "px_ge3": 685,
+       "px_ge5": 333,
+       "px_gt6": 142,
+       "max_outside_region_plus_1px": 0
+      },
+      "1440": {
+       "p99_9_region": 7.0,
+       "max": 16,
+       "px_ge3": 330,
+       "px_ge5": 152,
+       "px_gt6": 76,
+       "max_outside_region_plus_1px": 0
+      },
+      "1280": {
+       "p99_9_region": 7.0,
+       "max": 13,
+       "px_ge3": 288,
+       "px_ge5": 130,
+       "px_gt6": 60,
+       "max_outside_region_plus_1px": 0
+      },
+      "960": {
+       "p99_9_region": 6.0,
+       "max": 13,
+       "px_ge3": 191,
+       "px_ge5": 76,
+       "px_gt6": 23,
+       "max_outside_region_plus_1px": 0
+      },
+      "800": {
+       "p99_9_region": 5.86,
+       "max": 10,
+       "px_ge3": 120,
+       "px_ge5": 51,
+       "px_gt6": 13,
+       "max_outside_region_plus_1px": 0
+      }
+     },
+     "encoder_area": {
+      "2720": {
+       "p99_9_region": 1.0,
+       "max": 4,
+       "px_ge3": 25,
+       "px_ge5": 0,
+       "px_gt6": 0,
+       "max_outside_region_plus_1px": 0
+      },
+      "1920": {
+       "p99_9_region": 7.0,
+       "max": 14,
+       "px_ge3": 1038,
+       "px_ge5": 476,
+       "px_gt6": 208,
+       "max_outside_region_plus_1px": 1
+      },
+      "1440": {
+       "p99_9_region": 8.0,
+       "max": 14,
+       "px_ge3": 814,
+       "px_ge5": 376,
+       "px_gt6": 153,
+       "max_outside_region_plus_1px": 1
+      },
+      "1280": {
+       "p99_9_region": 9.0,
+       "max": 14,
+       "px_ge3": 744,
+       "px_ge5": 347,
+       "px_gt6": 165,
+       "max_outside_region_plus_1px": 0
+      },
+      "960": {
+       "p99_9_region": 10.0,
+       "max": 16,
+       "px_ge3": 613,
+       "px_ge5": 363,
+       "px_gt6": 201,
+       "max_outside_region_plus_1px": 0
+      },
+      "800": {
+       "p99_9_region": 11.0,
+       "max": 16,
+       "px_ge3": 524,
+       "px_ge5": 299,
+       "px_gt6": 187,
+       "max_outside_region_plus_1px": 0
+      }
+     }
+    }
+   }
+  },
+  "sku_notes": [
+   {
+    "owner": "sourcing-agent / manager",
+    "item": "set B, cushions-aliexpress-textured-boucle-throw-pillow 12000058046277179 (oatmeal 50x50)",
+    "note": "the card lists stock 0 for this SKU (oatmeal 45x45 has 995); it is the lead cushion of the default set; check before the shop sells set B"
+   },
+   {
+    "owner": "master-designer",
+    "item": "set B lumbar cushions-cj-linen-look-charcoal beige 30x50",
+    "note": "two SKUs: CJZT113551675WD pillow-core-and-pillowcase, CJZT113551679AZ pillowcase; the picture shows a filled cushion, so the shown option is the core+case SKU; name it in the selection"
+   }
+  ],
+  "shadow_layers_bound_to_this_base": "render-agent's known limit confirmed: the deep-contact multiplier is cool (R<G<B) because the v3c toe neutralised the shadow; exact on this base only. If a phase-2 slot is drawn under the cushions, re-cut the shadows on that base"
+ },
+ "conditions_before_public": [
+  "6K masters and G1/G2 on them (G1.17, G2.12; report 2026-11-07 'before the site')",
+  "frontend-dev: the browser measurement of the edge at the web widths (swap-diff.spec.ts on the WM house, compare to the approved composite resized), and a fix if it is seen (compose at the layers' native width and let the display pass's mipmaps downsample, or flattened per-set frames for this single-slot room)",
+  "G2.13: eye at zoom by master-designer and the owner"
+ ],
+ "combos": "phase 1 has one swappable slot, so the combination space is the 3 sets: all 3 recomposited and all 6 transitions (3 pairs + base->set) measured; the 5-random-combination check applies from phase 2 (2+ slots)",
+ "files": {
+  "report_md": "qa/reports/2026-11-10-wm-tool-layers-v3c.md",
+  "tools": "qa/reports/2026-11-10-wm-tool-layers-v3c/tools/",
+  "data": "qa/reports/2026-11-10-wm-tool-layers-v3c/data/",
+  "crops": "qa/reports/2026-11-10-wm-tool-layers-v3c/crops/"
+ },
+ "rules": {
+  "new_files_only": true,
+  "commits": 0,
+  "var2": 0,
+  "network": 0,
+  "tokens": 0,
+  "note": "the manager's WIP commit 8d346b77 (18:48) swept in two of these QA files while the run was in progress; qa-agent made no commit"
+ }
+}
