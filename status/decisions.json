@@ -6234,6 +6234,39 @@
       "source": "qa/reports/2026-11-10-site-track/launch-checklist.md",
       "asked": "2026-11-10",
       "status": "open"
+    },
+    {
+      "id": "INV1",
+      "group": "השקה",
+      "title": "שירות חשבוניות המס",
+      "question": "דרך איזה שירות להפיק חשבוניות מס אוטומטיות אחרי כל הזמנה ששולמה? ההמלצה: Morning (לשעבר חשבונית ירוקה), שיש לו API מתועד ושרואי חשבון מכירים. כדאי להחליט יחד עם רואה החשבון, באותה פגישה של VAT1.",
+      "context": "S9: הממשק וה-job כבר בנויים עם mock (site/api/src/lib/invoices). המתאם האמיתי ייכנס כשיש תיעוד ומפתח. docs/ops/deploy-runbook.md.",
+      "options": [
+        {
+          "id": "morning",
+          "label": "Morning (חשבונית ירוקה)",
+          "desc": "API מתועד, מוכר לרואי חשבון",
+          "recommended": true
+        },
+        {
+          "id": "grow",
+          "label": "המודול של Grow",
+          "desc": "אותו חשבון כמו הסולק, אם קיים במסלול שלך",
+          "recommended": false
+        },
+        {
+          "id": "accountant",
+          "label": "לפי רואה החשבון",
+          "desc": "להחליט בפגישה על VAT1",
+          "recommended": false
+        }
+      ],
+      "blocks": [
+        "הפעלת חשבוניות אמיתיות"
+      ],
+      "source": "docs/ops/deploy-runbook.md",
+      "asked": "2026-11-10",
+      "status": "open"
     }
   ]
 }
