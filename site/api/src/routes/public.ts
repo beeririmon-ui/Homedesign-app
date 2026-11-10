@@ -267,9 +267,11 @@ publicApi.get('/orders/:id', async (c) => {
     .bind(id)
     .first<{ id: string; token_hash: string; status: OrderStatus; created_at: string; total_agorot: number; shipping_method: 'economy' | 'express' }>();
   if (!o || !timingSafeEqualHex(o.token_hash, await sha256Hex(token))) throw new HttpError(404, 'order_not_found');
-  const { results } = await c.env.DB.prepare('SELECT name_he, pack, unit_sell_qty, qty, unit_price_agorot FROM order_items WHERE order_id = ? ORDER BY line')
+  const { results } = await c.env.DB.prepare(
+    'SELECT name_he, product_id, variant_id, pack, unit_sell_qty, qty, unit_price_agorot FROM order_items WHERE order_id = ? ORDER BY line',
+  )
     .bind(id)
-    .all<{ name_he: string; pack: 'set' | 'unit'; unit_sell_qty: number; qty: number; unit_price_agorot: number }>();
+    .all<{ name_he: string; product_id: string; variant_id: string; pack: 'set' | 'unit'; unit_sell_qty: number; qty: number; unit_price_agorot: number }>();
   const view: OrderView = {
     id: o.id,
     status: o.status,
@@ -279,6 +281,8 @@ publicApi.get('/orders/:id', async (c) => {
     shipping_method: o.shipping_method,
     lines: results.map((r) => ({
       name_he: r.name_he,
+      product_id: r.product_id,
+      variant_id: r.variant_id,
       pack: r.pack,
       pack_qty: r.pack === 'unit' ? 1 : r.unit_sell_qty,
       qty: r.qty,

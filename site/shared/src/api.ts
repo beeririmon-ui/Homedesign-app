@@ -83,7 +83,16 @@ export const OrderViewSchema = z.object({
   total_agorot: z.number().int(),
   shipping_method: z.enum(['economy', 'express']),
   lines: z.array(
-    z.object({ name_he: z.string(), pack: z.enum(PACKS), pack_qty: z.number().int().min(1), qty: z.number().int(), line_total_agorot: z.number().int() }),
+    z.object({
+      name_he: z.string(),
+      /** S8: the public ids (the order page draws "החדר שלך" from them) */
+      product_id: z.string().optional(),
+      variant_id: z.string().optional(),
+      pack: z.enum(PACKS),
+      pack_qty: z.number().int().min(1),
+      qty: z.number().int(),
+      line_total_agorot: z.number().int(),
+    }),
   ),
 });
 export type OrderView = z.infer<typeof OrderViewSchema>;

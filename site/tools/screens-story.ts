@@ -895,8 +895,6 @@ async function axeDetail(): Promise<void> {
       DETAIL('modern-country', 'curtains-aliexpress-linen-blend-s-fold-180502'),
       DETAIL('nordic', 'candle-holders-cj-travertine-pedestal'),
       BOHO_FRAME,
-      '/story/checkout/',
-      '/story/order/',
       TOOL_DRAFT,
     ]) {
       await page.goto(`${ORIGIN}${path}`, { waitUntil: 'load' });
@@ -915,67 +913,8 @@ async function axeDetail(): Promise<void> {
 }
 
 // ---------- S4, the shop: the whole look, the cart, the test checkout, PRE1 on the wheel; the designer's §6 ----------
-async function shopRun(w: number, h: number, tag: 'desk' | 'phone'): Promise<void> {
-  const ctx = await ctxOf(w, h);
-  const page = await open(ctx, '#list-A');
-  await sleep(800);
-  await page.evaluate(`document.querySelector('#list-A').scrollIntoView({ behavior: 'instant', block: 'start' })`);
-  await sleep(300);
-  const t = Date.now();
-  await page.locator('#look-A').click();
-  await page.waitForFunction(`document.querySelector('#st-cart-count').textContent !== '0'`, null, { timeout: 5000 });
-  const lookMs = Date.now() - t;
-  await sleep(200);
-  await shot(page, `${tag}-s1-look`, `${w}: "המראה כולו לסל" under Nordic A's list: every product for sale, once; what is not for sale is named`);
-  const count = (await page.evaluate(`document.querySelector('#st-cart-count').textContent`)) as string;
-  await page.locator('#st-cart-open').click();
-  await sleep(400);
-  await shot(page, `${tag}-s2-cart`, `${w}: the cart: a quantity per line (− and +), its removal, the sum, "לתשלום"`);
-  await page.locator('#st-cart-pay').click();
-  await page.waitForFunction(`(window.__story?.events ?? []).length > 0 && !!document.querySelector('#co-lines li')`, null, { timeout: 10_000 });
-  await sleep(400);
-  await shot(page, `${tag}-s3-checkout`, `${w}: the test checkout: the site's fields, its shipping (economy free over ₪299), the summary`);
-  await page.locator('#co-pay').click();
-  await sleep(300);
-  await shot(page, `${tag}-s4-checkout-errors`, `${w}: an empty form: every error at its field and in a summary that takes the focus`);
-  const focus = (await page.evaluate(`document.activeElement && document.activeElement.id`)) as string;
-  for (const [k, v] of [
-    ['full_name', 'נועה כהן'],
-    ['email', 'noa@example.com'],
-    ['phone', '050-1234567'],
-    ['city', 'חיפה'],
-    ['street', 'הנמל'],
-    ['house', '12'],
-  ])
-    await page.locator(`#f-${k}`).fill(v!);
-  await page.locator('#f-terms').check();
-  await page.locator('#co-pay').click();
-  await page.waitForURL(/\/story\/order\//, { timeout: 10_000 });
-  await sleep(500);
-  await shot(page, `${tag}-s5-order`, `${w}: the test order: its number, the lines, the sum; nothing charged, nothing sent; the cart is empty`);
-  const order = (await page.evaluate(`document.querySelector('#or-number').textContent`)) as string;
-  // the designer's §6 on the detail page: the title follows the colour; the crop says it is not a product photo
-  await page.goto(`${ORIGIN}${BOUCLE_WM}?color=white&size=30x50`, { waitUntil: 'load' });
-  await sleep(700);
-  await shot(page, `${tag}-s6-title`, `${w}: another option chosen: the title follows its colour and its shape name ("כרית מותן בוקלה, לבן"), never its size`);
-  const title = (await page.evaluate(`document.querySelector('h1').textContent`)) as string;
-  await page.goto(`${ORIGIN}${DETAIL('modern-country', 'curtains-aliexpress-linen-blend-s-fold-180502')}`, { waitUntil: 'load' });
-  await sleep(700);
-  await shot(page, `${tag}-s7-crop`, `${w}: no supplier photo: the product's crop from the frame, centred, at its own size, "זו לא תמונת מוצר"`);
-  await page.goto(`${ORIGIN}${DETAIL('nordic', 'candle-holders-cj-travertine-pedestal')}`, { waitUntil: 'load' });
-  await sleep(600);
-  await page.locator('label', { has: page.locator('input[name="st-pack"][value="unit"]') }).click();
-  await sleep(300);
-  await shot(page, `${tag}-s8-single-piece`, `${w}: SET1: the set by default, the single piece where the supplier offers one (an estimated price, said)`);
-  await page.goto(`${ORIGIN}${BOHO_FRAME}`, { waitUntil: 'load' });
-  await settled(page);
-  await sleep(700);
-  await page.evaluate(`window.__story.showMarks('A')`);
-  await sleep(350);
-  await shot(page, `${tag}-s9-boho`, `${w}: boho fin6: the dots the register lets on, placed by eye`);
-  evidence[`shop_${tag}`] = { look_ms: lookMs, cart_count_after_look: count, errors_focus: focus, order, title_after_choice: title };
-  await ctx.close();
-}
+// S8: the shop's evidence (the story's look, the cart, the real checkout, the order) needs the API: it is shot by
+// e2e/shots-*.spec.ts against the local build with its Worker (`HD_SHOTS_DIR=<dir> npx playwright test --project=evidence`)
 async function wheelPre1(): Promise<void> {
   const ctx = await ctxOf(1280, 800);
   const page = await ctx.newPage();
@@ -1126,9 +1065,6 @@ if (PART === 'tool' || PART === 'all') {
   await toolRun(400, 800, 'phone');
 }
 if (PART === 'shop' || PART === 'all') {
-  await firstLoad(400, 800, 1, 'checkout_phone_400_dpr1', '/story/checkout/');
-  await shopRun(1280, 800, 'desk');
-  await shopRun(400, 800, 'phone');
   await wheelPre1();
 }
 if (PART === 'detail' || PART === 'all') {

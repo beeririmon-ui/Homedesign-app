@@ -250,6 +250,9 @@ test.describe('store', () => {
     // ART6: the order number is digits only, and the status is in the customer's words (never "הועברה לספק")
     await expect(page).toHaveURL(/\/order\/[1-9]\d{9}\/$/);
     await expect(page.locator('.order-steps [aria-current="step"]')).toHaveText(/התקבלה|בהכנה/, { timeout: 20_000 });
+    // S8, §9.5 "החדר שלך": the room with what was ordered, drawn from the room's own layers
+    await expect(page.locator('.your-room .your-room-layer').first()).toBeVisible();
+    await expect(page.locator('.your-room figcaption')).toContainText('כפי שהרכבת אותו');
     await expect(page.locator('body')).not.toContainText('הועברה לספק');
   });
 

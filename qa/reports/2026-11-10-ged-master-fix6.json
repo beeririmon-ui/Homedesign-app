@@ -1,0 +1,27 @@
+{
+ "id": "2026-11-10-ged-master-fix6",
+ "date": "2026-11-10",
+ "by": "qa-agent",
+ "follows": "qa/reports/2026-11-10-ged-master-fix4.json",
+ "fix5": {
+  "nordic-MB-A-fix5": {
+   "G-ED.8": "pass: 2613 px, all in the declared wedge (x 1573-1647, y 791-849)",
+   "G-ED.9": "pass: the pillowcase's linen runs down to a soft contact line; L* 70.7 against 73.0 around, grain 1.52 against 1.99 (present, a little smoother); no apex, no straight sides; natural at 100 % (overlays/nordic-wedge-x4.jpg, nordic-wedge-context-100.jpg)"
+  },
+  "warm-modern-MB-A-fix4": {
+   "G-ED.8": "pass: 3186 px, all in the declared box (x 2014-2079, y 765-817)",
+   "G-ED.9": "pass: the blob is gone; the cream back pillow's edge and the gap continue down to the cushion; grain 1.44 (the clean gap rows above: 1.46) (overlays/wm-gap-x4.jpg)"
+  }
+ },
+ "fix6": {
+  "candles": "pass: both flames and their glow gone, dark wicks kept, the wax's warm half toned down; the content change only inside the candle boxes (4576 px > 3 levels inside, 0 outside) (overlays/fix6-candles-x3.jpg)",
+  "exposure": "pass: outside the candle boxes fix6 is fix5 through one tone curve of L* alone: residual after the curve 0 px > 3 levels (p99.9 1.04), the same gain on R, G and B (spread p99 0.0226); midtones x0.7944 (-0.332 stop), easing to 1.0 in the sun stripes (their 2 % brightest x1.0) and to about 0.88 in the deep shadow",
+  "DL1": "met: the wall above the panelling, lit side, L* 59.0 against the living room's back wall 57.0 (fix5: 65.0); frame median 56.6 against 57.4; render-agent's wider measure 60.5 against 60.5; the designer's cap (1/3 stop) used",
+  "guardrails": "G-ED.11 pass (no split; shadow p1 9.6 on QA's quarter-size copy, render-agent 8.2: both >= 8); G-ED.12 pass (0.162 % clipped, the window and the glazing behind the sill vase)"
+ },
+ "designer_eye": "docs/master-bedroom-comparison-2026-11-07.md §5: G-ED.10 pass; G-ED.13 pass after the candles; DL1 measured by QA; the frame a final test after the two code fixes",
+ "states": {
+  "nordic-MB-A-fix6": "final_test",
+  "warm-modern-MB-A-fix4": "not_yet (the caramel pillowcases' flanges: P6b in SPEND1 week 3, prepared in mb1-fix5.json)"
+ }
+}

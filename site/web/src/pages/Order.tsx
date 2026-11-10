@@ -7,7 +7,58 @@ import type { OrderView } from '@hd/shared';
 import { ORDER_STEPS_HE, orderStep } from '@hd/shared/constants';
 import { api, ApiError } from '../api';
 import { orderToken } from '../state/cart';
-import { Price } from '../components/Media';
+import { Picture, Price } from '../components/Media';
+import { livingRoom, scene } from '../catalog';
+import { mediaUrl } from '../media';
+import type { SceneLayerSet } from '../engine/types';
+
+/**
+ * S8, §9.5 "החדר שלך": the room's composite with the variations the customer ordered, made from the room's own layers
+ * (the same rects the engine draws), so it shows only products that exist. A shadow multiplies, a light screens. No
+ * ordered product on the room's wheel: nothing is drawn.
+ */
+function YourRoom({ lines }: { lines: OrderView['lines'] }) {
+  const picks = livingRoom.slots.flatMap((s) => {
+    const o = s.options.find((x) => !!x.product_id && lines.some((l) => l.product_id === x.product_id));
+    const layer = scene.slots[s.id];
+    return o && layer?.product ? [{ id: s.id, pos: o.position, layer }] : [];
+  });
+  if (!picks.length) return null;
+  const base = scene.base[0]!;
+  const at = (set: SceneLayerSet, pos: number, cls: string) => {
+    const [x0, x1, y0, y1] = set.rect;
+    const src = set.src[pos - 1] ?? set.src[0];
+    return src ? (
+      <img
+        class={`your-room-layer ${cls}`}
+        src={mediaUrl(src, scene.widths.lo, 'webp')}
+        alt=""
+        loading="lazy"
+        decoding="async"
+        style={{ left: `${x0 * 100}%`, top: `${y0 * 100}%`, width: `${(x1 - x0) * 100}%`, height: `${(y1 - y0) * 100}%` }}
+      />
+    ) : null;
+  };
+  return (
+    <figure class="your-room" aria-labelledby="your-room-cap">
+      <div class="your-room-frame">
+        <Picture src={base.src} widths={base.widths} sizes="(min-width: 1024px) 58vw, 100vw" alt="" loading="lazy" />
+        {[...picks]
+          .sort((a, b) => a.layer.z - b.layer.z)
+          .map((p) => (
+            <span key={p.id}>
+              {p.layer.shadow ? at(p.layer.shadow, p.pos, 'is-multiply') : null}
+              {at(p.layer.product!, p.pos, '')}
+              {p.layer.light ? at(p.layer.light, p.pos, 'is-screen') : null}
+            </span>
+          ))}
+      </div>
+      <figcaption id="your-room-cap" class="small muted">
+        הדמיה: {livingRoom.name_he}, כפי שהרכבת אותו.
+      </figcaption>
+    </figure>
+  );
+}
 import { lineLabelHe } from './lineLabel';
 
 export function OrderPage({ id }: { id: string }) {
@@ -54,6 +105,7 @@ export function OrderPage({ id }: { id: string }) {
           <p>
             מספר הזמנה: <strong class="num">{order.id.replace(/^\D+/, '')}</strong>
           </p>
+          {paid ? <YourRoom lines={order.lines} /> : null}
           {step !== null ? (
             <ol class="order-steps" aria-label={`מצב ההזמנה: ${order.status_he}`}>
               {ORDER_STEPS_HE.map((s, i) => (

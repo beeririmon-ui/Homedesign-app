@@ -567,3 +567,32 @@
 .room-intro p {
   max-width: 30rem;
 }
+/* S8, §9.5 "החדר שלך": the room's layers stacked as the engine draws them, 16:9, on paper */
+.your-room {
+  display: grid;
+  gap: var(--s-2);
+  margin: 0;
+}
+.your-room-frame {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--stage);
+}
+.your-room-frame img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.your-room-frame .your-room-layer {
+  inset: auto;
+  object-fit: fill;
+}
+.your-room-layer.is-multiply {
+  mix-blend-mode: multiply;
+}
+.your-room-layer.is-screen {
+  mix-blend-mode: screen;
+}
