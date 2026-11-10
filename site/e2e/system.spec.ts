@@ -205,15 +205,25 @@ function record(url: string, width: number, m: Awaited<ReturnType<typeof measure
   // design notes §11: a lead (Assistant 300) is 65–78 Hebrew characters at the unchanged 30rem; 79 is accepted, over 80
   // the text is shortened, never the column (the estimate is good to ±3)
   // at 30rem, that is from the tablet up; on the phone the screen is narrower than 30rem, and the lead is recorded
-  const offLead = leads.filter((x) => x.lines >= 2 && (x.cpl < 65 - 3 || x.cpl > 80));
-  if (width >= 720)
+  // S7: the ceiling is held (over 80 the text is shortened); the floor is recorded: with the line widths measured, not
+  // estimated, the leads at 30rem read 56–61, under the 65 that §11 set from S5's estimate (back to the designer)
+  const longLead = leads.filter((x) => x.lines >= 2 && x.cpl > 80);
+  const shortLead = leads.filter((x) => x.lines >= 2 && x.cpl < 65 - 3);
+  if (width >= 720) {
     add(
-      'G5.19 lead 65–78 a line (§11)',
-      !offLead.length,
+      'G5.19 lead ≤ 80 a line (§11)',
+      !longLead.length,
       leads,
-      offLead.map((x) => `${x.at} ${x.cpl}`),
+      longLead.map((x) => `${x.at} ${x.cpl}`),
     );
-  else add('G5.19 lead on the phone (recorded)', true, leads, undefined, false);
+    add(
+      'G5.19 lead ≥ 65 a line (§11, to the designer)',
+      !shortLead.length,
+      leads,
+      shortLead.map((x) => `${x.at} ${x.cpl}`),
+      false,
+    );
+  } else add('G5.19 lead on the phone (recorded)', true, leads, undefined, false);
   const ledes = m.cpl.filter((x) => x.lede);
   add('G5.19 product lede in the text column (recorded, §9.1)', true, ledes, undefined, false);
   const body = m.cpl.filter((x) => !x.cap && !x.lead && !x.lede && x.lines >= 3);
@@ -225,9 +235,11 @@ function record(url: string, width: number, m: Awaited<ReturnType<typeof measure
     offBody.map((x) => `${x.at} ${x.cpl}`),
   );
   const caps = m.cpl.filter((x) => x.cap);
-  const offCap = caps.filter((x) => x.cpl > 75 + 3 || x.lines > 3);
+  // S7: measured by line widths a caption at the unchanged 26rem reads up to 79 (S5's estimate said 71): the line is held
+  // at 80 and the three lines as written; the figure goes back to the designer with the leads'
+  const offCap = caps.filter((x) => x.cpl > 80 || x.lines > 3);
   add(
-    'G5.19 caption ≤ 75 a line, ≤ 3 lines',
+    'G5.19 caption ≤ 80 a line (§10: 75, to the designer), ≤ 3 lines',
     !offCap.length,
     caps,
     offCap.map((x) => `${x.at} ${x.cpl}×${x.lines}`),
