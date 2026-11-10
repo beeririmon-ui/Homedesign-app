@@ -35,7 +35,51 @@ REC = os.path.join(HERE, "mb1-fix3.json")
 CROPS = os.path.join(HERE, "fix3-before-after")
 RING_L, RING_R = (1366, 396, 1572, 572), (2436, 304, 2730, 566)
 SCALE_L, SCALE_R = 0.82, 0.80
-GHOST_BOX = (1326, 644, 1356, 692)
+GHOST_BOX = (1324, 640, 1358, 694)
+# the cloth outline, corrected (QA's fringe note): the lower-left fold piece (x 160-210, y 1087-1115) was outside fix1's polygon and kept
+# its old colour; the deep fold gap at x ~205-215 (L* < 18) was excluded as "chair"; the left edge strip of fix2 ran 10 px past the rail
+# onto the floor (a grey patch at x 132-140, y 995-1005)
+CLOTH3 = [[(0, 687), (10, 687), (30, 686), (53, 687), (73, 689), (87, 691), (98, 693), (98, 753), (100, 770), (110, 803), (120, 827), (132, 838),
+           (147, 843), (173, 848), (200, 853), (227, 863), (253, 870), (267, 877), (273, 887), (277, 903), (278, 923), (278, 1000), (279, 1067),
+           (280, 1117), (300, 1133), (293, 1137), (273, 1140), (250, 1146), (233, 1143), (220, 1138), (214, 1124), (210, 1115), (200, 1112),
+           (186, 1108), (178, 1100), (172, 1091), (162, 1088), (157, 1082), (150, 1050), (143, 1010), (140, 1000), (140, 903), (0, 903)],
+          [(0, 995), (55, 995), (55, 1075), (40, 1080), (20, 1088), (0, 1090)]]
+EDGE_STRIP3 = [(133, 895), (143, 895), (143, 992), (133, 992)]
+NOT_CLOTH = [(126, 993), (142, 993), (142, 1010), (126, 1010)]
+
+
+def cloth_mask3(img):
+    H, W = img.shape[:2]
+    L = F.lab(img)[..., 0]
+    yy, xx = np.mgrid[0:H, 0:W]
+    hanging = (xx >= 150) & (yy >= 990)                     # below the seat: no chair parts behind the hanging cloth
+    cm = np.zeros((H, W), bool)
+    for p in CLOTH3:
+        cm |= F.poly(img.shape, p)
+    for p in F.WOOD:
+        cm &= ~F.poly(img.shape, p)
+    cm |= F.poly(img.shape, EDGE_STRIP3)
+    cm &= ~((L < 18) & ~hanging)
+    cm &= ~F.poly(img.shape, NOT_CLOTH)
+    cm = cv2.morphologyEx(cm.astype(np.uint8), cv2.MORPH_OPEN, np.ones((3, 3), np.uint8)).astype(bool)
+    return cm, hanging
+
+
+def despeckle(img, box):
+    """the lamp's rims: a*/b* specks (red / green dots at the rim joints) pulled to the local median; L* untouched"""
+    x0, y0, x1, y1 = box
+    sub = F.lab(img[y0:y1, x0:x1])
+    out = sub.copy()
+    n = 0
+    for c in (1, 2):
+        ch = sub[..., c]
+        med = cv2.medianBlur(np.clip((ch + 128), 0, 255).astype(np.uint8), 5).astype(np.float32) - 128
+        bad = np.abs(ch - med) > 3.0
+        out[..., c] = np.where(bad, med, ch)
+        n += int(bad.sum())
+    res = img.copy()
+    res[y0:y1, x0:x1] = np.clip(F.rgb(out), 0, 1)
+    return res, n
 
 
 def nordic():
@@ -53,22 +97,31 @@ def nordic():
     for (x0, y0, x1, y1), src in ((RING_L, sl), (RING_R, sr)):
         out[y0:y1, x0:x1] = src[y0:y1, x0:x1]
     allowed |= rg_l | rg_r
+    for k, (cx, cy), s_, b in (("sconce_left", (1447, 467), SCALE_L, (1387, 407, 1506, 521)), ("sconce_right", (2566, 407), SCALE_R, (2458, 314, 2673, 500))):
+        bx = (int(cx + (b[0] - cx) * s_) - 4, int(cy + (b[1] - cy) * s_) - 4, int(cx + (b[2] - cx) * s_) + 5, int(cy + (b[3] - cy) * s_) + 5)
+        out, nsp = despeckle(out, bx)
+        info[k].update(scaled_body_box=list(bx), despeckled_px=nsp)
     # 2. the chair cloth, mask + 2 px
-    cm, _ = F2.cloth_alpha(orig)
+    cm, hanging = cloth_mask3(orig)
     Lb = F.lab(orig)
     L = Lb[..., 0]
     cm2 = cv2.dilate(cm.astype(np.uint8), np.ones((5, 5), np.uint8)).astype(bool)
     for p in F.WOOD:
         cm2 &= ~F.poly(orig.shape, p)
-    cm2 &= ~(L < 18)
+    cm2 &= ~((L < 18) & ~hanging)
+    cm2 &= ~F.poly(orig.shape, NOT_CLOTH)
     light_lim = float(np.percentile(L[cm], 98)) + 4.0
     band = cm2 & ~cm
     band &= L <= light_lim
     cm2 = cm | band
     ac2 = cv2.GaussianBlur(cv2.erode(cm2.astype(np.uint8), np.ones((2, 2), np.uint8)).astype(np.float32), (0, 0), 0.8)
     rec_ = F.recolour(orig, ac2, F2.CHARCOAL, chroma_keep=0.5, gain=True)
+    # where fix2 recoloured but fix3's cloth does not (the strip's floor patch): back to the source pixels
+    _, ac_old = F2.cloth_alpha(orig)
+    back = (ac_old > 0) & ~(ac2 > 0)
+    out = np.where(back[..., None], orig, out)
     out = np.where((ac2 > 0)[..., None], rec_, out)
-    allowed |= ac2 > 0
+    allowed |= (ac2 > 0) | back
     inner = cv2.erode(cm.astype(np.uint8), np.ones((5, 5), np.uint8)).astype(bool)
     o8 = F.save(out, NOUT)
     of = o8.astype(np.float32) / 255
@@ -80,7 +133,7 @@ def nordic():
     def hc(lb, m):
         v = np.median(lb[m], 0)
         return [round(float(v[0]), 1), round(float(np.hypot(v[1], v[2])), 2), round(float(np.degrees(np.arctan2(v[2], v[1])) % 360), 1)]
-    info["cloth"] = dict(grow_px=2, band_px=int(band.sum()), light_guard_L=round(light_lim, 1), mask_px=int(cm2.sum()),
+    info["cloth"] = dict(restored_to_source_px=int(back.sum()), outline="CLOTH3 (the lower-left fold piece added; the fold gap's dark pixels kept as cloth below the seat; the left strip stopped at the rail)", grow_px=2, band_px=int(band.sum()), light_guard_L=round(light_lim, 1), mask_px=int(cm2.sum()),
                          Lab_C_h_inner_fix3=F.med_lab(of, inner), edge_lower_L_C_h=dict(fix2=hc(lb2, low), fix3=hc(lb3, low)),
                          edge_lower_px_C_over_8=dict(fix2=int((np.hypot(lb2[..., 1], lb2[..., 2])[low] > 8).sum()),
                                                      fix3=int((np.hypot(lb3[..., 1], lb3[..., 2])[low] > 8).sum())))
@@ -103,13 +156,13 @@ def warm():
     # the plaster's local level: a wide median blur of L* (the leaves are thin)
     Lw = cv2.medianBlur((np.clip(L[win], 0, 100) * 2.55).astype(np.uint8), 21).astype(np.float32) / 2.55
     m = np.zeros((H, W), bool)
-    sub = (L[win] < Lw - 3.0)
+    sub = (L[win] < Lw - 2.0)
     m[win] = sub
     box = np.zeros((H, W), bool)
     box[y0:y1, x0:x1] = True
     m &= box
     m = cv2.morphologyEx(m.astype(np.uint8), cv2.MORPH_OPEN, np.ones((2, 2), np.uint8))
-    m = cv2.dilate(m, np.ones((5, 5), np.uint8)).astype(bool) & box
+    m = cv2.dilate(m, np.ones((7, 7), np.uint8)).astype(bool) & box
     i8 = (img * 255 + 0.5).astype(np.uint8)
     wy, wx = win
     fill = cv2.inpaint(np.ascontiguousarray(i8[wy, wx]), m[wy, wx].astype(np.uint8), 6, cv2.INPAINT_TELEA).astype(np.float32) / 255
@@ -133,7 +186,7 @@ def warm():
     Image.fromarray(mk).save(os.path.join(HERE, "warm-modern/raw/fix2-mask.png"))
     lo = F.lab(o8.astype(np.float32) / 255)[..., 0]
     return dict(base=WBASE, out=WOUT, ghost_box=list(GHOST_BOX), mask_px=int(m.sum()), grain_sd=round(sd, 4),
-                dark_px_in_box=dict(before=int(((L < Lw_full(L, win) - 3.0) & box).sum()), after=int(((lo < Lw_full(lo, win) - 3.0) & box).sum())),
+                dark_px_in_box_dL3=dict(before=int(((L < Lw_full(L, win) - 3.0) & box).sum()), after=int(((lo < Lw_full(lo, win) - 3.0) & box).sum())),
                 px_changed=int(moved.sum()), px_changed_outside_mask=int((moved & ~allowed).sum()))
 
 

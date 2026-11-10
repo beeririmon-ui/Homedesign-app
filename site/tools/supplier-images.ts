@@ -2,7 +2,7 @@
  * Supplier photos for the product page (FR-I, docs/studio-rules.md ג.0, 2026-10-10): the product page leads with the
  * render from the room, says so, and also shows the supplier's original photo. The photo is the first image of the
  * product card (`images.urls`), one per product (size budget), downloaded once, encoded as WebP 800 px wide and served
- * from our own media (media/products/<id>/supplier.800.webp): the site loads it from our CDN and the Artifact ships it
+ * from our own media (media/products/<public id>/photo.800.webp): the site loads it from our CDN and the Artifact ships it
  * next to the page, never a hot-link to the supplier. The card's `usage_rights` is recorded in the manifest (all
  * "unclear" today: to clear with the suppliers before launch).
  *
@@ -12,7 +12,7 @@
  *
  * Input:  .generated/catalog.full.json (supplier_image.url per shown product; the public catalog never has the url)
  * Cache:  .cache/supplier-images/<sha256(url)>.bin, gitignored (a second build does not hit the network)
- * Output: web/public/media/products/<id>/supplier.800.webp and .generated/supplier-images.json
+ * Output: web/public/media/products/<public id>/photo.800.webp and .generated/supplier-images.json
  *         ({ products: { <id>: { src: 'products/<id>/supplier.800', width, height, usage_rights } }, missing: [...] })
  *
  * A download that fails is a warning, not a build failure: the product page then shows the render only.
@@ -24,7 +24,7 @@
  * the product's photo there.
  */
 import sharp from 'sharp';
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { join, dirname } from 'node:path';
@@ -98,7 +98,7 @@ async function main() {
       continue;
     }
     // the file is named by the encoding width even when a small original stays smaller (withoutEnlargement)
-    const src = `products/${p.id}/supplier.${WIDTH}`;
+    const src = `products/${p.id}/photo.${WIDTH}`;
     const out = join(MEDIA_OUT, `${src}.webp`);
     const cached = existsSync(join(CACHE, `${hashOf(url)}.bin`));
     const prev = previous?.products[p.id];
@@ -174,10 +174,14 @@ async function main() {
     if (files.length) manifest.options[p.id] = { files, sku };
   }
   writeFileSync(MANIFEST, JSON.stringify(manifest, null, 1));
+  // S7: a folder of a product the catalog no longer names (an old card id with the supplier in it) leaves the media
+  const keep = new Set(catalog.products.map((p) => p.id));
+  const dir = join(MEDIA_OUT, 'products');
+  for (const name of existsSync(dir) ? readdirSync(dir) : []) if (!keep.has(name)) rmSync(join(dir, name), { recursive: true, force: true });
   const n = Object.keys(manifest.products).length;
   const rights = (['confirmed', 'unclear', 'none'] as const).map((r) => `${r} ${Object.values(manifest.products).filter((x) => x.usage_rights === r).length}`);
   console.log(
-    `supplier images: ${n}/${catalog.products.length} products (${encoded} encoded, ${reused} up to date, ${downloaded} downloaded) → media/products/<id>/supplier.${WIDTH}.webp` +
+    `supplier images: ${n}/${catalog.products.length} products (${encoded} encoded, ${reused} up to date, ${downloaded} downloaded) → media/products/<public id>/photo.${WIDTH}.webp` +
       ` · usage rights ${rights.join(', ')} (${((Date.now() - t0) / 1000).toFixed(1)}s)`,
   );
   console.log(

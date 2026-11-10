@@ -1,8 +1,7 @@
 import { useEffect } from 'preact/hooks';
-import { match, navigate, path, type Route } from './router';
+import { match, path, type Route } from './router';
 import { productBySegment, room } from './catalog';
 import { headFor } from './head';
-import { productPath } from '@hd/shared/product-url';
 import { Layout } from './components/Layout';
 import { TransitionOverlay } from './components/Transition';
 import { Home } from './pages/Home';
@@ -24,9 +23,8 @@ export function Page({ route }: { route: Route }) {
       return r?.built ? <Room room={r} slot={route.slot} option={route.option} /> : <NotFound />;
     }
     case 'product': {
-      // S5: /p/<slug>/; an old address by card id still opens the page and moves to the neutral one
+      // S7: /p/<public id>/ (an old address by card id moves there by dist/_redirects, 301)
       const hit = productBySegment(route.id);
-      if (hit?.old && typeof window !== 'undefined') queueMicrotask(() => navigate(productPath(hit.product.id) + location.search, { replace: true }));
       return hit ? <Product p={hit.product} /> : <NotFound />;
     }
     case 'cart':

@@ -8,7 +8,7 @@ import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { PublicCatalog } from '../shared/src/catalog';
-import { productPath, productSlug } from '@hd/shared/product-url';
+import { productPath, productSlug, shopPath } from '@hd/shared/product-url';
 
 // a product with supplier options (2026-10-11), the most axes first: swatches, chips and a list on one page
 const catalog = JSON.parse(readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), '../.generated/catalog.public.json'), 'utf8')) as PublicCatalog;
@@ -69,7 +69,7 @@ for (const scheme of ['light'] as const) {
 
     test('a product with supplier options: swatches, chips or a list, another option chosen', async ({ page }) => {
       test.skip(!WITH_OPTIONS, 'no product with options in the catalog');
-      await page.goto(productPath(WITH_OPTIONS!.id));
+      await page.goto(shopPath(WITH_OPTIONS!.id));
       const picker = page.locator('.opt-picker');
       await expect(picker).toBeVisible();
       await audit(page, `${scheme} options, the room's option`);

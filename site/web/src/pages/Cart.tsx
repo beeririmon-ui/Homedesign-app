@@ -1,4 +1,4 @@
-import { productPath } from '@hd/shared/product-url';
+import { shopPath } from '@hd/shared/product-url';
 import { useEffect } from 'preact/hooks';
 import { catalog, livingRoom, scene } from '../catalog';
 import { Picture, Price, productImage } from '../components/Media';
@@ -44,7 +44,7 @@ export function CartPage() {
                   <span class="line-thumb" aria-hidden="true" />
                 )}
                 <div>
-                  <a class="title" href={productPath(l.product_id)}>
+                  <a class="title" href={shopPath(l.product_id)}>
                     {l.name_he}
                   </a>
                   {lineLabelHe(l) ? <p class="detail pack-line">{lineLabelHe(l)}</p> : null}

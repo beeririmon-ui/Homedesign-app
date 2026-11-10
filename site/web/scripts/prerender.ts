@@ -5,7 +5,7 @@
 import { readFileSync, writeFileSync, mkdirSync, rmSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { productPath } from '@hd/shared/product-url';
+import { shopPath } from '@hd/shared/product-url';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const dist = resolve(here, '../dist');
@@ -16,12 +16,16 @@ const catalog = JSON.parse(readFileSync(resolve(here, '../../.generated/catalog.
   products: { id: string }[];
 };
 
+// S7: the old addresses by card id (only in the full catalog, never shipped) move to the public ids
+const cardIds = (
+  JSON.parse(readFileSync(resolve(here, '../../.generated/catalog.full.json'), 'utf8')) as { products: { id: string; card_id?: string }[] }
+).products.filter((p): p is { id: string; card_id: string } => !!p.card_id && p.card_id !== p.id);
 const template = readFileSync(resolve(dist, 'index.html'), 'utf8');
 const routes = [
   '/',
   ...catalog.rooms.filter((r) => r.built).map((r) => `/rooms/${r.id}/`),
   // S5: the neutral address (@hd/shared/product-url); the old one by card id moves there (_redirects below)
-  ...catalog.products.map((p) => productPath(p.id)),
+  ...catalog.products.map((p) => shopPath(p.id)),
   '/accessibility/',
   '/terms/',
   '/privacy/',
@@ -55,7 +59,7 @@ const storyRedirects = (() => {
 })();
 writeFileSync(
   resolve(dist, '_redirects'),
-  [...catalog.products.map((p) => `/p/${p.id}/ ${productPath(p.id)} 301`), ...(storyRedirects && process.env.HD_PUBLIC !== '1' ? [storyRedirects] : [])].join(
+  [...cardIds.map((p) => `/p/${p.card_id}/ ${shopPath(p.id)} 301`), ...(storyRedirects && process.env.HD_PUBLIC !== '1' ? [storyRedirects] : [])].join(
     '\n',
   ) + '\n',
 );

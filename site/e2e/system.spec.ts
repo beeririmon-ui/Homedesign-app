@@ -200,50 +200,36 @@ function record(url: string, width: number, m: Awaited<ReturnType<typeof measure
   add('G5.19 not justified', !m.justified.length, m.justified.length, m.justified);
   add('G5.19 inputs ≥ 16 px', !m.smallInputs.length, m.smallInputs.length, m.smallInputs);
   // design notes §10: the measured Hebrew targets (characters a line from the measured line widths, good to ±3)
-  const [lo, hi] = width < 720 ? [50, 60] : [52, 68];
-  const leads = m.cpl.filter((x) => x.lead);
-  // design notes §11: a lead (Assistant 300) is 65–78 Hebrew characters at the unchanged 30rem; 79 is accepted, over 80
-  // the text is shortened, never the column (the estimate is good to ±3)
-  // at 30rem, that is from the tablet up; on the phone the screen is narrower than 30rem, and the lead is recorded
-  // S7: the ceiling is held (over 80 the text is shortened); the floor is recorded: with the line widths measured, not
-  // estimated, the leads at 30rem read 56–61, under the 65 that §11 set from S5's estimate (back to the designer)
-  const longLead = leads.filter((x) => x.lines >= 2 && x.cpl > 80);
-  const shortLead = leads.filter((x) => x.lines >= 2 && x.cpl < 65 - 3);
-  if (width >= 720) {
-    add(
-      'G5.19 lead ≤ 80 a line (§11)',
-      !longLead.length,
-      leads,
-      longLead.map((x) => `${x.at} ${x.cpl}`),
-    );
-    add(
-      'G5.19 lead ≥ 65 a line (§11, to the designer)',
-      !shortLead.length,
-      leads,
-      shortLead.map((x) => `${x.at} ${x.cpl}`),
-      false,
-    );
-  } else add('G5.19 lead on the phone (recorded)', true, leads, undefined, false);
-  const ledes = m.cpl.filter((x) => x.lede);
-  add('G5.19 product lede in the text column (recorded, §9.1)', true, ledes, undefined, false);
-  const body = m.cpl.filter((x) => !x.cap && !x.lead && !x.lede && x.lines >= 3);
-  const offBody = body.filter((x) => x.cpl < lo - 3 || x.cpl > hi + 3);
+  // design notes §12 (2026-11-10), measured by line widths: the ceilings are held, the targets are logged
+  //   a lead 52–66, ceiling 70 · a story line and running text 50–65, ceiling 70 · a caption 60–80, ceiling 82, ≤ 3 lines
+  const within = (xs: typeof m.cpl, lo: number, hi: number) => xs.filter((x) => x.cpl >= lo && x.cpl <= hi).length;
+  const leads = m.cpl.filter((x) => x.lead && x.lines >= 2);
   add(
-    `G5.19 running text ${lo}–${hi} a line`,
-    !offBody.length,
-    body,
-    offBody.map((x) => `${x.at} ${x.cpl}`),
+    'G5.19 lead ≤ 70 a line (§12)',
+    leads.every((x) => x.cpl <= 70),
+    leads,
+    leads.filter((x) => x.cpl > 70).map((x) => `${x.at} ${x.cpl}`),
   );
-  const caps = m.cpl.filter((x) => x.cap);
-  // S7: measured by line widths a caption at the unchanged 26rem reads up to 79 (S5's estimate said 71): the line is held
-  // at 80 and the three lines as written; the figure goes back to the designer with the leads'
-  const offCap = caps.filter((x) => x.cpl > 80 || x.lines > 3);
+  add(`G5.19 lead target 52–66 (§12, logged: ${within(leads, 52, 66)}/${leads.length})`, true, leads, undefined, false);
+  const ledes = m.cpl.filter((x) => x.lede);
+  add('G5.19 product lede in the text column (logged, §9.1)', true, ledes, undefined, false);
+  const body = m.cpl.filter((x) => !x.cap && !x.lead && !x.lede && x.lines >= 3);
   add(
-    'G5.19 caption ≤ 80 a line (§10: 75, to the designer), ≤ 3 lines',
+    'G5.19 running text ≤ 70 a line (§12)',
+    body.every((x) => x.cpl <= 70),
+    body,
+    body.filter((x) => x.cpl > 70).map((x) => `${x.at} ${x.cpl}`),
+  );
+  add(`G5.19 running text target 50–65 (§12, logged: ${within(body, 50, 65)}/${body.length})`, true, body, undefined, false);
+  const caps = m.cpl.filter((x) => x.cap);
+  const offCap = caps.filter((x) => x.cpl > 82 || x.lines > 3);
+  add(
+    'G5.19 caption ≤ 82 a line, ≤ 3 lines (§12)',
     !offCap.length,
     caps,
     offCap.map((x) => `${x.at} ${x.cpl}×${x.lines}`),
   );
+  add(`G5.19 caption target 60–80 (§12, logged: ${within(caps, 60, 80)}/${caps.length})`, true, caps, undefined, false);
   if (width < 720) add('G5.20 margins ≥ 24 px', !m.margins.length, m.margins.length, m.margins);
   add('G7.7 targets ≥ 44 × 44', !m.small.length, m.small.length, m.small);
   add('G5.16 focus ring on every stop', !ring.length, ring.length, ring);

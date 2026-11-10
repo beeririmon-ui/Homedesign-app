@@ -1,4 +1,4 @@
-import { productPath } from '@hd/shared/product-url';
+import { shopPath } from '@hd/shared/product-url';
 import { useEffect, useRef, useState } from 'preact/hooks';
 import type { Pack, PublicProduct } from '@hd/shared';
 import { packLabelHe } from '@hd/shared/packs';
@@ -119,7 +119,7 @@ export function Product({ p }: { p: PublicProduct }) {
                             {op.name_he}
                           </span>
                         ) : (
-                          <a href={productPath(op.id)}>{op.name_he}</a>
+                          <a href={shopPath(op.id)}>{op.name_he}</a>
                         )}
                         <span class="detail">
                           {[op.materials_he[0], op.id === p.id ? 'הדף הזה' : null].filter(Boolean).join(' · ')} · <Price agorot={op.price_agorot} />

@@ -67,6 +67,7 @@ import { REPO, GENERATED, repoPath, sitePath } from './lib/paths';
 import { materialsHe, colorNameHe, hasHebrew } from './lib/hebrew';
 import { loadLeadRecords } from './lib/leads';
 import { cachedFreight } from './lib/freight-cache';
+import { publicId, publicVariantId, slugIndex } from '@hd/shared/product-url';
 
 const STRICT = process.argv.includes('--strict-prices');
 /** Rooms with a working room engine in this phase. Others are listed as "soon". */
@@ -850,6 +851,20 @@ const styles = [
   { id: 'boho', name_he: 'בוהו', available: false },
   { id: 'warm-modern', name_he: 'מודרני חם', available: false },
 ];
+
+// S7: neutral public ids end to end. Everything built above speaks card ids; from here on the public id (the card's
+// slug) is the product's id and the prefix of its variants' ids, in both catalogs, the rooms' options and the seed.
+// The full catalog keeps the card id in `card_id` (the supplier side); `hidden` stays in card ids (never public).
+slugIndex(fullProducts.map((p) => p.id));
+for (const p of fullProducts) {
+  const card = p.id;
+  p.card_id = card;
+  p.id = publicId(card);
+  p.variants = p.variants.map((v) => ({ ...v, id: publicVariantId(card, v.id) }));
+  if (p.variants_full) p.variants_full = p.variants_full.map((v) => ({ ...v, id: publicVariantId(card, v.id) }));
+}
+for (const r of rooms) for (const s of r.slots) for (const o of s.options) if (o.product_id) o.product_id = publicId(o.product_id);
+for (const x of studioLosing) x.variant_id = x.variant_id.replace(/^[^:]+/, (c) => publicId(c));
 
 const publicProducts = fullProducts.map((p) => ({
   id: p.id,

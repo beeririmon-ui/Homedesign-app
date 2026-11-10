@@ -10,7 +10,7 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { PublicCatalog, PublicProduct } from '../shared/src/catalog';
 import { availableValues, expandOptions, pickSku, selectionOf } from '../shared/src/options';
-import { productPath } from '@hd/shared/product-url';
+import { shopPath } from '@hd/shared/product-url';
 
 const SITE = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 // the review screenshots go to an untracked folder; HD_QA_SHOTS=1 writes the tracked ones for review by eye
@@ -54,7 +54,7 @@ async function choose(page: Page, axis: string, value: string) {
 
 test.describe('supplier options on the product page', () => {
   test('defaults to the room’s option; another option has its own price; the cart gets that SKU; the render stays', async ({ page }) => {
-    await page.goto(productPath(P.id));
+    await page.goto(shopPath(P.id));
     const picker = page.locator('.opt-picker');
     await expect(picker).toBeVisible();
     const price = page.locator('.price-row .price-big .num');
@@ -93,7 +93,7 @@ test.describe('supplier options on the product page', () => {
   });
 
   test('the keyboard: arrows move within an axis, the price and the legend follow; back to the room’s option', async ({ page }) => {
-    await page.goto(productPath(P.id));
+    await page.goto(shopPath(P.id));
     const first = O.axes[0]!;
     const checked = page.locator(`input[name="${fid(first.id)}"]:checked`);
     await checked.focus();
@@ -115,7 +115,7 @@ test.describe('supplier options on the product page', () => {
     const { defaultBrowserType: _b, ...pixel } = devices['Pixel 7'];
     test.use({ ...pixel, viewport: { width: 400, height: 860 } });
     test('fits the screen (no sideways scroll), 44 px targets, screenshot', async ({ page }) => {
-      await page.goto(productPath(P.id));
+      await page.goto(shopPath(P.id));
       await choose(page, O.axes[0]!.id, target.values[O.axes[0]!.id]!);
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1)).toBe(true);
       for (const box of await page.locator('.opt-value').evaluateAll((els) => els.map((e) => e.getBoundingClientRect())))

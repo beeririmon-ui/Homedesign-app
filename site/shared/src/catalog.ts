@@ -166,6 +166,8 @@ export type FullVariant = {
 
 /** Build-time only (seed, admin). */
 export type FullProduct = PublicProduct & {
+  /** S7: the card's id (the supplier's words in it); the public `id` is the card's slug (@hd/shared/product-url) */
+  card_id?: string;
   /** every variant with its own price and cost; the first is the room's (with no options: the product itself) */
   variants_full?: FullVariant[];
   name_supplier: string;

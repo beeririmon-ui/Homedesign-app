@@ -21,7 +21,7 @@ import sharp from 'sharp';
 import { formatIls } from '@hd/shared/money';
 import type { PublicCatalog, PublicProduct, SupplierImageManifest } from '@hd/shared';
 import { GENERATED, MEDIA_OUT, repoPath, sitePath } from './lib/paths';
-import { productPath } from '@hd/shared/product-url';
+import { shopPath } from '@hd/shared/product-url';
 
 type Frame = {
   src: string;
@@ -111,7 +111,7 @@ function credit(p: PublicProduct, placement: string): Credit {
     price_he: formatIls(p.price_agorot),
     unavailable: p.availability.status !== 'available',
     thumb: img ? `/media/${img.src}.webp` : null,
-    href: sitePages.has(p.id) ? productPath(p.id) : null,
+    href: sitePages.has(p.id) ? shopPath(p.id) : null,
   };
 }
 

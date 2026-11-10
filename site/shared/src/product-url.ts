@@ -50,8 +50,19 @@ export function shortIdOf(slug: string): string | null {
   return m ? m[1]! : null;
 }
 
-/** the shop's address of a product */
+/**
+ * S7: the public id of a product is its slug. It is the id in everything the customer's browser receives (the public
+ * catalog, the story's pages, the cart, the order, the media paths) and in the shop's database; the card id stays in
+ * the full catalog (`card_id`) and on the server side with the supplier.
+ */
+export const publicId = (cardId: string): string => productSlug(cardId);
+/** a variant id "<card id>:<key>" as "<public id>:<key>" */
+export const publicVariantId = (cardId: string, variantId: string): string =>
+  variantId.startsWith(`${cardId}:`) ? `${publicId(cardId)}${variantId.slice(cardId.length)}` : variantId;
+/** the shop's address of a product, from its card id (tools and tests) */
 export const productPath = (cardId: string): string => `/p/${productSlug(cardId)}/`;
+/** the shop's address of a product, from its public id (the site) */
+export const shopPath = (id: string): string => `/p/${id}/`;
 
 /**
  * A lookup from an address segment to a card id: the slug, or (an old address) the card id itself. Throws when two

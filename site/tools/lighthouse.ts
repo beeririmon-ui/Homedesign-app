@@ -8,12 +8,12 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import lighthouse from 'lighthouse';
 import * as chromeLauncher from 'chrome-launcher';
 import { sitePath } from './lib/paths';
-import { productPath } from '@hd/shared/product-url';
+import { shopPath } from '@hd/shared/product-url';
 
 const BASE = process.env.HD_BASE_URL ?? 'http://127.0.0.1:8788';
 const chromePath = process.env.PW_CHROMIUM ?? '/opt/pw-browsers/chromium';
 const catalog = JSON.parse(readFileSync(sitePath('.generated/catalog.public.json'), 'utf8')) as { products: { id: string }[] };
-const pages = ['/', '/rooms/living-room/', productPath(catalog.products[0]!.id), '/checkout/'];
+const pages = ['/', '/rooms/living-room/', shopPath(catalog.products[0]!.id), '/checkout/'];
 const OUT = sitePath('.lighthouse');
 mkdirSync(OUT, { recursive: true });
 

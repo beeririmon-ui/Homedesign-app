@@ -3,7 +3,6 @@ import type { CatalogRoom, CatalogSlot, PublicCatalog, PublicProduct, SlotOption
 import catalogJson from '@generated/catalog.public.json';
 import sceneJson from '@generated/scene.living-room.nordic.json';
 import supplierJson from '@generated/supplier-images.json';
-import { slugIndex } from '@hd/shared/product-url';
 import type { Scene } from './engine/types';
 
 export const catalog = catalogJson as unknown as PublicCatalog;
@@ -40,12 +39,10 @@ export const scene: Scene = __ARTIFACT__
 
 const byId = new Map(catalog.products.map((p) => [p.id, p]));
 export const product = (id: string | null | undefined): PublicProduct | undefined => (id ? byId.get(id) : undefined);
-/** S5: the neutral address of a product (/p/<slug>/), mapped from the card id in @hd/shared/product-url */
-const slugs = slugIndex(catalog.products.map((p) => p.id));
-export const productBySegment = (segment: string): { product: PublicProduct; old: boolean } | undefined => {
-  const r = slugs.resolve(segment);
-  const p = r ? byId.get(r.id) : undefined;
-  return p && r ? { product: p, old: r.old } : undefined;
+/** S7: a product's id is its public id (the card's slug), and its address /p/<id>/; an old address moves by _redirects */
+export const productBySegment = (segment: string): { product: PublicProduct } | undefined => {
+  const p = byId.get(segment);
+  return p ? { product: p } : undefined;
 };
 export const room = (id: string): CatalogRoom | undefined => catalog.rooms.find((r) => r.id === id);
 export const livingRoom = room('living-room')!;

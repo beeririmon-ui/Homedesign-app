@@ -1,4 +1,4 @@
-import { productPath } from '@hd/shared/product-url';
+import { shopPath } from '@hd/shared/product-url';
 import { useEffect, useState } from 'preact/hooks';
 import type { CatalogRoom } from '@hd/shared';
 import { product } from '../catalog';
@@ -40,7 +40,7 @@ export function Room({ room, slot, option }: { room: CatalogRoom; slot?: string;
                 {img ? <img class="thumb" src={img} alt="" loading="lazy" width={64} height={64} /> : <span class="thumb" aria-hidden="true" />}
                 <div class="meta">
                   <strong>{s.name_he}</strong>
-                  <span class="small">{p ? <a href={productPath(p.id)}>{p.name_he}</a> : <span class="muted">וריאציה {pos} · ממתינה למוצר</span>}</span>
+                  <span class="small">{p ? <a href={shopPath(p.id)}>{p.name_he}</a> : <span class="muted">וריאציה {pos} · ממתינה למוצר</span>}</span>
                   <span class="row">
                     {p ? <Price agorot={p.price_agorot} provisional={p.price_provisional} /> : null}
                     {s.on_hold || (p && p.availability.status !== 'available') ? <span class="small muted">המלאי אינו זמין כעת</span> : null}

@@ -31,7 +31,7 @@ import sharp from 'sharp';
 import { formatIls } from '@hd/shared/money';
 import { expandOptions, type FullCatalog, type FullProduct, type PublicCatalog } from '@hd/shared';
 import { availableValues, selectionOf } from '@hd/shared/picker';
-import { productSlug, slugIndex } from '@hd/shared/product-url';
+import { productSlug, publicId, slugIndex } from '@hd/shared/product-url';
 import { colorNameHe, materialsHe } from './lib/hebrew';
 import { GENERATED, MEDIA_OUT, repoPath, sitePath } from './lib/paths';
 import { cardOf, registerReader, rowOf, type QaFrame, type QaState } from './lib/qa-frames';
@@ -181,6 +181,8 @@ for (const p of ['.generated/catalog.story.full.json', '.generated/catalog.publi
 const catalog = read<FullCatalog>(sitePath('.generated/catalog.story.full.json'));
 const site = read<PublicCatalog>(sitePath('.generated/catalog.public.json'));
 const OUT = join(MEDIA_OUT, 'story');
+// S7: the product photos are re-made every build (cached sources), under public ids: an old card-id folder goes
+rmSync(join(OUT, 'products'), { recursive: true, force: true });
 const URL_BASE = '/media/story';
 const WIDTHS = [1280, 1920, 2720];
 const PHONE_WIDTHS = [480, 800, 1224];
@@ -285,7 +287,8 @@ async function photoOf(card: Card, url: string | null | undefined): Promise<Imag
   if (!url || !/^https:\/\//.test(url) || !existsSync(cacheOf(url))) return null;
   const file = cacheOf(url);
   const key = createHash('sha256').update(url).digest('hex').slice(0, 10);
-  const dir = join(OUT, 'products', card.id);
+  // S7: the folder is the product's public id (no supplier in a media path)
+  const dir = join(OUT, 'products', publicId(card.id));
   mkdirSync(dir, { recursive: true });
   const img = sharp(readFileSync(file)).rotate();
   const meta = await img.metadata();
@@ -293,10 +296,10 @@ async function photoOf(card: Card, url: string | null | undefined): Promise<Imag
   for (const w of PHOTO_WIDTHS) {
     const out = join(dir, `${key}.${w}.webp`);
     if (!existsSync(out)) await img.clone().resize({ width: w, withoutEnlargement: true }).webp({ quality: 78 }).toFile(out);
-    srcs.push(`${URL_BASE}/products/${card.id}/${key}.${w}.webp ${Math.min(w, meta.width ?? w)}w`);
+    srcs.push(`${URL_BASE}/products/${publicId(card.id)}/${key}.${w}.webp ${Math.min(w, meta.width ?? w)}w`);
   }
   const w = Math.min(800, meta.width ?? 800);
-  return { src: `${URL_BASE}/products/${card.id}/${key}.480.webp`, srcset: srcs.join(', '), w, h: Math.round((w * (meta.height ?? w)) / (meta.width ?? w)) };
+  return { src: `${URL_BASE}/products/${publicId(card.id)}/${key}.480.webp`, srcset: srcs.join(', '), w, h: Math.round((w * (meta.height ?? w)) / (meta.width ?? w)) };
 }
 
 // ---------- the credit (art direction §4.4–§4.5): material · the defining size · price ----------
@@ -315,7 +318,7 @@ function sizeHe(dims: FullProduct['dimensions_cm'] | Card['dimensions_cm'], plac
 function tryHref(tool: string | null, roomId: string, productId: string): string | null {
   if (!tool) return null;
   for (const s of site.rooms.find((r) => r.id === roomId)?.slots ?? []) {
-    const o = s.options.find((x) => x.product_id === productId);
+    const o = s.options.find((x) => x.product_id === publicId(productId));
     if (o) return `${tool}?slot=${encodeURIComponent(s.id)}&option=${o.position}`;
   }
   return null;
@@ -370,7 +373,8 @@ async function itemOf(
 ): Promise<Item> {
   const card = cards.get(pt.product);
   if (!card) throw new Error(`${frame}: no product card ${pt.product}`);
-  const p = catalog.products.find((x) => x.id === pt.product) ?? null;
+  // S7: the catalog speaks public ids; the story's data speaks card ids (the register, the cards)
+  const p = catalog.products.find((x) => x.id === publicId(pt.product)) ?? null;
   if (!p && !catalog.hidden.some((h) => h.id === pt.product)) throw new Error(`${pt.product} is not in the story catalog: npm run story builds it`);
   // the option the frame shows: the room's SKU with the point's values instead
   let optionHe: string | null = null;
@@ -688,7 +692,7 @@ async function closeupOf(room: string, style: string, c: CloseupSpec): Promise<C
 }
 async function detailOf(pg: PageOut, product: string, items: Item[]): Promise<DetailOut> {
   const card = cards.get(product)!;
-  const p = catalog.products.find((x) => x.id === product) ?? null;
+  const p = catalog.products.find((x) => x.id === publicId(product)) ?? null;
   const first = items[0]!;
   const place = placement.get(card.slot) ?? 'surface';
   const o = p?.options ? expandOptions(p.id, p.options) : null;
@@ -1263,7 +1267,8 @@ for (const pg of pages) {
   const data = {
     page: { room: pg.room, style: pg.style, href: pg.href, tool: pg.pair.tool ?? story.tool_fallback },
     // the frame's crop of each product serves the detail page only
-    items: Object.fromEntries(pg.frames.flatMap((f) => f.items.map((x) => [x.id, { ...x, crop_image: undefined }]))),
+    // S7: the browser gets the public id; the card id (with the supplier in it) stays in the build
+    items: Object.fromEntries(pg.frames.flatMap((f) => f.items.map((x) => [x.id, { ...x, product: publicId(x.product), crop_image: undefined }]))),
     frames: pg.frames.map((f) => ({ id: f.id, u0: f.u0, v0: f.v0, aspect: f.aspect, crop: f.crop, title_he: f.title_he, items: f.items.map((x) => x.id) })),
   };
   resolved[pg.href] = { ...data, held: pg.held, states: pg.frames.map((f) => [f.id, f.qa_key, f.state]) };
@@ -1307,7 +1312,7 @@ for (const d of details) {
     items: {},
     frames: [],
     detail: {
-      product: d.product,
+      product: publicId(d.product),
       name_he: d.name_he,
       material_he: d.material_he,
       status: d.status,

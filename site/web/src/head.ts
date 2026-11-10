@@ -2,7 +2,7 @@
 import { ilsNumber } from '@hd/shared/money';
 import type { Route } from './router';
 import { catalog, livingRoom, productBySegment, slotOf } from './catalog';
-import { productPath } from '@hd/shared/product-url';
+import { shopPath } from '@hd/shared/product-url';
 import { mediaUrl } from './media';
 import { scene } from './catalog';
 import { galleryImages } from './components/Media';
@@ -21,7 +21,7 @@ export function canonicalPath(route: Route): string {
       return `/rooms/${route.room}/`;
     case 'product': {
       const hit = productBySegment(route.id);
-      return hit ? productPath(hit.product.id) : `/p/${route.id}/`;
+      return hit ? shopPath(hit.product.id) : `/p/${route.id}/`;
     }
     case 'legal':
       return `/${route.page}/`;
@@ -68,7 +68,7 @@ export function headFor(route: Route): Head {
             '@type': 'ItemList',
             itemListElement: catalog.products
               .filter((p) => p.room === r.id)
-              .map((p, i) => ({ '@type': 'ListItem', position: i + 1, url: `${ORIGIN}${productPath(p.id)}`, name: p.name_he })),
+              .map((p, i) => ({ '@type': 'ListItem', position: i + 1, url: `${ORIGIN}${shopPath(p.id)}`, name: p.name_he })),
           },
         ],
       };
@@ -115,7 +115,7 @@ export function headFor(route: Route): Head {
           crumbs([
             ['בית', '/'],
             [livingRoom.name_he, `/rooms/${p.room}/`],
-            [where?.slot.name_he ?? p.name_he, productPath(p.id)],
+            [where?.slot.name_he ?? p.name_he, shopPath(p.id)],
           ]),
         ],
       };
