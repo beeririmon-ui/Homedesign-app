@@ -1,0 +1,83 @@
+{
+  "id": "qa-site-track-s6-s7-2026-11-10",
+  "date": "2026-11-10",
+  "by": "qa-agent",
+  "scope": "S7 launch prep (neutral public ids end to end, the real checkout path, server-side validation, QA S3-S5 findings) and S6 (shop pages in magazine style: design-system table, no toast); G-ED.17 on warm-modern ed8 and boho's merged planter dot",
+  "measured_state": {
+    "commit": "c2861937 (Interface S7 done)",
+    "build": "isolated copy (git archive of site/ and data/ at c2861937; assets, qa, docs, studio linked read-only), offline, 18:06:58-18:16:20 UTC; register read v11 (no frame change from v10)",
+    "served": "127.0.0.1:8799, wrangler dev from the copy, private D1 seeded from the copy; ENVIRONMENT=preview-local; PAYMENT_WEBHOOK_SECRET passed as a local dummy --var for the mock provider (no .dev.vars copied)",
+    "tests_from": "the copy",
+    "live_tree": "moved during the round (S8, then S10; HEAD 6a19a5b4 at the end); not in the measurement",
+    "tracked_files_touched_by_qa": 0,
+    "wip_commit_note": "an 'agents' in-progress files' commit (not QA's) swept some of this folder's files into git"
+  },
+  "verdict": {
+    "s7_public_ids": "pass",
+    "s7_real_checkout": "pass",
+    "s7_server_validation": "pass, except T9 (single print of the triptych sold)",
+    "s3_s5_findings": "T1-T6 fixed; notes 3, 5, 7 fixed except the contents link (T14)",
+    "s6": "pass (table, no toast, no scrim on desktop); T7 found on the phone",
+    "ged17_warm_modern_ed8": "pass",
+    "ged17_boho_merged_planter": "pass",
+    "before_launch": ["T7", "T8", "T9"],
+    "may_continue_on_test_route": true
+  },
+  "items": [
+    {"id": "1.1", "check": "public-scan.spec on a fresh build", "verdict": "pass", "evidence": "data/e2e-full.log", "note": "1,487 files, 0 findings"},
+    {"id": "1.2", "check": "break the scan: dist paths, text, image bytes and metadata", "verdict": "pass", "evidence": "report table 1.2", "note": "0 supplier names (incl. alicdn, 1688, temu, CJ as a word), 0 listing numbers (hits were our hashes and prices), 0 in image bytes, 0 EXIF/XMP, no card_id, no JSON files"},
+    {"id": "1.3", "check": "D1 seed and public API", "verdict": "pass", "evidence": "data/api-fuzz.json", "note": "supplier columns in 49 product rows server-side by design; no public endpoint returns them; all public responses collected scan clean; /api/admin/* 403 without access; full catalog and seed not served (404)"},
+    {"id": "1.4", "check": "old /p/<card id>/ -> 301", "verdict": "pass", "evidence": "data/redirects-live.txt", "note": "93 rows (39 shop + 52 story 301; 2 x 302 for /story/checkout/ and /story/order/); 93/93 live as written, targets 200"},
+    {"id": "1.5", "check": "neutral slugs", "verdict": "pass", "evidence": "data/scan-slugs.json", "note": "489 -> 489, no collision, no supplier word, no 4+ digit word; 49 still carry a size (S8 rule changes this; N11)"},
+    {"id": "2.1", "check": "boho whole look -> site cart -> /checkout/ -> mock pay -> order", "verdict": "pass", "evidence": "data/look-to-order.json, overlays/order-from-boho-look-*.png", "note": "1280 and 400: 5 products / 6 units (rust x2), 584 ILS; hd.cart only; error summary 7 links at 44; order shows the same 5 lines, paid 584, free shipping; story count 0 and /cart/ empty after"},
+    {"id": "2.2", "check": "/story/checkout/ -> /checkout/", "verdict": "pass", "note": "302; /story/order/ -> /cart/"},
+    {"id": "3.1", "check": "server: quantities", "verdict": "pass", "evidence": "data/api-fuzz.json", "note": "-2, 2.5, '3', 21, 999, 1e400, 2^53+1, -1e-9, null, true, [], {}, '1', '' -> 422; NaN -> 400; -0 and 0 remove the line; 1e1/2e1/2.0 are valid JSON numbers (10/20/2); a refused request leaves the cart unchanged"},
+    {"id": "3.2", "check": "server: variants", "verdict": "pass except T9", "evidence": "data/api-fuzz.json, data/api-order-view.json", "note": "404 for not-sold (rug, pouf), missing, id without key, another product's key, upper case, trailing space, old card id, SQL quote; 422 for 161 chars, empty, unit on a single product, bogus pack; client price fields ignored; triptych pack unit -> 200 at 69 ILS and an order (T9)"},
+    {"id": "3.3", "check": "server: checkout", "verdict": "pass", "evidence": "data/api-checkout.json", "note": "empty 409; forged shipping 422; client totals ignored; second checkout on an ordered cart 409 cart_closed; PUT/GET on it 409; 2 and 5 simultaneous submits -> 1 order; order view without/wrong token 404"},
+    {"id": "3.4", "check": "every variant the look buttons carry is sold by the server", "verdict": "pass", "note": "37/37"},
+    {"id": "3.5", "check": "PRE1 after the add", "verdict": "pass for the charge, fail for the notice (T11)", "evidence": "data/pre1-after-add.json"},
+    {"id": "4.1", "check": "T1 targets in opened states", "verdict": "fixed", "evidence": "data/check-targets.json"},
+    {"id": "4.2", "check": "T2 supplier in image URLs", "verdict": "fixed", "note": "see 1.1-1.3"},
+    {"id": "4.3", "check": "T3 quantity", "verdict": "fixed", "note": "see 3.1; the mock checkout is gone"},
+    {"id": "4.4", "check": "T4 error message over the draft mark", "verdict": "fixed", "evidence": "data/frame-failed-collide.json", "note": "overlap 0 at 360, 390, 400, 720, 1280"},
+    {"id": "4.5", "check": "T5 on-demand layers in the tool draft", "verdict": "fixed", "evidence": "data/check-draft-mark.json, data/check-s3.json", "note": "first load 149.5 KB without the Nordic house; its layer only on switch; fade 0.80-0.87 s (1-99%), 0.21 s reduced; one box, no transform"},
+    {"id": "4.6", "check": "T6 documentation", "verdict": "fixed", "note": "S3 README says 0.3 s (--d-swap)"},
+    {"id": "4.7", "check": "notes 3, 5, 7", "verdict": "fixed except T14", "note": "try_href carries from=; build warns on a missing row; toast-in opacity only; contents link from=/story/ rejected by the tool (T14)"},
+    {"id": "5.1", "check": "S6 design-system table", "verdict": "pass", "evidence": "data/system-checklist-qa-run.json", "note": "S6 table (288: 284 + 4 logged) consistent; at S7 the spec changed: QA's run 382 rows, 286 binding, 0 failed; shop 191 rows, 143 binding, all pass; N8"},
+    {"id": "5.2", "check": "S6 no toast", "verdict": "pass", "evidence": "data/check-no-toast.json", "note": "no new visible layer after add to cart at 1280 and 400; .toast clipped to rect(0,0,0,0), said aloud; button says 'נוסף לסל'"},
+    {"id": "5.3", "check": "S6 no dark scrim", "verdict": "pass on desktop; phone see T7", "evidence": "data/check-no-scrim.json"},
+    {"id": "6.1", "check": "G-ED.17 warm-modern ed8", "verdict": "pass", "evidence": "overlays/warm-modern-A-dots-boxes.jpg, overlays/warm-modern-A-phone-390.jpg, overlays/warm-modern-A-throw-phone-dot.jpg, data/ged17-18-story.json, data/hit-test-story.log", "note": "phone 390: 10/10 pass, own-button hits, closest 56 CSS, smallest sconces 32x49; floor lamp outside the crop, desktop only (page agrees); desktop 11/11 at 1280, 1440, 1920; every dot on its product by eye; rug no dot (partly); 1280x720 hides the pendant (N10)"},
+    {"id": "6.2", "check": "boho merged planter dot", "verdict": "pass", "note": "planter-zendrop-seagrass-belly-38x34 at d45-h36 (public planter-seagrass-belly-38x34-jyyuu); same box and place as fin7; desktop only; own-button hit; boho 9/9 desktop, 6 phone; look adds d45-h36 at 119 ILS (N12)"}
+  ],
+  "findings": [
+    {"id": "T7", "severity": "must before launch (mobile)", "what": "on narrow screens the room's wheel opens off screen after the stage was panned: .stage keeps scrollLeft -362 and the dialog, canvas and arc sit at x 362-762; the screen is black with a sliver (400, 390, 720); a hotspot visible without panning opens fine; frontend-dev's own S6 evidence phone-3-wheel.png shows the same black screen; no e2e opens a wheel after a pan", "fix": "place the focus/wheel against the viewport, not the scrolled content (or reset the pan on open and restore it on close); add a phone e2e: pan to the vase, tap, the dialog is on screen", "evidence": "data/phone-wheel-real.json, data/phone-wheel-diag.json, overlays/phone-wheel-real-sheet.jpg", "owner": "frontend-dev"},
+    {"id": "T8", "severity": "must before launch (faithfulness)", "what": "cart, checkout and order lines take the product's name (with its default colour) instead of the variant's: 9 story variants name a colour other than the one bought (Mediterranean white, moss and earthy cushions all '…, חלודה'; boho jute throw '…, ירוק תה'; flax-brown muslin '…, לבן שנהב'; milk-tea and white bouclé '…, לבן חם'; Nordic yellow planter '…, טבעי'); order_items.name_he keeps it for the invoice", "fix": "name the line from the variant (base name without colour + option), or the §11 names; same mechanism in the shop", "owner": "frontend-dev; master-designer for names"},
+    {"id": "T9", "severity": "must before launch (SET1)", "what": "the server sells a single print of the Nordic triptych: pack unit -> 200 at 69 ILS (unit_retail_agorot 6900 in D1); an order was created", "fix": "seed unit_retail_agorot null for set_axes products, or refuse unit server-side", "owner": "frontend-dev"},
+    {"id": "T10", "severity": "medium", "what": "the warm-modern ed8 corduroy point carries name_he 'ציפית כרית שניל סרוגה, טאופ' (the 21 Camel chenille it replaced); the page shows it; still in f550b1f2 after the §13 name", "fix": "drop the point's name_he so the §11/§13 name wins", "owner": "frontend-dev"},
+    {"id": "T11", "severity": "medium", "what": "a line that stops being sold after the add vanishes silently (6 -> 5) in the story cart, /cart/ and /checkout/; not charged (right), but no notice (before S7: 'המלאי אינו זמין כעת, ולכן הוא לא בהזמנה')", "fix": "the API returns held lines (or the client compares) and the cart and checkout name them", "owner": "frontend-dev"},
+    {"id": "T12", "severity": "medium (names)", "what": "245 of 700 variant option labels keep the supplier's English ('(Wear Rod)', '(Punch)', 'Sandstone Chenille Green', 'Raw Jute Color', 'Flax brown', '(Unframed)'); shown in cart, checkout, order and invoice", "fix": "translations by colours_he / §11, mapped in the build", "owner": "sourcing-agent / master-designer; frontend-dev"},
+    {"id": "T13", "severity": "minor", "what": "the story cart still says 'סל הבדיקה' and 'סל בדיקה בדפדפן… ולא נגבה כסף' though it is the site cart leading to the real checkout", "fix": "site-cart wording", "owner": "frontend-dev"},
+    {"id": "T14", "severity": "minor", "what": "the contents page's 'עצב בעצמך' carries from=%2Fstory%2F but Room.tsx accepts only /story/<…>/: no way back from the contents", "fix": "accept ^/story/$ too", "owner": "frontend-dev"}
+  ],
+  "notes": [
+    {"id": "N8", "what": "the system table says 382 passed, 0 recorded, but 10 logged §12 target rows miss their target (e.g. lead 52-66 at 400 on Nordic 0/2, running text 50-65 at 1280 0/1); count them as recorded, as in S5", "owner": "frontend-dev"},
+    {"id": "N9", "what": "public-scan.spec is narrower than QA's sweep (no alicdn, no CJ as a prose word, numbers not after letter-hyphen, no API responses); none found today; worth widening", "owner": "frontend-dev"},
+    {"id": "N10", "what": "at 1280x720 the warm-modern pendant dot is not shown (the stage crops the top; the product stays in the list); known for Nordic B too", "owner": "none"},
+    {"id": "N11", "what": "49 slugs carry a size at S7; HEAD's slugWords drops any word with a digit (manager's rule, S8), not built here; S7 slugs would need 301s if they were ever public (they are not)", "owner": "frontend-dev"},
+    {"id": "N12", "what": "boho planter after the merge: 119 ILS (was 99); the whole look 564 -> 584", "owner": "none"},
+    {"id": "N13", "what": "local checkout returns 503 payment_not_configured without PAYMENT_WEBHOOK_SECRET; the environment README should say so (QA's first e2e run had 4 payment failures for this reason)", "owner": "frontend-dev"},
+    {"id": "N14", "what": "Chromium tried mtalk.google.com (GCM) in QA's runs; the proxy refused it, nothing passed; later tools launch with --disable-background-networking", "owner": "qa-agent"}
+  ],
+  "tests": {
+    "e2e": {"result": "69/69", "note": "with the dummy mock-payment secret; the first run without it: 65/69 (4 payment tests, 503 payment_not_configured)", "log": "data/e2e-full.log", "first_run": "data/e2e-first-run-without-mock-secret.log"},
+    "a11y": {"result": "15/15", "log": "data/a11y.log"},
+    "vitest": {"result": "117/117", "log": "data/vitest.log"},
+    "budget": {"result": "pass", "note": "room JS 77.6/80 KB; story JS 7.3 KB; story first view 254 KB", "log": "data/build-web-api-budget.log"}
+  },
+  "files": {
+    "report": "qa/reports/2026-11-10-site-track-qa-s6-s7.md",
+    "tools": "qa/reports/2026-11-10-site-track-qa-s6-s7/tools/",
+    "data": "qa/reports/2026-11-10-site-track-qa-s6-s7/data/",
+    "overlays": "qa/reports/2026-11-10-site-track-qa-s6-s7/overlays/"
+  }
+}

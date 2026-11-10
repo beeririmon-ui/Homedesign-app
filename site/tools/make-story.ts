@@ -330,9 +330,31 @@ function sizeHe(dims: FullProduct['dimensions_cm'] | Card['dimensions_cm'], plac
   if (w) return `רוחב ⁦${w}⁩ ס״מ`;
   return null;
 }
+/** S10: a house in the room engine (DIR2), as tools/make-house.ts wrote it: its sets, piece by piece */
+type HouseFile = { room: { slots: { id: string }[] }; sets: { position: number; items: { product_id: string | null; variant_id: string | null }[] }[] };
+const houseOf = (style: string): HouseFile | null => {
+  const f = join(GENERATED, `house.living-room.${style}.json`);
+  return existsSync(f) ? read<HouseFile>(f) : null;
+};
+/** the house's address in the room engine, when it is built there */
+const houseTool = (style: string): string | null => (houseOf(style) ? `${story.tool_fallback}?style=${style}` : null);
+/** the tool of a pair: its own, or its house in the room engine (S10: the draft of S3 moved there) */
+const toolOf = (pair: Pair, style: string): string | null => pair.tool ?? (pair.tool_draft ? houseTool(style) : null);
+/** a query parameter onto an address that may already have some */
+const withQuery = (href: string, q: string): string => `${href}${href.includes('?') ? '&' : '?'}${q}`;
 /** the room engine opens on the slot, with this product on the wheel, when the product is one of the slot's options */
-function tryHref(tool: string | null, roomId: string, productId: string): string | null {
+function tryHref(tool: string | null, roomId: string, productId: string, option?: Record<string, string>): string | null {
   if (!tool) return null;
+  // S10: in a house, the set that has this piece (in the frame's option when a set has it), on the house's one slot
+  const style = /[?&]style=([a-z-]+)/.exec(tool)?.[1];
+  const house = style ? houseOf(style) : null;
+  if (house) {
+    const id = publicId(productId);
+    const has = (x: { product_id: string | null; variant_id: string | null }) =>
+      x.product_id === id && Object.values(option ?? {}).every((v) => (x.variant_id ?? '').split(/[:+]/).includes(v));
+    const set = house.sets.find((s) => s.items.some(has)) ?? house.sets.find((s) => s.items.some((x) => x.product_id === id));
+    return set ? withQuery(tool, `slot=${encodeURIComponent(house.room.slots[0]!.id)}&option=${set.position}`) : null;
+  }
   for (const s of site.rooms.find((r) => r.id === roomId)?.slots ?? []) {
     const o = s.options.find((x) => x.product_id === publicId(productId));
     if (o) return `${tool}?slot=${encodeURIComponent(s.id)}&option=${o.position}`;
@@ -496,7 +518,7 @@ async function itemOf(
     // a draft card (DS API) has no colour yet: the rule's hairline grey
     swatch: hexOf(card) ?? '#d9d6d0',
     href: null,
-    try_href: tryHref(tool, roomId, pt.product),
+    try_href: tryHref(tool, roomId, pt.product, pt.option),
     values,
     in_frame_he: inFrame,
     units,
@@ -557,7 +579,7 @@ for (const [key, pair] of Object.entries(story.pairs)) {
     const crop: [number, number] = [cl / W, (cl + cw) / W];
     const points = [...f.points].sort(readingOrder);
     const items: Item[] = [];
-    for (const [i, pt] of points.entries()) items.push(await itemOf(room, pair.tool, f.id, q, i + 1, pt, crop, W, H, pair.closeups));
+    for (const [i, pt] of points.entries()) items.push(await itemOf(room, toolOf(pair, style), f.id, q, i + 1, pt, crop, W, H, pair.closeups));
     for (const x of items) {
       x.href = detailHref(room, style, x.product);
       // QA on S3–S5 (ה3): every way into the tool carries the way back to this story page
@@ -1074,20 +1096,28 @@ ${story.styles.map((s) => tile(pg.room, s.id, s.id === pg.style)).join('\n')}
 </section>`;
 }
 function toolSection(pg: PageOut): string {
-  const tool = pg.pair.tool;
+  const tool = toolOf(pg.pair, pg.style);
+  // S10: the house's own tool, in the room engine (DIR2), behind the flag: phase 1, the cushions on the wheel
+  const house = !pg.pair.tool && !!tool;
   return `<section class="mag-paper st-tool" id="tool" data-head="עצב בעצמך" aria-labelledby="tool-title">
   <div class="mag-grid">
     <p class="mag-run-head mag-col-main" aria-hidden="true">הכלי</p>
     <h2 id="tool-title" class="mag-h1 mag-col-main">עצב בעצמך</h2>
     ${
       tool
-        ? `<p class="mag-lead mag-col-main">רוצים לראות את הספה עם כיסוי אחר, או כרית בגוון אחר? כאן כל פריט מתחלף במקום, והחדר מתעדכן איתו. משם ממשיכים בהליכה אל שאר הבית.</p>
-    <p class="mag-col-main st-tool-row"><a class="mag-btn mag-btn-primary st-btn-link" id="st-tool" href="${esc(`${tool}?from=${encodeURIComponent(pg.href)}`)}">לעיצוב ${esc(roomOf(pg.room).name_he)}</a></p>
-    <p class="mag-cap mag-col-main">בגרסת הבדיקה הכלי פותח את הסלון של היום, בבית המשותף.</p>`
-        : `<p class="mag-lead mag-col-main">הכלי של הבית הזה עוד בבנייה: באותה תוכנית, באדריכלות של הסגנון. בינתיים אפשר להחליף פריטים בסלון בבית הנורדי.</p>
-    <p class="mag-col-main st-tool-row"><a class="mag-btn mag-btn-secondary st-btn-link" id="st-tool" href="${esc(`${story.tool_fallback}?from=${encodeURIComponent(pg.href)}`)}">לסלון בבית הנורדי</a>${
-      pg.pair.tool_draft ? ` <a class="mag-link st-tool-draft-link" id="st-tool-draft" href="${pg.href}tool/">טיוטת הכלי של הבית הזה</a>` : ''
+        ? `<p class="mag-lead mag-col-main">${
+            house
+              ? 'רוצים לראות את הספה עם סט כריות אחר? כאן הכריות והשמיכה מתחלפות במקום, והחדר מתעדכן איתן.'
+              : 'רוצים לראות את הספה עם כיסוי אחר, או כרית בגוון אחר? כאן כל פריט מתחלף במקום, והחדר מתעדכן איתו. משם ממשיכים בהליכה אל שאר הבית.'
+          }</p>
+    <p class="mag-col-main st-tool-row"><a class="mag-btn mag-btn-primary st-btn-link" id="st-tool" href="${esc(withQuery(tool, `from=${encodeURIComponent(pg.href)}`))}">לעיצוב ${esc(roomOf(pg.room).name_he)}</a></p>
+    <p class="mag-cap mag-col-main">${
+      house
+        ? `הכלי פותח את ${esc(roomOf(pg.room).name_he)} בבית הזה. בשלב הזה מתחלפים בו שלושה סטים של כריות ושמיכה; שאר הפריטים יקבלו גלגל בשלב הבא.`
+        : 'בגרסת הבדיקה הכלי פותח את הסלון של היום, בבית המשותף.'
     }</p>`
+        : `<p class="mag-lead mag-col-main">הכלי של הבית הזה עוד בבנייה: באותה תוכנית, באדריכלות של הסגנון. בינתיים אפשר להחליף פריטים בסלון בבית הנורדי.</p>
+    <p class="mag-col-main st-tool-row"><a class="mag-btn mag-btn-secondary st-btn-link" id="st-tool" href="${esc(`${story.tool_fallback}?from=${encodeURIComponent(pg.href)}`)}">לסלון בבית הנורדי</a></p>`
     }
   </div>
 </section>`;
@@ -1239,7 +1269,7 @@ function detailBody(d: DetailOut, pg: PageOut): string {
       </div>
       ${d.notes_he.length ? `<ul class="st-notes">${d.notes_he.map((n) => `<li>${esc(n)}</li>`).join('')}</ul>` : ''}
       ${specs.length ? `<dl class="st-pd-specs" id="st-pd-specs">${specs.map(([k, v]) => `<div><dt>${esc(k!)}</dt><dd data-spec="${esc(k!)}">${esc(v!)}</dd></div>`).join('')}</dl>` : ''}
-      <p class="st-links">${d.try_href ? `<a class="mag-link" id="st-pd-try" href="${esc(d.try_href)}">לנסות בחדר: עצב בעצמך</a>` : `<span class="mag-cap" id="st-pd-try-none">בכלי "עצב בעצמך" המוצר הזה עוד לא על הגלגל${pg.pair.tool ? '' : ': הכלי של הבית הזה בבנייה'}.</span>`}</p>
+      <p class="st-links">${d.try_href ? `<a class="mag-link" id="st-pd-try" href="${esc(d.try_href)}">לנסות בחדר: עצב בעצמך</a>` : `<span class="mag-cap" id="st-pd-try-none">בכלי "עצב בעצמך" המוצר הזה עוד לא על הגלגל${toolOf(pg.pair, pg.style) ? '' : ': הכלי של הבית הזה בבנייה'}.</span>`}</p>
       <p class="mag-cap">ביטול עסקה והחזרות לפי חוק הגנת הצרכן. <a class="mag-link" href="/returns/">פרטים</a></p>
     </div>
   </div>
@@ -1281,7 +1311,7 @@ rmSync(sitePath('web/story'), { recursive: true, force: true });
 const resolved: Record<string, unknown> = {};
 for (const pg of pages) {
   const data = {
-    page: { room: pg.room, style: pg.style, href: pg.href, tool: pg.pair.tool ?? story.tool_fallback },
+    page: { room: pg.room, style: pg.style, href: pg.href, tool: toolOf(pg.pair, pg.style) ?? story.tool_fallback },
     // the frame's crop of each product serves the detail page only
     // S7: the browser gets the public id; the card id (with the supplier in it) stays in the build
     items: Object.fromEntries(pg.frames.flatMap((f) => f.items.map((x) => [x.id, { ...x, product: publicId(x.product), crop_image: undefined }]))),
@@ -1305,7 +1335,7 @@ for (const pg of pages) {
     NAV_TOOL: '#tool',
     SKIP: pg.frames.length ? `#list-${pg.frames[0]!.id}` : '#houses',
     SKIP_HE: pg.frames.length ? 'דילוג לרשימת המוצרים' : 'דילוג לבתים האחרים',
-    TOOL_HREF: esc(pg.pair.tool ?? story.tool_fallback),
+    TOOL_HREF: esc(toolOf(pg.pair, pg.style) ?? story.tool_fallback),
     BODY: body,
     DATA: JSON.stringify(data).replace(/</g, '\\u003c'),
   });
@@ -1324,7 +1354,7 @@ for (const d of details) {
   };
   const skus = d.skus.map((k) => ({ ...k, image: ix(k.image) }));
   const data = {
-    page: { room: d.room, style: d.style, href: d.href, tool: pg.pair.tool ?? story.tool_fallback },
+    page: { room: d.room, style: d.style, href: d.href, tool: toolOf(pg.pair, pg.style) ?? story.tool_fallback },
     items: {},
     frames: [],
     detail: {
@@ -1361,10 +1391,10 @@ for (const d of details) {
     KIND: 'detail',
     HEAD_ON: 'paper',
     CONTENTS_CURRENT: '',
-    NAV_TOOL: esc(d.try_href ?? pg.pair.tool ?? story.tool_fallback),
+    NAV_TOOL: esc(d.try_href ?? toolOf(pg.pair, pg.style) ?? story.tool_fallback),
     SKIP: '#detail',
     SKIP_HE: 'דילוג לפרטי המוצר',
-    TOOL_HREF: esc(d.try_href ?? pg.pair.tool ?? story.tool_fallback),
+    TOOL_HREF: esc(d.try_href ?? toolOf(pg.pair, pg.style) ?? story.tool_fallback),
     BODY: [detailBody(d, pg), footer('')].join('\n'),
     DATA: JSON.stringify(data).replace(/</g, '\\u003c'),
   });
@@ -1452,9 +1482,7 @@ writeFileSync(
     ...toolMoves.map(([href, to]) => `${href} ${to} 301`),
     '/story/checkout/ /checkout/ 302',
     '/story/order/ /cart/ 302',
-  ].join(
-    '\n',
-  ) + '\n',
+  ].join('\n') + '\n',
 );
 const all = pages.flatMap((p) => p.frames.flatMap((f) => f.items));
 console.log(

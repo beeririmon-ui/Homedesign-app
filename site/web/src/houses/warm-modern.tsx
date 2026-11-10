@@ -17,7 +17,6 @@ import { Price } from '../components/Media';
 import { PackPicker } from '../components/PackPicker';
 import { addToCart, cartBusy } from '../state/cart';
 import { variantPackPrice, variantView, type VariantView } from '../variants';
-import './house.css';
 
 type Piece = { product_id: string | null; variant_id: string | null; name_he: string; option_he: string | null };
 type HouseSet = { position: number; id: string; label_he: string; thumb: string; items: Piece[] };
@@ -39,7 +38,13 @@ function SetPanel({ set }: { set: HouseSet }) {
   const total = forSale.reduce((s, r) => s + variantPackPrice(r.v!, r.pack), 0);
   const add = async (rs: Row[]) => {
     for (const r of rs)
-      await addToCart(r.v!.variant_id, r.p!.name_he, 1, r.pack, [r.piece.option_he, r.p!.pack ? packLabelHe(r.pack, r.p!.pack.set_qty) : null].filter(Boolean).join(', ') || undefined);
+      await addToCart(
+        r.v!.variant_id,
+        r.p!.name_he,
+        1,
+        r.pack,
+        [r.piece.option_he, r.p!.pack ? packLabelHe(r.pack, r.p!.pack.set_qty) : null].filter(Boolean).join(', ') || undefined,
+      );
   };
   return (
     <div class="set-panel">
@@ -87,6 +92,7 @@ export const house: House = {
   name_he: h.name_he,
   status_he: h.status_he,
   alt_he: h.alt_he,
+  intro_he: 'בבית הזה מתחלפות בינתיים הכריות והשמיכה, בשלושה סטים. שאר הפריטים הם חלק מהתמונה, ויקבלו גלגל משלהם בשלב הבא.',
   scene: h.scene,
   room: h.room,
   product: (id) => (id ? byId.get(id) : undefined),

@@ -1,0 +1,5 @@
+measured commit: c2861937 (Interface S7 done), built in an isolated copy (git archive of site/ and data/ at c2861937; assets, qa, docs and studio linked read-only)
+build: 18:06:58-18:16:20 UTC (offline: supplier images from the cache); register read: v11 (landed 18:06:26 during the build; no frame change from v10)
+served: the copy on 127.0.0.1:8799 (wrangler dev, own D1 seeded from the copy, ENVIRONMENT=preview-local, PAYMENT_WEBHOOK_SECRET passed as a local dummy --var for the mock provider; no .dev.vars copied)
+e2e, a11y and vitest: run inside the copy
+live tree during the round: frontend-dev S8, then S10 work and commits (HEAD at the end: 6a19a5b4); none of it is in the measurement

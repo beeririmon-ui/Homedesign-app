@@ -13,7 +13,7 @@ import { coverSize, defaultCam, frameToScreen, screenToFrame } from '../engine/c
 import { slotSources } from '../engine/layers';
 import { mediaUrl } from '../media';
 import { Picture } from './Media';
-import { VariantWheel } from './VariantWheel';
+import type { VariantWheel as WheelComponent } from './VariantWheel';
 import { IconDoor, IconLeft, IconRight } from './Icons';
 import { arrival, pendingOpen, roomReady, selection, stageEngine } from '../state/room';
 import { announce } from '../state/ui';
@@ -40,6 +40,12 @@ const MARKS_MS = 3000;
 const HINT_MS = 2000;
 /** the first-visit hint shows once per page session */
 let hinted = false;
+/**
+ * S10: the variant wheel is a chunk of its own (the room page's first load stays under its 80 KB with the houses'
+ * loader): fetched when the page is idle, and at the latest during the zoom into a product.
+ */
+let wheelChunk: Promise<typeof WheelComponent> | null = null;
+const loadWheel = () => (wheelChunk ??= import('./VariantWheel').then((m) => m.VariantWheel));
 
 export function RoomExperience({
   house,
@@ -68,6 +74,7 @@ export function RoomExperience({
   const opener = useRef<HTMLElement | null>(null);
   const [ready, setReady] = useState(false);
   const [open, setOpen] = useState<{ slot: CatalogSlot; before: number } | null>(null);
+  const [Wheel, setWheel] = useState<typeof WheelComponent | null>(null);
   const [busy, setBusy] = useState(false);
   const [canPan, setCanPan] = useState(false);
 
@@ -212,6 +219,7 @@ export function RoomExperience({
     const later = () => {
       idle = requestIdleCallbackSafe(() => {
         preload('T-E0');
+        void loadWheel();
         prefetchVariants(cur.current.room, cur.current.house.scene);
       });
     };
@@ -300,6 +308,7 @@ export function RoomExperience({
     if (busy || open) return;
     setBusy(true);
     opener.current = document.activeElement as HTMLElement | null;
+    const wheel = loadWheel();
     const e = await ensureEngine();
     if (!e) return setBusy(false);
     const before = selection.value[slot.id] ?? 1;
@@ -309,6 +318,8 @@ export function RoomExperience({
     stage.current?.classList.add('zoomed');
     await e.zoomToBox(zoom, cur.current.house.scene.slots[slot.id]?.depth ?? 0.4, { durationMs: 1000, reserve: e.vp.h > 520 ? 0.44 : 0.36 });
     if (previewOption && previewOption !== before) await preview(slot, previewOption);
+    const W = await wheel;
+    setWheel(() => W);
     setOpen({ slot, before });
     setBusy(false);
   }
@@ -586,8 +597,8 @@ export function RoomExperience({
           </button>
         </div>
       </div>
-      {open ? (
-        <VariantWheel
+      {open && Wheel ? (
+        <Wheel
           house={house}
           slot={open.slot}
           roomId={room.id}

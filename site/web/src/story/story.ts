@@ -44,7 +44,7 @@ type Item = {
 type FrameData = { id: string; u0: number; v0: number; aspect: number; crop: [number, number]; title_he: string; items: string[] };
 /** the index and a typographic page have no frames and no items: the cart and the header still work there */
 type Data = {
-  page: { room: string | null; style: string | null; href: string; tool: string; kind?: 'checkout' | 'order' | 'tool-draft' };
+  page: { room: string | null; style: string | null; href: string; tool: string; kind?: 'checkout' | 'order' };
   items: Record<string, Item>;
   frames: FrameData[];
   /** a detail page (layer 2): the product's SKUs in this house */
@@ -302,7 +302,6 @@ function showCount(animate: boolean): void {
 }
 showCount(false);
 // the test checkout and its confirmation: their own module, loaded only there
-if (data.page.kind === 'tool-draft') void import('./tool-draft').then((m) => m.initToolDraft({ announce, mark }));
 // a detail page: its own module, loaded only there
 let detail: { current: () => DSku; choose: (key: string) => void } | null = null;
 if (data.detail)

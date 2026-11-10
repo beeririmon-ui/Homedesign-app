@@ -92,7 +92,8 @@ const pilot = repoPath(m.pilot);
 const W = 2720;
 const H = 1530;
 const lay = join(pilot, m.layers_dir);
-const layered = existsSync(join(lay, 'manifest.json')) && existsSync(join(lay, 'base.png')) && m.sets.every((s) => existsSync(join(lay, `cushions-set-${s.id}.png`)));
+const layered =
+  existsSync(join(lay, 'manifest.json')) && existsSync(join(lay, 'base.png')) && m.sets.every((s) => existsSync(join(lay, `cushions-set-${s.id}.png`)));
 const def = m.sets[0]!.id;
 const files = {
   base: layered ? join(lay, 'base.png') : join(pilot, m.approved.composites[def]!),
@@ -164,7 +165,7 @@ const BASE_WIDTHS = [1280, 1920, W];
 const WIDTHS = { lo: 1920, hi: W };
 const THUMB = 360;
 const stamp = createHash('sha256')
-  .update(JSON.stringify({ m, tool: readFileSync(new URL(import.meta.url), "utf8"), sources: sources.map((f) => [f, statSync(f).size, statSync(f).mtimeMs]) }))
+  .update(JSON.stringify({ m, tool: readFileSync(new URL(import.meta.url), 'utf8'), sources: sources.map((f) => [f, statSync(f).size, statSync(f).mtimeMs]) }))
   .digest('hex')
   .slice(0, 16);
 const STAMP = join(OUT, 'stamp.json');
@@ -181,8 +182,14 @@ if (cached?.stamp !== stamp) {
   const base = sharp(files.base).removeAlpha();
   for (const w of BASE_WIDTHS) {
     const r = base.clone().resize({ width: w });
-    await r.clone().avif({ quality: 52, effort: 4 }).toFile(out(`base/shell.${w}.avif`));
-    await r.clone().webp({ quality: 80, effort: 5 }).toFile(out(`base/shell.${w}.webp`));
+    await r
+      .clone()
+      .avif({ quality: 52, effort: 4 })
+      .toFile(out(`base/shell.${w}.avif`));
+    await r
+      .clone()
+      .webp({ quality: 80, effort: 5 })
+      .toFile(out(`base/shell.${w}.webp`));
   }
   const [x0, x1, y0, y1] = rect;
   const cut = { left: x0, top: y0, width: x1 - x0, height: y1 - y0 };

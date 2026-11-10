@@ -587,44 +587,20 @@ test.describe('from the story into the tool (S3)', () => {
     await expect(page.locator('#back-to-story')).toHaveCount(0);
   });
 
-  test("warm modern: the house's own tool, a draft, and the soft switch between two houses at one camera", async ({ page }) => {
+  test("warm modern: every way into the tool goes to the house in the room engine (S10); the draft's address moved, 301", async ({ page, request }) => {
     await page.goto(`${WARM}#tool`);
-    await page.locator('#st-tool-draft').click();
-    await expect(page).toHaveURL(/\/story\/living-room\/warm-modern\/tool\/$/);
-    await expect(page.locator('.st-td .st-draft')).toHaveText('הבית המודרני החם, שלב 1: אושר. עוד לא באתר הציבורי');
-    const warm = page.locator('.st-td-house[data-house="warm-modern"]');
-    await expect(warm.locator('.st-td-layer')).toHaveCount(3);
-    // QA on S3–S5 (ת5): the other house is not fetched until it is asked for
-    const nordicSrc = () =>
-      page
-        .locator('.st-td-house[data-house="nordic"] img')
-        .first()
-        .evaluate((i: HTMLImageElement) => i.getAttribute('src'));
-    expect(await nordicSrc()).toBeNull();
-    expect(await warm.locator('.st-td-layer.is-multiply').evaluate((el) => getComputedStyle(el).mixBlendMode)).toBe('multiply');
-    // every layer of both houses in the same frame: one box
-    const boxes = await page.locator('.st-td-layer img').evaluateAll((els) => els.map((e) => JSON.stringify(e.getBoundingClientRect())));
-    expect(new Set(boxes).size).toBe(1);
-    expect(await warm.evaluate((el) => getComputedStyle(el).transitionDuration)).toBe('1s');
-    await page.locator('.st-td-btn[data-house="nordic"]').click();
-    await expect(page.locator('.st-td-btn[data-house="nordic"]')).toHaveAttribute('aria-pressed', 'true');
-    await expect(page.locator('.st-td-house[data-house="nordic"]')).toHaveClass(/is-on/);
-    await expect(warm).toHaveAttribute('aria-hidden', 'true');
-    await expect(page).toHaveURL(/\?house=nordic$/);
-    await page.waitForTimeout(1200);
-    await audit(page, 'the draft tool, the Nordic house shown');
-  });
-
-  test('reduced motion: the switch is a short dissolve, nothing moves', async ({ page }) => {
-    await page.emulateMedia({ reducedMotion: 'reduce' });
-    await page.goto('/story/living-room/warm-modern/tool/?house=nordic');
-    await expect(page.locator('.st-td-house[data-house="nordic"]')).toHaveClass(/is-on/);
-    expect(
-      await page
-        .locator('.st-td-house')
-        .first()
-        .evaluate((el) => getComputedStyle(el).transitionDuration),
-    ).toBe('0.3s');
+    const from = encodeURIComponent(WARM);
+    await expect(page.locator('#st-tool')).toHaveAttribute('href', `/rooms/living-room/?style=warm-modern&from=${from}`);
+    await expect(page.locator('#st-tool-draft')).toHaveCount(0);
+    for (const href of await page.locator('a').evaluateAll((as) => as.map((a) => a.getAttribute('href') ?? '').filter((h) => h.startsWith('/rooms/'))))
+      expect(href, 'a way into the tool from the warm-modern story').toMatch(/^\/rooms\/living-room\/\?style=warm-modern(&|$)/);
+    const moved = await request.get('/story/living-room/warm-modern/tool/', { maxRedirects: 0 });
+    expect(moved.status()).toBe(301);
+    expect(moved.headers()['location']).toBe('/rooms/living-room/?style=warm-modern');
+    await page.locator('#st-tool').click();
+    await expect(page).toHaveURL(/\/rooms\/living-room\/\?style=warm-modern&from=/);
+    await expect(page.locator('.stage-status')).toHaveText('הבית המודרני החם, שלב 1: אושר. עוד לא באתר הציבורי');
+    await expect(page.locator('#back-to-story')).toHaveAttribute('href', WARM);
   });
 });
 

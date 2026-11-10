@@ -16,6 +16,8 @@ export type House = {
   status_he: string | null;
   /** the composed room's description; null: the Nordic one, written in the stage */
   alt_he: string | null;
+  /** the line above the list under the room, when the house has its own */
+  intro_he?: string;
   scene: Scene;
   room: CatalogRoom;
   product: (id: string | null | undefined) => PublicProduct | undefined;

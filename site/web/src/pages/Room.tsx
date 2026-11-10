@@ -47,9 +47,8 @@ export function Room({ room: nordicRoom, slot, option, style }: { room: CatalogR
         <div class="room-intro">
           <h2 id="items-title">מה יש בחדר</h2>
           <p class="muted">
-            {house.status_he
-              ? 'בבית הזה מתחלפות בינתיים הכריות והשמיכה, בשלושה סטים. שאר הפריטים הם חלק מהתמונה, ויקבלו גלגל משלהם בשלב הבא.'
-              : 'כל פריט בחדר הוא מוצר שאפשר לקנות. לכל פריט שלוש גרסאות: געו בנקודה על התמונה, או בחרו מהרשימה. המילוי (ענפים, נרות, עיתונים ועץ הזית) מראה איך משתמשים במוצר ולא נמכר.'}
+            {house.intro_he ??
+              'כל פריט בחדר הוא מוצר שאפשר לקנות. לכל פריט שלוש גרסאות: געו בנקודה על התמונה, או בחרו מהרשימה. המילוי (ענפים, נרות, עיתונים ועץ הזית) מראה איך משתמשים במוצר ולא נמכר.'}
           </p>
         </div>
         <ul class="slot-list">
@@ -64,7 +63,11 @@ export function Room({ room: nordicRoom, slot, option, style }: { room: CatalogR
                 <div class="meta">
                   <strong>{s.name_he}</strong>
                   <span class="small">
-                    {p ? <a href={shopPath(p.id)}>{p.name_he}</a> : <span class="muted">{opt && !opt.placeholder ? opt.label_he : `וריאציה ${pos} · ממתינה למוצר`}</span>}
+                    {p ? (
+                      <a href={shopPath(p.id)}>{p.name_he}</a>
+                    ) : (
+                      <span class="muted">{opt && !opt.placeholder ? opt.label_he : `וריאציה ${pos} · ממתינה למוצר`}</span>
+                    )}
                   </span>
                   <span class="row">
                     {p ? <Price agorot={p.price_agorot} provisional={p.price_provisional} /> : null}
