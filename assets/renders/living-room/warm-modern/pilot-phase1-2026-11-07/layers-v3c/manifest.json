@@ -1,0 +1,379 @@
+{
+ "id": "wm-living-room-m0-tool-layers-v3c",
+ "room": "living-room",
+ "style": "warm-modern",
+ "camera": "M0 1.2 (tool)",
+ "date": "2026-11-10",
+ "author": "render-agent",
+ "brief": "briefs/render-wm-tool-layers-v3c-2026-11-10.md",
+ "approval": "AP3-WM (owner, 2026-11-07, status/decisions.json); QA qa/reports/2026-11-07-pilot-phase1-v3c-verify.md",
+ "status": "the approved v3c display files of pilot phase 1 as separate layers; recompositing checked by verify_layers_v3c.py (QA to re-run); for the tool behind HD_PUBLIC=0; web encoding (WebP/AVIF, widths) is frontend-dev's",
+ "grade": "v3c, one display grade for every pilot file (jobs.json grade_v3c). Every layer is cut from the graded display files; no layer is graded on its own and the site applies no further grade",
+ "size": {
+  "width": 2720,
+  "height": 1530,
+  "aspect": "16:9",
+  "canvas": "the M0 1.2 overscan canvas (4072 x 2290 at 2720 / 4072), the same as the approved display files; for the engine every file covers the whole canvas, rect [0, 1, 0, 1]",
+  "camera_frame_px": [
+   77.49,
+   43.43,
+   2642.51,
+   1486.57
+  ],
+  "camera_frame_note": "the 3840 x 2160 camera frame inside the canvas [x0, y0, x1, y1]; rect_camera_frame_uv and data/slots boxes are in this frame"
+ },
+ "color": "8-bit sRGB, no ICC profile. Blending works on the sRGB-encoded values (CSS mix-blend-mode, canvas 2D and the engine's GL path do)",
+ "compose": {
+  "order": [
+   "base",
+   "cushions-shadow",
+   "cushions"
+  ],
+  "formula": "out = round((base * shadow / 255) * (1 - a) + rgb * a), a = alpha / 255, straight (not premultiplied) alpha; one set at a time: its shadow and its layer swap together",
+  "swap_region": "per set: alpha > 0 or any shadow channel < 255 (region below); a swap A <-> B <-> C changes nothing outside the union of the two sets' regions"
+ },
+ "layers": [
+  {
+   "id": "base",
+   "file": "base.png",
+   "blend": "normal",
+   "z": 0,
+   "opaque": true,
+   "replaces_base_layers": [
+    "shell (z 0)",
+    "fixed-furniture-shadow (z 34, multiply)",
+    "fixed-furniture (z 40)"
+   ],
+   "source": "assets/renders/living-room/warm-modern/pilot-phase1-2026-11-07/shell-furniture-v3-graded-v3c.png",
+   "how": "byte copy of the approved file",
+   "sha256": "75200f46361dfd62dd03363ef46e21cce119fce04990d914a771383b551aba39"
+  },
+  {
+   "id": "cushions-shadow",
+   "slot": "cushions",
+   "blend": "multiply",
+   "z": 54,
+   "opaque": true,
+   "per_set": "sets.<X>.shadow",
+   "white_is_none": true,
+   "format": "RGB, no alpha",
+   "how": "in the approved shadow band, per channel the integer S with round(base * S / 255) = the approved composite, the closest to the approved (pre-grade) shadow; RGB because the v3c toe neutralises the deep contact shadow; under the soft edge the approved shadow value; 255 under alpha 255"
+  },
+  {
+   "id": "cushions",
+   "slot": "cushions",
+   "blend": "normal",
+   "z": 55,
+   "per_set": "sets.<X>.layer",
+   "format": "RGBA, straight alpha",
+   "how": "alpha = the approved cut; RGB = the approved composite where alpha is 255, solved at the soft edge so that base x shadow and the layer give the approved pixel; RGB bled 32 px under alpha 0 (no effect on the picture)"
+  }
+ ],
+ "slot": {
+  "id": "cushions",
+  "z": 55,
+  "set_of": 4,
+  "default": "B",
+  "order": [
+   "B",
+   "A",
+   "C"
+  ],
+  "default_source": "data/selections/living-room.warm-modern.json (slots.cushions.default_2026_11_07, CAM1: set B is the default)",
+  "sold_as": "a set (SET1), a single unit as an option"
+ },
+ "sets": {
+  "A": {
+   "layer": "cushions-set-A.png",
+   "shadow": "cushions-set-A-shadow.png",
+   "products": [
+    {
+     "card_id": "cushions-cj-boucle-teddy",
+     "card": "data/products/cushions/cushions-cj-boucle-teddy.json",
+     "selection_item": "cushions-cj-boucle-teddy White 50x50",
+     "role": "50 x 50 square",
+     "option": {
+      "color": "white",
+      "size": "50x50"
+     },
+     "sku": "CJZT228600103CX"
+    },
+    {
+     "card_id": "cushions-cj-knitted-chenille-bean-green",
+     "card": "data/products/cushions/cushions-cj-knitted-chenille-bean-green.json",
+     "selection_item": "cushions-cj-knitted-chenille-bean-green 21 Camel 45x45",
+     "role": "45 x 45 square",
+     "option": {
+      "color": "21-camel-color"
+     },
+     "note": "customer-facing colour name: taupe (טאופ), not camel; the SKU photo reads taupe (selection, cushions picks A note_2026_11_07)",
+     "sku": "CJYD282217003CX"
+    },
+    {
+     "card_id": "cushions-cj-boucle-teddy",
+     "card": "data/products/cushions/cushions-cj-boucle-teddy.json",
+     "selection_item": "cushions-cj-boucle-teddy Milk Tea 30x50",
+     "role": "30 x 50 lumbar",
+     "option": {
+      "color": "milk-tea-color",
+      "size": "30x50"
+     },
+     "sku": "CJZT228600126ZA"
+    },
+    {
+     "card_id": "sofa-cover-cj-cotton-muslin-fringe",
+     "card": "data/products/sofa-cover/sofa-cover-cj-cotton-muslin-fringe.json",
+     "selection_item": "sofa-cover-cj-cotton-muslin-fringe Flax throw 150x200",
+     "role": "throw 150 x 200",
+     "option": {
+      "other": "flax-brown",
+      "size": "150x200"
+     },
+     "sku": "CJYD205807538LO"
+    }
+   ],
+   "source": {
+    "approved_composite": "assets/renders/living-room/warm-modern/pilot-phase1-2026-11-07/composite-set-A-v3-graded-v3c.png",
+    "approved_composite_sha256": "e53cdd15d2c1277c8bb38f8a76157b4ee6434551188eaf13fcfac7397061933b",
+    "alpha_from": "assets/renders/living-room/warm-modern/pilot-phase1-2026-11-07/layers/cushions/set-A.png",
+    "shadow_band_from": "assets/renders/living-room/warm-modern/pilot-phase1-2026-11-07/shadows/cushions/set-A.png",
+    "outlines": "assets/renders/living-room/warm-modern/pilot-phase1-2026-11-07/cushion-polys.json"
+   },
+   "region": {
+    "px": 236086,
+    "bbox_px": [
+     1369,
+     868,
+     2446,
+     1427
+    ],
+    "rect_canvas_uv": [
+     0.5033,
+     0.8993,
+     0.5673,
+     0.9327
+    ],
+    "rect_camera_frame_uv": [
+     0.5035,
+     0.9234,
+     0.5714,
+     0.9587
+    ]
+   },
+   "alpha_px": 162731,
+   "alpha_255_px": 151145,
+   "alpha_soft_px": 11586,
+   "shadow_px": 77984,
+   "build": {
+    "approved_cut_px": 236150,
+    "region_outside_approved_cut_px": 0,
+    "approved_changed_px": 234147,
+    "soft_edge_alpha_raised_px": 294,
+    "shadow_band_px": 73419,
+    "shadow_band_channel_needs_over_255_px": 334,
+    "shadow_differs_from_approved_shadow_px": 33577,
+    "bleed_px": 121842
+   }
+  },
+  "B": {
+   "layer": "cushions-set-B.png",
+   "shadow": "cushions-set-B-shadow.png",
+   "products": [
+    {
+     "card_id": "cushions-aliexpress-textured-boucle-throw-pillow",
+     "card": "data/products/cushions/cushions-aliexpress-textured-boucle-throw-pillow.json",
+     "selection_item": "cushions-aliexpress-textured-boucle-throw-pillow Oatmeal 50x50",
+     "role": "50 x 50 square",
+     "option": {
+      "color": "oatmeal",
+      "size": "50x50"
+     },
+     "sku": "12000058046277179"
+    },
+    {
+     "card_id": "cushions-cj-wide-stripe-corduroy-light-green",
+     "card": "data/products/cushions/cushions-cj-wide-stripe-corduroy-light-green.json",
+     "selection_item": "cushions-cj-wide-stripe-corduroy-light-green Camel",
+     "role": "corduroy square (card 50 x 50)",
+     "option": {
+      "color": "camel"
+     },
+     "sku": "CJYD280011307GT"
+    },
+    {
+     "card_id": "cushions-cj-linen-look-charcoal",
+     "card": "data/products/cushions/cushions-cj-linen-look-charcoal.json",
+     "selection_item": "cushions-cj-linen-look-charcoal Beige 30x50",
+     "role": "30 x 50 lumbar",
+     "option": {
+      "color": "beige",
+      "size": "30x50"
+     },
+     "sku": null,
+     "sku_candidates": [
+      "CJZT113551675WD",
+      "CJZT113551679AZ"
+     ],
+     "sku_note": "the selection does not say which; it matters to the shop, not to the picture"
+    },
+    {
+     "card_id": "sofa-cover-cj-cotton-muslin-fringe",
+     "card": "data/products/sofa-cover/sofa-cover-cj-cotton-muslin-fringe.json",
+     "selection_item": "sofa-cover-cj-cotton-muslin-fringe Pecan",
+     "role": "throw 150 x 200",
+     "option": {
+      "other": "pecan",
+      "size": "150x200"
+     },
+     "sku": "CJYD205807508HS"
+    }
+   ],
+   "source": {
+    "approved_composite": "assets/renders/living-room/warm-modern/pilot-phase1-2026-11-07/composite-set-B-v3-graded-v3c.png",
+    "approved_composite_sha256": "2036cd05c1642384e26496a31004b3b65a459d4ac707ccd00d363481a2af5683",
+    "alpha_from": "assets/renders/living-room/warm-modern/pilot-phase1-2026-11-07/layers/cushions/set-B.png",
+    "shadow_band_from": "assets/renders/living-room/warm-modern/pilot-phase1-2026-11-07/shadows/cushions/set-B.png",
+    "outlines": "assets/renders/living-room/warm-modern/pilot-phase1-2026-11-07/cushion-polys.json"
+   },
+   "region": {
+    "px": 230174,
+    "bbox_px": [
+     1357,
+     859,
+     2437,
+     1411
+    ],
+    "rect_canvas_uv": [
+     0.4989,
+     0.896,
+     0.5614,
+     0.9222
+    ],
+    "rect_camera_frame_uv": [
+     0.4988,
+     0.9199,
+     0.5651,
+     0.9476
+    ]
+   },
+   "alpha_px": 164458,
+   "alpha_255_px": 153130,
+   "alpha_soft_px": 11328,
+   "shadow_px": 70946,
+   "build": {
+    "approved_cut_px": 230243,
+    "region_outside_approved_cut_px": 0,
+    "approved_changed_px": 228238,
+    "soft_edge_alpha_raised_px": 211,
+    "shadow_band_px": 65785,
+    "shadow_band_channel_needs_over_255_px": 378,
+    "shadow_differs_from_approved_shadow_px": 27150,
+    "bleed_px": 118475
+   }
+  },
+  "C": {
+   "layer": "cushions-set-C.png",
+   "shadow": "cushions-set-C-shadow.png",
+   "products": [
+    {
+     "card_id": "cushions-cj-boucle-teddy",
+     "card": "data/products/cushions/cushions-cj-boucle-teddy.json",
+     "selection_item": "cushions-cj-boucle-teddy Light Brown 50x50",
+     "role": "50 x 50 square",
+     "option": {
+      "color": "light-brown",
+      "size": "50x50"
+     },
+     "sku": "CJZT228600133GT"
+    },
+    {
+     "card_id": "cushions-cj-corduroy-patchwork",
+     "card": "data/products/cushions/cushions-cj-corduroy-patchwork.json",
+     "selection_item": "cushions-cj-corduroy-patchwork Dark Coffee 45x45",
+     "role": "45 x 45 square",
+     "option": {
+      "color": "dark-coffee",
+      "size": "45x45"
+     },
+     "sku": "CJZT189401910JQ"
+    },
+    {
+     "card_id": "cushions-cj-linen-look-ivory",
+     "card": "data/products/cushions/cushions-cj-linen-look-ivory.json",
+     "selection_item": "cushions-cj-linen-look-ivory Light Beige Gray 30x50",
+     "role": "30 x 50 lumbar",
+     "option": {
+      "color": "light-beige-gray"
+     },
+     "sku": "CJZT242978810JQ"
+    },
+    {
+     "card_id": "sofa-cover-cj-cotton-muslin-fringe",
+     "card": "data/products/sofa-cover/sofa-cover-cj-cotton-muslin-fringe.json",
+     "selection_item": "sofa-cover-cj-cotton-muslin-fringe Clay",
+     "role": "throw 150 x 200",
+     "option": {
+      "other": "clay",
+      "size": "150x200"
+     },
+     "sku": "CJYD205807510JQ"
+    }
+   ],
+   "source": {
+    "approved_composite": "assets/renders/living-room/warm-modern/pilot-phase1-2026-11-07/composite-set-C-v3-graded-v3c.png",
+    "approved_composite_sha256": "df9b80a5cb568b1d71bcb497b6df5ba4a243e1cd51ce840d8a488c1fada6332c",
+    "alpha_from": "assets/renders/living-room/warm-modern/pilot-phase1-2026-11-07/layers/cushions/set-C.png",
+    "shadow_band_from": "assets/renders/living-room/warm-modern/pilot-phase1-2026-11-07/shadows/cushions/set-C.png",
+    "outlines": "assets/renders/living-room/warm-modern/pilot-phase1-2026-11-07/cushion-polys.json"
+   },
+   "region": {
+    "px": 256238,
+    "bbox_px": [
+     1351,
+     863,
+     2427,
+     1426
+    ],
+    "rect_canvas_uv": [
+     0.4967,
+     0.8923,
+     0.5641,
+     0.932
+    ],
+    "rect_camera_frame_uv": [
+     0.4965,
+     0.916,
+     0.5679,
+     0.958
+    ]
+   },
+   "alpha_px": 188978,
+   "alpha_255_px": 176999,
+   "alpha_soft_px": 11979,
+   "shadow_px": 73806,
+   "build": {
+    "approved_cut_px": 256282,
+    "region_outside_approved_cut_px": 0,
+    "approved_changed_px": 253643,
+    "soft_edge_alpha_raised_px": 330,
+    "shadow_band_px": 67304,
+    "shadow_band_channel_needs_over_255_px": 410,
+    "shadow_differs_from_approved_shadow_px": 27955,
+    "bleed_px": 127208
+   }
+  }
+ },
+ "known_limits": [
+  "a multiply cannot brighten: in set A 334 px, set B 378 px, set C 410 px of the shadow band the v3c toe put one channel (mostly blue) of the approved composite 1-4 levels above the base; there the shadow channel is 255 and the recomposite is off by up to that much (verify-layers-v3c.json); putting them in the layer's alpha would have scattered faint pixels outside the product silhouette",
+  "the shadow layers are exact for this base only: in the deep contact shadow under the throw the multiplier is cool (about 140 / 190 / 255), because the v3c toe turned the deepest shadow neutral. If a later slot puts something under the cushions' shadow (a rug, the sofa cover), cut the shadow again on that base",
+  "the soft-edge alpha was raised in set A 294 px, set B 211 px, set C 330 px (out of about 11,500 soft px each; median +2 levels) where the solved RGB would have left 0-255"
+ ],
+ "files": {
+  "build": "build_layers_v3c.py",
+  "verify": "verify_layers_v3c.py",
+  "verification": "verify-layers-v3c.json",
+  "asset_manifest_entries": "asset-manifest-entries.json (for assets/manifest.json; this task writes new files only)",
+  "verify_usage": "python3 verify_layers_v3c.py  (numpy + Pillow; exit 0 = pass)"
+ },
+ "tokens": 0
+}

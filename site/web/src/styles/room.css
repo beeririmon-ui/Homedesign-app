@@ -426,3 +426,13 @@
 .stage.arriving .stage-ui {
   opacity: 0;
 }
+/* S10: the house's status on the stage (behind the flag), under the room's name */
+.stage-status {
+  display: block;
+  font-weight: 400;
+}
+/* S10: entering at another house's address, the prerendered Nordic poster stays hidden until that house is here */
+.stage.house-pending .poster,
+.stage.house-pending .room-canvas {
+  visibility: hidden;
+}

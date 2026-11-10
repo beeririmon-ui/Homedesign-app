@@ -4,7 +4,10 @@
  */
 import { useEffect, useRef, useState } from 'preact/hooks';
 import type { CatalogRoom, CatalogSlot } from '@hd/shared';
-import { catalog, defaultSelection, product, scene } from '../catalog';
+import { defaultSelection } from '../catalog';
+import type { Scene } from '../engine/types';
+import { HOUSES, loadHouse, nordic, NORDIC, type House } from '../house';
+import { navigate } from '../router';
 import { RoomEngine } from '../engine/engine';
 import { coverSize, defaultCam, frameToScreen, screenToFrame } from '../engine/camera';
 import { slotSources } from '../engine/layers';
@@ -21,6 +24,8 @@ declare global {
   interface Window {
     __hdEngine?: RoomEngine;
     __hdFrames?: number[];
+    /** S10: the last switch between houses (performance.now ms): asked, the dissolve's start and end */
+    __hdHouseSwitch?: { from: string; to: string; asked: number; start: number; end: number };
   }
 }
 
@@ -36,7 +41,22 @@ const HINT_MS = 2000;
 /** the first-visit hint shows once per page session */
 let hinted = false;
 
-export function RoomExperience({ room, backTo = null }: { room: CatalogRoom; backTo?: string | null }) {
+export function RoomExperience({
+  house,
+  room,
+  backTo = null,
+  pending: waiting = false,
+}: {
+  house: House;
+  room: CatalogRoom;
+  backTo?: string | null;
+  /** S10: entering at another house's address: the stage waits for it rather than show the Nordic poster */
+  pending?: boolean;
+}) {
+  // the house on screen, for the engine's callbacks (they outlive a render); S10
+  const cur = useRef({ house, room });
+  cur.current = { house, room };
+  const scene = house.scene;
   const stage = useRef<HTMLDivElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
   const poster = useRef<HTMLImageElement>(null);
@@ -81,6 +101,8 @@ export function RoomExperience({ room, backTo = null }: { room: CatalogRoom; bac
 
   /** Hotspot positions: from the engine's camera once it runs, before that from the same camera math on the poster. */
   function placeHotspots() {
+    const { room } = cur.current;
+    const scene = cur.current.house.scene;
     const e = engine.current;
     const c = canvas.current;
     if (!c) return;
@@ -104,8 +126,8 @@ export function RoomExperience({ room, backTo = null }: { room: CatalogRoom; bac
     const pts: { el: HTMLButtonElement; x: number; y: number }[] = [];
     for (const s of room.slots) {
       const el = spots.current.get(s.id);
-      if (!el || !hasMark(s)) continue;
-      const [u, v] = anchorOf(s);
+      if (!el || !hasMark(s, scene)) continue;
+      const [u, v] = anchorOf(s, scene);
       pts.push({ el, ...frameToScreen(u, v, cam, vp, scene.aspect) });
     }
     // one mark per product, never overlapping: neighbouring 44 px targets (WCAG 2.5.8) are pushed apart a little
@@ -154,8 +176,8 @@ export function RoomExperience({ room, backTo = null }: { room: CatalogRoom; bac
     window.__hdFrames = window.__hdFrames ?? [];
     const e = new RoomEngine({
       canvas: canvas.current,
-      scene,
-      room,
+      scene: cur.current.house.scene,
+      room: cur.current.room,
       selection: selection.value,
       reduceMotion: prefersReducedMotion(),
       poster: poster.current,
@@ -190,7 +212,7 @@ export function RoomExperience({ room, backTo = null }: { room: CatalogRoom; bac
     const later = () => {
       idle = requestIdleCallbackSafe(() => {
         preload('T-E0');
-        prefetchVariants(room);
+        prefetchVariants(cur.current.room, cur.current.house.scene);
       });
     };
     // only after the page has fully loaded, so background bytes never compete with the first paint
@@ -216,6 +238,45 @@ export function RoomExperience({ room, backTo = null }: { room: CatalogRoom; bac
     stage.current?.classList.toggle('arriving', arriving);
     if (!arriving) placeHotspots();
   }, [arriving]);
+
+  /**
+   * S10, the soft switch between houses (DIR2; skeleton spec "החלפת סגנון"): the same camera and the same frame, another
+   * architecture; every layer of the composition dissolves at once, in the engine, 1 s (0.3 s with reduced motion: a
+   * short dissolve, nothing moves). Before the engine runs there is nothing to dissolve: the poster is the house's own.
+   */
+  const shownHouse = useRef(house);
+  useEffect(() => {
+    const from = shownHouse.current;
+    if (from === house) return;
+    shownHouse.current = house;
+    light(null);
+    hideMarks();
+    const run = starting.current;
+    if (!run) return placeHotspots();
+    const asked = performance.now();
+    setBusy(true);
+    void run.then(async (e) => {
+      if (!e) return setBusy(false);
+      const t = await e.setHouse(house.scene, room, selection.value, prefersReducedMotion() ? 300 : 1000);
+      window.__hdHouseSwitch = { from: from.style, to: house.style, asked, ...t };
+      setBusy(false);
+      placeHotspots();
+      announce(`${room.name_he}, ${house.name_he}`);
+    });
+  }, [house]);
+
+  /** The switch on the stage: the engine composes the house shown, the next house's chunk comes, then the address. */
+  async function switchTo(style: string) {
+    if (style === house.style || busy || open) return;
+    const [, next] = await Promise.all([ensureEngine(), loadHouse(style)]);
+    if (!next) return;
+    const q = new URLSearchParams(location.search);
+    q.delete('slot');
+    q.delete('option');
+    if (style === NORDIC) q.delete('style');
+    else q.set('style', style);
+    navigate(`${location.pathname}${q.size ? `?${q.toString()}` : ''}`, { replace: true });
+  }
 
   // first visit: the marks appear and fade so people know the products can be touched (no animation under
   // prefers-reduced-motion: base.css removes the transition, so they just appear and disappear)
@@ -246,7 +307,7 @@ export function RoomExperience({ room, backTo = null }: { room: CatalogRoom; bac
     // the touched product keeps its glow while the rings fade out and the camera moves in
     spots.current.get(slot.id)?.setAttribute('data-active', 'true');
     stage.current?.classList.add('zoomed');
-    await e.zoomToBox(zoom, scene.slots[slot.id]?.depth ?? 0.4, { durationMs: 1000, reserve: e.vp.h > 520 ? 0.44 : 0.36 });
+    await e.zoomToBox(zoom, cur.current.house.scene.slots[slot.id]?.depth ?? 0.4, { durationMs: 1000, reserve: e.vp.h > 520 ? 0.44 : 0.36 });
     if (previewOption && previewOption !== before) await preview(slot, previewOption);
     setOpen({ slot, before });
     setBusy(false);
@@ -270,8 +331,9 @@ export function RoomExperience({ room, backTo = null }: { room: CatalogRoom; bac
     setBusy(false);
     if (chosen) {
       const pos = selection.value[o.slot.id] ?? 1;
-      const p = product(o.slot.options[pos - 1]?.product_id);
-      announce(`${o.slot.name_he}: ${p ? p.name_he : `וריאציה ${pos}`} מוצג בחדר`);
+      const opt = o.slot.options[pos - 1];
+      const p = house.product(opt?.product_id);
+      announce(`${o.slot.name_he}: ${p ? p.name_he : opt && !opt.placeholder ? opt.label_he : `וריאציה ${pos}`} מוצג בחדר`);
     }
     // focus returns after the re-render that re-enables the hotspots (a disabled button cannot take focus)
     focusAfter.current = spots.current.get(o.slot.id) ?? opener.current;
@@ -300,6 +362,8 @@ export function RoomExperience({ room, backTo = null }: { room: CatalogRoom; bac
 
   /** The product under a point of the stage (its silhouette, frontmost first), for pointer hover and taps. */
   function slotAt(clientX: number, clientY: number): CatalogSlot | null {
+    const { room } = cur.current;
+    const scene = cur.current.house.scene;
     const c = canvas.current;
     if (!c) return null;
     const r = c.getBoundingClientRect();
@@ -310,7 +374,7 @@ export function RoomExperience({ room, backTo = null }: { room: CatalogRoom; bac
     const { u, v } = screenToFrame(clientX - r.left, clientY - r.top, cam, vp, scene.aspect);
     for (let i = room.slots.length - 1; i >= 0; i--) {
       const s = room.slots[i]!;
-      if (!hasMark(s)) continue;
+      if (!hasMark(s, scene)) continue;
       if ((scene.slots[s.id]?.outline ?? []).some((poly) => inPolygon(u, v, poly))) return s;
     }
     return null;
@@ -379,11 +443,11 @@ export function RoomExperience({ room, backTo = null }: { room: CatalogRoom; bac
     hideMarks();
   }
 
-  const styles = catalog.styles;
   return (
     <section
-      class="stage"
+      class={`stage${waiting ? ' house-pending' : ''}`}
       ref={stage}
+      data-house={house.style}
       style={{ '--cu': String(scene.mobile_center_u) }}
       aria-labelledby="room-title"
       onPointerDown={onPointerDown}
@@ -410,12 +474,17 @@ export function RoomExperience({ room, backTo = null }: { room: CatalogRoom; bac
         class="room-canvas"
         // eslint-disable-next-line jsx-a11y/no-interactive-element-to-noninteractive-role
         role="img"
-        aria-label={`${room.name_he} בסגנון נורדי: ספה בכיסוי בהיר, שולחן קפה מאלון, כורסה ליד החלון ועץ זית בפינה. ${room.slots.length} פריטים לבחירה, ברשימה שמתחת לחדר ובנקודות על התמונה.`}
+        aria-label={
+          house.alt_he ??
+          `${room.name_he} בסגנון נורדי: ספה בכיסוי בהיר, שולחן קפה מאלון, כורסה ליד החלון ועץ זית בפינה. ${room.slots.length} פריטים לבחירה, ברשימה שמתחת לחדר ובנקודות על התמונה.`
+        }
         style={{ opacity: ready ? 1 : 0, transition: arriving ? 'none' : 'opacity .5s' }}
       />
       <div class="stage-vignette" aria-hidden="true" />
       <h1 id="room-title" class="glass stage-temp-note" tabIndex={-1}>
-        {room.name_he} · נורדי{scene.temporary ? ' · תמונות זמניות' : ''}
+        {room.name_he} · {house.name_he}
+        {scene.temporary ? ' · תמונות זמניות' : ''}
+        {house.status_he ? <span class="stage-status">{house.status_he}</span> : null}
       </h1>
       <svg class="outlines" ref={outlineSvg} viewBox="0 0 1600 900" preserveAspectRatio="none" aria-hidden="true" focusable="false">
         {room.slots.map((s) => {
@@ -436,7 +505,8 @@ export function RoomExperience({ room, backTo = null }: { room: CatalogRoom; bac
         {room.slots.map((s) => {
           if (!s.hotspot) return null;
           const pos = selection.value[s.id] ?? 1;
-          const p = product(s.options[pos - 1]?.product_id);
+          const o = s.options[pos - 1];
+          const p = house.product(o?.product_id);
           return (
             <button
               key={s.id}
@@ -444,12 +514,12 @@ export function RoomExperience({ room, backTo = null }: { room: CatalogRoom; bac
               class="hotspot"
               data-slot={s.id}
               data-temp={String(s.hotspot.provisional)}
-              hidden={!placed || !hasMark(s)}
+              hidden={!placed || !hasMark(s, scene)}
               ref={(el) => {
                 if (el) spots.current.set(s.id, el);
               }}
               style={{ left: 0, top: 0 }}
-              aria-label={`${s.name_he}: ${p ? p.name_he : 'וריאציה זמנית'}. פתיחת ${s.options.length} וריאציות`}
+              aria-label={`${s.name_he}: ${p ? p.name_he : o && !o.placeholder ? o.label_he : 'וריאציה זמנית'}. פתיחת ${s.options.length} וריאציות`}
               onClick={() => void openSlot(s)}
               onPointerEnter={() => light(s.id)}
               onPointerLeave={() => light(null)}
@@ -478,17 +548,24 @@ export function RoomExperience({ room, backTo = null }: { room: CatalogRoom; bac
         </a>
       ) : null}
       <div class="stage-ui">
-        {/* ART7 (2026-11-03): styles that do not exist yet are not on the room image; they appear only in the contents
-            (Home) as "בגיליונות הבאים". With one style there is nothing to switch, so the control stays off the stage. */}
-        {styles.filter((s) => s.available).length > 1 ? (
-          <div class="glass segmented" role="group" aria-label="סגנון">
-            {styles
-              .filter((s) => s.available)
-              .map((s) => (
-                <button key={s.id} type="button" aria-pressed={s.id === room.style}>
-                  {s.name_he}
-                </button>
-              ))}
+        {/* ART7 (2026-11-03): styles that do not exist yet are not on the room image (only in the contents, "בגיליונות
+            הבאים"). S10: the houses that exist in the engine are; one house alone has nothing to switch. */}
+        {HOUSES.length > 1 ? (
+          <div class="glass segmented" role="group" aria-label="הבית">
+            {HOUSES.map((h) => (
+              <button
+                key={h.style}
+                type="button"
+                data-house={h.style}
+                aria-pressed={h.style === house.style}
+                disabled={busy}
+                onPointerEnter={() => void loadHouse(h.style)}
+                onFocus={() => void loadHouse(h.style)}
+                onClick={() => void switchTo(h.style)}
+              >
+                {h.name_he}
+              </button>
+            ))}
           </div>
         ) : null}
         <div class="stage-actions">
@@ -502,7 +579,8 @@ export function RoomExperience({ room, backTo = null }: { room: CatalogRoom; bac
               </button>
             </>
           ) : null}
-          <button type="button" class="glass glass-btn" onClick={() => go('T-E0', '/', true)}>
+          {/* the walk to the hall is the Nordic house's film: another house goes there without it */}
+          <button type="button" class="glass glass-btn" onClick={() => (house === nordic ? go('T-E0', '/', true) : navigate('/'))}>
             <IconDoor />
             <span>לכניסה</span>
           </button>
@@ -510,6 +588,7 @@ export function RoomExperience({ room, backTo = null }: { room: CatalogRoom; bac
       </div>
       {open ? (
         <VariantWheel
+          house={house}
           slot={open.slot}
           roomId={room.id}
           initial={selection.value[open.slot.id] ?? 1}
@@ -528,12 +607,12 @@ export function RoomExperience({ room, backTo = null }: { room: CatalogRoom; bac
  * which came back to the room in slots 1.7 with an M0 1.2 point): its slot-file point would float over the rug, so it
  * gets no mark; it stays in the list below the room. A scene without rings keeps the slot's hotspot.
  */
-function hasMark(s: CatalogSlot): boolean {
+function hasMark(s: CatalogSlot, scene: Scene): boolean {
   return !!s.hotspot?.visible && scene.slots[s.id]?.ring !== null;
 }
 
 /** Where a product's mark rests: the deepest point inside its silhouette (scene anchor), else the slot's hotspot. */
-function anchorOf(s: CatalogSlot): [number, number] {
+function anchorOf(s: CatalogSlot, scene: Scene): [number, number] {
   return scene.slots[s.id]?.anchor ?? [s.hotspot!.u, s.hotspot!.v];
 }
 
@@ -563,7 +642,7 @@ function cancelIdle(id: number): void {
 }
 
 /** Warms the HTTP cache with every variant layer (fetch only: decoding and GPU upload happen when the engine needs them). */
-function prefetchVariants(room: CatalogRoom): void {
+function prefetchVariants(room: CatalogRoom, scene: Scene): void {
   const w = innerWidth <= 900 ? scene.widths.lo : scene.widths.hi;
   // layers are WebP only (lossless alpha)
   for (const s of room.slots)

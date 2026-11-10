@@ -1,0 +1,1547 @@
+{
+ "base": "http://127.0.0.1:8799",
+ "run_at": "2026-11-10T18:29:12.683Z",
+ "qty": [
+  {
+   "qty": "-2",
+   "status": 422,
+   "error": "invalid_body",
+   "cart_qty_after": 1
+  },
+  {
+   "qty": "2.5",
+   "status": 422,
+   "error": "invalid_body",
+   "cart_qty_after": 1
+  },
+  {
+   "qty": "\"3\"",
+   "status": 422,
+   "error": "invalid_body",
+   "cart_qty_after": 1
+  },
+  {
+   "qty": "21",
+   "status": 422,
+   "error": "invalid_body",
+   "cart_qty_after": 1
+  },
+  {
+   "qty": "999",
+   "status": 422,
+   "error": "invalid_body",
+   "cart_qty_after": 1
+  },
+  {
+   "qty": "-0",
+   "status": 200,
+   "error": null,
+   "cart_qty_after": 0
+  },
+  {
+   "qty": "0",
+   "status": 200,
+   "error": null,
+   "cart_qty_after": 0
+  },
+  {
+   "qty": "1e1",
+   "status": 200,
+   "error": null,
+   "cart_qty_after": 10
+  },
+  {
+   "qty": "2e1",
+   "status": 200,
+   "error": null,
+   "cart_qty_after": 20
+  },
+  {
+   "qty": "2.0",
+   "status": 200,
+   "error": null,
+   "cart_qty_after": 2
+  },
+  {
+   "qty": "20.0000000000000001",
+   "status": 200,
+   "error": null,
+   "cart_qty_after": 20
+  },
+  {
+   "qty": "1e400",
+   "status": 422,
+   "error": "invalid_body",
+   "cart_qty_after": 1
+  },
+  {
+   "qty": "9007199254740993",
+   "status": 422,
+   "error": "invalid_body",
+   "cart_qty_after": 1
+  },
+  {
+   "qty": "-1e-9",
+   "status": 422,
+   "error": "invalid_body",
+   "cart_qty_after": 1
+  },
+  {
+   "qty": "null",
+   "status": 422,
+   "error": "invalid_body",
+   "cart_qty_after": 1
+  },
+  {
+   "qty": "true",
+   "status": 422,
+   "error": "invalid_body",
+   "cart_qty_after": 1
+  },
+  {
+   "qty": "[]",
+   "status": 422,
+   "error": "invalid_body",
+   "cart_qty_after": 1
+  },
+  {
+   "qty": "{}",
+   "status": 422,
+   "error": "invalid_body",
+   "cart_qty_after": 1
+  },
+  {
+   "qty": "\"1\"",
+   "status": 422,
+   "error": "invalid_body",
+   "cart_qty_after": 1
+  },
+  {
+   "qty": "\"\"",
+   "status": 422,
+   "error": "invalid_body",
+   "cart_qty_after": 1
+  },
+  {
+   "qty": "NaN",
+   "status": 400,
+   "error": "invalid_json",
+   "cart_qty_after": 1
+  }
+ ],
+ "variants": [
+  {
+   "case": "PRE1 rug (not sold)",
+   "status": 404,
+   "error": "variant_not_found",
+   "lines_after": []
+  },
+  {
+   "case": "PRE1 pouf (not sold)",
+   "status": 404,
+   "error": "variant_not_found",
+   "lines_after": []
+  },
+  {
+   "case": "missing variant",
+   "status": 404,
+   "error": "variant_not_found",
+   "lines_after": []
+  },
+  {
+   "case": "product id without a key",
+   "status": 404,
+   "error": "variant_not_found",
+   "lines_after": []
+  },
+  {
+   "case": "another product's key",
+   "status": 404,
+   "error": "variant_not_found",
+   "lines_after": []
+  },
+  {
+   "case": "upper case",
+   "status": 404,
+   "error": "variant_not_found",
+   "lines_after": []
+  },
+  {
+   "case": "trailing space",
+   "status": 404,
+   "error": "variant_not_found",
+   "lines_after": []
+  },
+  {
+   "case": "the old card id",
+   "status": 404,
+   "error": "variant_not_found",
+   "lines_after": []
+  },
+  {
+   "case": "SQL quote",
+   "status": 404,
+   "error": "variant_not_found",
+   "lines_after": []
+  },
+  {
+   "case": "161 chars",
+   "status": 422,
+   "error": "invalid_body",
+   "lines_after": []
+  },
+  {
+   "case": "empty",
+   "status": 422,
+   "error": "invalid_body",
+   "lines_after": []
+  },
+  {
+   "case": "pack unit on a single product",
+   "status": 422,
+   "error": "pack_unavailable",
+   "lines_after": []
+  },
+  {
+   "case": "pack bogus",
+   "status": 422,
+   "error": "invalid_body",
+   "lines_after": []
+  },
+  {
+   "case": "triptych as a set",
+   "status": 200,
+   "error": null,
+   "lines_after": [
+    "framed-art-minimal-geometric-triptych-prints-4ue7k:1+50x70-unframed set x1 19900"
+   ]
+  },
+  {
+   "case": "triptych as a single print (SET1: set only?)",
+   "status": 200,
+   "error": null,
+   "lines_after": [
+    "framed-art-minimal-geometric-triptych-prints-4ue7k:1+50x70-unframed unit x1 6900"
+   ]
+  },
+  {
+   "case": "extra price field",
+   "status": 200,
+   "error": null,
+   "lines_after": [
+    "cushions-washed-cotton-frayed-ws8a6:50x50+rust-orange set x1 4900"
+   ]
+  }
+ ],
+ "look_variants": [
+  {
+   "page": "/story/living-room/boho/index.html",
+   "variant": "basket-seagrass-belly-xl-2ew3r:wood-color+xl",
+   "status": 200,
+   "error": null
+  },
+  {
+   "page": "/story/living-room/boho/index.html",
+   "variant": "planter-seagrass-belly-38x34-jyyuu:d45-h36",
+   "status": 200,
+   "error": null
+  },
+  {
+   "page": "/story/living-room/boho/index.html",
+   "variant": "cushions-washed-cotton-frayed-ws8a6:50x50+rust-orange*2",
+   "status": 200,
+   "error": null
+  },
+  {
+   "page": "/story/living-room/boho/index.html",
+   "variant": "cushions-sandstone-chenille-flange-nubfy:45x45-pillowcase+sandstone-chenille-green",
+   "status": 200,
+   "error": null
+  },
+  {
+   "page": "/story/living-room/boho/index.html",
+   "variant": "sofa-cover-washed-hemp-throw-g8qc5:150x200+raw-jute-color",
+   "status": 200,
+   "error": null
+  },
+  {
+   "page": "/story/living-room/mediterranean/index.html",
+   "variant": "magazine-holder-arch-iron-cane-ema28:default",
+   "status": 200,
+   "error": null
+  },
+  {
+   "page": "/story/living-room/mediterranean/index.html",
+   "variant": "candle-holders-travertine-pedestal-5hc18:70x110mm",
+   "status": 200,
+   "error": null
+  },
+  {
+   "page": "/story/living-room/mediterranean/index.html",
+   "variant": "cushions-washed-cotton-frayed-ws8a6:50x50+white*3",
+   "status": 200,
+   "error": null
+  },
+  {
+   "page": "/story/living-room/mediterranean/index.html",
+   "variant": "cushions-washed-cotton-frayed-ws8a6:30x50+moss-green",
+   "status": 200,
+   "error": null
+  },
+  {
+   "page": "/story/living-room/mediterranean/index.html",
+   "variant": "cushions-washed-cotton-frayed-ws8a6:50x50+earthy-orange",
+   "status": 200,
+   "error": null
+  },
+  {
+   "page": "/story/living-room/mediterranean/index.html",
+   "variant": "bowl-speckled-ivory-wide-bowl-21-1491s:large-white",
+   "status": 200,
+   "error": null
+  },
+  {
+   "page": "/story/living-room/mediterranean/index.html",
+   "variant": "sofa-cover-cotton-muslin-fringe-0iz5d:150x200+white",
+   "status": 200,
+   "error": null
+  },
+  {
+   "page": "/story/living-room/modern-country/index.html",
+   "variant": "sill-vase-cream-fluted-column-25-g20ky:qiqing-style",
+   "status": 200,
+   "error": null
+  },
+  {
+   "page": "/story/living-room/modern-country/index.html",
+   "variant": "table-runner-linen-look-sage-fringe-9vndw:4-light-green+33x122",
+   "status": 200,
+   "error": null
+  },
+  {
+   "page": "/story/living-room/modern-country/index.html",
+   "variant": "bowl-speckled-ivory-wide-bowl-21-1491s:large-white",
+   "status": 200,
+   "error": null
+  },
+  {
+   "page": "/story/living-room/nordic/index.html",
+   "variant": "framed-art-minimal-geometric-triptych-prints-4ue7k:1+50x70-unframed",
+   "status": 200,
+   "error": null
+  },
+  {
+   "page": "/story/living-room/nordic/index.html",
+   "variant": "sofa-cover-cotton-muslin-fringe-0iz5d:150x200+white",
+   "status": 200,
+   "error": null
+  },
+  {
+   "page": "/story/living-room/nordic/index.html",
+   "variant": "cushions-linen-look-charcoal-j7xyk:dark-grey+pillowcase+50x50",
+   "status": 200,
+   "error": null
+  },
+  {
+   "page": "/story/living-room/nordic/index.html",
+   "variant": "bowl-glutinous-white-belly-bowl-21-dmhuc:default",
+   "status": 200,
+   "error": null
+  },
+  {
+   "page": "/story/living-room/nordic/index.html",
+   "variant": "cushions-knitted-chenille-bean-green-4z66l:1-bean-green",
+   "status": 200,
+   "error": null
+  },
+  {
+   "page": "/story/living-room/nordic/index.html",
+   "variant": "candle-holders-travertine-pedestal-5hc18:70x110mm",
+   "status": 200,
+   "error": null
+  },
+  {
+   "page": "/story/living-room/nordic/index.html",
+   "variant": "cushions-boucle-teddy-d7wrb:white+50x50",
+   "status": 200,
+   "error": null
+  },
+  {
+   "page": "/story/living-room/nordic/index.html",
+   "variant": "planter-seagrass-belly-msbbq:yellow+35x37-cm",
+   "status": 200,
+   "error": null
+  },
+  {
+   "page": "/story/living-room/nordic/index.html",
+   "variant": "basket-jute-rope-cylinder-6wing:large",
+   "status": 200,
+   "error": null
+  },
+  {
+   "page": "/story/living-room/nordic/index.html",
+   "variant": "table-runner-linen-look-sage-fringe-9vndw:4-light-green+33x122",
+   "status": 200,
+   "error": null
+  },
+  {
+   "page": "/story/living-room/nordic/index.html",
+   "variant": "wall-decor-corn-husk-round-38-8aouz:38cm",
+   "status": 200,
+   "error": null
+  },
+  {
+   "page": "/story/living-room/nordic/index.html",
+   "variant": "sofa-cover-cotton-muslin-fringe-0iz5d:150x200+white",
+   "status": 200,
+   "error": null
+  },
+  {
+   "page": "/story/living-room/nordic/index.html",
+   "variant": "magazine-holder-felt-log-basket-c59b4:dark-gray",
+   "status": 200,
+   "error": null
+  },
+  {
+   "page": "/story/living-room/nordic/index.html",
+   "variant": "basket-jute-rope-cylinder-6wing:large",
+   "status": 200,
+   "error": null
+  },
+  {
+   "page": "/story/living-room/warm-modern/index.html",
+   "variant": "floor-lamp-pleated-walnut-stem-158-p2hz3:3color-floor-lamp",
+   "status": 200,
+   "error": null
+  },
+  {
+   "page": "/story/living-room/warm-modern/index.html",
+   "variant": "pendant-tiered-fabric-drum-cjkd4:default",
+   "status": 200,
+   "error": null
+  },
+  {
+   "page": "/story/living-room/warm-modern/index.html",
+   "variant": "cushions-boucle-teddy-d7wrb:milk-tea-color+50x50",
+   "status": 200,
+   "error": null
+  },
+  {
+   "page": "/story/living-room/warm-modern/index.html",
+   "variant": "vase-textured-white-stoneware-w90r9:large",
+   "status": 200,
+   "error": null
+  },
+  {
+   "page": "/story/living-room/warm-modern/index.html",
+   "variant": "cushions-wide-stripe-corduroy-light-green-narue:camel",
+   "status": 200,
+   "error": null
+  },
+  {
+   "page": "/story/living-room/warm-modern/index.html",
+   "variant": "candle-holders-travertine-pedestal-5hc18:70x110mm",
+   "status": 200,
+   "error": null
+  },
+  {
+   "page": "/story/living-room/warm-modern/index.html",
+   "variant": "cushions-boucle-teddy-d7wrb:white+50x50",
+   "status": 200,
+   "error": null
+  },
+  {
+   "page": "/story/living-room/warm-modern/index.html",
+   "variant": "sofa-cover-cotton-muslin-fringe-0iz5d:150x200+flax-brown",
+   "status": 200,
+   "error": null
+  }
+ ],
+ "checkout": {
+  "empty_cart": 422,
+  "forged_shipping": 422,
+  "forged_total_field": {
+   "status": 422,
+   "keys": [
+    "error",
+    "message_he"
+   ]
+  },
+  "second_on_same_cart": {
+   "status": 422,
+   "error": "invalid_body"
+  },
+  "cart_after": 200,
+  "put_after_order": 200
+ },
+ "scan": [
+  {
+   "method": "POST",
+   "path": "/api/cart",
+   "status": 201,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 422,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "GET",
+   "path": "/api/cart/:id",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 422,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "GET",
+   "path": "/api/cart/:id",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 422,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "GET",
+   "path": "/api/cart/:id",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 422,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "GET",
+   "path": "/api/cart/:id",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 422,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "GET",
+   "path": "/api/cart/:id",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "GET",
+   "path": "/api/cart/:id",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "GET",
+   "path": "/api/cart/:id",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "GET",
+   "path": "/api/cart/:id",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "GET",
+   "path": "/api/cart/:id",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "GET",
+   "path": "/api/cart/:id",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "GET",
+   "path": "/api/cart/:id",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 422,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "GET",
+   "path": "/api/cart/:id",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 422,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "GET",
+   "path": "/api/cart/:id",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 422,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "GET",
+   "path": "/api/cart/:id",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 422,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "GET",
+   "path": "/api/cart/:id",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 422,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "GET",
+   "path": "/api/cart/:id",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 422,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "GET",
+   "path": "/api/cart/:id",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 422,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "GET",
+   "path": "/api/cart/:id",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 422,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "GET",
+   "path": "/api/cart/:id",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 422,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "GET",
+   "path": "/api/cart/:id",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 400,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "GET",
+   "path": "/api/cart/:id",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "POST",
+   "path": "/api/cart",
+   "status": 201,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 404,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "GET",
+   "path": "/api/cart/:id",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "POST",
+   "path": "/api/cart",
+   "status": 201,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 404,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "GET",
+   "path": "/api/cart/:id",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "POST",
+   "path": "/api/cart",
+   "status": 201,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 404,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "GET",
+   "path": "/api/cart/:id",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "POST",
+   "path": "/api/cart",
+   "status": 201,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 404,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "GET",
+   "path": "/api/cart/:id",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "POST",
+   "path": "/api/cart",
+   "status": 201,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 404,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "GET",
+   "path": "/api/cart/:id",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "POST",
+   "path": "/api/cart",
+   "status": 201,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 404,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "GET",
+   "path": "/api/cart/:id",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "POST",
+   "path": "/api/cart",
+   "status": 201,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 404,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "GET",
+   "path": "/api/cart/:id",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "POST",
+   "path": "/api/cart",
+   "status": 201,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 404,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "GET",
+   "path": "/api/cart/:id",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "POST",
+   "path": "/api/cart",
+   "status": 201,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 404,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "GET",
+   "path": "/api/cart/:id",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "POST",
+   "path": "/api/cart",
+   "status": 201,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 422,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "GET",
+   "path": "/api/cart/:id",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "POST",
+   "path": "/api/cart",
+   "status": 201,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 422,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "GET",
+   "path": "/api/cart/:id",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "POST",
+   "path": "/api/cart",
+   "status": 201,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 422,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "GET",
+   "path": "/api/cart/:id",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "POST",
+   "path": "/api/cart",
+   "status": 201,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 422,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "GET",
+   "path": "/api/cart/:id",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "POST",
+   "path": "/api/cart",
+   "status": 201,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "GET",
+   "path": "/api/cart/:id",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "POST",
+   "path": "/api/cart",
+   "status": 201,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "GET",
+   "path": "/api/cart/:id",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "POST",
+   "path": "/api/cart",
+   "status": 201,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "GET",
+   "path": "/api/cart/:id",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 400,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 404,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "POST",
+   "path": "/api/cart",
+   "status": 201,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "POST",
+   "path": "/api/cart",
+   "status": 201,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "POST",
+   "path": "/api/cart",
+   "status": 201,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "POST",
+   "path": "/api/cart",
+   "status": 201,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "POST",
+   "path": "/api/cart",
+   "status": 201,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "POST",
+   "path": "/api/cart",
+   "status": 201,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "POST",
+   "path": "/api/cart",
+   "status": 201,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "POST",
+   "path": "/api/checkout",
+   "status": 422,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "POST",
+   "path": "/api/cart",
+   "status": 201,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "POST",
+   "path": "/api/checkout",
+   "status": 422,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "POST",
+   "path": "/api/checkout",
+   "status": 422,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "POST",
+   "path": "/api/checkout",
+   "status": 422,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "GET",
+   "path": "/api/cart/:id",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "PUT",
+   "path": "/api/cart/:id/items",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "GET",
+   "path": "/api/admin/overview",
+   "status": 403,
+   "supplier_or_internal": "admin: status only"
+  },
+  {
+   "method": "GET",
+   "path": "/api/admin/products",
+   "status": 403,
+   "supplier_or_internal": "admin: status only"
+  },
+  {
+   "method": "GET",
+   "path": "/api/admin/orders",
+   "status": 403,
+   "supplier_or_internal": "admin: status only"
+  },
+  {
+   "method": "GET",
+   "path": "/api/admin/economics",
+   "status": 403,
+   "supplier_or_internal": "admin: status only"
+  },
+  {
+   "method": "GET",
+   "path": "/api/health",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "GET",
+   "path": "/api/catalog/rooms/living-room",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "GET",
+   "path": "/api/catalog/prices?ids=cushions-washed-cotton-frayed-ws8a6%2Crug-braided-wool-natural-jzzjv%2Cframed-art-minimal-geometric-triptych-prints-4ue7k",
+   "status": 200,
+   "supplier_or_internal": null
+  },
+  {
+   "method": "GET",
+   "path": "/api/catalog/prices?ids=cushions-cj-washed-cotton-frayed",
+   "status": 200,
+   "supplier_or_internal": null
+  }
+ ],
+ "good_variant": {
+  "status": 200,
+  "line": {
+   "variant_id": "cushions-washed-cotton-frayed-ws8a6:50x50+rust-orange",
+   "product_id": "cushions-washed-cotton-frayed-ws8a6",
+   "name_he": "ציפית כרית כותנה רחוצה עם שוליים פרומים, חלודה",
+   "option_he": "50×50 ס\"מ, חלודה כתום",
+   "pack": "set",
+   "pack_qty": 1,
+   "qty": 1,
+   "unit_price_agorot": 4900,
+   "line_total_agorot": 4900,
+   "price_provisional": true
+  },
+  "error": null
+ },
+ "bad_json": 400,
+ "unknown_cart": 404
+}

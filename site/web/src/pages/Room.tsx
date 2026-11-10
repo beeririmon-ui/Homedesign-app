@@ -1,15 +1,37 @@
 import { shopPath } from '@hd/shared/product-url';
-import { useEffect, useState } from 'preact/hooks';
+import { useEffect, useRef, useState } from 'preact/hooks';
 import type { CatalogRoom } from '@hd/shared';
-import { product } from '../catalog';
 import { RoomExperience } from '../components/RoomExperience';
 import { optionImage, Price } from '../components/Media';
-import { pendingOpen, selection } from '../state/room';
+import { pendingOpen, selectHouse, selection } from '../state/room';
+import { HOUSES, loadHouse, nordic, type House } from '../house';
 
-export function Room({ room, slot, option }: { room: CatalogRoom; slot?: string; option?: number }) {
+export function Room({ room: nordicRoom, slot, option, style }: { room: CatalogRoom; slot?: string; option?: number; style?: string }) {
+  // S10: the house the address names (DIR2), once its chunk is here; the first render is the prerendered Nordic one
+  const [house, setHouse] = useState<House>(nordic);
+  const [pending, setPending] = useState(false);
+  const want = style && HOUSES.some((h) => h.style === style) ? style : nordic.style;
+  // entering at a house's address, the stage waits for the house; a switch on the stage dissolves instead
+  const entry = useRef(true);
   useEffect(() => {
-    if (slot) pendingOpen.value = { slot, option: option ?? selection.value[slot] ?? 1 };
-  }, [slot, option]);
+    let live = true;
+    if (entry.current && want !== house.style) setPending(true);
+    entry.current = false;
+    void loadHouse(want).then((h) => {
+      if (!live) return;
+      setHouse(h ?? nordic);
+      setPending(false);
+    });
+    return () => {
+      live = false;
+    };
+  }, [want]);
+  selectHouse(house.style, house.room);
+  const room = house.style === nordic.style ? nordicRoom : house.room;
+  const product = house.product;
+  useEffect(() => {
+    if (slot && house.style === want) pendingOpen.value = { slot, option: option ?? selection.value[slot] ?? 1 };
+  }, [slot, option, house]);
   // S3: entered from a story page (?from=/story/…/), the way back to it; read after the first paint (prerendered HTML)
   const [from, setFrom] = useState<string | null>(null);
   useEffect(() => {
@@ -20,13 +42,14 @@ export function Room({ room, slot, option }: { room: CatalogRoom; slot?: string;
   return (
     <>
       {/* S5: the way back to the story sits on the stage (it was below it in S3) */}
-      <RoomExperience room={room} backTo={from} />
+      <RoomExperience house={house} room={room} backTo={from} pending={pending} />
       <section class="wrap page" aria-labelledby="items-title">
         <div class="room-intro">
           <h2 id="items-title">מה יש בחדר</h2>
           <p class="muted">
-            כל פריט בחדר הוא מוצר שאפשר לקנות. לכל פריט שלוש גרסאות: געו בנקודה על התמונה, או בחרו מהרשימה. המילוי (ענפים, נרות, עיתונים ועץ הזית) מראה איך
-            משתמשים במוצר ולא נמכר.
+            {house.status_he
+              ? 'בבית הזה מתחלפות בינתיים הכריות והשמיכה, בשלושה סטים. שאר הפריטים הם חלק מהתמונה, ויקבלו גלגל משלהם בשלב הבא.'
+              : 'כל פריט בחדר הוא מוצר שאפשר לקנות. לכל פריט שלוש גרסאות: געו בנקודה על התמונה, או בחרו מהרשימה. המילוי (ענפים, נרות, עיתונים ועץ הזית) מראה איך משתמשים במוצר ולא נמכר.'}
           </p>
         </div>
         <ul class="slot-list">
@@ -34,17 +57,19 @@ export function Room({ room, slot, option }: { room: CatalogRoom; slot?: string;
             const pos = selection.value[s.id] ?? 1;
             const opt = s.options[pos - 1];
             const p = product(opt?.product_id);
-            const img = optionImage(s.id, pos);
+            const img = house.thumb ? house.thumb(pos) : optionImage(s.id, pos);
             return (
               <li key={s.id} class="card slot-item">
                 {img ? <img class="thumb" src={img} alt="" loading="lazy" width={64} height={64} /> : <span class="thumb" aria-hidden="true" />}
                 <div class="meta">
                   <strong>{s.name_he}</strong>
-                  <span class="small">{p ? <a href={shopPath(p.id)}>{p.name_he}</a> : <span class="muted">וריאציה {pos} · ממתינה למוצר</span>}</span>
+                  <span class="small">
+                    {p ? <a href={shopPath(p.id)}>{p.name_he}</a> : <span class="muted">{opt && !opt.placeholder ? opt.label_he : `וריאציה ${pos} · ממתינה למוצר`}</span>}
+                  </span>
                   <span class="row">
                     {p ? <Price agorot={p.price_agorot} provisional={p.price_provisional} /> : null}
                     {s.on_hold || (p && p.availability.status !== 'available') ? <span class="small muted">המלאי אינו זמין כעת</span> : null}
-                    <a class="link-btn" href={`/rooms/${room.id}/?slot=${s.id}`}>
+                    <a class="link-btn" href={`/rooms/${room.id}/?${house === nordic ? '' : `style=${house.style}&`}slot=${s.id}`}>
                       החלפה
                       <span class="sr-only">
                         {' '}

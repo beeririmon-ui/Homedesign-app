@@ -11,7 +11,8 @@ const r = (p: string) => fileURLToPath(new URL(p, import.meta.url));
  * TODO(deploy): the test page (/test/), the story layer (/story/, tools/make-story.ts; /test/story/ redirects to it) and
  * their test frames (media/test/, media/story/) are built into dist for review. A public deploy builds with
  * HD_PUBLIC=1: their entries are left out, and dist/test, dist/story, dist/media/test and dist/media/story are removed
- * once the bundle is written (studio rules ו.7: an asset that did not pass QA never reaches the site). The story comes
+ * once the bundle is written (studio rules ו.7: an asset that did not pass QA never reaches the site); so are the houses
+ * beside the Nordic one in the room engine (S10, media/house, and __HD_PUBLIC__ in the code). The story comes
  * out from behind the flag when its frames pass "approved for the site" (G-ED).
  */
 const PUBLIC = process.env.HD_PUBLIC === '1';
@@ -39,7 +40,7 @@ function withoutTestPages(): Plugin {
       outDir = resolve(c.root, c.build.outDir);
     },
     closeBundle() {
-      for (const d of ['test', 'story', 'media/test', 'media/story']) rmSync(resolve(outDir, d), { recursive: true, force: true });
+      for (const d of ['test', 'story', 'media/test', 'media/story', 'media/house']) rmSync(resolve(outDir, d), { recursive: true, force: true });
     },
   };
 }
@@ -53,6 +54,8 @@ export default defineConfig(({ mode }) => {
     define: {
       __ARTIFACT__: JSON.stringify(artifact),
       __MEDIA_BASE__: JSON.stringify(artifact ? 'media/' : '/media/'),
+      // S10: the houses beside the Nordic one (DIR2) are behind the flag: a public build has no code path to them
+      __HD_PUBLIC__: JSON.stringify(PUBLIC || artifact),
     },
     resolve: {
       alias: [

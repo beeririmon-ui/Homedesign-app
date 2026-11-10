@@ -20,7 +20,7 @@ export function Page({ route }: { route: Route }) {
       return <Home />;
     case 'room': {
       const r = room(route.room);
-      return r?.built ? <Room room={r} slot={route.slot} option={route.option} /> : <NotFound />;
+      return r?.built ? <Room room={r} slot={route.slot} option={route.option} style={route.style} /> : <NotFound />;
     }
     case 'product': {
       // S7: /p/<public id>/ (an old address by card id moves there by dist/_redirects, 301)

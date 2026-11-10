@@ -1,0 +1,49 @@
+{
+  "note": "S10 (2026-11-10): the warm-modern house in the room engine (DIR2), phase 1 as approved (AP3-WM, 2026-11-07; QA qa/reports/2026-11-07-pilot-phase1-v3c-verify.md): the v3c base and the cushions slot as three sets on the wheel. Read by tools/build-catalog.ts (--products: every set's points become shop products) and tools/make-house.ts (layers, scene, the house's data). The sets and their order follow data/selections/living-room.warm-modern.json (checked by make-house): set B first, the default (CAM1). Each point names the card and the SKU the render shows; an axis the selection does not name takes the card's default_sku value.",
+  "room": "living-room",
+  "style": "warm-modern",
+  "selection": "data/selections/living-room.warm-modern.json",
+  "status_he": "הבית המודרני החם, שלב 1: אושר. עוד לא באתר הציבורי",
+  "alt_he": "הסלון בבית המודרני החם: ספת בוקלה בגוון גריז' עם כריות ושמיכה על המסעד, שולחן קפה מאגוז, כורסה ליד חלון גדול, קירות טיח חמים. הכריות מתחלפות בשלושה סטים.",
+  "frame": "M0 1.2",
+  "mobile_center_u": 0.64,
+  "pilot": "assets/renders/living-room/warm-modern/pilot-phase1-2026-11-07",
+  "approved": {
+    "base": "shell-furniture-v3-graded-v3c.png",
+    "composites": { "A": "composite-set-A-v3-graded-v3c.png", "B": "composite-set-B-v3-graded-v3c.png", "C": "composite-set-C-v3-graded-v3c.png" }
+  },
+  "layers_dir": "layers-v3c",
+  "slot": { "id": "cushions", "depth": 0.32 },
+  "sets": [
+    {
+      "id": "B",
+      "label_he": "סט B: בוקלה, קורדרוי קאמל ושמיכת פקאן",
+      "points": [
+        { "product": "cushions-aliexpress-textured-boucle-throw-pillow", "option": { "size": "50x50", "color": "oatmeal" } },
+        { "product": "cushions-cj-wide-stripe-corduroy-light-green", "option": { "color": "camel" } },
+        { "product": "cushions-cj-linen-look-charcoal", "option": { "color": "beige", "size": "30x50" } },
+        { "product": "sofa-cover-cj-cotton-muslin-fringe", "option": { "other": "pecan" } }
+      ]
+    },
+    {
+      "id": "A",
+      "label_he": "סט A: לבן, טאופ ותה חלב",
+      "points": [
+        { "product": "cushions-cj-boucle-teddy", "option": { "color": "white", "size": "50x50" } },
+        { "product": "cushions-cj-knitted-chenille-bean-green", "option": { "color": "21-camel-color" } },
+        { "product": "cushions-cj-boucle-teddy", "option": { "color": "milk-tea-color", "size": "30x50" } },
+        { "product": "sofa-cover-cj-cotton-muslin-fringe", "option": { "other": "flax-brown", "size": "150x200" } }
+      ]
+    },
+    {
+      "id": "C",
+      "label_he": "סט C: חום בהיר, קפה כהה ושמיכת חימר",
+      "points": [
+        { "product": "cushions-cj-boucle-teddy", "option": { "color": "light-brown", "size": "50x50" } },
+        { "product": "cushions-cj-corduroy-patchwork", "option": { "color": "dark-coffee", "size": "45x45" } },
+        { "product": "cushions-cj-linen-look-ivory", "option": { "color": "light-beige-gray" } },
+        { "product": "sofa-cover-cj-cotton-muslin-fringe", "option": { "other": "clay" } }
+      ]
+    }
+  ]
+}

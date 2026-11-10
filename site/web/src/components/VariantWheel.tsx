@@ -17,10 +17,13 @@ import { prefersReducedMotion } from '../motion';
 import { PackPicker, packPrice } from './PackPicker';
 import { defaultVariantId, optionLabelHe, optionsOf } from '../variants';
 import { Waitlist } from './Waitlist';
+import type { House } from '../house';
 
 const STEP_DEG = 34;
 
 type Props = {
+  /** S10: the house the slot is in (its products; a set's picture and panel) */
+  house?: House;
   slot: CatalogSlot;
   /** the room the slot is in (the slot's waiting list, PRE1) */
   roomId: string;
@@ -30,7 +33,8 @@ type Props = {
   onCancel: () => void;
 };
 
-export function VariantWheel({ slot, roomId, initial, onPreview, onChoose, onCancel }: Props) {
+export function VariantWheel({ house, slot, roomId, initial, onPreview, onChoose, onCancel }: Props) {
+  const lookup = house?.product ?? product;
   const n = slot.options.length;
   const physics = useRef(new ArcPhysics(n));
   const ring = useRef<HTMLDivElement>(null);
@@ -49,7 +53,7 @@ export function VariantWheel({ slot, roomId, initial, onPreview, onChoose, onCan
   const reduce = prefersReducedMotion();
 
   const opt = slot.options[index]!;
-  const p = product(opt.product_id);
+  const p = lookup(opt.product_id);
   // P1: set (default) or one piece; every option starts at its set
   const [pack, setPack] = useState<Pack>('set');
   useEffect(() => setPack('set'), [index]);
@@ -228,8 +232,8 @@ export function VariantWheel({ slot, roomId, initial, onPreview, onChoose, onCan
       >
         <div class="arc-ring" ref={ring} style={{ '--cw': `${cw}px` }}>
           {slot.options.map((o, i) => {
-            const prod = product(o.product_id);
-            const img = optionImage(slot.id, o.position);
+            const prod = lookup(o.product_id);
+            const img = house?.thumb ? house.thumb(o.position) : optionImage(slot.id, o.position);
             // PRE1 / MED1: an option out of stock stays on the wheel, said on its card and in its name, and is never sold
             const oos = !!prod && (slot.on_hold || prod.availability.status !== 'available');
             const label = `${i + 1} מתוך ${n}: ${
@@ -290,7 +294,9 @@ export function VariantWheel({ slot, roomId, initial, onPreview, onChoose, onCan
             ))}
           </p>
         ) : null}
-        {p ? (
+        {house?.info ? (
+          house.info(index + 1)
+        ) : p ? (
           <>
             <Price class="price" agorot={packPrice(p, pack)} provisional={p.price_provisional} />
             <PackPicker p={p} value={pack} onChange={setPack} id={`wheel-pack-${slot.id}`} onStage />
@@ -321,7 +327,7 @@ export function VariantWheel({ slot, roomId, initial, onPreview, onChoose, onCan
           <button type="button" class="btn btn-primary" onClick={() => onChoose(index + 1)}>
             בחירה והצגה בחדר
           </button>
-          {p && (slot.on_hold || p.availability.status !== 'available') ? (
+          {house?.info ? null : p && (slot.on_hold || p.availability.status !== 'available') ? (
             <>
               <Waitlist product_id={p.id} id={`wl-wheel-${slot.id}`} onStage />
               <a class="btn btn-ghost" href={shopPath(p.id)}>

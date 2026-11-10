@@ -36,7 +36,7 @@ const measure = (p, scope) =>
   }, scope);
 const res = [];
 for (const w of [400, 1280]) {
-  const ctx = await browser.newContext({ locale: 'he-IL', viewport: { width: w, height: w > 500 ? 900 : 860 } });
+  const ctx = await browser.newContext({ locale: 'he-IL', viewport: { width: w, height: w > 500 ? 900 : 860 }, isMobile: w < 500, hasTouch: w < 500 });
   const p = await ctx.newPage();
   // the sheet
   await p.goto(`${BASE}/story/living-room/boho/`, { waitUntil: 'load' });
@@ -61,12 +61,20 @@ for (const w of [400, 1280]) {
   await p.goto(`${BASE}/story/living-room/nordic/p/cushions-boucle-teddy-d7wrb/`, { waitUntil: 'load' });
   await p.waitForTimeout(500);
   res.push({ width: w, state: 'detail page (bouclé, options)', ...(await measure(p, null)) });
-  // the checkout, empty submit
-  await p.goto(`${BASE}/story/checkout/`, { waitUntil: 'load' });
-  await p.waitForTimeout(500);
-  await p.locator('#co-form button[type="submit"]').click();
-  await p.waitForTimeout(500);
-  res.push({ width: w, state: 'checkout after an empty submit', ...(await measure(p, null)) });
+  // S7: the site's checkout (the story's mock one is gone), with the look in the cart, after an empty submit
+  await p.goto(`${BASE}/checkout/`, { waitUntil: 'load' });
+  await p.waitForTimeout(800);
+  await p.locator('form button[type="submit"]').first().click();
+  await p.waitForTimeout(600);
+  res.push({ width: w, state: 'site checkout (cart with the look) after an empty submit', ...(await measure(p, 'main')) });
+  // the site cart page with lines
+  await p.goto(`${BASE}/cart/`, { waitUntil: 'load' });
+  await p.waitForTimeout(800);
+  res.push({ width: w, state: 'site /cart/ with the look', ...(await measure(p, 'main')) });
+  // a shop product page, after "הוספה לסל"
+  await p.goto(`${BASE}/p/vase-textured-white-stoneware-w90r9/`, { waitUntil: 'load' });
+  await p.waitForTimeout(800);
+  res.push({ width: w, state: 'shop product page', ...(await measure(p, null)) });
   // the contents, the tool draft, the order page
   for (const [u, s] of [['/story/', 'contents'], ['/story/living-room/warm-modern/tool/', 'tool draft'], ['/story/living-room/japandi/', 'typographic page']]) {
     await p.goto(BASE + u, { waitUntil: 'load' });

@@ -84,7 +84,8 @@ const OUT_NAME = argOf('--out') ?? null;
  * --products=<manifest>: also build every card a story frame shows (the story layer, tools/make-story.ts reads
  * data/story/story.json; the path is from the site folder), through the same pricing path, outside the rooms' slot options:
  * every { product } of every points array, wherever the manifest holds it. A card's slot is the living room's slot of the
- * same id when there is one (the story frames are living rooms so far), else its own room's.
+ * same id when there is one (the story frames are living rooms so far), else its own room's. Several manifests are
+ * comma separated (S10: tools/house/*.json, the houses' cushion sets, sold through the same shop).
  */
 const EXTRA_PRODUCTS = argOf('--products') ?? null;
 const STYLE = 'nordic';
@@ -792,7 +793,8 @@ if (EXTRA_PRODUCTS) {
         collect(v);
       }
   };
-  collect(readJson(sitePath(EXTRA_PRODUCTS)));
+  // several manifests, comma separated (S10: the story, and the houses' cushion sets in tools/house/)
+  for (const m of EXTRA_PRODUCTS.split(',').filter(Boolean)) collect(readJson(sitePath(m)));
   const wanted = [...new Set(found)];
   const built = new Set([...fullProducts.map((p) => p.id), ...hidden.map((h) => h.id)]);
   const slotsOf = (room: string) => {

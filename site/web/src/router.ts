@@ -40,7 +40,7 @@ export function onLinkClick(e: MouseEvent): void {
 
 export type Route =
   | { name: 'home' }
-  | { name: 'room'; room: string; slot?: string; option?: number }
+  | { name: 'room'; room: string; slot?: string; option?: number; style?: string }
   | { name: 'product'; id: string }
   | { name: 'cart' }
   | { name: 'checkout'; failed: boolean }
@@ -56,7 +56,15 @@ export function match(full: string): Route {
   if (seg.length === 0) return { name: 'home' };
   if (seg[0] === 'rooms' && seg[1]) {
     const opt = Number(q.get('option'));
-    return { name: 'room', room: seg[1], slot: q.get('slot') ?? undefined, option: Number.isInteger(opt) && opt > 0 ? opt : undefined };
+    // S10: ?style=<id> names the house shown (DIR2); the Nordic house without it
+    const style = q.get('style');
+    return {
+      name: 'room',
+      room: seg[1],
+      slot: q.get('slot') ?? undefined,
+      option: Number.isInteger(opt) && opt > 0 ? opt : undefined,
+      style: style && /^[a-z-]+$/.test(style) ? style : undefined,
+    };
   }
   if (seg[0] === 'p' && seg[1]) return { name: 'product', id: seg[1] };
   if (seg[0] === 'cart') return { name: 'cart' };

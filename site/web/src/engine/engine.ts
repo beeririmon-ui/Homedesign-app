@@ -142,15 +142,41 @@ export class RoomEngine {
     await this.recompose(durationMs);
   }
 
-  private async recompose(durationMs: number): Promise<void> {
+  /** `keep`: the duration holds under reduced motion too (the house switch's short dissolve; a swap is a cut there) */
+  private async recompose(durationMs: number, keep = false): Promise<{ start: number; end: number }> {
     const layers = buildLayers(this.o.room, this.o.scene, this.selection);
     await Promise.all(layers.map((l) => this.ensure(l.key, this.layerUrl(l), 0)));
-    if (this.destroyed) return;
+    const start = performance.now();
+    if (this.destroyed) return { start, end: start };
     this.comp.swap();
     this.comp.compose(this.draw(layers), this.compWidth);
-    const dur = this.o.reduceMotion ? 0 : durationMs;
+    const dur = this.o.reduceMotion && !keep ? 0 : durationMs;
     this.mix = dur ? 0 : 1;
     await this.animate(dur, (t) => (this.mix = t));
+    return { start, end: performance.now() };
+  }
+
+  /**
+   * S10: another house at the same camera (DIR2): its layers load, then the whole composition dissolves in the same frame
+   * (prev → next in one pass), `durationMs` even under reduced motion. Returns when the dissolve started and ended.
+   */
+  async setHouse(scene: Scene, room: CatalogRoom, selection: Record<string, number>, durationMs: number): Promise<{ start: number; end: number }> {
+    const widths = scene.base[0]!.widths;
+    this.o.scene = scene;
+    this.o.room = room;
+    this.selection = { ...selection };
+    this.shellUrl = '';
+    this.compWidth = widths.find((w) => w >= this.compWidth) ?? widths[widths.length - 1]!;
+    if (this.vp.w <= 900) this.compWidth = Math.min(this.compWidth, scene.widths.lo);
+    this.res = this.compWidth > scene.widths.lo ? 'hi' : 'lo';
+    if (!scene.formats.includes(this.ext)) this.ext = 'webp';
+    void this.loader
+      .load(mediaUrl(scene.depth.src, undefined, 'webp'), 0)
+      .then((d) => !this.destroyed && this.o.scene === scene && this.comp.setDepth(d))
+      .catch(() => undefined);
+    const t = await this.recompose(durationMs, true);
+    for (const slot of room.slots) for (const src of slotSources(scene, slot.id)) void this.ensure(src, this.srcUrl(src), 1).catch(() => undefined);
+    return t;
   }
 
   // ---------- camera ----------

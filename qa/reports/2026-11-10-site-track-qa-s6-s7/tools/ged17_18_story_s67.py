@@ -145,7 +145,7 @@ for key, pair in story['pairs'].items():
                 elif size and not ok:
                     d.text((it['box'][0] * W, it['box'][3] * H + 6), f'G-ED.17: {size[0]:.0f}x{size[1]:.0f} CSS < 44x24', fill=(255, 140, 0), font=SMALL, stroke_width=2, stroke_fill=(0, 0, 0))
         d.rectangle([0, 0, 1080, 120], fill=(20, 20, 20, 200))
-        for i, t in enumerate([f'{style} {f["id"]} ({f["qa_key"]}): G-ED.17 overlay, qa-agent 2026-11-07 (interface track S6-S7)',
+        for i, t in enumerate([f'{style} {f["id"]} ({f["qa_key"]}): G-ED.17 overlay, qa-agent 2026-11-10 (interface track S6-S7)',
                                'green: data-file box with a dot | grey: no dot | yellow: qa-agent box where it differs',
                                'red ring: desktop dot + 46 CSS target at 1280 | blue disc: phone dot + 46 CSS target at 390',
                                f'magenta: the phone 4:5 crop, u {bf["crop"][0]:.3f}-{bf["crop"][1]:.3f} (outside dimmed)']):

@@ -1,0 +1,66 @@
+{
+ "base": "http://127.0.0.1:8799",
+ "run_at": "2026-11-10T18:31:49.655Z",
+ "valid_body_sanity": {
+  "status": 201,
+  "error": null,
+  "order": "5413644117"
+ },
+ "empty_cart": {
+  "status": 409,
+  "error": "cart_empty",
+  "order": null
+ },
+ "forged_shipping": {
+  "status": 422,
+  "error": "invalid_body",
+  "order": null
+ },
+ "extra_total_fields": {
+  "status": 201,
+  "error": null,
+  "order": "2731288422",
+  "order_view": {
+   "error": "order_not_found"
+  }
+ },
+ "second_checkout_same_cart": {
+  "status": 409,
+  "error": "cart_closed",
+  "order": null
+ },
+ "put_into_ordered_cart": 409,
+ "get_ordered_cart": 409,
+ "double_submit": {
+  "a": {
+   "status": 201,
+   "error": null,
+   "order": "6149709632"
+  },
+  "b": {
+   "status": 409,
+   "error": "cart_closed",
+   "order": null
+  },
+  "orders_created": 1
+ },
+ "five_at_once": {
+  "statuses": [
+   201,
+   409,
+   409,
+   409,
+   409
+  ],
+  "orders_created": 1,
+  "ids": [
+   "7048774066",
+   null,
+   null,
+   null,
+   null
+  ]
+ },
+ "order_no_token": 404,
+ "order_bad_token": 404
+}
