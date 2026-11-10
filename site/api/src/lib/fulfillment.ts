@@ -6,8 +6,11 @@
 import type { Env, SupplierJob } from '../env';
 import { nowIso } from './http';
 import { supplierClient } from './suppliers';
+import { processInvoiceJob } from './invoices';
 
 export async function processSupplierJob(env: Env, job: SupplierJob, attempt: number): Promise<'submitted' | 'skipped' | 'retry'> {
+  // S9: the tax invoice rides the same queue (a job after "paid")
+  if (job.kind === 'issue-invoice') return (await processInvoiceJob(env, job.order_id)) === 'invoiced' ? 'submitted' : 'skipped';
   const client = supplierClient(env);
   const order = await env.DB.prepare('SELECT id, status, shipping_method, address_json, customer_id FROM orders WHERE id = ?')
     .bind(job.order_id)

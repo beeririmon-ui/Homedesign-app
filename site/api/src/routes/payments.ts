@@ -55,7 +55,8 @@ export async function handlePaymentEvent(env: Env, providerId: string, event: Pa
       ),
     ]);
     await env.SUPPLIER_QUEUE.send({ kind: 'submit-order', order_id: order.id });
-    // Next (not in this phase): enqueue the tax invoice job with the chosen invoicing service.
+    // S9: the tax invoice is a job after "paid" (lib/invoices; INVOICE_PROVIDER, mock until its documentation is in)
+    await env.SUPPLIER_QUEUE.send({ kind: 'issue-invoice', order_id: order.id });
     outcome = 'paid';
   }
   await env.DB.prepare('UPDATE payment_events SET order_id = ?, processed_at = ?, outcome = ? WHERE provider = ? AND provider_event_id = ?')

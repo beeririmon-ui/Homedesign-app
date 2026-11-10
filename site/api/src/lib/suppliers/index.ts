@@ -1,5 +1,5 @@
 import type { Env } from '../../env';
-import type { SupplierClient } from './types';
+import type { SupplierClient, SupplierOrderInput } from './types';
 
 /** Development and preview: records the order without calling a supplier. */
 const mockSupplier: SupplierClient = {
@@ -10,16 +10,45 @@ const mockSupplier: SupplierClient = {
 };
 
 /**
- * CJ Dropshipping (API 2.0). Not implemented in this phase: needs CJ_API_KEY (wrangler secret), the access-token
- * flow, logistic name mapping for economy/express, and a sandbox order test. Endpoints and terms are "לא אומת".
+ * CJ Dropshipping (API 2.0), S9: the order adapter's skeleton, ready for a key (CJ_API_KEY, a wrangler secret).
+ * What is known from the repo's own working client (scripts/cj.py, used by sourcing): the base URL, the token call
+ * (POST /authentication/getAccessToken with {apiKey}) and the CJ-Access-Token header; responses carry {result, code,
+ * message, data}. The order-creation call is NOT in the repo, so it is not guessed: `submitOrder` refuses with what
+ * is needed (docs/ops/deploy-runbook.md, "CJ"): the create-order call and its fields (our order number, the ship-to
+ * fields for Israel, each line's vid and quantity, the logistic name for economy and express), its response (CJ's
+ * order id), the payment step (balance or manual), and a sandbox order to run the contract against.
  */
-const cjSupplier = (apiKey: string | undefined): SupplierClient => ({
-  id: 'cj',
-  async submitOrder() {
-    if (!apiKey) throw new Error('CJ_API_KEY is not set');
-    throw new Error('CJ adapter not implemented yet');
-  },
-});
+export const CJ_BASE = 'https://developers.cjdropshipping.com/api2.0/v1';
+type Fetch = (url: string, init?: RequestInit) => Promise<Response>;
+
+export function cjSupplier(apiKey: string | undefined, fetcher: Fetch = (u, i) => fetch(u, i)): SupplierClient & { token(): Promise<string> } {
+  let cached: { token: string; until: number } | null = null;
+  const self = {
+    id: 'cj',
+    /** the access token (the documented call our sourcing client uses), cached for its life */
+    async token(): Promise<string> {
+      if (!apiKey) throw new Error('CJ_API_KEY is not set');
+      if (cached && cached.until > Date.now()) return cached.token;
+      const r = await fetcher(`${CJ_BASE}/authentication/getAccessToken`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ apiKey }),
+      });
+      const d = (await r.json().catch(() => ({}))) as { result?: boolean; message?: string; data?: { accessToken?: string } };
+      if (!r.ok || !d.result || !d.data?.accessToken) throw new Error(`cj_token_failed: ${d.message ?? r.status}`);
+      cached = { token: d.data.accessToken, until: Date.now() + 12 * 3600_000 };
+      return cached.token;
+    },
+    async submitOrder(input: SupplierOrderInput) {
+      if (!apiKey) throw new Error('CJ_API_KEY is not set');
+      const noSku = input.lines.filter((l) => !l.supplier_sku);
+      if (noSku.length) throw new Error(`cj_line_without_sku: ${noSku.map((l) => l.product_id).join(', ')}`);
+      // the create-order call is not in the repo's documentation: never guessed with a paid order
+      throw new Error('cj_order_api_docs_needed');
+    },
+  };
+  return self;
+}
 
 export function supplierClient(env: Env): SupplierClient {
   return env.SUPPLIER_PROVIDER === 'cj' ? cjSupplier(env.CJ_API_KEY) : mockSupplier;
