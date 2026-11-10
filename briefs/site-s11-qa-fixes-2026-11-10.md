@@ -62,3 +62,16 @@ master-designer's files are ready: `docs/proposals/names-labels-he-2026-11-10.md
   - **CJ's travertine lamp and the black bowl:** only identified variants are sold. Unidentified variants, the ones labelled "דגם א׳…ר׳", aren't offered until sourcing describes them.
   - **The Mediterranean print:** every SKU is a single print, but the product is shown as a triptych. Give it a set mechanism like the Nordic triptych, inside ת9: it isn't sold as a single print.
   - **Implementation:** these come from data (an exclusion list or a flag in the selection, your choice). They're checked in vitest, and nothing is hard-coded in components.
+
+## Addendum 2, 2026-11-10: after S10
+S10 is done: the warm-modern house in the engine, `?style=warm-modern`. Evidence: `qa/reports/2026-11-07-site-track/s10/`. Also add to S11:
+- **S10 question 2:** names that clash with the shade, for example "מרווה" on a camel cushion, or "לבן שנהב" on a Pecan throw. They're resolved by the ת8 rule (base name · label). Apply it to the house's wheel and sets as well, and to the temporary composed name of set B's bouclé.
+- **S10 question 7:** a direct entry to `?style=warm-modern` still downloads the Nordic poster for nothing. Fix it with a Worker rewrite or a prebuilt page per house, whichever is cheaper.
+- **Dead code:** `toolRun` in `site/tools/screens-story.ts` and the `.st-td*` CSS in `story.css`.
+- **Not in S11, defaults stand:**
+  - the set names, question 1 (master-designer will review);
+  - the throw at 150×200, question 3;
+  - the full overscan canvas, question 6;
+  - "לכניסה" without the movie, question 8;
+  - the depth map, question 5 (phase 2 of the tool);
+  - the base encoding threshold, question 4: QA decides it in the next site QA round. It blocks `HD_PUBLIC=1` only.

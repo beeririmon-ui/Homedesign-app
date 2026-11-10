@@ -86,6 +86,8 @@ test.describe('the warm-modern house in the room engine (S10)', () => {
   });
 
   test('the wheel reaches all three sets (B, A, C), each with its pieces and prices; the whole set goes to the cart', async ({ page }) => {
+    // its own rate-limit bucket (the API counts cart writes per client): the suite's other cart tests keep theirs
+    await page.setExtraHTTPHeaders({ 'cf-connecting-ip': '198.51.100.10' });
     await houseReady(page);
     const spot = page.locator(`button.hotspot[data-slot="${SLOT.id}"]`);
     await spot.focus();
