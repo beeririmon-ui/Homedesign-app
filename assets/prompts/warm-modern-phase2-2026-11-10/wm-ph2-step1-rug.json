@@ -1,0 +1,69 @@
+{
+ "id": "wm-ph2-step1-rug",
+ "step": 1,
+ "slots": [
+  "rug"
+ ],
+ "model": "seedream-5-pro i2i 2K",
+ "aspect_ratio": "auto",
+ "tokens": 650,
+ "estimate": 650,
+ "estimate_call": {
+  "tool": "var2_estimate_cost",
+  "model_id": "seedream-5-pro",
+  "type": "image-to-image",
+  "params": {
+   "resolution": "2K",
+   "aspect_ratio": "auto",
+   "image_refs": 2
+  },
+  "total_tokens": 650,
+  "deviation_pct": 0.0
+ },
+ "idempotency_key": "wm-ph2-step1-rug-20261110",
+ "placeholder_id": "21feb975-6cf1-412f-b34e-5100cadb4e93",
+ "task_id": "01a99d5f2e01c3307d9451d0fe37a514",
+ "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-01a99d5f2e01c3307d9451d0fe37a514-0-1794354176475-a6fd1621.png",
+ "image_url": null,
+ "image_url_local": "assets/renders/living-room/warm-modern/phase2-2026-11-10/inputs/step1-input.png",
+ "prompt": "assets/prompts/warm-modern-phase2-2026-11-10/step1-rug.txt",
+ "prompt_chars": 2227,
+ "refs": [
+  {
+   "n": 1,
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/570649f3-193a-42bc-9864-e29ea0a7fef3.png",
+   "card": "rug-cj-braided-wool-natural",
+   "sku": "CJJT211801818RI",
+   "what": "SKU Square 230x330 photo (square, no tassels)",
+   "source_image": "rug/sku.jpeg",
+   "crop": [
+    0.06,
+    0.06,
+    0.92,
+    0.75
+   ]
+  },
+  {
+   "n": 2,
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/cd8d73bb-aeea-4d55-aa6e-7a98b72f43f3.png",
+   "card": "rug-cj-braided-wool-natural",
+   "sku": "CJJT211801818RI",
+   "what": "close-up of the braided weave (fringe cropped out)",
+   "source_image": "rug/img4.jpg",
+   "crop": [
+    0.0,
+    0.6,
+    0.42,
+    1.0
+   ]
+  }
+ ],
+ "returned_px": [
+  2720,
+  1530
+ ],
+ "resolution": "2K",
+ "type": "image-to-image",
+ "seed": null,
+ "seed_note": "seedream-5-pro is not seedable (docs/var2-models.md): prompt, input and refs are kept instead"
+}

@@ -7,11 +7,13 @@
 import { test, expect, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import sharp from 'sharp';
-import { readFileSync } from 'node:fs';
-import { dirname, resolve } from 'node:path';
+import { mkdirSync, readFileSync } from 'node:fs';
+import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const SITE = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+/** S12: the evidence screens, when HD_SHOTS_DIR is set */
+const SHOTS = process.env.HD_SHOTS_DIR ?? null;
 const HOUSE = '/rooms/living-room/?style=warm-modern';
 const LABEL = 'הבית המודרני החם, שלב 1: אושר. עוד לא באתר הציבורי';
 const TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'];
@@ -32,6 +34,8 @@ const SLOT = house.room.slots[0]!;
 
 type SwitchTimes = { from: string; to: string; asked: number; start: number; end: number };
 type Engine = { ready: boolean; cam: { cu: number; cv: number; z: number }; vp: { w: number; h: number } };
+/** S12, QA ת26: the longest gap between two frames the engine drew while animating (window.__hdFrames, ms) */
+const frameGap = (page: Page) => page.evaluate(() => Math.max(16, ...(window.__hdFrames ?? [])));
 const switchTimes = (page: Page) => page.evaluate(() => (window as unknown as { __hdHouseSwitch?: SwitchTimes }).__hdHouseSwitch ?? null);
 const engineOf = (page: Page) =>
   page.evaluate(() => {
@@ -253,6 +257,10 @@ test.describe('the warm-modern house in the room engine (S10)', () => {
           expect(b.y, where).toBeGreaterThanOrEqual(Math.max(0, d.y) - 1);
           expect(b.y + b.height, where).toBeLessThanOrEqual(Math.min(v.height, d.y + d.height) + 1);
         }
+        if (SHOTS && i === 0 && v.dpr === 1 && (v.width === 1280 || v.width === 400)) {
+          mkdirSync(SHOTS, { recursive: true });
+          await page.screenshot({ path: join(SHOTS, `set-panel-B-${v.width}x${v.height}.png`) });
+        }
         await dialog.evaluate((e) => (e.matches('.picker') ? e : e.querySelector('.picker'))?.scrollTo(0, 0));
       }
       await ctx.close();
@@ -391,7 +399,8 @@ test.describe('the soft switch between houses, in the engine (S10)', () => {
     await expect.poll(() => switchTimes(page), { timeout: 20_000 }).toMatchObject({ from: 'nordic', to: 'warm-modern' });
     const t = (await switchTimes(page))!;
     expect(t.end - t.start, 'the dissolve').toBeGreaterThanOrEqual(980);
-    expect(t.end - t.start, 'the dissolve').toBeLessThan(1150);
+    // S12, QA ת26: it ends on the first frame after 1.0 s; a loaded machine draws few, so the bound is the longest gap
+    expect(t.end - t.start, 'the dissolve').toBeLessThan(1000 + (await frameGap(page)) + 50);
     expect((await engineOf(page))!.cam, 'the same camera').toEqual(camBefore);
     expect(await page.locator('canvas.room-canvas').boundingBox()).toEqual(canvasBox);
     expect(await page.locator('img.poster').boundingBox()).toEqual(canvasBox);
@@ -453,6 +462,12 @@ test.describe('the soft switch between houses, in the engine (S10)', () => {
         expect(dist(mid, at1), report).toBeGreaterThan(0.35 * dist(at0, at1));
         // and what was drawn while it ran: no frame darker than the darker house (a black frame is ~20)
         for (const f of frames) expect(f.mean, `${report}; frame at mix ${f.mix.toFixed(2)}`).toBeGreaterThan(0.9 * lumaFloor);
+        // the evidence: the dissolve's midpoint as the canvas shows it (the engine draws nothing more at rest)
+        if (SHOTS) {
+          mkdirSync(SHOTS, { recursive: true });
+          await page.evaluate(() => window.__hdProbe!.grab(0.5));
+          await page.locator('canvas.room-canvas').screenshot({ path: join(SHOTS, `switch-midpoint-${vp.width}-to-${to}.png`) });
+        }
         await page.evaluate(() => window.__hdProbe!.restore());
       }
     });
@@ -468,7 +483,8 @@ test.describe('the soft switch between houses, in the engine (S10)', () => {
     await expect.poll(() => switchTimes(page), { timeout: 20_000 }).toMatchObject({ to: 'warm-modern' });
     const t = (await switchTimes(page))!;
     expect(t.end - t.start).toBeGreaterThanOrEqual(280);
-    expect(t.end - t.start).toBeLessThan(450);
+    // S12, QA ת26: the first frame after 0.3 s, however far apart a loaded machine draws its frames
+    expect(t.end - t.start).toBeLessThan(300 + (await frameGap(page)) + 50);
     expect((await engineOf(page))!.cam).toEqual(camBefore!.cam);
     console.log(`house switch, reduced motion: dissolve ${Math.round(t.end - t.start)} ms`);
   });

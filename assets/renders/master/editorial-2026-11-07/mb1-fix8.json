@@ -1,0 +1,290 @@
+{
+ "date": "2026-11-11",
+ "by": "render-agent",
+ "pass_id": "MB1 fix8 (0 tokens, code only)",
+ "frame": "warm_modern",
+ "source": "docs/master-bedroom-comparison-2026-11-07.md §6 (designer's eye on fix5: polish (b) and Q-ED7 (a)); qa/reports/2026-11-10-ged-master-wm-fix5.md (+ .json)",
+ "note": "TEST, not for the site; new files only; fix5 and every approved file untouched; no var2, no tokens. Awaiting qa-agent: G-ED.8 / G-ED.9 in (b)'s region, the box median, G-ED.11 (p1, p5, split flag), G-ED.8 for the toe",
+ "base": "warm-modern/warm-modern-MB-A-fix5.png",
+ "out": "warm-modern/warm-modern-MB-A-fix6.png",
+ "tokens": 0,
+ "script": "mb1_fix8.py",
+ "toe_module": "q_ed7_toe.py (shared with ../../editorial-phase-b-2026-11-06/codefix_ed9.py)",
+ "b_cast_shadow_core": {
+  "method": "base/detail on logY (Gaussian sigma 3 over the pillowcase only); the shadow's depth below the pillowcase's unshadowed level (quadratic-in-x fit on lit pillowcase) scaled by gamma beyond a soft threshold (A < 0.8); the creases are the detail layer, untouched; contact lines kept (3 px, ramps to 12 / 10 px); colour: the caramel shadow's own C* at the new level and hue 55.5; no pixel from fix4",
+  "gamma": 0.7334,
+  "designer_box": [
+   2210,
+   820,
+   2330,
+   925
+  ],
+  "qa_area": [
+   2215,
+   840,
+   2330,
+   925
+  ],
+  "region_png": "warm-modern/raw/fix6-b-region.png",
+  "region_bbox": [
+   2213,
+   819,
+   2491,
+   923
+  ],
+  "px_changed": 18116,
+  "px_changed_gt2": 13877,
+  "max_abs_change_8bit": 14,
+  "px_changed_outside_region": 0,
+  "px_changed_outside_designer_box": 7567,
+  "px_changed_at_L_ge_20": 2910,
+  "px_changed_gt2_at_L_ge_20": 786,
+  "px_changed_in_qa_lumbar_mask": 0,
+  "box_median_L": {
+   "fix5": 10.45,
+   "after_b": 13.83,
+   "fix6": 14.46
+  },
+  "box_mean_L": {
+   "fix5": 13.82,
+   "fix6": 17.05
+  },
+  "slit_median_L": {
+   "fix5": 11.99,
+   "fix6": 13.09,
+   "box": [
+    2030,
+    770,
+    2060,
+    812
+   ]
+  },
+  "qa_area_median_L": {
+   "fix5": 9.11,
+   "fix6": 13.59
+  },
+  "hue": {
+   "fix5": {
+    "box_L_lt_20": {
+     "L": 7.8,
+     "C": 13.4,
+     "h": 46.3,
+     "px": 9330
+    },
+    "b_region_L_lt_20": {
+     "L": 10.8,
+     "C": 17.6,
+     "h": 50.8,
+     "px": 16133
+    }
+   },
+   "fix6": {
+    "box_L_lt_20": {
+     "L": 12.7,
+     "C": 19.7,
+     "h": 55.4,
+     "px": 8905
+    },
+    "b_region_L_lt_20": {
+     "L": 14.1,
+     "C": 21.5,
+     "h": 54.9,
+     "px": 15196
+    }
+   },
+   "lit_caramel_h": 56.5,
+   "window": [
+    53.5,
+    59.5
+   ]
+  },
+  "fit": {
+   "gamma": 0.7334,
+   "trend_coef_logY": [
+    -3.07485,
+    -0.45331,
+    -0.04656
+   ],
+   "trend_L_at": {
+    "x2220": 31.3,
+    "x2280": 29.2,
+    "x2340": 27.1,
+    "x2400": 24.9,
+    "x2460": 22.6,
+    "x2520": 20.4
+   },
+   "chroma_vs_L": [
+    [
+     3.3,
+     5.4
+    ],
+    [
+     4.8,
+     8.5
+    ],
+    [
+     7.0,
+     12.3
+    ],
+    [
+     9.0,
+     15.3
+    ],
+    [
+     10.9,
+     17.6
+    ],
+    [
+     13.0,
+     20.4
+    ],
+    [
+     15.8,
+     23.5
+    ],
+    [
+     18.8,
+     26.2
+    ],
+    [
+     22.4,
+     28.6
+    ],
+    [
+     26.3,
+     30.7
+    ],
+    [
+     32.9,
+     33.6
+    ]
+   ],
+   "max_lift_L_base": 4.28
+  },
+  "deviation": "region follows the shadow (x 2214-2509, y 809-921), not QA's x 2215-2330, y 840-925: the shadow runs past x 2330 in its lower half and starts at y 822; cut at the box (tried first) it left a 4-5 L* step at x 2330 (y 880-915) and a dark cap above y 840. Only the right caramel pillowcase changes; the cushion (QA's own lumbar mask too) and the duvet: 0 px"
+ },
+ "toe": {
+  "curve": "q_ed7_toe.curve: slope s0 below L* 12, smoothstep blend of the slope to 1 at 20, identity from 20; lift (1 - s0)(16 - L) below 12",
+  "s0": 0.7203,
+  "lift_by_L": {
+   "0": 4.47,
+   "2": 3.92,
+   "4": 3.36,
+   "6": 2.8,
+   "8": 2.24,
+   "10": 1.68,
+   "12": 1.12,
+   "14": 0.59,
+   "16": 0.21,
+   "18": 0.03,
+   "19.5": 0.0,
+   "20": 0.0,
+   "30": 0.0
+  },
+  "chromaticity_own_from_L": 10.0,
+  "chromaticity_local_below_L": 3.0,
+  "local_sigmas_px": [
+   6.0,
+   20.0,
+   60.0
+  ],
+  "local_scale_weights": [
+   1.0,
+   0.05,
+   0.0025
+  ],
+  "local_source_L": [
+   6.0,
+   20.0
+  ],
+  "info": {
+   "px_in_toe": 440353,
+   "px_chromaticity_partly_local": 107725,
+   "px_chromaticity_fully_local": 20463,
+   "px_hue_locked": 329472,
+   "px_gamut_clipped": 0
+  },
+  "gate_percentiles": {
+   "fix5": {
+    "p0.5": 3.79,
+    "p1": 5.96,
+    "p5": 15.05
+   },
+   "after_b": {
+    "p0.5": 3.89,
+    "p1": 6.11,
+    "p5": 15.11
+   },
+   "fix6": {
+    "p0.5": 7.37,
+    "p1": 9.0,
+    "p5": 15.64
+   }
+  },
+  "full_res_percentiles": {
+   "fix5": {
+    "p0.5": 3.04,
+    "p1": 5.21,
+    "p5": 14.23
+   },
+   "fix6": {
+    "p0.5": 6.67,
+    "p1": 8.34,
+    "p5": 14.86
+   }
+  },
+  "checks_toe_step": {
+   "px_changed": 280504,
+   "px_changed_at_L_ge_20": 0,
+   "px_changed_gt2_at_L_ge_20": 0,
+   "max_L_before_of_a_changed_px": 16.5,
+   "max_abs_change_8bit": 29,
+   "hue_shift_deg_own_class_L_ge_10_C_ge_6": {
+    "p1": -1.89,
+    "p5": -1.37,
+    "p50": -0.14,
+    "p95": 1.47,
+    "p99": 2.14,
+    "px": 169699
+   },
+   "hue_shift_deg_mixed_class_L_3_10_C_ge_6": {
+    "p1": -3.98,
+    "p5": -1.68,
+    "p50": 0.98,
+    "p95": 4.32,
+    "p99": 6.62,
+    "px": 77761
+   },
+   "chroma_ratio_own_class": {
+    "p1": 0.995,
+    "p5": 1.002,
+    "p50": 1.031,
+    "px": 169699
+   },
+   "share_changed_px_C_fell_gt_0_5": 0.0012,
+   "new_magenta_px_from_near_neutral": 0
+  },
+  "p1_target": [
+   8.5,
+   9.5
+  ],
+  "p5_rise_max": 3,
+  "p5_rise": 0.59,
+  "p1_rise": 3.04
+ },
+ "whole_pass": {
+  "px_changed": 287935,
+  "px_changed_at_L_ge_20_fix5": 2910,
+  "px_changed_at_L_ge_20_fix5_outside_b_region": 0,
+  "px_changed_gt2_at_L_ge_20_fix5_outside_b_region": 0
+ },
+ "crops": [
+  "fix8-before-after/pillowcase-shadow-100.jpg",
+  "fix8-before-after/pillowcase-shadow-x4.jpg",
+  "fix8-before-after/pillowcase-shadow-x4-stretch.jpg",
+  "fix8-before-after/muslin-throw-100.jpg",
+  "fix8-before-after/muslin-throw-x4.jpg",
+  "fix8-before-after/walnut-nightstand-100.jpg",
+  "fix8-before-after/walnut-nightstand-x4.jpg"
+ ]
+}

@@ -104,7 +104,7 @@ test.describe('ת21: "החדר שלך" draws what was bought, where it was bough
       .toContain('/media/house/living-room/warm-modern/');
     await expect(wm.locator('span[data-slot]')).toHaveCount(1);
     await expect(wm.locator('span[data-slot="cushions"]')).toHaveAttribute('data-position', '1');
-    expect(await wm.locator('span[data-slot="cushions"] img').first().getAttribute('src')).toContain(
+    expect(await wm.locator('span[data-slot="cushions"] img:not(.is-multiply):not(.is-screen)').getAttribute('src')).toContain(
       '/media/house/living-room/warm-modern/M0/slots/cushions/1.product.',
     );
     await expect(wm.locator('figcaption')).toContainText('מודרני חם');
@@ -133,5 +133,6 @@ test('ת25: the empty checkout’s way back to the room is a 44 px target', asyn
     const box = (await page.getByRole('link', { name: 'חזרה לסלון' }).boundingBox())!;
     expect(box.height, `${w}`).toBeGreaterThanOrEqual(44);
     expect(box.width, `${w}`).toBeGreaterThanOrEqual(44);
+    await shot(page, `empty-checkout-${w}`);
   }
 });

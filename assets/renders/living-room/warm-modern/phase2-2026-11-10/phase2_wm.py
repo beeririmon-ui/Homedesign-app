@@ -149,6 +149,10 @@ if __name__ == "__main__":
     elif cmd == "fetch":
         import extract  # noqa: E402
         extract.fetch(int(args[0]), *args[1:4])
+    elif cmd == "scale-fix":
+        import extract  # noqa: E402
+        for k in args:
+            extract.scale_fix(k)
     elif cmd == "swap":
         import extract  # noqa: E402
         extract.swap()

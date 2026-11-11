@@ -31,16 +31,16 @@ from phase2_wm import PW
 SPEC = {
     "rug": dict(margin=22, band=10, onto="floor", z=20),
     "curtains": dict(margin=40, band=34, onto="floor_wall_bench", z=10),
-    "vase": dict(margin=18, band=26, onto="bench_wall", z=16, thin=True),
+    "vase": dict(margin=18, band=22, onto="bench", z=16, thin=True),
     "planter": dict(margin=26, band=40, onto="floor_wall", z=32, thin=True),
     "basket": dict(margin=18, band=36, onto="floor_wall_planter", z=60),
     "magazine-holder": dict(margin=18, band=36, onto="floor", z=60),
-    "floor-lamp": dict(margin=16, band=40, onto="floor_wall", z=30, thin=True),
-    "framed-art": dict(margin=16, band=14, onto="wall", z=12),
-    "accent-sconces": dict(margin=12, band=14, onto="wall", z=12),
+    "floor-lamp": dict(margin=40, band=30, onto="floor", z=30, thin=True, thin_dE=16),
+    "framed-art": dict(margin=16, band=12, onto="wall", z=12, snap=5),
+    "accent-sconces": dict(margin=12, band=10, onto="wall", z=12, convex=True),
     "pendant": dict(margin=16, band=0, onto="none", z=80, thin=True),
-    "bowl": dict(margin=12, band=22, onto="table", z=65),
-    "candle-holders": dict(margin=12, band=22, onto="table", z=65),
+    "bowl": dict(margin=12, band=22, onto="table", z=65, convex=True),
+    "candle-holders": dict(margin=12, band=22, onto="table", z=65, convex=True),
 }
 SCR = "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad"
 IDX_FULL = os.path.join(SCR, "wm-r4-idx/M0.npz")
@@ -130,7 +130,7 @@ def cut_one(k, regt, below, V, zone, front, dE):
         pass
     f = np.isin(gc, (cv2.GC_FGD, cv2.GC_PR_FGD))
     if SPEC[k].get("thin"):
-        f |= dil(ph_, 3) & (dE_ > 7)                # stems, cords, branches: thinner than GrabCut keeps
+        f |= dil(ph_, 3) & (dE_ > SPEC[k].get("thin_dE", 7))   # stems, cords, branches: thinner than GrabCut keeps
     f = cv2.morphologyEx(f.astype(np.uint8), cv2.MORPH_OPEN, np.ones((2, 2), np.uint8)).astype(bool) & z_ & ~fr_
     n, lab, st, _ = cv2.connectedComponentsWithStats(f.astype(np.uint8), connectivity=8)
     keep = np.zeros_like(f)
@@ -145,6 +145,45 @@ def cut_one(k, regt, below, V, zone, front, dE):
     for i in range(1, n2):
         if i not in border and st2[i, 4] < 4000 and not SPEC[k].get("thin"):
             keep |= lab2 == i
+    if SPEC[k].get("thin"):
+        # thin parts that hang from the body (a pull chain, a cord) outside the placeholder: difference pixels in the zone that touch it
+        dEs = lab_diff(regt[y0:y1, x0:x1], below[y0:y1, x0:x1], 0.6)       # sharp: a 2-3 px chain survives
+        thin = z_ & (dEs > 10) & ~fr_ & ~keep
+        nt, labt = cv2.connectedComponents(thin.astype(np.uint8), connectivity=8)
+        body = dil(keep, 6)
+        for i in range(1, nt):
+            c_ = labt == i
+            ys_, xs_ = np.nonzero(c_)
+            if (c_ & body).any() and (ys_.max() - ys_.min() + 1) >= 3 * (xs_.max() - xs_.min() + 1) and c_.sum() < 2000:
+                keep |= c_                                  # only slender, vertical pieces (a chain), never a blob of wall
+    if SPEC[k].get("convex"):
+        # rigid convex pieces (frames, cylinders, a bowl, cone-and-cup holders): each separate piece filled to its convex hull
+        # several pieces (the triptych, the pair of lamps, the pair of holders): every cut pixel goes to its nearest placeholder piece
+        # first, so a gap of wall between two pieces never joins them; then each piece is filled to its own convex hull
+        npl, labp = cv2.connectedComponents(ph_.astype(np.uint8), connectivity=8)
+        _, near = cv2.distanceTransformWithLabels((~ph_).astype(np.uint8), cv2.DIST_L2, 5, labelType=cv2.DIST_LABEL_CCOMP)
+        # map the distance-transform labels (zero pixels of the input = placeholder pixels) to the placeholder pieces
+        lut = {}
+        for i in range(1, npl):
+            ys_, xs_ = np.nonzero(labp == i)
+            lut[int(near[ys_[0], xs_[0]])] = i
+        piece = np.vectorize(lambda v: lut.get(int(v), 0))(near) if len(lut) > 1 else np.where(keep, 1, 0)
+        hulls = np.zeros(keep.shape, np.uint8)
+        for i in range(1, max(npl, 2)):
+            m_ = keep & (piece == i)
+            if m_.sum() < 30:
+                continue
+            n4, lab4, st4, _ = cv2.connectedComponentsWithStats(m_.astype(np.uint8), connectivity=8)
+            big4 = 1 + int(np.argmax(st4[1:, 4]))
+            pts = cv2.findNonZero((lab4 == big4).astype(np.uint8))
+            cv2.fillConvexPoly(hulls, cv2.convexHull(pts), 1)
+        keep = hulls.astype(bool) & z_ & ~fr_
+    n3, lab3, st3, _ = cv2.connectedComponentsWithStats(keep.astype(np.uint8), connectivity=8)
+    if n3 > 2:
+        big = st3[1:, 4].max()
+        for i in range(1, n3):
+            if st3[i, 4] < 0.004 * big:
+                keep[lab3 == i] = False
     fill = np.zeros(V.shape, bool)
     fill[y0:y1, x0:x1] = keep
     g = cv2.cvtColor((regt * 255).astype(np.uint8), cv2.COLOR_RGB2GRAY).astype(np.float32) / 255
@@ -155,25 +194,42 @@ def cut_one(k, regt, below, V, zone, front, dE):
 
 
 def shadow_one(k, a, regt, below, surf, others):
+    """the product's contact shadow, measured, but held to what a shadow can be in this soft north light:
+    (1) a LOCAL tone match first: the render's gain to the scene below from a ring 12-60 px beyond the band (outside every product), a
+        normalised 25 px blur, so the model's own relighting of the surroundings is not read as shadow;
+    (2) only on the surfaces it can fall on (floor items on the floor, wall pieces on the wall, table pieces on the table top);
+    (3) it must fall off with the distance from the product (exp(-d / (band / 2))): a darkening far from the object is relighting;
+    (4) the multiplier is floored at 0.45 and darkening under 2 % is grain."""
     sp = SPEC[k]
     if sp["band"] <= 0 or sp["onto"] == "none":
         return np.ones(a.shape, np.float32)
     onto = np.zeros(a.shape, bool)
-    for s in sp["onto"].split("_"):
-        if s in surf:
-            onto |= surf[s]
-        elif s == "planter":
-            onto |= others.get("planter", np.zeros_like(onto))
-    band = dil(a > 0.02, sp["band"]) & (a < 0.5) & onto & ~surf["front"]
+    for s_ in sp["onto"].split("_"):
+        if s_ in surf:
+            onto |= surf[s_]
+        elif s_ == "planter":
+            onto |= others.get("planter", np.zeros(onto.shape, np.float32)) > 0.5
+    prod = a > 0.02
+    occ = np.zeros(a.shape, bool)
     for j, m in others.items():
-        if j != "planter" or "planter" not in sp["onto"]:
-            band &= ~(m > 0.02)
-    ratio = (cv2.GaussianBlur(PW.lum(regt).astype(np.float32), (0, 0), 3) + 1e-4) / (cv2.GaussianBlur(PW.lum(below).astype(np.float32), (0, 0), 3) + 1e-4)
-    d = 1 - np.clip(ratio, 0.35, 1.0)
+        occ |= m > 0.02
+    front = surf["front"] & ~onto                      # furniture is excluded unless it is the surface the item stands on (the table)
+    band = dil(prod, sp["band"]) & ~prod & onto & ~front & ~occ
+    ring = dil(prod, sp["band"] + 60) & ~dil(prod, sp["band"] + 12) & ~occ & ~front & onto
+    k_ = ring.astype(np.float32)
+    lb, lr = PW.lum(below).astype(np.float32), PW.lum(regt).astype(np.float32)
+    w = cv2.GaussianBlur(k_, (0, 0), 25)
+    gain = cv2.GaussianBlur(lb * k_, (0, 0), 25) / np.maximum(cv2.GaussianBlur(lr * k_, (0, 0), 25), 1e-4)
+    gain = np.where(w > 1e-3, gain, float(np.median((lb / np.maximum(lr, 1e-4))[ring])) if ring.any() else 1.0)
+    ratio = (cv2.GaussianBlur(lr * gain, (0, 0), 3) + 1e-4) / (cv2.GaussianBlur(lb, (0, 0), 3) + 1e-4)
+    d = 1 - np.clip(ratio, 0.45, 1.0)
     d = d * np.clip((d - 0.02) / 0.04, 0, 1) ** 2
+    dist = cv2.distanceTransform((~prod).astype(np.uint8), cv2.DIST_L2, 5)
+    d = d * np.exp(-dist / max(1.0, sp["band"] / 2.0))
     d = np.where(band, d, 0.0).astype(np.float32)
-    sh = 1 - cv2.GaussianBlur(d, (0, 0), 3.0)
-    return (sh * (1 - a) + a).astype(np.float32)
+    sh = 1 - cv2.GaussianBlur(d, (0, 0), 2.0)
+    sh = np.where(dil(prod, sp["band"] + 4), sh, 1.0)
+    return np.clip(sh * (1 - a) + a, 0.45, 1.0).astype(np.float32)
 
 
 def fetch(step, url, pid, tid):
@@ -207,6 +263,8 @@ def fetch(step, url, pid, tid):
             front |= fa > 0.5
         if k == "rug":
             fill, a = cut_rug(regt, below, V[k], zones[k], fa, dE)
+        elif SPEC[k].get("snap"):
+            fill, a = cut_snap(k, regt)
         else:
             fill, a = cut_one(k, regt, below, V[k], zones[k], front, dE)
         free[k] = a
@@ -272,6 +330,19 @@ def cut_rug(regt, below, V, zone, fa, dE):
     return a > 0.5, a
 
 
+def cut_snap(k, regt):
+    """planar pieces the render placed on the plan's geometry (the three frames on the wall): the placeholder's soft silhouette snapped
+    to the render's own edges by a guided filter (r = SPEC snap), 1 inside, 0 beyond the snap radius; the wall between the pieces
+    stays the base's"""
+    r = SPEC[k]["snap"]
+    S = W.sil(k)
+    ph = S > 0.5
+    g = cv2.cvtColor((regt * 255).astype(np.uint8), cv2.COLOR_RGB2GRAY).astype(np.float32) / 255
+    a = np.clip(PW.guided(g, S.astype(np.float32), r, 1e-3), 0, 1)
+    a = np.where(ero(ph, r), 1.0, np.where(dil(ph, r), a, 0.0)).astype(np.float32)
+    return a > 0.5, a
+
+
 def swap():
     """per product on the ungraded stack: adding it changes nothing outside its alpha > 0 or shadow < 1 (rule ו.5)"""
     out = {}
@@ -284,3 +355,53 @@ def swap():
         a = L[..., 3]
         out[k] = dict(region_px=int(((a > 0) | (S < 1)).sum()))
     print(json.dumps(out, indent=1))
+
+
+# ------------------------------------------------------------------------------------------------- code scale fix (0 tokens)
+SCALE_FIX = {
+    # product: (factor, anchor). Measured on the cut against the step-0 placeholder at the card's size (jobs.json scale_fix):
+    "accent-sconces": (0.80, "centre"),        # the travertine cylinders came out ~20 cm tall (+23-26 %); the card says 16
+    "candle-holders": (0.83, "foot"),          # the cone foot ~8.4 cm wide (+20 %); the card says 7 (Small 70 x 110)
+}
+
+
+def scale_fix(k):
+    """shrink each piece of the product (its layer and its shadow) about its anchor: the mount's centre for a wall lamp, the foot's
+    contact point for a holder on the table. What it uncovers is the scene below (the base's wall / table), never the render's."""
+    f, mode = SCALE_FIX[k]
+    lp, sp = os.path.join(W.WORK, "layers", f"{k}.png"), os.path.join(W.WORK, "shadows", f"{k}.png")
+    L = np.asarray(Image.open(lp)).astype(np.float32) / 255
+    Sh = np.asarray(Image.open(sp).convert("L")).astype(np.float32) / 255
+    a = L[..., 3]
+    n, lab, st, cen = cv2.connectedComponentsWithStats((a > 0.5).astype(np.uint8))
+    outL, outA, outS = np.zeros_like(L[..., :3]), np.zeros_like(a), np.ones_like(Sh)
+    rec = []
+    for i in range(1, n):
+        if st[i, 4] < 200:
+            continue
+        x, y, w, h = st[i, :4]
+        if mode == "centre":
+            ax, ay = cen[i]
+        else:
+            ax, ay = x + w / 2.0, y + h - 1
+        M = np.float32([[f, 0, ax * (1 - f)], [0, f, ay * (1 - f)]])
+        own = dil(lab == i, 4)                    # this piece and its soft edge, nothing of the other piece
+        roi = dil(lab == i, 40) & ~dil((lab != i) & (lab > 0), 4)
+        ai = np.where(own, a, 0).astype(np.float32)
+        pm = L[..., :3] * ai[..., None]
+        wa = cv2.warpAffine(ai, M, (a.shape[1], a.shape[0]), flags=cv2.INTER_AREA)
+        wp = cv2.warpAffine(pm, M, (a.shape[1], a.shape[0]), flags=cv2.INTER_AREA)
+        si = np.where(roi, Sh, 1.0).astype(np.float32)
+        ws = cv2.warpAffine(1 - si, M, (a.shape[1], a.shape[0]), flags=cv2.INTER_AREA)
+        outA = np.maximum(outA, wa)
+        outL = np.where((wa > 1e-4)[..., None], wp / np.maximum(wa, 1e-4)[..., None], outL)
+        outS = np.minimum(outS, 1 - ws)
+        rec.append(dict(piece_box_px=[int(x), int(y), int(w), int(h)], anchor_px=[round(float(ax), 1), round(float(ay), 1)]))
+    outS = outS * (1 - outA) + outA
+    PW.save(lp, np.clip(outL, 0, 1), alpha=np.clip(outA, 0, 1))
+    PW.save(sp, np.repeat(np.clip(outS, 0, 1)[..., None], 3, 2))
+    J = W.jobs()
+    J.setdefault("scale_fix", {})[k] = dict(factor=f, anchor=mode, pieces=rec, method="layer (premultiplied) and shadow shrunk about the "
+                                            "anchor, INTER_AREA; the uncovered pixels are the scene below; 0 tokens")
+    json.dump(J, open(W.JOBS, "w"), indent=1, ensure_ascii=False)
+    print(k, json.dumps(rec))

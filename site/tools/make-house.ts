@@ -175,7 +175,7 @@ const OUT = join(MEDIA_OUT, REL);
 const BASE_WIDTHS = [1280, 1920, W];
 /** the base's encoding (S12): the threshold of a tool layer on the public site (tools/lib/encoding.ts) */
 const BASE_AVIF_Q = 70;
-const BASE_WEBP_Q = 90;
+const BASE_WEBP_Q = 95;
 const WIDTHS = { lo: 1920, hi: W };
 const THUMB = 360;
 const stamp = createHash('sha256')
@@ -220,8 +220,9 @@ if (cached?.stamp !== stamp) {
         await img
           .clone()
           .resize({ width: Math.round((cut.width * w) / W) })
-          // a shadow multiplies the room: lossless, or the codec's noise near white would darken around the set
-          .webp(kind === 'shadow' ? { lossless: true, effort: 5 } : { quality: 86, alphaQuality: 100, smartSubsample: true, effort: 5 })
+          // a shadow multiplies the room: lossless, or the codec's noise near white would darken around the set. S12: the
+          // set itself near-lossless (lossy q86, and q95 too, missed the tool-layer threshold on the textiles; QA §4)
+          .webp(kind === 'shadow' ? { lossless: true, effort: 5 } : { nearLossless: true, quality: 60, effort: 5 })
           .toFile(out(`slots/${m.slot.id}/${i + 1}.${kind}.${w}.webp`));
     }
     // the wheel's card: the set on the sofa, from the approved display file (never a layer on its own)

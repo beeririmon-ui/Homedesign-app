@@ -130,13 +130,20 @@ async function encodeLayer(img: sharp.Sharp, rel: string): Promise<void> {
   await img.webp({ quality: 86, alphaQuality: 100, smartSubsample: true, effort: 5 }).toFile(out);
 }
 
-async function encode(img: sharp.Sharp, rel: string): Promise<void> {
+/**
+ * S12 (QA S8–S10 §4): the room's base is a tool layer, held to the threshold as the browser draws it
+ * (e2e/encoding.spec.ts). The engine draws the Nordic base 1:1 on a desktop (it composes at the poster's width), where
+ * AVIF q52 missed it (p99 9, 1.3% above 8 levels at 1920); q70 meets it, as for the warm-modern base, and the WebP
+ * fallback q95. Other pictures (the hall) keep the lighter setting.
+ */
+const TOOL_LAYER = { avif: 70, webp: 95 };
+async function encode(img: sharp.Sharp, rel: string, q: { avif: number; webp: number } = { avif: 52, webp: 80 }): Promise<void> {
   for (const fmt of FORMATS) {
     const out = join(MEDIA_OUT, `${rel}.${fmt}`);
     mkdirSync(dirname(out), { recursive: true });
     const pipeline = img.clone();
-    if (fmt === 'avif') await pipeline.avif({ quality: 52, effort: 4 }).toFile(out);
-    else await pipeline.webp({ quality: 80, alphaQuality: 90, effort: 5 }).toFile(out);
+    if (fmt === 'avif') await pipeline.avif({ quality: q.avif, effort: 4 }).toFile(out);
+    else await pipeline.webp({ quality: q.webp, alphaQuality: 90, effort: 5 }).toFile(out);
   }
 }
 
@@ -307,10 +314,10 @@ async function main() {
   const bases: Record<string, Raw> = {};
   for (const key of ['lo', 'hi'] as const) {
     bases[key] = await loadRaw(source, WIDTHS[key]);
-    await encode(sharp(source).resize({ width: WIDTHS[key] }), `${roomDir}/base/shell.${WIDTHS[key]}`);
+    await encode(sharp(source).resize({ width: WIDTHS[key] }), `${roomDir}/base/shell.${WIDTHS[key]}`, TOOL_LAYER);
   }
   // 1280 for small phones and the poster image
-  await encode(sharp(source).resize({ width: 1280 }), `${roomDir}/base/shell.1280`);
+  await encode(sharp(source).resize({ width: 1280 }), `${roomDir}/base/shell.1280`, TOOL_LAYER);
   scene.base = [{ id: 'shell', z: 0, blend: 'normal', src: `${roomDir}/base/shell`, widths: [1280, WIDTHS.lo, WIDTHS.hi], temporary: true }];
 
   for (const slot of room!.slots) {

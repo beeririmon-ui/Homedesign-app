@@ -10,12 +10,97 @@
  "references_policy": "supplier images are references only: cropped in the scratchpad and uploaded to var2, never stored in the repo",
  "jobs": [
   {
-   "id": "wm-ph2-step2-window-floor",
-   "step": 2,
+   "id": "wm-ph2-step1-rug",
+   "step": 1,
+   "slots": [
+    "rug"
+   ],
+   "model": "seedream-5-pro i2i 2K",
+   "aspect_ratio": "auto",
    "tokens": 650,
    "estimate": 650,
-   "idempotency_key": "wm-ph2-step2-window-floor-20261110",
-   "prompt_chars": 2760,
+   "placeholder_id": "21feb975-6cf1-412f-b34e-5100cadb4e93",
+   "task_id": "01a99d5f2e01c3307d9451d0fe37a514",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-01a99d5f2e01c3307d9451d0fe37a514-0-1794354176475-a6fd1621.png",
+   "returned_px": [
+    2720,
+    1530
+   ],
+   "raw": "assets/renders/living-room/warm-modern/phase2-2026-11-10/raw/step1-seedream.png",
+   "image_url_local": "assets/renders/living-room/warm-modern/phase2-2026-11-10/inputs/step1-input.png",
+   "prompt": "assets/prompts/warm-modern-phase2-2026-11-10/step1-rug.txt",
+   "register_to_input": [
+    [
+     0.9954000115394592,
+     0.00019999999494757503,
+     6.807600021362305
+    ],
+    [
+     -0.00019999999494757503,
+     0.9853000044822693,
+     10.645999908447266
+    ]
+   ],
+   "tone_gain_median": [
+    1.1303,
+    1.1248,
+    1.099
+   ],
+   "model_drift_outside_zones_L": {
+    "raw_median": 3.2,
+    "raw_p95": 8.85,
+    "after_tone_match_median": 0.79,
+    "note": "the model's redraw outside the products; discarded (the scene below is kept)"
+   },
+   "products": {
+    "rug": {
+     "alpha_px": 297289,
+     "soft_px": 23285,
+     "box_px": [
+      468,
+      1220,
+      2720,
+      1530
+     ],
+     "placeholder_px": 297762,
+     "placeholder_covered": 0.998,
+     "outside_placeholder_px": 1,
+     "shadow_px_below_0_97": 8177,
+     "shadow_min": 0.787
+    }
+   },
+   "composite": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work/composite-step1.png",
+   "status": "fetched",
+   "refs": [
+    {
+     "n": 1,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/570649f3-193a-42bc-9864-e29ea0a7fef3.png",
+     "card": "rug-cj-braided-wool-natural",
+     "sku": "CJJT211801818RI",
+     "what": "SKU Square 230x330 photo (square, no tassels)",
+     "source_image": "rug/sku.jpeg",
+     "crop": [
+      0.06,
+      0.06,
+      0.92,
+      0.75
+     ]
+    },
+    {
+     "n": 2,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/cd8d73bb-aeea-4d55-aa6e-7a98b72f43f3.png",
+     "card": "rug-cj-braided-wool-natural",
+     "sku": "CJJT211801818RI",
+     "what": "close-up of the braided weave (fringe cropped out)",
+     "source_image": "rug/img4.jpg",
+     "crop": [
+      0.0,
+      0.6,
+      0.42,
+      1.0
+     ]
+    }
+   ],
    "estimate_call": {
     "tool": "var2_estimate_cost",
     "model_id": "seedream-5-pro",
@@ -23,14 +108,156 @@
     "params": {
      "resolution": "2K",
      "aspect_ratio": "auto",
-     "image_refs": 8
+     "image_refs": 2
     },
     "total_tokens": 650,
     "deviation_pct": 0.0
    },
-   "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/cace0428-a037-4947-bc46-3e1537bc452d.png",
+   "prompt_chars": 2227,
+   "idempotency_key": "wm-ph2-step1-rug-20261110"
+  },
+  {
+   "id": "wm-ph2-step2-window-floor",
+   "step": 2,
+   "slots": [
+    "curtains",
+    "vase",
+    "planter",
+    "basket",
+    "magazine-holder",
+    "floor-lamp"
+   ],
+   "model": "seedream-5-pro i2i 2K",
+   "aspect_ratio": "auto",
+   "tokens": 650,
+   "estimate": 650,
    "placeholder_id": "89e74c94-8224-4d3c-a91f-f1cf8a59a066",
    "task_id": "ea758e2dc6e668b79f1162a0f6b98592",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-ea758e2dc6e668b79f1162a0f6b98592-0-1794354776689-1a3d99dc.png",
+   "returned_px": [
+    2720,
+    1530
+   ],
+   "raw": "assets/renders/living-room/warm-modern/phase2-2026-11-10/raw/step2-seedream.png",
+   "image_url_local": "assets/renders/living-room/warm-modern/phase2-2026-11-10/inputs/step2-input.png",
+   "prompt": "assets/prompts/warm-modern-phase2-2026-11-10/step2-window-floor.txt",
+   "register_to_input": [
+    [
+     0.9961000084877014,
+     -0.0010000000474974513,
+     5.960100173950195
+    ],
+    [
+     0.00019999999494757503,
+     0.9958999752998352,
+     2.6143999099731445
+    ]
+   ],
+   "tone_gain_median": [
+    1.147,
+    1.2269,
+    1.3346
+   ],
+   "model_drift_outside_zones_L": {
+    "raw_median": 9.67,
+    "raw_p95": 23.06,
+    "after_tone_match_median": 1.82,
+    "note": "the model's redraw outside the products; discarded (the scene below is kept)"
+   },
+   "products": {
+    "curtains": {
+     "alpha_px": 355507,
+     "soft_px": 6924,
+     "box_px": [
+      0,
+      0,
+      265,
+      1519
+     ],
+     "placeholder_px": 321755,
+     "placeholder_covered": 0.994,
+     "outside_placeholder_px": 30237,
+     "shadow_px_below_0_97": 6165,
+     "shadow_min": 0.568
+    },
+    "vase": {
+     "alpha_px": 17933,
+     "soft_px": 3169,
+     "box_px": [
+      622,
+      806,
+      725,
+      1084
+     ],
+     "placeholder_px": 15002,
+     "placeholder_covered": 0.923,
+     "outside_placeholder_px": 3211,
+     "shadow_px_below_0_97": 499,
+     "shadow_min": 0.715
+    },
+    "planter": {
+     "alpha_px": 67220,
+     "soft_px": 6980,
+     "box_px": [
+      929,
+      602,
+      1153,
+      1197
+     ],
+     "placeholder_px": 58258,
+     "placeholder_covered": 0.957,
+     "outside_placeholder_px": 9024,
+     "shadow_px_below_0_97": 28478,
+     "shadow_min": 0.555
+    },
+    "basket": {
+     "alpha_px": 23403,
+     "soft_px": 2380,
+     "box_px": [
+      993,
+      1044,
+      1146,
+      1235
+     ],
+     "placeholder_px": 22864,
+     "placeholder_covered": 0.931,
+     "outside_placeholder_px": 1783,
+     "shadow_px_below_0_97": 7867,
+     "shadow_min": 0.572
+    },
+    "magazine-holder": {
+     "alpha_px": 44924,
+     "soft_px": 2538,
+     "box_px": [
+      923,
+      1353,
+      1225,
+      1530
+     ],
+     "placeholder_px": 40107,
+     "placeholder_covered": 0.986,
+     "outside_placeholder_px": 4528,
+     "shadow_px_below_0_97": 10701,
+     "shadow_min": 0.563
+    },
+    "floor-lamp": {
+     "alpha_px": 35612,
+     "soft_px": 8008,
+     "box_px": [
+      2316,
+      579,
+      2549,
+      1342
+     ],
+     "placeholder_px": 32440,
+     "placeholder_covered": 0.935,
+     "outside_placeholder_px": 2968,
+     "shadow_px_below_0_97": 6398,
+     "shadow_min": 0.594
+    }
+   },
+   "composite": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work/composite-step2.png",
+   "status": "fetched",
    "refs": [
     {
      "n": 1,
@@ -145,15 +372,6 @@
      ]
     }
    ],
-   "status": "queued"
-  },
-  {
-   "id": "wm-ph2-step3-wall-table",
-   "step": 3,
-   "tokens": 650,
-   "estimate": 650,
-   "idempotency_key": "wm-ph2-step3-wall-table-20261110",
-   "prompt_chars": 2590,
    "estimate_call": {
     "tool": "var2_estimate_cost",
     "model_id": "seedream-5-pro",
@@ -161,14 +379,140 @@
     "params": {
      "resolution": "2K",
      "aspect_ratio": "auto",
-     "image_refs": 5
+     "image_refs": 8
     },
     "total_tokens": 650,
     "deviation_pct": 0.0
    },
-   "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/936f42d3-ff4d-4f69-a6de-6379e1b7b1fe.png",
+   "prompt_chars": 2760,
+   "idempotency_key": "wm-ph2-step2-window-floor-20261110"
+  },
+  {
+   "id": "wm-ph2-step3-wall-table",
+   "step": 3,
+   "slots": [
+    "framed-art",
+    "accent-sconces",
+    "pendant",
+    "bowl",
+    "candle-holders"
+   ],
+   "model": "seedream-5-pro i2i 2K",
+   "aspect_ratio": "auto",
+   "tokens": 650,
+   "estimate": 650,
    "placeholder_id": "8dc86802-110e-469b-925b-047c30ba2e13",
    "task_id": "277263d366679796552f9b78234a32b8",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-277263d366679796552f9b78234a32b8-0-1794354772146-2a8f246a.png",
+   "returned_px": [
+    2720,
+    1530
+   ],
+   "raw": "assets/renders/living-room/warm-modern/phase2-2026-11-10/raw/step3-seedream.png",
+   "image_url_local": "assets/renders/living-room/warm-modern/phase2-2026-11-10/inputs/step3-input.png",
+   "prompt": "assets/prompts/warm-modern-phase2-2026-11-10/step3-wall-table.txt",
+   "register_to_input": [
+    [
+     0.9987999796867371,
+     -0.00019999999494757503,
+     -3.021899938583374
+    ],
+    [
+     -9.999999747378752e-05,
+     0.9925000071525574,
+     6.2845001220703125
+    ]
+   ],
+   "tone_gain_median": [
+    1.1425,
+    1.1531,
+    1.1372
+   ],
+   "model_drift_outside_zones_L": {
+    "raw_median": 4.85,
+    "raw_p95": 16.52,
+    "after_tone_match_median": 1.35,
+    "note": "the model's redraw outside the products; discarded (the scene below is kept)"
+   },
+   "products": {
+    "framed-art": {
+     "alpha_px": 165609,
+     "soft_px": 15418,
+     "box_px": [
+      1513,
+      502,
+      2164,
+      795
+     ],
+     "placeholder_px": 165525,
+     "placeholder_covered": 1.0,
+     "outside_placeholder_px": 0,
+     "shadow_px_below_0_97": 26242,
+     "shadow_min": 0.701
+    },
+    "accent-sconces": {
+     "alpha_px": 7217,
+     "soft_px": 1617,
+     "box_px": [
+      1407,
+      487,
+      2312,
+      609
+     ],
+     "placeholder_px": 4930,
+     "placeholder_covered": 0.895,
+     "outside_placeholder_px": 2286,
+     "shadow_px_below_0_97": 3176,
+     "shadow_min": 0.729
+    },
+    "pendant": {
+     "alpha_px": 58493,
+     "soft_px": 5498,
+     "box_px": [
+      1509,
+      121,
+      1843,
+      397
+     ],
+     "placeholder_px": 70769,
+     "placeholder_covered": 0.734,
+     "outside_placeholder_px": 5290,
+     "shadow_px_below_0_97": 0,
+     "shadow_min": 1.0
+    },
+    "bowl": {
+     "alpha_px": 13127,
+     "soft_px": 1666,
+     "box_px": [
+      1931,
+      1246,
+      2069,
+      1357
+     ],
+     "placeholder_px": 12961,
+     "placeholder_covered": 0.914,
+     "outside_placeholder_px": 839,
+     "shadow_px_below_0_97": 2308,
+     "shadow_min": 0.635
+    },
+    "candle-holders": {
+     "alpha_px": 13721,
+     "soft_px": 2458,
+     "box_px": [
+      1724,
+      1132,
+      1879,
+      1280
+     ],
+     "placeholder_px": 9738,
+     "placeholder_covered": 0.997,
+     "outside_placeholder_px": 2866,
+     "shadow_px_below_0_97": 2976,
+     "shadow_min": 0.62
+    }
+   },
+   "composite": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work/composite-step3.png",
+   "status": "fetched",
    "refs": [
     {
      "n": 1,
@@ -241,100 +585,6 @@
      ]
     }
    ],
-   "status": "queued"
-  },
-  {
-   "id": "wm-ph2-step1-rug",
-   "step": 1,
-   "slots": [
-    "rug"
-   ],
-   "model": "seedream-5-pro i2i 2K",
-   "aspect_ratio": "auto",
-   "tokens": 650,
-   "estimate": 650,
-   "placeholder_id": "21feb975-6cf1-412f-b34e-5100cadb4e93",
-   "task_id": "01a99d5f2e01c3307d9451d0fe37a514",
-   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-01a99d5f2e01c3307d9451d0fe37a514-0-1794354176475-a6fd1621.png",
-   "returned_px": [
-    2720,
-    1530
-   ],
-   "raw": "assets/renders/living-room/warm-modern/phase2-2026-11-10/raw/step1-seedream.png",
-   "image_url_local": "assets/renders/living-room/warm-modern/phase2-2026-11-10/inputs/step1-input.png",
-   "prompt": "assets/prompts/warm-modern-phase2-2026-11-10/step1-rug.txt",
-   "register_to_input": [
-    [
-     0.9954000115394592,
-     0.00019999999494757503,
-     6.807600021362305
-    ],
-    [
-     -0.00019999999494757503,
-     0.9853000044822693,
-     10.645999908447266
-    ]
-   ],
-   "tone_gain_median": [
-    1.1303,
-    1.1248,
-    1.099
-   ],
-   "model_drift_outside_zones_L": {
-    "raw_median": 3.2,
-    "raw_p95": 8.85,
-    "after_tone_match_median": 0.79,
-    "note": "the model's redraw outside the products; discarded (the scene below is kept)"
-   },
-   "products": {
-    "rug": {
-     "alpha_px": 297289,
-     "soft_px": 23285,
-     "box_px": [
-      468,
-      1220,
-      2720,
-      1530
-     ],
-     "placeholder_px": 297762,
-     "placeholder_covered": 0.998,
-     "outside_placeholder_px": 1,
-     "shadow_px_below_0_97": 8177,
-     "shadow_min": 0.787
-    }
-   },
-   "composite": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work/composite-step1.png",
-   "status": "fetched",
-   "refs": [
-    {
-     "n": 1,
-     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/570649f3-193a-42bc-9864-e29ea0a7fef3.png",
-     "card": "rug-cj-braided-wool-natural",
-     "sku": "CJJT211801818RI",
-     "what": "SKU Square 230x330 photo (square, no tassels)",
-     "source_image": "rug/sku.jpeg",
-     "crop": [
-      0.06,
-      0.06,
-      0.92,
-      0.75
-     ]
-    },
-    {
-     "n": 2,
-     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/cd8d73bb-aeea-4d55-aa6e-7a98b72f43f3.png",
-     "card": "rug-cj-braided-wool-natural",
-     "sku": "CJJT211801818RI",
-     "what": "close-up of the braided weave (fringe cropped out)",
-     "source_image": "rug/img4.jpg",
-     "crop": [
-      0.0,
-      0.6,
-      0.42,
-      1.0
-     ]
-    }
-   ],
    "estimate_call": {
     "tool": "var2_estimate_cost",
     "model_id": "seedream-5-pro",
@@ -342,14 +592,216 @@
     "params": {
      "resolution": "2K",
      "aspect_ratio": "auto",
-     "image_refs": 2
+     "image_refs": 5
     },
     "total_tokens": 650,
     "deviation_pct": 0.0
    },
-   "prompt_chars": 2227,
-   "idempotency_key": "wm-ph2-step1-rug-20261110"
+   "prompt_chars": 2590,
+   "idempotency_key": "wm-ph2-step3-wall-table-20261110"
   }
  ],
- "tokens_total": 1950
+ "tokens_total": 1950,
+ "scale_fix": {
+  "accent-sconces": {
+   "factor": 0.8,
+   "anchor": "centre",
+   "pieces": [
+    {
+     "piece_box_px": [
+      2265,
+      487,
+      47,
+      92
+     ],
+     "anchor_px": [
+      2288.1,
+      532.3
+     ]
+    },
+    {
+     "piece_box_px": [
+      1407,
+      532,
+      43,
+      77
+     ],
+     "anchor_px": [
+      1427.9,
+      570.4
+     ]
+    }
+   ],
+   "method": "layer (premultiplied) and shadow shrunk about the anchor, INTER_AREA; the uncovered pixels are the scene below; 0 tokens"
+  },
+  "candle-holders": {
+   "factor": 0.83,
+   "anchor": "foot",
+   "pieces": [
+    {
+     "piece_box_px": [
+      1724,
+      1132,
+      55,
+      137
+     ],
+     "anchor_px": [
+      1751.5,
+      1268.0
+     ]
+    },
+    {
+     "piece_box_px": [
+      1819,
+      1152,
+      60,
+      128
+     ],
+     "anchor_px": [
+      1849.0,
+      1279.0
+     ]
+    }
+   ],
+   "method": "layer (premultiplied) and shadow shrunk about the anchor, INTER_AREA; the uncovered pixels are the scene below; 0 tokens"
+  }
+ },
+ "grade_v3c_phase2": {
+  "rule": "v3c, ONE display grade (stack.Grade = phase 1 grade_v3c; base.png reproduced byte for byte). Every layer is cut from the graded composites; no layer is graded on its own; the site applies no further grade",
+  "params": {
+   "gain": 1.000848,
+   "toe": {
+    "black_point_base_p005": 6.1401,
+    "target": 12.5,
+    "fade_to_L": 25.0,
+    "computed_on": "shell-furniture-v3.png"
+   },
+   "slab": {
+    "mask": "masks/stone-wide.png",
+    "h_top_deg": 87.623,
+    "chroma_max": 12.0103,
+    "share": "stone x (1 - furniture alpha) x (1 - product alpha)"
+   },
+   "source": "pilot_wm.py grade_v3c (phase 1), recomputed; base.png reproduced byte for byte"
+  },
+  "graded": [
+   "default-scene-set-A-graded-v3c.png",
+   "default-scene-set-B-graded-v3c.png",
+   "default-scene-set-C-graded-v3c.png",
+   "step1-rug-set-B-graded-v3c.png",
+   "step2-window-floor-set-B-graded-v3c.png",
+   "step3-wall-table-set-B-graded-v3c.png"
+  ]
+ },
+ "checkpoint": {
+  "date": "2026-11-11",
+  "tokens": {
+   "step1": 650,
+   "step2": 650,
+   "step3": 650,
+   "total": 1950,
+   "estimates": "650 each, 0 % off the table",
+   "reserve_used": 0
+  },
+  "layered": [
+   "rug",
+   "vase",
+   "floor-lamp",
+   "framed-art",
+   "accent-sconces",
+   "candle-holders",
+   "cushions A/B/C re-cut where the stack changed"
+  ],
+  "pending_retake": {
+   "curtains": "step 2 drew the stack about twice as wide as the plan's 0.30 m front stack (WMC7), over the first glazing pane",
+   "planter": "with the basket in one pass (plan section 2); step 2 put the basket beside the pot and over its right side",
+   "basket": "step 2 put it beside the pot (~110 px right of its place), not in front of it",
+   "magazine-holder": "step 2 drew it taller than wide; the card is 35 W x 27.5 H",
+   "bowl": "step 3 put it at the table's left end, not at its checked place (0.72, 1.94), and ~24 cm wide (card 20)",
+   "pendant": "step 3 drew the widest ring ~66 cm (card: Beige 50 cm)"
+  },
+  "verify": "layers/verify-layers.json: pass (recomposite p99.9 0-1, max 3-4; swap-diff 0 px outside every region; cushions 97-98 % kept byte for byte)",
+  "lock": "lock-and-grade-check.json: QA's nearest-peak F3 on the default scene = the base's numbers on every named line (pass, worst p90 9.0 px)",
+  "black_point": {
+   "B": 11.16,
+   "A": 11.71,
+   "C": 9.89,
+   "base": 12.4,
+   "note": "C as in phase 1 (10.0, accepted by QA: the set's own dark products)"
+  },
+  "code_fixes": {
+   "scale_fix": {
+    "accent-sconces": {
+     "factor": 0.8,
+     "anchor": "centre",
+     "pieces": [
+      {
+       "piece_box_px": [
+        2265,
+        487,
+        47,
+        92
+       ],
+       "anchor_px": [
+        2288.1,
+        532.3
+       ]
+      },
+      {
+       "piece_box_px": [
+        1407,
+        532,
+        43,
+        77
+       ],
+       "anchor_px": [
+        1427.9,
+        570.4
+       ]
+      }
+     ],
+     "method": "layer (premultiplied) and shadow shrunk about the anchor, INTER_AREA; the uncovered pixels are the scene below; 0 tokens"
+    },
+    "candle-holders": {
+     "factor": 0.83,
+     "anchor": "foot",
+     "pieces": [
+      {
+       "piece_box_px": [
+        1724,
+        1132,
+        55,
+        137
+       ],
+       "anchor_px": [
+        1751.5,
+        1268.0
+       ]
+      },
+      {
+       "piece_box_px": [
+        1819,
+        1152,
+        60,
+        128
+       ],
+       "anchor_px": [
+        1849.0,
+        1279.0
+       ]
+      }
+     ],
+     "method": "layer (premultiplied) and shadow shrunk about the anchor, INTER_AREA; the uncovered pixels are the scene below; 0 tokens"
+    }
+   },
+   "note": "the travertine wall lamps and candle holders came out ~20 % large; shrunk in code to the card size"
+  },
+  "retake_plan": {
+   "tokens": 1300,
+   "model": "seedream-5-pro i2i 2K x 2",
+   "needs": "the manager's approval (reserve)",
+   "R1": "window / floor: curtains, planter + olive (filler), basket, magazine holder on the current scene (rug, vase, lamp in); fewer refs",
+   "R2": "wall / table: bowl (style 12, at (0.72, 1.94)) and pendant (50 cm) on the current scene"
+  }
+ }
 }

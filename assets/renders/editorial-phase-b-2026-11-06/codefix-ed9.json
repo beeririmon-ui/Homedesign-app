@@ -1,0 +1,210 @@
+{
+ "date": "2026-11-11",
+ "by": "render-agent",
+ "pass_id": "codefix-ed9 (Q-ED7 (a), 0 tokens, code only)",
+ "tokens": 0,
+ "base": "warm-modern-A-ed8.png",
+ "out": "warm-modern-A-ed9.png",
+ "script": "codefix_ed9.py",
+ "toe_module": "../master/editorial-2026-11-07/q_ed7_toe.py (the same curve as the master bedroom's fix6, mb1_fix8.py)",
+ "source": "docs/master-bedroom-comparison-2026-11-07.md §6 (Q-ED7 ruling (a)); qa/reports/2026-11-10-ged-master-wm-fix5.json (G-ED.11)",
+ "note": "TEST, not for the site; new files only; ed8 and every approved file untouched; no var2. The toe only: the light and the brightness do not move (DL1 is measured on the plaster and the frame median). ed8 was shown to the owner; the manager notes the change when ed9 is shown. Awaiting qa-agent: G-ED.11 (p1, p5, split flag), G-ED.8 for the toe, G-ED.3 spot reads",
+ "toe": {
+  "curve": "q_ed7_toe.curve: slope s0 below L* 12, smoothstep blend of the slope to 1 at 20, identity from 20; lift (1 - s0)(16 - L) below 12",
+  "s0": 0.5703,
+  "lift_by_L": {
+   "0": 6.88,
+   "2": 6.02,
+   "4": 5.16,
+   "6": 4.3,
+   "8": 3.44,
+   "10": 2.58,
+   "12": 1.72,
+   "14": 0.91,
+   "16": 0.32,
+   "18": 0.05,
+   "19.5": 0.0,
+   "20": 0.0,
+   "30": 0.0
+  },
+  "chromaticity_own_from_L": 10.0,
+  "chromaticity_local_below_L": 3.0,
+  "local_sigma_px": 6.0,
+  "local_source_L": [
+   6.0,
+   20.0
+  ],
+  "local_cover_k": 0.001,
+  "fallback_srgb": "#2E2824 (Bible espresso)",
+  "info": {
+   "px_in_toe": 451809,
+   "px_chromaticity_partly_local": 219079,
+   "px_chromaticity_fully_local": 42471,
+   "px_hue_locked": 227180,
+   "px_gamut_clipped": 9
+  },
+  "p1_target": [
+   8.5,
+   9.5
+  ],
+  "p5_rise_max": 3
+ },
+ "gate_percentiles": {
+  "ed8": {
+   "p0.5": 2.47,
+   "p1": 3.65,
+   "p5": 10.59
+  },
+  "ed9": {
+   "p0.5": 8.35,
+   "p1": 8.99,
+   "p5": 13.14
+  }
+ },
+ "p1_rise": 5.34,
+ "p5_rise": 2.55,
+ "full_res_percentiles": {
+  "ed8": {
+   "p0.5": 1.75,
+   "p1": 2.97,
+   "p5": 9.48
+  },
+  "ed9": {
+   "p0.5": 7.88,
+   "p1": 8.57,
+   "p5": 12.29
+  }
+ },
+ "checks": {
+  "px_changed": 359884,
+  "px_changed_at_L_ge_20": 0,
+  "px_changed_gt2_at_L_ge_20": 0,
+  "max_L_before_of_a_changed_px": 17.03,
+  "max_abs_change_8bit": 35,
+  "hue_shift_deg_own_class_L_ge_10_C_ge_6": {
+   "p1": -2.77,
+   "p5": -1.85,
+   "p50": 0.05,
+   "p95": 1.85,
+   "p99": 2.63,
+   "px": 134743
+  },
+  "hue_shift_deg_mixed_class_L_3_10_C_ge_6": {
+   "p1": -13.66,
+   "p5": -3.72,
+   "p50": 1.2,
+   "p95": 9.66,
+   "p99": 17.87,
+   "px": 113027
+  },
+  "chroma_ratio_own_class": {
+   "p1": 0.995,
+   "p5": 0.996,
+   "p50": 1.056,
+   "px": 134743
+  },
+  "share_changed_px_C_fell_gt_0_5": 0.0,
+  "new_magenta_px_from_near_neutral": 0
+ },
+ "frame_median_L": {
+  "ed8": 46.23,
+  "ed9": 46.23
+ },
+ "frame_p90_L": {
+  "ed8": 78.82,
+  "ed9": 78.82
+ },
+ "product_reads": {
+  "black bowl (body, L* < 25)": {
+   "ed8": {
+    "L": 2.5,
+    "C": 1.6,
+    "h": 71.3,
+    "p5_L": 0.3
+   },
+   "ed9": {
+    "L": 8.3,
+    "C": 4.1,
+    "h": 63.3,
+    "p5_L": 7.1
+   },
+   "px": 20623,
+   "box": [
+    1380,
+    1000,
+    1630,
+    1110
+   ]
+  },
+  "walnut coffee table, left drum base (L* < 25)": {
+   "ed8": {
+    "L": 8.0,
+    "C": 10.2,
+    "h": 54.2,
+    "p5_L": 3.8
+   },
+   "ed9": {
+    "L": 11.5,
+    "C": 13.0,
+    "h": 56.1,
+    "p5_L": 9.1
+   },
+   "px": 50199,
+   "box": [
+    1110,
+    1250,
+    1410,
+    1440
+   ]
+  },
+  "walnut coffee table, right drum base (L* < 25)": {
+   "ed8": {
+    "L": 5.2,
+    "C": 6.5,
+    "h": 53.7,
+    "p5_L": 2.9
+   },
+   "ed9": {
+    "L": 9.8,
+    "C": 9.3,
+    "h": 56.8,
+    "p5_L": 8.5
+   },
+   "px": 58725,
+   "box": [
+    1870,
+    1250,
+    2170,
+    1450
+   ]
+  },
+  "walnut coffee table, top edge (L* < 40)": {
+   "ed8": {
+    "L": 20.0,
+    "C": 15.5,
+    "h": 60.8,
+    "p5_L": 3.1
+   },
+   "ed9": {
+    "L": 20.0,
+    "C": 16.1,
+    "h": 60.4,
+    "p5_L": 8.6
+   },
+   "px": 99022,
+   "box": [
+    900,
+    1160,
+    2380,
+    1240
+   ]
+  }
+ },
+ "crops": [
+  "codefix-ed9-before-after/black-bowl-100.jpg",
+  "codefix-ed9-before-after/black-bowl-x4.jpg",
+  "codefix-ed9-before-after/walnut-table-100.jpg",
+  "codefix-ed9-before-after/walnut-table-x4.jpg",
+  "codefix-ed9-before-after/under-table-100.jpg"
+ ]
+}

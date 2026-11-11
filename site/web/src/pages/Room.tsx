@@ -49,45 +49,51 @@ export function Room({ room: nordicRoom, slot, option, style }: { room: CatalogR
       <section class="wrap page" aria-labelledby="items-title">
         <div class="room-intro">
           <h2 id="items-title">מה יש בחדר</h2>
-          <p class="muted">
-            {house.intro_he ??
-              'כל פריט בחדר הוא מוצר שאפשר לקנות. לכל פריט שלוש גרסאות: געו בנקודה על התמונה, או בחרו מהרשימה. המילוי (ענפים, נרות, עיתונים ועץ הזית) מראה איך משתמשים במוצר ולא נמכר.'}
-          </p>
+          {/* S12, QA ת23: a page waiting for its house lists nothing yet: never the Nordic room's pictures (the browser's
+              lazy loading fetches them well below the fold) */}
+          {pending ? null : (
+            <p class="muted">
+              {house.intro_he ??
+                'כל פריט בחדר הוא מוצר שאפשר לקנות. לכל פריט שלוש גרסאות: געו בנקודה על התמונה, או בחרו מהרשימה. המילוי (ענפים, נרות, עיתונים ועץ הזית) מראה איך משתמשים במוצר ולא נמכר.'}
+            </p>
+          )}
         </div>
-        <ul class="slot-list">
-          {room.slots.map((s) => {
-            const pos = selection.value[s.id] ?? 1;
-            const opt = s.options[pos - 1];
-            const p = product(opt?.product_id);
-            const img = house.thumb ? house.thumb(pos) : optionImage(s.id, pos);
-            return (
-              <li key={s.id} class="card slot-item">
-                {img ? <img class="thumb" src={img} alt="" loading="lazy" width={64} height={64} /> : <span class="thumb" aria-hidden="true" />}
-                <div class="meta">
-                  <strong>{s.name_he}</strong>
-                  <span class="small">
-                    {p ? (
-                      <a href={shopPath(p.id)}>{p.name_he}</a>
-                    ) : (
-                      <span class="muted">{opt && !opt.placeholder ? opt.label_he : `וריאציה ${pos} · ממתינה למוצר`}</span>
-                    )}
-                  </span>
-                  <span class="row">
-                    {p ? <Price agorot={p.price_agorot} provisional={p.price_provisional} /> : null}
-                    {s.on_hold || (p && p.availability.status !== 'available') ? <span class="small muted">המלאי אינו זמין כעת</span> : null}
-                    <a class="link-btn" href={`/rooms/${room.id}/?${house === nordic ? '' : `style=${house.style}&`}slot=${s.id}`}>
-                      החלפה
-                      <span class="sr-only">
-                        {' '}
-                        של {s.name_he} ({s.options.length} וריאציות)
-                      </span>
-                    </a>
-                  </span>
-                </div>
-              </li>
-            );
-          })}
-        </ul>
+        {pending ? null : (
+          <ul class="slot-list">
+            {room.slots.map((s) => {
+              const pos = selection.value[s.id] ?? 1;
+              const opt = s.options[pos - 1];
+              const p = product(opt?.product_id);
+              const img = house.thumb ? house.thumb(pos) : optionImage(s.id, pos);
+              return (
+                <li key={s.id} class="card slot-item">
+                  {img ? <img class="thumb" src={img} alt="" loading="lazy" width={64} height={64} /> : <span class="thumb" aria-hidden="true" />}
+                  <div class="meta">
+                    <strong>{s.name_he}</strong>
+                    <span class="small">
+                      {p ? (
+                        <a href={shopPath(p.id)}>{p.name_he}</a>
+                      ) : (
+                        <span class="muted">{opt && !opt.placeholder ? opt.label_he : `וריאציה ${pos} · ממתינה למוצר`}</span>
+                      )}
+                    </span>
+                    <span class="row">
+                      {p ? <Price agorot={p.price_agorot} provisional={p.price_provisional} /> : null}
+                      {s.on_hold || (p && p.availability.status !== 'available') ? <span class="small muted">המלאי אינו זמין כעת</span> : null}
+                      <a class="link-btn" href={`/rooms/${room.id}/?${house === nordic ? '' : `style=${house.style}&`}slot=${s.id}`}>
+                        החלפה
+                        <span class="sr-only">
+                          {' '}
+                          של {s.name_he} ({s.options.length} וריאציות)
+                        </span>
+                      </a>
+                    </span>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        )}
       </section>
     </>
   );

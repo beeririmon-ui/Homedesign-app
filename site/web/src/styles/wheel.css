@@ -256,9 +256,18 @@
 .set-item .pack-picker {
   flex-basis: 100%;
 }
-/* S12, QA ת22: on a phone the dialog scrolls as a whole and the set's list shows every piece (no scroller inside it,
-   where the fourth piece hid); the wheel keeps its own height above the list */
-@media (max-width: 600px) {
+/* S12, QA ת22: every piece of a set shows whole. On a wide screen the pieces sit two by two (four pieces in two rows,
+   under the list's cap); on a narrower one the dialog scrolls as a whole and the list shows every piece (no scroller
+   inside it, where the fourth piece hid), the wheel keeping its own height above the list */
+@media (min-width: 900px) {
+  .set-items {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--s-4);
+    max-width: 960px;
+    margin-inline: auto;
+  }
+}
+@media (max-width: 899px) {
   .picker {
     overflow-y: auto;
     overscroll-behavior: contain;

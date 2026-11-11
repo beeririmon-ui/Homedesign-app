@@ -252,7 +252,8 @@ test.describe('store', () => {
     await expect(page.locator('.order-steps [aria-current="step"]')).toHaveText(/התקבלה|בהכנה/, { timeout: 20_000 });
     // S8, §9.5 "החדר שלך": the room with what was ordered, drawn from the room's own layers
     await expect(page.locator('.your-room .your-room-layer').first()).toBeVisible();
-    await expect(page.locator('.your-room figcaption')).toContainText('כפי שהרכבת אותו');
+    // S12 ת21: the house it was bought in (the Nordic room), and what was ordered, in the shade ordered
+    await expect(page.locator('figure.your-room[data-house="nordic"] figcaption')).toContainText('מה שהזמנת, בגוון שהזמנת');
     await expect(page.locator('body')).not.toContainText('הועברה לספק');
   });
 
