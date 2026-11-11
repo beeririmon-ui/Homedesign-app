@@ -1,0 +1,338 @@
+{
+ "date": "2026-11-11",
+ "author": "render-agent",
+ "tokens": 0,
+ "note": "0-token code fixes on the pass cuts; the raw cuts are kept as <name>-cut.png",
+ "framed-art-v2": {
+  "fix": "the default's walnut frames in the moulding band (scene brief section 3; PR1)",
+  "band_px": 35966,
+  "print_px": 139321,
+  "seam_px_refilled_from_the_print": 5375,
+  "render_frame_colour_lab": [
+   65.0,
+   7.6,
+   18.7
+  ],
+  "default_frame_colour_lab": [
+   36.4,
+   14.4,
+   17.4
+  ],
+  "blacks": {
+   "fix": "framed-art-v2: the prints' black reads L* 11 in the room; the scene brief (section 3) measures it as espresso-black, L* 12-22. The     print's dark tones (L* < 35 in the layer) are lifted by a smooth toe (full at L* 5, none at 35), L* only, to a graded median of 15",
+   "before_black_L": [
+    10.69,
+    47641
+   ],
+   "after_black_L": [
+    15.02,
+    47641
+   ],
+   "lift_at_L5": 7.588,
+   "iterations": [
+    {
+     "it": 0,
+     "lift": 4.0,
+     "black_L": 13.19
+    },
+    {
+     "it": 1,
+     "lift": 6.172,
+     "black_L": 14.17
+    },
+    {
+     "it": 2,
+     "lift": 7.168,
+     "black_L": 14.65
+    },
+    {
+     "it": 3,
+     "lift": 7.588,
+     "black_L": 15.02
+    }
+   ]
+  }
+ },
+ "accent-sconces-v2": {
+  "fix": "size: a block over 3 % taller than its clay box shrunk about its centre (extract.scale_fix's way)",
+  "pieces": {
+   "left": {
+    "cut_box": [
+     1408,
+     542,
+     1446,
+     604
+    ],
+    "clay_box": [
+     1413,
+     542,
+     1450,
+     603
+    ],
+    "height_ratio": 1.0164,
+    "scaled": false
+   },
+   "right": {
+    "cut_box": [
+     2260,
+     487,
+     2309,
+     566
+    ],
+    "clay_box": [
+     2258,
+     492,
+     2302,
+     567
+    ],
+    "height_ratio": 1.0533,
+    "scaled": true,
+    "factor": 0.9494,
+    "anchor_px": [
+     2284.5,
+     526.5
+    ]
+   }
+  }
+ },
+ "curtains-v2": {
+  "fix": "the designer's pre-approved colour fix (section 3, 'on the variants') + the post line, as on the default",
+  "photo": {
+   "files": "curtains2/img4.jpg, img1.jpg (scratchpad)",
+   "L": 87.2,
+   "C": 6.48,
+   "h": 92.8
+  },
+  "dh_deg": 8.04,
+  "k": 0.6475,
+  "iterations": [
+   {
+    "it": 0,
+    "dh": 7.63,
+    "k": 0.7271,
+    "h": 89.59,
+    "C": 6.52,
+    "C_p95": 12.15,
+    "L": 79.67
+   },
+   {
+    "it": 1,
+    "dh": 8.04,
+    "k": 0.7248,
+    "h": 89.86,
+    "C": 6.5,
+    "C_p95": 12.09,
+    "L": 79.67
+   },
+   {
+    "it": "p95-0",
+    "dh": 8.04,
+    "k": 0.6475,
+    "h": 90.0,
+    "C": 5.75,
+    "C_p95": 10.83,
+    "L": 79.66
+   }
+  ],
+  "before": {
+   "L": 79.82,
+   "a": 1.19,
+   "b": 8.86,
+   "C": 8.94,
+   "h": 82.37,
+   "C_px_median": 9.07,
+   "C_px_p95": 16.67,
+   "highpass_std": 2.183,
+   "plaster_ring": {
+    "L": 86.38,
+    "C": 5.58,
+    "h": 78.69
+   },
+   "px": 309363
+  },
+  "after": {
+   "L": 79.66,
+   "a": 0.0,
+   "b": 5.75,
+   "C": 5.75,
+   "h": 90.0,
+   "C_px_median": 5.83,
+   "C_px_p95": 10.83,
+   "highpass_std": 2.186,
+   "plaster_ring": {
+    "L": 86.35,
+    "C": 5.16,
+    "h": 83.74
+   },
+   "px": 309363
+  },
+  "targets": {
+   "L* median within +-0.5": {
+    "value": -0.16,
+    "pass_": true
+   },
+   "high-pass within +-5 %": {
+    "value": 0.001,
+    "pass_": true
+   },
+   "median h 85-95": {
+    "value": 90.0,
+    "pass_": true
+   },
+   "median C* 5.5-7.5": {
+    "value": 5.75,
+    "pass_": true
+   },
+   "p95 C* <= 11": {
+    "value": 10.83,
+    "pass_": true
+   },
+   ">= plaster + 0.5": {
+    "value": 0.59,
+    "pass_": true
+   }
+  },
+  "all_met": true,
+  "post_line_fringe_px": 2089
+ },
+ "pendant-v2": {
+  "fix": "the lantern's alpha snapped from the placeholder's silhouette (GrabCut lost ~22 % of the white lantern on the white wall)",
+  "lantern_top_row": 198,
+  "placeholder_covered_before": 0.797,
+  "placeholder_covered_after": 0.993,
+  "alpha_px": 32073,
+  "cord_sleeve_replaced_by_the_cord": {
+   "rows": [
+    88,
+    201
+   ],
+   "cols": [
+    1670,
+    1683
+   ],
+   "px": 220
+  }
+ },
+ "planter": {
+  "fix": "size: the pot scaled to the card's clay box about its own base (not moved); the tree carried down with the rim, not scaled",
+  "before": {
+   "rim_row": 1029,
+   "bottom_row": 1193,
+   "belly_px": 158,
+   "belly_row": 1115,
+   "axis_x": 1029.0,
+   "cm": {
+    "belly": 45.7,
+    "height": 40.2
+   }
+  },
+  "clay_box": {
+   "left": 958.1843219569961,
+   "right": 1103.48239702249,
+   "top": 1044.1795666695323,
+   "bottom": 1189.9883189191928
+  },
+  "scale": [
+   0.9196,
+   0.8837
+  ],
+  "anchor_px": [
+   1029.0,
+   1194.0
+  ],
+  "tree_shift_px": 20,
+  "after": {
+   "rim_row": 1049,
+   "bottom_row": 1193,
+   "belly_px": 146,
+   "cm": {
+    "belly": 42.2,
+    "height": 35.3
+   }
+  }
+ },
+ "accent-sconces-v3": {
+  "fix": "size: a piece over 3 % larger than its clay box shrunk about its centre (extract.scale_fix's way); v3: the card has no dimensions, the clay box is the SKU photo's proportions inside the slot envelope",
+  "pieces": {
+   "left": {
+    "cut_box": [
+     1400,
+     543,
+     1468,
+     610
+    ],
+    "clay_box": [
+     1399,
+     543,
+     1458,
+     598
+    ],
+    "height_ratio": 1.2182,
+    "scaled": true,
+    "factor": 0.8209,
+    "anchor_px": [
+     1434.0,
+     576.5
+    ]
+   },
+   "right": {
+    "cut_box": [
+     2241,
+     491,
+     2326,
+     574
+    ],
+    "clay_box": [
+     2241,
+     493,
+     2315,
+     562
+    ],
+    "height_ratio": 1.2029,
+    "scaled": true,
+    "factor": 0.8313,
+    "anchor_px": [
+     2283.5,
+     532.5
+    ]
+   }
+  }
+ },
+ "vase": {
+  "fix": "the default vase (4'): the model drew it cream (lit half C* 13.7, h 80, against the surfaces beside it C 4.2, h 85), against the     designer's targets (section 2: off-white like the card #EEECE8, C* median 4-7 on the lit half, hue within 10 deg of the surface beside,     not above C 7): a*b* only, one hue rotation and one chroma factor for every pixel, L* unchanged (fix_r5's method); the branch (a filler)     keeps its colour",
+  "beside": {
+   "C": 4.16,
+   "h": 84.83
+  },
+  "before": {
+   "L": 78.44,
+   "C": 16.29,
+   "h": 78.49
+  },
+  "after": {
+   "L": 78.27,
+   "C": 5.49,
+   "h": 84.94
+  },
+  "dh_deg": 6.335,
+  "k": 0.3376,
+  "iterations": [
+   {
+    "it": 0,
+    "dh": 6.34,
+    "k": 0.3376,
+    "L": 78.27,
+    "C": 5.49,
+    "h": 84.94
+   }
+  ],
+  "targets": {
+   "C* median 4-7 on the lit half": true,
+   "hue within 10 deg of the surface beside": true,
+   "not above C 7": true,
+   "L* unchanged (+-0.5)": true
+  },
+  "all_met": true,
+  "card": "#EEECE8"
+ }
+}

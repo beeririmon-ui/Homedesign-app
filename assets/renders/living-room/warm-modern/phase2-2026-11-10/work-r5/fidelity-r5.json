@@ -1,0 +1,296 @@
+{
+ "vase": {
+  "card": "#EEECE8",
+  "card_lab": {
+   "L": 93.3,
+   "C": 2.16,
+   "h": 90.4
+  },
+  "lit_half": {
+   "L": 82.7,
+   "a": 0.53,
+   "b": 5.56,
+   "C": 5.59,
+   "h": 84.5,
+   "C_px_p95": 26.02,
+   "px": 3151
+  },
+  "beside_ring_off_glass_and_bronze": {
+   "L": 92.3,
+   "a": 0.38,
+   "b": 4.14,
+   "C": 4.16,
+   "h": 84.8,
+   "C_px_p95": 10.09,
+   "px": 16610
+  },
+  "targets": {
+   "C* median 4-7 on the lit half": {
+    "value": 5.59,
+    "pass_": true
+   },
+   "hue within +-10 deg of the surface beside": {
+    "value": -0.3,
+    "pass_": true
+   },
+   "not above C 7 (QA's plaster)": {
+    "value": 5.59,
+    "pass_": true
+   }
+  },
+  "size_place": "15.9 x ~31.5 cm; seat on the clay point within 1 px (jobs-r5.json vase_landing_check)"
+ },
+ "curtains": {
+  "r5_scene": {
+   "L": 55.65,
+   "a": 0.0,
+   "b": 6.53,
+   "C": 6.53,
+   "h": 90.0,
+   "C_px_median": 6.61,
+   "C_px_p95": 9.5,
+   "highpass_std": 3.478,
+   "plaster_ring": {
+    "L": 88.33,
+    "C": 4.01,
+    "h": 85.09
+   },
+   "px": 306080
+  },
+  "photo": {
+   "L": 86.9,
+   "C": 6.5,
+   "h": 93.0
+  }
+ },
+ "magazine-holder rods": {
+  "fix_record": {
+   "before": {
+    "L_median": 14.91,
+    "L_p90": 72.11,
+    "L_p10": 13.28,
+    "C_median": 2.01
+   },
+   "after": {
+    "L_median": 55.99,
+    "L_p90": 86.47,
+    "L_p10": 39.33,
+    "C_median": 2.57
+   },
+   "px": 2233
+  },
+  "photo": {
+   "L_median": 56.0,
+   "C": 2.5,
+   "h_deg": 54.0,
+   "source": "the Orange SKU photo, 66 columns across the free rod spans (scratchpad)"
+  }
+ },
+ "floor-lamp wisp (QA's measure)": {
+  "wisp_px": 90,
+  "dL_p50_p95_max": [
+   6.1,
+   7.17,
+   7.87
+  ],
+  "alpha_p50_max": [
+   255,
+   255
+  ]
+ },
+ "planter": {
+  "card": "#BDB6A8",
+  "card_lab": {
+   "L": 74.2,
+   "C": 7.98,
+   "h": 89.7
+  },
+  "pot": {
+   "L": 66.5,
+   "a": 7.69,
+   "b": 21.91,
+   "C": 23.22,
+   "h": 70.7,
+   "C_px_p95": 33.0,
+   "px": 16551
+  },
+  "wall_and_floor_beside": {
+   "L": 65.1,
+   "a": 3.0,
+   "b": 13.31,
+   "C": 13.65,
+   "h": 77.3,
+   "C_px_p95": 17.02,
+   "px": 14229
+  },
+  "targets": {
+   "C* median <= 6": {
+    "value": 23.22,
+    "pass_": false
+   },
+   "darker than the plaster beside (not cream)": {
+    "value": 1.4,
+    "pass_": false
+   }
+  },
+  "size_cm": {
+   "belly": 42.2,
+   "height": 35.3
+  },
+  "shape": "the card's opening narrower than the belly with a rounded shoulder, vertical ribs on the upper half, a smooth speckled band below with a curved boundary (the render); size fixed in code (post-r5.json)"
+ },
+ "curtains-v2": {
+  "card": "curtains-aliexpress-linen-blend-s-fold-180502",
+  "all": {
+   "L": 77.8,
+   "a": 0.06,
+   "b": 6.17,
+   "C": 6.17,
+   "h": 89.4,
+   "C_px_p95": 11.34,
+   "px": 353682
+  },
+  "qa_mask": {
+   "L": 79.75,
+   "a": 0.0,
+   "b": 5.88,
+   "C": 5.88,
+   "h": 90.0,
+   "C_px_median": 5.93,
+   "C_px_p95": 10.86,
+   "highpass_std": 2.182,
+   "plaster_ring": {
+    "L": 86.36,
+    "C": 5.16,
+    "h": 83.74
+   },
+   "px": 309363
+  },
+  "photo": {
+   "L": 87.2,
+   "C": 6.48,
+   "h": 92.8
+  }
+ },
+ "framed-art-v2": {
+  "card": "framed-art-aliexpress-modern-minimalist-neutral-gallery-802995",
+  "all": {
+   "L": 64.8,
+   "a": 0.61,
+   "b": 8.02,
+   "C": 8.04,
+   "h": 85.7,
+   "C_px_p95": 19.09,
+   "px": 148363
+  },
+  "black_shapes": {
+   "L": 15.0,
+   "a": 0.08,
+   "b": 0.34,
+   "C": 0.35,
+   "h": 77.2,
+   "C_px_p95": 25.72,
+   "px": 52983,
+   "target": "espresso-black L* 12-22 (scene brief)",
+   "pass_": true
+  },
+  "frames": "the default's walnut frames (post-r5.json): the same frame in every variant"
+ },
+ "accent-sconces-v2": {
+  "card": "accent-sconces-cj-travertine-block-updown-8x16",
+  "all": {
+   "L": 78.2,
+   "a": 4.52,
+   "b": 17.56,
+   "C": 18.14,
+   "h": 75.6,
+   "C_px_p95": 30.49,
+   "px": 3974
+  },
+  "stone": {
+   "L": 78.2,
+   "a": 4.5,
+   "b": 17.52,
+   "C": 18.08,
+   "h": 75.6,
+   "C_px_p95": 30.38,
+   "px": 3955
+  },
+  "card_lab": {
+   "L": 80.0,
+   "C": 20.15,
+   "h": 79.0
+  },
+  "size": "8 x 16 (+ the side face seen); the right block x0.95 to the card in code"
+ },
+ "accent-sconces-v3": {
+  "card": "accent-sconces-cj-ribbed-travertine-half-cylinder-wood-bracket",
+  "all": {
+   "L": 66.0,
+   "a": 3.59,
+   "b": 17.84,
+   "C": 18.2,
+   "h": 78.6,
+   "C_px_p95": 38.71,
+   "px": 5289
+  },
+  "stone": {
+   "L": 77.7,
+   "a": 2.69,
+   "b": 16.08,
+   "C": 16.3,
+   "h": 80.5,
+   "C_px_p95": 32.95,
+   "px": 3850
+  },
+  "card_lab": {
+   "L": 85.7,
+   "C": 13.11,
+   "h": 85.2
+  },
+  "size": "the card has NO dimensions: scaled x0.82-0.83 in code to the clay from the SKU photo's proportions inside the slot envelope"
+ },
+ "vase-v2": {
+  "card": "vase-cj-charcoal-carved",
+  "all": {
+   "L": 18.7,
+   "a": 2.67,
+   "b": 5.98,
+   "C": 6.55,
+   "h": 65.9,
+   "C_px_p95": 19.53,
+   "px": 10538
+  },
+  "card_lab": {
+   "L": 24.4,
+   "C": 1.41,
+   "h": 89.4
+  },
+  "size_place": "W ~23.3 x H 32 cm (card: about 22 x 32); foot centre 672.5 against the point's 672.4; seat row ~1064 against its clay foot edge 1063.8"
+ },
+ "pendant-v2": {
+  "card": "pendant-cj-pleated-pumpkin-lantern-40",
+  "all": {
+   "L": 71.0,
+   "a": 1.25,
+   "b": 7.44,
+   "C": 7.54,
+   "h": 80.5,
+   "C_px_p95": 12.39,
+   "px": 28307
+  },
+  "card_lab": {
+   "L": 93.4,
+   "C": 4.94,
+   "h": 88.4
+  },
+  "size_place": {
+   "lantern_width_px": 243,
+   "card_40cm_px": 235.6,
+   "width_cm": 41.2,
+   "bottom_row": 359,
+   "Z190_row": 353.9
+  },
+  "notes": "faint horizontal banding on the paper (partial against the card's smooth pleats); the model's wood sleeve on the cord replaced by the cord in code"
+ }
+}

@@ -31,7 +31,7 @@
     "total_tokens": 650
    },
    "idempotency_key": "wm-ph2-variants-p4-20261111",
-   "status": "submitted, charged",
+   "status": "fetched, cut, post-fixed in code, graded and cut by grade_cut_r5.py; verify_layers_r5.py",
    "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/fd58e1a7-bdfd-47f7-b17d-b25011f51fc8.png",
    "image_url_local": "assets/renders/living-room/warm-modern/phase2-2026-11-10/inputs/p4-input.png",
    "image_sha256": "41bb524dda10c2a5db2997893615ca8f535923bb1767baed8e842b37bef757a0",
@@ -104,8 +104,336 @@
    "tokens": 650,
    "placeholder_id": "421a4cbe-3f86-4af5-bbdd-2e442137b3bc",
    "task_id": "2becf4c33481dcc8a3c992dcb0df4782",
-   "batch_id": "d290be4d-5eb1-4fae-92d2-c23d3474b434"
+   "batch_id": "d290be4d-5eb1-4fae-92d2-c23d3474b434",
+   "fetch": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r5/p4-fetch.json",
+   "vase_landing_check": {
+    "rule": "the designer section 2: the base lands on the clay point within 1 px before 5'",
+    "seat_row": {
+     "placeholder": 1061.5,
+     "render": 1062,
+     "how": "the darkest row of the contact line under the foot, columns 664-684 (median)"
+    },
+    "body_centre_x": {
+     "placeholder": 673.25,
+     "render": 674.0,
+     "clay_point": 672.44
+    },
+    "alpha_bottom_rows": {
+     "placeholder": 1063,
+     "render": 1067,
+     "note": "the cut's alpha holds the contact line and 2-4 px of its soft shadow under the foot"
+    },
+    "size_cm": {
+     "width": 15.9,
+     "height_at_the_rim": "~31.5 (the rim at rows ~935-937; vase_measure read 36.3 off the branches)"
+    },
+    "verdict": "PASS: seat +0.5 px, centre +0.75 px"
+   },
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-2becf4c33481dcc8a3c992dcb0df4782-0-1794437950090-af7fcb23.png",
+   "raw": "assets/renders/living-room/warm-modern/phase2-2026-11-10/raw/p4-r5-seedream.png",
+   "returned_px": [
+    2720,
+    1530
+   ],
+   "register_to_input": [
+    [
+     0.9991999864578247,
+     -0.0003000000142492354,
+     1.4434000253677368
+    ],
+    [
+     -0.00019999999494757503,
+     0.9945999979972839,
+     4.679599761962891
+    ]
+   ],
+   "tone_gain_median": [
+    1.0973,
+    1.101,
+    1.0833
+   ],
+   "model_drift_outside_zones_L": {
+    "raw_median": 4.63,
+    "raw_p95": 14.6,
+    "after_tone_match_median": 1.27,
+    "note": "the model's redraw outside the products; discarded (the scene below is kept)"
+   },
+   "products_cut": {
+    "vase": {
+     "alpha_px": 10443,
+     "box_px": [
+      627,
+      868,
+      714,
+      1068
+     ],
+     "placeholder_covered": 0.941,
+     "outside_placeholder_px": 133,
+     "model_change_vs_placeholder_dE": {
+      "median": 5.49,
+      "p90": 13.85
+     }
+    },
+    "curtains-v2": {
+     "alpha_px": 362395,
+     "box_px": [
+      0,
+      0,
+      271,
+      1530
+     ],
+     "placeholder_covered": 0.996,
+     "outside_placeholder_px": 2922,
+     "model_change_vs_placeholder_dE": {
+      "median": 17.76,
+      "p90": 28.4
+     }
+    },
+    "framed-art-v2": {
+     "alpha_px": 165974,
+     "box_px": [
+      1512,
+      502,
+      2164,
+      795
+     ],
+     "placeholder_covered": 0.999,
+     "outside_placeholder_px": 0,
+     "model_change_vs_placeholder_dE": {
+      "median": 22.25,
+      "p90": 81.66
+     }
+    },
+    "accent-sconces-v2": {
+     "alpha_px": 6008,
+     "box_px": [
+      1408,
+      487,
+      2309,
+      604
+     ],
+     "placeholder_covered": 0.926,
+     "outside_placeholder_px": 606,
+     "model_change_vs_placeholder_dE": {
+      "median": 10.87,
+      "p90": 18.04
+     }
+    }
+   },
+   "post_fixes": {
+    "framed-art-v2": "the default's walnut frames in the moulding band (scene brief section 3; PR1)",
+    "accent-sconces-v2": "size: a block over 3 % taller than its clay box shrunk about its centre (extract.scale_fix's way)",
+    "curtains-v2": "the designer's pre-approved colour fix (section 3, 'on the variants') + the post line, as on the default",
+    "vase": "the default vase (4'): the model drew it cream (lit half C* 13.7, h 80, against the surfaces beside it C 4.2, h 85), against the     designer's targets (section 2: off-white like the card #EEECE8, C* median 4-7 on the lit half, hue within 10 deg of the surface beside,     not above C 7): a*b* only, one hue rotation and one chroma factor for every pixel, L* unchanged (fix_r5's method); the branch (a filler)     keeps its colour"
+   }
+  },
+  {
+   "id": "wm-ph2-variants-p5",
+   "pass_": "5'",
+   "slots": [
+    "planter (default, whole)",
+    "vase v2",
+    "accent-sconces v3",
+    "pendant v2"
+   ],
+   "model": "seedream-5-pro i2i 2K",
+   "aspect_ratio": "auto",
+   "resolution": "2K",
+   "type": "image-to-image",
+   "estimate": 650,
+   "estimate_call": {
+    "tool": "var2_estimate_cost",
+    "model_id": "seedream-5-pro",
+    "type": "image-to-image",
+    "params": {
+     "resolution": "2K",
+     "aspect_ratio": "auto",
+     "image_refs": 4
+    },
+    "total_tokens": 650
+   },
+   "idempotency_key": "wm-ph2-variants-p5-20261111",
+   "status": "fetched, cut, post-fixed in code, graded and cut by grade_cut_r5.py; verify_layers_r5.py",
+   "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/6ea3c7de-4544-4195-8540-88aa4d617084.png",
+   "image_url_local": "assets/renders/living-room/warm-modern/phase2-2026-11-10/inputs/p5-input.png",
+   "image_sha256": "ef664d68dad41a1ace95736639aea768e22d3c5cbef894a3ba5407d5fabbdd36",
+   "image_upload_verified": "GET of the public URL returned the same sha256",
+   "input_record": "assets/renders/living-room/warm-modern/phase2-2026-11-10/inputs/p5-input.json",
+   "prompt": "assets/prompts/warm-modern-phase2-2026-11-10/variants-p5.txt",
+   "prompt_chars": 2651,
+   "refs": [
+    {
+     "n": 1,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/61eb456a-1b6b-4843-afff-2dba3d9f6418.png",
+     "card": "planter-cj-cement-ribbed-belly",
+     "sku": "CJJT154204209IR",
+     "what": "SKU beige large 42 x 35.5",
+     "source_image": "planter/sku.jpg",
+     "crop": [
+      0.13,
+      0.18,
+      0.8,
+      0.8
+     ],
+     "note": "the R1-R3 crop, already in var2"
+    },
+    {
+     "n": 2,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/f2bf460e-cecf-4a6e-9992-27d9ff6dff4f.png",
+     "card": "vase-cj-charcoal-carved",
+     "sku": "CJJT276474102BY",
+     "what": "SKU Style B: H ~32, W ~22, mouth ~13, carved charcoal (the text above cropped out)",
+     "source_image": "vase2/sku.jpeg",
+     "crop": [
+      0.4,
+      0.3,
+      0.98,
+      0.88
+     ],
+     "note": "r5 crop (scratchpad/r5/refs, var2 only, never in the repo)"
+    },
+    {
+     "n": 3,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/9fdccacd-341b-4c29-9715-81eeaf9667c2.png",
+     "card": "accent-sconces-cj-ribbed-travertine-half-cylinder-wood-bracket",
+     "sku": "CJYD320857702BY",
+     "what": "SKU type B: the ribbed travertine half-cylinder on its wood bracket",
+     "source_image": "sconce3/sku.jpg",
+     "crop": [
+      0.26,
+      0.1,
+      0.82,
+      0.62
+     ],
+     "note": "r5 crop (scratchpad/r5/refs, var2 only, never in the repo)"
+    },
+    {
+     "n": 4,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/b5cf5ac9-405a-465c-a989-98897720b6bf.png",
+     "card": "pendant-cj-pleated-pumpkin-lantern-40",
+     "sku": "CJYD272646801AZ",
+     "what": "the 40 cm pleated lantern hanging (Model A, D40 x H25); the room around cropped",
+     "source_image": "pendant2/img5.jpeg",
+     "crop": [
+      0.18,
+      0.0,
+      0.82,
+      0.72
+     ],
+     "note": "r5 crop (scratchpad/r5/refs, var2 only, never in the repo)"
+    }
+   ],
+   "tokens": 650,
+   "placeholder_id": "8d3b9432-72a5-4036-93ed-8e7b769be6a5",
+   "task_id": "4aa16998f77a27153d0a8001dd5b4564",
+   "batch_id": "62b545a1-041b-4874-b0d4-50d48a78cbbb",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-4aa16998f77a27153d0a8001dd5b4564-0-1794438655710-daea24dd.png",
+   "raw": "assets/renders/living-room/warm-modern/phase2-2026-11-10/raw/p5-r5-seedream.png",
+   "returned_px": [
+    2720,
+    1530
+   ],
+   "register_to_input": [
+    [
+     0.9998000264167786,
+     -0.0003000000142492354,
+     0.7052000164985657
+    ],
+    [
+     -9.999999747378752e-05,
+     0.9987999796867371,
+     1.2554999589920044
+    ]
+   ],
+   "tone_gain_median": [
+    1.1123,
+    1.1147,
+    1.0971
+   ],
+   "model_drift_outside_zones_L": {
+    "raw_median": 3.51,
+    "raw_p95": 12.97,
+    "after_tone_match_median": 1.27,
+    "note": "the model's redraw outside the products; discarded (the scene below is kept)"
+   },
+   "fetch": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r5/p5-fetch.json",
+   "products_cut": {
+    "planter": {
+     "alpha_px": 46355,
+     "box_px": [
+      950,
+      754,
+      1134,
+      1194
+     ],
+     "placeholder_covered": 0.98,
+     "outside_placeholder_px": 2475,
+     "model_change_vs_placeholder_dE": {
+      "median": 11.3,
+      "p90": 25.75
+     }
+    },
+    "vase-v2": {
+     "alpha_px": 13320,
+     "box_px": [
+      622,
+      867,
+      719,
+      1068
+     ],
+     "placeholder_covered": 0.974,
+     "outside_placeholder_px": 660,
+     "model_change_vs_placeholder_dE": {
+      "median": 9.02,
+      "p90": 24.35
+     }
+    },
+    "accent-sconces-v3": {
+     "alpha_px": 10370,
+     "box_px": [
+      1400,
+      491,
+      2326,
+      610
+     ],
+     "placeholder_covered": 0.992,
+     "outside_placeholder_px": 2823,
+     "model_change_vs_placeholder_dE": {
+      "median": 19.77,
+      "p90": 33.83
+     }
+    },
+    "pendant-v2": {
+     "alpha_px": 26349,
+     "box_px": [
+      1567,
+      9,
+      1797,
+      360
+     ],
+     "placeholder_covered": 0.777,
+     "outside_placeholder_px": 28,
+     "model_change_vs_placeholder_dE": {
+      "median": 5.34,
+      "p90": 9.2
+     }
+    }
+   },
+   "post_fixes": {
+    "pendant-v2": "the lantern's alpha snapped from the placeholder's silhouette (GrabCut lost ~22 % of the white lantern on the white wall)",
+    "planter": "size: the pot scaled to the card's clay box about its own base (not moved); the tree carried down with the rim, not scaled",
+    "accent-sconces-v3": "size: a piece over 3 % larger than its clay box shrunk about its centre (extract.scale_fix's way); v3: the card has no dimensions, the clay box is the SKU photo's proportions inside the slot envelope"
+   },
+   "vase_v2_landing": {
+    "foot_centre_x": 672.5,
+    "clay_point_x": 672.44,
+    "seat_row_median": 1064,
+    "clay_foot_near_edge": 1063.8,
+    "verdict": "PASS"
+   }
   }
  ],
- "tokens_total": 650
+ "tokens_total": 1300,
+ "phase2_tokens_total": 5850,
+ "third_pass": "none (the brief: no third pass)"
 }
