@@ -1,6 +1,6 @@
 import type { Env } from '../../env';
 import { providerOf } from '../config';
-import type { SupplierClient, SupplierOrderInput } from './types';
+import { SupplierRefused, type SupplierClient, type SupplierOrderInput } from './types';
 
 /**
  * Development and preview: records the order without calling a supplier.
@@ -52,14 +52,16 @@ export function cjSupplier(apiKey: string | undefined, fetcher: Fetch = (u, i) =
       return cached.token;
     },
     async submitOrder(input: SupplierOrderInput) {
-      if (!apiKey) throw new Error('CJ_API_KEY is not set');
+      // S16 (ת35): each of these refuses before any call: nothing reaches CJ
+      if (!apiKey) throw new SupplierRefused('cj_api_key_missing', 'CJ_API_KEY is not set');
       const noSku = input.lines.filter((l) => !l.supplier_sku);
-      if (noSku.length) throw new Error(`cj_line_without_sku: ${noSku.map((l) => l.product_id).join(', ')}`);
+      if (noSku.length) throw new SupplierRefused('cj_line_without_sku', `cj_line_without_sku: ${noSku.map((l) => l.product_id).join(', ')}`);
       // the create-order call is not in the repo's documentation: never guessed with a paid order
-      throw new Error('cj_order_api_docs_needed');
+      throw new SupplierRefused('cj_order_api_docs_needed');
     },
     // S13: the cancel and tracking calls are not in the repo's documentation either: absent, so the admin says that a
-    // person cancels at the supplier, and the cron asks nothing (docs/ops/deploy-runbook.md, "CJ")
+    // person cancels at the supplier, and the cron asks nothing (docs/ops/deploy-runbook.md, "CJ"). S16 (ת35): nor is a
+    // query by our order number (`findOrder`): a shipment that may be at CJ is checked there by a person.
   };
   return self;
 }

@@ -22,12 +22,32 @@ export type SupplierUpdate = {
 /** S13: the supplier's answer to a cancellation request. `requested`: it will answer later (a SupplierUpdate). */
 export type SupplierCancelOutcome = { outcome: 'canceled' | 'requested' | 'refused'; raw?: unknown };
 
+/**
+ * S16, QA ת35: the supplier refused the order, or the adapter refused before calling it (no key, no documentation, a line
+ * without a SKU): nothing was created at the supplier. Any other failure (a timeout, a network or server error) may have
+ * created the order, and the shipment then counts as sent until the supplier (or a person) says otherwise.
+ */
+export class SupplierRefused extends Error {
+  constructor(
+    public readonly code: string,
+    message: string = code,
+  ) {
+    super(message);
+    this.name = 'SupplierRefused';
+  }
+}
+
 export interface SupplierClient {
   readonly id: string;
   /** S14 (ת31): `signal` fires at the call's deadline; a client that calls out passes it to fetch */
   submitOrder(input: SupplierOrderInput, opts?: { signal?: AbortSignal }): Promise<{ supplier_order_id: string; raw: unknown }>;
   /** S13: asks the supplier to cancel an order it has; absent when the supplier has no such call (a person does it) */
   cancelOrder?(supplierOrderId: string): Promise<SupplierCancelOutcome>;
+  /**
+   * S16 (ת35): the supplier's order for our order number, null when it holds none; absent when the supplier cannot be
+   * asked (a person checks at the supplier instead). `signal` fires at the call's deadline.
+   */
+  findOrder?(ourOrderId: string, opts?: { signal?: AbortSignal }): Promise<{ supplier_order_id: string } | null>;
   /** S13: the supplier's current state of an order (polled by the cron); null when there is no news */
   tracking?(supplierOrderId: string): Promise<SupplierUpdate | null>;
 }

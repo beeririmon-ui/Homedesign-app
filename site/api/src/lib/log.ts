@@ -43,9 +43,39 @@ export function redact(value: unknown, depth = 0): unknown {
   return String(value);
 }
 
+/**
+ * S16, QA ת38: an exception's text may quote a customer's values (a name or an address inside a library's message, a
+ * JSON parse error that shows a piece of its input). Before it is logged, beyond emails and phone numbers: anything in
+ * quotes, and every run of Hebrew letters (a name, a street, a city as the customer typed them) are masked. Our own
+ * messages and the runtime's are English and keep their meaning. A provider's error is never logged as text at all
+ * (`errorCode`): its full text stays in D1, behind Access.
+ */
+export function scrubMessage(s: string): string {
+  return scrub(s)
+    .replace(/"[^"\n]{0,400}"|“[^”\n]{0,400}”|'[^'\n]{0,400}'/g, '"[…]"')
+    .replace(/[\u0590-\u05FF\uFB1D-\uFB4F]+(?:[\s'"״׳-]+[\u0590-\u05FF\uFB1D-\uFB4F]+)*/g, '[he]');
+}
+
 function errorFields(err: unknown): Fields {
-  if (err instanceof Error) return { error_name: err.name, error_message: scrub(err.message.slice(0, 300)) };
-  return { error_message: scrub(String(err).slice(0, 300)) };
+  if (err instanceof Error) return { error_name: err.name, error_message: scrubMessage(err.message.slice(0, 300)) };
+  return { error_message: scrubMessage(String(err).slice(0, 300)) };
+}
+
+/**
+ * S16, QA ת38/ת39: a provider's error (the supplier, the invoice or payment provider) as a code, never its text: the
+ * error's own `code`, a timeout, an HTTP status, or the code our own errors start with ("cj_order_api_docs_needed",
+ * "set_composition_missing: …"); else the error's class name. The text stays in D1 (`last_error`), behind Access.
+ */
+export function errorCode(err: unknown): string {
+  if (!err || typeof err !== 'object') return 'unknown';
+  const e = err as { code?: unknown; status?: unknown; name?: unknown; message?: unknown };
+  if (typeof e.code === 'string' && /^[a-z][a-z0-9_.:-]{1,60}$/i.test(e.code)) return e.code;
+  if (e.name === 'CallTimedOut') return 'timeout';
+  if (e.name === 'AbortError' || e.name === 'TimeoutError') return 'aborted';
+  if (typeof e.status === 'number' && e.status >= 100 && e.status < 600) return `http_${e.status}`;
+  const own = typeof e.message === 'string' ? /^([a-z][a-z0-9_]{2,60})(?::|$)/.exec(e.message) : null;
+  if (own) return own[1]!;
+  return typeof e.name === 'string' && /^[A-Za-z]{1,40}$/.test(e.name) ? e.name : 'Error';
 }
 
 /** A short id a person can read out: "E-" and eight characters without look-alikes (no 0/O, 1/I/L). */

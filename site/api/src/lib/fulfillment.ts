@@ -15,7 +15,8 @@ import { nowIso } from './http';
 import { refuseLoudly } from './config';
 import { PROVIDER_CALL_TIMEOUT_MS, withDeadline } from './deadline';
 import { supplierClient, type SupplierChoice } from './suppliers';
-import type { SupplierClient, SupplierOrderInput } from './suppliers/types';
+import { SupplierRefused, type SupplierClient, type SupplierOrderInput } from './suppliers/types';
+import { errorCode, log } from './log';
 import { processCreditNoteJob, processInvoiceJob } from './invoices';
 import { processNotifyJob } from './notify';
 
@@ -93,10 +94,11 @@ export async function processSupplierJob(
   if (!choice.ok) {
     // ת17: no supplier runs; the paid order stays paid (never "sent"), the queued row says why, and the job is retried
     refuseLoudly('the supplier job', choice.reason, order.id);
+    // S16 (ת39): the run of failures starts here, for /healthz; nothing was sent, so the shipment's reach is unchanged
     await env.DB.prepare(
-      "UPDATE supplier_shipments SET last_error = ?, attempts = ?, updated_at = ? WHERE order_id = ? AND fulfillment_source = 'dropship_cj' AND status IN ('queued', 'failed')",
+      "UPDATE supplier_shipments SET last_error = ?, attempts = ?, failing_since = COALESCE(failing_since, ?), updated_at = ? WHERE order_id = ? AND fulfillment_source = 'dropship_cj' AND status IN ('queued', 'failed')",
     )
-      .bind(`config: ${choice.reason}`.slice(0, 500), attempt, now, order.id)
+      .bind(`config: ${choice.reason}`.slice(0, 500), attempt, now, now, order.id)
       .run();
     if (attempt >= 5)
       await env.DB.prepare("UPDATE orders SET status = 'supplier_error', updated_at = ? WHERE id = ? AND status = 'paid'").bind(now, order.id).run();
@@ -147,9 +149,16 @@ export async function processSupplierJob(
     .bind(order.id)
     .all<ItemRow>();
   try {
+    let lines: SupplierOrderInput['lines'];
+    try {
+      lines = supplierLines(items);
+    } catch (err) {
+      // a set without its composition (or with repeated parts) is refused here: nothing is sent to the supplier
+      throw new SupplierRefused(errorCode(err), err instanceof Error ? err.message : String(err));
+    }
     const input = {
       order_id: order.id,
-      lines: supplierLines(items),
+      lines,
       ship_to: { ...customer!, ...(JSON.parse(order.address_json) as { city: string; street: string; house: string; apartment: string; zip: string }) },
       shipping_method: order.shipping_method,
     };
@@ -158,7 +167,7 @@ export async function processSupplierJob(
     // recorded only by the run that holds the claim (`updated_at` is the claim's, this run's `now`)
     const [mine] = await env.DB.batch([
       env.DB.prepare(
-        `UPDATE supplier_shipments SET status = 'submitted', supplier_order_id = ?, attempts = ?, request_json = ?, response_json = ?, last_error = NULL, updated_at = ?
+        `UPDATE supplier_shipments SET status = 'submitted', supplier_order_id = ?, attempts = ?, request_json = ?, response_json = ?, last_error = NULL, failing_since = NULL, reach = 'none', updated_at = ?
          WHERE order_id = ? AND supplier = ? AND status = 'submitting' AND updated_at = ?`,
       ).bind(
         res.supplier_order_id,
@@ -189,12 +198,19 @@ export async function processSupplierJob(
     return 'submitted';
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
+    // S16, QA ת35: a refusal created nothing; any other failure (a timeout, a network or server error) may have created
+    // the order at the supplier, and the shipment counts as sent from now on (lib/cancel.ts) until the supplier is asked
+    const refused = err instanceof SupplierRefused;
     await env.DB.prepare(
-      "UPDATE supplier_shipments SET status = 'failed', attempts = ?, last_error = ?, updated_at = ? WHERE order_id = ? AND supplier = ? AND status = 'submitting' AND updated_at = ?",
+      `UPDATE supplier_shipments SET status = 'failed', attempts = ?, last_error = ?, failing_since = COALESCE(failing_since, ?),
+         reach = CASE WHEN ? = 1 THEN reach ELSE 'maybe' END, updated_at = ?
+       WHERE order_id = ? AND supplier = ? AND status = 'submitting' AND updated_at = ?`,
     )
-      .bind(attempt, msg.slice(0, 500), now, order.id, client.id, now)
+      .bind(attempt, msg.slice(0, 500), now, refused ? 1 : 0, now, order.id, client.id, now)
       .run();
-    if (attempt >= 5) await env.DB.prepare("UPDATE orders SET status = 'supplier_error', updated_at = ? WHERE id = ?").bind(now, order.id).run();
+    // S16, QA ת39/ת38: one row per failed send, by code only (the text, which may echo the buyer, stays in D1)
+    log.error('supplier.submit_failed', { order_id: order.id, supplier: client.id, attempt, code: errorCode(err), may_have_reached: !refused });
+    if (attempt >= 5) await env.DB.prepare("UPDATE orders SET status = 'supplier_error', updated_at = ? WHERE id = ? AND status = 'paid'").bind(now, order.id).run();
     return 'retry';
   }
 }

@@ -13,7 +13,7 @@ import { z } from 'zod';
 import { ORDER_ID } from '@hd/shared';
 import type { AppEnv } from '../env';
 import { HttpError, readJson } from '../lib/http';
-import { requireAdmin } from '../lib/access';
+import { adminSameOrigin, requireAdmin } from '../lib/access';
 import { economics } from '../lib/store';
 import { FILTERS, checkInvoice, listOrders, orderDetail } from '../lib/admin-orders';
 import { cancelOrder } from '../lib/cancel';
@@ -24,7 +24,8 @@ import type { SupplierUpdate } from '../lib/suppliers/types';
 
 export const admin = new Hono<AppEnv>();
 
-admin.use('*', requireAdmin);
+// S16, QA ת34: every action (not a read) only from the admin itself, or a service token (lib/access.ts)
+admin.use('*', requireAdmin, adminSameOrigin);
 
 admin.get('/overview', async (c) => {
   const [byStatus, meta, settings, counts] = await Promise.all([

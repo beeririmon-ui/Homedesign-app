@@ -43,4 +43,5 @@ export type Env = {
   NOTIFY_PROVIDER?: string;
 };
 
-export type AppEnv = { Bindings: Env; Variables: { actor: string } };
+/** `adminKind` (S16, ת34): how the admin was let in: a person's Access login, an Access service token, or a local dev path */
+export type AppEnv = { Bindings: Env; Variables: { actor: string; adminKind: 'user' | 'service' | 'dev' } };

@@ -14,7 +14,7 @@
 import { Hono, type Context } from 'hono';
 import { formatIls, ORDER_ID, randomToken } from '@hd/shared';
 import type { AppEnv } from '../env';
-import { requireAdmin } from '../lib/access';
+import { adminWriteCheck, requireAdmin } from '../lib/access';
 import {
   ADMIN_STATUS_HE,
   AUDIT_HE,
@@ -350,11 +350,9 @@ adminUi.get('/orders/:id', async (c) => {
 });
 
 // ---------- actions (forms) ----------
-/** same origin only: a form on another site cannot act with the owner's Access cookie */
+/** same origin only: a form on another site cannot act with the owner's Access cookie (S16: the Admin API's rule, lib/access.ts) */
 function sameOrigin(c: Context<AppEnv>): boolean {
-  const origin = c.req.header('origin');
-  if (origin) return origin === new URL(c.req.url).origin;
-  return c.req.header('sec-fetch-site') === 'same-origin';
+  return adminWriteCheck({ url: c.req.url, header: (n) => c.req.header(n) }, c.get('adminKind')).ok;
 }
 const back = (c: Context<AppEnv>, id: string, q: string) => c.redirect(`/admin/orders/${id}?${q}`, 303);
 

@@ -31,11 +31,20 @@ export const securityHeaders: MiddlewareHandler<AppEnv> = async (c, next) => {
   if (c.env.ENVIRONMENT === 'production' || c.env.ENVIRONMENT === 'preview') h.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
 };
 
+/** A MIME type's essence: `type/subtype`, lowercased, without its parameters (WHATWG MIME Sniffing). */
+export function mimeEssence(contentType: string | null | undefined): string {
+  return (contentType ?? '').split(';', 1)[0]!.trim().toLowerCase();
+}
+
+/**
+ * A JSON body, validated. S16, QA ת34: the content type's essence must be exactly `application/json`. A page on another
+ * site can send `text/plain; charset=application/json` without a preflight (its essence is text/plain, a CORS-safelisted
+ * type); it contains the words but is not JSON, and is refused.
+ */
 export async function readJson<T extends z.ZodType>(c: Context<AppEnv>, schema: T, maxBytes = 16_384): Promise<z.output<T>> {
   const len = Number(c.req.header('content-length') ?? '0');
   if (len > maxBytes) throw new HttpError(413, 'payload_too_large');
-  const ct = c.req.header('content-type') ?? '';
-  if (!ct.includes('application/json')) throw new HttpError(400, 'expected_json');
+  if (mimeEssence(c.req.header('content-type')) !== 'application/json') throw new HttpError(400, 'expected_json');
   const text = await c.req.text();
   if (text.length > maxBytes) throw new HttpError(413, 'payload_too_large');
   let raw: unknown;

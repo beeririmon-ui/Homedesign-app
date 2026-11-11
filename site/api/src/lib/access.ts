@@ -11,7 +11,7 @@ import { log } from './log';
 
 type Jwk = JsonWebKey & { kid?: string };
 type JwtHeader = { alg: string; kid?: string };
-type JwtPayload = { aud?: string | string[]; iss?: string; exp?: number; nbf?: number; email?: string; sub?: string };
+type JwtPayload = { aud?: string | string[]; iss?: string; exp?: number; nbf?: number; email?: string; sub?: string; common_name?: string };
 
 let jwksCache: { domain: string; keys: Jwk[]; at: number } | null = null;
 
@@ -39,7 +39,7 @@ export function resetAccessCache(): void {
 export async function verifyAccessJwt(
   token: string,
   opts: { domain: string; aud: string; nowSec: number; fetcher?: typeof fetch },
-): Promise<{ ok: true; email: string } | { ok: false; reason: string }> {
+): Promise<{ ok: true; email: string; service?: true } | { ok: false; reason: string }> {
   const parts = token.split('.');
   if (parts.length !== 3) return { ok: false, reason: 'format' };
   const [h, p, s] = parts as [string, string, string];
@@ -63,6 +63,9 @@ export async function verifyAccessJwt(
   if (payload.iss !== `https://${opts.domain}`) return { ok: false, reason: 'iss' };
   if (typeof payload.exp !== 'number' || payload.exp < opts.nowSec) return { ok: false, reason: 'expired' };
   if (typeof payload.nbf === 'number' && payload.nbf > opts.nowSec + 60) return { ok: false, reason: 'nbf' };
+  // S16 (ת34): a service token (the studio's scripts) carries its client id in `common_name` and no email
+  if (!payload.email && typeof payload.common_name === 'string' && payload.common_name)
+    return { ok: true, email: `service:${payload.common_name.slice(0, 120)}`, service: true };
   return { ok: true, email: payload.email ?? payload.sub ?? 'unknown' };
 }
 
@@ -84,11 +87,13 @@ export function devTokenAllowed(env: Env): boolean {
 export const requireAdmin: MiddlewareHandler<AppEnv> = async (c, next) => {
   if (devBypassAllowed(c.env)) {
     c.set('actor', 'dev-bypass');
+    c.set('adminKind', 'dev');
     return next();
   }
   const dev = c.req.header('x-hd-dev-admin');
   if (dev && devTokenAllowed(c.env) && timingSafeEqualHex(await sha256Hex(dev), await sha256Hex(c.env.ADMIN_DEV_TOKEN!))) {
     c.set('actor', 'dev-token');
+    c.set('adminKind', 'dev');
     return next();
   }
   const token = c.req.header('cf-access-jwt-assertion');
@@ -98,6 +103,7 @@ export const requireAdmin: MiddlewareHandler<AppEnv> = async (c, next) => {
       const v = await verifyAccessJwt(token, { domain: c.env.ACCESS_TEAM_DOMAIN, aud: c.env.ACCESS_AUD, nowSec: Math.floor(Date.now() / 1000) });
       if (v.ok) {
         c.set('actor', v.email);
+        c.set('adminKind', v.service ? 'service' : 'user');
         return next();
       }
       reason = v.reason;
@@ -114,4 +120,42 @@ export const requireAdmin: MiddlewareHandler<AppEnv> = async (c, next) => {
       { 'cache-control': 'no-store', 'x-robots-tag': 'noindex' },
     );
   throw new HttpError(403, 'forbidden');
+};
+
+/**
+ * S16, QA ת34: an admin action (anything but GET, HEAD and OPTIONS) acts only for a request from the admin itself.
+ *
+ * Access lets a browser in by its cookie (`CF_Authorization`), which the browser also sends with a request a page on
+ * another site makes (a form, or a `fetch` with a CORS-safelisted content type, which needs no preflight). So:
+ * - **A browser's request** says where it comes from: `Origin` must be this site's own origin, and `Sec-Fetch-Site`, when
+ *   sent, must be `same-origin`. Either one saying otherwise is refused.
+ * - **No `Origin` and no `Sec-Fetch-Site`** is not a modern browser: only a client that authenticates by headers it sets
+ *   itself may act this way, which no other site can make a browser send: an Access service token (the studio's
+ *   scripts) or, in local runs, the dev token. A person's Access login (a cookie) without either marker is refused.
+ * The content type is the other half (lib/http.ts `readJson`: the essence must be exactly application/json, which a page
+ * on another site cannot send without a preflight this Worker never answers).
+ */
+export type AdminKind = 'user' | 'service' | 'dev';
+export function adminWriteCheck(
+  req: { url: string; header(name: string): string | undefined },
+  kind: AdminKind | undefined,
+): { ok: true } | { ok: false; reason: 'cross_origin' | 'cross_site' | 'no_origin' } {
+  const origin = req.header('origin');
+  const site = req.header('sec-fetch-site');
+  if (origin !== undefined && origin !== new URL(req.url).origin) return { ok: false, reason: 'cross_origin' };
+  if (site !== undefined && site !== 'same-origin') return { ok: false, reason: 'cross_site' };
+  if (origin !== undefined || site !== undefined) return { ok: true };
+  return kind === 'service' || kind === 'dev' ? { ok: true } : { ok: false, reason: 'no_origin' };
+}
+
+const SAFE_METHODS = new Set(['GET', 'HEAD', 'OPTIONS']);
+/** The Admin API's guard for its actions (after `requireAdmin`): 403 `cross_site_request`, and a warning row. */
+export const adminSameOrigin: MiddlewareHandler<AppEnv> = async (c, next) => {
+  if (SAFE_METHODS.has(c.req.method)) return next();
+  const v = adminWriteCheck({ url: c.req.url, header: (n) => c.req.header(n) }, c.get('adminKind'));
+  if (!v.ok) {
+    log.warn('admin.cross_site_refused', { path: new URL(c.req.url).pathname.slice(0, 80), reason: v.reason, kind: c.get('adminKind') ?? null });
+    throw new HttpError(403, 'cross_site_request', 'הבקשה לא הגיעה ממסך הניהול עצמו. רעננו את המסך ונסו שוב.');
+  }
+  return next();
 };

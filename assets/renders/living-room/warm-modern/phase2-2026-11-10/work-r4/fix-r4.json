@@ -1,0 +1,476 @@
+{
+ "date": "2026-11-11",
+ "author": "render-agent",
+ "tokens": 0,
+ "sources": {
+  "qa": "qa/reports/2026-11-11-wm-tool-phase2-checkpoint.md",
+  "designer": "docs/proposals/wm-phase2-f3-decisions-2026-11-11.md section 5"
+ },
+ "note": "ungraded per-product layers (RGBA, straight alpha) and shadows (grey RGB, multiply); grade_cut_r4.py grades and cuts them",
+ "vase": {
+  "what": "scaled in code to the card (Large D16 x H32), anchored at its current base; NOT moved (placement pending the designer)",
+  "source": {
+   "layer": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work/layers/vase.png",
+   "shadow": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work/shadows/vase.png"
+  },
+  "measured_before": {
+   "foot_centre_x": 676.0,
+   "foot_contact_y": 1083.16,
+   "foot_row": 1083,
+   "mouth_top_y": 897,
+   "height_px": 186.66,
+   "widest_row": 1028,
+   "width_px": 81.31
+  },
+  "stands_at": {
+   "foot_near_edge_xy": [
+    -2.171,
+    1.591
+   ],
+   "base_centre_xy": [
+    -2.206,
+    1.555
+   ],
+   "Z": 0.45,
+   "depth_m": 4.079,
+   "cm_per_px": 0.2385,
+   "vs_plan_point": {
+    "plan": [
+     -2.42,
+     1.35
+    ],
+    "offset_m": 0.296,
+    "toward_camera_m": 0.276
+   }
+  },
+  "card_at_its_place_px": {
+   "width": 71.19,
+   "left": 640.17,
+   "right": 711.36,
+   "top": 943.34,
+   "bottom": 1083.39,
+   "height": 140.05,
+   "centre_x": 676.0,
+   "depth": 4.08
+  },
+  "card_at_plan_point_px": {
+   "width": 66.72,
+   "left": 638.87,
+   "right": 705.59,
+   "top": 932.14,
+   "bottom": 1062.96,
+   "height": 130.82,
+   "centre_x": 672.44,
+   "depth": 4.36
+  },
+  "before_cm": {
+   "height": 42.6,
+   "width": 18.3,
+   "how": "the card's cylinder projected at the vase's own base point is the ruler (H 32 = card height px, D 16 = card width px)",
+   "ratio_vs_card": [
+    1.142,
+    1.333
+   ]
+  },
+  "scale": {
+   "sx": 0.8755,
+   "sy": 0.7503,
+   "anchor_px": [
+    676.0,
+    1083.16
+   ],
+   "layer_matrix": [
+    [
+     0.8755000233650208,
+     0.0,
+     84.13400268554688
+    ],
+    [
+     0.0,
+     0.7502999901771545,
+     270.47100830078125
+    ]
+   ],
+   "shadow_matrix": [
+    [
+     0.8755000233650208,
+     0.0,
+     84.13400268554688
+    ],
+    [
+     0.0,
+     0.8755000233650208,
+     134.80859375
+    ]
+   ],
+   "why_two_factors": "the render's height : width is ~2.3 : 1 against the card's 2 : 1 (QA: proportion partial), so each axis is brought to the card (QA's recipe: uniform unless the source proportion is wrong)"
+  },
+  "measured_after": {
+   "foot_centre_x": 676.5,
+   "foot_contact_y": 1083.19,
+   "foot_row": 1083,
+   "mouth_top_y": 944,
+   "height_px": 139.69,
+   "widest_row": 1042,
+   "width_px": 71.01
+  },
+  "after_cm": {
+   "height": 31.9,
+   "width": 16.0,
+   "ratio_vs_card": [
+    0.997,
+    0.997
+   ]
+  },
+  "base_kept": {
+   "foot_centre_x_shift_px": 0.5,
+   "foot_contact_y_shift_px": 0.03
+  },
+  "shadow": "the measured contact shadow (work/shadows/vase.png) shrunk about the same anchor at the foot's scale (sx, sx): it lies on the bench; 1 under the new full alpha; what the vase uncovers is the base's own window, frame and bench",
+  "status": "size fixed; placement pending the designer"
+ },
+ "pendant": {
+  "what": "the ceiling canopy re-cut whole from the R3b render (QA: half disc + separate crescent)",
+  "source": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r3/r3b-regt.npy",
+  "method": "the ceiling canopy as one rigid convex piece: what is whiter than the ceiling (b* at least 2.5 lower) or differs from it (dE > 6),     in the canopy's box, above the cord's foot, the cord's own column left out; the largest component, closed (5 px disc) and filled to     its convex hull; the edge from a guided filter on the render (r 2): 1 in the hull eroded 1 px, 0 beyond 2 px. The cord: below row     62 a_old's own cut; between the canopy's foot and row 62 the cord's own alpha profile (the median of rows 62-90 across its column,     +-6 px: the cord hangs plumb), so nothing else of a_old above row 62 is kept (R3's half disc, its tail and the crescent)",
+  "canopy": {
+   "cord_x": 1676.5,
+   "hull_box_px": [
+    1646,
+    5,
+    1716,
+    41
+   ],
+   "hull_px": 1912,
+   "candidate_components": 1,
+   "kept_component_px": 1792
+  },
+  "pieces_above_row_62_px": {
+   "r3": [
+    390,
+    1142
+   ],
+   "r4": [
+    2008
+   ]
+  },
+  "alpha_changed_px": 1431,
+  "alpha_changed_box": [
+   1646,
+   3,
+   1719,
+   62
+  ],
+  "rgb": "the R3b render (work-r3/layers/pendant.png's own RGB), unchanged; shadow: none (all white), as in the slot"
+ },
+ "edges": {
+  "what": "the basket's right edge and the planter's left side and bottom re-cut from the R3a render; both contact shadows carried to the product's edge",
+  "source": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r3/r3a-regt.npy",
+  "below": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r3/scene-B9.png",
+  "rematte": "the soft edge re-estimated from the render, in the selection only: F = the product's colour just inside (normalised blur over the     alpha core, eroded 3 px), B = the render's background just outside (2-7 px beyond the cut, on `bg`); per pixel of the edge band the     alpha is the projection of its colour on F - B (where |F - B| > 0.06; elsewhere the old alpha); the outline is smoothed at 4x (sigma     1 px) and anti-aliased; the colour in the band is un-mixed (C - (1 - a) B) / a toward F, so no background of the render stays in it",
+  "shadow": "extract.shadow_one with the edge fix: the darkening is measured exactly as before (local tone match in a ring, on the surfaces it     can fall on, falling off with the distance, floored at 0.45, grain under 2 % dropped), then carried from the band into the product's     soft edge (each pixel with 0 < a < 1 within 3 px of the band takes its nearest band value) and blurred NORMALISED over band + edge, so     the product's own pixels no longer dilute it; the soft edge is no longer lightened by (1 - a) + a. Away from the edge it is the old     shadow (the old unnormalised blur, the same 2 px spread)",
+  "basket": {
+   "selection": "rows 1062-1245, x 1095-1150 (the body's right edge)",
+   "rematte": {
+    "band_px": 1210,
+    "trusted_px": 1210,
+    "decontaminated_px": 943,
+    "alpha_changed_px": 906
+   },
+   "shadow": {
+    "edge_px_extended": 1244,
+    "band_px": 21333
+   },
+   "shadow_px_changed": 7309
+  },
+  "planter": {
+   "selection": "rows 1046-1205, x 935-1010, off the basket (+3 px): the pot's left side and bottom",
+   "rematte": {
+    "band_px": 1041,
+    "trusted_px": 799,
+    "decontaminated_px": 688,
+    "alpha_changed_px": 833
+   },
+   "shadow": {
+    "edge_px_extended": 321,
+    "band_px": 5463
+   },
+   "shadow_px_changed": 1715
+  }
+ },
+ "floor-lamp": {
+  "what": "the shade fabric toned to the designer's targets (section 5), so the product layer reads off; the collar, stem, base and chain keep their pixels; the light comes from the light layer later (code)",
+  "source": {
+   "layer": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work/layers/floor-lamp.png",
+   "raw": "assets/renders/living-room/warm-modern/phase2-2026-11-10/raw/step2-seedream.png",
+   "registration": {
+    "matrix": [
+     [
+      0.9961000084877014,
+      -0.0010000000474974513,
+      5.960100173950195
+     ],
+     [
+      0.00019999999494757503,
+      0.9958999752998352,
+      2.6143999099731445
+     ]
+    ],
+    "subpixel_shift_px": [
+     -0.22,
+     0.002
+    ],
+    "response": 0.924,
+    "residual_after_px": [
+     -0.025,
+     -0.005
+    ]
+   }
+  },
+  "masks": {
+   "shade_rows": [
+    576,
+    702
+   ],
+   "shade_cols": [
+    2320,
+    2545
+   ],
+   "fabric_px": 18047,
+   "collar_and_chain_px": 439,
+   "changed_px": 20377,
+   "changed_outside_zone_px": 0
+  },
+  "method": {
+   "low_frequencies": "replaced by T(u, v) = Lmid + G (0.5 - u) - D smoothstep((v - v0) / (v1 - v0)) in graded L* (u across the shade's columns, v down its rows); b* low = bT at the fabric's own hue",
+   "folds": "the raw's high-pass (L*, a*, b*) about a normalised sigma-8 blur over the fabric (the folds are ~3-9 px apart), L* detail x s so the graded high-pass std stays at the r3 value (the grade's shoulder no longer compresses it)",
+   "warmth": "b* soft knee from ring p95 + 5.6, never past ring p95 + 7.4",
+   "soft_edge": "the alpha < 1 rim keeps its render mix plus alpha x the fabric's local change",
+   "params": {
+    "Lmid": 92.66,
+    "G": 10.232,
+    "D": 16.49,
+    "v0": 0.55,
+    "v1": 0.92,
+    "s": 0.6939,
+    "sc": 0.8,
+    "bT": 8.55,
+    "b_soft": 14.33,
+    "b_lim": 16.13
+   },
+   "iterations": [
+    {
+     "it": 0,
+     "p": {
+      "Lmid": 85.81,
+      "G": 8.0,
+      "D": 9.0,
+      "v0": 0.55,
+      "v1": 0.92,
+      "s": 0.7,
+      "sc": 0.8,
+      "bT": 9.04,
+      "b_soft": 14.33,
+      "b_lim": 16.13
+     },
+     "left": 84.57,
+     "right": 80.7,
+     "bottom": 77.0,
+     "b": 9.58,
+     "hp": 2.002
+    },
+    {
+     "it": 1,
+     "p": {
+      "Lmid": 89.385,
+      "G": 10.076,
+      "D": 12.665,
+      "v0": 0.55,
+      "v1": 0.92,
+      "s": 0.656,
+      "sc": 0.8,
+      "bT": 8.5,
+      "b_soft": 14.33,
+      "b_lim": 16.13
+     },
+     "left": 87.19,
+     "right": 81.88,
+     "bottom": 77.41,
+     "b": 9.03,
+     "hp": 1.834
+    },
+    {
+     "it": 2,
+     "p": {
+      "Lmid": 91.06,
+      "G": 10.424,
+      "D": 14.84,
+      "v0": 0.55,
+      "v1": 0.92,
+      "s": 0.666,
+      "sc": 0.8,
+      "bT": 8.51,
+      "b_soft": 14.33,
+      "b_lim": 16.13
+     },
+     "left": 88.09,
+     "right": 82.37,
+     "bottom": 76.96,
+     "b": 9.03,
+     "hp": 1.825
+    },
+    {
+     "it": 3,
+     "p": {
+      "Lmid": 92.04,
+      "G": 10.28,
+      "D": 15.87,
+      "v0": 0.55,
+      "v1": 0.92,
+      "s": 0.679,
+      "sc": 0.8,
+      "bT": 8.52,
+      "b_soft": 14.33,
+      "b_lim": 16.13
+     },
+     "left": 88.6,
+     "right": 82.96,
+     "bottom": 76.9,
+     "b": 9.02,
+     "hp": 1.834
+    },
+    {
+     "it": 4,
+     "p": {
+      "Lmid": 92.47,
+      "G": 10.232,
+      "D": 16.29,
+      "v0": 0.55,
+      "v1": 0.92,
+      "s": 0.689,
+      "sc": 0.8,
+      "bT": 8.54,
+      "b_soft": 14.33,
+      "b_lim": 16.13
+     },
+     "left": 88.82,
+     "right": 83.22,
+     "bottom": 76.92,
+     "b": 9.03,
+     "hp": 1.849
+    },
+    {
+     "it": 5,
+     "p": {
+      "Lmid": 92.66,
+      "G": 10.232,
+      "D": 16.49,
+      "v0": 0.55,
+      "v1": 0.92,
+      "s": 0.694,
+      "sc": 0.8,
+      "bT": 8.55,
+      "b_soft": 14.33,
+      "b_lim": 16.13
+     },
+     "left": 88.91,
+     "right": 83.36,
+     "bottom": 76.89,
+     "b": 9.05,
+     "hp": 1.857
+    }
+   ]
+  },
+  "targets_before_r3": {
+   "qa_shade_mask": {
+    "px": 17516,
+    "left_third_L": 94.51,
+    "right_third_L": 91.11,
+    "bottom15_L": 91.53,
+    "shade_b": 12.05,
+    "shade_L_p50_p95_max": [
+     94.39,
+     94.73,
+     94.8
+    ],
+    "shade_b_max": 53.39,
+    "highpass_std": 1.864,
+    "targets": {
+     "1 window gradient: left >= right + 5": {
+      "value": 3.39,
+      "pass_": false
+     },
+     "2 bottom/inside <= right - 5": {
+      "value": 0.42,
+      "pass_": false
+     },
+     "3a left third <= ring + 4": {
+      "value": 8.7,
+      "pass_": false
+     },
+     "3b right third <= ring": {
+      "value": 5.3,
+      "pass_": false
+     },
+     "4a median b* <= ring b* + 4": {
+      "value": 5.41,
+      "pass_": false
+     },
+     "4b no px b* >= ring p95 + 8": {
+      "value": 6037,
+      "pass_": false
+     }
+    },
+    "all_met": false
+   },
+   "fabric_only": {
+    "px": 17281,
+    "left_third_L": 94.51,
+    "right_third_L": 91.11,
+    "bottom15_L": 91.93,
+    "shade_b": 12.05,
+    "shade_L_p50_p95_max": [
+     94.41,
+     94.73,
+     94.8
+    ],
+    "shade_b_max": 32.95,
+    "highpass_std": 1.632,
+    "targets": {
+     "1 window gradient: left >= right + 5": {
+      "value": 3.39,
+      "pass_": false
+     },
+     "2 bottom/inside <= right - 5": {
+      "value": 0.82,
+      "pass_": false
+     },
+     "3a left third <= ring + 4": {
+      "value": 8.7,
+      "pass_": false
+     },
+     "3b right third <= ring": {
+      "value": 5.3,
+      "pass_": false
+     },
+     "4a median b* <= ring b* + 4": {
+      "value": 5.41,
+      "pass_": false
+     },
+     "4b no px b* >= ring p95 + 8": {
+      "value": 5871,
+      "pass_": false
+     }
+    },
+    "all_met": false
+   },
+   "ring": {
+    "px": 7513,
+    "L": 85.81,
+    "b": 6.64,
+    "b_p95": 8.73
+   }
+  },
+  "note": "targets measured with QA's p2_lamp.py masks on the graded set-B scene; the final numbers are re-measured by grade_cut_r4.py on the r4 scene"
+ }
+}
