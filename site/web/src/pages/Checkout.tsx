@@ -5,6 +5,7 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 import type { CheckoutRequest } from '@hd/shared';
 import { catalog } from '../catalog';
+import { shippingFor, type Method } from './shipping';
 import { Price } from '../components/Media';
 import { lineName, removedNoteHe } from '@hd/shared/lines';
 import { lineLabelHe } from './lineLabel';
@@ -12,15 +13,6 @@ import { api, ApiError } from '../api';
 import { cart, forgetCart, loadCart, saveOrderToken } from '../state/cart';
 import { navigate } from '../router';
 import { validateCheckout, type FieldErrors } from '../validate';
-
-type Method = 'economy' | 'express';
-
-/** Mirrors shared/src/pricing.ts customerShippingAgorot (the server recomputes it from D1). */
-export function shippingFor(method: Method, subtotal: number): number {
-  const s = catalog.shipping.find((x) => x.id === method);
-  if (!s) return 0;
-  return s.free_over_agorot !== null && subtotal >= s.free_over_agorot ? 0 : s.price_agorot;
-}
 
 const FIELDS: { k: keyof FieldErrors; label: string }[] = [
   { k: 'full_name', label: 'שם מלא' },

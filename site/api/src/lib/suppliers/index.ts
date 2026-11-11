@@ -2,11 +2,22 @@ import type { Env } from '../../env';
 import { providerOf } from '../config';
 import type { SupplierClient, SupplierOrderInput } from './types';
 
-/** Development and preview: records the order without calling a supplier. */
+/**
+ * Development and preview: records the order without calling a supplier.
+ * S13: a cancellation request is `requested` (the supplier answers later, as a real one does). The mock never reports
+ * on its own (`tracking` is null): in development and preview the admin plays the supplier's answers (the order page's
+ * "ספק מדומה" panel, lib/shipments.ts `applySupplierUpdate`), so every state can be seen without a supplier.
+ */
 const mockSupplier: SupplierClient = {
   id: 'mock',
   async submitOrder(input) {
     return { supplier_order_id: `MOCK-${input.order_id}`, raw: { mocked: true, lines: input.lines.length } };
+  },
+  async cancelOrder() {
+    return { outcome: 'requested', raw: { mocked: true } };
+  },
+  async tracking() {
+    return null;
   },
 };
 
@@ -47,6 +58,8 @@ export function cjSupplier(apiKey: string | undefined, fetcher: Fetch = (u, i) =
       // the create-order call is not in the repo's documentation: never guessed with a paid order
       throw new Error('cj_order_api_docs_needed');
     },
+    // S13: the cancel and tracking calls are not in the repo's documentation either: absent, so the admin says that a
+    // person cancels at the supplier, and the cron asks nothing (docs/ops/deploy-runbook.md, "CJ")
   };
   return self;
 }

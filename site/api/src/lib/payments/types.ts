@@ -23,8 +23,33 @@ export type PaymentEvent = {
 
 export type VerifiedWebhook = { ok: true; event: PaymentEvent } | { ok: false; reason: string };
 
+/** S13 (2.5): a refund of a paid order, full or partial, through the provider that took the payment. */
+export type RefundInput = {
+  order_id: string;
+  /** the provider's reference of the payment (our payment session) */
+  payment_ref: string;
+  amount_agorot: number;
+  /** what the order paid, and what was refunded before this one: a provider refuses more than what is left */
+  paid_agorot: number;
+  refunded_before_agorot: number;
+  reason: string;
+};
+export type IssuedRefund = { refund_id: string; raw?: unknown };
+
+/** A refusal the provider gives before anything moved (more than what is left, a payment it does not know). */
+export class RefundRefused extends Error {}
+
 export interface PaymentProvider {
   readonly id: string;
   createSession(input: CreateSessionInput): Promise<{ session_id: string; redirect_url: string }>;
   verifyWebhook(headers: Headers, rawBody: string, nowSec: number): Promise<VerifiedWebhook>;
+  /**
+   * S13: the provider honours the idempotency key on refunds: the same key again returns the first refund, never a
+   * second one. A provider that does not cannot be retried blindly after a failure that may have refunded.
+   */
+  readonly refundsIdempotent?: boolean;
+  /** S13: refunds the amount, with our idempotency key (the refund's id); throws RefundRefused when nothing moved */
+  refund?(input: RefundInput, opts: { idempotency_key: string }): Promise<IssuedRefund>;
+  /** S13: the refund the provider already made for this key, null when none; absent when it cannot be asked */
+  findRefund?(idempotencyKey: string): Promise<IssuedRefund | null>;
 }

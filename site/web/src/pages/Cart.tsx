@@ -2,7 +2,7 @@ import { shopPath } from '@hd/shared/product-url';
 import { useEffect } from 'preact/hooks';
 import { catalog, livingRoom, scene } from '../catalog';
 import { Picture, Price, productImage } from '../components/Media';
-import { shippingFor } from './Checkout';
+import { shippingFor } from './shipping';
 import { cart, cartBusy, cartError, loadCart, setQty } from '../state/cart';
 import { removedNoteHe } from '@hd/shared/lines';
 import { lineLabelHe } from './lineLabel';

@@ -4,7 +4,7 @@
  * Without options the product is its one variant ('<id>:default'). Same pricing as the Worker (api/src/lib/store.ts).
  */
 import type { Pack, PublicProduct } from '@hd/shared';
-import { expandOptions, type ExpandedOptions } from '@hd/shared/options';
+import { expandOptions, type ExpandedOptions } from '@hd/shared/options-expand';
 
 const expanded = new WeakMap<object, ExpandedOptions>();
 /** The product's supplier options in the components' shape (the catalog ships them compact); null without options. */

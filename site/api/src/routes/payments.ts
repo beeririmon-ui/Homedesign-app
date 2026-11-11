@@ -11,6 +11,8 @@ import { paymentProvider } from '../lib/payments';
 import { isProduction, providerOf } from '../lib/config';
 import { MOCK_SIGNATURE_HEADER, signMockEvent } from '../lib/payments/mock';
 import type { PaymentEvent } from '../lib/payments/types';
+import { requestRefund } from '../lib/refunds';
+import { log } from '../lib/log';
 
 export const webhooks = new Hono<AppEnv>();
 
@@ -42,7 +44,27 @@ export async function handlePaymentEvent(env: Env, providerId: string, event: Pa
     }
     outcome = 'marked_failed';
   } else if (event.amount_agorot !== order.total_agorot) outcome = 'amount_mismatch';
-  else if (order.status !== 'pending_payment' && order.status !== 'payment_failed') outcome = 'already_processed';
+  else if (order.status === 'canceled') {
+    // S13: canceled before the payment arrived: the money is recorded as paid and refunded at once, never kept
+    const late = await env.DB.prepare("UPDATE orders SET paid_at = ?, updated_at = ? WHERE id = ? AND status = 'canceled' AND paid_at IS NULL")
+      .bind(now, now, order.id)
+      .run();
+    if (late.meta.changes) {
+      await env.DB.batch([
+        env.DB.prepare("UPDATE cancellations SET stage = 'after_payment_late' WHERE order_id = ? AND stage = 'before_payment'").bind(order.id),
+        env.DB.prepare('INSERT INTO audit_log (at, actor, action, subject, detail) VALUES (?, ?, ?, ?, ?)').bind(
+          now,
+          `webhook:${providerId}`,
+          'order.paid_after_cancel',
+          order.id,
+          JSON.stringify({ event: event.id }),
+        ),
+      ]);
+      const r = await requestRefund(env, { orderId: order.id, amount: 'rest', reason: 'תשלום שהגיע אחרי ביטול', key: `cancel:${order.id}`, actor: 'system' });
+      if (!r.ok) log.error('payment.after_cancel_refund_failed', { order_id: order.id, code: r.code });
+    }
+    outcome = 'paid_after_cancel';
+  } else if (order.status !== 'pending_payment' && order.status !== 'payment_failed') outcome = 'already_processed';
   else {
     await env.DB.batch([
       env.DB.prepare("UPDATE orders SET status = 'paid', paid_at = ?, updated_at = ? WHERE id = ?").bind(now, now, order.id),
@@ -64,6 +86,8 @@ export async function handlePaymentEvent(env: Env, providerId: string, event: Pa
     await env.SUPPLIER_QUEUE.send({ kind: 'submit-order', order_id: order.id });
     // S9: the tax invoice is a job after "paid" (lib/invoices; INVOICE_PROVIDER, mock until its documentation is in)
     await env.SUPPLIER_QUEUE.send({ kind: 'issue-invoice', order_id: order.id });
+    // S13 (6.3): the new-order alert (lib/notify; NOTIFY_PROVIDER, a log row until the owner chooses a channel)
+    await env.SUPPLIER_QUEUE.send({ kind: 'notify-order', order_id: order.id });
     outcome = 'paid';
   }
   await env.DB.prepare('UPDATE payment_events SET order_id = ?, processed_at = ?, outcome = ? WHERE provider = ? AND provider_event_id = ?')
@@ -79,7 +103,7 @@ webhooks.post('/payment/:provider', async (c) => {
   const provider = paymentProvider(c.env, new URL(c.req.url).origin, providerId);
   const verified = await provider.verifyWebhook(c.req.raw.headers, raw, Math.floor(Date.now() / 1000));
   if (!verified.ok) {
-    console.warn('payment webhook rejected', providerId, verified.reason);
+    log.warn('payment.webhook_rejected', { provider: providerId, reason: verified.reason });
     throw new HttpError(401, 'invalid_signature');
   }
   const result = await handlePaymentEvent(c.env, provider.id, verified.event, await sha256Hex(raw));

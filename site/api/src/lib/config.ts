@@ -9,6 +9,8 @@
  * - **The same rules check the deploy** (api/scripts/check-config.ts, run by `npm run build`): a value in wrangler.jsonc
  *   that is not a provider fails the build; `UNDECIDED` is the one placeholder allowed there, and it fails closed at run time.
  */
+import { log } from './log';
+
 export const NON_PRODUCTION = ['development', 'preview', 'preview-local', 'test'] as const;
 
 export const PROVIDERS = {
@@ -18,6 +20,11 @@ export const PROVIDERS = {
   INVOICE_PROVIDER: ['grow', 'morning'],
   /** CJ (API 2.0); it refuses to create an order until its documentation is in (lib/suppliers) */
   SUPPLIER_PROVIDER: ['cj'],
+  /**
+   * S13 (6.3): the new-order alert. None is built: email or Telegram is the owner's choice (lib/notify). Production
+   * carries `UNDECIDED` until then, and an order is never held up by its alert.
+   */
+  NOTIFY_PROVIDER: [],
 } as const;
 export type ProviderVar = keyof typeof PROVIDERS;
 /** the placeholder wrangler.jsonc may carry for a provider not chosen yet: it fails closed at run time */
@@ -56,7 +63,7 @@ export function configIssues(vars: Record<string, unknown>): string[] {
   return out;
 }
 
-/** Loud, once per call: the operator reads it in the Worker's logs (observability is on). */
+/** Loud, once per call: the operator reads it in the Worker's logs (observability is on). S13: a structured row. */
 export function refuseLoudly(what: string, reason: string, subject?: string): void {
-  console.error(`[config] ${what} refused: ${reason}${subject ? ` (order ${subject})` : ''}`);
+  log.error('config.refused', { what, reason, ...(subject ? { order_id: subject } : {}) });
 }

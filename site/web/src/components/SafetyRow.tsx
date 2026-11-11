@@ -3,7 +3,7 @@
  * for a product without them, and nothing the card does not state (shared/src/safety.ts).
  */
 import type { PublicSafety } from '@hd/shared';
-import { safetyLinesHe } from '@hd/shared/safety';
+import { safetyLinesHe } from '@hd/shared/safety-lines';
 
 export function SafetyRow({ safety }: { safety: PublicSafety | null }) {
   const lines = safetyLinesHe(safety);

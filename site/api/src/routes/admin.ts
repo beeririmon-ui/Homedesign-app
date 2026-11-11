@@ -1,28 +1,30 @@
 /**
- * Admin API, read-only in this phase. Behind Cloudflare Access (see lib/access.ts) and re-verified here.
- * This is the API the studio will call instead of its patch layer (docs/architecture.md, "Admin API").
+ * Admin API, behind Cloudflare Access (lib/access.ts `requireAdmin`, re-verified here). The studio and the admin screen
+ * (routes/admin-ui.ts) read and act through it (docs/architecture.md, "Admin API").
+ *
+ * S13 (launch checklist 6.3, 2.5): the order operations. The list filters by status (or "needs a person") and searches by
+ * the public order number; an order carries its tracks from the audit log; and the actions are the cancellation
+ * procedure (lib/cancel.ts), refunds (lib/refunds.ts), "checked by a person" for an unresolved invoice, and, outside
+ * production with the mock supplier, the supplier's answers played by a person. Every action writes the actor (the
+ * Access email) to the audit log.
  */
-import { Hono } from 'hono';
+import { Hono, type Context } from 'hono';
 import { z } from 'zod';
+import { ORDER_ID } from '@hd/shared';
 import type { AppEnv } from '../env';
-import { HttpError } from '../lib/http';
-import { devBypassAllowed, verifyAccessJwt } from '../lib/access';
+import { HttpError, readJson } from '../lib/http';
+import { requireAdmin } from '../lib/access';
 import { economics } from '../lib/store';
+import { FILTERS, checkInvoice, listOrders, orderDetail } from '../lib/admin-orders';
+import { cancelOrder } from '../lib/cancel';
+import { REFUND_KEY, requestRefund } from '../lib/refunds';
+import { applySupplierUpdate } from '../lib/shipments';
+import { isProduction } from '../lib/config';
+import type { SupplierUpdate } from '../lib/suppliers/types';
 
 export const admin = new Hono<AppEnv>();
 
-admin.use('*', async (c, next) => {
-  if (devBypassAllowed(c.env)) {
-    c.set('actor', 'dev-bypass');
-    return next();
-  }
-  const token = c.req.header('cf-access-jwt-assertion');
-  if (!token || !c.env.ACCESS_TEAM_DOMAIN || !c.env.ACCESS_AUD) throw new HttpError(403, 'forbidden');
-  const v = await verifyAccessJwt(token, { domain: c.env.ACCESS_TEAM_DOMAIN, aud: c.env.ACCESS_AUD, nowSec: Math.floor(Date.now() / 1000) });
-  if (!v.ok) throw new HttpError(403, 'forbidden');
-  c.set('actor', v.email);
-  return next();
-});
+admin.use('*', requireAdmin);
 
 admin.get('/overview', async (c) => {
   const [byStatus, meta, settings, counts] = await Promise.all([
@@ -45,59 +47,106 @@ admin.get('/overview', async (c) => {
   });
 });
 
-const ListQuery = z.object({
-  status: z
+export const ListQuery = z.object({
+  status: z.enum(FILTERS).optional(),
+  /** the public order number, or its start */
+  q: z
     .string()
-    .regex(/^[a-z_]{1,32}$/)
+    .trim()
+    .regex(/^\d{1,10}$/)
     .optional(),
   limit: z.coerce.number().int().min(1).max(200).default(50),
 });
 
 admin.get('/orders', async (c) => {
-  const q = ListQuery.safeParse(c.req.query());
+  const q = ListQuery.safeParse(Object.fromEntries(Object.entries(c.req.query()).filter(([, v]) => v !== '')));
   if (!q.success) throw new HttpError(400, 'invalid_query');
-  const where = q.data.status ? 'WHERE o.status = ?' : '';
-  const stmt = c.env.DB.prepare(
-    `SELECT o.id, o.status, o.total_agorot, o.shipping_method, o.payment_provider, o.created_at, o.paid_at, c.full_name, c.email
-     FROM orders o JOIN customers c ON c.id = o.customer_id ${where} ORDER BY o.created_at DESC LIMIT ?`,
-  );
-  const { results } = await (q.data.status ? stmt.bind(q.data.status, q.data.limit) : stmt.bind(q.data.limit)).all();
-  return c.json({ orders: results });
+  return c.json({ orders: await listOrders(c.env.DB, { filter: q.data.status, search: q.data.q, limit: q.data.limit }) });
 });
 
+const orderIdOf = (c: Context<AppEnv>): string => {
+  const id = c.req.param('id') ?? '';
+  if (!ORDER_ID.test(id)) throw new HttpError(404, 'order_not_found');
+  return id;
+};
+
 admin.get('/orders/:id', async (c) => {
-  const id = c.req.param('id');
-  const order = await c.env.DB.prepare(
-    'SELECT o.*, c.full_name, c.email, c.phone, c.marketing_consent FROM orders o JOIN customers c ON c.id = o.customer_id WHERE o.id = ?',
-  )
-    .bind(id)
-    .first<Record<string, unknown>>();
-  if (!order) throw new HttpError(404, 'order_not_found');
-  delete order.token_hash;
-  const [items, payments, supplier] = await Promise.all([
-    c.env.DB.prepare('SELECT * FROM order_items WHERE order_id = ? ORDER BY line').bind(id).all<{
-      qty: number;
-      unit_price_agorot: number;
-      unit_cost_usd_cents: number;
-      unit_shipping_usd_cents: number;
-    }>(),
-    c.env.DB.prepare(
-      'SELECT provider, provider_event_id, type, amount_agorot, received_at, outcome FROM payment_events WHERE order_id = ? ORDER BY received_at',
-    )
-      .bind(id)
-      .all(),
-    c.env.DB.prepare('SELECT * FROM supplier_shipments WHERE order_id = ?').bind(id).all(),
-  ]);
-  const fx = order.fx_usd_ils_at_order as number;
-  const cogs = items.results.reduce((s, i) => s + Math.round((i.unit_cost_usd_cents + i.unit_shipping_usd_cents) * fx) * i.qty, 0);
-  const net = (order.total_agorot as number) - (order.vat_agorot as number);
-  return c.json({
-    order: { ...order, address: JSON.parse(order.address_json as string), address_json: undefined },
-    items: items.results,
-    payments: payments.results,
-    supplier_shipments: supplier.results,
-    margin: { net_agorot: net, cogs_agorot: cogs, gross_profit_agorot: net - cogs, note: 'before payment fees, returns reserve and CAC' },
-  });
+  const d = await orderDetail(c.env.DB, orderIdOf(c));
+  if (!d) throw new HttpError(404, 'order_not_found');
+  return c.json(d);
+});
+
+const Reason = z.string().trim().min(2).max(300);
+export const CancelBody = z.object({ reason: Reason });
+export const RefundBody = z.object({
+  /** agorot, or "rest": what is left of the payment */
+  amount_agorot: z.union([z.number().int().positive().max(100_000_000), z.literal('rest')]),
+  reason: Reason,
+  key: z.string().regex(REFUND_KEY),
+});
+export const InvoiceCheckBody = z.discriminatedUnion('outcome', [
+  z.object({
+    outcome: z.literal('found'),
+    invoice_number: z
+      .string()
+      .trim()
+      .regex(/^[A-Za-z0-9/_-]{1,40}$/),
+    note: Reason,
+  }),
+  z.object({ outcome: z.literal('none'), note: Reason }),
+]);
+export const MOCK_SUPPLIER_EVENTS = ['accepted', 'shipped', 'delivered', 'cancel_confirmed', 'cancel_refused'] as const;
+export const MockSupplierBody = z.object({ event: z.enum(MOCK_SUPPLIER_EVENTS) });
+
+/** the mock supplier's answer, as the supplier would send it */
+export function mockUpdate(event: (typeof MOCK_SUPPLIER_EVENTS)[number], orderId: string): SupplierUpdate {
+  switch (event) {
+    case 'shipped':
+      return { status: 'shipped', tracking_number: `IL${orderId.slice(-8)}TRK`, tracking_url: `https://parcelsapp.com/he/tracking/IL${orderId.slice(-8)}TRK` };
+    case 'delivered':
+      return { status: 'delivered' };
+    case 'cancel_confirmed':
+      return { status: 'canceled' };
+    case 'cancel_refused':
+      return { status: 'accepted', cancel: 'refused' };
+    default:
+      return { status: 'accepted' };
+  }
+}
+/** the mock supplier's answers are played only outside production, with the mock supplier configured */
+export const mockSupplierOpen = (env: AppEnv['Bindings']): boolean => env.SUPPLIER_PROVIDER === 'mock' && !isProduction(env);
+
+admin.post('/orders/:id/cancel', async (c) => {
+  const id = orderIdOf(c);
+  const body = await readJson(c, CancelBody);
+  const r = await cancelOrder(c.env, id, c.get('actor'), body.reason);
+  if ('error' in r) return c.json({ error: r.code, message_he: r.message_he }, r.status);
+  return c.json(r);
+});
+
+admin.post('/orders/:id/refund', async (c) => {
+  const id = orderIdOf(c);
+  const body = await readJson(c, RefundBody);
+  const r = await requestRefund(c.env, { orderId: id, amount: body.amount_agorot, reason: body.reason, key: body.key, actor: c.get('actor') });
+  if (!r.ok) return c.json({ error: r.code, message_he: r.message_he, refund_id: r.refund_id }, r.status);
+  return c.json(r);
+});
+
+admin.post('/orders/:id/invoice-check', async (c) => {
+  const id = orderIdOf(c);
+  const body = await readJson(c, InvoiceCheckBody);
+  const r = await checkInvoice(c.env, id, c.get('actor'), body);
+  if (!r.ok) return c.json({ error: r.code, message_he: r.message_he }, r.status);
+  return c.json(r);
+});
+
+admin.post('/orders/:id/mock-supplier', async (c) => {
+  if (!mockSupplierOpen(c.env)) throw new HttpError(404, 'not_found');
+  const id = orderIdOf(c);
+  const body = await readJson(c, MockSupplierBody);
+  const outcome = await applySupplierUpdate(c.env, { orderId: id, supplier: 'mock', update: mockUpdate(body.event, id), actor: `mock-supplier (${c.get('actor')})` });
+  if (outcome === 'unknown_shipment') throw new HttpError(409, 'no_mock_shipment', 'להזמנה הזו אין משלוח אצל הספק המדומה.');
+  return c.json({ outcome });
 });
 
 admin.get('/products', async (c) => {

@@ -2,6 +2,16 @@
 import renderToString from 'preact-render-to-string';
 import { App } from './App';
 import { headFor } from './head';
+import { registerPages } from './pages/lazy';
+import { Product } from './pages/Product';
+import { CartPage } from './pages/Cart';
+import { Checkout } from './pages/Checkout';
+import { OrderPage } from './pages/Order';
+import { MockPay } from './pages/MockPay';
+import { Legal } from './pages/Legal';
+
+// S13: the prerender renders every page in full; the browser loads a page's chunk before it hydrates (main.tsx)
+registerPages({ product: Product, cart: CartPage, checkout: Checkout, order: OrderPage, 'mock-pay': MockPay, legal: Legal });
 
 export { ORIGIN } from './head';
 // S10 question 7 (S11): the houses of the room engine, for a prerendered page per house (scripts/prerender.ts)

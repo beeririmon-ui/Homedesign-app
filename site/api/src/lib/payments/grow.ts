@@ -34,5 +34,9 @@ export function growProvider(cfg: GrowConfig): PaymentProvider {
       // a webhook that cannot be verified is refused, never trusted
       return { ok: false, reason: missing.length ? 'grow_not_configured' : 'grow_docs_needed' };
     },
+    // S13 (2.5): refunds through Grow's API are item 3 of the list above; never a guessed call with a customer's money
+    async refund() {
+      return refuse();
+    },
   };
 }

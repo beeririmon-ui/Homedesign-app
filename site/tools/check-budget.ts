@@ -4,7 +4,8 @@
  *
  *   first load of the living room on mobile ≤ 3 MB: HTML + JS + CSS + Hebrew/Latin fonts + the poster and every layer
  *   of the default composition at the width the engine picks on a 412×915 @2x phone, plus the depth map.
- *   JS entry ≤ 80 KB gzip, CSS ≤ 15 KB gzip.
+ *   JS entry ≤ 80 KB gzip, CSS ≤ 15 KB gzip. S13: the room's own JS stays ≤ 74 KB (a goal, not a raised budget): the
+ *   pages off its first paint are lazy chunks (web/src/pages/lazy.tsx), and the browser's shared code carries no zod.
  *   S5, the story (when built): a page's JS ≤ 40 KB gzip and CSS ≤ 15 KB gzip; its first view on a phone ≤ 1.2 MB, a
  *   detail page's ≤ 0.9 MB.
  */
@@ -87,7 +88,8 @@ const kb = (n: number) => `${(n / 1024).toFixed(1)} KB`;
 const rows: [string, number, number | null][] = [
   ['JS (gzip), the room page entry', sum(js), BUDGET.jsGz],
   ['CSS (gzip), the room page entry', sum(css), BUDGET.cssGz],
-  [`other entries (the test page): JS ${otherJs.length} files, CSS ${otherCss.length}`, sum(otherJs) + sum(otherCss), null],
+  // S13: the pages off the room's first paint (product, cart, checkout, order, legal) are chunks loaded on their route
+  [`lazy chunks + test page: JS ${otherJs.length} files, CSS ${otherCss.length}`, sum(otherJs) + sum(otherCss), null],
   ['fonts (woff2, he+latin)', fonts, null],
   [`room media (${count} files, shell @${posterW}, layers @${res})`, layers, null],
   ['first load, living room, mobile', total, BUDGET.firstLoad],
@@ -122,7 +124,15 @@ if (existsSync(storyPage)) {
     ...(detail ? ([['first view, a detail page, mobile', view(detail), STORY.detailView]] as [string, number, number][]) : []),
   );
 }
+// S13: the goal under the budget, so the next features have room; and no lazy page is in the room's entry
+const ROOM_GOAL = 74 * 1024;
+const lazyInEntry = [...referenced].filter((f) => /^(Order|Checkout|Cart|Product|Legal|MockPay)-/.test(f));
 let failed = false;
+if (sum(js) > ROOM_GOAL) console.log(`note  the room's JS is over the S13 goal of ${kb(ROOM_GOAL)}: split before adding`);
+if (lazyInEntry.length) {
+  failed = true;
+  console.log(`FAIL  a lazy page is in the room's entry: ${lazyInEntry.join(', ')}`);
+}
 for (const [name, v, max] of rows) {
   const over = max !== null && v > max;
   failed ||= over;

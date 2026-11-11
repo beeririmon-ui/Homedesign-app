@@ -15,7 +15,11 @@ import { nowIso } from './http';
 import { refuseLoudly } from './config';
 import { supplierClient } from './suppliers';
 import type { SupplierOrderInput } from './suppliers/types';
-import { processInvoiceJob } from './invoices';
+import { processCreditNoteJob, processInvoiceJob } from './invoices';
+import { processNotifyJob } from './notify';
+
+/** S13: a claim on a shipment (`submitting`) older than this is a crash between the claim and the supplier's answer */
+export const SUBMIT_LEASE_MS = 10 * 60_000;
 
 type ItemRow = {
   product_id: string;
@@ -61,6 +65,15 @@ export async function processSupplierJob(env: Env, job: SupplierJob, attempt: nu
     const r = await processInvoiceJob(env, job.order_id);
     return r === 'invoiced' ? 'submitted' : r === 'retry' ? 'retry' : 'skipped';
   }
+  // S13: the credit note of a refund (2.5) and the new-order alert (6.3) ride the same queue
+  if (job.kind === 'credit-note') {
+    const r = await processCreditNoteJob(env, job.refund_id);
+    return r === 'credited' ? 'submitted' : r === 'retry' ? 'retry' : 'skipped';
+  }
+  if (job.kind === 'notify-order') {
+    const r = await processNotifyJob(env, job.order_id, attempt);
+    return r === 'sent' ? 'submitted' : r;
+  }
   const order = await env.DB.prepare('SELECT id, status, shipping_method, address_json, customer_id FROM orders WHERE id = ?')
     .bind(job.order_id)
     .first<{ id: string; status: string; shipping_method: 'economy' | 'express'; address_json: string; customer_id: string }>();
@@ -80,10 +93,39 @@ export async function processSupplierJob(env: Env, job: SupplierJob, attempt: nu
     return 'retry';
   }
   const client = choice.client;
-  const existing = await env.DB.prepare('SELECT status FROM supplier_shipments WHERE order_id = ? AND supplier = ?')
-    .bind(order.id, client.id)
-    .first<{ status: string }>();
-  if (existing && existing.status !== 'queued' && existing.status !== 'failed') return 'skipped';
+  // the row the payment queued while no supplier was configured (routes/payments.ts) is this supplier's now
+  await env.DB.prepare(
+    "UPDATE supplier_shipments SET supplier = ?, updated_at = ? WHERE order_id = ? AND supplier = 'unconfigured' AND NOT EXISTS (SELECT 1 FROM supplier_shipments WHERE order_id = ? AND supplier = ?)",
+  )
+    .bind(client.id, now, order.id, order.id, client.id)
+    .run();
+  await env.DB.prepare(
+    `INSERT INTO supplier_shipments (id, order_id, supplier, status, created_at, updated_at) SELECT ?, ?, ?, 'queued', ?, ? WHERE true
+     ON CONFLICT(order_id, supplier) DO NOTHING`,
+  )
+    .bind(crypto.randomUUID(), order.id, client.id, now, now)
+    .run();
+  // S13: the claim, before the supplier is called, only while the order is paid: a cancellation before the supplier
+  // (lib/cancel.ts) cancels only while no shipment is claimed, so the two can never both happen
+  const claim = await env.DB.prepare(
+    `UPDATE supplier_shipments SET status = 'submitting', attempts = ?, updated_at = ?
+     WHERE order_id = ? AND supplier = ? AND status IN ('queued', 'failed') AND EXISTS (SELECT 1 FROM orders WHERE id = ? AND status = 'paid')`,
+  )
+    .bind(attempt, now, order.id, client.id, order.id)
+    .run();
+  if (!claim.meta.changes) {
+    const row = await env.DB.prepare('SELECT status, updated_at FROM supplier_shipments WHERE order_id = ? AND supplier = ?')
+      .bind(order.id, client.id)
+      .first<{ status: string; updated_at: string }>();
+    // a claim left by a crash is taken over (compare-and-swap); the supplier must deduplicate by our order number
+    if (row?.status !== 'submitting' || Date.now() - Date.parse(row.updated_at) < SUBMIT_LEASE_MS) return 'skipped';
+    const take = await env.DB.prepare(
+      "UPDATE supplier_shipments SET attempts = ?, updated_at = ? WHERE order_id = ? AND supplier = ? AND status = 'submitting' AND updated_at = ?",
+    )
+      .bind(attempt, now, order.id, client.id, row.updated_at)
+      .run();
+    if (!take.meta.changes) return 'skipped';
+  }
   const customer = await env.DB.prepare('SELECT full_name, phone, email FROM customers WHERE id = ?')
     .bind(order.customer_id)
     .first<{ full_name: string; phone: string; email: string }>();
@@ -104,23 +146,18 @@ export async function processSupplierJob(env: Env, job: SupplierJob, attempt: nu
     const res = await client.submitOrder(input);
     await env.DB.batch([
       env.DB.prepare(
-        `INSERT INTO supplier_shipments (id, order_id, supplier, status, supplier_order_id, attempts, request_json, response_json, created_at, updated_at)
-         VALUES (?, ?, ?, 'submitted', ?, ?, ?, ?, ?, ?)
-         ON CONFLICT(order_id, supplier) DO UPDATE SET status = 'submitted', supplier_order_id = excluded.supplier_order_id, attempts = excluded.attempts, request_json = excluded.request_json, response_json = excluded.response_json, last_error = NULL, updated_at = excluded.updated_at`,
+        `UPDATE supplier_shipments SET status = 'submitted', supplier_order_id = ?, attempts = ?, request_json = ?, response_json = ?, last_error = NULL, updated_at = ?
+         WHERE order_id = ? AND supplier = ? AND status = 'submitting'`,
       ).bind(
-        crypto.randomUUID(),
-        order.id,
-        client.id,
         res.supplier_order_id,
         attempt,
         JSON.stringify({ lines: input.lines.map((l) => [l.supplier_sku, l.qty]), shipping_method: input.shipping_method }),
         JSON.stringify(res.raw),
         now,
-        now,
+        order.id,
+        client.id,
       ),
       env.DB.prepare("UPDATE orders SET status = 'sent_to_supplier', updated_at = ? WHERE id = ? AND status = 'paid'").bind(now, order.id),
-      // the row the payment queued while no supplier was configured (routes/payments.ts) is this one now
-      env.DB.prepare("DELETE FROM supplier_shipments WHERE order_id = ? AND supplier = 'unconfigured'").bind(order.id),
       env.DB.prepare('INSERT INTO audit_log (at, actor, action, subject, detail) VALUES (?, ?, ?, ?, ?)').bind(
         now,
         'queue',
@@ -133,10 +170,9 @@ export async function processSupplierJob(env: Env, job: SupplierJob, attempt: nu
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
     await env.DB.prepare(
-      `INSERT INTO supplier_shipments (id, order_id, supplier, status, attempts, last_error, created_at, updated_at) VALUES (?, ?, ?, 'failed', ?, ?, ?, ?)
-       ON CONFLICT(order_id, supplier) DO UPDATE SET status = 'failed', attempts = excluded.attempts, last_error = excluded.last_error, updated_at = excluded.updated_at`,
+      "UPDATE supplier_shipments SET status = 'failed', attempts = ?, last_error = ?, updated_at = ? WHERE order_id = ? AND supplier = ? AND status = 'submitting'",
     )
-      .bind(crypto.randomUUID(), order.id, client.id, attempt, msg.slice(0, 500), now, now)
+      .bind(attempt, msg.slice(0, 500), now, order.id, client.id)
       .run();
     if (attempt >= 5) await env.DB.prepare("UPDATE orders SET status = 'supplier_error', updated_at = ? WHERE id = ?").bind(now, order.id).run();
     return 'retry';

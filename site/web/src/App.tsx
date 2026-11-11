@@ -6,13 +6,16 @@ import { Layout } from './components/Layout';
 import { TransitionOverlay } from './components/Transition';
 import { Home } from './pages/Home';
 import { Room } from './pages/Room';
-import { Product } from './pages/Product';
-import { CartPage } from './pages/Cart';
-import { Checkout } from './pages/Checkout';
-import { OrderPage } from './pages/Order';
-import { MockPay } from './pages/MockPay';
-import { Legal } from './pages/Legal';
 import { NotFound } from './pages/NotFound';
+import { lazyPage } from './pages/lazy';
+
+// S13: the pages off the room's first paint are chunks of their own (pages/lazy.tsx); the room and home are in the entry
+const Product = lazyPage('product', () => import('./pages/Product').then((m) => m.Product));
+const CartPage = lazyPage('cart', () => import('./pages/Cart').then((m) => m.CartPage));
+const Checkout = lazyPage('checkout', () => import('./pages/Checkout').then((m) => m.Checkout));
+const OrderPage = lazyPage('order', () => import('./pages/Order').then((m) => m.OrderPage));
+const MockPay = lazyPage('mock-pay', () => import('./pages/MockPay').then((m) => m.MockPay));
+const Legal = lazyPage('legal', () => import('./pages/Legal').then((m) => m.Legal));
 
 export function Page({ route }: { route: Route }) {
   switch (route.name) {

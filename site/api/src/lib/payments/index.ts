@@ -26,3 +26,18 @@ export function paymentProvider(env: Env, origin: string, id = env.PAYMENT_PROVI
     return growProvider({ userId: env.GROW_USER_ID, pageCode: env.GROW_PAGE_CODE, apiKey: env.GROW_API_KEY, docsConfirmed: env.GROW_DOCS_CONFIRMED === '1' });
   throw new HttpError(503, 'payment_provider_not_configured', 'התשלום עוד לא מחובר.');
 }
+
+/**
+ * S13 (2.5): the provider to refund an order through: the one that took its payment, when it is the configured one.
+ * A payment through another provider (or none configured) is refunded by hand at that provider, never through this one.
+ */
+export function refundProvider(env: Env, orderProvider: string): { ok: true; provider: PaymentProvider } | { ok: false; reason: string } {
+  if (orderProvider !== env.PAYMENT_PROVIDER) return { ok: false, reason: `the order was paid through ${orderProvider}, and ${env.PAYMENT_PROVIDER || 'no provider'} is configured` };
+  try {
+    const p = paymentProvider(env, '', orderProvider);
+    if (!p.refund) return { ok: false, reason: `${p.id} has no refund call` };
+    return { ok: true, provider: p };
+  } catch (err) {
+    return { ok: false, reason: err instanceof HttpError ? err.code : 'payment_provider_unavailable' };
+  }
+}

@@ -392,15 +392,15 @@ def cut_product(k, regt, below, V, zone, front, dE):
     X.SPEC[k] = SPEC[k]
     try:
         if SPEC[k].get("no_fill"):
-            # cut_one fills enclosed holes < 4000 px for non-thin items; mark it thin-free but skip the fill by running it as "convex
-            # off, thin off" and then re-opening the holes where the render shows the scene below (dE small)
+            # cut_one fills enclosed holes < 4000 px for non-thin items. The rack is open: the render drew its tubes, rails and slings
+            # on the projected skeleton (within ~2 px, checked on the overlay), and what shows through its gaps is the model's redraw of
+            # the rug, which belongs to the rug layer. So its cut is held to the skeleton grown by 3 px; small specks are dropped.
             fill, a = X.cut_one(k, regt, below, V, zone, front, dE)
-            holes = fill & (dE < 5.0) & (V < 0.5)
-            ys, xs = np.nonzero(fill)
-            inner = np.zeros_like(fill)
-            inner[ys.min():ys.max() + 1, xs.min():xs.max() + 1] = True
-            reopen = holes & inner
-            fill = fill & ~reopen
+            fill = fill & X.dil(V > 0.5, 3)
+            n_, lab_, st_, _ = cv2.connectedComponentsWithStats(fill.astype(np.uint8), connectivity=8)
+            for i in range(1, n_):
+                if st_[i, 4] < 40:
+                    fill[lab_ == i] = False
             g = cv2.cvtColor((regt * 255).astype(np.uint8), cv2.COLOR_RGB2GRAY).astype(np.float32) / 255
             a = np.clip(PW.guided(g, fill.astype(np.float32), 2, 1e-3), 0, 1)
             a = np.where(X.ero(fill, 1), 1.0, a)

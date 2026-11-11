@@ -3,7 +3,11 @@
  * adds a signed JWT in `Cf-Access-Jwt-Assertion`; the Worker verifies it again (defence in depth):
  * RS256 signature against the team's JWKS, `aud` = the Access application AUD, `iss` = the team domain, `exp`.
  */
-import type { Env } from '../env';
+import type { MiddlewareHandler } from 'hono';
+import { sha256Hex, timingSafeEqualHex } from '@hd/shared';
+import type { AppEnv, Env } from '../env';
+import { HttpError } from './http';
+import { log } from './log';
 
 type Jwk = JsonWebKey & { kid?: string };
 type JwtHeader = { alg: string; kid?: string };
@@ -66,3 +70,48 @@ export async function verifyAccessJwt(
 export function devBypassAllowed(env: Env): boolean {
   return (env.ENVIRONMENT === 'development' || env.ENVIRONMENT === 'test') && env.ADMIN_DEV_BYPASS === '1';
 }
+
+/** S13: the local runs where the e2e suite's dev token may stand in for Access (never preview or production). */
+export function devTokenAllowed(env: Env): boolean {
+  return (env.ENVIRONMENT === 'development' || env.ENVIRONMENT === 'test' || env.ENVIRONMENT === 'preview-local') && (env.ADMIN_DEV_TOKEN ?? '').length >= 24;
+}
+
+/**
+ * S13: the one gate of /api/admin/* and /admin/* (the screen). Access sits in front of both paths; the Worker verifies
+ * its JWT again. Without a valid one: 403 (a short Hebrew page for the screen, JSON for the API), and a warning row
+ * without the token. The actor (the Access email) is what every admin action writes to the audit log.
+ */
+export const requireAdmin: MiddlewareHandler<AppEnv> = async (c, next) => {
+  if (devBypassAllowed(c.env)) {
+    c.set('actor', 'dev-bypass');
+    return next();
+  }
+  const dev = c.req.header('x-hd-dev-admin');
+  if (dev && devTokenAllowed(c.env) && timingSafeEqualHex(await sha256Hex(dev), await sha256Hex(c.env.ADMIN_DEV_TOKEN!))) {
+    c.set('actor', 'dev-token');
+    return next();
+  }
+  const token = c.req.header('cf-access-jwt-assertion');
+  let reason = 'no_token';
+  if (token && c.env.ACCESS_TEAM_DOMAIN && c.env.ACCESS_AUD) {
+    try {
+      const v = await verifyAccessJwt(token, { domain: c.env.ACCESS_TEAM_DOMAIN, aud: c.env.ACCESS_AUD, nowSec: Math.floor(Date.now() / 1000) });
+      if (v.ok) {
+        c.set('actor', v.email);
+        return next();
+      }
+      reason = v.reason;
+    } catch (err) {
+      reason = 'verify_failed';
+      log.error('admin.access_verify_failed', {}, err);
+    }
+  } else if (token) reason = 'access_not_configured';
+  log.warn('admin.forbidden', { path: new URL(c.req.url).pathname.slice(0, 80), reason });
+  if (new URL(c.req.url).pathname.startsWith('/admin'))
+    return c.html(
+      '<!doctype html><html lang="he" dir="rtl"><head><meta charset="utf-8"><meta name="robots" content="noindex"><title>אין גישה</title></head><body><main><h1>אין גישה</h1><p>העמוד הזה פתוח רק לצוות החנות, דרך הכניסה המאובטחת.</p></main></body></html>',
+      403,
+      { 'cache-control': 'no-store', 'x-robots-tag': 'noindex' },
+    );
+  throw new HttpError(403, 'forbidden');
+};

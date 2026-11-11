@@ -27,6 +27,20 @@ export type InvoiceInput = {
 };
 export type IssuedInvoice = { invoice_id: string; url: string | null };
 
+/** S13 (2.5): a credit note (חשבונית זיכוי) against the order's invoice, for one refund. */
+export type CreditNoteInput = {
+  order_id: string;
+  refund_id: string;
+  /** the provider's number of the invoice it credits */
+  invoice_id: string;
+  amount_agorot: number;
+  issued_at: string;
+  customer: { full_name: string; email: string; phone: string };
+  reason: string;
+  vat_rate: number;
+};
+export type IssuedCreditNote = { credit_note_id: string; url: string | null };
+
 export interface InvoiceProvider {
   readonly id: string;
   /** the provider honours the idempotency key: the same key again returns the first invoice, never a second one */
@@ -35,6 +49,10 @@ export interface InvoiceProvider {
   issue(input: InvoiceInput, opts: { idempotency_key: string }): Promise<IssuedInvoice>;
   /** the invoice the provider already issued for this order (our reference), null when there is none; absent when it cannot be asked */
   find?(orderId: string): Promise<IssuedInvoice | null>;
+  /** S13: a credit note for a refund, with our idempotency key (the refund's id); InvoiceRefused when nothing was issued */
+  creditNote?(input: CreditNoteInput, opts: { idempotency_key: string }): Promise<IssuedCreditNote>;
+  /** S13: the credit note already issued for this key, null when none; absent when it cannot be asked */
+  findCreditNote?(idempotencyKey: string): Promise<IssuedCreditNote | null>;
 }
 
 /** A refusal the provider gives before issuing anything (a total that does not add up): the claim is released. */
@@ -43,6 +61,7 @@ export class InvoiceRefused extends Error {}
 /** Development, tests and preview: a deterministic number per order; idempotent per key within the Worker instance */
 export function mockInvoices(): InvoiceProvider {
   const issued = new Map<string, IssuedInvoice>();
+  const credits = new Map<string, IssuedCreditNote>();
   return {
     id: 'mock',
     idempotent: true,
@@ -58,6 +77,18 @@ export function mockInvoices(): InvoiceProvider {
     },
     async find(orderId) {
       return issued.get(orderId) ?? null;
+    },
+    async creditNote(input, { idempotency_key }) {
+      const have = credits.get(idempotency_key);
+      if (have) return have;
+      if (!Number.isInteger(input.amount_agorot) || input.amount_agorot <= 0) throw new InvoiceRefused('credit_amount_invalid');
+      if (!input.invoice_id) throw new InvoiceRefused('credit_without_invoice');
+      const c = { credit_note_id: `MOCK-CN-${input.refund_id}`, url: null };
+      credits.set(idempotency_key, c);
+      return c;
+    },
+    async findCreditNote(key) {
+      return credits.get(key) ?? null;
     },
   };
 }
@@ -198,7 +229,125 @@ async function record(env: Db, orderId: string, providerId: string, inv: IssuedI
 }
 
 async function audit(env: Db, providerId: string, action: string, orderId: string, detail: string, at: string): Promise<void> {
-  await env.DB.prepare('INSERT INTO audit_log (at, actor, action, subject, detail) VALUES (?, ?, ?, ?, ?)')
-    .bind(at, `invoice:${providerId}`, action, orderId, detail)
+  await auditAs(env, `invoice:${providerId}`, action, orderId, detail, at);
+}
+async function auditAs(env: Db, actor: string, action: string, orderId: string, detail: string, at: string): Promise<void> {
+  await env.DB.prepare('INSERT INTO audit_log (at, actor, action, subject, detail) VALUES (?, ?, ?, ?, ?)').bind(at, actor, action, orderId, detail).run();
+}
+
+/**
+ * S13 (2.5): the credit note of a refund, once, the same way as the invoice (ת16): the refund row is claimed before the
+ * provider is called, the refund's id is the idempotency key, a claim left behind is resolved by asking the provider,
+ * and a provider that can neither be asked nor deduplicates leaves it `unresolved` for a person.
+ * - **No invoice, no credit note:** an order canceled before its invoice was issued (S12 question 1) needs none
+ *   (`not_needed`). An invoice still on its way: retried later.
+ * - `credited`: issued (or found) and recorded; `skipped`: nothing to do; `retry`: later; `unresolved`: a person.
+ */
+export async function processCreditNoteJob(
+  env: Db & { ENVIRONMENT?: string; INVOICE_PROVIDER?: string },
+  refundId: string,
+  provider?: InvoiceProvider,
+  opts: { vatRate?: number; now?: () => number } = {},
+): Promise<'credited' | 'skipped' | 'retry' | 'unresolved'> {
+  const now = opts.now ?? Date.now;
+  const iso = () => new Date(now()).toISOString();
+  const r = await env.DB.prepare(
+    'SELECT id, order_id, amount_agorot, reason, state, credit_state, credit_claimed_at FROM refunds WHERE id = ?',
+  )
+    .bind(refundId)
+    .first<{ id: string; order_id: string; amount_agorot: number; reason: string; state: string; credit_state: string; credit_claimed_at: string | null }>();
+  if (!r || r.state !== 'refunded' || r.credit_state === 'issued' || r.credit_state === 'not_needed') return 'skipped';
+  if (r.credit_state === 'unresolved') return 'unresolved';
+  const inv = await env.DB.prepare('SELECT state, provider_invoice_id FROM invoices WHERE order_id = ?')
+    .bind(r.order_id)
+    .first<{ state: string; provider_invoice_id: string | null }>();
+  if (!inv) {
+    const invoiceable = await env.DB.prepare(`SELECT 1 AS y FROM orders WHERE id = ? AND ${PAID_SQL}`).bind(r.order_id).first();
+    if (invoiceable) return 'retry'; // its invoice job has not run yet
+    await env.DB.prepare("UPDATE refunds SET credit_state = 'not_needed' WHERE id = ? AND credit_state = 'pending'").bind(refundId).run();
+    await auditAs(env, 'system', 'refund.credit_not_needed', r.order_id, JSON.stringify({ refund: refundId, why: 'no invoice was issued' }), iso());
+    return 'skipped';
+  }
+  if (inv.state !== 'issued' || !inv.provider_invoice_id) return 'retry';
+  if (!provider) {
+    const c = invoiceProvider(env);
+    if (!c.ok) {
+      refuseLoudly('the credit note job', c.reason, r.order_id);
+      return 'retry';
+    }
+    provider = c.provider;
+  }
+  if (!provider.creditNote) {
+    refuseLoudly('the credit note job', `${provider.id} has no credit note call`, r.order_id);
+    return 'retry';
+  }
+  const at = iso();
+  const claim = await env.DB.prepare(
+    "UPDATE refunds SET credit_state = 'claimed', credit_claimed_at = ? WHERE id = ? AND credit_state = 'pending'",
+  )
+    .bind(at, refundId)
     .run();
+  let ours = at;
+  if (!claim.meta.changes) {
+    // claimed by another run: fresh, it may be calling the provider; stale, a crash between the call and the record
+    if (r.credit_state !== 'claimed' || !r.credit_claimed_at || now() - Date.parse(r.credit_claimed_at) < INVOICE_LEASE_MS) return 'retry';
+    if (provider.findCreditNote) {
+      const found = await provider.findCreditNote(refundId);
+      if (found) return (await recordCredit(env, r.order_id, refundId, provider.id, found, iso())) ? 'credited' : 'skipped';
+    } else if (!provider.idempotent) {
+      const reason = `a credit note claim of ${r.credit_claimed_at} has no result, and ${provider.id} can neither be asked nor deduplicates: a person checks the provider`;
+      await env.DB.prepare("UPDATE refunds SET credit_state = 'unresolved', credit_error = ? WHERE id = ? AND credit_state = 'claimed'").bind(reason, refundId).run();
+      await auditAs(env, `invoice:${provider.id}`, 'refund.credit_unresolved', r.order_id, reason, iso());
+      refuseLoudly('the credit note job', reason, r.order_id);
+      return 'unresolved';
+    }
+    ours = iso();
+    const take = await env.DB.prepare(
+      "UPDATE refunds SET credit_claimed_at = ? WHERE id = ? AND credit_state = 'claimed' AND credit_claimed_at = ?",
+    )
+      .bind(ours, refundId, r.credit_claimed_at)
+      .run();
+    if (!take.meta.changes) return 'retry';
+  }
+  const head = await env.DB.prepare('SELECT o.customer_id, c.full_name, c.email, c.phone FROM orders o JOIN customers c ON c.id = o.customer_id WHERE o.id = ?')
+    .bind(r.order_id)
+    .first<{ full_name: string; email: string; phone: string }>();
+  let cn: IssuedCreditNote;
+  try {
+    cn = await provider.creditNote(
+      {
+        order_id: r.order_id,
+        refund_id: refundId,
+        invoice_id: inv.provider_invoice_id,
+        amount_agorot: r.amount_agorot,
+        issued_at: iso(),
+        customer: { full_name: head?.full_name ?? '', email: head?.email ?? '', phone: head?.phone ?? '' },
+        reason: r.reason,
+        vat_rate: opts.vatRate ?? 0.18,
+      },
+      { idempotency_key: refundId },
+    );
+  } catch (err) {
+    const msg = (err instanceof Error ? err.message : String(err)).slice(0, 500);
+    if (err instanceof InvoiceRefused)
+      await env.DB.prepare("UPDATE refunds SET credit_state = 'pending', credit_claimed_at = NULL, credit_error = ? WHERE id = ? AND credit_claimed_at = ?")
+        .bind(msg, refundId, ours)
+        .run();
+    else await env.DB.prepare('UPDATE refunds SET credit_error = ? WHERE id = ? AND credit_claimed_at = ?').bind(msg, refundId, ours).run();
+    refuseLoudly('the credit note provider', msg, r.order_id);
+    return 'retry';
+  }
+  return (await recordCredit(env, r.order_id, refundId, provider.id, cn, iso())) ? 'credited' : 'skipped';
+}
+
+async function recordCredit(env: Db, orderId: string, refundId: string, providerId: string, cn: IssuedCreditNote, at: string): Promise<boolean> {
+  const [done] = await env.DB.batch([
+    env.DB.prepare(
+      "UPDATE refunds SET credit_state = 'issued', credit_note_id = ?, credit_issued_at = ?, credit_error = NULL WHERE id = ? AND credit_state = 'claimed'",
+    ).bind(cn.credit_note_id, at, refundId),
+    env.DB.prepare(
+      "INSERT INTO audit_log (at, actor, action, subject, detail) SELECT ?, ?, 'refund.credit_note', ?, ? WHERE EXISTS (SELECT 1 FROM refunds WHERE id = ? AND credit_state = 'issued' AND credit_note_id = ? AND credit_issued_at = ?)",
+    ).bind(at, `invoice:${providerId}`, orderId, JSON.stringify({ refund: refundId, credit_note: cn.credit_note_id }), refundId, cn.credit_note_id, at),
+  ]);
+  return !!done?.meta.changes;
 }

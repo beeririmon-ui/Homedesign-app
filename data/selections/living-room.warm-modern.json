@@ -4,6 +4,7 @@
   "date": "2026-11-07",
   "author": "master-designer",
   "status": "proposed for owner approval 2 (with docs/design-bible/warm-modern.md 1.0 = approval 1); card statuses NOT changed until approval. 2026-11-07: approvals 1-2 (WMB1, WMP2), approval 3 (AP3-WM) and CAM1 given by the owner: cushions set B is the default",
+  "update_2026_11_11": "master-designer, phase 2 checkpoint (docs/proposals/wm-phase2-f3-decisions-2026-11-11.md): rug -> SKU 230x330 Square CJJT211801818RI (as rendered); magazine holder -> SKU Orange small CJYD201631004DW (cognac straps). Nothing else changed here. Open: owner question WM-T2 (table vignette, candle holders and bowl); floor-lamp card for both rooms (section 6, the manager)",
   "bible": "docs/design-bible/warm-modern.md 1.0",
   "camera": "M0 1.2 (tool), 17 slots in frame; wall-sconce transition-only",
   "scores": "warm-modern score: card style_scores where present, else 'cat' = provisional catalog score (data/catalog/warm-modern-2026-10-12.json). Price: card price.cost (USD, supplier); price_ils = the catalog's proposed retail where it exists (not approved, rule ה.10)",
@@ -30,7 +31,7 @@
       {"card_id": "vase-cj-white-plum-hand-thrown", "score": 8.0, "score_src": "card", "cost_usd": 24.05, "price_ils": null, "why": "white meiping: shape variant (shoulder and neck)"}
     ], "gap": "a caramel or taupe vessel would give an accent-colour axis"},
     "rug": {"picks": [
-      {"card_id": "rug-cj-braided-wool-natural", "score": 8.5, "score_src": "card", "cost_usd": 267.54, "price_ils": null, "why": "default: natural braided wool, tonal stripes, reads strongly on the smoked-oak floor. Loses money from China (IL1)"}
+      {"card_id": "rug-cj-braided-wool-natural", "option": {"size": "230x330", "other": "square"}, "sku": "CJJT211801818RI", "score": 8.5, "score_src": "card", "cost_usd": 338.43, "price_ils": null, "why": "default: natural braided wool, tonal stripes, reads strongly on the smoked-oak floor. Loses money from China (IL1)", "sku_2026_11_11": "master-designer (docs/proposals/wm-phase2-f3-decisions-2026-11-11.md section 3): the room shows SKU 230 x 330 Square (no tassels), the size rendered in the tool layer (assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/manifest.json); fidelity: what is rendered is what is sold. It fits the slot (330 x 240): Y 0.77-3.07, the sofa's front ~18 cm on the rug; 200 x 300 (was listed here at $267.54) would end at Y 0.92, ~3 cm under the sofa. 200 x 300 stays an option on the product page. Card not edited: sourcing moves default_sku / in_room to CJJT211801818RI and adds its IL shipping (card notes: DHL 3-7 d, $569.12)"}
     ], "gap": "2 missing: looped wool or tonal bouclé rug in griege 240 x 340, Israeli supplier (IL1)"},
     "floor-lamp": {"picks": [
       {"card_id": "floor-lamp-cj-pleated-walnut-stem-158", "score": 9.0, "score_src": "cat", "cost_usd": 31.18, "price_ils": null, "why": "default: walnut stem, pleated 37 shade, brushed brass detail; loses money in a 74 cm carton (find flat-pack / local)"}
@@ -48,7 +49,7 @@
       {"card_id": "basket-cj-jute-rope-cylinder", "score": 8.0, "score_src": "card", "cost_usd": 5.17, "price_ils": 119, "why": "default: tight natural rope cylinder, clean form"}
     ], "gap": "2 missing: cognac leather, taupe felt or espresso rope basket 35-38 x 35-42"},
     "magazine-holder": {"picks": [
-      {"card_id": "magazine-holder-cj-gunmetal-leather-strap", "score": 8.0, "score_src": "cat", "cost_usd": 31.08, "price_ils": null, "why": "default: dark metal with cognac leather straps, the second caramel point; loses money (find cheaper seller)"},
+      {"card_id": "magazine-holder-cj-gunmetal-leather-strap", "option": {"color": "orange", "size": "small"}, "sku": "CJYD201631004DW", "score": 8.0, "score_src": "cat", "cost_usd": 31.08, "price_ils": null, "why": "default: dark metal with cognac leather straps, the second caramel point; loses money (find cheaper seller)", "sku_2026_11_11": "master-designer (docs/proposals/wm-phase2-f3-decisions-2026-11-11.md section 4): the SKU is 'Orange' small 35 x 19 x 27.5 (CJYD201631004DW, cognac straps), not the card's default Black (CJYD201631002BY: black straps, no caramel). Customer-facing colour 'קוניאק', on condition that QA measures the straps inside the Bible caramel band (H 20-30, S 40-58, L 32-48) on the SKU photo and the R1 layer; the card hex #D9822B is a label reading. Card not edited: sourcing moves in_room to Orange and adds its IL shipping and stock"},
       {"card_id": "magazine-holder-cj-felt-log-basket", "score": 7.0, "score_src": "card", "cost_usd": 1.72, "price_ils": null, "why": "charcoal felt, light wood, cognac tabs: the soft variant (same card as the Nordic default)"}
     ], "gap": "1 missing: walnut magazine stand"},
     "table-runner": {"picks": [], "gap": "none fits (all fringed or too long); the draft allows a bare walnut table. Proposal: the slot is unused in warm modern (owner question WM-R1)"},
