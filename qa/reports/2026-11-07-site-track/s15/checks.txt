@@ -1,0 +1,22 @@
+S15 checks, 2026-11-11 (site/, from 7424a6d8 plus the S15 tree; no commit)
+
+npm run test:all                                   exit 0, 13m51s (test-all.log)
+  prepare:data, typecheck, lint, format:check      pass
+  vitest                                           233/233 (23 files)
+  build (flag) incl. budget, check:rights           pass; check:rights reports 39/39 public products withheld in a public build
+  e2e                                              118/118
+  a11y                                             16/16
+
+HD_PUBLIC=1 npm run build                           exit 0 (data/build-public.log); check:rights: 0 supplier files in web/dist, issues []
+  then HD_PUBLIC=1 web rebuild after the Product.image fix (data/build-public-web2.log): exit 0, 0 supplier files
+  public-scan.spec on the public build              2/2 (data/public-scan-on-public-build.log)
+  evidence shots on the public build                3/3 then 5/5 (data/shots-public.log, shots-public.json)
+
+HD_PUBLIC=1 npm run check:rights on the flag build  exit 1 as it must: 375 issues (221 files, 154 references) (data/rights-check-on-flag-dist.log)
+
+focused runs during the sprint
+  your-room + copy-seo                             11/11, 33 s (data/e2e-s15-specs.log)
+  house + flow                                     29/30, then flow fixed (old caption in flow.spec) 1/1 (data/e2e-house-flow.log, data/e2e-flow-rerun.log)
+  evidence shots, flag build                       7/7 (data/shots-flag.log, shots-flag.json)
+
+after the runs, web/dist is the flag build (test:all built it last; the evidence shots ran on it)

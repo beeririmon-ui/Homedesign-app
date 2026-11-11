@@ -1,0 +1,69 @@
+
+Running 3 tests using 1 worker
+
+encoding nordic 1920@1: base AVIF 5/7/13 · 0.02% · ΔE 2.38
+encoding nordic 1280@1: base AVIF 5/7/16 · 0.02% · ΔE 2.32
+encoding nordic 400@1: base AVIF 3/5/10 · 0.00% · ΔE 1.8
+encoding nordic 400@3: base AVIF 3/4/10 · 0.00% · ΔE 1.69
+encoding nordic 1280-zoom: base AVIF 4/6/12 · 0.00% · ΔE 2.3
+  ✓  1 [e2e] › e2e/encoding.spec.ts:152:3 › the tool-layer encoding threshold (S12, QA S8–S10 §4), as the browser draws it › Nordic: its base (AVIF: q80 at 1280 and 1920, the posters, S14; q70 at 2752; and the WebP fallback) meets it in every view (its layers are temporary) (50.9s)
+encoding warm-modern poster 1920@1 (default.2720.avif): AVIF 9/14/43 · 1.44% · ΔE 4.57 · WebP 2/2/2 · 0.00% · ΔE 2.06
+encoding warm-modern poster 1280@1 (default.1280.avif): AVIF 6/7/13 · 0.03% · ΔE 3.28 · WebP 2/2/2 · 0.00% · ΔE 2.44
+encoding warm-modern poster 400@1 (default.1280.avif): AVIF 4/5/8 · 0.00% · ΔE 2.52 · WebP 2/2/2 · 0.00% · ΔE 2.03
+encoding warm-modern poster 400@3 (default.2720.avif): AVIF 10/15/42 · 2.00% · ΔE 4.78 · WebP 2/2/2 · 0.00% · ΔE 2.05
+  ✘  2 [e2e] › e2e/encoding.spec.ts:200:5 › the poster at rest meets the threshold (S14, QA S11–S12 ת30 §4), in both houses and the four views › warm-modern: the poster the page rests on (AVIF and the WebP fallback) (35.8s)
+encoding nordic poster 1920@1 (shell.1920.avif): AVIF 6/8/15 · 0.09% · ΔE 2.79 · WebP 5/7/16 · 0.01% · ΔE 2.75
+encoding nordic poster 1280@1 (shell.1280.avif): AVIF 6/8/16 · 0.08% · ΔE 2.75 · WebP 5/7/15 · 0.02% · ΔE 2.7
+encoding nordic poster 400@1 (shell.1280.avif): AVIF 5/7/12 · 0.01% · ΔE 2.49 · WebP 4/5/10 · 0.00% · ΔE 2.55
+encoding nordic poster 400@3 (shell.2752.avif): AVIF 6/9/17 · 0.11% · ΔE 2.73 · WebP 4/5/17 · 0.00% · ΔE 2.59
+  ✓  3 [e2e] › e2e/encoding.spec.ts:200:5 › the poster at rest meets the threshold (S14, QA S11–S12 ת30 §4), in both houses and the four views › nordic: the poster the page rests on (AVIF and the WebP fallback) (45.3s)
+
+
+  1) [e2e] › e2e/encoding.spec.ts:200:5 › the poster at rest meets the threshold (S14, QA S11–S12 ת30 §4), in both houses and the four views › warm-modern: the poster the page rests on (AVIF and the WebP fallback) 
+
+    Error: warm-modern poster AVIF 1920@1 (default.2720.avif): p99 9 > 6
+    warm-modern poster AVIF 1920@1 (default.2720.avif): p99.9 14 > 10
+    warm-modern poster AVIF 1920@1 (default.2720.avif): 1.44% above 8 levels > 0.2%
+    warm-modern poster AVIF 1920@1 (default.2720.avif): ΔE00 p99 4.57 > 3.5
+    warm-modern poster AVIF 400@3 (default.2720.avif): p99 10 > 6
+    warm-modern poster AVIF 400@3 (default.2720.avif): p99.9 15 > 10
+    warm-modern poster AVIF 400@3 (default.2720.avif): 2.00% above 8 levels > 0.2%
+    warm-modern poster AVIF 400@3 (default.2720.avif): ΔE00 p99 4.78 > 3.5
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 10
+
+    - Array []
+    + Array [
+    +   "warm-modern poster AVIF 1920@1 (default.2720.avif): p99 9 > 6",
+    +   "warm-modern poster AVIF 1920@1 (default.2720.avif): p99.9 14 > 10",
+    +   "warm-modern poster AVIF 1920@1 (default.2720.avif): 1.44% above 8 levels > 0.2%",
+    +   "warm-modern poster AVIF 1920@1 (default.2720.avif): ΔE00 p99 4.57 > 3.5",
+    +   "warm-modern poster AVIF 400@3 (default.2720.avif): p99 10 > 6",
+    +   "warm-modern poster AVIF 400@3 (default.2720.avif): p99.9 15 > 10",
+    +   "warm-modern poster AVIF 400@3 (default.2720.avif): 2.00% above 8 levels > 0.2%",
+    +   "warm-modern poster AVIF 400@3 (default.2720.avif): ΔE00 p99 4.78 > 3.5",
+    + ]
+
+      220 |       }
+      221 |       write();
+    > 222 |       expect(bad, bad.join('\n')).toEqual([]);
+          |                                   ^
+      223 |     });
+      224 | });
+      225 |
+        at /tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/qa/build-s1314/site/e2e/encoding.spec.ts:222:35
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/encoding-the-poster-at-res-9c4a0-AVIF-and-the-WebP-fallback--e2e/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/encoding-the-poster-at-res-9c4a0-AVIF-and-the-WebP-fallback--e2e/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [e2e] › e2e/encoding.spec.ts:200:5 › the poster at rest meets the threshold (S14, QA S11–S12 ת30 §4), in both houses and the four views › warm-modern: the poster the page rests on (AVIF and the WebP fallback) 
+  2 passed (2.4m)
