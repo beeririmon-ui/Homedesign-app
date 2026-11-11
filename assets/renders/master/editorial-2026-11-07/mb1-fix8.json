@@ -98,6 +98,15 @@
     59.5
    ]
   },
+  "px_changed_in_cushion_mask": 0,
+  "px_changed_in_duvet_below_the_base": 0,
+  "contact_line_median_L": {
+   "fix5": 3.08,
+   "after_b": 3.07,
+   "fix6": 6.7,
+   "px": 146,
+   "read": "1.5-3 px off the cushion's right edge, y 830-915: (b) leaves its L* as it was; the toe lifts it like every dark"
+  },
   "fit": {
    "gamma": 0.7334,
    "trend_coef_logY": [
@@ -161,18 +170,18 @@
    ],
    "max_lift_L_base": 4.28
   },
-  "deviation": "region follows the shadow (x 2214-2509, y 809-921), not QA's x 2215-2330, y 840-925: the shadow runs past x 2330 in its lower half and starts at y 822; cut at the box (tried first) it left a 4-5 L* step at x 2330 (y 880-915) and a dark cap above y 840. Only the right caramel pillowcase changes; the cushion (QA's own lumbar mask too) and the duvet: 0 px"
+  "deviation": "region follows the shadow (bbox x 2213-2490, y 819-922), not QA's x 2215-2330, y 840-925: the shadow runs past x 2330 in its lower half (L* < 14 to x 2440 at y 900-918) and starts at y 822; cut at the box (tried first) it left a 4-5 L* step at x 2330 (y 880-915) and a dark cap above y 840, the wedge read as a lit rectangle. Only the right caramel pillowcase changes; the cushion (QA's lumbar mask and the colour mask) and the duvet below the base: 0 px"
  },
  "toe": {
   "curve": "q_ed7_toe.curve: slope s0 below L* 12, smoothstep blend of the slope to 1 at 20, identity from 20; lift (1 - s0)(16 - L) below 12",
-  "s0": 0.7203,
+  "s0": 0.7188,
   "lift_by_L": {
-   "0": 4.47,
-   "2": 3.92,
-   "4": 3.36,
-   "6": 2.8,
-   "8": 2.24,
-   "10": 1.68,
+   "0": 4.5,
+   "2": 3.94,
+   "4": 3.38,
+   "6": 2.81,
+   "8": 2.25,
+   "10": 1.69,
    "12": 1.12,
    "14": 0.59,
    "16": 0.21,
@@ -181,27 +190,20 @@
    "20": 0.0,
    "30": 0.0
   },
-  "chromaticity_own_from_L": 10.0,
-  "chromaticity_local_below_L": 3.0,
-  "local_sigmas_px": [
-   6.0,
-   20.0,
-   60.0
-  ],
-  "local_scale_weights": [
-   1.0,
-   0.05,
-   0.0025
-  ],
+  "chromaticity_own_from_L": 5.0,
+  "chromaticity_local_below_L": 2.0,
+  "local_sigma_px": 6.0,
   "local_source_L": [
-   6.0,
+   4.0,
    20.0
   ],
+  "local_cover_k": 0.001,
+  "fallback_srgb": "#2E2824 (Bible espresso)",
   "info": {
    "px_in_toe": 440353,
-   "px_chromaticity_partly_local": 107725,
-   "px_chromaticity_fully_local": 20463,
-   "px_hue_locked": 329472,
+   "px_chromaticity_partly_local": 38039,
+   "px_chromaticity_fully_local": 13143,
+   "px_hue_locked": 395005,
    "px_gamut_clipped": 0
   },
   "gate_percentiles": {
@@ -216,8 +218,8 @@
     "p5": 15.11
    },
    "fix6": {
-    "p0.5": 7.37,
-    "p1": 9.0,
+    "p0.5": 7.39,
+    "p1": 8.99,
     "p5": 15.64
    }
   },
@@ -228,40 +230,40 @@
     "p5": 14.23
    },
    "fix6": {
-    "p0.5": 6.67,
-    "p1": 8.34,
+    "p0.5": 6.7,
+    "p1": 8.38,
     "p5": 14.86
    }
   },
   "checks_toe_step": {
-   "px_changed": 280504,
+   "px_changed": 280901,
    "px_changed_at_L_ge_20": 0,
    "px_changed_gt2_at_L_ge_20": 0,
    "max_L_before_of_a_changed_px": 16.5,
-   "max_abs_change_8bit": 29,
-   "hue_shift_deg_own_class_L_ge_10_C_ge_6": {
-    "p1": -1.89,
-    "p5": -1.37,
-    "p50": -0.14,
-    "p95": 1.47,
-    "p99": 2.14,
-    "px": 169699
+   "max_abs_change_8bit": 28,
+   "hue_shift_deg_own_class_L_ge_5_C_ge_6": {
+    "p1": -2.15,
+    "p5": -1.42,
+    "p50": -0.12,
+    "p95": 1.52,
+    "p99": 2.24,
+    "px": 237065
    },
-   "hue_shift_deg_mixed_class_L_3_10_C_ge_6": {
-    "p1": -3.98,
-    "p5": -1.68,
-    "p50": 0.98,
-    "p95": 4.32,
-    "p99": 6.62,
-    "px": 77761
+   "hue_shift_deg_mixed_class_L_2_5_C_ge_4": {
+    "p1": -6.78,
+    "p5": -3.08,
+    "p50": 0.26,
+    "p95": 4.8,
+    "p99": 10.36,
+    "px": 18163
    },
    "chroma_ratio_own_class": {
-    "p1": 0.995,
-    "p5": 1.002,
-    "p50": 1.031,
-    "px": 169699
+    "p1": 0.996,
+    "p5": 1.004,
+    "p50": 1.056,
+    "px": 237065
    },
-   "share_changed_px_C_fell_gt_0_5": 0.0012,
+   "share_changed_px_C_fell_gt_0_5": 0.0,
    "new_magenta_px_from_near_neutral": 0
   },
   "p1_target": [
@@ -270,13 +272,135 @@
   ],
   "p5_rise_max": 3,
   "p5_rise": 0.59,
-  "p1_rise": 3.04
+  "p1_rise": 3.03
  },
  "whole_pass": {
-  "px_changed": 287935,
+  "px_changed": 288321,
   "px_changed_at_L_ge_20_fix5": 2910,
   "px_changed_at_L_ge_20_fix5_outside_b_region": 0,
   "px_changed_gt2_at_L_ge_20_fix5_outside_b_region": 0
+ },
+ "product_reads": {
+  "muslin throw, deep folds (L* < 25)": {
+   "fix5": {
+    "L": 16.9,
+    "C": 24.4,
+    "h": 54.2,
+    "p5_L": 5.2
+   },
+   "fix6": {
+    "L": 16.9,
+    "C": 24.6,
+    "h": 53.9,
+    "p5_L": 8.2
+   },
+   "px": 58530,
+   "box": [
+    1820,
+    1230,
+    2300,
+    1470
+   ]
+  },
+  "muslin throw, whole foot of the bed (L* < 25)": {
+   "fix5": {
+    "L": 18.5,
+    "C": 24.5,
+    "h": 55.1,
+    "p5_L": 3.9
+   },
+   "fix6": {
+    "L": 18.5,
+    "C": 24.6,
+    "h": 54.9,
+    "p5_L": 7.3
+   },
+   "px": 285705,
+   "box": [
+    940,
+    1140,
+    2736,
+    1536
+   ]
+  },
+  "walnut nightstand, drawer fronts (L* < 40)": {
+   "fix5": {
+    "L": 20.7,
+    "C": 24.3,
+    "h": 56.8,
+    "p5_L": 6.4
+   },
+   "fix6": {
+    "L": 20.7,
+    "C": 24.3,
+    "h": 56.8,
+    "p5_L": 9.1
+   },
+   "px": 59567,
+   "box": [
+    1000,
+    960,
+    1320,
+    1200
+   ]
+  },
+  "the void under the nightstand (L* < 12)": {
+   "fix5": {
+    "L": 1.0,
+    "C": 1.8,
+    "h": 43.0,
+    "p5_L": 0.0
+   },
+   "fix6": {
+    "L": 5.3,
+    "C": 2.7,
+    "h": 56.9,
+    "p5_L": 4.5
+   },
+   "px": 5945,
+   "box": [
+    990,
+    1230,
+    1300,
+    1280
+   ]
+  }
+ },
+ "gate_guardrails_py": {
+  "warm-modern-MB-A-fix5.png": {
+   "clipped_254_pct": 0.076,
+   "near_clip_250_pct": 0.587,
+   "shadows_10pct_Lab": [
+    13.8,
+    9.9,
+    14.6
+   ],
+   "highlights_10pct_Lab": [
+    77.3,
+    6.1,
+    20.1
+   ],
+   "split_flag": false,
+   "shadow_floor_L_p0_5": 3.8,
+   "shadow_floor_L_p1": 6.0
+  },
+  "warm-modern-MB-A-fix6.png": {
+   "clipped_254_pct": 0.076,
+   "near_clip_250_pct": 0.587,
+   "shadows_10pct_Lab": [
+    14.9,
+    10.6,
+    15.6
+   ],
+   "highlights_10pct_Lab": [
+    77.3,
+    6.1,
+    20.1
+   ],
+   "split_flag": false,
+   "shadow_floor_L_p0_5": 7.4,
+   "shadow_floor_L_p1": 9.0
+  }
  },
  "crops": [
   "fix8-before-after/pillowcase-shadow-100.jpg",

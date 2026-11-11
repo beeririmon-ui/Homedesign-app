@@ -84,6 +84,7 @@ def main():
         frame_median_L={"ed8": round(float(np.median(Lfr)), 2), "ed9": round(float(np.median(Lfin)), 2)},
         frame_p90_L={"ed8": round(float(np.percentile(Lfr, 90)), 2), "ed9": round(float(np.percentile(Lfin, 90)), 2)},
         product_reads=reads(fr, fin),
+        gate_guardrails_py=T.gate_guardrails([os.path.join(HERE, BASE), os.path.join(HERE, OUT)]),
     )
     os.makedirs(CROPS, exist_ok=True)
     spec = [

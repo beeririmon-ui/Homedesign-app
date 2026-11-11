@@ -23,7 +23,7 @@ Out: warm-modern/warm-modern-MB-A-fix6.png. Record: mb1-fix8.json. Crops: fix8-b
          - colour: the lifted base takes the caramel shadow's own chroma at its new level (C* vs L* measured on this
            pillowcase in this frame) and the hue H_T 55.5 (the lit caramel is 56.5; QA's patch), the per-pixel a*, b*
            texture kept; the contact lines keep their L* and take the same hue. Never grey.
-       Region: the cushion's cast shadow itself, x 2214-2509, y 809-921 (raw/fix6-b-region.png). DEVIATION, declared:
+       Region: the cushion's cast shadow itself (bbox in the record, raw/fix6-b-region.png). DEVIATION, declared:
        QA's area was x 2215-2330, y 840-925. The shadow's lower half runs past x 2330 (L* < 14 to x 2440 at y 900-918) and
        its top starts at y 822; a lift cut at that box (tried first) left a 4-5 L* vertical step at x 2330 (y 880-915) and
        a dark cap above y 840: the wedge read as a lit rectangle. Following the shadow keeps the wedge.
@@ -152,6 +152,13 @@ def shadow_core(fr, gamma):
                             for x in (2220, 2280, 2340, 2400, 2460, 2520)},
                 chroma_vs_L=[[round(a, 1), round(b, 1)] for a, b in zip(xs, ys)],
                 max_lift_L_base=round(float((Lb2 - Lb).max()), 2))
+    contact = np.zeros(fr.shape[:2], bool)                      # the contact line: 1.5-3 px off the cushion, rows 830-915, off the duvet
+    contact[y0:y1, x0:x1] = (dc >= 1.5) & (dc <= 3.0) & (yy >= 830) & (yy <= 915) & (dd > 3) & (xx >= 2205)
+    under = np.zeros(fr.shape[:2], bool)                        # the duvet below the pillowcase's base (per column, frame px)
+    under[y0:y1, x0:x1] = duv
+    cushion = np.zeros(fr.shape[:2], bool)
+    cushion[y0:y1, x0:x1] = cush
+    info["_masks"] = dict(contact=contact, duvet=under, cushion=cushion)
     return full, region, info
 
 
@@ -198,6 +205,31 @@ def solve(fr):
     return gm, s0, b_fr, region, info, fin, tinfo
 
 
+PATCHES = {   # frame px (x0, y0, x1, y1), L* limit: the product reads for G-ED.3 spot checks (the same pixels before and after)
+    "muslin throw, deep folds (L* < 25)": ((1820, 1230, 2300, 1470), 25.0),
+    "muslin throw, whole foot of the bed (L* < 25)": ((940, 1140, 2736, 1536), 25.0),
+    "walnut nightstand, drawer fronts (L* < 40)": ((1000, 960, 1320, 1200), 40.0),
+    "the void under the nightstand (L* < 12)": ((990, 1230, 1300, 1280), 12.0),
+}
+
+
+def product_reads(before, after):
+    out = {}
+    for name, (box, lmax) in PATCHES.items():
+        x0, y0, x1, y1 = box
+        lb0 = T.lab(before[y0:y1, x0:x1]).reshape(-1, 3)
+        lb1 = T.lab(after[y0:y1, x0:x1]).reshape(-1, 3)
+        m = lb0[:, 0] < lmax
+        r = {}
+        for k, lb in (("fix5", lb0), ("fix6", lb1)):
+            a, b = np.median(lb[m, 1]), np.median(lb[m, 2])
+            r[k] = dict(L=round(float(np.median(lb[m, 0])), 1), C=round(float(np.hypot(a, b)), 1),
+                        h=round(float(np.degrees(np.arctan2(b, a))), 1), p5_L=round(float(np.percentile(lb[m, 0], 5)), 1))
+        r["px"], r["box"] = int(m.sum()), list(box)
+        out[name] = r
+    return out
+
+
 def _inv(f, target, lo=0.0, hi=40.0):
     for _ in range(60):
         mid = (lo + hi) / 2
@@ -211,6 +243,7 @@ def _inv(f, target, lo=0.0, hi=40.0):
 def main():
     fr = load(BASE)
     gm, s0, b_fr, region, binfo, fin, tinfo = solve(fr)
+    mk = binfo.pop("_masks")
     Image.fromarray(fin).save(os.path.join(HERE, OUT))
     Image.fromarray((region * 255).astype(np.uint8)).save(os.path.join(HERE, REGION_PNG))
 
@@ -249,10 +282,19 @@ def main():
             slit_median_L={"fix5": round(box_median(fr, SLIT), 2), "fix6": round(box_median(fin, SLIT), 2), "box": list(SLIT)},
             qa_area_median_L={"fix5": round(box_median(fr, QA_AREA), 2), "fix6": round(box_median(fin, QA_AREA), 2)},
             hue={"fix5": shadow_hue(fr, region), "fix6": shadow_hue(fin, region), "lit_caramel_h": 56.5, "window": [53.5, 59.5]},
+            px_changed_in_cushion_mask=int(((d_b > 0) & mk["cushion"]).sum()),
+            px_changed_in_duvet_below_the_base=int(((d_b > 0) & mk["duvet"]).sum()),
+            contact_line_median_L={"fix5": round(float(np.median(Lfr[mk["contact"]])), 2),
+                                   "after_b": round(float(np.median(T.L_of(b_fr)[mk["contact"]])), 2),
+                                   "fix6": round(float(np.median(T.L_of(fin)[mk["contact"]])), 2),
+                                   "px": int(mk["contact"].sum()),
+                                   "read": "1.5-3 px off the cushion's right edge, y 830-915: (b) leaves its L* as it was; the toe lifts it like every dark"},
             fit=binfo,
-            deviation="region follows the shadow (x 2214-2509, y 809-921), not QA's x 2215-2330, y 840-925: the shadow runs past x 2330 in "
-                      "its lower half and starts at y 822; cut at the box (tried first) it left a 4-5 L* step at x 2330 (y 880-915) and a dark "
-                      "cap above y 840. Only the right caramel pillowcase changes; the cushion (QA's own lumbar mask too) and the duvet: 0 px",
+            deviation=f"region follows the shadow (bbox x {xs.min()}-{xs.max()}, y {ys.min()}-{ys.max()}), not QA's x 2215-2330, y 840-925: "
+                      "the shadow runs past x 2330 in its lower half (L* < 14 to x 2440 at y 900-918) and starts at y 822; cut at the box "
+                      "(tried first) it left a 4-5 L* step at x 2330 (y 880-915) and a dark cap above y 840, the wedge read as a lit "
+                      "rectangle. Only the right caramel pillowcase changes; the cushion (QA's lumbar mask and the colour mask) and the "
+                      "duvet below the base: 0 px",
         ),
         toe=dict(
             curve="q_ed7_toe.curve: slope s0 below L* 12, smoothstep blend of the slope to 1 at 20, identity from 20; lift (1 - s0)(16 - L) below 12",
@@ -269,6 +311,8 @@ def main():
             px_changed_gt2_at_L_ge_20_fix5_outside_b_region=int(((d_all > 2) & (Lfr >= 20) & ~region).sum()),
         ),
     )
+    rec["product_reads"] = product_reads(fr, fin)
+    rec["gate_guardrails_py"] = T.gate_guardrails([os.path.join(HERE, BASE), os.path.join(HERE, OUT)])
     gb, gf = rec["toe"]["gate_percentiles"]["fix5"], rec["toe"]["gate_percentiles"]["fix6"]
     rec["toe"]["p5_rise"] = round(gf["p5"] - gb["p5"], 2)
     rec["toe"]["p1_rise"] = round(gf["p1"] - gb["p1"], 2)

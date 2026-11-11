@@ -245,3 +245,16 @@ def crop_pair(before8, after8, box, scale, title, path, stretch=1.0):
                       f"{'' if stretch == 1 else f' · stretch x{stretch:g}'} · before | after", fill=(80, 80, 80), font=f)
     sheet.save(path, quality=95)
     return path
+
+
+# ---------------------------------------------------------------- the gate's own tool, for the record
+def gate_guardrails(paths):
+    """runs qa/reports/2026-11-07-gate-g-ed/tools/guardrails.py's measure() (G-ED.11 split flag and shadow floor, G-ED.12 clipping)"""
+    import importlib.util
+    import os
+    repo = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", ".."))
+    spec = importlib.util.spec_from_file_location("guardrails", os.path.join(repo, "qa/reports/2026-11-07-gate-g-ed/tools/guardrails.py"))
+    g = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(g)
+    keys = ("shadow_floor_L_p0_5", "shadow_floor_L_p1", "shadows_10pct_Lab", "highlights_10pct_Lab", "split_flag", "clipped_254_pct", "near_clip_250_pct")
+    return {os.path.basename(p): {k: v for k, v in g.measure(p, []).items() if k in keys} for p in paths}
