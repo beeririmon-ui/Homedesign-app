@@ -94,6 +94,25 @@ const rows: [string, number, number | null][] = [
   [`room media (${count} files, shell @${posterW}, layers @${res})`, layers, null],
   ['first load, living room, mobile', total, BUDGET.firstLoad],
 ];
+// S14 (QA ת29/ת30): a direct entry to another house (warm-modern) on the same phone: its own page, the room's entry and
+// the house's chunk, the poster (its default composition, at the width the same sizes pick) and the composition the
+// engine draws at the house's native width (the base, the default set's layers, the depth map). Behind the flag: the
+// public build has no house pages.
+const housePage = join(DIST, 'house/living-room/warm-modern/index.html');
+const houseData = sitePath('.generated/house.living-room.warm-modern.json');
+if (existsSync(housePage) && existsSync(houseData)) {
+  const hs = (JSON.parse(readFileSync(houseData, 'utf8')) as { scene: Scene & { native?: number; poster?: { src: string; widths: number[] } } }).scene;
+  const chunk = assets.filter((f) => /^warm-modern-.*\.js$/.test(f)).map((f) => gz(join(DIST, 'assets', f)));
+  const pst = hs.poster ?? hs.base[0]!;
+  const pw = pst.widths.find((w) => w >= need) ?? pst.widths[pst.widths.length - 1]!;
+  const at = hs.native ?? hs.widths.hi;
+  let media = file(pst.src, pw) + file(hs.depth.src) + file(hs.base[0]!.src, at);
+  for (const sc of Object.values(hs.slots)) for (const set of [sc.product, sc.shadow, sc.light]) if (set?.src[0]) media += file(set.src[0], at);
+  rows.push(
+    [`warm-modern house media (poster @${pw}, composition @${at})`, media, null],
+    ['first load, the warm-modern house, mobile', gz(housePage) + sum(js) + sum(chunk) + sum(css) + fonts + media, BUDGET.firstLoad],
+  );
+}
 // S5: the story's pages (behind the flag; absent from the public build). A story page's own scripts and styles, and its
 // first view on the phone: HTML, scripts, styles, fonts and the first frame's phone picture at 412 @2x (AVIF, which
 // every browser the site supports reads). A detail page the same way, with its first picture.

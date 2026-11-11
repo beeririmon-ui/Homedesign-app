@@ -183,10 +183,13 @@ const THUMB = 360;
  * S14, QA ת29/ת30: the poster the stage rests on until the engine starts (a phone: until the first touch) is the house's
  * approved default composition (composite-set-B), not the base without the set. It is held to the encoding threshold
  * where the browser draws it (e2e/encoding.spec.ts, "the poster at rest"):
- *  - 1280 at AVIF q90: 1280@1 and 400@1 (QA §4: 6/7/13 · 0.03% · ΔE 3.27).
- *  - 2720 at AVIF q85: a phone at DPR 3 (5/8/23 · 0.04% · ΔE 3.31), and every desktop wider than 1280 px. No lossy 1920
- *    met it at 1920@1, drawn 1:1 (q90: ΔE 3.69); the 2720 drawn down to 1920 does (measured: s14/poster-candidates.json).
- *  - The WebP fallback (browsers without AVIF): POSTER_WEBP, measured the same way.
+ *  - 1280 at AVIF q90 (147 KB): 1280@1 and 400@1 (QA §4: 6/7/13 · 0.03% · ΔE 3.27).
+ *  - 2720 at AVIF q85 (462 KB): a phone at DPR 3 (5/8/23 · 0.04% · ΔE 3.31), and every desktop wider than 1280 px. No
+ *    1920 file: the 1920 at q90 misses at 1920@1, drawn 1:1 (ΔE 3.70, 396 KB); q95 meets it at 798 KB, near-lossless at
+ *    1.45 MB; the 2720 at q85 drawn down to 1920 meets it at 462 KB (5/8 · 0.05% · ΔE 3.36; 1440@1: ΔE 3.37). Measured
+ *    in the browser: qa/reports/2026-11-07-site-track/s14/data/poster-candidates.run1.json.
+ *  - The WebP fallback (browsers without AVIF only): near-lossless 60, the lightest WebP that meets it (40 misses at
+ *    1280@1: ΔE 4.21; lossy q95 and q100 miss everywhere): 628 KB at 1280, 2.8 MB at 2720.
  */
 const POSTER_WIDTHS = [1280, W];
 const POSTER_AVIF_Q: Record<number, number> = { 1280: 90, [W]: 85 };

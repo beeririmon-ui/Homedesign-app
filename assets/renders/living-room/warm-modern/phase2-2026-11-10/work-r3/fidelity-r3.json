@@ -1,0 +1,155 @@
+{
+ "date": "2026-11-11",
+ "script": "assets/renders/living-room/warm-modern/phase2-2026-11-10/fidelity_r3.py",
+ "products": {
+  "planter": {
+   "card": "planter-cj-cement-ribbed-belly",
+   "option": "beige large",
+   "sku": "CJJT154204209IR",
+   "card_dimensions": "opening 35.5, largest diameter (belly) 42, height 35.5 (the card's notes)",
+   "plan": "slots 1.9.1 WMC2: pot centre (-1.95, 0.42); olive crown (filler) r <= 0.28, Z 0.70-1.65",
+   "visible": "its left side and the top of its rim (the basket in front hides the rest, as planned)",
+   "belly_left_px": {
+    "clay": 958.2,
+    "render": 957,
+    "delta_px": -1.2,
+    "delta_cm": -0.3
+   },
+   "rim_top_px": {
+    "1040": {
+     "render": 1042,
+     "clay": 1044.2
+    },
+    "1044": {
+     "render": 1042,
+     "clay": 1044.2
+    },
+    "1048": {
+     "render": 1044,
+     "clay": 1044.2
+    }
+   },
+   "rim_top_delta_px": -1.5,
+   "rim_top_delta_cm": -0.4,
+   "base_low_px": {
+    "975": {
+     "render": 1186,
+     "clay": 1182.9
+    },
+    "982": {
+     "render": 1189,
+     "clay": 1185.9
+    },
+    "990": {
+     "render": 1191,
+     "clay": 1187.7
+    }
+   },
+   "base_delta_px": 3.2,
+   "base_delta_cm": 0.9,
+   "olive_tree_filler": {
+    "crown_width_cm": 51.2,
+    "top_Z_m": 1.24,
+    "envelope": "r <= 0.28 (56 cm), Z 0.70-1.65",
+    "inside": true
+   },
+   "opening_left_px": {
+    "card_35_5": 969.6,
+    "belly_42": 958.2,
+    "render": 959.5
+   },
+   "opening_cm_if_symmetric": {
+    "card": 35.5,
+    "render": 41.7
+   },
+   "pot_pixels_right_of_x1000_below_y1090": 0,
+   "tolerance_cm": 1.5,
+   "verdict": "pass on size and place: belly edge, rim top and base on the clay of the card's 42 x 35.5 at (-1.95, 0.42) (belly -0.3 cm, rim -0.4 cm, base +0.9 cm); PARTIAL (shape): the opening reads ~42 cm against the card's 35.5, so the shoulder under the rim is straighter than the card's belly (R1's pot shape, carried by the placeholder; the model widened it a little); it shows only on the pot's visible left side"
+  },
+  "basket": {
+   "card": "basket-cj-jute-rope-cylinder",
+   "option": "large",
+   "sku": "CJYD186026903CX",
+   "card_dimensions": "diameter 35, body 39, loop handles ~9 above the rim (the card's notes)",
+   "plan": "slots 1.7 / 1.9: centre (-1.62, 0.78), IN FRONT of the pot",
+   "body_width_px": {
+    "clay": 133.0,
+    "render": 133.0
+   },
+   "body_width_cm": 35.0,
+   "rim_top_px": {
+    "clay": 1062,
+    "render": 1063
+   },
+   "loop_top_px": {
+    "clay": 1036,
+    "render": 1027
+   },
+   "base_front_y_px": 1235,
+   "floor_centre_m": {
+    "plan": [
+     -1.62,
+     0.78
+    ],
+    "render": [
+     -1.6,
+     0.762
+    ]
+   },
+   "offset_cm": 2.7,
+   "clay_by_the_same_method": [
+    -1.605,
+    0.764
+   ],
+   "offset_vs_clay_same_method_cm": 0.5,
+   "in_front_of_pot": true,
+   "verdict": "pass: body 35.0 cm (card 35), floor centre 2.7 cm from the plan's (-1.62, 0.78) (0.5 cm from the clay read the same way), in front of the pot, both loops"
+  },
+  "pendant": {
+   "card": "pendant-cj-tiered-fabric-drum",
+   "option": "Beige-50cm (the single variant)",
+   "sku": "CJYD247032902BY",
+   "plan": "slots 1.5 (V7Q7 b, the owner): hang point (0.20, 1.72, 3.00), shade bottom Z 1.90; card Beige 50 (shade height ~28, step 0)",
+   "shade_rows_px": {
+    "clay": [
+     164,
+     374
+    ],
+    "render": [
+     171,
+     383
+    ]
+   },
+   "width_px": {
+    "clay": 302,
+    "render": 306
+   },
+   "width_cm": 50.7,
+   "shade_bottom_Z_fit_m": 1.885,
+   "vs_plan_cm": -1.5,
+   "centre_x_offset_px": 1.0,
+   "centre_x_offset_cm": 0.2,
+   "cord_rows_found": "16 of 16",
+   "canopy_box_px": [
+    1647,
+    5,
+    1717,
+    44
+   ],
+   "r2_for_comparison": {
+    "shade_bottom_Z_fit_m": 1.8,
+    "centre_x_offset_cm": -3.6
+   },
+   "verdict": "pass: the shade bottom fits Z 1.885 (plan 1.90, R2 1.80), width 50.7 cm (card 50), centre +0.2 cm from the hang point's column"
+  }
+ },
+ "passes": {
+  "r3a": [
+   "planter",
+   "basket"
+  ],
+  "r3b": [
+   "pendant"
+  ]
+ }
+}

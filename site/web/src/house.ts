@@ -54,6 +54,7 @@ export const HOUSES: { style: string; name_he: string }[] = [
 ];
 
 const loading = new Map<string, Promise<House | null>>();
+const loaded = new Map<string, House>();
 /** The house of a style (cached); null for a style without one, and always in a public build. */
 export function loadHouse(style: string): Promise<House | null> {
   if (style === NORDIC) return Promise.resolve(nordic);
@@ -63,9 +64,17 @@ export function loadHouse(style: string): Promise<House | null> {
     loading.set(
       style,
       (p = import('./houses/warm-modern').then(
-        (m) => m.house,
+        (m) => (loaded.set(style, m.house), m.house),
         () => (loading.delete(style), null),
       )),
     );
   return p;
+}
+/**
+ * S14, QA ת29: the house of a style when its chunk is already here (the prerender loads it before it renders the
+ * house's page, the browser before it hydrates that page), so the page's first render, and so its first paint, is that
+ * house's poster: never a stage waiting for it, never another house's picture.
+ */
+export function houseNow(style: string): House | null {
+  return style === NORDIC ? nordic : (loaded.get(style) ?? null);
 }

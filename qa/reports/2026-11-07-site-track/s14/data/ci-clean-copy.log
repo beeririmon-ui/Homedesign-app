@@ -1,0 +1,21 @@
+== a clean copy: ls: cannot access '.generated': No such file or directory ls: cannot access 'web/public/media': No such file or directory ls: cannot access 'web/dist': No such file or directory 
+== 1. npm run typecheck first (the old CI order): expected to fail
+exit 2
+src/routes/payments.ts(158,5): error TS2739: Type 'ExecutionContext' is missing the following properties from type 'ExecutionContext<unknown>': exports, tracing, abort
+src/catalog.ts(3,25): error TS2307: Cannot find module '@generated/catalog.public.json' or its corresponding type declarations.
+src/catalog.ts(4,23): error TS2307: Cannot find module '@generated/scene.living-room.nordic.json' or its corresponding type declarations.
+src/catalog.ts(5,26): error TS2307: Cannot find module '@generated/supplier-images.json' or its corresponding type declarations.
+== 2. the CI order: prepare:data, typecheck, lint, format:check, test
+prepare:data: exit 0 (501 s)
+typecheck: exit 0 (17 s)
+lint: exit 0 (7 s)
+format:check: exit 0 (6 s)
+test: exit 0 (7 s)
+ Test Files  21 passed (21)
+      Tests  212 passed (212)
+== 3. again, without .generated (the copy now holds api/node_modules, as npm ci makes it: step 1's payments.ts error came from the copy missing it): npm run typecheck
+exit 2
+  src/catalog.ts(3,25): error TS2307: Cannot find module '@generated/catalog.public.json' or its corresponding type declarations.
+  src/catalog.ts(4,23): error TS2307: Cannot find module '@generated/scene.living-room.nordic.json' or its corresponding type declarations.
+  src/catalog.ts(5,26): error TS2307: Cannot find module '@generated/supplier-images.json' or its corresponding type declarations.
+  src/houses/warm-modern.tsx(12,18): error TS2307: Cannot find module '@generated/house.living-room.warm-modern.json' or its corresponding type declarations.

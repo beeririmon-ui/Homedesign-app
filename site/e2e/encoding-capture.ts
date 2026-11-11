@@ -103,10 +103,12 @@ export async function capturePoster(browser: Browser, url: string, v: View, answ
   const img = page.locator('img.poster');
   await expect(img).toBeVisible({ timeout: 20_000 });
   await expect.poll(() => img.evaluate((i: HTMLImageElement) => i.complete && i.naturalWidth > 0 && !!i.currentSrc), { timeout: 30_000 }).toBe(true);
-  await hide(page, '.stage-ui, .hotspots, .stage-temp-note, .outlines, .stage-back, .stage-vignette, canvas.room-canvas');
-  let shot = await img.screenshot();
+  // hidden again before every shot: the page hydrates after the poster is drawn (its marks, shown on a first entry,
+  // are made then), so a hide done once can miss them (S14: the Nordic room's 13 marks, ≈0.1–0.3% of the frame)
+  const still = () => hide(page, POSTER_OVER).then(() => img.screenshot());
+  let shot = await still();
   for (let i = 0; i < 30; i++) {
-    const next = await img.screenshot();
+    const next = await still();
     if (next.equals(shot)) break;
     shot = next;
   }
@@ -119,6 +121,8 @@ export async function capturePoster(browser: Browser, url: string, v: View, answ
   return { data, w: info.width, h: info.height, file: new URL(info0.src).pathname.split('/').pop()!, engine: info0.engine };
 }
 
+/** what lies over the poster at rest: the controls, the marks (each hotspot too: one shown sets its own visibility) */
+const POSTER_OVER = '.stage-ui, .hotspots, button.hotspot, .hotspot .mark, .stage-temp-note, .outlines, .stage-back, .stage-vignette, canvas.room-canvas';
 /** the page's CSP allows no style element: the controls are hidden through their style attribute */
 const hide = (page: Page, sel: string) =>
   page.evaluate((s) => document.querySelectorAll<HTMLElement>(s).forEach((el) => (el.style.visibility = 'hidden')), sel);

@@ -16,6 +16,9 @@ registerPages({ product: Product, cart: CartPage, checkout: Checkout, order: Ord
 export { ORIGIN } from './head';
 // S10 question 7 (S11): the houses of the room engine, for a prerendered page per house (scripts/prerender.ts)
 export { HOUSES, NORDIC } from './house';
+import { HOUSES as ALL, NORDIC as N, loadHouse } from './house';
+/** S14, QA ת29: every house's chunk, loaded before its page is rendered, so the page is that house from its first paint */
+export const loadHouses = () => Promise.all(ALL.filter((h) => h.style !== N).map((h) => loadHouse(h.style)));
 import { match } from './router';
 
 const esc = (s: string) => s.replace(/[&<>"]/g, (c) => `&#${c.charCodeAt(0)};`);

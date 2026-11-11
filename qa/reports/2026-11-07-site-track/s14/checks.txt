@@ -1,0 +1,11 @@
+S14, the full run: cd site && npm run test:all (2026-11-11), log: test-all.log (13 min 48 s)
+prepare:data   pass (now the first step of test:all and of the CI, QA ת32)
+typecheck      pass
+lint           pass (eslint, 0 warnings)
+format:check   pass
+vitest         212/212 (21 files; new: api/test/s14.test.ts 8 (ת27 x3 on the real cards through checkout and the supplier job, ת31 x5), tools/test/s14-catalog.test.ts 9 (ת27 x5, ת33 x4))
+build          pass; check-config pass; build-catalog: Latin in 0 public texts (ת33), 0 supplier SKU issues (ת27); budget: see budget.txt
+e2e            111/111 (new: encoding.spec: sets A and C, every set in all five views, the poster at rest in both houses x 4 views (AVIF and the WebP fallback); house.spec: ת29 x3 (no JavaScript, at rest 400@1 and 1280@1); your-room.spec: ת28 cases 3 and 4)
+a11y           16/16
+CI order (ת32) on a clean copy: data/ci-clean-copy.log (typecheck first: fails on the four @generated files; prepare:data first: typecheck, lint, format:check, vitest 212/212 pass)
+public build   HD_PUBLIC=1 npm run build: pass, 0 house pages, the Nordic first load 693.5 KB (data/public-build.log); the flagged build was rebuilt after it

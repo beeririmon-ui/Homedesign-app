@@ -10,7 +10,9 @@ import { shopPath } from '@hd/shared/product-url';
 const here = dirname(fileURLToPath(import.meta.url));
 const dist = resolve(here, '../dist');
 const ssrDir = resolve(here, '../.ssr');
-const { render, ORIGIN, HOUSES, NORDIC } = (await import(pathToFileURL(resolve(ssrDir, 'entry-server.js')).href)) as typeof import('../src/entry-server');
+const { render, ORIGIN, HOUSES, NORDIC, loadHouses } = (await import(
+  pathToFileURL(resolve(ssrDir, 'entry-server.js')).href
+)) as typeof import('../src/entry-server');
 const catalog = JSON.parse(readFileSync(resolve(here, '../../.generated/catalog.public.json'), 'utf8')) as {
   rooms: { id: string; built: boolean }[];
   products: { id: string }[];
@@ -45,9 +47,11 @@ for (const url of routes) {
   writeFileSync(file, page(url));
 }
 // S10 question 7 (S11): a page per house of the room engine besides the Nordic one, rendered at its own address
-// (/rooms/<room>/?style=<id>): it waits for that house and carries no Nordic poster. The Worker serves it for that address
-// (api/src/app.ts); a public build lists no other house, so writes none
+// (/rooms/<room>/?style=<id>): it carries no Nordic poster; S14 (ת29): it is that house, its poster from the first
+// paint. The Worker serves it for that address (api/src/app.ts); a public build lists no other house, so writes none
 const houses = HOUSES.filter((h) => h.style !== NORDIC);
+// S14, QA ת29: the house's chunk first, so its page is rendered as that house (its poster, its slot), not as a wait
+await loadHouses();
 for (const h of houses)
   for (const r of catalog.rooms.filter((x) => x.built)) {
     const file = resolve(dist, `house/${r.id}/${h.style}/index.html`);

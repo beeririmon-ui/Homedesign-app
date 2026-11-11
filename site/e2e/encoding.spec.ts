@@ -149,7 +149,9 @@ test.describe('the tool-layer encoding threshold (S12, QA S8–S10 §4), as the 
       expect(bad, bad.join('\n')).toEqual([]);
     });
 
-  test('Nordic: its base (AVIF q70 and its WebP fallback) meets it in every view (its layers are temporary)', async ({ browser }) => {
+  test('Nordic: its base (AVIF: q80 at 1280 and 1920, the posters, S14; q70 at 2752; and the WebP fallback) meets it in every view (its layers are temporary)', async ({
+    browser,
+  }) => {
     const BASE = /\/media\/rooms\/living-room\/nordic\/M0\/base\/shell\.(\d+)\.(avif|webp)$/;
     const refBase: Answer = async (r, m) => fulfil(r, await reference(nordicSource, Number(m[1]), false), 'image/png');
     const webpBase: Answer = async (r, m) => fulfil(r, file(`rooms/living-room/nordic/M0/base/shell.${m[1]}.webp`), 'image/webp');

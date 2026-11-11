@@ -25,6 +25,7 @@ const HOUSES = {
 };
 const ENC = {
   png: (s) => s.png({ compressionLevel: 1 }),
+  'avif-q70': (s) => s.avif({ quality: 70, effort: 4 }),
   'avif-q80': (s) => s.avif({ quality: 80, effort: 4 }),
   'avif-q85': (s) => s.avif({ quality: 85, effort: 4 }),
   'avif-q90': (s) => s.avif({ quality: 90, effort: 4 }),
@@ -52,15 +53,18 @@ const bytes = (h, w, enc) => {
 const VIEWS = { '1920@1': { w: 1920, h: 1080, dpr: 1 }, '1280@1': { w: 1280, h: 720, dpr: 1 }, '400@1': { w: 400, h: 800, dpr: 1 }, '400@3': { w: 400, h: 800, dpr: 3 }, '1440@1': { w: 1440, h: 900, dpr: 1 } };
 // [house, view, file width answered (whatever the page asks for), candidates]
 const PLAN = [
-  ['warm-modern', '1920@1', 2720, ['avif-q85', 'webp-q95-smart', 'webp-q100-smart', 'webp-nl20', 'webp-nl40', 'webp-nl60']],
-  ['warm-modern', '1920@1', 1920, ['avif-q90', 'avif-q95', 'avif-q85-444', 'avif-q90-444', 'webp-q100-smart', 'webp-nl40']],
-  ['warm-modern', '1440@1', 2720, ['avif-q85', 'webp-nl40']],
-  ['warm-modern', '1280@1', 1280, ['avif-q90', 'webp-q95', 'webp-q95-smart', 'webp-q100-smart', 'webp-nl20', 'webp-nl40', 'webp-nl60']],
-  ['warm-modern', '400@1', 1280, ['avif-q90', 'webp-q95-smart', 'webp-nl40']],
-  ['warm-modern', '400@3', 2720, ['avif-q85', 'webp-q95-smart', 'webp-q100-smart', 'webp-nl20', 'webp-nl40', 'webp-nl60']],
-  ['nordic', '1920@1', 1920, ['avif-q80']],
-  ['nordic', '1280@1', 1280, ['avif-q80']],
-  ['nordic', '400@1', 1280, ['avif-q80']],
+  // the warm-modern desktop: the page asks for the 2720 at 1920@1 and 1440@1 (no 1920 poster); the 1920 rows are QA's case, for the record
+  ['warm-modern', '1920@1', 2720, ['avif-q80', 'avif-q85', 'webp-q95-smart', 'webp-q100-smart', 'webp-nl20', 'webp-nl40', 'webp-nl60']],
+  ['warm-modern', '1920@1', 1920, ['avif-q90', 'avif-q95', 'avif-q90-444', 'webp-nl40', 'webp-nl60']],
+  ['warm-modern', '1440@1', 2720, ['avif-q85', 'webp-nl20', 'webp-nl40', 'webp-nl60']],
+  ['warm-modern', '1280@1', 1280, ['avif-q85', 'avif-q90', 'webp-q95', 'webp-q100-smart', 'webp-nl20', 'webp-nl40', 'webp-nl60']],
+  ['warm-modern', '400@1', 1280, ['avif-q80', 'avif-q90', 'webp-q95', 'webp-nl20', 'webp-nl40', 'webp-nl60']],
+  ['warm-modern', '400@3', 2720, ['avif-q85', 'webp-q95-smart', 'webp-nl20', 'webp-nl40', 'webp-nl60']],
+  // Nordic: QA's q80 for the 1280 and the 1920; the phones' 2752 stays at q70; the WebP fallback q95
+  ['nordic', '1920@1', 1920, ['avif-q70', 'avif-q80', 'webp-q95']],
+  ['nordic', '1280@1', 1280, ['avif-q70', 'avif-q80', 'webp-q95']],
+  ['nordic', '400@1', 1280, ['avif-q80', 'webp-q95']],
+  ['nordic', '400@3', 2752, ['avif-q70', 'webp-q95']],
 ];
 const browser = await chromium.launch({ executablePath: process.env.PW_CHROMIUM ?? '/opt/pw-browsers/chromium', args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist', '--disable-background-networking'] });
 async function shot(h, v, width, enc) {
@@ -74,17 +78,20 @@ async function shot(h, v, width, enc) {
   });
   await p.goto(`${BASE}${HOUSES[h].url}`);
   await p.waitForFunction(() => { const i = document.querySelector('img.poster'); return i && i.complete && i.naturalWidth > 0; }, null, { timeout: 60000 });
-  await p.evaluate(() => document.querySelectorAll('.stage-ui, .hotspots, .stage-temp-note, .outlines, .stage-back, .stage-vignette, canvas.room-canvas').forEach((el) => (el.style.visibility = 'hidden')));
+  // hidden again before every shot (the page hydrates after the poster is drawn, and makes the first entry's marks then)
+  const over = '.stage-ui, .hotspots, button.hotspot, .hotspot .mark, .stage-temp-note, .outlines, .stage-back, .stage-vignette, canvas.room-canvas';
   const loc = p.locator('img.poster');
-  let b = await loc.screenshot();
-  for (let i = 0; i < 20; i++) { const n = await loc.screenshot(); if (n.equals(b)) break; b = n; }
+  const still = async () => { await p.evaluate((s) => document.querySelectorAll(s).forEach((el) => (el.style.visibility = 'hidden')), over); return loc.screenshot(); };
+  let b = await still();
+  for (let i = 0; i < 20; i++) { const n = await still(); if (n.equals(b)) break; b = n; }
   const engine = await p.evaluate(() => !!window.__hdEngine);
   await ctx.close();
   const { data, info } = await sharp(b).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
   return { data, w: info.width, h: info.height, asked, engine };
 }
 const res = [];
-for (const [h, v, width, cands] of PLAN) {
+// HD_PLAN=<house>: only that house's rows (a re-measure)
+for (const [h, v, width, cands] of PLAN.filter(([h]) => !process.env.HD_PLAN || h === process.env.HD_PLAN)) {
   const R = await shot(h, v, width, 'png');
   for (const c of cands) {
     const X = await shot(h, v, width, c);

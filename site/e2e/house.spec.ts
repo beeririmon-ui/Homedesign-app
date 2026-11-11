@@ -114,13 +114,18 @@ async function engineReady(page: Page) {
 }
 
 test.describe("a house's own address (S10 question 7, S11)", () => {
-  test('?style=warm-modern is served that house’s own page: no Nordic poster in it, the page CSP; the Nordic address is unchanged', async ({ request }) => {
+  test('?style=warm-modern is served that house’s own page: its own poster (S14, ת29), no Nordic one, the page CSP; the Nordic address is unchanged', async ({
+    request,
+  }) => {
     const house = await request.get(HOUSE);
     expect(house.status()).toBe(200);
     const html = await house.text();
-    expect(html).not.toContain('class="poster"');
+    // S14, QA ת29: the page is the house from its first paint: its poster, the default composition, in the HTML itself
+    expect(html).toContain('class="poster"');
+    expect(html).toContain('/media/house/living-room/warm-modern/M0/poster/default.');
+    expect(html).not.toContain('/media/house/living-room/warm-modern/M0/base/shell.');
+    expect(html).not.toContain('house-pending');
     expect(html).not.toContain('/media/rooms/living-room/nordic/M0/base/shell.');
-    expect(html).toContain('house-pending');
     expect(house.headers()['content-security-policy']).toContain("default-src 'self'");
     const nordic = await request.get('/rooms/living-room/');
     expect(nordic.status()).toBe(200);
@@ -158,6 +163,25 @@ test.describe('ת29 (S14): a direct entry rests on set B from the first paint, b
           .toBuffer(),
         'image/png',
       );
+  test('before any script runs: the prerendered page already draws the poster of set B (the first paint)', async ({ browser }) => {
+    for (const vp of [
+      { width: 400, height: 800 },
+      { width: 1280, height: 720 },
+    ]) {
+      const ctx = await browser.newContext({ javaScriptEnabled: false, viewport: vp, locale: 'he-IL' });
+      const page = await ctx.newPage();
+      const asked: string[] = [];
+      page.on('request', (r) => void (/\/media\//.test(r.url()) && asked.push(new URL(r.url()).pathname)));
+      await page.goto(HOUSE);
+      const img = page.locator('section.stage img.poster');
+      await expect(img).toBeVisible();
+      await expect.poll(() => img.evaluate((i: HTMLImageElement) => i.complete && i.naturalWidth > 0 && i.currentSrc)).toMatch(/\/poster\/default\.\d+\.avif$/);
+      // never the empty base, never the Nordic house
+      expect(asked.filter((u) => /\/base\/shell\.|\/nordic\//.test(u))).toEqual([]);
+      await ctx.close();
+    }
+  });
+
   for (const v of VIEWS.filter((x) => x.id === '400@1' || x.id === '1280@1'))
     test(`${v.id}: the poster at rest is the approved set B composition, not the empty sofa`, async ({ browser }) => {
       test.setTimeout(120_000);

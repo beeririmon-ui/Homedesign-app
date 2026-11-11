@@ -4,15 +4,17 @@ import type { CatalogRoom } from '@hd/shared';
 import { RoomExperience } from '../components/RoomExperience';
 import { optionImage, Price } from '../components/Media';
 import { pendingOpen, selectHouse, selection } from '../state/room';
-import { HOUSES, loadHouse, nordic, type House } from '../house';
+import { HOUSES, houseNow, loadHouse, nordic, type House } from '../house';
 
 export function Room({ room: nordicRoom, slot, option, style }: { room: CatalogRoom; slot?: string; option?: number; style?: string }) {
-  // S10: the house the address names (DIR2), once its chunk is here; the first render is the prerendered Nordic one
-  const [house, setHouse] = useState<House>(nordic);
   const want = style && HOUSES.some((h) => h.style === style) ? style : nordic.style;
-  // S10 question 7 (S11): an address naming another house starts waiting for it, from the first (prerendered) render,
-  // so its page never carries the Nordic poster (the Worker serves that house's own prerendered page)
-  const [pending, setPending] = useState(want !== nordic.style);
+  // S10: the house the address names (DIR2), once its chunk is here. S14, QA ת29: at that house's own address the chunk
+  // is here before the first render (the prerender and the browser load it first), so the page is that house from its
+  // first paint: its poster, the default composition (warm-modern: set B on the sofa)
+  const [house, setHouse] = useState<House>(() => houseNow(want) ?? nordic);
+  // S10 question 7 (S11): an address naming a house that is not here yet waits for it, from the first render, so its page
+  // never carries the Nordic poster (the Worker serves that house's own prerendered page)
+  const [pending, setPending] = useState(want !== nordic.style && !houseNow(want));
   // entering at a house's address, the stage waits for the house; a switch on the stage dissolves instead
   const entry = useRef(true);
   useEffect(() => {

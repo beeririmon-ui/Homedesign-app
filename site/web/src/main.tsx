@@ -10,6 +10,7 @@ import { App } from './App';
 import { initRouter, match, onLinkClick, path } from './router';
 import { loadCart } from './state/cart';
 import { preloadRoute } from './pages/lazy';
+import { loadHouse } from './house';
 
 // The artifact has no <html> tag of its own: set language and direction here (the site's index.html has them too).
 document.documentElement.lang = 'he';
@@ -29,7 +30,9 @@ const root = document.getElementById('app')!;
 // Prerendered pages hydrate; the artifact build (no prerender) renders from scratch.
 // The order page is a shared shell (the id lives in the URL, the token in this browser), so it renders fresh.
 // S13: the page's own chunk is in before the first render, so hydration meets the prerendered markup.
-void preloadRoute(match(path.value)).then(() => {
+// S14, QA ת29: so is the house a room's address names (its page is prerendered as that house, poster and all).
+const first = match(path.value);
+void Promise.all([preloadRoute(first), first.name === 'room' && first.style ? loadHouse(first.style) : null]).then(() => {
   if (root.firstElementChild && !__ARTIFACT__ && !location.pathname.startsWith('/order/')) hydrate(<App />, root);
   else render(<App />, root);
 });
