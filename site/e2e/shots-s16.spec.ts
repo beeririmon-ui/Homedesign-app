@@ -11,6 +11,7 @@ import { execFileSync } from 'node:child_process';
 import { mkdirSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 import { adminHeaders, openCustomerOrder, placeOrder, waitStatus, type Placed } from './ops';
 
@@ -56,6 +57,11 @@ for (const w of WIDTHS)
     const page = await ctx.newPage();
     await page.goto(`/admin/orders/${maybe.id}`);
     await expect(page.getByRole('heading', { name: /בדיקה אצל הספק/ })).toBeVisible();
+    // the new form, as the a11y suite checks every page: zero axe violations (WCAG 2.0/2.1 A + AA)
+    const axe = await new AxeBuilder({ page } as unknown as ConstructorParameters<typeof AxeBuilder>[0])
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+      .analyze();
+    expect(axe.violations.map((v) => `${v.id}: ${v.nodes.length} × ${v.nodes[0]?.target.join(' ')}`)).toEqual([]);
     await shot(page, `admin-supplier-check-${w}`);
     await ctx.close();
   });
@@ -66,6 +72,14 @@ for (const w of WIDTHS)
     const page = await ctx.newPage();
     await openCustomerOrder(page, stuck);
     await expect(page.locator('.order-delay')).toBeVisible();
+    // "החדר שלך": every layer of the picture in, before the shot
+    await expect
+      .poll(() =>
+        page
+          .locator('figure.your-room img')
+          .evaluateAll((is) => is.length > 0 && is.every((i) => (i as HTMLImageElement).complete && (i as HTMLImageElement).naturalWidth > 0)),
+      )
+      .toBe(true);
     await expect(page.locator('.order-steps')).toHaveAttribute('aria-label', 'מצב ההזמנה: מתעכבת');
     await shot(page, `order-delayed-${w}`);
     await ctx.close();

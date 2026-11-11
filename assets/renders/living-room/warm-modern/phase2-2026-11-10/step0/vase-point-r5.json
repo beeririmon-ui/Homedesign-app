@@ -1,0 +1,647 @@
+{
+ "date": "2026-11-11",
+ "author": "render-agent",
+ "tokens": 0,
+ "script": "assets/renders/living-room/warm-modern/phase2-2026-11-10/clay_vase_point_r5.py",
+ "brief": "briefs/render-wm-tool-phase2-steps4-5-2026-11-11.md section 1",
+ "rule": "docs/proposals/wm-phase2-checkpoint-eye-2026-11-11.md section 2: the first point where all three vases at card size pass (F3 >= 0.02 vs the armchair; the body never runs along the bronze mullion Y 1.45 or the end profile Y 0.75: >= 0.01, or clearly crossing)",
+ "method": {
+  "camera": "house plan M0 via step0_clay_checks.P (verticals stay vertical: no pitch)",
+  "bodies": "the card's bounding cylinder (widest at every height), Z 0.45 to 0.45 + H; branch = step 0's cone to Z 1.05, the same for all",
+  "armchair": {
+   "clay": "step 0's r4 furniture index (the F3 authority)",
+   "render": "phase 1's fixed-furniture alpha, the armchair's component"
+  },
+  "bronze": {
+   "rendered": "the base's dark strip (L* < 50) per row, round each projected line; checked per body row",
+   "projected": "the plan line +- 4 cm (the widest 8 cm profile) and its 4 cm depth",
+   "crossing": "a strip wholly inside the body with >= 0.005 of the frame each side passes ('clearly crossing')"
+  },
+  "frame_width_px": 3840
+ },
+ "profiles_rendered_vs_projected": {
+  "mullion_Y1.45": {
+   "projected_u": 0.194,
+   "projected_canvas_x": 860.9,
+   "rendered_width_canvas_px_median": 22.5,
+   "rendered_centre_canvas_x_median": 860.1
+  },
+  "end_profile_Y0.75": {
+   "projected_u": 0.2685,
+   "projected_canvas_x": 1147.1,
+   "rendered_width_canvas_px_median": 18.0,
+   "rendered_centre_canvas_x_median": 1140.8
+  }
+ },
+ "table": [
+  {
+   "point": 1,
+   "xy": [
+    -2.42,
+    1.35
+   ],
+   "from_slot_m": 0.0,
+   "vases": {
+    "vase-cj-textured-white-stoneware": {
+     "role": "default",
+     "size_cm": [
+      16.0,
+      32.0
+     ],
+     "body_frame_box": [
+      0.219,
+      0.2451,
+      0.6148,
+      0.7083
+     ],
+     "base_centre_work_px": [
+      672.4,
+      1059.3
+     ],
+     "depth_m": 4.355,
+     "armchair": {
+      "clay_gap_frame": 0.0229,
+      "render_gap_frame": 0.0232,
+      "ok": true
+     },
+     "bronze": {
+      "mullion_Y1.45": {
+       "rendered": {
+        "row_canvas": 1553,
+        "gap_px": 83.6,
+        "gap_frame": 0.0218,
+        "kind": "outside",
+        "need": 0.01,
+        "ok": true
+       },
+       "projected_8cm": {
+        "row_canvas": 1577,
+        "gap_px": 76.9,
+        "gap_frame": 0.02,
+        "kind": "outside",
+        "need": 0.01,
+        "ok": true
+       }
+      },
+      "end_profile_Y0.75": {
+       "rendered": {
+        "row_canvas": 1509,
+        "gap_px": 68.0,
+        "gap_frame": 0.0177,
+        "kind": "outside",
+        "need": 0.01,
+        "ok": true
+       },
+       "projected_8cm": {
+        "row_canvas": 1577,
+        "gap_px": 76.4,
+        "gap_frame": 0.0199,
+        "kind": "outside",
+        "need": 0.01,
+        "ok": true
+       }
+      }
+     },
+     "bronze_ok": true,
+     "passes": true
+    },
+    "vase-cj-charcoal-carved": {
+     "role": "vase 2 (pass 5')",
+     "size_cm": [
+      22.0,
+      32.0
+     ],
+     "body_frame_box": [
+      0.2141,
+      0.25,
+      0.6144,
+      0.7097
+     ],
+     "base_centre_work_px": [
+      672.4,
+      1059.3
+     ],
+     "depth_m": 4.355,
+     "armchair": {
+      "clay_gap_frame": 0.0221,
+      "render_gap_frame": 0.0224,
+      "ok": true
+     },
+     "bronze": {
+      "mullion_Y1.45": {
+       "rendered": {
+        "row_canvas": 1553,
+        "gap_px": 64.6,
+        "gap_frame": 0.0168,
+        "kind": "outside",
+        "need": 0.01,
+        "ok": true
+       },
+       "projected_8cm": {
+        "row_canvas": 1574,
+        "gap_px": 57.9,
+        "gap_frame": 0.0151,
+        "kind": "outside",
+        "need": 0.01,
+        "ok": true
+       }
+      },
+      "end_profile_Y0.75": {
+       "rendered": {
+        "row_canvas": 1509,
+        "gap_px": 49.5,
+        "gap_frame": 0.0129,
+        "kind": "outside",
+        "need": 0.01,
+        "ok": true
+       },
+       "projected_8cm": {
+        "row_canvas": 1574,
+        "gap_px": 57.9,
+        "gap_frame": 0.0151,
+        "kind": "outside",
+        "need": 0.01,
+        "ok": true
+       }
+      }
+     },
+     "bronze_ok": true,
+     "passes": true
+    },
+    "vase-cj-white-plum-hand-thrown": {
+     "role": "vase 3 (pass 6')",
+     "size_cm": [
+      22.4,
+      33.0
+     ],
+     "body_frame_box": [
+      0.2135,
+      0.2503,
+      0.6116,
+      0.7102
+     ],
+     "base_centre_work_px": [
+      672.4,
+      1059.3
+     ],
+     "depth_m": 4.355,
+     "armchair": {
+      "clay_gap_frame": 0.0219,
+      "render_gap_frame": 0.0221,
+      "ok": true
+     },
+     "bronze": {
+      "mullion_Y1.45": {
+       "rendered": {
+        "row_canvas": 1553,
+        "gap_px": 63.4,
+        "gap_frame": 0.0165,
+        "kind": "outside",
+        "need": 0.01,
+        "ok": true
+       },
+       "projected_8cm": {
+        "row_canvas": 1574,
+        "gap_px": 56.7,
+        "gap_frame": 0.0148,
+        "kind": "outside",
+        "need": 0.01,
+        "ok": true
+       }
+      },
+      "end_profile_Y0.75": {
+       "rendered": {
+        "row_canvas": 1509,
+        "gap_px": 48.3,
+        "gap_frame": 0.0126,
+        "kind": "outside",
+        "need": 0.01,
+        "ok": true
+       },
+       "projected_8cm": {
+        "row_canvas": 1574,
+        "gap_px": 56.7,
+        "gap_frame": 0.0148,
+        "kind": "outside",
+        "need": 0.01,
+        "ok": true
+       }
+      }
+     },
+     "bronze_ok": true,
+     "passes": true
+    }
+   },
+   "all_three_pass": true
+  },
+  {
+   "point": 2,
+   "xy": [
+    -2.42,
+    1.3
+   ],
+   "from_slot_m": 0.05,
+   "vases": {
+    "vase-cj-textured-white-stoneware": {
+     "role": "default",
+     "size_cm": [
+      16.0,
+      32.0
+     ],
+     "body_frame_box": [
+      0.2247,
+      0.2505,
+      0.6139,
+      0.7065
+     ],
+     "base_centre_work_px": [
+      686.9,
+      1056.3
+     ],
+     "depth_m": 4.401,
+     "armchair": {
+      "clay_gap_frame": 0.024,
+      "render_gap_frame": 0.0242,
+      "ok": true
+     },
+     "bronze": {
+      "mullion_Y1.45": {
+       "rendered": {
+        "row_canvas": 1553,
+        "gap_px": 106.0,
+        "gap_frame": 0.0276,
+        "kind": "outside",
+        "need": 0.01,
+        "ok": true
+       },
+       "projected_8cm": {
+        "row_canvas": 1573,
+        "gap_px": 99.3,
+        "gap_frame": 0.0259,
+        "kind": "outside",
+        "need": 0.01,
+        "ok": true
+       }
+      },
+      "end_profile_Y0.75": {
+       "rendered": {
+        "row_canvas": 1509,
+        "gap_px": 46.9,
+        "gap_frame": 0.0122,
+        "kind": "outside",
+        "need": 0.01,
+        "ok": true
+       },
+       "projected_8cm": {
+        "row_canvas": 1573,
+        "gap_px": 55.3,
+        "gap_frame": 0.0144,
+        "kind": "outside",
+        "need": 0.01,
+        "ok": true
+       }
+      }
+     },
+     "bronze_ok": true,
+     "passes": true
+    },
+    "vase-cj-charcoal-carved": {
+     "role": "vase 2 (pass 5')",
+     "size_cm": [
+      22.0,
+      32.0
+     ],
+     "body_frame_box": [
+      0.2198,
+      0.2555,
+      0.613,
+      0.7079
+     ],
+     "base_centre_work_px": [
+      686.9,
+      1056.3
+     ],
+     "depth_m": 4.401,
+     "armchair": {
+      "clay_gap_frame": 0.0232,
+      "render_gap_frame": 0.0234,
+      "ok": true
+     },
+     "bronze": {
+      "mullion_Y1.45": {
+       "rendered": {
+        "row_canvas": 1553,
+        "gap_px": 87.3,
+        "gap_frame": 0.0227,
+        "kind": "outside",
+        "need": 0.01,
+        "ok": true
+       },
+       "projected_8cm": {
+        "row_canvas": 1570,
+        "gap_px": 80.6,
+        "gap_frame": 0.021,
+        "kind": "outside",
+        "need": 0.01,
+        "ok": true
+       }
+      },
+      "end_profile_Y0.75": {
+       "rendered": {
+        "row_canvas": 1509,
+        "gap_px": 28.7,
+        "gap_frame": 0.0075,
+        "kind": "outside",
+        "need": 0.01,
+        "ok": false
+       },
+       "projected_8cm": {
+        "row_canvas": 1570,
+        "gap_px": 37.1,
+        "gap_frame": 0.0097,
+        "kind": "outside",
+        "need": 0.01,
+        "ok": false
+       }
+      }
+     },
+     "bronze_ok": false,
+     "passes": false
+    },
+    "vase-cj-white-plum-hand-thrown": {
+     "role": "vase 3 (pass 6')",
+     "size_cm": [
+      22.4,
+      33.0
+     ],
+     "body_frame_box": [
+      0.2195,
+      0.2557,
+      0.6102,
+      0.7079
+     ],
+     "base_centre_work_px": [
+      686.9,
+      1056.3
+     ],
+     "depth_m": 4.401,
+     "armchair": {
+      "clay_gap_frame": 0.0232,
+      "render_gap_frame": 0.0234,
+      "ok": true
+     },
+     "bronze": {
+      "mullion_Y1.45": {
+       "rendered": {
+        "row_canvas": 1553,
+        "gap_px": 86.0,
+        "gap_frame": 0.0224,
+        "kind": "outside",
+        "need": 0.01,
+        "ok": true
+       },
+       "projected_8cm": {
+        "row_canvas": 1570,
+        "gap_px": 79.3,
+        "gap_frame": 0.0207,
+        "kind": "outside",
+        "need": 0.01,
+        "ok": true
+       }
+      },
+      "end_profile_Y0.75": {
+       "rendered": {
+        "row_canvas": 1509,
+        "gap_px": 27.5,
+        "gap_frame": 0.0071,
+        "kind": "outside",
+        "need": 0.01,
+        "ok": false
+       },
+       "projected_8cm": {
+        "row_canvas": 1570,
+        "gap_px": 35.9,
+        "gap_frame": 0.0093,
+        "kind": "outside",
+        "need": 0.01,
+        "ok": false
+       }
+      }
+     },
+     "bronze_ok": false,
+     "passes": false
+    }
+   },
+   "all_three_pass": false
+  },
+  {
+   "point": 3,
+   "xy": [
+    -2.45,
+    1.3
+   ],
+   "from_slot_m": 0.058,
+   "vases": {
+    "vase-cj-textured-white-stoneware": {
+     "role": "default",
+     "size_cm": [
+      16.0,
+      32.0
+     ],
+     "body_frame_box": [
+      0.2214,
+      0.2471,
+      0.6134,
+      0.7056
+     ],
+     "base_centre_work_px": [
+      678.1,
+      1055.4
+     ],
+     "depth_m": 4.413,
+     "armchair": {
+      "clay_gap_frame": 0.0245,
+      "render_gap_frame": 0.0247,
+      "ok": true
+     },
+     "bronze": {
+      "mullion_Y1.45": {
+       "rendered": {
+        "row_canvas": 1553,
+        "gap_px": 92.9,
+        "gap_frame": 0.0242,
+        "kind": "outside",
+        "need": 0.01,
+        "ok": true
+       },
+       "projected_8cm": {
+        "row_canvas": 1572,
+        "gap_px": 86.2,
+        "gap_frame": 0.0224,
+        "kind": "outside",
+        "need": 0.01,
+        "ok": true
+       }
+      },
+      "end_profile_Y0.75": {
+       "rendered": {
+        "row_canvas": 1509,
+        "gap_px": 60.2,
+        "gap_frame": 0.0157,
+        "kind": "outside",
+        "need": 0.01,
+        "ok": true
+       },
+       "projected_8cm": {
+        "row_canvas": 1572,
+        "gap_px": 68.6,
+        "gap_frame": 0.0179,
+        "kind": "outside",
+        "need": 0.01,
+        "ok": true
+       }
+      }
+     },
+     "bronze_ok": true,
+     "passes": true
+    },
+    "vase-cj-charcoal-carved": {
+     "role": "vase 2 (pass 5')",
+     "size_cm": [
+      22.0,
+      32.0
+     ],
+     "body_frame_box": [
+      0.2164,
+      0.2518,
+      0.6125,
+      0.7069
+     ],
+     "base_centre_work_px": [
+      678.1,
+      1055.4
+     ],
+     "depth_m": 4.413,
+     "armchair": {
+      "clay_gap_frame": 0.0237,
+      "render_gap_frame": 0.024,
+      "ok": true
+     },
+     "bronze": {
+      "mullion_Y1.45": {
+       "rendered": {
+        "row_canvas": 1553,
+        "gap_px": 74.1,
+        "gap_frame": 0.0193,
+        "kind": "outside",
+        "need": 0.01,
+        "ok": true
+       },
+       "projected_8cm": {
+        "row_canvas": 1569,
+        "gap_px": 67.4,
+        "gap_frame": 0.0176,
+        "kind": "outside",
+        "need": 0.01,
+        "ok": true
+       }
+      },
+      "end_profile_Y0.75": {
+       "rendered": {
+        "row_canvas": 1509,
+        "gap_px": 42.0,
+        "gap_frame": 0.0109,
+        "kind": "outside",
+        "need": 0.01,
+        "ok": true
+       },
+       "projected_8cm": {
+        "row_canvas": 1569,
+        "gap_px": 50.4,
+        "gap_frame": 0.0131,
+        "kind": "outside",
+        "need": 0.01,
+        "ok": true
+       }
+      }
+     },
+     "bronze_ok": true,
+     "passes": true
+    },
+    "vase-cj-white-plum-hand-thrown": {
+     "role": "vase 3 (pass 6')",
+     "size_cm": [
+      22.4,
+      33.0
+     ],
+     "body_frame_box": [
+      0.2161,
+      0.2523,
+      0.6102,
+      0.7074
+     ],
+     "base_centre_work_px": [
+      678.1,
+      1055.4
+     ],
+     "depth_m": 4.413,
+     "armchair": {
+      "clay_gap_frame": 0.0234,
+      "render_gap_frame": 0.0237,
+      "ok": true
+     },
+     "bronze": {
+      "mullion_Y1.45": {
+       "rendered": {
+        "row_canvas": 1553,
+        "gap_px": 72.9,
+        "gap_frame": 0.019,
+        "kind": "outside",
+        "need": 0.01,
+        "ok": true
+       },
+       "projected_8cm": {
+        "row_canvas": 1569,
+        "gap_px": 66.2,
+        "gap_frame": 0.0172,
+        "kind": "outside",
+        "need": 0.01,
+        "ok": true
+       }
+      },
+      "end_profile_Y0.75": {
+       "rendered": {
+        "row_canvas": 1509,
+        "gap_px": 40.8,
+        "gap_frame": 0.0106,
+        "kind": "outside",
+        "need": 0.01,
+        "ok": true
+       },
+       "projected_8cm": {
+        "row_canvas": 1569,
+        "gap_px": 49.2,
+        "gap_frame": 0.0128,
+        "kind": "outside",
+        "need": 0.01,
+        "ok": true
+       }
+      }
+     },
+     "bronze_ok": true,
+     "passes": true
+    }
+   },
+   "all_three_pass": true
+  }
+ ],
+ "chosen_point": {
+  "index": 1,
+  "xy": [
+   -2.42,
+   1.35
+  ],
+  "from_slot_m": 0.0
+ },
+ "verdict": "point 1 [-2.42, 1.35]: all three vases pass; vase 1 is re-rendered there in 4', vase 2 in 5', vase 3 in 6'"
+}

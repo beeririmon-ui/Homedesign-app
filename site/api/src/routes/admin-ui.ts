@@ -257,6 +257,10 @@ function orderPage(c: Context<AppEnv>, d: OrderDetail): string {
   const gone = ['shipped', 'delivered', 'refunded'].includes(status) || ships.some((s) => s.status === 'shipped' || s.status === 'delivered');
   // a request waiting on the supplier is not sent again from here: the supplier's answer settles it
   const waiting = d.cancellation?.state === 'requested';
+  // S16 (ת35): a submit that may have reached the supplier: a person checks there before any cancellation or refund
+  const maybeSent = d.supplier_shipments.some(
+    (sh) => sh.status === 'failed' && !sh.supplier_order_id && (sh.reach === 'maybe' || (sh.reach === 'none' && status === 'supplier_error')),
+  );
   const cancelText = waiting
     ? 'הבקשה אצל הספק. כשיענה: אישור מבטל ומחזיר את כל התשלום; סירוב משאיר את ההזמנה בדרך.'
     : status === 'canceled'
@@ -265,12 +269,14 @@ function orderPage(c: Context<AppEnv>, d: OrderDetail): string {
         : 'ההזמנה בוטלה.'
       : gone
         ? 'ההזמנה כבר יצאה: אי אפשר לבטל. החזר כסף (מלא או חלקי) אחרי שהפריט חוזר.'
-        : sent
-          ? 'אחרי שליחה לספק: נשלחת לספק בקשת ביטול. ההזמנה תבוטל ותזוכה רק כשהספק יאשר.'
-          : o.paid_at
-            ? 'לפני שליחה לספק: ההזמנה מבוטלת מיד, והתשלום מוחזר במלואו דרך הסולק.'
-            : 'לפני תשלום: ההזמנה מבוטלת. לא שולם עליה דבר.';
-  const canCancel = !gone && !waiting && !(status === 'canceled' && d.money.paid_agorot <= d.money.counted_agorot);
+        : maybeSent
+          ? 'ייתכן שההזמנה כבר אצל הספק: קודם "בדיקה אצל הספק". אחרי שתרשמו מה מצאתם, הביטול ימשיך במסלול הנכון. עד אז לא מוחזר כסף.'
+          : sent
+            ? 'אחרי שליחה לספק: נשלחת לספק בקשת ביטול. ההזמנה תבוטל ותזוכה רק כשהספק יאשר.'
+            : o.paid_at
+              ? 'לפני שליחה לספק: ההזמנה מבוטלת מיד, והתשלום מוחזר במלואו דרך הסולק.'
+              : 'לפני תשלום: ההזמנה מבוטלת. לא שולם עליה דבר.';
+  const canCancel = !gone && !waiting && !maybeSent && !(status === 'canceled' && d.money.paid_agorot <= d.money.counted_agorot);
   const cancel = `<form class="act" method="post" action="/admin/orders/${esc(id)}/cancel"><h3>ביטול</h3>
 ${d.cancellation ? `<p><span class="flag${d.cancellation.state === 'requested' ? ' warn' : ''}">${esc(CANCEL_STATE_HE[d.cancellation.state] ?? d.cancellation.state)}</span> · ${esc(CANCEL_STAGE_HE[d.cancellation.stage] ?? d.cancellation.stage)} · ${when(d.cancellation.requested_at)} · ${esc(d.cancellation.requested_by)}</p>` : ''}
 <p>${esc(cancelText)}</p>${
@@ -304,10 +310,6 @@ ${d.cancellation ? `<p><span class="flag${d.cancellation.state === 'requested' ?
         ? `<div class="act"><h3>חשבונית</h3><p>נבדקה ידנית: ${esc(d.invoice.checked_by)} · ${when(d.invoice.checked_at)}</p></div>`
         : '';
 
-  // S16 (ת35): a submit that may have reached the supplier: a person checks there before any cancellation or refund
-  const maybeSent = d.supplier_shipments.some(
-    (sh) => sh.status === 'failed' && !sh.supplier_order_id && (sh.reach === 'maybe' || (sh.reach === 'none' && status === 'supplier_error')),
-  );
   const supplierCheck = maybeSent
     ? `<form class="act" method="post" action="/admin/orders/${esc(id)}/supplier-check"><h3>בדיקה אצל הספק <span class="flag warn">לפני ביטול</span></h3>
 <p>שליחה לספק נכשלה בדרך שייתכן שבכל זאת יצרה הזמנה אצלו. בדקו אצל הספק לפי מספר ההזמנה <span class="num">${esc(id)}</span> וסמנו מה מצאתם. עד אז אין ביטול עם החזר.</p>

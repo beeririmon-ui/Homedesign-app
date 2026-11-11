@@ -1,0 +1,181 @@
+{
+ "date": "2026-11-11",
+ "author": "render-agent",
+ "tokens": 0,
+ "brief": "briefs/render-wm-tool-phase2-steps4-5-2026-11-11.md section 0",
+ "sources": {
+  "designer": "docs/proposals/wm-phase2-checkpoint-eye-2026-11-11.md sections 3-4",
+  "qa": "qa/reports/2026-11-11-wm-tool-phase2-checkpoint.md"
+ },
+ "note": "ungraded per-product layers (RGBA, straight alpha) and shadows (grey RGB, multiply); grade_cut_r5.py grades and cuts them",
+ "curtains": {
+  "what": "a* and b* only toward the card's cream (designer section 3), one hue rotation and one chroma factor for every pixel; the armchair post's light line (QA section 4) closed in the same cut",
+  "source": {
+   "layer": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-reserve/layers/curtains.png",
+   "free_alpha": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-reserve/layers/curtains-free-alpha.png",
+   "shadow": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-reserve/shadows/curtains.png (unchanged, copied)"
+  },
+  "method": {
+   "recolour": "Lab of the ungraded layer: (a, b) -> k R(dh) (a, b), L* unchanged; dh, k iterated on the graded set-B r4 scene",
+   "dh_deg": 15.14,
+   "k": 0.4296,
+   "iterations": [
+    {
+     "it": 0,
+     "dh": 15.14,
+     "k": 0.4296,
+     "h": 89.73,
+     "C": 6.52,
+     "C_p95": 9.45,
+     "L": 55.53
+    }
+   ],
+   "post_line": "where 0.02 < fa < 0.98 and the curtain is behind: the curtain's own colour from its clear pixels beside the edge (normalised blur, sigma 2), plus (F_core - F) x fa / ((1 - fa) a), F_core the furniture's opaque core next to the edge (normalised blur, sigma 2); clipped to 0-1",
+   "masks": "QA p2_colour.py: alpha 255 eroded 5x5, rows 100-1400 (306080 px); plaster ring 15-40 px"
+  },
+  "before": {
+   "L": 55.66,
+   "a": 3.95,
+   "b": 14.61,
+   "C": 15.13,
+   "h": 74.86,
+   "C_px_median": 15.29,
+   "C_px_p95": 21.9,
+   "highpass_std": 3.473,
+   "plaster_ring": {
+    "L": 88.33,
+    "C": 4.84,
+    "h": 78.07
+   },
+   "px": 306080
+  },
+  "after": {
+   "L": 55.53,
+   "a": 0.03,
+   "b": 6.52,
+   "C": 6.52,
+   "h": 89.73,
+   "C_px_median": 6.6,
+   "C_px_p95": 9.45,
+   "highpass_std": 3.478,
+   "plaster_ring": {
+    "L": 88.33,
+    "C": 4.01,
+    "h": 85.09
+   },
+   "px": 306080
+  },
+  "targets": {
+   "1a L* median within +-0.5": {
+    "value": -0.13,
+    "pass_": true
+   },
+   "1b high-pass L* std within +-5 %": {
+    "value": 0.0014,
+    "pass_": true
+   },
+   "2 median h 85-95": {
+    "value": 89.73,
+    "pass_": true
+   },
+   "3a median C* 5.5-7.5": {
+    "value": 6.52,
+    "pass_": true
+   },
+   "3b one factor k for every pixel": {
+    "value": 0.4296,
+    "pass_": true
+   },
+   "3c p95 C* <= 11": {
+    "value": 9.45,
+    "pass_": true
+   },
+   "4 >= plaster C + 0.5": {
+    "value": 2.51,
+    "pass_": true
+   }
+  },
+  "all_met": true,
+  "post_line": {
+   "fringe_px": 2126,
+   "fringe_fa_lt_0_5_L_median": {
+    "before": 53.13,
+    "after": 48.12
+   },
+   "fringe_px_lighter_than_the_curtain_beside": {
+    "before": 1330,
+    "after": 430
+   }
+  },
+  "changed_px": 4037327,
+  "changed_outside_alpha_px": 3676945,
+  "photo": {
+   "file": "curtains/img1.jpg (scratchpad, never in the repo)",
+   "L": 86.9,
+   "C": 6.5,
+   "h": 93.0,
+   "source": "QA data/colour.json"
+  },
+  "note": "measured on the graded set-B scene recomposed with the change (the r4 stack); grade_cut_r5.py re-measures on the r5 scene"
+ },
+ "magazine-holder": {
+  "what": "the two thin strap rods to the SKU photo's satin silver (designer section 4); the glossy black tubes unchanged (documented exception, pending WM-M1)",
+  "source": {
+   "layer": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-reserve/layers/magazine-holder.png",
+   "shadow": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-reserve/shadows/magazine-holder.png (unchanged)"
+  },
+  "rods": {
+   "back": {
+    "line_y_eq_ax_plus_b": [
+     0.20151,
+     1240.95
+    ],
+    "half_width_px": 4.96,
+    "px": 714,
+    "x_span": [
+     1015,
+     1190
+    ]
+   },
+   "front": {
+    "line_y_eq_ax_plus_b": [
+     0.21388,
+     1283.7
+    ],
+    "half_width_px": 4.74,
+    "px": 1707,
+    "x_span": [
+     947,
+     1149
+    ]
+   }
+  },
+  "target": {
+   "L_median": 56.0,
+   "C": 2.5,
+   "h_deg": 54.0,
+   "source": "the Orange SKU photo, 66 columns across the free rod spans (scratchpad)"
+  },
+  "profile": "L*(t) = (52 - 16 t + 26 exp(-((t + 0.35) / 0.30)^2)) x gain x the render's own light along the rod (normalised, ^0.5, 0.85-1.12); t = signed distance across the rod / half width (negative = up)",
+  "gain": 1.0701,
+  "measured_graded_rod_core": {
+   "before": {
+    "L_median": 14.91,
+    "L_p90": 72.11,
+    "L_p10": 13.28,
+    "C_median": 2.01
+   },
+   "after": {
+    "L_median": 55.99,
+    "L_p90": 86.47,
+    "L_p10": 39.33,
+    "C_median": 2.57
+   },
+   "px": 2233
+  },
+  "rods_frame_pct": 0.021,
+  "changed_px": 2421,
+  "changed_outside_rods_px": 0,
+  "note": "QA measures the target on the r5 scene (the photo: L* median 56, C* 2.5)"
+ }
+}
