@@ -1,0 +1,111 @@
+{
+ "date": "2026-11-11",
+ "brief": "briefs/render-wm-tool-phase2-steps4-5-2026-11-11.md",
+ "decision": "PH2-WM (owner, up to 9,740); phase 2 so far 4,550; passes 4' and 5' at 650 each; no third pass",
+ "references_policy": "supplier images are references only: cropped in the scratchpad and uploaded to var2, never stored in the repo",
+ "shadow_recipe": "FROZEN: extract.shadow_one as every existing layer (the coordinator, 2026-11-11, after QA's R4 check)",
+ "jobs": [
+  {
+   "id": "wm-ph2-variants-p4",
+   "pass_": "4'",
+   "slots": [
+    "vase (default, at the clay point)",
+    "curtains v2",
+    "framed-art v2",
+    "accent-sconces v2"
+   ],
+   "model": "seedream-5-pro i2i 2K",
+   "aspect_ratio": "auto",
+   "resolution": "2K",
+   "type": "image-to-image",
+   "estimate": 650,
+   "estimate_call": {
+    "tool": "var2_estimate_cost",
+    "model_id": "seedream-5-pro",
+    "type": "image-to-image",
+    "params": {
+     "resolution": "2K",
+     "aspect_ratio": "auto",
+     "image_refs": 4
+    },
+    "total_tokens": 650
+   },
+   "idempotency_key": "wm-ph2-variants-p4-20261111",
+   "status": "submitted, charged",
+   "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/fd58e1a7-bdfd-47f7-b17d-b25011f51fc8.png",
+   "image_url_local": "assets/renders/living-room/warm-modern/phase2-2026-11-10/inputs/p4-input.png",
+   "image_sha256": "41bb524dda10c2a5db2997893615ca8f535923bb1767baed8e842b37bef757a0",
+   "image_upload_verified": "GET of the public URL returned the same sha256",
+   "input_record": "assets/renders/living-room/warm-modern/phase2-2026-11-10/inputs/p4-input.json",
+   "prompt": "assets/prompts/warm-modern-phase2-2026-11-10/variants-p4.txt",
+   "prompt_chars": 2747,
+   "refs": [
+    {
+     "n": 1,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/b01f4824-09f9-42ea-ac0d-98a0902bccc7.png",
+     "card": "vase-cj-textured-white-stoneware",
+     "sku": "CJJT312391803CX",
+     "what": "SKU Large 16 x 32",
+     "source_image": "vase/sku.jpeg",
+     "crop": [
+      0.22,
+      0.05,
+      0.75,
+      0.84
+     ],
+     "note": "the R1-R3 crop, already in var2"
+    },
+    {
+     "n": 2,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/145ce02d-fdb4-4071-b6af-be9687f9da84.png",
+     "card": "curtains-aliexpress-linen-blend-s-fold-180502",
+     "sku": "12000059196236244",
+     "what": "S Fold 132x270: the sheer linen-look panels to the floor (label cropped out)",
+     "source_image": "curtains2/img4.jpg",
+     "crop": [
+      0.0,
+      0.0,
+      1.0,
+      0.74
+     ],
+     "note": "r5 crop (scratchpad/r5/refs, var2 only, never in the repo)"
+    },
+    {
+     "n": 3,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/3a2eea62-1842-4d9b-97c4-f6f5f1e549ec.png",
+     "card": "framed-art-aliexpress-modern-minimalist-neutral-gallery-802995",
+     "sku": "12000038165012545",
+     "what": "the gallery's three prints 01 / 02 / 03 hanging as a triptych (room below cropped out)",
+     "source_image": "art2/img2.jpg",
+     "crop": [
+      0.08,
+      0.08,
+      0.94,
+      0.5
+     ],
+     "note": "r5 crop (scratchpad/r5/refs, var2 only, never in the repo)"
+    },
+    {
+     "n": 4,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/b965ae89-97f0-42f7-95b0-52ea0d1cbc20.png",
+     "card": "accent-sconces-cj-travertine-block-updown-8x16",
+     "sku": "CJYD254545505EV",
+     "what": "SKU 'Rectangle - Indoor Model' 8 x 8 x 16 with its up / down light (text and dimension lines cropped out)",
+     "source_image": "sconce2/sku.jpeg",
+     "crop": [
+      0.37,
+      0.2,
+      0.645,
+      0.752
+     ],
+     "note": "r5 crop (scratchpad/r5/refs, var2 only, never in the repo)"
+    }
+   ],
+   "tokens": 650,
+   "placeholder_id": "421a4cbe-3f86-4af5-bbdd-2e442137b3bc",
+   "task_id": "2becf4c33481dcc8a3c992dcb0df4782",
+   "batch_id": "d290be4d-5eb1-4fae-92d2-c23d3474b434"
+  }
+ ],
+ "tokens_total": 650
+}

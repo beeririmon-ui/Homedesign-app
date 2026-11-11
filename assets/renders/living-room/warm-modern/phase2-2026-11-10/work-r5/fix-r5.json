@@ -177,5 +177,51 @@
   "changed_px": 2421,
   "changed_outside_rods_px": 0,
   "note": "QA measures the target on the r5 scene (the photo: L* median 56, C* 2.5)"
+ },
+ "floor-lamp": {
+  "what": "the milky wisp under the shade removed from the lamp layer (QA R4 report 2.1; the coordinator's 0-token task): the layer holds only the product and its own contact shadow",
+  "source": {
+   "layer": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r4/layers/floor-lamp.png",
+   "free_alpha": "work-r4/layers/floor-lamp-free-alpha.png",
+   "shadow": "work-r4/shadows/floor-lamp.png (unchanged, copied)"
+  },
+  "method": "QA (qa/reports/2026-11-11-wm-tool-phase2-r4.md 2.1): a milky wisp on the wall under the shade, inside the lamp layer since steps     1-3 (the step-2 render's lit lamp). The layer keeps only the product and its own contact shadow: in the box under the shade, the     product is its material (brass: b* > 22, or dark: L* < 60, at alpha > 0.5; every piece of 3 px or more: the chain's beads stand     apart) with its soft edge (2 px), where a soft-edge pixel is kept only if it is not lighter than the wall below it (+1 L*: a mix of     brass and wall cannot be lighter than the wall; the glow is); the box starts under the shade's lowest row (QA's lamp mask), so the fabric is never touched. Everything else in the box gets alpha 0 (in the layer and in the free alpha). RGB, the shadow, and every     pixel outside the box are unchanged",
+  "box_px": [
+   2380,
+   704,
+   2480,
+   810
+  ],
+  "shade_bottom_row": 702,
+  "kept_components_px": 1302,
+  "alpha_zeroed_px": 1198,
+  "qa_measure": {
+   "before": {
+    "wisp_px": 431,
+    "dL_p50_p95_max": [
+     4.26,
+     6.8,
+     8.17
+    ],
+    "alpha_p50_max": [
+     159,
+     255
+    ]
+   },
+   "after": {
+    "wisp_px": 90,
+    "dL_p50_p95_max": [
+     6.1,
+     7.17,
+     7.87
+    ],
+    "alpha_p50_max": [
+     255,
+     255
+    ]
+   },
+   "how": "QA's r4_lamp_wisp.py: box 2380-2470 x 700-800, alpha > 0 and > 2 L* over the base, on the graded set-B scene (r4 / r4 with the change)"
+  },
+  "changed_outside_box_px": 0
  }
 }

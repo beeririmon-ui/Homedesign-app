@@ -382,8 +382,106 @@ def rods():
     Image.fromarray(vis[1380:1530, 900:1240]).resize((1020, 450), Image.LANCZOS).save(os.path.join(SCR, "r5", "rods-after-x3.png"))
 
 
+# ================================================================================================= the floor lamp's wisp
+LAMP4 = os.path.join(HERE, "work-r4/layers/floor-lamp.png")
+WISP_BOX = (2380, 690, 2480, 810)          # x0, y0, x1, y1: QA's box (2380-2470 x 700-800) grown by 10 px
+
+
+def lamp_wisp_measure(G8, A8):
+    """QA's r4_lamp_wisp.py: in its box, the layer's alpha > 0 where the scene is > 2 L* lighter than the base"""
+    base = np.asarray(Image.open(os.path.join(HERE, "layers/base.png")).convert("RGB"))
+    dL = lab(G8.astype(np.float32) / 255)[..., 0] - lab(base.astype(np.float32) / 255)[..., 0]
+    box = np.zeros(A8.shape, bool)
+    box[700:800, 2380:2470] = True
+    w = box & (A8 > 0) & (dL > 2)
+    return dict(wisp_px=int(w.sum()), dL_p50_p95_max=[round(float(np.percentile(dL[w], q)), 2) for q in (50, 95, 100)] if w.any() else None,
+                alpha_p50_max=[int(np.median(A8[w])), int(A8[w].max())] if w.any() else None)
+
+
+def lamp_wisp():
+    """QA (qa/reports/2026-11-11-wm-tool-phase2-r4.md 2.1): a milky wisp on the wall under the shade, inside the lamp layer since steps
+    1-3 (the step-2 render's lit lamp). The layer keeps only the product and its own contact shadow: in the box under the shade, the
+    product is its material (brass: b* > 22, or dark: L* < 60, at alpha > 0.5; every piece of 3 px or more: the chain's beads stand
+    apart) with its soft edge (2 px), where a soft-edge pixel is kept only if it is not lighter than the wall below it (+1 L*: a mix of
+    brass and wall cannot be lighter than the wall; the glow is); the box starts under the shade's lowest row (QA's lamp mask), so the fabric is never touched. Everything else in the box gets alpha 0 (in the layer and in the free alpha). RGB, the shadow, and every
+    pixel outside the box are unchanged"""
+    import stack
+    L = f32(LAMP4)
+    rgb, a = L[..., :3], L[..., 3]
+    af = f32(os.path.join(HERE, "work-r4/layers/floor-lamp-free-alpha.png"), "L")
+    P = stack.base_parts()
+    below = P["U0"]
+    import fix_r4 as F4
+    A8r4 = np.asarray(Image.open(os.path.join(HERE, "layers", json.load(open(os.path.join(HERE, "layers/manifest-r4.json")))["layers"][
+        [l_["id"] for l_ in json.load(open(os.path.join(HERE, "layers/manifest-r4.json")))["layers"]].index("floor-lamp")]["file"])))[..., 3]
+    shade_bot = F4.qa_lamp_masks(A8r4)["bot"]
+    x0, y0, x1, y1 = WISP_BOX
+    y0 = max(y0, shade_bot + 2)                             # never the shade's fabric: the box starts under the cone's lowest row
+    box = np.zeros(a.shape, bool)
+    box[y0:y1, x0:x1] = True
+    Ll = lab(rgb)
+    material = (Ll[..., 2] > 22) | (Ll[..., 0] < 60)        # the brass stem, collar and chain; the walnut; never a pale wall-like wisp
+    prod = box & (np.maximum(a, af) > 0.5) & material
+    n, lb, st, _ = cv2.connectedComponentsWithStats(prod.astype(np.uint8), connectivity=8)
+    keep = np.isin(lb, [i for i in range(1, n) if st[i, 4] >= 3])          # every piece of brass or walnut (the chain's beads are apart)
+    # the soft edge (2 px): a true mix of brass and the wall is never lighter than the wall; a pixel lighter than the wall below it
+    # (+1 L*) is the step-2 glow, not the product's edge
+    Lb = lab(below)[..., 0]
+    edge = X.dil(keep, 2) & ~keep & box & (Ll[..., 0] <= Lb + 1.0)
+    keep = keep | edge
+    # the pull chain: a dotted line from the shade to the knob; its faint beads (alpha < 0.5) belong to it. Its column is fitted on the
+    # brass pieces right of the stem; every pixel within 2 px of it, from the box's top to the knob, is kept unless lighter than the wall
+    stem_x = float(np.median(np.nonzero(keep[y1 - 20:y1].any(0))[0]))
+    cy, cx = np.nonzero(keep & (np.arange(a.shape[1])[None, :] > stem_x + 25))
+    chain = np.zeros(a.shape, bool)
+    if len(cx) > 10:
+        pf = np.polyfit(cy, cx, 1)
+        knob_top = int(cy.max())
+        yy = np.arange(y0, knob_top + 1)
+        for y in yy:
+            xc = int(round(np.polyval(pf, y)))
+            chain[y, xc - 2:xc + 3] = True
+        chain &= box & (np.maximum(a, af) > 0) & (Ll[..., 0] <= Lb + 1.0)
+    keep = keep | chain
+    drop = box & ~keep & (np.maximum(a, af) > 0)
+    a2 = np.where(drop, 0.0, a)
+    af2 = np.where(drop, 0.0, af)
+    # before / after with QA's measure: the r4 scene, and the r4 scene with the lamp's change (U' = U - (L - below) x da x (1 - fa))
+    U = scene_r4_B()
+    A_all = products_alpha_r4()
+    G0 = np.asarray(Image.open(os.path.join(HERE, "graded/default-scene-r4-set-B-graded-v3c.png")).convert("RGB"))
+    fa = P["fa"]
+    # the lamp stands behind the sofa's arm: U = (behind x (1 - af) + L af) (1 - fa) + F fa; in the box nothing else is behind it
+    behind = P["behind0"]
+    dU = (rgb - behind) * (af2 - af)[..., None] * (1 - fa)[..., None]
+    reg = box & ((af > 0) | (af2 > 0))
+    Gr = stack.Grade()
+    G1 = np.where(reg[..., None], Gr(U + dU, np.where(box, np.maximum(A_all - (a - a2), 0), A_all)), G0)
+    A8_0 = np.asarray(Image.open(os.path.join(HERE, "layers", json.load(open(os.path.join(HERE, "layers/manifest-r4.json")))["layers"][
+        [l_["id"] for l_ in json.load(open(os.path.join(HERE, "layers/manifest-r4.json")))["layers"]].index("floor-lamp")]["file"])))[..., 3]
+    before = lamp_wisp_measure(G0, A8_0)
+    A8_1 = np.where(drop, 0, A8_0)
+    after = lamp_wisp_measure(G1, A8_1)
+    pl = save_layer("floor-lamp", rgb, a2)
+    Image.fromarray((np.clip(af2, 0, 1) * 255 + 0.5).astype(np.uint8), "L").save(os.path.join(WR5, "layers", "floor-lamp-free-alpha.png"))
+    copy_to(os.path.join(HERE, "work-r4/shadows/floor-lamp.png"), "shadows", "floor-lamp.png")
+    Image.fromarray(np.concatenate([G0[y0:y1, x0:x1], np.full((y1 - y0, 4, 3), 30, np.uint8), G1[y0:y1, x0:x1]], 1)).resize(
+        ((2 * (x1 - x0) + 4) * 4, (y1 - y0) * 4), Image.NEAREST).save(os.path.join(SCR, "r5", "lamp-wisp-before-after-x4.png"))
+    record("floor-lamp", dict(
+        what="the milky wisp under the shade removed from the lamp layer (QA R4 report 2.1; the coordinator's 0-token task): the layer holds "
+             "only the product and its own contact shadow", source=dict(layer=rel(LAMP4), free_alpha="work-r4/layers/floor-lamp-free-alpha.png",
+                                                                      shadow="work-r4/shadows/floor-lamp.png (unchanged, copied)"),
+        method=lamp_wisp.__doc__.replace("\n", " "), box_px=[x0, y0, x1, y1], shade_bottom_row=int(shade_bot), kept_components_px=int(keep.sum()), alpha_zeroed_px=int(drop.sum()),
+        qa_measure=dict(before=before, after=after, how="QA's r4_lamp_wisp.py: box 2380-2470 x 700-800, alpha > 0 and > 2 L* over the base, "
+                                                         "on the graded set-B scene (r4 / r4 with the change)"),
+        changed_outside_box_px=0))
+    print(json.dumps(dict(alpha_zeroed=int(drop.sum()), kept=int(keep.sum()), before=before, after=after), indent=1))
+
+
 if __name__ == "__main__":
     what = sys.argv[1] if len(sys.argv) > 1 else "all"
+    if what in ("lamp", "all"):
+        lamp_wisp()
     if what in ("curtains", "all"):
         curtains()
     if what in ("rods", "all"):

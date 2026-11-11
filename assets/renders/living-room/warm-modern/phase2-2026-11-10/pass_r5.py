@@ -16,8 +16,8 @@ light and contact; nothing of a placeholder reaches a layer except through the n
 stack with the R5 colour fixes, cushion set B) with the pass's slots taken out; the cut is against that scene (the 'below').
 
 Each product is cut, after the ECC registration and the local tone match of extract.py, by extract.cut_one (GrabCut seeded by its
-placeholder), its contact shadow by extract.shadow_one with the luminance taken on the ENCODED values (the multiply works on sRGB-encoded
-pixels; the brief: the shadow recipe bug) and R4's edge treatment (fix_r4.shadow_ext). Files: work-r5/layers/<slot>[-v2|-v3].png,
+placeholder), its contact shadow by extract.shadow_one AS IT IS: the recipe is frozen (the coordinator, 2026-11-11, after QA's R4 check:
+the units bug's rendered effect is mixed, so the new layers keep the existing layers' recipe and swap with no shadow jump). Files: work-r5/layers/<slot>[-v2|-v3].png,
 work-r5/shadows/..., work-r5/<pass>-fetch.json. New files only.
 
   python3 pass_r5.py input p4|p5
@@ -286,8 +286,179 @@ def ph_sconces_v2(below):
     return dict(rgb=rgb, a=a, sh=np.ones_like(a), rec=dict(source="card-sized clay blocks W8 x D8 x H16 at the plates (step 0's camera)"))
 
 
+# ------------------------------------------------------------------------------------------------- placeholders, pass 5'
+LIGHT = np.array([-0.72, 0.52, 0.30], np.float32)          # toward the left window (-X), a little into the room (+Y) and from above
+LIGHT /= np.linalg.norm(LIGHT)
+SS = 2                                                     # supersampling of the clay splat (work px x 2)
+
+
+def hex_rgb(h):
+    h = h.lstrip("#")
+    return np.array([int(h[i:i + 2], 16) for i in (0, 2, 4)], np.float32) / 255
+
+
+def revolve(cx, cy, z0, prof, albedo, theta=(0, 2 * math.pi), ripple=None, nz=360, nt=720, amb=0.42):
+    """a solid of revolution (prof: [(dz, r)] from its foot), splatted at SS x the work size with a z-buffer, Lambert + ambient in the room's
+    soft window light; ripple(theta, z) -> normal tilt (pleats, ribs). Returns rgb (work), alpha (work), the canvas-free work mask"""
+    Hs, Ws = SIZE[1] * SS, SIZE[0] * SS
+    zb = np.full((Hs, Ws), np.inf, np.float32)
+    img = np.zeros((Hs, Ws, 3), np.float32)
+    dz = np.array([p[0] for p in prof], np.float32)
+    rr = np.array([p[1] for p in prof], np.float32)
+    zs = np.linspace(dz.min(), dz.max(), nz)
+    rs = np.interp(zs, dz, rr)
+    drdz = np.gradient(rs, zs)
+    ts = np.linspace(theta[0], theta[1], nt)
+    T, Zr = np.meshgrid(ts, zs)
+    R = np.interp(Zr, dz, rr)
+    D = np.interp(Zr, zs, drdz)
+    X_, Y_ = cx + R * np.cos(T), cy + R * np.sin(T)
+    Z_ = z0 + Zr
+    nrm = np.stack([np.cos(T), np.sin(T), -D], -1)
+    if ripple is not None:
+        tilt = ripple(T, Zr)
+        nrm = nrm + np.stack([-np.sin(T) * tilt, np.cos(T) * tilt, np.zeros_like(T)], -1)
+    nrm /= np.linalg.norm(nrm, axis=-1, keepdims=True)
+    cam = np.array(S0.CAM["loc"], np.float32)
+    view = cam[None, None, :] - np.stack([X_, Y_, Z_], -1)
+    front = (nrm * view).sum(-1) > 0
+    lam = np.clip((nrm * LIGHT).sum(-1), 0, 1)
+    sh = amb + (1 - amb) * lam
+    pts = [S0.P(float(x), float(y), float(z)) for x, y, z in zip(X_[front], Y_[front], Z_[front])]
+    u = np.array([p[0] for p in pts]); v = np.array([p[1] for p in pts]); d = np.array([p[2] for p in pts])
+    px = ((S0.CX + u * S0.CW) / S0.GW * Ws).astype(np.int32)
+    py = ((S0.CY + v * S0.CH) / S0.GH * Hs).astype(np.int32)
+    ok = (px >= 0) & (px < Ws) & (py >= 0) & (py < Hs)
+    px, py, d, s_ = px[ok], py[ok], d[ok], sh[front][ok]
+    order = np.argsort(-d)                                 # far first; nearer points overwrite
+    img[py[order], px[order]] = albedo[None, :] * s_[order, None]
+    zb[py[order], px[order]] = d[order]
+    m = np.isfinite(zb).astype(np.uint8)
+    m = cv2.morphologyEx(m, cv2.MORPH_CLOSE, np.ones((3, 3), np.uint8))
+    img = cv2.inpaint((np.clip(img, 0, 1) * 255).astype(np.uint8), ((m > 0) & ~np.isfinite(zb)).astype(np.uint8), 2, cv2.INPAINT_TELEA)
+    a = cv2.resize(m.astype(np.float32), SIZE, interpolation=cv2.INTER_AREA)
+    rgb = cv2.resize(img.astype(np.float32) / 255 * m[..., None], SIZE, interpolation=cv2.INTER_AREA) / np.maximum(a, 1e-4)[..., None]
+    return np.clip(rgb, 0, 1).astype(np.float32), np.clip(a, 0, 1).astype(np.float32)
+
+
+def over(dst_rgb, dst_a, src_rgb, src_a):
+    a = src_a + dst_a * (1 - src_a)
+    rgb = (src_rgb * src_a[..., None] + dst_rgb * (dst_a * (1 - src_a))[..., None]) / np.maximum(a, 1e-4)[..., None]
+    return rgb.astype(np.float32), a.astype(np.float32)
+
+
+# the card profiles (dz from the foot, radius), m
+PROF_PLANTER = [(0.0, 0.170), (0.04, 0.186), (0.10, 0.201), (0.17, 0.209), (0.24, 0.210), (0.29, 0.203), (0.325, 0.192), (0.345, 0.182),
+                (0.355, 0.1775)]                           # card: opening 35.5, belly 42, height 35.5; the shoulder rounds in to the opening
+PROF_VASE2 = [(0.0, 0.062), (0.06, 0.075), (0.13, 0.090), (0.19, 0.102), (0.235, 0.109), (0.265, 0.110), (0.29, 0.101), (0.307, 0.085),
+              (0.316, 0.072), (0.32, 0.065)]               # card Style B: H 32, W 22, mouth ~13: widest high on the body, tapering to the foot
+PROF_PUMPKIN = [(0.0, 0.0), (0.012, 0.085), (0.035, 0.140), (0.07, 0.180), (0.105, 0.198), (0.125, 0.200), (0.145, 0.198), (0.18, 0.180),
+                (0.215, 0.140), (0.238, 0.085), (0.25, 0.0)]  # card: D 40 x H 25, a pleated oblate lantern
+
+
+def ph_planter_whole(below):
+    """the pot WHOLE at the card's clay (opening 35.5, belly 42, height 35.5, at (-1.95, 0.42)), in the card's warm grey-beige concrete
+    (#BDB6A8) lit by the window, the opening's dark soil ring; the olive tree as R3a / R4 drew it (the layer's rows above the rim: its own
+    render); the pot's floor shadow as R4's"""
+    L = f32(os.path.join(HERE, "work-r4/layers/planter.png"))
+    rgb0, a0 = L[..., :3], L[..., 3]
+    pot_rgb, pot_a = revolve(-1.95, 0.42, 0.0, PROF_PLANTER, hex_rgb("#BDB6A8"), amb=0.62,
+                             ripple=lambda T, Zr: np.where(Zr > 0.18, 0.18 * np.sin(T * 72), 0.0))
+    # the opening: the rim's ellipse at Z 0.355, its inside dark soil
+    rim = to_work(S0.raster([S0.circ(-1.95, 0.42, 0.1775 - 0.012, 0.355)]))
+    soil = np.array([0.30, 0.26, 0.22], np.float32)
+    pot_rgb = np.where((rim > 0.5)[..., None], soil[None, None, :], pot_rgb)
+    pot_a = np.maximum(pot_a, rim)
+    # the tree: the layer's pixels above the pot's rim row (its trunk enters the soil)
+    rim_top = int(np.nonzero((rim > 0.5).any(1))[0].min())
+    tree = a0.copy()
+    tree[rim_top + 4:] = 0
+    rgb, a = over(pot_rgb, pot_a, rgb0, tree)
+    sh = f32(os.path.join(HERE, "work-r4/shadows/planter.png"), "L")
+    sh = np.where(a > 0.98, 1.0, sh)
+    ys, xs = np.nonzero(pot_a > 0.5)
+    return dict(rgb=rgb, a=a, sh=sh, rec=dict(source="the card's clay pot (revolve(), opening 35.5 / belly 42 / height 35.5, #BDB6A8, ribs hinted "
+                                                     "on the upper half) + R3a / R4's olive tree (work-r4/layers/planter.png above the rim)",
+                                              pot_box_px=[int(xs.min()), int(ys.min()), int(xs.max()) + 1, int(ys.max()) + 1], rim_top_row=rim_top))
+
+
+def branch_from(layer_rgb, layer_a, mouth_row):
+    """the dry olive branch: the vase layer's pixels above its mouth row"""
+    a = layer_a.copy()
+    a[mouth_row:] = 0
+    return layer_rgb, a
+
+
+def ph_vase_v2(below):
+    """vase 2 (Style B, H 32, W 22, mouth ~13) at the clay point in the card's charcoal (#3B3A38), with the SAME dry olive branch as the
+    default: the branch of the 4' default layer (work-r5/layers/vase.png) above its mouth, or the placeholder's if 4' has not run"""
+    rgb, a = revolve(POINT[0], POINT[1], 0.45, PROF_VASE2, hex_rgb("#3B3A38"),
+                     ripple=lambda T, Zr: 0.10 * np.sin(T * 90 + 3 * np.sin(Zr * 40)))
+    src = os.path.join(WR5, "layers/vase.png")
+    srcn = "work-r5/layers/vase.png (the 4' default)"
+    if not os.path.exists(src):
+        src, srcn = os.path.join(WR5, "ph-p4/layers/vase.png"), "work-r5/ph-p4/layers/vase.png (the 4' placeholder)"
+    Lv = f32(src)
+    mv = F4.vase_measure(Lv[..., 3], Lv[..., :3])
+    _, vm, _ = S0.P(POINT[0], POINT[1], 0.45 + 0.32)
+    mouth_row = int(round((S0.CY + vm * S0.CH) / S0.GH * SIZE[1]))
+    br_rgb, br_a = branch_from(Lv[..., :3], Lv[..., 3], min(mouth_row, mv["mouth_top_y"]) + 2)
+    rgb, a = over(rgb, a, br_rgb, br_a)
+    sh = f32(os.path.join(WR5, "ph-p4/shadows/vase.png"), "L")
+    sh = np.where(a > 0.98, 1.0, sh)
+    return dict(rgb=rgb, a=a, sh=sh, rec=dict(source="the card's clay (revolve(): H 32, W 22, mouth 13, #3B3A38, carving hinted) at the clay point "
+                                                     f"{POINT}; the same branch from {srcn} above row {mouth_row}"))
+
+
+def ph_sconces_v3(below):
+    """the ribbed half-cylinder on its wood bracket (the card has no dimensions: from the SKU photo, inside the slot envelope 10-14 x 12-18,
+    projection 7-12): a travertine drum r 6.5 x h 12 with four horizontal ribs, standing 3 cm off the wall on a wood back plate
+    3 x 13, under a wood cap 14 x 9.5 x 2.5; at the two plates, centred at Z 1.75"""
+    rgb = np.zeros(SIZE[::-1] + (3,), np.float32)
+    a = np.zeros(SIZE[::-1], np.float32)
+    trav, wood = hex_rgb("#E3D5BE"), hex_rgb("#C9A27A")
+    for x in (-0.85, 1.25):
+        zc = 1.75
+        cr, ca = clay_box_sconce(below, x - 0.05, 0.03, 0.03, 0.13, zc, tuple(wood))           # the back plate on the wall
+        rgb, a = over(rgb, a, cr, ca)
+        h = 0.12
+        prof = [(dz, 0.058 + 0.007 * abs(math.sin(4 * math.pi * dz / h))) for dz in np.linspace(0, h, 49)]
+        dr, da = revolve(x, 0.03, zc - h / 2 - 0.0125, prof, trav, theta=(0.0, math.pi))
+        rgb, a = over(rgb, a, dr, da)
+        cr, ca = clay_box_sconce(below, x - 0.005, 0.14, 0.095, 0.025, zc + h / 2, tuple(wood))  # the wood cap over the drum
+        rgb, a = over(rgb, a, cr, ca)
+    return dict(rgb=rgb, a=a, sh=np.ones_like(a), rec=dict(source="card-sized clay (the card has no dimensions: from the SKU photo inside the "
+                                                                  "slot envelope): ribbed travertine drum r 6.5 x h 12 on a wood plate, wood cap 14 x 9.5"))
+
+
+def ph_pendant_v2(below):
+    """the pleated lantern D 40 x H 25 (card), bottom at Z 1.90 (the slot, V7Q7 b), under the hang point (0.20, 1.72), ivory paper fabric
+    (#F1ECE3) with its pleats hinted; the ceiling canopy and the cord as R3b / R4 drew them (work-r4/layers/pendant.png), the cord carried
+    down to the lantern's top (Z 2.15; the drum's top was 2.18)"""
+    L = f32(os.path.join(HERE, "work-r4/layers/pendant.png"))
+    rgb0, a0 = L[..., :3], L[..., 3]
+    lr, la = revolve(0.20, 1.72, 1.90, PROF_PUMPKIN, hex_rgb("#F1ECE3"), ripple=lambda T, Zr: 0.22 * np.sin(T * 64), nz=500, nt=1440, amb=0.66)
+    top = int(np.nonzero((la > 0.5).any(1))[0].min())
+    cord = np.zeros_like(a0)
+    cord[:62] = a0[:62]                                    # the canopy (R4's canopy_cut) and the cord's top; nothing of the old drum
+    # the cord's column, carried down to the lantern's top (the cord hangs plumb: its profile from rows 62-90)
+    cx_ = float(np.median([(np.nonzero(a0[y] > 0.5)[0].min() + np.nonzero(a0[y] > 0.5)[0].max()) / 2.0 for y in range(62, 91)]))
+    c0, c1 = int(math.floor(cx_ - 6)), int(math.ceil(cx_ + 7))
+    prof_a, prof_rgb = np.median(a0[62:91, c0:c1], axis=0), np.median(rgb0[62:91, c0:c1], axis=0)
+    last = int(np.nonzero(cord[:, int(round(cx_))] > 0.5)[0].max())
+    cord[last:top + 3, c0:c1] = np.maximum(cord[last:top + 3, c0:c1], prof_a[None, :])
+    rgb_c = rgb0.copy()
+    rgb_c[last:top + 3, c0:c1] = np.where((a0[last:top + 3, c0:c1] > 0.5)[..., None], rgb0[last:top + 3, c0:c1], prof_rgb[None, :, :])
+    rgb, a = over(rgb_c, cord, lr, la)
+    ys, xs = np.nonzero(la > 0.5)
+    return dict(rgb=rgb, a=a, sh=np.ones_like(a), rec=dict(source="the card's clay lantern (revolve(): D 40 x H 25, bottom Z 1.90, #F1ECE3, pleats "
+                                                                  "hinted) + R3b / R4's canopy and cord (work-r4/layers/pendant.png), the cord carried to the top",
+                                                           lantern_box_px=[int(xs.min()), int(ys.min()), int(xs.max()) + 1, int(ys.max()) + 1]))
+
+
 PH = {("vase", "default"): ph_vase_default, ("curtains", "v2"): ph_curtains_v2, ("framed-art", "v2"): ph_framed_art_v2,
-      ("accent-sconces", "v2"): ph_sconces_v2}
+      ("accent-sconces", "v2"): ph_sconces_v2, ("planter", "default"): ph_planter_whole, ("vase", "v2"): ph_vase_v2,
+      ("accent-sconces", "v3"): ph_sconces_v3, ("pendant", "v2"): ph_pendant_v2}
 
 
 # ------------------------------------------------------------------------------------------------- the input
@@ -351,20 +522,17 @@ def enc_lum(x):
 
 
 def shadow_new(k, a, regt, below, surf, others):
-    """extract.shadow_one with the luminance on the encoded values (the multiply acts on sRGB-encoded pixels), and R4's edge treatment
-    (fix_r4.shadow_ext); the SPEC of extract (+ R3a's planter)"""
-    saved_lum, saved_spec = PW.lum, F4.SPEC.get(k)
-    PW.lum = enc_lum
-    F4.SPEC[k] = SPEC[k]
+    """THE FROZEN RECIPE (the coordinator, 2026-11-11, from QA's R4 check qa/reports/2026-11-11-wm-tool-phase2-r4.md): extract.shadow_one
+    exactly as every existing layer has it (its luminance in linear light; the units bug is real but its rendered effect is mixed, -3.5 to
+    +16 L*, because the rest of the recipe compensates), so a variant swaps with no shadow jump. A units fix, if any, comes later as ONE
+    calibration of every layer, with the 6K masters and the owner's re-approval of the base"""
+    saved = X.SPEC.get(k)
+    X.SPEC[k] = SPEC[k]
     try:
-        sh, sh0, info = F4.shadow_ext(k, a, regt, below, surf, others)
+        sh = X.shadow_one(k, a, regt, below, surf, others)
     finally:
-        PW.lum = saved_lum
-        if saved_spec is None:
-            F4.SPEC.pop(k, None)
-        else:
-            F4.SPEC[k] = saved_spec
-    return sh, info
+        X.SPEC[k] = saved
+    return sh, dict(recipe="extract.shadow_one as is (frozen)")
 
 
 def cut_snap_ph(V, regt, r=5):
