@@ -5,6 +5,7 @@ import { RoomExperience } from '../components/RoomExperience';
 import { optionImage, Price } from '../components/Media';
 import { pendingOpen, selectHouse, selection } from '../state/room';
 import { HOUSES, houseNow, loadHouse, nordic, type House } from '../house';
+import { wheelCountHe } from '../set-copy';
 
 export function Room({ room: nordicRoom, slot, option, style }: { room: CatalogRoom; slot?: string; option?: number; style?: string }) {
   const want = style && HOUSES.some((h) => h.style === style) ? style : nordic.style;
@@ -76,7 +77,7 @@ export function Room({ room: nordicRoom, slot, option, style }: { room: CatalogR
                       {p ? (
                         <a href={shopPath(p.id)}>{p.name_he}</a>
                       ) : (
-                        <span class="muted">{opt && !opt.placeholder ? opt.label_he : `וריאציה ${pos} · ממתינה למוצר`}</span>
+                        <span class="muted">{opt && !opt.placeholder ? opt.label_he : `גרסה ${pos} · ממתינה למוצר`}</span>
                       )}
                     </span>
                     <span class="row">
@@ -86,7 +87,7 @@ export function Room({ room: nordicRoom, slot, option, style }: { room: CatalogR
                         החלפה
                         <span class="sr-only">
                           {' '}
-                          של {s.name_he} ({s.options.length} וריאציות)
+                          של {s.name_he} ({wheelCountHe(s.options.length, !!house.info)})
                         </span>
                       </a>
                     </span>

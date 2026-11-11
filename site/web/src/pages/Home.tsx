@@ -56,7 +56,7 @@ export function Home() {
                 <a href={`/rooms/${r.id}/`}>
                   <strong>{r.name_he}</strong>
                 </a>
-                <span class="small muted">{r.slots.length} פריטים לבחירה, 3 וריאציות בכל אחד</span>
+                <span class="small muted">{r.slots.length} פריטים לבחירה, 3 גרסאות לכל אחד</span>
               </div>
             </li>
           ))}

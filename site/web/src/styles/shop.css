@@ -628,6 +628,23 @@
   align-items: center;
   gap: var(--s-2);
 }
+/* S15 (master-designer §0.6, §12): the caption and the list are measured at 26rem, 60–80 characters a line, as the
+   story's caption; the list's lead names it, and a row's reason sits on its own line under the name */
+.your-room figcaption,
+.your-room-list,
+.your-room-missing {
+  max-width: 26rem;
+}
+.your-room-list {
+  display: grid;
+  gap: var(--s-2);
+}
+.your-room-lead {
+  margin: 0;
+}
+.your-room-why {
+  display: block;
+}
 .your-room-missing img,
 .your-room-noimg {
   flex: none;

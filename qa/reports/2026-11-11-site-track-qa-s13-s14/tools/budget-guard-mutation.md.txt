@@ -1,0 +1,6 @@
+qa-agent, 2026-11-11 (S13, the room-JS guard): the mutation, in a third copy only (build-s1314-mut), never the live tree.
+web/src/App.tsx, the order page put back in the room's entry statically:
+  - const OrderPage = lazyPage('order', () => import('./pages/Order').then((m) => m.OrderPage));
+  + import { OrderPage as OrderStatic } from './pages/Order'; // QA mutation: the order page back in the entry, statically
+  + const OrderPage = lazyPage('order', () => Promise.resolve(OrderStatic));
+then: npm run build -w @hd/web; npx tsx tools/check-budget.ts  → data/mut-budget.log (exit 0: the guard did not fire)

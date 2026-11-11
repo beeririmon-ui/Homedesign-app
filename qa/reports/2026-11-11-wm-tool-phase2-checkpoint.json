@@ -1,0 +1,418 @@
+{
+ "id": "qa-2026-11-11-wm-tool-phase2-checkpoint",
+ "date": "2026-11-11",
+ "author": "qa-agent",
+ "scope": "warm-modern living-room tool, phase 2 checkpoint: the full default scene (12 defaults + cushion set B; sets A and C too)",
+ "plan": "docs/proposals/warm-modern-tool-phase2-2026-11-07.md section 3, checkpoint row",
+ "briefs": [
+  "briefs/render-wm-tool-phase2-2026-11-10.md",
+  "briefs/render-wm-tool-phase2-reserve-2026-11-11.md",
+  "briefs/render-wm-tool-phase2-fix-r3-2026-11-11.md"
+ ],
+ "inputs": "assets/renders/living-room/warm-modern/phase2-2026-11-10/ (manifest-r3.json, graded/default-scene-r3-set-{A,B,C}-graded-v3c.png, layers, work*/fidelity*, step0/f3-checks.json, jobs*.json); docs/proposals/wm-phase2-f3-decisions-2026-11-11.md",
+ "cost": {
+  "tokens": 0,
+  "var2": false,
+  "network": false,
+  "commits": false,
+  "files": "new files only",
+  "note": "the manager's commit 7424a6d8 (19:28) picked up an early p2_integrity.py mid-run; the working-tree version is final; qa-agent made no commit"
+ },
+ "tools": "qa/reports/2026-11-11-wm-tool-phase2-checkpoint/tools/: p2_integrity.py, p2_grade.py, p2_lock.py, p2_geometry.py, p2_overlay.py, p2_colour.py, p2_lamp.py, p2_halo.py, p2_haze.py, p2_light.py, p2_crops.py, p2_combos.py (QA's own code; projection and lock reader from QA's 2026-11-07 tools)",
+ "verdict": {
+  "checkpoint": "PASS WITH CONDITIONS",
+  "summary": "The layer system is sound: recomposite, swap-diff, one v3c grade and the shell lock all pass on A/B/C. Of the 12 defaults: 8 yes (framed-art, accent-sconces, rug, basket, magazine-holder, bowl, candle-holders, pendant as a product), 3 partial (curtains colour, floor-lamp lit shade, planter shape/texture), 1 no (vase size, new finding). Two R3 cut defects (pendant canopy, basket/pot edges) and the lamp toning are 0-token code fixes.",
+  "steps_4_7": "May start, except: vase 2 / vase 3 wait for the vase default fix and the designer's position call; pendant 2 waits for the canopy re-cut fix in the cut code; bowl 2-3 and candle-holders 2-3 wait for WM-T2 (as planned). The designer's eye on the default scene is still the second half of the checkpoint.",
+  "partials_in_tool": "Only behind HD_PUBLIC=0 and without a buy dot, as a temporary state; before the public site each one is fixed or gets an explicit owner exception (precedent EDR2 is an owner decision for the story rugs, not a general rule). The vase and the pendant layer are not 'partial' cases: they are fixed first."
+ },
+ "integrity": {
+  "recomposite": {
+   "A": {
+    "P1": {
+     "p999_region": 0.0,
+     "max": 3.0,
+     "px_gt2": 13,
+     "px_gt6": 0,
+     "outside_region_gt0": 6
+    },
+    "P2": {
+     "p999_region": 0.0,
+     "max": 3.0,
+     "px_gt2": 13,
+     "px_gt6": 0,
+     "outside_region_gt0": 6
+    },
+    "P4": {
+     "p999_region": 1.0,
+     "max": 3.0,
+     "px_gt2": 13,
+     "px_gt6": 0,
+     "outside_region_gt0": 6
+    }
+   },
+   "B": {
+    "P1": {
+     "p999_region": 0.0,
+     "max": 4.0,
+     "px_gt2": 24,
+     "px_gt6": 0,
+     "outside_region_gt0": 5
+    },
+    "P2": {
+     "p999_region": 0.0,
+     "max": 4.0,
+     "px_gt2": 24,
+     "px_gt6": 0,
+     "outside_region_gt0": 5
+    },
+    "P4": {
+     "p999_region": 1.0,
+     "max": 4.0,
+     "px_gt2": 24,
+     "px_gt6": 0,
+     "outside_region_gt0": 5
+    }
+   },
+   "C": {
+    "P1": {
+     "p999_region": 0.0,
+     "max": 4.0,
+     "px_gt2": 26,
+     "px_gt6": 0,
+     "outside_region_gt0": 3
+    },
+    "P2": {
+     "p999_region": 0.0,
+     "max": 4.0,
+     "px_gt2": 26,
+     "px_gt6": 0,
+     "outside_region_gt0": 3
+    },
+    "P4": {
+     "p999_region": 1.0,
+     "max": 4.0,
+     "px_gt2": 26,
+     "px_gt6": 0,
+     "outside_region_gt0": 3
+    }
+   }
+  },
+  "recomposite_gate": "p99.9 <= 2, max <= 6: PASS on every path; px over 2 are all in the cushion sets' shadow band (phase-1 pixels), in C one of them also lies in the rug's region; outside-region px are the phase-1 level-1 differences",
+  "matches_render_agent": "bit-8 path identical to verify-layers-r3.json (B: 37,664 px > 0, 24 > 2, max 4 at (2171, 1370))",
+  "swap_diff": "0 px outside the region for each of 13 toggles x 3 sets (39); set swaps A<->B, A<->C, B<->C with all 12 present: 0 px outside the union: PASS",
+  "one_grade": {
+   "verdict": "PASS",
+   "detail": "12/12 product layers follow the base's v3c curve: residual median |<= 0.05| L*, p95 <= 0.26; toe residual <= 0.05 (bowl expected lift 5.83, observed 5.88). r3 vs r12: 0 px changed outside the 3 R3 regions. Outside all phase-2 regions the r3 scenes equal base.png but for 3-4 inherited level-1 px. base.png = approved v3c base (sha256 75200f46...aba39). Every layer file committed once, never rewritten."
+  },
+  "black_point": {
+   "verdict": "ACCEPTED as product colour (as set C in phase 1)",
+   "base_p005": 12.4,
+   "scene_p005": {
+    "A": 11.37,
+    "B": 10.91,
+    "C": 9.71
+   },
+   "phase1_p005": {
+    "A": 12.01,
+    "B": 11.33,
+    "C": 10.02
+   },
+   "B_below_11_by_owner": {
+    "curtains": 34,
+    "framed-art": 418,
+    "accent-sconces": 27,
+    "rug": 584,
+    "floor-lamp": 2561,
+    "planter": 23,
+    "magazine-holder": 553,
+    "bowl": 2335,
+    "set-B": 7563,
+    "base (no product alpha>127)": 9181
+   },
+   "B_without_bowl_and_magazine_holder": 11.15,
+   "note": "the grade's own black point (base p0.5 12.4) is inside WM-G1 11-14; set B's scene dips 0.09 under 11 because of the matte-black bowl, the black tubes of the magazine holder and the walnut pole; texture kept (median local std 1.5 L*). No grade split."
+  },
+  "lock": {
+   "verdict": "PASS",
+   "detail": "base.png and the three scenes give identical numbers on all 10 named lines (worst p90 9.0 px back-wall floor line, 4.4 bench front edge); those come from the fixed furniture covering the line (25/48 samples), on the visible shell the floor line is 0 px and the bench edge 1 px; products move no line"
+  }
+ },
+ "fidelity": [
+  {
+   "slot": "curtains",
+   "card": "curtains-aliexpress-beige-linen-sheer-curtains-554205",
+   "sku": "12000029601125492 hooks-top 150x270",
+   "pass_": "R1",
+   "shape": "yes",
+   "colour": "partial",
+   "proportion": "yes",
+   "size": "yes",
+   "position": "yes",
+   "overall": "partial",
+   "numbers": "layer L 55.7 C 15.1 h 75 vs linen photo L 86.9 C 6.5 h 93 (dC +8.6, dh -18; white plaster beside it C 4.8); inner edge +0.8..+2.2 cm from X -2.15; armchair overlap 0.0343 (>= 0.028)",
+   "fix": "0-token chroma/hue correction inside the curtain mask toward the photo, with targets from the designer; or retake inside step 4's curtain pass (~650); or owner exception",
+   "owner": "master-designer (choice), render-agent (fix)"
+  },
+  {
+   "slot": "framed-art",
+   "card": "framed-art-aliexpress-frameless-minimalist-wall-art-631735",
+   "sku": "12000052586400026 tl2356-3pcs 50x70",
+   "pass_": "steps 1-3",
+   "shape": "yes",
+   "colour": "yes",
+   "proportion": "yes",
+   "size": "yes",
+   "position": "yes",
+   "overall": "yes",
+   "numbers": "3 panels: box edges within 3 px of 50x70 at X -0.36/0.20/0.76; top +11-15 px = the walnut frame (PR1); centres <= 0.4 cm in X, -1.6..-1.9 cm in Z"
+  },
+  {
+   "slot": "accent-sconces",
+   "card": "accent-sconces-aliexpress-travertine-cylinder-walnut-choice",
+   "sku": "12000047535430431",
+   "pass_": "steps 1-3 (x0.80 in code)",
+   "shape": "yes",
+   "colour": "yes",
+   "proportion": "yes",
+   "size": "yes",
+   "position": "yes",
+   "overall": "yes",
+   "numbers": "centres -0.5 / +2.0 cm; 10.0 / 8.6 x 17.4 / 17.2 cm with the block; dE00 5.0 vs photo; rendered off"
+  },
+  {
+   "slot": "vase",
+   "card": "vase-cj-textured-white-stoneware",
+   "sku": "CJJT312391803CX Large 16 x 32",
+   "pass_": "steps 1-3",
+   "shape": "yes",
+   "colour": "partial",
+   "proportion": "partial",
+   "size": "no",
+   "position": "partial",
+   "overall": "no",
+   "numbers": "body ~42 cm tall (the 45 cm bench face as a ruler) and ~18 cm wide vs 32 x 16 (height x1.3, width x1.14-1.23); foot 18 px under the projection of (-2.42, 1.35, 0.45) = ~0.3 m toward the camera on the same ray (~(-2.18, 1.59), on the bench); cream C 20 vs off-white photo C 3 (wall beside it C 7)",
+   "new_finding": true,
+   "fix": "scale in code about the foot to the card (0 tokens); designer confirms the foot position or asks for a retake (~650) before vase 2 / vase 3",
+   "owner": "render-agent; master-designer (position)"
+  },
+  {
+   "slot": "rug",
+   "card": "rug-cj-braided-wool-natural",
+   "sku": "CJJT211801818RI 230x330 Square",
+   "pass_": "steps 1-3",
+   "shape": "yes",
+   "colour": "yes",
+   "proportion": "yes",
+   "size": "yes",
+   "position": "yes",
+   "overall": "yes",
+   "numbers": "back and left edges on the projected 330 x 230 outline; dE00 5.2 vs SKU photo (dC +0.5, dh -4, L lower by room light); no fringe on the visible edges",
+   "data": "card in_room still 200x300 (sourcing, known)"
+  },
+  {
+   "slot": "floor-lamp",
+   "card": "floor-lamp-cj-pleated-walnut-stem-158",
+   "sku": "CJYD224754407GT",
+   "pass_": "steps 1-3",
+   "shape": "yes",
+   "colour": "partial",
+   "proportion": "yes",
+   "size": "yes (shade x1.14 accepted by the designer)",
+   "position": "yes",
+   "overall": "partial",
+   "numbers": "shade lit: designer targets met 0 of 6 (shade L 94.4 vs wall ring 85.8; left-right +3.4 < 5; bottom 15 % not darker (+0.4); b* +5.4 over the ring; 6,037 px >= ring p95 + 8). Toning NOT applied: the layer is the steps-1-3 file (sha256 4cd5ef67...). Pole reads espresso (L 11.6) vs walnut hex (L 24), in shade. F3 base vs sofa: A 8 px contact, 2 rows dL > 10, no line; B/C covered by the throw: closed",
+   "fix": "the designer's 0-token shade toning (section 5), then QA on the region only; AliExpress card comparison (section 6) needs the SKU photo in the scratchpad",
+   "owner": "render-agent; sourcing-agent (photo); qa-agent"
+  },
+  {
+   "slot": "planter",
+   "card": "planter-cj-cement-ribbed-belly",
+   "sku": "CJJT154204209IR beige large",
+   "pass_": "R3a",
+   "shape": "partial",
+   "colour": "partial",
+   "proportion": "partial",
+   "size": "yes",
+   "position": "yes",
+   "overall": "partial",
+   "numbers": "belly left edge -0.6 px, rim and base within 1-3 px of 42 x 35.5 at (-1.95, 0.42); opening: left edge at the rim rows 958-961 vs 969.6 for 35.5 -> ~42 cm, straight shoulder; ribs run down ~3/4 of the visible height, no speckle (card: ribs to mid-height over a smooth diagonal band, speckled cement); L 81 C 12 cream-white vs grey-beige photo (C 3), close to the 'Beige' label hex",
+   "layer_note": "the layer holds only the visible fragments (~25 % of the pot): without the basket the pot is broken (crops/combo-no-basket-x2.jpg). Planter and basket are a coupled pair; any basket variant needs the pot drawn whole",
+   "fix": "keep without a buy dot; re-render the pot whole (with the basket, ~650) when basket variants arrive",
+   "owner": "render-agent; master-designer"
+  },
+  {
+   "slot": "basket",
+   "card": "basket-cj-jute-rope-cylinder",
+   "sku": "CJYD186026903CX large",
+   "pass_": "R3a",
+   "shape": "yes",
+   "colour": "yes",
+   "proportion": "yes",
+   "size": "yes",
+   "position": "yes",
+   "overall": "yes",
+   "numbers": "body width x1.006 of the projected 35 cm; rim, base and centre within 1 px / 0.3 cm; in front of the pot; dE00 2.35 vs SKU photo; handles ~2.5 cm taller than 9; the right handle reads as two points at x4"
+  },
+  {
+   "slot": "magazine-holder",
+   "card": "magazine-holder-cj-gunmetal-leather-strap",
+   "sku": "CJYD201631004DW Orange small",
+   "pass_": "R1",
+   "shape": "yes",
+   "colour": "yes (note)",
+   "proportion": "yes",
+   "size": "yes",
+   "position": "yes",
+   "overall": "yes",
+   "numbers": "arches and slings on the 35 x 19 x 27.5 box (x range within 3 px); straps: SKU photo HSL 26/42/42 inside the Bible caramel band -> 'cognac' is right; layer 22.5/61/26: hue in the band, darker and more saturated (deep cognac, not orange); tubes: photo glossy black with white specular streaks, not mirror chrome; render semi-gloss; the photo's thin cross rods are silver, rendered black",
+   "designer_condition": "section 4: straps in the band on the SKU photo: yes; not saturated orange: yes; not mirror chrome: yes. Whether 'glossy black' is the Bible's banned 'glossy lacquer' is the designer's call",
+   "data": "card in_room still Black (sourcing, known)"
+  },
+  {
+   "slot": "bowl",
+   "card": "bowl-cj-matte-black-bowl-20",
+   "sku": "CJJT131449012LO style 12",
+   "pass_": "R2",
+   "shape": "yes",
+   "colour": "yes",
+   "proportion": "yes",
+   "size": "yes",
+   "position": "provisional (WM-T2, not judged)",
+   "overall": "yes (fidelity only)",
+   "numbers": "width x0.98 of the projected D20; matte black dE00 3.1 vs photo; gap to the throw 0.0083-0.0086 (pending WM-T2)"
+  },
+  {
+   "slot": "candle-holders",
+   "card": "candle-holders-cj-travertine-pedestal",
+   "sku": "CJYD201648001AZ 70x110",
+   "pass_": "steps 1-3 (x0.83 in code)",
+   "shape": "yes",
+   "colour": "yes",
+   "proportion": "yes",
+   "size": "yes",
+   "position": "provisional (WM-T2)",
+   "overall": "yes",
+   "numbers": "7.6 / 8.3 cm wide (card 7); centres within 0.5 cm in X; unit B ~12 px lower than its projected point; warmer in the table's shade (dC +7, dh -9) and still reads travertine"
+  },
+  {
+   "slot": "pendant",
+   "card": "pendant-cj-tiered-fabric-drum",
+   "sku": "CJYD247032902BY Beige 50",
+   "pass_": "R3b",
+   "shape": "yes",
+   "colour": "yes",
+   "proportion": "yes",
+   "size": "yes",
+   "position": "yes",
+   "overall": "yes (product); layer must be re-cut",
+   "numbers": "five tiers widening at the middle; widest x1.01 of the projected 50 cm; shade bottom Z 1.887-1.902 by QA's own fit (plan 1.90 +-1.5); centre +1 cm",
+   "layer_defect": "the ceiling canopy is cut wrong: a half disc left of the cord plus a detached 623-px crescent to its right with ceiling showing between; raw/r3b-seedream has a whole disc (crops/pendant-canopy-final-raw-input-r12-x3.png)",
+   "fix": "re-cut the canopy from the raw (0 tokens) and fix the cut code before pendant 2",
+   "owner": "render-agent"
+  }
+ ],
+ "r3_method": {
+  "verdict": "coherent light and contact; three cut defects",
+  "light": "basket and pendant lit from the window side (left quarter brighter by 49 / 31 L*, vase from steps 1-3: 33); the basket's shadow falls right and back onto the wall and floor; grain (high-pass std) and edge softness (1.8-2.0) match the neighbours (1.6-2.1)",
+  "contact": "basket base on its row (+-1 px) with a contact shadow; pot base on its row (+3 px)",
+  "pasted_look": "none at 100 %; at x2-x4: a 1-3 px bright line along the basket's right edge (73-px run, up to +42 L*), a dark speckled rim and grey ghost on the pot's left and lower edge, and the pendant canopy",
+  "no_layer_moved": "confirmed: every layer file committed once; r3 vs r12 changes 0 px outside the 3 R3 regions",
+  "recipe_note": "the basket placeholder was scaled anisotropically (0.875 x 0.967); the output proportions are right, but the recipe should say isotropic unless the source's proportions were wrong, and always re-measure on the output"
+ },
+ "seams_and_halos": {
+  "data": "qa/reports/2026-11-11-wm-tool-phase2-checkpoint/data/halo.json, qa/reports/2026-11-11-wm-tool-phase2-checkpoint/data/haze.json",
+  "real": [
+   "basket right edge (R3a)",
+   "pot left / lower edge (R3a)",
+   "pendant canopy (R3b)",
+   "curtain vs armchair: a 1-px light rim on the walnut post's top and left edge, faint at x2, not seen at 100 %"
+  ],
+  "not_defects": "most other flags are true features: walnut frames, dark rims, the pull chain, the cord, the shade's inner cavity",
+  "haze": "no veil wider than ~4-6 px (p95) on any layer"
+ },
+ "combinations": "no empty slot in the tool and one variant per slot except the cushions: sets A/B/C with all 12 composed and swap-diffed; probes without the basket and without the planter show the coupling (overlays/combos-sheet.jpg)",
+ "designer_conditions": {
+  "1 F3 floor-lamp base": "closed: no line",
+  "4 magazine-holder straps": "SKU photo in the band; render darker; not chrome",
+  "5 shade toning": "not applied: open",
+  "6 AliExpress lamp card": "open: no SKU photo offline"
+ },
+ "remaining": [
+  {
+   "item": "vase: scale to the card about the foot",
+   "owner": "render-agent",
+   "cost": 0,
+   "blocks": "vase 2 / vase 3 (steps 4, 6) and a buy dot"
+  },
+  {
+   "item": "vase: position on the bench vs the plan point; retake if the plan point is required",
+   "owner": "master-designer",
+   "cost": "0 or ~650"
+  },
+  {
+   "item": "pendant: re-cut the canopy from the raw; fix the cut code",
+   "owner": "render-agent",
+   "cost": 0,
+   "blocks": "the pendant layer in the tool; pendant 2 (step 5)"
+  },
+  {
+   "item": "floor-lamp: shade toning to the designer's targets",
+   "owner": "render-agent",
+   "cost": 0,
+   "blocks": "a buy dot (CE blocks sale anyway)"
+  },
+  {
+   "item": "basket right edge and pot left / lower edge: edge re-cut (decontaminate / erode 1-2 px)",
+   "owner": "render-agent",
+   "cost": 0
+  },
+  {
+   "item": "curtains colour: choose code correction / retake / owner exception",
+   "owner": "master-designer, then render-agent",
+   "cost": "0 or ~650"
+  },
+  {
+   "item": "planter: whole pot with the basket when basket variants come",
+   "owner": "render-agent",
+   "cost": "~650 (later)"
+  },
+  {
+   "item": "magazine holder: 'glossy black' vs the Bible's glossy-lacquer ban; the felt-log variant (45 x 32 x 40) needs an F3 check at WMC9 before step 4",
+   "owner": "master-designer",
+   "cost": 0
+  },
+  {
+   "item": "card data: curtains in_room -> hooks-top 12000029601125492; framed-art in_room -> 3pcs 12000052586400026; rug -> 230x330; magazine holder -> Orange",
+   "owner": "sourcing-agent",
+   "cost": 0
+  },
+  {
+   "item": "AliExpress floor-lamp SKU photo into the scratchpad, then QA comparison (section 6)",
+   "owner": "sourcing-agent, qa-agent",
+   "cost": 0
+  },
+  {
+   "item": "sheet captions: mixed Hebrew/Latin lines print in reversed order",
+   "owner": "render-agent",
+   "cost": 0
+  },
+  {
+   "item": "WM-T2 (table group), WM-FL3, WM-L1",
+   "owner": "the owner via the manager",
+   "cost": 0
+  },
+  {
+   "item": "unchanged from phase 1: 6K masters and G1/G2 on them; the browser-width edge check",
+   "owner": "render-agent; frontend-dev",
+   "cost": "later"
+  }
+ ],
+ "files": {
+  "report": "qa/reports/2026-11-11-wm-tool-phase2-checkpoint.md",
+  "data": "qa/reports/2026-11-11-wm-tool-phase2-checkpoint/data/",
+  "crops": "qa/reports/2026-11-11-wm-tool-phase2-checkpoint/crops/",
+  "overlays": "qa/reports/2026-11-11-wm-tool-phase2-checkpoint/overlays/",
+  "tools": "qa/reports/2026-11-11-wm-tool-phase2-checkpoint/tools/",
+  "supplier_images": "compared in the scratchpad only, never written to the repo"
+ }
+}

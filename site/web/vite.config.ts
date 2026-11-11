@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 import { viteSingleFile } from 'vite-plugin-singlefile';
 import { fileURLToPath } from 'node:url';
-import { existsSync, readdirSync, rmSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync, rmSync, statSync } from 'node:fs';
 import { join, relative, resolve } from 'node:path';
 import type { Plugin } from 'vite';
 
@@ -31,6 +31,20 @@ function storyPages(): Record<string, string> {
   walk(root);
   return out;
 }
+/**
+ * S15 (the owner's launch item "supplier image rights"): the public build ships only the supplier pictures whose rights
+ * are confirmed. Its code reads .generated/supplier-images.public.json (the alias below), and every other file under
+ * dist/media/products is removed here; tools/check-image-rights.ts fails the build if one is left or named.
+ */
+const PUBLIC_SUPPLIER = r('../.generated/supplier-images.public.json');
+function shippedSupplierFiles(): Set<string> {
+  type M = { width: number; products: Record<string, { src: string }>; options?: Record<string, { files: { name: string }[] }> };
+  const m = JSON.parse(readFileSync(PUBLIC_SUPPLIER, 'utf8')) as M;
+  return new Set([
+    ...Object.values(m.products).map((p) => `${p.src}.webp`),
+    ...Object.entries(m.options ?? {}).flatMap(([id, o]) => o.files.map((f) => `products/${id}/${f.name}.${m.width}.webp`)),
+  ]);
+}
 function withoutTestPages(): Plugin {
   let outDir = '';
   return {
@@ -41,6 +55,18 @@ function withoutTestPages(): Plugin {
     },
     closeBundle() {
       for (const d of ['test', 'story', 'media/test', 'media/story', 'media/house']) rmSync(resolve(outDir, d), { recursive: true, force: true });
+      // S15: a supplier picture the public manifest does not list (its rights are not confirmed) does not ship
+      const media = resolve(outDir, 'media');
+      const dir = resolve(media, 'products');
+      if (!existsSync(dir)) return;
+      const keep = shippedSupplierFiles();
+      for (const id of readdirSync(dir)) {
+        const folder = resolve(dir, id);
+        if (!statSync(folder).isDirectory()) continue;
+        for (const f of readdirSync(folder)) if (!keep.has(`products/${id}/${f}`)) rmSync(resolve(folder, f), { force: true });
+        if (!readdirSync(folder).length) rmSync(folder, { recursive: true, force: true });
+      }
+      if (!readdirSync(dir).length) rmSync(dir, { recursive: true, force: true });
     },
   };
 }
@@ -59,6 +85,8 @@ export default defineConfig(({ mode }) => {
     },
     resolve: {
       alias: [
+        // S15: the public build reads the supplier pictures it may ship, never the full manifest
+        ...(PUBLIC ? [{ find: /^@generated\/supplier-images\.json$/, replacement: PUBLIC_SUPPLIER }] : []),
         { find: /^@generated\/(.*)$/, replacement: r('../.generated/$1') },
         // The artifact loads fonts from Google Fonts (allowed there); the site self-hosts them.
         ...(artifact ? [{ find: /^\.\/styles\/fonts\.css$/, replacement: r('src/styles/empty.css') }] : []),

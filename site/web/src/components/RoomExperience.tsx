@@ -19,6 +19,7 @@ import { arrival, pendingOpen, roomReady, selection, stageEngine } from '../stat
 import { announce } from '../state/ui';
 import { prefersReducedMotion } from '../motion';
 import { go, preload } from './Transition';
+import { wheelCountHe } from '../set-copy';
 
 declare global {
   interface Window {
@@ -381,7 +382,7 @@ export function RoomExperience({
       const pos = selection.value[o.slot.id] ?? 1;
       const opt = o.slot.options[pos - 1];
       const p = house.product(opt?.product_id);
-      announce(`${o.slot.name_he}: ${p ? p.name_he : opt && !opt.placeholder ? opt.label_he : `וריאציה ${pos}`} מוצג בחדר`);
+      announce(`${o.slot.name_he}: ${p ? p.name_he : opt && !opt.placeholder ? opt.label_he : `גרסה ${pos}`} מוצג בחדר`);
     }
     // focus returns after the re-render that re-enables the hotspots (a disabled button cannot take focus)
     focusAfter.current = spots.current.get(o.slot.id) ?? opener.current;
@@ -536,7 +537,8 @@ export function RoomExperience({
       <h1 id="room-title" class="glass stage-temp-note" tabIndex={-1}>
         {room.name_he} · {house.name_he}
         {scene.temporary ? ' · תמונות זמניות' : ''}
-        {house.status_he ? <span class="stage-status">{house.status_he}</span> : null}
+        {/* S15 (§2 row 17): a working label, shown only in a build behind the flag, never on the public site */}
+        {house.status_he && !__HD_PUBLIC__ ? <span class="stage-status">{house.status_he}</span> : null}
       </h1>
       <svg class="outlines" ref={outlineSvg} viewBox="0 0 1600 900" preserveAspectRatio="none" aria-hidden="true" focusable="false">
         {room.slots.map((s) => {
@@ -571,7 +573,7 @@ export function RoomExperience({
                 if (el) spots.current.set(s.id, el);
               }}
               style={{ left: 0, top: 0 }}
-              aria-label={`${s.name_he}: ${p ? p.name_he : o && !o.placeholder ? o.label_he : 'וריאציה זמנית'}. פתיחת ${s.options.length} וריאציות`}
+              aria-label={`${s.name_he}: ${p ? p.name_he : o && !o.placeholder ? o.label_he : 'גרסה זמנית'}. פתיחת ${wheelCountHe(s.options.length, !!house.info)}`}
               onClick={() => void openSlot(s)}
               onPointerEnter={() => light(s.id)}
               onPointerLeave={() => light(null)}

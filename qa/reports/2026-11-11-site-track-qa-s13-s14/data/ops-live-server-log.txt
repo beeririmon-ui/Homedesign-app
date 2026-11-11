@@ -1,0 +1,183 @@
+[wrangler:info] POST /api/cart 201 Created (17ms)
+[wrangler:info] PUT /api/cart/nZdLZHNx4y4C5SnClol9oR4U8Kl9sPwN/items 200 OK (17ms)
+[wrangler:info] POST /api/checkout 201 Created (20ms)
+[wrangler:info] POST /mock-pay/ms_wVZSj2s2Xq1cNpLoAEnHN5Nc/complete 303 See Other (14ms)
+[wrangler:info] GET /api/admin/orders/9673898087 200 OK (15ms)
+[wrangler:info] GET /api/admin/orders/9673898087 200 OK (27ms)
+[wrangler:info] GET /api/admin/orders/9673898087 200 OK (31ms)
+{
+  level: 'info',
+  event: 'notify.new_order',
+  at: '2026-11-11T19:46:30.299Z',
+  channel: 'mock',
+  order_id: '9673898087',
+  total_agorot: 51700,
+  items: 2,
+  admin_path: '/admin/orders/9673898087',
+  paid_at: '2026-11-11T19:46:28.233Z'
+}
+[wrangler:info] QUEUE supplier-orders-dev 3/3 (64ms)
+[wrangler:info] GET /api/admin/orders/9673898087 200 OK (30ms)
+[wrangler:info] GET /api/orders/9673898087 200 OK (14ms)
+{
+  level: 'info',
+  event: 'shipment.updated',
+  at: '2026-11-11T19:46:30.509Z',
+  order_id: '9673898087',
+  supplier: 'mock',
+  status: 'shipped'
+}
+[wrangler:info] POST /api/admin/orders/9673898087/mock-supplier 200 OK (16ms)
+[wrangler:info] GET /api/orders/9673898087 200 OK (11ms)
+{
+  level: 'info',
+  event: 'shipment.updated',
+  at: '2026-11-11T19:46:30.538Z',
+  order_id: '9673898087',
+  supplier: 'mock',
+  status: 'delivered'
+}
+[wrangler:info] POST /api/admin/orders/9673898087/mock-supplier 200 OK (12ms)
+[wrangler:info] GET /api/orders/9673898087 200 OK (11ms)
+[wrangler:info] GET /api/orders/9673898087 404 Not Found (5ms)
+{
+  level: 'info',
+  event: 'refund.refunded',
+  at: '2026-11-11T19:46:30.588Z',
+  order_id: '9673898087',
+  refund_id: 'qa_live_1794426390563',
+  amount_agorot: 1000,
+  provider: 'mock'
+}
+[wrangler:info] POST /api/admin/orders/9673898087/refund 200 OK (27ms)
+[wrangler:info] POST /api/admin/orders/9673898087/refund 200 OK (9ms)
+{
+  level: 'info',
+  event: 'refund.refunded',
+  at: '2026-11-11T19:46:30.627Z',
+  order_id: '9673898087',
+  refund_id: 'qa_live2_1794426390605',
+  amount_agorot: 700,
+  provider: 'mock'
+}
+[wrangler:info] POST /api/admin/orders/9673898087/refund 200 OK (21ms)
+[wrangler:info] POST /api/admin/orders/9673898087/refund 200 OK (37ms)
+[wrangler:info] POST /api/admin/orders/9673898087/refund 200 OK (36ms)
+[wrangler:info] POST /api/admin/orders/9673898087/refund 200 OK (36ms)
+[wrangler:info] POST /api/admin/orders/9673898087/refund 200 OK (38ms)
+[wrangler:info] POST /api/admin/orders/9673898087/refund 422 Unprocessable Entity (9ms)
+{
+  level: 'info',
+  event: 'refund.refunded',
+  at: '2026-11-11T19:46:30.684Z',
+  order_id: '9673898087',
+  refund_id: 'qa_rest_1794426390667',
+  amount_agorot: 50000,
+  provider: 'mock'
+}
+[wrangler:info] POST /api/admin/orders/9673898087/refund 200 OK (18ms)
+[wrangler:info] QUEUE supplier-orders-dev 3/3 (29ms)
+[wrangler:info] GET /api/admin/orders/9673898087 200 OK (17ms)
+[wrangler:info] GET /api/orders/9673898087 200 OK (10ms)
+[wrangler:info] POST /api/cart 201 Created (12ms)
+[wrangler:info] PUT /api/cart/eWKJCUwo-k1a8F3-Ezt_bEqwyL2i2cyb/items 200 OK (15ms)
+[wrangler:info] POST /api/checkout 201 Created (19ms)
+[wrangler:info] POST /mock-pay/ms_L05BLLzcwXFA5Fv9KRdSYFNt/complete 303 See Other (16ms)
+{
+  level: 'info',
+  event: 'refund.refunded',
+  at: '2026-11-11T19:46:34.820Z',
+  order_id: '4866641518',
+  refund_id: 'cancel:4866641518',
+  amount_agorot: 51700,
+  provider: 'mock'
+}
+[wrangler:info] POST /api/admin/orders/4866641518/cancel 200 OK (33ms)
+[wrangler:info] POST /api/cart 201 Created (10ms)
+[wrangler:info] PUT /api/cart/7z5FDE6g8D9K3kas5lSkNi95UBr4eSvw/items 200 OK (17ms)
+[wrangler:info] POST /api/checkout 201 Created (19ms)
+[wrangler:info] POST /mock-pay/ms_v820hpsofJohzIWxDhOoY2IP/complete 303 See Other (17ms)
+{
+  level: 'info',
+  event: 'notify.new_order',
+  at: '2026-11-11T19:46:34.906Z',
+  channel: 'mock',
+  order_id: '4866641518',
+  total_agorot: 51700,
+  items: 2,
+  admin_path: '/admin/orders/4866641518',
+  paid_at: '2026-11-11T19:46:34.778Z'
+}
+[wrangler:info] QUEUE supplier-orders-dev 5/5 (32ms)
+[wrangler:info] GET /api/admin/orders/8400846971 200 OK (45ms)
+[wrangler:info] POST /api/admin/orders/8400846971/cancel 200 OK (12ms)
+[wrangler:info] GET /api/orders/8400846971 200 OK (11ms)
+[wrangler:info] POST /api/admin/orders/8400846971/cancel 200 OK (13ms)
+{
+  level: 'info',
+  event: 'refund.refunded',
+  at: '2026-11-11T19:46:35.016Z',
+  order_id: '8400846971',
+  refund_id: 'cancel:8400846971',
+  amount_agorot: 51700,
+  provider: 'mock'
+}
+[wrangler:info] POST /api/admin/orders/8400846971/mock-supplier 200 OK (29ms)
+[wrangler:info] GET /api/admin/orders/4866641518 200 OK (31ms)
+[wrangler:info] GET /api/admin/orders/8400846971 200 OK (18ms)
+[wrangler:info] GET /api/orders/4866641518 200 OK (10ms)
+[wrangler:info] GET /api/orders/8400846971 200 OK (12ms)
+{
+  level: 'info',
+  event: 'notify.new_order',
+  at: '2026-11-11T19:46:36.943Z',
+  channel: 'mock',
+  order_id: '8400846971',
+  total_agorot: 51700,
+  items: 2,
+  admin_path: '/admin/orders/8400846971',
+  paid_at: '2026-11-11T19:46:34.885Z'
+}
+[wrangler:info] QUEUE supplier-orders-dev 3/3 (26ms)
+[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1m{[0m
+
+    level: 'error',
+    event: 'request.unhandled',
+    at: '2026-11-11T19:46:38.319Z',
+    method: 'GET',
+    path: '/api/orders/9673898087',
+    error_id: 'E-2CE7Y9VD',
+    error_name: 'URIError',
+    error_message: 'URI malformed'
+  }
+
+
+[wrangler:info] GET /api/orders/9673898087 500 Internal Server Error (16ms)
+[wrangler:info] POST /api/cart 201 Created (10ms)
+[wrangler:info] PUT /api/cart/VIzZBaY-ecYVE49m0VY6npNzh21v3Y0J/items 200 OK (16ms)
+[wrangler:info] POST /api/checkout 201 Created (17ms)
+[wrangler:info] POST /mock-pay/ms_ozZJDdlHbAKzRgw3ETMinA1q/complete 303 See Other (19ms)
+{
+  level: 'info',
+  event: 'refund.refunded',
+  at: '2026-11-11T19:46:38.422Z',
+  order_id: '2555071313',
+  refund_id: 'cancel:2555071313',
+  amount_agorot: 51700,
+  provider: 'mock'
+}
+[wrangler:info] POST /api/admin/orders/2555071313/cancel 200 OK (30ms)
+[wrangler:info] POST /admin/orders/2555071313/cancel 303 See Other (5ms)
+[wrangler:info] GET /api/admin/orders/2555071313 200 OK (18ms)
+{
+  level: 'info',
+  event: 'notify.new_order',
+  at: '2026-11-11T19:46:40.401Z',
+  channel: 'mock',
+  order_id: '2555071313',
+  total_agorot: 51700,
+  items: 2,
+  admin_path: '/admin/orders/2555071313',
+  paid_at: '2026-11-11T19:46:38.383Z'
+}
+[wrangler:info] QUEUE supplier-orders-dev 4/4 (22ms)

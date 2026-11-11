@@ -17,10 +17,22 @@ import { Price } from '../components/Media';
 import { PackPicker } from '../components/PackPicker';
 import { addToCart, cartBusy } from '../state/cart';
 import { variantPackPrice, variantView, type VariantView } from '../variants';
+import { NOT_FOR_SALE_HE, setButtonHe, setItemsLabelHe, setNoteHe } from '../set-copy';
 
 type Piece = { product_id: string | null; variant_id: string | null; name_he: string; option_he: string | null };
 type HouseSet = { position: number; id: string; label_he: string; thumb: string; items: Piece[] };
-type Data = { style: string; name_he: string; status_he: string; alt_he: string; scene: Scene; room: CatalogRoom; sets: HouseSet[]; products: PublicProduct[] };
+type Data = {
+  style: string;
+  name_he: string;
+  status_he: string;
+  place_he: string;
+  alt_he: string;
+  intro_he: string;
+  scene: Scene;
+  room: CatalogRoom;
+  sets: HouseSet[];
+  products: PublicProduct[];
+};
 
 const h = data as unknown as Data;
 const byId = new Map(h.products.map((p) => [p.id, p]));
@@ -49,7 +61,7 @@ function SetPanel({ set }: { set: HouseSet }) {
   };
   return (
     <div class="set-panel">
-      <ul class="set-items" aria-label={`בסט: ${set.items.length} פריטים`}>
+      <ul class="set-items" aria-label={setItemsLabelHe(set.items.length)}>
         {rows.map((r, i) => (
           <li key={i} class="set-item" data-variant={r.piece.variant_id ?? ''}>
             <span class="set-text">
@@ -57,10 +69,10 @@ function SetPanel({ set }: { set: HouseSet }) {
               {r.piece.option_he ? <span class="specs">{r.piece.option_he}</span> : null}
             </span>
             <span class="set-buy">
-              {r.v ? <Price agorot={variantPackPrice(r.v, r.pack)} provisional={r.v.price_provisional} /> : <span class="specs">עוד בלי מחיר</span>}
+              {r.v ? <Price agorot={variantPackPrice(r.v, r.pack)} provisional={r.v.price_provisional} /> : <span class="specs">{NOT_FOR_SALE_HE}</span>}
               {r.sellable ? (
                 <button type="button" class="btn btn-ghost set-add" disabled={cartBusy.value} onClick={() => void add([r])}>
-                  לסל<span class="sr-only"> רק את {r.piece.name_he}</span>
+                  לסל<span class="sr-only">: {r.piece.name_he} בלבד</span>
                 </button>
               ) : r.v ? (
                 <span class="specs set-oos">המלאי אינו זמין כעת</span>
@@ -79,19 +91,11 @@ function SetPanel({ set }: { set: HouseSet }) {
           </li>
         ))}
       </ul>
-      {forSale.length < rows.length ? (
-        <p class="specs set-note">
-          {rows.length - forSale.length === 1 ? 'פריט אחד בסט אינו במלאי כעת' : `${rows.length - forSale.length} פריטים בסט אינם במלאי כעת`}:{' '}
-          {rows
-            .filter((r) => !r.sellable)
-            .map((r) => r.piece.name_he)
-            .join(', ')}
-          . לסל נכנס רק מה שבמלאי.
-        </p>
-      ) : null}
+      {/* S15 (§2 rows 10, 11): the piece's own row already says "המלאי אינו זמין כעת"; the note says what that does to the button */}
+      {forSale.length < rows.length ? <p class="specs set-note">{setNoteHe(rows.length - forSale.length)}</p> : null}
       {forSale.length ? (
         <button type="button" class="btn btn-ghost set-all" id="add-set" disabled={cartBusy.value} onClick={() => void add(forSale)}>
-          {forSale.length === rows.length ? 'הסט כולו לסל' : `${forSale.length} הפריטים שבמלאי לסל`} · <span class="num">{formatIls(total)}</span>
+          {setButtonHe(forSale.length, rows.length)} · <span class="num">{formatIls(total)}</span>
         </button>
       ) : null}
     </div>
@@ -102,11 +106,14 @@ export const house: House = {
   style: h.style,
   name_he: h.name_he,
   status_he: h.status_he,
+  place_he: h.place_he,
   alt_he: h.alt_he,
-  intro_he: 'בבית הזה מתחלפות בינתיים הכריות והשמיכה, בשלושה סטים. שאר הפריטים הם חלק מהתמונה, ויקבלו גלגל משלהם בשלב הבא.',
+  intro_he: h.intro_he,
   scene: h.scene,
   room: h.room,
   product: (id) => (id ? byId.get(id) : undefined),
+  // S15: the pieces of the three sets, each product once, in the wheel's order (the page's ItemList)
+  sold: () => [...new Set(h.sets.flatMap((s) => s.items.flatMap((i) => (i.product_id ? [i.product_id] : []))))].flatMap((id) => byId.get(id) ?? []),
   thumb: (position) => {
     const s = h.sets[position - 1];
     return s ? mediaUrl(s.thumb.replace(/\.webp$/, '')) : null;
@@ -117,6 +124,6 @@ export const house: House = {
   },
   // a set's layer draws every piece of it, each in the SKU the render shows
   drawn: (slotId, position) => (slotId === h.room.slots[0]?.id ? (h.sets[position - 1]?.items ?? []).flatMap((i) => (i.variant_id ? [i.variant_id] : [])) : []),
-  // S14, ת28: the set by its short name ("סט B"), the part of its label before the colon
+  // S14, ת28: the set by its name; S15: the label is the customer's name of the set ("סט קאמל ופקאן"), without a colon
   drawnLabel: (slotId, position) => (slotId === h.room.slots[0]?.id ? (h.sets[position - 1]?.label_he.split(':')[0]?.trim() ?? null) : null),
 };

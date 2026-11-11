@@ -33,13 +33,17 @@ type Manifest = {
   style: string;
   selection: string;
   status_he: string;
+  /** S15: the room in this house as a sentence names it, the line under the room, and the room's description */
+  place_he: string;
+  intro_he: string;
   alt_he: string;
   frame: string;
   mobile_center_u: number;
   pilot: string;
   approved: { base: string; composites: Record<string, string> };
   layers_dir: string;
-  slot: { id: string; depth: number };
+  /** name_he: S15, a display override of the slot's name in data/slots (which does not change) */
+  slot: { id: string; depth: number; name_he?: string };
   sets: { id: string; label_he: string; points: Point[] }[];
 };
 type Selection = { slots: Record<string, { picks: { set_id?: string; items?: string[] }[] }> };
@@ -337,6 +341,7 @@ const living = site.rooms.find((r) => r.id === m.room)!;
 const template = living.slots.find((s) => s.id === m.slot.id)!;
 const slot: CatalogSlot = {
   ...template,
+  name_he: m.slot.name_he ?? template.name_he,
   has_shadow: !!scene.slots[m.slot.id]!.shadow,
   has_light: false,
   hotspot: { u: anchor[0], v: anchor[1], provisional: false, visible: true },
@@ -350,6 +355,8 @@ const house = {
   style: m.style,
   name_he: style?.name_he ?? m.style,
   status_he: m.status_he,
+  place_he: m.place_he,
+  intro_he: m.intro_he,
   alt_he: m.alt_he,
   scene,
   room,

@@ -52,11 +52,14 @@ for (const url of routes) {
 const houses = HOUSES.filter((h) => h.style !== NORDIC);
 // S14, QA ת29: the house's chunk first, so its page is rendered as that house (its poster, its slot), not as a wait
 await loadHouses();
+// S15: each house's page is its own page (its canonical names the house), so the sitemap lists it
+const housePages: string[] = [];
 for (const h of houses)
   for (const r of catalog.rooms.filter((x) => x.built)) {
     const file = resolve(dist, `house/${r.id}/${h.style}/index.html`);
     mkdirSync(dirname(file), { recursive: true });
     writeFileSync(file, page(`/rooms/${r.id}/?style=${h.style}`));
+    housePages.push(`/rooms/${r.id}/?style=${h.style}`);
   }
 // /order/<id>/ is served by the Worker from this shell (client-rendered: the id and token live in the browser)
 mkdirSync(resolve(dist, 'order'), { recursive: true });
@@ -77,10 +80,10 @@ writeFileSync(
     '\n',
 );
 // robots.txt and sitemap.xml (absolute URLs; ORIGIN changes when the domain is chosen)
-const indexable = routes.filter((u) => !['/cart/', '/checkout/'].includes(u));
+const indexable = [...routes.filter((u) => !['/cart/', '/checkout/'].includes(u)), ...housePages];
 writeFileSync(
   resolve(dist, 'sitemap.xml'),
-  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${indexable.map((u) => `  <url><loc>${ORIGIN}${u}</loc></url>`).join('\n')}\n</urlset>\n`,
+  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${indexable.map((u) => `  <url><loc>${ORIGIN}${u.replace(/&/g, '&amp;')}</loc></url>`).join('\n')}\n</urlset>\n`,
 );
 writeFileSync(
   resolve(dist, 'robots.txt'),

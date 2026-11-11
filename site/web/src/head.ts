@@ -7,18 +7,51 @@ import { mediaUrl } from './media';
 import { scene } from './catalog';
 import { galleryImages } from './components/Media';
 import { optionsOf } from './variants';
+import { HOUSES, NORDIC, houseNow, type House } from './house';
+import { metaDescription } from '@hd/shared/meta-text';
 
 export type Head = { title: string; description: string; canonical: string; jsonLd: object[]; noindex?: boolean; preload?: string };
 
 const SITE = 'הבית';
 export const ORIGIN = 'https://example.co.il'; // replaced when the domain is chosen (docs/architecture.md, open decisions)
 
+/**
+ * S15 (QA, master-designer §4): the house a room page shows. The address names it (?style=<id>, S10); a style that is
+ * not a house of this build (every style but the Nordic one in a public build) is the Nordic page.
+ */
+export function houseOf(route: Extract<Route, { name: 'room' }>): string {
+  return route.style && route.style !== NORDIC && HOUSES.some((h) => h.style === route.style) ? route.style : NORDIC;
+}
+
+/**
+ * S15 (master-designer §4): each house's room page, its own title and description. The same shape in every house: the
+ * style, then three words of material and light. The warm-modern house says what can be swapped there today (the set of
+ * cushions and throw); once it has more slots on the wheel, the Nordic sentence.
+ */
+const ROOM_HEAD: Record<string, { title: string; crumb?: string; description: (h: House | null) => string }> = {
+  'living-room/nordic': {
+    title: 'סלון נורדי: לבן חם, אלון ואור חורף',
+    description: () => 'סלון נורדי באור חורף של שלוש אחר הצהריים, בלבן חם, בשיבולת שועל ובאלון בהיר. נוגעים בפריט, מחליפים גרסה ורואים את החדר מתעדכן.',
+  },
+  'living-room/warm-modern': {
+    title: 'סלון מודרני חם: בוקלה, אגוז ואבן',
+    crumb: 'סלון מודרני חם',
+    description: (h) =>
+      `סלון מודרני חם: קירות טיח, ספת בוקלה, שולחן קפה מאגוז וספסל אבן בחלון, באור חורף של אחר הצהריים. ${
+        (h?.room.slots.length ?? 1) > 1 ? 'נוגעים בפריט, מחליפים גרסה ורואים את החדר מתעדכן.' : 'בוחרים סט כריות ושמיכה ורואים אותו על הספה.'
+      }`,
+  },
+};
+
 export function canonicalPath(route: Route): string {
   switch (route.name) {
     case 'home':
       return '/';
-    case 'room':
-      return `/rooms/${route.room}/`;
+    case 'room': {
+      // S15: a house's page is its own page (its own title, its own products): the canonical names its house
+      const style = houseOf(route);
+      return `/rooms/${route.room}/${style === NORDIC ? '' : `?style=${style}`}`;
+    }
     case 'product': {
       const hit = productBySegment(route.id);
       return hit ? shopPath(hit.product.id) : `/p/${route.id}/`;
@@ -54,21 +87,30 @@ export function headFor(route: Route): Head {
       };
     case 'room': {
       const r = livingRoom;
+      const style = houseOf(route);
+      const house = houseNow(style);
+      const copy = ROOM_HEAD[`${r.id}/${style}`] ?? ROOM_HEAD[`${r.id}/${NORDIC}`]!;
+      // S15: the products of the house shown, never another house's: the Nordic room's products, or the pieces the
+      // house sells (its sets); a product has its url when the shop has its page
+      const sold = style === NORDIC ? catalog.products.filter((p) => p.room === r.id) : (house?.sold?.() ?? []);
       return {
-        title: `${r.name_he} נורדי · ${SITE}`,
-        description: `סלון נורדי עם ${r.slots.length} עמדות מוצר: וילונות, שטיח, תאורה, טקסטיל וקרמיקה. בחרו גרסה לכל פריט וראו אותה בחדר.`,
+        title: `${copy.title} · ${SITE}`,
+        description: copy.description(house),
         canonical,
         jsonLd: [
           crumbs([
             ['בית', '/'],
-            [r.name_he, `/rooms/${r.id}/`],
+            [copy.crumb ?? r.name_he, canonicalPath(route)],
           ]),
           {
             '@context': 'https://schema.org',
             '@type': 'ItemList',
-            itemListElement: catalog.products
-              .filter((p) => p.room === r.id)
-              .map((p, i) => ({ '@type': 'ListItem', position: i + 1, url: `${ORIGIN}${shopPath(p.id)}`, name: p.name_he })),
+            itemListElement: sold.map((p, i) => ({
+              '@type': 'ListItem',
+              position: i + 1,
+              ...(productBySegment(p.id) ? { url: `${ORIGIN}${shopPath(p.id)}` } : {}),
+              name: p.name_he,
+            })),
           },
         ],
       };
@@ -77,6 +119,8 @@ export function headFor(route: Route): Head {
       const p = productBySegment(route.id)?.product;
       if (!p) return { title: `לא נמצא · ${SITE}`, description: '', canonical, jsonLd: [], noindex: true };
       const where = slotOf(p);
+      // S15: a public build withholds a supplier photo without confirmed rights; a product with no picture left has no image
+      const images = galleryImages(p).map((im) => new URL(im.src, `${ORIGIN}/`).href);
       const ld: Record<string, unknown> = {
         '@context': 'https://schema.org',
         '@type': 'Product',
@@ -84,7 +128,7 @@ export function headFor(route: Route): Head {
         description: p.description_he,
         sku: p.id,
         // FR-I: the render from the room first, the supplier's original photo after it
-        image: galleryImages(p).map((im) => new URL(im.src, `${ORIGIN}/`).href),
+        image: images.length ? images : undefined,
         color: p.color_hex,
         material: p.materials_he.join(', ') || undefined,
       };
@@ -108,7 +152,8 @@ export function headFor(route: Route): Head {
       }
       return {
         title: `${p.name_he} · ${SITE}`,
-        description: p.description_he.slice(0, 155),
+        // S15 (§5): cut where a sentence ends, never in the middle of a word
+        description: metaDescription(p.description_he),
         canonical,
         jsonLd: [
           ld,

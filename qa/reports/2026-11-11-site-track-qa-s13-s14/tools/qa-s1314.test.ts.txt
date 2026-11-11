@@ -1,0 +1,929 @@
+/**
+ * qa-agent, 2026-11-11 (S13–S14 at a8104956): my own reproduction at the Worker, on the REAL seed the build made
+ * (.generated/seed.sql: the shop's catalog plus the story's), not frontend-dev's fixture. Copied into the isolated copy as
+ * site/api/test/qa-s1314.test.ts and run there only (never in the live tree). Every number printed with "QA " is quoted
+ * in the report.
+ *
+ *  A  admin gate: every route × no header / forged JWT (other key, alg none, HS256, wrong aud, wrong iss, expired) /
+ *     forged Access email header / dev token and ADMIN_DEV_BYPASS in every ENVIRONMENT spelling; a valid JWT as the
+ *     positive control (and its email is the actor in the audit log); the JSON API's content-type check.
+ *  B  cancellation: before the supplier (cancel + full refund, the supplier job sends nothing), after it (request, then
+ *     confirm or refuse), a repeated request, and a supplier call that timed out; the audit log names the actor.
+ *  C  refunds: same key at once ×5 (three provider kinds), partial then the rest, many keys at once, never above paid,
+ *     the credit note through the invoice interface (once per refund).
+ *  D  delivery statuses on the customer's view (token-gated), no supplier in it; a malformed tracking link.
+ *  E  /healthz: the exact shape.
+ *  F  PII: a full order with distinct details, its jobs, a cancel, a refund, crashes, and provider errors that echo them.
+ *  G  ת31: the 60 s deadline vs the 10 min lease, and claim_lost (invoice, credit note, supplier order).
+ *  H  ת27: every sold variant of the real seed: its supplier SKU is one of its card's option SKUs (or, for a card without
+ *     options, the cached CJ product's one variant), never CJ's product-level code; and through a paid order.
+ */
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import { resolve, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { signWebhook } from '@hd/shared';
+import { app } from '../src/app';
+import type { Env, SupplierJob } from '../src/env';
+import { createD1, migrate } from './d1-shim';
+import { processSupplierJob } from '../src/lib/fulfillment';
+import { INVOICE_LEASE_MS, processCreditNoteJob, processInvoiceJob, type InvoiceProvider } from '../src/lib/invoices';
+import { requestRefund } from '../src/lib/refunds';
+import { cancelOrder } from '../src/lib/cancel';
+import { applySupplierUpdate, customerTrackingUrl, deliveryView } from '../src/lib/shipments';
+import { resetAccessCache } from '../src/lib/access';
+import { RefundRefused, type IssuedRefund, type PaymentProvider, type RefundInput } from '../src/lib/payments/types';
+import type { SupplierClient, SupplierOrderInput } from '../src/lib/suppliers/types';
+
+const here = dirname(fileURLToPath(import.meta.url));
+const SITE = resolve(here, '../..');
+const REPO = resolve(SITE, '..');
+const GEN = resolve(SITE, '.generated');
+const SEED = readFileSync(resolve(GEN, 'seed.sql'), 'utf8');
+const SECRET = 'qa-dummy-webhook-secret-not-a-key-1314';
+const DEV_TOKEN = 'qa-dummy-admin-token-not-a-key-0123456789';
+const TEAM = 'qa-team.cloudflareaccess.com';
+const AUD = 'qa-aud-0123456789abcdef';
+
+type Full = {
+  products: {
+    id: string;
+    price_agorot: number | null;
+    availability: { status: string };
+    pack: unknown;
+    source_path: string;
+    supplier?: { sku?: string };
+    variants: { id: string }[];
+    variants_full?: { id: string; active: boolean; set_part?: boolean; set_skus?: string[] | null; supplier_sku: string; set_incomplete?: string | null }[];
+  }[];
+};
+const shop = JSON.parse(readFileSync(resolve(GEN, 'catalog.full.json'), 'utf8')) as Full;
+const story = JSON.parse(readFileSync(resolve(GEN, 'catalog.story.full.json'), 'utf8')) as Full;
+const testPage = JSON.parse(readFileSync(resolve(GEN, 'catalog.test-page.full.json'), 'utf8')) as Full;
+const plain = shop.products.find((p) => p.availability.status === 'available' && p.price_agorot && !p.pack && p.variants.length === 1)!;
+const PLAIN = plain.variants[0]!.id;
+
+// distinct personal details: any of these in a log row is a leak
+const PII = {
+  full_name: 'זהבה קוואלי־טסטמן',
+  email: 'zehava.qa1314@example.invalid',
+  phone: '052-9137264',
+  city: 'כפר־בדיקה־עילית',
+  street: 'סמטת־הבודקת',
+  house: '77',
+  apartment: '31',
+  zip: '9988776',
+  notes: 'לשים ליד העציץ הכחול',
+};
+const PII_NEEDLES = [PII.full_name, 'קוואלי', 'זהבה', PII.email, 'zehava', PII.phone, '9137264', '0529137264', PII.city, PII.street, PII.notes, PII.zip];
+
+let env: Env;
+let sent: SupplierJob[];
+beforeEach(() => {
+  const DB = createD1();
+  migrate(DB, SEED);
+  sent = [];
+  resetAccessCache();
+  env = {
+    DB,
+    SUPPLIER_QUEUE: { send: vi.fn(async (m: SupplierJob) => void sent.push(m)), sendBatch: vi.fn() } as unknown as Queue<SupplierJob>,
+    ENVIRONMENT: 'test',
+    PAYMENT_PROVIDER: 'mock',
+    SUPPLIER_PROVIDER: 'mock',
+    INVOICE_PROVIDER: 'mock',
+    NOTIFY_PROVIDER: 'mock',
+    ACCESS_TEAM_DOMAIN: '',
+    ACCESS_AUD: '',
+    PAYMENT_WEBHOOK_SECRET: SECRET,
+  };
+});
+afterEach(() => {
+  vi.restoreAllMocks();
+  vi.unstubAllGlobals();
+});
+
+const req = (path: string, init?: RequestInit, e: Env = env) => app.request(`http://localhost${path}`, init, e);
+const json = (body: unknown, method = 'POST', headers: Record<string, string> = {}): RequestInit => ({
+  method,
+  headers: { 'content-type': 'application/json', ...headers },
+  body: JSON.stringify(body),
+});
+const one = async <T>(sql: string, ...b: unknown[]) =>
+  (await env.DB.prepare(sql)
+    .bind(...b)
+    .first<T>())!;
+const count = async (sql: string, ...b: unknown[]) => (await one<{ n: number }>(sql, ...b)).n;
+const status = async (id: string) => (await one<{ status: string }>('SELECT status FROM orders WHERE id = ?', id)).status;
+const snapshot = async () =>
+  JSON.stringify(
+    await Promise.all(
+      ['orders', 'refunds', 'cancellations', 'audit_log', 'supplier_shipments', 'invoices', 'notifications'].map(async (t) => [t, await count(`SELECT COUNT(*) AS n FROM ${t}`)]),
+    ),
+  ) + JSON.stringify((await env.DB.prepare('SELECT id, status FROM orders ORDER BY id').all()).results);
+
+async function cart(items: { variant_id: string; qty?: number; pack?: string; house?: string }[]) {
+  const { id } = (await (await req('/api/cart', { method: 'POST' })).json()) as { id: string };
+  for (const i of items) {
+    const r = await req(`/api/cart/${id}/items`, json({ qty: 1, ...i }, 'PUT'));
+    expect(r.status, `${i.variant_id}: ${await r.clone().text()}`).toBe(200);
+  }
+  return id;
+}
+async function pending(items: Parameters<typeof cart>[0] = [{ variant_id: PLAIN }]) {
+  const body = { cart_id: await cart(items), customer: { full_name: PII.full_name, email: PII.email, phone: PII.phone }, address: { city: PII.city, street: PII.street, house: PII.house, apartment: PII.apartment, zip: PII.zip, notes: PII.notes }, shipping_method: 'economy', consents: { terms: true, marketing: false } };
+  const r = await req('/api/checkout', json(body));
+  expect(r.status, await r.clone().text()).toBe(201);
+  const c = (await r.json()) as { order_id: string; order_token: string };
+  const o = await one<{ payment_session_id: string; total_agorot: number }>('SELECT payment_session_id, total_agorot FROM orders WHERE id = ?', c.order_id);
+  return { id: c.order_id, token: c.order_token, session: o.payment_session_id, total: o.total_agorot };
+}
+async function pay(o: { id: string; session: string; total: number }) {
+  const body = JSON.stringify({ id: `qa_${o.id}_${Math.random().toString(36).slice(2, 8)}`, type: 'payment.succeeded', session_id: o.session, amount_agorot: o.total });
+  const r = await req('/api/webhooks/payment/mock', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', 'x-mock-signature': await signWebhook(SECRET, body, Math.floor(Date.now() / 1000)) },
+    body,
+  });
+  return ((await r.json()) as { outcome: string }).outcome;
+}
+async function paid(items?: Parameters<typeof cart>[0]) {
+  const o = await pending(items);
+  expect(await pay(o)).toBe('paid');
+  return o;
+}
+async function sentToSupplier(client?: SupplierClient) {
+  const o = await paid();
+  expect(await processSupplierJob(env, { kind: 'submit-order', order_id: o.id }, 1, client ? { client } : {})).toBe('submitted');
+  return o;
+}
+
+/** a payment provider like a network one: counts every refund call and every refund it makes; dedupes and can be asked on demand */
+function payments(o: { idempotent?: boolean; find?: boolean; delayMs?: number } = {}) {
+  const calls: string[] = [];
+  const made: { key: string; amount: number }[] = [];
+  const byKey = new Map<string, IssuedRefund>();
+  const p: PaymentProvider & { calls: string[]; made: typeof made } = {
+    id: 'mock',
+    calls,
+    made,
+    refundsIdempotent: o.idempotent ?? true,
+    async createSession() {
+      throw new Error('not used');
+    },
+    async verifyWebhook() {
+      return { ok: false, reason: 'not used' };
+    },
+    async refund(input: RefundInput, { idempotency_key }) {
+      calls.push(idempotency_key);
+      await new Promise((r) => setTimeout(r, o.delayMs ?? 15));
+      if ((o.idempotent ?? true) && byKey.has(idempotency_key)) return byKey.get(idempotency_key)!;
+      if (input.refunded_before_agorot + input.amount_agorot > input.paid_agorot) throw new RefundRefused('exceeds');
+      made.push({ key: idempotency_key, amount: input.amount_agorot });
+      const r = { refund_id: `QA-RF-${made.length}` };
+      byKey.set(idempotency_key, r);
+      return r;
+    },
+  };
+  if (o.find) p.findRefund = async (k) => byKey.get(k) ?? null;
+  return p;
+}
+
+/** an invoice provider that counts invoices and credit notes; can hang, can be asked, can echo the buyer in its error */
+function invoicing(o: { find?: boolean; idempotent?: boolean; hang?: Promise<void>; failWith?: (input: { customer?: { full_name: string } }) => Error } = {}) {
+  const issued: string[] = [];
+  const credits: { key: string; amount: number }[] = [];
+  const byKey = new Map<string, { invoice_id: string; url: string | null }>();
+  const cnByKey = new Map<string, { credit_note_id: string; url: string | null }>();
+  const p = {
+    id: 'qa-inv',
+    idempotent: !!o.idempotent,
+    issued,
+    credits,
+    async issue(input: { order_id: string; customer: { full_name: string } }, { idempotency_key }: { idempotency_key: string }) {
+      if (o.hang) await o.hang;
+      if (o.failWith) throw o.failWith(input);
+      if (o.idempotent && byKey.has(idempotency_key)) return byKey.get(idempotency_key)!;
+      issued.push(input.order_id);
+      const inv = { invoice_id: `QA-INV-${issued.length}`, url: null };
+      byKey.set(idempotency_key, inv);
+      return inv;
+    },
+    async creditNote(input: { amount_agorot: number }, { idempotency_key }: { idempotency_key: string }) {
+      if (o.hang) await o.hang;
+      if (o.idempotent && cnByKey.has(idempotency_key)) return cnByKey.get(idempotency_key)!;
+      credits.push({ key: idempotency_key, amount: input.amount_agorot });
+      const cn = { credit_note_id: `QA-CN-${credits.length}`, url: null };
+      cnByKey.set(idempotency_key, cn);
+      return cn;
+    },
+    ...(o.find
+      ? {
+          find: async (id: string) => byKey.get(id) ?? null,
+          findCreditNote: async (k: string) => cnByKey.get(k) ?? null,
+        }
+      : {}),
+  };
+  return p as unknown as InvoiceProvider & { issued: string[]; credits: typeof credits };
+}
+
+/** a supplier that records every submit and every cancellation request; can hang past the deadline and still "create" */
+function supplier(o: { hangMs?: number; cancel?: 'canceled' | 'requested' | 'refused'; failWith?: (i: SupplierOrderInput) => Error } = {}) {
+  const orders: string[] = [];
+  const cancels: string[] = [];
+  const c: SupplierClient & { orders: string[]; cancels: string[] } = {
+    id: 'mock',
+    orders,
+    cancels,
+    async submitOrder(input) {
+      if (o.failWith) throw o.failWith(input);
+      orders.push(input.order_id); // created at the supplier the moment it is received
+      if (o.hangMs) await new Promise((r) => setTimeout(r, o.hangMs));
+      return { supplier_order_id: `QA-SUP-${input.order_id}`, raw: {} };
+    },
+    async cancelOrder(sid) {
+      cancels.push(sid);
+      return { outcome: o.cancel ?? 'requested' };
+    },
+    async tracking() {
+      return null;
+    },
+  };
+  return c;
+}
+
+// ---------------------------------------------------------------- A. the admin gate
+const b64u = (b: ArrayBuffer | Uint8Array | string) =>
+  Buffer.from(typeof b === 'string' ? b : b instanceof Uint8Array ? b : new Uint8Array(b))
+    .toString('base64')
+    .replace(/=+$/, '')
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_');
+async function rsaKey(kid: string) {
+  const k = (await crypto.subtle.generateKey({ name: 'RSASSA-PKCS1-v1_5', modulusLength: 2048, publicExponent: new Uint8Array([1, 0, 1]), hash: 'SHA-256' }, true, [
+    'sign',
+    'verify',
+  ])) as CryptoKeyPair;
+  const jwk = { ...(await crypto.subtle.exportKey('jwk', k.publicKey)), kid, alg: 'RS256', use: 'sig' };
+  return { k, jwk };
+}
+async function jwt(key: CryptoKey | null, header: object, payload: object) {
+  const h = b64u(JSON.stringify(header));
+  const p = b64u(JSON.stringify(payload));
+  const sig = key ? b64u(await crypto.subtle.sign('RSASSA-PKCS1-v1_5', key, new TextEncoder().encode(`${h}.${p}`))) : '';
+  return `${h}.${p}.${sig}`;
+}
+
+describe('QA A: the admin gate (S13)', () => {
+  const routes = (id: string): [string, string, RequestInit['body']?, Record<string, string>?][] => [
+    ['GET', '/api/admin/overview'],
+    ['GET', '/api/admin/orders'],
+    ['GET', `/api/admin/orders/${id}`],
+    ['GET', '/api/admin/products'],
+    ['GET', '/api/admin/supplier-shipments'],
+    ['GET', '/api/admin/economics'],
+    ['GET', '/api/admin/nope'],
+    ['POST', `/api/admin/orders/${id}/cancel`, JSON.stringify({ reason: 'qa test' }), { 'content-type': 'application/json' }],
+    ['POST', `/api/admin/orders/${id}/refund`, JSON.stringify({ amount_agorot: 100, reason: 'qa test', key: 'qa_forbidden_1' }), { 'content-type': 'application/json' }],
+    ['POST', `/api/admin/orders/${id}/invoice-check`, JSON.stringify({ outcome: 'none', note: 'qa test' }), { 'content-type': 'application/json' }],
+    ['POST', `/api/admin/orders/${id}/mock-supplier`, JSON.stringify({ event: 'shipped' }), { 'content-type': 'application/json' }],
+    ['PUT', `/api/admin/orders/${id}`, '{}', { 'content-type': 'application/json' }],
+    ['DELETE', `/api/admin/orders/${id}`],
+    ['PATCH', `/api/admin/orders/${id}`, '{}', { 'content-type': 'application/json' }],
+    ['GET', '/admin'],
+    ['GET', '/admin/'],
+    ['GET', `/admin/orders/${id}`],
+    ['GET', '/admin/nope'],
+    ['POST', `/admin/orders/${id}/cancel`, 'reason=qa+test', { 'content-type': 'application/x-www-form-urlencoded', origin: 'http://localhost' }],
+    ['POST', `/admin/orders/${id}/refund`, 'amount=1&reason=qa+test&key=qa_forbidden_2', { 'content-type': 'application/x-www-form-urlencoded', origin: 'http://localhost' }],
+    ['POST', `/admin/orders/${id}/mock-supplier`, 'event=shipped', { 'content-type': 'application/x-www-form-urlencoded', origin: 'http://localhost' }],
+  ];
+
+  it('forged credentials on every route, in every ENVIRONMENT spelling, with and without Access configured: 403 and nothing changes', async () => {
+    vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    const good = await rsaKey('kid-good');
+    const evil = await rsaKey('kid-good'); // same kid, another key
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (u: string) =>
+        String(u) === `https://${TEAM}/cdn-cgi/access/certs` ? new Response(JSON.stringify({ keys: [good.jwk] }), { status: 200 }) : new Response('no', { status: 404 }),
+      ),
+    );
+    const now = Math.floor(Date.now() / 1000);
+    const base = { aud: AUD, iss: `https://${TEAM}`, exp: now + 600, email: 'attacker@example.invalid' };
+    const forged: [string, Record<string, string>][] = [
+      ['none', {}],
+      ['garbage jwt', { 'cf-access-jwt-assertion': 'a.b.c' }],
+      ['another key, same kid', { 'cf-access-jwt-assertion': await jwt(evil.k.privateKey, { alg: 'RS256', kid: 'kid-good' }, base) }],
+      ['alg none', { 'cf-access-jwt-assertion': await jwt(null, { alg: 'none', kid: 'kid-good' }, base) }],
+      ['alg HS256', { 'cf-access-jwt-assertion': await jwt(null, { alg: 'HS256', kid: 'kid-good' }, base) + 'c2ln' }],
+      ['wrong aud', { 'cf-access-jwt-assertion': await jwt(good.k.privateKey, { alg: 'RS256', kid: 'kid-good' }, { ...base, aud: 'other' }) }],
+      ['wrong iss', { 'cf-access-jwt-assertion': await jwt(good.k.privateKey, { alg: 'RS256', kid: 'kid-good' }, { ...base, iss: 'https://evil.cloudflareaccess.com' }) }],
+      ['expired', { 'cf-access-jwt-assertion': await jwt(good.k.privateKey, { alg: 'RS256', kid: 'kid-good' }, { ...base, exp: now - 5 }) }],
+      ['no exp', { 'cf-access-jwt-assertion': await jwt(good.k.privateKey, { alg: 'RS256', kid: 'kid-good' }, { aud: AUD, iss: `https://${TEAM}`, email: 'x@y.z' }) }],
+      ['access email header only', { 'cf-access-authenticated-user-email': 'owner@example.invalid' }],
+      ['dev token, wrong', { 'x-hd-dev-admin': `${DEV_TOKEN}x` }],
+      ['dev token, right (only where it may)', { 'x-hd-dev-admin': DEV_TOKEN }],
+      ['cf-access-client-id/secret', { 'cf-access-client-id': 'x', 'cf-access-client-secret': 'y' }],
+    ];
+    const ENVS: (string | undefined)[] = ['production', 'preview', undefined, '', 'Production', 'Development', 'development ', 'dev', 'local', 'staging'];
+    const o = await paid();
+    const before = await snapshot();
+    const leaks: string[] = [];
+    let tried = 0;
+    for (const E of ENVS)
+      for (const access of [false, true])
+        for (const bypass of [undefined, '1']) {
+          const e: Env = {
+            ...env,
+            ENVIRONMENT: E as Env['ENVIRONMENT'],
+            SUPPLIER_PROVIDER: 'mock',
+            ADMIN_DEV_TOKEN: DEV_TOKEN,
+            ADMIN_DEV_BYPASS: bypass,
+            ACCESS_TEAM_DOMAIN: access ? TEAM : '',
+            ACCESS_AUD: access ? AUD : '',
+          };
+          for (const [name, h] of forged)
+            for (const [method, path, body, hh] of routes(o.id)) {
+              tried++;
+              const r = await req(path, { method, body, headers: { ...(hh ?? {}), ...h } }, e);
+              if (r.status !== 403) leaks.push(`${E}/${access ? 'access' : 'no-access'}/bypass=${bypass}/${name}: ${method} ${path} → ${r.status}`);
+            }
+        }
+    console.log(`QA A1: ${tried} forged requests across ${ENVS.length} ENVIRONMENT spellings × Access on/off × bypass on/off; not 403: ${leaks.length}`);
+    expect(leaks).toEqual([]);
+    expect(await snapshot()).toBe(before);
+  }, 120_000);
+
+  it('the positive controls: a valid Access JWT opens it (its email is the actor); the dev bypass and dev token only where they may', async () => {
+    vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const good = await rsaKey('kid-good');
+    vi.stubGlobal('fetch', vi.fn(async () => new Response(JSON.stringify({ keys: [good.jwk] }), { status: 200 })));
+    const now = Math.floor(Date.now() / 1000);
+    const token = await jwt(good.k.privateKey, { alg: 'RS256', kid: 'kid-good' }, { aud: AUD, iss: `https://${TEAM}`, exp: now + 600, email: 'owner@example.invalid' });
+    const prod: Env = { ...env, ENVIRONMENT: 'production', SUPPLIER_PROVIDER: 'cj', PAYMENT_PROVIDER: 'mock', ACCESS_TEAM_DOMAIN: TEAM, ACCESS_AUD: AUD };
+    const o = await paid();
+    expect((await req('/api/admin/orders', { headers: { 'cf-access-jwt-assertion': token } }, prod)).status).toBe(200);
+    expect((await req('/admin/', { headers: { 'cf-access-jwt-assertion': token } }, prod)).status).toBe(200);
+    // an action with the valid JWT: the actor in the audit log is the Access email (supplier cj has no call in prod: before-supplier path)
+    const r = await req(`/api/admin/orders/${o.id}/cancel`, json({ reason: 'בדיקת QA' }, 'POST', { 'cf-access-jwt-assertion': token }), {
+      ...prod,
+      PAYMENT_PROVIDER: 'mock',
+      ENVIRONMENT: 'test',
+    });
+    const actors = (await env.DB.prepare("SELECT DISTINCT actor FROM audit_log WHERE subject = ? AND action IN ('order.canceled', 'refund.requested', 'refund.refunded')").bind(o.id).all<{ actor: string }>()).results.map((x) => x.actor);
+    console.log(`QA A2: valid JWT → 200 (API, screen); cancel by JWT → ${r.status}; actors ${JSON.stringify(actors)}`);
+    expect(actors).toEqual(['owner@example.invalid']);
+    // dev bypass: development and test only; dev token: development, test and preview-local only
+    const rows: string[] = [];
+    for (const E of ['development', 'test', 'preview-local', 'preview', 'production'] as const) {
+      const b = (await req('/api/admin/orders', undefined, { ...env, ENVIRONMENT: E, ADMIN_DEV_BYPASS: '1' })).status;
+      const t = (await req('/api/admin/orders', { headers: { 'x-hd-dev-admin': DEV_TOKEN } }, { ...env, ENVIRONMENT: E, ADMIN_DEV_TOKEN: DEV_TOKEN })).status;
+      const short = (await req('/api/admin/orders', { headers: { 'x-hd-dev-admin': 'short-token' } }, { ...env, ENVIRONMENT: E, ADMIN_DEV_TOKEN: 'short-token' })).status;
+      rows.push(`${E}: bypass ${b}, token ${t}, short token ${short}`);
+    }
+    console.log(`QA A3: ${rows.join(' | ')}`);
+    expect(rows).toEqual([
+      'development: bypass 200, token 200, short token 403',
+      'test: bypass 200, token 200, short token 403',
+      'preview-local: bypass 403, token 200, short token 403',
+      'preview: bypass 403, token 403, short token 403',
+      'production: bypass 403, token 403, short token 403',
+    ]);
+  });
+
+  it('the JSON API accepts a content type a cross-site page can send without a preflight ("text/plain; …application/json")', async () => {
+    env.ADMIN_DEV_TOKEN = DEV_TOKEN;
+    const o = await paid();
+    // a CORS-safelisted content type (its essence is text/plain) that still contains the substring readJson looks for
+    const r = await req(`/api/admin/orders/${o.id}/cancel`, {
+      method: 'POST',
+      headers: { 'content-type': 'text/plain; charset=application/json', 'x-hd-dev-admin': DEV_TOKEN, origin: 'https://evil.example' },
+      body: JSON.stringify({ reason: 'csrf probe' }),
+    });
+    console.log(`QA A4: admin cancel with content-type "text/plain; charset=application/json" and a foreign Origin → ${r.status}, order now ${await status(o.id)}`);
+    // recorded either way; the report rates it (the admin screen's forms check Origin; the JSON API does not)
+    expect([200, 400, 403]).toContain(r.status);
+  });
+});
+
+describe('QA A5: "checked by a person" on an unresolved invoice, by a valid Access JWT', () => {
+  it('found → recorded with its number; none → the claim is released and the job queued; both logged with the email', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const good = await rsaKey('kid-good');
+    vi.stubGlobal('fetch', vi.fn(async () => new Response(JSON.stringify({ keys: [good.jwk] }), { status: 200 })));
+    const token = await jwt(good.k.privateKey, { alg: 'RS256', kid: 'kid-good' }, { aud: AUD, iss: `https://${TEAM}`, exp: Math.floor(Date.now() / 1000) + 600, email: 'owner@example.invalid' });
+    const e: Env = { ...env, ACCESS_TEAM_DOMAIN: TEAM, ACCESS_AUD: AUD };
+    const out: string[] = [];
+    for (const outcome of ['found', 'none'] as const) {
+      const o = await paid();
+      // a blind provider (neither asked nor deduplicating) and a claim past its lease: unresolved, for a person
+      let clock = Date.now();
+      const blind = { id: 'qa-blind', idempotent: false, async issue() { throw new Error('network reset'); } } as unknown as InvoiceProvider;
+      await processInvoiceJob(env, o.id, blind, { now: () => clock });
+      clock += INVOICE_LEASE_MS + 1000;
+      const u = await processInvoiceJob(env, o.id, blind, { now: () => clock });
+      const body = outcome === 'found' ? { outcome, invoice_number: 'INV-QA-77', note: 'נמצאה אצל הספק' } : { outcome, note: 'אין אצל הספק' };
+      sent.length = 0;
+      const r = await req(`/api/admin/orders/${o.id}/invoice-check`, json(body, 'POST', { 'cf-access-jwt-assertion': token }), e);
+      const again = await req(`/api/admin/orders/${o.id}/invoice-check`, json(body, 'POST', { 'cf-access-jwt-assertion': token }), e);
+      const inv = await env.DB.prepare('SELECT state, provider_invoice_id, checked_by FROM invoices WHERE order_id = ?').bind(o.id).first<{ state: string; provider_invoice_id: string | null; checked_by: string | null }>();
+      const a = (await env.DB.prepare("SELECT actor, action FROM audit_log WHERE subject = ? AND action = 'invoice.checked'").bind(o.id).all<{ actor: string; action: string }>()).results;
+      out.push(`${outcome}: job ${u} → check ${r.status}, again ${again.status}; invoice ${JSON.stringify(inv)}; queued ${JSON.stringify(sent.map((m) => m.kind))}; audit ${JSON.stringify(a.map((x) => x.actor))}`);
+      expect(u).toBe('unresolved');
+      expect(r.status).toBe(200);
+      expect(a.map((x) => x.actor)).toEqual(['owner@example.invalid']);
+    }
+    console.log(`QA A5: ${out.join(' | ')}`);
+  });
+});
+
+// ---------------------------------------------------------------- B. cancellation
+describe('QA B: the cancellation procedure on the real seed', () => {
+  const ACTOR = 'owner@example.invalid';
+  const audit = async (id: string) =>
+    (await env.DB.prepare('SELECT actor, action FROM audit_log WHERE subject = ? ORDER BY id').bind(id).all<{ actor: string; action: string }>()).results.map(
+      (r) => `${r.actor}:${r.action}`,
+    );
+
+  it('before the supplier: canceled + a full refund; the supplier job then sends nothing; every step has its actor', async () => {
+    const o = await paid();
+    const p = payments();
+    const sup = supplier();
+    const r = await cancelOrder(env, o.id, ACTOR, 'הלקוח ביקש', { payment: p, supplier: sup });
+    expect('outcome' in r && r.outcome).toBe('canceled');
+    expect(await status(o.id)).toBe('canceled');
+    expect(p.made).toEqual([{ key: `cancel:${o.id}`, amount: o.total }]);
+    expect(await processSupplierJob(env, { kind: 'submit-order', order_id: o.id }, 1, { client: sup })).toBe('skipped');
+    expect(sup.orders).toEqual([]);
+    const a = await audit(o.id);
+    console.log(`QA B1: before supplier → ${await status(o.id)}, refunded ${p.made[0]!.amount}/${o.total}; audit ${JSON.stringify(a)}`);
+    expect(a).toEqual(expect.arrayContaining([`${ACTOR}:order.canceled`, `${ACTOR}:refund.requested`, `${ACTOR}:refund.refunded`]));
+    // again: no second refund
+    await cancelOrder(env, o.id, ACTOR, 'שוב', { payment: p, supplier: sup });
+    expect(p.made).toHaveLength(1);
+  });
+
+  it('after the supplier: a request; confirmed → canceled and refunded; refused → goes on; a second request while waiting', async () => {
+    const sup = supplier({ cancel: 'requested' });
+    const o = await sentToSupplier(sup);
+    const p = payments();
+    const r1 = await cancelOrder(env, o.id, ACTOR, 'הלקוח ביקש', { payment: p, supplier: sup });
+    expect('outcome' in r1 && r1.outcome).toBe('requested');
+    const view1 = (await (await req(`/api/orders/${o.id}`, { headers: { 'x-order-token': o.token } })).json()) as { status: string; status_he: string };
+    // a second request while waiting (the API, not the screen)
+    const r2 = await cancelOrder(env, o.id, ACTOR, 'שוב', { payment: p, supplier: sup });
+    const requestsSent = sup.cancels.length;
+    await applySupplierUpdate(env, { orderId: o.id, supplier: 'mock', update: { status: 'canceled' }, actor: 'supplier:mock' });
+    const a = await audit(o.id);
+    console.log(
+      `QA B2: after supplier → ${'outcome' in r1 ? r1.outcome : r1.code}; customer sees "${view1.status_he}" (${view1.status}); second request → ${'outcome' in r2 ? r2.outcome : r2.code}, supplier asked ${requestsSent}×; confirmed → ${await status(o.id)}; audit ${JSON.stringify(a)}`,
+    );
+    expect(await status(o.id)).toBe('canceled');
+    expect(a).toEqual(expect.arrayContaining([`${ACTOR}:order.cancel_requested`, 'supplier:mock:supplier.canceled', 'supplier:mock:order.canceled']));
+    const rf = await one<{ n: number; s: number }>("SELECT COUNT(*) AS n, COALESCE(SUM(amount_agorot),0) AS s FROM refunds WHERE order_id = ? AND state = 'refunded'", o.id);
+    expect(rf).toEqual({ n: 1, s: o.total });
+
+    const sup2 = supplier({ cancel: 'refused' });
+    const o2 = await sentToSupplier(sup2);
+    const r3 = await cancelOrder(env, o2.id, ACTOR, 'הלקוח ביקש', { payment: p, supplier: sup2 });
+    expect('outcome' in r3 && r3.outcome).toBe('refused');
+    expect(await status(o2.id)).toBe('sent_to_supplier');
+    expect(await count('SELECT COUNT(*) AS n FROM refunds WHERE order_id = ?', o2.id)).toBe(0);
+    console.log(`QA B3: refused → ${await status(o2.id)}, refunds 0; audit ${JSON.stringify(await audit(o2.id))}`);
+  });
+
+  it('a supplier call that timed out (it may have created the order): what the cancellation does', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    const sup = supplier({ hangMs: 200 });
+    const o = await paid();
+    const r = await processSupplierJob(env, { kind: 'submit-order', order_id: o.id }, 1, { client: sup, callTimeoutMs: 40 });
+    const ship = await one<{ status: string; last_error: string }>('SELECT status, last_error FROM supplier_shipments WHERE order_id = ?', o.id);
+    const p = payments();
+    const c = await cancelOrder(env, o.id, ACTOR, 'הלקוח ביקש', { payment: p, supplier: sup });
+    await new Promise((res) => setTimeout(res, 250));
+    console.log(
+      `QA B4: supplier call timed out → job ${r}, shipment ${ship.status} ("${ship.last_error.slice(0, 60)}…"), supplier holds ${sup.orders.length} order(s); cancel → ${'outcome' in c ? `${c.outcome}/${c.stage}` : c.code}, refunded ${p.made.reduce((s, x) => s + x.amount, 0)}/${o.total}, cancellation requests to the supplier ${sup.cancels.length}`,
+    );
+    expect(sup.orders).toHaveLength(1);
+  });
+});
+
+// ---------------------------------------------------------------- C. refunds
+describe('QA C: refunds on the real seed', () => {
+  it('the same key, 5 at once: mock (dedupes) → one refund; a provider that cannot dedupe nor be asked → one call', async () => {
+    for (const kind of [{ idempotent: true }, { idempotent: false, find: false }] as const) {
+      const o = await paid();
+      const p = payments({ ...kind, delayMs: 30 });
+      const out = await Promise.all(
+        Array.from({ length: 5 }, () => requestRefund(env, { orderId: o.id, amount: 1000, reason: 'qa', key: `qa_same_${o.id}`, actor: 'qa' }, { provider: p })),
+      );
+      const rows = await count('SELECT COUNT(*) AS n FROM refunds WHERE order_id = ?', o.id);
+      console.log(`QA C1 ${JSON.stringify(kind)}: 5 at once, same key → provider calls ${p.calls.length}, refunds made ${p.made.length}, rows ${rows}, results ${out.map((x) => (x.ok ? 'ok' : x.code)).join(',')}`);
+      expect(p.made).toHaveLength(1);
+      expect(rows).toBe(1);
+    }
+  });
+
+  it('the same key, 5 at once, a provider that cannot dedupe but CAN be asked (findRefund): how many refunds?', async () => {
+    const o = await paid();
+    const p = payments({ idempotent: false, find: true, delayMs: 30 });
+    const out = await Promise.all(
+      Array.from({ length: 5 }, () => requestRefund(env, { orderId: o.id, amount: 1000, reason: 'qa', key: `qa_same_${o.id}`, actor: 'qa' }, { provider: p })),
+    );
+    console.log(`QA C2: non-idempotent + findRefund, 5 at once, same key → provider calls ${p.calls.length}, refunds made ${p.made.length} (${p.made.map((m) => m.amount).join('+')}), results ${out.map((x) => (x.ok ? `ok${x.duplicate ? '/dup' : ''}` : x.code)).join(',')}`);
+    // recorded; the report rates it
+    expect(p.made.length).toBeGreaterThanOrEqual(1);
+  });
+
+  it('partial, then the rest, then nothing; never above paid; 8 keys at once of 20% each → exactly 5', async () => {
+    const o = await paid();
+    const p = payments();
+    const third = Math.floor(o.total / 3);
+    const a = await requestRefund(env, { orderId: o.id, amount: third, reason: 'qa', key: 'qa_part_0001', actor: 'qa' }, { provider: p });
+    const over = await requestRefund(env, { orderId: o.id, amount: o.total - third + 1, reason: 'qa', key: 'qa_part_0002', actor: 'qa' }, { provider: p });
+    const rest = await requestRefund(env, { orderId: o.id, amount: 'rest', reason: 'qa', key: 'qa_part_0003', actor: 'qa' }, { provider: p });
+    const more = await requestRefund(env, { orderId: o.id, amount: 1, reason: 'qa', key: 'qa_part_0004', actor: 'qa' }, { provider: p });
+    const restAgain = await requestRefund(env, { orderId: o.id, amount: 'rest', reason: 'qa', key: 'qa_part_0005', actor: 'qa' }, { provider: p });
+    const sum = p.made.reduce((s, x) => s + x.amount, 0);
+    console.log(
+      `QA C3: total ${o.total}; partial ${a.ok ? a.amount_agorot : a.code}; over by 1 → ${over.ok ? 'ok' : over.code}; rest ${rest.ok ? rest.amount_agorot : rest.code}; 1 more → ${more.ok ? 'ok' : more.code}; rest again → ${restAgain.ok ? 'ok' : restAgain.code}; refunded ${sum}; order ${await status(o.id)}`,
+    );
+    expect(sum).toBe(o.total);
+    expect(await status(o.id)).toBe('refunded');
+
+    const o2 = await paid();
+    const p2 = payments({ delayMs: 25 });
+    const fifth = Math.floor(o2.total / 5);
+    const out = await Promise.all(
+      Array.from({ length: 8 }, (_, i) => requestRefund(env, { orderId: o2.id, amount: fifth, reason: 'qa', key: `qa_many_${String(i).padStart(4, '0')}`, actor: 'qa' }, { provider: p2 })),
+    );
+    const s2 = p2.made.reduce((s, x) => s + x.amount, 0);
+    console.log(`QA C4: 8 keys at once, ${fifth} each of ${o2.total} → ${out.filter((x) => x.ok).length} ok, refunded ${s2}`);
+    expect(out.filter((x) => x.ok)).toHaveLength(5);
+    expect(s2).toBeLessThanOrEqual(o2.total);
+  });
+
+  it('the credit note goes through the invoice interface, once per refund, with the refund as its key', async () => {
+    const o = await paid();
+    const inv = invoicing({ find: true });
+    expect(await processInvoiceJob(env, o.id, inv)).toBe('invoiced');
+    const p = payments();
+    const r = await requestRefund(env, { orderId: o.id, amount: 1234, reason: 'qa', key: 'qa_cn_0001', actor: 'qa' }, { provider: p });
+    expect(r.ok).toBe(true);
+    const job = sent.find((m) => m.kind === 'credit-note');
+    expect(job).toBeTruthy();
+    const outs = await Promise.all([processCreditNoteJob(env, 'qa_cn_0001', inv), processCreditNoteJob(env, 'qa_cn_0001', inv), processCreditNoteJob(env, 'qa_cn_0001', inv)]);
+    const again = await processCreditNoteJob(env, 'qa_cn_0001', inv);
+    const row = await one<{ credit_state: string; credit_note_id: string }>('SELECT credit_state, credit_note_id FROM refunds WHERE id = ?', 'qa_cn_0001');
+    console.log(`QA C5: credit note jobs ×3 at once → ${outs.join(',')}, then ${again}; provider credit notes ${JSON.stringify(inv.credits)}; row ${JSON.stringify(row)}`);
+    expect(inv.credits).toEqual([{ key: 'qa_cn_0001', amount: 1234 }]);
+    // and an order canceled before any invoice: none needed
+    const o2 = await paid();
+    await cancelOrder(env, o2.id, 'qa', 'qa', { payment: p });
+    const rid = `cancel:${o2.id}`;
+    const r2 = await processCreditNoteJob(env, rid, inv);
+    const st = await one<{ credit_state: string }>('SELECT credit_state FROM refunds WHERE id = ?', rid);
+    console.log(`QA C6: canceled before an invoice → credit note job ${r2}, state ${st.credit_state}`);
+  });
+});
+
+// ---------------------------------------------------------------- D. delivery statuses
+describe('QA D: delivery statuses on the customer view', () => {
+  it('received → preparing → shipped (number, generic link only) → delivered; behind the token; no supplier anywhere in it', async () => {
+    const o = await sentToSupplier();
+    const view = async (token = o.token) => {
+      const r = await req(`/api/orders/${o.id}`, { headers: { 'x-order-token': token } });
+      return { status: r.status, text: await r.text() };
+    };
+    const seen: string[] = [];
+    seen.push(JSON.parse((await view()).text).status_he);
+    await applySupplierUpdate(env, { orderId: o.id, supplier: 'mock', update: { status: 'accepted' }, actor: 'supplier:mock' });
+    seen.push(JSON.parse((await view()).text).status_he);
+    await applySupplierUpdate(env, {
+      orderId: o.id,
+      supplier: 'mock',
+      update: { status: 'shipped', tracking_number: 'CJPKL7010012345YQ', tracking_url: 'https://cjpacket.com/track?no=CJPKL7010012345YQ' },
+      actor: 'supplier:mock',
+    });
+    const shipped = JSON.parse((await view()).text) as { status_he: string; shipments: { tracking_number: string; tracking_url: string | null }[] };
+    seen.push(shipped.status_he);
+    await applySupplierUpdate(env, { orderId: o.id, supplier: 'mock', update: { status: 'accepted' }, actor: 'supplier:mock' }); // late, never back
+    await applySupplierUpdate(env, { orderId: o.id, supplier: 'mock', update: { status: 'delivered' }, actor: 'supplier:mock' });
+    const final = await view();
+    seen.push(JSON.parse(final.text).status_he);
+    const noToken = (await req(`/api/orders/${o.id}`)).status;
+    const badToken = (await view('x'.repeat(32))).status;
+    const SUP = /\b(cj|cjpacket|cjdropshipping|aliexpress|zendrop|alibaba|cainiao|mock|QA-SUP)\b/i;
+    console.log(
+      `QA D1: customer statuses ${seen.join(' → ')}; shipped: number ${shipped.shipments[0]?.tracking_number}, link ${shipped.shipments[0]?.tracking_url}; no token ${noToken}, wrong token ${badToken}; supplier word in the view: ${SUP.exec(final.text)?.[0] ?? 'none'}`,
+    );
+    expect(shipped.shipments[0]!.tracking_url).toBeNull();
+    expect(noToken).toBe(404);
+    expect(badToken).toBe(404);
+  });
+
+  it('the tracking link filter, and a malformed link from the supplier', async () => {
+    const cases = [
+      'https://parcelsapp.com/he/tracking/IL123TRK',
+      'https://t.17track.net/en#nums=LP123',
+      'https://www.17track.net/en/track?nums=CJPKL123&from=cjdropshipping',
+      'https://parcelsapp.com/he/tracking/IL123?ref=aliexpress',
+      'http://parcelsapp.com/x',
+      'https://parcelsapp.com.evil.example/x',
+      'https://user:pw@parcelsapp.com/x',
+      'https://track.aftership.com/cainiao/LP00123',
+      'https://parcelsapp.com/he/tracking/%E0%A4%A',
+    ];
+    const out = cases.map((u) => {
+      try {
+        return `${u} → ${customerTrackingUrl(u) ?? 'null'}`;
+      } catch (e) {
+        return `${u} → THROWS ${(e as Error).name}`;
+      }
+    });
+    console.log(`QA D2:\n  ${out.join('\n  ')}`);
+    // a shipped order whose supplier link is malformed: what the customer's page gets
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    const o = await sentToSupplier();
+    await applySupplierUpdate(env, { orderId: o.id, supplier: 'mock', update: { status: 'shipped', tracking_number: 'IL12345678', tracking_url: 'https://parcelsapp.com/he/tracking/%E0%A4%A' }, actor: 'supplier:mock' });
+    const r = await req(`/api/orders/${o.id}`, { headers: { 'x-order-token': o.token } });
+    console.log(`QA D3: a shipped order with a malformed supplier link → the customer's order API ${r.status}`);
+    let dv = 'ok';
+    try {
+      await deliveryView(env.DB, o.id);
+    } catch (e) {
+      dv = `throws ${(e as Error).name}`;
+    }
+    console.log(`QA D3b: deliveryView ${dv}`);
+  });
+});
+
+// ---------------------------------------------------------------- E. /healthz
+describe('QA E: /healthz', () => {
+  it('the exact shape, ok and failing; no internal detail', async () => {
+    const ok = await req('/healthz');
+    const okText = await ok.text();
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const broken = { ...env, DB: { prepare: () => ({ first: async () => { throw new Error('D1_ERROR: no such table: secret_internal_table at /srv/db'); }, bind: () => ({ first: async () => null }) }) } as unknown as D1Database };
+    const bad = await req('/healthz', undefined, broken);
+    const badText = await bad.text();
+    const noQueue = await req('/healthz', undefined, { ...env, SUPPLIER_QUEUE: undefined as unknown as Queue<SupplierJob> });
+    const api = await (await req('/api/health')).text();
+    const hdr = [...ok.headers.entries()].map(([k, v]) => `${k}: ${v}`).join('; ');
+    console.log(`QA E1: ok ${ok.status} ${okText} [${hdr}] | db failing ${bad.status} ${badText} | no queue ${noQueue.status} ${await noQueue.text()} | /api/health ${api}`);
+    expect(JSON.parse(okText)).toEqual({ ok: true, checks: { db: 'ok', queue: 'ok' } });
+    expect(badText).not.toMatch(/secret|D1_ERROR|srv|table/i);
+    expect(okText + badText).not.toMatch(/test|mock|development|production|version|cj|grow/i);
+  });
+});
+
+describe('QA E2: a supplier that fails every call (the production cj adapter refuses today)', () => {
+  it('five attempts, an hour old: what the logs and /healthz say', async () => {
+    const rows: unknown[] = [];
+    for (const m of ['log', 'warn', 'error', 'info'] as const) vi.spyOn(console, m).mockImplementation((...a: unknown[]) => void rows.push(a));
+    const o = await paid();
+    const failing = supplier({ failWith: () => new Error('cj: the create-order call is not documented in the repo (refused)') });
+    const outs: string[] = [];
+    for (let a = 1; a <= 5; a++) outs.push(await processSupplierJob(env, { kind: 'submit-order', order_id: o.id }, a, { client: failing }));
+    await env.DB.prepare("UPDATE orders SET paid_at = ? WHERE id = ?").bind(new Date(Date.now() - 60 * 60_000).toISOString(), o.id).run();
+    const h0 = await (await req('/healthz')).text();
+    // a second paid order whose shipment is still queued an hour later (the stall /healthz is built to catch)
+    const q = await paid();
+    await env.DB.prepare("UPDATE orders SET paid_at = ? WHERE id = ?").bind(new Date(Date.now() - 60 * 60_000).toISOString(), q.id).run();
+    const ship = await one<{ status: string; last_error: string }>('SELECT status, last_error FROM supplier_shipments WHERE order_id = ?', o.id);
+    const qs = await one<{ status: string; fulfillment_source: string }>('SELECT status, fulfillment_source FROM supplier_shipments WHERE order_id = ?', q.id);
+    const h1 = await (await req('/healthz')).text();
+    const supplierRows = rows.filter((r) => /supplier|submit/.test(JSON.stringify(r)));
+    vi.restoreAllMocks();
+    console.log(`QA E2: 5 failed attempts → ${outs.join(',')}; order ${await status(o.id)}, shipment ${ship.status}; console rows about it ${supplierRows.length}; /healthz with only the failing order: ${h0}; with a queued one an hour old too: ${h1} (${qs.status}/${qs.fulfillment_source})`);
+  });
+});
+
+// ---------------------------------------------------------------- F. PII
+describe('QA F: no PII in any log row', () => {
+  it('phase by phase: the natural paths must be clean; then exceptions and provider errors that echo the buyer', async () => {
+    const rows: { phase: string; args: unknown[] }[] = [];
+    let phase = 'order';
+    for (const m of ['log', 'warn', 'error', 'info', 'debug'] as const) vi.spyOn(console, m).mockImplementation((...a: unknown[]) => void rows.push({ phase, args: a }));
+    // 1. natural paths: order, payment, every job, a partial refund, its credit note, delivery; a cancel before and after
+    //    the supplier; a checkout rejected for a bad field; a webhook rejected; a refund refused; the new-order alert
+    const o = await paid();
+    for (const kind of ['submit-order', 'issue-invoice', 'notify-order'] as const) await processSupplierJob(env, { kind, order_id: o.id } as SupplierJob, 1);
+    await requestRefund(env, { orderId: o.id, amount: 500, reason: 'qa', key: 'qa_pii_0001', actor: 'owner@example.invalid' });
+    await processSupplierJob(env, { kind: 'credit-note', order_id: o.id, refund_id: 'qa_pii_0001' }, 1);
+    await applySupplierUpdate(env, { orderId: o.id, supplier: 'mock', update: { status: 'shipped', tracking_number: 'IL12345678' }, actor: 'supplier:mock' });
+    const c1 = await paid();
+    await cancelOrder(env, c1.id, 'owner@example.invalid', 'בוטל');
+    const c2 = await sentToSupplier();
+    await cancelOrder(env, c2.id, 'owner@example.invalid', 'בוטל');
+    await req('/api/checkout', json({ cart_id: 'x', customer: { full_name: PII.full_name, email: PII.email, phone: 'bad' }, address: { city: PII.city, street: PII.street, house: PII.house }, shipping_method: 'economy', consents: { terms: true } }));
+    await req('/api/webhooks/payment/mock', { method: 'POST', headers: { 'content-type': 'application/json', 'x-mock-signature': 'bad' }, body: JSON.stringify({ email: PII.email }) });
+    // production config: the supplier, invoice and alert refuse loudly
+    const prodE = { ...env, ENVIRONMENT: 'production' as const, SUPPLIER_PROVIDER: 'mock', INVOICE_PROVIDER: 'UNDECIDED', NOTIFY_PROVIDER: 'UNDECIDED' };
+    const pz = await paid();
+    for (const kind of ['submit-order', 'issue-invoice', 'notify-order'] as const) await processSupplierJob(prodE, { kind, order_id: pz.id } as SupplierJob, 5);
+    // 2. a crash whose message carries the buyer's email and phone (the S13 test's case): masked by pattern
+    phase = 'crash-email-phone';
+    const brokenA = { ...env, DB: { prepare: () => ({ bind: () => ({ first: async () => { throw new Error(`D1 failed reading ${PII.email} ${PII.phone}`); } }) }) } as unknown as D1Database };
+    await app.request(`http://localhost/api/orders/${o.id}`, { headers: { 'x-order-token': o.token } }, brokenA);
+    // 3. exceptions whose message carries the name and address (a provider echoing its request, a library error)
+    phase = 'crash-name-address';
+    const brokenB = { ...env, DB: { prepare: () => ({ bind: () => ({ first: async () => { throw new Error(`failed for ${PII.full_name}, ${PII.street} ${PII.house}, ${PII.city}`); } }) }) } as unknown as D1Database };
+    await app.request(`http://localhost/api/orders/${o.id}`, { headers: { 'x-order-token': o.token } }, brokenB);
+    phase = 'supplier-echo';
+    const echo = (i: { full_name?: string; city?: string; street?: string; phone?: string }) =>
+      new Error(`400 invalid consignee "${i.full_name}" at ${i.street} ${PII.house}, ${i.city}; tel ${i.phone}`);
+    const e1 = await paid();
+    await processSupplierJob(env, { kind: 'submit-order', order_id: e1.id }, 1, { client: supplier({ failWith: (inp) => echo(inp.ship_to) }) });
+    await processSupplierJob(env, { kind: 'submit-order', order_id: e1.id }, 2, { client: supplier({ failWith: (inp) => echo(inp.ship_to) }) });
+    phase = 'invoice-echo';
+    const e2 = await paid();
+    await processInvoiceJob(env, e2.id, invoicing({ failWith: (inp) => echo({ full_name: inp.customer?.full_name, street: PII.street, city: PII.city, phone: PII.phone }) }));
+    vi.restoreAllMocks();
+
+    const byPhase: Record<string, { rows: number; leaks: Record<string, string[]> }> = {};
+    for (const r of rows) {
+      const t = JSON.stringify(r.args);
+      const b = (byPhase[r.phase] ??= { rows: 0, leaks: {} });
+      b.rows++;
+      for (const n of PII_NEEDLES) if (t.includes(n)) (b.leaks[n] ??= []).push((r.args[0] as { event?: string })?.event ?? t.slice(0, 50));
+    }
+    // where the failed supplier call's text is kept (not a log row): the shipment's last_error, which the admin screen shows
+    const lastErr = (await one<{ last_error: string | null }>('SELECT last_error FROM supplier_shipments WHERE order_id = ?', e1.id)).last_error ?? '';
+    const invErr = (await one<{ last_error: string | null }>('SELECT last_error FROM invoices WHERE order_id = ?', e2.id))?.last_error ?? '';
+    console.log(`QA F1: ${rows.length} console rows; by phase: ${JSON.stringify(byPhase)}`);
+    console.log(`QA F3: the failed supplier call's text kept in D1 (supplier_shipments.last_error): "${lastErr.slice(0, 120)}"; invoices.last_error: "${invErr.slice(0, 120)}"`);
+    expect(Object.keys(byPhase.order?.leaks ?? {})).toEqual([]);
+    expect(Object.keys(byPhase['crash-email-phone']?.leaks ?? {})).toEqual([]);
+  });
+});
+
+// ---------------------------------------------------------------- G. ת31
+describe('QA G (ת31): the deadline and the lease; claim_lost', () => {
+  it('the numbers: 60 s deadline, 10 min lease (×10); a hung invoice call is given up at its deadline and the claim stays', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    const { PROVIDER_CALL_TIMEOUT_MS } = await import('../src/lib/deadline');
+    const { SUBMIT_LEASE_MS, SUBMIT_CALL_TIMEOUT_MS } = await import('../src/lib/fulfillment');
+    const o = await paid();
+    let release!: () => void;
+    const hang = new Promise<void>((r) => (release = r));
+    const slow = invoicing({ hang, find: true });
+    const t0 = Date.now();
+    const a = await processInvoiceJob(env, o.id, slow, { callTimeoutMs: 80 });
+    const took = Date.now() - t0;
+    const claim = await one<{ state: string; last_error: string }>('SELECT state, last_error FROM invoices WHERE order_id = ?', o.id);
+    release();
+    console.log(`QA G1: deadline ${PROVIDER_CALL_TIMEOUT_MS} ms, invoice lease ${INVOICE_LEASE_MS} ms, supplier ${SUBMIT_CALL_TIMEOUT_MS}/${SUBMIT_LEASE_MS} ms; hung call → ${a} after ${took} ms, claim ${claim.state} ("${claim.last_error.slice(0, 50)}…")`);
+    expect(PROVIDER_CALL_TIMEOUT_MS * 5).toBeLessThanOrEqual(INVOICE_LEASE_MS);
+    expect(a).toBe('retry');
+    expect(claim.state).toBe('claimed');
+  });
+
+  it('lease overrun (my S11–S12 case): the first run outlives the lease; the takeover asks, then issues; the late answer is claim_lost', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    const o = await paid();
+    let release!: () => void;
+    const hang = new Promise<void>((r) => (release = r));
+    const shared = { issued: [] as string[] };
+    const slowP = invoicing({ hang, find: true });
+    const fastP = invoicing({ find: true });
+    let clock = Date.now();
+    const now = () => clock;
+    // run A: claims and hangs (its deadline is long: it outlives the lease)
+    const runA = processInvoiceJob(env, o.id, slowP, { now, callTimeoutMs: 5_000 });
+    await new Promise((r) => setTimeout(r, 30));
+    clock += INVOICE_LEASE_MS + 1_000;
+    const b = await processInvoiceJob(env, o.id, fastP, { now });
+    release();
+    const a = await runA;
+    shared.issued.push(...slowP.issued, ...fastP.issued);
+    const lost = await count("SELECT COUNT(*) AS n FROM audit_log WHERE subject = ? AND action = 'invoice.claim_lost'", o.id);
+    const rec = await one<{ provider_invoice_id: string }>('SELECT provider_invoice_id FROM invoices WHERE order_id = ?', o.id);
+    console.log(`QA G2: takeover → ${b}; late run → ${a}; issued at providers ${shared.issued.length}; recorded ${rec.provider_invoice_id}; claim_lost rows ${lost}`);
+    // recorded either way; the report rates it. The variant their test covers: the takeover is still in flight (claimed)
+    const o2 = await paid();
+    let rel2!: () => void;
+    const hang2 = new Promise<void>((r) => (rel2 = r));
+    const slow2 = invoicing({ hang: hang2, find: true });
+    let clock2 = Date.now();
+    const runA2 = processInvoiceJob(env, o2.id, slow2, { now: () => clock2, callTimeoutMs: 5_000 });
+    await new Promise((r) => setTimeout(r, 30));
+    clock2 += INVOICE_LEASE_MS + 1_000;
+    let rel3!: () => void;
+    const hang3 = new Promise<void>((r) => (rel3 = r));
+    const runB2 = processInvoiceJob(env, o2.id, invoicing({ hang: hang3, find: true }), { now: () => clock2, callTimeoutMs: 5_000 });
+    await new Promise((r) => setTimeout(r, 30));
+    rel2();
+    const a2 = await runA2;
+    rel3();
+    const b2 = await runB2;
+    const lost2 = await count("SELECT COUNT(*) AS n FROM audit_log WHERE subject = ? AND action = 'invoice.claim_lost'", o2.id);
+    console.log(`QA G2b: takeover still in flight when the late answer lands → late run ${a2}, takeover ${b2}; claim_lost rows ${lost2}`);
+    expect(rec.provider_invoice_id).toBeTruthy();
+    expect(lost).toBeGreaterThanOrEqual(0);
+  });
+
+  it('the supplier order: a hung submit is failed at the deadline; a lost claim records nothing and says so', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    const o = await paid();
+    const sup = supplier({ hangMs: 150 });
+    const r = await processSupplierJob(env, { kind: 'submit-order', order_id: o.id }, 1, { client: sup, callTimeoutMs: 40 });
+    const s = await one<{ status: string }>('SELECT status FROM supplier_shipments WHERE order_id = ?', o.id);
+    console.log(`QA G3: hung submit → ${r}; shipment ${s.status}; order ${await status(o.id)}; supplier holds ${sup.orders.length}`);
+    // a lost claim: the row's claim changes while the call runs
+    const o2 = await paid();
+    const slow = supplier({ hangMs: 100 });
+    const p = processSupplierJob(env, { kind: 'submit-order', order_id: o2.id }, 1, { client: slow, callTimeoutMs: 5_000 });
+    await new Promise((res) => setTimeout(res, 30));
+    await env.DB.prepare("UPDATE supplier_shipments SET updated_at = '2000-01-01T00:00:00.000Z' WHERE order_id = ?").bind(o2.id).run();
+    const r2 = await p;
+    const lost = await count("SELECT COUNT(*) AS n FROM audit_log WHERE subject = ? AND action = 'supplier.claim_lost'", o2.id);
+    console.log(`QA G4: lost claim → ${r2}; order ${await status(o2.id)}; supplier.claim_lost rows ${lost}`);
+    expect(lost).toBe(1);
+    expect(await status(o2.id)).toBe('paid');
+  });
+});
+
+// ---------------------------------------------------------------- H. ת27
+describe('QA H (ת27): every sold variant carries a SKU of its card', () => {
+  type Card = { id?: string; supplier?: { name?: string; sku?: string; product_url?: string } | null; options?: { default_sku?: string; skus?: { id: string }[] } | null };
+  const card = (p: string) => JSON.parse(readFileSync(resolve(REPO, p), 'utf8')) as Card;
+  /** my own reading of the cached CJ product (data/sources/cj/<pid>.json): its product-level code and its variants' SKUs */
+  const cjOf = (c: Card): { product: string | null; variants: string[] } | null => {
+    if (!/^CJ/i.test(c.supplier?.name ?? '')) return null;
+    const pid = /-p-(\d+)\.html/.exec(c.supplier?.product_url ?? '')?.[1];
+    const f = pid ? resolve(REPO, 'data/sources/cj', `${pid}.json`) : null;
+    if (!f || !existsSync(f)) return { product: null, variants: [] };
+    const pl = (JSON.parse(readFileSync(f, 'utf8')) as { sections?: { product?: { payload?: { productSku?: string; variants?: { variantSku?: string }[] } } } }).sections?.product?.payload;
+    return { product: pl?.productSku ?? null, variants: (pl?.variants ?? []).map((v) => v.variantSku!).filter(Boolean) };
+  };
+  const excl = JSON.parse(readFileSync(resolve(REPO, 'data/catalog/sale-exclusions.json'), 'utf8')) as { exclusions: { card_id: string }[] };
+  const exclCards = new Set(excl.exclusions.map((e) => e.card_id));
+
+  it('both catalogs: each sold variant → its card; with options: one of options.skus; without: the CJ product\'s variant, never its product code', () => {
+    const issues: string[] = [];
+    const noOpt: string[] = [];
+    let checked = 0;
+    for (const [name, cat] of [
+      ['shop', shop],
+      ['story', story],
+      ['test-page', testPage],
+    ] as const)
+      for (const p of cat.products) {
+        if (!p.source_path || !existsSync(resolve(REPO, p.source_path))) continue;
+        const c = card(p.source_path);
+        const opts = new Set((c.options?.skus ?? []).map((s) => s.id));
+        const cj = cjOf(c);
+        for (const v of p.variants_full ?? []) {
+          if (!v.active || v.set_part || (v as { sale_excluded?: string | null }).sale_excluded) continue;
+          checked++;
+          const skus = v.set_skus?.length ? v.set_skus : [v.supplier_sku];
+          for (const s of skus) {
+            if (!s) issues.push(`${name} ${v.id}: no SKU`);
+            else if (opts.size) {
+              if (!opts.has(s)) issues.push(`${name} ${v.id}: ${s} not in the card's ${opts.size} option SKUs`);
+            } else if (cj) {
+              noOpt.push(`${name} ${p.id}: card ${c.supplier?.sku} → sold ${s} (cache: product ${cj.product}, ${cj.variants.length} variant${cj.variants.length === 1 ? '' : 's'}${cj.variants.length <= 3 ? ` ${cj.variants.join(',')}` : ''})`);
+              if (cj.product && s === cj.product) issues.push(`${name} ${v.id}: ${s} is the CJ product-level code`);
+              if (cj.variants.length && !cj.variants.includes(s)) issues.push(`${name} ${v.id}: ${s} is not one of the CJ product's variants`);
+            }
+          }
+        }
+      }
+    console.log(`QA H1: ${checked} sold variants checked (both catalogs); issues ${issues.length}${issues.length ? `\n  ${issues.slice(0, 20).join('\n  ')}` : ''}\n  CJ cards without options:\n  ${[...new Set(noOpt)].join('\n  ')}`);
+    expect(issues).toEqual([]);
+  });
+
+  it('one paid order with every product that has sale exclusions or a single SKU: the supplier request carries option SKUs', async () => {
+    const seen = new Set<string>();
+    const picks = [...shop.products, ...story.products].filter((p) => {
+      if (seen.has(p.id)) return false;
+      seen.add(p.id);
+      if (!p.price_agorot || p.availability.status !== 'available' || p.pack) return false;
+      const c = card(p.source_path);
+      return exclCards.has(c.id ?? '') || (c.options?.skus ?? []).length <= 1;
+    });
+    const items = picks.map((p) => ({ variant_id: p.variants[0]!.id }));
+    const o = await paid(items);
+    expect(await processSupplierJob(env, { kind: 'submit-order', order_id: o.id }, 1)).toBe('submitted');
+    const lines = (JSON.parse((await one<{ request_json: string }>('SELECT request_json FROM supplier_shipments WHERE order_id = ?', o.id)).request_json) as { lines: [string, number][] }).lines;
+    const bad: string[] = [];
+    for (const p of picks) {
+      const c = card(p.source_path);
+      const cj = cjOf(c);
+      const opts = new Set((c.options?.skus ?? []).map((s) => s.id));
+      const sold = (p.variants_full ?? []).find((v) => v.id === p.variants[0]!.id)!;
+      const s = sold.supplier_sku;
+      if (!lines.some(([l]) => l === s)) bad.push(`${p.id}: ${s} not in the request`);
+      if (opts.size && !opts.has(s)) bad.push(`${p.id}: ${s} not an option`);
+      if (cj?.product && s === cj.product) bad.push(`${p.id}: ${s} is the CJ product code`);
+    }
+    const lamp = lines.find(([s]) => s.startsWith('CJYD2247544'));
+    console.log(`QA H2: ${picks.length} products (exclusions or one SKU) in one paid order; supplier lines ${lines.length}; floor lamp ${JSON.stringify(lamp)}; issues ${bad.length ? bad.join('; ') : 'none'}`);
+    expect(lamp?.[0]).toBe('CJYD224754407GT');
+    expect(bad).toEqual([]);
+  });
+});

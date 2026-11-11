@@ -28,7 +28,7 @@ type HouseFile = {
     slots: Record<string, { product: { rect: Box; src: string[] }; shadow: { rect: Box; src: string[] } | null }>;
   };
   room: { slots: { id: string; name_he: string }[] };
-  sets: { position: number; id: string; items: { variant_id: string | null }[] }[];
+  sets: { position: number; id: string; label_he: string; items: { variant_id: string | null }[] }[];
 };
 const house = JSON.parse(readFileSync(resolve(SITE, '.generated/house.living-room.warm-modern.json'), 'utf8')) as HouseFile;
 const LAYERED = house.scene.source.startsWith('layers-v3c');
@@ -264,7 +264,8 @@ test.describe('the warm-modern house in the room engine (S10)', () => {
     for (const [i, s] of house.sets.entries()) {
       if (i > 0) await page.keyboard.press('ArrowLeft'); // RTL: the next set
       await expect(radios.nth(i)).toHaveAttribute('aria-checked', 'true');
-      await expect(radios.nth(i)).toHaveAttribute('aria-label', new RegExp(`סט ${s.id}`));
+      // S15 (§2 rows 1–3): the customer's name of the set; the letters A, B, C stay internal ids
+      await expect(radios.nth(i)).toHaveAttribute('aria-label', `${i + 1} מתוך 3: ${s.label_he}`);
       await expect.poll(sel).toBe(i + 1);
       const items = dialog.locator('.set-item');
       await expect(items).toHaveCount(s.items.length);
@@ -285,7 +286,9 @@ test.describe('the warm-modern house in the room engine (S10)', () => {
     const out = await items.filter({ hasText: 'המלאי אינו זמין כעת' }).count();
     expect(sold + out).toBeLessThanOrEqual(house.sets[0]!.items.length);
     for (const el of await items.filter({ hasText: 'המלאי אינו זמין כעת' }).all()) await expect(el.locator('button')).toHaveCount(0);
-    await expect(dialog.locator('#add-set')).toContainText(sold === house.sets[0]!.items.length ? 'הסט כולו לסל' : `${sold} הפריטים שבמלאי לסל`);
+    // S15 (§2 rows 12, 13): the same verb whole or partial; "מתוך" says the set goes in without a piece
+    const all = house.sets[0]!.items.length;
+    await expect(dialog.locator('#add-set')).toContainText(sold === all ? 'הסט כולו לסל' : `הסט לסל, ${sold} מתוך ${all} פריטים`);
     const count = async () => Number(await page.locator('.cart-count').first().innerText());
     const before = await count();
     await dialog.locator('#add-set').click();

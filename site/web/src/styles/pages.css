@@ -12,6 +12,13 @@
 .product-media {
   min-width: 0; /* the gallery strip scrolls inside the grid cell, never widens it */
 }
+/* S15: the neutral tile in place of a picture that may not ship (supplier image rights), the size of a gallery slide */
+.product-noimg {
+  aspect-ratio: 1;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: var(--paper-2);
+}
 
 /* ---------- product gallery (FR-I): the render first, the supplier photo after it ---------- */
 .gallery {

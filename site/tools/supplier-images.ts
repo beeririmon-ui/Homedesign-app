@@ -13,7 +13,9 @@
  * Input:  .generated/catalog.full.json (supplier_image.url per shown product; the public catalog never has the url)
  * Cache:  .cache/supplier-images/<sha256(url)>.bin, gitignored (a second build does not hit the network)
  * Output: web/public/media/products/<public id>/photo.800.webp and .generated/supplier-images.json
- *         ({ products: { <id>: { src: 'products/<id>/supplier.800', width, height, usage_rights } }, missing: [...] })
+ *         ({ products: { <id>: { src: 'products/<id>/supplier.800', width, height, usage_rights } }, missing: [...] }),
+ *         and .generated/supplier-images.public.json: S15, the same with only the pictures whose rights are confirmed,
+ *         the manifest the public build (HD_PUBLIC=1) reads (tools/lib/image-rights.ts)
  *
  * A download that fails is a warning, not a build failure: the product page then shows the render only.
  *
@@ -31,12 +33,14 @@ import { join, dirname } from 'node:path';
 import { tmpdir } from 'node:os';
 import { expandOptions, type FullCatalog, type SupplierImageManifest } from '@hd/shared';
 import { GENERATED, MEDIA_OUT, sitePath } from './lib/paths';
+import { publicManifest, withheld } from './lib/image-rights';
 
 const WIDTH = 800;
 const OFFLINE = process.argv.includes('--offline');
 const FORCE = process.argv.includes('--force');
 const CACHE = sitePath('.cache/supplier-images');
 const MANIFEST = join(GENERATED, 'supplier-images.json');
+const PUBLIC_MANIFEST = join(GENERATED, 'supplier-images.public.json');
 const UA = 'homedesign-site-build/1.0';
 const MAX_BYTES = 25 * 1024 * 1024;
 /** option pictures shipped with the Artifact (200 files at most there; the room and the products use ~145) */
@@ -174,6 +178,9 @@ async function main() {
     if (files.length) manifest.options[p.id] = { files, sku };
   }
   writeFileSync(MANIFEST, JSON.stringify(manifest, null, 1));
+  // S15: the public build's manifest, without a picture whose rights are not confirmed
+  writeFileSync(PUBLIC_MANIFEST, JSON.stringify(publicManifest(manifest), null, 1));
+  const out = withheld(manifest);
   // S7: a folder of a product the catalog no longer names (an old card id with the supplier in it) leaves the media
   const keep = new Set(catalog.products.map((p) => p.id));
   const dir = join(MEDIA_OUT, 'products');
@@ -186,6 +193,12 @@ async function main() {
   );
   console.log(
     `option pictures: ${optCount} options, ${Object.values(manifest.options).reduce((n, o) => n + o.files.length, 0)} files (${optEncoded} encoded${optMissing ? `, ${optMissing} failed` : ''}) · artifact: ${artifactFiles} files`,
+  );
+  console.log(
+    `image rights (S15): a public build (HD_PUBLIC=1) withholds the supplier pictures of ${out.products.length}/${n} products ` +
+      `(${out.photos} photos, ${out.optionFiles} option pictures; ${Object.entries(out.byRights)
+        .map(([r, k]) => `${r} ${k}`)
+        .join(', ')}) → ${PUBLIC_MANIFEST}`,
   );
   for (const m of manifest.missing) console.warn(`  missing: ${m.id}: ${m.reason}`);
 }

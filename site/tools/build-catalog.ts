@@ -126,6 +126,16 @@ const designerNames: Record<string, string> = {
   ...((readJson(repoPath('data/story/story.json')) as { names_he?: Record<string, string> }).names_he ?? {}),
   ...(existsSync(namesPath) ? ((readJson(namesPath) as { names_he?: Record<string, string> }).names_he ?? {}) : {}),
 };
+// S15 (master-designer, docs/proposals/your-room-copy-2026-11-11.md §3): the shop's Hebrew description per card id
+// (names-he.json 1.2, description_he) wins over the one composed from the card's texture, materials and dimensions
+const designerDescriptions: Record<string, string> = existsSync(namesPath)
+  ? ((readJson(namesPath) as { description_he?: Record<string, string> }).description_he ?? {})
+  : {};
+// S15 (§2 row 5, §5): the slot's name as the site shows it, over the binding name in data/slots (which does not change)
+const displayFile = sitePath('tools/display-he.json');
+const slotNamesHe: Record<string, string> = existsSync(displayFile)
+  ? ((readJson(displayFile) as { slot_names_he?: Record<string, string> }).slot_names_he ?? {})
+  : {};
 // S11 (QA S6–S7 ת8, ת12, ת9; the manager's sale decisions): the line's base name and the Hebrew option labels
 // (master-designer's), the sale exclusions (data/catalog/sale-exclusions.json) and the sets of distinct SKUs (story.json
 // set_axes). Each file is optional: without it the card's own label and the product's name stand (tools/lib/lines.ts)
@@ -579,7 +589,9 @@ function buildProduct(card: ProductCard, path: string, roomId: string, slot: Slo
   const dfltLine = lineOf(lineData, card, (dfltSku?.values ?? {}) as Record<string, string>, '');
   const dfltLabel = dfltSku ? (dfltLine.label ?? '') : '';
   const base = lineData.base[card.id] ?? null;
-  const name_he = named ?? (base ? lineName(base, dfltLabel) : `${slot.name_he}${materials[0] ? ` ${materials[0]}` : ''}, ${color}`);
+  // S15: the slot as the site names it (tools/display-he.json), never a catalog tag such as "(סט)"
+  const slotName = slotNamesHe[`${roomId}/${slot.id}`] ?? slot.name_he;
+  const name_he = named ?? (base ? lineName(base, dfltLabel) : `${slotName}${materials[0] ? ` ${materials[0]}` : ''}, ${color}`);
   const d = card.dimensions_cm ?? {};
   const dims = [d.width, d.depth, d.height].filter((x): x is number => typeof x === 'number');
   // S14, QA ת33: the card's data only (its texture when that is a public sentence, materials, dimensions), never its notes
@@ -687,7 +699,7 @@ function buildProduct(card: ProductCard, path: string, roomId: string, slot: Slo
     slot: slot.id,
     name_he,
     name_provisional: !named && !base,
-    description_he: description || `${slot.name_he}.`,
+    description_he: designerDescriptions[card.id] ?? (description || `${slotName}.`),
     price_agorot: retail,
     compare_at_agorot: compare,
     price_provisional: provisional,
@@ -813,7 +825,7 @@ for (const hr of house.rooms) {
         position: i + 1,
         product_id: p?.id ?? null,
         placeholder: !p,
-        label_he: p ? p.name_he : `וריאציה ${i + 1} · ממתינה למוצר`,
+        label_he: p ? p.name_he : `גרסה ${i + 1} · ממתינה למוצר`,
         is_default: i === 0,
       };
     });
@@ -824,7 +836,7 @@ for (const hr of house.rooms) {
     const hold = onHold.get(`${roomId}/${slot.id}`) ?? null;
     slots.push({
       id: slot.id,
-      name_he: slot.name_he,
+      name_he: slotNamesHe[`${roomId}/${slot.id}`] ?? slot.name_he,
       category: slot.category ?? null,
       placement: slot.placement,
       z: slot.z ?? 0,

@@ -20,15 +20,26 @@ const MATERIALS: [RegExp, string][] = [
   [/cement/i, 'מלט'],
   [/cotton/i, 'כותנה'],
   [/polyester/i, 'אריג סינתטי'],
-  [/embossed|print|painting/i, 'הדפס במרקם'],
+  // S15 (master-designer §5): "במרקם" only when the card says the print is embossed or textured; any other print is
+  // "הדפס", and a canvas the card does not call a print is "קנבס" (a flat canvas print never claims a texture)
+  [/^(?=.*\b(?:print(?:ed)?|painting)\b)(?=.*\b(?:embossed|textured?)\b)/i, 'הדפס במרקם'],
+  [/\bprint(?:ed)?\b/i, 'הדפס'],
+  [/\bcanvas\b/i, 'קנבס'],
   [/iron|metal|steel/i, 'מתכת'],
   [/wood|oak|beech/i, 'עץ'],
   [/fabric|cloth/i, 'בד'],
 ];
 
+/**
+ * S15: a guess the card hedges ("(material not stated - possibly PVC/printed)") is not a claim the shop makes: the
+ * hedged part is left out before the material is read.
+ */
+const HEDGED = /\([^)]*\b(?:possibly|probably|perhaps|maybe|likely|not stated|unclear|unknown|unverified)\b[^)]*\)/gi;
+
 export function materialHe(raw: string): string | null {
-  for (const [re, he] of MATERIALS) if (re.test(raw)) return he;
-  const paren = raw.match(/\(([^)]*[֐-׿][^)]*)\)/);
+  const text = raw.replace(HEDGED, ' ');
+  for (const [re, he] of MATERIALS) if (re.test(text)) return he;
+  const paren = text.match(/\(([^)]*[֐-׿][^)]*)\)/);
   return paren?.[1]?.trim() ?? null;
 }
 

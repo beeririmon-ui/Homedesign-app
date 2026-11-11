@@ -1,0 +1,38 @@
+[2m[WebServer] [22m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mProxy environment variables detected. We'll use your proxy for fetch requests.[0m
+[2m[WebServer] [22m
+[2m[WebServer] [22m
+[2m[WebServer] [22m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mProxy environment variables detected. We'll use your proxy for fetch requests.[0m
+[2m[WebServer] [22m
+[2m[WebServer] [22m
+[2m[WebServer] [22m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mProxy environment variables detected. We'll use your proxy for fetch requests.[0m
+[2m[WebServer] [22m
+[2m[WebServer] [22m
+[2m[WebServer] [22m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mScheduled Workers are not automatically triggered during local development.[0m
+[2m[WebServer] [22m
+[2m[WebServer] [22m  To manually trigger a scheduled event, run:
+[2m[WebServer] [22m    curl "http://localhost:8788/cdn-cgi/local/scheduled"
+[2m[WebServer] [22m  For more details, see [4mhttps://developers.cloudflare.com/workers/configuration/cron-triggers/#test-cron-triggers-locally[0m
+[2m[WebServer] [22m
+[2m[WebServer] [22m
+
+Running 11 tests using 1 worker
+
+  ✓   1 [e2e] › e2e/copy-seo.spec.ts:52:3 › SEO per house (§4) › the Nordic page: its own title and description, its canonical, its products (120ms)
+  ✓   2 [e2e] › e2e/copy-seo.spec.ts:66:3 › SEO per house (§4) › the warm-modern page: its own canonical (the bug), its title and description, and only its own products (115ms)
+  ✓   3 [e2e] › e2e/copy-seo.spec.ts:90:3 › SEO per house (§4) › in the browser: the title follows the house, the switch included (1.7s)
+product pages: 39, meta descriptions cut at a sentence: 1
+  ✓   4 [e2e] › e2e/copy-seo.spec.ts:99:1 › every product page: its meta description is whole sentences of its description, never a cut word (§5) (388ms)
+  ✓   5 [e2e] › e2e/copy-seo.spec.ts:124:3 › the words on the stage (§2, §5) › the Nordic house: "כריות ושמיכה" and "3 גרסאות" on the wheel; no "(סט)" and no "וריאציות" on the page (2.9s)
+  ✓   6 [e2e] › e2e/copy-seo.spec.ts:144:3 › the words on the stage (§2, §5) › the warm-modern house: the set names, "3 סטים", its line under the room and its description (2.8s)
+  ✓   7 [e2e] › e2e/your-room.spec.ts:87:3 › ת21: "החדר שלך" draws what was bought, where it was bought › a beige cushion and the Pecan throw from the warm-modern house; the Nordic vase; a colour no room renders (5.5s)
+  ✓   8 [e2e] › e2e/your-room.spec.ts:181:3 › ת28: two options of the same slot in one order: every line is accounted for › case 3: the Pecan throw (set B) and the white bouclé (set A), both in the warm-modern house (2.2s)
+  ✓   9 [e2e] › e2e/your-room.spec.ts:217:3 › ת28: two options of the same slot in one order: every line is accounted for › case 4: two vases of the vase slot in the Nordic house (1.9s)
+  ✓  10 [e2e] › e2e/your-room.spec.ts:255:3 › ת28: two options of the same slot in one order: every line is accounted for › all as ordered: the caption says so only when nothing is listed under the picture (1.8s)
+  ✓  11 [e2e] › e2e/your-room.spec.ts:272:1 › ת25: the empty checkout’s way back to the room is a 44 px target (604ms)
+
+  11 passed (33.4s)
+
+real	0m34.751s
+user	0m10.245s
+sys	0m3.025s
+exit 0

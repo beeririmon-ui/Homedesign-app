@@ -70,7 +70,11 @@ export function Product({ p }: { p: PublicProduct }) {
         </ol>
       </nav>
       <article class="product" aria-labelledby="product-title">
-        <div class="product-media">{images.length ? <ProductGallery images={images} id={`p-${p.id}`} /> : null}</div>
+        {/* S15: a product with no picture that may ship (no render, and a supplier photo the public build withholds for
+            its rights) shows a neutral tile, never an empty column */}
+        <div class="product-media">
+          {images.length ? <ProductGallery images={images} id={`p-${p.id}`} /> : <div class="product-noimg" aria-hidden="true" />}
+        </div>
         <div class="product-info">
           <div class="page-head" style={{ marginBottom: 0 }}>
             {/* §9.1: the running head, "02 · הסלון · אגרטל"; the temporary names are said once, in the footer (§6.6) */}
@@ -126,7 +130,7 @@ export function Product({ p }: { p: PublicProduct }) {
                         </span>
                       </span>
                     ) : (
-                      <span class="detail">וריאציה {o.position}: ממתינה למוצר</span>
+                      <span class="detail">גרסה {o.position}: ממתינה למוצר</span>
                     )}
                   </li>
                 );

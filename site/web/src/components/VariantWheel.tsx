@@ -19,6 +19,7 @@ import { defaultVariantId, optionLabelHe, optionsOf } from '../variants';
 import { Waitlist } from './Waitlist';
 import { NORDIC, type House } from '../house';
 import { frameStyle, visibleFrame } from './viewport-frame';
+import { wheelCountHe } from '../set-copy';
 
 const STEP_DEG = 34;
 
@@ -236,9 +237,9 @@ export function VariantWheel({ house, slot, roomId, initial, onPreview, onChoose
     <div class="picker" role="dialog" aria-modal="true" aria-labelledby={headingId} ref={dialog} onKeyDown={onKeyDown}>
       <div class="picker-head">
         <div>
-          <p class="eyebrow">
-            {n} וריאציות · {slot.hotspot?.provisional ? 'מיקום זמני' : 'בחדר'}
-          </p>
+          {/* S15 (master-designer §2 row 4, §5): the customer's word, "גרסאות", or "סטים" in a house of sets; "וריאציות",
+              "· בחדר" and "מיקום זמני" were the studio's */}
+          <p class="eyebrow">{wheelCountHe(n, !!house?.info)}</p>
           <h2 id={headingId}>{slot.name_he}</h2>
         </div>
         <button type="button" class="glass close-btn" onClick={onCancel} aria-label="סגירה וחזרה לחדר בלי שינוי">
@@ -342,10 +343,10 @@ export function VariantWheel({ house, slot, roomId, initial, onPreview, onChoose
         )}
         <div class="picker-actions">
           <div class="arc-nav">
-            <button type="button" class="glass" onClick={() => goTo(index - 1)} disabled={index === 0} aria-label="הווריאציה הקודמת">
+            <button type="button" class="glass" onClick={() => goTo(index - 1)} disabled={index === 0} aria-label="הגרסה הקודמת">
               <IconRight />
             </button>
-            <button type="button" class="glass" onClick={() => goTo(index + 1)} disabled={index === n - 1} aria-label="הווריאציה הבאה">
+            <button type="button" class="glass" onClick={() => goTo(index + 1)} disabled={index === n - 1} aria-label="הגרסה הבאה">
               <IconLeft />
             </button>
           </div>

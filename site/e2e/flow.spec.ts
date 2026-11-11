@@ -253,7 +253,8 @@ test.describe('store', () => {
     // S8, §9.5 "החדר שלך": the room with what was ordered, drawn from the room's own layers
     await expect(page.locator('.your-room .your-room-layer').first()).toBeVisible();
     // S12 ת21: the house it was bought in (the Nordic room), and what was ordered, in the shade ordered
-    await expect(page.locator('figure.your-room[data-house="nordic"] figcaption')).toContainText('מה שהזמנת, בגוון שהזמנת');
+    // S15 (§1.1 row 2): all as ordered, nothing listed under the picture
+    await expect(page.locator('figure.your-room[data-house="nordic"] figcaption')).toHaveText('הדמיה: הסלון בבית הנורדי, עם מה שהזמנתם, בגוונים שבחרתם.');
     await expect(page.locator('body')).not.toContainText('הועברה לספק');
   });
 

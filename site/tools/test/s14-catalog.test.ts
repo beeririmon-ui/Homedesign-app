@@ -4,8 +4,11 @@
  *  - ת27: every variant sold from a card with supplier options asks the supplier for one of the card's option SKUs; the
  *    floor lamp, whose options collapse to one sold row, carries that row's SKU (CJYD224754407GT), never the card's
  *    product-level CJYD2247544. The build check catches the old value.
- *  - ת33: no public name, description or note in Latin; the card's notes never reach a public field; the Morandi
- *    triptych's description is the shop's Hebrew from the card's data. The build check catches an English remark.
+ *  - ת33: no public name, description or note in Latin; the card's notes never reach a public field. The build check
+ *    catches an English remark.
+ *  - S15: the Morandi triptych's description is master-designer's (names-he.json 1.2, description_he), over the one
+ *    composed from the card's data; "הדפס במרקם" only where the card says embossed or textured; a hedged guess is no
+ *    material; the slot's name as the site shows it ("כריות ושמיכה", without the catalog's "(סט)").
  */
 import { beforeAll, describe, expect, it } from 'vitest';
 import { execFileSync } from 'node:child_process';
@@ -15,8 +18,12 @@ import type { FullCatalog, PublicCatalog } from '@hd/shared';
 import { REPO, repoPath, sitePath } from '../lib/paths';
 import { cjProductOf, singleSku, supplierSkuIssues, type SkuCard } from '../lib/supplier-skus';
 import { hasLatinText, latinPublicText, publicDescription, publicTexture } from '../lib/public-text';
+import { metaDescription } from '@hd/shared/meta-text';
 
-type Card = SkuCard & { texture?: string | null; notes?: string | null };
+type Names = { description_he: Record<string, string> };
+const NAMES = JSON.parse(readFileSync(repoPath('data/catalog/names-he.json'), 'utf8')) as Names;
+
+type Card = SkuCard & { texture?: string | null; notes?: string | null; materials?: string[] };
 const walk = (d: string): string[] =>
   readdirSync(d).flatMap((f) => (statSync(join(d, f)).isDirectory() ? walk(join(d, f)) : f.endsWith('.json') ? [join(d, f)] : []));
 const cards = new Map<string, Card>();
@@ -146,18 +153,28 @@ describe('ת27: the supplier is asked for the very option sold', () => {
 });
 
 describe('ת33: the customer reads the shop’s Hebrew, never the studio’s notes', () => {
-  it('the Morandi triptych: a neutral Hebrew description from the card’s data, without the English sourcing remark', () => {
+  it('the Morandi triptych: master-designer’s Hebrew description (S15), without the English sourcing remark', () => {
     const card = cards.get(MORANDI)!;
     expect(card.texture).toMatch(/bright crystal film/); // the card keeps its working note
     expect(publicTexture(card.texture)).toBeNull();
+    const want = NAMES.description_he[MORANDI]!;
+    let seen = 0;
     for (const b of Object.values(built)) {
       const p = b.pub.products.find((x) => (b.full.products.find((f) => f.id === x.id)?.card_id ?? '') === MORANDI);
       if (!p) continue;
+      seen++;
+      // S15: description_he[card id] wins over the description composed from the card's data
+      expect(p.description_he).toBe(want);
       expect(hasLatinText(p.description_he), p.description_he).toBe(false);
-      expect(p.description_he).not.toMatch(/ליסטינג|בתמונות|texture|crystal/);
-      expect(p.description_he).toMatch(/^חומרים: /);
-      expect(p.description_he).toContain('מידות: 50 × 70 ס"מ');
+      expect(p.description_he).not.toMatch(/ליסטינג|בתמונות|texture|crystal|מורנדי|לפי הספק/);
+      // its meta description: the two first sentences, whole (§3: 130 characters, inside the 155)
+      expect(metaDescription(p.description_he)).toBe(
+        'שלושה הדפסים מופשטים במרקם מובלט על גב סיבית, כל אחד במסגרת שחורה דקה. חמישה דגמים בארבע מידות, מ-40×60 עד 70×90 ס"מ לכל הדפס.',
+      );
+      // the card says embossed: its material may say "במרקם"
+      expect(p.materials_he).toEqual(['הדפס במרקם']);
     }
+    expect(seen).toBeGreaterThan(0);
   });
 
   it('no public name, description or note in Latin, in either build; a card’s notes are in no public field', () => {
@@ -192,5 +209,47 @@ describe('ת33: the customer reads the shop’s Hebrew, never the studio’s not
       { id: 'b', name_he: 'Pillow cover', description_he: 'כותנה.', notes_he: ['מתאים ל-CE'] },
     ]);
     expect(issues.map((x) => `${x.product}:${x.where}`)).toEqual(['a:description', 'b:name']);
+  });
+});
+
+describe('S15: public honesty in the catalog', () => {
+  it('"הדפס במרקם" only on a product whose card says the print is embossed or textured', () => {
+    for (const [name, b] of Object.entries(built))
+      for (const p of b.pub.products) {
+        if (!p.materials_he.includes('הדפס במרקם')) continue;
+        const card = cardOf(b.full.products.find((f) => f.id === p.id)!)!;
+        expect(
+          (card.materials ?? []).some((m) => /\b(?:print(?:ed)?|painting)\b/i.test(m) && /\b(?:embossed|textured?)\b/i.test(m)),
+          `${name}: ${p.id}`,
+        ).toBe(true);
+      }
+  });
+
+  it('a guess the card hedges is no material: the magazine holder is metal, not a print', () => {
+    for (const b of Object.values(built)) {
+      const p = b.pub.products.find((x) => b.full.products.find((f) => f.id === x.id)?.card_id === 'magazine-holder-cj-arch-iron-cane');
+      if (p) expect(p.materials_he).toEqual(['מתכת']);
+    }
+  });
+
+  it('every designer description wins in every build, and passes the Latin check', () => {
+    for (const [id, text] of Object.entries(NAMES.description_he)) {
+      expect(hasLatinText(text), id).toBe(false);
+      for (const b of Object.values(built)) {
+        const f = b.full.products.find((x) => x.card_id === id);
+        if (f) expect(b.pub.products.find((x) => x.id === f.id)!.description_he).toBe(text);
+      }
+    }
+  });
+
+  it('the slot’s name as the site shows it: no catalog tag "(סט)" (data/slots does not change)', () => {
+    const slots = JSON.parse(readFileSync(repoPath('data/slots/living-room.json'), 'utf8')) as { slots: { id: string; name_he: string }[] };
+    expect(slots.slots.find((s) => s.id === 'cushions')!.name_he).toBe('כריות ושמיכה (סט)');
+    for (const [name, b] of Object.entries(built)) {
+      const room = b.pub.rooms.find((r) => r.id === 'living-room')!;
+      expect(room.slots.find((s) => s.id === 'cushions')?.name_he, name).toBe('כריות ושמיכה');
+      for (const r of b.pub.rooms) for (const s of r.slots) expect(s.name_he, `${name}: ${r.id}/${s.id}`).not.toMatch(/\(סט\)/);
+      for (const p of b.pub.products) expect(p.name_he, p.id).not.toMatch(/\(סט\)/);
+    }
   });
 });

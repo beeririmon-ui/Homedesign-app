@@ -13,8 +13,12 @@ import { defaultVariantId } from './variants';
 export type House = {
   style: string;
   name_he: string;
-  /** the house's status on the stage while it is behind the flag; null for the house on the site */
+  /** the house's status on the stage while it is behind the flag; null for the house on the site. S15: a working label,
+   *  never public (RoomExperience shows it only in a build behind the flag) */
   status_he: string | null;
+  /** S15 (master-designer §1): the room in this house, as a sentence names it ("הסלון בבית הנורדי"): a fixed string,
+   *  since in Hebrew the article goes on every word of the phrase */
+  place_he: string;
   /** the composed room's description; null: the Nordic one, written in the stage */
   alt_he: string | null;
   /** the line above the list under the room, when the house has its own */
@@ -28,7 +32,9 @@ export type House = {
   info?: (position: number) => ComponentChildren;
   /** S12, ת21: the variants the layer of a slot's option draws (a set: every piece of it), as rendered; [] for none */
   drawn: (slotId: string, position: number) => string[];
-  /** S14, ת28: how "החדר שלך" names an option whose layer draws more than one piece (a set: "סט B"); absent: none does */
+  /** S15: the products the house sells, in its own order (for the page's ItemList); absent: the room's slots say it */
+  sold?: () => PublicProduct[];
+  /** S14, ת28: how "החדר שלך" names an option whose layer draws more than one piece (a set: "סט קאמל ופקאן", S15); absent: none does */
   drawnLabel?: (slotId: string, position: number) => string | null;
 };
 
@@ -37,6 +43,7 @@ export const nordic: House = {
   style: NORDIC,
   name_he: catalog.styles.find((s) => s.id === NORDIC)?.name_he ?? 'נורדי',
   status_he: null,
+  place_he: 'הסלון בבית הנורדי',
   alt_he: null,
   scene,
   room: livingRoom,

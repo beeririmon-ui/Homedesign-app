@@ -1,0 +1,80 @@
+
+> @hd/web@0.1.0 build
+> vite build && vite build --ssr src/entry-server.tsx --outDir .ssr && tsx scripts/prerender.ts
+
+vite v7.3.7 building client environment for production...
+transforming...
+✓ 79 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                                     0.54 kB │ gzip:  0.33 kB
+dist/assets/assistant-hebrew-400-normal-BaQtOmbn.woff2              4.24 kB
+dist/assets/assistant-hebrew-600-normal-DM_XHISn.woff2              4.24 kB
+dist/assets/assistant-hebrew-600-normal-D6VOnxse.woff               5.52 kB
+dist/assets/assistant-hebrew-400-normal-B18Ux13Q.woff               5.54 kB
+dist/assets/frank-ruhl-libre-hebrew-300-normal-CpnDuyr4.woff2       6.21 kB
+dist/assets/assistant-latin-ext-400-normal-CJRdOknU.woff2           6.42 kB
+dist/assets/assistant-latin-ext-600-normal-BRc8ZhdA.woff2           6.45 kB
+dist/assets/frank-ruhl-libre-hebrew-500-normal-UhV5Nrdm.woff2       6.62 kB
+dist/assets/frank-ruhl-libre-hebrew-300-normal-CuhWN747.woff        7.78 kB
+dist/assets/frank-ruhl-libre-latin-ext-300-normal-B9Dv6aZe.woff2    7.93 kB
+dist/assets/frank-ruhl-libre-latin-ext-500-normal-gwbrZlZG.woff2    8.03 kB
+dist/assets/assistant-latin-ext-600-normal-DvGDKMJu.woff            8.13 kB
+dist/assets/assistant-latin-ext-400-normal-BcqNq6r3.woff            8.14 kB
+dist/assets/frank-ruhl-libre-hebrew-500-normal-DXveaSS_.woff        8.16 kB
+dist/assets/frank-ruhl-libre-latin-ext-300-normal-0KjHu9ch.woff    10.43 kB
+dist/assets/frank-ruhl-libre-latin-ext-500-normal-CrEvhThu.woff    10.55 kB
+dist/assets/assistant-latin-600-normal-DQhO4fCi.woff2              12.32 kB
+dist/assets/assistant-latin-400-normal-CDF-mh-3.woff2              12.35 kB
+dist/assets/frank-ruhl-libre-latin-300-normal-DssNYltd.woff2       14.82 kB
+dist/assets/frank-ruhl-libre-latin-500-normal-BAzcRRUT.woff2       15.01 kB
+dist/assets/assistant-latin-600-normal-CfJI0IBS.woff               15.72 kB
+dist/assets/assistant-latin-400-normal-BKD5Gqji.woff               15.74 kB
+dist/assets/frank-ruhl-libre-latin-300-normal-DWtGO9Zk.woff        18.76 kB
+dist/assets/frank-ruhl-libre-latin-500-normal-Czdveetw.woff        18.94 kB
+dist/assets/main-BfngGkPa.css                                      42.82 kB │ gzip:  9.10 kB
+dist/assets/packs-CVFF84Bd.js                                       0.07 kB │ gzip:  0.10 kB
+dist/assets/shipping-BROZP0ZU.js                                    0.19 kB │ gzip:  0.16 kB
+dist/assets/constants-vL2_DXfj.js                                   0.37 kB │ gzip:  0.28 kB
+dist/assets/lineLabel-uHGMb4fo.js                                   0.58 kB │ gzip:  0.38 kB
+dist/assets/MockPay-hJg3FfQi.js                                     1.19 kB │ gzip:  0.67 kB
+dist/assets/Waitlist-BVcW6BSr.js                                    2.86 kB │ gzip:  1.39 kB
+dist/assets/Cart-jvhe1Y5w.js                                        3.44 kB │ gzip:  1.48 kB
+dist/assets/Legal-3OopfUhZ.js                                       5.43 kB │ gzip:  2.07 kB
+dist/assets/Order-DE3oQkoN.js                                       7.80 kB │ gzip:  3.33 kB
+dist/assets/Checkout-Dd4s2p_y.js                                    8.12 kB │ gzip:  3.19 kB
+dist/assets/VariantWheel-CK0ciznw.js                                9.09 kB │ gzip:  3.77 kB
+dist/assets/Product-D7uVVSf3.js                                    12.14 kB │ gzip:  4.76 kB
+dist/assets/main-CBSfSxAs.js                                      177.66 kB │ gzip: 50.77 kB
+✓ built in 1.08s
+vite v7.3.7 building ssr environment for production...
+transforming...
+✓ 64 modules transformed.
+rendering chunks...
+[plugin vite:reporter] 
+(!) /home/user/homedesign-app/site/web/src/pages/Product.tsx is dynamically imported by /home/user/homedesign-app/site/web/src/App.tsx but also statically imported by /home/user/homedesign-app/site/web/src/entry-server.tsx, dynamic import will not move module into another chunk.
+
+[plugin vite:reporter] 
+(!) /home/user/homedesign-app/site/web/src/pages/Cart.tsx is dynamically imported by /home/user/homedesign-app/site/web/src/App.tsx but also statically imported by /home/user/homedesign-app/site/web/src/entry-server.tsx, dynamic import will not move module into another chunk.
+
+[plugin vite:reporter] 
+(!) /home/user/homedesign-app/site/web/src/pages/Checkout.tsx is dynamically imported by /home/user/homedesign-app/site/web/src/App.tsx but also statically imported by /home/user/homedesign-app/site/web/src/entry-server.tsx, dynamic import will not move module into another chunk.
+
+[plugin vite:reporter] 
+(!) /home/user/homedesign-app/site/web/src/pages/Order.tsx is dynamically imported by /home/user/homedesign-app/site/web/src/App.tsx but also statically imported by /home/user/homedesign-app/site/web/src/entry-server.tsx, dynamic import will not move module into another chunk.
+
+[plugin vite:reporter] 
+(!) /home/user/homedesign-app/site/web/src/pages/MockPay.tsx is dynamically imported by /home/user/homedesign-app/site/web/src/App.tsx but also statically imported by /home/user/homedesign-app/site/web/src/entry-server.tsx, dynamic import will not move module into another chunk.
+
+[plugin vite:reporter] 
+(!) /home/user/homedesign-app/site/web/src/pages/Legal.tsx is dynamically imported by /home/user/homedesign-app/site/web/src/App.tsx but also statically imported by /home/user/homedesign-app/site/web/src/entry-server.tsx, dynamic import will not move module into another chunk.
+
+.ssr/assets/VariantWheel-DimSifsw.js   16.20 kB
+.ssr/entry-server.js                  260.59 kB
+✓ built in 1.15s
+prerendered 47 pages + 0 house page(s) + order shell + 404
+
+> homedesign-site@0.1.0 check:rights
+> tsx tools/check-image-rights.ts
+
+image rights (S15, public (HD_PUBLIC=1)): 39/39 public products lose the supplier's picture in a public build (39 photos, 182 option pictures withheld: unclear 39); shipped publicly: 0; web/dist: 0 supplier files

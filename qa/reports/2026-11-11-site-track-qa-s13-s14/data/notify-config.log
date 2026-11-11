@@ -1,0 +1,11 @@
+production NOTIFY_PROVIDER=undefined: deploy check NOTIFY_PROVIDER is not set; at run time skipped
+production NOTIFY_PROVIDER="": deploy check NOTIFY_PROVIDER is not set; at run time skipped
+production NOTIFY_PROVIDER="mock": deploy check NOTIFY_PROVIDER=mock is refused in production (ENVIRONMENT=production); at run time skipped
+production NOTIFY_PROVIDER="Mock": deploy check NOTIFY_PROVIDER="Mock" is not a provider (mock); at run time skipped
+production NOTIFY_PROVIDER="UNDECIDED": deploy check passes; at run time skipped
+production NOTIFY_PROVIDER="telegram": deploy check NOTIFY_PROVIDER="telegram" is not a provider (mock); at run time skipped
+production NOTIFY_PROVIDER="email": deploy check NOTIFY_PROVIDER="email" is not a provider (mock); at run time skipped
+development NOTIFY_PROVIDER="mock": mock runs
+preview NOTIFY_PROVIDER="mock": mock runs
+preview-local NOTIFY_PROVIDER="mock": mock runs
+test NOTIFY_PROVIDER="mock": mock runs

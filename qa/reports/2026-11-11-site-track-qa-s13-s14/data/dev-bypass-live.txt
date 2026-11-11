@@ -1,0 +1,6 @@
+ENVIRONMENT='production' ADMIN_DEV_BYPASS=1 + token set: /admin/ 403, /api/admin/orders 403 (no header), with the dev token 403
+ENVIRONMENT='preview' ADMIN_DEV_BYPASS=1 + token set: /admin/ 403, /api/admin/orders 403 (no header), with the dev token 403
+ENVIRONMENT='' ADMIN_DEV_BYPASS=1 + token set: /admin/ 403, /api/admin/orders 403 (no header), with the dev token 403
+ENVIRONMENT='Development' ADMIN_DEV_BYPASS=1 + token set: /admin/ 403, /api/admin/orders 403 (no header), with the dev token 403
+ENVIRONMENT='preview-local' ADMIN_DEV_BYPASS=1 + token set: /admin/ 403, /api/admin/orders 403 (no header), with the dev token 500
+ENVIRONMENT='development' ADMIN_DEV_BYPASS=1 + token set: /admin/ 500, /api/admin/orders 500 (no header), with the dev token 500

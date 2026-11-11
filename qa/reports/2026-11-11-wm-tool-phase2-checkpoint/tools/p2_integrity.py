@@ -235,7 +235,8 @@ for s in "ABC":
 res["black_point"] = bp
 
 # overlay of regions on set B
-ov_img = graded["B"].copy()
+json.dump(res, open(os.path.join(OUT, "data/integrity.json"), "w"), indent=1)
+ov_img = np.ascontiguousarray(graded["B"].astype(np.uint8))
 cols = [(255, 0, 0), (0, 160, 255), (0, 200, 0), (255, 160, 0), (200, 0, 200), (0, 200, 200), (255, 255, 0), (120, 60, 255),
         (255, 80, 160), (80, 255, 120), (160, 120, 60), (255, 255, 255), (0, 0, 0), (90, 90, 255)]
 for i, k in enumerate([k for k in lay if not (k.startswith("set-") and k != "set-B")]):

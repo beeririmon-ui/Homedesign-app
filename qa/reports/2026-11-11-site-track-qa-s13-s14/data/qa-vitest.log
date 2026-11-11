@@ -1,0 +1,131 @@
+
+ RUN  v4.0.8 /tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/qa/build-s1314/site
+
+(node:11850) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+stdout | api/test/qa-s1314.test.ts > QA A: the admin gate (S13) > forged credentials on every route, in every ENVIRONMENT spelling, with and without Access configured: 403 and nothing changes
+QA A1: 10920 forged requests across 10 ENVIRONMENT spellings × Access on/off × bypass on/off; not 403: 0
+
+stdout | api/test/qa-s1314.test.ts > QA A: the admin gate (S13) > the positive controls: a valid Access JWT opens it (its email is the actor); the dev bypass and dev token only where they may
+QA A2: valid JWT → 200 (API, screen); cancel by JWT → 200; actors ["owner@example.invalid"]
+
+stdout | api/test/qa-s1314.test.ts > QA A: the admin gate (S13) > the positive controls: a valid Access JWT opens it (its email is the actor); the dev bypass and dev token only where they may
+QA A3: development: bypass 200, token 200, short token 403 | test: bypass 200, token 200, short token 403 | preview-local: bypass 403, token 200, short token 403 | preview: bypass 403, token 403, short token 403 | production: bypass 403, token 403, short token 403
+
+stdout | api/test/qa-s1314.test.ts > QA A: the admin gate (S13) > the JSON API accepts a content type a cross-site page can send without a preflight ("text/plain; …application/json")
+QA A4: admin cancel with content-type "text/plain; charset=application/json" and a foreign Origin → 200, order now canceled
+
+stdout | api/test/qa-s1314.test.ts > QA A5: "checked by a person" on an unresolved invoice, by a valid Access JWT > found → recorded with its number; none → the claim is released and the job queued; both logged with the email
+QA A5: found: job unresolved → check 200, again 409; invoice {"state":"issued","provider_invoice_id":"INV-QA-77","checked_by":"owner@example.invalid"}; queued []; audit ["owner@example.invalid"] | none: job unresolved → check 200, again 404; invoice null; queued ["issue-invoice"]; audit ["owner@example.invalid"]
+
+stdout | api/test/qa-s1314.test.ts > QA B: the cancellation procedure on the real seed > before the supplier: canceled + a full refund; the supplier job then sends nothing; every step has its actor
+QA B1: before supplier → canceled, refunded 14800/14800; audit ["system:order.created","webhook:mock:order.paid","owner@example.invalid:order.canceled","owner@example.invalid:refund.requested","owner@example.invalid:refund.refunded"]
+
+stdout | api/test/qa-s1314.test.ts > QA B: the cancellation procedure on the real seed > after the supplier: a request; confirmed → canceled and refunded; refused → goes on; a second request while waiting
+QA B2: after supplier → requested; customer sees "בהכנה" (sent_to_supplier); second request → requested, supplier asked 2×; confirmed → canceled; audit ["system:order.created","webhook:mock:order.paid","queue:supplier.submitted","owner@example.invalid:order.cancel_requested","supplier:mock:supplier.cancel_requested","owner@example.invalid:order.cancel_requested","supplier:mock:supplier.cancel_requested","supplier:mock:supplier.canceled","supplier:mock:order.canceled","supplier:mock:refund.requested","supplier:mock:refund.refunded"]
+
+stdout | api/test/qa-s1314.test.ts > QA B: the cancellation procedure on the real seed > after the supplier: a request; confirmed → canceled and refunded; refused → goes on; a second request while waiting
+QA B3: refused → sent_to_supplier, refunds 0; audit ["system:order.created","webhook:mock:order.paid","queue:supplier.submitted","owner@example.invalid:order.cancel_requested","supplier:mock:supplier.cancel_refused","supplier:mock:order.cancel_refused"]
+
+stdout | api/test/qa-s1314.test.ts > QA B: the cancellation procedure on the real seed > a supplier call that timed out (it may have created the order): what the cancellation does
+QA B4: supplier call timed out → job retry, shipment failed ("mock submitOrder: no answer within 40 ms (aborted; it may st…"), supplier holds 1 order(s); cancel → canceled/before_supplier, refunded 14800/14800, cancellation requests to the supplier 0
+
+stdout | api/test/qa-s1314.test.ts > QA C: refunds on the real seed > the same key, 5 at once: mock (dedupes) → one refund; a provider that cannot dedupe nor be asked → one call
+QA C1 {"idempotent":true}: 5 at once, same key → provider calls 5, refunds made 1, rows 1, results ok,ok,ok,ok,ok
+
+stdout | api/test/qa-s1314.test.ts > QA C: refunds on the real seed > the same key, 5 at once: mock (dedupes) → one refund; a provider that cannot dedupe nor be asked → one call
+QA C1 {"idempotent":false,"find":false}: 5 at once, same key → provider calls 1, refunds made 1, rows 1, results ok,in_progress,in_progress,in_progress,in_progress
+
+stdout | api/test/qa-s1314.test.ts > QA C: refunds on the real seed > the same key, 5 at once, a provider that cannot dedupe but CAN be asked (findRefund): how many refunds?
+QA C2: non-idempotent + findRefund, 5 at once, same key → provider calls 5, refunds made 5 (1000+1000+1000+1000+1000), results ok,ok/dup,ok/dup,ok/dup,ok/dup
+
+stdout | api/test/qa-s1314.test.ts > QA C: refunds on the real seed > partial, then the rest, then nothing; never above paid; 8 keys at once of 20% each → exactly 5
+QA C3: total 14800; partial 4933; over by 1 → exceeds_paid; rest 9867; 1 more → exceeds_paid; rest again → nothing_left; refunded 14800; order refunded
+
+stdout | api/test/qa-s1314.test.ts > QA C: refunds on the real seed > partial, then the rest, then nothing; never above paid; 8 keys at once of 20% each → exactly 5
+QA C4: 8 keys at once, 2960 each of 14800 → 5 ok, refunded 14800
+
+stdout | api/test/qa-s1314.test.ts > QA C: refunds on the real seed > the credit note goes through the invoice interface, once per refund, with the refund as its key
+QA C5: credit note jobs ×3 at once → credited,retry,retry, then skipped; provider credit notes [{"key":"qa_cn_0001","amount":1234}]; row {"credit_state":"issued","credit_note_id":"QA-CN-1"}
+
+stdout | api/test/qa-s1314.test.ts > QA C: refunds on the real seed > the credit note goes through the invoice interface, once per refund, with the refund as its key
+QA C6: canceled before an invoice → credit note job skipped, state not_needed
+
+stdout | api/test/qa-s1314.test.ts > QA D: delivery statuses on the customer view > received → preparing → shipped (number, generic link only) → delivered; behind the token; no supplier anywhere in it
+QA D1: customer statuses בהכנה → בהכנה → נשלחה → נמסרה; shipped: number CJPKL7010012345YQ, link null; no token 404, wrong token 404; supplier word in the view: none
+
+stdout | api/test/qa-s1314.test.ts > QA D: delivery statuses on the customer view > the tracking link filter, and a malformed link from the supplier
+QA D2:
+  https://parcelsapp.com/he/tracking/IL123TRK → https://parcelsapp.com/he/tracking/IL123TRK
+  https://t.17track.net/en#nums=LP123 → https://t.17track.net/en#nums=LP123
+  https://www.17track.net/en/track?nums=CJPKL123&from=cjdropshipping → null
+  https://parcelsapp.com/he/tracking/IL123?ref=aliexpress → null
+  http://parcelsapp.com/x → null
+  https://parcelsapp.com.evil.example/x → null
+  https://user:pw@parcelsapp.com/x → null
+  https://track.aftership.com/cainiao/LP00123 → null
+  https://parcelsapp.com/he/tracking/%E0%A4%A → THROWS URIError
+
+stdout | api/test/qa-s1314.test.ts > QA D: delivery statuses on the customer view > the tracking link filter, and a malformed link from the supplier
+QA D3: a shipped order with a malformed supplier link → the customer's order API 500
+
+stdout | api/test/qa-s1314.test.ts > QA D: delivery statuses on the customer view > the tracking link filter, and a malformed link from the supplier
+QA D3b: deliveryView throws URIError
+
+stdout | api/test/qa-s1314.test.ts > QA E: /healthz > the exact shape, ok and failing; no internal detail
+QA E1: ok 200 {"ok":true,"checks":{"db":"ok","queue":"ok"}} [cache-control: no-store; content-security-policy: default-src 'none'; frame-ancestors 'none'; content-type: application/json; cross-origin-opener-policy: same-origin; permissions-policy: camera=(), microphone=(), geolocation=(); referrer-policy: strict-origin-when-cross-origin; x-content-type-options: nosniff] | db failing 503 {"ok":false,"checks":{"db":"fail","queue":"ok"}} | no queue 503 {"ok":false,"checks":{"db":"ok","queue":"fail"}} | /api/health {"ok":true,"catalog_version":"1f39f863ba6e"}
+
+stdout | api/test/qa-s1314.test.ts > QA E2: a supplier that fails every call (the production cj adapter refuses today) > five attempts, an hour old: what the logs and /healthz say
+QA E2: 5 failed attempts → retry,retry,retry,retry,retry; order supplier_error, shipment failed; console rows about it 0; /healthz with only the failing order: {"ok":true,"checks":{"db":"ok","queue":"ok"}}; with a queued one an hour old too: {"ok":false,"checks":{"db":"ok","queue":"stalled"}} (queued/dropship_cj)
+
+stdout | api/test/qa-s1314.test.ts > QA F: no PII in any log row > phase by phase: the natural paths must be clean; then exceptions and provider errors that echo the buyer
+QA F1: 11 console rows; by phase: {"order":{"rows":8,"leaks":{}},"crash-email-phone":{"rows":1,"leaks":{}},"crash-name-address":{"rows":1,"leaks":{"זהבה קוואלי־טסטמן":["request.unhandled"],"קוואלי":["request.unhandled"],"זהבה":["request.unhandled"],"כפר־בדיקה־עילית":["request.unhandled"],"סמטת־הבודקת":["request.unhandled"]}},"invoice-echo":{"rows":1,"leaks":{"זהבה קוואלי־טסטמן":["config.refused"],"קוואלי":["config.refused"],"זהבה":["config.refused"],"כפר־בדיקה־עילית":["config.refused"],"סמטת־הבודקת":["config.refused"]}}}
+QA F3: the failed supplier call's text kept in D1 (supplier_shipments.last_error): "400 invalid consignee "זהבה קוואלי־טסטמן" at סמטת־הבודקת 77, כפר־בדיקה־עילית; tel 052-9137264"; invoices.last_error: "400 invalid consignee "זהבה קוואלי־טסטמן" at סמטת־הבודקת 77, כפר־בדיקה־עילית; tel 052-9137264"
+
+stdout | api/test/qa-s1314.test.ts > QA G (ת31): the deadline and the lease; claim_lost > the numbers: 60 s deadline, 10 min lease (×10); a hung invoice call is given up at its deadline and the claim stays
+QA G1: deadline 60000 ms, invoice lease 600000 ms, supplier 60000/600000 ms; hung call → retry after 81 ms, claim claimed ("qa-inv issue: no answer within 80 ms (aborted; it …")
+
+stdout | api/test/qa-s1314.test.ts > QA G (ת31): the deadline and the lease; claim_lost > lease overrun (my S11–S12 case): the first run outlives the lease; the takeover asks, then issues; the late answer is claim_lost
+QA G2: takeover → invoiced; late run → skipped; issued at providers 2; recorded QA-INV-1; claim_lost rows 0
+
+stdout | api/test/qa-s1314.test.ts > QA G (ת31): the deadline and the lease; claim_lost > lease overrun (my S11–S12 case): the first run outlives the lease; the takeover asks, then issues; the late answer is claim_lost
+QA G2b: takeover still in flight when the late answer lands → late run retry, takeover invoiced; claim_lost rows 1
+
+stdout | api/test/qa-s1314.test.ts > QA G (ת31): the deadline and the lease; claim_lost > the supplier order: a hung submit is failed at the deadline; a lost claim records nothing and says so
+QA G3: hung submit → retry; shipment failed; order paid; supplier holds 1
+
+stdout | api/test/qa-s1314.test.ts > QA G (ת31): the deadline and the lease; claim_lost > the supplier order: a hung submit is failed at the deadline; a lost claim records nothing and says so
+QA G4: lost claim → skipped; order paid; supplier.claim_lost rows 1
+
+stdout | api/test/qa-s1314.test.ts > QA H (ת27): every sold variant carries a SKU of its card > both catalogs: each sold variant → its card; with options: one of options.skus; without: the CJ product's variant, never its product code
+QA H1: 1755 sold variants checked (both catalogs); issues 0
+  CJ cards without options:
+  shop wall-decor-macrame-dowel-4hx2b: card CJJJJTJT41968-Beige → sold CJJJJTJT41968-Beige (cache: product null, 0 variants )
+  shop wall-sconce-black-swing-arm-fabric-wom7h: card CJYD223337102BY → sold CJYD223337102BY (cache: product CJYD2233371, 2 variants CJYD223337102BY,CJYD223337103CX)
+  shop magazine-holder-arch-iron-cane-ema28: card CJJT1610110 → sold CJJT161011001AZ (cache: product CJJT1610110, 1 variant CJJT161011001AZ)
+  shop pendant-tiered-fabric-drum-cjkd4: card CJYD247032902BY → sold CJYD247032902BY (cache: product CJYD2470329, 1 variant CJYD247032902BY)
+  story wall-decor-macrame-dowel-4hx2b: card CJJJJTJT41968-Beige → sold CJJJJTJT41968-Beige (cache: product null, 0 variants )
+  story wall-sconce-black-swing-arm-fabric-wom7h: card CJYD223337102BY → sold CJYD223337102BY (cache: product CJYD2233371, 2 variants CJYD223337102BY,CJYD223337103CX)
+  story magazine-holder-arch-iron-cane-ema28: card CJJT1610110 → sold CJJT161011001AZ (cache: product CJJT1610110, 1 variant CJJT161011001AZ)
+  story pendant-tiered-fabric-drum-cjkd4: card CJYD247032902BY → sold CJYD247032902BY (cache: product CJYD2470329, 1 variant CJYD247032902BY)
+  story bowl-glutinous-white-belly-bowl-dmhuc: card CJYD2389779 → sold CJYD238977901AZ (cache: product CJYD2389779, 1 variant CJYD238977901AZ)
+  test-page wall-decor-macrame-dowel-4hx2b: card CJJJJTJT41968-Beige → sold CJJJJTJT41968-Beige (cache: product null, 0 variants )
+  test-page wall-sconce-black-swing-arm-fabric-wom7h: card CJYD223337102BY → sold CJYD223337102BY (cache: product CJYD2233371, 2 variants CJYD223337102BY,CJYD223337103CX)
+  test-page magazine-holder-arch-iron-cane-ema28: card CJJT1610110 → sold CJJT161011001AZ (cache: product CJJT1610110, 1 variant CJJT161011001AZ)
+  test-page pendant-tiered-fabric-drum-cjkd4: card CJYD247032902BY → sold CJYD247032902BY (cache: product CJYD2470329, 1 variant CJYD247032902BY)
+  test-page condiment-set-rubberwood-mill-pair-lg33j: card CJCJ1714465 → sold CJCJ171446501AZ (cache: product CJCJ1714465, 1 variant CJCJ171446501AZ)
+  test-page bowl-glutinous-white-belly-bowl-dmhuc: card CJYD2389779 → sold CJYD238977901AZ (cache: product CJYD2389779, 1 variant CJYD238977901AZ)
+  test-page mug-set-cream-matte-breakfast-cup-z0fn7: card CJCJ1434903 → sold CJCJ143490301AZ (cache: product CJCJ1434903, 1 variant CJCJ143490301AZ)
+
+stdout | api/test/qa-s1314.test.ts > QA H (ת27): every sold variant carries a SKU of its card > one paid order with every product that has sale exclusions or a single SKU: the supplier request carries option SKUs
+QA H2: 7 products (exclusions or one SKU) in one paid order; supplier lines 7; floor lamp ["CJYD224754407GT",1]; issues none
+
+ ✓ api/test/qa-s1314.test.ts (21 tests) 3550ms
+     ✓ forged credentials on every route, in every ENVIRONMENT spelling, with and without Access configured: 403 and nothing changes  1350ms
+     ✓ a supplier call that timed out (it may have created the order): what the cancellation does  354ms
+
+ Test Files  1 passed (1)
+      Tests  21 passed (21)
+   Start at  19:56:04
+   Duration  4.66s (transform 702ms, setup 0ms, collect 955ms, tests 3.55s, environment 0ms, prepare 4ms)
+

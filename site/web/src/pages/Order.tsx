@@ -5,7 +5,7 @@
 import { useEffect, useState } from 'preact/hooks';
 import type { OrderView } from '@hd/shared';
 import { ORDER_STEPS_HE, orderStep } from '@hd/shared/constants';
-import { lineName } from '@hd/shared/lines';
+import { lineName, splitLineName } from '@hd/shared/lines';
 import { api, ApiError } from '../api';
 import { orderToken } from '../state/cart';
 import { Picture, Price } from '../components/Media';
@@ -48,13 +48,16 @@ type Unshown = { line: Line; img: string | null; instead: string | null; style: 
 /**
  * S8, §9.5 "החדר שלך"; S12, QA ת21 (fidelity first): each line is drawn in the house it was bought in (a line bought off
  * the room engine: the first house that renders it), and only where that house has a layer of the very variant bought.
- * A variant without a layer is never drawn in another colour: the card's picture of it, and a line that it is not in the
- * room yet. A shadow multiplies, a light screens, as the engine draws them.
+ * A variant without a layer is never drawn in another colour: the card's picture of it, and a line that it has none.
+ * A shadow multiplies, a light screens, as the engine draws them.
  *
  * S14, QA ת28: every line of the order is accounted for. A picture draws one option per slot (the first the order
  * holds); a line whose place already shows another option is listed under the pictures with its own picture and the
- * reason, never dropped. The caption says what is drawn: "what you ordered" only when that is all it shows; a set drawn
- * whole says which of its pieces were ordered.
+ * reason, never dropped.
+ *
+ * S15, master-designer's copy (docs/proposals/your-room-copy-2026-11-11.md §1): the caption describes the picture only;
+ * what was ordered and is not in it is in the list under it, which opens with its own line ("בהזמנה, ולא בהדמיה:").
+ * "עם מה שהזמנתם, בגוונים שבחרתם" is said only when the list is empty and no set is drawn whole.
  */
 function YourRoom({ lines }: { lines: Line[] }) {
   const [houses, setHouses] = useState<Record<string, House | null>>({ [NORDIC]: nordic });
@@ -85,36 +88,64 @@ function YourRoom({ lines }: { lines: Line[] }) {
     // the same option (two pieces of one set): drawn by the same layer
     if (taken?.position === at.place.position) taken.lines.push(l);
     // another option of the same slot: one picture draws one option per slot; this one is listed, with what is drawn there
-    else if (taken) unshown.push({ line: l, img: cardImage(at.house, l), instead: drawnName(at.house, taken), style: at.house.style });
+    else if (taken) unshown.push({ line: l, img: cardImage(at.house, l), instead: drawnName(at.house, taken, l), style: at.house.style });
     else r.picks.push({ ...at.place, lines: [l] });
   }
   if (!rooms.size && !unshown.length) return null;
-  const elsewhere = unshown.filter((u) => u.instead).length;
+  const pictured = rooms.size > 0;
   return (
     <div class="your-rooms">
       {[...rooms.values()].map(({ house, picks }) => (
-        <RoomFigure key={house.style} house={house} picks={picks} others={unshown.filter((u) => u.style === house.style).length} />
+        <RoomFigure key={house.style} house={house} picks={picks} listed={unshown.length > 0} />
       ))}
       {unshown.length ? (
-        <ul class="your-room-missing" aria-label={elsewhere ? 'פריטים שהזמנת ואינם בהדמיה' : 'פריטים שעוד לא בהדמיה'}>
-          {unshown.map(({ line, img, instead }, i) => (
-            <li key={i} data-variant={line.variant_id} data-why={instead ? 'slot-taken' : 'no-layer'}>
-              {img ? <img src={img} alt="" width={64} height={64} loading="lazy" decoding="async" /> : <span class="your-room-noimg" aria-hidden="true" />}
-              <span>
-                {lineName(line.name_he, lineLabelHe(line))}
-                <span class="small muted">{instead ? ` · הוזמן גם. באותו מקום בהדמיה מצויר ${instead}.` : ' · עוד לא מופיע בהדמיה של החדר.'}</span>
-              </span>
-            </li>
-          ))}
-        </ul>
+        <div class="your-room-list">
+          {/* the list's lead is its name; without any picture on the page it says so, and the rows give no reason */}
+          <p id="your-room-missing-title" class="small your-room-lead">
+            {pictured ? 'בהזמנה, ולא בהדמיה:' : 'לפריטים שהזמנתם אין הדמיה בחדר.'}
+          </p>
+          <ul class="your-room-missing" aria-labelledby="your-room-missing-title">
+            {unshown.map(({ line, img, instead }, i) => (
+              <li key={i} data-variant={line.variant_id} data-why={instead ? 'slot-taken' : 'no-layer'}>
+                {img ? <img src={img} alt="" width={64} height={64} loading="lazy" decoding="async" /> : <span class="your-room-noimg" aria-hidden="true" />}
+                <span>
+                  {lineName(line.name_he, lineLabelHe(line))}
+                  {instead || pictured ? <span class="small muted your-room-why">{whyHe(line, instead)}</span> : null}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
       ) : null}
     </div>
   );
 }
 
-/** How the picture's option of a slot is named: a set drawn whole by its label, else the line(s) it was drawn for. */
-function drawnName(house: House, p: Pick): string {
-  return extras(house, p).length ? (house.drawnLabel?.(p.slot, p.position) ?? 'הסט') : p.lines.map((l) => lineName(l.name_he, lineLabelHe(l))).join(', ');
+/** a line's base name and its labels (the option the order's name carries, and the pack), §1.1 rows 3, 8 and 9 */
+function partsOf(l: Line): { base: string; label: string } {
+  const { base, label } = splitLineName(l.name_he);
+  return { base, label: [label, lineLabelHe(l)].filter(Boolean).join(', ') };
+}
+
+/** §1.1 rows 7 and 8: why a listed line is not in the picture, on its own line under the name */
+function whyHe(l: Line, instead: string | null): string {
+  if (instead) return `בהדמיה, באותו מקום: ${instead}.`;
+  return partsOf(l).label ? 'אין הדמיה לאפשרות הזו.' : 'אין הדמיה לפריט הזה.';
+}
+
+/**
+ * §1.1 rows 9–11: what the picture shows in the place of a listed line. A set: its name ("סט קאמל ופקאן",
+ * else "סט אחר"); otherwise the base name of what is drawn, with its option only when the listed line has the same base
+ * name (two shades of one cushion), so the two can be told apart.
+ */
+function drawnName(house: House, p: Pick, row: Line): string {
+  if (house.drawn(p.slot, p.position).length > 1) return house.drawnLabel?.(p.slot, p.position) ?? 'סט אחר';
+  const mine = partsOf(row).base;
+  const names = p.lines.map((l) => {
+    const { base, label } = partsOf(l);
+    return base === mine && label ? `${base}, ${label}` : base;
+  });
+  return [...new Set(names)].join(', ');
 }
 /** the pieces an option's layer draws that the order does not hold (a set drawn whole) */
 function extras(house: House, p: Pick): string[] {
@@ -122,26 +153,25 @@ function extras(house: House, p: Pick): string[] {
   return house.drawn(p.slot, p.position).filter((v) => !bought.has(v));
 }
 
-/** S14, ת28: the caption says what the picture shows, against what was ordered. */
-function captionOf(house: House, picks: Pick[], others: number): string {
-  const head = `הדמיה: ${house.room.name_he} · ${house.name_he}.`;
+/**
+ * S15 (§1.1 rows 1–5): the caption says what the picture shows, in the house's own words for the place ("הסלון בבית
+ * הנורדי"). A set drawn whole says how much of it was ordered; "what you ordered" only when that is all the order holds.
+ */
+function captionOf(house: House, picks: Pick[], listed: boolean): string {
   const sets = picks.filter((p) => extras(house, p).length);
-  if (!sets.length && !others) return `${head} מה שהזמנת, בגוון שהזמנת.`;
-  const names = (p: Pick) => p.lines.map((l) => lineName(l.name_he, lineLabelHe(l))).join(', ');
-  const parts = picks.map((p) =>
-    extras(house, p).length
-      ? `${house.drawnLabel?.(p.slot, p.position) ?? 'הסט'} מצויר כולו; ממנו הזמנת: ${names(p)}. שאר הפריטים בו רק בהדמיה.`
-      : `${names(p)}: כפי שהזמנת.`,
-  );
-  const more = others
-    ? others === 1
-      ? 'הזמנת גם אפשרות אחרת לאותו מקום. היא לא מצוירת, והיא ברשימה למטה.'
-      : `הזמנת גם ${others} אפשרויות אחרות לאותו מקום. הן לא מצוירות, והן ברשימה למטה.`
-    : null;
-  return [head, ...parts, more].filter(Boolean).join(' ');
+  if (!sets.length && !listed) return `הדמיה: ${house.place_he}, עם מה שהזמנתם, בגוונים שבחרתם.`;
+  const parts = sets.map((p) => {
+    const set = house.drawnLabel?.(p.slot, p.position) ?? 'הסט';
+    const ordered = [...new Set(p.lines.map((l) => l.variant_id))];
+    const all = house.drawn(p.slot, p.position).length;
+    return ordered.length === 1
+      ? `${set} מוצג כולו; הזמנתם ממנו פריט אחד: ${partsOf(p.lines[0]!).base}.`
+      : `${set} מוצג כולו; הזמנתם ממנו ${ordered.length} פריטים מתוך ${all}.`;
+  });
+  return [`הדמיה: ${house.place_he}.`, ...parts].join(' ');
 }
 
-function RoomFigure({ house, picks, others }: { house: House; picks: Pick[]; others: number }) {
+function RoomFigure({ house, picks, listed }: { house: House; picks: Pick[]; listed: boolean }) {
   const sc = house.scene;
   const base = sc.base[0]!;
   const at = (set: SceneLayerSet, pos: number, cls: string) => {
@@ -174,7 +204,7 @@ function RoomFigure({ house, picks, others }: { house: House; picks: Pick[]; oth
           ))}
       </div>
       <figcaption id={cap} class="small muted">
-        {captionOf(house, picks, others)}
+        {captionOf(house, picks, listed)}
       </figcaption>
     </figure>
   );

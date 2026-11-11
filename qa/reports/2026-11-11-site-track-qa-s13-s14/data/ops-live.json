@@ -1,0 +1,165 @@
+{
+ "base": "http://127.0.0.1:8799",
+ "steps": {
+  "flow": {
+   "order": "9673898087",
+   "order_token_local_copy": "2VmNkViscxQC-oSYutp1GAI0sLG5XbrU",
+   "canceled_order": {
+    "id": "8400846971",
+    "token": "iESjCoOHKaUfz94Lzdj8_kQ8TPvNRXl7"
+   },
+   "total": 51700,
+   "admin_status_after_jobs": "sent_to_supplier",
+   "mock_shipped": 200,
+   "customer_statuses": [
+    "בהכנה",
+    "נשלחה",
+    "נמסרה"
+   ],
+   "shipments": [
+    {
+     "status_he": "נמסרה",
+     "tracking_number": "IL73898087TRK",
+     "tracking_url": "https://parcelsapp.com/he/tracking/IL73898087TRK",
+     "shipped_at": "2026-11-11T19:46:30.500Z",
+     "delivered_at": "2026-11-11T19:46:30.532Z"
+    }
+   ],
+   "view_keys": [
+    "id",
+    "status",
+    "status_he",
+    "created_at",
+    "total_agorot",
+    "shipping_method",
+    "lines",
+    "shipments",
+    "refunded_agorot"
+   ],
+   "supplier_word": null,
+   "no_token": 404
+  },
+  "refunds": {
+   "total": 51700,
+   "partial": 200,
+   "same_key_again": [
+    200,
+    true
+   ],
+   "same_key_x5": [
+    "200",
+    "200/dup",
+    "200/dup",
+    "200/dup",
+    "200/dup"
+   ],
+   "over": [
+    422,
+    "exceeds_paid"
+   ],
+   "rest": [
+    200,
+    50000
+   ],
+   "rows": [
+    "1000:refunded:issued",
+    "700:refunded:issued",
+    "50000:refunded:issued"
+   ],
+   "sum_refunded": 51700,
+   "order_status": "refunded",
+   "customer_refunded": 51700
+  },
+  "cancel": {
+   "before": {
+    "cancel": [
+     200,
+     "canceled",
+     "before_supplier"
+    ],
+    "status": "canceled",
+    "refunds": [
+     "51700:refunded"
+    ],
+    "audit": [
+     "system:order.created",
+     "webhook:mock:order.paid",
+     "dev-token:order.canceled",
+     "dev-token:refund.requested",
+     "dev-token:refund.refunded",
+     "system:refund.credit_not_needed"
+    ],
+    "customer": "בוטלה"
+   },
+   "after": {
+    "cancel": [
+     200,
+     "requested",
+     "after_supplier"
+    ],
+    "customer_while_waiting": "בהכנה",
+    "again": [
+     200,
+     "requested"
+    ],
+    "confirm": 200,
+    "status": "canceled",
+    "refunds": [
+     "51700:refunded"
+    ],
+    "audit": [
+     "system:order.created",
+     "webhook:mock:order.paid",
+     "queue:supplier.submitted",
+     "dev-token:order.cancel_requested",
+     "supplier:mock:supplier.cancel_requested",
+     "dev-token:order.cancel_requested",
+     "supplier:mock:supplier.cancel_requested",
+     "mock-supplier (dev-token):supplier.canceled",
+     "mock-supplier (dev-token):order.canceled",
+     "mock-supplier (dev-token):refund.requested",
+     "mock-supplier (dev-token):refund.refunded"
+    ],
+    "customer": "בוטלה"
+   }
+  },
+  "crash": {
+   "status": 500,
+   "body": {
+    "error": "internal_error",
+    "error_id": "E-2CE7Y9VD",
+    "message_he": "משהו השתבש אצלנו. נסו שוב בעוד רגע. אם זה חוזר, כתבו לנו וציינו את הקוד E-2CE7Y9VD."
+   }
+  },
+  "csrf": {
+   "json_api_text_plain_foreign_origin": [
+    200,
+    "canceled"
+   ],
+   "screen_form_foreign_origin": [
+    303,
+    "/admin/orders/2555071313?error=bad_origin"
+   ],
+   "order_after": "canceled"
+  }
+ },
+ "log": {
+  "lines": 180,
+  "structured_rows": 26,
+  "leaks": [],
+  "events": [
+   "notify.new_order",
+   "shipment.updated",
+   "refund.refunded",
+   "request.unhandled"
+  ],
+  "sample": [
+   "  level: 'info',",
+   "  event: 'notify.new_order',",
+   "  level: 'info',",
+   "  event: 'shipment.updated',",
+   "  level: 'info',",
+   "  event: 'shipment.updated',"
+  ]
+ }
+}
