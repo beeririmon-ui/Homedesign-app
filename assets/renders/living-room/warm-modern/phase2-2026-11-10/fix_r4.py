@@ -415,20 +415,19 @@ def shadow_ext(k, a, regt, below, surf, others, near=(3.0, 4.5)):
     """R3's measured contact shadow, with the edge fix only: extract.shadow_one blurs the darkening with zeros inside the product and then
     lightens the soft edge by (1 - a) + a, so within ~3 px of the product it fades out and a lighter strip shows between the product and
     its shadow (the basket's light line, the planter's ghost). Here, within 3 px outside the product and on its soft edge (0 < a < 1),
-    each pixel takes the shadow R3 measured 3-4.5 px out from the product (its nearest such pixel), never lighter than R3's own value
+    each pixel takes the shadow R3 measured 3-4.5 px out from the product (a sigma-2.5 blur normalised over that ring, so it follows the
+    edge and tapers where R3's shadow ends), never lighter than R3's own value
     and, where that is a real shadow (<= 0.85), never lighter than the render's own darkening right there (the contact occlusion; at most
     20 % deeper); everywhere else the shadow is R3's, unchanged"""
     sh0 = shadow_r3(k, a, regt, below, surf, others)
     prod = a > 0.02
     dist = cv2.distanceTransform((~prod).astype(np.uint8), cv2.DIST_L2, 5)
-    ref = (dist >= near[0]) & (dist <= near[1]) & (sh0 < 0.999)
-    _, lbl = cv2.distanceTransformWithLabels((~ref).astype(np.uint8), cv2.DIST_L2, 5, labelType=cv2.DIST_LABEL_PIXEL)
-    ry, rx = np.nonzero(ref)
-    lut = np.ones(lbl.max() + 1, np.float32)
-    lut[lbl[ry, rx]] = sh0[ry, rx]
-    she = lut[lbl]
+    ring_all = (dist >= near[0]) & (dist <= near[1])          # the whole ring, shadowed or not, so the carried shadow tapers where R3's ends
+    ref = ring_all & (sh0 < 0.999)
+    dk, den = nblur((1 - sh0).astype(np.float32), ring_all.astype(np.float32), 2.5)
+    she = (1 - dk).astype(np.float32)
     dref = cv2.distanceTransform((~ref).astype(np.uint8), cv2.DIST_L2, 5)
-    zone = (((dist < near[0]) & ~prod) | (prod & (a < 0.999))) & (dref <= near[1] + 1.0)
+    zone = (((dist < near[0]) & ~prod) | (prod & (a < 0.999))) & (dref <= near[1] + 1.0) & (den > 0.02)
     sh = np.where(zone, np.minimum(sh0, she), sh0)
     # right at the edge the render is often darker still (contact occlusion): in the zone, the shadow is also never lighter than the
     # render's own darkening there (its sRGB-encoded luminance over the scene's, as the multiply works on encoded values; sigma-1 blurs
