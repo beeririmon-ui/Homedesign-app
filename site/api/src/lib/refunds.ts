@@ -13,13 +13,20 @@
  *   canceled), the audit log names who asked, and the credit note is queued (lib/invoices `processCreditNoteJob`). A
  *   refusal frees the amount. A failure that may have moved money keeps the claim: the same key again asks again, and a
  *   provider that can neither deduplicate nor be asked leaves it `unresolved` for a person, never a second refund.
+ * - **S16, QA ת36, one call at a time, for every provider:** the call to the provider holds a lease on the refund
+ *   (`in_flight_until`, the invoice job's 10 minutes), taken in one statement before the call and given back when it
+ *   ends. The same refund asked for while a call is running is 409 `in_progress`, whatever the provider (five requests
+ *   at once with the same key: one call). Once no call is running (it ended in a failure, or a crash outlived its
+ *   lease), a provider that does not deduplicate is asked first (`findRefund`), and called again only when it holds none.
+ *   The call itself has the providers' deadline (lib/deadline.ts), far below the lease.
  */
 import type { Env } from '../env';
 import { formatIls } from '@hd/shared/money';
 import { INVOICE_LEASE_MS } from './invoices';
 import { refundProvider } from './payments';
 import { RefundRefused, type IssuedRefund, type PaymentProvider } from './payments/types';
-import { log } from './log';
+import { errorCode, log } from './log';
+import { PROVIDER_CALL_TIMEOUT_MS, withDeadline } from './deadline';
 
 export type RefundRequest = {
   orderId: string;
@@ -39,6 +46,9 @@ export const REFUND_KEY = /^[A-Za-z0-9:_-]{8,80}$/;
 
 type OrderRow = { id: string; total_agorot: number; paid_at: string | null; payment_provider: string; payment_session_id: string | null; status: string };
 type RefundRow = { id: string; order_id: string; amount_agorot: number; state: string; claimed_at: string; provider_refund_id: string | null };
+/** S16 (ת36): how long a call to the provider holds the refund (the invoice job's lease) */
+export const REFUND_LEASE_MS = INVOICE_LEASE_MS;
+if (PROVIDER_CALL_TIMEOUT_MS * 5 > REFUND_LEASE_MS) throw new Error('the refund call deadline must stay far below the lease');
 
 /** What the order paid, what the refunds that count hold, and what is refunded for real. */
 export async function refundTotals(db: D1Database, orderId: string): Promise<{ paid: number; counted: number; refunded: number }> {
@@ -62,9 +72,14 @@ const fail = (status: 404 | 409 | 422 | 502 | 503, code: string, message_he: str
   ...(refund_id ? { refund_id } : {}),
 });
 
-export async function requestRefund(env: Env, req: RefundRequest, opts: { provider?: PaymentProvider; now?: () => number } = {}): Promise<RefundResult> {
+export async function requestRefund(
+  env: Env,
+  req: RefundRequest,
+  opts: { provider?: PaymentProvider; now?: () => number; callTimeoutMs?: number } = {},
+): Promise<RefundResult> {
   const now = opts.now ?? Date.now;
   const iso = () => new Date(now()).toISOString();
+  const lease = () => new Date(now() + REFUND_LEASE_MS).toISOString();
   if (!REFUND_KEY.test(req.key)) return fail(422, 'invalid_key', 'מפתח ההחזר לא תקין. רעננו את הדף ונסו שוב.');
   const order = await env.DB.prepare('SELECT id, total_agorot, paid_at, payment_provider, payment_session_id, status FROM orders WHERE id = ?')
     .bind(req.orderId)
@@ -91,13 +106,13 @@ export async function requestRefund(env: Env, req: RefundRequest, opts: { provid
   const at = iso();
   // the claim: inserted only while the refunds that count, with this one, stay within what the order paid
   const claim = await env.DB.prepare(
-    `INSERT INTO refunds (id, order_id, kind, amount_agorot, reason, state, provider, requested_by, claimed_at)
-     SELECT ?, o.id, ?, ?, ?, 'claimed', ?, ?, ? FROM orders o
+    `INSERT INTO refunds (id, order_id, kind, amount_agorot, reason, state, provider, requested_by, claimed_at, in_flight_until)
+     SELECT ?, o.id, ?, ?, ?, 'claimed', ?, ?, ?, ? FROM orders o
      WHERE o.id = ? AND o.paid_at IS NOT NULL
        AND (SELECT COALESCE(SUM(amount_agorot), 0) FROM refunds WHERE order_id = o.id AND state != 'refused') + ? <= o.total_agorot
      ON CONFLICT(id) DO NOTHING`,
   )
-    .bind(req.key, kind, amount, req.reason.slice(0, 300), provider.id, req.actor.slice(0, 200), at, order.id, amount)
+    .bind(req.key, kind, amount, req.reason.slice(0, 300), provider.id, req.actor.slice(0, 200), at, lease(), order.id, amount)
     .run();
   if (!claim.meta.changes) {
     const raced = await env.DB.prepare('SELECT id, order_id, amount_agorot, state, claimed_at, provider_refund_id FROM refunds WHERE id = ?')
@@ -124,49 +139,80 @@ export async function requestRefund(env: Env, req: RefundRequest, opts: { provid
     if (row.state === 'unresolved') return fail(409, 'unresolved', 'ההחזר הזה מחכה לבדיקה של אדם אצל הסולק.', row.id);
     const provider = opts.provider ?? pick();
     if (!provider) return fail(503, 'provider_unavailable', 'אי אפשר להחזיר דרך הסולק כרגע.', row.id);
+    // S16, QA ת36: a call of this refund is running (its lease is not over): 409, for every kind of provider
+    const take = await env.DB.prepare(
+      "UPDATE refunds SET in_flight_until = ?, attempts = attempts + 1 WHERE id = ? AND state = 'claimed' AND (in_flight_until IS NULL OR in_flight_until <= ?)",
+    )
+      .bind(lease(), row.id, iso())
+      .run();
+    if (!take.meta.changes) {
+      const cur = await env.DB.prepare('SELECT id, order_id, amount_agorot, state, claimed_at, provider_refund_id FROM refunds WHERE id = ?')
+        .bind(row.id)
+        .first<RefundRow>();
+      // it ended meanwhile (recorded, refused or left to a person): its outcome
+      if (cur && cur.state !== 'claimed') return resume(cur);
+      return fail(409, 'in_progress', 'ההחזר הזה כבר בדרך לסולק.', row.id);
+    }
     if (!provider.refundsIdempotent) {
-      // a provider that does not deduplicate is asked first, or a person checks it: never a blind second call
-      const found = provider.findRefund ? await provider.findRefund(row.id) : null;
-      if (found) return record(row, provider.id, found);
+      // the last call ended in a failure, or crashed: it may have moved money. A provider that does not deduplicate is
+      // asked first, or a person checks it: never a blind second call
       if (!provider.findRefund) {
-        if (now() - Date.parse(row.claimed_at) < INVOICE_LEASE_MS) return fail(409, 'in_progress', 'ההחזר הזה כבר בדרך לסולק.', row.id);
         const reason = `a refund claim of ${row.claimed_at} has no result, and ${provider.id} can neither be asked nor deduplicates: a person checks the provider`;
-        await env.DB.prepare("UPDATE refunds SET state = 'unresolved', last_error = ? WHERE id = ? AND state = 'claimed'").bind(reason, row.id).run();
+        await env.DB.prepare("UPDATE refunds SET state = 'unresolved', last_error = ?, in_flight_until = NULL WHERE id = ? AND state = 'claimed'")
+          .bind(reason, row.id)
+          .run();
         await audit(env.DB, `payment:${provider.id}`, 'refund.unresolved', row.order_id, { refund: row.id }, iso());
         log.error('refund.unresolved', { order_id: row.order_id, refund_id: row.id });
         return fail(409, 'unresolved', 'ההחזר הזה מחכה לבדיקה של אדם אצל הסולק.', row.id);
       }
+      const ask = provider.findRefund.bind(provider);
+      let found: IssuedRefund | null;
+      try {
+        found = await withDeadline(`${provider.id} findRefund`, opts.callTimeoutMs ?? PROVIDER_CALL_TIMEOUT_MS, () => ask(row.id));
+      } catch (err) {
+        await env.DB.prepare('UPDATE refunds SET in_flight_until = NULL WHERE id = ?').bind(row.id).run();
+        const error_id = log.error('refund.provider_failed', { order_id: row.order_id, refund_id: row.id, code: errorCode(err) });
+        return fail(502, 'provider_failed', `הסולק לא ענה. ההחזר שמור, ואפשר לשלוח אותו שוב באותו מפתח (קוד ${error_id}).`, row.id);
+      }
+      if (found) return record(row, provider.id, found);
     }
-    await env.DB.prepare('UPDATE refunds SET attempts = attempts + 1 WHERE id = ?').bind(row.id).run();
     return call(provider, row);
   }
 
   async function call(provider: PaymentProvider, row: RefundRow): Promise<RefundResult> {
     const before = (await refundTotals(env.DB, row.order_id)).counted - row.amount_agorot;
     let issued: IssuedRefund;
+    const refund = provider.refund!.bind(provider);
     try {
-      issued = await provider.refund!(
-        {
-          order_id: row.order_id,
-          payment_ref: order!.payment_session_id ?? '',
-          amount_agorot: row.amount_agorot,
-          paid_agorot: order!.total_agorot,
-          refunded_before_agorot: Math.max(0, before),
-          reason: req.reason.slice(0, 300),
-        },
-        { idempotency_key: row.id },
+      // S16 (ת36): the providers' deadline, far below the lease this call holds
+      issued = await withDeadline(`${provider.id} refund`, opts.callTimeoutMs ?? PROVIDER_CALL_TIMEOUT_MS, (signal) =>
+        refund(
+          {
+            order_id: row.order_id,
+            payment_ref: order!.payment_session_id ?? '',
+            amount_agorot: row.amount_agorot,
+            paid_agorot: order!.total_agorot,
+            refunded_before_agorot: Math.max(0, before),
+            reason: req.reason.slice(0, 300),
+          },
+          { idempotency_key: row.id, signal },
+        ),
       );
     } catch (err) {
       const msg = (err instanceof Error ? err.message : String(err)).slice(0, 500);
       if (err instanceof RefundRefused) {
         await env.DB.batch([
-          env.DB.prepare("UPDATE refunds SET state = 'refused', last_error = ?, completed_at = ? WHERE id = ? AND state = 'claimed'").bind(msg, iso(), row.id),
-          auditStmt(env.DB, `payment:${provider.id}`, 'refund.refused', row.order_id, { refund: row.id, why: msg }, iso()),
+          env.DB.prepare(
+            "UPDATE refunds SET state = 'refused', last_error = ?, completed_at = ?, in_flight_until = NULL WHERE id = ? AND state = 'claimed'",
+          ).bind(msg, iso(), row.id),
+          // S16, QA ת38: the provider's words stay in D1 (last_error); the audit row carries its code
+          auditStmt(env.DB, `payment:${provider.id}`, 'refund.refused', row.order_id, { refund: row.id, code: errorCode(err) }, iso()),
         ]);
         return fail(422, 'refused', 'הסולק סירב להחזר: לא הועבר כסף.', row.id);
       }
-      await env.DB.prepare('UPDATE refunds SET last_error = ? WHERE id = ?').bind(msg, row.id).run();
-      const error_id = log.error('refund.provider_failed', { order_id: row.order_id, refund_id: row.id }, err);
+      // the call ended (a failure that may have moved money): the lease is given back, the claim stays
+      await env.DB.prepare('UPDATE refunds SET last_error = ?, in_flight_until = NULL WHERE id = ?').bind(msg, row.id).run();
+      const error_id = log.error('refund.provider_failed', { order_id: row.order_id, refund_id: row.id, code: errorCode(err) });
       return fail(502, 'provider_failed', `הסולק לא ענה. ההחזר שמור, ואפשר לשלוח אותו שוב באותו מפתח (קוד ${error_id}).`, row.id);
     }
     return record(row, provider.id, issued);
@@ -176,7 +222,7 @@ export async function requestRefund(env: Env, req: RefundRequest, opts: { provid
     const at = iso();
     const [done] = await env.DB.batch([
       env.DB.prepare(
-        "UPDATE refunds SET state = 'refunded', provider_refund_id = ?, completed_at = ?, last_error = NULL WHERE id = ? AND state = 'claimed'",
+        "UPDATE refunds SET state = 'refunded', provider_refund_id = ?, completed_at = ?, last_error = NULL, in_flight_until = NULL WHERE id = ? AND state = 'claimed'",
       ).bind(issued.refund_id, at, row.id),
       // all of it refunded: the order says so (a canceled order stays canceled)
       env.DB.prepare(

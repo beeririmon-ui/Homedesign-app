@@ -96,6 +96,7 @@ export const FILTERS = ['attention', ...Object.keys(ADMIN_STATUS_HE)] as const;
 export type Filter = (typeof FILTERS)[number];
 /** an order a person should look at: a supplier error, an invoice or refund for a person, a cancellation waiting */
 const ATTENTION_SQL = `(o.status = 'supplier_error'
+  OR EXISTS (SELECT 1 FROM supplier_shipments s WHERE s.order_id = o.id AND s.status = 'failed' AND s.supplier_order_id IS NULL AND s.reach = 'maybe')
   OR EXISTS (SELECT 1 FROM invoices i WHERE i.order_id = o.id AND i.state = 'unresolved')
   OR EXISTS (SELECT 1 FROM refunds r WHERE r.order_id = o.id AND (r.state IN ('claimed', 'unresolved') OR r.credit_state = 'unresolved'))
   OR EXISTS (SELECT 1 FROM cancellations x WHERE x.order_id = o.id AND x.state = 'requested'))`;
@@ -186,7 +187,7 @@ export async function orderDetail(db: D1Database, id: string) {
       .all(),
     db
       .prepare(
-        'SELECT supplier, fulfillment_source, status, supplier_order_id, tracking_number, tracking_url, attempts, last_error, shipped_at, delivered_at, updated_at FROM supplier_shipments WHERE order_id = ? ORDER BY created_at',
+        'SELECT supplier, fulfillment_source, status, supplier_order_id, tracking_number, tracking_url, attempts, last_error, reach, failing_since, shipped_at, delivered_at, updated_at FROM supplier_shipments WHERE order_id = ? ORDER BY created_at',
       )
       .bind(id)
       .all<{
@@ -198,6 +199,10 @@ export async function orderDetail(db: D1Database, id: string) {
         tracking_url: string | null;
         attempts: number;
         last_error: string | null;
+        /** S16 (ת35): whether a failed submit may have reached the supplier (migration 0007) */
+        reach: 'none' | 'maybe' | 'checked';
+        /** S16 (ת39): the first failure of the current run of failures */
+        failing_since: string | null;
         shipped_at: string | null;
         delivered_at: string | null;
         updated_at: string;

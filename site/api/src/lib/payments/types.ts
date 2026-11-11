@@ -49,7 +49,7 @@ export interface PaymentProvider {
    */
   readonly refundsIdempotent?: boolean;
   /** S13: refunds the amount, with our idempotency key (the refund's id); throws RefundRefused when nothing moved */
-  refund?(input: RefundInput, opts: { idempotency_key: string }): Promise<IssuedRefund>;
+  refund?(input: RefundInput, opts: { idempotency_key: string; signal?: AbortSignal }): Promise<IssuedRefund>;
   /** S13: the refund the provider already made for this key, null when none; absent when it cannot be asked */
   findRefund?(idempotencyKey: string): Promise<IssuedRefund | null>;
 }

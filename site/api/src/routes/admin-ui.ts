@@ -32,7 +32,7 @@ import {
   type Filter,
   type OrderDetail,
 } from '../lib/admin-orders';
-import { cancelOrder } from '../lib/cancel';
+import { cancelOrder, recordSupplierCheck } from '../lib/cancel';
 import { requestRefund } from '../lib/refunds';
 import { applySupplierUpdate } from '../lib/shipments';
 import { MOCK_SUPPLIER_EVENTS, mockSupplierOpen, mockUpdate } from './admin';
@@ -166,6 +166,8 @@ const DONE_HE: Record<string, string> = {
   refund_duplicate: 'ההחזר הזה כבר בוצע קודם (אותו מפתח): לא הוחזר שוב.',
   invoice_found: 'נרשם: החשבונית נמצאה אצל הספק.',
   invoice_none: 'נרשם: אין חשבונית אצל הספק. ג׳וב החשבונית ירוץ שוב.',
+  supplier_found: 'נרשם: ההזמנה נמצאה אצל הספק. ביטול ממשיך עכשיו בבקשת ביטול לספק.',
+  supplier_none: 'נרשם: אין הזמנה אצל הספק. אפשר לבטל עם החזר מלא.',
   mock_applied: 'התשובה של הספק המדומה נרשמה.',
   mock_unchanged: 'התשובה של הספק המדומה לא שינתה דבר.',
 };
@@ -191,6 +193,8 @@ const ERROR_HE: Record<string, string> = {
   invoice_not_unresolved: 'החשבונית לא מחכה לבדיקה.',
   no_invoice_claim: 'אין להזמנה הזו חשבונית בבדיקה.',
   no_mock_shipment: 'אין להזמנה הזו משלוח אצל הספק המדומה.',
+  supplier_check_needed: 'ייתכן שההזמנה הגיעה לספק: לא הוחזר כסף. בדקו אצל הספק לפי מספר ההזמנה ורשמו מה מצאתם ("בדיקה אצל הספק").',
+  no_supplier_check_needed: 'אין בהזמנה הזו משלוח שצריך לבדוק אצל הספק.',
 };
 
 const MOCK_HE: Record<(typeof MOCK_SUPPLIER_EVENTS)[number], string> = {
@@ -300,6 +304,19 @@ ${d.cancellation ? `<p><span class="flag${d.cancellation.state === 'requested' ?
         ? `<div class="act"><h3>חשבונית</h3><p>נבדקה ידנית: ${esc(d.invoice.checked_by)} · ${when(d.invoice.checked_at)}</p></div>`
         : '';
 
+  // S16 (ת35): a submit that may have reached the supplier: a person checks there before any cancellation or refund
+  const maybeSent = d.supplier_shipments.some(
+    (sh) => sh.status === 'failed' && !sh.supplier_order_id && (sh.reach === 'maybe' || (sh.reach === 'none' && status === 'supplier_error')),
+  );
+  const supplierCheck = maybeSent
+    ? `<form class="act" method="post" action="/admin/orders/${esc(id)}/supplier-check"><h3>בדיקה אצל הספק <span class="flag warn">לפני ביטול</span></h3>
+<p>שליחה לספק נכשלה בדרך שייתכן שבכל זאת יצרה הזמנה אצלו. בדקו אצל הספק לפי מספר ההזמנה <span class="num">${esc(id)}</span> וסמנו מה מצאתם. עד אז אין ביטול עם החזר.</p>
+<fieldset class="row"><legend class="sr-only">מה מצאתם</legend><label class="row"><input type="radio" name="outcome" value="found" required> יש הזמנה אצל הספק</label><label class="row"><input type="radio" name="outcome" value="none"> אין הזמנה אצל הספק</label></fieldset>
+<label>מספר ההזמנה אצל הספק (אם יש)<input name="supplier_order_id" pattern="[A-Za-z0-9/_.\-]{1,80}" dir="ltr" autocomplete="off"></label>
+<label>הערה (נרשמת ביומן)<input name="note" required minlength="2" maxlength="300" autocomplete="off"></label>
+<div class="row"><button class="btn" type="submit">נבדק אצל הספק</button></div></form>`
+    : '';
+
   const mock = mockSupplierOpen(c.env)
     ? `<form class="act" method="post" action="/admin/orders/${esc(id)}/mock-supplier"><h3>ספק מדומה <span class="flag">פיתוח ותצוגה מקדימה בלבד</span></h3>
 <p class="muted">משחק את התשובות של הספק, כמו שספק אמיתי ישלח אותן. ב-production אין את הלוח הזה.</p>
@@ -330,7 +347,7 @@ ${d.cancellation ? `<p><span class="flag${d.cancellation.state === 'requested' ?
 <p class="muted small">נוצרה ${when(o.created_at as string)}${o.paid_at ? ` · שולמה ${when(o.paid_at as string)}` : ''} · ${esc(o.shipping_method === 'express' ? 'משלוח מהיר' : 'משלוח חסכוני')} · סה״כ <span class="num">${ils(o.total_agorot as number)}</span></p>
 ${flash}${flashErr}
 <h2>מצב ההזמנה</h2><div class="tracks">${track('תשלום', paymentNow, d.tracks.payment)}${track('חשבונית', invoiceNow, d.tracks.invoice)}${track('ספק ומשלוח', supplierNow, d.tracks.supplier)}</div>
-<h2>פעולות</h2><div class="acts">${cancel}${refund}${inv}${mock}</div>
+<h2>פעולות</h2><div class="acts">${supplierCheck}${cancel}${refund}${inv}${mock}</div>
 <h2>פריטים</h2>${items}${refunds}${shipTable}
 <h2>לקוח ומשלוח</h2><dl class="kv"><dt>שם</dt><dd>${esc(o.full_name)}</dd><dt>אימייל</dt><dd class="num">${esc(o.email)}</dd><dt>טלפון</dt><dd class="num">${esc(o.phone)}</dd>
 <dt>כתובת</dt><dd>${esc([a.street, a.house].filter(Boolean).join(' '))}${a.apartment ? `, דירה ${esc(a.apartment)}` : ''}, ${esc(a.city)}${a.zip ? ` ${esc(a.zip)}` : ''}</dd>${a.notes ? `<dt>הערות</dt><dd>${esc(a.notes)}</dd>` : ''}</dl>
@@ -394,6 +411,17 @@ adminUi.post('/orders/:id/:action', async (c) => {
       const r = await checkInvoice(c.env, id, actor, outcome === 'found' ? { outcome, invoice_number: number, note } : { outcome, note });
       if (!r.ok) return back(c, id, `error=${r.code}`);
       return back(c, id, `done=invoice_${outcome}`);
+    }
+    if (action === 'supplier-check') {
+      const note = str('note');
+      const outcome = str('outcome');
+      const number = str('supplier_order_id');
+      if (note.length < 2 || note.length > 300) return back(c, id, 'error=invalid_form');
+      if (outcome === 'found' && !/^[A-Za-z0-9/_.-]{1,80}$/.test(number)) return back(c, id, 'error=invalid_form');
+      if (outcome !== 'found' && outcome !== 'none') return back(c, id, 'error=invalid_form');
+      const r = await recordSupplierCheck(c.env, id, actor, outcome === 'found' ? { outcome, supplier_order_id: number, note } : { outcome, note });
+      if (!r.ok) return back(c, id, `error=${r.code}`);
+      return back(c, id, `done=supplier_${outcome}`);
     }
     if (action === 'mock-supplier' && mockSupplierOpen(c.env)) {
       const event = str('event') as (typeof MOCK_SUPPLIER_EVENTS)[number];

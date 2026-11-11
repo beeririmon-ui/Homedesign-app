@@ -173,7 +173,8 @@ export async function cancelOrder(
 
   const missing = pickClient();
   if (missing) return missing;
-  if (!client.cancelOrder)
+  const sup: SupplierClient = client!;
+  if (!sup.cancelOrder)
     return {
       error: true,
       status: 503,
@@ -184,16 +185,16 @@ export async function cancelOrder(
     env.DB.prepare(
       "INSERT INTO cancellations (order_id, stage, state, reason, requested_by, requested_at) VALUES (?, 'after_supplier', 'requested', ?, ?, ?) ON CONFLICT(order_id) DO NOTHING",
     ).bind(orderId, why, actor.slice(0, 200), at),
-    audit(env.DB, at, actor, 'order.cancel_requested', orderId, { stage: 'after_supplier', reason: why, supplier: client.id }),
+    audit(env.DB, at, actor, 'order.cancel_requested', orderId, { stage: 'after_supplier', reason: why, supplier: sup.id }),
   ]);
   const answers: string[] = [];
-  for (const s of open.filter((x) => x.supplier === client!.id && x.supplier_order_id && x.status !== 'cancel_requested')) {
+  for (const s of open.filter((x) => x.supplier === sup.id && x.supplier_order_id && x.status !== 'cancel_requested')) {
     let outcome: 'canceled' | 'requested' | 'refused';
     try {
-      outcome = (await client.cancelOrder(s.supplier_order_id!)).outcome;
+      outcome = (await sup.cancelOrder(s.supplier_order_id!)).outcome;
     } catch (err) {
       // S16, QA ת38: a provider's error by its code only
-      const error_id = log.error('cancel.supplier_failed', { order_id: orderId, supplier: client.id, code: errorCode(err) });
+      const error_id = log.error('cancel.supplier_failed', { order_id: orderId, supplier: sup.id, code: errorCode(err) });
       return { error: true, status: 503, code: 'supplier_failed', message_he: `הספק לא ענה לבקשת הביטול. נסו שוב (קוד ${error_id}).` };
     }
     answers.push(outcome);
@@ -203,7 +204,7 @@ export async function cancelOrder(
       ...(next
         ? [env.DB.prepare('UPDATE supplier_shipments SET status = ?, updated_at = ? WHERE order_id = ? AND supplier = ?').bind(next, t, orderId, s.supplier)]
         : []),
-      audit(env.DB, t, `supplier:${client.id}`, `supplier.cancel_${outcome}`, orderId, { supplier_order: s.supplier_order_id }),
+      audit(env.DB, t, `supplier:${sup.id}`, `supplier.cancel_${outcome}`, orderId, { supplier_order: s.supplier_order_id }),
     ]);
   }
   if (answers.includes('refused')) {
@@ -212,7 +213,7 @@ export async function cancelOrder(
       env.DB.prepare("UPDATE cancellations SET state = 'refused', resolved_at = ? WHERE order_id = ? AND state = 'requested'").bind(t, orderId),
       // a shipment the request had marked goes back to being prepared
       env.DB.prepare("UPDATE supplier_shipments SET status = 'accepted', updated_at = ? WHERE order_id = ? AND status = 'cancel_requested'").bind(t, orderId),
-      audit(env.DB, t, `supplier:${client.id}`, 'order.cancel_refused', orderId, {}),
+      audit(env.DB, t, `supplier:${sup.id}`, 'order.cancel_refused', orderId, {}),
     ]);
     return { outcome: 'refused', stage: 'after_supplier', message_he: 'הספק סירב לבטל: ההזמנה ממשיכה. אחרי המסירה אפשר להחזיר כסף על מה שחוזר.' };
   }

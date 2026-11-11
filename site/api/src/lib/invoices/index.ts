@@ -19,6 +19,7 @@
  * records nothing: it says so loudly, with what the provider gave it, for a person to check for a second invoice.
  */
 import { providerOf, refuseLoudly } from '../config';
+import { errorCode } from '../log';
 import { PROVIDER_CALL_TIMEOUT_MS, withDeadline } from '../deadline';
 
 export type InvoiceInput = {
@@ -172,7 +173,7 @@ export async function processInvoiceJob(
       try {
         found = await withDeadline(`${provider.id} find`, deadline, () => ask(orderId));
       } catch (err) {
-        refuseLoudly('the invoice provider', (err instanceof Error ? err.message : String(err)).slice(0, 500), orderId);
+        refuseLoudly('the invoice provider', `find failed: ${errorCode(err)}`, orderId);
         return 'retry';
       }
       if (found) return recorded(await record(env, orderId, provider.id, found, iso(), row.claimed_at), provider.id, found);
@@ -227,7 +228,8 @@ export async function processInvoiceJob(
     if (err instanceof InvoiceRefused)
       await env.DB.prepare("DELETE FROM invoices WHERE order_id = ? AND state = 'claimed' AND claimed_at = ?").bind(orderId, ours).run();
     else await env.DB.prepare('UPDATE invoices SET last_error = ? WHERE order_id = ? AND claimed_at = ?').bind(msg, orderId, ours).run();
-    refuseLoudly('the invoice provider', msg, orderId);
+    // S16, QA ת38: the provider's text may echo the customer: the log row carries its code; the text stays in D1
+    refuseLoudly('the invoice provider', `issue failed: ${errorCode(err)}`, orderId);
     return 'retry';
   }
   return recorded(await record(env, orderId, provider.id, inv, iso(), ours), provider.id, inv);
@@ -273,8 +275,13 @@ async function record(
     ).bind(at, `invoice:${providerId}`, orderId, JSON.stringify(inv), orderId, orderId, inv.invoice_id, at),
   ]);
   if (done?.meta.changes) return 'recorded';
-  const row = await env.DB.prepare('SELECT state FROM invoices WHERE order_id = ?').bind(orderId).first<{ state: string }>();
-  return row?.state === 'claimed' ? 'lost' : 'already';
+  const row = await env.DB.prepare('SELECT state, provider_invoice_id FROM invoices WHERE order_id = ?')
+    .bind(orderId)
+    .first<{ state: string; provider_invoice_id: string | null }>();
+  if (row?.state === 'claimed') return 'lost';
+  // S16, QA ת40: the run that took over already recorded another invoice: the provider now holds two documents
+  if (row?.state === 'issued' && row.provider_invoice_id !== inv.invoice_id) return 'lost';
+  return 'already';
 }
 
 async function audit(env: Db, providerId: string, action: string, orderId: string, detail: string, at: string): Promise<void> {
@@ -343,7 +350,7 @@ export async function processCreditNoteJob(
       try {
         found = await withDeadline(`${provider.id} findCreditNote`, deadline, () => ask(refundId));
       } catch (err) {
-        refuseLoudly('the credit note provider', (err instanceof Error ? err.message : String(err)).slice(0, 500), r.order_id);
+        refuseLoudly('the credit note provider', `find failed: ${errorCode(err)}`, r.order_id);
         return 'retry';
       }
       if (found) return (await recordCredit(env, r.order_id, refundId, provider.id, found, iso(), r.credit_claimed_at)) ? 'credited' : 'skipped';
@@ -392,13 +399,16 @@ export async function processCreditNoteJob(
         .bind(msg, refundId, ours)
         .run();
     else await env.DB.prepare('UPDATE refunds SET credit_error = ? WHERE id = ? AND credit_claimed_at = ?').bind(msg, refundId, ours).run();
-    refuseLoudly('the credit note provider', msg, r.order_id);
+    refuseLoudly('the credit note provider', `credit note failed: ${errorCode(err)}`, r.order_id);
     return 'retry';
   }
   if (await recordCredit(env, r.order_id, refundId, provider.id, cn, iso(), ours)) return 'credited';
-  // ת31: not recorded, and still claimed: another run holds the claim now; a person checks for a second credit note
-  const still = await env.DB.prepare('SELECT credit_state FROM refunds WHERE id = ?').bind(refundId).first<{ credit_state: string }>();
-  if (still?.credit_state !== 'claimed') return 'skipped';
+  // ת31: not recorded, and still claimed: another run holds the claim now; a person checks for a second credit note.
+  // S16, QA ת40: and when the run that took over already recorded another credit note, the same: two at the provider
+  const still = await env.DB.prepare('SELECT credit_state, credit_note_id FROM refunds WHERE id = ?')
+    .bind(refundId)
+    .first<{ credit_state: string; credit_note_id: string | null }>();
+  if (still?.credit_state !== 'claimed' && !(still?.credit_state === 'issued' && still.credit_note_id !== cn.credit_note_id)) return 'skipped';
   const detail = `the credit note claim was taken over by another run before ${provider.id} answered (${cn.credit_note_id}): not recorded; check the provider for a second credit note`;
   await auditAs(
     env,

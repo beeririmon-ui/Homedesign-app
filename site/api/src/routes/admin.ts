@@ -16,7 +16,7 @@ import { HttpError, readJson } from '../lib/http';
 import { adminSameOrigin, requireAdmin } from '../lib/access';
 import { economics } from '../lib/store';
 import { FILTERS, checkInvoice, listOrders, orderDetail } from '../lib/admin-orders';
-import { cancelOrder } from '../lib/cancel';
+import { cancelOrder, recordSupplierCheck } from '../lib/cancel';
 import { REFUND_KEY, requestRefund } from '../lib/refunds';
 import { applySupplierUpdate } from '../lib/shipments';
 import { isProduction } from '../lib/config';
@@ -96,6 +96,18 @@ export const InvoiceCheckBody = z.discriminatedUnion('outcome', [
   }),
   z.object({ outcome: z.literal('none'), note: Reason }),
 ]);
+/** S16 (ת35): a person's check at the supplier, for a shipment that may be there */
+export const SupplierCheckBody = z.discriminatedUnion('outcome', [
+  z.object({
+    outcome: z.literal('found'),
+    supplier_order_id: z
+      .string()
+      .trim()
+      .regex(/^[A-Za-z0-9/_.-]{1,80}$/),
+    note: Reason,
+  }),
+  z.object({ outcome: z.literal('none'), note: Reason }),
+]);
 export const MOCK_SUPPLIER_EVENTS = ['accepted', 'shipped', 'delivered', 'cancel_confirmed', 'cancel_refused'] as const;
 export const MockSupplierBody = z.object({ event: z.enum(MOCK_SUPPLIER_EVENTS) });
 
@@ -137,6 +149,14 @@ admin.post('/orders/:id/invoice-check', async (c) => {
   const id = orderIdOf(c);
   const body = await readJson(c, InvoiceCheckBody);
   const r = await checkInvoice(c.env, id, c.get('actor'), body);
+  if (!r.ok) return c.json({ error: r.code, message_he: r.message_he }, r.status);
+  return c.json(r);
+});
+
+admin.post('/orders/:id/supplier-check', async (c) => {
+  const id = orderIdOf(c);
+  const body = await readJson(c, SupplierCheckBody);
+  const r = await recordSupplierCheck(c.env, id, c.get('actor'), body);
   if (!r.ok) return c.json({ error: r.code, message_he: r.message_he }, r.status);
   return c.json(r);
 });

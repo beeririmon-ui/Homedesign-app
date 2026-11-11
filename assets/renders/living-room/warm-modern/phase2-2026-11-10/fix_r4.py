@@ -150,15 +150,21 @@ def qa_lamp_masks(A8):
 
 
 def collar_mask(rgb_w, a_w, M):
-    """the brass collar under the shade and the top of the pull chain: brass / chain colour (b* > 26 or L < 80, ungraded) in a box round
-    the stem's top and in the chain's column, grown 2 px; never fabric"""
+    """the brass collar under the shade and the top of the pull chain, which keep their pixels: brass colour (ungraded b* > 32, or
+    L* < 75 with b* > 20) in the shade's lowest rows, only the pieces connected to the stem's top or to the chain's column below the shade
+    (so no dark fold of the fabric is taken for brass). Returns the brass core and its 1 px ring (mixed brass / fabric pixels, which take
+    half the fabric's change)"""
     Lw = lab(rgb_w)
-    box = np.zeros(a_w.shape, bool)
-    box[M["bot"] - 14:M["bot"] + 6, 2410:2452] = True
-    chain = np.zeros(a_w.shape, bool)
-    chain[M["bot"] - 8:M["bot"] + 6, 2458:2478] = True
-    m = (box | chain) & (a_w > 0.02) & ((Lw[..., 2] > 26) | (Lw[..., 0] < 80))
-    return X.dil(m, 2) & (box | chain)
+    brass = (a_w > 0.02) & ((Lw[..., 2] > 32) | ((Lw[..., 0] < 75) & (Lw[..., 2] > 20)))
+    brass[:M["bot"] - 14] = False
+    brass[M["bot"] + 8:] = False
+    n, lab_ = cv2.connectedComponents(brass.astype(np.uint8), connectivity=8)
+    seed = np.zeros(brass.shape, bool)
+    seed[M["bot"] + 2:M["bot"] + 8, 2405:2456] = True          # the stem's top under the collar
+    seed[M["bot"] + 2:M["bot"] + 8, 2458:2478] = True          # the chain's column under the shade
+    keep = np.isin(lab_, [i for i in np.unique(lab_[seed & brass]) if i > 0])
+    ring = X.dil(keep, 1) & ~keep & (a_w > 0.02)
+    return keep, ring
 
 
 def lamp_measure(G8, M, fabric=None):
@@ -209,7 +215,7 @@ def raw_step2_registered(rgb_w, M):
                       residual_after_px=[round(dx2, 3), round(dy2, 3)])
 
 
-def lamp_tone_rgb(rgb_w, a_w, raw, M, fab, zone, p):
+def lamp_tone_rgb(rgb_w, a_w, raw, M, fab, zone, ring, p):
     """the toned RGB of the lamp layer (ungraded). p: Lmid, G (left-right spread), D (lower drop), s (fold detail gain), bT (low b*)"""
     H, Wd = a_w.shape
     Lr = lab(raw)
@@ -235,8 +241,9 @@ def lamp_tone_rgb(rgb_w, a_w, raw, M, fab, zone, p):
     dlt, _ = nblur(new - rgb_w, full.astype(np.float32), 3.0)
     out = rgb_w.copy()
     soft = zone & ~full
+    k = a_w * np.where(ring, 0.5, 1.0)                     # the collar's 1 px ring: half the change (mixed brass and fabric)
     out[full] = new[full]
-    out[soft] = np.clip(rgb_w[soft] + a_w[soft][:, None] * dlt[soft], 0, 1)
+    out[soft] = np.clip(rgb_w[soft] + k[soft][:, None] * dlt[soft], 0, 1)
     return out
 
 
@@ -246,8 +253,8 @@ def lamp():
     rgb_w, a_w = Lw[..., :3], Lw[..., 3]
     A8 = np.asarray(Image.open(os.path.join(HERE, "layers", BYID["floor-lamp"]["file"])))[..., 3]
     M = qa_lamp_masks(A8)
-    col = collar_mask(rgb_w, a_w, M)
-    fab = ((a_w >= 0.999) & ~col).astype(np.float32)
+    col, ring = collar_mask(rgb_w, a_w, M)
+    fab = ((a_w >= 0.999) & ~col & ~ring).astype(np.float32)
     fab[:M["top"] - 2], fab[M["bot"] + 3:] = 0, 0
     zone = (a_w > 0) & ~col
     zone[:M["top"] - 2], zone[M["bot"] + 3:] = False, False
@@ -269,14 +276,14 @@ def lamp():
     fabric_qa = M["shade"] & (fab > 0.5)
     G0 = np.asarray(Image.open(os.path.join(HERE, "graded/default-scene-r3-set-B-graded-v3c.png")).convert("RGB"))
     before = lamp_measure(G0, M, fabric_qa)
-    ring = before["ring"]
+    wall = before["ring"]
     hp0 = before["qa_shade_mask"]["highpass_std"]
     # targets with margins: right third = ring - 2.4, left = right + 5.6 (<= ring + 3.2), the bottom 15 % = right - 6.5, median b* = ring b* + 2.4
-    want = dict(right=ring["L"] - 2.4, left=ring["L"] + 3.2, bottom=ring["L"] - 2.4 - 6.5, b=ring["b"] + 2.4)
-    p = dict(Lmid=ring["L"], G=8.0, D=9.0, v0=0.55, v1=0.92, s=0.7, sc=0.8, bT=want["b"], b_soft=ring["b_p95"] + 5.6, b_lim=ring["b_p95"] + 7.4)
+    want = dict(right=wall["L"] - 2.4, left=wall["L"] + 3.2, bottom=wall["L"] - 2.4 - 6.5, b=wall["b"] + 2.4)
+    p = dict(Lmid=wall["L"], G=8.0, D=9.0, v0=0.70, v1=0.88, s=0.7, sc=0.8, bT=want["b"], b_soft=wall["b_p95"] + 5.6, b_lim=wall["b_p95"] + 7.4)
     hist = []
     for it in range(14):
-        rgb_n = lamp_tone_rgb(rgb_w, a_w, raw, M, fab, zone, p)
+        rgb_n = lamp_tone_rgb(rgb_w, a_w, raw, M, fab, zone, ring, p)
         Un = U + (rgb_n - rgb_w) * vis
         Gn = Gr(Un)
         m = lamp_measure(Gn, M, fabric_qa)["fabric_only"]
@@ -292,7 +299,7 @@ def lamp():
         p["D"] -= e_b - 0.5 * (e_r + e_l)
         p["bT"] += e_c
         p["s"] *= e_h ** 0.9
-    rgb_n = lamp_tone_rgb(rgb_w, a_w, raw, M, fab, zone, p)
+    rgb_n = lamp_tone_rgb(rgb_w, a_w, raw, M, fab, zone, ring, p)
     pl = save_layer("floor-lamp", rgb_n, a_w)
     for f in ("floor-lamp-free-alpha.png",):
         dst = os.path.join(WR4, "layers", f)
@@ -307,7 +314,7 @@ def lamp():
         what="the shade fabric toned to the designer's targets (section 5), so the product layer reads off; the collar, stem, base and chain "
              "keep their pixels; the light comes from the light layer later (code)",
         source=dict(layer=rel(LAMP_W), raw=rel(os.path.join(W.RAW, "step2-seedream.png")), registration=regrec),
-        masks=dict(shade_rows=[M["top"], M["bot"]], shade_cols=[M["x0"], M["x1"]], fabric_px=int(fab.sum()), collar_and_chain_px=int(col.sum()),
+        masks=dict(shade_rows=[M["top"], M["bot"]], shade_cols=[M["x0"], M["x1"]], fabric_px=int(fab.sum()), collar_and_chain_px=int(col.sum()), collar_ring_px=int(ring.sum()),
                    changed_px=int(changed.sum()), changed_outside_zone_px=int((changed & ~zone).sum())),
         method=dict(low_frequencies="replaced by T(u, v) = Lmid + G (0.5 - u) - D smoothstep((v - v0) / (v1 - v0)) in graded L* (u across the shade's "
                                     "columns, v down its rows); b* low = bT at the fabric's own hue",
