@@ -277,7 +277,7 @@ def lamp():
     G0 = np.asarray(Image.open(os.path.join(HERE, "graded/default-scene-r3-set-B-graded-v3c.png")).convert("RGB"))
     before = lamp_measure(G0, M, fabric_qa)
     wall = before["ring"]
-    hp0 = before["qa_shade_mask"]["highpass_std"]
+    hp0 = before["fabric_only"]["highpass_std"]               # the folds: the fabric's graded high-pass std as in r3 (like for like)
     # targets with margins: right third = ring - 2.4, left = right + 5.6 (<= ring + 3.2), the bottom 15 % = right - 6.5, median b* = ring b* + 2.4
     want = dict(right=wall["L"] - 2.4, left=wall["L"] + 3.2, bottom=wall["L"] - 2.4 - 6.5, b=wall["b"] + 2.4)
     p = dict(Lmid=wall["L"], G=8.0, D=9.0, v0=0.70, v1=0.88, s=0.7, sc=0.8, bT=want["b"], b_soft=wall["b_p95"] + 5.6, b_lim=wall["b_p95"] + 7.4)

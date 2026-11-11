@@ -168,15 +168,15 @@
   "source": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r3/r3a-regt.npy",
   "below": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r3/scene-B9.png",
   "rematte": "the soft edge re-estimated from the render, in the selection only: F = the product's colour just inside (normalised blur over the     alpha core, eroded 3 px), B = the render's background just outside (2-7 px beyond the cut, on `bg`); per pixel of the edge band the     alpha is the projection of its colour on F - B (where |F - B| > 0.06; elsewhere the old alpha); the outline is smoothed at 4x (sigma     1 px) and anti-aliased; the colour in the band is un-mixed (C - (1 - a) B) / a toward F, so no background of the render stays in it",
-  "shadow": "R3's measured contact shadow, with the edge fix only: extract.shadow_one blurs the darkening with zeros inside the product and then     lightens the soft edge by (1 - a) + a, so within ~3 px of the product it fades out and a lighter strip shows between the product and     its shadow (the basket's light line, the planter's ghost). Here, within 3 px outside the product and on its soft edge (0 < a < 1),     each pixel takes the shadow R3 measured 3-4.5 px out from the product (its nearest such pixel), never lighter than R3's own value     and, where that is a real shadow (<= 0.85), never lighter than the render's own darkening right there (the contact occlusion; at most     20 % deeper); everywhere else the shadow is R3's, unchanged",
+  "shadow": "R3's measured contact shadow, with the edge fix only: extract.shadow_one blurs the darkening with zeros inside the product and then     lightens the soft edge by (1 - a) + a, so within ~3 px of the product it fades out and a lighter strip shows between the product and     its shadow (the basket's light line, the planter's ghost). Here, within 3 px outside the product and on its soft edge (0 < a < 1),     each pixel takes the shadow R3 measured 3-4.5 px out from the product (a sigma-2.5 blur normalised over that ring, so it follows the     edge and tapers where R3's shadow ends), never lighter than R3's own value     and, where that is a real shadow (<= 0.85), never lighter than the render's own darkening right there (the contact occlusion; at most     20 % deeper); everywhere else the shadow is R3's, unchanged",
   "basket": {
    "alpha_and_rgb": "R3's (work-r3/layers/basket.png), unchanged",
    "shadow": {
-    "edge_px_extended": 1895,
+    "edge_px_extended": 1889,
     "reference_px": 841
    },
    "shadow_recomputed_equals_r3_px": 4161201,
-   "shadow_px_changed_vs_r3": 2216
+   "shadow_px_changed_vs_r3": 2213
   },
   "planter": {
    "selection": "the pot's left side, rows 1046-1205, x 935-1010, off the basket (+3 px) and off its R3 contact shadow (+4 px)",
@@ -196,10 +196,10 @@
     "alpha_cut_px": 121
    },
    "shadow": {
-    "edge_px_extended": 551,
+    "edge_px_extended": 550,
     "reference_px": 231
    },
-   "shadow_px_changed_vs_r3": 551
+   "shadow_px_changed_vs_r3": 550
   }
  },
  "floor-lamp": {
@@ -243,7 +243,7 @@
    "fabric_px": 18156,
    "collar_and_chain_px": 215,
    "collar_ring_px": 91,
-   "changed_px": 20615,
+   "changed_px": 20616,
    "changed_outside_zone_px": 0
   },
   "method": {
@@ -252,12 +252,12 @@
    "warmth": "b* soft knee from ring p95 + 5.6, never past ring p95 + 7.4",
    "soft_edge": "the alpha < 1 rim keeps its render mix plus alpha x the fabric's local change",
    "params": {
-    "Lmid": 87.965,
-    "G": 9.716,
-    "D": 11.395,
+    "Lmid": 87.9,
+    "G": 9.8,
+    "D": 11.37,
     "v0": 0.7,
     "v1": 0.88,
-    "s": 0.6702,
+    "s": 0.6042,
     "sc": 0.8,
     "bT": 8.49,
     "b_soft": 14.33,
@@ -292,37 +292,37 @@
       "D": 10.92,
       "v0": 0.7,
       "v1": 0.88,
-      "s": 0.662,
+      "s": 0.605,
       "sc": 0.8,
       "bT": 8.5,
       "b_soft": 14.33,
       "b_lim": 16.13
      },
-     "left": 88.7,
-     "right": 83.39,
-     "bottom": 77.22,
+     "left": 88.73,
+     "right": 83.49,
+     "bottom": 77.26,
      "b": 9.05,
-     "hp": 1.839
+     "hp": 1.686
     },
     {
      "it": 2,
      "p": {
-      "Lmid": 87.965,
-      "G": 9.716,
-      "D": 11.395,
+      "Lmid": 87.9,
+      "G": 9.8,
+      "D": 11.37,
       "v0": 0.7,
       "v1": 0.88,
-      "s": 0.67,
+      "s": 0.604,
       "sc": 0.8,
       "bT": 8.49,
       "b_soft": 14.33,
       "b_lim": 16.13
      },
      "left": 88.87,
-     "right": 83.4,
-     "bottom": 76.92,
+     "right": 83.44,
+     "bottom": 76.96,
      "b": 9.03,
-     "hp": 1.856
+     "hp": 1.681
     }
    ]
   },
