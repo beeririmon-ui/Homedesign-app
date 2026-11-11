@@ -4,7 +4,7 @@
  */
 import { useEffect, useState } from 'preact/hooks';
 import type { OrderView } from '@hd/shared';
-import { ORDER_STEPS_HE, orderStep } from '@hd/shared/constants';
+import { ORDER_DELAY_HE, ORDER_STEPS_HE, orderStep } from '@hd/shared/constants';
 import { lineName, splitLineName } from '@hd/shared/lines';
 import { api, ApiError } from '../api';
 import { orderToken } from '../state/cart';
@@ -259,7 +259,14 @@ export function OrderPage({ id }: { id: string }) {
         setOrder(o);
         if (o.status === 'pending_payment' && ++tries < 10) timer = setTimeout(() => void poll(), 1500);
       } catch (e) {
-        setError(e instanceof ApiError && e.status === 404 ? 'ההזמנה לא נמצאה.' : 'לא הצלחנו לטעון את ההזמנה. נסו לרענן את הדף.');
+        // S16, QA ת37: the server's own words (with its error code), as the checkout shows them
+        setError(
+          e instanceof ApiError && e.status === 404
+            ? 'ההזמנה לא נמצאה.'
+            : e instanceof ApiError && e.messageHe
+              ? e.messageHe
+              : 'לא הצלחנו לטעון את ההזמנה. נסו לרענן את הדף.',
+        );
       }
     };
     void poll();
@@ -302,6 +309,12 @@ export function OrderPage({ id }: { id: string }) {
               סטטוס: <span class="status-pill">{order.status_he}</span>
             </p>
           )}
+          {order.status === 'supplier_error' ? (
+            // S16 (QA ה7): an order stuck on a supplier error is said honestly, in neutral words
+            <p class="order-delay" role="status">
+              {ORDER_DELAY_HE}
+            </p>
+          ) : null}
           {order.shipments?.length ? <Tracking shipments={order.shipments} /> : null}
           {order.refunded_agorot ? (
             <p class="order-refund">

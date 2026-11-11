@@ -14,11 +14,12 @@
  *   refusal frees the amount. A failure that may have moved money keeps the claim: the same key again asks again, and a
  *   provider that can neither deduplicate nor be asked leaves it `unresolved` for a person, never a second refund.
  * - **S16, QA ת36, one call at a time, for every provider:** the call to the provider holds a lease on the refund
- *   (`in_flight_until`, the invoice job's 10 minutes), taken in one statement before the call and given back when it
- *   ends. The same refund asked for while a call is running is 409 `in_progress`, whatever the provider (five requests
- *   at once with the same key: one call). Once no call is running (it ended in a failure, or a crash outlived its
- *   lease), a provider that does not deduplicate is asked first (`findRefund`), and called again only when it holds none.
- *   The call itself has the providers' deadline (lib/deadline.ts), far below the lease.
+ *   (`in_flight_until`, the invoice job's 10 minutes), taken in one statement before the call. The same refund asked for
+ *   while the lease runs is 409 `in_progress`, whatever the provider (five requests at once with the same key: one
+ *   call). A call that ends refunded or refused gives it back; one that fails gives it back only to a provider that
+ *   deduplicates (the same key again returns its first refund). For one that does not, a call that timed out may still
+ *   complete there: the lease is waited out, then the provider is asked (`findRefund`) and called again only when it
+ *   holds none, or a person checks it. The call itself has the providers' deadline (lib/deadline.ts), far below the lease.
  */
 import type { Env } from '../env';
 import { formatIls } from '@hd/shared/money';
@@ -210,8 +211,12 @@ export async function requestRefund(
         ]);
         return fail(422, 'refused', 'הסולק סירב להחזר: לא הועבר כסף.', row.id);
       }
-      // the call ended (a failure that may have moved money): the lease is given back, the claim stays
-      await env.DB.prepare('UPDATE refunds SET last_error = ?, in_flight_until = NULL WHERE id = ?').bind(msg, row.id).run();
+      // the call ended in a failure that may have moved money; the claim stays. A provider that deduplicates gets the
+      // lease back (the same key again returns its first refund); one that does not keeps it: a call that timed out may
+      // still complete there, so the refund waits out the lease before the provider is asked (QA ת36)
+      await env.DB.prepare('UPDATE refunds SET last_error = ?, in_flight_until = CASE WHEN ? = 1 THEN NULL ELSE in_flight_until END WHERE id = ?')
+        .bind(msg, provider.refundsIdempotent ? 1 : 0, row.id)
+        .run();
       const error_id = log.error('refund.provider_failed', { order_id: row.order_id, refund_id: row.id, code: errorCode(err) });
       return fail(502, 'provider_failed', `הסולק לא ענה. ההחזר שמור, ואפשר לשלוח אותו שוב באותו מפתח (קוד ${error_id}).`, row.id);
     }

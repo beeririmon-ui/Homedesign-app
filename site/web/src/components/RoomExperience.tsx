@@ -11,7 +11,7 @@ import { navigate } from '../router';
 import { RoomEngine } from '../engine/engine';
 import { coverSize, defaultCam, frameToScreen, screenToFrame } from '../engine/camera';
 import { slotSources } from '../engine/layers';
-import { mediaUrl } from '../media';
+import { mediaUrl, supportsAvif } from '../media';
 import { Picture } from './Media';
 import type { VariantWheel as WheelComponent } from './VariantWheel';
 import { IconDoor, IconLeft, IconRight } from './Icons';
@@ -135,6 +135,7 @@ export function RoomExperience({
     if (img && cam.z < 1.001) {
       const { fw, fh } = coverSize(vp, scene.aspect);
       img.style.objectPosition = `${(vp.w / 2 - cam.cu * fw).toFixed(1)}px ${(vp.h / 2 - cam.cv * fh).toFixed(1)}px`;
+      img.style.backgroundPosition = img.style.objectPosition;
     }
     const { fw, fh } = coverSize(vp, scene.aspect);
     // the outlines follow the same camera: the SVG is the whole frame, scaled and shifted like the picture
@@ -235,7 +236,15 @@ export function RoomExperience({
       idle = requestIdleCallbackSafe(() => {
         idled.current = true;
         void loadWheel();
-        background();
+        if (!cur.current.house.scene.poster) return background();
+        // S16, QA ת43: a browser without AVIF painted the poster's WebP fallback (lossy q95: exempt from the encoding
+        // threshold, held to the first-load budget); the engine, whose layers meet the threshold, takes over at idle.
+        // It fetches every other variant itself once the room is composed, so no prefetch races it for the same files
+        void supportsAvif().then((avif) => {
+          if (avif || cur.current.waiting) return background();
+          if (cur.current.house.style === NORDIC) preload('T-E0');
+          void ensureEngine();
+        });
       });
     };
     // only after the page has fully loaded, so background bytes never compete with the first paint
@@ -519,6 +528,8 @@ export function RoomExperience({
           loading="eager"
           fetchpriority="high"
           imgRef={poster}
+          // S16, QA ה1: until the poster arrives, a tiny inlined picture of the same composition (never a dark stage)
+          style={scene.poster?.placeholder ? { backgroundImage: `url("${scene.poster.placeholder}")` } : undefined}
         />
       )}
       {/* the composed room is a picture, not a control: the hotspot buttons and the list below are the interactive parts */}

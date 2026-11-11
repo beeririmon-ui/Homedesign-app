@@ -84,7 +84,8 @@ def remeasure(files):
     G0 = np.asarray(Image.open(os.path.join(GRD, "default-scene-r3-set-B-graded-v3c.png")).convert("RGB"))
     out["floor-lamp"]["r3_for_comparison"] = F.lamp_measure(G0, M, M["shade"] & ~core & ~ring)
     out["vase"] = {k: FIXREC["vase"][k] for k in ("measured_before", "before_cm", "measured_after", "after_cm", "base_kept", "card_at_its_place_px",
-                                                  "stands_at", "scale", "status")}
+                                                  "stands_at", "scale")}
+    out["vase"]["fix_status"] = FIXREC["vase"]["status"]
     a = np.asarray(Image.open(files[("basket", None)][0]))[..., 3] >= 128
     w = a.sum(1)
     a3 = np.asarray(Image.open(os.path.join(LAY, "basket/basket-cj-jute-rope-cylinder.png")))[..., 3] >= 128
@@ -168,7 +169,7 @@ def main():
         os.makedirs(d, exist_ok=True)
         key = f"{k}{'-' + s if s else ''}"
         found = None
-        for suf in ("", "-r12", "-r3"):
+        for suf in ("", "-r12", "-r3", "-r4"):
             lp_old, sp_old = os.path.join(d, f"{stem}{suf}.png"), os.path.join(d, f"{stem}{suf}-shadow.png")
             if os.path.exists(lp_old) and os.path.exists(sp_old):
                 if (np.array_equal(np.asarray(Image.open(lp_old)), r["L"]) and
@@ -226,7 +227,7 @@ def write_manifest(G, files, results, regions, cush_changed, overlap, reused, me
             rec["fix_r4"] = dict(record="../work-r4/fix-r4.json#" + {"planter": "edges", "basket": "edges"}.get(k, k), remeasured=meas[k],
                                  previous_file=r3by[k]["file"])
         if k == "vase":
-            rec["status"] = "size fixed; placement pending the designer"
+            rec["fix_status"] = "size fixed; placement pending the designer"     # not "status": that key marks a PENDING (unused) layer
             rec["position_status"] = "pending the designer: accept its place on the bench (~0.29 m nearer the camera than the plan point) or re-render at the plan point (~650)"
         layers.append(rec)
     sets = {}

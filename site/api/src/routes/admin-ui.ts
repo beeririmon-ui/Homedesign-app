@@ -312,7 +312,7 @@ ${d.cancellation ? `<p><span class="flag${d.cancellation.state === 'requested' ?
     ? `<form class="act" method="post" action="/admin/orders/${esc(id)}/supplier-check"><h3>בדיקה אצל הספק <span class="flag warn">לפני ביטול</span></h3>
 <p>שליחה לספק נכשלה בדרך שייתכן שבכל זאת יצרה הזמנה אצלו. בדקו אצל הספק לפי מספר ההזמנה <span class="num">${esc(id)}</span> וסמנו מה מצאתם. עד אז אין ביטול עם החזר.</p>
 <fieldset class="row"><legend class="sr-only">מה מצאתם</legend><label class="row"><input type="radio" name="outcome" value="found" required> יש הזמנה אצל הספק</label><label class="row"><input type="radio" name="outcome" value="none"> אין הזמנה אצל הספק</label></fieldset>
-<label>מספר ההזמנה אצל הספק (אם יש)<input name="supplier_order_id" pattern="[A-Za-z0-9/_.\-]{1,80}" dir="ltr" autocomplete="off"></label>
+<label>מספר ההזמנה אצל הספק (אם יש)<input name="supplier_order_id" pattern="[A-Za-z0-9\\/_.\\-]{1,80}" dir="ltr" autocomplete="off"></label>
 <label>הערה (נרשמת ביומן)<input name="note" required minlength="2" maxlength="300" autocomplete="off"></label>
 <div class="row"><button class="btn" type="submit">נבדק אצל הספק</button></div></form>`
     : '';

@@ -28,11 +28,14 @@
   object-fit: cover;
   /* same framing as the engine's default camera (centre u 0.5); JS keeps it in step with the camera after load */
   object-position: 50% 50%;
+  /* S16, QA ה1: the inlined placeholder (style attribute) under the picture, framed exactly like it */
+  background: no-repeat 50% 50% / cover;
 }
 @media (max-aspect-ratio: 11/10) {
   /* portrait: the camera centres the frame at --cu (scene.mobile_center_u); the frame is (stage height × 16/9) wide */
   .stage .poster {
     object-position: max(calc(100vw - (100svh - var(--header-h)) * 1.7778), min(0px, calc(50vw - var(--cu, 0.5) * (100svh - var(--header-h)) * 1.7778))) 50%;
+    background-position: max(calc(100vw - (100svh - var(--header-h)) * 1.7778), min(0px, calc(50vw - var(--cu, 0.5) * (100svh - var(--header-h)) * 1.7778))) 50%;
   }
 }
 .stage .seq-canvas {

@@ -21,6 +21,8 @@ type PictureProps = {
   loading?: 'eager' | 'lazy';
   fetchpriority?: 'high' | 'low' | 'auto';
   imgRef?: Ref<HTMLImageElement>;
+  /** S16: inline style of the img (the stage poster's inlined placeholder, as its background) */
+  style?: Record<string, string>;
   width?: number;
   height?: number;
 };
@@ -35,6 +37,7 @@ export function Picture(p: PictureProps) {
       <img
         ref={p.imgRef}
         class={p.class}
+        style={p.style}
         src={mediaUrl(p.src, fallbackW, 'webp')}
         srcset={srcset(p.src, p.widths, 'webp')}
         sizes={p.sizes}

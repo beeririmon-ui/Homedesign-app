@@ -1,0 +1,137 @@
+$ (production SUPPLIER_PROVIDER mutated to "CJ") npx wrangler deploy --dry-run --env production --outdir <scratch>   # bare wrangler, no npm script
+ ⛅️ wrangler 4.149.0 (update available 4.160.1)
+───────────────────────────────────────────────
+[custom build] Running: npx tsx scripts/check-config.ts
+[custom build] check-config: 1 provider settings would not run:
+[custom build]   production: SUPPLIER_PROVIDER="CJ" is not a provider (cj, mock)
+[custom build] 
+✘ [ERROR] k [Error]: Process exited with non-zero status (1)
+      at I2._waitForOutput (/home/user/homedesign-app/site/node_modules/wrangler/wrangler-dist/cli.js:161927:98)
+      at async runCommand (/home/user/homedesign-app/site/node_modules/wrangler/wrangler-dist/cli.js:190318:26)
+      at async runCustomBuild (/home/user/homedesign-app/site/node_modules/wrangler/wrangler-dist/cli.js:190346:5)
+      at async getEntry (/home/user/homedesign-app/site/node_modules/wrangler/wrangler-dist/cli.js:204140:3)
+      at async mergeSharedConfigArgs (/home/user/homedesign-app/site/node_modules/wrangler/wrangler-dist/cli.js:219982:17)
+      at async mergeDeployConfigArgs (/home/user/homedesign-app/site/node_modules/wrangler/wrangler-dist/cli.js:220052:34)
+      at async runDeployCommandHandler (/home/user/homedesign-app/site/node_modules/wrangler/wrangler-dist/cli.js:295724:33)
+      at async Object.handler (/home/user/homedesign-app/site/node_modules/wrangler/wrangler-dist/cli.js:295879:9)
+      at async /home/user/homedesign-app/site/node_modules/wrangler/wrangler-dist/cli.js:236481:26
+      at async Object.handler (/home/user/homedesign-app/site/node_modules/wrangler/wrangler-dist/cli.js:236416:7) {
+    result: I {
+      _process: ChildProcess {
+        _events: [Object: null prototype] {},
+        _eventsCount: 0,
+        _maxListeners: undefined,
+        _closesNeeded: 3,
+        _closesGot: 3,
+        connected: false,
+        signalCode: null,
+        exitCode: 1,
+        killed: false,
+        spawnfile: '/bin/sh',
+        _handle: null,
+        spawnargs: [Array],
+        pid: 17422,
+        stdin: [Socket],
+        stdout: [Socket],
+        stderr: [Socket],
+        stdio: [Array],
+        [Symbol(shapeMode)]: false,
+        [Symbol(kCapture)]: false
+      },
+      _aborted: false,
+      _options: {
+        timeout: undefined,
+        persist: false,
+        nodeOptions: [Object],
+        throwOnError: true,
+        nodePath: false
+      },
+      _command: 'npx tsx scripts/check-config.ts',
+      _args: [],
+      _resolveClose: [Function (anonymous)],
+      _processClosed: Promise {
+        undefined,
+        [Symbol(async_id_symbol)]: 150,
+        [Symbol(trigger_async_id_symbol)]: 138,
+        [Symbol(kResourceStore)]: [Object]
+      },
+      _thrownError: undefined,
+      _streamOut: Socket {
+        connecting: false,
+        _hadError: false,
+        _parent: null,
+        _host: null,
+        _closeAfterHandlingError: false,
+        _events: [Object],
+        _readableState: [ReadableState],
+        _writableState: [WritableState],
+        allowHalfOpen: false,
+        _maxListeners: undefined,
+        _eventsCount: 5,
+        _sockname: null,
+        _pendingData: null,
+        _pendingEncoding: '',
+        server: null,
+        _server: null,
+        write: [Function: writeAfterFIN],
+        [Symbol(async_id_symbol)]: 153,
+        [Symbol(kHandle)]: null,
+        [Symbol(lastWriteQueueSize)]: 0,
+        [Symbol(timeout)]: null,
+        [Symbol(kBuffer)]: null,
+        [Symbol(kBufferCb)]: null,
+        [Symbol(kBufferGen)]: null,
+        [Symbol(shapeMode)]: true,
+        [Symbol(kCapture)]: false,
+        [Symbol(kSetNoDelay)]: false,
+        [Symbol(kSetKeepAlive)]: false,
+        [Symbol(kSetKeepAliveInitialDelay)]: 0,
+        [Symbol(kBytesRead)]: 0,
+        [Symbol(kBytesWritten)]: 0
+      },
+      _streamErr: Socket {
+        connecting: false,
+        _hadError: false,
+        _parent: null,
+        _host: null,
+        _closeAfterHandlingError: false,
+        _events: [Object],
+        _readableState: [ReadableState],
+        _writableState: [WritableState],
+        allowHalfOpen: false,
+        _maxListeners: undefined,
+        _eventsCount: 5,
+        _sockname: null,
+        _pendingData: null,
+        _pendingEncoding: '',
+        server: null,
+        _server: null,
+        write: [Function: writeAfterFIN],
+        [Symbol(async_id_symbol)]: 154,
+        [Symbol(kHandle)]: null,
+        [Symbol(lastWriteQueueSize)]: 0,
+        [Symbol(timeout)]: null,
+        [Symbol(kBuffer)]: null,
+        [Symbol(kBufferCb)]: null,
+        [Symbol(kBufferGen)]: null,
+        [Symbol(shapeMode)]: true,
+        [Symbol(kCapture)]: false,
+        [Symbol(kSetNoDelay)]: false,
+        [Symbol(kSetKeepAlive)]: false,
+        [Symbol(kSetKeepAliveInitialDelay)]: 0,
+        [Symbol(kBytesRead)]: 115,
+        [Symbol(kBytesWritten)]: 0
+      },
+      _onError: [Function: _onError],
+      _onClose: [Function: _onClose]
+    },
+    output: {
+      stderr: 'check-config: 1 provider settings would not run:\n' +
+        '  production: SUPPLIER_PROVIDER="CJ" is not a provider (cj, mock)\n',
+      stdout: '',
+      exitCode: 1
+    }
+  }
+✘ [ERROR] Running custom build `npx tsx scripts/check-config.ts` failed. There are likely more logs from your build command above.
+🪵  Logs were written to "/root/.config/.wrangler/logs/wrangler-2026-11-11_20-35-09_706.log"
+exit: 1

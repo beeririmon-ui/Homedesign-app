@@ -28,6 +28,28 @@ export function shortId(cardId: string): string {
   return fnv1a(cardId).toString(36).padStart(7, '0').slice(-5);
 }
 
+/**
+ * S16, QA ת41: a card id that names a supplier or a marketplace ("-cj-", "aliexpress", "zendrop"), or carries a listing
+ * number (six digits or more), as one of its words. The public build's `_redirects` leaves such old addresses out.
+ */
+export function namesSupplier(cardId: string): boolean {
+  return cardId
+    .toLowerCase()
+    .split(/[^a-z0-9]+/)
+    .some((w) => SUPPLIERS.has(w) || /^\d{6,}$/.test(w));
+}
+
+/**
+ * The old product addresses (by card id) that move to the neutral ones, as `_redirects` lines. S16, QA ת41: a public
+ * build leaves out every card id that names a supplier (the site was never public, so nothing links to them).
+ */
+export function cardRedirects(products: { id: string; card_id?: string }[], opts: { public: boolean }): string[] {
+  return products
+    .filter((p): p is { id: string; card_id: string } => !!p.card_id && p.card_id !== p.id)
+    .filter((p) => !opts.public || !namesSupplier(p.card_id))
+    .map((p) => `/p/${p.card_id}/ ${shopPath(p.id)} 301`);
+}
+
 /** the words of a card id that say what the product is: no supplier, and no word with a digit in it: not a product
  * number or a model code ("g4483a", QA on S3–S5), and not a size ("38x34", "40": S8, the owner's rule) */
 export function slugWords(cardId: string): string[] {

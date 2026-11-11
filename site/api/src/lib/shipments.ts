@@ -42,7 +42,14 @@ export function customerTrackingUrl(raw: string | null | undefined): string | nu
   }
   if (u.protocol !== 'https:' || u.username || u.password || u.port) return null;
   if (!GENERIC_TRACKERS.has(u.hostname.toLowerCase())) return null;
-  if (SUPPLIER_IN_URL.test(decodeURIComponent(u.href))) return null;
+  // S16, QA ת37: a malformed escape (%E0%A4%A) cannot be read for a supplier's name: the number alone, never a 500
+  let text: string;
+  try {
+    text = decodeURIComponent(u.href);
+  } catch {
+    return null;
+  }
+  if (SUPPLIER_IN_URL.test(text)) return null;
   return u.href;
 }
 

@@ -43,6 +43,9 @@ jobs:
         run: npm run format:check
       - name: Unit and API tests (vitest)
         run: npm test
+      # S16 (QA ה7): the deploy check on its own line; every `wrangler deploy` runs it too (api/wrangler.jsonc `build`)
+      - name: Deploy config check (the same check every wrangler deploy runs first)
+        run: npm run check:config -w @hd/api
       - name: Build (strict prices are not enforced until the user approves prices) + bundle budget
         run: npm run build
       - name: Artifact preview build and contract check

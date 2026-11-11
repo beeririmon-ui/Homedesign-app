@@ -1,8 +1,8 @@
 import { defineConfig } from 'vite';
 import { viteSingleFile } from 'vite-plugin-singlefile';
 import { fileURLToPath } from 'node:url';
-import { existsSync, readFileSync, readdirSync, rmSync, statSync } from 'node:fs';
-import { join, relative, resolve } from 'node:path';
+import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs';
+import { dirname, join, relative, resolve } from 'node:path';
 import type { Plugin } from 'vite';
 
 const r = (p: string) => fileURLToPath(new URL(p, import.meta.url));
@@ -71,6 +71,42 @@ function withoutTestPages(): Plugin {
   };
 }
 
+/**
+ * S16, QA ת44: the client build's chunk graph, by content (tools/lib/bundle-graph.ts): each chunk's rendered modules,
+ * static and dynamic imports. tools/check-budget.ts follows the room entry's static imports and fails if a page that must
+ * be its own chunk is carried there, whatever the chunk is called. Written beside the generated data, never into dist.
+ */
+function bundleGraph(): Plugin {
+  let ssr = false;
+  let root = '';
+  return {
+    name: 'hd-bundle-graph',
+    apply: 'build',
+    configResolved(c) {
+      ssr = !!c.build.ssr;
+      root = c.root;
+    },
+    generateBundle(_opts, bundle) {
+      if (ssr) return;
+      const chunks: Record<string, { isEntry: boolean; imports: string[]; dynamicImports: string[]; modules: string[] }> = {};
+      for (const out of Object.values(bundle)) {
+        if (out.type !== 'chunk') continue;
+        chunks[out.fileName] = {
+          isEntry: out.isEntry,
+          imports: out.imports,
+          dynamicImports: out.dynamicImports,
+          modules: Object.entries(out.modules)
+            .filter(([, m]) => m.renderedLength > 0)
+            .map(([id]) => relative(root, id.replace(/\?.*$/, '')).split('\\').join('/')),
+        };
+      }
+      const file = r('../.generated/bundle-graph.json');
+      mkdirSync(dirname(file), { recursive: true });
+      writeFileSync(file, JSON.stringify({ chunks }, null, 1));
+    },
+  };
+}
+
 export default defineConfig(({ mode }) => {
   const artifact = mode === 'artifact';
   return {
@@ -129,6 +165,6 @@ export default defineConfig(({ mode }) => {
                 }) as Record<string, string>,
           },
         },
-    plugins: artifact ? [viteSingleFile({ removeViteModuleLoader: true })] : PUBLIC ? [withoutTestPages()] : [],
+    plugins: artifact ? [viteSingleFile({ removeViteModuleLoader: true })] : PUBLIC ? [bundleGraph(), withoutTestPages()] : [bundleGraph()],
   };
 });

@@ -37,6 +37,7 @@ import {
   initialPrice,
   supplierKey,
   ORDER_STATUS_HE,
+  ORDER_DELAY_HE,
   orderStep,
 } from '../src';
 import { loadLeadRecords } from '../../tools/lib/leads';

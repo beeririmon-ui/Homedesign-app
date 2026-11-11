@@ -151,7 +151,12 @@ export async function cancelOrder(
         found = await withDeadline(`${c.id} findOrder`, opts.callTimeoutMs ?? PROVIDER_CALL_TIMEOUT_MS, (signal) => find(orderId, { signal }));
       } catch (err) {
         const error_id = log.error('cancel.supplier_find_failed', { order_id: orderId, supplier: c.id, code: errorCode(err) });
-        return { error: true, status: 503, code: 'supplier_failed', message_he: `הספק לא ענה על השאלה אם ההזמנה אצלו. לא הוחזר כסף. נסו שוב (קוד ${error_id}).` };
+        return {
+          error: true,
+          status: 503,
+          code: 'supplier_failed',
+          message_he: `הספק לא ענה על השאלה אם ההזמנה אצלו. לא הוחזר כסף. נסו שוב (קוד ${error_id}).`,
+        };
       }
       await supplierHolds(env, orderId, c.id, found, `supplier:${c.id}`, iso());
     }
@@ -258,7 +263,11 @@ async function supplierHolds(
          WHERE order_id = ? AND supplier = ? AND status = 'failed' AND supplier_order_id IS NULL`,
       ).bind(found.supplier_order_id.slice(0, 120), at, orderId, supplier),
       env.DB.prepare("UPDATE orders SET status = 'sent_to_supplier', updated_at = ? WHERE id = ? AND status IN ('paid', 'supplier_error')").bind(at, orderId),
-      audit(env.DB, at, actor, 'supplier.found_by_order', orderId, { supplier, supplier_order: found.supplier_order_id.slice(0, 120), ...(note ? { note } : {}) }),
+      audit(env.DB, at, actor, 'supplier.found_by_order', orderId, {
+        supplier,
+        supplier_order: found.supplier_order_id.slice(0, 120),
+        ...(note ? { note } : {}),
+      }),
     ]);
   else
     await env.DB.batch([
@@ -287,7 +296,15 @@ export async function recordSupplierCheck(
   if (!results.length) return { ok: false, status: 409, code: 'no_supplier_check_needed', message_he: 'אין בהזמנה הזו משלוח שצריך לבדוק אצל הספק.' };
   const at = new Date().toISOString();
   for (const r of results)
-    await supplierHolds(env, orderId, r.supplier, check.outcome === 'found' ? { supplier_order_id: check.supplier_order_id } : null, actor, at, check.note.slice(0, 300));
+    await supplierHolds(
+      env,
+      orderId,
+      r.supplier,
+      check.outcome === 'found' ? { supplier_order_id: check.supplier_order_id } : null,
+      actor,
+      at,
+      check.note.slice(0, 300),
+    );
   return { ok: true };
 }
 

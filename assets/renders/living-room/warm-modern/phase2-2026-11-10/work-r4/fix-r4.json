@@ -164,38 +164,42 @@
   "rgb": "the R3b render (work-r3/layers/pendant.png's own RGB), unchanged; shadow: none (all white), as in the slot"
  },
  "edges": {
-  "what": "the basket's right edge and the planter's left side and bottom re-cut from the R3a render; both contact shadows carried to the product's edge",
+  "what": "the planter's left side re-matted where it meets the plain wall, and the grey crescent left of its mouth (R1's wider rim, carried into R3a) cut at the pot's own edge; the planter's and the basket's contact shadows no longer fade out next to them (the basket's light line, the planter's ghost); the basket's cut, colours and alpha are R3's",
   "source": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r3/r3a-regt.npy",
   "below": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r3/scene-B9.png",
   "rematte": "the soft edge re-estimated from the render, in the selection only: F = the product's colour just inside (normalised blur over the     alpha core, eroded 3 px), B = the render's background just outside (2-7 px beyond the cut, on `bg`); per pixel of the edge band the     alpha is the projection of its colour on F - B (where |F - B| > 0.06; elsewhere the old alpha); the outline is smoothed at 4x (sigma     1 px) and anti-aliased; the colour in the band is un-mixed (C - (1 - a) B) / a toward F, so no background of the render stays in it",
-  "shadow": "extract.shadow_one with the edge fix: the darkening is measured exactly as before (local tone match in a ring, on the surfaces it     can fall on, falling off with the distance, floored at 0.45, grain under 2 % dropped), then carried from the band into the product's     soft edge (each pixel with 0 < a < 1 within 3 px of the band takes its nearest band value) and blurred NORMALISED over band + edge, so     the product's own pixels no longer dilute it; the soft edge is no longer lightened by (1 - a) + a. Away from the edge it is the old     shadow (the old unnormalised blur, the same 2 px spread)",
+  "shadow": "R3's measured contact shadow, with the edge fix only: extract.shadow_one blurs the darkening with zeros inside the product and then     lightens the soft edge by (1 - a) + a, so within ~3 px of the product it fades out and a lighter strip shows between the product and     its shadow (the basket's light line, the planter's ghost). Here, within 3 px outside the product and on its soft edge (0 < a < 1),     each pixel takes the shadow R3 measured 3-4.5 px out from the product (its nearest such pixel), never lighter than R3's own value     and, where that is a real shadow (<= 0.85), never lighter than the render's own darkening right there (the contact occlusion; at most     20 % deeper); everywhere else the shadow is R3's, unchanged",
   "basket": {
-   "selection": "rows 1062-1245, x 1095-1150 (the body's right edge)",
-   "rematte": {
-    "band_px": 1210,
-    "trusted_px": 1210,
-    "decontaminated_px": 943,
-    "alpha_changed_px": 906
-   },
+   "alpha_and_rgb": "R3's (work-r3/layers/basket.png), unchanged",
    "shadow": {
-    "edge_px_extended": 1244,
-    "band_px": 21333
+    "edge_px_extended": 1895,
+    "reference_px": 841
    },
-   "shadow_px_changed": 7309
+   "shadow_recomputed_equals_r3_px": 4161201,
+   "shadow_px_changed_vs_r3": 2216
   },
   "planter": {
-   "selection": "rows 1046-1205, x 935-1010, off the basket (+3 px): the pot's left side and bottom",
+   "selection": "the pot's left side, rows 1046-1205, x 935-1010, off the basket (+3 px) and off its R3 contact shadow (+4 px)",
    "rematte": {
-    "band_px": 1041,
-    "trusted_px": 799,
-    "decontaminated_px": 688,
-    "alpha_changed_px": 833
+    "band_px": 389,
+    "trusted_px": 375,
+    "decontaminated_px": 364,
+    "alpha_changed_px": 371
+   },
+   "rim_clip": {
+    "line": "x = -0.1228 y + 1093.72 (the pot's left edge on rows 1056-1075)",
+    "rows": [
+     1030,
+     1056
+    ],
+    "alpha_removed_px": 59.1,
+    "alpha_cut_px": 121
    },
    "shadow": {
-    "edge_px_extended": 321,
-    "band_px": 5463
+    "edge_px_extended": 551,
+    "reference_px": 231
    },
-   "shadow_px_changed": 1715
+   "shadow_px_changed_vs_r3": 551
   }
  },
  "floor-lamp": {

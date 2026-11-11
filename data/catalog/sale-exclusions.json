@@ -2,7 +2,7 @@
   "version": "1.0",
   "date": "2026-11-10",
   "source": "the manager's decisions in briefs/site-s11-qa-fixes-2026-11-10.md (addendum, 'what's sold'), on master-designer's 'uncertain' rows (data/catalog/option-labels-he.json, docs/proposals/names-labels-he-2026-11-10.md)",
-  "rule": "For each card, the variants sold are those whose value on `axis` is in `sell_only`; every other value of that axis is not offered (not on the product page, not on a story page, refused by the server: the variant is inactive in D1). An allow-list, so an unidentified SKU the supplier adds later is not sold until it is described. Read by site/tools/build-catalog.ts; checked in site/tools/test/sale-rules.test.ts against the cards.",
+  "rule": "For each card, the variants sold are those whose value on `axis` is in `sell_only`; every other value of that axis is not offered (not on the product page, not on a story page, refused by the server: the variant is inactive in D1). An allow-list, so an unidentified SKU the supplier adds later is not sold until it is described. Read by site/tools/build-catalog.ts; checked in site/tools/test/lines.test.ts (\"the manager's sale decisions\") against the cards, and in site/api/test/s14.test.ts on a real build.",
   "exclusions": [
     {
       "card_id": "floor-lamp-cj-pleated-walnut-stem-158",

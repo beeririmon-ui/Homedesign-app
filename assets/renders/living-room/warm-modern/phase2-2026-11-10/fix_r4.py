@@ -401,56 +401,59 @@ def pendant():
 SPEC = R3.SPEC
 
 
-def shadow_ext(k, a, regt, below, surf, others):
-    """extract.shadow_one with the edge fix: the darkening is measured exactly as before (local tone match in a ring, on the surfaces it
-    can fall on, falling off with the distance, floored at 0.45, grain under 2 % dropped), then carried from the band into the product's
-    soft edge (each pixel with 0 < a < 1 within 3 px of the band takes its nearest band value) and blurred NORMALISED over band + edge, so
-    the product's own pixels no longer dilute it; the soft edge is no longer lightened by (1 - a) + a. Away from the edge it is the old
-    shadow (the old unnormalised blur, the same 2 px spread)"""
-    sp = SPEC[k]
-    onto = np.zeros(a.shape, bool)
-    for s_ in sp["onto"].split("_"):
-        if s_ in surf:
-            onto |= surf[s_]
-        elif s_ == "planter":
-            onto |= others.get("planter", np.zeros(onto.shape, np.float32)) > 0.5
+def shadow_r3(k, a, regt, below, surf, others):
+    """the contact shadow exactly as R3 measured it (extract.shadow_one with reserve_r3's SPEC)"""
+    saved = X.SPEC.get(k)
+    X.SPEC[k] = SPEC[k]
+    try:
+        return X.shadow_one(k, a, regt, below, surf, others)
+    finally:
+        X.SPEC[k] = saved
+
+
+def shadow_ext(k, a, regt, below, surf, others, near=(3.0, 4.5)):
+    """R3's measured contact shadow, with the edge fix only: extract.shadow_one blurs the darkening with zeros inside the product and then
+    lightens the soft edge by (1 - a) + a, so within ~3 px of the product it fades out and a lighter strip shows between the product and
+    its shadow (the basket's light line, the planter's ghost). Here, within 3 px outside the product and on its soft edge (0 < a < 1),
+    each pixel takes the shadow R3 measured 3-4.5 px out from the product (its nearest such pixel), never lighter than R3's own value
+    and, where that is a real shadow (<= 0.85), never lighter than the render's own darkening right there (the contact occlusion; at most
+    20 % deeper); everywhere else the shadow is R3's, unchanged"""
+    sh0 = shadow_r3(k, a, regt, below, surf, others)
     prod = a > 0.02
-    occ = np.zeros(a.shape, bool)
-    for j, m in others.items():
-        occ |= m > 0.02
-    front = surf["front"] & ~onto
-    band = X.dil(prod, sp["band"]) & ~prod & onto & ~front & ~occ
-    ring = X.dil(prod, sp["band"] + 60) & ~X.dil(prod, sp["band"] + 12) & ~occ & ~front & onto
-    k_ = ring.astype(np.float32)
-    lb, lr = PW.lum(below).astype(np.float32), PW.lum(regt).astype(np.float32)
-    w = cv2.GaussianBlur(k_, (0, 0), 25)
-    gain = cv2.GaussianBlur(lb * k_, (0, 0), 25) / np.maximum(cv2.GaussianBlur(lr * k_, (0, 0), 25), 1e-4)
-    gain = np.where(w > 1e-3, gain, float(np.median((lb / np.maximum(lr, 1e-4))[ring])) if ring.any() else 1.0)
-    ratio = (cv2.GaussianBlur(lr * gain, (0, 0), 3) + 1e-4) / (cv2.GaussianBlur(lb, (0, 0), 3) + 1e-4)
-    d = 1 - np.clip(ratio, 0.45, 1.0)
-    d = d * np.clip((d - 0.02) / 0.04, 0, 1) ** 2
     dist = cv2.distanceTransform((~prod).astype(np.uint8), cv2.DIST_L2, 5)
-    d = d * np.exp(-dist / max(1.0, sp["band"] / 2.0))
-    d_b = np.where(band, d, 0.0).astype(np.float32)
-    old = cv2.GaussianBlur(d_b, (0, 0), 2.0)
-    # the edge: soft product pixels next to the band take the nearest band value
-    soft = prod & (a < 0.999)
-    _, lbl = cv2.distanceTransformWithLabels((~band).astype(np.uint8), cv2.DIST_L2, 5, labelType=cv2.DIST_LABEL_PIXEL)
-    by, bx = np.nonzero(band)
-    lut = np.zeros(lbl.max() + 1, np.float32)
-    lut[lbl[by, bx]] = d_b[by, bx]
-    dn = lut[lbl]
-    dband = cv2.distanceTransform((~band).astype(np.uint8), cv2.DIST_L2, 5)
-    ext = soft & (dband <= 3.0)
-    d_e = np.where(band, d_b, np.where(ext, dn, 0.0)).astype(np.float32)
-    w_e = (band | ext).astype(np.float32)
-    norm, den = nblur(d_e, w_e, 2.0)
-    near = X.dil(prod, 4) & (band | ext)
-    d_new = np.where(near, np.maximum(old, norm), old)
-    sh = 1 - d_new
-    sh = np.where(X.dil(prod, sp["band"] + 4), sh, 1.0)
+    ref = (dist >= near[0]) & (dist <= near[1]) & (sh0 < 0.999)
+    _, lbl = cv2.distanceTransformWithLabels((~ref).astype(np.uint8), cv2.DIST_L2, 5, labelType=cv2.DIST_LABEL_PIXEL)
+    ry, rx = np.nonzero(ref)
+    lut = np.ones(lbl.max() + 1, np.float32)
+    lut[lbl[ry, rx]] = sh0[ry, rx]
+    she = lut[lbl]
+    dref = cv2.distanceTransform((~ref).astype(np.uint8), cv2.DIST_L2, 5)
+    zone = (((dist < near[0]) & ~prod) | (prod & (a < 0.999))) & (dref <= near[1] + 1.0)
+    sh = np.where(zone, np.minimum(sh0, she), sh0)
+    # right at the edge the render is often darker still (contact occlusion): in the zone, the shadow is also never lighter than the
+    # render's own darkening there (its sRGB-encoded luminance over the scene's, as the multiply works on encoded values; sigma-1 blurs
+    # normalised off every product; on the soft edge the
+    # value of the nearest pixel 1-2.5 px out), floored at 0.45 as R3's
+    occ_any = np.zeros(a.shape, bool)
+    for j, m in others.items():
+        occ_any |= m > 0.02
+    free = (~(prod | occ_any)).astype(np.float32)
+    wl = np.array([0.2126, 0.7152, 0.0722], np.float32)       # on the ENCODED values: the multiply layer acts on sRGB-encoded pixels
+    nr, _ = nblur((np.clip(regt, 0, 1) * wl).sum(2).astype(np.float32), free, 1.0)
+    nb_, _ = nblur((np.clip(below, 0, 1) * wl).sum(2).astype(np.float32), free, 1.0)
+    r = np.clip((nr + 1e-4) / (nb_ + 1e-4), 0.45, 1.0)
+    out1 = (dist >= 1.0) & (dist <= 2.5) & (free > 0)
+    _, lbl2 = cv2.distanceTransformWithLabels((~out1).astype(np.uint8), cv2.DIST_L2, 5, labelType=cv2.DIST_LABEL_PIXEL)
+    oy, ox = np.nonzero(out1)
+    lut2 = np.ones(lbl2.max() + 1, np.float32)
+    lut2[lbl2[oy, ox]] = r[oy, ox]
+    r_use = np.where((dist >= 1.0) & (free > 0), r, lut2[lbl2])
+    # only where R3 measured a real contact shadow nearby (<= 0.85), and at most 20 % deeper than it: elsewhere the render's darker
+    # wall next to a product is its relighting, not a shadow (the planter's left side)
+    deep = zone & (she <= 0.85)
+    sh = np.where(deep, np.minimum(sh, np.maximum(r_use, 0.8 * she)), sh)
     sh = np.where(a >= 0.999, 1.0, sh)
-    return np.clip(sh, 0.45, 1.0).astype(np.float32), dict(edge_px_extended=int(ext.sum()), band_px=int(band.sum()))
+    return np.clip(sh, 0.45, 1.0).astype(np.float32), sh0, dict(edge_px_extended=int((zone & (sh < sh0 - 1 / 255)).sum()), reference_px=int(ref.sum()))
 
 
 def rematte(regt, a_old, sel, bg):
@@ -495,6 +498,30 @@ def rematte(regt, a_old, sel, bg):
                             alpha_changed_px=int((np.abs(a_new - a_old) > 1 / 255).sum()))
 
 
+def rim_clip(a, rgb, regt, rows=(1030, 1056), fit_rows=(1056, 1076)):
+    """the grey crescent left of the pot's mouth (rows ~1034-1052) lies outside the pot's own silhouette: R1's wider rim, carried by the
+    photographic placeholder into the R3a render (on the window side, so it cannot be a shadow). The pot's left edge (the alpha 0.5
+    crossing) is fitted as a line on rows 1056-1076 and extended up through the rim; left of it the alpha is cut with a 1 px
+    anti-aliased edge; the colours are the render's own"""
+    ys = np.arange(*fit_rows)
+    xe = []
+    for y in ys:
+        r = a[y]
+        x = int(np.nonzero(r > 0.5)[0].min())
+        xe.append(x - 0.5 + (0.5 - r[x - 1]) / max(r[x] - r[x - 1], 1e-3))
+    k, b = np.polyfit(ys, np.array(xe), 1)
+    H, Wd = a.shape
+    yy = np.arange(H, dtype=np.float32)[:, None].repeat(Wd, 1)
+    xx = np.arange(Wd, dtype=np.float32)[None, :].repeat(H, 0)
+    half = np.clip(xx - (k * yy + b) + 0.5, 0, 1)
+    zone = np.zeros(a.shape, bool)
+    zone[rows[0]:rows[1]] = True
+    zone &= xx < (k * yy + b) + 6
+    a2 = np.where(zone, a * half, a).astype(np.float32)
+    return a2, rgb, dict(line="x = %.4f y + %.2f (the pot's left edge on rows %d-%d)" % (k, b, fit_rows[0], fit_rows[1] - 1),
+                          rows=list(rows), alpha_removed_px=round(float((a - a2).sum()), 1), alpha_cut_px=int(((a - a2) > 1 / 255).sum()))
+
+
 def edges():
     regt = np.load(os.path.join(R3.WR3, "r3a-regt.npy")).astype(np.float32)
     below = PW.load(os.path.join(R3.WR3, "scene-B9.png"))
@@ -504,34 +531,37 @@ def edges():
     H, Wd = ap.shape
     yy = np.arange(H)[:, None].repeat(Wd, 1)
     xx = np.arange(Wd)[None, :].repeat(H, 0)
-    # the basket: its body's right edge (QA's light line, rows 1075-1158; the body 1062-1245); the handles above are not touched
-    sel_b = (yy >= 1062) & (yy <= 1245) & (xx >= 1095) & (xx <= 1150)
-    bg_b = (ea < 0.5) & (ap < 0.02)
-    ab2, rgb_b, rb = rematte(regt, ab, sel_b, bg_b)
-    # the planter: the pot's left side and its bottom (QA: the dark dotted rim and the ghost), below the rim lip, left of the basket
-    sel_p = (yy >= 1046) & (yy <= 1205) & (xx >= 935) & (xx <= 1010) & ~X.dil(ab2 > 0.02, 3)
-    bg_p = (ea < 0.5) & (ab2 < 0.02)
-    ap2, rgb_p, rp = rematte(regt, ap, sel_p, bg_p)
     surf = X.surfaces()
     surf["front"] = W.furn_alpha() > 0.02
-    sh_p, ip = shadow_ext("planter", ap2, regt, below, surf, {"basket": ab2, "_layered": ea})
-    sh_b, ib = shadow_ext("basket", ab2, regt, below, surf, {"planter": ap2, "_layered": ea})
+    # the planter: its left side where it stands against the plain wall (no contact shadow within 4 px): the render darkened that wall
+    # (relighting, not shadow: the planter's shadow falls on the floor only), and its soft edge carried that dark wall onto the room's
+    # own wall (QA's dark dotted rim): re-matted and un-mixed. Its lower left and its bottom stand in its contact shadow: shadow fix only
+    sh_p_r3 = f32(os.path.join(R3.WR3, "shadows", "planter.png"), "L")
+    shadowed = X.dil(sh_p_r3 < 0.95, 4)
+    sel_p = (yy >= 1046) & (yy <= 1205) & (xx >= 935) & (xx <= 1010) & ~X.dil(ab > 0.02, 3) & ~shadowed
+    bg_p = (ea < 0.5) & (ab < 0.02)
+    ap2, rgb_p, rp = rematte(regt, ap, sel_p, bg_p)
+    ap2, rgb_p, rim = rim_clip(ap2, rgb_p, regt)
+    sh_p, sh_p0, ip = shadow_ext("planter", ap2, regt, below, surf, {"basket": ab, "_layered": ea})
+    # the basket: its cut is kept (its right edge's lit rope ends are the render's own); the light line was its contact shadow fading
+    # out next to it: shadow fix only
+    sh_b, sh_b0, ib = shadow_ext("basket", ab, regt, below, surf, {"planter": ap2, "_layered": ea})
     save_layer("planter", rgb_p, ap2)
-    save_layer("basket", rgb_b, ab2)
+    save_layer("basket", Lb[..., :3], ab)
     save_shadow("planter", sh_p)
     save_shadow("basket", sh_b)
-    sh_p0 = f32(os.path.join(R3.WR3, "shadows", "planter.png"), "L")
-    sh_b0 = f32(os.path.join(R3.WR3, "shadows", "basket.png"), "L")
+    sh_b_r3 = f32(os.path.join(R3.WR3, "shadows", "basket.png"), "L")
     record("edges", dict(
-        what="the basket's right edge and the planter's left side and bottom re-cut from the R3a render; both contact shadows carried to "
-             "the product's edge",
+        what="the planter's left side re-matted where it meets the plain wall, and the grey crescent left of its mouth (R1's wider rim, "
+             "carried into R3a) cut at the pot's own edge; the planter's and the basket's contact shadows no longer fade out next to them "
+             "(the basket's light line, the planter's ghost); the basket's cut, colours and alpha are R3's",
         source=rel(os.path.join(R3.WR3, "r3a-regt.npy")), below=rel(os.path.join(R3.WR3, "scene-B9.png")),
         rematte=rematte.__doc__.replace("\n", " "), shadow=shadow_ext.__doc__.replace("\n", " "),
-        basket=dict(selection="rows 1062-1245, x 1095-1150 (the body's right edge)", rematte=rb, shadow=ib,
-                    shadow_px_changed=int((np.abs(sh_b - sh_b0) > 1 / 255).sum())),
-        planter=dict(selection="rows 1046-1205, x 935-1010, off the basket (+3 px): the pot's left side and bottom", rematte=rp, shadow=ip,
-                     shadow_px_changed=int((np.abs(sh_p - sh_p0) > 1 / 255).sum()))))
-    print("edges", json.dumps(dict(basket=rb, planter=rp, shadow_b=ib, shadow_p=ip)))
+        basket=dict(alpha_and_rgb="R3's (work-r3/layers/basket.png), unchanged", shadow=ib,
+                    shadow_recomputed_equals_r3_px=int((np.abs(sh_b0 - sh_b_r3) <= 1 / 255).sum()), shadow_px_changed_vs_r3=int((np.abs(sh_b - sh_b_r3) > 1 / 255).sum())),
+        planter=dict(selection="the pot's left side, rows 1046-1205, x 935-1010, off the basket (+3 px) and off its R3 contact shadow (+4 px)",
+                     rematte=rp, rim_clip=rim, shadow=ip, shadow_px_changed_vs_r3=int((np.abs(sh_p - sh_p_r3) > 1 / 255).sum()))))
+    print("edges", json.dumps(dict(basket=ib, planter=rp, shadow_p=ip)))
 
 
 # ================================================================================================= 5. the vase

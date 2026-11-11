@@ -13,6 +13,7 @@ import { readFileSync, readdirSync, existsSync, statSync } from 'node:fs';
 import { gzipSync } from 'node:zlib';
 import { join } from 'node:path';
 import { sitePath } from './lib/paths';
+import { lazyPagesInEntry, lazyPagesMissing, readGraph } from './lib/bundle-graph';
 
 const DIST = sitePath('web/dist');
 const MB = 1024 * 1024;
@@ -60,27 +61,34 @@ const need = Math.min(Math.max(vw, vh * scene.aspect), 1080) * dpr;
 const shell = scene.base[0]!;
 const posterW = shell.widths.find((w) => w >= need) ?? shell.widths[shell.widths.length - 1]!;
 const res = vw <= 900 ? scene.widths.lo : posterW > scene.widths.lo ? scene.widths.hi : scene.widths.lo;
-const file = (src: string, w?: number) => {
-  for (const ext of ['avif', 'webp']) {
+/** a media file's size: the AVIF where the browser reads it, else the WebP. S16 (QA ת43): `['webp']` for a browser without AVIF */
+type Formats = ('avif' | 'webp')[];
+const file = (src: string, w?: number, formats: Formats = ['avif', 'webp']) => {
+  for (const ext of formats) {
     const p = sitePath('web/public/media', `${src}${w ? `.${w}` : ''}.${ext}`);
     if (existsSync(p)) return statSync(p).size;
   }
   return 0;
 };
-let layers = file(shell.src, posterW) + file(scene.depth.src);
-let count = 2;
-for (const s of room.slots) {
-  const sc = scene.slots[s.id];
-  if (!sc) continue;
-  const n = (s.options.find((o) => o.is_default)?.position ?? 1) - 1;
-  for (const set of [sc.product, s.has_shadow ? sc.shadow : null, s.has_light ? sc.light : null]) {
-    const src = set?.src[n] ?? set?.src[0];
-    if (src) {
-      layers += file(src, res);
-      count++;
+const roomMedia = (formats: Formats) => {
+  let bytes = file(shell.src, posterW, formats) + file(scene.depth.src, undefined, formats);
+  let files = 2;
+  for (const s of room.slots) {
+    const sc = scene.slots[s.id];
+    if (!sc) continue;
+    const n = (s.options.find((o) => o.is_default)?.position ?? 1) - 1;
+    for (const set of [sc.product, s.has_shadow ? sc.shadow : null, s.has_light ? sc.light : null]) {
+      const src = set?.src[n] ?? set?.src[0];
+      if (src) {
+        bytes += file(src, res, formats);
+        files++;
+      }
     }
   }
-}
+  return { bytes, files };
+};
+const { bytes: layers, files: count } = roomMedia(['avif', 'webp']);
+const layersNoAvif = roomMedia(['webp']).bytes;
 
 const sum = (a: number[]) => a.reduce((s, x) => s + x, 0);
 const total = html + sum(js) + sum(css) + fonts + layers;
@@ -93,6 +101,8 @@ const rows: [string, number, number | null][] = [
   ['fonts (woff2, he+latin)', fonts, null],
   [`room media (${count} files, shell @${posterW}, layers @${res})`, layers, null],
   ['first load, living room, mobile', total, BUDGET.firstLoad],
+  // S16, QA ת43: a browser without AVIF loads every WebP fallback instead
+  ['first load, living room, mobile, no AVIF', total - layers + layersNoAvif, BUDGET.firstLoad],
 ];
 // S14 (QA ת29/ת30): a direct entry to another house (warm-modern) on the same phone: its own page, the room's entry and
 // the house's chunk, the poster (its default composition, at the width the same sizes pick) and the composition the
@@ -106,11 +116,20 @@ if (existsSync(housePage) && existsSync(houseData)) {
   const pst = hs.poster ?? hs.base[0]!;
   const pw = pst.widths.find((w) => w >= need) ?? pst.widths[pst.widths.length - 1]!;
   const at = hs.native ?? hs.widths.hi;
-  let media = file(pst.src, pw) + file(hs.depth.src) + file(hs.base[0]!.src, at);
-  for (const sc of Object.values(hs.slots)) for (const set of [sc.product, sc.shadow, sc.light]) if (set?.src[0]) media += file(set.src[0], at);
+  const houseMedia = (formats: Formats) => {
+    let m = file(pst.src, pw, formats) + file(hs.depth.src, undefined, formats) + file(hs.base[0]!.src, at, formats);
+    for (const sc of Object.values(hs.slots)) for (const set of [sc.product, sc.shadow, sc.light]) if (set?.src[0]) m += file(set.src[0], at, formats);
+    return m;
+  };
+  const media = houseMedia(['avif', 'webp']);
+  // S16, QA ת43: a browser without AVIF: the poster's WebP fallback, and the engine's composition (it starts at idle there)
+  const mediaNoAvif = houseMedia(['webp']);
+  const page = gz(housePage) + sum(js) + sum(chunk) + sum(css) + fonts;
   rows.push(
     [`warm-modern house media (poster @${pw}, composition @${at})`, media, null],
-    ['first load, the warm-modern house, mobile', gz(housePage) + sum(js) + sum(chunk) + sum(css) + fonts + media, BUDGET.firstLoad],
+    ['first load, the warm-modern house, mobile', page + media, BUDGET.firstLoad],
+    [`warm-modern house media, no AVIF (WebP poster @${pw}, composition @${at})`, mediaNoAvif, null],
+    ['first load, the warm-modern house, mobile, no AVIF', page + mediaNoAvif, BUDGET.firstLoad],
   );
 }
 // S5: the story's pages (behind the flag; absent from the public build). A story page's own scripts and styles, and its
@@ -143,14 +162,27 @@ if (existsSync(storyPage)) {
     ...(detail ? ([['first view, a detail page, mobile', view(detail), STORY.detailView]] as [string, number, number][]) : []),
   );
 }
-// S13: the goal under the budget, so the next features have room; and no lazy page is in the room's entry
+// S13: the goal under the budget, so the next features have room; and no lazy page is in the room's entry.
+// S16, QA ת44: checked by content, not by file name: the build's chunk graph (tools/lib/bundle-graph.ts) says which
+// modules' code each chunk carries; the entry's static closure must carry none of the lazy pages
 const ROOM_GOAL = 74 * 1024;
-const lazyInEntry = [...referenced].filter((f) => /^(Order|Checkout|Cart|Product|Legal|MockPay)-/.test(f));
 let failed = false;
 if (sum(js) > ROOM_GOAL) console.log(`note  the room's JS is over the S13 goal of ${kb(ROOM_GOAL)}: split before adding`);
-if (lazyInEntry.length) {
+const graph = readGraph();
+if (!graph) {
   failed = true;
-  console.log(`FAIL  a lazy page is in the room's entry: ${lazyInEntry.join(', ')}`);
+  console.log('FAIL  .generated/bundle-graph.json is missing: the web build writes it (web/vite.config.ts, bundleGraph)');
+} else {
+  const entry = [...referenced].filter((f) => f.endsWith('.js')).map((f) => `assets/${f}`);
+  const lazyInEntry = lazyPagesInEntry(graph, entry);
+  const missing = lazyPagesMissing(graph);
+  if (lazyInEntry.length) {
+    failed = true;
+    console.log(`FAIL  a lazy page's code is in the room's entry: ${lazyInEntry.join(', ')}`);
+  } else if (missing.length) {
+    failed = true;
+    console.log(`FAIL  a lazy page is in no chunk of the build (renamed or removed?): ${missing.join(', ')}`);
+  } else console.log(`ok    no lazy page's code in the room's entry (by content: ${entry.length} entry chunk(s) and their static imports)`);
 }
 for (const [name, v, max] of rows) {
   const over = max !== null && v > max;

@@ -192,15 +192,22 @@ const THUMB = 360;
  *    1920 file: the 1920 at q90 misses at 1920@1, drawn 1:1 (ΔE 3.70, 396 KB); q95 meets it at 798 KB, near-lossless at
  *    1.45 MB; the 2720 at q85 drawn down to 1920 meets it at 462 KB (5/8 · 0.05% · ΔE 3.36; 1440@1: ΔE 3.37). Measured
  *    in the browser: qa/reports/2026-11-07-site-track/s14/data/poster-candidates.run1.json.
- *  - The WebP fallback (browsers without AVIF only): near-lossless 60, the lightest WebP that meets it (40 misses at
- *    1280@1: ΔE 4.21; lossy q95 and q100 miss everywhere): 628 KB at 1280, 2.8 MB at 2720.
+ *  - The WebP fallback (browsers without AVIF only). S16, QA ת43 (QA's ruling, S13–S14 §ת30): exempt from the numeric
+ *    threshold (every supported browser paints the AVIF), not from the first-load budget nor from "no visible defect at
+ *    ×1". Near-lossless 60 met the threshold at 2.8 MB (a phone without AVIF loaded ~3.98 MB); lossy q95 is 669 KB at
+ *    2720 and 157 KB at 1280, with no defect QA could see at 1:1. In such a browser the engine (whose layers meet the
+ *    threshold) takes over at idle (RoomExperience), and check-budget has a no-AVIF row.
+ *  - S16, QA ה1: a 48 px placeholder of the same composition is inlined in the page (`poster.placeholder`), so the stage
+ *    is the room, blurred, until the poster arrives; never a dark stage.
  */
 const POSTER_WIDTHS = [1280, W];
 const POSTER_AVIF_Q: Record<number, number> = { 1280: 90, [W]: 85 };
 const POSTER_WEBP: Record<number, sharp.WebpOptions> = {
-  1280: { nearLossless: true, quality: 60, effort: 5 },
-  [W]: { nearLossless: true, quality: 60, effort: 5 },
+  1280: { quality: 95, effort: 5 },
+  [W]: { quality: 95, effort: 5 },
 };
+/** S16 (QA ה1): the inlined placeholder's width (16:9 → 48 × 27) */
+const PLACEHOLDER_W = 48;
 const posterSource = join(pilot, m.approved.composites[def]!);
 const stamp = createHash('sha256')
   .update(
@@ -303,6 +310,11 @@ const zoom: Box = [Math.max(0, ring[0] - pad), Math.min(1, ring[1] + pad), Math.
 const frameRect: Box = [rect[0] / W, rect[1] / W, rect[2] / H, rect[3] / H];
 
 // ---------- the scene and the room ----------
+// S16 (QA ה1): the poster's composition at 48 px, inlined in the page (a few hundred bytes)
+const placeholder = `data:image/webp;base64,${(
+  await sharp(posterSource).removeAlpha().resize({ width: PLACEHOLDER_W }).webp({ quality: 60, effort: 6 }).toBuffer()
+).toString('base64')}`;
+if (placeholder.length > 2048) fail(`the poster's placeholder is ${placeholder.length} characters: keep it under 2 KB`);
 const nordicScene = read<{ hall: unknown }>(join(GENERATED, `scene.${m.room}.nordic.json`));
 const src = (kind: string) => m.sets.map((_, i) => `${REL}/slots/${m.slot.id}/${i + 1}.${kind}`);
 const scene = {
@@ -319,7 +331,7 @@ const scene = {
   formats: ['avif', 'webp'],
   base: [{ id: 'shell', z: 0, blend: 'normal', src: `${REL}/base/shell`, widths: BASE_WIDTHS, temporary: false }],
   // S14, QA ת29: the stage's poster is the default composition (the base has no set on the sofa)
-  poster: { src: `${REL}/poster/default`, widths: POSTER_WIDTHS },
+  poster: { src: `${REL}/poster/default`, widths: POSTER_WIDTHS, placeholder },
   slots: {
     [m.slot.id]: {
       z: 55,

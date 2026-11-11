@@ -1,0 +1,176 @@
+{
+ "date": "2026-11-11",
+ "author": "render-agent",
+ "before": "graded/default-scene-r3-set-B-graded-v3c.png",
+ "after": "graded/default-scene-r4-set-B-graded-v3c.png",
+ "crops": [
+  "crops-r4/floor-lamp-shade-100.png",
+  "crops-r4/floor-lamp-shade-lower-left-and-collar-x4.png",
+  "crops-r4/pendant-canopy-and-cord-100.png",
+  "crops-r4/pendant-canopy-x4.png",
+  "crops-r4/basket-planter-100.png",
+  "crops-r4/basket-right-edge-x4.png",
+  "crops-r4/planter-left-side-x4.png",
+  "crops-r4/planter-bottom-x4.png",
+  "crops-r4/vase-100.png",
+  "crops-r4/vase-foot-contact-x4.png"
+ ],
+ "halo_rule": "QA's p2_halo.py: per contour pixel (alpha >= 128 next to < 128, off later layers +3 px), the L* profile -8..+8 px along the normal; a bright halo / dark fringe when the edge zone (-2..+2) exceeds both references (inside +4..+8, outside -8..-4) by more than max(6, 2.5 x their std); restricted to each fix's box. Many flags are real details (QA: dark frames, the chain, the shade's inside); the runs are what matters",
+ "raw_relative": "<ver>_vs_raw: a contour flag that the graded raw render also has at the same pixel (same sign) is the render's own detail and is dropped; what remains (cut_made_*) is made by the cut or the shadow",
+ "edges": {
+  "basket right edge": {
+   "r3": {
+    "contour_px": 226,
+    "bright_halo_px": 122,
+    "dark_fringe_px": 5,
+    "bright_longest_run_px": 73,
+    "bright_worst_excess_L": 32.7,
+    "dark_longest_run_px": 5,
+    "dark_worst_excess_L": 14.8
+   },
+   "r4": {
+    "contour_px": 226,
+    "bright_halo_px": 75,
+    "dark_fringe_px": 11,
+    "bright_longest_run_px": 46,
+    "bright_worst_excess_L": 25.1,
+    "dark_longest_run_px": 4,
+    "dark_worst_excess_L": 14.8
+   },
+   "r3_vs_raw": {
+    "contour_px": 226,
+    "cut_made_bright_px": 62,
+    "cut_made_dark_px": 1,
+    "bright_longest_run_px": 31,
+    "bright_worst_excess_L": 31.7,
+    "dark_longest_run_px": 1,
+    "dark_worst_excess_L": 14.8
+   },
+   "r4_vs_raw": {
+    "contour_px": 226,
+    "cut_made_bright_px": 25,
+    "cut_made_dark_px": 5,
+    "bright_longest_run_px": 9,
+    "bright_worst_excess_L": 12.6,
+    "dark_longest_run_px": 2,
+    "dark_worst_excess_L": 14.8
+   }
+  },
+  "planter left side and bottom": {
+   "r3": {
+    "contour_px": 204,
+    "bright_halo_px": 51,
+    "dark_fringe_px": 31,
+    "bright_longest_run_px": 27,
+    "bright_worst_excess_L": 18.9,
+    "dark_longest_run_px": 26,
+    "dark_worst_excess_L": 26.5
+   },
+   "r4": {
+    "contour_px": 210,
+    "bright_halo_px": 46,
+    "dark_fringe_px": 9,
+    "bright_longest_run_px": 27,
+    "bright_worst_excess_L": 18.7,
+    "dark_longest_run_px": 6,
+    "dark_worst_excess_L": 18.3
+   },
+   "r3_vs_raw": {
+    "contour_px": 204,
+    "cut_made_bright_px": 1,
+    "cut_made_dark_px": 13,
+    "bright_longest_run_px": 1,
+    "bright_worst_excess_L": 12.8,
+    "dark_longest_run_px": 4,
+    "dark_worst_excess_L": 22.4
+   },
+   "r4_vs_raw": {
+    "contour_px": 210,
+    "cut_made_bright_px": 0,
+    "cut_made_dark_px": 9,
+    "bright_longest_run_px": 0,
+    "bright_worst_excess_L": 0.0,
+    "dark_longest_run_px": 6,
+    "dark_worst_excess_L": 18.3
+   }
+  },
+  "pendant canopy": {
+   "r3": {
+    "contour_px": 274,
+    "bright_halo_px": 28,
+    "dark_fringe_px": 26,
+    "bright_longest_run_px": 28,
+    "bright_worst_excess_L": 13.2,
+    "dark_longest_run_px": 26,
+    "dark_worst_excess_L": 27.0
+   },
+   "r4": {
+    "contour_px": 246,
+    "bright_halo_px": 40,
+    "dark_fringe_px": 28,
+    "bright_longest_run_px": 39,
+    "bright_worst_excess_L": 12.9,
+    "dark_longest_run_px": 28,
+    "dark_worst_excess_L": 27.0
+   },
+   "r3_vs_raw": {
+    "contour_px": 274,
+    "cut_made_bright_px": 1,
+    "cut_made_dark_px": 0,
+    "bright_longest_run_px": 1,
+    "bright_worst_excess_L": 9.5,
+    "dark_longest_run_px": 0,
+    "dark_worst_excess_L": 0.0
+   },
+   "r4_vs_raw": {
+    "contour_px": 246,
+    "cut_made_bright_px": 0,
+    "cut_made_dark_px": 0,
+    "bright_longest_run_px": 0,
+    "bright_worst_excess_L": 0.0,
+    "dark_longest_run_px": 0,
+    "dark_worst_excess_L": 0.0
+   }
+  },
+  "vase (whole)": {
+   "r3": {
+    "contour_px": 1110,
+    "bright_halo_px": 15,
+    "dark_fringe_px": 259,
+    "bright_longest_run_px": 14,
+    "bright_worst_excess_L": 33.4,
+    "dark_longest_run_px": 48,
+    "dark_worst_excess_L": 68.5
+   },
+   "r4": {
+    "contour_px": 867,
+    "bright_halo_px": 22,
+    "dark_fringe_px": 212,
+    "bright_longest_run_px": 18,
+    "bright_worst_excess_L": 32.7,
+    "dark_longest_run_px": 38,
+    "dark_worst_excess_L": 64.7
+   }
+  },
+  "floor lamp shade (whole)": {
+   "r3": {
+    "contour_px": 799,
+    "bright_halo_px": 24,
+    "dark_fringe_px": 27,
+    "bright_longest_run_px": 14,
+    "bright_worst_excess_L": 9.7,
+    "dark_longest_run_px": 21,
+    "dark_worst_excess_L": 26.5
+   },
+   "r4": {
+    "contour_px": 799,
+    "bright_halo_px": 0,
+    "dark_fringe_px": 55,
+    "bright_longest_run_px": 0,
+    "bright_worst_excess_L": 0.0,
+    "dark_longest_run_px": 22,
+    "dark_worst_excess_L": 25.8
+   }
+  }
+ }
+}

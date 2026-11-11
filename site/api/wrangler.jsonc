@@ -6,6 +6,10 @@
   "name": "homedesign-site",
   "main": "src/index.ts",
   "compatibility_date": "2026-09-15",
+  // S16 (QA S11–S12 ה2, S13–S14 ה7): every wrangler deploy (and dev) runs the deploy check first; a provider setting
+  // that would not run fails it, and the deploy stops. It runs from site/api (as `npm run deploy -w @hd/api` does); run from
+  // anywhere else it cannot find the check, and the deploy stops too: it fails closed (docs/ops/deploy-runbook.md §3)
+  "build": { "command": "npx tsx scripts/check-config.ts" },
   "workers_dev": true,
   "assets": {
     "directory": "../web/dist",

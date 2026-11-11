@@ -27,7 +27,8 @@ export type Scene = {
    * widths are the ones that meet the encoding threshold where they are drawn. Absent: the base is the poster (Nordic:
    * its base already holds the default products).
    */
-  poster?: { src: string; widths: number[] };
+  /** S16 (QA ה1): `placeholder`, a tiny picture of the same composition inlined in the page, so the stage is never dark */
+  poster?: { src: string; widths: number[]; placeholder?: string };
   slots: Record<
     string,
     {

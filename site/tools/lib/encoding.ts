@@ -156,6 +156,22 @@ export function failures(m: Measure): string[] {
   return out;
 }
 
+/**
+ * S16, QA ת43 (QA's ruling on the poster's WebP fallback, S13–S14 §ת30): the fallback serves only browsers without AVIF,
+ * which the site does not support, so it is exempt from THRESHOLD; it is still held to "no defect visible at ×1" (QA's
+ * eye: lossy q95 shows none at 1:1, at p99 7–9 · ΔE 4.1–4.5). This bound is the regression guard around that: a setting
+ * clearly worse than q95 (q90 measured p99 8–10 · 0.9–2.4% · ΔE 4.7–5.0) fails it.
+ */
+export const FALLBACK_BOUND = { p99: 10, p999: 16, over8: 0.02, de00_p99: 4.6 } as const;
+export function fallbackFailures(m: Measure): string[] {
+  const out: string[] = [];
+  if (m.p99 > FALLBACK_BOUND.p99) out.push(`p99 ${m.p99} > ${FALLBACK_BOUND.p99}`);
+  if (m.p999 > FALLBACK_BOUND.p999) out.push(`p99.9 ${m.p999} > ${FALLBACK_BOUND.p999}`);
+  if (m.over8 > FALLBACK_BOUND.over8) out.push(`${(m.over8 * 100).toFixed(2)}% above 8 levels > ${FALLBACK_BOUND.over8 * 100}%`);
+  if (m.de00_p99 > FALLBACK_BOUND.de00_p99) out.push(`ΔE00 p99 ${m.de00_p99} > ${FALLBACK_BOUND.de00_p99}`);
+  return out;
+}
+
 /** The views QA measured (qa/reports/2026-11-10-site-track-qa-s8-s10/tools/base-quality.mjs): the page, its dpr, and the
  * wheel's camera on the set ("zoom"). */
 export type View = { id: string; w: number; h: number; dpr: number; zoom?: boolean };

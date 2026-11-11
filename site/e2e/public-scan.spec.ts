@@ -4,7 +4,7 @@
  * behind the flag included: every file's path, and the text of every text file. `_redirects` and `_headers` are the
  * host's configuration, never served (the old addresses live there on purpose).
  */
-import { readFileSync, readdirSync, statSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { expect, test } from '@playwright/test';
@@ -65,4 +65,14 @@ test('no admin code in the public build: no admin route, API call, dev header or
     if (/(^|\/)admin(\/|$)/.test(rel)) found.push(`path ${rel}`);
   }
   expect(found).toEqual([]);
+});
+
+/**
+ * S16, QA ת41: a public build's `_redirects` (the host's configuration, not served, but answering 301 to the old
+ * addresses) names no supplier and no listing number. Behind the flag the old addresses stay (the build has dist/test).
+ */
+test('S16 (ת41): in a public build, _redirects names no supplier and no listing number', () => {
+  test.skip(existsSync(join(DIST, 'test')), 'a build behind the flag (HD_PUBLIC=0) keeps the old addresses');
+  const lines = readFileSync(join(DIST, '_redirects'), 'utf8').split('\n').filter(Boolean);
+  expect(lines.filter((l) => SUPPLIER_IN_ID.test(l) || SUPPLIER_WORD.test(l) || LISTING.test(l))).toEqual([]);
 });

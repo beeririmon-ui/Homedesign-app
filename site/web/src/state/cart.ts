@@ -33,9 +33,11 @@ export async function loadCart(): Promise<void> {
   if (!id) return;
   try {
     cart.value = await api.getCart(id);
+    cartError.value = null;
   } catch (e) {
     if (e instanceof ApiError && (e.status === 404 || e.status === 409)) saveId(null);
-    else cartError.value = e instanceof ApiError ? (e.messageHe ?? null) : null;
+    // S16, QA ת37: the server's own words (with its error code) when it sent them, else a plain line; never silence
+    else cartError.value = e instanceof ApiError && e.messageHe ? e.messageHe : 'לא הצלחנו לטעון את הסל. נסו לרענן את הדף.';
   }
 }
 

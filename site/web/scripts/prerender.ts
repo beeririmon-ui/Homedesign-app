@@ -5,7 +5,7 @@
 import { readFileSync, writeFileSync, mkdirSync, rmSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { shopPath } from '@hd/shared/product-url';
+import { cardRedirects, shopPath } from '@hd/shared/product-url';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const dist = resolve(here, '../dist');
@@ -18,10 +18,12 @@ const catalog = JSON.parse(readFileSync(resolve(here, '../../.generated/catalog.
   products: { id: string }[];
 };
 
-// S7: the old addresses by card id (only in the full catalog, never shipped) move to the public ids
-const cardIds = (
-  JSON.parse(readFileSync(resolve(here, '../../.generated/catalog.full.json'), 'utf8')) as { products: { id: string; card_id?: string }[] }
-).products.filter((p): p is { id: string; card_id: string } => !!p.card_id && p.card_id !== p.id);
+// S7: the old addresses by card id (only in the full catalog, never shipped) move to the public ids. S16, QA ת41: a
+// public build leaves out every one that names a supplier (the site was never public: nothing links to them)
+const redirects = cardRedirects(
+  (JSON.parse(readFileSync(resolve(here, '../../.generated/catalog.full.json'), 'utf8')) as { products: { id: string; card_id?: string }[] }).products,
+  { public: process.env.HD_PUBLIC === '1' },
+);
 const template = readFileSync(resolve(dist, 'index.html'), 'utf8');
 const routes = [
   '/',
@@ -74,11 +76,7 @@ const storyRedirects = (() => {
     return '';
   }
 })();
-writeFileSync(
-  resolve(dist, '_redirects'),
-  [...cardIds.map((p) => `/p/${p.card_id}/ ${shopPath(p.id)} 301`), ...(storyRedirects && process.env.HD_PUBLIC !== '1' ? [storyRedirects] : [])].join('\n') +
-    '\n',
-);
+writeFileSync(resolve(dist, '_redirects'), [...redirects, ...(storyRedirects && process.env.HD_PUBLIC !== '1' ? [storyRedirects] : [])].join('\n') + '\n');
 // robots.txt and sitemap.xml (absolute URLs; ORIGIN changes when the domain is chosen)
 const indexable = [...routes.filter((u) => !['/cart/', '/checkout/'].includes(u)), ...housePages];
 writeFileSync(

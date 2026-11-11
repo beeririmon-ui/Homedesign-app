@@ -11,6 +11,8 @@
  *  - **S14, QA S11–S12 ת30 (§4): the poster at rest,** in both houses and the four views, as the page rests on it before
  *    the engine starts (a phone: until the first touch): the built file (AVIF, and the WebP fallback) against the
  *    approved pixels the poster stands for (the warm-modern house: its default composition, composite-set-B, ת29).
+ *    S16, QA ת43: the warm-modern poster's WebP fallback (lossy q95) is exempt from the threshold by QA's ruling, and
+ *    held to the fallback bound (tools/lib/encoding.ts FALLBACK_BOUND); the Nordic fallback still meets the threshold.
  * The numbers go to the evidence when HD_EVIDENCE_DIR is set.
  */
 import { test, expect, type Page } from '@playwright/test';
@@ -18,7 +20,7 @@ import sharp from 'sharp';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { VIEWS, failures, measure, type Measure } from '../tools/lib/encoding';
+import { VIEWS, failures, fallbackFailures, measure, type Measure } from '../tools/lib/encoding';
 import { capture, capturePoster, crop, file, fulfil, within, type Answer, type Box } from './encoding-capture';
 
 const SITE = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -213,9 +215,14 @@ test.describe('the poster at rest meets the threshold (S14, QA S11–S12 ת30 §
         const ma = measure(R.data, A.data, false);
         const mw = measure(R.data, W.data, false);
         note(`${h.name} poster at rest, AVIF (${A.file})`, v.id, ma);
-        note(`${h.name} poster at rest, WebP fallback (${A.file.replace(/avif$/, 'webp')})`, v.id, mw);
+        note(
+          `${h.name} poster at rest, WebP fallback (${A.file.replace(/avif$/, 'webp')})${h.name === 'warm-modern' ? ' [exempt: fallback bound]' : ''}`,
+          v.id,
+          mw,
+        );
         for (const f of failures(ma)) bad.push(`${h.name} poster AVIF ${v.id} (${A.file}): ${f}`);
-        for (const f of failures(mw)) bad.push(`${h.name} poster WebP ${v.id}: ${f}`);
+        // S16, QA ת43: the warm-modern fallback is exempt from the threshold (QA's ruling), held to the fallback bound
+        for (const f of h.name === 'warm-modern' ? fallbackFailures(mw) : failures(mw)) bad.push(`${h.name} poster WebP ${v.id}: ${f}`);
         console.log(`encoding ${h.name} poster ${v.id} (${A.file}): AVIF ${fmt(ma)} · WebP ${fmt(mw)}`);
       }
       write();

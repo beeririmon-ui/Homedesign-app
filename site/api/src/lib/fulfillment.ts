@@ -210,7 +210,8 @@ export async function processSupplierJob(
       .run();
     // S16, QA ת39/ת38: one row per failed send, by code only (the text, which may echo the buyer, stays in D1)
     log.error('supplier.submit_failed', { order_id: order.id, supplier: client.id, attempt, code: errorCode(err), may_have_reached: !refused });
-    if (attempt >= 5) await env.DB.prepare("UPDATE orders SET status = 'supplier_error', updated_at = ? WHERE id = ? AND status = 'paid'").bind(now, order.id).run();
+    if (attempt >= 5)
+      await env.DB.prepare("UPDATE orders SET status = 'supplier_error', updated_at = ? WHERE id = ? AND status = 'paid'").bind(now, order.id).run();
     return 'retry';
   }
 }
